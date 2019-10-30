@@ -1,0 +1,17 @@
+{
+  "lerna": "2.11.0",
+  "version": "independent",
+  "npmClient": "tnpm",
+  "command": {
+    "publish": {
+      "ignoreChanges": [
+        "**/*.md",
+        "**/test/**"
+      ],
+      "conventionalCommits": true
+    }
+  },
+  "packages": [
+    "packages/*"
+  ]
+}

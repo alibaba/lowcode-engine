@@ -1,0 +1,49 @@
+{
+  "name": "ali-lowcode-engine",
+  "private": true,
+  "scripts": {
+    "boot": "lerna bootstrap --registry http://registry.npm.alibaba-inc.com",
+    "clean": "rimraf ./packages/*/lib ./packages/*/node_modules",
+    "pub": "npm run test && lerna publish --registry http://registry.npm.alibaba-inc.com",
+    "lint": "tslint -p tsconfig.json",
+    "lint:fix": "tslint --fix -p tsconfig.json",
+    "build": "lerna run build",
+    "test": "lerna run test"
+  },
+  "devDependencies": {
+    "@types/node": "^10.12.18",
+    "ava": "^1.0.1",
+    "commitizen": "^3.0.5",
+    "cz-conventional-changelog": "^2.1.0",
+    "husky": "^1.3.1",
+    "lerna": "^2.11.0",
+    "lint-staged": "^8.1.0",
+    "prettier": "^1.15.3",
+    "rimraf": "^2.6.3",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.12.0",
+    "tslint-config-prettier": "^1.17.0",
+    "tslint-plugin-prettier": "^2.0.1",
+    "typescript": "^3.2.2"
+  },
+  "engines": {
+    "node": "^8 || ^10"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "prettier --write",
+      "tslint --fix -p tsconfig.json",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
+  }
+}
