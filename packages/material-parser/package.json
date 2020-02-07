@@ -1,0 +1,35 @@
+{
+  "name": "@ali/lowcode-engine-material-parser",
+  "version": "0.1.0",
+  "description": "material parser for Ali lowCode engine",
+  "main": "lib/index.js",
+  "files": [
+    "lib",
+    "schemas"
+  ],
+  "devDependencies": {
+    "@types/js-yaml": "^3.12.2",
+    "ajv": "^6.10.2",
+    "better-ajv-errors": "^0.6.4",
+    "globby": "^10.0.1",
+    "jest": "^24.8.0",
+    "jest-watch-typeahead": "^0.3.1",
+    "js-yaml": "^3.13.1"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prebuild": "npm run schema",
+    "test": "ava",
+    "schema": "node ./scripts/transform.js"
+  },
+  "ava": {
+    "compileEnhancements": false,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  },
+  "license": "MIT"
+}

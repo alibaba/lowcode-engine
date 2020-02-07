@@ -1,0 +1,15 @@
+node_modules
+dist
+build
+coverage
+expected
+website
+gh-pages
+vendors
+packages/build-scripts/test
+packages/build-scripts/bin
+packages/build-scripts/lib
+packages/build-plugin-store/lib
+packages/build-plugin-ice-router/lib
+packages/build-plugin-ice-stark-child/lib
+packages/build-plugin-env-config/lib
