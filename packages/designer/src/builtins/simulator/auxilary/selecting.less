@@ -1,0 +1,39 @@
+.my-selecting {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px solid var(--color-brand-light);
+  z-index: 2;
+  overflow: visible;
+  >.title {
+    position: absolute;
+    color: var(--color-brand-light);
+    top: -20px;
+    left: 0;
+    font-weight: lighter;
+  }
+  &.dragging {
+    background: rgba(182, 178, 178, 0.8);
+    border: none;
+    pointer-events: all;
+  }
+
+  &.x-shadow {
+    border-color: rgba(147, 112, 219, 1.0);
+    background: rgba(147, 112, 219, 0.04);
+    >.title {
+      color: rgba(147, 112, 219, 1.0);
+    }
+    &.highlight {
+      background: transparent;
+    }
+  }
+
+  &.x-flow {
+    border-color: rgb(255, 99, 8);
+    >.title {
+      color: rgb(255, 99, 8);
+    }
+  }
+}

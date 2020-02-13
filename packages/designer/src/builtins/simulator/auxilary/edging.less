@@ -1,0 +1,39 @@
+.my-edging {
+  box-sizing: border-box;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px dashed var(--color-brand-light);
+  z-index: 1;
+  background: rgba(95, 240, 114, 0.04);
+  will-change: transform, width, height;
+  transition-property: transform, width, height;
+  transition-duration: 60ms;
+  transition-timing-function: linear;
+  overflow: visible;
+  >.title {
+    position: absolute;
+    color: var(--color-brand-light);
+    top: -20px;
+    left: 0;
+    font-weight: lighter;
+  }
+
+  &.x-shadow {
+    border-color: rgba(138, 93, 226, 0.8);
+    background: rgba(138, 93, 226, 0.04);
+
+    >.title {
+      color: rgba(138, 93, 226, 1.0);
+    }
+  }
+
+  &.x-flow {
+    border-color: rgba(255, 99, 8, 0.8);
+    background: rgba(255, 99, 8, 0.04);
+    >.title {
+      color: rgb(255, 99, 8);
+    }
+  }
+}

@@ -1,0 +1,23 @@
+.my-insertion {
+  position: absolute;
+  top: -1.5px;
+  left: 0;
+  z-index: 12;
+  pointer-events: none !important;
+  background-color: var(--color-brand-light);
+  height: 3px;
+
+  &.cover {
+    top: 0;
+    height: auto;
+    width: auto;
+    opacity: 0.3;
+  }
+
+  &.vertical {
+    top: 0;
+    left: -1.5px;
+    width: 3px;
+    height: auto;
+  }
+}

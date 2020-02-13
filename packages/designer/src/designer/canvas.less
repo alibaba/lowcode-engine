@@ -1,0 +1,47 @@
+.my-canvas {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: 10px;
+  box-shadow: 0 2px 10px 0 rgba(31,56,88,.15);
+}
+
+html.my-show-topbar .my-canvas {
+  top: var(--topbar-height);
+}
+html.my-show-toolbar .my-canvas {
+  top: var(--toolbar-height);
+}
+html.my-show-topbar.my-show-toolbar .my-canvas {
+  top: calc(var(--topbar-height) + var(--topbar-height));
+}
+
+.my-screen {
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  position: absolute;
+  overflow: hidden;
+}
+
+.my-doc-shell {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  .my-doc-frame {
+    border: none;
+    transform-origin: 0 0;
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.my-drag-pane-mode .my-doc-shell {
+  pointer-events: none;
+}
