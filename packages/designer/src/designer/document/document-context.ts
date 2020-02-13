@@ -1,5 +1,6 @@
 import Project from '../project';
 import { RootSchema, NodeData, isDOMText, isJSExpression } from '../schema';
+import Node from './node';
 
 export default class DocumentContext {
   /**
@@ -65,7 +66,9 @@ export default class DocumentContext {
   /**
    * 插入一个节点
    */
-  insertNode(parent: Node, thing: Node | Schema, at?: number | null, copy?: boolean): Node;
+  insertNode(parent: Node, thing: Node | Schema, at?: number | null, copy?: boolean): Node {
+
+  }
   /**
    * 移除一个节点
    */

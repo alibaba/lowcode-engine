@@ -1,5 +1,7 @@
-import { NodeSchema, isNodeSchema, NodeData, DOMText, JSExpression, PropsMap } from '../schema';
+import { obx } from '@recore/obx';
+import { NodeSchema, NodeData, PropsMap, PropsList } from '../schema';
 import Props, { Prop } from './props';
+import DocumentContext from './document-context';
 
 /**
  * nodeSchema are:
@@ -18,6 +20,7 @@ import Props, { Prop } from './props';
  *    .hidden
  *    .locked
  */
+const DIRECTIVES = ['condition', 'conditionGroup', 'loop', 'loopArgs', 'title', 'ignore', 'hidden', 'locked'];
 export default class Node {
   /**
    * 是节点实例
@@ -40,18 +43,26 @@ export default class Node {
    */
   readonly componentName: string;
 
+  readonly props?: Props<Node>;
+  readonly directives?: Props<Node>;
+  readonly extras?: Props<Node>;
+
   constructor(readonly document: DocumentContext, private nodeSchema: NodeSchema) {
-    const { componentName, id, children, props, leadingComponents, ...directives } = nodeSchema;
-    // clone
+    const { componentName, id, children, props, ...extras } = nodeSchema;
     this.id = id || `node$${document.nextId()}`;
     this.componentName = componentName;
     if (this.isNodeParent()) {
-      this._props = new Props(this, props);
-      this._directives = new Props(this, directives as PropsMap);
+      this.props = new Props(this, props);
+      this.directives = new Props(this, {});
+      Object.keys(extras).forEach(key => {
+        this.directives!.add((extras as any)[key], key);
+        delete (extras as any)[key];
+      });
+      this.extras = new Props(this, extras as any);
       if (children) {
         this._children = (Array.isArray(children) ? children : [children]).map(child => {
           const node = this.document.createNode(child);
-          node.internalSetParent(this);
+          node.internalSetParent(this as INodeParent);
           return node;
         });
       }
@@ -65,20 +76,20 @@ export default class Node {
     return this.componentName.charAt(0) !== '#';
   }
 
-  private _parent: Node | null = null;
+  private _parent: INodeParent | null = null;
 
   /**
    * 父级节点
    */
-  get parent(): Node | null {
+  get parent(): INodeParent | null {
     return this._parent;
   }
   /**
-   * 内部方法
+   * 内部方法，请勿使用
    *
    * @ignore
    */
-  internalSetParent(parent: Node | null) {
+  internalSetParent(parent: INodeParent | null) {
     if (this._parent === parent) {
       return;
     }
@@ -108,34 +119,32 @@ export default class Node {
    */
   get children(): Node[] | null {
     if (this.purged) {
-      return [];
+      return null;
     }
-    if (this._children) {
-      return this._children;
-    }
+    return this._children;
   }
 
+  /*
   @obx.ref get component(): ReactType {
     return this.document.getComponent(this.tagName);
   }
   @obx.ref get prototype(): Prototype {
     return this.document.getPrototype(this.component, this.tagName);
   }
+  */
 
-  @obx.ref get props(): object {
+  @obx.ref get propsData(): PropsMap | PropsList | null {
     if (!this.isNodeParent() || this.componentName === 'Fragment') {
-      return {};
+      return null;
     }
-    // ...
+    return this.props?.value || null;
   }
 
-  private _directives: any = {};
-  get directives() {
-    return {
-      condition: this.condition,
-      conditionGroup: this.conditionGroup,
-      loop: '',
-    };
+  get directivesData(): PropsMap | null {
+    if (!this.isNodeParent()) {
+      return null;
+    }
+    return this.directives?.value as PropsMap || null;
   }
 
   private _conditionGroup: string | null = null;
@@ -171,6 +180,8 @@ export default class Node {
     return this._condition;
   }
 
+  /*
+  // TODO
   // 外部修改，merge 进来，产生一次可恢复的历史数据
   merge(data: ElementData) {
     this.elementData = data;
@@ -197,15 +208,14 @@ export default class Node {
       this.children.splice(data.length).forEach(child => child.purge());
     }
   }
+  */
 
-  getProp(path: string): Prop;
-  getProp(path: string, useStash: true): Prop;
-  getProp(path: string, useStash = true): Prop | null {
-    return this._props!.query(path, useStash)!;
+  getProp(path: string, useStash: boolean = true): Prop | null {
+    return this.props?.query(path, useStash as any) || null;
   }
 
-  getProps(): Props {
-    return this._props;
+  getDirective(name: string, useStash: boolean = true): Prop | null {
+    return this.directives?.get(name, useStash as any) || null;
   }
 
   /**
@@ -313,7 +323,9 @@ export default class Node {
       return;
     }
     this.purged = true;
-    this.children.forEach(child => child.purge());
+    if (this._children) {
+      this._children.forEach(child => child.purge());
+    }
     // TODO: others dispose...
   }
 }

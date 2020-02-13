@@ -450,8 +450,8 @@ export function isProp(obj: any): obj is Prop {
   return obj && obj.isProp;
 }
 
-export default class Props<T> implements IPropParent {
-  @obx.val private readonly items: Prop[] = [];
+export default class Props<O = any> implements IPropParent {
+  @obx.val private items: Prop[] = [];
   @obx.ref private get maps(): Map<string, Prop> {
     const maps = new Map();
     if (this.items.length > 0) {
@@ -474,32 +474,64 @@ export default class Props<T> implements IPropParent {
     },
   );
 
+  /**
+   * 元素个数
+   */
   get size() {
     return this.items.length;
   }
 
-  private _type: 'map' | 'list' | 'unset' = 'unset';
+  @computed get value(): PropsMap | PropsList | null {
+    if (this.items.length < 1) {
+      return null;
+    }
+    if (this.type === 'list') {
+      return this.items.map(item => ({
+        spread: item.spread,
+        name: item.key as string,
+        value: item.value,
+      }));
+    }
+    const maps: any = {};
+    this.items.forEach(prop => {
+      if (prop.key) {
+        maps[prop.key] = prop.value;
+      }
+    });
+    return maps;
+  }
 
-  constructor(owner: T, value?: PropsMap | PropsList | null) {
-    if (value == null) {
-      this._type = 'unset';
-    } else if (Array.isArray(value)) {
-      this._type = 'list';
+  @obx type: 'map' | 'list' = 'map';
+
+  constructor(readonly owner: O, value?: PropsMap | PropsList | null) {
+    if (Array.isArray(value)) {
+      this.type = 'list';
       value.forEach(item => {});
-    } else {
-      this._type = 'map';
+    } else if (value != null) {
+      this.type = 'map';
     }
   }
 
-  delete(prop: Prop) {
-    const i = this.items.indexOf(prop);
-    if (i > -1) {
-      this.items.splice(i, 1);
-      prop.purge();
-    }
-  }
-
-  query(path: string, useStash = true) {
+  /**
+   * 根据 path 路径查询属性，如果没有则临时生成一个
+   */
+  query(path: string): Prop;
+  /**
+   * 根据 path 路径查询属性
+   *
+   * @useStash 如果没有则临时生成一个
+   */
+  query(path: string, useStash: true): Prop;
+  /**
+   * 根据 path 路径查询属性
+   */
+  query(path: string, useStash: false): Prop | null;
+  /**
+   * 根据 path 路径查询属性
+   *
+   * @useStash 如果没有则临时生成一个
+   */
+  query(path: string, useStash: boolean = true) {
     let matchedLength = 0;
     let firstMatched = null;
     if (this.items) {
@@ -537,16 +569,109 @@ export default class Props<T> implements IPropParent {
     return ret;
   }
 
+  /**
+   * 获取某个属性, 如果不存在，临时获取一个待写入
+   * @param useStash 强制
+   */
+  get(path: string, useStash: true): Prop;
+  /**
+   * 获取某个属性
+   * @param useStash 强制
+   */
+  get(path: string, useStash: false): Prop | null;
+  /**
+   * 获取某个属性
+   */
+  get(path: string): Prop | null;
   get(name: string, useStash = false) {
     return this.maps.get(name) || (useStash && this.stash.get(name)) || null;
   }
 
-  add(value: CompositeValue | null, key?: string | number, spread = false) {
+  /**
+   * 删除项
+   */
+  delete(prop: Prop): void {
+    const i = this.items.indexOf(prop);
+    if (i > -1) {
+      this.items.splice(i, 1);
+      prop.purge();
+    }
+  }
+
+  /**
+   * 删除 key
+   */
+  deleteKey(key: string): void {
+    this.items = this.items.filter(item => {
+      if (item.key === key) {
+        item.purge();
+        return false;
+      }
+      return true;
+    });
+  }
+
+  /**
+   * 添加值
+   */
+  add(value: CompositeValue | null, key?: string | number, spread = false): Prop {
     const prop = new Prop(this, value, key, spread);
     this.items.push(prop);
+    return prop;
+  }
+
+  /**
+   * 是否存在 key
+   */
+  has(key: string): boolean {
+    return this.maps.has(key);
+  }
+
+  /**
+   * 迭代器
+   */
+  [Symbol.iterator](): { next(): { value: Prop } } {
+    let index = 0;
+    const items = this.items;
+    const length = items.length || 0;
+    return {
+      next() {
+        if (index < length) {
+          return {
+            value: items[index++],
+            done: false,
+          };
+        }
+        return {
+          value: undefined as any,
+          done: true,
+        };
+      },
+    };
+  }
+
+  /**
+   * 遍历
+   */
+  forEach(fn: (item: Prop, key: number | string | undefined) => void): void {
+    this.items.forEach(item => {
+      return fn(item, item.key);
+    });
+  }
+
+  /**
+   * 遍历
+   */
+  map<T>(fn: (item: Prop, key: number | string | undefined) => T): T[] | null {
+    return this.items.map(item => {
+      return fn(item, item.key);
+    });
   }
 
   private purged = false;
+  /**
+   * 回收销毁
+   */
   purge() {
     if (this.purged) {
       return;
