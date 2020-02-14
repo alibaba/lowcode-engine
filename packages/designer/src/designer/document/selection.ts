@@ -1,4 +1,4 @@
-import { INode, contains, isNode, comparePosition } from './node';
+import { INode, contains, isNode, comparePosition } from './node/node';
 import { obx } from '@ali/recore';
 import DocumentContext from './document-context';
 

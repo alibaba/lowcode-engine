@@ -1,4 +1,4 @@
-import { INode, INodeParent } from './node';
+import { INode, INodeParent } from './node/node';
 import DocumentContext from './document-context';
 
 export interface LocationData {

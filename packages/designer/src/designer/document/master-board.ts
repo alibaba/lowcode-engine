@@ -23,7 +23,7 @@ import {
   contains,
   isRootNode,
   isConfettiNode,
-} from './node';
+} from './node/node';
 import {
   Point,
   Rect,

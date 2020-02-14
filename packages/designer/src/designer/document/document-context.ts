@@ -1,6 +1,6 @@
 import Project from '../project';
 import { RootSchema, NodeData, isDOMText, isJSExpression } from '../schema';
-import Node from './node';
+import Node from './node/node';
 
 export default class DocumentContext {
   /**
@@ -85,6 +85,7 @@ export default class DocumentContext {
     if (!node || !node.parent) {
       return;
     }
+    // TODO: 考虑留着缓存
     this.nodesMap.delete(id);
     this.nodes.delete(node);
     node.parent.removeChild(node);
