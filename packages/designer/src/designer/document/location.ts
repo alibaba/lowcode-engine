@@ -1,8 +1,8 @@
-import { INode, INodeParent } from './node/node';
+import { INode, NodeParent } from './node/node';
 import DocumentContext from './document-context';
 
 export interface LocationData {
-  target: INodeParent; // shadowNode | ConditionFlow | ElementNode | RootNode
+  target: NodeParent; // shadowNode | ConditionFlow | ElementNode | RootNode
   detail: LocationDetail;
 }
 
@@ -113,7 +113,7 @@ export function getWindow(elem: Element | Document): Window {
 }
 
 export default class Location {
-  readonly target: INodeParent;
+  readonly target: NodeParent;
   readonly detail: LocationDetail;
 
   constructor(readonly document: DocumentContext, { target, detail }: LocationData) {

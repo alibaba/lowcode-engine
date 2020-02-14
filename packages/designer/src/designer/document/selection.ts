@@ -1,5 +1,5 @@
-import { INode, contains, isNode, comparePosition } from './node/node';
-import { obx } from '@ali/recore';
+import Node, { comparePosition } from './node/node';
+import { obx } from '@recore/obx';
 import DocumentContext from './document-context';
 
 export class Selection {
@@ -7,6 +7,9 @@ export class Selection {
 
   constructor(private doc: DocumentContext) {}
 
+  /**
+   * 选中
+   */
   select(id: string) {
     if (this.selected.length === 1 && this.selected.indexOf(id) > -1) {
       // avoid cause reaction
@@ -16,76 +19,83 @@ export class Selection {
     this.selected = [id];
   }
 
+  /**
+   * 批量选中
+   */
   selectAll(ids: string[]) {
     this.selected = ids;
   }
 
+  /**
+   * 清除选中
+   */
   clear() {
     this.selected = [];
   }
 
+  /**
+   * 整理选中
+   */
   dispose() {
     let i = this.selected.length;
     while (i-- > 0) {
       const id = this.selected[i];
-      const node = this.doc.getNode(id, true);
-      if (!node) {
+      if (!this.doc.hasNode(id)) {
         this.selected.splice(i, 1);
-      } else if (node.id !== id) {
+      } else {
         this.selected[i] = id;
       }
     }
   }
 
+  /**
+   * 添加选中
+   */
   add(id: string) {
     if (this.selected.indexOf(id) > -1) {
       return;
     }
 
-    const i = this.findIndex(id);
-    if (i > -1) {
-      this.selected.splice(i, 1);
-    }
-
     this.selected.push(id);
   }
 
-  private findIndex(id: string): number {
-    const ns = getNamespace(id);
-    const nsx = `${ns}:`;
-    return this.selected.findIndex(idx => {
-      return idx === ns || idx.startsWith(nsx);
-    });
+  /**
+   * 是否选中
+   */
+  has(id: string) {
+    return this.selected.indexOf(id) > -1;
   }
 
-  has(id: string, variant = false) {
-    return this.selected.indexOf(id) > -1 || (variant && this.findIndex(id) > -1);
-  }
-
-  del(id: string, variant = false) {
+  /**
+   * 移除选中
+   */
+  remove(id: string) {
     let i = this.selected.indexOf(id);
     if (i > -1) {
-      this.selected.splice(i, 1);
-    } else if (variant) {
-      i = this.findIndex(id);
       this.selected.splice(i, 1);
     }
   }
 
-  containsNode(node: INode) {
+  /**
+   * 选区是否包含节点
+   */
+  containsNode(node: Node) {
     for (const id of this.selected) {
       const parent = this.doc.getNode(id);
-      if (parent && contains(parent, node)) {
+      if (parent?.contains(node)) {
         return true;
       }
     }
     return false;
   }
 
+  /**
+   * 获取选中的节点
+   */
   getNodes() {
     const nodes = [];
     for (const id of this.selected) {
-      const node = this.doc.getNode(id, true);
+      const node = this.doc.getNode(id);
       if (node) {
         nodes.push(node);
       }
@@ -93,24 +103,13 @@ export class Selection {
     return nodes;
   }
 
-  getOriginNodes(): INode[] {
-    const nodes: any[] = [];
-    for (const id of this.selected) {
-      const node = this.doc.getOriginNode(id);
-      if (node && !nodes.includes(node)) {
-        nodes.push(node);
-      }
-    }
-    return nodes;
-  }
-
   /**
-   * get union items that at top level
+   * 获取顶层选区节点, 场景：拖拽时，建立蒙层，只蒙在最上层
    */
-  getTopNodes(origin?: boolean) {
+  getTopNodes() {
     const nodes = [];
     for (const id of this.selected) {
-      const node = origin ? this.doc.getOriginNode(id) : this.doc.getNode(id);
+      const node = this.doc.getNode(id);
       if (!node) {
         continue;
       }
@@ -135,17 +134,4 @@ export class Selection {
     }
     return nodes;
   }
-}
-
-function getNamespace(id: string) {
-  const i = id.indexOf(':');
-  if (i < 0) {
-    return id;
-  }
-
-  return id.substring(0, i);
-}
-
-export function isSelectable(obj: any): obj is INode {
-  return isNode(obj);
 }

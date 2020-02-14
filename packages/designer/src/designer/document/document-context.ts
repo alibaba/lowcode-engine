@@ -1,8 +1,16 @@
 import Project from '../project';
-import { RootSchema, NodeData, isDOMText, isJSExpression } from '../schema';
-import Node from './node/node';
+import { RootSchema, NodeData, isDOMText, isJSExpression, NodeSchema } from '../schema';
+import Node, { isNodeParent, insertChildren, insertChild, NodeParent } from './node/node';
+import { Selection } from './selection';
+import RootNode from './node/root-node';
+import { SimulatorInterface } from '../simulator-interface';
+import { computed } from '@recore/obx';
 
 export default class DocumentContext {
+  /**
+   * 根节点 类型有：Page/Component/Block
+   */
+  readonly rootNode: RootNode;
   /**
    * 文档编号
    */
@@ -14,23 +22,35 @@ export default class DocumentContext {
   /**
    * 操作记录控制
    */
-  readonly history: History = new History(this);
-  /**
-   * 根节点 类型有：Page/Component/Block
-   */
-  readonly root: Root;
+  // TODO
+  // readonly history: History = new History(this);
   /**
    * 模拟器
    */
   simulator?: SimulatorInterface;
 
-  private nodesMap = new Map<string, INode>();
-  private nodes = new Set<INode>();
+  private nodesMap = new Map<string, Node>();
+  private nodes = new Set<Node>();
   private seqId = 0;
 
+  get fileName() {
+    return this.rootNode.extras.get('fileName')?.value as string;
+  }
+
+  set fileName(fileName: string) {
+    this.rootNode.extras.get('fileName', true).value = fileName;
+  }
+
   constructor(readonly project: Project, schema: RootSchema) {
-    this.id = uniqueId('doc');
-    this.root = new Root(this, viewData);
+    this.rootNode = new RootNode(this, schema);
+    this.id = this.rootNode.id;
+  }
+
+  /**
+   * 生成唯一id
+   */
+  nextId() {
+    return (++this.seqId).toString(36).toLocaleLowerCase();
   }
 
   /**
@@ -41,18 +61,21 @@ export default class DocumentContext {
   }
 
   /**
+   * 是否存在节点
+   */
+  hasNode(id: string): boolean {
+    const node = this.getNode(id);
+    return node ? !node.isPurged : false;
+  }
+
+  /**
    * 根据 schema 创建一个节点
    */
   createNode(data: NodeData): Node {
     let schema: any;
-    if (isDOMText(data)) {
+    if (isDOMText(data) || isJSExpression(data)) {
       schema = {
-        componentName: '#text',
-        children: data,
-      };
-    } else if (isJSExpression(data)) {
-      schema = {
-        componentName: '#expression',
+        componentName: '#frag',
         children: data,
       };
     } else {
@@ -63,12 +86,21 @@ export default class DocumentContext {
     this.nodes.add(node);
     return node;
   }
+
   /**
    * 插入一个节点
    */
-  insertNode(parent: Node, thing: Node | Schema, at?: number | null, copy?: boolean): Node {
-
+  insertNode(parent: NodeParent, thing: Node | NodeData, at?: number | null, copy?: boolean): Node {
+    return insertChild(parent, thing, at, copy);
   }
+
+  /**
+   * 插入多个节点
+   */
+  insertNodes(parent: NodeParent, thing: Node[] | NodeData[], at?: number | null, copy?: boolean) {
+    return insertChildren(parent, thing, at, copy);
+  }
+
   /**
    * 移除一个节点
    */
@@ -82,30 +114,88 @@ export default class DocumentContext {
       node = idOrNode;
       id = node.id;
     }
-    if (!node || !node.parent) {
+    if (!node) {
       return;
     }
-    // TODO: 考虑留着缓存
-    this.nodesMap.delete(id);
-    this.nodes.delete(node);
-    node.parent.removeChild(node);
+    this.internalRemoveAndPurgeNode(node);
   }
+
+  /**
+   * 内部方法，请勿调用
+   */
+  internalRemoveAndPurgeNode(node: Node) {
+    if (!this.nodes.has(node)) {
+      return;
+    }
+    this.nodesMap.delete(node.id);
+    this.nodes.delete(node);
+    node.remove();
+  }
+
+  /**
+   * 包裹当前选区中的节点
+   */
+  wrapWith(schema: NodeSchema): Node | null {
+    const nodes = this.selection.getTopNodes();
+    if (nodes.length < 1) {
+      return null;
+    }
+    const wrapper = this.createNode(schema);
+    if (isNodeParent(wrapper)) {
+      const first = nodes[0];
+      // TODO: check nesting rules x 2
+      insertChild(first.parent!, wrapper, first.index);
+      insertChildren(wrapper, nodes);
+      this.selection.select(wrapper.id);
+      return wrapper;
+    }
+
+    this.removeNode(wrapper);
+    return null;
+  }
+
   /**
    * 导出 schema 数据
    */
-  getSchema(): Schema {
-    return this.root.getSchema();
+  get schema(): NodeSchema {
+    return this.rootNode.schema;
   }
+
   /**
-   * 导出节点 Schema
+   * 导出节点数据
    */
-  getNodeSchema(id: string): Schema | null {
+  getNodeSchema(id: string): NodeData | null {
     const node = this.getNode(id);
     if (node) {
-      return node.getSchema();
+      return node.schema;
     }
     return null;
   }
+
+  /**
+   * 是否已修改
+   */
+  isModified() {
+    // return !this.history.isSavePoint();
+  }
+
+  @computed get simulatorProps(): object {
+    let simulatorProps = this.project.simulatorProps;
+    if (typeof simulatorProps === 'function') {
+      simulatorProps = simulatorProps(this);
+    }
+    return {
+      ...simulatorProps,
+      documentContext: this,
+      onMount: this.mountSimulator.bind(this),
+    };
+  }
+
+  private mountSimulator(simulator: SimulatorInterface) {
+    this.simulator = simulator;
+    // TODO: emit simulator mounted
+  }
+
   /**
    * 根据节点取得视图实例，在循环等场景会有多个，依赖 simulator 的接口
    */
@@ -115,6 +205,7 @@ export default class DocumentContext {
     }
     return null;
   }
+
   /**
    * 通过 DOM 节点获取节点，依赖 simulator 的接口
    */
@@ -129,6 +220,7 @@ export default class DocumentContext {
     }
     return this.getNode(id) as Node;
   }
+
   /**
    * 获得到的结果是一个数组
    * 表示一个实例对应多个外层 DOM 节点，依赖 simulator 的接口
@@ -144,34 +236,28 @@ export default class DocumentContext {
 
     return this.simulator.findDOMNodes(viewInstance);
   }
+
+  getComponent(componentName: string): any {
+    return this.simulator!.getCurrentComponent(componentName);
+  }
+
   /**
-   * 激活当前文档
+   * 激活
    */
   active(): void {}
+
   /**
    * 不激活
    */
   suspense(): void {}
-  /**
-   * 销毁
-   */
-  destroy(): void {}
 
   /**
-   * 是否已修改
+   * 开启
    */
-  isModified() {
-    return !this.history.isSavePoint();
-  }
+  open(): void {}
 
   /**
-   * 生成唯一id
+   * 关闭
    */
-  nextId() {
-    return (++this.seqId).toString(36).toLocaleLowerCase();
-  }
-
-  getComponent(tagName: string): any {
-    return this.simulator!.getCurrentComponent(tagName);
-  }
+  close(): void {}
 }

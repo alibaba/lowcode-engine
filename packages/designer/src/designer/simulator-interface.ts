@@ -1,0 +1,74 @@
+export interface SimulatorInterface<P = object> {
+  /**
+   * 获得边界维度等信息
+   */
+  readonly bounds: object;
+
+  // containerAssets // like react jQuery lodash
+  // vendorsAssets // antd/fusion
+  // themeAssets
+  // componentAssets
+  // simulatorUrls //
+  // layout: ComponentName
+  // utils, dataSource, constants 模拟
+  // 获取区块代码, 通过 components 传递，可异步获取
+  setProps(props: P): void;
+
+  /**
+   * 设置编辑模式
+   */
+  setDesignMode(mode: "live" | "design" | string): void;
+
+  /**
+   * 设置拖拽态
+   */
+  setDraggingState(state: boolean): void;
+
+  /**
+   * 是否拖拽态
+   */
+  isDraggingState(): boolean;
+
+  /**
+   * 设置拷贝态
+   */
+  setCopyState(state: boolean): void;
+
+  /**
+   * 是否拷贝态
+   */
+  isCopyState(): boolean;
+
+  /**
+   * 清除所有态：拖拽态、拷贝态
+   */
+  clearState(): void;
+
+  /**
+   * 在模拟器拖拽定位
+   */
+  locate(e: LocateEvent): any;
+
+  /**
+   * 滚动视口到节点
+   */
+  scrollToNode(node: INode, detail?: any): void;
+
+  /**
+   * 给 event 打补丁，添加 canvasX, globalX 等信息，用于拖拽
+   */
+  fixEvent(e: LocateEvent): LocateEvent;
+
+  getComponent(npmInfo: object): ReactComponent | any;
+  getViewInstance(node: Node): ViewInstance[] | null;
+
+  /**
+   * 设置挂起
+   */
+  setSuspense(suspended: boolean): void;
+
+  /**
+   * 销毁
+   */
+  destroy(): void;
+}

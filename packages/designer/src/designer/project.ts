@@ -4,9 +4,12 @@ import { EventEmitter } from 'events';
 
 export default class Project {
   @obx documents: DocumentContext[];
-  displayMode: 'exclusive' | 'split'; // P2
+  displayMode: 'exclusive' | 'tabbed' | 'split'; // P2
   private emitter = new EventEmitter();
   private data: ProjectSchema = {};
+
+  // 考虑项目级别 History
+
   constructor(schema: ProjectSchema) {
     this.data = { ...schema };
   }

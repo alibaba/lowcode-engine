@@ -1,7 +1,7 @@
 import { obx } from '@ali/recore';
 import { screen } from '../globals/screen';
 import { Point } from './location';
-import { ScrollTarget } from './scroller';
+import { ScrollTarget } from '../../builtins/simulator/scroller';
 
 export type AutoFit = '100%';
 export const AutoFit = '100%';
