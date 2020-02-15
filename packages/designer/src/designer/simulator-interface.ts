@@ -1,4 +1,9 @@
-export interface SimulatorInterface<P = object> {
+import { NpmInfo } from './schema';
+import { ComponentClass as ReactComponentClass, Component } from 'react';
+import { LocateEvent, SensorInterface } from './dragon';
+import { Point } from './document/location';
+
+export interface SimulatorInterface<P = object> extends SensorInterface {
   /**
    * 获得边界维度等信息
    */
@@ -52,15 +57,35 @@ export interface SimulatorInterface<P = object> {
   /**
    * 滚动视口到节点
    */
-  scrollToNode(node: INode, detail?: any): void;
+  scrollToNode(node: Node, detail?: any): void;
 
   /**
    * 给 event 打补丁，添加 canvasX, globalX 等信息，用于拖拽
    */
   fixEvent(e: LocateEvent): LocateEvent;
 
-  getComponent(npmInfo: object): ReactComponent | any;
-  getViewInstance(node: Node): ViewInstance[] | null;
+  /**
+   * 全局坐标系转化为本地坐标系
+   */
+  toLocalPoint(point: Point): Point;
+
+  /**
+   * 本地坐标系转化为全局坐标系
+   */
+  toGlobalPoint(point: Point): Point;
+
+  /**
+   * 根据组件信息获取组件类
+   */
+  getComponent(npmInfo: NpmInfo): ComponentClass | any;
+  /**
+   * 根据节点获取节点的组件实例
+   */
+  getComponentInstance(node: Node): ComponentInstance[] | null;
+  /**
+   * 根据节点获取节点的组件运行上下文
+   */
+  getComponentContext(node: Node): object;
 
   /**
    * 设置挂起
@@ -70,5 +95,14 @@ export interface SimulatorInterface<P = object> {
   /**
    * 销毁
    */
-  destroy(): void;
+  purge(): void;
 }
+
+/**
+ * 组件类定义
+ */
+export type ComponentClass = ReactComponentClass | object;
+/**
+ * 组件实例定义
+ */
+export type ComponentInstance = Element | Component<any, any> | object;

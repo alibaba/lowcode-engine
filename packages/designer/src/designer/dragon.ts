@@ -1,69 +1,107 @@
 import { EventEmitter } from 'events';
-import MasterBoard from '../document/master-board';
-import Location from '../document/location';
-import { INode } from '../document/node';
-import { NodeData } from '../document/document-data';
-import { getCurrentDocument } from './current';
-import { obx } from '@ali/recore';
+import { obx } from '@recore/obx';
+import Location from './document/location';
+import Project from './project';
+import DocumentContext from './document/document-context';
+import { NodeData } from './schema';
+import { SimulatorInterface } from './simulator-interface';
+import Node from './document/node/node';
 
 export interface LocateEvent {
   readonly type: 'LocateEvent';
-  readonly clientX: number;
-  readonly clientY: number;
+  /**
+   * 浏览器窗口坐标系
+   */
   readonly globalX: number;
   readonly globalY: number;
+  /**
+   * 原始事件
+   */
   readonly originalEvent: MouseEvent;
-  readonly dragTarget: DragTarget;
+  /**
+   * 拖拽对象
+   */
+  readonly dragObject: DragObject;
+  /**
+   * 浏览器事件响应目标
+   */
   target: Element | null;
+  /**
+   * 当前激活文档画布坐标系
+   */
+  canvasX?: number;
+  canvasY?: number;
+  /**
+   * 激活或目标文档
+   */
+  document?: DocumentContext;
+  /**
+   * 事件订正标识，初始构造时，从发起端构造，缺少 canvasX,canvasY, 需要经过订正才有
+   */
   fixed?: true;
 }
 
-export type DragTarget = NodesDragTarget | NodeDatasDragTarget | AnyDragTarget;
-
-export enum DragTargetType {
-  Nodes = 'nodes',
-  NodeDatas = 'nodedatas',
+/**
+ * 拖拽敏感板
+ */
+export interface SensorInterface {
+  /**
+   * 是否可响应，比如面板被隐藏，可设置该值 false
+   */
+  readonly sensorAvailable: boolean;
+  /**
+   * 给事件打补丁
+   */
+  fixEvent(e: LocateEvent): LocateEvent;
+  /**
+   * 定位并激活
+   */
+  locate(e: LocateEvent): Location | undefined;
+  /**
+   * 是否进入敏感板区域
+   */
+  isEnter(e: LocateEvent): boolean;
+  /**
+   * 取消激活
+   */
+  deactiveSensor(): void;
 }
 
-export interface NodesDragTarget {
-  type: DragTargetType.Nodes;
-  nodes: INode[];
+export type DragObject = DragNodeObject | DragNodeDataObject | DragAnyObject;
+
+export enum DragObjectType {
+  Node = 'node',
+  NodeData = 'nodedata',
 }
 
-export function isNodesDragTarget(obj: any): obj is NodesDragTarget {
-  return obj && obj.type === DragTargetType.Nodes;
+export interface DragNodeObject {
+  type: DragObjectType.Node;
+  node: Node | Node[];
 }
-
-export interface NodeDatasDragTarget {
-  type: DragTargetType.NodeDatas;
-  data: NodeData[];
+export interface DragNodeDataObject {
+  type: DragObjectType.NodeData;
+  data: NodeData | NodeData[];
   maps?: { [tagName: string]: string };
   thumbnail?: string;
   description?: string;
   [extra: string]: any;
 }
 
-export function isNodeDatasDragTarget(obj: any): obj is NodeDatasDragTarget {
-  return obj && obj.type === DragTargetType.NodeDatas;
-}
-
-export interface AnyDragTarget {
+export interface DragAnyObject {
   type: string;
   [key: string]: any;
 }
 
-export function isAnyDragTarget(obj: any): obj is AnyDragTarget {
-  return obj && obj.type !== DragTargetType.NodeDatas && obj.type !== DragTargetType.Nodes;
+export function isDragNodeObject(obj: any): obj is DragNodeObject {
+  return obj && obj.type === DragObjectType.Node;
 }
 
-export interface ISenseAble {
-  id: string;
-  sensitive: boolean;
-  fixEvent(e: LocateEvent): LocateEvent;
-  locate(e: LocateEvent): Location | undefined;
-  isEnter(e: LocateEvent): boolean;
-  inRange(e: LocateEvent): boolean;
-  deactive(): void;
+export function isDragNodeDataObject(obj: any): obj is DragNodeDataObject {
+  return obj && obj.type === DragObjectType.NodeData;
+}
+
+export function isDragAnyObject(obj: any): obj is DragAnyObject {
+  return obj && obj.type !== DragObjectType.NodeData && obj.type !== DragObjectType.Node;
 }
 
 export function isLocateEvent(e: any): e is LocateEvent {
@@ -92,7 +130,7 @@ function getTopDocument(e: MouseEvent, local: Document) {
   return e.view!.document === local ? null : document;
 }
 
-class Dragon {
+export default class Dragon {
   private sensors: ISenseAble[] = [];
 
   /**
@@ -113,7 +151,9 @@ class Dragon {
     return doc.masterBoard;
   }
 
-  from(shell: Element, boost: (e: MouseEvent) => DragTarget | null) {
+  constructor(readonly project: Project) {}
+
+  from(shell: Element, boost: (e: MouseEvent) => DragObject | null) {
     const mousedown = (e: MouseEvent) => {
       // ESC or RightClick
       if (e.which === 3 || e.button === 2) {
@@ -137,7 +177,7 @@ class Dragon {
   /**
    * dragTarget should be a INode | INode[] | NodeData | NodeData[]
    */
-  boost(dragTarget: DragTarget, boostEvent: MouseEvent) {
+  boost(dragObject: DragObject, boostEvent: MouseEvent) {
     if (!this.master) {
       return;
     }
@@ -145,7 +185,7 @@ class Dragon {
     const doc = master.contentDocument;
     const viewport = master.document.viewport;
     const topDoc = getTopDocument(boostEvent, doc);
-    const newBie = dragTarget.type !== DragTargetType.Nodes;
+    const newBie = dragObject.type !== DragTargetType.Nodes;
     let lastLocation: any = null;
     let lastSensor: ISenseAble | undefined;
     this.dragging = false;
@@ -221,7 +261,7 @@ class Dragon {
       if (this.dragging) {
         this.dragging = false;
         try {
-          this.emitter.emit('dragend', { dragTarget, copy: master.isCopy() }, lastLocation);
+          this.emitter.emit('dragend', { dragTarget: dragObject, copy: master.isCopy() }, lastLocation);
         } catch (ex) {
           exception = ex;
         }
@@ -255,7 +295,7 @@ class Dragon {
       const evt: any = {
         type: 'LocateEvent',
         target: e.target,
-        dragTarget,
+        dragTarget: dragObject,
         originalEvent: e,
       };
       if (e.view!.document === document) {
@@ -274,17 +314,29 @@ class Dragon {
       return evt;
     };
 
-    const sensors: ISenseAble[] = ([master] as any).concat(this.sensors);
+    function getSourceSensor(dragObject: DragObject): SimulatorInterface | null {
+      if (!isDragNodeObject(dragObject)) {
+        return null;
+      }
+      return (Array.isArray(dragObject.node) ? dragObject.node[0] : dragObject.node)?.document.simulator || null;
+    }
+
+    const simSensors = this.project.documents.map(doc => (doc.actived && doc.simulator) || null).filter(Boolean);
+    const sourceSensor = getSourceSensor(dragObject);
+    // check simulator is empty
+    const sensors: SensorInterface[] = simSensors.concat(this.sensors);
     const chooseSensor = (e: LocateEvent) => {
-      let sensor;
-      if (newBie && !lastLocation) {
-        sensor = sensors.find(s => s.sensitive && s.isEnter(e));
-      } else {
-        sensor = sensors.find(s => s.sensitive && s.inRange(e)) || lastSensor;
+      let sensor = sensors.find(s => s.sensorAvailable && s.isEnter(e));
+      if (!sensor) {
+        if (lastSensor) {
+          sensor = lastSensor;
+        } else if (sourceSensor) {
+          sensor = sourceSensor;
+        }
       }
       if (sensor !== lastSensor) {
         if (lastSensor) {
-          lastSensor.deactive();
+          lastSensor.deactiveSensor();
         }
         lastSensor = sensor;
       }
@@ -338,12 +390,10 @@ class Dragon {
     };
   }
 
-  onDragend(func: (x: { dragTarget: DragTarget; copy: boolean }, location: Location) => any) {
+  onDragend(func: (x: { dragTarget: DragObject; copy: boolean }, location: Location) => any) {
     this.emitter.on('dragend', func);
     return () => {
       this.emitter.removeListener('dragend', func);
     };
   }
 }
-
-export const dragon = new Dragon();

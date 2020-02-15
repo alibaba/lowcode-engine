@@ -24,14 +24,18 @@ export default class DocumentContext {
    */
   // TODO
   // readonly history: History = new History(this);
-  /**
-   * 模拟器
-   */
-  simulator?: SimulatorInterface;
 
   private nodesMap = new Map<string, Node>();
   private nodes = new Set<Node>();
   private seqId = 0;
+  private _simulator?: SimulatorInterface;
+
+  /**
+   * 模拟器
+   */
+  get simulator(): SimulatorInterface | null {
+    return this._simulator || null;
+  }
 
   get fileName() {
     return this.rootNode.extras.get('fileName')?.value as string;
@@ -179,6 +183,9 @@ export default class DocumentContext {
     // return !this.history.isSavePoint();
   }
 
+  /**
+   * 提供给模拟器的参数
+   */
   @computed get simulatorProps(): object {
     let simulatorProps = this.project.simulatorProps;
     if (typeof simulatorProps === 'function') {
@@ -192,7 +199,7 @@ export default class DocumentContext {
   }
 
   private mountSimulator(simulator: SimulatorInterface) {
-    this.simulator = simulator;
+    this._simulator = simulator;
     // TODO: emit simulator mounted
   }
 
@@ -241,23 +248,53 @@ export default class DocumentContext {
     return this.simulator!.getCurrentComponent(componentName);
   }
 
-  /**
-   * 激活
-   */
-  active(): void {}
+  private _opened: boolean = true;
+  private _suspensed: boolean = false;
 
   /**
-   * 不激活
+   * 是否不是激活的
    */
-  suspense(): void {}
+  get suspensed(): boolean {
+    return this._suspensed;
+  }
 
   /**
-   * 开启
+   * 与 suspensed 相反，是否是激活的，这个函数可能用的更多一点
    */
-  open(): void {}
+  get actived(): boolean {
+    return !this._suspensed;
+  }
 
   /**
-   * 关闭
+   * 切换激活，只有打开的才能激活
+   * 不激活，打开之后切换到另外一个时发生，比如 tab 视图，切换到另外一个标签页
    */
-  close(): void {}
+  set suspensed(flag: boolean) {
+    if (!this._opened && !flag) {
+      return;
+    }
+    this._suspensed = flag;
+  }
+
+  /**
+   * 打开，已载入，默认建立时就打开状态，除非手动关闭
+   */
+  open(): void {
+    this._opened = true;
+  }
+
+  /**
+   * 关闭，相当于 sleep，仍然缓存，停止一切响应，如果有发生的变更没被保存，仍然需要去取数据保存
+   */
+  close(): void {
+    this.suspensed = true;
+    this._opened = false;
+  }
+
+  /**
+   * 从项目中移除
+   */
+  remove() {
+
+  }
 }

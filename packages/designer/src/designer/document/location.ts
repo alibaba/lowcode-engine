@@ -1,4 +1,4 @@
-import { INode, NodeParent } from './node/node';
+import ComponentNode, { NodeParent } from './node/node';
 import DocumentContext from './document-context';
 
 export interface LocationData {
@@ -15,7 +15,7 @@ export interface LocationChildrenDetail {
   type: LocationDetailType.Children;
   index: number;
   near?: {
-    node: INode;
+    node: ComponentNode;
     pos: 'before' | 'after';
     rect?: Rect;
     align?: 'V' | 'H';
