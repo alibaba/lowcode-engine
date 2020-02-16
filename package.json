@@ -9,7 +9,7 @@
     "lint:fix": "tslint --fix -p tsconfig.json",
     "build": "lerna run build",
     "test": "lerna run test",
-    "snapshot": "lerna run snapshot"
+    "test:snapshot": "lerna run test:snapshot"
   },
   "devDependencies": {
     "@types/node": "^10.12.18",

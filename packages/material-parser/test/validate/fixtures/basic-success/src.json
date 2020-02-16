@@ -14,5 +14,6 @@
     "main": "",
     "destructuring": true,
     "version": "0.1.13"
-  }
+  },
+  "props": []
 }

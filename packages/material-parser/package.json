@@ -24,7 +24,7 @@
     "build": "tsc",
     "prebuild": "npm run schema",
     "test": "ava",
-    "snapshot": "ava --update-snapshots",
+    "test:snapshot": "ava --update-snapshots",
     "schema": "node ./scripts/transform.js"
   },
   "ava": {
