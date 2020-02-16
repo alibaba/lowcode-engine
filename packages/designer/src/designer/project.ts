@@ -1,4 +1,4 @@
-import { obx } from '@recore/obx';
+import { obx, computed } from '@recore/obx';
 import { ProjectSchema } from './schema';
 import { EventEmitter } from 'events';
 import Designer from './designer';
@@ -20,6 +20,10 @@ export default class Project {
       componentsTree: [],
       ...schema
     };
+  }
+
+  @computed get activedDocuments() {
+    return this.documents.filter(doc => doc.actived);
   }
 
   getDocument(fileName: string): DocumentContext {}

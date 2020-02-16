@@ -1,5 +1,5 @@
 import { NpmInfo } from './schema';
-import { ComponentClass as ReactComponentClass, Component } from 'react';
+import { ComponentClass as ReactComponentClass, Component as ReactComponent, ComponentType } from 'react';
 import { LocateEvent, ISensor } from './dragon';
 import { Point } from './location';
 import Node from './document/node/node';
@@ -10,13 +10,14 @@ export interface SimulatorInterface<P = object> extends ISensor {
    */
   readonly bounds: object;
 
-  // containerAssets // like react jQuery lodash
-  // vendorsAssets // antd/fusion
-  // themeAssets
-  // componentAssets
-  // simulatorUrls //
-  // layout: ComponentName
+  // dependsAsset // like react jQuery lodash
+  // themesAsset
+  // componentsAsset
+  // simulatorUrl //
   // utils, dataSource, constants 模拟
+  //
+  // later:
+  // layout: ComponentName
   // 获取区块代码, 通过 components 传递，可异步获取
   setProps(props: P): void;
 
@@ -78,7 +79,7 @@ export interface SimulatorInterface<P = object> extends ISensor {
   /**
    * 根据组件信息获取组件类
    */
-  getComponent(npmInfo: NpmInfo): ComponentClass | any;
+  getComponent(componentName: string): Component | any;
   /**
    * 根据节点获取节点的组件实例
    */
@@ -102,8 +103,9 @@ export interface SimulatorInterface<P = object> extends ISensor {
 /**
  * 组件类定义
  */
-export type ComponentClass = ReactComponentClass | object;
+export type Component = ComponentType<any> | object;
+
 /**
  * 组件实例定义
  */
-export type ComponentInstance = Element | Component<any, any> | object;
+export type ComponentInstance = Element | ReactComponent<any> | object;

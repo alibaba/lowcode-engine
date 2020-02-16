@@ -8,6 +8,8 @@ import DocumentModel from './document/document-model';
 import ActiveTracker from './active-tracker';
 import Location, { LocationData, isLocationChildrenDetail } from './location';
 import Node, { insertChildren } from './document/node/node';
+import { isRootNode } from './document/node/root-node';
+import { ComponentDescriptionSpec, ComponentConfig } from './document/node/component-config';
 
 export interface DesignerProps {
   className?: string;
@@ -18,6 +20,7 @@ export interface DesignerProps {
   simulatorComponent?: ComponentType<any>;
   dragGhostComponent?: ComponentType<any>;
   suspensed?: boolean;
+  componentDescriptionSpecs?: ComponentDescriptionSpec[];
   onMount?: (designer: Designer) => void;
   onDragstart?: (e: LocateEvent) => void;
   onDrag?: (e: LocateEvent) => void;
@@ -107,6 +110,32 @@ export default class Designer {
     this._dropLocation = undefined;
   }
 
+  /**
+   * 获得合适的插入位置
+   */
+  getSuitableInsertion() {
+    const activedDoc = this.project.activedDocuments[0];
+    if (!activedDoc) {
+      return null;
+    }
+    const nodes = activedDoc.selection.getNodes();
+    let target;
+    let index: number | undefined;
+    if (!nodes || nodes.length < 1) {
+      target = activedDoc.rootNode;
+    } else {
+      const node = nodes[0];
+      if (isRootNode(node)) {
+        target = node;
+      } else {
+        // FIXME!!, parent maybe null
+        target = node.parent!;
+        index = node.index + 1;
+      }
+    }
+    return { target, index };
+  }
+
   private props?: DesignerProps;
   setProps(props: DesignerProps) {
     if (this.props) {
@@ -122,6 +151,9 @@ export default class Designer {
       if (props.suspensed !== this.props.suspensed && props.suspensed != null) {
         this.suspensed = props.suspensed;
       }
+      if (props.componentDescriptionSpecs !== this.props.componentDescriptionSpecs && props.componentDescriptionSpecs != null) {
+        this.buildComponentConfigMaps(props.componentDescriptionSpecs);
+      }
     } else {
       // init hotkeys
       // todo:
@@ -135,6 +167,9 @@ export default class Designer {
       // init suspensed
       if (props.suspensed != null) {
         this.suspensed = props.suspensed;
+      }
+      if (props.componentDescriptionSpecs != null) {
+        this.buildComponentConfigMaps(props.componentDescriptionSpecs);
       }
     }
     this.props = props;
@@ -176,6 +211,33 @@ export default class Designer {
 
   set schema(schema: ProjectSchema) {
     // todo:
+  }
+
+  @obx.val private _componentConfigMaps = new Map<string, ComponentConfig>();
+
+  private buildComponentConfigMaps(specs: ComponentDescriptionSpec[]) {
+    specs.forEach(spec => {
+      const key = spec.componentName;
+      const had = this._componentConfigMaps.get(key);
+      if (had) {
+        had.spec = spec;
+      } else {
+        this._componentConfigMaps.set(key, new ComponentConfig(spec));
+      }
+    });
+  }
+
+  getComponentConfig(componentName: string): ComponentConfig {
+    if (this._componentConfigMaps.has(componentName)) {
+      return this._componentConfigMaps.get(componentName)!;
+    }
+
+    const config = new ComponentConfig({
+      componentName,
+    });
+
+    this._componentConfigMaps.set(componentName, config);
+    return config;
   }
 
   purge() {
