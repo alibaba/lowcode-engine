@@ -1,10 +1,10 @@
-import Dragon, { isDragNodeObject, isDragNodeDataObject } from "./dragon";
+import { ComponentType } from 'react';
+import { obx, computed } from '@recore/obx';
+import { SimulatorView as BuiltinSimulatorView } from '../builtins/simulator';
+import Dragon, { isDragNodeObject, isDragNodeDataObject, LocateEvent, DragObject } from './dragon';
 import Project from './project';
 import { ProjectSchema } from './schema';
 import DocumentModel from './document/document-model';
-import BuiltinSimulatorView from '../builtins/simulator/master';
-import { Component } from 'react';
-import { obx, computed } from '@recore/obx';
 import ActiveTracker from './active-tracker';
 import Location, { LocationData, isLocationChildrenDetail } from './location';
 import Node, { insertChildren } from './document/node/node';
@@ -15,13 +15,13 @@ export interface DesignerProps {
   defaultSchema?: ProjectSchema;
   hotkeys?: object;
   simulatorProps?: object | ((document: DocumentModel) => object);
-  simulatorComponent?: Component<any>;
-  dragGhostComponent?: Component<any>;
+  simulatorComponent?: ComponentType<any>;
+  dragGhostComponent?: ComponentType<any>;
   suspensed?: boolean;
   onMount?: (designer: Designer) => void;
-  onDragstart?: (designer: Designer) => void;
-  onDrag?: (designer: Designer) => void;
-  onDragend?: (designer: Designer) => void;
+  onDragstart?: (e: LocateEvent) => void;
+  onDrag?: (e: LocateEvent) => void;
+  onDragend?: (e: { dragObject: DragObject; copy: boolean }, loc?: Location) => void;
   // TODO: ...add other events support
   [key: string]: any;
 }
@@ -35,14 +35,25 @@ export default class Designer {
   constructor(props: DesignerProps) {
     this.project = new Project(this, props.defaultSchema);
 
-    this.dragon.onDragstart(({ dragObject }) => {
+    this.dragon.onDragstart(e => {
+      const { dragObject } = e;
       if (isDragNodeObject(dragObject) && dragObject.nodes.length === 1) {
         // ensure current selecting
         dragObject.nodes[0].select();
       }
+      if (this.props?.onDragstart) {
+        this.props.onDragstart(e);
+      }
     });
 
-    this.dragon.onDragend(({ dragObject, copy }) => {
+    this.dragon.onDrag(e => {
+      if (this.props?.onDrag) {
+        this.props.onDrag(e);
+      }
+    });
+
+    this.dragon.onDragend(e => {
+      const { dragObject, copy } = e;
       const loc = this._dropLocation;
       if (loc) {
         if (isLocationChildrenDetail(loc.detail)) {
@@ -61,6 +72,9 @@ export default class Designer {
         }
       }
       this.clearLocation();
+      if (this.props?.onDragend) {
+        this.props.onDragend(e, loc);
+      }
       // this.enableEdging();
     });
 
@@ -130,17 +144,16 @@ export default class Designer {
     return this.props ? this.props[key] : null;
   }
 
-  @obx.ref private _simulatorComponent?: Component<any>;
-  @obx.ref private _simulatorProps?: object;
-  @computed get simulatorConfig(): {
-    Component: Component<any>;
-    props: object;
-  } {
-    const config: any = {
-      Component: this._simulatorComponent || BuiltinSimulatorView,
-      props: this._simulatorProps || {},
-    };
-    return config;
+  @obx.ref private _simulatorComponent?: ComponentType<any>;
+
+  @computed get simulatorComponent(): ComponentType<any> {
+    return this._simulatorComponent || BuiltinSimulatorView;
+  }
+
+  @obx.ref private _simulatorProps?: object | ((document: DocumentModel) => object);
+
+  @computed get simulatorProps(): object | ((document: DocumentModel) => object) {
+    return this._simulatorProps || {};
   }
 
   @obx.ref private _suspensed: boolean = false;
@@ -166,6 +179,6 @@ export default class Designer {
   }
 
   purge() {
-
+    // todo:
   }
 }

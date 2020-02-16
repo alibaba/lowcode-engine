@@ -9,7 +9,7 @@ export default class Project {
   @obx.val readonly documents: DocumentModel[] = [];
   private data: ProjectSchema = {};
 
-  @obx.ref displayMode: 'exclusive' | 'tabbed' | 'split' = 'exclusive';
+  @obx.ref canvasDisplayMode: 'exclusive' | 'overview' = 'exclusive';
 
   // 考虑项目级别 History
 
