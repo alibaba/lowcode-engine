@@ -3,7 +3,7 @@ import { obx } from '@recore/obx';
 import Location from './location';
 import DocumentModel from './document/document-model';
 import { NodeData } from './schema';
-import { SimulatorInterface } from './simulator-interface';
+import { ISimulator } from './simulator';
 import Node from './document/node/node';
 import Designer from './designer';
 
@@ -167,7 +167,7 @@ export default class Dragon {
     };
   }
 
-  getMasterSensors(): SimulatorInterface[] {
+  getMasterSensors(): ISimulator[] {
     return this.designer.project.documents.map(doc => (doc.actived && doc.simulator) || null).filter(Boolean);
   }
 
@@ -319,7 +319,7 @@ export default class Dragon {
       return evt;
     };
 
-    function getSourceSensor(dragObject: DragObject): SimulatorInterface | null {
+    function getSourceSensor(dragObject: DragObject): ISimulator | null {
       if (!isDragNodeObject(dragObject)) {
         return null;
       }
