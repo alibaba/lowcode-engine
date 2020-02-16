@@ -1,5 +1,5 @@
-import test from 'ava';
 import Ajv from 'ajv';
+import test from 'ava';
 import betterAjvErrors from 'better-ajv-errors';
 
 import fs = require('fs');

@@ -1,0 +1,1 @@
+export default {"name":"Root","settings":{"type":"element_inline","insertionModes":"tbrl","handles":["cut","copy","duplicate","delete","paste"],"shouldActive":true,"shouldDrag":true,"props":[{"name":"style","label":"style","renderer":"","defaultValue":"{\n  padding: 0,\n  backgroundColor: '#f0f2f5',\n  minHeight: '100%'\n}"},{"name":"children","label":"children","renderer":""}]}}

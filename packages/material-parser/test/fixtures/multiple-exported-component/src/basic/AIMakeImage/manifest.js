@@ -1,0 +1,1 @@
+const manifest = {"name":"AIMakeImage","settings":{"type":"element_inline","insertionModes":"tbrl","handles":["cut","copy","duplicate","delete","paste"],"shouldActive":true,"shouldDrag":true,"props":[{"name":"styleBoxModel","label":"styleBoxModel","renderer":""},{"name":"style","label":"style","renderer":"","defaultValue":"{}"}]}}; export default manifest;

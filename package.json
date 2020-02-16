@@ -5,10 +5,11 @@
     "boot": "lerna bootstrap --registry http://registry.npm.alibaba-inc.com --hoist",
     "clean": "rimraf ./packages/*/lib ./packages/*/node_modules",
     "pub": "npm run test && lerna publish --registry http://registry.npm.alibaba-inc.com",
-    "lint": "eslint --cache --quiet --ext .ts ./",
-    "lint:fix": "eslint --fix --cache --quiet --ext .ts ./",
+    "lint": "tslint -p tsconfig.json",
+    "lint:fix": "tslint --fix -p tsconfig.json",
     "build": "lerna run build",
-    "test": "lerna run test"
+    "test": "lerna run test",
+    "snapshot": "lerna run snapshot"
   },
   "devDependencies": {
     "@types/node": "^10.12.18",
@@ -31,7 +32,7 @@
   "lint-staged": {
     "*.ts": [
       "prettier --write",
-      "eslint --fix --cache --quiet --ext .ts ./",
+      "tslint --fix -p tsconfig.json",
       "git add"
     ]
   },
