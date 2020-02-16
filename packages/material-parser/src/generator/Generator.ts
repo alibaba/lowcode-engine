@@ -1,8 +1,12 @@
 import { dirname, join } from 'path';
 import defaultExtension from '../extensions';
-import { debug, IMaterialinManifest, IMaterialinProp } from '../otter-core';
 import {
-  ICompiler,
+  debug,
+  IComponentMaterial,
+  PropsSection,
+  PropType,
+} from '../otter-core';
+import {
   IGenerator,
   IMaterializeOptions,
   IMaterialParsedModel,
@@ -29,14 +33,6 @@ class Generator implements IGenerator {
    */
   protected options!: IMaterializeOptions;
 
-  /**
-   * 编译器实例
-   * @protected
-   * @type {ICompiler}
-   * @memberof BaseGenerator
-   */
-  protected compiler!: ICompiler;
-
   constructor(options: IMaterializeOptions) {
     this.options = options;
   }
@@ -62,7 +58,10 @@ class Generator implements IGenerator {
         continue;
       }
       // 组装 manifest
-      const manifest: any = await this.genManifest(matParsedModel);
+      const manifest: any = await this.genManifest(
+        matScanModel,
+        matParsedModel,
+      );
 
       containerList.push(manifest);
     }
@@ -95,21 +94,25 @@ class Generator implements IGenerator {
    * @memberof LocalGenerator
    */
   public async genManifest(
+    matScanModel: IMaterialScanModel,
     matParsedModel: IMaterialParsedModel,
   ): Promise<{
     manifestFilePath: string; // manifest 文件路径
     manifestJS: string; // manifest 文件内容
-    manifestObj: IMaterialinManifest; // manifest 文件对象
+    manifestObj: IComponentMaterial; // manifest 文件对象
   }> {
-    const manifestObj: IMaterialinManifest = {
-      name: matParsedModel.defaultExportName,
-      settings: {
-        type: 'element_inline',
-        insertionModes: 'tbrl',
-        handles: ['cut', 'copy', 'duplicate', 'delete', 'paste'],
-        shouldActive: true,
-        shouldDrag: true,
-        props: [],
+    const manifestObj: Partial<IComponentMaterial> = {
+      componentName: matParsedModel.defaultExportName,
+      title: '',
+      docUrl: '',
+      screenshot: '',
+      npm: {
+        package: matScanModel.pkgName,
+        version: matScanModel.pkgVersion,
+        exportName: matParsedModel.defaultExportName,
+        main: matScanModel.mainEntry,
+        destructuring: false,
+        subName: '',
       },
     };
 
@@ -119,7 +122,7 @@ class Generator implements IGenerator {
     );
 
     // 填充 props
-    manifestObj.settings.props = this.populateProps(matParsedModel);
+    manifestObj.props = this.populateProps(matParsedModel);
     // 执行扩展点
     const manifest: any = await this.executeExtensionPoint(
       'mat:config:manifest',
@@ -145,17 +148,17 @@ class Generator implements IGenerator {
    */
   public populateProps(
     matParsedModel: IMaterialParsedModel,
-  ): IMaterialinProp[] {
+  ): PropsSection['props'] {
     // 填充 props
-    const props: IMaterialinProp[] = [];
+    const props: PropsSection['props'] = [];
     matParsedModel.propsTypes.forEach(item => {
       const defaultValueItem = matParsedModel.propsDefaults.find(
         inner => inner.name === item.name,
       );
       props.push({
         name: item.name,
-        label: item.name,
-        renderer: '',
+        propType: item.type as PropType,
+        description: '',
         defaultValue: defaultValueItem
           ? defaultValueItem.defaultValue
           : undefined,

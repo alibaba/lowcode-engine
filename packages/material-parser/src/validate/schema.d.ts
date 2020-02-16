@@ -8,7 +8,7 @@
 /**
  * json schema for low code component protocol
  */
-export type IComponentMaterial = BasicSection & PropsSection & ConfigureSection;
+export type ComponentMaterial = BasicSection & PropsSection & ConfigureSection;
 export type PropType = BasicType | RequiredType | ComplexType;
 export type BasicType =
   | 'array'
@@ -57,7 +57,7 @@ export interface Npm {
   [k: string]: any;
 }
 export interface PropsSection {
-  props: {
+  props?: {
     name: string;
     propType: PropType;
     description?: string;

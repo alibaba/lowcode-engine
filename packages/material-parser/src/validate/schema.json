@@ -60,6 +60,9 @@
     },
     "PropsSection": {
       "type": "object",
+      "required": [
+        "props"
+      ],
       "properties": {
         "props": {
           "type": "array",

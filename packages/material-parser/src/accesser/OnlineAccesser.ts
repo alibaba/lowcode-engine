@@ -3,7 +3,7 @@ import { ensureDir, ensureFile, writeFile } from 'fs-extra';
 import { join } from 'path';
 import semver from 'semver';
 import uuid from 'short-uuid';
-import { debug, IMaterialinSchema, OtterError } from '../otter-core';
+import { debug, IComponentMaterial, OtterError } from '../otter-core';
 import { IMaterializeOptions } from '../types';
 import BaseAccesser from './BaseAccesser';
 import LocalAccesser from './LocalAccesser';
@@ -25,7 +25,7 @@ class OnlineAccesser extends BaseAccesser {
    */
   private tempDir: string = '';
 
-  public async access(): Promise<IMaterialinSchema> {
+  public async access(): Promise<IComponentMaterial> {
     // 创建临时目录
     this.tempDir = await this.createTempDir();
     // 创建组件包

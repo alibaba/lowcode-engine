@@ -1,5 +1,5 @@
 import Generator from '../generator/Generator';
-import { debug, IMaterialinSchema } from '../otter-core';
+import { debug, IComponentMaterial } from '../otter-core';
 import BaseParser from '../parser/BaseParser';
 import ReactParser from '../parser/ReactParser';
 import Scanner from '../scanner/Scanner';
@@ -38,7 +38,7 @@ class LocalAccesser extends BaseAccesser {
    */
   private generator!: Generator;
 
-  public async access(): Promise<IMaterialinSchema> {
+  public async access(): Promise<IComponentMaterial> {
     await this.init();
     // 开始扫描
     const matScanModel: IMaterialScanModel = await this.scanner.scan();
@@ -49,7 +49,7 @@ class LocalAccesser extends BaseAccesser {
     );
     log('matParsedModels', matParsedModels);
     // 开始生产
-    const material: IMaterialinSchema = await this.generator.generate(
+    const material: IComponentMaterial = await this.generator.generate(
       matScanModel,
       matParsedModels,
     );

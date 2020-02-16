@@ -1,8 +1,5 @@
 import ExtensionName from './ExtensionName';
-import IExtensionBuildBundle from './IExtensionBuildBundle';
-import IExtensionConfigContainer from './IExtensionConfigContainer';
 import IExtensionConfigManifest from './IExtensionConfigManifest';
-import IExtensionGenerateBuildJS from './IExtensionGenerateBuildJS';
 
 /**
  * 物料化配置项
@@ -45,9 +42,6 @@ interface IMaterializeOptions {
    */
   extensions?: {
     [ExtensionName.CONFIGMANIFEST]?: IExtensionConfigManifest;
-    [ExtensionName.CONFIGCONTAINER]?: IExtensionConfigContainer;
-    [ExtensionName.BUILDBUNDLE]?: IExtensionBuildBundle;
-    [ExtensionName.GENERATEBUILDJS]?: IExtensionGenerateBuildJS;
   };
 
   /**

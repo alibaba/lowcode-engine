@@ -1,4 +1,4 @@
-import { IMaterialinSchema } from '../otter-core';
+import { IComponentMaterial } from '../otter-core';
 import IMaterialParsedModel from './IMaterialParsedModel';
 import IMaterialScanModel from './IMaterialScanModel';
 
@@ -16,5 +16,5 @@ export default interface IGenerator {
   generate(
     matScanModel: IMaterialScanModel,
     matParsedModels: IMaterialParsedModel[],
-  ): Promise<IMaterialinSchema>;
+  ): Promise<IComponentMaterial>;
 }

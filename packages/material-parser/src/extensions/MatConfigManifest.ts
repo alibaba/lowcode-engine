@@ -1,5 +1,5 @@
 import { writeFile } from 'fs-extra';
-import { IMaterialinManifest } from '../otter-core';
+import { IComponentMaterial } from '../otter-core';
 
 /**
  * 配置 manifest（物料化场景下可以使用此扩展点）
@@ -8,29 +8,29 @@ import { IMaterialinManifest } from '../otter-core';
  *
  * @export
  * @param {{
- *   manifestObj: IMaterialinManifest,
+ *   manifestObj: IComponentMaterial,
  *   manifestFilePath: string,
  * }} params
  * @returns {Promise<{
  *   manifestJS: string,
  *   manifestFilePath: string,
- *   manifestObj: IMaterialinManifest,
+ *   manifestObj: IComponentMaterial,
  * }>}
  */
 export default async function matConfigManifest(params: {
-  manifestObj: IMaterialinManifest;
+  manifestObj: IComponentMaterial;
   manifestFilePath: string;
 }): Promise<{
-  manifestJS: string;
+  manifestJSON: string;
   manifestFilePath: string;
-  manifestObj: IMaterialinManifest;
+  manifestObj: IComponentMaterial;
 }> {
-  const manifestJS = `export default ${JSON.stringify(params.manifestObj)}`;
+  const manifestJSON = JSON.stringify(params.manifestObj);
 
-  await writeFile(params.manifestFilePath, manifestJS);
+  await writeFile(params.manifestFilePath, manifestJSON);
 
   return Promise.resolve({
-    manifestJS,
+    manifestJSON,
     manifestObj: params.manifestObj,
     manifestFilePath: params.manifestFilePath,
   });

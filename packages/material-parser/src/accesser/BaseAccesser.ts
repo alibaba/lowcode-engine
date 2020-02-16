@@ -1,4 +1,4 @@
-import { IMaterialinSchema } from '../otter-core';
+import { IComponentMaterial } from '../otter-core';
 import { IAccesser, IMaterializeOptions } from '../types';
 
 /**
@@ -20,7 +20,7 @@ abstract class BaseAccesser implements IAccesser {
     this.options = options;
   }
 
-  public abstract access(): Promise<IMaterialinSchema>;
+  public abstract access(): Promise<IComponentMaterial>;
 }
 
 export default BaseAccesser;

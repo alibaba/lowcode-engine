@@ -1,4 +1,4 @@
-$id: '@ali/low-code-component-protocol-schema'
+$id: "@ali/low-code-component-protocol-schema"
 description: json schema for low code component protocol
 allOf:
   - $ref: "#/definitions/BasicSection"
@@ -20,7 +20,7 @@ definitions:
         type: string
       icon:
         type: string
-      tags: 
+      tags:
         type: array
         items:
           type: string
@@ -38,12 +38,14 @@ definitions:
       - screenshot
   PropsSection:
     type: object
+    required:
+      - props
     properties:
       props:
         type: array
         items:
           properties:
-            name: 
+            name:
               type: string
             propType:
               $ref: "#/definitions/PropType"
@@ -74,17 +76,17 @@ definitions:
   Npm:
     type: object
     properties:
-      package: 
+      package:
         type: string
-      exportName: 
+      exportName:
         type: string
-      subName: 
+      subName:
         type: string
-      main: 
+      main:
         type: string
-      destructuring: 
+      destructuring:
         type: boolean
-      version: 
+      version:
         type: string
     required:
       - package
@@ -98,7 +100,7 @@ definitions:
       - $ref: "#/definitions/BasicType"
       - $ref: "#/definitions/RequiredType"
       - $ref: "#/definitions/ComplexType"
-  BasicType: 
+  BasicType:
     type: string
     enum:
       - array
@@ -113,7 +115,7 @@ definitions:
   RequiredType:
     type: object
     properties:
-      type: 
+      type:
         $ref: "#/definitions/BasicType"
       isRequired:
         type: boolean
@@ -250,7 +252,7 @@ definitions:
     allOf:
       - type: object
         properties:
-          title: 
+          title:
             type: string
           extraProps:
             type: object
@@ -263,7 +265,7 @@ definitions:
     required:
       - type
     properties:
-      type: 
+      type:
         type: string
         enum:
           - field
@@ -306,7 +308,7 @@ definitions:
       - type
       - items
     properties:
-      type: 
+      type:
         type: string
         enum:
           - group
@@ -326,21 +328,21 @@ definitions:
       nestingRule:
         type: object
         properties:
-          childWhitelist: 
+          childWhitelist:
             type: array
-            items: 
+            items:
               type: string
           parentWhitelist:
             type: array
-            items: 
+            items:
               type: string
-          descendantBlacklist: 
+          descendantBlacklist:
             type: array
-            items: 
+            items:
               type: string
           ancestorWhitelist:
             type: array
-            items: 
+            items:
               type: string
       isNullNode:
         type: boolean

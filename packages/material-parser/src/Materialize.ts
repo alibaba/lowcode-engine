@@ -1,6 +1,6 @@
 import LocalAccesser from './accesser/LocalAccesser';
 import OnlineAccesser from './accesser/OnlineAccesser';
-import { IMaterialinSchema } from './otter-core';
+import { IComponentMaterial } from './otter-core';
 import { IAccesser, IMaterializeOptions } from './types';
 
 /**
@@ -34,7 +34,7 @@ class Materialize {
    * @returns {Promise<IMaterialinSchema>}
    * @memberof Materialize
    */
-  public async start(): Promise<IMaterialinSchema> {
+  public async start(): Promise<IComponentMaterial> {
     // 分发请求到对应接入器
     if (this.options.accesser === 'local') {
       this.accesser = new LocalAccesser(this.options);
