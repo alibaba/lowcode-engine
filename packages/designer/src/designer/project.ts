@@ -1,17 +1,25 @@
 import { obx } from '@recore/obx';
-import { DocumentSchema, ProjectSchema } from './schema';
+import { ProjectSchema } from './schema';
 import { EventEmitter } from 'events';
+import Designer from './designer';
+import DocumentModel from './document/document-model';
 
 export default class Project {
-  @obx documents: DocumentContext[];
-  displayMode: 'exclusive' | 'tabbed' | 'split'; // P2
   private emitter = new EventEmitter();
+  @obx.val readonly documents: DocumentModel[] = [];
   private data: ProjectSchema = {};
+
+  @obx.ref displayMode: 'exclusive' | 'tabbed' | 'split' = 'exclusive';
 
   // 考虑项目级别 History
 
-  constructor(schema: ProjectSchema) {
-    this.data = { ...schema };
+  constructor(readonly designer: Designer, schema?: ProjectSchema) {
+    this.data = {
+      version: '1.0.0',
+      componentsMap: [],
+      componentsTree: [],
+      ...schema
+    };
   }
 
   getDocument(fileName: string): DocumentContext {}
@@ -23,16 +31,19 @@ export default class Project {
   /**
    * 获取项目整体 schema
    */
-  getSchema(): ProjectSchema {
+  get schema(): ProjectSchema {
     return {
       ...this.data,
       componentsTree: this.documents.map(doc => doc.getSchema()),
     };
   }
+
   /**
    * 整体设置项目 schema
    */
-  setSchema(schema: ProjectSchema): void {}
+  set schema(schema: ProjectSchema) {
+
+  }
 
   /**
    * 分字段设置储存数据，不记录操作记录

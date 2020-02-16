@@ -1,9 +1,10 @@
 import { NpmInfo } from './schema';
 import { ComponentClass as ReactComponentClass, Component } from 'react';
-import { LocateEvent, SensorInterface } from './dragon';
-import { Point } from './document/location';
+import { LocateEvent, ISensor } from './dragon';
+import { Point } from './location';
+import Node from './document/node/node';
 
-export interface SimulatorInterface<P = object> extends SensorInterface {
+export interface SimulatorInterface<P = object> extends ISensor {
   /**
    * 获得边界维度等信息
    */

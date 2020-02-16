@@ -1,11 +1,11 @@
 import Node, { comparePosition } from './node/node';
 import { obx } from '@recore/obx';
-import DocumentContext from './document-context';
+import DocumentModel from './document-model';
 
 export class Selection {
   @obx.val private selected: string[] = [];
 
-  constructor(private doc: DocumentContext) {}
+  constructor(private doc: DocumentModel) {}
 
   /**
    * 选中
