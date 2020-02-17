@@ -1,4 +1,4 @@
-// import { Engine as LowCodeRenderer } from '@ali/iceluna-sdk';
+import LowCodeRenderer from '@ali/iceluna-sdk';
 import { ReactInstance, Fragment, Component } from 'react';
 import { observer } from '@recore/core-obx';
 import { SimulatorRenderer } from './renderer';
@@ -50,20 +50,21 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
         componentsMap={renderer.componentsMap}
         suspended={renderer.suspended}
         self={renderer.scope}
-        onComponentGetRef={(schema: any, ref: ReactInstance | null) => {
+        onCompGetRef={(schema: any, ref: ReactInstance | null) => {
           renderer.mountInstance(schema.id, ref);
         }}
-        onComponentGetCtx={(schema: any, ctx: object) => {
-          renderer.mountContext(schema.id, ctx);
-        }}
+        //onCompGetCtx={(schema: any, ctx: object) => {
+          // renderer.mountContext(schema.id, ctx);
+        //}}
       />
     );
   }
 }
 
-
+/*
 class LowCodeRenderer extends Component<any> {
   render() {
+    const { schema } = this.props;
     return <div>{JSON.stringify(this.props.schema)}</div>
   }
-}
+}*/

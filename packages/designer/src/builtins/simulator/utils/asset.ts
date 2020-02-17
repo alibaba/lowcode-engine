@@ -20,6 +20,15 @@ export enum AssetLevel {
   App = 6,
 }
 
+export const AssetLevels = [
+  AssetLevel.BaseDepends,
+  AssetLevel.BaseComponents,
+  AssetLevel.Theme,
+  AssetLevel.Runtime,
+  AssetLevel.Components,
+  AssetLevel.App,
+];
+
 export type URL = string;
 
 export enum AssetType {
@@ -27,7 +36,7 @@ export enum AssetType {
   CSSUrl = 'cssUrl',
   CSSText = 'cssText',
   JSText = 'jsText',
-  Bundle = 'bundel',
+  Bundle = 'bundle',
 }
 
 export interface AssetBundle {
@@ -64,7 +73,7 @@ export function assetBundle(assets?: Asset | AssetList | null, level?: AssetLeve
 }
 
 export function assetItem(type: AssetType, content?: string | null, level?: AssetLevel, id?: string): AssetItem | null {
-  if (content) {
+  if (!content) {
     return null;
   }
   return {

@@ -25,6 +25,7 @@ export class SimulatorHostView extends Component<SimulatorProps & {
     super(props);
     const { documentContext } = this.props;
     this.host = (documentContext.simulator as SimulatorHost) || new SimulatorHost(documentContext);
+    this.host.setProps(this.props);
   }
   shouldComponentUpdate(nextProps: SimulatorProps) {
     this.host.setProps(nextProps);

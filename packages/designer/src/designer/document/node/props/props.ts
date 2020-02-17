@@ -65,9 +65,10 @@ export default class Props<O = any> implements IPropParent {
   constructor(readonly owner: O, value?: PropsMap | PropsList | null) {
     if (Array.isArray(value)) {
       this.type = 'list';
-      value.forEach(item => {});
+      this.items = value.map(item => new Prop(this, item.value, item.name, item.spread));
     } else if (value != null) {
       this.type = 'map';
+      this.items = Object.keys(value).map(key => new Prop(this, value[key], key));
     }
   }
 

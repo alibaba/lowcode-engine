@@ -6,7 +6,7 @@ import { SimulatorRenderer } from '../renderer/renderer';
 import Node, { NodeParent } from '../../../designer/document/node/node';
 import DocumentModel from '../../../designer/document/document-model';
 import ResourceConsumer from './resource-consumer';
-import { AssetLevel, Asset, assetBundle } from '../utils/asset';
+import { AssetLevel, Asset, assetBundle, assetItem, AssetType } from '../utils/asset';
 import { DragObjectType, isShaken, LocateEvent, DragNodeObject, DragNodeDataObject } from '../../../designer/dragon';
 import { LocationData } from '../../../designer/location';
 import { NodeData } from '../../../designer/schema';
@@ -32,23 +32,19 @@ const defaultSimulatorUrl = (() => {
   if (process.env.NODE_ENV === 'production') {
     urls = [`${publicPath}simulator-renderer.min.css`, `${publicPath}simulator-renderer.min.js`];
   } else {
-    urls = [`${publicPath}simulator-renderer.js`];
+    urls = [`${publicPath}simulator-renderer.css`, `${publicPath}simulator-renderer.js`];
   }
   return urls;
 })();
 
 const defaultDepends = [
-  {
-    type: 'jsUrl',
-    content:
-      'https://g.alicdn.com/mylib/??react/16.11.0/umd/react.production.min.js,react-dom/16.8.6/umd/react-dom.production.min.js,prop-types/15.7.2/prop-types.min.js',
-    id: 'rect',
-  },
-  {
-    type: 'jsText',
-    content:
-      'React.PropTypes=window.PropTypes;window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;',
-  },
+  // https://g.alicdn.com/mylib/??react/16.11.0/umd/react.production.min.js,react-dom/16.8.6/umd/react-dom.production.min.js,prop-types/15.7.2/prop-types.min.js
+  assetItem(AssetType.JSText, 'window.React=parent.React;window.ReactDOM=parent.ReactDOM;', undefined, 'react'),
+  assetItem(
+    AssetType.JSText,
+    'window.PropTypes=parent.PropTypes;React.PropTypes=parent.PropTypes; window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;',
+  ),
+  assetItem(AssetType.JSUrl, 'http://localhost:4444/js/index.js'),
 ];
 
 export class SimulatorHost implements ISimulator<SimulatorProps> {
@@ -138,15 +134,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     return this._renderer;
   }
 
-  readonly componentsConsumer = new ResourceConsumer<{
-    componentsAsset?: Asset;
-    componentsMap: object;
-  }>(() => {
-    return {
-      componentsAsset: this.componentsAsset,
-      componentsMap: this.componentsMap,
-    };
-  });
+  readonly componentsConsumer = new ResourceConsumer<Asset | undefined>(() => this.componentsAsset);
 
   readonly injectionConsumer = new ResourceConsumer(() => {
     return {};
@@ -350,8 +338,8 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     throw new Error('Method not implemented.');
   }
 
-  getClosestNodeId(elem: Element): string {
-    throw new Error('Method not implemented.');
+  getClosestNodeId(elem: Element): string | null {
+    return this.renderer?.getClosestNodeId(elem) || null;
   }
 
   findDOMNodes(instance: ComponentInstance): (Element | Text)[] | null {

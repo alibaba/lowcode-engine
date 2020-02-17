@@ -67,6 +67,9 @@ export class SimulatorRenderer {
       // sync schema
       this._schema = host.document.schema;
 
+      this._componentsMap = host.designer.componentsMap;
+      this.buildComponents();
+
       // sync designMode
 
       // sync suspended
@@ -75,13 +78,11 @@ export class SimulatorRenderer {
 
       // sync device
     });
-    host.componentsConsumer.consume(async (data) => {
-      if (data.componentsAsset) {
-        await this.load(data.componentsAsset);
+    host.componentsConsumer.consume(async (componentsAsset) => {
+      if (componentsAsset) {
+        await this.load(componentsAsset);
+        this.buildComponents();
       }
-
-      // sync componetsMap
-      this._componentsMap = data.componentsMap;
     });
     host.injectionConsumer.consume((data) => {
       // sync utils, i18n, contants,... config
@@ -103,11 +104,14 @@ export class SimulatorRenderer {
   @computed get schema(): any {
     return this._schema;
   }
-  @obx.ref private _componentsMap = {};
+  private buildComponents() {
+    this._components = buildComponents(this._componentsMap);
+  }
+  @obx.ref private _components = {};
   @computed get components(): object {
     // 根据 device 选择不同组件，进行响应式
     // 更好的做法是，根据 device 选择加载不同的组件资源，甚至是 simulatorUrl
-    return buildComponents(this._componentsMap);
+    return this._components;
   }
   // context from: utils、constants、history、location、match
   @obx.ref private _appContext = {};
@@ -118,6 +122,7 @@ export class SimulatorRenderer {
   @computed get designMode(): any {
     return 'border';
   }
+  @obx.ref private _componentsMap = {};
   @computed get componentsMap(): any {
     return this._componentsMap;
   }

@@ -93,7 +93,7 @@ export default class Node {
       this._directives = new Props(this, {});
       Object.keys(extras).forEach(key => {
         if (DIRECTIVES.indexOf(key) > -1) {
-          this.directives!.add((extras as any)[key], key);
+          this._directives!.add((extras as any)[key], key);
           delete (extras as any)[key];
         }
       });
@@ -295,9 +295,9 @@ export default class Node {
     // TODO...
     const schema: any = {
       componentName: this.componentName,
-      ...this.extras,
-      props: this.props,
-      ...this.directives,
+      ...this.extras?.value,
+      props: this.props?.value || {},
+      ...this.directives?.value,
     };
     if (serialize) {
       schema.id = this.id;

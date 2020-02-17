@@ -58,7 +58,11 @@ export default class ResourceConsumer<T = any> {
       }
       await consumer(this._data);
       // TODO: catch error and report
-      this.emitter.emit('consume');
+      if (this.resovleFirst) {
+        this.resovleFirst();
+      } else {
+        this._firstConsumed = true;
+      }
     });
   }
 
@@ -72,9 +76,15 @@ export default class ResourceConsumer<T = any> {
     this.emitter.removeAllListeners();
   }
 
+  private _firstConsumed: boolean = false;
+  private resovleFirst?: () => void;
+
   waitFirstConsume(): Promise<any> {
+    if (this._firstConsumed) {
+      return Promise.resolve();
+    }
     return new Promise((resolve) => {
-      this.emitter.once('consume', resolve);
+      this.resovleFirst = resolve;
     });
   }
 }

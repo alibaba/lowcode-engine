@@ -132,9 +132,9 @@ export interface ISimulator<P = object> extends ISensor {
   /**
    * 根据节点获取节点的组件运行上下文
    */
-  getComponentContext(node: Node): object;
+  getComponentContext(node: Node): object | null;
 
-  getClosestNodeId(elem: Element): string;
+  getClosestNodeId(elem: Element): string | null;
 
   findDOMNodes(instance: ComponentInstance): Array<Element | Text> | null;
 

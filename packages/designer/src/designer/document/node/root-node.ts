@@ -35,12 +35,24 @@ import Props from './props/props';
  */
 export default class RootNode extends Node implements NodeParent {
   readonly isRootNode = true;
-  readonly isNodeParent = true;
-  readonly index = 0;
-  readonly nextSibling = null;
-  readonly prevSibling = null;
-  readonly zLevel = 0;
-  readonly parent = null;
+  get isNodeParent() {
+    return true;
+  }
+  get index() {
+    return 0;
+  }
+  get nextSibling() {
+    return null
+  }
+  get prevSibling() {
+    return null
+  }
+  get zLevel() {
+    return 0;
+  }
+  get parent() {
+    return null
+  }
   get children(): NodeChildren {
     return this._children as NodeChildren;
   }
@@ -51,7 +63,7 @@ export default class RootNode extends Node implements NodeParent {
     return this._extras as any;
   }
   get directives(): Props<RootNode> {
-    return this._props as any;
+    return this._directives as any;
   }
   internalSetParent(parent: null) {}
 

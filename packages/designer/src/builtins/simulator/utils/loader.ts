@@ -1,6 +1,6 @@
 import { load, evaluate } from './script';
 import StylePoint from './style';
-import { Asset, AssetLevel, AssetType, AssetList, isAssetBundle, isAssetItem, assetItem, isCSSUrl, AssetItem } from './asset';
+import { Asset, AssetLevel, AssetLevels, AssetType, AssetList, isAssetBundle, isAssetItem, assetItem, isCSSUrl, AssetItem } from './asset';
 
 function parseAssetList(scripts: any, styles: any, assets: AssetList, level?: AssetLevel) {
   for (let asset of assets) {
@@ -50,10 +50,9 @@ export class AssetLoader {
   async load(asset: Asset) {
     const styles: any = {};
     const scripts: any = {};
-    Object.keys(AssetLevel).forEach((key) => {
-      const v = (AssetLevel as any)[key];
-      styles[v] = [];
-      scripts[v] = [];
+    AssetLevels.forEach((lv) => {
+      styles[lv] = [];
+      scripts[lv] = [];
     });
     parseAsset(scripts, styles, asset);
     const styleQueue: AssetItem[] = styles[AssetLevel.BaseDepends].concat(
