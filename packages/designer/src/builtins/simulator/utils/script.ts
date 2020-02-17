@@ -1,4 +1,4 @@
-import { createDefer } from './create-defer';
+import { createDefer } from '../../../utils/create-defer';
 
 export function evaluate(script: string) {
   const scriptEl = document.createElement('script');
@@ -35,4 +35,20 @@ export function load(url: string) {
   document.head.appendChild(node);
 
   return i.promise();
+}
+
+export function evaluateExpression(expr: string) {
+  // eslint-disable-next-line no-new-func
+  const fn = new Function(expr);
+  return fn();
+}
+
+export function newFunction(args: string, code: string) {
+  try {
+    // eslint-disable-next-line no-new-func
+    return new Function(args, code);
+  } catch (e) {
+    console.warn('Caught error, Cant init func');
+    return null;
+  }
 }

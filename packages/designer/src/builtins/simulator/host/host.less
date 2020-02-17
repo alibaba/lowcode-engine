@@ -1,0 +1,67 @@
+@scope: lc-simulator;
+
+.@{scope} {
+  position: relative;
+  height: 100%;
+  width: 100%;
+
+  &-canvas {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+
+    &-viewport {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+    }
+  }
+
+  &-device-mobile {
+    left: 50%;
+    width: 460px;
+    transform: translateX(-50%);
+    box-shadow: 0 2px 10px 0 rgba(31,56,88,.15);
+  }
+
+  &-device-iphone6 {
+    left: 50%;
+    width: 368px;
+    transform: translateX(-50%);
+    background: url(https://img.alicdn.com/tps/TB12GetLpXXXXXhXFXXXXXXXXXX-756-1544.png) no-repeat top;
+    background-size: 378px 772px;
+    top: 8px;
+    .@{scope}-canvas-viewport {
+      top: 114px;
+      left: 25px;
+      right: 25px;
+      max-height: 561px;
+      border-radius: 0 0 2px 2px;
+    }
+  }
+
+  &-device-legao {
+    margin: 15px;
+    box-shadow: 0 2px 10px 0 rgba(31,56,88,.15);
+  }
+
+  &-content {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    &-frame {
+      border: none;
+      transform-origin: 0 0;
+      height: 100%;
+      width: 100%;
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import { ComponentType } from 'react';
 import { obx, computed } from '@recore/obx';
-import { SimulatorView as BuiltinSimulatorView } from '../builtins/simulator';
+import BuiltinSimulatorView from '../builtins/simulator';
 import Project from './project';
 import { ProjectSchema } from './schema';
 import Dragon, { isDragNodeObject, isDragNodeDataObject, LocateEvent, DragObject } from './dragon';

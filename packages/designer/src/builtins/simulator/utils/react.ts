@@ -1,5 +1,5 @@
 import { ReactInstance } from 'react';
-import { isDOMNode, isElement } from './dom';
+import { isDOMNode, isElement } from '../../../utils/dom';
 
 const FIBER_KEY = '_reactInternalFiber';
 

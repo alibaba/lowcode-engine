@@ -168,17 +168,14 @@ export default class Dragon {
   }
 
   getMasterSensors(): ISimulator[] {
-    return this.designer.project.documents.map(doc => (doc.actived && doc.simulator) || null).filter(Boolean);
-  }
-
-  get master(): DocumentModel {
-
+    return this.designer.project.documents.map(doc => (doc.actived && doc.simulator) || null).filter(Boolean) as any;
   }
 
   /**
    * dragTarget should be a INode | INode[] | NodeData | NodeData[]
    */
   boost(dragObject: DragObject, boostEvent: MouseEvent) {
+    /*
     const doc = document;
     const fromTop = isFromTopDocument(boostEvent);
     let lastLocation: any = null;
@@ -368,6 +365,7 @@ export default class Dragon {
         topDoc.addEventListener('keyup', checkcopy as any, false);
       }
     }
+    */
   }
 
   addSensor(sensor: any) {

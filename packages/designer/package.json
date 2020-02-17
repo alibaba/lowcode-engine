@@ -3,16 +3,13 @@
   "version": "0.9.0",
   "description": "alibaba lowcode designer",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@ali/iceluna-sdk": "^1.0.5-beta.12",
     "@recore/core-obx": "^1.0.4",
     "@recore/obx": "^1.0.5",
     "@types/medium-editor": "^5.0.3",
-    "@ali/lowcode-renderer": "0.9.0",
     "classnames": "^2.2.6",
     "react": "^16",
     "react-dom": "^16.7.0"

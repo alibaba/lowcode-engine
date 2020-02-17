@@ -31,7 +31,7 @@ export interface CompositeObject {
 }
 
 export interface NpmInfo {
-  componentName: string;
+  componentName?: string;
   package: string;
   version: string;
   destructuring?: boolean;
