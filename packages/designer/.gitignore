@@ -6,6 +6,7 @@ dist/
 .vscode/
 .theia/
 .recore/
+demo/
 ~*
 package-lock.json
 
