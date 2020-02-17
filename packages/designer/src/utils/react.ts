@@ -18,7 +18,7 @@ function elementsFromFiber(fiber: any, elements: Array<Element | Text>) {
   }
 }
 
-export function findDOMNodes(elem: Element | ReactInstance | null): Array<Element | Text> | null {
+export function findDOMNodes(elem: ReactInstance | null): Array<Element | Text> | null {
   if (!elem) {
     return null;
   }

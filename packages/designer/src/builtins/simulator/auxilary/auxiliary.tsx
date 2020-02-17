@@ -2,7 +2,7 @@ import { observer } from '@ali/recore';
 import { Component } from 'react';
 import { getCurrentDocument } from '../../globals';
 import './auxiliary.less';
-import { EdgingView } from './edging';
+import { EdgingView } from './gliding';
 import { InsertionView } from './insertion';
 import { SelectingView } from './selecting';
 import EmbedEditorToolbar from './embed-editor-toolbar';

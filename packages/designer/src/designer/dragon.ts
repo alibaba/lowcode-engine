@@ -277,8 +277,8 @@ export default class Dragon {
         doc.removeEventListener('keyup', checkcopy as any, false);
       } else {
         masterSensors.forEach(item => {
-          const odoc = item.ownerDocument;
-          if (odoc && odoc !== doc) {
+          const odoc = item.contentDocument;
+          if (odoc) {
             odoc.removeEventListener('mousemove', move, true);
             odoc.removeEventListener('mouseup', over, true);
             odoc.removeEventListener('mousedown', over, true);

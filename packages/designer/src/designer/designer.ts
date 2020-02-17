@@ -1,15 +1,17 @@
 import { ComponentType } from 'react';
 import { obx, computed } from '@recore/obx';
 import { SimulatorView as BuiltinSimulatorView } from '../builtins/simulator';
-import Dragon, { isDragNodeObject, isDragNodeDataObject, LocateEvent, DragObject } from './dragon';
 import Project from './project';
 import { ProjectSchema } from './schema';
-import DocumentModel from './document/document-model';
+import Dragon, { isDragNodeObject, isDragNodeDataObject, LocateEvent, DragObject } from './dragon';
 import ActiveTracker from './active-tracker';
+import Hovering from './hovering';
 import Location, { LocationData, isLocationChildrenDetail } from './location';
+import DocumentModel from './document/document-model';
 import Node, { insertChildren } from './document/node/node';
 import { isRootNode } from './document/node/root-node';
 import { ComponentDescriptionSpec, ComponentConfig } from './document/node/component-config';
+import Scroller, { IScrollable } from './scroller';
 
 export interface DesignerProps {
   className?: string;
@@ -33,12 +35,14 @@ export default class Designer {
   // readonly hotkey: Hotkey;
   readonly dragon = new Dragon(this);
   readonly activeTracker = new ActiveTracker();
+  readonly hovering = new Hovering();
   readonly project: Project;
 
   constructor(props: DesignerProps) {
     this.project = new Project(this, props.defaultSchema);
 
     this.dragon.onDragstart(e => {
+      this.hovering.enable = false;
       const { dragObject } = e;
       if (isDragNodeObject(dragObject) && dragObject.nodes.length === 1) {
         // ensure current selecting
@@ -78,7 +82,7 @@ export default class Designer {
       if (this.props?.onDragend) {
         this.props.onDragend(e, loc);
       }
-      // this.enableEdging();
+      this.hovering.enable = true;
     });
 
     this.activeTracker.onChange(({ node, detail }) => {
@@ -108,6 +112,10 @@ export default class Designer {
       this._dropLocation.document.internalSetDropLocation(null);
     }
     this._dropLocation = undefined;
+  }
+
+  createScroller(scrollable: IScrollable) {
+    return new Scroller(scrollable);
   }
 
   /**
@@ -152,7 +160,7 @@ export default class Designer {
         this.suspensed = props.suspensed;
       }
       if (props.componentDescriptionSpecs !== this.props.componentDescriptionSpecs && props.componentDescriptionSpecs != null) {
-        this.buildComponentConfigMaps(props.componentDescriptionSpecs);
+        this.buildComponentConfigsMap(props.componentDescriptionSpecs);
       }
     } else {
       // init hotkeys
@@ -169,7 +177,7 @@ export default class Designer {
         this.suspensed = props.suspensed;
       }
       if (props.componentDescriptionSpecs != null) {
-        this.buildComponentConfigMaps(props.componentDescriptionSpecs);
+        this.buildComponentConfigsMap(props.componentDescriptionSpecs);
       }
     }
     this.props = props;
@@ -213,31 +221,39 @@ export default class Designer {
     // todo:
   }
 
-  @obx.val private _componentConfigMaps = new Map<string, ComponentConfig>();
+  @obx.val private _componentConfigsMap = new Map<string, ComponentConfig>();
 
-  private buildComponentConfigMaps(specs: ComponentDescriptionSpec[]) {
+  private buildComponentConfigsMap(specs: ComponentDescriptionSpec[]) {
     specs.forEach(spec => {
       const key = spec.componentName;
-      const had = this._componentConfigMaps.get(key);
+      const had = this._componentConfigsMap.get(key);
       if (had) {
         had.spec = spec;
       } else {
-        this._componentConfigMaps.set(key, new ComponentConfig(spec));
+        this._componentConfigsMap.set(key, new ComponentConfig(spec));
       }
     });
   }
 
   getComponentConfig(componentName: string): ComponentConfig {
-    if (this._componentConfigMaps.has(componentName)) {
-      return this._componentConfigMaps.get(componentName)!;
+    if (this._componentConfigsMap.has(componentName)) {
+      return this._componentConfigsMap.get(componentName)!;
     }
 
     const config = new ComponentConfig({
       componentName,
     });
 
-    this._componentConfigMaps.set(componentName, config);
+    this._componentConfigsMap.set(componentName, config);
     return config;
+  }
+
+  get componentsMap(): { [key: string]: ComponentDescriptionSpec } {
+    const maps: any = {};
+    this._componentConfigsMap.forEach((config, key) => {
+      maps[key] = config.spec;
+    });
+    return maps;
   }
 
   purge() {
