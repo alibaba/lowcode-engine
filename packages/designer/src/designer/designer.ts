@@ -12,7 +12,7 @@ import Node, { insertChildren } from './document/node/node';
 import { isRootNode } from './document/node/root-node';
 import { ComponentDescriptionSpec, ComponentConfig } from './component-config';
 import Scroller, { IScrollable } from './helper/scroller';
-import { INodeInstance } from './simulator';
+import { INodeSelector } from './simulator';
 import OffsetObserver, { createOffsetObserver } from './helper/offset-observer';
 
 export interface DesignerProps {
@@ -96,7 +96,7 @@ export default class Designer {
 
   private _dropLocation?: Location;
   /**
-   * 创建插入位置
+   * 创建插入位置，考虑放到 dragon 中
    */
   createLocation(locationData: LocationData): Location {
     const loc = new Location(locationData);
@@ -109,7 +109,7 @@ export default class Designer {
   /**
    * 清除插入位置
    */
-  private clearLocation() {
+  clearLocation() {
     if (this._dropLocation) {
       this._dropLocation.document.internalSetDropLocation(null);
     }
@@ -120,7 +120,7 @@ export default class Designer {
     return new Scroller(scrollable);
   }
 
-  createOffsetObserver(nodeInstance: INodeInstance): OffsetObserver | null {
+  createOffsetObserver(nodeInstance: INodeSelector): OffsetObserver | null {
     return createOffsetObserver(nodeInstance);
   }
 

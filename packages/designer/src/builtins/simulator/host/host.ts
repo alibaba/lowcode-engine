@@ -1,5 +1,5 @@
 import { obx, autorun, computed } from '@recore/obx';
-import { ISimulator, ComponentInstance, Component } from '../../../designer/simulator';
+import { ISimulator, ComponentInstance, Component, NodeInstance } from '../../../designer/simulator';
 import Viewport from './viewport';
 import { createSimulator } from './create-simulator';
 import { SimulatorRenderer } from '../renderer/renderer';
@@ -12,6 +12,8 @@ import { LocationData } from '../../../designer/helper/location';
 import { NodeData } from '../../../designer/schema';
 import { ComponentDescriptionSpec } from '../../../designer/component-config';
 import { ReactInstance } from 'react';
+import { setNativeSelection } from '../../../utils/navtive-selection';
+import cursor from '../../../designer/helper/cursor';
 
 export interface SimulatorProps {
   // 从 documentModel 上获取
@@ -50,6 +52,7 @@ const defaultDepends = [
 ];
 
 export class SimulatorHost implements ISimulator<SimulatorProps> {
+  readonly isSimulator = true;
   constructor(readonly document: DocumentModel) {}
 
   readonly designer = this.document.designer;
@@ -126,6 +129,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
   get contentWindow() {
     return this._contentWindow;
   }
+
   @obx.ref private _contentDocument?: Document;
   get contentDocument() {
     return this._contentDocument;
@@ -192,8 +196,8 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     // TODO: think of lock when edit a node
     // 事件路由
     doc.addEventListener('mousedown', (downEvent: MouseEvent) => {
-      const target = documentModel.getNodeFromElement(downEvent.target as Element);
-      if (!target) {
+      const nodeInst = documentModel.getNodeInstanceFromElement(downEvent.target as Element);
+      if (!nodeInst?.node) {
         selection.clear();
         return;
       }
@@ -202,7 +206,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
       const isLeftButton = downEvent.which === 1 || downEvent.button === 0;
 
       if (isLeftButton) {
-        let node: Node = target;
+        let node: Node = nodeInst.node;
         let nodes: Node[] = [node];
         let ignoreUpSelected = false;
         if (isMulti) {
@@ -214,7 +218,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
           }
           // 获得顶层 nodes
           nodes = selection.getTopNodes();
-        } else if (selection.containsNode(target)) {
+        } else if (selection.containsNode(node)) {
           nodes = selection.getTopNodes();
         } else {
           // will clear current selection & select dragment in dragstart
@@ -236,7 +240,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
         doc.removeEventListener('mouseup', checkSelect, true);
         if (!isShaken(downEvent, e)) {
           // const node = hasConditionFlow(target) ? target.conditionFlow : target;
-          const node = target;
+          const node = nodeInst.node!;
           const id = node.id;
           designer.activeTracker.track(node);
           if (isMulti && selection.has(id)) {
@@ -252,6 +256,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     // cause edit
     doc.addEventListener('dblclick', (e: MouseEvent) => {
       // TODO:
+
     });
   }
 
@@ -266,9 +271,9 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
       if (!hovering.enable) {
         return;
       }
-      const node = this.document.getNodeFromElement(e.target as Element);
+      const nodeInst = this.document.getNodeInstanceFromElement(e.target as Element);
       // TODO: enhance only hover one instance
-      hovering.hover(node);
+      hovering.hover(nodeInst?.node || null);
       e.stopPropagation();
     };
     const leave = () => hovering.leave(this.document);
@@ -293,15 +298,6 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     };
   }
 
-  setDraggingState(state: boolean): void {
-    throw new Error('Method not implemented.');
-  }
-  isDraggingState(): boolean {
-    throw new Error('Method not implemented.');
-  }
-  setCopyState(state: boolean): void {
-    throw new Error('Method not implemented.');
-  }
   setSuspense(suspended: boolean) {
     if (suspended) {
       if (this.disableHovering) {
@@ -315,13 +311,8 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
       }
     }
   }
+
   setDesignMode(mode: string): void {
-    throw new Error('Method not implemented.');
-  }
-  isCopyState(): boolean {
-    throw new Error('Method not implemented.');
-  }
-  clearState(): void {
     throw new Error('Method not implemented.');
   }
 
@@ -345,8 +336,8 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     throw new Error('Method not implemented.');
   }
 
-  getClosestNodeId(elem: Element): string | null {
-    return this.renderer?.getClosestNodeId(elem) || null;
+  getClosestNodeInstance(elem: Element): NodeInstance | null {
+    return this.renderer?.getClosestNodeInstance(elem) || null;
   }
 
   computeComponentInstanceRect(instance: ReactInstance): DOMRect | null {
@@ -459,6 +450,20 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     }
   }
 
+  // #region ========= drag and drop helpers =============
+  setNativeSelection(enableFlag: boolean) {
+    setNativeSelection(enableFlag);
+  }
+  setDraggingState(state: boolean) {
+    cursor.setDragging(state);
+  }
+  setCopyState(state: boolean) {
+    cursor.setCopy(state);
+  }
+  clearState() {
+    cursor.release();
+  }
+
   fixEvent(e: LocateEvent): LocateEvent {
     /*
     if (e.fixed) {
@@ -483,7 +488,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     this.scroller.cancel();
   }
 
-  //#region drag locate logic
+  // ========= drag location logic start ==========
   getDropTarget(e: LocateEvent): NodeParent | LocationData | null {
     /*
     const { target, dragTarget } = e;
@@ -841,5 +846,5 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     }*/
     return false;
   }
-  //#endregion
+  // #endregion
 }

@@ -3,7 +3,7 @@ import { RootSchema, NodeData, isDOMText, isJSExpression, NodeSchema } from '../
 import Node, { isNodeParent, insertChildren, insertChild, NodeParent } from './node/node';
 import { Selection } from './selection';
 import RootNode from './node/root-node';
-import { ISimulator, ComponentInstance, Component } from '../simulator';
+import { ISimulator, ComponentInstance, Component, NodeInstance } from '../simulator';
 import { computed, obx } from '@recore/obx';
 import Location from '../helper/location';
 import { ComponentConfig } from '../component-config';
@@ -245,16 +245,20 @@ export default class DocumentModel {
   /**
    * 通过 DOM 节点获取节点，依赖 simulator 的接口
    */
-  getNodeFromElement(target: Element | null): Node | null {
+  getNodeInstanceFromElement(target: Element | null): NodeInstance | null {
     if (!this.simulator || !target) {
       return null;
     }
 
-    const id = this.simulator.getClosestNodeId(target);
-    if (!id) {
+    const nodeIntance = this.simulator.getClosestNodeInstance(target);
+    if (!nodeIntance) {
       return null;
     }
-    return this.getNode(id) as Node;
+    const node = this.getNode(nodeIntance.nodeId);
+    return {
+      ...nodeIntance,
+      node,
+    };
   }
 
   /**

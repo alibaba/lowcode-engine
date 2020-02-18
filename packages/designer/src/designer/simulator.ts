@@ -59,6 +59,7 @@ export interface IViewport extends IScrollable {
  * 模拟器控制进程协议
  */
 export interface ISimulator<P = object> extends ISensor {
+  readonly isSimulator: true;
   /**
    * 获得边界维度等信息
    */
@@ -77,26 +78,23 @@ export interface ISimulator<P = object> extends ISensor {
   // 获取区块代码, 通过 components 传递，可异步获取
   setProps(props: P): void;
 
+
+  setSuspense(suspensed: boolean): void;
+
+  // #region ========= drag and drop helpers =============
+
+  /**
+   * 设置文字拖选
+   */
+  setNativeSelection(enableFlag: boolean): void;
   /**
    * 设置拖拽态
    */
   setDraggingState(state: boolean): void;
-
-  /**
-   * 是否拖拽态
-   */
-  isDraggingState(): boolean;
-
   /**
    * 设置拷贝态
    */
   setCopyState(state: boolean): void;
-
-  /**
-   * 是否拷贝态
-   */
-  isCopyState(): boolean;
-
   /**
    * 清除所有态：拖拽态、拷贝态
    */
@@ -108,14 +106,16 @@ export interface ISimulator<P = object> extends ISensor {
   locate(e: LocateEvent): any;
 
   /**
-   * 滚动视口到节点
-   */
-  scrollToNode(node: Node, detail?: any): void;
-
-  /**
    * 给 event 打补丁，添加 canvasX, globalX 等信息，用于拖拽
    */
   fixEvent(e: LocateEvent): LocateEvent;
+
+  // #endregion
+
+  /**
+   * 滚动视口到节点
+   */
+  scrollToNode(node: Node, detail?: any): void;
 
   /**
    * 描述组件
@@ -134,17 +134,26 @@ export interface ISimulator<P = object> extends ISensor {
    */
   getComponentContext(node: Node): object | null;
 
-  getClosestNodeId(elem: Element): string | null;
+  getClosestNodeInstance(elem: Element): NodeInstance | null;
 
   computeComponentInstanceRect(instance: ComponentInstance): DOMRect | null;
 
   findDOMNodes(instance: ComponentInstance): Array<Element | Text> | null;
 
-  setSuspense(suspensed: boolean): void;
   /**
    * 销毁
    */
   purge(): void;
+}
+
+export function isSimulator(obj: any): obj is ISimulator {
+  return obj && obj.isSimulator;
+}
+
+export interface NodeInstance {
+  nodeId: string;
+  instance: ComponentInstance;
+  node?: Node | null;
 }
 
 /**
@@ -157,7 +166,7 @@ export type Component = ComponentType<any> | object;
  */
 export type ComponentInstance = Element | ReactComponent<any> | object;
 
-export interface INodeInstance {
+export interface INodeSelector {
   node: Node;
   instance?: ComponentInstance;
 }

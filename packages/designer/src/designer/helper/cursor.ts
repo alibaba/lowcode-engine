@@ -45,14 +45,14 @@ export class Cursor {
   private addState(state: string) {
     if (!this.states.has(state)) {
       this.states.add(state);
-      document.documentElement.classList.add(`my-cursor-${state}`);
+      document.documentElement.classList.add(`lc-cursor-${state}`);
     }
   }
 
   private removeState(state: string) {
     if (this.states.has(state)) {
       this.states.delete(state);
-      document.documentElement.classList.remove(`my-cursor-${state}`);
+      document.documentElement.classList.remove(`lc-cursor-${state}`);
     }
   }
 }

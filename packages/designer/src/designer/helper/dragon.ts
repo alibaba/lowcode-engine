@@ -3,9 +3,11 @@ import { obx } from '@recore/obx';
 import Location from './location';
 import DocumentModel from '../document/document-model';
 import { NodeData } from '../schema';
-import { ISimulator } from '../simulator';
+import { ISimulator, isSimulator } from '../simulator';
 import Node from '../document/node/node';
 import Designer from '../designer';
+import { setNativeSelection } from '../../utils/navtive-selection';
+import cursor from './cursor';
 
 export interface LocateEvent {
   readonly type: 'LocateEvent';
@@ -22,10 +24,17 @@ export interface LocateEvent {
    * 拖拽对象
    */
   readonly dragObject: DragObject;
+
+  /**
+   * 激活的感应器
+   */
+  sensor?: ISensor;
+
+  // ======= 以下是 激活的 sensor 将填充的值 ========
   /**
    * 浏览器事件响应目标
    */
-  target: Element | null;
+  target?: Element | null;
   /**
    * 当前激活文档画布坐标系
    */
@@ -134,14 +143,18 @@ export default class Dragon {
   private sensors: ISensor[] = [];
 
   /**
-   * current actived sensor
+   * current actived sensor, 可用于感应区高亮
    */
-  private _activeSensor: ISensor | undefined;
+  @obx.ref private _activeSensor: ISensor | undefined;
   get activeSensor(): ISensor | undefined {
     return this._activeSensor;
   }
 
-  @obx.ref dragging = false;
+  @obx.ref private _dragging: boolean = false;
+  get dragging(): boolean {
+    return this._dragging;
+  }
+
   private emitter = new EventEmitter();
 
   constructor(readonly designer: Designer) {}
@@ -168,66 +181,69 @@ export default class Dragon {
   }
 
   getMasterSensors(): ISimulator[] {
-    return this.designer.project.documents.map(doc => (doc.actived && doc.simulator) || null).filter(Boolean) as any;
+    return this.designer.project.documents.map(doc => {
+      if (doc.actived && doc.simulator?.sensorAvailable) {
+        return doc.simulator;
+      }
+      return null;
+    }).filter(Boolean) as any;
   }
 
-  /**
-   * dragTarget should be a INode | INode[] | NodeData | NodeData[]
-   */
   boost(dragObject: DragObject, boostEvent: MouseEvent) {
-    /*
     const doc = document;
-    const fromTop = isFromTopDocument(boostEvent);
-    let lastLocation: any = null;
-    let lastSensor: ISensor | undefined;
-    this.dragging = false;
+    const isFromTop = isFromTopDocument(boostEvent);
     const masterSensors = this.getMasterSensors();
-    masterSensors.forEach((sensor) => {
-      sensor.setNativeSelection(false);
-    });
-    //
+    const designer = this.designer;
+    const newBie = dragObject.type !== DragObjectType.Node;
+    let lastSensor: ISensor | undefined;
+
+    this._dragging = false;
+    // 禁用默认的文稿拖选
+    this.setNativeSelection(false);
 
     const checkesc = (e: KeyboardEvent) => {
       if (e.keyCode === 27) {
-        lastLocation = null;
-        master.document.clearLocation();
+        designer.clearLocation();
         over();
       }
     };
 
     const checkcopy = (e: MouseEvent) => {
       if (newBie || e.altKey || e.ctrlKey) {
-        master.setCopy(true);
+        this.setCopyState(true);
       } else {
-        master.setCopy(false);
+        this.setCopyState(false);
       }
     };
+
+    // period one fix:
+    // get evt source-sensor
+    // get globalX and globalY source-sensor
 
     const drag = (e: MouseEvent) => {
       checkcopy(e);
 
-      const locateEvent = fixEvent(e);
+      const locateEvent = createLocateEvent(e);
       const sensor = chooseSensor(locateEvent);
       if (sensor) {
         sensor.fixEvent(locateEvent);
-        lastLocation = sensor.locate(locateEvent);
+        sensor.locate(locateEvent);
       } else {
-        master.document.clearLocation();
-        lastLocation = null;
+        designer.clearLocation();
       }
-      this.emitter.emit('drag', locateEvent, lastLocation);
+      this.emitter.emit('drag', locateEvent);
     };
 
     const dragstart = () => {
-      const locateEvent = fixEvent(boostEvent);
+      const locateEvent = createLocateEvent(boostEvent);
       if (!newBie) {
         chooseSensor(locateEvent);
       }
-      master.setDragging(true);
+      this.setDraggingState(true);
       // ESC cancel drag
       doc.addEventListener('keydown', checkesc, false);
-      if (topDoc) {
-        topDoc.addEventListener('keydown', checkesc, false);
+      if (isFromTop) {
+        // topDoc.addEventListener('keydown', checkesc, false);
       }
       this.emitter.emit('dragstart', locateEvent);
     };
@@ -239,7 +255,7 @@ export default class Dragon {
       }
 
       if (isShaken(boostEvent, e)) {
-        this.dragging = true;
+        this._dragging = true;
 
         setShaken(boostEvent);
         dragstart();
@@ -249,23 +265,23 @@ export default class Dragon {
 
     const over = (e?: any) => {
       if (lastSensor) {
-        lastSensor.deactive();
+        lastSensor.deactiveSensor();
       }
-      master.setNativeSelection(true);
+      this.setNativeSelection(true);
 
       let exception;
-      if (this.dragging) {
-        this.dragging = false;
+      if (this._dragging) {
+        this._dragging = false;
         try {
-          this.emitter.emit('dragend', { dragTarget: dragObject, copy: master.isCopy() }, lastLocation);
+          this.emitter.emit('dragend', { dragTarget: dragObject, copy: this.isCopyState() });
         } catch (ex) {
           exception = ex;
         }
       }
 
-      master.releaseCursor();
+      this.clearState();
 
-      if (fromTop) {
+      if (isFromTop) {
         doc.removeEventListener('mousemove', move, true);
         doc.removeEventListener('mouseup', over, true);
         doc.removeEventListener('mousedown', over, true);
@@ -290,28 +306,44 @@ export default class Dragon {
       }
     };
 
-    const fixEvent = (e: MouseEvent): LocateEvent => {
+    const createLocateEvent = (e: MouseEvent): LocateEvent => {
       if (isLocateEvent(e)) {
         return e;
       }
+
       const evt: any = {
         type: 'LocateEvent',
+        dragObject,
         target: e.target,
-        dragTarget: dragObject,
         originalEvent: e,
       };
-      if (e.view!.document === document) {
-        const l = viewport.toLocalPoint(e);
-        evt.clientX = l.clientX;
-        evt.clientY = l.clientY;
+
+      const sourceDocument = e.view?.document;
+
+      if (!sourceDocument || sourceDocument === document) {
         evt.globalX = e.clientX;
         evt.globalY = e.clientY;
       } else {
-        const g = viewport.toGlobalPoint(e);
-        evt.clientX = e.clientX;
-        evt.clientY = e.clientY;
-        evt.globalX = g.clientX;
-        evt.globalY = g.clientY;
+        let srcSim: ISimulator | undefined;
+        let lastSim = lastSensor && isSimulator(lastSensor) ? lastSensor : null;
+        if (lastSim && lastSim.contentDocument === sourceDocument) {
+          srcSim = lastSim;
+        } else {
+          srcSim = masterSensors.find(sim => sim.contentDocument === sourceDocument);
+          if (!srcSim && lastSim) {
+            srcSim = lastSim;
+          }
+        }
+        if (srcSim) {
+          const g = srcSim.viewport.toGlobalPoint(e);
+          evt.globalX = g.clientX;
+          evt.globalY = g.clientY;
+          evt.sensor = srcSim;
+        } else {
+          // this condition will not happen, just make sure ts ok
+          evt.globalX = e.clientX;
+          evt.globalY = e.clientY;
+        }
       }
       return evt;
     };
@@ -320,15 +352,13 @@ export default class Dragon {
       if (!isDragNodeObject(dragObject)) {
         return null;
       }
-      return (Array.isArray(dragObject.nodes) ? dragObject.nodes[0] : dragObject.nodes)?.document.simulator || null;
+      return dragObject.nodes[0]?.document.simulator || null;
     }
 
-    const simSensors = this.project.documents.map(doc => (doc.actived && doc.simulator) || null).filter(Boolean);
     const sourceSensor = getSourceSensor(dragObject);
-    // check simulator is empty
-    const sensors: ISensor[] = simSensors.concat(this.sensors);
+    const sensors: ISensor[] = (masterSensors as ISensor[]).concat(this.sensors);
     const chooseSensor = (e: LocateEvent) => {
-      let sensor = sensors.find(s => s.sensorAvailable && s.isEnter(e));
+      let sensor = e.sensor || sensors.find(s => s.sensorAvailable && s.isEnter(e));
       if (!sensor) {
         if (lastSensor) {
           sensor = lastSensor;
@@ -343,6 +373,7 @@ export default class Dragon {
         lastSensor = sensor;
       }
       if (sensor) {
+        e.sensor = sensor;
         sensor.fixEvent(e);
       }
       this._activeSensor = sensor;
@@ -352,26 +383,81 @@ export default class Dragon {
     doc.addEventListener('mousemove', move, true);
     doc.addEventListener('mouseup', over, true);
     doc.addEventListener('mousedown', over, true);
-    if (topDoc) {
+    if (isFromTop) {/*
       topDoc.addEventListener('mousemove', move, true);
       topDoc.addEventListener('mouseup', over, true);
       topDoc.addEventListener('mousedown', over, true);
+      */
     }
+
     if (!newBie) {
       doc.addEventListener('keydown', checkcopy as any, false);
       doc.addEventListener('keyup', checkcopy as any, false);
-      if (topDoc) {
+      if (isFromTop) {/*
         topDoc.addEventListener('keydown', checkcopy as any, false);
         topDoc.addEventListener('keyup', checkcopy as any, false);
+        */
       }
     }
-    */
   }
 
+  // #region ======== drag and drop helpers ============
+  private setNativeSelection(enableFlag: boolean) {
+    setNativeSelection(enableFlag);
+    this.designer.project.documents.forEach(doc => {
+      doc.simulator?.setNativeSelection(enableFlag);
+    });
+  }
+
+  /**
+   * 设置拖拽态
+   */
+  private setDraggingState(state: boolean) {
+    cursor.setDragging(state);
+    this.designer.project.documents.forEach(doc => {
+      doc.simulator?.setDraggingState(state);
+    });
+  }
+
+  /**
+   * 设置拷贝态
+   */
+  private setCopyState(state: boolean) {
+    cursor.setCopy(state);
+    this.designer.project.documents.forEach(doc => {
+      doc.simulator?.setCopyState(state);
+    });
+  }
+
+  /**
+   * 是否拷贝态
+   */
+  private isCopyState(): boolean {
+    return cursor.isCopy();
+  }
+
+  /**
+   * 清除所有态：拖拽态、拷贝态
+   */
+  private clearState() {
+    cursor.release();
+    this.designer.project.documents.forEach(doc => {
+      doc.simulator?.clearState();
+    });
+  }
+  // #endregion
+
+
+  /**
+   * 添加投放感应区
+   */
   addSensor(sensor: any) {
     this.sensors.push(sensor);
   }
 
+  /**
+   * 移除投放感应
+   */
   removeSensor(sensor: any) {
     const i = this.sensors.indexOf(sensor);
     if (i > -1) {
@@ -386,14 +472,14 @@ export default class Dragon {
     };
   }
 
-  onDrag(func: (e: LocateEvent, location: Location) => any) {
+  onDrag(func: (e: LocateEvent) => any) {
     this.emitter.on('drag', func);
     return () => {
       this.emitter.removeListener('drag', func);
     };
   }
 
-  onDragend(func: (x: { dragObject: DragObject; copy: boolean }, location: Location) => any) {
+  onDragend(func: (x: { dragObject: DragObject; copy: boolean }) => any) {
     this.emitter.on('dragend', func);
     return () => {
       this.emitter.removeListener('dragend', func);

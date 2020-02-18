@@ -9,6 +9,8 @@ import { Asset } from '../utils/asset';
 import loader from '../utils/loader';
 import { ComponentDescriptionSpec } from '../../../designer/component-config';
 import { findDOMNodes } from '../utils/react';
+import { isESModule } from '../../../utils/is-es-module';
+import { NodeInstance } from '../../../designer/simulator';
 
 let REACT_KEY = '';
 function cacheReactKey(el: Element): Element {
@@ -24,28 +26,36 @@ function cacheReactKey(el: Element): Element {
 
 const SYMBOL_VNID = Symbol('_LCNodeId');
 
-function getClosestNodeId(element: Element): string | null {
+function getClosestNodeInstance(element: Element): NodeInstance | null {
   let el: any = element;
   if (el) {
     el = cacheReactKey(el);
   }
   while (el) {
     if (SYMBOL_VNID in el) {
-      return el[SYMBOL_VNID];
+      return {
+        nodeId: el[SYMBOL_VNID],
+        instance: el,
+      };
     }
+    // get fiberNode from element
     if (el[REACT_KEY]) {
-      return getNodeId(el[REACT_KEY]);
+      return getNodeInstance(el[REACT_KEY]);
     }
     el = el.parentElement;
   }
   return null;
 }
 
-function getNodeId(instance: any): string {
-  if (instance.stateNode && SYMBOL_VNID in instance.stateNode) {
-    return instance.stateNode[SYMBOL_VNID];
+function getNodeInstance(fiberNode: any): NodeInstance | null {
+  const instance = fiberNode.stateNode;
+  if (instance && SYMBOL_VNID in instance) {
+    return {
+      nodeId: instance[SYMBOL_VNID],
+      instance,
+    };
   }
-  return getNodeId(instance.return);
+  return getNodeInstance(fiberNode.return);
 }
 
 function checkInstanceMounted(instance: any): boolean {
@@ -190,8 +200,8 @@ export class SimulatorRenderer {
     return this.instancesMap.get(id) || null;
   }
 
-  getClosestNodeId(element: Element): string | null {
-    return getClosestNodeId(element);
+  getClosestNodeInstance(element: Element): NodeInstance | null {
+    return getClosestNodeInstance(element);
   }
 
   findDOMNodes(instance: ReactInstance): Array<Element | Text> | null {
@@ -228,22 +238,31 @@ function accessLibrary(library: string | object) {
   return (window as any)[library];
 }
 
-function getSubComponent(component: any, paths: string[]) {
+function getSubComponent(library: any, paths: string[]) {
   const l = paths.length;
-  if (l < 1) {
-    return component;
+  if (l < 1 || !library) {
+    return library;
   }
   let i = 0;
+  let component: any;
   while (i < l) {
     const key = paths[i]!;
+    let ex: any;
     try {
-      component = (component as any)[key];
+      component = library[key];
     } catch (e) {
+      ex = e;
+      component = null;
+    }
+    if (i === 0 && component == null && key === 'default') {
+      if (ex) {
+        return l === 1 ? library : null;
+      }
+      component = library;
+    } else if (component == null) {
       return null;
     }
-    if (!component) {
-      return null;
-    }
+    library = component;
     i++;
   }
   return component;
@@ -253,13 +272,21 @@ function findComponent(componentName: string, npm?: NpmInfo) {
   if (!npm) {
     return accessLibrary(componentName);
   }
+  // libraryName the key access to global
+  // export { exportName } from xxx exportName === global.libraryName.exportName
+  // export exportName from xxx   exportName === global.libraryName.default || global.libraryName
+  // export { exportName as componentName } from package
+  // if exportName == null exportName === componentName;
+  // const componentName = exportName.subName, if exportName empty subName donot use
   const libraryName = npm.exportName || npm.componentName || componentName;
-  const component = accessLibrary(libraryName);
-  const paths = npm.subName ? npm.subName.split('.') : [];
+  const library = accessLibrary(libraryName);
+  const paths = npm.exportName && npm.subName ? npm.subName.split('.') : [];
   if (npm.destructuring) {
     paths.unshift(libraryName);
+  } else if (isESModule(library)) {
+    paths.unshift('default');
   }
-  return getSubComponent(component, paths);
+  return getSubComponent(library, paths);
 }
 
 function buildComponents(componentsMap: { [componentName: string]: ComponentDescriptionSpec }) {

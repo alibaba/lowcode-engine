@@ -1,5 +1,5 @@
 import { obx, computed } from '@recore/obx';
-import { INodeInstance, IViewport } from '../simulator';
+import { INodeSelector, IViewport } from '../simulator';
 import Viewport from '../../builtins/simulator/host/viewport';
 
 export default class OffsetObserver {
@@ -24,7 +24,7 @@ export default class OffsetObserver {
   private pid: number | undefined;
   private viewport: IViewport;
 
-  constructor(readonly nodeInstance: INodeInstance) {
+  constructor(readonly nodeInstance: INodeSelector) {
     const { node, instance } = nodeInstance;
     const doc = node.document;
     const host = doc.simulator!;
@@ -67,7 +67,7 @@ export default class OffsetObserver {
   }
 }
 
-export function createOffsetObserver(nodeInstance: INodeInstance): OffsetObserver | null {
+export function createOffsetObserver(nodeInstance: INodeSelector): OffsetObserver | null {
   if (!nodeInstance.instance) {
     return null;
   }
