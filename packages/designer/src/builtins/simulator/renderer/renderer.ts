@@ -4,66 +4,14 @@ import { host } from './host';
 import SimulatorRendererView from './renderer-view';
 import { computed, obx } from '@recore/obx';
 import { RootSchema, NpmInfo } from '../../../designer/schema';
-import { isElement, getClientRects } from '../../../utils/dom';
+import { getClientRects } from '../../../utils/get-client-rects';
 import { Asset } from '../utils/asset';
 import loader from '../utils/loader';
 import { ComponentDescriptionSpec } from '../../../designer/component-config';
-import { findDOMNodes } from '../utils/react';
+import { reactFindDOMNodes } from '../utils/react-find-dom-nodes';
 import { isESModule } from '../../../utils/is-es-module';
 import { NodeInstance } from '../../../designer/simulator';
-
-let REACT_KEY = '';
-function cacheReactKey(el: Element): Element {
-  if (REACT_KEY !== '') {
-    return el;
-  }
-  REACT_KEY = Object.keys(el).find(key => key.startsWith('__reactInternalInstance$')) || '';
-  if (!REACT_KEY && (el as HTMLElement).parentElement) {
-    return cacheReactKey((el as HTMLElement).parentElement!);
-  }
-  return el;
-}
-
-const SYMBOL_VNID = Symbol('_LCNodeId');
-
-function getClosestNodeInstance(element: Element): NodeInstance | null {
-  let el: any = element;
-  if (el) {
-    el = cacheReactKey(el);
-  }
-  while (el) {
-    if (SYMBOL_VNID in el) {
-      return {
-        nodeId: el[SYMBOL_VNID],
-        instance: el,
-      };
-    }
-    // get fiberNode from element
-    if (el[REACT_KEY]) {
-      return getNodeInstance(el[REACT_KEY]);
-    }
-    el = el.parentElement;
-  }
-  return null;
-}
-
-function getNodeInstance(fiberNode: any): NodeInstance | null {
-  const instance = fiberNode.stateNode;
-  if (instance && SYMBOL_VNID in instance) {
-    return {
-      nodeId: instance[SYMBOL_VNID],
-      instance,
-    };
-  }
-  return getNodeInstance(fiberNode.return);
-}
-
-function checkInstanceMounted(instance: any): boolean {
-  if (isElement(instance)) {
-    return instance.parentElement != null;
-  }
-  return true;
-}
+import { isElement } from '../../../utils/is-element';
 
 export class SimulatorRenderer {
   readonly isSimulatorRenderer = true;
@@ -205,7 +153,7 @@ export class SimulatorRenderer {
   }
 
   findDOMNodes(instance: ReactInstance): Array<Element | Text> | null {
-    return findDOMNodes(instance);
+    return reactFindDOMNodes(instance);
   }
 
   getClientRects(element: Element | Text) {
@@ -295,6 +243,60 @@ function buildComponents(componentsMap: { [componentName: string]: ComponentDesc
     components[componentName] = findComponent(componentName, componentsMap[componentName].npm);
   });
   return components;
+}
+
+
+let REACT_KEY = '';
+function cacheReactKey(el: Element): Element {
+  if (REACT_KEY !== '') {
+    return el;
+  }
+  REACT_KEY = Object.keys(el).find(key => key.startsWith('__reactInternalInstance$')) || '';
+  if (!REACT_KEY && (el as HTMLElement).parentElement) {
+    return cacheReactKey((el as HTMLElement).parentElement!);
+  }
+  return el;
+}
+
+const SYMBOL_VNID = Symbol('_LCNodeId');
+
+function getClosestNodeInstance(element: Element): NodeInstance | null {
+  let el: any = element;
+  if (el) {
+    el = cacheReactKey(el);
+  }
+  while (el) {
+    if (SYMBOL_VNID in el) {
+      return {
+        nodeId: el[SYMBOL_VNID],
+        instance: el,
+      };
+    }
+    // get fiberNode from element
+    if (el[REACT_KEY]) {
+      return getNodeInstance(el[REACT_KEY]);
+    }
+    el = el.parentElement;
+  }
+  return null;
+}
+
+function getNodeInstance(fiberNode: any): NodeInstance | null {
+  const instance = fiberNode.stateNode;
+  if (instance && SYMBOL_VNID in instance) {
+    return {
+      nodeId: instance[SYMBOL_VNID],
+      instance,
+    };
+  }
+  return getNodeInstance(fiberNode.return);
+}
+
+function checkInstanceMounted(instance: any): boolean {
+  if (isElement(instance)) {
+    return instance.parentElement != null;
+  }
+  return true;
 }
 
 export default new SimulatorRenderer();

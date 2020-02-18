@@ -1,4 +1,4 @@
-import { createDefer } from '../../../utils/create-defer';
+import { createDefer } from './create-defer';
 
 export default class StylePoint {
   private lastContent: string | undefined;

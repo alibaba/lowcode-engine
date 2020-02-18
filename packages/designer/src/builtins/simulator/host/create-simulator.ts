@@ -1,7 +1,8 @@
 // NOTE: 仅用作类型标注，切勿作为实体使用
 import { SimulatorRenderer } from '../renderer/renderer';
 import { SimulatorHost } from './host';
-import { AssetLevel, AssetLevels, AssetList, isAssetBundle, isAssetItem, isCSSUrl, AssetType, assetItem } from '../utils/asset';
+import { AssetLevel, AssetLevels, AssetList, isAssetBundle, isAssetItem, AssetType, assetItem } from '../utils/asset';
+import { isCSSUrl } from '../../../utils/is-css-url';
 
 export function createSimulator(host: SimulatorHost, iframe: HTMLIFrameElement, vendors: AssetList = []): Promise<SimulatorRenderer> {
   const win: any = iframe.contentWindow;

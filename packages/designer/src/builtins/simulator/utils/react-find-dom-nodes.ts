@@ -1,5 +1,6 @@
 import { ReactInstance } from 'react';
-import { isDOMNode, isElement } from '../../../utils/dom';
+import { isElement } from '../../../utils/is-element';
+import { isDOMNode } from '../../../utils/is-dom-node';
 
 const FIBER_KEY = '_reactInternalFiber';
 
@@ -18,7 +19,7 @@ function elementsFromFiber(fiber: any, elements: Array<Element | Text>) {
   }
 }
 
-export function findDOMNodes(elem: ReactInstance | null): Array<Element | Text> | null {
+export function reactFindDOMNodes(elem: ReactInstance | null): Array<Element | Text> | null {
   if (!elem) {
     return null;
   }

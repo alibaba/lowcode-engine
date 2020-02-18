@@ -7,7 +7,7 @@ import { ISimulator, ComponentInstance, Component, NodeInstance } from '../simul
 import { computed, obx } from '@recore/obx';
 import Location from '../helper/location';
 import { ComponentConfig } from '../component-config';
-import { isElement } from '../../utils/dom';
+import { isElement } from '../../utils/is-element';
 
 export default class DocumentModel {
   /**

@@ -1,4 +1,4 @@
-import { createDefer } from '../../../utils/create-defer';
+import { createDefer } from './create-defer';
 
 export function evaluate(script: string) {
   const scriptEl = document.createElement('script');

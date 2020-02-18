@@ -1,6 +1,7 @@
 import { load, evaluate } from './script';
 import StylePoint from './style';
-import { Asset, AssetLevel, AssetLevels, AssetType, AssetList, isAssetBundle, isAssetItem, assetItem, isCSSUrl, AssetItem } from './asset';
+import { Asset, AssetLevel, AssetLevels, AssetType, AssetList, isAssetBundle, isAssetItem, assetItem, AssetItem } from './asset';
+import { isCSSUrl } from '../../../utils/is-css-url';
 
 function parseAssetList(scripts: any, styles: any, assets: AssetList, level?: AssetLevel) {
   for (let asset of assets) {

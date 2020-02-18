@@ -56,6 +56,7 @@ export default class Designer {
     });
 
     this.dragon.onDrag(e => {
+      console.info(e);
       if (this.props?.onDrag) {
         this.props.onDrag(e);
       }

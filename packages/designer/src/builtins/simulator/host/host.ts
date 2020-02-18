@@ -12,7 +12,7 @@ import { LocationData } from '../../../designer/helper/location';
 import { NodeData } from '../../../designer/schema';
 import { ComponentDescriptionSpec } from '../../../designer/component-config';
 import { ReactInstance } from 'react';
-import { setNativeSelection } from '../../../utils/navtive-selection';
+import { setNativeSelection } from '../../../designer/helper/navtive-selection';
 import cursor from '../../../designer/helper/cursor';
 
 export interface SimulatorProps {

@@ -1,10 +1,4 @@
-export function isDOMNode(node: any): node is Element | Text {
-  return node.nodeType && (node.nodeType === Node.ELEMENT_NODE || node.nodeType === Node.TEXT_NODE);
-}
-
-export function isElement(node: any): node is Element {
-  return node.nodeType === Node.ELEMENT_NODE;
-}
+import { isElement } from './is-element';
 
 // a range for test TextNode clientRect
 const cycleRange = document.createRange();
