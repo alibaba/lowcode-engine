@@ -1,11 +1,11 @@
 import { EventEmitter } from 'events';
 import { obx } from '@recore/obx';
 import Location from './location';
-import DocumentModel from './document/document-model';
-import { NodeData } from './schema';
-import { ISimulator } from './simulator';
-import Node from './document/node/node';
-import Designer from './designer';
+import DocumentModel from '../document/document-model';
+import { NodeData } from '../schema';
+import { ISimulator } from '../simulator';
+import Node from '../document/node/node';
+import Designer from '../designer';
 
 export interface LocateEvent {
   readonly type: 'LocateEvent';

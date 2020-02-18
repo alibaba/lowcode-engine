@@ -1,4 +1,4 @@
-import { isElement } from '../utils/dom';
+import { isElement } from '../../utils/dom';
 
 export class ScrollTarget {
   get left() {

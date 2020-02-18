@@ -7,7 +7,7 @@ import { RootSchema, NpmInfo } from '../../../designer/schema';
 import { isElement, getClientRects } from '../../../utils/dom';
 import { Asset } from '../utils/asset';
 import loader from '../utils/loader';
-import { ComponentDescriptionSpec } from '../../../designer/document/node/component-config';
+import { ComponentDescriptionSpec } from '../../../designer/component-config';
 import { findDOMNodes } from '../utils/react';
 
 let REACT_KEY = '';

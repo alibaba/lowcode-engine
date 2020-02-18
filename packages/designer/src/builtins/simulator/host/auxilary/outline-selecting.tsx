@@ -4,7 +4,7 @@ import { observer } from '@recore/core-obx';
 import { SimulatorContext } from '../context';
 import { SimulatorHost } from '../host';
 import { computed } from '@recore/obx';
-import OffsetObserver from '../../../../designer/offset-observer';
+import OffsetObserver from '../../../../designer/helper/offset-observer';
 
 @observer
 export class OutlineSelectingInstance extends Component<{ observed: OffsetObserver; highlight?: boolean }> {

@@ -6,7 +6,7 @@ import NodeChildren from './node-children';
 import Prop from './props/prop';
 import NodeContent from './node-content';
 import { Component } from '../../simulator';
-import { ComponentConfig } from './component-config';
+import { ComponentConfig } from '../../component-config';
 
 const DIRECTIVES = ['condition', 'conditionGroup', 'loop', 'loopArgs', 'title', 'ignore', 'hidden', 'locked'];
 

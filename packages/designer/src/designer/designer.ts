@@ -3,17 +3,17 @@ import { obx, computed } from '@recore/obx';
 import BuiltinSimulatorView from '../builtins/simulator';
 import Project from './project';
 import { ProjectSchema } from './schema';
-import Dragon, { isDragNodeObject, isDragNodeDataObject, LocateEvent, DragObject } from './dragon';
-import ActiveTracker from './active-tracker';
-import Hovering from './hovering';
-import Location, { LocationData, isLocationChildrenDetail } from './location';
+import Dragon, { isDragNodeObject, isDragNodeDataObject, LocateEvent, DragObject } from './helper/dragon';
+import ActiveTracker from './helper/active-tracker';
+import Hovering from './helper/hovering';
+import Location, { LocationData, isLocationChildrenDetail } from './helper/location';
 import DocumentModel from './document/document-model';
 import Node, { insertChildren } from './document/node/node';
 import { isRootNode } from './document/node/root-node';
-import { ComponentDescriptionSpec, ComponentConfig } from './document/node/component-config';
-import Scroller, { IScrollable } from './scroller';
+import { ComponentDescriptionSpec, ComponentConfig } from './component-config';
+import Scroller, { IScrollable } from './helper/scroller';
 import { INodeInstance } from './simulator';
-import OffsetObserver, { createOffsetObserver } from './offset-observer';
+import OffsetObserver, { createOffsetObserver } from './helper/offset-observer';
 
 export interface DesignerProps {
   className?: string;

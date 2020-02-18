@@ -5,8 +5,8 @@ import { Selection } from './selection';
 import RootNode from './node/root-node';
 import { ISimulator, ComponentInstance, Component } from '../simulator';
 import { computed, obx } from '@recore/obx';
-import Location from '../location';
-import { ComponentConfig } from './node/component-config';
+import Location from '../helper/location';
+import { ComponentConfig } from '../component-config';
 import { isElement } from '../../utils/dom';
 
 export default class DocumentModel {

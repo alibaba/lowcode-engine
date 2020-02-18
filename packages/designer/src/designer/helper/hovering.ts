@@ -1,6 +1,6 @@
 import { obx } from '@recore/obx';
-import Node from './document/node/node';
-import DocumentModel from './document/document-model';
+import Node from '../document/node/node';
+import DocumentModel from '../document/document-model';
 
 export default class Hovering {
   @obx.ref private _enable: boolean = true;

@@ -1,5 +1,5 @@
-import ComponentNode, { NodeParent } from './document/node/node';
-import DocumentModel from './document/document-model';
+import ComponentNode, { NodeParent } from '../document/node/node';
+import DocumentModel from '../document/document-model';
 
 export interface LocationData {
   target: NodeParent; // shadowNode | ConditionFlow | ElementNode | RootNode

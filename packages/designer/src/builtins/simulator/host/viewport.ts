@@ -1,6 +1,6 @@
 import { obx, computed } from '@recore/obx';
-import { Point } from '../../../designer/location';
-import { ScrollTarget } from '../../../designer/scroller';
+import { Point } from '../../../designer/helper/location';
+import { ScrollTarget } from '../../../designer/helper/scroller';
 import { AutoFit, IViewport } from '../../../designer/simulator';
 
 export default class Viewport implements IViewport {

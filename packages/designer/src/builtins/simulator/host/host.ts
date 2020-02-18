@@ -7,10 +7,10 @@ import Node, { NodeParent } from '../../../designer/document/node/node';
 import DocumentModel from '../../../designer/document/document-model';
 import ResourceConsumer from './resource-consumer';
 import { AssetLevel, Asset, assetBundle, assetItem, AssetType } from '../utils/asset';
-import { DragObjectType, isShaken, LocateEvent, DragNodeObject, DragNodeDataObject } from '../../../designer/dragon';
-import { LocationData } from '../../../designer/location';
+import { DragObjectType, isShaken, LocateEvent, DragNodeObject, DragNodeDataObject } from '../../../designer/helper/dragon';
+import { LocationData } from '../../../designer/helper/location';
 import { NodeData } from '../../../designer/schema';
-import { ComponentDescriptionSpec } from '../../../designer/document/node/component-config';
+import { ComponentDescriptionSpec } from '../../../designer/component-config';
 import { ReactInstance } from 'react';
 
 export interface SimulatorProps {

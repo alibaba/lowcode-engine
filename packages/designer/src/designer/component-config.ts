@@ -1,6 +1,6 @@
 import { ReactNode, ReactElement, ComponentType } from 'react';
-import Node, { NodeParent } from './node';
-import { NodeData, NodeSchema } from '../../schema';
+import Node, { NodeParent } from './document/node/node';
+import { NodeData, NodeSchema } from './schema';
 
 export type BasicTypes = 'array' | 'bool' | 'func' | 'number' | 'object' | 'string' | 'node' | 'element' | 'any';
 export interface CompositeType {

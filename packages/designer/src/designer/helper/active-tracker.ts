@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { LocationDetail } from './location';
-import Node, { isNode } from './document/node/node';
+import Node, { isNode } from '../document/node/node';
 
 interface ActiveTarget {
   node: Node;

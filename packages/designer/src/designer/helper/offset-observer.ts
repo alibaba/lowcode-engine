@@ -1,6 +1,6 @@
 import { obx, computed } from '@recore/obx';
-import { INodeInstance, IViewport } from './simulator';
-import Viewport from '../builtins/simulator/host/viewport';
+import { INodeInstance, IViewport } from '../simulator';
+import Viewport from '../../builtins/simulator/host/viewport';
 
 export default class OffsetObserver {
   @obx.ref hasOffset = false;
