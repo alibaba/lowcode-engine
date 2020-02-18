@@ -136,6 +136,8 @@ export interface ISimulator<P = object> extends ISensor {
 
   getClosestNodeId(elem: Element): string | null;
 
+  computeComponentInstanceRect(instance: ComponentInstance): DOMRect | null;
+
   findDOMNodes(instance: ComponentInstance): Array<Element | Text> | null;
 
   setSuspense(suspensed: boolean): void;
@@ -154,3 +156,8 @@ export type Component = ComponentType<any> | object;
  * 组件实例定义
  */
 export type ComponentInstance = Element | ReactComponent<any> | object;
+
+export interface INodeInstance {
+  node: Node;
+  instance?: ComponentInstance;
+}

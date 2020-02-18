@@ -12,6 +12,8 @@ import Node, { insertChildren } from './document/node/node';
 import { isRootNode } from './document/node/root-node';
 import { ComponentDescriptionSpec, ComponentConfig } from './document/node/component-config';
 import Scroller, { IScrollable } from './scroller';
+import { INodeInstance } from './simulator';
+import OffsetObserver, { createOffsetObserver } from './offset-observer';
 
 export interface DesignerProps {
   className?: string;
@@ -116,6 +118,10 @@ export default class Designer {
 
   createScroller(scrollable: IScrollable) {
     return new Scroller(scrollable);
+  }
+
+  createOffsetObserver(nodeInstance: INodeInstance): OffsetObserver | null {
+    return createOffsetObserver(nodeInstance);
   }
 
   /**

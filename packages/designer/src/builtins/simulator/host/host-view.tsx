@@ -1,8 +1,9 @@
-import { Component, createContext } from 'react';
+import { Component } from 'react';
 import { observer } from '@recore/core-obx';
-// import { AuxiliaryView } from '../auxilary';
 import { SimulatorHost, SimulatorProps } from './host';
 import DocumentModel from '../../../designer/document/document-model';
+import { SimulatorContext } from './context';
+import { AuxiliaryView } from './auxilary';
 import './host.less';
 
 /*
@@ -13,8 +14,6 @@ import './host.less';
   ContentFrame 可设置宽高，在页面场景一般只设置框，高度拉伸贴合 Content
   Auxiliary 辅助显示层，初始相对 Content 位置 0,0，紧贴 Canvas, 根据 Content 滚动位置，改变相对位置
 */
-
-export const SimulatorContext = createContext<SimulatorHost>({} as any);
 
 export class SimulatorHostView extends Component<SimulatorProps & {
   documentContext: DocumentModel;
@@ -32,6 +31,7 @@ export class SimulatorHostView extends Component<SimulatorProps & {
     return false;
   }
   componentDidMount() {
+    console.info('mount simulator');
     if (this.props.onMount) {
       this.props.onMount(this.host);
     }
@@ -64,7 +64,7 @@ class Canvas extends Component {
     return (
       <div className={className}>
         <div ref={elmt => sim.mountViewport(elmt)} className="lc-simulator-canvas-viewport">
-          {/*<AuxiliaryView />*/}
+          <AuxiliaryView />
           <Content />
         </div>
       </div>

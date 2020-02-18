@@ -4,10 +4,11 @@ import { host } from './host';
 import SimulatorRendererView from './renderer-view';
 import { computed, obx } from '@recore/obx';
 import { RootSchema, NpmInfo } from '../../../designer/schema';
-import { isElement } from '../../../utils/dom';
+import { isElement, getClientRects } from '../../../utils/dom';
 import { Asset } from '../utils/asset';
 import loader from '../utils/loader';
 import { ComponentDescriptionSpec } from '../../../designer/document/node/component-config';
+import { findDOMNodes } from '../utils/react';
 
 let REACT_KEY = '';
 function cacheReactKey(el: Element): Element {
@@ -191,6 +192,14 @@ export class SimulatorRenderer {
 
   getClosestNodeId(element: Element): string | null {
     return getClosestNodeId(element);
+  }
+
+  findDOMNodes(instance: ReactInstance): Array<Element | Text> | null {
+    return findDOMNodes(instance);
+  }
+
+  getClientRects(element: Element | Text) {
+    return getClientRects(element);
   }
 
   private _running: boolean = false;

@@ -10,25 +10,24 @@ export default class Hovering {
   set enable(flag: boolean) {
     this._enable = flag;
     if (!flag) {
-      this._hovering = null;
+      this._current = null;
     }
   }
   @obx.ref xRayMode: boolean = false;
 
-  @obx.ref private _hovering: Node | null = null;
-  get hovering() {
-    return this._hovering;
+  @obx.ref private _current: Node | null = null;
+  get current() {
+    return this._current;
   }
 
-  @obx.ref event?: MouseEvent;
-  hover(node: Node | null, e: MouseEvent) {
-    this._hovering = node;
-    this.event = e;
+  hover(node: Node | null) {
+    console.info(node);
+    this._current = node;
   }
 
   leave(document: DocumentModel) {
-    if (this.hovering && this.hovering.document === document) {
-      this._hovering = null;
+    if (this.current && this.current.document === document) {
+      this._current = null;
     }
   }
 }

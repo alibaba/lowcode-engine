@@ -62,6 +62,13 @@ export default class Prop implements IPropParent {
     return null;
   }
 
+  @computed getAsString(): string {
+    if (this.type === 'literal') {
+      return this._value ? String(this._value) : '';
+    }
+    return '';
+  }
+
   /**
    * set value, val should be JSON Object
    */

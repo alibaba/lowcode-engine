@@ -1,0 +1,73 @@
+@scope: lc-outlines;
+
+.@{scope} {
+  box-sizing: border-box;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  border: 1px solid var(--color-brand-light);
+  will-change: transform, width, height;
+  overflow: visible;
+  & > &-title {
+    position: absolute;
+    color: var(--color-brand-light);
+    top: 0;
+    left: 0;
+    transform: translateY(-100%);
+    font-weight: lighter;
+  }
+
+  &&-hovering {
+    z-index: 1;
+    border-style: dashed;
+    background: rgba(95, 240, 114, 0.04);
+
+    &.x-loop {
+      border-color: rgba(138, 93, 226, 0.8);
+      background: rgba(138, 93, 226, 0.04);
+
+      >.@{scope}-title {
+        color: rgba(138, 93, 226, 1.0);
+      }
+    }
+
+    &.x-condition {
+      border-color: rgba(255, 99, 8, 0.8);
+      background: rgba(255, 99, 8, 0.04);
+      >.@{scope}-title {
+        color: rgb(255, 99, 8);
+      }
+    }
+  }
+
+  &&-selecting {
+    z-index: 2;
+
+    &.x-loop {
+      border-color: rgba(147, 112, 219, 1.0);
+      background: rgba(147, 112, 219, 0.04);
+
+      >@{scope}-title {
+        color: rgba(147, 112, 219, 1.0);
+      }
+      &.highlight {
+        background: transparent;
+      }
+    }
+
+    &.x-condition {
+      border-color: rgb(255, 99, 8);
+      >@{scope}-title {
+        color: rgb(255, 99, 8);
+      }
+    }
+
+    &.dragging {
+      background: rgba(182, 178, 178, 0.8);
+      border: none;
+      pointer-events: all;
+    }
+  }
+}

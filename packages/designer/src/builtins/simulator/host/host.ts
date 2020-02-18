@@ -11,11 +11,12 @@ import { DragObjectType, isShaken, LocateEvent, DragNodeObject, DragNodeDataObje
 import { LocationData } from '../../../designer/location';
 import { NodeData } from '../../../designer/schema';
 import { ComponentDescriptionSpec } from '../../../designer/document/node/component-config';
+import { ReactInstance } from 'react';
 
 export interface SimulatorProps {
   // 从 documentModel 上获取
   // suspended?: boolean;
-  designMode?: 'live' | 'design' | 'extend' | 'border' | 'preview';
+  designMode?: 'live' | 'design' | 'mock' | 'extend' | 'border' | 'preview';
   device?: 'mobile' | 'iphone' | string;
   deviceClassName?: string;
   simulatorUrl?: Asset;
@@ -44,6 +45,7 @@ const defaultDepends = [
     AssetType.JSText,
     'window.PropTypes=parent.PropTypes;React.PropTypes=parent.PropTypes; window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;',
   ),
+  assetItem(AssetType.JSUrl, 'https://g.alicdn.com/mylib/@ali/recore/1.5.7/umd/recore.min.js'),
   assetItem(AssetType.JSUrl, 'http://localhost:4444/js/index.js'),
 ];
 
@@ -206,7 +208,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
         if (isMulti) {
           // multi select mode, directily add
           if (!selection.has(node.id)) {
-            // activeTracker.track(node);
+            designer.activeTracker.track(node);
             selection.add(node.id);
             ignoreUpSelected = true;
           }
@@ -265,7 +267,8 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
         return;
       }
       const node = this.document.getNodeFromElement(e.target as Element);
-      hovering.hover(node, e);
+      // TODO: enhance only hover one instance
+      hovering.hover(node);
       e.stopPropagation();
     };
     const leave = () => hovering.leave(this.document);
@@ -330,8 +333,12 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     throw new Error('Method not implemented.');
   }
 
-  getComponentInstance(node: Node): ComponentInstance[] | null {
-    throw new Error('Method not implemented.');
+  getComponentInstance(node: Node): ReactInstance[] | null {
+    return this._renderer?.getComponentInstance(node.id) || null;
+  }
+
+  getComponentInstanceId(instance: ReactInstance) {
+
   }
 
   getComponentContext(node: Node): object {
@@ -342,8 +349,59 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     return this.renderer?.getClosestNodeId(elem) || null;
   }
 
-  findDOMNodes(instance: ComponentInstance): (Element | Text)[] | null {
-    throw new Error('Method not implemented.');
+  computeComponentInstanceRect(instance: ReactInstance): DOMRect | null {
+    const renderer = this.renderer!;
+    const elements = renderer.findDOMNodes(instance);
+    if (!elements) {
+      return null;
+    }
+
+    let rects: DOMRect[] | undefined;
+    let last: { x: number; y: number; r: number; b: number; } | undefined;
+    while (true) {
+      if (!rects || rects.length < 1) {
+        const elem = elements.pop();
+        if (!elem) {
+          break;
+        }
+        rects = renderer.getClientRects(elem);
+      }
+      const rect = rects.pop();
+      if (!rect) {
+        break;
+      }
+      if (!last) {
+        last = {
+          x: rect.left,
+          y: rect.top,
+          r: rect.right,
+          b: rect.bottom,
+        };
+        continue;
+      }
+      if (rect.left < last.x) {
+        last.x = rect.left;
+      }
+      if (rect.top < last.y) {
+        last.y = rect.top;
+      }
+      if (rect.right > last.r) {
+        last.r = rect.right;
+      }
+      if (rect.bottom > last.b) {
+        last.b = rect.bottom;
+      }
+    }
+
+    if (last) {
+      return new DOMRect(last.x, last.y, last.r - last.x, last.b - last.y);
+    }
+
+    return null;
+  }
+
+  findDOMNodes(instance: ReactInstance): Array<Element | Text> | null {
+    return this._renderer?.findDOMNodes(instance) || null;
   }
 
   private tryScrollAgain: number | null = null;

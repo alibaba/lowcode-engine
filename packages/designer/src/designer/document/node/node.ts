@@ -1,4 +1,4 @@
-import { obx } from '@recore/obx';
+import { obx, computed } from '@recore/obx';
 import { NodeSchema, NodeData, PropsMap, PropsList } from '../../schema';
 import Props from './props/props';
 import DocumentModel from '../document-model';
@@ -24,10 +24,10 @@ const DIRECTIVES = ['condition', 'conditionGroup', 'loop', 'loopArgs', 'title', 
  *  condition
  *  ------- future support -----
  *  conditionGroup
- *  title
- *  ignore
- *  locked
- *  hidden
+ *  x-title
+ *  x-ignore
+ *  x-locked
+ *  x-hidden
  */
 export default class Node {
   /**
@@ -82,6 +82,20 @@ export default class Node {
    */
   get zLevel(): number {
     return this._zLevel;
+  }
+
+  @computed get title(): string {
+    let t = this.getDirective('x-title');
+    if (!t && this.componentConfig.descriptor) {
+      t = this.getProp(this.componentConfig.descriptor, false);
+    }
+    if (t) {
+      const v = t.getAsString();
+      if (v) {
+        return v;
+      }
+    }
+    return this.componentName;
   }
 
   constructor(readonly document: DocumentModel, nodeSchema: NodeSchema) {

@@ -49,7 +49,7 @@ export default class DocumentModel {
   }
 
   constructor(readonly project: Project, schema: RootSchema) {
-    this.rootNode = new RootNode(this, schema);
+    this.rootNode = this.createNode(schema) as RootNode;
     this.id = this.rootNode.id;
   }
 
