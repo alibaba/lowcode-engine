@@ -8,10 +8,12 @@ import { getClientRects } from '../../../utils/get-client-rects';
 import { Asset } from '../utils/asset';
 import loader from '../utils/loader';
 import { ComponentDescriptionSpec } from '../../../designer/component-config';
-import { reactFindDOMNodes } from '../utils/react-find-dom-nodes';
+import { reactFindDOMNodes, FIBER_KEY } from '../utils/react-find-dom-nodes';
 import { isESModule } from '../../../utils/is-es-module';
 import { NodeInstance } from '../../../designer/simulator';
 import { isElement } from '../../../utils/is-element';
+import cursor from '../../../designer/helper/cursor';
+import { setNativeSelection } from '../../../designer/helper/navtive-selection';
 
 export class SimulatorRenderer {
   readonly isSimulatorRenderer = true;
@@ -133,7 +135,9 @@ export class SimulatorRenderer {
     let instances = this.instancesMap.get(id);
     if (instances) {
       instances = instances.filter(checkInstanceMounted);
-      instances.push(instance);
+      if (!instances.includes(instance)) {
+        instances.push(instance);
+      }
       instancesMap.set(id, instances);
     } else {
       instancesMap.set(id, [instance]);
@@ -144,12 +148,12 @@ export class SimulatorRenderer {
     this.ctxMap.set(id, ctx);
   }
 
-  getComponentInstance(id: string): ReactInstance[] | null {
+  getComponentInstances(id: string): ReactInstance[] | null {
     return this.instancesMap.get(id) || null;
   }
 
-  getClosestNodeInstance(element: Element): NodeInstance | null {
-    return getClosestNodeInstance(element);
+  getClosestNodeInstance(from: ReactInstance, nodeId?: string): NodeInstance<ReactInstance> | null {
+    return getClosestNodeInstance(from, nodeId);
   }
 
   findDOMNodes(instance: ReactInstance): Array<Element | Text> | null {
@@ -158,6 +162,28 @@ export class SimulatorRenderer {
 
   getClientRects(element: Element | Text) {
     return getClientRects(element);
+  }
+
+  setNativeSelection(enableFlag: boolean) {
+    setNativeSelection(enableFlag);
+  }
+  /**
+   * @see ISimulator
+   */
+  setDraggingState(state: boolean) {
+    cursor.setDragging(state);
+  }
+  /**
+   * @see ISimulator
+   */
+  setCopyState(state: boolean) {
+    cursor.setCopy(state);
+  }
+  /**
+   * @see ISimulator
+   */
+  clearState() {
+    cursor.release();
   }
 
   private _running: boolean = false;
@@ -260,34 +286,44 @@ function cacheReactKey(el: Element): Element {
 
 const SYMBOL_VNID = Symbol('_LCNodeId');
 
-function getClosestNodeInstance(element: Element): NodeInstance | null {
-  let el: any = element;
+function getClosestNodeInstance(from: ReactInstance, specId?: string): NodeInstance<ReactInstance> | null {
+  let el: any = from;
   if (el) {
-    el = cacheReactKey(el);
+    if (isElement(el)) {
+      el = cacheReactKey(el);
+    } else {
+      return getNodeInstance(el[FIBER_KEY], specId);
+    }
   }
   while (el) {
     if (SYMBOL_VNID in el) {
-      return {
-        nodeId: el[SYMBOL_VNID],
-        instance: el,
-      };
+      const nodeId = el[SYMBOL_VNID];
+      if (!specId || specId === nodeId) {
+        return {
+          nodeId: nodeId,
+          instance: el,
+        };
+      }
     }
     // get fiberNode from element
     if (el[REACT_KEY]) {
-      return getNodeInstance(el[REACT_KEY]);
+      return getNodeInstance(el[REACT_KEY], specId);
     }
     el = el.parentElement;
   }
   return null;
 }
 
-function getNodeInstance(fiberNode: any): NodeInstance | null {
+function getNodeInstance(fiberNode: any, specId?: string): NodeInstance<ReactInstance> | null {
   const instance = fiberNode.stateNode;
   if (instance && SYMBOL_VNID in instance) {
-    return {
-      nodeId: instance[SYMBOL_VNID],
-      instance,
-    };
+    const nodeId = instance[SYMBOL_VNID];
+    if (!specId || specId === nodeId) {
+      return {
+        nodeId: nodeId,
+        instance: instance,
+      };
+    }
   }
   return getNodeInstance(fiberNode.return);
 }

@@ -2,7 +2,7 @@ import { ReactInstance } from 'react';
 import { isElement } from '../../../utils/is-element';
 import { isDOMNode } from '../../../utils/is-dom-node';
 
-const FIBER_KEY = '_reactInternalFiber';
+export const FIBER_KEY = '_reactInternalFiber';
 
 function elementsFromFiber(fiber: any, elements: Array<Element | Text>) {
   if (fiber) {

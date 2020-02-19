@@ -100,16 +100,6 @@ export interface ISimulator<P = object> extends ISensor {
    */
   clearState(): void;
 
-  /**
-   * 在模拟器拖拽定位
-   */
-  locate(e: LocateEvent): any;
-
-  /**
-   * 给 event 打补丁，添加 canvasX, globalX 等信息，用于拖拽
-   */
-  fixEvent(e: LocateEvent): LocateEvent;
-
   // #endregion
 
   /**
@@ -128,13 +118,15 @@ export interface ISimulator<P = object> extends ISensor {
   /**
    * 根据节点获取节点的组件实例
    */
-  getComponentInstance(node: Node): ComponentInstance[] | null;
+  getComponentInstances(node: Node): ComponentInstance[] | null;
   /**
    * 根据节点获取节点的组件运行上下文
    */
   getComponentContext(node: Node): object | null;
 
-  getClosestNodeInstance(elem: Element): NodeInstance | null;
+  getClosestNodeInstance(from: ComponentInstance, specId?: string): NodeInstance | null;
+
+  computeRect(node: Node): DOMRect | null;
 
   computeComponentInstanceRect(instance: ComponentInstance): DOMRect | null;
 
@@ -150,9 +142,9 @@ export function isSimulator(obj: any): obj is ISimulator {
   return obj && obj.isSimulator;
 }
 
-export interface NodeInstance {
+export interface NodeInstance<T = ComponentInstance> {
   nodeId: string;
-  instance: ComponentInstance;
+  instance: T;
   node?: Node | null;
 }
 

@@ -54,8 +54,8 @@ export default class Node {
   protected _directives?: Props<Node>;
   protected _extras?: Props<Node>;
   protected _children: NodeChildren | NodeContent;
-  private _parent: NodeParent | null = null;
-  private _zLevel = 0;
+  @obx.ref private _parent: NodeParent | null = null;
+  @obx.ref private _zLevel = 0;
   get props(): Props<Node> | undefined {
     return this._props;
   }
@@ -165,15 +165,18 @@ export default class Node {
   /**
    * 节点组件类
    */
-  @obx.ref get component(): Component {
-    return this.document.getComponent(this.componentName);
+  @obx.ref get component(): Component | null {
+    if (this.isNodeParent) {
+      return this.document.getComponent(this.componentName);
+    }
+    return null;
   }
 
   /**
    * 节点组件描述
    */
   @obx.ref get componentConfig(): ComponentConfig {
-    return this.document.getComponentConfig(this.component, this.componentName);
+    return this.document.getComponentConfig(this.componentName, this.component);
   }
 
   @obx.ref get propsData(): PropsMap | PropsList | null {
@@ -258,7 +261,7 @@ export default class Node {
   /**
    * 获取节点在父容器中的索引
    */
-  get index(): number {
+  @computed get index(): number {
     if (!this.parent) {
       return -1;
     }

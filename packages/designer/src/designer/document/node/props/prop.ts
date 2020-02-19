@@ -125,7 +125,7 @@ export default class Prop implements IPropParent {
    * 值是否包含表达式
    * 包含 JSExpresion | JSSlot 等值
    */
-  isContainJSExpression(): boolean {
+  @computed isContainJSExpression(): boolean {
     const type = this._type;
     if (type === 'expression') {
       return true;
@@ -142,12 +142,12 @@ export default class Prop implements IPropParent {
   /**
    * 是否简单 JSON 数据
    */
-  isJSON() {
+  @computed isJSON() {
     return !this.isContainJSExpression();
   }
 
-  private _items: Prop[] | null = null;
-  private _maps: Map<string, Prop> | null = null;
+  @obx.val private _items: Prop[] | null = null;
+  @obx.val private _maps: Map<string, Prop> | null = null;
   @computed private get items(): Prop[] | null {
     let _items: any;
     untracked(() => {

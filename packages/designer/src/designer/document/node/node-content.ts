@@ -1,10 +1,10 @@
-import { obx } from '@recore/obx';
+import { obx, computed } from '@recore/obx';
 import { JSExpression, isJSExpression } from '../../schema';
 
 export default class NodeContent {
   @obx.ref private _value: string | JSExpression = '';
 
-  get value(): string | JSExpression {
+  @computed get value(): string | JSExpression {
     return this._value;
   }
 
@@ -15,7 +15,7 @@ export default class NodeContent {
   /**
    * 获得表达式值
    */
-  get code() {
+  @computed get code() {
     if (isJSExpression(this._value)) {
       return this._value.value;
     }
@@ -70,14 +70,14 @@ export default class NodeContent {
   /**
    * 是否表达式
    */
-  isJSExpression(): boolean {
+  @computed isJSExpression(): boolean {
     return isJSExpression(this._value);
   }
 
   /**
    * 是否空值
    */
-  isEmpty() {
+  @computed isEmpty() {
     if (isJSExpression(this._value)) {
       return this._value.value === '';
     }

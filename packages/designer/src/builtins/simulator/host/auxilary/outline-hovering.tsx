@@ -75,7 +75,7 @@ export class OutlineHovering extends Component {
     if (!current) {
       return <Fragment />;
     }
-    const instances = host.getComponentInstance(current);
+    const instances = host.getComponentInstances(current);
     if (!instances || instances.length < 1) {
       return <Fragment />;
     }
@@ -83,7 +83,7 @@ export class OutlineHovering extends Component {
     if (instances.length === 1) {
       return (
         <OutlineHoveringInstance
-          key="line-s"
+          key="line-h"
           title={current.title}
           scale={this.scale}
           scrollX={this.scrollX}
@@ -96,7 +96,7 @@ export class OutlineHovering extends Component {
       <Fragment>
         {instances.map((inst, i) => (
           <OutlineHoveringInstance
-            key={`line-${i}`}
+            key={`line-h-${i}`}
             title={current.title}
             scale={this.scale}
             scrollX={this.scrollX}

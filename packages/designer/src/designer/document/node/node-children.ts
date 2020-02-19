@@ -1,8 +1,9 @@
 import Node, { NodeParent } from './node';
 import { NodeData } from '../../schema';
+import { obx, computed } from '@recore/obx';
 
 export default class NodeChildren {
-  private children: Node[];
+  @obx.val private children: Node[];
   constructor(readonly owner: NodeParent, childrenData: NodeData | NodeData[]) {
     this.children = (Array.isArray(childrenData) ? childrenData : [childrenData]).map(child => {
       const node = this.owner.document.createNode(child);
@@ -22,14 +23,14 @@ export default class NodeChildren {
   /**
    * 元素个数
    */
-  get size(): number {
+  @computed get size(): number {
     return this.children.length;
   }
 
   /**
    * 是否空
    */
-  isEmpty() {
+  @computed isEmpty() {
     return this.size < 1;
   }
 

@@ -1,34 +1,35 @@
 import { Component } from 'react';
-import { observer } from '@ali/recore';
-import { getCurrentDocument } from '../../globals';
+import { computed } from '@recore/obx';
+import { observer } from '@recore/core-obx';
+import { SimulatorContext } from '../context';
+import { SimulatorHost } from '../host';
+import Location, { Rect, isLocationChildrenDetail, LocationChildrenDetail, isVertical } from '../../../../designer/helper/location';
+import { ISimulator } from '../../../../designer/simulator';
+import { NodeParent } from '../../../../designer/document/node/node';
 import './insertion.less';
-import Location, { isLocationChildrenDetail, isVertical, LocationChildrenDetail, Rect } from '../../document/location';
-import { isConditionFlow } from '../../document/node/condition-flow';
-import { getChildAt, INodeParent } from '../../document/node';
-import DocumentContext from '../../document/document-context';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function processPropDetail() {
-  // return { insertType: 'cover', coverEdge: ? };
-}
 
 interface InsertionData {
-  edge?: Rect;
+  edge?: DOMRect;
   insertType?: string;
   vertical?: boolean;
   nearRect?: Rect;
-  coverRect?: Rect;
+  coverRect?: DOMRect;
 }
 
 /**
  * 处理拖拽子节点(INode)情况
  */
 function processChildrenDetail(
-  doc: DocumentContext,
-  target: INodeParent,
+  sim: ISimulator,
+  target: NodeParent,
   detail: LocationChildrenDetail,
 ): InsertionData {
-  const edge = doc.computeRect(target);
+  let edge = detail.edge || null;
+
+  if (edge) {
+    edge = sim.computeRect(target);
+  }
+
   if (!edge) {
     return {};
   }
@@ -38,15 +39,9 @@ function processChildrenDetail(
     insertType: 'before',
   };
 
-  if (isConditionFlow(target)) {
-    ret.insertType = 'cover';
-    ret.coverRect = edge;
-    return ret;
-  }
-
   if (detail.near) {
     const { node, pos, rect, align } = detail.near;
-    ret.nearRect = rect || doc.computeRect(node);
+    ret.nearRect = rect || sim.computeRect(node);
     ret.vertical = align ? align === 'V' : isVertical(ret.nearRect);
     ret.insertType = pos;
     return ret;
@@ -55,10 +50,10 @@ function processChildrenDetail(
   // from outline-tree: has index, but no near
   // TODO: think of shadowNode & ConditionFlow
   const { index } = detail;
-  let nearNode = getChildAt(target, index);
+  let nearNode = target.children.get(index);
   if (!nearNode) {
     // index = 0, eg. nochild,
-    nearNode = getChildAt(target, index > 0 ? index - 1 : 0);
+    nearNode = target.children.get(index > 0 ? index - 1 : 0);
     if (!nearNode) {
       ret.insertType = 'cover';
       ret.coverRect = edge;
@@ -67,7 +62,7 @@ function processChildrenDetail(
     ret.insertType = 'after';
   }
   if (nearNode) {
-    ret.nearRect = doc.computeRect(nearNode);
+    ret.nearRect = sim.computeRect(nearNode);
     ret.vertical = isVertical(ret.nearRect);
   }
   return ret;
@@ -77,44 +72,56 @@ function processChildrenDetail(
  * 将 detail 信息转换为页面"坐标"信息
  */
 function processDetail({ target, detail, document }: Location): InsertionData {
+  const sim = document.simulator;
+  if (!sim) {
+    return {};
+  }
   if (isLocationChildrenDetail(detail)) {
-    return processChildrenDetail(document, target, detail);
+    return processChildrenDetail(sim, target, detail);
   } else {
     // TODO: others...
-    const edge = document.computeRect(target);
+    const instances = sim.getComponentInstances(target);
+    if (!instances) {
+      return {};
+    }
+    const edge = sim.computeComponentInstanceRect(instances[0]);
     return edge ? { edge, insertType: 'cover', coverRect: edge } : {};
   }
 }
 
 @observer
 export class InsertionView extends Component {
+  static contextType = SimulatorContext;
+
+  @computed get host(): SimulatorHost {
+    return this.context;
+  }
+
   shouldComponentUpdate() {
     return false;
   }
 
   render() {
-    const doc = getCurrentDocument();
-    if (!doc || !doc.dropLocation) {
+    const loc = this.host.document.dropLocation;
+    if (!loc) {
       return null;
     }
 
-    const { scale, scrollTarget } = doc.viewport;
-    const sx = scrollTarget!.left;
-    const sy = scrollTarget!.top;
+    const { scale, scrollX, scrollY } = this.host.viewport;
+    const { edge, insertType, coverRect, nearRect, vertical } = processDetail(loc);
 
-    const { edge, insertType, coverRect, nearRect, vertical } = processDetail(doc.dropLocation);
     if (!edge) {
       return null;
     }
 
-    let className = 'my-insertion';
+    let className = 'lc-insertion';
     const style: any = {};
     let x: number;
     let y: number;
     if (insertType === 'cover') {
       className += ' cover';
-      x = (coverRect!.left + sx) * scale;
-      y = (coverRect!.top + sy) * scale;
+      x = (coverRect!.left + scrollX) * scale;
+      y = (coverRect!.top + scrollY) * scale;
       style.width = coverRect!.width * scale;
       style.height = coverRect!.height * scale;
     } else {
@@ -123,12 +130,12 @@ export class InsertionView extends Component {
       }
       if (vertical) {
         className += ' vertical';
-        x = ((insertType === 'before' ? nearRect.left : nearRect.right) + sx) * scale;
-        y = (nearRect.top + sy) * scale;
+        x = ((insertType === 'before' ? nearRect.left : nearRect.right) + scrollX) * scale;
+        y = (nearRect.top + scrollY) * scale;
         style.height = nearRect!.height * scale;
       } else {
-        x = (nearRect.left + sx) * scale;
-        y = ((insertType === 'before' ? nearRect.top : nearRect.bottom) + sy) * scale;
+        x = (nearRect.left + scrollX) * scale;
+        y = ((insertType === 'before' ? nearRect.top : nearRect.bottom) + scrollY) * scale;
         style.width = nearRect.width * scale;
       }
     }

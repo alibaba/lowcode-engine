@@ -21,7 +21,6 @@ export default class Hovering {
   }
 
   hover(node: Node | null) {
-    console.info(node);
     this._current = node;
   }
 

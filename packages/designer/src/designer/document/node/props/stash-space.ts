@@ -1,10 +1,10 @@
-import { obx, autorun, untracked } from '@recore/obx';
+import { obx, autorun, untracked, computed } from '@recore/obx';
 import Prop, { IPropParent } from './prop';
 
 export type PendingItem = Prop[];
 export default class StashSpace implements IPropParent {
   @obx.val private space: Set<Prop> = new Set();
-  @obx.ref private get maps(): Map<string, Prop> {
+  @computed private get maps(): Map<string, Prop> {
     const maps = new Map();
     if (this.space.size > 0) {
       this.space.forEach(prop => {

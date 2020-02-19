@@ -280,7 +280,7 @@ export class ComponentConfig {
   }
   private _isContainer?: boolean;
   get isContainer(): boolean {
-    return this._isContainer!;
+    return this._isContainer! || this.isRootComponent();
   }
   private _isModal?: boolean;
   get isModal(): boolean {
@@ -352,6 +352,10 @@ export class ComponentConfig {
       this._isContainer = false;
       this._isModal = false;
     }
+  }
+
+  isRootComponent() {
+    return this.componentName === 'Page' || this.componentName === 'Block' || this.componentName === 'Component';
   }
 
   set spec(spec: ComponentDescriptionSpec) {

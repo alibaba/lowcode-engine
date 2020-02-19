@@ -56,7 +56,7 @@ export default class Designer {
     });
 
     this.dragon.onDrag(e => {
-      console.info(e);
+      console.info('dropLocation', this._dropLocation);
       if (this.props?.onDrag) {
         this.props.onDrag(e);
       }
@@ -247,12 +247,9 @@ export default class Designer {
       return this._componentConfigsMap.get(componentName)!;
     }
 
-    const config = new ComponentConfig({
+    return new ComponentConfig({
       componentName,
     });
-
-    this._componentConfigsMap.set(componentName, config);
-    return config;
   }
 
   get componentsMap(): { [key: string]: ComponentDescriptionSpec } {

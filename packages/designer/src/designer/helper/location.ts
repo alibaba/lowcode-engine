@@ -14,6 +14,7 @@ export enum LocationDetailType {
 export interface LocationChildrenDetail {
   type: LocationDetailType.Children;
   index: number;
+  edge?: DOMRect;
   near?: {
     node: ComponentNode;
     pos: 'before' | 'after';
@@ -36,11 +37,16 @@ export interface Point {
   clientY: number;
 }
 
-export type Rects = Array<ClientRect | DOMRect> & {
+export interface CanvasPoint {
+  canvasX: number;
+  canvasY: number;
+}
+
+export type Rects = DOMRect[] & {
   elements: Array<Element | Text>;
 };
 
-export type Rect = (ClientRect | DOMRect) & {
+export type Rect = DOMRect & {
   elements: Array<Element | Text>;
   computed?: boolean;
 };

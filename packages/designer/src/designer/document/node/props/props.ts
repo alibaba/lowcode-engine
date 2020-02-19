@@ -11,7 +11,7 @@ export type UNSET = typeof UNSET;
 export default class Props<O = any> implements IPropParent {
   readonly id = uniqueId('props');
   @obx.val private items: Prop[] = [];
-  @obx.ref private get maps(): Map<string, Prop> {
+  @computed private get maps(): Map<string, Prop> {
     const maps = new Map();
     if (this.items.length > 0) {
       this.items.forEach(prop => {
@@ -36,7 +36,7 @@ export default class Props<O = any> implements IPropParent {
   /**
    * 元素个数
    */
-  get size() {
+  @computed get size() {
     return this.items.length;
   }
 

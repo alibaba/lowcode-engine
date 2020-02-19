@@ -223,59 +223,16 @@ export default class DocumentModel {
     // TODO: emit simulator mounted
   }
 
-  /**
-   * 根据节点取得视图实例，在循环等场景会有多个，依赖 simulator 的接口
-   */
-  getComponentInstance(node: Node): ComponentInstance[] | null {
-    if (this.simulator) {
-      this.simulator.getComponentInstance(node);
-    }
-    return null;
-  }
-
   getComponent(componentName: string): any {
     return this.simulator!.getComponent(componentName);
   }
 
-  getComponentConfig(component: Component, componentName: string): ComponentConfig {
+  getComponentConfig(componentName: string, component?: Component | null): ComponentConfig {
     // TODO: guess componentConfig from component by simulator
     return this.designer.getComponentConfig(componentName);
   }
 
-  /**
-   * 通过 DOM 节点获取节点，依赖 simulator 的接口
-   */
-  getNodeInstanceFromElement(target: Element | null): NodeInstance | null {
-    if (!this.simulator || !target) {
-      return null;
-    }
 
-    const nodeIntance = this.simulator.getClosestNodeInstance(target);
-    if (!nodeIntance) {
-      return null;
-    }
-    const node = this.getNode(nodeIntance.nodeId);
-    return {
-      ...nodeIntance,
-      node,
-    };
-  }
-
-  /**
-   * 获得到的结果是一个数组
-   * 表示一个实例对应多个外层 DOM 节点，依赖 simulator 的接口
-   */
-  getDOMNodes(instance: ComponentInstance): Array<Element | Text> | null {
-    if (!this.simulator) {
-      return null;
-    }
-
-    if (isElement(instance)) {
-      return [instance];
-    }
-
-    return this.simulator.findDOMNodes(instance);
-  }
 
   private _opened: boolean = true;
   private _suspensed: boolean = false;

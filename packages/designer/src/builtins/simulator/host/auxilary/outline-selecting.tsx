@@ -70,7 +70,7 @@ export class OutlineSelecting extends Component {
     return (
       <Fragment>
         {selecting.map(node => {
-          const instances = this.host.getComponentInstance(node);
+          const instances = this.host.getComponentInstances(node);
           if (!instances || instances.length < 1) {
             return null;
           }

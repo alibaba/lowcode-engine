@@ -2,8 +2,8 @@ import { EventEmitter } from 'events';
 import { obx } from '@recore/obx';
 import Location from './location';
 import DocumentModel from '../document/document-model';
-import { NodeData } from '../schema';
-import { ISimulator, isSimulator } from '../simulator';
+import { NodeData, NodeSchema } from '../schema';
+import { ISimulator, isSimulator, ComponentInstance } from '../simulator';
 import Node from '../document/node/node';
 import Designer from '../designer';
 import { setNativeSelection } from './navtive-selection';
@@ -43,11 +43,14 @@ export interface LocateEvent {
   /**
    * 激活或目标文档
    */
-  document?: DocumentModel;
+  documentModel?: DocumentModel;
   /**
    * 事件订正标识，初始构造时，从发起端构造，缺少 canvasX,canvasY, 需要经过订正才有
    */
   fixed?: true;
+
+  targetNode?: Node;
+  targetInstance?: ComponentInstance;
 }
 
 /**
@@ -89,8 +92,8 @@ export interface DragNodeObject {
 }
 export interface DragNodeDataObject {
   type: DragObjectType.NodeData;
-  data: NodeData | NodeData[];
-  maps?: { [tagName: string]: string };
+  data: NodeSchema | NodeSchema[];
+  maps?: { [componentName: string]: string };
   thumbnail?: string;
   description?: string;
   [extra: string]: any;
@@ -279,7 +282,7 @@ export default class Dragon {
       if (this._dragging) {
         this._dragging = false;
         try {
-          this.emitter.emit('dragend', { dragTarget: dragObject, copy: this.isCopyState() });
+          this.emitter.emit('dragend', { dragObject, copy: this.isCopyState() });
         } catch (ex) {
           exception = ex;
         }
@@ -339,6 +342,8 @@ export default class Dragon {
           const g = srcSim.viewport.toGlobalPoint(e);
           evt.globalX = g.clientX;
           evt.globalY = g.clientY;
+          evt.canvasX = e.clientX;
+          evt.canvasY = e.clientY;
           evt.sensor = srcSim;
         } else {
           // this condition will not happen, just make sure ts ok
@@ -352,10 +357,12 @@ export default class Dragon {
     const sourceSensor = getSourceSensor(dragObject);
     const sensors: ISensor[] = (masterSensors as ISensor[]).concat(this.sensors);
     const chooseSensor = (e: LocateEvent) => {
-      let sensor = e.sensor || sensors.find(s => s.sensorAvailable && s.isEnter(e));
+      let sensor = e.sensor && e.sensor.isEnter(e) ? e.sensor : sensors.find(s => s.sensorAvailable && s.isEnter(e));
       if (!sensor) {
         if (lastSensor) {
           sensor = lastSensor;
+        } else if (e.sensor) {
+          sensor = e.sensor;
         } else if (sourceSensor) {
           sensor = sourceSensor;
         }
