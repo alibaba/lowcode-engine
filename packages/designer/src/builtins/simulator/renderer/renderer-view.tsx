@@ -40,10 +40,11 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
   }
   render() {
     const { renderer } = this.props;
+    const { components, schemas } = LowCodeRenderer.others
     return (
       <LowCodeRenderer
         schema={renderer.schema}
-        components={renderer.components}
+        components={components /*renderer.components*/}
         appHelper={renderer.context}
         // context={renderer.context}
         designMode={renderer.designMode}
@@ -60,11 +61,3 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
     );
   }
 }
-
-/*
-class LowCodeRenderer extends Component<any> {
-  render() {
-    const { schema } = this.props;
-    return <div>{JSON.stringify(this.props.schema)}</div>
-  }
-}*/

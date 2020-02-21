@@ -220,7 +220,10 @@ export default class Dragon {
     };
 
     const checkcopy = (e: MouseEvent) => {
-      if (newBie || e.altKey || e.ctrlKey) {
+      if (newBie) {
+        return;
+      }
+      if (e.altKey || e.ctrlKey) {
         this.setCopyState(true);
       } else {
         this.setCopyState(false);
@@ -243,7 +246,9 @@ export default class Dragon {
 
     const dragstart = () => {
       const locateEvent = createLocateEvent(boostEvent);
-      if (!newBie) {
+      if (newBie) {
+        this.setCopyState(true);
+      } else {
         chooseSensor(locateEvent);
       }
       this.setDraggingState(true);
@@ -277,18 +282,18 @@ export default class Dragon {
         lastSensor.deactiveSensor();
       }
       this.setNativeSelection(true);
+      const copy = !newBie && this.isCopyState();
+      this.clearState();
 
       let exception;
       if (this._dragging) {
         this._dragging = false;
         try {
-          this.emitter.emit('dragend', { dragObject, copy: this.isCopyState() });
+          this.emitter.emit('dragend', { dragObject, copy });
         } catch (ex) {
           exception = ex;
         }
       }
-
-      this.clearState();
 
       alwaysListen.removeEventListener('mousemove', move, true);
       alwaysListen.removeEventListener('mouseup', over, true);

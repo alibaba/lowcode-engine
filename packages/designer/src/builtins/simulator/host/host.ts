@@ -15,6 +15,7 @@ import {
   DragNodeDataObject,
   isDragAnyObject,
   isDragNodeObject,
+  isDragNodeDataObject,
 } from '../../../designer/helper/dragon';
 import {
   LocationData,
@@ -347,11 +348,20 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     return null;
   }
 
+  @obx.val private instancesMap = new Map<string, ReactInstance[]>();
+  setInstance(id: string, instances: ReactInstance[] | null) {
+    if (instances == null) {
+      this.instancesMap.delete(id);
+    } else {
+      this.instancesMap.set(id, instances.slice());
+    }
+  }
+
   /**
    * @see ISimulator
    */
   getComponentInstances(node: Node): ReactInstance[] | null {
-    return this._renderer?.getComponentInstances(node.id) || null;
+    return this.instancesMap.get(node.id) || null;
   }
 
   /**
@@ -888,12 +898,22 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
   */
 
   checkNesting(dropTarget: NodeParent, dragObject: DragNodeObject | DragNodeDataObject): boolean {
-    const items: Array<Node | NodeSchema> = dragObject.nodes || (dragObject as DragNodeDataObject).data;
+    let items: Array<Node | NodeSchema>;
+    if (isDragNodeDataObject(dragObject)) {
+      items = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
+    } else {
+      items = dragObject.nodes
+    }
     return items.every(item => this.checkNestingDown(dropTarget, item));
   }
 
   checkDropTarget(dropTarget: NodeParent, dragObject: DragNodeObject | DragNodeDataObject): boolean {
-    const items: Array<Node | NodeSchema> = dragObject.nodes || (dragObject as DragNodeDataObject).data;
+    let items: Array<Node | NodeSchema>;
+    if (isDragNodeDataObject(dragObject)) {
+      items = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
+    } else {
+      items = dragObject.nodes
+    }
     return items.every(item => this.checkNestingUp(dropTarget, item));
   }
 

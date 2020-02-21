@@ -5,11 +5,16 @@ import { SimulatorContext } from '../context';
 import { SimulatorHost } from '../host';
 import { computed } from '@recore/obx';
 import OffsetObserver from '../../../../designer/helper/offset-observer';
+import Node from '../../../../designer/document/node/node';
 
 @observer
 export class OutlineSelectingInstance extends Component<{ observed: OffsetObserver; highlight?: boolean }> {
   shouldComponentUpdate() {
     return false;
+  }
+
+  componentWillUnmount() {
+    this.props.observed.purge();
   }
 
   render() {
@@ -18,12 +23,12 @@ export class OutlineSelectingInstance extends Component<{ observed: OffsetObserv
       return null;
     }
 
-    const { scale, width, height, offsetTop, offsetLeft } = observed;
+    const { offsetWidth, offsetHeight, offsetTop, offsetLeft } = observed;
 
     const style = {
-      width: width * scale,
-      height: height * scale,
-      transform: `translate3d(${offsetLeft * scale}px, ${offsetTop * scale}px, 0)`,
+      width: offsetWidth,
+      height: offsetHeight,
+      transform: `translate3d(${offsetLeft}px, ${offsetTop}px, 0)`,
     };
 
     const className = classNames('lc-outlines lc-outlines-selecting', {
@@ -39,11 +44,52 @@ export class OutlineSelectingInstance extends Component<{ observed: OffsetObserv
 }
 
 @observer
-export class OutlineSelecting extends Component {
+export class OutlineSelectingForNode extends Component<{ node: Node }> {
   static contextType = SimulatorContext;
+
+  get host(): SimulatorHost {
+    return this.context;
+  }
+
+  @computed get instances() {
+    return this.host.getComponentInstances(this.props.node);
+  }
 
   shouldComponentUpdate() {
     return false;
+  }
+
+  render() {
+    const { instances } = this;
+    const { node } = this.props;
+    const designer = this.host.designer;
+
+    if (!instances || instances.length < 1) {
+      return null;
+    }
+    return (
+      <Fragment key={node.id}>
+        {instances.map((instance) => {
+          const observed = designer.createOffsetObserver({
+            node,
+            instance,
+          });
+          if (!observed) {
+            return null;
+          }
+          return <OutlineSelectingInstance key={observed.id} observed={observed} />;
+        })}
+      </Fragment>
+    );
+  }
+}
+
+@observer
+export class OutlineSelecting extends Component {
+  static contextType = SimulatorContext;
+
+  get host(): SimulatorHost {
+    return this.context;
   }
 
   @computed get selecting() {
@@ -54,8 +100,8 @@ export class OutlineSelecting extends Component {
     return doc.selection.getNodes();
   }
 
-  @computed get host(): SimulatorHost {
-    return this.context;
+  shouldComponentUpdate() {
+    return false;
   }
 
   render() {
@@ -65,30 +111,11 @@ export class OutlineSelecting extends Component {
       return <Fragment />;
     }
 
-    const designer = this.host.designer;
-
     return (
       <Fragment>
-        {selecting.map(node => {
-          const instances = this.host.getComponentInstances(node);
-          if (!instances || instances.length < 1) {
-            return null;
-          }
-          return (
-            <Fragment key={node.id}>
-              {instances.map((instance, i) => {
-                const observed = designer.createOffsetObserver({
-                  node,
-                  instance,
-                });
-                if (!observed) {
-                  return null;
-                }
-                return <OutlineSelectingInstance key={`line-s-${i}`} observed={observed} />;
-              })}
-            </Fragment>
-          );
-        })}
+        {selecting.map(node => (
+          <OutlineSelectingForNode key={node.id} node={node} />
+        ))}
       </Fragment>
     );
   }

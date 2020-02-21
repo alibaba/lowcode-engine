@@ -3,11 +3,10 @@ import { RootSchema, NodeData, isDOMText, isJSExpression, NodeSchema } from '../
 import Node, { isNodeParent, insertChildren, insertChild, NodeParent } from './node/node';
 import { Selection } from './selection';
 import RootNode from './node/root-node';
-import { ISimulator, ComponentInstance, Component, NodeInstance } from '../simulator';
+import { ISimulator, Component } from '../simulator';
 import { computed, obx } from '@recore/obx';
 import Location from '../helper/location';
 import { ComponentConfig } from '../component-config';
-import { isElement } from '../../utils/is-element';
 
 export default class DocumentModel {
   /**
@@ -234,8 +233,8 @@ export default class DocumentModel {
 
 
 
-  private _opened: boolean = true;
-  private _suspensed: boolean = false;
+  @obx.ref private _opened: boolean = true;
+  @obx.ref private _suspensed: boolean = false;
 
   /**
    * 是否不是激活的
@@ -288,6 +287,8 @@ export default class DocumentModel {
     this._opened = true;
     if (this._suspensed) {
       this.setSuspense(false);
+    } else {
+      this.project.checkExclusive(this);
     }
   }
 

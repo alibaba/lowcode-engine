@@ -99,7 +99,18 @@ export class SimulatorRenderer {
   load(asset: Asset): Promise<any> {
     return loader.load(asset);
   }
+
   private instancesMap = new Map<string, ReactInstance[]>();
+  private unmountIntance(id: string, instance: ReactInstance) {
+    const instances = this.instancesMap.get(id);
+    if (instances) {
+      const i = instances.indexOf(instance);
+      if (i > -1) {
+        instances.splice(i, 1);
+        host.setInstance(id, instances);
+      }
+    }
+  }
   mountInstance(id: string, instance: ReactInstance | null) {
     const instancesMap = this.instancesMap;
     if (instance == null) {
@@ -108,41 +119,57 @@ export class SimulatorRenderer {
         instances = instances.filter(checkInstanceMounted);
         if (instances.length > 0) {
           instancesMap.set(id, instances);
+          host.setInstance(id, instances);
         } else {
           instancesMap.delete(id);
+          host.setInstance(id, null);
         }
       }
       return;
     }
+    const unmountIntance = this.unmountIntance.bind(this);
+    const origId = (instance as any)[SYMBOL_VNID];
+    if (origId && origId !== id) {
+      // 另外一个节点的 instance 在此被复用了，需要从原来地方卸载
+      unmountIntance(origId, instance);
+    }
     if (isElement(instance)) {
       cacheReactKey(instance);
-    } else if (!(instance as any)[SYMBOL_VNID]) {
-      const origUnmout = instance.componentWillUnmount;
+    } else if (origId !== id) {
+      // 涵盖 origId == null || origId !== id 的情况
+      let origUnmount: any = instance.componentWillUnmount;
+      if (origUnmount && origUnmount.origUnmount) {
+        origUnmount = origUnmount.origUnmount;
+      }
       // hack! delete instance from map
-      instance.componentWillUnmount = function() {
-        const instances = instancesMap.get(id);
-        if (instances) {
-          const i = instances.indexOf(instance);
-          if (i > -1) {
-            instances.splice(i, 1);
-          }
-        }
-        origUnmout && origUnmout.call(this);
+      const newUnmount = function (this: any) {
+        unmountIntance(id, instance);
+        origUnmount && origUnmount.call(this);
       };
+      (newUnmount as any).origUnmount = origUnmount;
+      instance.componentWillUnmount = newUnmount;
     }
 
     (instance as any)[SYMBOL_VNID] = id;
     let instances = this.instancesMap.get(id);
     if (instances) {
+      const l = instances.length;
       instances = instances.filter(checkInstanceMounted);
+      let updated = instances.length !== l;
       if (!instances.includes(instance)) {
         instances.push(instance);
+        updated = true;
       }
-      instancesMap.set(id, instances);
+      if (!updated) {
+        return;
+      }
     } else {
-      instancesMap.set(id, [instance]);
+      instances = [instance];
     }
+    instancesMap.set(id, instances);
+    host.setInstance(id, instances);
   }
+
   private ctxMap = new Map<string, object>();
   mountContext(id: string, ctx: object) {
     this.ctxMap.set(id, ctx);
@@ -167,21 +194,12 @@ export class SimulatorRenderer {
   setNativeSelection(enableFlag: boolean) {
     setNativeSelection(enableFlag);
   }
-  /**
-   * @see ISimulator
-   */
   setDraggingState(state: boolean) {
     cursor.setDragging(state);
   }
-  /**
-   * @see ISimulator
-   */
   setCopyState(state: boolean) {
     cursor.setCopy(state);
   }
-  /**
-   * @see ISimulator
-   */
   clearState() {
     cursor.release();
   }

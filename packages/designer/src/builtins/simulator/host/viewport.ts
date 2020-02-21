@@ -98,14 +98,28 @@ export default class Viewport implements IViewport {
     return this._scrollTarget;
   }
 
+  @obx private _scrolling: boolean = false;
+  get scrolling(): boolean {
+    return this._scrolling;
+  }
+
   setScrollTarget(target: Window) {
     const scrollTarget = new ScrollTarget(target);
     this._scrollX = scrollTarget.left;
     this._scrollY = scrollTarget.top;
-    target.onscroll = () => {
+
+    let scrollTimer: any;
+    target.addEventListener('scroll', () => {
       this._scrollX = scrollTarget.left;
       this._scrollY = scrollTarget.top;
-    };
+      this._scrolling = true;
+      if (scrollTimer) {
+        clearTimeout(scrollTimer);
+      }
+      scrollTimer = setTimeout(() => {
+        this._scrolling = false;
+      }, 80);
+    });
     this._scrollTarget = scrollTarget;
   }
 

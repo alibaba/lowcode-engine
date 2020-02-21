@@ -34,7 +34,14 @@ export interface IViewport extends IScrollable {
    * 内容矩形维度
    */
   readonly contentBounds: DOMRect;
+  /**
+   * 视口滚动对象
+   */
   readonly scrollTarget?: ScrollTarget;
+  /**
+   * 是否滚动中
+   */
+  readonly scrolling: boolean;
   /**
    * 内容当前滚动 X
    */

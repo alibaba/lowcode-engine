@@ -1,21 +1,44 @@
 import { obx, computed } from '@recore/obx';
 import { INodeSelector, IViewport } from '../simulator';
-import Viewport from '../../builtins/simulator/host/viewport';
+import { uniqueId } from '../../utils/unique-id';
 
 export default class OffsetObserver {
-  @obx.ref hasOffset = false;
+  readonly id = uniqueId('oobx');
 
+  private lastOffsetLeft?: number;
+  private lastOffsetTop?: number;
+  private lastOffsetHeight?: number;
+  private lastOffsetWidth?: number;
+  @obx private height = 0;
+  @obx private width = 0;
+  @obx private left = 0;
+  @obx private top = 0;
+
+  @obx hasOffset = false;
   @computed get offsetLeft() {
-    return this.left + this.viewport.scrollX;
+    if (!this.viewport.scrolling || this.lastOffsetLeft == null) {
+      this.lastOffsetLeft = (this.left + this.viewport.scrollX) * this.scale;
+    }
+    return this.lastOffsetLeft;
   }
   @computed get offsetTop() {
-    return this.top + this.viewport.scrollY;
+    if (!this.viewport.scrolling || this.lastOffsetTop == null) {
+      this.lastOffsetTop = (this.top + this.viewport.scrollY) * this.scale;
+    }
+    return this.lastOffsetTop;
   }
-
-  @obx.ref height = 0;
-  @obx.ref width = 0;
-  @obx.ref left = 0;
-  @obx.ref top = 0;
+  @computed get offsetHeight() {
+    if (!this.viewport.scrolling || this.lastOffsetHeight == null) {
+      this.lastOffsetHeight = this.height * this.scale;
+    }
+    return this.lastOffsetHeight;
+  }
+  @computed get offsetWidth() {
+    if (!this.viewport.scrolling || this.lastOffsetWidth == null) {
+      this.lastOffsetWidth = this.width * this.scale;
+    }
+    return this.lastOffsetWidth;
+  }
 
   @computed get scale() {
     return this.viewport.scale;
@@ -44,11 +67,13 @@ export default class OffsetObserver {
       if (!rect) {
         this.hasOffset = false;
       } else {
-        this.hasOffset = true;
-        this.height = rect.height;
-        this.width = rect.width;
-        this.left = rect.left;
-        this.top = rect.top;
+        if (!this.viewport.scrolling || !this.hasOffset) {
+          this.height = rect.height;
+          this.width = rect.width;
+          this.left = rect.left;
+          this.top = rect.top;
+          this.hasOffset = true;
+        }
       }
       this.pid = pid = (window as any).requestIdleCallback(compute);
     };
@@ -59,7 +84,7 @@ export default class OffsetObserver {
     this.pid = pid = (window as any).requestIdleCallback(compute);
   }
 
-  destroy() {
+  purge() {
     if (this.pid) {
       (window as any).cancelIdleCallback(this.pid);
     }
