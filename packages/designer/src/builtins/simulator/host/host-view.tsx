@@ -31,7 +31,6 @@ export class SimulatorHostView extends Component<SimulatorProps & {
     return false;
   }
   componentDidMount() {
-    console.info('mount simulator');
     if (this.props.onMount) {
       this.props.onMount(this.host);
     }

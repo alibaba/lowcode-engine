@@ -1,4 +1,4 @@
-.my-ghost-group {
+.lc-ghost-group {
   box-sizing: border-box;
   position: fixed;
   z-index: 99999;
@@ -9,8 +9,10 @@
   pointer-events: none;
   background-color: rgba(0, 0, 0, 0.4);
   opacity: 0.5;
-  .my-ghost {
-    .my-ghost-title {
+  box-shadow: 0 0 6px grey;
+  transform: translate(-10%, -50%);
+  .lc-ghost {
+    .lc-ghost-title {
       text-align: center;
       font-size: var(--font-size-text);
       text-overflow: ellipsis;
@@ -19,11 +21,4 @@
       overflow: hidden;
     }
   }
-}
-
-.dragging {
-  position: fixed;
-  z-index: 99999;
-  width: 100%;
-  box-shadow: 0 0 6px grey;
 }

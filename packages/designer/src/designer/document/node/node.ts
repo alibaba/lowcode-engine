@@ -466,7 +466,7 @@ export function comparePosition(node1: Node, node2: Node): number {
 export function insertChild(container: NodeParent, thing: Node | NodeData, at?: number | null, copy?: boolean): Node {
   let node: Node;
   if (copy && isNode(thing)) {
-    thing = thing.schema;
+    thing = thing.exportSchema(false);
   }
   if (isNode(thing)) {
     node = thing;
@@ -490,7 +490,8 @@ export function insertChildren(
   const results: Node[] = [];
   // tslint:disable-next-line
   while ((node = nodes.pop())) {
-    results.push(insertChild(container, node, index, copy));
+    node = insertChild(container, node, index, copy);
+    results.push(node);
     index = node.index;
   }
   return results;

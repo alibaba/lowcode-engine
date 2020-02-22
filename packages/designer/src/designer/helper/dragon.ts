@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 import { obx } from '@recore/obx';
 import Location from './location';
 import DocumentModel from '../document/document-model';
-import { NodeData, NodeSchema } from '../schema';
+import { NodeSchema } from '../schema';
 import { ISimulator, isSimulator, ComponentInstance } from '../simulator';
 import Node from '../document/node/node';
 import Designer from '../designer';
