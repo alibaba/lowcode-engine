@@ -1,7 +1,4 @@
 import test from 'ava';
-test.serial('generator', (t) => {
-  t.pass();
-})
 import { ensureFile, writeFile } from 'fs-extra';
 import { join } from 'path';
 import { IComponentMaterial } from '../../src/otter-core';
@@ -53,7 +50,16 @@ test.serial('generate single exported components', async t => {
     accesser: 'local',
     isExportedAsMultiple: false,
   };
-
+  // const scanner = new Scanner(options);
+  // const scanModel = await scanner.scan();
+  // const parser = new ReactParser(options);
+  // const parsedModels: IMaterialParsedModel[] = await parser.parse(scanModel);
+  // const generator = new Generator(options);
+  // t.log('parsedModels', JSON.stringify(parsedModels,null,2));
+  // const actual: IComponentMaterial = await generator.generate(
+  //   scanModel,
+  //   parsedModels
+  // );
   const actual = await generate(options);
 
   t.snapshot(actual);

@@ -118,7 +118,7 @@ class Generator implements IGenerator {
 
     const defaultManifestFilePath = join(
       dirname(matParsedModel.filePath),
-      './manifest.js',
+      './manifest.json',
     );
 
     // 填充 props
@@ -155,14 +155,34 @@ class Generator implements IGenerator {
       const defaultValueItem = matParsedModel.propsDefaults.find(
         inner => inner.name === item.name,
       );
-      props.push({
+      const propItem: Partial<PropsSection['props'][0]> = {
         name: item.name,
-        propType: item.type as PropType,
-        description: '',
-        defaultValue: defaultValueItem
-          ? defaultValueItem.defaultValue
-          : undefined,
-      });
+      };
+      if (
+        [
+          'array',
+          'bool',
+          'func',
+          'number',
+          'object',
+          'string',
+          'node',
+          'element',
+          'any',
+        ].includes(item.type)
+      ) {
+        propItem.propType = item.type as PropType;
+      } else {
+        propItem.propType = {
+          type: item.type,
+          // @ts-ignore
+          value: item.value,
+        } as PropType;
+      }
+      if (defaultValueItem) {
+        propItem.defaultValue = defaultValueItem.defaultValue;
+      }
+      props.push(propItem as PropsSection['props'][0]);
     });
 
     return props;

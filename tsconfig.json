@@ -9,8 +9,5 @@
     "resolveJsonModule": true,
     "sourceMap": true
   },
-  "exclude": [
-    "**/test",
-    "**/lib"
-  ]
+  "exclude": ["**/test", "**/lib"]
 }

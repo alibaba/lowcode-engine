@@ -23,7 +23,7 @@
   "scripts": {
     "build": "tsc",
     "prebuild": "npm run schema",
-    "test": "ava",
+    "test": "ava --verbose --serial",
     "test:snapshot": "ava --update-snapshots",
     "schema": "node ./scripts/transform.js"
   },

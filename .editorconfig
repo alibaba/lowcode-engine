@@ -11,7 +11,3 @@ quote_type = single
 
 [*.md]
 trim_trailing_whitespace = false
-
-[makefile]
-indent_style = tab
-indent_size = 4
