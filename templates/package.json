@@ -8,10 +8,12 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "ava"
+    "test": "ava",
+    "test:snapshot": "ava --update-snapshots"
   },
   "ava": {
     "compileEnhancements": false,
+    "snapshotDir": "test/fixtures/__snapshots__",
     "extensions": [
       "ts"
     ],

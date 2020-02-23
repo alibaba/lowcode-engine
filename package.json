@@ -2,13 +2,15 @@
   "name": "ali-lowcode-engine",
   "private": true,
   "scripts": {
-    "boot": "lerna bootstrap --registry http://registry.npm.alibaba-inc.com",
+    "boot": "lerna bootstrap --registry http://registry.npm.alibaba-inc.com --hoist",
     "clean": "rimraf ./packages/*/lib ./packages/*/node_modules",
     "pub": "npm run test && lerna publish --registry http://registry.npm.alibaba-inc.com",
     "lint": "tslint -p tsconfig.json",
     "lint:fix": "tslint --fix -p tsconfig.json",
     "build": "lerna run build",
-    "test": "lerna run test"
+    "test": "lerna run test",
+    "test:snapshot": "lerna run test:snapshot",
+    "commit": "git-cz"
   },
   "devDependencies": {
     "@types/node": "^10.12.18",
