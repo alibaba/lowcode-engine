@@ -90,13 +90,12 @@ export type PropsList = Array<{
 
 export type NodeData = NodeSchema | JSExpression | DOMText;
 
-export interface JSExpression {
-  type: 'JSExpression';
-  value: string;
-}
-
 export function isJSExpression(data: any): data is JSExpression {
   return data && data.type === 'JSExpression';
+}
+
+export function isJSSlot(data: any): data is JSSlot {
+  return data && data.type === 'JSSlot';
 }
 
 export function isDOMText(data: any): data is DOMText {

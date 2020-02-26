@@ -290,8 +290,6 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
         return;
       }
       const nodeInst = this.getNodeInstanceFromElement(e.target as Element);
-      // TODO: enhance only hover one instance
-      console.info(nodeInst);
       hovering.hover(nodeInst?.node || null);
       e.stopPropagation();
     };
@@ -633,7 +631,6 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     this.sensing = true;
     this.scroller.scrolling(e);
     const dropTarget = this.getDropTarget(e);
-    console.info('aa', dropTarget);
     if (!dropTarget) {
       return null;
     }

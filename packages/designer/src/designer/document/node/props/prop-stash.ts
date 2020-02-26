@@ -1,8 +1,9 @@
 import { obx, autorun, untracked, computed } from '@recore/obx';
-import Prop, { IPropParent } from './prop';
+import Prop, { IPropParent, UNSET } from './prop';
+import Props from './props';
 
 export type PendingItem = Prop[];
-export default class StashSpace implements IPropParent {
+export default class PropStash implements IPropParent {
   @obx.val private space: Set<Prop> = new Set();
   @computed private get maps(): Map<string, Prop> {
     const maps = new Map();
@@ -15,7 +16,7 @@ export default class StashSpace implements IPropParent {
   }
   private willPurge: () => void;
 
-  constructor(write: (item: Prop) => void, before: () => boolean) {
+  constructor(readonly props: Props, write: (item: Prop) => void) {
     this.willPurge = autorun(() => {
       if (this.space.size < 1) {
         return;
@@ -28,11 +29,10 @@ export default class StashSpace implements IPropParent {
         }
       }
       if (pending.length > 0) {
+        debugger;
         untracked(() => {
-          if (before()) {
-            for (const item of pending) {
-              write(item);
-            }
+          for (const item of pending) {
+            write(item);
           }
         });
       }
@@ -42,7 +42,7 @@ export default class StashSpace implements IPropParent {
   get(key: string): Prop {
     let prop = this.maps.get(key);
     if (!prop) {
-      prop = new Prop(this, null, key);
+      prop = new Prop(this, UNSET, key);
       this.space.add(prop);
     }
     return prop;

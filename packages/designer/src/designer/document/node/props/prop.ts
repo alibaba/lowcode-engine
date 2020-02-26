@@ -1,16 +1,19 @@
 import { untracked, computed, obx } from '@recore/obx';
 import { valueToSource } from '../../../../utils/value-to-source';
-import { CompositeValue, isJSExpression } from '../../../schema';
-import StashSpace from './stash-space';
+import { CompositeValue, isJSExpression, isJSSlot, NodeSchema, NodeData, isNodeSchema } from '../../../schema';
+import PropStash from './prop-stash';
 import { uniqueId } from '../../../../utils/unique-id';
 import { isPlainObject } from '../../../../utils/is-plain-object';
 import { hasOwnProperty } from '../../../../utils/has-own-property';
+import Props from './props';
+import Node from '../node';
 
 export const UNSET = Symbol.for('unset');
 export type UNSET = typeof UNSET;
 
 export interface IPropParent {
   delete(prop: Prop): void;
+  readonly props: Props;
 }
 
 export default class Prop implements IPropParent {
@@ -18,11 +21,11 @@ export default class Prop implements IPropParent {
 
   readonly id = uniqueId('prop$');
 
-  private _type: 'unset' | 'literal' | 'map' | 'list' | 'expression' = 'unset';
+  @obx.ref private _type: 'unset' | 'literal' | 'map' | 'list' | 'expression' | 'slot' = 'unset';
   /**
    * 属性类型
    */
-  get type(): 'unset' | 'literal' | 'map' | 'list' | 'expression' {
+  get type(): 'unset' | 'literal' | 'map' | 'list' | 'expression' | 'slot' {
     return this._type;
   }
 
@@ -32,13 +35,25 @@ export default class Prop implements IPropParent {
    * 属性值
    */
   @computed get value(): CompositeValue {
-    if (this._type === 'unset') {
+    return this.export(true);
+  }
+
+  export(serialize = false): CompositeValue {
+    const type = this._type;
+
+    if (type === 'unset') {
       return null;
     }
 
-    const type = this._type;
     if (type === 'literal' || type === 'expression') {
       return this._value;
+    }
+
+    if (type === 'slot') {
+      return {
+        type: 'JSSlot',
+        value: this._slotNode!.export(serialize),
+      };
     }
 
     if (type === 'map') {
@@ -79,11 +94,14 @@ export default class Prop implements IPropParent {
       this._value = null;
       this._type = 'literal';
     } else if (t === 'string' || t === 'number' || t === 'boolean') {
-      this._value = val;
       this._type = 'literal';
     } else if (Array.isArray(val)) {
       this._type = 'list';
     } else if (isPlainObject(val)) {
+      if (isJSSlot(val)) {
+        this.setAsSlot(val.value);
+        return;
+      }
       if (isJSExpression(val)) {
         this._type = 'expression';
       } else {
@@ -97,14 +115,42 @@ export default class Prop implements IPropParent {
         value: valueToSource(val),
       };
     }
-    if (untracked(() => this._items)) {
-      this._items!.forEach(prop => prop.purge());
-      this._items = null;
+    this.dispose();
+  }
+
+  private dispose() {
+    const items = untracked(() => this._items);
+    if (items) {
+      items.forEach(prop => prop.purge());
     }
+    this._items = null;
     this._maps = null;
     if (this.stash) {
       this.stash.clear();
     }
+    if (this._type !== 'slot' && this._slotNode) {
+      this._slotNode.purge();
+      this._slotNode = undefined;
+    }
+  }
+
+  private _slotNode?: Node;
+  setAsSlot(data: NodeData) {
+    this._type = 'slot';
+    if (
+      this._slotNode &&
+      isNodeSchema(data) &&
+      (!data.id || this._slotNode.id === data.id) &&
+      this._slotNode.componentName === data.componentName
+    ) {
+      this._slotNode.import(data);
+    } else {
+      this._slotNode?.internalSetParent(null);
+      const owner = this.props.owner;
+      this._slotNode = owner.document.createNode(data, this);
+      this._slotNode.internalSetParent(owner);
+    }
+    this.dispose();
   }
 
   /**
@@ -122,19 +168,19 @@ export default class Prop implements IPropParent {
   }
 
   /**
-   * 值是否包含表达式
-   * 包含 JSExpresion | JSSlot 等值
+   * 值是否是带类型的 JS
+   * 比如 JSExpresion | JSSlot 等值
    */
-  @computed isContainJSExpression(): boolean {
+  @computed isTypedJS(): boolean {
     const type = this._type;
-    if (type === 'expression') {
+    if (type === 'expression' || type === 'slot') {
       return true;
     }
     if (type === 'literal' || type === 'unset') {
       return false;
     }
     if ((type === 'list' || type === 'map') && this.items) {
-      return this.items.some(item => item.isContainJSExpression());
+      return this.items.some(item => item.isTypedJS());
     }
     return false;
   }
@@ -143,7 +189,7 @@ export default class Prop implements IPropParent {
    * 是否简单 JSON 数据
    */
   @computed isJSON() {
-    return !this.isContainJSExpression();
+    return !this.isTypedJS();
   }
 
   @obx.val private _items: Prop[] | null = null;
@@ -189,7 +235,7 @@ export default class Prop implements IPropParent {
     return this._maps;
   }
 
-  private stash: StashSpace | undefined;
+  private stash: PropStash | undefined;
 
   /**
    * 键值
@@ -200,12 +246,15 @@ export default class Prop implements IPropParent {
    */
   @obx spread: boolean;
 
+  readonly props: Props;
+
   constructor(
     public parent: IPropParent,
     value: CompositeValue | UNSET = UNSET,
     key?: string | number,
     spread = false,
   ) {
+    this.props = parent.props;
     if (value !== UNSET) {
       this.value = value;
     }
@@ -257,16 +306,11 @@ export default class Prop implements IPropParent {
 
     if (stash) {
       if (!this.stash) {
-        this.stash = new StashSpace(
-          item => {
-            // item take effect
-            this.set(String(item.key), item);
-            item.parent = this;
-          },
-          () => {
-            return true;
-          },
-        );
+        this.stash = new PropStash(this.props, item => {
+          // item take effect
+          this.set(String(item.key), item);
+          item.parent = this;
+        });
       }
       prop = this.stash.get(entry);
       if (nest) {
@@ -401,6 +445,9 @@ export default class Prop implements IPropParent {
       this._items.forEach(item => item.purge());
     }
     this._maps = null;
+    if (this._slotNode && this._slotNode.slotFor === this) {
+      this._slotNode.purge();
+    }
   }
 
   /**

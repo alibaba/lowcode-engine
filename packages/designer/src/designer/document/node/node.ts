@@ -1,4 +1,4 @@
-import { obx, computed } from '@recore/obx';
+import { obx, computed, untracked } from '@recore/obx';
 import { NodeSchema, NodeData, PropsMap, PropsList } from '../../schema';
 import Props from './props/props';
 import DocumentModel from '../document-model';
@@ -50,19 +50,19 @@ export default class Node {
    *  * Component 组件/元件
    */
   readonly componentName: string;
-  protected _props?: Props<Node>;
-  protected _directives?: Props<Node>;
-  protected _extras?: Props<Node>;
+  protected _props?: Props;
+  protected _directives?: Props;
+  protected _extras?: Props;
   protected _children: NodeChildren | NodeContent;
   @obx.ref private _parent: NodeParent | null = null;
   @obx.ref private _zLevel = 0;
-  get props(): Props<Node> | undefined {
+  get props(): Props | undefined {
     return this._props;
   }
-  get directives(): Props<Node> | undefined {
+  get directives(): Props | undefined {
     return this._directives;
   }
-  get extras(): Props<Node> | undefined {
+  get extras(): Props | undefined {
     return this._extras;
   }
   /**
@@ -80,8 +80,11 @@ export default class Node {
   /**
    * 当前节点深度
    */
-  get zLevel(): number {
-    return this._zLevel;
+  @computed get zLevel(): number {
+    if (this._parent) {
+      return this._parent.zLevel + 1;
+    }
+    return -1;
   }
 
   @computed get title(): string {
@@ -98,11 +101,16 @@ export default class Node {
     return this.componentName;
   }
 
-  constructor(readonly document: DocumentModel, nodeSchema: NodeSchema) {
+  get isSlotRoot(): boolean {
+    return this._slotFor != null;
+  }
+
+  constructor(readonly document: DocumentModel, nodeSchema: NodeSchema, slotFor?: Prop) {
     const { componentName, id, children, props, ...extras } = nodeSchema;
     this.id = id || `node$${document.nextId()}`;
     this.componentName = componentName;
-    if (this.isNodeParent) {
+    this._slotFor = slotFor;
+    if (isNodeParent(this)) {
       this._props = new Props(this, props);
       this._directives = new Props(this, {});
       Object.keys(extras).forEach(key => {
@@ -127,30 +135,33 @@ export default class Node {
 
   /**
    * 内部方法，请勿使用
-   *
-   * @ignore
    */
   internalSetParent(parent: NodeParent | null) {
     if (this._parent === parent) {
       return;
     }
-    if (this._parent) {
+
+    if (this._parent && !this.isSlotRoot) {
       this._parent.children.delete(this);
     }
 
     this._parent = parent;
-    if (parent) {
-      this._zLevel = parent.zLevel + 1;
-    } else {
-      this._zLevel = -1;
-    }
+  }
+
+  private _slotFor?: Prop | null = null;
+  internalSetSlotFor(slotFor: Prop | null | undefined) {
+    this._slotFor = slotFor;
+  }
+
+  get slotFor() {
+    return this._slotFor;
   }
 
   /**
    * 移除当前节点
    */
   remove() {
-    if (this.parent) {
+    if (this.parent && !this.isSlotRoot) {
       this.parent.children.delete(this, true);
     }
   }
@@ -231,24 +242,9 @@ export default class Node {
   }
 
   replaceWith(schema: NodeSchema, migrate: boolean = true) {
-
+    // reuse the same id? or replaceSelection
     //
   }
-
-  /*
-  // TODO
-  // 外部修改，merge 进来，产生一次可恢复的历史数据
-  merge(data: ElementData) {
-    this.elementData = data;
-    const { leadingComments } = data;
-    this.leadingComments = leadingComments ? leadingComments.slice() : [];
-    this.parse();
-    this.mergeChildren(data.children || []);
-  }
-
-  // TODO: 再利用历史数据，不产生历史数据
-  reuse(timelineData: NodeSchema) {}
-  */
 
   getProp(path: string, useStash: boolean = true): Prop | null {
     return this.props?.query(path, useStash as any) || null;
@@ -300,28 +296,51 @@ export default class Node {
    * 获取符合搭建协议-节点 schema 结构
    */
   get schema(): NodeSchema {
-    // TODO: ..
-    return this.exportSchema(true);
+    return this.export(true);
+  }
+
+  set schema(data: NodeSchema) {
+    this.import(data);
+  }
+
+  import(data: NodeSchema, checkId: boolean = false) {
+    const { componentName, id, children, props, ...extras } = data;
+
+    if (isNodeParent(this)) {
+      const directives: any = {};
+      Object.keys(extras).forEach(key => {
+        if (DIRECTIVES.indexOf(key) > -1) {
+          directives[key] = (extras as any)[key];
+          delete (extras as any)[key];
+        }
+      });
+      this._props!.import(data.props);
+      this._directives!.import(directives);
+      this._extras!.import(extras as any);
+      this._children.import(children, checkId);
+    } else {
+      this._children.import(children);
+    }
   }
 
   /**
    * 导出 schema
    * @param serialize 序列化，加 id 标识符，用于储存为操作记录
    */
-  exportSchema(serialize = false): NodeSchema {
+  export(serialize = false): NodeSchema {
     // TODO...
     const schema: any = {
       componentName: this.componentName,
-      ...this.extras?.value,
-      props: this.props?.value || {},
-      ...this.directives?.value,
+      ...this.extras?.export(serialize),
+      props: this.props?.export(serialize) || {},
+      ...this.directives?.export(serialize),
     };
     if (serialize) {
       schema.id = this.id;
     }
     if (isNodeParent(this)) {
       if (this.children.size > 0) {
-        schema.children = this.children.exportSchema(serialize);
+        schema.children = this.children.export(serialize);
       }
     } else {
       schema.children = (this.children as NodeContent).value;
@@ -387,9 +406,9 @@ export default class Node {
 
 export interface NodeParent extends Node {
   readonly children: NodeChildren;
-  readonly props: Props<Node>;
-  readonly directives: Props<Node>;
-  readonly extras: Props<Node>;
+  readonly props: Props;
+  readonly directives: Props;
+  readonly extras: Props;
 }
 
 export function isNode(node: any): node is Node {
@@ -466,7 +485,7 @@ export function comparePosition(node1: Node, node2: Node): number {
 export function insertChild(container: NodeParent, thing: Node | NodeData, at?: number | null, copy?: boolean): Node {
   let node: Node;
   if (copy && isNode(thing)) {
-    thing = thing.exportSchema(false);
+    thing = thing.export(false);
   }
   if (isNode(thing)) {
     node = thing;

@@ -4,9 +4,11 @@ import Node, { isNodeParent, insertChildren, insertChild, NodeParent } from './n
 import { Selection } from './selection';
 import RootNode from './node/root-node';
 import { ISimulator, Component } from '../simulator';
-import { computed, obx } from '@recore/obx';
+import { computed, obx, autorun } from '@recore/obx';
 import Location from '../helper/location';
 import { ComponentConfig } from '../component-config';
+import History from '../helper/history';
+import Prop from './node/props/prop';
 
 export default class DocumentModel {
   /**
@@ -24,11 +26,10 @@ export default class DocumentModel {
   /**
    * 操作记录控制
    */
-  // TODO
-  // readonly history: History = new History(this);
+  readonly history: History;
 
   private nodesMap = new Map<string, Node>();
-  private nodes = new Set<Node>();
+  @obx.val private nodes = new Set<Node>();
   private seqId = 0;
   private _simulator?: ISimulator;
 
@@ -48,8 +49,21 @@ export default class DocumentModel {
   }
 
   constructor(readonly project: Project, schema: RootSchema) {
-    this.rootNode = this.createNode(schema) as RootNode;
+    // todo: purge this autorun
+    /*
+    autorun(() => {
+      this.nodes.forEach(item => {
+        if (item.parent == null && item !== this.rootNode) {
+          // item.remove();
+        }
+      });
+    }, true);*/
+    this.rootNode = this.createRootNode(schema);
     this.id = this.rootNode.id;
+    this.history = new History(
+      () => this.schema,
+      (schema) => this.import(schema as RootSchema, true),
+    );
   }
 
   readonly designer = this.project.designer;
@@ -79,7 +93,7 @@ export default class DocumentModel {
   /**
    * 根据 schema 创建一个节点
    */
-  createNode(data: NodeData): Node {
+  createNode(data: NodeData, slotFor?: Prop): Node {
     let schema: any;
     if (isDOMText(data) || isJSExpression(data)) {
       schema = {
@@ -89,7 +103,34 @@ export default class DocumentModel {
     } else {
       schema = data;
     }
-    const node = new Node(this, schema);
+
+    let node: Node | null = null;
+    if (schema.id) {
+      node = this.getNode(schema.id);
+      if (node && node.componentName === schema.componentName) {
+        node.internalSetParent(null);
+        node.internalSetSlotFor(slotFor);
+        node.import(schema, true);
+      } else if (node) {
+        node = null;
+      }
+    }
+    if (!node) {
+      node = new Node(this, schema, slotFor);
+    }
+
+    if (this.nodesMap.has(node.id)) {
+      node.purge();
+    }
+
+    this.nodesMap.set(node.id, node);
+    this.nodes.add(node);
+
+    return node;
+  }
+
+  private createRootNode(schema: RootSchema) {
+    const node = new RootNode(this, schema);
     this.nodesMap.set(node.id, node);
     this.nodes.add(node);
     return node;
@@ -184,6 +225,11 @@ export default class DocumentModel {
     return this.rootNode.schema as any;
   }
 
+  import(schema: RootSchema, checkId: boolean = false) {
+    this.rootNode.import(schema, checkId);
+    // todo: purge something
+  }
+
   /**
    * 导出节点数据
    */
@@ -230,8 +276,6 @@ export default class DocumentModel {
     // TODO: guess componentConfig from component by simulator
     return this.designer.getComponentConfig(componentName);
   }
-
-
 
   @obx.ref private _opened: boolean = true;
   @obx.ref private _suspensed: boolean = false;
@@ -303,7 +347,9 @@ export default class DocumentModel {
   /**
    * 从项目中移除
    */
-  remove() {}
+  remove() {
+    // todo:
+  }
 }
 
 export function isDocumentModel(obj: any): obj is DocumentModel {

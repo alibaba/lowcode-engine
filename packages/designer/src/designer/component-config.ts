@@ -280,7 +280,7 @@ export class ComponentConfig {
   }
   private _isContainer?: boolean;
   get isContainer(): boolean {
-    return this._isContainer! || this.isRootComponent();
+    return true; // this._isContainer! || this.isRootComponent();
   }
   private _isModal?: boolean;
   get isModal(): boolean {

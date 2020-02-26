@@ -1,14 +1,14 @@
 import { computed, obx } from '@recore/obx';
 import { uniqueId } from '../../../../utils/unique-id';
 import { CompositeValue, PropsList, PropsMap } from '../../../schema';
-import StashSpace from './stash-space';
+import PropStash from './prop-stash';
 import Prop, { IPropParent } from './prop';
+import { NodeParent } from '../node';
 
 export const UNSET = Symbol.for('unset');
 export type UNSET = typeof UNSET;
 
-
-export default class Props<O = any> implements IPropParent {
+export default class Props implements IPropParent {
   readonly id = uniqueId('props');
   @obx.val private items: Prop[] = [];
   @computed private get maps(): Map<string, Prop> {
@@ -23,15 +23,14 @@ export default class Props<O = any> implements IPropParent {
     return maps;
   }
 
-  private stash = new StashSpace(
-    prop => {
-      this.items.push(prop);
-      prop.parent = this;
-    },
-    () => {
-      return true;
-    },
-  );
+  get props(): Props {
+    return this;
+  }
+
+  private stash = new PropStash(this, prop => {
+    this.items.push(prop);
+    prop.parent = this;
+  });
 
   /**
    * 元素个数
@@ -41,6 +40,36 @@ export default class Props<O = any> implements IPropParent {
   }
 
   @computed get value(): PropsMap | PropsList | null {
+    return this.export(true);
+  }
+
+  @obx type: 'map' | 'list' = 'map';
+
+  constructor(readonly owner: NodeParent, value?: PropsMap | PropsList | null) {
+    if (Array.isArray(value)) {
+      this.type = 'list';
+      this.items = value.map(item => new Prop(this, item.value, item.name, item.spread));
+    } else if (value != null) {
+      this.items = Object.keys(value).map(key => new Prop(this, value[key], key));
+    }
+  }
+
+  import(value?: PropsMap | PropsList | null) {
+    this.stash.clear();
+    if (Array.isArray(value)) {
+      this.type = 'list';
+      this.items = value.map(item => new Prop(this, item.value, item.name, item.spread));
+    } else if (value != null) {
+      this.type = 'map';
+      this.items = Object.keys(value).map(key => new Prop(this, value[key], key));
+    } else {
+      this.type = 'map';
+      this.items = [];
+    }
+    this.items.forEach(item => item.purge());
+  }
+
+  export(serialize = false): PropsMap | PropsList | null {
     if (this.items.length < 1) {
       return null;
     }
@@ -48,28 +77,16 @@ export default class Props<O = any> implements IPropParent {
       return this.items.map(item => ({
         spread: item.spread,
         name: item.key as string,
-        value: item.value,
+        value: item.export(serialize),
       }));
     }
     const maps: any = {};
     this.items.forEach(prop => {
       if (prop.key) {
-        maps[prop.key] = prop.value;
+        maps[prop.key] = prop.export(serialize);
       }
     });
     return maps;
-  }
-
-  @obx type: 'map' | 'list' = 'map';
-
-  constructor(readonly owner: O, value?: PropsMap | PropsList | null) {
-    if (Array.isArray(value)) {
-      this.type = 'list';
-      this.items = value.map(item => new Prop(this, item.value, item.name, item.spread));
-    } else if (value != null) {
-      this.type = 'map';
-      this.items = Object.keys(value).map(key => new Prop(this, value[key], key));
-    }
   }
 
   /**
