@@ -1,7 +1,7 @@
 {
-  "name": "editor-framework",
+  "name": "@ali/lowcode-engine-editor",
   "version": "0.0.1",
-  "description": "alibaba lowcode editor framework",
+  "description": "alibaba lowcode editor core",
   "files": [
     "demo/",
     "es/",
