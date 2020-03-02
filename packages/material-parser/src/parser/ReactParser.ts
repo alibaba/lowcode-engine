@@ -1,13 +1,55 @@
 import { CodeGenerator } from '@babel/generator';
-import { parse } from '@babel/parser';
+// import { parse } from '@babel/parser';
+const buildParser = require('react-docgen/dist/babelParser').default;
 import traverse from '@babel/traverse';
 import * as t from '@babel/types';
+const { utils: ReactDocUtils } = require('react-docgen');
 import { debug } from '../otter-core';
-import { IMaterialParsedModel, IMaterialScanModel, SourceType } from '../types';
+import {
+  IMaterialParsedModel,
+  IMaterialScanModel,
+  IPropType,
+  IPropTypes,
+  SourceType,
+} from '../types';
 import BaseParser from './BaseParser';
 
 const log = debug.extend('mat');
+const parser = buildParser();
 
+function transformType(item: any): any {
+  switch (typeof item) {
+    case 'string':
+      return {
+        propType: item,
+      };
+    case 'object':
+      if (Array.isArray(item)) {
+        return item.map(transformType);
+      } else if (Object.keys(item).length === 1 && item.name) {
+        return {
+          propType: item.name,
+        };
+      } else if (item.name === 'shape' || item.name === 'exact') {
+        return {
+          propType: item.name,
+          value: Object.keys(item.value).map(name => {
+            return {
+              name,
+              ...transformType(item.value[name]),
+            };
+          }),
+        };
+      } else if (item.name === 'enum') {
+        return item.value.map((x: any) => x.value);
+      } else {
+        return {
+          propType: item.name,
+          isRequired: item.required,
+        };
+      }
+  }
+}
 /**
  * 解析 react 生态下的组件
  *
@@ -31,10 +73,10 @@ class ReactParser extends BaseParser {
       source: string;
     }>
   > {
-    const ast = await parse(fileContent, {
-      sourceType: sourceType === SourceType.MODULE ? 'module' : 'script',
-      plugins: ['jsx'],
-    });
+    const ast = parser.parse(fileContent);
+
+    // @ts-ignore
+    ast.__src = fileContent;
 
     const specifiers: any = [];
 
@@ -77,6 +119,139 @@ class ReactParser extends BaseParser {
     return specifiers;
   }
 
+  public static parseProperties(objectPath: any): IPropTypes {
+    const results: IPropTypes = objectPath.get('properties').map((p: any) => ({
+      name: p.get('key').node.name,
+      ...transformType(ReactDocUtils.getPropType(p.get('value'))),
+    }));
+    // console.log(JSON.stringify(results, null, 2));
+    // objectPath.node.properties.forEach((prop: any) => {
+    //   if (t.isProperty(prop)) {
+    //     if (t.isMemberExpression(prop.value)) {
+    //       if (t.isIdentifier(prop.value.object)) {
+    //         // 支持 optionalArray: PropTypes.array 写法
+    //         results.push({
+    //           name: prop.key.name,
+    //           type: prop.value.property.name,
+    //           required: false,
+    //         });
+    //       }
+    //       if (t.isMemberExpression(prop.value.object)) {
+    //         // 支持 optionalArray: PropTypes.array.isRequired 写法
+    //         results.push({
+    //           name: prop.key.name,
+    //           type: prop.value.object.property.name,
+    //           required: prop.value.object.property.name === 'isRequired',
+    //         });
+    //       }
+    //       if (
+    //         t.isCallExpression(prop.value.object) &&
+    //         t.isMemberExpression(prop.value.object.callee)
+    //       ) {
+    //         // 支持 optionalArray: PropTypes.shape().isRequired 写法
+    //         results.push({
+    //           name: prop.key.name,
+    //           type: prop.value.object.callee.property.name,
+    //           value: ReactParser.parseProperties(
+    //             prop.value.object.arguments[0],
+    //           ),
+    //           required: prop.value.property.name === 'isRequired',
+    //         });
+    //       }
+    //     }
+    //     if (
+    //       t.isCallExpression(prop.value) &&
+    //       t.isMemberExpression(prop.value.callee)
+    //     ) {
+    //       // 支持 optionalArray: PropTypes.shape() 写法
+    //       results.push({
+    //         name: prop.key.name,
+    //         type: prop.value.callee.property.name,
+    //         value: ReactParser.parsePropsTypesES6(prop.value.arguments[0], ''),
+    //         required: false,
+    //       });
+    //     }
+    //   }
+    // });
+
+    return results;
+    // public return [];
+  }
+
+  /**
+   * 解析 AST 获取 propsTypes
+   * 支持的写法：
+   * - static propTypes = { sth: PropTypes.any.isRequired }
+   * - Demo.propTypes = {}
+   *
+   * @private
+   * @param {*} ast
+   * @param {string} defaultExportName
+   * @returns {<Array<{
+   *     name: string,
+   *     type: string,
+   *     value?: any,
+   *     required: boolean,
+   *   }>}
+   * @memberof ReactParser
+   */
+  public static parsePropsTypesES6(
+    ast: any,
+    defaultExportName: string,
+  ): IPropTypes {
+    const results: any[] = [];
+    traverse(ast, {
+      enter(path) {
+        // 支持 static propTypes = { sth: PropTypes.any.isRequired }; 写法
+        if (
+          t.isExpressionStatement(path.node) &&
+          t.isCallExpression(path.node.expression)
+        ) {
+          const args = path.node.expression.arguments;
+          if (
+            t.isIdentifier(args[0]) &&
+            // args[0].name === defaultExportName &&
+            t.isLiteral(args[1]) &&
+            (args[1] as any).value === 'propTypes' &&
+            t.isObjectExpression(args[2])
+          ) {
+            // const properties = (args[2] as t.ObjectExpression).properties;
+            results.push(
+              ...ReactParser.parseProperties(
+                path
+                  // @ts-ignore
+                  .get('expression')
+                  // @ts-ignore
+                  .get('arguments')[2],
+              ),
+            );
+          }
+        }
+
+        // 支持 Demo.propTypes = {}; 写法
+        if (
+          t.isExpressionStatement(path.node) &&
+          t.isAssignmentExpression(path.node.expression) &&
+          t.isMemberExpression(path.node.expression.left) &&
+          t.isObjectExpression(path.node.expression.right) &&
+          t.isIdentifier(path.node.expression.left.object) &&
+          t.isIdentifier(path.node.expression.left.property) &&
+          path.node.expression.left.object.name === defaultExportName &&
+          ['propTypes'].includes(path.node.expression.left.property.name)
+        ) {
+          debugger;
+          // 处理 propTypes
+          results.push(
+            // @ts-ignore
+            ...ReactParser.parseProperties(path.get('expression').get('right')),
+          );
+        }
+      },
+      noScope: defaultExportName ? false : true,
+    });
+    return results;
+  }
+
   public async parseES5(
     model: IMaterialScanModel,
   ): Promise<IMaterialParsedModel> {
@@ -95,10 +270,10 @@ class ReactParser extends BaseParser {
       item => item.filePath === model.mainEntry,
     );
     // log('mainEntryItem', mainEntryItem);
-    const ast = await parse(mainEntryItem.file, {
-      sourceType: 'script',
-      plugins: ['jsx'],
-    });
+    const ast = parser.parse(mainEntryItem.file);
+
+    // @ts-ignore
+    ast.__src = mainEntryItem.file;
 
     // 获取 defaultExportName
     traverse(ast, {
@@ -430,11 +605,10 @@ class ReactParser extends BaseParser {
     filePath: string;
     fileContent: string;
   }): Promise<IMaterialParsedModel> {
-    const ast = await parse(params.fileContent, {
-      sourceType:
-        params.model.sourceType === SourceType.MODULE ? 'module' : 'script',
-      plugins: ['jsx'],
-    });
+    const ast = parser.parse(params.fileContent);
+
+    // @ts-ignore
+    ast.__src = params.fileContent;
 
     const defaultExportName = await this.parseDefaultExportNameES6(ast);
     const componentNames = await this.parseComponentNamesES6(ast);
@@ -444,7 +618,7 @@ class ReactParser extends BaseParser {
       params.model.sourceType,
     );
     const subModules = await this.parseSubModulesES6(ast);
-    const propsTypes = await this.parsePropsTypesES6(ast, defaultExportName);
+    const propsTypes = ReactParser.parsePropsTypesES6(ast, defaultExportName);
     const propsDefaults = await this.parseDefaultPropsES6(
       ast,
       defaultExportName,
@@ -718,161 +892,6 @@ class ReactParser extends BaseParser {
   }
 
   /**
-   * 解析 AST 获取 propsTypes
-   * 支持的写法：
-   * - static propTypes = { sth: PropTypes.any.isRequired }
-   * - Demo.propTypes = {}
-   *
-   * @private
-   * @param {*} ast
-   * @param {string} defaultExportName
-   * @returns {Promise<Array<{
-   *     name: string,
-   *     type: string,
-   *     typeRaw?: any,
-   *     required: boolean,
-   *   }>>}
-   * @memberof ReactParser
-   */
-  private async parsePropsTypesES6(
-    ast: any,
-    defaultExportName: string,
-  ): Promise<
-    Array<{
-      name: string;
-      type: string;
-      typeRaw?: any;
-      required: boolean;
-    }>
-  > {
-    const results: any[] = [];
-    traverse(ast, {
-      enter(path) {
-        // 支持 static propTypes = { sth: PropTypes.any.isRequired }; 写法
-        if (
-          t.isExpressionStatement(path.node) &&
-          t.isCallExpression(path.node.expression)
-        ) {
-          const args = path.node.expression.arguments;
-          if (
-            t.isIdentifier(args[0]) &&
-            // args[0].name === defaultExportName &&
-            t.isLiteral(args[1]) &&
-            (args[1] as any).value === 'propTypes' &&
-            t.isObjectExpression(args[2])
-          ) {
-            const properties = (args[2] as t.ObjectExpression).properties;
-            properties.forEach((prop: any) => {
-              if (t.isProperty(prop)) {
-                if (t.isMemberExpression(prop.value)) {
-                  if (t.isIdentifier(prop.value.object)) {
-                    // 支持 optionalArray: PropTypes.array 写法
-                    results.push({
-                      name: prop.key.name,
-                      type: prop.value.property.name,
-                      required: false,
-                    });
-                  }
-                  if (t.isMemberExpression(prop.value.object)) {
-                    // 支持 optionalArray: PropTypes.array.isRequired 写法
-                    results.push({
-                      name: prop.key.name,
-                      type: prop.value.object.property.name,
-                      required:
-                        prop.value.object.property.name === 'isRequired',
-                    });
-                  }
-                  if (
-                    t.isCallExpression(prop.value.object) &&
-                    t.isMemberExpression(prop.value.object.callee)
-                  ) {
-                    // 支持 optionalArray: PropTypes.shape().isRequired 写法
-                    results.push({
-                      name: prop.key.name,
-                      type: prop.value.object.callee.property.name,
-                      required: prop.value.property.name === 'isRequired',
-                    });
-                  }
-                }
-                if (
-                  t.isCallExpression(prop.value) &&
-                  t.isMemberExpression(prop.value.callee)
-                ) {
-                  // 支持 optionalArray: PropTypes.shape() 写法
-                  results.push({
-                    name: prop.key.name,
-                    type: prop.value.callee.property.name,
-                    required: false,
-                  });
-                }
-              }
-            });
-          }
-        }
-
-        // 支持 Demo.propTypes = {}; 写法
-        if (
-          t.isExpressionStatement(path.node) &&
-          t.isAssignmentExpression(path.node.expression) &&
-          t.isMemberExpression(path.node.expression.left) &&
-          t.isObjectExpression(path.node.expression.right) &&
-          t.isIdentifier(path.node.expression.left.object) &&
-          t.isIdentifier(path.node.expression.left.property) &&
-          path.node.expression.left.object.name === defaultExportName &&
-          ['propTypes'].includes(path.node.expression.left.property.name)
-        ) {
-          // 处理 propTypes
-          path.node.expression.right.properties.forEach(prop => {
-            if (t.isProperty(prop)) {
-              if (t.isMemberExpression(prop.value)) {
-                if (t.isIdentifier(prop.value.object)) {
-                  // 支持 optionalArray: PropTypes.array 写法
-                  results.push({
-                    name: prop.key.name,
-                    type: prop.value.property.name,
-                    required: false,
-                  });
-                }
-                if (t.isMemberExpression(prop.value.object)) {
-                  // 支持 optionalArray: PropTypes.array.isRequired 写法
-                  results.push({
-                    name: prop.key.name,
-                    type: prop.value.object.property.name,
-                    required: prop.value.object.property.name === 'isRequired',
-                  });
-                }
-                if (
-                  t.isCallExpression(prop.value.object) &&
-                  t.isMemberExpression(prop.value.object.callee)
-                ) {
-                  // 支持 optionalArray: PropTypes.shape().isRequired 写法
-                  results.push({
-                    name: prop.key.name,
-                    type: prop.value.object.callee.property.name,
-                    required: prop.value.property.name === 'isRequired',
-                  });
-                }
-              }
-              if (
-                t.isCallExpression(prop.value) &&
-                t.isMemberExpression(prop.value.callee)
-              ) {
-                // 支持 optionalArray: PropTypes.shape() 写法
-                results.push({
-                  name: prop.key.name,
-                  type: prop.value.callee.property.name,
-                  required: false,
-                });
-              }
-            }
-          });
-        }
-      },
-    });
-    return results;
-  }
-
-  /**
    * 解析 AST 获取 defaultProps
    * 支持的写法：
    * - static defaultProps = {};
@@ -897,64 +916,64 @@ class ReactParser extends BaseParser {
     }>
   > {
     const results: any[] = [];
-    traverse(ast, {
-      enter(path) {
-        if (
-          t.isExpressionStatement(path.node) &&
-          t.isCallExpression(path.node.expression)
-        ) {
-          const args = path.node.expression.arguments;
-          if (
-            t.isIdentifier(args[0]) &&
-            // args[0].name === defaultExportName &&
-            t.isLiteral(args[1]) &&
-            (args[1] as any).value === 'defaultProps' &&
-            t.isObjectExpression(args[2])
-          ) {
-            const properties = (args[2] as t.ObjectExpression).properties;
-            properties.forEach((prop: any) => {
-              if (t.isProperty(prop)) {
-                if (t.isObjectExpression(prop.value)) {
-                  const defaultValue = new CodeGenerator(
-                    t.objectExpression(prop.value.properties),
-                  ).generate().code;
-                  results.push({
-                    name: prop.key.name,
-                    defaultValue,
-                  });
-                }
-              }
-            });
-          }
-        }
+    // traverse(ast, {
+    //   enter(path) {
+    //     if (
+    //       t.isExpressionStatement(path.node) &&
+    //       t.isCallExpression(path.node.expression)
+    //     ) {
+    //       const args = path.node.expression.arguments;
+    //       if (
+    //         t.isIdentifier(args[0]) &&
+    //         // args[0].name === defaultExportName &&
+    //         t.isLiteral(args[1]) &&
+    //         (args[1] as any).value === 'defaultProps' &&
+    //         t.isObjectExpression(args[2])
+    //       ) {
+    //         const properties = (args[2] as t.ObjectExpression).properties;
+    //         properties.forEach((prop: any) => {
+    //           if (t.isProperty(prop)) {
+    //             if (t.isObjectExpression(prop.value)) {
+    //               const defaultValue = new CodeGenerator(
+    //                 t.objectExpression(prop.value.properties),
+    //               ).generate().code;
+    //               results.push({
+    //                 name: prop.key.name,
+    //                 defaultValue,
+    //               });
+    //             }
+    //           }
+    //         });
+    //       }
+    //     }
 
-        if (
-          t.isExpressionStatement(path.node) &&
-          t.isAssignmentExpression(path.node.expression) &&
-          t.isMemberExpression(path.node.expression.left) &&
-          t.isObjectExpression(path.node.expression.right) &&
-          t.isIdentifier(path.node.expression.left.object) &&
-          t.isIdentifier(path.node.expression.left.property) &&
-          path.node.expression.left.object.name === defaultExportName &&
-          ['defaultProps'].includes(path.node.expression.left.property.name)
-        ) {
-          // 处理 defaultProps
-          path.node.expression.right.properties.forEach(prop => {
-            if (t.isProperty(prop)) {
-              if (t.isObjectExpression(prop.value)) {
-                const defaultValue = new CodeGenerator(
-                  t.objectExpression(prop.value.properties),
-                ).generate().code;
-                results.push({
-                  name: prop.key.name,
-                  defaultValue,
-                });
-              }
-            }
-          });
-        }
-      },
-    });
+    //     if (
+    //       t.isExpressionStatement(path.node) &&
+    //       t.isAssignmentExpression(path.node.expression) &&
+    //       t.isMemberExpression(path.node.expression.left) &&
+    //       t.isObjectExpression(path.node.expression.right) &&
+    //       t.isIdentifier(path.node.expression.left.object) &&
+    //       t.isIdentifier(path.node.expression.left.property) &&
+    //       path.node.expression.left.object.name === defaultExportName &&
+    //       ['defaultProps'].includes(path.node.expression.left.property.name)
+    //     ) {
+    //       // 处理 defaultProps
+    //       path.node.expression.right.properties.forEach(prop => {
+    //         if (t.isProperty(prop)) {
+    //           if (t.isObjectExpression(prop.value)) {
+    //             const defaultValue = new CodeGenerator(
+    //               t.objectExpression(prop.value.properties),
+    //             ).generate().code;
+    //             results.push({
+    //               name: prop.key.name,
+    //               defaultValue,
+    //             });
+    //           }
+    //         }
+    //       });
+    //     }
+    //   },
+    // });
     return results;
   }
 }

@@ -155,32 +155,13 @@ class Generator implements IGenerator {
       const defaultValueItem = matParsedModel.propsDefaults.find(
         inner => inner.name === item.name,
       );
-      const propItem: Partial<PropsSection['props'][0]> = {
-        name: item.name,
-      };
-      if (
-        [
-          'array',
-          'bool',
-          'func',
-          'number',
-          'object',
-          'string',
-          'node',
-          'element',
-          'any',
-        ].includes(item.type)
-      ) {
-        propItem.propType = item.type as PropType;
-      } else {
-        propItem.propType = {
-          type: item.type,
-          // @ts-ignore
-          value: item.value,
-        } as PropType;
-      }
+      let propItem: Partial<PropsSection['props'][0]> = item;
+
       if (defaultValueItem) {
-        propItem.defaultValue = defaultValueItem.defaultValue;
+        propItem = {
+          ...propItem,
+          defaultValue: defaultValueItem.defaultValue,
+        };
       }
       props.push(propItem as PropsSection['props'][0]);
     });

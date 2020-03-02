@@ -43,7 +43,7 @@ test.serial('generate multiple exported components', async t => {
   t.snapshot(actual);
 });
 
-test.serial('generate single exported components', async t => {
+test.only('generate single exported components', async t => {
   const options: IMaterializeOptions = {
     cwd: singleExportedComptPath,
     entry: singleExportedComptPath,

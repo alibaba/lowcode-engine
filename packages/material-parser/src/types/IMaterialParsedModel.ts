@@ -1,7 +1,16 @@
 /**
  * 对应解析器分析出的一些关键信息
  */
-interface IMaterialParsedModel {
+export interface IPropType {
+  name: string;
+  type: string;
+  value?: IPropTypes;
+  required: boolean;
+}
+
+export type IPropTypes = IPropType[];
+
+export interface IMaterialParsedModel {
   filePath: string;
   defaultExportName: string;
   componentNames: Array<{
@@ -30,16 +39,9 @@ interface IMaterialParsedModel {
     // value 是否对应匿名函数
     isValueAnonymousFunc: boolean;
   }>;
-  propsTypes: Array<{
-    name: string;
-    type: string;
-    typeRaw?: any;
-    required: boolean;
-  }>;
+  propsTypes: IPropTypes;
   propsDefaults: Array<{
     name: string;
     defaultValue: any;
   }>;
 }
-
-export default IMaterialParsedModel;

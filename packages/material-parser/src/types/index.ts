@@ -6,7 +6,7 @@ import ICompiler from './ICompiler';
 import IExtensionConfigManifest from './IExtensionConfigManifest';
 import IGenerator from './IGenerator';
 import IMaterializeOptions from './IMaterializeOptions';
-import IMaterialParsedModel from './IMaterialParsedModel';
+export * from './IMaterialParsedModel';
 import IMaterialScanModel from './IMaterialScanModel';
 import IParser from './IParser';
 import IScanner from './IScanner';
@@ -20,7 +20,6 @@ export {
   IExtensionConfigManifest,
   IMaterializeOptions,
   IMaterialScanModel,
-  IMaterialParsedModel,
   SourceType,
   ChannelType,
   EcologyType,
