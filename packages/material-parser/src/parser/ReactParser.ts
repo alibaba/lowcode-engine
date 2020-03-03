@@ -17,38 +17,47 @@ import BaseParser from './BaseParser';
 const log = debug.extend('mat');
 const parser = buildParser();
 
-function transformType(item: any): any {
-  switch (typeof item) {
-    case 'string':
-      return {
-        propType: item,
-      };
-    case 'object':
-      if (Array.isArray(item)) {
-        return item.map(transformType);
-      } else if (Object.keys(item).length === 1 && item.name) {
-        return {
-          propType: item.name,
-        };
-      } else if (item.name === 'shape' || item.name === 'exact') {
-        return {
-          propType: item.name,
-          value: Object.keys(item.value).map(name => {
-            return {
-              name,
-              ...transformType(item.value[name]),
-            };
-          }),
-        };
-      } else if (item.name === 'enum') {
-        return item.value.map((x: any) => x.value);
-      } else {
-        return {
-          propType: item.name,
-          isRequired: item.required,
-        };
-      }
+function transformType(type: any): any {
+  const { name, value, computed, required } = type;
+  if (!value && !required) {
+    return name;
   }
+  if (computed !== undefined && value) {
+    // tslint:disable-next-line:no-eval
+    return eval(value);
+  }
+  const result: any = {
+    type: name,
+  };
+  if (required) {
+    result.isRequired = required;
+  }
+  if (Array.isArray(value)) {
+    if (name === 'enum') {
+      result.type = 'oneOf';
+    }
+    result.value = value.map(transformType);
+  } else if (typeof value === 'object') {
+    if (name === 'objectOf' || name === 'arrayOf' || name === 'instanceOf') {
+      result.value = transformType(value);
+    } else {
+      result.value = Object.keys(value).map((n: string) => {
+        return transformItem(n, value[n]);
+      });
+    }
+  } else if (value !== undefined) {
+    result.value = value;
+  }
+  return result;
+}
+
+function transformItem(name: string, item: any): any {
+  const result: any = {
+    name,
+    propType: transformType(item),
+  };
+
+  return result;
 }
 /**
  * 解析 react 生态下的组件
@@ -120,10 +129,14 @@ class ReactParser extends BaseParser {
   }
 
   public static parseProperties(objectPath: any): IPropTypes {
-    const results: IPropTypes = objectPath.get('properties').map((p: any) => ({
-      name: p.get('key').node.name,
-      ...transformType(ReactDocUtils.getPropType(p.get('value'))),
-    }));
+    const results: IPropTypes = objectPath
+      .get('properties')
+      .map((p: any) =>
+        transformItem(
+          p.get('key').node.name,
+          ReactDocUtils.getPropType(p.get('value')),
+        ),
+      );
     // console.log(JSON.stringify(results, null, 2));
     // objectPath.node.properties.forEach((prop: any) => {
     //   if (t.isProperty(prop)) {
@@ -239,7 +252,7 @@ class ReactParser extends BaseParser {
           path.node.expression.left.object.name === defaultExportName &&
           ['propTypes'].includes(path.node.expression.left.property.name)
         ) {
-          debugger;
+          // debugger;
           // 处理 propTypes
           results.push(
             // @ts-ignore
