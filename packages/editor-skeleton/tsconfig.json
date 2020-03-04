@@ -2,30 +2,20 @@
   "compileOnSave": false,
   "buildOnSave": false,
   "compilerOptions": {
-    "baseUrl": ".",
     "outDir": "build",
     "module": "esnext",
     "target": "es6",
     "jsx": "react",
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
     "lib": ["es6", "dom"],
     "sourceMap": true,
     "allowJs": true,
-    "rootDir": "src",
-    "forceConsistentCasingInFileNames": true,
+    "noUnusedLocals": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "noImplicitAny": false,
-    "importHelpers": true,
-    "strictNullChecks": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": true,
-    "skipLibCheck": true,
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "noImplicitAny": true,
+    "skipLibCheck": true
   },
-  "include": ["src/*"],
+  "include": ["src/*.ts", "src/*.tsx"],
   "exclude": ["node_modules", "build", "public"]
 }

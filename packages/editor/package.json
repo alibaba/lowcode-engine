@@ -1,0 +1,46 @@
+{
+  "name": "@icedesign/ts-scaffold",
+  "version": "0.0.1",
+  "description": "低代码编辑器",
+  "dependencies": {
+    "@alifd/next": "^1.x",
+    "@icedesign/theme": "^1.x",
+    "@types/react": "^16.8.3",
+    "@types/react-dom": "^16.8.2",
+    "moment": "^2.23.0",
+    "prop-types": "^15.5.8",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-router-dom": "^5.1.2"
+  },
+  "devDependencies": {
+    "@ice/spec": "^0.1.1",
+    "css-modules-typescript-loader": "^2.0.4",
+    "eslint": "^6.0.1",
+    "ice-plugin-fusion": "^0.1.4",
+    "ice-plugin-moment-locales": "^0.1.0",
+    "ice-scripts": "^2.0.0",
+    "stylelint": "^10.1.0"
+  },
+  "scripts": {
+    "start": "ice-scripts dev",
+    "build": "ice-scripts build",
+    "lint": "npm run eslint && npm run stylelint",
+    "eslint": "eslint --cache --ext .js,.jsx ./",
+    "stylelint": "stylelint ./**/*.scss"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "iceworks": {
+    "type": "react",
+    "adapter": "adapter-react-v3"
+  },
+  "ideMode": {
+    "name": "ice-react"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ice-lab/react-materials/tree/master/scaffolds/ice-ts"
+  }
+}
