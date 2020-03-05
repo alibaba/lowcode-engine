@@ -1,5 +1,5 @@
 import { computed, obx } from '@recore/obx';
-import { uniqueId } from '../../../../utils/unique-id';
+import { uniqueId } from '../../../../../../utils/unique-id';
 import { CompositeValue, PropsList, PropsMap } from '../../../schema';
 import PropStash from './prop-stash';
 import Prop, { IPropParent } from './prop';
@@ -67,6 +67,12 @@ export default class Props implements IPropParent {
       this.items = [];
     }
     this.items.forEach(item => item.purge());
+  }
+
+  merge(value: PropsMap) {
+    Object.keys(value).forEach(key => {
+      this.query(key).value = value[key];
+    });
   }
 
   export(serialize = false): PropsMap | PropsList | null {

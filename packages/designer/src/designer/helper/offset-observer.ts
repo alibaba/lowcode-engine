@@ -1,6 +1,6 @@
 import { obx, computed } from '@recore/obx';
 import { INodeSelector, IViewport } from '../simulator';
-import { uniqueId } from '../../utils/unique-id';
+import { uniqueId } from '../../../../utils/unique-id';
 
 export default class OffsetObserver {
   readonly id = uniqueId('oobx');

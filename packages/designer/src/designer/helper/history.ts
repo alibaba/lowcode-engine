@@ -3,6 +3,7 @@ import Session from './session';
 import { autorun, Reaction, untracked } from '@recore/obx';
 import { NodeSchema } from '../schema';
 
+// TODO: cache to localStorage
 
 export interface Serialization<T = any> {
   serialize(data: NodeSchema): T;
@@ -92,7 +93,7 @@ export default class History {
 
     this.obx.sleep();
     try {
-      this.redoer(hotData);
+      this.redoer(currentSerializion.unserialize(hotData));
       this.emitter.emit('cursor', hotData);
     } catch (e) {
       //

@@ -3,7 +3,7 @@ import { LocateEvent, ISensor } from './helper/dragon';
 import { Point } from './helper/location';
 import Node from './document/node/node';
 import { ScrollTarget, IScrollable } from './helper/scroller';
-import { ComponentDescriptionSpec } from './component-config';
+import { ComponentDescription } from './component-type';
 
 export type AutoFit = '100%';
 export const AutoFit = '100%';
@@ -117,7 +117,7 @@ export interface ISimulator<P = object> extends ISensor {
   /**
    * 描述组件
    */
-  describeComponent(component: Component): ComponentDescriptionSpec;
+  describeComponent(component: Component): ComponentDescription;
   /**
    * 根据组件信息获取组件类
    */

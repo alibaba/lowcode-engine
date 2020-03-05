@@ -6,7 +6,7 @@ import NodeChildren from './node-children';
 import Prop from './props/prop';
 import NodeContent from './node-content';
 import { Component } from '../../simulator';
-import { ComponentConfig } from '../../component-config';
+import { ComponentType } from '../../component-type';
 
 const DIRECTIVES = ['condition', 'conditionGroup', 'loop', 'loopArgs', 'title', 'ignore', 'hidden', 'locked'];
 
@@ -89,8 +89,8 @@ export default class Node {
 
   @computed get title(): string {
     let t = this.getDirective('x-title');
-    if (!t && this.componentConfig.descriptor) {
-      t = this.getProp(this.componentConfig.descriptor, false);
+    if (!t && this.componentType.descriptor) {
+      t = this.getProp(this.componentType.descriptor, false);
     }
     if (t) {
       const v = t.getAsString();
@@ -186,8 +186,8 @@ export default class Node {
   /**
    * 节点组件描述
    */
-  @obx.ref get componentConfig(): ComponentConfig {
-    return this.document.getComponentConfig(this.componentName, this.component);
+  @obx.ref get componentType(): ComponentType {
+    return this.document.getComponentType(this.componentName, this.component);
   }
 
   @obx.ref get propsData(): PropsMap | PropsList | null {
@@ -248,6 +248,34 @@ export default class Node {
 
   getProp(path: string, useStash: boolean = true): Prop | null {
     return this.props?.query(path, useStash as any) || null;
+  }
+
+  /**
+   * 获取单个属性值
+   */
+  getPropValue(path: string): any {
+    return this.getProp(path, false)?.value;
+  }
+
+  /**
+   * 设置单个属性值
+   */
+  setPropValue(path: string, value: any) {
+    this.getProp(path, true)!.value = value;
+  }
+
+  /**
+   * 设置多个属性值，和原有值合并
+   */
+  mergeProps(props: PropsMap) {
+    this.props?.merge(props);
+  }
+
+  /**
+   * 设置多个属性值，替换原有值
+   */
+  setProps(props?: PropsMap | PropsList | null) {
+    this.props?.import(props);
   }
 
   getDirective(name: string, useStash: boolean = true): Prop | null {
@@ -484,7 +512,7 @@ export function comparePosition(node1: Node, node2: Node): number {
 
 export function insertChild(container: NodeParent, thing: Node | NodeData, at?: number | null, copy?: boolean): Node {
   let node: Node;
-  if (copy && isNode(thing)) {
+  if (isNode(thing) && (copy || thing.isSlotRoot)) {
     thing = thing.export(false);
   }
   if (isNode(thing)) {

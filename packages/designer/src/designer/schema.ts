@@ -105,7 +105,7 @@ export function isDOMText(data: any): data is DOMText {
 export type DOMText = string;
 
 export interface RootSchema extends NodeSchema {
-  componentName: 'Block' | 'Page' | 'Component';
+  componentName: string; // 'Block' | 'Page' | 'Component';
   fileName: string;
   meta?: object;
   state?: {
@@ -120,7 +120,7 @@ export interface RootSchema extends NodeSchema {
   css?: string;
   dataSource?: {
     items: DataSourceConfig[];
-  };
+  } | any;
   defaultProps?: CompositeObject;
 }
 

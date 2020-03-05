@@ -1,5 +1,5 @@
-import { ComponentType } from 'react';
-import { obx, computed } from '@recore/obx';
+import { ComponentType as ReactComponentType } from 'react';
+import { obx, computed, autorun } from '@recore/obx';
 import BuiltinSimulatorView from '../builtins/simulator';
 import Project from './project';
 import { ProjectSchema } from './schema';
@@ -10,7 +10,7 @@ import Location, { LocationData, isLocationChildrenDetail } from './helper/locat
 import DocumentModel from './document/document-model';
 import Node, { insertChildren } from './document/node/node';
 import { isRootNode } from './document/node/root-node';
-import { ComponentDescriptionSpec, ComponentConfig } from './component-config';
+import { ComponentDescription, ComponentType } from './component-type';
 import Scroller, { IScrollable } from './helper/scroller';
 import { INodeSelector } from './simulator';
 import OffsetObserver, { createOffsetObserver } from './helper/offset-observer';
@@ -21,10 +21,10 @@ export interface DesignerProps {
   defaultSchema?: ProjectSchema;
   hotkeys?: object;
   simulatorProps?: object | ((document: DocumentModel) => object);
-  simulatorComponent?: ComponentType<any>;
-  dragGhostComponent?: ComponentType<any>;
+  simulatorComponent?: ReactComponentType<any>;
+  dragGhostComponent?: ReactComponentType<any>;
   suspensed?: boolean;
-  componentDescriptionSpecs?: ComponentDescriptionSpec[];
+  componentDescriptionSpecs?: ComponentDescription[];
   onMount?: (designer: Designer) => void;
   onDragstart?: (e: LocateEvent) => void;
   onDrag?: (e: LocateEvent) => void;
@@ -128,7 +128,7 @@ export default class Designer {
    * 获得合适的插入位置
    */
   getSuitableInsertion() {
-    const activedDoc = this.project.activedDocuments[0];
+    const activedDoc = this.project.activedDocument;
     if (!activedDoc) {
       return null;
     }
@@ -166,7 +166,7 @@ export default class Designer {
         this.suspensed = props.suspensed;
       }
       if (props.componentDescriptionSpecs !== this.props.componentDescriptionSpecs && props.componentDescriptionSpecs != null) {
-        this.buildComponentConfigsMap(props.componentDescriptionSpecs);
+        this.buildComponentTypesMap(props.componentDescriptionSpecs);
       }
     } else {
       // init hotkeys
@@ -183,7 +183,7 @@ export default class Designer {
         this.suspensed = props.suspensed;
       }
       if (props.componentDescriptionSpecs != null) {
-        this.buildComponentConfigsMap(props.componentDescriptionSpecs);
+        this.buildComponentTypesMap(props.componentDescriptionSpecs);
       }
     }
     this.props = props;
@@ -193,9 +193,9 @@ export default class Designer {
     return this.props ? this.props[key] : null;
   }
 
-  @obx.ref private _simulatorComponent?: ComponentType<any>;
+  @obx.ref private _simulatorComponent?: ReactComponentType<any>;
 
-  @computed get simulatorComponent(): ComponentType<any> {
+  @computed get simulatorComponent(): ReactComponentType<any> {
     return this._simulatorComponent || BuiltinSimulatorView;
   }
 
@@ -227,36 +227,40 @@ export default class Designer {
     // todo:
   }
 
-  @obx.val private _componentConfigsMap = new Map<string, ComponentConfig>();
+  @obx.val private _componentTypesMap = new Map<string, ComponentType>();
 
-  private buildComponentConfigsMap(specs: ComponentDescriptionSpec[]) {
+  private buildComponentTypesMap(specs: ComponentDescription[]) {
     specs.forEach(spec => {
       const key = spec.componentName;
-      const had = this._componentConfigsMap.get(key);
+      const had = this._componentTypesMap.get(key);
       if (had) {
         had.spec = spec;
       } else {
-        this._componentConfigsMap.set(key, new ComponentConfig(spec));
+        this._componentTypesMap.set(key, new ComponentType(spec));
       }
     });
   }
 
-  getComponentConfig(componentName: string): ComponentConfig {
-    if (this._componentConfigsMap.has(componentName)) {
-      return this._componentConfigsMap.get(componentName)!;
+  getComponentType(componentName: string): ComponentType {
+    if (this._componentTypesMap.has(componentName)) {
+      return this._componentTypesMap.get(componentName)!;
     }
 
-    return new ComponentConfig({
+    return new ComponentType({
       componentName,
     });
   }
 
-  get componentsMap(): { [key: string]: ComponentDescriptionSpec } {
+  get componentsMap(): { [key: string]: ComponentDescription } {
     const maps: any = {};
-    this._componentConfigsMap.forEach((config, key) => {
+    this._componentTypesMap.forEach((config, key) => {
       maps[key] = config.spec;
     });
     return maps;
+  }
+
+  autorun(action: (context: { firstRun: boolean }) => void, sync: boolean = false): () => void {
+    return autorun(action, sync as true);
   }
 
   purge() {

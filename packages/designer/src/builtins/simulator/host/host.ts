@@ -29,7 +29,7 @@ import {
   CanvasPoint,
 } from '../../../designer/helper/location';
 import { isNodeSchema, NodeSchema } from '../../../designer/schema';
-import { ComponentDescriptionSpec } from '../../../designer/component-config';
+import { ComponentDescription } from '../../../designer/component-type';
 import { ReactInstance } from 'react';
 import { setNativeSelection } from '../../../designer/helper/navtive-selection';
 import cursor from '../../../designer/helper/cursor';
@@ -68,7 +68,7 @@ const defaultDepends = [
     'window.PropTypes=parent.PropTypes;React.PropTypes=parent.PropTypes; window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;',
   ),
   assetItem(AssetType.JSUrl, 'https://g.alicdn.com/mylib/@ali/recore/1.5.7/umd/recore.min.js'),
-  assetItem(AssetType.JSUrl, 'http://localhost:4444/js/index.js'),
+  assetItem(AssetType.JSUrl, '/lowcode-renderer.js'),
 ];
 
 export class SimulatorHost implements ISimulator<SimulatorProps> {
@@ -335,7 +335,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
   /**
    * @see ISimulator
    */
-  describeComponent(component: Component): ComponentDescriptionSpec {
+  describeComponent(component: Component): ComponentDescription {
     throw new Error('Method not implemented.');
   }
 
@@ -817,7 +817,6 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
         }
       }*/
       else if (isNode(res)) {
-        console.info('res', res);
         container = res;
         upward = null;
       }
@@ -831,7 +830,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
       return this.checkDropTarget(container, dragObject as any);
     }
 
-    const config = container.componentConfig;
+    const config = container.componentType;
 
     if (!config.isContainer) {
       return false;
@@ -916,7 +915,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
 
   checkNestingUp(parent: NodeParent, target: NodeSchema | Node): boolean {
     if (isNode(target) || isNodeSchema(target)) {
-      const config = isNode(target) ? target.componentConfig : this.designer.getComponentConfig(target.componentName);
+      const config = isNode(target) ? target.componentType : this.designer.getComponentType(target.componentName);
       if (config) {
         return config.checkNestingUp(target, parent);
       }
@@ -926,7 +925,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
   }
 
   checkNestingDown(parent: NodeParent, target: NodeSchema | Node): boolean {
-    const config = parent.componentConfig;
+    const config = parent.componentType;
     return config.checkNestingDown(parent, target) && this.checkNestingUp(parent, target);
   }
   // #endregion

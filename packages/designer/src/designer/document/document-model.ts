@@ -6,7 +6,7 @@ import RootNode from './node/root-node';
 import { ISimulator, Component } from '../simulator';
 import { computed, obx, autorun } from '@recore/obx';
 import Location from '../helper/location';
-import { ComponentConfig } from '../component-config';
+import { ComponentType } from '../component-type';
 import History from '../helper/history';
 import Prop from './node/props/prop';
 
@@ -49,21 +49,20 @@ export default class DocumentModel {
   }
 
   constructor(readonly project: Project, schema: RootSchema) {
-    // todo: purge this autorun
-    /*
     autorun(() => {
       this.nodes.forEach(item => {
         if (item.parent == null && item !== this.rootNode) {
-          // item.remove();
+          item.purge();
         }
       });
-    }, true);*/
+    }, true);
     this.rootNode = this.createRootNode(schema);
     this.id = this.rootNode.id;
     this.history = new History(
       () => this.schema,
       (schema) => this.import(schema as RootSchema, true),
     );
+    this.setupListenActiveNodes();
   }
 
   readonly designer = this.project.designer;
@@ -90,6 +89,12 @@ export default class DocumentModel {
     return node ? !node.isPurged : false;
   }
 
+  @obx.val private activeNodes?: Node[];
+
+  private setupListenActiveNodes() {
+    // todo:
+  }
+
   /**
    * 根据 schema 创建一个节点
    */
@@ -108,7 +113,11 @@ export default class DocumentModel {
     if (schema.id) {
       node = this.getNode(schema.id);
       if (node && node.componentName === schema.componentName) {
-        node.internalSetParent(null);
+        if (node.parent) {
+          node.internalSetParent(null);
+          // will move to another position
+          // todo: this.activeNodes?.push(node);
+        }
         node.internalSetSlotFor(slotFor);
         node.import(schema, true);
       } else if (node) {
@@ -117,10 +126,12 @@ export default class DocumentModel {
     }
     if (!node) {
       node = new Node(this, schema, slotFor);
+      // will add
+      // todo: this.activeNodes?.push(node);
     }
 
     if (this.nodesMap.has(node.id)) {
-      node.purge();
+      this.nodesMap.get(node.id)!.internalSetParent(null);
     }
 
     this.nodesMap.set(node.id, node);
@@ -178,6 +189,7 @@ export default class DocumentModel {
     }
     this.nodesMap.delete(node.id);
     this.nodes.delete(node);
+    this.selection.remove(node.id);
     node.remove();
   }
 
@@ -228,6 +240,7 @@ export default class DocumentModel {
   import(schema: RootSchema, checkId: boolean = false) {
     this.rootNode.import(schema, checkId);
     // todo: purge something
+    // todo: select added and active track added
   }
 
   /**
@@ -245,7 +258,7 @@ export default class DocumentModel {
    * 是否已修改
    */
   isModified() {
-    // return !this.history.isSavePoint();
+    return !this.history.isSavePoint();
   }
 
   /**
@@ -272,9 +285,9 @@ export default class DocumentModel {
     return this.simulator!.getComponent(componentName);
   }
 
-  getComponentConfig(componentName: string, component?: Component | null): ComponentConfig {
+  getComponentType(componentName: string, component?: Component | null): ComponentType {
     // TODO: guess componentConfig from component by simulator
-    return this.designer.getComponentConfig(componentName);
+    return this.designer.getComponentType(componentName);
   }
 
   @obx.ref private _opened: boolean = true;

@@ -1,0 +1,8 @@
+.idea/
+.vscode/
+.theia/
+.recore/
+build/
+.*
+~*
+node_modules

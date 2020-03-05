@@ -1,9 +1,11 @@
 import Node, { comparePosition } from './node/node';
 import { obx } from '@recore/obx';
 import DocumentModel from './document-model';
+import { EventEmitter } from 'events';
 
 export class Selection {
   @obx.val private selected: string[] = [];
+  private emitter = new EventEmitter();
 
   constructor(private doc: DocumentModel) {}
 
@@ -17,6 +19,7 @@ export class Selection {
     }
 
     this.selected = [id];
+    this.emitter.emit('selectionchange');
   }
 
   /**
@@ -24,27 +27,34 @@ export class Selection {
    */
   selectAll(ids: string[]) {
     this.selected = ids;
+    this.emitter.emit('selectionchange');
   }
 
   /**
    * 清除选中
    */
   clear() {
+    if (this.selected.length < 1) {
+      return;
+    }
     this.selected = [];
+    this.emitter.emit('selectionchange');
   }
 
   /**
    * 整理选中
    */
   dispose() {
-    let i = this.selected.length;
+    const l = this.selected.length;
+    let i = l;
     while (i-- > 0) {
       const id = this.selected[i];
       if (!this.doc.hasNode(id)) {
         this.selected.splice(i, 1);
-      } else {
-        this.selected[i] = id;
       }
+    }
+    if (this.selected.length !== l) {
+      this.emitter.emit('selectionchange');
     }
   }
 
@@ -57,6 +67,7 @@ export class Selection {
     }
 
     this.selected.push(id);
+    this.emitter.emit('selectionchange');
   }
 
   /**
@@ -73,6 +84,7 @@ export class Selection {
     let i = this.selected.indexOf(id);
     if (i > -1) {
       this.selected.splice(i, 1);
+      this.emitter.emit('selectionchange');
     }
   }
 
@@ -133,5 +145,12 @@ export class Selection {
       }
     }
     return nodes;
+  }
+
+  onSelectionChange(fn: () => void): () => void {
+    this.emitter.addListener('selectionchange', fn);
+    return () => {
+      this.emitter.removeListener('selectionchange', fn);
+    };
   }
 }

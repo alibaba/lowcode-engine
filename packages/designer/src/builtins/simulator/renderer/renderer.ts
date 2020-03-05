@@ -7,9 +7,9 @@ import { RootSchema, NpmInfo } from '../../../designer/schema';
 import { getClientRects } from '../../../utils/get-client-rects';
 import { Asset } from '../utils/asset';
 import loader from '../utils/loader';
-import { ComponentDescriptionSpec } from '../../../designer/component-config';
+import { ComponentDescription } from '../../../designer/component-type';
 import { reactFindDOMNodes, FIBER_KEY } from '../utils/react-find-dom-nodes';
-import { isESModule } from '../../../utils/is-es-module';
+import { isESModule } from '../../../../../utils/is-es-module';
 import { NodeInstance } from '../../../designer/simulator';
 import { isElement } from '../../../utils/is-element';
 import cursor from '../../../designer/helper/cursor';
@@ -281,7 +281,7 @@ function findComponent(componentName: string, npm?: NpmInfo) {
   return getSubComponent(library, paths);
 }
 
-function buildComponents(componentsMap: { [componentName: string]: ComponentDescriptionSpec }) {
+function buildComponents(componentsMap: { [componentName: string]: ComponentDescription }) {
   const components: any = {};
   Object.keys(componentsMap).forEach(componentName => {
     components[componentName] = findComponent(componentName, componentsMap[componentName].npm);
