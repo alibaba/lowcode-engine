@@ -77,6 +77,22 @@ export default class Prop implements IPropParent {
     return null;
   }
 
+  /**
+   * 获得表达式值
+   */
+  @computed get code() {
+    if (isJSExpression(this.value)) {
+      return this.value.value;
+    }
+    if (this.type === 'slot') {
+      return JSON.stringify(this._slotNode!.export(false));
+    }
+    return JSON.stringify(this.value);
+  }
+  set code(val) {
+
+  }
+
   @computed getAsString(): string {
     if (this.type === 'literal') {
       return this._value ? String(this._value) : '';
@@ -165,6 +181,17 @@ export default class Prop implements IPropParent {
    */
   isUnset() {
     return this._type === 'unset';
+  }
+
+  isEqual(otherProp: Prop | null): boolean {
+    if (!otherProp) {
+      return this.isUnset();
+    }
+    if (otherProp.type !== this.type) {
+      return false;
+    }
+    // 'unset' | 'literal' | 'map' | 'list' | 'expression' | 'slot'
+    return this.code === otherProp.code;
   }
 
   /**
@@ -278,6 +305,7 @@ export default class Prop implements IPropParent {
   get(path: string): Prop;
   get(path: string, stash = true) {
     const type = this._type;
+    // todo: support list get
     if (type !== 'map' && type !== 'unset' && !stash) {
       return null;
     }

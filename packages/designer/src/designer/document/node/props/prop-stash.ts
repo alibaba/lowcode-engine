@@ -29,7 +29,6 @@ export default class PropStash implements IPropParent {
         }
       }
       if (pending.length > 0) {
-        debugger;
         untracked(() => {
           for (const item of pending) {
             write(item);

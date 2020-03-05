@@ -43,24 +43,28 @@ export interface SettingTarget {
 
   readonly designer?: Designer;
 
+  readonly path: string[];
+
   /**
    * 响应式自动运行
    */
   onEffect(action: () => void): () => void;
 
+  // 获取属性值
+  getPropValue(propName: string): any;
+
+  // 设置属性值
+  setPropValue(path: string, value: any): void;
+
   /*
   // 所有属性值数据
   readonly props: object;
-  // 获取属性值
-  getPropValue(propName: string): any;
   // 设置多个属性值，替换原有值
   setProps(data: object): void;
   // 设置多个属性值，和原有值合并
   mergeProps(data: object): void;
   // 绑定属性值发生变化时
   onPropsChange(fn: () => void): () => void;
-  // 设置属性值
-  setPropValue(path: string, value: any) {}
   */
 }
 
@@ -149,8 +153,9 @@ export class SettingField implements SettingTarget {
   readonly nodes: Node[];
   readonly componentType: ComponentType | null;
   readonly designer: Designer;
+  readonly path: string[];
 
-  constructor(readonly parent: SettingTarget, private config: FieldConfig) {
+  constructor(readonly parent: SettingTarget, config: FieldConfig) {
     const { type, title, name, items, setter, extraProps, ...rest } = config;
 
     if (type == null) {
@@ -184,6 +189,10 @@ export class SettingField implements SettingTarget {
     this.isOne = parent.isOne;
     this.isNone = parent.isNone;
     this.designer = parent.designer!;
+    this.path = parent.path.slice();
+    if (this.type === 'field') {
+      this.path.push(this.name);
+    }
 
     // initial items
     if (this.type === 'group' && items) {
@@ -210,36 +219,44 @@ export class SettingField implements SettingTarget {
     this._items = [];
   }
 
-  get isSameValue() {
-    return true;
-  }
-
   get items() {
     return this._items;
   }
 
-  get prop(): SettingTargetProp | void {
-    if (this.type === 'field') {
+  // ====== 当前属性读写 =====
 
-    }
-    return;
+  get isSameValue(): boolean {
+    // todo:
+    return true;
   }
 
   getValue(): any {
-    return null;
+    return this.parent.getPropValue(this.name);
   }
 
   setValue(val: any) {
+    this.parent.setPropValue(this.name, val);
+  }
 
+  // 设置属性值
+  setPropValue(propName: string, value: any) {
+    const path = this.type === 'field' ? `${this.name}.${propName}` : propName;
+    this.parent.setPropValue(path, value);
+  }
+
+  // 获取属性值
+  getPropValue(propName: string): any {
+    const path = this.type === 'field' ? `${this.name}.${propName}` : propName;
+    return this.parent.getPropValue(path);
   }
 
   // 添加
   // addItem(config: FieldConfig): SettingField {}
   // 删除
-  deleteItem() {}
+  // deleteItem() {}
   // 移动
-  insertItem(item: SettingField, index?: number) {}
-  remove() {}
+  // insertItem(item: SettingField, index?: number) {}
+  // remove() {}
 
   purge() {
     this.disposeItems();
@@ -250,8 +267,6 @@ export function isSettingField(obj: any): obj is SettingField {
   return obj && obj.isSettingField;
 }
 
-export class SettingTargetProp {}
-
 export class SettingsMain implements SettingTarget {
   private emitter = new EventEmitter();
 
@@ -260,6 +275,7 @@ export class SettingsMain implements SettingTarget {
   private _sessionId = '';
   private _componentType: ComponentType | null = null;
   private _isSame: boolean = true;
+  readonly path = [];
 
   get nodes(): Node[] {
     return this._nodes;
@@ -345,6 +361,47 @@ export class SettingsMain implements SettingTarget {
     return this.onNodesChange(action);
   }
 
+  /**
+   * 获取属性值
+   */
+  getPropValue(propName: string): any {
+    if (!this.isSame) {
+      return null;
+    }
+    const first = this.nodes[0].getProp(propName)!;
+    let l = this.nodes.length;
+    while (l-- > 1) {
+      const next = this.nodes[l].getProp(propName, false);
+      if (!first.isEqual(next)) {
+        return null;
+      }
+    }
+    return first.value;
+  }
+
+  /**
+   * 设置属性值
+   */
+  setPropValue(propName: string, value: any) {
+    this.nodes.forEach(node => {
+      node.setPropValue(propName, value);
+    });
+  }
+
+  // 设置多个属性值，替换原有值
+  setProps(data: object) {
+    this.nodes.forEach(node => {
+      node.setProps(data as any);
+    });
+  }
+
+  // 设置多个属性值，和原有值合并
+  mergeProps(data: object) {
+    this.nodes.forEach(node => {
+      node.mergeProps(data as any);
+    });
+  }
+
   private setup(nodes: Node[]) {
     this._nodes = nodes;
 
@@ -394,6 +451,9 @@ export class SettingsMain implements SettingTarget {
     if (theSame) {
       this._isSame = true;
       this._componentType = type;
+    } else {
+      this._isSame = false;
+      this._componentType = null;
     }
   }
 

@@ -4,6 +4,7 @@ import { SettingsMain, SettingField, isSettingField } from './main';
 import './style.less';
 import Title from './title';
 import SettingsTab, { registerSetter, createSetterContent, getSetter, createSettingFieldView } from './settings-tab';
+import Node from '../../designer/src/designer/document/node/node';
 
 export default class SettingsPane extends Component {
   private main: SettingsMain;
@@ -28,20 +29,34 @@ export default class SettingsPane extends Component {
     if (this.main.isMulti) {
       return (
         <div className="lc-settings-navigator">
-          {this.main.componentType ? this.main.componentType.icon : <Icon type="ellipsis" />}
-          <span>多个节点</span>
+          {this.main.componentType!.icon || <Icon type="ellipsis" size="small" />}
+          <span>
+            {this.main.componentType!.title} x {this.main.nodes.length}
+          </span>
         </div>
       );
     }
 
+    let node: Node | null = this.main.nodes[0]!;
+    const items = [];
+    let l = 4;
+    while (l-- > 0 && node) {
+      const props =
+        l === 3
+          ? {}
+          : {
+              onMouseOver: hoverNode.bind(null, node, true),
+              onMouseOut: hoverNode.bind(null, node, false),
+              onClick: selectNode.bind(null, node),
+            };
+      items.unshift(<Breadcrumb.Item {...props}>{node.title}</Breadcrumb.Item>);
+      node = node.parent;
+    }
+
     return (
       <div className="lc-settings-navigator">
-        {this.main.componentType ? this.main.componentType.icon : <Icon type="ellipsis" />}
-        <Breadcrumb>
-          <Breadcrumb.Item>页面</Breadcrumb.Item>
-          <Breadcrumb.Item>容器</Breadcrumb.Item>
-          <Breadcrumb.Item>输入框</Breadcrumb.Item>
-        </Breadcrumb>
+        {this.main.componentType!.icon || <Icon type="ellipsis" size="small" />}
+        <Breadcrumb className="lc-settings-node-breadcrumb">{items}</Breadcrumb>
       </div>
     );
   }
@@ -49,12 +64,24 @@ export default class SettingsPane extends Component {
   render() {
     if (this.main.isNone) {
       // 未选中节点，提示选中 或者 显示根节点设置
-      return <div className="lc-settings-pane">请选中节点</div>;
+      return (
+        <div className="lc-settings-pane">
+          <div className="lc-settings-notice">
+            <p>请在左侧画布选中节点</p>
+          </div>
+        </div>
+      );
     }
 
     if (!this.main.isSame) {
       // todo: future support 获取设置项交集编辑
-      return <div className="lc-settings-pane">选中同一类型节点编辑</div>;
+      return (
+        <div className="lc-settings-pane">
+          <div className="lc-settings-notice">
+            <p>请选中同一类型节点编辑</p>
+          </div>
+        </div>
+      );
     }
 
     const { items } = this.main;
@@ -79,13 +106,20 @@ export default class SettingsPane extends Component {
         >
           {(items as SettingField[]).map(field => (
             <Tab.Item className="lc-settings-tab-item" title={<Title title={field.title} />} key={field.name}>
-              <SettingsTab target={field} />
+              <SettingsTab target={field} key={field.id} />
             </Tab.Item>
           ))}
         </Tab>
       </div>
     );
   }
+}
+
+function hoverNode(node: Node, flag: boolean) {
+  node.hover(flag);
+}
+function selectNode(node: Node) {
+  node.select();
 }
 
 export { registerSetter, createSetterContent, getSetter, createSettingFieldView };

@@ -228,15 +228,25 @@ export default class Designer {
   }
 
   @obx.val private _componentTypesMap = new Map<string, ComponentType>();
+  private _lostComponentTypesMap = new Map<string, ComponentType>();
 
   private buildComponentTypesMap(specs: ComponentDescription[]) {
     specs.forEach(spec => {
       const key = spec.componentName;
-      const had = this._componentTypesMap.get(key);
-      if (had) {
-        had.spec = spec;
+      let cType = this._componentTypesMap.get(key);
+      if (cType) {
+        cType.spec = spec;
       } else {
-        this._componentTypesMap.set(key, new ComponentType(spec));
+        cType = this._lostComponentTypesMap.get(key);
+
+        if (cType) {
+          cType.spec = spec;
+          this._lostComponentTypesMap.delete(key);
+        } else {
+          cType = new ComponentType(spec);
+        }
+
+        this._componentTypesMap.set(key, cType);
       }
     });
   }
@@ -246,9 +256,17 @@ export default class Designer {
       return this._componentTypesMap.get(componentName)!;
     }
 
-    return new ComponentType({
+    if (this._lostComponentTypesMap.has(componentName)) {
+      return this._lostComponentTypesMap.get(componentName)!;
+    }
+
+    const cType = new ComponentType({
       componentName,
     });
+
+    this._lostComponentTypesMap.set(componentName, cType);
+
+    return cType;
   }
 
   get componentsMap(): { [key: string]: ComponentDescription } {

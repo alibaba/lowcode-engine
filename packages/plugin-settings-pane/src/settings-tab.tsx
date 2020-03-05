@@ -60,7 +60,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
 
   render() {
     const { field } = this.props;
-    const { setter, title, extraProps, isSameValue } = field;
+    const { setter, title, extraProps } = field;
     const { defaultValue } = extraProps;
     const { visible, value } = this.state;
     // reaction point
@@ -77,9 +77,11 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     if (defaultValue != null && !('defaultValue' in props)) {
       props.defaultValue = defaultValue;
     }
+    /*
     if (!('placeholder' in props) && !isSameValue) {
       props.placeholder = '多种值';
     }
+    */
 
     // todo: error handling
 

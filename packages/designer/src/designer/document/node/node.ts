@@ -98,7 +98,7 @@ export default class Node {
         return v;
       }
     }
-    return this.componentName;
+    return this.componentType.title;
   }
 
   get isSlotRoot(): boolean {
@@ -171,6 +171,17 @@ export default class Node {
    */
   select() {
     this.document.selection.select(this.id);
+  }
+
+  /**
+   * 悬停高亮
+   */
+  hover(flag: boolean = true) {
+    if (flag) {
+      this.document.designer.hovering.hover(this);
+    } else {
+      this.document.designer.hovering.unhover(this);
+    }
   }
 
   /**

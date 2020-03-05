@@ -147,18 +147,17 @@ export class ComponentType {
       name: '#props',
       title: "属性",
       items: [{
-        name: 'title',
-        title: '标题',
+        name: 'label',
+        title: '标签',
         setter: 'StringSetter'
       }, {
-        name: 'description',
-        title: '描述',
-        setter: {
-          componentName: 'StringSetter',
-          props: {
-            multiline: true,
-          }
-        }
+        name: 'name',
+        title: '名称',
+        setter: 'StringSetter'
+      }, {
+        name: 'size',
+        title: '大小',
+        setter: 'StringSetter'
       }]
     }, {
       name: '#styles',
@@ -188,12 +187,6 @@ export class ComponentType {
       name: '#data',
       title: "数据",
       items: []
-    }, {
-      name: '#a',
-      title: "数据1",
-    }, {
-      name: '#b',
-      title: "数据2",
     }];
   }
 
@@ -201,7 +194,7 @@ export class ComponentType {
   private childWhitelist?: string[] | null;
 
   get title() {
-    return this._spec.title;
+    return this._spec.title || this.componentName;
   }
 
   get icon() {
@@ -260,7 +253,6 @@ export class ComponentType {
   get spec(): ComponentDescription {
     return this._spec;
   }
-
 
   checkNestingUp(my: Node | NodeData, parent: NodeParent) {
     if (this.parentWhitelist) {
