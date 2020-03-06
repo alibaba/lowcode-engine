@@ -96,6 +96,9 @@ class SettingFieldView extends Component<{ field: SettingField }> {
           // === IO
           value, // reaction point
           onChange: (value: any) => {
+            this.setState({
+              value,
+            });
             field.setValue(value);
           }
         })}
