@@ -13,7 +13,7 @@ const routerConfig = [
       {
         path: '/',
         redirect: '/dashboard',
-      }
+      },
     ],
   },
 ];

@@ -1,5 +1,4 @@
-/// <reference types="react" />
-import { PureComponent } from 'react-dom';
+import { PureComponent } from 'react';
 import './global.scss';
 export default class Skeleton extends PureComponent {
     static displayName: string;

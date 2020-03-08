@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 
 import './index.scss';
 
@@ -10,8 +10,6 @@ export default class LeftAreaPanel extends PureComponent {
   }
 
   render() {
-    return (
-      <div className="lowcode-left-area"/>
-    );
+    return <div className="lowcode-left-area-panel" />;
   }
 }

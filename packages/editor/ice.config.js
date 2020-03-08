@@ -8,7 +8,7 @@ module.exports = {
   },
   plugins: [
     ['ice-plugin-fusion', {
-      themePackage: '@icedesign/theme',
+      themePackage: '@alife/dpl-iceluna',
     }],
     ['ice-plugin-moment-locales', {
       locales: ['zh-cn'],

@@ -2,6 +2,26 @@
   "name": "@ali/lowcode-engine-skeleton",
   "version": "0.0.1",
   "description": "alibaba lowcode editor skeleton",
+  "files": [
+    "demo/",
+    "es/",
+    "lib/",
+    "build/"
+  ],
+  "main": "lib/index.tsx",
+  "module": "es/index.js",
+  "stylePath": "style.js",
+  "scripts": {
+    "start": "build-scripts start",
+    "build": "build-scripts build --skip-demo",
+    "prepublishOnly": "npm run prettier && npm run build",
+    "lint": "eslint --cache --ext .js,.jsx ./",
+    "prettier": "prettier  --write \"./src/**/*.{ts,tsx,js,jsx,ejs,less,css,scss,json}\" "
+  },
+  "keywords": [
+    "lowcode",
+    "editor"
+  ],
   "author": "xiayang.xy",
   "dependencies": {
     "@alifd/next": "^1.x",
@@ -21,30 +41,13 @@
     "@types/lodash": "^4.14.149",
     "@types/react": "^16.9.13",
     "@types/react-dom": "^16.9.4",
-    "build-plugin-component": "^0.2.0",
+    "build-plugin-component": "^0.2.7-1",
     "build-plugin-fusion": "^0.1.0",
     "build-plugin-moment-locales": "^0.1.0",
     "eslint": "^6.0.1",
     "prettier": "^1.19.1",
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
-  },
-  "scripts": {
-    "start": "build-scripts start",
-    "build": "build-scripts build",
-    "prepublishOnly": "npm run prettier && npm run build",
-    "lint": "eslint --cache --ext .js,.jsx ./",
-    "prettier": "prettier  --write \"./src/**/*.{ts,tsx,js,jsx,ejs,less,css,scss,json}\" "
-  },
-  "engines": {
-    "node": ">=8.0.0"
-  },
-  "iceworks": {
-    "type": "react",
-    "adapter": "adapter-react-v3"
-  },
-  "ideMode": {
-    "name": "ice-react"
   },
   "repository": {
     "type": "git",

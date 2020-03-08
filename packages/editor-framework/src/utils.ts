@@ -213,5 +213,30 @@ export function transformToPromise(input) {
 }
 
 export function comboEditorConfig(defaultConfig, customConfig) {
-
+  const { ideConfig = {}, utils = {} } = this.props;
+    const comboShortCuts = () => {
+      const defaultShortCuts = defaultIdeConfig.shortCuts;
+      const shortCuts = ideConfig.shortCuts || [];
+      const configMap = skeletonUtils.transformArrayToMap(defaultShortCuts, 'keyboard');
+      (shortCuts || []).forEach(item => {
+        configMap[item.keyboard] = item;
+      });
+      return Object.keys(configMap).map(key => configMap[key]);
+    };
+    return {
+      ...ideConfig,
+      utils: {
+        ...skeletonUtils,
+        ...utils
+      },
+      constants: {
+        ...defaultIdeConfig.constants,
+        ...ideConfig.constants
+      },
+      extensions: {
+        ...defaultIdeConfig.extensions,
+        ...ideConfig.extensions
+      },
+      shortCuts: comboShortCuts()
+    };
 }

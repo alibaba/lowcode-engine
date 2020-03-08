@@ -4,9 +4,11 @@
   "description": "低代码编辑器",
   "dependencies": {
     "@alifd/next": "^1.x",
+    "@alife/dpl-iceluna": "^2.3.2",
     "@icedesign/theme": "^1.x",
     "@types/react": "^16.8.3",
     "@types/react-dom": "^16.8.2",
+    "keymaster": "^1.6.2",
     "moment": "^2.23.0",
     "prop-types": "^15.5.8",
     "react": "^16.4.1",
@@ -20,6 +22,7 @@
     "ice-plugin-fusion": "^0.1.4",
     "ice-plugin-moment-locales": "^0.1.0",
     "ice-scripts": "^2.0.0",
+    "prettier": "^1.19.1",
     "stylelint": "^10.1.0"
   },
   "scripts": {
@@ -27,7 +30,8 @@
     "build": "ice-scripts build",
     "lint": "npm run eslint && npm run stylelint",
     "eslint": "eslint --cache --ext .js,.jsx ./",
-    "stylelint": "stylelint ./**/*.scss"
+    "stylelint": "stylelint ./**/*.scss",
+    "prettier": "prettier  --write \"./src/**/*.{ts,tsx,js,jsx,ejs,less,css,scss,json}\" "
   },
   "engines": {
     "node": ">=8.0.0"

@@ -1,0 +1,52 @@
+.lowcode-panel {
+  user-select: none;
+  overflow: hidden;
+  position: relative;
+  background: #ffffff;
+  transition: width 0.3s ease;
+  transform: translate3d(0, 0, 0);
+  height: 100%;
+  &.visible {
+    border-right: 1px solid #bfbfbf;
+  }
+  .drag-area {
+    display: none;
+  }
+  &.floatable {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 999;
+  }
+  &.draggable {
+    .drag-area {
+      display: block;
+      width: 10px;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      cursor: col-resize;
+      z-index: 9999;
+    }
+    &.left {
+      .drag-area {
+        right: 0;
+      }
+    }
+    &.right {
+      .drag-area {
+        left: 0;
+      }
+    }
+  }
+  &.left {
+    &.floatable {
+      left: 44px;
+    }
+  }
+  &.right {
+    &.floatable {
+      right: 44px;
+    }
+  }
+}

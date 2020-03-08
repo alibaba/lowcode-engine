@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react-dom';
+import React, { PureComponent } from 'react';
 
 // import Editor from '@ali/lowcode-engine-editor';
 import { Loading, ConfigProvider } from '@alifd/next';
@@ -17,6 +17,12 @@ export default class Skeleton extends PureComponent {
   constructor(props) {
     super(props);
     // this.editor = new Editor(props.config, props.utils);
+    this.editor = {
+      on: () => {},
+      off: () => {},
+      config: props.config,
+      pluginComponents: props.pluginComponents
+    };
   }
 
   componentWillUnmount() {
@@ -26,24 +32,26 @@ export default class Skeleton extends PureComponent {
 
   render() {
     const { location, history, messages } = this.props;
-    
+    this.editor.location = location;
+    this.editor.history = history;
+    this.editor.messages = messages;
     return (
-      <ConfigProvider locale={messages[appHelper.locale]}>
+      <ConfigProvider>
         <Loading
-          tip={this.i18n('loading')}
+          tip="Loading"
           size="large"
-          visible={loading || !initReady}
+          visible={false}
           shape="fusion-reactor"
           fullScreen
         >
           <div className="lowcode-editor">
-            {/* <TopArea/>
+            <TopArea editor={this.editor}/>
             <div className="lowcode-main-content">
-              <LeftArea.Nav/>
-              <LeftArea.Panel/>
-              <CenterArea/>
-              <RightArea/>
-            </div> */}
+              <LeftArea.Nav editor={this.editor}/>
+              <LeftArea.Panel editor={this.editor}/>
+              <CenterArea editor={this.editor}/>
+              <RightArea editor={this.editor}/>
+            </div>
           </div>
         </Loading>
       </ConfigProvider>

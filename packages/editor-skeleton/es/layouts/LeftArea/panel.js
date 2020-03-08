@@ -13,7 +13,7 @@ var LeftAreaPanel = /*#__PURE__*/function (_PureComponent) {
 
   _proto.render = function render() {
     return React.createElement("div", {
-      className: "lowcode-left-area"
+      className: "lowcode-left-area-panel"
     });
   };
 

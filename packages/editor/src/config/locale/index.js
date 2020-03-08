@@ -6,5 +6,5 @@ export default {
   'en-US': en_us,
   'zh-CN': zh_cn,
   'zh-TW': zh_tw,
-  'ja-JP': ja_jp
+  'ja-JP': ja_jp,
 };
