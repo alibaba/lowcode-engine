@@ -158,6 +158,10 @@ export class ComponentType {
         name: 'size',
         title: '大小',
         setter: 'StringSetter'
+      }, {
+        name: 'age',
+        title: '年龄',
+        setter: 'NumberSetter'
       }]
     }, {
       name: '#styles',

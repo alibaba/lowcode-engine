@@ -74,6 +74,8 @@ export function isCustomView(obj: any): obj is CustomView {
   return obj && (isValidElement(obj) || isReactComponent(obj));
 }
 
+export type DynamicProps = (field: SettingField, editor: any) => object;
+
 export interface SetterConfig {
   /**
    * if *string* passed must be a registered Setter Name
@@ -82,9 +84,7 @@ export interface SetterConfig {
   /**
    * the props pass to Setter Component
    */
-  props?: {
-    [prop: string]: any;
-  };
+  props?: object | DynamicProps;
   children?: any;
 }
 
@@ -225,26 +225,57 @@ export class SettingField implements SettingTarget {
 
   // ====== 当前属性读写 =====
 
+  // Todo cache!!
+  /**
+   * 判断当前属性值是否一致
+   */
   get isSameValue(): boolean {
-    // todo:
+    if (this.type !== 'field') {
+      return false;
+    }
+    const propName = this.path.join('.');
+    const first = this.nodes[0].getProp(propName)!;
+    let l = this.nodes.length;
+    while (l-- > 1) {
+      const next = this.nodes[l].getProp(propName, false);
+      if (!first.isEqual(next)) {
+        return false;
+      }
+    }
     return true;
   }
 
+  /**
+   * 获取当前属性值
+   */
   getValue(): any {
+    if (this.type !== 'field') {
+      return null;
+    }
     return this.parent.getPropValue(this.name);
   }
 
+  /**
+   * 设置当前属性值
+   */
   setValue(val: any) {
+    if (this.type !== 'field') {
+      return;
+    }
     this.parent.setPropValue(this.name, val);
   }
 
-  // 设置属性值
+  /**
+   * 设置子级属性值
+   */
   setPropValue(propName: string, value: any) {
     const path = this.type === 'field' ? `${this.name}.${propName}` : propName;
     this.parent.setPropValue(path, value);
   }
 
-  // 获取属性值
+  /**
+   * 获取子级属性值
+   */
   getPropValue(propName: string): any {
     const path = this.type === 'field' ? `${this.name}.${propName}` : propName;
     return this.parent.getPropValue(path);
@@ -418,7 +449,7 @@ export class SettingsMain implements SettingTarget {
     // setups
     this.setupComponentType();
 
-    // todo: enhance that componentType not changed
+    // todo: enhance when componentType not changed do merge
     // clear fields
     this.setupItems();
 

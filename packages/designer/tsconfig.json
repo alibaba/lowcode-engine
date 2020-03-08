@@ -4,6 +4,6 @@
     "experimentalDecorators": true
   },
   "include": [
-    "./src/", "../utils/unique-id.ts"
+    "./src/", "../utils/unique-id.ts", "../utils/is-plain-object.ts", "../utils/is-object.ts", "../utils/is-function.ts"
   ]
 }

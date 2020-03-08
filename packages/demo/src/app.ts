@@ -1,5 +1,6 @@
 import { ViewController } from '@ali/recore';
 import DesignView from '../../designer/src';
+import NumberSetter from '../../plugin-setters/number-setter';
 import SettingsPane, { registerSetter } from '../../plugin-settings-pane/src';
 import { EventEmitter } from 'events';
 import { Input } from '@alifd/next';
@@ -17,7 +18,9 @@ registerSetter('EventsSetter', () => {
   }, '这里是事件设置');
 });
 
-registerSetter('StringSetter', Input);
+registerSetter('StringSetter', { component: Input, props: { placeholder: "请输入" } });
+
+registerSetter('NumberSetter', NumberSetter as any);
 
 const emitter = new EventEmitter();
 
