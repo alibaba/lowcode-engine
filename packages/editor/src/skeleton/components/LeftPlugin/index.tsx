@@ -1,26 +1,42 @@
 import React, { PureComponent, Fragment } from 'react';
-
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Balloon, Dialog, Icon, Badge } from '@alife/next';
+import { Balloon, Dialog, Icon, Badge } from '@alifd/next';
 
 import './index.scss';
-export default class LeftPlugin extends PureComponent {
-  static displayName = 'lowcodeLeftPlugin';
+import Editor from '../../../framework/editor';
+import { PluginConfig, PluginClass } from '../../../framework/definitions';
+
+export interface LeftPluginProps {
+  active?: boolean;
+  config: PluginConfig;
+  disabled?: boolean;
+  editor: Editor;
+  locked?: boolean;
+  marked?: boolean;
+  onClick?: () => void;
+  pluginClass: PluginClass;
+}
+
+export interface LeftPluginState {
+  dialogVisible: boolean;
+}
+
+export default class LeftPlugin extends PureComponent<LeftPluginProps, LeftPluginState> {
+  static displayName = 'LowcodeLeftPlugin';
 
   static defaultProps = {
     active: false,
     config: {},
     disabled: false,
-    dotted: false,
+    marked: false,
     locked: false,
-    onClick: () => {},
+    onClick: () => {}
   };
 
   constructor(props, context) {
     super(props, context);
     this.state = {
-      dialogVisible: false,
+      dialogVisible: false
     };
   }
 
@@ -60,7 +76,7 @@ export default class LeftPlugin extends PureComponent {
   handleOpen = () => {
     // todo 对话框类型的插件初始时拿不到插件实例
     this.setState({
-      dialogVisible: true,
+      dialogVisible: true
     });
   };
 
@@ -75,15 +91,7 @@ export default class LeftPlugin extends PureComponent {
   };
 
   renderIcon = clickCallback => {
-    const {
-      active,
-      disabled,
-      dotted,
-      locked,
-      onClick,
-      config,
-      editor,
-    } = this.props;
+    const { active, disabled, marked, locked, onClick, config, editor } = this.props;
     const { pluginKey, props } = config || {};
     const { icon, title } = props || {};
     return (
@@ -91,7 +99,7 @@ export default class LeftPlugin extends PureComponent {
         className={classNames('lowcode-left-plugin', pluginKey, {
           active,
           disabled,
-          locked,
+          locked
         })}
         data-tooltip={title}
         onClick={() => {
@@ -101,7 +109,7 @@ export default class LeftPlugin extends PureComponent {
           onClick && onClick();
         }}
       >
-        {dotted ? (
+        {marked ? (
           <Badge dot>
             <Icon type={icon} size="small" />
           </Badge>
@@ -113,15 +121,7 @@ export default class LeftPlugin extends PureComponent {
   };
 
   render() {
-    const {
-      dotted,
-      locked,
-      active,
-      disabled,
-      config,
-      editor,
-      pluginClass: Comp,
-    } = this.props;
+    const { marked, locked, active, disabled, config, editor, pluginClass: Comp } = this.props;
     const { pluginKey, props, type, pluginProps } = config || {};
     const { onClick, title } = props || {};
     const { dialogVisible } = this.state;
@@ -197,7 +197,7 @@ export default class LeftPlugin extends PureComponent {
           this.handleOpen();
         });
       case 'Custom':
-        return dotted ? <Badge dot>{node}</Badge> : node;
+        return marked ? <Badge dot>{node}</Badge> : node;
       default:
         return null;
     }

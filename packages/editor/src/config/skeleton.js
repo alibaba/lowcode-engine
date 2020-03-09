@@ -3,12 +3,12 @@ export default {
   theme: {
     dpl: {
       package: '@alife/dpl-iceluna',
-      version: '^2.3.0',
+      version: '^2.3.0'
     },
-    scss: '',
+    scss: ''
   },
   constants: {
-    namespace: 'page',
+    namespace: 'page'
   },
   utils: [],
   plugins: {
@@ -21,21 +21,21 @@ export default {
           title: 'balloon',
           icon: 'dengpao',
           balloonProps: {
-            triggerType: 'click',
-          },
+            triggerType: 'click'
+          }
         },
         config: {
           package: '@ali/iceluna-addon-2',
-          version: '^1.0.0',
+          version: '^1.0.0'
         },
-        pluginProps: {},
+        pluginProps: {}
       },
       {
         pluginKey: 'divider',
         type: 'Divider',
         props: {
-          align: 'left',
-        },
+          align: 'left'
+        }
       },
       {
         pluginKey: 'topDialogIcon',
@@ -43,13 +43,13 @@ export default {
         props: {
           align: 'left',
           title: 'dialog',
-          icon: 'dengpao',
+          icon: 'dengpao'
         },
         config: {
           package: '@ali/iceluna-addon-2',
-          version: '^1.0.0',
+          version: '^1.0.0'
         },
-        pluginProps: {},
+        pluginProps: {}
       },
       {
         pluginKey: 'topLinkIcon',
@@ -60,11 +60,11 @@ export default {
           icon: 'dengpao',
           linkProps: {
             href: '//www.taobao.com',
-            target: 'blank',
-          },
+            target: 'blank'
+          }
         },
         config: {},
-        pluginProps: {},
+        pluginProps: {}
       },
       {
         pluginKey: 'topIcon',
@@ -75,11 +75,11 @@ export default {
           icon: 'dengpao',
           onClick: function(editor) {
             alert('icon addon invoke, current activeKey: ' + editor.activeKey);
-          },
+          }
         },
         config: {},
-        pluginProps: {},
-      },
+        pluginProps: {}
+      }
     ],
     leftArea: [
       {
@@ -88,13 +88,13 @@ export default {
         props: {
           align: 'top',
           title: 'panel',
-          icon: 'dengpao',
+          icon: 'dengpao'
         },
         config: {
           package: '@ali/iceluna-addon-2',
-          version: '^1.0.0',
+          version: '^1.0.0'
         },
-        pluginProps: {},
+        pluginProps: {}
       },
       {
         pluginKey: 'leftBalloonIcon',
@@ -102,13 +102,13 @@ export default {
         props: {
           align: 'top',
           title: 'balloon',
-          icon: 'dengpao',
+          icon: 'dengpao'
         },
         config: {
           package: '@ali/iceluna-addon-2',
-          version: '^1.0.0',
+          version: '^1.0.0'
         },
-        pluginProps: {},
+        pluginProps: {}
       },
       {
         pluginKey: 'leftDialogIcon',
@@ -116,13 +116,13 @@ export default {
         props: {
           align: 'bottom',
           title: 'dialog',
-          icon: 'dengpao',
+          icon: 'dengpao'
         },
         config: {
           package: '@ali/iceluna-addon-2',
-          version: '^1.0.0',
+          version: '^1.0.0'
         },
-        pluginProps: {},
+        pluginProps: {}
       },
       {
         pluginKey: 'leftLinkIcon',
@@ -133,11 +133,11 @@ export default {
           icon: 'dengpao',
           linkProps: {
             href: '//www.taobao.com',
-            target: 'blank',
-          },
+            target: 'blank'
+          }
         },
         config: {},
-        pluginProps: {},
+        pluginProps: {}
       },
       {
         pluginKey: 'leftIcon',
@@ -148,11 +148,11 @@ export default {
           icon: 'dengpao',
           onClick: function(editor) {
             alert('icon addon invoke, current activeKey: ' + editor.activeKey);
-          },
+          }
         },
         config: {},
-        pluginProps: {},
-      },
+        pluginProps: {}
+      }
     ],
     rightArea: [
       {
@@ -160,56 +160,56 @@ export default {
         type: 'Panel',
         props: {
           title: 'panel1',
-          icon: 'dengpao',
+          icon: 'dengpao'
         },
         config: {
           package: '@ali/iceluna-addon-2',
-          version: '^1.0.0',
+          version: '^1.0.0'
         },
-        pluginProps: {},
+        pluginProps: {}
       },
       {
         pluginKey: 'rightPanel2',
         type: 'Panel',
         props: {
           title: 'panel2',
-          icon: 'dengpao',
+          icon: 'dengpao'
         },
         config: {
           package: '@ali/iceluna-addon-2',
-          version: '^1.0.0',
+          version: '^1.0.0'
         },
-        pluginProps: {},
+        pluginProps: {}
       },
       {
         pluginKey: 'rightPanel3',
         type: 'Panel',
         props: {
           title: 'panel3',
-          icon: 'dengpao',
+          icon: 'dengpao'
         },
         config: {
           package: '@ali/iceluna-addon-2',
-          version: '^1.0.0',
+          version: '^1.0.0'
         },
-        pluginProps: {},
+        pluginProps: {}
       },
       {
         pluginKey: 'rightPanel4',
         type: 'Panel',
         props: {
           title: 'panel4',
-          icon: 'dengpao',
+          icon: 'dengpao'
         },
         config: {
           package: '@ali/iceluna-addon-2',
-          version: '^1.0.0',
+          version: '^1.0.0'
         },
-        pluginProps: {},
-      },
+        pluginProps: {}
+      }
     ],
-    centerArea: [],
+    centerArea: []
   },
   hooks: [],
-  shortCuts: [],
+  shortCuts: []
 };

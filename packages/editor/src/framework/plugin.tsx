@@ -1,23 +1,41 @@
-import React, { PureComponent, creatRef} from 'react';
+import React, { PureComponent, createRef } from 'react';
 
 import EditorContext from './context';
-import { isEmpty, generateI18n, goldlog } from './utils';
+import Editor from './editor';
+import { isEmpty, generateI18n } from './utils';
+import { PluginConfig, I18nFunction } from './definitions';
 
+export interface PluginProps {
+  editor: Editor;
+  config: PluginConfig;
+}
 
-export default function plugin(Comp) {
-  class LowcodePlugin extends PureComponent {
+export interface InjectedPluginProps {
+  i18n?: I18nFunction;
+}
+
+export default function plugin(
+  Comp: React.ComponentType<PluginProps & InjectedPluginProps>
+): React.ComponentType<PluginProps> {
+  class LowcodePlugin extends PureComponent<PluginProps> {
     static displayName = 'LowcodeEditorPlugin';
     static defaultProps = {
-      config: {},
+      config: {}
     };
     static contextType = EditorContext;
+    static init = Comp.init;
+    public ref = createRef<React.Component>();
+    private editor: Editor;
+    private pluginKey: string;
+    private i18n: I18nFunction;
+
     constructor(props, context) {
       super(props, context);
+
       if (isEmpty(props.config) || !props.config.pluginKey) {
         console.warn('lowcode editor plugin has wrong config');
         return;
       }
-      this.ref = React.createRef();
       const { locale, messages, editor } = props;
       // 注册插件
       this.editor = editor;
@@ -36,19 +54,9 @@ export default function plugin(Comp) {
 
     render() {
       const { config } = this.props;
-      return (
-        <Comp
-          ref={this.ref}
-          i18n={this.i18n}
-          editor={this.editor}
-          config={config}
-          {...config.pluginProps}
-        />
-      );
+      return <Comp ref={this.ref} i18n={this.i18n} editor={this.editor} config={config} {...config.pluginProps} />;
     }
   }
-
-  LowcodePlugin.init = Comp.init;
 
   return LowcodePlugin;
 }

@@ -1,23 +1,25 @@
 import React, { PureComponent } from 'react';
-
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Icon, Button } from '@alifd/next';
+
 import './index.scss';
-export default class TopIcon extends PureComponent {
-  static displayName = 'TopIcon';
-  static propTypes = {
-    active: PropTypes.bool,
-    className: PropTypes.string,
-    disabled: PropTypes.bool,
-    icon: PropTypes.string,
-    id: PropTypes.string,
-    locked: PropTypes.bool,
-    onClick: PropTypes.func,
-    showTitle: PropTypes.bool,
-    style: PropTypes.object,
-    title: PropTypes.string,
-  };
+
+export interface TopIconProps {
+  active?: boolean;
+  className?: string;
+  disabled?: boolean;
+  icon: string;
+  id?: string;
+  locked?: boolean;
+  marked?: boolean;
+  onClick?: () => void;
+  showTitle?: boolean;
+  style?: React.CSSProperties;
+  title?: string;
+}
+
+export default class TopIcon extends PureComponent<TopIconProps> {
+  static displayName = 'LowcodeTopIcon';
   static defaultProps = {
     active: false,
     className: '',
@@ -28,22 +30,11 @@ export default class TopIcon extends PureComponent {
     onClick: () => {},
     showTitle: false,
     style: {},
-    title: '',
+    title: ''
   };
 
   render() {
-    const {
-      active,
-      disabled,
-      icon,
-      locked,
-      title,
-      className,
-      id,
-      style,
-      showTitle,
-      onClick,
-    } = this.props;
+    const { active, disabled, icon, locked, title, className, id, style, showTitle, onClick } = this.props;
     return (
       <Button
         type="normal"
@@ -52,11 +43,11 @@ export default class TopIcon extends PureComponent {
         className={classNames('lowcode-top-btn', className, {
           active,
           disabled,
-          locked,
+          locked
         })}
         id={id}
         style={style}
-        onClick={disabled ? null : onClick}
+        onClick={disabled ? undefined : onClick}
       >
         <div>
           <Icon size="large" type={icon} />

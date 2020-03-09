@@ -6,5 +6,5 @@ export default {
   pageNotExist: 'The current Page not exist',
   enterFromAppCenter: 'Please enter from the app center',
   noPermission: 'Sorry, you do not have the develop permission',
-  getPermission: 'Please connect the app owners {owners} to get the permission',
+  getPermission: 'Please connect the app owners {owners} to get the permission'
 };

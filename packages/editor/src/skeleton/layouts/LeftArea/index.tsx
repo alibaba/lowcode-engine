@@ -3,5 +3,5 @@ import Panel from './panel';
 
 export default {
   Nav,
-  Panel,
+  Panel
 };

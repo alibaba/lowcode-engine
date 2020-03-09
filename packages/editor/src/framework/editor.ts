@@ -1,13 +1,9 @@
 import EventEmitter from 'events';
 import Debug from 'debug';
 import store from 'store';
+import { EditorConfig, Utils, PluginComponents, PluginStatus, LocaleType, HooksConfig } from './definitions';
 
-import {
-  unRegistShortCuts,
-  registShortCuts,
-  transformToPromise,
-  generateI18n,
-} from './utils';
+import { unRegistShortCuts, registShortCuts, transformToPromise } from './utils';
 
 // 根据url参数设置debug选项
 const res = /_?debug=(.*?)(&|$)/.exec(location.search);
@@ -39,35 +35,47 @@ window.onbeforeunload = function(e) {
   return msg;
 };
 
-let instance = null;
+let instance: Editor;
+
 const debug = Debug('editor');
 EventEmitter.defaultMaxListeners = 100;
 
+export interface HooksFuncs {
+  [idx: number]: (msg: string, handler: (...args) => void) => void;
+}
 
 export default class Editor extends EventEmitter {
-  static getInstance = () => {
+  static getInstance = (config: EditorConfig, components: PluginComponents, utils?: Utils): Editor => {
     if (!instance) {
-      instance = new Editor();
+      instance = new Editor(config, components, utils);
     }
     return instance;
   };
 
-  constructor(config, utils, components) {
+  private hooksFuncs: HooksFuncs;
+
+  public pluginStatus: PluginStatus;
+  public plugins: PluginComponents;
+  public locale: LocaleType;
+
+  public emit: (msg: string, ...args) => void;
+  public on: (msg: string, handler: (...args) => void) => void;
+  public once: (msg: string, handler: (...args) => void) => void;
+  public off: (msg: string, handler: (...args) => void) => void;
+
+  constructor(public config: EditorConfig, public components: PluginComponents, public utils?: Utils) {
     super();
     instance = this;
-    this.config = config;
-    this.utils = utils;
-    this.components = components;
     this.init();
   }
 
-  init() {
-    const { hooks, shortCuts, lifeCycles } = this.config || {};
+  init(): Promise<any> {
+    const { hooks, shortCuts = [], lifeCycles } = this.config || {};
     this.locale = store.get('lowcode-editor-locale') || 'zh-CN';
     // this.messages = this.messagesSet[this.locale];
     // this.i18n = generateI18n(this.locale, this.messages);
     this.pluginStatus = this.initPluginStatus();
-    this.initHooks(hooks);
+    this.initHooks(hooks || []);
 
     this.emit('editor.beforeInit');
     const init = (lifeCycles && lifeCycles.init) || (() => {});
@@ -77,6 +85,7 @@ export default class Editor extends EventEmitter {
         // 注册快捷键
         registShortCuts(shortCuts, this);
         this.emit('editor.afterInit');
+        return true;
       })
       .catch(err => {
         console.error(err);
@@ -84,11 +93,12 @@ export default class Editor extends EventEmitter {
   }
 
   destroy() {
+    debug('destroy');
     try {
       const { hooks = [], shortCuts = [], lifeCycles = {} } = this.config;
       unRegistShortCuts(shortCuts);
       this.destroyHooks(hooks);
-      lifeCycles.destroy && lifeCycles.destroy();
+      lifeCycles.destroy && lifeCycles.destroy(this);
     } catch (err) {
       console.warn(err);
       return;
@@ -101,20 +111,8 @@ export default class Editor extends EventEmitter {
 
   set(key: string | object, val: any): void {
     if (typeof key === 'string') {
-      if (
-        [
-          'init',
-          'destroy',
-          'get',
-          'set',
-          'batchOn',
-          'batchOff',
-          'batchOnce',
-        ].includes(key)
-      ) {
-        console.warning(
-          'init, destroy, get, set, batchOn, batchOff, batchOnce is private attribute',
-        );
+      if (['init', 'destroy', 'get', 'set', 'batchOn', 'batchOff', 'batchOnce'].includes(key)) {
+        console.error('init, destroy, get, set, batchOn, batchOff, batchOnce is private attribute');
         return;
       }
       this[key] = val;
@@ -125,34 +123,34 @@ export default class Editor extends EventEmitter {
     }
   }
 
-  batchOn(events: Array<string>, lisenter: function): void {
+  batchOn(events: Array<string>, lisenter: (...args) => void): void {
     if (!Array.isArray(events)) return;
     events.forEach(event => this.on(event, lisenter));
   }
 
-  batchOnce(events: Array<string>, lisenter: function): void {
+  batchOnce(events: Array<string>, lisenter: (...args) => void): void {
     if (!Array.isArray(events)) return;
     events.forEach(event => this.once(event, lisenter));
   }
 
-  batchOff(events: Array<string>, lisenter: function): void {
+  batchOff(events: Array<string>, lisenter: (...args) => void): void {
     if (!Array.isArray(events)) return;
     events.forEach(event => this.off(event, lisenter));
   }
 
   //销毁hooks中的消息监听
-  private destroyHooks(hooks = []) {
+  private destroyHooks(hooks: HooksConfig = []) {
     hooks.forEach((item, idx) => {
-      if (typeof this.__hooksFuncs[idx] === 'function') {
-        this.off(item.message, this.__hooksFuncs[idx]);
+      if (typeof this.hooksFuncs[idx] === 'function') {
+        this.off(item.message, this.hooksFuncs[idx]);
       }
     });
-    delete this.__hooksFuncs;
+    delete this.hooksFuncs;
   }
 
   //初始化hooks中的消息监听
-  private initHooks(hooks = []) {
-    this.__hooksFuncs = hooks.map(item => {
+  private initHooks(hooks: HooksConfig = []): void {
+    this.hooksFuncs = hooks.map(item => {
       const func = (...args) => {
         item.handler(this, ...args);
       };
@@ -168,11 +166,11 @@ export default class Editor extends EventEmitter {
     pluginAreas.forEach(area => {
       (plugins[area] || []).forEach(plugin => {
         if (plugin.type === 'Divider') return;
-        const { visible, disabled, dotted } = plugin.props || {};
+        const { visible, disabled, marked } = plugin.props || {};
         res[plugin.pluginKey] = {
           visible: typeof visible === 'boolean' ? visible : true,
           disabled: typeof disabled === 'boolean' ? disabled : false,
-          dotted: typeof dotted === 'boolean' ? dotted : false,
+          marked: typeof marked === 'boolean' ? marked : false
         };
         const pluginClass = this.components[plugin.pluginKey];
         // 判断如果编辑器插件有init静态方法，则在此执行init方法

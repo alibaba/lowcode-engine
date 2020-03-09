@@ -28,5 +28,5 @@ ReactDOM.render(
     constants={constants}
     components={components}
   />,
-  ICE_CONTAINER,
+  ICE_CONTAINER
 );

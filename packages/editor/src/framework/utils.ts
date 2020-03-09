@@ -1,15 +1,41 @@
 import IntlMessageFormat from 'intl-messageformat';
 import keymaster from 'keymaster';
 import _isEmpty from 'lodash/isEmpty';
+import { EditorConfig, LocaleType, I18nMessages, I18nFunction, ShortCutsConfig } from './definitions';
+import Editor from './editor';
 
 export const isEmpty = _isEmpty;
 
+const ENV = {
+  TBE: 'TBE',
+  WEBIDE: 'WEB-IDE',
+  VSCODE: 'VSCODE',
+  WEB: 'WEB'
+};
+
+export interface IDEMessageParams {
+  action: string;
+  data: {
+    logKey: string;
+    gmKey: string;
+    goKey: string;
+  };
+}
+
+export interface Window {
+  sendIDEMessage: (IDEMessageParams) => void;
+  goldlog: {
+    record: (logKey: string, gmKey: string, goKey: string, method: 'GET' | 'POST') => void;
+  };
+  parent: Window;
+  is_theia: boolean;
+  vscode: boolean;
+}
+
 /**
  * 用于构造国际化字符串处理函数
- * @param {*} locale 国际化标识，例如 zh-CN、en-US
- * @param {*} messages 国际化语言包
  */
-export function generateI18n(locale = 'zh-CN', messages = {}) {
+export function generateI18n(locale: LocaleType = 'zh-CN', messages: I18nMessages = {}): I18nFunction {
   return (key, values = {}) => {
     if (!messages || !messages[key]) return '';
     const formater = new IntlMessageFormat(messages[key], locale);
@@ -19,18 +45,14 @@ export function generateI18n(locale = 'zh-CN', messages = {}) {
 
 /**
  * 序列化参数
- * @param {*} obj 参数
  */
 export function serializeParams(obj: object): string {
   if (typeof obj !== 'object') return '';
-
   const res: Array<string> = [];
   Object.entries(obj).forEach(([key, val]) => {
     if (val === null || val === undefined || val === '') return;
     if (typeof val === 'object') {
-      res.push(
-        `${encodeURIComponent(key)}=${encodeURIComponent(JSON.stringify(val))}`,
-      );
+      res.push(`${encodeURIComponent(key)}=${encodeURIComponent(JSON.stringify(val))}`);
     } else {
       res.push(`${encodeURIComponent(key)}=${encodeURIComponent(val)}`);
     }
@@ -44,12 +66,12 @@ export function serializeParams(obj: object): string {
  * @param {Object} params 参数
  * @param {String} logKey 属性串
  */
-export function goldlog(gmKey, params = {}, logKey = 'other') {
-  const sendIDEMessage = window.sendIDEMessage || window.parent.sendIDEMessage;
+export function goldlog(gmKey: string, params: object = {}, logKey: string = 'other'): void {
+  const global = window as Window;
+  const sendIDEMessage = global.sendIDEMessage || global.parent.sendIDEMessage;
   const goKey = serializeParams({
-    sdkVersion: pkg.version,
     env: getEnv(),
-    ...params,
+    ...params
   });
   if (sendIDEMessage) {
     sendIDEMessage({
@@ -57,18 +79,17 @@ export function goldlog(gmKey, params = {}, logKey = 'other') {
       data: {
         logKey: `/iceluna.core.${logKey}`,
         gmKey,
-        goKey,
-      },
+        goKey
+      }
     });
   }
-  window.goldlog &&
-    window.goldlog.record(`/iceluna.core.${logKey}`, gmKey, goKey, 'POST');
+  global.goldlog && global.goldlog.record(`/iceluna.core.${logKey}`, gmKey, goKey, 'POST');
 }
 
 /**
  * 获取当前编辑器环境
  */
-export function getEnv() {
+export function getEnv(): string {
   const userAgent = navigator.userAgent;
   const isVscode = /Electron\//.test(userAgent);
   if (isVscode) return ENV.VSCODE;
@@ -78,131 +99,17 @@ export function getEnv() {
 }
 
 // 注册快捷键
-export function registShortCuts(config, editor) {
-  const keyboardFilter = (keymaster.filter = event => {
-    let eTarget = event.target || event.srcElement;
-    let tagName = eTarget.tagName;
-    let isInput = !!(
-      tagName == 'INPUT' ||
-      tagName == 'SELECT' ||
-      tagName == 'TEXTAREA'
-    );
-    let isContenteditable = !!eTarget.getAttribute('contenteditable');
-    if (isInput || isContenteditable) {
-      if (event.metaKey === true && [70, 83].includes(event.keyCode))
-        event.preventDefault(); //禁止触发chrome原生的页面保存或查找
-      return false;
-    } else {
-      return true;
-    }
-  });
-
-  const ideMessage = editor.utils && editor.utils.ideMessage;
-
-  //复制
-  if (!document.copyListener) {
-    document.copyListener = e => {
-      if (!keyboardFilter(e) || editor.isCopying) return;
-      const schema =
-        editor.schemaHelper &&
-        editor.schemaHelper.schemaMap[editor.activeKey];
-      if (!schema || !isSchema(schema)) return;
-      editor.isCopying = true;
-      const schemaStr = serialize(transformSchemaToPure(schema), {
-        unsafe: true,
-      });
-      setClipboardData(schemaStr)
-        .then(() => {
-          ideMessage &&
-            ideMessage(
-              'success',
-              '当前内容已复制到剪贴板，请使用快捷键Command+v进行粘贴',
-            );
-          editor.emit('schema.copy', schemaStr, schema);
-          editor.isCopying = false;
-        })
-        .catch(errMsg => {
-          ideMessage && ideMessage('error', errMsg);
-          editor.isCopying = false;
-        });
-    };
-    document.addEventListener('copy', document.copyListener);
-    if (window.parent.vscode) {
-      keymaster('command+c', document.copyListener);
-    }
-  }
-
-  //粘贴
-  if (!document.pasteListener) {
-    const doPaste = (e, text) => {
-      if (!keyboardFilter(e) || editor.isPasting) return;
-      const schemaHelper = editor.schemaHelper;
-      let targetKey = editor.activeKey;
-      let direction = 'after';
-      const topKey =
-        schemaHelper.schema &&
-        schemaHelper.schema.__ctx &&
-        schemaHelper.schema.__ctx.lunaKey;
-      if (!targetKey || topKey === targetKey) {
-        const schemaHelper = editor.schemaHelper;
-        const topKey =
-          schemaHelper.schema &&
-          schemaHelper.schema.__ctx &&
-          schemaHelper.schema.__ctx.lunaKey;
-        if (!topKey) return;
-        targetKey = topKey;
-        direction = 'in';
-      }
-      editor.isPasting = true;
-      const schema = parseObj(text);
-      if (!isSchema(schema)) {
-        editor.emit('illegalSchema.paste', text);
-        // ideMessage && ideMessage('error', '当前内容不是模型结构，不能粘贴进来！');
-        console.warn('paste schema illegal');
-        editor.isPasting = false;
-        return;
-      }
-      editor.emit('material.add', {
-        schema,
-        targetKey,
-        direction,
-      });
-      editor.isPasting = false;
-      editor.emit('schema.paste', schema);
-    };
-    document.pasteListener = e => {
-      const clipboardData = e.clipboardData || window.clipboardData;
-      const text = clipboardData && clipboardData.getData('text');
-      doPaste(e, text);
-    };
-    document.addEventListener('paste', document.pasteListener);
-    if (window.parent.vscode) {
-      keymaster('command+v', e => {
-        const sendIDEMessage = window.parent.sendIDEMessage;
-        sendIDEMessage &&
-          sendIDEMessage({
-            action: 'readClipboard',
-          })
-            .then(text => {
-              doPaste(e, text);
-            })
-            .catch(err => {
-              console.warn(err);
-            });
-      });
-    }
-  }
-
+export function registShortCuts(config: ShortCutsConfig, editor: Editor): void {
   (config || []).forEach(item => {
     keymaster(item.keyboard, ev => {
       ev.preventDefault();
-      item.handler(ev, editor, keymaster);
+      item.handler(editor, ev, keymaster);
     });
   });
 }
 
 // 取消注册快捷
-export function unRegistShortCuts(config) {
+export function unRegistShortCuts(config: ShortCutsConfig): void {
   (config || []).forEach(item => {
     keymaster.unbind(item.keyboard);
   });
@@ -210,18 +117,12 @@ export function unRegistShortCuts(config) {
     keymaster.unbind('command+c');
     keymaster.unbind('command+v');
   }
-  if (document.copyListener) {
-    document.removeEventListener('copy', document.copyListener);
-    delete document.copyListener;
-  }
-  if (document.pasteListener) {
-    document.removeEventListener('paste', document.pasteListener);
-    delete document.pasteListener;
-  }
 }
 
-// 将函数返回结果转成promise形式，如果函数有返回值则根据返回值的bool类型判断是reject还是resolve，若函数无返回值默认执行resolve
-export function transformToPromise(input) {
+/**
+ * 将函数返回结果转成promise形式，如果函数有返回值则根据返回值的bool类型判断是reject还是resolve，若函数无返回值默认执行resolve
+ */
+export function transformToPromise(input: any): Promise<{}> {
   if (input instanceof Promise) return input;
   return new Promise((resolve, reject) => {
     if (input || input === undefined) {
@@ -232,7 +133,13 @@ export function transformToPromise(input) {
   });
 }
 
-export function transformArrayToMap(arr, key, overwrite = true) {
+/**
+ * 将数组类型转换为Map类型
+ */
+interface MapOf<T> {
+  [propName: string]: T;
+}
+export function transformArrayToMap<T>(arr: Array<T>, key: string, overwrite: boolean = true): MapOf<T> {
   if (isEmpty(arr) || !Array.isArray(arr)) return {};
   const res = {};
   arr.forEach(item => {
@@ -244,7 +151,13 @@ export function transformArrayToMap(arr, key, overwrite = true) {
   return res;
 }
 
-export function parseSearch(search) {
+/**
+ * 解析url的查询参数
+ */
+interface Query {
+  [propName: string]: string;
+}
+export function parseSearch(search: string): Query {
   if (!search || typeof search !== 'string') return {};
   const str = search.replace(/^\?/, '');
   let paramStr = str.split('&');
@@ -258,63 +171,50 @@ export function parseSearch(search) {
   return res;
 }
 
-export function comboEditorConfig(defaultConfig = {}, customConfig = {}) {
-  const {
-    skeleton,
-    theme,
-    plugins,
-    hooks,
-    shortCuts,
-    lifeCycles,
-    constants,
-    utils,
-    i18n,
-  } = customConfig || {};
+export function comboEditorConfig(defaultConfig: EditorConfig = {}, customConfig: EditorConfig): EditorConfig {
+  const { skeleton, theme, plugins, hooks, shortCuts, lifeCycles, constants, utils, i18n } = customConfig || {};
 
   if (skeleton && skeleton.handler && typeof skeleton.handler === 'function') {
     return skeleton.handler({
       skeleton,
-      ...defaultConfig,
+      ...defaultConfig
     });
   }
 
-  const defaultShortCuts = transformArrayToMap(
-    defaultConfig.shortCuts,
-    'keyboard',
-  );
-  const customShortCuts = transformArrayToMap(shortCuts, 'keyboard');
+  const defaultShortCuts = transformArrayToMap(defaultConfig.shortCuts || [], 'keyboard');
+  const customShortCuts = transformArrayToMap(shortCuts || [], 'keyboard');
   const localeList = ['zh-CN', 'zh-TW', 'en-US', 'ja-JP'];
   const i18nConfig = {};
   localeList.forEach(key => {
     i18nConfig[key] = {
       ...(defaultConfig.i18n && defaultConfig.i18n[key]),
-      ...(i18n && i18n[key]),
+      ...(i18n && i18n[key])
     };
   });
   return {
     skeleton,
     theme: {
       ...defaultConfig.theme,
-      ...theme,
+      ...theme
     },
     plugins: {
       ...defaultConfig.plugins,
-      ...plugins,
+      ...plugins
     },
     hooks: [...(defaultConfig.hooks || []), ...(hooks || [])],
     shortCuts: Object.values({
       ...defaultShortCuts,
-      ...customShortCuts,
+      ...customShortCuts
     }),
     lifeCycles: {
       ...defaultConfig.lifeCycles,
-      ...lifeCycles,
+      ...lifeCycles
     },
     constants: {
       ...defaultConfig.constants,
-      ...constants,
+      ...constants
     },
     utils: [...(defaultConfig.utils || []), ...(utils || [])],
-    i18n: i18nConfig,
+    i18n: i18nConfig
   };
 }

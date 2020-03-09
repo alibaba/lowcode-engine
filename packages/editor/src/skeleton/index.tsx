@@ -1,9 +1,12 @@
 import React, { PureComponent } from 'react';
 
 import { HashRouter as Router, Route } from 'react-router-dom';
-import Editor from '../framework/editor';
-import { comboEditorConfig, parseSearch } from '../framework/utils';
 import { Loading, ConfigProvider } from '@alifd/next';
+
+import Editor from '../framework/editor';
+import { EditorConfig, Utils, PluginComponents } from '../framework/definitions';
+import { comboEditorConfig, parseSearch } from '../framework/utils';
+
 import defaultConfig from './config/skeleton';
 import skeletonUtils from './config/utils';
 
@@ -16,20 +19,35 @@ import './global.scss';
 
 let renderIdx = 0;
 
-export default class Skeleton extends PureComponent {
+export interface SkeletonProps {
+  components: PluginComponents;
+  config: EditorConfig;
+  utils: Utils;
+}
+
+export interface SkeletonState {
+  initReady: boolean;
+  skeletonKey: string;
+  __hasError?: boolean;
+}
+
+export default class Skeleton extends PureComponent<SkeletonProps, SkeletonState> {
   static displayName = 'LowcodeEditorSkeleton';
 
   static getDerivedStateFromError() {
     return {
-      __hasError: true,
+      __hasError: true
     };
   }
+
+  private editor: Editor;
+
   constructor(props) {
     super(props);
 
     this.state = {
       initReady: false,
-      skeletonKey: `skeleton${renderIdx}`,
+      skeletonKey: `skeleton${renderIdx}`
     };
 
     this.init();
@@ -37,31 +55,28 @@ export default class Skeleton extends PureComponent {
 
   componentWillUnmount() {
     this.editor && this.editor.destroy();
-    this.editor = null;
   }
 
   componentDidCatch(err) {
     console.error(err);
   }
 
-  init = (isReset = false) => {
+  init = (isReset: boolean = false): void => {
     if (this.editor) {
       this.editor.destroy();
-      this.editor = null;
     }
     const { utils, config, components } = this.props;
-    const editor = (this.editor = new Editor(
-      comboEditorConfig(defaultConfig, config),
-      { ...skeletonUtils, ...utils },
-      components,
-    ));
+    const editor = (this.editor = new Editor(comboEditorConfig(defaultConfig, config), components, {
+      ...skeletonUtils,
+      ...utils
+    }));
     window.__ctx = {
       editor,
       appHelper: editor
     };
     editor.once('editor.reset', () => {
       this.setState({
-        initReady: false,
+        initReady: false
       });
       editor.emit('editor.beforeReset');
       this.init(true);
@@ -72,9 +87,7 @@ export default class Skeleton extends PureComponent {
         {
           initReady: true,
           //刷新IDE时生成新的skeletonKey保证插件生命周期重新执行
-          skeletonKey: isReset
-            ? `skeleton${++renderIdx}`
-            : this.state.skeletonKey, 
+          skeletonKey: isReset ? `skeleton${++renderIdx}` : this.state.skeletonKey
         },
         () => {
           editor.emit('editor.ready');
@@ -86,7 +99,7 @@ export default class Skeleton extends PureComponent {
 
   render() {
     const { initReady, skeletonKey, __hasError } = this.state;
-    if (__hasError) {
+    if (__hasError || !this.editor) {
       return 'error';
     }
 
@@ -102,13 +115,7 @@ export default class Skeleton extends PureComponent {
             this.editor.set('match', match);
             return (
               <ConfigProvider>
-                <Loading
-                  tip="Loading"
-                  size="large"
-                  visible={!initReady}
-                  shape="fusion-reactor"
-                  fullScreen
-                >
+                <Loading tip="Loading" size="large" visible={!initReady} shape="fusion-reactor" fullScreen>
                   <div className="lowcode-editor" key={skeletonKey}>
                     <TopArea editor={this.editor} />
                     <div className="lowcode-main-content">

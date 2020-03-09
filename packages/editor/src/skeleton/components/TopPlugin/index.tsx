@@ -1,26 +1,43 @@
 import React, { PureComponent, Fragment } from 'react';
 
-import PropTypes from 'prop-types';
 import TopIcon from '../TopIcon';
 import { Balloon, Badge, Dialog } from '@alifd/next';
 
 import './index.scss';
-export default class TopPlugin extends PureComponent {
-  static displayName = 'lowcodeTopPlugin';
+import { PluginConfig, PluginClass } from '../../../framework/definitions';
+import Editor from '../../../framework/editor';
+
+export interface TopPluginProps {
+  active?: boolean;
+  config: PluginConfig;
+  disabled?: boolean;
+  editor: Editor;
+  locked?: boolean;
+  marked?: boolean;
+  onClick?: () => void;
+  pluginClass: PluginClass;
+}
+
+export interface TopPluginState {
+  dialogVisible: boolean;
+}
+
+export default class TopPlugin extends PureComponent<TopPluginProps, TopPluginState> {
+  static displayName = 'LowcodeTopPlugin';
 
   static defaultProps = {
     active: false,
     config: {},
     disabled: false,
-    dotted: false,
+    marked: false,
     locked: false,
-    onClick: () => {},
+    onClick: () => {}
   };
 
   constructor(props, context) {
     super(props, context);
     this.state = {
-      dialogVisible: false,
+      dialogVisible: false
     };
   }
 
@@ -70,20 +87,12 @@ export default class TopPlugin extends PureComponent {
   handleOpen = () => {
     // todo dialog类型的插件初始时拿不动插件实例
     this.setState({
-      dialogVisible: true,
+      dialogVisible: true
     });
   };
 
   renderIcon = clickCallback => {
-    const {
-      active,
-      disabled,
-      dotted,
-      locked,
-      config,
-      onClick,
-      editor,
-    } = this.props;
+    const { active, disabled, marked, locked, config, onClick, editor } = this.props;
     const { pluginKey, props } = config || {};
     const { icon, title } = props || {};
     const node = (
@@ -103,19 +112,11 @@ export default class TopPlugin extends PureComponent {
         }}
       />
     );
-    return dotted ? <Badge dot>{node}</Badge> : node;
+    return marked ? <Badge dot>{node}</Badge> : node;
   };
 
   render() {
-    const {
-      active,
-      dotted,
-      locked,
-      disabled,
-      config,
-      editor,
-      pluginClass: Comp,
-    } = this.props;
+    const { active, marked, locked, disabled, config, editor, pluginClass: Comp } = this.props;
     const { pluginKey, pluginProps, props, type } = config || {};
     const { onClick, title } = props || {};
     const { dialogVisible } = this.state;
@@ -184,7 +185,7 @@ export default class TopPlugin extends PureComponent {
           </Balloon>
         );
       case 'Custom':
-        return dotted ? <Badge dot>{node}</Badge> : node;
+        return marked ? <Badge dot>{node}</Badge> : node;
       default:
         return null;
     }
