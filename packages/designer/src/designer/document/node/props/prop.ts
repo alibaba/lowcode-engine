@@ -34,15 +34,15 @@ export default class Prop implements IPropParent {
   /**
    * 属性值
    */
-  @computed get value(): CompositeValue {
+  @computed get value(): CompositeValue | UNSET {
     return this.export(true);
   }
 
-  export(serialize = false): CompositeValue {
+  export(serialize = false): CompositeValue | UNSET {
     const type = this._type;
 
     if (type === 'unset') {
-      return null;
+      return UNSET;
     }
 
     if (type === 'literal' || type === 'expression') {
@@ -62,7 +62,10 @@ export default class Prop implements IPropParent {
       }
       const maps: any = {};
       this.items!.forEach((prop, key) => {
-        maps[key] = prop.value;
+        const v = prop.export(serialize);
+        if (v !== UNSET) {
+          maps[key] = v;
+        }
       });
       return maps;
     }
@@ -71,7 +74,10 @@ export default class Prop implements IPropParent {
       if (!this._items) {
         return this._items;
       }
-      return this.items!.map(prop => prop.value);
+      return this.items!.map(prop => {
+        const v = prop.export(serialize);
+        return v === UNSET ? null : v
+      });
     }
 
     return null;
@@ -103,7 +109,7 @@ export default class Prop implements IPropParent {
   /**
    * set value, val should be JSON Object
    */
-  set value(val: CompositeValue) {
+  setValue(val: CompositeValue) {
     this._value = val;
     const t = typeof val;
     if (val == null) {
@@ -183,44 +189,24 @@ export default class Prop implements IPropParent {
     return this._type === 'unset';
   }
 
-  isEqual(otherProp: Prop | null): boolean {
-    if (!otherProp) {
-      return this.isUnset();
+  // TODO: improve this logic
+  compare(other: Prop | null): number {
+    if (!other || other.isUnset()) {
+      return this.isUnset() ? 0 : 2;
     }
-    if (otherProp.type !== this.type) {
-      return false;
+    if (other.type !== this.type) {
+      return 2;
     }
-    // 'unset' | 'literal' | 'map' | 'list' | 'expression' | 'slot'
-    return this.code === otherProp.code;
-  }
-
-  /**
-   * 值是否是带类型的 JS
-   * 比如 JSExpresion | JSSlot 等值
-   */
-  @computed isTypedJS(): boolean {
-    const type = this._type;
-    if (type === 'expression' || type === 'slot') {
-      return true;
+    // list
+    if (this.type === 'list') {
+      return this.size === other.size ? 1 : 2;
     }
-    if (type === 'literal' || type === 'unset') {
-      return false;
-    }
-    if ((type === 'list' || type === 'map') && this.items) {
-      return this.items.some(item => item.isTypedJS());
-    }
-    return false;
-  }
-
-  /**
-   * 是否简单 JSON 数据
-   */
-  @computed isJSON() {
-    return !this.isTypedJS();
+    // 'literal' | 'map' | 'expression' | 'slot'
+    return this.code === other.code ? 0 : 2;
   }
 
   @obx.val private _items: Prop[] | null = null;
-  @obx.val private _maps: Map<string, Prop> | null = null;
+  @obx.val private _maps: Map<string | number, Prop> | null = null;
   @computed private get items(): Prop[] | null {
     let _items: any;
     untracked(() => {
@@ -255,8 +241,8 @@ export default class Prop implements IPropParent {
     }
     return _items;
   }
-  @computed private get maps(): Map<string, Prop> | null {
-    if (!this.items || this.items.length < 1) {
+  @computed private get maps(): Map<string | number, Prop> | null {
+    if (!this.items) {
       return null;
     }
     return this._maps;
@@ -283,7 +269,7 @@ export default class Prop implements IPropParent {
   ) {
     this.props = parent.props;
     if (value !== UNSET) {
-      this.value = value;
+      this.setValue(value);
     }
     this.key = key;
     this.spread = spread;
@@ -291,43 +277,50 @@ export default class Prop implements IPropParent {
 
   /**
    * 获取某个属性
-   * @param stash 强制
+   * @param stash 如果不存在，临时获取一个待写入
    */
-  get(path: string, stash: false): Prop | null;
-  /**
-   * 获取某个属性, 如果不存在，临时获取一个待写入
-   * @param stash 强制
-   */
-  get(path: string, stash: true): Prop;
-  /**
-   * 获取某个属性, 如果不存在，临时获取一个待写入
-   */
-  get(path: string): Prop;
-  get(path: string, stash = true) {
+  get(path: string | number, stash = true): Prop | null {
     const type = this._type;
     // todo: support list get
-    if (type !== 'map' && type !== 'unset' && !stash) {
+    if (type !== 'map' && type !== 'list' && type !== 'unset' && !stash) {
       return null;
     }
 
     const maps = type === 'map' ? this.maps : null;
-
-    let prop: any = maps ? maps.get(path) : null;
+    const items = type === 'list' ? this.items : null;
+    let prop: any;
+    if (type === 'list') {
+      if (isValidArrayIndex(path, this.size)) {
+        prop = items![path];
+      }
+    } else if (type === 'map') {
+      prop = maps?.get(path);
+    }
 
     if (prop) {
       return prop;
     }
 
-    const i = path.indexOf('.');
     let entry = path;
     let nest = '';
-    if (i > 0) {
-      nest = path.slice(i + 1);
-      if (nest) {
-        entry = path.slice(0, i);
-        prop = maps ? maps.get(entry) : null;
-        if (prop) {
-          return prop.get(nest, stash);
+    if (typeof path !== 'number') {
+      const i = path.indexOf('.');
+      if (i > 0) {
+        nest = path.slice(i + 1);
+        if (nest) {
+          entry = path.slice(0, i);
+
+          if (type === 'list') {
+            if (isValidArrayIndex(entry, this.size)) {
+              prop = items![entry];
+            }
+          } else if (type === 'map') {
+            prop = maps?.get(entry);
+          }
+
+          if (prop) {
+            return prop.get(nest, stash);
+          }
         }
       }
     }
@@ -336,7 +329,9 @@ export default class Prop implements IPropParent {
       if (!this.stash) {
         this.stash = new PropStash(this.props, item => {
           // item take effect
-          this.set(String(item.key), item);
+          if (item.key) {
+            this.set(item.key, item, true);
+          }
           item.parent = this;
         });
       }
@@ -389,7 +384,7 @@ export default class Prop implements IPropParent {
   /**
    * 元素个数
    */
-  size(): number {
+  get size(): number {
     return this.items?.length || 0;
   }
 
@@ -404,7 +399,7 @@ export default class Prop implements IPropParent {
       return null;
     }
     if (type === 'unset' || (force && type !== 'list')) {
-      this.value = [];
+      this.setValue([]);
     }
     const prop = new Prop(this, value);
     this.items!.push(prop);
@@ -416,29 +411,44 @@ export default class Prop implements IPropParent {
    *
    * @param force 强制
    */
-  set(key: string, value: CompositeValue | Prop, force = false) {
+  set(key: string | number, value: CompositeValue | Prop, force = false) {
     const type = this._type;
-    if (type !== 'map' && type !== 'unset' && !force) {
+    if (type !== 'map' && type !== 'list' && type !== 'unset' && !force) {
       return null;
     }
     if (type === 'unset' || (force && type !== 'map')) {
-      this.value = {};
+      if (isValidArrayIndex(key)) {
+        if (type !== 'list') {
+          this.setValue([]);
+        }
+      } else {
+        this.setValue({});
+      }
     }
     const prop = isProp(value) ? value : new Prop(this, value, key);
     const items = this.items!;
-    const maps = this.maps!;
-    const orig = maps.get(key);
-    if (orig) {
-      // replace
-      const i = items.indexOf(orig);
-      if (i > -1) {
-        items.splice(i, 1, prop)[0].purge();
+    if (this.type === 'list') {
+      if (!isValidArrayIndex(key)) {
+        return null;
       }
-      maps.set(key, prop);
+      items[key] = prop;
+    } else if (this.maps) {
+      const maps = this.maps;
+      const orig = maps.get(key);
+      if (orig) {
+        // replace
+        const i = items.indexOf(orig);
+        if (i > -1) {
+          items.splice(i, 1, prop)[0].purge();
+        }
+        maps.set(key, prop);
+      } else {
+        // push
+        items.push(prop);
+        maps.set(key, prop);
+      }
     } else {
-      // push
-      items.push(prop);
-      maps.set(key, prop);
+      return null;
     }
 
     return prop;
@@ -532,4 +542,9 @@ export default class Prop implements IPropParent {
 
 export function isProp(obj: any): obj is Prop {
   return obj && obj.isProp;
+}
+
+function isValidArrayIndex(key: any, limit: number = -1): key is number {
+  const n = parseFloat(String(key));
+  return n >= 0 && Math.floor(n) === n && isFinite(n) && (limit < 0 || n < limit);
 }

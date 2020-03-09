@@ -7,7 +7,7 @@ import './index.less';
 export interface FieldProps {
   className?: string;
   // span
-  title?: TitleContent;
+  title?: TitleContent | null;
 }
 
 export class Field extends Component<FieldProps> {

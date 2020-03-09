@@ -2,11 +2,8 @@ import { computed, obx } from '@recore/obx';
 import { uniqueId } from '../../../../../../utils/unique-id';
 import { CompositeValue, PropsList, PropsMap } from '../../../schema';
 import PropStash from './prop-stash';
-import Prop, { IPropParent } from './prop';
+import Prop, { IPropParent, UNSET } from './prop';
 import { NodeParent } from '../node';
-
-export const UNSET = Symbol.for('unset');
-export type UNSET = typeof UNSET;
 
 export default class Props implements IPropParent {
   readonly id = uniqueId('props');
@@ -56,6 +53,7 @@ export default class Props implements IPropParent {
 
   import(value?: PropsMap | PropsList | null) {
     this.stash.clear();
+    const originItems = this.items;
     if (Array.isArray(value)) {
       this.type = 'list';
       this.items = value.map(item => new Prop(this, item.value, item.name, item.spread));
@@ -66,12 +64,12 @@ export default class Props implements IPropParent {
       this.type = 'map';
       this.items = [];
     }
-    this.items.forEach(item => item.purge());
+    originItems.forEach(item => item.purge());
   }
 
   merge(value: PropsMap) {
     Object.keys(value).forEach(key => {
-      this.query(key).value = value[key];
+      this.query(key, true)!.setValue(value[key]);
     });
   }
 
@@ -80,11 +78,14 @@ export default class Props implements IPropParent {
       return null;
     }
     if (this.type === 'list') {
-      return this.items.map(item => ({
-        spread: item.spread,
-        name: item.key as string,
-        value: item.export(serialize),
-      }));
+      return this.items.map(item => {
+        const v = item.export(serialize);
+        return {
+          spread: item.spread,
+          name: item.key as string,
+          value: v === UNSET ? null : v,
+        };
+      });
     }
     const maps: any = {};
     this.items.forEach(prop => {
@@ -96,25 +97,11 @@ export default class Props implements IPropParent {
   }
 
   /**
-   * 根据 path 路径查询属性，如果没有则临时生成一个
-   */
-  query(path: string): Prop;
-  /**
    * 根据 path 路径查询属性
    *
    * @useStash 如果没有则临时生成一个
    */
-  query(path: string, useStash: true): Prop;
-  /**
-   * 根据 path 路径查询属性
-   */
-  query(path: string, useStash: false): Prop | null;
-  /**
-   * 根据 path 路径查询属性
-   *
-   * @useStash 如果没有则临时生成一个
-   */
-  query(path: string, useStash: boolean = true) {
+  query(path: string, useStash: boolean = true): Prop | null {
     let matchedLength = 0;
     let firstMatched = null;
     if (this.items) {
@@ -156,17 +143,7 @@ export default class Props implements IPropParent {
    * 获取某个属性, 如果不存在，临时获取一个待写入
    * @param useStash 强制
    */
-  get(path: string, useStash: true): Prop;
-  /**
-   * 获取某个属性
-   * @param useStash 强制
-   */
-  get(path: string, useStash: false): Prop | null;
-  /**
-   * 获取某个属性
-   */
-  get(path: string): Prop | null;
-  get(name: string, useStash = false) {
+  get(name: string, useStash = false): Prop | null {
     return this.maps.get(name) || (useStash && this.stash.get(name)) || null;
   }
 

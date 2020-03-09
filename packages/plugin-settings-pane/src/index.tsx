@@ -3,10 +3,11 @@ import { Tab, Breadcrumb, Icon } from '@alifd/next';
 import { SettingsMain, SettingField, isSettingField } from './main';
 import './style.less';
 import Title from './title';
-import SettingsTab, { registerSetter, createSetterContent, getSetter, createSettingFieldView } from './settings-tab';
+import SettingsTab, { registerSetter, createSetterContent, getSetter, createSettingFieldView } from './settings-pane';
 import Node from '../../designer/src/designer/document/node/node';
+import ArraySetter from './builtin-setters/array-setter';
 
-export default class SettingsPane extends Component {
+export default class SettingsMainView extends Component {
   private main: SettingsMain;
 
   constructor(props: any) {
@@ -65,7 +66,7 @@ export default class SettingsPane extends Component {
     if (this.main.isNone) {
       // 未选中节点，提示选中 或者 显示根节点设置
       return (
-        <div className="lc-settings-pane">
+        <div className="lc-settings-main">
           <div className="lc-settings-notice">
             <p>请在左侧画布选中节点</p>
           </div>
@@ -76,7 +77,7 @@ export default class SettingsPane extends Component {
     if (!this.main.isSame) {
       // todo: future support 获取设置项交集编辑
       return (
-        <div className="lc-settings-pane">
+        <div className="lc-settings-main">
           <div className="lc-settings-notice">
             <p>请选中同一类型节点编辑</p>
           </div>
@@ -87,7 +88,7 @@ export default class SettingsPane extends Component {
     const { items } = this.main;
     if (items.length > 5 || items.some(item => !isSettingField(item) || !item.isGroup)) {
       return (
-        <div className="lc-settings-pane">
+        <div className="lc-settings-main">
           {this.renderBreadcrumb()}
           <div className="lc-settings-body">
             <SettingsTab target={this.main} />
@@ -97,7 +98,7 @@ export default class SettingsPane extends Component {
     }
 
     return (
-      <div className="lc-settings-pane">
+      <div className="lc-settings-main">
         <Tab
           navClassName="lc-settings-tabs"
           animation={false}
@@ -121,5 +122,7 @@ function hoverNode(node: Node, flag: boolean) {
 function selectNode(node: Node) {
   node.select();
 }
+
+registerSetter('ArraySetter', ArraySetter);
 
 export { registerSetter, createSetterContent, getSetter, createSettingFieldView };

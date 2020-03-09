@@ -51,10 +51,10 @@ export interface SettingTarget {
   onEffect(action: () => void): () => void;
 
   // 获取属性值
-  getPropValue(propName: string): any;
+  getPropValue(propName: string | number): any;
 
   // 设置属性值
-  setPropValue(path: string, value: any): void;
+  setPropValue(propName: string | number, value: any): void;
 
   /*
   // 所有属性值数据
@@ -95,6 +95,10 @@ export type SetterType = SetterConfig | string | CustomView;
 
 export interface FieldExtraProps {
   /**
+   * 是否必填参数
+   */
+  required?: boolean;
+  /**
    * default value of target prop for setter use
    */
   defaultValue?: any;
@@ -109,6 +113,14 @@ export interface FieldExtraProps {
    * default collapsed when display accordion
    */
   defaultCollapsed?: boolean;
+  /**
+   * important field
+   */
+  important?: boolean;
+  /**
+   * internal use
+   */
+  forceInline?: number;
 }
 
 export interface FieldConfig extends FieldExtraProps {
@@ -116,7 +128,7 @@ export interface FieldConfig extends FieldExtraProps {
   /**
    * the name of this setting field, which used in quickEditor
    */
-  name: string;
+  name: string | number;
   /**
    * the field title
    * @default sameas .name
@@ -141,7 +153,10 @@ export class SettingField implements SettingTarget {
   readonly id = uniqueId('field');
   readonly type: 'field' | 'virtual-field' | 'group';
   readonly isGroup: boolean;
-  readonly name: string;
+  private _name: string | number;
+  get name() {
+    return this._name;
+  }
   readonly title: TitleContent;
   readonly editor: any;
   readonly extraProps: FieldExtraProps;
@@ -153,13 +168,19 @@ export class SettingField implements SettingTarget {
   readonly nodes: Node[];
   readonly componentType: ComponentType | null;
   readonly designer: Designer;
-  readonly path: string[];
+  get path() {
+    const path = this.parent.path.slice();
+    if (this.type === 'field') {
+      path.push(String(this.name));
+    }
+    return path;
+  }
 
   constructor(readonly parent: SettingTarget, config: FieldConfig) {
     const { type, title, name, items, setter, extraProps, ...rest } = config;
 
     if (type == null) {
-      const c = name.substr(0, 1);
+      const c = typeof name === 'string' ? name.substr(0, 1) : '';
       if (c === '#') {
         this.type = 'group';
       } else if (c === '!') {
@@ -171,8 +192,8 @@ export class SettingField implements SettingTarget {
       this.type = type;
     }
     // initial self properties
-    this.name = name;
-    this.title = title || name;
+    this._name = name;
+    this.title = title || String(name);
     this.setter = setter;
     this.extraProps = {
       ...rest,
@@ -189,10 +210,6 @@ export class SettingField implements SettingTarget {
     this.isOne = parent.isOne;
     this.isNone = parent.isNone;
     this.designer = parent.designer!;
-    this.path = parent.path.slice();
-    if (this.type === 'field') {
-      this.path.push(this.name);
-    }
 
     // initial items
     if (this.type === 'group' && items) {
@@ -219,30 +236,41 @@ export class SettingField implements SettingTarget {
     this._items = [];
   }
 
+  createField(config: FieldConfig): SettingField {
+    return new SettingField(this, config);
+  }
+
   get items() {
     return this._items;
   }
 
   // ====== 当前属性读写 =====
 
-  // Todo cache!!
   /**
    * 判断当前属性值是否一致
+   * 0 无值/多种值
+   * 1 类似值，比如数组长度一样
+   * 2 单一植
    */
-  get isSameValue(): boolean {
+  get valueState(): number {
     if (this.type !== 'field') {
-      return false;
+      return 0;
     }
     const propName = this.path.join('.');
     const first = this.nodes[0].getProp(propName)!;
     let l = this.nodes.length;
+    let state = 2;
     while (l-- > 1) {
       const next = this.nodes[l].getProp(propName, false);
-      if (!first.isEqual(next)) {
-        return false;
+      const s = first.compare(next);
+      if (s > 1) {
+        return 0;
+      }
+      if (s === 1) {
+        state = 1;
       }
     }
-    return true;
+    return state;
   }
 
   /**
@@ -251,6 +279,11 @@ export class SettingField implements SettingTarget {
   getValue(): any {
     if (this.type !== 'field') {
       return null;
+    }
+    // todo: use getValue
+    const { getValue } = this.extraProps;
+    if (getValue) {
+      return getValue(this, this.editor);
     }
     return this.parent.getPropValue(this.name);
   }
@@ -262,13 +295,37 @@ export class SettingField implements SettingTarget {
     if (this.type !== 'field') {
       return;
     }
+    // todo: use onChange
     this.parent.setPropValue(this.name, val);
+  }
+
+  setKey(key: string | number) {
+    if (this.type !== 'field') {
+      return;
+    }
+    const propName = this.path.join('.');
+    let l = this.nodes.length;
+    while (l-- > 1) {
+      this.nodes[l].getProp(propName, true)!.key = key;
+    }
+    this._name = key;
+  }
+
+  remove() {
+    if (this.type !== 'field') {
+      return;
+    }
+    const propName = this.path.join('.');
+    let l = this.nodes.length;
+    while (l-- > 1) {
+      this.nodes[l].getProp(propName)?.remove()
+    }
   }
 
   /**
    * 设置子级属性值
    */
-  setPropValue(propName: string, value: any) {
+  setPropValue(propName: string | number, value: any) {
     const path = this.type === 'field' ? `${this.name}.${propName}` : propName;
     this.parent.setPropValue(path, value);
   }
@@ -276,18 +333,10 @@ export class SettingField implements SettingTarget {
   /**
    * 获取子级属性值
    */
-  getPropValue(propName: string): any {
+  getPropValue(propName: string | number): any {
     const path = this.type === 'field' ? `${this.name}.${propName}` : propName;
     return this.parent.getPropValue(path);
   }
-
-  // 添加
-  // addItem(config: FieldConfig): SettingField {}
-  // 删除
-  // deleteItem() {}
-  // 移动
-  // insertItem(item: SettingField, index?: number) {}
-  // remove() {}
 
   purge() {
     this.disposeItems();
@@ -297,6 +346,7 @@ export class SettingField implements SettingTarget {
 export function isSettingField(obj: any): obj is SettingField {
   return obj && obj.isSettingField;
 }
+
 
 export class SettingsMain implements SettingTarget {
   private emitter = new EventEmitter();
@@ -396,18 +446,7 @@ export class SettingsMain implements SettingTarget {
    * 获取属性值
    */
   getPropValue(propName: string): any {
-    if (!this.isSame) {
-      return null;
-    }
-    const first = this.nodes[0].getProp(propName)!;
-    let l = this.nodes.length;
-    while (l-- > 1) {
-      const next = this.nodes[l].getProp(propName, false);
-      if (!first.isEqual(next)) {
-        return null;
-      }
-    }
-    return first.value;
+    return this.nodes[0].getProp(propName, false)?.value;
   }
 
   /**

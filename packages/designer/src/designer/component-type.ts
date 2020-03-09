@@ -153,7 +153,15 @@ export class ComponentType {
       }, {
         name: 'name',
         title: '名称',
-        setter: 'StringSetter'
+        setter: {
+          componentName: 'ArraySetter',
+          props: {
+            itemConfig: {
+              setter: 'StringSetter',
+              defaultValue: ''
+            }
+          }
+        }
       }, {
         name: 'size',
         title: '大小',

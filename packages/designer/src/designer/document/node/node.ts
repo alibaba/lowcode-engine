@@ -272,7 +272,7 @@ export default class Node {
    * 设置单个属性值
    */
   setPropValue(path: string, value: any) {
-    this.getProp(path, true)!.value = value;
+    this.getProp(path, true)!.setValue(value);
   }
 
   /**

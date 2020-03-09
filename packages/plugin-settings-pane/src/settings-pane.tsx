@@ -79,11 +79,13 @@ class SettingFieldView extends Component<{ field: SettingField }> {
           ...(typeof setterProps === 'function' ? setterProps(field, editor) : setterProps),
         };
         if (field.type === 'field') {
-          state.value = field.getValue();
           if (defaultValue != null && !('defaultValue' in state.setterProps)) {
             state.setterProps.defaultValue = defaultValue;
           }
-          if (!field.isSameValue) {
+          if (field.valueState > 0) {
+            state.value = field.getValue();
+          } else {
+            state.value = null;
             state.setterProps.multiValue = true;
             if (!('placeholder' in props)) {
               state.setterProps.placeholder = '多种值';
@@ -118,18 +120,20 @@ class SettingFieldView extends Component<{ field: SettingField }> {
   }
 
   render() {
-    const { field } = this.props;
     const { visible, value, setterProps } = this.state;
     if (!visible) {
       return null;
     }
+    const { field } = this.props;
+    const { title, extraProps } = field;
 
     // todo: error handling
 
     return (
-      <Field title={field.title}>
+      <Field title={extraProps.forceInline ? null : title}>
         {createSetterContent(this.setterType, {
           ...setterProps,
+          forceInline: extraProps.forceInline,
           key: field.id,
           // === injection
           prop: field,
@@ -204,7 +208,7 @@ class SettingGroupView extends Component<{ field: SettingField }> {
   }
 }
 
-export function createSettingFieldView(item: SettingField | CustomView, field: SettingTarget, index: number) {
+export function createSettingFieldView(item: SettingField | CustomView, field: SettingTarget, index?: number) {
   if (isSettingField(item)) {
     if (item.isGroup) {
       return <SettingGroupView field={item} key={item.id} />;
@@ -216,7 +220,11 @@ export function createSettingFieldView(item: SettingField | CustomView, field: S
   }
 }
 
-export default class SettingsTab extends Component<{ target: SettingTarget }> {
+export function showPopup() {
+
+}
+
+export default class SettingsPane extends Component<{ target: SettingTarget }> {
   state: { items: Array<SettingField | CustomView> } = {
     items: [],
   };
@@ -254,7 +262,7 @@ export default class SettingsTab extends Component<{ target: SettingTarget }> {
     const { items } = this.state;
     const { target } = this.props;
     return (
-      <div className="lc-settings-singlepane">
+      <div className="lc-settings-pane">
         {items.map((item, index) => createSettingFieldView(item, target, index))}
       </div>
     );
