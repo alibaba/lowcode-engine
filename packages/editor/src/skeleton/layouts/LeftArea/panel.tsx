@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import Panel from '../../components/Panel';
 import './index.scss';
 import Editor from '../../../framework/editor';
-import { PluginConfig } from '../../../framework/definitions';
+import AreaManager from '../../../framework/areaManager';
 
 export interface LeftAreaPanelProps {
   editor: Editor;
@@ -16,29 +16,51 @@ export default class LeftAreaPanel extends PureComponent<LeftAreaPanelProps, Lef
   static displayName = 'LowcodeLeftAreaPanel';
 
   private editor: Editor;
-  private config: Array<PluginConfig>;
+  private areaManager: AreaManager;
 
   constructor(props) {
     super(props);
     this.editor = props.editor;
-    this.config = (this.editor.config.plugins && this.editor.config.plugins.leftArea) || [];
+    this.areaManager = new AreaManager(this.editor, 'leftArea');
 
     this.state = {
-      activeKey: 'leftPanelIcon'
+      activeKey: 'none'
     };
   }
 
-  render() {
-    const list = this.config.filter(item => {
-      return item.type === 'PanelIcon';
+  componentDidMount() {
+    this.editor.on('skeleton.update', this.handleSkeletonUpdate);
+    this.editor.on('leftPanel.show', this.handlePluginChange);
+  }
+  componentWillUnmount() {
+    this.editor.off('skeleton.update', this.handleSkeletonUpdate);
+    this.editor.off('leftPanel.show', this.handlePluginChange);
+  }
+
+  handleSkeletonUpdate = (): void => {
+    // 当前区域插件状态改变是更新区域
+    if (this.areaManager.isPluginStatusUpdate('PanelIcon')) {
+      this.forceUpdate();
+    }
+  };
+
+  handlePluginChange = (key: string): void => {
+    this.setState({
+      activeKey: key
     });
+  };
+
+  render() {
+    const { activeKey } = this.state;
+    const list = this.areaManager.getVisiblePluginList('PanelIcon');
+
     return (
       <Fragment>
         {list.map((item, idx) => {
           const Comp = this.editor.components[item.pluginKey];
           return (
-            <Panel key={item.pluginKey} visible={item.pluginKey === this.state.activeKey}>
-              <Comp editor={this.editor} config={item} />
+            <Panel key={item.pluginKey} visible={item.pluginKey === activeKey}>
+              <Comp editor={this.editor} config={item} {...item.pluginProps} />
             </Panel>
           );
         })}

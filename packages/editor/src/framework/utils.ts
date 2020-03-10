@@ -232,3 +232,15 @@ export function comboEditorConfig(defaultConfig: EditorConfig = {}, customConfig
     i18n: i18nConfig
   };
 }
+
+/**
+ * 判断当前组件是否能够设置ref
+ * @param {*} Comp 需要判断的组件
+ */
+export function acceptsRef(Comp: React.ComponentType) {
+  const hasSymbol = typeof Symbol === 'function' && Symbol['for'];
+  const REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol['for']('react.forward_ref') : 0xead0;
+  return (
+    (Comp.$$typeof && Comp.$$typeof === REACT_FORWARD_REF_TYPE) || (Comp.prototype && Comp.prototype.isReactComponent)
+  );
+}

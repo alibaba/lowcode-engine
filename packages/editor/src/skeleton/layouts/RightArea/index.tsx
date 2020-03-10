@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { Tab, Badge, Icon } from '@alifd/next';
 import './index.scss';
 import Editor from '../../../framework/editor';
-import { transformToPromise } from '../../../framework/utils';
 import AreaManager from '../../../framework/areaManager';
 import { PluginConfig } from '../../../framework/definitions';
 
@@ -33,7 +32,7 @@ export default class RightArea extends PureComponent<RightAreaProps, RightAreaSt
     this.editor.on('skeleton.update', this.handleSkeletonUpdate);
     this.editor.on('rightNav.change', this.handlePluginChange);
     const visiblePluginList = this.areaManager.getVisiblePluginList();
-    const defaultKey = (visiblePluginList[0] && visiblePluginList[0].pluginKey) || '';
+    const defaultKey = (visiblePluginList[0] && visiblePluginList[0].pluginKey) || 'componentAttr';
     this.handlePluginChange(defaultKey, true);
   }
   componentWillUnmount() {
@@ -51,7 +50,7 @@ export default class RightArea extends PureComponent<RightAreaProps, RightAreaSt
       } else {
         const currentPlugin = this.editor.plugins[activeKey];
         if (currentPlugin) {
-          transformToPromise(currentPlugin.close()).then(() => {
+          currentPlugin.close().then(() => {
             this.setState(
               {
                 activeKey: ''
@@ -78,7 +77,7 @@ export default class RightArea extends PureComponent<RightAreaProps, RightAreaSt
         console.error(`plugin ${key} has not regist in the editor`);
         return;
       }
-      transformToPromise(plugins[key].open()).then(() => {
+      plugins[key].open().then(() => {
         this.editor.set('rightNav', key);
         this.setState({
           activeKey: key
@@ -87,7 +86,7 @@ export default class RightArea extends PureComponent<RightAreaProps, RightAreaSt
     };
     if (key === activeKey && !isinit) return;
     if (activeKey && plugins[activeKey]) {
-      transformToPromise(plugins[activeKey].close()).then(() => {
+      plugins[activeKey].close().then(() => {
         openPlugin();
       });
     } else {

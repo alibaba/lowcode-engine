@@ -1,6 +1,6 @@
 import Editor from './index';
 import { PluginConfig, PluginStatus } from './definitions';
-import { clone, deepEqual } from './utils';
+import { clone, deepEqual, transformToPromise } from './utils';
 
 export default class AreaManager {
   private pluginStatus: PluginStatus;
@@ -10,19 +10,20 @@ export default class AreaManager {
     this.pluginStatus = clone(editor.pluginStatus);
   }
 
-  isPluginStatusUpdate(): boolean {
+  isPluginStatusUpdate(pluginType?: string): boolean {
     const { pluginStatus } = this.editor;
-    const isUpdate = this.config.some(
-      item => !deepEqual(pluginStatus[item.pluginKey], this.pluginStatus[item.pluginKey])
-    );
+    const list = pluginType ? this.config.filter(item => item.type === pluginType) : this.config;
+
+    const isUpdate = list.some(item => !deepEqual(pluginStatus[item.pluginKey], this.pluginStatus[item.pluginKey]));
     this.pluginStatus = clone(pluginStatus);
     return isUpdate;
   }
 
-  getVisiblePluginList(): Array<PluginConfig> {
-    return this.config.filter(item => {
+  getVisiblePluginList(pluginType?: string): Array<PluginConfig> {
+    const res = this.config.filter(item => {
       return !this.pluginStatus[item.pluginKey] || this.pluginStatus[item.pluginKey].visible;
     });
+    return pluginType ? res.filter(item => item.type === pluginType) : res;
   }
 
   getPluginConfig(): Array<PluginConfig> {

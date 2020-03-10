@@ -14,6 +14,21 @@ export default {
   plugins: {
     topArea: [
       {
+        pluginKey: 'logo',
+        type: 'Custom',
+        props: {
+          align: 'left',
+          width: 100
+        },
+        config: {
+          package: '@ali/lowcode-plugin-logo',
+          version: '1.0.0'
+        },
+        pluginProps: {
+          logo: 'https://img.alicdn.com/tfs/TB1mHYDxQP2gK0jSZPxXXacQpXa-112-64.png'
+        }
+      },
+      {
         pluginKey: 'topBalloonIcon',
         type: 'BalloonIcon',
         props: {
@@ -102,6 +117,20 @@ export default {
         props: {
           align: 'top',
           title: 'balloon',
+          icon: 'dengpao'
+        },
+        config: {
+          package: '@ali/iceluna-addon-2',
+          version: '^1.0.0'
+        },
+        pluginProps: {}
+      },
+      {
+        pluginKey: 'leftPanelIcon2',
+        type: 'PanelIcon',
+        props: {
+          align: 'top',
+          title: 'panel2',
           icon: 'dengpao'
         },
         config: {

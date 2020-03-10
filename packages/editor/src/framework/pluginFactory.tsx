@@ -2,8 +2,9 @@ import React, { PureComponent, createRef } from 'react';
 
 import EditorContext from './context';
 import Editor from './editor';
-import { isEmpty, generateI18n } from './utils';
+import { isEmpty, generateI18n, transformToPromise, acceptsRef } from './utils';
 import { PluginConfig, I18nFunction } from './definitions';
+import Editor from './index';
 
 export interface PluginProps {
   editor: Editor;
@@ -53,17 +54,32 @@ export default function pluginFactory(
       }
     }
 
-    open = () => {
-      return this.ref && this.ref.open && this.ref.open();
+    open = (): Promise<any> => {
+      if (this.ref && this.ref.open && typeof this.ref.open === 'function') {
+        return transformToPromise(this.ref.open());
+      }
+      return Promise.resolve();
     };
 
     close = () => {
-      return this.ref && this.ref.close && this.ref.close();
+      if (this.ref && this.ref.close && typeof this.ref.close === 'function') {
+        return transformToPromise(this.ref.close());
+      }
+      return Promise.resolve();
     };
 
     render() {
       const { config } = this.props;
-      return <Comp ref={this.ref} i18n={this.i18n} editor={this.editor} config={config} {...config.pluginProps} />;
+      const props = {
+        i18n: this.i18n,
+        editor: this.editor,
+        config,
+        ...config.pluginProps
+      };
+      if (acceptsRef(Comp)) {
+        props.ref = this.ref;
+      }
+      return <Comp {...props} />;
     }
   }
 

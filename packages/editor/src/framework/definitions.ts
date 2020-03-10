@@ -114,6 +114,8 @@ export interface Utils {
 
 export interface PluginClass extends React.Component {
   init?: (editor: Editor) => void;
+  open?: () => any;
+  close?: () => any;
 }
 
 export interface PluginComponents {

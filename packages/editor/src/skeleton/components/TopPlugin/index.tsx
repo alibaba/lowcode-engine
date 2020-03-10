@@ -42,46 +42,44 @@ export default class TopPlugin extends PureComponent<TopPluginProps, TopPluginSt
   }
 
   componentDidMount() {
-    const { config } = this.props;
+    const { config, editor } = this.props;
     const pluginKey = config && config.pluginKey;
-    // const appHelper = this.appHelper;
-    // if (appHelper && pluginKey) {
-    //   appHelper.on(`${pluginKey}.dialog.show`, this.handleShow);
-    //   appHelper.on(`${pluginKey}.dialog.close`, this.handleClose);
-    // }
+    if (editor && pluginKey) {
+      editor.on(`${pluginKey}.dialog.show`, this.handleShow);
+      editor.on(`${pluginKey}.dialog.close`, this.handleClose);
+    }
   }
 
   componentWillUnmount() {
-    // const { config } = this.props;
-    // const pluginKey = config && config.pluginKey;
-    // const appHelper = this.appHelper;
-    // if (appHelper && pluginKey) {
-    //   appHelper.off(`${pluginKey}.dialog.show`, this.handleShow);
-    //   appHelper.off(`${pluginKey}.dialog.close`, this.handleClose);
-    // }
+    const { config, editor } = this.props;
+    const pluginKey = config && config.pluginKey;
+    if (editor && pluginKey) {
+      editor.off(`${pluginKey}.dialog.show`, this.handleShow);
+      editor.off(`${pluginKey}.dialog.close`, this.handleClose);
+    }
   }
 
   handleShow = () => {
-    // const { disabled, config, onClick, editor } = this.props;
-    // const pluginKey = config && config.pluginKey;
-    // if (disabled || !pluginKey) return;
-    // //考虑到弹窗情况，延时发送消息
-    // setTimeout(() => editor.emit(`${pluginKey}.addon.activate`), 0);
-    // this.handleOpen();
-    // onClick && onClick();
+    const { disabled, config, onClick, editor } = this.props;
+    const pluginKey = config && config.pluginKey;
+    if (disabled || !pluginKey) return;
+    //考虑到弹窗情况，延时发送消息
+    setTimeout(() => editor.emit(`${pluginKey}.addon.activate`), 0);
+    this.handleOpen();
+    onClick && onClick();
   };
 
   handleClose = () => {
-    // const pluginKey = this.props.config && this.props.config.pluginKey;
-    // const currentAddon =
-    //   this.appHelper.addons && this.appHelper.addons[pluginKey];
-    // if (currentAddon) {
-    //   this.utils.transformToPromise(currentAddon.close()).then(() => {
-    //     this.setState({
-    //       dialogVisible: false,
-    //     });
-    //   });
-    // }
+    const { config, editor } = this.props;
+    const pluginKey = config && config.pluginKey;
+    const plugin = editor.plugins && editor.plugins[pluginKey];
+    if (plugin) {
+      plugin.close().then(() => {
+        this.setState({
+          dialogVisible: false
+        });
+      });
+    }
   };
 
   handleOpen = () => {

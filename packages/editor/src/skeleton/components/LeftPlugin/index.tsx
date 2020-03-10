@@ -41,36 +41,34 @@ export default class LeftPlugin extends PureComponent<LeftPluginProps, LeftPlugi
   }
 
   componentDidMount() {
-    // const { config } = this.props;
-    // const addonKey = config && config.addonKey;
-    // const appHelper = this.appHelper;
-    // if (appHelper && addonKey) {
-    //   appHelper.on(`${addonKey}.dialog.show`, this.handleShow);
-    //   appHelper.on(`${addonKey}.dialog.close`, this.handleClose);
-    // }
+    const { config, editor } = this.props;
+    const pluginKey = config && config.pluginKey;
+    if (editor && pluginKey) {
+      editor.on(`${pluginKey}.dialog.show`, this.handleShow);
+      editor.on(`${pluginKey}.dialog.close`, this.handleClose);
+    }
   }
 
   componentWillUnmount() {
-    // const { config } = this.props;
-    // const appHelper = this.appHelper;
-    // const addonKey = config && config.addonKey;
-    // if (appHelper && addonKey) {
-    //   appHelper.off(`${addonKey}.dialog.show`, this.handleShow);
-    //   appHelper.off(`${addonKey}.dialog.close`, this.handleClose);
-    // }
+    const { config, editor } = this.props;
+    const pluginKey = config && config.pluginKey;
+    if (editor && pluginKey) {
+      editor.off(`${pluginKey}.dialog.show`, this.handleShow);
+      editor.off(`${pluginKey}.dialog.close`, this.handleClose);
+    }
   }
 
   handleClose = () => {
-    // const addonKey = this.props.config && this.props.config.addonKey;
-    // const currentAddon =
-    //   this.appHelper.addons && this.appHelper.addons[addonKey];
-    // if (currentAddon) {
-    //   this.utils.transformToPromise(currentAddon.close()).then(() => {
-    //     this.setState({
-    //       dialogVisible: false,
-    //     });
-    //   });
-    // }
+    const { config, editor } = this.props;
+    const pluginKey = config && config.pluginKey;
+    const plugin = editor.plugins && editor.plugins[pluginKey];
+    if (plugin) {
+      plugin.close().then(() => {
+        this.setState({
+          dialogVisible: false
+        });
+      });
+    }
   };
 
   handleOpen = () => {
@@ -81,17 +79,17 @@ export default class LeftPlugin extends PureComponent<LeftPluginProps, LeftPlugi
   };
 
   handleShow = () => {
-    // const { disabled, config, onClick } = this.props;
-    // const addonKey = config && config.addonKey;
-    // if (disabled || !addonKey) return;
-    // //考虑到弹窗情况，延时发送消息
-    // setTimeout(() => this.appHelper.emit(`${addonKey}.addon.activate`), 0);
-    // this.handleOpen();
-    // onClick && onClick();
+    const { disabled, config, onClick, editor } = this.props;
+    const pluginKey = config && config.pluginKey;
+    if (disabled || !pluginKey) return;
+    //考虑到弹窗情况，延时发送消息
+    setTimeout(() => editor.emit(`${pluginKey}.addon.activate`), 0);
+    this.handleOpen();
+    onClick && onClick();
   };
 
   renderIcon = clickCallback => {
-    const { active, disabled, marked, locked, onClick, config, editor } = this.props;
+    const { active, disabled, marked, locked, onClick, config } = this.props;
     const { pluginKey, props } = config || {};
     const { icon, title } = props || {};
     return (

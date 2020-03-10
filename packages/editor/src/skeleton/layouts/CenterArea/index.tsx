@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 
 import Editor from '../../../framework/editor';
-import { PluginConfig } from '../../../framework/definitions';
 import './index.scss';
 import AreaManager from '../../../framework/areaManager';
 
