@@ -1,0 +1,32 @@
+.next-btn.next-large.lowcode-top-btn {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  margin: 4px -2px;
+  text-align: center;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  color: #777;
+  &.disabled {
+    cursor: not-allowed;
+    color: $color-text1-1;
+  }
+  &.locked {
+    color: red !important;
+  }
+  i.next-icon {
+    &:before {
+      font-size: 17px;
+    }
+    margin-right: 0;
+    line-height: 18px;
+  }
+  span {
+    display: block;
+    margin: 0px -5px 0;
+    line-height: 16px;
+    text-align: center;
+    font-size: 12px;
+    transform: scale(0.8);
+  }
+}
