@@ -172,29 +172,27 @@ export default class DesignerPlugin extends PureComponent<PluginProps> {
   render() {
     const { editor } = this.props;
     return (
-      <div className="lowcode-plugin-designer">
-        <Designer
-          defaultSchema={SCHEMA as any}
-          eventPipe={editor as any}
-          simulatorProps={{
-            componentsAsset: [
-              {
-                type: 'jsUrl',
-                content: 'https://unpkg.alibaba-inc.com/@alifd/next@1.18.17/dist/next.min.js',
-                id: 'next',
-                level: 2
-              },
-              {
-                type: 'cssUrl',
-                content: 'https://unpkg.alibaba-inc.com/@alifd/next@1.18.17/dist/next.min.css',
-                id: 'next',
-                level: 2
-              }
-            ],
-            // simulatorUrl: ['/statics/simulator-renderer.css', '/statics/simulator-renderer.js']
-          }}
-        />
-      </div>
+      <Designer
+        className="lowcode-plugin-designer"
+        defaultSchema={SCHEMA as any}
+        eventPipe={editor as any}
+        simulatorProps={{
+          componentsAsset: [
+            {
+              type: 'jsUrl',
+              content: 'https://unpkg.alibaba-inc.com/@alifd/next@1.18.17/dist/next.min.js',
+              id: 'next',
+              level: 2
+            },
+            {
+              type: 'cssUrl',
+              content: 'https://unpkg.alibaba-inc.com/@alifd/next@1.18.17/dist/next.min.css',
+              id: 'next',
+              level: 2
+            }
+          ]
+        }}
+      />
     );
   }
 }

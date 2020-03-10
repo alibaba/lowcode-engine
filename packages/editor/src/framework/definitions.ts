@@ -112,7 +112,10 @@ export interface Utils {
   [propName: string]: (...args) => any;
 }
 
-export interface PluginClass extends React.Component {
+export interface PluginClass extends React.ComponentClass<{
+  editor: Editor;
+  [key: string]: any
+}> {
   init?: (editor: Editor) => void;
   open?: () => any;
   close?: () => any;

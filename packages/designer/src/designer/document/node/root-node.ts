@@ -17,9 +17,9 @@ import Props from './props/props';
  *  meta
  *  state
  *  defaultProps
+ *  dataSource
  *  lifeCycles
  *  methods
- *  dataSource
  *  css
  *
  * [Directives **not used**]
@@ -42,16 +42,16 @@ export default class RootNode extends Node implements NodeParent {
     return 0;
   }
   get nextSibling() {
-    return null
+    return null;
   }
   get prevSibling() {
-    return null
+    return null;
   }
   get zLevel() {
     return 0;
   }
   get parent() {
-    return null
+    return null;
   }
   get children(): NodeChildren {
     return this._children as NodeChildren;
@@ -59,7 +59,9 @@ export default class RootNode extends Node implements NodeParent {
   get props(): Props {
     return this._props as any;
   }
-  internalSetParent(parent: null) {}
+  internalSetParent(parent: null) {
+    // empty
+  }
 
   constructor(readonly document: DocumentModel, rootSchema: RootSchema) {
     super(document, rootSchema);

@@ -45,9 +45,9 @@ export interface SettingTarget {
 
   readonly path: string[];
 
-  /**
-   * 响应式自动运行
-   */
+  readonly top: SettingTarget;
+
+  // 响应式自动运行
   onEffect(action: () => void): () => void;
 
   // 获取属性值
@@ -55,6 +55,12 @@ export interface SettingTarget {
 
   // 设置属性值
   setPropValue(propName: string | number, value: any): void;
+
+  // 获取附属属性值
+  getExtraPropValue(propName: string): any;
+
+  // 设置附属属性值
+  setExtraPropValue(propName: string, value: any): void;
 
   /*
   // 所有属性值数据
@@ -74,7 +80,7 @@ export function isCustomView(obj: any): obj is CustomView {
   return obj && (isValidElement(obj) || isReactComponent(obj));
 }
 
-export type DynamicProps = (field: SettingField, editor: any) => object;
+export type DynamicProps = (field: SettingField) => object;
 
 export interface SetterConfig {
   /**
@@ -102,13 +108,13 @@ export interface FieldExtraProps {
    * default value of target prop for setter use
    */
   defaultValue?: any;
-  onChange?: (val: any, field: SettingField, editor: any) => void;
-  getValue?: (field: SettingField, editor: any) => any;
+  getValue?: (field: SettingField, fieldValue: any) => any;
+  setValue?: (field: SettingField, value: any) => void;
   /**
    * the field conditional show, is not set always true
    * @default undefined
    */
-  condition?: (field: SettingField, editor: any) => boolean;
+  condition?: (field: SettingField) => boolean;
   /**
    * default collapsed when display accordion
    */
@@ -168,6 +174,7 @@ export class SettingField implements SettingTarget {
   readonly nodes: Node[];
   readonly componentType: ComponentType | null;
   readonly designer: Designer;
+  readonly top: SettingTarget;
   get path() {
     const path = this.parent.path.slice();
     if (this.type === 'field') {
@@ -210,6 +217,7 @@ export class SettingField implements SettingTarget {
     this.isOne = parent.isOne;
     this.isNone = parent.isNone;
     this.designer = parent.designer!;
+    this.top = parent.top;
 
     // initial items
     if (this.type === 'group' && items) {
@@ -277,26 +285,25 @@ export class SettingField implements SettingTarget {
    * 获取当前属性值
    */
   getValue(): any {
-    if (this.type !== 'field') {
-      return null;
+    let val: any = null;
+    if (this.type === 'field') {
+      val = this.parent.getPropValue(this.name);
     }
-    // todo: use getValue
     const { getValue } = this.extraProps;
-    if (getValue) {
-      return getValue(this, this.editor);
-    }
-    return this.parent.getPropValue(this.name);
+    return getValue ? getValue(this, val) : val;
   }
 
   /**
    * 设置当前属性值
    */
   setValue(val: any) {
-    if (this.type !== 'field') {
-      return;
+    if (this.type === 'field') {
+      this.parent.setPropValue(this.name, val);
     }
-    // todo: use onChange
-    this.parent.setPropValue(this.name, val);
+    const { setValue } = this.extraProps;
+    if (setValue) {
+      setValue(this, val);
+    }
   }
 
   setKey(key: string | number) {
@@ -338,6 +345,14 @@ export class SettingField implements SettingTarget {
     return this.parent.getPropValue(path);
   }
 
+  getExtraPropValue(propName: string) {
+    return this.top.getExtraPropValue(propName);
+  }
+
+  setExtraPropValue(propName: string, value: any) {
+    this.top.setExtraPropValue(propName, value);
+  }
+
   purge() {
     this.disposeItems();
   }
@@ -356,6 +371,7 @@ export class SettingsMain implements SettingTarget {
   private _componentType: ComponentType | null = null;
   private _isSame: boolean = true;
   readonly path = [];
+  readonly top: SettingTarget = this;
 
   get nodes(): Node[] {
     return this._nodes;
@@ -433,6 +449,9 @@ export class SettingsMain implements SettingTarget {
    * 获取属性值
    */
   getPropValue(propName: string): any {
+    if (this.nodes.length < 1) {
+      return null;
+    }
     return this.nodes[0].getProp(propName, false)?.value;
   }
 
@@ -442,6 +461,19 @@ export class SettingsMain implements SettingTarget {
   setPropValue(propName: string, value: any) {
     this.nodes.forEach(node => {
       node.setPropValue(propName, value);
+    });
+  }
+
+  getExtraPropValue(propName: string) {
+    if (this.nodes.length < 1) {
+      return null;
+    }
+    return this.nodes[0].getExtraProp(propName, false)?.value;
+  }
+
+  setExtraPropValue(propName: string, value: any) {
+    this.nodes.forEach(node => {
+      node.getExtraProp(propName, true)?.setValue(value);
     });
   }
 

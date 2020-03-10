@@ -86,7 +86,7 @@ function npmToURI(npm: {
   main?: string;
   version: string;
 }): string {
-  let pkg = [];
+  const pkg = [];
   if (npm.package) {
     pkg.push(npm.package);
   }
@@ -143,63 +143,91 @@ export class ComponentType {
   }
   private _configure?: Configure;
   get configure() {
-    return [{
-      name: '#props',
-      title: "属性",
-      items: [{
-        name: 'label',
-        title: '标签',
-        setter: 'StringSetter'
-      }, {
-        name: 'name',
-        title: '名称',
-        setter: {
-          componentName: 'ArraySetter',
-          props: {
-            itemConfig: {
-              setter: 'StringSetter',
-              defaultValue: ''
-            }
-          }
-        }
-      }, {
-        name: 'size',
-        title: '大小',
-        setter: 'StringSetter'
-      }, {
-        name: 'age',
-        title: '年龄',
-        setter: 'NumberSetter'
-      }]
-    }, {
-      name: '#styles',
-      title: "样式",
-      items: [{
-        name: 'className',
-        title: '类名绑定',
-        setter: 'ClassNameSetter'
-      }, {
-        name: 'className2',
-        title: '类名绑定',
-        setter: 'StringSetter'
-      }, {
-        name: '#inlineStyles',
-        title: '行内样式',
-        items: []
-      }]
-    }, {
-      name: '#events',
-      title: "事件",
-      items: [{
-        name: '!events',
-        title: '事件绑定',
-        setter: 'EventsSetter'
-      }]
-    }, {
-      name: '#data',
-      title: "数据",
-      items: []
-    }];
+    return [
+      {
+        name: '#props',
+        title: '属性',
+        items: [
+          {
+            name: 'label',
+            title: '标签',
+            setter: 'StringSetter',
+          },
+          {
+            name: 'name',
+            title: '名称',
+            setter: {
+              componentName: 'ArraySetter',
+              props: {
+                itemConfig: {
+                  setter: 'StringSetter',
+                  defaultValue: '',
+                },
+              },
+            },
+          },
+          {
+            name: 'size',
+            title: '大小',
+            setter: 'StringSetter',
+          },
+          {
+            name: 'age',
+            title: '年龄',
+            setter: 'NumberSetter',
+          },
+        ],
+      },
+      {
+        name: '#styles',
+        title: '样式',
+        items: [
+          {
+            name: 'className',
+            title: '类名绑定',
+            setter: 'ClassNameSetter',
+          },
+          {
+            name: 'className2',
+            title: '类名绑定',
+            setter: 'StringSetter',
+          },
+          {
+            name: '#inlineStyles',
+            title: '行内样式',
+            items: [],
+          },
+        ],
+      },
+      {
+        name: '#events',
+        title: '事件',
+        items: [
+          {
+            name: '!events',
+            title: '事件绑定',
+            setter: {
+              componentName: 'EventsSetter',
+            },
+            extraProps: {
+              getValue(field: any) {
+                console.info('lifeCycles', field.getExtraPropValue('lifeCycles'));
+                return field.getPropValue('xxx');
+              },
+              setValue(field: any, val: any) {
+                field.setExtraPropValue('lifeCycles', val);
+                field.setPropValue('xxx', val);
+              },
+            },
+          },
+        ],
+      },
+      {
+        name: '#data',
+        title: '数据',
+        items: [],
+      },
+    ];
   }
 
   private parentWhitelist?: string[] | null;

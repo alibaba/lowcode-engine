@@ -3,7 +3,7 @@ import { Tab, Breadcrumb, Icon } from '@alifd/next';
 import { SettingsMain, SettingField, isSettingField } from './main';
 import './style.less';
 import Title from './title';
-import SettingsTab, { registerSetter, createSetterContent, getSetter, createSettingFieldView } from './settings-pane';
+import SettingsPane, { registerSetter, createSetterContent, getSetter, createSettingFieldView } from './settings-pane';
 import Node from '../../designer/src/designer/document/node/node';
 import ArraySetter from './builtin-setters/array-setter';
 
@@ -50,7 +50,7 @@ export default class SettingsMainView extends Component {
               onMouseOut: hoverNode.bind(null, node, false),
               onClick: selectNode.bind(null, node),
             };
-      items.unshift(<Breadcrumb.Item {...props}>{node.title}</Breadcrumb.Item>);
+      items.unshift(<Breadcrumb.Item {...props} key={node.id}>{node.title}</Breadcrumb.Item>);
       node = node.parent;
     }
 
@@ -91,7 +91,7 @@ export default class SettingsMainView extends Component {
         <div className="lc-settings-main">
           {this.renderBreadcrumb()}
           <div className="lc-settings-body">
-            <SettingsTab target={this.main} />
+            <SettingsPane target={this.main} />
           </div>
         </div>
       );
@@ -107,7 +107,7 @@ export default class SettingsMainView extends Component {
         >
           {(items as SettingField[]).map(field => (
             <Tab.Item className="lc-settings-tab-item" title={<Title title={field.title} />} key={field.name}>
-              <SettingsTab target={field} key={field.id} />
+              <SettingsPane target={field} key={field.id} />
             </Tab.Item>
           ))}
         </Tab>
