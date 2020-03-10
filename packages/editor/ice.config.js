@@ -1,7 +1,11 @@
 const path = require('path');
 
 module.exports = {
-  entry: 'src/index.tsx',
+  entry: {
+    'index': 'src/index.tsx',
+    'simulator-renderer': '../designer/src/builtins/simulator/renderer/index.ts'
+  },
+  "vendor": false,
   publicPath: './',
   alias: {
     '@': path.resolve(__dirname, './src'),
@@ -14,6 +18,16 @@ module.exports = {
       locales: ['zh-cn'],
     }],
   ],
+  externals: {
+    'react': 'var window.React',
+    'react-dom': 'var window.ReactDOM',
+    'prop-types': 'var window.PropTypes',
+    // '@recore/obx': 'var window.Recore',
+    // '@recore/obx-react': 'var window.Recore',
+    '@ali/lowcode-renderer': 'var window.LowCodeRenderer',
+    '@alifd/next': 'var window.Next',
+    'moment': 'var window.moment',
+  },
   chainWebpack: (config) => {
     // 修改对应 css module的 loader，默认修改 scss-module 同理可以修改 css-module 和 less-module 规则
     ['scss-module'].forEach((rule) => {

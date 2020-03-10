@@ -53,9 +53,9 @@ const publicPath = (document.currentScript as HTMLScriptElement).src.replace(/^(
 const defaultSimulatorUrl = (() => {
   let urls;
   if (process.env.NODE_ENV === 'production') {
-    urls = [`${publicPath}simulator-renderer.min.css`, `${publicPath}simulator-renderer.min.js`];
+    urls = [`${publicPath}../css/simulator-renderer.min.css`, `${publicPath}simulator-renderer.min.js`];
   } else {
-    urls = [`${publicPath}simulator-renderer.css`, `${publicPath}simulator-renderer.js`];
+    urls = [`${publicPath}../css/simulator-renderer.css`, `${publicPath}simulator-renderer.js`];
   }
   return urls;
 })();
@@ -67,8 +67,8 @@ const defaultDepends = [
     AssetType.JSText,
     'window.PropTypes=parent.PropTypes;React.PropTypes=parent.PropTypes; window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;',
   ),
-  assetItem(AssetType.JSUrl, 'https://g.alicdn.com/mylib/@ali/recore/1.5.7/umd/recore.min.js'),
-  assetItem(AssetType.JSUrl, '/lowcode-renderer.js'),
+  // assetItem(AssetType.JSUrl, 'https://g.alicdn.com/mylib/@ali/recore/1.5.7/umd/recore.min.js'),
+  assetItem(AssetType.JSUrl, '/statics/lowcode-renderer.js'),
 ];
 
 export class SimulatorHost implements ISimulator<SimulatorProps> {
@@ -132,7 +132,9 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     return autorun(fn as any, true);
   }
 
-  purge(): void {}
+  purge(): void {
+    // todo
+  }
 
   readonly viewport = new Viewport();
   readonly scroller = this.designer.createScroller(this.viewport);
@@ -225,7 +227,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
       const isLeftButton = downEvent.which === 1 || downEvent.button === 0;
 
       if (isLeftButton) {
-        let node: Node = nodeInst.node;
+        const node: Node = nodeInst.node;
         let nodes: Node[] = [node];
         let ignoreUpSelected = false;
         if (isMulti) {
@@ -365,7 +367,9 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
   /**
    * @see ISimulator
    */
-  getComponentInstanceId(instance: ReactInstance) {}
+  getComponentInstanceId(instance: ReactInstance) {
+    throw new Error('Method not implemented.');
+  }
 
   /**
    * @see ISimulator
@@ -493,7 +497,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     }
 
     const opt: any = {};
-    let scroll = false;
+    const scroll = false;
 
     if (detail) {
       // TODO:
@@ -565,7 +569,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     this.renderer?.clearState();
   }
 
-  private _sensorAvailable: boolean = true;
+  private _sensorAvailable = true;
   /**
    * @see ISensor
    */
@@ -613,7 +617,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     return e.globalY >= rect.top && e.globalY <= rect.bottom && e.globalX >= rect.left && e.globalX <= rect.right;
   }
 
-  private sensing: boolean = false;
+  private sensing = false;
   /**
    * @see ISensor
    */
@@ -674,14 +678,12 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     let maxBottom = null;
 
     for (let i = 0, l = children.size; i < l; i++) {
-      let node = children.get(i)!;
-      let index = i;
+      const node = children.get(i)!;
+      const index = i;
       const instances = this.getComponentInstances(node);
       const inst = instances
         ? instances.length > 1
-          ? instances.find(inst => {
-              return this.getClosestNodeInstance(inst, target.id)?.instance === targetInstance;
-            })
+          ? instances.find(inst => this.getClosestNodeInstance(inst, target.id)?.instance === targetInstance)
           : instances[0]
         : null;
       const rect = inst ? this.computeComponentInstanceRect(inst) : null;
@@ -805,8 +807,8 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
         } else {
           container = container.parent;
         }
-      }
-      /* else if (res === AT_CHILD) {
+      } else if (isNode(res)) {
+        /* else if (res === AT_CHILD) {
         if (!upward) {
           upward = container.parent;
         }
@@ -816,7 +818,6 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
           upward = null;
         }
       }*/
-      else if (isNode(res)) {
         container = res;
         upward = null;
       }
@@ -898,7 +899,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     if (isDragNodeDataObject(dragObject)) {
       items = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
     } else {
-      items = dragObject.nodes
+      items = dragObject.nodes;
     }
     return items.every(item => this.checkNestingDown(dropTarget, item));
   }
@@ -908,7 +909,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     if (isDragNodeDataObject(dragObject)) {
       items = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
     } else {
-      items = dragObject.nodes
+      items = dragObject.nodes;
     }
     return items.every(item => this.checkNestingUp(dropTarget, item));
   }
@@ -931,12 +932,12 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
   // #endregion
 }
 
-
 function isPointInRect(point: CanvasPoint, rect: Rect) {
   return (
     point.canvasY >= rect.top &&
     point.canvasY <= rect.bottom &&
-    (point.canvasX >= rect.left && point.canvasX <= rect.right)
+    point.canvasX >= rect.left &&
+    point.canvasX <= rect.right
   );
 }
 

@@ -1,4 +1,4 @@
-import LowCodeRenderer from '@ali/iceluna-sdk';
+import LowCodeRenderer from '@ali/lowcode-renderer';
 import { ReactInstance, Fragment, Component } from 'react';
 import { observer } from '@recore/obx-react';
 import { SimulatorRenderer } from './renderer';
