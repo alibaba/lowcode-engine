@@ -1,6 +1,6 @@
 import { Component, Fragment } from 'react';
 import classNames from 'classnames';
-import { observer } from '@recore/core-obx';
+import { observer } from '@recore/obx-react';
 import { SimulatorContext } from '../context';
 import { SimulatorHost } from '../host';
 import { computed } from '@recore/obx';
@@ -69,7 +69,7 @@ export class OutlineSelectingForNode extends Component<{ node: Node }> {
     }
     return (
       <Fragment key={node.id}>
-        {instances.map((instance) => {
+        {instances.map(instance => {
           const observed = designer.createOffsetObserver({
             node,
             instance,

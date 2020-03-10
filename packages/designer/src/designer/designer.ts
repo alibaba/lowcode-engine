@@ -118,17 +118,32 @@ export default class Designer {
       if (this.currentSelection) {
         const currentSelection = this.currentSelection;
         selectionDispose = currentSelection.onSelectionChange(() => {
-          this.postEvent('current-selection-change', currentSelection);
+          this.postEvent('selection-change', currentSelection);
         });
       }
-    }
+    };
+    let historyDispose: undefined | (() => void);
+    const setupHistory = () => {
+      if (historyDispose) {
+        historyDispose();
+        historyDispose = undefined;
+      }
+      if (this.currentHistory) {
+        const currentHistory = this.currentHistory;
+        historyDispose = currentHistory.onStateChange(() => {
+          this.postEvent('history-change', currentHistory);
+        });
+      }
+    };
     this.project.onCurrentDocumentChange(() => {
       this.postEvent('current-document-change', this.currentDocument);
-      this.postEvent('current-selection-change', this.currentSelection);
-      this.postEvent('current-history-change', this.currentHistory);
+      this.postEvent('selection-change', this.currentSelection);
+      this.postEvent('history-change', this.currentHistory);
       setupSelection();
+      setupHistory();
     });
     setupSelection();
+    setupHistory();
   }
 
   postEvent(event: string, ...args: any[]) {
@@ -246,7 +261,7 @@ export default class Designer {
     return this._simulatorProps || {};
   }
 
-  @obx.ref private _suspensed: boolean = false;
+  @obx.ref private _suspensed = false;
 
   get suspensed(): boolean {
     return this._suspensed;
@@ -318,7 +333,7 @@ export default class Designer {
     return maps;
   }
 
-  autorun(action: (context: { firstRun: boolean }) => void, sync: boolean = false): () => void {
+  autorun(action: (context: { firstRun: boolean }) => void, sync = false): () => void {
     return autorun(action, sync as true);
   }
 

@@ -628,7 +628,6 @@
       ],
     }}
     simulatorProps={{
-      device: 'legao',
       componentsAsset: [
         {
           type: 'jsUrl',
@@ -643,6 +642,7 @@
           level: 2,
         },
       ],
+      simulatorUrl: ['/build/simulator-renderer.css', '/build/simulator-renderer.js'],
     }}
     componentsDescription={[
       {

@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { observer } from '@recore/core-obx';
+import { observer } from '@recore/obx-react';
 import Designer from './designer';
 import DocumentView from './document/document-view';
 

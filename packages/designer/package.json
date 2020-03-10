@@ -7,8 +7,8 @@
   "license": "MIT",
   "dependencies": {
     "@ali/iceluna-sdk": "^1.0.5-beta.12",
-    "@recore/core-obx": "^1.0.4",
-    "@recore/obx": "^1.0.5",
+    "@recore/obx": "^1.0.8",
+    "@recore/obx-react": "^1.0.7",
     "@types/medium-editor": "^5.0.3",
     "classnames": "^2.2.6",
     "react": "^16",

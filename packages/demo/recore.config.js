@@ -8,8 +8,8 @@ module.exports = {
   },
   externals: {
     '@ali/iceluna-sdk': 'var window.LowCodeRenderer',
-    '@recore/obx': 'var window.Recore',
-    '@recore/core-obx': 'var window.Recore',
+    // '@recore/obx': 'var window.Recore',
+    // '@recore/obx-react': 'var window.Recore',
     // '@alifd/next': 'var window.Next',
     'moment': 'var window.moment',
   },

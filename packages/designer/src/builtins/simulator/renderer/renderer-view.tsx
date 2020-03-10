@@ -1,6 +1,6 @@
 import LowCodeRenderer from '@ali/iceluna-sdk';
 import { ReactInstance, Fragment, Component } from 'react';
-import { observer } from '@recore/core-obx';
+import { observer } from '@recore/obx-react';
 import { SimulatorRenderer } from './renderer';
 import './renderer.less';
 
@@ -16,7 +16,7 @@ export default class SimulatorRendererView extends Component<{ renderer: Simulat
 }
 
 @observer
-class Layout extends Component<{ renderer: SimulatorRenderer; }> {
+class Layout extends Component<{ renderer: SimulatorRenderer }> {
   shouldComponentUpdate() {
     return false;
   }
@@ -40,7 +40,7 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
   }
   render() {
     const { renderer } = this.props;
-    const { components, schemas } = LowCodeRenderer.others
+    const { components, schemas } = LowCodeRenderer.others;
     return (
       <LowCodeRenderer
         schema={renderer.schema}
@@ -55,7 +55,7 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
           renderer.mountInstance(schema.id, ref);
         }}
         //onCompGetCtx={(schema: any, ctx: object) => {
-          // renderer.mountContext(schema.id, ctx);
+        // renderer.mountContext(schema.id, ctx);
         //}}
       />
     );

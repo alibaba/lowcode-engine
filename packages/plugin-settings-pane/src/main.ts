@@ -415,12 +415,12 @@ export class SettingsMain implements SettingTarget {
         this.setup([]);
       }
     };
-    editor.on('designer.current-selection-change', setupSelection);
+    editor.on('designer.selection-change', setupSelection);
     if (editor.designer) {
       setupSelection(editor.designer.currentSelection);
     }
     this.disposeListener = () => {
-      editor.removeListener('designer.current-selection-change', setupSelection);
+      editor.removeListener('designer.selection-change', setupSelection);
     };
   }
 
