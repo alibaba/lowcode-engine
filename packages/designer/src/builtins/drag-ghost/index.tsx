@@ -2,10 +2,8 @@ import { Component } from 'react';
 import { obx } from '@recore/obx';
 import { observer } from '@recore/core-obx';
 import Designer from '../../designer/designer';
-import './ghost.less';
-import { NodeSchema } from '../../designer/schema';
-import Node from '../../designer/document/node/node';
 import { isDragNodeObject, DragObject, isDragNodeDataObject } from '../../designer/helper/dragon';
+import './ghost.less';
 
 type offBinding = () => any;
 

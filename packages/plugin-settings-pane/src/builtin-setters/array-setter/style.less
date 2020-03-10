@@ -1,0 +1,72 @@
+.lc-setter-list {
+  [draggable] {
+    cursor: move;
+  }
+  color: var(--color-text);
+
+  .next-btn {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1 !important;
+  }
+  .lc-setter-list-empty {
+    text-align: center;
+    padding: 10px;
+    .next-btn {
+      margin-left: 5px;
+    }
+  }
+
+  .lc-setter-list-scroll-body {
+    margin: -8px -5px;
+    padding: 8px 10px;
+    overflow-y: auto;
+    max-height: 300px;
+  }
+
+  .lc-setter-list-card {
+    border: 1px solid rgba(31,56,88,.2);
+    background-color: var(--color-block-background-light);
+    border-radius: 3px;
+    margin-bottom: 8px;
+
+    .lc-listitem {
+      position: relative;
+      outline: none;
+      display: flex;
+      align-items: stretch;
+      height: 32px;
+
+      .lc-listitem-actions {
+        margin: 0 3px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-end;
+        .lc-listitem-action {
+          text-align: center;
+          cursor: pointer;
+          opacity: 0.6;
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
+      .lc-listitem-body {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .lc-listitem-handler {
+        margin-left: 2px;
+        display: inline-flex;
+        align-items: center;
+        .next-icon-ellipsis {
+          transform: rotate(90deg);
+        }
+        opacity: 0.6;
+      }
+    }
+  }
+}

@@ -204,7 +204,8 @@ export default class Dragon {
     const listenSimulators = !sourceDoc || sourceDoc === doc ? makeSimulatorListener(masterSensors) : null;
     const alwaysListen = listenSimulators ? doc : sourceDoc!;
     const designer = this.designer;
-    const newBie = dragObject.type !== DragObjectType.Node;
+    const newBie = !isDragNodeObject(dragObject);
+    const forceCopyState = isDragNodeObject(dragObject) && dragObject.nodes.some(node => node.isSlotRoot);
     let lastSensor: ISensor | undefined;
 
     this._dragging = false;
@@ -219,14 +220,19 @@ export default class Dragon {
       }
     };
 
+    let copy = false;
     const checkcopy = (e: MouseEvent) => {
       if (newBie) {
         return;
       }
       if (e.altKey || e.ctrlKey) {
+        copy = true;
         this.setCopyState(true);
       } else {
-        this.setCopyState(false);
+        copy = false;
+        if (!forceCopyState) {
+          this.setCopyState(false);
+        }
       }
     };
 
@@ -246,7 +252,7 @@ export default class Dragon {
 
     const dragstart = () => {
       const locateEvent = createLocateEvent(boostEvent);
-      if (newBie) {
+      if (newBie || forceCopyState) {
         this.setCopyState(true);
       } else {
         chooseSensor(locateEvent);
@@ -282,7 +288,6 @@ export default class Dragon {
         lastSensor.deactiveSensor();
       }
       this.setNativeSelection(true);
-      const copy = !newBie && this.isCopyState();
       this.clearState();
 
       let exception;
@@ -414,6 +419,7 @@ export default class Dragon {
   private getMasterSensors(): ISimulator[] {
     return this.designer.project.documents
       .map(doc => {
+        // TODO: not use actived,
         if (doc.actived && doc.simulator?.sensorAvailable) {
           return doc.simulator;
         }

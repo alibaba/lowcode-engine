@@ -1,14 +1,12 @@
-import { obx, computed } from '@recore/obx';
+import { obx, computed, untracked } from '@recore/obx';
 import { NodeSchema, NodeData, PropsMap, PropsList } from '../../schema';
-import Props from './props/props';
+import Props, { EXTRA_KEY_PREFIX } from './props/props';
 import DocumentModel from '../document-model';
 import NodeChildren from './node-children';
 import Prop from './props/prop';
 import NodeContent from './node-content';
 import { Component } from '../../simulator';
-import { ComponentConfig } from '../../component-config';
-
-const DIRECTIVES = ['condition', 'conditionGroup', 'loop', 'loopArgs', 'title', 'ignore', 'hidden', 'locked'];
+import { ComponentType } from '../../component-type';
 
 /**
  * 基础节点
@@ -50,20 +48,11 @@ export default class Node {
    *  * Component 组件/元件
    */
   readonly componentName: string;
-  protected _props?: Props<Node>;
-  protected _directives?: Props<Node>;
-  protected _extras?: Props<Node>;
+  protected _props?: Props;
   protected _children: NodeChildren | NodeContent;
   @obx.ref private _parent: NodeParent | null = null;
-  @obx.ref private _zLevel = 0;
-  get props(): Props<Node> | undefined {
+  get props(): Props | undefined {
     return this._props;
-  }
-  get directives(): Props<Node> | undefined {
-    return this._directives;
-  }
-  get extras(): Props<Node> | undefined {
-    return this._extras;
   }
   /**
    * 父级节点
@@ -80,14 +69,17 @@ export default class Node {
   /**
    * 当前节点深度
    */
-  get zLevel(): number {
-    return this._zLevel;
+  @computed get zLevel(): number {
+    if (this._parent) {
+      return this._parent.zLevel + 1;
+    }
+    return -1;
   }
 
   @computed get title(): string {
-    let t = this.getDirective('x-title');
-    if (!t && this.componentConfig.descriptor) {
-      t = this.getProp(this.componentConfig.descriptor, false);
+    let t = this.getExtraProp('title');
+    if (!t && this.componentType.descriptor) {
+      t = this.getProp(this.componentType.descriptor, false);
     }
     if (t) {
       const v = t.getAsString();
@@ -95,23 +87,20 @@ export default class Node {
         return v;
       }
     }
-    return this.componentName;
+    return this.componentType.title;
   }
 
-  constructor(readonly document: DocumentModel, nodeSchema: NodeSchema) {
+  get isSlotRoot(): boolean {
+    return this._slotFor != null;
+  }
+
+  constructor(readonly document: DocumentModel, nodeSchema: NodeSchema, slotFor?: Prop) {
     const { componentName, id, children, props, ...extras } = nodeSchema;
     this.id = id || `node$${document.nextId()}`;
     this.componentName = componentName;
-    if (this.isNodeParent) {
-      this._props = new Props(this, props);
-      this._directives = new Props(this, {});
-      Object.keys(extras).forEach(key => {
-        if (DIRECTIVES.indexOf(key) > -1) {
-          this._directives!.add((extras as any)[key], key);
-          delete (extras as any)[key];
-        }
-      });
-      this._extras = new Props(this, extras as any);
+    this._slotFor = slotFor;
+    if (isNodeParent(this)) {
+      this._props = new Props(this, props, extras);
       this._children = new NodeChildren(this as NodeParent, children || []);
     } else {
       this._children = new NodeContent(children);
@@ -127,30 +116,33 @@ export default class Node {
 
   /**
    * 内部方法，请勿使用
-   *
-   * @ignore
    */
   internalSetParent(parent: NodeParent | null) {
     if (this._parent === parent) {
       return;
     }
-    if (this._parent) {
+
+    if (this._parent && !this.isSlotRoot) {
       this._parent.children.delete(this);
     }
 
     this._parent = parent;
-    if (parent) {
-      this._zLevel = parent.zLevel + 1;
-    } else {
-      this._zLevel = -1;
-    }
+  }
+
+  private _slotFor?: Prop | null = null;
+  internalSetSlotFor(slotFor: Prop | null | undefined) {
+    this._slotFor = slotFor;
+  }
+
+  get slotFor() {
+    return this._slotFor;
   }
 
   /**
    * 移除当前节点
    */
   remove() {
-    if (this.parent) {
+    if (this.parent && !this.isSlotRoot) {
       this.parent.children.delete(this, true);
     }
   }
@@ -160,6 +152,17 @@ export default class Node {
    */
   select() {
     this.document.selection.select(this.id);
+  }
+
+  /**
+   * 悬停高亮
+   */
+  hover(flag: boolean = true) {
+    if (flag) {
+      this.document.designer.hovering.hover(this);
+    } else {
+      this.document.designer.hovering.unhover(this);
+    }
   }
 
   /**
@@ -175,22 +178,15 @@ export default class Node {
   /**
    * 节点组件描述
    */
-  @obx.ref get componentConfig(): ComponentConfig {
-    return this.document.getComponentConfig(this.componentName, this.component);
+  @computed get componentType(): ComponentType {
+    return this.document.getComponentType(this.componentName, this.component);
   }
 
-  @obx.ref get propsData(): PropsMap | PropsList | null {
+  @computed get propsData(): PropsMap | PropsList | null {
     if (!this.isNodeParent || this.componentName === 'Fragment') {
       return null;
     }
-    return this.props?.value || null;
-  }
-
-  get directivesData(): PropsMap | null {
-    if (!this.isNodeParent) {
-      return null;
-    }
-    return this.directives?.value as PropsMap || null;
+    return this.props?.export(true).props || null;
   }
 
   private _conditionGroup: string | null = null;
@@ -231,31 +227,44 @@ export default class Node {
   }
 
   replaceWith(schema: NodeSchema, migrate: boolean = true) {
-
+    // reuse the same id? or replaceSelection
     //
   }
-
-  /*
-  // TODO
-  // 外部修改，merge 进来，产生一次可恢复的历史数据
-  merge(data: ElementData) {
-    this.elementData = data;
-    const { leadingComments } = data;
-    this.leadingComments = leadingComments ? leadingComments.slice() : [];
-    this.parse();
-    this.mergeChildren(data.children || []);
-  }
-
-  // TODO: 再利用历史数据，不产生历史数据
-  reuse(timelineData: NodeSchema) {}
-  */
 
   getProp(path: string, useStash: boolean = true): Prop | null {
     return this.props?.query(path, useStash as any) || null;
   }
 
-  getDirective(name: string, useStash: boolean = true): Prop | null {
-    return this.directives?.get(name, useStash as any) || null;
+  getExtraProp(key: string, useStash: boolean = true): Prop | null {
+    return this.props?.get(EXTRA_KEY_PREFIX + key, useStash) || null;
+  }
+
+  /**
+   * 获取单个属性值
+   */
+  getPropValue(path: string): any {
+    return this.getProp(path, false)?.value;
+  }
+
+  /**
+   * 设置单个属性值
+   */
+  setPropValue(path: string, value: any) {
+    this.getProp(path, true)!.setValue(value);
+  }
+
+  /**
+   * 设置多个属性值，和原有值合并
+   */
+  mergeProps(props: PropsMap) {
+    this.props?.merge(props);
+  }
+
+  /**
+   * 设置多个属性值，替换原有值
+   */
+  setProps(props?: PropsMap | PropsList | null) {
+    this.props?.import(props);
   }
 
   /**
@@ -300,28 +309,41 @@ export default class Node {
    * 获取符合搭建协议-节点 schema 结构
    */
   get schema(): NodeSchema {
-    // TODO: ..
-    return this.exportSchema(true);
+    return this.export(true);
+  }
+
+  set schema(data: NodeSchema) {
+    this.import(data);
+  }
+
+  import(data: NodeSchema, checkId: boolean = false) {
+    const { componentName, id, children, props, ...extras } = data;
+
+    if (isNodeParent(this)) {
+      this._props!.import(props, extras);
+      this._children.import(children, checkId);
+    } else {
+      this._children.import(children);
+    }
   }
 
   /**
    * 导出 schema
    * @param serialize 序列化，加 id 标识符，用于储存为操作记录
    */
-  exportSchema(serialize = false): NodeSchema {
-    // TODO...
+  export(serialize = false): NodeSchema {
+    const { props, extras } = this.props?.export(serialize) || {};
     const schema: any = {
       componentName: this.componentName,
-      ...this.extras?.value,
-      props: this.props?.value || {},
-      ...this.directives?.value,
+      props,
+      ...extras,
     };
     if (serialize) {
       schema.id = this.id;
     }
     if (isNodeParent(this)) {
       if (this.children.size > 0) {
-        schema.children = this.children.exportSchema(serialize);
+        schema.children = this.children.export(serialize);
       }
     } else {
       schema.children = (this.children as NodeContent).value;
@@ -379,17 +401,13 @@ export default class Node {
       this.children.purge();
     }
     this.props?.purge();
-    this.directives?.purge();
-    this.extras?.purge();
     this.document.internalRemoveAndPurgeNode(this);
   }
 }
 
 export interface NodeParent extends Node {
   readonly children: NodeChildren;
-  readonly props: Props<Node>;
-  readonly directives: Props<Node>;
-  readonly extras: Props<Node>;
+  readonly props: Props;
 }
 
 export function isNode(node: any): node is Node {
@@ -465,8 +483,8 @@ export function comparePosition(node1: Node, node2: Node): number {
 
 export function insertChild(container: NodeParent, thing: Node | NodeData, at?: number | null, copy?: boolean): Node {
   let node: Node;
-  if (copy && isNode(thing)) {
-    thing = thing.exportSchema(false);
+  if (isNode(thing) && (copy || thing.isSlotRoot)) {
+    thing = thing.export(false);
   }
   if (isNode(thing)) {
     node = thing;

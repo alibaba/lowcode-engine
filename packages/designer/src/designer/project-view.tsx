@@ -8,7 +8,6 @@ export default class ProjectView extends Component<{ designer: Designer }> {
   render() {
     const { designer } = this.props;
     // TODO: support splitview
-    console.info(designer.project.documents);
     return (
       <div className="lc-project">
         {designer.project.documents.map(doc => {

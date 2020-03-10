@@ -90,13 +90,12 @@ export type PropsList = Array<{
 
 export type NodeData = NodeSchema | JSExpression | DOMText;
 
-export interface JSExpression {
-  type: 'JSExpression';
-  value: string;
-}
-
 export function isJSExpression(data: any): data is JSExpression {
   return data && data.type === 'JSExpression';
+}
+
+export function isJSSlot(data: any): data is JSSlot {
+  return data && data.type === 'JSSlot';
 }
 
 export function isDOMText(data: any): data is DOMText {
@@ -106,7 +105,7 @@ export function isDOMText(data: any): data is DOMText {
 export type DOMText = string;
 
 export interface RootSchema extends NodeSchema {
-  componentName: 'Block' | 'Page' | 'Component';
+  componentName: string; // 'Block' | 'Page' | 'Component';
   fileName: string;
   meta?: object;
   state?: {
@@ -121,7 +120,7 @@ export interface RootSchema extends NodeSchema {
   css?: string;
   dataSource?: {
     items: DataSourceConfig[];
-  };
+  } | any;
   defaultProps?: CompositeObject;
 }
 

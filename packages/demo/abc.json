@@ -1,0 +1,12 @@
+{
+  "name": "demo",
+  "assets": {
+    "type": "command",
+    "command": {
+      "cmd": [
+        "tnpm ii",
+        "tnpm run cloud"
+      ]
+    }
+  }
+}

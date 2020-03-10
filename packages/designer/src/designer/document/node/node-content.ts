@@ -57,6 +57,10 @@ export default class NodeContent {
   }
 
   constructor(value: any) {
+    this.import(value);
+  }
+
+  import(value: any) {
     const type = typeof value;
     if (value == null) {
       this._value = '';

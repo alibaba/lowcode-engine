@@ -1,11 +1,11 @@
 import Node, { NodeParent } from './node';
-import { NodeData } from '../../schema';
+import { NodeData, isNodeSchema } from '../../schema';
 import { obx, computed } from '@recore/obx';
 
 export default class NodeChildren {
   @obx.val private children: Node[];
-  constructor(readonly owner: NodeParent, childrenData: NodeData | NodeData[]) {
-    this.children = (Array.isArray(childrenData) ? childrenData : [childrenData]).map(child => {
+  constructor(readonly owner: NodeParent, data: NodeData | NodeData[]) {
+    this.children = (Array.isArray(data) ? data : [data]).map(child => {
       const node = this.owner.document.createNode(child);
       node.internalSetParent(this.owner);
       return node;
@@ -16,8 +16,33 @@ export default class NodeChildren {
    * 导出 schema
    * @param serialize 序列化，加 id 标识符，用于储存为操作记录
    */
-  exportSchema(serialize = false): NodeData[] {
-    return this.children.map(node => node.exportSchema(serialize));
+  export(serialize = false): NodeData[] {
+    return this.children.map(node => node.export(serialize));
+  }
+
+  import(data?: NodeData | NodeData[], checkId: boolean = false) {
+    data = data ? (Array.isArray(data) ? data : [data]) : [];
+
+    const originChildren = this.children.slice();
+    this.children.forEach(child => child.internalSetParent(null));
+
+    const children = new Array<Node>(data.length);
+    for (let i = 0, l = data.length; i < l; i++) {
+      const child = originChildren[i];
+      const item = data[i];
+
+      let node: Node | undefined;
+      if (isNodeSchema(item) && !checkId && child && child.componentName === item.componentName) {
+        node = child;
+        node.import(item);
+      } else {
+        node = this.owner.document.createNode(item);
+      }
+      node.internalSetParent(this.owner);
+      children[i] = node;
+    }
+
+    this.children = children;
   }
 
   /**
@@ -33,27 +58,6 @@ export default class NodeChildren {
   @computed isEmpty() {
     return this.size < 1;
   }
-
-  /*
-  // 用于数据重新灌入
-  merge() {
-    for (let i = 0, l = data.length; i < l; i++) {
-      const item = this.children[i];
-      if (item && isMergeable(item) && item.tagName === data[i].tagName) {
-        item.merge(data[i]);
-      } else {
-        if (item) {
-          item.purge();
-        }
-        this.children[i] = this.document.createNode(data[i]);
-        this.children[i].internalSetParent(this);
-      }
-    }
-    if (this.children.length > data.length) {
-      this.children.splice(data.length).forEach(child => child.purge());
-    }
-  }
-  */
 
   /**
    * 删除一个节点

@@ -1,5 +1,5 @@
-import { ComponentType } from 'react';
-import { obx, computed } from '@recore/obx';
+import { ComponentType as ReactComponentType } from 'react';
+import { obx, computed, autorun } from '@recore/obx';
 import BuiltinSimulatorView from '../builtins/simulator';
 import Project from './project';
 import { ProjectSchema } from './schema';
@@ -10,10 +10,11 @@ import Location, { LocationData, isLocationChildrenDetail } from './helper/locat
 import DocumentModel from './document/document-model';
 import Node, { insertChildren } from './document/node/node';
 import { isRootNode } from './document/node/root-node';
-import { ComponentDescriptionSpec, ComponentConfig } from './component-config';
+import { ComponentDescription, ComponentType } from './component-type';
 import Scroller, { IScrollable } from './helper/scroller';
 import { INodeSelector } from './simulator';
 import OffsetObserver, { createOffsetObserver } from './helper/offset-observer';
+import { EventEmitter } from 'events';
 
 export interface DesignerProps {
   className?: string;
@@ -21,15 +22,15 @@ export interface DesignerProps {
   defaultSchema?: ProjectSchema;
   hotkeys?: object;
   simulatorProps?: object | ((document: DocumentModel) => object);
-  simulatorComponent?: ComponentType<any>;
-  dragGhostComponent?: ComponentType<any>;
+  simulatorComponent?: ReactComponentType<any>;
+  dragGhostComponent?: ReactComponentType<any>;
   suspensed?: boolean;
-  componentDescriptionSpecs?: ComponentDescriptionSpec[];
+  componentsDescription?: ComponentDescription[];
+  eventPipe?: EventEmitter;
   onMount?: (designer: Designer) => void;
   onDragstart?: (e: LocateEvent) => void;
   onDrag?: (e: LocateEvent) => void;
   onDragend?: (e: { dragObject: DragObject; copy: boolean }, loc?: Location) => void;
-  // TODO: ...add other events support
   [key: string]: any;
 }
 
@@ -40,7 +41,21 @@ export default class Designer {
   readonly hovering = new Hovering();
   readonly project: Project;
 
+  get currentDocument() {
+    return this.project.currentDocument;
+  }
+
+  get currentHistory() {
+    return this.currentDocument?.history;
+  }
+
+  get currentSelection() {
+    return this.currentDocument?.selection;
+  }
+
   constructor(props: DesignerProps) {
+    this.setProps(props);
+
     this.project = new Project(this, props.defaultSchema);
 
     this.dragon.onDragstart(e => {
@@ -53,13 +68,14 @@ export default class Designer {
       if (this.props?.onDragstart) {
         this.props.onDragstart(e);
       }
+      this.postEvent('dragstart', e);
     });
 
     this.dragon.onDrag(e => {
-      console.info('dropLocation', this._dropLocation);
       if (this.props?.onDrag) {
         this.props.onDrag(e);
       }
+      this.postEvent('drag', e);
     });
 
     this.dragon.onDragend(e => {
@@ -85,6 +101,7 @@ export default class Designer {
       if (this.props?.onDragend) {
         this.props.onDragend(e, loc);
       }
+      this.postEvent('dragend', e, loc);
       this.hovering.enable = true;
     });
 
@@ -92,7 +109,30 @@ export default class Designer {
       node.document.simulator?.scrollToNode(node, detail);
     });
 
-    this.setProps(props);
+    let selectionDispose: undefined | (() => void);
+    const setupSelection = () => {
+      if (selectionDispose) {
+        selectionDispose();
+        selectionDispose = undefined;
+      }
+      if (this.currentSelection) {
+        const currentSelection = this.currentSelection;
+        selectionDispose = currentSelection.onSelectionChange(() => {
+          this.postEvent('current-selection-change', currentSelection);
+        });
+      }
+    }
+    this.project.onCurrentDocumentChange(() => {
+      this.postEvent('current-document-change', this.currentDocument);
+      this.postEvent('current-selection-change', this.currentSelection);
+      this.postEvent('current-history-change', this.currentHistory);
+      setupSelection();
+    });
+    setupSelection();
+  }
+
+  postEvent(event: string, ...args: any[]) {
+    this.props?.eventPipe?.emit(`designer.${event}`, ...args);
   }
 
   private _dropLocation?: Location;
@@ -129,7 +169,7 @@ export default class Designer {
    * 获得合适的插入位置
    */
   getSuitableInsertion() {
-    const activedDoc = this.project.activedDocuments[0];
+    const activedDoc = this.project.currentDocument;
     if (!activedDoc) {
       return null;
     }
@@ -166,8 +206,8 @@ export default class Designer {
       if (props.suspensed !== this.props.suspensed && props.suspensed != null) {
         this.suspensed = props.suspensed;
       }
-      if (props.componentDescriptionSpecs !== this.props.componentDescriptionSpecs && props.componentDescriptionSpecs != null) {
-        this.buildComponentConfigsMap(props.componentDescriptionSpecs);
+      if (props.componentsDescription !== this.props.componentsDescription && props.componentsDescription != null) {
+        this.buildComponentTypesMap(props.componentsDescription);
       }
     } else {
       // init hotkeys
@@ -183,8 +223,8 @@ export default class Designer {
       if (props.suspensed != null) {
         this.suspensed = props.suspensed;
       }
-      if (props.componentDescriptionSpecs != null) {
-        this.buildComponentConfigsMap(props.componentDescriptionSpecs);
+      if (props.componentsDescription != null) {
+        this.buildComponentTypesMap(props.componentsDescription);
       }
     }
     this.props = props;
@@ -194,9 +234,9 @@ export default class Designer {
     return this.props ? this.props[key] : null;
   }
 
-  @obx.ref private _simulatorComponent?: ComponentType<any>;
+  @obx.ref private _simulatorComponent?: ReactComponentType<any>;
 
-  @computed get simulatorComponent(): ComponentType<any> {
+  @computed get simulatorComponent(): ReactComponentType<any> {
     return this._simulatorComponent || BuiltinSimulatorView;
   }
 
@@ -228,36 +268,58 @@ export default class Designer {
     // todo:
   }
 
-  @obx.val private _componentConfigsMap = new Map<string, ComponentConfig>();
+  @obx.val private _componentTypesMap = new Map<string, ComponentType>();
+  private _lostComponentTypesMap = new Map<string, ComponentType>();
 
-  private buildComponentConfigsMap(specs: ComponentDescriptionSpec[]) {
+  private buildComponentTypesMap(specs: ComponentDescription[]) {
     specs.forEach(spec => {
       const key = spec.componentName;
-      const had = this._componentConfigsMap.get(key);
-      if (had) {
-        had.spec = spec;
+      let cType = this._componentTypesMap.get(key);
+      if (cType) {
+        cType.spec = spec;
       } else {
-        this._componentConfigsMap.set(key, new ComponentConfig(spec));
+        cType = this._lostComponentTypesMap.get(key);
+
+        if (cType) {
+          cType.spec = spec;
+          this._lostComponentTypesMap.delete(key);
+        } else {
+          cType = new ComponentType(spec);
+        }
+
+        this._componentTypesMap.set(key, cType);
       }
     });
   }
 
-  getComponentConfig(componentName: string): ComponentConfig {
-    if (this._componentConfigsMap.has(componentName)) {
-      return this._componentConfigsMap.get(componentName)!;
+  getComponentType(componentName: string): ComponentType {
+    if (this._componentTypesMap.has(componentName)) {
+      return this._componentTypesMap.get(componentName)!;
     }
 
-    return new ComponentConfig({
+    if (this._lostComponentTypesMap.has(componentName)) {
+      return this._lostComponentTypesMap.get(componentName)!;
+    }
+
+    const cType = new ComponentType({
       componentName,
     });
+
+    this._lostComponentTypesMap.set(componentName, cType);
+
+    return cType;
   }
 
-  get componentsMap(): { [key: string]: ComponentDescriptionSpec } {
+  get componentsMap(): { [key: string]: ComponentDescription } {
     const maps: any = {};
-    this._componentConfigsMap.forEach((config, key) => {
+    this._componentTypesMap.forEach((config, key) => {
       maps[key] = config.spec;
     });
     return maps;
+  }
+
+  autorun(action: (context: { firstRun: boolean }) => void, sync: boolean = false): () => void {
+    return autorun(action, sync as true);
   }
 
   purge() {

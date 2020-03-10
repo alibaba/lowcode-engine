@@ -1,16 +1,19 @@
 import { untracked, computed, obx } from '@recore/obx';
 import { valueToSource } from '../../../../utils/value-to-source';
-import { CompositeValue, isJSExpression } from '../../../schema';
-import StashSpace from './stash-space';
-import { uniqueId } from '../../../../utils/unique-id';
-import { isPlainObject } from '../../../../utils/is-plain-object';
+import { CompositeValue, isJSExpression, isJSSlot, NodeSchema, NodeData, isNodeSchema } from '../../../schema';
+import PropStash from './prop-stash';
+import { uniqueId } from '../../../../../../utils/unique-id';
+import { isPlainObject } from '../../../../../../utils/is-plain-object';
 import { hasOwnProperty } from '../../../../utils/has-own-property';
+import Props from './props';
+import Node from '../node';
 
 export const UNSET = Symbol.for('unset');
 export type UNSET = typeof UNSET;
 
 export interface IPropParent {
   delete(prop: Prop): void;
+  readonly props: Props;
 }
 
 export default class Prop implements IPropParent {
@@ -18,11 +21,11 @@ export default class Prop implements IPropParent {
 
   readonly id = uniqueId('prop$');
 
-  private _type: 'unset' | 'literal' | 'map' | 'list' | 'expression' = 'unset';
+  @obx.ref private _type: 'unset' | 'literal' | 'map' | 'list' | 'expression' | 'slot' = 'unset';
   /**
    * 属性类型
    */
-  get type(): 'unset' | 'literal' | 'map' | 'list' | 'expression' {
+  get type(): 'unset' | 'literal' | 'map' | 'list' | 'expression' | 'slot' {
     return this._type;
   }
 
@@ -31,14 +34,26 @@ export default class Prop implements IPropParent {
   /**
    * 属性值
    */
-  @computed get value(): CompositeValue {
-    if (this._type === 'unset') {
-      return null;
+  @computed get value(): CompositeValue | UNSET {
+    return this.export(true);
+  }
+
+  export(serialize = false): CompositeValue | UNSET {
+    const type = this._type;
+
+    if (type === 'unset') {
+      return UNSET;
     }
 
-    const type = this._type;
     if (type === 'literal' || type === 'expression') {
       return this._value;
+    }
+
+    if (type === 'slot') {
+      return {
+        type: 'JSSlot',
+        value: this._slotNode!.export(serialize),
+      };
     }
 
     if (type === 'map') {
@@ -47,7 +62,10 @@ export default class Prop implements IPropParent {
       }
       const maps: any = {};
       this.items!.forEach((prop, key) => {
-        maps[key] = prop.value;
+        const v = prop.export(serialize);
+        if (v !== UNSET) {
+          maps[key] = v;
+        }
       });
       return maps;
     }
@@ -56,10 +74,29 @@ export default class Prop implements IPropParent {
       if (!this._items) {
         return this._items;
       }
-      return this.items!.map(prop => prop.value);
+      return this.items!.map(prop => {
+        const v = prop.export(serialize);
+        return v === UNSET ? null : v
+      });
     }
 
     return null;
+  }
+
+  /**
+   * 获得表达式值
+   */
+  @computed get code() {
+    if (isJSExpression(this.value)) {
+      return this.value.value;
+    }
+    if (this.type === 'slot') {
+      return JSON.stringify(this._slotNode!.export(false));
+    }
+    return JSON.stringify(this.value);
+  }
+  set code(val) {
+
   }
 
   @computed getAsString(): string {
@@ -72,18 +109,21 @@ export default class Prop implements IPropParent {
   /**
    * set value, val should be JSON Object
    */
-  set value(val: CompositeValue) {
+  setValue(val: CompositeValue) {
     this._value = val;
     const t = typeof val;
     if (val == null) {
       this._value = null;
       this._type = 'literal';
     } else if (t === 'string' || t === 'number' || t === 'boolean') {
-      this._value = val;
       this._type = 'literal';
     } else if (Array.isArray(val)) {
       this._type = 'list';
     } else if (isPlainObject(val)) {
+      if (isJSSlot(val)) {
+        this.setAsSlot(val.value);
+        return;
+      }
       if (isJSExpression(val)) {
         this._type = 'expression';
       } else {
@@ -97,14 +137,46 @@ export default class Prop implements IPropParent {
         value: valueToSource(val),
       };
     }
-    if (untracked(() => this._items)) {
-      this._items!.forEach(prop => prop.purge());
-      this._items = null;
+    this.dispose();
+  }
+
+  getValue(serialize = true) {
+    // todo:
+  }
+
+  private dispose() {
+    const items = untracked(() => this._items);
+    if (items) {
+      items.forEach(prop => prop.purge());
     }
+    this._items = null;
     this._maps = null;
     if (this.stash) {
       this.stash.clear();
     }
+    if (this._type !== 'slot' && this._slotNode) {
+      this._slotNode.purge();
+      this._slotNode = undefined;
+    }
+  }
+
+  private _slotNode?: Node;
+  setAsSlot(data: NodeData) {
+    this._type = 'slot';
+    if (
+      this._slotNode &&
+      isNodeSchema(data) &&
+      (!data.id || this._slotNode.id === data.id) &&
+      this._slotNode.componentName === data.componentName
+    ) {
+      this._slotNode.import(data);
+    } else {
+      this._slotNode?.internalSetParent(null);
+      const owner = this.props.owner;
+      this._slotNode = owner.document.createNode(data, this);
+      this._slotNode.internalSetParent(owner);
+    }
+    this.dispose();
   }
 
   /**
@@ -121,33 +193,24 @@ export default class Prop implements IPropParent {
     return this._type === 'unset';
   }
 
-  /**
-   * 值是否包含表达式
-   * 包含 JSExpresion | JSSlot 等值
-   */
-  @computed isContainJSExpression(): boolean {
-    const type = this._type;
-    if (type === 'expression') {
-      return true;
+  // TODO: improve this logic
+  compare(other: Prop | null): number {
+    if (!other || other.isUnset()) {
+      return this.isUnset() ? 0 : 2;
     }
-    if (type === 'literal' || type === 'unset') {
-      return false;
+    if (other.type !== this.type) {
+      return 2;
     }
-    if ((type === 'list' || type === 'map') && this.items) {
-      return this.items.some(item => item.isContainJSExpression());
+    // list
+    if (this.type === 'list') {
+      return this.size === other.size ? 1 : 2;
     }
-    return false;
-  }
-
-  /**
-   * 是否简单 JSON 数据
-   */
-  @computed isJSON() {
-    return !this.isContainJSExpression();
+    // 'literal' | 'map' | 'expression' | 'slot'
+    return this.code === other.code ? 0 : 2;
   }
 
   @obx.val private _items: Prop[] | null = null;
-  @obx.val private _maps: Map<string, Prop> | null = null;
+  @obx.val private _maps: Map<string | number, Prop> | null = null;
   @computed private get items(): Prop[] | null {
     let _items: any;
     untracked(() => {
@@ -182,14 +245,14 @@ export default class Prop implements IPropParent {
     }
     return _items;
   }
-  @computed private get maps(): Map<string, Prop> | null {
-    if (!this.items || this.items.length < 1) {
+  @computed private get maps(): Map<string | number, Prop> | null {
+    if (!this.items) {
       return null;
     }
     return this._maps;
   }
 
-  private stash: StashSpace | undefined;
+  private stash: PropStash | undefined;
 
   /**
    * 键值
@@ -200,14 +263,17 @@ export default class Prop implements IPropParent {
    */
   @obx spread: boolean;
 
+  readonly props: Props;
+
   constructor(
     public parent: IPropParent,
     value: CompositeValue | UNSET = UNSET,
     key?: string | number,
     spread = false,
   ) {
+    this.props = parent.props;
     if (value !== UNSET) {
-      this.value = value;
+      this.setValue(value);
     }
     this.key = key;
     this.spread = spread;
@@ -215,58 +281,63 @@ export default class Prop implements IPropParent {
 
   /**
    * 获取某个属性
-   * @param stash 强制
+   * @param stash 如果不存在，临时获取一个待写入
    */
-  get(path: string, stash: false): Prop | null;
-  /**
-   * 获取某个属性, 如果不存在，临时获取一个待写入
-   * @param stash 强制
-   */
-  get(path: string, stash: true): Prop;
-  /**
-   * 获取某个属性, 如果不存在，临时获取一个待写入
-   */
-  get(path: string): Prop;
-  get(path: string, stash = true) {
+  get(path: string | number, stash = true): Prop | null {
     const type = this._type;
-    if (type !== 'map' && type !== 'unset' && !stash) {
+    // todo: support list get
+    if (type !== 'map' && type !== 'list' && type !== 'unset' && !stash) {
       return null;
     }
 
     const maps = type === 'map' ? this.maps : null;
-
-    let prop: any = maps ? maps.get(path) : null;
+    const items = type === 'list' ? this.items : null;
+    let prop: any;
+    if (type === 'list') {
+      if (isValidArrayIndex(path, this.size)) {
+        prop = items![path];
+      }
+    } else if (type === 'map') {
+      prop = maps?.get(path);
+    }
 
     if (prop) {
       return prop;
     }
 
-    const i = path.indexOf('.');
     let entry = path;
     let nest = '';
-    if (i > 0) {
-      nest = path.slice(i + 1);
-      if (nest) {
-        entry = path.slice(0, i);
-        prop = maps ? maps.get(entry) : null;
-        if (prop) {
-          return prop.get(nest, stash);
+    if (typeof path !== 'number') {
+      const i = path.indexOf('.');
+      if (i > 0) {
+        nest = path.slice(i + 1);
+        if (nest) {
+          entry = path.slice(0, i);
+
+          if (type === 'list') {
+            if (isValidArrayIndex(entry, this.size)) {
+              prop = items![entry];
+            }
+          } else if (type === 'map') {
+            prop = maps?.get(entry);
+          }
+
+          if (prop) {
+            return prop.get(nest, stash);
+          }
         }
       }
     }
 
     if (stash) {
       if (!this.stash) {
-        this.stash = new StashSpace(
-          item => {
-            // item take effect
-            this.set(String(item.key), item);
-            item.parent = this;
-          },
-          () => {
-            return true;
-          },
-        );
+        this.stash = new PropStash(this.props, item => {
+          // item take effect
+          if (item.key) {
+            this.set(item.key, item, true);
+          }
+          item.parent = this;
+        });
       }
       prop = this.stash.get(entry);
       if (nest) {
@@ -317,7 +388,7 @@ export default class Prop implements IPropParent {
   /**
    * 元素个数
    */
-  size(): number {
+  get size(): number {
     return this.items?.length || 0;
   }
 
@@ -332,7 +403,7 @@ export default class Prop implements IPropParent {
       return null;
     }
     if (type === 'unset' || (force && type !== 'list')) {
-      this.value = [];
+      this.setValue([]);
     }
     const prop = new Prop(this, value);
     this.items!.push(prop);
@@ -344,29 +415,44 @@ export default class Prop implements IPropParent {
    *
    * @param force 强制
    */
-  set(key: string, value: CompositeValue | Prop, force = false) {
+  set(key: string | number, value: CompositeValue | Prop, force = false) {
     const type = this._type;
-    if (type !== 'map' && type !== 'unset' && !force) {
+    if (type !== 'map' && type !== 'list' && type !== 'unset' && !force) {
       return null;
     }
     if (type === 'unset' || (force && type !== 'map')) {
-      this.value = {};
+      if (isValidArrayIndex(key)) {
+        if (type !== 'list') {
+          this.setValue([]);
+        }
+      } else {
+        this.setValue({});
+      }
     }
     const prop = isProp(value) ? value : new Prop(this, value, key);
     const items = this.items!;
-    const maps = this.maps!;
-    const orig = maps.get(key);
-    if (orig) {
-      // replace
-      const i = items.indexOf(orig);
-      if (i > -1) {
-        items.splice(i, 1, prop)[0].purge();
+    if (this.type === 'list') {
+      if (!isValidArrayIndex(key)) {
+        return null;
       }
-      maps.set(key, prop);
+      items[key] = prop;
+    } else if (this.maps) {
+      const maps = this.maps;
+      const orig = maps.get(key);
+      if (orig) {
+        // replace
+        const i = items.indexOf(orig);
+        if (i > -1) {
+          items.splice(i, 1, prop)[0].purge();
+        }
+        maps.set(key, prop);
+      } else {
+        // push
+        items.push(prop);
+        maps.set(key, prop);
+      }
     } else {
-      // push
-      items.push(prop);
-      maps.set(key, prop);
+      return null;
     }
 
     return prop;
@@ -401,6 +487,9 @@ export default class Prop implements IPropParent {
       this._items.forEach(item => item.purge());
     }
     this._maps = null;
+    if (this._slotNode && this._slotNode.slotFor === this) {
+      this._slotNode.purge();
+    }
   }
 
   /**
@@ -457,4 +546,9 @@ export default class Prop implements IPropParent {
 
 export function isProp(obj: any): obj is Prop {
   return obj && obj.isProp;
+}
+
+function isValidArrayIndex(key: any, limit: number = -1): key is number {
+  const n = parseFloat(String(key));
+  return n >= 0 && Math.floor(n) === n && isFinite(n) && (limit < 0 || n < limit);
 }
