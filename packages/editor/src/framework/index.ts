@@ -1,5 +1,5 @@
 import Editor from './editor';
-export { default as PluginFactory } from './plugin';
+export { default as PluginFactory } from './pluginFactory';
 export { default as EditorContext } from './context';
 
 import * as editorUtils from './utils';

@@ -14,7 +14,7 @@ export interface InjectedPluginProps {
   i18n?: I18nFunction;
 }
 
-export default function plugin(
+export default function pluginFactory(
   Comp: React.ComponentType<PluginProps & InjectedPluginProps>
 ): React.ComponentType<PluginProps> {
   class LowcodePlugin extends PureComponent<PluginProps> {
@@ -31,7 +31,6 @@ export default function plugin(
 
     constructor(props, context) {
       super(props, context);
-
       if (isEmpty(props.config) || !props.config.pluginKey) {
         console.warn('lowcode editor plugin has wrong config');
         return;
@@ -41,8 +40,10 @@ export default function plugin(
       this.editor = editor;
       this.i18n = generateI18n(locale, messages);
       this.pluginKey = props.config.pluginKey;
-      editor.plugins = editor.plugins || {};
-      editor.plugins[this.pluginKey] = this;
+      editor.set('plugins', {
+        ...editor.plugins,
+        [this.pluginKey]: this
+      });
     }
 
     componentWillUnmount() {
@@ -51,6 +52,14 @@ export default function plugin(
         delete this.editor.plugins[this.pluginKey];
       }
     }
+
+    open = () => {
+      return this.ref && this.ref.open && this.ref.open();
+    };
+
+    close = () => {
+      return this.ref && this.ref.close && this.ref.close();
+    };
 
     render() {
       const { config } = this.props;

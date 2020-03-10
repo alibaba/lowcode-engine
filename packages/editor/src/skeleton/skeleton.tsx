@@ -22,9 +22,6 @@ let renderIdx = 0;
 export interface SkeletonProps {
   components: PluginComponents;
   config: EditorConfig;
-  history: object;
-  location: object;
-  match: object;
   utils: Utils;
 }
 
@@ -69,6 +66,7 @@ export default class Skeleton extends PureComponent<SkeletonProps, SkeletonState
       this.editor.destroy();
     }
     const { utils, config, components } = this.props;
+    debugger;
     const editor = (this.editor = new Editor(comboEditorConfig(defaultConfig, config), components, {
       ...skeletonUtils,
       ...utils
@@ -102,30 +100,39 @@ export default class Skeleton extends PureComponent<SkeletonProps, SkeletonState
 
   render() {
     const { initReady, skeletonKey, __hasError } = this.state;
-    const { location, history, match } = this.props;
     if (__hasError || !this.editor) {
       return 'error';
     }
 
-    location.query = parseSearch(location.search);
-    this.editor.set('location', location);
-    this.editor.set('history', history);
-    this.editor.set('match', match);
-
     return (
-      <ConfigProvider>
-        <Loading tip="Loading" size="large" visible={!initReady} shape="fusion-reactor" fullScreen>
-          <div className="lowcode-editor" key={skeletonKey}>
-            <TopArea editor={this.editor} />
-            <div className="lowcode-main-content">
-              <LeftArea.Nav editor={this.editor} />
-              <LeftArea.Panel editor={this.editor} />
-              <CenterArea editor={this.editor} />
-              <RightArea editor={this.editor} />
-            </div>
-          </div>
-        </Loading>
-      </ConfigProvider>
+      <Router>
+        <Route
+          path="/*"
+          component={props => {
+            const { location, history, match } = props;
+            location.query = parseSearch(location.search);
+            this.editor.set('location', location);
+            this.editor.set('history', history);
+            this.editor.set('match', match);
+            console.log('&&&&&&&&&&');
+            return (
+              <ConfigProvider>
+                <Loading tip="Loading" size="large" visible={!initReady} shape="fusion-reactor" fullScreen>
+                  <div className="lowcode-editor" key={skeletonKey}>
+                    <TopArea editor={this.editor} />
+                    <div className="lowcode-main-content">
+                      <LeftArea.Nav editor={this.editor} />
+                      <LeftArea.Panel editor={this.editor} />
+                      <CenterArea editor={this.editor} />
+                      <RightArea editor={this.editor} />
+                    </div>
+                  </div>
+                </Loading>
+              </ConfigProvider>
+            );
+          }}
+        />
+      </Router>
     );
   }
 }

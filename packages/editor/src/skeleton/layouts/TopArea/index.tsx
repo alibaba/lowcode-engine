@@ -4,6 +4,7 @@ import TopPlugin from '../../components/TopPlugin';
 import './index.scss';
 import Editor from '../../../framework/index';
 import { PluginConfig } from '../../../framework/definitions';
+import AreaManager from '../../../framework/areaManager';
 
 const { Row, Col } = Grid;
 
@@ -14,19 +15,28 @@ export interface TopAreaProps {
 export default class TopArea extends PureComponent<TopAreaProps> {
   static displayName = 'LowcodeTopArea';
 
+  private areaManager: AreaManager;
   private editor: Editor;
-  private config: Array<PluginConfig>;
 
   constructor(props) {
     super(props);
     this.editor = props.editor;
-    this.config = (this.editor.config.plugins && this.editor.config.plugins.topArea) || [];
+    this.areaManager = new AreaManager(props.editor, 'topArea');
   }
 
-  componentDidMount() {}
-  componentWillUnmount() {}
+  componentDidMount() {
+    this.editor.on('skeleton.update', this.handleSkeletonUpdate);
+  }
+  componentWillUnmount() {
+    this.editor.off('skeleton.update', this.handleSkeletonUpdate);
+  }
 
-  handlePluginStatusChange = () => {};
+  handleSkeletonUpdate = (): void => {
+    // 当前区域插件状态改变是更新区域
+    if (this.areaManager.isPluginStatusUpdate()) {
+      this.forceUpdate();
+    }
+  };
 
   renderPluginList = (list: Array<PluginConfig> = []): Array<React.ReactElement> => {
     return list.map((item, idx) => {
@@ -49,10 +59,10 @@ export default class TopArea extends PureComponent<TopAreaProps> {
   };
 
   render() {
-    if (!this.config) return null;
     const leftList: Array<PluginConfig> = [];
     const rightList: Array<PluginConfig> = [];
-    this.config.forEach(item => {
+    const visiblePluginList = this.areaManager.getVisiblePluginList();
+    visiblePluginList.forEach(item => {
       const align = item.props && item.props.align === 'right' ? 'right' : 'left';
       // 分隔符不允许相邻
       if (item.type === 'Divider') {

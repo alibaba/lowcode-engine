@@ -159,8 +159,7 @@ export default {
         pluginKey: 'rightPanel1',
         type: 'Panel',
         props: {
-          title: 'panel1',
-          icon: 'dengpao'
+          title: '样式'
         },
         config: {
           package: '@ali/iceluna-addon-2',
@@ -172,7 +171,7 @@ export default {
         pluginKey: 'rightPanel2',
         type: 'Panel',
         props: {
-          title: 'panel2',
+          title: '属性',
           icon: 'dengpao'
         },
         config: {
@@ -185,8 +184,7 @@ export default {
         pluginKey: 'rightPanel3',
         type: 'Panel',
         props: {
-          title: 'panel3',
-          icon: 'dengpao'
+          title: '事件'
         },
         config: {
           package: '@ali/iceluna-addon-2',
@@ -198,8 +196,7 @@ export default {
         pluginKey: 'rightPanel4',
         type: 'Panel',
         props: {
-          title: 'panel4',
-          icon: 'dengpao'
+          title: '数据'
         },
         config: {
           package: '@ali/iceluna-addon-2',

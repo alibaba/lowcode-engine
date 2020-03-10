@@ -1,10 +1,24 @@
 import IntlMessageFormat from 'intl-messageformat';
 import keymaster from 'keymaster';
-import _isEmpty from 'lodash/isEmpty';
 import { EditorConfig, LocaleType, I18nMessages, I18nFunction, ShortCutsConfig } from './definitions';
 import Editor from './editor';
 
+import _pick from 'lodash/pick';
+import _deepEqual from 'lodash/isEqualWith';
+import _clone from 'lodash/cloneDeep';
+import _isEmpty from 'lodash/isEmpty';
+import _throttle from 'lodash/throttle';
+import _debounce from 'lodash/debounce';
+
+export const pick = _pick;
+export const deepEqual = _deepEqual;
+export const clone = _clone;
 export const isEmpty = _isEmpty;
+export const throttle = _throttle;
+export const debounce = _debounce;
+
+import _serialize from 'serialize-javascript';
+export const serialize = _serialize;
 
 const ENV = {
   TBE: 'TBE',

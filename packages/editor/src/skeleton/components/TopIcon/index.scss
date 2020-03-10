@@ -14,6 +14,41 @@
   &.locked {
     color: red !important;
   }
+  &:hover {
+    background-color: $color-brand1-1;
+    color: $color-brand1-6;
+    &:before {
+      content: attr(data-tooltip);
+      display: block;
+      height: auto;
+      width: auto;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 0);
+      bottom: -35px;
+      line-height: 18px;
+      font-size: 12px;
+      white-space: nowrap;
+      padding: 6px 8px;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.75);
+      color: #fff;
+      z-index: 100;
+    }
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 0);
+      bottom: -5px;
+      border: 5px solid transparent;
+      border-bottom-color: rgba(0, 0, 0, 0.75);
+      opacity: 1;
+      visibility: visible;
+      z-index: 100;
+    }
+  }
   i.next-icon {
     &:before {
       font-size: 17px;

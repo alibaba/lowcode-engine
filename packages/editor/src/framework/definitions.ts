@@ -125,5 +125,6 @@ export interface PluginStatus {
     disabled: boolean;
     visible: boolean;
     marked: boolean;
+    locked: boolean;
   };
 }

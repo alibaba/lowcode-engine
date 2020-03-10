@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import Editor from '../../../framework/editor';
 import { PluginConfig } from '../../../framework/definitions';
 import './index.scss';
+import AreaManager from '../../../framework/areaManager';
 
 export interface CenterAreaProps {
   editor: Editor;
@@ -12,18 +13,33 @@ export default class CenterArea extends PureComponent<CenterAreaProps> {
   static displayName = 'LowcodeCenterArea';
 
   private editor: Editor;
-  private config: Array<PluginConfig>;
+  private areaManager: AreaManager;
 
   constructor(props) {
     super(props);
     this.editor = props.editor;
-    this.config = (this.editor.config && this.editor.config.plugins && this.editor.config.plugins.centerArea) || [];
+    this.areaManager = new AreaManager(this.editor, 'centerArea');
   }
 
+  componentDidMount() {
+    this.editor.on('skeleton.update', this.handleSkeletonUpdate);
+  }
+  componentWillUnmount() {
+    this.editor.off('skeleton.update', this.handleSkeletonUpdate);
+  }
+
+  handleSkeletonUpdate = (): void => {
+    // 当前区域插件状态改变是更新区域
+    if (this.areaManager.isPluginStatusUpdate()) {
+      this.forceUpdate();
+    }
+  };
+
   render() {
+    const visiblePluginList = this.areaManager.getVisiblePluginList();
     return (
       <div className="lowcode-center-area">
-        {this.config.map(item => {
+        {visiblePluginList.map(item => {
           const Comp = this.editor.components[item.pluginKey];
           return <Comp editor={this.editor} config={item} {...item.pluginProps} />;
         })}

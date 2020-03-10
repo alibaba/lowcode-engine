@@ -45,6 +45,7 @@ export default class TopIcon extends PureComponent<TopIconProps> {
           disabled,
           locked
         })}
+        data-tooltip={title}
         id={id}
         style={style}
         onClick={disabled ? undefined : onClick}

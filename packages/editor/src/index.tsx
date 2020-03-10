@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 // import Skeleton from '@ali/lowcode-engine-skeleton';
+import { HashRouter as Router, Route } from 'react-router-dom';
 import Skeleton from './skeleton';
 import config from './config/skeleton';
 import components from './config/components';
@@ -21,12 +22,20 @@ if (!ICE_CONTAINER) {
 }
 
 ReactDOM.render(
-  <Skeleton
-    {...(config.skeleton && config.skeleton.props)}
-    config={config}
-    utils={utils}
-    constants={constants}
-    components={components}
-  />,
+  <Router>
+    <Route
+      path="/*"
+      component={props => (
+        <Skeleton
+          {...props}
+          {...(config.skeleton && config.skeleton.props)}
+          config={config}
+          utils={utils}
+          constants={constants}
+          components={components}
+        />
+      )}
+    />
+  </Router>,
   ICE_CONTAINER
 );

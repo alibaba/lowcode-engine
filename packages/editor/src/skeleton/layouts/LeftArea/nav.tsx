@@ -3,6 +3,7 @@ import LeftPlugin from '../../components/LeftPlugin';
 import './index.scss';
 import Editor from '../../../framework/editor';
 import { PluginConfig } from '../../../framework/definitions';
+import AreaManager from '../../../framework/areaManager';
 
 export interface LeftAreaNavProps {
   editor: Editor;
@@ -12,15 +13,29 @@ export default class LeftAreaNav extends PureComponent<LeftAreaNavProps> {
   static displayName = 'LowcodeLeftAreaNav';
 
   private editor: Editor;
-  private config: Array<PluginConfig>;
+  private areaManager: AreaManager;
 
   constructor(props) {
     super(props);
     this.editor = props.editor;
-    this.config = (this.editor.config.plugins && this.editor.config.plugins.leftArea) || [];
+    this.areaManager = new AreaManager(this.editor, 'leftArea');
   }
 
-  handlePluginClick = item => {};
+  componentDidMount() {
+    this.editor.on('skeleton.update', this.handleSkeletonUpdate);
+  }
+  componentWillUnmount() {
+    this.editor.off('skeleton.update', this.handleSkeletonUpdate);
+  }
+
+  handleSkeletonUpdate = (): void => {
+    // 当前区域插件状态改变是更新区域
+    if (this.areaManager.isPluginStatusUpdate()) {
+      this.forceUpdate();
+    }
+  };
+
+  handlePluginClick = (item: PluginConfig): void => {};
 
   renderPluginList = (list: Array<PluginConfig> = []): Array<React.ReactElement> => {
     return list.map((item, idx) => {
@@ -39,7 +54,8 @@ export default class LeftAreaNav extends PureComponent<LeftAreaNavProps> {
   render() {
     const topList: Array<PluginConfig> = [];
     const bottomList: Array<PluginConfig> = [];
-    this.config.forEach(item => {
+    const visiblePluginList = this.areaManager.getVisiblePluginList();
+    visiblePluginList.forEach(item => {
       const align = item.props && item.props.align === 'bottom' ? 'bottom' : 'top';
       if (align === 'bottom') {
         bottomList.push(item);

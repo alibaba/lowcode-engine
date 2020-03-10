@@ -8,7 +8,7 @@ import rightPanel2 from '@ali/iceluna-addon-2';
 import rightPanel3 from '@ali/iceluna-addon-2';
 import rightPanel4 from '@ali/iceluna-addon-2';
 
-import PluginFactory from '../framework/plugin';
+import PluginFactory from '../framework/pluginFactory';
 
 export default {
   topBalloonIcon: PluginFactory(topBalloonIcon),
