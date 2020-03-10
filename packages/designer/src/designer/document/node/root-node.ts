@@ -59,12 +59,6 @@ export default class RootNode extends Node implements NodeParent {
   get props(): Props {
     return this._props as any;
   }
-  get extras(): Props {
-    return this._extras as any;
-  }
-  get directives(): Props {
-    return this._directives as any;
-  }
   internalSetParent(parent: null) {}
 
   constructor(readonly document: DocumentModel, rootSchema: RootSchema) {

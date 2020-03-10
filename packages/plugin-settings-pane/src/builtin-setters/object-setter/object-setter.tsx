@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { FieldConfig } from '../../main';
+import { FieldConfig, SettingField } from '../../main';
 
 class ObjectSetter extends Component<{
   mode?: 'popup' | 'row' | 'form';
@@ -29,6 +29,7 @@ interface ObjectSetterConfig {
 
 // for table|list row
 class RowSetter extends Component<{
+  decriptor?: string | ((rowField: SettingField) => string);
   config: ObjectSetterConfig;
   columnsLimit?: number;
 }> {

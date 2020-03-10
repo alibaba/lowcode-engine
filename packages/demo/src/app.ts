@@ -31,22 +31,12 @@ export default class App extends ViewController {
     SettingsPane
   };
 
-  editor = {
-    on(type: string, fn: any) {
-      emitter.on(type, fn);
-    }
-  }
+  editor = emitter;
 
   $didMount() {
     const designer = this.$refs.d.designer;
     const pane = this.$refs.pane;
     (window as any).LCDesigner = designer;
-    if (designer.project.activedDocument) {
-      emitter.emit('designer.actived-document-change', designer.project.activedDocument);
-    }
-    designer.project.onActivedDocumentChange((doc: any) => {
-      emitter.emit('designer.actived-document-change', doc);
-    });
     (this.editor as any).designer = designer;
     designer.dragon.from(pane, () => {
       return {

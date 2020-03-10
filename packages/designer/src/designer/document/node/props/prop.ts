@@ -140,6 +140,10 @@ export default class Prop implements IPropParent {
     this.dispose();
   }
 
+  getValue(serialize = true) {
+    // todo:
+  }
+
   private dispose() {
     const items = untracked(() => this._items);
     if (items) {

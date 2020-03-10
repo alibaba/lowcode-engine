@@ -41,11 +41,11 @@ export default class DocumentModel {
   }
 
   get fileName(): string {
-    return (this.rootNode.extras.get('fileName')?.value as string) || this.id;
+    return (this.rootNode.getExtraProp('fileName')?.getAsString()) || this.id;
   }
 
   set fileName(fileName: string) {
-    this.rootNode.extras.get('fileName', true).value = fileName;
+    this.rootNode.getExtraProp('fileName', true)?.setValue(fileName);
   }
 
   constructor(readonly project: Project, schema: RootSchema) {
@@ -290,7 +290,7 @@ export default class DocumentModel {
     return this.designer.getComponentType(componentName);
   }
 
-  @obx.ref private _opened: boolean = true;
+  @obx.ref private _opened: boolean = false;
   @obx.ref private _suspensed: boolean = false;
 
   /**
@@ -341,7 +341,11 @@ export default class DocumentModel {
    * 打开，已载入，默认建立时就打开状态，除非手动关闭
    */
   open(): void {
+    const originState = this._opened;
     this._opened = true;
+    if (originState === false) {
+      this.designer.postEvent('document-open', this);
+    }
     if (this._suspensed) {
       this.setSuspense(false);
     } else {

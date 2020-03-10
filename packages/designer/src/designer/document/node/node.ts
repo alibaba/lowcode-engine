@@ -1,14 +1,12 @@
 import { obx, computed, untracked } from '@recore/obx';
 import { NodeSchema, NodeData, PropsMap, PropsList } from '../../schema';
-import Props from './props/props';
+import Props, { EXTRA_KEY_PREFIX } from './props/props';
 import DocumentModel from '../document-model';
 import NodeChildren from './node-children';
 import Prop from './props/prop';
 import NodeContent from './node-content';
 import { Component } from '../../simulator';
 import { ComponentType } from '../../component-type';
-
-const DIRECTIVES = ['condition', 'conditionGroup', 'loop', 'loopArgs', 'title', 'ignore', 'hidden', 'locked'];
 
 /**
  * 基础节点
@@ -51,19 +49,10 @@ export default class Node {
    */
   readonly componentName: string;
   protected _props?: Props;
-  protected _directives?: Props;
-  protected _extras?: Props;
   protected _children: NodeChildren | NodeContent;
   @obx.ref private _parent: NodeParent | null = null;
-  @obx.ref private _zLevel = 0;
   get props(): Props | undefined {
     return this._props;
-  }
-  get directives(): Props | undefined {
-    return this._directives;
-  }
-  get extras(): Props | undefined {
-    return this._extras;
   }
   /**
    * 父级节点
@@ -88,7 +77,7 @@ export default class Node {
   }
 
   @computed get title(): string {
-    let t = this.getDirective('x-title');
+    let t = this.getExtraProp('title');
     if (!t && this.componentType.descriptor) {
       t = this.getProp(this.componentType.descriptor, false);
     }
@@ -111,15 +100,7 @@ export default class Node {
     this.componentName = componentName;
     this._slotFor = slotFor;
     if (isNodeParent(this)) {
-      this._props = new Props(this, props);
-      this._directives = new Props(this, {});
-      Object.keys(extras).forEach(key => {
-        if (DIRECTIVES.indexOf(key) > -1) {
-          this._directives!.add((extras as any)[key], key);
-          delete (extras as any)[key];
-        }
-      });
-      this._extras = new Props(this, extras as any);
+      this._props = new Props(this, props, extras);
       this._children = new NodeChildren(this as NodeParent, children || []);
     } else {
       this._children = new NodeContent(children);
@@ -197,22 +178,15 @@ export default class Node {
   /**
    * 节点组件描述
    */
-  @obx.ref get componentType(): ComponentType {
+  @computed get componentType(): ComponentType {
     return this.document.getComponentType(this.componentName, this.component);
   }
 
-  @obx.ref get propsData(): PropsMap | PropsList | null {
+  @computed get propsData(): PropsMap | PropsList | null {
     if (!this.isNodeParent || this.componentName === 'Fragment') {
       return null;
     }
-    return this.props?.value || null;
-  }
-
-  get directivesData(): PropsMap | null {
-    if (!this.isNodeParent) {
-      return null;
-    }
-    return this.directives?.value as PropsMap || null;
+    return this.props?.export(true).props || null;
   }
 
   private _conditionGroup: string | null = null;
@@ -261,6 +235,10 @@ export default class Node {
     return this.props?.query(path, useStash as any) || null;
   }
 
+  getExtraProp(key: string, useStash: boolean = true): Prop | null {
+    return this.props?.get(EXTRA_KEY_PREFIX + key, useStash) || null;
+  }
+
   /**
    * 获取单个属性值
    */
@@ -287,10 +265,6 @@ export default class Node {
    */
   setProps(props?: PropsMap | PropsList | null) {
     this.props?.import(props);
-  }
-
-  getDirective(name: string, useStash: boolean = true): Prop | null {
-    return this.directives?.get(name, useStash as any) || null;
   }
 
   /**
@@ -346,16 +320,7 @@ export default class Node {
     const { componentName, id, children, props, ...extras } = data;
 
     if (isNodeParent(this)) {
-      const directives: any = {};
-      Object.keys(extras).forEach(key => {
-        if (DIRECTIVES.indexOf(key) > -1) {
-          directives[key] = (extras as any)[key];
-          delete (extras as any)[key];
-        }
-      });
-      this._props!.import(data.props);
-      this._directives!.import(directives);
-      this._extras!.import(extras as any);
+      this._props!.import(props, extras);
       this._children.import(children, checkId);
     } else {
       this._children.import(children);
@@ -367,12 +332,11 @@ export default class Node {
    * @param serialize 序列化，加 id 标识符，用于储存为操作记录
    */
   export(serialize = false): NodeSchema {
-    // TODO...
+    const { props, extras } = this.props?.export(serialize) || {};
     const schema: any = {
       componentName: this.componentName,
-      ...this.extras?.export(serialize),
-      props: this.props?.export(serialize) || {},
-      ...this.directives?.export(serialize),
+      props,
+      ...extras,
     };
     if (serialize) {
       schema.id = this.id;
@@ -437,8 +401,6 @@ export default class Node {
       this.children.purge();
     }
     this.props?.purge();
-    this.directives?.purge();
-    this.extras?.purge();
     this.document.internalRemoveAndPurgeNode(this);
   }
 }
@@ -446,8 +408,6 @@ export default class Node {
 export interface NodeParent extends Node {
   readonly children: NodeChildren;
   readonly props: Props;
-  readonly directives: Props;
-  readonly extras: Props;
 }
 
 export function isNode(node: any): node is Node {

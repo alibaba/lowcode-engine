@@ -4,9 +4,9 @@ import { ComponentType } from '../../designer/src/designer/component-type';
 import Node from '../../designer/src/designer/document/node/node';
 import { TitleContent } from './title';
 import { ReactElement, ComponentType as ReactComponentType, isValidElement } from 'react';
-import DocumentModel from '../../designer/src/designer/document/document-model';
 import { isReactComponent } from '../../utils/is-react';
 import Designer from '../../designer/src/designer/designer';
+import { Selection } from '../../designer/src/designer/document/selection';
 
 export interface SettingTarget {
   // 所设置的节点集，至少一个
@@ -347,7 +347,6 @@ export function isSettingField(obj: any): obj is SettingField {
   return obj && obj.isSettingField;
 }
 
-
 export class SettingsMain implements SettingTarget {
   private emitter = new EventEmitter();
 
@@ -402,38 +401,26 @@ export class SettingsMain implements SettingTarget {
 
   private _designer?: Designer;
   get designer() {
-    return this._designer;
+    return this._designer || this.editor.designer;
   }
 
   constructor(readonly editor: any) {
-    let selectionChangeDispose: any = null;
-    const setupDoc = (doc: DocumentModel) => {
-      if (selectionChangeDispose) {
-        selectionChangeDispose();
-        selectionChangeDispose = null;
-      }
-      if (doc) {
+    const setupSelection = (selection?: Selection) => {
+      if (selection) {
         if (!this._designer) {
-          this._designer = doc.designer;
+          this._designer = selection.doc.designer;
         }
-        const selection = doc.selection;
         this.setup(selection.getNodes());
-        selectionChangeDispose = doc.selection.onSelectionChange(() => {
-          this.setup(selection.getNodes());
-        });
       } else {
         this.setup([]);
       }
     };
-    const activedDispose = editor.on('designer.actived-document-change', setupDoc);
+    editor.on('designer.current-selection-change', setupSelection);
     if (editor.designer) {
-      setupDoc(editor.designer.project.activedDocument);
+      setupSelection(editor.designer.currentSelection);
     }
     this.disposeListener = () => {
-      if (selectionChangeDispose) {
-        selectionChangeDispose();
-      }
-      activedDispose();
+      editor.removeListener('designer.current-selection-change', setupSelection);
     };
   }
 

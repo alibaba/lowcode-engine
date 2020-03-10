@@ -4,57 +4,63 @@ import DocumentModel from './document-model';
 import { EventEmitter } from 'events';
 
 export class Selection {
-  @obx.val private selected: string[] = [];
   private emitter = new EventEmitter();
+  @obx.val private _selected: string[] = [];
+  /**
+   * 选中的节点 id
+   */
+  get selected(): string[] {
+    return this._selected;
+  }
 
-  constructor(private doc: DocumentModel) {}
+  constructor(readonly doc: DocumentModel) {}
 
   /**
    * 选中
    */
   select(id: string) {
-    if (this.selected.length === 1 && this.selected.indexOf(id) > -1) {
+    if (this._selected.length === 1 && this._selected.indexOf(id) > -1) {
       // avoid cause reaction
       return;
     }
 
-    this.selected = [id];
-    this.emitter.emit('selectionchange');
+    this._selected = [id];
+    this.emitter.emit('selectionchange', this._selected);
   }
 
   /**
    * 批量选中
    */
   selectAll(ids: string[]) {
-    this.selected = ids;
-    this.emitter.emit('selectionchange');
+    this._selected = ids;
+    this.emitter.emit('selectionchange', this._selected);
   }
 
   /**
    * 清除选中
    */
   clear() {
-    if (this.selected.length < 1) {
+    if (this._selected.length < 1) {
       return;
     }
-    this.selected = [];
-    this.emitter.emit('selectionchange');
+    this._selected = [];
+    this.emitter.emit('selectionchange', this._selected);
   }
 
   /**
    * 整理选中
    */
   dispose() {
-    const l = this.selected.length;
+    const l = this._selected.length;
     let i = l;
     while (i-- > 0) {
-      const id = this.selected[i];
+      const id = this._selected[i];
       if (!this.doc.hasNode(id)) {
-        this.selected.splice(i, 1);
+        this._selected.splice(i, 1);
       }
     }
-    if (this.selected.length !== l) {
-      this.emitter.emit('selectionchange');
+    if (this._selected.length !== l) {
+      this.emitter.emit('selectionchange', this._selected);
     }
   }
 
@@ -62,29 +68,29 @@ export class Selection {
    * 添加选中
    */
   add(id: string) {
-    if (this.selected.indexOf(id) > -1) {
+    if (this._selected.indexOf(id) > -1) {
       return;
     }
 
-    this.selected.push(id);
-    this.emitter.emit('selectionchange');
+    this._selected.push(id);
+    this.emitter.emit('selectionchange', this._selected);
   }
 
   /**
    * 是否选中
    */
   has(id: string) {
-    return this.selected.indexOf(id) > -1;
+    return this._selected.indexOf(id) > -1;
   }
 
   /**
    * 移除选中
    */
   remove(id: string) {
-    let i = this.selected.indexOf(id);
+    let i = this._selected.indexOf(id);
     if (i > -1) {
-      this.selected.splice(i, 1);
-      this.emitter.emit('selectionchange');
+      this._selected.splice(i, 1);
+      this.emitter.emit('selectionchange', this._selected);
     }
   }
 
@@ -92,7 +98,7 @@ export class Selection {
    * 选区是否包含节点
    */
   containsNode(node: Node) {
-    for (const id of this.selected) {
+    for (const id of this._selected) {
       const parent = this.doc.getNode(id);
       if (parent?.contains(node)) {
         return true;
@@ -106,7 +112,7 @@ export class Selection {
    */
   getNodes() {
     const nodes = [];
-    for (const id of this.selected) {
+    for (const id of this._selected) {
       const node = this.doc.getNode(id);
       if (node) {
         nodes.push(node);
@@ -120,7 +126,7 @@ export class Selection {
    */
   getTopNodes() {
     const nodes = [];
-    for (const id of this.selected) {
+    for (const id of this._selected) {
       const node = this.doc.getNode(id);
       if (!node) {
         continue;

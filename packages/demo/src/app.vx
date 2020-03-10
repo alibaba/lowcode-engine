@@ -1,5 +1,6 @@
 <div className="editor">
   <DesignView
+    eventPipe={editor}
     defaultSchema={{
       componentsTree: [
         {
@@ -643,7 +644,7 @@
         },
       ],
     }}
-    componentDescriptionSpecs={[
+    componentsDescription={[
       {
         description: 'Button',
         npm: { package: '@ali/deep', subName: 'Button', destructuring: false, exportName: 'Next', version: '1.17.2' },

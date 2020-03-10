@@ -14,6 +14,7 @@ import { ComponentDescription, ComponentType } from './component-type';
 import Scroller, { IScrollable } from './helper/scroller';
 import { INodeSelector } from './simulator';
 import OffsetObserver, { createOffsetObserver } from './helper/offset-observer';
+import { EventEmitter } from 'events';
 
 export interface DesignerProps {
   className?: string;
@@ -24,12 +25,12 @@ export interface DesignerProps {
   simulatorComponent?: ReactComponentType<any>;
   dragGhostComponent?: ReactComponentType<any>;
   suspensed?: boolean;
-  componentDescriptionSpecs?: ComponentDescription[];
+  componentsDescription?: ComponentDescription[];
+  eventPipe?: EventEmitter;
   onMount?: (designer: Designer) => void;
   onDragstart?: (e: LocateEvent) => void;
   onDrag?: (e: LocateEvent) => void;
   onDragend?: (e: { dragObject: DragObject; copy: boolean }, loc?: Location) => void;
-  // TODO: ...add other events support
   [key: string]: any;
 }
 
@@ -40,7 +41,21 @@ export default class Designer {
   readonly hovering = new Hovering();
   readonly project: Project;
 
+  get currentDocument() {
+    return this.project.currentDocument;
+  }
+
+  get currentHistory() {
+    return this.currentDocument?.history;
+  }
+
+  get currentSelection() {
+    return this.currentDocument?.selection;
+  }
+
   constructor(props: DesignerProps) {
+    this.setProps(props);
+
     this.project = new Project(this, props.defaultSchema);
 
     this.dragon.onDragstart(e => {
@@ -53,12 +68,14 @@ export default class Designer {
       if (this.props?.onDragstart) {
         this.props.onDragstart(e);
       }
+      this.postEvent('dragstart', e);
     });
 
     this.dragon.onDrag(e => {
       if (this.props?.onDrag) {
         this.props.onDrag(e);
       }
+      this.postEvent('drag', e);
     });
 
     this.dragon.onDragend(e => {
@@ -84,6 +101,7 @@ export default class Designer {
       if (this.props?.onDragend) {
         this.props.onDragend(e, loc);
       }
+      this.postEvent('dragend', e, loc);
       this.hovering.enable = true;
     });
 
@@ -91,7 +109,30 @@ export default class Designer {
       node.document.simulator?.scrollToNode(node, detail);
     });
 
-    this.setProps(props);
+    let selectionDispose: undefined | (() => void);
+    const setupSelection = () => {
+      if (selectionDispose) {
+        selectionDispose();
+        selectionDispose = undefined;
+      }
+      if (this.currentSelection) {
+        const currentSelection = this.currentSelection;
+        selectionDispose = currentSelection.onSelectionChange(() => {
+          this.postEvent('current-selection-change', currentSelection);
+        });
+      }
+    }
+    this.project.onCurrentDocumentChange(() => {
+      this.postEvent('current-document-change', this.currentDocument);
+      this.postEvent('current-selection-change', this.currentSelection);
+      this.postEvent('current-history-change', this.currentHistory);
+      setupSelection();
+    });
+    setupSelection();
+  }
+
+  postEvent(event: string, ...args: any[]) {
+    this.props?.eventPipe?.emit(`designer.${event}`, ...args);
   }
 
   private _dropLocation?: Location;
@@ -128,7 +169,7 @@ export default class Designer {
    * 获得合适的插入位置
    */
   getSuitableInsertion() {
-    const activedDoc = this.project.activedDocument;
+    const activedDoc = this.project.currentDocument;
     if (!activedDoc) {
       return null;
     }
@@ -165,8 +206,8 @@ export default class Designer {
       if (props.suspensed !== this.props.suspensed && props.suspensed != null) {
         this.suspensed = props.suspensed;
       }
-      if (props.componentDescriptionSpecs !== this.props.componentDescriptionSpecs && props.componentDescriptionSpecs != null) {
-        this.buildComponentTypesMap(props.componentDescriptionSpecs);
+      if (props.componentsDescription !== this.props.componentsDescription && props.componentsDescription != null) {
+        this.buildComponentTypesMap(props.componentsDescription);
       }
     } else {
       // init hotkeys
@@ -182,8 +223,8 @@ export default class Designer {
       if (props.suspensed != null) {
         this.suspensed = props.suspensed;
       }
-      if (props.componentDescriptionSpecs != null) {
-        this.buildComponentTypesMap(props.componentDescriptionSpecs);
+      if (props.componentsDescription != null) {
+        this.buildComponentTypesMap(props.componentsDescription);
       }
     }
     this.props = props;

@@ -27,7 +27,7 @@ export default class Project {
     });
   }
 
-  @computed get activedDocument() {
+  @computed get currentDocument() {
     return this.documents.find(doc => doc.actived);
   }
 
@@ -111,7 +111,7 @@ export default class Project {
         doc.suspense();
       }
     });
-    this.emitter.emit('actived-document-change', actived);
+    this.emitter.emit('current-document-change', actived);
   }
 
   closeOthers(opened: DocumentModel) {
@@ -122,13 +122,14 @@ export default class Project {
     });
   }
 
+  onCurrentDocumentChange(fn: (doc: DocumentModel) => void): () => void {
+    this.emitter.on('current-document-change', fn);
+    return () => {
+      this.emitter.removeListener('current-document-change', fn);
+    };
+  }
   // 通知标记删除，需要告知服务端
   // 项目角度编辑不是全量打开所有文档，是按需加载，哪个更新就通知更新谁，
   // 哪个删除就
-  onActivedDocumentChange(fn: (doc: DocumentModel) => void): () => void {
-    this.emitter.on('actived-document-change', fn);
-    return () => {
-      this.emitter.removeListener('actived-document-change', fn);
-    };
-  }
+
 }
