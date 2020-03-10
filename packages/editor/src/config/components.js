@@ -1,5 +1,6 @@
 import logo from '../plugins/logo';
 import designer from '../plugins/designer';
+import undoRedo from '../plugins/undoRedo';
 import topBalloonIcon from '@ali/iceluna-addon-2';
 import topDialogIcon from '@ali/iceluna-addon-2';
 import leftPanelIcon from '@ali/iceluna-addon-2';
@@ -16,6 +17,7 @@ import PluginFactory from '../framework/pluginFactory';
 export default {
   logo: PluginFactory(logo),
   designer: PluginFactory(designer),
+  undoRedo: PluginFactory(undoRedo),
   topBalloonIcon: PluginFactory(topBalloonIcon),
   topDialogIcon: PluginFactory(topDialogIcon),
   leftPanelIcon: PluginFactory(leftPanelIcon),

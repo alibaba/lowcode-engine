@@ -40,7 +40,7 @@ export default class CenterArea extends PureComponent<CenterAreaProps> {
       <div className="lowcode-center-area">
         {visiblePluginList.map(item => {
           const Comp = this.editor.components[item.pluginKey];
-          return <Comp editor={this.editor} config={item} {...item.pluginProps} />;
+          return <Comp key={item.pluginKey} editor={this.editor} config={item} {...item.pluginProps} />;
         })}
       </div>
     );

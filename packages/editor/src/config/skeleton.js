@@ -67,6 +67,25 @@ export default {
         pluginProps: {}
       },
       {
+        pluginKey: 'undoRedo',
+        type: 'Custom',
+        props: {
+          align: 'right',
+          width: 90
+        },
+        config: {
+          package: '@ali/lowcode-plugin-undo-redo',
+          version: '1.0.0'
+        }
+      },
+      {
+        pluginKey: 'divider',
+        type: 'Divider',
+        props: {
+          align: 'right'
+        }
+      },
+      {
         pluginKey: 'topLinkIcon',
         type: 'LinkIcon',
         props: {
@@ -234,7 +253,13 @@ export default {
         pluginProps: {}
       }
     ],
-    centerArea: []
+    centerArea: [{
+      pluginKey: 'designer',
+      config: {
+        package: '@ali/lowcode-plugin-designer',
+        version: '1.0.0'
+      }
+    }]
   },
   hooks: [],
   shortCuts: []
