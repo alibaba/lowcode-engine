@@ -218,18 +218,27 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     // 事件路由
     doc.addEventListener('mousedown', (downEvent: MouseEvent) => {
       const nodeInst = this.getNodeInstanceFromElement(downEvent.target as Element);
-      if (!nodeInst?.node) {
-        selection.clear();
-        return;
-      }
-
+      const node = nodeInst?.node || this.document.rootNode;
       const isMulti = downEvent.metaKey || downEvent.ctrlKey;
       const isLeftButton = downEvent.which === 1 || downEvent.button === 0;
+      const checkSelect = (e: MouseEvent) => {
+        doc.removeEventListener('mouseup', checkSelect, true);
+        if (!isShaken(downEvent, e)) {
+          const id = node.id;
+          designer.activeTracker.track(node);
+          if (isMulti && !isRootNode(node) && selection.has(id)) {
+            selection.remove(id);
+          } else {
+            selection.select(id);
+          }
+        }
+      };
 
-      if (isLeftButton) {
-        const node: Node = nodeInst.node;
+      if (isLeftButton && !isRootNode(node)) {
         let nodes: Node[] = [node];
         let ignoreUpSelected = false;
+        // 排除根节点拖拽
+        selection.remove(this.document.rootNode.id);
         if (isMulti) {
           // multi select mode, directily add
           if (!selection.has(node.id)) {
@@ -257,20 +266,6 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
         }
       }
 
-      const checkSelect = (e: MouseEvent) => {
-        doc.removeEventListener('mouseup', checkSelect, true);
-        if (!isShaken(downEvent, e)) {
-          // const node = hasConditionFlow(target) ? target.conditionFlow : target;
-          const node = nodeInst.node!;
-          const id = node.id;
-          designer.activeTracker.track(node);
-          if (isMulti && selection.has(id)) {
-            selection.remove(id);
-          } else {
-            selection.select(id);
-          }
-        }
-      };
       doc.addEventListener('mouseup', checkSelect, true);
     });
 

@@ -6,6 +6,7 @@ import Title from './title';
 import SettingsPane, { registerSetter, createSetterContent, getSetter, createSettingFieldView } from './settings-pane';
 import Node from '../../designer/src/designer/document/node/node';
 import ArraySetter from './builtin-setters/array-setter';
+import ObjectSetter from './builtin-setters/object-setter';
 
 export default class SettingsMainView extends Component {
   private main: SettingsMain;
@@ -124,5 +125,6 @@ function selectNode(node: Node) {
 }
 
 registerSetter('ArraySetter', ArraySetter);
+registerSetter('ObjectSetter', ObjectSetter);
 
 export { registerSetter, createSetterContent, getSetter, createSettingFieldView };

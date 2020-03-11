@@ -1,9 +1,11 @@
-import { Component } from 'react';
+import { Component, Fragment } from 'react';
 import { Icon, Button, Message } from '@alifd/next';
 import Sortable from './sortable';
-import { SettingField, SetterType } from '../../main';
+import { SettingField, SetterType, FieldConfig } from '../../main';
 import './style.less';
 import { createSettingFieldView } from '../../settings-pane';
+import { PopupContext, PopupPipe } from '../../popup';
+import Title from '../../title';
 
 interface ArraySetterState {
   items: SettingField[];
@@ -45,7 +47,7 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
         const item = field.createField({
           ...props.itemConfig,
           name: i,
-          forceInline: 1,
+          forceInline: 2,
         });
         items[i] = item;
         itemsMap.set(item.id, item);
@@ -140,37 +142,39 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
     this.scrollToLast = false;
     const lastIndex = items.length - 1;
 
+    const content =
+      items.length > 0 ? (
+        <div className="lc-setter-list-scroll-body">
+          <Sortable itemClassName="lc-setter-list-card" onSort={this.onSort.bind(this)}>
+            {items.map((field, index) => (
+              <ArrayItem
+                key={field.id}
+                scrollIntoView={scrollToLast && index === lastIndex}
+                field={field}
+                onRemove={this.onRemove.bind(this, field)}
+              />
+            ))}
+          </Sortable>
+        </div>
+      ) : this.props.multiValue ? (
+        <Message type="warning">当前选择了多个节点，且值不一致，修改会覆盖所有值</Message>
+      ) : (
+        <Message type="notice">当前项目为空</Message>
+      );
+
     return (
       <div className="lc-setter-list lc-block-setter">
-        <div className="lc-block-setter-actions">
+        {/*<div className="lc-block-setter-actions">
           <Button size="medium" onClick={this.onAdd.bind(this)}>
             <Icon type="add" />
             <span>添加</span>
           </Button>
-        </div>
-        {this.props.multiValue && <Message type="warning">当前选择多个节点，且值不一致</Message>}
-        {items.length > 0 ? (
-          <div className="lc-setter-list-scroll-body">
-            <Sortable itemClassName="lc-setter-list-card" onSort={this.onSort.bind(this)}>
-              {items.map((field, index) => (
-                <ArrayItem
-                  key={field.id}
-                  scrollIntoView={scrollToLast && index === lastIndex}
-                  field={field}
-                  onRemove={this.onRemove.bind(this, field)}
-                />
-              ))}
-            </Sortable>
-          </div>
-        ) : (
-          <div className="lc-setter-list-empty">
-            列表为空
-            <Button size="small" onClick={this.onAdd.bind(this)}>
-              <Icon type="add" />
-              <span>添加</span>
-            </Button>
-          </div>
-        )}
+        </div>*/}
+        {content}
+        <Button className="lc-setter-list-add" type="primary" onClick={this.onAdd.bind(this)}>
+          <Icon type="add" />
+          <span>添加一项</span>
+        </Button>
       </div>
     );
   }
@@ -208,7 +212,11 @@ class ArrayItem extends Component<{
   }
 }
 
-class TableSetter extends ListSetter {}
+class TableSetter extends ListSetter {
+  // todo:
+  // forceInline = 1
+  // has more actions
+}
 
 export default class ArraySetter extends Component<{
   value: any[];
@@ -218,17 +226,52 @@ export default class ArraySetter extends Component<{
     defaultValue?: any | ((field: SettingField) => any);
     required?: boolean;
   };
-  mode?: 'popup' | 'list' | 'table';
+  mode?: 'popup' | 'list';
   forceInline?: boolean;
   multiValue?: boolean;
 }> {
+  static contextType = PopupContext;
+  private pipe: any;
   render() {
     const { mode, forceInline, ...props } = this.props;
+    const { field, itemConfig } = props;
     if (mode === 'popup' || forceInline) {
-      // todo popup
-      return <Button>编辑数组</Button>;
-    } else if (mode === 'table') {
-      return <TableSetter {...props} />;
+      const title = (
+        <Fragment>
+          编辑：
+          <Title title={field.title} />
+        </Fragment>
+      );
+      if (!this.pipe) {
+        let width = 360;
+        const setter: any = itemConfig?.setter;
+        if (setter?.componentName === 'ObjectSetter') {
+          const items: FieldConfig[] = setter.props?.config?.items;
+          if (items && Array.isArray(items)) {
+            const length = items.filter(item => item.required || item.important).length;
+            if (length === 3) {
+              width = 480;
+            } else if (length > 3) {
+              width = 600;
+            }
+          }
+        }
+        this.pipe = (this.context as PopupPipe).create({ width });
+      }
+      this.pipe.send(
+        <TableSetter key={field.id} {...props} />,
+        title,
+      );
+      return (
+        <Button
+          onClick={e => {
+            this.pipe.show((e as any).target);
+          }}
+        >
+          <Icon type="edit" />
+          {forceInline ? title : '编辑数组'}
+        </Button>
+      );
     } else {
       return <ListSetter {...props} />;
     }
