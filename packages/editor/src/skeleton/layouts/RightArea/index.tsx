@@ -4,6 +4,7 @@ import './index.scss';
 import Editor from '../../../framework/editor';
 import AreaManager from '../../../framework/areaManager';
 import { PluginConfig } from '../../../framework/definitions';
+import { isEmpty } from '../../../framework/utils';
 
 export interface RightAreaProps {
   editor: Editor;
@@ -31,7 +32,7 @@ export default class RightArea extends PureComponent<RightAreaProps, RightAreaSt
   componentDidMount() {
     this.editor.on('skeleton.update', this.handleSkeletonUpdate);
     this.editor.on('rightNav.change', this.handlePluginChange);
-    const visiblePluginList = this.areaManager.getVisiblePluginList();
+    const visiblePluginList = this.areaManager.getVisiblePluginList('TabPanel');
     const defaultKey = (visiblePluginList[0] && visiblePluginList[0].pluginKey) || 'componentAttr';
     this.handlePluginChange(defaultKey, true);
   }
@@ -126,33 +127,22 @@ export default class RightArea extends PureComponent<RightAreaProps, RightAreaSt
     return renderTitle();
   };
 
-  render() {
-    const visiblePluginList = this.areaManager.getVisiblePluginList();
-    if (visiblePluginList.length < 2) {
-      const pane = visiblePluginList[0];
-      if (!pane) {
-        return <div className="lowcode-right-area"></div>;
-      }
-      const Comp = this.editor.components[pane.pluginKey];
-      return (
-        <div className="lowcode-right-area">
-          <Comp editor={this.editor} config={pane} {...pane.pluginProps} />
-        </div>
-      );
+  renderTabPanels = (list:PluginConfig[], height: string):void => {
+    if (isEmpty(list)) {
+      return null;
     }
     return (
-      <div className="lowcode-right-area">
-        <Tab
+      <Tab
           shape="wrapped"
           className="right-tabs"
           style={{
-            height: '100%'
+            height
           }}
           activeKey={this.state.activeKey}
           lazyLoad={false}
           onChange={this.handlePluginChange}
         >
-          {visiblePluginList.map((item, idx) => {
+          {list.map((item, idx) => {
             const Comp = this.editor.components[item.pluginKey];
             return (
               <Tab.Item
@@ -165,6 +155,34 @@ export default class RightArea extends PureComponent<RightAreaProps, RightAreaSt
             );
           })}
         </Tab>
+    );
+  }
+
+  renderPanels = (list:PluginConfig[], height: string):void => {
+    return list.map((item) => {
+      const Comp = this.editor.components[item.pluginKey];
+      return (
+        <div className="right-panel" style={{height}} key={item.pluginKey}>
+           <Comp editor={this.editor} config={item} {...item.pluginProps} />
+        </div>
+      );
+    });
+  }
+
+  render() {
+    const tabList = this.areaManager.getVisiblePluginList('TabPanel');
+    const panelList = this.areaManager.getVisiblePluginList('Panel');
+    if (isEmpty(panelList) && isEmpty(tabList)) {
+      return null;
+    } else if (tabList.length === 1) {
+      panelList.unshift(tabList[0]);
+      tabList.splice(0, 1);
+    }
+    const height = `${Math.floor(100 / (panelList.length + (tabList.length > 0 ? 1 : 0)))}%`;
+    return (
+      <div className="lowcode-right-area">
+        {this.renderTabPanels(tabList, height)}
+        {this.renderPanels(panelList, height)}
       </div>
     );
   }

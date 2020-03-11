@@ -4,7 +4,7 @@ import './index.scss';
 import Editor from '../../../framework/editor';
 import { PluginConfig } from '../../../framework/definitions';
 import AreaManager from '../../../framework/areaManager';
-
+import { isEmpty } from '../../../framework/utils';
 export interface LeftAreaNavProps {
   editor: Editor;
 }
@@ -138,6 +138,9 @@ export default class LeftAreaNav extends PureComponent<LeftAreaNavProps, LeftAre
     const topList: Array<PluginConfig> = [];
     const bottomList: Array<PluginConfig> = [];
     const visiblePluginList = this.areaManager.getVisiblePluginList();
+    if (isEmpty(visiblePluginList)){
+      return null;
+    }
     visiblePluginList.forEach(item => {
       const align = item.props && item.props.align === 'bottom' ? 'bottom' : 'top';
       if (align === 'bottom') {

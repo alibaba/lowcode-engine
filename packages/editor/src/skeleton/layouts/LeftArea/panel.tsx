@@ -59,7 +59,7 @@ export default class LeftAreaPanel extends PureComponent<LeftAreaPanelProps, Lef
         {list.map((item, idx) => {
           const Comp = this.editor.components[item.pluginKey];
           return (
-            <Panel key={item.pluginKey} visible={item.pluginKey === activeKey}>
+            <Panel key={item.pluginKey} visible={item.pluginKey === activeKey} {...(item.props && item.props.panelProps)}>
               <Comp editor={this.editor} config={item} {...item.pluginProps} />
             </Panel>
           );

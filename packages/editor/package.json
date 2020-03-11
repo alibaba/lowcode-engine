@@ -7,6 +7,8 @@
     "@ali/iceluna-sdk": "^1.0.5-beta.26",
     "@alifd/next": "^1.x",
     "@alife/dpl-iceluna": "^2.3.2",
+    "@alife/theme-lowcode-dark": "^0.1.0",
+    "@alife/theme-lowcode-light": "^0.1.0",
     "@icedesign/theme": "^1.x",
     "events": "^3.1.0",
     "intl-messageformat": "^8.2.1",

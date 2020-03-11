@@ -6,7 +6,7 @@
   text-align: center;
   border-radius: 8px;
   border: 1px solid transparent;
-  color: #777;
+  color: $color-text1-3;
   &.disabled {
     cursor: not-allowed;
     color: $color-text1-1;
@@ -51,7 +51,7 @@
   }
   i.next-icon {
     &:before {
-      font-size: 17px;
+      font-size: 16px;
     }
     margin-right: 0;
     line-height: 18px;

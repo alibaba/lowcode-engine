@@ -1,8 +1,8 @@
 .lowcode-right-area {
   width: 300px;
   height: 100%;
-  background-color: #ffffff;
-  border-left: 1px solid #e8ebee;
+  background-color: $card-background;
+  border-left: 1px solid $color-line1-1;
   .right-plugin-title {
     &.locked {
       color: red !important;
@@ -14,6 +14,11 @@
       cursor: not-allowed;
       color: $color-text1-1;
     }
+  }
+
+  .right-panel {
+    overflow: auto;
+    border-top: 1px solid $color-line1-1;
   }
 
   //tab定义
@@ -37,7 +42,7 @@
         width: 25%;
         &.active {
           background: none;
-          border-bottom-color: #f7f7f7 !important;
+          border-bottom-color: $color-line1-1 !important;
         }
       }
     }

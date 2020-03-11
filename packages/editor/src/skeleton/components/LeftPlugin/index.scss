@@ -6,26 +6,14 @@
   position: relative;
   cursor: pointer;
   transition: all 0.3s ease;
-  color: #777;
+  color: $color-text1-3;
   &.collapse {
     height: 40px;
-    color: #8c8c8c;
-    border-bottom: 1px solid #bfbfbf;
+    border-bottom: 1px solid $color-line1-1;
+    opacity: 0.6;
   }
   &.locked {
     color: red !important;
-  }
-  &.active {
-    color: #fff !important;
-    background-color: $color-brand1-9 !important;
-    &.disabled {
-      color: #fff;
-      background-color: $color-fill1-7;
-    }
-  }
-  &.disabled {
-    cursor: not-allowed;
-    color: $color-text1-1;
   }
   &:hover {
     background-color: $color-brand1-1;
@@ -55,5 +43,17 @@
       border-right-color: rgba(0, 0, 0, 0.75);
       z-index: 100;
     }
+  }
+  &.active {
+    color: $color-white;
+    background-color: $color-brand1-9;
+    &.disabled {
+      color: $color-white;
+      background-color: $color-fill1-4;
+    }
+  }
+  &.disabled {
+    cursor: not-allowed;
+    color: $color-text1-1;
   }
 }
