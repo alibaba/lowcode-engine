@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import './index.scss';
 import Editor from '../../framework/index';
 import { PluginConfig } from '../../framework/definitions';

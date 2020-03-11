@@ -1,10 +1,9 @@
-import React, { PureComponent, createRef } from 'react';
+import React, { createRef, PureComponent } from 'react';
 
 import EditorContext from './context';
+import { I18nFunction, PluginConfig } from './definitions';
 import Editor from './editor';
-import { isEmpty, generateI18n, transformToPromise, acceptsRef } from './utils';
-import { PluginConfig, I18nFunction } from './definitions';
-import Editor from './index';
+import { acceptsRef, generateI18n, isEmpty, transformToPromise } from './utils';
 
 export interface PluginProps {
   editor: Editor;
@@ -19,12 +18,12 @@ export default function pluginFactory(
   Comp: React.ComponentType<PluginProps & InjectedPluginProps>
 ): React.ComponentType<PluginProps> {
   class LowcodePlugin extends PureComponent<PluginProps> {
-    static displayName = 'LowcodeEditorPlugin';
-    static defaultProps = {
+    public static displayName = 'LowcodeEditorPlugin';
+    public static defaultProps = {
       config: {}
     };
-    static contextType = EditorContext;
-    static init = Comp.init;
+    public static contextType = EditorContext;
+    public static init = Comp.init;
     public ref = createRef<React.Component>();
     private editor: Editor;
     private pluginKey: string;
@@ -47,28 +46,28 @@ export default function pluginFactory(
       });
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
       // 销毁插件
       if (this.editor && this.editor.plugins) {
         delete this.editor.plugins[this.pluginKey];
       }
     }
 
-    open = (): Promise<any> => {
+    public open = (): Promise<any> => {
       if (this.ref && this.ref.open && typeof this.ref.open === 'function') {
         return transformToPromise(this.ref.open());
       }
       return Promise.resolve();
     };
 
-    close = () => {
+    public close = () => {
       if (this.ref && this.ref.close && typeof this.ref.close === 'function') {
         return transformToPromise(this.ref.close());
       }
       return Promise.resolve();
     };
 
-    render() {
+    public render() {
       const { config } = this.props;
       const props = {
         i18n: this.i18n,

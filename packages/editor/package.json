@@ -8,8 +8,6 @@
     "@alifd/next": "^1.x",
     "@alife/dpl-iceluna": "^2.3.2",
     "@icedesign/theme": "^1.x",
-    "@types/react": "^16.8.3",
-    "@types/react-dom": "^16.8.2",
     "events": "^3.1.0",
     "intl-messageformat": "^8.2.1",
     "keymaster": "^1.6.2",
@@ -18,10 +16,13 @@
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
     "react-router-dom": "^5.1.2",
+    "serialize-javascript": "^3.0.0",
     "store": "^2.0.12"
   },
   "devDependencies": {
     "@ice/spec": "^0.1.1",
+    "@types/react": "^16.8.3",
+    "@types/react-dom": "^16.8.2",
     "@types/debug": "^4.1.5",
     "@types/events": "^3.0.0",
     "@types/store": "^2.0.2",

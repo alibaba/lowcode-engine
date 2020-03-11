@@ -190,7 +190,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps> {
                 id: 'next',
                 level: 2
               }
-            ],
+            ]
             // simulatorUrl: ['/statics/simulator-renderer.css', '/statics/simulator-renderer.js']
           }}
         />
