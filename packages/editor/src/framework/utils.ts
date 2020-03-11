@@ -1,14 +1,14 @@
 import IntlMessageFormat from 'intl-messageformat';
 import keymaster from 'keymaster';
-import { EditorConfig, LocaleType, I18nMessages, I18nFunction, ShortCutsConfig } from './definitions';
+import { EditorConfig, I18nFunction, I18nMessages, LocaleType, ShortCutsConfig } from './definitions';
 import Editor from './editor';
 
-import _pick from 'lodash/pick';
-import _deepEqual from 'lodash/isEqualWith';
 import _clone from 'lodash/cloneDeep';
-import _isEmpty from 'lodash/isEmpty';
-import _throttle from 'lodash/throttle';
 import _debounce from 'lodash/debounce';
+import _isEmpty from 'lodash/isEmpty';
+import _deepEqual from 'lodash/isEqualWith';
+import _pick from 'lodash/pick';
+import _throttle from 'lodash/throttle';
 
 export const pick = _pick;
 export const deepEqual = _deepEqual;
@@ -36,22 +36,14 @@ export interface IDEMessageParams {
   };
 }
 
-export interface Window {
-  sendIDEMessage: (IDEMessageParams) => void;
-  goldlog: {
-    record: (logKey: string, gmKey: string, goKey: string, method: 'GET' | 'POST') => void;
-  };
-  parent: Window;
-  is_theia: boolean;
-  vscode: boolean;
-}
-
-/**
+/*
  * 用于构造国际化字符串处理函数
  */
 export function generateI18n(locale: LocaleType = 'zh-CN', messages: I18nMessages = {}): I18nFunction {
-  return (key, values = {}) => {
-    if (!messages || !messages[key]) return '';
+  return (key: string, values): string => {
+    if (!messages || !messages[key]) {
+      return '';
+    }
     const formater = new IntlMessageFormat(messages[key], locale);
     return formater.format(values);
   };
@@ -61,10 +53,14 @@ export function generateI18n(locale: LocaleType = 'zh-CN', messages: I18nMessage
  * 序列化参数
  */
 export function serializeParams(obj: object): string {
-  if (typeof obj !== 'object') return '';
-  const res: Array<string> = [];
+  if (typeof obj !== 'object') {
+    return '';
+  }
+  const res: string[] = [];
   Object.entries(obj).forEach(([key, val]) => {
-    if (val === null || val === undefined || val === '') return;
+    if (val === null || val === undefined || val === '') {
+      return;
+    }
     if (typeof val === 'object') {
       res.push(`${encodeURIComponent(key)}=${encodeURIComponent(JSON.stringify(val))}`);
     } else {
@@ -81,8 +77,7 @@ export function serializeParams(obj: object): string {
  * @param {String} logKey 属性串
  */
 export function goldlog(gmKey: string, params: object = {}, logKey: string = 'other'): void {
-  const global = window as Window;
-  const sendIDEMessage = global.sendIDEMessage || global.parent.sendIDEMessage;
+  const sendIDEMessage = window.sendIDEMessage || window.parent.sendIDEMessage;
   const goKey = serializeParams({
     env: getEnv(),
     ...params
@@ -97,7 +92,9 @@ export function goldlog(gmKey: string, params: object = {}, logKey: string = 'ot
       }
     });
   }
-  global.goldlog && global.goldlog.record(`/iceluna.core.${logKey}`, gmKey, goKey, 'POST');
+  if (window.goldlog) {
+    window.goldlog.record(`/iceluna.core.${logKey}`, gmKey, goKey, 'POST');
+  }
 }
 
 /**
@@ -106,9 +103,13 @@ export function goldlog(gmKey: string, params: object = {}, logKey: string = 'ot
 export function getEnv(): string {
   const userAgent = navigator.userAgent;
   const isVscode = /Electron\//.test(userAgent);
-  if (isVscode) return ENV.VSCODE;
+  if (isVscode) {
+    return ENV.VSCODE;
+  }
   const isTheia = window.is_theia === true;
-  if (isTheia) return ENV.WEBIDE;
+  if (isTheia) {
+    return ENV.WEBIDE;
+  }
   return ENV.WEB;
 }
 
@@ -137,7 +138,9 @@ export function unRegistShortCuts(config: ShortCutsConfig): void {
  * 将函数返回结果转成promise形式，如果函数有返回值则根据返回值的bool类型判断是reject还是resolve，若函数无返回值默认执行resolve
  */
 export function transformToPromise(input: any): Promise<{}> {
-  if (input instanceof Promise) return input;
+  if (input instanceof Promise) {
+    return input;
+  }
   return new Promise((resolve, reject) => {
     if (input || input === undefined) {
       resolve();
@@ -153,13 +156,19 @@ export function transformToPromise(input: any): Promise<{}> {
 interface MapOf<T> {
   [propName: string]: T;
 }
-export function transformArrayToMap<T>(arr: Array<T>, key: string, overwrite: boolean = true): MapOf<T> {
-  if (isEmpty(arr) || !Array.isArray(arr)) return {};
+export function transformArrayToMap<T>(arr: T[], key: string, overwrite: boolean = true): MapOf<T> {
+  if (isEmpty(arr) || !Array.isArray(arr)) {
+    return {};
+  }
   const res = {};
   arr.forEach(item => {
     const curKey = item[key];
-    if (item[key] === undefined) return;
-    if (res[curKey] && !overwrite) return;
+    if (item[key] === undefined) {
+      return;
+    }
+    if (res[curKey] && !overwrite) {
+      return;
+    }
     res[curKey] = item;
   });
   return res;
@@ -172,16 +181,18 @@ interface Query {
   [propName: string]: string;
 }
 export function parseSearch(search: string): Query {
-  if (!search || typeof search !== 'string') return {};
+  if (!search || typeof search !== 'string') {
+    return {};
+  }
   const str = search.replace(/^\?/, '');
-  let paramStr = str.split('&');
-  let res = {};
-  for (let i = 0; i < paramStr.length; i++) {
-    let regRes = paramStr[i].split('=');
+  const paramStr = str.split('&');
+  const res = {};
+  paramStr.forEach(item => {
+    const regRes = item.split('=');
     if (regRes[0] && regRes[1]) {
       res[regRes[0]] = decodeURIComponent(regRes[1]);
     }
-  }
+  });
   return res;
 }
 
@@ -238,8 +249,8 @@ export function comboEditorConfig(defaultConfig: EditorConfig = {}, customConfig
  * @param {*} Comp 需要判断的组件
  */
 export function acceptsRef(Comp: React.ComponentType) {
-  const hasSymbol = typeof Symbol === 'function' && Symbol['for'];
-  const REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol['for']('react.forward_ref') : 0xead0;
+  const hasSymbol = typeof Symbol === 'function' && Symbol.for;
+  const REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
   return (
     (Comp.$$typeof && Comp.$$typeof === REACT_FORWARD_REF_TYPE) || (Comp.prototype && Comp.prototype.isReactComponent)
   );

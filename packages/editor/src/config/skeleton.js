@@ -213,13 +213,15 @@ export default {
         pluginProps: {}
       },
     ],
-    centerArea: [{
-      pluginKey: 'designer',
-      config: {
-        package: '@ali/lowcode-plugin-designer',
-        version: '1.0.0'
+    centerArea: [
+      {
+        pluginKey: 'designer',
+        config: {
+          package: '@ali/lowcode-plugin-designer',
+          version: '1.0.0'
+        }
       }
-    }]
+    ]
   },
   hooks: [],
   shortCuts: []

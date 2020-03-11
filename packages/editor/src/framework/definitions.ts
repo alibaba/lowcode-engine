@@ -106,7 +106,7 @@ export interface I18nConfig {
   'ja-JP'?: I18nMessages;
 }
 
-export type I18nFunction = (key: string, params: object) => string;
+export type I18nFunction = (key: string, params: any) => string;
 
 export interface Utils {
   [propName: string]: (...args) => any;
@@ -127,9 +127,9 @@ export interface PluginComponents {
 
 export interface PluginStatus {
   [propName: string]: {
-    disabled: boolean;
-    visible: boolean;
-    marked: boolean;
-    locked: boolean;
+    disabled?: boolean;
+    visible?: boolean;
+    marked?: boolean;
+    locked?: boolean;
   };
 }

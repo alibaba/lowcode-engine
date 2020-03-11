@@ -1,9 +1,9 @@
-import EventEmitter from 'events';
 import Debug from 'debug';
+import EventEmitter from 'events';
 import store from 'store';
-import { EditorConfig, Utils, PluginComponents, PluginStatus, LocaleType, HooksConfig } from './definitions';
+import { EditorConfig, HooksConfig, LocaleType, PluginComponents, PluginStatus, Utils } from './definitions';
 
-import { unRegistShortCuts, registShortCuts, transformToPromise } from './utils';
+import { registShortCuts, transformToPromise, unRegistShortCuts } from './utils';
 
 // 根据url参数设置debug选项
 const res = /_?debug=(.*?)(&|$)/.exec(location.search);
@@ -15,17 +15,19 @@ if (res && res[1]) {
   store.remove('debug');
 }
 
-//重要，用于矫正画布执行new Function的window对象上下文
+// 重要，用于矫正画布执行new Function的window对象上下文
 window.__newFunc = funContext => {
   return new Function(funContext);
 };
 
-//关闭浏览器前提醒,只有产生过交互才会生效
+// 关闭浏览器前提醒,只有产生过交互才会生效
 window.onbeforeunload = function(e) {
   e = e || window.event;
   // 本地调试不生效
-  if (location.href.indexOf('localhost') > 0) return;
-  var msg = '您确定要离开此页面吗？';
+  if (location.href.indexOf('localhost') > 0) {
+    return;
+  }
+  const msg = '您确定要离开此页面吗？';
   e.cancelBubble = true;
   e.returnValue = msg;
   if (e.stopPropagation) {
@@ -45,14 +47,12 @@ export interface HooksFuncs {
 }
 
 export default class Editor extends EventEmitter {
-  static getInstance = (config: EditorConfig, components: PluginComponents, utils?: Utils): Editor => {
+  public static getInstance = (config: EditorConfig, components: PluginComponents, utils?: Utils): Editor => {
     if (!instance) {
       instance = new Editor(config, components, utils);
     }
     return instance;
   };
-
-  private hooksFuncs: HooksFuncs;
 
   public pluginStatus: PluginStatus;
   public plugins: PluginComponents;
@@ -63,13 +63,15 @@ export default class Editor extends EventEmitter {
   public once: (msg: string, handler: (...args) => void) => void;
   public off: (msg: string, handler: (...args) => void) => void;
 
+  private hooksFuncs: HooksFuncs;
+
   constructor(public config: EditorConfig, public components: PluginComponents, public utils?: Utils) {
     super();
     instance = this;
     this.init();
   }
 
-  init(): Promise<any> {
+  public init(): Promise<any> {
     const { hooks, shortCuts = [], lifeCycles } = this.config || {};
     this.locale = store.get('lowcode-editor-locale') || 'zh-CN';
     // this.messages = this.messagesSet[this.locale];
@@ -92,24 +94,26 @@ export default class Editor extends EventEmitter {
       });
   }
 
-  destroy() {
+  public destroy() {
     debug('destroy');
     try {
       const { hooks = [], shortCuts = [], lifeCycles = {} } = this.config;
       unRegistShortCuts(shortCuts);
       this.destroyHooks(hooks);
-      lifeCycles.destroy && lifeCycles.destroy(this);
+      if (lifeCycles.destroy) {
+        lifeCycles.destroy(this);
+      }
     } catch (err) {
       console.warn(err);
       return;
     }
   }
 
-  get(key: string): any {
+  public get(key: string): any {
     return this[key];
   }
 
-  set(key: string | object, val: any): void {
+  public set(key: string | object, val: any): void {
     if (typeof key === 'string') {
       if (['init', 'destroy', 'get', 'set', 'batchOn', 'batchOff', 'batchOnce'].includes(key)) {
         console.error('init, destroy, get, set, batchOn, batchOff, batchOnce is private attribute');
@@ -123,22 +127,28 @@ export default class Editor extends EventEmitter {
     }
   }
 
-  batchOn(events: Array<string>, lisenter: (...args) => void): void {
-    if (!Array.isArray(events)) return;
+  public batchOn(events: string[], lisenter: (...args) => void): void {
+    if (!Array.isArray(events)) {
+      return;
+    }
     events.forEach(event => this.on(event, lisenter));
   }
 
-  batchOnce(events: Array<string>, lisenter: (...args) => void): void {
-    if (!Array.isArray(events)) return;
+  public batchOnce(events: string[], lisenter: (...args) => void): void {
+    if (!Array.isArray(events)) {
+      return;
+    }
     events.forEach(event => this.once(event, lisenter));
   }
 
-  batchOff(events: Array<string>, lisenter: (...args) => void): void {
-    if (!Array.isArray(events)) return;
+  public batchOff(events: string[], lisenter: (...args) => void): void {
+    if (!Array.isArray(events)) {
+      return;
+    }
     events.forEach(event => this.off(event, lisenter));
   }
 
-  //销毁hooks中的消息监听
+  // 销毁hooks中的消息监听
   private destroyHooks(hooks: HooksConfig = []) {
     hooks.forEach((item, idx) => {
       if (typeof this.hooksFuncs[idx] === 'function') {
@@ -148,7 +158,7 @@ export default class Editor extends EventEmitter {
     delete this.hooksFuncs;
   }
 
-  //初始化hooks中的消息监听
+  // 初始化hooks中的消息监听
   private initHooks(hooks: HooksConfig = []): void {
     this.hooksFuncs = hooks.map(item => {
       const func = (...args) => {
@@ -162,10 +172,12 @@ export default class Editor extends EventEmitter {
   private initPluginStatus() {
     const { plugins = {} } = this.config;
     const pluginAreas = Object.keys(plugins);
-    const res = {};
+    const res: PluginStatus = {};
     pluginAreas.forEach(area => {
       (plugins[area] || []).forEach(plugin => {
-        if (plugin.type === 'Divider') return;
+        if (plugin.type === 'Divider') {
+          return;
+        }
         const { visible, disabled, marked } = plugin.props || {};
         res[plugin.pluginKey] = {
           visible: typeof visible === 'boolean' ? visible : true,
