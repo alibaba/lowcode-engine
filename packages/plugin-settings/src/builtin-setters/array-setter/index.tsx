@@ -10,20 +10,20 @@ interface ArraySetterState {
   itemsMap: Map<string | number, SettingField>;
   prevLength: number;
 }
-export class ListSetter extends Component<
-  {
-    value: any[];
-    field: SettingField;
-    itemConfig?: {
-      setter?: SetterType;
-      defaultValue?: any | ((field: SettingField, editor: any) => any);
-      required?: boolean;
-    };
-    multiValue?: boolean;
-  },
-  ArraySetterState
-> {
-  static getDerivedStateFromProps(props: any, state: ArraySetterState) {
+
+interface ArraySetterProps {
+  value: any[];
+  field: SettingField;
+  itemConfig?: {
+    setter?: SetterType;
+    defaultValue?: any | ((field: SettingField) => any);
+    required?: boolean;
+  };
+  multiValue?: boolean;
+}
+
+export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
+  static getDerivedStateFromProps(props: ArraySetterProps, state: ArraySetterState) {
     const { value, field } = props;
     const newLength = value && Array.isArray(value) ? value.length : 0;
     if (state && state.prevLength === newLength) {
@@ -63,6 +63,12 @@ export class ListSetter extends Component<
     };
   }
 
+  state: ArraySetterState = {
+    items: [],
+    itemsMap: new Map<string | number, SettingField>(),
+    prevLength: 0,
+  };
+
   onSort(sortedIds: Array<string | number>) {
     const { itemsMap } = this.state;
     const items = sortedIds.map((id, index) => {
@@ -87,7 +93,7 @@ export class ListSetter extends Component<
     });
     items.push(item);
     itemsMap.set(item.id, item);
-    item.setValue(typeof defaultValue === 'function' ? defaultValue(item, item.editor) : defaultValue);
+    item.setValue(typeof defaultValue === 'function' ? defaultValue(item) : defaultValue);
     this.scrollToLast = true;
     this.setState({
       items: items.slice(),
@@ -202,17 +208,14 @@ class ArrayItem extends Component<{
   }
 }
 
-class TableSetter extends ListSetter {
+class TableSetter extends ListSetter {}
 
-}
-
-export default class ArraySetter extends Component<
-{
+export default class ArraySetter extends Component<{
   value: any[];
   field: SettingField;
   itemConfig?: {
     setter?: SetterType;
-    defaultValue?: any | ((field: SettingField, editor: any) => any);
+    defaultValue?: any | ((field: SettingField) => any);
     required?: boolean;
   };
   mode?: 'popup' | 'list' | 'table';

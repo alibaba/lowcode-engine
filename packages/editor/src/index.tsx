@@ -7,13 +7,14 @@ import config from './config/skeleton';
 import components from './config/components';
 import utils from './config/utils';
 import constants from './config/constants';
-import messages from './config/locale';
+import './config/locale';
+import './config/setters';
 
 import pkg from '../package.json';
 import './global.scss';
 import './config/theme.scss';
 
-window.__pkg = pkg;
+(window as any).__pkg = pkg;
 
 const ICE_CONTAINER = document.getElementById('ice-container');
 

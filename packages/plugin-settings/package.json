@@ -1,5 +1,5 @@
 {
-  "name": "@ali/lowcode-plugin-settings-pane",
+  "name": "@ali/lowcode-plugin-settings",
   "version": "0.0.0",
   "description": "xxx for Ali lowCode engine",
   "main": "src/index.tsx",

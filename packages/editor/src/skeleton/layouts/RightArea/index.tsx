@@ -128,6 +128,18 @@ export default class RightArea extends PureComponent<RightAreaProps, RightAreaSt
 
   render() {
     const visiblePluginList = this.areaManager.getVisiblePluginList();
+    if (visiblePluginList.length < 2) {
+      const pane = visiblePluginList[0];
+      if (!pane) {
+        return <div className="lowcode-right-area"></div>;
+      }
+      const Comp = this.editor.components[pane.pluginKey];
+      return (
+        <div className="lowcode-right-area">
+          <Comp editor={this.editor} config={pane} {...pane.pluginProps} />
+        </div>
+      );
+    }
     return (
       <div className="lowcode-right-area">
         <Tab

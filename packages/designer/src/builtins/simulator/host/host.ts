@@ -81,7 +81,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
   @computed get device(): string | undefined {
     // 根据 device 不同来做画布外框样式变化  渲染时可选择不同组件
     // renderer 依赖
-    return this.get('device');
+    return this.get('device') || 'default';
   }
 
   @computed get deviceClassName(): string | undefined {

@@ -66,7 +66,6 @@ export default class Skeleton extends PureComponent<SkeletonProps, SkeletonState
       this.editor.destroy();
     }
     const { utils, config, components } = this.props;
-    debugger;
     const editor = (this.editor = new Editor(comboEditorConfig(defaultConfig, config), components, {
       ...skeletonUtils,
       ...utils

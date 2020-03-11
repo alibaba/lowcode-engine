@@ -11,14 +11,22 @@ import {
   DynamicProps,
 } from './main';
 import { Field, FieldGroup } from './field';
+import { TitleContent } from './title';
 
-export type RegisteredSetter = CustomView | {
+export type RegisteredSetter = {
   component: CustomView;
-  props?: object;
+  defaultProps?: object;
+  title?: TitleContent;
 };
 
 const settersMap = new Map<string, RegisteredSetter>();
-export function registerSetter(type: string, setter: RegisteredSetter) {
+export function registerSetter(type: string, setter: CustomView | RegisteredSetter) {
+  if (isCustomView(setter)) {
+    setter = {
+      component: setter,
+      title: (setter as any).displayName || (setter as any).name || 'CustomSetter'
+    };
+  }
   settersMap.set(type, setter);
 }
 
@@ -29,15 +37,16 @@ export function getSetter(type: string): RegisteredSetter | null {
 export function createSetterContent(setter: any, props: object): ReactNode {
   if (typeof setter === 'string') {
     setter = getSetter(setter);
-    if (!isCustomView(setter)) {
-      if (setter.props) {
-        props = {
-          ...setter.props,
-          ...props,
-        };
-      }
-      setter = setter.component;
+    if (!setter) {
+      return null;
     }
+    if (setter.defaultProps) {
+      props = {
+        ...setter.defaultProps,
+        ...props,
+      };
+    }
+    setter = setter.component;
   }
 
   return createContent(setter, props);
@@ -71,12 +80,12 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     let firstRun: boolean = true;
     this.dispose = field.onEffect(() => {
       const state: any = {};
-      const { extraProps, editor } = field;
+      const { extraProps } = field;
       const { condition, defaultValue } = extraProps;
-      state.visible = field.isOne && typeof condition === 'function' ? !condition(field, editor) : true;
+      state.visible = field.isOne && typeof condition === 'function' ? !condition(field) : true;
       if (state.visible) {
         state.setterProps = {
-          ...(typeof setterProps === 'function' ? setterProps(field, editor) : setterProps),
+          ...(typeof setterProps === 'function' ? setterProps(field) : setterProps),
         };
         if (field.type === 'field') {
           if (defaultValue != null && !('defaultValue' in state.setterProps)) {
@@ -136,7 +145,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
           forceInline: extraProps.forceInline,
           key: field.id,
           // === injection
-          prop: field,
+          prop: field, // for compatible
           field,
           // === IO
           value, // reaction point
@@ -165,7 +174,7 @@ class SettingGroupView extends Component<{ field: SettingField }> {
     let firstRun: boolean = true;
     this.dispose = field.onEffect(() => {
       const state: any = {};
-      state.visible = field.isOne && typeof condition === 'function' ? !condition(field, field.editor) : true;
+      state.visible = field.isOne && typeof condition === 'function' ? !condition(field) : true;
       if (state.visible) {
         state.items = field.items.slice();
       }
@@ -216,7 +225,7 @@ export function createSettingFieldView(item: SettingField | CustomView, field: S
       return <SettingFieldView field={item} key={item.id} />;
     }
   } else {
-    return createContent(item, { key: index, field, editor: field.editor });
+    return createContent(item, { key: index, field });
   }
 }
 

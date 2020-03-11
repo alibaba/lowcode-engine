@@ -204,54 +204,14 @@ export default {
     ],
     rightArea: [
       {
-        pluginKey: 'rightPanel1',
+        pluginKey: 'settings',
         type: 'Panel',
-        props: {
-          title: '样式'
-        },
+        props: {},
         config: {
-          package: '@ali/iceluna-addon-2',
           version: '^1.0.0'
         },
         pluginProps: {}
       },
-      {
-        pluginKey: 'rightPanel2',
-        type: 'Panel',
-        props: {
-          title: '属性',
-          icon: 'dengpao'
-        },
-        config: {
-          package: '@ali/iceluna-addon-2',
-          version: '^1.0.0'
-        },
-        pluginProps: {}
-      },
-      {
-        pluginKey: 'rightPanel3',
-        type: 'Panel',
-        props: {
-          title: '事件'
-        },
-        config: {
-          package: '@ali/iceluna-addon-2',
-          version: '^1.0.0'
-        },
-        pluginProps: {}
-      },
-      {
-        pluginKey: 'rightPanel4',
-        type: 'Panel',
-        props: {
-          title: '数据'
-        },
-        config: {
-          package: '@ali/iceluna-addon-2',
-          version: '^1.0.0'
-        },
-        pluginProps: {}
-      }
     ],
     centerArea: [
       {
