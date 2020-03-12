@@ -1,0 +1,25 @@
+{
+  "name": "@ali/lowcode-engine-runtime",
+  "version": "0.0.1",
+  "description": "runtime for Ali lowCode engine",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "ava",
+    "test:snapshot": "ava --update-snapshots"
+  },
+  "ava": {
+    "compileEnhancements": false,
+    "snapshotDir": "test/fixtures/__snapshots__",
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  },
+  "license": "MIT"
+}
