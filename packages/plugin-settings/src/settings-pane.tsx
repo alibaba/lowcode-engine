@@ -12,6 +12,8 @@ import {
 } from './main';
 import { Field, FieldGroup } from './field';
 import { TitleContent } from './title';
+import { Balloon } from '@alifd/next';
+import PopupService from './popup';
 
 export type RegisteredSetter = {
   component: CustomView;
@@ -229,10 +231,6 @@ export function createSettingFieldView(item: SettingField | CustomView, field: S
   }
 }
 
-export function showPopup() {
-
-}
-
 export default class SettingsPane extends Component<{ target: SettingTarget }> {
   state: { items: Array<SettingField | CustomView> } = {
     items: [],
@@ -272,7 +270,12 @@ export default class SettingsPane extends Component<{ target: SettingTarget }> {
     const { target } = this.props;
     return (
       <div className="lc-settings-pane">
-        {items.map((item, index) => createSettingFieldView(item, target, index))}
+        {/* todo: add head for single use */}
+        <PopupService>
+          <div className="lc-settings-content">
+            {items.map((item, index) => createSettingFieldView(item, target, index))}
+          </div>
+        </PopupService>
       </div>
     );
   }

@@ -154,22 +154,55 @@ export class ComponentType {
             setter: 'StringSetter',
           },
           {
-            name: 'name',
-            title: '名称',
+            name: 'data',
+            title: '数据',
             setter: {
               componentName: 'ArraySetter',
               props: {
                 itemConfig: {
-                  setter: 'StringSetter',
-                  defaultValue: '',
+                  setter: {
+                    componentName: 'ObjectSetter',
+                    props: {
+                      config: {
+                        items: [
+                          {
+                            name: 'title',
+                            title: '名称',
+                            setter: 'StringSetter',
+                            important: true,
+                          },
+                          {
+                            name: 'records',
+                            title: '记录集',
+                            setter: {
+                              componentName: 'ArraySetter',
+                              props: {
+                                itemConfig: {
+                                  setter: {
+                                    componentName: 'ArraySetter',
+                                    props: {
+                                      itemConfig: {
+                                        setter: 'StringSetter',
+                                        defaultValue: '',
+                                      },
+                                    },
+                                  },
+                                  defaultValue: [],
+                                },
+                              },
+                            },
+                            important: true,
+                          },
+                        ],
+                        extraConfig: {},
+                      },
+                      // mode: 'popup'
+                    },
+                  },
+                  defaultValue: {},
                 },
               },
             },
-          },
-          {
-            name: 'size',
-            title: '大小',
-            setter: 'StringSetter',
           },
           {
             name: 'age',

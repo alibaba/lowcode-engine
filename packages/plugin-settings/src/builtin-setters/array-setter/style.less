@@ -8,13 +8,14 @@
     display: inline-flex;
     align-items: center;
     line-height: 1 !important;
+    max-width: 100%;
+    text-overflow: ellipsis;
   }
-  .lc-setter-list-empty {
-    text-align: center;
-    padding: 10px;
-    .next-btn {
-      margin-left: 5px;
-    }
+
+  .lc-setter-list-add {
+    display: block;
+    width: 100%;
+    margin-top: 8px;;
   }
 
   .lc-setter-list-scroll-body {
@@ -28,14 +29,16 @@
     border: 1px solid rgba(31,56,88,.2);
     background-color: var(--color-block-background-light);
     border-radius: 3px;
-    margin-bottom: 8px;
+    &:not(:last-child) {
+      margin-bottom: 5px;
+    }
 
     .lc-listitem {
       position: relative;
       outline: none;
       display: flex;
       align-items: stretch;
-      height: 32px;
+      height: 34px;
 
       .lc-listitem-actions {
         margin: 0 3px;
@@ -54,9 +57,20 @@
       .lc-listitem-body {
         flex: 1;
         display: flex;
-        align-items: center;
+        align-items: stretch;
         overflow: hidden;
+        min-width: 0;
         text-overflow: ellipsis;
+        .lc-field {
+          padding: 0 !important;
+        }
+        > * {
+          width: 100%;
+        }
+        .next-btn {
+          display: block;
+          width: 100%;
+        }
       }
       .lc-listitem-handler {
         margin-left: 2px;

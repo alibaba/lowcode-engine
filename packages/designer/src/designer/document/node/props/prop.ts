@@ -76,7 +76,7 @@ export default class Prop implements IPropParent {
       }
       return this.items!.map(prop => {
         const v = prop.export(serialize);
-        return v === UNSET ? null : v
+        return v === UNSET ? null : v;
       });
     }
 
@@ -96,7 +96,7 @@ export default class Prop implements IPropParent {
     return JSON.stringify(this.value);
   }
   set code(val) {
-
+    // todo
   }
 
   @computed getAsString(): string {
@@ -205,6 +205,7 @@ export default class Prop implements IPropParent {
     if (this.type === 'list') {
       return this.size === other.size ? 1 : 2;
     }
+
     // 'literal' | 'map' | 'expression' | 'slot'
     return this.code === other.code ? 0 : 2;
   }
@@ -548,7 +549,7 @@ export function isProp(obj: any): obj is Prop {
   return obj && obj.isProp;
 }
 
-function isValidArrayIndex(key: any, limit: number = -1): key is number {
+function isValidArrayIndex(key: any, limit = -1): key is number {
   const n = parseFloat(String(key));
   return n >= 0 && Math.floor(n) === n && isFinite(n) && (limit < 0 || n < limit);
 }
