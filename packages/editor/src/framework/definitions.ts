@@ -9,7 +9,7 @@ export interface EditorConfig {
   shortCuts?: ShortCutsConfig;
   utils?: UtilsConfig;
   constants?: ConstantsConfig;
-  lifeCycles?: lifeCyclesConfig;
+  lifeCycles?: LifeCyclesConfig;
   i18n?: I18nConfig;
 }
 
@@ -38,7 +38,7 @@ export interface ThemeConfig {
 }
 
 export interface PluginsConfig {
-  [propName: string]: Array<PluginConfig>;
+  [propName: string]: PluginConfig[];
 }
 
 export interface PluginConfig {
@@ -63,7 +63,7 @@ export interface PluginConfig {
   pluginProps?: object;
 }
 
-export type HooksConfig = Array<HookConfig>;
+export type HooksConfig = HookConfig[];
 
 export interface HookConfig {
   message: string;
@@ -71,14 +71,14 @@ export interface HookConfig {
   handler: (editor: Editor, ...args) => void;
 }
 
-export type ShortCutsConfig = Array<ShortCutConfig>;
+export type ShortCutsConfig = ShortCutConfig[];
 
 export interface ShortCutConfig {
   keyboard: string;
   handler: (editor: Editor, ev: React.KeyboardEventHandler<HTMLElement>, keymaster: any) => void;
 }
 
-export type UtilsConfig = Array<UtilConfig>;
+export type UtilsConfig = UtilConfig[];
 
 export interface UtilConfig {
   name: string;
@@ -88,7 +88,7 @@ export interface UtilConfig {
 
 export type ConstantsConfig = object;
 
-export interface lifeCyclesConfig {
+export interface LifeCyclesConfig {
   init?: (editor: Editor) => any;
   destroy?: (editor: Editor) => any;
 }
@@ -114,7 +114,7 @@ export interface Utils {
 
 export interface PluginClass extends React.ComponentClass<{
   editor: Editor;
-  [key: string]: any
+  [key: string]: any;
 }> {
   init?: (editor: Editor) => void;
   open?: () => any;
@@ -133,3 +133,4 @@ export interface PluginStatus {
     locked?: boolean;
   };
 }
+

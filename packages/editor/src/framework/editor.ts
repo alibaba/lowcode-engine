@@ -17,8 +17,10 @@ if (res && res[1]) {
 
 // 重要，用于矫正画布执行new Function的window对象上下文
 window.__newFunc = funContext => {
-  return new Function(funContext);
+return new Function(funContext);
 };
+
+
 
 // 关闭浏览器前提醒,只有产生过交互才会生效
 window.onbeforeunload = function(e) {

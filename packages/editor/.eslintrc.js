@@ -1,8 +1,8 @@
-const { eslint, deepmerge } = require('@ice/spec');
+const { tslint, deepmerge } = require('@ice/spec');
 
-module.exports = deepmerge(eslint, {
+module.exports = deepmerge(tslint, {
   rules: {
     "global-require": 0,
-    "interface-name" : [true, "never-prefix"]
+    "@typescript-eslint/interface-name-prefix": 0
   },
 });
