@@ -25,7 +25,7 @@ export default class ObjectSetter extends Component<{
       }
     } else {
       // form
-      return <FormSetter />;
+      return <FormSetter {...props} />;
     }
   }
 }
@@ -77,31 +77,26 @@ class RowSetter extends Component<RowSetterProps> {
       this.items = items;
     }
 
-    if (descriptor) {
-      if (typeof descriptor === 'function') {
-        let firstRun: boolean = true;
-        field.onEffect(() => {
-          const state = {
-            descriptor: descriptor(field),
-          };
-          if (firstRun) {
-            firstRun = false;
-            this.state = state;
-          } else {
-            this.setState(state);
-          }
-        });
+    let firstRun: boolean = true;
+    field.onEffect(() => {
+      let state: any = {};
+      if (descriptor) {
+        if (typeof descriptor === 'function') {
+          state.descriptor = descriptor(field);
+        } else {
+          state.descriptor = field.getPropValue(descriptor);
+        }
       } else {
-        this.state = {
-          descriptor,
-        };
+        state.descriptor = field.title;
       }
-    } else {
-      // todo: onEffect change field.name
-      this.state = {
-        descriptor: field.title || `项目 ${field.name}`,
-      };
-    }
+
+      if (firstRun) {
+        firstRun = false;
+        this.state = state;
+      } else {
+        this.setState(state);
+      }
+    });
   }
 
   shouldComponentUpdate(_: any, nextState: any) {
@@ -114,7 +109,7 @@ class RowSetter extends Component<RowSetterProps> {
   private pipe: any;
   render() {
     const items = this.items;
-    const { field, primaryButton } = this.props;
+    const { field, primaryButton, config } = this.props;
 
     if (!this.pipe) {
       this.pipe = (this.context as PopupPipe).create({ width: 320 });
@@ -127,7 +122,7 @@ class RowSetter extends Component<RowSetterProps> {
       </Fragment>
     );
 
-    this.pipe.send(<FormSetter key={field.id} />, title);
+    this.pipe.send(<FormSetter key={field.id} field={field} config={config} />, title);
 
     if (items) {
       return (
@@ -135,7 +130,7 @@ class RowSetter extends Component<RowSetterProps> {
           <div
             className="lc-setter-object-row-edit"
             onClick={e => {
-              this.pipe.show((e as any).target);
+              this.pipe.show((e as any).target, field.id);
             }}
           >
             <Icon size="small" type="edit" />
@@ -149,7 +144,7 @@ class RowSetter extends Component<RowSetterProps> {
       <Button
         type={primaryButton === false ? 'normal' : 'primary'}
         onClick={e => {
-          this.pipe.show((e as any).target);
+          this.pipe.show((e as any).target, field.id);
         }}
       >
         <Icon type="edit" />
@@ -159,9 +154,30 @@ class RowSetter extends Component<RowSetterProps> {
   }
 }
 
-// form-field setter
-class FormSetter extends Component<{}> {
+interface FormSetterProps {
+  field: SettingField;
+  config: ObjectSetterConfig;
+}
+class FormSetter extends Component<FormSetterProps> {
+  private items: SettingField[];
+  constructor(props: RowSetterProps) {
+    super(props);
+    const { config, field } = props;
+    this.items = (config.items || []).map(conf => field.createField(conf));
+
+    // TODO: extraConfig for custom fields
+  }
+
+  shouldComponentUpdate() {
+    return false;
+  }
+
   render() {
-    return 'yes';
+    const { field } = this.props;
+    return (
+      <div className="lc-setter-object lc-block-setter">
+        {this.items.map((item, index) => createSettingFieldView(item, field, index))}
+      </div>
+    );
   }
 }

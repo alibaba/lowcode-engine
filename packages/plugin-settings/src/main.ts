@@ -200,7 +200,8 @@ export class SettingField implements SettingTarget {
     }
     // initial self properties
     this._name = name;
-    this.title = title || String(name);
+    // make this reactive
+    this.title = title || (typeof name === 'number' ? `项目 ${name}` : name);
     this.setter = setter;
     this.extraProps = {
       ...rest,

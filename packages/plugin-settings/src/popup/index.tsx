@@ -26,10 +26,11 @@ export class PopupPipe {
           });
         }
       },
-      show: (target: Element) => {
+      show: (target: Element, actionKey?: string) => {
         this.currentId = id;
         this.popup({
           ...props,
+          actionKey,
           content: sendContent,
           title: sendTitle,
         }, target);
@@ -55,7 +56,7 @@ export class PopupPipe {
   }
 }
 
-export default class PopupService extends Component<{ safeId?: string }> {
+export default class PopupService extends Component<{ actionKey?: string; safeId?: string }> {
   private popupPipe = new PopupPipe();
 
   componentWillUnmount() {
@@ -63,10 +64,11 @@ export default class PopupService extends Component<{ safeId?: string }> {
   }
 
   render() {
+    const { children, actionKey, safeId } = this.props;
     return (
       <PopupContext.Provider value={this.popupPipe}>
-        {this.props.children}
-        <PopupContent safeId={this.props.safeId} />
+        {children}
+        <PopupContent key={'pop' + actionKey} safeId={safeId} />
       </PopupContext.Provider>
     );
   }
@@ -100,7 +102,7 @@ export class PopupContent extends PureComponent<{ safeId?: string }> {
   }
 
   render() {
-    const { content, visible, width, title, pos } = this.state;
+    const { content, visible, width, title, pos, actionKey } = this.state;
     if (!visible) {
       return null;
     }
@@ -116,7 +118,6 @@ export class PopupContent extends PureComponent<{ safeId?: string }> {
         className="lc-ballon"
         align="l"
         id={this.props.safeId}
-        safeId={this.props.safeId}
         safeNode={id}
         visible={visible}
         style={{ width }}
@@ -135,7 +136,7 @@ export class PopupContent extends PureComponent<{ safeId?: string }> {
         shouldUpdatePosition
       >
         <div className="lc-ballon-title">{title}</div>
-        <div className="lc-ballon-content"><PopupService safeId={id}>{content}</PopupService></div>
+        <div className="lc-ballon-content"><PopupService actionKey={actionKey} safeId={id}>{content}</PopupService></div>
       </Balloon>
     );
   }

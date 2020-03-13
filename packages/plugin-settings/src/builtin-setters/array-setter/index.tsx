@@ -137,6 +137,8 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
       // check is ObjectSetter then check if show columns
     }
 
+    console.info(this.state.items);
+
     const { items } = this.state;
     const scrollToLast = this.scrollToLast;
     this.scrollToLast = false;
@@ -265,7 +267,7 @@ export default class ArraySetter extends Component<{
       return (
         <Button
           onClick={e => {
-            this.pipe.show((e as any).target);
+            this.pipe.show((e as any).target, field.id);
           }}
         >
           <Icon type="edit" />

@@ -81,7 +81,7 @@ export default class Props implements IPropParent {
     });
   }
 
-  export(serialize = false): { props?: PropsMap | PropsList; extras?: object} {
+  export(serialize = false): { props?: PropsMap | PropsList; extras?: object } {
     if (this.items.length < 1) {
       return {};
     }
@@ -126,15 +126,17 @@ export default class Props implements IPropParent {
       });
     }
 
-    return  { props, extras };
+    return { props, extras };
   }
 
   /**
    * 根据 path 路径查询属性
    *
-   * @useStash 如果没有则临时生成一个
+   * @param stash 如果没有则临时生成一个
    */
-  query(path: string, useStash: boolean = true): Prop | null {
+  query(path: string, stash = true): Prop | null {
+    return this.get(path, stash);
+    // todo: future support list search
     let matchedLength = 0;
     let firstMatched = null;
     if (this.items) {
@@ -165,7 +167,7 @@ export default class Props implements IPropParent {
     if (firstMatched) {
       ret = firstMatched.get(path.slice(matchedLength + 1), true);
     }
-    if (!ret && useStash) {
+    if (!ret && stash) {
       return this.stash.get(path);
     }
 
@@ -174,10 +176,26 @@ export default class Props implements IPropParent {
 
   /**
    * 获取某个属性, 如果不存在，临时获取一个待写入
-   * @param useStash 强制
+   * @param stash 强制
    */
-  get(name: string, useStash = false): Prop | null {
-    return this.maps.get(name) || (useStash && this.stash.get(name)) || null;
+  get(path: string, stash = false): Prop | null {
+    let entry = path;
+    let nest = '';
+    const i = path.indexOf('.');
+    if (i > 0) {
+      nest = path.slice(i + 1);
+      if (nest) {
+        entry = path.slice(0, i);
+      }
+    }
+
+    const prop = this.maps.get(entry) || (stash && this.stash.get(entry)) || null;
+
+    if (prop) {
+      return nest ? prop.get(nest, stash) : prop;
+    }
+
+    return null;
   }
 
   /**

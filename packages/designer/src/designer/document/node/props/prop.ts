@@ -205,6 +205,9 @@ export default class Prop implements IPropParent {
     if (this.type === 'list') {
       return this.size === other.size ? 1 : 2;
     }
+    if (this.type === 'map') {
+      return 1;
+    }
 
     // 'literal' | 'map' | 'expression' | 'slot'
     return this.code === other.code ? 0 : 2;
@@ -286,25 +289,12 @@ export default class Prop implements IPropParent {
    */
   get(path: string | number, stash = true): Prop | null {
     const type = this._type;
-    // todo: support list get
     if (type !== 'map' && type !== 'list' && type !== 'unset' && !stash) {
       return null;
     }
 
     const maps = type === 'map' ? this.maps : null;
     const items = type === 'list' ? this.items : null;
-    let prop: any;
-    if (type === 'list') {
-      if (isValidArrayIndex(path, this.size)) {
-        prop = items![path];
-      }
-    } else if (type === 'map') {
-      prop = maps?.get(path);
-    }
-
-    if (prop) {
-      return prop;
-    }
 
     let entry = path;
     let nest = '';
@@ -314,20 +304,21 @@ export default class Prop implements IPropParent {
         nest = path.slice(i + 1);
         if (nest) {
           entry = path.slice(0, i);
-
-          if (type === 'list') {
-            if (isValidArrayIndex(entry, this.size)) {
-              prop = items![entry];
-            }
-          } else if (type === 'map') {
-            prop = maps?.get(entry);
-          }
-
-          if (prop) {
-            return prop.get(nest, stash);
-          }
         }
       }
+    }
+
+    let prop: any;
+    if (type === 'list') {
+      if (isValidArrayIndex(entry, this.size)) {
+        prop = items![entry];
+      }
+    } else if (type === 'map') {
+      prop = maps?.get(entry);
+    }
+
+    if (prop) {
+      return nest ? prop.get(nest, stash) : prop;
     }
 
     if (stash) {
@@ -549,7 +540,7 @@ export function isProp(obj: any): obj is Prop {
   return obj && obj.isProp;
 }
 
-function isValidArrayIndex(key: any, limit = -1): key is number {
+export function isValidArrayIndex(key: any, limit = -1): key is number {
   const n = parseFloat(String(key));
   return n >= 0 && Math.floor(n) === n && isFinite(n) && (limit < 0 || n < limit);
 }
