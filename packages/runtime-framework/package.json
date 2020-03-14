@@ -21,5 +21,8 @@
       "ts-node/register"
     ]
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@ali/recore": "^1.6.9"
+  }
 }
