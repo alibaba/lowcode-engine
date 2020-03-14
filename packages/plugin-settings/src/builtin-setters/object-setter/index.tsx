@@ -34,7 +34,6 @@ interface ObjectSetterConfig {
   items?: FieldConfig[];
   extraConfig?: {
     setter?: SetterType;
-    defaultValue?: any | ((field: SettingField, editor: any) => any);
   };
 }
 
@@ -62,7 +61,7 @@ class RowSetter extends Component<RowSetterProps> {
       const l = Math.min(config.items.length, columns);
       for (let i = 0; i < l; i++) {
         const conf = config.items[i];
-        if (conf.required || conf.important) {
+        if (conf.isRequired || conf.important) {
           const item = field.createField({
             ...conf,
             // in column-cell

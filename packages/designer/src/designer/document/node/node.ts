@@ -6,7 +6,7 @@ import NodeChildren from './node-children';
 import Prop from './props/prop';
 import NodeContent from './node-content';
 import { Component } from '../../simulator';
-import { ComponentType } from '../../component-type';
+import { ComponentMeta } from '../../component-meta';
 
 /**
  * 基础节点
@@ -78,8 +78,8 @@ export default class Node {
 
   @computed get title(): string {
     let t = this.getExtraProp('title');
-    if (!t && this.componentType.descriptor) {
-      t = this.getProp(this.componentType.descriptor, false);
+    if (!t && this.componentMeta.descriptor) {
+      t = this.getProp(this.componentMeta.descriptor, false);
     }
     if (t) {
       const v = t.getAsString();
@@ -87,7 +87,7 @@ export default class Node {
         return v;
       }
     }
-    return this.componentType.title;
+    return this.componentMeta.title;
   }
 
   get isSlotRoot(): boolean {
@@ -157,7 +157,7 @@ export default class Node {
   /**
    * 悬停高亮
    */
-  hover(flag: boolean = true) {
+  hover(flag = true) {
     if (flag) {
       this.document.designer.hovering.hover(this);
     } else {
@@ -168,18 +168,18 @@ export default class Node {
   /**
    * 节点组件类
    */
-  @obx.ref get component(): Component | null {
+  @obx.ref get component(): Component {
     if (this.isNodeParent) {
-      return this.document.getComponent(this.componentName);
+      return this.document.getComponent(this.componentName) || this.componentName;
     }
-    return null;
+    return this.componentName;
   }
 
   /**
    * 节点组件描述
    */
-  @computed get componentType(): ComponentType {
-    return this.document.getComponentType(this.componentName, this.component);
+  @computed get componentMeta(): ComponentMeta {
+    return this.document.getComponentMeta(this.componentName);
   }
 
   @computed get propsData(): PropsMap | PropsList | null {
@@ -223,19 +223,19 @@ export default class Node {
   }
 
   wrapWith(schema: NodeSchema) {
-
+    // todo
   }
 
-  replaceWith(schema: NodeSchema, migrate: boolean = true) {
+  replaceWith(schema: NodeSchema, migrate = true) {
     // reuse the same id? or replaceSelection
     //
   }
 
-  getProp(path: string, useStash: boolean = true): Prop | null {
+  getProp(path: string, useStash = true): Prop | null {
     return this.props?.query(path, useStash as any) || null;
   }
 
-  getExtraProp(key: string, useStash: boolean = true): Prop | null {
+  getExtraProp(key: string, useStash = true): Prop | null {
     return this.props?.get(EXTRA_KEY_PREFIX + key, useStash) || null;
   }
 
@@ -316,7 +316,7 @@ export default class Node {
     this.import(data);
   }
 
-  import(data: NodeSchema, checkId: boolean = false) {
+  import(data: NodeSchema, checkId = false) {
     const { componentName, id, children, props, ...extras } = data;
 
     if (isNodeParent(this)) {
@@ -514,4 +514,3 @@ export function insertChildren(
   }
   return results;
 }
-

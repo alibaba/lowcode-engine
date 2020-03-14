@@ -7,7 +7,7 @@ import { RootSchema, NpmInfo } from '../../../designer/schema';
 import { getClientRects } from '../../../utils/get-client-rects';
 import { Asset } from '../utils/asset';
 import loader from '../utils/loader';
-import { ComponentDescription } from '../../../designer/component-type';
+import { ComponentMetadata } from '../../../designer/component-meta';
 import { reactFindDOMNodes, FIBER_KEY } from '../utils/react-find-dom-nodes';
 import { isESModule } from '../../../../../utils/is-es-module';
 import { NodeInstance } from '../../../designer/simulator';
@@ -39,13 +39,13 @@ export class SimulatorRenderer {
 
       // sync device
     });
-    host.componentsConsumer.consume(async (componentsAsset) => {
+    host.componentsConsumer.consume(async componentsAsset => {
       if (componentsAsset) {
         await this.load(componentsAsset);
         this.buildComponents();
       }
     });
-    host.injectionConsumer.consume((data) => {
+    host.injectionConsumer.consume(data => {
       // sync utils, i18n, contants,... config
       this._appContext = {
         utils: {},
@@ -142,7 +142,7 @@ export class SimulatorRenderer {
         origUnmount = origUnmount.origUnmount;
       }
       // hack! delete instance from map
-      const newUnmount = function (this: any) {
+      const newUnmount = function(this: any) {
         unmountIntance(id, instance);
         origUnmount && origUnmount.call(this);
       };
@@ -204,7 +204,7 @@ export class SimulatorRenderer {
     cursor.release();
   }
 
-  private _running: boolean = false;
+  private _running = false;
   run() {
     if (this._running) {
       return;
@@ -281,14 +281,13 @@ function findComponent(componentName: string, npm?: NpmInfo) {
   return getSubComponent(library, paths);
 }
 
-function buildComponents(componentsMap: { [componentName: string]: ComponentDescription }) {
+function buildComponents(componentsMap: { [componentName: string]: NpmInfo }) {
   const components: any = {};
   Object.keys(componentsMap).forEach(componentName => {
-    components[componentName] = findComponent(componentName, componentsMap[componentName].npm);
+    components[componentName] = findComponent(componentName, componentsMap[componentName]);
   });
   return components;
 }
-
 
 let REACT_KEY = '';
 function cacheReactKey(el: Element): Element {

@@ -7,6 +7,7 @@ import SettingsPane, { registerSetter, createSetterContent, getSetter, createSet
 import Node from '../../designer/src/designer/document/node/node';
 import ArraySetter from './builtin-setters/array-setter';
 import ObjectSetter from './builtin-setters/object-setter';
+import './register-transducer';
 
 export default class SettingsMainView extends Component {
   private main: SettingsMain;
@@ -31,9 +32,9 @@ export default class SettingsMainView extends Component {
     if (this.main.isMulti) {
       return (
         <div className="lc-settings-navigator">
-          {this.main.componentType!.icon || <Icon type="ellipsis" size="small" />}
+          {this.main.componentMeta!.icon || <Icon type="ellipsis" size="small" />}
           <span>
-            {this.main.componentType!.title} x {this.main.nodes.length}
+            {this.main.componentMeta!.title} x {this.main.nodes.length}
           </span>
         </div>
       );
@@ -57,7 +58,7 @@ export default class SettingsMainView extends Component {
 
     return (
       <div className="lc-settings-navigator">
-        {this.main.componentType!.icon || <Icon type="ellipsis" size="small" />}
+        {this.main.componentMeta!.icon || <Icon type="ellipsis" size="small" />}
         <Breadcrumb className="lc-settings-node-breadcrumb">{items}</Breadcrumb>
       </div>
     );

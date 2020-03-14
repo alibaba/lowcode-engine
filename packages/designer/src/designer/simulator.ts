@@ -3,7 +3,7 @@ import { LocateEvent, ISensor } from './helper/dragon';
 import { Point } from './helper/location';
 import Node from './document/node/node';
 import { ScrollTarget, IScrollable } from './helper/scroller';
-import { ComponentDescription } from './component-type';
+import { ComponentMetadata } from './component-meta';
 
 export type AutoFit = '100%';
 export const AutoFit = '100%';
@@ -85,7 +85,6 @@ export interface ISimulator<P = object> extends ISensor {
   // 获取区块代码, 通过 components 传递，可异步获取
   setProps(props: P): void;
 
-
   setSuspense(suspensed: boolean): void;
 
   // #region ========= drag and drop helpers =============
@@ -117,7 +116,7 @@ export interface ISimulator<P = object> extends ISensor {
   /**
    * 描述组件
    */
-  describeComponent(component: Component): ComponentDescription;
+  generateComponentMetadata(componentName: string): ComponentMetadata;
   /**
    * 根据组件信息获取组件类
    */
@@ -158,7 +157,7 @@ export interface NodeInstance<T = ComponentInstance> {
 /**
  * 组件类定义
  */
-export type Component = ComponentType<any> | object;
+export type Component = ComponentType<any> | object | string;
 
 /**
  * 组件实例定义

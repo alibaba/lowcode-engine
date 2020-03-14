@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { uniqueId } from '../../utils/unique-id';
-import { ComponentType } from '../../designer/src/designer/component-type';
+import { ComponentMeta } from '../../designer/src/designer/component-meta';
 import Node from '../../designer/src/designer/document/node/node';
 import { TitleContent } from './title';
 import { ReactElement, ComponentType as ReactComponentType, isValidElement } from 'react';
@@ -12,7 +12,7 @@ export interface SettingTarget {
   // 所设置的节点集，至少一个
   readonly nodes: Node[];
 
-  readonly componentType: ComponentType | null;
+  readonly componentMeta: ComponentMeta | null;
 
   readonly items: Array<SettingField | CustomView>;
 
@@ -92,6 +92,8 @@ export interface SetterConfig {
    */
   props?: object | DynamicProps;
   children?: any;
+  isRequired?: boolean;
+  initialValue?: any | ((field: SettingField) => any);
 }
 
 /**
@@ -103,7 +105,7 @@ export interface FieldExtraProps {
   /**
    * 是否必填参数
    */
-  required?: boolean;
+  isRequired?: boolean;
   /**
    * default value of target prop for setter use
    */
@@ -172,7 +174,7 @@ export class SettingField implements SettingTarget {
   readonly isOne: boolean;
   readonly isNone: boolean;
   readonly nodes: Node[];
-  readonly componentType: ComponentType | null;
+  readonly componentMeta: ComponentMeta | null;
   readonly designer: Designer;
   readonly top: SettingTarget;
   get path() {
@@ -212,7 +214,7 @@ export class SettingField implements SettingTarget {
     // copy parent properties
     this.editor = parent.editor;
     this.nodes = parent.nodes;
-    this.componentType = parent.componentType;
+    this.componentMeta = parent.componentMeta;
     this.isSame = parent.isSame;
     this.isMulti = parent.isMulti;
     this.isOne = parent.isOne;
@@ -369,7 +371,7 @@ export class SettingsMain implements SettingTarget {
   private _nodes: Node[] = [];
   private _items: Array<SettingField | CustomView> = [];
   private _sessionId = '';
-  private _componentType: ComponentType | null = null;
+  private _componentMeta: ComponentMeta | null = null;
   private _isSame: boolean = true;
   readonly path = [];
   readonly top: SettingTarget = this;
@@ -378,8 +380,8 @@ export class SettingsMain implements SettingTarget {
     return this._nodes;
   }
 
-  get componentType() {
-    return this._componentType;
+  get componentMeta() {
+    return this._componentMeta;
   }
 
   get items() {
@@ -506,7 +508,7 @@ export class SettingsMain implements SettingTarget {
     this._sessionId = sessionId;
 
     // setups
-    this.setupComponentType();
+    this.setupComponentMeta();
 
     // todo: enhance when componentType not changed do merge
     // clear fields
@@ -521,36 +523,36 @@ export class SettingsMain implements SettingTarget {
     this._items = [];
   }
 
-  private setupComponentType() {
+  private setupComponentMeta() {
     if (this.nodes.length < 1) {
       this._isSame = false;
-      this._componentType = null;
+      this._componentMeta = null;
       return;
     }
     const first = this.nodes[0];
-    const type = first.componentType;
+    const meta = first.componentMeta;
     const l = this.nodes.length;
     let theSame = true;
     for (let i = 1; i < l; i++) {
       const other = this.nodes[i];
-      if ((other as any).componentType !== type) {
+      if ((other as any).componentType !== meta) {
         theSame = false;
         break;
       }
     }
     if (theSame) {
       this._isSame = true;
-      this._componentType = type;
+      this._componentMeta = meta;
     } else {
       this._isSame = false;
-      this._componentType = null;
+      this._componentMeta = null;
     }
   }
 
   private setupItems() {
     this.disposeItems();
-    if (this.componentType) {
-      this._items = this.componentType.configure.map(item => {
+    if (this.componentMeta) {
+      this._items = this.componentMeta.configure.map(item => {
         if (isCustomView(item)) {
           return item;
         }

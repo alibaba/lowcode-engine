@@ -2,7 +2,7 @@ import { ComponentType as ReactComponentType } from 'react';
 import { obx, computed, autorun } from '@recore/obx';
 import BuiltinSimulatorView from '../builtins/simulator';
 import Project from './project';
-import { ProjectSchema } from './schema';
+import { ProjectSchema, NpmInfo } from './schema';
 import Dragon, { isDragNodeObject, isDragNodeDataObject, LocateEvent, DragObject } from './helper/dragon';
 import ActiveTracker from './helper/active-tracker';
 import Hovering from './helper/hovering';
@@ -10,7 +10,7 @@ import Location, { LocationData, isLocationChildrenDetail } from './helper/locat
 import DocumentModel from './document/document-model';
 import Node, { insertChildren } from './document/node/node';
 import { isRootNode } from './document/node/root-node';
-import { ComponentDescription, ComponentType } from './component-type';
+import { ComponentMetadata, ComponentMeta } from './component-meta';
 import Scroller, { IScrollable } from './helper/scroller';
 import { INodeSelector } from './simulator';
 import OffsetObserver, { createOffsetObserver } from './helper/offset-observer';
@@ -25,7 +25,7 @@ export interface DesignerProps {
   simulatorComponent?: ReactComponentType<any>;
   dragGhostComponent?: ReactComponentType<any>;
   suspensed?: boolean;
-  componentsDescription?: ComponentDescription[];
+  componentsDescription?: ComponentMetadata[];
   eventPipe?: EventEmitter;
   onMount?: (designer: Designer) => void;
   onDragstart?: (e: LocateEvent) => void;
@@ -222,7 +222,7 @@ export default class Designer {
         this.suspensed = props.suspensed;
       }
       if (props.componentsDescription !== this.props.componentsDescription && props.componentsDescription != null) {
-        this.buildComponentTypesMap(props.componentsDescription);
+        this.buildComponentMetasMap(props.componentsDescription);
       }
     } else {
       // init hotkeys
@@ -239,7 +239,7 @@ export default class Designer {
         this.suspensed = props.suspensed;
       }
       if (props.componentsDescription != null) {
-        this.buildComponentTypesMap(props.componentsDescription);
+        this.buildComponentMetasMap(props.componentsDescription);
       }
     }
     this.props = props;
@@ -283,52 +283,53 @@ export default class Designer {
     // todo:
   }
 
-  @obx.val private _componentTypesMap = new Map<string, ComponentType>();
-  private _lostComponentTypesMap = new Map<string, ComponentType>();
+  @obx.val private _componentMetasMap = new Map<string, ComponentMeta>();
+  private _lostComponentMetasMap = new Map<string, ComponentMeta>();
 
-  private buildComponentTypesMap(specs: ComponentDescription[]) {
-    specs.forEach(spec => {
-      const key = spec.componentName;
-      let cType = this._componentTypesMap.get(key);
-      if (cType) {
-        cType.spec = spec;
+  private buildComponentMetasMap(metas: ComponentMetadata[]) {
+    metas.forEach(data => {
+      const key = data.componentName;
+      let meta = this._componentMetasMap.get(key);
+      if (meta) {
+        meta.metadata = data;
       } else {
-        cType = this._lostComponentTypesMap.get(key);
+        meta = this._lostComponentMetasMap.get(key);
 
-        if (cType) {
-          cType.spec = spec;
-          this._lostComponentTypesMap.delete(key);
+        if (meta) {
+          meta.metadata = data;
+          this._lostComponentMetasMap.delete(key);
         } else {
-          cType = new ComponentType(spec);
+          meta = new ComponentMeta(data);
         }
 
-        this._componentTypesMap.set(key, cType);
+        this._componentMetasMap.set(key, meta);
       }
     });
   }
 
-  getComponentType(componentName: string): ComponentType {
-    if (this._componentTypesMap.has(componentName)) {
-      return this._componentTypesMap.get(componentName)!;
+  getComponentMeta(componentName: string, generateMetadata?: () => ComponentMetadata | null): ComponentMeta {
+    if (this._componentMetasMap.has(componentName)) {
+      return this._componentMetasMap.get(componentName)!;
     }
 
-    if (this._lostComponentTypesMap.has(componentName)) {
-      return this._lostComponentTypesMap.get(componentName)!;
+    if (this._lostComponentMetasMap.has(componentName)) {
+      return this._lostComponentMetasMap.get(componentName)!;
     }
 
-    const cType = new ComponentType({
+    const meta = new ComponentMeta({
       componentName,
+      ...(generateMetadata ? generateMetadata() : null),
     });
 
-    this._lostComponentTypesMap.set(componentName, cType);
+    this._lostComponentMetasMap.set(componentName, meta);
 
-    return cType;
+    return meta;
   }
 
-  get componentsMap(): { [key: string]: ComponentDescription } {
+  get componentsMap(): { [key: string]: NpmInfo } {
     const maps: any = {};
-    this._componentTypesMap.forEach((config, key) => {
-      maps[key] = config.spec;
+    this._componentMetasMap.forEach((config, key) => {
+      maps[key] = config.metadata.npm;
     });
     return maps;
   }

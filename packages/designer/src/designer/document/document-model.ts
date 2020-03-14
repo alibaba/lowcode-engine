@@ -6,7 +6,7 @@ import RootNode from './node/root-node';
 import { ISimulator, Component } from '../simulator';
 import { computed, obx, autorun } from '@recore/obx';
 import Location from '../helper/location';
-import { ComponentType } from '../component-type';
+import { ComponentMeta } from '../component-meta';
 import History from '../helper/history';
 import Prop from './node/props/prop';
 
@@ -41,7 +41,7 @@ export default class DocumentModel {
   }
 
   get fileName(): string {
-    return (this.rootNode.getExtraProp('fileName')?.getAsString()) || this.id;
+    return this.rootNode.getExtraProp('fileName')?.getAsString() || this.id;
   }
 
   set fileName(fileName: string) {
@@ -60,7 +60,7 @@ export default class DocumentModel {
     this.id = this.rootNode.id;
     this.history = new History(
       () => this.schema,
-      (schema) => this.import(schema as RootSchema, true),
+      schema => this.import(schema as RootSchema, true),
     );
     this.setupListenActiveNodes();
   }
@@ -237,7 +237,7 @@ export default class DocumentModel {
     return this.rootNode.schema as any;
   }
 
-  import(schema: RootSchema, checkId: boolean = false) {
+  import(schema: RootSchema, checkId = false) {
     this.rootNode.import(schema, checkId);
     // todo: purge something
     // todo: select added and active track added
@@ -285,13 +285,15 @@ export default class DocumentModel {
     return this.simulator!.getComponent(componentName);
   }
 
-  getComponentType(componentName: string, component?: Component | null): ComponentType {
-    // TODO: guess componentConfig from component by simulator
-    return this.designer.getComponentType(componentName);
+  getComponentMeta(componentName: string): ComponentMeta {
+    return this.designer.getComponentMeta(
+      componentName,
+      () => this.simulator?.generateComponentMetadata(componentName) || null,
+    );
   }
 
-  @obx.ref private _opened: boolean = false;
-  @obx.ref private _suspensed: boolean = false;
+  @obx.ref private _opened = false;
+  @obx.ref private _suspensed = false;
 
   /**
    * 是否不是激活的

@@ -29,7 +29,7 @@ import {
   CanvasPoint,
 } from '../../../designer/helper/location';
 import { isNodeSchema, NodeSchema } from '../../../designer/schema';
-import { ComponentDescription } from '../../../designer/component-type';
+import { ComponentMetadata } from '../../../designer/component-meta';
 import { ReactInstance } from 'react';
 import { setNativeSelection } from '../../../designer/helper/navtive-selection';
 import cursor from '../../../designer/helper/cursor';
@@ -332,8 +332,14 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
   /**
    * @see ISimulator
    */
-  describeComponent(component: Component): ComponentDescription {
-    throw new Error('Method not implemented.');
+  generateComponentMetadata(componentName: string): ComponentMetadata {
+    const component = this.getComponent(componentName);
+    // TODO:
+    // 1. generate builtin div/p/h1/h2
+    // 2. read propTypes
+    return {
+      componentName,
+    };
   }
 
   /**
@@ -826,7 +832,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
       return this.checkDropTarget(container, dragObject as any);
     }
 
-    const config = container.componentType;
+    const config = container.componentMeta;
 
     if (!config.isContainer) {
       return false;
@@ -911,7 +917,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
 
   checkNestingUp(parent: NodeParent, target: NodeSchema | Node): boolean {
     if (isNode(target) || isNodeSchema(target)) {
-      const config = isNode(target) ? target.componentType : this.designer.getComponentType(target.componentName);
+      const config = isNode(target) ? target.componentMeta : this.document.getComponentMeta(target.componentName);
       if (config) {
         return config.checkNestingUp(target, parent);
       }
@@ -921,7 +927,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
   }
 
   checkNestingDown(parent: NodeParent, target: NodeSchema | Node): boolean {
-    const config = parent.componentType;
+    const config = parent.componentMeta;
     return config.checkNestingDown(parent, target) && this.checkNestingUp(parent, target);
   }
   // #endregion

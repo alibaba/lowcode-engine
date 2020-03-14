@@ -16,11 +16,8 @@ interface ArraySetterState {
 interface ArraySetterProps {
   value: any[];
   field: SettingField;
-  itemConfig?: {
-    setter?: SetterType;
-    defaultValue?: any | ((field: SettingField) => any);
-    required?: boolean;
-  };
+  itemSetter?: SetterType;
+  columns?: FieldConfig[];
   multiValue?: boolean;
 }
 
@@ -45,8 +42,8 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
     if (newLength > originLength) {
       for (let i = originLength; i < newLength; i++) {
         const item = field.createField({
-          ...props.itemConfig,
           name: i,
+          setter: props.itemSetter,
           forceInline: 2,
         });
         items[i] = item;
@@ -86,16 +83,16 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
   private scrollToLast: boolean = false;
   onAdd() {
     const { items, itemsMap } = this.state;
-    const { itemConfig } = this.props;
-    const defaultValue = itemConfig ? itemConfig.defaultValue : null;
+    const { itemSetter } = this.props;
+    const initialValue = typeof itemSetter === 'object' ? (itemSetter as any).initialValue : null;
     const item = this.props.field.createField({
-      ...itemConfig,
       name: items.length,
-      forceInline: 1,
+      setter: itemSetter,
+      forceInline: 2,
     });
     items.push(item);
     itemsMap.set(item.id, item);
-    item.setValue(typeof defaultValue === 'function' ? defaultValue(item) : defaultValue);
+    item.setValue(typeof initialValue === 'function' ? initialValue(item) : initialValue);
     this.scrollToLast = true;
     this.setState({
       items: items.slice(),
@@ -132,12 +129,10 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
   }
 
   render() {
-    // mini Button: depends popup
-    if (this.props.itemConfig) {
-      // check is ObjectSetter then check if show columns
+    let columns: any = null;
+    if (this.props.columns) {
+      columns = this.props.columns.map(column => <Title title={column.title || (column.name as string)} />);
     }
-
-    console.info(this.state.items);
 
     const { items } = this.state;
     const scrollToLast = this.scrollToLast;
@@ -172,6 +167,7 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
             <span>添加</span>
           </Button>
         </div>*/}
+        {columns && <div className="lc-setter-list-columns">{columns}</div>}
         {content}
         <Button className="lc-setter-list-add" type="primary" onClick={this.onAdd.bind(this)}>
           <Icon type="add" />
@@ -226,7 +222,6 @@ export default class ArraySetter extends Component<{
   itemConfig?: {
     setter?: SetterType;
     defaultValue?: any | ((field: SettingField) => any);
-    required?: boolean;
   };
   mode?: 'popup' | 'list';
   forceInline?: boolean;
@@ -237,6 +232,20 @@ export default class ArraySetter extends Component<{
   render() {
     const { mode, forceInline, ...props } = this.props;
     const { field, itemConfig } = props;
+    let columns: FieldConfig[] | undefined;
+    const setter: any = itemConfig?.setter;
+    if (setter?.componentName === 'ObjectSetter') {
+      const items: FieldConfig[] = setter.props?.config?.items;
+      if (items && Array.isArray(items)) {
+        columns = items.filter(item => item.isRequired || item.important);
+        if (columns.length === 3) {
+          columns = columns.slice(0, 3);
+        } else if (columns.length > 3) {
+          columns = columns.slice(0, 4);
+        }
+      }
+    }
+
     if (mode === 'popup' || forceInline) {
       const title = (
         <Fragment>
@@ -246,26 +255,22 @@ export default class ArraySetter extends Component<{
       );
       if (!this.pipe) {
         let width = 360;
-        const setter: any = itemConfig?.setter;
-        if (setter?.componentName === 'ObjectSetter') {
-          const items: FieldConfig[] = setter.props?.config?.items;
-          if (items && Array.isArray(items)) {
-            const length = items.filter(item => item.required || item.important).length;
-            if (length === 3) {
-              width = 480;
-            } else if (length > 3) {
-              width = 600;
-            }
+        if (columns) {
+          if (columns.length === 3) {
+            width = 480;
+          } else if (columns.length > 3) {
+            width = 600;
           }
         }
         this.pipe = (this.context as PopupPipe).create({ width });
       }
       this.pipe.send(
-        <TableSetter key={field.id} {...props} />,
+        <TableSetter key={field.id} {...props} columns={columns} />,
         title,
       );
       return (
         <Button
+          type={forceInline ? 'normal' : 'primary'}
           onClick={e => {
             this.pipe.show((e as any).target, field.id);
           }}
@@ -275,7 +280,7 @@ export default class ArraySetter extends Component<{
         </Button>
       );
     } else {
-      return <ListSetter {...props} />;
+      return <ListSetter {...props} columns={columns?.slice(0, 2)} />;
     }
   }
 }
