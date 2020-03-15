@@ -26,21 +26,18 @@ export function setSerialization(serializion: Serialization) {
 export default class History {
   private session: Session;
   private records: Session[];
-  private point: number = 0;
+  private point = 0;
   private emitter = new EventEmitter();
   private obx: Reaction;
-  private justWokeup: boolean = false;
+  private justWokeup = false;
 
-  constructor(
-    logger: () => any,
-    private redoer: (data: NodeSchema) => void,
-    private timeGap: number = 1000,
-  ) {
+  constructor(logger: () => any, private redoer: (data: NodeSchema) => void, private timeGap: number = 1000) {
     this.session = new Session(0, null, this.timeGap);
     this.records = [this.session];
 
     this.obx = autorun(() => {
       const data = logger();
+      // TODO: remove this line
       console.info('log');
       if (this.justWokeup) {
         this.justWokeup = false;
@@ -49,6 +46,7 @@ export default class History {
       untracked(() => {
         const log = currentSerializion.serialize(data);
         if (this.session.cursor === 0 && this.session.isActive()) {
+          // first log
           this.session.log(log);
           this.session.end();
         } else if (this.session) {
@@ -56,10 +54,15 @@ export default class History {
             this.session.log(log);
           } else {
             this.session.end();
+            const lastState = this.getState();
             const cursor = this.session.cursor + 1;
             const session = new Session(cursor, log, this.timeGap);
             this.session = session;
             this.records.splice(cursor, this.records.length - cursor, session);
+            const currentState = this.getState();
+            if (currentState !== lastState) {
+              this.emitter.emit('statechange', currentState);
+            }
           }
         }
       });

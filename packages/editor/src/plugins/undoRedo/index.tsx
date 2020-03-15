@@ -4,6 +4,7 @@ import { PluginProps } from '../../framework/definitions';
 import TopIcon from '../../skeleton/components/TopIcon/index';
 
 export interface IProps {
+  editor: any;
   logo?: string;
 }
 
@@ -26,7 +27,7 @@ export default class UndoRedo extends PureComponent<IProps & PluginProps, IState
     if (props.editor.designer) {
       this.init();
     } else {
-      props.editor.on('designer.ready', (): void => {
+      props.editor.on('designer.ready', () => {
         this.init();
       });
     }
@@ -34,17 +35,17 @@ export default class UndoRedo extends PureComponent<IProps & PluginProps, IState
 
   init = (): void => {
     const { editor } = this.props;
-    this.history = editor.designer.currentHistory;
-    this.updateState(this.history.getState());
+
+    this.history = editor.designer?.currentHistory;
+    this.updateState(this.history?.getState() || 0);
+
     editor.on('designer.history-change', (history): void => {
       this.history = history;
-      this.history.onStateChange(this.updateState);
+      this.updateState(this.history?.getState() || 0);
     });
-    this.history.onStateChange(this.updateState);
   };
 
   updateState = (state: number): void => {
-    console.log('++++', !!(state & 1), !!(state & 2));
     this.setState({
       undoEnable: !!(state & 1),
       redoEnable: !!(state & 2)
@@ -52,15 +53,11 @@ export default class UndoRedo extends PureComponent<IProps & PluginProps, IState
   };
 
   handleUndoClick = (): void => {
-    if (this.history) {
-      this.history.back();
-    }
+    this.history?.back();
   };
 
   handleRedoClick = (): void => {
-    if (this.history) {
-      this.history.forward();
-    }
+    this.history?.forward();
   };
 
   render(): React.ReactNode {

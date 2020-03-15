@@ -115,6 +115,7 @@ export default class Designer {
         selectionDispose();
         selectionDispose = undefined;
       }
+      this.postEvent('selection-change', this.currentSelection);
       if (this.currentSelection) {
         const currentSelection = this.currentSelection;
         selectionDispose = currentSelection.onSelectionChange(() => {
@@ -128,6 +129,7 @@ export default class Designer {
         historyDispose();
         historyDispose = undefined;
       }
+      this.postEvent('history-change', this.currentHistory);
       if (this.currentHistory) {
         const currentHistory = this.currentHistory;
         historyDispose = currentHistory.onStateChange(() => {
@@ -144,6 +146,8 @@ export default class Designer {
     });
     setupSelection();
     setupHistory();
+
+    this.postEvent('designer.ready', this);
   }
 
   postEvent(event: string, ...args: any[]) {

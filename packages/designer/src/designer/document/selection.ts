@@ -87,7 +87,7 @@ export class Selection {
    * 移除选中
    */
   remove(id: string) {
-    let i = this._selected.indexOf(id);
+    const i = this._selected.indexOf(id);
     if (i > -1) {
       this._selected.splice(i, 1);
       this.emitter.emit('selectionchange', this._selected);
@@ -154,7 +154,7 @@ export class Selection {
   }
 
   onSelectionChange(fn: () => void): () => void {
-    this.emitter.addListener('selectionchange', fn);
+    this.emitter.on('selectionchange', fn);
     return () => {
       this.emitter.removeListener('selectionchange', fn);
     };

@@ -335,6 +335,12 @@ export default {
         handleResourceDragStart: function(ev, tagName, schema) {
           // 物料面板中组件snippet的dragStart回调
           // ev: 原始的domEvent；tagName: 组件的描述文案；schema: snippet的schema
+          if (editor.designer) {
+            editor.designer.dragon.boost({
+              type: 'nodedata',
+              data: schema
+            }, ev.nativeEvent);
+          }
         }
       });
     }
