@@ -1,3 +1,5 @@
+import assets from './assets';
+
 export default {
   version: '^1.0.2',
   theme: {
@@ -117,6 +119,22 @@ export default {
       }
     ],
     leftArea: [
+      {
+        pluginKey: 'componentList',
+        type: 'PanelIcon',
+        props: {
+          align: 'top',
+          icon: 'zujianku',
+          title: '组件库'
+        },
+        config: {
+          package: "@ali/iceluna-addon-component-list",
+          version: "^1.0.4"
+        },
+        pluginProps: {
+          disableAppComponent: true
+        }
+      },
       {
         pluginKey: 'leftPanelIcon',
         type: 'PanelIcon',
@@ -274,5 +292,43 @@ export default {
     ]
   },
   hooks: [],
-  shortCuts: []
+  shortCuts: [],
+  lifeCycles: {
+    init: function init(editor) {
+      const transformMaterial = (componentList) => {
+        return componentList.map(category => {
+          return {
+            name: category.title,
+            items: category.children.map(comp => {
+              return {
+                ...comp,
+                name: comp.componentName,
+                libraryId: 1,
+                snippets: comp.snippets.map(snippet => {
+                  return {
+                    name: snippet.title,
+                    screenshort: snippet.screenshort,
+                    code: JSON.stringify(snippet.schema)
+                  };
+                })
+              };
+            })
+          };
+        });
+      };
+
+      const list = transformMaterial(assets.componentList);
+      console.log('+++++', list);
+      editor.set({
+        componentsMap: assets.components,
+        componentMaterial: {
+          library: [{
+            name: 'Fusion组件库',
+            id: 1
+          }],
+          list
+        }
+      });
+    }
+  }
 };

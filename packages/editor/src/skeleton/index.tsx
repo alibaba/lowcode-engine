@@ -89,11 +89,12 @@ export default class Skeleton extends PureComponent<SkeletonProps, SkeletonState
       this.setState(
         {
           initReady: true,
-          //刷新IDE时生成新的skeletonKey保证插件生命周期重新执行
+          // 刷新IDE时生成新的skeletonKey保证插件生命周期重新执行
           skeletonKey: isReset ? `skeleton${++renderIdx}` : this.state.skeletonKey
         },
         () => {
           editor.emit('editor.ready');
+          editor.emit('ide.ready');
           isReset && editor.emit('ide.afterReset');
         }
       );

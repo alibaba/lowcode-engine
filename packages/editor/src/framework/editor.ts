@@ -3,7 +3,11 @@ import EventEmitter from 'events';
 import store from 'store';
 import { EditorConfig, HooksConfig, LocaleType, PluginStatusSet, Utils, PluginClassSet, PluginSet } from './definitions';
 
-import { registShortCuts, transformToPromise, unRegistShortCuts } from './utils';
+import * as editorUtils from './utils';
+
+const {
+  registShortCuts, transformToPromise, unRegistShortCuts
+} = editorUtils;
 
 // 根据url参数设置debug选项
 const debugRegRes = /_?debug=(.*?)(&|$)/.exec(location.search);
@@ -85,7 +89,7 @@ export default class Editor extends EventEmitter {
     super();
     this.config = config;
     this.components = components;
-    this.utils = utils || {};
+    this.utils = {...editorUtils, ...utils};
     instance = this;
     this.init();
   }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { PureComponent } from 'react';
 import './index.scss';
 import Editor from '../../framework/index';
 import { PluginConfig } from '../../framework/definitions';
@@ -10,13 +10,62 @@ export interface PluginProps {
   logo?: string;
 }
 
-export default function(props: PluginProps) {
-  const [backEnable, setBackEnable] = useState(true);
-  const [forwardEnable, setForwardEnable] = useState(true);
-  return (
-    <div className="lowcode-plugin-undo-redo">
-      <TopIcon icon="houtui" title="后退" disabled={!backEnable} />
-      <TopIcon icon="qianjin" title="前进" disabled={!forwardEnable} />
-    </div>
-  );
+export interface PluginState{
+  backEnable: boolean;
+  forwardEnable: boolean;
+};
+
+
+export default class UndoRedo extends PureComponent<PluginProps, PluginState> {
+  static display = 'LowcodeUndoRedo';
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      backEnable: false,
+      forwardEnable: false
+    };
+    if (props.editor.designer) {
+      this.init();
+    } else {
+      props.editor.on('designer.ready', () => {
+        this.init();
+      });
+    }
+
+  }
+
+  init = (): void => {
+    const {editor} = this.props;
+    this.designer = editor.designer;
+    this.history = this.designer.currentHistory;
+    editor.on('designer.history-change', (history) => {
+      this.history = history;
+    });
+  };
+
+  handleBackClick = (): void => {
+    if (this.history) {
+      this.history.back();
+    }
+  };
+
+  handleForwardClick = (): void => {
+    if (this.history) {
+      this.history.forward();
+    }
+  };
+
+  render() {
+    const {
+      backEnable,
+      forwardEnable
+    } = this.state;
+    return (
+      <div className="lowcode-plugin-undo-redo">
+        <TopIcon icon="houtui" title="后退"  onClick={this.handleBackClick}/>
+        <TopIcon icon="qianjin" title="前进" onClick={this.handleForwardClick}/>
+      </div>
+    );
+  }
 }
