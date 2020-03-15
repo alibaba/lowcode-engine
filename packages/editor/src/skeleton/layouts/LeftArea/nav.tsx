@@ -5,6 +5,7 @@ import Editor from '../../../framework/editor';
 import { PluginConfig } from '../../../framework/definitions';
 import AreaManager from '../../../framework/areaManager';
 import { isEmpty } from '../../../framework/utils';
+
 export interface LeftAreaNavProps {
   editor: Editor;
 }
@@ -17,7 +18,9 @@ export default class LeftAreaNav extends PureComponent<LeftAreaNavProps, LeftAre
   static displayName = 'LowcodeLeftAreaNav';
 
   private editor: Editor;
+
   private areaManager: AreaManager;
+
   private cacheActiveKey: string;
 
   constructor(props) {
@@ -38,6 +41,7 @@ export default class LeftAreaNav extends PureComponent<LeftAreaNavProps, LeftAre
     const defaultKey = (visiblePanelPluginList[0] && visiblePanelPluginList[0].pluginKey) || 'componentAttr';
     this.handlePluginChange(defaultKey);
   }
+
   componentWillUnmount() {
     this.editor.off('skeleton.update', this.handleSkeletonUpdate);
     this.editor.off('leftNav.change', this.handlePluginChange);
@@ -81,24 +85,24 @@ export default class LeftAreaNav extends PureComponent<LeftAreaNavProps, LeftAre
     }
   };
 
-  handleCollapseClick = (): void => {
-    const { activeKey } = this.state;
-    if (activeKey === 'none') {
-      const plugin = this.editor.plugins[this.cacheActiveKey];
-      if (plugin) {
-        plugin.open().then(() => {
-          this.updateActiveKey(this.cacheActiveKey);
-        });
-      }
-    } else {
-      const plugin = this.editor.plugins[activeKey];
-      if (plugin) {
-        plugin.close().then(() => {
-          this.updateActiveKey('none');
-        });
-      }
-    }
-  };
+  // handleCollapseClick = (): void => {
+  //   const { activeKey } = this.state;
+  //   if (activeKey === 'none') {
+  //     const plugin = this.editor.plugins[this.cacheActiveKey];
+  //     if (plugin) {
+  //       plugin.open().then(() => {
+  //         this.updateActiveKey(this.cacheActiveKey);
+  //       });
+  //     }
+  //   } else {
+  //     const plugin = this.editor.plugins[activeKey];
+  //     if (plugin) {
+  //       plugin.close().then(() => {
+  //         this.updateActiveKey('none');
+  //       });
+  //     }
+  //   }
+  // };
 
   handlePluginClick = (item: PluginConfig): void => {
     if (item.type === 'PanelIcon') {
@@ -115,7 +119,7 @@ export default class LeftAreaNav extends PureComponent<LeftAreaNavProps, LeftAre
     this.editor.emit('leftPanel.show', key);
   };
 
-  renderPluginList = (list: Array<PluginConfig> = []): Array<React.ReactElement> => {
+  renderPluginList = (list: PluginConfig[] = []): React.ReactElement[] => {
     const { activeKey } = this.state;
     return list.map((item, idx) => {
       const pluginStatus = this.editor.pluginStatus[item.pluginKey];
@@ -135,8 +139,8 @@ export default class LeftAreaNav extends PureComponent<LeftAreaNavProps, LeftAre
 
   render() {
     const { activeKey } = this.state;
-    const topList: Array<PluginConfig> = [];
-    const bottomList: Array<PluginConfig> = [];
+    const topList: PluginConfig[] = [];
+    const bottomList: PluginConfig[] = [];
     const visiblePluginList = this.areaManager.getVisiblePluginList();
     if (isEmpty(visiblePluginList)){
       return null;
@@ -154,7 +158,7 @@ export default class LeftAreaNav extends PureComponent<LeftAreaNavProps, LeftAre
       <div className="lowcode-left-area-nav">
         <div className="bottom-area">{this.renderPluginList(bottomList)}</div>
         <div className="top-area">
-          <LeftPlugin
+          {/* <LeftPlugin
             editor={this.editor}
             key="collapse"
             config={{
@@ -166,7 +170,7 @@ export default class LeftAreaNav extends PureComponent<LeftAreaNavProps, LeftAre
               }
             }}
             onClick={this.handleCollapseClick}
-          />
+          /> */}
           {this.renderPluginList(topList)}
         </div>
       </div>

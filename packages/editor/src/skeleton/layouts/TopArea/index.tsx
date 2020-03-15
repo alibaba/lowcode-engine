@@ -16,6 +16,7 @@ export default class TopArea extends PureComponent<TopAreaProps> {
   static displayName = 'LowcodeTopArea';
 
   private areaManager: AreaManager;
+
   private editor: Editor;
 
   constructor(props) {
@@ -27,6 +28,7 @@ export default class TopArea extends PureComponent<TopAreaProps> {
   componentDidMount() {
     this.editor.on('skeleton.update', this.handleSkeletonUpdate);
   }
+
   componentWillUnmount() {
     this.editor.off('skeleton.update', this.handleSkeletonUpdate);
   }
@@ -38,7 +40,7 @@ export default class TopArea extends PureComponent<TopAreaProps> {
     }
   };
 
-  renderPluginList = (list: Array<PluginConfig> = []): Array<React.ReactElement> => {
+  renderPluginList = (list: PluginConfig[] = []): React.ReactElement[] => {
     return list.map((item, idx) => {
       const isDivider = item.type === 'Divider';
       return (
@@ -46,7 +48,7 @@ export default class TopArea extends PureComponent<TopAreaProps> {
           className={isDivider ? 'divider' : ''}
           key={isDivider ? idx : item.pluginKey}
           style={{
-            width: (item.props && item.props.width) || 40,
+            width: (item.props && item.props.width) || 36,
             flex: 'none'
           }}
         >
@@ -59,8 +61,8 @@ export default class TopArea extends PureComponent<TopAreaProps> {
   };
 
   render() {
-    const leftList: Array<PluginConfig> = [];
-    const rightList: Array<PluginConfig> = [];
+    const leftList: PluginConfig[] = [];
+    const rightList: PluginConfig[] = [];
     const visiblePluginList = this.areaManager.getVisiblePluginList();
     visiblePluginList.forEach(item => {
       const align = item.props && item.props.align === 'right' ? 'right' : 'left';

@@ -18,6 +18,7 @@ export default class RightArea extends PureComponent<RightAreaProps, RightAreaSt
   static displayName = 'LowcodeRightArea';
 
   private editor: Editor;
+
   private areaManager: AreaManager;
 
   constructor(props) {
@@ -36,6 +37,7 @@ export default class RightArea extends PureComponent<RightAreaProps, RightAreaSt
     const defaultKey = (visiblePluginList[0] && visiblePluginList[0].pluginKey) || 'componentAttr';
     this.handlePluginChange(defaultKey, true);
   }
+
   componentWillUnmount() {
     this.editor.off('skeleton.update', this.handleSkeletonUpdate);
     this.editor.off('rightNav.change', this.handlePluginChange);
@@ -103,19 +105,14 @@ export default class RightArea extends PureComponent<RightAreaProps, RightAreaSt
 
     const renderTitle = (): React.ReactElement => (
       <div
-        className={`right-addon-title ${active ? 'active' : ''} ${locked ? 'locked' : ''} ${
+        className={`right-plugin-title ${active ? 'active' : ''} ${locked ? 'locked' : ''} ${
           disabled ? 'disabled' : ''
         }`}
       >
         {!!icon && (
           <Icon
+            size="xs"
             type={icon}
-            style={{
-              marginRight: 2,
-              fontSize: '14px',
-              lineHeight: '14px',
-              verticalAlign: 'top'
-            }}
           />
         )}
         {title}
@@ -127,43 +124,45 @@ export default class RightArea extends PureComponent<RightAreaProps, RightAreaSt
     return renderTitle();
   };
 
-  renderTabPanels = (list:PluginConfig[], height: string):void => {
+  renderTabPanels = (list: PluginConfig[], height: string): void => {
     if (isEmpty(list)) {
       return null;
     }
     return (
       <Tab
-          shape="wrapped"
-          className="right-tabs"
-          style={{
-            height
-          }}
-          activeKey={this.state.activeKey}
-          lazyLoad={false}
-          onChange={this.handlePluginChange}
-        >
-          {list.map((item, idx) => {
-            const Comp = this.editor.components[item.pluginKey];
-            return (
-              <Tab.Item
-                key={item.pluginKey}
-                title={this.renderTabTitle(item)}
-                disabled={this.editor.pluginStatus[item.pluginKey].disabled}
-              >
-                <Comp editor={this.editor} config={item} {...item.pluginProps} />
-              </Tab.Item>
-            );
-          })}
-        </Tab>
+        className="right-tabs"
+        style={{
+          height
+        }}
+        activeKey={this.state.activeKey}
+        lazyLoad={false}
+        onChange={this.handlePluginChange}
+      >
+        {list.map((item, idx) => {
+          const Comp = this.editor.components[item.pluginKey];
+          return (
+            <Tab.Item
+              key={item.pluginKey}
+              title={this.renderTabTitle(item)}
+              disabled={this.editor.pluginStatus[item.pluginKey].disabled}
+              style={{
+                width: `${100/list.length}%`
+              }}
+            >
+              <Comp editor={this.editor} config={item} {...item.pluginProps} />
+            </Tab.Item>
+          );
+        })}
+      </Tab>
     );
   }
 
-  renderPanels = (list:PluginConfig[], height: string):void => {
+  renderPanels = (list: PluginConfig[], height: string): void => {
     return list.map((item) => {
       const Comp = this.editor.components[item.pluginKey];
       return (
         <div className="right-panel" style={{height}} key={item.pluginKey}>
-           <Comp editor={this.editor} config={item} {...item.pluginProps} />
+          <Comp editor={this.editor} config={item} {...item.pluginProps} />
         </div>
       );
     });

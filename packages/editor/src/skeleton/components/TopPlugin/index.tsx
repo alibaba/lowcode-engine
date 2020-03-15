@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 
-import TopIcon from '../TopIcon';
 import { Balloon, Badge, Dialog } from '@alifd/next';
+import TopIcon from '../TopIcon';
 
 import './index.scss';
 import { PluginConfig, PluginClass } from '../../../framework/definitions';
@@ -63,8 +63,8 @@ export default class TopPlugin extends PureComponent<TopPluginProps, TopPluginSt
     const { disabled, config, onClick, editor } = this.props;
     const pluginKey = config && config.pluginKey;
     if (disabled || !pluginKey) return;
-    //考虑到弹窗情况，延时发送消息
-    setTimeout(() => editor.emit(`${pluginKey}.addon.activate`), 0);
+    // 考虑到弹窗情况，延时发送消息
+    setTimeout(() => editor.emit(`${pluginKey}.plugin.activate`), 0);
     this.handleOpen();
     onClick && onClick();
   };
@@ -95,7 +95,7 @@ export default class TopPlugin extends PureComponent<TopPluginProps, TopPluginSt
     const { icon, title } = props || {};
     const node = (
       <TopIcon
-        className={`lowcode-top-addon ${pluginKey}`}
+        className={`lowcode-top-plugin ${pluginKey}`}
         active={active}
         disabled={disabled}
         locked={locked}
@@ -103,8 +103,8 @@ export default class TopPlugin extends PureComponent<TopPluginProps, TopPluginSt
         title={title}
         onClick={() => {
           if (disabled) return;
-          //考虑到弹窗情况，延时发送消息
-          setTimeout(() => editor.emit(`${pluginKey}.addon.activate`), 0);
+          // 考虑到弹窗情况，延时发送消息
+          setTimeout(() => editor.emit(`${pluginKey}.plugin.activate`), 0);
           clickCallback && clickCallback();
           onClick && onClick();
         }}
@@ -163,6 +163,10 @@ export default class TopPlugin extends PureComponent<TopPluginProps, TopPluginSt
               onCancel={this.handleClose}
               onClose={this.handleClose}
               title={title}
+              style={{
+                width: 500,
+                ...(props && props.style)
+              }}
               {...props.dialogProps}
               visible={dialogVisible}
             >

@@ -13,13 +13,13 @@ export interface TopIconProps {
   locked?: boolean;
   marked?: boolean;
   onClick?: () => void;
-  showTitle?: boolean;
   style?: React.CSSProperties;
   title?: string;
 }
 
 export default class TopIcon extends PureComponent<TopIconProps> {
   static displayName = 'LowcodeTopIcon';
+
   static defaultProps = {
     active: false,
     className: '',
@@ -28,33 +28,23 @@ export default class TopIcon extends PureComponent<TopIconProps> {
     id: '',
     locked: false,
     onClick: () => {},
-    showTitle: false,
     style: {},
     title: ''
   };
 
   render() {
-    const { active, disabled, icon, locked, title, className, id, style, showTitle, onClick } = this.props;
+    const { active, disabled, icon, locked, title, className, id, style, onClick } = this.props;
     return (
-      <Button
-        type="normal"
-        size="large"
-        text={true}
-        className={classNames('lowcode-top-btn', className, {
-          active,
-          disabled,
-          locked
-        })}
-        data-tooltip={title}
-        id={id}
-        style={style}
-        onClick={disabled ? undefined : onClick}
-      >
-        <div>
-          <Icon size="large" type={icon} />
-          {showTitle && <span>{title}</span>}
-        </div>
-      </Button>
+      <div className={classNames('lowcode-top-icon', className, {
+        active,
+        disabled,
+        locked
+      })} data-tooltip={title}
+      id={id}
+      style={style}
+      onClick={disabled ? undefined : onClick}>
+        <Icon type={icon} />
+      </div>
     );
   }
 }

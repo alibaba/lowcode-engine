@@ -82,7 +82,7 @@ export default class LeftPlugin extends PureComponent<LeftPluginProps, LeftPlugi
     const { disabled, config, onClick, editor } = this.props;
     const pluginKey = config && config.pluginKey;
     if (disabled || !pluginKey) return;
-    //考虑到弹窗情况，延时发送消息
+    // 考虑到弹窗情况，延时发送消息
     setTimeout(() => editor.emit(`${pluginKey}.addon.activate`), 0);
     this.handleOpen();
     onClick && onClick();
@@ -102,7 +102,7 @@ export default class LeftPlugin extends PureComponent<LeftPluginProps, LeftPlugi
         data-tooltip={title}
         onClick={() => {
           if (disabled) return;
-          //考虑到弹窗情况，延时发送消息
+          // 考虑到弹窗情况，延时发送消息
           clickCallback && clickCallback();
           onClick && onClick();
         }}
@@ -169,6 +169,10 @@ export default class LeftPlugin extends PureComponent<LeftPluginProps, LeftPlugi
               onCancel={this.handleClose}
               onClose={this.handleClose}
               title={title}
+              style={{
+                width: 500,
+                ...(props && props.style)
+              }}
               {...(props.dialogProps || {})}
               visible={dialogVisible}
             >

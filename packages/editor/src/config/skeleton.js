@@ -25,7 +25,8 @@ export default {
           version: '1.0.0'
         },
         pluginProps: {
-          logo: 'https://img.alicdn.com/tfs/TB1mHYDxQP2gK0jSZPxXXacQpXa-112-64.png'
+          logo: 'https://img.alicdn.com/tfs/TB1hoI9x1H2gK0jSZFEXXcqMpXa-146-40.png',
+          href: '/'
         }
       },
       {
@@ -71,7 +72,7 @@ export default {
         type: 'Custom',
         props: {
           align: 'right',
-          width: 90
+          width: 88
         },
         config: {
           package: '@ali/lowcode-plugin-undo-redo',
@@ -107,8 +108,8 @@ export default {
           align: 'right',
           title: 'icon',
           icon: 'dengpao',
-          onClick: function(editor) {
-            alert('icon addon invoke, current activeKey: ' + editor.activeKey);
+          onClick(editor) {
+            alert(`icon addon invoke, current activeKey: ${  editor.activeKey}`);
           }
         },
         config: {},
@@ -198,8 +199,8 @@ export default {
           align: 'bottom',
           title: 'icon',
           icon: 'dengpao',
-          onClick: function(editor) {
-            alert('icon addon invoke, current activeKey: ' + editor.activeKey);
+          onClick(editor) {
+            alert(`icon addon invoke, current activeKey: ${  editor.activeKey}`);
           }
         },
         config: {},
@@ -231,7 +232,8 @@ export default {
         pluginKey: 'rightPanel2',
         type: 'TabPanel',
         props: {
-          title: '属性'
+          title: '属性',
+          icon: 'dengpao'
         },
         config: {
           version: '^1.0.0'

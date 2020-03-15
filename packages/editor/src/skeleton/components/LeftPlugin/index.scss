@@ -1,22 +1,16 @@
 .lowcode-left-plugin {
-  font-size: 16px;
+  font-size: 20px;
   text-align: center;
-  line-height: 36px;
-  height: 36px;
+  line-height: 44px;
+  height: 44px;
   position: relative;
   cursor: pointer;
   transition: all 0.3s ease;
   color: $color-text1-3;
-  &.collapse {
-    height: 40px;
-    border-bottom: 1px solid $color-line1-1;
-    opacity: 0.6;
-  }
   &.locked {
     color: red !important;
   }
   &:hover {
-    background-color: $color-brand1-1;
     color: $color-brand1-6;
     &:before {
       content: attr(data-tooltip);
@@ -29,8 +23,8 @@
       white-space: nowrap;
       padding: 6px 8px;
       border-radius: 4px;
-      background: rgba(0, 0, 0, 0.75);
-      color: #fff;
+      background: $balloon-tooltip-color-bg;
+      color: $color-text1-3;
       z-index: 100;
     }
     &:after {
@@ -40,17 +34,18 @@
       left: 40px;
       top: 15px;
       border: 5px solid transparent;
-      border-right-color: rgba(0, 0, 0, 0.75);
+      border-right: 5px solid $balloon-tooltip-color-bg;
       z-index: 100;
     }
   }
   &.active {
-    color: $color-white;
-    background-color: $color-brand1-9;
+    color: $color-brand1-9;
     &.disabled {
-      color: $color-white;
-      background-color: $color-fill1-4;
+      color: $color-text1-1;
     }
+    &:hover {
+      color: $color-brand1-6;
+    } 
   }
   &.disabled {
     cursor: not-allowed;

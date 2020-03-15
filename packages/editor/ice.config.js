@@ -12,7 +12,7 @@ module.exports = {
   },
   plugins: [
     ['ice-plugin-fusion', {
-      themePackage: '@alife/theme-lowcode-dark',
+      themePackage: '@alife/theme-lowcode-light',
     }],
     ['ice-plugin-moment-locales', {
       locales: ['zh-cn'],

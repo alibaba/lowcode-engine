@@ -7,12 +7,13 @@ export interface PluginProps {
   editor: Editor;
   config: PluginConfig;
   logo?: string;
+  href?: string;
 }
 
 export default function(props: PluginProps) {
   return (
     <div className="lowcode-plugin-logo">
-      <div className="logo" style={{ backgroundImage: `url(${props.logo})` }} />
+      <a className="logo" target="blank" href={props.href || '/'} style={{ backgroundImage: `url(${props.logo})` }} />
     </div>
   );
 }
