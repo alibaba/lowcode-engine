@@ -1,9 +1,9 @@
 import { computed, obx } from '@recore/obx';
 import { uniqueId } from '../../../../../../utils/unique-id';
-import { CompositeValue, PropsList, PropsMap, CompositeObject } from '../../../schema';
+import { CompositeValue, PropsList, PropsMap } from '../../../schema';
 import PropStash from './prop-stash';
 import Prop, { IPropParent, UNSET } from './prop';
-import { NodeParent } from '../node';
+import Node from '../node';
 
 export const EXTRA_KEY_PREFIX = '__';
 
@@ -40,7 +40,7 @@ export default class Props implements IPropParent {
 
   @obx type: 'map' | 'list' = 'map';
 
-  constructor(readonly owner: NodeParent, value?: PropsMap | PropsList | null, extras?: object) {
+  constructor(readonly owner: Node, value?: PropsMap | PropsList | null, extras?: object) {
     if (Array.isArray(value)) {
       this.type = 'list';
       this.items = value.map(item => new Prop(this, item.value, item.name, item.spread));

@@ -102,7 +102,7 @@ export default class DocumentModel {
     let schema: any;
     if (isDOMText(data) || isJSExpression(data)) {
       schema = {
-        componentName: '#frag',
+        componentName: 'Leaf',
         children: data,
       };
     } else {
@@ -281,6 +281,7 @@ export default class DocumentModel {
     // TODO: emit simulator mounted
   }
 
+  // FIXME: does needed?
   getComponent(componentName: string): any {
     return this.simulator!.getComponent(componentName);
   }

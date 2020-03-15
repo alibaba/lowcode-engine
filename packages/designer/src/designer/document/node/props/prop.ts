@@ -16,16 +16,18 @@ export interface IPropParent {
   readonly props: Props;
 }
 
+export type ValueTypes = 'unset' | 'literal' | 'map' | 'list' | 'expression' | 'slot';
+
 export default class Prop implements IPropParent {
   readonly isProp = true;
 
   readonly id = uniqueId('prop$');
 
-  @obx.ref private _type: 'unset' | 'literal' | 'map' | 'list' | 'expression' | 'slot' = 'unset';
+  @obx.ref private _type: ValueTypes = 'unset';
   /**
    * 属性类型
    */
-  get type(): 'unset' | 'literal' | 'map' | 'list' | 'expression' | 'slot' {
+  get type(): ValueTypes {
     return this._type;
   }
 
@@ -83,6 +85,7 @@ export default class Prop implements IPropParent {
     return null;
   }
 
+  private _code: string | null = null;
   /**
    * 获得表达式值
    */
@@ -90,13 +93,41 @@ export default class Prop implements IPropParent {
     if (isJSExpression(this.value)) {
       return this.value.value;
     }
+    // todo: JSFunction ...
     if (this.type === 'slot') {
       return JSON.stringify(this._slotNode!.export(false));
     }
-    return JSON.stringify(this.value);
+    return this._code != null ? this._code : JSON.stringify(this.value);
   }
-  set code(val) {
-    // todo
+
+  /**
+   * 设置表达式值
+   */
+  set code(code: string) {
+    if (isJSExpression(this._value)) {
+      this.setValue({
+        ...this._value,
+        value: code,
+      });
+      this._code = code;
+      return;
+    }
+
+    try {
+      const v = JSON.parse(code);
+      this.setValue(v);
+      this._code = code;
+      return;
+    } catch (e) {
+      // ignore
+    }
+
+    this.setValue({
+      type: 'JSExpression',
+      value: code,
+      mock: this._value,
+    });
+    this._code = code;
   }
 
   @computed getAsString(): string {
@@ -111,6 +142,7 @@ export default class Prop implements IPropParent {
    */
   setValue(val: CompositeValue) {
     this._value = val;
+    this._code = null;
     const t = typeof val;
     if (val == null) {
       this._value = null;
@@ -174,7 +206,7 @@ export default class Prop implements IPropParent {
       this._slotNode?.internalSetParent(null);
       const owner = this.props.owner;
       this._slotNode = owner.document.createNode(data, this);
-      this._slotNode.internalSetParent(owner);
+      this._slotNode.internalSetParent(owner as any);
     }
     this.dispose();
   }

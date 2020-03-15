@@ -7,7 +7,6 @@ import { RootSchema, NpmInfo } from '../../../designer/schema';
 import { getClientRects } from '../../../utils/get-client-rects';
 import { Asset } from '../utils/asset';
 import loader from '../utils/loader';
-import { ComponentMetadata } from '../../../designer/component-meta';
 import { reactFindDOMNodes, FIBER_KEY } from '../utils/react-find-dom-nodes';
 import { isESModule } from '../../../../../utils/is-es-module';
 import { NodeInstance } from '../../../designer/simulator';
@@ -68,7 +67,7 @@ export class SimulatorRenderer {
   private buildComponents() {
     this._components = buildComponents(this._componentsMap);
   }
-  @obx.ref private _components = {};
+  @obx.ref private _components: any = {};
   @computed get components(): object {
     // 根据 device 选择不同组件，进行响应式
     // 更好的做法是，根据 device 选择加载不同的组件资源，甚至是 simulatorUrl
@@ -173,6 +172,27 @@ export class SimulatorRenderer {
   private ctxMap = new Map<string, object>();
   mountContext(id: string, ctx: object) {
     this.ctxMap.set(id, ctx);
+  }
+
+  getComponent(componentName: string) {
+    const paths = componentName.split('.');
+    const subs: string[] = [];
+
+    while (true) {
+      const component = this._components[componentName];
+      if (component) {
+        return getSubComponent(component, subs);
+      }
+
+      const sub = paths.pop();
+      if (!sub) {
+        return null;
+      }
+      subs.unshift(sub);
+      componentName = paths.join('.');
+    }
+
+    return null;
   }
 
   getComponentInstances(id: string): ReactInstance[] | null {

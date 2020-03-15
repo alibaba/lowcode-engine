@@ -56,9 +56,6 @@ export default class RootNode extends Node implements NodeParent {
   get children(): NodeChildren {
     return this._children as NodeChildren;
   }
-  get props(): Props {
-    return this._props as any;
-  }
   internalSetParent(parent: null) {
     // empty
   }

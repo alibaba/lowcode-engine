@@ -160,6 +160,7 @@ export class SettingField implements SettingTarget {
   readonly isSettingField = true;
   readonly id = uniqueId('field');
   readonly type: 'field' | 'virtual-field' | 'group';
+  readonly isRequired: boolean = false;
   readonly isGroup: boolean;
   private _name: string | number;
   get name() {
@@ -209,6 +210,7 @@ export class SettingField implements SettingTarget {
       ...rest,
       ...extraProps,
     };
+    this.isRequired = config.isRequired || (setter as any)?.isRequired;
     this.isGroup = this.type === 'group';
 
     // copy parent properties

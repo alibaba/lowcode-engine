@@ -157,7 +157,7 @@ export interface NodeInstance<T = ComponentInstance> {
 /**
  * 组件类定义
  */
-export type Component = ComponentType<any> | object | string;
+export type Component = ComponentType<any> | object;
 
 /**
  * 组件实例定义

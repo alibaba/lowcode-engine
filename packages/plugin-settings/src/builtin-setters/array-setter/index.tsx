@@ -237,7 +237,7 @@ export default class ArraySetter extends Component<{
     if (setter?.componentName === 'ObjectSetter') {
       const items: FieldConfig[] = setter.props?.config?.items;
       if (items && Array.isArray(items)) {
-        columns = items.filter(item => item.isRequired || item.important);
+        columns = items.filter(item => item.isRequired || item.important || (item.setter as any)?.isRequired);
         if (columns.length === 3) {
           columns = columns.slice(0, 3);
         } else if (columns.length > 3) {
@@ -264,10 +264,7 @@ export default class ArraySetter extends Component<{
         }
         this.pipe = (this.context as PopupPipe).create({ width });
       }
-      this.pipe.send(
-        <TableSetter key={field.id} {...props} columns={columns} />,
-        title,
-      );
+      this.pipe.send(<TableSetter key={field.id} {...props} columns={columns} />, title);
       return (
         <Button
           type={forceInline ? 'normal' : 'primary'}

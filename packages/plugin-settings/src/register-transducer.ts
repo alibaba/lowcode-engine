@@ -264,7 +264,7 @@ registerMetadataTransducer((metadata) => {
 
 registerMetadataTransducer((metadata) => {
   const { componentName, configure = {} } = metadata;
-  if (componentName === '#frag') {
+  if (componentName === 'Leaf') {
     return {
       ...metadata,
       configure: {
@@ -277,19 +277,23 @@ registerMetadataTransducer((metadata) => {
             props: {
               setters: [{
                 componentName: 'StringSetter',
+                props: {
+                  // todo:
+                  multiline: true,
+                },
                 initialValue: '',
               }, {
                 componentName: 'ExpressionSetter',
                 initialValue: {
                   type: 'JSExpression',
-                  value: ''
-                }
-              }]
-            }
-          }
-        }]
-      }
-    }
+                  value: '',
+                },
+              }],
+            },
+          },
+        }],
+      },
+    };
   }
 
   const { props, events, styles } = configure as any;
@@ -297,8 +301,6 @@ registerMetadataTransducer((metadata) => {
   let isRoot: boolean = false;
   if (componentName === 'Page' || componentName === 'Component') {
     isRoot = true;
-    // todo
-    /*
     supportEvents = [{
       description: '初始化时',
       name: 'constructor'
@@ -312,7 +314,6 @@ registerMetadataTransducer((metadata) => {
       description: '卸载时',
       name: 'componentWillUnmount'
     }]
-    */
   } else {
     supportEvents = (events?.supportEvents || []).map((event: any) => {
       return typeof event === 'string' ? {
@@ -332,9 +333,11 @@ registerMetadataTransducer((metadata) => {
     }, {
       name: 'key',
       title: 'Key',
+      // todo: use Mixin
       setter: 'StringSetter',
     }, {
       name: 'ref',
+      title: 'Ref',
       setter: 'StringSetter',
     }, {
       name: '!more',
@@ -395,6 +398,11 @@ registerMetadataTransducer((metadata) => {
 
   if (isRoot) {
     // todo...
+    combined.push({
+      name: '#advanced',
+      title: '高级',
+      items: []
+    });
   } else {
     combined.push({
       name: '#advanced',

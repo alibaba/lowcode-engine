@@ -31,9 +31,8 @@ import {
 import { isNodeSchema, NodeSchema } from '../../../designer/schema';
 import { ComponentMetadata } from '../../../designer/component-meta';
 import { ReactInstance } from 'react';
-import { setNativeSelection } from '../../../designer/helper/navtive-selection';
-import cursor from '../../../designer/helper/cursor';
 import { isRootNode } from '../../../designer/document/node/root-node';
+import { parseProps } from '../utils/parse-props';
 
 export interface SimulatorProps {
   // 从 documentModel 上获取
@@ -333,12 +332,26 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
    * @see ISimulator
    */
   generateComponentMetadata(componentName: string): ComponentMetadata {
+    // if html tags
+    if (isHTMLTag(componentName)) {
+      return {
+        componentName,
+        // TODO: read builtins html metadata
+      };
+    }
+
     const component = this.getComponent(componentName);
+
+    if (component) {
+      parseProps(component as any);
+    }
+
     // TODO:
     // 1. generate builtin div/p/h1/h2
     // 2. read propTypes
     return {
       componentName,
+      props: parseProps(this.getComponent(componentName)),
     };
   }
 
@@ -346,7 +359,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
    * @see ISimulator
    */
   getComponent(componentName: string): Component | null {
-    return null;
+    return this.renderer?.getComponent(componentName) || null;
   }
 
   @obx.val private instancesMap = new Map<string, ReactInstance[]>();
@@ -931,6 +944,10 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     return config.checkNestingDown(parent, target) && this.checkNestingUp(parent, target);
   }
   // #endregion
+}
+
+function isHTMLTag(name: string) {
+  return /^[a-z]\w*$/.test(name);
 }
 
 function isPointInRect(point: CanvasPoint, rect: Rect) {
