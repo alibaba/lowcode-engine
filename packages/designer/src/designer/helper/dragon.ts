@@ -19,7 +19,7 @@ export interface LocateEvent {
   /**
    * 原始事件
    */
-  readonly originalEvent: MouseEvent;
+  readonly originalEvent: MouseEvent | DragEvent;
   /**
    * 拖拽对象
    */
@@ -124,7 +124,7 @@ const SHAKE_DISTANCE = 4;
 /**
  * mouse shake check
  */
-export function isShaken(e1: MouseEvent, e2: MouseEvent): boolean {
+export function isShaken(e1: MouseEvent | DragEvent, e2: MouseEvent | DragEvent): boolean {
   if ((e1 as any).shaken) {
     return true;
   }
@@ -132,6 +132,19 @@ export function isShaken(e1: MouseEvent, e2: MouseEvent): boolean {
     return true;
   }
   return Math.pow(e1.clientY - e2.clientY, 2) + Math.pow(e1.clientX - e2.clientX, 2) > SHAKE_DISTANCE;
+}
+
+function isInvalidPoint(e: any, last: any): boolean {
+  return (
+    e.clientX === 0 &&
+    e.clientY === 0 &&
+    last &&
+    (Math.abs(last.clientX - e.clientX) > 5 || Math.abs(last.clientY - e.clientY) > 5)
+  );
+}
+
+function isSameAs(e1: MouseEvent | DragEvent, e2: MouseEvent | DragEvent): boolean {
+  return e1.clientY === e2.clientY && e1.clientX === e2.clientX;
 }
 
 export function setShaken(e: any) {
@@ -145,15 +158,27 @@ function getSourceSensor(dragObject: DragObject): ISimulator | null {
   return dragObject.nodes[0]?.document.simulator || null;
 }
 
-function makeSimulatorListener(masterSensors: ISimulator[]): (fn: (sdoc: Document) => void) => void {
+function makeEventsHandler(
+  boostEvent: MouseEvent | DragEvent,
+  sensors?: ISimulator[],
+): (fn: (sdoc: Document) => void) => void {
+  const doc = boostEvent.view?.document || document;
+  if (doc === document && !isDragEvent(boostEvent)) {
+    sensors = undefined;
+  }
   return (fn: (sdoc: Document) => void) => {
-    masterSensors.forEach(sim => {
+    fn(doc);
+    sensors?.forEach(sim => {
       const sdoc = sim.contentDocument;
-      if (sdoc) {
+      if (sdoc && sdoc !== doc) {
         fn(sdoc);
       }
     });
   };
+}
+
+function isDragEvent(e: any): e is DragEvent {
+  return e?.type?.substr(0, 4) === 'drag';
 }
 
 export default class Dragon {
@@ -167,14 +192,17 @@ export default class Dragon {
     return this._activeSensor;
   }
 
-  @obx.ref private _dragging: boolean = false;
+  @obx.ref private _dragging = false;
   get dragging(): boolean {
     return this._dragging;
   }
 
   private emitter = new EventEmitter();
+  private emptyImage: HTMLImageElement = new Image();
 
-  constructor(readonly designer: Designer) {}
+  constructor(readonly designer: Designer) {
+    this.emptyImage.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+  }
 
   from(shell: Element, boost: (e: MouseEvent) => DragObject | null) {
     const mousedown = (e: MouseEvent) => {
@@ -197,21 +225,16 @@ export default class Dragon {
     };
   }
 
-  boost(dragObject: DragObject, boostEvent: MouseEvent) {
-    const doc = document;
-    const sourceDoc = boostEvent.view?.document;
-    const masterSensors = this.getMasterSensors();
-    const listenSimulators = !sourceDoc || sourceDoc === doc ? makeSimulatorListener(masterSensors) : null;
-    const alwaysListen = listenSimulators ? doc : sourceDoc!;
+  boost(dragObject: DragObject, boostEvent: MouseEvent | DragEvent) {
     const designer = this.designer;
+    const masterSensors = this.getMasterSensors();
+    const handleEvents = makeEventsHandler(boostEvent, masterSensors);
     const newBie = !isDragNodeObject(dragObject);
     const forceCopyState = isDragNodeObject(dragObject) && dragObject.nodes.some(node => node.isSlotRoot);
+    const isBoostFromDragAPI = boostEvent.type.substr(0, 4) === 'drag';
     let lastSensor: ISensor | undefined;
 
     this._dragging = false;
-
-    // 禁用默认的文稿拖选
-    this.setNativeSelection(false);
 
     const checkesc = (e: KeyboardEvent) => {
       if (e.keyCode === 27) {
@@ -221,23 +244,45 @@ export default class Dragon {
     };
 
     let copy = false;
-    const checkcopy = (e: MouseEvent) => {
+    const checkcopy = (e: MouseEvent | DragEvent | KeyboardEvent) => {
+      if (isDragEvent(e) && e.dataTransfer) {
+        if (newBie || forceCopyState) {
+          e.dataTransfer.dropEffect = 'copy';
+        }
+        return;
+      }
       if (newBie) {
         return;
       }
+
       if (e.altKey || e.ctrlKey) {
         copy = true;
         this.setCopyState(true);
+        if (isDragEvent(e) && e.dataTransfer) {
+          e.dataTransfer.dropEffect = 'copy';
+        }
       } else {
         copy = false;
         if (!forceCopyState) {
           this.setCopyState(false);
+          if (isDragEvent(e) && e.dataTransfer) {
+            e.dataTransfer.dropEffect = 'move';
+          }
         }
       }
     };
 
-    const drag = (e: MouseEvent) => {
+    let lastArrive: any;
+    const drag = (e: MouseEvent | DragEvent) => {
       checkcopy(e);
+
+      if (isInvalidPoint(e, lastArrive)) return;
+
+      if (lastArrive && isSameAs(e, lastArrive)) {
+        lastArrive = e;
+        return;
+      }
+      lastArrive = e;
 
       const locateEvent = createLocateEvent(e);
       const sensor = chooseSensor(locateEvent);
@@ -251,6 +296,8 @@ export default class Dragon {
     };
 
     const dragstart = () => {
+      this._dragging = true;
+      setShaken(boostEvent);
       const locateEvent = createLocateEvent(boostEvent);
       if (newBie || forceCopyState) {
         this.setCopyState(true);
@@ -259,35 +306,51 @@ export default class Dragon {
       }
       this.setDraggingState(true);
       // ESC cancel drag
-      alwaysListen.addEventListener('keydown', checkesc, false);
-      listenSimulators &&
-        listenSimulators(sdoc => {
-          sdoc.addEventListener('keydown', checkesc, false);
+      if (!isBoostFromDragAPI) {
+        handleEvents(doc => {
+          doc.addEventListener('keydown', checkesc, false);
         });
+      }
 
       this.emitter.emit('dragstart', locateEvent);
     };
 
-    const move = (e: MouseEvent) => {
-      if (this.dragging) {
+    const move = (e: MouseEvent | DragEvent) => {
+      if (isBoostFromDragAPI) {
+        e.preventDefault();
+      }
+      if (this._dragging) {
         drag(e);
         return;
       }
 
       if (isShaken(boostEvent, e)) {
-        this._dragging = true;
-
-        setShaken(boostEvent);
         dragstart();
         drag(e);
       }
     };
 
+    let didDrop = true;
+    const drop = (e: DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      didDrop = true;
+    };
+
     const over = (e?: any) => {
+      if (e && isDragEvent(e)) {
+        e.preventDefault();
+      }
       if (lastSensor) {
         lastSensor.deactiveSensor();
       }
-      this.setNativeSelection(true);
+      if (isBoostFromDragAPI) {
+        if (!didDrop) {
+          designer.clearLocation();
+        }
+      } else {
+        this.setNativeSelection(true);
+      }
       this.clearState();
 
       let exception;
@@ -300,31 +363,26 @@ export default class Dragon {
         }
       }
 
-      alwaysListen.removeEventListener('mousemove', move, true);
-      alwaysListen.removeEventListener('mouseup', over, true);
-      alwaysListen.removeEventListener('mousedown', over, true);
-      alwaysListen.removeEventListener('keydown', checkesc, false);
-      alwaysListen.removeEventListener('keydown', checkcopy as any, false);
-      alwaysListen.removeEventListener('keyup', checkcopy as any, false);
-      listenSimulators &&
-        listenSimulators(sdoc => {
-          sdoc.removeEventListener('mousemove', move, true);
-          sdoc.removeEventListener('mouseup', over, true);
-          sdoc.removeEventListener('mousedown', over, true);
-          sdoc.removeEventListener('keydown', checkesc, false);
-          sdoc.removeEventListener('keydown', checkcopy as any, false);
-          sdoc.removeEventListener('keyup', checkcopy as any, false);
-        });
+      handleEvents(doc => {
+        if (isBoostFromDragAPI) {
+          doc.removeEventListener('dragover', move, true);
+          doc.removeEventListener('dragend', over, true);
+          doc.removeEventListener('drop', drop, true);
+        } else {
+          doc.removeEventListener('mousemove', move, true);
+          doc.removeEventListener('mouseup', over, true);
+        }
+        doc.removeEventListener('mousedown', over, true);
+        doc.removeEventListener('keydown', checkesc, false);
+        doc.removeEventListener('keydown', checkcopy, false);
+        doc.removeEventListener('keyup', checkcopy, false);
+      });
       if (exception) {
         throw exception;
       }
     };
 
-    const createLocateEvent = (e: MouseEvent): LocateEvent => {
-      if (isLocateEvent(e)) {
-        return e;
-      }
-
+    const createLocateEvent = (e: MouseEvent | DragEvent): LocateEvent => {
       const evt: any = {
         type: 'LocateEvent',
         dragObject,
@@ -339,7 +397,7 @@ export default class Dragon {
         evt.globalY = e.clientY;
       } else {
         let srcSim: ISimulator | undefined;
-        let lastSim = lastSensor && isSimulator(lastSensor) ? lastSensor : null;
+        const lastSim = lastSensor && isSimulator(lastSensor) ? lastSensor : null;
         if (lastSim && lastSim.contentDocument === sourceDocument) {
           srcSim = lastSim;
         } else {
@@ -391,28 +449,46 @@ export default class Dragon {
       return sensor;
     };
 
-    alwaysListen.addEventListener('mousemove', move, true);
-    alwaysListen.addEventListener('mouseup', over, true);
-    alwaysListen.addEventListener('mousedown', over, true);
-    listenSimulators &&
-      listenSimulators(sdoc => {
-        // alwaysListen = global document
-        // listen others simulator iframe
-        sdoc.addEventListener('mousemove', move, true);
-        sdoc.addEventListener('mouseup', over, true);
-        sdoc.addEventListener('mousedown', over, true);
-      });
+    if (isDragEvent(boostEvent)) {
+      const { dataTransfer } = boostEvent;
+
+      if (dataTransfer) {
+        dataTransfer.setDragImage(this.emptyImage, 0, 0);
+        dataTransfer.effectAllowed = 'all';
+        dataTransfer.dropEffect = newBie || forceCopyState ? 'copy' : 'move';
+
+        try {
+          dataTransfer.setData('application/json', '{}');
+        } catch (ex) {
+          // ignore
+        }
+      }
+
+      dragstart();
+    } else {
+      this.setNativeSelection(false);
+    }
+
+    handleEvents(doc => {
+      if (isBoostFromDragAPI) {
+        doc.addEventListener('dragover', move, true);
+        didDrop = false;
+        doc.addEventListener('drop', drop, true);
+        doc.addEventListener('dragend', over, true);
+      } else {
+        doc.addEventListener('mousemove', move, true);
+        doc.addEventListener('mouseup', over, true);
+      }
+      doc.addEventListener('mousedown', over, true);
+    });
 
     // future think: drag things from browser-out or a iframe-pane
 
-    if (!newBie) {
-      alwaysListen.addEventListener('keydown', checkcopy as any, false);
-      alwaysListen.addEventListener('keyup', checkcopy as any, false);
-      listenSimulators &&
-        listenSimulators(sdoc => {
-          sdoc.addEventListener('keydown', checkcopy as any, false);
-          sdoc.addEventListener('keyup', checkcopy as any, false);
-        });
+    if (!newBie && !isBoostFromDragAPI) {
+      handleEvents(doc => {
+        doc.addEventListener('keydown', checkcopy, false);
+        doc.addEventListener('keyup', checkcopy, false);
+      });
     }
   }
 
