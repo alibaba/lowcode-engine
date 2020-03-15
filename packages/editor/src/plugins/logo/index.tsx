@@ -1,19 +1,18 @@
 import React from 'react';
 import './index.scss';
-import Editor from '../../framework/index';
-import { PluginConfig } from '../../framework/definitions';
+import { PluginProps } from '../../framework/definitions';
 
-export interface PluginProps {
-  editor: Editor;
-  config: PluginConfig;
+export interface IProps {
   logo?: string;
   href?: string;
 }
 
-export default function(props: PluginProps) {
+const Logo: React.FC<IProps & PluginProps> = (props): React.ReactElement => {
   return (
     <div className="lowcode-plugin-logo">
       <a className="logo" target="blank" href={props.href || '/'} style={{ backgroundImage: `url(${props.logo})` }} />
     </div>
   );
-}
+};
+
+export default Logo;

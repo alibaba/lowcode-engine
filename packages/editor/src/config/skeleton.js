@@ -111,7 +111,7 @@ export default {
           title: 'icon',
           icon: 'dengpao',
           onClick(editor) {
-            alert(`icon addon invoke, current activeKey: ${  editor.activeKey}`);
+            alert(`icon addon invoke, current activeKey: ${editor.activeKey}`);
           }
         },
         config: {},
@@ -128,8 +128,8 @@ export default {
           title: '组件库'
         },
         config: {
-          package: "@ali/iceluna-addon-component-list",
-          version: "^1.0.4"
+          package: '@ali/iceluna-addon-component-list',
+          version: '^1.0.4'
         },
         pluginProps: {
           disableAppComponent: true
@@ -218,7 +218,7 @@ export default {
           title: 'icon',
           icon: 'dengpao',
           onClick(editor) {
-            alert(`icon addon invoke, current activeKey: ${  editor.activeKey}`);
+            alert(`icon addon invoke, current activeKey: ${editor.activeKey}`);
           }
         },
         config: {},
@@ -234,52 +234,52 @@ export default {
           version: '^1.0.0'
         },
         pluginProps: {}
-      },
-      {
-        pluginKey: 'rightPanel1',
-        type: 'TabPanel',
-        props: {
-          title: '样式'
-        },
-        config: {
-          version: '^1.0.0'
-        },
-        pluginProps: {}
-      },
-      {
-        pluginKey: 'rightPanel2',
-        type: 'TabPanel',
-        props: {
-          title: '属性',
-          icon: 'dengpao'
-        },
-        config: {
-          version: '^1.0.0'
-        },
-        pluginProps: {}
-      },
-      {
-        pluginKey: 'rightPanel3',
-        type: 'TabPanel',
-        props: {
-          title: '事件'
-        },
-        config: {
-          version: '^1.0.0'
-        },
-        pluginProps: {}
-      },
-      {
-        pluginKey: 'rightPanel4',
-        type: 'TabPanel',
-        props: {
-          title: '数据'
-        },
-        config: {
-          version: '^1.0.0'
-        },
-        pluginProps: {}
       }
+      // {
+      //   pluginKey: 'rightPanel1',
+      //   type: 'TabPanel',
+      //   props: {
+      //     title: '样式'
+      //   },
+      //   config: {
+      //     version: '^1.0.0'
+      //   },
+      //   pluginProps: {}
+      // },
+      // {
+      //   pluginKey: 'rightPanel2',
+      //   type: 'TabPanel',
+      //   props: {
+      //     title: '属性',
+      //     icon: 'dengpao'
+      //   },
+      //   config: {
+      //     version: '^1.0.0'
+      //   },
+      //   pluginProps: {}
+      // },
+      // {
+      //   pluginKey: 'rightPanel3',
+      //   type: 'TabPanel',
+      //   props: {
+      //     title: '事件'
+      //   },
+      //   config: {
+      //     version: '^1.0.0'
+      //   },
+      //   pluginProps: {}
+      // },
+      // {
+      //   pluginKey: 'rightPanel4',
+      //   type: 'TabPanel',
+      //   props: {
+      //     title: '数据'
+      //   },
+      //   config: {
+      //     version: '^1.0.0'
+      //   },
+      //   pluginProps: {}
+      // }
     ],
     centerArea: [
       {
@@ -295,7 +295,7 @@ export default {
   shortCuts: [],
   lifeCycles: {
     init: function init(editor) {
-      const transformMaterial = (componentList) => {
+      const transformMaterial = componentList => {
         return componentList.map(category => {
           return {
             name: category.title,
@@ -318,15 +318,23 @@ export default {
       };
 
       const list = transformMaterial(assets.componentList);
-      console.log('+++++', list);
       editor.set({
         componentsMap: assets.components,
         componentMaterial: {
-          library: [{
-            name: 'Fusion组件库',
-            id: 1
-          }],
+          library: [
+            {
+              name: 'Fusion组件库',
+              id: 1
+            }
+          ],
           list
+        }
+      });
+
+      editor.set('dndHelper', {
+        handleResourceDragStart: function(ev, tagName, schema) {
+          // 物料面板中组件snippet的dragStart回调
+          // ev: 原始的domEvent；tagName: 组件的描述文案；schema: snippet的schema
         }
       });
     }

@@ -1,13 +1,26 @@
 import Debug from 'debug';
 import EventEmitter from 'events';
 import store from 'store';
-import { EditorConfig, HooksConfig, LocaleType, PluginStatusSet, Utils, PluginClassSet, PluginSet } from './definitions';
+import {
+  EditorConfig,
+  HooksConfig,
+  LocaleType,
+  PluginStatusSet,
+  Utils,
+  PluginClassSet,
+  PluginSet
+} from './definitions';
 
 import * as editorUtils from './utils';
 
-const {
-  registShortCuts, transformToPromise, unRegistShortCuts
-} = editorUtils;
+const { registShortCuts, transformToPromise, unRegistShortCuts } = editorUtils;
+
+declare global {
+  interface Window {
+    __isDebug?: boolean;
+    __newFunc?: (funcStr: string) => (...args: any[]) => any;
+  }
+}
 
 // 根据url参数设置debug选项
 const debugRegRes = /_?debug=(.*?)(&|$)/.exec(location.search);
@@ -16,6 +29,7 @@ if (debugRegRes && debugRegRes[1]) {
   window.__isDebug = true;
   store.storage.write('debug', debugRegRes[1] === 'true' ? '*' : debugRegRes[1]);
 } else {
+  // eslint-disable-next-line no-underscore-dangle
   window.__isDebug = false;
   store.remove('debug');
 }
@@ -23,13 +37,12 @@ if (debugRegRes && debugRegRes[1]) {
 // 重要，用于矫正画布执行new Function的window对象上下文
 // eslint-disable-next-line no-underscore-dangle
 window.__newFunc = (funContext: string): ((...args: any[]) => any) => {
-  return new Function(funContext);
+  // eslint-disable-next-line no-new-func
+  return new Function(funContext) as (...args: any[]) => any;
 };
 
-
-
 // 关闭浏览器前提醒,只有产生过交互才会生效
-window.onbeforeunload = function(e: Event): string|void {
+window.onbeforeunload = function(e: Event): string | void {
   const ev = e || window.event;
   // 本地调试不生效
   if (location.href.indexOf('localhost') > 0) {
@@ -72,7 +85,6 @@ export default class Editor extends EventEmitter {
 
   public plugins: PluginSet;
 
-
   public locale: LocaleType;
 
   public emit: (msg: string, ...args) => void;
@@ -89,7 +101,7 @@ export default class Editor extends EventEmitter {
     super();
     this.config = config;
     this.components = components;
-    this.utils = {...editorUtils, ...utils};
+    this.utils = { ...editorUtils, ...utils };
     instance = this;
     this.init();
   }
@@ -128,7 +140,6 @@ export default class Editor extends EventEmitter {
       }
     } catch (err) {
       console.warn(err);
-      
     }
   }
 

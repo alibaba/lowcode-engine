@@ -30,7 +30,7 @@ export default class RightArea extends PureComponent<RightAreaProps, RightAreaSt
     };
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     this.editor.on('skeleton.update', this.handleSkeletonUpdate);
     this.editor.on('rightNav.change', this.handlePluginChange);
     const visiblePluginList = this.areaManager.getVisiblePluginList('TabPanel');
@@ -38,7 +38,7 @@ export default class RightArea extends PureComponent<RightAreaProps, RightAreaSt
     this.handlePluginChange(defaultKey, true);
   }
 
-  componentWillUnmount() {
+  componentWillUnmount(): void {
     this.editor.off('skeleton.update', this.handleSkeletonUpdate);
     this.editor.off('rightNav.change', this.handlePluginChange);
   }
@@ -53,12 +53,12 @@ export default class RightArea extends PureComponent<RightAreaProps, RightAreaSt
       } else {
         const currentPlugin = this.editor.plugins[activeKey];
         if (currentPlugin) {
-          currentPlugin.close().then(() => {
+          currentPlugin.close().then((): void => {
             this.setState(
               {
                 activeKey: ''
               },
-              () => {
+              (): void => {
                 const visiblePluginList = this.areaManager.getVisiblePluginList();
                 const firstPlugin = visiblePluginList && visiblePluginList[0];
                 if (firstPlugin) {
@@ -75,12 +75,12 @@ export default class RightArea extends PureComponent<RightAreaProps, RightAreaSt
   handlePluginChange = (key: string, isinit?: boolean): void => {
     const activeKey = this.state.activeKey;
     const plugins = this.editor.plugins || {};
-    const openPlugin = () => {
+    const openPlugin = (): void => {
       if (!plugins[key]) {
         console.error(`plugin ${key} has not regist in the editor`);
         return;
       }
-      plugins[key].open().then(() => {
+      plugins[key].open().then((): void => {
         this.editor.set('rightNav', key);
         this.setState({
           activeKey: key
@@ -89,7 +89,7 @@ export default class RightArea extends PureComponent<RightAreaProps, RightAreaSt
     };
     if (key === activeKey && !isinit) return;
     if (activeKey && plugins[activeKey]) {
-      plugins[activeKey].close().then(() => {
+      plugins[activeKey].close().then((): void => {
         openPlugin();
       });
     } else {
@@ -109,12 +109,7 @@ export default class RightArea extends PureComponent<RightAreaProps, RightAreaSt
           disabled ? 'disabled' : ''
         }`}
       >
-        {!!icon && (
-          <Icon
-            size="xs"
-            type={icon}
-          />
-        )}
+        {!!icon && <Icon size="xs" type={icon} />}
         {title}
       </div>
     );
@@ -124,7 +119,7 @@ export default class RightArea extends PureComponent<RightAreaProps, RightAreaSt
     return renderTitle();
   };
 
-  renderTabPanels = (list: PluginConfig[], height: string): void => {
+  renderTabPanels = (list: PluginConfig[], height: string): React.ReactNode => {
     if (isEmpty(list)) {
       return null;
     }
@@ -138,37 +133,41 @@ export default class RightArea extends PureComponent<RightAreaProps, RightAreaSt
         lazyLoad={false}
         onChange={this.handlePluginChange}
       >
-        {list.map((item, idx) => {
-          const Comp = this.editor.components[item.pluginKey];
-          return (
-            <Tab.Item
-              key={item.pluginKey}
-              title={this.renderTabTitle(item)}
-              disabled={this.editor.pluginStatus[item.pluginKey].disabled}
-              style={{
-                width: `${100/list.length}%`
-              }}
-            >
-              <Comp editor={this.editor} config={item} {...item.pluginProps} />
-            </Tab.Item>
-          );
-        })}
+        {list.map(
+          (item): React.ReactElement => {
+            const Comp = this.editor.components[item.pluginKey];
+            return (
+              <Tab.Item
+                key={item.pluginKey}
+                title={this.renderTabTitle(item)}
+                disabled={this.editor.pluginStatus[item.pluginKey].disabled}
+                style={{
+                  width: `${100 / list.length}%`
+                }}
+              >
+                <Comp editor={this.editor} config={item} {...item.pluginProps} />
+              </Tab.Item>
+            );
+          }
+        )}
       </Tab>
     );
-  }
+  };
 
-  renderPanels = (list: PluginConfig[], height: string): void => {
-    return list.map((item) => {
-      const Comp = this.editor.components[item.pluginKey];
-      return (
-        <div className="right-panel" style={{height}} key={item.pluginKey}>
-          <Comp editor={this.editor} config={item} {...item.pluginProps} />
-        </div>
-      );
-    });
-  }
+  renderPanels = (list: PluginConfig[], height: string): React.ReactNode => {
+    return list.map(
+      (item): React.ReactElement => {
+        const Comp = this.editor.components[item.pluginKey];
+        return (
+          <div className="right-panel" style={{ height }} key={item.pluginKey}>
+            <Comp editor={this.editor} config={item} {...item.pluginProps} />
+          </div>
+        );
+      }
+    );
+  };
 
-  render() {
+  render(): React.ReactNode {
     const tabList = this.areaManager.getVisiblePluginList('TabPanel');
     const panelList = this.areaManager.getVisiblePluginList('Panel');
     if (isEmpty(panelList) && isEmpty(tabList)) {

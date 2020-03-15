@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
-import { Icon, Button } from '@alifd/next';
+import { Icon } from '@alifd/next';
 
 import './index.scss';
 
@@ -27,22 +27,25 @@ export default class TopIcon extends PureComponent<TopIconProps> {
     icon: '',
     id: '',
     locked: false,
-    onClick: () => {},
+    onClick: (): void => {},
     style: {},
     title: ''
   };
 
-  render() {
+  render(): React.ReactNode {
     const { active, disabled, icon, locked, title, className, id, style, onClick } = this.props;
     return (
-      <div className={classNames('lowcode-top-icon', className, {
-        active,
-        disabled,
-        locked
-      })} data-tooltip={title}
-      id={id}
-      style={style}
-      onClick={disabled ? undefined : onClick}>
+      <div
+        className={classNames('lowcode-top-icon', className, {
+          active,
+          disabled,
+          locked
+        })}
+        data-tooltip={title}
+        id={id}
+        style={style}
+        onClick={disabled ? undefined : onClick}
+      >
         <Icon type={icon} />
       </div>
     );

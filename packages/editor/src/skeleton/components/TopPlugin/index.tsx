@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent, Fragment, CSSProperties } from 'react';
 
 import { Balloon, Badge, Dialog } from '@alifd/next';
 import TopIcon from '../TopIcon';
@@ -31,7 +31,7 @@ export default class TopPlugin extends PureComponent<TopPluginProps, TopPluginSt
     disabled: false,
     marked: false,
     locked: false,
-    onClick: () => {}
+    onClick: (): void => {}
   };
 
   constructor(props, context) {
@@ -41,7 +41,7 @@ export default class TopPlugin extends PureComponent<TopPluginProps, TopPluginSt
     };
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     const { config, editor } = this.props;
     const pluginKey = config && config.pluginKey;
     if (editor && pluginKey) {
@@ -50,7 +50,7 @@ export default class TopPlugin extends PureComponent<TopPluginProps, TopPluginSt
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount(): void {
     const { config, editor } = this.props;
     const pluginKey = config && config.pluginKey;
     if (editor && pluginKey) {
@@ -59,22 +59,22 @@ export default class TopPlugin extends PureComponent<TopPluginProps, TopPluginSt
     }
   }
 
-  handleShow = () => {
+  handleShow = (): void => {
     const { disabled, config, onClick, editor } = this.props;
     const pluginKey = config && config.pluginKey;
     if (disabled || !pluginKey) return;
     // 考虑到弹窗情况，延时发送消息
-    setTimeout(() => editor.emit(`${pluginKey}.plugin.activate`), 0);
+    setTimeout((): void => editor.emit(`${pluginKey}.plugin.activate`), 0);
     this.handleOpen();
     onClick && onClick();
   };
 
-  handleClose = () => {
+  handleClose = (): void => {
     const { config, editor } = this.props;
     const pluginKey = config && config.pluginKey;
     const plugin = editor.plugins && editor.plugins[pluginKey];
-    if (plugin) {
-      plugin.close().then(() => {
+    if (plugin && plugin.close) {
+      plugin.close().then((): void => {
         this.setState({
           dialogVisible: false
         });
@@ -82,14 +82,14 @@ export default class TopPlugin extends PureComponent<TopPluginProps, TopPluginSt
     }
   };
 
-  handleOpen = () => {
+  handleOpen = (): void => {
     // todo dialog类型的插件初始时拿不动插件实例
     this.setState({
       dialogVisible: true
     });
   };
 
-  renderIcon = clickCallback => {
+  renderIcon = (clickCallback): React.ReactNode => {
     const { active, disabled, marked, locked, config, onClick, editor } = this.props;
     const { pluginKey, props } = config || {};
     const { icon, title } = props || {};
@@ -101,10 +101,10 @@ export default class TopPlugin extends PureComponent<TopPluginProps, TopPluginSt
         locked={locked}
         icon={icon}
         title={title}
-        onClick={() => {
+        onClick={(): void => {
           if (disabled) return;
           // 考虑到弹窗情况，延时发送消息
-          setTimeout(() => editor.emit(`${pluginKey}.plugin.activate`), 0);
+          setTimeout((): void => editor.emit(`${pluginKey}.plugin.activate`), 0);
           clickCallback && clickCallback();
           onClick && onClick();
         }}
@@ -113,8 +113,8 @@ export default class TopPlugin extends PureComponent<TopPluginProps, TopPluginSt
     return marked ? <Badge dot>{node}</Badge> : node;
   };
 
-  render() {
-    const { active, marked, locked, disabled, config, editor, pluginClass: Comp } = this.props;
+  render(): React.ReactNode {
+    const { active, marked, locked, disabled, config, editor, pluginClass: Comp, style } = this.props;
     const { pluginKey, pluginProps, props, type } = config || {};
     const { onClick, title } = props || {};
     const { dialogVisible } = this.state;
@@ -127,7 +127,7 @@ export default class TopPlugin extends PureComponent<TopPluginProps, TopPluginSt
           locked={locked}
           disabled={disabled}
           config={config}
-          onClick={() => {
+          onClick={(): void => {
             onClick && onClick.call(null, editor);
           }}
           {...pluginProps}
@@ -139,24 +139,24 @@ export default class TopPlugin extends PureComponent<TopPluginProps, TopPluginSt
       case 'LinkIcon':
         return (
           <a {...props.linkProps}>
-            {this.renderIcon(() => {
+            {this.renderIcon((): void => {
               onClick && onClick.call(null, editor);
             })}
           </a>
         );
       case 'Icon':
-        return this.renderIcon(() => {
+        return this.renderIcon((): void => {
           onClick && onClick.call(null, editor);
         });
       case 'DialogIcon':
         return (
           <Fragment>
-            {this.renderIcon(() => {
+            {this.renderIcon((): void => {
               onClick && onClick.call(null, editor);
               this.handleOpen();
             })}
             <Dialog
-              onOk={() => {
+              onOk={(): void => {
                 editor.emit(`${pluginKey}.dialog.onOk`);
                 this.handleClose();
               }}
@@ -165,7 +165,7 @@ export default class TopPlugin extends PureComponent<TopPluginProps, TopPluginSt
               title={title}
               style={{
                 width: 500,
-                ...(props && props.style)
+                ...(props.dialogProps && props.dialogProps.style)
               }}
               {...props.dialogProps}
               visible={dialogVisible}
@@ -177,7 +177,7 @@ export default class TopPlugin extends PureComponent<TopPluginProps, TopPluginSt
       case 'BalloonIcon':
         return (
           <Balloon
-            trigger={this.renderIcon(() => {
+            trigger={this.renderIcon((): void => {
               onClick && onClick.call(null, editor);
             })}
             triggerType={['click', 'hover']}

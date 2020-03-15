@@ -163,19 +163,15 @@ const SCHEMA = {
 };
 
 export default class DesignerPlugin extends PureComponent<PluginProps> {
-  static displayName: 'LowcodePluginDesigner';
-
-  constructor(props) {
-    super(props);
-  }
+  displayName: 'LowcodePluginDesigner';
 
   handleDesignerMount = (designer): void => {
-    const {editor} = this.props;
+    const { editor } = this.props;
     editor.set('designer', designer);
     editor.emit('designer.ready', designer);
-  }
+  };
 
-  render() {
+  render(): React.ReactNode {
     const { editor } = this.props;
     return (
       <Designer

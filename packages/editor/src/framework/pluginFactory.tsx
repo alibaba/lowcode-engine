@@ -1,30 +1,19 @@
 import React, { createRef, PureComponent } from 'react';
 
 import EditorContext from './context';
-import { I18nFunction, PluginConfig, PluginClass, Plugin } from './definitions';
+import { I18nFunction, PluginProps, PluginClass, Plugin } from './definitions';
 import Editor from './editor';
 import { acceptsRef, generateI18n, isEmpty, transformToPromise } from './utils';
 
-export interface PluginProps {
-  editor: Editor;
-  config: PluginConfig;
-}
-
-export interface InjectedPluginProps {
-  i18n?: I18nFunction;
-}
-
-export default function pluginFactory(
-  Comp: PluginClass
-): React.ComponentType<PluginProps> {
+export default function pluginFactory(Comp: PluginClass): React.ComponentType<PluginProps> {
   class LowcodePlugin extends PureComponent<PluginProps> {
     public static displayName = 'LowcodeEditorPlugin';
 
     public static contextType = EditorContext;
 
     public static init = Comp.init;
-    
-    public ref: React.RefObject<Plugin>;
+
+    public ref: React.RefObject<React.ReactElement> & Plugin;
 
     private editor: Editor;
 
@@ -39,7 +28,7 @@ export default function pluginFactory(
         return;
       }
       const { locale, messages, editor } = props;
-      this.ref = createRef<Plugin>();
+      this.ref = createRef<React.ReactElement>();
       // 注册插件
       this.editor = editor;
       this.i18n = generateI18n(locale, messages);
@@ -70,7 +59,6 @@ export default function pluginFactory(
       }
       return Promise.resolve();
     };
-
 
     public render(): React.ReactNode {
       const { config } = this.props;

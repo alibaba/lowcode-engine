@@ -16,6 +16,7 @@ export default class LeftAreaPanel extends PureComponent<LeftAreaPanelProps, Lef
   static displayName = 'LowcodeLeftAreaPanel';
 
   private editor: Editor;
+
   private areaManager: AreaManager;
 
   constructor(props) {
@@ -28,11 +29,12 @@ export default class LeftAreaPanel extends PureComponent<LeftAreaPanelProps, Lef
     };
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     this.editor.on('skeleton.update', this.handleSkeletonUpdate);
     this.editor.on('leftPanel.show', this.handlePluginChange);
   }
-  componentWillUnmount() {
+
+  componentWillUnmount(): void {
     this.editor.off('skeleton.update', this.handleSkeletonUpdate);
     this.editor.off('leftPanel.show', this.handlePluginChange);
   }
@@ -50,20 +52,26 @@ export default class LeftAreaPanel extends PureComponent<LeftAreaPanelProps, Lef
     });
   };
 
-  render() {
+  render(): React.ReactNode {
     const { activeKey } = this.state;
     const list = this.areaManager.getVisiblePluginList('PanelIcon');
 
     return (
       <Fragment>
-        {list.map((item, idx) => {
-          const Comp = this.editor.components[item.pluginKey];
-          return (
-            <Panel key={item.pluginKey} visible={item.pluginKey === activeKey} {...(item.props && item.props.panelProps)}>
-              <Comp editor={this.editor} config={item} {...item.pluginProps} />
-            </Panel>
-          );
-        })}
+        {list.map(
+          (item): React.ReactElement => {
+            const Comp = this.editor.components[item.pluginKey];
+            return (
+              <Panel
+                key={item.pluginKey}
+                visible={item.pluginKey === activeKey}
+                {...(item.props && item.props.panelProps)}
+              >
+                <Comp editor={this.editor} config={item} {...item.pluginProps} />
+              </Panel>
+            );
+          }
+        )}
       </Fragment>
     );
   }

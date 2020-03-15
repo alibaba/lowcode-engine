@@ -106,34 +106,37 @@ export interface I18nConfig {
   'ja-JP'?: I18nMessages;
 }
 
-export type I18nFunction = (key: string, params: any) => string | string[];
+export type I18nFunction = (key: string, params: any) => string;
 
 export interface Utils {
   [key: string]: (...args) => any;
 }
 
-
 export interface PluginProps {
   editor: Editor;
   config: PluginConfig;
-  i18n: I18nFunction;
-  ref?: React.RefObject<Plugin>;
+  i18n?: I18nFunction;
+  ref?: React.RefObject<React.ReactElement>;
   [key: string]: any;
 }
 
-
 export type Plugin = React.ReactNode & {
-  open?: () => boolean| void| Promise<any>;
-  close?: () => boolean| void| Promise<any>;
-}
+  open?: () => boolean | void | Promise<any>;
+  close?: () => boolean | void | Promise<any>;
+};
+
+export type HOCPlugin = React.ReactNode & {
+  open: () => Promise<any>;
+  close: () => Promise<any>;
+};
 
 export interface PluginSet {
-  [key: string]: Plugin;
+  [key: string]: HOCPlugin;
 }
 
 export type PluginClass = React.ComponentType<PluginProps> & {
   init?: (editor: Editor) => void;
-}
+};
 
 export interface PluginClassSet {
   [key: string]: PluginClass;
@@ -149,4 +152,3 @@ export interface PluginStatus {
 export interface PluginStatusSet {
   [key: string]: PluginStatus;
 }
-

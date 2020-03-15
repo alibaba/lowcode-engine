@@ -12,6 +12,7 @@ export default class CenterArea extends PureComponent<CenterAreaProps> {
   static displayName = 'LowcodeCenterArea';
 
   private editor: Editor;
+
   private areaManager: AreaManager;
 
   constructor(props) {
@@ -20,10 +21,11 @@ export default class CenterArea extends PureComponent<CenterAreaProps> {
     this.areaManager = new AreaManager(this.editor, 'centerArea');
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     this.editor.on('skeleton.update', this.handleSkeletonUpdate);
   }
-  componentWillUnmount() {
+
+  componentWillUnmount(): void {
     this.editor.off('skeleton.update', this.handleSkeletonUpdate);
   }
 
@@ -34,14 +36,16 @@ export default class CenterArea extends PureComponent<CenterAreaProps> {
     }
   };
 
-  render() {
+  render(): React.ReactNode {
     const visiblePluginList = this.areaManager.getVisiblePluginList();
     return (
       <div className="lowcode-center-area">
-        {visiblePluginList.map(item => {
-          const Comp = this.editor.components[item.pluginKey];
-          return <Comp key={item.pluginKey} editor={this.editor} config={item} {...item.pluginProps} />;
-        })}
+        {visiblePluginList.map(
+          (item): React.ReactNode => {
+            const Comp = this.editor.components[item.pluginKey];
+            return <Comp key={item.pluginKey} editor={this.editor} config={item} {...item.pluginProps} />;
+          }
+        )}
       </div>
     );
   }

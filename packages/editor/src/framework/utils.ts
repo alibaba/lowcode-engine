@@ -28,6 +28,17 @@ const ENV = {
   WEB: 'WEB'
 };
 
+declare global {
+  interface Window {
+    sendIDEMessage?: (params: IDEMessageParams) => void;
+    goldlog?: {
+      record: (logKey: string, gmKey: string, goKey: string, method: 'POST' | 'GET') => (...args: any[]) => any;
+    };
+    is_theia?: boolean;
+    vscode?: boolean;
+  }
+}
+
 export interface IDEMessageParams {
   action: string;
   data: {
@@ -37,16 +48,11 @@ export interface IDEMessageParams {
   };
 }
 
-export interface Window {
-  sendIDEMessage: (msg: IDEMessageParams) => void;
-  is_theia?: boolean;
-}
-
 /*
  * 用于构造国际化字符串处理函数
  */
 export function generateI18n(locale: LocaleType = 'zh-CN', messages: I18nMessages = {}): I18nFunction {
-  return (key: string, values): string | string[] => {
+  return (key: string, values): string => {
     if (!messages || !messages[key]) {
       return '';
     }

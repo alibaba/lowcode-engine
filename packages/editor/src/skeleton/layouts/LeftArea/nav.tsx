@@ -21,7 +21,7 @@ export default class LeftAreaNav extends PureComponent<LeftAreaNavProps, LeftAre
 
   private areaManager: AreaManager;
 
-  private cacheActiveKey: string;
+  // private cacheActiveKey: string;
 
   constructor(props) {
     super(props);
@@ -31,10 +31,10 @@ export default class LeftAreaNav extends PureComponent<LeftAreaNavProps, LeftAre
     this.state = {
       activeKey: 'none'
     };
-    this.cacheActiveKey = 'none';
+    // this.cacheActiveKey = 'none';
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     this.editor.on('skeleton.update', this.handleSkeletonUpdate);
     this.editor.on('leftNav.change', this.handlePluginChange);
     const visiblePanelPluginList = this.areaManager.getVisiblePluginList().filter(item => item.type === 'IconPanel');
@@ -42,7 +42,7 @@ export default class LeftAreaNav extends PureComponent<LeftAreaNavProps, LeftAre
     this.handlePluginChange(defaultKey);
   }
 
-  componentWillUnmount() {
+  componentWillUnmount(): void {
     this.editor.off('skeleton.update', this.handleSkeletonUpdate);
     this.editor.off('leftNav.change', this.handlePluginChange);
   }
@@ -61,27 +61,25 @@ export default class LeftAreaNav extends PureComponent<LeftAreaNavProps, LeftAre
     const nextPlugin = plugins[key];
     if (activeKey === 'none') {
       if (nextPlugin) {
-        nextPlugin.open().then(() => {
+        nextPlugin.open().then((): void => {
           this.updateActiveKey(key);
         });
       }
     } else if (activeKey === key) {
       if (prePlugin) {
-        prePlugin.close().then(() => {
+        prePlugin.close().then((): void => {
           this.updateActiveKey('none');
         });
       }
-    } else {
+    } else if (prePlugin) {
       // 先关后开
-      if (prePlugin) {
-        prePlugin.close().then(() => {
-          if (nextPlugin) {
-            nextPlugin.open().then(() => {
-              this.updateActiveKey(key);
-            });
-          }
-        });
-      }
+      prePlugin.close().then((): void => {
+        if (nextPlugin) {
+          nextPlugin.open().then((): void => {
+            this.updateActiveKey(key);
+          });
+        }
+      });
     }
   };
 
@@ -111,9 +109,9 @@ export default class LeftAreaNav extends PureComponent<LeftAreaNavProps, LeftAre
   };
 
   updateActiveKey = (key: string): void => {
-    if (key === 'none') {
-      this.cacheActiveKey = this.state.activeKey;
-    }
+    // if (key === 'none') {
+    //   this.cacheActiveKey = this.state.activeKey;
+    // }
     this.editor.set('leftNav', key);
     this.setState({ activeKey: key });
     this.editor.emit('leftPanel.show', key);
@@ -121,31 +119,32 @@ export default class LeftAreaNav extends PureComponent<LeftAreaNavProps, LeftAre
 
   renderPluginList = (list: PluginConfig[] = []): React.ReactElement[] => {
     const { activeKey } = this.state;
-    return list.map((item, idx) => {
-      const pluginStatus = this.editor.pluginStatus[item.pluginKey];
-      return (
-        <LeftPlugin
-          key={item.pluginKey}
-          config={item}
-          editor={this.editor}
-          pluginClass={this.editor.components[item.pluginKey]}
-          onClick={() => this.handlePluginClick(item)}
-          active={activeKey === item.pluginKey}
-          {...pluginStatus}
-        />
-      );
-    });
+    return list.map(
+      (item): React.ReactElement => {
+        const pluginStatus = this.editor.pluginStatus[item.pluginKey];
+        return (
+          <LeftPlugin
+            key={item.pluginKey}
+            config={item}
+            editor={this.editor}
+            pluginClass={this.editor.components[item.pluginKey]}
+            onClick={(): void => this.handlePluginClick(item)}
+            active={activeKey === item.pluginKey}
+            {...pluginStatus}
+          />
+        );
+      }
+    );
   };
 
-  render() {
-    const { activeKey } = this.state;
+  render(): React.ReactNode {
     const topList: PluginConfig[] = [];
     const bottomList: PluginConfig[] = [];
     const visiblePluginList = this.areaManager.getVisiblePluginList();
-    if (isEmpty(visiblePluginList)){
+    if (isEmpty(visiblePluginList)) {
       return null;
     }
-    visiblePluginList.forEach(item => {
+    visiblePluginList.forEach((item): void => {
       const align = item.props && item.props.align === 'bottom' ? 'bottom' : 'top';
       if (align === 'bottom') {
         bottomList.push(item);

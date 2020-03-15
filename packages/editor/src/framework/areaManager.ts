@@ -22,7 +22,9 @@ export default class AreaManager {
     const { pluginStatus } = this.editor;
     const list = pluginType ? this.config.filter((item): boolean => item.type === pluginType) : this.config;
 
-    const isUpdate = list.some((item): boolean => !deepEqual(pluginStatus[item.pluginKey], this.pluginStatus[item.pluginKey]));
+    const isUpdate = list.some(
+      (item): boolean => !deepEqual(pluginStatus[item.pluginKey], this.pluginStatus[item.pluginKey])
+    );
     this.pluginStatus = clone(pluginStatus);
     return isUpdate;
   }
