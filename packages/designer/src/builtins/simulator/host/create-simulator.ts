@@ -4,7 +4,11 @@ import { SimulatorHost } from './host';
 import { AssetLevel, AssetLevels, AssetList, isAssetBundle, isAssetItem, AssetType, assetItem } from '../utils/asset';
 import { isCSSUrl } from '../../../utils/is-css-url';
 
-export function createSimulator(host: SimulatorHost, iframe: HTMLIFrameElement, vendors: AssetList = []): Promise<SimulatorRenderer> {
+export function createSimulator(
+  host: SimulatorHost,
+  iframe: HTMLIFrameElement,
+  vendors: AssetList = [],
+): Promise<SimulatorRenderer> {
   const win: any = iframe.contentWindow;
   const doc = iframe.contentDocument!;
 
@@ -12,7 +16,7 @@ export function createSimulator(host: SimulatorHost, iframe: HTMLIFrameElement, 
 
   const styles: any = {};
   const scripts: any = {};
-  AssetLevels.forEach((lv) => {
+  AssetLevels.forEach(lv => {
     styles[lv] = [];
     scripts[lv] = [];
   });
@@ -36,9 +40,9 @@ export function createSimulator(host: SimulatorHost, iframe: HTMLIFrameElement, 
         asset = assetItem(isCSSUrl(asset) ? AssetType.CSSUrl : AssetType.JSUrl, asset, level)!;
       }
       const id = asset.id ? ` data-id="${asset.id}"` : '';
-      const lv = asset.level || level || AssetLevel.BaseDepends;
+      const lv = asset.level || level || AssetLevel.Environment;
       if (asset.type === AssetType.JSUrl) {
-        (scripts[lv] || scripts[AssetLevel.App]).push(`<script src="${asset.content}"${id}></script>`)
+        (scripts[lv] || scripts[AssetLevel.App]).push(`<script src="${asset.content}"${id}></script>`);
       } else if (asset.type === AssetType.JSText) {
         (scripts[lv] || scripts[AssetLevel.App]).push(`<script${id}>${asset.content}</script>`);
       } else if (asset.type === AssetType.CSSUrl) {
@@ -51,12 +55,16 @@ export function createSimulator(host: SimulatorHost, iframe: HTMLIFrameElement, 
 
   parseAssetList(vendors);
 
-  const styleFrags = Object.keys(styles).map(key => {
-    return styles[key].join('\n') + `<meta level="${key}" />`;
-  }).join('');
-  const scriptFrags = Object.keys(scripts).map(key => {
-    return scripts[key].join('\n');
-  }).join('');
+  const styleFrags = Object.keys(styles)
+    .map(key => {
+      return styles[key].join('\n') + `<meta level="${key}" />`;
+    })
+    .join('');
+  const scriptFrags = Object.keys(scripts)
+    .map(key => {
+      return scripts[key].join('\n');
+    })
+    .join('');
 
   doc.open();
   doc.write(`<!doctype html><html><head><meta charset="utf-8"/>

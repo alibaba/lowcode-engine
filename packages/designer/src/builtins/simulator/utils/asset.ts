@@ -6,11 +6,11 @@ export interface AssetItem {
 }
 
 export enum AssetLevel {
-  // 基础依赖库
-  BaseDepends = 1,
-  // 基础组件库
-  BaseComponents = 2,
-  // 主题包
+  // 环境依赖库 比如 react, react-dom
+  Environment = 1,
+  // 基础类库，比如 lodash deep fusion antd
+  Library = 2,
+  // 主题
   Theme = 3,
   // 运行时
   Runtime = 4,
@@ -21,8 +21,8 @@ export enum AssetLevel {
 }
 
 export const AssetLevels = [
-  AssetLevel.BaseDepends,
-  AssetLevel.BaseComponents,
+  AssetLevel.Environment,
+  AssetLevel.Library,
   AssetLevel.Theme,
   AssetLevel.Runtime,
   AssetLevel.Components,

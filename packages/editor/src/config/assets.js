@@ -33,22 +33,24 @@ export default {
           propType: 'string'
         }
       ],
-      configure: {
-        props: [
-          {
-            name: 'type',
-            setter: {
-              componentName: 'Input'
-            }
-          },
-          {
-            name: 'children',
-            setter: {
-              componentName: 'Input'
-            }
-          }
-        ]
-      }
+    },
+    'Button.Group': {
+      componentName: 'Button.Group',
+      title: '按钮组',
+      devMode: 'proCode',
+      npm: {
+        package: '@alifd/next',
+        version: '1.19.18',
+        destructuring: true,
+        exportName: 'Button',
+        subName: 'Group'
+      },
+      props: [
+        {
+          name: 'size',
+          propType: 'string'
+        }
+      ],
     },
     Input: {
       componentName: 'Input',
@@ -66,16 +68,91 @@ export default {
           propType: 'string'
         }
       ],
-      configure: {
-        props: [
-          {
-            name: 'placeholder',
-            setter: {
-              componentName: 'Input'
-            }
-          }
-        ]
-      }
+    },
+    Form: {
+      componentName: 'Form',
+      title: '表单容器',
+      devMode: 'proCode',
+      npm: {
+        package: '@alifd/next',
+        version: '1.19.18',
+        destructuring: true,
+        exportName: 'Form'
+      },
+      props: [
+        {
+          name: 'device',
+          propType: 'string'
+        }
+      ],
+    },
+    'Form.Item': {
+      componentName: 'Form.Item',
+      title: '表单项',
+      devMode: 'proCode',
+      npm: {
+        package: '@alifd/next',
+        version: '1.19.18',
+        destructuring: true,
+        exportName: 'Form',
+        subName: 'Item'
+      },
+      props: [
+        {
+          name: 'label',
+          propType: 'string',
+        },
+        {
+          name: 'device',
+          propType: 'string'
+        }
+      ],
+    },
+    NumberPicker: {
+      componentName: 'NumberPicker',
+      title: '数字输入',
+      devMode: 'proCode',
+      npm: {
+        package: '@alifd/next',
+        version: '1.19.18',
+        destructuring: true,
+        exportName: 'NumberPicker',
+      },
+      props: [
+        {
+          name: 'size',
+          propType: 'string',
+        },
+        {
+          name: 'defaultValue',
+          propType: 'number'
+        }
+      ],
+    },
+    Select: {
+      componentName: 'Select',
+      title: '下拉',
+      devMode: 'proCode',
+      npm: {
+        package: '@alifd/next',
+        version: '1.19.18',
+        destructuring: true,
+        exportName: 'Select',
+      },
+      props: [
+        {
+          name: 'size',
+          propType: 'string',
+        },
+        {
+          name: 'defaultValue',
+          propType: 'number'
+        },
+        {
+          name: 'placeholder',
+          propType: 'string'
+        }
+      ],
     }
   },
   componentList: [

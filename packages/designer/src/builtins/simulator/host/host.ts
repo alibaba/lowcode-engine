@@ -6,7 +6,7 @@ import { SimulatorRenderer } from '../renderer/renderer';
 import Node, { NodeParent, isNodeParent, isNode, contains } from '../../../designer/document/node/node';
 import DocumentModel from '../../../designer/document/document-model';
 import ResourceConsumer from './resource-consumer';
-import { AssetLevel, Asset, assetBundle, assetItem, AssetType } from '../utils/asset';
+import { AssetLevel, Asset, AssetList, assetBundle, assetItem, AssetType } from '../utils/asset';
 import {
   DragObjectType,
   isShaken,
@@ -34,6 +34,12 @@ import { ReactInstance } from 'react';
 import { isRootNode } from '../../../designer/document/node/root-node';
 import { parseProps } from '../utils/parse-props';
 
+export interface LibraryItem {
+  package: string;
+  library: string;
+  urls: Asset;
+}
+
 export interface SimulatorProps {
   // 从 documentModel 上获取
   // suspended?: boolean;
@@ -41,8 +47,9 @@ export interface SimulatorProps {
   device?: 'mobile' | 'iphone' | string;
   deviceClassName?: string;
   simulatorUrl?: Asset;
-  dependsAsset?: Asset;
-  themesAsset?: Asset;
+  environment?: Asset;
+  library?: LibraryItem[];
+  theme?: Asset;
   componentsAsset?: Asset;
   [key: string]: any;
 }
@@ -59,14 +66,13 @@ const defaultSimulatorUrl = (() => {
   return urls;
 })();
 
-const defaultDepends = [
+const defaultEnvironment = [
   // https://g.alicdn.com/mylib/??react/16.11.0/umd/react.production.min.js,react-dom/16.8.6/umd/react-dom.production.min.js,prop-types/15.7.2/prop-types.min.js
   assetItem(AssetType.JSText, 'window.React=parent.React;window.ReactDOM=parent.ReactDOM;', undefined, 'react'),
   assetItem(
     AssetType.JSText,
     'window.PropTypes=parent.PropTypes;React.PropTypes=parent.PropTypes; window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;',
   ),
-  // assetItem(AssetType.JSUrl, 'https://g.alicdn.com/mylib/@ali/recore/1.5.7/umd/recore.min.js'),
   assetItem(AssetType.JSUrl, '/statics/lowcode-renderer.js'),
 ];
 
@@ -97,8 +103,8 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     return this.get('componentsAsset');
   }
 
-  @computed get themesAsset(): Asset | undefined {
-    return this.get('themesAsset');
+  @computed get theme(): Asset | undefined {
+    return this.get('theme');
   }
 
   @computed get componentsMap() {
@@ -166,6 +172,8 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     return {};
   });
 
+  readonly libraryMap: { [key: string]: string } = {};
+
   async mountContentFrame(iframe: HTMLIFrameElement | null) {
     if (!iframe) {
       return;
@@ -173,11 +181,22 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
 
     this._contentWindow = iframe.contentWindow!;
 
+    const library = this.get('library') as LibraryItem[];
+    const libraryAsset: AssetList = [];
+    if (library) {
+      library.forEach(item => {
+        this.libraryMap[item.package] = item.library;
+        libraryAsset.push(item.urls);
+      });
+    }
+
     const vendors = [
       // required & use once
-      assetBundle(this.get('dependsAsset') || defaultDepends, AssetLevel.BaseDepends),
+      assetBundle(this.get('environment') || defaultEnvironment, AssetLevel.Environment),
+      // required & use once
+      assetBundle(libraryAsset, AssetLevel.Library),
       // required & TODO: think of update
-      assetBundle(this.themesAsset, AssetLevel.Theme),
+      assetBundle(this.theme, AssetLevel.Theme),
       // required & use once
       assetBundle(this.get('simulatorUrl') || defaultSimulatorUrl, AssetLevel.Runtime),
     ];

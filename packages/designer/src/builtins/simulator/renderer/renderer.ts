@@ -27,8 +27,12 @@ export class SimulatorRenderer {
       // sync schema
       this._schema = host.document.schema;
 
-      this._componentsMap = host.designer.componentsMap;
-      this.buildComponents();
+      // todo: split with others, not all should recompute
+      if (this._libraryMap !== host.libraryMap || this._componentsMap !== host.designer.componentsMap) {
+        this._libraryMap = host.libraryMap || {};
+        this._componentsMap = host.designer.componentsMap;
+        this.buildComponents();
+      }
 
       // sync designMode
 
@@ -64,8 +68,9 @@ export class SimulatorRenderer {
   @computed get schema(): any {
     return this._schema;
   }
+  private _libraryMap: { [key: string]: string } = {};
   private buildComponents() {
-    this._components = buildComponents(this._componentsMap);
+    this._components = buildComponents(this._libraryMap, this._componentsMap);
   }
   @obx.ref private _components: any = {};
   @computed get components(): object {
@@ -280,7 +285,7 @@ function getSubComponent(library: any, paths: string[]) {
   return component;
 }
 
-function findComponent(componentName: string, npm?: NpmInfo) {
+function findComponent(libraryMap: LibraryMap, componentName: string, npm?: NpmInfo) {
   if (!npm) {
     return accessLibrary(componentName);
   }
@@ -290,21 +295,26 @@ function findComponent(componentName: string, npm?: NpmInfo) {
   // export { exportName as componentName } from package
   // if exportName == null exportName === componentName;
   // const componentName = exportName.subName, if exportName empty subName donot use
-  const libraryName = npm.exportName || npm.componentName || componentName;
+  const exportName = npm.exportName || npm.componentName || componentName;
+  const libraryName = libraryMap[npm.package] || exportName;
   const library = accessLibrary(libraryName);
   const paths = npm.exportName && npm.subName ? npm.subName.split('.') : [];
   if (npm.destructuring) {
-    paths.unshift(libraryName);
+    paths.unshift(exportName);
   } else if (isESModule(library)) {
     paths.unshift('default');
   }
   return getSubComponent(library, paths);
 }
 
-function buildComponents(componentsMap: { [componentName: string]: NpmInfo }) {
+export interface LibraryMap {
+  [key: string]: string;
+}
+
+function buildComponents(libraryMap: LibraryMap, componentsMap: { [componentName: string]: NpmInfo }) {
   const components: any = {};
   Object.keys(componentsMap).forEach(componentName => {
-    components[componentName] = findComponent(componentName, componentsMap[componentName]);
+    components[componentName] = findComponent(libraryMap, componentName, componentsMap[componentName]);
   });
   return components;
 }

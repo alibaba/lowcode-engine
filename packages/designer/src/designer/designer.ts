@@ -330,7 +330,7 @@ export default class Designer {
     return meta;
   }
 
-  get componentsMap(): { [key: string]: NpmInfo } {
+  @computed get componentsMap(): { [key: string]: NpmInfo } {
     const maps: any = {};
     this._componentMetasMap.forEach((config, key) => {
       maps[key] = config.metadata.npm;

@@ -325,7 +325,7 @@ export default class Node {
    */
   export(serialize = false): NodeSchema {
     const baseSchema: any = {
-      componentName: this.componentName,
+      componentName: this.componentName === 'Leaf' ? 'Fragment' : this.componentName,
     };
 
     if (serialize) {
@@ -334,10 +334,11 @@ export default class Node {
 
     if (!isNodeParent(this)) {
       baseSchema.children = this.props.get('children')?.export(serialize);
-      return baseSchema;
+      // FIXME!
+      return baseSchema.children;
     }
 
-    const { props, extras } = this.props.export(serialize) || {};
+    const { props = {}, extras } = this.props.export(serialize) || {};
     const schema: any = {
       ...baseSchema,
       props,

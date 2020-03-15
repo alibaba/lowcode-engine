@@ -6,6 +6,8 @@ import { PluginConfig } from '../../framework/definitions';
 // @ts-ignore
 import Designer from '../../../../designer';
 
+import assets from '../../config/assets';
+
 import './index.scss';
 
 export interface PluginProps {
@@ -53,7 +55,7 @@ const SCHEMA = {
           },
           children: [
             {
-              componentName: 'FormItem',
+              componentName: 'Form.Item',
               props: {
                 label: '姓名：',
                 name: 'name',
@@ -73,7 +75,7 @@ const SCHEMA = {
               ]
             },
             {
-              componentName: 'FormItem',
+              componentName: 'Form.Item',
               props: {
                 label: '年龄：',
                 name: 'age',
@@ -90,7 +92,7 @@ const SCHEMA = {
               ]
             },
             {
-              componentName: 'FormItem',
+              componentName: 'Form.Item',
               props: {
                 label: '职业：',
                 name: 'profession'
@@ -126,7 +128,7 @@ const SCHEMA = {
               },
               children: [
                 {
-                  componentName: 'ButtonGroup',
+                  componentName: 'Button.Group',
                   props: {},
                   children: [
                     {
@@ -179,21 +181,9 @@ export default class DesignerPlugin extends PureComponent<PluginProps> {
         className="lowcode-plugin-designer"
         defaultSchema={SCHEMA as any}
         eventPipe={editor as any}
+        componentsDescription={Object.values(assets.components) as any}
         simulatorProps={{
-          componentsAsset: [
-            {
-              type: 'jsUrl',
-              content: 'https://unpkg.alibaba-inc.com/@alifd/next@1.18.17/dist/next.min.js',
-              id: 'next',
-              level: 2
-            },
-            {
-              type: 'cssUrl',
-              content: 'https://unpkg.alibaba-inc.com/@alifd/next@1.18.17/dist/next.min.css',
-              id: 'next',
-              level: 2
-            }
-          ]
+          library: Object.values(assets.packages),
         }}
       />
     );
