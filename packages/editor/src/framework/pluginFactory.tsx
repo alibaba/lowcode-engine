@@ -1,32 +1,24 @@
 import React, { createRef, PureComponent } from 'react';
 
 import EditorContext from './context';
-import { I18nFunction, PluginConfig } from './definitions';
+import { I18nFunction, PluginProps, PluginClass, Plugin } from './definitions';
 import Editor from './editor';
 import { acceptsRef, generateI18n, isEmpty, transformToPromise } from './utils';
 
-export interface PluginProps {
-  editor: Editor;
-  config: PluginConfig;
-}
-
-export interface InjectedPluginProps {
-  i18n?: I18nFunction;
-}
-
-export default function pluginFactory(
-  Comp: React.ComponentType<PluginProps & InjectedPluginProps>
-): React.ComponentType<PluginProps> {
+export default function pluginFactory(Comp: PluginClass): React.ComponentType<PluginProps> {
   class LowcodePlugin extends PureComponent<PluginProps> {
     public static displayName = 'LowcodeEditorPlugin';
-    public static defaultProps = {
-      config: {}
-    };
+
     public static contextType = EditorContext;
+
     public static init = Comp.init;
-    public ref = createRef<React.Component>();
+
+    public ref: React.RefObject<React.ReactElement> & Plugin;
+
     private editor: Editor;
+
     private pluginKey: string;
+
     private i18n: I18nFunction;
 
     constructor(props, context) {
@@ -36,6 +28,7 @@ export default function pluginFactory(
         return;
       }
       const { locale, messages, editor } = props;
+      this.ref = createRef<React.ReactElement>();
       // 注册插件
       this.editor = editor;
       this.i18n = generateI18n(locale, messages);
@@ -46,7 +39,7 @@ export default function pluginFactory(
       });
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
       // 销毁插件
       if (this.editor && this.editor.plugins) {
         delete this.editor.plugins[this.pluginKey];
@@ -60,14 +53,14 @@ export default function pluginFactory(
       return Promise.resolve();
     };
 
-    public close = () => {
+    public close = (): Promise<any> => {
       if (this.ref && this.ref.close && typeof this.ref.close === 'function') {
         return transformToPromise(this.ref.close());
       }
       return Promise.resolve();
     };
 
-    public render() {
+    public render(): React.ReactNode {
       const { config } = this.props;
       const props = {
         i18n: this.i18n,

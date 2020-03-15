@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
-import { Icon, Button } from '@alifd/next';
+import { Icon } from '@alifd/next';
 
 import './index.scss';
 
@@ -13,13 +13,13 @@ export interface TopIconProps {
   locked?: boolean;
   marked?: boolean;
   onClick?: () => void;
-  showTitle?: boolean;
   style?: React.CSSProperties;
   title?: string;
 }
 
 export default class TopIcon extends PureComponent<TopIconProps> {
   static displayName = 'LowcodeTopIcon';
+
   static defaultProps = {
     active: false,
     className: '',
@@ -27,20 +27,16 @@ export default class TopIcon extends PureComponent<TopIconProps> {
     icon: '',
     id: '',
     locked: false,
-    onClick: () => {},
-    showTitle: false,
+    onClick: (): void => {},
     style: {},
     title: ''
   };
 
-  render() {
-    const { active, disabled, icon, locked, title, className, id, style, showTitle, onClick } = this.props;
+  render(): React.ReactNode {
+    const { active, disabled, icon, locked, title, className, id, style, onClick } = this.props;
     return (
-      <Button
-        type="normal"
-        size="large"
-        text={true}
-        className={classNames('lowcode-top-btn', className, {
+      <div
+        className={classNames('lowcode-top-icon', className, {
           active,
           disabled,
           locked
@@ -50,11 +46,8 @@ export default class TopIcon extends PureComponent<TopIconProps> {
         style={style}
         onClick={disabled ? undefined : onClick}
       >
-        <div>
-          <Icon size="large" type={icon} />
-          {showTitle && <span>{title}</span>}
-        </div>
-      </Button>
+        <Icon type={icon} />
+      </div>
     );
   }
 }

@@ -9,7 +9,7 @@ export interface EditorConfig {
   shortCuts?: ShortCutsConfig;
   utils?: UtilsConfig;
   constants?: ConstantsConfig;
-  lifeCycles?: lifeCyclesConfig;
+  lifeCycles?: LifeCyclesConfig;
   i18n?: I18nConfig;
 }
 
@@ -38,7 +38,7 @@ export interface ThemeConfig {
 }
 
 export interface PluginsConfig {
-  [propName: string]: Array<PluginConfig>;
+  [propName: string]: PluginConfig[];
 }
 
 export interface PluginConfig {
@@ -63,7 +63,7 @@ export interface PluginConfig {
   pluginProps?: object;
 }
 
-export type HooksConfig = Array<HookConfig>;
+export type HooksConfig = HookConfig[];
 
 export interface HookConfig {
   message: string;
@@ -71,14 +71,14 @@ export interface HookConfig {
   handler: (editor: Editor, ...args) => void;
 }
 
-export type ShortCutsConfig = Array<ShortCutConfig>;
+export type ShortCutsConfig = ShortCutConfig[];
 
 export interface ShortCutConfig {
   keyboard: string;
-  handler: (editor: Editor, ev: React.KeyboardEventHandler<HTMLElement>, keymaster: any) => void;
+  handler: (editor: Editor, ev: Event, keymaster: any) => void;
 }
 
-export type UtilsConfig = Array<UtilConfig>;
+export type UtilsConfig = UtilConfig[];
 
 export interface UtilConfig {
   name: string;
@@ -88,7 +88,7 @@ export interface UtilConfig {
 
 export type ConstantsConfig = object;
 
-export interface lifeCyclesConfig {
+export interface LifeCyclesConfig {
   init?: (editor: Editor) => any;
   destroy?: (editor: Editor) => any;
 }
@@ -96,7 +96,7 @@ export interface lifeCyclesConfig {
 export type LocaleType = 'zh-CN' | 'zh-TW' | 'en-US' | 'ja-JP';
 
 export interface I18nMessages {
-  [propName: string]: string;
+  [key: string]: string;
 }
 
 export interface I18nConfig {
@@ -109,27 +109,46 @@ export interface I18nConfig {
 export type I18nFunction = (key: string, params: any) => string;
 
 export interface Utils {
-  [propName: string]: (...args) => any;
+  [key: string]: (...args) => any;
 }
 
-export interface PluginClass extends React.ComponentClass<{
+export interface PluginProps {
   editor: Editor;
-  [key: string]: any
-}> {
-  init?: (editor: Editor) => void;
-  open?: () => any;
-  close?: () => any;
+  config: PluginConfig;
+  i18n?: I18nFunction;
+  ref?: React.RefObject<React.ReactElement>;
+  [key: string]: any;
 }
 
-export interface PluginComponents {
-  [propName: string]: PluginClass;
+export type Plugin = React.ReactNode & {
+  open?: () => boolean | void | Promise<any>;
+  close?: () => boolean | void | Promise<any>;
+};
+
+export type HOCPlugin = React.ReactNode & {
+  open: () => Promise<any>;
+  close: () => Promise<any>;
+};
+
+export interface PluginSet {
+  [key: string]: HOCPlugin;
+}
+
+export type PluginClass = React.ComponentType<PluginProps> & {
+  init?: (editor: Editor) => void;
+};
+
+export interface PluginClassSet {
+  [key: string]: PluginClass;
 }
 
 export interface PluginStatus {
-  [propName: string]: {
-    disabled?: boolean;
-    visible?: boolean;
-    marked?: boolean;
-    locked?: boolean;
-  };
+  disabled?: boolean;
+  visible?: boolean;
+  marked?: boolean;
+  locked?: boolean;
+}
+
+export interface PluginStatusSet {
+  [key: string]: PluginStatus;
 }

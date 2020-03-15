@@ -6,7 +6,9 @@ body {
   * {
     box-sizing: border-box;
   }
+  color: $color-text1-3;
 }
+
 .next-loading {
   .next-loading-wrap {
     height: 100%;
@@ -15,7 +17,7 @@ body {
 .lowcode-editor {
   .lowcode-main-content {
     position: absolute;
-    top: 48px;
+    top: 50px;
     left: 0;
     right: 0;
     bottom: 0;

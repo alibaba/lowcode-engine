@@ -37,7 +37,7 @@ export default class Panel extends PureComponent<PanelProps, PanelState> {
     };
   }
 
-  render() {
+  render(): React.ReactNode {
     const { align, draggable, floatable, visible } = this.props;
     const { width } = this.state;
     return (

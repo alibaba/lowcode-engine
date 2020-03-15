@@ -1,10 +1,9 @@
 import React, { PureComponent } from 'react';
 
-import { HashRouter as Router, Route } from 'react-router-dom';
 import { Loading, ConfigProvider } from '@alifd/next';
 
 import Editor from '../framework/editor';
-import { EditorConfig, Utils, PluginComponents } from '../framework/definitions';
+import { EditorConfig, Utils, PluginClassSet } from '../framework/definitions';
 import { comboEditorConfig, parseSearch } from '../framework/utils';
 
 import defaultConfig from './config/skeleton';
@@ -19,8 +18,17 @@ import './global.scss';
 
 let renderIdx = 0;
 
+declare global {
+  interface Window {
+    __ctx: {
+      editor: Editor;
+      appHelper: Editor;
+    };
+  }
+}
+
 export interface SkeletonProps {
-  components: PluginComponents;
+  components: PluginClassSet;
   config: EditorConfig;
   history: object;
   location: object;
@@ -29,15 +37,15 @@ export interface SkeletonProps {
 }
 
 export interface SkeletonState {
-  initReady: boolean;
-  skeletonKey: string;
+  initReady?: boolean;
+  skeletonKey?: string;
   __hasError?: boolean;
 }
 
 export default class Skeleton extends PureComponent<SkeletonProps, SkeletonState> {
   static displayName = 'LowcodeEditorSkeleton';
 
-  static getDerivedStateFromError() {
+  static getDerivedStateFromError(): SkeletonState {
     return {
       __hasError: true
     };
@@ -56,11 +64,11 @@ export default class Skeleton extends PureComponent<SkeletonProps, SkeletonState
     this.init();
   }
 
-  componentWillUnmount() {
+  componentWillUnmount(): void {
     this.editor && this.editor.destroy();
   }
 
-  componentDidCatch(err) {
+  componentDidCatch(err): void {
     console.error(err);
   }
 
@@ -69,15 +77,17 @@ export default class Skeleton extends PureComponent<SkeletonProps, SkeletonState
       this.editor.destroy();
     }
     const { utils, config, components } = this.props;
-    const editor = (this.editor = new Editor(comboEditorConfig(defaultConfig, config), components, {
+    const editor = new Editor(comboEditorConfig(defaultConfig, config), components, {
       ...skeletonUtils,
       ...utils
-    }));
+    });
+    this.editor = editor;
+    // eslint-disable-next-line no-underscore-dangle
     window.__ctx = {
       editor,
       appHelper: editor
     };
-    editor.once('editor.reset', () => {
+    editor.once('editor.reset', (): void => {
       this.setState({
         initReady: false
       });
@@ -85,22 +95,23 @@ export default class Skeleton extends PureComponent<SkeletonProps, SkeletonState
       this.init(true);
     });
 
-    this.editor.init().then(() => {
+    this.editor.init().then((): void => {
       this.setState(
         {
           initReady: true,
-          //刷新IDE时生成新的skeletonKey保证插件生命周期重新执行
+          // 刷新IDE时生成新的skeletonKey保证插件生命周期重新执行
           skeletonKey: isReset ? `skeleton${++renderIdx}` : this.state.skeletonKey
         },
-        () => {
+        (): void => {
           editor.emit('editor.ready');
+          editor.emit('ide.ready');
           isReset && editor.emit('ide.afterReset');
         }
       );
     });
   };
 
-  render() {
+  render(): React.ReactNode {
     const { initReady, skeletonKey, __hasError } = this.state;
     const { location, history, match } = this.props;
     if (__hasError || !this.editor) {

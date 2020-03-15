@@ -1,21 +1,27 @@
-.next-btn.next-large.lowcode-top-btn {
+.lowcode-top-icon {
+  display: inline-block;
   width: 44px;
-  height: 44px;
-  padding: 0;
-  margin: 2px -2px;
-  text-align: center;
-  border-radius: 8px;
-  border: 1px solid transparent;
-  color: #777;
+  font-size: 20px;
+  line-height: 48px;
+  color: $color-text1-3;
+  position: relative;
   &.disabled {
     cursor: not-allowed;
     color: $color-text1-1;
+    &:hover {
+      color: $color-text1-1;
+    }
+  }
+  &.active {
+    color: $color-brand1-9;
+    &:hover {
+      color: $color-brand1-6;
+    }
   }
   &.locked {
     color: red !important;
   }
   &:hover {
-    background-color: $color-brand1-1;
     color: $color-brand1-6;
     &:before {
       content: attr(data-tooltip);
@@ -31,8 +37,8 @@
       white-space: nowrap;
       padding: 6px 8px;
       border-radius: 4px;
-      background: rgba(0, 0, 0, 0.75);
-      color: #fff;
+      background: $balloon-tooltip-color-bg;
+      color: $color-text1-3;
       z-index: 100;
     }
     &:after {
@@ -43,7 +49,7 @@
       transform: translate(-50%, 0);
       bottom: -5px;
       border: 5px solid transparent;
-      border-bottom-color: rgba(0, 0, 0, 0.75);
+      border-bottom-color: $balloon-tooltip-color-bg;
       opacity: 1;
       visibility: visible;
       z-index: 100;
@@ -51,7 +57,7 @@
   }
   i.next-icon {
     &:before {
-      font-size: 17px;
+      font-size: 16px;
     }
     margin-right: 0;
     line-height: 18px;

@@ -2,12 +2,12 @@
   user-select: none;
   overflow: hidden;
   position: relative;
-  background: #ffffff;
+  background: $card-background;
   transition: width 0.3s ease;
   transform: translate3d(0, 0, 0);
   height: 100%;
   &.visible {
-    border-right: 1px solid #bfbfbf;
+    border-right: 1px solid $color-line1-1;
   }
   .drag-area {
     display: none;
@@ -16,7 +16,7 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    z-index: 999;
+    z-index: 99;
   }
   &.draggable {
     .drag-area {
@@ -41,12 +41,12 @@
   }
   &.left {
     &.floatable {
-      left: 44px;
+      left: 48px;
     }
   }
   &.right {
     &.floatable {
-      right: 44px;
+      right: 48px;
     }
   }
 }

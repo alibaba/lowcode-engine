@@ -16,6 +16,7 @@ export default class TopArea extends PureComponent<TopAreaProps> {
   static displayName = 'LowcodeTopArea';
 
   private areaManager: AreaManager;
+
   private editor: Editor;
 
   constructor(props) {
@@ -24,10 +25,11 @@ export default class TopArea extends PureComponent<TopAreaProps> {
     this.areaManager = new AreaManager(props.editor, 'topArea');
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     this.editor.on('skeleton.update', this.handleSkeletonUpdate);
   }
-  componentWillUnmount() {
+
+  componentWillUnmount(): void {
     this.editor.off('skeleton.update', this.handleSkeletonUpdate);
   }
 
@@ -38,31 +40,33 @@ export default class TopArea extends PureComponent<TopAreaProps> {
     }
   };
 
-  renderPluginList = (list: Array<PluginConfig> = []): Array<React.ReactElement> => {
-    return list.map((item, idx) => {
-      const isDivider = item.type === 'Divider';
-      return (
-        <Col
-          className={isDivider ? 'divider' : ''}
-          key={isDivider ? idx : item.pluginKey}
-          style={{
-            width: (item.props && item.props.width) || 40,
-            flex: 'none'
-          }}
-        >
-          {!isDivider && (
-            <TopPlugin config={item} pluginClass={this.editor.components[item.pluginKey]} editor={this.editor} />
-          )}
-        </Col>
-      );
-    });
+  renderPluginList = (list: PluginConfig[] = []): React.ReactElement[] => {
+    return list.map(
+      (item, idx): React.ReactElement => {
+        const isDivider = item.type === 'Divider';
+        return (
+          <Col
+            className={isDivider ? 'divider' : ''}
+            key={isDivider ? idx : item.pluginKey}
+            style={{
+              width: (item.props && item.props.width) || 36,
+              flex: 'none'
+            }}
+          >
+            {!isDivider && (
+              <TopPlugin config={item} pluginClass={this.editor.components[item.pluginKey]} editor={this.editor} />
+            )}
+          </Col>
+        );
+      }
+    );
   };
 
-  render() {
-    const leftList: Array<PluginConfig> = [];
-    const rightList: Array<PluginConfig> = [];
+  render(): React.ReactNode {
+    const leftList: PluginConfig[] = [];
+    const rightList: PluginConfig[] = [];
     const visiblePluginList = this.areaManager.getVisiblePluginList();
-    visiblePluginList.forEach(item => {
+    visiblePluginList.forEach((item): void => {
       const align = item.props && item.props.align === 'right' ? 'right' : 'left';
       // 分隔符不允许相邻
       if (item.type === 'Divider') {

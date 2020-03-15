@@ -10,11 +10,8 @@ import constants from './config/constants';
 import './config/locale';
 import './config/setters';
 
-import pkg from '../package.json';
 import './global.scss';
 import './config/theme.scss';
-
-(window as any).__pkg = pkg;
 
 const ICE_CONTAINER = document.getElementById('ice-container');
 
@@ -26,7 +23,7 @@ ReactDOM.render(
   <Router>
     <Route
       path="/*"
-      component={props => (
+      component={(props): React.ReactNode => (
         <Skeleton
           {...props}
           {...(config.skeleton && config.skeleton.props)}

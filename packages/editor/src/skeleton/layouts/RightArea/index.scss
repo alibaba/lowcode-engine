@@ -1,52 +1,39 @@
 .lowcode-right-area {
-  width: 300px;
+  width: 262px;
   height: 100%;
-  background-color: #ffffff;
-  border-left: 1px solid #e8ebee;
-  .right-plugin-title {
-    &.locked {
-      color: red !important;
-    }
-    &.active {
-      color: $color-brand1-9 !important;
-    }
-    &.disabled {
-      cursor: not-allowed;
-      color: $color-text1-1;
-    }
+  background-color: $card-background;
+  border-left: 2px solid $color-line1-1;
+
+  .right-panel {
+    overflow: auto;
+    // border-top: 2px solid $color-line1-1;
   }
 
   //tab定义
-  .next-tabs-wrapped.right-tabs {
-    display: flex;
-    flex-direction: column;
-    margin-top: -1px;
-    .next-tabs-bar {
-      z-index: 1;
-    }
+  .right-tabs.next-tabs {
     .next-tabs-nav {
-      display: block;
-      .next-tabs-tab {
-        &:first-child {
-          border-left: none;
-        }
-        font-size: 14px;
+      width: 100%;
+      .next-tabs-tab-inner {
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .right-plugin-title {
         text-align: center;
-        border-right: none !important;
-        margin-right: 0 !important;
-        width: 25%;
+        &.locked {
+          color: red !important;
+        }
         &.active {
-          background: none;
-          border-bottom-color: #f7f7f7 !important;
+          color: $color-brand1-9 !important;
+        }
+        &.disabled {
+          cursor: not-allowed;
+          color: $color-text1-1;
+        }
+        .next-icon {
+          line-height: 15px;
+          margin-right: 2px;
         }
       }
-    }
-  }
-  .next-tabs-content {
-    flex: 1;
-    .next-tabs-tabpane.active {
-      height: 100%;
-      overflow-y: auto;
     }
   }
 }

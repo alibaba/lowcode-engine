@@ -1,7 +1,5 @@
 import IntlMessageFormat from 'intl-messageformat';
 import keymaster from 'keymaster';
-import { EditorConfig, I18nFunction, I18nMessages, LocaleType, ShortCutsConfig } from './definitions';
-import Editor from './editor';
 
 import _clone from 'lodash/cloneDeep';
 import _debounce from 'lodash/debounce';
@@ -10,6 +8,10 @@ import _deepEqual from 'lodash/isEqualWith';
 import _pick from 'lodash/pick';
 import _throttle from 'lodash/throttle';
 
+import _serialize from 'serialize-javascript';
+import Editor from './editor';
+import { EditorConfig, I18nFunction, I18nMessages, LocaleType, ShortCutsConfig } from './definitions';
+
 export const pick = _pick;
 export const deepEqual = _deepEqual;
 export const clone = _clone;
@@ -17,7 +19,6 @@ export const isEmpty = _isEmpty;
 export const throttle = _throttle;
 export const debounce = _debounce;
 
-import _serialize from 'serialize-javascript';
 export const serialize = _serialize;
 
 const ENV = {
@@ -26,6 +27,17 @@ const ENV = {
   VSCODE: 'VSCODE',
   WEB: 'WEB'
 };
+
+declare global {
+  interface Window {
+    sendIDEMessage?: (params: IDEMessageParams) => void;
+    goldlog?: {
+      record: (logKey: string, gmKey: string, goKey: string, method: 'POST' | 'GET') => (...args: any[]) => any;
+    };
+    is_theia?: boolean;
+    vscode?: boolean;
+  }
+}
 
 export interface IDEMessageParams {
   action: string;
@@ -57,7 +69,7 @@ export function serializeParams(obj: object): string {
     return '';
   }
   const res: string[] = [];
-  Object.entries(obj).forEach(([key, val]) => {
+  Object.entries(obj).forEach(([key, val]): void => {
     if (val === null || val === undefined || val === '') {
       return;
     }
@@ -115,8 +127,8 @@ export function getEnv(): string {
 
 // 注册快捷键
 export function registShortCuts(config: ShortCutsConfig, editor: Editor): void {
-  (config || []).forEach(item => {
-    keymaster(item.keyboard, ev => {
+  (config || []).forEach((item): void => {
+    keymaster(item.keyboard, (ev: Event): void => {
       ev.preventDefault();
       item.handler(editor, ev, keymaster);
     });
@@ -125,7 +137,7 @@ export function registShortCuts(config: ShortCutsConfig, editor: Editor): void {
 
 // 取消注册快捷
 export function unRegistShortCuts(config: ShortCutsConfig): void {
-  (config || []).forEach(item => {
+  (config || []).forEach((item): void => {
     keymaster.unbind(item.keyboard);
   });
   if (window.parent.vscode) {
@@ -141,7 +153,7 @@ export function transformToPromise(input: any): Promise<{}> {
   if (input instanceof Promise) {
     return input;
   }
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject): void => {
     if (input || input === undefined) {
       resolve();
     } else {
@@ -161,7 +173,7 @@ export function transformArrayToMap<T>(arr: T[], key: string, overwrite: boolean
     return {};
   }
   const res = {};
-  arr.forEach(item => {
+  arr.forEach((item): void => {
     const curKey = item[key];
     if (item[key] === undefined) {
       return;
@@ -187,7 +199,7 @@ export function parseSearch(search: string): Query {
   const str = search.replace(/^\?/, '');
   const paramStr = str.split('&');
   const res = {};
-  paramStr.forEach(item => {
+  paramStr.forEach((item): void => {
     const regRes = item.split('=');
     if (regRes[0] && regRes[1]) {
       res[regRes[0]] = decodeURIComponent(regRes[1]);
@@ -210,7 +222,7 @@ export function comboEditorConfig(defaultConfig: EditorConfig = {}, customConfig
   const customShortCuts = transformArrayToMap(shortCuts || [], 'keyboard');
   const localeList = ['zh-CN', 'zh-TW', 'en-US', 'ja-JP'];
   const i18nConfig = {};
-  localeList.forEach(key => {
+  localeList.forEach((key): void => {
     i18nConfig[key] = {
       ...(defaultConfig.i18n && defaultConfig.i18n[key]),
       ...(i18n && i18n[key])
@@ -248,9 +260,12 @@ export function comboEditorConfig(defaultConfig: EditorConfig = {}, customConfig
  * 判断当前组件是否能够设置ref
  * @param {*} Comp 需要判断的组件
  */
-export function acceptsRef(Comp: React.ComponentType) {
+export function acceptsRef(Comp: React.ReactNode): boolean {
   const hasSymbol = typeof Symbol === 'function' && Symbol.for;
   const REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
+  if (!Comp || typeof Comp !== 'object' || isEmpty(Comp)) {
+    return false;
+  }
   return (
     (Comp.$$typeof && Comp.$$typeof === REACT_FORWARD_REF_TYPE) || (Comp.prototype && Comp.prototype.isReactComponent)
   );

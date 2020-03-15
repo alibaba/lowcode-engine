@@ -1,3 +1,5 @@
+import assets from './assets';
+
 export default {
   version: '^1.0.2',
   theme: {
@@ -25,7 +27,8 @@ export default {
           version: '1.0.0'
         },
         pluginProps: {
-          logo: 'https://img.alicdn.com/tfs/TB1mHYDxQP2gK0jSZPxXXacQpXa-112-64.png'
+          logo: 'https://img.alicdn.com/tfs/TB1hoI9x1H2gK0jSZFEXXcqMpXa-146-40.png',
+          href: '/'
         }
       },
       {
@@ -71,7 +74,7 @@ export default {
         type: 'Custom',
         props: {
           align: 'right',
-          width: 90
+          width: 88
         },
         config: {
           package: '@ali/lowcode-plugin-undo-redo',
@@ -107,8 +110,8 @@ export default {
           align: 'right',
           title: 'icon',
           icon: 'dengpao',
-          onClick: function(editor) {
-            alert('icon addon invoke, current activeKey: ' + editor.activeKey);
+          onClick(editor) {
+            alert(`icon addon invoke, current activeKey: ${editor.activeKey}`);
           }
         },
         config: {},
@@ -116,6 +119,22 @@ export default {
       }
     ],
     leftArea: [
+      {
+        pluginKey: 'componentList',
+        type: 'PanelIcon',
+        props: {
+          align: 'top',
+          icon: 'zujianku',
+          title: '组件库'
+        },
+        config: {
+          package: '@ali/iceluna-addon-component-list',
+          version: '^1.0.4'
+        },
+        pluginProps: {
+          disableAppComponent: true
+        }
+      },
       {
         pluginKey: 'leftPanelIcon',
         type: 'PanelIcon',
@@ -150,7 +169,11 @@ export default {
         props: {
           align: 'top',
           title: 'panel2',
-          icon: 'dengpao'
+          icon: 'dengpao',
+          panelProps: {
+            defaultWidth: 400,
+            floatable: true
+          }
         },
         config: {
           package: '@ali/iceluna-addon-2',
@@ -194,8 +217,8 @@ export default {
           align: 'bottom',
           title: 'icon',
           icon: 'dengpao',
-          onClick: function(editor) {
-            alert('icon addon invoke, current activeKey: ' + editor.activeKey);
+          onClick(editor) {
+            alert(`icon addon invoke, current activeKey: ${editor.activeKey}`);
           }
         },
         config: {},
@@ -211,7 +234,52 @@ export default {
           version: '^1.0.0'
         },
         pluginProps: {}
-      },
+      }
+      // {
+      //   pluginKey: 'rightPanel1',
+      //   type: 'TabPanel',
+      //   props: {
+      //     title: '样式'
+      //   },
+      //   config: {
+      //     version: '^1.0.0'
+      //   },
+      //   pluginProps: {}
+      // },
+      // {
+      //   pluginKey: 'rightPanel2',
+      //   type: 'TabPanel',
+      //   props: {
+      //     title: '属性',
+      //     icon: 'dengpao'
+      //   },
+      //   config: {
+      //     version: '^1.0.0'
+      //   },
+      //   pluginProps: {}
+      // },
+      // {
+      //   pluginKey: 'rightPanel3',
+      //   type: 'TabPanel',
+      //   props: {
+      //     title: '事件'
+      //   },
+      //   config: {
+      //     version: '^1.0.0'
+      //   },
+      //   pluginProps: {}
+      // },
+      // {
+      //   pluginKey: 'rightPanel4',
+      //   type: 'TabPanel',
+      //   props: {
+      //     title: '数据'
+      //   },
+      //   config: {
+      //     version: '^1.0.0'
+      //   },
+      //   pluginProps: {}
+      // }
     ],
     centerArea: [
       {
@@ -224,5 +292,51 @@ export default {
     ]
   },
   hooks: [],
-  shortCuts: []
+  shortCuts: [],
+  lifeCycles: {
+    init: function init(editor) {
+      const transformMaterial = componentList => {
+        return componentList.map(category => {
+          return {
+            name: category.title,
+            items: category.children.map(comp => {
+              return {
+                ...comp,
+                name: comp.componentName,
+                libraryId: 1,
+                snippets: comp.snippets.map(snippet => {
+                  return {
+                    name: snippet.title,
+                    screenshort: snippet.screenshort,
+                    code: JSON.stringify(snippet.schema)
+                  };
+                })
+              };
+            })
+          };
+        });
+      };
+
+      const list = transformMaterial(assets.componentList);
+      editor.set({
+        componentsMap: assets.components,
+        componentMaterial: {
+          library: [
+            {
+              name: 'Fusion组件库',
+              id: 1
+            }
+          ],
+          list
+        }
+      });
+
+      editor.set('dndHelper', {
+        handleResourceDragStart: function(ev, tagName, schema) {
+          // 物料面板中组件snippet的dragStart回调
+          // ev: 原始的domEvent；tagName: 组件的描述文案；schema: snippet的schema
+        }
+      });
+    }
+  }
 };

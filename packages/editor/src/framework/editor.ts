@@ -1,35 +1,56 @@
 import Debug from 'debug';
 import EventEmitter from 'events';
 import store from 'store';
-import { EditorConfig, HooksConfig, LocaleType, PluginComponents, PluginStatus, Utils } from './definitions';
+import {
+  EditorConfig,
+  HooksConfig,
+  LocaleType,
+  PluginStatusSet,
+  Utils,
+  PluginClassSet,
+  PluginSet
+} from './definitions';
 
-import { registShortCuts, transformToPromise, unRegistShortCuts } from './utils';
+import * as editorUtils from './utils';
+
+const { registShortCuts, transformToPromise, unRegistShortCuts } = editorUtils;
+
+declare global {
+  interface Window {
+    __isDebug?: boolean;
+    __newFunc?: (funcStr: string) => (...args: any[]) => any;
+  }
+}
 
 // 根据url参数设置debug选项
-const res = /_?debug=(.*?)(&|$)/.exec(location.search);
-if (res && res[1]) {
+const debugRegRes = /_?debug=(.*?)(&|$)/.exec(location.search);
+if (debugRegRes && debugRegRes[1]) {
+  // eslint-disable-next-line no-underscore-dangle
   window.__isDebug = true;
-  store.storage.write('debug', res[1] === 'true' ? '*' : res[1]);
+  store.storage.write('debug', debugRegRes[1] === 'true' ? '*' : debugRegRes[1]);
 } else {
+  // eslint-disable-next-line no-underscore-dangle
   window.__isDebug = false;
   store.remove('debug');
 }
 
 // 重要，用于矫正画布执行new Function的window对象上下文
-window.__newFunc = funContext => {
-  return new Function(funContext);
+// eslint-disable-next-line no-underscore-dangle
+window.__newFunc = (funContext: string): ((...args: any[]) => any) => {
+  // eslint-disable-next-line no-new-func
+  return new Function(funContext) as (...args: any[]) => any;
 };
 
 // 关闭浏览器前提醒,只有产生过交互才会生效
-window.onbeforeunload = function(e) {
-  e = e || window.event;
+window.onbeforeunload = function(e: Event): string | void {
+  const ev = e || window.event;
   // 本地调试不生效
   if (location.href.indexOf('localhost') > 0) {
     return;
   }
   const msg = '您确定要离开此页面吗？';
-  e.cancelBubble = true;
-  e.returnValue = msg;
+  ev.cancelBubble = true;
+  ev.returnValue = true;
   if (e.stopPropagation) {
     e.stopPropagation();
     e.preventDefault();
@@ -47,26 +68,40 @@ export interface HooksFuncs {
 }
 
 export default class Editor extends EventEmitter {
-  public static getInstance = (config: EditorConfig, components: PluginComponents, utils?: Utils): Editor => {
+  public static getInstance = (config: EditorConfig, components: PluginClassSet, utils?: Utils): Editor => {
     if (!instance) {
       instance = new Editor(config, components, utils);
     }
     return instance;
   };
 
-  public pluginStatus: PluginStatus;
-  public plugins: PluginComponents;
+  public config: EditorConfig;
+
+  public components: PluginClassSet;
+
+  public utils: Utils;
+
+  public pluginStatus: PluginStatusSet;
+
+  public plugins: PluginSet;
+
   public locale: LocaleType;
 
   public emit: (msg: string, ...args) => void;
+
   public on: (msg: string, handler: (...args) => void) => void;
+
   public once: (msg: string, handler: (...args) => void) => void;
+
   public off: (msg: string, handler: (...args) => void) => void;
 
   private hooksFuncs: HooksFuncs;
 
-  constructor(public config: EditorConfig, public components: PluginComponents, public utils?: Utils) {
+  constructor(config: EditorConfig, components: PluginClassSet, utils?: Utils) {
     super();
+    this.config = config;
+    this.components = components;
+    this.utils = { ...editorUtils, ...utils };
     instance = this;
     this.init();
   }
@@ -80,21 +115,21 @@ export default class Editor extends EventEmitter {
     this.initHooks(hooks || []);
 
     this.emit('editor.beforeInit');
-    const init = (lifeCycles && lifeCycles.init) || (() => {});
+    const init = (lifeCycles && lifeCycles.init) || ((): void => {});
     // 用户可以通过设置extensions.init自定义初始化流程；
     return transformToPromise(init(this))
-      .then(() => {
+      .then((): boolean => {
         // 注册快捷键
         registShortCuts(shortCuts, this);
         this.emit('editor.afterInit');
         return true;
       })
-      .catch(err => {
+      .catch((err): void => {
         console.error(err);
       });
   }
 
-  public destroy() {
+  public destroy(): void {
     debug('destroy');
     try {
       const { hooks = [], shortCuts = [], lifeCycles = {} } = this.config;
@@ -105,7 +140,6 @@ export default class Editor extends EventEmitter {
       }
     } catch (err) {
       console.warn(err);
-      return;
     }
   }
 
@@ -121,7 +155,7 @@ export default class Editor extends EventEmitter {
       }
       this[key] = val;
     } else if (typeof key === 'object') {
-      Object.keys(key).forEach(item => {
+      Object.keys(key).forEach((item): void => {
         this[item] = key[item];
       });
     }
@@ -131,26 +165,26 @@ export default class Editor extends EventEmitter {
     if (!Array.isArray(events)) {
       return;
     }
-    events.forEach(event => this.on(event, lisenter));
+    events.forEach((event): void => this.on(event, lisenter));
   }
 
   public batchOnce(events: string[], lisenter: (...args) => void): void {
     if (!Array.isArray(events)) {
       return;
     }
-    events.forEach(event => this.once(event, lisenter));
+    events.forEach((event): void => this.once(event, lisenter));
   }
 
   public batchOff(events: string[], lisenter: (...args) => void): void {
     if (!Array.isArray(events)) {
       return;
     }
-    events.forEach(event => this.off(event, lisenter));
+    events.forEach((event): void => this.off(event, lisenter));
   }
 
   // 销毁hooks中的消息监听
-  private destroyHooks(hooks: HooksConfig = []) {
-    hooks.forEach((item, idx) => {
+  private destroyHooks(hooks: HooksConfig = []): void {
+    hooks.forEach((item, idx): void => {
       if (typeof this.hooksFuncs[idx] === 'function') {
         this.off(item.message, this.hooksFuncs[idx]);
       }
@@ -160,8 +194,8 @@ export default class Editor extends EventEmitter {
 
   // 初始化hooks中的消息监听
   private initHooks(hooks: HooksConfig = []): void {
-    this.hooksFuncs = hooks.map(item => {
-      const func = (...args) => {
+    this.hooksFuncs = hooks.map((item): ((...arg) => void) => {
+      const func = (...args): void => {
         item.handler(this, ...args);
       };
       this[item.type](item.message, func);
@@ -169,12 +203,12 @@ export default class Editor extends EventEmitter {
     });
   }
 
-  private initPluginStatus() {
+  private initPluginStatus(): PluginStatusSet {
     const { plugins = {} } = this.config;
     const pluginAreas = Object.keys(plugins);
-    const res: PluginStatus = {};
-    pluginAreas.forEach(area => {
-      (plugins[area] || []).forEach(plugin => {
+    const res: PluginStatusSet = {};
+    pluginAreas.forEach((area): void => {
+      (plugins[area] || []).forEach((plugin): void => {
         if (plugin.type === 'Divider') {
           return;
         }
