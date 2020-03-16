@@ -42,10 +42,10 @@ export default class SettingsMainView extends Component {
 
     let node: Node | null = this.main.nodes[0]!;
     const items = [];
-    let l = 4;
+    let l = 3;
     while (l-- > 0 && node) {
       const props =
-        l === 3
+        l === 2
           ? {}
           : {
               onMouseOver: hoverNode.bind(null, node, true),
