@@ -260,8 +260,6 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
         if (isLeftButton && !isRootNode(node)) {
           let nodes: Node[] = [node];
           let ignoreUpSelected = false;
-          // 排除根节点拖拽
-          selection.remove(this.document.rootNode.id);
           if (isMulti) {
             // multi select mode, directily add
             if (!selection.has(node.id)) {
@@ -269,9 +267,10 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
               selection.add(node.id);
               ignoreUpSelected = true;
             }
+            selection.remove(this.document.rootNode.id);
             // 获得顶层 nodes
             nodes = selection.getTopNodes();
-          } else if (selection.containsNode(node)) {
+          } else if (selection.containsNode(node, true)) {
             nodes = selection.getTopNodes();
           } else {
             // will clear current selection & select dragment in dragstart

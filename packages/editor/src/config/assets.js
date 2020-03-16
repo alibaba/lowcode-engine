@@ -29,6 +29,10 @@ export default {
           propType: 'string'
         },
         {
+          name: 'onClick',
+          propType: 'func'
+        },
+        {
           name: 'children',
           propType: 'string'
         }
@@ -66,6 +70,22 @@ export default {
         {
           name: 'placeholder',
           propType: 'string'
+        },
+        {
+          name: 'onChange',
+          propType: 'func'
+        },
+        {
+          name: 'onKeyDown',
+          propType: 'func'
+        },
+        {
+          name: 'onFocus',
+          propType: 'func'
+        },
+        {
+          name: 'onBlur',
+          propType: 'func'
         }
       ],
     },
@@ -83,7 +103,11 @@ export default {
         {
           name: 'device',
           propType: 'string'
-        }
+        },
+        {
+          name: 'onChange',
+          propType: 'func'
+        },
       ],
     },
     'Form.Item': {
@@ -126,6 +150,26 @@ export default {
         {
           name: 'defaultValue',
           propType: 'number'
+        },
+        {
+          name: 'onChange',
+          propType: 'func'
+        },
+        {
+          name: 'onKeyDown',
+          propType: 'func'
+        },
+        {
+          name: 'onFocus',
+          propType: 'func'
+        },
+        {
+          name: 'onBlur',
+          propType: 'func'
+        },
+        {
+          name: 'onCorrect',
+          propType: 'func'
         }
       ],
     },
@@ -151,6 +195,38 @@ export default {
         {
           name: 'placeholder',
           propType: 'string'
+        },
+        {
+          name: 'onChange',
+          propType: 'func'
+        },
+        {
+          name: 'onVisibleChange',
+          propType: 'func'
+        },
+        {
+          name: 'onToggleHighlightItem',
+          propType: 'func'
+        },
+        {
+          name: 'onSearch',
+          propType: 'func'
+        },
+        {
+          name: 'onSearchClear',
+          propType: 'func'
+        },
+        {
+          name: 'onRemove',
+          propType: 'func'
+        },
+        {
+          name: 'onFocus',
+          propType: 'func'
+        },
+        {
+          name: 'onBlur',
+          propType: 'func'
         }
       ],
     }

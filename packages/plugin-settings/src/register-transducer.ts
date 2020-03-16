@@ -191,6 +191,7 @@ registerMetadataTransducer(metadata => {
     if (EVENT_RE.test(name) && (propType === 'func' || propType === 'any')) {
       if (supportEvents) {
         supportEvents.push(name);
+        (events as any).supportEvents = supportEvents;
       }
       return;
     }

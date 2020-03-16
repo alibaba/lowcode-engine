@@ -97,9 +97,12 @@ export class Selection {
   /**
    * 选区是否包含节点
    */
-  containsNode(node: Node) {
+  containsNode(node: Node, excludeRoot = false) {
     for (const id of this._selected) {
       const parent = this.doc.getNode(id);
+      if (excludeRoot && parent === this.doc.rootNode) {
+        continue;
+      }
       if (parent?.contains(node)) {
         return true;
       }
@@ -124,11 +127,12 @@ export class Selection {
   /**
    * 获取顶层选区节点, 场景：拖拽时，建立蒙层，只蒙在最上层
    */
-  getTopNodes() {
+  getTopNodes(includeRoot = false) {
     const nodes = [];
     for (const id of this._selected) {
       const node = this.doc.getNode(id);
-      if (!node) {
+      // 排除根节点
+      if (!node || (!includeRoot && node === this.doc.rootNode)) {
         continue;
       }
       let i = nodes.length;
