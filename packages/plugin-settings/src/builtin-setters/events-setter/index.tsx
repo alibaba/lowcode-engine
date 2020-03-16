@@ -37,7 +37,9 @@ export default class EventsSetter extends Component<{
   };
 
   componentWillMount() {
-    this.props.field.getValue()
+    // this.props.field.getValue()
+    console.log(this.props);
+
     this.initEventBtns();
     this.initEventList();
   }
@@ -233,16 +235,15 @@ export default class EventsSetter extends Component<{
 
   submitDialog = (relatedEventName: String) => {
     const { bindEventName,eventDataList} = this.state;
-    const {field} = this.props;
     eventDataList.map(item => {
       if (item.name === bindEventName) {
         item.relatedEventName = relatedEventName;
       }
     });
 
-    debugger;
 
-    field.setValue(eventDataList);
+    this.props.onChange(eventDataList);
+    // field.setValue(eventDataList);
 
 
     this.closeDialog();
