@@ -13,11 +13,13 @@ import Settings from '../../../plugin-settings';
 import undoRedo from '../plugins/undoRedo';
 import Designer from '../plugins/designer';
 import logo from '../plugins/logo';
+import save from '../plugins/save';
 
 import PluginFactory from '../framework/pluginFactory';
 
 export default {
   logo: PluginFactory(logo),
+  save: PluginFactory(save),
   designer: PluginFactory(Designer),
   settings: PluginFactory(Settings),
   undoRedo: PluginFactory(undoRedo),

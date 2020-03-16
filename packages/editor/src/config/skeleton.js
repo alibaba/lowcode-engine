@@ -70,6 +70,35 @@ export default {
         pluginProps: {}
       },
       {
+        pluginKey: 'topLinkIcon',
+        type: 'LinkIcon',
+        props: {
+          align: 'left',
+          title: 'link',
+          icon: 'dengpao',
+          linkProps: {
+            href: '//www.taobao.com',
+            target: 'blank'
+          }
+        },
+        config: {},
+        pluginProps: {}
+      },
+      {
+        pluginKey: 'topIcon',
+        type: 'Icon',
+        props: {
+          align: 'left',
+          title: 'icon',
+          icon: 'dengpao',
+          onClick(editor) {
+            alert(`icon addon invoke, current activeKey: ${editor.activeKey}`);
+          }
+        },
+        config: {},
+        pluginProps: {}
+      },
+      {
         pluginKey: 'undoRedo',
         type: 'Custom',
         props: {
@@ -89,33 +118,16 @@ export default {
         }
       },
       {
-        pluginKey: 'topLinkIcon',
-        type: 'LinkIcon',
+        pluginKey: 'save',
+        type: 'Custom',
         props: {
           align: 'right',
-          title: 'link',
-          icon: 'dengpao',
-          linkProps: {
-            href: '//www.taobao.com',
-            target: 'blank'
-          }
+          width: 64
         },
-        config: {},
-        pluginProps: {}
-      },
-      {
-        pluginKey: 'topIcon',
-        type: 'Icon',
-        props: {
-          align: 'right',
-          title: 'icon',
-          icon: 'dengpao',
-          onClick(editor) {
-            alert(`icon addon invoke, current activeKey: ${editor.activeKey}`);
-          }
-        },
-        config: {},
-        pluginProps: {}
+        config: {
+          package: '@ali/lowcode-plugin-save',
+          version: '1.0.0'
+        }
       }
     ],
     leftArea: [
