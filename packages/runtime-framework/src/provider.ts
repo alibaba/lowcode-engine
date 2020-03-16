@@ -66,7 +66,11 @@ export default abstract class Provider {
     if (!pageId) {
       return null;
     }
-    return createElement(LazyComponent as any, { getPageData: async () => await this.getPageData(pageId), ...props });
+    return createElement(LazyComponent as any, {
+      getPageData: async () => await this.getPageData(pageId),
+      key: pageId,
+      ...props,
+    });
   }
 
   public createApp() {
