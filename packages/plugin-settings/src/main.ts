@@ -159,7 +159,7 @@ export interface FieldConfig extends FieldExtraProps {
 export class SettingField implements SettingTarget {
   readonly isSettingField = true;
   readonly id = uniqueId('field');
-  readonly type: 'field' | 'virtual-field' | 'group';
+  readonly type: 'field' | 'group';
   readonly isRequired: boolean = false;
   readonly isGroup: boolean;
   private _name: string | number;
@@ -193,8 +193,6 @@ export class SettingField implements SettingTarget {
       const c = typeof name === 'string' ? name.substr(0, 1) : '';
       if (c === '#') {
         this.type = 'group';
-      } else if (c === '!') {
-        this.type = 'virtual-field';
       } else {
         this.type = 'field';
       }

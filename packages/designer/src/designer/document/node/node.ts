@@ -374,7 +374,7 @@ export default class Node {
    *  2  thisNode before or after otherNode
    *  0  thisNode same as otherNode
    */
-  comparePosition(otherNode: Node): number {
+  comparePosition(otherNode: Node): PositionNO {
     return comparePosition(this, otherNode);
   }
 
@@ -455,31 +455,37 @@ export function contains(node1: Node, node2: Node): boolean {
 // 8  node1 contained_by node2
 // 2  node1 before or after node2
 // 0  node1 same as node2
-export function comparePosition(node1: Node, node2: Node): number {
+export enum PositionNO {
+  Contains = 16,
+  ContainedBy = 8,
+  BeforeOrAfter = 2,
+  TheSame = 0,
+}
+export function comparePosition(node1: Node, node2: Node): PositionNO {
   if (node1 === node2) {
-    return 0;
+    return PositionNO.TheSame;
   }
   const l1 = node1.zLevel;
   const l2 = node2.zLevel;
   if (l1 === l2) {
-    return 2;
+    return PositionNO.BeforeOrAfter;
   }
 
   let p: any;
-  if (l1 > l2) {
+  if (l1 < l2) {
     p = getZLevelTop(node2, l1);
     if (p && p === node1) {
-      return 16;
+      return PositionNO.Contains;
     }
-    return 2;
+    return PositionNO.BeforeOrAfter;
   }
 
   p = getZLevelTop(node1, l2);
   if (p && p === node2) {
-    return 8;
+    return PositionNO.ContainedBy;
   }
 
-  return 2;
+  return PositionNO.BeforeOrAfter;
 }
 
 export function insertChild(container: NodeParent, thing: Node | NodeData, at?: number | null, copy?: boolean): Node {

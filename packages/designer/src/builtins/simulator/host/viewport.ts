@@ -25,7 +25,7 @@ export default class Viewport implements IViewport {
 
   private viewportElement?: Element;
   mount(viewportElement: Element | null) {
-    if (!viewportElement) {
+    if (!viewportElement || this.viewportElement === viewportElement) {
       return;
     }
     this.viewportElement = viewportElement;
@@ -54,7 +54,7 @@ export default class Viewport implements IViewport {
   /**
    * 缩放比例
    */
-  get scale(): number {
+  @computed get scale(): number {
     if (!this.rect || this.contentWidth === AutoFit) {
       return 1;
     }
@@ -63,14 +63,14 @@ export default class Viewport implements IViewport {
 
   @obx.ref private _contentWidth: number | AutoFit = AutoFit;
 
-  get contentHeight(): number | AutoFit {
+  @computed get contentHeight(): number | AutoFit {
     if (!this.rect || this.scale === 1) {
       return AutoFit;
     }
     return this.height / this.scale;
   }
 
-  get contentWidth(): number | AutoFit {
+  @computed get contentWidth(): number | AutoFit {
     if (!this.rect || (this._contentWidth !== AutoFit && this._contentWidth <= this.width)) {
       return AutoFit;
     }
@@ -98,7 +98,7 @@ export default class Viewport implements IViewport {
     return this._scrollTarget;
   }
 
-  @obx private _scrolling: boolean = false;
+  @obx private _scrolling = false;
   get scrolling(): boolean {
     return this._scrolling;
   }
@@ -120,6 +120,7 @@ export default class Viewport implements IViewport {
         this._scrolling = false;
       }, 80);
     });
+    target.addEventListener('resize', () => this.touch());
     this._scrollTarget = scrollTarget;
   }
 

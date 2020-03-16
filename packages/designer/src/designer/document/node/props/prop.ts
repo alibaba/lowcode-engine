@@ -225,6 +225,10 @@ export default class Prop implements IPropParent {
     return this._type === 'unset';
   }
 
+  isVirtual() {
+    return typeof this.key === 'string' && this.key.charAt(0) === '!';
+  }
+
   // TODO: improve this logic
   compare(other: Prop | null): number {
     if (!other || other.isUnset()) {

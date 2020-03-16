@@ -1,4 +1,4 @@
-import Node, { comparePosition } from './node/node';
+import Node, { comparePosition, PositionNO } from './node/node';
 import { obx } from '@recore/obx';
 import DocumentModel from './document-model';
 import { EventEmitter } from 'events';
@@ -97,9 +97,12 @@ export class Selection {
   /**
    * 选区是否包含节点
    */
-  containsNode(node: Node) {
+  containsNode(node: Node, excludeRoot = false) {
     for (const id of this._selected) {
       const parent = this.doc.getNode(id);
+      if (excludeRoot && parent === this.doc.rootNode) {
+        continue;
+      }
       if (parent?.contains(node)) {
         return true;
       }
@@ -124,11 +127,12 @@ export class Selection {
   /**
    * 获取顶层选区节点, 场景：拖拽时，建立蒙层，只蒙在最上层
    */
-  getTopNodes() {
+  getTopNodes(includeRoot = false) {
     const nodes = [];
     for (const id of this._selected) {
       const node = this.doc.getNode(id);
-      if (!node) {
+      // 排除根节点
+      if (!node || (!includeRoot && node === this.doc.rootNode)) {
         continue;
       }
       let i = nodes.length;
@@ -136,12 +140,12 @@ export class Selection {
       while (i-- > 0) {
         const n = comparePosition(nodes[i], node);
         // nodes[i] contains node
-        if (n === 16 || n === 0) {
+        if (n === PositionNO.Contains || n === PositionNO.TheSame) {
           isTop = false;
           break;
         }
         // node contains nodes[i], delete nodes[i]
-        if (n === 8) {
+        if (n === PositionNO.ContainedBy) {
           nodes.splice(i, 1);
         }
       }

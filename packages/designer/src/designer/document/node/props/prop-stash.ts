@@ -23,7 +23,7 @@ export default class PropStash implements IPropParent {
       }
       const pending: Prop[] = [];
       for (const prop of this.space) {
-        if (!prop.isUnset()) {
+        if (!prop.isUnset() && !prop.isVirtual()) {
           this.space.delete(prop);
           pending.push(prop);
         }
