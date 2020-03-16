@@ -1,5 +1,6 @@
 import { Component, isValidElement, ReactElement, ReactNode } from 'react';
 import { Radio, Menu, Table, Icon, Dialog } from '@alifd/next';
+import {SettingField} from './main';
 import nativeEvents from './native-events';
 
 import './style.less';
@@ -19,7 +20,9 @@ const DEFINITION_EVENT_TYPE = {
   LIFE_CYCLE_EVENT: 'lifeCycleEvent',
 };
 
-export default class EventsSetter extends Component<{}> {
+export default class EventsSetter extends Component<{
+  field:SettingField
+}> {
   state = {
     showEventList: false,
     eventBtns: [],
@@ -34,6 +37,7 @@ export default class EventsSetter extends Component<{}> {
   };
 
   componentWillMount() {
+    this.props.field.getValue()
     this.initEventBtns();
     this.initEventList();
   }
@@ -229,13 +233,18 @@ export default class EventsSetter extends Component<{}> {
   };
 
   submitDialog = (relatedEventName: String) => {
-    const { bindEventName } = this.state;
-    const { eventDataList } = this.state;
+    const { bindEventName,eventDataList} = this.state;
+    const {field} = this.props;
     eventDataList.map(item => {
       if (item.name === bindEventName) {
         item.relatedEventName = relatedEventName;
       }
     });
+
+    debugger;
+
+    field.setValue(eventDataList);
+
 
     this.closeDialog();
   };
@@ -270,7 +279,7 @@ export default class EventsSetter extends Component<{}> {
         {selectType && selectType != EVENT_CONTENTS.NATIVE_EVENT && (
           <Menu defaultOpenKeys="sub-menu" className="event-menu" onItemClick={this.onEventMenuClick}>
             {showEventList.map((item, index) => (
-              <Item key={item.name} helper={item.title} disabled={item.disabled}>
+              <Item key={item.name} helper={item.description} disabled={item.disabled}>
                 {item.name}
               </Item>
             ))}

@@ -403,11 +403,11 @@ registerMetadataTransducer((metadata) => {
           type: 'events', // 组件自定义的
           list: [{
             name:'onClick',
-            title:'点击回调'
+            description:'点击回调'
          },
          {
             name:'onChange',
-            title:'变更回调'
+            description:'变更回调'
          },
          {
           name:'onSubmit'
@@ -415,10 +415,12 @@ registerMetadataTransducer((metadata) => {
         }],
 
         getValue(field: SettingField) {
-          return [];
+          let data = field.getPropValue('eventDataList');
+          debugger
+          return data;
         },
-        setValue(field: SettingField) {
-
+        setValue(field: SettingField,eventDataList:Array) {
+           field.setPropValue('eventDataList',eventDataList);
         }
       }]
     });
