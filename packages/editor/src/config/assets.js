@@ -208,7 +208,7 @@ export default {
             value: ['small', 'medium', 'large']
           },
           description: '尺寸\n@enumdesc 小, 中, 大',
-          defaultValue: "'medium'"
+          defaultValue: 'medium'
         },
         {
           name: 'onPressEnter',
@@ -268,7 +268,7 @@ export default {
           name: 'autoComplete',
           propType: 'string',
           description: '(原生input支持)',
-          defaultValue: "'off'"
+          defaultValue: 'off'
         },
         {
           name: 'autoFocus',
