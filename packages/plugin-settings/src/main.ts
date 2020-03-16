@@ -455,7 +455,7 @@ export class SettingsMain implements SettingTarget {
     if (this.nodes.length < 1) {
       return null;
     }
-    return this.nodes[0].getProp(propName, false)?.value;
+    return this.nodes[0].getProp(propName, true)?.getValue();
   }
 
   /**
@@ -471,7 +471,7 @@ export class SettingsMain implements SettingTarget {
     if (this.nodes.length < 1) {
       return null;
     }
-    return this.nodes[0].getExtraProp(propName, false)?.value;
+    return this.nodes[0].getExtraProp(propName, false)?.getValue();
   }
 
   setExtraPropValue(propName: string, value: any) {

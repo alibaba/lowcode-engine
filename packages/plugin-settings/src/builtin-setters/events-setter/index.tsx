@@ -31,11 +31,13 @@ export default class EventsSetter extends Component<{
     selectType: null,
     nativeEventList: [],
     lifeCycleEventList: [],
-    eventDataList: [],
+    eventDataList: this.props.value || [],
     isShowEventDialog: false,
     bindEventName: '',
     relatedEventName: '',
   };
+
+  // TODO: getDerivedStateFromProps recieve eventDataList from prop.value
 
   componentWillMount() {
     this.initEventBtns();
@@ -239,10 +241,7 @@ export default class EventsSetter extends Component<{
       }
     });
 
-
     this.props.onChange(eventDataList);
-    // field.setValue(eventDataList);
-
 
     this.closeDialog();
   };

@@ -74,7 +74,7 @@ export default class Prop implements IPropParent {
 
     if (type === 'list') {
       if (!this._items) {
-        return this._items;
+        return this._value;
       }
       return this.items!.map(prop => {
         const v = prop.export(serialize);
@@ -172,8 +172,12 @@ export default class Prop implements IPropParent {
     this.dispose();
   }
 
-  getValue(serialize = true) {
-    // todo:
+  @computed getValue(): CompositeValue {
+    const v = this.export(true);
+    if (v === UNSET) {
+      return null;
+    }
+    return v;
   }
 
   private dispose() {
