@@ -21,7 +21,8 @@ const DEFINITION_EVENT_TYPE = {
 };
 
 export default class EventsSetter extends Component<{
-  field:SettingField
+  value: any[];
+  onChange: (eventList: any[]) => void;
 }> {
   state = {
     showEventList: false,
@@ -37,9 +38,6 @@ export default class EventsSetter extends Component<{
   };
 
   componentWillMount() {
-    // this.props.field.getValue()
-    console.log(this.props);
-
     this.initEventBtns();
     this.initEventList();
   }

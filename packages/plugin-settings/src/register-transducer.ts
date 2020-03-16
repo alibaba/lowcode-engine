@@ -310,55 +310,38 @@ registerMetadataTransducer(metadata => {
   if (componentName === 'Page' || componentName === 'Component') {
     isRoot = true;
     // 平台配置的，一般只有根节点才会配置
-    eventsDefinition = [{
-      type: 'lifeCycleEvent',
-      title: '生命周期',
-      list: [
-        {
-          description: '初始化时',
-          name: 'constructor',
-        },
-        {
-          description: '装载后',
-          name: 'componentDidMount',
-        },
-        {
-          description: '更新时',
-          name: 'componentDidMount',
-        },
-        {
-          description: '卸载时',
-          name: 'componentWillUnmount',
-        },
-      ]
-    }];
+    eventsDefinition = [
+      {
+        type: 'lifeCycleEvent',
+        title: '生命周期',
+        list: [
+          {
+            description: '初始化时',
+            name: 'constructor',
+          },
+          {
+            description: '装载后',
+            name: 'componentDidMount',
+          },
+          {
+            description: '更新时',
+            name: 'componentDidMount',
+          },
+          {
+            description: '卸载时',
+            name: 'componentWillUnmount',
+          },
+        ],
+      },
+    ];
   } else {
-    eventsDefinition = [{
-      type: 'events',
-      title: '事件',
-      list: (events?.supportEvents || []).map((event: any) => {
-        return typeof event === 'string'
-          ? {
-              name: event,
-            }
-          : event;
-      }),
-
-      // mock data
-      list:[
-        {
-          name:'onClick',
-          description:'点击回调'
-       },
-       {
-          name:'onChange',
-          description:'变更回调'
-       },
-       {
-          name:'onSubmit'
-        }
-      ]
-    }];
+    eventsDefinition = [
+      {
+        type: 'events',
+        title: '事件',
+        list: (events?.supportEvents || []).map((event: any) => (typeof event === 'string' ? { name: event } : event)),
+      },
+    ];
   }
   //  通用设置
   const propsGroup = props || [];
@@ -439,8 +422,9 @@ registerMetadataTransducer(metadata => {
             return data;
           },
           setValue(field: SettingField, eventDataList: any[]) {
-             field.setPropValue('eventDataList', eventDataList);
-          }
+            console.info(eventDataList);
+            field.setPropValue('eventDataList', eventDataList);
+          },
         },
       ],
     });
