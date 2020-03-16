@@ -80,11 +80,10 @@ export default function findExportedComponentDefinition(ast: any) {
         if (isComponentDefinition(definition)) {
           acc.push(definition);
         } else {
-          definition = resolveToValue(resolveIIFE(definition));
-          if (!isComponentDefinition(definition)) {
-            definition = resolveTranspiledClass(definition);
-            // console.log("path");
-          }
+          // definition = resolveToValue(resolveIIFE(definition));
+          // if (!isComponentDefinition(definition)) {
+          //   definition = resolveTranspiledClass(definition);
+          // }
           const resolved = resolveToValue(resolveHOC(definition));
           if (isComponentDefinition(resolved)) {
             acc.push(resolved);

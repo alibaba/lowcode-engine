@@ -34,8 +34,6 @@ definitions:
       - componentName
       - title
       - npm
-      - docUrl
-      - screenshot
   PropsSection:
     type: object
     required:
@@ -143,7 +141,10 @@ definitions:
       value:
         type: array
         items:
-          type: string
+          oneOf:
+            - type: string
+            - type: number
+            - type: boolean
       isRequired:
         type: boolean
   OneOfType:

@@ -69,11 +69,12 @@ class Scanner implements IScanner {
     log('entryFile', entryFile);
     model.mainEntry = entryFilePath;
     // 记录入口文件
-    model.modules.push({
-      filePath: entryFilePath,
-      fileContent: entryFile,
-    });
+    // model.modules.push({
+    //   filePath: entryFilePath,
+    //   fileContent: entryFile,
+    // });
     log('model', model);
+    // debugger;
     if (options.isExportedAsMultiple) {
       // 解析 entryFile，提取出 export 语句
       const modules = await this.parseEntryFile({

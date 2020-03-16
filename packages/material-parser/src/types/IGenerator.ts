@@ -1,5 +1,5 @@
 import { IComponentMaterial } from '../otter-core';
-import IMaterialParsedModel from './IMaterialParsedModel';
+import { IMaterialParsedModel } from './IMaterialParsedModel';
 import IMaterialScanModel from './IMaterialScanModel';
 
 /**

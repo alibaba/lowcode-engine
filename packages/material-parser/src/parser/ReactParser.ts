@@ -37,6 +37,8 @@ function transformType(type: any): any {
   if (Array.isArray(value)) {
     if (name === 'enum') {
       result.type = 'oneOf';
+    } else if (name === 'union') {
+      result.type = 'oneOfType';
     }
     result.value = value.map(transformType);
   } else if (typeof value === 'object') {

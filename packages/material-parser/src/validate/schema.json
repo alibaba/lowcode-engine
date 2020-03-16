@@ -53,9 +53,7 @@
       "required": [
         "componentName",
         "title",
-        "npm",
-        "docUrl",
-        "screenshot"
+        "npm"
       ]
     },
     "PropsSection": {
@@ -225,7 +223,17 @@
         "value": {
           "type": "array",
           "items": {
-            "type": "string"
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
           }
         },
         "isRequired": {

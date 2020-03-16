@@ -18,7 +18,8 @@
     "globby": "^10.0.1",
     "jest": "^24.8.0",
     "jest-watch-typeahead": "^0.3.1",
-    "js-yaml": "^3.13.1"
+    "js-yaml": "^3.13.1",
+    "json-schema-to-typescript": "^8.2.0"
   },
   "scripts": {
     "build": "tsc",

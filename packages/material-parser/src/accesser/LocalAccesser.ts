@@ -68,6 +68,7 @@ class LocalAccesser extends BaseAccesser {
     this.scanner = new Scanner(options);
     const ecology = await BaseParser.recognizeEcology(options);
     if (ecology === 'react') {
+      // debugger;
       this.parser = new ReactParser(options);
       this.generator = new Generator(options);
     }
