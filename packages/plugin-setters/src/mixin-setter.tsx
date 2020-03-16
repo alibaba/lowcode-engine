@@ -126,26 +126,25 @@ export default class Mixin extends PureComponent {
       RadioGroupSetter: {
         label: this.i18n('radio'),
         component: RadioGroup,
-        // props: radioGroupProps
       },
       TextAreaSetter: {
         label: this.i18n('textarea'),
         component: Input.TextArea,
       },
       DateSetter: {
-        label: this.i18n('DatePicker'),
+        label: this.i18n('date'),
         component: DatePicker,
       },
       DateYearSetter: {
-        label: this.i18n('DatePicker'),
+        label: this.i18n('dateYear'),
         component: DatePicker,
       },
       DateMonthSetter: {
-        label: this.i18n('DatePicker'),
+        label: this.i18n('dateMonth'),
         component: DatePicker,
       },
       DateRangeSetter: {
-        label: this.i18n('DatePicker'),
+        label: this.i18n('dateRange'),
         component: DatePicker,
       }
     };
@@ -182,7 +181,7 @@ export default class Mixin extends PureComponent {
       }
       let triggerNode = (
         <Button {...btnProps} size={isTwoType ? 'large' : 'small'}>
-          <Icon type={isTwoType ? 'ceshi' : 'ellipsis'} />
+          <Icon type={isTwoType ? 'edit' : 'ellipsis'} />
         </Button>
       );
       if (isTwoType) {
