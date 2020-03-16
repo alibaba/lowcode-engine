@@ -160,20 +160,27 @@ function getSourceSensor(dragObject: DragObject): ISimulator | null {
 
 function makeEventsHandler(
   boostEvent: MouseEvent | DragEvent,
-  sensors?: ISimulator[],
+  sensors: ISimulator[],
 ): (fn: (sdoc: Document) => void) => void {
-  const doc = boostEvent.view?.document || document;
-  if (doc === document && !isDragEvent(boostEvent)) {
-    sensors = undefined;
+  const topDoc = window.top.document;
+  const sourceDoc = boostEvent.view?.document || topDoc;
+  const boostPrevented = boostEvent.defaultPrevented;
+  const docs = new Set<Document>();
+  if (boostPrevented || isDragEvent(boostEvent)) {
+    docs.add(topDoc);
   }
-  return (fn: (sdoc: Document) => void) => {
-    fn(doc);
-    sensors?.forEach(sim => {
+  docs.add(sourceDoc);
+  if (sourceDoc !== topDoc || isDragEvent(boostEvent)) {
+    sensors.forEach(sim => {
       const sdoc = sim.contentDocument;
-      if (sdoc && sdoc !== doc) {
-        fn(sdoc);
+      if (sdoc) {
+        docs.add(sdoc);
       }
     });
+  }
+
+  return (handle: (sdoc: Document) => void) => {
+    docs.forEach(doc => handle(doc));
   };
 }
 
@@ -453,9 +460,9 @@ export default class Dragon {
       const { dataTransfer } = boostEvent;
 
       if (dataTransfer) {
-        dataTransfer.setDragImage(this.emptyImage, 0, 0);
+        // dataTransfer.setDragImage(this.emptyImage, 0, 0);
         dataTransfer.effectAllowed = 'all';
-        dataTransfer.dropEffect = newBie || forceCopyState ? 'copy' : 'move';
+        // dataTransfer.dropEffect = newBie || forceCopyState ? 'copy' : 'move';
 
         try {
           dataTransfer.setData('application/json', '{}');
@@ -472,6 +479,7 @@ export default class Dragon {
     handleEvents(doc => {
       if (isBoostFromDragAPI) {
         doc.addEventListener('dragover', move, true);
+        // dragexit
         didDrop = false;
         doc.addEventListener('drop', drop, true);
         doc.addEventListener('dragend', over, true);

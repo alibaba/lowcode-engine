@@ -19,6 +19,9 @@ export default class Ghost extends Component<{ designer: Designer }> {
     super(props);
     this.dispose = [
       this.dragon.onDragstart(e => {
+        if (e.originalEvent.type.substr(0, 4) === 'drag') {
+          return;
+        }
         this.dragObject = e.dragObject;
         this.x = e.globalX;
         this.y = e.globalY;
