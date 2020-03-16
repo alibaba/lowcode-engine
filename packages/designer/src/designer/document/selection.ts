@@ -1,4 +1,4 @@
-import Node, { comparePosition } from './node/node';
+import Node, { comparePosition, PositionNO } from './node/node';
 import { obx } from '@recore/obx';
 import DocumentModel from './document-model';
 import { EventEmitter } from 'events';
@@ -136,12 +136,12 @@ export class Selection {
       while (i-- > 0) {
         const n = comparePosition(nodes[i], node);
         // nodes[i] contains node
-        if (n === 16 || n === 0) {
+        if (n === PositionNO.Contains || n === PositionNO.TheSame) {
           isTop = false;
           break;
         }
         // node contains nodes[i], delete nodes[i]
-        if (n === 8) {
+        if (n === PositionNO.ContainedBy) {
           nodes.splice(i, 1);
         }
       }

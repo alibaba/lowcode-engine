@@ -8,17 +8,17 @@ import OffsetObserver from '../../../../designer/helper/offset-observer';
 import Node from '../../../../designer/document/node/node';
 
 @observer
-export class OutlineSelectingInstance extends Component<{ observed: OffsetObserver; highlight?: boolean }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
+export class OutlineSelectingInstance extends Component<{
+  observed: OffsetObserver;
+  highlight?: boolean;
+  dragging?: boolean;
+}> {
   componentWillUnmount() {
     this.props.observed.purge();
   }
 
   render() {
-    const { observed, highlight } = this.props;
+    const { observed, highlight, dragging } = this.props;
     if (!observed.hasOffset) {
       return null;
     }
@@ -33,6 +33,7 @@ export class OutlineSelectingInstance extends Component<{ observed: OffsetObserv
 
     const className = classNames('lc-outlines lc-outlines-selecting', {
       highlight,
+      dragging,
     });
 
     return (
@@ -49,6 +50,10 @@ export class OutlineSelectingForNode extends Component<{ node: Node }> {
 
   get host(): SimulatorHost {
     return this.context;
+  }
+
+  get dragging(): boolean {
+    return this.host.designer.dragon.dragging;
   }
 
   @computed get instances() {
@@ -77,7 +82,7 @@ export class OutlineSelectingForNode extends Component<{ node: Node }> {
           if (!observed) {
             return null;
           }
-          return <OutlineSelectingInstance key={observed.id} observed={observed} />;
+          return <OutlineSelectingInstance key={observed.id} dragging={this.dragging} observed={observed} />;
         })}
       </Fragment>
     );
@@ -92,12 +97,17 @@ export class OutlineSelecting extends Component {
     return this.context;
   }
 
+  get dragging(): boolean {
+    return this.host.designer.dragon.dragging;
+  }
+
   @computed get selecting() {
     const doc = this.host.document;
     if (doc.suspensed) {
       return null;
     }
-    return doc.selection.getNodes();
+    const selection = doc.selection;
+    return this.dragging ? selection.getTopNodes() : selection.getNodes();
   }
 
   shouldComponentUpdate() {
@@ -106,6 +116,7 @@ export class OutlineSelecting extends Component {
 
   render() {
     const selecting = this.selecting;
+    console.info(selecting);
     if (!selecting || selecting.length < 1) {
       // DIRTY FIX, recore has a bug!
       return <Fragment />;

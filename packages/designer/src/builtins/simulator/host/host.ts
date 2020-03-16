@@ -145,9 +145,6 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
   readonly scroller = this.designer.createScroller(this.viewport);
 
   mountViewport(viewport: Element | null) {
-    if (!viewport) {
-      return;
-    }
     this.viewport.mount(viewport);
   }
 
@@ -174,10 +171,12 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
 
   readonly libraryMap: { [key: string]: string } = {};
 
+  private _iframe?: HTMLIFrameElement;
   async mountContentFrame(iframe: HTMLIFrameElement | null) {
-    if (!iframe) {
+    if (!iframe || this._iframe === iframe) {
       return;
     }
+    this._iframe = iframe;
 
     this._contentWindow = iframe.contentWindow!;
 
@@ -234,63 +233,89 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
 
     // TODO: think of lock when edit a node
     // 事件路由
-    doc.addEventListener('mousedown', (downEvent: MouseEvent) => {
-      const nodeInst = this.getNodeInstanceFromElement(downEvent.target as Element);
-      const node = nodeInst?.node || this.document.rootNode;
-      const isMulti = downEvent.metaKey || downEvent.ctrlKey;
-      const isLeftButton = downEvent.which === 1 || downEvent.button === 0;
-      const checkSelect = (e: MouseEvent) => {
-        doc.removeEventListener('mouseup', checkSelect, true);
-        if (!isShaken(downEvent, e)) {
-          const id = node.id;
-          designer.activeTracker.track(node);
-          if (isMulti && !isRootNode(node) && selection.has(id)) {
-            selection.remove(id);
-          } else {
-            selection.select(id);
-          }
-        }
-      };
+    doc.addEventListener(
+      'mousedown',
+      (downEvent: MouseEvent) => {
+        // stop response document focus event
+        downEvent.stopPropagation();
+        downEvent.preventDefault();
 
-      if (isLeftButton && !isRootNode(node)) {
-        let nodes: Node[] = [node];
-        let ignoreUpSelected = false;
-        // 排除根节点拖拽
-        selection.remove(this.document.rootNode.id);
-        if (isMulti) {
-          // multi select mode, directily add
-          if (!selection.has(node.id)) {
+        const nodeInst = this.getNodeInstanceFromElement(downEvent.target as Element);
+        const node = nodeInst?.node || this.document.rootNode;
+        const isMulti = downEvent.metaKey || downEvent.ctrlKey;
+        const isLeftButton = downEvent.which === 1 || downEvent.button === 0;
+        const checkSelect = (e: MouseEvent) => {
+          doc.removeEventListener('mouseup', checkSelect, true);
+          if (!isShaken(downEvent, e)) {
+            const id = node.id;
             designer.activeTracker.track(node);
-            selection.add(node.id);
-            ignoreUpSelected = true;
+            if (isMulti && !isRootNode(node) && selection.has(id)) {
+              selection.remove(id);
+            } else {
+              selection.select(id);
+            }
           }
-          // 获得顶层 nodes
-          nodes = selection.getTopNodes();
-        } else if (selection.containsNode(node)) {
-          nodes = selection.getTopNodes();
-        } else {
-          // will clear current selection & select dragment in dragstart
-        }
-        designer.dragon.boost(
-          {
-            type: DragObjectType.Node,
-            nodes,
-          },
-          downEvent,
-        );
-        if (ignoreUpSelected) {
-          // multi select mode has add selected, should return
-          return;
-        }
-      }
+        };
 
-      doc.addEventListener('mouseup', checkSelect, true);
-    });
+        if (isLeftButton && !isRootNode(node)) {
+          let nodes: Node[] = [node];
+          let ignoreUpSelected = false;
+          // 排除根节点拖拽
+          selection.remove(this.document.rootNode.id);
+          if (isMulti) {
+            // multi select mode, directily add
+            if (!selection.has(node.id)) {
+              designer.activeTracker.track(node);
+              selection.add(node.id);
+              ignoreUpSelected = true;
+            }
+            // 获得顶层 nodes
+            nodes = selection.getTopNodes();
+          } else if (selection.containsNode(node)) {
+            nodes = selection.getTopNodes();
+          } else {
+            // will clear current selection & select dragment in dragstart
+          }
+          designer.dragon.boost(
+            {
+              type: DragObjectType.Node,
+              nodes,
+            },
+            downEvent,
+          );
+          if (ignoreUpSelected) {
+            // multi select mode has add selected, should return
+            return;
+          }
+        }
+
+        doc.addEventListener('mouseup', checkSelect, true);
+      },
+      true,
+    );
+
+    doc.addEventListener(
+      'click',
+      e => {
+        // stop response document click event
+        e.preventDefault();
+        e.stopPropagation();
+        // todo: catch link redirect
+      },
+      true,
+    );
 
     // cause edit
-    doc.addEventListener('dblclick', (e: MouseEvent) => {
-      // TODO:
-    });
+    doc.addEventListener(
+      'dblclick',
+      (e: MouseEvent) => {
+        // stop response document dblclick event
+        e.stopPropagation();
+        e.preventDefault();
+        // todo: quick editing
+      },
+      true,
+    );
   }
 
   private disableHovering?: () => void;
@@ -443,17 +468,27 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     let last: { x: number; y: number; r: number; b: number } | undefined;
     let computed = false;
     const elems = elements.slice();
+    const commonParent: Element | null = null;
     while (true) {
       if (!rects || rects.length < 1) {
         const elem = elems.pop();
         if (!elem) {
           break;
         }
+        /*
+        if (!commonParent) {
+          commonParent = elem.parentElement;
+        } else if (elem.parentElement !== commonParent) {
+          continue;
+        }*/
         rects = renderer.getClientRects(elem);
       }
       const rect = rects.pop();
       if (!rect) {
         break;
+      }
+      if (rect.width === 0 && rect.height === 0) {
+        continue;
       }
       if (!last) {
         last = {
@@ -677,8 +712,10 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     }
 
     const target = dropTarget;
-    const targetInstance = e.targetInstance as ReactInstance;
 
+    // FIXME: e.target is #document, etc., does not has e.targetInstance
+
+    const targetInstance = e.targetInstance as ReactInstance;
     const parentInstance = this.getClosestNodeInstance(targetInstance, target.id);
     const edge = this.computeComponentInstanceRect(parentInstance?.instance as any);
 

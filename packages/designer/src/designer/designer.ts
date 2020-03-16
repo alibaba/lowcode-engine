@@ -61,9 +61,13 @@ export default class Designer {
     this.dragon.onDragstart(e => {
       this.hovering.enable = false;
       const { dragObject } = e;
-      if (isDragNodeObject(dragObject) && dragObject.nodes.length === 1) {
-        // ensure current selecting
-        dragObject.nodes[0].select();
+      if (isDragNodeObject(dragObject)) {
+        if (dragObject.nodes.length === 1) {
+          // ensure current selecting
+          dragObject.nodes[0].select();
+        }
+      } else {
+        this.currentSelection?.clear();
       }
       if (this.props?.onDragstart) {
         this.props.onDragstart(e);

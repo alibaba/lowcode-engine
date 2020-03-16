@@ -209,7 +209,6 @@ registerMetadataTransducer(metadata => {
     props.push(propConfigToFieldConfig(prop));
   });
 
-
   return {
     ...metadata,
     configure: {
