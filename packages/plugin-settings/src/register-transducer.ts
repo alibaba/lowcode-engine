@@ -342,6 +342,21 @@ registerMetadataTransducer(metadata => {
             }
           : event;
       }),
+
+      // mock data
+      list:[
+        {
+          name:'onClick',
+          description:'点击回调'
+       },
+       {
+          name:'onChange',
+          description:'变更回调'
+       },
+       {
+          name:'onSubmit'
+        }
+      ]
     }];
   }
   //  通用设置
