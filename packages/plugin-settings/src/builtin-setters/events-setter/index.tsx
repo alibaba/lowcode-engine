@@ -38,6 +38,7 @@ export default class EventsSetter extends Component<{
   };
 
   componentWillMount() {
+    console.log(this.props);
     this.initEventBtns();
     this.initEventList();
   }
@@ -239,7 +240,7 @@ export default class EventsSetter extends Component<{
       }
     });
 
-
+    debugger;
     this.props.onChange(eventDataList);
     // field.setValue(eventDataList);
 

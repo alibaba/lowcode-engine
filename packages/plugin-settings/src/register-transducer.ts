@@ -417,13 +417,17 @@ registerMetadataTransducer(metadata => {
             },
           },
 
-          getValue(field: SettingField) {
-            let data = field.getPropValue('eventDataList');
-            return data;
+          getValue(field: SettingField,val?:any[]) {
+            //console.log(value);
+            //return value;
+            return field.parent.getPropValue('eventDataList');
+           //return val;
           },
+
           setValue(field: SettingField, eventDataList: any[]) {
-            console.info(eventDataList);
-            field.setPropValue('eventDataList', eventDataList);
+            //return;
+            //console.info(eventDataList);
+            field.parent.setPropValue('eventDataList', eventDataList);
           },
         },
       ],
