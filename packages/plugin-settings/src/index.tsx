@@ -8,6 +8,7 @@ import Node from '../../designer/src/designer/document/node/node';
 import ArraySetter from './builtin-setters/array-setter';
 import ObjectSetter from './builtin-setters/object-setter';
 import './register-transducer';
+import { TipContainer } from './tip';
 
 export default class SettingsMainView extends Component {
   private main: SettingsMain;
@@ -101,6 +102,7 @@ export default class SettingsMainView extends Component {
 
     return (
       <div className="lc-settings-main">
+        <TipContainer />
         <Tab
           navClassName="lc-settings-tabs"
           animation={false}

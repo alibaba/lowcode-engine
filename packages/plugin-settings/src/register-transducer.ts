@@ -11,7 +11,13 @@ import { SetterType, FieldConfig, SettingField } from './main';
 import { registerMetadataTransducer } from '../../designer/src/designer/component-meta';
 
 export function propConfigToFieldConfig(propConfig: PropConfig): FieldConfig {
+  const { name, description } = propConfig;
+  const title = {
+    label: description?.slice(0, 10) || name,
+    tip: description ? `${name} | ${description}` : undefined,
+  };
   return {
+    title,
     ...propConfig,
     setter: propTypeToSetter(propConfig.propType),
   };
@@ -163,21 +169,23 @@ registerMetadataTransducer(metadata => {
       return metadata as any;
     }
   }
+
+  const { configure = {} } = metadata;
+
   if (!metadata.props) {
     return {
       ...metadata,
       configure: {
-        props: metadata.configure && Array.isArray(metadata.configure) ? metadata.configure : [],
+        ...configure,
+        props: [],
       },
     };
   }
-
-  const { configure = {} } = metadata;
   const { props = [], component = {}, events = {}, styles = {} } = configure;
-  const supportEvents: string[] | null = (events as any).supportEvents ? null : [];
+  const supportedEvents: any[] | null = (events as any).supportedEvents ? null : [];
 
   metadata.props.forEach(prop => {
-    const { name, propType } = prop;
+    const { name, propType, description } = prop;
     if (
       name === 'children' &&
       (component.isContainer || propType === 'node' || propType === 'element' || propType === 'any')
@@ -189,9 +197,12 @@ registerMetadataTransducer(metadata => {
     }
 
     if (EVENT_RE.test(name) && (propType === 'func' || propType === 'any')) {
-      if (supportEvents) {
-        supportEvents.push(name);
-        (events as any).supportEvents = supportEvents;
+      if (supportedEvents) {
+        supportedEvents.push({
+          name,
+          description,
+        });
+        (events as any).supportedEvents = supportedEvents;
       }
       return;
     }
@@ -304,44 +315,40 @@ registerMetadataTransducer(metadata => {
     };
   }
 
-  const { props, events, styles } = configure as any;
-  let eventsDefinition: any;
-  let isRoot: boolean = false;
-  if (componentName === 'Page' || componentName === 'Component') {
-    isRoot = true;
-    // 平台配置的，一般只有根节点才会配置
-    eventsDefinition = [
-      {
-        type: 'lifeCycleEvent',
-        title: '生命周期',
-        list: [
-          {
-            description: '初始化时',
-            name: 'constructor',
-          },
-          {
-            description: '装载后',
-            name: 'componentDidMount',
-          },
-          {
-            description: '更新时',
-            name: 'componentDidMount',
-          },
-          {
-            description: '卸载时',
-            name: 'componentWillUnmount',
-          },
-        ],
-      },
-    ];
-  } else {
-    eventsDefinition = [
-      {
-        type: 'events',
-        title: '事件',
-        list: (events?.supportEvents || []).map((event: any) => (typeof event === 'string' ? { name: event } : event)),
-      },
-    ];
+  const { props, events = {}, styles } = configure as any;
+  const isRoot: boolean = componentName === 'Page' || componentName === 'Component';
+  const eventsDefinition: any[] = [];
+  const supportedLifecycles = events.supportedLifecycles || (isRoot ? [
+    {
+      description: '初始化时',
+      name: 'constructor',
+    },
+    {
+      description: '装载后',
+      name: 'componentDidMount',
+    },
+    {
+      description: '更新时',
+      name: 'componentDidMount',
+    },
+    {
+      description: '卸载时',
+      name: 'componentWillUnmount',
+    },
+  ] : null);
+  if (supportedLifecycles) {
+    eventsDefinition.push({
+      type: 'lifeCycleEvent',
+      title: '生命周期',
+      list: supportedLifecycles.map((event: any) => (typeof event === 'string' ? { name: event } : event)),
+    });
+  }
+  if (events.supportedEvents) {
+    eventsDefinition.push({
+      type: 'events',
+      title: '事件',
+      list: (events.supportedEvents || []).map((event: any) => (typeof event === 'string' ? { name: event } : event)),
+    });
   }
   //  通用设置
   const propsGroup = props || [];
@@ -402,7 +409,7 @@ registerMetadataTransducer(metadata => {
     });
   }
 
-  if (eventsDefinition) {
+  if (eventsDefinition.length > 0) {
     combined.push({
       name: '#events',
       title: '事件',
@@ -416,15 +423,14 @@ registerMetadataTransducer(metadata => {
               definition: eventsDefinition,
             },
           },
-
-          getValue(field: SettingField, val?:any[]) {
+          getValue(field: SettingField, val?: any[]) {
+            // todo:
             return val;
           },
 
           setValue(field: SettingField, eventDataList: any[]) {
+            // todo:
             return;
-            // console.info(eventDataList);
-            // field.parent.setPropValue('eventDataList', eventDataList);
           },
         },
       ],
@@ -432,7 +438,6 @@ registerMetadataTransducer(metadata => {
   }
 
   if (isRoot) {
-    // todo...
     combined.push({
       name: '#advanced',
       title: '高级',

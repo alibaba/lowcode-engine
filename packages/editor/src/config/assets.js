@@ -13,6 +13,44 @@ export default {
     }
   },
   components: {
+    Page: {
+      componentName: 'Page',
+      title: '页面',
+      configure: {
+        events: {
+          supportedLifecycles: [
+            {
+              description: '初始化时',
+              name: 'constructor',
+            },
+            {
+              description: '装载后',
+              name: 'componentDidMount',
+            },
+            {
+              description: '更新时',
+              name: 'componentDidMount',
+            },
+            {
+              description: '卸载时',
+              name: 'componentWillUnmount',
+            },
+          ]
+        },
+        component: {
+          isContainer: true,
+        }
+      }
+    },
+    Div: {
+      componentName: 'Div',
+      title: '容器',
+      configure: {
+        component: {
+          isContainer: true,
+        }
+      }
+    },
     Button: {
       componentName: 'Button',
       title: '按钮',
@@ -165,7 +203,15 @@ export default {
           name: 'children',
           propType: 'node'
         }
-      ]
+      ],
+      configure: {
+        component: {
+          isContainer: true,
+          nestingRule: {
+            childWhitelist: 'Button'
+          }
+        }
+      }
     },
     Input: {
       componentName: 'Input',
@@ -450,7 +496,12 @@ export default {
           propType: 'bool',
           description: '是否开启预览态'
         }
-      ]
+      ],
+      configure: {
+        component: {
+          isContainer: true,
+        }
+      }
     },
     'Form.Item': {
       componentName: 'Form.Item',
@@ -747,7 +798,15 @@ export default {
           propType: 'func',
           description: '预览态模式下渲染的内容\n@param {any} value 根据包裹的组件的 value 类型而决定'
         }
-      ]
+      ],
+      configure: {
+        component: {
+          isContainer: true,
+          nestingRule: {
+            parentWhitelist: 'Form'
+          }
+        }
+      }
     },
     NumberPicker: {
       componentName: 'NumberPicker',
@@ -1142,7 +1201,15 @@ export default {
           propType: 'object',
           defaultValue: 'zhCN.Select'
         }
-      ]
+      ],
+      configure: {
+        component: {
+          isContainer: true,
+          nestingRule: {
+            childWhitelist: 'Select.Option'
+          }
+        }
+      }
     },
     'Select.Option': {
       componentName: 'Select.Option',
@@ -1173,7 +1240,15 @@ export default {
           name: 'children',
           propType: 'any'
         }
-      ]
+      ],
+      configure: {
+        component: {
+          isContainer: true,
+          nestingRule: {
+            parentWhitelist: 'Select'
+          }
+        }
+      }
     }
   },
   componentList: [
