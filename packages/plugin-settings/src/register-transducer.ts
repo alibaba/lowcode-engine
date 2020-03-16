@@ -309,7 +309,7 @@ registerMetadataTransducer(metadata => {
   if (componentName === 'Page' || componentName === 'Component') {
     isRoot = true;
     // 平台配置的，一般只有根节点才会配置
-    eventsDefinition = {
+    eventsDefinition = [{
       type: 'lifeCycleEvent',
       title: '生命周期',
       list: [
@@ -330,9 +330,9 @@ registerMetadataTransducer(metadata => {
           name: 'componentWillUnmount',
         },
       ]
-    };
+    }];
   } else {
-    eventsDefinition = {
+    eventsDefinition = [{
       type: 'events',
       title: '事件',
       list: (events?.supportEvents || []).map((event: any) => {
@@ -342,7 +342,7 @@ registerMetadataTransducer(metadata => {
             }
           : event;
       }),
-    };
+    }];
   }
   //  通用设置
   const propsGroup = props || [];
@@ -419,9 +419,12 @@ registerMetadataTransducer(metadata => {
           },
 
           getValue(field: SettingField) {
-            return [];
+            let data = field.getPropValue('eventDataList');
+            return data;
           },
-          setValue(field: SettingField) {},
+          setValue(field: SettingField, eventDataList: any[]) {
+             field.setPropValue('eventDataList', eventDataList);
+          }
         },
       ],
     });

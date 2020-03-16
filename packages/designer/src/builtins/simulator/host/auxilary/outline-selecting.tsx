@@ -116,7 +116,6 @@ export class OutlineSelecting extends Component {
 
   render() {
     const selecting = this.selecting;
-    console.info(selecting);
     if (!selecting || selecting.length < 1) {
       // DIRTY FIX, recore has a bug!
       return <Fragment />;
