@@ -1,0 +1,9 @@
+{
+  "extends": "./node_modules/@recore/config/tsconfig",
+  "compilerOptions": {
+    "experimentalDecorators": true
+  },
+  "include": [
+    "./src/"
+  ]
+}

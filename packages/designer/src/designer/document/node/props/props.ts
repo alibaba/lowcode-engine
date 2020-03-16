@@ -1,12 +1,11 @@
 import { computed, obx } from '@recore/obx';
-import { uniqueId } from '../../../../utils/unique-id';
+import { uniqueId } from '../../../../../../utils/unique-id';
 import { CompositeValue, PropsList, PropsMap } from '../../../schema';
 import PropStash from './prop-stash';
-import Prop, { IPropParent } from './prop';
-import { NodeParent } from '../node';
+import Prop, { IPropParent, UNSET } from './prop';
+import Node from '../node';
 
-export const UNSET = Symbol.for('unset');
-export type UNSET = typeof UNSET;
+export const EXTRA_KEY_PREFIX = '__';
 
 export default class Props implements IPropParent {
   readonly id = uniqueId('props');
@@ -39,23 +38,25 @@ export default class Props implements IPropParent {
     return this.items.length;
   }
 
-  @computed get value(): PropsMap | PropsList | null {
-    return this.export(true);
-  }
-
   @obx type: 'map' | 'list' = 'map';
 
-  constructor(readonly owner: NodeParent, value?: PropsMap | PropsList | null) {
+  constructor(readonly owner: Node, value?: PropsMap | PropsList | null, extras?: object) {
     if (Array.isArray(value)) {
       this.type = 'list';
       this.items = value.map(item => new Prop(this, item.value, item.name, item.spread));
     } else if (value != null) {
       this.items = Object.keys(value).map(key => new Prop(this, value[key], key));
     }
+    if (extras) {
+      Object.keys(extras).forEach(key => {
+        this.items.push(new Prop(this, (extras as any)[key], EXTRA_KEY_PREFIX + key));
+      });
+    }
   }
 
-  import(value?: PropsMap | PropsList | null) {
+  import(value?: PropsMap | PropsList | null, extras?: object) {
     this.stash.clear();
+    const originItems = this.items;
     if (Array.isArray(value)) {
       this.type = 'list';
       this.items = value.map(item => new Prop(this, item.value, item.name, item.spread));
@@ -66,49 +67,76 @@ export default class Props implements IPropParent {
       this.type = 'map';
       this.items = [];
     }
-    this.items.forEach(item => item.purge());
+    if (extras) {
+      Object.keys(extras).forEach(key => {
+        this.items.push(new Prop(this, (extras as any)[key], EXTRA_KEY_PREFIX + key));
+      });
+    }
+    originItems.forEach(item => item.purge());
   }
 
-  export(serialize = false): PropsMap | PropsList | null {
-    if (this.items.length < 1) {
-      return null;
-    }
-    if (this.type === 'list') {
-      return this.items.map(item => ({
-        spread: item.spread,
-        name: item.key as string,
-        value: item.export(serialize),
-      }));
-    }
-    const maps: any = {};
-    this.items.forEach(prop => {
-      if (prop.key) {
-        maps[prop.key] = prop.export(serialize);
-      }
+  merge(value: PropsMap) {
+    Object.keys(value).forEach(key => {
+      this.query(key, true)!.setValue(value[key]);
     });
-    return maps;
+  }
+
+  export(serialize = false): { props?: PropsMap | PropsList; extras?: object } {
+    if (this.items.length < 1) {
+      return {};
+    }
+    let props: any = {};
+    const extras: any = {};
+    if (this.type === 'list') {
+      props = [];
+      this.items.forEach(item => {
+        let value = item.export(serialize);
+        if (value === UNSET) {
+          value = null;
+        }
+        let name = item.key as string;
+        if (name && typeof name === 'string' && name.startsWith(EXTRA_KEY_PREFIX)) {
+          name = name.substr(EXTRA_KEY_PREFIX.length);
+          extras[name] = value;
+        } else {
+          props.push({
+            spread: item.spread,
+            name,
+            value,
+          });
+        }
+      });
+    } else {
+      this.items.forEach(item => {
+        let name = item.key as string;
+        if (name == null) {
+          // todo ...spread
+          return;
+        }
+        let value = item.export(serialize);
+        if (value === UNSET) {
+          value = null;
+        }
+        if (typeof name === 'string' && name.startsWith(EXTRA_KEY_PREFIX)) {
+          name = name.substr(EXTRA_KEY_PREFIX.length);
+          extras[name] = value;
+        } else {
+          props[name] = value;
+        }
+      });
+    }
+
+    return { props, extras };
   }
 
   /**
-   * 根据 path 路径查询属性，如果没有则临时生成一个
-   */
-  query(path: string): Prop;
-  /**
    * 根据 path 路径查询属性
    *
-   * @useStash 如果没有则临时生成一个
+   * @param stash 如果没有则临时生成一个
    */
-  query(path: string, useStash: true): Prop;
-  /**
-   * 根据 path 路径查询属性
-   */
-  query(path: string, useStash: false): Prop | null;
-  /**
-   * 根据 path 路径查询属性
-   *
-   * @useStash 如果没有则临时生成一个
-   */
-  query(path: string, useStash: boolean = true) {
+  query(path: string, stash = true): Prop | null {
+    return this.get(path, stash);
+    // todo: future support list search
     let matchedLength = 0;
     let firstMatched = null;
     if (this.items) {
@@ -139,7 +167,7 @@ export default class Props implements IPropParent {
     if (firstMatched) {
       ret = firstMatched.get(path.slice(matchedLength + 1), true);
     }
-    if (!ret && useStash) {
+    if (!ret && stash) {
       return this.stash.get(path);
     }
 
@@ -148,20 +176,26 @@ export default class Props implements IPropParent {
 
   /**
    * 获取某个属性, 如果不存在，临时获取一个待写入
-   * @param useStash 强制
+   * @param stash 强制
    */
-  get(path: string, useStash: true): Prop;
-  /**
-   * 获取某个属性
-   * @param useStash 强制
-   */
-  get(path: string, useStash: false): Prop | null;
-  /**
-   * 获取某个属性
-   */
-  get(path: string): Prop | null;
-  get(name: string, useStash = false) {
-    return this.maps.get(name) || (useStash && this.stash.get(name)) || null;
+  get(path: string, stash = false): Prop | null {
+    let entry = path;
+    let nest = '';
+    const i = path.indexOf('.');
+    if (i > 0) {
+      nest = path.slice(i + 1);
+      if (nest) {
+        entry = path.slice(0, i);
+      }
+    }
+
+    const prop = this.maps.get(entry) || (stash && this.stash.get(entry)) || null;
+
+    if (prop) {
+      return nest ? prop.get(nest, stash) : prop;
+    }
+
+    return null;
   }
 
   /**

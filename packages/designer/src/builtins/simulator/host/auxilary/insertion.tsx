@@ -1,9 +1,14 @@
 import { Component } from 'react';
 import { computed } from '@recore/obx';
-import { observer } from '@recore/core-obx';
+import { observer } from '@recore/obx-react';
 import { SimulatorContext } from '../context';
 import { SimulatorHost } from '../host';
-import Location, { Rect, isLocationChildrenDetail, LocationChildrenDetail, isVertical } from '../../../../designer/helper/location';
+import Location, {
+  Rect,
+  isLocationChildrenDetail,
+  LocationChildrenDetail,
+  isVertical,
+} from '../../../../designer/helper/location';
 import { ISimulator } from '../../../../designer/simulator';
 import { NodeParent } from '../../../../designer/document/node/node';
 import './insertion.less';
@@ -19,11 +24,7 @@ interface InsertionData {
 /**
  * 处理拖拽子节点(INode)情况
  */
-function processChildrenDetail(
-  sim: ISimulator,
-  target: NodeParent,
-  detail: LocationChildrenDetail,
-): InsertionData {
+function processChildrenDetail(sim: ISimulator, target: NodeParent, detail: LocationChildrenDetail): InsertionData {
   let edge = detail.edge || null;
 
   if (edge) {

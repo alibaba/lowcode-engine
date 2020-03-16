@@ -5,7 +5,7 @@ import Props from './props';
 export type PendingItem = Prop[];
 export default class PropStash implements IPropParent {
   @obx.val private space: Set<Prop> = new Set();
-  @computed private get maps(): Map<string, Prop> {
+  @computed private get maps(): Map<string | number, Prop> {
     const maps = new Map();
     if (this.space.size > 0) {
       this.space.forEach(prop => {
@@ -23,13 +23,12 @@ export default class PropStash implements IPropParent {
       }
       const pending: Prop[] = [];
       for (const prop of this.space) {
-        if (!prop.isUnset()) {
+        if (!prop.isUnset() && !prop.isVirtual()) {
           this.space.delete(prop);
           pending.push(prop);
         }
       }
       if (pending.length > 0) {
-        debugger;
         untracked(() => {
           for (const item of pending) {
             write(item);
@@ -39,7 +38,7 @@ export default class PropStash implements IPropParent {
     });
   }
 
-  get(key: string): Prop {
+  get(key: string | number): Prop {
     let prop = this.maps.get(key);
     if (!prop) {
       prop = new Prop(this, UNSET, key);

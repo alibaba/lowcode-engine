@@ -6,7 +6,7 @@ import RootNode from './node/root-node';
 import { ISimulator, Component } from '../simulator';
 import { computed, obx, autorun } from '@recore/obx';
 import Location from '../helper/location';
-import { ComponentConfig } from '../component-config';
+import { ComponentMeta } from '../component-meta';
 import History from '../helper/history';
 import Prop from './node/props/prop';
 
@@ -41,29 +41,28 @@ export default class DocumentModel {
   }
 
   get fileName(): string {
-    return (this.rootNode.extras.get('fileName')?.value as string) || this.id;
+    return this.rootNode.getExtraProp('fileName')?.getAsString() || this.id;
   }
 
   set fileName(fileName: string) {
-    this.rootNode.extras.get('fileName', true).value = fileName;
+    this.rootNode.getExtraProp('fileName', true)?.setValue(fileName);
   }
 
   constructor(readonly project: Project, schema: RootSchema) {
-    // todo: purge this autorun
-    /*
     autorun(() => {
       this.nodes.forEach(item => {
         if (item.parent == null && item !== this.rootNode) {
-          // item.remove();
+          item.purge();
         }
       });
-    }, true);*/
+    }, true);
     this.rootNode = this.createRootNode(schema);
     this.id = this.rootNode.id;
     this.history = new History(
       () => this.schema,
-      (schema) => this.import(schema as RootSchema, true),
+      schema => this.import(schema as RootSchema, true),
     );
+    this.setupListenActiveNodes();
   }
 
   readonly designer = this.project.designer;
@@ -90,6 +89,12 @@ export default class DocumentModel {
     return node ? !node.isPurged : false;
   }
 
+  @obx.val private activeNodes?: Node[];
+
+  private setupListenActiveNodes() {
+    // todo:
+  }
+
   /**
    * 根据 schema 创建一个节点
    */
@@ -97,7 +102,7 @@ export default class DocumentModel {
     let schema: any;
     if (isDOMText(data) || isJSExpression(data)) {
       schema = {
-        componentName: '#frag',
+        componentName: 'Leaf',
         children: data,
       };
     } else {
@@ -108,7 +113,11 @@ export default class DocumentModel {
     if (schema.id) {
       node = this.getNode(schema.id);
       if (node && node.componentName === schema.componentName) {
-        node.internalSetParent(null);
+        if (node.parent) {
+          node.internalSetParent(null);
+          // will move to another position
+          // todo: this.activeNodes?.push(node);
+        }
         node.internalSetSlotFor(slotFor);
         node.import(schema, true);
       } else if (node) {
@@ -117,10 +126,12 @@ export default class DocumentModel {
     }
     if (!node) {
       node = new Node(this, schema, slotFor);
+      // will add
+      // todo: this.activeNodes?.push(node);
     }
 
     if (this.nodesMap.has(node.id)) {
-      node.purge();
+      this.nodesMap.get(node.id)!.internalSetParent(null);
     }
 
     this.nodesMap.set(node.id, node);
@@ -178,6 +189,7 @@ export default class DocumentModel {
     }
     this.nodesMap.delete(node.id);
     this.nodes.delete(node);
+    this.selection.remove(node.id);
     node.remove();
   }
 
@@ -225,9 +237,10 @@ export default class DocumentModel {
     return this.rootNode.schema as any;
   }
 
-  import(schema: RootSchema, checkId: boolean = false) {
+  import(schema: RootSchema, checkId = false) {
     this.rootNode.import(schema, checkId);
     // todo: purge something
+    // todo: select added and active track added
   }
 
   /**
@@ -245,7 +258,7 @@ export default class DocumentModel {
    * 是否已修改
    */
   isModified() {
-    // return !this.history.isSavePoint();
+    return !this.history.isSavePoint();
   }
 
   /**
@@ -268,17 +281,20 @@ export default class DocumentModel {
     // TODO: emit simulator mounted
   }
 
+  // FIXME: does needed?
   getComponent(componentName: string): any {
     return this.simulator!.getComponent(componentName);
   }
 
-  getComponentConfig(componentName: string, component?: Component | null): ComponentConfig {
-    // TODO: guess componentConfig from component by simulator
-    return this.designer.getComponentConfig(componentName);
+  getComponentMeta(componentName: string): ComponentMeta {
+    return this.designer.getComponentMeta(
+      componentName,
+      () => this.simulator?.generateComponentMetadata(componentName) || null,
+    );
   }
 
-  @obx.ref private _opened: boolean = true;
-  @obx.ref private _suspensed: boolean = false;
+  @obx.ref private _opened = false;
+  @obx.ref private _suspensed = false;
 
   /**
    * 是否不是激活的
@@ -328,7 +344,11 @@ export default class DocumentModel {
    * 打开，已载入，默认建立时就打开状态，除非手动关闭
    */
   open(): void {
+    const originState = this._opened;
     this._opened = true;
+    if (originState === false) {
+      this.designer.postEvent('document-open', this);
+    }
     if (this._suspensed) {
       this.setSuspense(false);
     } else {

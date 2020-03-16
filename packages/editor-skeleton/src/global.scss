@@ -1,0 +1,33 @@
+body {
+  font-family: PingFangSC-Regular, Roboto, Helvetica Neue, Helvetica, Tahoma,
+    Arial, PingFang SC-Light, Microsoft YaHei;
+  font-size: 12px;
+  padding: 0;
+  margin: 0;
+  * {
+    box-sizing: border-box;
+  }
+}
+.next-loading {
+  .next-loading-wrap {
+    height: 100%;
+  }
+}
+.lowcode-editor {
+  .lowcode-main-content {
+    position: absolute;
+    top: 48px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    background-color: #d8d8d8;
+  }
+  .lowcode-center-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    overflow: auto;
+  }
+}

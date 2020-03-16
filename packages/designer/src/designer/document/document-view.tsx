@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import DocumentModel from './document-model';
-import { observer } from '@recore/core-obx';
+import { observer } from '@recore/obx-react';
 import classNames from 'classnames';
 
 @observer

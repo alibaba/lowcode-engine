@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { observer } from '@recore/core-obx';
+import { observer } from '@recore/obx-react';
 import { SimulatorHost, SimulatorProps } from './host';
 import DocumentModel from '../../../designer/document/document-model';
 import { SimulatorContext } from './context';
@@ -15,10 +15,12 @@ import './host.less';
   Auxiliary 辅助显示层，初始相对 Content 位置 0,0，紧贴 Canvas, 根据 Content 滚动位置，改变相对位置
 */
 
-export class SimulatorHostView extends Component<SimulatorProps & {
+type SimulatorHostProps = SimulatorProps & {
   documentContext: DocumentModel;
   onMount?: (host: SimulatorHost) => void;
-}> {
+};
+
+export class SimulatorHostView extends Component<SimulatorHostProps> {
   readonly host: SimulatorHost;
   constructor(props: any) {
     super(props);

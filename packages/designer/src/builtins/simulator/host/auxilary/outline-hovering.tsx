@@ -1,6 +1,6 @@
 import { Component, Fragment, PureComponent } from 'react';
 import classNames from 'classnames';
-import { observer } from '@recore/core-obx';
+import { observer } from '@recore/obx-react';
 import { SimulatorContext } from '../context';
 import { SimulatorHost } from '../host';
 import { computed } from '@recore/obx';

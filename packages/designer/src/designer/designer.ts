@@ -1,8 +1,8 @@
-import { ComponentType } from 'react';
-import { obx, computed } from '@recore/obx';
+import { ComponentType as ReactComponentType } from 'react';
+import { obx, computed, autorun } from '@recore/obx';
 import BuiltinSimulatorView from '../builtins/simulator';
 import Project from './project';
-import { ProjectSchema } from './schema';
+import { ProjectSchema, NpmInfo } from './schema';
 import Dragon, { isDragNodeObject, isDragNodeDataObject, LocateEvent, DragObject } from './helper/dragon';
 import ActiveTracker from './helper/active-tracker';
 import Hovering from './helper/hovering';
@@ -10,10 +10,11 @@ import Location, { LocationData, isLocationChildrenDetail } from './helper/locat
 import DocumentModel from './document/document-model';
 import Node, { insertChildren } from './document/node/node';
 import { isRootNode } from './document/node/root-node';
-import { ComponentDescriptionSpec, ComponentConfig } from './component-config';
+import { ComponentMetadata, ComponentMeta } from './component-meta';
 import Scroller, { IScrollable } from './helper/scroller';
 import { INodeSelector } from './simulator';
 import OffsetObserver, { createOffsetObserver } from './helper/offset-observer';
+import { EventEmitter } from 'events';
 
 export interface DesignerProps {
   className?: string;
@@ -21,15 +22,15 @@ export interface DesignerProps {
   defaultSchema?: ProjectSchema;
   hotkeys?: object;
   simulatorProps?: object | ((document: DocumentModel) => object);
-  simulatorComponent?: ComponentType<any>;
-  dragGhostComponent?: ComponentType<any>;
+  simulatorComponent?: ReactComponentType<any>;
+  dragGhostComponent?: ReactComponentType<any>;
   suspensed?: boolean;
-  componentDescriptionSpecs?: ComponentDescriptionSpec[];
+  componentsDescription?: ComponentMetadata[];
+  eventPipe?: EventEmitter;
   onMount?: (designer: Designer) => void;
   onDragstart?: (e: LocateEvent) => void;
   onDrag?: (e: LocateEvent) => void;
   onDragend?: (e: { dragObject: DragObject; copy: boolean }, loc?: Location) => void;
-  // TODO: ...add other events support
   [key: string]: any;
 }
 
@@ -40,25 +41,45 @@ export default class Designer {
   readonly hovering = new Hovering();
   readonly project: Project;
 
+  get currentDocument() {
+    return this.project.currentDocument;
+  }
+
+  get currentHistory() {
+    return this.currentDocument?.history;
+  }
+
+  get currentSelection() {
+    return this.currentDocument?.selection;
+  }
+
   constructor(props: DesignerProps) {
+    this.setProps(props);
+
     this.project = new Project(this, props.defaultSchema);
 
     this.dragon.onDragstart(e => {
       this.hovering.enable = false;
       const { dragObject } = e;
-      if (isDragNodeObject(dragObject) && dragObject.nodes.length === 1) {
-        // ensure current selecting
-        dragObject.nodes[0].select();
+      if (isDragNodeObject(dragObject)) {
+        if (dragObject.nodes.length === 1) {
+          // ensure current selecting
+          dragObject.nodes[0].select();
+        }
+      } else {
+        this.currentSelection?.clear();
       }
       if (this.props?.onDragstart) {
         this.props.onDragstart(e);
       }
+      this.postEvent('dragstart', e);
     });
 
     this.dragon.onDrag(e => {
       if (this.props?.onDrag) {
         this.props.onDrag(e);
       }
+      this.postEvent('drag', e);
     });
 
     this.dragon.onDragend(e => {
@@ -84,6 +105,7 @@ export default class Designer {
       if (this.props?.onDragend) {
         this.props.onDragend(e, loc);
       }
+      this.postEvent('dragend', e, loc);
       this.hovering.enable = true;
     });
 
@@ -91,7 +113,49 @@ export default class Designer {
       node.document.simulator?.scrollToNode(node, detail);
     });
 
-    this.setProps(props);
+    let selectionDispose: undefined | (() => void);
+    const setupSelection = () => {
+      if (selectionDispose) {
+        selectionDispose();
+        selectionDispose = undefined;
+      }
+      this.postEvent('selection-change', this.currentSelection);
+      if (this.currentSelection) {
+        const currentSelection = this.currentSelection;
+        selectionDispose = currentSelection.onSelectionChange(() => {
+          this.postEvent('selection-change', currentSelection);
+        });
+      }
+    };
+    let historyDispose: undefined | (() => void);
+    const setupHistory = () => {
+      if (historyDispose) {
+        historyDispose();
+        historyDispose = undefined;
+      }
+      this.postEvent('history-change', this.currentHistory);
+      if (this.currentHistory) {
+        const currentHistory = this.currentHistory;
+        historyDispose = currentHistory.onStateChange(() => {
+          this.postEvent('history-change', currentHistory);
+        });
+      }
+    };
+    this.project.onCurrentDocumentChange(() => {
+      this.postEvent('current-document-change', this.currentDocument);
+      this.postEvent('selection-change', this.currentSelection);
+      this.postEvent('history-change', this.currentHistory);
+      setupSelection();
+      setupHistory();
+    });
+    setupSelection();
+    setupHistory();
+
+    this.postEvent('designer.ready', this);
+  }
+
+  postEvent(event: string, ...args: any[]) {
+    this.props?.eventPipe?.emit(`designer.${event}`, ...args);
   }
 
   private _dropLocation?: Location;
@@ -128,7 +192,7 @@ export default class Designer {
    * 获得合适的插入位置
    */
   getSuitableInsertion() {
-    const activedDoc = this.project.activedDocuments[0];
+    const activedDoc = this.project.currentDocument;
     if (!activedDoc) {
       return null;
     }
@@ -165,8 +229,8 @@ export default class Designer {
       if (props.suspensed !== this.props.suspensed && props.suspensed != null) {
         this.suspensed = props.suspensed;
       }
-      if (props.componentDescriptionSpecs !== this.props.componentDescriptionSpecs && props.componentDescriptionSpecs != null) {
-        this.buildComponentConfigsMap(props.componentDescriptionSpecs);
+      if (props.componentsDescription !== this.props.componentsDescription && props.componentsDescription != null) {
+        this.buildComponentMetasMap(props.componentsDescription);
       }
     } else {
       // init hotkeys
@@ -182,8 +246,8 @@ export default class Designer {
       if (props.suspensed != null) {
         this.suspensed = props.suspensed;
       }
-      if (props.componentDescriptionSpecs != null) {
-        this.buildComponentConfigsMap(props.componentDescriptionSpecs);
+      if (props.componentsDescription != null) {
+        this.buildComponentMetasMap(props.componentsDescription);
       }
     }
     this.props = props;
@@ -193,9 +257,9 @@ export default class Designer {
     return this.props ? this.props[key] : null;
   }
 
-  @obx.ref private _simulatorComponent?: ComponentType<any>;
+  @obx.ref private _simulatorComponent?: ReactComponentType<any>;
 
-  @computed get simulatorComponent(): ComponentType<any> {
+  @computed get simulatorComponent(): ReactComponentType<any> {
     return this._simulatorComponent || BuiltinSimulatorView;
   }
 
@@ -205,7 +269,7 @@ export default class Designer {
     return this._simulatorProps || {};
   }
 
-  @obx.ref private _suspensed: boolean = false;
+  @obx.ref private _suspensed = false;
 
   get suspensed(): boolean {
     return this._suspensed;
@@ -227,36 +291,59 @@ export default class Designer {
     // todo:
   }
 
-  @obx.val private _componentConfigsMap = new Map<string, ComponentConfig>();
+  @obx.val private _componentMetasMap = new Map<string, ComponentMeta>();
+  private _lostComponentMetasMap = new Map<string, ComponentMeta>();
 
-  private buildComponentConfigsMap(specs: ComponentDescriptionSpec[]) {
-    specs.forEach(spec => {
-      const key = spec.componentName;
-      const had = this._componentConfigsMap.get(key);
-      if (had) {
-        had.spec = spec;
+  private buildComponentMetasMap(metas: ComponentMetadata[]) {
+    metas.forEach(data => {
+      const key = data.componentName;
+      let meta = this._componentMetasMap.get(key);
+      if (meta) {
+        meta.metadata = data;
       } else {
-        this._componentConfigsMap.set(key, new ComponentConfig(spec));
+        meta = this._lostComponentMetasMap.get(key);
+
+        if (meta) {
+          meta.metadata = data;
+          this._lostComponentMetasMap.delete(key);
+        } else {
+          meta = new ComponentMeta(data);
+        }
+
+        this._componentMetasMap.set(key, meta);
       }
     });
   }
 
-  getComponentConfig(componentName: string): ComponentConfig {
-    if (this._componentConfigsMap.has(componentName)) {
-      return this._componentConfigsMap.get(componentName)!;
+  getComponentMeta(componentName: string, generateMetadata?: () => ComponentMetadata | null): ComponentMeta {
+    if (this._componentMetasMap.has(componentName)) {
+      return this._componentMetasMap.get(componentName)!;
     }
 
-    return new ComponentConfig({
+    if (this._lostComponentMetasMap.has(componentName)) {
+      return this._lostComponentMetasMap.get(componentName)!;
+    }
+
+    const meta = new ComponentMeta({
       componentName,
+      ...(generateMetadata ? generateMetadata() : null),
     });
+
+    this._lostComponentMetasMap.set(componentName, meta);
+
+    return meta;
   }
 
-  get componentsMap(): { [key: string]: ComponentDescriptionSpec } {
+  @computed get componentsMap(): { [key: string]: NpmInfo } {
     const maps: any = {};
-    this._componentConfigsMap.forEach((config, key) => {
-      maps[key] = config.spec;
+    this._componentMetasMap.forEach((config, key) => {
+      maps[key] = config.metadata.npm;
     });
     return maps;
+  }
+
+  autorun(action: (context: { firstRun: boolean }) => void, sync = false): () => void {
+    return autorun(action, sync as true);
   }
 
   purge() {

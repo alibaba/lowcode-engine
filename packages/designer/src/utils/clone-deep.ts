@@ -1,4 +1,4 @@
-import { isPlainObject } from './is-plain-object';
+import { isPlainObject } from '../../../utils/is-plain-object';
 
 export function cloneDeep(src: any): any {
   const type = typeof src;

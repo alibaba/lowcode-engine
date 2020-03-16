@@ -1,0 +1,98 @@
+.lc-setter-list {
+  [draggable] {
+    cursor: move;
+  }
+  color: var(--color-text);
+
+  .next-btn {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1 !important;
+    max-width: 100%;
+    text-overflow: ellipsis;
+  }
+
+  .lc-setter-list-add {
+    display: block;
+    width: 100%;
+    margin-top: 8px;;
+  }
+
+
+  .lc-setter-list-columns {
+    display: flex;
+    > .lc-title {
+      flex: 1;
+      justify-content: center;
+    }
+    margin-left: 47px;
+    margin-right: 28px;
+    margin-bottom: 5px;
+  }
+
+  .lc-setter-list-scroll-body {
+    margin: -8px -5px;
+    padding: 8px 10px;
+    overflow-y: auto;
+    max-height: 300px;
+  }
+
+  .lc-setter-list-card {
+    border: 1px solid rgba(31,56,88,.2);
+    background-color: var(--color-block-background-light);
+    border-radius: 3px;
+    &:not(:last-child) {
+      margin-bottom: 5px;
+    }
+
+    .lc-listitem {
+      position: relative;
+      outline: none;
+      display: flex;
+      align-items: stretch;
+      height: 34px;
+
+      .lc-listitem-actions {
+        margin: 0 3px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-end;
+        .lc-listitem-action {
+          text-align: center;
+          cursor: pointer;
+          opacity: 0.6;
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
+      .lc-listitem-body {
+        flex: 1;
+        display: flex;
+        align-items: stretch;
+        overflow: hidden;
+        min-width: 0;
+        text-overflow: ellipsis;
+        .lc-field {
+          padding: 0 !important;
+        }
+        > * {
+          width: 100%;
+        }
+        .next-btn {
+          display: block;
+          width: 100%;
+        }
+      }
+      .lc-listitem-handler {
+        margin-left: 2px;
+        display: inline-flex;
+        align-items: center;
+        .next-icon-ellipsis {
+          transform: rotate(90deg);
+        }
+        opacity: 0.6;
+      }
+    }
+  }
+}
