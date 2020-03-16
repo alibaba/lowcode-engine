@@ -314,7 +314,10 @@ export interface LibraryMap {
 function buildComponents(libraryMap: LibraryMap, componentsMap: { [componentName: string]: NpmInfo }) {
   const components: any = {};
   Object.keys(componentsMap).forEach(componentName => {
-    components[componentName] = findComponent(libraryMap, componentName, componentsMap[componentName]);
+    const component = findComponent(libraryMap, componentName, componentsMap[componentName]);
+    if (component) {
+      components[componentName] = component;
+    }
   });
   return components;
 }

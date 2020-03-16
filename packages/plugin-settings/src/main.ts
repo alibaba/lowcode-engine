@@ -535,7 +535,7 @@ export class SettingsMain implements SettingTarget {
     let theSame = true;
     for (let i = 1; i < l; i++) {
       const other = this.nodes[i];
-      if ((other as any).componentType !== meta) {
+      if (other.componentMeta !== meta) {
         theSame = false;
         break;
       }
