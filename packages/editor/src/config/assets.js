@@ -65,7 +65,7 @@ export default {
         {
           name: 'prefix',
           propType: 'string',
-          defaultValue: "'next-'"
+          defaultValue: 'next-'
         },
         {
           name: 'rtl',
@@ -78,7 +78,7 @@ export default {
             value: ['primary', 'secondary', 'normal']
           },
           description: '按钮的类型',
-          defaultValue: "'normal'"
+          defaultValue: 'normal'
         },
         {
           name: 'size',
@@ -87,7 +87,7 @@ export default {
             value: ['small', 'medium', 'large']
           },
           description: '按钮的尺寸',
-          defaultValue: "'medium'"
+          defaultValue: 'medium'
         },
         {
           name: 'iconSize',
@@ -104,7 +104,7 @@ export default {
             value: ['submit', 'reset', 'button']
           },
           description: "当 component = 'button' 时，设置 button 标签的 type 值",
-          defaultValue: "'button'"
+          defaultValue: 'button'
         },
         {
           name: 'component',
@@ -113,13 +113,13 @@ export default {
             value: ['button', 'a', 'div', 'span']
           },
           description: '设置标签类型',
-          defaultValue: "'button'"
+          defaultValue: 'button'
         },
         {
           name: 'loading',
           propType: 'bool',
           description: '设置按钮的载入状态',
-          defaultValue: 'false'
+          defaultValue: false
         },
         {
           name: 'ghost',
@@ -128,31 +128,30 @@ export default {
             value: [true, false, 'light', 'dark']
           },
           description: '是否为幽灵按钮',
-          defaultValue: 'false'
+          defaultValue: false
         },
         {
           name: 'text',
           propType: 'bool',
           description: '是否为文本按钮',
-          defaultValue: 'false'
+          defaultValue: false
         },
         {
           name: 'warning',
           propType: 'bool',
           description: '是否为警告按钮',
-          defaultValue: 'false'
+          defaultValue: false
         },
         {
           name: 'disabled',
           propType: 'bool',
           description: '是否禁用',
-          defaultValue: 'false'
+          defaultValue: false
         },
         {
           name: 'onClick',
           propType: 'func',
-          description: '点击按钮的回调\n@param {Object} e Event Object',
-          defaultValue: '() => {}'
+          description: '点击按钮的回调\n@param {Object} e Event Object'
         },
         {
           name: 'className',
@@ -187,13 +186,13 @@ export default {
         {
           name: 'prefix',
           propType: 'string',
-          defaultValue: "'next-'"
+          defaultValue: 'next-'
         },
         {
           name: 'size',
           propType: 'string',
           description: '统一设置 Button 组件的按钮大小',
-          defaultValue: "'medium'"
+          defaultValue: 'medium'
         },
         {
           name: 'className',
@@ -255,7 +254,7 @@ export default {
             value: ['small', 'medium', 'large']
           },
           description: '尺寸\n@enumdesc 小, 中, 大',
-          defaultValue: "'medium'"
+          defaultValue: 'medium'
         },
         {
           name: 'onPressEnter',
@@ -315,7 +314,7 @@ export default {
           name: 'autoComplete',
           propType: 'string',
           description: '(原生input支持)',
-          defaultValue: "'off'"
+          defaultValue: 'off'
         },
         {
           name: 'autoFocus',
@@ -367,7 +366,7 @@ export default {
           name: 'prefix',
           propType: 'string',
           description: '样式前缀',
-          defaultValue: '"next-"'
+          defaultValue: 'next-'
         },
         {
           name: 'inline',
@@ -382,7 +381,7 @@ export default {
           },
           description:
             '单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效。\n@enumdesc 大, 中, 小',
-          defaultValue: '"medium"'
+          defaultValue: 'medium'
         },
         {
           name: 'fullWidth',
@@ -396,7 +395,7 @@ export default {
             value: ['top', 'left', 'inset']
           },
           description: '标签的位置\n@enumdesc 上, 左, 内',
-          defaultValue: '"left"'
+          defaultValue: 'left'
         },
         {
           name: 'labelTextAlign',
@@ -414,8 +413,7 @@ export default {
         {
           name: 'saveField',
           propType: 'func',
-          description: '保存 Form 自动生成的 field 对象',
-          defaultValue: 'func.noop'
+          description: '保存 Form 自动生成的 field 对象'
         },
         {
           name: 'labelCol',
@@ -430,8 +428,7 @@ export default {
         {
           name: 'onSubmit',
           propType: 'func',
-          description: 'form内有 `htmlType="submit"` 的元素的时候会触发',
-          defaultValue: 'function preventDefault(e) {\n  e.preventDefault();\n}'
+          description: 'form内有 `htmlType="submit"` 的元素的时候会触发'
         },
         {
           name: 'children',
@@ -457,8 +454,7 @@ export default {
           name: 'onChange',
           propType: 'func',
           description:
-            '表单变化回调\n@param {Object} values 表单数据\n@param {Object} item 详细\n@param {String} item.name 变化的组件名\n@param {String} item.value 变化的数据\n@param {Object} item.field field 实例',
-          defaultValue: 'func.noop'
+            '表单变化回调\n@param {Object} values 表单数据\n@param {Object} item 详细\n@param {String} item.name 变化的组件名\n@param {String} item.value 变化的数据\n@param {Object} item.field field 实例'
         },
         {
           name: 'component',
@@ -467,7 +463,7 @@ export default {
             value: ['string', 'func']
           },
           description: '设置标签类型',
-          defaultValue: '"form"'
+          defaultValue: 'form'
         },
         {
           name: 'fieldOptions',
@@ -484,7 +480,7 @@ export default {
             value: ['phone', 'tablet', 'desktop']
           },
           description: '预设屏幕宽度',
-          defaultValue: '"desktop"'
+          defaultValue: 'desktop'
         },
         {
           name: 'responsive',
@@ -519,7 +515,7 @@ export default {
           name: 'prefix',
           propType: 'string',
           description: '样式前缀',
-          defaultValue: "'next-'"
+          defaultValue: 'next-'
         },
         {
           name: 'rtl',
@@ -564,7 +560,7 @@ export default {
           name: 'hasFeedback',
           propType: 'bool',
           description: '配合 validateState 属性使用，是否展示 success/loading 的校验状态图标, 目前只有Input支持',
-          defaultValue: 'false'
+          defaultValue: false
         },
         {
           name: 'style',
@@ -786,7 +782,7 @@ export default {
             value: ['string', 'number']
           },
           description: '在响应式布局下，且label在左边时，label的宽度是多少',
-          defaultValue: '100'
+          defaultValue: 100
         },
         {
           name: 'isPreview',
@@ -823,7 +819,7 @@ export default {
           name: 'prefix',
           propType: 'string',
           description: '样式前缀',
-          defaultValue: '"next-"'
+          defaultValue: 'next-'
         },
         {
           name: 'type',
@@ -832,7 +828,7 @@ export default {
             value: ['normal', 'inline']
           },
           description: '设置类型\n@enumdesc 普通, 内联',
-          defaultValue: '"normal"'
+          defaultValue: 'normal'
         },
         {
           name: 'size',
@@ -841,7 +837,7 @@ export default {
             value: ['large', 'medium']
           },
           description: '大小',
-          defaultValue: '"medium"'
+          defaultValue: 'medium'
         },
         {
           name: 'value',
@@ -865,19 +861,19 @@ export default {
             value: ['number', 'string']
           },
           description: '步长',
-          defaultValue: '1'
+          defaultValue: 1
         },
         {
           name: 'precision',
           propType: 'number',
           description: '保留小数点后位数',
-          defaultValue: '0'
+          defaultValue: 0
         },
         {
           name: 'editable',
           propType: 'bool',
           description: '用户是否可以输入',
-          defaultValue: 'true'
+          defaultValue: true
         },
         {
           name: 'autoFocus',
@@ -887,14 +883,12 @@ export default {
         {
           name: 'onChange',
           propType: 'func',
-          description: '数值被改变的事件\n@param {Number} value 数据\n@param {Event} e DOM事件对象',
-          defaultValue: 'func.noop'
+          description: '数值被改变的事件\n@param {Number} value 数据\n@param {Event} e DOM事件对象'
         },
         {
           name: 'onKeyDown',
           propType: 'func',
-          description: '键盘按下',
-          defaultValue: 'func.noop'
+          description: '键盘按下'
         },
         {
           name: 'onFocus',
@@ -904,31 +898,28 @@ export default {
         {
           name: 'onBlur',
           propType: 'func',
-          description: '焦点失去',
-          defaultValue: 'func.noop'
+          description: '焦点失去'
         },
         {
           name: 'onCorrect',
           propType: 'func',
-          description: '数值订正后的回调\n@param {Object} obj {currentValue,oldValue:String}',
-          defaultValue: 'func.noop'
+          description: '数值订正后的回调\n@param {Object} obj {currentValue,oldValue:String}'
         },
         {
           name: 'onDisabled',
-          propType: 'func',
-          defaultValue: 'func.noop'
+          propType: 'func'
         },
         {
           name: 'max',
           propType: 'number',
           description: '最大值',
-          defaultValue: 'Infinity'
+          defaultValue: null
         },
         {
           name: 'min',
           propType: 'number',
           description: '最小值',
-          defaultValue: '-Infinity'
+          defaultValue: null
         },
         {
           name: 'className',
@@ -938,8 +929,7 @@ export default {
         {
           name: 'style',
           propType: 'object',
-          description: '自定义内联样式',
-          defaultValue: '{}'
+          description: '自定义内联样式'
         },
         {
           name: 'state',
@@ -1015,7 +1005,7 @@ export default {
             value: ['single', 'multiple', 'tag']
           },
           description: '选择器模式',
-          defaultValue: '"single"'
+          defaultValue: 'single'
         },
         {
           name: 'value',
@@ -1078,13 +1068,13 @@ export default {
           name: 'hasArrow',
           propType: 'bool',
           description: '是否有下拉箭头',
-          defaultValue: 'true'
+          defaultValue: true
         },
         {
           name: 'showSearch',
           propType: 'bool',
           description: '展开后是否能搜索（tag 模式下固定为true）',
-          defaultValue: 'false'
+          defaultValue: false
         },
         {
           name: 'onSearch',
@@ -1119,7 +1109,7 @@ export default {
           name: 'cacheValue',
           propType: 'bool',
           description: 'dataSource 变化的时是否保留已选的内容',
-          defaultValue: 'true'
+          defaultValue: true
         },
         {
           name: 'valueRender',
@@ -1151,7 +1141,7 @@ export default {
           name: 'tagInline',
           propType: 'bool',
           description: '是否一行显示，仅在 mode 为 multiple 的时候生效',
-          defaultValue: 'false'
+          defaultValue: false
         },
         {
           name: 'maxTagCount',
@@ -1198,8 +1188,7 @@ export default {
         },
         {
           name: 'locale',
-          propType: 'object',
-          defaultValue: 'zhCN.Select'
+          propType: 'object'
         }
       ],
       configure: {

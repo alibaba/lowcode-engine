@@ -1,0 +1,361 @@
+/*增加标签函数*/
+@mixin labelFun($type: before) {
+  &:#{$type} {
+    content: attr(data-instance-name) !important;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: unset;
+    bottom: unset;
+    color: #666 !important;
+    font-size: 12px !important;
+    float: left;
+    padding: 0 5px !important;
+    line-height: 12px !important;
+    height: 12px;
+    overflow: hidden;
+    background: rgba(222, 222, 222, 0.7);
+    z-index: 2;
+    border-left: 3px solid transparent;
+    transform-origin: 0 0;
+    transform: scale(0.8);
+    transition: all 0.3s ease;
+  }
+
+  &.luna-block,
+  &.luna-page,
+  &.luna-comp {
+    &:#{$type} {
+      border-color: #2077ff;
+    }
+  }
+
+  &[data-active='true'] {
+    &:#{$type} {
+      color: #fff !important;
+      background: #1861d5 !important;
+    }
+  }
+
+  &[data-design-mode='luna-design-border'] {
+    &:#{$type} {
+      display: none;
+    }
+
+    &[data-active='true'] {
+      &:#{$type} {
+        display: block;
+      }
+    }
+  }
+}
+
+.luna-canvas-inner {
+  height: 100%;
+
+  &.empty,
+  &.null {
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: calc(50% - 180px) 50%;
+    background-size: 310px 215px;
+
+    &:after {
+      content: attr(data-placeholder-text);
+      position: absolute;
+      pointer-events: none;
+      top: 50%;
+      left: 50%;
+      margin: -40px 0 0 20px;
+      height: 80px;
+      line-height: 40px;
+      color: #aaa;
+      font-size: 24px;
+      white-space: pre;
+    }
+  }
+
+  &.empty {
+    &.drill-down {
+      &:before {
+        display: none;
+      }
+
+      &:after {
+        content: '请拖入组件';
+        text-align: center;
+        left: 0;
+        right: 0;
+        margin-left: 0;
+        font-size: 14px;
+      }
+    }
+  }
+
+  .engine-wrapper {
+    height: 100%;
+    display: none;
+    overflow: auto;
+
+    &.extend,
+    &.border {
+      padding: 1px;
+
+      > div {
+        padding: 1px;
+      }
+    }
+
+    &:last-child {
+      display: block;
+    }
+
+    &.fixed-width > div {
+      min-width: unset;
+      width: auto;
+    }
+
+    &.fixed-height > div {
+      min-height: unset;
+    }
+
+    > div {
+      transform-origin: left top;
+      min-width: 100%;
+      width: fit-content;
+      min-height: 100%;
+    }
+  }
+}
+
+a,
+span:not(.next-input-group):not(.next-input) {
+  &[data-design-mode*='luna-design-'] {
+    display: inline-block;
+    min-height: 16px;
+  }
+}
+
+[data-luna-key] {
+  transition: all 0.3s ease;
+}
+
+[data-design-mode='luna-design-border'] {
+  min-height: 10px;
+}
+
+[data-design-mode='luna-design-extend'] {
+  min-height: 20px;
+}
+
+[data-design-mode*='luna-design-'] {
+  position: relative;
+  outline: 1px dotted #d9d9d9;
+  zoom: 1;
+
+  &:hover {
+    outline: 1px dotted #2077ff;
+  }
+
+  [draggable='true'] {
+    position: relative;
+  }
+
+  .next-card-body {
+    overflow: inherit !important;
+  }
+
+  &.next-loading {
+    pointer-events: all !important;
+  }
+
+  &[data-active='true'] {
+    outline: 1px solid #1861d5 !important;
+
+    &[data-nochild='true']:not(.next-step-item):not([top-container='true']) {
+      min-height: 60px;
+      min-width: 200px;
+
+      &:after {
+        content: '请拖入组件';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        opacity: 1 !important;
+        visibility: visible !important;
+        line-height: 30px;
+        height: 30px;
+        font-size: 13px;
+        color: #ccc;
+        text-align: center;
+      }
+    }
+  }
+
+  &:not(.next-tag):not(.next-icon):not(.anticon):not(.icon) {
+    @include labelFun(before);
+  }
+
+  &.next-tag,
+  &.next-icon,
+  &.anticon,
+  &.icon {
+    @include labelFun(after);
+  }
+
+  &.next-tabs-tabpane.hidden {
+    min-height: 0;
+  }
+
+  &.ant-loop:after {
+    content: '';
+    display: block;
+    clear: both;
+    line-height: 0;
+  }
+
+  .ant-tabs-tabpane {
+    padding: 1px;
+  }
+
+  .ide-design-placeholder {
+    position: relative;
+    text-align: center;
+    border: 1px dashed #d9d9d9;
+    outline: none;
+    padding: 0 !important;
+    min-height: 20px;
+    min-width: 80px;
+
+    &:after {
+      content: attr(data-prop);
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      text-align: center;
+      line-height: 20px;
+      color: #e9e9e9;
+    }
+  }
+
+  &[data-instance-name='TableGroupHeaderF'] {
+    clear: both;
+
+    &:after {
+      content: '';
+      width: 100%;
+      height: 0;
+      clear: both;
+      overflow: hidden;
+    }
+  }
+
+  &[data-design-mode='luna-design-extend'] {
+    &[data-luna-key*='luna_'] {
+      &:not([class*='-input']):not([class*='-picker']):not([class*='-table']):not([class*='-switch']):not([class*='-select']):not(img):not([class*='-btn']):not(.next-tag):not(input):not([class*='-rating']):not([class*='next-menu']) {
+        padding: 10px;
+      }
+
+      &.ant-loop {
+        padding: 10px 0 0;
+      }
+    }
+
+    [class*='-form-item-control'] {
+      & > [data-design-mode*='luna-design-'] {
+        &:not(button):not(input):not([class*='-input']):not([class*='luna-comp-']) {
+          padding: 0 !important;
+        }
+      }
+    }
+  }
+}
+
+#luna-canvas-effect {
+  position: fixed;
+  background: #1aab11;
+  z-index: 10000000;
+  text-align: center;
+  pointer-events: none;
+
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    border: 4px solid #1aab11;
+    pointer-events: none;
+  }
+
+  &.left,
+  &.right {
+    width: 2px;
+
+    &:before,
+    &:after {
+      left: -4px;
+      border-left-color: transparent;
+      border-right-color: transparent;
+    }
+
+    &:before {
+      top: 0;
+      border-bottom-width: 0;
+    }
+
+    &:after {
+      bottom: 0;
+      border-top-width: 0;
+    }
+  }
+
+  &.top,
+  &.bottom,
+  &.in {
+    height: 2px;
+
+    &:before,
+    &:after {
+      top: -4px;
+      border-top-color: transparent;
+      border-bottom-color: transparent;
+    }
+
+    &:before {
+      left: 0;
+      border-right-width: 0;
+    }
+
+    &:after {
+      right: 0;
+      border-left-width: 0;
+    }
+  }
+
+  &.in {
+    b {
+      display: inline-block;
+    }
+  }
+
+  b {
+    display: inline-block;
+    position: relative;
+    top: -12px;
+    margin: 0 auto;
+    padding: 0 10px;
+    color: #fff;
+    background: #1aab11;
+    height: 16px !important;
+    line-height: 16px !important;
+    font-weight: normal;
+    font-size: 11px;
+    display: none;
+  }
+}
