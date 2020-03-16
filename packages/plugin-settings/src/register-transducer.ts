@@ -386,6 +386,35 @@ registerMetadataTransducer((metadata) => {
             definition: []
           }
         },
+
+        // 先简单mock一下
+        definition:[
+          // {
+          //   type: 'lifeCycleEvent', // 平台配置的，一般只有根节点才会配置
+          //   title: '生命周期',
+          //   list: [{
+          //     title: '装载时',
+          //     name: 'componentDidMount'
+          //   },{
+          //     title: '卸载时',
+          //     name: 'componentWillUnmount'
+          //   }]
+          // },
+          {
+          type: 'events', // 组件自定义的
+          list: [{
+            name:'onClick',
+            title:'点击回调'
+         },
+         {
+            name:'onChange',
+            title:'变更回调'
+         },
+         {
+          name:'onSubmit'
+        }]
+        }],
+
         getValue(field: SettingField) {
           return [];
         },
