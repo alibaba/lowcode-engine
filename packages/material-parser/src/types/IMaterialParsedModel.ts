@@ -1,3 +1,4 @@
+import { PropsSection } from '../otter-core';
 /**
  * 对应解析器分析出的一些关键信息
  */
@@ -13,6 +14,7 @@ export type IPropTypes = IPropType[];
 export interface IMaterialParsedModel {
   filePath: string;
   defaultExportName: string;
+  props?: PropsSection['props'];
   componentNames: Array<{
     exportedName: string;
     localName: string;

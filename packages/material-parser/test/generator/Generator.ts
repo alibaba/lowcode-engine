@@ -30,18 +30,18 @@ async function generate(
   return actual;
 }
 
-test.serial('generate multiple exported components', async t => {
-  const options: IMaterializeOptions = {
-    cwd: multiExportedComptPath,
-    entry: multiExportedComptPath,
-    accesser: 'local',
-    isExportedAsMultiple: true,
-  };
+// test.serial('generate multiple exported components', async t => {
+//   const options: IMaterializeOptions = {
+//     cwd: multiExportedComptPath,
+//     entry: multiExportedComptPath,
+//     accesser: 'local',
+//     isExportedAsMultiple: true,
+//   };
 
-  const actual = await generate(options);
+//   const actual = await generate(options);
 
-  t.snapshot(actual);
-});
+//   t.snapshot(actual);
+// });
 
 test.only('generate single exported components', async t => {
   const options: IMaterializeOptions = {

@@ -1,11 +1,6 @@
 import { dirname, join } from 'path';
 import defaultExtension from '../extensions';
-import {
-  debug,
-  IComponentMaterial,
-  PropsSection,
-  PropType,
-} from '../otter-core';
+import { debug, IComponentMaterial, PropsSection } from '../otter-core';
 import {
   IGenerator,
   IMaterializeOptions,
@@ -102,14 +97,14 @@ class Generator implements IGenerator {
     manifestObj: IComponentMaterial; // manifest 文件对象
   }> {
     const manifestObj: Partial<IComponentMaterial> = {
-      componentName: matParsedModel.defaultExportName,
-      title: '',
+      // componentName: matParsedModel.defaultExportName,
+      title: matScanModel.pkgName,
       docUrl: '',
       screenshot: '',
       npm: {
         package: matScanModel.pkgName,
         version: matScanModel.pkgVersion,
-        exportName: matParsedModel.defaultExportName,
+        exportName: '', // matParsedModel.defaultExportName,
         main: matScanModel.mainEntry,
         destructuring: false,
         subName: '',
@@ -122,7 +117,7 @@ class Generator implements IGenerator {
     );
 
     // 填充 props
-    manifestObj.props = this.populateProps(matParsedModel);
+    manifestObj.props = matParsedModel.props;
     // 执行扩展点
     const manifest: any = await this.executeExtensionPoint(
       'mat:config:manifest',
@@ -149,24 +144,8 @@ class Generator implements IGenerator {
   public populateProps(
     matParsedModel: IMaterialParsedModel,
   ): PropsSection['props'] {
-    // 填充 props
-    const props: PropsSection['props'] = [];
-    matParsedModel.propsTypes.forEach(item => {
-      const defaultValueItem = matParsedModel.propsDefaults.find(
-        inner => inner.name === item.name,
-      );
-      let propItem: Partial<PropsSection['props'][0]> = item;
-
-      if (defaultValueItem) {
-        propItem = {
-          ...propItem,
-          defaultValue: defaultValueItem.defaultValue,
-        };
-      }
-      props.push(propItem as PropsSection['props'][0]);
-    });
-
-    return props;
+    // @ts-ignore
+    return matParsedModel.props;
   }
 
   /**

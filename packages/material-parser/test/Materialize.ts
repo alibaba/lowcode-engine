@@ -22,19 +22,19 @@ test('materialize single exported component by local', async t => {
   t.snapshot(actual);
 });
 
-test('materialize multiple exported component by local', async t => {
-  const options: IMaterializeOptions = {
-    cwd: multiExportedComptPath,
-    entry: multiExportedComptPath,
-    accesser: 'local',
-    isExportedAsMultiple: true,
-  };
+// test('materialize multiple exported component by local', async t => {
+//   const options: IMaterializeOptions = {
+//     cwd: multiExportedComptPath,
+//     entry: multiExportedComptPath,
+//     accesser: 'local',
+//     isExportedAsMultiple: true,
+//   };
 
-  const instance = new Materialize(options);
-  const actual = await instance.start();
+//   const instance = new Materialize(options);
+//   const actual = await instance.start();
 
-  t.snapshot(actual);
-});
+//   t.snapshot(actual);
+// });
 
 // test('materialize single exported component by online', async t => {
 //   const options: IMaterializeOptions = {

@@ -17,13 +17,13 @@ test.serial('access single exported component by local', async t => {
   t.snapshot(actual);
 });
 
-test.serial('access multiple exported component by local', async t => {
-  const options: IMaterializeOptions = {
-    entry: multiExportedComptPath,
-    accesser: 'local',
-    isExportedAsMultiple: true,
-  };
-  const accesser = new LocalAccesser(options);
-  const actual = await accesser.access();
-  t.snapshot(actual);
-});
+// test.serial('access multiple exported component by local', async t => {
+//   const options: IMaterializeOptions = {
+//     entry: multiExportedComptPath,
+//     accesser: 'local',
+//     isExportedAsMultiple: true,
+//   };
+//   const accesser = new LocalAccesser(options);
+//   const actual = await accesser.access();
+//   t.snapshot(actual);
+// });

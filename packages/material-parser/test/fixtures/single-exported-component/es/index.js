@@ -79,5 +79,7 @@ Demo.propTypes = {
   // A value of any data type
   requiredAny: PropTypes.any.isRequired
 };
-Demo.defaultProps = {};
+Demo.defaultProps = {
+  optionalNumber: 123
+};
 export default Demo;
