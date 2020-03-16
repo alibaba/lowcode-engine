@@ -61,7 +61,7 @@ export function propTypeToSetter(propType: PropType): SetterType {
           value,
         };
       });
-      const componentName = dataSource.length > 4 ? 'SelectSetter' : 'RadioSetter';
+      const componentName = dataSource.length > 4 ? 'SelectSetter' : 'RadioGroupSetter';
       return {
         componentName,
         props: { dataSource },
@@ -141,7 +141,8 @@ export function propTypeToSetter(propType: PropType): SetterType {
       return {
         componentName: 'MixinSetter',
         props: {
-          setters: (propType as OneOfType).value.map(item => propTypeToSetter(item)),
+          // TODO:
+          // setters: (propType as OneOfType).value.map(item => propTypeToSetter(item)),
         },
         isRequired,
       };
@@ -290,11 +291,12 @@ registerMetadataTransducer(metadata => {
             setter: {
               componentName: 'MixinSetter',
               props: {
+                // TODO:
                 setters: [
                   {
                     componentName: 'StringSetter',
                     props: {
-                      // todo:
+                      // TODO: textarea mode
                       multiline: true,
                     },
                     initialValue: '',
@@ -463,6 +465,7 @@ registerMetadataTransducer(metadata => {
               setter: {
                 componentName: 'MixinSetter',
                 props: {
+                  // TODO:
                   setters: [
                     {
                       componentName: 'JSONSetter',

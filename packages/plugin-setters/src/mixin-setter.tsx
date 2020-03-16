@@ -34,7 +34,8 @@ export default class Mixin extends PureComponent {
   };
   static defaultProps = {
     locale: 'zh-CN',
-    messages: zhCN
+    messages: zhCN,
+    types: ['StringSetter', 'ExpressionSetter', 'NumberSetter', 'BoolSetter', 'SelectSetter', 'RadioGroupSetter'],
   };
   constructor(props) {
     super(props);
