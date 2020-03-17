@@ -13,6 +13,44 @@ export default {
     }
   },
   components: {
+    Page: {
+      componentName: 'Page',
+      title: '页面',
+      configure: {
+        events: {
+          supportedLifecycles: [
+            {
+              description: '初始化时',
+              name: 'constructor',
+            },
+            {
+              description: '装载后',
+              name: 'componentDidMount',
+            },
+            {
+              description: '更新时',
+              name: 'componentDidMount',
+            },
+            {
+              description: '卸载时',
+              name: 'componentWillUnmount',
+            },
+          ]
+        },
+        component: {
+          isContainer: true,
+        }
+      }
+    },
+    Div: {
+      componentName: 'Div',
+      title: '容器',
+      configure: {
+        component: {
+          isContainer: true,
+        }
+      }
+    },
     Button: {
       componentName: 'Button',
       title: '按钮',
@@ -164,7 +202,15 @@ export default {
           name: 'children',
           propType: 'node'
         }
-      ]
+      ],
+      configure: {
+        component: {
+          isContainer: true,
+          nestingRule: {
+            childWhitelist: 'Button'
+          }
+        }
+      }
     },
     Input: {
       componentName: 'Input',
@@ -446,7 +492,12 @@ export default {
           propType: 'bool',
           description: '是否开启预览态'
         }
-      ]
+      ],
+      configure: {
+        component: {
+          isContainer: true,
+        }
+      }
     },
     'Form.Item': {
       componentName: 'Form.Item',
@@ -743,7 +794,15 @@ export default {
           propType: 'func',
           description: '预览态模式下渲染的内容\n@param {any} value 根据包裹的组件的 value 类型而决定'
         }
-      ]
+      ],
+      configure: {
+        component: {
+          isContainer: true,
+          nestingRule: {
+            parentWhitelist: 'Form'
+          }
+        }
+      }
     },
     NumberPicker: {
       componentName: 'NumberPicker',
@@ -1131,7 +1190,199 @@ export default {
           name: 'locale',
           propType: 'object'
         }
-      ]
+      ],
+      configure: {
+        component: {
+          isContainer: true,
+          nestingRule: {
+            childWhitelist: 'Select.Option'
+          }
+        },
+        props: [
+          {
+            name: 'mode',
+            title: '选择器模式',
+            setter: {
+              componentName: 'RadioGroupSetter',
+              props: {
+                defaultValue: 'single',
+                dataSource: [
+                  {
+                      value: 'single',
+                      label: 'single'
+                  }, {
+                      value: 'multiple',
+                      label: 'multiple'
+                  }, {
+                      value: 'tag',
+                      label: 'tag'
+                  }
+                ]
+              }
+            }
+          },
+          {
+            name: 'mode',
+            title: '选择器模式',
+            setter: {
+              componentName: 'SelectSetter',
+              props: {
+                defaultValue: 'single',
+                dataSource: [
+                  {
+                      value: 'single',
+                      label: 'single'
+                  }, {
+                      value: 'multiple',
+                      label: 'multiple'
+                  }, {
+                      value: 'tag',
+                      label: 'tag'
+                  }
+                ]
+              }
+            }
+          },
+          {
+            name: 'value',
+            title: '当前值，用于受控模式',
+            placeholder: '混合',
+            setter: {
+              componentName: 'MixinSetter',
+              props: {
+                types: [{
+                  name: 'StringSetter', 
+                  // 当前mixin setter API
+                  props: {}
+                }, {
+                  name: 'ExpressionSetter', 
+                  props: {}
+                }, {
+                  name: 'RadioGroupSetter', 
+                  // 当前mixin setter API
+                  props: {
+                    hasClear: true,
+                    dataSource: [{
+                      label: '上',
+                      value: 't',
+                    },
+                    {
+                      label: '右',
+                      value: 'r',
+                    },
+                    {
+                      label: '下',
+                      value: 'b',
+                    },
+                    {
+                      label: '左',
+                      value: 'l',
+                    }]
+                  }
+                }],
+                defaultType: 'SelectSetter'
+              },
+            },
+          },
+          {
+            name: 'defaultValue',
+            title: '当前值，用于受控模式',
+            placeholder: '混合',
+            setter: {
+              componentName: 'MixinSetter',
+              props: {
+                types: [{
+                  name: 'StringSetter', 
+                  // 当前mixin setter API
+                  props: {}
+                }, {
+                  name: 'TextAreaSetter', 
+                  props: {}
+                }, {
+                  name: 'SelectSetter', 
+                  // 当前mixin setter API
+                  props: {
+                    hasClear: true,
+                    dataSource: [{
+                      label: '上',
+                      value: 't',
+                    },
+                    {
+                      label: '右',
+                      value: 'r',
+                    },
+                    {
+                      label: '下',
+                      value: 'b',
+                    },
+                    {
+                      label: '左',
+                      value: 'l',
+                    }]
+                  }
+                }, {
+                  name: 'NumberSetter', 
+                  props: {}
+                }, {
+                  name: 'BoolSetter', 
+                  props: {}
+                }],
+                defaultType: 'SelectSetter'
+              },
+            },
+          },
+          {
+            name: 'hasBorder',
+            title: '是否有边框',
+            setter: {
+              componentName: 'BoolSetter',
+              props: {
+                defaultValue: true
+              }
+            }
+          },
+          {
+            name: 'searchValue',
+            title: '受控搜索值，一般不需要设置\n@type {[type]}',
+            setter: 'TextAreaSetter'
+          },
+          {
+            name: 'searchValue',
+            title: '受控搜索值，一般不需要设置\n@type {[type]}',
+            setter: 'StringSetter'
+          },
+          {
+            name: 'maxTagCount',
+            title: '最多显示多少个 tag',
+            setter: 'NumberSetter'
+          },
+          {
+            name: 'maxTagCount',
+            title: '最多显示多少个 tag',
+            setter: 'ExpressionSetter'
+          },
+          {
+            name: 'date',
+            title: '测试日期',
+            setter: 'DateSetter'
+          },
+          {
+            name: 'date',
+            title: '测试日期-年',
+            setter: 'DateYearSetter'
+          },
+          {
+            name: 'date',
+            title: '测试日期-月',
+            setter: 'DateMonthSetter'
+          },
+          {
+            name: 'date',
+            title: '测试日期-区间',
+            setter: 'DateRangeSetter'
+          }
+        ]
+      }
     },
     'Select.Option': {
       componentName: 'Select.Option',
@@ -1162,7 +1413,15 @@ export default {
           name: 'children',
           propType: 'any'
         }
-      ]
+      ],
+      configure: {
+        component: {
+          isContainer: true,
+          nestingRule: {
+            parentWhitelist: 'Select'
+          }
+        }
+      }
     }
   },
   componentList: [
@@ -1175,10 +1434,11 @@ export default {
           title: '按钮',
           icon: '',
           package: '@alife/next',
+          libraryId: 2,
           snippets: [
             {
               title: 'private',
-              screenshort: '',
+              screenshot: 'https://img.alicdn.com/tfs/TB16gZhi.H1gK0jSZSyXXXtlpXa-192-144.png',
               schema: {
                 componentName: 'Button',
                 props: {
@@ -1189,7 +1449,7 @@ export default {
             },
             {
               title: 'secondary',
-              screenshort: '',
+              screenshot: 'https://img.alicdn.com/tfs/TB11Hkji1H2gK0jSZFEXXcqMpXa-192-144.png',
               schema: {
                 componentName: 'Button',
                 props: {
@@ -1200,7 +1460,7 @@ export default {
             },
             {
               title: 'normal',
-              screenshort: '',
+              screenshot: '',
               schema: {
                 componentName: 'Button',
                 props: {
@@ -1219,21 +1479,74 @@ export default {
       children: [
         {
           componentName: 'Input',
+          libraryId: 2,
           title: '输入框',
           icon: '',
           package: '@alife/next',
           snippets: [
             {
               title: '普通',
-              screenshort: '',
+              screenshot: '',
               schema: {
                 componentName: 'Input',
                 props: {}
               }
             }
           ]
+        }, {
+          componentName: 'Select',
+          libraryId: 2,
+          title: '选择框',
+          icon: '',
+          package: '@alife/next',
+          snippets: [
+            {
+              title: '默认',
+              screenshot: '',
+              schema: {
+                componentName: 'Select',
+                props: {}
+              }
+            }
+          ]
+        }, {
+          componentName: 'NumberPicker',
+          libraryId: 2,
+          title: '数字',
+          icon: '',
+          package: '@alife/next',
+          snippets: [
+            {
+              title: '默认',
+              screenshot: '',
+              schema: {
+                componentName: 'NumberPicker',
+                props: {}
+              }
+            }
+          ]
         }
       ]
+    }, {
+      title: '其他',
+      icon: '',
+      children: [{
+        componentName: 'Div',
+        libraryId: 3,
+        title: '容器',
+        icon: '',
+        snippets: [
+          {
+            title: '默认',
+            screenshot: '',
+            schema: {
+              componentName: 'Div',
+              props: {
+              }
+            }
+          }
+        ]
+      }]
     }
   ]
 };

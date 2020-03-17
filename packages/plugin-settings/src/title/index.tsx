@@ -6,7 +6,7 @@ import './title.less';
 
 export interface IconConfig {
   type: string;
-  size?: number | "small" | "xxs" | "xs" | "medium" | "large" | "xl" | "xxl" | "xxxl" | "inherit";
+  size?: number | 'small' | 'xxs' | 'xs' | 'medium' | 'large' | 'xl' | 'xxl' | 'xxxl' | 'inherit';
   className?: string;
 }
 
@@ -51,7 +51,12 @@ export default class Title extends Component<{ title: TitleContent; onClick?: ()
     }
 
     return (
-      <div className={classNames('lc-title', title.className)} onClick={this.props.onClick}>
+      <div
+        className={classNames('lc-title', title.className, {
+          'has-tip': !!tip,
+        })}
+        onClick={this.props.onClick}
+      >
         {icon ? <div className="lc-title-icon">{icon}</div> : null}
         {title.label ? <span className="lc-title-label">{title.label}</span> : null}
         {tip}
