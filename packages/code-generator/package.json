@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "build": "rimraf lib && tsc",
+    "demo": "ts-node -r tsconfig-paths/register ./src/demo/main.ts",
     "test": "ava"
   },
   "dependencies": {
@@ -18,7 +19,8 @@
   "devDependencies": {
     "ava": "^1.0.1",
     "rimraf": "^3.0.2",
-    "ts-node": "^7.0.1"
+    "ts-node": "^7.0.1",
+    "tsconfig-paths": "^3.9.0"
   },
   "ava": {
     "compileEnhancements": false,

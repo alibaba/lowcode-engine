@@ -1,5 +1,10 @@
 import { IProjectSchema } from '@/types';
 
+// meta: {
+//   title: '测试',
+//   router: '/',
+// },
+
 const demoData: IProjectSchema = {
   version: '1.0.0',
   componentsMap: [
@@ -59,6 +64,10 @@ const demoData: IProjectSchema = {
     {
       componentName: 'Page',
       id: 'node$1',
+      meta: {
+        title: '测试',
+        router: '/',
+      },
       props: {
         ref: 'outterView',
         autoLoading: true,

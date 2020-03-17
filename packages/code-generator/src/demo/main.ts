@@ -1,6 +1,7 @@
 import { IResultDir, IResultFile } from '@/types';
 
 import CodeGenerator from '@/index';
+import { createDiskPublisher } from '@/publisher/disk';
 import demoSchema from './simpleDemo';
 
 function flatFiles(rootName: string | null, dir: IResultDir): IResultFile[] {
@@ -16,16 +17,34 @@ function flatFiles(rootName: string | null, dir: IResultDir): IResultFile[] {
   return result;
 }
 
+function displayResultInConsole(root: IResultDir): void {
+  const files = flatFiles('.', root);
+  files.forEach(file => {
+    console.log(`========== ${file.name} Start ==========`);
+    console.log(file.content);
+    console.log(`========== ${file.name} End   ==========`);
+  });
+}
+
+async function writeResultToDisk(root: IResultDir, path: string): Promise<any> {
+  const publisher = createDiskPublisher();
+
+  return publisher.publish({
+    project: root,
+    outputPath: path,
+    projectSlug: 'demo-project',
+    createProjectFolder: true,
+  });
+}
+
 function main() {
   const createIceJsProjectBuilder = CodeGenerator.solutions.icejs;
   const builder = createIceJsProjectBuilder();
   builder.generateProject(demoSchema).then(result => {
-    const files = flatFiles('.', result);
-    files.forEach(file => {
-      console.log(`========== ${file.name} Start ==========`);
-      console.log(file.content);
-      console.log(`========== ${file.name} End   ==========`);
-    });
+    // displayResultInConsole(result);
+    writeResultToDisk(result, '/Users/armslave/lowcodeDemo').then(response =>
+      console.log('Write to disk: ', JSON.stringify(response)),
+    );
   });
 }
 

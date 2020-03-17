@@ -33,7 +33,6 @@ const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     version: '0.1.5',
     description: '轻量级模板，使用 JavaScript，仅包含基础的 Layout。',
     dependencies: {
-      '@alifd/next': '^1.19.4',
       moment: '^2.24.0',
       react: '^16.4.1',
       'react-dom': '^16.4.1',

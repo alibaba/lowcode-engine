@@ -68,6 +68,8 @@ export class ProjectBuilder implements IProjectBuilder {
     let buildResult: IModuleInfo[] = [];
 
     // Generator Code module
+    // components
+    // pages
     const containerBuildResult: IModuleInfo[] = await Promise.all<IModuleInfo>(
       parseResult.containers.map(async containerInfo => {
         let builder: IModuleBuilder;
@@ -91,6 +93,7 @@ export class ProjectBuilder implements IProjectBuilder {
     );
     buildResult = buildResult.concat(containerBuildResult);
 
+    // router
     if (parseResult.globalRouter && builders.router) {
       const { files } = await builders.router.generateModule(
         parseResult.globalRouter,
@@ -98,6 +101,92 @@ export class ProjectBuilder implements IProjectBuilder {
 
       buildResult.push({
         path: this.template.slots.pages.path,
+        files,
+      });
+    }
+
+    // entry
+    if (parseResult.project && builders.entry) {
+      const { files } = await builders.entry.generateModule(
+        parseResult.project,
+      );
+
+      buildResult.push({
+        path: this.template.slots.entry.path,
+        files,
+      });
+    }
+    // constants?
+    if (
+      parseResult.project &&
+      builders.constants &&
+      this.template.slots.constants
+    ) {
+      const { files } = await builders.constants.generateModule(
+        parseResult.project,
+      );
+
+      buildResult.push({
+        path: this.template.slots.constants.path,
+        files,
+      });
+    }
+    // utils?
+    if (
+      parseResult.globalUtils &&
+      builders.utils &&
+      this.template.slots.utils
+    ) {
+      const { files } = await builders.utils.generateModule(
+        parseResult.globalUtils,
+      );
+
+      buildResult.push({
+        path: this.template.slots.utils.path,
+        files,
+      });
+    }
+    // i18n?
+    if (parseResult.globalI18n && builders.i18n && this.template.slots.i18n) {
+      const { files } = await builders.i18n.generateModule(
+        parseResult.globalI18n,
+      );
+
+      buildResult.push({
+        path: this.template.slots.i18n.path,
+        files,
+      });
+    }
+    // globalStyle
+    if (parseResult.project && builders.globalStyle) {
+      const { files } = await builders.globalStyle.generateModule(
+        parseResult.project,
+      );
+
+      buildResult.push({
+        path: this.template.slots.globalStyle.path,
+        files,
+      });
+    }
+    // htmlEntry
+    if (parseResult.project && builders.htmlEntry) {
+      const { files } = await builders.htmlEntry.generateModule(
+        parseResult.project,
+      );
+
+      buildResult.push({
+        path: this.template.slots.htmlEntry.path,
+        files,
+      });
+    }
+    // packageJSON
+    if (parseResult.project && builders.packageJSON) {
+      const { files } = await builders.packageJSON.generateModule(
+        parseResult.project,
+      );
+
+      buildResult.push({
+        path: this.template.slots.packageJSON.path,
         files,
       });
     }

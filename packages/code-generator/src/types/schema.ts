@@ -217,7 +217,7 @@ export interface IBasicMeta {
 
 export interface IPageMeta extends IBasicMeta {
   router: string; // 页面路由
-  spmb: string; // spm
+  spmb?: string; // spm
 }
 
 // "theme": {
@@ -250,6 +250,6 @@ export interface IAppMeta {
   git_group?: string; // 应用对应git分组名
   project_name?: string; // 应用对应git的project名称
   description?: string; // 应用描述
-  spma: string; // 应用spma A位信息
+  spma?: string; // 应用spma A位信息
   creator?: string; // author
 }
