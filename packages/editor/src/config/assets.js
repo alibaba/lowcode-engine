@@ -1250,10 +1250,11 @@ export default {
           title: '按钮',
           icon: '',
           package: '@alife/next',
+          libraryId: 2,
           snippets: [
             {
               title: 'private',
-              screenshort: '',
+              screenshot: 'https://img.alicdn.com/tfs/TB16gZhi.H1gK0jSZSyXXXtlpXa-192-144.png',
               schema: {
                 componentName: 'Button',
                 props: {
@@ -1264,7 +1265,7 @@ export default {
             },
             {
               title: 'secondary',
-              screenshort: '',
+              screenshot: 'https://img.alicdn.com/tfs/TB11Hkji1H2gK0jSZFEXXcqMpXa-192-144.png',
               schema: {
                 componentName: 'Button',
                 props: {
@@ -1275,7 +1276,7 @@ export default {
             },
             {
               title: 'normal',
-              screenshort: '',
+              screenshot: '',
               schema: {
                 componentName: 'Button',
                 props: {
@@ -1294,21 +1295,74 @@ export default {
       children: [
         {
           componentName: 'Input',
+          libraryId: 2,
           title: '输入框',
           icon: '',
           package: '@alife/next',
           snippets: [
             {
               title: '普通',
-              screenshort: '',
+              screenshot: '',
               schema: {
                 componentName: 'Input',
                 props: {}
               }
             }
           ]
+        }, {
+          componentName: 'Select',
+          libraryId: 2,
+          title: '选择框',
+          icon: '',
+          package: '@alife/next',
+          snippets: [
+            {
+              title: '默认',
+              screenshot: '',
+              schema: {
+                componentName: 'Select',
+                props: {}
+              }
+            }
+          ]
+        }, {
+          componentName: 'NumberPicker',
+          libraryId: 2,
+          title: '数字',
+          icon: '',
+          package: '@alife/next',
+          snippets: [
+            {
+              title: '默认',
+              screenshot: '',
+              schema: {
+                componentName: 'NumberPicker',
+                props: {}
+              }
+            }
+          ]
         }
       ]
+    }, {
+      title: '其他',
+      icon: '',
+      children: [{
+        componentName: 'Div',
+        libraryId: 3,
+        title: '容器',
+        icon: '',
+        snippets: [
+          {
+            title: '默认',
+            screenshot: '',
+            schema: {
+              componentName: 'Div',
+              props: {
+              }
+            }
+          }
+        ]
+      }]
     }
   ]
 };
