@@ -23,20 +23,7 @@ const SCHEMA = {
       componentName: 'Page',
       fileName: 'test',
       dataSource: {
-        list: [
-          {
-            id: 'getComponentsMap',
-            isInit: true,
-            type: 'doServer',
-            options: {
-              method: 'POST',
-              params: {
-                libVersionIds: '1'
-              },
-              uri: 'getComponentsMap'
-            }
-          }
-        ]
+        list: []
       },
       state: {
         text: 'outter'
