@@ -81,6 +81,20 @@ const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     ],
   });
 
+  next.chunks.push({
+    type: ChunkType.STRING,
+    fileType: FileType.JSX,
+    name: COMMON_CHUNK_NAME.FileExport,
+    content: `export default ${ir.componentName};`,
+    linkAfter: [
+      COMMON_CHUNK_NAME.ExternalDepsImport,
+      COMMON_CHUNK_NAME.InternalDepsImport,
+      COMMON_CHUNK_NAME.FileVarDefine,
+      COMMON_CHUNK_NAME.FileUtilDefine,
+      REACT_CHUNK_NAME.ClassEnd,
+    ],
+  });
+
   return next;
 };
 

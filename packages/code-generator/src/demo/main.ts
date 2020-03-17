@@ -17,12 +17,14 @@ function flatFiles(rootName: string | null, dir: IResultDir): IResultFile[] {
   return result;
 }
 
-function displayResultInConsole(root: IResultDir): void {
+function displayResultInConsole(root: IResultDir, fileName?: string): void {
   const files = flatFiles('.', root);
   files.forEach(file => {
-    console.log(`========== ${file.name} Start ==========`);
-    console.log(file.content);
-    console.log(`========== ${file.name} End   ==========`);
+    if (!fileName || fileName === file.name) {
+      console.log(`========== ${file.name} Start ==========`);
+      console.log(file.content);
+      console.log(`========== ${file.name} End   ==========`);
+    }
   });
 }
 
@@ -41,7 +43,7 @@ function main() {
   const createIceJsProjectBuilder = CodeGenerator.solutions.icejs;
   const builder = createIceJsProjectBuilder();
   builder.generateProject(demoSchema).then(result => {
-    // displayResultInConsole(result);
+    // displayResultInConsole(result, '././src/routes.js');
     writeResultToDisk(result, '/Users/armslave/lowcodeDemo').then(response =>
       console.log('Write to disk: ', JSON.stringify(response)),
     );

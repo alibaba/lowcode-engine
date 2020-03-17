@@ -8,6 +8,7 @@ import {
 
 export enum FileType {
   CSS = 'css',
+  SCSS = 'scss',
   HTML = 'html',
   JS = 'js',
   JSX = 'jsx',

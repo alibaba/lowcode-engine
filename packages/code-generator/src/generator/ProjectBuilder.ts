@@ -100,7 +100,7 @@ export class ProjectBuilder implements IProjectBuilder {
       );
 
       buildResult.push({
-        path: this.template.slots.pages.path,
+        path: this.template.slots.router.path,
         files,
       });
     }

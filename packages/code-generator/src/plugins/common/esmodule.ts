@@ -38,7 +38,11 @@ function groupDepsByPack(deps: IDependency[]): Record<string, IDependency[]> {
   return depMap;
 }
 
-function buildPackageImport(pkg: string, deps: IDependency[]): ICodeChunk[] {
+function buildPackageImport(
+  pkg: string,
+  deps: IDependency[],
+  isJSX: boolean,
+): ICodeChunk[] {
   const chunks: ICodeChunk[] = [];
   let defaultImport: string = '';
   let defaultImportAs: string = '';
@@ -47,11 +51,14 @@ function buildPackageImport(pkg: string, deps: IDependency[]): ICodeChunk[] {
   deps.forEach(dep => {
     const srcName = dep.exportName;
     let targetName = dep.importName || dep.exportName;
+    if (dep.subName) {
+      return;
+    }
 
     if (dep.subName) {
       chunks.push({
         type: ChunkType.STRING,
-        fileType: FileType.JSX,
+        fileType: isJSX ? FileType.JSX : FileType.JS,
         name: COMMON_CHUNK_NAME.FileVarDefine,
         content: `const ${targetName} = ${srcName}.${dep.subName};`,
         linkAfter: [
@@ -93,10 +100,10 @@ function buildPackageImport(pkg: string, deps: IDependency[]): ICodeChunk[] {
 
   if (deps[0].dependencyType === DependencyType.Internal) {
     // TODO: Internal Deps path use project slot setting
-    statementL.push(`'@src/${(deps[0] as IInternalDependency).type}/${pkg}';`);
+    statementL.push(`'@/${(deps[0] as IInternalDependency).type}/${pkg}';`);
     chunks.push({
       type: ChunkType.STRING,
-      fileType: FileType.JSX,
+      fileType: isJSX ? FileType.JSX : FileType.JS,
       name: COMMON_CHUNK_NAME.InternalDepsImport,
       content: statementL.join(' '),
       linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport],
@@ -105,7 +112,7 @@ function buildPackageImport(pkg: string, deps: IDependency[]): ICodeChunk[] {
     statementL.push(`'${pkg}';`);
     chunks.push({
       type: ChunkType.STRING,
-      fileType: FileType.JSX,
+      fileType: isJSX ? FileType.JSX : FileType.JS,
       name: COMMON_CHUNK_NAME.ExternalDepsImport,
       content: statementL.join(' '),
       linkAfter: [],
@@ -120,13 +127,15 @@ const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     ...pre,
   };
 
+  const isJSX = next.chunks.some(chunk => chunk.fileType === FileType.JSX);
+
   const ir = next.ir as IWithDependency;
 
   if (ir && ir.deps && ir.deps.length > 0) {
     const packs = groupDepsByPack(ir.deps);
 
     Object.keys(packs).forEach(pkg => {
-      const chunks = buildPackageImport(pkg, packs[pkg]);
+      const chunks = buildPackageImport(pkg, packs[pkg], isJSX);
       next.chunks.push.apply(next.chunks, chunks);
     });
   }

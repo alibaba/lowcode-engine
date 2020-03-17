@@ -10,9 +10,9 @@ export interface IExternalDependency extends IDependency {
 }
 
 export enum InternalDependencyType {
-  PAGE = 'page',
-  BLOCK = 'block',
-  COMPONENT = 'component',
+  PAGE = 'pages',
+  BLOCK = 'components',
+  COMPONENT = 'components',
   UTILS = 'utils',
 }
 

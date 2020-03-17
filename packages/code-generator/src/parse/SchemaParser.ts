@@ -118,10 +118,13 @@ class SchemaParser implements ISchemaParser {
     // 分析容器内部组件依赖
     containers.forEach(container => {
       if (container.children) {
-        const depNames = this.getComponentNames(container.children);
-        container.deps = uniqueArray<string>(depNames)
-          .map(depName => internalDeps[depName] || compDeps[depName])
-          .filter(dep => !!dep);
+        // const depNames = this.getComponentNames(container.children);
+        // container.deps = uniqueArray<string>(depNames)
+        //   .map(depName => internalDeps[depName] || compDeps[depName])
+        //   .filter(dep => !!dep);
+        container.deps = Object.keys(compDeps).map(
+          depName => compDeps[depName],
+        );
       }
     });
 

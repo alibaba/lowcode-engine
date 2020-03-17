@@ -30,35 +30,48 @@ function generateInlineStyle(style: IInlineStyle): string | null {
 }
 
 function generateAttr(attrName: string, attrValue: any): string {
+  if (attrName === 'initValue' || attrName === 'labelCol') {
+    return '';
+  }
   const [isString, valueStr] = generateCompositeType(attrValue);
   return `${attrName}=${isString ? `"${valueStr}"` : `{${valueStr}}`}`;
 }
 
+function mapNodeName(src: string): string {
+  if (src === 'Div') {
+    return 'div';
+  }
+  return src;
+}
+
 function generateNode(nodeItem: IComponentNodeItem): string {
   const codePieces: string[] = [];
+  let propLines: string[] = [];
   const { className, style, ...props } = nodeItem.props;
 
-  codePieces.push(`<${nodeItem.componentName}`);
+  codePieces.push(`<${mapNodeName(nodeItem.componentName)}`);
   if (className) {
-    codePieces.push(`className="${className}"`);
+    propLines.push(`className="${className}"`);
   }
   if (style) {
     const inlineStyle = generateInlineStyle(style);
     if (inlineStyle !== null) {
-      codePieces.push(`style={${inlineStyle}}`);
+      propLines.push(`style={${inlineStyle}}`);
     }
   }
 
-  const propLines = Object.keys(props).map((propName: string) =>
-    generateAttr(propName, props[propName]),
+  propLines = propLines.concat(
+    Object.keys(props).map((propName: string) =>
+      generateAttr(propName, props[propName]),
+    ),
   );
-  codePieces.push.apply(codePieces, propLines);
+  codePieces.push(` ${propLines.join(' ')} `);
 
   if (nodeItem.children && (nodeItem.children as unknown[]).length > 0) {
     codePieces.push('>');
     const childrenLines = generateChildren(nodeItem.children);
     codePieces.push.apply(codePieces, childrenLines);
-    codePieces.push(`</${nodeItem.componentName}>`);
+    codePieces.push(`</${mapNodeName(nodeItem.componentName)}>`);
   } else {
     codePieces.push('/>');
   }
@@ -86,7 +99,7 @@ function generateNode(nodeItem: IComponentNodeItem): string {
     codePieces.push('}');
   }
 
-  return codePieces.join(' ');
+  return codePieces.join('');
 }
 
 function generateChildren(children: ChildNodeType): string[] {

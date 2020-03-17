@@ -18,7 +18,7 @@ const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
 
   next.chunks.push({
     type: ChunkType.STRING,
-    fileType: FileType.CSS,
+    fileType: FileType.SCSS,
     name: COMMON_CHUNK_NAME.StyleDepsImport,
     content: `
       // 引入默认全局样式
@@ -29,7 +29,7 @@ const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
 
   next.chunks.push({
     type: ChunkType.STRING,
-    fileType: FileType.CSS,
+    fileType: FileType.SCSS,
     name: COMMON_CHUNK_NAME.StyleCssContent,
     content: `
       body {
@@ -41,7 +41,7 @@ const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
 
   next.chunks.push({
     type: ChunkType.STRING,
-    fileType: FileType.CSS,
+    fileType: FileType.SCSS,
     name: COMMON_CHUNK_NAME.StyleCssContent,
     content: ir.css || '',
     linkAfter: [COMMON_CHUNK_NAME.StyleDepsImport],
