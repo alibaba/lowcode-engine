@@ -30,13 +30,16 @@ const SCHEMA = {
       },
       props: {
         ref: 'outterView',
-        autoLoading: true
+        autoLoading: true,
+        style: {
+          padding: 20
+        }
       },
       children: [
         {
           componentName: 'Form',
           props: {
-            labelCol: 4,
+            labelCol: 3,
             style: {},
             ref: 'testForm'
           },
