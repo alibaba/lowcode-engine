@@ -11,6 +11,7 @@
     "@alife/theme-lowcode-dark": "^0.1.0",
     "@alife/theme-lowcode-light": "^0.1.0",
     "@icedesign/theme": "^1.x",
+    "core-js": "^3.6.4",
     "events": "^3.1.0",
     "intl-messageformat": "^8.2.1",
     "keymaster": "^1.6.2",
