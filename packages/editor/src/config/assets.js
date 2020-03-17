@@ -1197,7 +1197,191 @@ export default {
           nestingRule: {
             childWhitelist: 'Select.Option'
           }
-        }
+        },
+        props: [
+          {
+            name: 'mode',
+            title: '选择器模式',
+            setter: {
+              componentName: 'RadioGroupSetter',
+              props: {
+                defaultValue: 'single',
+                dataSource: [
+                  {
+                      value: 'single',
+                      label: 'single'
+                  }, {
+                      value: 'multiple',
+                      label: 'multiple'
+                  }, {
+                      value: 'tag',
+                      label: 'tag'
+                  }
+                ]
+              }
+            }
+          },
+          {
+            name: 'mode',
+            title: '选择器模式',
+            setter: {
+              componentName: 'SelectSetter',
+              props: {
+                defaultValue: 'single',
+                dataSource: [
+                  {
+                      value: 'single',
+                      label: 'single'
+                  }, {
+                      value: 'multiple',
+                      label: 'multiple'
+                  }, {
+                      value: 'tag',
+                      label: 'tag'
+                  }
+                ]
+              }
+            }
+          },
+          {
+            name: 'value',
+            title: '当前值，用于受控模式',
+            placeholder: '混合',
+            setter: {
+              componentName: 'MixinSetter',
+              props: {
+                types: [{
+                  name: 'StringSetter', 
+                  // 当前mixin setter API
+                  props: {}
+                }, {
+                  name: 'ExpressionSetter', 
+                  props: {}
+                }, {
+                  name: 'RadioGroupSetter', 
+                  // 当前mixin setter API
+                  props: {
+                    hasClear: true,
+                    dataSource: [{
+                      label: '上',
+                      value: 't',
+                    },
+                    {
+                      label: '右',
+                      value: 'r',
+                    },
+                    {
+                      label: '下',
+                      value: 'b',
+                    },
+                    {
+                      label: '左',
+                      value: 'l',
+                    }]
+                  }
+                }],
+                defaultType: 'SelectSetter'
+              },
+            },
+          },
+          {
+            name: 'defaultValue',
+            title: '当前值，用于受控模式',
+            placeholder: '混合',
+            setter: {
+              componentName: 'MixinSetter',
+              props: {
+                types: [{
+                  name: 'StringSetter', 
+                  // 当前mixin setter API
+                  props: {}
+                }, {
+                  name: 'TextAreaSetter', 
+                  props: {}
+                }, {
+                  name: 'SelectSetter', 
+                  // 当前mixin setter API
+                  props: {
+                    hasClear: true,
+                    dataSource: [{
+                      label: '上',
+                      value: 't',
+                    },
+                    {
+                      label: '右',
+                      value: 'r',
+                    },
+                    {
+                      label: '下',
+                      value: 'b',
+                    },
+                    {
+                      label: '左',
+                      value: 'l',
+                    }]
+                  }
+                }, {
+                  name: 'NumberSetter', 
+                  props: {}
+                }, {
+                  name: 'BoolSetter', 
+                  props: {}
+                }],
+                defaultType: 'SelectSetter'
+              },
+            },
+          },
+          {
+            name: 'hasBorder',
+            title: '是否有边框',
+            setter: {
+              componentName: 'BoolSetter',
+              props: {
+                defaultValue: true
+              }
+            }
+          },
+          {
+            name: 'searchValue',
+            title: '受控搜索值，一般不需要设置\n@type {[type]}',
+            setter: 'TextAreaSetter'
+          },
+          {
+            name: 'searchValue',
+            title: '受控搜索值，一般不需要设置\n@type {[type]}',
+            setter: 'StringSetter'
+          },
+          {
+            name: 'maxTagCount',
+            title: '最多显示多少个 tag',
+            setter: 'NumberSetter'
+          },
+          {
+            name: 'maxTagCount',
+            title: '最多显示多少个 tag',
+            setter: 'ExpressionSetter'
+          },
+          {
+            name: 'date',
+            title: '测试日期',
+            setter: 'DateSetter'
+          },
+          {
+            name: 'date',
+            title: '测试日期-年',
+            setter: 'DateYearSetter'
+          },
+          {
+            name: 'date',
+            title: '测试日期-月',
+            setter: 'DateMonthSetter'
+          },
+          {
+            name: 'date',
+            title: '测试日期-区间',
+            setter: 'DateRangeSetter'
+          }
+        ]
       }
     },
     'Select.Option': {
