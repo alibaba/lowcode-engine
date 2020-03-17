@@ -28,6 +28,7 @@ export default abstract class Provider {
   public globalUtils: any = {};
   public routerConfig: { [key: string]: string } = {};
   public layout: { componentName: string; props: any } | null = null;
+  private lazyElementsMap: { [key: string]: any } = {};
 
   constructor() {
     this.init();
@@ -66,11 +67,19 @@ export default abstract class Provider {
     if (!pageId) {
       return null;
     }
-    return createElement(LazyComponent as any, {
-      getPageData: async () => await this.getPageData(pageId),
-      key: pageId,
-      ...props,
-    });
+    if (this.lazyElementsMap[pageId]) {
+      console.log('缓存');
+      return this.lazyElementsMap[pageId];
+    } else {
+      const lazyElement = createElement(LazyComponent as any, {
+        getPageData: async () => await this.getPageData(pageId),
+        key: pageId,
+        ...props,
+      });
+      this.lazyElementsMap[pageId] = lazyElement;
+      console.log('新组件');
+      return lazyElement;
+    }
   }
 
   public createApp() {

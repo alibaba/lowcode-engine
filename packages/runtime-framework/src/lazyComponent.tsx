@@ -11,8 +11,6 @@ interface IState {
 }
 
 export default class LazyComponent extends Component<IProps, IState> {
-  private schema: object | null = null;
-
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -22,9 +20,8 @@ export default class LazyComponent extends Component<IProps, IState> {
 
   public async componentDidMount() {
     const { getPageData } = this.props;
-    if (getPageData && !this.schema) {
+    if (getPageData && !this.state.schema) {
       const schema = await getPageData();
-      this.schema = schema;
       this.setState({ schema });
     }
   }
