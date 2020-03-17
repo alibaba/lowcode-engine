@@ -17,14 +17,20 @@ export default class OffsetObserver {
 
   @obx hasOffset = false;
   @computed get offsetLeft() {
+    if (this.isRoot) {
+      return this.viewport.scrollX;
+    }
     if (!this.viewport.scrolling || this.lastOffsetLeft == null) {
-      this.lastOffsetLeft = this.isRoot ? this.viewport.scrollX : (this.left + this.viewport.scrollX) * this.scale;
+      this.lastOffsetLeft = (this.left + this.viewport.scrollX) * this.scale;
     }
     return this.lastOffsetLeft;
   }
   @computed get offsetTop() {
+    if (this.isRoot) {
+      return this.viewport.scrollY;
+    }
     if (!this.viewport.scrolling || this.lastOffsetTop == null) {
-      this.lastOffsetTop = this.isRoot ? this.viewport.scrollY : (this.top + this.viewport.scrollY) * this.scale;
+      this.lastOffsetTop = (this.top + this.viewport.scrollY) * this.scale;
     }
     return this.lastOffsetTop;
   }
