@@ -315,11 +315,10 @@ export default {
               return {
                 ...comp,
                 name: comp.componentName,
-                libraryId: 1,
                 snippets: comp.snippets.map(snippet => {
                   return {
                     name: snippet.title,
-                    screenshort: snippet.screenshort,
+                    screenshot: snippet.screenshot,
                     code: JSON.stringify(snippet.schema)
                   };
                 })
@@ -330,13 +329,17 @@ export default {
       };
 
       const list = transformMaterial(assets.componentList);
+      console.log('++++', list);
       editor.set({
         componentsMap: assets.components,
         componentMaterial: {
           library: [
             {
               name: 'Fusion组件库',
-              id: 1
+              id: '2'
+            }, {
+              name: '其他',
+              id: '3'
             }
           ],
           list

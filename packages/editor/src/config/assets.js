@@ -21,24 +21,24 @@ export default {
           supportedLifecycles: [
             {
               description: '初始化时',
-              name: 'constructor',
+              name: 'constructor'
             },
             {
               description: '装载后',
-              name: 'componentDidMount',
+              name: 'componentDidMount'
             },
             {
               description: '更新时',
-              name: 'componentDidMount',
+              name: 'componentDidMount'
             },
             {
               description: '卸载时',
-              name: 'componentWillUnmount',
-            },
+              name: 'componentWillUnmount'
+            }
           ]
         },
         component: {
-          isContainer: true,
+          isContainer: true
         }
       }
     },
@@ -47,7 +47,7 @@ export default {
       title: '容器',
       configure: {
         component: {
-          isContainer: true,
+          isContainer: true
         }
       }
     },
@@ -495,7 +495,7 @@ export default {
       ],
       configure: {
         component: {
-          isContainer: true,
+          isContainer: true
         }
       }
     },
@@ -1197,7 +1197,531 @@ export default {
           nestingRule: {
             childWhitelist: 'Select.Option'
           }
-        }
+        },
+        props: [
+          {
+            name: 'mode',
+            title: '选择器模式',
+            setter: {
+              componentName: 'RadioGroupSetter',
+              props: {
+                defaultValue: 'single',
+                dataSource: [
+                  {
+                    value: 'single',
+                    label: 'single'
+                  },
+                  {
+                    value: 'multiple',
+                    label: 'multiple'
+                  },
+                  {
+                    value: 'tag',
+                    label: 'tag'
+                  }
+                ]
+              }
+            }
+          },
+          {
+            name: 'mode',
+            title: '选择器模式',
+            setter: {
+              componentName: 'SelectSetter',
+              props: {
+                defaultValue: 'single',
+                dataSource: [
+                  {
+                    value: 'single',
+                    label: 'single'
+                  },
+                  {
+                    value: 'multiple',
+                    label: 'multiple'
+                  },
+                  {
+                    value: 'tag',
+                    label: 'tag'
+                  }
+                ]
+              }
+            }
+          },
+          {
+            name: 'value',
+            title: '受控值',
+            setter: 'StringSetter',
+          },
+          {
+            name: 'hasBorder',
+            title: '是否有边框',
+            setter: {
+              componentName: 'BoolSetter',
+              props: {
+                defaultValue: true
+              }
+            }
+          },
+          {
+            name: 'maxTagCount',
+            title: '最多显示多少个 tag',
+            setter: 'NumberSetter'
+          },
+          {
+            name: 'maxTagCount',
+            title: '最多显示多少个 tag',
+            setter: 'ExpressionSetter'
+          },
+          {
+            name: 'MixinSetter',
+            placeholder: '混合',
+            setter: {
+              componentName: 'MixinSetter',
+              props: {
+                types: [
+                  {
+                    name: 'StringSetter',
+                    // 当前mixin setter API
+                    props: {}
+                  },
+                  {
+                    name: 'TextAreaSetter',
+                    props: {}
+                  },
+                  {
+                    name: 'SelectSetter',
+                    // 当前mixin setter API
+                    props: {
+                      hasClear: true,
+                      dataSource: [
+                        {
+                          label: '上',
+                          value: 't'
+                        },
+                        {
+                          label: '右',
+                          value: 'r'
+                        },
+                        {
+                          label: '下',
+                          value: 'b'
+                        },
+                        {
+                          label: '左',
+                          value: 'l'
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    name: 'NumberSetter',
+                    props: {}
+                  },
+                  {
+                    name: 'BoolSetter',
+                    props: {}
+                  }
+                ],
+                defaultType: 'SelectSetter'
+              }
+            }
+          },
+          {
+            type: 'group',
+            name: '扩展 Setter',
+            items: [
+              {
+                name: 'TextAreaSetter',
+                setter: 'TextAreaSetter'
+              },
+              {
+                name: 'date',
+                title: '测试日期',
+                setter: 'DateSetter'
+              },
+              {
+                name: 'date',
+                title: '测试日期-年',
+                setter: 'DateYearSetter'
+              },
+              {
+                name: 'date',
+                title: '测试日期-月',
+                setter: 'DateMonthSetter'
+              },
+              {
+                name: 'date',
+                title: '测试日期-区间',
+                setter: 'DateRangeSetter'
+              }
+            ]
+          },
+          {
+            type: 'group',
+            name: 'ArraySetter',
+            items: [
+              {
+                name: 'arrayValue1',
+                title: '字符数组',
+                setter: {
+                  componentName: 'ArraySetter',
+                  props: {
+                    itemSetter: {
+                      componentName: 'StringSetter',
+                      initialValue: ''
+                    }
+                  }
+                }
+              },
+              {
+                name: 'arrayValue2',
+                title: '数字数组',
+                setter: {
+                  componentName: 'ArraySetter',
+                  props: {
+                    itemSetter: {
+                      componentName: 'NumberSetter',
+                      initialValue: 0
+                    }
+                  }
+                }
+              },
+              {
+                name: 'arrayValue3',
+                title: '混合数组',
+                setter: {
+                  componentName: 'ArraySetter',
+                  props: {
+                    itemSetter: {
+                      componentName: 'MixinSetter',
+                      props: {
+                        types: [
+                          {
+                            name: 'StringSetter',
+                            // 当前mixin setter API
+                            props: {}
+                          },
+                          {
+                            name: 'ExpressionSetter',
+                            props: {}
+                          },
+                          {
+                            name: 'RadioGroupSetter',
+                            // 当前mixin setter API
+                            props: {
+                              hasClear: true,
+                              dataSource: [
+                                {
+                                  label: '上',
+                                  value: 't'
+                                },
+                                {
+                                  label: '右',
+                                  value: 'r'
+                                },
+                                {
+                                  label: '下',
+                                  value: 'b'
+                                },
+                                {
+                                  label: '左',
+                                  value: 'l'
+                                }
+                              ]
+                            }
+                          }
+                        ],
+                        defaultType: 'SelectSetter'
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                name: 'arrayValue4',
+                title: '对象数组',
+                setter: {
+                  componentName: 'ArraySetter',
+                  props: {
+                    itemSetter: {
+                      componentName: 'ObjectSetter',
+                      props: {
+                        config: {
+                          items: [{
+                            name: 'username',
+                            title: '姓名',
+                            setter: 'StringSetter',
+                            important: true,
+                          }, {
+                            name: 'phone',
+                            title: '电话',
+                            setter: 'StringSetter',
+                            important: true,
+                          }, {
+                            name: 'age',
+                            title: '年龄',
+                            setter: 'NumberSetter'
+                          }, {
+                            name: 'married',
+                            title: '婚否',
+                            setter: 'BoolSetter'
+                          }, {
+                            type: 'group',
+                            title: 'work',
+                            items: [
+                              {
+                                name: 'job',
+                                title: '工作岗位',
+                                setter: {
+                                  componentName: 'SelectSetter',
+                                  props: {
+                                    dataSource: [{
+                                      label: '工程师',
+                                      value: 1
+                                    }, {
+                                      label: '高级工程师',
+                                      value: 2
+                                    }, {
+                                      label: '资深工程师',
+                                      value: 3
+                                    }]
+                                  }
+                                }
+                              },
+                              {
+                                name: 'address',
+                                title: '工作地点',
+                                setter: 'TextAreaSetter'
+                              }
+                            ]
+                          }],
+                        }
+                      },
+                      initialValue: {},
+                    }
+                  }
+                }
+              },
+              {
+                name: 'arrayValue5',
+                title: '对象数组',
+                setter: {
+                  componentName: 'ArraySetter',
+                  props: {
+                    itemSetter: {
+                      componentName: 'ObjectSetter',
+                      props: {
+                        config: {
+                          items: [{
+                            name: 'username',
+                            title: '姓名',
+                            setter: 'StringSetter',
+                            important: true,
+                          }, {
+                            name: 'age',
+                            title: '年龄',
+                            setter: 'NumberSetter',
+                            important: true,
+                          }, {
+                            name: 'married',
+                            title: '婚否',
+                            setter: 'BoolSetter',
+                            important: true,
+                          }, {
+                            name: 'log',
+                            title: '到访记录',
+                            setter: {
+                              componentName: 'ArraySetter',
+                              props: {
+                                itemSetter: 'StringSetter'
+                              }
+                            },
+                            important: true,
+                          }, {
+                            type: 'group',
+                            title: 'work',
+                            items: [
+                              {
+                                name: 'job',
+                                title: '工作岗位',
+                                setter: {
+                                  componentName: 'SelectSetter',
+                                  props: {
+                                    dataSource: [{
+                                      label: '工程师',
+                                      value: 1
+                                    }, {
+                                      label: '高级工程师',
+                                      value: 2
+                                    }, {
+                                      label: '资深工程师',
+                                      value: 3
+                                    }]
+                                  }
+                                }
+                              },
+                              {
+                                name: 'address',
+                                title: '工作地点',
+                                setter: 'TextAreaSetter'
+                              }
+                            ]
+                          }],
+                        }
+                      },
+                      initialValue: {},
+                    },
+                    mode: 'popup'
+                  }
+                }
+              },
+            ],
+            extraProps: {
+              defaultCollapsed: false,
+            }
+          },
+          {
+            type: 'group',
+            name: 'ObjectSetter',
+            items: [
+              {
+                name: 'objectValue1',
+                title: '对象数据1',
+                setter: {
+                  componentName: 'ObjectSetter',
+                  props: {
+                    config: {
+                      items: [{
+                        name: 'username',
+                        title: '姓名',
+                        setter: 'StringSetter',
+                        important: true,
+                      }, {
+                        name: 'age',
+                        title: '年龄',
+                        setter: 'NumberSetter',
+                        important: true,
+                      }, {
+                        name: 'married',
+                        title: '婚否',
+                        setter: 'BoolSetter',
+                        important: true,
+                      }, {
+                        name: 'log',
+                        title: '到访记录',
+                        setter: {
+                          componentName: 'ArraySetter',
+                          props: {
+                            itemSetter: 'StringSetter'
+                          }
+                        },
+                        important: true,
+                      }, {
+                        type: 'group',
+                        title: 'work',
+                        items: [
+                          {
+                            name: 'job',
+                            title: '工作岗位',
+                            setter: {
+                              componentName: 'SelectSetter',
+                              props: {
+                                dataSource: [{
+                                  label: '工程师',
+                                  value: 1
+                                }, {
+                                  label: '高级工程师',
+                                  value: 2
+                                }, {
+                                  label: '资深工程师',
+                                  value: 3
+                                }]
+                              }
+                            }
+                          },
+                          {
+                            name: 'address',
+                            title: '工作地点',
+                            setter: 'TextAreaSetter'
+                          }
+                        ]
+                      }],
+                    }
+                  },
+                  initialValue: {},
+                }
+              },
+              {
+                name: 'objectValue2',
+                title: '对象数据2',
+                setter: {
+                  componentName: 'ObjectSetter',
+                  props: {
+                    mode: 'popup',
+                    config: {
+                      items: [{
+                        name: 'username',
+                        title: '姓名',
+                        setter: 'StringSetter',
+                        important: true,
+                      }, {
+                        name: 'age',
+                        title: '年龄',
+                        setter: 'NumberSetter',
+                        important: true,
+                      }, {
+                        name: 'married',
+                        title: '婚否',
+                        setter: 'BoolSetter',
+                        important: true,
+                      }, {
+                        name: 'log',
+                        title: '到访记录',
+                        setter: {
+                          componentName: 'ArraySetter',
+                          props: {
+                            itemSetter: 'StringSetter'
+                          }
+                        },
+                        important: true,
+                      }, {
+                        type: 'group',
+                        title: 'work',
+                        items: [
+                          {
+                            name: 'job',
+                            title: '工作岗位',
+                            setter: {
+                              componentName: 'SelectSetter',
+                              props: {
+                                dataSource: [{
+                                  label: '工程师',
+                                  value: 1
+                                }, {
+                                  label: '高级工程师',
+                                  value: 2
+                                }, {
+                                  label: '资深工程师',
+                                  value: 3
+                                }]
+                              }
+                            }
+                          },
+                          {
+                            name: 'address',
+                            title: '工作地点',
+                            setter: 'TextAreaSetter'
+                          }
+                        ]
+                      }],
+                    }
+                  },
+                  initialValue: {},
+                }
+              }
+            ]
+          }
+        ]
       }
     },
     'Select.Option': {
@@ -1250,10 +1774,11 @@ export default {
           title: '按钮',
           icon: '',
           package: '@alife/next',
+          libraryId: 2,
           snippets: [
             {
               title: 'private',
-              screenshort: '',
+              screenshot: 'https://img.alicdn.com/tfs/TB16gZhi.H1gK0jSZSyXXXtlpXa-192-144.png',
               schema: {
                 componentName: 'Button',
                 props: {
@@ -1264,7 +1789,7 @@ export default {
             },
             {
               title: 'secondary',
-              screenshort: '',
+              screenshot: 'https://img.alicdn.com/tfs/TB11Hkji1H2gK0jSZFEXXcqMpXa-192-144.png',
               schema: {
                 componentName: 'Button',
                 props: {
@@ -1275,7 +1800,7 @@ export default {
             },
             {
               title: 'normal',
-              screenshort: '',
+              screenshot: '',
               schema: {
                 componentName: 'Button',
                 props: {
@@ -1294,15 +1819,72 @@ export default {
       children: [
         {
           componentName: 'Input',
+          libraryId: 2,
           title: '输入框',
           icon: '',
           package: '@alife/next',
           snippets: [
             {
               title: '普通',
-              screenshort: '',
+              screenshot: '',
               schema: {
                 componentName: 'Input',
+                props: {}
+              }
+            }
+          ]
+        },
+        {
+          componentName: 'Select',
+          libraryId: 2,
+          title: '选择框',
+          icon: '',
+          package: '@alife/next',
+          snippets: [
+            {
+              title: '默认',
+              screenshot: '',
+              schema: {
+                componentName: 'Select',
+                props: {}
+              }
+            }
+          ]
+        },
+        {
+          componentName: 'NumberPicker',
+          libraryId: 2,
+          title: '数字',
+          icon: '',
+          package: '@alife/next',
+          snippets: [
+            {
+              title: '默认',
+              screenshot: '',
+              schema: {
+                componentName: 'NumberPicker',
+                props: {}
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      title: '其他',
+      icon: '',
+      children: [
+        {
+          componentName: 'Div',
+          libraryId: 3,
+          title: '容器',
+          icon: '',
+          snippets: [
+            {
+              title: '默认',
+              screenshot: '',
+              schema: {
+                componentName: 'Div',
                 props: {}
               }
             }
