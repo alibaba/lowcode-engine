@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "runtime for Ali lowCode engine",
   "main": "lib/index.js",
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
+  },
   "files": [
     "lib"
   ],
