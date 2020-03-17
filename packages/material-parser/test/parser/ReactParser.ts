@@ -18,24 +18,23 @@ test.serial('parse es6 multiple exported component by local', async t => {
   const scanner = new Scanner(options);
   const scanModel = await scanner.scan();
   const parser = new ReactParser(options);
-//   debugger;
   const actual: IMaterialParsedModel[] = await parser.parse(scanModel);
 
   t.snapshot(actual);
 });
 
-// test.serial('parse es6 single exported component by local', async t => {
-//   const options: IMaterializeOptions = {
-//     cwd: singleExportedComptPath,
-//     entry: singleExportedComptPath,
-//     accesser: 'local',
-//     isExportedAsMultiple: false,
-//   };
+test.serial('parse es6 single exported component by local', async t => {
+  const options: IMaterializeOptions = {
+    cwd: singleExportedComptPath,
+    entry: singleExportedComptPath,
+    accesser: 'local',
+    isExportedAsMultiple: false,
+  };
 
-//   const scanner = new Scanner(options);
-//   const scanModel = await scanner.scan();
-//   const parser = new ReactParser(options);
-//   const actual: IMaterialParsedModel[] = await parser.parse(scanModel);
+  const scanner = new Scanner(options);
+  const scanModel = await scanner.scan();
+  const parser = new ReactParser(options);
+  const actual: IMaterialParsedModel[] = await parser.parse(scanModel);
 
-//   t.snapshot(actual);
-// });
+  t.snapshot(actual);
+});

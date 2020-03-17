@@ -17,6 +17,7 @@ const {
   resolveExportDeclaration,
   resolveToValue,
 } = require('react-docgen').utils;
+import checkIsIIFE from './checkIsIIFE';
 import resolveHOC from './resolveHOC';
 import resolveIIFE from './resolveIIFE';
 import resolveTranspiledClass from './resolveTranspiledClass';
@@ -56,6 +57,29 @@ function resolveDefinition(definition: any) {
   return null;
 }
 
+function getDefinition(definition: any) {
+  if (checkIsIIFE(definition)) {
+    definition = resolveToValue(resolveIIFE(definition));
+    if (!isComponentDefinition(definition)) {
+      definition = resolveTranspiledClass(definition);
+    }
+  } else {
+    definition = resolveToValue(resolveHOC(definition));
+    if (checkIsIIFE(definition)) {
+      definition = resolveToValue(resolveIIFE(definition));
+      if (!isComponentDefinition(definition)) {
+        definition = resolveTranspiledClass(definition);
+      }
+    }
+  }
+  // definition = resolveToValue(resolveIIFE(definition));
+  // if (!isComponentDefinition(definition)) {
+  //   definition = resolveTranspiledClass(definition);
+  // }
+  // definition = resolveToValue(resolveHOC(definition));
+
+  return definition;
+}
 /**
  * Given an AST, this function tries to find the exported component definition.
  *
@@ -80,13 +104,9 @@ export default function findExportedComponentDefinition(ast: any) {
         if (isComponentDefinition(definition)) {
           acc.push(definition);
         } else {
-          // definition = resolveToValue(resolveIIFE(definition));
-          // if (!isComponentDefinition(definition)) {
-          //   definition = resolveTranspiledClass(definition);
-          // }
-          const resolved = resolveToValue(resolveHOC(definition));
-          if (isComponentDefinition(resolved)) {
-            acc.push(resolved);
+          definition = getDefinition(definition);
+          if (isComponentDefinition(definition)) {
+            acc.push(definition);
           }
         }
         return acc;
@@ -133,15 +153,7 @@ export default function findExportedComponentDefinition(ast: any) {
       // expression, something like React.createClass
       path = resolveToValue(path.get('right'));
       if (!isComponentDefinition(path)) {
-        // path = resolveToValue(resolveHOC(path));
-        // if (!isComponentDefinition(path)) {
-        path = resolveToValue(resolveIIFE(path));
-        if (!isComponentDefinition(path)) {
-          path = resolveTranspiledClass(path);
-          if (!isComponentDefinition(path)) {
-            path = resolveToValue(resolveHOC(path));
-          }
-        }
+        path = getDefinition(path);
       }
       if (foundDefinition) {
         // If a file exports multiple components, ... complain!

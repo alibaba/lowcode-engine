@@ -42,9 +42,9 @@ class Scanner implements IScanner {
     const isDepsMode = cwd !== entry;
     const pkgJsonPath = join(cwd, 'package.json');
     // 判断是否存在 package.json
-    if (!(await pathExists(pkgJsonPath))) {
-      throw new Error(`Cannot find package.json. ${pkgJsonPath}`);
-    }
+    // if (!(await pathExists(pkgJsonPath))) {
+    //   throw new Error(`Cannot find package.json. ${pkgJsonPath}`);
+    // }
     // 读取 package.json
     let pkgJson = await this.resolvePkgJson(pkgJsonPath);
     model.pkgName = pkgJson.name;
@@ -69,10 +69,10 @@ class Scanner implements IScanner {
     log('entryFile', entryFile);
     model.mainEntry = entryFilePath;
     // 记录入口文件
-    // model.modules.push({
-    //   filePath: entryFilePath,
-    //   fileContent: entryFile,
-    // });
+    model.modules.push({
+      filePath: entryFilePath,
+      fileContent: entryFile,
+    });
     log('model', model);
     // debugger;
     if (options.isExportedAsMultiple) {
@@ -82,7 +82,7 @@ class Scanner implements IScanner {
         entryFilePath,
         sourceType: model.sourceType,
       });
-      model.modules.push(...modules);
+      model.modules = [...modules];
     }
     log('model', model);
     return model;

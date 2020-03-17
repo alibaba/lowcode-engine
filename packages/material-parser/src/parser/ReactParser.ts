@@ -15,6 +15,7 @@ import {
 } from '../types';
 import BaseParser from './BaseParser';
 import resolver from './resolver';
+import handlers from './handlers';
 
 const log = debug.extend('mat');
 const parser = buildParser();
@@ -75,7 +76,10 @@ function transformItem(name: string, item: any): any {
     result.description = description;
   }
   if (defaultValue) {
-    result.defaultValue = defaultValue.value;
+    try {
+      const value = eval(defaultValue.value);
+      result.defaultValue = value;
+    } catch (e) {}
   }
 
   return result;
@@ -179,8 +183,12 @@ class ReactParser extends BaseParser {
       item => item.filePath === model.mainEntry,
     );
 
-    const result = reactDocs.parse(mainEntryItem.fileContent, resolver);
-    const props = Object.keys(result.props).map(name => {
+    const result = reactDocs.parse(
+      mainEntryItem.fileContent,
+      resolver,
+      handlers,
+    );
+    const props = Object.keys(result.props || {}).map(name => {
       return transformItem(name, result.props[name]);
     });
 
@@ -529,20 +537,17 @@ class ReactParser extends BaseParser {
     fileContent: string;
   }): Promise<IMaterialParsedModel> {
     const ast = parser.parse(params.fileContent);
-    const result = reactDocs.parse(params.fileContent, resolver);
-    // @ts-ignore
-    // ast.__src = params.fileContent;
-    const props = Object.keys(result.props).map(name => {
+    const result = reactDocs.parse(params.fileContent, resolver, handlers);
+    const props = Object.keys(result.props || {}).map(name => {
       return transformItem(name, result.props[name]);
     });
-    // const defaultExportName = await this.parseDefaultExportNameES6(ast);
+    const defaultExportName = await this.parseDefaultExportNameES6(ast);
     // const subModules = await this.parseSubModulesES6(ast);
 
     return {
       filePath: params.filePath,
-      // defaultExportName,
+      defaultExportName,
       // subModules,
-      // propsTypes,
       props,
     } as any;
   }

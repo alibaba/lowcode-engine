@@ -14,7 +14,7 @@ const resolveFunctionDefinitionToReturnValue = require('react-docgen/dist/utils/
 //   resolveToValue,
 //   resolveHOC
 
-const checkIsIIFE = require('./checkIsIIFE');
+import checkIsIIFE from './checkIsIIFE';
 /**
  * If the path is a call expression, it recursively resolves to the
  * rightmost argument, stopping if it finds a React.createClass call expression

@@ -26,6 +26,8 @@
     "prettier": "^1.15.3",
     "rimraf": "^2.6.3",
     "ts-node": "^7.0.1",
+    "tslint": "^6.1.0",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.2.2"
   },
   "engines": {

@@ -38,11 +38,13 @@ export default function resolveHOC(path: any): any {
           t.SpreadElement.check(inner.node))
       ) {
         return resolveHOC(
-          resolveToValue(path.get('arguments', node.arguments.length - 1)),
+          // resolveToValue(path.get('arguments', node.arguments.length - 1)),
+          path.get('arguments', node.arguments.length - 1),
         );
       }
 
-      return resolveHOC(resolveToValue(inner));
+      // return resolveHOC(resolveToValue(inner));
+      return resolveHOC(inner);
     }
   }
 

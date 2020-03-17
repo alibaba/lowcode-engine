@@ -93,7 +93,6 @@ class Generator implements IGenerator {
     matParsedModel: IMaterialParsedModel,
   ): Promise<{
     manifestFilePath: string; // manifest 文件路径
-    manifestJS: string; // manifest 文件内容
     manifestObj: IComponentMaterial; // manifest 文件对象
   }> {
     const manifestObj: Partial<IComponentMaterial> = {
@@ -127,7 +126,6 @@ class Generator implements IGenerator {
       },
     );
     return {
-      manifestJS: manifest.manifestJS,
       manifestObj: manifest.manifestObj,
       manifestFilePath: manifest.manifestFilePath,
     };
