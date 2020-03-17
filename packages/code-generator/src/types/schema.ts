@@ -91,8 +91,8 @@ export interface IInlineStyle {
   [cssAttribute: string]: string | number | IJSExpression;
 }
 
-type ChildNodeItem = string | IJSExpression | IComponentNodeItem;
-type ChildNodeType = ChildNodeItem | ChildNodeItem[];
+export type ChildNodeItem = string | IJSExpression | IComponentNodeItem;
+export type ChildNodeType = ChildNodeItem | ChildNodeItem[];
 
 /**
  * 搭建基础协议 - 单个组件树节点描述
@@ -102,6 +102,8 @@ type ChildNodeType = ChildNodeItem | ChildNodeItem[];
  * @interface IComponentNodeItem
  */
 export interface IComponentNodeItem {
+  // TODO: 不需要 id 字段，暂时简单兼容
+  id?: string;
   componentName: string; // 组件名称 必填、首字母大写
   props: {
     className?: string; // 组件样式类名
@@ -170,7 +172,7 @@ export interface IDataSource {
    * 返回值：数据对象data，将会在渲染引擎和schemaToCode中通过调用this.setState(...)将返回的数据对象生效到state中；
    * 支持返回一个Promise，通过resolve(返回数据)，常用于串型发送请求场景，配合this.dataSourceMap[oneRequest.id].load()使用；
    */
-  dataHandler: IJSExpression;
+  dataHandler?: IJSExpression;
 }
 
 /**
@@ -182,7 +184,7 @@ export interface IDataSource {
 export interface IDataSourceConfig {
   id: string; // 数据请求ID标识
   isInit: boolean; // 是否为初始数据 支持表达式 值为true时，将在组件初始化渲染时自动发送当前数据请求
-  type: 'fetch' | 'mtop' | 'jsonp' | 'custom'; // 数据请求类型
+  type: 'fetch' | 'mtop' | 'jsonp' | 'custom' | 'doServer'; // 数据请求类型
   requestHandler?: IJSExpression; // 自定义扩展的外部请求处理器 仅type='custom'时生效
   options?: IFetchOptions; // 请求参数配置 每种请求类型对应不同参数
   dataHandler?: IJSExpression; // 数据结果处理函数，形如：(data, err) => Object
@@ -201,8 +203,8 @@ export interface IFetchOptions {
     [key: string]: any;
   };
   method: 'GET' | 'POST';
-  isCors: boolean; // 是否支持跨域，对应credentials = 'include'
-  timeout: number; // 超时时长
+  isCors?: boolean; // 是否支持跨域，对应credentials = 'include'
+  timeout?: number; // 超时时长
   headers?: {
     // 自定义请求头
     [key: string]: string;

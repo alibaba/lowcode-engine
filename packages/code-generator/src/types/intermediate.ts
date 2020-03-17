@@ -8,18 +8,6 @@ import {
   IUtilItem,
 } from './index';
 
-export interface IPackageJSON {
-  name: string;
-  description: string;
-  version: string;
-  main?: string;
-  author?: string;
-  license?: string;
-  scripts?: Record<string, string>;
-  dependencies?: Record<string, string>;
-  [key: string]: unknown;
-}
-
 export interface IParseResult {
   containers: IContainerInfo[];
   globalUtils?: IUtilInfo;

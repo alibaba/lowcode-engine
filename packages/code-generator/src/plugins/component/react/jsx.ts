@@ -1,9 +1,7 @@
-import { REACT_CHUNK_NAME } from './const';
-
-import { generateCompositeType } from '../../utils/compositeType';
-
 import {
   BuilderComponentPlugin,
+  ChildNodeItem,
+  ChildNodeType,
   ChunkType,
   FileType,
   ICodeStruct,
@@ -12,6 +10,10 @@ import {
   IInlineStyle,
   IJSExpression,
 } from '../../../types';
+
+import { handleChildren } from '@/utils/children';
+import { generateCompositeType } from '../../utils/compositeType';
+import { REACT_CHUNK_NAME } from './const';
 
 function generateInlineStyle(style: IInlineStyle): string | null {
   const attrLines = Object.keys(style).map((cssAttribute: string) => {
@@ -52,9 +54,9 @@ function generateNode(nodeItem: IComponentNodeItem): string {
   );
   codePieces.push.apply(codePieces, propLines);
 
-  if (nodeItem.children && nodeItem.children.length > 0) {
+  if (nodeItem.children && (nodeItem.children as unknown[]).length > 0) {
     codePieces.push('>');
-    const childrenLines = nodeItem.children.map(child => generateNode(child));
+    const childrenLines = generateChildren(nodeItem.children);
     codePieces.push.apply(codePieces, childrenLines);
     codePieces.push(`</${nodeItem.componentName}>`);
   } else {
@@ -87,6 +89,15 @@ function generateNode(nodeItem: IComponentNodeItem): string {
   return codePieces.join(' ');
 }
 
+function generateChildren(children: ChildNodeType): string[] {
+  return handleChildren<string>(children, {
+    // TODO: 如果容器直接只有一个 字符串 children 呢？
+    string: (input: string) => [input],
+    expression: (input: IJSExpression) => [`{${input.value}}`],
+    node: (input: IComponentNodeItem) => [generateNode(input)],
+  });
+}
+
 const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
   const next: ICodeStruct = {
     ...pre,
@@ -95,14 +106,17 @@ const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
   const ir = next.ir as IContainerInfo;
 
   let jsxContent: string;
-  if (!ir.children || ir.children.length === 0) {
+  if (!ir.children || (ir.children as unknown[]).length === 0) {
     jsxContent = 'null';
-  } else if (ir.children.length === 1) {
-    jsxContent = `(${generateNode(ir.children[0])})`;
   } else {
-    jsxContent = `(<React.Fragment>${ir.children
-      .map(child => generateNode(child))
-      .join('')}</React.Fragment>)`;
+    const childrenCode = generateChildren(ir.children);
+    if (childrenCode.length === 1) {
+      jsxContent = `(${childrenCode[0]})`;
+    } else {
+      jsxContent = `(<React.Fragment>${childrenCode.join(
+        '',
+      )}</React.Fragment>)`;
+    }
   }
 
   next.chunks.push({

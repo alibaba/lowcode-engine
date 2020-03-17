@@ -5,9 +5,12 @@
 
 import { SUPPORT_SCHEMA_VERSION_LIST } from '../const';
 
+import { handleChildren } from '../utils/children';
 import { uniqueArray } from '../utils/common';
 
 import {
+  ChildNodeItem,
+  ChildNodeType,
   CodeGeneratorError,
   CompatibilityError,
   DependencyType,
@@ -169,12 +172,10 @@ class SchemaParser implements ISchemaParser {
     };
   }
 
-  public getComponentNames(list: IComponentNodeItem[]): string[] {
-    const names = list.map(i => i.componentName);
-    const namesForward = list
-      .map(i => this.getComponentNames(i.children || []))
-      .reduce((p, c) => p.concat(c), []);
-    return names.concat(namesForward);
+  public getComponentNames(children: ChildNodeType): string[] {
+    return handleChildren<string>(children, {
+      node: (i: IComponentNodeItem) => [i.componentName],
+    });
   }
 }
 
