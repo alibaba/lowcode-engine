@@ -1,7 +1,7 @@
 import { Component, Fragment } from 'react';
 import { Icon, Button, Message } from '@alifd/next';
 import Sortable from './sortable';
-import { SettingField, SetterType, FieldConfig } from '../../main';
+import { SettingField, SetterType, FieldConfig, SetterConfig } from '../../main';
 import './style.less';
 import { createSettingFieldView } from '../../settings-pane';
 import { PopupContext, PopupPipe } from '../../popup';
@@ -44,7 +44,8 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
         const item = field.createField({
           name: i,
           setter: props.itemSetter,
-          forceInline: 2,
+          // FIXME:
+          forceInline: 1,
         });
         items[i] = item;
         itemsMap.set(item.id, item);
@@ -88,7 +89,8 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
     const item = this.props.field.createField({
       name: items.length,
       setter: itemSetter,
-      forceInline: 2,
+      // FIXME:
+      forceInline: 1,
     });
     items.push(item);
     itemsMap.set(item.id, item);
@@ -219,10 +221,7 @@ class TableSetter extends ListSetter {
 export default class ArraySetter extends Component<{
   value: any[];
   field: SettingField;
-  itemConfig?: {
-    setter?: SetterType;
-    defaultValue?: any | ((field: SettingField) => any);
-  };
+  itemSetter?: SetterType;
   mode?: 'popup' | 'list';
   forceInline?: boolean;
   multiValue?: boolean;
@@ -231,16 +230,13 @@ export default class ArraySetter extends Component<{
   private pipe: any;
   render() {
     const { mode, forceInline, ...props } = this.props;
-    const { field, itemConfig } = props;
+    const { field, itemSetter } = props;
     let columns: FieldConfig[] | undefined;
-    const setter: any = itemConfig?.setter;
-    if (setter?.componentName === 'ObjectSetter') {
-      const items: FieldConfig[] = setter.props?.config?.items;
+    if ((itemSetter as SetterConfig)?.componentName === 'ObjectSetter') {
+      const items: FieldConfig[] = (itemSetter as any).props?.config?.items;
       if (items && Array.isArray(items)) {
         columns = items.filter(item => item.isRequired || item.important || (item.setter as any)?.isRequired);
-        if (columns.length === 3) {
-          columns = columns.slice(0, 3);
-        } else if (columns.length > 3) {
+        if (columns.length > 4) {
           columns = columns.slice(0, 4);
         }
       }
