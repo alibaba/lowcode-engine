@@ -7,9 +7,8 @@ import { RootSchema, NpmInfo } from '../../../designer/schema';
 import { getClientRects } from '../../../utils/get-client-rects';
 import { Asset } from '../utils/asset';
 import loader from '../utils/loader';
-import { ComponentDescriptionSpec } from '../../../designer/component-config';
 import { reactFindDOMNodes, FIBER_KEY } from '../utils/react-find-dom-nodes';
-import { isESModule } from '../../../utils/is-es-module';
+import { isESModule } from '../../../../../utils/is-es-module';
 import { NodeInstance } from '../../../designer/simulator';
 import { isElement } from '../../../utils/is-element';
 import cursor from '../../../designer/helper/cursor';
@@ -28,8 +27,12 @@ export class SimulatorRenderer {
       // sync schema
       this._schema = host.document.schema;
 
-      this._componentsMap = host.designer.componentsMap;
-      this.buildComponents();
+      // todo: split with others, not all should recompute
+      if (this._libraryMap !== host.libraryMap || this._componentsMap !== host.designer.componentsMap) {
+        this._libraryMap = host.libraryMap || {};
+        this._componentsMap = host.designer.componentsMap;
+        this.buildComponents();
+      }
 
       // sync designMode
 
@@ -39,13 +42,13 @@ export class SimulatorRenderer {
 
       // sync device
     });
-    host.componentsConsumer.consume(async (componentsAsset) => {
+    host.componentsConsumer.consume(async componentsAsset => {
       if (componentsAsset) {
         await this.load(componentsAsset);
         this.buildComponents();
       }
     });
-    host.injectionConsumer.consume((data) => {
+    host.injectionConsumer.consume(data => {
       // sync utils, i18n, contants,... config
       this._appContext = {
         utils: {},
@@ -65,10 +68,11 @@ export class SimulatorRenderer {
   @computed get schema(): any {
     return this._schema;
   }
+  private _libraryMap: { [key: string]: string } = {};
   private buildComponents() {
-    this._components = buildComponents(this._componentsMap);
+    this._components = buildComponents(this._libraryMap, this._componentsMap);
   }
-  @obx.ref private _components = {};
+  @obx.ref private _components: any = {};
   @computed get components(): object {
     // 根据 device 选择不同组件，进行响应式
     // 更好的做法是，根据 device 选择加载不同的组件资源，甚至是 simulatorUrl
@@ -142,7 +146,7 @@ export class SimulatorRenderer {
         origUnmount = origUnmount.origUnmount;
       }
       // hack! delete instance from map
-      const newUnmount = function (this: any) {
+      const newUnmount = function(this: any) {
         unmountIntance(id, instance);
         origUnmount && origUnmount.call(this);
       };
@@ -175,6 +179,27 @@ export class SimulatorRenderer {
     this.ctxMap.set(id, ctx);
   }
 
+  getComponent(componentName: string) {
+    const paths = componentName.split('.');
+    const subs: string[] = [];
+
+    while (true) {
+      const component = this._components[componentName];
+      if (component) {
+        return getSubComponent(component, subs);
+      }
+
+      const sub = paths.pop();
+      if (!sub) {
+        return null;
+      }
+      subs.unshift(sub);
+      componentName = paths.join('.');
+    }
+
+    return null;
+  }
+
   getComponentInstances(id: string): ReactInstance[] | null {
     return this.instancesMap.get(id) || null;
   }
@@ -204,7 +229,7 @@ export class SimulatorRenderer {
     cursor.release();
   }
 
-  private _running: boolean = false;
+  private _running = false;
   run() {
     if (this._running) {
       return;
@@ -260,7 +285,7 @@ function getSubComponent(library: any, paths: string[]) {
   return component;
 }
 
-function findComponent(componentName: string, npm?: NpmInfo) {
+function findComponent(libraryMap: LibraryMap, componentName: string, npm?: NpmInfo) {
   if (!npm) {
     return accessLibrary(componentName);
   }
@@ -270,25 +295,32 @@ function findComponent(componentName: string, npm?: NpmInfo) {
   // export { exportName as componentName } from package
   // if exportName == null exportName === componentName;
   // const componentName = exportName.subName, if exportName empty subName donot use
-  const libraryName = npm.exportName || npm.componentName || componentName;
+  const exportName = npm.exportName || npm.componentName || componentName;
+  const libraryName = libraryMap[npm.package] || exportName;
   const library = accessLibrary(libraryName);
   const paths = npm.exportName && npm.subName ? npm.subName.split('.') : [];
   if (npm.destructuring) {
-    paths.unshift(libraryName);
+    paths.unshift(exportName);
   } else if (isESModule(library)) {
     paths.unshift('default');
   }
   return getSubComponent(library, paths);
 }
 
-function buildComponents(componentsMap: { [componentName: string]: ComponentDescriptionSpec }) {
+export interface LibraryMap {
+  [key: string]: string;
+}
+
+function buildComponents(libraryMap: LibraryMap, componentsMap: { [componentName: string]: NpmInfo }) {
   const components: any = {};
   Object.keys(componentsMap).forEach(componentName => {
-    components[componentName] = findComponent(componentName, componentsMap[componentName].npm);
+    const component = findComponent(libraryMap, componentName, componentsMap[componentName]);
+    if (component) {
+      components[componentName] = component;
+    }
   });
   return components;
 }
-
 
 let REACT_KEY = '';
 function cacheReactKey(el: Element): Element {

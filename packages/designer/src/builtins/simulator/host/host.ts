@@ -6,7 +6,7 @@ import { SimulatorRenderer } from '../renderer/renderer';
 import Node, { NodeParent, isNodeParent, isNode, contains } from '../../../designer/document/node/node';
 import DocumentModel from '../../../designer/document/document-model';
 import ResourceConsumer from './resource-consumer';
-import { AssetLevel, Asset, assetBundle, assetItem, AssetType } from '../utils/asset';
+import { AssetLevel, Asset, AssetList, assetBundle, assetItem, AssetType } from '../utils/asset';
 import {
   DragObjectType,
   isShaken,
@@ -29,11 +29,16 @@ import {
   CanvasPoint,
 } from '../../../designer/helper/location';
 import { isNodeSchema, NodeSchema } from '../../../designer/schema';
-import { ComponentDescriptionSpec } from '../../../designer/component-config';
+import { ComponentMetadata } from '../../../designer/component-meta';
 import { ReactInstance } from 'react';
-import { setNativeSelection } from '../../../designer/helper/navtive-selection';
-import cursor from '../../../designer/helper/cursor';
 import { isRootNode } from '../../../designer/document/node/root-node';
+import { parseProps } from '../utils/parse-props';
+
+export interface LibraryItem {
+  package: string;
+  library: string;
+  urls: Asset;
+}
 
 export interface SimulatorProps {
   // 从 documentModel 上获取
@@ -42,8 +47,9 @@ export interface SimulatorProps {
   device?: 'mobile' | 'iphone' | string;
   deviceClassName?: string;
   simulatorUrl?: Asset;
-  dependsAsset?: Asset;
-  themesAsset?: Asset;
+  environment?: Asset;
+  library?: LibraryItem[];
+  theme?: Asset;
   componentsAsset?: Asset;
   [key: string]: any;
 }
@@ -53,22 +59,21 @@ const publicPath = (document.currentScript as HTMLScriptElement).src.replace(/^(
 const defaultSimulatorUrl = (() => {
   let urls;
   if (process.env.NODE_ENV === 'production') {
-    urls = [`${publicPath}simulator-renderer.min.css`, `${publicPath}simulator-renderer.min.js`];
+    urls = [`${publicPath}../css/simulator-renderer.min.css`, `${publicPath}simulator-renderer.min.js`];
   } else {
-    urls = [`${publicPath}simulator-renderer.css`, `${publicPath}simulator-renderer.js`];
+    urls = [`${publicPath}../css/simulator-renderer.css`, `${publicPath}simulator-renderer.js`];
   }
   return urls;
 })();
 
-const defaultDepends = [
+const defaultEnvironment = [
   // https://g.alicdn.com/mylib/??react/16.11.0/umd/react.production.min.js,react-dom/16.8.6/umd/react-dom.production.min.js,prop-types/15.7.2/prop-types.min.js
   assetItem(AssetType.JSText, 'window.React=parent.React;window.ReactDOM=parent.ReactDOM;', undefined, 'react'),
   assetItem(
     AssetType.JSText,
     'window.PropTypes=parent.PropTypes;React.PropTypes=parent.PropTypes; window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;',
   ),
-  assetItem(AssetType.JSUrl, 'https://g.alicdn.com/mylib/@ali/recore/1.5.7/umd/recore.min.js'),
-  assetItem(AssetType.JSUrl, 'http://localhost:4444/js/index.js'),
+  assetItem(AssetType.JSUrl, '/statics/lowcode-renderer.js'),
 ];
 
 export class SimulatorHost implements ISimulator<SimulatorProps> {
@@ -81,7 +86,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
   @computed get device(): string | undefined {
     // 根据 device 不同来做画布外框样式变化  渲染时可选择不同组件
     // renderer 依赖
-    return this.get('device');
+    return this.get('device') || 'default';
   }
 
   @computed get deviceClassName(): string | undefined {
@@ -98,8 +103,8 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     return this.get('componentsAsset');
   }
 
-  @computed get themesAsset(): Asset | undefined {
-    return this.get('themesAsset');
+  @computed get theme(): Asset | undefined {
+    return this.get('theme');
   }
 
   @computed get componentsMap() {
@@ -132,15 +137,14 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     return autorun(fn as any, true);
   }
 
-  purge(): void {}
+  purge(): void {
+    // todo
+  }
 
   readonly viewport = new Viewport();
   readonly scroller = this.designer.createScroller(this.viewport);
 
   mountViewport(viewport: Element | null) {
-    if (!viewport) {
-      return;
-    }
     this.viewport.mount(viewport);
   }
 
@@ -165,18 +169,33 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     return {};
   });
 
+  readonly libraryMap: { [key: string]: string } = {};
+
+  private _iframe?: HTMLIFrameElement;
   async mountContentFrame(iframe: HTMLIFrameElement | null) {
-    if (!iframe) {
+    if (!iframe || this._iframe === iframe) {
       return;
     }
+    this._iframe = iframe;
 
     this._contentWindow = iframe.contentWindow!;
 
+    const library = this.get('library') as LibraryItem[];
+    const libraryAsset: AssetList = [];
+    if (library) {
+      library.forEach(item => {
+        this.libraryMap[item.package] = item.library;
+        libraryAsset.push(item.urls);
+      });
+    }
+
     const vendors = [
       // required & use once
-      assetBundle(this.get('dependsAsset') || defaultDepends, AssetLevel.BaseDepends),
+      assetBundle(this.get('environment') || defaultEnvironment, AssetLevel.Environment),
+      // required & use once
+      assetBundle(libraryAsset, AssetLevel.Library),
       // required & TODO: think of update
-      assetBundle(this.themesAsset, AssetLevel.Theme),
+      assetBundle(this.theme, AssetLevel.Theme),
       // required & use once
       assetBundle(this.get('simulatorUrl') || defaultSimulatorUrl, AssetLevel.Runtime),
     ];
@@ -214,68 +233,88 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
 
     // TODO: think of lock when edit a node
     // 事件路由
-    doc.addEventListener('mousedown', (downEvent: MouseEvent) => {
-      const nodeInst = this.getNodeInstanceFromElement(downEvent.target as Element);
-      if (!nodeInst?.node) {
-        selection.clear();
-        return;
-      }
+    doc.addEventListener(
+      'mousedown',
+      (downEvent: MouseEvent) => {
+        // stop response document focus event
+        downEvent.stopPropagation();
+        downEvent.preventDefault();
 
-      const isMulti = downEvent.metaKey || downEvent.ctrlKey;
-      const isLeftButton = downEvent.which === 1 || downEvent.button === 0;
-
-      if (isLeftButton) {
-        let node: Node = nodeInst.node;
-        let nodes: Node[] = [node];
-        let ignoreUpSelected = false;
-        if (isMulti) {
-          // multi select mode, directily add
-          if (!selection.has(node.id)) {
+        const nodeInst = this.getNodeInstanceFromElement(downEvent.target as Element);
+        const node = nodeInst?.node || this.document.rootNode;
+        const isMulti = downEvent.metaKey || downEvent.ctrlKey;
+        const isLeftButton = downEvent.which === 1 || downEvent.button === 0;
+        const checkSelect = (e: MouseEvent) => {
+          doc.removeEventListener('mouseup', checkSelect, true);
+          if (!isShaken(downEvent, e)) {
+            const id = node.id;
             designer.activeTracker.track(node);
-            selection.add(node.id);
-            ignoreUpSelected = true;
+            if (isMulti && !isRootNode(node) && selection.has(id)) {
+              selection.remove(id);
+            } else {
+              selection.select(id);
+            }
           }
-          // 获得顶层 nodes
-          nodes = selection.getTopNodes();
-        } else if (selection.containsNode(node)) {
-          nodes = selection.getTopNodes();
-        } else {
-          // will clear current selection & select dragment in dragstart
-        }
-        designer.dragon.boost(
-          {
-            type: DragObjectType.Node,
-            nodes,
-          },
-          downEvent,
-        );
-        if (ignoreUpSelected) {
-          // multi select mode has add selected, should return
-          return;
-        }
-      }
+        };
 
-      const checkSelect = (e: MouseEvent) => {
-        doc.removeEventListener('mouseup', checkSelect, true);
-        if (!isShaken(downEvent, e)) {
-          // const node = hasConditionFlow(target) ? target.conditionFlow : target;
-          const node = nodeInst.node!;
-          const id = node.id;
-          designer.activeTracker.track(node);
-          if (isMulti && selection.has(id)) {
-            selection.remove(id);
+        if (isLeftButton && !isRootNode(node)) {
+          let nodes: Node[] = [node];
+          let ignoreUpSelected = false;
+          if (isMulti) {
+            // multi select mode, directily add
+            if (!selection.has(node.id)) {
+              designer.activeTracker.track(node);
+              selection.add(node.id);
+              ignoreUpSelected = true;
+            }
+            selection.remove(this.document.rootNode.id);
+            // 获得顶层 nodes
+            nodes = selection.getTopNodes();
+          } else if (selection.containsNode(node, true)) {
+            nodes = selection.getTopNodes();
           } else {
-            selection.select(id);
+            // will clear current selection & select dragment in dragstart
+          }
+          designer.dragon.boost(
+            {
+              type: DragObjectType.Node,
+              nodes,
+            },
+            downEvent,
+          );
+          if (ignoreUpSelected) {
+            // multi select mode has add selected, should return
+            return;
           }
         }
-      };
-      doc.addEventListener('mouseup', checkSelect, true);
-    });
+
+        doc.addEventListener('mouseup', checkSelect, true);
+      },
+      true,
+    );
+
+    doc.addEventListener(
+      'click',
+      e => {
+        // stop response document click event
+        e.preventDefault();
+        e.stopPropagation();
+        // todo: catch link redirect
+      },
+      true,
+    );
 
     // cause edit
-    doc.addEventListener('dblclick', (e: MouseEvent) => {
-      // TODO:
-    });
+    doc.addEventListener(
+      'dblclick',
+      (e: MouseEvent) => {
+        // stop response document dblclick event
+        e.stopPropagation();
+        e.preventDefault();
+        // todo: quick editing
+      },
+      true,
+    );
   }
 
   private disableHovering?: () => void;
@@ -290,8 +329,6 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
         return;
       }
       const nodeInst = this.getNodeInstanceFromElement(e.target as Element);
-      // TODO: enhance only hover one instance
-      console.info(nodeInst);
       hovering.hover(nodeInst?.node || null);
       e.stopPropagation();
     };
@@ -337,15 +374,35 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
   /**
    * @see ISimulator
    */
-  describeComponent(component: Component): ComponentDescriptionSpec {
-    throw new Error('Method not implemented.');
+  generateComponentMetadata(componentName: string): ComponentMetadata {
+    // if html tags
+    if (isHTMLTag(componentName)) {
+      return {
+        componentName,
+        // TODO: read builtins html metadata
+      };
+    }
+
+    const component = this.getComponent(componentName);
+
+    if (component) {
+      parseProps(component as any);
+    }
+
+    // TODO:
+    // 1. generate builtin div/p/h1/h2
+    // 2. read propTypes
+    return {
+      componentName,
+      props: parseProps(this.getComponent(componentName)),
+    };
   }
 
   /**
    * @see ISimulator
    */
   getComponent(componentName: string): Component | null {
-    return null;
+    return this.renderer?.getComponent(componentName) || null;
   }
 
   @obx.val private instancesMap = new Map<string, ReactInstance[]>();
@@ -367,7 +424,9 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
   /**
    * @see ISimulator
    */
-  getComponentInstanceId(instance: ReactInstance) {}
+  getComponentInstanceId(instance: ReactInstance) {
+    throw new Error('Method not implemented.');
+  }
 
   /**
    * @see ISimulator
@@ -408,17 +467,27 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     let last: { x: number; y: number; r: number; b: number } | undefined;
     let computed = false;
     const elems = elements.slice();
+    const commonParent: Element | null = null;
     while (true) {
       if (!rects || rects.length < 1) {
         const elem = elems.pop();
         if (!elem) {
           break;
         }
+        /*
+        if (!commonParent) {
+          commonParent = elem.parentElement;
+        } else if (elem.parentElement !== commonParent) {
+          continue;
+        }*/
         rects = renderer.getClientRects(elem);
       }
       const rect = rects.pop();
       if (!rect) {
         break;
+      }
+      if (rect.width === 0 && rect.height === 0) {
+        continue;
       }
       if (!last) {
         last = {
@@ -495,7 +564,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     }
 
     const opt: any = {};
-    let scroll = false;
+    const scroll = false;
 
     if (detail) {
       // TODO:
@@ -567,7 +636,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     this.renderer?.clearState();
   }
 
-  private _sensorAvailable: boolean = true;
+  private _sensorAvailable = true;
   /**
    * @see ISensor
    */
@@ -615,7 +684,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     return e.globalY >= rect.top && e.globalY <= rect.bottom && e.globalX >= rect.left && e.globalX <= rect.right;
   }
 
-  private sensing: boolean = false;
+  private sensing = false;
   /**
    * @see ISensor
    */
@@ -633,7 +702,6 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     this.sensing = true;
     this.scroller.scrolling(e);
     const dropTarget = this.getDropTarget(e);
-    console.info('aa', dropTarget);
     if (!dropTarget) {
       return null;
     }
@@ -643,8 +711,10 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     }
 
     const target = dropTarget;
-    const targetInstance = e.targetInstance as ReactInstance;
 
+    // FIXME: e.target is #document, etc., does not has e.targetInstance
+
+    const targetInstance = e.targetInstance as ReactInstance;
     const parentInstance = this.getClosestNodeInstance(targetInstance, target.id);
     const edge = this.computeComponentInstanceRect(parentInstance?.instance as any);
 
@@ -677,14 +747,12 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     let maxBottom = null;
 
     for (let i = 0, l = children.size; i < l; i++) {
-      let node = children.get(i)!;
-      let index = i;
+      const node = children.get(i)!;
+      const index = i;
       const instances = this.getComponentInstances(node);
       const inst = instances
         ? instances.length > 1
-          ? instances.find(inst => {
-              return this.getClosestNodeInstance(inst, target.id)?.instance === targetInstance;
-            })
+          ? instances.find(inst => this.getClosestNodeInstance(inst, target.id)?.instance === targetInstance)
           : instances[0]
         : null;
       const rect = inst ? this.computeComponentInstanceRect(inst) : null;
@@ -808,8 +876,8 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
         } else {
           container = container.parent;
         }
-      }
-      /* else if (res === AT_CHILD) {
+      } else if (isNode(res)) {
+        /* else if (res === AT_CHILD) {
         if (!upward) {
           upward = container.parent;
         }
@@ -819,8 +887,6 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
           upward = null;
         }
       }*/
-      else if (isNode(res)) {
-        console.info('res', res);
         container = res;
         upward = null;
       }
@@ -834,7 +900,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
       return this.checkDropTarget(container, dragObject as any);
     }
 
-    const config = container.componentConfig;
+    const config = container.componentMeta;
 
     if (!config.isContainer) {
       return false;
@@ -902,7 +968,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     if (isDragNodeDataObject(dragObject)) {
       items = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
     } else {
-      items = dragObject.nodes
+      items = dragObject.nodes;
     }
     return items.every(item => this.checkNestingDown(dropTarget, item));
   }
@@ -912,14 +978,14 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     if (isDragNodeDataObject(dragObject)) {
       items = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
     } else {
-      items = dragObject.nodes
+      items = dragObject.nodes;
     }
     return items.every(item => this.checkNestingUp(dropTarget, item));
   }
 
   checkNestingUp(parent: NodeParent, target: NodeSchema | Node): boolean {
     if (isNode(target) || isNodeSchema(target)) {
-      const config = isNode(target) ? target.componentConfig : this.designer.getComponentConfig(target.componentName);
+      const config = isNode(target) ? target.componentMeta : this.document.getComponentMeta(target.componentName);
       if (config) {
         return config.checkNestingUp(target, parent);
       }
@@ -929,18 +995,22 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
   }
 
   checkNestingDown(parent: NodeParent, target: NodeSchema | Node): boolean {
-    const config = parent.componentConfig;
+    const config = parent.componentMeta;
     return config.checkNestingDown(parent, target) && this.checkNestingUp(parent, target);
   }
   // #endregion
 }
 
+function isHTMLTag(name: string) {
+  return /^[a-z]\w*$/.test(name);
+}
 
 function isPointInRect(point: CanvasPoint, rect: Rect) {
   return (
     point.canvasY >= rect.top &&
     point.canvasY <= rect.bottom &&
-    (point.canvasX >= rect.left && point.canvasX <= rect.right)
+    point.canvasX >= rect.left &&
+    point.canvasX <= rect.right
   );
 }
 

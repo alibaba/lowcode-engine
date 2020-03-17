@@ -1,10 +1,20 @@
 import { load, evaluate } from './script';
 import StylePoint from './style';
-import { Asset, AssetLevel, AssetLevels, AssetType, AssetList, isAssetBundle, isAssetItem, assetItem, AssetItem } from './asset';
+import {
+  Asset,
+  AssetLevel,
+  AssetLevels,
+  AssetType,
+  AssetList,
+  isAssetBundle,
+  isAssetItem,
+  assetItem,
+  AssetItem,
+} from './asset';
 import { isCSSUrl } from '../../../utils/is-css-url';
 
 function parseAssetList(scripts: any, styles: any, assets: AssetList, level?: AssetLevel) {
-  for (let asset of assets) {
+  for (const asset of assets) {
     parseAsset(scripts, styles, asset, level);
   }
 }
@@ -36,7 +46,7 @@ function parseAsset(scripts: any, styles: any, asset: Asset | undefined | null, 
   let lv = asset.level || level;
 
   if (!lv || AssetLevel[lv] == null) {
-    lv = AssetLevel.App
+    lv = AssetLevel.App;
   }
 
   asset.level = lv;
@@ -51,19 +61,19 @@ export class AssetLoader {
   async load(asset: Asset) {
     const styles: any = {};
     const scripts: any = {};
-    AssetLevels.forEach((lv) => {
+    AssetLevels.forEach(lv => {
       styles[lv] = [];
       scripts[lv] = [];
     });
     parseAsset(scripts, styles, asset);
-    const styleQueue: AssetItem[] = styles[AssetLevel.BaseDepends].concat(
-      styles[AssetLevel.BaseComponents],
+    const styleQueue: AssetItem[] = styles[AssetLevel.Environment].concat(
+      styles[AssetLevel.Library],
       styles[AssetLevel.Theme],
       styles[AssetLevel.Runtime],
       styles[AssetLevel.App],
     );
-    const scriptQueue: AssetItem[] = scripts[AssetLevel.BaseDepends].concat(
-      scripts[AssetLevel.BaseComponents],
+    const scriptQueue: AssetItem[] = scripts[AssetLevel.Environment].concat(
+      scripts[AssetLevel.Library],
       scripts[AssetLevel.Theme],
       scripts[AssetLevel.Runtime],
       scripts[AssetLevel.App],
@@ -71,9 +81,7 @@ export class AssetLoader {
     await Promise.all(
       styleQueue.map(({ content, level, type, id }) => this.loadStyle(content, level!, type === AssetType.CSSUrl, id)),
     );
-    await Promise.all(
-      scriptQueue.map(({ content, type }) => this.loadScript(content, type === AssetType.JSUrl)),
-    );
+    await Promise.all(scriptQueue.map(({ content, type }) => this.loadScript(content, type === AssetType.JSUrl)));
   }
 
   private stylePoints = new Map<string, StylePoint>();

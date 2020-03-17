@@ -22,7 +22,7 @@
   &&-hovering {
     z-index: 1;
     border-style: dashed;
-    background: rgba(95, 240, 114, 0.04);
+    background: rgba(0,121,242,.04);
 
     &.x-loop {
       border-color: rgba(138, 93, 226, 0.8);
@@ -44,6 +44,7 @@
 
   &&-selecting {
     z-index: 2;
+    border-width: 2px;
 
     &.x-loop {
       border-color: rgba(147, 112, 219, 1.0);
@@ -67,7 +68,6 @@
     &.dragging {
       background: rgba(182, 178, 178, 0.8);
       border: none;
-      pointer-events: all;
     }
   }
 }

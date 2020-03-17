@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { observer } from '@recore/core-obx';
+import { observer } from '@recore/obx-react';
 import Designer from './designer';
 import DocumentView from './document/document-view';
 
@@ -8,7 +8,6 @@ export default class ProjectView extends Component<{ designer: Designer }> {
   render() {
     const { designer } = this.props;
     // TODO: support splitview
-    console.info(designer.project.documents);
     return (
       <div className="lc-project">
         {designer.project.documents.map(doc => {

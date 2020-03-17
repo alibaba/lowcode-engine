@@ -1,4 +1,4 @@
-import { observer } from '@recore/core-obx';
+import { observer } from '@recore/obx-react';
 import { Component } from 'react';
 import { OutlineHovering } from './outline-hovering';
 import { SimulatorContext } from '../context';

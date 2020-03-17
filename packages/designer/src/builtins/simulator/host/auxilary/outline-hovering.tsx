@@ -1,6 +1,6 @@
 import { Component, Fragment, PureComponent } from 'react';
 import classNames from 'classnames';
-import { observer } from '@recore/core-obx';
+import { observer } from '@recore/obx-react';
 import { SimulatorContext } from '../context';
 import { SimulatorHost } from '../host';
 import { computed } from '@recore/obx';
@@ -72,12 +72,10 @@ export class OutlineHovering extends Component {
   render() {
     const host = this.context as SimulatorHost;
     const current = this.current;
-    console.info('current', current)
     if (!current || host.viewport.scrolling) {
       return <Fragment />;
     }
     const instances = host.getComponentInstances(current);
-    console.info('current instances', instances)
     if (!instances || instances.length < 1) {
       return <Fragment />;
     }

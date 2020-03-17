@@ -1,11 +1,9 @@
 import { Component } from 'react';
 import { obx } from '@recore/obx';
-import { observer } from '@recore/core-obx';
+import { observer } from '@recore/obx-react';
 import Designer from '../../designer/designer';
-import './ghost.less';
-import { NodeSchema } from '../../designer/schema';
-import Node from '../../designer/document/node/node';
 import { isDragNodeObject, DragObject, isDragNodeDataObject } from '../../designer/helper/dragon';
+import './ghost.less';
 
 type offBinding = () => any;
 
@@ -20,7 +18,10 @@ export default class Ghost extends Component<{ designer: Designer }> {
   constructor(props: any) {
     super(props);
     this.dispose = [
-       this.dragon.onDragstart((e) => {
+      this.dragon.onDragstart(e => {
+        if (e.originalEvent.type.substr(0, 4) === 'drag') {
+          return;
+        }
         this.dragObject = e.dragObject;
         this.x = e.globalX;
         this.y = e.globalY;
@@ -50,7 +51,7 @@ export default class Ghost extends Component<{ designer: Designer }> {
   renderGhostGroup() {
     const dragObject = this.dragObject;
     if (isDragNodeObject(dragObject)) {
-      return dragObject.nodes.map((node) => {
+      return dragObject.nodes.map(node => {
         const ghost = (
           <div className="lc-ghost" key={node.id}>
             <div className="lc-ghost-title">{node.title}</div>
@@ -59,17 +60,19 @@ export default class Ghost extends Component<{ designer: Designer }> {
         return ghost;
       });
     } else if (isDragNodeDataObject(dragObject)) {
-      return Array.isArray(dragObject.data) ? dragObject.data.map((item, index) => {
-        return (
-          <div className="lc-ghost" key={`ghost-${index}`}>
-            <div className="lc-ghost-title">{item.componentName}</div>
-          </div>
-        )
-      }) : (
+      return Array.isArray(dragObject.data) ? (
+        dragObject.data.map((item, index) => {
+          return (
+            <div className="lc-ghost" key={`ghost-${index}`}>
+              <div className="lc-ghost-title">{item.componentName}</div>
+            </div>
+          );
+        })
+      ) : (
         <div className="lc-ghost">
           <div className="lc-ghost-title">{dragObject.data.componentName}</div>
         </div>
-      )
+      );
     }
   }
 

@@ -1,14 +1,10 @@
 import { obx, computed } from '@recore/obx';
-import { NodeSchema, NodeData, PropsMap, PropsList } from '../../schema';
-import Props from './props/props';
+import { NodeSchema, NodeData, PropsMap, PropsList, isDOMText, isJSExpression } from '../../schema';
+import Props, { EXTRA_KEY_PREFIX } from './props/props';
 import DocumentModel from '../document-model';
 import NodeChildren from './node-children';
 import Prop from './props/prop';
-import NodeContent from './node-content';
-import { Component } from '../../simulator';
-import { ComponentConfig } from '../../component-config';
-
-const DIRECTIVES = ['condition', 'conditionGroup', 'loop', 'loopArgs', 'title', 'ignore', 'hidden', 'locked'];
+import { ComponentMeta } from '../../component-meta';
 
 /**
  * 基础节点
@@ -50,21 +46,12 @@ export default class Node {
    *  * Component 组件/元件
    */
   readonly componentName: string;
-  protected _props?: Props<Node>;
-  protected _directives?: Props<Node>;
-  protected _extras?: Props<Node>;
-  protected _children: NodeChildren | NodeContent;
+  /**
+   * 属性抽象
+   */
+  readonly props: Props;
+  protected _children?: NodeChildren;
   @obx.ref private _parent: NodeParent | null = null;
-  @obx.ref private _zLevel = 0;
-  get props(): Props<Node> | undefined {
-    return this._props;
-  }
-  get directives(): Props<Node> | undefined {
-    return this._directives;
-  }
-  get extras(): Props<Node> | undefined {
-    return this._extras;
-  }
   /**
    * 父级节点
    */
@@ -74,20 +61,23 @@ export default class Node {
   /**
    * 当前节点子集
    */
-  get children(): NodeChildren | NodeContent {
-    return this._children;
+  get children(): NodeChildren | null {
+    return this._children || null;
   }
   /**
    * 当前节点深度
    */
-  get zLevel(): number {
-    return this._zLevel;
+  @computed get zLevel(): number {
+    if (this._parent) {
+      return this._parent.zLevel + 1;
+    }
+    return -1;
   }
 
   @computed get title(): string {
-    let t = this.getDirective('x-title');
-    if (!t && this.componentConfig.descriptor) {
-      t = this.getProp(this.componentConfig.descriptor, false);
+    let t = this.getExtraProp('title');
+    if (!t && this.componentMeta.descriptor) {
+      t = this.getProp(this.componentMeta.descriptor, false);
     }
     if (t) {
       const v = t.getAsString();
@@ -95,62 +85,66 @@ export default class Node {
         return v;
       }
     }
-    return this.componentName;
+    return this.componentMeta.title;
   }
 
-  constructor(readonly document: DocumentModel, nodeSchema: NodeSchema) {
+  get isSlotRoot(): boolean {
+    return this._slotFor != null;
+  }
+
+  constructor(readonly document: DocumentModel, nodeSchema: NodeSchema, slotFor?: Prop) {
     const { componentName, id, children, props, ...extras } = nodeSchema;
     this.id = id || `node$${document.nextId()}`;
     this.componentName = componentName;
-    if (this.isNodeParent) {
-      this._props = new Props(this, props);
-      this._directives = new Props(this, {});
-      Object.keys(extras).forEach(key => {
-        if (DIRECTIVES.indexOf(key) > -1) {
-          this._directives!.add((extras as any)[key], key);
-          delete (extras as any)[key];
-        }
-      });
-      this._extras = new Props(this, extras as any);
+    this._slotFor = slotFor;
+    let _props: Props;
+    if (isNodeParent(this)) {
+      _props = new Props(this, props, extras);
       this._children = new NodeChildren(this as NodeParent, children || []);
     } else {
-      this._children = new NodeContent(children);
+      _props = new Props(this, {
+        children: isDOMText(children) || isJSExpression(children) ? children : '',
+      });
     }
+    this.props = _props;
   }
 
   /**
    * 是否一个父亲类节点
    */
   get isNodeParent(): boolean {
-    return this.componentName.charAt(0) !== '#';
+    return this.componentName !== 'Leaf';
   }
 
   /**
    * 内部方法，请勿使用
-   *
-   * @ignore
    */
   internalSetParent(parent: NodeParent | null) {
     if (this._parent === parent) {
       return;
     }
-    if (this._parent) {
+
+    if (this._parent && !this.isSlotRoot) {
       this._parent.children.delete(this);
     }
 
     this._parent = parent;
-    if (parent) {
-      this._zLevel = parent.zLevel + 1;
-    } else {
-      this._zLevel = -1;
-    }
+  }
+
+  private _slotFor?: Prop | null = null;
+  internalSetSlotFor(slotFor: Prop | null | undefined) {
+    this._slotFor = slotFor;
+  }
+
+  get slotFor() {
+    return this._slotFor;
   }
 
   /**
    * 移除当前节点
    */
   remove() {
-    if (this.parent) {
+    if (this.parent && !this.isSlotRoot) {
       this.parent.children.delete(this, true);
     }
   }
@@ -163,34 +157,28 @@ export default class Node {
   }
 
   /**
-   * 节点组件类
+   * 悬停高亮
    */
-  @obx.ref get component(): Component | null {
-    if (this.isNodeParent) {
-      return this.document.getComponent(this.componentName);
+  hover(flag = true) {
+    if (flag) {
+      this.document.designer.hovering.hover(this);
+    } else {
+      this.document.designer.hovering.unhover(this);
     }
-    return null;
   }
 
   /**
    * 节点组件描述
    */
-  @obx.ref get componentConfig(): ComponentConfig {
-    return this.document.getComponentConfig(this.componentName, this.component);
+  @computed get componentMeta(): ComponentMeta {
+    return this.document.getComponentMeta(this.componentName);
   }
 
-  @obx.ref get propsData(): PropsMap | PropsList | null {
+  @computed get propsData(): PropsMap | PropsList | null {
     if (!this.isNodeParent || this.componentName === 'Fragment') {
       return null;
     }
-    return this.props?.value || null;
-  }
-
-  get directivesData(): PropsMap | null {
-    if (!this.isNodeParent) {
-      return null;
-    }
-    return this.directives?.value as PropsMap || null;
+    return this.props.export(true).props || null;
   }
 
   private _conditionGroup: string | null = null;
@@ -227,35 +215,48 @@ export default class Node {
   }
 
   wrapWith(schema: NodeSchema) {
-
+    // todo
   }
 
-  replaceWith(schema: NodeSchema, migrate: boolean = true) {
-
+  replaceWith(schema: NodeSchema, migrate = true) {
+    // reuse the same id? or replaceSelection
     //
   }
 
-  /*
-  // TODO
-  // 外部修改，merge 进来，产生一次可恢复的历史数据
-  merge(data: ElementData) {
-    this.elementData = data;
-    const { leadingComments } = data;
-    this.leadingComments = leadingComments ? leadingComments.slice() : [];
-    this.parse();
-    this.mergeChildren(data.children || []);
+  getProp(path: string, stash = true): Prop | null {
+    return this.props.query(path, stash as any) || null;
   }
 
-  // TODO: 再利用历史数据，不产生历史数据
-  reuse(timelineData: NodeSchema) {}
-  */
-
-  getProp(path: string, useStash: boolean = true): Prop | null {
-    return this.props?.query(path, useStash as any) || null;
+  getExtraProp(key: string, stash = true): Prop | null {
+    return this.props.get(EXTRA_KEY_PREFIX + key, stash) || null;
   }
 
-  getDirective(name: string, useStash: boolean = true): Prop | null {
-    return this.directives?.get(name, useStash as any) || null;
+  /**
+   * 获取单个属性值
+   */
+  getPropValue(path: string): any {
+    return this.getProp(path, false)?.value;
+  }
+
+  /**
+   * 设置单个属性值
+   */
+  setPropValue(path: string, value: any) {
+    this.getProp(path, true)!.setValue(value);
+  }
+
+  /**
+   * 设置多个属性值，和原有值合并
+   */
+  mergeProps(props: PropsMap) {
+    this.props.merge(props);
+  }
+
+  /**
+   * 设置多个属性值，替换原有值
+   */
+  setProps(props?: PropsMap | PropsList | null) {
+    this.props.import(props);
   }
 
   /**
@@ -300,32 +301,54 @@ export default class Node {
    * 获取符合搭建协议-节点 schema 结构
    */
   get schema(): NodeSchema {
-    // TODO: ..
-    return this.exportSchema(true);
+    return this.export(true);
+  }
+
+  set schema(data: NodeSchema) {
+    this.import(data);
+  }
+
+  import(data: NodeSchema, checkId = false) {
+    const { componentName, id, children, props, ...extras } = data;
+
+    if (isNodeParent(this)) {
+      this.props.import(props, extras);
+      (this._children as NodeChildren).import(children, checkId);
+    } else {
+      this.props.get('children', true)!.setValue(isDOMText(children) || isJSExpression(children) ? children : '');
+    }
   }
 
   /**
    * 导出 schema
    * @param serialize 序列化，加 id 标识符，用于储存为操作记录
    */
-  exportSchema(serialize = false): NodeSchema {
-    // TODO...
-    const schema: any = {
-      componentName: this.componentName,
-      ...this.extras?.value,
-      props: this.props?.value || {},
-      ...this.directives?.value,
+  export(serialize = false): NodeSchema {
+    const baseSchema: any = {
+      componentName: this.componentName === 'Leaf' ? 'Fragment' : this.componentName,
     };
+
     if (serialize) {
-      schema.id = this.id;
+      baseSchema.id = this.id;
     }
-    if (isNodeParent(this)) {
-      if (this.children.size > 0) {
-        schema.children = this.children.exportSchema(serialize);
-      }
-    } else {
-      schema.children = (this.children as NodeContent).value;
+
+    if (!isNodeParent(this)) {
+      baseSchema.children = this.props.get('children')?.export(serialize);
+      // FIXME!
+      return baseSchema.children;
     }
+
+    const { props = {}, extras } = this.props.export(serialize) || {};
+    const schema: any = {
+      ...baseSchema,
+      props,
+      ...extras,
+    };
+
+    if (this.children.size > 0) {
+      schema.children = this.children.export(serialize);
+    }
+
     return schema;
   }
 
@@ -351,7 +374,7 @@ export default class Node {
    *  2  thisNode before or after otherNode
    *  0  thisNode same as otherNode
    */
-  comparePosition(otherNode: Node): number {
+  comparePosition(otherNode: Node): PositionNO {
     return comparePosition(this, otherNode);
   }
 
@@ -378,18 +401,14 @@ export default class Node {
     if (isNodeParent(this)) {
       this.children.purge();
     }
-    this.props?.purge();
-    this.directives?.purge();
-    this.extras?.purge();
+    this.props.purge();
     this.document.internalRemoveAndPurgeNode(this);
   }
 }
 
 export interface NodeParent extends Node {
   readonly children: NodeChildren;
-  readonly props: Props<Node>;
-  readonly directives: Props<Node>;
-  readonly extras: Props<Node>;
+  readonly props: Props;
 }
 
 export function isNode(node: any): node is Node {
@@ -436,37 +455,43 @@ export function contains(node1: Node, node2: Node): boolean {
 // 8  node1 contained_by node2
 // 2  node1 before or after node2
 // 0  node1 same as node2
-export function comparePosition(node1: Node, node2: Node): number {
+export enum PositionNO {
+  Contains = 16,
+  ContainedBy = 8,
+  BeforeOrAfter = 2,
+  TheSame = 0,
+}
+export function comparePosition(node1: Node, node2: Node): PositionNO {
   if (node1 === node2) {
-    return 0;
+    return PositionNO.TheSame;
   }
   const l1 = node1.zLevel;
   const l2 = node2.zLevel;
   if (l1 === l2) {
-    return 2;
+    return PositionNO.BeforeOrAfter;
   }
 
   let p: any;
-  if (l1 > l2) {
+  if (l1 < l2) {
     p = getZLevelTop(node2, l1);
     if (p && p === node1) {
-      return 16;
+      return PositionNO.Contains;
     }
-    return 2;
+    return PositionNO.BeforeOrAfter;
   }
 
   p = getZLevelTop(node1, l2);
   if (p && p === node2) {
-    return 8;
+    return PositionNO.ContainedBy;
   }
 
-  return 2;
+  return PositionNO.BeforeOrAfter;
 }
 
 export function insertChild(container: NodeParent, thing: Node | NodeData, at?: number | null, copy?: boolean): Node {
   let node: Node;
-  if (copy && isNode(thing)) {
-    thing = thing.exportSchema(false);
+  if (isNode(thing) && (copy || thing.isSlotRoot)) {
+    thing = thing.export(false);
   }
   if (isNode(thing)) {
     node = thing;
@@ -496,4 +521,3 @@ export function insertChildren(
   }
   return results;
 }
-

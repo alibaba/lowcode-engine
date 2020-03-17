@@ -1,6 +1,7 @@
 import { obx, computed } from '@recore/obx';
 import { INodeSelector, IViewport } from '../simulator';
-import { uniqueId } from '../../utils/unique-id';
+import { uniqueId } from '../../../../utils/unique-id';
+import { isRootNode } from '../document/node/root-node';
 
 export default class OffsetObserver {
   readonly id = uniqueId('oobx');
@@ -17,25 +18,25 @@ export default class OffsetObserver {
   @obx hasOffset = false;
   @computed get offsetLeft() {
     if (!this.viewport.scrolling || this.lastOffsetLeft == null) {
-      this.lastOffsetLeft = (this.left + this.viewport.scrollX) * this.scale;
+      this.lastOffsetLeft = this.isRoot ? this.viewport.scrollX : (this.left + this.viewport.scrollX) * this.scale;
     }
     return this.lastOffsetLeft;
   }
   @computed get offsetTop() {
     if (!this.viewport.scrolling || this.lastOffsetTop == null) {
-      this.lastOffsetTop = (this.top + this.viewport.scrollY) * this.scale;
+      this.lastOffsetTop = this.isRoot ? this.viewport.scrollY : (this.top + this.viewport.scrollY) * this.scale;
     }
     return this.lastOffsetTop;
   }
   @computed get offsetHeight() {
     if (!this.viewport.scrolling || this.lastOffsetHeight == null) {
-      this.lastOffsetHeight = this.height * this.scale;
+      this.lastOffsetHeight = this.isRoot ? this.viewport.height : this.height * this.scale;
     }
     return this.lastOffsetHeight;
   }
   @computed get offsetWidth() {
     if (!this.viewport.scrolling || this.lastOffsetWidth == null) {
-      this.lastOffsetWidth = this.width * this.scale;
+      this.lastOffsetWidth = this.isRoot ? this.viewport.width : this.width * this.scale;
     }
     return this.lastOffsetWidth;
   }
@@ -46,12 +47,18 @@ export default class OffsetObserver {
 
   private pid: number | undefined;
   private viewport: IViewport;
+  private isRoot: boolean;
 
   constructor(readonly nodeInstance: INodeSelector) {
     const { node, instance } = nodeInstance;
     const doc = node.document;
     const host = doc.simulator!;
+    this.isRoot = isRootNode(node);
     this.viewport = host.viewport;
+    if (this.isRoot) {
+      this.hasOffset = true;
+      return;
+    }
     if (!instance) {
       return;
     }

@@ -24,6 +24,12 @@ export default class Hovering {
     this._current = node;
   }
 
+  unhover(node: Node) {
+    if (this._current === node) {
+      this._current = null;
+    }
+  }
+
   leave(document: DocumentModel) {
     if (this.current && this.current.document === document) {
       this._current = null;
