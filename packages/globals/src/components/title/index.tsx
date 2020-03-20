@@ -3,12 +3,7 @@ import { Icon } from '@alifd/next';
 import classNames from 'classnames';
 import EmbedTip, { TipConfig } from '../tip/embed-tip';
 import './title.less';
-
-export interface IconConfig {
-  type: string;
-  size?: number | 'small' | 'xxs' | 'xs' | 'medium' | 'large' | 'xl' | 'xxl' | 'xxxl' | 'inherit';
-  className?: string;
-}
+import { IconConfig, createIcon } from '../../utils';
 
 export interface TitleConfig {
   label?: ReactNode;
@@ -19,7 +14,7 @@ export interface TitleConfig {
 
 export type TitleContent = string | ReactElement | TitleConfig;
 
-export default class Title extends Component<{ title: TitleContent; onClick?: () => void }> {
+export class Title extends Component<{ title: TitleContent; onClick?: () => void }> {
   render() {
     let { title } = this.props;
     if (isValidElement(title)) {
@@ -29,15 +24,7 @@ export default class Title extends Component<{ title: TitleContent; onClick?: ()
       title = { label: title }; // tslint:disable-line
     }
 
-    let icon = null;
-    if (title.icon) {
-      if (isValidElement(title.icon)) {
-        icon = title.icon;
-      } else {
-        const iconProps = typeof title.icon === 'string' ? { type: title.icon } : title.icon;
-        icon = <Icon {...iconProps} />;
-      }
-    }
+    const icon = title.icon ? createIcon(title.icon) : null;
 
     let tip: any = null;
     if (title.tip) {

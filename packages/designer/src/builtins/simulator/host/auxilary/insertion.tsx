@@ -85,7 +85,7 @@ function processDetail({ target, detail, document }: Location): InsertionData {
     if (!instances) {
       return {};
     }
-    const edge = sim.computeComponentInstanceRect(instances[0]);
+    const edge = sim.computeComponentInstanceRect(instances[0], target.componentMeta.rectSelector);
     return edge ? { edge, insertType: 'cover', coverRect: edge } : {};
   }
 }

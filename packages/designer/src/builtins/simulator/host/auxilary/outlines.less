@@ -18,6 +18,32 @@
     transform: translateY(-100%);
     font-weight: lighter;
   }
+  & > &-actions {
+    position: absolute;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: stretch;
+    justify-content: flex-end;
+    pointer-events: all;
+  }
+
+  &-action {
+    box-sizing: border-box;
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-brand, #006cff);
+    opacity: 1;
+    max-height: 100%;
+    overflow: hidden;
+    color: white;
+    &:hover {
+      background: var(--color-brand-light, #006cff);
+    }
+  }
 
   &&-hovering {
     z-index: 1;

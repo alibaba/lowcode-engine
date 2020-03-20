@@ -168,7 +168,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps> {
         className="lowcode-plugin-designer"
         defaultSchema={SCHEMA as any}
         eventPipe={editor as any}
-        componentsDescription={Object.values(assets.components) as any}
+        componentMetadatas={Object.values(assets.components) as any}
         simulatorProps={{
           library: Object.values(assets.packages),
         }}

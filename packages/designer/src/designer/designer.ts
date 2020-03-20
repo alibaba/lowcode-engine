@@ -10,7 +10,7 @@ import Location, { LocationData, isLocationChildrenDetail } from './helper/locat
 import DocumentModel from './document/document-model';
 import Node, { insertChildren } from './document/node/node';
 import { isRootNode } from './document/node/root-node';
-import { ComponentMetadata, ComponentMeta } from './component-meta';
+import { ComponentMetadata, ComponentMeta, ComponentAction } from './component-meta';
 import Scroller, { IScrollable } from './helper/scroller';
 import { INodeSelector } from './simulator';
 import OffsetObserver, { createOffsetObserver } from './helper/offset-observer';
@@ -25,8 +25,9 @@ export interface DesignerProps {
   simulatorComponent?: ReactComponentType<any>;
   dragGhostComponent?: ReactComponentType<any>;
   suspensed?: boolean;
-  componentsDescription?: ComponentMetadata[];
+  componentMetadatas?: ComponentMetadata[];
   eventPipe?: EventEmitter;
+  globalComponentActions?: ComponentAction[];
   onMount?: (designer: Designer) => void;
   onDragstart?: (e: LocateEvent) => void;
   onDrag?: (e: LocateEvent) => void;
@@ -229,8 +230,8 @@ export default class Designer {
       if (props.suspensed !== this.props.suspensed && props.suspensed != null) {
         this.suspensed = props.suspensed;
       }
-      if (props.componentsDescription !== this.props.componentsDescription && props.componentsDescription != null) {
-        this.buildComponentMetasMap(props.componentsDescription);
+      if (props.componentMetadatas !== this.props.componentMetadatas && props.componentMetadatas != null) {
+        this.buildComponentMetasMap(props.componentMetadatas);
       }
     } else {
       // init hotkeys
@@ -246,8 +247,8 @@ export default class Designer {
       if (props.suspensed != null) {
         this.suspensed = props.suspensed;
       }
-      if (props.componentsDescription != null) {
-        this.buildComponentMetasMap(props.componentsDescription);
+      if (props.componentMetadatas != null) {
+        this.buildComponentMetasMap(props.componentMetadatas);
       }
     }
     this.props = props;
@@ -307,12 +308,16 @@ export default class Designer {
           meta.metadata = data;
           this._lostComponentMetasMap.delete(key);
         } else {
-          meta = new ComponentMeta(data);
+          meta = new ComponentMeta(this, data);
         }
 
         this._componentMetasMap.set(key, meta);
       }
     });
+  }
+
+  getGlobalComponentActions(): ComponentAction[] | null {
+    return this.props?.globalComponentActions || null;
   }
 
   getComponentMeta(componentName: string, generateMetadata?: () => ComponentMetadata | null): ComponentMeta {
@@ -324,7 +329,7 @@ export default class Designer {
       return this._lostComponentMetasMap.get(componentName)!;
     }
 
-    const meta = new ComponentMeta({
+    const meta = new ComponentMeta(this, {
       componentName,
       ...(generateMetadata ? generateMetadata() : null),
     });

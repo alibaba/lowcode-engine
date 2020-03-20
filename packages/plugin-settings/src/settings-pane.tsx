@@ -11,8 +11,7 @@ import {
   DynamicProps,
 } from './main';
 import { Field, FieldGroup } from './field';
-import { TitleContent } from './title';
-import { Balloon } from '@alifd/next';
+import { TitleContent } from '../../globals';
 import PopupService from './popup';
 
 export type RegisteredSetter = {

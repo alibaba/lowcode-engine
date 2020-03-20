@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import { Tab, Breadcrumb, Icon } from '@alifd/next';
 import { SettingsMain, SettingField, isSettingField } from './main';
 import './style.less';
-import Title from './title';
+import { Title, TipContainer } from '../../globals';
 import SettingsPane, { registerSetter, createSetterContent, getSetter, createSettingFieldView } from './settings-pane';
 import Node from '../../designer/src/designer/document/node/node';
 import ArraySetter from './builtin-setters/array-setter';
 import ObjectSetter from './builtin-setters/object-setter';
 import './register-transducer';
-import { TipContainer } from './tip';
 
 export default class SettingsMainView extends Component {
   private main: SettingsMain;

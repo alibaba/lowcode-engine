@@ -1196,7 +1196,8 @@ export default {
           isContainer: true,
           nestingRule: {
             childWhitelist: 'Select.Option'
-          }
+          },
+          rectSelector: '.next-select',
         },
         props: [
           {
@@ -1762,6 +1763,26 @@ export default {
           }
         }
       }
+    },
+    Dialog: {
+      componentName: 'Dialog',
+      title: '弹窗',
+      devMode: 'proCode',
+      npm: {
+        package: '@alifd/next',
+        version: '1.19.18',
+        destructuring: true,
+        exportName: 'Dialog'
+      },
+      props: [{
+        name: 'title',
+        propType: 'string'
+      }],
+      configure: {
+        component: {
+          rectSelector: '.next-dialog'
+        }
+      }
     }
   },
   componentList: [
@@ -1886,6 +1907,30 @@ export default {
               schema: {
                 componentName: 'Div',
                 props: {}
+              }
+            }
+          ]
+        },
+        {
+          componentName: 'Dialog',
+          libraryId: 3,
+          title: '弹窗',
+          icon: '',
+          snippets: [
+            {
+              title: '弹窗',
+              screenshot: '',
+              schema: {
+                componentName: 'Dialog',
+                props: {
+                  title: '这是一个dialog',
+                  visible: true
+                },
+                children: [
+                  {
+                    compoentName: 'Div'
+                  }
+                ]
               }
             }
           ]

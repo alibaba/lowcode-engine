@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import classNames from 'classnames';
 import { Icon } from '@alifd/next';
-import Title, { TitleContent } from '../title';
+import { Title, TitleContent } from '../../../globals';
 import './index.less';
 
 export interface FieldProps {

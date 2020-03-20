@@ -5,7 +5,7 @@ import { SettingField, SetterType, FieldConfig, SetterConfig } from '../../main'
 import './style.less';
 import { createSettingFieldView } from '../../settings-pane';
 import { PopupContext, PopupPipe } from '../../popup';
-import Title from '../../title';
+import { Title } from '../../../../globals';
 
 interface ArraySetterState {
   items: SettingField[];

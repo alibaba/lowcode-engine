@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 import { uniqueId } from '../../utils/unique-id';
 import { ComponentMeta } from '../../designer/src/designer/component-meta';
 import Node from '../../designer/src/designer/document/node/node';
-import { TitleContent } from './title';
+import { TitleContent } from '../../globals';
 import { ReactElement, ComponentType as ReactComponentType, isValidElement } from 'react';
 import { isReactComponent } from '../../utils/is-react';
 import Designer from '../../designer/src/designer/designer';

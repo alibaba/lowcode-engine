@@ -2,6 +2,7 @@ import { obx, computed } from '@recore/obx';
 import { INodeSelector, IViewport } from '../simulator';
 import { uniqueId } from '../../../../utils/unique-id';
 import { isRootNode } from '../document/node/root-node';
+import Node from '../document/node/node';
 
 export default class OffsetObserver {
   readonly id = uniqueId('oobx');
@@ -10,39 +11,65 @@ export default class OffsetObserver {
   private lastOffsetTop?: number;
   private lastOffsetHeight?: number;
   private lastOffsetWidth?: number;
-  @obx private height = 0;
-  @obx private width = 0;
-  @obx private left = 0;
-  @obx private top = 0;
+  @obx private _height = 0;
+  @obx private _width = 0;
+  @obx private _left = 0;
+  @obx private _top = 0;
+  @obx private _right = 0;
+  @obx private _bottom = 0;
+
+  @computed get height() {
+    return this.isRoot ? this.viewport.height : this._height * this.scale;
+  }
+
+  @computed get width() {
+    return this.isRoot ? this.viewport.width : this._width * this.scale;
+  }
+
+  @computed get top() {
+    return this.isRoot ? 0 : this._top * this.scale;
+  }
+
+  @computed get left() {
+    return this.isRoot ? 0 : this._left * this.scale;
+  }
+
+  @computed get bottom() {
+    return this.isRoot ? this.viewport.height : this._bottom * this.scale;
+  }
+
+  @computed get right() {
+    return this.isRoot ? this.viewport.width : this._right * this.scale;
+  }
 
   @obx hasOffset = false;
   @computed get offsetLeft() {
     if (this.isRoot) {
-      return this.viewport.scrollX;
+      return this.viewport.scrollX * this.scale;
     }
     if (!this.viewport.scrolling || this.lastOffsetLeft == null) {
-      this.lastOffsetLeft = (this.left + this.viewport.scrollX) * this.scale;
+      this.lastOffsetLeft = this.left + this.viewport.scrollX * this.scale;
     }
     return this.lastOffsetLeft;
   }
   @computed get offsetTop() {
     if (this.isRoot) {
-      return this.viewport.scrollY;
+      return this.viewport.scrollY * this.scale;
     }
     if (!this.viewport.scrolling || this.lastOffsetTop == null) {
-      this.lastOffsetTop = (this.top + this.viewport.scrollY) * this.scale;
+      this.lastOffsetTop = this.top + this.viewport.scrollY * this.scale;
     }
     return this.lastOffsetTop;
   }
   @computed get offsetHeight() {
     if (!this.viewport.scrolling || this.lastOffsetHeight == null) {
-      this.lastOffsetHeight = this.isRoot ? this.viewport.height : this.height * this.scale;
+      this.lastOffsetHeight = this.isRoot ? this.viewport.height : this.height;
     }
     return this.lastOffsetHeight;
   }
   @computed get offsetWidth() {
     if (!this.viewport.scrolling || this.lastOffsetWidth == null) {
-      this.lastOffsetWidth = this.isRoot ? this.viewport.width : this.width * this.scale;
+      this.lastOffsetWidth = this.isRoot ? this.viewport.width : this.width;
     }
     return this.lastOffsetWidth;
   }
@@ -52,11 +79,13 @@ export default class OffsetObserver {
   }
 
   private pid: number | undefined;
-  private viewport: IViewport;
+  readonly viewport: IViewport;
   private isRoot: boolean;
+  readonly node: Node;
 
   constructor(readonly nodeInstance: INodeSelector) {
     const { node, instance } = nodeInstance;
+    this.node = node;
     const doc = node.document;
     const host = doc.simulator!;
     this.isRoot = isRootNode(node);
@@ -75,16 +104,18 @@ export default class OffsetObserver {
         return;
       }
 
-      const rect = host.computeComponentInstanceRect(instance!);
+      const rect = host.computeComponentInstanceRect(instance!, node.componentMeta.rectSelector);
 
       if (!rect) {
         this.hasOffset = false;
       } else {
         if (!this.viewport.scrolling || !this.hasOffset) {
-          this.height = rect.height;
-          this.width = rect.width;
-          this.left = rect.left;
-          this.top = rect.top;
+          this._height = rect.height;
+          this._width = rect.width;
+          this._left = rect.left;
+          this._top = rect.top;
+          this._right = rect.right;
+          this._bottom = rect.bottom;
           this.hasOffset = true;
         }
       }

@@ -134,7 +134,7 @@ export interface ISimulator<P = object> extends ISensor {
 
   computeRect(node: Node): DOMRect | null;
 
-  computeComponentInstanceRect(instance: ComponentInstance): DOMRect | null;
+  computeComponentInstanceRect(instance: ComponentInstance, selector?: string): DOMRect | null;
 
   findDOMNodes(instance: ComponentInstance): Array<Element | Text> | null;
 

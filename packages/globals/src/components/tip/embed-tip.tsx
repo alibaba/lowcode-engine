@@ -1,4 +1,4 @@
-import { uniqueId } from '../../../utils/unique-id';
+import { uniqueId } from '../../../../utils/unique-id';
 import { Component, ReactNode } from 'react';
 import { saveTips } from './tip-handler';
 

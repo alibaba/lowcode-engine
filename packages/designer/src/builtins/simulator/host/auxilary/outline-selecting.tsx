@@ -1,4 +1,13 @@
-import { Component, Fragment } from 'react';
+import {
+  Component,
+  Fragment,
+  ReactNodeArray,
+  isValidElement,
+  cloneElement,
+  createElement,
+  ReactNode,
+  ComponentType,
+} from 'react';
 import classNames from 'classnames';
 import { observer } from '@recore/obx-react';
 import { SimulatorContext } from '../context';
@@ -6,6 +15,8 @@ import { SimulatorHost } from '../host';
 import { computed } from '@recore/obx';
 import OffsetObserver from '../../../../designer/helper/offset-observer';
 import Node from '../../../../designer/document/node/node';
+import { isContentObject, ContentObject } from '../../../../designer/component-meta';
+import { createIcon, EmbedTip, isReactComponent } from '../../../../../../globals';
 
 @observer
 export class OutlineSelectingInstance extends Component<{
@@ -38,10 +49,87 @@ export class OutlineSelectingInstance extends Component<{
 
     return (
       <div className={className} style={style}>
-        <a className="lc-outlines-title">{observed.nodeInstance.node.title}</a>
+        {!dragging && <Toolbar observed={observed} />}
       </div>
     );
   }
+}
+
+@observer
+class Toolbar extends Component<{ observed: OffsetObserver }> {
+  shouldComponentUpdate() {
+    return false;
+  }
+  render() {
+    const { observed } = this.props;
+    const { height, width } = observed.viewport;
+    const BAR_HEIGHT = 20;
+    const MARGIN = 1;
+    const BORDER = 2;
+    const SPACE_HEIGHT = BAR_HEIGHT + MARGIN + BORDER;
+    let style: any;
+    if (observed.top > SPACE_HEIGHT) {
+      style = {
+        right: Math.max(-BORDER, observed.right - width - BORDER),
+        top: -SPACE_HEIGHT,
+        height: BAR_HEIGHT,
+      };
+    } else if (observed.bottom + SPACE_HEIGHT < height) {
+      style = {
+        bottom: -SPACE_HEIGHT,
+        height: BAR_HEIGHT,
+        right: Math.max(-BORDER, observed.right - width - BORDER),
+      };
+    } else {
+      style = {
+        height: BAR_HEIGHT,
+        top: Math.max(MARGIN, MARGIN - observed.top),
+        right: Math.max(MARGIN, MARGIN + observed.right - width),
+      };
+    }
+    const { node } = observed;
+    const actions: ReactNodeArray = [];
+    node.componentMeta.availableActions.forEach(action => {
+      const { important, condition, content, name } = action;
+      if (node.isSlotRoot && (name === 'copy' || name === 'remove')) {
+        // FIXME: need this?
+        return;
+      }
+      if (important && (typeof condition === 'function' ? condition(node) : condition !== false)) {
+        actions.push(createAction(content, name, node));
+      }
+    });
+    return (
+      <div className="lc-outlines-actions" style={style}>
+        {actions}
+      </div>
+    );
+  }
+}
+
+function createAction(content: ReactNode | ComponentType<any> | ContentObject, key: string, node: Node) {
+  if (isValidElement(content)) {
+    return cloneElement(content, { key, node });
+  }
+  if (isReactComponent(content)) {
+    return createElement(content, { key, node });
+  }
+  if (isContentObject(content)) {
+    const { action, description, icon } = content;
+    return (
+      <div
+        key={key}
+        className="lc-outlines-action"
+        onClick={() => {
+          action && action(node);
+        }}
+      >
+        {icon && createIcon(icon)}
+        <EmbedTip>{description}</EmbedTip>
+      </div>
+    );
+  }
+  return null;
 }
 
 @observer

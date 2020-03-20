@@ -3,7 +3,7 @@ import { Icon, Button } from '@alifd/next';
 import { FieldConfig, SettingField, SetterType } from '../../main';
 import { createSettingFieldView } from '../../settings-pane';
 import { PopupContext, PopupPipe } from '../../popup';
-import Title from '../../title';
+import { Title } from '../../../..//globals';
 import './style.less';
 
 export default class ObjectSetter extends Component<{

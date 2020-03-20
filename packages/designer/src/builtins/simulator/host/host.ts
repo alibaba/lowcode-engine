@@ -33,6 +33,7 @@ import { ComponentMetadata } from '../../../designer/component-meta';
 import { ReactInstance } from 'react';
 import { isRootNode } from '../../../designer/document/node/root-node';
 import { parseProps } from '../utils/parse-props';
+import { isElement } from '../../../utils/is-element';
 
 export interface LibraryItem {
   package: string;
@@ -450,13 +451,13 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     if (!instances) {
       return null;
     }
-    return this.computeComponentInstanceRect(instances[0]);
+    return this.computeComponentInstanceRect(instances[0], node.componentMeta.rectSelector);
   }
 
   /**
    * @see ISimulator
    */
-  computeComponentInstanceRect(instance: ReactInstance): Rect | null {
+  computeComponentInstanceRect(instance: ReactInstance, selector?: string): Rect | null {
     const renderer = this.renderer!;
     const elements = renderer.findDOMNodes(instance);
     if (!elements) {
@@ -466,20 +467,27 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     let rects: DOMRect[] | undefined;
     let last: { x: number; y: number; r: number; b: number } | undefined;
     let computed = false;
-    const elems = elements.slice();
-    const commonParent: Element | null = null;
+    const elems = selector
+      ? elements
+          .map(elem => {
+            if (isElement(elem)) {
+              // TODO: if has selector use exact match
+              if (elem.matches(selector)) {
+                return elem;
+              }
+
+              return elem.querySelector(selector);
+            }
+            return null;
+          })
+          .filter(Boolean)
+      : elements.slice();
     while (true) {
       if (!rects || rects.length < 1) {
         const elem = elems.pop();
         if (!elem) {
           break;
         }
-        /*
-        if (!commonParent) {
-          commonParent = elem.parentElement;
-        } else if (elem.parentElement !== commonParent) {
-          continue;
-        }*/
         rects = renderer.getClientRects(elem);
       }
       const rect = rects.pop();
@@ -716,7 +724,10 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
 
     const targetInstance = e.targetInstance as ReactInstance;
     const parentInstance = this.getClosestNodeInstance(targetInstance, target.id);
-    const edge = this.computeComponentInstanceRect(parentInstance?.instance as any);
+    const edge = this.computeComponentInstanceRect(
+      parentInstance?.instance as any,
+      parentInstance?.node?.componentMeta.rectSelector,
+    );
 
     if (!edge) {
       return null;
@@ -755,7 +766,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
           ? instances.find(inst => this.getClosestNodeInstance(inst, target.id)?.instance === targetInstance)
           : instances[0]
         : null;
-      const rect = inst ? this.computeComponentInstanceRect(inst) : null;
+      const rect = inst ? this.computeComponentInstanceRect(inst, node.componentMeta.rectSelector) : null;
 
       if (!rect) {
         continue;

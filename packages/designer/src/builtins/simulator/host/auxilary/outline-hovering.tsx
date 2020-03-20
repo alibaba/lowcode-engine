@@ -88,7 +88,7 @@ export class OutlineHovering extends Component {
           scale={this.scale}
           scrollX={this.scrollX}
           scrollY={this.scrollY}
-          rect={host.computeComponentInstanceRect(instances[0])}
+          rect={host.computeComponentInstanceRect(instances[0], current.componentMeta.rectSelector)}
         />
       );
     }
@@ -101,7 +101,7 @@ export class OutlineHovering extends Component {
             scale={this.scale}
             scrollX={this.scrollX}
             scrollY={this.scrollY}
-            rect={host.computeComponentInstanceRect(inst)}
+            rect={host.computeComponentInstanceRect(inst, current.componentMeta.rectSelector)}
           />
         ))}
       </Fragment>

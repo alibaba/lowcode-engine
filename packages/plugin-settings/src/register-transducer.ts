@@ -70,7 +70,7 @@ export function propTypeToSetter(propType: PropType): SetterType {
       };
 
     case 'element':
-    case 'node':
+    case 'node': // TODO: use Mixin
       return {
         // slotSetter
         componentName: 'NodeSetter',
@@ -156,22 +156,9 @@ export function propTypeToSetter(propType: PropType): SetterType {
 
 const EVENT_RE = /^on[A-Z][\w]*$/;
 
+// parseProps
 registerMetadataTransducer(metadata => {
-  if (metadata.configure) {
-    if (Array.isArray(metadata.configure)) {
-      return {
-        ...metadata,
-        configure: {
-          props: metadata.configure,
-        },
-      };
-    }
-    if (metadata.configure.props) {
-      return metadata as any;
-    }
-  }
-
-  const { configure = {} } = metadata;
+  const { configure } = metadata;
 
   if (!metadata.props) {
     return {
@@ -237,46 +224,7 @@ registerMetadataTransducer(metadata => {
   };
 });
 
-registerMetadataTransducer(metadata => {
-  const { configure = {}, componentName } = metadata;
-  const { component = {} } = configure as any;
-  if (!component.nestingRule) {
-    let m;
-    // uri match xx.Group set subcontrolling: true, childWhiteList
-    if ((m = /^(.+)\.Group$/.exec(componentName))) {
-      // component.subControlling = true;
-      if (!component.nestingRule) {
-        component.nestingRule = {
-          childWhitelist: [`${m[1]}`],
-        };
-      }
-    }
-    // uri match xx.Node set selfControlled: false, parentWhiteList
-    else if ((m = /^(.+)\.Node$/.exec(componentName))) {
-      // component.selfControlled = false;
-      component.nestingRule = {
-        parentWhitelist: [`${m[1]}`, componentName],
-      };
-    }
-    // uri match .Item .Node .Option set parentWhiteList
-    else if ((m = /^(.+)\.(Item|Node|Option)$/.exec(componentName))) {
-      component.nestingRule = {
-        parentWhitelist: [`${m[1]}`],
-      };
-    }
-  }
-  if (component.isModal == null && /Dialog/.test(componentName)) {
-    component.isModal = true;
-  }
-  return {
-    ...metadata,
-    configure: {
-      ...configure,
-      component,
-    },
-  };
-});
-
+// addon/platform custom
 registerMetadataTransducer(metadata => {
   const { componentName, configure = {} } = metadata;
   if (componentName === 'Leaf') {

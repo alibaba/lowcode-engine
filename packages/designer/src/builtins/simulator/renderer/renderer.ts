@@ -85,7 +85,7 @@ export class SimulatorRenderer {
   }
 
   @computed get designMode(): any {
-    return 'border';
+    return 'preview';
   }
   @obx.ref private _componentsMap = {};
   @computed get componentsMap(): any {
