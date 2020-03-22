@@ -1,4 +1,4 @@
-import { obx, computed } from '@recore/obx';
+import { obx, computed } from '../../../../../globals';
 import { Point } from '../../../designer/helper/location';
 import { ScrollTarget } from '../../../designer/helper/scroller';
 import { AutoFit, IViewport } from '../../../designer/simulator';

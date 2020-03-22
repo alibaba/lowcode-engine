@@ -1,10 +1,19 @@
-import { obx, computed } from '@recore/obx';
-import { NodeSchema, NodeData, PropsMap, PropsList, isDOMText, isJSExpression } from '../../schema';
 import Props, { EXTRA_KEY_PREFIX } from './props/props';
 import DocumentModel from '../document-model';
 import NodeChildren from './node-children';
 import Prop from './props/prop';
 import { ComponentMeta } from '../../component-meta';
+import {
+  isDOMText,
+  isJSExpression,
+  NodeSchema,
+  PropsMap,
+  PropsList,
+  NodeData,
+  TitleContent,
+  obx,
+  computed,
+} from '../../../../../globals';
 
 /**
  * 基础节点
@@ -74,7 +83,7 @@ export default class Node {
     return -1;
   }
 
-  @computed get title(): string {
+  @computed get title(): TitleContent {
     let t = this.getExtraProp('title');
     if (!t && this.componentMeta.descriptor) {
       t = this.getProp(this.componentMeta.descriptor, false);
@@ -179,6 +188,30 @@ export default class Node {
       return null;
     }
     return this.props.export(true).props || null;
+  }
+
+  isContainer() {
+    return this.isNodeParent && this.componentMeta.isContainer;
+  }
+
+  @computed isSlotContainer() {
+    for (const item of this.props) {
+      if (item.type === 'slot') {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @computed get slots() {
+    // TODO: optimize recore/obx, array maked every time, donot as changed
+    const slots: Node[] = [];
+    this.props.forEach(item => {
+      if (item.type === 'slot') {
+        slots.push(item.slotNode!);
+      }
+    });
+    return slots;
   }
 
   private _conditionGroup: string | null = null;

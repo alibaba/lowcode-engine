@@ -1,5 +1,5 @@
 import { SimulatorRenderer } from '../renderer/renderer';
-import { autorun, obx } from '@recore/obx';
+import { autorun, obx } from '../../../../../globals';
 import { SimulatorHost } from './host';
 import { EventEmitter } from 'events';
 
@@ -34,7 +34,6 @@ export default class ResourceConsumer<T = any> {
     });
   }
 
-
   private _consuming?: () => void;
   consume(consumerOrRenderer: SimulatorRenderer | ((data: T) => any)) {
     if (this._consuming) {
@@ -48,7 +47,7 @@ export default class ResourceConsumer<T = any> {
       }
       const rendererConsumer = this.consumer!;
 
-      consumer = (data) => rendererConsumer(consumerOrRenderer, data);
+      consumer = data => rendererConsumer(consumerOrRenderer, data);
     } else {
       consumer = consumerOrRenderer;
     }
@@ -76,14 +75,14 @@ export default class ResourceConsumer<T = any> {
     this.emitter.removeAllListeners();
   }
 
-  private _firstConsumed: boolean = false;
+  private _firstConsumed = false;
   private resovleFirst?: () => void;
 
   waitFirstConsume(): Promise<any> {
     if (this._firstConsumed) {
       return Promise.resolve();
     }
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this.resovleFirst = resolve;
     });
   }

@@ -3,7 +3,6 @@ import { render as reactRender } from 'react-dom';
 import { host } from './host';
 import SimulatorRendererView from './renderer-view';
 import { computed, obx } from '@recore/obx';
-import { RootSchema, NpmInfo } from '../../../designer/schema';
 import { getClientRects } from '../../../utils/get-client-rects';
 import { Asset } from '../utils/asset';
 import loader from '../utils/loader';
@@ -13,6 +12,7 @@ import { NodeInstance } from '../../../designer/simulator';
 import { isElement } from '../../../utils/is-element';
 import cursor from '../../../designer/helper/cursor';
 import { setNativeSelection } from '../../../designer/helper/navtive-selection';
+import { RootSchema, NpmInfo } from '../../../../../globals/src';
 
 export class SimulatorRenderer {
   readonly isSimulatorRenderer = true;

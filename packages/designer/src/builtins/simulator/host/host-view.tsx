@@ -1,9 +1,9 @@
 import { Component } from 'react';
-import { observer } from '@recore/obx-react';
+import { observer } from '../../../../../globals';
 import { SimulatorHost, SimulatorProps } from './host';
 import DocumentModel from '../../../designer/document/document-model';
 import { SimulatorContext } from './context';
-import { AuxiliaryView } from './auxilary';
+import { BemTools } from './bem-tools';
 import './host.less';
 
 /*
@@ -65,7 +65,7 @@ class Canvas extends Component {
     return (
       <div className={className}>
         <div ref={elmt => sim.mountViewport(elmt)} className="lc-simulator-canvas-viewport">
-          <AuxiliaryView />
+          <BemTools />
           <Content />
         </div>
       </div>

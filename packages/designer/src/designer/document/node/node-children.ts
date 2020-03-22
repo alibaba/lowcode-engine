@@ -1,6 +1,5 @@
 import Node, { NodeParent } from './node';
-import { NodeData, isNodeSchema } from '../../schema';
-import { obx, computed } from '@recore/obx';
+import { NodeData, isNodeSchema, obx, computed } from '../../../../../globals';
 
 export default class NodeChildren {
   @obx.val private children: Node[];
@@ -20,7 +19,7 @@ export default class NodeChildren {
     return this.children.map(node => node.export(serialize));
   }
 
-  import(data?: NodeData | NodeData[], checkId: boolean = false) {
+  import(data?: NodeData | NodeData[], checkId = false) {
     data = data ? (Array.isArray(data) ? data : [data]) : [];
 
     const originChildren = this.children.slice();
@@ -59,10 +58,14 @@ export default class NodeChildren {
     return this.size < 1;
   }
 
+  @computed notEmpty() {
+    return this.size > 0;
+  }
+
   /**
    * 删除一个节点
    */
-  delete(node: Node, purge: boolean = false): boolean {
+  delete(node: Node, purge = false): boolean {
     const i = this.children.indexOf(node);
     if (i < 0) {
       return false;

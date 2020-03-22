@@ -1,4 +1,4 @@
-import { obx, autorun, untracked, computed } from '@recore/obx';
+import { obx, autorun, untracked, computed } from '../../../../../../globals';
 import Prop, { IPropParent, UNSET } from './prop';
 import Props from './props';
 

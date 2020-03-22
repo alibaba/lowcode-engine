@@ -36,6 +36,9 @@ class AliGlobalLocale {
   }
 
   setLocale(locale: string) {
+    if (locale === this.locale) {
+      return;
+    }
     this.locale = locale;
     if (hasLocalStorage(window)) {
       const store = window.localStorage;
@@ -54,6 +57,7 @@ class AliGlobalLocale {
 
       store.setItem(LowcodeConfigKey, JSON.stringify(config));
     }
+    this.emitter.emit('localechange', locale);
   }
 
   getLocale() {

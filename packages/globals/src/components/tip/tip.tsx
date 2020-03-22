@@ -1,7 +1,8 @@
 import { Component } from 'react';
 import classNames from 'classnames';
 import { resolvePosition } from './utils';
-import tipHandler from './tip-handler';
+import tipHandler, { TipOptions } from './tip-handler';
+import { intl } from '../../intl';
 
 export default class Tip extends Component {
   private dispose?: () => void;
@@ -100,7 +101,7 @@ export default class Tip extends Component {
   }
 
   render() {
-    const tip: any = tipHandler.tip || {};
+    const tip: TipOptions = tipHandler.tip || ({} as any);
     const className = classNames('lc-tip', tip.className, tip && tip.theme ? `lc-theme-${tip.theme}` : null);
 
     this.originClassName = className;
@@ -113,7 +114,7 @@ export default class Tip extends Component {
         }}
       >
         <i className="lc-arrow" />
-        <div className="lc-tip-content">{tip.children}</div>
+        <div className="lc-tip-content">{intl(tip.children)}</div>
       </div>
     );
   }

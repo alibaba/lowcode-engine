@@ -1,5 +1,5 @@
 import Node, { comparePosition, PositionNO } from './node/node';
-import { obx } from '@recore/obx';
+import { obx } from '../../../../globals';
 import DocumentModel from './document-model';
 import { EventEmitter } from 'events';
 

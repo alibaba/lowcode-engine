@@ -1,9 +1,9 @@
 import { Component as ReactComponent, ComponentType } from 'react';
-import { LocateEvent, ISensor } from './helper/dragon';
+import { ISensor } from './helper/dragon';
 import { Point } from './helper/location';
 import Node from './document/node/node';
 import { ScrollTarget, IScrollable } from './helper/scroller';
-import { ComponentMetadata } from './component-meta';
+import { ComponentMetadata } from '../../../globals';
 
 export type AutoFit = '100%';
 export const AutoFit = '100%';

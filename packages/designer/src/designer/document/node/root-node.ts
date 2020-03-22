@@ -1,8 +1,7 @@
 import Node, { NodeParent } from './node';
-import { RootSchema } from '../../schema';
 import DocumentModel from '../document-model';
 import NodeChildren from './node-children';
-import Props from './props/props';
+import { RootSchema } from '../../../../../globals';
 
 /**
  * 根容器节点

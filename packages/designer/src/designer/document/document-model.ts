@@ -1,14 +1,22 @@
 import Project from '../project';
-import { RootSchema, NodeData, isDOMText, isJSExpression, NodeSchema } from '../schema';
 import Node, { isNodeParent, insertChildren, insertChild, NodeParent } from './node/node';
 import { Selection } from './selection';
 import RootNode from './node/root-node';
-import { ISimulator, Component } from '../simulator';
-import { computed, obx, autorun } from '@recore/obx';
+import { ISimulator } from '../simulator';
 import Location from '../helper/location';
 import { ComponentMeta } from '../component-meta';
 import History from '../helper/history';
 import Prop from './node/props/prop';
+import {
+  RootSchema,
+  NodeData,
+  isJSExpression,
+  isDOMText,
+  NodeSchema,
+  computed,
+  obx,
+  autorun,
+} from '../../../../globals';
 
 export default class DocumentModel {
   /**

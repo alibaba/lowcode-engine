@@ -1,6 +1,5 @@
 import { Component } from 'react';
-import { obx } from '@recore/obx';
-import { observer } from '@recore/obx-react';
+import { observer, obx } from '../../../../globals';
 import Designer from '../../designer/designer';
 import { isDragNodeObject, DragObject, isDragNodeDataObject } from '../../designer/helper/dragon';
 import './ghost.less';

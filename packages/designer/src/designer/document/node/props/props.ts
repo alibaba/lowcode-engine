@@ -1,9 +1,8 @@
-import { computed, obx } from '@recore/obx';
 import { uniqueId } from '../../../../../../utils/unique-id';
-import { CompositeValue, PropsList, PropsMap } from '../../../schema';
 import PropStash from './prop-stash';
 import Prop, { IPropParent, UNSET } from './prop';
 import Node from '../node';
+import { PropsMap, PropsList, CompositeValue, computed, obx } from '../../../../../../globals';
 
 export const EXTRA_KEY_PREFIX = '__';
 
@@ -275,6 +274,12 @@ export default class Props implements IPropParent {
    */
   map<T>(fn: (item: Prop, key: number | string | undefined) => T): T[] | null {
     return this.items.map(item => {
+      return fn(item, item.key);
+    });
+  }
+
+  filter(fn: (item: Prop, key: number | string | undefined) => boolean) {
+    return this.items.filter(item => {
       return fn(item, item.key);
     });
   }

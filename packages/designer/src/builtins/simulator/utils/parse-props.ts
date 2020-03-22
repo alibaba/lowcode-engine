@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { isValidElement } from 'react';
 import { isElement } from '../../../utils/is-element';
-import { PropType, PropConfig } from '../../../designer/prop-config';
+import { PropConfig } from '../../../../../globals';
 
 export const primitiveTypes = [
   'string',

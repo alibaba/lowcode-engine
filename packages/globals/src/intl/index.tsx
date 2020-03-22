@@ -1,5 +1,6 @@
 import { globalLocale } from './ali-global-locale';
 import { PureComponent, ReactNode } from 'react';
+import { isI18nData } from '../types';
 
 function injectVars(template: string, params: any): string {
   if (!template || !params) {
@@ -13,14 +14,20 @@ function injectVars(template: string, params: any): string {
     return $1;
   });
 }
-
-export interface I18nData {
-  type: 'i18n';
-  [key: string]: string;
-}
-
-export function isI18nData(obj: any): obj is I18nData {
-  return obj && obj.type === 'i18n';
+function generateTryLocales(locale: string) {
+  const tries = [locale, locale.replace('-', '_')];
+  if (locale === 'zh-TW' || locale === 'en-US') {
+    tries.push('zh-CN');
+    tries.push('zh_CN');
+  } else {
+    tries.push('en-US');
+    tries.push('en_US');
+    if (locale !== 'zh-CN') {
+      tries.push('zh-CN');
+      tries.push('zh_CN');
+    }
+  }
+  return tries;
 }
 
 export function localeFormat(data: any, params?: object): string {
@@ -28,9 +35,16 @@ export function localeFormat(data: any, params?: object): string {
     return data;
   }
   const locale = globalLocale.getLocale();
-  const tpl = data[locale];
+  const tries = generateTryLocales(locale);
+  let tpl: string | undefined;
+  for (const lan of tries) {
+    tpl = data[lan];
+    if (tpl != null) {
+      break;
+    }
+  }
   if (tpl == null) {
-    return `##intl null@${locale}##`;
+    return `##intl@${locale}##`;
   }
   return injectVars(tpl, params);
 }
@@ -53,11 +67,22 @@ export function intl(data: any, params?: object): ReactNode {
   return data;
 }
 
+export function shallowIntl(data: any): any {
+  if (!data || typeof data !== 'object') {
+    return data;
+  }
+  const maps: any = {};
+  Object.keys(data).forEach(key => {
+    maps[key] = localeFormat(data[key]);
+  });
+  return maps;
+}
+
 export function createIntl(
   instance: string | object,
 ): {
   intl(id: string, params?: object): ReactNode;
-  getIntlString(id: string, params?: object): string;
+  intlString(id: string, params?: object): string;
   getLocale(): string;
   setLocale(locale: string): void;
 } {
@@ -79,11 +104,12 @@ export function createIntl(
 
   useLocale(globalLocale.getLocale());
 
-  function getIntlString(key: string, params?: object): string {
+  function intlString(key: string, params?: object): string {
+    // TODO: tries lost language
     const str = data[key];
 
     if (str == null) {
-      return `##intl null@${key}##`;
+      return `##intl@${key}##`;
     }
 
     return injectVars(str, params);
@@ -101,7 +127,7 @@ export function createIntl(
     }
     render() {
       const { id, params } = this.props;
-      return getIntlString(id, params);
+      return intlString(id, params);
     }
   }
 
@@ -109,7 +135,7 @@ export function createIntl(
     intl(id: string, params?: object) {
       return <Intl id={id} params={params} />;
     },
-    getIntlString,
+    intlString,
     getLocale() {
       return globalLocale.getLocale();
     },

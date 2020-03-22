@@ -1,13 +1,7 @@
 import { uniqueId } from '../../../../utils/unique-id';
-import { Component, ReactNode } from 'react';
+import { Component } from 'react';
 import { saveTips } from './tip-handler';
-
-export interface TipConfig {
-  className?: string;
-  children?: ReactNode;
-  theme?: string;
-  direction?: string; // 'n|s|w|e|top|bottom|left|right';
-}
+import { TipConfig } from '../../types';
 
 export default class EmbedTip extends Component<TipConfig> {
   private id = uniqueId('tips$');

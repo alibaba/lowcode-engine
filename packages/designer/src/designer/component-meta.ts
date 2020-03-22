@@ -1,95 +1,23 @@
-import { ReactNode, ReactElement, ComponentType, createElement } from 'react';
 import Node, { NodeParent } from './document/node/node';
-import { NodeData, NodeSchema } from './schema';
-import { PropConfig } from './prop-config';
 import Designer from './designer';
-import { Remove, Clone } from '../../../globals';
-import { computed } from '@recore/obx';
+import {
+  IconRemove,
+  IconClone,
+  IconPage,
+  IconContainer,
+  IconComponent,
+  ComponentMetadata,
+  NpmInfo,
+  NodeData,
+  NodeSchema,
+  ComponentAction,
+  TitleContent,
+  TransformedComponentMetadata,
+  getRegisteredMetadataTransducers,
+  registerMetadataTransducer,
+  computed,
+} from '../../../globals';
 import { intl } from '../locale';
-
-export interface NestingRule {
-  childWhitelist?: string[];
-  parentWhitelist?: string[];
-}
-
-export interface Configure {
-  props?: any[];
-  styles?: object;
-  events?: object;
-  component?: {
-    isContainer?: boolean;
-    isModal?: boolean;
-    descriptor?: string;
-    nestingRule?: NestingRule;
-    rectSelector?: string;
-    // copy,move,delete
-    disableBehaviors?: string[];
-    actions?: ComponentAction[];
-  };
-}
-
-export interface ContentObject {
-  // 图标
-  icon?: string | ComponentType<any> | ReactElement;
-  // 描述
-  description?: string;
-  // 执行动作
-  action?: (node: Node) => void;
-}
-
-export interface ComponentAction {
-  // behaviorName
-  name: string;
-  // 菜单名称
-  content: string | ReactNode | ContentObject;
-  // 子集
-  items?: ComponentAction[];
-  // 不显示
-  condition?: boolean | ((node: Node) => boolean);
-  // 显示在工具条上
-  important?: boolean;
-}
-
-export function isContentObject(obj: any): obj is ContentObject {
-  return obj && typeof obj === 'object';
-}
-
-export interface ComponentMetadata {
-  componentName: string;
-  /**
-   * unique id
-   */
-  uri?: string;
-  /**
-   * title or description
-   */
-  title?: string;
-  /**
-   * svg icon for component
-   */
-  icon?: string | ReactNode;
-  tags?: string[];
-  description?: string;
-  docUrl?: string;
-  screenshot?: string;
-  devMode?: 'procode' | 'lowcode';
-  npm?: {
-    package: string;
-    exportName: string;
-    subName: string;
-    main: string;
-    destructuring: boolean;
-    version: string;
-  };
-  props?: PropConfig[];
-  configure?: any[] | Configure;
-}
-
-interface TransformedComponentMetadata extends ComponentMetadata {
-  configure: Configure & {
-    combined?: any[];
-  };
-}
 
 function ensureAList(list?: string | string[]): string[] | null {
   if (!list) {
@@ -136,21 +64,15 @@ function npmToURI(npm: {
   return uri;
 }
 
-export type MetadataTransducer = (prev: TransformedComponentMetadata) => TransformedComponentMetadata;
-const metadataTransducers: MetadataTransducer[] = [];
-
-// propsParser
-//
-
-export function registerMetadataTransducer(transducer: MetadataTransducer) {
-  metadataTransducers.push(transducer);
-}
-
 export class ComponentMeta {
   readonly isComponentMeta = true;
   private _uri?: string;
   get uri(): string {
     return this._uri!;
+  }
+  private _npm?: NpmInfo;
+  get npm() {
+    return this._npm;
   }
   private _componentName?: string;
   get componentName(): string {
@@ -172,10 +94,6 @@ export class ComponentMeta {
   get rectSelector(): string | undefined {
     return this._rectSelector;
   }
-  private _acceptable?: boolean;
-  get acceptable(): boolean {
-    return this._acceptable!;
-  }
   private _transformedMetadata?: TransformedComponentMetadata;
   get configure() {
     const config = this._transformedMetadata?.configure;
@@ -185,26 +103,45 @@ export class ComponentMeta {
   private parentWhitelist?: string[] | null;
   private childWhitelist?: string[] | null;
 
+  private _title?: TitleContent;
   get title() {
-    return this._metadata.title || this.componentName;
+    return this._title || this.componentName;
   }
 
   get icon() {
-    return this._metadata.icon;
+    return (
+      this._transformedMetadata?.icon ||
+      (this.componentName === 'Page' ? IconPage : this.isContainer ? IconContainer : IconComponent)
+    );
   }
 
-  constructor(readonly designer: Designer, private _metadata: ComponentMetadata) {
-    this.parseMetadata(_metadata);
+  private _acceptable?: boolean;
+  get acceptable(): boolean {
+    return this._acceptable!;
+  }
+
+  constructor(readonly designer: Designer, metadata: ComponentMetadata) {
+    this.parseMetadata(metadata);
   }
 
   private parseMetadata(metadta: ComponentMetadata) {
-    const { componentName, uri, npm, props } = metadta;
+    const { componentName, uri, npm } = metadta;
+    this._npm = npm;
     this._uri = uri || (npm ? npmToURI(npm) : componentName);
     this._componentName = componentName;
 
     metadta.uri = this._uri;
     // 额外转换逻辑
     this._transformedMetadata = this.transformMetadata(metadta);
+
+    const title = this._transformedMetadata.title;
+    if (title && typeof title === 'string') {
+      this._title = {
+        type: 'i18n',
+        'en-US': this.componentName,
+        'zh-CN': title,
+      };
+    }
 
     const { configure = {} } = this._transformedMetadata;
     this._acceptable = false;
@@ -227,7 +164,7 @@ export class ComponentMeta {
   }
 
   private transformMetadata(metadta: ComponentMetadata): TransformedComponentMetadata {
-    const result = metadataTransducers.reduce((prevMetadata, current) => {
+    const result = getRegisteredMetadataTransducers().reduce((prevMetadata, current) => {
       return current(prevMetadata);
     }, preprocessMetadata(metadta));
 
@@ -253,13 +190,12 @@ export class ComponentMeta {
     return actions;
   }
 
-  set metadata(metadata: ComponentMetadata) {
-    this._metadata = metadata;
+  setMetadata(metadata: ComponentMetadata) {
     this.parseMetadata(metadata);
   }
 
-  get metadata(): ComponentMetadata {
-    return this._metadata;
+  getMetadata(): TransformedComponentMetadata {
+    return this._transformedMetadata!;
   }
 
   checkNestingUp(my: Node | NodeData, parent: NodeParent) {
@@ -340,7 +276,7 @@ const builtinComponentActions: ComponentAction[] = [
   {
     name: 'remove',
     content: {
-      icon: Remove,
+      icon: IconRemove,
       description: intl('remove'),
       action(node: Node) {
         node.remove();
@@ -351,7 +287,7 @@ const builtinComponentActions: ComponentAction[] = [
   {
     name: 'copy',
     content: {
-      icon: Clone,
+      icon: IconClone,
       description: intl('copy'),
       action(node: Node) {
         // node.remove();

@@ -1,8 +1,7 @@
-import { obx, computed } from '@recore/obx';
-import { ProjectSchema, RootSchema } from './schema';
 import { EventEmitter } from 'events';
 import Designer from './designer';
 import DocumentModel, { isDocumentModel } from './document/document-model';
+import { ProjectSchema, RootSchema, obx, computed } from '../../../globals';
 
 export default class Project {
   private emitter = new EventEmitter();
@@ -21,10 +20,12 @@ export default class Project {
       componentsTree: [],
       ...schema,
     };
-    this.open(this.data.componentsTree[0] || {
-      componentName: 'Page',
-      fileName: '',
-    });
+    this.open(
+      this.data.componentsTree[0] || {
+        componentName: 'Page',
+        fileName: '',
+      },
+    );
   }
 
   @computed get currentDocument() {
@@ -106,7 +107,7 @@ export default class Project {
   }
 
   checkExclusive(actived: DocumentModel) {
-    this.documents.forEach((doc) => {
+    this.documents.forEach(doc => {
       if (doc !== actived) {
         doc.suspense();
       }
@@ -115,7 +116,7 @@ export default class Project {
   }
 
   closeOthers(opened: DocumentModel) {
-    this.documents.forEach((doc) => {
+    this.documents.forEach(doc => {
       if (doc !== opened) {
         doc.close();
       }
@@ -131,5 +132,4 @@ export default class Project {
   // 通知标记删除，需要告知服务端
   // 项目角度编辑不是全量打开所有文档，是按需加载，哪个更新就通知更新谁，
   // 哪个删除就
-
 }

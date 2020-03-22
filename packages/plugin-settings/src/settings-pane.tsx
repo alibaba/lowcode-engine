@@ -1,61 +1,14 @@
-import { Component, ReactNode } from 'react';
+import { Component } from 'react';
 import { createContent } from '../../utils/create-content';
 import { shallowEqual } from '../../utils/shallow-equal';
 import {
   SettingField,
-  CustomView,
   isSettingField,
   SettingTarget,
-  SetterConfig,
-  isCustomView,
-  DynamicProps,
 } from './main';
 import { Field, FieldGroup } from './field';
-import { TitleContent } from '../../globals';
+import { CustomView, DynamicProps, intl, shallowIntl, isSetterConfig, createSetterContent } from '../../globals';
 import PopupService from './popup';
-
-export type RegisteredSetter = {
-  component: CustomView;
-  defaultProps?: object;
-  title?: TitleContent;
-};
-
-const settersMap = new Map<string, RegisteredSetter>();
-export function registerSetter(type: string, setter: CustomView | RegisteredSetter) {
-  if (isCustomView(setter)) {
-    setter = {
-      component: setter,
-      title: (setter as any).displayName || (setter as any).name || 'CustomSetter'
-    };
-  }
-  settersMap.set(type, setter);
-}
-
-export function getSetter(type: string): RegisteredSetter | null {
-  return settersMap.get(type) || null;
-}
-
-export function createSetterContent(setter: any, props: object): ReactNode {
-  if (typeof setter === 'string') {
-    setter = getSetter(setter);
-    if (!setter) {
-      return null;
-    }
-    if (setter.defaultProps) {
-      props = {
-        ...setter.defaultProps,
-        ...props,
-      };
-    }
-    setter = setter.component;
-  }
-
-  return createContent(setter, props);
-}
-
-function isSetterConfig(obj: any): obj is SetterConfig {
-  return obj && typeof obj === 'object' && 'componentName' in obj && !isCustomView(obj);
-}
 
 class SettingFieldView extends Component<{ field: SettingField }> {
   state = {
@@ -98,7 +51,11 @@ class SettingFieldView extends Component<{ field: SettingField }> {
             state.value = null;
             state.setterProps.multiValue = true;
             if (!('placeholder' in props)) {
-              state.setterProps.placeholder = '多种值';
+              state.setterProps.placeholder = intl({
+                type: 'i18n',
+                'zh-CN': '多种值',
+                'en-US': 'Multiple Value'
+              });
             }
           }
           // TODO: error handling
@@ -142,7 +99,8 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     return (
       <Field title={extraProps.forceInline ? null : title}>
         {createSetterContent(this.setterType, {
-          ...setterProps,
+          // TODO: refresh intl
+          ...shallowIntl(setterProps),
           forceInline: extraProps.forceInline,
           key: field.id,
           // === injection

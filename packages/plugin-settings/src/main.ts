@@ -2,9 +2,7 @@ import { EventEmitter } from 'events';
 import { uniqueId } from '../../utils/unique-id';
 import { ComponentMeta } from '../../designer/src/designer/component-meta';
 import Node from '../../designer/src/designer/document/node/node';
-import { TitleContent } from '../../globals';
-import { ReactElement, ComponentType as ReactComponentType, isValidElement } from 'react';
-import { isReactComponent } from '../../utils/is-react';
+import { TitleContent, FieldExtraProps, SetterType, CustomView, FieldConfig, isCustomView } from '../../globals';
 import Designer from '../../designer/src/designer/designer';
 import { Selection } from '../../designer/src/designer/document/selection';
 
@@ -61,99 +59,6 @@ export interface SettingTarget {
 
   // 设置附属属性值
   setExtraPropValue(propName: string, value: any): void;
-
-  /*
-  // 所有属性值数据
-  readonly props: object;
-  // 设置多个属性值，替换原有值
-  setProps(data: object): void;
-  // 设置多个属性值，和原有值合并
-  mergeProps(data: object): void;
-  // 绑定属性值发生变化时
-  onPropsChange(fn: () => void): () => void;
-  */
-}
-
-export type CustomView = ReactElement | ReactComponentType<any>;
-
-export function isCustomView(obj: any): obj is CustomView {
-  return obj && (isValidElement(obj) || isReactComponent(obj));
-}
-
-export type DynamicProps = (field: SettingField) => object;
-
-export interface SetterConfig {
-  /**
-   * if *string* passed must be a registered Setter Name
-   */
-  componentName: string | CustomView;
-  /**
-   * the props pass to Setter Component
-   */
-  props?: object | DynamicProps;
-  children?: any;
-  isRequired?: boolean;
-  initialValue?: any | ((field: SettingField) => any);
-}
-
-/**
- * if *string* passed must be a registered Setter Name, future support blockSchema
- */
-export type SetterType = SetterConfig | string | CustomView;
-
-export interface FieldExtraProps {
-  /**
-   * 是否必填参数
-   */
-  isRequired?: boolean;
-  /**
-   * default value of target prop for setter use
-   */
-  defaultValue?: any;
-  getValue?: (field: SettingField, fieldValue: any) => any;
-  setValue?: (field: SettingField, value: any) => void;
-  /**
-   * the field conditional show, is not set always true
-   * @default undefined
-   */
-  condition?: (field: SettingField) => boolean;
-  /**
-   * default collapsed when display accordion
-   */
-  defaultCollapsed?: boolean;
-  /**
-   * important field
-   */
-  important?: boolean;
-  /**
-   * internal use
-   */
-  forceInline?: number;
-}
-
-export interface FieldConfig extends FieldExtraProps {
-  type?: 'field' | 'group';
-  /**
-   * the name of this setting field, which used in quickEditor
-   */
-  name: string | number;
-  /**
-   * the field title
-   * @default sameas .name
-   */
-  title?: TitleContent;
-  /**
-   * the field body contains when .type = 'field'
-   */
-  setter?: SetterType;
-  /**
-   * the setting items which group body contains when .type = 'group'
-   */
-  items?: FieldConfig[];
-  /**
-   * extra props for field
-   */
-  extraProps?: FieldExtraProps;
 }
 
 export class SettingField implements SettingTarget {

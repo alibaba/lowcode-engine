@@ -1,4 +1,4 @@
-import { obx, computed } from '@recore/obx';
+import { obx, computed } from '../../../../globals';
 import { INodeSelector, IViewport } from '../simulator';
 import { uniqueId } from '../../../../utils/unique-id';
 import { isRootNode } from '../document/node/root-node';

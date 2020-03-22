@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import { Tab, Breadcrumb, Icon } from '@alifd/next';
+import { Tab, Breadcrumb } from '@alifd/next';
 import { SettingsMain, SettingField, isSettingField } from './main';
 import './style.less';
-import { Title, TipContainer } from '../../globals';
-import SettingsPane, { registerSetter, createSetterContent, getSetter, createSettingFieldView } from './settings-pane';
+import { Title, TipContainer, createIcon } from '../../globals';
+import SettingsPane, { createSettingFieldView } from './settings-pane';
 import Node from '../../designer/src/designer/document/node/node';
-import ArraySetter from './builtin-setters/array-setter';
-import ObjectSetter from './builtin-setters/object-setter';
-import './register-transducer';
+import './transducers/register';
+import './setters/register';
 
 export default class SettingsMainView extends Component {
   private main: SettingsMain;
@@ -32,10 +31,9 @@ export default class SettingsMainView extends Component {
     if (this.main.isMulti) {
       return (
         <div className="lc-settings-navigator">
-          {this.main.componentMeta!.icon || <Icon type="ellipsis" size="small" />}
-          <span>
-            {this.main.componentMeta!.title} x {this.main.nodes.length}
-          </span>
+          {createIcon(this.main.componentMeta?.icon)}
+          <Title title={this.main.componentMeta!.title} />
+          <span>x {this.main.nodes.length}</span>
         </div>
       );
     }
@@ -52,13 +50,13 @@ export default class SettingsMainView extends Component {
               onMouseOut: hoverNode.bind(null, node, false),
               onClick: selectNode.bind(null, node),
             };
-      items.unshift(<Breadcrumb.Item {...props} key={node.id}>{node.title}</Breadcrumb.Item>);
+      items.unshift(<Breadcrumb.Item {...props} key={node.id}><Title title={node.title} /></Breadcrumb.Item>);
       node = node.parent;
     }
 
     return (
       <div className="lc-settings-navigator">
-        {this.main.componentMeta!.icon || <Icon type="ellipsis" size="small" />}
+        {createIcon(this.main.componentMeta?.icon)}
         <Breadcrumb className="lc-settings-node-breadcrumb">{items}</Breadcrumb>
       </div>
     );
@@ -105,6 +103,7 @@ export default class SettingsMainView extends Component {
         <Tab
           navClassName="lc-settings-tabs"
           animation={false}
+          excessMode="dropdown"
           contentClassName="lc-settings-tabs-content"
           extra={this.renderBreadcrumb()}
         >
@@ -126,7 +125,4 @@ function selectNode(node: Node) {
   node.select();
 }
 
-registerSetter('ArraySetter', ArraySetter);
-registerSetter('ObjectSetter', ObjectSetter);
-
-export { registerSetter, createSetterContent, getSetter, createSettingFieldView };
+export { createSettingFieldView };

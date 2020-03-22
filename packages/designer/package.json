@@ -1,5 +1,5 @@
 {
-  "name": "lowcode-designer",
+  "name": "@ali/lowcode-designer",
   "version": "0.9.0",
   "description": "alibaba lowcode designer",
   "main": "src/index.ts",

@@ -1,9 +1,9 @@
-import { obx } from '@recore/obx';
 import Node from '../document/node/node';
 import DocumentModel from '../document/document-model';
+import { obx } from '../../../../globals';
 
 export default class Hovering {
-  @obx.ref private _enable: boolean = true;
+  @obx.ref private _enable = true;
   get enable() {
     return this._enable;
   }
@@ -13,7 +13,7 @@ export default class Hovering {
       this._current = null;
     }
   }
-  @obx.ref xRayMode: boolean = false;
+  @obx.ref xRayMode = false;
 
   @obx.ref private _current: Node | null = null;
   get current() {

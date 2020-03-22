@@ -1,5 +1,5 @@
-import { TipConfig } from './embed-tip';
 import { EventEmitter } from 'events';
+import { TipConfig } from '../../types';
 
 export interface TipOptions extends TipConfig {
   target: HTMLElement;

@@ -1,4 +1,4 @@
-import { obx, autorun, computed } from '@recore/obx';
+import { obx, autorun, computed } from '../../../../../globals';
 import { ISimulator, Component, NodeInstance } from '../../../designer/simulator';
 import Viewport from './viewport';
 import { createSimulator } from './create-simulator';
@@ -28,12 +28,11 @@ import {
   Rect,
   CanvasPoint,
 } from '../../../designer/helper/location';
-import { isNodeSchema, NodeSchema } from '../../../designer/schema';
-import { ComponentMetadata } from '../../../designer/component-meta';
 import { ReactInstance } from 'react';
 import { isRootNode } from '../../../designer/document/node/root-node';
 import { parseProps } from '../utils/parse-props';
 import { isElement } from '../../../utils/is-element';
+import { ComponentMetadata, NodeSchema, isNodeSchema } from '../../../../../globals';
 
 export interface LibraryItem {
   package: string;
@@ -464,24 +463,17 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
       return null;
     }
 
+    let elems = elements.slice();
+    if (selector) {
+      const matched = getMatched(elems, selector);
+      if (!matched) {
+        return null;
+      }
+      elems = [matched];
+    }
     let rects: DOMRect[] | undefined;
     let last: { x: number; y: number; r: number; b: number } | undefined;
     let computed = false;
-    const elems = selector
-      ? elements
-          .map(elem => {
-            if (isElement(elem)) {
-              // TODO: if has selector use exact match
-              if (elem.matches(selector)) {
-                return elem;
-              }
-
-              return elem.querySelector(selector);
-            }
-            return null;
-          })
-          .filter(Boolean)
-      : elements.slice();
     while (true) {
       if (!rects || rects.length < 1) {
         const elem = elems.pop();
@@ -1056,4 +1048,20 @@ function isNearAfter(point: CanvasPoint, rect: Rect, inline: boolean) {
     );
   }
   return Math.abs(point.canvasY - rect.top) > Math.abs(point.canvasY - rect.bottom);
+}
+
+function getMatched(elements: Array<Element | Text>, selector: string): Element | null {
+  let firstQueried: Element | null = null;
+  for (const elem of elements) {
+    if (isElement(elem)) {
+      if (elem.matches(selector)) {
+        return elem;
+      }
+
+      if (!firstQueried) {
+        firstQueried = elem.querySelector(selector);
+      }
+    }
+  }
+  return firstQueried;
 }

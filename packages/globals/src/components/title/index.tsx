@@ -1,27 +1,19 @@
-import { Component, isValidElement, ReactElement, ReactNode } from 'react';
-import { Icon } from '@alifd/next';
+import { Component, isValidElement } from 'react';
 import classNames from 'classnames';
-import EmbedTip, { TipConfig } from '../tip/embed-tip';
+import EmbedTip from '../tip/embed-tip';
 import './title.less';
-import { IconConfig, createIcon } from '../../utils';
+import { createIcon } from '../../utils';
+import { TitleContent, isI18nData } from '../../types';
+import { intl } from '../../intl';
 
-export interface TitleConfig {
-  label?: ReactNode;
-  tip?: string | ReactElement | TipConfig;
-  icon?: string | ReactElement | IconConfig;
-  className?: string;
-}
-
-export type TitleContent = string | ReactElement | TitleConfig;
-
-export class Title extends Component<{ title: TitleContent; onClick?: () => void }> {
+export class Title extends Component<{ title: TitleContent; className?: string; onClick?: () => void }> {
   render() {
-    let { title } = this.props;
+    let { title, className, onClick } = this.props;
     if (isValidElement(title)) {
       return title;
     }
-    if (typeof title === 'string') {
-      title = { label: title }; // tslint:disable-line
+    if (typeof title === 'string' || isI18nData(title)) {
+      title = { label: title };
     }
 
     const icon = title.icon ? createIcon(title.icon) : null;
@@ -32,22 +24,24 @@ export class Title extends Component<{ title: TitleContent; onClick?: () => void
         tip = title.tip;
       } else {
         const tipProps =
-          typeof title.tip === 'object' && !isValidElement(title.tip) ? title.tip : { children: title.tip };
+          typeof title.tip === 'object' && !(isValidElement(title.tip) || isI18nData(title.tip))
+            ? title.tip
+            : { children: title.tip };
         tip = <EmbedTip direction="top" theme="black" {...tipProps} />;
       }
     }
 
     return (
-      <div
-        className={classNames('lc-title', title.className, {
+      <span
+        className={classNames('lc-title', className, title.className, {
           'has-tip': !!tip,
         })}
-        onClick={this.props.onClick}
+        onClick={onClick}
       >
-        {icon ? <div className="lc-title-icon">{icon}</div> : null}
-        {title.label ? <span className="lc-title-label">{title.label}</span> : null}
+        {icon ? <b className="lc-title-icon">{icon}</b> : null}
+        {title.label ? intl(title.label) : null}
         {tip}
-      </div>
+      </span>
     );
   }
 }

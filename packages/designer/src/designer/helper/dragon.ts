@@ -1,13 +1,12 @@
 import { EventEmitter } from 'events';
-import { obx } from '@recore/obx';
 import Location from './location';
 import DocumentModel from '../document/document-model';
-import { NodeSchema } from '../schema';
 import { ISimulator, isSimulator, ComponentInstance } from '../simulator';
 import Node from '../document/node/node';
 import Designer from '../designer';
 import { setNativeSelection } from './navtive-selection';
 import cursor from './cursor';
+import { NodeSchema, obx } from '../../../../globals';
 
 export interface LocateEvent {
   readonly type: 'LocateEvent';

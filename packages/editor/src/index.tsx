@@ -8,7 +8,7 @@ import components from './config/components';
 import utils from './config/utils';
 import constants from './config/constants';
 import './config/locale';
-import './config/setters';
+import '../../plugin-setters';
 
 import './global.scss';
 import './config/theme.scss';

@@ -1,0 +1,251 @@
+/* 面板背景的颜色 */
+@pane-bgcolor: #333131; // #1a1c23;
+/* 标题背景色 */
+//@title-bgcolor: var(--pane-bg-color; // backup rgba(0, 0, 0, 0.2);
+/* 标题边框色 */
+@title-bdcolor: transparent;
+@title-selectedcolor: #111;
+@section-bgcolor: transparent;
+@section-bdcolor: rgba(0, 0, 0, 0.1);
+/* 文字颜色 */
+@text-color: #ffffff;
+
+.hidden {
+  display: none;
+}
+
+.my-outline-pane {
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+
+  > .tree-scroll-container {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    overflow: auto;
+  }
+}
+
+.my-outline-tree {
+  overflow: hidden;
+  margin-bottom: 20px;
+  padding-left: 5px;
+
+  // 禁用 Text Select
+  user-select: none;
+
+  .insertion {
+    pointer-events: none !important;
+    border: 1px dashed var(--color-brand-light);
+    height: 25px;
+    transform: translateZ(0);
+  }
+
+  .condition-flow-container {
+    @bd-setting: 1px solid #7b605b;
+    border-top: @bd-setting;
+    border-bottom: @bd-setting;
+    position: relative;
+
+    &:before {
+      position: absolute;
+      display: block;
+      width: 0;
+      border-left: @bd-setting;
+      height: 100%;
+      top: 0;
+      left: 0;
+      content: ' ';
+      z-index: 2;
+    }
+  }
+
+  .tree-node {
+    color: rgb(217, 217, 217);
+
+    .c-control-flow-title {
+      text-align: center;
+      background-color: #7b605b;
+      height: 14px;
+      > b {
+        transform: scale(0.75);
+        transform-origin: top;
+        text-shadow: 0px 0px 2px black;
+        display: block;
+      }
+    }
+
+    .tree-node-collapsed-icon {
+      transition: transform 0.01s;
+      margin-left: 4px;
+      filter: opacity(0.5);
+
+      & > svg {
+        width: 8px;
+        height: 8px;
+      }
+
+      &:hover {
+        filter: opacity(1);
+      }
+    }
+
+    .tree-node-icon {
+      transform: translateZ(0);
+      display: flex;
+      align-items: center;
+      margin-right: 5px;
+      margin-left: 5px;
+
+      & > svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    .tree-node-ignored-icon {
+      display: none;
+      position: absolute;
+      right: 8px;
+      top: 6px;
+    }
+
+    .tree-node-title {
+      font-size: var(--font-size-text);
+      padding: 0;
+      cursor: pointer;
+      background: var(--pane-bg-color);
+      display: flex;
+      align-items: center;
+      position: relative;
+      transform: translateZ(0);
+
+      .tree-node-title-inner {
+        flex: 1;
+        height: 26px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: flex;
+        align-items: center;
+      }
+
+      .tree-node-title-input {
+        flex: 1;
+        border: none;
+        background-color: var(--pane-bg-color);
+        color: var(--color-pane-label);
+        height: 24px;
+        line-height: 24px;
+      }
+
+      .tree-node-title-text {
+        flex: 1;
+        color: rgb(217, 217, 217);
+        // problem
+        //width: 100%;
+        //height: 100%;
+        display: flex;
+        align-items: center;
+
+        &.x-for-text {
+          color: #9370db;
+        }
+
+        &.x-if-text {
+          color: #ff6308;
+        }
+
+        .info {
+          margin-left: 10px;
+        }
+
+        .editable {
+          display: flex;
+          justify-content: space-between;
+        }
+      }
+    }
+
+    &.expanded {
+      > .tree-node-title > .tree-node-collapsed-icon {
+        transform-origin: center;
+        transform: rotate(90deg);
+      }
+      //> .branches {
+      //  > .tree-node > .tree-node-title > .tree-node-icon {
+      //    margin-left: 9px;
+      //  }
+      //}
+    }
+
+    &.hover {
+      & > .tree-node-title {
+        background: @title-selectedcolor * 1.6;
+
+        .tree-node-ignored-icon {
+          display: block;
+        }
+      }
+    }
+
+    // 忽略节点处理
+    &.ignored {
+      .tree-node-title-text {
+        color: #9b9b9b;
+      }
+
+      .tree-node-collapsed-icon,
+      .tree-node-ignored-icon {
+        display: block;
+        filter: opacity(0.5);
+      }
+    }
+
+    // 选中节点处理
+    &.selected {
+      & > .tree-node-title {
+        background: @title-selectedcolor;
+      }
+    }
+
+    // 处理拖入节点
+    &.dropping {
+      & > .tree-node-title {
+        background: @title-selectedcolor * 0.75;
+      }
+
+      & > .branches:before {
+        border-left: 1px solid var(--color-brand-light);
+      }
+    }
+
+    .branches {
+      padding-left: 12px;
+      position: relative;
+
+      &:before {
+        position: absolute;
+        display: block;
+        width: 0;
+        border-left: 0.5px solid rgba(149, 216, 160, 0.25);
+        height: 100%;
+        top: 0;
+        left: 10px;
+        content: ' ';
+        z-index: 2;
+      }
+
+      &.x-flow {
+        &:before {
+          border-left: 1px solid #ff6308;
+        }
+      }
+    }
+  }
+}

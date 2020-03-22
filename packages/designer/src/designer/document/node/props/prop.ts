@@ -1,12 +1,20 @@
-import { untracked, computed, obx } from '@recore/obx';
 import { valueToSource } from '../../../../utils/value-to-source';
-import { CompositeValue, isJSExpression, isJSSlot, NodeSchema, NodeData, isNodeSchema } from '../../../schema';
 import PropStash from './prop-stash';
 import { uniqueId } from '../../../../../../utils/unique-id';
 import { isPlainObject } from '../../../../../../utils/is-plain-object';
 import { hasOwnProperty } from '../../../../utils/has-own-property';
 import Props from './props';
 import Node from '../node';
+import {
+  CompositeValue,
+  isJSExpression,
+  isJSSlot,
+  NodeData,
+  isNodeSchema,
+  untracked,
+  computed,
+  obx,
+} from '../../../../../../globals';
 
 export const UNSET = Symbol.for('unset');
 export type UNSET = typeof UNSET;
@@ -197,6 +205,9 @@ export default class Prop implements IPropParent {
   }
 
   private _slotNode?: Node;
+  get slotNode() {
+    return this._slotNode;
+  }
   setAsSlot(data: NodeData) {
     this._type = 'slot';
     if (

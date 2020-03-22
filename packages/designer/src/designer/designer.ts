@@ -1,8 +1,6 @@
-import { ComponentType as ReactComponentType } from 'react';
-import { obx, computed, autorun } from '@recore/obx';
+import { ComponentType } from 'react';
 import BuiltinSimulatorView from '../builtins/simulator';
 import Project from './project';
-import { ProjectSchema, NpmInfo } from './schema';
 import Dragon, { isDragNodeObject, isDragNodeDataObject, LocateEvent, DragObject } from './helper/dragon';
 import ActiveTracker from './helper/active-tracker';
 import Hovering from './helper/hovering';
@@ -10,11 +8,12 @@ import Location, { LocationData, isLocationChildrenDetail } from './helper/locat
 import DocumentModel from './document/document-model';
 import Node, { insertChildren } from './document/node/node';
 import { isRootNode } from './document/node/root-node';
-import { ComponentMetadata, ComponentMeta, ComponentAction } from './component-meta';
+import { ComponentMeta } from './component-meta';
 import Scroller, { IScrollable } from './helper/scroller';
 import { INodeSelector } from './simulator';
 import OffsetObserver, { createOffsetObserver } from './helper/offset-observer';
 import { EventEmitter } from 'events';
+import { ProjectSchema, ComponentMetadata, ComponentAction, NpmInfo, obx, computed, autorun } from '../../../globals';
 
 export interface DesignerProps {
   className?: string;
@@ -22,8 +21,8 @@ export interface DesignerProps {
   defaultSchema?: ProjectSchema;
   hotkeys?: object;
   simulatorProps?: object | ((document: DocumentModel) => object);
-  simulatorComponent?: ReactComponentType<any>;
-  dragGhostComponent?: ReactComponentType<any>;
+  simulatorComponent?: ComponentType<any>;
+  dragGhostComponent?: ComponentType<any>;
   suspensed?: boolean;
   componentMetadatas?: ComponentMetadata[];
   eventPipe?: EventEmitter;
@@ -165,6 +164,9 @@ export default class Designer {
    */
   createLocation(locationData: LocationData): Location {
     const loc = new Location(locationData);
+    if (this._dropLocation && this._dropLocation.document !== loc.document) {
+      this._dropLocation.document.internalSetDropLocation(null);
+    }
     this._dropLocation = loc;
     loc.document.internalSetDropLocation(loc);
     this.activeTracker.track({ node: loc.target, detail: loc.detail });
@@ -258,9 +260,9 @@ export default class Designer {
     return this.props ? this.props[key] : null;
   }
 
-  @obx.ref private _simulatorComponent?: ReactComponentType<any>;
+  @obx.ref private _simulatorComponent?: ComponentType<any>;
 
-  @computed get simulatorComponent(): ReactComponentType<any> {
+  @computed get simulatorComponent(): ComponentType<any> {
     return this._simulatorComponent || BuiltinSimulatorView;
   }
 
@@ -300,12 +302,12 @@ export default class Designer {
       const key = data.componentName;
       let meta = this._componentMetasMap.get(key);
       if (meta) {
-        meta.metadata = data;
+        meta.setMetadata(data);
       } else {
         meta = this._lostComponentMetasMap.get(key);
 
         if (meta) {
-          meta.metadata = data;
+          meta.setMetadata(data);
           this._lostComponentMetasMap.delete(key);
         } else {
           meta = new ComponentMeta(this, data);
@@ -342,7 +344,9 @@ export default class Designer {
   @computed get componentsMap(): { [key: string]: NpmInfo } {
     const maps: any = {};
     this._componentMetasMap.forEach((config, key) => {
-      maps[key] = config.metadata.npm;
+      if (config.npm) {
+        maps[key] = config.npm;
+      }
     });
     return maps;
   }
