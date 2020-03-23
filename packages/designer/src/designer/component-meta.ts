@@ -108,7 +108,8 @@ export class ComponentMeta {
     return this._title || this.componentName;
   }
 
-  get icon() {
+  @computed get icon() {
+    // give Slot default icon
     return (
       this._transformedMetadata?.icon ||
       (this.componentName === 'Page' ? IconPage : this.isContainer ? IconContainer : IconComponent)

@@ -14,6 +14,7 @@ import {
   obx,
   computed,
 } from '../../../../../globals';
+import ExclusiveGroup, { isExclusiveGroup } from './exclusive-group';
 
 /**
  * 基础节点
@@ -29,10 +30,10 @@ import {
  *  condition
  *  ------- future support -----
  *  conditionGroup
- *  x-title
- *  x-ignore
- *  x-locked
- *  x-hidden
+ *  title
+ *  ignored
+ *  locked
+ *  hidden
  */
 export default class Node {
   /**
@@ -80,7 +81,7 @@ export default class Node {
     if (this._parent) {
       return this._parent.zLevel + 1;
     }
-    return -1;
+    return 0;
   }
 
   @computed get title(): TitleContent {
@@ -110,6 +111,7 @@ export default class Node {
     if (isNodeParent(this)) {
       _props = new Props(this, props, extras);
       this._children = new NodeChildren(this as NodeParent, children || []);
+      this._children.interalInitParent();
     } else {
       _props = new Props(this, {
         children: isDOMText(children) || isJSExpression(children) ? children : '',
@@ -138,6 +140,13 @@ export default class Node {
     }
 
     this._parent = parent;
+    if (parent && !this.conditionGroup) {
+      // initial conditionGroup
+      const grp = this.getExtraProp('conditionGroup', false)?.getAsString();
+      if (grp) {
+        this.setConditionGroup(grp);
+      }
+    }
   }
 
   private _slotFor?: Prop | null = null;
@@ -214,37 +223,53 @@ export default class Node {
     return slots;
   }
 
-  private _conditionGroup: string | null = null;
-  /**
-   * 条件组
-   */
-  get conditionGroup(): string | null {
-    if (this._conditionGroup) {
-      return this._conditionGroup;
-    }
-    // 如果 condition 有值，且没有 group
-    if (this._condition) {
-      return this.id;
-    }
-    return null;
-  }
-  set conditionGroup(val) {
-    this._conditionGroup = val;
+  @obx.ref private _conditionGroup: ExclusiveGroup | null = null;
+  get conditionGroup(): ExclusiveGroup | null {
+    return this._conditionGroup;
   }
 
-  private _condition: any;
-  /**
-   *
-   */
-  get condition() {
-    if (this._condition == null) {
+  setConditionGroup(grp: ExclusiveGroup | string | null) {
+    if (!grp) {
+      this.getExtraProp('conditionGroup', false)?.remove();
       if (this._conditionGroup) {
-        // FIXME: should be expression
-        return true;
+        this._conditionGroup.remove(this);
+        this._conditionGroup = null;
       }
-      return null;
+      return;
     }
-    return this._condition;
+    if (!isExclusiveGroup(grp)) {
+      if (this.prevSibling?.conditionGroup?.name === grp) {
+        grp = this.prevSibling.conditionGroup;
+      } else {
+        grp = new ExclusiveGroup(grp);
+      }
+    }
+    if (this._conditionGroup !== grp) {
+      this.getExtraProp('conditionGroup', true)?.setValue(grp.name);
+      if (this._conditionGroup) {
+        this._conditionGroup.remove(this);
+      }
+      this._conditionGroup = grp;
+      grp.add(this);
+    }
+  }
+
+  @computed isConditionalVisible(): boolean | undefined {
+    return this._conditionGroup?.isVisible(this);
+  }
+
+  setConditionalVisible() {
+    this._conditionGroup?.setVisible(this);
+  }
+
+  @computed hasCondition() {
+    const v = this.getExtraProp('condition', false)?.getValue();
+    return v != null && v !== '';
+  }
+
+  @computed hasLoop() {
+    const v = this.getExtraProp('loop', false)?.getValue();
+    return v != null && v !== '';
   }
 
   wrapWith(schema: NodeSchema) {

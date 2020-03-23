@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { OutlineMain } from '../main';
+import { observer } from '../../../globals';
 import { intl } from '../locale';
-import { observer } from '../../../globals/src';
+import { OutlineMain } from '../main';
+import TreeView from './tree';
 import './style.less';
 
 @observer
@@ -25,7 +26,9 @@ export default class OutlinePane extends Component<{ editor: any }> {
       );
     }
 
-    if (!this.main.master.currentTree) {
+    const tree = this.main.master.currentTree;
+
+    if (!tree) {
       return (
         <div className="lc-outline-pane">
           <p className="lc-outline-notice">{intl('No opened document')}</p>
@@ -35,11 +38,8 @@ export default class OutlinePane extends Component<{ editor: any }> {
 
     return (
       <div className="lc-outline-pane">
-        <div
-          ref={shell => this.main.mount(shell)}
-          className="lc-outline-tree-container"
-        >
-          <TreeView tree={this.main.master.currentTree} />
+        <div ref={shell => this.main.mount(shell)} className="lc-outline-tree-container">
+          <TreeView key={tree.id} tree={tree} />
         </div>
       </div>
     );

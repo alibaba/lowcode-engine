@@ -5,10 +5,12 @@ export default class NodeChildren {
   @obx.val private children: Node[];
   constructor(readonly owner: NodeParent, data: NodeData | NodeData[]) {
     this.children = (Array.isArray(data) ? data : [data]).map(child => {
-      const node = this.owner.document.createNode(child);
-      node.internalSetParent(this.owner);
-      return node;
+      return this.owner.document.createNode(child);
     });
+  }
+
+  interalInitParent() {
+    this.children.forEach(child => child.internalSetParent(this.owner));
   }
 
   /**
@@ -109,11 +111,24 @@ export default class NodeChildren {
     }
 
     // check condition group
-    node.conditionGroup = null;
+    if (node.conditionGroup) {
+      if (
+        !(
+          // just sort at condition group
+          (
+            (node.prevSibling && node.prevSibling.conditionGroup === node.conditionGroup) ||
+            (node.nextSibling && node.nextSibling.conditionGroup === node.conditionGroup)
+          )
+        )
+      ) {
+        node.setConditionGroup(null);
+      }
+    }
     if (node.prevSibling && node.nextSibling) {
       const conditionGroup = node.prevSibling.conditionGroup;
+      // insert at condition group
       if (conditionGroup && conditionGroup === node.nextSibling.conditionGroup) {
-        node.conditionGroup = conditionGroup;
+        node.setConditionGroup(conditionGroup);
       }
     }
   }

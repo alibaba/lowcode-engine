@@ -1,5 +1,6 @@
 import Pane from './views/pane';
 
+/*
 export default {
   name: 'outline-tree',
   title: {
@@ -8,3 +9,6 @@ export default {
   },
   content: Pane,
 };
+*/
+
+export default Pane;

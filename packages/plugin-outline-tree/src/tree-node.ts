@@ -1,15 +1,9 @@
-import { computed, obx, TitleContent } from '../../globals';
+import { computed, obx, TitleContent, isI18nData, localeFormat } from '../../globals';
 import Node from '../../designer/src/designer/document/node/node';
 import DocumentModel from '../../designer/src/designer/document/document-model';
 import { isLocationChildrenDetail } from '../../designer/src/designer/helper/location';
 import Designer from '../../designer/src/designer/designer';
 import { Tree } from './tree';
-
-export interface Title {
-  label: string;
-  icon?: string;
-  actions?: any;
-}
 
 export default class TreeNode {
   get id(): string {
@@ -35,6 +29,10 @@ export default class TreeNode {
     return this.node.zLevel;
   }
 
+  isRoot() {
+    return this.tree.root === this;
+  }
+
   /**
    * 是否是响应投放区
    */
@@ -52,10 +50,10 @@ export default class TreeNode {
    */
   @obx.ref private _expanded = false;
   get expanded(): boolean {
-    return this.expandable && this._expanded;
+    return this.isRoot() || (this.expandable && this._expanded);
   }
 
-  set expanded(value: boolean) {
+  setExpanded(value: boolean) {
     this._expanded = value;
   }
 
@@ -64,15 +62,34 @@ export default class TreeNode {
   }
 
   @computed get hidden(): boolean {
-    return this.node.getExtraProp('hidden', false)?.getValue() === true;
+    const cv = this.node.isConditionalVisible();
+    if (cv == null) {
+      return this.node.getExtraProp('hidden', false)?.getValue() === true;
+    }
+    return !cv;
   }
 
-  @computed get ignored(): boolean {
-    return this.node.getExtraProp('ignored', false)?.getValue() === true;
+  setHidden(flag: boolean) {
+    if (this.node.conditionGroup) {
+      return;
+    }
+    if (flag) {
+      this.node.getExtraProp('hidden', true)?.setValue(true);
+    } else {
+      this.node.getExtraProp('hidden', false)?.remove();
+    }
   }
 
   @computed get locked(): boolean {
     return this.node.getExtraProp('locked', false)?.getValue() === true;
+  }
+
+  setLocked(flag: boolean) {
+    if (flag) {
+      this.node.getExtraProp('locked', true)?.setValue(true);
+    } else {
+      this.node.getExtraProp('locked', false)?.remove();
+    }
   }
 
   @computed get selected(): boolean {
@@ -83,6 +100,39 @@ export default class TreeNode {
 
   @computed get title(): TitleContent {
     return this.node.title;
+  }
+
+  @computed get titleLabel() {
+    let title = this.title;
+    if (!title) {
+      return '';
+    }
+    if ((title as any).label) {
+      title = (title as any).label;
+    }
+    if (typeof title === 'string') {
+      return title;
+    }
+    if (isI18nData(title)) {
+      return localeFormat(title);
+    }
+    return this.node.componentName;
+  }
+
+  setTitleLabel(label: string) {
+    const origLabel = this.titleLabel;
+    if (label === origLabel) {
+      return;
+    }
+    if (label === '') {
+      this.node.getExtraProp('title', false)?.remove();
+    } else {
+      this.node.getExtraProp('title', true)?.setValue(label);
+    }
+  }
+
+  get icon() {
+    return this.node.componentMeta.icon;
   }
 
   @computed get parent() {
@@ -155,7 +205,7 @@ export default class TreeNode {
     // 这边不能直接使用 expanded，需要额外判断是否可以展开
     // 如果只使用 expanded，会漏掉不可以展开的情况，即在不可以展开的情况下，会触发展开
     if (this.expandable && !this._expanded) {
-      this.expanded = true;
+      this.setExpanded(true);
     }
     if (tryExpandParents) {
       this.expandParents();
@@ -188,7 +238,7 @@ export default class TreeNode {
   expandParents() {
     let p = this.node.parent;
     while (p) {
-      this.tree.getTreeNode(p).expanded = true;
+      this.tree.getTreeNode(p).setExpanded(true);
       p = p.parent;
     }
   }
@@ -226,8 +276,19 @@ export default class TreeNode {
 
   readonly designer: Designer;
   readonly document: DocumentModel;
-  constructor(readonly tree: Tree, readonly node: Node) {
+  @obx.ref private _node: Node;
+  get node() {
+    return this._node;
+  }
+  constructor(readonly tree: Tree, node: Node) {
     this.document = node.document;
     this.designer = this.document.designer;
+    this._node = node;
+  }
+
+  setNode(node: Node) {
+    if (this._node !== node) {
+      this._node = node;
+    }
   }
 }

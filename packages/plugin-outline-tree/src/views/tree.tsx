@@ -1,8 +1,11 @@
-@observer
-export default class TreeView extends React.Component {
-  private ref = React.createRef<HTMLDivElement>();
-  private dispose?: () => void;
+import { Component } from 'react';
+import { observer } from '../../../globals';
+import { Tree } from '../tree';
+import TreeNodeView from './tree-node';
 
+@observer
+export default class TreeView extends Component<{ tree: Tree }> {
+  /*
   hover(e: any) {
     const treeNode = tree.getTreeNodeByEvent(e);
 
@@ -68,12 +71,13 @@ export default class TreeView extends React.Component {
       });
     }
   }
+  */
 
   render() {
     const { tree } = this.props;
     const root = tree.root;
     return (
-      <div className="my-outline-tree">
+      <div className="lc-outline-tree">
         <TreeNodeView key={root.id} treeNode={root} />
       </div>
     );

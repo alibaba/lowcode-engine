@@ -1,6 +1,6 @@
-import { IconBase, IconBaseProps } from "./icon-base";
+import { IconBase, IconProps } from "./icon-base";
 
-export function IconContainer(props: IconBaseProps) {
+export function IconContainer(props: IconProps) {
   return (
     <IconBase viewBox="0 0 1024 1024" {...props}>
       <path d="M800 800h64v64h-64v-64z m-128 0h64v64h-64v-64z m-128 0h64v64h-64v-64z m-128 0h64v64h-64v-64z m-256 0h64v64h-64v-64z m0-640h64v64h-64v-64z m128 640h64v64h-64v-64zM160 672h64v64h-64v-64z m0-128h64v64h-64v-64z m0-128h64v64h-64v-64z m0-128h64v64h-64v-64z m640 384h64v64h-64v-64z m0-128h64v64h-64v-64z m0-128h64v64h-64v-64z m0-128h64v64h-64v-64z m0-128h64v64h-64v-64z m-128 0h64v64h-64v-64z m-128 0h64v64h-64v-64z m-128 0h64v64h-64v-64z m-128 0h64v64h-64v-64z" />

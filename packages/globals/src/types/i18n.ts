@@ -1,6 +1,9 @@
+import { ReactNode } from 'react';
+
 export interface I18nData {
   type: 'i18n';
-  [key: string]: string;
+  intl?: ReactNode;
+  [key: string]: any;
 }
 
 // type checks

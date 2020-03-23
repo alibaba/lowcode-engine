@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { observer, obx } from '../../../../globals';
+import { observer, obx, Title } from '../../../../globals';
 import Designer from '../../designer/designer';
 import { isDragNodeObject, DragObject, isDragNodeDataObject } from '../../designer/helper/dragon';
 import './ghost.less';
@@ -53,7 +53,7 @@ export default class Ghost extends Component<{ designer: Designer }> {
       return dragObject.nodes.map(node => {
         const ghost = (
           <div className="lc-ghost" key={node.id}>
-            <div className="lc-ghost-title">{node.title}</div>
+            <Title title={node.title} />
           </div>
         );
         return ghost;

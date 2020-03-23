@@ -5,7 +5,22 @@ import { Tree } from './tree';
 import Location from '../../designer/src/designer/helper/location';
 
 class TreeMaster {
-  constructor(readonly designer: Designer) {}
+  constructor(readonly designer: Designer) {
+    designer.dragon.onDragstart((e) => {
+      const tree = this.currentTree;
+      if (tree) {
+        tree.document.selection.getTopNodes().forEach(node => {
+          tree.getTreeNode(node).setExpanded(false);
+        });
+      };
+    });
+    designer.activeTracker.onChange((target) => {
+      const tree = this.currentTree;
+      if (tree && target.node.document === tree.document) {
+        tree.getTreeNode(target.node).expandParents();
+      }
+    });
+  }
 
   private treeMap = new Map<string, Tree>();
   @computed get currentTree(): Tree | null {
@@ -70,7 +85,7 @@ export class OutlineMain implements ISensor {
   private setupDesigner(designer: Designer) {
     this._designer = designer;
     this._master = getTreeMaster(designer);
-    designer.dragon.addSensor(this);
+    // designer.dragon.addSensor(this);
   }
 
   purge() {
@@ -93,7 +108,7 @@ export class OutlineMain implements ISensor {
     }
     this._shell = shell;
     if (shell) {
-      this._sensorAvailable = true;
+      // this._sensorAvailable = true;
     }
   }
 }

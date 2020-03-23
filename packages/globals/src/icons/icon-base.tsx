@@ -8,16 +8,24 @@ const SizePresets: any = {
   xlarge: 30,
 };
 
-export interface IconBaseProps {
+export interface IconProps {
   className?: string;
   fill?: string;
   size?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge' | number;
-  viewBox: string;
   children?: ReactNode;
   style?: object;
-};
+}
 
-export function IconBase({ fill, size = 'medium', viewBox, style, children, ...props }: IconBaseProps) {
+export function IconBase({
+  fill,
+  size = 'medium',
+  viewBox,
+  style,
+  children,
+  ...props
+}: IconProps & {
+  viewBox: string;
+}) {
   if (SizePresets.hasOwnProperty(size)) {
     size = SizePresets[size];
   }
@@ -31,10 +39,11 @@ export function IconBase({ fill, size = 'medium', viewBox, style, children, ...p
       viewBox={viewBox}
       {...props}
       style={{
-        verticalAlign: 'middle',
         color: fill,
         ...style,
       }}
-    >{children}</svg>
+    >
+      {children}
+    </svg>
   );
 }

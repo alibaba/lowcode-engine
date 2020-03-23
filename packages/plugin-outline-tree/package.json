@@ -1,5 +1,5 @@
 {
-  "name": "@ali/lowcode-plugin-outline-pane",
+  "name": "@ali/lowcode-plugin-outline-tree",
   "version": "0.0.0",
   "description": "xxx for Ali lowCode engine",
   "main": "src/index.ts",

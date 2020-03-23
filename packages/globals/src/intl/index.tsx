@@ -62,6 +62,9 @@ class Intl extends PureComponent<{ data: any; params?: object }> {
 
 export function intl(data: any, params?: object): ReactNode {
   if (isI18nData(data)) {
+    if (data.intl) {
+      return data.intl;
+    }
     return <Intl data={data} params={params} />;
   }
   return data;

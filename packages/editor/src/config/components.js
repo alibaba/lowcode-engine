@@ -14,6 +14,7 @@ import undoRedo from '../plugins/undoRedo';
 import Designer from '../plugins/designer';
 import logo from '../plugins/logo';
 import save from '../plugins/save';
+import OutlineTree from '../../../plugin-outline-tree';
 
 import PluginFactory from '../framework/pluginFactory';
 
@@ -22,6 +23,7 @@ export default {
   save: PluginFactory(save),
   designer: PluginFactory(Designer),
   settings: PluginFactory(Settings),
+  outlineTree: PluginFactory(OutlineTree),
   undoRedo: PluginFactory(undoRedo),
   topBalloonIcon: PluginFactory(topBalloonIcon),
   topDialogIcon: PluginFactory(topDialogIcon),

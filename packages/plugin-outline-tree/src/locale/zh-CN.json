@@ -1,0 +1,14 @@
+{
+  "Designer not found": "未发现设计器模块",
+  "No opened document": "没有打开的文档",
+  "Hide": "隐藏",
+  "Show": "显示",
+  "Lock": "锁定",
+  "Unlock": "解锁",
+  "Expand": "展开",
+  "Collapse": "收起",
+  "Conditional": "条件式",
+  "Loop": "循环",
+  "Slots": "插槽",
+  "Slot for {prop}": "属性 {prop} 的插槽"
+}

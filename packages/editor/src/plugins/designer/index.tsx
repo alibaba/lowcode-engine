@@ -81,7 +81,13 @@ const SCHEMA = {
             {
               componentName: 'Form.Item',
               props: {
-                label: '职业：',
+                label: {
+                  type: 'JSSlot',
+                  value: {
+                    componentName: 'Div',
+                    children: '职业：',
+                  }
+                },
                 name: 'profession'
               },
               children: [
@@ -127,7 +133,10 @@ const SCHEMA = {
                         },
                         htmlType: 'submit'
                       },
-                      children: '提交'
+                      children: '提交',
+                      condition: true,
+                      loop: [1,2,3],
+                      conditionGroup: '1'
                     },
                     {
                       componentName: 'Button',
@@ -138,7 +147,9 @@ const SCHEMA = {
                         },
                         htmlType: 'reset'
                       },
-                      children: '重置'
+                      children: '重置',
+                      condition: false,
+                      conditionGroup: '1'
                     }
                   ]
                 }

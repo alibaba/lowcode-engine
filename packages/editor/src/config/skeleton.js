@@ -238,6 +238,7 @@ export default {
       }
     ],
     rightArea: [
+      /*
       {
         pluginKey: 'settings',
         type: 'Panel',
@@ -246,52 +247,16 @@ export default {
           version: '^1.0.0'
         },
         pluginProps: {}
+      },*/
+      {
+        pluginKey: 'outlineTree',
+        type: 'Panel',
+        props: {},
+        config: {
+          version: '^1.0.0'
+        },
+        pluginProps: {}
       }
-      // {
-      //   pluginKey: 'rightPanel1',
-      //   type: 'TabPanel',
-      //   props: {
-      //     title: '样式'
-      //   },
-      //   config: {
-      //     version: '^1.0.0'
-      //   },
-      //   pluginProps: {}
-      // },
-      // {
-      //   pluginKey: 'rightPanel2',
-      //   type: 'TabPanel',
-      //   props: {
-      //     title: '属性',
-      //     icon: 'dengpao'
-      //   },
-      //   config: {
-      //     version: '^1.0.0'
-      //   },
-      //   pluginProps: {}
-      // },
-      // {
-      //   pluginKey: 'rightPanel3',
-      //   type: 'TabPanel',
-      //   props: {
-      //     title: '事件'
-      //   },
-      //   config: {
-      //     version: '^1.0.0'
-      //   },
-      //   pluginProps: {}
-      // },
-      // {
-      //   pluginKey: 'rightPanel4',
-      //   type: 'TabPanel',
-      //   props: {
-      //     title: '数据'
-      //   },
-      //   config: {
-      //     version: '^1.0.0'
-      //   },
-      //   pluginProps: {}
-      // }
     ],
     centerArea: [
       {
