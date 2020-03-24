@@ -21,24 +21,24 @@ export default {
           supportedLifecycles: [
             {
               description: '初始化时',
-              name: 'constructor',
+              name: 'constructor'
             },
             {
               description: '装载后',
-              name: 'componentDidMount',
+              name: 'componentDidMount'
             },
             {
               description: '更新时',
-              name: 'componentDidMount',
+              name: 'componentDidMount'
             },
             {
               description: '卸载时',
-              name: 'componentWillUnmount',
-            },
+              name: 'componentWillUnmount'
+            }
           ]
         },
         component: {
-          isContainer: true,
+          isContainer: true
         }
       }
     },
@@ -47,7 +47,7 @@ export default {
       title: '容器',
       configure: {
         component: {
-          isContainer: true,
+          isContainer: true
         }
       }
     },
@@ -495,7 +495,7 @@ export default {
       ],
       configure: {
         component: {
-          isContainer: true,
+          isContainer: true
         }
       }
     },
@@ -1208,14 +1208,16 @@ export default {
                 defaultValue: 'single',
                 dataSource: [
                   {
-                      value: 'single',
-                      label: 'single'
-                  }, {
-                      value: 'multiple',
-                      label: 'multiple'
-                  }, {
-                      value: 'tag',
-                      label: 'tag'
+                    value: 'single',
+                    label: 'single'
+                  },
+                  {
+                    value: 'multiple',
+                    label: 'multiple'
+                  },
+                  {
+                    value: 'tag',
+                    label: 'tag'
                   }
                 ]
               }
@@ -1230,14 +1232,16 @@ export default {
                 defaultValue: 'single',
                 dataSource: [
                   {
-                      value: 'single',
-                      label: 'single'
-                  }, {
-                      value: 'multiple',
-                      label: 'multiple'
-                  }, {
-                      value: 'tag',
-                      label: 'tag'
+                    value: 'single',
+                    label: 'single'
+                  },
+                  {
+                    value: 'multiple',
+                    label: 'multiple'
+                  },
+                  {
+                    value: 'tag',
+                    label: 'tag'
                   }
                 ]
               }
@@ -1245,91 +1249,8 @@ export default {
           },
           {
             name: 'value',
-            title: '当前值，用于受控模式',
-            placeholder: '混合',
-            setter: {
-              componentName: 'MixinSetter',
-              props: {
-                types: [{
-                  name: 'StringSetter', 
-                  // 当前mixin setter API
-                  props: {}
-                }, {
-                  name: 'ExpressionSetter', 
-                  props: {}
-                }, {
-                  name: 'RadioGroupSetter', 
-                  // 当前mixin setter API
-                  props: {
-                    hasClear: true,
-                    dataSource: [{
-                      label: '上',
-                      value: 't',
-                    },
-                    {
-                      label: '右',
-                      value: 'r',
-                    },
-                    {
-                      label: '下',
-                      value: 'b',
-                    },
-                    {
-                      label: '左',
-                      value: 'l',
-                    }]
-                  }
-                }],
-                defaultType: 'SelectSetter'
-              },
-            },
-          },
-          {
-            name: 'defaultValue',
-            title: '当前值，用于受控模式',
-            placeholder: '混合',
-            setter: {
-              componentName: 'MixinSetter',
-              props: {
-                types: [{
-                  name: 'StringSetter', 
-                  // 当前mixin setter API
-                  props: {}
-                }, {
-                  name: 'TextAreaSetter', 
-                  props: {}
-                }, {
-                  name: 'SelectSetter', 
-                  // 当前mixin setter API
-                  props: {
-                    hasClear: true,
-                    dataSource: [{
-                      label: '上',
-                      value: 't',
-                    },
-                    {
-                      label: '右',
-                      value: 'r',
-                    },
-                    {
-                      label: '下',
-                      value: 'b',
-                    },
-                    {
-                      label: '左',
-                      value: 'l',
-                    }]
-                  }
-                }, {
-                  name: 'NumberSetter', 
-                  props: {}
-                }, {
-                  name: 'BoolSetter', 
-                  props: {}
-                }],
-                defaultType: 'SelectSetter'
-              },
-            },
+            title: '受控值',
+            setter: 'StringSetter',
           },
           {
             name: 'hasBorder',
@@ -1342,16 +1263,6 @@ export default {
             }
           },
           {
-            name: 'searchValue',
-            title: '受控搜索值，一般不需要设置\n@type {[type]}',
-            setter: 'TextAreaSetter'
-          },
-          {
-            name: 'searchValue',
-            title: '受控搜索值，一般不需要设置\n@type {[type]}',
-            setter: 'StringSetter'
-          },
-          {
             name: 'maxTagCount',
             title: '最多显示多少个 tag',
             setter: 'NumberSetter'
@@ -1362,24 +1273,453 @@ export default {
             setter: 'ExpressionSetter'
           },
           {
-            name: 'date',
-            title: '测试日期',
-            setter: 'DateSetter'
+            name: 'MixinSetter',
+            placeholder: '混合',
+            setter: {
+              componentName: 'MixinSetter',
+              props: {
+                types: [
+                  {
+                    name: 'StringSetter',
+                    // 当前mixin setter API
+                    props: {}
+                  },
+                  {
+                    name: 'TextAreaSetter',
+                    props: {}
+                  },
+                  {
+                    name: 'SelectSetter',
+                    // 当前mixin setter API
+                    props: {
+                      hasClear: true,
+                      dataSource: [
+                        {
+                          label: '上',
+                          value: 't'
+                        },
+                        {
+                          label: '右',
+                          value: 'r'
+                        },
+                        {
+                          label: '下',
+                          value: 'b'
+                        },
+                        {
+                          label: '左',
+                          value: 'l'
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    name: 'NumberSetter',
+                    props: {}
+                  },
+                  {
+                    name: 'BoolSetter',
+                    props: {}
+                  }
+                ],
+                defaultType: 'SelectSetter'
+              }
+            }
           },
           {
-            name: 'date',
-            title: '测试日期-年',
-            setter: 'DateYearSetter'
+            type: 'group',
+            name: '扩展 Setter',
+            items: [
+              {
+                name: 'TextAreaSetter',
+                setter: 'TextAreaSetter'
+              },
+              {
+                name: 'date',
+                title: '测试日期',
+                setter: 'DateSetter'
+              },
+              {
+                name: 'date',
+                title: '测试日期-年',
+                setter: 'DateYearSetter'
+              },
+              {
+                name: 'date',
+                title: '测试日期-月',
+                setter: 'DateMonthSetter'
+              },
+              {
+                name: 'date',
+                title: '测试日期-区间',
+                setter: 'DateRangeSetter'
+              }
+            ]
           },
           {
-            name: 'date',
-            title: '测试日期-月',
-            setter: 'DateMonthSetter'
+            type: 'group',
+            name: 'ArraySetter',
+            items: [
+              {
+                name: 'arrayValue1',
+                title: '字符数组',
+                setter: {
+                  componentName: 'ArraySetter',
+                  props: {
+                    itemSetter: {
+                      componentName: 'StringSetter',
+                      initialValue: ''
+                    }
+                  }
+                }
+              },
+              {
+                name: 'arrayValue2',
+                title: '数字数组',
+                setter: {
+                  componentName: 'ArraySetter',
+                  props: {
+                    itemSetter: {
+                      componentName: 'NumberSetter',
+                      initialValue: 0
+                    }
+                  }
+                }
+              },
+              {
+                name: 'arrayValue3',
+                title: '混合数组',
+                setter: {
+                  componentName: 'ArraySetter',
+                  props: {
+                    itemSetter: {
+                      componentName: 'MixinSetter',
+                      props: {
+                        types: [
+                          {
+                            name: 'StringSetter',
+                            // 当前mixin setter API
+                            props: {}
+                          },
+                          {
+                            name: 'ExpressionSetter',
+                            props: {}
+                          },
+                          {
+                            name: 'RadioGroupSetter',
+                            // 当前mixin setter API
+                            props: {
+                              hasClear: true,
+                              dataSource: [
+                                {
+                                  label: '上',
+                                  value: 't'
+                                },
+                                {
+                                  label: '右',
+                                  value: 'r'
+                                },
+                                {
+                                  label: '下',
+                                  value: 'b'
+                                },
+                                {
+                                  label: '左',
+                                  value: 'l'
+                                }
+                              ]
+                            }
+                          }
+                        ],
+                        defaultType: 'SelectSetter'
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                name: 'arrayValue4',
+                title: '对象数组',
+                setter: {
+                  componentName: 'ArraySetter',
+                  props: {
+                    itemSetter: {
+                      componentName: 'ObjectSetter',
+                      props: {
+                        config: {
+                          items: [{
+                            name: 'username',
+                            title: '姓名',
+                            setter: 'StringSetter',
+                            important: true,
+                          }, {
+                            name: 'phone',
+                            title: '电话',
+                            setter: 'StringSetter',
+                            important: true,
+                          }, {
+                            name: 'age',
+                            title: '年龄',
+                            setter: 'NumberSetter'
+                          }, {
+                            name: 'married',
+                            title: '婚否',
+                            setter: 'BoolSetter'
+                          }, {
+                            type: 'group',
+                            title: 'work',
+                            items: [
+                              {
+                                name: 'job',
+                                title: '工作岗位',
+                                setter: {
+                                  componentName: 'SelectSetter',
+                                  props: {
+                                    dataSource: [{
+                                      label: '工程师',
+                                      value: 1
+                                    }, {
+                                      label: '高级工程师',
+                                      value: 2
+                                    }, {
+                                      label: '资深工程师',
+                                      value: 3
+                                    }]
+                                  }
+                                }
+                              },
+                              {
+                                name: 'address',
+                                title: '工作地点',
+                                setter: 'TextAreaSetter'
+                              }
+                            ]
+                          }],
+                        }
+                      },
+                      initialValue: {},
+                    }
+                  }
+                }
+              },
+              {
+                name: 'arrayValue5',
+                title: '对象数组',
+                setter: {
+                  componentName: 'ArraySetter',
+                  props: {
+                    itemSetter: {
+                      componentName: 'ObjectSetter',
+                      props: {
+                        config: {
+                          items: [{
+                            name: 'username',
+                            title: '姓名',
+                            setter: 'StringSetter',
+                            important: true,
+                          }, {
+                            name: 'age',
+                            title: '年龄',
+                            setter: 'NumberSetter',
+                            important: true,
+                          }, {
+                            name: 'married',
+                            title: '婚否',
+                            setter: 'BoolSetter',
+                            important: true,
+                          }, {
+                            name: 'log',
+                            title: '到访记录',
+                            setter: {
+                              componentName: 'ArraySetter',
+                              props: {
+                                itemSetter: 'StringSetter'
+                              }
+                            },
+                            important: true,
+                          }, {
+                            type: 'group',
+                            title: 'work',
+                            items: [
+                              {
+                                name: 'job',
+                                title: '工作岗位',
+                                setter: {
+                                  componentName: 'SelectSetter',
+                                  props: {
+                                    dataSource: [{
+                                      label: '工程师',
+                                      value: 1
+                                    }, {
+                                      label: '高级工程师',
+                                      value: 2
+                                    }, {
+                                      label: '资深工程师',
+                                      value: 3
+                                    }]
+                                  }
+                                }
+                              },
+                              {
+                                name: 'address',
+                                title: '工作地点',
+                                setter: 'TextAreaSetter'
+                              }
+                            ]
+                          }],
+                        }
+                      },
+                      initialValue: {},
+                    },
+                    mode: 'popup'
+                  }
+                }
+              },
+            ],
+            extraProps: {
+              defaultCollapsed: false,
+            }
           },
           {
-            name: 'date',
-            title: '测试日期-区间',
-            setter: 'DateRangeSetter'
+            type: 'group',
+            name: 'ObjectSetter',
+            items: [
+              {
+                name: 'objectValue1',
+                title: '对象数据1',
+                setter: {
+                  componentName: 'ObjectSetter',
+                  props: {
+                    config: {
+                      items: [{
+                        name: 'username',
+                        title: '姓名',
+                        setter: 'StringSetter',
+                        important: true,
+                      }, {
+                        name: 'age',
+                        title: '年龄',
+                        setter: 'NumberSetter',
+                        important: true,
+                      }, {
+                        name: 'married',
+                        title: '婚否',
+                        setter: 'BoolSetter',
+                        important: true,
+                      }, {
+                        name: 'log',
+                        title: '到访记录',
+                        setter: {
+                          componentName: 'ArraySetter',
+                          props: {
+                            itemSetter: 'StringSetter'
+                          }
+                        },
+                        important: true,
+                      }, {
+                        type: 'group',
+                        title: 'work',
+                        items: [
+                          {
+                            name: 'job',
+                            title: '工作岗位',
+                            setter: {
+                              componentName: 'SelectSetter',
+                              props: {
+                                dataSource: [{
+                                  label: '工程师',
+                                  value: 1
+                                }, {
+                                  label: '高级工程师',
+                                  value: 2
+                                }, {
+                                  label: '资深工程师',
+                                  value: 3
+                                }]
+                              }
+                            }
+                          },
+                          {
+                            name: 'address',
+                            title: '工作地点',
+                            setter: 'TextAreaSetter'
+                          }
+                        ]
+                      }],
+                    }
+                  },
+                  initialValue: {},
+                }
+              },
+              {
+                name: 'objectValue2',
+                title: '对象数据2',
+                setter: {
+                  componentName: 'ObjectSetter',
+                  props: {
+                    mode: 'popup',
+                    config: {
+                      items: [{
+                        name: 'username',
+                        title: '姓名',
+                        setter: 'StringSetter',
+                        important: true,
+                      }, {
+                        name: 'age',
+                        title: '年龄',
+                        setter: 'NumberSetter',
+                        important: true,
+                      }, {
+                        name: 'married',
+                        title: '婚否',
+                        setter: 'BoolSetter',
+                        important: true,
+                      }, {
+                        name: 'log',
+                        title: '到访记录',
+                        setter: {
+                          componentName: 'ArraySetter',
+                          props: {
+                            itemSetter: 'StringSetter'
+                          }
+                        },
+                        important: true,
+                      }, {
+                        type: 'group',
+                        title: 'work',
+                        items: [
+                          {
+                            name: 'job',
+                            title: '工作岗位',
+                            setter: {
+                              componentName: 'SelectSetter',
+                              props: {
+                                dataSource: [{
+                                  label: '工程师',
+                                  value: 1
+                                }, {
+                                  label: '高级工程师',
+                                  value: 2
+                                }, {
+                                  label: '资深工程师',
+                                  value: 3
+                                }]
+                              }
+                            }
+                          },
+                          {
+                            name: 'address',
+                            title: '工作地点',
+                            setter: 'TextAreaSetter'
+                          }
+                        ]
+                      }],
+                    }
+                  },
+                  initialValue: {},
+                }
+              }
+            ]
           }
         ]
       }
@@ -1493,7 +1833,8 @@ export default {
               }
             }
           ]
-        }, {
+        },
+        {
           componentName: 'Select',
           libraryId: 2,
           title: '选择框',
@@ -1509,7 +1850,8 @@ export default {
               }
             }
           ]
-        }, {
+        },
+        {
           componentName: 'NumberPicker',
           libraryId: 2,
           title: '数字',
@@ -1527,26 +1869,28 @@ export default {
           ]
         }
       ]
-    }, {
+    },
+    {
       title: '其他',
       icon: '',
-      children: [{
-        componentName: 'Div',
-        libraryId: 3,
-        title: '容器',
-        icon: '',
-        snippets: [
-          {
-            title: '默认',
-            screenshot: '',
-            schema: {
-              componentName: 'Div',
-              props: {
+      children: [
+        {
+          componentName: 'Div',
+          libraryId: 3,
+          title: '容器',
+          icon: '',
+          snippets: [
+            {
+              title: '默认',
+              screenshot: '',
+              schema: {
+                componentName: 'Div',
+                props: {}
               }
             }
-          }
-        ]
-      }]
+          ]
+        }
+      ]
     }
   ]
 };
