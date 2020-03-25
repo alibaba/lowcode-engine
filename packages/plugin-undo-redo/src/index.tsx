@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import './index.scss';
-import { PluginProps } from '../../framework/definitions';
-import TopIcon from '../../skeleton/components/TopIcon/index';
+import { PluginProps } from '@ali/lowcode-editor-framework/lib/definitions';
+import {TopIcon} from '@ali/lowcode-editor-skeleton';
 
 export interface IProps {
   editor: any;

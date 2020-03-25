@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button} from '@alifd/next';
 import './index.scss';
-import { PluginProps } from '../../framework/definitions';
+import { PluginProps } from '@ali/lowcode-editor-framework/lib/definitions';
 
 
 

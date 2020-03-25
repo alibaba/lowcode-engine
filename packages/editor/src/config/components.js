@@ -10,12 +10,12 @@ import rightPanel3 from '@ali/iceluna-addon-2';
 import rightPanel4 from '@ali/iceluna-addon-2';
 import componentList from '@ali/iceluna-addon-component-list';
 import Settings from '../../../plugin-settings';
-import undoRedo from '../plugins/undoRedo';
+import undoRedo from '@ali/lowcode-plugin-undo-redo';
 import Designer from '../plugins/designer';
-import logo from '../plugins/logo';
-import save from '../plugins/save';
+import logo from '@ali/lowcode-plugin-logo';
+import save from '@ali/lowcode-plugin-save';
 
-import PluginFactory from '../framework/pluginFactory';
+import {PluginFactory} from '@ali/lowcode-editor-framework';
 
 export default {
   logo: PluginFactory(logo),
