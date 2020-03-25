@@ -1,12 +1,27 @@
-import { PureComponent } from 'react';
+import React, { PureComponent } from 'react';
+import Editor from '@ali/lowcode-editor-framework';
+import { PluginConfig, PluginClass } from '@ali/lowcode-editor-framework/lib/definitions';
 import './index.scss';
-export default class TopPlugin extends PureComponent {
+export interface TopPluginProps {
+    active?: boolean;
+    config: PluginConfig;
+    disabled?: boolean;
+    editor: Editor;
+    locked?: boolean;
+    marked?: boolean;
+    onClick?: () => void;
+    pluginClass: PluginClass | undefined;
+}
+export interface TopPluginState {
+    dialogVisible: boolean;
+}
+export default class TopPlugin extends PureComponent<TopPluginProps, TopPluginState> {
     static displayName: string;
     static defaultProps: {
         active: boolean;
         config: {};
         disabled: boolean;
-        dotted: boolean;
+        marked: boolean;
         locked: boolean;
         onClick: () => void;
     };
@@ -16,6 +31,6 @@ export default class TopPlugin extends PureComponent {
     handleShow: () => void;
     handleClose: () => void;
     handleOpen: () => void;
-    renderIcon: (clickCallback: any) => JSX.Element;
-    render(): JSX.Element;
+    renderIcon: (clickCallback: any) => any;
+    render(): React.ReactNode;
 }

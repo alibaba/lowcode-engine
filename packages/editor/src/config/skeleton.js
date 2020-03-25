@@ -3,7 +3,7 @@ import assets from './assets';
 export default {
   version: '^1.0.2',
   theme: {
-    dpl: {
+    fusion: {
       package: '@alife/dpl-iceluna',
       version: '^2.3.0'
     },

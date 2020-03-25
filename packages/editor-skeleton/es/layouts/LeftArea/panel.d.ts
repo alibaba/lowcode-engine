@@ -1,7 +1,20 @@
-import { PureComponent } from 'react';
+import React, { PureComponent } from 'react';
+import Editor from '@ali/lowcode-editor-framework';
 import './index.scss';
-export default class LeftAreaPanel extends PureComponent {
+export interface LeftAreaPanelProps {
+    editor: Editor;
+}
+export interface LeftAreaPanelState {
+    activeKey: string;
+}
+export default class LeftAreaPanel extends PureComponent<LeftAreaPanelProps, LeftAreaPanelState> {
     static displayName: string;
+    private editor;
+    private areaManager;
     constructor(props: any);
-    render(): JSX.Element;
+    componentDidMount(): void;
+    componentWillUnmount(): void;
+    handleSkeletonUpdate: () => void;
+    handlePluginChange: (key: string) => void;
+    render(): React.ReactNode;
 }

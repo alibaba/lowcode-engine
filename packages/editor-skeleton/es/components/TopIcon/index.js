@@ -1,8 +1,6 @@
-import _Button from "@alifd/next/es/button";
 import _Icon from "@alifd/next/es/icon";
 import _inheritsLoose from "@babel/runtime/helpers/inheritsLoose";
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './index.scss';
 
@@ -25,42 +23,26 @@ var TopIcon = /*#__PURE__*/function (_PureComponent) {
         className = _this$props.className,
         id = _this$props.id,
         style = _this$props.style,
-        showTitle = _this$props.showTitle,
         onClick = _this$props.onClick;
-    return React.createElement(_Button, {
-      type: "normal",
-      size: "large",
-      text: true,
-      className: classNames('lowcode-top-btn', className, {
+    return React.createElement("div", {
+      className: classNames('lowcode-top-icon', className, {
         active: active,
         disabled: disabled,
         locked: locked
       }),
+      "data-tooltip": title,
       id: id,
       style: style,
-      onClick: disabled ? null : onClick
-    }, React.createElement("div", null, React.createElement(_Icon, {
-      size: "large",
+      onClick: disabled ? undefined : onClick
+    }, React.createElement(_Icon, {
       type: icon
-    }), showTitle && React.createElement("span", null, title)));
+    }));
   };
 
   return TopIcon;
 }(PureComponent);
 
-TopIcon.displayName = 'TopIcon';
-TopIcon.propTypes = {
-  active: PropTypes.bool,
-  className: PropTypes.string,
-  disabled: PropTypes.bool,
-  icon: PropTypes.string,
-  id: PropTypes.string,
-  locked: PropTypes.bool,
-  onClick: PropTypes.func,
-  showTitle: PropTypes.bool,
-  style: PropTypes.object,
-  title: PropTypes.string
-};
+TopIcon.displayName = 'LowcodeTopIcon';
 TopIcon.defaultProps = {
   active: false,
   className: '',
@@ -69,7 +51,6 @@ TopIcon.defaultProps = {
   id: '',
   locked: false,
   onClick: function onClick() {},
-  showTitle: false,
   style: {},
   title: ''
 };

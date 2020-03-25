@@ -1,17 +1,61 @@
-
 import IntlMessageFormat from 'intl-messageformat';
+import keymaster from 'keymaster';
+
+import _clone from 'lodash/cloneDeep';
+import _debounce from 'lodash/debounce';
 import _isEmpty from 'lodash/isEmpty';
+import _deepEqual from 'lodash/isEqualWith';
+import _pick from 'lodash/pick';
+import _throttle from 'lodash/throttle';
 
+import _serialize from 'serialize-javascript';
+import Editor from './editor';
+import { EditorConfig, I18nFunction, I18nMessages, LocaleType, ShortCutsConfig } from './definitions';
+
+export const pick = _pick;
+export const deepEqual = _deepEqual;
+export const clone = _clone;
 export const isEmpty = _isEmpty;
+export const throttle = _throttle;
+export const debounce = _debounce;
 
-/**
+export const serialize = _serialize;
+
+const ENV = {
+  TBE: 'TBE',
+  WEBIDE: 'WEB-IDE',
+  VSCODE: 'VSCODE',
+  WEB: 'WEB',
+};
+
+declare global {
+  interface Window {
+    sendIDEMessage?: (params: IDEMessageParams) => void;
+    goldlog?: {
+      record: (logKey: string, gmKey: string, goKey: string, method: 'POST' | 'GET') => (...args: any[]) => any;
+    };
+    is_theia?: boolean;
+    vscode?: boolean;
+  }
+}
+
+export interface IDEMessageParams {
+  action: string;
+  data: {
+    logKey: string;
+    gmKey: string;
+    goKey: string;
+  };
+}
+
+/*
  * 用于构造国际化字符串处理函数
- * @param {*} locale 国际化标识，例如 zh-CN、en-US
- * @param {*} messages 国际化语言包
  */
-export function generateI18n(locale = 'zh-CN', messages = {}) {
-  return (key, values = {}) => {
-    if (!messages || !messages[key]) return '';
+export function generateI18n(locale: LocaleType = 'zh-CN', messages: I18nMessages = {}): I18nFunction {
+  return (key: string, values): string => {
+    if (!messages || !messages[key]) {
+      return '';
+    }
     const formater = new IntlMessageFormat(messages[key], locale);
     return formater.format(values);
   };
@@ -19,14 +63,16 @@ export function generateI18n(locale = 'zh-CN', messages = {}) {
 
 /**
  * 序列化参数
- * @param {*} obj 参数
  */
-export function serializeParams(obj:object):string {
-  if (typeof obj !== 'object') return '';
-
-  const res:Array<string> = [];
-  Object.entries(obj).forEach(([key, val]) => {
-    if (val === null || val === undefined || val === '') return;
+export function serializeParams(obj: object): string {
+  if (typeof obj !== 'object') {
+    return '';
+  }
+  const res: string[] = [];
+  Object.entries(obj).forEach(([key, val]): void => {
+    if (val === null || val === undefined || val === '') {
+      return;
+    }
     if (typeof val === 'object') {
       res.push(`${encodeURIComponent(key)}=${encodeURIComponent(JSON.stringify(val))}`);
     } else {
@@ -42,12 +88,11 @@ export function serializeParams(obj:object):string {
  * @param {Object} params 参数
  * @param {String} logKey 属性串
  */
-export function goldlog(gmKey, params = {}, logKey = 'other') {
+export function goldlog(gmKey: string, params: object = {}, logKey: string = 'other'): void {
   const sendIDEMessage = window.sendIDEMessage || window.parent.sendIDEMessage;
   const goKey = serializeParams({
-    sdkVersion: pkg.version,
     env: getEnv(),
-    ...params
+    ...params,
   });
   if (sendIDEMessage) {
     sendIDEMessage({
@@ -55,155 +100,60 @@ export function goldlog(gmKey, params = {}, logKey = 'other') {
       data: {
         logKey: `/iceluna.core.${logKey}`,
         gmKey,
-        goKey
-      }
+        goKey,
+      },
     });
   }
-  window.goldlog && window.goldlog.record(`/iceluna.core.${logKey}`, gmKey, goKey, 'POST');
+  if (window.goldlog) {
+    window.goldlog.record(`/iceluna.core.${logKey}`, gmKey, goKey, 'POST');
+  }
 }
 
 /**
  * 获取当前编辑器环境
  */
-export function getEnv() {
+export function getEnv(): string {
   const userAgent = navigator.userAgent;
   const isVscode = /Electron\//.test(userAgent);
-  if (isVscode) return ENV.VSCODE;
+  if (isVscode) {
+    return ENV.VSCODE;
+  }
   const isTheia = window.is_theia === true;
-  if (isTheia) return ENV.WEBIDE;
+  if (isTheia) {
+    return ENV.WEBIDE;
+  }
   return ENV.WEB;
 }
 
 // 注册快捷键
-export function registShortCuts(config, editor) {
-  const keyboardFilter = (keymaster.filter = event => {
-    let eTarget = event.target || event.srcElement;
-    let tagName = eTarget.tagName;
-    let isInput = !!(tagName == 'INPUT' || tagName == 'SELECT' || tagName == 'TEXTAREA');
-    let isContenteditable = !!eTarget.getAttribute('contenteditable');
-    if (isInput || isContenteditable) {
-      if (event.metaKey === true && [70, 83].includes(event.keyCode)) event.preventDefault(); //禁止触发chrome原生的页面保存或查找
-      return false;
-    } else {
-      return true;
-    }
-  });
-
-  const ideMessage = appHelper.utils && appHelper.utils.ideMessage;
-
-  //复制
-  if (!document.copyListener) {
-    document.copyListener = e => {
-      if (!keyboardFilter(e) || appHelper.isCopying) return;
-      const schema = appHelper.schemaHelper && appHelper.schemaHelper.schemaMap[appHelper.activeKey];
-      if (!schema || !isSchema(schema)) return;
-      appHelper.isCopying = true;
-      const schemaStr = serialize(transformSchemaToPure(schema), {
-        unsafe: true
-      });
-      setClipboardData(schemaStr)
-        .then(() => {
-          ideMessage && ideMessage('success', '当前内容已复制到剪贴板，请使用快捷键Command+v进行粘贴');
-          appHelper.emit('schema.copy', schemaStr, schema);
-          appHelper.isCopying = false;
-        })
-        .catch(errMsg => {
-          ideMessage && ideMessage('error', errMsg);
-          appHelper.isCopying = false;
-        });
-    };
-    document.addEventListener('copy', document.copyListener);
-    if (window.parent.vscode) {
-      keymaster('command+c', document.copyListener);
-    }
-  }
-
-  //粘贴
-  if (!document.pasteListener) {
-    const doPaste = (e, text) => {
-      if (!keyboardFilter(e) || appHelper.isPasting) return;
-      const schemaHelper = appHelper.schemaHelper;
-      let targetKey = appHelper.activeKey;
-      let direction = 'after';
-      const topKey = schemaHelper.schema && schemaHelper.schema.__ctx && schemaHelper.schema.__ctx.lunaKey;
-      if (!targetKey || topKey === targetKey) {
-        const schemaHelper = appHelper.schemaHelper;
-        const topKey = schemaHelper.schema && schemaHelper.schema.__ctx && schemaHelper.schema.__ctx.lunaKey;
-        if (!topKey) return;
-        targetKey = topKey;
-        direction = 'in';
-      }
-      appHelper.isPasting = true;
-      const schema = parseObj(text);
-      if (!isSchema(schema)) {
-        appHelper.emit('illegalSchema.paste', text);
-        // ideMessage && ideMessage('error', '当前内容不是模型结构，不能粘贴进来！');
-        console.warn('paste schema illegal');
-        appHelper.isPasting = false;
-        return;
-      }
-      appHelper.emit('material.add', {
-        schema,
-        targetKey,
-        direction
-      });
-      appHelper.isPasting = false;
-      appHelper.emit('schema.paste', schema);
-    };
-    document.pasteListener = e => {
-      const clipboardData = e.clipboardData || window.clipboardData;
-      const text = clipboardData && clipboardData.getData('text');
-      doPaste(e, text);
-    };
-    document.addEventListener('paste', document.pasteListener);
-    if (window.parent.vscode) {
-      keymaster('command+v', e => {
-        const sendIDEMessage = window.parent.sendIDEMessage;
-        sendIDEMessage &&
-          sendIDEMessage({
-            action: 'readClipboard'
-          })
-            .then(text => {
-              doPaste(e, text);
-            })
-            .catch(err => {
-              console.warn(err);
-            });
-      });
-    }
-  }
-
-  (config || []).forEach(item => {
-    keymaster(item.keyboard, ev => {
+export function registShortCuts(config: ShortCutsConfig, editor: Editor): void {
+  (config || []).forEach((item): void => {
+    keymaster(item.keyboard, (ev: Event): void => {
       ev.preventDefault();
-      item.handler(ev, appHelper, keymaster);
+      item.handler(editor, ev, keymaster);
     });
   });
 }
 
 // 取消注册快捷
-export function unRegistShortCuts(config) {
-  (config || []).forEach(item => {
+export function unRegistShortCuts(config: ShortCutsConfig): void {
+  (config || []).forEach((item): void => {
     keymaster.unbind(item.keyboard);
   });
   if (window.parent.vscode) {
     keymaster.unbind('command+c');
     keymaster.unbind('command+v');
   }
-  if (document.copyListener) {
-    document.removeEventListener('copy', document.copyListener);
-    delete document.copyListener;
-  }
-  if (document.pasteListener) {
-    document.removeEventListener('paste', document.pasteListener);
-    delete document.pasteListener;
-  }
 }
 
-// 将函数返回结果转成promise形式，如果函数有返回值则根据返回值的bool类型判断是reject还是resolve，若函数无返回值默认执行resolve
-export function transformToPromise(input) {
-  if (input instanceof Promise) return input;
-  return new Promise((resolve, reject) => {
+/**
+ * 将函数返回结果转成promise形式，如果函数有返回值则根据返回值的bool类型判断是reject还是resolve，若函数无返回值默认执行resolve
+ */
+export function transformToPromise(input: any): Promise<{}> {
+  if (input instanceof Promise) {
+    return input;
+  }
+  return new Promise((resolve, reject): void => {
     if (input || input === undefined) {
       resolve();
     } else {
@@ -212,31 +162,111 @@ export function transformToPromise(input) {
   });
 }
 
-export function comboEditorConfig(defaultConfig, customConfig) {
-  const { ideConfig = {}, utils = {} } = this.props;
-    const comboShortCuts = () => {
-      const defaultShortCuts = defaultIdeConfig.shortCuts;
-      const shortCuts = ideConfig.shortCuts || [];
-      const configMap = skeletonUtils.transformArrayToMap(defaultShortCuts, 'keyboard');
-      (shortCuts || []).forEach(item => {
-        configMap[item.keyboard] = item;
-      });
-      return Object.keys(configMap).map(key => configMap[key]);
+/**
+ * 将数组类型转换为Map类型
+ */
+interface MapOf<T> {
+  [propName: string]: T;
+}
+export function transformArrayToMap<T>(arr: T[], key: string, overwrite: boolean = true): MapOf<T> {
+  if (isEmpty(arr) || !Array.isArray(arr)) {
+    return {};
+  }
+  const res = {};
+  arr.forEach((item): void => {
+    const curKey = item[key];
+    if (item[key] === undefined) {
+      return;
+    }
+    if (res[curKey] && !overwrite) {
+      return;
+    }
+    res[curKey] = item;
+  });
+  return res;
+}
+
+/**
+ * 解析url的查询参数
+ */
+interface Query {
+  [propName: string]: string;
+}
+export function parseSearch(search: string): Query {
+  if (!search || typeof search !== 'string') {
+    return {};
+  }
+  const str = search.replace(/^\?/, '');
+  const paramStr = str.split('&');
+  const res = {};
+  paramStr.forEach((item): void => {
+    const regRes = item.split('=');
+    if (regRes[0] && regRes[1]) {
+      res[regRes[0]] = decodeURIComponent(regRes[1]);
+    }
+  });
+  return res;
+}
+
+export function comboEditorConfig(defaultConfig: EditorConfig = {}, customConfig: EditorConfig): EditorConfig {
+  const { skeleton, theme, plugins, hooks, shortCuts, lifeCycles, constants, utils, i18n } = customConfig || {};
+
+  if (skeleton && skeleton.handler && typeof skeleton.handler === 'function') {
+    return skeleton.handler({
+      skeleton,
+      ...defaultConfig,
+    });
+  }
+
+  const defaultShortCuts = transformArrayToMap(defaultConfig.shortCuts || [], 'keyboard');
+  const customShortCuts = transformArrayToMap(shortCuts || [], 'keyboard');
+  const localeList = ['zh-CN', 'zh-TW', 'en-US', 'ja-JP'];
+  const i18nConfig = {};
+  localeList.forEach((key): void => {
+    i18nConfig[key] = {
+      ...(defaultConfig.i18n && defaultConfig.i18n[key]),
+      ...(i18n && i18n[key]),
     };
-    return {
-      ...ideConfig,
-      utils: {
-        ...skeletonUtils,
-        ...utils
-      },
-      constants: {
-        ...defaultIdeConfig.constants,
-        ...ideConfig.constants
-      },
-      extensions: {
-        ...defaultIdeConfig.extensions,
-        ...ideConfig.extensions
-      },
-      shortCuts: comboShortCuts()
-    };
+  });
+  return {
+    skeleton,
+    theme: {
+      ...defaultConfig.theme,
+      ...theme,
+    },
+    plugins: {
+      ...defaultConfig.plugins,
+      ...plugins,
+    },
+    hooks: [...(defaultConfig.hooks || []), ...(hooks || [])],
+    shortCuts: Object.values({
+      ...defaultShortCuts,
+      ...customShortCuts,
+    }),
+    lifeCycles: {
+      ...defaultConfig.lifeCycles,
+      ...lifeCycles,
+    },
+    constants: {
+      ...defaultConfig.constants,
+      ...constants,
+    },
+    utils: [...(defaultConfig.utils || []), ...(utils || [])],
+    i18n: i18nConfig,
+  };
+}
+
+/**
+ * 判断当前组件是否能够设置ref
+ * @param {*} Comp 需要判断的组件
+ */
+export function acceptsRef(Comp: React.ReactNode): boolean {
+  const hasSymbol = typeof Symbol === 'function' && Symbol.for;
+  const REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
+  if (!Comp || typeof Comp !== 'object' || isEmpty(Comp)) {
+    return false;
+  }
+  return (
+    (Comp.$$typeof && Comp.$$typeof === REACT_FORWARD_REF_TYPE) || (Comp.prototype && Comp.prototype.isReactComponent)
+  );
 }

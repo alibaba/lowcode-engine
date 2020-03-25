@@ -27,21 +27,26 @@ export default function pluginFactory(Comp: PluginClass): React.ComponentType<Pl
         console.warn('lowcode editor plugin has wrong config');
         return;
       }
-      const { locale, messages, editor } = props;
+      const { editor } = props;
       this.ref = createRef<React.ReactElement>();
       // 注册插件
       this.editor = editor;
-      this.i18n = generateI18n(locale, messages);
       this.pluginKey = props.config.pluginKey;
+      const defaultProps = Comp.defaultProps || {};
+      const locale = this.editor.get('locale') || defaultProps.locale || 'zh-CN';
+      const editorMessages = this.editor.get('messages') || {};
+      const messages = editorMessages[this.pluginKey] || defaultProps.messages || {};
+      this.i18n = generateI18n(locale, messages);
+
       editor.set('plugins', {
         ...editor.plugins,
-        [this.pluginKey]: this
+        [this.pluginKey]: this,
       });
     }
 
     public componentWillUnmount(): void {
       // 销毁插件
-      if (this.editor && this.editor.plugins) {
+      if (this.pluginKey && this.editor && this.editor.plugins) {
         delete this.editor.plugins[this.pluginKey];
       }
     }
@@ -66,7 +71,7 @@ export default function pluginFactory(Comp: PluginClass): React.ComponentType<Pl
         i18n: this.i18n,
         editor: this.editor,
         config,
-        ...config.pluginProps
+        ...config.pluginProps,
       };
       if (acceptsRef(Comp)) {
         props.ref = this.ref;

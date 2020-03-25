@@ -1,23 +1,25 @@
 import React, { PureComponent } from 'react';
-
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Icon, Button } from '@alifd/next';
+import { Icon } from '@alifd/next';
+
 import './index.scss';
-export default class TopIcon extends PureComponent {
-  static displayName = 'TopIcon';
-  static propTypes = {
-    active: PropTypes.bool,
-    className: PropTypes.string,
-    disabled: PropTypes.bool,
-    icon: PropTypes.string,
-    id: PropTypes.string,
-    locked: PropTypes.bool,
-    onClick: PropTypes.func,
-    showTitle: PropTypes.bool,
-    style: PropTypes.object,
-    title: PropTypes.string,
-  };
+
+export interface TopIconProps {
+  active?: boolean;
+  className?: string;
+  disabled?: boolean;
+  icon: string;
+  id?: string;
+  locked?: boolean;
+  marked?: boolean;
+  onClick?: () => void;
+  style?: React.CSSProperties;
+  title?: string;
+}
+
+export default class TopIcon extends PureComponent<TopIconProps> {
+  static displayName = 'LowcodeTopIcon';
+
   static defaultProps = {
     active: false,
     className: '',
@@ -25,13 +27,12 @@ export default class TopIcon extends PureComponent {
     icon: '',
     id: '',
     locked: false,
-    onClick: () => {},
-    showTitle: false,
+    onClick: (): void => {},
     style: {},
     title: '',
   };
 
-  render() {
+  render(): React.ReactNode {
     const {
       active,
       disabled,
@@ -41,28 +42,22 @@ export default class TopIcon extends PureComponent {
       className,
       id,
       style,
-      showTitle,
       onClick,
     } = this.props;
     return (
-      <Button
-        type="normal"
-        size="large"
-        text={true}
-        className={classNames('lowcode-top-btn', className, {
+      <div
+        className={classNames('lowcode-top-icon', className, {
           active,
           disabled,
           locked,
         })}
+        data-tooltip={title}
         id={id}
         style={style}
-        onClick={disabled ? null : onClick}
+        onClick={disabled ? undefined : onClick}
       >
-        <div>
-          <Icon size="large" type={icon} />
-          {showTitle && <span>{title}</span>}
-        </div>
-      </Button>
+        <Icon type={icon} />
+      </div>
     );
   }
 }

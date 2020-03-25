@@ -1,5 +1,5 @@
 {
-  "name": "@ali/lowcode-engine-editor",
+  "name": "@ali/lowcode-editor-framework",
   "version": "0.0.1",
   "description": "alibaba lowcode editor core",
   "files": [
@@ -13,7 +13,7 @@
   "stylePath": "style.js",
   "scripts": {
     "start": "build-scripts start",
-    "build": "build-scripts build",
+    "build": "build-scripts build --skip-demo",
     "prepublishOnly": "npm run prettier && npm run build",
     "lint": "eslint --cache --ext .js,.jsx ./",
     "prettier": "prettier  --write \"./src/**/*.{ts,tsx,js,jsx,ejs,less,css,scss,json}\" "
@@ -51,5 +51,5 @@
     "@alifd/next": "1.x"
   },
   "license": "MIT",
-  "homepage": "https://unpkg.com/editor-framework@0.0.1/build/index.html"
+  "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-editor-framework@0.0.1/build/index.html"
 }

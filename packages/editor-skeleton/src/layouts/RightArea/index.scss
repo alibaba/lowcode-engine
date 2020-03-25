@@ -1,155 +1,37 @@
 .lowcode-right-area {
-  width: 300px;
+  width: 262px;
   height: 100%;
-  background-color: #ffffff;
-  border-left: 1px solid #e8ebee;
-  .right-plugin-title {
-    &.locked {
-      color: red !important;
-    }
-    &.active {
-      color: $color-brand1-9 !important;
-    }
-    &.disabled {
-      cursor: not-allowed;
-      color: $color-text1-1;
-    }
+  background-color: $card-background;
+  border-left: 2px solid $color-line1-1;
+
+  .right-panel {
+    overflow: auto;
+    // border-top: 2px solid $color-line1-1;
   }
 
   //tab定义
-  .next-tabs-wrapped.right-tabs {
-    display: flex;
-    flex-direction: column;
-    margin-top: -1px;
-    .next-tabs-bar {
-      z-index: 1;
-    }
+  .right-tabs.next-tabs {
     .next-tabs-nav {
-      display: block;
-      .next-tabs-tab {
-        &:first-child {
-          border-left: none;
-        }
-        font-size: 14px;
+      width: 100%;
+      .next-tabs-tab-inner {
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .right-plugin-title {
         text-align: center;
-        border-right: none !important;
-        margin-right: 0 !important;
-        width: 25%;
+        &.locked {
+          color: red !important;
+        }
         &.active {
-          background: none;
-          border-bottom-color: #f7f7f7 !important;
+          color: $color-brand1-9 !important;
         }
-      }
-    }
-  }
-  .next-tabs-content {
-    flex: 1;
-    .next-tabs-tabpane.active {
-      height: 100%;
-      overflow-y: auto;
-    }
-  }
-  //组件
-  .select-comp {
-    padding: 10px 16px;
-    line-height: 16px;
-    color: #989a9c;
-    & > span {
-      font-size: 12px;
-      line-height: 16px;
-      font-weight: 400;
-    }
-    & > .btn-wrap,
-    & > .next-btn {
-      width: auto;
-      margin: 0 5px;
-      float: right;
-    }
-  }
-
-  .unselected {
-    padding: 60px 0;
-    text-align: center;
-  }
-  //右侧属性面板样式调整;
-  .offset-56 {
-    padding-left: 56px;
-    margin-bottom: 16px;
-    overflow: hidden;
-  }
-  .fixedSpan.next-form-item {
-    & > .next-form-item-label {
-      width: 56px;
-      flex: none;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-    }
-    & > .next-form-item-control {
-      padding-right: 24px;
-    }
-  }
-  .fixedSpan.next-form-item,
-  .offset-56 .next-form-item {
-    display: flex;
-    & > .next-form-item-control {
-      width: auto;
-      flex: 1;
-      max-width: none;
-      .next-input,
-      .next-select,
-      .next-radio-group,
-      .next-number-picker,
-      .luna-reactnode-btn,
-      .luna-monaco-button button,
-      .luna-object-button button {
-        width: 100%;
-      }
-      .next-number-picker {
-        width: 100%;
-        .next-after {
-          padding-right: 5px;
+        &.disabled {
+          cursor: not-allowed;
+          color: $color-text1-1;
         }
-      }
-      .next-radio-group {
-        display: flex;
-        label {
-          flex: 1;
-          text-align: center;
-          text-overflow: ellipsis;
-          overflow: hidden;
-          white-space: nowrap;
-        }
-      }
-    }
-  }
-  .topSpan.next-form-item {
-    margin-bottom: 4px;
-    & > .next-form-item-control {
-      padding-right: 24px;
-      .next-input,
-      .next-select,
-      .next-radio-group,
-      .next-number-picker,
-      .luna-reactnode-btn,
-      .luna-monaco-button button,
-      .luna-object-button button {
-        width: 100%;
-      }
-      .next-number-picker {
-        width: 100%;
-        .next-after {
-          padding-right: 5px;
-        }
-      }
-      .next-radio-group {
-        display: flex;
-        label {
-          flex: 1;
-          text-align: center;
-          text-overflow: ellipsis;
-          overflow: hidden;
-          white-space: nowrap;
+        .next-icon {
+          line-height: 15px;
+          margin-right: 2px;
         }
       }
     }
