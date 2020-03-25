@@ -28,12 +28,13 @@ import ExclusiveGroup, { isExclusiveGroup } from './exclusive-group';
  *  loop
  *  loopArgs
  *  condition
- *  ------- future support -----
- *  conditionGroup
- *  title
- *  ignored
- *  locked
- *  hidden
+ *  ------- addition support -----
+ *  conditionGroup use for condition, for exclusive
+ *  title          display on outline
+ *  ignored        ignore this node will not publish to render, but will store
+ *  locked         can not select/hover/ item on canvas but can control on outline
+ *  hidden         not visible on canvas
+ *  slotArgs       like loopArgs, for slot node
  */
 export default class Node {
   /**
@@ -49,11 +50,12 @@ export default class Node {
   /**
    * 节点组件类型
    * 特殊节点:
-   *  * #text 文字节点
-   *  * #expression 表达式节点
    *  * Page 页面
-   *  * Block/Fragment 区块
+   *  * Block 区块
    *  * Component 组件/元件
+   *  * Fragment 碎片节点，无 props，有指令
+   *  * Leaf 文字节点 | 表达式节点，无 props，无指令？
+   *  * Slot 插槽节点，无 props，正常 children，有 slotArgs，有指令
    */
   readonly componentName: string;
   /**
@@ -240,6 +242,8 @@ export default class Node {
     if (!isExclusiveGroup(grp)) {
       if (this.prevSibling?.conditionGroup?.name === grp) {
         grp = this.prevSibling.conditionGroup;
+      } else if (this.nextSibling?.conditionGroup?.name === grp) {
+        grp = this.nextSibling.conditionGroup;
       } else {
         grp = new ExclusiveGroup(grp);
       }

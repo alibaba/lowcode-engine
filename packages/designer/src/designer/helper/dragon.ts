@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import Location from './location';
+import DropLocation from './location';
 import DocumentModel from '../document/document-model';
 import { ISimulator, isSimulator, ComponentInstance } from '../simulator';
 import Node from '../document/node/node';
@@ -47,9 +47,6 @@ export interface LocateEvent {
    * 事件订正标识，初始构造时，从发起端构造，缺少 canvasX,canvasY, 需要经过订正才有
    */
   fixed?: true;
-
-  targetNode?: Node;
-  targetInstance?: ComponentInstance;
 }
 
 /**
@@ -67,7 +64,7 @@ export interface ISensor {
   /**
    * 定位并激活
    */
-  locate(e: LocateEvent): Location | undefined;
+  locate(e: LocateEvent): DropLocation | undefined | null;
   /**
    * 是否进入敏感板区域
    */
@@ -204,10 +201,10 @@ export default class Dragon {
   }
 
   private emitter = new EventEmitter();
-  private emptyImage: HTMLImageElement = new Image();
+  // private emptyImage: HTMLImageElement = new Image();
 
   constructor(readonly designer: Designer) {
-    this.emptyImage.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+    // this.emptyImage.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
   }
 
   from(shell: Element, boost: (e: MouseEvent) => DragObject | null) {
@@ -280,6 +277,7 @@ export default class Dragon {
 
     let lastArrive: any;
     const drag = (e: MouseEvent | DragEvent) => {
+      // FIXME: donot setcopy when: newbie & no location
       checkcopy(e);
 
       if (isInvalidPoint(e, lastArrive)) return;
@@ -433,6 +431,7 @@ export default class Dragon {
     const chooseSensor = (e: LocateEvent) => {
       let sensor = e.sensor && e.sensor.isEnter(e) ? e.sensor : sensors.find(s => s.sensorAvailable && s.isEnter(e));
       if (!sensor) {
+        // TODO: enter some area like componentspanel cancel
         if (lastSensor) {
           sensor = lastSensor;
         } else if (e.sensor) {
@@ -537,13 +536,6 @@ export default class Dragon {
     this.designer.project.documents.forEach(doc => {
       doc.simulator?.setCopyState(state);
     });
-  }
-
-  /**
-   * 是否拷贝态
-   */
-  private isCopyState(): boolean {
-    return cursor.isCopy();
   }
 
   /**

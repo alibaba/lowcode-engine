@@ -39,11 +39,11 @@ export default class NodeChildren {
       } else {
         node = this.owner.document.createNode(item);
       }
-      node.internalSetParent(this.owner);
       children[i] = node;
     }
 
     this.children = children;
+    this.interalInitParent();
   }
 
   /**

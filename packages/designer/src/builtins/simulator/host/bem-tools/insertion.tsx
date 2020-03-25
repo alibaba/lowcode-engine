@@ -2,7 +2,7 @@ import { Component } from 'react';
 import { computed, observer } from '../../../../../../globals';
 import { SimulatorContext } from '../context';
 import { SimulatorHost } from '../host';
-import Location, {
+import DropLocation, {
   Rect,
   isLocationChildrenDetail,
   LocationChildrenDetail,
@@ -23,15 +23,14 @@ interface InsertionData {
 /**
  * 处理拖拽子节点(INode)情况
  */
-function processChildrenDetail(sim: ISimulator, target: NodeParent, detail: LocationChildrenDetail): InsertionData {
+function processChildrenDetail(sim: ISimulator, container: NodeParent, detail: LocationChildrenDetail): InsertionData {
   let edge = detail.edge || null;
 
-  if (edge) {
-    edge = sim.computeRect(target);
-  }
-
   if (!edge) {
-    return {};
+    edge = sim.computeRect(container);
+    if (!edge) {
+      return {};
+    }
   }
 
   const ret: any = {
@@ -42,18 +41,33 @@ function processChildrenDetail(sim: ISimulator, target: NodeParent, detail: Loca
   if (detail.near) {
     const { node, pos, rect, align } = detail.near;
     ret.nearRect = rect || sim.computeRect(node);
-    ret.vertical = align ? align === 'V' : isVertical(ret.nearRect);
-    ret.insertType = pos;
+    if (pos === 'replace') {
+      // FIXME: ret.nearRect mybe null
+      ret.coverRect = ret.nearRect;
+      ret.insertType = 'cover';
+    } else if (!ret.nearRect || (ret.nearRect.width === 0 && ret.nearRect.height === 0)) {
+      ret.nearRect = ret.edge;
+      ret.insertType = 'after';
+      ret.vertical = isVertical(ret.nearRect);
+    } else {
+      ret.insertType = pos;
+      ret.vertical = align ? align === 'V' : isVertical(ret.nearRect);
+    }
     return ret;
   }
 
   // from outline-tree: has index, but no near
   // TODO: think of shadowNode & ConditionFlow
   const { index } = detail;
-  let nearNode = target.children.get(index);
+  if (index == null) {
+    ret.coverRect = ret.edge;
+    ret.insertType = 'cover';
+    return ret;
+  }
+  let nearNode = container.children.get(index);
   if (!nearNode) {
     // index = 0, eg. nochild,
-    nearNode = target.children.get(index > 0 ? index - 1 : 0);
+    nearNode = container.children.get(index > 0 ? index - 1 : 0);
     if (!nearNode) {
       ret.insertType = 'cover';
       ret.coverRect = edge;
@@ -63,7 +77,14 @@ function processChildrenDetail(sim: ISimulator, target: NodeParent, detail: Loca
   }
   if (nearNode) {
     ret.nearRect = sim.computeRect(nearNode);
+    if (!ret.nearRect || (ret.nearRect.width === 0 && ret.nearRect.height === 0)) {
+      ret.nearRect = ret.edge;
+      ret.insertType = 'after';
+    }
     ret.vertical = isVertical(ret.nearRect);
+  } else {
+    ret.insertType = 'cover';
+    ret.coverRect = edge;
   }
   return ret;
 }
@@ -71,7 +92,7 @@ function processChildrenDetail(sim: ISimulator, target: NodeParent, detail: Loca
 /**
  * 将 detail 信息转换为页面"坐标"信息
  */
-function processDetail({ target, detail, document }: Location): InsertionData {
+function processDetail({ target, detail, document }: DropLocation): InsertionData {
   const sim = document.simulator;
   if (!sim) {
     return {};
@@ -115,6 +136,9 @@ export class InsertionView extends Component {
     }
 
     let className = 'lc-insertion';
+    if ((loc.detail as any)?.valid === false) {
+      className += ' invalid';
+    }
     const style: any = {};
     let x: number;
     let y: number;

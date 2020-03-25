@@ -25,4 +25,8 @@ export class Tree {
     this.treeNodesMap.set(node.id, treeNode);
     return treeNode;
   }
+
+  getTreeNodeById(id: string) {
+    return this.treeNodesMap.get(id);
+  }
 }

@@ -1,37 +1,52 @@
+import { NodeParent } from '../../../designer/src/designer/document/node/node';
+import DropLocation, { isLocationChildrenDetail } from '../../../designer/src/designer/helper/location';
+import { LocateEvent } from '../../../designer/src/designer/helper/dragon';
+
 /**
  * 停留检查计时器
  */
 export default class DwellTimer {
   private timer: number | undefined;
-  private previous: any;
+  private previous?: NodeParent;
+  private event?: LocateEvent
 
-  constructor(readonly timeout: number = 400) {}
+  constructor(private decide: (node: NodeParent, event: LocateEvent) => void, private timeout: number = 800) {}
 
-  /**
-   * 根据传入的 ID 判断，停留事件是否触发
-   * 如果上一次的标示(包括不存在)和这次不相同，则设置停留计时器
-   * 反之什么也不用做
-   */
-  start(id: any, fn: () => void) {
-    if (this.previous !== id) {
-      this.end();
-      this.previous = id;
-      this.timer = setTimeout(() => {
-        fn();
-        this.end();
-      }, this.timeout) as number;
+  focus(node: NodeParent, event: LocateEvent) {
+    this.event = event;
+    if (this.previous === node) {
+      return;
+    }
+    this.reset();
+    this.previous = node;
+    const x = Date.now();
+    console.info('set', x);
+    this.timer = setTimeout(() => {
+      console.info('done', x, Date.now() - x);
+      this.previous && this.decide(this.previous, this.event!);
+      this.reset();
+    }, this.timeout) as any;
+  }
+
+  tryFocus(loc?: DropLocation | null) {
+    if (!loc || !isLocationChildrenDetail(loc.detail)) {
+      this.reset();
+      return;
+    }
+    if (loc.detail.focus?.type === 'node') {
+      this.focus(loc.detail.focus.node, loc.event);
+    } else {
+      this.reset();
     }
   }
 
-  end() {
-    const timer = this.timer;
-    if (timer) {
-      clearTimeout(timer);
+  reset() {
+    console.info('reset');
+    if (this.timer) {
+      clearTimeout(this.timer);
       this.timer = undefined;
     }
 
-    if (this.previous) {
-      this.previous = undefined;
-    }
+    this.previous = undefined;
   }
 }

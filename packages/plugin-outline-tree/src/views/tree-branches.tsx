@@ -1,5 +1,6 @@
 import { observer, Title } from '../../../globals';
 import { Component } from 'react';
+import classNames from 'classnames';
 import TreeNode from '../tree-node';
 import TreeNodeView from './tree-node';
 import ExclusiveGroup from '../../../designer/src/designer/document/node/exclusive-group';
@@ -55,7 +56,16 @@ class TreeNodeChildren extends Component<{
         groupContents = [];
       }
     };
-    const { dropIndex } = treeNode;
+    const dropDetail = treeNode.dropDetail;
+    const dropIndex = dropDetail?.index;
+    const insertion = (
+      <div
+        key="insertion"
+        className={classNames('insertion', {
+          invalid: dropDetail?.valid === false,
+        })}
+      />
+    );
     treeNode.children?.forEach((child, index) => {
       const { conditionGroup } = child.node;
       if (conditionGroup !== currentGrp) {
@@ -66,22 +76,23 @@ class TreeNodeChildren extends Component<{
         currentGrp = conditionGroup;
         if (index === dropIndex) {
           if (groupContents.length > 0) {
-            groupContents.push(<div key="insertion" className="insertion" />);
+            groupContents.push(insertion);
           } else {
-            children.push(<div key="insertion" className="insertion" />);
+            children.push(insertion);
           }
         }
         groupContents.push(<TreeNodeView key={child.id} treeNode={child} />);
       } else {
         if (index === dropIndex) {
-          children.push(<div key="insertion" className="insertion" />);
+          children.push(insertion);
         }
         children.push(<TreeNodeView key={child.id} treeNode={child} />);
       }
     });
     endGroup();
-    if (dropIndex != null && dropIndex === treeNode.children?.length) {
-      children.push(<div key="insertion" className="insertion" />);
+    const length = treeNode.children?.length || 0;
+    if (dropIndex != null && dropIndex >= length) {
+      children.push(insertion);
     }
 
     return <div className="tree-node-children">{children}</div>;
@@ -101,9 +112,14 @@ class TreeNodeSlots extends Component<{
       return null;
     }
     return (
-      <div className="tree-node-slots">
+      <div
+        className={classNames('tree-node-slots', {
+          'insertion-at-slots': treeNode.dropDetail?.focus?.type === 'slots',
+        })}
+        data-id={treeNode.id}
+      >
         <div className="tree-node-slots-title">
-          <Title title={{ type: 'i18n', intl: intl('Slots')}} />
+          <Title title={{ type: 'i18n', intl: intl('Slots') }} />
         </div>
         {treeNode.slots.map(tnode => (
           <TreeNodeView key={tnode.id} treeNode={tnode} />

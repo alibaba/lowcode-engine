@@ -1,83 +1,140 @@
-import { Component } from 'react';
+import { Component, MouseEvent as ReactMouseEvent } from 'react';
 import { observer } from '../../../globals';
 import { Tree } from '../tree';
 import TreeNodeView from './tree-node';
+import { isRootNode } from '../../../designer/src/designer/document/node/root-node';
+import Node from '../../../designer/src/designer/document/node/node';
+import { DragObjectType, isShaken } from '../../../designer/src/designer/helper/dragon';
+
+function getTreeNodeIdByEvent(e: ReactMouseEvent, stop: Element): null | string {
+  let target: Element | null = e.target as Element;
+  if (!target || !stop.contains(target)) {
+    return null;
+  }
+  target = target.closest('[data-id]');
+  if (!target || !stop.contains(target)) {
+    return null;
+  }
+
+  return (target as HTMLDivElement).dataset.id || null;
+}
 
 @observer
 export default class TreeView extends Component<{ tree: Tree }> {
-  /*
-  hover(e: any) {
-    const treeNode = tree.getTreeNodeByEvent(e);
+  private shell: HTMLDivElement | null = null;
+  private hover(e: ReactMouseEvent) {
+    const { tree } = this.props;
 
+    const doc = tree.document;
+    const hovering = doc.designer.hovering;
+    if (!hovering.enable) {
+      return;
+    }
+    const node = this.getTreeNodeFromEvent(e)?.node;
+    hovering.hover(node || null);
+  }
+
+  private onClick = (e: ReactMouseEvent) => {
+    if (this.ignoreUpSelected) {
+      return;
+    }
+    if (this.boostEvent && isShaken(this.boostEvent, e.nativeEvent)) {
+      return;
+    }
+    const treeNode = this.getTreeNodeFromEvent(e);
+    if (!treeNode) {
+      return;
+    }
+    const { node } = treeNode;
+    const designer = treeNode.designer;
+    const doc = node.document;
+    const selection = doc.selection;
+    const id = node.id;
+    const isMulti = e.metaKey || e.ctrlKey;
+    designer.activeTracker.track(node);
+    if (isMulti && !isRootNode(node) && selection.has(id)) {
+      selection.remove(id);
+    } else {
+      selection.select(id);
+    }
+  };
+
+  private onMouseOver = (e: ReactMouseEvent) => {
+    this.hover(e);
+  };
+
+  private getTreeNodeFromEvent(e: ReactMouseEvent) {
+    if (!this.shell) {
+      return;
+    }
+    const id = getTreeNodeIdByEvent(e, this.shell);
+    if (!id) {
+      return;
+    }
+
+    const { tree } = this.props;
+    return tree.getTreeNodeById(id);
+  }
+
+  private ignoreUpSelected = false;
+  private boostEvent?: MouseEvent;
+  private onMouseDown = (e: ReactMouseEvent) => {
+    const treeNode = this.getTreeNodeFromEvent(e);
     if (!treeNode) {
       return;
     }
 
-    edging.watch(treeNode.node);
-  }
-
-  onClick(e: any) {
-    if (this.dragEvent && (this.dragEvent as any).shaken) {
-      return;
-    }
+    const { node } = treeNode;
+    const designer = treeNode.designer;
+    const doc = node.document;
+    const selection = doc.selection;
 
     const isMulti = e.metaKey || e.ctrlKey;
+    const isLeftButton = e.button === 0;
 
-    const treeNode = tree.getTreeNodeByEvent(e);
-
-    if (!treeNode) {
-      return;
-    }
-
-    treeNode.select(isMulti);
-
-    // 通知主画板滚动到对应位置
-    activeTracker.track(treeNode.node);
-  }
-
-  onMouseOver(e: any) {
-    if (dragon.dragging) {
-      return;
-    }
-
-    this.hover(e);
-  }
-
-  onMouseUp(e: any) {
-    if (dragon.dragging) {
-      return;
-    }
-
-    this.hover(e);
-  }
-
-  onMouseLeave() {
-    edging.watch(null);
-  }
-
-  componentDidMount(): void {
-    if (this.ref.current) {
-      dragon.from(this.ref.current, (e: MouseEvent) => {
-        this.dragEvent = e;
-
-        const treeNode = tree.getTreeNodeByEvent(e);
-        if (treeNode) {
-          return {
-            type: DragTargetType.Nodes,
-            nodes: [treeNode.node],
-          };
+    if (isLeftButton && !isRootNode(node)) {
+      let nodes: Node[] = [node];
+      this.ignoreUpSelected = false;
+      if (isMulti) {
+        // multi select mode, directily add
+        if (!selection.has(node.id)) {
+          designer.activeTracker.track(node);
+          selection.add(node.id);
+          this.ignoreUpSelected = true;
         }
-        return null;
-      });
+        selection.remove(doc.rootNode.id);
+        // 获得顶层 nodes
+        nodes = selection.getTopNodes();
+      }
+      this.boostEvent = e.nativeEvent;
+      designer.dragon.boost(
+        {
+          type: DragObjectType.Node,
+          nodes,
+        },
+        this.boostEvent,
+      );
     }
-  }
-  */
+  };
+
+  private onMouseLeave = () => {
+    const { tree } = this.props;
+    const doc = tree.document;
+    doc.designer.hovering.leave(doc);
+  };
 
   render() {
     const { tree } = this.props;
     const root = tree.root;
     return (
-      <div className="lc-outline-tree">
+      <div
+        className="lc-outline-tree"
+        ref={shell => (this.shell = shell)}
+        onMouseDown={this.onMouseDown}
+        onMouseOver={this.onMouseOver}
+        onClick={this.onClick}
+        onMouseLeave={this.onMouseLeave}
+      >
         <TreeNodeView key={root.id} treeNode={root} />
       </div>
     );

@@ -1,9 +1,12 @@
 import ComponentNode, { NodeParent } from '../document/node/node';
 import DocumentModel from '../document/document-model';
+import { LocateEvent } from './dragon';
 
 export interface LocationData {
   target: NodeParent; // shadowNode | ConditionFlow | ElementNode | RootNode
   detail: LocationDetail;
+  source: string;
+  event: LocateEvent;
 }
 
 export enum LocationDetailType {
@@ -13,14 +16,19 @@ export enum LocationDetailType {
 
 export interface LocationChildrenDetail {
   type: LocationDetailType.Children;
-  index: number;
+  index?: number | null;
+  /**
+   * 是否有效位置
+   */
+  valid?: boolean;
   edge?: DOMRect;
   near?: {
     node: ComponentNode;
-    pos: 'before' | 'after';
+    pos: 'before' | 'after' | 'replace';
     rect?: Rect;
     align?: 'V' | 'H';
   };
+  focus?: { type: 'slots' } | { type: 'node'; node: NodeParent };
 }
 
 export interface LocationPropDetail {
@@ -118,15 +126,28 @@ export function getWindow(elem: Element | Document): Window {
   return (isDocument(elem) ? elem : elem.ownerDocument!).defaultView!;
 }
 
-export default class Location {
+export default class DropLocation {
   readonly target: NodeParent;
   readonly detail: LocationDetail;
+  readonly event: LocateEvent;
+  readonly source: string;
   get document(): DocumentModel {
     return this.target.document;
   }
 
-  constructor({ target, detail }: LocationData) {
+  constructor({ target, detail, source, event }: LocationData) {
     this.target = target;
     this.detail = detail;
+    this.source = source;
+    this.event = event;
+  }
+
+  clone(event: LocateEvent): DropLocation {
+    return new DropLocation({
+      target: this.target,
+      detail: this.detail,
+      source: this.source,
+      event,
+    });
   }
 }

@@ -3,9 +3,11 @@ import { uniqueId } from '../../../../../utils/unique-id';
 import Node from './node';
 import { intl } from '../../../locale';
 
+// modals assoc x-hide value, initial: check is Modal, yes will put it in modals, cross levels
+// if-else-if assoc conditionGroup value, should be the same level, and siblings, need renderEngine support
 export default class ExclusiveGroup {
   readonly isExclusiveGroup = true;
-  readonly id = uniqueId('cond-grp');
+  readonly id = uniqueId('exclusive');
   @obx.val readonly children: Node[] = [];
 
   @obx private visibleIndex = 0;

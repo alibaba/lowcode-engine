@@ -4,7 +4,7 @@ import Project from './project';
 import Dragon, { isDragNodeObject, isDragNodeDataObject, LocateEvent, DragObject } from './helper/dragon';
 import ActiveTracker from './helper/active-tracker';
 import Hovering from './helper/hovering';
-import Location, { LocationData, isLocationChildrenDetail } from './helper/location';
+import DropLocation, { LocationData, isLocationChildrenDetail } from './helper/location';
 import DocumentModel from './document/document-model';
 import Node, { insertChildren } from './document/node/node';
 import { isRootNode } from './document/node/root-node';
@@ -30,7 +30,7 @@ export interface DesignerProps {
   onMount?: (designer: Designer) => void;
   onDragstart?: (e: LocateEvent) => void;
   onDrag?: (e: LocateEvent) => void;
-  onDragend?: (e: { dragObject: DragObject; copy: boolean }, loc?: Location) => void;
+  onDragend?: (e: { dragObject: DragObject; copy: boolean }, loc?: DropLocation) => void;
   [key: string]: any;
 }
 
@@ -158,12 +158,12 @@ export default class Designer {
     this.props?.eventPipe?.emit(`designer.${event}`, ...args);
   }
 
-  private _dropLocation?: Location;
+  private _dropLocation?: DropLocation;
   /**
    * 创建插入位置，考虑放到 dragon 中
    */
-  createLocation(locationData: LocationData): Location {
-    const loc = new Location(locationData);
+  createLocation(locationData: LocationData): DropLocation {
+    const loc = new DropLocation(locationData);
     if (this._dropLocation && this._dropLocation.document !== loc.document) {
       this._dropLocation.document.internalSetDropLocation(null);
     }
@@ -290,7 +290,7 @@ export default class Designer {
     return this.project.schema;
   }
 
-  set schema(schema: ProjectSchema) {
+  setSchema(schema: ProjectSchema) {
     // todo:
   }
 

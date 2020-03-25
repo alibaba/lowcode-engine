@@ -27,10 +27,10 @@ export default class TreeNodeView extends Component<{ treeNode: TreeNode }> {
       // 是否锁定的
       locked: treeNode.locked,
       // 是否投放响应
-      dropping: treeNode.dropIndex != null,
+      dropping: treeNode.dropDetail?.index != null,
       'is-root': treeNode.isRoot(),
       'condition-flow': treeNode.node.conditionGroup != null,
-      // highlight: treeNode.isResponseDropping() && treeNode.dropIndex == null,
+      highlight: treeNode.isFocusingNode(),
     });
 
     return (

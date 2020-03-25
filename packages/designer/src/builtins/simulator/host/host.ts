@@ -3,7 +3,7 @@ import { ISimulator, Component, NodeInstance } from '../../../designer/simulator
 import Viewport from './viewport';
 import { createSimulator } from './create-simulator';
 import { SimulatorRenderer } from '../renderer/renderer';
-import Node, { NodeParent, isNodeParent, isNode, contains } from '../../../designer/document/node/node';
+import Node, { NodeParent, isNodeParent, isNode, contains, PositionNO } from '../../../designer/document/node/node';
 import DocumentModel from '../../../designer/document/document-model';
 import ResourceConsumer from './resource-consumer';
 import { AssetLevel, Asset, AssetList, assetBundle, assetItem, AssetType } from '../utils/asset';
@@ -536,7 +536,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
   /**
    * 通过 DOM 节点获取节点，依赖 simulator 的接口
    */
-  getNodeInstanceFromElement(target: Element | null): NodeInstance | null {
+  getNodeInstanceFromElement(target: Element | null): NodeInstance<ReactInstance> | null {
     if (!target) {
       return null;
     }
@@ -701,31 +701,24 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
   locate(e: LocateEvent): any {
     this.sensing = true;
     this.scroller.scrolling(e);
-    const dropTarget = this.getDropTarget(e);
-    if (!dropTarget) {
+    const dropContainer = this.getDropContainer(e);
+    if (!dropContainer) {
       return null;
     }
 
-    if (isLocationData(dropTarget)) {
-      return this.designer.createLocation(dropTarget);
+    if (isLocationData(dropContainer)) {
+      return this.designer.createLocation(dropContainer);
     }
 
-    const target = dropTarget;
+    const { container, instance: containerInstance } = dropContainer;
 
-    // FIXME: e.target is #document, etc., does not has e.targetInstance
-
-    const targetInstance = e.targetInstance as ReactInstance;
-    const parentInstance = this.getClosestNodeInstance(targetInstance, target.id);
-    const edge = this.computeComponentInstanceRect(
-      parentInstance?.instance as any,
-      parentInstance?.node?.componentMeta.rectSelector,
-    );
+    const edge = this.computeComponentInstanceRect(containerInstance, container.componentMeta.rectSelector);
 
     if (!edge) {
       return null;
     }
 
-    const children = target.children;
+    const children = container.children;
 
     const detail: LocationChildrenDetail = {
       type: LocationDetailType.Children,
@@ -734,8 +727,10 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     };
 
     const locationData = {
-      target,
+      target: container,
       detail,
+      source: 'simulator' + this.document.id,
+      event: e,
     };
 
     if (!children || children.size < 1 || !edge) {
@@ -755,7 +750,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
       const instances = this.getComponentInstances(node);
       const inst = instances
         ? instances.length > 1
-          ? instances.find(inst => this.getClosestNodeInstance(inst, target.id)?.instance === targetInstance)
+          ? instances.find(inst => this.getClosestNodeInstance(inst, container.id)?.instance === containerInstance)
           : instances[0]
         : null;
       const rect = inst ? this.computeComponentInstanceRect(inst, node.componentMeta.rectSelector) : null;
@@ -830,61 +825,109 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     return this.designer.createLocation(locationData);
   }
 
-  getDropTarget(e: LocateEvent): NodeParent | LocationData | null {
+  /**
+   * 查找合适的投放容器
+   */
+  getDropContainer(e: LocateEvent): DropContainer | LocationData | null {
     const { target, dragObject } = e;
     const isAny = isDragAnyObject(dragObject);
-    let container: any;
+    const { modalNode, currentRoot } = this.document;
+    let container: Node;
+    let nodeInstance: NodeInstance<ReactInstance> | undefined;
 
     if (target) {
       const ref = this.getNodeInstanceFromElement(target);
       if (ref?.node) {
-        e.targetInstance = ref.instance;
-        e.targetNode = ref.node;
+        nodeInstance = ref;
         container = ref.node;
       } else if (isAny) {
         return null;
       } else {
-        container = this.document.rootNode;
+        container = currentRoot;
       }
     } else if (isAny) {
       return null;
     } else {
-      container = this.document.rootNode;
+      container = currentRoot;
     }
 
-    if (!isNodeParent(container) && !isRootNode(container)) {
-      container = container.parent;
+    if (!isNodeParent(container)) {
+      container = container.parent || currentRoot;
     }
 
+    // check container if in modalNode layer, if not, use modalNode
+    if (modalNode && !modalNode.contains(container)) {
+      container = modalNode;
+    }
+
+    // TODO: use spec container to accept specialData
     if (isAny) {
-      // TODO: use spec container to accept specialData
+      // will return locationData
       return null;
+    }
+
+    // get common parent, avoid drop container contains by dragObject
+    // TODO: renderengine support pointerEvents: none for acceleration
+    const drillDownExcludes = new Set<Node>();
+    if (isDragNodeObject(dragObject)) {
+      const nodes = dragObject.nodes;
+      let i = nodes.length;
+      let p: any = container;
+      while (i-- > 0) {
+        if (contains(nodes[i], p)) {
+          p = nodes[i].parent;
+        }
+      }
+      if (p !== container) {
+        container = p || this.document.rootNode;
+        drillDownExcludes.add(container);
+      }
+    }
+
+    const ret: any = {
+      container,
+    };
+    if (nodeInstance) {
+      if (nodeInstance.node === container) {
+        ret.instance = nodeInstance.instance;
+      } else {
+        ret.instance = this.getClosestNodeInstance(nodeInstance.instance as any, container.id)?.instance;
+      }
+    } else {
+      ret.instance = this.getComponentInstances(container)?.[0];
     }
 
     let res: any;
     let upward: any;
-    // TODO: improve AT_CHILD logic, mark has checked
+    // TODO: complete drill down logic
     while (container) {
-      res = this.acceptNodes(container, e);
+      if (ret.container !== container) {
+        ret.container = container;
+        ret.instance = this.getClosestNodeInstance(ret.instance, container.id)?.instance;
+      }
+      res = this.handleAccept(ret, e);
       if (isLocationData(res)) {
         return res;
       }
       if (res === true) {
-        return container;
+        return ret;
       }
       if (!res) {
+        drillDownExcludes.add(container);
         if (upward) {
           container = upward;
           upward = null;
-        } else {
+        } else if (container.parent) {
           container = container.parent;
+        } else {
+          return null;
         }
       } else if (isNode(res)) {
-        /* else if (res === AT_CHILD) {
+        /* else if (res === DRILL_DOWN) {
         if (!upward) {
           upward = container.parent;
         }
-        container = this.getNearByContainer(container, e);
+        container = this.getNearByContainer(container, drillExcludes, e);
         if (!container) {
           container = upward;
           upward = null;
@@ -897,38 +940,71 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     return null;
   }
 
-  acceptNodes(container: NodeParent, e: LocateEvent) {
-    const { dragObject } = e;
-    if (isRootNode(container)) {
-      return this.checkDropTarget(container, dragObject as any);
+  isAcceptable(container: NodeParent): boolean {
+    return false;
+    /*
+    const meta = container.componentMeta;
+    const instance: any = this.document.getView(container);
+    if (instance && '$accept' in instance) {
+      return true;
     }
-
-    const config = container.componentMeta;
-
-    if (!config.isContainer) {
-      return false;
-    }
-    // check is contains, get common parent
-    if (isDragNodeObject(dragObject)) {
-      const nodes = dragObject.nodes;
-      let i = nodes.length;
-      let p: any = container;
-      while (i-- > 0) {
-        if (contains(nodes[i], p)) {
-          p = nodes[i].parent;
-        }
-      }
-      if (p !== container) {
-        return p || this.document.rootNode;
-      }
-    }
-
-    return this.checkNesting(container, dragObject as any);
+    return meta.acceptable;
+    */
   }
 
-  /*
-  getNearByContainer(container: NodeParent, e: LocateEvent) {
+  /**
+   * 控制接受
+   */
+  handleAccept({ container, instance }: DropContainer, e: LocateEvent) {
+    const { dragObject } = e;
+    if (isRootNode(container)) {
+      return this.document.checkDropTarget(container, dragObject as any);
+    }
 
+    const meta = container.componentMeta;
+
+    // FIXME: get containerInstance for accept logic use
+    const acceptable: boolean = this.isAcceptable(container);
+    if (!meta.isContainer && !acceptable) {
+      return false;
+    }
+
+    // first use accept
+    if (acceptable) {
+      /*
+      const view: any = this.document.getView(container);
+      if (view && '$accept' in view) {
+        if (view.$accept === false) {
+          return false;
+        }
+        if (view.$accept === AT_CHILD || view.$accept === '@CHILD') {
+          return AT_CHILD;
+        }
+        if (typeof view.$accept === 'function') {
+          const ret = view.$accept(container, e);
+          if (ret || ret === false) {
+            return ret;
+          }
+        }
+      }
+      if (proto.acceptable) {
+        const ret = proto.accept(container, e);
+        if (ret || ret === false) {
+          return ret;
+        }
+      }
+      */
+    }
+
+    // check nesting
+    return this.document.checkNesting(container, dragObject as any);
+  }
+
+  /**
+   * 查找邻近容器
+   */
+  getNearByContainer(container: NodeParent, e: LocateEvent) {
+    /*
     const children = container.children;
     if (!children || children.length < 1) {
       return null;
@@ -963,43 +1039,7 @@ export class SimulatorHost implements ISimulator<SimulatorProps> {
     }
 
     return nearBy;
-  }
-  */
-
-  checkNesting(dropTarget: NodeParent, dragObject: DragNodeObject | DragNodeDataObject): boolean {
-    let items: Array<Node | NodeSchema>;
-    if (isDragNodeDataObject(dragObject)) {
-      items = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
-    } else {
-      items = dragObject.nodes;
-    }
-    return items.every(item => this.checkNestingDown(dropTarget, item));
-  }
-
-  checkDropTarget(dropTarget: NodeParent, dragObject: DragNodeObject | DragNodeDataObject): boolean {
-    let items: Array<Node | NodeSchema>;
-    if (isDragNodeDataObject(dragObject)) {
-      items = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
-    } else {
-      items = dragObject.nodes;
-    }
-    return items.every(item => this.checkNestingUp(dropTarget, item));
-  }
-
-  checkNestingUp(parent: NodeParent, target: NodeSchema | Node): boolean {
-    if (isNode(target) || isNodeSchema(target)) {
-      const config = isNode(target) ? target.componentMeta : this.document.getComponentMeta(target.componentName);
-      if (config) {
-        return config.checkNestingUp(target, parent);
-      }
-    }
-
-    return true;
-  }
-
-  checkNestingDown(parent: NodeParent, target: NodeSchema | Node): boolean {
-    const config = parent.componentMeta;
-    return config.checkNestingDown(parent, target) && this.checkNestingUp(parent, target);
+    */
   }
   // #endregion
 }
@@ -1064,4 +1104,9 @@ function getMatched(elements: Array<Element | Text>, selector: string): Element 
     }
   }
   return firstQueried;
+}
+
+export interface DropContainer {
+  container: NodeParent;
+  instance: ReactInstance;
 }

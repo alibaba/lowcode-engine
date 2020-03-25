@@ -61,7 +61,8 @@ export default class TreeTitle extends Component<{
     const { treeNode } = this.props;
     const { editing } = this.state;
     const isCNode = !treeNode.isRoot();
-    const isNodeParent = treeNode.node.isNodeParent;
+    const { node } = treeNode;
+    const isNodeParent = node.isNodeParent;
     let style: any;
     if (isCNode) {
       const depth = treeNode.depth;
@@ -77,9 +78,9 @@ export default class TreeTitle extends Component<{
         className={classNames('tree-node-title', {
           editing,
         })}
-        ref={ref => treeNode.mount(ref)}
         style={style}
-        onClick={treeNode.node.conditionGroup ? () => treeNode.node.setConditionalVisible() : undefined}
+        data-id={treeNode.id}
+        onClick={node.conditionGroup ? () => node.setConditionalVisible() : undefined}
       >
         {isCNode && <ExpandBtn treeNode={treeNode} />}
         <div className="tree-node-icon">{createIcon(treeNode.icon)}</div>
@@ -94,19 +95,19 @@ export default class TreeTitle extends Component<{
           ) : (
             <Fragment>
               <Title title={treeNode.title} />
-              {treeNode.node.slotFor && (<a className="tree-node-tag slot">
+              {node.slotFor && (<a className="tree-node-tag slot">
                 {/* todo: click redirect to prop */}
                 <IconSlot />
-                <EmbedTip>{intl('Slot for {prop}', { prop: treeNode.node.slotFor.key })}</EmbedTip>
+                <EmbedTip>{intl('Slot for {prop}', { prop: node.slotFor.key })}</EmbedTip>
               </a>)}
-              {treeNode.node.hasLoop() && (
+              {node.hasLoop() && (
                 <a className="tree-node-tag loop">
                   {/* todo: click todo something */}
                   <IconLoop />
                   <EmbedTip>{intl('Loop')}</EmbedTip>
                 </a>
               )}
-              {treeNode.node.hasCondition() && !treeNode.node.conditionGroup && (
+              {node.hasCondition() && !node.conditionGroup && (
                 <a className="tree-node-tag cond">
                   {/* todo: click todo something */}
                   <IconCond />

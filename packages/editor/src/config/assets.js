@@ -165,7 +165,7 @@ export default {
           name: 'children',
           propType: 'node'
         }
-      ]
+      ],
     },
     'Button.Group': {
       componentName: 'Button.Group',

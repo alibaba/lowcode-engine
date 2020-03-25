@@ -43,8 +43,8 @@ const SCROLL_ACCURCY = 30;
 
 export interface IScrollable {
   scrollTarget?: ScrollTarget | Element;
-  bounds: DOMRect;
-  scale: number;
+  bounds?: DOMRect | null;
+  scale?: number;
 }
 
 export default class Scroller {
@@ -62,8 +62,7 @@ export default class Scroller {
     return target;
   }
 
-  constructor(private scrollable: IScrollable) {
-  }
+  constructor(private scrollable: IScrollable) {}
 
   scrollTo(options: { left?: number; top?: number }) {
     this.cancel();
@@ -119,9 +118,9 @@ export default class Scroller {
   scrolling(point: { globalX: number; globalY: number }) {
     this.cancel();
 
-    const { bounds, scale } = this.scrollable;
+    const { bounds, scale = 1 } = this.scrollable;
     const scrollTarget = this.scrollTarget;
-    if (!scrollTarget) {
+    if (!scrollTarget || !bounds) {
       return;
     }
 

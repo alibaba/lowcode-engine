@@ -1,9 +1,9 @@
 import Project from '../project';
-import Node, { isNodeParent, insertChildren, insertChild, NodeParent } from './node/node';
+import Node, { isNodeParent, insertChildren, insertChild, NodeParent, isNode } from './node/node';
 import { Selection } from './selection';
 import RootNode from './node/root-node';
 import { ISimulator } from '../simulator';
-import Location from '../helper/location';
+import DropLocation from '../helper/location';
 import { ComponentMeta } from '../component-meta';
 import History from '../helper/history';
 import Prop from './node/props/prop';
@@ -16,7 +16,9 @@ import {
   computed,
   obx,
   autorun,
+  isNodeSchema,
 } from '../../../../globals';
+import { isDragNodeDataObject, DragNodeObject, DragNodeDataObject } from '../helper/dragon';
 
 export default class DocumentModel {
   /**
@@ -54,6 +56,15 @@ export default class DocumentModel {
 
   set fileName(fileName: string) {
     this.rootNode.getExtraProp('fileName', true)?.setValue(fileName);
+  }
+
+  private _modalNode?: NodeParent;
+  get modalNode() {
+    return this._modalNode;
+  }
+
+  get currentRoot() {
+    return this.modalNode || this.rootNode;
   }
 
   constructor(readonly project: Project, schema: RootSchema) {
@@ -201,11 +212,11 @@ export default class DocumentModel {
     node.remove();
   }
 
-  @obx.ref private _dropLocation: Location | null = null;
+  @obx.ref private _dropLocation: DropLocation | null = null;
   /**
    * 内部方法，请勿调用
    */
-  internalSetDropLocation(loc: Location | null) {
+  internalSetDropLocation(loc: DropLocation | null) {
     this._dropLocation = loc;
   }
 
@@ -377,6 +388,48 @@ export default class DocumentModel {
    */
   remove() {
     // todo:
+  }
+
+  checkNesting(dropTarget: NodeParent, dragObject: DragNodeObject | DragNodeDataObject): boolean {
+    let items: Array<Node | NodeSchema>;
+    if (isDragNodeDataObject(dragObject)) {
+      items = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
+    } else {
+      items = dragObject.nodes;
+    }
+    return items.every(item => this.checkNestingDown(dropTarget, item));
+  }
+
+  checkDropTarget(dropTarget: NodeParent, dragObject: DragNodeObject | DragNodeDataObject): boolean {
+    let items: Array<Node | NodeSchema>;
+    if (isDragNodeDataObject(dragObject)) {
+      items = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
+    } else {
+      items = dragObject.nodes;
+    }
+    return items.every(item => this.checkNestingUp(dropTarget, item));
+  }
+
+  /**
+   * 检查对象对父级的要求，涉及配置 parentWhitelist
+   */
+  checkNestingUp(parent: NodeParent, obj: NodeSchema | Node): boolean {
+    if (isNode(obj) || isNodeSchema(obj)) {
+      const config = isNode(obj) ? obj.componentMeta : this.getComponentMeta(obj.componentName);
+      if (config) {
+        return config.checkNestingUp(obj, parent);
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * 检查投放位置对子级的要求，涉及配置 childWhitelist
+   */
+  checkNestingDown(parent: NodeParent, obj: NodeSchema | Node): boolean {
+    const config = parent.componentMeta;
+    return config.checkNestingDown(parent, obj) && this.checkNestingUp(parent, obj);
   }
 }
 

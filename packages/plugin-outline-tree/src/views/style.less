@@ -14,8 +14,9 @@
 }
 
 .lc-outline-tree {
+  @treeNodeHeight: 30px;
   overflow: hidden;
-  margin-bottom: 20px;
+  margin-bottom: @treeNodeHeight;
   user-select: none;
 
   .tree-node-branches::before {
@@ -28,6 +29,7 @@
     left: 6px;
     content: ' ';
     z-index: 2;
+    pointer-events: none;
   }
 
   &:hover {
@@ -37,10 +39,15 @@
   }
 
   .insertion {
-    pointer-events: none !important;
+    pointer-events: all !important;
     border: 1px dashed var(--color-brand-light);
-    height: 18px;
+    height: @treeNodeHeight;
+    box-sizing: border-box;
     transform: translateZ(0);
+    &.invalid {
+      border-color: red;
+      background-color: rgba(240, 154, 154, 0.719);
+    }
   }
 
   .condition-group-container {
@@ -75,7 +82,7 @@
   .tree-node-slots {
     border-bottom: 1px solid rgb(144, 94, 190);
     position: relative;
-    &:before {
+    &::before {
       position: absolute;
       display: block;
       width: 0;
@@ -97,6 +104,16 @@
         color: white;
         text-shadow: 0px 0px 2px black;
         display: block;
+      }
+    }
+    &.insertion-at-slots {
+      padding-bottom: @treeNodeHeight;
+      border-bottom-color: rgb(182, 55, 55);
+      >.tree-node-slots-title {
+        background-color: rgb(182, 55, 55);
+      }
+      &::before {
+        border-left-color: rgb(182, 55, 55);
       }
     }
   }
@@ -146,7 +163,8 @@
       border-bottom: 1px solid var(--color-line-normal, rgba(31, 56, 88, 0.1));
       display: flex;
       align-items: center;
-      height: 30px;
+      height: @treeNodeHeight;
+      box-sizing: border-box;
       position: relative;
       transform: translateZ(0);
       padding-right: 5px;
@@ -194,6 +212,12 @@
       &:hover {
         .tree-node-hide-btn, .tree-node-lock-btn {
           opacity: 0.5;
+        }
+      }
+      html.lc-cursor-dragging & {
+        // FIXME: only hide hover shows
+        .tree-node-hide-btn, .tree-node-lock-btn {
+          display: none;
         }
       }
       &.editing {
@@ -284,6 +308,22 @@
     &.dropping {
       & > .tree-node-branches::before {
         border-left: 1px solid var(--color-brand);
+      }
+      & > .tree-node-title {
+        .tree-node-expand-btn {
+          color: var(--color-brand);
+        }
+        .tree-node-icon {
+          color: var(--color-brand);
+        }
+        .tree-node-title-label > .lc-title {
+          color: var(--color-brand);
+        }
+      }
+    }
+    &.highlight {
+      & > .tree-node-title {
+        background: var(--color-block-background-shallow);
       }
     }
 

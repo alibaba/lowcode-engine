@@ -1,7 +1,7 @@
 import { computed, obx, TitleContent, isI18nData, localeFormat } from '../../globals';
 import Node from '../../designer/src/designer/document/node/node';
 import DocumentModel from '../../designer/src/designer/document/document-model';
-import { isLocationChildrenDetail } from '../../designer/src/designer/helper/location';
+import { isLocationChildrenDetail, LocationChildrenDetail } from '../../designer/src/designer/helper/location';
 import Designer from '../../designer/src/designer/designer';
 import { Tree } from './tree';
 
@@ -14,15 +14,15 @@ export default class TreeNode {
    * 是否可以展开
    */
   @computed get expandable(): boolean {
-    return this.hasChildren() || this.isSlotContainer() || this.dropIndex != null;
+    return this.hasChildren() || this.isSlotContainer() || this.dropDetail?.index != null;
   }
 
   /**
    * 插入"线"位置信息
    */
-  @computed get dropIndex(): number | null {
+  @computed get dropDetail(): LocationChildrenDetail | undefined | null {
     const loc = this.node.document.dropLocation;
-    return loc && this.isResponseDropping() && isLocationChildrenDetail(loc.detail) ? loc.detail.index : null;
+    return loc && this.isResponseDropping() && isLocationChildrenDetail(loc.detail) ? loc.detail : null;
   }
 
   @computed get depth(): number {
@@ -42,6 +42,14 @@ export default class TreeNode {
       return false;
     }
     return loc.target === this.node;
+  }
+
+  @computed isFocusingNode(): boolean {
+    const loc = this.node.document.dropLocation;
+    if (!loc) {
+      return false;
+    }
+    return isLocationChildrenDetail(loc.detail) && loc.detail.focus?.type === 'node' && loc.detail.focus.node === this.node;
   }
 
   /**
@@ -198,65 +206,6 @@ export default class TreeNode {
   }
   */
 
-  /**
-   * 展开节点，支持依次展开父节点
-   */
-  expand(tryExpandParents: boolean = false) {
-    // 这边不能直接使用 expanded，需要额外判断是否可以展开
-    // 如果只使用 expanded，会漏掉不可以展开的情况，即在不可以展开的情况下，会触发展开
-    if (this.expandable && !this._expanded) {
-      this.setExpanded(true);
-    }
-    if (tryExpandParents) {
-      this.expandParents();
-    }
-  }
-
-  /**
-   * 光标停留处理
-   * 超过一定时间，展开节点
-   */
-  private dwellTimer: number | undefined;
-  clearDwellTimer() {
-    clearTimeout(this.dwellTimer);
-    this.dwellTimer = undefined;
-  }
-  willExpand() {
-    if (this.dwellTimer) {
-      return;
-    }
-    this.clearDwellTimer();
-    if (this.expanded) {
-      return;
-    }
-    this.dwellTimer = setTimeout(() => {
-      this.clearDwellTimer();
-      this.expand(true);
-    }, 400) as any;
-  }
-
-  expandParents() {
-    let p = this.node.parent;
-    while (p) {
-      this.tree.getTreeNode(p).setExpanded(true);
-      p = p.parent;
-    }
-  }
-
-  private titleRef: HTMLDivElement | null = null;
-  mount(ref: HTMLDivElement | null) {
-    this.titleRef = ref;
-  }
-
-  computeRect() {
-    let target = this.titleRef;
-    if (!target) {
-      const nodeId = this.id;
-      target = window.document.querySelector(`div[data-id="${nodeId}"]`);
-    }
-    return target && target.getBoundingClientRect();
-  }
-
   select(isMulti: boolean) {
     const node = this.node;
 
@@ -271,6 +220,28 @@ export default class TreeNode {
       selection.add(node.id);
     } else {
       selection.select(node.id);
+    }
+  }
+
+  /**
+   * 展开节点，支持依次展开父节点
+   */
+  expand(tryExpandParents: boolean = false) {
+    // 这边不能直接使用 expanded，需要额外判断是否可以展开
+    // 如果只使用 expanded，会漏掉不可以展开的情况，即在不可以展开的情况下，会触发展开
+    if (this.expandable && !this._expanded) {
+      this.setExpanded(true);
+    }
+    if (tryExpandParents) {
+      this.expandParents();
+    }
+  }
+
+  expandParents() {
+    let p = this.node.parent;
+    while (p) {
+      this.tree.getTreeNode(p).setExpanded(true);
+      p = p.parent;
     }
   }
 
