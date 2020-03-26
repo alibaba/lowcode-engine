@@ -164,6 +164,10 @@ export default {
         {
           name: 'children',
           propType: 'node'
+        },
+        {
+          name: 'style',
+          propType: 'object'
         }
       ],
     },

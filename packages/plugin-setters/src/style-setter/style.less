@@ -1,0 +1,417 @@
+/**
+ * Popover Component Style for uxcore
+ * @author eternalsky
+ *
+ * Copyright 2014-2015, Uxcore Team, Alinw.
+ * All rights reserved.
+ */
+ .kuma-popover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1050;
+  cursor: auto;
+  -webkit-user-select: text;
+     -moz-user-select: text;
+      -ms-user-select: text;
+          user-select: text;
+  white-space: normal;
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: normal;
+  text-align: left;
+}
+.kuma-popover-button-group {
+  padding: 6px 0 0;
+  text-align: right;
+  background: #fff;
+}
+.kuma-popover-button-group .kuma-button {
+  margin-left: 10px;
+  margin-right: 0;
+}
+.kuma-popover-hidden {
+  display: none;
+}
+.kuma-popover-placement-top,
+.kuma-popover-placement-topLeft,
+.kuma-popover-placement-topRight {
+  margin-top: -7px;
+  padding-bottom: 11px;
+}
+.kuma-popover-placement-right,
+.kuma-popover-placement-rightTop,
+.kuma-popover-placement-rightBottom {
+  margin-left: 7px;
+  padding-left: 11px;
+}
+.kuma-popover-placement-bottom,
+.kuma-popover-placement-bottomLeft,
+.kuma-popover-placement-bottomRight {
+  margin-top: 7px;
+  padding-top: 11px;
+}
+.kuma-popover-placement-left,
+.kuma-popover-placement-leftTop,
+.kuma-popover-placement-leftBottom {
+  margin-left: -7px;
+  padding-right: 11px;
+}
+.kuma-popover-inner {
+  min-width: 320px;
+  max-width: 560px;
+  background-color: #fff;
+  border: 1px solid #bcc3cd;
+  border-radius: 3px;
+  box-shadow: 0 1px 4px 0 rgba(31, 56, 88, 0.15);
+  padding: 16px 16px 16px 24px;
+}
+.kuma-popover-inner .kuma-popover-content {
+  color: rgba(0, 0, 0, 0.4);
+}
+.kuma-popover-inner .kuma-popover-content > div:first-child {
+  padding: 0;
+}
+.kuma-popover-title {
+  padding: 0;
+  line-height: 32px;
+  height: 32px;
+  font-size: 16px;
+  border: none;
+  color: rgba(0, 0, 0, 0.8);
+}
+.kuma-popover-title + .kuma-popover-content > div:first-child {
+  padding: 5px 0;
+}
+.kuma-popover-arrow,
+.kuma-popover-arrow:after {
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+}
+.kuma-popover-arrow {
+  border-width: 8px;
+}
+.kuma-popover-arrow:after {
+  border-width: 7px;
+  content: "";
+}
+.kuma-popover-placement-top .kuma-popover-arrow,
+.kuma-popover-placement-topLeft .kuma-popover-arrow,
+.kuma-popover-placement-topRight .kuma-popover-arrow {
+  left: 50%;
+  border-bottom-width: 0;
+  border-top-color: #bcc3cd;
+  bottom: 4px;
+}
+.kuma-popover-placement-top .kuma-popover-arrow:after,
+.kuma-popover-placement-topLeft .kuma-popover-arrow:after,
+.kuma-popover-placement-topRight .kuma-popover-arrow:after {
+  content: " ";
+  bottom: 1px;
+  margin-left: -7px;
+  border-bottom-width: 0;
+  border-top-color: #fff;
+}
+.kuma-popover-placement-topLeft .kuma-popover-arrow {
+  left: 10px;
+}
+.kuma-popover-placement-topRight .kuma-popover-arrow {
+  right: 10px;
+  left: auto;
+}
+.kuma-popover-placement-top .kuma-popover-arrow {
+  margin-left: -8px;
+}
+.kuma-popover-placement-right .kuma-popover-arrow,
+.kuma-popover-placement-rightTop .kuma-popover-arrow,
+.kuma-popover-placement-rightBottom .kuma-popover-arrow {
+  top: 50%;
+  left: 4px;
+  border-left-width: 0;
+  border-right-color: #bcc3cd;
+}
+.kuma-popover-placement-right .kuma-popover-arrow:after,
+.kuma-popover-placement-rightTop .kuma-popover-arrow:after,
+.kuma-popover-placement-rightBottom .kuma-popover-arrow:after {
+  content: " ";
+  left: 1px;
+  bottom: -7px;
+  border-left-width: 0;
+  border-right-color: #fff;
+}
+.kuma-popover-placement-rightTop .kuma-popover-arrow {
+  top: 10px;
+}
+.kuma-popover-placement-rightBottom .kuma-popover-arrow {
+  top: auto;
+  bottom: 10px;
+}
+.kuma-popover-placement-right .kuma-popover-arrow {
+  margin-top: -8px;
+}
+.kuma-popover-placement-bottom .kuma-popover-arrow,
+.kuma-popover-placement-bottomLeft .kuma-popover-arrow,
+.kuma-popover-placement-bottomRight .kuma-popover-arrow {
+  left: 50%;
+  border-top-width: 0;
+  border-bottom-color: #bcc3cd;
+  top: 4px;
+}
+.kuma-popover-placement-bottom .kuma-popover-arrow:after,
+.kuma-popover-placement-bottomLeft .kuma-popover-arrow:after,
+.kuma-popover-placement-bottomRight .kuma-popover-arrow:after {
+  content: " ";
+  top: 1px;
+  margin-left: -7px;
+  border-top-width: 0;
+  border-bottom-color: #fff;
+}
+.kuma-popover-placement-bottomLeft .kuma-popover-arrow {
+  left: 10px;
+}
+.kuma-popover-placement-bottomRight .kuma-popover-arrow {
+  right: 10px;
+  left: auto;
+}
+.kuma-popover-placement-bottom .kuma-popover-arrow {
+  margin-left: -8px;
+}
+.kuma-popover-placement-left .kuma-popover-arrow,
+.kuma-popover-placement-leftTop .kuma-popover-arrow,
+.kuma-popover-placement-leftBottom .kuma-popover-arrow {
+  top: 50%;
+  right: 4px;
+  border-right-width: 0;
+  border-left-color: #bcc3cd;
+}
+.kuma-popover-placement-left .kuma-popover-arrow:after,
+.kuma-popover-placement-leftTop .kuma-popover-arrow:after,
+.kuma-popover-placement-leftBottom .kuma-popover-arrow:after {
+  content: " ";
+  right: 1px;
+  border-right-width: 0;
+  border-left-color: #fff;
+  bottom: -7px;
+}
+.kuma-popover-placement-leftTop .kuma-popover-arrow {
+  top: 10px;
+}
+.kuma-popover-placement-leftBottom .kuma-popover-arrow {
+  bottom: 10px;
+  top: auto;
+}
+.kuma-popover-placement-left .kuma-popover-arrow {
+  margin-top: -8px;
+}
+@keyframes popoverSlideInLeft {
+  0% {
+    transform: translate(10px, 0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+}
+@keyframes popoverSlideOutLeft {
+  0% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(10px, 0);
+    opacity: 0;
+  }
+}
+.kuma-popover-placement-right.popover-slide-enter,
+.kuma-popover-placement-rightTop.popover-slide-enter,
+.kuma-popover-placement-rightBottom.popover-slide-enter,
+.kuma-popover-placement-right.popover-slide-appear,
+.kuma-popover-placement-rightTop.popover-slide-appear,
+.kuma-popover-placement-rightBottom.popover-slide-appear {
+  opacity: 0;
+  transform: translate(10px, 0);
+  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  animation-duration: .3s;
+}
+.kuma-popover-placement-right.popover-slide-enter-active,
+.kuma-popover-placement-rightTop.popover-slide-enter-active,
+.kuma-popover-placement-rightBottom.popover-slide-enter-active,
+.kuma-popover-placement-right.popover-slide-appear-active,
+.kuma-popover-placement-rightTop.popover-slide-appear-active,
+.kuma-popover-placement-rightBottom.popover-slide-appear-active {
+  animation-name: popoverSlideInLeft;
+}
+.kuma-popover-placement-right.popover-slide-leave,
+.kuma-popover-placement-rightTop.popover-slide-leave,
+.kuma-popover-placement-rightBottom.popover-slide-leave {
+  opacity: 1;
+  transform: translate(0, 0);
+  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  animation-duration: .3s;
+}
+.kuma-popover-placement-right.popover-slide-leave-active,
+.kuma-popover-placement-rightTop.popover-slide-leave-active,
+.kuma-popover-placement-rightBottom.popover-slide-leave-active {
+  animation-name: popoverSlideOutLeft;
+}
+@keyframes popoverSlideInRight {
+  0% {
+    transform: translate(-10px, 0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+}
+@keyframes popoverSlideOutRight {
+  0% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-10px, 0);
+    opacity: 0;
+  }
+}
+.kuma-popover-placement-left.popover-slide-enter,
+.kuma-popover-placement-leftTop.popover-slide-enter,
+.kuma-popover-placement-leftBottom.popover-slide-enter,
+.kuma-popover-placement-left.popover-slide-appear,
+.kuma-popover-placement-leftTop.popover-slide-appear,
+.kuma-popover-placement-leftBottom.popover-slide-appear {
+  opacity: 0;
+  transform: translate(-10px, 0);
+  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  animation-duration: .3s;
+}
+.kuma-popover-placement-left.popover-slide-enter-active,
+.kuma-popover-placement-leftTop.popover-slide-enter-active,
+.kuma-popover-placement-leftBottom.popover-slide-enter-active,
+.kuma-popover-placement-left.popover-slide-appear-active,
+.kuma-popover-placement-leftTop.popover-slide-appear-active,
+.kuma-popover-placement-leftBottom.popover-slide-appear-active {
+  animation-name: popoverSlideInRight;
+}
+.kuma-popover-placement-left.popover-slide-leave,
+.kuma-popover-placement-leftTop.popover-slide-leave,
+.kuma-popover-placement-leftBottom.popover-slide-leave {
+  opacity: 1;
+  transform: translate(0, 0);
+  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  animation-duration: .3s;
+}
+.kuma-popover-placement-left.popover-slide-leave-active,
+.kuma-popover-placement-leftTop.popover-slide-leave-active,
+.kuma-popover-placement-leftBottom.popover-slide-leave-active {
+  animation-name: popoverSlideOutRight;
+}
+@keyframes popoverSlideInBottom {
+  0% {
+    transform: translate(0, -10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+}
+@keyframes popoverSlideOutBottom {
+  0% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(0, -10px);
+    opacity: 0;
+  }
+}
+.kuma-popover-placement-top.popover-slide-enter,
+.kuma-popover-placement-topLeft.popover-slide-enter,
+.kuma-popover-placement-topRight.popover-slide-enter,
+.kuma-popover-placement-top.popover-slide-appear,
+.kuma-popover-placement-topLeft.popover-slide-appear,
+.kuma-popover-placement-topRight.popover-slide-appear {
+  opacity: 0;
+  transform: translate(0, -10px);
+  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  animation-duration: .3s;
+}
+.kuma-popover-placement-top.popover-slide-enter-active,
+.kuma-popover-placement-topLeft.popover-slide-enter-active,
+.kuma-popover-placement-topRight.popover-slide-enter-active,
+.kuma-popover-placement-top.popover-slide-appear-active,
+.kuma-popover-placement-topLeft.popover-slide-appear-active,
+.kuma-popover-placement-topRight.popover-slide-appear-active {
+  animation-name: popoverSlideInBottom;
+}
+.kuma-popover-placement-top.popover-slide-leave,
+.kuma-popover-placement-topLeft.popover-slide-leave,
+.kuma-popover-placement-topRight.popover-slide-leave {
+  opacity: 1;
+  transform: translate(0, 0);
+  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  animation-duration: .3s;
+}
+.kuma-popover-placement-top.popover-slide-leave-active,
+.kuma-popover-placement-topLeft.popover-slide-leave-active,
+.kuma-popover-placement-topRight.popover-slide-leave-active {
+  animation-name: popoverSlideOutBottom;
+}
+@keyframes popoverSlideInTop {
+  0% {
+    transform: translate(0, 10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+}
+@keyframes popoverSlideOutTop {
+  0% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(0, 10px);
+    opacity: 0;
+  }
+}
+.kuma-popover-placement-bottom.popover-slide-enter,
+.kuma-popover-placement-bottomLeft.popover-slide-enter,
+.kuma-popover-placement-bottomRight.popover-slide-enter,
+.kuma-popover-placement-bottom.popover-slide-appear,
+.kuma-popover-placement-bottomLeft.popover-slide-appear,
+.kuma-popover-placement-bottomRight.popover-slide-appear {
+  opacity: 0;
+  transform: translate(0, 10px);
+  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  animation-duration: .3s;
+}
+.kuma-popover-placement-bottom.popover-slide-enter-active,
+.kuma-popover-placement-bottomLeft.popover-slide-enter-active,
+.kuma-popover-placement-bottomRight.popover-slide-enter-active,
+.kuma-popover-placement-bottom.popover-slide-appear-active,
+.kuma-popover-placement-bottomLeft.popover-slide-appear-active,
+.kuma-popover-placement-bottomRight.popover-slide-appear-active {
+  animation-name: popoverSlideInTop;
+}
+.kuma-popover-placement-bottom.popover-slide-leave,
+.kuma-popover-placement-bottomLeft.popover-slide-leave,
+.kuma-popover-placement-bottomRight.popover-slide-leave {
+  opacity: 1;
+  transform: translate(0, 0);
+  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  animation-duration: .3s;
+}
+.kuma-popover-placement-bottom.popover-slide-leave-active,
+.kuma-popover-placement-bottomLeft.popover-slide-leave-active,
+.kuma-popover-placement-bottomRight.popover-slide-leave-active {
+  animation-name: popoverSlideOutTop;
+}
