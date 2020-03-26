@@ -72,7 +72,7 @@ export default {
         },
         config: {
           package: '@ali/iceluna-plugin-components-pane',
-          version: '^1.0.4'
+          version: '0.0.1'
         },
         pluginProps: {
           disableAppComponent: true
