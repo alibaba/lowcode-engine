@@ -390,6 +390,8 @@ export default class DocumentModel {
     // todo:
   }
 
+  purge() {}
+
   checkNesting(dropTarget: NodeParent, dragObject: DragNodeObject | DragNodeDataObject): boolean {
     let items: Array<Node | NodeSchema>;
     if (isDragNodeDataObject(dragObject)) {

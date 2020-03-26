@@ -36,11 +36,14 @@ export default class TreeView extends Component<{ tree: Tree }> {
 
   private onClick = (e: ReactMouseEvent) => {
     if (this.ignoreUpSelected) {
+      this.boostEvent = undefined;
       return;
     }
     if (this.boostEvent && isShaken(this.boostEvent, e.nativeEvent)) {
+      this.boostEvent = undefined;
       return;
     }
+    this.boostEvent = undefined;
     const treeNode = this.getTreeNodeFromEvent(e);
     if (!treeNode) {
       return;
@@ -104,6 +107,8 @@ export default class TreeView extends Component<{ tree: Tree }> {
         }
         selection.remove(doc.rootNode.id);
         // 获得顶层 nodes
+        nodes = selection.getTopNodes();
+      } else if (selection.has(node.id)) {
         nodes = selection.getTopNodes();
       }
       this.boostEvent = e.nativeEvent;

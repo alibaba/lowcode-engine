@@ -188,7 +188,9 @@ class ExpandBtn extends Component<{
       <div
         className="tree-node-expand-btn"
         onClick={e => {
-          e.stopPropagation();
+          if (treeNode.expanded) {
+            e.stopPropagation();
+          }
           treeNode.setExpanded(!treeNode.expanded);
         }}
       >

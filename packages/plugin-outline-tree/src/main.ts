@@ -489,14 +489,15 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
    * @see IScrollBoard
    */
   scrollToNode(treeNode: TreeNode, detail?: any, tryTimes: number = 0) {
-    this.tryScrollAgain = null;
+    if (tryTimes < 1 && this.tryScrollAgain) {
+      (window as any).cancelIdleCallback(this.tryScrollAgain);
+      this.tryScrollAgain = null;
+    }
     if (this.sensing || !this.bounds || !this.scroller || !this.scrollTarget) {
       // is a active sensor
       return;
     }
 
-    const opt: any = {};
-    let scroll = false;
     let rect: ClientRect | undefined;
     if (detail && isLocationChildrenDetail(detail)) {
       rect = this.getInsertionRect();
@@ -505,23 +506,24 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
     }
 
     if (!rect) {
-      if (!this.tryScrollAgain && tryTimes < 3) {
-        this.tryScrollAgain = requestAnimationFrame(() => this.scrollToNode(treeNode, detail, tryTimes + 1));
+      if (tryTimes < 3) {
+        this.tryScrollAgain = (window as any).requestIdleCallback(() => this.scrollToNode(treeNode, detail, tryTimes + 1));
       }
       return;
     }
-    const scrollTarget = this.scrollTarget;
-    const st = scrollTarget.top;
-    const scrollHeight = scrollTarget.scrollHeight;
+    const { scrollHeight, top: scrollTop } = this.scrollTarget;
     const { height, top, bottom } = this.bounds;
-
     if (rect.top < top || rect.bottom > bottom) {
-      opt.top = Math.min(rect.top + rect.height / 2 + st - top - height / 2, scrollHeight - height);
-      scroll = true;
-    }
-
-    if (scroll) {
+      const opt: any = {};
+      opt.top = Math.min(rect.top + rect.height / 2 + scrollTop - top - height / 2, scrollHeight - height);
+      if (rect.height >= height) {
+        opt.top = Math.min(scrollTop + rect.top - top, opt.top);
+      }
       this.scroller.scrollTo(opt);
+    }
+    // make tail scroll be sure
+    if (tryTimes < 4) {
+      this.tryScrollAgain = (window as any).requestIdleCallback(() => this.scrollToNode(treeNode, detail, 4));
     }
   }
 

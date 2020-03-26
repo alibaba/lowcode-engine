@@ -148,6 +148,19 @@ export default {
         }
       },
       {
+        pluginKey: 'outlineTree',
+        type: 'PanelIcon',
+        props: {
+          align: 'top',
+          icon: 'dengpao',
+          title: '大纲树'
+        },
+        config: {
+          version: '^1.0.0'
+        },
+        pluginProps: {}
+      },
+      {
         pluginKey: 'leftPanelIcon',
         type: 'PanelIcon',
         props: {
@@ -238,7 +251,6 @@ export default {
       }
     ],
     rightArea: [
-      /*
       {
         pluginKey: 'settings',
         type: 'Panel',
@@ -247,16 +259,7 @@ export default {
           version: '^1.0.0'
         },
         pluginProps: {}
-      },*/
-      {
-        pluginKey: 'outlineTree',
-        type: 'Panel',
-        props: {},
-        config: {
-          version: '^1.0.0'
-        },
-        pluginProps: {}
-      }
+      },
     ],
     centerArea: [
       {

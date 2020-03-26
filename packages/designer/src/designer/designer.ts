@@ -287,11 +287,11 @@ export default class Designer {
   }
 
   get schema(): ProjectSchema {
-    return this.project.schema;
+    return this.project.getSchema();
   }
 
-  setSchema(schema: ProjectSchema) {
-    // todo:
+  setSchema(schema?: ProjectSchema) {
+    this.project.setSchema(schema);
   }
 
   @obx.val private _componentMetasMap = new Map<string, ComponentMeta>();
