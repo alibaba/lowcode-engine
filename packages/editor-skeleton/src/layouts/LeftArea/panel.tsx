@@ -1,5 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
-import Editor, { AreaManager } from '@ali/lowcode-editor-framework';
+import Editor, { AreaManager } from '@ali/lowcode-editor-core';
 import Panel from '../../components/Panel';
 
 import './index.scss';

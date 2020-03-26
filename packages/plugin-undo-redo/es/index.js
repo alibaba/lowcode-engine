@@ -21,20 +21,28 @@ var UndoRedo = /*#__PURE__*/function (_PureComponent) {
     _this = _PureComponent.call(this, props) || this;
     _this.history = void 0;
 
+    _this.handleHistoryChange = function (history) {
+      var _this$history;
+
+      _this.history = history;
+
+      _this.updateState(((_this$history = _this.history) === null || _this$history === void 0 ? void 0 : _this$history.getState()) || 0);
+    };
+
     _this.init = function () {
-      var _editor$designer, _this$history;
+      var _editor$designer, _this$history2;
 
       var editor = _this.props.editor;
       _this.history = (_editor$designer = editor.designer) === null || _editor$designer === void 0 ? void 0 : _editor$designer.currentHistory;
 
-      _this.updateState(((_this$history = _this.history) === null || _this$history === void 0 ? void 0 : _this$history.getState()) || 0);
+      _this.updateState(((_this$history2 = _this.history) === null || _this$history2 === void 0 ? void 0 : _this$history2.getState()) || 0);
 
       editor.on('designer.history-change', function (history) {
-        var _this$history2;
+        var _this$history3;
 
         _this.history = history;
 
-        _this.updateState(((_this$history2 = _this.history) === null || _this$history2 === void 0 ? void 0 : _this$history2.getState()) || 0);
+        _this.updateState(((_this$history3 = _this.history) === null || _this$history3 === void 0 ? void 0 : _this$history3.getState()) || 0);
       });
     };
 
@@ -46,34 +54,52 @@ var UndoRedo = /*#__PURE__*/function (_PureComponent) {
     };
 
     _this.handleUndoClick = function () {
-      var _this$history3;
+      var _this$history4;
 
-      (_this$history3 = _this.history) === null || _this$history3 === void 0 ? void 0 : _this$history3.back();
+      (_this$history4 = _this.history) === null || _this$history4 === void 0 ? void 0 : _this$history4.back();
     };
 
     _this.handleRedoClick = function () {
-      var _this$history4;
+      var _this$history5;
 
-      (_this$history4 = _this.history) === null || _this$history4 === void 0 ? void 0 : _this$history4.forward();
+      (_this$history5 = _this.history) === null || _this$history5 === void 0 ? void 0 : _this$history5.forward();
     };
 
     _this.state = {
       undoEnable: false,
       redoEnable: false
     };
-
-    if (props.editor.designer) {
-      _this.init();
-    } else {
-      props.editor.on('designer.ready', function () {
-        _this.init();
-      });
-    }
-
     return _this;
   }
 
   var _proto = UndoRedo.prototype;
+
+  _proto.componentDidMount = function componentDidMount() {
+    var _this2 = this;
+
+    var editor = this.props.editor;
+    editor.on('designer.history-change', this.handleHistoryChange);
+
+    if (editor.designer) {
+      var _editor$designer2, _this$history6;
+
+      this.history = (_editor$designer2 = editor.designer) === null || _editor$designer2 === void 0 ? void 0 : _editor$designer2.currentHistory;
+      this.updateState(((_this$history6 = this.history) === null || _this$history6 === void 0 ? void 0 : _this$history6.getState()) || 0);
+    } else {
+      editor.once('designer.ready', function () {
+        var _editor$designer3, _this2$history;
+
+        _this2.history = (_editor$designer3 = editor.designer) === null || _editor$designer3 === void 0 ? void 0 : _editor$designer3.currentHistory;
+
+        _this2.updateState(((_this2$history = _this2.history) === null || _this2$history === void 0 ? void 0 : _this2$history.getState()) || 0);
+      });
+    }
+  };
+
+  _proto.componentWillUnmount = function componentWillUnmount() {
+    var editor = this.props.editor;
+    editor.off('designer.history-change', this.handleHistoryChange);
+  };
 
   _proto.render = function render() {
     var _this$state = this.state,

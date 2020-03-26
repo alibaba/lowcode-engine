@@ -2,12 +2,12 @@ import React, { PureComponent } from 'react';
 
 import { Loading, ConfigProvider } from '@alifd/next';
 import { HashRouter as Router, Route } from 'react-router-dom';
-import Editor, { utils } from '@ali/lowcode-editor-framework';
+import Editor, { utils } from '@ali/lowcode-editor-core';
 import {
   EditorConfig,
   Utils,
   PluginClassSet,
-} from '@ali/lowcode-editor-framework/lib/definitions';
+} from '@ali/lowcode-editor-core/lib/definitions';
 import defaultConfig from './config/skeleton';
 import skeletonUtils from './config/utils';
 
@@ -113,8 +113,7 @@ export class Skeleton extends PureComponent<SkeletonProps, SkeletonState> {
         },
         (): void => {
           editor.emit('editor.ready');
-          editor.emit('ide.ready');
-          isReset && editor.emit('ide.afterReset');
+          isReset && editor.emit('editor.afterReset');
         },
       );
     });

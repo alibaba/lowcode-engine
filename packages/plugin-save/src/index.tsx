@@ -1,9 +1,7 @@
 import React from 'react';
-import {Button} from '@alifd/next';
+import { Button } from '@alifd/next';
 import './index.scss';
-import { PluginProps } from '@ali/lowcode-editor-framework/lib/definitions';
-
-
+import { PluginProps } from '@ali/lowcode-editor-core/lib/definitions';
 
 const Save: React.FC<PluginProps> = (props): React.ReactElement => {
   const handleClick = (): void => {
@@ -12,7 +10,9 @@ const Save: React.FC<PluginProps> = (props): React.ReactElement => {
 
   return (
     <div className="lowcode-plugin-save">
-      <Button type="primary" onClick={handleClick}>保存</Button>
+      <Button type="primary" onClick={handleClick}>
+        保存
+      </Button>
     </div>
   );
 };

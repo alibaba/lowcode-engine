@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Grid } from '@alifd/next';
-import Editor, { AreaManager } from '@ali/lowcode-editor-framework';
-import { PluginConfig } from '@ali/lowcode-editor-framework/lib/definitions';
+import Editor, { AreaManager } from '@ali/lowcode-editor-core';
+import { PluginConfig } from '@ali/lowcode-editor-core/lib/definitions';
 import TopPlugin from '../../components/TopPlugin';
 import './index.scss';
 

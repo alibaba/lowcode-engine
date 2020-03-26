@@ -9,6 +9,7 @@ import _pick from 'lodash/pick';
 import _throttle from 'lodash/throttle';
 
 import _serialize from 'serialize-javascript';
+export { get, post, request } from './request';
 import Editor from './editor';
 import { EditorConfig, I18nFunction, I18nMessages, LocaleType, ShortCutsConfig } from './definitions';
 

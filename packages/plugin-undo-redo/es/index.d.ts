@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import './index.scss';
-import { PluginProps } from '@ali/lowcode-editor-framework/lib/definitions';
+import { PluginProps } from '@ali/lowcode-editor-core/lib/definitions';
 export interface IProps {
     editor: any;
     logo?: string;
@@ -13,6 +13,9 @@ export default class UndoRedo extends PureComponent<IProps & PluginProps, IState
     static display: string;
     private history;
     constructor(props: any);
+    componentDidMount(): void;
+    componentWillUnmount(): void;
+    handleHistoryChange: (history: any) => void;
     init: () => void;
     updateState: (state: number) => void;
     handleUndoClick: () => void;

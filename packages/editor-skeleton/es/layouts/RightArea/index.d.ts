@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
-import Editor from '@ali/lowcode-editor-framework';
-import { PluginConfig } from '@ali/lowcode-editor-framework/lib/definitions';
+import Editor from '@ali/lowcode-editor-core';
 import './index.scss';
 export interface RightAreaProps {
     editor: Editor;
@@ -17,8 +16,8 @@ export default class RightArea extends PureComponent<RightAreaProps, RightAreaSt
     componentWillUnmount(): void;
     handleSkeletonUpdate: () => void;
     handlePluginChange: (key: string, isinit?: boolean) => void;
-    renderTabTitle: (config: PluginConfig) => any;
-    renderTabPanels: (list: PluginConfig[], height: string) => any;
-    renderPanels: (list: PluginConfig[], height: string) => any;
+    renderTabTitle: (config: any) => any;
+    renderTabPanels: (list: any[], height: string) => any;
+    renderPanels: (list: any[], height: string) => any;
     render(): React.ReactNode;
 }

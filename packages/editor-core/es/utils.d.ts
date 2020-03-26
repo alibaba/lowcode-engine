@@ -1,4 +1,5 @@
 /// <reference types="react" />
+export { get, post, request } from './request';
 import Editor from './editor';
 import { EditorConfig, I18nFunction, I18nMessages, LocaleType, ShortCutsConfig } from './definitions';
 export declare const pick: any;
@@ -68,4 +69,3 @@ export declare function comboEditorConfig(defaultConfig: EditorConfig, customCon
  * @param {*} Comp 需要判断的组件
  */
 export declare function acceptsRef(Comp: React.ReactNode): boolean;
-export {};

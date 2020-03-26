@@ -2,7 +2,7 @@ import _extends from "@babel/runtime/helpers/extends";
 import _inheritsLoose from "@babel/runtime/helpers/inheritsLoose";
 import React, { PureComponent } from 'react';
 import LeftPlugin from '../../components/LeftPlugin';
-import { utils, AreaManager } from '@ali/lowcode-editor-framework';
+import { utils, AreaManager } from '@ali/lowcode-editor-core';
 import './index.scss';
 var isEmpty = utils.isEmpty;
 

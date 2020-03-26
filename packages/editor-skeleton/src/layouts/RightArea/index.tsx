@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { Tab, Badge, Icon } from '@alifd/next';
 import classNames from 'classnames';
-import Editor, { AreaManager, utils } from '@ali/lowcode-editor-framework';
-import { PluginConfig } from '@ali/lowcode-editor-framework/lib/definitions';
+import Editor, { AreaManager, utils } from '@ali/lowcode-editor-core';
+import { PluginConfig } from '@ali/lowcode-editor-core/lib/definitions';
 import './index.scss';
 
 const { isEmpty } = utils;

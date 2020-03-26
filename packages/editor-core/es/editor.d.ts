@@ -8,7 +8,7 @@ declare global {
     }
 }
 export interface HooksFuncs {
-    [idx: number]: (msg: string, handler: (...args: any[]) => void) => void;
+    [idx: number]: (msg: string, handler: (...args: []) => void) => void;
 }
 export default class Editor extends EventEmitter {
     static getInstance: (config: EditorConfig, components: PluginClassSet, utils?: Utils) => Editor;

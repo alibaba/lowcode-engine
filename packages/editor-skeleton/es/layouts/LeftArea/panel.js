@@ -1,7 +1,7 @@
 import _extends from "@babel/runtime/helpers/extends";
 import _inheritsLoose from "@babel/runtime/helpers/inheritsLoose";
 import React, { PureComponent, Fragment } from 'react';
-import { AreaManager } from '@ali/lowcode-editor-framework';
+import { AreaManager } from '@ali/lowcode-editor-core';
 import Panel from '../../components/Panel';
 import './index.scss';
 

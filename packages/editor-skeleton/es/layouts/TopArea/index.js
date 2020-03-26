@@ -1,7 +1,7 @@
 import _inheritsLoose from "@babel/runtime/helpers/inheritsLoose";
 import _Grid from "@alifd/next/es/grid";
 import React, { PureComponent } from 'react';
-import { AreaManager } from '@ali/lowcode-editor-framework';
+import { AreaManager } from '@ali/lowcode-editor-core';
 import TopPlugin from '../../components/TopPlugin';
 import './index.scss';
 var Row = _Grid.Row,

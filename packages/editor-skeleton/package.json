@@ -24,7 +24,7 @@
   ],
   "author": "xiayang.xy",
   "dependencies": {
-    "@ali/lowcode-editor-framework": "0.0.1",
+    "@ali/lowcode-editor-core": "0.0.1",
     "@alifd/next": "^1.x",
     "prop-types": "^15.5.8",
     "react": "^16.8.1",

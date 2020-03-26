@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import './index.scss';
-import { PluginProps } from '@ali/lowcode-editor-framework/lib/definitions';
-import {TopIcon} from '@ali/lowcode-editor-skeleton';
+import { PluginProps } from '@ali/lowcode-editor-core/lib/definitions';
+import { TopIcon } from '@ali/lowcode-editor-skeleton';
 
 export interface IProps {
   editor: any;
@@ -13,7 +13,10 @@ export interface IState {
   redoEnable: boolean;
 }
 
-export default class UndoRedo extends PureComponent<IProps & PluginProps, IState> {
+export default class UndoRedo extends PureComponent<
+  IProps & PluginProps,
+  IState
+> {
   public static display = 'LowcodeUndoRedo';
 
   private history: any;
@@ -22,16 +25,34 @@ export default class UndoRedo extends PureComponent<IProps & PluginProps, IState
     super(props);
     this.state = {
       undoEnable: false,
-      redoEnable: false
+      redoEnable: false,
     };
-    if (props.editor.designer) {
-      this.init();
+  }
+
+  componentDidMount(): void {
+    const { editor } = this.props;
+    editor.on('designer.history-change', this.handleHistoryChange);
+
+    if (editor.designer) {
+      this.history = editor.designer?.currentHistory;
+      this.updateState(this.history?.getState() || 0);
     } else {
-      props.editor.on('designer.ready', () => {
-        this.init();
+      editor.once('designer.ready', (): void => {
+        this.history = editor.designer?.currentHistory;
+        this.updateState(this.history?.getState() || 0);
       });
     }
   }
+
+  componentWillUnmount(): void {
+    const { editor } = this.props;
+    editor.off('designer.history-change', this.handleHistoryChange);
+  }
+
+  handleHistoryChange = (history): void => {
+    this.history = history;
+    this.updateState(this.history?.getState() || 0);
+  };
 
   init = (): void => {
     const { editor } = this.props;
@@ -48,7 +69,7 @@ export default class UndoRedo extends PureComponent<IProps & PluginProps, IState
   updateState = (state: number): void => {
     this.setState({
       undoEnable: !!(state & 1),
-      redoEnable: !!(state & 2)
+      redoEnable: !!(state & 2),
     });
   };
 
@@ -64,8 +85,18 @@ export default class UndoRedo extends PureComponent<IProps & PluginProps, IState
     const { undoEnable, redoEnable } = this.state;
     return (
       <div className="lowcode-plugin-undo-redo">
-        <TopIcon icon="houtui" title="后退" disabled={!undoEnable} onClick={this.handleUndoClick} />
-        <TopIcon icon="qianjin" title="前进" disabled={!redoEnable} onClick={this.handleRedoClick} />
+        <TopIcon
+          icon="houtui"
+          title="后退"
+          disabled={!undoEnable}
+          onClick={this.handleUndoClick}
+        />
+        <TopIcon
+          icon="qianjin"
+          title="前进"
+          disabled={!redoEnable}
+          onClick={this.handleRedoClick}
+        />
       </div>
     );
   }

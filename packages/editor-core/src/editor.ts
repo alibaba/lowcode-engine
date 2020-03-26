@@ -64,7 +64,7 @@ const debug = Debug('editor');
 EventEmitter.defaultMaxListeners = 100;
 
 export interface HooksFuncs {
-  [idx: number]: (msg: string, handler: (...args) => void) => void;
+  [idx: number]: (msg: string, handler: (...args: []) => void) => void;
 }
 
 export default class Editor extends EventEmitter {
@@ -95,7 +95,6 @@ export default class Editor extends EventEmitter {
     this.components = components;
     this.utils = { ...editorUtils, ...utils };
     instance = this;
-    this.init();
   }
 
   public init(): Promise<any> {

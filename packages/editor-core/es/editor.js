@@ -79,9 +79,6 @@ var Editor = /*#__PURE__*/function (_EventEmitter) {
     _this.components = components;
     _this.utils = _extends({}, editorUtils, {}, utils);
     instance = _assertThisInitialized(_this);
-
-    _this.init();
-
     return _this;
   }
 

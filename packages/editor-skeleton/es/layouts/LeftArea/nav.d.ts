@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
-import Editor from '@ali/lowcode-editor-framework';
-import { PluginConfig } from '@ali/lowcode-editor-framework/lib/definitions';
+import Editor from '@ali/lowcode-editor-core';
 import './index.scss';
 export interface LeftAreaNavProps {
     editor: Editor;
@@ -17,8 +16,8 @@ export default class LeftAreaNav extends PureComponent<LeftAreaNavProps, LeftAre
     componentWillUnmount(): void;
     handleSkeletonUpdate: () => void;
     handlePluginChange: (key: string) => void;
-    handlePluginClick: (item: PluginConfig) => void;
+    handlePluginClick: (item: any) => void;
     updateActiveKey: (key: string) => void;
-    renderPluginList: (list?: PluginConfig[]) => any[];
+    renderPluginList: (list?: any[]) => any[];
     render(): React.ReactNode;
 }

@@ -26,7 +26,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@ali/lowcode-editor-framework": "^0.0.1",
+    "@ali/lowcode-editor-core": "^0.0.1",
     "@ali/recore": "^1.6.9"
   }
 }

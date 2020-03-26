@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import LeftPlugin from '../../components/LeftPlugin';
-import Editor, { utils, AreaManager } from '@ali/lowcode-editor-framework';
-import { PluginConfig } from '@ali/lowcode-editor-framework/lib/definitions';
+import Editor, { utils, AreaManager } from '@ali/lowcode-editor-core';
+import { PluginConfig } from '@ali/lowcode-editor-core/lib/definitions';
 
 import './index.scss';
 

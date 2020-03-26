@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
-import Editor from '@ali/lowcode-editor-framework';
-import { PluginConfig, PluginClass } from '@ali/lowcode-editor-framework/lib/definitions';
+import Editor from '@ali/lowcode-editor-core';
+import { PluginConfig, PluginClass } from '@ali/lowcode-editor-core/lib/definitions';
 import './index.scss';
 export interface LeftPluginProps {
     active?: boolean;

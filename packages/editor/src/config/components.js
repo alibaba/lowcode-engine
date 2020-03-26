@@ -8,14 +8,14 @@ import rightPanel1 from '@ali/iceluna-addon-2';
 import rightPanel2 from '@ali/iceluna-addon-2';
 import rightPanel3 from '@ali/iceluna-addon-2';
 import rightPanel4 from '@ali/iceluna-addon-2';
-import componentList from '@ali/iceluna-addon-component-list';
+import componentsPane from '@ali/lowcode-plugin-components-pane';
 import Settings from '../../../plugin-settings';
 import undoRedo from '@ali/lowcode-plugin-undo-redo';
 import Designer from '../plugins/designer';
 import logo from '@ali/lowcode-plugin-logo';
 import save from '@ali/lowcode-plugin-save';
 
-import {PluginFactory} from '@ali/lowcode-editor-framework';
+import { PluginFactory } from '@ali/lowcode-editor-core';
 
 export default {
   logo: PluginFactory(logo),
@@ -33,5 +33,5 @@ export default {
   rightPanel2: PluginFactory(rightPanel2),
   rightPanel3: PluginFactory(rightPanel3),
   rightPanel4: PluginFactory(rightPanel4),
-  componentList: PluginFactory(componentList)
+  componentsPane: PluginFactory(componentsPane)
 };

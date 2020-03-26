@@ -4,7 +4,4 @@ import TopIcon from './components/TopIcon';
 
 export default Skeleton;
 
-export {
-  Panel,
-  TopIcon
-};
+export { Panel, TopIcon };

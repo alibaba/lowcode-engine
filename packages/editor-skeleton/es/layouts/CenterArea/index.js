@@ -1,7 +1,7 @@
 import _extends from "@babel/runtime/helpers/extends";
 import _inheritsLoose from "@babel/runtime/helpers/inheritsLoose";
 import React, { PureComponent } from 'react';
-import { AreaManager } from '@ali/lowcode-editor-framework';
+import { AreaManager } from '@ali/lowcode-editor-core';
 import './index.scss';
 
 var CenterArea = /*#__PURE__*/function (_PureComponent) {

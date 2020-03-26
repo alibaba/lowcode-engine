@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
-import Editor from '@ali/lowcode-editor-framework';
-import { PluginConfig } from '@ali/lowcode-editor-framework/lib/definitions';
+import Editor from '@ali/lowcode-editor-core';
 import './index.scss';
 export interface TopAreaProps {
     editor: Editor;
@@ -13,6 +12,6 @@ export default class TopArea extends PureComponent<TopAreaProps> {
     componentDidMount(): void;
     componentWillUnmount(): void;
     handleSkeletonUpdate: () => void;
-    renderPluginList: (list?: PluginConfig[]) => any[];
+    renderPluginList: (list?: any[]) => any[];
     render(): React.ReactNode;
 }

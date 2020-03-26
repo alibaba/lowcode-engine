@@ -8,6 +8,7 @@ import _deepEqual from 'lodash/isEqualWith';
 import _pick from 'lodash/pick';
 import _throttle from 'lodash/throttle';
 import _serialize from 'serialize-javascript';
+export { get, post, request } from './request';
 export var pick = _pick;
 export var deepEqual = _deepEqual;
 export var clone = _clone;

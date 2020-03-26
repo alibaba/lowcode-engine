@@ -1,11 +1,11 @@
 import React, { PureComponent, Fragment } from 'react';
 
 import { Balloon, Badge, Dialog } from '@alifd/next';
-import Editor from '@ali/lowcode-editor-framework';
+import Editor from '@ali/lowcode-editor-core';
 import {
   PluginConfig,
   PluginClass,
-} from '@ali/lowcode-editor-framework/lib/definitions';
+} from '@ali/lowcode-editor-core/lib/definitions';
 import TopIcon from '../TopIcon';
 
 import './index.scss';

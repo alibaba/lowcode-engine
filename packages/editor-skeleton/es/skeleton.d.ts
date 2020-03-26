@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
-import Editor from '@ali/lowcode-editor-framework';
-import { EditorConfig, Utils, PluginClassSet } from '@ali/lowcode-editor-framework/lib/definitions';
+import Editor from '@ali/lowcode-editor-core';
+import { EditorConfig, Utils, PluginClassSet } from '@ali/lowcode-editor-core/lib/definitions';
 import './global.scss';
 declare global {
     interface Window {

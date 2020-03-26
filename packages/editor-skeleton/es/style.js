@@ -1,6 +1,5 @@
 import '@alifd/next/es/config-provider/style';
 import '@alifd/next/es/loading/style';
-import '@ali/lowcode-editor-framework/es/style';
 import '@alifd/next/es/grid/style';
 import '@alifd/next/es/balloon/style';
 import '@alifd/next/es/dialog/style';

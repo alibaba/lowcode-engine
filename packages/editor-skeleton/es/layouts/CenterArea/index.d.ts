@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import Editor from '@ali/lowcode-editor-framework';
+import Editor from '@ali/lowcode-editor-core';
 import './index.scss';
 export interface CenterAreaProps {
     editor: Editor;

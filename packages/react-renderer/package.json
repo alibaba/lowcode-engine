@@ -26,7 +26,7 @@
     "@ali/iceluna-comp-div": "^0.0.5",
     "@ali/iceluna-rax": "0.0.5",
     "@ali/lib-mtop": "^2.5.1",
-    "@ali/lowcode-editor-framework": "^0.0.1",
+    "@ali/lowcode-editor-core": "^0.0.1",
     "@alifd/next": "^1.18.17",
     "debug": "^4.1.1",
     "driver-universal": "^3.1.2",

@@ -30,7 +30,7 @@
     "react-router-dom": "^5.1.2"
   },
   "peerDependencies": {
-    "@ali/lowcode-editor-framework": "0.0.1"
+    "@ali/lowcode-editor-core": "0.0.1"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.3",

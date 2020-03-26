@@ -5,7 +5,7 @@ import _extends from "@babel/runtime/helpers/extends";
 import _inheritsLoose from "@babel/runtime/helpers/inheritsLoose";
 import React, { PureComponent } from 'react';
 import { HashRouter as Router, Route } from 'react-router-dom';
-import Editor, { utils } from '@ali/lowcode-editor-framework';
+import Editor, { utils } from '@ali/lowcode-editor-core';
 import defaultConfig from './config/skeleton';
 import skeletonUtils from './config/utils';
 import TopArea from './layouts/TopArea';
@@ -68,8 +68,7 @@ export var Skeleton = /*#__PURE__*/function (_PureComponent) {
           skeletonKey: isReset ? "skeleton" + ++renderIdx : _this.state.skeletonKey
         }, function () {
           editor.emit('editor.ready');
-          editor.emit('ide.ready');
-          isReset && editor.emit('ide.afterReset');
+          isReset && editor.emit('editor.afterReset');
         });
       });
     };

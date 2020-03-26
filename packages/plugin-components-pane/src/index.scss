@@ -1,0 +1,25 @@
+.lowcode-component-list {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  .title {
+    height: 40px;
+    line-height: 39px;
+    border-bottom: 1px solid $color-line1-1;
+    padding: 0 8px;
+    position: relative;
+  }
+  .search {
+    display: block;
+    width: auto;
+    margin: 8px 8px 0;
+  }
+  .select {
+    display: block;
+    margin: 8px 8px 4px;
+  }
+  .components-show {
+    flex: 1 1 0%;
+    overflow: hidden;
+  }
+}
