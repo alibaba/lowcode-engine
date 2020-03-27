@@ -1,5 +1,5 @@
 {
-  "name": "@ali/lowcode-engine-editor",
+  "name": "@ali/lowcode-editor",
   "version": "0.0.1",
   "description": "alibaba lowcode editor core",
   "files": [

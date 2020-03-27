@@ -10,18 +10,18 @@
 
 #### 跑起来：
 
-- `tnpm i`
-- `npm run boot`
+- `npm run reinstall`
 - `npm run build`
 
 #### Link & unlink
 
-- `cd packages/<package-name> && tnpm link -g`
-- `tnpm link @ali/<package-name>`
+- ~~`cd packages/<package-name> && tnpm link -g`~~
+- ~~`tnpm link @ali/<package-name>`~~
+- ~~`tnpm unlink @ali/<package-name>`~~
 
-- `tnpm unlink @ali/<package-name>`
+已在 tsconfig 中配置 paths，开发时无需 link，但是发包的依赖还得有
 
-#### 开发过程中：
+#### 开发提交：
 
 - `git add <your-files>`
 - `npm run commit`
