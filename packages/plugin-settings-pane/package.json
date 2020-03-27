@@ -13,6 +13,7 @@
     "test:snapshot": "ava --update-snapshots"
   },
   "dependencies": {
+    "@ali/lowcode-editor-core": "^0.0.1",
     "@alifd/next": "^1.19.16",
     "classnames": "^2.2.6",
     "react": "^16",

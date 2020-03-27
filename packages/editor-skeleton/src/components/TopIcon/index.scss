@@ -1,22 +1,67 @@
-.next-btn.next-large.lowcode-top-btn {
+.lowcode-top-icon {
+  display: inline-block;
   width: 44px;
-  height: 44px;
-  padding: 0;
-  margin: 4px -2px;
-  text-align: center;
-  border-radius: 8px;
-  border: 1px solid transparent;
-  color: #777;
+  font-size: 20px;
+  line-height: 48px;
+  color: $color-text1-3;
+  position: relative;
   &.disabled {
     cursor: not-allowed;
     color: $color-text1-1;
+    &:hover {
+      color: $color-text1-1;
+    }
+  }
+  &.active {
+    color: $color-brand1-9;
+    &:hover {
+      color: $color-brand1-6;
+    }
   }
   &.locked {
     color: red !important;
   }
+  &:hover {
+    color: $color-brand1-6;
+    &:before {
+      content: attr(data-tooltip);
+      display: block;
+      height: auto;
+      width: auto;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 0);
+      bottom: -32px;
+      line-height: 18px;
+      font-size: 12px;
+      white-space: nowrap;
+      padding: 6px 8px;
+      border-radius: 4px;
+      background: $balloon-normal-color-bg;
+      border: 1px solid $balloon-normal-color-border;
+      color: $color-text1-3;
+      z-index: 100;
+    }
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      left: 50%;
+      transform: translate(-50%, 0) rotate(45deg);
+      bottom: -5px;
+      background: $balloon-normal-color-bg;
+      border-left: 1px solid $balloon-normal-color-border;
+      border-top: 1px solid $balloon-normal-color-border;
+      opacity: 1;
+      visibility: visible;
+      z-index: 100;
+    }
+  }
   i.next-icon {
     &:before {
-      font-size: 17px;
+      font-size: 16px;
     }
     margin-right: 0;
     line-height: 18px;
