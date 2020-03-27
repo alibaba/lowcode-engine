@@ -1,0 +1,4 @@
+{
+  "type": "ice-scripts",
+  "builder": "@ali/builder-ice-scripts"
+}

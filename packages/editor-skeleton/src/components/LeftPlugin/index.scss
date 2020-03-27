@@ -1,59 +1,59 @@
-.luna-left-addon {
-  font-size: 16px;
+.lowcode-left-plugin {
+  font-size: 20px;
   text-align: center;
-  line-height: 36px;
-  height: 36px;
+  line-height: 44px;
+  height: 44px;
   position: relative;
   cursor: pointer;
   transition: all 0.3s ease;
-  color: #777;
-  &.collapse {
-    height: 40px;
-    color: #8c8c8c;
-    border-bottom: 1px solid #bfbfbf;
-  }
+  color: $color-text1-3;
   &.locked {
     color: red !important;
   }
-  &.active {
-    color: #fff !important;
-    background-color: $color-brand1-9 !important;
-    &.disabled {
-      color: #fff;
-      background-color: $color-fill1-7;
-    }
-  }
-  &.disabled {
-    cursor: not-allowed;
-    color: $color-text1-1;
-  }
   &:hover {
-    background-color: $color-brand1-1;
     color: $color-brand1-6;
     &:before {
       content: attr(data-tooltip);
       display: block;
       position: absolute;
-      left: 50px;
-      top: 5px;
+      left: 45px;
+      top: 8px;
       line-height: 18px;
       font-size: 12px;
       white-space: nowrap;
       padding: 6px 8px;
       border-radius: 4px;
-      background: rgba(0, 0, 0, 0.75);
-      color: #fff;
+      background: $balloon-normal-color-bg;
+      border: 1px solid $balloon-normal-color-border;
+      color: $color-text1-3;
       z-index: 100;
     }
     &:after {
       content: '';
       display: block;
       position: absolute;
+      width: 10px;
+      height: 10px;
+      transform: rotate(45deg);
       left: 40px;
-      top: 15px;
-      border: 5px solid transparent;
-      border-right-color: rgba(0, 0, 0, 0.75);
+      top: 18px;
+      background: $balloon-normal-color-bg;
+      border-left: 1px solid $balloon-normal-color-border;
+      border-bottom: 1px solid $balloon-normal-color-border;
       z-index: 100;
     }
+  }
+  &.active {
+    color: $color-brand1-9;
+    &.disabled {
+      color: $color-text1-1;
+    }
+    &:hover {
+      color: $color-brand1-6;
+    }
+  }
+  &.disabled {
+    cursor: not-allowed;
+    color: $color-text1-1;
   }
 }

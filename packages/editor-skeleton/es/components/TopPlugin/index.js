@@ -19,25 +19,29 @@ var TopPlugin = /*#__PURE__*/function (_PureComponent) {
       var _this$props = _this.props,
           disabled = _this$props.disabled,
           config = _this$props.config,
-          onClick = _this$props.onClick;
-      var addonKey = config && config.addonKey;
-      if (disabled || !addonKey) return; //考虑到弹窗情况，延时发送消息
+          onClick = _this$props.onClick,
+          editor = _this$props.editor;
+      var pluginKey = config && config.pluginKey;
+      if (disabled || !pluginKey) return;
+
+      _this.handleOpen(); // 考虑到弹窗情况，延时发送消息
+
 
       setTimeout(function () {
-        return _this.appHelper.emit(addonKey + ".addon.activate");
+        editor.emit(pluginKey + ".plugin.activate");
       }, 0);
-
-      _this.handleOpen();
-
       onClick && onClick();
     };
 
     _this.handleClose = function () {
-      var addonKey = _this.props.config && _this.props.config.addonKey;
-      var currentAddon = _this.appHelper.addons && _this.appHelper.addons[addonKey];
+      var _this$props2 = _this.props,
+          config = _this$props2.config,
+          editor = _this$props2.editor;
+      var pluginKey = config && config.pluginKey;
+      var plugin = editor.plugins && editor.plugins[pluginKey];
 
-      if (currentAddon) {
-        _this.utils.transformToPromise(currentAddon.close()).then(function () {
+      if (plugin) {
+        plugin.close().then(function () {
           _this.setState({
             dialogVisible: false
           });
@@ -53,13 +57,14 @@ var TopPlugin = /*#__PURE__*/function (_PureComponent) {
     };
 
     _this.renderIcon = function (clickCallback) {
-      var _this$props2 = _this.props,
-          active = _this$props2.active,
-          disabled = _this$props2.disabled,
-          dotted = _this$props2.dotted,
-          locked = _this$props2.locked,
-          config = _this$props2.config,
-          _onClick = _this$props2.onClick;
+      var _this$props3 = _this.props,
+          active = _this$props3.active,
+          disabled = _this$props3.disabled,
+          marked = _this$props3.marked,
+          locked = _this$props3.locked,
+          config = _this$props3.config,
+          _onClick = _this$props3.onClick,
+          editor = _this$props3.editor;
 
       var _ref = config || {},
           pluginKey = _ref.pluginKey,
@@ -70,23 +75,23 @@ var TopPlugin = /*#__PURE__*/function (_PureComponent) {
           title = _ref2.title;
 
       var node = React.createElement(TopIcon, {
-        className: "lowcode-top-addon " + pluginKey,
+        className: "lowcode-top-plugin " + pluginKey,
         active: active,
         disabled: disabled,
         locked: locked,
         icon: icon,
         title: title,
         onClick: function onClick() {
-          if (disabled) return; //考虑到弹窗情况，延时发送消息
+          if (disabled) return; // 考虑到弹窗情况，延时发送消息
 
           setTimeout(function () {
-            return _this.appHelper.emit(pluginKey + ".addon.activate");
+            editor.emit(pluginKey + ".plugin.activate");
           }, 0);
           clickCallback && clickCallback();
           _onClick && _onClick();
         }
       });
-      return dotted ? React.createElement(_Badge, {
+      return marked ? React.createElement(_Badge, {
         dot: true
       }, node) : node;
     };
@@ -100,34 +105,40 @@ var TopPlugin = /*#__PURE__*/function (_PureComponent) {
   var _proto = TopPlugin.prototype;
 
   _proto.componentDidMount = function componentDidMount() {
-    var config = this.props.config;
-    var pluginKey = config && config.pluginKey; // const appHelper = this.appHelper;
-    // if (appHelper && addonKey) {
-    //   appHelper.on(`${addonKey}.dialog.show`, this.handleShow);
-    //   appHelper.on(`${addonKey}.dialog.close`, this.handleClose);
-    // }
+    var _this$props4 = this.props,
+        config = _this$props4.config,
+        editor = _this$props4.editor;
+    var pluginKey = config && config.pluginKey;
+
+    if (editor && pluginKey) {
+      editor.on(pluginKey + ".dialog.show", this.handleShow);
+      editor.on(pluginKey + ".dialog.close", this.handleClose);
+    }
   };
 
-  _proto.componentWillUnmount = function componentWillUnmount() {// const { config } = this.props;
-    // const addonKey = config && config.addonKey;
-    // const appHelper = this.appHelper;
-    // if (appHelper && addonKey) {
-    //   appHelper.off(`${addonKey}.dialog.show`, this.handleShow);
-    //   appHelper.off(`${addonKey}.dialog.close`, this.handleClose);
-    // }
+  _proto.componentWillUnmount = function componentWillUnmount() {
+    var _this$props5 = this.props,
+        config = _this$props5.config,
+        editor = _this$props5.editor;
+    var pluginKey = config && config.pluginKey;
+
+    if (editor && pluginKey) {
+      editor.off(pluginKey + ".dialog.show", this.handleShow);
+      editor.off(pluginKey + ".dialog.close", this.handleClose);
+    }
   };
 
   _proto.render = function render() {
     var _this2 = this;
 
-    var _this$props3 = this.props,
-        active = _this$props3.active,
-        dotted = _this$props3.dotted,
-        locked = _this$props3.locked,
-        disabled = _this$props3.disabled,
-        config = _this$props3.config,
-        editor = _this$props3.editor,
-        Comp = _this$props3.pluginClass;
+    var _this$props6 = this.props,
+        active = _this$props6.active,
+        marked = _this$props6.marked,
+        locked = _this$props6.locked,
+        disabled = _this$props6.disabled,
+        config = _this$props6.config,
+        editor = _this$props6.editor,
+        Comp = _this$props6.pluginClass;
 
     var _ref3 = config || {},
         pluginKey = _ref3.pluginKey,
@@ -140,8 +151,9 @@ var TopPlugin = /*#__PURE__*/function (_PureComponent) {
         title = _ref4.title;
 
     var dialogVisible = this.state.dialogVisible;
-    if (!pluginKey || !type || !Comp) return null;
-    var node = React.createElement(Comp, _extends({
+    if (!pluginKey || !type) return null;
+    var node = Comp ? React.createElement(Comp, _extends({
+      editor: editor,
       active: active,
       locked: locked,
       disabled: disabled,
@@ -149,7 +161,7 @@ var TopPlugin = /*#__PURE__*/function (_PureComponent) {
       onClick: function onClick() {
         _onClick2 && _onClick2.call(null, editor);
       }
-    }, pluginProps));
+    }, pluginProps)) : null;
 
     switch (type) {
       case 'LinkIcon':
@@ -175,7 +187,10 @@ var TopPlugin = /*#__PURE__*/function (_PureComponent) {
           },
           onCancel: this.handleClose,
           onClose: this.handleClose,
-          title: title
+          title: title,
+          style: _extends({
+            width: 500
+          }, props.dialogProps && props.dialogProps.style)
         }, props.dialogProps, {
           visible: dialogVisible
         }), node));
@@ -189,7 +204,7 @@ var TopPlugin = /*#__PURE__*/function (_PureComponent) {
         }, props.balloonProps), node);
 
       case 'Custom':
-        return dotted ? React.createElement(_Badge, {
+        return marked ? React.createElement(_Badge, {
           dot: true
         }, node) : node;
 
@@ -201,12 +216,12 @@ var TopPlugin = /*#__PURE__*/function (_PureComponent) {
   return TopPlugin;
 }(PureComponent);
 
-TopPlugin.displayName = 'lowcodeTopPlugin';
+TopPlugin.displayName = 'LowcodeTopPlugin';
 TopPlugin.defaultProps = {
   active: false,
   config: {},
   disabled: false,
-  dotted: false,
+  marked: false,
   locked: false,
   onClick: function onClick() {}
 };

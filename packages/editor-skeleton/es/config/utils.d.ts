@@ -1,2 +1,2 @@
-declare const asideMenuConfig: any[];
-export { asideMenuConfig };
+declare const _default: {};
+export default _default;

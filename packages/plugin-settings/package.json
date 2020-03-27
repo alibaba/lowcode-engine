@@ -12,6 +12,7 @@
     "test:snapshot": "ava --update-snapshots"
   },
   "dependencies": {
+    "@ali/lowcode-editor-core": "^0.0.1",
     "@alifd/next": "^1.19.16",
     "classnames": "^2.2.6",
     "react": "^16",
@@ -25,9 +26,9 @@
     "@types/react-dom": "^16",
     "eslint": "^6.5.1",
     "prettier": "^1.18.2",
+    "ts-node": "^8.0.1",
     "tslib": "^1.9.3",
-    "typescript": "^3.1.3",
-    "ts-node": "^8.0.1"
+    "typescript": "^3.1.3"
   },
   "ava": {
     "compileEnhancements": false,

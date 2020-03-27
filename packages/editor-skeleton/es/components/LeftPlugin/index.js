@@ -1,26 +1,30 @@
+import _Balloon from "@alifd/next/es/balloon";
+import _Dialog from "@alifd/next/es/dialog";
 import _extends from "@babel/runtime/helpers/extends";
+import _Badge from "@alifd/next/es/badge";
+import _Icon from "@alifd/next/es/icon";
 import _inheritsLoose from "@babel/runtime/helpers/inheritsLoose";
 import React, { PureComponent, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import AppContext from '@ali/iceluna-sdk/lib/context/appContext';
-import { Balloon, Dialog, Icon, Badge } from '@alife/next';
 import './index.scss';
 
-var LeftAddon = /*#__PURE__*/function (_PureComponent) {
-  _inheritsLoose(LeftAddon, _PureComponent);
+var LeftPlugin = /*#__PURE__*/function (_PureComponent) {
+  _inheritsLoose(LeftPlugin, _PureComponent);
 
-  function LeftAddon(_props, context) {
+  function LeftPlugin(_props, context) {
     var _this;
 
     _this = _PureComponent.call(this, _props, context) || this;
 
     _this.handleClose = function () {
-      var addonKey = _this.props.config && _this.props.config.addonKey;
-      var currentAddon = _this.appHelper.addons && _this.appHelper.addons[addonKey];
+      var _this$props = _this.props,
+          config = _this$props.config,
+          editor = _this$props.editor;
+      var pluginKey = config && config.pluginKey;
+      var plugin = editor.plugins && editor.plugins[pluginKey];
 
-      if (currentAddon) {
-        _this.utils.transformToPromise(currentAddon.close()).then(function () {
+      if (plugin) {
+        plugin.close().then(function () {
           _this.setState({
             dialogVisible: false
           });
@@ -36,33 +40,37 @@ var LeftAddon = /*#__PURE__*/function (_PureComponent) {
     };
 
     _this.handleShow = function () {
-      var _this$props = _this.props,
-          disabled = _this$props.disabled,
-          config = _this$props.config,
-          onClick = _this$props.onClick;
-      var addonKey = config && config.addonKey;
-      if (disabled || !addonKey) return; //考虑到弹窗情况，延时发送消息
+      var _this$props2 = _this.props,
+          disabled = _this$props2.disabled,
+          config = _this$props2.config,
+          onClick = _this$props2.onClick,
+          editor = _this$props2.editor;
+      var pluginKey = config && config.pluginKey;
+      if (disabled || !pluginKey) return;
+
+      _this.handleOpen(); // 考虑到弹窗情况，延时发送消息
+
 
       setTimeout(function () {
-        return _this.appHelper.emit(addonKey + ".addon.activate");
+        editor.emit(pluginKey + ".plugin.activate");
       }, 0);
 
-      _this.handleOpen();
-
-      onClick && onClick();
+      if (onClick) {
+        onClick();
+      }
     };
 
     _this.renderIcon = function (clickCallback) {
-      var _this$props2 = _this.props,
-          active = _this$props2.active,
-          disabled = _this$props2.disabled,
-          dotted = _this$props2.dotted,
-          locked = _this$props2.locked,
-          _onClick = _this$props2.onClick,
-          config = _this$props2.config;
+      var _this$props3 = _this.props,
+          active = _this$props3.active,
+          disabled = _this$props3.disabled,
+          marked = _this$props3.marked,
+          locked = _this$props3.locked,
+          _onClick = _this$props3.onClick,
+          config = _this$props3.config;
 
       var _ref = config || {},
-          addonKey = _ref.addonKey,
+          pluginKey = _ref.pluginKey,
           props = _ref.props;
 
       var _ref2 = props || {},
@@ -70,24 +78,24 @@ var LeftAddon = /*#__PURE__*/function (_PureComponent) {
           title = _ref2.title;
 
       return React.createElement("div", {
-        className: classNames('luna-left-addon', addonKey, {
+        className: classNames('lowcode-left-plugin', pluginKey, {
           active: active,
           disabled: disabled,
           locked: locked
         }),
         "data-tooltip": title,
         onClick: function onClick() {
-          if (disabled) return; //考虑到弹窗情况，延时发送消息
+          if (disabled) return; // 考虑到弹窗情况，延时发送消息
 
           clickCallback && clickCallback();
           _onClick && _onClick();
         }
-      }, dotted ? React.createElement(Badge, {
+      }, marked ? React.createElement(_Badge, {
         dot: true
-      }, React.createElement(Icon, {
+      }, React.createElement(_Icon, {
         type: icon,
         size: "small"
-      })) : React.createElement(Icon, {
+      })) : React.createElement(_Icon, {
         type: icon,
         size: "small"
       }));
@@ -96,118 +104,106 @@ var LeftAddon = /*#__PURE__*/function (_PureComponent) {
     _this.state = {
       dialogVisible: false
     };
-    _this.appHelper = context.appHelper;
-    _this.utils = _this.appHelper.utils;
-    _this.constants = _this.appHelper.constants;
     return _this;
   }
 
-  var _proto = LeftAddon.prototype;
+  var _proto = LeftPlugin.prototype;
 
   _proto.componentDidMount = function componentDidMount() {
-    var config = this.props.config;
-    var addonKey = config && config.addonKey;
-    var appHelper = this.appHelper;
+    var _this$props4 = this.props,
+        config = _this$props4.config,
+        editor = _this$props4.editor;
+    var pluginKey = config && config.pluginKey;
 
-    if (appHelper && addonKey) {
-      appHelper.on(addonKey + ".dialog.show", this.handleShow);
-      appHelper.on(addonKey + ".dialog.close", this.handleClose);
+    if (editor && pluginKey) {
+      editor.on(pluginKey + ".dialog.show", this.handleShow);
+      editor.on(pluginKey + ".dialog.close", this.handleClose);
     }
   };
 
   _proto.componentWillUnmount = function componentWillUnmount() {
-    var config = this.props.config;
-    var appHelper = this.appHelper;
-    var addonKey = config && config.addonKey;
+    var _this$props5 = this.props,
+        config = _this$props5.config,
+        editor = _this$props5.editor;
+    var pluginKey = config && config.pluginKey;
 
-    if (appHelper && addonKey) {
-      appHelper.off(addonKey + ".dialog.show", this.handleShow);
-      appHelper.off(addonKey + ".dialog.close", this.handleClose);
+    if (editor && pluginKey) {
+      editor.off(pluginKey + ".dialog.show", this.handleShow);
+      editor.off(pluginKey + ".dialog.close", this.handleClose);
     }
   };
 
   _proto.render = function render() {
     var _this2 = this;
 
-    var _this$props3 = this.props,
-        dotted = _this$props3.dotted,
-        locked = _this$props3.locked,
-        active = _this$props3.active,
-        disabled = _this$props3.disabled,
-        config = _this$props3.config;
+    var _this$props6 = this.props,
+        marked = _this$props6.marked,
+        locked = _this$props6.locked,
+        active = _this$props6.active,
+        disabled = _this$props6.disabled,
+        config = _this$props6.config,
+        editor = _this$props6.editor,
+        Comp = _this$props6.pluginClass;
 
     var _ref3 = config || {},
-        addonKey = _ref3.addonKey,
+        pluginKey = _ref3.pluginKey,
         props = _ref3.props,
         type = _ref3.type,
-        addonProps = _ref3.addonProps;
+        pluginProps = _ref3.pluginProps;
 
     var _ref4 = props || {},
         _onClick2 = _ref4.onClick,
         title = _ref4.title;
 
     var dialogVisible = this.state.dialogVisible;
-    var _this$context = this.context,
-        appHelper = _this$context.appHelper,
-        components = _this$context.components;
-    if (!addonKey || !type || !props) return null;
-    var componentName = appHelper.utils.generateAddonCompName(addonKey);
-    var localeProps = {};
-    var locale = appHelper.locale,
-        messages = appHelper.messages;
-
-    if (locale) {
-      localeProps.locale = locale;
-    }
-
-    if (messages && messages[componentName]) {
-      localeProps.messages = messages[componentName];
-    }
-
-    var AddonComp = components && components[componentName];
-    var node = AddonComp && React.createElement(AddonComp, _extends({
+    if (!pluginKey || !type || !props) return null;
+    var node = Comp ? React.createElement(Comp, _extends({
+      editor: editor,
       active: active,
       locked: locked,
       disabled: disabled,
       config: config,
       onClick: function onClick() {
-        _onClick2 && _onClick2.call(null, appHelper);
+        _onClick2 && _onClick2.call(null, editor);
       }
-    }, localeProps, addonProps || {})) || null;
+    }, pluginProps)) : null;
 
     switch (type) {
       case 'LinkIcon':
         return React.createElement("a", props.linkProps || {}, this.renderIcon(function () {
-          _onClick2 && _onClick2.call(null, appHelper);
+          _onClick2 && _onClick2.call(null, editor);
         }));
 
       case 'Icon':
         return this.renderIcon(function () {
-          _onClick2 && _onClick2.call(null, appHelper);
+          _onClick2 && _onClick2.call(null, editor);
         });
 
       case 'DialogIcon':
         return React.createElement(Fragment, null, this.renderIcon(function () {
-          _onClick2 && _onClick2.call(null, appHelper);
+          _onClick2 && _onClick2.call(null, editor);
 
           _this2.handleOpen();
-        }), React.createElement(Dialog, _extends({
+        }), React.createElement(_Dialog, _extends({
           onOk: function onOk() {
-            appHelper.emit(addonKey + ".dialog.onOk");
+            editor.emit(pluginKey + ".dialog.onOk");
 
             _this2.handleClose();
           },
           onCancel: this.handleClose,
           onClose: this.handleClose,
-          title: title
+          title: title,
+          style: _extends({
+            width: 500
+          }, props.dialogProps && props.dialogProps.style)
         }, props.dialogProps || {}, {
           visible: dialogVisible
         }), node));
 
       case 'BalloonIcon':
-        return React.createElement(Balloon, _extends({
+        return React.createElement(_Balloon, _extends({
           trigger: this.renderIcon(function () {
-            _onClick2 && _onClick2.call(null, appHelper);
+            _onClick2 && _onClick2.call(null, editor);
           }),
           align: "r",
           triggerType: ['click', 'hover']
@@ -215,13 +211,11 @@ var LeftAddon = /*#__PURE__*/function (_PureComponent) {
 
       case 'PanelIcon':
         return this.renderIcon(function () {
-          _onClick2 && _onClick2.call(null, appHelper);
-
-          _this2.handleOpen();
+          _onClick2 && _onClick2.call(null, editor);
         });
 
       case 'Custom':
-        return dotted ? React.createElement(Badge, {
+        return marked ? React.createElement(_Badge, {
           dot: true
         }, node) : node;
 
@@ -230,30 +224,16 @@ var LeftAddon = /*#__PURE__*/function (_PureComponent) {
     }
   };
 
-  return LeftAddon;
+  return LeftPlugin;
 }(PureComponent);
 
-LeftAddon.displayName = 'LunaLeftAddon';
-LeftAddon.propTypes = {
-  active: PropTypes.bool,
-  config: PropTypes.shape({
-    addonKey: PropTypes.string,
-    addonProps: PropTypes.object,
-    props: PropTypes.object,
-    type: PropTypes.oneOf(['DialogIcon', 'BalloonIcon', 'PanelIcon', 'LinkIcon', 'Icon', 'Custom'])
-  }),
-  disabled: PropTypes.bool,
-  dotted: PropTypes.bool,
-  locked: PropTypes.bool,
-  onClick: PropTypes.func
-};
-LeftAddon.defaultProps = {
+LeftPlugin.displayName = 'LowcodeLeftPlugin';
+LeftPlugin.defaultProps = {
   active: false,
   config: {},
   disabled: false,
-  dotted: false,
+  marked: false,
   locked: false,
   onClick: function onClick() {}
 };
-LeftAddon.contextType = AppContext;
-export { LeftAddon as default };
+export { LeftPlugin as default };

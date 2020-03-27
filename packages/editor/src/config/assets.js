@@ -1255,7 +1255,7 @@ export default {
           {
             name: 'value',
             title: '受控值',
-            setter: 'StringSetter',
+            setter: 'StringSetter'
           },
           {
             name: 'hasBorder',
@@ -1452,57 +1452,67 @@ export default {
                       componentName: 'ObjectSetter',
                       props: {
                         config: {
-                          items: [{
-                            name: 'username',
-                            title: '姓名',
-                            setter: 'StringSetter',
-                            important: true,
-                          }, {
-                            name: 'phone',
-                            title: '电话',
-                            setter: 'StringSetter',
-                            important: true,
-                          }, {
-                            name: 'age',
-                            title: '年龄',
-                            setter: 'NumberSetter'
-                          }, {
-                            name: 'married',
-                            title: '婚否',
-                            setter: 'BoolSetter'
-                          }, {
-                            type: 'group',
-                            title: 'work',
-                            items: [
-                              {
-                                name: 'job',
-                                title: '工作岗位',
-                                setter: {
-                                  componentName: 'SelectSetter',
-                                  props: {
-                                    dataSource: [{
-                                      label: '工程师',
-                                      value: 1
-                                    }, {
-                                      label: '高级工程师',
-                                      value: 2
-                                    }, {
-                                      label: '资深工程师',
-                                      value: 3
-                                    }]
+                          items: [
+                            {
+                              name: 'username',
+                              title: '姓名',
+                              setter: 'StringSetter',
+                              important: true
+                            },
+                            {
+                              name: 'phone',
+                              title: '电话',
+                              setter: 'StringSetter',
+                              important: true
+                            },
+                            {
+                              name: 'age',
+                              title: '年龄',
+                              setter: 'NumberSetter'
+                            },
+                            {
+                              name: 'married',
+                              title: '婚否',
+                              setter: 'BoolSetter'
+                            },
+                            {
+                              type: 'group',
+                              title: 'work',
+                              items: [
+                                {
+                                  name: 'job',
+                                  title: '工作岗位',
+                                  setter: {
+                                    componentName: 'SelectSetter',
+                                    props: {
+                                      dataSource: [
+                                        {
+                                          label: '工程师',
+                                          value: 1
+                                        },
+                                        {
+                                          label: '高级工程师',
+                                          value: 2
+                                        },
+                                        {
+                                          label: '资深工程师',
+                                          value: 3
+                                        }
+                                      ]
+                                    }
                                   }
+                                },
+                                {
+                                  name: 'address',
+                                  title: '工作地点',
+                                  setter: 'TextAreaSetter'
                                 }
-                              },
-                              {
-                                name: 'address',
-                                title: '工作地点',
-                                setter: 'TextAreaSetter'
-                              }
-                            ]
-                          }],
+                              ]
+                            }
+                          ]
                         }
                       },
-                      initialValue: {},
+                      initialValue: {}
                     }
                   }
                 }
@@ -1517,72 +1527,82 @@ export default {
                       componentName: 'ObjectSetter',
                       props: {
                         config: {
-                          items: [{
-                            name: 'username',
-                            title: '姓名',
-                            setter: 'StringSetter',
-                            important: true,
-                          }, {
-                            name: 'age',
-                            title: '年龄',
-                            setter: 'NumberSetter',
-                            important: true,
-                          }, {
-                            name: 'married',
-                            title: '婚否',
-                            setter: 'BoolSetter',
-                            important: true,
-                          }, {
-                            name: 'log',
-                            title: '到访记录',
-                            setter: {
-                              componentName: 'ArraySetter',
-                              props: {
-                                itemSetter: 'StringSetter'
-                              }
+                          items: [
+                            {
+                              name: 'username',
+                              title: '姓名',
+                              setter: 'StringSetter',
+                              important: true
                             },
-                            important: true,
-                          }, {
-                            type: 'group',
-                            title: 'work',
-                            items: [
-                              {
-                                name: 'job',
-                                title: '工作岗位',
-                                setter: {
-                                  componentName: 'SelectSetter',
-                                  props: {
-                                    dataSource: [{
-                                      label: '工程师',
-                                      value: 1
-                                    }, {
-                                      label: '高级工程师',
-                                      value: 2
-                                    }, {
-                                      label: '资深工程师',
-                                      value: 3
-                                    }]
-                                  }
+                            {
+                              name: 'age',
+                              title: '年龄',
+                              setter: 'NumberSetter',
+                              important: true
+                            },
+                            {
+                              name: 'married',
+                              title: '婚否',
+                              setter: 'BoolSetter',
+                              important: true
+                            },
+                            {
+                              name: 'log',
+                              title: '到访记录',
+                              setter: {
+                                componentName: 'ArraySetter',
+                                props: {
+                                  itemSetter: 'StringSetter'
                                 }
                               },
-                              {
-                                name: 'address',
-                                title: '工作地点',
-                                setter: 'TextAreaSetter'
-                              }
-                            ]
-                          }],
+                              important: true
+                            },
+                            {
+                              type: 'group',
+                              title: 'work',
+                              items: [
+                                {
+                                  name: 'job',
+                                  title: '工作岗位',
+                                  setter: {
+                                    componentName: 'SelectSetter',
+                                    props: {
+                                      dataSource: [
+                                        {
+                                          label: '工程师',
+                                          value: 1
+                                        },
+                                        {
+                                          label: '高级工程师',
+                                          value: 2
+                                        },
+                                        {
+                                          label: '资深工程师',
+                                          value: 3
+                                        }
+                                      ]
+                                    }
+                                  }
+                                },
+                                {
+                                  name: 'address',
+                                  title: '工作地点',
+                                  setter: 'TextAreaSetter'
+                                }
+                              ]
+                            }
+                          ]
                         }
                       },
-                      initialValue: {},
+                      initialValue: {}
                     },
                     mode: 'popup'
                   }
                 }
-              },
+              }
             ],
             extraProps: {
-              defaultCollapsed: false,
+              defaultCollapsed: false
             }
           },
           {
@@ -1596,64 +1616,74 @@ export default {
                   componentName: 'ObjectSetter',
                   props: {
                     config: {
-                      items: [{
-                        name: 'username',
-                        title: '姓名',
-                        setter: 'StringSetter',
-                        important: true,
-                      }, {
-                        name: 'age',
-                        title: '年龄',
-                        setter: 'NumberSetter',
-                        important: true,
-                      }, {
-                        name: 'married',
-                        title: '婚否',
-                        setter: 'BoolSetter',
-                        important: true,
-                      }, {
-                        name: 'log',
-                        title: '到访记录',
-                        setter: {
-                          componentName: 'ArraySetter',
-                          props: {
-                            itemSetter: 'StringSetter'
-                          }
+                      items: [
+                        {
+                          name: 'username',
+                          title: '姓名',
+                          setter: 'StringSetter',
+                          important: true
                         },
-                        important: true,
-                      }, {
-                        type: 'group',
-                        title: 'work',
-                        items: [
-                          {
-                            name: 'job',
-                            title: '工作岗位',
-                            setter: {
-                              componentName: 'SelectSetter',
-                              props: {
-                                dataSource: [{
-                                  label: '工程师',
-                                  value: 1
-                                }, {
-                                  label: '高级工程师',
-                                  value: 2
-                                }, {
-                                  label: '资深工程师',
-                                  value: 3
-                                }]
-                              }
+                        {
+                          name: 'age',
+                          title: '年龄',
+                          setter: 'NumberSetter',
+                          important: true
+                        },
+                        {
+                          name: 'married',
+                          title: '婚否',
+                          setter: 'BoolSetter',
+                          important: true
+                        },
+                        {
+                          name: 'log',
+                          title: '到访记录',
+                          setter: {
+                            componentName: 'ArraySetter',
+                            props: {
+                              itemSetter: 'StringSetter'
                             }
                           },
-                          {
-                            name: 'address',
-                            title: '工作地点',
-                            setter: 'TextAreaSetter'
-                          }
-                        ]
-                      }],
+                          important: true
+                        },
+                        {
+                          type: 'group',
+                          title: 'work',
+                          items: [
+                            {
+                              name: 'job',
+                              title: '工作岗位',
+                              setter: {
+                                componentName: 'SelectSetter',
+                                props: {
+                                  dataSource: [
+                                    {
+                                      label: '工程师',
+                                      value: 1
+                                    },
+                                    {
+                                      label: '高级工程师',
+                                      value: 2
+                                    },
+                                    {
+                                      label: '资深工程师',
+                                      value: 3
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            {
+                              name: 'address',
+                              title: '工作地点',
+                              setter: 'TextAreaSetter'
+                            }
+                          ]
+                        }
+                      ]
                     }
                   },
-                  initialValue: {},
+                  initialValue: {}
                 }
               },
               {
@@ -1664,64 +1694,74 @@ export default {
                   props: {
                     mode: 'popup',
                     config: {
-                      items: [{
-                        name: 'username',
-                        title: '姓名',
-                        setter: 'StringSetter',
-                        important: true,
-                      }, {
-                        name: 'age',
-                        title: '年龄',
-                        setter: 'NumberSetter',
-                        important: true,
-                      }, {
-                        name: 'married',
-                        title: '婚否',
-                        setter: 'BoolSetter',
-                        important: true,
-                      }, {
-                        name: 'log',
-                        title: '到访记录',
-                        setter: {
-                          componentName: 'ArraySetter',
-                          props: {
-                            itemSetter: 'StringSetter'
-                          }
+                      items: [
+                        {
+                          name: 'username',
+                          title: '姓名',
+                          setter: 'StringSetter',
+                          important: true
                         },
-                        important: true,
-                      }, {
-                        type: 'group',
-                        title: 'work',
-                        items: [
-                          {
-                            name: 'job',
-                            title: '工作岗位',
-                            setter: {
-                              componentName: 'SelectSetter',
-                              props: {
-                                dataSource: [{
-                                  label: '工程师',
-                                  value: 1
-                                }, {
-                                  label: '高级工程师',
-                                  value: 2
-                                }, {
-                                  label: '资深工程师',
-                                  value: 3
-                                }]
-                              }
+                        {
+                          name: 'age',
+                          title: '年龄',
+                          setter: 'NumberSetter',
+                          important: true
+                        },
+                        {
+                          name: 'married',
+                          title: '婚否',
+                          setter: 'BoolSetter',
+                          important: true
+                        },
+                        {
+                          name: 'log',
+                          title: '到访记录',
+                          setter: {
+                            componentName: 'ArraySetter',
+                            props: {
+                              itemSetter: 'StringSetter'
                             }
                           },
-                          {
-                            name: 'address',
-                            title: '工作地点',
-                            setter: 'TextAreaSetter'
-                          }
-                        ]
-                      }],
+                          important: true
+                        },
+                        {
+                          type: 'group',
+                          title: 'work',
+                          items: [
+                            {
+                              name: 'job',
+                              title: '工作岗位',
+                              setter: {
+                                componentName: 'SelectSetter',
+                                props: {
+                                  dataSource: [
+                                    {
+                                      label: '工程师',
+                                      value: 1
+                                    },
+                                    {
+                                      label: '高级工程师',
+                                      value: 2
+                                    },
+                                    {
+                                      label: '资深工程师',
+                                      value: 3
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            {
+                              name: 'address',
+                              title: '工作地点',
+                              setter: 'TextAreaSetter'
+                            }
+                          ]
+                        }
+                      ]
                     }
                   },
-                  initialValue: {},
+                  initialValue: {}
                 }
               }
             ]

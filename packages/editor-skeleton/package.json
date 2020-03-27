@@ -1,5 +1,5 @@
 {
-  "name": "@ali/lowcode-engine-skeleton",
+  "name": "@ali/lowcode-editor-skeleton",
   "version": "0.0.1",
   "description": "alibaba lowcode editor skeleton",
   "files": [
@@ -24,15 +24,13 @@
   ],
   "author": "xiayang.xy",
   "dependencies": {
+    "@ali/lowcode-editor-core": "0.0.1",
     "@alifd/next": "^1.x",
-    "@icedesign/theme": "^1.x",
-    "@types/react": "^16.8.3",
-    "@types/react-dom": "^16.8.2",
-    "moment": "^2.23.0",
     "prop-types": "^15.5.8",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
-    "react-router-dom": "^5.0.1"
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
+    "react-router-dom": "^5.1.2",
+    "store": "^2.0.12"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.3",

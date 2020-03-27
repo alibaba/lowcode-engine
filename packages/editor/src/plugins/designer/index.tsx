@@ -1,12 +1,10 @@
 import React, { PureComponent } from 'react';
 
-import Editor from '../../framework/index';
-import { PluginConfig } from '../../framework/definitions';
-
+import Editor from '@ali/lowcode-editor-core';
+import { PluginConfig } from '@ali/lowcode-editor-core/lib/definitions';
+import assets from '../../config/assets';
 // @ts-ignore
 import Designer from '../../../../designer';
-
-import assets from '../../config/assets';
 
 import './index.scss';
 
@@ -30,13 +28,16 @@ const SCHEMA = {
       },
       props: {
         ref: 'outterView',
-        autoLoading: true
+        autoLoading: true,
+        style: {
+          padding: 20
+        }
       },
       children: [
         {
           componentName: 'Form',
           props: {
-            labelCol: 4,
+            labelCol: 3,
             style: {},
             ref: 'testForm'
           },
@@ -165,14 +166,37 @@ const SCHEMA = {
 export default class DesignerPlugin extends PureComponent<PluginProps> {
   displayName: 'LowcodePluginDesigner';
 
+  componentDidMount(): void {
+    const { editor } = this.props;
+    editor.on('schema.reset', this.handleSchemaReset);
+  }
+
+  componentWillUmount(): void {
+    const { editor } = this.props;
+    editor.off('schema.reset', this.handleSchemaReset);
+  }
+
+  handleSchemaReset = (schema: object): void => {
+    // const {editor} = this.props;
+    // if (this.designer) {
+    //   this.designer.setSchema(schema);
+    // } else {
+    //   editor.once('designer.ready', (designer): void => {
+    //     designer.setSchema(schema);
+    //   });
+    // }
+  };
+
   handleDesignerMount = (designer): void => {
     const { editor } = this.props;
+    this.designer = designer;
     editor.set('designer', designer);
     editor.emit('designer.ready', designer);
   };
 
   render(): React.ReactNode {
     const { editor } = this.props;
+    // const assets = editor.get('assets') || {};
     return (
       <Designer
         onMount={this.handleDesignerMount}
@@ -181,7 +205,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps> {
         eventPipe={editor as any}
         componentMetadatas={Object.values(assets.components) as any}
         simulatorProps={{
-          library: Object.values(assets.packages),
+          library: Object.values(assets.packages || {})
         }}
       />
     );
