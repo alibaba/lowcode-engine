@@ -1,0 +1,39 @@
+{
+  "name": "@ali/lowcode-engine-code-generator",
+  "version": "0.0.1",
+  "description": "出码引擎 for LowCode Engine",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "rimraf lib && tsc",
+    "demo": "ts-node -r tsconfig-paths/register ./src/demo/main.ts",
+    "test": "ava"
+  },
+  "dependencies": {
+    "@ali/am-eslint-config": "*",
+    "change-case": "^3.1.0",
+    "short-uuid": "^3.1.1"
+  },
+  "devDependencies": {
+    "ava": "^1.0.1",
+    "rimraf": "^3.0.2",
+    "ts-node": "^7.0.1",
+    "tsconfig-paths": "^3.9.0"
+  },
+  "ava": {
+    "compileEnhancements": false,
+    "snapshotDir": "test/fixtures/__snapshots__",
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  },
+  "publishConfig": {
+    "registry": "http://registry.npm.alibaba-inc.com"
+  },
+  "license": "MIT"
+}

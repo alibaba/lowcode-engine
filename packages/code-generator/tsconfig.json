@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "outDir": "./lib",
+    "lib": [
+      "es6"
+    ],
+    "types": ["node"],
+    "baseUrl": ".",            /* Base directory to resolve non-absolute module names. */
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

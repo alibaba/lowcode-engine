@@ -10,6 +10,7 @@ import {
 import ExpressionSetter from './expression-setter';
 import MixinSetter from './mixin-setter';
 import EventsSetter from './events-setter';
+import StyleSetter from './style-setter';
 
 registerSetter('ClassNameSetter', () => {
   return <div className="lc-block-setter">这里是类名绑定</div>;
@@ -38,3 +39,5 @@ registerSetter('DateSetter', DatePicker);
 registerSetter('DateYearSetter', DatePicker.YearPicker);
 registerSetter('DateMonthSetter', DatePicker.MonthPicker);
 registerSetter('DateRangeSetter', DatePicker.RangePicker);
+
+registerSetter('StyleSetter', StyleSetter);

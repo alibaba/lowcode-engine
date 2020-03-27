@@ -1,0 +1,16 @@
+export const REACT_CHUNK_NAME = {
+  ClassStart: 'ReactComponentClassDefineStart',
+  ClassEnd: 'ReactComponentClassDefineEnd',
+  ClassLifeCycle: 'ReactComponentClassMemberLifeCycle',
+  ClassMethod: 'ReactComponentClassMemberMethod',
+  ClassRenderStart: 'ReactComponentClassRenderStart',
+  ClassRenderPre: 'ReactComponentClassRenderPre',
+  ClassRenderEnd: 'ReactComponentClassRenderEnd',
+  ClassRenderJSX: 'ReactComponentClassRenderJSX',
+  ClassConstructorStart: 'ReactComponentClassConstructorStart',
+  ClassConstructorEnd: 'ReactComponentClassConstructorEnd',
+  ClassConstructorContent: 'ReactComponentClassConstructorContent',
+  ClassDidMountStart: 'ReactComponentClassDidMountStart',
+  ClassDidMountEnd: 'ReactComponentClassDidMountEnd',
+  ClassDidMountContent: 'ReactComponentClassDidMountContent',
+};

@@ -22,8 +22,6 @@ module.exports = {
     'react': 'var window.React',
     'react-dom': 'var window.ReactDOM',
     'prop-types': 'var window.PropTypes',
-    // '@recore/obx': 'var window.Recore',
-    // '@recore/obx-react': 'var window.Recore',
     '@ali/lowcode-renderer': 'var window.LowCodeRenderer',
     '@alifd/next': 'var window.Next',
     'moment': 'var window.moment',

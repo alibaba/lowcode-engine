@@ -8,6 +8,7 @@ import { PluginProps } from '../../framework/definitions';
 const Save: React.FC<PluginProps> = (props): React.ReactElement => {
   const handleClick = (): void => {
     console.log('save data:', props.editor.designer.currentDocument.schema);
+    console.log('save data json:', JSON.stringify(props.editor.designer.currentDocument.schema));
   };
 
   return (
