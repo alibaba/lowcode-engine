@@ -22,14 +22,14 @@ import {
   transformStringToFunction,
   checkPropTypes,
   generateI18n,
-  acceptsRef
+  acceptsRef,
 } from '../utils';
 
 const debug = Debug('engine:base');
 const DESIGN_MODE = {
   EXTEND: 'extend',
   BORDER: 'border',
-  PREVIEW: 'preview'
+  PREVIEW: 'preview',
 };
 const OVERLAY_LIST = ['Dialog', 'Overlay', 'Animate', 'ConfigProvider'];
 let scopeIdx = 0;
@@ -43,10 +43,10 @@ export default class BaseEngine extends PureComponent {
     __components: PropTypes.object,
     __componentsMap: PropTypes.object,
     __ctx: PropTypes.object,
-    __schema: PropTypes.object
+    __schema: PropTypes.object,
   };
   static defaultProps = {
-    __schema: {}
+    __schema: {},
   };
   static contextType = AppContext;
 
@@ -90,7 +90,7 @@ export default class BaseEngine extends PureComponent {
       }
       this.__dataHelper
         .getInitData()
-        .then(res => {
+        .then((res) => {
           this.__showPlaceholder = false;
           if (isEmpty(res)) {
             this.forceUpdate();
@@ -98,7 +98,7 @@ export default class BaseEngine extends PureComponent {
           }
           this.setState(res, resolve);
         })
-        .catch(err => {
+        .catch((err) => {
           if (this.__showPlaceholder) {
             this.__showPlaceholder = false;
             this.forceUpdate();
@@ -123,7 +123,7 @@ export default class BaseEngine extends PureComponent {
     const { __schema } = props;
     const customMethodsList = Object.keys(__schema.methods || {}) || [];
     this.__customMethodsList &&
-      this.__customMethodsList.forEach(item => {
+      this.__customMethodsList.forEach((item) => {
         if (!customMethodsList.includes(item)) {
           delete this[item];
         }
@@ -134,12 +134,12 @@ export default class BaseEngine extends PureComponent {
     });
   };
 
-  __generateCtx = ctx => {
+  __generateCtx = (ctx) => {
     const { pageContext, compContext } = this.context;
     const obj = {
       page: pageContext,
       component: compContext,
-      ...ctx
+      ...ctx,
     };
     forEach(obj, (val, key) => {
       this[key] = val;
@@ -155,12 +155,12 @@ export default class BaseEngine extends PureComponent {
     const schema = props.__schema || {};
     const appHelper = props.__appHelper;
     const dataSource = (schema && schema.dataSource) || {};
-    this.__dataHelper = new DataHelper(this, dataSource, appHelper, config => this.__parseData(config));
+    this.__dataHelper = new DataHelper(this, dataSource, appHelper, (config) => this.__parseData(config));
     this.dataSourceMap = this.__dataHelper.dataSourceMap;
     // 设置容器组件占位，若设置占位则在初始异步请求完成之前用loading占位且不渲染容器组件内部内容
     this.__showPlaceholder =
       this.__parseData(schema.props && schema.props.autoLoading) &&
-      (dataSource.list || []).some(item => !!this.__parseData(item.isInit));
+      (dataSource.list || []).some((item) => !!this.__parseData(item.isInit));
   };
 
   __render = () => {
@@ -178,7 +178,7 @@ export default class BaseEngine extends PureComponent {
     }
   };
 
-  __getRef = ref => {
+  __getRef = (ref) => {
     this.__ref = ref;
   };
 
@@ -188,7 +188,7 @@ export default class BaseEngine extends PureComponent {
     self.__proto__ = __ctx || this;
     return this.__createVirtualDom(__schema.children, self, {
       schema: __schema,
-      Comp: __components[__schema.componentName]
+      Comp: __components[__schema.componentName],
     });
   };
 
@@ -212,7 +212,7 @@ export default class BaseEngine extends PureComponent {
     if (Array.isArray(schema)) {
       if (schema.length === 1) return this.__createVirtualDom(schema[0], self, parentInfo);
       return schema.map((item, idx) =>
-        this.__createVirtualDom(item, self, parentInfo, item && item.__ctx && item.__ctx.lunaKey ? '' : idx)
+        this.__createVirtualDom(item, self, parentInfo, item && item.__ctx && item.__ctx.lunaKey ? '' : idx),
       );
     }
 
@@ -233,11 +233,11 @@ export default class BaseEngine extends PureComponent {
       return this.__createLoopVirtualDom(
         {
           ...schema,
-          loop: parseData(schema.loop, self)
+          loop: parseData(schema.loop, self),
         },
         self,
         parentInfo,
-        idx
+        idx,
       );
     }
     const condition = schema.condition === undefined ? true : parseData(schema.condition, self);
@@ -253,7 +253,7 @@ export default class BaseEngine extends PureComponent {
       } else if (!schema.__ctx) {
         // 在生产环境schema没有__ctx上下文，需要手动生成一个lunaKey
         schema.__ctx = {
-          lunaKey: `luna${++scopeIdx}`
+          lunaKey: `luna${++scopeIdx}`,
         };
         scopeKey = schema.__ctx.lunaKey;
       } else {
@@ -277,7 +277,7 @@ export default class BaseEngine extends PureComponent {
           __schema: schema,
           __appHelper: appHelper,
           __components: components,
-          __componentsMap: componentsMap
+          __componentsMap: componentsMap,
         }
       : {};
     if (engine && engine.props.designMode) {
@@ -289,12 +289,12 @@ export default class BaseEngine extends PureComponent {
       Comp,
       componentInfo: {
         ...componentInfo,
-        props: transformArrayToMap(componentInfo.props, 'name')
-      }
+        props: transformArrayToMap(componentInfo.props, 'name'),
+      },
     });
     // 对于可以获取到ref的组件做特殊处理
     if (acceptsRef(Comp)) {
-      otherProps.ref = ref => {
+      otherProps.ref = (ref) => {
         const refProps = props.ref;
         if (refProps && typeof refProps === 'string') {
           this[refProps] = ref;
@@ -314,7 +314,7 @@ export default class BaseEngine extends PureComponent {
     } else if (typeof idx === 'number' && !props.key) {
       props.key = idx;
     }
-    const renderComp = props => (
+    const renderComp = (props) => (
       <Comp {...props}>
         {(!isFileSchema(schema) &&
           !!schema.children &&
@@ -323,8 +323,8 @@ export default class BaseEngine extends PureComponent {
             self,
             {
               schema,
-              Comp
-            }
+              Comp,
+            },
           )) ||
           null}
       </Comp>
@@ -367,17 +367,17 @@ export default class BaseEngine extends PureComponent {
     return schema.loop.map((item, i) => {
       const loopSelf = {
         [itemArg]: item,
-        [indexArg]: i
+        [indexArg]: i,
       };
       loopSelf.__proto__ = self;
       return this.__createVirtualDom(
         {
           ...schema,
-          loop: undefined
+          loop: undefined,
         },
         loopSelf,
         parentInfo,
-        idx ? `${idx}_${i}` : i
+        idx ? `${idx}_${i}` : i,
       );
     });
   };
@@ -387,7 +387,7 @@ export default class BaseEngine extends PureComponent {
     const propInfo = getValue(componentInfo.props, path);
     const propType = propInfo && propInfo.extra && propInfo.extra.propType;
     const ignoreParse = schema.__ignoreParse || [];
-    const checkProps = value => {
+    const checkProps = (value) => {
       if (!propType) return value;
       return checkPropTypes(value, path, propType, componentInfo.name) ? value : undefined;
     };
@@ -415,7 +415,7 @@ export default class BaseEngine extends PureComponent {
 
     // 判断是否需要解析变量
     if (
-      ignoreParse.some(item => {
+      ignoreParse.some((item) => {
         if (item instanceof RegExp) {
           return item.test(path);
         }
@@ -462,7 +462,7 @@ export default class BaseEngine extends PureComponent {
           ? propInfo.props.params
           : isMixinReactNodeFunction
           ? propInfo.props.reactNodeProps.params
-          : null
+          : null,
       );
     } else if (Array.isArray(props)) {
       return checkProps(props.map((item, idx) => this.__parseProps(item, self, path ? `${path}.${idx}` : idx, info)));

@@ -10,8 +10,8 @@ import {
   isAssetItem,
   assetItem,
   AssetItem,
-} from 'utils/asset';
-import { isCSSUrl } from 'utils/is-css-url';
+  isCSSUrl,
+} from '@ali/lowcode-globals';
 
 function parseAssetList(scripts: any, styles: any, assets: AssetList, level?: AssetLevel) {
   for (const asset of assets) {

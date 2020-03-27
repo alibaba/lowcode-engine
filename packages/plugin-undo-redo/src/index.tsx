@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import './index.scss';
-import { PluginProps } from '@ali/lowcode-editor-core/lib/definitions';
+import { PluginProps } from '@ali/lowcode-editor-core';
 import { TopIcon } from '@ali/lowcode-editor-skeleton';
 
 export interface IProps {
@@ -21,7 +21,7 @@ export default class UndoRedo extends PureComponent<
 
   private history: any;
 
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.state = {
       undoEnable: false,
@@ -49,7 +49,7 @@ export default class UndoRedo extends PureComponent<
     editor.off('designer.history-change', this.handleHistoryChange);
   }
 
-  handleHistoryChange = (history): void => {
+  handleHistoryChange = (history: any): void => {
     this.history = history;
     this.updateState(this.history?.getState() || 0);
   };
@@ -60,7 +60,7 @@ export default class UndoRedo extends PureComponent<
     this.history = editor.designer?.currentHistory;
     this.updateState(this.history?.getState() || 0);
 
-    editor.on('designer.history-change', (history): void => {
+    editor.on('designer.history-change', (history: any): void => {
       this.history = history;
       this.updateState(this.history?.getState() || 0);
     });

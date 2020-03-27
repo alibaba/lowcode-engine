@@ -9,11 +9,11 @@ export default class TempEngine extends BaseEngine {
   static dislayName = 'temp-engine';
   static propTypes = {
     __ctx: PropTypes.object,
-    __schema: PropTypes.object
+    __schema: PropTypes.object,
   };
   static defaultProps = {
     __ctx: {},
-    __schema: {}
+    __schema: {},
   };
 
   constructor(props, context) {

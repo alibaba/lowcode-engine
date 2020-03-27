@@ -1,51 +1,32 @@
 {
-  "name": "@icedesign/ts-scaffold",
-  "version": "0.0.1",
-  "description": "低代码编辑器",
+  "name": "@ali/lowcode-demo",
+  "version": "0.8.0",
+  "description": "低代码引擎 DEMO",
+  "scripts": {
+    "start": "build-scripts start",
+    "build": "build-scripts build"
+  },
   "dependencies": {
-    "@ali/lowcode-editor-core": "0.0.1",
-    "@ali/lowcode-editor-skeleton": "0.0.1",
-    "@ali/lowcode-plugin-logo": "0.0.1",
-    "@ali/lowcode-plugin-undo-redo": "0.0.1",
-    "@ali/lowcode-plugin-save": "0.0.1",
-    "@ali/lowcode-plugin-designer": "0.0.1",
-    "@ali/lowcode-plugin-components-pane": "0.0.1",
-    "@alifd/next": "^1.x",
+    "@ali/lowcode-editor-core": "^0.8",
+    "@ali/lowcode-editor-skeleton": "^0.8.0",
+    "@ali/lowcode-plugin-components-pane": "^0.8.0",
+    "@ali/lowcode-plugin-designer": "^0.8.0",
+    "@ali/lowcode-plugin-logo": "^0.8.0",
+    "@ali/lowcode-plugin-save": "^0.8.0",
+    "@ali/lowcode-plugin-undo-redo": "^0.8.0",
     "@alife/theme-lowcode-dark": "^0.1.0",
     "@alife/theme-lowcode-light": "^0.1.0",
-    "@icedesign/theme": "^1.x",
-    "core-js": "^3.6.4",
-    "events": "^3.1.0",
-    "intl-messageformat": "^8.2.1",
-    "keymaster": "^1.6.2",
-    "moment": "^2.23.0",
-    "prop-types": "^15.5.8",
     "react": "^16.8.1",
-    "react-dom": "^16.8.1",
-    "react-router-dom": "^5.1.2",
-    "serialize-javascript": "^3.0.0",
-    "store": "^2.0.12"
+    "react-dom": "^16.8.1"
   },
   "devDependencies": {
-    "@types/debug": "^4.1.5",
+    "@alib/build-scripts": "^0.1.18",
     "@types/events": "^3.0.0",
     "@types/react": "^16.8.3",
     "@types/react-dom": "^16.8.2",
-    "@types/store": "^2.0.2",
-    "css-modules-typescript-loader": "^2.0.4",
-    "ice-plugin-fusion": "^0.1.4",
-    "ice-plugin-moment-locales": "^0.1.0",
-    "ice-scripts": "^2.0.0"
-  },
-  "scripts": {
-    "start": "ice-scripts dev",
-    "build": "ice-scripts build"
-  },
-  "iceworks": {
-    "type": "react",
-    "adapter": "adapter-react-v3"
-  },
-  "ideMode": {
-    "name": "ice-react"
+    "build-plugin-fusion": "^0.1.0",
+    "build-plugin-moment-locales": "^0.1.0",
+    "build-plugin-react-app": "^1.1.2",
+    "tsconfig-paths-webpack-plugin": "^3.2.0"
   }
 }

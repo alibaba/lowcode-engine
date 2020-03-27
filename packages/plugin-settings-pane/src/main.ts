@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { uniqueId } from '../../utils/unique-id';
+import { uniqueId } from '@ali/lowcode-globals';
 import { ComponentMeta, Node, Designer, Selection } from '@ali/lowcode-designer';
 import { TitleContent, FieldExtraProps, SetterType, CustomView, FieldConfig, isCustomView } from '@ali/lowcode-globals';
 

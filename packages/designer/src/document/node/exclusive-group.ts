@@ -1,5 +1,5 @@
 import { obx, computed, TitleContent } from '@ali/lowcode-globals';
-import { uniqueId } from 'utils/unique-id';
+import { uniqueId } from '@ali/lowcode-globals';
 import { Node } from './node';
 import { intl } from '../../locale';
 

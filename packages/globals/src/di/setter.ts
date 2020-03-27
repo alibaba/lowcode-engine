@@ -8,16 +8,27 @@ export type RegisteredSetter = {
   defaultProps?: object;
   title?: TitleContent;
 };
-
 const settersMap = new Map<string, RegisteredSetter>();
-export function registerSetter(type: string, setter: CustomView | RegisteredSetter) {
+export function registerSetter(
+  typeOrMaps: string | { [key: string]: CustomView | RegisteredSetter },
+  setter?: CustomView | RegisteredSetter,
+) {
+  if (typeof typeOrMaps === 'object') {
+    Object.keys(typeOrMaps).forEach(type => {
+      registerSetter(type, typeOrMaps[type]);
+    });
+    return;
+  }
+  if (!setter) {
+    return;
+  }
   if (isCustomView(setter)) {
     setter = {
       component: setter,
-      title: (setter as any).displayName || (setter as any).name || 'CustomSetter'
+      title: (setter as any).displayName || (setter as any).name || 'CustomSetter',
     };
   }
-  settersMap.set(type, setter);
+  settersMap.set(typeOrMaps, setter);
 }
 
 export function getSetter(type: string): RegisteredSetter | null {

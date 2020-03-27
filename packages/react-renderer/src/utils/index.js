@@ -43,7 +43,7 @@ const PropTypes2 = factoryWithTypeCheckers(ReactIs.isElement, true);
 const EXPRESSION_TYPE = {
   JSEXPRESSION: 'JSExpression',
   JSFUNCTION: 'JSFunction',
-  JSSLOT: 'JSSlot'
+  JSSLOT: 'JSSlot',
 };
 const EXPRESSION_REG = /^\{\{(\{.*\}|.*?)\}\}$/;
 const hasSymbol = typeof Symbol === 'function' && Symbol['for'];
@@ -54,7 +54,7 @@ const ENV = {
   TBE: 'TBE',
   WEBIDE: 'WEB-IDE',
   VSCODE: 'VSCODE',
-  WEB: 'WEB'
+  WEB: 'WEB',
 };
 
 /**
@@ -63,7 +63,7 @@ const ENV = {
  */
 export function isSchema(schema, ignoreArr) {
   if (isEmpty(schema)) return false;
-  if (!ignoreArr && Array.isArray(schema)) return schema.every(item => isSchema(item));
+  if (!ignoreArr && Array.isArray(schema)) return schema.every((item) => isSchema(item));
   return !!(schema.componentName && schema.props && (typeof schema.props === 'object' || isJSExpression(schema.props)));
 }
 
@@ -86,7 +86,7 @@ export function getFileCssName(fileName) {
   let name = fileName.replace(/([A-Z])/g, '-$1').toLowerCase();
   return ('luna-' + name)
     .split('-')
-    .filter(p => !!p)
+    .filter((p) => !!p)
     .join('-');
 }
 
@@ -109,7 +109,7 @@ export function isJSExpression(obj) {
  * @description 等待函数
  */
 export function wait(ms) {
-  return new Promise(resolve => setTimeout(() => resolve(true), ms));
+  return new Promise((resolve) => setTimeout(() => resolve(true), ms));
 }
 
 export function curry(Comp, hocs = []) {
@@ -146,7 +146,7 @@ export function fastClone(obj) {
 
 // 更新obj的内容但不改变obj的指针
 export function fillObj(receiver = {}, ...suppliers) {
-  Object.keys(receiver).forEach(item => {
+  Object.keys(receiver).forEach((item) => {
     delete receiver[item];
   });
   Object.assign(receiver, ...suppliers);
@@ -209,7 +209,7 @@ export function goldlog(gmKey, params = {}, logKey = 'other') {
   const goKey = serializeParams({
     sdkVersion: pkg.version,
     env: getEnv(),
-    ...params
+    ...params,
   });
   if (sendIDEMessage) {
     sendIDEMessage({
@@ -217,8 +217,8 @@ export function goldlog(gmKey, params = {}, logKey = 'other') {
       data: {
         logKey: `/iceluna.core.${logKey}`,
         gmKey,
-        goKey
-      }
+        goKey,
+      },
     });
   }
   window.goldlog && window.goldlog.record(`/iceluna.core.${logKey}`, gmKey, goKey, 'POST');
@@ -228,7 +228,7 @@ export function goldlog(gmKey, params = {}, logKey = 'other') {
 export function generateUtils(utils, utilsConfig) {
   if (!Array.isArray(utilsConfig)) return { ...utils };
   const res = {};
-  utilsConfig.forEach(item => {
+  utilsConfig.forEach((item) => {
     if (!item.name || !item.type || !item.content) return;
     if (item.type === 'function' && typeof item.content === 'function') {
       res[item.name] = item.content;
@@ -248,7 +248,7 @@ export function setClipboardData(str) {
         .then(() => {
           resolve();
         })
-        .catch(err => {
+        .catch((err) => {
           reject('复制失败，请重试！', err);
         });
     } else {
@@ -278,10 +278,10 @@ export function getClipboardData() {
     } else if (navigator.clipboard) {
       return navigator.clipboard
         .readText()
-        .then(res => {
+        .then((res) => {
           resolve(res);
         })
-        .catch(err => {
+        .catch((err) => {
           reject('粘贴板获取失败', err);
         });
     } else {
@@ -328,7 +328,7 @@ export function moveArrayItem(arr, sourceIdx, distIdx, direction) {
 export function transformArrayToMap(arr, key, overwrite = true) {
   if (isEmpty(arr) || !Array.isArray(arr)) return {};
   const res = {};
-  arr.forEach(item => {
+  arr.forEach((item) => {
     const curKey = item[key];
     if (item[key] === undefined) return;
     if (res[curKey] && !overwrite) return;
@@ -347,13 +347,13 @@ export function checkPropTypes(value, name, rule, componentName) {
   }
   const err = rule(
     {
-      [name]: value
+      [name]: value,
     },
     name,
     componentName,
     'prop',
     null,
-    ReactPropTypesSecret
+    ReactPropTypesSecret,
   );
   if (err) {
     console.warn(err);
@@ -362,9 +362,9 @@ export function checkPropTypes(value, name, rule, componentName) {
 }
 
 export function transformSchemaToPure(obj) {
-  const pureObj = obj => {
+  const pureObj = (obj) => {
     if (Array.isArray(obj)) {
-      return obj.map(item => pureObj(item));
+      return obj.map((item) => pureObj(item));
     } else if (typeof obj === 'object') {
       // 对于undefined及null直接返回
       if (!obj) return obj;
@@ -381,9 +381,9 @@ export function transformSchemaToPure(obj) {
 }
 
 export function transformSchemaToStandard(obj) {
-  const standardObj = obj => {
+  const standardObj = (obj) => {
     if (Array.isArray(obj)) {
-      return obj.map(item => standardObj(item));
+      return obj.map((item) => standardObj(item));
     } else if (typeof obj === 'object') {
       // 对于undefined及null直接返回
       if (!obj) return obj;
@@ -393,7 +393,7 @@ export function transformSchemaToStandard(obj) {
         if (isSchema(val) && key !== 'children' && obj.type !== 'JSSlot') {
           res[key] = {
             type: 'JSSlot',
-            value: standardObj(val)
+            value: standardObj(val),
           };
           // table特殊处理
           if (key === 'cell') {
@@ -407,13 +407,13 @@ export function transformSchemaToStandard(obj) {
     } else if (typeof obj === 'function') {
       return {
         type: 'JSFunction',
-        value: obj.toString()
+        value: obj.toString(),
       };
     } else if (typeof obj === 'string' && EXPRESSION_REG.test(obj.trim())) {
       const regRes = obj.trim().match(EXPRESSION_REG);
       return {
         type: 'JSExpression',
-        value: (regRes && regRes[1]) || ''
+        value: (regRes && regRes[1]) || '',
       };
     }
     return obj;
@@ -445,7 +445,7 @@ export function addCssTag(id, content) {
 
 // 注册快捷
 export function registShortCuts(config, appHelper) {
-  const keyboardFilter = (keymaster.filter = event => {
+  const keyboardFilter = (keymaster.filter = (event) => {
     let eTarget = event.target || event.srcElement;
     let tagName = eTarget.tagName;
     let isInput = !!(tagName == 'INPUT' || tagName == 'SELECT' || tagName == 'TEXTAREA');
@@ -462,13 +462,13 @@ export function registShortCuts(config, appHelper) {
 
   //复制
   if (!document.copyListener) {
-    document.copyListener = e => {
+    document.copyListener = (e) => {
       if (!keyboardFilter(e) || appHelper.isCopying) return;
       const schema = appHelper.schemaHelper && appHelper.schemaHelper.schemaMap[appHelper.activeKey];
       if (!schema || !isSchema(schema)) return;
       appHelper.isCopying = true;
       const schemaStr = serialize(transformSchemaToPure(schema), {
-        unsafe: true
+        unsafe: true,
       });
       setClipboardData(schemaStr)
         .then(() => {
@@ -476,7 +476,7 @@ export function registShortCuts(config, appHelper) {
           appHelper.emit('schema.copy', schemaStr, schema);
           appHelper.isCopying = false;
         })
-        .catch(errMsg => {
+        .catch((errMsg) => {
           ideMessage && ideMessage('error', errMsg);
           appHelper.isCopying = false;
         });
@@ -514,36 +514,36 @@ export function registShortCuts(config, appHelper) {
       appHelper.emit('material.add', {
         schema,
         targetKey,
-        direction
+        direction,
       });
       appHelper.isPasting = false;
       appHelper.emit('schema.paste', schema);
     };
-    document.pasteListener = e => {
+    document.pasteListener = (e) => {
       const clipboardData = e.clipboardData || window.clipboardData;
       const text = clipboardData && clipboardData.getData('text');
       doPaste(e, text);
     };
     document.addEventListener('paste', document.pasteListener);
     if (window.parent.vscode) {
-      keymaster('command+v', e => {
+      keymaster('command+v', (e) => {
         const sendIDEMessage = window.parent.sendIDEMessage;
         sendIDEMessage &&
           sendIDEMessage({
-            action: 'readClipboard'
+            action: 'readClipboard',
           })
-            .then(text => {
+            .then((text) => {
               doPaste(e, text);
             })
-            .catch(err => {
+            .catch((err) => {
               console.warn(err);
             });
       });
     }
   }
 
-  (config || []).forEach(item => {
-    keymaster(item.keyboard, ev => {
+  (config || []).forEach((item) => {
+    keymaster(item.keyboard, (ev) => {
       ev.preventDefault();
       item.handler(ev, appHelper, keymaster);
     });
@@ -552,7 +552,7 @@ export function registShortCuts(config, appHelper) {
 
 // 取消注册快捷
 export function unRegistShortCuts(config) {
-  (config || []).forEach(item => {
+  (config || []).forEach((item) => {
     keymaster.unbind(item.keyboard);
   });
   if (window.parent.vscode) {
@@ -575,7 +575,7 @@ export function parseData(schema, self) {
   } else if (typeof schema === 'string') {
     return schema.trim();
   } else if (Array.isArray(schema)) {
-    return schema.map(item => parseData(item, self));
+    return schema.map((item) => parseData(item, self));
   } else if (typeof schema === 'function') {
     return schema.bind(self);
   } else if (typeof schema === 'object') {

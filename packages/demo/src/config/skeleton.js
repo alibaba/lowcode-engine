@@ -2,8 +2,8 @@ export default {
   version: '^1.0.2',
   theme: {
     fusion: {
-      package: '@alife/dpl-iceluna',
-      version: '^2.3.0'
+      package: '@alife/theme-lowcode-light',
+      version: '^0.1.0'
     },
     scss: ''
   },
@@ -126,6 +126,7 @@ export default {
       });
 
       editor.utils.get('/schema.json').then(res => {
+        editor.set('schema', res);
         editor.emit('schema.reset', res);
       });
     }

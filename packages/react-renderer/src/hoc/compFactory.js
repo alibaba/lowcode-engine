@@ -13,7 +13,7 @@ export default function compFactory(schema, components = {}, componentsMap = {},
     static version = config.version || '0.0.0';
     static contextType = AppContext;
     static propTypes = {
-      forwardedRef: PropTypes.func
+      forwardedRef: PropTypes.func,
     };
     render() {
       if (!schema || schema.componentName !== 'Component' || !isFileSchema(schema)) {
@@ -23,13 +23,13 @@ export default function compFactory(schema, components = {}, componentsMap = {},
       const { forwardedRef, ...otherProps } = this.props;
       // 低代码组件透传应用上下文
       const appCtx = ['utils', 'constants'];
-      appCtx.forEach(key => {
+      appCtx.forEach((key) => {
         if (!appHelper[key] && this.context && this.context.appHelper && this.context.appHelper[key]) {
           appHelper.set(key, this.context.appHelper[key]);
         }
       });
       const routerCtx = ['history', 'location', 'match'];
-      routerCtx.forEach(key => {
+      routerCtx.forEach((key) => {
         if (this.context && this.context.appHelper && this.context.appHelper[key]) {
           appHelper.set(key, this.context.appHelper[key]);
         }
@@ -46,13 +46,13 @@ export default function compFactory(schema, components = {}, componentsMap = {},
         ...localeProps,
         ...otherProps,
         __schema: schema,
-        ref: forwardedRef
+        ref: forwardedRef,
       };
 
       return (
         <AppContext.Provider
           value={{
-            ...this.context
+            ...this.context,
           }}
         >
           <CompEngine

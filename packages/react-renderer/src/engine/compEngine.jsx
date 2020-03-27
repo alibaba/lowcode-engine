@@ -12,10 +12,10 @@ const debug = Debug('engine:comp');
 export default class CompEngine extends BaseEngine {
   static dislayName = 'comp-engine';
   static propTypes = {
-    __schema: PropTypes.object
+    __schema: PropTypes.object,
   };
   static defaultProps = {
-    __schema: {}
+    __schema: {},
   };
 
   static getDerivedStateFromProps(props, state) {
@@ -30,7 +30,7 @@ export default class CompEngine extends BaseEngine {
   constructor(props, context) {
     super(props, context);
     this.__generateCtx({
-      component: this
+      component: this,
     });
     const schema = props.__schema || {};
     this.state = this.__parseData(schema.state || {});
@@ -69,19 +69,19 @@ export default class CompEngine extends BaseEngine {
 
     debug(`comp.render - ${__schema.fileName}`);
     this.__generateCtx({
-      component: this
+      component: this,
     });
     this.__render();
 
     const { id, className, style, noContainer, autoLoading, defaultHeight = 300, loading } = this.__parseData(
-      __schema.props
+      __schema.props,
     );
     const renderContent = () => (
       <AppContext.Provider
         value={{
           ...this.context,
           compContext: this,
-          blockContext: this
+          blockContext: this,
         }}
       >
         {this.__createDom()}
@@ -99,7 +99,7 @@ export default class CompEngine extends BaseEngine {
           style={{
             height: this.__showPlaceholder ? defaultHeight : 'auto',
             display: 'block',
-            ...style
+            ...style,
           }}
           className={classnames('luna-comp', getFileCssName(__schema.fileName), className, this.props.className)}
           id={this.props.id || id}

@@ -8,9 +8,9 @@ import {
   isLocationChildrenDetail,
   LocationChildrenDetail,
   isVertical
-} from '../../../designer';
-import { ISimulatorHost, } from '../../../simulator';
-import {NodeParent } from '../../../document';
+} from '../../designer';
+import { ISimulatorHost, } from '../../simulator';
+import {NodeParent } from '../../document';
 import './insertion.less';
 
 interface InsertionData {

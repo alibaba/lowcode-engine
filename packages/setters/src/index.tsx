@@ -1,43 +1,56 @@
 import { registerSetter } from '@ali/lowcode-globals';
-import {
-  DatePicker,
-  Input,
-  Radio,
-  Select,
-  Switch,
-  NumberPicker,
-} from '@alifd/next';
+import { DatePicker, Input, Radio, Select, Switch, NumberPicker } from '@alifd/next';
 import ExpressionSetter from './expression-setter';
 import MixinSetter from './mixin-setter';
 import EventsSetter from './events-setter';
 import StyleSetter from './style-setter';
 
-registerSetter('ClassNameSetter', () => {
-  return <div className="lc-block-setter">这里是类名绑定</div>;
-});
-
-registerSetter('EventsSetter', EventsSetter);
-registerSetter('StringSetter', {
+export const StringSetter = {
   component: Input,
   defaultProps: { placeholder: '请输入' },
-});
-registerSetter('NumberSetter', NumberPicker);
-registerSetter('ExpressionSetter', ExpressionSetter);
-registerSetter('MixinSetter', MixinSetter);
-registerSetter('BoolSetter', Switch);
-registerSetter('RadioGroupSetter', {
+};
+export const NumberSetter = NumberPicker;
+export const BoolSetter = Switch;
+// suggest: 做成 SelectSetter 一种变体
+export const RadioGroupSetter = {
   component: Radio.Group,
   defaultProps: {
     shape: 'button',
   },
-});
-registerSetter('SelectSetter', Select);
+};
+export const SelectSetter = Select;
 
 // suggest: 做成 StringSetter 的一个参数，
-registerSetter('TextAreaSetter', Input.TextArea);
-registerSetter('DateSetter', DatePicker);
-registerSetter('DateYearSetter', DatePicker.YearPicker);
-registerSetter('DateMonthSetter', DatePicker.MonthPicker);
-registerSetter('DateRangeSetter', DatePicker.RangePicker);
+export const TextAreaSetter = Input.TextArea;
+export const DateSetter = DatePicker;
+export const DateYearSetter = DatePicker.YearPicker;
+export const DateMonthSetter = DatePicker.MonthPicker;
+export const DateRangeSetter = DatePicker.RangePicker;
 
-registerSetter('StyleSetter', StyleSetter);
+export { ExpressionSetter, MixinSetter, EventsSetter, StyleSetter }
+
+// todo:
+export const ClassNameSetter = () => {
+  return <div className="lc-block-setter">这里是类名绑定</div>;
+};
+
+const builtinSetters = {
+  StringSetter,
+  NumberSetter,
+  BoolSetter,
+  SelectSetter,
+  ExpressionSetter: ExpressionSetter as any,
+  MixinSetter,
+  RadioGroupSetter,
+  TextAreaSetter,
+  DateSetter,
+  DateYearSetter,
+  DateMonthSetter,
+  DateRangeSetter,
+  EventsSetter,
+  StyleSetter,
+};
+
+export function registerSetters() {
+  registerSetter(builtinSetters);
+}

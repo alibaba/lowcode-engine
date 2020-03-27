@@ -1,7 +1,7 @@
 import Debug from 'debug';
 import { fastClone } from './index';
 const DEFAULT_CONFIG = {
-  limit: 20
+  limit: 20,
 };
 const debug = Debug('utils:undoRedoHelper');
 export default class UndoRedoHelper {
@@ -14,7 +14,7 @@ export default class UndoRedoHelper {
     if (!this.data[key] || forceCreate) {
       this.data[key] = {
         list: [fastClone(value)],
-        idx: 0
+        idx: 0,
       };
     }
     return this.data[key];
@@ -82,7 +82,7 @@ export default class UndoRedoHelper {
     return {
       past: this.past(key),
       present: this.present(key),
-      future: this.future(key)
+      future: this.future(key),
     };
   }
 }

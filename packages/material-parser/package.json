@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-material-parser",
-  "version": "0.1.0",
+  "version": "0.8.0",
   "description": "material parser for Ali lowCode engine",
   "main": "lib/index.js",
   "files": [
@@ -19,7 +19,8 @@
     "jest": "^24.8.0",
     "jest-watch-typeahead": "^0.3.1",
     "js-yaml": "^3.13.1",
-    "json-schema-to-typescript": "^8.2.0"
+    "json-schema-to-typescript": "^8.2.0",
+    "typescript": "^3.8.3"
   },
   "scripts": {
     "build": "tsc",
@@ -42,7 +43,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@ali/lowcode-editor-core": "^0.0.1",
     "@babel/generator": "^7.8.4",
     "@babel/parser": "^7.8.4",
     "@babel/traverse": "^7.8.4",

@@ -8,7 +8,7 @@ const debug = Debug('utils:request');
 export function get(dataAPI, params = {}, headers = {}, otherProps = {}) {
   headers = {
     Accept: 'application/json',
-    ...headers
+    ...headers,
   };
   dataAPI = buildUrl(dataAPI, params);
   return request(dataAPI, 'GET', null, headers, otherProps);
@@ -18,7 +18,7 @@ export function post(dataAPI, params = {}, headers = {}, otherProps = {}) {
   headers = {
     Accept: 'application/json',
     'Content-Type': 'application/x-www-form-urlencoded',
-    ...headers
+    ...headers,
   };
   return request(
     dataAPI,
@@ -27,7 +27,7 @@ export function post(dataAPI, params = {}, headers = {}, otherProps = {}) {
       ? JSON.stringify(params)
       : serialize(params),
     headers,
-    otherProps
+    otherProps,
   );
 }
 
@@ -38,7 +38,7 @@ export function request(dataAPI, method = 'GET', data, headers = {}, otherProps 
       headers = {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        ...headers
+        ...headers,
       };
       data = JSON.stringify(data || {});
       break;
@@ -54,9 +54,9 @@ export function request(dataAPI, method = 'GET', data, headers = {}, otherProps 
       credentials: 'include',
       headers,
       body: data,
-      ...otherProps
+      ...otherProps,
     })
-      .then(response => {
+      .then((response) => {
         switch (response.status) {
           case 200:
           case 201:
@@ -65,12 +65,12 @@ export function request(dataAPI, method = 'GET', data, headers = {}, otherProps 
           case 204:
             if (method === 'DELETE') {
               return {
-                success: true
+                success: true,
               };
             } else {
               return {
                 __success: false,
-                code: response.status
+                code: response.status,
               };
             }
           case 400:
@@ -83,23 +83,23 @@ export function request(dataAPI, method = 'GET', data, headers = {}, otherProps 
           case 500:
             return response
               .json()
-              .then(res => {
+              .then((res) => {
                 return {
                   __success: false,
                   code: response.status,
-                  data: res
+                  data: res,
                 };
               })
               .catch(() => {
                 return {
                   __success: false,
-                  code: response.status
+                  code: response.status,
                 };
               });
         }
         return null;
       })
-      .then(json => {
+      .then((json) => {
         if (json && json.__success !== false) {
           resolve(json);
         } else {
@@ -107,7 +107,7 @@ export function request(dataAPI, method = 'GET', data, headers = {}, otherProps 
           reject(json);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
@@ -117,18 +117,18 @@ export function jsonp(dataAPI, params = {}, otherProps = {}) {
   return new Promise((resolve, reject) => {
     otherProps = {
       timeout: 5000,
-      ...otherProps
+      ...otherProps,
     };
     fetchJsonp(buildUrl(dataAPI, params), otherProps)
-      .then(response => response.json())
-      .then(json => {
+      .then((response) => response.json())
+      .then((json) => {
         if (json) {
           resolve(json);
         } else {
           reject();
         }
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
@@ -144,7 +144,7 @@ export function mtop(dataAPI, params, otherProps = {}) {
     type: otherProps.method || 'GET',
     dataType: otherProps.dataType || 'jsonp',
     AntiFlood: true, // 防刷
-    timeout: otherProps.timeout || 20000
+    timeout: otherProps.timeout || 20000,
   });
 }
 
@@ -167,6 +167,6 @@ export function bzb(apiCode, params, otherProps = {}) {
   otherProps.env = getUrlEnv() || otherProps.env || 'prod';
   return bzbRequest(apiCode, {
     data: params,
-    ...otherProps
+    ...otherProps,
   });
 }

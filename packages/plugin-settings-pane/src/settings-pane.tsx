@@ -7,8 +7,8 @@ import {
   shallowIntl,
   isSetterConfig,
   createSetterContent,
+  shallowEqual
 } from '@ali/lowcode-globals';
-import { shallowEqual } from 'utils/shallow-equal';
 import { SettingField, isSettingField, SettingTarget } from './main';
 import { Field, FieldGroup } from './field';
 import PopupService from './popup';

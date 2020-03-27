@@ -16,7 +16,7 @@ export default class Rax extends PureComponent {
       const [config, setConfig] = useState(this.props);
       updateRax = setConfig;
       return createElement(Engine, {
-        ...config
+        ...config,
       });
     };
     render(createElement(RaxEngine), document.getElementById('luna-rax-container'), { driver: DriverUniversal });

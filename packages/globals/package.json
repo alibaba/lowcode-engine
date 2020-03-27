@@ -3,11 +3,14 @@
   "version": "0.8.0",
   "description": "Globals api for Ali lowCode engine",
   "main": "lib/index.js",
+  "module": "es/index.js",
   "files": [
-    "lib"
+    "lib",
+    "es",
+    "dist"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "build-scripts build --skip-demo",
     "test": "ava",
     "test:snapshot": "ava --update-snapshots"
   },
@@ -23,7 +26,11 @@
     "@types/classnames": "^2.2.7",
     "@types/node": "^13.7.1",
     "@types/react": "^16",
-    "@types/react-dom": "^16"
+    "@types/react-dom": "^16",
+    "@alib/build-scripts": "^0.1.18",
+    "build-plugin-component": "^0.2.11",
+    "build-plugin-fusion": "^0.1.0",
+    "build-plugin-moment-locales": "^0.1.0"
   },
   "ava": {
     "compileEnhancements": false,

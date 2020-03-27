@@ -10,15 +10,14 @@ import {
   isNodeSchema,
 } from '@ali/lowcode-globals';
 import { Project } from '../project';
+import { ISimulatorHost } from '../simulator';
+import { ComponentMeta } from '../component-meta';
+import { isDragNodeDataObject, DragNodeObject, DragNodeDataObject, DropLocation } from '../designer';
 import { Node, isNodeParent, insertChildren, insertChild, NodeParent, isNode } from './node/node';
 import { Selection } from './selection';
 import { RootNode } from './node/root-node';
-import { ISimulatorHost } from '../simulator';
-import { DropLocation } from '../designer/location';
-import { ComponentMeta } from '../component-meta';
 import { History } from './history';
 import { Prop } from './node/props/prop';
-import { isDragNodeDataObject, DragNodeObject, DragNodeDataObject } from '../designer/dragon';
 
 export class DocumentModel {
   /**

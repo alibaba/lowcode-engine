@@ -4,8 +4,8 @@ import { DropLocation } from './location';
 import { Node, DocumentModel } from '../document';
 import { ISimulatorHost, isSimulatorHost } from '../simulator';
 import { Designer } from './designer';
-import { setNativeSelection } from 'utils/navtive-selection';
-import cursor from 'utils/cursor';
+import { setNativeSelection } from '@ali/lowcode-globals';
+import { cursor } from '@ali/lowcode-globals';
 
 export interface LocateEvent {
   readonly type: 'LocateEvent';

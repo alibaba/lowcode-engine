@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-engine-code-generator",
-  "version": "0.0.1",
+  "version": "0.8.0",
   "description": "出码引擎 for LowCode Engine",
   "main": "lib/index.js",
   "files": [
@@ -20,7 +20,8 @@
     "ava": "^1.0.1",
     "rimraf": "^3.0.2",
     "ts-node": "^7.0.1",
-    "tsconfig-paths": "^3.9.0"
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^3.8.3"
   },
   "ava": {
     "compileEnhancements": false,

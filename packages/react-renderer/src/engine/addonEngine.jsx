@@ -10,11 +10,11 @@ export default class AddonEngine extends BaseEngine {
   static dislayName = 'addon-engine';
   static propTypes = {
     config: PropTypes.object,
-    __schema: PropTypes.object
+    __schema: PropTypes.object,
   };
   static defaultProps = {
     config: {},
-    __schema: {}
+    __schema: {},
   };
 
   static getDerivedStateFromProps(props, state) {
@@ -29,7 +29,7 @@ export default class AddonEngine extends BaseEngine {
   constructor(props, context) {
     super(props, context);
     this.__generateCtx({
-      component: this
+      component: this,
     });
     const schema = props.__schema || {};
     this.state = this.__parseData(schema.state || {});
@@ -84,9 +84,9 @@ export default class AddonEngine extends BaseEngine {
         package: addonConfig.package,
         version: addonConfig.version,
         ...this.appHelper.logParams,
-        ...params
+        ...params,
       },
-      'addon'
+      'addon',
     );
   };
 
@@ -104,7 +104,7 @@ export default class AddonEngine extends BaseEngine {
 
     debug(`addon.render - ${__schema.fileName}`);
     this.__generateCtx({
-      component: this
+      component: this,
     });
     this.__render();
 
@@ -120,7 +120,7 @@ export default class AddonEngine extends BaseEngine {
           value={{
             ...this.context,
             compContext: this,
-            blockContext: this
+            blockContext: this,
           }}
         >
           {this.__createDom()}

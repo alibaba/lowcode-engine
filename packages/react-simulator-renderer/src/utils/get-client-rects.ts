@@ -1,4 +1,4 @@
-import { isElement } from 'utils/is-element';
+import { isElement } from '@ali/lowcode-globals';
 
 // a range for test TextNode clientRect
 const cycleRange = document.createRange();

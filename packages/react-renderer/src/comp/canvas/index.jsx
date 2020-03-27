@@ -21,21 +21,21 @@ import {
   shallowEqual,
   addCssTag,
   transformSchemaToPure,
-  goldlog
+  goldlog,
 } from '../../utils';
 import './index.scss';
 
 const DESIGN_MODE = {
   EXTEND: 'extend',
   BORDER: 'border',
-  PREVIEW: 'preview'
+  PREVIEW: 'preview',
 };
 
 const DEFAULT_PLACEHOLDER = {
   emptyImage: '//img.alicdn.com/tfs/TB1zpkUoUT1gK0jSZFhXXaAtVXa-620-430.png',
   emptyText: '当前页面为空～\n请拖拽组件放入页面容器内吧！',
   nullImage: '//img.alicdn.com/tfs/TB1m_oSoND1gK0jSZFsXXbldVXa-620-430.png',
-  nullText: '编辑内容不存在～！'
+  nullText: '编辑内容不存在～！',
 };
 
 export default class Canvas extends PureComponent {
@@ -47,7 +47,7 @@ export default class Canvas extends PureComponent {
     onCreate: PropTypes.func,
     initSchema: PropTypes.object,
     shortCuts: PropTypes.array,
-    utils: PropTypes.object
+    utils: PropTypes.object,
   };
   static defaultProps = {
     components: {},
@@ -55,7 +55,7 @@ export default class Canvas extends PureComponent {
     onCreate: () => {},
     initSchema: {},
     shortCuts: [],
-    utils: {}
+    utils: {},
   };
   constructor(props) {
     super(props);
@@ -75,7 +75,7 @@ export default class Canvas extends PureComponent {
     this.canvasAppHelper = new AppHelper({
       history: this.appHelper.history,
       location: this.appHelper.location,
-      match: this.appHelper.match
+      match: this.appHelper.match,
     });
 
     this.updateCanvasAppHelper(props);
@@ -86,7 +86,7 @@ export default class Canvas extends PureComponent {
     window.__ctx = {
       appHelper: this.appHelper,
       canvasAppHelper: this.canvasAppHelper,
-      components: this.props.components
+      components: this.props.components,
     };
 
     window.goldlog = window.goldlog || window.parent.goldlog;
@@ -98,9 +98,9 @@ export default class Canvas extends PureComponent {
           lunaPath: '',
           name: 'root',
           schemaHelper: this.appHelper.schemaHelper,
-          schema: this.appHelper.schemaHelper.get('schema')
-        }
-      ]
+          schema: this.appHelper.schemaHelper.get('schema'),
+        },
+      ],
     };
     this.appHelper.set('canvasStack', this.state.canvasStack);
   }
@@ -134,9 +134,9 @@ export default class Canvas extends PureComponent {
     goldlog(
       'EXP',
       {
-        action: 'appear'
+        action: 'appear',
       },
-      'canvas'
+      'canvas',
     );
   }
 
@@ -188,14 +188,14 @@ export default class Canvas extends PureComponent {
     this.autoSelectComponent(addKey);
   };
 
-  handleMaterialRemove = lunaKey => {
+  handleMaterialRemove = (lunaKey) => {
     const appHelper = this.appHelper;
     const schemaHelper = appHelper.schemaHelper;
     const currCompSchema = schemaHelper.schemaMap[lunaKey];
     // 获取当前删除物料的相邻物料
     const nextCompSchema = jsonuri.get(
       schemaHelper.schema,
-      currCompSchema.__ctx.lunaPath.replace(/\/(\d+)$/, (res, idx) => `/${parseInt(idx) + 1}`)
+      currCompSchema.__ctx.lunaPath.replace(/\/(\d+)$/, (res, idx) => `/${parseInt(idx) + 1}`),
     );
     const activeKey = (nextCompSchema && nextCompSchema.__ctx.lunaKey) || currCompSchema.__ctx.parentKey;
     appHelper.schemaHelper.remove(lunaKey);
@@ -203,19 +203,19 @@ export default class Canvas extends PureComponent {
     this.autoSelectComponent(activeKey);
   };
 
-  handleMaterialMoveUp = lunaKey => {
+  handleMaterialMoveUp = (lunaKey) => {
     const appHelper = this.appHelper;
     appHelper.schemaHelper && appHelper.schemaHelper.slide(lunaKey, 'up');
     appHelper.emit('behavior.record');
   };
 
-  handleMaterialMoveDown = lunaKey => {
+  handleMaterialMoveDown = (lunaKey) => {
     const appHelper = this.appHelper;
     appHelper.schemaHelper && appHelper.schemaHelper.slide(lunaKey, 'down');
     appHelper.emit('behavior.record');
   };
 
-  handleMaterialCopy = lunaKey => {
+  handleMaterialCopy = (lunaKey) => {
     const appHelper = this.appHelper;
     const addKey = appHelper.schemaHelper.copy(lunaKey);
 
@@ -236,7 +236,7 @@ export default class Canvas extends PureComponent {
     appHelper.emit('material.select.change', lunaKey, options);
     const preNode = document.querySelectorAll('[data-active=true]');
     if (preNode[0] && preNode[0].dataset.lunaKey === lunaKey) return;
-    (preNode || []).forEach(item => {
+    (preNode || []).forEach((item) => {
       item.removeAttribute('data-active');
       item.removeAttribute('data-nochild');
     });
@@ -249,7 +249,7 @@ export default class Canvas extends PureComponent {
     if (!schema) return;
     let componentInfo = appHelper.componentsMap[schema.componentName];
     const currentNode = document.querySelectorAll(`[data-luna-key=${lunaKey}]`);
-    (currentNode || []).forEach(item => {
+    (currentNode || []).forEach((item) => {
       item.setAttribute('data-active', 'true');
       if (componentInfo && componentInfo.isContainer && schema && (!schema.children || !schema.children.length)) {
         item.setAttribute('data-nochild', 'true');
@@ -261,28 +261,28 @@ export default class Canvas extends PureComponent {
     let t = {
       ctx,
       schema,
-      ref
+      ref,
     };
     t.__proto__ = ctx;
     window.parent.t = window.t = t;
   };
 
-  handleDesignModeChange = designMode => {
+  handleDesignModeChange = (designMode) => {
     this.appHelper.set('designMode', designMode);
     this.forceUpdate();
   };
 
-  handlePreviewChange = isPreview => {
+  handlePreviewChange = (isPreview) => {
     this.appHelper.set('isPreview', isPreview);
     this.forceUpdate();
   };
 
-  handleUndoRedo = schema => {
+  handleUndoRedo = (schema) => {
     this.appHelper.schemaHelper.reset(schema);
     this.autoSelectComponent();
   };
 
-  handleSchemaReset = schema => {
+  handleSchemaReset = (schema) => {
     this.appHelper.schemaHelper.reset(schema);
     this.appHelper.emit('behavior.record');
     this.autoSelectComponent();
@@ -311,7 +311,7 @@ export default class Canvas extends PureComponent {
       componentName: 'Temp',
       fileName: 'temp',
       props: {},
-      children: isJSSlot(schema) ? schema.value : schema //兼容slot
+      children: isJSSlot(schema) ? schema.value : schema, //兼容slot
     };
     const schemaHelper = new SchemaHelper(transformSchemaToPure(tempSchema), this.appHelper);
     const schemaMap = this.appHelper.schemaHelper.schemaMap || {};
@@ -330,7 +330,7 @@ export default class Canvas extends PureComponent {
       schemaHelper,
       ctx: compCtxMap[lunaKey],
       undoRedoKey,
-      componentName: currentComp.componentName
+      componentName: currentComp.componentName,
     };
     appHelper.set('schemaHelper', schemaHelper);
     appHelper.undoRedoHelper && appHelper.undoRedoHelper.create(undoRedoKey, tempSchema);
@@ -338,13 +338,13 @@ export default class Canvas extends PureComponent {
     appHelper.set('activeKey', null);
     this.setState(
       {
-        canvasStack: [...this.state.canvasStack, currentData]
+        canvasStack: [...this.state.canvasStack, currentData],
       },
       () => {
         this.appHelper.set('canvasStack', this.state.canvasStack);
         this.appHelper.emit('canvas.stack.afterPush', currentData, this.state.canvasStack);
         this.autoSelectComponent();
-      }
+      },
     );
   };
 
@@ -374,7 +374,7 @@ export default class Canvas extends PureComponent {
     appHelper.undoRedoHelper && appHelper.undoRedoHelper.delete(preData.undoRedoKey);
     this.setState(
       {
-        canvasStack: canvasStack.slice(0, idx + 1)
+        canvasStack: canvasStack.slice(0, idx + 1),
       },
       () => {
         appHelper.set('canvasStack', this.state.canvasStack);
@@ -382,7 +382,7 @@ export default class Canvas extends PureComponent {
         appHelper.emit('behavior.record');
         appHelper.emit(`canvas.stack.${isPop ? 'afterPop' : 'afterJump'}`, preData, this.state.canvasStack);
         this.autoSelectComponent(preData.lunaKey);
-      }
+      },
     );
   };
 
@@ -399,7 +399,7 @@ export default class Canvas extends PureComponent {
       let t = {
         ctx,
         schema,
-        ref
+        ref,
       };
       t.__proto__ = ctx;
       window.parent.t = window.t = t;
@@ -441,7 +441,7 @@ export default class Canvas extends PureComponent {
   };
 
   //自动选中组件
-  autoSelectComponent = lunaKey => {
+  autoSelectComponent = (lunaKey) => {
     const appHelper = this.appHelper;
     // 若未指定需要选中的组件，且当前有选中的组件不做处理
     if (appHelper.activeKey && !lunaKey) return;
@@ -464,7 +464,7 @@ export default class Canvas extends PureComponent {
     const { components } = props;
     const { utils, constants } = this.canvasAppHelper || {};
     const componentsMap = this.appHelper.componentsMap || {};
-    Object.keys(componentsMap).forEach(key => {
+    Object.keys(componentsMap).forEach((key) => {
       const comp = componentsMap[key];
       // 对自定义组件做特殊处理
       if (comp.version === '0.0.0' && comp.code) {
@@ -472,7 +472,7 @@ export default class Canvas extends PureComponent {
         if (isFileSchema(schema) && schema.componentName === 'Component') {
           components[comp.name] = CompFactory(schema, components, componentsMap, {
             utils,
-            constants
+            constants,
           });
         }
       }
@@ -486,7 +486,7 @@ export default class Canvas extends PureComponent {
     this.canvasAppHelper.set({
       componentsMap,
       utils: entityInfo.utils ? generateUtils(utils, parseObj(entityInfo.utils)) : utils,
-      constants: parseObj((entityInfo && entityInfo.constants) || {})
+      constants: parseObj((entityInfo && entityInfo.constants) || {}),
     });
     this.canvasAppHelper.set('components', this.generateLowComps(props));
   };
@@ -497,12 +497,12 @@ export default class Canvas extends PureComponent {
     const componentsMap = this.appHelper.componentsMap || {};
     const cssMap = {};
     // 区块中的样式
-    Object.keys(blockSchemaMap).forEach(item => {
+    Object.keys(blockSchemaMap).forEach((item) => {
       const schema = blockSchemaMap[item];
       cssMap[schema.fileName] = schema.css || (schema.__ctx && schema.__ctx.css) || '';
     });
     // 低代码自定义组件中的样式
-    Object.keys(componentsMap).forEach(item => {
+    Object.keys(componentsMap).forEach((item) => {
       const comp = componentsMap[item];
       // 对自定义组件做特殊处理
       if (comp.version === '0.0.0' && comp.code && comp.css) {
@@ -516,8 +516,8 @@ export default class Canvas extends PureComponent {
     addCssTag(
       'luna-canvas-style',
       `${__global}\n${Object.keys(other || {})
-        .map(item => cssMap[item])
-        .join('\n')}`
+        .map((item) => cssMap[item])
+        .join('\n')}`,
     );
   };
 
@@ -533,25 +533,25 @@ export default class Canvas extends PureComponent {
       if (isEmpty(data)) {
         jsonuri.rm(
           preData.schemaHelper.schema,
-          name === 'children' ? `${lunaPath}/children` : `${lunaPath}/props/${name.replace('.', '/')}`
+          name === 'children' ? `${lunaPath}/children` : `${lunaPath}/props/${name.replace('.', '/')}`,
         );
         continue;
       }
       if (isJSSlot(schema)) {
         data = {
           ...schema,
-          value: data
+          value: data,
         };
       } else if (name !== 'children') {
         data = {
           type: 'JSSlot',
-          value: data
+          value: data,
         };
       }
       jsonuri.set(
         preData.schemaHelper.schema,
         name === 'children' ? `${lunaPath}/children` : `${lunaPath}/props/${name.replace('.', '/')}`,
-        data
+        data,
       );
     }
   };
@@ -606,7 +606,7 @@ export default class Canvas extends PureComponent {
       }
       // 点击
       if (!node.compEvent && schema.componentName !== 'Temp') {
-        node.compEvent = ev => {
+        node.compEvent = (ev) => {
           ev.stopPropagation();
           appHelper.emit('material.select', lunaKey, { isFromCanvas: true });
         };
@@ -616,14 +616,14 @@ export default class Canvas extends PureComponent {
       // drag and drop
       if (!node.draggableFlag) {
         if (topLevel) {
-          node.ondragleave = ev => this.handleDnd('DragLeave', ev, schema);
-          node.ondrop = ev => this.handleDnd('Drop', ev, schema);
+          node.ondragleave = (ev) => this.handleDnd('DragLeave', ev, schema);
+          node.ondrop = (ev) => this.handleDnd('Drop', ev, schema);
         } else {
           node.setAttribute('draggable', 'true');
-          node.ondragstart = ev => this.handleDnd('DragStart', ev, schema);
-          node.ondragend = ev => this.handleDnd('DragEnd', ev, schema);
+          node.ondragstart = (ev) => this.handleDnd('DragStart', ev, schema);
+          node.ondragend = (ev) => this.handleDnd('DragEnd', ev, schema);
         }
-        node.ondragover = ev => this.handleDnd('DragOver', ev, schema);
+        node.ondragover = (ev) => this.handleDnd('DragOver', ev, schema);
         node.draggableFlag = true;
       }
     } else {
@@ -661,8 +661,8 @@ export default class Canvas extends PureComponent {
           item.schemaHelper.schema &&
             item.schemaHelper.schema.props.style && {
               'fixed-width': item.schemaHelper.schema.props.style.width,
-              'fixed-height': item.schemaHelper.schema.props.style.height
-            }
+              'fixed-height': item.schemaHelper.schema.props.style.height,
+            },
         )}
         key={`${item.lunaKey}_${item.name}`}
       >
@@ -711,7 +711,7 @@ export default class Canvas extends PureComponent {
         className={classNames('luna-canvas-inner', {
           empty: isSchemaEmpty,
           null: isSchemaNull,
-          'drill-down': isDrillDown
+          'drill-down': isDrillDown,
         })}
         style={canvasStyle}
         data-placeholder-text={isSchemaEmpty ? placeholder.emptyText : isSchemaNull ? placeholder.nullText : ''}

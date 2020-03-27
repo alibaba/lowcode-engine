@@ -8,9 +8,9 @@ import {
   computed,
   obx
 } from '@ali/lowcode-globals';
-import { uniqueId } from 'utils/unique-id';
-import { isPlainObject } from 'utils/is-plain-object';
-import { hasOwnProperty } from 'utils/has-own-property';
+import { uniqueId } from '@ali/lowcode-globals';
+import { isPlainObject } from '@ali/lowcode-globals';
+import { hasOwnProperty } from '@ali/lowcode-globals';
 import { PropStash } from './prop-stash';
 import { valueToSource } from './value-to-source';
 import { Props } from './props';

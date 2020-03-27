@@ -1,12 +1,18 @@
 {
   "name": "@ali/lowcode-designer",
   "version": "0.8.0",
-  "description": "alibaba lowcode designer",
+  "description": "Designer for Ali LowCode Engine",
   "main": "lib/index.js",
+  "module": "es/index.js",
   "files": [
     "lib",
-    "umd"
+    "es"
   ],
+  "scripts": {
+    "build": "build-scripts build --skip-demo",
+    "test": "ava",
+    "test:snapshot": "ava --update-snapshots"
+  },
   "license": "MIT",
   "dependencies": {
     "classnames": "^2.2.6",
@@ -19,7 +25,9 @@
     "@types/classnames": "^2.2.7",
     "@types/node": "^13.7.1",
     "@types/react": "^16",
-    "@types/react-dom": "^16"
+    "@types/react-dom": "^16",
+    "@alib/build-scripts": "^0.1.18",
+    "build-plugin-component": "^0.2.10"
   },
   "ava": {
     "compileEnhancements": false,

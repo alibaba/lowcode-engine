@@ -1,13 +1,12 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "lib",
     "paths": {
       "@/*": ["./src/*"]
     },
-    "outDir": "./lib",
-    "lib": [
-      "es6"
-    ],
     "types": ["node"],
     "baseUrl": ".",            /* Base directory to resolve non-absolute module names. */
   },

@@ -3,13 +3,12 @@ import { Dialog, Search, Input } from '@alifd/next';
 import './style.less';
 
 export default class EventDialog extends Component<{
-  dialigVisiable:?Boolean,
-  closeDialog:?()=>void,
-  submitDialog:?()=>void,
-  bindEventName:?String
+  dialigVisiable?: boolean;
+  closeDialog?: () => void;
+  submitDialog?: (value?: string) => void;
+  bindEventName?: string;
 }> {
-
-  private eventList : Array = [
+  private eventList: any[] = [
     {
       name: 'getData',
     },
@@ -23,69 +22,66 @@ export default class EventDialog extends Component<{
       name: 'editData',
     },
     {
-      name: 'submitData'
+      name: 'submitData',
     },
-  ]
+  ];
 
   state = {
-    selectedEventName:'',
-    eventName:''
+    selectedEventName: '',
+    eventName: '',
   };
 
-  componentWillReceiveProps(nextProps){
-     this.setState({
-       eventName:nextProps.bindEventName
-     })
+  componentWillReceiveProps(nextProps: any) {
+    this.setState({
+      eventName: nextProps.bindEventName,
+    });
   }
 
   initEventName = () => {
-    const {bindEventName} = this.props;
+    const { bindEventName } = this.props;
     let eventName = bindEventName;
-    this.eventList.map((item)=>{
-      if (item.name === eventName){
+    this.eventList.map((item) => {
+      if (item.name === eventName) {
         eventName = `${eventName}_new`;
       }
-    })
+    });
 
     this.setState({
-      eventName
-    })
-  }
+      eventName,
+    });
+  };
 
-  onInputChange = (eventName:String) => {
+  onInputChange = (eventName: String) => {
     this.setState({
-      eventName
-    })
-  }
+      eventName,
+    });
+  };
 
-  onSelectItem = (eventName:String) => {
+  onSelectItem = (eventName: String) => {
     this.setState({
-      selectedEventName:eventName
-    })
+      selectedEventName: eventName,
+    });
 
     // 为空是新建事件
-    if (eventName === ''){
-      this.initEventName()
-    }else{
+    if (eventName === '') {
+      this.initEventName();
+    } else {
       this.setState({
-        selectedEventName:eventName,
-        eventName
-      })
+        selectedEventName: eventName,
+        eventName,
+      });
     }
-  }
+  };
 
-  onSearchEvent = (searchEventName:String) => {
-
-  }
+  onSearchEvent = (searchEventName: String) => {};
 
   onOk = () => {
-    this.props.submitDialog(this.state.eventName);
-  }
-
+    this.props.submitDialog?.(this.state.eventName);
+  };
 
   render() {
-    const { dialigVisiable, closeDialog} = this.props;
-    const {selectedEventName,eventName} = this.state;
+    const { dialigVisiable, closeDialog } = this.props;
+    const { selectedEventName, eventName } = this.state;
     return (
       <Dialog visible={dialigVisiable} title="事件绑定" onClose={closeDialog} onCancel={closeDialog} onOk={this.onOk}>
         <div className="event-dialog-body">
@@ -103,10 +99,21 @@ export default class EventDialog extends Component<{
                   <Search className="event-search-box" shape="simple" />
 
                   <ul className="event-list">
-                    <li className="select-item" className={selectedEventName==''?'select-item select-item-active':'select-item'} onClick={()=>this.onSelectItem('')}>新建事件</li>
-                    {
-                      this.eventList.map((item,index)=><li key={index} className={selectedEventName==item.name?'select-item select-item-active':'select-item'} onClick={()=>this.onSelectItem(item.name)}>{item.name}</li>)
-                    }
+                    <li
+                      className={selectedEventName == '' ? 'select-item select-item-active' : 'select-item'}
+                      onClick={() => this.onSelectItem('')}
+                    >
+                      新建事件
+                    </li>
+                    {this.eventList.map((item, index) => (
+                      <li
+                        key={index}
+                        className={selectedEventName == item.name ? 'select-item select-item-active' : 'select-item'}
+                        onClick={() => this.onSelectItem(item.name)}
+                      >
+                        {item.name}
+                      </li>
+                    ))}
                   </ul>
                 </div>
               </div>
@@ -116,7 +123,7 @@ export default class EventDialog extends Component<{
           <div className="dialog-right-container">
             <div className="dialog-small-title">事件名称</div>
             <div className="event-input-container">
-              <Input style={{ width: '100%' }} value={eventName} onChange={this.onInputChange}/>
+              <Input style={{ width: '100%' }} value={eventName} onChange={this.onInputChange} />
             </div>
 
             <div className="dialog-small-title">参数设置</div>

@@ -4,10 +4,10 @@ import './index.scss';
 export default class VisualDom extends PureComponent {
   static displayName = 'VisualDom';
   static propTypes = {
-    children: PropTypes.oneOfType([PropTypes.element, PropTypes.arrayOf(PropTypes.element)])
+    children: PropTypes.oneOfType([PropTypes.element, PropTypes.arrayOf(PropTypes.element)]),
   };
   static defaultProps = {
-    children: null
+    children: null,
   };
   render() {
     const { children, cell, title, label, text, __componentName } = this.props;

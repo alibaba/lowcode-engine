@@ -1,7 +1,7 @@
 import { createContext, ReactNode, Component, PureComponent } from 'react';
 import { EventEmitter } from 'events';
 import { Balloon } from '@alifd/next';
-import { uniqueId } from 'utils/unique-id';
+import { uniqueId } from '@ali/lowcode-globals';
 import './style.less';
 
 export const PopupContext = createContext<PopupPipe>({} as any);

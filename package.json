@@ -1,9 +1,8 @@
 {
-  "name": "@ali/lowcode",
   "private": true,
   "scripts": {
-    "reinstall": "./scripts/reinstall.sh",
-    "bootstrap": "lerna bootstrap",
+    "clean": "lerna clean -y",
+    "setup": "./scripts/reinstall.sh",
     "pub": "npm run test && lerna publish --registry http://registry.npm.alibaba-inc.com",
     "lint": "eslint -p tsconfig.json",
     "lint:fix": "eslint --fix -p tsconfig.json",
@@ -20,19 +19,22 @@
     "cz-conventional-changelog": "^2.1.0",
     "eslint": "^6.5.1",
     "git-cz": "^4.3.1",
+    "husky": "^4.2.3",
     "lerna": "^2.11.0",
     "lint-staged": "^8.1.0",
     "prettier": "^1.15.3",
     "ts-node": "^7.0.1",
     "tslib": "^1.9.3",
-    "typescript": "^3.2.2",
-    "husky": "^4.2.3"
+    "typescript": "^3.2.2"
   },
   "workspaces": {
     "packages": [
       "packages/*"
     ],
-    "nohoist": []
+    "nohoist": [
+      "**/css-modules-typescript-loader",
+      "**/@alife/theme-lowcode-*"
+    ]
   },
   "gitHooks": {
     "pre-commit": "lint-staged"

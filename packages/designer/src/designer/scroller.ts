@@ -1,4 +1,4 @@
-import { isElement } from 'utils/is-element';
+import { isElement } from '@ali/lowcode-globals';
 
 export class ScrollTarget {
   get left() {

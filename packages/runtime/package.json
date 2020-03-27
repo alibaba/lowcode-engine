@@ -2,15 +2,14 @@
   "name": "@ali/lowcode-runtime",
   "version": "0.0.1",
   "description": "Runtime for Ali lowCode engine",
-  "main": "lib/index.js",
-  "publishConfig": {
-    "registry": "https://registry.npm.alibaba-inc.com"
-  },
   "files": [
+    "es",
     "lib"
   ],
+  "main": "lib/index.js",
+  "module": "es/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "build-scripts build --skip-demo",
     "test": "ava",
     "test:snapshot": "ava --update-snapshots"
   },
@@ -26,7 +25,9 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@ali/lowcode-editor-core": "^0.0.1",
     "@ali/recore": "^1.6.9"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
   }
 }

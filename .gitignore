@@ -2,7 +2,9 @@
 build
 packages/*/lib/
 packages/*/es/
+packages/*/dist/
 package-lock.json
+yarn.lock
 
 
 # IDE

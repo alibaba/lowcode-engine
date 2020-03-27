@@ -1,7 +1,7 @@
 // NOTE: 仅用作类型标注，切勿作为实体使用
 import { BuiltinSimulatorHost } from './host';
-import { AssetLevel, AssetLevels, AssetList, isAssetBundle, isAssetItem, AssetType, assetItem } from 'utils/asset';
-import { isCSSUrl } from 'utils/is-css-url';
+import { AssetLevel, AssetLevels, AssetList, isAssetBundle, isAssetItem, AssetType, assetItem } from '@ali/lowcode-globals';
+import { isCSSUrl } from '@ali/lowcode-globals';
 import { BuiltinSimulatorRenderer } from './renderer';
 
 export function createSimulator(

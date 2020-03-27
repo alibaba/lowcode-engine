@@ -41,9 +41,9 @@ export default class StorageHelper {
       key = '__luna_history_' + key;
       this.store
         .getItem(key)
-        .then(res => {
+        .then((res) => {
           let codeStr = serialize(code, {
-            unsafe: true
+            unsafe: true,
           });
           if (res && res[0] && res[0].code) {
             if (codeStr === res[0].code) return;
@@ -56,11 +56,11 @@ export default class StorageHelper {
           res.unshift({
             id: newId,
             time: +new Date(),
-            code: codeStr
+            code: codeStr,
           });
           this.store
             .setItem(key, res.slice(0, limit))
-            .then(res => {
+            .then((res) => {
               resolve(res);
             })
             .catch(reject);

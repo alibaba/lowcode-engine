@@ -4,7 +4,7 @@ import Viewport from './viewport';
 import { createSimulator } from './create-simulator';
 import { Node, NodeParent, DocumentModel, isNodeParent, isNode, contains, isRootNode } from '../document';
 import ResourceConsumer from './resource-consumer';
-import { AssetLevel, Asset, AssetList, assetBundle, assetItem, AssetType } from 'utils/asset';
+import { AssetLevel, Asset, AssetList, assetBundle, assetItem, AssetType, getPublicPath } from '@ali/lowcode-globals';
 import {
   DragObjectType,
   isShaken,
@@ -22,7 +22,7 @@ import {
   CanvasPoint,
 } from '../designer';
 import { parseProps } from './utils/parse-props';
-import { isElement } from 'utils/is-element';
+import { isElement } from '@ali/lowcode-globals';
 import { ComponentMetadata } from '@ali/lowcode-globals';
 import { BuiltinSimulatorRenderer } from './renderer';
 
@@ -46,15 +46,16 @@ export interface BuiltinSimulatorProps {
   [key: string]: any;
 }
 
-const publicPath = (document.currentScript as HTMLScriptElement).src.replace(/^(.*\/)[^/]+$/, '$1');
-
-// TODO: use MACRO replace
 const defaultSimulatorUrl = (() => {
+  const publicPath = getPublicPath();
   let urls;
-  if (process.env.NODE_ENV === 'production') {
-    urls = [`${publicPath}../css/simulator-renderer.min.css`, `${publicPath}simulator-renderer.min.js`];
+  const [_, prefix = '', dev] = /^(.+?)(\/js)?\/?$/.exec(publicPath) || [];
+  if (dev) {
+    urls = [`${prefix}/css/react-simulator-renderer.css`, `${prefix}/js/react-simulator-renderer.js`];
+  } else if (process.env.NODE_ENV === 'production') {
+    urls = [`${prefix}/react-simulator-renderer.min.css`, `${prefix}/react-simulator-renderer.min.js`];
   } else {
-    urls = [`${publicPath}../css/simulator-renderer.css`, `${publicPath}simulator-renderer.js`];
+    urls = [`${prefix}/react-simulator-renderer.css`, `${prefix}/react-simulator-renderer.js`];
   }
   return urls;
 })();
