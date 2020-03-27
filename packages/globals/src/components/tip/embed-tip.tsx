@@ -1,4 +1,4 @@
-import { uniqueId } from '../../../../utils/unique-id';
+import { uniqueId } from 'utils/unique-id';
 import { Component } from 'react';
 import { saveTips } from './tip-handler';
 import { TipConfig } from '../../types';

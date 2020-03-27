@@ -1,7 +1,7 @@
 {
-  "name": "@ali/lowcode-engine-react-renderer",
+  "name": "@ali/lowcode-react-renderer",
   "version": "0.0.1",
-  "description": "lowcode engine react renderer",
+  "description": "react renderer for ali lowcode engine",
   "main": "lib/index.js",
   "scripts": {
     "babel": "rm -rf lib && babel src -d lib --copy-files",

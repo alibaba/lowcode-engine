@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { CustomView, isCustomView } from '../types/setter-config';
-import { createContent } from '../../../utils/create-content';
+import { createContent } from '../utils/create-content';
 import { TitleContent } from '../types';
 
 export type RegisteredSetter = {

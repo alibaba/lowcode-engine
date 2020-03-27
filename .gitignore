@@ -1,3 +1,11 @@
+# project custom
+build
+packages/*/lib/
+
+# IDE
+.vscode
+.idea
+
 # Logs
 logs
 *.log

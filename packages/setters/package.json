@@ -1,0 +1,49 @@
+{
+  "name": "@ali/lowcode-setters",
+  "version": "0.8.0",
+  "description": "Builtin setters for Ali lowCode engine",
+  "main": "lib/index.js",
+  "files": [
+    "lib",
+    "umd"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "ava",
+    "test:snapshot": "ava --update-snapshots"
+  },
+  "dependencies": {
+    "@alifd/next": "^1.19.16",
+    "classnames": "^2.2.6",
+    "react": "^16",
+    "react-dom": "^16.7.0",
+    "@ali/iceluna-comp-expression": "^1.0.6",
+    "@ali/iceluna-comp-form": "^1.0.20",
+    "@ali/iceluna-comp-list": "^1.0.26",
+    "@ali/iceluna-comp-monaco-editor": "^1.0.31",
+    "@ali/iceluna-comp-object-button": "^1.0.23",
+    "@ali/iceluna-comp-react-node": "^1.0.5",
+    "@ali/iceluna-sdk": "^1.0.5-beta.24",
+    "acorn": "^6.4.1",
+    "intl-messageformat": "^8.2.1",
+    "monaco-editor": "^0.20.0",
+    "qs": "^6.9.1",
+    "react-monaco-editor": "^0.34.0"
+  },
+  "devDependencies": {
+    "@types/classnames": "^2.2.7",
+    "@types/node": "^13.7.1",
+    "@types/react": "^16",
+    "@types/react-dom": "^16"
+  },
+  "ava": {
+    "compileEnhancements": false,
+    "snapshotDir": "test/fixtures/__snapshots__",
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  }
+}

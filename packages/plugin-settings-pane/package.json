@@ -1,0 +1,38 @@
+{
+  "name": "@ali/lowcode-plugin-settings-pane",
+  "version": "0.8.0",
+  "description": "Settings pane for Ali lowCode engine",
+  "main": "lib/index.js",
+  "files": [
+    "lib",
+    "umd"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "ava",
+    "test:snapshot": "ava --update-snapshots"
+  },
+  "dependencies": {
+    "@alifd/next": "^1.19.16",
+    "classnames": "^2.2.6",
+    "react": "^16",
+    "react-dom": "^16.7.0"
+  },
+  "devDependencies": {
+    "@types/classnames": "^2.2.7",
+    "@types/node": "^13.7.1",
+    "@types/react": "^16",
+    "@types/react-dom": "^16"
+  },
+  "ava": {
+    "compileEnhancements": false,
+    "snapshotDir": "test/fixtures/__snapshots__",
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  },
+  "license": "MIT"
+}

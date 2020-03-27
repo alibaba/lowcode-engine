@@ -1,9 +1,13 @@
 {
-  "extends": "./node_modules/@recore/config/tsconfig",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "experimentalDecorators": true
+    "outDir": "lib"
   },
   "include": [
-    "./src/", "../utils/unique-id.ts", "../utils/is-plain-object.ts", "../utils/is-object.ts", "../utils/is-function.ts"
+    "./src/"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }
+

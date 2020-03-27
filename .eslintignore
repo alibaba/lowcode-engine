@@ -1,0 +1,7 @@
+.idea/
+.vscode/
+build/
+.*
+~*
+node_modules
+

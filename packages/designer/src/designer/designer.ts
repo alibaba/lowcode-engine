@@ -1,19 +1,24 @@
 import { ComponentType } from 'react';
-import BuiltinSimulatorView from '../builtins/simulator';
-import Project from './project';
-import Dragon, { isDragNodeObject, isDragNodeDataObject, LocateEvent, DragObject } from './helper/dragon';
-import ActiveTracker from './helper/active-tracker';
-import Hovering from './helper/hovering';
-import DropLocation, { LocationData, isLocationChildrenDetail } from './helper/location';
-import DocumentModel from './document/document-model';
-import Node, { insertChildren } from './document/node/node';
-import { isRootNode } from './document/node/root-node';
-import { ComponentMeta } from './component-meta';
-import Scroller, { IScrollable } from './helper/scroller';
-import { INodeSelector } from './simulator';
-import OffsetObserver, { createOffsetObserver } from './helper/offset-observer';
 import { EventEmitter } from 'events';
-import { ProjectSchema, ComponentMetadata, ComponentAction, NpmInfo, obx, computed, autorun } from '../../../globals';
+import {
+  ProjectSchema,
+  ComponentMetadata,
+  ComponentAction,
+  NpmInfo,
+  obx,
+  computed,
+  autorun,
+} from '@ali/lowcode-globals';
+import { Project } from '../project';
+import { Node, DocumentModel, insertChildren, isRootNode } from '../document';
+import { ComponentMeta } from '../component-meta';
+import { INodeSelector } from '../simulator';
+import { Scroller, IScrollable } from './scroller';
+import { Dragon, isDragNodeObject, isDragNodeDataObject, LocateEvent, DragObject } from './dragon';
+import { ActiveTracker } from './active-tracker';
+import { Hovering } from './hovering';
+import { DropLocation, LocationData, isLocationChildrenDetail } from './location';
+import { OffsetObserver, createOffsetObserver } from './offset-observer';
 
 export interface DesignerProps {
   className?: string;
@@ -34,7 +39,7 @@ export interface DesignerProps {
   [key: string]: any;
 }
 
-export default class Designer {
+export class Designer {
   // readonly hotkey: Hotkey;
   readonly dragon = new Dragon(this);
   readonly activeTracker = new ActiveTracker();
@@ -58,7 +63,7 @@ export default class Designer {
 
     this.project = new Project(this, props.defaultSchema);
 
-    this.dragon.onDragstart(e => {
+    this.dragon.onDragstart((e) => {
       this.hovering.enable = false;
       const { dragObject } = e;
       if (isDragNodeObject(dragObject)) {
@@ -75,14 +80,14 @@ export default class Designer {
       this.postEvent('dragstart', e);
     });
 
-    this.dragon.onDrag(e => {
+    this.dragon.onDrag((e) => {
       if (this.props?.onDrag) {
         this.props.onDrag(e);
       }
       this.postEvent('drag', e);
     });
 
-    this.dragon.onDragend(e => {
+    this.dragon.onDragend((e) => {
       const { dragObject, copy } = e;
       const loc = this._dropLocation;
       if (loc) {
@@ -96,7 +101,7 @@ export default class Designer {
             nodes = insertChildren(loc.target, nodeData, loc.detail.index);
           }
           if (nodes) {
-            loc.document.selection.selectAll(nodes.map(o => o.id));
+            loc.document.selection.selectAll(nodes.map((o) => o.id));
             setTimeout(() => this.activeTracker.track(nodes![0]), 10);
           }
         }
@@ -262,8 +267,8 @@ export default class Designer {
 
   @obx.ref private _simulatorComponent?: ComponentType<any>;
 
-  @computed get simulatorComponent(): ComponentType<any> {
-    return this._simulatorComponent || BuiltinSimulatorView;
+  @computed get simulatorComponent(): ComponentType<any> | undefined {
+    return this._simulatorComponent;
   }
 
   @obx.ref private _simulatorProps?: object | ((document: DocumentModel) => object);
@@ -298,7 +303,7 @@ export default class Designer {
   private _lostComponentMetasMap = new Map<string, ComponentMeta>();
 
   private buildComponentMetasMap(metas: ComponentMetadata[]) {
-    metas.forEach(data => {
+    metas.forEach((data) => {
       const key = data.componentName;
       let meta = this._componentMetasMap.get(key);
       if (meta) {

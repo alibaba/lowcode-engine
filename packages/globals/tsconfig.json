@@ -1,9 +1,7 @@
 {
-  "extends": "./node_modules/@recore/config/tsconfig",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "experimentalDecorators": true
+    "outDir": "lib"
   },
-  "include": [
-    "./src/"
-  ]
+  "include": ["./src/"],
 }

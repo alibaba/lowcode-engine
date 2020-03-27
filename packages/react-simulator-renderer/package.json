@@ -1,0 +1,40 @@
+{
+  "name": "@ali/lowcode-react-simulator-renderer",
+  "version": "0.8.0",
+  "description": "react simulator renderer for alibaba lowcode designer",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "files": [
+    "lib",
+    "umd"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "ava",
+    "test:snapshot": "ava --update-snapshots"
+  },
+  "dependencies": {
+    "classnames": "^2.2.6",
+    "react": "^16",
+    "react-dom": "^16.7.0",
+    "@ali/lowcode-globals": "^0.8",
+    "@recore/obx": "^1.0.8",
+    "@recore/obx-react": "^1.0.7"
+  },
+  "devDependencies": {
+    "@types/classnames": "^2.2.7",
+    "@types/node": "^13.7.1",
+    "@types/react": "^16",
+    "@types/react-dom": "^16"
+  },
+  "ava": {
+    "compileEnhancements": false,
+    "snapshotDir": "test/fixtures/__snapshots__",
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  }
+}

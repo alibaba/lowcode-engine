@@ -1,11 +1,11 @@
 import { Component } from 'react';
 import classNames from 'classnames';
-import Designer, { DesignerProps } from './designer';
-import BuiltinDragGhostComponent from '../builtins/drag-ghost';
-import ProjectView from './project-view';
+import BuiltinDragGhostComponent from './drag-ghost';
+import { Designer, DesignerProps } from './designer';
+import { ProjectView } from '../project';
 import './designer.less';
 
-export default class DesignerView extends Component<DesignerProps> {
+export class DesignerView extends Component<DesignerProps> {
   readonly designer: Designer;
 
   constructor(props: any) {
