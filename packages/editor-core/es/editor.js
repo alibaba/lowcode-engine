@@ -11,6 +11,7 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 import Debug from 'debug';
 import { EventEmitter } from 'events';
 import store from 'store';
+import pluginFactory from './pluginFactory';
 import * as editorUtils from './utils';
 var registShortCuts = editorUtils.registShortCuts,
     transformToPromise = editorUtils.transformToPromise,
@@ -76,7 +77,12 @@ var Editor = /*#__PURE__*/function (_EventEmitter) {
     _this.locale = void 0;
     _this.hooksFuncs = void 0;
     _this.config = config;
-    _this.components = components;
+    _this.components = {};
+    Object.entries(components).forEach(function (_ref) {
+      var key = _ref[0],
+          value = _ref[1];
+      _this.components[key] = pluginFactory(value);
+    });
     _this.utils = _extends({}, editorUtils, {}, utils);
     instance = _assertThisInitialized(_this);
     return _this;
@@ -87,11 +93,11 @@ var Editor = /*#__PURE__*/function (_EventEmitter) {
   _proto.init = function init() {
     var _this2 = this;
 
-    var _ref = this.config || {},
-        hooks = _ref.hooks,
-        _ref$shortCuts = _ref.shortCuts,
-        shortCuts = _ref$shortCuts === void 0 ? [] : _ref$shortCuts,
-        lifeCycles = _ref.lifeCycles;
+    var _ref2 = this.config || {},
+        hooks = _ref2.hooks,
+        _ref2$shortCuts = _ref2.shortCuts,
+        shortCuts = _ref2$shortCuts === void 0 ? [] : _ref2$shortCuts,
+        lifeCycles = _ref2.lifeCycles;
 
     this.locale = store.get('lowcode-editor-locale') || 'zh-CN'; // this.messages = this.messagesSet[this.locale];
     // this.i18n = generateI18n(this.locale, this.messages);
@@ -246,10 +252,10 @@ var Editor = /*#__PURE__*/function (_EventEmitter) {
           return;
         }
 
-        var _ref2 = plugin.props || {},
-            visible = _ref2.visible,
-            disabled = _ref2.disabled,
-            marked = _ref2.marked;
+        var _ref3 = plugin.props || {},
+            visible = _ref3.visible,
+            disabled = _ref3.disabled,
+            marked = _ref3.marked;
 
         res[plugin.pluginKey] = {
           visible: typeof visible === 'boolean' ? visible : true,

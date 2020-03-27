@@ -10,6 +10,8 @@
     "@ali/lowcode-plugin-save": "0.0.1",
     "@ali/lowcode-plugin-designer": "0.0.1",
     "@ali/lowcode-plugin-components-pane": "0.0.1",
+    "@ali/lowcode-plugin-outline-tree": "0.0.0",
+    "@ali/lowcode-plugin-settings": "0.0.0",
     "@alifd/next": "^1.x",
     "@alife/theme-lowcode-dark": "^0.1.0",
     "@alife/theme-lowcode-light": "^0.1.0",
