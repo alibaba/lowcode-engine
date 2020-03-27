@@ -2,8 +2,8 @@ import componentsPane from '@ali/lowcode-plugin-components-pane';
 import Settings from '../../../plugin-settings';
 import undoRedo from '@ali/lowcode-plugin-undo-redo';
 import Designer from '../plugins/designer';
-import logo from '../plugins/logo';
-import save from '../plugins/save';
+import logo from '@ali/lowcode-plugin-logo';
+import save from '@ali/lowcode-plugin-save';
 import OutlineTree from '../../../plugin-outline-tree';
 
 import { PluginFactory } from '@ali/lowcode-editor-core';
