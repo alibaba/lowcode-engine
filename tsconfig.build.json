@@ -21,7 +21,7 @@
     // Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'.
     "esModuleInterop": true,
     // Specify JSX code generation: 'preserve', 'react-native', or 'react'.
-    "jsx": "react",
+    "jsx": "preserve",
     // Import emit helpers (e.g. __extends, __rest, etc..) from tslib
     "importHelpers": true,
     // Enables experimental support for ES7 decorators.
@@ -39,5 +39,5 @@
       "utils": ["./utils"]
     }
   },
-  "exclude": ["**/test", "**/lib"]
+  "exclude": ["**/test", "**/lib", "node_modules"]
 }
