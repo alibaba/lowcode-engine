@@ -1,11 +1,6 @@
 import React, { PureComponent } from 'react';
-
-import Editor from '@ali/lowcode-editor-core';
-import { PluginConfig } from '@ali/lowcode-editor-core/lib/definitions';
-
-// @ts-ignore
-import Designer from '../../designer';
-
+import { Editor, PluginConfig } from '@ali/lowcode-editor-core';
+import { DesignerView, Designer } from '@ali/lowcode-designer';
 import './index.scss';
 
 export interface PluginProps {
@@ -21,17 +16,17 @@ const SCHEMA = {
       componentName: 'Page',
       fileName: 'test',
       dataSource: {
-        list: []
+        list: [],
       },
       state: {
-        text: 'outter'
+        text: 'outter',
       },
       props: {
         ref: 'outterView',
         autoLoading: true,
         style: {
-          padding: 20
-        }
+          padding: 20,
+        },
       },
       children: [
         {
@@ -39,7 +34,7 @@ const SCHEMA = {
           props: {
             labelCol: 3,
             style: {},
-            ref: 'testForm'
+            ref: 'testForm',
           },
           children: [
             {
@@ -47,7 +42,7 @@ const SCHEMA = {
               props: {
                 label: '姓名：',
                 name: 'name',
-                initValue: '李雷'
+                initValue: '李雷',
               },
               children: [
                 {
@@ -56,34 +51,34 @@ const SCHEMA = {
                     placeholder: '请输入',
                     size: 'medium',
                     style: {
-                      width: 320
-                    }
-                  }
-                }
-              ]
+                      width: 320,
+                    },
+                  },
+                },
+              ],
             },
             {
               componentName: 'Form.Item',
               props: {
                 label: '年龄：',
                 name: 'age',
-                initValue: '22'
+                initValue: '22',
               },
               children: [
                 {
                   componentName: 'NumberPicker',
                   props: {
                     size: 'medium',
-                    type: 'normal'
-                  }
-                }
-              ]
+                    type: 'normal',
+                  },
+                },
+              ],
             },
             {
               componentName: 'Form.Item',
               props: {
                 label: '职业：',
-                name: 'profession'
+                name: 'profession',
               },
               children: [
                 {
@@ -92,27 +87,27 @@ const SCHEMA = {
                     dataSource: [
                       {
                         label: '教师',
-                        value: 't'
+                        value: 't',
                       },
                       {
                         label: '医生',
-                        value: 'd'
+                        value: 'd',
                       },
                       {
                         label: '歌手',
-                        value: 's'
-                      }
-                    ]
-                  }
-                }
-              ]
+                        value: 's',
+                      },
+                    ],
+                  },
+                },
+              ],
             },
             {
               componentName: 'Div',
               props: {
                 style: {
-                  textAlign: 'center'
-                }
+                  textAlign: 'center',
+                },
               },
               children: [
                 {
@@ -124,59 +119,60 @@ const SCHEMA = {
                       props: {
                         type: 'primary',
                         style: {
-                          margin: '0 5px 0 5px'
+                          margin: '0 5px 0 5px',
                         },
-                        htmlType: 'submit'
+                        htmlType: 'submit',
                       },
-                      children: '提交'
+                      children: '提交',
                     },
                     {
                       componentName: 'Button',
                       props: {
                         type: 'normal',
                         style: {
-                          margin: '0 5px 0 5px'
+                          margin: '0 5px 0 5px',
                         },
-                        htmlType: 'reset'
+                        htmlType: 'reset',
                       },
-                      children: '重置'
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
+                      children: '重置',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ],
 };
 
 export default class DesignerPlugin extends PureComponent<PluginProps> {
-  displayName: 'LowcodePluginDesigner';
+  static displayName: 'LowcodePluginDesigner';
 
   componentDidMount(): void {
-    const {editor} = this.props;
+    const { editor } = this.props;
     editor.on('schema.reset', this.handleSchemaReset);
   }
 
   componentWillUmount(): void {
-    const {editor} = this.props;
+    const { editor } = this.props;
     editor.off('schema.reset', this.handleSchemaReset);
   }
 
-  handleSchemaReset = (schema: object): void => {
-    const {editor} = this.props;
+  private designer?: Designer;
+  handleSchemaReset = (schema: any): void => {
+    const { editor } = this.props;
     if (this.designer) {
       this.designer.setSchema(schema);
     } else {
-      editor.once('designer.ready', (designer): void => {
+      editor.once('designer.ready', (designer: Designer): void => {
         designer.setSchema(schema);
       });
     }
-  }
+  };
 
-  handleDesignerMount = (designer): void => {
+  handleDesignerMount = (designer: Designer): void => {
     const { editor } = this.props;
     this.designer = designer;
     editor.set('designer', designer);
@@ -187,7 +183,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps> {
     const { editor } = this.props;
     const assets = editor.get('assets') || {};
     return (
-      <Designer
+      <DesignerView
         onMount={this.handleDesignerMount}
         className="lowcode-plugin-designer"
         defaultSchema={SCHEMA as any}

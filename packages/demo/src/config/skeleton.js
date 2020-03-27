@@ -79,7 +79,7 @@ export default {
         }
       },
       {
-        pluginKey: 'outlineTree',
+        pluginKey: 'outlinePane',
         type: 'PanelIcon',
         props: {
           align: 'top',
@@ -87,6 +87,7 @@ export default {
           title: '大纲树'
         },
         config: {
+          package: '@ali/lowcode-plugin-outline-pane',
           version: '^1.0.0'
         },
         pluginProps: {}
@@ -94,7 +95,7 @@ export default {
     ],
     rightArea: [
       {
-        pluginKey: 'settings',
+        pluginKey: 'settingsPane',
         type: 'Panel',
         props: {},
         config: {

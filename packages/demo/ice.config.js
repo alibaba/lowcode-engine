@@ -3,13 +3,10 @@ const path = require('path');
 module.exports = {
   entry: {
     'index': 'src/index.tsx',
-    'simulator-renderer': '../designer/src/builtins/simulator/renderer/index.ts'
+    'simulator-renderer': '../react-simulator-renderer/src/index.ts'
   },
   "vendor": false,
   publicPath: './',
-  alias: {
-    '@': path.resolve(__dirname, './src'),
-  },
   plugins: [
     ['ice-plugin-fusion', {
       themePackage: '@alife/theme-lowcode-light',

@@ -27,31 +27,19 @@
     "store": "^2.0.12"
   },
   "devDependencies": {
-    "@ice/spec": "^1.0.1",
     "@types/debug": "^4.1.5",
     "@types/events": "^3.0.0",
     "@types/react": "^16.8.3",
     "@types/react-dom": "^16.8.2",
     "@types/store": "^2.0.2",
     "css-modules-typescript-loader": "^2.0.4",
-    "eslint": "^6.0.1",
-    "husky": "^4.2.3",
     "ice-plugin-fusion": "^0.1.4",
     "ice-plugin-moment-locales": "^0.1.0",
-    "ice-scripts": "^2.0.0",
-    "prettier": "^1.19.1",
-    "stylelint": "^10.1.0"
+    "ice-scripts": "^2.0.0"
   },
   "scripts": {
     "start": "ice-scripts dev",
-    "build": "ice-scripts build",
-    "lint": "npm run eslint && npm run stylelint",
-    "eslint": "eslint --cache --ext .js,.jsx ./",
-    "stylelint": "stylelint ./**/*.scss",
-    "prettier": "prettier  --write \"./src/**/*.{ts,tsx,js,jsx,ejs,less,css,scss,json}\" "
-  },
-  "engines": {
-    "node": ">=8.0.0"
+    "build": "ice-scripts build"
   },
   "iceworks": {
     "type": "react",
@@ -59,9 +47,5 @@
   },
   "ideMode": {
     "name": "ice-react"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ice-lab/react-materials/tree/master/scaffolds/ice-ts"
   }
 }
