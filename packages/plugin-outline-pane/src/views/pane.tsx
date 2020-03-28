@@ -18,27 +18,21 @@ export default class OutlinePane extends Component<{ editor: any }> {
   }
 
   render() {
-    if (!this.main.master) {
-      return (
-        <div className="lc-outline-pane">
-          <p className="lc-outline-notice">{intl('Designer not found')}</p>
-        </div>
-      );
-    }
+    const tree = this.main.currentTree;
 
-    const tree = this.main.master.currentTree;
+    console.info('tree', tree);
 
     if (!tree) {
       return (
         <div className="lc-outline-pane">
-          <p className="lc-outline-notice">{intl('No opened document')}</p>
+          <p className="lc-outline-notice">{intl('Initializing')}</p>
         </div>
       );
     }
 
     return (
       <div className="lc-outline-pane">
-        <div ref={shell => this.main.mount(shell)} className="lc-outline-tree-container">
+        <div ref={(shell) => this.main.mount(shell)} className="lc-outline-tree-container">
           <TreeView key={tree.id} tree={tree} />
         </div>
       </div>

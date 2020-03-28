@@ -1,6 +1,6 @@
 import undoRedo from '@ali/lowcode-plugin-undo-redo';
-import logo from '@ali/lowcode-plugin-logo';
-import save from '@ali/lowcode-plugin-save';
+import logo from '@ali/lowcode-plugin-sample-logo';
+import SamplePreview from '@ali/lowcode-plugin-sample-preview';
 import Designer from '@ali/lowcode-plugin-designer';
 import SettingsPane from '@ali/lowcode-plugin-settings-pane';
 import componentsPane from '@ali/lowcode-plugin-components-pane';
@@ -9,10 +9,10 @@ import { PluginFactory } from '@ali/lowcode-editor-core';
 
 export default {
   logo: PluginFactory(logo),
-  save: PluginFactory(save),
+  samplePreview: PluginFactory(SamplePreview),
   undoRedo: PluginFactory(undoRedo),
   designer: PluginFactory(Designer),
   componentsPane: PluginFactory(componentsPane),
   settingsPane: PluginFactory(SettingsPane),
-  OutlinePane: PluginFactory(OutlinePane),
+  outlinePane: PluginFactory(OutlinePane),
 };

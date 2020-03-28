@@ -18,3 +18,4 @@ export * from './set-prototype-of';
 export * from './shallow-equal';
 export * from './unique-id';
 export * from './get-public-path';
+export * from './is-form-event';

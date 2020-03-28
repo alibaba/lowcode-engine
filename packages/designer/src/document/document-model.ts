@@ -8,6 +8,7 @@ import {
   obx,
   autorun,
   isNodeSchema,
+  uniqueId,
 } from '@ali/lowcode-globals';
 import { Project } from '../project';
 import { ISimulatorHost } from '../simulator';
@@ -27,7 +28,7 @@ export class DocumentModel {
   /**
    * 文档编号
    */
-  readonly id: string;
+  readonly id: string = uniqueId('doc');
   /**
    * 选区控制
    */
@@ -68,17 +69,16 @@ export class DocumentModel {
 
   constructor(readonly project: Project, schema: RootSchema) {
     autorun(() => {
-      this.nodes.forEach(item => {
+      this.nodes.forEach((item) => {
         if (item.parent == null && item !== this.rootNode) {
           item.purge();
         }
       });
     }, true);
     this.rootNode = this.createRootNode(schema);
-    this.id = this.rootNode.id;
     this.history = new History(
       () => this.schema,
-      schema => this.import(schema as RootSchema, true),
+      (schema) => this.import(schema as RootSchema, true),
     );
     this.setupListenActiveNodes();
   }
@@ -389,7 +389,9 @@ export class DocumentModel {
     // todo:
   }
 
-  purge() {}
+  purge() {
+    // todo:
+  }
 
   checkNesting(dropTarget: NodeParent, dragObject: DragNodeObject | DragNodeDataObject): boolean {
     let items: Array<Node | NodeSchema>;
@@ -398,7 +400,7 @@ export class DocumentModel {
     } else {
       items = dragObject.nodes;
     }
-    return items.every(item => this.checkNestingDown(dropTarget, item));
+    return items.every((item) => this.checkNestingDown(dropTarget, item));
   }
 
   checkDropTarget(dropTarget: NodeParent, dragObject: DragNodeObject | DragNodeDataObject): boolean {
@@ -408,7 +410,7 @@ export class DocumentModel {
     } else {
       items = dragObject.nodes;
     }
-    return items.every(item => this.checkNestingUp(dropTarget, item));
+    return items.every((item) => this.checkNestingUp(dropTarget, item));
   }
 
   /**

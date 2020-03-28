@@ -3,8 +3,7 @@
   "version": "0.8.0",
   "description": "低代码引擎 DEMO",
   "scripts": {
-    "start": "build-scripts start",
-    "build": "build-scripts build"
+    "start": "build-scripts start"
   },
   "dependencies": {
     "@ali/lowcode-editor-core": "^0.8",

@@ -4,6 +4,9 @@
     "react-simulator-renderer": "../react-simulator-renderer/src/index.js"
   },
   "vendor": false,
+  "devServer": {
+    "hot": false
+  },
   "publicPath": "/",
   "externals": {
     "react": "var window.React",

@@ -8,6 +8,7 @@
         "libraryExport": "default",
         "libraryTarget": "umd"
       }
-    ]
+    ],
+    "./build.plugin.js"
   ]
 }

@@ -21,7 +21,7 @@ export default {
           width: 100
         },
         config: {
-          package: '@ali/lowcode-plugin-logo',
+          package: '@ali/lowcode-plugin-sample-logo',
           version: '1.0.0'
         },
         pluginProps: {
@@ -49,14 +49,14 @@ export default {
         }
       },
       {
-        pluginKey: 'save',
+        pluginKey: 'samplePreview',
         type: 'Custom',
         props: {
           align: 'right',
           width: 64
         },
         config: {
-          package: '@ali/lowcode-plugin-save',
+          package: '@ali/lowcode-plugin-sample-preview',
           version: '1.0.0'
         }
       }
@@ -120,15 +120,12 @@ export default {
   lifeCycles: {
     init: async function init(editor) {
       const assets = await editor.utils.get('/assets.json');
-      editor.set({
-        assets,
-        componentsMap: assets.components
-      });
+      editor.set('assets', assets);
+      editor.emit('assets.loaded', assets);
 
-      editor.utils.get('/schema.json').then(res => {
-        editor.set('schema', res);
-        editor.emit('schema.reset', res);
-      });
+      const schema = await editor.utils.get('/schema.json');
+      editor.set('schema', schema);
+      editor.emit('schema.loaded', schema);
     }
   }
 };

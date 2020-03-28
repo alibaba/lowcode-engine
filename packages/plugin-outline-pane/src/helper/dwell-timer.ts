@@ -17,10 +17,7 @@ export default class DwellTimer {
     }
     this.reset();
     this.previous = node;
-    const x = Date.now();
-    console.info('set', x);
     this.timer = setTimeout(() => {
-      console.info('done', x, Date.now() - x);
       this.previous && this.decide(this.previous, this.event!);
       this.reset();
     }, this.timeout) as any;
@@ -39,7 +36,6 @@ export default class DwellTimer {
   }
 
   reset() {
-    console.info('reset');
     if (this.timer) {
       clearTimeout(this.timer);
       this.timer = undefined;

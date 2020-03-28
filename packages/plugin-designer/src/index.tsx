@@ -147,70 +147,84 @@ const SCHEMA = {
   ],
 };
 
-const BaseLibrary = ["https://g.alicdn.com/mylib/moment/2.24.0/min/moment.min.js"];
+interface DesignerPluginState {
+  componentMetadatas?: any[] | null;
+  library?: any[] | null;
+}
 
-export default class DesignerPlugin extends PureComponent<PluginProps> {
+export default class DesignerPlugin extends PureComponent<PluginProps, DesignerPluginState> {
   static displayName: 'LowcodePluginDesigner';
 
-  componentDidMount(): void {
-    const { editor } = this.props;
-    editor.on('schema.reset', this.handleSchemaReset);
-  }
-
-  componentWillUmount(): void {
-    const { editor } = this.props;
-    editor.off('schema.reset', this.handleSchemaReset);
-  }
-
-  private designer?: Designer;
-  state = {
-    componentMetadatas: [],
+  state: DesignerPluginState = {
+    componentMetadatas: null,
     library: null,
   };
-  handleSchemaReset = (schema: any): void => {
-    const { editor } = this.props;
-    const { components, packages } = editor.get('assets') || {};
 
-    this.setState({
+  private _lifeState = 0;
+
+  constructor(props: any) {
+    super(props);
+    const { editor } = this.props;
+    const assets = editor.get('assets');
+
+    if (assets) {
+      this.setupAssets(assets);
+    } else {
+      editor.once('assets.loaded', this.setupAssets);
+    }
+    this._lifeState = 1;
+  }
+
+  setupAssets = (assets: any) => {
+    if (this._lifeState < 0) {
+      return;
+    }
+    const { components, packages } = assets;
+    const state = {
       componentMetadatas: components ? Object.values(components) : [],
       library: packages ? Object.values(packages) : [],
-    });
-
-    /*
-    if (this.designer) {
-      this.designer.setSchema(schema);
+    };
+    if (this._lifeState === 0) {
+      this.state = state;
     } else {
-      editor.once('designer.ready', (designer: Designer): void => {
-        designer.setSchema(schema);
-      });
+      this.setState(state);
     }
-    */
   };
+
+  componentWillUnmount() {
+    this._lifeState = -1;
+  }
 
   handleDesignerMount = (designer: Designer): void => {
     const { editor } = this.props;
-    this.designer = designer;
     editor.set('designer', designer);
-    // editor.emit('designer.ready', designer);
+    editor.emit('designer.ready', designer);
+    const schema = editor.get('schema');
+    if (schema) {
+      designer.project.open(schema);
+    }
+    editor.on('schema.loaded', (schema) => {
+      designer.project.open(schema);
+    });
   };
 
   render(): React.ReactNode {
     const { editor } = this.props;
     const { componentMetadatas, library } = this.state;
 
-    if (!library) {
-      return 'loading';
+    if (!library || !componentMetadatas) {
+      // TODO: use a Loading
+      return 'assets loading';
     }
 
     return (
       <DesignerView
         onMount={this.handleDesignerMount}
         className="lowcode-plugin-designer"
-        defaultSchema={SCHEMA as any}
         eventPipe={editor}
         componentMetadatas={componentMetadatas}
         simulatorProps={{
-          library: BaseLibrary.concat(library || []),
+          library,
         }}
       />
     );

@@ -1,5 +1,5 @@
 import { Component, MouseEvent as ReactMouseEvent } from 'react';
-import { observer } from '@ali/lowcode-globals';
+import { observer, isFormEvent } from '@ali/lowcode-globals';
 import { Tree } from '../tree';
 import TreeNodeView from './tree-node';
 import { isRootNode, Node, DragObjectType, isShaken } from '@ali/lowcode-designer';
@@ -54,7 +54,9 @@ export default class TreeView extends Component<{ tree: Tree }> {
     const isMulti = e.metaKey || e.ctrlKey;
     designer.activeTracker.track(node);
     if (isMulti && !isRootNode(node) && selection.has(id)) {
-      selection.remove(id);
+      if (!isFormEvent(e.nativeEvent)) {
+        selection.remove(id);
+      }
     } else {
       selection.select(id);
     }
@@ -80,6 +82,9 @@ export default class TreeView extends Component<{ tree: Tree }> {
   private ignoreUpSelected = false;
   private boostEvent?: MouseEvent;
   private onMouseDown = (e: ReactMouseEvent) => {
+    if (isFormEvent(e.nativeEvent)) {
+      return;
+    }
     const treeNode = this.getTreeNodeFromEvent(e);
     if (!treeNode) {
       return;
@@ -132,8 +137,8 @@ export default class TreeView extends Component<{ tree: Tree }> {
     return (
       <div
         className="lc-outline-tree"
-        ref={shell => (this.shell = shell)}
-        onMouseDown={this.onMouseDown}
+        ref={(shell) => (this.shell = shell)}
+        onMouseDownCapture={this.onMouseDown}
         onMouseOver={this.onMouseOver}
         onClick={this.onClick}
         onMouseLeave={this.onMouseLeave}

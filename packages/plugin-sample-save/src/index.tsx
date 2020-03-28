@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@alifd/next';
+import { PluginProps } from '@ali/lowcode-editor-core';
 import './index.scss';
-import { PluginProps } from '@ali/lowcode-editor-core/lib/definitions';
 
 const Save: React.FC<PluginProps> = (props): React.ReactElement => {
   const handleClick = (): void => {

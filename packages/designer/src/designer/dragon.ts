@@ -159,23 +159,24 @@ function makeEventsHandler(
 ): (fn: (sdoc: Document) => void) => void {
   const topDoc = window.top.document;
   const sourceDoc = boostEvent.view?.document || topDoc;
-  const boostPrevented = boostEvent.defaultPrevented;
+  // TODO: optimize this logic, reduce listener
+  // const boostPrevented = boostEvent.defaultPrevented;
   const docs = new Set<Document>();
-  if (boostPrevented || isDragEvent(boostEvent)) {
-    docs.add(topDoc);
-  }
+  // if (boostPrevented || isDragEvent(boostEvent)) {
+  docs.add(topDoc);
+  // }
   docs.add(sourceDoc);
-  if (sourceDoc !== topDoc || isDragEvent(boostEvent)) {
-    sensors.forEach(sim => {
-      const sdoc = sim.contentDocument;
-      if (sdoc) {
-        docs.add(sdoc);
-      }
-    });
-  }
+  // if (sourceDoc !== topDoc || isDragEvent(boostEvent)) {
+  sensors.forEach((sim) => {
+    const sdoc = sim.contentDocument;
+    if (sdoc) {
+      docs.add(sdoc);
+    }
+  });
+  // }
 
   return (handle: (sdoc: Document) => void) => {
-    docs.forEach(doc => handle(doc));
+    docs.forEach((doc) => handle(doc));
   };
 }
 
@@ -232,7 +233,7 @@ export class Dragon {
     const masterSensors = this.getMasterSensors();
     const handleEvents = makeEventsHandler(boostEvent, masterSensors);
     const newBie = !isDragNodeObject(dragObject);
-    const forceCopyState = isDragNodeObject(dragObject) && dragObject.nodes.some(node => node.isSlotRoot);
+    const forceCopyState = isDragNodeObject(dragObject) && dragObject.nodes.some((node) => node.isSlotRoot);
     const isBoostFromDragAPI = boostEvent.type.substr(0, 4) === 'drag';
     let lastSensor: ISensor | undefined;
 
@@ -310,7 +311,7 @@ export class Dragon {
       this.setDraggingState(true);
       // ESC cancel drag
       if (!isBoostFromDragAPI) {
-        handleEvents(doc => {
+        handleEvents((doc) => {
           doc.addEventListener('keydown', checkesc, false);
         });
       }
@@ -366,7 +367,7 @@ export class Dragon {
         }
       }
 
-      handleEvents(doc => {
+      handleEvents((doc) => {
         if (isBoostFromDragAPI) {
           doc.removeEventListener('dragover', move, true);
           doc.removeEventListener('dragend', over, true);
@@ -404,7 +405,7 @@ export class Dragon {
         if (lastSim && lastSim.contentDocument === sourceDocument) {
           srcSim = lastSim;
         } else {
-          srcSim = masterSensors.find(sim => sim.contentDocument === sourceDocument);
+          srcSim = masterSensors.find((sim) => sim.contentDocument === sourceDocument);
           if (!srcSim && lastSim) {
             srcSim = lastSim;
           }
@@ -428,7 +429,7 @@ export class Dragon {
     const sourceSensor = getSourceSensor(dragObject);
     const sensors: ISensor[] = (masterSensors as ISensor[]).concat(this.sensors);
     const chooseSensor = (e: LocateEvent) => {
-      let sensor = e.sensor && e.sensor.isEnter(e) ? e.sensor : sensors.find(s => s.sensorAvailable && s.isEnter(e));
+      let sensor = e.sensor && e.sensor.isEnter(e) ? e.sensor : sensors.find((s) => s.sensorAvailable && s.isEnter(e));
       if (!sensor) {
         // TODO: enter some area like componentspanel cancel
         if (lastSensor) {
@@ -473,7 +474,7 @@ export class Dragon {
       this.setNativeSelection(false);
     }
 
-    handleEvents(doc => {
+    handleEvents((doc) => {
       if (isBoostFromDragAPI) {
         doc.addEventListener('dragover', move, true);
         // dragexit
@@ -490,7 +491,7 @@ export class Dragon {
     // future think: drag things from browser-out or a iframe-pane
 
     if (!newBie && !isBoostFromDragAPI) {
-      handleEvents(doc => {
+      handleEvents((doc) => {
         doc.addEventListener('keydown', checkcopy, false);
         doc.addEventListener('keyup', checkcopy, false);
       });
@@ -499,7 +500,7 @@ export class Dragon {
 
   private getMasterSensors(): ISimulatorHost[] {
     return this.designer.project.documents
-      .map(doc => {
+      .map((doc) => {
         // TODO: not use actived,
         if (doc.actived && doc.simulator?.sensorAvailable) {
           return doc.simulator;
@@ -512,7 +513,7 @@ export class Dragon {
   // #region ======== drag and drop helpers ============
   private setNativeSelection(enableFlag: boolean) {
     setNativeSelection(enableFlag);
-    this.designer.project.documents.forEach(doc => {
+    this.designer.project.documents.forEach((doc) => {
       doc.simulator?.setNativeSelection(enableFlag);
     });
   }
@@ -522,7 +523,7 @@ export class Dragon {
    */
   private setDraggingState(state: boolean) {
     cursor.setDragging(state);
-    this.designer.project.documents.forEach(doc => {
+    this.designer.project.documents.forEach((doc) => {
       doc.simulator?.setDraggingState(state);
     });
   }
@@ -532,7 +533,7 @@ export class Dragon {
    */
   private setCopyState(state: boolean) {
     cursor.setCopy(state);
-    this.designer.project.documents.forEach(doc => {
+    this.designer.project.documents.forEach((doc) => {
       doc.simulator?.setCopyState(state);
     });
   }
@@ -542,7 +543,7 @@ export class Dragon {
    */
   private clearState() {
     cursor.release();
-    this.designer.project.documents.forEach(doc => {
+    this.designer.project.documents.forEach((doc) => {
       doc.simulator?.clearState();
     });
   }

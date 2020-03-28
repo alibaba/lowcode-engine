@@ -1,14 +1,13 @@
 {
   "private": true,
   "scripts": {
-    "clean": "lerna clean -y",
-    "setup": "./scripts/reinstall.sh",
-    "pub": "npm run test && lerna publish --registry http://registry.npm.alibaba-inc.com",
-    "lint": "eslint -p tsconfig.json",
-    "lint:fix": "eslint --fix -p tsconfig.json",
-    "build": "lerna run build",
+    "clean": "rm -rf ./packages/*/lib ./packages/*/es ./packages/*/dist ./packages/*/build",
+    "setup": "./scripts/setup.sh",
+    "start": "./scripts/start.sh",
+    "build": "lerna exec -- npm run build",
     "test": "lerna run test",
     "test:snapshot": "lerna run test:snapshot",
+    "pub": "npm run test && lerna publish",
     "commit": "git-cz"
   },
   "devDependencies": {
@@ -36,14 +35,16 @@
       "**/@alife/theme-lowcode-*"
     ]
   },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
-  },
   "lint-staged": {
     "*.{tsx,ts}": [
-      "eslint --fix",
+      "eslint --quiet",
       "git add"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "config": {
     "commitizen": {

@@ -18,7 +18,7 @@ export class DesignerView extends Component<DesignerProps> {
     const props = this.props;
     if (
       nextProps.className !== props.className ||
-      nextProps.style != props.style ||
+      nextProps.style !== props.style ||
       nextProps.dragGhostComponent !== props.dragGhostComponent
     ) {
       return true;
@@ -31,6 +31,7 @@ export class DesignerView extends Component<DesignerProps> {
     if (onMount) {
       onMount(this.designer);
     }
+    this.designer.postEvent('mount', this.designer);
   }
 
   componentWillMount() {

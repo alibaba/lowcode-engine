@@ -1,6 +1,11 @@
 {
   "version": "1.0.0",
   "packages": {
+    "moment": {
+      "package": "moment",
+      "urls": ["https://g.alicdn.com/mylib/moment/2.24.0/min/moment.min.js"],
+      "library": "moment"
+    },
     "@alifd/next": {
       "title": "fusion组件库",
       "package": "@alifd/next",

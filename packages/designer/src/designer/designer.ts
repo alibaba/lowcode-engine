@@ -153,10 +153,9 @@ export class Designer {
       setupSelection();
       setupHistory();
     });
+    this.postEvent('designer.init', this);
     setupSelection();
     setupHistory();
-
-    this.postEvent('designer.ready', this);
   }
 
   postEvent(event: string, ...args: any[]) {
@@ -223,7 +222,8 @@ export class Designer {
   }
 
   private props?: DesignerProps;
-  setProps(props: DesignerProps) {
+  setProps(nextProps: DesignerProps) {
+    const props = this.props ? { ...this.props, ...nextProps } : nextProps;
     if (this.props) {
       // check hotkeys
       // TODO:

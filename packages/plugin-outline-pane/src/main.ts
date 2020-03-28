@@ -68,6 +68,7 @@ class TreeMaster {
     const doc = this.designer?.currentDocument;
     if (doc) {
       const id = doc.id;
+      console.info(id);
       if (this.treeMap.has(id)) {
         return this.treeMap.get(id)!;
       }
@@ -96,13 +97,16 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
   get master() {
     return this._master;
   }
-  readonly id = uniqueId('tree');
+  @computed get currentTree() {
+    return this._master?.currentTree;
+  }
+  readonly id = uniqueId('outline');
 
   constructor(readonly editor: any) {
     if (editor.designer) {
       this.setupDesigner(editor.designer);
     } else {
-      editor.once('designer.ready', (designer: Designer) => {
+      editor.once('designer.mount', (designer: Designer) => {
         this.setupDesigner(designer);
       });
     }
@@ -404,7 +408,7 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
 
     let items: TreeNode[] | null = null;
     let slotsRect: DOMRect | undefined;
-    let focusSlots: boolean = false;
+    let focusSlots = false;
     // isSlotContainer
     if (isSlotContainer) {
       slotsRect = this.getTreeSlotsRect(treeNode);
@@ -491,7 +495,7 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
   /**
    * @see IScrollBoard
    */
-  scrollToNode(treeNode: TreeNode, detail?: any, tryTimes: number = 0) {
+  scrollToNode(treeNode: TreeNode, detail?: any, tryTimes = 0) {
     if (tryTimes < 1 && this.tryScrollAgain) {
       (window as any).cancelIdleCallback(this.tryScrollAgain);
       this.tryScrollAgain = null;
@@ -576,7 +580,7 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
     // todo purge treeMaster if needed
   }
 
-  private _sensorAvailable: boolean = false;
+  private _sensorAvailable = false;
   /**
    * @see ISensor
    */
@@ -644,13 +648,7 @@ function checkRecursion(parent: Node | undefined | null, dragObject: DragObject)
 function getPosFromEvent(
   { target }: LocateEvent,
   stop: Element,
-):
-  | null
-  | 'unchanged'
-  | {
-      nodeId: string;
-      focusSlots: boolean;
-    } {
+): null | 'unchanged' | { nodeId: string; focusSlots: boolean } {
   if (!target || !stop.contains(target)) {
     return null;
   }

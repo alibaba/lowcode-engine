@@ -7,6 +7,7 @@ module.exports = ({ onGetWebpackConfig }) => {
       .use(TsconfigPathsPlugin, [{
         configFile: "./tsconfig.json"
       }]);
+    config.plugins.delete('hot');
     config.devServer.hot(false);
   });
 };

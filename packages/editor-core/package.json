@@ -22,27 +22,20 @@
   "dependencies": {
     "debug": "^4.1.1",
     "events": "^3.1.0",
-    "intl-messageformat": "^7.8.4",
+    "intl-messageformat": "^8.3.1",
     "lodash": "^4.17.15",
     "prop-types": "^15.5.8",
     "store": "^2.0.12",
-    "whatwg-fetch": "^3.0.0"
+    "whatwg-fetch": "^3.0.0",
+    "react": "^16.8.0",
+    "@alifd/next": "1.x"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.3",
-    "@ice/spec": "^0.1.1",
     "@types/lodash": "^4.14.149",
     "@types/react": "^16.9.13",
     "@types/react-dom": "^16.9.4",
-    "build-plugin-component": "^0.2.7-1",
-    "eslint": "^6.0.1",
-    "prettier": "^1.19.1",
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0"
-  },
-  "peerDependencies": {
-    "react": "^16.8.0",
-    "@alifd/next": "1.x"
+    "build-plugin-component": "^0.2.10"
   },
   "license": "MIT",
   "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-editor-core@0.0.1/build/index.html"

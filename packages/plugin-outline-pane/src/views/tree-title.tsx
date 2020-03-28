@@ -16,7 +16,9 @@ import { IconSlot } from '../icons/slot';
 export default class TreeTitle extends Component<{
   treeNode: TreeNode;
 }> {
-  state = {
+  state: {
+    editing: boolean;
+  } = {
     editing: false,
   };
 
@@ -30,6 +32,7 @@ export default class TreeTitle extends Component<{
     this.setState({
       editing: false,
     });
+    this.lastInput = undefined;
   }
 
   private saveEdit = (e: FocusEvent<HTMLInputElement> | KeyboardEvent<HTMLInputElement>) => {
@@ -47,15 +50,15 @@ export default class TreeTitle extends Component<{
     }
   };
 
-  componentDidUpdate() {
-    // TODO:
-    /*
-    const { current } = this.inputRef;
-    if (current) {
-      current.select();
+  private lastInput?: HTMLInputElement;
+  private setCaret = (input: HTMLInputElement | null) => {
+    if (!input || this.lastInput === input) {
+      return;
     }
-    */
-  }
+    input.focus();
+    input.select();
+    input.selectionStart = input.selectionEnd;
+  };
 
   render() {
     const { treeNode } = this.props;
@@ -90,16 +93,19 @@ export default class TreeTitle extends Component<{
               className="tree-node-title-input"
               defaultValue={treeNode.titleLabel}
               onBlur={this.saveEdit}
+              ref={this.setCaret}
               onKeyUp={this.handleKeyUp}
             />
           ) : (
             <Fragment>
               <Title title={treeNode.title} />
-              {node.slotFor && (<a className="tree-node-tag slot">
-                {/* todo: click redirect to prop */}
-                <IconSlot />
-                <EmbedTip>{intl('Slot for {prop}', { prop: node.slotFor.key })}</EmbedTip>
-              </a>)}
+              {node.slotFor && (
+                <a className="tree-node-tag slot">
+                  {/* todo: click redirect to prop */}
+                  <IconSlot />
+                  <EmbedTip>{intl('Slot for {prop}', { prop: node.slotFor.key })}</EmbedTip>
+                </a>
+              )}
               {node.hasLoop() && (
                 <a className="tree-node-tag loop">
                   {/* todo: click todo something */}
@@ -125,9 +131,7 @@ export default class TreeTitle extends Component<{
 }
 
 @observer
-class LockBtn extends Component<{
-  treeNode: TreeNode;
-}> {
+class LockBtn extends Component<{ treeNode: TreeNode }> {
   shouldComponentUpdate() {
     return false;
   }
@@ -136,7 +140,7 @@ class LockBtn extends Component<{
     return (
       <div
         className="tree-node-lock-btn"
-        onClick={e => {
+        onClick={(e) => {
           e.stopPropagation();
           treeNode.setLocked(!treeNode.locked);
         }}
@@ -149,9 +153,7 @@ class LockBtn extends Component<{
 }
 
 @observer
-class HideBtn extends Component<{
-  treeNode: TreeNode;
-}> {
+class HideBtn extends Component<{ treeNode: TreeNode }> {
   shouldComponentUpdate() {
     return false;
   }
@@ -160,7 +162,7 @@ class HideBtn extends Component<{
     return (
       <div
         className="tree-node-hide-btn"
-        onClick={e => {
+        onClick={(e) => {
           e.stopPropagation();
           treeNode.setHidden(!treeNode.hidden);
         }}
@@ -173,9 +175,7 @@ class HideBtn extends Component<{
 }
 
 @observer
-class ExpandBtn extends Component<{
-  treeNode: TreeNode;
-}> {
+class ExpandBtn extends Component<{ treeNode: TreeNode }> {
   shouldComponentUpdate() {
     return false;
   }
@@ -187,7 +187,7 @@ class ExpandBtn extends Component<{
     return (
       <div
         className="tree-node-expand-btn"
-        onClick={e => {
+        onClick={(e) => {
           if (treeNode.expanded) {
             e.stopPropagation();
           }
@@ -200,3 +200,52 @@ class ExpandBtn extends Component<{
     );
   }
 }
+
+/*
+interface Point {
+  clientX: number;
+  clientY: number;
+}
+
+function setCaret(point: Point) {
+  debugger;
+  const range = getRangeFromPoint(point);
+  if (range) {
+    selectRange(range);
+    setTimeout(() => selectRange(range), 1);
+  }
+}
+
+function getRangeFromPoint(point: Point): Range | undefined {
+  const x = point.clientX;
+  const y = point.clientY;
+  let range;
+  let pos: CaretPosition | null = null;
+  if (document.caretRangeFromPoint) {
+    range = document.caretRangeFromPoint(x, y);
+  } else if ((pos = document.caretPositionFromPoint(x, y))) {
+    range = document.createRange();
+    range.setStart(pos.offsetNode, pos.offset);
+    range.collapse(true);
+
+  }
+  return range;
+}
+
+function selectRange(range: Range) {
+  const selection = document.getSelection();
+  if (selection) {
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+}
+
+function setCaretAfter(elem) {
+  const range = document.createRange();
+  const node = elem.lastChild;
+  if (!node) return;
+  range.setStartAfter(node);
+  range.setEndAfter(node);
+  selectRange(range);
+}
+*/
