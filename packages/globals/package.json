@@ -6,11 +6,11 @@
   "module": "es/index.js",
   "files": [
     "lib",
-    "es",
-    "dist"
+    "es"
   ],
   "scripts": {
     "build": "build-scripts build --skip-demo",
+    "cloud-build": "build-scripts build --skip-demo --config cloud-build.json",
     "test": "ava",
     "test:snapshot": "ava --update-snapshots"
   },

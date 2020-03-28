@@ -4,10 +4,10 @@
     "clean": "rm -rf ./packages/*/lib ./packages/*/es ./packages/*/dist ./packages/*/build",
     "setup": "./scripts/setup.sh",
     "start": "./scripts/start.sh",
-    "build": "lerna exec -- npm run build",
+    "build": "lerna run build",
     "test": "lerna run test",
     "test:snapshot": "lerna run test:snapshot",
-    "pub": "npm run test && lerna publish",
+    "pub": "lerna publish",
     "commit": "git-cz"
   },
   "devDependencies": {

@@ -1,15 +1,16 @@
 {
   "entry": {
-    "index": "src/index.jsx",
-    "react-simulator-renderer": "../react-simulator-renderer/src/index.js"
+    "lowcode-demo": "src/index.jsx"
   },
   "vendor": false,
-  "devServer": {
-    "hot": false
-  },
-  "publicPath": "/",
   "externals": {
-    "prop-types": "var window.PropTypes"
+    "prop-types": "PropTypes",
+    "@ali/lowcode-globals": "LCEGlobals"
+  },
+  "minify": false,
+  "sourcemap": true,
+  "outputAssetsPath": {
+    "js": "", "css": ""
   },
   "plugins": [
     ["build-plugin-react-app"],
@@ -24,7 +25,6 @@
       {
         "locales": ["zh-cn"]
       }
-    ],
-    "./build.plugin.js"
+    ]
   ]
 }

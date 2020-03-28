@@ -9,16 +9,26 @@ echo "Deploy ${PWD} -> ${BUILD_DEST} ..."
 echo "build globals"
 cd packages/globals
 tnpm ii
-tnpm run build
+tnpm run cloud-build
 cd $WORK_DIR
-mv packages/globals/dist $BUILD_DEST
 
 # build simulator-renderer
 echo "build simulator-renderer"
 cd packages/react-simulator-renderer
 tnpm ii
-tnpm run build
+tnpm run cloud-build
 cd $WORK_DIR
-mv packages/react-simulator-renderer/dist/* $BUILD_DEST
 
+# build lowcode demo
+echo "build lowcode demo"
+cd packages/demo
+tnpm ii
+tnpm run cloud-build
+cd $WORK_DIR
+
+mv packages/demo/build $BUILD_DEST
+mv packages/react-simulator-renderer/dist/* $BUILD_DEST
+mv packages/globals/dist/* $BUILD_DEST
+
+cp html/* $BUILD_DEST
 echo "complete"

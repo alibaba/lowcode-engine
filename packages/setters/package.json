@@ -52,5 +52,8 @@
     "require": [
       "ts-node/register"
     ]
+  },
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
   }
 }

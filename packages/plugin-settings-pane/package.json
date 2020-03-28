@@ -40,5 +40,8 @@
       "ts-node/register"
     ]
   },
-  "license": "MIT"
+  "license": "MIT",
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
+  }
 }

@@ -34,5 +34,8 @@
     "build-plugin-component": "^0.2.7-1",
     "build-plugin-fusion": "^0.1.0",
     "build-plugin-moment-locales": "^0.1.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
   }
 }

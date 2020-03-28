@@ -1,14 +1,6 @@
 {
   "plugins": [
-    [
-      "build-plugin-component",
-      {
-        "filename": "globals",
-        "library": "LCEGlobals",
-        "libraryExport": "default",
-        "libraryTarget": "umd"
-      }
-    ],
+    "build-plugin-component",
     "build-plugin-fusion",
     ["build-plugin-moment-locales", {
       "locales": ["zh-cn"]

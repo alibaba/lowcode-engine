@@ -38,5 +38,7 @@
     "build-plugin-component": "^0.2.10"
   },
   "license": "MIT",
-  "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-editor-core@0.0.1/build/index.html"
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
+  }
 }

@@ -36,9 +36,7 @@
     "build-plugin-fusion": "^0.1.0",
     "build-plugin-moment-locales": "^0.1.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ice-lab/react-materials/tree/master/scaffolds/ice-ts"
-  },
-  "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-engine-skeleton@0.0.1/build/index.html"
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
+  }
 }
