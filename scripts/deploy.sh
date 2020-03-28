@@ -22,8 +22,8 @@ cd $WORK_DIR
 # build lowcode demo
 echo "build lowcode demo"
 cd packages/demo
-tnpm ii
-tnpm run cloud-build
+npm i
+npm run cloud-build
 cd $WORK_DIR
 
 mv packages/demo/build $BUILD_DEST
