@@ -22,7 +22,7 @@ cd $WORK_DIR
 # build lowcode demo
 echo "build lowcode demo"
 cd packages/demo
-npm i
+npm i --registry=http://registry.npm.alibaba-inc.com
 npm run cloud-build
 cd $WORK_DIR
 
