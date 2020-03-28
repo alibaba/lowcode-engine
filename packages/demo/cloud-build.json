@@ -4,8 +4,10 @@
   },
   "vendor": false,
   "externals": {
-    "prop-types": "PropTypes",
-    "@ali/lowcode-globals": "LCEGlobals"
+    "react": "window.React",
+    "react-dom": "window.ReactDOM",
+    "prop-types": "window.PropTypes",
+    "@ali/lowcode-globals": "window.LCEGlobals"
   },
   "minify": false,
   "sourcemap": true,

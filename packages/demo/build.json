@@ -9,7 +9,10 @@
   },
   "publicPath": "/",
   "externals": {
-    "prop-types": "var window.PropTypes"
+    "react": "window.React",
+    "react-dom": "window.ReactDOM",
+    "prop-types": "window.PropTypes",
+    "@alifd/next": "window.Next"
   },
   "plugins": [
     ["build-plugin-react-app"],
