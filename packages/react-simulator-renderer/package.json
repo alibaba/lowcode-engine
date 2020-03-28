@@ -18,7 +18,7 @@
   "dependencies": {
     "@ali/lowcode-globals": "^0.8",
     "@ali/lowcode-designer": "^0.8",
-    "@ali/lowcode-react-renderer": "^0.8",
+    "@ali/lowcode-react-renderer": "0.8.0-1",
     "@recore/obx": "^1.0.8",
     "@recore/obx-react": "^1.0.7",
     "classnames": "^2.2.6",

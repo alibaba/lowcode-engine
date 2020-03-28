@@ -1,5 +1,6 @@
 # project custom
 build
+dist
 packages/*/lib/
 packages/*/es/
 packages/*/dist/

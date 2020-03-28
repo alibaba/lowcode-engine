@@ -4,12 +4,7 @@
     "type": "command",
     "command": {
       "cmd": [
-        "BUILD_WORK_DIR=$(pwd)/packages/globals tnpm ii",
-        "BUILD_WORK_DIR=$(pwd)/packages/globals npm run build",
-        "BUILD_WORK_DIR=$(pwd)/packages/react-simulator-renderer tnpm ii",
-        "BUILD_WORK_DIR=$(pwd)/packages/react-simulator-renderer npm run build",
-        "mv packages/react-simulator-renderer/dist $BUILD_DEST",
-        "mv packages/globals/dist/* $BUILD_DEST"
+        "./scripts/deploy.sh $BUILD_DEST"
       ]
     }
   }
