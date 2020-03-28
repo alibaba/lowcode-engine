@@ -1,4 +1,4 @@
-import { uniqueId } from '@ali/lowcode-globals';
+import { uniqueId } from '../../utils';
 import { Component } from 'react';
 import { saveTips } from './tip-handler';
 import { TipConfig } from '../../types';
