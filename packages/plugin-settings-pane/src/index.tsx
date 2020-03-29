@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import { Tab, Breadcrumb } from '@alifd/next';
 import { Title, createIcon } from '@ali/lowcode-globals';
 import { Node } from '@ali/lowcode-designer';
+import OutlinePane, { getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import { SettingsMain, SettingField, isSettingField } from './main';
 import SettingsPane, { createSettingFieldView } from './settings-pane';
 import './transducers/register';
@@ -67,6 +68,7 @@ export default class SettingsMainView extends Component {
       // 未选中节点，提示选中 或者 显示根节点设置
       return (
         <div className="lc-settings-main">
+          <OutlinePaneEntry main={this.main} />
           <div className="lc-settings-notice">
             <p>请在左侧画布选中节点</p>
           </div>
@@ -78,6 +80,7 @@ export default class SettingsMainView extends Component {
       // todo: future support 获取设置项交集编辑
       return (
         <div className="lc-settings-main">
+          <OutlinePaneEntry main={this.main} />
           <div className="lc-settings-notice">
             <p>请选中同一类型节点编辑</p>
           </div>
@@ -89,6 +92,7 @@ export default class SettingsMainView extends Component {
     if (items.length > 5 || items.some(item => !isSettingField(item) || !item.isGroup)) {
       return (
         <div className="lc-settings-main">
+          <OutlinePaneEntry main={this.main} />
           {this.renderBreadcrumb()}
           <div className="lc-settings-body">
             <SettingsPane target={this.main} />
@@ -99,6 +103,7 @@ export default class SettingsMainView extends Component {
 
     return (
       <div className="lc-settings-main">
+        <OutlinePaneEntry main={this.main} />
         <Tab
           navClassName="lc-settings-tabs"
           animation={false}
@@ -114,6 +119,26 @@ export default class SettingsMainView extends Component {
         </Tab>
       </div>
     );
+  }
+}
+
+class OutlinePaneEntry extends PureComponent<{ main: SettingsMain }> {
+  state = {
+    outlineInited: false,
+  };
+  private dispose = this.props.main.onceOutlineVisible(() => {
+    this.setState({
+      outlineInited: true,
+    });
+  });
+  componentWillUnmount() {
+    this.dispose();
+  }
+  render() {
+    if (!this.state.outlineInited) {
+      return null;
+    }
+    return <OutlinePane editor={this.props.main.editor} inSettings />;
   }
 }
 

@@ -15,6 +15,7 @@
     "@ali/lowcode-plugin-settings-pane": "^0.8.0",
     "@ali/lowcode-plugin-outline-pane": "^0.8.0",
     "@ali/lowcode-plugin-undo-redo": "^0.8.0",
+    "@ali/lowcode-plugin-zh-en": "^0.8.0",
     "@ali/lowcode-plugin-sample-logo": "^0.8.0",
     "@ali/lowcode-plugin-sample-preview": "^0.8.0",
     "@alife/theme-lowcode-dark": "^0.1.0",

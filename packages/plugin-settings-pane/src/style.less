@@ -129,4 +129,18 @@
       overflow-y: auto;
     }
   }
+  .lc-outline-pane {
+    position: absolute;
+    z-index: 100;
+    background-color: white;
+    top: 0;
+    bottom: 0;
+    display: none;
+  }
+}
+
+html.lc-cursor-dragging:not(.lowcode-has-fixed-tree) {
+  .lc-settings-main .lc-outline-pane {
+    display: block;
+  }
 }

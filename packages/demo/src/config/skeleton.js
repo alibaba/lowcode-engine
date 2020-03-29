@@ -91,6 +91,18 @@ export default {
           version: '^1.0.0'
         },
         pluginProps: {}
+      },
+      {
+        pluginKey: 'zhEn',
+        type: 'Custom',
+        props: {
+          align: 'bottom',
+        },
+        config: {
+          package: '@ali/lowcode-plugin-zh-en',
+          version: '^1.0.0'
+        },
+        pluginProps: {}
       }
     ],
     rightArea: [
