@@ -23,7 +23,7 @@ export interface IAppConfig {
   containerId?: string;
 }
 
-export default abstract class Provider {
+export default class Provider {
   globalComponents: any = {};
   globalUtils: any = {};
   routerConfig: { [key: string]: string } = {};
