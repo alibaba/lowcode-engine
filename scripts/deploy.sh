@@ -7,8 +7,8 @@ echo "Deploy ${PWD} -> ${BUILD_DEST} ..."
 
 # basic environment preparing
 tnpm install yarn --install-node=10
-export PATH=$PWD/node_modules/.bin:$PATH
 tnpm install -g lerna
+export PATH=$PWD/node_modules/.bin:$PATH
 
 echo ""
 echo "Use node version:"
