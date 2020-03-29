@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "dependencies": {
+    "tslib": "^1.9.3",
+    "typescript": "^3.2.2"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/css-modules-typescript-loader",
+      "**/@alife/theme-lowcode-*"
+    ]
+  }
+}

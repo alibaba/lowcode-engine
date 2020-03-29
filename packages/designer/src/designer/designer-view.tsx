@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import classNames from 'classnames';
+import { TipContainer } from '@ali/lowcode-globals';
 import BuiltinDragGhostComponent from './drag-ghost';
 import { Designer, DesignerProps } from './designer';
 import { ProjectView } from '../project';
@@ -46,6 +47,7 @@ export class DesignerView extends Component<DesignerProps> {
       <div className={classNames('lc-designer', className)} style={style}>
         <DragGhost designer={this.designer} />
         <ProjectView designer={this.designer} />
+        <TipContainer />
       </div>
     );
   }

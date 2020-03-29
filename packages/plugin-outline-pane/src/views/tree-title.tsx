@@ -57,7 +57,8 @@ export default class TreeTitle extends Component<{
     }
     input.focus();
     input.select();
-    input.selectionStart = input.selectionEnd;
+    // 光标定位最后一个
+    // input.selectionStart = input.selectionEnd;
   };
 
   render() {
@@ -195,7 +196,6 @@ class ExpandBtn extends Component<{ treeNode: TreeNode }> {
         }}
       >
         <IconArrowRight size="small" />
-        <EmbedTip>{treeNode.expanded ? intl('Collapse') : intl('Expand')}</EmbedTip>
       </div>
     );
   }

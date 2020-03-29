@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Tab, Breadcrumb } from '@alifd/next';
-import { Title, TipContainer, createIcon } from '@ali/lowcode-globals';
+import { Title, createIcon } from '@ali/lowcode-globals';
 import { Node } from '@ali/lowcode-designer';
 import { SettingsMain, SettingField, isSettingField } from './main';
 import SettingsPane, { createSettingFieldView } from './settings-pane';
@@ -99,7 +99,6 @@ export default class SettingsMainView extends Component {
 
     return (
       <div className="lc-settings-main">
-        <TipContainer />
         <Tab
           navClassName="lc-settings-tabs"
           animation={false}
