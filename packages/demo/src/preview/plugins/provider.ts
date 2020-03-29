@@ -1,5 +1,5 @@
 import { createElement } from 'react';
-import { Provider, Boot, Router, navigator } from '@ali/lowcode-runtime';
+import { Provider, boot, Router } from '@ali/lowcode-runtime';
 import appConfig from '../config/app';
 import builtInComps from '../config/components';
 import componentsMap from '../config/componentsMap';
@@ -94,16 +94,13 @@ class PreviewProvider extends Provider {
       return App;
     }
     const { componentName: layoutName, props: layoutProps } = this.layout as any;
-    const Layout = Boot.getLayout(layoutName);
+    const Layout = boot.getLayout(layoutName);
     if (Layout) {
       App = (props: any) =>
         createElement(
           Layout,
           {
             ...layoutProps,
-            onNavChange: ({ selectedKey }: any) => {
-              navigator.goto(`/${selectedKey}`);
-            },
           },
           RouterView({ props }),
         );
