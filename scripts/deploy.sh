@@ -5,10 +5,10 @@ BUILD_DEST=$1
 
 echo "Deploy ${PWD} -> ${BUILD_DEST} ..."
 
+cd deploy-space
 # basic environment preparing
-tnpm install yarn --install-node=10
-tnpm install -g lerna
-export PATH=$PWD/node_modules/.bin:$PATH
+tnpm install yarn lerna --install-node=10
+export PATH=$WORK_DIR/deploy-space/node_modules/.bin:$PATH
 
 echo ""
 echo "Use node version:"
@@ -18,8 +18,7 @@ echo ""
 # set source
 yarn config set registry https://registry.npm.alibaba-inc.com
 
-# goto workdir
-cd deploy-space
+# work
 mkdir packages
 ln -s $WORK_DIR/packages/demo packages/demo
 ln -s $WORK_DIR/packages/react-simulator-renderer packages/react-simulator-renderer
