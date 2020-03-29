@@ -13,5 +13,5 @@
       "**/@alife/theme-lowcode-*"
     ]
   },
-  "engines" : { "node" : ">10" }
+  "engines" : { "node" : "^10" }
 }

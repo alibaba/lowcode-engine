@@ -26,7 +26,7 @@
     "tslib": "^1.9.3",
     "typescript": "^3.2.2"
   },
-  "engines" : { "node" : ">10" },
+  "engines" : { "node" : "^10" },
   "workspaces": {
     "packages": [
       "packages/*"

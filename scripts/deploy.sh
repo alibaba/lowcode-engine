@@ -6,9 +6,14 @@ BUILD_DEST=$1
 echo "Deploy ${PWD} -> ${BUILD_DEST} ..."
 
 # basic environment preparing
-tnpm install yarn lerna --install-node=10
+tnpm install yarn --install-node=10
 export PATH=$PWD/node_modules/.bin:$PATH
+tnpm install -g lerna
+
+echo ""
+echo "Use node version:"
 node -v
+echo ""
 
 # set source
 yarn config set registry https://registry.npm.alibaba-inc.com
