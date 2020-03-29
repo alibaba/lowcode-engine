@@ -8,7 +8,8 @@ echo "Deploy ${PWD} -> ${BUILD_DEST} ..."
 cd deploy-space
 # basic environment preparing
 tnpm install yarn lerna --install-node=10
-export PATH=$WORK_DIR/deploy-space/node_modules/.bin:$PATH
+mv node_modules env
+export PATH=$WORK_DIR/deploy-space/env/.bin:$PATH
 
 echo ""
 echo "Use node version:"
@@ -20,15 +21,16 @@ yarn config set registry https://registry.npm.alibaba-inc.com
 
 # work
 mkdir packages
-cp -r $WORK_DIR/packages/demo packages/demo
-cp -r $WORK_DIR/packages/react-simulator-renderer packages/react-simulator-renderer
-cp -r $WORK_DIR/packages/globals packages/globals
+mv $WORK_DIR/packages/demo packages/demo
+mv $WORK_DIR/packages/react-simulator-renderer packages/react-simulator-renderer
+mv $WORK_DIR/packages/globals packages/globals
+yarn
 lerna bootstrap
 lerna run cloud-build --stream
 
-mv packages/demo/build $BUILD_DEST
-mv packages/react-simulator-renderer/dist/* $BUILD_DEST
-mv packages/globals/dist/* $BUILD_DEST
+cp -r packages/demo/build $BUILD_DEST
+cp -r packages/react-simulator-renderer/dist/* $BUILD_DEST
+cp -r packages/globals/dist/* $BUILD_DEST
 
 cp html/* $BUILD_DEST
 echo "complete"
