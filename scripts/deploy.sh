@@ -20,9 +20,9 @@ yarn config set registry https://registry.npm.alibaba-inc.com
 
 # work
 mkdir packages
-ln -s $WORK_DIR/packages/demo packages/demo
-ln -s $WORK_DIR/packages/react-simulator-renderer packages/react-simulator-renderer
-ln -s $WORK_DIR/packages/globals packages/globals
+cp -r $WORK_DIR/packages/demo packages/demo
+cp -r $WORK_DIR/packages/react-simulator-renderer packages/react-simulator-renderer
+cp -r $WORK_DIR/packages/globals packages/globals
 lerna bootstrap
 lerna run cloud-build --stream
 
