@@ -1,12 +1,10 @@
 import { Component, isValidElement, ReactElement, ReactNode } from 'react';
 import { Dialog, Search, Input } from '@alifd/next';
+import Editor from '@ali/lowcode-editor-core';
 import './style.less';
 
 export default class EventDialog extends Component<{
-  dialigVisiable?: boolean;
-  closeDialog?: () => void;
-  submitDialog?: (value?: string) => void;
-  bindEventName?: string;
+  editor:Editor,
 }> {
   private eventList: any[] = [
     {
@@ -27,18 +25,33 @@ export default class EventDialog extends Component<{
   ];
 
   state = {
+    visiable:false,
     selectedEventName: '',
     eventName: '',
   };
 
-  componentWillReceiveProps(nextProps: any) {
+  openDialog = (bindEventName:String) => {
     this.setState({
-      eventName: nextProps.bindEventName,
+      visiable:true,
+      eventName:bindEventName
+    })
+  }
+
+  closeDialog = () => {
+    this.setState({
+      visiable:false
+    })
+  }
+
+  componentDidMount (){
+    const {editor} = this.props;
+    editor.on('eventBindDialog.open',(bindEventName:String)=>{
+      this.openDialog(bindEventName)
     });
   }
 
   initEventName = () => {
-    const { bindEventName } = this.props;
+    const { bindEventName } = this.state;
     let eventName = bindEventName;
     this.eventList.map((item) => {
       if (item.name === eventName) {
@@ -76,14 +89,15 @@ export default class EventDialog extends Component<{
   onSearchEvent = (searchEventName: String) => {};
 
   onOk = () => {
-    this.props.submitDialog?.(this.state.eventName);
+    const {editor} = this.props;
+    editor.emit('event-setter.bindEvent',this.state.eventName);
+    this.closeDialog();
   };
 
   render() {
-    const { dialigVisiable, closeDialog } = this.props;
-    const { selectedEventName, eventName } = this.state;
+    const { selectedEventName, eventName,visiable} = this.state;
     return (
-      <Dialog visible={dialigVisiable} title="事件绑定" onClose={closeDialog} onCancel={closeDialog} onOk={this.onOk}>
+      <Dialog visible={visiable} title="事件绑定" onClose={this.closeDialog} onCancel={this.closeDialog} onOk={this.onOk}>
         <div className="event-dialog-body">
           <div className="dialog-left-container">
             <div className="dialog-small-title">事件选择</div>
