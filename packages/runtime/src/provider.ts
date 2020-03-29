@@ -24,17 +24,18 @@ export interface IAppConfig {
 }
 
 export default abstract class Provider {
-  public globalComponents: any = {};
-  public globalUtils: any = {};
-  public routerConfig: { [key: string]: string } = {};
-  public layout: { componentName: string; props: any } | null = null;
+  globalComponents: any = {};
+  globalUtils: any = {};
+  routerConfig: { [key: string]: string } = {};
+  layout: { componentName: string; props: any } | null = null;
+  componentsMap: any = null;
   private lazyElementsMap: { [key: string]: any } = {};
 
   constructor() {
     this.init();
   }
 
-  public create(appkey: string): Promise<IAppData> {
+  create(appkey: string): Promise<IAppData> {
     return new Promise(async (resolve, reject) => {
       try {
         const config = await this.getAppData(appkey);
@@ -49,21 +50,21 @@ export default abstract class Provider {
     });
   }
 
-  public async init() {
+  async init() {
     console.log('init');
   }
 
-  public async getAppData(appkey: string, restOptions?: any): Promise<object> {
+  async getAppData(appkey: string, restOptions?: any): Promise<object> {
     console.log('getAppData');
     return {};
   }
 
-  public async getPageData(pageId: string, restOptions?: any): Promise<any> {
+  async getPageData(pageId: string, restOptions?: any): Promise<any> {
     console.log('getPageData');
     return;
   }
 
-  public getLazyComponent(pageId: string, props: any): ReactElement | null {
+  getLazyComponent(pageId: string, props: any): ReactElement | null {
     if (!pageId) {
       return null;
     }
@@ -82,7 +83,7 @@ export default abstract class Provider {
     }
   }
 
-  public createApp() {
+  createApp() {
     console.log('createApp');
     return;
   }

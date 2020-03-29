@@ -18,7 +18,7 @@ export default class LazyComponent extends Component<IProps, IState> {
     };
   }
 
-  public async componentDidMount() {
+  async componentDidMount() {
     const { getPageData } = this.props;
     if (getPageData && !this.state.schema) {
       const schema = await getPageData();
@@ -26,7 +26,7 @@ export default class LazyComponent extends Component<IProps, IState> {
     }
   }
 
-  public render() {
+  render() {
     const { getPageData, ...restProps } = this.props;
     const { schema } = this.state;
     const Renderer = Boot.getRenderer();
