@@ -1,0 +1,24 @@
+@header-height: 52px;
+
+.avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.basic-shell {
+  min-height: 100vh;
+  .next-shell-header {
+    height: @header-height;
+  }
+  .next-shell-main {
+    flex: 1;
+    display: flex;
+    flex-flow: column;
+    min-height: calc(100% - @header-height);
+    .next-shell-sub-main {
+      flex: 1;
+    }
+  }
+}
