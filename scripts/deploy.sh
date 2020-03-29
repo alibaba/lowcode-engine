@@ -24,7 +24,6 @@ mkdir packages
 cp -r $WORK_DIR/packages/demo packages/demo
 cp -r $WORK_DIR/packages/react-simulator-renderer packages/react-simulator-renderer
 cp -r $WORK_DIR/packages/globals packages/globals
-yarn
 lerna bootstrap
 lerna run cloud-build --stream
 
