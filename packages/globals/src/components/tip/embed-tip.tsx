@@ -12,7 +12,6 @@ export default class EmbedTip extends Component<TipConfig> {
 
   render() {
     saveTips(this.id, this.props);
-    console.info(this.props);
     return <meta data-role="tip" data-tip-id={this.id} />;
   }
 }

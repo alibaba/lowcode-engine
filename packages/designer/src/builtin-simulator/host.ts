@@ -787,7 +787,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       const row = el ? isRowContainer(el.parentElement!) : false;
       const vertical = inline || row;
 
-      console.info('mm', inline, vertical, row, el);
       // TODO: fix type
       const near: any = {
         node: nearNode,

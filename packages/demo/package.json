@@ -1,5 +1,6 @@
 {
   "name": "@ali/lowcode-demo",
+  "private": true,
   "version": "0.8.0",
   "description": "低代码引擎 DEMO",
   "scripts": {

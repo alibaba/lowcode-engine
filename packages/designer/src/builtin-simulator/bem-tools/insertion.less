@@ -8,6 +8,9 @@
   height: 5px;
   border: 2px solid var(--color-brand-light);
   border-radius: 2px;
+  &.invalid {
+    border-color: red;
+  }
 
   &.cover {
     top: 0;
@@ -17,6 +20,9 @@
     border: none;
     opacity: 0.3;
     border-radius: 0;
+    &.invalid {
+      background-color: red;
+    }
   }
 
   &.vertical {
@@ -24,8 +30,5 @@
     left: -1.5px;
     width: 5px;
     height: auto;
-  }
-  &.invalid {
-    background-color: red;
   }
 }
