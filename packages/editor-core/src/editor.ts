@@ -11,6 +11,8 @@ import {
   PluginSet,
 } from './definitions';
 
+import pluginFactory from './pluginFactory';
+
 import * as editorUtils from './utils';
 
 const { registShortCuts, transformToPromise, unRegistShortCuts } = editorUtils;
@@ -92,7 +94,10 @@ export default class Editor extends EventEmitter {
   constructor(config: EditorConfig, components: PluginClassSet, utils?: Utils) {
     super();
     this.config = config;
-    this.components = components;
+    this.components = {};
+    Object.entries(components).forEach(([key, value]): void => {
+      this.components[key] = pluginFactory(value);
+    });
     this.utils = { ...editorUtils, ...utils };
     instance = this;
   }

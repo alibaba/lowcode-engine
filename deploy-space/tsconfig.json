@@ -32,6 +32,7 @@
     "resolveJsonModule": true,
     // skip type checking of declaration files
     "skipLibCheck": true,
+    "outDir": "lib"
   },
   "exclude": ["**/test", "**/lib", "**/es", "node_modules"]
 }
