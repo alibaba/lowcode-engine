@@ -95,7 +95,6 @@ export default class EventBindDialog extends Component<{
   };
 
   render() {
-    debugger;
     const { selectedEventName, eventName,visiable} = this.state;
     return (
       <Dialog visible={visiable} title="事件绑定" onClose={this.closeDialog} onCancel={this.closeDialog} onOk={this.onOk}>
