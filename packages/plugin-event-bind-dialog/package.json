@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-event-bind-dialog",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "alibaba lowcode editor event bind dialog plugin",
   "files": [
     "es",

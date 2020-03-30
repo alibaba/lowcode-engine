@@ -2,6 +2,7 @@
   "name": "@ali/lowcode-globals",
   "version": "0.8.0",
   "description": "Globals api for Ali lowCode engine",
+  "license": "MIT",
   "main": "lib/index.js",
   "module": "es/index.js",
   "files": [
@@ -14,6 +15,16 @@
     "test": "ava",
     "test:snapshot": "ava --update-snapshots"
   },
+  "ava": {
+    "compileEnhancements": false,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "snapshotDir": "test/fixtures/__snapshots__"
+  },
   "dependencies": {
     "@alifd/next": "^1.19.16",
     "@recore/obx": "^1.0.8",
@@ -23,26 +34,15 @@
     "react-dom": "^16.7.0"
   },
   "devDependencies": {
+    "@alib/build-scripts": "^0.1.18",
     "@types/classnames": "^2.2.7",
     "@types/node": "^13.7.1",
     "@types/react": "^16",
     "@types/react-dom": "^16",
-    "@alib/build-scripts": "^0.1.18",
     "build-plugin-component": "^0.2.11",
     "build-plugin-fusion": "^0.1.0",
     "build-plugin-moment-locales": "^0.1.0"
   },
-  "ava": {
-    "compileEnhancements": false,
-    "snapshotDir": "test/fixtures/__snapshots__",
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "ts-node/register"
-    ]
-  },
-  "license": "MIT",
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"
   }
