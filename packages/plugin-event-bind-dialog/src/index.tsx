@@ -1,9 +1,9 @@
 import { Component, isValidElement, ReactElement, ReactNode } from 'react';
 import { Dialog, Search, Input } from '@alifd/next';
 import Editor from '@ali/lowcode-editor-core';
-import './style.less';
+import './index.scss';
 
-export default class EventDialog extends Component<{
+export default class EventBindDialog extends Component<{
   editor:Editor,
 }> {
   private eventList: any[] = [
@@ -44,8 +44,8 @@ export default class EventDialog extends Component<{
   }
 
   componentDidMount (){
-    const {editor} = this.props;
-    editor.on('eventBindDialog.open',(bindEventName:String)=>{
+    const {editor,config} = this.props;
+    editor.on(`${config.pluginKey}.openDialog`,(bindEventName:String)=>{
       this.openDialog(bindEventName)
     });
   }

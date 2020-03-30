@@ -124,6 +124,13 @@ export default {
           package: '@ali/lowcode-plugin-designer',
           version: '1.0.0'
         }
+      },
+      {
+        pluginKey: 'eventBindDialog',
+        config: {
+          package: '@ali/lowcode-plugin-event-bind-dialog',
+          version: '1.0.0'
+        }
       }
     ]
   },
