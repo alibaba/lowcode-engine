@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 import { uniqueId } from '@ali/lowcode-globals';
 import { ComponentMeta, Node, Designer, Selection } from '@ali/lowcode-designer';
 import { TitleContent, FieldExtraProps, SetterType, CustomView, FieldConfig, isCustomView } from '@ali/lowcode-globals';
-import { getTreeMaster } from 'plugin-outline-pane/src/main';
+import { getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 
 export interface SettingTarget {
   // 所设置的节点集，至少一个

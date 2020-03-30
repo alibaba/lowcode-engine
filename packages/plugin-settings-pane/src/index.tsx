@@ -2,7 +2,7 @@ import React, { Component, PureComponent } from 'react';
 import { Tab, Breadcrumb } from '@alifd/next';
 import { Title, createIcon } from '@ali/lowcode-globals';
 import { Node } from '@ali/lowcode-designer';
-import OutlinePane, { getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
+import OutlinePane from '@ali/lowcode-plugin-outline-pane';
 import { SettingsMain, SettingField, isSettingField } from './main';
 import SettingsPane, { createSettingFieldView } from './settings-pane';
 import './transducers/register';

@@ -1,7 +1,7 @@
 import renderer from './renderer';
 
 if (typeof window !== 'undefined') {
-  window.SimulatorRenderer = renderer;
+  (window as any).SimulatorRenderer = renderer;
 }
 
 export default renderer;

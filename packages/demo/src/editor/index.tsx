@@ -13,6 +13,7 @@ registerSetters();
 
 const LCE_CONTAINER = document.getElementById('lce-container');
 
+console.info('aeafeawef')
 if (!LCE_CONTAINER) {
   throw new Error('当前页面不存在 <div id="lce-container"></div> 节点.');
 }

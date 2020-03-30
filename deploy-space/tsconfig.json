@@ -5,9 +5,7 @@
     // Target latest version of ECMAScript.
     "target": "esnext",
     // Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'.
-    "module": "commonjs",
-    // Search under node_modules for non-relative imports.
-    "moduleResolution": "node",
+    "module": "esnext",
     // Process & infer types from .js files.
     "allowJs": true,
     // Report errors in .js files.

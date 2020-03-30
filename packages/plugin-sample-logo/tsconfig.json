@@ -1,10 +1,7 @@
 {
   "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "outDir": "lib",
-    "target": "es6",
-    "jsx": "react",
-  },
-  "include": ["src/*.ts", "src/*.tsx"],
-  "exclude": ["node_modules", "build", "public"]
+  "compilerOptions": {},
+  "include": [
+    "./src/"
+  ]
 }
