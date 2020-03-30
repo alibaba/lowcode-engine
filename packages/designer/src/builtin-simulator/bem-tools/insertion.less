@@ -4,20 +4,25 @@
   left: 0;
   z-index: 12;
   pointer-events: none !important;
-  background-color: var(--color-brand-light);
-  height: 3px;
+  background-color: white;
+  height: 5px;
+  border: 2px solid var(--color-brand-light);
+  border-radius: 2px;
 
   &.cover {
     top: 0;
     height: auto;
     width: auto;
+    background-color: var(--color-brand-light);
+    border: none;
     opacity: 0.3;
+    border-radius: 0;
   }
 
   &.vertical {
     top: 0;
     left: -1.5px;
-    width: 3px;
+    width: 5px;
     height: auto;
   }
   &.invalid {

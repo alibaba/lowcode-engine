@@ -86,7 +86,7 @@ export function isChildInline(child: Element | Text, win?: Window) {
     return true;
   }
   const style = (win || getWindow(child)).getComputedStyle(child);
-  return /^inline/.test(style.getPropertyValue('display'));
+  return /^inline/.test(style.getPropertyValue('display')) || /^(left|right)$/.test(style.getPropertyValue('float'));
 }
 
 export function getRectTarget(rect: Rect | null) {
