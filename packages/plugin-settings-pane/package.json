@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-settings-pane",
-  "version": "0.8.6",
+  "version": "0.8.7",
   "description": "Settings pane for Ali lowCode engine",
   "files": [
     "es",
@@ -14,10 +14,10 @@
     "test:snapshot": "ava --update-snapshots"
   },
   "dependencies": {
-    "@ali/lowcode-designer": "^0.8.5",
+    "@ali/lowcode-designer": "^0.9.0",
     "@ali/lowcode-editor-core": "^0.8.4",
-    "@ali/lowcode-globals": "^0.8.4",
-    "@ali/lowcode-plugin-outline-pane": "^0.8.5",
+    "@ali/lowcode-globals": "^0.9.0",
+    "@ali/lowcode-plugin-outline-pane": "^0.8.6",
     "@alifd/next": "^1.19.16",
     "classnames": "^2.2.6",
     "react": "^16"

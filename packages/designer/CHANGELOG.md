@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.0"></a>
+# [0.9.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.8.5...@ali/lowcode-designer@0.9.0) (2020-03-30)
+
+
+### Bug Fixes
+
+* **designer:** fix insertion style ([82c10d2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/82c10d2))
+
+
+### Features
+
+* **designer:** add blank page logic ([aeeb9ba](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/aeeb9ba))
+* **designer:** add builtin hotkeys ([2ec5883](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2ec5883))
+
+
+
+
 <a name="0.8.5"></a>
 ## [0.8.5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.8.4...@ali/lowcode-designer@0.8.5) (2020-03-30)
 

@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-outline-pane",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "description": "Outline pane for Ali lowCode engine",
   "files": [
     "es",
@@ -14,8 +14,8 @@
     "test:snapshot": "ava --update-snapshots"
   },
   "dependencies": {
-    "@ali/lowcode-designer": "^0.8.5",
-    "@ali/lowcode-globals": "^0.8.4",
+    "@ali/lowcode-designer": "^0.9.0",
+    "@ali/lowcode-globals": "^0.9.0",
     "@alifd/next": "^1.19.16",
     "classnames": "^2.2.6",
     "react": "^16",
