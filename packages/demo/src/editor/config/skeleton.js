@@ -131,6 +131,13 @@ export default {
           package: '@ali/lowcode-plugin-event-bind-dialog',
           version: '1.0.0'
         }
+      },
+      {
+        pluginKey: 'variableBindDialog',
+        config: {
+          package: '@ali/lowcode-plugin-variable-bind-dialog',
+          version: '1.0.0'
+        }
       }
     ]
   },
