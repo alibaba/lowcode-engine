@@ -1,150 +1,133 @@
 export default {
-  version: '^1.0.2',
-  theme: {
-    fusion: {
-      package: '@alife/theme-lowcode-light',
-      version: '^0.1.0'
+  "skeleton": {
+    "config": {
+      "package": "@ali/lowcode-editor-skeleton",
+      "version": "^0.8.0"
+    }
+  },
+  "theme": {
+    "fusion": {
+      "package": "@alife/theme-lowcode-light",
+      "version": "^0.1.0"
     },
-    scss: ''
+    "scss": ""
   },
-  constants: {
-    namespace: 'page'
+  "constants": {
+    "namespace": "page"
   },
-  utils: [],
-  plugins: {
-    topArea: [
-      {
-        pluginKey: 'logo',
-        type: 'Custom',
-        props: {
-          align: 'left',
-          width: 100
-        },
-        config: {
-          package: '@ali/lowcode-plugin-sample-logo',
-          version: '1.0.0'
-        },
-        pluginProps: {
-          logo: 'https://img.alicdn.com/tfs/TB1hoI9x1H2gK0jSZFEXXcqMpXa-146-40.png',
-          href: '/'
-        }
+  "utils": [],
+  "plugins": {
+    "topArea": [{
+      "pluginKey": "logo",
+      "type": "Custom",
+      "props": {
+        "align": "left",
+        "width": 100
       },
-      {
-        pluginKey: 'undoRedo',
-        type: 'Custom',
-        props: {
-          align: 'right',
-          width: 88
-        },
-        config: {
-          package: '@ali/lowcode-plugin-undo-redo',
-          version: '1.0.0'
-        }
+      "config": {
+        "package": "@ali/lowcode-plugin-sample-logo",
+        "version": "^0.8.0"
       },
-      {
-        pluginKey: 'divider',
-        type: 'Divider',
-        props: {
-          align: 'right'
-        }
-      },
-      {
-        pluginKey: 'samplePreview',
-        type: 'Custom',
-        props: {
-          align: 'right',
-          width: 64
-        },
-        config: {
-          package: '@ali/lowcode-plugin-sample-preview',
-          version: '1.0.0'
-        }
+      "pluginProps": {
+        "logo": "https://img.alicdn.com/tfs/TB1hoI9x1H2gK0jSZFEXXcqMpXa-146-40.png",
+        "href": "/"
       }
-    ],
-    leftArea: [
-      {
-        pluginKey: 'componentsPane',
-        type: 'PanelIcon',
-        props: {
-          align: 'top',
-          icon: 'zujianku',
-          title: '组件库'
-        },
-        config: {
-          package: '@ali/iceluna-plugin-components-pane',
-          version: '0.0.1'
-        },
-        pluginProps: {
-          disableAppComponent: true
-        }
+    }, {
+      "pluginKey": "undoRedo",
+      "type": "Custom",
+      "props": {
+        "align": "right",
+        "width": 88
       },
-      {
-        pluginKey: 'outlinePane',
-        type: 'PanelIcon',
-        props: {
-          align: 'top',
-          icon: 'shuxingkongjian',
-          title: '大纲树'
-        },
-        config: {
-          package: '@ali/lowcode-plugin-outline-pane',
-          version: '^1.0.0'
-        },
-        pluginProps: {}
-      },
-      {
-        pluginKey: 'zhEn',
-        type: 'Custom',
-        props: {
-          align: 'bottom',
-        },
-        config: {
-          package: '@ali/lowcode-plugin-zh-en',
-          version: '^1.0.0'
-        },
-        pluginProps: {}
+      "config": {
+        "package": "@ali/lowcode-plugin-undo-redo",
+        "version": "^0.8.0"
       }
-    ],
-    rightArea: [
-      {
-        pluginKey: 'settingsPane',
-        type: 'Panel',
-        props: {},
-        config: {
-          package: '@ali/lowcode-plugin-settings-pane',
-          version: '^1.0.0'
-        },
-        pluginProps: {}
+    }, {
+      "pluginKey": "divider",
+      "type": "Divider",
+      "props": {
+        "align": "right"
       }
-    ],
-    centerArea: [
-      {
-        pluginKey: 'designer',
-        config: {
-          package: '@ali/lowcode-plugin-designer',
-          version: '1.0.0'
-        }
+    }, {
+      "pluginKey": "samplePreview",
+      "type": "Custom",
+      "props": {
+        "align": "right",
+        "width": 64
       },
-      {
-        pluginKey: 'eventBindDialog',
-        config: {
-          package: '@ali/lowcode-plugin-event-bind-dialog',
-          version: '1.0.0'
-        }
-      },
-      {
-        pluginKey: 'variableBindDialog',
-        config: {
-          package: '@ali/lowcode-plugin-variable-bind-dialog',
-          version: '1.0.0'
-        }
+      "config": {
+        "package": "@ali/lowcode-plugin-sample-preview",
+        "version": "^0.8.0"
       }
-    ]
+    }],
+    "leftArea": [{
+      "pluginKey": "componentsPane",
+      "type": "PanelIcon",
+      "props": {
+        "align": "top",
+        "icon": "zujianku",
+        "title": "组件库",
+        "floatable": true
+      },
+      "config": {
+        "package": "@ali/lowcode-plugin-components-pane",
+        "version": "^0.8.0"
+      },
+      "pluginProps": {}
+    }, {
+      "pluginKey": "outlinePane",
+      "type": "PanelIcon",
+      "props": {
+        "align": "top",
+        "icon": "shuxingkongjian",
+        "title": "大纲树"
+      },
+      "config": {
+        "package": "@ali/lowcode-plugin-outline-pane",
+        "version": "^0.8.0"
+      },
+      "pluginProps": {}
+    }, {
+      "pluginKey": "zhEn",
+      "type": "Custom",
+      "props": {
+        "align": "bottom"
+      },
+      "config": {
+        "package": "@ali/lowcode-plugin-zh-en",
+        "version": "^0.8.0"
+      },
+      "pluginProps": {}
+    }],
+    "rightArea": [{
+      "pluginKey": "settingsPane",
+      "type": "Panel",
+      "props": {},
+      "config": {
+        "package": "@ali/lowcode-plugin-settings-pane",
+        "version": "^0.8.0"
+      },
+      "pluginProps": {}
+    }],
+    "centerArea": [{
+      "pluginKey": "designer",
+      "config": {
+        "package": "@ali/lowcode-plugin-designer",
+        "version": "^0.8.0"
+      }
+    }, {
+      "pluginKey": "eventBindDialog",
+      "config": {
+        "package": "@ali/lowcode-plugin-event-bind-dialog",
+        "version": "^0.8.0"
+      }
+    }]
   },
-  hooks: [],
-  shortCuts: [],
-  lifeCycles: {
-    init: async function init(editor) {
+  "hooks": [],
+  "shortCuts": [],
+  "lifeCycles": {
+    "init": async function init(editor) {
       const assets = await editor.utils.get('./assets.json');
       editor.set('assets', assets);
       editor.emit('assets.loaded', assets);

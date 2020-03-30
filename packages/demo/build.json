@@ -16,7 +16,9 @@
     "@alifd/next": "window.Next"
   },
   "plugins": [
-    ["build-plugin-react-app"],
+    [
+      "build-plugin-react-app"
+    ],
     [
       "build-plugin-fusion",
       {
@@ -26,7 +28,9 @@
     [
       "build-plugin-moment-locales",
       {
-        "locales": ["zh-cn"]
+        "locales": [
+          "zh-cn"
+        ]
       }
     ],
     "./build.plugin.js"
