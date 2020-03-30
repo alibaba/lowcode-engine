@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.3"></a>
+## [0.8.3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.2...@ali/lowcode-demo@0.8.3) (2020-03-30)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-demo
+
 <a name="0.8.2"></a>
 ## 0.8.2 (2020-03-30)
 
