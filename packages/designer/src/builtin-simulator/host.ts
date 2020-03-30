@@ -786,6 +786,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       const inline = el ? isChildInline(el) : false;
       const row = el ? isRowContainer(el.parentElement!) : false;
       const vertical = inline || row;
+
       // TODO: fix type
       const near: any = {
         node: nearNode,

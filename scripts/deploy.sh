@@ -7,9 +7,9 @@ echo "Deploy ${PWD} -> ${BUILD_DEST} ..."
 
 cd deploy-space
 # basic environment preparing
-tnpm install yarn lerna --install-node=10
-mv node_modules env
-export PATH=$WORK_DIR/deploy-space/env/.bin:$PATH
+tnpm install @ali/tyarn lerna --install-node=10
+mv node_modules .env
+export PATH=$WORK_DIR/deploy-space/.env/.bin:$PATH
 
 echo ""
 echo "Use node version:"
@@ -17,7 +17,7 @@ node -v
 echo ""
 
 # set source
-yarn config set registry https://registry.npm.alibaba-inc.com
+# yarn config set registry https://registry.npm.alibaba-inc.com
 
 # work
 mkdir packages

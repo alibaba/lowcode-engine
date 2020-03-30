@@ -1,0 +1,35 @@
+// color-setter
+.lowcode-color-box {
+  margin-right: -5px;
+  padding: 3px 0 3px 3px;
+  width: 26px;
+  height: 26px;
+  display: inline-block;
+  div {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ddd;
+  }
+}
+.next-balloon-normal.lowcode-color-content {
+  padding: 0;
+  background: #ffffff;
+  border-radius: 0;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1);
+  &:after {
+    display: none;
+  }
+  .sketch-picker {
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    .flexbox-fix {
+      input {
+        width: 100% !important;
+        min-width: 30px;
+        text-align: center;
+      }
+    }
+  }
+}

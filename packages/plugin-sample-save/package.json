@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-sample-save",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "alibaba lowcode editor sample save plugin",
   "files": [
     "es",
@@ -19,9 +19,9 @@
   ],
   "author": "xiayang.xy",
   "dependencies": {
+    "@ali/lowcode-editor-core": "^0.8.1",
     "@alifd/next": "^1.x",
-    "react": "^16.8.1",
-    "@ali/lowcode-editor-core": "^0.8.0"
+    "react": "^16.8.1"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.3",

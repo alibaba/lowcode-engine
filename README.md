@@ -11,11 +11,12 @@
 #### 跑起来：
 
 - `npm run setup`
+- `npm start`
 
 #### 开发提交：
 
 - `git add <your-files>`
-- `npm run commit`
+- `npm run commit` # 在根目录
 
 ## 发布
 

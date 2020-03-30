@@ -146,6 +146,7 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
       }
     };
 
+    // FIXME: dirty connect to others
     if (at === '__IN_SETTINGS__') {
       setup();
     } else {

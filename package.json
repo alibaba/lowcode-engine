@@ -10,13 +10,13 @@
     ]
   },
   "scripts": {
-    "build": "lerna run build",
+    "build": "lerna run build --stream",
     "clean": "rm -rf ./packages/*/lib ./packages/*/es ./packages/*/dist ./packages/*/build",
     "commit": "git-cz",
     "pub": "lerna publish",
     "setup": "./scripts/setup.sh",
     "start": "./scripts/start.sh",
-    "test": "lerna run test",
+    "test": "lerna run test --stream",
     "test:snapshot": "lerna run test:snapshot"
   },
   "lint-staged": {
