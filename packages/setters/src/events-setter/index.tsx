@@ -2,8 +2,7 @@ import { Component, isValidElement, ReactElement, ReactNode } from 'react';
 import { Radio, Menu, Table, Icon, Dialog } from '@alifd/next';
 import nativeEvents from './native-events';
 
-import './style.less';
-import EventDialog from './event-dialog';
+import './index.scss';
 const { SubMenu, Item, Group, Divider } = Menu;
 const RadioGroup = Radio.Group;
 
@@ -38,7 +37,6 @@ export default class EventsSetter extends Component<{
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { value } = nextProps;
-    debugger;
     if (value !== prevState.eventDataList) {
       return {
         value,
@@ -301,7 +299,7 @@ export default class EventsSetter extends Component<{
   openDialog = (bindEventName: String) => {
     const {editor} = this.props.field;
     this.bindEventName = bindEventName;
-    editor.emit('eventBindDialog.open',bindEventName);
+    editor.emit('eventBindDialog.openDialog',bindEventName);
   };
 
 
@@ -398,10 +396,6 @@ export default class EventsSetter extends Component<{
             />
           </Table>
         </div>
-
-        <EventDialog
-          editor={editor}
-        ></EventDialog>
       </div>
     );
   }
