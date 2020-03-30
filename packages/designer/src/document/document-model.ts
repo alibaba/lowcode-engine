@@ -59,6 +59,7 @@ export class DocumentModel {
   }
 
   private _modalNode?: NodeParent;
+  private _blank?: boolean;
   get modalNode() {
     return this._modalNode;
   }
@@ -67,7 +68,7 @@ export class DocumentModel {
     return this.modalNode || this.rootNode;
   }
 
-  constructor(readonly project: Project, schema: RootSchema) {
+  constructor(readonly project: Project, schema?: RootSchema) {
     autorun(() => {
       this.nodes.forEach((item) => {
         if (item.parent == null && item !== this.rootNode) {
@@ -75,12 +76,25 @@ export class DocumentModel {
         }
       });
     }, true);
-    this.rootNode = this.createRootNode(schema);
+
+    if (!schema) {
+      this._blank = true;
+    }
+
+    this.rootNode = this.createRootNode(schema || {
+      componentName: 'Page',
+      fileName: ''
+    });
+
     this.history = new History(
       () => this.schema,
       (schema) => this.import(schema as RootSchema, true),
     );
     this.setupListenActiveNodes();
+  }
+
+  @computed isBlank() {
+    return this._blank && !this.isModified();
   }
 
   readonly designer = this.project.designer;
@@ -295,6 +309,7 @@ export class DocumentModel {
   }
 
   private mountSimulator(simulator: ISimulatorHost) {
+    // TODO: 多设备 simulator 支持
     this._simulator = simulator;
     // TODO: emit simulator mounted
   }
@@ -386,7 +401,8 @@ export class DocumentModel {
    * 从项目中移除
    */
   remove() {
-    // todo:
+    // this.project.removeDocument(this);
+    // todo: ...
   }
 
   purge() {

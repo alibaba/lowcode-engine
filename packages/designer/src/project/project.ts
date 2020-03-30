@@ -14,11 +14,11 @@ export class Project {
   // TODO: 考虑项目级别 History
 
   constructor(readonly designer: Designer, schema?: ProjectSchema) {
-    this.setSchema(schema);
+    this.load(schema);
   }
 
   @computed get currentDocument() {
-    return this.documents.find(doc => doc.actived);
+    return this.documents.find((doc) => doc.actived);
   }
 
   /**
@@ -27,30 +27,45 @@ export class Project {
   getSchema(): ProjectSchema {
     return {
       ...this.data,
-      componentsTree: this.documents.map(doc => doc.schema),
+      // todo: future change this filter
+      componentsTree: this.documents.filter((doc) => !doc.isBlank()).map((doc) => doc.schema),
     };
   }
 
   /**
    * 整体设置项目 schema
+   *
+   * @param autoOpen true 自动打开文档 string 指定打开的文件
    */
-  setSchema(schema?: ProjectSchema) {
+  load(schema?: ProjectSchema, autoOpen?: boolean | string) {
+    this.unload();
+    // load new document
     this.data = {
       version: '1.0.0',
       componentsMap: [],
       componentsTree: [],
       ...schema,
     };
-    if (this.documents.length > 0) {
-      this.documents.forEach(doc => doc.purge());
-      this.documents.length = 0;
+
+    if (autoOpen) {
+      if (autoOpen === true) {
+        // auto open first document or open a blank page
+        this.open(this.data.componentsTree[0]);
+      } else {
+        // auto open should be string of fileName
+        this.open(autoOpen);
+      }
     }
-    this.open(
-      this.data.componentsTree[0] || {
-        componentName: 'Page',
-        fileName: '',
-      },
-    );
+  }
+
+  /**
+   * 卸载当前项目数据
+   */
+  unload() {
+    if (this.documents.length < 1) {
+      return;
+    }
+    this.documents.forEach((doc) => doc.remove());
   }
 
   /**
@@ -86,14 +101,23 @@ export class Project {
       | string,
   ): any {}
 
-  open(doc: string | DocumentModel | RootSchema): void {
+  open(doc?: string | DocumentModel | RootSchema): void {
+    if (!doc) {
+      const got = this.documents.find((item) => item.isBlank());
+      if (got) {
+        return got.open();
+      }
+      doc = new DocumentModel(this);
+      this.documents.push(doc);
+      return doc.open();
+    }
     if (typeof doc === 'string') {
-      const got = this.documents.find(item => item.fileName === doc);
+      const got = this.documents.find((item) => item.fileName === doc);
       if (got) {
         return got.open();
       }
 
-      const data = this.data.componentsTree.find(data => data.fileName === doc);
+      const data = this.data.componentsTree.find((data) => data.fileName === doc);
       if (data) {
         doc = new DocumentModel(this, data);
         this.documents.push(doc);
@@ -113,7 +137,7 @@ export class Project {
   }
 
   checkExclusive(actived: DocumentModel) {
-    this.documents.forEach(doc => {
+    this.documents.forEach((doc) => {
       if (doc !== actived) {
         doc.suspense();
       }
@@ -122,7 +146,7 @@ export class Project {
   }
 
   closeOthers(opened: DocumentModel) {
-    this.documents.forEach(doc => {
+    this.documents.forEach((doc) => {
       if (doc !== opened) {
         doc.close();
       }
