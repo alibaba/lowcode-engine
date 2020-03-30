@@ -6,7 +6,7 @@ import './index.scss';
 
 interface Color {
   rgb: any;
-  onChange: function;
+  onChange: () => void;
 }
 
 export interface PluginProps {
