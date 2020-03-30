@@ -1,7 +1,8 @@
 {
   "entry": {
-    "index": "src/index.jsx",
-    "react-simulator-renderer": "../react-simulator-renderer/src/index.js"
+    "index": "src/index.ts",
+    "react-simulator-renderer": "../react-simulator-renderer/src/index.ts",
+    "preview": "src/preview.ts"
   },
   "vendor": false,
   "devServer": {
