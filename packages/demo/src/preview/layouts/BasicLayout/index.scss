@@ -1,4 +1,4 @@
-@header-height: 52px;
+$header-height: 52px;
 
 .avatar {
   width: 24px;
@@ -10,13 +10,13 @@
 .basic-shell {
   min-height: 100vh;
   .next-shell-header {
-    height: @header-height;
+    height: $header-height;
   }
   .next-shell-main {
     flex: 1;
     display: flex;
     flex-flow: column;
-    min-height: calc(100% - @header-height);
+    min-height: calc(100% - $header-height);
     .next-shell-sub-main {
       flex: 1;
     }

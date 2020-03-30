@@ -1,5 +1,5 @@
 import { Component, createElement } from 'react';
-import boot from './boot';
+import boot from '../../boot';
 
 interface IProps {
   getPageData: () => any;
