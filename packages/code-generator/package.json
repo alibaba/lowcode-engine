@@ -7,7 +7,8 @@
     "lib"
   ],
   "scripts": {
-    "build": "rimraf lib && tsc",
+    "compile": "rimraf lib && tsc",
+    "build": "rimraf lib && webpack",
     "demo": "ts-node -r tsconfig-paths/register ./src/demo/main.ts",
     "test": "ava"
   },
@@ -19,8 +20,12 @@
   "devDependencies": {
     "ava": "^1.0.1",
     "rimraf": "^3.0.2",
+    "ts-loader": "^6.2.2",
     "ts-node": "^7.0.1",
-    "tsconfig-paths": "^3.9.0"
+    "tsconfig-paths": "^3.9.0",
+    "tsconfig-paths-webpack-plugin": "^3.2.0",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
   },
   "ava": {
     "compileEnhancements": false,

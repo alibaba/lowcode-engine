@@ -1,15 +1,22 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "module": "es2015",
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "isolatedModules": true,
+    "target": "es5",
+    "strictNullChecks": true,
+    "inlineSources": false,
+    "lib": ["es2015"],
+    "downlevelIteration": true,
     "paths": {
       "@/*": ["./src/*"]
     },
     "outDir": "./lib",
-    "lib": [
-      "es6"
-    ],
     "types": ["node"],
-    "baseUrl": ".",            /* Base directory to resolve non-absolute module names. */
+    "baseUrl": "."            /* Base directory to resolve non-absolute module names. */
   },
   "include": [
     "src/**/*"
