@@ -21,12 +21,15 @@ import { Tree } from './tree';
 import TreeNode from './tree-node';
 import { IndentTrack } from './helper/indent-track';
 import DwellTimer from './helper/dwell-timer';
+import { EventEmitter } from 'events';
 
 export interface IScrollBoard {
   scrollToNode(treeNode: TreeNode, detail?: any): void;
 }
 
 class TreeMaster {
+  private emitter = new EventEmitter();
+  private currentFixed?: OutlineMain;
   constructor(readonly designer: Designer) {
     designer.dragon.onDragstart((e) => {
       const tree = this.currentTree;
@@ -34,6 +37,9 @@ class TreeMaster {
         tree.document.selection.getTopNodes().forEach((node) => {
           tree.getTreeNode(node).setExpanded(false);
         });
+      }
+      if (!this.currentFixed) {
+        this.emitter.emit('enable-builtin');
       }
     });
     designer.activeTracker.onChange(({ node, detail }) => {
@@ -55,6 +61,23 @@ class TreeMaster {
     });
   }
 
+  setFixed(entry: OutlineMain) {
+    this.currentFixed = entry;
+  }
+
+  unFixed(entry: OutlineMain) {
+    if (entry === this.currentFixed) {
+      this.currentFixed = undefined;
+    }
+  }
+
+  onceEnableBuiltin(fn: () => void): () => void {
+    this.emitter.once('enable-builtin', fn);
+    return () => {
+      this.emitter.removeListener('enable-builtin', fn);
+    }
+  }
+
   private boards = new Set<IScrollBoard>();
   addBoard(board: IScrollBoard) {
     this.boards.add(board);
@@ -63,12 +86,16 @@ class TreeMaster {
     this.boards.delete(board);
   }
 
+  purge() {
+    this.emitter.removeAllListeners();
+    // todo others purge
+  }
+
   private treeMap = new Map<string, Tree>();
   @computed get currentTree(): Tree | null {
     const doc = this.designer?.currentDocument;
     if (doc) {
       const id = doc.id;
-      console.info(id);
       if (this.treeMap.has(id)) {
         return this.treeMap.get(id)!;
       }
@@ -82,7 +109,7 @@ class TreeMaster {
 }
 
 const mastersMap = new Map<Designer, TreeMaster>();
-function getTreeMaster(designer: Designer): TreeMaster {
+export function getTreeMaster(designer: Designer): TreeMaster {
   let master = mastersMap.get(designer);
   if (!master) {
     master = new TreeMaster(designer);
@@ -102,13 +129,45 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
   }
   readonly id = uniqueId('outline');
 
-  constructor(readonly editor: any) {
-    if (editor.designer) {
-      this.setupDesigner(editor.designer);
+  private fixed = false;
+  constructor(readonly editor: any, at?: string) {
+    let inited = false;
+    const setup = () => {
+      if (inited) {
+        return false;
+      }
+      inited = true;
+      if (editor.designer) {
+        this.setupDesigner(editor.designer);
+      } else {
+        editor.once('designer.mount', (designer: Designer) => {
+          this.setupDesigner(designer);
+        });
+      }
+    };
+
+    if (at === '__IN_SETTINGS__') {
+      setup();
     } else {
-      editor.once('designer.mount', (designer: Designer) => {
-        this.setupDesigner(designer);
+      editor.on('leftPanel.show', (key: string) => {
+        if (key === at) {
+          setup();
+          if (this.master) {
+            this.master.setFixed(this);
+          } else {
+            this.fixed = true;
+          }
+          document.documentElement.classList.add('lowcode-has-fixed-tree');
+        } else {
+          document.documentElement.classList.remove('lowcode-has-fixed-tree');
+          if (this.master) {
+            this.master.unFixed(this);
+          } else {
+            this.fixed = false;
+          }
+        }
       });
+      // editor.once('outlinePane.visible', setup);
     }
   }
 
@@ -570,6 +629,9 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
     this._designer = designer;
     this._master = getTreeMaster(designer);
     this._master.addBoard(this);
+    if (this.fixed) {
+      this._master.setFixed(this);
+    }
     designer.dragon.addSensor(this);
     this.scroller = designer.createScroller(this);
   }

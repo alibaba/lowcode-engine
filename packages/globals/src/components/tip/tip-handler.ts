@@ -16,7 +16,7 @@ function findTip(target: HTMLElement | null): TipOptions | null {
     if (target.dataset && target.dataset.tip) {
       return {
         children: target.dataset.tip,
-        direction: target.dataset.direction || target.dataset.dir,
+        direction: (target.dataset.direction || target.dataset.dir) as any,
         theme: target.dataset.theme,
         target,
       };
