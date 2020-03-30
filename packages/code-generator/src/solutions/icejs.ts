@@ -21,6 +21,8 @@ import template from '@/plugins/project/framework/icejs/template';
 import i18n from '@/plugins/project/i18n';
 import utils from '@/plugins/project/utils';
 
+import { prettier } from '@/postprocessor';
+
 export default function createIceJsProjectBuilder(): IProjectBuilder {
   return createProjectBuilder({
     template,
@@ -56,5 +58,6 @@ export default function createIceJsProjectBuilder(): IProjectBuilder {
       htmlEntry: [iceJsEntryHtml],
       packageJSON: [iceJsPackageJSON],
     },
+    postProcessors: [prettier],
   });
 }

@@ -14,7 +14,9 @@
   },
   "dependencies": {
     "@ali/am-eslint-config": "*",
+    "@types/prettier": "^1.19.1",
     "change-case": "^3.1.0",
+    "prettier": "^2.0.2",
     "short-uuid": "^3.1.1"
   },
   "devDependencies": {

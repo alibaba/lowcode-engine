@@ -141,3 +141,5 @@ export interface IProjectPlugins {
 export interface IProjectBuilder {
   generateProject(schema: IProjectSchema): Promise<IResultDir>;
 }
+
+export type PostProcessor = (content: string, fileType: string) => string;
