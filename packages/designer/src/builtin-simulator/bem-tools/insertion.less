@@ -1,34 +1,28 @@
 .lc-insertion {
   position: absolute;
-  top: -1.5px;
+  top: -2px;
   left: 0;
   z-index: 12;
   pointer-events: none !important;
-  background-color: white;
-  height: 5px;
-  border: 2px solid var(--color-brand-light);
-  border-radius: 2px;
-  &.invalid {
-    border-color: red;
-  }
+  background-color: var(--color-brand-light);
+  height: 4px;
 
   &.cover {
     top: 0;
     height: auto;
     width: auto;
-    background-color: var(--color-brand-light);
     border: none;
     opacity: 0.3;
-    border-radius: 0;
-    &.invalid {
-      background-color: red;
-    }
   }
 
   &.vertical {
     top: 0;
-    left: -1.5px;
-    width: 5px;
+    left: -2px;
+    width: 4px;
     height: auto;
+  }
+
+  &.invalid {
+    background-color: red;
   }
 }
