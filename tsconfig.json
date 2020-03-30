@@ -27,7 +27,7 @@
     // Enables experimental support for ES7 decorators.
     "experimentalDecorators": true,
     // Generates corresponding .map file.
-    "sourceMap": false,
+    "sourceMap": true,
     // Disallow inconsistently-cased references to the same file.
     "forceConsistentCasingInFileNames": true,
     // Allow json import
