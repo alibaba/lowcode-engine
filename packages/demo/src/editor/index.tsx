@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Skeleton from '@ali/lowcode-editor-skeleton';
 import { registerSetters } from '@ali/lowcode-setters';
 import config from './config/skeleton';
 import components from './config/components';
@@ -10,7 +9,7 @@ import './global.scss';
 import './config/theme.scss';
 
 registerSetters();
-
+const Skeleton = components.LowcodeSkeleton;
 const LCE_CONTAINER = document.getElementById('lce-container');
 
 console.info('aeafeawef')
