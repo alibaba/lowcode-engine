@@ -28,7 +28,7 @@ export default class VariableBindDialog extends Component<{
   ];
 
   state = {
-    visiable: true,
+    visiable: false,
     selectedVariableName: '',
     variableContext: '',
   };
