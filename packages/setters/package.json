@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-setters",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Builtin setters for Ali lowCode engine",
   "files": [
     "es",
@@ -14,7 +14,6 @@
     "test:snapshot": "ava --update-snapshots"
   },
   "dependencies": {
-    "@ali/lowcode-globals": "^0.8",
     "@ali/iceluna-comp-expression": "^1.0.6",
     "@ali/iceluna-comp-form": "^1.0.20",
     "@ali/iceluna-comp-list": "^1.0.26",
@@ -23,6 +22,7 @@
     "@ali/iceluna-comp-react-node": "^1.0.5",
     "@ali/iceluna-sdk": "^1.0.5-beta.24",
     "@ali/lc-style-setter": "^0.0.1",
+    "@ali/lowcode-globals": "^0.8.1",
     "@alifd/next": "^1.19.16",
     "acorn": "^6.4.1",
     "classnames": "^2.2.6",
@@ -34,11 +34,11 @@
     "react-monaco-editor": "^0.34.0"
   },
   "devDependencies": {
+    "@alib/build-scripts": "^0.1.18",
     "@types/classnames": "^2.2.7",
     "@types/node": "^13.7.1",
     "@types/react": "^16",
     "@types/react-dom": "^16",
-    "@alib/build-scripts": "^0.1.18",
     "build-plugin-component": "^0.2.10",
     "build-plugin-fusion": "^0.1.0",
     "build-plugin-moment-locales": "^0.1.0"
