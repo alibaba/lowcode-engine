@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-variable-bind-dialog",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "alibaba lowcode editor variable bind dialog plugin",
   "files": [
     "es",
