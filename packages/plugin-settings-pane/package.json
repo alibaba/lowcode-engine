@@ -1,6 +1,10 @@
 {
   "name": "@ali/lowcode-plugin-settings-pane",
+<<<<<<< HEAD
   "version": "0.8.5",
+=======
+  "version": "0.8.3",
+>>>>>>> df955e1db90ff104cd11160def80113cfd6faccc
   "description": "Settings pane for Ali lowCode engine",
   "files": [
     "es",

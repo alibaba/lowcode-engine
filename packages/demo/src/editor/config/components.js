@@ -6,7 +6,8 @@ import designer from '@ali/lowcode-plugin-designer';
 import settingsPane from '@ali/lowcode-plugin-settings-pane';
 import componentsPane from '@ali/lowcode-plugin-components-pane';
 import outlinePane from '@ali/lowcode-plugin-outline-pane';
-import eventBindDialog from '@ali/lowcode-plugin-event-bind-dialog'
+import eventBindDialog from '@ali/lowcode-plugin-event-bind-dialog';
+import variableBindDialog from '@ali/lowcode-plugin-variable-bind-dialog'
 export default {
   undoRedo,
   zhEn,
@@ -15,6 +16,7 @@ export default {
   settingsPane,
   outlinePane,
   eventBindDialog,
+  variableBindDialog,
   logo,
   samplePreview
 };

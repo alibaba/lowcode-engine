@@ -28,4 +28,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
+<<<<<<< HEAD
 * 🎸 merge material-parser ([b40c286](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b40c286))
+=======
+* 🎸 merge material-parser ([b40c286](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b40c2869a0bc901d855279735fe86b84dabaa04d))
+>>>>>>> df955e1db90ff104cd11160def80113cfd6faccc

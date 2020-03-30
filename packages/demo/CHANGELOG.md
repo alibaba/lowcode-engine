@@ -29,5 +29,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
+<<<<<<< HEAD
 * complet preview ([56c16ff](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/56c16ff))
 * double outline & ZH_EN support ([b379bd7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b379bd7))
+=======
+* complet preview ([56c16ff](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/56c16ffa5c39c2d01abd9cfa90fea49a4539da1d))
+* double outline & ZH_EN support ([b379bd7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b379bd7c0c488ef24f825760750a13d3fa083c96))
+>>>>>>> df955e1db90ff104cd11160def80113cfd6faccc

@@ -28,4 +28,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
+<<<<<<< HEAD
 * ts type ([1732e7d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1732e7d))
+=======
+* ts type ([1732e7d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1732e7db5fccb6e185cfa12e197ae698932fe127))
+>>>>>>> df955e1db90ff104cd11160def80113cfd6faccc

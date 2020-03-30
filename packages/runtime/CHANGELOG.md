@@ -33,9 +33,17 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
+<<<<<<< HEAD
 * remove abstract identifer ([2e45266](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2e45266))
+=======
+* remove abstract identifer ([2e45266](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2e4526667d563dccb85b9e3c60d862500f308915))
+>>>>>>> df955e1db90ff104cd11160def80113cfd6faccc
 
 
 ### Features
 
+<<<<<<< HEAD
 * complet preview ([56c16ff](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/56c16ff))
+=======
+* complet preview ([56c16ff](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/56c16ffa5c39c2d01abd9cfa90fea49a4539da1d))
+>>>>>>> df955e1db90ff104cd11160def80113cfd6faccc

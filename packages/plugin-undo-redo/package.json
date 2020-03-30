@@ -19,8 +19,13 @@
   ],
   "author": "xiayang.xy",
   "dependencies": {
+<<<<<<< HEAD
     "@ali/lowcode-editor-core": "^0.8.4",
     "@ali/lowcode-editor-skeleton": "^0.8.4",
+=======
+    "@ali/lowcode-editor-core": "^0.8.1",
+    "@ali/lowcode-editor-skeleton": "^0.8.1",
+>>>>>>> df955e1db90ff104cd11160def80113cfd6faccc
     "react": "^16.8.1",
     "react-dom": "^16.8.1"
   },

@@ -1,6 +1,10 @@
 {
   "name": "@ali/lowcode-plugin-sample-logo",
+<<<<<<< HEAD
   "version": "0.8.3",
+=======
+  "version": "0.8.1",
+>>>>>>> df955e1db90ff104cd11160def80113cfd6faccc
   "description": "alibaba lowcode editor logo plugin",
   "files": [
     "es/",
