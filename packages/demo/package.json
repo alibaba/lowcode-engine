@@ -21,7 +21,7 @@
     "@ali/lowcode-plugin-variable-bind-dialog": "^0.8.0",
     "@ali/lowcode-plugin-zh-en": "^0.8.4",
     "@ali/lowcode-react-renderer": "^0.8.4",
-    "@ali/lowcode-runtime": "^0.0.3",
+    "@ali/lowcode-runtime": "^0.8.0",
     "@ali/lowcode-setters": "^0.8.4",
     "@alifd/next": "^1.19.21",
     "@alife/theme-lowcode-dark": "^0.1.0",

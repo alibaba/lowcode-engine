@@ -83,7 +83,7 @@ export default {
         type: 'PanelIcon',
         props: {
           align: 'top',
-          icon: 'dengpao',
+          icon: 'shuxingkongjian',
           title: '大纲树'
         },
         config: {
