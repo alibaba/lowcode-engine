@@ -5,6 +5,7 @@ function getDataFromPasteEvent(event: ClipboardEvent) {
   }
 
   try {
+    // { componentsMap, componentsTree, ... }
     return JSON.parse(clipboardData.getData('text/plain'));
   } catch (error) {
     /*
@@ -17,11 +18,13 @@ function getDataFromPasteEvent(event: ClipboardEvent) {
       };
     }
     */
-    // paste the text by div
+    // TODO: open the parser implement
+    return null;
+    /*
     return {
       code: clipboardData.getData('text/plain'),
       maps: {},
-    };
+    };*/
   }
 }
 
@@ -33,7 +36,7 @@ class Clipboard {
     this.isCopyPaster(e.target);
   }
 
-  isCopyPaster(el: any) {
+  private isCopyPaster(el: any) {
     return this.copyPasters.includes(el);
   }
 
@@ -57,6 +60,9 @@ class Clipboard {
   }
 
   injectCopyPaster(document: Document) {
+    if (this.copyPasters.find(x => x.ownerDocument === document)) {
+      return;
+    }
     const copyPaster = document.createElement<'textarea'>('textarea');
     copyPaster.style.cssText = 'position: relative;left: -9999px;';
     document.body.appendChild(copyPaster);

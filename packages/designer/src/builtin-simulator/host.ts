@@ -20,11 +20,13 @@ import {
   getRectTarget,
   Rect,
   CanvasPoint,
+  hotkey,
 } from '../designer';
 import { parseProps } from './utils/parse-props';
 import { isElement } from '@ali/lowcode-globals';
 import { ComponentMetadata } from '@ali/lowcode-globals';
 import { BuiltinSimulatorRenderer } from './renderer';
+import clipboard from '../designer/clipboard';
 
 export interface LibraryItem {
   package: string;
@@ -196,6 +198,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     // wait 准备 iframe 内容、依赖库注入
     const renderer = await createSimulator(this, iframe, vendors);
 
+    // TODO: !!! thinkof reload onload
+
     // wait 业务组件被第一次消费，否则会渲染出错
     await this.componentsConsumer.waitFirstConsume();
 
@@ -209,11 +213,17 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this._contentDocument = this._contentWindow.document;
     this.viewport.setScrollTarget(this._contentWindow);
     this.setupEvents();
-    // hotkey.mount(this.contentWindow);
-    // clipboard.injectCopyPaster(this.ownerDocument);
+
+    // bind hotkey & clipboard
+    hotkey.mount(this._contentWindow);
+    clipboard.injectCopyPaster(this._contentDocument);
+    // TODO: dispose the bindings
   }
 
   setupEvents() {
+    // TODO: Thinkof move events control to simulator renderer
+    //       just listen special callback
+    // because iframe maybe reload
     this.setupDragAndClick();
     this.setupHovering();
   }
