@@ -1,7 +1,7 @@
 import { createElement, ReactElement } from 'react';
 import { Router } from '@ali/recore';
-import contribution from '../../contribution';
-import Provider from '../base';
+import app from '../../index';
+import Provider from '..';
 import LazyComponent from './lazy-component';
 
 export default class ReactProvider extends Provider {
@@ -52,7 +52,7 @@ export default class ReactProvider extends Provider {
       return App;
     }
     const { componentName: layoutName, props: layoutProps } = layoutConfig;
-    const Layout = contribution.getLayout(layoutName);
+    const Layout = app.getLayout(layoutName);
     if (Layout) {
       App = (props: any) => createElement(Layout, layoutProps, RouterView({ props }));
     } else {

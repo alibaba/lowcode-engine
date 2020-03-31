@@ -1,7 +1,7 @@
 import { ReactType } from 'react';
 import { runApp } from '@ali/recore';
 import { HashHistoryBuildOptions, BrowserHistoryBuildOptions, MemoryHistoryBuildOptions } from '@recore/history';
-import contribution from './contribution';
+import app from './index';
 
 export type HistoryOptions = {
   mode?: HistoryMode;
@@ -47,7 +47,7 @@ function transformConfig(config: IAppConfig | (() => IAppConfig)): IRecoreAppCon
 }
 
 export default function run(config?: IAppConfig | (() => IAppConfig)) {
-  const provider = contribution.getProvider();
+  const provider = app.getProvider();
   if (config) {
     config = transformConfig(config);
     const App = provider.createApp();

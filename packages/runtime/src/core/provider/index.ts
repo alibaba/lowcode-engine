@@ -38,10 +38,6 @@ interface IAppData {
   constants?: IConstants;
 }
 
-interface IOptions {
-  appKey: string;
-}
-
 export interface ComponentProps {
   [key: string]: any;
 }
@@ -90,22 +86,21 @@ export interface ComponentModel {
   dataSource?: DataSource;
   lifeCycles?: LifeCycles;
   methods?: Methods;
-  children?: ComponentModel[];
+  children?: ComponentModel[] | string[];
   condition?: JSExpression | boolean;
   loop?: string[];
   loopArgs?: string[];
 }
 
-export interface IProvider {
-  init?(): void;
-  getAppData?(appkey: string): Promise<IAppData | undefined>;
-  getPageData?(pageId: string): Promise<ComponentModel | undefined>;
-  getLazyComponent?(pageId: string, props: any): any;
-  createApp?(): void;
-}
+// export interface IProvider {
+//   init?(): void;
+//   getAppData?(appkey: string): Promise<IAppData | undefined>;
+//   getPageData?(pageId: string): Promise<ComponentModel | undefined>;
+//   getLazyComponent?(pageId: string, props: any): any;
+//   createApp?(): void;
+// }
 
-export default class Provider implements IProvider {
-  private appKey = '';
+export default class Provider {
   private components: IComponents = {};
   private utils: IUtils = {};
   private constants: IConstants = {};
@@ -116,16 +111,14 @@ export default class Provider implements IProvider {
   private containerId = '';
   private lazyElementsMap: { [key: string]: any } = {};
 
-  constructor(options: IOptions) {
-    const { appKey } = options;
-    this.appKey = appKey;
+  constructor() {
     this.init();
   }
 
   async(): Promise<IAppConfig> {
     return new Promise(async (resolve, reject) => {
       try {
-        const appData = await this.getAppData(this.appKey || '');
+        const appData = await this.getAppData();
         if (!appData) {
           return;
         }
@@ -154,11 +147,11 @@ export default class Provider implements IProvider {
     console.log('init');
   }
 
-  async getAppData(appkey: string): Promise<IAppData | undefined> {
+  getAppData(): any {
     throw new Error('Method called "getPageData" not implemented.');
   }
 
-  async getPageData(pageId: string): Promise<ComponentModel | undefined> {
+  getPageData(pageId?: string): any {
     throw new Error('Method called "getPageData" not implemented.');
   }
 

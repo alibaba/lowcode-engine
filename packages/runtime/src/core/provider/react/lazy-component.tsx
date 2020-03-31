@@ -1,5 +1,5 @@
 import { Component, createElement } from 'react';
-import contribution from '../../contribution';
+import app from '../../index';
 
 interface IProps {
   getPageData: () => any;
@@ -29,8 +29,8 @@ export default class LazyComponent extends Component<IProps, IState> {
   render() {
     const { getPageData, ...restProps } = this.props;
     const { schema } = this.state;
-    const Renderer = contribution.getRenderer();
-    const Loading = contribution.getLoading();
+    const Renderer = app.getRenderer();
+    const Loading = app.getLoading();
     if (!Renderer || !schema) {
       if (!Loading) {
         return null;
