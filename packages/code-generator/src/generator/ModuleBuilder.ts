@@ -57,7 +57,7 @@ export function createModuleBuilder(
           content = processer(content, type);
         });
 
-        return new ResultFile(content, type, file.name);
+        return new ResultFile(file.name, type, content);
       });
     }
 
