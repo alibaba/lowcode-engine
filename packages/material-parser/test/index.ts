@@ -67,13 +67,13 @@ test('ts component by local', async t => {
   t.snapshot(actual);
 });
 
-// test('fusion next component by local', async t => {
-//   const options: IMaterializeOptions = {
-//     entry: fusionComptPath,
-//     accesser: 'local',
-//   };
+test('fusion next component by local', async t => {
+  const options: IMaterializeOptions = {
+    entry: fusionComptPath,
+    accesser: 'local',
+  };
 
-//   const actual = await parse(options);
+  const actual = await parse(options);
 
-//   t.snapshot(actual);
-// });
+  t.snapshot(actual);
+});
