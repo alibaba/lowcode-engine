@@ -1,15 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "module": "es2015",
-    "noImplicitAny": true,
-    "sourceMap": true,
-    "moduleResolution": "node",
-    "isolatedModules": true,
     "target": "es5",
     "strictNullChecks": true,
     "inlineSources": false,
-    "lib": ["es2015"],
+    "lib": ["es6"],
     "downlevelIteration": true,
     "paths": {
       "@/*": ["./src/*"]

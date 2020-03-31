@@ -1,4 +1,5 @@
 const path = require('path');
+const nodeExternals = require('webpack-node-externals');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
@@ -6,7 +7,7 @@ module.exports = {
   target: 'node',
   entry: {
     index: './src/index.ts',
-    // demo: './src/demo/main.ts',
+    demo: './src/demo/main.ts',
   },
   module: {
     rules: [
@@ -26,4 +27,5 @@ module.exports = {
     filename: '[name].js',
     path: path.resolve(__dirname, 'lib'),
   },
+  externals: [nodeExternals()], // in order to ignore all modules in node_modules folder
 };
