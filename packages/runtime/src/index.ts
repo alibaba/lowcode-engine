@@ -1,5 +1,8 @@
-import { navigator, Router, runApp as run } from '@ali/recore';
-import boot from './boot';
-import Provider from './provider';
+import { navigator, Router } from '@ali/recore';
+import run from './core/run';
+import contribution from './core/contribution';
+import Provider from './core/provider/base';
+import ReactProvider from './core/provider/react';
+import * as Utils from './utils';
 
-export { run, Router, boot, Provider, navigator };
+export { run, Router, contribution, Provider, ReactProvider, navigator, Utils };

@@ -1,15 +1,22 @@
 import { Search, Icon, Shell } from '@alifd/next';
-import './index.less';
+import './index.scss';
 
-// eslint-disable-next-line react/prop-types
-export default ({ name, children, logo }) => (
-  <Shell className="basic-shell" type="dark" style={{ border: '1px solid #eee' }}>
+export default ({
+  name,
+  children,
+  logo,
+}: {
+  name: string;
+  children: any;
+  logo: { src: string; width: number; height: number };
+}) => (
+  <Shell className="basic-shell" style={{ border: '1px solid #eee' }}>
     <Shell.Branding>
       <img src={logo.src} width={logo.width} height={logo.height} alt="logo" />
       <span style={{ marginLeft: 10 }}>{name}</span>
     </Shell.Branding>
     <Shell.Navigation direction="hoz">
-      <Search key="2" shape="simple" type="dark" palceholder="Search" style={{ width: '200px' }} />
+      <Search key="2" shape="simple" type="dark" style={{ width: '200px' }} />
     </Shell.Navigation>
     <Shell.Action>
       <Icon type="ic_tongzhi" />

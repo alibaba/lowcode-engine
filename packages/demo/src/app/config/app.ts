@@ -1,15 +1,15 @@
 export default {
   sdkVersion: '1.0.3',
-  historyMode: 'hash', // 浏览器路由：brower  哈希路由：hash
-  constainerId: 'app',
+  history: 'hash', // 浏览器路由：brower  哈希路由：hash
+  containerId: 'lce-container',
   layout: {
     componentName: 'BasicLayout',
     props: {
       name: '低代码引擎预览 demo',
       logo: {
-        src: 'https://img.alicdn.com/tfs/TB1kAfWyrY1gK0jSZTEXXXDQVXa-75-33.png',
-        width: 40,
-        height: 20,
+        src: 'https://img.alicdn.com/tfs/TB1L.1QAeL2gK0jSZFmXXc7iXXa-90-90.png',
+        width: 25,
+        height: 25,
       },
     },
   },

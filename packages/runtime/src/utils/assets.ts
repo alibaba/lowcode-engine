@@ -1,17 +1,25 @@
-function isESModule(obj) {
+function isESModule(obj: any): obj is { [key: string]: any } {
   return obj && obj.__esModule;
 }
 
-function getSubComponent(library, paths) {
+function accessLibrary(library: string | object) {
+  if (typeof library !== 'string') {
+    return library;
+  }
+
+  return (window as any)[library];
+}
+
+function getSubComponent(library: any, paths: string[]) {
   const l = paths.length;
   if (l < 1 || !library) {
     return library;
   }
   let i = 0;
-  let component;
+  let component: any;
   while (i < l) {
-    const key = paths[i];
-    let ex;
+    const key = paths[i]!;
+    let ex: any;
     try {
       component = library[key];
     } catch (e) {
@@ -32,15 +40,7 @@ function getSubComponent(library, paths) {
   return component;
 }
 
-function accessLibrary(library) {
-  if (typeof library !== 'string') {
-    return library;
-  }
-
-  return window[library];
-}
-
-function findComponent(libraryMap, componentName, npm) {
+function findComponent(libraryMap: LibraryMap, componentName: string, npm?: NpmInfo) {
   if (!npm) {
     return accessLibrary(componentName);
   }
@@ -62,10 +62,37 @@ function findComponent(libraryMap, componentName, npm) {
   return getSubComponent(library, paths);
 }
 
-export function buildComponents(libraryMap, componentsMap) {
-  const components = {};
+export interface LibraryMap {
+  [key: string]: string;
+}
+
+export interface NpmInfo {
+  componentName?: string;
+  package: string;
+  version: string;
+  destructuring?: boolean;
+  exportName?: string;
+  subName?: string;
+  main?: string;
+}
+
+export function buildComponents(
+  libraryMap: LibraryMap,
+  componentsMap: { [componentName: string]: NpmInfo } | NpmInfo[],
+) {
+  const components: any = {};
+  if (componentsMap && Array.isArray(componentsMap)) {
+    const compMapObj: any = {};
+    componentsMap.forEach((item: NpmInfo) => {
+      if (!item || !item.componentName) {
+        return;
+      }
+      compMapObj[item.componentName] = item;
+    });
+    componentsMap = compMapObj;
+  }
   Object.keys(componentsMap).forEach((componentName) => {
-    const component = findComponent(libraryMap, componentName, componentsMap[componentName]);
+    const component = findComponent(libraryMap, componentName, (componentsMap as any)[componentName]);
     if (component) {
       components[componentName] = component;
     }
