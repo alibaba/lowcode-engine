@@ -5,6 +5,7 @@ import {
   ICompiledModule,
   IModuleBuilder,
   IResultFile,
+  PostProcessor,
 } from '../types';
 
 import { COMMON_SUB_MODULE_NAME } from '../const/generator';
@@ -17,9 +18,11 @@ import ResultFile from '../model/ResultFile';
 export function createModuleBuilder(
   options: {
     plugins: BuilderComponentPlugin[];
+    postProcessors: PostProcessor[];
     mainFileName?: string;
   } = {
     plugins: [],
+    postProcessors: [],
   },
 ): IModuleBuilder {
   const chunkGenerator = new ChunkBuilder(options.plugins);
@@ -33,7 +36,7 @@ export function createModuleBuilder(
       );
     }
 
-    const files: IResultFile[] = [];
+    let files: IResultFile[] = [];
 
     const { chunks } = await chunkGenerator.run(input);
     chunks.forEach(fileChunkList => {
@@ -45,6 +48,18 @@ export function createModuleBuilder(
       );
       files.push(file);
     });
+
+    if (options.postProcessors.length > 0) {
+      files = files.map(file => {
+        let content = file.content;
+        const type = file.ext;
+        options.postProcessors.forEach(processer => {
+          content = processer(content, type);
+        });
+
+        return new ResultFile(file.name, type, content);
+      });
+    }
 
     return {
       files,

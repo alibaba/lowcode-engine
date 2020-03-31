@@ -8,10 +8,11 @@ import {
   IResultDir,
   IResultFile,
   ISchemaParser,
+  PostProcessor,
 } from '../types';
 
 import ResultDir from '@/model/ResultDir';
-import SchemaParser from '@/parse/SchemaParser';
+import SchemaParser from '@/parser/SchemaParser';
 
 import { createModuleBuilder } from '@/generator/ModuleBuilder';
 
@@ -40,16 +41,20 @@ function getDirFromRoot(root: IResultDir, path: string[]): IResultDir {
 export class ProjectBuilder implements IProjectBuilder {
   private template: IProjectTemplate;
   private plugins: IProjectPlugins;
+  private postProcessors: PostProcessor[];
 
   constructor({
     template,
     plugins,
+    postProcessors,
   }: {
     template: IProjectTemplate;
     plugins: IProjectPlugins;
+    postProcessors: PostProcessor[];
   }) {
     this.template = template;
     this.plugins = plugins;
+    this.postProcessors = postProcessors;
   }
 
   public async generateProject(schema: IProjectSchema): Promise<IResultDir> {
@@ -212,45 +217,57 @@ export class ProjectBuilder implements IProjectBuilder {
 
     builders.components = createModuleBuilder({
       plugins: this.plugins.components,
+      postProcessors: this.postProcessors,
     });
-    builders.pages = createModuleBuilder({ plugins: this.plugins.pages });
+    builders.pages = createModuleBuilder({
+      plugins: this.plugins.pages,
+      postProcessors: this.postProcessors,
+    });
     builders.router = createModuleBuilder({
       plugins: this.plugins.router,
       mainFileName: this.template.slots.router.fileName,
+      postProcessors: this.postProcessors,
     });
     builders.entry = createModuleBuilder({
       plugins: this.plugins.entry,
       mainFileName: this.template.slots.entry.fileName,
+      postProcessors: this.postProcessors,
     });
     builders.globalStyle = createModuleBuilder({
       plugins: this.plugins.globalStyle,
       mainFileName: this.template.slots.globalStyle.fileName,
+      postProcessors: this.postProcessors,
     });
     builders.htmlEntry = createModuleBuilder({
       plugins: this.plugins.htmlEntry,
       mainFileName: this.template.slots.htmlEntry.fileName,
+      postProcessors: this.postProcessors,
     });
     builders.packageJSON = createModuleBuilder({
       plugins: this.plugins.packageJSON,
       mainFileName: this.template.slots.packageJSON.fileName,
+      postProcessors: this.postProcessors,
     });
 
     if (this.template.slots.constants && this.plugins.constants) {
       builders.constants = createModuleBuilder({
         plugins: this.plugins.constants,
         mainFileName: this.template.slots.constants.fileName,
+        postProcessors: this.postProcessors,
       });
     }
     if (this.template.slots.utils && this.plugins.utils) {
       builders.utils = createModuleBuilder({
         plugins: this.plugins.utils,
         mainFileName: this.template.slots.utils.fileName,
+        postProcessors: this.postProcessors,
       });
     }
     if (this.template.slots.i18n && this.plugins.i18n) {
       builders.i18n = createModuleBuilder({
         plugins: this.plugins.i18n,
         mainFileName: this.template.slots.i18n.fileName,
+        postProcessors: this.postProcessors,
       });
     }
 
@@ -261,12 +278,15 @@ export class ProjectBuilder implements IProjectBuilder {
 export function createProjectBuilder({
   template,
   plugins,
+  postProcessors,
 }: {
   template: IProjectTemplate;
   plugins: IProjectPlugins;
+  postProcessors: PostProcessor[];
 }): IProjectBuilder {
   return new ProjectBuilder({
     template,
     plugins,
+    postProcessors,
   });
 }
