@@ -1,0 +1,499 @@
+@charset "UTF-8";
+
+@import "../core/index-noreset";
+@import "scss/variable";
+@import "./rtl.scss";
+
+
+#{$upload-prefix} {
+    @include box-sizing;
+
+    &-inner {
+        &.#{$css-prefix}hidden {
+            display: none;
+        }
+        outline: 0;
+        display: inline-block;
+    }
+
+    &-list {
+        overflow: hidden;
+        @include box-sizing;
+    }
+
+    &-list-item {
+        position: relative;
+        &.#{$css-prefix}hidden {
+            display: none;
+        }
+    }
+
+    &-list-item-name {
+        text-decoration: none;
+    }
+
+    &.#{$css-prefix}disabled {
+        border-color: $upload-disable-border-color !important;
+        color: $upload-disable-text-color !important;
+
+        .#{$css-prefix}icon-close {
+            cursor: not-allowed !important;
+        }
+
+        #{$upload-prefix}-inner * {
+            color: $upload-disable-text-color !important;
+            border-color: $upload-disable-border-color !important;
+            cursor: not-allowed !important;
+        }
+    }
+}
+
+#{$upload-prefix}-list-text {
+    #{$upload-prefix}-list-item {
+        background-color: $upload-text-list-bg-color;
+        // top-bottom s-1  left $upload-text-list-padding-left-right
+        padding: $s-1 $upload-text-list-padding-left-right;
+        // righrt: icon size + icon paddinng left-right
+        padding-right: $upload-text-list-close-icon-right * 2 + $upload-text-list-close-icon-size;
+        height: $upload-text-list-height;
+        // line-height = height - padding-top-bottom
+        line-height: $upload-text-list-height - $s-2;
+        font-size: $upload-text-list-font-size;
+        overflow: hidden;
+        transition: all $motion-duration-immediately $motion-linear;
+        border-radius: $upload-text-list-corner;
+
+        &:not(:last-child) {
+            margin-bottom: 4px;
+        }
+
+        .#{$css-prefix}icon {
+            position: absolute;
+            top: 0;
+            right: $upload-text-list-close-icon-right;
+            color: $upload-text-list-close-icon-color;
+            cursor: pointer;
+            text-align: center;
+            transition: all $motion-duration-immediately $motion-linear;
+            line-height: $upload-text-list-height;
+            @include icon-size($upload-text-list-close-icon-size);
+        }
+
+        &:hover {
+            background-color: $upload-text-list-bg-color-hover;
+            .#{$css-prefix}icon {
+                color: $upload-text-list-close-icon-color-hover;
+            }
+        }
+        &-name-wrap {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            margin-right: 4px;
+        }
+        &-name {
+            color: $upload-text-list-name-font-color;
+            transition: all $motion-duration-immediately $motion-linear;
+        }
+
+        &-size {
+            color: $upload-text-list-size-font-color;
+            margin-left: 8px;
+        }
+        &-uploading {
+            // uploading state, two line display
+            //  so  line-height = height / 2  - padding-top;
+            line-height: $upload-text-list-height / 2 - $s-1;
+            .#{$css-prefix}upload-list-item-progress {
+                line-height: 0;
+                padding-top: ($upload-text-list-height / 2 - $s-1 - $upload-text-list-progressbar-height) / 2;
+                padding-bottom: ($upload-text-list-height / 2 - $s-1 - $upload-text-list-progressbar-height) / 2;
+                .#{$css-prefix}progress-line-underlay {
+                    height: $upload-text-list-progressbar-height;
+                }
+                .#{$css-prefix}progress-line-overlay {
+                    height: $upload-text-list-progressbar-height;
+                    margin-top: - ($upload-text-list-progressbar-height / 2);
+                }
+            }
+        }
+        &-done {
+            // 行高 = 高度 - 上下padding
+            line-height: $upload-text-list-height - $s-2;
+        }
+        &-done:hover .#{$css-prefix}upload-list-item-name {
+            color: $upload-text-list-name-font-color-hover;
+        }
+        &-done:hover .#{$css-prefix}upload-list-item-size {
+            color: $upload-text-list-size-font-color-hover;
+        }
+        &-error {
+            /* stylelint-disable declaration-no-important */
+            background-color: $upload-text-list-bg-color-error !important;
+            &#{$upload-prefix}-list-item-error-with-msg {
+                // error state with error msg, we need they are display at two line
+                // so  line-height = height / 2  - padding-top;
+                line-height: $upload-text-list-height / 2 - $s-1;
+            }
+            &-msg {
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                color: $upload-text-list-error-text-color;
+            }
+        }
+    }
+}
+
+#{$upload-prefix}-list-image {
+    .#{$css-prefix}upload-list-item {
+        box-sizing: content-box;
+        border: $upload-image-list-item-border-width solid $upload-image-list-item-border-color;
+        background-color: $upload-image-list-item-bg-color;
+        padding: $upload-image-list-item-padding;
+        height: $upload-image-list-item-picture-size;
+        line-height: $upload-image-list-item-picture-size;
+        font-size: $upload-image-list-item-font-size;
+        transition: all $motion-duration-immediately $motion-linear;
+        overflow: hidden;
+        border-radius: $upload-card-list-corner;
+
+        &:not(:last-child) {
+            margin-bottom: 4px;
+        }
+        @include clearfix();
+
+        .#{$css-prefix}icon-close {
+            float: right;
+            margin-right: $upload-image-list-close-icon-right;
+            cursor: pointer;
+            color: $upload-image-list-close-icon-color;
+            text-align: center;
+
+            @include icon-size($upload-image-list-close-icon-size);
+        }
+
+        &:hover {
+            border-color: $upload-image-list-item-border-color-hover;
+
+            .#{$css-prefix}icon-close {
+                color: $upload-image-list-close-icon-color-hover;
+            }
+        }
+
+        &-name {
+            display: block;
+            color: $upload-text-list-name-font-color;
+            // leave spaces for thumbnail
+            margin-left: $upload-image-list-item-picture-size + $upload-image-list-item-padding;
+            // leave spaces for close icon
+            margin-right: $upload-image-list-close-icon-size + $upload-image-list-close-icon-right * 2;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            transition: all $motion-duration-immediately $motion-linear;
+        }
+
+        &-size {
+            color: $upload-text-list-size-font-color;
+            margin-left: 8px;
+        }
+
+        &-done:hover .#{$css-prefix}upload-list-item-name {
+            color: $upload-text-list-name-font-color-hover;
+        }
+        &-done:hover .#{$css-prefix}upload-list-item-size {
+            color: $upload-text-list-size-font-color-hover;
+        }
+
+        $thumbnail-margin-right: $s-2 !default;
+        @if ($upload-image-list-item-padding > $s-2) {
+            $thumbnail-margin-right: $upload-image-list-item-padding;
+        }
+        &-thumbnail {
+            float: left;
+            width: $upload-image-list-item-picture-size;
+            height: $upload-image-list-item-picture-size;
+            color: $upload-image-list-item-thumbnail-font-color;
+            border: $upload-image-list-item-picture-border-width solid $upload-image-list-item-picture-border-color;
+            border-radius: $upload-image-list-item-picture-corner;
+            background-color: $upload-image-list-item-picture-background-color;
+            margin-right: $thumbnail-margin-right;
+            vertical-align: middle;
+            text-align: center;
+            overflow: hidden;
+            box-sizing: border-box;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
+
+            .#{$css-prefix}icon {
+                display: block;
+                margin: 0;
+                line-height: $upload-image-list-item-picture-size;
+
+                @include icon-size($upload-image-list-item-picture-icon-size);
+            }
+        }
+
+        &-error {
+            border-color: $upload-image-list-item-border-color-error !important;
+            background-color: $upload-image-list-item-error-bg-color;
+        }
+
+        &-uploading {
+            background-color: $upload-image-list-item-uploading-bg-color;
+            #{$upload-prefix}-list-item-name {
+                height: $upload-image-list-item-picture-size / 2;
+                line-height: $upload-image-list-item-picture-size / 2;
+            }
+            #{$upload-prefix}-list-item-progress {
+                // 左边 把 thumbnail 的空间空出来
+                margin-left: $upload-image-list-item-picture-size + $thumbnail-margin-right;
+                // 右边边 把 icon 的空间空出来
+                margin-right: $upload-image-list-close-icon-size + $upload-image-list-close-icon-right * 2;
+                line-height: 0;
+                padding-top: ($upload-image-list-item-picture-size / 2  - $upload-image-list-progressbar-height) / 2;
+                padding-bottom: ($upload-image-list-item-picture-size / 2  - $upload-image-list-progressbar-height) / 2;
+
+                .#{$css-prefix}progress-line-underlay {
+                    height: $upload-image-list-progressbar-height;
+                }
+                .#{$css-prefix}progress-line-overlay {
+                    height: $upload-image-list-progressbar-height;
+                    margin-top: - ($upload-image-list-progressbar-height / 2);
+                }
+            }
+        }
+        &-error-with-msg {
+            #{$upload-prefix}-list-item-name,
+            #{$upload-prefix}-list-item-error-msg {
+                height: $upload-image-list-item-picture-size / 2;
+                line-height: $upload-image-list-item-picture-size / 2;
+            }
+            #{$upload-prefix}-list-item-error-msg {
+                // 左边 把 thumbnail 的空间空出来
+                margin-left: $upload-image-list-item-picture-size + $thumbnail-margin-right;
+                // 右边边 把 icon 的空间空出来
+                margin-right: $upload-image-list-close-icon-size + $upload-image-list-close-icon-right * 2;
+                color: $upload-text-list-error-text-color;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+            }
+        }
+    }
+}
+
+#{$upload-prefix}-list-card {
+    display: inline-block;
+    .#{$css-prefix}upload-list-item {
+        vertical-align: middle;
+        float: left;
+
+        &:not(:last-child) {
+            margin-right: $upload-card-list-margin-right;
+        }
+
+        &-wrapper {
+            position: relative;
+            border: 1px solid $upload-card-list-border-color;
+            width: $upload-card-size;
+            height: $upload-card-size;
+            padding: $upload-card-list-padding;
+            background-color: $upload-card-list-bg-color;
+        }
+
+        &-thumbnail {
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            color: $upload-card-list-thumbnail-font-color;
+            font-size: $upload-card-list-thumbnail-font-size;
+
+            img {
+                max-width: 100%;
+                max-height: 100%;
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                margin: auto;
+
+                &:focus {
+                    outline: 0;
+                }
+            }
+
+            .#{$css-prefix}icon {
+                width: 100%;
+                @include icon-size($upload-card-list-thumbnail-icon-size);
+            }
+        }
+
+        &-handler {
+            margin-top: ($upload-card-size - 74) / 2;
+            .#{$css-prefix}icon-cry {
+                margin-top: 10px;
+            }
+        }
+
+        &-name {
+            display: block;
+            width: $upload-card-size;
+            text-align: center;
+            margin-top: $upload-card-list-name-margin-top;
+            font-size: $upload-card-list-name-font-size;
+            color: $upload-card-list-name-font-color;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        &-progress {
+            position: absolute;
+            font-size: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            .#{$css-prefix}progress-line-underlay {
+                border-radius: 0;
+                height: $upload-card-list-progressbar-height;
+            }
+            .#{$css-prefix}progress-line-overlay {
+                border-radius: 0;
+                height: $upload-card-list-progressbar-height;
+                margin-top: - ($upload-card-list-progressbar-height / 2);
+            }
+        }
+
+        &-uploading .#{$css-prefix}upload-list-item-wrapper {
+            background-color: $upload-card-list-uploading-bg-color;
+        }
+
+        &:hover {
+            .#{$css-prefix}upload-tool {
+                opacity: .8;
+            }
+        }
+
+        .#{$css-prefix}upload-tool {
+            position: absolute;
+            z-index: 1;
+            background-color: rgba($upload-select-card-tool-bg-color, $upload-select-card-tool-bg-opacity);
+            transition: all $motion-duration-immediately $motion-linear;
+            opacity: 0;
+            width: 100%;
+            height: $upload-select-card-tool-height;
+            left: 0;
+            bottom: 0;
+
+            .#{$css-prefix}icon {
+                width: 49%;
+                text-align: center;
+                line-height: $upload-select-card-tool-height;
+                color: $color-white;
+            }
+
+            .#{$css-prefix}icon {
+                @include icon-size($upload-select-card-tool-icon-size);
+            }
+
+            &.#{$css-prefix}noclose .#{$css-prefix}icon {
+                width: 100%;
+            }
+
+            &-close {
+                cursor: pointer;
+            }
+
+            &-download-icon {
+                border-right: 1px solid $color-white;
+            }
+        }
+
+        &-error .#{$css-prefix}upload-list-item-wrapper {
+            border-color: $upload-card-list-border-color-error;
+        }
+    }
+}
+
+#{$upload-prefix}-card {
+    border: 1px $upload-card-border-style $upload-card-border-color;
+    width: $upload-card-size;
+    height: $upload-card-size;
+    background-color: $upload-card-bg-color;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color $motion-duration-immediately $motion-linear;
+    display: table-cell;
+    vertical-align: middle;
+
+    .#{$css-prefix}icon {
+        color: $upload-card-icon-color;
+        @include icon-size($upload-card-add-icon-size);
+    }
+
+    .#{$css-prefix}upload-text {
+        font-size: $upload-card-add-text-size;
+        margin-top: $upload-card-add-text-margin-top;
+        color: $upload-card-font-color;
+        outline: none;
+    }
+
+    &:hover {
+        border-color: $upload-card-hover-border-color;
+        .#{$css-prefix}icon {
+            color: $upload-card-hover-font-color;
+        }
+        .#{$css-prefix}upload-text {
+            color: $upload-card-hover-font-color;
+        }
+    }
+}
+
+#{$upload-prefix}-dragable {
+    #{$upload-prefix}-inner {
+        display: block;
+    }
+
+    #{$upload-prefix}-drag {
+        border: 1px dashed $upload-drag-zone-border-color;
+        transition: border-color $motion-duration-immediately $motion-linear;
+        cursor: pointer;
+        border-radius: $upload-drag-zone-corner;
+        background-color: $upload-drag-zone-bg-color;
+        text-align: center;
+        margin-bottom: $s-1;
+
+        &-icon {
+            margin: $s-5 0 0;
+            color: $upload-drag-zone-upload-icon-color;
+
+            #{$upload-prefix}-drag-upload-icon::before {
+                content: $upload-drag-zone-upload-icon;
+                font-size: $upload-drag-zone-icon-size;
+            }
+        }
+
+
+
+        &-text {
+            margin: $s-3 0 0;
+            font-size: $upload-drag-zone-font-size;
+            color: $upload-drag-zone-upload-normal-title-color;
+        }
+        &-hint {
+            margin: $s-1 0 $s-5;
+            font-size: $upload-drag-zone-hint-font-size;
+            color: $upload-drag-zone-upload-normal-hint-color;
+        }
+        &-over {
+            border-color: $upload-drag-zone-over-border-color;
+        }
+    }
+}
+

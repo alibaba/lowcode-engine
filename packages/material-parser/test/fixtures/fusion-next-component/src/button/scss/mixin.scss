@@ -1,0 +1,54 @@
+@mixin next-button-size(
+    $padding,
+    $height,
+    $font-size,
+    $border-width,
+    $corner,
+    $icon-margin,
+    $icon-size,
+    $icon-split-size
+) {
+    border-radius: $corner;
+
+    @include button-size($padding, $height, $font-size, $border-width);
+
+    & > #{$btn-prefix}-icon#{$btn-icon-prefix}-first {
+        @include icon-size($icon-size, 0, $icon-margin);
+    }
+    & > #{$btn-prefix}-icon#{$btn-icon-prefix}-last {
+        @include icon-size($icon-size, $icon-margin, 0);
+    }
+    & > #{$btn-prefix}-icon#{$btn-icon-prefix}-alone {
+        @include icon-size($icon-size);
+    }
+
+    &#{$btn-prefix}-loading {
+        padding-left: $padding + $icon-size + $icon-margin;
+
+        &:after {
+            width: $icon-size;
+            height: $icon-size;
+            font-size: $icon-size;
+            line-height: $icon-size;
+            left: $padding;
+            top: 50%;
+            text-align: center;
+            margin-top: -$icon-size/2;
+            margin-right: $icon-margin;
+        }
+        > #{$btn-icon-prefix} {
+            display: none;
+        }
+    }
+}
+
+@keyframes loadingCircle {
+    0% {
+        transform-origin: 50% 50%;
+        transform: rotate(0deg);
+    }
+    100% {
+        transform-origin: 50% 50%;
+        transform: rotate(360deg);
+    }
+}

@@ -1,0 +1,41 @@
+#{$step-prefix} {
+    width: 100%;
+    // overflow: hidden;
+    position: relative;
+    border: none;
+
+    &-item {
+        // flex: 1;
+        position: relative;
+        vertical-align: middle;
+        outline: 0;
+        height: 100%;
+
+        &-body {
+            outline: 0;
+        }
+
+        &-node {
+            transition: all $motion-duration-immediately $motion-linear;
+            &.clicked {
+                transform: scale3d(.8, .8, .8);
+            }
+        }
+    }
+
+    &-horizontal {
+        // display: flex;
+        overflow: hidden;
+        & > #{$step-prefix}-item {
+            display: inline-block;
+            text-align: left;
+        }
+    }
+
+    &-vertical {
+        & > #{$step-prefix}-item {
+            display: block;
+            text-align: center;
+        }
+    }
+}

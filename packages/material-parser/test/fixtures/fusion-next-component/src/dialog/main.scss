@@ -1,0 +1,134 @@
+@import "../core/index-noreset.scss";
+@import "scss/variable";
+@import "./rtl.scss";
+
+#{$dialog-prefix} {
+    @include box-sizing;
+    position: fixed;
+    z-index: 1001;
+    background: $dialog-bg;
+    border: $dialog-border-width $dialog-border-style $dialog-border-color;
+    border-radius: $dialog-corner;
+    box-shadow: $dialog-shadow;
+    text-align: left;
+    overflow: hidden;
+    animation-duration: $motion-duration-standard;
+    animation-timing-function: $motion-ease-in-out;
+    max-width: 90%;
+
+    &-header {
+        padding: $dialog-title-padding-top $dialog-title-padding-left-right $dialog-title-padding-bottom $dialog-title-padding-left-right;
+        border-bottom: $dialog-title-border-width $line-solid $dialog-title-border-color;
+        font-size: $dialog-title-font-size;
+        background: $dialog-title-bg-color;
+        color: $dialog-title-color;
+    }
+
+    &-body {
+        padding: $dialog-content-padding-top $dialog-content-padding-left-right $dialog-content-padding-bottom $dialog-content-padding-left-right;
+        font-size: $dialog-content-font-size;
+        color: $dialog-content-color;
+    }
+
+    /* 让用户自己设置 */
+    /* &.#{$css-prefix}closeable &-header, */
+    /* &.#{$css-prefix}closeable &-body, { */
+    /*     padding-right: $dialog-part-padding-right-closeable; */
+    /* } */
+
+    &-footer {
+        padding: $dialog-footer-padding-top $dialog-footer-padding-left-right $dialog-footer-padding-bottom $dialog-footer-padding-left-right;
+        border-top: $dialog-footer-border-width $line-solid $dialog-footer-border-color;
+        background: $dialog-footer-bg-color;
+
+        &.#{$css-prefix}align-left {
+            text-align: left;
+        }
+
+        &.#{$css-prefix}align-center {
+            text-align: center;
+        }
+
+        &.#{$css-prefix}align-right {
+            text-align: right;
+        }
+    }
+
+    &-footer-fixed-height {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+    }
+
+    &-btn + &-btn {
+        margin-left: $dialog-footer-button-spacing;
+    }
+
+    &-close {
+        position: absolute;
+        top: $dialog-close-top;
+        right: $dialog-close-right;
+        width: $dialog-close-width;
+        height: $dialog-close-width;
+        color: $dialog-close-color;
+        cursor: pointer;
+
+        &:link,
+        &:visited {
+            height: $dialog-close-width;
+            color: $dialog-close-color;
+        }
+
+        &:hover {
+            background: $dialog-close-bg-hovered;
+            color: $dialog-close-color-hovered;
+        }
+
+        & &-icon.#{$css-prefix}icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            @include icon-square-size(
+                $size: $dialog-close-size,
+                $marginTop: -($dialog-close-size / 2),
+                $marginLeft: -($dialog-close-size / 2)
+            );
+        }
+    }
+
+    &-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1001;
+        padding: $s-10;
+        overflow: auto;
+        text-align: center;
+        box-sizing: border-box;
+
+        &:before {
+            display: inline-block;
+            vertical-align: middle;
+            width: 0;
+            height: 100%;
+            content: '';
+        }
+
+        #{$dialog-prefix} {
+            display: inline-block;
+            position: relative;
+            vertical-align: middle;
+        }
+    }
+
+    &-quick #{$dialog-prefix}-body {
+        padding: $dialog-message-content-padding-top $dialog-message-content-padding-left-right $dialog-message-content-padding-bottom $dialog-message-content-padding-left-right;
+    }
+
+    & &-message.#{$css-prefix}message {
+        min-width: $s-25 * 3;
+        padding: 0;
+    }
+}

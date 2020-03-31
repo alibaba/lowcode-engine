@@ -1,0 +1,745 @@
+@charset "UTF-8";
+
+////
+/// @module shell: 布局框架
+/// @tag Shell
+/// @category component
+/// @family general
+/// @varPrefix $shell-
+/// @classPrefix {prefix}-shell
+/// @order {}
+////
+// shell variables
+// --------------------------------------------------
+$shell-prefix: '.#{$css-prefix}shell' !default;
+
+
+
+/** light **/
+/// color
+/// @namespace statement/header
+$shell-light-header-color: $color-black !default;
+/// height
+/// @namespace statement/header
+$shell-light-header-height: $s-13 !default;
+/// background
+/// @namespace statement/header
+$shell-light-header-background: $color-white !default;
+/// shadow
+/// @namespace statement/header
+$shell-light-header-shadow: $shadow-zero !default;
+/// size
+/// @namespace statement/header/divider
+$shell-light-header-divider-size: $line-1 !default;
+/// style
+/// @namespace statement/header/divider
+$shell-light-header-divider-style: $line-solid !default;
+/// color
+/// @namespace statement/header/divider
+$shell-light-header-divider-color: $color-line1-1 !default;
+$shell-light-header-divider: $shell-light-header-divider-size $shell-light-header-divider-style $shell-light-header-divider-color;
+/// padding (l, r)
+/// @namespace statement/header
+$shell-light-header-paddingLeft: $s-4 !default;
+
+/// min-height
+/// @namespace statement/multitask
+$shell-light-multitask-min-height: $s-10 !default;
+/// background
+/// @namespace statement/multitask
+$shell-light-multitask-background: $color-white !default;
+/// shadow
+/// @namespace statement/multitask
+$shell-light-multitask-shadow: $shadow-zero !default;
+/// size
+/// @namespace statement/multitask/divider
+$shell-light-multitask-divider-size: $line-1 !default;
+/// style
+/// @namespace statement/multitask/divider
+$shell-light-multitask-divider-style: $line-solid !default;
+/// color
+/// @namespace statement/multitask/divider
+$shell-light-multitask-divider-color: $color-line1-1 !default;
+$shell-light-multitask-divider: $shell-light-multitask-divider-size $shell-light-multitask-divider-style $shell-light-multitask-divider-color;
+/// padding (l, r)
+/// @namespace statement/multitask
+$shell-light-multitask-paddingLeft: $s-zero !default;
+
+
+/// margin (l, r)
+/// @namespace statement/navigation
+$shell-light-navigation-hoz-marginLeft: $s-12 !default;
+$shell-light-navigation-hoz-align: flex-end !default; // flex-start flex-end center space-evenly space-around space-between
+
+
+/// width
+/// @namespace statement/navigation
+$shell-light-navigation-ver-width: $s-42 !default;
+/// shadow
+/// @namespace statement/navigation
+$shell-light-navigation-ver-shadow: $shadow-zero !default;
+/// padding (t)
+/// @namespace statement/navigation
+$shell-light-navigation-ver-paddingTop: $s-2 !default;
+/// padding (b)
+/// @namespace statement/navigation
+$shell-light-navigation-ver-paddingBottom: $s-2 !default;
+/// mini-width
+/// @namespace statement/navigation
+$shell-light-navigation-ver-width-mini: $s-15 !default;
+/// background
+/// @namespace statement/navigation
+$shell-light-navigation-ver-background: $color-white !default;
+/// size
+/// @namespace statement/navigation/divider
+$shell-light-navigation-ver-divider-size: $line-1 !default;
+/// style
+/// @namespace statement/navigation/divider
+$shell-light-navigation-ver-divider-style: $line-solid !default;
+/// color
+/// @namespace statement/navigation/divider
+$shell-light-navigation-ver-divider-color: $color-line1-1 !default;
+$shell-light-navigation-ver-divider: $shell-light-navigation-ver-divider-size $shell-light-navigation-ver-divider-style $shell-light-navigation-ver-divider-color;
+
+/// width
+/// @namespace statement/local-navigation
+$shell-light-local-navigation-width: $s-42 !default;
+/// background
+/// @namespace statement/local-navigation
+$shell-light-local-navigation-background: $color-fill1-4 !default;
+/// padding (t)
+/// @namespace statement/local-navigation
+$shell-light-local-navigation-paddingTop: $s-2 !default;
+/// padding (b)
+/// @namespace statement/local-navigation
+$shell-light-local-navigation-paddingBottom: $s-2 !default;
+/// shadow
+/// @namespace statement/local-navigation
+$shell-light-local-navigation-shadow: $shadow-zero !default;
+/// size
+/// @namespace statement/local-navigation/divider
+$shell-light-local-navigation-divider-size: $line-1 !default;
+/// style
+/// @namespace statement/local-navigation/divider
+$shell-light-local-navigation-divider-style: $line-solid !default;
+/// color
+/// @namespace statement/local-navigation/divider
+$shell-light-local-navigation-divider-color: $color-line1-1 !default;
+$shell-light-local-navigation-divider: $shell-light-local-navigation-divider-size $shell-light-local-navigation-divider-style $shell-light-local-navigation-divider-color;
+
+/// background
+/// @namespace statement/appbar
+$shell-light-appbar-background: $color-white !default;
+/// min-height
+/// @namespace statement/appbar
+$shell-light-appbar-min-height: $s-12 !default;
+/// shadow
+/// @namespace statement/appbar
+$shell-light-appbar-shadow: $shadow-zero !default;
+/// padding (l, r)
+/// @namespace statement/appbar
+$shell-light-appbar-paddingLeft: $s-6 !default;
+/// size
+/// @namespace statement/appbar/divider
+$shell-light-appbar-divider-size: $line-1 !default;
+/// style
+/// @namespace statement/appbar/divider
+$shell-light-appbar-divider-style: $line-solid !default;
+/// color
+/// @namespace statement/appbar/divider
+$shell-light-appbar-divider-color: $color-line1-1 !default;
+$shell-light-appbar-divider: $shell-light-appbar-divider-size $shell-light-appbar-divider-style $shell-light-appbar-divider-color;
+
+
+$shell-light-content-max-width: unset !default;
+/// background
+/// @namespace statement/content
+$shell-light-content-background: $color-fill1-3 !default;
+/// padding (l, r)
+/// @namespace statement/content
+$shell-light-content-paddingLeft: $s-5 !default;
+/// padding (t, b)
+/// @namespace statement/content
+$shell-light-content-paddingTop: $s-5 !default;
+
+$shell-light-content-gutter-row: $s-4 !default;
+$shell-light-content-gutter-column: $s-4 !default;
+$shell-light-content-columns: 1 !default;
+
+/// min-height
+/// @namespace statement/footer
+$shell-light-footer-min-height: $s-14 !default;
+/// background
+/// @namespace statement/footer
+$shell-light-footer-background: $color-transparent !default;
+/// color
+/// @namespace statement/footer
+$shell-light-footer-color: $color-text1-1 !default;
+/// font-size
+/// @namespace statement/footer
+$shell-light-footer-font-size: $font-size-body-2 !default;
+
+/// width
+/// @namespace statement/ancillary
+$shell-light-ancillary-width: $s-42 !default;
+/// background
+/// @namespace statement/ancillary
+$shell-light-ancillary-background: $color-white !default;
+/// padding (t)
+/// @namespace statement/ancillary
+$shell-light-ancillary-paddingTop: $s-2 !default;
+/// padding (b)
+/// @namespace statement/ancillary
+$shell-light-ancillary-paddingBottom: $s-2 !default;
+/// shadow
+/// @namespace statement/ancillary
+$shell-light-ancillary-shadow: $shadow-zero !default;
+/// size
+/// @namespace statement/ancillary/divider
+$shell-light-ancillary-divider-size: $line-1 !default;
+/// style
+/// @namespace statement/ancillary/divider
+$shell-light-ancillary-divider-style: $line-solid !default;
+/// color
+/// @namespace statement/ancillary/divider
+$shell-light-ancillary-divider-color: $color-line1-1 !default;
+$shell-light-ancillary-divider: $shell-light-ancillary-divider-size $shell-light-ancillary-divider-style $shell-light-ancillary-divider-color;
+
+
+/// height
+/// @namespace statement/tooldock
+$shell-light-tooldock-height: $s-13 !default;
+/// width
+/// @namespace statement/tooldock
+$shell-light-tooldock-width: $s-13 !default;
+/// background
+/// @namespace statement/tooldock
+$shell-light-tooldock-background: $color-fill1-4 !default;
+/// padding (t)
+/// @namespace statement/tooldock
+$shell-light-tooldock-paddingTop: $s-2 !default;
+/// padding (b)
+/// @namespace statement/tooldock
+$shell-light-tooldock-paddingBottom: $s-2 !default;
+/// shadow
+/// @namespace statement/tooldock
+$shell-light-tooldock-shadow: $shadow-zero !default;
+/// size
+/// @namespace statement/tooldock/divider
+$shell-light-tooldock-divider-size: $line-1 !default;
+/// style
+/// @namespace statement/tooldock/divider
+$shell-light-tooldock-divider-style: $line-solid !default;
+/// color
+/// @namespace statement/tooldock/divider
+$shell-light-tooldock-divider-color: $color-line1-1 !default;
+$shell-light-tooldock-divider: $shell-light-tooldock-divider-size $shell-light-tooldock-divider-style $shell-light-tooldock-divider-color;
+
+/// padding (t)
+/// @namespace statement/tooldock-item
+$shell-light-tooldock-item-paddingTop: $s-2 !default;
+/// color
+/// @namespace statement/tooldock-item
+$shell-light-tooldock-item-color: $color-text1-3 !default;
+/// color
+/// @namespace statement/tooldock-item/hover
+$shell-light-tooldock-item-color-hover: $color-text1-4 !default;
+/// color
+/// @namespace statement/tooldock-item/active
+$shell-light-tooldock-item-color-active: $color-text1-4 !default;
+/// background
+/// @namespace statement/tooldock-item
+$shell-light-tooldock-item-background: $color-transparent !default;
+/// background
+/// @namespace statement/tooldock-item/hover
+$shell-light-tooldock-item-background-hover: $color-fill1-3 !default;
+/// background
+/// @namespace statement/tooldock-item/active
+$shell-light-tooldock-item-background-active: $color-fill1-3 !default;
+
+
+
+/** dark **/
+/// color
+/// @namespace statement/header
+$shell-dark-header-color: $color-white !default;
+/// height
+/// @namespace statement/header
+$shell-dark-header-height: $s-13 !default;
+/// background
+/// @namespace statement/header
+$shell-dark-header-background: $color-black !default;
+/// shadow
+/// @namespace statement/header
+$shell-dark-header-shadow: $shadow-1-down !default;
+/// size
+/// @namespace statement/header/divider
+$shell-dark-header-divider-size: $line-1 !default;
+/// style
+/// @namespace statement/header/divider
+$shell-dark-header-divider-style: $line-solid !default;
+/// color
+/// @namespace statement/header/divider
+$shell-dark-header-divider-color: #1F1F1F !default;
+$shell-dark-header-divider: $shell-dark-header-divider-size $shell-dark-header-divider-style $shell-dark-header-divider-color;
+/// padding (l, r)
+/// @namespace statement/header
+$shell-dark-header-paddingLeft: $s-4 !default;
+
+/// min-height
+/// @namespace statement/multitask
+$shell-dark-multitask-min-height: $s-10 !default;
+/// background
+/// @namespace statement/multitask
+$shell-dark-multitask-background: $color-white !default;
+/// shadow
+/// @namespace statement/multitask
+$shell-dark-multitask-shadow: $shadow-zero !default;
+/// size
+/// @namespace statement/multitask/divider
+$shell-dark-multitask-divider-size: $line-1 !default;
+/// style
+/// @namespace statement/multitask/divider
+$shell-dark-multitask-divider-style: $line-solid !default;
+/// color
+/// @namespace statement/multitask/divider
+$shell-dark-multitask-divider-color: $color-line1-1 !default;
+$shell-dark-multitask-divider: $shell-dark-multitask-divider-size $shell-dark-multitask-divider-style $shell-dark-multitask-divider-color;
+/// padding (l, r)
+/// @namespace statement/multitask
+$shell-dark-multitask-paddingLeft: $s-zero !default;
+
+
+/// margin (l, r)
+/// @namespace statement/navigation
+$shell-dark-navigation-hoz-marginLeft: $s-12 !default;
+$shell-dark-navigation-hoz-align: flex-end !default; // flex-start flex-end center space-evenly space-around space-between
+
+
+/// width
+/// @namespace statement/navigation
+$shell-dark-navigation-ver-width: $s-42 !default;
+/// shadow
+/// @namespace statement/navigation
+$shell-dark-navigation-ver-shadow: $shadow-zero !default;
+/// padding (t)
+/// @namespace statement/navigation
+$shell-dark-navigation-ver-paddingTop: $s-2 !default;
+/// padding (b)
+/// @namespace statement/navigation
+$shell-dark-navigation-ver-paddingBottom: $s-2 !default;
+/// mini-width
+/// @namespace statement/navigation
+$shell-dark-navigation-ver-width-mini: $s-15 !default;
+/// background
+/// @namespace statement/navigation
+$shell-dark-navigation-ver-background: $color-text1-4 !default;
+/// size
+/// @namespace statement/navigation/divider
+$shell-dark-navigation-ver-divider-size: $line-1 !default;
+/// style
+/// @namespace statement/navigation/divider
+$shell-dark-navigation-ver-divider-style: $line-solid !default;
+/// color
+/// @namespace statement/navigation/divider
+$shell-dark-navigation-ver-divider-color: $color-line1-1 !default;
+$shell-dark-navigation-ver-divider: $shell-dark-navigation-ver-divider-size $shell-dark-navigation-ver-divider-style $shell-dark-navigation-ver-divider-color;
+
+/// width
+/// @namespace statement/local-navigation
+$shell-dark-local-navigation-width: $s-42 !default;
+/// background
+/// @namespace statement/local-navigation
+$shell-dark-local-navigation-background: $color-fill1-4 !default;
+/// padding (t)
+/// @namespace statement/local-navigation
+$shell-dark-local-navigation-paddingTop: $s-2 !default;
+/// padding (b)
+/// @namespace statement/local-navigation
+$shell-dark-local-navigation-paddingBottom: $s-2 !default;
+/// shadow
+/// @namespace statement/local-navigation
+$shell-dark-local-navigation-shadow: $shadow-zero !default;
+/// size
+/// @namespace statement/local-navigation/divider
+$shell-dark-local-navigation-divider-size: $line-1 !default;
+/// style
+/// @namespace statement/local-navigation/divider
+$shell-dark-local-navigation-divider-style: $line-solid !default;
+/// color
+/// @namespace statement/local-navigation/divider
+$shell-dark-local-navigation-divider-color: $color-line1-1 !default;
+$shell-dark-local-navigation-divider: $shell-dark-local-navigation-divider-size $shell-dark-local-navigation-divider-style $shell-dark-local-navigation-divider-color;
+
+/// background
+/// @namespace statement/appbar
+$shell-dark-appbar-background: $color-white !default;
+/// min-height
+/// @namespace statement/appbar
+$shell-dark-appbar-min-height: $s-12 !default;
+/// shadow
+/// @namespace statement/appbar
+$shell-dark-appbar-shadow: $shadow-zero !default;
+/// padding (l, r)
+/// @namespace statement/appbar
+$shell-dark-appbar-paddingLeft: $s-6 !default;
+/// size
+/// @namespace statement/appbar/divider
+$shell-dark-appbar-divider-size: $line-1 !default;
+/// style
+/// @namespace statement/appbar/divider
+$shell-dark-appbar-divider-style: $line-solid !default;
+/// color
+/// @namespace statement/appbar/divider
+$shell-dark-appbar-divider-color: $color-line1-1 !default;
+$shell-dark-appbar-divider: $shell-dark-appbar-divider-size $shell-dark-appbar-divider-style $shell-dark-appbar-divider-color;
+
+
+$shell-dark-content-max-width: unset !default;
+/// background
+/// @namespace statement/content
+$shell-dark-content-background: $color-fill1-3 !default;
+/// padding (l, r)
+/// @namespace statement/content
+$shell-dark-content-paddingLeft: $s-5 !default;
+/// padding (t, b)
+/// @namespace statement/content
+$shell-dark-content-paddingTop: $s-5 !default;
+
+$shell-dark-content-gutter-row: $s-4 !default;
+$shell-dark-content-gutter-column: $s-4 !default;
+$shell-dark-content-columns: 1 !default;
+
+/// min-height
+/// @namespace statement/footer
+$shell-dark-footer-min-height: $s-14 !default;
+/// background
+/// @namespace statement/footer
+$shell-dark-footer-background: $color-transparent !default;
+/// color
+/// @namespace statement/footer
+$shell-dark-footer-color: $color-text1-1 !default;
+/// font-size
+/// @namespace statement/footer
+$shell-dark-footer-font-size: $font-size-body-2 !default;
+
+/// width
+/// @namespace statement/ancillary
+$shell-dark-ancillary-width: $s-42 !default;
+/// background
+/// @namespace statement/ancillary
+$shell-dark-ancillary-background: $color-white !default;
+/// padding (t)
+/// @namespace statement/ancillary
+$shell-dark-ancillary-paddingTop: $s-2 !default;
+/// padding (b)
+/// @namespace statement/ancillary
+$shell-dark-ancillary-paddingBottom: $s-2 !default;
+/// shadow
+/// @namespace statement/ancillary
+$shell-dark-ancillary-shadow: $shadow-zero !default;
+/// size
+/// @namespace statement/ancillary/divider
+$shell-dark-ancillary-divider-size: $line-1 !default;
+/// style
+/// @namespace statement/ancillary/divider
+$shell-dark-ancillary-divider-style: $line-solid !default;
+/// color
+/// @namespace statement/ancillary/divider
+$shell-dark-ancillary-divider-color: $color-line1-1 !default;
+$shell-dark-ancillary-divider: $shell-dark-ancillary-divider-size $shell-dark-ancillary-divider-style $shell-dark-ancillary-divider-color;
+
+
+/// height
+/// @namespace statement/tooldock
+$shell-dark-tooldock-height: $s-13 !default;
+/// width
+/// @namespace statement/tooldock
+$shell-dark-tooldock-width: $s-13 !default;
+/// background
+/// @namespace statement/tooldock
+$shell-dark-tooldock-background: $color-fill1-4 !default;
+/// padding (t)
+/// @namespace statement/tooldock
+$shell-dark-tooldock-paddingTop: $s-2 !default;
+/// padding (b)
+/// @namespace statement/tooldock
+$shell-dark-tooldock-paddingBottom: $s-2 !default;
+/// shadow
+/// @namespace statement/tooldock
+$shell-dark-tooldock-shadow: $shadow-zero !default;
+/// size
+/// @namespace statement/tooldock/divider
+$shell-dark-tooldock-divider-size: $line-1 !default;
+/// style
+/// @namespace statement/tooldock/divider
+$shell-dark-tooldock-divider-style: $line-solid !default;
+/// color
+/// @namespace statement/tooldock/divider
+$shell-dark-tooldock-divider-color: $color-line1-1 !default;
+$shell-dark-tooldock-divider: $shell-dark-tooldock-divider-size $shell-dark-tooldock-divider-style $shell-dark-tooldock-divider-color;
+
+/// padding (t)
+/// @namespace statement/tooldock-item
+$shell-dark-tooldock-item-paddingTop: $s-2 !default;
+/// color
+/// @namespace statement/tooldock-item
+$shell-dark-tooldock-item-color: $color-text1-3 !default;
+/// color
+/// @namespace statement/tooldock-item/hover
+$shell-dark-tooldock-item-color-hover: $color-text1-4 !default;
+/// color
+/// @namespace statement/tooldock-item/active
+$shell-dark-tooldock-item-color-active: $color-text1-4 !default;
+/// background
+/// @namespace statement/tooldock-item
+$shell-dark-tooldock-item-background: $color-transparent !default;
+/// background
+/// @namespace statement/tooldock-item/hover
+$shell-dark-tooldock-item-background-hover: $color-fill1-3 !default;
+/// background
+/// @namespace statement/tooldock-item/active
+$shell-dark-tooldock-item-background-active: $color-fill1-3 !default;
+
+
+/** brand **/
+/// color
+/// @namespace statement/header
+$shell-brand-header-color: $color-white !default;
+/// height
+/// @namespace statement/header
+$shell-brand-header-height: $s-13 !default;
+/// background
+/// @namespace statement/header
+$shell-brand-header-background: $color-brand1-6 !default;
+/// shadow
+/// @namespace statement/header
+$shell-brand-header-shadow: $shadow-1-down !default;
+/// size
+/// @namespace statement/header/divider
+$shell-brand-header-divider-size: $line-1 !default;
+/// style
+/// @namespace statement/header/divider
+$shell-brand-header-divider-style: $line-solid !default;
+/// color
+/// @namespace statement/header/divider
+$shell-brand-header-divider-color: $color-line1-1 !default;
+$shell-brand-header-divider: $shell-brand-header-divider-size $shell-brand-header-divider-style $shell-brand-header-divider-color;
+/// padding (l, r)
+/// @namespace statement/header
+$shell-brand-header-paddingLeft: $s-4 !default;
+
+/// min-height
+/// @namespace statement/multitask
+$shell-brand-multitask-min-height: $s-10 !default;
+/// background
+/// @namespace statement/multitask
+$shell-brand-multitask-background: $color-white !default;
+/// shadow
+/// @namespace statement/multitask
+$shell-brand-multitask-shadow: $shadow-zero !default;
+/// size
+/// @namespace statement/multitask/divider
+$shell-brand-multitask-divider-size: $line-1 !default;
+/// style
+/// @namespace statement/multitask/divider
+$shell-brand-multitask-divider-style: $line-solid !default;
+/// color
+/// @namespace statement/multitask/divider
+$shell-brand-multitask-divider-color: $color-line1-1 !default;
+$shell-brand-multitask-divider: $shell-brand-multitask-divider-size $shell-brand-multitask-divider-style $shell-brand-multitask-divider-color;
+/// padding (l, r)
+/// @namespace statement/multitask
+$shell-brand-multitask-paddingLeft: $s-zero !default;
+
+
+/// margin (l, r)
+/// @namespace statement/navigation
+$shell-brand-navigation-hoz-marginLeft: $s-12 !default;
+$shell-brand-navigation-hoz-align: flex-end !default; // flex-start flex-end center space-evenly space-around space-between
+
+
+/// width
+/// @namespace statement/navigation
+$shell-brand-navigation-ver-width: $s-42 !default;
+/// shadow
+/// @namespace statement/navigation
+$shell-brand-navigation-ver-shadow: $shadow-zero !default;
+/// padding (t)
+/// @namespace statement/navigation
+$shell-brand-navigation-ver-paddingTop: $s-2 !default;
+/// padding (b)
+/// @namespace statement/navigation
+$shell-brand-navigation-ver-paddingBottom: $s-2 !default;
+/// mini-width
+/// @namespace statement/navigation
+$shell-brand-navigation-ver-width-mini: $s-15 !default;
+/// background
+/// @namespace statement/navigation
+$shell-brand-navigation-ver-background: $color-white !default;
+/// size
+/// @namespace statement/navigation/divider
+$shell-brand-navigation-ver-divider-size: $line-1 !default;
+/// style
+/// @namespace statement/navigation/divider
+$shell-brand-navigation-ver-divider-style: $line-solid !default;
+/// color
+/// @namespace statement/navigation/divider
+$shell-brand-navigation-ver-divider-color: $color-line1-1 !default;
+$shell-brand-navigation-ver-divider: $shell-brand-navigation-ver-divider-size $shell-brand-navigation-ver-divider-style $shell-brand-navigation-ver-divider-color;
+
+/// width
+/// @namespace statement/local-navigation
+$shell-brand-local-navigation-width: $s-42 !default;
+/// background
+/// @namespace statement/local-navigation
+$shell-brand-local-navigation-background: $color-fill1-4 !default;
+/// padding (t)
+/// @namespace statement/local-navigation
+$shell-brand-local-navigation-paddingTop: $s-2 !default;
+/// padding (b)
+/// @namespace statement/local-navigation
+$shell-brand-local-navigation-paddingBottom: $s-2 !default;
+/// shadow
+/// @namespace statement/local-navigation
+$shell-brand-local-navigation-shadow: $shadow-zero !default;
+/// size
+/// @namespace statement/local-navigation/divider
+$shell-brand-local-navigation-divider-size: $line-1 !default;
+/// style
+/// @namespace statement/local-navigation/divider
+$shell-brand-local-navigation-divider-style: $line-solid !default;
+/// color
+/// @namespace statement/local-navigation/divider
+$shell-brand-local-navigation-divider-color: $color-line1-1 !default;
+$shell-brand-local-navigation-divider: $shell-brand-local-navigation-divider-size $shell-brand-local-navigation-divider-style $shell-brand-local-navigation-divider-color;
+
+/// background
+/// @namespace statement/appbar
+$shell-brand-appbar-background: $color-white !default;
+/// min-height
+/// @namespace statement/appbar
+$shell-brand-appbar-min-height: $s-12 !default;
+/// shadow
+/// @namespace statement/appbar
+$shell-brand-appbar-shadow: $shadow-zero !default;
+/// padding (l, r)
+/// @namespace statement/appbar
+$shell-brand-appbar-paddingLeft: $s-6 !default;
+/// size
+/// @namespace statement/appbar/divider
+$shell-brand-appbar-divider-size: $line-1 !default;
+/// style
+/// @namespace statement/appbar/divider
+$shell-brand-appbar-divider-style: $line-solid !default;
+/// color
+/// @namespace statement/appbar/divider
+$shell-brand-appbar-divider-color: $color-line1-1 !default;
+$shell-brand-appbar-divider: $shell-brand-appbar-divider-size $shell-brand-appbar-divider-style $shell-brand-appbar-divider-color;
+
+
+$shell-brand-content-max-width: unset !default;
+/// background
+/// @namespace statement/content
+$shell-brand-content-background: $color-fill1-3 !default;
+/// padding (l, r)
+/// @namespace statement/content
+$shell-brand-content-paddingLeft: $s-5 !default;
+/// padding (t, b)
+/// @namespace statement/content
+$shell-brand-content-paddingTop: $s-5 !default;
+
+$shell-brand-content-gutter-row: $s-4 !default;
+$shell-brand-content-gutter-column: $s-4 !default;
+$shell-brand-content-columns: 1 !default;
+
+/// min-height
+/// @namespace statement/footer
+$shell-brand-footer-min-height: $s-14 !default;
+/// background
+/// @namespace statement/footer
+$shell-brand-footer-background: $color-transparent !default;
+/// color
+/// @namespace statement/footer
+$shell-brand-footer-color: $color-text1-1 !default;
+/// font-size
+/// @namespace statement/footer
+$shell-brand-footer-font-size: $font-size-body-2 !default;
+
+/// width
+/// @namespace statement/ancillary
+$shell-brand-ancillary-width: $s-42 !default;
+/// background
+/// @namespace statement/ancillary
+$shell-brand-ancillary-background: $color-white !default;
+/// padding (t)
+/// @namespace statement/ancillary
+$shell-brand-ancillary-paddingTop: $s-2 !default;
+/// padding (b)
+/// @namespace statement/ancillary
+$shell-brand-ancillary-paddingBottom: $s-2 !default;
+/// shadow
+/// @namespace statement/ancillary
+$shell-brand-ancillary-shadow: $shadow-zero !default;
+/// size
+/// @namespace statement/ancillary/divider
+$shell-brand-ancillary-divider-size: $line-1 !default;
+/// style
+/// @namespace statement/ancillary/divider
+$shell-brand-ancillary-divider-style: $line-solid !default;
+/// color
+/// @namespace statement/ancillary/divider
+$shell-brand-ancillary-divider-color: $color-line1-1 !default;
+$shell-brand-ancillary-divider: $shell-brand-ancillary-divider-size $shell-brand-ancillary-divider-style $shell-brand-ancillary-divider-color;
+
+
+/// height
+/// @namespace statement/tooldock
+$shell-brand-tooldock-height: $s-13 !default;
+/// width
+/// @namespace statement/tooldock
+$shell-brand-tooldock-width: $s-13 !default;
+/// background
+/// @namespace statement/tooldock
+$shell-brand-tooldock-background: $color-fill1-4 !default;
+/// padding (t)
+/// @namespace statement/tooldock
+$shell-brand-tooldock-paddingTop: $s-2 !default;
+/// padding (b)
+/// @namespace statement/tooldock
+$shell-brand-tooldock-paddingBottom: $s-2 !default;
+/// shadow
+/// @namespace statement/tooldock
+$shell-brand-tooldock-shadow: $shadow-zero !default;
+/// size
+/// @namespace statement/tooldock/divider
+$shell-brand-tooldock-divider-size: $line-1 !default;
+/// style
+/// @namespace statement/tooldock/divider
+$shell-brand-tooldock-divider-style: $line-solid !default;
+/// color
+/// @namespace statement/tooldock/divider
+$shell-brand-tooldock-divider-color: $color-line1-1 !default;
+$shell-brand-tooldock-divider: $shell-brand-tooldock-divider-size $shell-brand-tooldock-divider-style $shell-brand-tooldock-divider-color;
+
+/// padding (t)
+/// @namespace statement/tooldock-item
+$shell-brand-tooldock-item-paddingTop: $s-2 !default;
+/// color
+/// @namespace statement/tooldock-item
+$shell-brand-tooldock-item-color: $color-text1-3 !default;
+/// color
+/// @namespace statement/tooldock-item/hover
+$shell-brand-tooldock-item-color-hover: $color-text1-4 !default;
+/// color
+/// @namespace statement/tooldock-item/active
+$shell-brand-tooldock-item-color-active: $color-text1-4 !default;
+/// background
+/// @namespace statement/tooldock-item
+$shell-brand-tooldock-item-background: $color-transparent !default;
+/// background
+/// @namespace statement/tooldock-item/hover
+$shell-brand-tooldock-item-background-hover: $color-fill1-3 !default;
+/// background
+/// @namespace statement/tooldock-item/active
+$shell-brand-tooldock-item-background-active: $color-fill1-3 !default;

@@ -1,0 +1,333 @@
+@charset "UTF-8";
+
+////
+/// @module search: 搜索框
+/// @tag Search
+/// @category component
+/// @family data-entry
+/// @varPrefix $search-
+/// @classPrefix {prefix}-search
+/// @order {"size/bounding":10,"size/btn":11,"size/margin":12,"size/simple":13,"statement/normal":10,"statement/normal/btn":100,"statement/btn":11,"statement/hover":12,"statement/hover/btn":120,"statement/simple":13,"statement/icon":14}
+////
+
+$search-prefix: '.#{$css-prefix}search';
+
+// Normal
+/// corner
+/// @namespace size/bounding
+$search-normal-corner: $corner-1 !default;
+
+// Primary
+// ----------------------------------------
+/// color
+/// @namespace statement/normal
+$search-normal-primary-color: $color-brand1-6 !default;
+/// hover
+/// @namespace statement/normal
+$search-normal-primary-hover-color: $color-brand1-6 !default;
+/// split
+/// @namespace statement/normal
+$search-normal-primary-split-color: $color-line1-1 !default;
+/// shadow
+/// @namespace statement/normal
+$search-normal-primary-shadow: $shadow-zero !default;
+/// text
+/// @namespace statement/btn
+$search-normal-primary-btn-text-color: $color-white !default;
+/// background
+/// @namespace statement/hover
+$search-normal-primary-btn-hover-bg-color: $color-brand1-9 !default;
+/// text
+/// @namespace statement/hover
+$search-normal-primary-btn-hover-text-color: $color-white !default;
+/// border
+/// @namespace size/bounding
+$search-normal-primary-border-width: $line-2 !default;
+/// icon-margin(r)
+/// @namespace size/btn
+$search-normal-primary-btn-text-padding-left: $s-zero !default;
+
+
+// Primary Large
+// ----------------------------------------
+/// height
+/// @namespace size/bounding
+$search-normal-primary-l-height: $s-15 !default;
+/// icon
+/// @namespace size/bounding
+$search-normal-primary-l-icon-size: $icon-l !default;
+/// text
+/// @namespace size/btn
+$search-normal-primary-l-btn-text-size: $font-size-subhead !default;
+// Primary Medium
+// ----------------------------------------
+/// height
+/// @namespace size/bounding
+$search-normal-primary-m-height: $s-10 !default;
+/// icon
+/// @namespace size/bounding
+$search-normal-primary-m-icon-size: $icon-s !default;
+/// text
+/// @namespace size/btn
+$search-normal-primary-m-btn-text-size: $font-size-subhead !default;
+// Secondary
+// ----------------------------------------
+/// color
+/// @namespace statement/normal
+$search-normal-secondary-color: $color-line1-3 !default;
+/// split
+/// @namespace statement/normal
+$search-normal-secondary-split-color: $color-line1-1 !default;
+/// hover
+/// @namespace statement/normal
+$search-normal-secondary-hover-color: $color-brand1-6 !default;
+/// shadow
+/// @namespace statement/normal
+$search-normal-secondary-shadow: $shadow-zero !default;
+/// background
+/// @namespace statement/btn
+$search-normal-secondary-btn-bg-color: $color-brand1-6 !default;
+/// text
+/// @namespace statement/btn
+$search-normal-secondary-btn-text-color: $color-white !default;
+/// background
+/// @namespace statement/hover
+$search-normal-secondary-btn-hover-bg-color: $color-brand1-9 !default;
+/// text
+/// @namespace statement/hover
+$search-normal-secondary-btn-hover-text-color: $color-white !default;
+/// border
+/// @namespace size/bounding
+$search-normal-secondary-border-width: $line-1 !default;
+/// icon-margin(r)
+/// @namespace size/btn
+$search-normal-secondary-btn-text-padding-left: $s-zero !default;
+// Secondary Large
+// ----------------------------------------
+/// height
+/// @namespace size/bounding
+$search-normal-secondary-l-height: $s-15 !default;
+/// icon
+/// @namespace size/bounding
+$search-normal-secondary-l-icon-size: $icon-l !default;
+/// text
+/// @namespace size/btn
+$search-normal-secondary-l-btn-text-size: $font-size-subhead !default;
+// Secondary Medium
+// ----------------------------------------
+/// height
+/// @namespace size/bounding
+$search-normal-secondary-m-height: $s-10 !default;
+/// icon
+/// @namespace size/bounding
+$search-normal-secondary-m-icon-size: $icon-s !default;
+/// text
+/// @namespace size/btn
+$search-normal-secondary-m-btn-text-size: $font-size-subhead !default;
+
+// Normal
+// ----------------------------------------
+/// color
+/// @namespace statement/normal
+$search-normal-normal-color: $color-line1-3 !default;
+/// split
+/// @namespace statement/normal
+$search-normal-normal-split-color: $color-line1-1 !default;
+/// hover
+/// @namespace statement/normal
+$search-normal-normal-hover-color: $color-line1-4 !default;
+/// shadow
+/// @namespace statement/normal
+$search-normal-normal-shadow: $shadow-zero !default;
+/// background
+/// @namespace statement/normal/btn
+$search-normal-normal-btn-bg-color: $color-fill1-1 !default;
+/// text
+/// @namespace statement/normal/btn
+$search-normal-normal-btn-text-color: $color-text1-3 !default;
+/// background
+/// @namespace statement/hover/btn
+$search-normal-normal-btn-hover-bg-color: $color-fill1-3 !default;
+/// text
+/// @namespace statement/hover/btn
+$search-normal-normal-btn-hover-text-color: $color-text1-4 !default;
+/// border
+/// @namespace size/bounding
+$search-normal-normal-border-width: $line-1 !default;
+/// icon-margin(r)
+/// @namespace size/btn
+$search-normal-normal-btn-text-padding-left: $s-zero !default;
+
+// Normal Large
+// ----------------------------------------
+/// height
+/// @namespace size/bounding
+$search-normal-normal-l-height: $s-15 !default;
+/// icon
+/// @namespace size/bounding
+$search-normal-normal-l-icon-size: $icon-l !default;
+/// text
+/// @namespace size/btn
+$search-normal-normal-l-btn-text-size: $font-size-subhead !default;
+// Normal Medium
+// ----------------------------------------
+/// height
+/// @namespace size/bounding
+$search-normal-normal-m-height: $s-10 !default;
+/// icon
+/// @namespace size/bounding
+$search-normal-normal-m-icon-size: $icon-s !default;
+/// text
+/// @namespace size/btn
+$search-normal-normal-m-btn-text-size: $font-size-subhead !default;
+
+// Dark
+// ----------------------------------------
+/// color
+/// @namespace statement/normal
+$search-normal-dark-color: $color-brand1-6 !default;
+/// hover
+/// @namespace statement/normal
+$search-normal-dark-hover-color: $color-brand1-6 !default;
+/// text
+/// @namespace statement/normal
+$search-normal-dark-text-color: $color-white !default;
+/// background
+/// @namespace statement/normal
+$search-normal-dark-bg-color: $color-white !default;
+/// background-opacity
+/// @namespace statement/normal
+/// @type alpha
+$search-normal-dark-bg-opacity: 0 !default;
+/// shadow
+/// @namespace statement/normal
+$search-normal-dark-shadow: $shadow-zero !default;
+/// text
+/// @namespace statement/btn
+$search-normal-dark-btn-text-color: $color-white !default;
+/// background
+/// @namespace statement/hover
+$search-normal-dark-btn-hover-bg-color: $color-brand1-9 !default;
+/// text
+/// @namespace statement/hover
+$search-normal-dark-btn-hover-text-color: $color-white !default;
+/// border
+/// @namespace size/bounding
+$search-normal-dark-border-width: $line-1 !default;
+/// icon-margin(r)
+/// @namespace size/btn
+$search-normal-dark-btn-text-padding-left: $s-zero !default;
+
+/// height
+/// @namespace size/bounding
+$search-normal-dark-l-height: $s-15 !default;
+/// icon
+/// @namespace size/bounding
+$search-normal-dark-l-icon-size: $icon-l !default;
+/// text
+/// @namespace size/btn
+$search-normal-dark-l-btn-text-size: $font-size-subhead !default;
+/// height
+/// @namespace size/bounding
+$search-normal-dark-m-height: $s-10 !default;
+/// icon
+/// @namespace size/bounding
+$search-normal-dark-m-icon-size: $icon-s !default;
+/// text
+/// @namespace size/btn
+$search-normal-dark-m-btn-text-size: $font-size-subhead !default;
+/// text
+/// @namespace size/btn
+$search-normal-dark-m-btn-text-size: $font-size-subhead !default;
+
+// Simple
+/// corner
+/// @namespace size/bounding
+$search-simple-corner: $corner-1 !default;
+/// right
+/// @namespace size/margin
+$search-simple-l-icon-margin-right: $s-3 !default;
+/// right
+/// @namespace size/margin
+$search-simple-m-icon-margin-right: $s-2 !default;
+
+// Normal
+// ----------------------------------------
+/// color
+/// @namespace statement/normal
+$search-simple-normal-color: $color-line1-3 !default;
+/// hover
+/// @namespace statement/simple
+$search-simple-normal-hover-color: $color-line1-4 !default;
+/// split
+/// @namespace statement/normal
+$search-simple-normal-split-color: $color-line1-3 !default;
+/// shadow
+/// @namespace statement/normal
+$search-simple-normal-shadow: $shadow-zero !default;
+/// text
+/// @namespace statement/icon
+$search-simple-normal-icon-text-color: $color-text1-2 !default;
+/// text
+/// @namespace statement/hover
+$search-simple-normal-icon-hover-text-color: $color-text1-3 !default;
+/// border
+/// @namespace size/simple
+$search-simple-normal-border-width: $line-1 !default;
+/// icon
+/// @namespace size/simple
+$search-simple-normal-l-icon-size: $icon-m !default;
+/// icon
+/// @namespace size/simple
+$search-simple-normal-m-icon-size: $icon-xs !default;
+/// icon-margin(r)
+/// @namespace size/btn
+$search-simple-normal-btn-text-padding-left: $s-zero !default;
+
+// Dark
+// ----------------------------------------
+/// color
+/// @namespace statement/normal
+$search-simple-dark-color: $color-line1-3 !default;
+/// hover
+/// @namespace statement/normal
+$search-simple-dark-hover-color: $color-line1-3 !default;
+/// background
+/// @namespace statement/normal
+$search-simple-dark-bg-color: $color-white !default;
+/// background-opacity
+/// @namespace statement/normal
+/// @type alpha
+$search-simple-dark-bg-opacity: 0 !default;
+/// text
+/// @namespace statement/normal
+$search-simple-dark-text-color: $color-white !default;
+/// shadow
+/// @namespace statement/normal
+$search-simple-dark-shadow: $shadow-zero !default;
+/// text
+/// @namespace statement/icon
+$search-simple-dark-icon-text-color: $color-text1-2 !default;
+/// text
+/// @namespace statement/hover
+$search-simple-dark-icon-hover-text-color: $color-text1-3 !default;
+/// icon-margin(r)
+/// @namespace size/btn
+$search-simple-dark-btn-text-padding-left: $s-zero !default;
+
+/// split
+/// @namespace statement/normal
+$search-simple-dark-split-color: $color-line1-3 !default;
+
+/// border
+/// @namespace size/simple
+$search-simple-dark-border-width: $line-1 !default;
+/// icon
+/// @namespace size/simple
+$search-simple-dark-l-icon-size: $icon-m !default;
+/// icon
+/// @namespace size/simple
+$search-simple-dark-m-icon-size: $icon-xs !default;
+
+$color-calculate-search-normal-dark-bg: transparentize($search-normal-dark-bg-color, 1 - $search-normal-dark-bg-opacity) !default;
+$color-calculate-search-simple-dark-bg: transparentize($search-simple-dark-bg-color, 1 - $search-simple-dark-bg-opacity) !default;

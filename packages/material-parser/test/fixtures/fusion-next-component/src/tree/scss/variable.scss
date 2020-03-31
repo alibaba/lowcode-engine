@@ -1,0 +1,152 @@
+////
+/// @module tree: 树
+/// @tag Tree
+/// @category component
+/// @family data-display
+/// @varPrefix $tree-
+/// @classPrefix {prefix}-tree
+/// @order {"size/node":10,"size/label":11,"size/arrow":12,"size/switch":13,"size/arrow & switch":14,"size/line":15,"statement/normal":10,"statement/normal/label":100,"statement/normal/arrow":101,"statement/normal/switch":102,"statement/normal/line":103,"statement/hover":11,"statement/hover/label":110,"statement/hover/arrow":111,"statement/hover/switch":112,"statement/selected":12,"statement/selected/label":120,"statement/disabled":13,"statement/disabled/label":130}
+////
+
+$tree-prefix: '.' + $css-prefix + 'tree';
+
+// Size
+// ----------------------------------------
+
+/// padding (t, b)
+/// @namespace size/node
+$tree-node-padding: $s-1 !default;
+
+/// margin (l, r)
+/// @namespace size/label
+$tree-node-title-margin: $s-1 !default;
+
+/// padding (l, r)
+/// @namespace size/label
+$tree-node-title-padding: $s-1 !default;
+
+/// text
+/// @namespace size/label
+$tree-node-title-font-size: $font-size-body-1 !default;
+
+/// size
+/// @namespace size/arrow
+$tree-switch-arrow-size: $icon-xs !default;
+
+/// size
+/// @namespace size/switch
+$tree-switch-size: $s-4 !default;
+
+/// icon
+/// @namespace size/switch
+$tree-switch-icon-size: $icon-xxs !default;
+
+/// border width
+/// @namespace size/switch
+$tree-switch-border-width: $line-1 !default;
+
+/// margin (r)
+/// @namespace size/arrow & switch
+$tree-switch-margint-right: $s-2 !default;
+
+/// width
+/// @namespace size/line
+$tree-line-width: $line-1 !default;
+
+// Statement:Normal
+// ----------------------------------------
+
+/// text
+/// @namespace statement/normal/label
+$tree-node-normal-color: $color-text1-4 !default;
+
+/// background
+/// @namespace statement/normal/label
+$tree-node-normal-background: $color-white !default;
+
+/// corner
+/// @namespace statement/normal/label
+$tree-node-title-border-radius: $corner-1 !default;
+
+/// color
+/// @namespace statement/normal/arrow
+$tree-switch-arrow-color: $color-text1-2 !default;
+
+/// icon color
+/// @namespace statement/normal/switch
+$tree-switch-icon-color: $color-text1-3 !default;
+
+/// background
+/// @namespace statement/normal/switch
+$tree-switch-bg-color: $color-white !default;
+
+/// border color
+/// @namespace statement/normal/switch
+$tree-switch-border-color: $color-line1-3 !default;
+
+/// corner
+/// @namespace statement/normal/switch
+$tree-switch-corner: $corner-1 !default;
+
+/// color
+/// @namespace statement/normal/line
+$tree-line-color: $color-line1-3 !default;
+
+/// style
+/// @namespace statement/normal/line
+$tree-line-style: $line-solid !default;
+
+// Statement:Hover
+// ----------------------------------------
+
+/// text
+/// @namespace statement/hover/label
+$tree-node-hover-color: $color-text1-4 !default;
+
+/// background
+/// @namespace statement/hover/label
+$tree-node-hover-bg-color: $color-fill1-2 !default;
+
+/// color
+/// @namespace statement/hover/arrow
+$tree-switch-hover-arrow-color: $color-text1-4 !default;
+
+/// icon color
+/// @namespace statement/hover/switch
+$tree-switch-hover-icon-color: $color-text1-4 !default;
+
+/// background
+/// @namespace statement/hover/switch
+$tree-switch-hover-bg-color: $color-fill1-2 !default;
+
+/// border color
+/// @namespace statement/hover/switch
+$tree-switch-hover-border-color: $color-line1-4 !default;
+
+// Statement:Selected
+// ----------------------------------------
+
+/// text
+/// @namespace statement/selected/label
+$tree-node-selected-color: $color-text1-4 !default;
+
+/// background
+/// @namespace statement/selected/label
+$tree-node-selected-background: $color-brand1-1 !default;
+
+// Statement:Disabled
+// ----------------------------------------
+
+/// text
+/// @namespace statement/disabled/label
+$tree-node-disabled-color: $color-text1-1 !default;
+
+/// background
+/// @namespace statement/disabled/label
+$tree-node-disabled-background: $color-white !default;
+
+$tree-child-indent: $s-6 !default;
+$tree-node-title-height: $s-5 !default;
+$tree-child-indent-left: ($tree-switch-size - $tree-line-width) / 2;
+$tree-child-indent-right: $tree-child-indent - $tree-line-width - $tree-child-indent-left;
+$tree-line: $tree-line-width $tree-line-style $tree-line-color;

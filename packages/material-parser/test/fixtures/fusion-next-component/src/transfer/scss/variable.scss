@@ -1,0 +1,125 @@
+////
+/// @module transfer: 穿梭框
+/// @tag Transfer
+/// @category component
+/// @family data-entry
+/// @varPrefix $transfer-
+/// @classPrefix {prefix}-transfer
+/// @order {"size/move":10,"size/panel":11,"size/header":12,"size/search":13,"size/footer":14,"statement/normal":10,"statement/normal/move":100,"statement/normal/panel":101,"statement/normal/header":102,"statement/normal/item":103,"statement/normal/footer":104,"statement/hover":11,"statement/hover/item":110}
+////
+
+// transfer variables
+// --------------------------------------------------
+
+// unconfigurable
+$transfer-prefix: ".#{$css-prefix}transfer";
+
+// Size
+// ----------------------------------------
+
+/// margin (l, r)
+/// @namespace size/move
+$transfer-operation-margin-left-right: $s-5 !default;
+
+/// spacing
+/// @namespace size/move
+$transfer-operation-margin-gutter: $s-2 !default;
+
+/// icon
+/// @namespace size/move
+$transfer-operation-icon-size: $icon-xs !default;
+
+/// border width
+/// @namespace size/panel
+$transfer-panel-border-width: $line-1 !default;
+
+/// padding (t, b)
+/// @namespace size/header
+$transfer-panel-header-padding-top-bottom: $s-2 !default;
+
+/// padding (l, r)
+/// @namespace size/header
+$transfer-panel-header-padding-left-right: $s-5 !default;
+
+/// text
+/// @namespace size/header
+$transfer-panel-header-text-size: $font-size-body-1 !default;
+
+/// margin (t)
+/// @namespace size/search
+$transfer-panel-search-margin-top: $s-2 !default;
+
+/// margin (l, r)
+/// @namespace size/search
+$transfer-panel-search-margin-left-right: $s-1 !default;
+
+/// margin (b)
+/// @namespace size/search
+$transfer-panel-search-margin-bottom: $s-zero !default;
+
+/// width
+/// @namespace size/list
+$transfer-panel-list-width: $s-45 !default;
+
+/// height
+/// @namespace size/list
+$transfer-panel-list-height: $s-40 !default;
+
+/// padding (t, b)
+/// @namespace size/footer
+$transfer-panel-footer-padding-top-bottom: $s-2 !default;
+
+/// padding (l, r)
+/// @namespace size/footer
+$transfer-panel-footer-padding-left-right: $s-5 !default;
+
+// Statement
+// ----------------------------------------
+
+/// icon
+/// @namespace statement/normal/move
+$transfer-simple-move-icon-color: $color-line1-3 !default;
+
+/// border color
+/// @namespace statement/normal/panel
+$transfer-panel-border-color: $color-line1-2 !default;
+
+/// corner
+/// @namespace statement/normal/panel
+$transfer-panel-border-corner: $corner-1 !default;
+
+/// background
+/// @namespace statement/normal/panel
+$transfer-panel-background-color: $color-white !default;
+
+/// text
+/// @namespace statement/normal/header
+$transfer-panel-header-text-color: $color-text1-4 !default;
+
+/// background
+/// @namespace statement/normal/header
+$transfer-panel-header-background-color: $color-fill1-1 !default;
+
+/// icon
+/// @namespace statement/normal/item
+$transfer-panel-search-icon-color: $color-text1-2 !default;
+
+/// text
+/// @namespace statement/normal/footer
+$transfer-panel-footer-text-color: $color-text1-4 !default;
+
+/// background
+/// @namespace statement/normal/footer
+$transfer-panel-footer-background-color: $color-white !default;
+
+/// text
+/// @namespace statement/normal/footer
+$transfer-simple-panel-footer-text-color: $color-brand1-6 !default;
+
+/// text
+/// @namespace statement/hover/item
+$transfer-simple-panel-item-hover-text-color: $color-brand1-6 !default;
+
+/// shadow
+/// @namespace statement/normal/footer
+$transfer-panel-footer-shadow: $shadow-zero !default;

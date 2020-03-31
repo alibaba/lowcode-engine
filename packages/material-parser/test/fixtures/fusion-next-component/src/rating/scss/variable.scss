@@ -1,0 +1,78 @@
+////
+/// @module rating: 评分
+/// @tag Rating
+/// @category component
+/// @family data-entry
+/// @varPrefix $rating-
+/// @classPrefix {prefix}-rating
+/// @order {"size/text":10,"size/icon":11,"statement/normal":10,"statement/normal/underlay":100,"statement/normal/overlay":101,"statement/hover":11,"statement/hover/underlay":110,"statement/hover/overlay":111}
+////
+
+$rating-prefix: '.' + $css-prefix + 'rating';
+
+$rating-icon-prefix: '.' + $css-prefix + 'icon';
+
+
+/// margin (l)
+/// @namespace size/text
+$rating-small-text-margin-left: $s-2 !default;
+
+/// size
+/// @namespace size/icon
+$rating-small-icon-size: $icon-xs !default;
+
+/// size
+/// @namespace size/text
+$rating-small-font-size: $font-size-caption !default;
+
+/// margin (l)
+/// @namespace size/text
+$rating-medium-text-margin-left: $s-3 !default;
+
+/// size
+/// @namespace size/icon
+$rating-medium-icon-size: $icon-s !default;
+
+/// size
+/// @namespace size/text
+$rating-medium-font-size: $font-size-body-1 !default;
+
+/// margin (l)
+/// @namespace size/text
+$rating-large-text-margin-left: $s-4 !default;
+
+/// size
+/// @namespace size/icon
+$rating-large-icon-size: $icon-m !default;
+
+/// size
+/// @namespace size/text
+$rating-large-font-size: $font-size-subhead !default;
+
+/// color
+/// @namespace statement/normal/underlay
+$rating-normal-underlay-color: $color-fill1-4 !default;
+
+/// color
+/// @namespace statement/normal/overlay
+$rating-normal-overlay-color: $color-brand1-6 !default;
+
+/// color
+/// @namespace statement/hover/underlay
+$rating-normal-overlay-hover-color: $color-brand1-6 !default;
+
+/// low level background
+/// @namespace statement/normal/overlay
+$rating-grade-low-overlay-color: $color-text1-3 !default;
+
+/// low level background
+/// @namespace statement/hover/overlay
+$rating-grade-low-overlay-hover-color: $color-text1-2 !default;
+
+/// high level background
+/// @namespace statement/normal/overlay
+$rating-grade-high-overlay-color: $color-brand1-6 !default;
+
+/// high level background
+/// @namespace statement/hover/overlay
+$rating-grade-high-overlay-hover-color: $color-brand1-6 !default;

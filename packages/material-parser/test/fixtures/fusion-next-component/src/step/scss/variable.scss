@@ -1,0 +1,447 @@
+////
+/// @module step: 步骤
+/// @tag Step
+/// @category component
+/// @family navigation
+/// @varPrefix $step-
+/// @classPrefix {prefix}-step
+/// @order {"size/bounding":10,"size/text":11,"size/node":12,"size/divider":13,"size/content":14,"size/dot":15,"statement/awaiting":10,"statement/awaiting/arrow":100,"statement/awaiting/node":101,"statement/awaiting/divider":102,"statement/awaiting/content":103,"statement/processing":11,"statement/processing/arrow":110,"statement/processing/node":111,"statement/processing/divider":112,"statement/processing/content":113,"statement/finished":12,"statement/finished/arrow":120,"statement/finished/node":121,"statement/finished/divider":122,"statement/finished/content":123,"statement/disabled":13,"statement/disabled/arrow":130,"statement/disabled/node":131,"statement/disabled/divider":132,"statement/disabled/content":133,"statement/normal":14,"statement/normal/content":140}
+////
+
+$step-prefix: '.' + $css-prefix + 'step';
+
+$step-icon-prefix: '.' + $css-prefix + 'icon';
+
+$step-progress-prefix: '.' + $css-prefix + 'progress';
+
+
+// 箭头变量
+// ----------------------------------------
+
+/// height
+/// @namespace size/bounding
+$step-arrow-item-height: $s-8 !default;
+$step-arrow-item-border-width: $step-arrow-item-height/2;
+
+/// font size
+/// @namespace size/text
+$step-arrow-item-title-size: $font-size-body-2 !default;
+
+/// font weight
+/// @namespace size/text
+$step-arrow-item-title-weight: $font-weight-3 !default;
+
+/// background
+/// @namespace statement/awaiting/arrow
+$step-arrow-item-wait-background: $color-fill1-3 !default;
+
+/// text
+/// @namespace statement/awaiting/arrow
+$step-arrow-item-title-wait-color: $color-text1-2 !default;
+
+/// background
+/// @namespace statement/processing/arrow
+$step-arrow-item-process-background: $color-brand1-6 !default;
+
+/// text
+/// @namespace statement/processing/arrow
+$step-arrow-item-title-process-color: $color-white !default;
+
+/// background
+/// @namespace statement/finished/arrow
+$step-arrow-item-finish-background: $color-brand1-1 !default;
+
+/// text
+/// @namespace statement/finished/arrow
+$step-arrow-item-title-finish-color: $color-brand1-6 !default;
+
+/// background
+/// @namespace statement/disabled/arrow
+$step-arrow-item-disabled-background: $color-fill1-1 !default;
+
+/// text
+/// @namespace statement/disabled/arrow
+$step-arrow-item-title-disabled-color: $color-text1-1 !default;
+
+// 圆形变量
+// ----------------------------------------
+
+/// margin (l, r)
+/// @namespace size/node
+$step-circle-item-node-padding: $s-2 !default;
+
+/// border width
+/// @namespace size/node
+$step-circle-item-node-border-width: $line-1 !default;
+
+/// icon
+/// @namespace size/node
+$step-circle-item-node-icon-size: $icon-xs !default;
+
+/// text
+/// @namespace size/node
+$step-circle-item-node-font-size: $font-size-caption !default;
+
+/// corner
+/// @namespace size/node
+$step-circle-item-node-corner: $corner-circle !default;
+
+/// width
+/// @namespace size/divider
+$step-circle-item-tail-size: $line-1 !default;
+
+/// title margin (t)
+/// @namespace size/content
+$step-circle-item-title-margin-top: $s-2 !default;
+
+/// body margin (t)
+/// @namespace size/content
+$step-circle-item-content-margin-top: $s-1 !default;
+
+/// content size
+/// @namespace size/content
+$step-circle-item-content-font-size: $font-size-caption !default;
+
+/// body width
+/// @namespace size/content
+$step-circle-item-body-width: $s-25 !default;
+
+/// title size
+/// @namespace size/content
+$step-circle-item-title-size: $font-size-body-2 !default;
+/// title weight
+/// @namespace size/content
+$step-circle-item-title-weight: $font-weight-3 !default;
+
+/// node size
+/// @namespace statement/awaiting/node
+$step-circle-item-node-wait-size: $s-8 !default;
+
+/// node size
+/// @namespace statement/processing/node
+$step-circle-item-node-process-size: $s-8 !default;
+
+/// node size
+/// @namespace statement/finished/node
+$step-circle-item-node-finish-size: $s-8 !default;
+
+/// node size
+/// @namespace statement/disabled/node
+$step-circle-item-node-disabled-size: $s-8 !default;
+
+/// line color
+/// @namespace statement/awaiting/divider
+$step-circle-item-tail-wait-color: $color-line1-3 !default;
+
+/// line color
+/// @namespace statement/processing/divider
+$step-circle-item-tail-process-color: $color-line1-3 !default;
+
+/// line color
+/// @namespace statement/finished/divider
+$step-circle-item-tail-finish-color: $color-brand1-6 !default;
+
+/// line color
+/// @namespace statement/disabled/divider
+$step-circle-item-tail-disabled-color: $color-line1-1 !default;
+
+/// font weight
+/// @namespace statement/awaiting/content
+$step-circle-item-node-wait-font-weight: $font-weight-2 !default;
+
+/// font weight
+/// @namespace statement/processing/content
+$step-circle-item-node-process-font-weight: $font-weight-2 !default;
+
+/// font weight
+/// @namespace statement/disabled/content
+$step-circle-item-node-disabled-font-weight: $font-weight-2 !default;
+
+/// font weight
+/// @namespace statement/finished/content
+$step-circle-item-node-finish-font-weight: $font-weight-2 !default;
+
+/// title text
+/// @namespace statement/awaiting/content
+$step-circle-item-title-wait-color: $color-text1-3 !default;
+
+/// title text
+/// @namespace statement/processing/content
+$step-circle-item-title-process-color: $color-text1-4 !default;
+
+/// title text
+/// @namespace statement/finished/content
+$step-circle-item-title-finish-color: $color-text1-3 !default;
+
+/// title text
+/// @namespace statement/disabled/content
+$step-circle-item-title-disabled-color: $color-text1-1 !default;
+
+/// border color
+/// @namespace statement/awaiting/node
+$step-circle-item-node-wait-border-color: $color-line1-4 !default;
+
+/// background
+/// @namespace statement/awaiting/node
+$step-circle-item-node-wait-background: $color-white !default;
+
+/// text
+/// @namespace statement/awaiting/node
+$step-circle-item-node-wait-color: $color-text1-3 !default;
+
+/// border color
+/// @namespace statement/processing/node
+$step-circle-item-node-process-border-color: $color-brand1-6 !default;
+
+/// background
+/// @namespace statement/processing/node
+$step-circle-item-node-process-background: $color-brand1-6 !default;
+
+/// text
+/// @namespace statement/processing/node
+$step-circle-item-node-process-color: $color-white !default;
+
+/// percent text
+/// @namespace statement/processing/node
+$step-circle-item-node-process-percent-color: $color-brand1-6 !default;
+
+/// percent size
+/// @namespace size/node
+$step-circle-item-node-process-percent-size: $font-size-body-1 !default;
+
+/// border color
+/// @namespace statement/finished/node
+$step-circle-item-node-finish-border-color: $color-brand1-6 !default;
+
+/// background
+/// @namespace statement/finished/node
+$step-circle-item-node-finish-background: $color-white !default;
+
+/// text
+/// @namespace statement/finished/node
+$step-circle-item-node-finish-color: $color-brand1-6 !default;
+
+/// border color
+/// @namespace statement/disabled/node
+$step-circle-item-node-disabled-border-color: $color-line1-1 !default;
+
+/// background
+/// @namespace statement/disabled/node
+$step-circle-item-node-disabled-background: $color-white !default;
+
+/// text
+/// @namespace statement/disabled/node
+$step-circle-item-node-disabled-color: $color-text1-1 !default;
+
+// 圆形变量 (垂直)
+// ----------------------------------------
+
+/// node margin (t, b)
+/// @namespace size/node
+$step-circle-vertical-item-node-padding: $s-2 !default;
+
+/// margin (l)
+/// @namespace size/content
+$step-circle-vertical-item-body-margin-left: $s-4 !default;
+
+/// title margin (t)
+/// @namespace size/content
+$step-circle-vertical-item-title-margin-top: $s-2 !default;
+
+/// body margin (t)
+/// @namespace size/content
+$step-circle-vertical-item-content-margin-top: $s-1 !default;
+
+/// body size
+/// @namespace size/content
+$step-circle-item-content-font-size: $font-size-caption !default;
+
+/// text
+/// @namespace statement/normal/content
+$step-circle-item-content-color: $color-text1-3 !default;
+
+/// tail bg color
+/// @namespace statement/normal/content
+$step-circle-item-tail-bg-color: $color-line1-1 !default;
+
+/// width
+/// @namespace size/divider
+$step-circle-vertical-item-tail-size: $line-1 !default;
+
+// 点型变量
+// ----------------------------------------
+
+/// margin (l, r)
+/// @namespace size/dot
+$step-dot-item-dot-padding: $s-2 !default;
+
+/// size
+/// @namespace size/dot
+// $step-dot-item-dot-size: $s-3 !default;
+
+/// icon
+/// @namespace size/dot
+$step-dot-item-dot-icon-size: $icon-xs !default;
+
+/// border width
+/// @namespace size/dot
+$step-dot-item-dot-border-width: $line-1 !default;
+
+/// body width
+/// @namespace size/content
+$step-dot-item-body-width: $s-25 !default;
+
+/// content margin (t)
+/// @namespace size/content
+$step-dot-item-content-margin-top: $s-1 !default;
+
+/// corner
+/// @namespace size/dot
+$step-dot-item-dot-corner: $corner-circle !default;
+
+/// title size
+/// @namespace size/content
+$step-dot-item-title-size: $font-size-body-1 !default;
+
+/// title weight
+/// @namespace size/content
+$step-dot-item-title-weight: $font-weight-3 !default;
+
+/// title margin (t)
+/// @namespace size/content
+$step-dot-item-title-margin-top: $s-2 !default;
+
+/// width
+/// @namespace size/divider
+$step-dot-item-tail-size: $line-1 !default;
+
+/// node size
+/// @namespace statement/awaiting/node
+$step-dot-item-dot-wait-size: $s-3 !default;
+
+/// node size
+/// @namespace statement/processing/node
+$step-dot-item-dot-process-size: $s-3 !default;
+
+/// node size
+/// @namespace statement/finished/node
+$step-dot-item-dot-finish-size: $s-3 !default;
+
+/// node size
+/// @namespace statement/disabled/node
+$step-dot-item-dot-disabled-size: $s-3 !default;
+
+/// line color
+/// @namespace statement/awaiting/divider
+$step-dot-item-tail-wait-color: $color-line1-3 !default;
+
+/// line color
+/// @namespace statement/processing/divider
+$step-dot-item-tail-process-color: $color-line1-3 !default;
+
+/// line color
+/// @namespace statement/finished/divider
+$step-dot-item-tail-finish-color: $color-brand1-6 !default;
+
+/// line color
+/// @namespace statement/disabled/divider
+$step-dot-item-tail-disabled-color: $color-line1-1 !default;
+
+/// title text
+/// @namespace statement/awaiting/content
+$step-dot-item-title-wait-color: $color-text1-3 !default;
+
+/// title text
+/// @namespace statement/processing/content
+$step-dot-item-title-process-color: $color-text1-4 !default;
+
+/// title text
+/// @namespace statement/finished/content
+$step-dot-item-title-finish-color: $color-text1-3 !default;
+
+/// title text
+/// @namespace statement/disabled/content
+$step-dot-item-title-disabled-color: $color-text1-1 !default;
+
+/// border color
+/// @namespace statement/awaiting/node
+$step-dot-item-node-wait-border-color: $color-line1-4 !default;
+
+/// background
+/// @namespace statement/awaiting/node
+$step-dot-item-node-wait-background: $color-white !default;
+
+/// text
+/// @namespace statement/awaiting/node
+$step-dot-item-node-wait-color: $color-text1-2 !default;
+
+/// border color
+/// @namespace statement/processing/node
+$step-dot-item-node-process-border-color: $color-brand1-6 !default;
+
+/// background
+/// @namespace statement/processing/node
+$step-dot-item-node-process-background: $color-brand1-6 !default;
+
+/// text
+/// @namespace statement/processing/node
+$step-dot-item-node-process-color: $color-brand1-6 !default;
+
+/// border color
+/// @namespace statement/finished/node
+$step-dot-item-node-finish-border-color: $color-brand1-6 !default;
+
+/// background
+/// @namespace statement/finished/node
+$step-dot-item-node-finish-background: $color-white !default;
+
+/// text
+/// @namespace statement/finished/node
+$step-dot-item-node-finish-color: $color-brand1-6 !default;
+
+/// border color
+/// @namespace statement/disabled/node
+$step-dot-item-node-disabled-border-color: $color-line1-2 !default;
+
+/// background
+/// @namespace statement/disabled/node
+$step-dot-item-node-disabled-background: $color-white !default;
+
+/// text
+/// @namespace statement/disabled/node
+$step-dot-item-node-disabled-color: $color-line1-1 !default;
+
+// 点型变量 (垂直)
+// ----------------------------------------
+
+/// margin (t, b)
+/// @namespace size/node
+$step-dot-vertical-item-node-padding: $s-2 !default;
+
+/// margin (l)
+/// @namespace size/content
+$step-dot-vertical-item-body-margin-left: $s-4 !default;
+
+/// title margin (t)
+/// @namespace size/content
+$step-dot-vertical-item-title-margin-top: $s-zero !default;
+
+/// body margin (t)
+/// @namespace size/content
+$step-dot-vertical-item-content-margin-top: $s-2 !default;
+
+/// body size
+/// @namespace size/content
+$step-dot-item-content-font-size: $font-size-caption !default;
+
+/// text
+/// @namespace statement/normal/content
+$step-dot-item-content-color: $color-text1-3 !default;
+
+/// tail bg color
+/// @namespace statement/normal/content
+$step-dot-item-tail-bg-color: $color-line1-1 !default;
+
+/// width
+/// @namespace size/divider
+$step-dot-vertical-item-tail-size: $line-1 !default;

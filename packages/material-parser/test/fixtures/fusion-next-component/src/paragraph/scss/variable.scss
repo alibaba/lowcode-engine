@@ -1,0 +1,35 @@
+////
+/// @module paragraph: 段落（已废弃）
+/// @tag Paragraph
+/// @category component
+/// @family general
+/// @varPrefix $paragraph-
+/// @classPrefix {prefix}-paragraph
+/// @order {"size/text":10,"statement/normal":11,"size/text/size":101,"size/text/line height":102,"statement/normal/text":111}
+////
+
+// paragraph variables
+// --------------------------------------------------
+
+// unconfigurable
+$paragraph-prefix: ".#{$css-prefix}paragraph";
+
+/// text
+/// @namespace statement/normal
+$paragraph-text-color: 	$color-text1-4 !default;
+
+/// size
+/// @namespace size/text
+$paragraph-s-font-size: $font-size-body-1 !default;
+
+/// size
+/// @namespace size/text
+$paragraph-m-font-size: $font-size-body-2 !default;
+
+/// line height
+/// @namespace size/text
+$paragraph-s-line-height: $font-lineheight-2 !default;
+
+/// line height
+/// @namespace size/text
+$paragraph-l-line-height: $font-lineheight-3 !default;

@@ -1,0 +1,38 @@
+////
+/// @module global: 全局基础样式
+/// @category style
+////
+
+/// 全局命名空间前缀
+/// @unconfigurable
+$class-prefix: ".next" !default;
+$css-prefix: "#{str-slice($class-prefix, 2)}-" !default;
+
+/// language
+/// @semantic 语言变量
+/// @export
+/// @unconfigurable
+$language: "zh-cn" !default;
+
+// Typography
+$typo-margin-bottom: .5;
+
+// Z-Indexes
+// [...]
+// -------------------------------
+$z-pane:              89 !default;
+$z-menu:              99 !default;
+$z-select:            109 !default;
+$z-dialog:            199 !default;
+$z-balloon:           299 !default;
+$z-loading-panel:     399 !default;
+$z-tour-user:         499 !default;
+$z-tour-new:          599 !default;
+$z-dialog-login:      699 !default;
+$z-msg:               999 !default;
+
+$prefix-for-webkit:    true !default;
+$prefix-for-mozilla:   true !default;
+$prefix-for-microsoft: true !default;
+$prefix-for-opera:     true !default;
+$prefix-for-spec:      true !default;

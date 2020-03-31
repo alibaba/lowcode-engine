@@ -15,19 +15,19 @@ import PropTypes from 'prop-types';
  * @param {*} WrappedComponent
  */
 
-var HOCBackgroundProps = function (WrappedComponent) {
-  var _class, _temp;
+const HOCBackgroundProps = function (WrappedComponent) {
+  let _class; let _temp;
 
-  var PROPS = {
-    backgroundColor: 'backgroundColor'
+  const PROPS = {
+    backgroundColor: 'backgroundColor',
   };
   return _temp = _class =
-  /*#__PURE__*/
+  /* #__PURE__ */
   function (_Component) {
     _inherits(_class, _Component);
 
     function _class() {
-      var _this;
+      let _this;
 
       _classCallCheck(this, _class);
 
@@ -38,7 +38,7 @@ var HOCBackgroundProps = function (WrappedComponent) {
       _this = _possibleConstructorReturn(this, _getPrototypeOf(_class).call(this, ..._args));
 
       _defineProperty(_assertThisInitialized(_this), "parseStyle", function (args) {
-        var style = {};
+        const style = {};
         Object.keys(PROPS).forEach(function (item) {
           // if props isn't false
           if (!args[item]) return;
@@ -53,21 +53,21 @@ var HOCBackgroundProps = function (WrappedComponent) {
     _createClass(_class, [{
       key: "render",
       value: function render() {
-        var _this$props = this.props,
-            backgroundColor = _this$props.backgroundColor,
-            otherProps = _objectWithoutProperties(_this$props, ["backgroundColor"]);
+        const _this$props = this.props;
+            const backgroundColor = _this$props.backgroundColor;
+            const otherProps = _objectWithoutProperties(_this$props, ["backgroundColor"]);
 
         return React.createElement(WrappedComponent, _extends({}, otherProps, {
-          styleBackground: this.parseStyle(this.props)
+          styleBackground: this.parseStyle(this.props),
         }));
-      }
+      },
     }]);
 
     return _class;
   }(Component), _defineProperty(_class, "propTypes", {
-    backgroundColor: PropTypes.oneOfType([PropTypes.string, PropTypes.bool])
+    backgroundColor: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   }), _defineProperty(_class, "defaultProps", {
-    backgroundColor: false
+    backgroundColor: false,
   }), _temp;
 };
 

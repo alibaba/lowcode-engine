@@ -1,0 +1,13 @@
+@charset "UTF-8";
+
+@import "../core/index-noreset.scss";
+
+@import "scss/mixin";
+@import "scss/variable";
+
+/* put your code here */
+
+#{$responsive-grid-prefix} {
+    @include box-sizing;
+    display: grid;
+}

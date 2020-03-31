@@ -8,21 +8,21 @@ import _inherits from "@babel/runtime/helpers/inherits";
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'; // 缓存已加载的字体文件
 
-var customCache = new Set(); // 动态加载字体文件
+const customCache = new Set(); // 动态加载字体文件
 
 export default function createFromIconfont(options) {
-  var scriptUrl = options.scriptUrl;
+  const scriptUrl = options.scriptUrl;
 
   if (typeof document !== 'undefined' && typeof window !== 'undefined' && typeof document.createElement === 'function' && typeof scriptUrl === 'string' && scriptUrl.length && !customCache.has(scriptUrl)) {
-    var script = document.createElement('script');
+    const script = document.createElement('script');
     script.setAttribute('src', scriptUrl);
     script.setAttribute('data-namespace', scriptUrl);
     customCache.add(scriptUrl);
     document.body.appendChild(script);
   }
 
-  var IconFont =
-  /*#__PURE__*/
+  const IconFont =
+  /* #__PURE__ */
   function (_Component) {
     _inherits(IconFont, _Component);
 
@@ -35,32 +35,32 @@ export default function createFromIconfont(options) {
     _createClass(IconFont, [{
       key: "render",
       value: function render() {
-        var _this$props = this.props,
-            type = _this$props.type,
-            restProps = _objectWithoutProperties(_this$props, ["type"]);
+        const _this$props = this.props;
+            const type = _this$props.type;
+            const restProps = _objectWithoutProperties(_this$props, ["type"]);
 
-        var innerSvgProps = {
+        const innerSvgProps = {
           width: '1em',
           height: '1em',
           fill: 'currentColor',
           'aria-hidden': 'true',
-          focusable: 'false'
+          focusable: 'false',
         }; // 引用指定svg
 
-        var content = React.createElement("use", {
-          xlinkHref: `#${type}`
+        const content = React.createElement("use", {
+          xlinkHref: `#${type}`,
         });
         return React.createElement("i", _extends({}, restProps, {
-          className: `iconfont ${type}`
+          className: `iconfont ${type}`,
         }), React.createElement("svg", innerSvgProps, content));
-      }
+      },
     }]);
 
     return IconFont;
   }(Component);
 
   IconFont.propTypes = {
-    type: PropTypes.string.isRequired // icon
+    type: PropTypes.string.isRequired, // icon
 
   };
   return IconFont;

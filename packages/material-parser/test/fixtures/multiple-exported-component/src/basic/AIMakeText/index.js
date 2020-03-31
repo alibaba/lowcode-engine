@@ -68,5 +68,5 @@ class AIMakeText extends Component {
 }
 
 export default HOCBoxModelProps(
-  HOCTextProps(HOCLayoutProps(HOCBackgroundProps(AIMakeText)))
+  HOCTextProps(HOCLayoutProps(HOCBackgroundProps(AIMakeText))),
 );

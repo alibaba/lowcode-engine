@@ -1,0 +1,21 @@
+@include keyframes(pulse) {
+    from {
+        @include transform(scale(1));
+    }
+    20% {
+        @include transform(scale(1.2));
+    }
+    to {
+        @include transform(scale(1));
+    }
+}
+
+@mixin pulse($count: $countDefault, $duration: $durationDefault, $delay: $delayDefault, $function: $functionDefault, $fill: $fillDefault, $visibility: $visibilityDefault) {
+    @include animation-name(pulse);
+    @include count($count);
+    @include duration($duration);
+    @include delay($delay);
+    @include function($function);
+    @include fill-mode($fill);
+    @include visibility($visibility);
+}

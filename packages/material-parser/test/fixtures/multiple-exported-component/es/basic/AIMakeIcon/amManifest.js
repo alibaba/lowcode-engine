@@ -1,7 +1,7 @@
 /**
  * The template of manifest for AiMake studio.
  */
-var manifest = {
+const manifest = {
   // The name of current component.
   name: 'AIMakeIcon',
   // The description of current component.
@@ -53,30 +53,30 @@ var manifest = {
     props: [{
       name: 'margin',
       label: '外边距',
-      renderer: 'Quadrant'
+      renderer: 'Quadrant',
     }, {
       name: 'color',
       label: '图标颜色',
       renderer: 'Color',
-      defaultValue: '#333'
+      defaultValue: '#333',
     }, {
       name: 'fontSize',
       label: '图标大小',
       renderer: 'FontSize',
-      defaultValue: '16px'
+      defaultValue: '16px',
     }, {
       name: 'display',
       label: '显示',
-      defaultValue: 'inline-block'
+      defaultValue: 'inline-block',
     }, {
       name: 'className',
       label: '图标类型',
       defaultValue: 'iconfont',
       renderer: false,
       params: {
-        placeholder: '请输入Iconfont名'
-      }
-    }]
-  }
+        placeholder: '请输入Iconfont名',
+      },
+    }],
+  },
 };
 export default manifest;

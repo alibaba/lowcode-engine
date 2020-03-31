@@ -1,0 +1,24 @@
+@import "../core/index-noreset.scss";
+@import "./scss/variable.scss";
+
+.#{$css-prefix}overlay-wrapper {
+    .#{$css-prefix}overlay-inner {
+        z-index: 1001;
+    }
+
+    .#{$css-prefix}overlay-backdrop {
+        position: fixed;
+        z-index: 1001;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: $color-calculate-mask-background;
+        transition: opacity $motion-duration-standard $motion-ease;
+        opacity: 0;
+    }
+
+    &.opened .#{$css-prefix}overlay-backdrop {
+        opacity: 1;
+    }
+}

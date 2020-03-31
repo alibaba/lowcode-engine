@@ -17,7 +17,7 @@ const tsPath = path.resolve(__dirname, '../src/otter-core/schema/types.ts');
     ajv.compile(schema);
     fs.writeFileSync(JsonPath, JSON.stringify(schema, null, 2), 'utf-8');
     console.log('yaml file is successfully transformed into json');
-    const ts = await compile(schema, 'IComponentMaterial');
+    const ts = await compile(schema, 'ComponentMeta');
     fs.writeFileSync(tsPath, ts);
     console.log('schema.d.ts is successfully generated');
   } catch (e) {

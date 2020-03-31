@@ -1,0 +1,22 @@
+@include keyframes(zoomInDown) {
+    0% {
+        animation-timing-function: cubic-bezier(.550, .055, .675, .190);
+        opacity: 0;
+        @include transform(scale3d(.1, .1, .1) translate3d(0, -1000px, 0));
+    }
+    60% {
+        animation-timing-function: cubic-bezier(.175, .885, .320, 1);
+        opacity: 1;
+        @include transform(scale3d(.475, .475, .475) translate3d(0, 60px, 0));
+    }
+}
+
+@mixin zoomInDown($count: $countDefault, $duration: $durationDefault, $delay: $delayDefault, $function: $ease-out-quint, $fill: $fillDefault, $visibility: $visibilityDefault) {
+    @include animation-name(zoomInDown);
+    @include count($count);
+    @include duration($duration);
+    @include delay($delay);
+    @include function($function);
+    @include fill-mode($fill);
+    @include visibility($visibility);
+}

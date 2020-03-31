@@ -1,0 +1,114 @@
+@charset "UTF-8";
+
+@import "../core/index-noreset.scss";
+@import "scss/mixin";
+@import "scss/variable";
+@import "./rtl.scss";
+
+.#{$css-prefix}switch {
+    @include box-sizing;
+    outline: none;
+    text-align: left;
+    transition: all $motion-duration-immediately $motion-linear;
+    overflow: hidden;
+    cursor: pointer;
+
+    &:after {
+        content: " ";
+        transition: all $motion-duration-immediately $motion-linear;
+        transform-origin: left center;
+    }
+
+    &-medium {
+        @include bounding($switch-size-m-width, $switch-size-m-trigger, $switch-border-width-container, $switch-border-width-trigger, $switch-size-m-radius-container, $switch-size-m-radius-trigger);
+    }
+
+    &-small {
+        @include bounding($switch-size-s-width, $switch-size-s-trigger, $switch-border-width-container, $switch-border-width-trigger, $switch-size-s-radius-container, $switch-size-s-radius-trigger);
+    }
+
+    &-on {
+        background-color: $switch-normal-on-bg-color;
+        &:after {
+            box-shadow: $switch-on-shadow;
+            background-color: $switch-normal-on-trigger-bg-color;
+            border-color: $switch-handle-on-border-color;
+        }
+        > .#{$css-prefix}switch-children {
+            left: $switch-text-on-left + $switch-border-width-container * 2;
+            color: $switch-normal-on-color-font;
+        }
+
+        &:focus,
+        &:hover {
+            background-color: $switch-hover-on-bg-color;
+            &:after {
+                background-color: $switch-hover-on-trigger-bg-color;
+            }
+        }
+    }
+
+    &-on#{&}-small {
+        > .#{$css-prefix}switch-children {
+            left: $switch-size-s-text-on-left + $switch-border-width-container * 2;
+        }
+    }
+    &-on[disabled] {
+        background-color: $switch-disabled-on-bg-color;
+        cursor: not-allowed;
+
+        &:after {
+            right: 0;
+            box-shadow: $switch-on-shadow;
+            background-color: $switch-disabled-on-trigger-bg-color;
+            border-color: $switch-handle-disabled-border-color;
+        }
+
+        > .#{$css-prefix}switch-children {
+            color: $switch-disabled-on-color-font;
+        }
+    }
+    &-off {
+        background-color: $switch-normal-off-bg-color;
+        border-color: $switch-normal-off-border-color;
+
+        &:focus,
+        &:hover {
+            background-color: $switch-hover-off-bg-color;
+            border-color: $switch-hover-off-border-color;
+        }
+
+        &:after {
+            left: 0;
+            transform: translateX(0);
+            box-shadow: $switch-on-shadow;
+            background-color: $switch-normal-off-trigger-bg-color;
+            border-color: $switch-handle-off-border-color;
+            &:focus,
+            &:hover {
+                background-color: $switch-hover-off-trigger-bg-color;
+            }
+        }
+        > .#{$css-prefix}switch-children {
+            right: $switch-text-off-right + $switch-border-width-container * 2;
+            color: $switch-normal-off-color-font;
+        }
+    }
+    &-off[disabled] {
+        background-color: $switch-disabled-off-bg-color;
+        cursor: not-allowed;
+        &:after {
+            box-shadow: $switch-off-shadow;
+            background-color: $switch-disabled-off-trigger-bg-color;
+            border-color: $switch-handle-disabled-border-color;
+        }
+        > .#{$css-prefix}switch-children {
+            color: $switch-disabled-off-color-font;
+        }
+    }
+    &-off#{&}-small {
+        > .#{$css-prefix}switch-children {
+            right: $switch-size-s-text-off-right + $switch-border-width-container;
+        }
+    }
+}

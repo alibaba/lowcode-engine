@@ -1,0 +1,33 @@
+//
+// date-picker 样式
+//
+#{$date-picker-prefix},
+#{$month-picker-prefix},
+#{$year-picker-prefix},
+#{$week-picker-prefix} {
+    display: inline-block;
+    width: $s-50;
+
+    &-input {
+        width: 100%;
+    }
+
+    &-body {
+        width: $s-18 * 4;
+    }
+
+    &-panel-input#{$date-picker-input-prefix} {
+        width: 100%;
+        background: $color-transparent;
+    }
+}
+
+#{$date-picker-prefix}-body#{$date-picker-prefix}-body-show-time {
+    #{$date-picker-prefix}-panel-input#{$date-picker-input-prefix} {
+        width: 49%;
+
+        &:first-child {
+            margin-right: 2%;
+        }
+    }
+}

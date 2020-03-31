@@ -1,0 +1,69 @@
+#{$calendar-prefix}[dir='rtl'] {
+    #{$calendar-prefix} {
+        &-header {
+            text-align: left;
+
+            #{$calendar-select-prefix} {
+                margin-right: 0;
+                margin-left: $s-1;
+            }
+
+            #{$calendar-menu-prefix} {
+                text-align: right;
+            }
+        }
+        &-btn-prev-decade,
+        &-btn-prev-year {
+            left: auto;
+            right: $calendar-btn-arrow-double-offset-lr;
+        }
+
+        &-btn-prev-month {
+            left: auto;
+            right: $calendar-btn-arrow-single-offset-lr;
+        }
+
+        &-btn-next-month {
+            right: auto;
+            left: $calendar-btn-arrow-single-offset-lr;
+        }
+
+        &-btn-next-year,
+        &-btn-next-decade {
+            right: auto;
+            left: $calendar-btn-arrow-double-offset-lr;
+        }
+    }
+}
+
+#{$calendar-prefix}-fullscreen[dir='rtl'] {
+    #{$calendar-prefix} {
+        &-th {
+            text-align: left;
+            padding-left: $calendar-fullscreen-table-head-padding-r;
+            padding-right: 0;
+        }
+        &-date,
+        &-month {
+            text-align: left;
+        }
+    }
+}
+
+#{$calendar-prefix}-range[dir='rtl'] {
+    #{$calendar-prefix} {
+        &-body-left, &-body-right {
+            float: right;
+        }
+
+        &-body-left {
+            padding-right: 0;
+            padding-left: $s-2;
+        }
+
+        &-body-right {
+            padding-left: 0;
+            padding-right: $s-2;
+        }
+    }
+}

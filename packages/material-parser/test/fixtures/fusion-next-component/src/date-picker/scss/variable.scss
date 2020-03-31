@@ -1,0 +1,50 @@
+////
+/// @module date-picker: 日期选择
+/// @tag DatePicker
+/// @category component
+/// @family data-entry
+/// @varPrefix $date-picker
+/// @classPrefix {prefix}-date-picker
+/// @order {"size/panel footer":10,"statement/normal":10,"statement/normal/panel":100}
+////
+
+
+$date-picker-prefix: '.' + $css-prefix + 'date-picker';
+
+$range-picker-prefix: '.' + $css-prefix + 'range-picker';
+
+$month-picker-prefix: '.' + $css-prefix + 'month-picker';
+
+$year-picker-prefix: '.' + $css-prefix + 'year-picker';
+
+$week-picker-prefix: '.' + $css-prefix + 'week-picker';
+
+$date-picker-btn-prefix: '.' + $css-prefix + 'btn';
+
+$date-picker-input-prefix: '.' + $css-prefix  + 'input';
+
+$date-picker-time-prefix: '.' + $css-prefix  + 'time-picker';
+
+/// 日期输入框
+// --------------------------------------------------
+
+$date-picker-input-separator-width: $s-4 !default;
+
+// 日期选择面板
+// --------------------------------------------------
+
+/// padding (l, r)
+/// @namespace size/panel footer
+$date-picker-panel-footer-padding-lr: $s-5 !default;
+
+/// padding (t, b)
+/// @namespace size/panel footer
+$date-picker-panel-footer-padding-tb: $s-2 !default;
+
+/// background
+/// @namespace statement/normal/panel
+$date-picker-panel-background: $color-white !default;
+
+/// separator border
+/// @namespace statement/normal/panel
+$date-picker-panel-time-panel-separator-color: $color-line1-2 !default;

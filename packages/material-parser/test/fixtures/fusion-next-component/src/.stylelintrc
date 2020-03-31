@@ -1,0 +1,17 @@
+{
+    "extends": [
+        "@alifd/stylelint-config-next"
+    ],
+    "ignoreFiles": [
+        "**/*.js",
+        "**/*.jsx"
+    ],
+    "rules": {
+        "max-nesting-depth": 4,
+        "max-empty-lines": 3,
+        "no-duplicate-selectors": null,
+        "no-descending-specificity": null,
+        "font-family-no-missing-generic-family-keyword": null,
+        "no-empty-source": null
+    }
+}

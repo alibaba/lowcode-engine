@@ -1,1 +1,1 @@
-import "./editor"
+import './editor';

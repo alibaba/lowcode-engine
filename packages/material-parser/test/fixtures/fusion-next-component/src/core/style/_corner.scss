@@ -1,0 +1,51 @@
+////
+/// @module corner: 边角
+/// @category style
+////
+
+
+// Corner 预定义圆角尺寸
+// 根据 Alibaba Base DPL(BASE DPL)设计规范实现
+// 圆角是用一段与角的两边相切的圆弧
+// 规则: x == y, 所有方向阴影的 blur 值, 透明度, 颜色都应该相同
+// 类型: Right Angle(直角), Rounded(圆角)
+// -------------------------------
+
+/// corner-1
+/// @semantic 常规圆角
+/// @export
+/// @type Length
+$corner-1: 3px !default;
+
+/// corner-2
+/// @semantic 大圆角
+/// @export
+/// @type Length
+$corner-2: 6px !default;
+
+/// corner-3
+/// @semantic 超大圆角
+/// @export
+/// @type Length
+$corner-3: 20px !default;
+
+/// corner-circle
+/// @semantic 圆形
+/// @export
+/// @unconfigurable
+$corner-circle: 50% !default;
+
+/// corner-semicircle
+/// @semantic 圆形
+/// @export
+/// @unconfigurable
+$corner-semicircle: 500px !default;
+
+/// corner-zero
+/// @semantic 直角
+/// @export
+/// @unconfigurable
+$corner-zero: 0 !default;
+
+// ----------- patch ----------- //
+$corner-right-angle: $corner-zero;

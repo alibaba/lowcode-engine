@@ -1,0 +1,346 @@
+@charset "UTF-8";
+
+@import "../core/index-noreset.scss";
+
+@import "scss/mixin";
+@import "scss/variable";
+
+.#{$css-prefix}message {
+    @include box-sizing;
+    @include message-bounding();
+    animation-duration: $motion-duration-standard;
+    animation-timing-function: $motion-ease-in-out;
+
+    .#{$css-prefix}message-close {
+        color: $message-close-icon-color;
+        font-size: 0;
+        position: absolute;
+        cursor: pointer;
+
+        .#{$css-prefix}icon-close {
+            @include icon-square-size($message-close-icon-size);
+        }
+
+        &:hover {
+            color: $message-hover-close-icon-color;
+        }
+    }
+
+    &.#{$css-prefix}message-success {
+        &.#{$css-prefix}inline {
+            @include message-shape(
+                inline,
+                $message-success-color-title-inline,
+                $message-success-color-content-inline,
+                $message-success-color-icon-inline,
+                $message-success-color-bg-inline,
+                $message-success-color-border-inline,
+                none,
+                $message-success-icon-content
+            );
+        }
+        &.#{$css-prefix}addon {
+            @include message-shape(
+                toast,
+                $message-success-color-title-addon,
+                $message-success-color-content-addon,
+                $message-success-color-icon-addon,
+                transparent,
+                transparent,
+                none,
+                $message-success-icon-content
+            );
+        }
+        &.#{$css-prefix}toast {
+            @include message-shape(
+                toast,
+                $message-success-color-title-toast,
+                $message-success-color-content-toast,
+                $message-success-color-icon-toast,
+                $message-success-color-bg-toast,
+                $message-success-color-border-toast,
+                $message-shadow-toast,
+                $message-success-icon-content
+            );
+        }
+    }
+
+    &.#{$css-prefix}message-warning {
+        &.#{$css-prefix}inline {
+            @include message-shape(
+                inline,
+                $message-warning-color-title-inline,
+                $message-warning-color-content-inline,
+                $message-warning-color-icon-inline,
+                $message-warning-color-bg-inline,
+                $message-warning-color-border-inline,
+                none,
+                $message-warning-icon-content
+            );
+        }
+        &.#{$css-prefix}addon {
+            @include message-shape(
+                toast,
+                $message-warning-color-title-addon,
+                $message-warning-color-content-addon,
+                $message-warning-color-icon-addon,
+                transparent,
+                transparent,
+                none,
+                $message-warning-icon-content
+            );
+        }
+        &.#{$css-prefix}toast {
+            @include message-shape(
+                toast,
+                $message-warning-color-title-toast,
+                $message-warning-color-content-toast,
+                $message-warning-color-icon-toast,
+                $message-warning-color-bg-toast,
+                $message-warning-color-border-toast,
+                $message-shadow-toast,
+                $message-warning-icon-content
+            );
+        }
+    }
+
+    &.#{$css-prefix}message-error {
+        &.#{$css-prefix}inline {
+            @include message-shape(
+                inline,
+                $message-error-color-title-inline,
+                $message-error-color-content-inline,
+                $message-error-color-icon-inline,
+                $message-error-color-bg-inline,
+                $message-error-color-border-inline,
+                none,
+                $message-error-icon-content
+            );
+        }
+        &.#{$css-prefix}addon {
+            @include message-shape(
+                toast,
+                $message-error-color-title-addon,
+                $message-error-color-content-addon,
+                $message-error-color-icon-addon,
+                transparent,
+                transparent,
+                none,
+                $message-error-icon-content
+            );
+        }
+        &.#{$css-prefix}toast {
+            @include message-shape(
+                toast,
+                $message-error-color-title-toast,
+                $message-error-color-content-toast,
+                $message-error-color-icon-toast,
+                $message-error-color-bg-toast,
+                $message-error-color-border-toast,
+                $message-shadow-toast,
+                $message-error-icon-content
+            );
+        }
+    }
+
+    &.#{$css-prefix}message-notice {
+        &.#{$css-prefix}inline {
+            @include message-shape(
+                inline,
+                $message-notice-color-title-inline,
+                $message-notice-color-content-inline,
+                $message-notice-color-icon-inline,
+                $message-notice-color-bg-inline,
+                $message-notice-color-border-inline,
+                none,
+                $message-notice-icon-content
+            );
+        }
+        &.#{$css-prefix}addon {
+            @include message-shape(
+                toast,
+                $message-notice-color-title-addon,
+                $message-notice-color-content-addon,
+                $message-notice-color-icon-addon,
+                transparent,
+                transparent,
+                none,
+                $message-notice-icon-content
+            );
+        }
+        &.#{$css-prefix}toast {
+            @include message-shape(
+                toast,
+                $message-notice-color-title-toast,
+                $message-notice-color-content-toast,
+                $message-notice-color-icon-toast,
+                $message-notice-color-bg-toast,
+                $message-notice-color-border-toast,
+                $message-shadow-toast,
+                $message-notice-icon-content
+            );
+        }
+    }
+
+    &.#{$css-prefix}message-help {
+        &.#{$css-prefix}inline {
+            @include message-shape(
+                inline,
+                $message-help-color-title-inline,
+                $message-help-color-content-inline,
+                $message-help-color-icon-inline,
+                $message-help-color-bg-inline,
+                $message-help-color-border-inline,
+                none,
+                $message-help-icon-content
+            );
+        }
+        &.#{$css-prefix}addon {
+            @include message-shape(
+                toast,
+                $message-help-color-title-addon,
+                $message-help-color-content-addon,
+                $message-help-color-icon-addon,
+                transparent,
+                transparent,
+                none,
+                $message-help-icon-content
+            );
+        }
+        &.#{$css-prefix}toast {
+            @include message-shape(
+                toast,
+                $message-help-color-title-toast,
+                $message-help-color-content-toast,
+                $message-help-color-icon-toast,
+                $message-help-color-bg-toast,
+                $message-help-color-border-toast,
+                $message-shadow-toast,
+                $message-help-icon-content
+            );
+        }
+    }
+
+    &.#{$css-prefix}message-loading {
+        &.#{$css-prefix}inline {
+            @include message-shape(
+                inline,
+                $message-loading-color-title-inline,
+                $message-loading-color-content-inline,
+                $message-loading-color-icon-inline,
+                $message-loading-color-bg-inline,
+                $message-loading-color-border-inline,
+                none,
+                $message-loading-icon-content
+            );
+        }
+        &.#{$css-prefix}addon {
+            @include message-shape(
+                toast,
+                $message-loading-color-title-addon,
+                $message-loading-color-content-addon,
+                $message-loading-color-icon-addon,
+                transparent,
+                transparent,
+                none,
+                $message-loading-icon-content
+            );
+        }
+        &.#{$css-prefix}toast {
+            @include message-shape(
+                toast,
+                $message-loading-color-title-toast,
+                $message-loading-color-content-toast,
+                $message-loading-color-icon-toast,
+                $message-loading-color-bg-toast,
+                $message-loading-color-border-toast,
+                $message-shadow-toast,
+                $message-loading-icon-content
+            );
+        }
+    }
+
+    &.#{$css-prefix}medium {
+        @include message-size(
+            $borderWidth: $message-size-m-border-width,
+            $padding: $message-size-m-padding,
+            $titlePadding: $message-size-m-title-content-padding,
+            $titleFontSize: $message-size-m-title-font,
+            $contentPadding: $message-size-m-title-content-padding,
+            $contentMarginTop: $message-size-m-content-margin-top,
+            $contentFontSize: $message-size-m-content-font,
+            $iconSize: $message-size-m-icon
+        );
+        &.#{$css-prefix}title-content {
+            @include vertial-align-middle(
+                $message-size-m-title-font,
+                $message-size-m-icon,
+                'title'
+            );
+        }
+        &.#{$css-prefix}only-content {
+            @include vertial-align-middle(
+                $message-size-m-content-font,
+                $message-size-m-icon,
+                'content'
+            );
+        }
+
+        .#{$css-prefix}message-close {
+            top: $message-size-m-close-top;
+            right: $message-size-m-close-right;
+        }
+
+        &.#{$css-prefix}inline {
+            border-radius: $message-size-m-border-radius;
+        }
+
+        &.#{$css-prefix}toast {
+            border-radius: $message-size-m-border-radius-toast;
+        }
+    }
+
+    &.#{$css-prefix}large {
+        @include message-size(
+            $borderWidth: $message-size-l-border-width,
+            $padding: $message-size-l-padding,
+            $titlePadding: $message-size-l-title-content-padding,
+            $titleFontSize: $message-size-l-title-font,
+            $contentPadding: $message-size-l-title-content-padding,
+            $contentMarginTop: $message-size-l-content-margin-top,
+            $contentFontSize: $message-size-l-content-font,
+            $iconSize: $message-size-l-icon
+        );
+        line-height: 18px;
+
+        &.#{$css-prefix}title-content {
+            @include vertial-align-middle(
+                $message-size-l-title-font,
+                $message-size-l-icon,
+                'title'
+            );
+        }
+        &.#{$css-prefix}only-content {
+            @include vertial-align-middle(
+                $message-size-l-content-font,
+                $message-size-l-icon,
+                'content'
+            );
+        }
+
+        .#{$css-prefix}message-close {
+            top: $message-size-l-close-top;
+            right: $message-size-l-close-right;
+        }
+
+        &.#{$css-prefix}inline {
+            border-radius: $message-size-l-border-radius;
+        }
+
+        &.#{$css-prefix}toast {
+            border-radius: $message-size-l-border-radius-toast;
+        }
+    }
+}
+
+@import "./rtl.scss";

@@ -1,0 +1,17 @@
+@include keyframes(waterIn) {
+    0% {
+        @include transform(translate(-45%) scaleX(2));
+    }
+    100% {
+        @include transform(translate(0%) scaleX(1));
+    }
+}
+@mixin waterIn($count: $countDefault, $duration: $durationSmallDefault, $delay: $delayDefault, $function: $functionDefault, $fill: $fillDefault, $visibility: $visibilityDefault) {
+    @include animation-name(waterIn);
+    @include count($count);
+    @include duration($duration);
+    @include delay($delay);
+    @include function($function);
+    @include fill-mode($fill);
+    @include visibility($visibility);
+}

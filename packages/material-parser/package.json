@@ -20,6 +20,7 @@
     "jest-watch-typeahead": "^0.3.1",
     "js-yaml": "^3.13.1",
     "json-schema-to-typescript": "^8.2.0",
+    "tslib": "^1.11.1",
     "typescript": "^3.8.3"
   },
   "scripts": {
@@ -47,6 +48,7 @@
     "@babel/parser": "^7.8.4",
     "@babel/traverse": "^7.8.4",
     "@babel/types": "^7.8.3",
+    "ast-types": "^0.13.3",
     "cross-spawn-promise": "^0.10.2",
     "debug": "^4.1.1",
     "fs-extra": "^8.1.0",
