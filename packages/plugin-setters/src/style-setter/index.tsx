@@ -1,7 +1,10 @@
+import './style.less';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LowStyleSetter from '@ali/lc-style-setter';
-import './style.less';
+import { createIntl } from '../../../globals';
+
+const { getLocale } = createIntl();
 
 export default class StyleSetter extends Component{
 
@@ -16,7 +19,7 @@ export default class StyleSetter extends Component{
     value: {},
     onChange: () => {},
     placeholder: '',
-    locale: 'zh-CN'
+    locale: getLocale() || 'en-US'
   };
 
   onChange = (val: any) => {
@@ -25,11 +28,10 @@ export default class StyleSetter extends Component{
   }
 
   render () {
-    console.log(this.props);
     const { value } = this.props;
     return (
       <div className="lc-block-setter">
-        <LowStyleSetter value={value} onChange={this.onChange} />
+        <LowStyleSetter {...this.props} value={value} onChange={this.onChange} />
       </div>
     );
   }
