@@ -1,9 +1,4 @@
 import {
-  IconRemove,
-  IconClone,
-  IconPage,
-  IconContainer,
-  IconComponent,
   ComponentMetadata,
   NpmInfo,
   NodeData,
@@ -18,6 +13,11 @@ import {
 import { Node, NodeParent } from './document';
 import { Designer } from './designer';
 import { intl } from './locale';
+import { IconContainer } from './icons/container';
+import { IconPage } from './icons/page';
+import { IconComponent } from './icons/component';
+import { IconRemove } from './icons/remove';
+import { IconClone } from './icons/clone';
 
 function ensureAList(list?: string | string[]): string[] | null {
   if (!list) {
