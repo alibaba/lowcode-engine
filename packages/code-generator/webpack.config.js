@@ -3,11 +3,11 @@ const nodeExternals = require('webpack-node-externals');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
-  // entry: './src/index.ts',
+  mode: 'production',
   target: 'node',
   entry: {
     index: './src/index.ts',
-    demo: './src/demo/main.ts',
+    // demo: './src/demo/main.ts',
   },
   module: {
     rules: [
