@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@ali/lowcode-react-simulator-renderer",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "description": "react simulator renderer for alibaba lowcode designer",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -13,8 +13,8 @@
     "test:snapshot": "ava --update-snapshots"
   },
   "dependencies": {
-    "@ali/lowcode-designer": "^0.9.0",
-    "@ali/lowcode-globals": "^0.9.0",
+    "@ali/lowcode-designer": "^0.9.1",
+    "@ali/lowcode-globals": "^0.9.1",
     "@ali/lowcode-react-renderer": "^0.8.4",
     "@recore/obx": "^1.0.8",
     "@recore/obx-react": "^1.0.7",
