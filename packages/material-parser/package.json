@@ -20,6 +20,7 @@
     "jest-watch-typeahead": "^0.3.1",
     "js-yaml": "^3.13.1",
     "json-schema-to-typescript": "^8.2.0",
+    "tslib": "^1.11.1",
     "typescript": "^3.8.3"
   },
   "scripts": {

@@ -10,17 +10,17 @@ import generate from './generate';
 import parse from './parse';
 import localize from './localize';
 
-export default async function(
-  options: IMaterializeOptions,
-): Promise<ComponentMeta[]> {
+export default async function(options: IMaterializeOptions): Promise<ComponentMeta[]> {
   const { accesser = 'local' } = options;
   if (accesser === 'online') {
-    const { entry, cwd } = await localize(options);
+    const entry = await localize(options);
     options.entry = entry;
-    options.cwd = cwd;
   }
   const scanedModel = await scan(options);
-  const parsedModel = await parse(scanedModel.modules[0]);
+  const parsedModel = await parse({
+    filePath: scanedModel.entryFilePath,
+    fileContent: scanedModel.entryFileContent,
+  });
   const result = await generate(scanedModel, parsedModel);
   return result;
 }
