@@ -46,7 +46,7 @@ export async function genManifest(
       package: matScanModel.pkgName,
       version: matScanModel.pkgVersion,
       exportName: matParsedModel.componentName,
-      main: matScanModel.entryFilePath,
+      main: matScanModel.mainFilePath,
       destructuring: false,
       subName: '',
     },

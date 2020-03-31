@@ -11,12 +11,12 @@ export default async function scan(options: IMaterializeOptions): Promise<IMater
     sourceType: SourceType.MODULE,
     entryFilePath: '',
     entryFileContent: '',
+    mainFilePath: '',
   };
   log('options', options);
   // 入口文件路径
   let entryFilePath = options.entry;
   const stats = lstatSync(entryFilePath);
-  debugger;
   if (!stats.isFile()) {
     let mainFilePath = '';
     const pkgJsonPath = join(entryFilePath, 'package.json');
@@ -39,6 +39,7 @@ export default async function scan(options: IMaterializeOptions): Promise<IMater
     } else {
       mainFilePath = './index.js';
     }
+    model.mainFilePath = mainFilePath;
     entryFilePath = join(entryFilePath, mainFilePath);
   }
 
