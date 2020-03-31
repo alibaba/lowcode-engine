@@ -1,7 +1,7 @@
 import { ReactType } from 'react';
-import { IProvider } from './provider/base';
+import Provider from './provider';
 
-class Contribution {
+export default class Container {
   private renderer: ReactType | null = null;
   private layouts: { [key: string]: ReactType } = {};
   private loading: ReactType | null = null;
@@ -25,8 +25,13 @@ class Contribution {
     this.loading = component;
   }
 
-  registerProvider(provider: IProvider) {
-    this.provider = provider;
+  registerProvider(CustomProvider: any) {
+    if (Provider.isPrototypeOf(CustomProvider)) {
+      this.provider = new CustomProvider();
+    } else {
+      const identifier = (CustomProvider && CustomProvider.name) || 'registered Provider';
+      throw new Error(`${identifier} is not a child class of Provider`);
+    }
   }
 
   getLayout(componentName: string) {
@@ -48,5 +53,3 @@ class Contribution {
     return this.provider;
   }
 }
-
-export default new Contribution();

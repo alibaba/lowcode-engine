@@ -8,7 +8,7 @@ import utils from '../config/utils';
 // 定制加载应用配置的逻辑
 export default class Preview extends ReactProvider {
   // 定制获取、处理应用配置（组件、插件、路由模式、布局等）的逻辑
-  async getAppData(appkey: string): Promise<any> {
+  async getAppData(): Promise<any> {
     const { history, layout, containerId } = appConfig;
     const appSchemaStr: any = localStorage.getItem('lce-dev-store');
     if (!appSchemaStr) {
