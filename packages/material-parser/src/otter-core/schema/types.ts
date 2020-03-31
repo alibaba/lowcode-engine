@@ -8,10 +8,25 @@
 /**
  * json schema for low code component protocol
  */
-export type IComponentMaterial = BasicSection & PropsSection & ConfigureSection;
+export type ComponentMeta = BasicSection & PropsSection & ConfigureSection;
 export type PropType = BasicType | RequiredType | ComplexType;
-export type BasicType = "array" | "bool" | "func" | "number" | "object" | "string" | "node" | "element" | "any";
-export type ComplexType = OneOf | OneOfType | ArrayOf | ObjectOf | Shape | Exact;
+export type BasicType =
+  | 'array'
+  | 'bool'
+  | 'func'
+  | 'number'
+  | 'object'
+  | 'string'
+  | 'node'
+  | 'element'
+  | 'any';
+export type ComplexType =
+  | OneOf
+  | OneOfType
+  | ArrayOf
+  | ObjectOf
+  | Shape
+  | Exact;
 export type ConfigureProp = {
   title?: string;
   extraProps?: {
@@ -28,7 +43,7 @@ export interface BasicSection {
   screenshot?: string;
   icon?: string;
   tags?: string[];
-  devMode?: "proCode" | "lowCode";
+  devMode?: 'proCode' | 'lowCode';
   npm: Npm;
   [k: string]: any;
 }
@@ -56,31 +71,31 @@ export interface RequiredType {
   isRequired?: boolean;
 }
 export interface OneOf {
-  type: "oneOf";
+  type: 'oneOf';
   value: (string | number | boolean)[];
   isRequired?: boolean;
   [k: string]: any;
 }
 export interface OneOfType {
-  type: "oneOfType";
+  type: 'oneOfType';
   value: PropType[];
   isRequired?: boolean;
   [k: string]: any;
 }
 export interface ArrayOf {
-  type: "arrayOf";
+  type: 'arrayOf';
   value: PropType;
   isRequired?: boolean;
   [k: string]: any;
 }
 export interface ObjectOf {
-  type: "objectOf";
+  type: 'objectOf';
   value: PropType;
   isRequired?: boolean;
   [k: string]: any;
 }
 export interface Shape {
-  type: "shape";
+  type: 'shape';
   value: {
     name?: string;
     propType?: PropType;
@@ -89,7 +104,7 @@ export interface Shape {
   [k: string]: any;
 }
 export interface Exact {
-  type: "exact";
+  type: 'exact';
   value: {
     name?: string;
     propType?: PropType;
@@ -112,38 +127,38 @@ export interface ConfigureSection {
   [k: string]: any;
 }
 export interface ConfigureFieldProp {
-  type: "field";
+  type: 'field';
   name?: string;
   setter?: ConfigureFieldSetter;
   [k: string]: any;
 }
 export interface ConfigureFieldSetter {
   componentName:
-    | "List"
-    | "Object"
-    | "Function"
-    | "Node"
-    | "Mixin"
-    | "Expression"
-    | "Switch"
-    | "Number"
-    | "Input"
-    | "TextArea"
-    | "Date"
-    | "DateYear"
-    | "DateMonth"
-    | "DateRange"
-    | "ColorPicker"
-    | "CodeEditor"
-    | "Select"
-    | "RadioGroup";
+    | 'List'
+    | 'Object'
+    | 'Function'
+    | 'Node'
+    | 'Mixin'
+    | 'Expression'
+    | 'Switch'
+    | 'Number'
+    | 'Input'
+    | 'TextArea'
+    | 'Date'
+    | 'DateYear'
+    | 'DateMonth'
+    | 'DateRange'
+    | 'ColorPicker'
+    | 'CodeEditor'
+    | 'Select'
+    | 'RadioGroup';
   props?: {
     [k: string]: any;
   };
   [k: string]: any;
 }
 export interface ConfigureGroupProp {
-  type: "group";
+  type: 'group';
   items: ConfigureProp[];
   [k: string]: any;
 }

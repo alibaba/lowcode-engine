@@ -11,8 +11,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import createFromIconfont from './IconFont';
 
-var AIMakeIcon =
-/*#__PURE__*/
+const AIMakeIcon =
+/* #__PURE__ */
 function (_Component) {
   _inherits(AIMakeIcon, _Component);
 
@@ -25,26 +25,26 @@ function (_Component) {
   _createClass(AIMakeIcon, [{
     key: "render",
     value: function render() {
-      var _this$props = this.props,
-          className = _this$props.className,
-          iconClassName = _this$props.iconClassName,
-          children = _this$props.children,
-          styleBoxModel = _this$props.styleBoxModel,
-          styleText = _this$props.styleText,
-          styleBackground = _this$props.styleBackground,
-          style = _this$props.style,
-          otherProps = _objectWithoutProperties(_this$props, ["className", "iconClassName", "children", "styleBoxModel", "styleText", "styleBackground", "style"]);
+      const _this$props = this.props;
+          const className = _this$props.className;
+          const iconClassName = _this$props.iconClassName;
+          const children = _this$props.children;
+          const styleBoxModel = _this$props.styleBoxModel;
+          const styleText = _this$props.styleText;
+          const styleBackground = _this$props.styleBackground;
+          const style = _this$props.style;
+          const otherProps = _objectWithoutProperties(_this$props, ["className", "iconClassName", "children", "styleBoxModel", "styleText", "styleBackground", "style"]);
 
-      var styles = { ...styleBoxModel,
+      const styles = { ...styleBoxModel,
         ...styleText,
         ...styleBackground,
-        ...style
+        ...style,
       };
       return React.createElement("i", _extends({}, otherProps, {
         className: classNames(className, iconClassName),
-        style: styles
+        style: styles,
       }), children);
-    }
+    },
   }]);
 
   return AIMakeIcon;
@@ -57,14 +57,14 @@ _defineProperty(AIMakeIcon, "propTypes", {
   styleBoxModel: PropTypes.object.isRequired,
   styleText: PropTypes.object.isRequired,
   styleBackground: PropTypes.object.isRequired,
-  style: PropTypes.object
+  style: PropTypes.object,
 });
 
 _defineProperty(AIMakeIcon, "defaultProps", {
   className: '',
   iconClassName: 'iconfont',
   children: '',
-  style: {}
+  style: {},
 });
 
 AIMakeIcon.createFromIconfont = createFromIconfont;

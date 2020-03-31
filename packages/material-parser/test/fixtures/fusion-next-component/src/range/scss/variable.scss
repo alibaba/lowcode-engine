@@ -1,0 +1,174 @@
+@charset "UTF-8";
+
+////
+/// @module range: 滑块选择
+/// @tag Range
+/// @category component
+/// @family data-entry
+/// @varPrefix $range-
+/// @classPrefix {prefix}-range
+/// @order {"size/bar":10,"size/scale":11,"size/handle":12,"size/mark":13,"statement/normal":10,"statement/normal/bar":100,"statement/normal/scale":101,"statement/normal/handle":102,"statement/normal/mark":103,"statement/moving":11,"statement/moving/handle":110,"statement/hover":12,"statement/hover/bar":120,"statement/hover/handle":121,"statement/hover/mark":122,"statement/disabled":13,"statement/disabled/bar":130,"statement/disabled/handle":131,"statement/disabled/mark":132}
+////
+
+// Size
+
+/// height
+/// @size medium
+/// @namespace size/bar
+$range-size-m-track-height: $s-1 !default;
+
+/// height
+/// @size medium
+/// @namespace size/scale
+$range-size-m-scale-height: $s-3 !default;
+/// width
+/// @size medium
+/// @namespace size/scale
+$range-size-m-scale-item-border-width: $line-1 !default;
+/// height
+/// @size medium
+/// @namespace size/handle
+$range-size-m-slider-hw: $s-4 !default;
+/// border style
+/// @size medium
+/// @namespace size/handle
+$range-size-slider-border-style: $line-solid !default;
+/// border width
+/// @size medium
+/// @namespace size/handle
+$range-size-slider-border-width: $line-1 !default;
+
+/// distance
+/// @size medium
+/// @namespace size/mark
+$range-size-m-mark-top: 30px !default;
+
+/// size
+/// @size medium
+/// @namespace size/mark
+$range-size-m-mark-font-size: $font-size-body-1 !default;
+/// weight
+/// @size medium
+/// @namespace size/mark
+$range-size-m-mark-font-weight: $font-weight-2 !default;
+
+/// line height
+/// @size medium
+/// @namespace size/mark
+$range-size-m-mark-font-lineheight: 20px !default;
+
+// Normal
+
+/// radius
+/// @level normal
+/// @namespace statement/normal/bar
+$range-size-m-track-radius: $corner-zero !default;
+/// radius
+/// @level normal
+/// @namespace statement/normal/scale
+$range-size-m-scale-radius: $corner-zero !default;
+/// shadow
+/// @level moving
+/// @namespace statement/moving/handle
+$range-size-m-slider-shadow-moving: $shadow-2 !default;
+/// unselected
+/// @level normal
+/// @namespace statement/normal/bar
+$range-normal-unselected-color: $color-line1-3 !default;
+
+/// selected
+/// @level normal
+/// @namespace statement/normal/bar
+$range-normal-selected-color: $color-brand1-6 !default;
+
+/// background
+/// @level normal
+/// @namespace statement/normal/handle
+$range-normal-slider-bg-color: $color-white !default;
+
+/// unselected
+/// @level normal
+/// @namespace statement/normal/mark
+$range-normal-mark-color: $color-text1-2 !default;
+
+/// selected
+/// @level normal
+/// @namespace statement/normal/mark
+$range-normal-mark-selected-color: $color-text1-4 !default;
+// Hover
+
+/// unselecter
+/// @level normal
+/// @namespace statement/hover/bar
+$range-normal-unselected-color-hover: $color-line1-3 !default;
+
+/// selected
+/// @level normal
+/// @namespace statement/hover/bar
+$range-normal-selected-color-hover: $color-brand1-6 !default;
+
+/// background
+/// @level normal
+/// @namespace statement/hover/handle
+$range-normal-slider-bg-color-hover: $color-white !default;
+/// shadow
+/// @level normal
+/// @namespace statement/normal/handle
+$range-size-m-slider-shadow: $shadow-1 !default;
+
+/// shadow
+/// @level normal
+/// @namespace statement/hover/handle
+$range-size-m-slider-shadow-hover: $shadow-3 !default;
+
+/// unselected
+/// @level normal
+/// @namespace statement/hover/mark
+$range-normal-mark-color-hover: $color-text1-2 !default;
+
+/// selected
+/// @level normal
+/// @namespace statement/hover/mark
+$range-normal-mark-selected-color-hover: $color-text1-4 !default;
+
+/// border
+/// @size medium
+/// @namespace statement/hover/handle
+$range-normal-slider-border-color-hover: $color-transparent !default;
+
+/// unselected
+/// @level normal
+/// @state disabled
+/// @namespace statement/disabled/bar
+$range-normal-unselected-color-disabled: $color-line1-3 !default;
+
+/// selected
+/// @level normal
+/// @state disabled
+/// @namespace statement/disabled/bar
+$range-normal-selected-color-disabled: $color-line1-4 !default;
+
+/// background
+/// @level normal
+/// @state disabled
+/// @namespace statement/disabled/handle
+$range-normal-slider-bg-color-disabled: $color-line1-1 !default;
+/// border
+/// @size medium
+/// @namespace statement/normal/handle
+$range-normal-slider-border-color: $color-line1-3 !default;
+/// border
+/// @size medium
+/// @namespace statement/disabled/handle
+$range-normal-slider-border-color-disabled: $color-line1-1 !default;
+/// color
+/// @level normal
+/// @state disabled
+/// @namespace statement/disabled/mark
+$range-normal-mark-color-disabled: $color-text1-1 !default;
+
+/// unselected
+/// @level normal
+/// @state disabled
+/// @namespace statement/disabled/mark
+$range-normal-mark-selected-color-disabled: $color-text1-2 !default;

@@ -15,21 +15,21 @@ import PropTypes from 'prop-types';
  * @param {*} WrappedComponent
  */
 
-var HOCTextProps = function (WrappedComponent) {
-  var _class, _temp;
+const HOCTextProps = function (WrappedComponent) {
+  let _class; let _temp;
 
-  var PROPS = {
+  const PROPS = {
     fontSize: 'fontSize',
     fontWeight: 'fontWeight',
-    color: 'color'
+    color: 'color',
   };
   return _temp = _class =
-  /*#__PURE__*/
+  /* #__PURE__ */
   function (_Component) {
     _inherits(_class, _Component);
 
     function _class() {
-      var _this;
+      let _this;
 
       _classCallCheck(this, _class);
 
@@ -40,7 +40,7 @@ var HOCTextProps = function (WrappedComponent) {
       _this = _possibleConstructorReturn(this, _getPrototypeOf(_class).call(this, ..._args));
 
       _defineProperty(_assertThisInitialized(_this), "parseStyle", function (args) {
-        var style = {};
+        const style = {};
         Object.keys(PROPS).forEach(function (item) {
           // if props isn't false
           if (!args[item]) return;
@@ -55,27 +55,27 @@ var HOCTextProps = function (WrappedComponent) {
     _createClass(_class, [{
       key: "render",
       value: function render() {
-        var _this$props = this.props,
-            fontSize = _this$props.fontSize,
-            fontWeight = _this$props.fontWeight,
-            color = _this$props.color,
-            otherProps = _objectWithoutProperties(_this$props, ["fontSize", "fontWeight", "color"]);
+        const _this$props = this.props;
+            const fontSize = _this$props.fontSize;
+            const fontWeight = _this$props.fontWeight;
+            const color = _this$props.color;
+            const otherProps = _objectWithoutProperties(_this$props, ["fontSize", "fontWeight", "color"]);
 
         return React.createElement(WrappedComponent, _extends({}, otherProps, {
-          styleText: this.parseStyle(this.props)
+          styleText: this.parseStyle(this.props),
         }));
-      }
+      },
     }]);
 
     return _class;
   }(Component), _defineProperty(_class, "propTypes", {
     fontSize: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     fontWeight: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-    color: PropTypes.oneOfType([PropTypes.string, PropTypes.bool])
+    color: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   }), _defineProperty(_class, "defaultProps", {
     fontSize: false,
     fontWeight: false,
-    color: false
+    color: false,
   }), _temp;
 };
 

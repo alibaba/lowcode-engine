@@ -1,0 +1,102 @@
+////
+/// @module time-picker: 时间选择
+/// @tag TimePicker
+/// @category component
+/// @family data-entry
+/// @varPrefix $time-picker-
+/// @classPrefix {prefix}-time-picker
+/// @order {"size/input":10,"size/panel":11,"size/menu":12,"size/menu title":13,"size/menu item":14,"statement/normal":10,"statement/normal/input":100,"statement/normal/panel":101,"statement/normal/menu":102,"statement/normal/menu title":103,"statement/normal/menu item":104,"statement/hover":11,"statement/hover/input":110,"statement/hover/menu item":111,"statement/selected":12,"statement/selected/menu item":120,"statement/disabled":13,"statement/disabled/menu item":130}
+////
+
+$time-picker-prefix: '.' + $css-prefix + 'time-picker';
+
+// global
+$time-picker-panel-border-color: $popup-local-border-color;
+$time-picker-panel-corner: $popup-local-corner;
+$time-picker-panel-shadow: $popup-local-shadow;
+
+// 下拉面板
+// --------------------------------------------------
+
+/// width
+/// @namespace size/panel
+$time-picker-panel-width: $s-50 !default;
+
+/// background
+/// @namespace statement/normal/panel
+$time-picker-panel-background: $color-white !default;
+
+// 时间菜单
+// --------------------------------------------------
+
+/// border
+/// @namespace size/menu
+$time-picker-menu-border-width: $line-1 !default;
+
+/// text
+/// @namespace size/menu title
+$time-picker-menu-title-font-size: $font-size-caption !default;
+
+/// text
+/// @namespace size/menu item
+$time-picker-menu-item-font-size: $font-size-caption !default;
+
+/// height
+/// @namespace size/menu title
+$time-picker-menu-title-height: $s-7 !default;
+
+/// height
+/// @namespace size/menu item
+$time-picker-menu-item-height: $s-7 !default;
+
+/// border color
+/// @namespace statement/normal/menu
+$time-picker-menu-border-color: $color-line1-3 !default;
+
+/// color
+/// @namespace statement/normal/menu title
+$time-picker-menu-title-color: $color-text1-2 !default;
+
+/// background
+/// @namespace statement/normal/menu title
+$time-picker-menu-title-background: $color-white !default;
+
+/// font weight
+/// @namespace statement/normal/menu title
+$time-pikcer-menu-title-font-weight: $font-weight-2 !default;
+
+/// color
+/// @namespace statement/normal/menu item
+$time-picker-menu-item-color: $color-text1-3 !default;
+
+/// color
+/// @namespace statement/hover/menu item
+$time-picker-menu-item-color-hover: $color-text1-4 !default;
+
+/// color
+/// @namespace statement/selected/menu item
+$time-picker-menu-item-color-selected: $color-text1-3 !default;
+
+/// color
+/// @namespace statement/disabled/menu item
+$time-picker-menu-item-color-disabled: $color-text1-1 !default;
+
+/// background
+/// @namespace statement/normal/menu item
+$time-picker-menu-item-background: $color-white !default;
+
+/// background
+/// @namespace statement/hover/menu item
+$time-picker-menu-item-background-hover: $color-fill1-2 !default;
+
+/// background
+/// @namespace statement/selected/menu item
+$time-picker-menu-item-background-selected: $color-fill1-2 !default;
+
+/// background
+/// @namespace statement/disabled/menu item
+$time-picker-menu-item-background-disabled: $color-white !default;
+
+/// font weight
+/// @namespace statement/selected/menu item
+$time-picker-menu-item-font-weight-selected: $font-weight-3 !default;

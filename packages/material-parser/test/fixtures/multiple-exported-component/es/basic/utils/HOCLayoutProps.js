@@ -15,21 +15,21 @@ import PropTypes from 'prop-types';
  * @param {*} WrappedComponent
  */
 
-var HOCLayoutProps = function (WrappedComponent) {
-  var _class, _temp;
+const HOCLayoutProps = function (WrappedComponent) {
+  let _class; let _temp;
 
-  var PROPS = {
+  const PROPS = {
     align: 'textAlign',
     lineHeight: 'lineHeight',
-    verticalAlign: 'verticalAlign'
+    verticalAlign: 'verticalAlign',
   };
   return _temp = _class =
-  /*#__PURE__*/
+  /* #__PURE__ */
   function (_Component) {
     _inherits(_class, _Component);
 
     function _class() {
-      var _this;
+      let _this;
 
       _classCallCheck(this, _class);
 
@@ -40,7 +40,7 @@ var HOCLayoutProps = function (WrappedComponent) {
       _this = _possibleConstructorReturn(this, _getPrototypeOf(_class).call(this, ..._args));
 
       _defineProperty(_assertThisInitialized(_this), "parseStyle", function (args) {
-        var style = {};
+        const style = {};
         Object.keys(PROPS).forEach(function (item) {
           // if props isn't false
           if (!args[item]) return;
@@ -55,27 +55,27 @@ var HOCLayoutProps = function (WrappedComponent) {
     _createClass(_class, [{
       key: "render",
       value: function render() {
-        var _this$props = this.props,
-            align = _this$props.align,
-            lineHeight = _this$props.lineHeight,
-            verticalAlign = _this$props.verticalAlign,
-            otherProps = _objectWithoutProperties(_this$props, ["align", "lineHeight", "verticalAlign"]);
+        const _this$props = this.props;
+            const align = _this$props.align;
+            const lineHeight = _this$props.lineHeight;
+            const verticalAlign = _this$props.verticalAlign;
+            const otherProps = _objectWithoutProperties(_this$props, ["align", "lineHeight", "verticalAlign"]);
 
         return React.createElement(WrappedComponent, _extends({}, otherProps, {
-          styleLayout: this.parseStyle(this.props)
+          styleLayout: this.parseStyle(this.props),
         }));
-      }
+      },
     }]);
 
     return _class;
   }(Component), _defineProperty(_class, "propTypes", {
     align: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     lineHeight: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-    verticalAlign: PropTypes.oneOfType([PropTypes.string, PropTypes.bool])
+    verticalAlign: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   }), _defineProperty(_class, "defaultProps", {
     align: false,
     lineHeight: false,
-    verticalAlign: false
+    verticalAlign: false,
   }), _temp;
 };
 

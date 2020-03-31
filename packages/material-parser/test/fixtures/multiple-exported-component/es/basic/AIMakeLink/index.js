@@ -13,8 +13,8 @@ import HOCTextProps from '../utils/HOCTextProps';
 import HOCLayoutProps from '../utils/HOCLayoutProps';
 import HOCBackgroundProps from '../utils/HOCBackgroundProps';
 
-var AIMakeLink =
-/*#__PURE__*/
+const AIMakeLink =
+/* #__PURE__ */
 function (_Component) {
   _inherits(AIMakeLink, _Component);
 
@@ -27,20 +27,20 @@ function (_Component) {
   _createClass(AIMakeLink, [{
     key: "render",
     value: function render() {
-      var _this$props = this.props,
-          children = _this$props.children,
-          styleBoxModel = _this$props.styleBoxModel,
-          styleText = _this$props.styleText,
-          styleLayout = _this$props.styleLayout,
-          styleBackground = _this$props.styleBackground,
-          style = _this$props.style,
-          otherProps = _objectWithoutProperties(_this$props, ["children", "styleBoxModel", "styleText", "styleLayout", "styleBackground", "style"]);
+      const _this$props = this.props;
+          const children = _this$props.children;
+          const styleBoxModel = _this$props.styleBoxModel;
+          const styleText = _this$props.styleText;
+          const styleLayout = _this$props.styleLayout;
+          const styleBackground = _this$props.styleBackground;
+          const style = _this$props.style;
+          const otherProps = _objectWithoutProperties(_this$props, ["children", "styleBoxModel", "styleText", "styleLayout", "styleBackground", "style"]);
 
-      var styles = { ...styleBoxModel,
+      const styles = { ...styleBoxModel,
         ...styleText,
         ...styleLayout,
         ...styleBackground,
-        ...style
+        ...style,
       };
 
       if (typeof children !== 'string') {
@@ -48,9 +48,9 @@ function (_Component) {
       }
 
       return React.createElement("a", _extends({}, otherProps, {
-        style: styles
+        style: styles,
       }), [children]);
-    }
+    },
   }]);
 
   return AIMakeLink;
@@ -62,12 +62,12 @@ _defineProperty(AIMakeLink, "propTypes", {
   styleText: PropTypes.object.isRequired,
   styleLayout: PropTypes.object.isRequired,
   styleBackground: PropTypes.object.isRequired,
-  style: PropTypes.object
+  style: PropTypes.object,
 });
 
 _defineProperty(AIMakeLink, "defaultProps", {
   children: '',
-  style: {}
+  style: {},
 });
 
 export default HOCBoxModelProps(HOCTextProps(HOCLayoutProps(HOCBackgroundProps(AIMakeLink))));

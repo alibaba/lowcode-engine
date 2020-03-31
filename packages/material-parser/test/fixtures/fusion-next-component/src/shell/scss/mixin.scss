@@ -1,0 +1,194 @@
+@charset "UTF-8";
+
+@mixin shell-header-type(
+    $color,
+    $height,
+    $background,
+    $divider,
+    $shadow,
+    $paddingLeft
+) {
+    color: $color;
+    height: $height;
+    background: $background;
+    border-bottom: $divider;
+    box-shadow: $shadow;
+    padding: 0 $paddingLeft;
+}
+
+@mixin shell-header-navigation(
+    $direction,
+    $height,
+    $lineHight,
+    $paddingLeft
+) {
+    justify-content: $direction;
+    height: $height;
+    line-height: $lineHight;
+    margin: 0 $paddingLeft;
+}
+
+@mixin shell-task-header(
+    $min-height,
+    $background,
+    $divider,
+    $shadow,
+    $paddingLeft
+) {
+    width: 100%;
+    min-height: $min-height;
+    background: $background;
+    border-bottom: $divider;
+    box-shadow: $shadow;
+    padding: 0 $paddingLeft;
+    overflow: auto;
+}
+
+@mixin shell-appbar(
+    $min-height,
+    $background,
+    $divider,
+    $shadow,
+    $paddingLeft
+) {
+    min-height: $min-height;
+    background: $background;
+    border-bottom: $divider;
+    box-shadow: $shadow;
+    padding: 0 $paddingLeft;
+}
+
+@mixin shell-content(
+    $paddingTop,
+    $paddingLeft,
+    $max-width,
+    $gutter-row,
+    $gutter-column,
+    $columns
+) {
+    #{$shell-prefix}-content {
+        padding: $paddingTop $paddingLeft;
+    }
+
+    // #{$shell-prefix}-content-inner {
+    //     max-width: $max-width;
+    //     grid-row-gap: $gutter-row;
+    //     grid-column-gap: $gutter-column;
+    //     grid-template-columns: repeat($columns, 1fr);
+    // }
+}
+
+@mixin shell-trigger-background(
+    $nav-trigger-bg,
+    $dock-trigger-bg,
+    $local-nav-trigger-bg,
+    $ancillary-trigger-bg
+) {
+    #{$shell-prefix}-header {
+        .dock-trigger,
+        .nav-trigger {
+            background: $nav-trigger-bg;
+        }
+    }
+
+    #{$shell-prefix}-aside {
+        .local-nav-trigger {
+            background: $local-nav-trigger-bg;
+        }
+        .ancillary-trigger {
+            background: $ancillary-trigger-bg;
+        }
+    }
+}
+
+@mixin shell-navigation(
+    $width,
+    $background,
+    $divider,
+    $shadow,
+    $paddingTop,
+    $paddingBottom,
+    $width-mini
+) {
+    width: $width;
+    background: $background;
+    border-right: $divider;
+    box-shadow: $shadow;
+    padding: $paddingTop 0 $paddingBottom;
+
+    &#{$shell-prefix}-collapse#{$shell-prefix}-mini {
+        width: $width-mini;
+    }
+
+    &#{$shell-prefix}-collapse {
+        width: 0;
+    }
+}
+
+@mixin shell-tooldock(
+    $width,
+    $background,
+    $divider,
+    $shadow,
+    $paddingTop,
+    $paddingBottom
+) {
+    width: $width;
+    background: $background;
+    border-left: $divider;
+    box-shadow: $shadow;
+    padding: $paddingTop 0 $paddingBottom;
+}
+
+@mixin shell-tooldock-item(
+    $paddingTop,
+    $color,
+    $background,
+    $color-hover,
+    $background-hover
+) {
+    padding: $paddingTop 0;
+    color: $color;
+    background: $background;
+
+    &:hover {
+        color: $color-hover;
+        background: $background-hover;
+    }
+}
+
+@mixin shell-localnavigation(
+    $width,
+    $background,
+    $divider,
+    $shadow,
+    $paddingTop,
+    $paddingBottom
+) {
+    width: $width;
+    background: $background;
+    border-right: $divider;
+    box-shadow: $shadow;
+    padding: $paddingTop 0 $paddingBottom;
+    &#{$shell-prefix}-collapse {
+        width: 0;
+    }
+}
+
+@mixin shell-ancillary(
+    $width,
+    $background,
+    $divider,
+    $shadow,
+    $paddingTop,
+    $paddingBottom
+) {
+    width: $width;
+    background: $background;
+    border-left: $divider;
+    box-shadow: $shadow;
+    padding: $paddingTop 0 $paddingBottom;
+    &#{$shell-prefix}-collapse {
+        width: 0;
+    }
+}

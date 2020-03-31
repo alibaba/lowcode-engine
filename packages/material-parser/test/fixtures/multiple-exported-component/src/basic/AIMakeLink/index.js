@@ -53,5 +53,5 @@ class AIMakeLink extends Component {
 }
 
 export default HOCBoxModelProps(
-  HOCTextProps(HOCLayoutProps(HOCBackgroundProps(AIMakeLink)))
+  HOCTextProps(HOCLayoutProps(HOCBackgroundProps(AIMakeLink))),
 );

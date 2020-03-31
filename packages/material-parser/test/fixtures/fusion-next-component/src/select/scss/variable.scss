@@ -1,0 +1,55 @@
+@charset "UTF-8";
+
+////
+/// @module select: 选择器
+/// @tag Select
+/// @category component
+/// @family data-entry
+/// @varPrefix $select-
+/// @classPrefix {prefix}-select
+/// @order {"statement/normal":10,"statement/normal/text":100,"statement/normal/hint":101,"statement/normal/label":102,"statement/normal/icon":103,"size/bounding":10,"size/text":11}
+////
+
+// select variables
+// --------------------------------------------------
+
+$select-prefix: '.#{$css-prefix}select';
+$tag-prefix: '.#{$css-prefix}tag';
+
+/// color
+/// @namespace statement/normal/text
+$select-color: $color-text1-4 !default;
+/// color
+/// @namespace statement/normal/hint
+$select-hint-color: $color-text1-2 !default;
+
+/// color
+/// @namespace statement/normal/highlight
+$select-highlight-color: $color-brand1-6 !default;
+
+// font
+/// size
+/// @namespace size/highlight
+$select-highlight-font: $font-size-body-1 !default;
+
+// large
+
+/// line-height
+/// @namespace size/bounding
+$select-l-lineheight: $s-6 !default;
+
+// medium
+
+/// line-height
+/// @namespace size/bounding
+$select-m-lineheight: $s-5 !default;
+
+/// line-height
+/// @namespace size/bounding
+$select-s-lineheight: 14px !default;
+
+$select-tag-spacing-lr: $s-1;
+$select-tag-spacing-tb: 3px;
+$select-tag-padding-lr: $s-1;
+$select-menu-item-height: $s-5;
+$select-menu-icon-color: $color-brand1-6;

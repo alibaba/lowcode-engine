@@ -1,0 +1,32 @@
+@import "../core/index-noreset.scss";
+@import "scss/mixin";
+@import "scss/variable";
+
+#{$split-btn-prefix} {
+    display: inline-block;
+    position: relative;
+
+    &-trigger {
+        .#{$css-prefix}icon {
+            transition: transform $motion-duration-immediately $motion-linear;
+        }
+
+        &.#{$css-prefix}expand .#{$css-prefix}icon {
+            transform: rotate(180deg);
+        }
+
+        &.#{$css-prefix}btn-normal:not(:disabled):not(.disabled) .#{$css-prefix}icon {
+            color: $split-btn-trigger-normal-icon-color;
+        }
+
+        &.#{$css-prefix}small {
+            padding-left: $s-1;
+            padding-right: $s-1;
+        }
+
+        &.#{$css-prefix}medium {
+            padding-left: $s-2;
+            padding-right: $s-2;
+        }
+    }
+}

@@ -1,0 +1,428 @@
+@import "../core/index-noreset.scss";
+@import "scss/mixin";
+@import "scss/variable";
+
+$nav-icononly-width: 58px;
+
+#{$nav-prefix} {
+    @include box-sizing;
+    min-width: auto;
+    padding: 0;
+    border-radius: 0;
+
+    &-icon.#{$css-prefix}icon {
+        @include icon-size(
+            $size: $nav-icon-self-size,
+            $marginRight: $nav-icon-self-margin
+        );
+        font-weight: inherit;
+    }
+
+    &-group-label {
+        height: $nav-group-height;
+        line-height: $nav-group-height;
+        font-size: $nav-group-font-size;
+    }
+
+    &-item {
+        #{$menu-prefix}-item-text > span,
+        #{$nav-prefix}-group-label > span {
+            opacity: 1;
+            transition: opacity $motion-duration-immediately $motion-linear;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        &,
+        &:hover,
+        &.#{$css-prefix}focused,
+        &.#{$css-prefix}selected,
+        &.#{$css-prefix}opened {
+            #{$menu-prefix}-hoz-icon-arrow.#{$css-prefix}icon,
+            #{$menu-prefix}-icon-arrow.#{$css-prefix}icon {
+                color: inherit;
+                top: 2px;
+                transform-origin: center 47%;
+            }
+        }
+    }
+
+    &.#{$css-prefix}active &-item:before {
+        position: absolute;
+        transition: all $motion-duration-standard $motion-ease;
+        content: '';
+    }
+
+    &.#{$css-prefix}hoz {
+        height: $nav-hoz-height + 2 * $nav-hoz-item-margin-tb;
+
+        @include nav-size(
+            'hoz',
+            $nav-hoz-height - $popup-local-border-width * 2,
+            $nav-hoz-font-size,
+            $nav-hoz-item-padding-lr,
+            $nav-hoz-item-margin-tb,
+            $nav-hoz-item-margin-lr,
+            $nav-hoz-item-corner
+        );
+
+        #{$nav-prefix}-group-label #{$menu-prefix}-item-inner {
+            height: $nav-group-height;
+            line-height: $nav-group-height;
+            font-size: $nav-group-font-size;
+        }
+
+        #{$menu-prefix}-header {
+            float: left;
+            height: $nav-hoz-height - $popup-local-border-width * 2;
+        }
+
+        #{$menu-prefix}-footer {
+            float: right;
+            height: $nav-hoz-height - $popup-local-border-width * 2;
+        }
+
+        #{$nav-prefix}-item {
+            &:before {
+                width: 0;
+                left: 50%;
+                height: $nav-hoz-item-selected-active-line;
+            }
+
+            &:hover:before {
+                height: $nav-hoz-item-hover-active-line;
+            }
+
+            @if ($nav-hoz-item-hover-active-line != 0) {
+                &:hover:before {
+                    width: 100%;
+                    left: 0;
+                }
+            }
+        }
+
+        &.#{$css-prefix}top #{$nav-prefix}-item:before {
+            top: - $popup-local-border-width;
+        }
+
+        &.#{$css-prefix}bottom #{$nav-prefix}-item:before {
+            bottom: - $popup-local-border-width;
+        }
+
+        .#{$css-prefix}selected#{$nav-prefix}-item:before {
+            width: 100%;
+            left: 0;
+            height: $nav-hoz-item-selected-active-line;
+        }
+    }
+
+    &.#{$css-prefix}ver {
+        transition: width $motion-duration-standard $motion-ease;
+
+        @include nav-size(
+            'ver',
+            $nav-ver-height,
+            $nav-ver-font-size,
+            $nav-ver-item-padding-lr,
+            $nav-ver-item-margin-tb,
+            $nav-ver-item-margin-lr,
+            $nav-ver-item-corner
+        );
+
+        #{$nav-prefix}-group-label #{$menu-prefix}-item-inner {
+            height: $nav-group-height;
+            line-height: $nav-group-height;
+            font-size: $nav-group-font-size;
+        }
+
+        > #{$menu-prefix}-item:first-child,
+        > #{$menu-prefix}-sub-menu-wrapper:first-child > #{$menu-prefix}-item {
+            margin-top: $nav-ver-item-margin-tb;
+        }
+
+        > #{$menu-prefix}-item:last-child,
+        > #{$menu-prefix}-sub-menu-wrapper:last-child > #{$menu-prefix}-item {
+            margin-bottom: $nav-ver-item-margin-tb;
+        }
+
+        #{$menu-prefix}-sub-menu #{$menu-prefix}-item-inner {
+            height: $nav-ver-sub-nav-height;
+            line-height: $nav-ver-sub-nav-height;
+            font-size: $nav-ver-sub-nav-font-size;
+        }
+
+        #{$nav-prefix}-item {
+            &:before {
+                height: 0;
+                top: 50%;
+                width: $nav-ver-item-selected-active-line;
+            }
+
+            &:hover:before {
+                width: $nav-ver-item-hover-active-line;
+            }
+
+            @if ($nav-ver-item-hover-active-line != 0) {
+                &:hover:before {
+                    height: 100%;
+                    top: 0;
+                }
+            }
+        }
+
+        &.#{$css-prefix}left #{$nav-prefix}-item:before {
+            left: - $popup-local-border-width;
+        }
+
+        &.#{$css-prefix}right #{$nav-prefix}-item:before {
+            right: - $popup-local-border-width;
+        }
+
+        .#{$css-prefix}selected#{$nav-prefix}-item:before {
+            height: 100%;
+            top: 0;
+            width: $nav-ver-item-selected-active-line;
+        }
+    }
+
+    &.#{$css-prefix}primary {
+        @include nav-border-fix(
+            $nav-hoz-height,
+            $nav-primary-border-width
+        );
+        @include nav-statement(
+            $nav-primary-bg-color,
+            $nav-primary-border-color,
+            $nav-primary-text-color,
+            $nav-primary-text-style,
+            $nav-primary-shadow,
+            $nav-primary-item-hover-bg-color,
+            $nav-primary-item-hover-text-color,
+            $nav-primary-item-hover-text-style,
+            $nav-primary-item-selected-bg-color,
+            $nav-primary-item-selected-text-color,
+            $nav-primary-item-selected-text-style,
+            $nav-primary-item-selected-active-color,
+            $nav-primary-item-hover-active-color,
+            $nav-primary-item-opened-bg-color,
+            $nav-primary-item-opened-text-color,
+            $nav-primary-group-text-color,
+            $nav-primary-group-text-style
+        );
+        @include sub-nav-statement(
+            $nav-primary-sub-nav-text-color,
+            $nav-primary-sub-nav-text-style,
+            $nav-primary-sub-nav-bg-color,
+            $nav-primary-sub-nav-hover-bg-color,
+            $nav-primary-sub-nav-hover-text-color,
+            $nav-primary-sub-nav-selected-bg-color,
+            $nav-primary-sub-nav-selected-text-color,
+            $nav-primary-sub-nav-active-color
+        );
+    }
+
+    &.#{$css-prefix}secondary {
+        @include nav-border-fix(
+            $nav-hoz-height,
+            $nav-secondary-border-width
+        );
+        @include nav-statement(
+            $nav-secondary-bg-color,
+            $nav-secondary-border-color,
+            $nav-secondary-text-color,
+            $nav-secondary-text-style,
+            $nav-secondary-shadow,
+            $nav-secondary-item-hover-bg-color,
+            $nav-secondary-item-hover-text-color,
+            $nav-secondary-item-hover-text-style,
+            $nav-secondary-item-selected-bg-color,
+            $nav-secondary-item-selected-text-color,
+            $nav-secondary-item-selected-text-style,
+            $nav-secondary-item-selected-active-color,
+            $nav-secondary-item-hover-active-color,
+            $nav-secondary-item-opened-bg-color,
+            $nav-secondary-item-opened-text-color,
+            $nav-secondary-group-text-color,
+            $nav-secondary-group-text-style
+        );
+        @include sub-nav-statement(
+            $nav-secondary-sub-nav-text-color,
+            $nav-secondary-sub-nav-text-style,
+            $nav-secondary-sub-nav-bg-color,
+            $nav-secondary-sub-nav-hover-bg-color,
+            $nav-secondary-sub-nav-hover-text-color,
+            $nav-secondary-sub-nav-selected-bg-color,
+            $nav-secondary-sub-nav-selected-text-color,
+            $nav-secondary-sub-nav-active-color
+        );
+    }
+
+    &.#{$css-prefix}normal {
+        @include nav-statement(
+            $nav-normal-bg-color,
+            $nav-normal-border-color,
+            $nav-normal-text-color,
+            $nav-normal-text-style,
+            $nav-normal-shadow,
+            $nav-normal-item-hover-bg-color,
+            $nav-normal-item-hover-text-color,
+            $nav-normal-item-hover-text-style,
+            $nav-normal-item-selected-bg-color,
+            $nav-normal-item-selected-text-color,
+            $nav-normal-item-selected-text-style,
+            $nav-normal-item-selected-active-color,
+            $nav-normal-item-hover-active-color,
+            $nav-normal-item-opened-bg-color,
+            $nav-normal-item-opened-text-color,
+            $nav-normal-group-text-color,
+            $nav-normal-group-text-style
+        );
+        @include sub-nav-statement(
+            $nav-normal-sub-nav-text-color,
+            $nav-normal-sub-nav-text-style,
+            $nav-normal-sub-nav-bg-color,
+            $nav-normal-sub-nav-hover-bg-color,
+            $nav-normal-sub-nav-hover-text-color,
+            $nav-normal-sub-nav-selected-bg-color,
+            $nav-normal-sub-nav-selected-text-color,
+            $nav-normal-sub-nav-active-color
+        );
+    }
+
+    &.#{$css-prefix}line {
+        &.#{$css-prefix}hoz {
+            border-top-color: $nav-line-bg-color;
+            border-left-color: $nav-line-bg-color;
+            border-right-color: $nav-line-bg-color;
+        }
+
+        &.#{$css-prefix}ver {
+            border-top-color: $nav-line-bg-color;
+            border-left-color: $nav-line-bg-color;
+            border-bottom-color: $nav-line-bg-color;
+        }
+
+        @include nav-statement(
+            $nav-line-bg-color,
+            $nav-line-border-color,
+            $nav-line-text-color,
+            $nav-line-text-style,
+            $shadow-zero,
+            $nav-line-item-hover-bg-color,
+            $nav-line-item-hover-text-color,
+            $nav-line-item-hover-text-style,
+            $nav-line-item-selected-bg-color,
+            $nav-line-item-selected-text-color,
+            $nav-line-item-selected-text-style,
+            $nav-line-item-selected-active-color,
+            $nav-line-item-hover-active-color,
+            $nav-line-item-opened-bg-color,
+            $nav-line-item-opened-text-color,
+            $nav-line-group-text-color,
+            $nav-line-group-text-style
+        );
+        @include sub-nav-statement(
+            $nav-line-sub-nav-text-color,
+            $nav-line-sub-nav-text-style,
+            $nav-line-sub-nav-bg-color,
+            $nav-line-sub-nav-hover-bg-color,
+            $nav-line-sub-nav-hover-text-color,
+            $nav-line-sub-nav-selected-bg-color,
+            $nav-line-sub-nav-selected-text-color,
+            $nav-line-sub-nav-active-color
+        );
+    }
+
+    &.#{$css-prefix}icon-only {
+        #{$menu-prefix}-item-inner {
+            text-overflow: clip;
+        }
+
+        // #{$menu-prefix}-item-text > span,
+        // #{$nav-prefix}-group-label > #{$menu-prefix}-item-inner > span {
+        //     opacity: 0;
+        // }
+
+        &.#{$css-prefix}normal {
+            @include icon-only-size($popup-local-border-width);
+        }
+
+        &.#{$css-prefix}primary {
+            @include icon-only-size($nav-primary-border-width);
+        }
+        &.#{$css-prefix}secondary {
+            @include icon-only-size($nav-secondary-border-width);
+        }
+
+        #{$nav-prefix}-icon-only-arrow.#{$css-prefix}icon {
+            @include icon-size(
+                $size: $nav-icon-only-font-size,
+                $marginLeft: (18px - $nav-icon-only-font-size) / 2,
+                $marginRight: (18px - $nav-icon-only-font-size) / 2
+            );
+            transition: all $motion-duration-immediately $motion-linear;
+            transform-origin: center 46%;
+        }
+
+        #{$nav-prefix}-item.#{$css-prefix}opened #{$nav-prefix}-icon-only-arrow.#{$css-prefix}icon-arrow-down {
+            @include icon-size(
+                $size: $nav-icon-only-font-size,
+                $marginLeft: (18px - $nav-icon-only-font-size) / 2,
+                $marginRight: (18px - $nav-icon-only-font-size) / 2,
+                $transform: rotate(180deg)
+            );
+        }
+
+        #{$nav-prefix}-item.#{$css-prefix}selected #{$nav-prefix}-icon.#{$css-prefix}icon {
+            animation: pulse .3s cubic-bezier(.23, 1, .32, 1);
+        }
+
+        #{$menu-prefix}-hoz-icon-arrow,
+        #{$menu-prefix}-icon-arrow {
+            display: none;
+        }
+    }
+
+    &-embeddable {
+        &.#{$css-prefix}primary,
+        &.#{$css-prefix}secondary,
+        &.#{$css-prefix}normal {
+            height: 100%;
+            background: initial;
+            box-shadow: none;
+            border: none;
+
+            #{$menu-prefix}-sub-menu #{$menu-prefix}-item,
+            #{$nav-prefix}-item#{$menu-prefix}-item {
+                background: initial;
+            }
+
+            &.#{$css-prefix}icon-only {
+                @include icon-only-size(0);
+            }
+        }
+
+        &#{$nav-prefix}.#{$css-prefix}hoz {
+            #{$menu-prefix}-item-inner {
+                height: 100%;
+            }
+
+            #{$menu-prefix}-sub-menu #{$menu-prefix}-item,
+            #{$nav-prefix}-item#{$menu-prefix}-item {
+                height: 100%;
+            }
+        }
+    }
+
+    &-embeddable,
+    &-embeddable &-item.#{$css-prefix}disabled,
+    &-embeddable &-item.#{$css-prefix}disabled #{$menu-prefix}-item-text > a {
+        background: initial;
+        border: none;
+    }
+}
+
+@import "./rtl.scss";

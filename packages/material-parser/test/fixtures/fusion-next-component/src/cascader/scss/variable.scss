@@ -1,0 +1,63 @@
+////
+/// @module cascader: 级联
+/// @tag Cascader
+/// @category component
+/// @family data-display
+/// @varPrefix $cascader-
+/// @classPrefix {prefix}-cascader
+/// @order {"size/menu":10,"size/icon arrow":11,"statement/normal":10,"statement/normal/menu":100,"statement/normal/icon arrow":101,"statement/expanded":11,"statement/expanded/icon arrow":110,"statement/expanded/menu item":111}
+////
+
+$cascader-prefix: ".#{$css-prefix}cascader";
+
+// Size
+// ----------------------------------------
+
+/// border width
+/// @namespace size/menu
+$cascader-menu-border-width: $line-1 !default;
+
+/// width
+/// @namespace size/menu
+$cascader-menu-width: $s-25 !default;
+
+/// height
+/// @namespace size/menu
+$cascader-menu-height: $s-48 !default;
+
+/// size
+/// @namespace size/icon arrow
+$cascader-menu-icon-expand-size: $icon-xxs !default;
+
+// Statement:normal
+// ----------------------------------------
+
+/// border color
+/// @namespace statement/normal/menu
+$cascader-menu-border-color: $color-line1-2 !default;
+
+/// corner
+/// @namespace statement/normal/menu
+$cascader-menu-border-radius: $corner-1 !default;
+
+/// color
+/// @namespace statement/normal/icon arrow
+$cascader-menu-icon-expand-color: $color-text1-3 !default;
+
+// Statement:hover
+// ----------------------------------------
+
+/// color
+/// @namespace statement/expanded/icon arrow
+$cascader-menu-icon-hover-expand-color: $color-text1-4 !default;
+
+// Statement:expanded
+// ----------------------------------------
+
+/// text
+/// @namespace statement/expanded/menu item
+$cascader-menu-item-expanded-color: $color-text1-4 !default;
+
+/// background
+/// @namespace statement/expanded/menu item
+$cascader-menu-item-expanded-background-color: $color-fill1-2 !default;

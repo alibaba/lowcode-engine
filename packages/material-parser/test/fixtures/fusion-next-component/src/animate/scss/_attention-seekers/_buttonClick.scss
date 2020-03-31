@@ -1,0 +1,14 @@
+@include keyframes(buttonClick) {
+    50% {
+        @include transform(scale3d(.95, .95, .95));
+    }
+}
+@mixin buttonClick($count: $countDefault, $duration: $durationDefault, $delay: $delayDefault, $function: $functionDefault, $fill: $fillDefault, $visibility: $visibilityDefault) {
+    @include animation-name(buttonClick);
+    @include count($count);
+    @include duration($duration);
+    @include delay($delay);
+    @include function($function);
+    @include fill-mode($fill);
+    @include visibility($visibility);
+}

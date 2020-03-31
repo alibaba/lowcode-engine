@@ -1,0 +1,42 @@
+#{$menu-prefix}[dir="rtl"] {
+    #{$menu-prefix} {
+        &-item {
+            &-helper {
+                float: left;
+            }
+
+            .#{$css-prefix}checkbox,
+            .#{$css-prefix}radio {
+                margin-left: $menu-icon-margin;
+                margin-right: 0;
+            }
+        }
+
+        &-hoz-right {
+            float: left;
+        }
+
+        &-icon-arrow.#{$css-prefix}icon {
+            left: 10px;
+            right: auto;
+        }
+
+        &-hoz-icon-arrow.#{$css-prefix}icon {
+            left: 6px;
+            right: auto;
+        }
+
+        &-icon-selected.#{$css-prefix}icon {
+            @include icon-size($menu-icon-selected-size, 0, -($menu-padding-horizontal + $menu-icon-selected-size) / 2);
+
+            &#{$menu-prefix}-icon-right {
+                right: auto;
+                left: $menu-icon-selected-right;
+            }
+        }
+    }
+    #{$menu-prefix}-icon-arrow.#{$css-prefix}icon {
+        left: 10px;
+        right: auto;
+    }
+}

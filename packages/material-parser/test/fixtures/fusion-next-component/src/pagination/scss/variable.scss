@@ -1,0 +1,258 @@
+////
+/// @module pagination: 分页器
+/// @tag Pagination
+/// @category component
+/// @family navigation
+/// @varPrefix $pagination-
+/// @classPrefix {prefix}-pagination
+/// @order {"size/item":10,"size/ellipsis":11,"size/display":12,"size/jump":13,"size/size selector":14,"statement/normal":10,"statement/normal/ellipsis":100,"statement/normal/display":101,"statement/normal/jump":102,"statement/normal/size selector":103,"statement/normal/arrow":104,"statement/normal/current item":105,"statement/hover/arrow":110,"statement/hover":11,"statement/hover/current item":110}
+////
+
+// pagination variables
+// --------------------------------------------------
+
+// unconfigurable
+$pagination-prefix: ".#{$css-prefix}pagination";
+
+// Size:Medium
+// ----------------------------------------
+
+/// margin (l, r)
+/// @namespace size/item
+$pagination-item-split: $s-1 !default;
+
+/// border style
+/// @namespace size/item
+$pagination-item-border-style: $line-solid !default;
+
+/// border width
+/// @namespace size/item
+$pagination-item-border-width: $line-1 !default;
+
+/// corner
+/// @namespace size/item
+$pagination-item-corner: $corner-1 !default;
+
+/// icon
+/// @namespace size/ellipsis
+$pagination-ellipsis-size: $icon-xs !default;
+
+/// margin (l, r)
+/// @namespace size/ellipsis
+$pagination-ellipsis-margin: $s-2 !default;
+
+/// current text
+/// @namespace size/display
+$pagination-current-font-size: $font-size-body-1 !default;
+
+/// total text
+/// @namespace size/display
+$pagination-total-font-size: $font-size-body-1 !default;
+
+/// text
+/// @namespace size/jump
+$pagination-jump-font-size: $font-size-body-1 !default;
+
+/// input width
+/// @namespace size/jump
+$pagination-input-width: $s-9 !default;
+
+/// input margin (l, r)
+/// @namespace size/jump
+$pagination-input-margin: $s-1 !default;
+
+/// title margin (r)
+/// @namespace size/size selector
+$pagination-size-selector-title-margin-right: $s-1 !default;
+
+/// number padding
+/// @namespace size/size selector
+$pagination-size-selector-number-padding: $s-3 !default;
+
+// Size:Large
+// ----------------------------------------
+
+/// margin (l, r)
+/// @namespace size/item
+$pagination-large-item-split: $s-2 !default;
+
+/// border width
+/// @namespace size/item
+$pagination-large-item-border-width: $line-1 !default;
+
+/// corner
+/// @namespace size/item
+$pagination-large-item-corner: $corner-1 !default;
+
+/// icon
+/// @namespace size/ellipsis
+$pagination-large-ellipsis-size: $icon-s !default;
+
+/// current text
+/// @namespace size/display
+$pagination-large-current-font-size: $font-size-subhead !default;
+
+/// total text
+/// @namespace size/display
+$pagination-large-total-font-size: $font-size-subhead !default;
+
+/// input width
+/// @namespace size/jump
+$pagination-large-input-width: $s-12 !default;
+
+/// text
+/// @namespace size/jump
+$pagination-large-jump-font-size: $font-size-subhead !default;
+
+/// number padding
+/// @namespace size/size selector
+$pagination-large-size-selector-number-padding: $s-4 !default;
+
+// Size:Small
+// ----------------------------------------
+
+/// margin (l, r)
+/// @namespace size/item
+$pagination-small-item-split: $s-1 !default;
+
+/// border width
+/// @namespace size/item
+$pagination-small-item-border-width: $line-1 !default;
+
+/// corner
+/// @namespace size/item
+$pagination-small-item-corner: $corner-1 !default;
+
+/// icon
+/// @namespace size/ellipsis
+$pagination-small-ellipsis-size: $icon-xs !default;
+
+/// current text
+/// @namespace size/display
+$pagination-small-current-font-size: $font-size-caption !default;
+
+/// total text
+/// @namespace size/display
+$pagination-small-total-font-size: $font-size-caption !default;
+
+/// input width
+/// @namespace size/jump
+$pagination-small-input-width: $s-7 !default;
+
+/// text
+/// @namespace size/jump
+$pagination-small-jump-font-size: $font-size-caption !default;
+
+/// number padding
+/// @namespace size/size selector
+$pagination-small-size-selector-number-padding: $s-2 !default;
+
+// Statement:Normal
+// ----------------------------------------
+
+/// text
+/// @namespace statement/normal/ellipsis
+$pagination-ellipsis-color: $color-text1-2 !default;
+
+/// current text
+/// @namespace statement/normal/display
+$pagination-current-color: $color-brand1-6 !default;
+
+/// total text
+/// @namespace statement/normal/display
+$pagination-total-color: $color-text1-4 !default;
+
+/// text
+/// @namespace statement/normal/jump
+$pagination-jump-color: $color-text1-2 !default;
+
+/// title text
+/// @namespace statement/normal/size selector
+$pagination-size-selector-title-color: $color-text1-2 !default;
+
+/// filter text
+/// @namespace statement/normal/size selector
+$pagination-size-selector-filter-color: $color-text1-3 !default;
+
+/// filter current text
+/// @namespace statement/normal/size selector
+$pagination-size-selector-filter-current-color: $color-brand1-6 !default;
+
+/// border
+/// @namespace statement/normal/item
+$pagination-item-border-color: $color-line1-3 !default;
+
+/// shadow
+/// @namespace statement/normal/item
+$pagination-item-shadow: $shadow-zero !default;
+
+/// text
+/// @namespace statement/normal/item
+$pagination-item-color: $color-text1-4 !default;
+
+/// background
+/// @namespace statement/normal/item
+$pagination-item-bg: $color-white !default;
+
+/// border
+/// @namespace statement/normal/current item
+$pagination-item-current-border-color: $color-brand1-6 !default;
+
+/// shadow
+/// @namespace statement/normal/current item
+$pagination-item-current-shadow: $shadow-zero !default;
+
+/// text
+/// @namespace statement/normal/current item
+$pagination-item-current-color: $color-white !default;
+
+/// background
+/// @namespace statement/normal/current item
+$pagination-item-current-bg: $color-brand1-6 !default;
+
+/// border
+/// @namespace statement/hover/item
+$pagination-item-hover-border-color: $color-line1-4 !default;
+
+/// shadow
+/// @namespace statement/hover/item
+$pagination-item-hover-shadow: $shadow-zero !default;
+
+/// text
+/// @namespace statement/hover/item
+$pagination-item-hover-color: $color-text1-4 !default;
+
+/// background
+/// @namespace statement/hover/item
+$pagination-item-hover-bg: $color-fill1-2 !default;
+
+/// color
+/// @namespace statement/normal/arrow
+$pagination-arrow-color: $color-text1-3 !default;
+
+// Statement:Hover
+// ----------------------------------------
+
+/// border
+/// @namespace statement/hover/current item
+$pagination-item-current-hover-border-color: $color-transparent !default;
+
+/// shadow
+/// @namespace statement/hover/current item
+$pagination-item-current-hover-shadow: $shadow-zero !default;
+
+/// text
+/// @namespace statement/hover/current item
+$pagination-item-current-hover-color: $color-white !default;
+
+/// background
+/// @namespace statement/hover/current item
+$pagination-item-current-hover-bg: $color-brand1-9 !default;
+
+/// color
+/// @namespace statement/hover/arrow
+$pagination-arrow-hover-color: $color-text1-4 !default;
+
+/// color
+/// @namespace statement/hover/arrow
+$pagination-arrow-hover-color-noboder: $color-brand1-6 !default;

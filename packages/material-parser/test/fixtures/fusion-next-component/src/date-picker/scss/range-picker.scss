@@ -1,0 +1,111 @@
+//
+// date-picker 样式
+//
+#{$range-picker-prefix} {
+
+    display: inline-block;
+    width: $s-28 * 3;
+
+    &-input {
+        width: 100%;
+    }
+
+    &-trigger {
+        // Extend next-input
+        border: $input-border-width solid $input-border-color;
+        background-color: $input-bg-color;
+
+        // Extend next-input
+        &:hover {
+            border-color: $input-hover-border-color;
+            background-color: $input-hover-bg-color;
+        }
+
+        // Extend next-input
+        &.#{$css-prefix}error {
+            border-color: $input-feedback-error-border-color;
+        }
+
+        &-separator {
+            @extend %input-separator;
+        }
+
+        &-input#{$date-picker-input-prefix} {
+            height: auto;
+            width: calc((100% - #{$date-picker-input-separator-width}) / 2);
+        }
+    }
+
+    &.#{$css-prefix}disabled {
+        #{$range-picker-prefix}-trigger {
+            cursor: not-allowed;
+            @include input-disabled();
+        }
+    }
+
+    &.#{$css-prefix}large {
+        @include range-picker-input-corner($form-element-large-corner);
+    }
+
+    &.#{$css-prefix}medium {
+        @include range-picker-input-corner($form-element-medium-corner);
+    }
+
+    &.#{$css-prefix}small {
+        @include range-picker-input-corner($form-element-small-corner);
+    }
+
+    &-body {
+        width: $s-30 * 5;
+    }
+
+    &-panel {
+        &-input-separator {
+            @extend %input-separator;
+        }
+
+        &-input-start-date#{$date-picker-input-prefix},
+        &-input-end-date#{$date-picker-input-prefix} {
+            width: calc((100% - #{$date-picker-input-separator-width}) / 2);
+        }
+    }
+}
+
+#{$range-picker-prefix}-body#{$range-picker-prefix}-body-show-time {
+    #{$range-picker-prefix}-panel {
+        &-input-start-date,
+        &-input-end-date,
+        &-input-start-time,
+        &-input-end-time {
+            width: calc((100% - #{$date-picker-input-separator-width} - #{$s-4}) / 4);
+        }
+
+        &-input-start-date {
+            margin-right: $s-2;
+        }
+
+        &-input-end-time {
+            margin-left: $s-2;
+        }
+
+        // time-panel
+        &-time {
+            @include clearfix;
+        }
+
+        &-time-start, &-time-end {
+            width: 50%;
+            float: left;
+        }
+
+        &-time-start {
+            // Extend time-picker border
+            border-right: $line-1 $line-solid $date-picker-panel-time-panel-separator-color;
+        }
+
+        &-time-end {
+            // Extend time-picker border
+            border-left: $line-1 $line-solid $date-picker-panel-time-panel-separator-color;
+        }
+    }
+}

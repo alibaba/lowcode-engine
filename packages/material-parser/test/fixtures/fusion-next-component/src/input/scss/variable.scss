@@ -1,0 +1,213 @@
+@charset "UTF-8";
+
+////
+/// @module input: 输入框
+/// @tag input
+/// @category component
+/// @family data-entry
+/// @varPrefix $input-
+/// @classPrefix {prefix}-input
+/// @order {"statement/normal":10,"statement/normal/addon":100,"statement/normal/feedback":101,"statement/normal/maxlen":102,"statement/normal/clear":103,"statement/hover":11,"statement/hover/clear":110,"statement/focus":12,"statement/disabled":13,"statement/error":14,"size/bounding":10,"size/bounding/addon":100,"size/label":11,"size/maxlen":12}
+////
+
+$input-prefix: '.#{$css-prefix}input';
+
+// 公共
+// --------------------------------------------------
+
+/// text
+/// @namespace statement/normal
+$input-text-color: $color-text1-4 !default;
+
+/// border
+/// @namespace statement/normal
+$input-border-color: $color-line1-3 !default;
+
+/// label
+/// @namespace statement/normal
+$input-label-color: $color-text1-3 !default;
+
+/// border
+/// @namespace statement/hover
+$input-hover-border-color: $color-line1-4 !default;
+
+/// background
+/// @namespace statement/hover
+$input-hover-bg-color: $color-white !default;
+
+/// border
+/// @namespace statement/focus
+$input-focus-border-color: $color-brand1-6 !default;
+$color-calculate-input-focus-shadow: rgba($input-focus-border-color, .2);
+
+/// background
+/// @namespace statement/focus
+$input-focus-bg-color: $color-white !default;
+
+/// shadow
+/// @namespace statement/focus
+$input-focus-shadow-spread: $line-zero !default;
+
+/// border
+/// @namespace size/bounding
+$input-border-width: $line-1 !default;
+
+/// background
+/// @namespace statement/normal
+$input-bg-color: $color-white !default;
+
+/// placeholder
+/// @namespace statement/normal
+$input-placeholder-color: $color-text1-2 !default;
+
+/// text
+/// @namespace statement/disabled
+$input-disabled-color: $color-text1-1 !default;
+
+/// border
+/// @namespace statement/disabled
+$input-disabled-border-color: $color-line1-1 !default;
+
+/// background
+/// @namespace statement/disabled
+$input-disabled-bg-color: $color-fill1-1 !default;
+
+// 多行
+// --------------------------------------------------
+
+/// padding(l,r)
+/// @namespace size/bounding
+$input-multiple-padding-lr: $s-2 !default;
+
+/// padding(t,b)
+/// @namespace size/bounding
+$input-multiple-padding-tb: $s-1 !default;
+
+/// text
+/// @namespace size/bounding
+$input-multiple-font-size: $font-size-body-1 !default;
+
+/// corner
+/// @namespace size/bounding
+$input-multiple-corner: $corner-1 !default;
+
+// addon
+// --------------------------------------------------
+
+/// background
+/// @namespace statement/normal/addon
+$input-addon-bg-color: $color-fill1-2 !default;
+
+/// text
+/// @namespace statement/normal/addon
+$input-addon-text-color: $color-text1-2 !default;
+
+/// padding(l,r)
+/// @namespace size/bounding/addon
+$input-addon-padding: $s-2 !default;
+
+// large
+// --------------------------------------------------
+
+/// padding
+/// @namespace size/bounding
+$input-l-padding: $s-3 !default;
+
+/// padding(l)
+/// @namespace size/label
+$input-l-label-padding-left: $s-3 !default;
+
+/// padding(r)
+/// @namespace size/label
+$input-l-icon-padding-right: $s-2 !default;
+
+// medium
+// --------------------------------------------------
+
+/// padding
+/// @namespace size/bounding
+$input-m-padding: $s-2 !default;
+
+/// padding(l)
+/// @namespace size/label
+$input-m-label-padding-left: $s-2 !default;
+
+/// padding(r)
+/// @namespace size/label
+$input-m-icon-padding-right: $s-2 !default;
+
+// small
+// --------------------------------------------------
+
+/// padding
+/// @namespace size/bounding
+$input-s-padding: $s-1 !default;
+
+/// padding(l)
+/// @namespace size/label
+$input-s-label-padding-left: $s-2 !default;
+
+/// padding(r)
+/// @namespace size/label
+$input-s-icon-padding-right: $s-1 !default;
+
+// feedback
+// --------------------------------------------------
+/// warning
+/// @namespace statement/normal/feedback
+$input-feedback-warning-color: $color-warning-3 !default;
+/// success
+/// @namespace statement/normal/feedback
+$input-feedback-success-color: $color-success-3 !default;
+
+/// loading
+/// @namespace statement/normal/feedback
+$input-feedback-loading-color: $color-notice-3 !default;
+
+/// border
+/// @namespace statement/error
+$input-feedback-error-border-color: $color-error-3 !default;
+$color-calculate-input-feedback-error-shadow: rgba($input-feedback-error-border-color, .2);
+
+/// background
+/// @namespace statement/error
+$input-feedback-error-bg-color: $color-white !default;
+
+/// border
+/// @namespace statement/warning
+$input-feedback-warning-border-color: $color-warning-3 !default;
+$color-calculate-input-feedback-warning-shadow: rgba($input-feedback-warning-border-color, .2);
+
+/// background
+/// @namespace statement/warning
+$input-feedback-warning-bg-color: $color-white !default;
+
+// maxlen
+// --------------------------------------------------
+
+/// error
+/// @namespace statement/normal/maxlen
+$input-maxlen-error-color: $color-error-3 !default;
+
+/// warning
+/// @namespace statement/normal/maxlen
+$input-maxlen-warning-color: $color-warning-3 !default;
+
+/// text
+/// @namespace statement/normal/maxlen
+$input-maxlen-color: $color-text1-2 !default;
+
+/// text
+/// @namespace size/maxlen
+$input-maxlen-font-size: $font-size-caption !default;
+
+// hint
+// --------------------------------------------------
+
+/// background
+/// @namespace statement/normal/clear
+$input-hint-color: $color-text1-2 !default;
+
+/// background
+/// @namespace statement/hover/clear
+$input-hint-hover-color: $color-text1-3 !default;

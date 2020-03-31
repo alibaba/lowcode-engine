@@ -1,0 +1,33 @@
+#{$loading-prefix}-fusion-reactor[dir=rtl] {
+    @include animation-name(nextVectorRouteRTL);
+}
+
+@include keyframes(nextVectorRouteRTL) {
+    0% {
+        @include transform(rotate($loading-fusion-vector-rotation-step-rtl * 0));
+    }
+    5% {
+        @include transform(rotate($loading-fusion-vector-rotation-step-rtl * 1));
+    }
+    25% {
+        @include transform(rotate($loading-fusion-vector-rotation-step-rtl * 1));
+    }
+    30% {
+        @include transform(rotate($loading-fusion-vector-rotation-step-rtl * 2));
+    }
+    50% {
+        @include transform(rotate($loading-fusion-vector-rotation-step-rtl * 2));
+    }
+    55% {
+        @include transform(rotate($loading-fusion-vector-rotation-step-rtl * 3));
+    }
+    75% {
+        @include transform(rotate($loading-fusion-vector-rotation-step-rtl * 3));
+    }
+    80% {
+        @include transform(rotate($loading-fusion-vector-rotation-step-rtl * 4));
+    }
+    100% {
+        @include transform(rotate($loading-fusion-vector-rotation-step-rtl * 4));
+    }
+}

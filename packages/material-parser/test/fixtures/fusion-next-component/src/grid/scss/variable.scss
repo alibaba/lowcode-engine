@@ -1,0 +1,50 @@
+@charset "UTF-8";
+
+// Grid System 变量
+// -------------------------------
+
+// Media queries 断点枚举
+// Two Extra small screen / phone
+$grid-xxs: 320px !default;
+// Extra small screen / phone
+$grid-xs: 480px !default;
+// Small screen / tablet
+$grid-s: 720px !default;
+// Medium screen / desktop
+$grid-m: 990px !default;
+// Large screen / desktop
+$grid-l: 1200px !default;
+// Extra Large screen / desktop
+$grid-xl: 1500px !default;
+
+$grid-columns: 24 !default;
+$grid-columns-5p: 5 !default;
+$grid-columns-fixed: 30 !default;
+$grid-col-fixed-width: $s-5 !default;
+
+// 断点选择器宽度计算和枚举
+$breakpoints: ((
+    "xxs",
+    "(min-width: " + $grid-xxs + ")",
+    "(max-width: " + ($grid-xs - 1) + ")"
+), (
+    "xs",
+    "(min-width: " + $grid-xs + ")",
+    "(max-width: " + ($grid-s - 1) + ")"
+), (
+    "s",
+    "(min-width: " + $grid-s + ")",
+    "(max-width: " + ($grid-m - 1) + ")"
+), (
+    "m",
+    "(min-width: " + $grid-m + ")",
+    "(max-width: " + ($grid-l - 1) + ")"
+), (
+    "l",
+    "(min-width: " + $grid-l + ")",
+    "(max-width: " + ($grid-xl - 1) + ")"
+), (
+    "xl",
+    "(min-width: " + $grid-xl + ")",
+    ""
+));

@@ -57,5 +57,5 @@ class AIMakeBlank extends Component {
 }
 
 export default HOCBoxModelProps(
-  HOCLayoutProps(HOCBackgroundProps(HOCFlexLayoutProps(AIMakeBlank)))
+  HOCLayoutProps(HOCBackgroundProps(HOCFlexLayoutProps(AIMakeBlank))),
 );

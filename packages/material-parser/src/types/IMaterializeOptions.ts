@@ -23,14 +23,6 @@ interface IMaterializeOptions {
   accesser: 'local' | 'online';
 
   /**
-   * 是否为多组件透出场景
-   * （true：表示多组件透出场景，false：表示单组件透出场景）
-   * @type {boolean}
-   * @memberof IMaterializeOptions
-   */
-  isExportedAsMultiple: boolean;
-
-  /**
    * 当 accesser=local 时，需要通过此配置项指定当前工作目录，形如：/usr/.../demo-project
    * @type {string}
    * @memberof IMaterializeOptions

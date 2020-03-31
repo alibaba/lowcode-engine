@@ -1,0 +1,146 @@
+// pagination mixins
+// --------------------------------------------------
+
+@mixin pagination-size(
+    $direction,
+    $itemSplit,
+    $itemPaddingLeftRight,
+    $itemBorderWidth,
+    $itemCorner,
+    $ellipsisSize,
+    $totalFontSize,
+    $currentFontSize,
+    $otherFontSize,
+    $pageHeihgt,
+    $numberPaddingLeftRight,
+    $inputWidth
+) {
+    #{$pagination-prefix}-list {
+        margin: 0 $itemSplit;
+    }
+    #{$pagination-prefix}-total {
+        line-height: $pageHeihgt;
+        vertical-align: middle;
+    }
+    #{$pagination-prefix}-item {
+        padding: 0 $itemPaddingLeftRight;
+        border-width: $itemBorderWidth;
+        border-radius: $itemCorner;
+        & + #{$pagination-prefix}-item {
+
+            @if $direction == 'rtl' {
+                margin: 0 $itemSplit 0 0;
+            } @else {
+                margin: 0 0 0 $itemSplit;
+            }
+        }
+    }
+    #{$pagination-prefix}-ellipsis {
+        height: $pageHeihgt;
+        line-height: $pageHeihgt;
+        @include icon-size(
+            $size: $ellipsisSize,
+            $marginLeft: $pagination-ellipsis-margin,
+            $marginRight: $pagination-ellipsis-margin
+        );
+    }
+    #{$pagination-prefix}-display {
+        font-size: $totalFontSize;
+        em {
+            font-size: $currentFontSize;
+        }
+    }
+    #{$pagination-prefix}-jump-text {
+        font-size: $otherFontSize;
+    }
+    #{$pagination-prefix}-jump-input {
+        width: $inputWidth;
+    }
+    #{$pagination-prefix}-size-selector-title {
+        height: $pageHeihgt;
+        line-height: $pageHeihgt;
+        font-size: $otherFontSize;
+        vertical-align: middle;
+    }
+    #{$pagination-prefix}-size-selector-btn {
+        padding: 0 $numberPaddingLeftRight;
+    }
+    #{$pagination-prefix}-item {
+        &.#{$css-prefix}prev:not([disabled]) i,
+        &.#{$css-prefix}next:not([disabled]) i {
+            color: $pagination-arrow-color;
+        }
+        &:hover {
+            &.#{$css-prefix}prev:not([disabled]) i,
+            &.#{$css-prefix}next:not([disabled]) i {
+                color: $pagination-arrow-hover-color;
+            }
+        }
+    }
+}
+
+@mixin arrow-only-size(
+    $prevNextWidth
+) {
+    #{$pagination-prefix}-item {
+        &.#{$css-prefix}prev,
+        &.#{$css-prefix}next {
+            width: $prevNextWidth;
+            padding: 0;
+            .#{$css-prefix}icon {
+                margin: 0 auto;
+            }
+        }
+    }
+}
+
+@mixin arrow-prev-only-size(
+    $prevWidth
+) {
+    #{$pagination-prefix}-item.#{$css-prefix}prev {
+        width: $prevWidth;
+        padding: 0;
+        .#{$css-prefix}icon {
+            margin: 0 auto;
+        }
+    }
+}
+
+@mixin no-border-size(
+    $displayMarginLeftRight
+) {
+    #{$pagination-prefix}-item {
+        &.#{$css-prefix}prev,
+        &.#{$css-prefix}next {
+            padding: 0;
+            border: none;
+            background-color: transparent;
+            box-shadow: none;
+            .#{$css-prefix}icon {
+                margin: 0;
+            }
+        }
+
+        &.#{$css-prefix}prev:not([disabled]):hover i,
+        &.#{$css-prefix}next:not([disabled]):hover i {
+            color: $pagination-arrow-hover-color-noboder;
+        }
+    }
+
+    #{$pagination-prefix}-display {
+        margin: 0 $displayMarginLeftRight;
+    }
+}
+
+@mixin mini-size(
+    $prevNextMarginLeftRight
+) {
+    #{$pagination-prefix}-item {
+        &.#{$css-prefix}prev {
+            margin-right: $prevNextMarginLeftRight;
+        }
+        &.#{$css-prefix}next {
+            margin-left: $prevNextMarginLeftRight;
+        }
+    }
+}

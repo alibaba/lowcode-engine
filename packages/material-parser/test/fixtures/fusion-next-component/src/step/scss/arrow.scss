@@ -1,0 +1,115 @@
+// 箭头
+// ----------------------------------------
+
+#{$step-prefix}-arrow {
+    display: flex;
+    #{$step-prefix}-item {
+        flex: 1;
+        @include step-item-size(
+            $step-arrow-item-height,
+            auto,
+            $step-arrow-item-height/2,
+            $step-arrow-item-height/8
+        );
+
+        &:before {
+            content: '';
+            position: absolute;
+            left: -$step-arrow-item-border-width;
+            top: 0;
+            z-index: 1;
+            border: $step-arrow-item-border-width solid transparent;
+            border-left-color: transparent;
+        }
+
+        &:after {
+            content: '';
+            position: absolute;
+            right: -$step-arrow-item-border-width;
+            top: 0;
+            z-index: 1;
+            border-top: $step-arrow-item-border-width solid transparent;
+            border-bottom: $step-arrow-item-border-width solid transparent;
+            border-left: $step-arrow-item-border-width solid transparent;
+        }
+
+        #{$step-prefix}-item-container {
+            min-width: 100px;
+            height: $step-arrow-item-height;
+            cursor: pointer;
+
+            #{$step-prefix}-item-title {
+                height: $step-arrow-item-height;
+                line-height: $step-arrow-item-height;
+                font-weight: $step-arrow-item-title-weight;
+                font-size: $step-arrow-item-title-size;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                text-align: center;
+            }
+        }
+    }
+
+    & > #{$step-prefix}-item-wait {
+        @include step-item-state(
+            'arrow',
+            $step-arrow-item-wait-background,
+            $step-arrow-item-title-wait-color
+        );
+    }
+
+    & > #{$step-prefix}-item-process {
+        @include step-item-state(
+            'arrow',
+            $step-arrow-item-process-background,
+            $step-arrow-item-title-process-color
+        );
+    }
+
+    & > #{$step-prefix}-item-finish {
+        @include step-item-state(
+            'arrow',
+            $step-arrow-item-finish-background,
+            $step-arrow-item-title-finish-color
+        );
+    }
+
+    #{$step-prefix}-item-disabled {
+        cursor: not-allowed;
+
+        @include step-item-state(
+            'arrow',
+            $step-arrow-item-disabled-background,
+            $step-arrow-item-title-disabled-color
+        );
+
+        #{$step-prefix}-item-container {
+            cursor: not-allowed;
+        }
+    }
+
+    #{$step-prefix}-item-read-only {
+        cursor: default;
+
+        #{$step-prefix}-item-container {
+            cursor: default;
+        }
+    }
+
+    #{$step-prefix}-item-first {
+        margin-left: 0;
+
+        &:before {
+            border: $step-arrow-item-border-width solid transparent;
+        }
+    }
+
+    #{$step-prefix}-item-last {
+        margin-right: 0;
+
+        &:after {
+            border: $step-arrow-item-border-width solid transparent;
+        }
+    }
+}

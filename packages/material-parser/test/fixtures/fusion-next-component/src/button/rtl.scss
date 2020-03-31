@@ -1,0 +1,119 @@
+@mixin next-button-size-rtl(
+    $padding,
+    $icon-margin,
+    $icon-size,
+    $corner
+) {
+    border-radius: $corner;
+    & > #{$btn-prefix}-icon#{$btn-icon-prefix}-first {
+        @include icon-size($icon-size, $icon-margin, 0);
+    }
+    & > #{$btn-prefix}-icon#{$btn-icon-prefix}-last {
+        @include icon-size($icon-size, 0, $icon-margin);
+    }
+
+    &#{$btn-prefix}-loading {
+        padding-left: $padding;
+        padding-right: $padding + $icon-size + $icon-margin;
+
+        &:after {
+            right: $padding;
+            top: 50%;
+            margin-right: 0;
+            margin-left: $icon-margin;
+        }
+    }
+}
+
+/* 组合 */
+/* ---------------------------------------- */
+#{$btn-prefix}-group[dir="rtl"] {
+    > #{$btn-prefix} {
+        float: right;
+    }
+
+    #{$btn-prefix}#{$btn-prefix} {
+        margin: 0 -1px 0 0;
+    }
+
+    > #{$btn-prefix}:first-child:not(:last-child) {
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+    }
+
+    > #{$btn-prefix}:last-child:not(:first-child) {
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+    }
+
+    > #{$btn-prefix}-primary:not(:first-child) {
+        border-right-color: transparentize($color-white, .8);
+
+        &:hover {
+            border-right-color: transparent;
+        }
+        &.disabled,
+        &[disabled] {
+            border-right-color: $color-line1-1;
+        }
+    }
+}
+
+
+/* 尺寸维度 */
+/* ---------------------------------------- */
+#{$btn-prefix}.#{$css-prefix} {
+    &small[dir="rtl"] {
+        @include next-button-size-rtl(
+            $btn-size-s-padding,
+            $btn-size-s-icon-margin,
+            $btn-size-s-icon-size,
+            $btn-size-s-corner
+        );
+    }
+    &medium[dir="rtl"] {
+        @include next-button-size-rtl(
+            $btn-size-m-padding,
+            $btn-size-m-icon-margin,
+            $btn-size-m-icon-size,
+            $btn-size-m-corner
+        );
+    }
+    &large[dir="rtl"] {
+        @include next-button-size-rtl(
+            $btn-size-l-padding,
+            $btn-size-l-icon-margin,
+            $btn-size-l-icon-size,
+            $btn-size-l-corner
+        );
+    }
+}
+
+/* 文本按钮 */
+#{$btn-prefix}-text[dir="rtl"] {
+    &.#{$css-prefix}large {
+        @include next-button-size-rtl(
+            0,
+            $btn-text-icon-l-margin,
+            $btn-size-l-icon-size,
+            0
+        );
+    }
+    &.#{$css-prefix}medium {
+        @include next-button-size-rtl(
+            0,
+            $btn-text-icon-m-margin,
+            $btn-size-m-icon-size,
+            0
+        );
+    }
+    &.#{$css-prefix}small {
+        @include next-button-size-rtl(
+            0,
+            $btn-text-icon-s-margin,
+            $btn-size-s-icon-size,
+            0
+        );
+    }
+}
+

@@ -1,0 +1,26 @@
+// 状态
+// ----------------------------------------
+@mixin calendar-cell-state(
+    $background,
+    $color,
+    $border-color
+) {
+    background: $background;
+    color: $color;
+    border-color: $border-color;
+}
+
+// 卡片模式单元尺寸
+// ----------------------------------------
+@mixin calendar-card-cell-size(
+    $width,
+    $height,
+    $corner: 0,
+    $margin-tb: 0
+) {
+    width: $width;
+    height: $height;
+    line-height: $height - 2;
+    margin: $margin-tb auto;
+    border-radius: $corner;
+}

@@ -1,0 +1,33 @@
+@charset "UTF-8";
+
+// select mixins
+// --------------------------------------------------
+
+// @global
+@mixin select-size(
+    $height,
+    $lineHeight
+) {
+    $padding-tb: ($height - $lineHeight - 2px) / 2;
+
+    min-height: $height - 2;
+    padding-top: $padding-tb;
+    padding-bottom: $padding-tb;
+    line-height: $lineHeight;
+}
+
+// 16px 是 tag-body 的固定高度
+@mixin select-tag-size(
+    $height,
+    $border: 1px
+) {
+    $padding-tb: ($height - $s-4 - $border * 2) / 2;
+
+    padding-top: $padding-tb;
+    padding-bottom: $padding-tb;
+    height: $height;
+
+    .#{$css-prefix}tag-body, .#{$css-prefix}tag-close-btn {
+        line-height: $height - $padding-tb * 2;
+    }
+}

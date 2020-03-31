@@ -1,0 +1,324 @@
+@mixin reset-font() {
+    font-family: $font-family-base;
+    font-size: $font-size-body-1;
+    line-height: $font-lineheight-base;
+}
+
+// item尺寸
+// ----------------------------------------
+
+@mixin step-item-size(
+    $height: auto,
+    $width: auto,
+    $margin-left: 0,
+    $margin-right: 0
+) {
+    height: $height;
+    line-height: $height;
+    margin-left: $margin-left;
+    margin-right: $margin-right;
+}
+
+// item状态
+// ----------------------------------------
+
+@mixin step-item-state(
+    $shape: 'circle',
+    $background: $color-white,
+    $title-color: $color-black,
+    $icon-color: $color-black,
+    $tail-color: $color-black,
+    $tail-bg-color: $color-text1-1,
+    $icon-border-color: $color-black,
+    $content-color: $color-black,
+    $node-size: $s-8,
+    $font-weight: $font-weight-2
+) {
+    #{$step-prefix}-item-tail {
+        &-overlay {
+            background: $tail-color;
+        }
+
+        &-underlay {
+            background: $tail-bg-color;
+        }
+    }
+
+    & > #{$step-prefix}-item-container {
+        #{$step-prefix}-item-progress {
+            width: $node-size;
+            height: $node-size;
+        }
+
+        #{$step-prefix}-item-node {
+            color: $icon-color;
+        }
+
+        #{$step-prefix}-item-node-circle {
+            background: $background;
+            border-color: $icon-border-color;
+        }
+
+        #{$step-prefix}-item-node-dot {
+            background: $background;
+            border-color: $icon-border-color;
+        }
+    }
+
+    #{$step-prefix}-item-title {
+        color: $title-color;
+        word-break: break-word;
+    }
+    #{$step-prefix}-item-content {
+        color: $title-color;
+        font-size: $step-circle-item-content-font-size;
+        word-break: break-word;
+    }
+
+    #{$step-prefix}-item-node-placeholder {
+        width: $node-size;
+        height: $node-size;
+        position: relative;
+    }
+
+    #{$step-prefix}-item-node {
+        position: relative;
+        display: inline-block;
+        text-align: center;
+        cursor: pointer;
+        &-circle {
+            display: block;
+            width: $node-size;
+            height: $node-size;
+            font-size: $step-circle-item-node-font-size;
+            font-weight: $font-weight;
+            line-height: $node-size - 2 * $step-circle-item-node-border-width;
+            text-align: center;
+            border: $step-circle-item-node-border-width solid;
+            border-radius: $step-circle-item-node-corner;
+            transition: background-color $motion-duration-immediately $motion-linear;
+            #{$step-icon-prefix} {
+                @include icon-size($step-circle-item-node-icon-size);
+                animation: zoomIn $motion-duration-immediately $motion-linear;
+            }
+        }
+    }
+    @if ($shape == 'dot') {
+        #{$step-prefix}-item-content {
+            font-size: $step-dot-item-content-font-size;
+        }
+        #{$step-prefix}-item-node-dot {
+            display: block;
+            width: $node-size;
+            height: $node-size;
+            font-size: $step-dot-item-content-font-size;
+            line-height: $node-size - 2 * $step-dot-item-dot-border-width;
+            text-align: center;
+            border: $step-dot-item-dot-border-width solid;
+            border-radius: $step-dot-item-dot-corner;
+            transition: background-color .3s ease, border-color .3s ease;
+        }
+    }
+
+    @if ($shape == 'arrow') {
+        background: $background;
+
+        &:before {
+            border: $step-arrow-item-border-width solid $background;
+            border-left-color: transparent;
+        }
+
+        &:after {
+            border-left-color: $background;
+        }
+    }
+}
+
+// 针对不同size的节点进行样式调整
+
+@mixin state-node-size($type: 'hor', $shape: 'circle', $node-size: $s-8) {
+    @if ($type == 'hor') {
+        @if ($shape == 'circle') {
+            #{$step-prefix}-item-tail {
+                display: inline-block;
+                clear: both;
+                width: calc(100% - #{$node-size + 2 * $step-circle-item-node-padding});
+                vertical-align: middle;
+                #{$step-prefix}-item-tail-underlay {
+                    display: block;
+                    height: $step-circle-item-tail-size;
+                    position: relative;
+                }
+                #{$step-prefix}-item-tail-overlay {
+                    position: absolute;
+                    top: 0;
+                    height: $step-circle-item-tail-size;
+                    transition: all $motion-duration-immediately $motion-linear;
+                    width: 100%;
+                }
+            }
+
+            & > #{$step-prefix}-item-body {
+                width: $step-circle-item-body-width;
+                left: - ($step-circle-item-body-width - $node-size - $step-circle-item-node-padding * 2) / 2;
+                text-align: center;
+                position: absolute;
+                & > #{$step-prefix}-item-title {
+                    font-size: $step-circle-item-title-size;
+                    line-height: $step-circle-item-title-size + 4;
+                    margin-top: $step-circle-item-title-margin-top;
+                    font-weight: $step-circle-item-title-weight;
+                }
+                & > #{$step-prefix}-item-content {
+                    margin-top: $step-circle-item-content-margin-top;
+                }
+            }
+        }
+        @if ($shape == 'dot') {
+            #{$step-prefix}-item-tail {
+                display: inline-block;
+                clear: both;
+                width: calc(100% - #{$node-size + 2 * $step-dot-item-dot-padding});
+                vertical-align: middle;
+                #{$step-prefix}-item-tail-underlay {
+                    display: block;
+                    height: $step-dot-item-tail-size;
+                    position: relative;
+                }
+                #{$step-prefix}-item-tail-overlay {
+                    position: absolute;
+                    top: 0;
+                    height: $step-dot-item-tail-size;
+                    transition: all $motion-duration-immediately $motion-linear;
+                    width: 100%;
+                }
+            }
+
+            & > #{$step-prefix}-item-body {
+                width: $step-dot-item-body-width;
+                left: - ($step-dot-item-body-width - $node-size - $step-dot-item-dot-padding * 2) / 2;
+                text-align: center;
+                position: absolute;
+                & > #{$step-prefix}-item-title {
+                    font-size: $step-dot-item-title-size;
+                    line-height: $step-dot-item-title-size + 4;
+                    margin-top: $step-dot-item-title-margin-top;
+                    font-weight: $step-dot-item-title-weight;
+                }
+                & > #{$step-prefix}-item-content {
+                    margin-top: $step-dot-item-content-margin-top;
+                }
+            }
+        }
+    }
+
+    @if ($type == 'ver') {
+        @if ($shape == 'circle') {
+            #{$step-prefix}-item-tail {
+                width: $step-circle-vertical-item-tail-size;
+                height: 0;
+                margin: $step-circle-item-node-padding auto;
+                #{$step-prefix}-item-tail-underlay {
+                    height: 100%;
+                    width: $step-circle-vertical-item-tail-size;
+                    position: relative;
+                }
+                #{$step-prefix}-item-tail-overlay {
+                    position: absolute;
+                    top: 0;
+                    height: 100%;
+                    width: $step-circle-vertical-item-tail-size;
+                }
+            }
+
+            & > #{$step-prefix}-item-body {
+                position: absolute;
+                top: 0;
+                left: $node-size / 2;
+                margin-left: $step-circle-item-node-padding;
+                & > #{$step-prefix}-item-title {
+                    margin-top: $step-circle-vertical-item-title-margin-top;
+                    text-align: left;
+                    font-weight: $step-circle-item-title-weight;
+                    @include reset-font;
+                }
+                & > #{$step-prefix}-item-content {
+                    margin-top: $step-circle-vertical-item-content-margin-top;
+                    min-height: $s-2;
+                    text-align: left;
+                    font-size: $step-circle-item-content-font-size;
+                    line-height: $step-circle-item-content-font-size + 4;
+                }
+            }
+        }
+
+        @if ($shape == 'dot') {
+            #{$step-prefix}-item-tail {
+                width: $step-dot-vertical-item-tail-size;
+                height: 0;
+                margin: $step-dot-item-dot-padding auto;
+                #{$step-prefix}-item-tail-underlay {
+                    height: 100%;
+                    width: $step-dot-vertical-item-tail-size;
+                    position: relative;
+                }
+                #{$step-prefix}-item-tail-overlay {
+                    position: absolute;
+                    top: 0;
+                    height: 100%;
+                    width: $step-dot-vertical-item-tail-size;
+                }
+            }
+
+            & > #{$step-prefix}-item-body {
+                position: absolute;
+                top: 0;
+                left: $node-size / 2;
+                margin-left: $step-dot-item-dot-padding;
+                & > #{$step-prefix}-item-title {
+                    margin-top: $step-dot-vertical-item-title-margin-top;
+                    font-weight: $step-dot-item-title-weight;
+                    text-align: left;
+                    @include reset-font;
+                }
+                & > #{$step-prefix}-item-content {
+                    margin-top: $step-dot-vertical-item-content-margin-top;
+                    min-height: $s-2;
+                    text-align: left;
+                    font-size: $step-dot-item-content-font-size;
+                    line-height: $step-dot-item-content-font-size + 4;
+                }
+            }
+        }
+    }
+}
+
+@mixin label-placement($node-size: $s-8) {
+    // 横向布局支持content
+    #{$step-prefix}-item:last-child {
+        #{$step-prefix}-item-tail {
+            display: none;
+        }
+    }
+    #{$step-prefix}-item-body {
+        position: relative;
+        display: inline-block;
+        top: 0;
+        left: 0;
+        max-width: $step-circle-item-body-width;
+        overflow: hidden;
+        vertical-align: top;
+        text-align: left;
+        #{$step-prefix}-item-title {
+            display: inline-block;
+            padding-right: $step-circle-item-node-padding;
+            margin-top: $node-size / 2 - $step-circle-item-title-size / 2;
+        }
+    }
+    #{$step-prefix}-item-tail {
+        width: calc(100% - #{($node-size + 2 * $step-circle-item-node-padding + $step-circle-item-body-width)});
+        position: absolute;
+        right: 0;
+        margin-top: -$step-circle-vertical-item-tail-size;
+    }
+}
