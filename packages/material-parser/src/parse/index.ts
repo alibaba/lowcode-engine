@@ -5,10 +5,7 @@ import { IMaterialParsedModel, IMaterialScanModel } from '../types';
 import resolver from './resolver';
 import handlers from './handlers';
 
-export default function parse(params: {
-  fileContent: string;
-  filePath: string;
-}): Promise<IMaterialParsedModel[]> {
+export default function parse(params: { fileContent: string; filePath: string }): Promise<IMaterialParsedModel[]> {
   const { fileContent, filePath } = params;
   const result = reactDocs.parse(
     fileContent,

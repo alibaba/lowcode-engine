@@ -12,7 +12,6 @@ const tsComponent = getFromFixtures('ts-component');
 
 test('materialize single exported component by local', async t => {
   const options: IMaterializeOptions = {
-    cwd: singleExportedComptPath,
     entry: singleExportedComptPath,
     accesser: 'local',
   };
@@ -24,7 +23,6 @@ test('materialize single exported component by local', async t => {
 
 test('materialize multiple exported component by local', async t => {
   const options: IMaterializeOptions = {
-    cwd: multiExportedComptPath,
     entry: multiExportedComptPath,
     accesser: 'local',
   };
@@ -48,6 +46,17 @@ test('materialize single exported component by online', async t => {
 test('materialize multiple exported component by online', async t => {
   const options: IMaterializeOptions = {
     entry: multipleExportedComponent,
+    accesser: 'online',
+  };
+
+  const actual = await parse(options);
+
+  t.snapshot(actual);
+});
+
+test('materialize @ali/lowcode-editor-skeleton by online', async t => {
+  const options: IMaterializeOptions = {
+    entry: '@ali/lowcode-editor-skeleton',
     accesser: 'online',
   };
 

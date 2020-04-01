@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.9.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@0.9.0...@ali/lowcode-material-parser@0.9.1) (2020-04-01)
+
+
+### Bug Fixes
+
+* fix bug of missing ajv ([a37d655](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a37d655))
+
+
+
+
+
+<a name="0.9.0"></a>
+# [0.9.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@0.8.4...@ali/lowcode-material-parser@0.9.0) (2020-03-31)
+
+
+### Bug Fixes
+
+* [material-parser]fix bug of main field & remove useless debugger ([8fde0ec](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8fde0ec))
+* fix bug of build errors ([770a1b6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/770a1b6))
+* fix bug of missing types in material-parser ([9ce0a73](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9ce0a73))
+
+
+### Features
+
+* 🎸 support parsing fusion source code ([5895cf1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5895cf1))
+* support localizing ([e1faa84](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e1faa84))
+
+
+
+
 <a name="0.8.4"></a>
 ## [0.8.4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@0.8.3...@ali/lowcode-material-parser@0.8.4) (2020-03-30)
 

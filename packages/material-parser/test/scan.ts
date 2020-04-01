@@ -8,7 +8,6 @@ const singleExportedComptPath = getFromFixtures('single-exported-component');
 test.serial('scan multiple exported component', async t => {
 
   const actual = await scan({
-    cwd: multiExportedComptPath,
     entry: multiExportedComptPath,
     accesser: 'local',
   });
@@ -18,7 +17,6 @@ test.serial('scan multiple exported component', async t => {
 test.serial('scan single exported component', async t => {
 
   const actual = await scan({
-    cwd: singleExportedComptPath,
     entry: singleExportedComptPath,
     accesser: 'local',
   });

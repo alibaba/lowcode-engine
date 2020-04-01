@@ -49,10 +49,7 @@ export function transformType(type: any) {
       } = type;
       if (properties.length === 0) {
         result.type = 'object';
-      } else if (
-        properties.length === 1 &&
-        typeof properties[0].key === 'object'
-      ) {
+      } else if (properties.length === 1 && typeof properties[0].key === 'object') {
         result.type = 'objectOf';
         const v = transformType(properties[0].value);
         if (typeof v.type === 'string') result.value = v.type;
@@ -81,7 +78,7 @@ export function transformType(type: any) {
       break;
     case 'exact':
     case 'shape':
-      result.value = Object.keys(value).map(n => {
+      result.value = Object.keys(value).map((n) => {
         // tslint:disable-next-line:variable-name
         const { name: _name, ...others } = value[n];
         return transformItem(n, {
@@ -110,13 +107,7 @@ export function transformType(type: any) {
 }
 
 export function transformItem(name: string, item: any) {
-  const {
-    description,
-    flowType,
-    type = flowType,
-    required,
-    defaultValue,
-  } = item;
+  const { description, flowType, type = flowType, required, defaultValue } = item;
   const result: any = {
     name,
     propType: transformType({
@@ -132,6 +123,9 @@ export function transformItem(name: string, item: any) {
       const value = eval(defaultValue.value);
       result.defaultValue = value;
     } catch (e) {}
+  }
+  if (result.propType === undefined) {
+    delete result.propType;
   }
 
   return result;

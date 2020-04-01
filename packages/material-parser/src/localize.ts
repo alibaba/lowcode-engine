@@ -33,13 +33,13 @@ export async function createFakePackage(params: {
     pkgJsonFilePath,
     JSON.stringify({
       name: params.pkgName,
-      version: params.pkgVersion,
+      version: params.pkgVersion || '0.0.0',
       dependencies: {
-        [params.pkgName]: params.pkgVersion,
+        [params.pkgName]: params.pkgVersion || 'latest',
       },
     }),
   );
-  debugger;
+
   // 安装依赖
   const npmClient = params.npmClient || 'tnpm';
   await spawn(npmClient, ['i'], { stdio: 'inherit', cwd: tempDir } as any);
@@ -68,12 +68,12 @@ export async function createTempDir(): Promise<string> {
  * @returns {{ [key: string]: any }}
  * @memberof OnlineAccesser
  */
-export function getPkgNameAndVersion(
-  pkgNameWithVersion: string,
-): { [key: string]: any } {
+export function getPkgNameAndVersion(pkgNameWithVersion: string): { [key: string]: any } {
   const matches = pkgNameWithVersion.match(/(@\d+\.\d+\.\d+)$/);
   if (!matches) {
-    throw new OtterError(`Illegal semver version: ${pkgNameWithVersion}`);
+    return {
+      name: pkgNameWithVersion,
+    };
   }
   const semverObj = semver.coerce(matches[0]);
   const name = pkgNameWithVersion.replace(matches[0], '');
@@ -84,12 +84,7 @@ export function getPkgNameAndVersion(
 }
 
 // 将问题转化为本地物料化场景
-export default async function localize(
-  options: IMaterializeOptions,
-): Promise<{
-  cwd: string;
-  entry: string;
-}> {
+export default async function localize(options: IMaterializeOptions): Promise<string> {
   // 创建临时目录
   const tempDir = await createTempDir();
   // 创建组件包
@@ -101,8 +96,5 @@ export default async function localize(
     npmClient: options.npmClient,
   });
 
-  return {
-    cwd: tempDir,
-    entry: join(tempDir, 'node_modules', name),
-  };
+  return join(tempDir, 'node_modules', name);
 }

@@ -16,7 +16,7 @@ export interface IconProps {
   style?: object;
 }
 
-export function IconBase({
+export function SVGIcon({
   fill,
   size = 'medium',
   viewBox,
