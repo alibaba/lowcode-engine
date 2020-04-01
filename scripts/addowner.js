@@ -45,7 +45,7 @@ function addOwner(packageName, owner) {
 }
 
 if (pkg) {
-  const packageJsonFile = path.join(packages_dir, item, 'package.json');
+  const packageJsonFile = path.join(packages_dir, pkg, 'package.json');
 
   if (fs.existsSync(packageJsonFile)) {
     const json = require(packageJsonFile);
@@ -53,7 +53,7 @@ if (pkg) {
       pkg = json.name;
     }
   }
-  if (owner === '*') {
+  if (owner === '-') {
     addPackageOwners(pkg);
   } else {
     addOwner(pkg, owner);
