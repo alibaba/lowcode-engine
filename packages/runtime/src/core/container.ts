@@ -1,6 +1,11 @@
 import { ReactType } from 'react';
 import Provider from './provider';
 
+export interface ILayoutOptions {
+  componentName?: string;
+  props?: any;
+}
+
 export default class Container {
   private renderer: ReactType | null = null;
   private layouts: { [key: string]: ReactType } = {};
@@ -11,7 +16,11 @@ export default class Container {
     this.renderer = renderer;
   }
 
-  registerLayout(componentName: string, Layout: ReactType): any {
+  registerLayout(Layout: ReactType, options: ILayoutOptions): any {
+    if (!options) {
+      return;
+    }
+    const { componentName } = options;
     if (!componentName || !Layout) {
       return;
     }

@@ -8,7 +8,7 @@ import Preview from './plugins/provider';
 app.registerRenderer(Renderer);
 
 // 注册布局组件，可注册多个
-app.registerLayout('BasicLayout', BasicLayout);
+app.registerLayout(BasicLayout, { componentName: 'BasicLayout' });
 
 // 注册页面 Loading
 app.registerLoading(FusionLoading);

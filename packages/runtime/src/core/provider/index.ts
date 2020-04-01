@@ -27,7 +27,7 @@ interface IHistoryConfig {
   basement?: string;
 }
 
-interface IAppData {
+export interface IAppData {
   history?: HistoryMode;
   layout?: ILayoutConfig;
   routes?: IRouterConfig;
@@ -36,6 +36,7 @@ interface IAppData {
   componentsMap?: IComponentMap[];
   utils?: IUtils;
   constants?: IConstants;
+  i18n?: I18n;
 }
 
 export interface ComponentProps {
@@ -92,6 +93,13 @@ export interface ComponentModel {
   loopArgs?: string[];
 }
 
+export interface I18n {
+  'zh-CN': { [key: string]: string };
+  'en-US': { [key: string]: string };
+}
+
+type Locale = 'zh-CN' | 'en-US';
+
 // export interface IProvider {
 //   init?(): void;
 //   getAppData?(appkey: string): Promise<IAppData | undefined>;
@@ -109,6 +117,7 @@ export default class Provider {
   private componentsMap: IComponentMap[] = [];
   private history: HistoryMode = 'hash';
   private containerId = '';
+  private i18n: I18n | null = null;
   private lazyElementsMap: { [key: string]: any } = {};
 
   constructor() {
@@ -118,15 +127,16 @@ export default class Provider {
   async(): Promise<IAppConfig> {
     return new Promise(async (resolve, reject) => {
       try {
-        const appData = await this.getAppData();
+        const appData: IAppData = await this.getAppData();
         if (!appData) {
           return;
         }
-        const { history, layout, routes, containerId, components, componentsMap, utils, constants } = appData;
+        const { history, layout, routes, containerId, components, componentsMap, utils, constants, i18n } = appData;
         this.setHistory(history);
         this.setLayoutConfig(layout);
         this.setRouterConfig(routes);
         this.setContainerId(containerId);
+        this.setI18n(i18n);
         this.registerComponents(components);
         this.registerComponentsMap(componentsMap);
         this.registerUtils(utils);
@@ -220,6 +230,13 @@ export default class Provider {
     this.containerId = id;
   }
 
+  setI18n(i18n: I18n) {
+    if (!i18n) {
+      return;
+    }
+    this.i18n = i18n;
+  }
+
   setlazyElement(pageId: string, cache: any) {
     if (!pageId || !cache) {
       return;
@@ -279,6 +296,13 @@ export default class Provider {
 
   getContainerId() {
     return this.containerId;
+  }
+
+  getI18n(locale?: Locale) {
+    if (!this.i18n) {
+      return;
+    }
+    return locale ? this.i18n[locale] : this.i18n;
   }
 
   getlazyElement(pageId: string) {
