@@ -7,21 +7,28 @@
     "lib"
   ],
   "scripts": {
-    "build": "rimraf lib && tsc",
+    "compile": "rimraf lib && tsc",
+    "build": "rimraf lib && webpack",
     "demo": "ts-node -r tsconfig-paths/register ./src/demo/main.ts",
     "test": "ava"
   },
   "dependencies": {
     "@ali/am-eslint-config": "*",
+    "@types/prettier": "^1.19.1",
     "change-case": "^3.1.0",
+    "prettier": "^2.0.2",
     "short-uuid": "^3.1.1"
   },
   "devDependencies": {
     "ava": "^1.0.1",
     "rimraf": "^3.0.2",
+    "ts-loader": "^6.2.2",
     "ts-node": "^7.0.1",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "^3.8.3"
+    "tsconfig-paths-webpack-plugin": "^3.2.0",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-node-externals": "^1.7.2"
   },
   "ava": {
     "compileEnhancements": false,
