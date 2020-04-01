@@ -1,0 +1,58 @@
+@charset "UTF-8";
+
+// divider variables
+// --------------------------------------------------
+
+////
+/// @module divider: 分隔符
+/// @tag Divider
+/// @category component
+/// @family general
+/// @varPrefix $divider-
+/// @classPrefix {prefix}-divider
+/// @order {}
+////
+
+// Unconfigurable
+// ----------------------------------------
+$divider-prefix: ".#{$css-prefix}divider";
+
+/// size
+/// @namespace statement/divider
+$divider-hoz-size: $line-1 !default;
+/// color
+/// @namespace statement/divider
+$divider-hoz-color: $color-line1-2 !default;
+/// padding (l, r)
+/// @namespace statement/text
+$divider-hoz-text-center-paddingLeft: $s-4 !default;
+/// padding (l, r)
+/// @namespace statement/text
+$divider-hoz-text-left-paddingLeft: $s-4 !default;
+
+/// margin (t, b)
+/// @namespace statement/text
+$divider-hoz-text-marginTop: $s-4 !default;
+/// margin (t, b)
+/// @namespace statement/text
+$divider-hoz-marginTop: $s-4 !default;
+/// size
+/// @namespace size/text
+$divider-hoz-text-size: $font-size-subhead !default;
+/// font wight
+/// @namespace size/text
+$divider-hoz-text-weight: $font-weight-2 !default;
+/// color
+/// @namespace size/text
+$divider-hoz-text-color: $color-text1-4 !default;
+
+
+/// size
+/// @namespace statement/divider
+$divider-ver-size: $line-1 !default;
+/// color
+/// @namespace statement/divider
+$divider-ver-color: $color-line1-2 !default;
+/// margin (l, r)
+/// @namespace statement/text
+$divider-ver-marginLeft: $s-2 !default;

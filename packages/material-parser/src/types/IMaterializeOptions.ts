@@ -7,7 +7,7 @@ import IExtensionConfigManifest from './IExtensionConfigManifest';
  */
 interface IMaterializeOptions {
   /**
-   * 入口文件路径或包名
+   * 组件文件(夹)路径或包名
    * 形如：
    *  本地路径：/usr/project/src/container/DemoMaterial
    *  包名：@ali/demo-material@0.0.1
@@ -21,21 +21,6 @@ interface IMaterializeOptions {
    * @memberof IMaterializeOptions
    */
   accesser: 'local' | 'online';
-
-  /**
-   * 是否为多组件透出场景
-   * （true：表示多组件透出场景，false：表示单组件透出场景）
-   * @type {boolean}
-   * @memberof IMaterializeOptions
-   */
-  isExportedAsMultiple: boolean;
-
-  /**
-   * 当 accesser=local 时，需要通过此配置项指定当前工作目录，形如：/usr/.../demo-project
-   * @type {string}
-   * @memberof IMaterializeOptions
-   */
-  cwd?: string;
 
   /**
    * 扩展点

@@ -8,7 +8,7 @@
 /**
  * json schema for low code component protocol
  */
-export type IComponentMaterial = BasicSection & PropsSection & ConfigureSection;
+export type ComponentMeta = BasicSection & PropsSection & ConfigureSection;
 export type PropType = BasicType | RequiredType | ComplexType;
 export type BasicType = "array" | "bool" | "func" | "number" | "object" | "string" | "node" | "element" | "any";
 export type ComplexType = OneOf | OneOfType | ArrayOf | ObjectOf | Shape | Exact;

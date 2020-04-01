@@ -1,0 +1,253 @@
+@import "../core/index-noreset.scss";
+@import "scss/variable";
+@import "scss/mixin";
+@import "./rtl.scss";
+
+#{$menu-prefix} {
+    @include box-sizing;
+
+    &:focus,
+    & *:focus {
+        outline: 0;
+    }
+
+    position: relative;
+    min-width: $s-25;
+    padding: $menu-padding-vertical 0;
+    margin: 0;
+    list-style: none;
+    border: $popup-local-border-width $popup-local-border-style $popup-local-border-color;
+    border-radius: $popup-local-corner;
+    box-shadow: $popup-local-shadow;
+    background: $menu-background;
+    line-height: $menu-line-height;
+    font-size: $menu-font-size;
+    animation-duration: $motion-duration-standard;
+    animation-timing-function: $motion-ease;
+
+    &-embeddable,
+    &-embeddable &-item.#{$css-prefix}disabled,
+    &-embeddable &-item.#{$css-prefix}disabled #{$menu-prefix}-item-text > a {
+        background: initial;
+        border: none;
+    }
+
+    &-embeddable &-item-inner {
+        height: 100%;
+    }
+
+    &-content {
+        position: relative;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    &-sub-menu {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+
+        &.#{$css-prefix} {
+            &expand-enter {
+                overflow: hidden;
+            }
+
+            &expand-enter-active {
+                transition: height $motion-duration-standard $motion-ease;
+            }
+
+            &expand-leave {
+                overflow: hidden;
+            }
+
+            &expand-leave-active {
+                transition: height $motion-duration-standard $motion-ease;
+            }
+        }
+    }
+
+    &-item {
+        position: relative;
+        padding: 0 $menu-padding-horizontal;
+        transition: background $motion-duration-immediately $motion-linear;
+        color: $menu-color;
+        cursor: pointer;
+
+        &-helper {
+            float: right;
+            color: $color-text1-2;
+            font-style: normal;
+            font-size: $menu-font-size;
+        }
+
+        .#{$css-prefix}checkbox,
+        .#{$css-prefix}radio {
+            margin-right: $menu-icon-margin;
+        }
+
+        &.#{$css-prefix}selected {
+            @include menu-item-state(
+                $menu-color-selected,
+                $menu-background-selected,
+                $menu-arrow-color,
+                $menu-icon-selected-color
+            );
+        }
+
+        &.#{$css-prefix}disabled,
+        &.#{$css-prefix}disabled #{$menu-prefix}-item-text > a {
+            @include menu-item-state(
+                $menu-color-disabled,
+                $menu-background,
+                $menu-color-disabled,
+                $menu-color-disabled
+            );
+            cursor: not-allowed;
+        }
+
+        &:not(.#{$css-prefix}disabled):hover,
+        &:not(.#{$css-prefix}disabled).#{$css-prefix}selected:hover,
+        &:not(.#{$css-prefix}disabled).#{$css-prefix}selected.#{$css-prefix}focused:hover,
+        &:not(.#{$css-prefix}disabled).#{$css-prefix}selected:focus:hover,
+        &:not(.#{$css-prefix}disabled).#{$css-prefix}focused,
+        &:not(.#{$css-prefix}disabled).#{$css-prefix}selected.#{$css-prefix}focused,
+        &:not(.#{$css-prefix}disabled).#{$css-prefix}selected:focus {
+            @include menu-item-state(
+                $menu-color-hover,
+                $menu-background-hover,
+                $menu-arrow-color-hover,
+                $menu-icon-selected-hover-color
+            );
+        }
+    }
+
+    &-item-inner {
+        height: $menu-line-height;
+        font-size: $menu-font-size;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        word-wrap: normal;
+    }
+
+    &-item-text {
+        vertical-align: middle;
+
+        & > a {
+            display: inline-block;
+            text-decoration: none;
+            color: $menu-color;
+            &::before {
+                position: absolute;
+                background-color: transparent;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                content: '';
+            }
+        }
+    }
+
+    &.#{$css-prefix}hoz {
+        padding: 0;
+
+        &#{$menu-prefix}-nowrap {
+            overflow: hidden;
+            white-space: nowrap;
+
+            #{$menu-prefix}-more {
+                text-align: center;
+            }
+        }
+
+        > #{$menu-prefix}-item,
+        > #{$menu-prefix}-sub-menu-wrapper,
+        #{$menu-prefix}-content > #{$menu-prefix}-item {
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        #{$menu-prefix}-header,
+        #{$menu-prefix}-content,
+        #{$menu-prefix}-footer {
+            display: inline-block;
+        }
+    }
+
+    &-hoz-right {
+        float: right;
+    }
+
+    &-group-label {
+        padding: 0 $menu-padding-title-horizontal;
+        color: $color-text1-2;
+    }
+
+    &-divider {
+        margin: $menu-divider-margin-ver $menu-divider-margin-hoz;
+        border-bottom: $menu-divider-width $menu-divider-style $menu-divider-color;
+    }
+
+    & &-icon-selected.#{$css-prefix}icon {
+        position: absolute;
+        top: 0;
+        @include icon-size($menu-icon-selected-size, -($menu-padding-horizontal + $menu-icon-selected-size) / 2);
+
+        &#{$menu-prefix}-icon-right {
+            right: $menu-icon-selected-right;
+        }
+    }
+
+    & &-icon-arrow.#{$css-prefix}icon {
+        position: absolute;
+        top: 0;
+        right: 10px;
+        @include icon-size($menu-icon-size);
+        color: $menu-arrow-color;
+        transition: all $motion-duration-immediately $motion-linear;
+    }
+
+    & &-icon-arrow-down.#{$css-prefix}open {
+        @include icon-size(
+            $size: $menu-icon-size,
+            $transform: rotate(180deg)
+        );
+    }
+
+    & &-icon-arrow-right.#{$css-prefix}open {
+        @include icon-size(
+            $size: $menu-icon-size,
+            $transform: rotate(-90deg)
+        );
+    }
+
+    & &-hoz-icon-arrow.#{$css-prefix}icon {
+        position: absolute;
+        top: 0;
+        right: 6px;
+        @include icon-size($menu-hoz-icon-size);
+        color: $menu-arrow-color;
+        transition: all $motion-duration-immediately $motion-linear;
+    }
+
+    & &-hoz-icon-arrow.#{$css-prefix}open {
+        @include icon-size(
+            $size: $menu-hoz-icon-size,
+            $transform: rotate(180deg)
+        );
+    }
+
+    &.#{$css-prefix}context {
+        line-height: $s-6;
+
+        #{$menu-prefix}-item-inner {
+            height: $s-6;
+        }
+    }
+
+    /* &-popup-content.#{$css-prefix}hide { */
+    /*     display: none; */
+    /* } */
+}

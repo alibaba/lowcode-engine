@@ -11,8 +11,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import "./main.css";
 
-var Demo =
-/*#__PURE__*/
+const Demo =
+/* #__PURE__ */
 function (_React$Component) {
   _inherits(Demo, _React$Component);
 
@@ -26,7 +26,7 @@ function (_React$Component) {
     key: "render",
     value: function render() {
       return React.createElement("div", null, " Test ");
-    }
+    },
   }]);
 
   return Demo;
@@ -64,22 +64,22 @@ Demo.propTypes = {
   // An object taking on a particular shape
   optionalObjectWithShape: PropTypes.shape({
     optionalProperty: PropTypes.string,
-    requiredProperty: PropTypes.number.isRequired
+    requiredProperty: PropTypes.number.isRequired,
   }),
   optionalObjectWithShape2: PropTypes.shape({
     optionalProperty: PropTypes.string,
-    requiredProperty: PropTypes.number.isRequired
+    requiredProperty: PropTypes.number.isRequired,
   }).isRequired,
   // An object with warnings on extra properties
   optionalObjectWithStrictShape: PropTypes.exact({
     optionalProperty: PropTypes.string,
-    requiredProperty: PropTypes.number.isRequired
+    requiredProperty: PropTypes.number.isRequired,
   }),
   requiredFunc: PropTypes.func.isRequired,
   // A value of any data type
-  requiredAny: PropTypes.any.isRequired
+  requiredAny: PropTypes.any.isRequired,
 };
 Demo.defaultProps = {
-  optionalNumber: 123
+  optionalNumber: 123,
 };
 export default Demo;

@@ -1,0 +1,22 @@
+@include keyframes(expandInDown) {
+    0% {
+        opacity: 0;
+        @include transform(scaleY(.6));
+        @include transform-origin(left top 0);
+    }
+    100% {
+        opacity: 1;
+        @include transform(scaleY(1));
+        @include transform-origin(left top 0);
+    }
+}
+
+@mixin expandInDown($count: $countDefault, $duration: $durationDefault, $delay: $delayDefault, $function: $functionDefault, $fill: $fillDefault, $visibility: $visibilityDefault) {
+    @include animation-name(expandInDown);
+    @include count($count);
+    @include duration($duration);
+    @include delay($delay);
+    @include function($function);
+    @include fill-mode($fill);
+    @include visibility($visibility);
+}

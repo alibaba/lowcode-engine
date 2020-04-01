@@ -5,7 +5,7 @@
     // Target latest version of ECMAScript.
     "target": "esnext",
     // Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'.
-    "module": "commonjs",
+    "module": "esnext",
     // Search under node_modules for non-relative imports.
     "moduleResolution": "node",
     // Process & infer types from .js files.
@@ -34,6 +34,7 @@
     "resolveJsonModule": true,
     // skip type checking of declaration files
     "skipLibCheck": true,
+    "outDir": "lib"
   },
   "exclude": ["**/test", "**/lib", "**/es", "node_modules"]
 }

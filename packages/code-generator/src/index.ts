@@ -3,6 +3,7 @@
  *
  */
 import { createProjectBuilder } from '@/generator/ProjectBuilder';
+import { createDiskPublisher } from '@/publisher/disk';
 import createIceJsProjectBuilder from '@/solutions/icejs';
 
 export * from './types';
@@ -11,5 +12,8 @@ export default {
   createProjectBuilder,
   solutions: {
     icejs: createIceJsProjectBuilder,
+  },
+  publishers: {
+    disk: createDiskPublisher,
   },
 };

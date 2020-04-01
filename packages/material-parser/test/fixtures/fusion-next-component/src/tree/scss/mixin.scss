@@ -1,0 +1,7 @@
+@mixin tree-node-state (
+    $handle-color,
+    $handle-background
+) {
+    color: $handle-color;
+    background-color: $handle-background;
+}

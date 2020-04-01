@@ -1,7 +1,7 @@
 /**
  * The template of manifest for AiMake studio.
  */
-var manifest = {
+const manifest = {
   // The name of current component.
   name: 'AIMakeLink',
   // The description of current component.
@@ -31,8 +31,8 @@ var manifest = {
       fontSize: '12px',
       fontWeight: 'normal',
       href: '#',
-      children: '链接'
-    }
+      children: '链接',
+    },
   }],
   // Other settings of current component for AiMake studio.
   settings: {
@@ -64,39 +64,39 @@ var manifest = {
     props: [{
       name: 'margin',
       label: '外边距',
-      renderer: 'Quadrant'
+      renderer: 'Quadrant',
     }, {
       name: 'color',
       label: '文字颜色',
       renderer: 'Color',
-      defaultValue: '#3788FF'
+      defaultValue: '#3788FF',
     }, {
       name: 'fontSize',
       label: '字号',
       renderer: 'FontSize',
-      defaultValue: '12px'
+      defaultValue: '12px',
     }, {
       name: 'fontWeight',
       label: '字重',
       renderer: 'FontWeight',
-      defaultValue: 'normal'
+      defaultValue: 'normal',
     }, {
       name: 'lineHeight',
       label: '行高',
       defaultValue: undefined,
-      renderer: 'LineHeight'
+      renderer: 'LineHeight',
     }, {
       name: 'href',
       label: '链接URL',
       renderer: 'Input',
       placeholder: '请输入链接URL',
-      defaultValue: '#'
+      defaultValue: '#',
     }, {
       name: 'children',
       label: '内容',
       defaultValue: '链接',
-      renderer: 'TextArea'
-    }]
-  }
+      renderer: 'TextArea',
+    }],
+  },
 };
 export default manifest;

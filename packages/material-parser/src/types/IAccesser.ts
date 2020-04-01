@@ -1,4 +1,4 @@
-import { IComponentMaterial } from '../otter-core';
+import { ComponentMeta } from '../otter-core';
 
 /**
  * 接入器接口（用于定义物料化组件的接入渠道）
@@ -10,7 +10,7 @@ interface IAccesser {
    * @returns {Promise<IMaterialinSchema>}
    * @memberof IAccesser
    */
-  access(): Promise<IComponentMaterial>;
+  access(): Promise<ComponentMeta[]>;
 }
 
 export default IAccesser;

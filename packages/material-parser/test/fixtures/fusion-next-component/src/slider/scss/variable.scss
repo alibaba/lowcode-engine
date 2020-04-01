@@ -1,0 +1,255 @@
+@charset "UTF-8";
+
+////
+/// @module slider: 跑马灯
+/// @tag Slider
+/// @category component
+/// @family data-display
+/// @varPrefix $slick-
+/// @classPrefix {prefix}-slick
+/// @order {"size/dots":10,"size/arrow":11,"size/track":12,"statement/normal":10,"statement/normal/dot":100,"statement/normal/arrow":101,"statement/hover":11,"statement/hover/dot":110,"statement/hover/arrow":111,"statement/selected":12,"statement/selected/dot":120,"statement/disabled":13,"statement/disabled/arrow":130}
+////
+
+// slider variables
+// --------------------------------------------------
+
+$slick-prefix: '.' + $css-prefix + 'slick';
+
+// size
+// ---------
+
+/// offset bottom
+/// @namespace size/dots
+$slick-dots-position-bottom: $s-3 !default;
+
+/// offset right
+/// @namespace size/dots
+$slick-dots-position-right: $s-5 !default;
+
+/// dot width
+/// @namespace size/dots
+$slick-dots-width: $s-2 !default;
+
+/// dot height
+/// @namespace size/dots
+$slick-dots-height: $s-2 !default;
+
+/// dot margin (l, r)
+/// @namespace size/dots
+$slick-dots-margin-lr: $s-1 !default;
+
+/// dot margin (t, b)
+/// @namespace size/dots
+$slick-dots-margin-tb: $s-zero !default;
+
+/// width
+/// @namespace size/arrow
+$slick-arrow-width-m: $s-7 !default;
+
+/// width
+/// @namespace size/arrow
+$slick-arrow-width-l: $s-12 !default;
+
+/// height
+/// @namespace size/arrow
+$slick-arrow-height-m: $s-14 !default;
+
+/// height
+/// @namespace size/arrow
+$slick-arrow-height-l: $s-24 !default;
+
+/// width
+/// @namespace size/arrow
+$slick-ver-arrow-width-m: $s-14 !default;
+
+/// width
+/// @namespace size/arrow
+$slick-ver-arrow-width-l: $s-24 !default;
+
+/// height
+/// @namespace size/arrow
+$slick-ver-arrow-height-m: $s-7 !default;
+
+/// height
+/// @namespace size/arrow
+$slick-ver-arrow-height-l: $s-12 !default;
+
+/// icon
+/// @namespace size/arrow
+$slick-arrow-icon-m: $icon-m !default;
+
+/// icon
+/// @namespace size/arrow
+$slick-arrow-icon-l: $icon-xl !default;
+
+/// arrow positon (l,r)
+/// @namespace size/arrow
+$slick-arrow-position-lr-m: $s-1 !default;
+
+/// arrow positon (l,r)
+/// @namespace size/arrow
+$slick-arrow-position-lr-l: $s-2 !default;
+
+/// arrow position (t,b)
+/// @namespace size/arrow
+$slick-ver-arrow-position-tb-m: $s-1 !default;
+
+/// arrow position (t,b)
+/// @namespace size/arrow
+$slick-ver-arrow-position-tb-l: $s-4 !default;
+
+/// padding (l,r)
+/// @namespace size/track
+$slick-track-padding-lr: $s-6 !default;
+
+/// padding (t,b)
+/// @namespace size/track
+$slick-ver-track-padding-tb: $s-6 !default;
+
+// statement
+// ---------
+
+/// background
+/// @namespace statement/normal/dot
+$slick-dots-background-color-normal: $color-black !default;
+
+/// background
+/// @namespace statement/hover/dot
+$slick-dots-background-color-hover: $color-black !default;
+
+/// background
+/// @namespace statement/selected/dot
+$slick-dots-background-color-selected: $color-brand1-6 !default;
+
+/// background opacity
+/// @type alpha
+/// @namespace statement/normal/dot
+$slick-dots-background-opacity-normal: .32 !default;
+
+/// background opacity
+/// @type alpha
+/// @namespace statement/hover/dot
+$slick-dots-background-opacity-hover: .32 !default;
+
+/// background opacity
+/// @type alpha
+/// @namespace statement/selected/dot
+$slick-dots-background-opacity-selected: 1 !default;
+
+/// border width
+/// @type width
+/// @namespace size/dots
+$slick-dots-border-width: $line-zero !default;
+
+/// border radius
+/// @namespace size/dots
+$slick-dots-border-radius: $corner-circle !default;
+
+/// border
+/// @namespace statement/normal/dot
+$slick-dots-border-color-normal: $color-white !default;
+
+/// border
+/// @namespace statement/hover/dot
+$slick-dots-border-color-hover: $color-white !default;
+
+/// border
+/// @namespace statement/selected/dot
+$slick-dots-border-color-selected: $color-white !default;
+
+/// border opacity
+/// @type alpha
+/// @namespace statement/normal/dot
+$slick-dots-border-opacity-normal: 1 !default;
+
+/// border opacity
+/// @type alpha
+/// @namespace statement/hover/dot
+$slick-dots-border-opacity-hover: 1 !default;
+
+/// border opacity
+/// @type alpha
+/// @namespace statement/selected/dot
+$slick-dots-border-opacity-selected: 1 !default;
+
+/// icon
+/// @namespace statement/normal/arrow
+$slick-arrow-icon-color-normal: $color-white !default;
+
+/// icon
+/// @namespace statement/normal/arrow
+$slick-arrow-icon-color-normal-outer: $color-text1-3 !default;
+
+/// icon
+/// @namespace statement/hover/arrow
+$slick-arrow-icon-color-hover: $color-white !default;
+
+/// icon
+/// @namespace statement/hover/arrow
+$slick-arrow-icon-color-hover-outer: $color-text1-4 !default;
+
+/// icon
+/// @namespace statement/disabled/arrow
+$slick-arrow-icon-color-disabled: $color-text1-1 !default;
+
+/// icon
+/// @namespace statement/disabled/arrow
+$slick-arrow-icon-color-disabled-outer: $color-text1-1 !default;
+
+/// background
+/// @namespace statement/normal/arrow
+$slick-arrow-bg-color-normal: $color-black !default;
+
+/// background
+/// @namespace statement/hover/arrow
+$slick-arrow-bg-color-hover: $color-black !default;
+
+/// background
+/// @namespace statement/disabled/arrow
+$slick-arrow-bg-color-disabled: $color-fill1-1 !default;
+
+/// background opacity
+/// @type alpha
+/// @namespace statement/normal/arrow
+$slick-arrow-bg-opacity-normal: .2 !default;
+
+/// background opacity
+/// @type alpha
+/// @namespace statement/hover/arrow
+$slick-arrow-bg-opacity-hover: .4 !default;
+
+/// background opacity
+/// @type alpha
+/// @namespace statement/disabled/arrow
+$slick-arrow-bg-opacity-disabled: .5 !default;
+
+/// background
+/// @namespace statement/normal/arrow
+$slick-arrow-bg-color-normal-outer: $color-transparent !default;
+
+/// background
+/// @namespace statement/hover/arrow
+$slick-arrow-bg-color-hover-outer: $color-transparent !default;
+
+/// background
+/// @namespace statement/disabled/arrow
+$slick-arrow-bg-color-disabled-outer: $color-transparent !default;
+
+/// background opacity
+/// @type alpha
+/// @namespace statement/normal/arrow
+$slick-arrow-bg-opacity-normal-outer: .32 !default;
+
+/// background opacity
+/// @type alpha
+/// @namespace statement/hover/arrow
+$slick-arrow-bg-opacity-hover-outer: .32 !default;
+
+/// background opacity
+/// @type alpha
+/// @namespace statement/disabled/arrow
+$slick-arrow-bg-opacity-disabled-outer: .32 !default;
+
+/// radius
+/// @namespace size/arrow
+$slick-arrow-corner-radius-outer: $s-zero !default;

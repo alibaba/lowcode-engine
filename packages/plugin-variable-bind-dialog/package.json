@@ -1,0 +1,38 @@
+{
+  "name": "@ali/lowcode-plugin-variable-bind-dialog",
+  "version": "0.8.2",
+  "description": "alibaba lowcode editor variable bind dialog plugin",
+  "files": [
+    "es",
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "scripts": {
+    "build": "build-scripts build --skip-demo",
+    "test": "ava",
+    "test:snapshot": "ava --update-snapshots"
+  },
+  "keywords": [
+    "lowcode",
+    "editor"
+  ],
+  "author": "zude.hzd",
+  "dependencies": {
+    "@ali/lowcode-editor-core": "^0.8.0",
+    "@alifd/next": "^1.19.16",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1"
+  },
+  "devDependencies": {
+    "@alib/build-scripts": "^0.1.3",
+    "@types/react": "^16.9.13",
+    "@types/react-dom": "^16.9.4",
+    "build-plugin-component": "^0.2.7-1",
+    "build-plugin-fusion": "^0.1.0",
+    "build-plugin-moment-locales": "^0.1.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
+  }
+}

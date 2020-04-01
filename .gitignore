@@ -7,6 +7,7 @@ packages/*/dist/
 package-lock.json
 yarn.lock
 deploy-space/packages
+deploy-space/.env
 
 
 # IDE

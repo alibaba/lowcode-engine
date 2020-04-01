@@ -1,0 +1,68 @@
+@charset "UTF-8";
+@import "../core/index-noreset.scss";
+@import "scss/mixin";
+@import "scss/variable";
+
+.#{$css-prefix} {
+    &range {
+        @include box-sizing;
+        @include range-bounding();
+
+        & {
+            @include range-state(
+                $range-normal-unselected-color,
+                $range-normal-unselected-color-disabled,
+                $range-normal-unselected-color-hover,
+                $range-normal-selected-color,
+                $range-normal-selected-color-disabled,
+                $range-normal-selected-color-hover,
+                $range-normal-slider-bg-color,
+                $range-normal-slider-bg-color-disabled,
+                $range-normal-slider-bg-color-hover,
+                $range-normal-slider-border-color,
+                $range-normal-slider-border-color-disabled,
+                $range-normal-slider-border-color-hover,
+                $range-normal-mark-color,
+                $range-normal-mark-color-disabled,
+                $range-normal-mark-color-hover,
+                $range-normal-mark-selected-color,
+                $range-normal-mark-selected-color-disabled,
+                $range-normal-mark-selected-color-hover
+            );
+
+            @include range-size(
+                $range-size-m-track-height,
+                $range-size-m-scale-height,
+                $range-size-m-slider-hw,
+                $range-size-m-slider-shadow,
+                $range-size-m-mark-font-size,
+                $range-size-m-mark-font-weight,
+                $range-size-m-mark-font-lineheight
+            );
+
+            @include range-hover(
+                $range-normal-slider-bg-color,
+                $range-normal-slider-bg-color-hover
+            );
+
+            @include range-click(
+                $range-normal-slider-bg-color,
+                $range-normal-slider-bg-color-hover
+            );
+        }
+    }
+
+    &range[dir=rtl] {
+        .#{$css-prefix}range-mark {
+            position: relative;
+            cursor: auto;
+            .#{$css-prefix}range-mark-text {
+                position: absolute;
+                right: 0;
+                transform: translateX(50%);
+                padding-right: 2px;
+                text-align: center;
+            }
+        }
+    }
+}

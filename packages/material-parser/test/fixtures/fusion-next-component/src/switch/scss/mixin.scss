@@ -1,0 +1,38 @@
+@charset "UTF-8";
+
+// switch mixins
+// --------------------------------------------------
+@mixin bounding(
+    $width,
+    $trigger-size,
+    $border-width-container,
+    $border-width-trigger,
+    $container-radius,
+    $trigger-radius
+) {
+    position: relative;
+    display: inline-block;
+    border: $border-width-container solid transparent;
+    width: $width;
+    height: $trigger-size + $border-width-container * 2;
+    border-radius: $container-radius;
+
+    &:after {
+        border: $border-width-trigger solid transparent;
+        position: absolute;
+        // left: $width - $border-width-container * 2 - $trigger-size;
+        left: 100%;
+        transform: translateX(-100%);
+        width: $trigger-size;
+        height: $trigger-size;
+        border-radius: $trigger-radius;
+        box-sizing: border-box;
+    }
+    > .#{$css-prefix}switch-children {
+        font-size: $font-size-body-1;
+        position: absolute;
+        // width: $trigger-size;
+        height: $trigger-size;
+        line-height: $trigger-size;
+    }
+}

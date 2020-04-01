@@ -15,22 +15,22 @@ import PropTypes from 'prop-types';
  * @param {*} WrappedComponent
  */
 
-var HOCFlexLayoutProps = function (WrappedComponent) {
-  var _class, _temp;
+const HOCFlexLayoutProps = function (WrappedComponent) {
+  let _class; let _temp;
 
-  var PROPS = {
+  const PROPS = {
     alignItems: 'alignItems',
     justifyContent: 'justifyContent',
     flexDirection: 'flexDirection',
-    flexWrap: 'flexWrap'
+    flexWrap: 'flexWrap',
   };
   return _temp = _class =
-  /*#__PURE__*/
+  /* #__PURE__ */
   function (_Component) {
     _inherits(_class, _Component);
 
     function _class() {
-      var _this;
+      let _this;
 
       _classCallCheck(this, _class);
 
@@ -41,7 +41,7 @@ var HOCFlexLayoutProps = function (WrappedComponent) {
       _this = _possibleConstructorReturn(this, _getPrototypeOf(_class).call(this, ..._args));
 
       _defineProperty(_assertThisInitialized(_this), "parseStyle", function (args) {
-        var style = {};
+        const style = {};
 
         if (args.style && args.style.display === 'flex') {
           Object.keys(PROPS).forEach(function (item) {
@@ -60,17 +60,17 @@ var HOCFlexLayoutProps = function (WrappedComponent) {
     _createClass(_class, [{
       key: "render",
       value: function render() {
-        var _this$props = this.props,
-            alignItems = _this$props.alignItems,
-            justifyContent = _this$props.justifyContent,
-            flexDirection = _this$props.flexDirection,
-            flexWrap = _this$props.flexWrap,
-            otherProps = _objectWithoutProperties(_this$props, ["alignItems", "justifyContent", "flexDirection", "flexWrap"]);
+        const _this$props = this.props;
+            const alignItems = _this$props.alignItems;
+            const justifyContent = _this$props.justifyContent;
+            const flexDirection = _this$props.flexDirection;
+            const flexWrap = _this$props.flexWrap;
+            const otherProps = _objectWithoutProperties(_this$props, ["alignItems", "justifyContent", "flexDirection", "flexWrap"]);
 
         return React.createElement(WrappedComponent, _extends({}, otherProps, {
-          styleFlexLayout: this.parseStyle(this.props)
+          styleFlexLayout: this.parseStyle(this.props),
         }));
-      }
+      },
     }]);
 
     return _class;
@@ -78,12 +78,12 @@ var HOCFlexLayoutProps = function (WrappedComponent) {
     alignItems: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     justifyContent: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     flexDirection: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-    flexWrap: PropTypes.oneOfType([PropTypes.string, PropTypes.bool])
+    flexWrap: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   }), _defineProperty(_class, "defaultProps", {
     alignItems: false,
     justifyContent: false,
     flexDirection: false,
-    flexWrap: false
+    flexWrap: false,
   }), _temp;
 };
 

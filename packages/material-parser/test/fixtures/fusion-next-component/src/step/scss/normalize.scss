@@ -1,0 +1,13 @@
+#{$step-prefix} {
+    *,
+    *:before,
+    *:after {
+        box-sizing: border-box;
+    }
+
+    &,
+    &:before,
+    &:after {
+        box-sizing: border-box;
+    }
+}

@@ -1,14 +1,11 @@
 {
-  "name": "fusion-next-component",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@alife/next": "^1.17.12"
+  "name": "@alifd/next",
+  "version": "1.19.18",
+  "description": "A configurable component library for web built on React.",
+  "main": "src/index.js",
+  "typings": "types/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alibaba-fusion/next.git"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-editor-core",
-  "version": "0.8.0",
+  "version": "0.8.4",
   "description": "alibaba lowcode editor core",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -20,15 +20,15 @@
   ],
   "author": "xiayang.xy",
   "dependencies": {
+    "@alifd/next": "1.x",
     "debug": "^4.1.1",
     "events": "^3.1.0",
     "intl-messageformat": "^8.3.1",
     "lodash": "^4.17.15",
     "prop-types": "^15.5.8",
-    "store": "^2.0.12",
-    "whatwg-fetch": "^3.0.0",
     "react": "^16.8.0",
-    "@alifd/next": "1.x"
+    "store": "^2.0.12",
+    "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.3",

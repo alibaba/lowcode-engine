@@ -12,38 +12,38 @@ export interface IPropType {
 export type IPropTypes = IPropType[];
 
 export interface IMaterialParsedModel {
-  filePath: string;
-  defaultExportName: string;
+  // filePath: string;
+  componentName: string;
   props?: PropsSection['props'];
-  componentNames: Array<{
-    exportedName: string;
-    localName: string;
-    source?: string;
-  }>;
-  importModules: Array<{
-    importDefaultName?: string;
-    importName?: string;
-    localName?: string;
-    source: string;
-  }>;
-  exportModules: Array<{
-    exportedName: string;
-    localName: string;
-    source?: string;
-  }>;
-  /**
-   * 子模块，形如：Demo.SubModule = value; 或者 Demo.SubModule.Sub = subValue;
-   */
-  subModules: Array<{
-    objectName: string[];
-    propertyName: string;
-    value?: string;
-    // value 是否对应匿名函数
-    isValueAnonymousFunc: boolean;
-  }>;
-  propsTypes: IPropTypes;
-  propsDefaults: Array<{
-    name: string;
-    defaultValue: any;
-  }>;
+  // componentNames: {
+  //   exportedName: string;
+  //   localName: string;
+  //   source?: string;
+  // }[];
+  // importModules: {
+  //   importDefaultName?: string;
+  //   importName?: string;
+  //   localName?: string;
+  //   source: string;
+  // }[];
+  // exportModules: {
+  //   exportedName: string;
+  //   localName: string;
+  //   source?: string;
+  // }[];
+  // /**
+  //  * 子模块，形如：Demo.SubModule = value; 或者 Demo.SubModule.Sub = subValue;
+  //  */
+  // subModules: {
+  //   objectName: string[];
+  //   propertyName: string;
+  //   value?: string;
+  //   // value 是否对应匿名函数
+  //   isValueAnonymousFunc: boolean;
+  // }[];
+  // propsTypes: IPropTypes;
+  // propsDefaults: {
+  //   name: string;
+  //   defaultValue: any;
+  // }[];
 }

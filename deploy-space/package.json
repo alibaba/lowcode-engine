@@ -1,9 +1,5 @@
 {
   "private": true,
-  "dependencies": {
-    "tslib": "^1.9.3",
-    "typescript": "^3.2.2"
-  },
   "workspaces": {
     "packages": [
       "packages/*"
@@ -13,5 +9,8 @@
       "**/@alife/theme-lowcode-*"
     ]
   },
-  "engines" : { "node" : "^10" }
+  "dependencies": {
+    "tslib": "^1.11.1",
+    "typescript": "^3.8.3"
+  }
 }

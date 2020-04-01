@@ -1,0 +1,186 @@
+@charset "UTF-8";
+
+////
+/// @module balloon: 气泡
+/// @tag Balloon
+/// @category component
+/// @family feedback
+/// @varPrefix $balloon-
+/// @classPrefix {prefix}-balloon
+/// @order {"size/bounding":10,"size/content":11,"size/close icon":12,"size/arrow":13,"statement/normal":10,"statement/normal/bounding":100,"statement/normal/content":101,"statement/normal/close icon":102,"statement/hover":11,"statement/hover/close icon":110}
+////
+
+
+// balloon variables
+// --------------------------------------------------
+
+// Size
+/// max width
+/// @type length
+/// @namespace size/bounding
+$balloon-size-max-width: 300px !default;
+
+/// padding (t, b)
+/// @namespace size/content
+$balloon-size-padding-top: $s-4 !default;
+
+/// padding (r)
+/// @namespace size/content
+$balloon-size-padding-right: $s-4 !default;
+
+/// padding (l)
+/// @namespace size/content
+$balloon-size-padding-closable-right: $s-10 !default;
+
+/// text
+/// @namespace size/content
+$balloon-content-font-size: $font-size-body-1 !default;
+
+/// text weight
+/// @namespace size/content
+$balloon-content-font-weight: $font-weight-2 !default;
+
+/// border width
+/// @namespace size/bounding
+$balloon-normal-border-width: $line-1 !default;
+
+/// border width
+/// @namespace size/bounding
+$balloon-primary-border-width: $line-1 !default;
+
+/// border width
+/// @namespace size/bounding
+$balloon-tooltip-border-width: $line-1 !default;
+
+/// text
+/// @namespace size/content
+$balloon-tooltip-content-font-size: $font-size-body-1 !default;
+
+/// text weight
+/// @namespace size/content
+$balloon-tooltip-content-font-weight: $font-weight-2 !default;
+
+/// size
+/// @namespace size/close icon
+$balloon-size-close: $icon-xs !default;
+
+/// margin (t)
+/// @namespace size/close icon
+$balloon-size-close-margin-top: $s-3 !default;
+
+/// margin (r)
+/// @namespace size/close icon
+$balloon-size-close-margin-right: $s-3 !default;
+
+/// size
+/// @namespace size/arrow
+$balloon-size-arrow-size: $s-3 !default;
+
+/// margin
+/// @namespace size/arrow
+$balloon-size-arrow-margin: $s-3 !default;
+
+/// padding (t)
+/// @namespace size/bounding
+$balloon-tooltip-size-padding-top: $s-2 !default;
+
+/// padding (r)
+/// @namespace size/bounding
+$balloon-tooltip-size-padding-right: $s-2 !default;
+
+/// padding (b)
+/// @namespace size/bounding
+$balloon-tooltip-size-padding-bottom: $s-2 !default;
+
+/// padding (l)
+/// @namespace size/bounding
+$balloon-tooltip-size-padding-left: $s-2 !default;
+
+$balloon-size-padding: $balloon-size-padding-top $balloon-size-padding-right;
+$balloon-size-closable-padding: $balloon-size-padding-top $balloon-size-padding-closable-right $balloon-size-padding-top $balloon-size-padding-right;
+$balloon-size-arrow-expose: -$balloon-size-arrow-size / 2 - 1;
+$balloon-size-arrow-expose-primary: -$balloon-size-arrow-size / 2 - $balloon-primary-border-width;
+
+// Common
+/// border style
+/// @namespace statement/normal/bounding
+$balloon-border-style: $line-solid !default;
+/// corner
+/// @namespace statement/normal/bounding
+$balloon-corner: $corner-1 !default;
+
+// Normal
+/// background
+/// @namespace statement/normal/bounding
+$balloon-normal-color-bg: $color-white !default;
+
+/// border
+/// @namespace statement/normal/bounding
+$balloon-normal-color-border: $color-line1-2 !default;
+
+/// shadow
+/// @namespace statement/normal/bounding
+$balloon-normal-shadow: $shadow-2-down !default;
+
+/// text
+/// @namespace statement/normal/content
+$balloon-normal-color: $color-text1-4 !default;
+
+/// color
+/// @namespace statement/normal/close icon
+$balloon-normal-color-close: $color-text1-2 !default;
+
+/// color
+/// @namespace statement/hover/close icon
+$balloon-normal-color-close-hover: $color-text1-3 !default;
+
+// Primary
+/// background
+/// @namespace statement/normal/bounding
+$balloon-primary-color-bg: $color-notice-1 !default;
+
+/// border
+/// @namespace statement/normal/bounding
+$balloon-primary-color-border: $color-notice-3 !default;
+
+/// shadow
+/// @namespace statement/normal/bounding
+$balloon-primary-shadow: $shadow-1-down !default;
+
+/// text
+/// @namespace statement/normal/content
+$balloon-primary-color: $color-text1-4 !default;
+
+/// color
+/// @namespace statement/normal/close icon
+$balloon-primary-color-close: $color-text1-2 !default;
+
+/// color
+/// @namespace statement/hover/close icon
+$balloon-primary-color-close-hover: $color-text1-4 !default;
+
+// Tooltip
+/// background
+/// @namespace statement/normal/bounding
+$balloon-tooltip-color-bg: $color-fill1-2 !default;
+
+/// shadow
+/// @namespace statement/normal/bounding
+$balloon-tooltip-shadow: $shadow-zero !default;
+
+/// border
+/// @namespace statement/normal/bounding
+$balloon-tooltip-color-border: $color-line1-2 !default;
+
+/// border style
+/// @namespace statement/normal/bounding
+$balloon-tooltip-border-style: $line-solid !default;
+
+/// text
+/// @namespace statement/normal/content
+$balloon-tooltip-color: $color-text1-4 !default;
+
+$balloon-shadow-top: shadow-maker($shadow-sides-base, 1, rgba($shadow-color-sd1, .1), -1, -1);
+$balloon-shadow-right: shadow-maker($shadow-sides-base, 1, rgba($shadow-color-sd1, .1), 1, -1);
+$balloon-shadow-bottom: shadow-maker($shadow-sides-base, 1, rgba($shadow-color-sd1, .1), 1, 1);
+$balloon-shadow-left: shadow-maker($shadow-sides-base, 1, rgba($shadow-color-sd1, .1), -1, 1);

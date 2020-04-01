@@ -1,0 +1,23 @@
+@import "../core/index-noreset.scss";
+@import "scss/mixin";
+@import "scss/variable";
+
+#{$paragraph-prefix} {
+    color: $paragraph-text-color;
+
+    &-short {
+        line-height: $paragraph-s-line-height;
+    }
+
+    &-long {
+        line-height: $paragraph-l-line-height;
+    }
+
+    &-small {
+        font-size: $paragraph-s-font-size;
+    }
+
+    &-medium {
+        font-size: $paragraph-m-font-size;
+    }
+}

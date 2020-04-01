@@ -1,14 +1,34 @@
 {
   "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/css-modules-typescript-loader",
+      "**/@alife/theme-lowcode-*"
+    ]
+  },
   "scripts": {
+    "build": "lerna run build --stream",
     "clean": "rm -rf ./packages/*/lib ./packages/*/es ./packages/*/dist ./packages/*/build",
+    "commit": "git-cz",
+    "pub": "lerna publish",
     "setup": "./scripts/setup.sh",
     "start": "./scripts/start.sh",
-    "build": "lerna run build",
-    "test": "lerna run test",
-    "test:snapshot": "lerna run test:snapshot",
-    "pub": "lerna publish",
-    "commit": "git-cz"
+    "test": "lerna run test --stream",
+    "test:snapshot": "lerna run test:snapshot"
+  },
+  "lint-staged": {
+    "*.{tsx,ts}": [
+      "eslint --quiet",
+      "git add"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
   },
   "devDependencies": {
     "@ali/lowcode-config": "^2.0.5",
@@ -26,25 +46,7 @@
     "tslib": "^1.9.3",
     "typescript": "^3.2.2"
   },
-  "engines" : { "node" : "^10" },
-  "workspaces": {
-    "packages": [
-      "packages/*"
-    ],
-    "nohoist": [
-      "**/css-modules-typescript-loader",
-      "**/@alife/theme-lowcode-*"
-    ]
-  },
-  "lint-staged": {
-    "*.{tsx,ts}": [
-      "eslint --quiet",
-      "git add"
-    ]
-  },
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-conventional-changelog"
-    }
+  "engines": {
+    "node": ">=10.0.0"
   }
 }

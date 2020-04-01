@@ -19,3 +19,4 @@ export * from './shallow-equal';
 export * from './unique-id';
 export * from './get-public-path';
 export * from './is-form-event';
+export * from './hotkey';

@@ -1,0 +1,12 @@
+#{$collapse-prefix}[dir=rtl] {
+    #{$collapse-prefix}-panel-title {
+        padding: $collapse-title-padding-tb $collapse-icon-margin-r + $collapse-icon-margin-l + $collapse-icon-size $collapse-title-padding-tb 0;
+    }
+
+    #{$collapse-prefix}-panel-icon {
+        left: inherit;
+        right: $collapse-icon-margin-l;
+
+        @include icon-size($collapse-icon-size, 0, 0, rotate($collapse-icon-rotation-collapsed-rtl));
+    }
+}

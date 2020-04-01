@@ -10,8 +10,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import HOCBoxModelProps from '../utils/HOCBoxModelProps';
 
-var AIMakeImage =
-/*#__PURE__*/
+const AIMakeImage =
+/* #__PURE__ */
 function (_Component) {
   _inherits(AIMakeImage, _Component);
 
@@ -24,19 +24,19 @@ function (_Component) {
   _createClass(AIMakeImage, [{
     key: "render",
     value: function render() {
-      var _this$props = this.props,
-          styleBoxModel = _this$props.styleBoxModel,
-          style = _this$props.style,
-          otherProps = _objectWithoutProperties(_this$props, ["styleBoxModel", "style"]);
+      const _this$props = this.props;
+          const styleBoxModel = _this$props.styleBoxModel;
+          const style = _this$props.style;
+          const otherProps = _objectWithoutProperties(_this$props, ["styleBoxModel", "style"]);
 
-      var styles = { ...styleBoxModel,
-        ...style
+      const styles = { ...styleBoxModel,
+        ...style,
       };
       return React.createElement("img", _extends({}, otherProps, {
         style: styles,
-        alt: "AIMakeImage"
+        alt: "AIMakeImage",
       }));
-    }
+    },
   }]);
 
   return AIMakeImage;
@@ -44,11 +44,11 @@ function (_Component) {
 
 _defineProperty(AIMakeImage, "propTypes", {
   styleBoxModel: PropTypes.object.isRequired,
-  style: PropTypes.object
+  style: PropTypes.object,
 });
 
 _defineProperty(AIMakeImage, "defaultProps", {
-  style: {}
+  style: {},
 });
 
 export default HOCBoxModelProps(AIMakeImage);

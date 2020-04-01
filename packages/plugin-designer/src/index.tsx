@@ -214,7 +214,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
 
     if (!library || !componentMetadatas) {
       // TODO: use a Loading
-      return 'assets loading';
+      return null;
     }
 
     return (

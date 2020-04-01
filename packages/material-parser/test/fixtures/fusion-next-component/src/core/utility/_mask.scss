@@ -1,0 +1,20 @@
+////
+/// @group mask
+/// @module mask: 遮罩通用
+/// @type String
+/// @tag mask
+/// @category utility
+/// @family mask
+/// @varPrefix $mask-
+/// @classPrefix {prefix}-mask
+////
+
+
+/// background
+/// @semantic 背景颜色
+$mask-background: $color-black !default;
+
+/// opacity
+/// @type alpha
+/// @semantic 透明度
+$mask-opacity: .2 !default;

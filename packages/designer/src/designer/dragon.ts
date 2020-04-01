@@ -427,8 +427,9 @@ export class Dragon {
     };
 
     const sourceSensor = getSourceSensor(dragObject);
-    const sensors: ISensor[] = (masterSensors as ISensor[]).concat(this.sensors);
     const chooseSensor = (e: LocateEvent) => {
+      // this.sensors will change on dragstart
+      const sensors: ISensor[] = (masterSensors as ISensor[]).concat(this.sensors);
       let sensor = e.sensor && e.sensor.isEnter(e) ? e.sensor : sensors.find((s) => s.sensorAvailable && s.isEnter(e));
       if (!sensor) {
         // TODO: enter some area like componentspanel cancel

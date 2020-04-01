@@ -2,8 +2,7 @@ import { Component, isValidElement, ReactElement, ReactNode } from 'react';
 import { Radio, Menu, Table, Icon, Dialog } from '@alifd/next';
 import nativeEvents from './native-events';
 
-import './style.less';
-import EventDialog from './event-dialog';
+import './index.scss';
 const { SubMenu, Item, Group, Divider } = Menu;
 const RadioGroup = Radio.Group;
 
@@ -31,10 +30,10 @@ export default class EventsSetter extends Component<{
     nativeEventList: [],
     lifeCycleEventList: [],
     eventDataList: this.props.value || [],
-    isShowEventDialog: false,
-    bindEventName: '',
     relatedEventName: '',
   };
+
+
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { value } = nextProps;
@@ -46,9 +45,16 @@ export default class EventsSetter extends Component<{
     return null;
   }
 
+  private bindEventName:String;
+
   componentDidMount() {
+    const {editor} = this.props.field;
     this.initEventBtns();
     this.initEventList();
+    editor.on('event-setter.bindEvent',(relatedEventName)=>{
+      this.bindEvent(relatedEventName);
+    })
+
   }
 
   /**
@@ -201,7 +207,7 @@ export default class EventsSetter extends Component<{
         <Icon
           type="set"
           className="event-operate-icon"
-          style={{ marginLeft: '5px', marginRight: '4px' }}
+          style={{ marginLeft: '3px', marginRight: '4px' }}
           onClick={() => this.openDialog(eventName)}
         />
         <Icon
@@ -291,29 +297,27 @@ export default class EventsSetter extends Component<{
   };
 
   openDialog = (bindEventName: String) => {
-    this.setState({
-      isShowEventDialog: true,
-      bindEventName,
-    });
+    const {editor} = this.props.field;
+    this.bindEventName = bindEventName;
+    editor.emit('eventBindDialog.openDialog',bindEventName);
   };
 
-  closeDialog = () => {
-    this.setState({
-      isShowEventDialog: false,
-    });
-  };
 
-  submitDialog = (relatedEventName: String) => {
-    const { bindEventName, eventDataList } = this.state;
+  bindEvent = (relatedEventName: String) => {
+    const {eventDataList} = this.state;
     eventDataList.map(item => {
-      if (item.name === bindEventName) {
+      if (item.name === this.bindEventName) {
         item.relatedEventName = relatedEventName;
       }
     });
 
+    this.setState({
+      eventDataList
+    })
+
     this.props.onChange(eventDataList);
 
-    this.closeDialog();
+    //this.closeDialog();
   };
 
   render() {
@@ -324,10 +328,8 @@ export default class EventsSetter extends Component<{
       lifeCycleEventList,
       selectType,
       eventDataList,
-      isShowEventDialog,
-      bindEventName,
     } = this.state;
-
+    const {editor} = this.props.field;
     let showEventList =
       lifeCycleEventList.length > 0 ? lifeCycleEventList : eventList;
     return (
@@ -394,13 +396,6 @@ export default class EventsSetter extends Component<{
             />
           </Table>
         </div>
-
-        <EventDialog
-          dialigVisiable={isShowEventDialog}
-          closeDialog={this.closeDialog}
-          submitDialog={this.submitDialog}
-          bindEventName={bindEventName}
-        ></EventDialog>
       </div>
     );
   }

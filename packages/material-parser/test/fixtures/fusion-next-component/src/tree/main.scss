@@ -1,0 +1,276 @@
+@import "../core/index-noreset.scss";
+
+@import "scss/variable";
+@import "scss/mixin";
+
+#{$tree-prefix} {
+    @include box-sizing;
+
+    &, &-child-tree {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    &-node {
+        white-space: nowrap;
+    }
+
+    &-node-inner {
+        font-size: 0;
+        outline: none;
+    }
+
+    &-node-label-wrapper {
+        display: inline-block;
+        margin: 0 $tree-node-title-margin;
+        vertical-align: middle;
+    }
+
+    &-node-label {
+        height: $tree-node-title-height;
+        line-height: $tree-node-title-height;
+        padding: 0 $tree-node-title-padding;
+        border-radius: $tree-node-title-border-radius;
+        font-size: $tree-node-title-font-size;
+    }
+
+    &-node-input.#{$css-prefix}input {
+        margin: 0 $tree-node-title-margin;
+    }
+
+    &-switcher {
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: $tree-switch-margint-right;
+    }
+
+    &-switcher.#{$css-prefix}noline {
+        width: $tree-switch-arrow-size;
+        height: $tree-switch-arrow-size;
+        line-height: $tree-switch-arrow-size;
+        cursor: pointer;
+
+        #{$tree-prefix}-switcher-icon {
+            @include icon-size($tree-switch-arrow-size);
+            transition: transform $motion-duration-immediately $motion-linear;
+            color: $tree-switch-arrow-color;
+        }
+
+        &.#{$css-prefix}close #{$tree-prefix}-switcher-icon {
+            @include icon-size(
+                $size: $tree-switch-arrow-size,
+                $transform: rotate(-90deg)
+            );
+        }
+
+        &:not(.#{$css-prefix}disabled):hover #{$tree-prefix}-switcher-icon {
+            color: $tree-switch-hover-arrow-color;
+        }
+
+        &.#{$css-prefix}disabled {
+            cursor: not-allowed;
+
+            #{$tree-prefix}-switcher-icon {
+                color: $tree-node-disabled-color;
+            }
+        }
+    }
+
+    &-switcher.#{$css-prefix}noop-noline {
+        width: $tree-switch-arrow-size;
+        height: $tree-switch-arrow-size;
+    }
+
+    &-switcher.#{$css-prefix}line {
+        width: $tree-switch-size;
+        height: $tree-switch-size;
+        line-height: $tree-switch-size - $tree-switch-border-width * 2;
+        border: $tree-switch-border-width $line-solid $tree-switch-border-color;
+        border-radius: $tree-switch-corner;
+        background-color: $tree-switch-bg-color;
+        cursor: pointer;
+
+        #{$tree-prefix}-switcher-icon {
+            @include icon-size($tree-switch-icon-size, ($tree-switch-size - $tree-switch-icon-size - $tree-switch-border-width * 2) / 2);
+            color: $tree-switch-icon-color;
+        }
+
+        &:not(.#{$css-prefix}disabled):hover {
+            border-color: $tree-switch-hover-border-color;
+            background-color: $tree-switch-hover-bg-color;
+
+            #{$tree-prefix}-switcher-icon {
+                color: $tree-switch-hover-icon-color;
+            }
+        }
+
+        &.#{$css-prefix}disabled {
+            border-color: $color-line1-1;
+            background-color: $color-white;
+            cursor: not-allowed;
+
+            #{$tree-prefix}-switcher-icon {
+                color: $tree-node-disabled-color;
+            }
+        }
+    }
+
+    &-switcher.#{$css-prefix}noop-line {
+        width: $tree-switch-size;
+        height: $tree-switch-size;
+    }
+
+    &-switcher.#{$css-prefix}noop-line-noroot {
+        height: 0;
+        border-left: $tree-switch-border-width $line-solid $tree-line-color;
+        border-bottom: $tree-line;
+
+        #{$tree-prefix}-right-angle {
+            bottom: -$tree-line-width;
+        }
+    }
+
+    &-switcher.#{$css-prefix}loading {
+        &.#{$css-prefix}loading-noline {
+            width: $tree-switch-arrow-size;
+            height: $tree-switch-arrow-size;
+            line-height: $tree-switch-arrow-size;
+        }
+
+        &.#{$css-prefix}loading-line {
+            width: $tree-switch-size;
+            height: $tree-switch-size;
+            line-height: $tree-switch-size - $tree-switch-border-width * 2;
+            border: $tree-switch-border-width $line-solid $color-transparent;
+        }
+
+        #{$tree-prefix}-switcher-icon {
+            @include icon-size($tree-switch-arrow-size);
+            color: $color-brand1-6;
+        }
+    }
+
+    &-right-angle {
+        position: absolute;
+        bottom: ($tree-switch-size - $tree-switch-border-width * 2 - $tree-line-width) / 2;
+        left: - ($tree-child-indent-right + $tree-line-width + $tree-switch-border-width);
+        display: block;
+        width: $tree-child-indent-right + $tree-line-width;
+        height: $tree-node-title-height + $tree-node-padding - $tree-line-width * 2;
+        border-left: $tree-line;
+        border-bottom: $tree-line;
+    }
+
+    &.#{$css-prefix}label-block {
+        #{$tree-prefix}-node-inner {
+            display: flex;
+            align-items: center;
+            outline: none;
+        }
+
+        #{$tree-prefix}-node-label-wrapper {
+            flex: 1 1 auto;
+        }
+    }
+
+
+    &.#{$css-prefix}node-indent {
+        #{$tree-prefix}-node #{$tree-prefix}-node {
+            margin-left: $tree-child-indent;
+        }
+
+        #{$tree-prefix}-node-inner {
+            padding-top: $tree-node-padding / 2;
+            padding-bottom: $tree-node-padding / 2;
+            &:focus {
+                #{$tree-prefix}-node-label {
+                    @include tree-node-state($tree-node-hover-color, $tree-node-hover-bg-color);
+                }
+            }
+        }
+
+        #{$tree-prefix}-node-label-wrapper {
+            border-top: $line-2 solid $color-transparent;
+            border-bottom: $line-2 solid $color-transparent;
+        }
+
+        #{$tree-prefix}-node-label {
+            transition: color $motion-duration-immediately $motion-linear, background-color $motion-duration-immediately $motion-linear;
+            cursor: default;
+            @include tree-node-state($tree-node-normal-color, $tree-node-normal-background);
+        }
+
+        #{$tree-prefix}-node-label-selectable {
+            cursor: pointer;
+        }
+
+        #{$tree-prefix}-node-label:hover {
+            @include tree-node-state($tree-node-hover-color, $tree-node-hover-bg-color);
+        }
+
+        #{$tree-prefix}-node-inner.#{$css-prefix}selected #{$tree-prefix}-node-label {
+            @include tree-node-state($tree-node-selected-color, $tree-node-selected-background);
+        }
+
+        #{$tree-prefix}-node-inner.#{$css-prefix}disabled #{$tree-prefix}-node-label,
+        #{$tree-prefix}-node-inner.#{$css-prefix}disabled #{$tree-prefix}-node-label:hover {
+            @include tree-node-state($tree-node-disabled-color, $tree-node-disabled-background);
+            cursor: not-allowed;
+        }
+
+        #{$tree-prefix}-node-inner.#{$css-prefix}drag-over #{$tree-prefix}-node-label {
+            background-color: $color-brand1-6;
+            color: $color-white;
+            opacity: .8;
+        }
+
+        #{$tree-prefix}-node-inner.#{$css-prefix}drag-over-gap-top #{$tree-prefix}-node-label-wrapper {
+            border-top-color: $color-brand1-6;
+        }
+
+        #{$tree-prefix}-node-inner.#{$css-prefix}drag-over-gap-bottom #{$tree-prefix}-node-label-wrapper {
+            border-bottom-color: $color-brand1-6;
+        }
+    }
+
+    &.#{$css-prefix}node-block #{$tree-prefix}-node-inner {
+        padding-top: $tree-node-padding;
+        padding-bottom: $tree-node-padding;
+        transition: color $motion-duration-immediately $motion-linear, background-color $motion-duration-immediately $motion-linear;
+        cursor: pointer;
+        @include tree-node-state($tree-node-normal-color, $tree-node-normal-background);
+
+        &:hover,
+        &:focus {
+            @include tree-node-state($tree-node-hover-color, $tree-node-hover-bg-color);
+        }
+
+        &.#{$css-prefix}selected {
+            @include tree-node-state($tree-node-selected-color, $tree-node-selected-background);
+        }
+
+        &.#{$css-prefix}disabled,
+        &.#{$css-prefix}disabled:hover {
+            @include tree-node-state($tree-node-disabled-color, $tree-node-disabled-background);
+            cursor: not-allowed;
+        }
+    }
+
+    &.#{$css-prefix}show-line &-node &-node:not(:last-child) {
+        margin-left: $tree-child-indent-left;
+        border-left: $tree-line;
+        padding-left: $tree-child-indent-right;
+    }
+
+    &-node.#{$css-prefix}filtered > #{$tree-prefix}-node-inner #{$tree-prefix}-node-label {
+        color: $color-brand1-6;
+
+        &:hover {
+            color: $color-brand1-6;
+        }
+    }
+}
+
+@import './rtl.scss';

@@ -1,0 +1,119 @@
+@charset "UTF-8";
+@import "../core/index-noreset.scss";
+@import "scss/mixin";
+@import "scss/variable";
+@import "./rtl.scss";
+
+/* put your code here */
+#{$collapse-prefix} {
+    @include box-sizing;
+
+    border: $collapse-border-width solid $collapse-border-color;
+    border-radius: $collapse-border-corner;
+    &:focus,
+    & *:focus {
+        outline: 0;
+    }
+
+    &-panel {
+        &:not(:first-child) {
+            border-top: $collapse-title-border-width solid $collapse-panel-border-color;
+        }
+    }
+
+    #{$collapse-prefix}-panel-icon {
+        position: absolute;
+        color: $collapse-icon-color;
+        transition: transform $motion-duration-immediately $motion-linear;
+        left: $collapse-icon-margin-l;
+        margin-top: -2px;
+
+        @include icon-size($collapse-icon-size, 0, 0, rotate($collapse-icon-rotation-collapsed));
+    }
+
+    &-panel-title {
+        position: relative;
+        line-height: $collapse-title-height;
+        background: $collapse-title-bg-color;
+        font-size: $collapse-title-font-size;
+        font-weight: $collapse-title-font-weight;
+        color: $collapse-title-font-color;
+        cursor: pointer;
+        padding: $collapse-title-padding-tb 0 $collapse-title-padding-tb $collapse-icon-margin-r + $collapse-icon-margin-l + $collapse-icon-size;
+        transition: background $motion-duration-immediately $motion-linear;
+
+        &:hover {
+            background: $collapse-title-hover-bg-color;
+            color: $collapse-title-hover-font-color;
+            font-weight: $collapse-title-hover-font-weight;
+
+            #{$collapse-prefix}-panel-icon {
+                color: $collapse-icon-hover-color;
+            }
+        }
+    }
+
+    &-panel-content {
+        height: 0;
+        padding: 0 $collapse-content-padding-x;
+        background: $collapse-content-bg-color;
+        font-size: $collapse-content-font-size;
+        color: $collapse-content-color;
+        transition: all $motion-duration-standard $motion-ease;
+        opacity: 0;
+    }
+
+    &-panel-expanded {
+        > #{$collapse-prefix}-panel-content {
+            display: block;
+            padding: $collapse-content-padding-y $collapse-content-padding-x;
+            height: auto;
+            opacity: 1;
+        }
+    }
+
+    &-panel-hidden {
+        > #{$collapse-prefix}-panel-content {
+            overflow: hidden;
+        }
+    }
+
+    #{$collapse-prefix}-panel-icon {
+        &#{$collapse-prefix}-panel-icon-expanded {
+            @include icon-size($collapse-icon-size, 0, 0, rotate($collapse-icon-rotation-expanded));
+        }
+    }
+
+    &-disabled {
+        border-color: $collapse-disabled-border-color;
+    }
+
+    &-panel-disabled {
+        &:not(:first-child) {
+            border-color: $collapse-disabled-border-color;
+        }
+
+        > #{$collapse-prefix}-panel-title {
+            cursor: not-allowed;
+            color: $collapse-title-font-disabled-color;
+            background: $collapse-title-disabled-bg-color;
+        }
+
+        #{$collapse-prefix}-panel-icon {
+            color: $collapse-title-font-disabled-color;
+        }
+
+        #{$collapse-prefix}-panel-title:hover {
+            font-weight: $collapse-title-font-weight;
+
+            #{$collapse-prefix}-panel-icon {
+                color: $collapse-title-font-disabled-color;
+            }
+        }
+
+        &:hover {
+            color: $collapse-title-font-disabled-color;
+            background: $collapse-title-disabled-bg-color;
+        }
+    }
+}

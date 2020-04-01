@@ -12,8 +12,8 @@ import HOCLayoutProps from '../utils/HOCLayoutProps';
 import HOCBackgroundProps from '../utils/HOCBackgroundProps';
 import HOCFlexLayoutProps from '../utils/HOCFlexLayoutProps';
 
-var AIMakeBlank =
-/*#__PURE__*/
+const AIMakeBlank =
+/* #__PURE__ */
 function (_Component) {
   _inherits(AIMakeBlank, _Component);
 
@@ -26,20 +26,20 @@ function (_Component) {
   _createClass(AIMakeBlank, [{
     key: "render",
     value: function render() {
-      var merged = {};
-      var _this$props = this.props,
-          children = _this$props.children,
-          styleBoxModel = _this$props.styleBoxModel,
-          styleLayout = _this$props.styleLayout,
-          styleBackground = _this$props.styleBackground,
-          styleFlexLayout = _this$props.styleFlexLayout,
-          style = _this$props.style,
-          id = _this$props.id;
-      var styles = { ...styleBoxModel,
+      const merged = {};
+      const _this$props = this.props;
+          const children = _this$props.children;
+          const styleBoxModel = _this$props.styleBoxModel;
+          const styleLayout = _this$props.styleLayout;
+          const styleBackground = _this$props.styleBackground;
+          const styleFlexLayout = _this$props.styleFlexLayout;
+          const style = _this$props.style;
+          const id = _this$props.id;
+      const styles = { ...styleBoxModel,
         ...styleLayout,
         ...styleBackground,
         ...styleFlexLayout,
-        ...style
+        ...style,
       };
 
       if (id) {
@@ -47,9 +47,9 @@ function (_Component) {
       }
 
       return React.createElement("div", _extends({
-        style: styles
+        style: styles,
       }, merged), children);
-    }
+    },
   }]);
 
   return AIMakeBlank;
@@ -62,13 +62,13 @@ _defineProperty(AIMakeBlank, "propTypes", {
   styleBackground: PropTypes.object.isRequired,
   styleFlexLayout: PropTypes.object.isRequired,
   style: PropTypes.object,
-  id: PropTypes.string
+  id: PropTypes.string,
 });
 
 _defineProperty(AIMakeBlank, "defaultProps", {
   children: [],
   style: {},
-  id: ''
+  id: '',
 });
 
 export default HOCBoxModelProps(HOCLayoutProps(HOCBackgroundProps(HOCFlexLayoutProps(AIMakeBlank))));

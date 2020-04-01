@@ -1,7 +1,7 @@
 /**
  * The template of manifest for AiMake studio.
  */
-var manifest = {
+const manifest = {
   // The name of current component.
   name: 'AIMakeImage',
   // The description of current component.
@@ -29,8 +29,8 @@ var manifest = {
     customProps: {
       width: '224px',
       height: '126px',
-      src: 'https://img.alicdn.com/tfs/TB1RtEMGbSYBuNjSspfXXcZCpXa-448-252.png'
-    }
+      src: 'https://img.alicdn.com/tfs/TB1RtEMGbSYBuNjSspfXXcZCpXa-448-252.png',
+    },
   }],
   // Other settings of current component for AiMake studio.
   settings: {
@@ -62,25 +62,25 @@ var manifest = {
     props: [{
       name: 'margin',
       label: '外边距',
-      renderer: 'Quadrant'
+      renderer: 'Quadrant',
     }, {
       name: 'width',
       label: '宽度',
       defaultValue: '224px',
-      renderer: 'Width'
+      renderer: 'Width',
     }, {
       name: 'height',
       label: '高度',
       defaultValue: '126px',
-      renderer: 'Height'
+      renderer: 'Height',
     }, {
       name: 'src',
       label: '图片URL',
       renderer: 'Uploader',
       placeholder: 'eg: https://img.alicdn.com/tfs/TB1RtEMGbSYBuNjSspfXXcZCpXa-448-252.png',
       hint: '请填入图片的URL',
-      defaultValue: 'https://img.alicdn.com/tfs/TB1RtEMGbSYBuNjSspfXXcZCpXa-448-252.png'
-    }]
-  }
+      defaultValue: 'https://img.alicdn.com/tfs/TB1RtEMGbSYBuNjSspfXXcZCpXa-448-252.png',
+    }],
+  },
 };
 export default manifest;

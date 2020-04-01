@@ -2,23 +2,23 @@
  * The template of manifest for AiMake studio.
  */
 function _update(Nygma, node) {
-  var attributes = node.get();
-  var display = attributes.display,
-      flexDirection = attributes.flexDirection,
-      alignItems = attributes.alignItems,
-      justifyContent = attributes.justifyContent,
-      flexWrap = attributes.flexWrap;
-  var isFlex = display === 'flex';
+  const attributes = node.get();
+  const display = attributes.display;
+      const flexDirection = attributes.flexDirection;
+      const alignItems = attributes.alignItems;
+      const justifyContent = attributes.justifyContent;
+      const flexWrap = attributes.flexWrap;
+  const isFlex = display === 'flex';
   node.set({
     display,
     flexDirection: isFlex ? flexDirection : undefined,
     alignItems: isFlex ? alignItems : undefined,
     justifyContent: isFlex ? justifyContent : undefined,
-    flexWrap: isFlex ? flexWrap : undefined
+    flexWrap: isFlex ? flexWrap : undefined,
   });
 }
 
-var manifest = {
+const manifest = {
   // The name of current component.
   name: 'AIMakeBlank',
   // The description of current component.
@@ -49,8 +49,8 @@ var manifest = {
       textAlign: 'left',
       padding: '12px',
       width: '100%',
-      backgroundColor: '#FFF'
-    }
+      backgroundColor: '#FFF',
+    },
   }],
   // Other settings of current component for AiMake studio.
   settings: {
@@ -71,21 +71,21 @@ var manifest = {
     // Whether the component can be dragged.
     shouldDrag: true,
     lifeCycle: {
-      didMount: function (props) {
-        var Nygma = props.Nygma,
-            dragInstance = props.dragInstance;
-        var Drager = dragInstance.NygmaNode;
+      didMount (props) {
+        const Nygma = props.Nygma;
+            const dragInstance = props.dragInstance;
+        const Drager = dragInstance.NygmaNode;
 
         _update(Nygma, Drager);
       },
-      didUpdate: function (Nygma, node, args) {
-        var newvalue = args[1];
-        var oldvalue = args[2];
+      didUpdate (Nygma, node, args) {
+        const newvalue = args[1];
+        const oldvalue = args[2];
 
         if (JSON.stringify(newvalue) !== JSON.stringify(oldvalue)) {
           _update(Nygma, node);
         }
-      }
+      },
     },
     // The props of current component in AiMake studio.
     // Each property contains following keys:
@@ -100,45 +100,45 @@ var manifest = {
       name: 'id',
       label: 'id',
       defaultValue: '',
-      renderer: 'Input'
+      renderer: 'Input',
     }, {
       name: 'textAlign',
       label: '水平对齐',
       defaultValue: 'left',
-      renderer: 'TextAlign'
+      renderer: 'TextAlign',
     }, {
       name: 'margin',
       label: '外边距',
-      renderer: 'Quadrant'
+      renderer: 'Quadrant',
     }, {
       name: 'padding',
       label: '内边距',
       renderer: 'Quadrant',
-      defaultValue: '12px'
+      defaultValue: '12px',
     }, {
       name: 'width',
       label: '宽度',
       defaultValue: '100%',
-      renderer: 'Width'
+      renderer: 'Width',
     }, {
       name: 'height',
       label: '高度',
       renderer: 'Height',
-      defaultValue: undefined
+      defaultValue: undefined,
     }, {
       name: 'backgroundColor',
       label: '背景颜色',
       renderer: 'Color',
-      defaultValue: '#FFF'
+      defaultValue: '#FFF',
     }, {
       name: 'border',
       label: '边框',
-      renderer: 'BarBorder'
+      renderer: 'BarBorder',
     }, {
       name: 'display',
       label: '布局设置',
-      renderer: 'FlexLayout'
-    }]
-  }
+      renderer: 'FlexLayout',
+    }],
+  },
 };
 export default manifest;

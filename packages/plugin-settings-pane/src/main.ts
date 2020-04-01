@@ -2,6 +2,7 @@ import { EventEmitter } from 'events';
 import { uniqueId } from '@ali/lowcode-globals';
 import { ComponentMeta, Node, Designer, Selection } from '@ali/lowcode-designer';
 import { TitleContent, FieldExtraProps, SetterType, CustomView, FieldConfig, isCustomView } from '@ali/lowcode-globals';
+import { getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 
 export interface SettingTarget {
   // 所设置的节点集，至少一个
@@ -337,8 +338,16 @@ export class SettingsMain implements SettingTarget {
       }
     };
     editor.on('designer.selection-change', setupSelection);
+    const connectTree = (designer: any) => {
+      getTreeMaster(designer).onceEnableBuiltin(() => {
+        this.emitter.emit('outline-visible');
+      });
+    }
     if (editor.designer) {
+      connectTree(editor.designer);
       setupSelection(editor.designer.currentSelection);
+    } else {
+      editor.once('designer.mount', connectTree);
     }
     this.disposeListener = () => {
       editor.removeListener('designer.selection-change', setupSelection);
@@ -348,6 +357,13 @@ export class SettingsMain implements SettingTarget {
   onEffect(action: () => void): () => void {
     action();
     return this.onNodesChange(action);
+  }
+
+  onceOutlineVisible(fn: () => void): () => void {
+    this.emitter.on('outline-visible', fn);
+    return () => {
+      this.emitter.removeListener('outline-visible', fn);
+    };
   }
 
   /**

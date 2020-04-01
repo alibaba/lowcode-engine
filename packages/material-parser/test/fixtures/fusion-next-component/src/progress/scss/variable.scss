@@ -1,0 +1,161 @@
+////
+/// @module progress: 进度指示
+/// @tag Progress
+/// @category component
+/// @family data-display
+/// @varPrefix $progress-
+/// @classPrefix {prefix}-progress
+/// @order {"size/bounding":10,"size/text":11,"size/circle":12,"statement/normal":10,"statement/normal/underlay":100,"statement/normal/overlay":101,"statement/normal/text":102,"statement/error":11,"statement/error/overlay":110,"statement/success":12,"statement/success/overlay":120,"statement/started":13,"statement/started/overlay":130,"statement/middle":14,"statement/middle/overlay":140,"statement/finishing":15,"statement/finishing/overlay":150}
+////
+
+
+$progress-prefix: '.' + $css-prefix + 'progress';
+
+$progress-easing: cubic-bezier(.65, .2, .35, 1);
+
+// 条形
+// ----------------------------------------
+
+/// height
+/// @namespace size/bounding
+$progress-line-height-size-l: $s-3 !default;
+
+/// height
+/// @namespace size/bounding
+$progress-line-height-size-m: $s-2 !default;
+
+/// height
+/// @namespace size/bounding
+$progress-line-height-size-s: $s-1 !default;
+
+/// border width
+/// @namespace size/bounding
+$progress-line-underlay-border-width: $line-1 !default;
+
+/// size
+/// @namespace size/text
+$progress-line-font-l: $font-size-body-1 !default;
+/// size
+/// @namespace size/text
+$progress-line-font-m: $font-size-caption !default;
+/// size
+/// @namespace size/text
+$progress-line-font-s: $font-size-caption !default;
+
+/// background
+/// @namespace statement/normal/underlay
+$progress-line-underlay-color: $color-fill1-3 !default;
+
+/// border color
+/// @namespace statement/normal/underlay
+$progress-line-underlay-border-color: $color-line1-2 !default;
+
+/// corner
+/// @namespace statement/normal/overlay
+$progress-line-radius-l: $corner-3 !default;
+
+/// corner
+/// @namespace statement/normal/overlay
+$progress-line-radius-m: $corner-3 !default;
+
+/// corner
+/// @namespace statement/normal/overlay
+$progress-line-radius-s: $corner-3 !default;
+
+/// color
+/// @namespace statement/normal/text
+$progress-line-font-color: $color-text1-4 !default;
+
+/// background
+/// @namespace statement/normal/overlay
+$progress-line-normal-color: $color-brand1-6 !default;
+
+/// background
+/// @namespace statement/error/overlay
+$progress-line-error-color: $color-error-3 !default;
+
+/// background
+/// @namespace statement/success/overlay
+$progress-line-success-color: $color-success-3 !default;
+
+/// background
+/// @namespace statement/started/overlay
+$progress-line-started-color: $color-error-3 !default;
+/// background
+/// @namespace statement/middle/overlay
+$progress-line-middle-color: $color-warning-3 !default;
+/// background
+/// @namespace statement/finishing/overlay
+$progress-line-finishing-color: $color-success-3 !default;
+
+// 圆形
+// ----------------------------------------
+
+/// diameter
+/// @namespace size/circle
+$progress-circle-size-l: $s-33 !default;
+
+/// diameter
+/// @namespace size/circle
+$progress-circle-size-m: $s-29 !default;
+
+/// diameter
+/// @namespace size/circle
+$progress-circle-size-s: $s-25 !default;
+
+/// underlay width
+/// @namespace size/circle
+$progress-circle-underlay-width: $s-2 !default;
+
+/// overlay width
+/// @namespace size/circle
+$progress-circle-overlay-width: $s-2 !default;
+
+/// size
+/// @namespace size/text
+$progress-circle-font-l: $font-size-display-1 !default;
+
+/// size
+/// @namespace size/text
+$progress-circle-font-m: $font-size-headline !default;
+
+/// size
+/// @namespace size/text
+$progress-circle-font-s: $font-size-title !default;
+
+/// stroke color
+/// @namespace statement/normal/underlay
+$progress-circle-underlay-color: $color-fill1-3 !default;
+
+/// color
+/// @namespace statement/normal/text
+$progress-circle-text-color: $color-text1-4 !default;
+
+/// stroke corner
+/// @type ['butt', 'round', 'square']
+/// @namespace statement/normal/overlay
+$progress-circle-corner: round !default; // butt|round|square
+
+/// stroke color
+/// @namespace statement/normal/overlay
+$progress-circle-normal-color: $color-brand1-6 !default;
+
+/// stroke color
+/// @namespace statement/error/overlay
+$progress-circle-error-color: $color-error-3 !default;
+
+/// stroke color
+/// @namespace statement/success/overlay
+$progress-circle-success-color: $color-success-3 !default;
+
+/// stroke color
+/// @namespace statement/started/overlay
+$progress-circle-started-color: $color-error-3 !default;
+
+/// stroke color
+/// @namespace statement/middle/overlay
+$progress-circle-middle-color: $color-warning-3 !default;
+
+/// stroke color
+/// @namespace statement/finishing/overlay
+$progress-circle-finishing-color: $color-success-3 !default;

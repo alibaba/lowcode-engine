@@ -10,7 +10,7 @@ import {
   autorun,
 } from '@ali/lowcode-globals';
 import { Project } from '../project';
-import { Node, DocumentModel, insertChildren, isRootNode } from '../document';
+import { Node, DocumentModel, insertChildren, isRootNode, NodeParent } from '../document';
 import { ComponentMeta } from '../component-meta';
 import { INodeSelector } from '../simulator';
 import { Scroller, IScrollable } from './scroller';
@@ -19,6 +19,7 @@ import { ActiveTracker } from './active-tracker';
 import { Hovering } from './hovering';
 import { DropLocation, LocationData, isLocationChildrenDetail } from './location';
 import { OffsetObserver, createOffsetObserver } from './offset-observer';
+import { focusing } from './focusing';
 
 export interface DesignerProps {
   className?: string;
@@ -40,7 +41,6 @@ export interface DesignerProps {
 }
 
 export class Designer {
-  // readonly hotkey: Hotkey;
   readonly dragon = new Dragon(this);
   readonly activeTracker = new ActiveTracker();
   readonly hovering = new Hovering();
@@ -156,6 +156,9 @@ export class Designer {
     this.postEvent('designer.init', this);
     setupSelection();
     setupHistory();
+
+    // TODO: 先简单实现，后期通过焦点赋值
+    focusing.focusDesigner = this;
   }
 
   postEvent(event: string, ...args: any[]) {
@@ -198,7 +201,7 @@ export class Designer {
   /**
    * 获得合适的插入位置
    */
-  getSuitableInsertion() {
+  getSuitableInsertion(): { target: NodeParent; index?: number } | null {
     const activedDoc = this.project.currentDocument;
     if (!activedDoc) {
       return null;
@@ -296,7 +299,7 @@ export class Designer {
   }
 
   setSchema(schema?: ProjectSchema) {
-    this.project.setSchema(schema);
+    this.project.load(schema);
   }
 
   @obx.val private _componentMetasMap = new Map<string, ComponentMeta>();

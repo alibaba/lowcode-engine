@@ -1,6 +1,7 @@
 {
   "entry": {
-    "lowcode-demo": "src/index.jsx"
+    "lowcode-editor": "src/index.ts",
+    "lowcode-preview": "src/preview.ts"
   },
   "vendor": false,
   "externals": {

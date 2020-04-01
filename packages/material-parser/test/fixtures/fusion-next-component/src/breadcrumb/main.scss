@@ -1,0 +1,35 @@
+@charset "UTF-8";
+
+@import "../core/index-noreset.scss";
+
+@import "scss/mixin";
+@import "scss/variable";
+
+/* put your code here */
+
+.#{$css-prefix} {
+    &breadcrumb {
+        @include breadcrumb-bounding();
+
+        @include breadcrumb-size(
+            $breadcrumb-height,
+            $breadcrumb-text-min-width,
+            $breadcrumb-size-m-font-size,
+            $breadcrumb-size-ellipsis-font-size,
+            $breadcrumb-size-m-icon-size,
+            $breadcrumb-size-m-icon-margin
+        );
+
+        @include breadcrumb-state(
+            $breadcrumb-text-color,
+            $breadcrumb-text-ellipsis-color,
+            $breadcrumb-text-current-color,
+            $breadcrumb-text-current-weight,
+            $breadcrumb-text-keyword-color,
+            $breadcrumb-icon-color,
+            $breadcrumb-text-color-hover,
+            $breadcrumb-text-current-color-hover,
+            $breadcrumb-text-keyword-color-hover
+        );
+    }
+}

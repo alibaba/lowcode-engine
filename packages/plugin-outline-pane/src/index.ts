@@ -11,4 +11,6 @@ export default {
 };
 */
 
+export { getTreeMaster } from './main';
+
 export default Pane;

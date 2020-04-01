@@ -1,0 +1,14 @@
+@include keyframes(pressOut) {
+    0% {
+        @include transform(scale3d(.7, .7, .7));
+    }
+}
+@mixin pressOut($count: $countDefault, $duration: $durationSmallDefault, $delay: $delayDefault, $function: $functionDefault, $fill: $fillDefault, $visibility: $visibilityDefault) {
+    @include animation-name(pressOut);
+    @include count($count);
+    @include duration($duration);
+    @include delay($delay);
+    @include function($function);
+    @include fill-mode($fill);
+    @include visibility($visibility);
+}

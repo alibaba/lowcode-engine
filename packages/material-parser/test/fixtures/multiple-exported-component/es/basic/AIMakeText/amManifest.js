@@ -1,7 +1,7 @@
 /**
  * The template of manifest for AiMake studio.
  */
-var manifest = {
+const manifest = {
   // The name of current component.
   name: 'AIMakeText',
   // The description of current component.
@@ -30,8 +30,8 @@ var manifest = {
       type: 'label',
       fontSize: '12px',
       fontWeight: 'normal',
-      children: '文本内容'
-    }
+      children: '文本内容',
+    },
   }],
   // Other settings of current component for AiMake studio.
   settings: {
@@ -67,49 +67,49 @@ var manifest = {
       defaultValue: 'label',
       params: [{
         label: '一级标题',
-        value: 'h1'
+        value: 'h1',
       }, {
         label: '二级标题',
-        value: 'h2'
+        value: 'h2',
       }, {
         label: '三级标题',
-        value: 'h3'
+        value: 'h3',
       }, {
         label: '段落',
-        value: 'p'
+        value: 'p',
       }, {
         label: '标签',
-        value: 'label'
-      }]
+        value: 'label',
+      }],
     }, {
       name: 'margin',
       label: '外边距',
-      renderer: 'Quadrant'
+      renderer: 'Quadrant',
     }, {
       name: 'color',
       label: '文字颜色',
-      renderer: 'Color'
+      renderer: 'Color',
     }, {
       name: 'fontSize',
       label: '字号',
       renderer: 'FontSize',
-      defaultValue: '12px'
+      defaultValue: '12px',
     }, {
       name: 'fontWeight',
       label: '字重',
       renderer: 'FontWeight',
-      defaultValue: 'normal'
+      defaultValue: 'normal',
     }, {
       name: 'lineHeight',
       label: '行高',
       defaultValue: undefined,
-      renderer: 'LineHeight'
+      renderer: 'LineHeight',
     }, {
       name: 'children',
       label: '内容',
       defaultValue: '文本内容',
-      renderer: 'TextArea'
-    }]
-  }
+      renderer: 'TextArea',
+    }],
+  },
 };
 export default manifest;

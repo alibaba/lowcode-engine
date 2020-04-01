@@ -1,14 +1,17 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "outDir": "lib",
+    "target": "es5",
+    "strictNullChecks": true,
+    "inlineSources": false,
+    "lib": ["es6"],
+    "downlevelIteration": true,
     "paths": {
       "@/*": ["./src/*"]
     },
+    "outDir": "./lib",
     "types": ["node"],
-    "baseUrl": ".",            /* Base directory to resolve non-absolute module names. */
+    "baseUrl": "."            /* Base directory to resolve non-absolute module names. */
   },
   "include": [
     "src/**/*"

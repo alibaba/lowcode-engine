@@ -1,7 +1,7 @@
 /**
  * The template of manifest for AiMake studio.
  */
-var manifest = {
+const manifest = {
   // The name of current component.
   name: 'AIMakePlaceholder',
   // The description of current component.
@@ -32,8 +32,8 @@ var manifest = {
       backgroundColor: '#FFF6E0',
       textAlign: 'center',
       border: '1px dashed rgb(170, 170, 170)',
-      children: '暂不支持此组件'
-    }
+      children: '暂不支持此组件',
+    },
   }],
   // Other settings of current component for AiMake studio.
   settings: {
@@ -65,38 +65,38 @@ var manifest = {
     props: [{
       name: 'margin',
       label: '外边距',
-      renderer: 'Quadrant'
+      renderer: 'Quadrant',
     }, {
       name: 'width',
       label: '宽度',
       defaultValue: '224px',
-      renderer: 'Width'
+      renderer: 'Width',
     }, {
       name: 'height',
       label: '高度',
       defaultValue: '126px',
-      renderer: 'Height'
+      renderer: 'Height',
     }, {
       name: 'backgroundColor',
       label: '背景色',
       defaultValue: '#FFF6E0',
-      renderer: false
+      renderer: false,
     }, {
       name: 'textAlign',
       label: '对齐',
       defaultValue: 'center',
-      renderer: false
+      renderer: false,
     }, {
       name: 'border',
       label: '边框',
       defaultValue: '1px dashed rgb(170, 170, 170)',
-      renderer: false
+      renderer: false,
     }, {
       name: 'children',
       label: '内容',
       defaultValue: '暂不支持此组件',
-      renderer: false
-    }]
-  }
+      renderer: false,
+    }],
+  },
 };
 export default manifest;
