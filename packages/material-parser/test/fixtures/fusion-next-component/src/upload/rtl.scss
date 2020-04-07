@@ -1,0 +1,38 @@
+
+#{$upload-prefix}-list[dir=rtl] {
+    &#{$upload-prefix}-list-text {
+        #{$upload-prefix}-list-item {
+            // top-bottom s-1  left $upload-text-list-padding-left-right
+            padding: $s-1 $upload-text-list-padding-left-right;
+            // righrt: icon size + icon paddinng left-right
+            padding-left: $upload-text-list-close-icon-right * 2 + $upload-text-list-close-icon-size;
+        }
+        .#{$css-prefix}icon {
+            left: $upload-text-list-close-icon-right;
+            right: auto;
+        }
+    }
+    &#{$upload-prefix}-list-image {
+        .#{$css-prefix}icon-close {
+            float: left;
+            margin-left: $upload-image-list-close-icon-right;
+            margin-right: 0;
+        }
+
+        $thumbnail-margin-right: $s-2 !default;
+        @if ($upload-image-list-item-padding > $s-2) {
+            $thumbnail-margin-right: $upload-image-list-item-padding;
+        }
+
+        #{$upload-prefix}-list-item-thumbnail {
+            float: right;
+            margin-left: $thumbnail-margin-right;
+            margin-right: 0;
+        }
+
+        #{$upload-prefix}-list-item-progress {
+            margin-right: $upload-image-list-item-picture-size + $thumbnail-margin-right;
+            margin-left: $upload-image-list-close-icon-size + $upload-image-list-close-icon-right * 2;
+        }
+    }
+}

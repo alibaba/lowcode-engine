@@ -1,0 +1,33 @@
+{
+  "entry": {
+    "lowcode-editor": "src/index.ts",
+    "lowcode-preview": "src/preview.ts"
+  },
+  "vendor": false,
+  "externals": {
+    "react": "window.React",
+    "react-dom": "window.ReactDOM",
+    "prop-types": "window.PropTypes",
+    "@ali/lowcode-globals": "window.LCEGlobals"
+  },
+  "minify": false,
+  "sourcemap": true,
+  "outputAssetsPath": {
+    "js": "", "css": ""
+  },
+  "plugins": [
+    ["build-plugin-react-app"],
+    [
+      "build-plugin-fusion",
+      {
+        "themePackage": "@alife/theme-lowcode-light"
+      }
+    ],
+    [
+      "build-plugin-moment-locales",
+      {
+        "locales": ["zh-cn"]
+      }
+    ]
+  ]
+}

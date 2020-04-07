@@ -6,7 +6,7 @@ export default function localeConfig(componentName, Component) {
     static dislayName = 'luna-locale-config';
     static contextType = AppContext;
     static propTypes = {
-      forwardedRef: PropTypes.func
+      forwardedRef: PropTypes.func,
     };
     render() {
       const { forwardedRef, ...otherProps } = this.props;
@@ -19,7 +19,7 @@ export default function localeConfig(componentName, Component) {
       const props = {
         ...localeProps,
         ...otherProps,
-        ref: forwardedRef
+        ref: forwardedRef,
       };
       return <Component {...props} />;
     }

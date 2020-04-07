@@ -12,10 +12,10 @@ const debug = Debug('engine:page');
 export default class PageEngine extends BaseEngine {
   static dislayName = 'page-engine';
   static propTypes = {
-    __schema: PropTypes.object
+    __schema: PropTypes.object,
   };
   static defaultProps = {
-    __schema: {}
+    __schema: {},
   };
 
   static getDerivedStateFromProps(props, state) {
@@ -30,7 +30,7 @@ export default class PageEngine extends BaseEngine {
   constructor(props, context) {
     super(props, context);
     this.__generateCtx({
-      page: this
+      page: this,
     });
     const schema = props.__schema || {};
     this.state = this.__parseData(schema.state || {});
@@ -68,7 +68,7 @@ export default class PageEngine extends BaseEngine {
     }
     debug(`page.render - ${__schema.fileName}`);
     this.__generateCtx({
-      page: this
+      page: this,
     });
     this.__render();
 
@@ -78,7 +78,7 @@ export default class PageEngine extends BaseEngine {
         value={{
           ...this.context,
           pageContext: this,
-          blockContext: this
+          blockContext: this,
         }}
       >
         {this.__createDom()}
@@ -93,7 +93,7 @@ export default class PageEngine extends BaseEngine {
           style={{
             height: this.__showPlaceholder ? defaultHeight : 'auto',
             display: 'block',
-            ...style
+            ...style,
           }}
           className={classnames('luna-page', getFileCssName(__schema.fileName), className, this.props.className)}
           id={id}

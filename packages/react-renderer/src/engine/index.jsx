@@ -20,7 +20,7 @@ const ENGINE_COMPS = {
   Component,
   Block,
   Addon,
-  Temp
+  Temp,
 };
 export default class Engine extends PureComponent {
   static dislayName = 'engine';
@@ -32,7 +32,7 @@ export default class Engine extends PureComponent {
     suspended: PropTypes.bool,
     schema: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     onCompGetRef: PropTypes.func,
-    onCompGetCtx: PropTypes.func
+    onCompGetCtx: PropTypes.func,
   };
   static defaultProps = {
     appHelper: null,
@@ -42,7 +42,7 @@ export default class Engine extends PureComponent {
     suspended: false,
     schema: {},
     onCompGetRef: () => {},
-    onCompGetCtx: () => {}
+    onCompGetCtx: () => {},
   };
 
   constructor(props, context) {
@@ -56,9 +56,9 @@ export default class Engine extends PureComponent {
       'EXP',
       {
         action: 'appear',
-        value: !!this.props.designMode
+        value: !!this.props.designMode,
       },
-      'engine'
+      'engine',
     );
     debug(`entry.componentDidMount - ${this.props.schema && this.props.schema.componentName}`);
   }
@@ -79,7 +79,7 @@ export default class Engine extends PureComponent {
     return !nextProps.suspended;
   }
 
-  __getRef = ref => {
+  __getRef = (ref) => {
     this.__ref = ref;
     if (ref) {
       this.props.onCompGetRef(this.props.schema, ref, true);
@@ -104,7 +104,7 @@ export default class Engine extends PureComponent {
             appHelper,
             components: allComponents,
             componentsMap,
-            engine: this
+            engine: this,
           }}
         >
           <Comp

@@ -1,0 +1,222 @@
+@charset "UTF-8";
+// tag mixins
+// --------------------------------------------------
+
+@mixin tag-group-margin($margin) {
+    margin-right: $margin;
+    margin-bottom: $margin;
+}
+
+@mixin tag-size(
+    $height,
+    $lineHeight,
+    $borderWidth,
+    $paddingLr,
+    $fontSize,
+    $iconSize,
+    $minWidth
+) {
+    height: $height;
+    padding: 0;
+    line-height: $height - $borderWidth * 2;
+    font-size: 0;
+
+    $_marginLeft: $iconSize;
+
+    > .#{$css-prefix}tag-body {
+        font-size: $fontSize;
+        padding: 0 $paddingLr;
+        min-width: $minWidth;
+    }
+
+    &.#{$css-prefix}tag-closable > .#{$css-prefix}tag-body {
+        padding: 0 0 0 $paddingLr;
+        max-width: calc(100% - #{$_marginLeft + $iconSize + $paddingLr});
+    }
+    &[dir=rtl].#{$css-prefix}tag-closable > .#{$css-prefix}tag-body {
+        padding: 0 $paddingLr 0 0;
+    }
+
+    &.#{$css-prefix}tag-closable > .#{$css-prefix}tag-close-btn {
+        margin-left: $_marginLeft;
+        padding-right: $paddingLr;
+        .#{$css-prefix}icon {
+            @include icon-size($iconSize);
+        }
+    }
+    &[dir=rtl] > .#{$css-prefix}tag-close-btn {
+        margin-right: $_marginLeft;
+        margin-left: 0;
+        padding-right: 0;
+        padding-left: $paddingLr;
+    }
+}
+
+@mixin tag-statement(
+    $textColor,
+    $borderColor,
+    $bgColor,
+    $textColorHover,
+    $borderColorHover: "",
+    $bgColorHover: "",
+    $tailColor: "",
+    $tailColorHover: "",
+    $tailColorDisabled: "",
+    $textColorDisabled: "",
+    $borderColorDisabled: "",
+    $bgColorDisabled: ""
+) {
+    color: $textColor;
+    border-color: $borderColor;
+    background-color: $bgColor;
+
+    &:not(.disabled):not([disabled]):hover,
+    &:not(.disabled):not([disabled]).hover,
+    &:not(.disabled):not([disabled]):focus {
+        color: $textColorHover;
+
+        @if $borderColorHover != "" {
+            border-color: $borderColorHover;
+        }
+        @if $bgColorHover != "" {
+            background-color: $bgColorHover;
+        }
+
+        @if $tailColorHover != "" {
+            > .#{$css-prefix}tag-close-btn {
+                color: $tailColorHover;
+            }
+        }
+    }
+
+    &[disabled],
+    &.disabled {
+        @if $tailColorDisabled != "" {
+            > .#{$css-prefix}tag-close-btn {
+                color: $tailColorDisabled;
+            }
+        }
+
+        @if $textColorDisabled != "" {
+            color: $textColorDisabled;
+        }
+
+        @if $borderColorDisabled != "" {
+            border-color: $borderColorDisabled;
+        }
+
+        @if $bgColorDisabled != "" {
+            background-color: $bgColorDisabled;
+        }
+    }
+
+    > .#{$css-prefix}tag-close-btn {
+        @if $tailColor != "" {
+            color: $tailColor;
+        }
+    }
+}
+
+@mixin tail-hover-animation() {
+    transform: rotate(90deg);
+    transform-origin: 50% 50%;
+    backface-visibility: hidden;
+}
+
+// for virtual btn
+@mixin tick-bg-size($size) {
+    right: -$size / 2;
+    bottom: -$size / 2;
+    width: $size;
+    height: $size;
+}
+
+// checkable tag tick
+@mixin checkable-tag-tick-size($tick-bg-size, $tick-size) {
+    &:before {
+        right: -$tick-bg-size / 2;
+        bottom: -$tick-bg-size / 2;
+        width: $tick-bg-size;
+        height: $tick-bg-size;
+    }
+
+    &:after {
+        font-size: $tick-size;
+        line-height: $tick-size;
+        right: 0;
+        bottom: 0;
+    }
+}
+
+@mixin tag-checked-tick(
+    $tick-icon,
+    $tick-icon-color,
+    $tick-icon-hover-color,
+    $tick-icon-disabled-color,
+    $tick-bg,
+    $tick-bg-hover,
+    $tick-bg-disabled
+) {
+    &:before {
+        position: absolute;
+        content: "";
+        -webkit-font-smoothing: antialiased;
+        background-color: $tick-bg;
+        transform: rotate(45deg);
+    }
+
+    &:after {
+        position: absolute;
+        font-family: $icon-font-family;
+        -webkit-font-smoothing: antialiased;
+        content: $tick-icon;
+        transform: scale(.6);
+        color: $tick-icon-color;
+    }
+
+    &:not(.disabled):not([disabled]):hover,
+    &:not(.disabled):not([disabled]).hover,
+    &:not(.disabled):not([disabled]):focus {
+        &:before {
+            background-color: $tick-bg-hover;
+        }
+
+        &:after {
+            color: $tick-icon-hover-color;
+        }
+    }
+
+    &[disabled],
+    &:disabled {
+        &:before {
+            background-color: $tick-bg-disabled;
+        }
+
+        &:after {
+            color: $tick-icon-disabled-color;
+        }
+    }
+}
+
+@mixin placeholder-full {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+@mixin tag-preset-color($name, $color) {
+    &-#{$name} {
+        background-color: $color;
+        border-color: $color;
+        color: #FFF;
+
+        &-inverse {
+            background-color: rgba($color, .25);
+            border-color: $color;
+            color: $color;
+        }
+    }
+}

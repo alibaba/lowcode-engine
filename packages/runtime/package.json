@@ -1,0 +1,40 @@
+{
+  "name": "@ali/lowcode-runtime",
+  "version": "0.8.7",
+  "description": "Runtime for Ali lowCode engine",
+  "files": [
+    "es",
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "scripts": {
+    "build": "build-scripts build --skip-demo",
+    "test": "ava",
+    "test:snapshot": "ava --update-snapshots"
+  },
+  "ava": {
+    "compileEnhancements": false,
+    "snapshotDir": "test/fixtures/__snapshots__",
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@ali/recore": "^1.6.9"
+  },
+  "devDependencies": {
+    "@alib/build-scripts": "^0.1.18",
+    "@types/node": "^13.7.1",
+    "@types/react": "^16",
+    "@types/react-dom": "^16",
+    "build-plugin-component": "^0.2.11"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
+  }
+}

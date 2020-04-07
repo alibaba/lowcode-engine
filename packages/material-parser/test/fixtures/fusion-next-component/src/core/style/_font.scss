@@ -1,0 +1,177 @@
+@import "../util/_mixin.scss";
+
+////
+/// @module font: 字体
+/// @type String
+/// @category style
+/// @export
+////
+
+// Font & Typography
+// 根据 Alibaba Base DPL(BASE DPL) 设计规范实现
+// 字体主要解决的是内容可读性以及信息的层级表达，同时选择不同的字体来传达不同的设计风格的统一性和整体性，从而在阅读的舒适性上达到平衡。
+// -------------------------------
+
+$font-custom-path: "//i.alicdn.com/artascope-font/20160419204543/font/" !default;
+$font-custom-name: Roboto !default;
+$font-name-thin: roboto-thin !default;
+$font-name-light: roboto-light !default;
+$font-name-regular: roboto-regular !default;
+$font-name-medium: roboto-medium !default;
+$font-name-bold: roboto-bold !default;
+$font-name-bolder: roboto-bolder !default;
+$font-lineheight-base: 1.2857142;
+
+$font-face-name-default: "#{$font-custom-name}";
+$font-face-url-default: "#{$font-custom-path}#{$font-name-thin}.eot";
+
+// ------------------- font-face ------------------- //
+
+$font-face1-name: $font-face-name-default !default;
+$font-face1-url: $font-face-url-default !default;
+$font-face2-name: $font-face-name-default !default;
+$font-face2-url: $font-face-url-default !default;
+$font-face3-name: $font-face-name-default !default;
+$font-face3-url: $font-face-url-default !default;
+@include font-face-handler($font-face1-name, $font-face1-url);
+@include font-face-handler($font-face2-name, $font-face2-url);
+@include font-face-handler($font-face3-name, $font-face3-url);
+
+// ------------------- font-family ------------------- //
+
+/// family
+/// @semantic 字体
+/// @export
+$font-family-base: Roboto, "Helvetica Neue", Helvetica, Tahoma, Arial, "PingFang SC", "Microsoft YaHei" !default;
+
+$font-family-en: Roboto, "Helvetica Neue", Helvetica, Tahoma, Arial !default;
+$font-family-zh: "Microsoft YaHei", SimSun, Arial !default !default;
+
+// ------------------- font-weight ------------------- //
+
+/// thin
+/// @semantic Ultra light(Thin)
+/// @group weight
+/// @export weight
+$font-weight-1: lighter !default;
+/// extra light
+/// @semantic Extra Light
+/// @group weight
+/// @export weight
+$font-weight-thin: 200 !default;
+/// light
+/// @semantic Light
+/// @group weight
+/// @export weight
+$font-weight-light: 300 !default;
+/// normal
+/// @semantic Regular(Normal)
+/// @group weight
+/// @export weight
+$font-weight-2: normal !default;
+/// medium
+/// @semantic Medium
+/// @group weight
+/// @export weight
+$font-weight-medium: 500 !default;
+/// semi bold
+/// @semantic Semi Bold
+/// @group weight
+/// @export weight
+$font-weight-semi-bold: 600 !default;
+/// bold
+/// @semantic Bold
+/// @group weight
+/// @export weight
+$font-weight-3: bold !default;
+/// extra bold
+/// @semantic Extra Bold
+/// @group weight
+/// @export weight
+$font-weight-extra-bold: 800 !default;
+/// heavy
+/// @semantic Ultra Bold(Heavy)
+/// @group weight
+/// @export weight
+$font-weight-ultra-bold: 900 !default;
+
+$font-weight-bolder: bolder !default;
+
+// ------------------- font-size ------------------- //
+
+/// display-3
+/// @semantic 运营标题-大
+/// @group size
+/// @export size
+$font-size-display-3: 56px !default;
+
+/// display-2
+/// @semantic 运营标题-中
+/// @group size
+/// @export size
+$font-size-display-2: 48px !default;
+
+/// display-1
+/// @semantic 运营标题-小
+/// @group size
+/// @export size
+$font-size-display-1: 36px !default;
+
+/// headline
+/// @semantic 标题-大
+/// @group size
+/// @export size
+$font-size-headline: 24px !default;
+
+/// title
+/// @semantic 标题-中
+/// @group size
+/// @export size
+$font-size-title: 20px !default;
+
+/// subhead
+/// @semantic 标题-小
+/// @group size
+/// @export size
+$font-size-subhead: 16px !default;
+
+/// body-2
+/// @semantic 正文-强调
+/// @group size
+/// @export size
+$font-size-body-2: 14px !default;
+
+/// body-1
+/// @semantic 正文-常规
+/// @group size
+/// @export size
+$font-size-body-1: 12px !default;
+
+/// caption
+/// @semantic 水印文本
+/// @group size
+/// @export size
+$font-size-caption: 12px !default;
+
+// ------------------- line-height ------------------- //
+
+/// lineheight-1
+/// @semantic 密集
+/// @group lineheight
+/// @export lineheight
+/// @type Number
+$font-lineheight-1: 1.3 !default;
+
+/// lineheight-2
+/// @semantic 常规
+/// @group lineheight
+/// @export lineheight
+/// @type Number
+$font-lineheight-2: 1.5 !default;
+
+/// lineheight-3
+/// @semantic 宽松
+/// @group lineheight
+/// @export lineheight
+/// @type Number
+$font-lineheight-3: 1.7 !default;

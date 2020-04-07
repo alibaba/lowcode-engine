@@ -10,21 +10,13 @@
 
 #### 跑起来：
 
-- `tnpm i`
-- `npm run boot`
-- `npm run build`
+- `npm run setup`
+- `npm start`
 
-#### Link & unlink
-
-- `cd packages/<package-name> && tnpm link -g`
-- `tnpm link @ali/<package-name>`
-
-- `tnpm unlink @ali/<package-name>`
-
-#### 开发过程中：
+#### 开发提交：
 
 - `git add <your-files>`
-- `npm run commit`
+- `npm run commit` # 在根目录
 
 ## 发布
 

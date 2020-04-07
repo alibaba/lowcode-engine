@@ -1,3 +1,19 @@
+# project custom
+build
+dist
+packages/*/lib/
+packages/*/es/
+packages/*/dist/
+package-lock.json
+yarn.lock
+deploy-space/packages
+deploy-space/.env
+
+
+# IDE
+.vscode
+.idea
+
 # Logs
 logs
 *.log

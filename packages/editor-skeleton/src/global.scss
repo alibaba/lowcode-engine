@@ -7,7 +7,9 @@ body {
   * {
     box-sizing: border-box;
   }
+  color: $color-text1-3;
 }
+
 .next-loading {
   .next-loading-wrap {
     height: 100%;
@@ -16,18 +18,16 @@ body {
 .lowcode-editor {
   .lowcode-main-content {
     position: absolute;
-    top: 48px;
+    top: 50px;
     left: 0;
     right: 0;
     bottom: 0;
     display: flex;
-    background-color: #d8d8d8;
+    background-color: rgba(31, 56, 88, 0.06);
   }
   .lowcode-center-area {
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 10px;
-    overflow: auto;
   }
 }

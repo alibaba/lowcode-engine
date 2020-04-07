@@ -1,0 +1,13 @@
+{
+    "extends": [
+        "@alifd/stylelint-config-next"
+    ],
+    "rules": {
+        "max-nesting-depth": null,
+        "max-empty-lines": 3,
+        "no-duplicate-selectors": null,
+        "no-descending-specificity": null,
+        "font-family-no-missing-generic-family-keyword": null,
+        "selector-max-class": null
+    }
+}

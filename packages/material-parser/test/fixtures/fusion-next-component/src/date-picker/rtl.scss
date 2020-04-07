@@ -1,0 +1,75 @@
+#{$date-picker-prefix}-body[dir="rtl"] {
+    #{$date-picker-prefix}-panel-footer {
+        text-align: left;
+    }
+    #{$date-picker-prefix}-panel-footer > #{$date-picker-btn-prefix}:not(:last-child) {
+        margin-right: 0;
+        margin-left: $s-4;
+    }
+}
+
+#{$date-picker-prefix}-body[dir="rtl"]#{$date-picker-prefix}-body-show-time {
+    #{$date-picker-prefix}-panel-input#{$date-picker-input-prefix} {
+        &:first-child {
+            margin-left: 2%;
+            margin-right: 0;
+        }
+    }
+    #{$time-picker-prefix}-menu {
+        float: right;
+        &:not(:last-child) {
+            border-right: none;
+            border-left: $time-picker-menu-border-width $line-solid $time-picker-menu-border-color;
+        }
+    }
+}
+
+
+#{$range-picker-prefix}-body[dir="rtl"] {
+    #{$range-picker-prefix}-panel-input {
+        text-align: right;
+    }
+    #{$date-picker-prefix}-panel-footer {
+        text-align: left;
+    }
+    #{$date-picker-prefix}-panel-footer > #{$date-picker-btn-prefix}:not(:last-child) {
+        margin-right: 0;
+        margin-left: $s-4;
+    }
+}
+
+#{$range-picker-prefix}-body[dir="rtl"]#{$range-picker-prefix}-body-show-time {
+    #{$range-picker-prefix}-panel {
+        &-input-start-date {
+            margin-right: 0;
+            margin-left: $s-2;
+        }
+
+        &-input-end-time {
+            margin-left: 0;
+            margin-right: $s-2;
+        }
+
+        &-time-start, &-time-end {
+            float: right;
+        }
+        &-time-start {
+            // Extend time-picker border
+            border-right: none;
+            border-left: $line-1 $line-solid $date-picker-panel-time-panel-separator-color;
+        }
+
+        &-time-end {
+            // Extend time-picker border
+            border-left: none;
+            border-right: $line-1 $line-solid $date-picker-panel-time-panel-separator-color;
+        }
+    }
+    #{$time-picker-prefix}-menu {
+        float: right;
+        &:not(:last-child) {
+            border-right: none;
+            border-left: $time-picker-menu-border-width $line-solid $time-picker-menu-border-color;
+        }
+    }
+}

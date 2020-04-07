@@ -26,7 +26,7 @@ export default class AppHelper extends EventEmitter {
     if (typeof key === 'string') {
       this[key] = val;
     } else if (typeof key === 'object') {
-      Object.keys(key).forEach(item => {
+      Object.keys(key).forEach((item) => {
         this[item] = key[item];
       });
     }
@@ -34,16 +34,16 @@ export default class AppHelper extends EventEmitter {
 
   batchOn(events, lisenter) {
     if (!Array.isArray(events)) return;
-    events.forEach(event => this.on(event, lisenter));
+    events.forEach((event) => this.on(event, lisenter));
   }
 
   batchOnce(events, lisenter) {
     if (!Array.isArray(events)) return;
-    events.forEach(event => this.once(event, lisenter));
+    events.forEach((event) => this.once(event, lisenter));
   }
 
   batchOff(events, lisenter) {
     if (!Array.isArray(events)) return;
-    events.forEach(event => this.off(event, lisenter));
+    events.forEach((event) => this.off(event, lisenter));
   }
 }

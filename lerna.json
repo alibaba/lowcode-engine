@@ -1,17 +1,27 @@
 {
   "lerna": "2.11.0",
   "version": "independent",
-  "npmClient": "tnpm",
+  "npmClient": "tyarn",
+  "registry": "http://registry.npm.alibaba-inc.com",
+  "useWorkspaces": true,
+  "packages": [
+    "packages/*"
+  ],
   "command": {
+    "bootstrap": {
+      "npmClientArgs": [
+        "--no-package-lock"
+      ]
+    },
     "publish": {
+      "npmClient": "tnpm",
+      "verifyRegistry": false,
+      "verifyAccess": false,
       "ignoreChanges": [
         "**/*.md",
         "**/test/**"
       ],
       "conventionalCommits": true
     }
-  },
-  "packages": [
-    "packages/*"
-  ]
+  }
 }

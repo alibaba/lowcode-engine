@@ -10,7 +10,7 @@ export default function addonFactory(schema, components = {}, componentsMap = {}
     static version = config.version || '0.0.0';
     static contextType = AppContext;
     static propTypes = {
-      forwardedRef: PropTypes.func
+      forwardedRef: PropTypes.func,
     };
     render() {
       if (!schema || schema.componentName !== 'Addon' || !isFileSchema(schema)) {
@@ -22,7 +22,7 @@ export default function addonFactory(schema, components = {}, componentsMap = {}
         ...schema.defaultProps,
         ...otherProps,
         __schema: schema,
-        ref: forwardedRef
+        ref: forwardedRef,
       };
       return (
         <AppContext.Provider
@@ -33,7 +33,7 @@ export default function addonFactory(schema, components = {}, componentsMap = {}
             componentsMap,
             config,
             locale: props.locale,
-            messages: props.messages
+            messages: props.messages,
           }}
         >
           <AddonEngine

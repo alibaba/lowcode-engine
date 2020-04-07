@@ -1,0 +1,38 @@
+@import '../core/index-noreset';
+
+@import "scss/variable";
+@import "scss/normalize";
+@import "scss/mixin";
+@import "scss/animation";
+
+@import "scss/header";
+@import "scss/table";
+@import "./rtl.scss";
+
+#{$calendar-prefix} {
+    &-table {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    /* range calendar */
+    /* --------------- */
+    &-range {
+        #{$calendar-prefix}-body {
+            &-left, &-right {
+                float: left;
+                width: 50%;
+            }
+
+            &-left {
+                padding-right: $s-2;
+            }
+
+            &-right {
+                padding-left: $s-2;
+            }
+
+            @include clearfix;
+        }
+    }
+}

@@ -1,0 +1,38 @@
+#{$timeline-prefix}[dir='rtl'] {
+    #{$timeline-prefix}-item {
+        &-folder {
+            padding-left: 0;
+            padding-right: $timeline-item-content-margin-left + $timeline-item-node-size;
+        }
+
+        &-dot-tail {
+            left: auto;
+            right: $timeline-item-node-size / 2;
+            border-left: none;
+            border-right: $timeline-item-tail-size dotted $timeline-item-tail-color;
+        }
+        /* 时间轴左边存在内容的情况 */
+        &-has-left-content {
+            &#{$timeline-prefix}-item-folder {
+                margin-left: 0;
+                margin-right: $timeline-item-left-content-width;
+            }
+        }
+    }
+
+    #{$timeline-prefix}-item-done {
+        @include node-state('rtl', $timeline-item-done-background, $timeline-item-done-color, $timeline-item-done-dot-size);
+    }
+
+    #{$timeline-prefix}-item-process {
+        @include node-state('rtl', $timeline-item-process-background, $timeline-item-process-color, $timeline-item-process-dot-size);
+    }
+
+    #{$timeline-prefix}-item-success {
+        @include node-state('rtl', $timeline-item-success-background, $timeline-item-success-color, $timeline-item-success-dot-size);
+    }
+
+    #{$timeline-prefix}-item-error {
+        @include node-state('rtl', $timeline-item-error-background, $timeline-item-error-color, $timeline-item-error-dot-size);
+    }
+}

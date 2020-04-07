@@ -19,40 +19,40 @@ export default class WSHelper {
       reconnectionDelay: 3000,
       transports: ['websocket'],
       query: urlInfo.params,
-      ...options
+      ...options,
     }));
     const appHelper = this.appHelper;
     debug('ws.init');
 
-    ws.on('connect', msg => {
+    ws.on('connect', (msg) => {
       appHelper.emit('wsHelper.connect.success', msg);
       debug('ws.connect');
     });
 
-    ws.on('error', msg => {
+    ws.on('error', (msg) => {
       appHelper.emit('wsHelper.connect.error', msg);
       debug('ws.error', msg);
     });
 
-    ws.on('disconnect', msg => {
+    ws.on('disconnect', (msg) => {
       appHelper.emit('wsHelper.connect.break', msg);
       debug('ws.disconnect', msg);
     });
 
-    ws.on('reconnecting', msg => {
+    ws.on('reconnecting', (msg) => {
       appHelper.emit('wsHelper.connect.retry', msg);
       debug('ws.reconnecting', msg);
     });
 
-    ws.on('ping', msg => {
+    ws.on('ping', (msg) => {
       debug('ws.ping', msg);
     });
 
-    ws.on('pong', msg => {
+    ws.on('pong', (msg) => {
       debug('ws.pong', msg);
     });
 
-    ws.on('data', msg => {
+    ws.on('data', (msg) => {
       appHelper.emit('wsHelper.data.receive', msg);
       if (msg.eventName) {
         appHelper.emit(`wsHelper.result.${msg.eventName}`, msg);
@@ -73,7 +73,7 @@ export default class WSHelper {
       try {
         this.appHelper.emit('wsHelper.data.request', {
           eventName,
-          params: args
+          params: args,
         });
         this.appHelper.once(`wsHelper.result.${eventName}`, resolve);
         this.ws && this.ws.emit(eventName, ...args);

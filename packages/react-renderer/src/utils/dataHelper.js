@@ -5,7 +5,7 @@ const DS_STATUS = {
   INIT: 'init',
   LOADING: 'loading',
   LOADED: 'loaded',
-  ERROR: 'error'
+  ERROR: 'error',
 };
 const debug = Debug('utils:dataHelper');
 export default class DataHelper {
@@ -34,20 +34,20 @@ export default class DataHelper {
     this.ajaxList = (config && config.list) || [];
     const ajaxMap = transformArrayToMap(this.ajaxList, 'id');
     // 删除已经移除的接口
-    Object.keys(this.ajaxMap).forEach(key => {
+    Object.keys(this.ajaxMap).forEach((key) => {
       if (!ajaxMap[key]) {
         delete this.dataSourceMap[key];
       }
     });
     this.ajaxMap = ajaxMap;
     // 添加未加入到dataSourceMap中的接口
-    this.ajaxList.forEach(item => {
+    this.ajaxList.forEach((item) => {
       if (!this.dataSourceMap[item.id]) {
         this.dataSourceMap[item.id] = {
           status: DS_STATUS.INIT,
           load: (...args) => {
             return this.getDataSource(item.id, ...args);
-          }
+          },
         };
       }
     });
@@ -56,12 +56,12 @@ export default class DataHelper {
 
   generateDataSourceMap() {
     const res = {};
-    this.ajaxList.forEach(item => {
+    this.ajaxList.forEach((item) => {
       res[item.id] = {
         status: DS_STATUS.INIT,
         load: (...args) => {
           return this.getDataSource(item.id, ...args);
-        }
+        },
       };
     });
     return res;
@@ -74,14 +74,14 @@ export default class DataHelper {
   }
 
   getInitData() {
-    const initSyncData = this.parser(this.ajaxList).filter(item => {
+    const initSyncData = this.parser(this.ajaxList).filter((item) => {
       if (item.isInit) {
         this.dataSourceMap[item.id].status = DS_STATUS.LOADING;
         return true;
       }
       return false;
     });
-    return this.asyncDataHandler(initSyncData).then(res => {
+    return this.asyncDataHandler(initSyncData).then((res) => {
       let dataHandler = this.config.dataHandler;
       if (isJSFunction(dataHandler)) {
         dataHandler = transformStringToFunction(dataHandler.value);
@@ -119,17 +119,17 @@ export default class DataHelper {
               ? params || options.params
               : {
                   ...options.params,
-                  ...params
+                  ...params,
                 },
           headers: {
             ...options.headers,
-            ...headers
+            ...headers,
           },
-          ...otherProps
-        }
-      }
+          ...otherProps,
+        },
+      },
     ])
-      .then(res => {
+      .then((res) => {
         try {
           callback && callback(res && res[id]);
         } catch (e) {
@@ -138,7 +138,7 @@ export default class DataHelper {
 
         return res && res[id];
       })
-      .catch(err => {
+      .catch((err) => {
         try {
           callback && callback(null, err);
         } catch (e) {
@@ -158,7 +158,7 @@ export default class DataHelper {
       const afterRequest = this.appHelper && this.appHelper.utils && this.appHelper.utils.afterRequest;
       const csrfInput = document.getElementById('_csrf_token');
       const _tb_token_ = csrfInput && csrfInput.value;
-      asyncDataList.map(req => {
+      asyncDataList.map((req) => {
         const { id, type, options } = req;
         if (!id || !type) return;
         if (type === 'doServer') {
@@ -180,20 +180,20 @@ export default class DataHelper {
             method: 'POST',
             params: {
               data: JSON.stringify(doserReq),
-              _tb_token_
-            }
-          }
+              _tb_token_,
+            },
+          },
         });
       }
       if (allReq.length === 0) resolve({});
       const res = {};
       Promise.all(
-        allReq.map(item => {
-          return new Promise(resolve => {
+        allReq.map((item) => {
+          return new Promise((resolve) => {
             const { type, id, dataHandler, options } = item;
             const doFetch = (type, options) => {
               this.fetchOne(type, options)
-                .then(data => {
+                .then((data) => {
                   if (afterRequest) {
                     this.appHelper.utils.afterRequest(item, data, undefined, (data, error) => {
                       fetchHandler(data, error);
@@ -202,7 +202,7 @@ export default class DataHelper {
                     fetchHandler(data, undefined);
                   }
                 })
-                .catch(err => {
+                .catch((err) => {
                   if (afterRequest) {
                     // 必须要这么调用，否则beforeRequest中的this会丢失
                     this.appHelper.utils.afterRequest(item, undefined, err, (data, error) => {
@@ -233,7 +233,7 @@ export default class DataHelper {
             };
 
             if (type === 'doServer') {
-              doserList.forEach(item => {
+              doserList.forEach((item) => {
                 this.dataSourceMap[item].status = DS_STATUS.LOADING;
               });
             } else {
@@ -242,17 +242,17 @@ export default class DataHelper {
             // 请求切片
             if (beforeRequest) {
               // 必须要这么调用，否则beforeRequest中的this会丢失
-              this.appHelper.utils.beforeRequest(item, clone(options), options => doFetch(type, options));
+              this.appHelper.utils.beforeRequest(item, clone(options), (options) => doFetch(type, options));
             } else {
               doFetch(type, options);
             }
           });
-        })
+        }),
       )
         .then(() => {
           resolve(res);
         })
-        .catch(e => {
+        .catch((e) => {
           reject(e);
         });
     });
@@ -284,7 +284,7 @@ export default class DataHelper {
         return bzb(uri, params, {
           method,
           headers,
-          ...otherProps
+          ...otherProps,
         });
       default:
         method = method.toUpperCase();

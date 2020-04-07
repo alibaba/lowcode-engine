@@ -12,13 +12,13 @@ import HOCTextProps from '../utils/HOCTextProps';
 import HOCLayoutProps from '../utils/HOCLayoutProps';
 import HOCBackgroundProps from '../utils/HOCBackgroundProps';
 
-var AIMakeText =
-/*#__PURE__*/
+const AIMakeText =
+/* #__PURE__ */
 function (_Component) {
   _inherits(AIMakeText, _Component);
 
   function AIMakeText() {
-    var _this;
+    let _this;
 
     _classCallCheck(this, AIMakeText);
 
@@ -29,14 +29,14 @@ function (_Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(AIMakeText).call(this, ...args));
 
     _defineProperty(_assertThisInitialized(_this), "generateComponentType", function (componentType) {
-      var componentNameMap = {
+      const componentNameMap = {
         h1: 'h1',
         h2: 'h2',
         h3: 'h3',
         h4: 'h4',
         h5: 'h5',
         paragraph: 'p',
-        label: 'label'
+        label: 'label',
       };
       return componentNameMap[componentType] || 'div';
     });
@@ -47,29 +47,29 @@ function (_Component) {
   _createClass(AIMakeText, [{
     key: "render",
     value: function render() {
-      var _this$props = this.props,
-          children = _this$props.children,
-          type = _this$props.type,
-          styleBoxModel = _this$props.styleBoxModel,
-          styleText = _this$props.styleText,
-          styleLayout = _this$props.styleLayout,
-          styleBackground = _this$props.styleBackground,
-          style = _this$props.style;
-      var styles = { ...styleBoxModel,
+      const _this$props = this.props;
+          const children = _this$props.children;
+          const type = _this$props.type;
+          const styleBoxModel = _this$props.styleBoxModel;
+          const styleText = _this$props.styleText;
+          const styleLayout = _this$props.styleLayout;
+          const styleBackground = _this$props.styleBackground;
+          const style = _this$props.style;
+      const styles = { ...styleBoxModel,
         ...styleText,
         ...styleLayout,
         ...styleBackground,
-        ...style
+        ...style,
       };
-      var Comp = this.generateComponentType(type);
-      var labelStyle = Comp === 'label' ? {
-        display: 'inline-block'
+      const Comp = this.generateComponentType(type);
+      const labelStyle = Comp === 'label' ? {
+        display: 'inline-block',
       } : {};
       return React.createElement(Comp, {
         className: "AIMakeText",
-        style: Object.assign(labelStyle, styles)
+        style: Object.assign(labelStyle, styles),
       }, [children]);
-    }
+    },
   }]);
 
   return AIMakeText;
@@ -82,14 +82,14 @@ _defineProperty(AIMakeText, "propTypes", {
   styleText: PropTypes.object.isRequired,
   styleLayout: PropTypes.object.isRequired,
   styleBackground: PropTypes.object.isRequired,
-  style: PropTypes.object
+  style: PropTypes.object,
 });
 
 _defineProperty(AIMakeText, "defaultProps", {
   children: '',
   type: '',
   // paragraph || label
-  style: {}
+  style: {},
 });
 
 export default HOCBoxModelProps(HOCTextProps(HOCLayoutProps(HOCBackgroundProps(AIMakeText))));

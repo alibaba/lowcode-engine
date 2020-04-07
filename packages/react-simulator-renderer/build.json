@@ -1,0 +1,14 @@
+{
+  "plugins": [
+    [
+      "build-plugin-component",
+      {
+        "filename": "react-simulator-renderer",
+        "library": "SimulatorRenderer",
+        "libraryExport": "default",
+        "libraryTarget": "umd"
+      }
+    ],
+    "./build.plugin.js"
+  ]
+}

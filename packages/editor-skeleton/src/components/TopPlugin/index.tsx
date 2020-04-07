@@ -1,20 +1,43 @@
 import React, { PureComponent, Fragment } from 'react';
 
-import PropTypes from 'prop-types';
-import TopIcon from '../TopIcon';
 import { Balloon, Badge, Dialog } from '@alifd/next';
+import Editor from '@ali/lowcode-editor-core';
+import {
+  PluginConfig,
+  PluginClass,
+} from '@ali/lowcode-editor-core/lib/definitions';
+import TopIcon from '../TopIcon';
 
 import './index.scss';
-export default class TopPlugin extends PureComponent {
-  static displayName = 'lowcodeTopPlugin';
-  
+
+export interface TopPluginProps {
+  active?: boolean;
+  config: PluginConfig;
+  disabled?: boolean;
+  editor: Editor;
+  locked?: boolean;
+  marked?: boolean;
+  onClick?: () => void;
+  pluginClass: PluginClass | undefined;
+}
+
+export interface TopPluginState {
+  dialogVisible: boolean;
+}
+
+export default class TopPlugin extends PureComponent<
+  TopPluginProps,
+  TopPluginState
+> {
+  static displayName = 'LowcodeTopPlugin';
+
   static defaultProps = {
     active: false,
     config: {},
     disabled: false,
-    dotted: false,
+    marked: false,
     locked: false,
-    onClick: () => {},
+    onClick: (): void => {},
   };
 
   constructor(props, context) {
@@ -24,42 +47,42 @@ export default class TopPlugin extends PureComponent {
     };
   }
 
-  componentDidMount() {
-    const { config } = this.props;
+  componentDidMount(): void {
+    const { config, editor } = this.props;
     const pluginKey = config && config.pluginKey;
-    // const appHelper = this.appHelper;
-    // if (appHelper && addonKey) {
-    //   appHelper.on(`${addonKey}.dialog.show`, this.handleShow);
-    //   appHelper.on(`${addonKey}.dialog.close`, this.handleClose);
-    // }
+    if (editor && pluginKey) {
+      editor.on(`${pluginKey}.dialog.show`, this.handleShow);
+      editor.on(`${pluginKey}.dialog.close`, this.handleClose);
+    }
   }
 
-  componentWillUnmount() {
-    // const { config } = this.props;
-    // const addonKey = config && config.addonKey;
-    // const appHelper = this.appHelper;
-    // if (appHelper && addonKey) {
-    //   appHelper.off(`${addonKey}.dialog.show`, this.handleShow);
-    //   appHelper.off(`${addonKey}.dialog.close`, this.handleClose);
-    // }
+  componentWillUnmount(): void {
+    const { config, editor } = this.props;
+    const pluginKey = config && config.pluginKey;
+    if (editor && pluginKey) {
+      editor.off(`${pluginKey}.dialog.show`, this.handleShow);
+      editor.off(`${pluginKey}.dialog.close`, this.handleClose);
+    }
   }
 
-  handleShow = () => {
-    const { disabled, config, onClick } = this.props;
-    const addonKey = config && config.addonKey;
-    if (disabled || !addonKey) return;
-    //考虑到弹窗情况，延时发送消息
-    setTimeout(() => this.appHelper.emit(`${addonKey}.addon.activate`), 0);
+  handleShow = (): void => {
+    const { disabled, config, onClick, editor } = this.props;
+    const pluginKey = config && config.pluginKey;
+    if (disabled || !pluginKey) return;
     this.handleOpen();
+    // 考虑到弹窗情况，延时发送消息
+    setTimeout((): void => {
+      editor.emit(`${pluginKey}.plugin.activate`);
+    }, 0);
     onClick && onClick();
   };
 
-  handleClose = () => {
-    const addonKey = this.props.config && this.props.config.addonKey;
-    const currentAddon =
-      this.appHelper.addons && this.appHelper.addons[addonKey];
-    if (currentAddon) {
-      this.utils.transformToPromise(currentAddon.close()).then(() => {
+  handleClose = (): void => {
+    const { config, editor } = this.props;
+    const pluginKey = config && config.pluginKey;
+    const plugin = editor.plugins && editor.plugins[pluginKey];
+    if (plugin) {
+      plugin.close().then((): void => {
         this.setState({
           dialogVisible: false,
         });
@@ -67,85 +90,107 @@ export default class TopPlugin extends PureComponent {
     }
   };
 
-  handleOpen = () => {
+  handleOpen = (): void => {
     // todo dialog类型的插件初始时拿不动插件实例
     this.setState({
       dialogVisible: true,
     });
   };
 
-  renderIcon = clickCallback => {
-    const { active, disabled, dotted, locked, config, onClick } = this.props;
+  renderIcon = (clickCallback): React.ReactNode => {
+    const {
+      active,
+      disabled,
+      marked,
+      locked,
+      config,
+      onClick,
+      editor,
+    } = this.props;
     const { pluginKey, props } = config || {};
     const { icon, title } = props || {};
     const node = (
       <TopIcon
-        className={`lowcode-top-addon ${pluginKey}`}
+        className={`lowcode-top-plugin ${pluginKey}`}
         active={active}
         disabled={disabled}
         locked={locked}
         icon={icon}
         title={title}
-        onClick={() => {
+        onClick={(): void => {
           if (disabled) return;
-          //考虑到弹窗情况，延时发送消息
-          setTimeout(
-            () => this.appHelper.emit(`${pluginKey}.addon.activate`),
-            0,
-          );
+          // 考虑到弹窗情况，延时发送消息
+          setTimeout((): void => {
+            editor.emit(`${pluginKey}.plugin.activate`);
+          }, 0);
           clickCallback && clickCallback();
           onClick && onClick();
         }}
       />
     );
-    return dotted ? <Badge dot>{node}</Badge> : node;
+    return marked ? <Badge dot>{node}</Badge> : node;
   };
 
-  render() {
-    const { active, dotted, locked, disabled, config, editor, pluginClass: Comp } = this.props;
+  render(): React.ReactNode {
+    const {
+      active,
+      marked,
+      locked,
+      disabled,
+      config,
+      editor,
+      pluginClass: Comp,
+    } = this.props;
     const { pluginKey, pluginProps, props, type } = config || {};
     const { onClick, title } = props || {};
     const { dialogVisible } = this.state;
-    if (!pluginKey || !type || !Comp) return null;
-    const node = <Comp 
-      active={active}
-      locked={locked}
-      disabled={disabled}
-      config={config}
-      onClick={() => {
-        onClick && onClick.call(null, editor);
-      }}
-      {...pluginProps}
-    />;
+    if (!pluginKey || !type) return null;
+    const node = Comp ? (
+      <Comp
+        editor={editor}
+        active={active}
+        locked={locked}
+        disabled={disabled}
+        config={config}
+        onClick={(): void => {
+          onClick && onClick.call(null, editor);
+        }}
+        {...pluginProps}
+      />
+    ) : null;
 
     switch (type) {
       case 'LinkIcon':
         return (
           <a {...props.linkProps}>
-            {this.renderIcon(() => {
+            {this.renderIcon((): void => {
               onClick && onClick.call(null, editor);
             })}
           </a>
         );
       case 'Icon':
-        return this.renderIcon(() => {
+        return this.renderIcon((): void => {
           onClick && onClick.call(null, editor);
         });
       case 'DialogIcon':
         return (
           <Fragment>
-            {this.renderIcon(() => {
+            {this.renderIcon((): void => {
               onClick && onClick.call(null, editor);
               this.handleOpen();
             })}
             <Dialog
-              onOk={() => {
+              onOk={(): void => {
                 editor.emit(`${pluginKey}.dialog.onOk`);
                 this.handleClose();
               }}
               onCancel={this.handleClose}
               onClose={this.handleClose}
               title={title}
+              style={{
+                width: 500,
+                ...(props.dialogProps && props.dialogProps.style),
+              }}
               {...props.dialogProps}
               visible={dialogVisible}
             >
@@ -156,7 +201,7 @@ export default class TopPlugin extends PureComponent {
       case 'BalloonIcon':
         return (
           <Balloon
-            trigger={this.renderIcon(() => {
+            trigger={this.renderIcon((): void => {
               onClick && onClick.call(null, editor);
             })}
             triggerType={['click', 'hover']}
@@ -166,7 +211,7 @@ export default class TopPlugin extends PureComponent {
           </Balloon>
         );
       case 'Custom':
-        return dotted ? <Badge dot>{node}</Badge> : node;
+        return marked ? <Badge dot>{node}</Badge> : node;
       default:
         return null;
     }

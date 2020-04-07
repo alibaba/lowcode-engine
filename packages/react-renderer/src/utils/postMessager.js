@@ -15,9 +15,9 @@ export class InnerMessager extends EventEmitter {
       window.parent.postMessage(
         {
           type,
-          data
+          data,
         },
-        targetOrigin
+        targetOrigin,
       );
   }
 
@@ -43,9 +43,9 @@ export class OuterMessager extends EventEmitter {
       this.innerWindow.postMessage(
         {
           type,
-          data
+          data,
         },
-        targetOrigin
+        targetOrigin,
       );
   }
 

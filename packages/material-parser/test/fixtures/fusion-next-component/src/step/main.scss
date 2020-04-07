@@ -1,0 +1,12 @@
+@import "../core/index-noreset.scss";
+
+@import "scss/variable";
+@import "scss/normalize";
+@import "scss/mixin";
+
+@import "scss/basic";
+@import "scss/arrow";
+@import "scss/circle";
+@import "scss/dot";
+
+@import "./rtl.scss";

@@ -12,10 +12,10 @@ const debug = Debug('engine:block');
 export default class BlockEngine extends BaseEngine {
   static dislayName = 'block-engine';
   static propTypes = {
-    __schema: PropTypes.object
+    __schema: PropTypes.object,
   };
   static defaultProps = {
-    __schema: {}
+    __schema: {},
   };
 
   static getDerivedStateFromProps(props, state) {
@@ -74,7 +74,7 @@ export default class BlockEngine extends BaseEngine {
       <AppContext.Provider
         value={{
           ...this.context,
-          blockContext: this
+          blockContext: this,
         }}
       >
         {this.__createDom()}
@@ -89,7 +89,7 @@ export default class BlockEngine extends BaseEngine {
           style={{
             height: this.__showPlaceholder ? defaultHeight : 'auto',
             display: 'block',
-            ...style
+            ...style,
           }}
           className={classnames('luna-block', getFileCssName(__schema.fileName), className, this.props.className)}
           id={id}

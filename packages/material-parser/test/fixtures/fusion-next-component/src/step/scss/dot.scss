@@ -1,0 +1,164 @@
+// 点型
+// ----------------------------------------
+
+#{$step-prefix}-dot {
+    // padding: 4px 0 0 0;
+    #{$step-prefix}-item-container {
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+        padding: 0 $step-dot-item-dot-padding;
+        font-size: 0;
+
+        #{$step-prefix}-item-node-placeholder {
+            display: inline-block;
+        }
+        #{$step-prefix}-item-node {
+            position: relative;
+            display: inline-block;
+            text-align: center;
+            cursor: pointer;
+
+            #{$step-icon-prefix} {
+                @include icon-size($step-dot-item-dot-icon-size);
+            }
+        }
+    }
+
+    & > #{$step-prefix}-item-wait {
+        @include step-item-state(
+            'dot',
+            $step-dot-item-node-wait-background,
+            $step-dot-item-title-wait-color,
+            $step-dot-item-node-wait-color,
+            $step-dot-item-tail-wait-color,
+            $step-dot-item-tail-bg-color,
+            $step-dot-item-node-wait-border-color,
+            $step-dot-item-title-wait-color,
+            $s-3
+        );
+    }
+
+    & > #{$step-prefix}-item-process {
+        @include step-item-state(
+            'dot',
+            $step-dot-item-node-process-background,
+            $step-dot-item-title-process-color,
+            $step-dot-item-node-process-color,
+            $step-dot-item-tail-process-color,
+            $step-dot-item-tail-bg-color,
+            $step-dot-item-node-process-border-color,
+            $step-dot-item-title-process-color,
+            $step-dot-item-dot-process-size
+        );
+    }
+
+    & > #{$step-prefix}-item-finish {
+        @include step-item-state(
+            'dot',
+            $step-dot-item-node-finish-background,
+            $step-dot-item-title-finish-color,
+            $step-dot-item-node-finish-color,
+            $step-dot-item-tail-finish-color,
+            $step-dot-item-tail-bg-color,
+            $step-dot-item-node-finish-border-color,
+            $step-dot-item-title-finish-color,
+            $s-3
+        );
+    }
+
+    #{$step-prefix}-item-disabled {
+        @include step-item-state(
+            'dot',
+            $step-dot-item-node-disabled-background,
+            $step-dot-item-title-disabled-color,
+            $step-dot-item-node-disabled-color,
+            $step-dot-item-tail-disabled-color,
+            $step-dot-item-tail-bg-color,
+            $step-dot-item-node-disabled-border-color,
+            $step-dot-item-title-disabled-color,
+            $s-3
+        );
+
+        #{$step-prefix}-item-node-placeholder,
+        #{$step-prefix}-item-node {
+            cursor: not-allowed;
+        }
+    }
+
+    #{$step-prefix}-item-read-only {
+        #{$step-prefix}-item-node-placeholder,
+        #{$step-prefix}-item-node {
+            cursor: default;
+        }
+    }
+
+    #{$step-prefix}-item-last {
+        #{$step-prefix}-item-tail {
+            display: none;
+        }
+    }
+
+    // 点型 水平
+    // ----------------------------------------
+    &#{$step-prefix}-horizontal {
+        text-align: center;
+        white-space: nowrap;
+        & > #{$step-prefix}-item {
+            #{$step-prefix}-item-title {
+                white-space: normal;
+            }
+            #{$step-prefix}-item-content {
+                white-space: normal;
+            }
+        }
+        #{$step-prefix}-item-node {
+            #{$step-icon-prefix} {
+                vertical-align: middle;
+            }
+        }
+        & > #{$step-prefix}-item-wait {
+            @include state-node-size('hor', 'dot', $s-3);
+        }
+        & > #{$step-prefix}-item-process {
+            @include state-node-size('hor', 'dot', $step-dot-item-dot-process-size);
+        }
+        & > #{$step-prefix}-item-finish {
+            @include state-node-size('hor', 'dot', $s-3);
+        }
+        & > #{$step-prefix}-item-disabled {
+            @include state-node-size('hor', 'dot', $s-3);
+        }
+    }
+
+    // 点型 垂直
+    // ----------------------------------------
+    &#{$step-prefix}-vertical {
+        padding: 0 0 0 4px;
+        font-size: 0;
+        display: table-cell;
+        // vertical-align: middle;
+        #{$step-prefix}-item-container {
+            padding: 0;
+        }
+        & > #{$step-prefix}-item:last-child {
+            #{$step-prefix}-item-tail {
+                display: block;
+                visibility: hidden;
+            }
+        }
+        position: relative;
+        & > #{$step-prefix}-item-wait {
+            @include state-node-size('ver', 'dot', $s-3);
+        }
+        & > #{$step-prefix}-item-process {
+            @include state-node-size('ver', 'dot', $step-dot-item-dot-process-size);
+        }
+        & > #{$step-prefix}-item-finish {
+            @include state-node-size('ver', 'dot', $s-3);
+        }
+        & > #{$step-prefix}-item-disabled {
+            @include state-node-size('ver', 'dot', $s-3);
+        }
+    }
+}

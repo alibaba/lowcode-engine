@@ -9,10 +9,10 @@ export default class Addon extends PureComponent {
   static propTypes = {
     config: PropTypes.object,
     locale: PropTypes.string,
-    messages: PropTypes.object
+    messages: PropTypes.object,
   };
   static defaultProps = {
-    config: {}
+    config: {},
   };
   static contextType = AppContext;
   constructor(props, context) {
@@ -59,9 +59,9 @@ export default class Addon extends PureComponent {
         package: addonConfig.package,
         version: addonConfig.version,
         ...this.appHelper.logParams,
-        ...params
+        ...params,
       },
-      'addon'
+      'addon',
     );
   };
 

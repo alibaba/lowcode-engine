@@ -1,20 +1,25 @@
-import { ComponentType as ReactComponentType } from 'react';
-import { obx, computed, autorun } from '@recore/obx';
-import BuiltinSimulatorView from '../builtins/simulator';
-import Project from './project';
-import { ProjectSchema, NpmInfo } from './schema';
-import Dragon, { isDragNodeObject, isDragNodeDataObject, LocateEvent, DragObject } from './helper/dragon';
-import ActiveTracker from './helper/active-tracker';
-import Hovering from './helper/hovering';
-import Location, { LocationData, isLocationChildrenDetail } from './helper/location';
-import DocumentModel from './document/document-model';
-import Node, { insertChildren } from './document/node/node';
-import { isRootNode } from './document/node/root-node';
-import { ComponentMetadata, ComponentMeta } from './component-meta';
-import Scroller, { IScrollable } from './helper/scroller';
-import { INodeSelector } from './simulator';
-import OffsetObserver, { createOffsetObserver } from './helper/offset-observer';
+import { ComponentType } from 'react';
 import { EventEmitter } from 'events';
+import {
+  ProjectSchema,
+  ComponentMetadata,
+  ComponentAction,
+  NpmInfo,
+  obx,
+  computed,
+  autorun,
+} from '@ali/lowcode-globals';
+import { Project } from '../project';
+import { Node, DocumentModel, insertChildren, isRootNode, NodeParent } from '../document';
+import { ComponentMeta } from '../component-meta';
+import { INodeSelector } from '../simulator';
+import { Scroller, IScrollable } from './scroller';
+import { Dragon, isDragNodeObject, isDragNodeDataObject, LocateEvent, DragObject } from './dragon';
+import { ActiveTracker } from './active-tracker';
+import { Hovering } from './hovering';
+import { DropLocation, LocationData, isLocationChildrenDetail } from './location';
+import { OffsetObserver, createOffsetObserver } from './offset-observer';
+import { focusing } from './focusing';
 
 export interface DesignerProps {
   className?: string;
@@ -22,20 +27,20 @@ export interface DesignerProps {
   defaultSchema?: ProjectSchema;
   hotkeys?: object;
   simulatorProps?: object | ((document: DocumentModel) => object);
-  simulatorComponent?: ReactComponentType<any>;
-  dragGhostComponent?: ReactComponentType<any>;
+  simulatorComponent?: ComponentType<any>;
+  dragGhostComponent?: ComponentType<any>;
   suspensed?: boolean;
-  componentsDescription?: ComponentMetadata[];
+  componentMetadatas?: ComponentMetadata[];
   eventPipe?: EventEmitter;
+  globalComponentActions?: ComponentAction[];
   onMount?: (designer: Designer) => void;
   onDragstart?: (e: LocateEvent) => void;
   onDrag?: (e: LocateEvent) => void;
-  onDragend?: (e: { dragObject: DragObject; copy: boolean }, loc?: Location) => void;
+  onDragend?: (e: { dragObject: DragObject; copy: boolean }, loc?: DropLocation) => void;
   [key: string]: any;
 }
 
-export default class Designer {
-  // readonly hotkey: Hotkey;
+export class Designer {
   readonly dragon = new Dragon(this);
   readonly activeTracker = new ActiveTracker();
   readonly hovering = new Hovering();
@@ -58,7 +63,7 @@ export default class Designer {
 
     this.project = new Project(this, props.defaultSchema);
 
-    this.dragon.onDragstart(e => {
+    this.dragon.onDragstart((e) => {
       this.hovering.enable = false;
       const { dragObject } = e;
       if (isDragNodeObject(dragObject)) {
@@ -75,14 +80,14 @@ export default class Designer {
       this.postEvent('dragstart', e);
     });
 
-    this.dragon.onDrag(e => {
+    this.dragon.onDrag((e) => {
       if (this.props?.onDrag) {
         this.props.onDrag(e);
       }
       this.postEvent('drag', e);
     });
 
-    this.dragon.onDragend(e => {
+    this.dragon.onDragend((e) => {
       const { dragObject, copy } = e;
       const loc = this._dropLocation;
       if (loc) {
@@ -96,7 +101,7 @@ export default class Designer {
             nodes = insertChildren(loc.target, nodeData, loc.detail.index);
           }
           if (nodes) {
-            loc.document.selection.selectAll(nodes.map(o => o.id));
+            loc.document.selection.selectAll(nodes.map((o) => o.id));
             setTimeout(() => this.activeTracker.track(nodes![0]), 10);
           }
         }
@@ -148,22 +153,27 @@ export default class Designer {
       setupSelection();
       setupHistory();
     });
+    this.postEvent('designer.init', this);
     setupSelection();
     setupHistory();
 
-    this.postEvent('designer.ready', this);
+    // TODO: 先简单实现，后期通过焦点赋值
+    focusing.focusDesigner = this;
   }
 
   postEvent(event: string, ...args: any[]) {
     this.props?.eventPipe?.emit(`designer.${event}`, ...args);
   }
 
-  private _dropLocation?: Location;
+  private _dropLocation?: DropLocation;
   /**
    * 创建插入位置，考虑放到 dragon 中
    */
-  createLocation(locationData: LocationData): Location {
-    const loc = new Location(locationData);
+  createLocation(locationData: LocationData): DropLocation {
+    const loc = new DropLocation(locationData);
+    if (this._dropLocation && this._dropLocation.document !== loc.document) {
+      this._dropLocation.document.internalSetDropLocation(null);
+    }
     this._dropLocation = loc;
     loc.document.internalSetDropLocation(loc);
     this.activeTracker.track({ node: loc.target, detail: loc.detail });
@@ -191,7 +201,7 @@ export default class Designer {
   /**
    * 获得合适的插入位置
    */
-  getSuitableInsertion() {
+  getSuitableInsertion(): { target: NodeParent; index?: number } | null {
     const activedDoc = this.project.currentDocument;
     if (!activedDoc) {
       return null;
@@ -215,7 +225,8 @@ export default class Designer {
   }
 
   private props?: DesignerProps;
-  setProps(props: DesignerProps) {
+  setProps(nextProps: DesignerProps) {
+    const props = this.props ? { ...this.props, ...nextProps } : nextProps;
     if (this.props) {
       // check hotkeys
       // TODO:
@@ -229,8 +240,8 @@ export default class Designer {
       if (props.suspensed !== this.props.suspensed && props.suspensed != null) {
         this.suspensed = props.suspensed;
       }
-      if (props.componentsDescription !== this.props.componentsDescription && props.componentsDescription != null) {
-        this.buildComponentMetasMap(props.componentsDescription);
+      if (props.componentMetadatas !== this.props.componentMetadatas && props.componentMetadatas != null) {
+        this.buildComponentMetasMap(props.componentMetadatas);
       }
     } else {
       // init hotkeys
@@ -246,8 +257,8 @@ export default class Designer {
       if (props.suspensed != null) {
         this.suspensed = props.suspensed;
       }
-      if (props.componentsDescription != null) {
-        this.buildComponentMetasMap(props.componentsDescription);
+      if (props.componentMetadatas != null) {
+        this.buildComponentMetasMap(props.componentMetadatas);
       }
     }
     this.props = props;
@@ -257,10 +268,10 @@ export default class Designer {
     return this.props ? this.props[key] : null;
   }
 
-  @obx.ref private _simulatorComponent?: ReactComponentType<any>;
+  @obx.ref private _simulatorComponent?: ComponentType<any>;
 
-  @computed get simulatorComponent(): ReactComponentType<any> {
-    return this._simulatorComponent || BuiltinSimulatorView;
+  @computed get simulatorComponent(): ComponentType<any> | undefined {
+    return this._simulatorComponent;
   }
 
   @obx.ref private _simulatorProps?: object | ((document: DocumentModel) => object);
@@ -284,35 +295,39 @@ export default class Designer {
   }
 
   get schema(): ProjectSchema {
-    return this.project.schema;
+    return this.project.getSchema();
   }
 
-  set schema(schema: ProjectSchema) {
-    // todo:
+  setSchema(schema?: ProjectSchema) {
+    this.project.load(schema);
   }
 
   @obx.val private _componentMetasMap = new Map<string, ComponentMeta>();
   private _lostComponentMetasMap = new Map<string, ComponentMeta>();
 
   private buildComponentMetasMap(metas: ComponentMetadata[]) {
-    metas.forEach(data => {
+    metas.forEach((data) => {
       const key = data.componentName;
       let meta = this._componentMetasMap.get(key);
       if (meta) {
-        meta.metadata = data;
+        meta.setMetadata(data);
       } else {
         meta = this._lostComponentMetasMap.get(key);
 
         if (meta) {
-          meta.metadata = data;
+          meta.setMetadata(data);
           this._lostComponentMetasMap.delete(key);
         } else {
-          meta = new ComponentMeta(data);
+          meta = new ComponentMeta(this, data);
         }
 
         this._componentMetasMap.set(key, meta);
       }
     });
+  }
+
+  getGlobalComponentActions(): ComponentAction[] | null {
+    return this.props?.globalComponentActions || null;
   }
 
   getComponentMeta(componentName: string, generateMetadata?: () => ComponentMetadata | null): ComponentMeta {
@@ -324,7 +339,7 @@ export default class Designer {
       return this._lostComponentMetasMap.get(componentName)!;
     }
 
-    const meta = new ComponentMeta({
+    const meta = new ComponentMeta(this, {
       componentName,
       ...(generateMetadata ? generateMetadata() : null),
     });
@@ -337,7 +352,9 @@ export default class Designer {
   @computed get componentsMap(): { [key: string]: NpmInfo } {
     const maps: any = {};
     this._componentMetasMap.forEach((config, key) => {
-      maps[key] = config.metadata.npm;
+      if (config.npm) {
+        maps[key] = config.npm;
+      }
     });
     return maps;
   }

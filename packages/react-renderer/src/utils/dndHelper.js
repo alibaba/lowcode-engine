@@ -6,7 +6,7 @@ const DICT = {
   right: '右',
   top: '上',
   bottom: '下',
-  in: '里'
+  in: '里',
 };
 const TOP_COMPONENT = ['Page', 'Component', 'Temp']; // 顶端模块，不支持放置兄弟节点
 const debug = Debug('utils:dndHelper');
@@ -43,7 +43,7 @@ export default class DndHelper {
       ? this.getTreeEntity(schemaOrNode, ev)
       : {
           target: ev.currentTarget,
-          schema: schemaOrNode
+          schema: schemaOrNode,
         };
     if (this.sourceEntity.schema.__ctx && this.sourceEntity.schema.__ctx.lunaKey === entity.schema.__ctx.lunaKey)
       return;
@@ -68,13 +68,13 @@ export default class DndHelper {
       this.emit('material.add', {
         schema: this.sourceEntity.schema,
         targetKey: this.tempEntity.schema.__ctx.lunaKey,
-        direction: this.dragInfo.position
+        direction: this.dragInfo.position,
       });
     } else {
       this.emit('material.move', {
         lunaKey: this.sourceEntity.schema.__ctx.lunaKey,
         targetKey: this.tempEntity.schema.__ctx.lunaKey,
-        direction: this.dragInfo.position
+        direction: this.dragInfo.position,
       });
     }
   }
@@ -90,7 +90,7 @@ export default class DndHelper {
     return {
       schema,
       target: ref && ReactDOM.findDOMNode(ref),
-      treeNodeTarget: currentTarget
+      treeNodeTarget: currentTarget,
     };
   }
 
@@ -167,7 +167,7 @@ export default class DndHelper {
     if (!container) return;
 
     let treeItems = container.querySelectorAll('.tree-item');
-    (treeItems || []).forEach(item => {
+    (treeItems || []).forEach((item) => {
       const classList = item.classList;
       if (classList) {
         classList.remove('top');
@@ -248,9 +248,9 @@ export default class DndHelper {
 
     //如果是容器组件，且包含有子组件，且是in状态，进行智能识别处理；
     let subChildren = [];
-    const getChildren = node => {
+    const getChildren = (node) => {
       if (!node || !node.childNodes || node.childNodes.length === 0) return;
-      node.childNodes.forEach(child => {
+      node.childNodes.forEach((child) => {
         if (child === sourceTarget) return;
         if (child && child.getAttribute && child.getAttribute('draggable')) {
           const isInline = ['inline', 'inline-block'].includes(getComputedStyle(child).display) && sourceIsInline;
@@ -265,7 +265,7 @@ export default class DndHelper {
             lunaKey: child.dataset.lunaKey,
             node: child,
             minDistance: isInline ? [minXDistance, minYDistance] : [minYDistance, minXDistance],
-            position: isInline ? (l > r ? 'right' : 'left') : b > t ? 'top' : 'bottom'
+            position: isInline ? (l > r ? 'right' : 'left') : b > t ? 'top' : 'bottom',
           });
         } else {
           getChildren(child);
@@ -289,7 +289,7 @@ export default class DndHelper {
         position = tempChild.position;
         entity = {
           target: tempChild.node,
-          schema: this.appHelper.schemaHelper.schemaMap[tempChild.lunaKey]
+          schema: this.appHelper.schemaHelper.schemaMap[tempChild.lunaKey],
         };
       }
     }
@@ -309,7 +309,7 @@ export default class DndHelper {
       position,
       isSupportIn,
       isContainer,
-      entity
+      entity,
     };
   }
 
@@ -344,7 +344,7 @@ export default class DndHelper {
       position,
       isSupportIn,
       isContainer,
-      entity
+      entity,
     };
   }
 
@@ -448,7 +448,7 @@ export default class DndHelper {
     ev.dataTransfer.setDragImage(this.getDragTagDom(schema.componentName), 0, 0);
     this.sourceEntity = {
       target,
-      schema
+      schema,
     };
     this.isDragging = true;
   }
@@ -473,9 +473,9 @@ export default class DndHelper {
       {
         clientX: ev.clientX,
         clientY: ev.clientY,
-        currentTarget: ev.currentTarget
+        currentTarget: ev.currentTarget,
       },
-      schema
+      schema,
     );
   }
 
@@ -536,10 +536,10 @@ export default class DndHelper {
       {
         clientX: event.clientX,
         clientY: event.clientY,
-        currentTarget: event.currentTarget.children[0]
+        currentTarget: event.currentTarget.children[0],
       },
       node,
-      true
+      true,
     );
   }
 
@@ -567,7 +567,7 @@ export default class DndHelper {
     ev.dataTransfer.setDragImage(this.getDragTagDom(title), -2, -2);
     this.sourceEntity = {
       isAdd: true,
-      schema
+      schema,
     };
     this.isDragging = true;
   }

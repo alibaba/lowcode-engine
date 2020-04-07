@@ -1,0 +1,295 @@
+@charset "UTF-8";
+
+////
+/// @module upload: 上传
+/// @tag upload
+/// @category component
+/// @family data-entry
+/// @varPrefix $upload-
+/// @classPrefix {prefix}-upload
+/// @order {"statement/disabled":10,"statement/normal":11,"statement/normal/bounding":110,"statement/normal/close":111,"statement/normal/name":112,"statement/normal/extra":113,"statement/normal/thumbnail":114,"statement/normal/picture":115,"statement/normal/add":116,"statement/hover":12,"statement/hover/bounding":120,"statement/hover/close":121,"statement/hover/title":122,"statement/hover/extra":123,"statement/hover/add":124,"statement/error":13,"statement/error/bounding":130,"statement/error/add":131,"statement/uploading":14,"statement/uploading/add":140,"size/bounding":10,"size/close icon":11,"size/picture":12,"size/border":13,"size/add":14,"size/normal":15,"size/normal/thumbnail":150,"size/name":16}
+////
+
+$upload-prefix: '.#{$css-prefix}upload';
+
+// upload variables
+// --------------------------------------------------
+
+/// text
+/// @namespace statement/disabled
+$upload-disable-text-color: $color-text1-1;
+/// border
+/// @namespace statement/disabled
+$upload-disable-border-color: $color-line1-1;
+
+// Text
+// -----------------------------------------------------
+/// heigth
+/// @namespace size/bounding
+$upload-text-list-height: $s-10 !default;
+/// padding (l, r)
+/// @namespace size/bounding
+$upload-text-list-padding-left-right: $s-2 !default;
+/// text
+/// @namespace size/bounding
+$upload-text-list-font-size: $font-size-body-1 !default;
+/// size
+/// @namespace size/close icon
+$upload-text-list-close-icon-size: $icon-xs !default;
+/// margin (r)
+/// @namespace size/close icon
+$upload-text-list-close-icon-right: $s-3 !default;
+/// corner
+/// @namespace size/normal
+$upload-text-list-corner: $corner-zero !default;
+/// background
+/// @namespace statement/normal/bounding
+$upload-text-list-bg-color: $color-fill1-2 !default;
+/// background
+/// @namespace statement/hover/bounding
+$upload-text-list-bg-color-hover: $color-fill1-2 !default;
+/// background
+/// @namespace statement/error/bounding
+$upload-text-list-bg-color-error: $color-error-1 !default;
+/// text
+/// @namespace statement/error/bounding
+$upload-text-list-error-text-color: $color-error-3 !default;
+
+/// icon
+/// @namespace statement/normal/close
+$upload-text-list-close-icon-color: $color-text1-2 !default;
+/// icon
+/// @namespace statement/hover/close
+$upload-text-list-close-icon-color-hover: $color-text1-3 !default;
+
+/// text
+/// @namespace statement/normal/name
+$upload-text-list-name-font-color: $color-text1-4 !default;
+/// text
+/// @namespace statement/hover/title
+$upload-text-list-name-font-color-hover: $color-brand1-6 !default;
+/// text
+/// @namespace statement/normal/extra
+$upload-text-list-size-font-color: $color-text1-2 !default;
+/// text
+/// @namespace statement/hover/extra
+$upload-text-list-size-font-color-hover: $color-brand1-6 !default;
+/// height
+/// @namespace size/progressbar
+$upload-text-list-progressbar-height: $s-2 !default;
+
+// ============================================================
+
+// Simple with Image
+// -----------------------------------
+/// padding
+/// @namespace size/bounding
+$upload-image-list-item-padding: $s-2 !default;
+
+/// size
+/// @namespace size/picture
+/// @type length
+$upload-image-list-item-picture-size: $s-12 !default;
+/// icon
+/// @namespace size/picture
+$upload-image-list-item-picture-icon-size: $icon-l !default;
+/// border
+/// @namespace size/picture
+$upload-image-list-item-picture-border-width: $line-1 !default;
+/// corner
+/// @namespace size/picture
+$upload-image-list-item-picture-corner: $corner-zero !default;
+
+/// font
+/// @namespace statement/normal/thumbnail
+$upload-image-list-item-thumbnail-font-color: $color-text1-1 !default;
+
+/// text
+/// @namespace size/bounding
+$upload-image-list-item-font-size: $font-size-body-1 !default;
+/// size
+/// @namespace size/close icon
+$upload-image-list-close-icon-size: $icon-xs !default;
+/// margin
+/// @namespace size/close icon
+$upload-image-list-close-icon-right: $s-1 !default;
+/// width
+/// @namespace size/border
+$upload-image-list-item-border-width: $line-1 !default;
+/// background
+/// @namespace statement/normal
+$upload-image-list-item-bg-color: $color-white !default;
+/// background
+/// @namespace statement/uploading
+$upload-image-list-item-uploading-bg-color: $color-white !default;
+/// background
+/// @namespace statement/error
+$upload-image-list-item-error-bg-color: $color-white !default;
+/// icon
+/// @namespace statement/normal/close
+$upload-image-list-close-icon-color: $color-text1-2 !default;
+/// icon
+/// @namespace statement/hover/close
+$upload-image-list-close-icon-color-hover: $color-text1-3 !default;
+/// border
+/// @namespace statement/normal/bounding
+$upload-image-list-item-border-color: $color-line1-2 !default;
+/// border
+/// @namespace statement/error/bounding
+$upload-image-list-item-border-color-error: $color-error-3 !default;
+/// border
+/// @namespace statement/hover/bounding
+$upload-image-list-item-border-color-hover: $color-brand1-6 !default;
+/// border
+/// @namespace statement/normal/picture
+$upload-image-list-item-picture-border-color: $color-line1-2 !default;
+/// background
+/// @namespace statement/normal/picture
+$upload-image-list-item-picture-background-color: $color-fill1-2 !default;
+/// height
+/// @namespace size/progressbar
+$upload-image-list-progressbar-height: $s-2 !default;
+
+
+// ============================================================
+
+// Card
+// -----------------------------------------------------
+/// size
+/// @namespace size/bounding
+/// @type length
+$upload-card-size: $s-25 !default;
+/// margin (b)
+/// @namespace size/bounding
+$upload-card-margin-bottom: $s-4 !default;
+/// icon
+/// @namespace size/add
+$upload-card-add-icon-size: $icon-l !default;
+/// text
+/// @namespace size/add
+$upload-card-add-text-size: $font-size-body-1 !default;
+/// text margin (t)
+/// @namespace size/add
+$upload-card-add-text-margin-top: $s-3 !default;
+/// background
+/// @namespace statement/normal
+$upload-card-bg-color: $color-white !default;
+/// border style
+/// @namespace statement/normal
+$upload-card-border-style: $line-dashed !default;
+/// border
+/// @namespace statement/normal
+$upload-card-border-color: $color-line1-3 !default;
+/// border
+/// @namespace statement/hover/bounding
+$upload-card-hover-border-color: $color-brand1-6 !default;
+/// text
+/// @namespace statement/normal/add
+$upload-card-font-color: $color-text1-3 !default;
+/// color
+/// @namespace statement/normal/add
+$upload-card-icon-color: $color-line1-3 !default;
+/// text
+/// @namespace statement/hover/add
+$upload-card-hover-font-color: $color-brand1-6 !default;
+
+// Card Item
+/// background
+/// @namespace statement/normal
+$upload-card-list-bg-color: $color-transparent !default;
+/// background
+/// @namespace statement/uploading/add
+$upload-card-list-uploading-bg-color: $color-fill1-1 !default;
+/// background
+/// @namespace statement/error/add
+$upload-card-list-bg-color-error: $color-fill1-1 !default;
+/// margin (r)
+/// @namespace size/bounding
+$upload-card-list-margin-right: $s-3 !default;
+/// padding
+/// @namespace size/bounding
+$upload-card-list-padding: $s-zero !default;
+/// corner
+/// @namespace size/normal
+$upload-card-list-corner: $corner-zero !default;
+/// border
+/// @namespace statement/normal/bounding
+$upload-card-list-border-color: $color-line1-3 !default;
+/// border
+/// @namespace statement/error/bounding
+$upload-card-list-border-color-error: $color-error-3 !default;
+/// font
+/// @namespace statement/normal/thumbnail
+$upload-card-list-thumbnail-font-color: $color-text1-1 !default;
+/// text
+/// @namespace statement/normal/thumbnail
+$upload-card-list-thumbnail-font-size: $font-size-caption !default;
+/// icon
+/// @namespace statement/normal/thumbnail
+$upload-card-list-thumbnail-icon-size: $icon-xxl !default;
+
+/// margin (t)
+/// @namespace size/name
+$upload-card-list-name-margin-top: $s-1 !default;
+/// text
+/// @namespace statement/normal/name
+$upload-card-list-name-font-size: $font-size-caption !default;
+/// text
+/// @namespace statement/normal/name
+$upload-card-list-name-font-color: $color-text1-3 !default;
+/// height
+/// @namespace size/progressbar
+$upload-card-list-progressbar-height: $s-2 !default;
+
+
+// 上传后的 item 文件下载、删除操作区域的样式
+// @ignore
+$upload-select-card-tool-height: $s-7 !default;
+// @ignore
+$upload-select-card-tool-icon-size: $icon-s !default;
+/// color
+/// @namespace statement/hover/action
+$upload-select-card-tool-bg-color: $color-black !default;
+/// opacity
+/// @type alpha
+/// @namespace statement/hover/action
+$upload-select-card-tool-bg-opacity: .7 !default;
+
+// ============================================================
+
+// Drag
+// -----------------------------------------------------
+/// border
+/// @namespace statement/normal
+$upload-drag-zone-border-color: $color-line1-3 !default;
+/// border
+/// @namespace statement/normal
+$upload-drag-zone-over-border-color: $color-brand1-6 !default;
+/// corner
+/// @namespace statement/normal
+$upload-drag-zone-corner: $corner-1 !default;
+/// font
+/// @namespace size/bounding
+$upload-drag-zone-font-size: $font-size-body-2 !default;
+/// icon
+/// @namespace size/bounding
+$upload-drag-zone-icon-size: $s-6 !default;
+/// hint-font
+/// @namespace size/bounding
+$upload-drag-zone-hint-font-size: $font-size-caption !default;
+/// background
+/// @namespace statement/normal
+$upload-drag-zone-bg-color: $color-transparent !default;
+/// icon
+/// @type icon
+/// @namespace statement/normal
+$upload-drag-zone-upload-icon: $icon-content-upload !default;
+/// icon-color
+/// @namespace statement/normal
+$upload-drag-zone-upload-icon-color: $color-text1-3 !default;
+/// title
+/// @namespace statement/normal
+$upload-drag-zone-upload-normal-title-color: $color-text1-3 !default;
+/// hint
+/// @namespace statement/normal
+$upload-drag-zone-upload-normal-hint-color: $color-text1-2 !default;

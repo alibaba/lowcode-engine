@@ -1,0 +1,24 @@
+#{$cascader-prefix}[dir="rtl"] {
+    #{$cascader-prefix} {
+        &-menu-wrapper {
+            float: right;
+            border-left: none;
+            border-right: $cascader-menu-border;
+            &:first-child {
+                border-right: none;
+            }
+        }
+
+        &-menu {
+            &.#{$css-prefix}has-right-border {
+                border-right: none;
+                border-left: $cascader-menu-border;
+            }
+
+            &-icon-right {
+                right: auto;
+                left: 10px;
+            }
+        }
+    }
+}

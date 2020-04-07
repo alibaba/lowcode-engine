@@ -1,0 +1,19 @@
+@include keyframes(zoomInQuick) {
+    0% {
+        opacity: 0;
+        @include transform(scale(.8));
+    }
+    to {
+        @include transform(scale(1));
+    }
+}
+
+@mixin zoomInQuick($count: $countDefault, $duration: $durationSmallDefault, $delay: $delayDefault, $function: $ease-out-quint, $fill: $fillDefault, $visibility: $visibilityDefault) {
+    @include animation-name(zoomInQuick);
+    @include count($count);
+    @include duration($duration);
+    @include delay($delay);
+    @include function($function);
+    @include fill-mode($fill);
+    @include visibility($visibility);
+}

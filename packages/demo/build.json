@@ -1,0 +1,38 @@
+{
+  "entry": {
+    "index": "src/index.ts",
+    "react-simulator-renderer": "../react-simulator-renderer/src/index.ts",
+    "preview": "src/preview.ts"
+  },
+  "vendor": false,
+  "devServer": {
+    "hot": false
+  },
+  "publicPath": "/",
+  "externals": {
+    "react": "window.React",
+    "react-dom": "window.ReactDOM",
+    "prop-types": "window.PropTypes",
+    "@alifd/next": "window.Next"
+  },
+  "plugins": [
+    [
+      "build-plugin-react-app"
+    ],
+    [
+      "build-plugin-fusion",
+      {
+        "themePackage": "@alife/theme-lowcode-light"
+      }
+    ],
+    [
+      "build-plugin-moment-locales",
+      {
+        "locales": [
+          "zh-cn"
+        ]
+      }
+    ],
+    "./build.plugin.js"
+  ]
+}

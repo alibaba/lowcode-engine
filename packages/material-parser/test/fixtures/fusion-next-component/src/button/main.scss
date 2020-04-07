@@ -1,0 +1,396 @@
+@import '../core/index-noreset';
+
+@import './scss/variable';
+@import './scss/normalize';
+@import './scss/mixin';
+
+#{$btn-prefix} {
+    & {
+        position: relative;
+        display: inline-block;
+        box-shadow: $btn-shadow;
+        text-decoration: none;
+        text-align: center;
+        text-transform: none;
+        white-space: nowrap;
+        vertical-align: middle;
+        user-select: none;
+        transition: all $motion-duration-immediately $motion-linear;
+        line-height: 1;
+        cursor: pointer;
+
+        &:after {
+            text-align: center;
+            position: absolute;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity $motion-duration-immediately $motion-linear;
+        }
+
+        &::before {
+            content: '';
+            display: inline-block;
+            height: 100%;
+            width: 0;
+            vertical-align: middle;
+        }
+
+        .#{$css-prefix}icon {
+            display: inline-block;
+            font-size: 0;
+            vertical-align: middle;
+        }
+
+        > span,
+        > div {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        &.hover,
+        &:hover {
+            box-shadow: $btn-shadow-hover;
+        }
+    }
+
+    /* 尺寸维度 */
+    /* ---------------------------------------- */
+    &.#{$css-prefix} {
+        &small {
+            @include next-button-size(
+                $btn-size-s-padding,
+                $btn-size-s-height,
+                $btn-size-s-font,
+                $btn-size-s-border-width,
+                $btn-size-s-corner,
+                $btn-size-s-icon-margin,
+                $btn-size-s-icon-size,
+                $btn-size-s-icon-split-size
+            );
+        }
+        &medium {
+            @include next-button-size(
+                $btn-size-m-padding,
+                $btn-size-m-height,
+                $btn-size-m-font,
+                $btn-size-m-border-width,
+                $btn-size-m-corner,
+                $btn-size-m-icon-margin,
+                $btn-size-m-icon-size,
+                $btn-size-m-icon-split-size
+            );
+        }
+        &large {
+            @include next-button-size(
+                $btn-size-l-padding,
+                $btn-size-l-height,
+                $btn-size-l-font,
+                $btn-size-l-border-width,
+                $btn-size-l-corner,
+                $btn-size-l-icon-margin,
+                $btn-size-l-icon-size,
+                $btn-size-l-icon-split-size
+            );
+        }
+    }
+
+    /* 普通按钮 */
+    &#{$btn-prefix} {
+        &-normal {
+            border-style: $btn-pure-normal-border-style;
+
+            @include button-color(
+                $btn-pure-normal-color,
+                $btn-pure-normal-color-hover,
+                $btn-pure-normal-bg,
+                $btn-pure-normal-bg-hover,
+                $btn-pure-normal-border-color,
+                $btn-pure-normal-border-color-hover
+            );
+        }
+
+        &-primary {
+            border-style: $btn-pure-primary-border-style;
+
+            @include button-color(
+                $btn-pure-primary-color,
+                $btn-pure-primary-color-hover,
+                $btn-pure-primary-bg,
+                $btn-pure-primary-bg-hover,
+                $btn-pure-primary-border-color,
+                $btn-pure-primary-border-color-hover
+            );
+        }
+
+        &-secondary {
+            border-style: $btn-pure-secondary-border-style;
+
+            @include button-color(
+                $btn-pure-secondary-color,
+                $btn-pure-secondary-color-hover,
+                $btn-pure-secondary-bg,
+                $btn-pure-secondary-bg-hover,
+                $btn-pure-secondary-border-color,
+                $btn-pure-secondary-border-color-hover
+            );
+        }
+    }
+
+    /* 普通态禁用样式 */
+    &.disabled,
+    &[disabled] {
+        cursor: not-allowed;
+
+        @include button-color(
+            $btn-pure-color-disabled,
+            $btn-pure-color-disabled,
+            $btn-pure-bg-disabled,
+            $btn-pure-bg-disabled,
+            $btn-pure-border-color-disabled,
+            $btn-pure-border-color-disabled
+        );
+    }
+
+    /* 警告按钮 */
+    &-warning {
+        border-style: $btn-warning-border-style;
+
+        &#{$btn-prefix}-primary {
+            @include button-color(
+                $btn-warning-primary-color,
+                $btn-warning-primary-color-hover,
+                $btn-warning-primary-bg,
+                $btn-warning-primary-bg-hover,
+                $btn-warning-primary-border-color,
+                $btn-warning-primary-border-color-hover
+            );
+            &.disabled,
+            &[disabled] {
+                @include button-color(
+                    $btn-warning-primary-color-disabled,
+                    $btn-warning-primary-color-disabled,
+                    $btn-warning-primary-bg-disabled,
+                    $btn-warning-primary-bg-disabled,
+                    $btn-warning-primary-border-color-disabled,
+                    $btn-warning-primary-border-color-disabled
+                );
+            }
+        }
+
+        &#{$btn-prefix}-normal {
+            @include button-color(
+                $btn-warning-normal-color,
+                $btn-warning-normal-color-hover,
+                $btn-warning-normal-bg,
+                $btn-warning-normal-bg-hover,
+                $btn-warning-normal-border-color,
+                $btn-warning-normal-border-color-hover
+            );
+
+            &.disabled,
+            &[disabled] {
+                @include button-color(
+                    $btn-warning-normal-color-disabled,
+                    $btn-warning-normal-color-disabled,
+                    $btn-warning-normal-bg-disabled,
+                    $btn-warning-normal-bg-disabled,
+                    $btn-warning-normal-border-color-disabled,
+                    $btn-warning-normal-border-color-disabled
+                );
+            }
+        }
+    }
+
+    /* 文本按钮 */
+    &-text {
+        box-shadow: none;
+        border-radius: 0;
+
+        &.hover,
+        &:hover {
+            box-shadow: none;
+        }
+
+        &#{$btn-prefix}-primary {
+            @include button-color(
+                $btn-text-primary-color,
+                $btn-text-primary-color-hover,
+                transparent,
+                transparent,
+                transparent,
+                transparent
+            );
+        }
+        &#{$btn-prefix}-secondary {
+            @include button-color(
+                $btn-text-secondary-color,
+                $btn-text-secondary-color-hover,
+                transparent,
+                transparent,
+                transparent,
+                transparent
+            );
+        }
+        &#{$btn-prefix}-normal {
+            @include button-color(
+                $btn-text-normal-color,
+                $btn-text-normal-color-hover,
+                transparent,
+                transparent,
+                transparent,
+                transparent
+            );
+        }
+        &.#{$css-prefix}large {
+            @include next-button-size(
+                0,
+                $btn-text-size-l-height,
+                $btn-text-size-l-font,
+                0,
+                0,
+                $btn-text-icon-l-margin,
+                $btn-size-l-icon-size,
+                $btn-size-l-icon-split-size
+            );
+        }
+        &.#{$css-prefix}medium {
+            @include next-button-size(
+                0,
+                $btn-text-size-m-height,
+                $btn-text-size-m-font,
+                0,
+                0,
+                $btn-text-icon-m-margin,
+                $btn-size-m-icon-size,
+                $btn-size-m-icon-split-size
+            );
+        }
+        &.#{$css-prefix}small {
+            @include next-button-size(
+                0,
+                $btn-text-size-s-height,
+                $btn-text-size-s-font,
+                0,
+                0,
+                $btn-text-icon-s-margin,
+                $btn-size-s-icon-size,
+                $btn-size-s-icon-split-size
+            );
+        }
+        &.disabled,
+        &[disabled] {
+            @include button-color(
+                $btn-text-disabled-color,
+                $btn-text-disabled-color,
+                transparent,
+                transparent,
+                transparent,
+                transparent
+            );
+        }
+        &#{$btn-prefix}-loading {
+            @include button-color(
+                $btn-text-loading-color,
+                $btn-text-loading-color,
+                transparent,
+                transparent,
+                transparent,
+                transparent
+            );
+        }
+    }
+
+    /* loading */
+    /* ---------------------------------------- */
+    &-loading {
+        pointer-events: none;
+        &:after {
+            font-family: $icon-font-family;
+            content: $icon-content-loading;
+            opacity: 1;
+            visibility: visible;
+            animation: loadingCircle 2s infinite linear;
+        }
+    }
+
+    /* 幽灵按钮 */
+    &-ghost {
+        box-shadow: none;
+        border-style: $btn-ghost-border-style;
+        &#{$btn-prefix}-dark {
+            @include button-color( $btn-ghost-dark-color, $btn-ghost-dark-color-hover, $btn-ghost-dark-bg-normal, $btn-ghost-dark-bg-hover, $btn-ghost-dark-border-color, $btn-ghost-dark-border-color-hover);
+            &.disabled,
+            &[disabled] {
+                @include button-color( $btn-ghost-dark-color-disabled, $btn-ghost-dark-color-disabled, $btn-ghost-dark-bg-disabled, $btn-ghost-dark-bg-disabled, $btn-ghost-dark-border-color-disabled, $btn-ghost-dark-border-color-disabled);
+            }
+        }
+        &#{$btn-prefix}-light {
+            @include button-color( $btn-ghost-light-color, $btn-ghost-light-color-hover, $btn-ghost-light-bg-normal, $btn-ghost-light-bg-hover, $btn-ghost-light-border-color, $btn-ghost-light-border-color-hover);
+            &.disabled,
+            &[disabled] {
+                @include button-color( $btn-ghost-light-color-disabled, $btn-ghost-light-color-disabled, $btn-ghost-light-bg-disabled, $btn-ghost-light-bg-disabled, $btn-ghost-light-border-color-disabled, $btn-ghost-light-border-color-disabled);
+            }
+        }
+    }
+
+    /* 组合 */
+    /* ---------------------------------------- */
+    &-group {
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+
+        > #{$btn-prefix} {
+            position: relative;
+            float: left;
+            box-shadow: none;
+
+            &:hover,
+            &:focus,
+            &:active,
+            &.active {
+                z-index: 1;
+            }
+            &.disabled,
+            &[disabled] {
+                z-index: 0;
+            }
+        }
+
+        #{$btn-prefix}#{$btn-prefix} {
+            margin: 0 0 0 -1px;
+        }
+
+        #{$btn-prefix}:not(:first-child):not(:last-child) {
+            border-radius: 0;
+        }
+
+        > #{$btn-prefix}:first-child {
+            margin: 0;
+        }
+
+        > #{$btn-prefix}:first-child:not(:last-child) {
+            border-bottom-right-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        > #{$btn-prefix}:last-child:not(:first-child) {
+            border-bottom-left-radius: 0;
+            border-top-left-radius: 0;
+        }
+
+        > #{$btn-prefix}-primary:not(:first-child) {
+            border-left-color: transparentize($color-white, .8);
+
+            &:hover {
+                border-left-color: transparent;
+            }
+            &.disabled,
+            &[disabled] {
+                border-left-color: $color-line1-1;
+            }
+        }
+    }
+}
+
+@import './rtl.scss';

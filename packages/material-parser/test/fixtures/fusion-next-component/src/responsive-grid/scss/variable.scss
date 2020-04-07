@@ -1,0 +1,18 @@
+@charset "UTF-8";
+
+// responsive-grid variables
+// --------------------------------------------------
+
+////
+/// @module responsive-grid: 栅格布局
+/// @tag ResponsiveGrid
+/// @category component
+/// @family general
+/// @varPrefix $responsive-grid-
+/// @classPrefix {prefix}-responsive-grid
+/// @order {}
+////
+
+// Unconfigurable
+// ----------------------------------------
+$responsive-grid-prefix: ".#{$css-prefix}responsive-grid";

@@ -1,40 +1,45 @@
 {
-  "name": "lowcode-designer",
-  "version": "0.9.0",
-  "description": "alibaba lowcode designer",
-  "main": "src/index.ts",
-  "author": "",
+  "name": "@ali/lowcode-designer",
+  "version": "0.9.1",
+  "description": "Designer for Ali LowCode Engine",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "files": [
+    "lib",
+    "es"
+  ],
+  "scripts": {
+    "build": "build-scripts build --skip-demo",
+    "test": "ava",
+    "test:snapshot": "ava --update-snapshots"
+  },
   "license": "MIT",
   "dependencies": {
-    "@ali/iceluna-sdk": "^1.0.5-beta.12",
-    "@recore/obx": "^1.0.8",
-    "@recore/obx-react": "^1.0.7",
-    "@types/medium-editor": "^5.0.3",
+    "@ali/lowcode-globals": "^0.9.1",
     "classnames": "^2.2.6",
     "react": "^16",
     "react-dom": "^16.7.0"
   },
   "devDependencies": {
-    "@recore/config": "^2.0.0",
+    "@alib/build-scripts": "^0.1.18",
     "@types/classnames": "^2.2.7",
-    "@types/jest": "^24.0.16",
+    "@types/medium-editor": "^5.0.3",
     "@types/node": "^13.7.1",
     "@types/react": "^16",
     "@types/react-dom": "^16",
-    "eslint": "^6.5.1",
-    "husky": "^1.1.2",
-    "jest": "^23.4.1",
-    "lint-staged": "^7.1.2",
-    "prettier": "^1.18.2",
-    "ts-jest": "^24.0.2",
-    "ts-node": "^8.0.1",
-    "tslib": "^1.9.3",
-    "typescript": "^3.1.3"
+    "build-plugin-component": "^0.2.10"
   },
-  "lint-staged": {
-    "./src/**/*.{ts,tsx}": [
-      "eslint --fix",
-      "git add"
+  "ava": {
+    "compileEnhancements": false,
+    "snapshotDir": "test/fixtures/__snapshots__",
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
     ]
+  },
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
   }
 }

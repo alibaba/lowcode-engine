@@ -13,7 +13,7 @@ import {
   isEmpty,
   moveArrayItem,
   serialize,
-  deepEqual
+  deepEqual,
 } from './index';
 import Debug from 'debug';
 import compFactory from '../hoc/compFactory';
@@ -49,7 +49,7 @@ export default class SchemaHelper {
     }
     let newSchema = [];
     if (Array.isArray(schema)) {
-      newSchema = schema.filter(item => isSchema(item, true));
+      newSchema = schema.filter((item) => isSchema(item, true));
     } else if (isSchema(schema)) {
       newSchema = [schema];
     } else {
@@ -62,7 +62,7 @@ export default class SchemaHelper {
       //jsonuri.set(this.schema, targetPath, targetNode);
     } else {
       direction = ['left', 'top'].includes(direction) ? 'before' : 'after';
-      newSchema.reverse().forEach(item => {
+      newSchema.reverse().forEach((item) => {
         jsonuri.insert(this.schema, targetPath, item, direction);
       });
     }
@@ -189,7 +189,7 @@ export default class SchemaHelper {
       } else {
         schema.defaultProps = __defaultProps;
       }
-      this.appHelper.components[schema.fileName.replace(/^\w/, a => a.toUpperCase())] = compFactory(schema);
+      this.appHelper.components[schema.fileName.replace(/^\w/, (a) => a.toUpperCase())] = compFactory(schema);
     }
 
     // 如果loop值没有设置有效值，则删除schema中这个的字段
@@ -207,7 +207,7 @@ export default class SchemaHelper {
         __loopArgs === undefined ||
         (typeof __loopArgs === 'object' && isEmpty(__loopArgs)) ||
         !Array.isArray(__loopArgs) ||
-        __loopArgs.every(item => !item)
+        __loopArgs.every((item) => !item)
       ) {
         delete schema.loopArgs;
       } else {
@@ -290,11 +290,11 @@ export default class SchemaHelper {
 
     schema.props = {
       ...schema.props,
-      ...otherProps
+      ...otherProps,
     };
 
     //过滤undefined属性
-    Object.keys(schema.props).map(key => {
+    Object.keys(schema.props).map((key) => {
       if (schema.props[key] === undefined) {
         delete schema.props[key];
       }
@@ -309,8 +309,8 @@ export default class SchemaHelper {
       componentName,
       props: props || {},
       __ctx: {
-        lunaKey: ++this.lunaKey
-      }
+        lunaKey: ++this.lunaKey,
+      },
     };
     if (isContainer) {
       schema.children = [];
@@ -366,7 +366,7 @@ export default class SchemaHelper {
               lunaKey,
               lunaPath: path,
               parentKey: parentCompNode && parentCompNode.lunaKey,
-              blockKey: parentBlockNode && parentBlockNode.lunaKey
+              blockKey: parentBlockNode && parentBlockNode.lunaKey,
             };
           } else {
             res.__ctx.lunaPath = path;
@@ -381,7 +381,7 @@ export default class SchemaHelper {
               label,
               lunaKey,
               isFile: true,
-              children: []
+              children: [],
             };
             this.compTreeMap[lunaKey] = blockNode;
             const compNode = clone(blockNode);
@@ -401,7 +401,7 @@ export default class SchemaHelper {
             const compNode = {
               label,
               lunaKey,
-              children: []
+              children: [],
             };
             parentCompNode.children.push(compNode);
             parentCompNode = compNode;
@@ -434,13 +434,13 @@ export default class SchemaHelper {
       return true;
     }
     return !deepEqual(
-      (preData.list || []).filter(item => item.isInit),
-      (nextData.list || []).filter(item => item.isInit),
+      (preData.list || []).filter((item) => item.isInit),
+      (nextData.list || []).filter((item) => item.isInit),
       (pre, next) => {
         if (typeof pre === 'function' && next === 'function') {
           return pre.toString() === next.toString();
         }
-      }
+      },
     );
   }
 
@@ -466,7 +466,7 @@ export default class SchemaHelper {
 
   getPureSchemaStr() {
     return serialize(this.getPureSchema(), {
-      unsafe: true
+      unsafe: true,
     });
   }
 
@@ -476,7 +476,7 @@ export default class SchemaHelper {
 
   getStandardSchemaStr() {
     return serialize(this.getStandardSchema(), {
-      unsafe: true
+      unsafe: true,
     });
   }
 }

@@ -1,0 +1,68 @@
+@import "../core/index-noreset";
+@import "../input/scss/variable.scss";
+@import "../input/scss/mixin.scss";
+@import "../time-picker/scss/variable.scss";
+
+@import "scss/variable";
+@import "scss/mixin";
+
+@import "scss/date-picker";
+@import "scss/range-picker";
+@import "./rtl.scss";
+
+#{$date-picker-prefix},
+#{$range-picker-prefix},
+#{$month-picker-prefix},
+#{$year-picker-prefix},
+#{$week-picker-prefix} {
+    @include box-sizing;
+
+    &-body {
+        border: $popup-local-border-width $popup-local-border-style $popup-local-border-color;
+        border-radius: $popup-local-corner;
+        box-shadow: $popup-local-shadow;
+        background: $date-picker-panel-background;
+    }
+
+    &-panel {
+        &-header {
+            padding: 6px;
+            text-align: center;
+        }
+
+        &-time {
+            border-top: $popup-local-border-width $popup-local-border-style $popup-local-border-color;
+        }
+
+        &-footer {
+            text-align: right;
+            padding: $date-picker-panel-footer-padding-tb $date-picker-panel-footer-padding-lr;
+            border-top: $popup-local-border-width $popup-local-border-style $popup-local-border-color;
+        }
+
+        &-footer > #{$date-picker-btn-prefix}:not(:last-child),
+        &-tools > #{$date-picker-btn-prefix}:not(:last-child) {
+            margin-right: $s-4;
+        }
+
+        &-tools {
+            float: left;
+        }
+    }
+
+    .#{$css-prefix}calendar-panel-header {
+        margin-left: -$popup-local-border-width;
+        margin-right: -$popup-local-border-width;
+    }
+
+    #{$date-picker-input-prefix} input {
+        vertical-align: baseline;
+    }
+}
+
+#{$range-picker-prefix}-panel-body {
+    .#{$css-prefix}calendar {
+        display: inline-block;
+        width: 50%;
+    }
+}

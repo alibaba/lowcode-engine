@@ -10,7 +10,7 @@ import _defineProperty from "@babel/runtime/helpers/defineProperty";
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-var parseJoin = function (value) {
+const parseJoin = function (value) {
   return value.join(' ');
 };
 /**
@@ -20,25 +20,25 @@ var parseJoin = function (value) {
  */
 
 
-var HOCBoxModelProps = function (WrappedComponent) {
-  var _class, _temp;
+const HOCBoxModelProps = function (WrappedComponent) {
+  let _class; let _temp;
 
-  var PROPS = {
+  const PROPS = {
     display: 'display',
     margin: 'margin',
     border: 'border',
     padding: 'padding',
     width: 'width',
     height: 'height',
-    borderRadius: 'borderRadius'
+    borderRadius: 'borderRadius',
   };
   return _temp = _class =
-  /*#__PURE__*/
+  /* #__PURE__ */
   function (_Component) {
     _inherits(_class, _Component);
 
     function _class() {
-      var _this;
+      let _this;
 
       _classCallCheck(this, _class);
 
@@ -49,7 +49,7 @@ var HOCBoxModelProps = function (WrappedComponent) {
       _this = _possibleConstructorReturn(this, _getPrototypeOf(_class).call(this, ..._args));
 
       _defineProperty(_assertThisInitialized(_this), "parseStyle", function (args) {
-        var style = {};
+        const style = {};
         Object.keys(PROPS).forEach(function (item) {
           // if props isn't false
           if (!args[item]) return;
@@ -64,20 +64,20 @@ var HOCBoxModelProps = function (WrappedComponent) {
     _createClass(_class, [{
       key: "render",
       value: function render() {
-        var _this$props = this.props,
-            display = _this$props.display,
-            margin = _this$props.margin,
-            border = _this$props.border,
-            padding = _this$props.padding,
-            width = _this$props.width,
-            height = _this$props.height,
-            borderRadius = _this$props.borderRadius,
-            otherProps = _objectWithoutProperties(_this$props, ["display", "margin", "border", "padding", "width", "height", "borderRadius"]);
+        const _this$props = this.props;
+            const display = _this$props.display;
+            const margin = _this$props.margin;
+            const border = _this$props.border;
+            const padding = _this$props.padding;
+            const width = _this$props.width;
+            const height = _this$props.height;
+            const borderRadius = _this$props.borderRadius;
+            const otherProps = _objectWithoutProperties(_this$props, ["display", "margin", "border", "padding", "width", "height", "borderRadius"]);
 
         return React.createElement(WrappedComponent, _extends({}, otherProps, {
-          styleBoxModel: this.parseStyle(this.props)
+          styleBoxModel: this.parseStyle(this.props),
         }));
-      }
+      },
     }]);
 
     return _class;
@@ -88,7 +88,7 @@ var HOCBoxModelProps = function (WrappedComponent) {
     padding: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
     width: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-    borderRadius: PropTypes.oneOfType([PropTypes.string, PropTypes.bool])
+    borderRadius: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   }), _defineProperty(_class, "defaultProps", {
     display: false,
     margin: false,
@@ -96,7 +96,7 @@ var HOCBoxModelProps = function (WrappedComponent) {
     padding: false,
     width: false,
     height: false,
-    borderRadius: false
+    borderRadius: false,
   }), _temp;
 };
 

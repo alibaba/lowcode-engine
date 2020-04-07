@@ -1,5 +1,6 @@
 import Ajv from 'ajv';
 import test from 'ava';
+
 import fs = require('fs');
 import yaml = require('js-yaml');
 import path = require('path');
