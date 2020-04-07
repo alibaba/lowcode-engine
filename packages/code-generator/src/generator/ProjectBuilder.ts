@@ -11,10 +11,10 @@ import {
   PostProcessor,
 } from '../types';
 
-import ResultDir from '@/model/ResultDir';
-import SchemaParser from '@/parser/SchemaParser';
+import ResultDir from '../model/ResultDir';
+import SchemaParser from '../parser/SchemaParser';
 
-import { createModuleBuilder } from '@/generator/ModuleBuilder';
+import { createModuleBuilder } from '../generator/ModuleBuilder';
 
 interface IModuleInfo {
   moduleName?: string;
@@ -67,7 +67,7 @@ export class ProjectBuilder implements IProjectBuilder {
     // Parse / Format
 
     // Preprocess
-    // Colllect Deps
+    // Collect Deps
     // Parse JSExpression
     const parseResult: IParseResult = schemaParser.parse(schema);
     let buildResult: IModuleInfo[] = [];

@@ -6,10 +6,8 @@
 import { SUPPORT_SCHEMA_VERSION_LIST } from '../const';
 
 import { handleChildren } from '../utils/children';
-import { uniqueArray } from '../utils/common';
 
 import {
-  ChildNodeItem,
   ChildNodeType,
   CodeGeneratorError,
   CompatibilityError,
@@ -86,7 +84,7 @@ class SchemaParser implements ISchemaParser {
         });
       }
     } else {
-      throw new CodeGeneratorError(`Can't find anything to generator.`);
+      throw new CodeGeneratorError(`Can't find anything to generate.`);
     }
 
     // 建立所有容器的内部依赖索引

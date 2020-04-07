@@ -1,4 +1,4 @@
-import { COMMON_CHUNK_NAME } from '@/const/generator';
+import { COMMON_CHUNK_NAME } from '../../../../../const/generator';
 
 import {
   BuilderComponentPlugin,
@@ -6,7 +6,7 @@ import {
   FileType,
   ICodeStruct,
   IRouterInfo,
-} from '@/types';
+} from '../../../../../types';
 
 // TODO: How to merge this logic to common deps
 const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
