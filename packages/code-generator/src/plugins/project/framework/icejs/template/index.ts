@@ -1,5 +1,9 @@
-import ResultDir from '@/model/ResultDir';
-import { IProjectTemplate, IResultDir, IResultFile } from '@/types';
+import ResultDir from '../../../../../model/ResultDir';
+import {
+  IProjectTemplate,
+  IResultDir,
+  IResultFile,
+} from '../../../../../types';
 
 import file12 from './files/abc.json';
 import file11 from './files/build.json';

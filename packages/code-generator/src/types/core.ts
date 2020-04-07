@@ -143,3 +143,8 @@ export interface IProjectBuilder {
 }
 
 export type PostProcessor = (content: string, fileType: string) => string;
+
+// TODO: temp interface, need modify
+export interface IPluginOptions {
+  fileDirDepth: number;
+}

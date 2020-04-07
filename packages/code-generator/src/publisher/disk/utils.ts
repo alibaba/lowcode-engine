@@ -1,7 +1,7 @@
 import { existsSync, mkdir, writeFile } from 'fs';
 import { join } from 'path';
 
-import { IResultDir, IResultFile } from '@/types';
+import { IResultDir, IResultFile } from '../../types';
 
 export const writeFolder = async (
   folder: IResultDir,

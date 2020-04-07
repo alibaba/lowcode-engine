@@ -1,9 +1,4 @@
-import { IProjectSchema } from '@/types';
-
-// meta: {
-//   title: '测试',
-//   router: '/',
-// },
+import { IProjectSchema } from '../types';
 
 const demoData: IProjectSchema = {
   version: '1.0.0',

@@ -3,7 +3,7 @@ import {
   ChildNodeType,
   IComponentNodeItem,
   IJSExpression,
-} from '@/types';
+} from '../types';
 
 // tslint:disable-next-line: no-empty
 const noop = () => [];

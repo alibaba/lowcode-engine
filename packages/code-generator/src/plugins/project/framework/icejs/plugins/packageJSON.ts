@@ -1,4 +1,4 @@
-import { COMMON_CHUNK_NAME } from '@/const/generator';
+import { COMMON_CHUNK_NAME } from '../../../../../const/generator';
 
 import {
   BuilderComponentPlugin,
@@ -7,7 +7,7 @@ import {
   ICodeStruct,
   IPackageJSON,
   IProjectInfo,
-} from '@/types';
+} from '../../../../../types';
 
 interface IIceJsPackageJSON extends IPackageJSON {
   ideMode: {

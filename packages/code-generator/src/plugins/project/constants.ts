@@ -1,12 +1,12 @@
-import { COMMON_CHUNK_NAME } from '@/const/generator';
-import { generateCompositeType } from '@/plugins/utils/compositeType';
+import { COMMON_CHUNK_NAME } from '../../const/generator';
+import { generateCompositeType } from '../../plugins/utils/compositeType';
 import {
   BuilderComponentPlugin,
   ChunkType,
   FileType,
   ICodeStruct,
   IProjectInfo,
-} from '@/types';
+} from '../../types';
 
 // TODO: How to merge this logic to common deps
 const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
