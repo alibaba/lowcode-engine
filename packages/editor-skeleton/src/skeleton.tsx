@@ -31,12 +31,13 @@ declare global {
 }
 
 export interface SkeletonProps {
-  components: PluginClassSet;
-  config: EditorConfig;
-  history: object;
-  location: object;
-  match: object;
-  utils: Utils;
+  components?: PluginClassSet;
+  config?: EditorConfig;
+  history?: object;
+  location?: object;
+  match?: object;
+  utils?: Utils;
+  editor?: Editor;
 }
 
 export interface SkeletonState {
@@ -79,29 +80,32 @@ export class Skeleton extends PureComponent<SkeletonProps, SkeletonState> {
     if (this.editor) {
       this.editor.destroy();
     }
-    const { utils, config, components } = this.props;
-    const editor = new Editor(
-      comboEditorConfig(defaultConfig, config),
-      components,
-      {
-        ...skeletonUtils,
-        ...utils,
-      },
-    );
-    this.editor = editor;
+    const { utils, config, components, editor } = this.props;
+    if (!editor) {
+      this.editor = new Editor(
+        comboEditorConfig(defaultConfig, config),
+        components,
+        {
+          ...skeletonUtils,
+          ...utils,
+        },
+      );
+      this.editor.once('editor.reset', (): void => {
+        this.setState({
+          initReady: false,
+        });
+        this.editor.emit('editor.beforeReset');
+        this.init(true);
+      });
+    } else {
+      this.editor = editor;
+    }
+
     // eslint-disable-next-line no-underscore-dangle
     window.__ctx = {
-      editor,
-      appHelper: editor,
+      editor: this.editor,
+      appHelper: this.editor,
     };
-    editor.once('editor.reset', (): void => {
-      this.setState({
-        initReady: false,
-      });
-      editor.emit('editor.beforeReset');
-      this.init(true);
-    });
-
     this.editor.init().then((): void => {
       this.setState(
         {
@@ -151,9 +155,10 @@ export class Skeleton extends PureComponent<SkeletonProps, SkeletonState> {
 
 // 通过React-Router包裹，支持编辑器内页面根据路由切换
 export interface SkeletonWithRouterProps {
-  components: PluginClassSet;
-  config: EditorConfig;
-  utils: Utils;
+  components?: PluginClassSet;
+  config?: EditorConfig;
+  utils?: Utils;
+  editor?: Editor;
 }
 
 const SkeletonWithRouter: React.FC<SkeletonWithRouterProps> = (
@@ -168,7 +173,7 @@ const SkeletonWithRouter: React.FC<SkeletonWithRouterProps> = (
           <Skeleton
             {...routerProps}
             {...otherProps}
-            {...(config.skeleton && config.skeleton.props)}
+            {...(config && config.skeleton && config.skeleton.props)}
             config={config}
           />
         )}

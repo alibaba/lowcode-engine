@@ -1,10 +1,10 @@
 import lg from '@ali/vu-logger';
-import EventEmitter = require('events');
+import { EventEmitter } from 'events';
 import { ComponentClass } from 'react';
 
-import Bundle from './bundle/bundle';
-import Prototype, { setPackages } from './bundle/prototype';
-import Bus from './bus';
+import Bundle from '../bundle/bundle';
+import Prototype, { setPackages } from '../bundle/prototype';
+import Bus from '../bus';
 
 interface IComponentInfo {
   image?: string;

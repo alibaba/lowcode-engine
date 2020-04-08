@@ -7,12 +7,15 @@ import { ProjectView } from '../project';
 import './designer.less';
 import clipboard from './clipboard';
 
-export class DesignerView extends Component<DesignerProps> {
+export class DesignerView extends Component<DesignerProps & {
+  designer: Designer;
+}> {
   readonly designer: Designer;
 
   constructor(props: any) {
     super(props);
-    this.designer = new Designer(props);
+    const { designer, ...designerProps } = props;
+    this.designer = designer || new Designer(designerProps);
   }
 
   shouldComponentUpdate(nextProps: DesignerProps) {
