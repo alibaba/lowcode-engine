@@ -9,7 +9,7 @@ import Symbols from './symbols';
 import Skeleton from '@ali/lowcode-editor-skeleton';
 import editor from './editor';
 import Exchange from './exchange';
-
+import VisualEngineContext from './context';
 import VisualManager from './base/visualManager';
 
 function init(container?: Element) {
@@ -37,6 +37,8 @@ const modules = {
   VisualManager,
 };
 
+const context = new VisualEngineContext();
+
 export {
   /**
    * VE.Popup
@@ -55,6 +57,7 @@ export {
   /* Symbol 管理类 */
   Symbols,
   Exchange,
+  context,
   /**
    * VE.init
    *
