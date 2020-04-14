@@ -8,7 +8,7 @@ import './designer.less';
 import clipboard from './clipboard';
 
 export class DesignerView extends Component<DesignerProps & {
-  designer: Designer;
+  designer?: Designer;
 }> {
   readonly designer: Designer;
 

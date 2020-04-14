@@ -1,68 +1,44 @@
 import Editor from '@ali/lowcode-editor-core';
-import outlinePane from '@ali/lowcode-plugin-outline-pane';
-import settingsPane from '@ali/lowcode-plugin-settings-pane';
-import designer from '@ali/lowcode-plugin-designer';
+import OutlinePane from '@ali/lowcode-plugin-outline-pane';
+import SettingsPane from '@ali/lowcode-plugin-settings-pane';
+import Designer from '@ali/lowcode-plugin-designer';
 import { registerSetters } from '@ali/lowcode-setters';
+import { Skeleton } from './skeleton/skeleton';
 
 registerSetters();
 
-export default new Editor(
-  {
-    plugins: {
-      topArea: [],
-      leftArea: [
-        {
-          pluginKey: 'outlinePane',
-          type: 'PanelIcon',
-          props: {
-            align: 'top',
-            icon: 'shuxingkongjian',
-            title: '大纲树',
-          },
-          config: {
-            package: '@ali/lowcode-plugin-outline-pane',
-            version: '^0.8.0',
-          },
-          pluginProps: {},
-        },
-      ],
-      rightArea: [
-        {
-          pluginKey: 'settingsPane',
-          type: 'Panel',
-          props: {},
-          config: {
-            package: '@ali/lowcode-plugin-settings-pane',
-            version: '^0.8.0',
-          },
-          pluginProps: {},
-        },
-      ],
-      centerArea: [
-        {
-          pluginKey: 'designer',
-          type: '',
-          props: {},
-          config: {
-            package: '@ali/lowcode-plugin-designer',
-            version: '^0.8.0',
-          },
-        },
-      ],
-    },
-  },
-  {
-    outlinePane,
-    settingsPane,
-    designer,
-  },
-);
+export const editor = new Editor();
 
+export const skeleton = new Skeleton(editor);
+
+skeleton.mainArea.add({
+  name: 'designer',
+  type: 'Widget',
+  content: Designer,
+});
+skeleton.rightArea.add({
+  name: 'settingsPane',
+  type: 'Panel',
+  content: SettingsPane,
+});
+skeleton.leftArea.add({
+  name: 'outlinePane',
+  type: 'PanelDock',
+  props: {
+    align: 'top',
+    icon: 'shuxingkongjian',
+    description: '大纲树',
+  },
+  content: OutlinePane,
+  panelProps: {
+    area: 'leftFloatArea'
+  }
+});
 
 // editor-core
 //  1. di 实现
-//  2. skeleton 区域管理
-//  3. general bus: pub/sub
+//  2. general bus: pub/sub
 // editor-skeleton/workbench 视图实现
+//  1. skeleton 区域划分 panes
 //  provide fixed left pane
 //  provide float left pane

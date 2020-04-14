@@ -91,7 +91,7 @@ export default class Editor extends EventEmitter {
 
   private hooksFuncs: HooksFuncs;
 
-  constructor(config: EditorConfig, components: PluginClassSet, utils?: Utils) {
+  constructor(config: EditorConfig = {}, components: PluginClassSet = {}, utils?: Utils) {
     super();
     this.config = config;
     this.components = {};

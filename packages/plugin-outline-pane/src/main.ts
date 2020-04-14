@@ -168,7 +168,6 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
           }
         }
       });
-      // editor.once('outlinePane.visible', setup);
     }
   }
 

@@ -1,5 +1,5 @@
-import { init } from "./vision";
-import editor from './editor';
+import { init } from './vision'; // VisualEngine
+import { editor } from './editor';
 
 init();
 

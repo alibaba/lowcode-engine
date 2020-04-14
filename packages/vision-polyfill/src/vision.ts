@@ -6,8 +6,9 @@ import { createElement } from 'react';
 import { VE_EVENTS as EVENTS, VE_HOOKS as HOOKS } from './const';
 import Bus from './bus';
 import Symbols from './symbols';
-import Skeleton from '@ali/lowcode-editor-skeleton';
-import editor from './editor';
+import { editor, skeleton } from './editor';
+import { VisionWorkbench } from './skeleton/workbench';
+import Panes from './panes';
 
 function init(container?: Element) {
   if (!container) {
@@ -16,9 +17,12 @@ function init(container?: Element) {
   }
   container.id = 'engine';
 
-  render(createElement(Skeleton, {
-    editor,
-  }), container);
+  render(
+    createElement(VisionWorkbench, {
+      skeleton,
+    }),
+    container,
+  );
 }
 
 const ui = {
@@ -51,4 +55,5 @@ export {
    */
   init,
   ui,
+  Panes,
 };
