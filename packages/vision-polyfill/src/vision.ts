@@ -10,6 +10,8 @@ import Skeleton from '@ali/lowcode-editor-skeleton';
 import editor from './editor';
 import Exchange from './exchange';
 
+import VisualManager from './base/visualManager';
+
 function init(container?: Element) {
   if (!container) {
     container = document.createElement('div');
@@ -17,15 +19,22 @@ function init(container?: Element) {
   }
   container.id = 'engine';
 
-  render(createElement(Skeleton, {
-    editor,
-  }), container);
+  render(
+    createElement(Skeleton, {
+      editor,
+    }),
+    container,
+  );
 }
 
 const ui = {
   Icon: Icons,
   Icons,
   Popup,
+};
+
+const modules = {
+  VisualManager,
 };
 
 export {
@@ -53,4 +62,5 @@ export {
    */
   init,
   ui,
+  modules,
 };
