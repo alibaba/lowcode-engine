@@ -8,6 +8,7 @@ import Bus from './bus';
 import Symbols from './symbols';
 import Skeleton from '@ali/lowcode-editor-skeleton';
 import editor from './editor';
+import Exchange from './exchange';
 
 function init(container?: Element) {
   if (!container) {
@@ -44,6 +45,7 @@ export {
   HOOKS,
   /* Symbol 管理类 */
   Symbols,
+  Exchange,
   /**
    * VE.init
    *
