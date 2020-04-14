@@ -9,6 +9,9 @@ import Symbols from './symbols';
 import { editor, skeleton } from './editor';
 import { VisionWorkbench } from './skeleton/workbench';
 import Panes from './panes';
+import Exchange from './exchange';
+import VisualEngineContext from './context';
+import VisualManager from './base/visualManager';
 
 function init(container?: Element) {
   if (!container) {
@@ -31,6 +34,12 @@ const ui = {
   Popup,
 };
 
+const modules = {
+  VisualManager,
+};
+
+const context = new VisualEngineContext();
+
 export {
   /**
    * VE.Popup
@@ -48,6 +57,8 @@ export {
   HOOKS,
   /* Symbol 管理类 */
   Symbols,
+  Exchange,
+  context,
   /**
    * VE.init
    *
@@ -56,4 +67,5 @@ export {
   init,
   ui,
   Panes,
+  modules,
 };
