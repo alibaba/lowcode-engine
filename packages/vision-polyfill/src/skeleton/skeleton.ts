@@ -1,3 +1,5 @@
+import { Editor } from '@ali/lowcode-editor-core';
+import { inject } from '@ali/lowcode-globals';
 import {
   DockConfig,
   PanelConfig,
@@ -9,7 +11,6 @@ import {
   isPanelDockConfig,
   isPanelConfig,
 } from './types';
-import Editor from '@ali/lowcode-editor-core';
 import Panel, { isPanel } from './panel';
 import WidgetContainer from './widget-container';
 import Area from './area';
@@ -18,6 +19,17 @@ import PanelDock from './panel-dock';
 import Dock from './dock';
 import { Stage, StageConfig } from './stage';
 import { isValidElement } from 'react';
+
+export enum SkeletonEvents {
+  PANEL_DOCK_ACTIVE = 'skeleton.panel-dock.active',
+  PANEL_DOCK_UNACTIVE = 'skeleton.panel-dock.unactive',
+  PANEL_SHOW = 'skeleton.panel.show',
+  PANEL_HIDE = 'skeleton.panel.hide',
+  WIDGET_SHOW = 'skeleton.widget.show',
+  WIDGET_HIDE = 'skeleton.widget.hide',
+}
+
+console.log(inject);
 
 export class Skeleton {
   private panels = new Map<string, Panel>();
@@ -31,7 +43,10 @@ export class Skeleton {
   readonly mainArea: Area<WidgetConfig | PanelConfig, Widget | Panel>;
   readonly bottomArea: Area<PanelConfig, Panel>;
   readonly stages: Area<StageConfig, Stage>;
-  constructor(readonly editor: Editor) {
+
+  @inject() public editor: Editor;
+
+  constructor() {
     this.leftArea = new Area(
       this,
       'leftArea',
@@ -172,6 +187,10 @@ export class Skeleton {
         this.add(config);
       });
     })
+  }
+
+  postEvent(event: SkeletonEvents, ...args: any[]) {
+    this.editor.emit(event, ...args);
   }
 
   createWidget(config: IWidgetBaseConfig | IWidget) {

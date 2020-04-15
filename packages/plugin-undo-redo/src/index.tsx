@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
 import './index.scss';
-import { PluginProps } from '@ali/lowcode-editor-core';
+import Editor, { PluginProps } from '@ali/lowcode-editor-core';
 import { TopIcon } from '@ali/lowcode-editor-skeleton';
+import { Designer } from '@ali/lowcode-designer';
 
 export interface IProps {
-  editor: any;
+  editor: Editor;
   logo?: string;
 }
 
@@ -33,12 +34,13 @@ export default class UndoRedo extends PureComponent<
     const { editor } = this.props;
     editor.on('designer.history-change', this.handleHistoryChange);
 
-    if (editor.designer) {
-      this.history = editor.designer?.currentHistory;
+    const designer = editor.get(Designer);
+    if (designer) {
+      this.history = designer.currentHistory;
       this.updateState(this.history?.getState() || 0);
     } else {
       editor.once('designer.ready', (): void => {
-        this.history = editor.designer?.currentHistory;
+        this.history = editor.get(Designer)?.currentHistory;
         this.updateState(this.history?.getState() || 0);
       });
     }
@@ -57,7 +59,7 @@ export default class UndoRedo extends PureComponent<
   init = (): void => {
     const { editor } = this.props;
 
-    this.history = editor.designer?.currentHistory;
+    this.history = editor.get(Designer)?.currentHistory;
     this.updateState(this.history?.getState() || 0);
 
     editor.on('designer.history-change', (history: any): void => {

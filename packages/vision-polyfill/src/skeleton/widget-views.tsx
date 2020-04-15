@@ -7,6 +7,7 @@ import { composeTitle } from './utils';
 import WidgetContainer from './widget-container';
 import Panel from './panel';
 import { IWidget } from './widget';
+import { SkeletonEvents } from './skeleton';
 
 export function DockView({ title, icon, description, size, className, onClick }: DockProps) {
   return (
@@ -34,9 +35,9 @@ export class PanelDockView extends Component<DockProps & { dock: PanelDock }> {
     if (dock.actived !== this.lastActived) {
       this.lastActived = dock.actived;
       if (this.lastActived) {
-        dock.skeleton.editor.emit('skeleton.panel-dock.active', dock.name, dock);
+        dock.skeleton.postEvent(SkeletonEvents.PANEL_DOCK_ACTIVE, dock.name, dock);
       } else {
-        dock.skeleton.editor.emit('skeleton.panel-dock.unactive', dock.name, dock);
+        dock.skeleton.postEvent(SkeletonEvents.PANEL_DOCK_UNACTIVE, dock.name, dock);
       }
     }
   }
@@ -78,9 +79,9 @@ export class TitledPanelView extends Component<{ panel: Panel }> {
     if (currentVisible !== this.lastVisible) {
       this.lastVisible = currentVisible;
       if (this.lastVisible) {
-        panel.skeleton.editor.emit('skeleton.panel.show', panel.name, panel);
+        panel.skeleton.postEvent(SkeletonEvents.PANEL_SHOW, panel.name, panel);
       } else {
-        panel.skeleton.editor.emit('skeleton.panel.hide', panel.name, panel);
+        panel.skeleton.postEvent(SkeletonEvents.PANEL_HIDE, panel.name, panel);
       }
     }
   }
@@ -118,9 +119,9 @@ export class PanelView extends Component<{ panel: Panel }> {
     if (currentVisible !== this.lastVisible) {
       this.lastVisible = currentVisible;
       if (this.lastVisible) {
-        panel.skeleton.editor.emit('skeleton.panel.show', panel.name, panel);
+        panel.skeleton.postEvent(SkeletonEvents.PANEL_SHOW, panel.name, panel);
       } else {
-        panel.skeleton.editor.emit('skeleton.panel.hide', panel.name, panel);
+        panel.skeleton.postEvent(SkeletonEvents.PANEL_HIDE, panel.name, panel);
       }
     }
   }
@@ -215,9 +216,9 @@ export class WidgetView extends Component<{ widget: IWidget }> {
     if (currentVisible !== this.lastVisible) {
       this.lastVisible = currentVisible;
       if (this.lastVisible) {
-        widget.skeleton.editor.emit('skeleton.widget.show', widget.name, widget);
+        widget.skeleton.postEvent(SkeletonEvents.WIDGET_SHOW, widget.name, widget);
       } else {
-        widget.skeleton.editor.emit('skeleton.widget.hide', widget.name, widget);
+        widget.skeleton.postEvent(SkeletonEvents.WIDGET_SHOW, widget.name, widget);
       }
     }
   }

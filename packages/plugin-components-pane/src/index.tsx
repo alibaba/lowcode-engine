@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { Icon, Search, Select } from '@alifd/next';
 import MaterialShow from '@ali/iceluna-comp-material-show';
 import { PluginProps } from '@ali/lowcode-editor-core';
+import { Designer } from '@ali/lowcode-designer';
 
 import './index.scss';
 
@@ -42,7 +43,7 @@ export default class ComponentListPlugin extends PureComponent<
 
   componentDidMount(): void {
     const { editor } = this.props;
-    if (editor.assets) {
+    if (editor.get('assets')) {
       this.initComponentList();
     } else {
       editor.once('editor.ready', this.initComponentList);
@@ -72,7 +73,7 @@ export default class ComponentListPlugin extends PureComponent<
 
   initComponentList = (): void => {
     const { editor } = this.props;
-    const assets = editor.assets || {};
+    const assets = editor.get('assets') || {};
     const list: string[] = [];
     const libs: LibrayInfo[] = [];
     Object.values(assets.packages).forEach((item): void => {
@@ -100,10 +101,9 @@ export default class ComponentListPlugin extends PureComponent<
 
     editor.set('dndHelper', {
       handleResourceDragStart: function(ev, tagName, schema) {
-        // 物料面板中组件snippet的dragStart回调
-        // ev: 原始的domEvent；tagName: 组件的描述文案；schema: snippet的schema
-        if (editor.designer) {
-          editor.designer.dragon.boost(
+        const designer = editor.get(Designer);
+        if (designer) {
+          designer.dragon.boost(
             {
               type: 'nodedata',
               data: schema,

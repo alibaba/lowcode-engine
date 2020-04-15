@@ -57,7 +57,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
 
   handleDesignerMount = (designer: Designer): void => {
     const { editor } = this.props;
-    editor.set('designer', designer);
+    editor.set(Designer, designer);
     editor.emit('designer.ready', designer);
     const schema = editor.get('schema');
     if (schema) {
@@ -82,7 +82,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
         onMount={this.handleDesignerMount}
         className="lowcode-plugin-designer"
         eventPipe={editor}
-        designer={editor.get('designer')}
+        designer={editor.get(Designer)}
         componentMetadatas={componentMetadatas}
         simulatorProps={{
           library,

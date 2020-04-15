@@ -13,7 +13,7 @@
     "build": "lerna run build --stream",
     "clean": "rm -rf ./packages/*/lib ./packages/*/es ./packages/*/dist ./packages/*/build",
     "commit": "git-cz",
-    "pub": "lerna publish",
+    "pub": "lerna publish --cd-version patch",
     "setup": "./scripts/setup.sh",
     "start": "lerna exec --scope @ali/lowcode-vision-polyfill -- npm start",
     "test": "lerna run test --stream",

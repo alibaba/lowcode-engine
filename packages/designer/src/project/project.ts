@@ -142,7 +142,7 @@ export class Project {
         doc.suspense();
       }
     });
-    this.emitter.emit('current-document-change', actived);
+    this.emitter.emit('current-document.change', actived);
   }
 
   closeOthers(opened: DocumentModel) {
@@ -154,9 +154,9 @@ export class Project {
   }
 
   onCurrentDocumentChange(fn: (doc: DocumentModel) => void): () => void {
-    this.emitter.on('current-document-change', fn);
+    this.emitter.on('current-document.change', fn);
     return () => {
-      this.emitter.removeListener('current-document-change', fn);
+      this.emitter.removeListener('current-document.change', fn);
     };
   }
   // 通知标记删除，需要告知服务端

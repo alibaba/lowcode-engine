@@ -3,6 +3,7 @@ import { uniqueId } from '@ali/lowcode-globals';
 import { ComponentMeta, Node, Designer, Selection } from '@ali/lowcode-designer';
 import { TitleContent, FieldExtraProps, SetterType, CustomView, FieldConfig, isCustomView } from '@ali/lowcode-globals';
 import { getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
+import Editor from '@ali/lowcode-editor-core';
 
 export interface SettingTarget {
   // 所设置的节点集，至少一个
@@ -323,10 +324,10 @@ export class SettingsMain implements SettingTarget {
 
   private _designer?: Designer;
   get designer() {
-    return this._designer || this.editor.designer;
+    return this._designer || this.editor.get(Designer);
   }
 
-  constructor(readonly editor: any) {
+  constructor(readonly editor: Editor) {
     const setupSelection = (selection?: Selection) => {
       if (selection) {
         if (!this._designer) {
@@ -337,20 +338,21 @@ export class SettingsMain implements SettingTarget {
         this.setup([]);
       }
     };
-    editor.on('designer.selection-change', setupSelection);
+    editor.on('designer.selection.change', setupSelection);
     const connectTree = (designer: any) => {
       getTreeMaster(designer).onceEnableBuiltin(() => {
         this.emitter.emit('outline-visible');
       });
     }
-    if (editor.designer) {
-      connectTree(editor.designer);
-      setupSelection(editor.designer.currentSelection);
+    const designer = editor.get(Designer);
+    if (designer) {
+      connectTree(designer);
+      setupSelection(designer.currentSelection);
     } else {
       editor.once('designer.mount', connectTree);
     }
     this.disposeListener = () => {
-      editor.removeListener('designer.selection-change', setupSelection);
+      editor.removeListener('designer.selection.change', setupSelection);
     };
   }
 

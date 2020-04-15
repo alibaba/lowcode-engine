@@ -5,16 +5,20 @@ import DesignerView from '@ali/lowcode-plugin-designer';
 import { registerSetters } from '@ali/lowcode-setters';
 import { Skeleton } from './skeleton/skeleton';
 import { Designer } from 'designer/src/designer';
+import { globalContext } from 'globals/src/di';
 
 registerSetters();
 
 export const editor = new Editor();
+globalContext.register(editor, Editor);
 
-export const skeleton = new Skeleton(editor);
+export const skeleton = new Skeleton();
 
-export const designer = new Designer({editor});
+console.info(skeleton.editor);
 
-editor.set('designer', designer)
+export const designer = new Designer({ eventPipe: editor });
+
+editor.set(Designer, designer);
 
 skeleton.mainArea.add({
   name: 'designer',
@@ -36,8 +40,8 @@ skeleton.leftArea.add({
   },
   content: OutlinePane,
   panelProps: {
-    area: 'leftFixedArea'
-  }
+    area: 'leftFixedArea',
+  },
 });
 
 // editor-core

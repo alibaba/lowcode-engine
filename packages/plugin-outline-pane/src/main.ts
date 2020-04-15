@@ -17,6 +17,7 @@ import {
   contains,
   Node,
 } from '@ali/lowcode-designer';
+import { Editor } from '@ali/lowcode-editor-core';
 import { Tree } from './tree';
 import TreeNode from './tree-node';
 import { IndentTrack } from './helper/indent-track';
@@ -130,15 +131,16 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
   readonly id = uniqueId('outline');
 
   private fixed = false;
-  constructor(readonly editor: any, at?: string) {
+  constructor(readonly editor: Editor, at?: string) {
     let inited = false;
     const setup = () => {
       if (inited) {
         return false;
       }
       inited = true;
-      if (editor.designer) {
-        this.setupDesigner(editor.designer);
+      const designer = editor.get(Designer);
+      if (designer) {
+        this.setupDesigner(designer);
       } else {
         editor.once('designer.mount', (designer: Designer) => {
           this.setupDesigner(designer);
@@ -151,7 +153,6 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
       setup();
     } else {
       editor.on('skeleton.panel.show', (key: string) => {
-        console.info('show', key);
         if (key === at) {
           setup();
           if (this.master) {
@@ -160,7 +161,10 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
             this.fixed = true;
           }
           document.documentElement.classList.add('lowcode-has-fixed-tree');
-        } else {
+        }
+      });
+      editor.on('skeleton.panel.hide', (key: string) => {
+        if (key === at) {
           document.documentElement.classList.remove('lowcode-has-fixed-tree');
           if (this.master) {
             this.master.unFixed(this);

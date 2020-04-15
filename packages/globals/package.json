@@ -30,6 +30,7 @@
     "@recore/obx": "^1.0.8",
     "@recore/obx-react": "^1.0.7",
     "classnames": "^2.2.6",
+    "power-di": "^2.2.4",
     "react": "^16",
     "react-dom": "^16.7.0"
   },

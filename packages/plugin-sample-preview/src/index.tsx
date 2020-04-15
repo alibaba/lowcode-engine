@@ -6,7 +6,7 @@ import './index.scss';
 
 const SamplePreview = ({ editor }: PluginProps) => {
   const handleClick = () => {
-    const designer = editor.get('designer') as Designer;
+    const designer = editor.get(Designer);
     console.info('save schema:', designer.schema);
     localStorage.setItem('lce-dev-store', JSON.stringify(designer.schema));
     window.open('./preview.html', 'preview');

@@ -1,6 +1,6 @@
-import Debug from 'debug';
 import { EventEmitter } from 'events';
 import store from 'store';
+import { IocContext, RegisterOptions } from '@ali/lowcode-globals';
 import {
   EditorConfig,
   HooksConfig,
@@ -17,56 +17,19 @@ import * as editorUtils from './utils';
 
 const { registShortCuts, transformToPromise, unRegistShortCuts } = editorUtils;
 
-declare global {
-  interface Window {
-    __isDebug?: boolean;
-    __newFunc?: (funcStr: string) => (...args: any[]) => any;
-  }
-}
-
-// 根据url参数设置debug选项
-const debugRegRes = /_?debug=(.*?)(&|$)/.exec(location.search);
-if (debugRegRes && debugRegRes[1]) {
-  // eslint-disable-next-line no-underscore-dangle
-  window.__isDebug = true;
-  store.storage.write('debug', debugRegRes[1] === 'true' ? '*' : debugRegRes[1]);
-} else {
-  // eslint-disable-next-line no-underscore-dangle
-  window.__isDebug = false;
-  store.remove('debug');
-}
-
-// 重要，用于矫正画布执行new Function的window对象上下文
-// eslint-disable-next-line no-underscore-dangle
-window.__newFunc = (funContext: string): ((...args: any[]) => any) => {
-  // eslint-disable-next-line no-new-func
-  return new Function(funContext) as (...args: any[]) => any;
-};
-
-// 关闭浏览器前提醒,只有产生过交互才会生效
-window.onbeforeunload = function(e: Event): string | void {
-  const ev = e || window.event;
-  // 本地调试不生效
-  if (location.href.indexOf('localhost') > 0) {
-    return;
-  }
-  const msg = '您确定要离开此页面吗？';
-  ev.cancelBubble = true;
-  ev.returnValue = true;
-  if (e.stopPropagation) {
-    e.stopPropagation();
-    e.preventDefault();
-  }
-  return msg;
-};
-
 let instance: Editor;
 
-const debug = Debug('editor');
 EventEmitter.defaultMaxListeners = 100;
 
 export interface HooksFuncs {
   [idx: number]: (msg: string, handler: (...args: []) => void) => void;
+}
+
+export type KeyType = Function | Symbol | string;
+export type ClassType = Function | (new (...args: any[]) => any);
+export interface GetOptions {
+  forceNew?: boolean;
+  sourceCls?: ClassType;
 }
 
 export default class Editor extends EventEmitter {
@@ -89,6 +52,10 @@ export default class Editor extends EventEmitter {
   }
 
   readonly utils: Utils;
+  /**
+   * Ioc Container
+   */
+  readonly context = new IocContext();
 
   pluginStatus?: PluginStatusSet;
 
@@ -100,35 +67,32 @@ export default class Editor extends EventEmitter {
 
   constructor(readonly config: EditorConfig = {}, readonly componentsMap: PluginClassSet = {}, utils?: Utils) {
     super();
-    this.utils = ({ ...editorUtils, ...utils } as any);
+    this.utils = { ...editorUtils, ...utils } as any;
     instance = this;
   }
 
-  init(): Promise<any> {
+  async init(): Promise<any> {
     const { hooks, shortCuts = [], lifeCycles } = this.config || {};
     this.locale = store.get('lowcode-editor-locale') || 'zh-CN';
-    // this.messages = this.messagesSet[this.locale];
-    // this.i18n = generateI18n(this.locale, this.messages);
     this.pluginStatus = this.initPluginStatus();
     this.initHooks(hooks || []);
 
     this.emit('editor.beforeInit');
     const init = (lifeCycles && lifeCycles.init) || ((): void => {});
     // 用户可以通过设置extensions.init自定义初始化流程；
-    return transformToPromise(init(this))
-      .then((): boolean => {
-        // 注册快捷键
-        registShortCuts(shortCuts, this);
-        this.emit('editor.afterInit');
-        return true;
-      })
-      .catch((err): void => {
-        console.error(err);
-      });
+    try {
+      await transformToPromise(init(this));
+      // 注册快捷键
+      registShortCuts(shortCuts, this);
+      this.emit('editor.afterInit');
+      return true;
+    }
+    catch (err) {
+      console.error(err);
+    }
   }
 
   destroy(): void {
-    debug('destroy');
     try {
       const { hooks = [], shortCuts = [], lifeCycles = {} } = this.config;
       unRegistShortCuts(shortCuts);
@@ -141,23 +105,20 @@ export default class Editor extends EventEmitter {
     }
   }
 
-  get(key: string): any {
-    return (this as any)[key];
+  get<T = undefined, KeyOrType = any>(keyOrType: KeyOrType, opt?: GetOptions) {
+    return this.context.get<T, KeyOrType>(keyOrType, opt);
   }
 
-  set(key: string | object, val: any): void {
-    if (typeof key === 'string') {
-      if (['init', 'destroy', 'get', 'set', 'batchOn', 'batchOff', 'batchOnce'].includes(key)) {
-        console.error('init, destroy, get, set, batchOn, batchOff, batchOnce is private attribute');
-        return;
-      }
-      // FIXME! set to plugins, not to this
-      (this as any)[key] = val;
-    } else if (typeof key === 'object') {
-      Object.keys(key).forEach((item): void => {
-        (this as any)[item] = (key as any)[item];
-      });
-    }
+  has(keyOrType: KeyType): boolean {
+    return this.context.has(keyOrType);
+  }
+
+  set(key: KeyType, data: any): void {
+    this.context.register(data, key);
+  }
+
+  register(data: any, key?: KeyType, options?: RegisterOptions): void {
+    this.context.register(data, key, options);
   }
 
   batchOn(events: string[], lisenter: (...args: any[]) => void): void {

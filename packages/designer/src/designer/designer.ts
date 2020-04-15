@@ -124,11 +124,11 @@ export class Designer {
         selectionDispose();
         selectionDispose = undefined;
       }
-      this.postEvent('selection-change', this.currentSelection);
+      this.postEvent('selection.change', this.currentSelection);
       if (this.currentSelection) {
         const currentSelection = this.currentSelection;
         selectionDispose = currentSelection.onSelectionChange(() => {
-          this.postEvent('selection-change', currentSelection);
+          this.postEvent('selection.change', currentSelection);
         });
       }
     };
@@ -147,9 +147,9 @@ export class Designer {
       }
     };
     this.project.onCurrentDocumentChange(() => {
-      this.postEvent('current-document-change', this.currentDocument);
-      this.postEvent('selection-change', this.currentSelection);
-      this.postEvent('history-change', this.currentHistory);
+      this.postEvent('current-document.change', this.currentDocument);
+      this.postEvent('selection.change', this.currentSelection);
+      this.postEvent('history.change', this.currentHistory);
       setupSelection();
       setupHistory();
     });
