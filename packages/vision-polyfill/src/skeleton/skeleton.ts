@@ -17,6 +17,7 @@ import Widget, { isWidget, IWidget } from './widget';
 import PanelDock from './panel-dock';
 import Dock from './dock';
 import { Stage, StageConfig } from './stage';
+import { isValidElement } from 'react';
 
 export class Skeleton {
   private panels = new Map<string, Panel>();
@@ -127,6 +128,50 @@ export class Skeleton {
       }
       return new Stage(this, config);
     });
+
+    this.setupPlugins();
+  }
+
+  private setupPlugins() {
+    const { config, componentsMap } = this.editor;
+    const { plugins } = config;
+    if (!plugins) {
+      return;
+    }
+    Object.keys(plugins).forEach((area) => {
+      plugins[area].forEach(item => {
+        const { pluginKey, type, props = {}, pluginProps } = item;
+        const config: any = {
+          area,
+          type: "Widget",
+          name: pluginKey,
+          contentProps: pluginProps,
+        };
+        const { dialogProps, balloonProps, panelProps, linkProps, ...restProps } = props;
+        config.props = restProps;
+        if (dialogProps) {
+          config.dialogProps = dialogProps;
+        }
+        if (balloonProps) {
+          config.balloonProps = balloonProps;
+        }
+        if (panelProps) {
+          config.panelProps = panelProps;
+        }
+        if (linkProps) {
+          config.linkProps = linkProps;
+        }
+        if (type === 'TabPanel') {
+          config.type = 'Panel';
+        } else if (/Icon$/.test(type)) {
+          config.type = type.replace('Icon', 'Dock');
+        }
+        if (pluginKey in componentsMap) {
+          config.content = componentsMap[pluginKey];
+        }
+        this.add(config);
+      });
+    })
   }
 
   createWidget(config: IWidgetBaseConfig | IWidget) {
@@ -169,26 +214,43 @@ export class Skeleton {
   }
 
   add(config: IWidgetBaseConfig & { area: string }) {
-    const { area } = config;
+    const { content, ...restConfig } = config;
+    if (content) {
+      if (typeof content === 'object' && !isValidElement(content)) {
+        Object.keys(content).forEach(key => {
+          if (/props$/i.test(key) && restConfig[key]) {
+            restConfig[key] = {
+              ...restConfig[key],
+              ...content[key],
+            };
+          } else {
+            restConfig[key] = content[key];
+          }
+        });
+      } else {
+        restConfig.content = content;
+      }
+    }
+    const { area } = restConfig;
     switch (area) {
       case 'leftArea': case 'left':
-        return this.leftArea.add(config as any);
+        return this.leftArea.add(restConfig as any);
       case 'rightArea': case 'right':
-        return this.rightArea.add(config as any);
+        return this.rightArea.add(restConfig as any);
       case 'topArea': case 'top':
-        return this.topArea.add(config as any);
+        return this.topArea.add(restConfig as any);
       case 'toolbar':
-        return this.toolbar.add(config as any);
+        return this.toolbar.add(restConfig as any);
       case 'mainArea': case 'main': case 'center': case 'centerArea':
-        return this.mainArea.add(config as any);
+        return this.mainArea.add(restConfig as any);
       case 'bottomArea': case 'bottom':
-        return this.bottomArea.add(config as any);
+        return this.bottomArea.add(restConfig as any);
       case 'leftFixedArea':
-        return this.leftFixedArea.add(config as any);
+        return this.leftFixedArea.add(restConfig as any);
       case 'leftFloatArea':
-        return this.leftFloatArea.add(config as any);
+        return this.leftFloatArea.add(restConfig as any);
       case 'stages':
-        return this.stages.add(config as any);
+        return this.stages.add(restConfig as any);
     }
   }
 }

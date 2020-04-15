@@ -70,39 +70,41 @@ export interface HooksFuncs {
 }
 
 export default class Editor extends EventEmitter {
-  public static getInstance = (config: EditorConfig, components: PluginClassSet, utils?: Utils): Editor => {
+  static getInstance = (config: EditorConfig, components: PluginClassSet, utils?: Utils): Editor => {
     if (!instance) {
       instance = new Editor(config, components, utils);
     }
     return instance;
   };
 
-  public config: EditorConfig;
+  private _components?: PluginClassSet;
+  get components(): PluginClassSet {
+    if (!this._components) {
+      this._components = {};
+      Object.keys(this.componentsMap).forEach((key) => {
+        (this._components as any)[key] = pluginFactory(this.componentsMap[key]);
+      });
+    }
+    return this._components;
+  }
 
-  public components: PluginClassSet;
+  readonly utils: Utils;
 
-  public utils: Utils;
+  pluginStatus?: PluginStatusSet;
 
-  public pluginStatus: PluginStatusSet;
+  plugins?: PluginSet;
 
-  public plugins: PluginSet;
+  locale?: LocaleType;
 
-  public locale: LocaleType;
+  hooksFuncs?: HooksFuncs;
 
-  private hooksFuncs: HooksFuncs;
-
-  constructor(config: EditorConfig = {}, components: PluginClassSet = {}, utils?: Utils) {
+  constructor(readonly config: EditorConfig = {}, readonly componentsMap: PluginClassSet = {}, utils?: Utils) {
     super();
-    this.config = config;
-    this.components = {};
-    Object.entries(components).forEach(([key, value]): void => {
-      this.components[key] = pluginFactory(value);
-    });
-    this.utils = { ...editorUtils, ...utils };
+    this.utils = ({ ...editorUtils, ...utils } as any);
     instance = this;
   }
 
-  public init(): Promise<any> {
+  init(): Promise<any> {
     const { hooks, shortCuts = [], lifeCycles } = this.config || {};
     this.locale = store.get('lowcode-editor-locale') || 'zh-CN';
     // this.messages = this.messagesSet[this.locale];
@@ -125,7 +127,7 @@ export default class Editor extends EventEmitter {
       });
   }
 
-  public destroy(): void {
+  destroy(): void {
     debug('destroy');
     try {
       const { hooks = [], shortCuts = [], lifeCycles = {} } = this.config;
@@ -139,25 +141,26 @@ export default class Editor extends EventEmitter {
     }
   }
 
-  public get(key: string): any {
-    return this[key];
+  get(key: string): any {
+    return (this as any)[key];
   }
 
-  public set(key: string | object, val: any): void {
+  set(key: string | object, val: any): void {
     if (typeof key === 'string') {
       if (['init', 'destroy', 'get', 'set', 'batchOn', 'batchOff', 'batchOnce'].includes(key)) {
         console.error('init, destroy, get, set, batchOn, batchOff, batchOnce is private attribute');
         return;
       }
-      this[key] = val;
+      // FIXME! set to plugins, not to this
+      (this as any)[key] = val;
     } else if (typeof key === 'object') {
       Object.keys(key).forEach((item): void => {
-        this[item] = key[item];
+        (this as any)[item] = (key as any)[item];
       });
     }
   }
 
-  public batchOn(events: string[], lisenter: (...args) => void): void {
+  batchOn(events: string[], lisenter: (...args: any[]) => void): void {
     if (!Array.isArray(events)) {
       return;
     }
@@ -166,7 +169,7 @@ export default class Editor extends EventEmitter {
     });
   }
 
-  public batchOnce(events: string[], lisenter: (...args) => void): void {
+  batchOnce(events: string[], lisenter: (...args: any[]) => void): void {
     if (!Array.isArray(events)) {
       return;
     }
@@ -175,7 +178,7 @@ export default class Editor extends EventEmitter {
     });
   }
 
-  public batchOff(events: string[], lisenter: (...args) => void): void {
+  batchOff(events: string[], lisenter: (...args: any[]) => void): void {
     if (!Array.isArray(events)) {
       return;
     }
@@ -187,7 +190,7 @@ export default class Editor extends EventEmitter {
   // 销毁hooks中的消息监听
   private destroyHooks(hooks: HooksConfig = []): void {
     hooks.forEach((item, idx): void => {
-      if (typeof this.hooksFuncs[idx] === 'function') {
+      if (typeof this.hooksFuncs?.[idx] === 'function') {
         this.off(item.message, this.hooksFuncs[idx]);
       }
     });
@@ -196,8 +199,8 @@ export default class Editor extends EventEmitter {
 
   // 初始化hooks中的消息监听
   private initHooks(hooks: HooksConfig = []): void {
-    this.hooksFuncs = hooks.map((item): ((...arg) => void) => {
-      const func = (...args): void => {
+    this.hooksFuncs = hooks.map((item): ((...arg: any[]) => void) => {
+      const func = (...args: any[]): void => {
         item.handler(this, ...args);
       };
       this[item.type](item.message, func);

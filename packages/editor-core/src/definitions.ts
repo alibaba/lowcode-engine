@@ -68,7 +68,7 @@ export type HooksConfig = HookConfig[];
 export interface HookConfig {
   message: string;
   type: 'on' | 'once';
-  handler: (editor: Editor, ...args: []) => void;
+  handler: (editor: Editor, ...args: any[]) => void;
 }
 
 export type ShortCutsConfig = ShortCutConfig[];
