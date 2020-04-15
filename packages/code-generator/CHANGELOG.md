@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.5"></a>
+## [0.8.5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@0.8.4...@ali/lowcode-code-generator@0.8.5) (2020-04-15)
+
+
+### Bug Fixes
+
+* enhance compile config ([2899149](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2899149))
+* path resolve problem ([b12c0f8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b12c0f8))
+* post process file error ([389eaf7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/389eaf7))
+* rm demo in lib ([55630d6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/55630d6))
+* use webpack for package ([b350a88](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b350a88))
+
+
+### Features
+
+* add prettier post processor ([49ac9a3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/49ac9a3))
+* export publisher ([4a53faa](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/4a53faa))
+
+
+
+
 <a name="0.8.4"></a>
 ## [0.8.4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@0.8.3...@ali/lowcode-code-generator@0.8.4) (2020-03-30)
 

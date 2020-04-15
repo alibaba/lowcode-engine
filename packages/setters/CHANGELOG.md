@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.7"></a>
+## [0.8.7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-setters@0.8.6...@ali/lowcode-setters@0.8.7) (2020-04-15)
+
+
+### Features
+
+* mixin-setter get all setter ([eaa84d2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/eaa84d2))
+* mixin-setter get all setter ([a5eb62d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a5eb62d))
+
+
+
+
 <a name="0.8.6"></a>
 ## [0.8.6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-setters@0.8.5...@ali/lowcode-setters@0.8.6) (2020-03-31)
 
