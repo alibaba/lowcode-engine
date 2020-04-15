@@ -1,4 +1,4 @@
-import { CompositeArray, CompositeValue, ICompositeObject } from '@/types';
+import { CompositeArray, CompositeValue, ICompositeObject } from '../../types';
 import { generateValue, isJsExpression } from './jsExpression';
 
 function generateArray(value: CompositeArray): string {

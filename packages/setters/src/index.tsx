@@ -2,6 +2,8 @@ import { registerSetter } from '@ali/lowcode-globals';
 import { DatePicker, Input, Radio, Select, Switch, NumberPicker } from '@alifd/next';
 import ExpressionSetter from './expression-setter';
 import MixinSetter from './mixin-setter';
+import ColorSetter from './color-setter';
+import JsonSetter from './json-setter';
 import EventsSetter from './events-setter';
 import StyleSetter from './style-setter';
 
@@ -49,6 +51,8 @@ const builtinSetters = {
   DateRangeSetter,
   EventsSetter,
   StyleSetter,
+  ColorSetter,
+  JsonSetter,
 };
 
 export function registerSetters() {

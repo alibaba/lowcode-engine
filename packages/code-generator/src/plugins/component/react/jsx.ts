@@ -11,7 +11,7 @@ import {
   IJSExpression,
 } from '../../../types';
 
-import { handleChildren } from '@/utils/children';
+import { handleChildren } from '../../../utils/children';
 import { generateCompositeType } from '../../utils/compositeType';
 import { REACT_CHUNK_NAME } from './const';
 

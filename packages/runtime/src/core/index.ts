@@ -1,5 +1,5 @@
 import { ReactType } from 'react';
-import Container from './container';
+import Container, { ILayoutOptions } from './container';
 import run from './run';
 
 class App {
@@ -17,8 +17,8 @@ class App {
     this.container.registerRenderer(renderer);
   }
 
-  registerLayout(componentName: string, Layout: ReactType): any {
-    this.container.registerLayout(componentName, Layout);
+  registerLayout(Layout: ReactType, options: ILayoutOptions): any {
+    this.container.registerLayout(Layout, options);
   }
 
   registerLoading(component: ReactType) {

@@ -1,7 +1,7 @@
-import { IResultDir, IResultFile } from '@/types';
+import { IResultDir, IResultFile } from '../types';
 
-import CodeGenerator from '@/index';
-import { createDiskPublisher } from '@/publisher/disk';
+import CodeGenerator from '../index';
+import { createDiskPublisher } from '../publisher/disk';
 import demoSchema from './simpleDemo';
 
 function flatFiles(rootName: string | null, dir: IResultDir): IResultFile[] {
