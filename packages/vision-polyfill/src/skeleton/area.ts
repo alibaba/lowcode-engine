@@ -45,4 +45,8 @@ export default class Area<C extends IWidgetBaseConfig = any, T extends IWidget =
   hide() {
     this.setVisible(false);
   }
+
+  show() {
+    this.setVisible(true);
+  }
 }

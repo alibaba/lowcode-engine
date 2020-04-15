@@ -2,7 +2,7 @@ import { ReactNode, createElement } from 'react';
 import { uniqueId, createContent, obx } from '@ali/lowcode-globals';
 import { DockConfig } from "./types";
 import { Skeleton } from './skeleton';
-import { DockView } from './widget-views';
+import { DockView, WidgetView } from './widget-views';
 import { IWidget } from './widget';
 
 /**
@@ -19,30 +19,34 @@ export default class Dock implements IWidget {
     return this._visible;
   }
 
+  get content(): ReactNode {
+    return createElement(WidgetView, {
+      widget: this,
+      key: this.id,
+    });
+  }
+
   private inited: boolean = false;
-  private _content: ReactNode;
-  get content() {
+  private _body: ReactNode;
+  get body() {
     if (this.inited) {
-      return this._content;
+      return this._body;
     }
-    this.inited = true;
+
     const { props, content, contentProps } = this.config;
 
     if (content) {
-      this._content = createContent(content, {
+      this._body = createContent(content, {
         ...contentProps,
+        config: this.content,
         editor: this.skeleton.editor,
-        key: this.id,
       });
     } else {
-      this._content = createElement(DockView, {
-        ...props,
-        key: this.id,
-      });
+      this._body = createElement(DockView, props);
     }
-
-    return this._content;
+    return this._body;
   }
+
   constructor(readonly skeleton: Skeleton, private config: DockConfig) {
     const { props = {}, name } = config;
     this.name = name;
@@ -74,5 +78,9 @@ export default class Dock implements IWidget {
 
   show() {
     this.setVisible(true);
+  }
+
+  toggle() {
+    this.setVisible(!this._visible);
   }
 }

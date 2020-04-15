@@ -69,3 +69,12 @@ export {
   Panes,
   modules,
 };
+
+
+/*
+console.log(
+  `%cLowcodeEngine %cv${VERSION}`,
+  "color:#000;font-weight:bold;",
+  "color:green;font-weight:bold;"
+);
+*/

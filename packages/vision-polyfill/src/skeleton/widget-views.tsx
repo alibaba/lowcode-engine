@@ -6,7 +6,7 @@ import PanelDock from './panel-dock';
 import { composeTitle } from './utils';
 import WidgetContainer from './widget-container';
 import Panel from './panel';
-import Widget from './widget';
+import { IWidget } from './widget';
 
 export function DockView({ title, icon, description, size, className, onClick }: DockProps) {
   return (
@@ -22,6 +22,25 @@ export function DockView({ title, icon, description, size, className, onClick }:
 
 @observer
 export class PanelDockView extends Component<DockProps & { dock: PanelDock }> {
+  componentDidMount() {
+    this.checkActived();
+  }
+  componentDidUpdate() {
+    this.checkActived();
+  }
+  private lastActived: boolean = false;
+  checkActived() {
+    const { dock } = this.props;
+    if (dock.actived !== this.lastActived) {
+      this.lastActived = dock.actived;
+      if (this.lastActived) {
+        dock.skeleton.editor.emit('skeleton.panel-dock.active', dock.name, dock);
+      } else {
+        dock.skeleton.editor.emit('skeleton.panel-dock.unactive', dock.name, dock);
+      }
+    }
+  }
+
   render() {
     const { dock, className, onClick, ...props } = this.props;
     return DockView({
@@ -31,7 +50,7 @@ export class PanelDockView extends Component<DockProps & { dock: PanelDock }> {
       }),
       onClick: () => {
         onClick && onClick();
-        dock.toggle();
+        dock.togglePanel();
       },
     });
   }
@@ -41,16 +60,82 @@ export class DialogDockView extends Component {
 
 }
 
+@observer
+export class TitledPanelView extends Component<{ panel: Panel }> {
+  shouldComponentUpdate() {
+    return false;
+  }
+  componentDidMount() {
+    this.checkVisible();
+  }
+  componentDidUpdate() {
+    this.checkVisible();
+  }
+  private lastVisible: boolean = false;
+  checkVisible() {
+    const { panel } = this.props;
+    const currentVisible = panel.inited && panel.visible;
+    if (currentVisible !== this.lastVisible) {
+      this.lastVisible = currentVisible;
+      if (this.lastVisible) {
+        panel.skeleton.editor.emit('skeleton.panel.show', panel.name, panel);
+      } else {
+        panel.skeleton.editor.emit('skeleton.panel.hide', panel.name, panel);
+      }
+    }
+  }
+  render() {
+    const { panel } = this.props;
+    if (!panel.inited) {
+      return null;
+    }
+    return (
+      <div className={classNames('lc-titled-panel', {
+        hidden: !panel.visible,
+      })}>
+        <PanelTitle panel={panel} />
+        <div className="lc-pane-body">{panel.body}</div>
+      </div>
+    );
+  }
+}
+
+@observer
 export class PanelView extends Component<{ panel: Panel }> {
   shouldComponentUpdate() {
     return false;
   }
+  componentDidMount() {
+    this.checkVisible();
+  }
+  componentDidUpdate() {
+    this.checkVisible();
+  }
+  private lastVisible: boolean = false;
+  checkVisible() {
+    const { panel } = this.props;
+    const currentVisible = panel.inited && panel.visible;
+    if (currentVisible !== this.lastVisible) {
+      this.lastVisible = currentVisible;
+      if (this.lastVisible) {
+        panel.skeleton.editor.emit('skeleton.panel.show', panel.name, panel);
+      } else {
+        panel.skeleton.editor.emit('skeleton.panel.hide', panel.name, panel);
+      }
+    }
+  }
   render() {
     const { panel } = this.props;
+    if (!panel.inited) {
+      return null;
+    }
     return (
-      <div className="lc-panel">
-        <PanelTitle panel={panel} />
-        <div className="lc-pane-body">{panel.body}</div>
+      <div
+        className={classNames('lc-panel', {
+          hidden: !panel.visible,
+        })}
+      >
+        {panel.body}
       </div>
     );
   }
@@ -64,7 +149,7 @@ export class TabsPanelView extends Component<{ container: WidgetContainer<Panel>
     const contents: ReactElement[] = [];
     container.items.forEach((item: any) => {
       titles.push(<PanelTitle key={item.id} panel={item} className="lc-tab-title" />);
-      contents.push(<PanelWrapper key={item.id} panel={item} />);
+      contents.push(<PanelView key={item.id} panel={item} />);
     });
 
     return (
@@ -113,26 +198,29 @@ class PanelTitle extends Component<{ panel: Panel; className?: string }> {
 }
 
 @observer
-export class PanelWrapper extends Component<{ panel: Panel }> {
-  render() {
-    const { panel } = this.props;
-    if (!panel.inited) {
-      return null;
-    }
-    return (
-      <div
-        className={classNames('lc-panel-wrapper', {
-          hidden: !panel.actived,
-        })}
-      >
-        {panel.body}
-      </div>
-    );
+export class WidgetView extends Component<{ widget: IWidget }> {
+  shouldComponentUpdate() {
+    return false;
   }
-}
-
-@observer
-export class WidgetWrapper extends Component<{ widget: Widget }> {
+  componentDidMount() {
+    this.checkVisible();
+  }
+  componentDidUpdate() {
+    this.checkVisible();
+  }
+  private lastVisible: boolean = false;
+  checkVisible() {
+    const { widget } = this.props;
+    const currentVisible = widget.visible;
+    if (currentVisible !== this.lastVisible) {
+      this.lastVisible = currentVisible;
+      if (this.lastVisible) {
+        widget.skeleton.editor.emit('skeleton.widget.show', widget.name, widget);
+      } else {
+        widget.skeleton.editor.emit('skeleton.widget.hide', widget.name, widget);
+      }
+    }
+  }
   render() {
     const { widget } = this.props;
     if (!widget.visible) {

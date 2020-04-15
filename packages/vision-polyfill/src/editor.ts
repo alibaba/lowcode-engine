@@ -11,6 +11,10 @@ export const editor = new Editor();
 
 export const skeleton = new Skeleton(editor);
 
+export const designer = new Designer();
+
+editor.set('designer', designer)
+
 skeleton.mainArea.add({
   name: 'designer',
   type: 'Widget',
@@ -31,7 +35,7 @@ skeleton.leftArea.add({
   },
   content: OutlinePane,
   panelProps: {
-    area: 'leftFloatArea'
+    area: 'leftFixedArea'
   }
 });
 

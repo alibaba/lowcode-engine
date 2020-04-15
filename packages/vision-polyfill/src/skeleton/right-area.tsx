@@ -1,9 +1,8 @@
 import { Component, Fragment } from 'react';
 import classNames from 'classnames';
-import { observer } from '@ali/recore';
+import { observer } from '@ali/lowcode-globals';
 import Area from './area';
 import Panel from './panel';
-import { PanelWrapper } from './widget-views';
 
 @observer
 export default class RightArea extends Component<{ area: Area<any, Panel> }> {
@@ -29,7 +28,7 @@ class Contents extends Component<{ area: Area<any, Panel> }> {
     const { area } = this.props;
     return (
       <Fragment>
-        {area.container.items.map((item) => <PanelWrapper key={item.id} panel={item} />)}
+        {area.container.items.map((item) => item.content)}
       </Fragment>
     );
   }

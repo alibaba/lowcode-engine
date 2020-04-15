@@ -150,7 +150,8 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
     if (at === '__IN_SETTINGS__') {
       setup();
     } else {
-      editor.on('leftPanel.show', (key: string) => {
+      editor.on('skeleton.panel.show', (key: string) => {
+        console.info('show', key);
         if (key === at) {
           setup();
           if (this.master) {

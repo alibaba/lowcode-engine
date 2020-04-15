@@ -1,5 +1,5 @@
 import { Selection, DocumentModel, Node } from '@ali/lowcode-designer';
-import editor from './editor';
+import { editor, designer } from './editor';
 
 let currentSelection: Selection;
 // let currentDocument: DocumentModel;
@@ -27,7 +27,7 @@ editor.once('designer.ready', () => {
 export default {
   select: (node: Node) => {
     if (!node) {
-      return currentSelection.clear();
+      return designer.currentSelection?.clear();
     }
     currentSelection.select(node.id);
   },

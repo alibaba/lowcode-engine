@@ -3,7 +3,7 @@ import { createElement, ReactNode } from 'react';
 import { Skeleton } from './skeleton';
 import { PanelDockConfig } from './types';
 import Panel from './panel';
-import { PanelDockView } from './widget-views';
+import { PanelDockView, WidgetView } from './widget-views';
 import { IWidget } from './widget';
 
 export default class PanelDock implements IWidget {
@@ -13,21 +13,32 @@ export default class PanelDock implements IWidget {
   readonly align?: string;
 
   private inited: boolean = false;
-  private _content: ReactNode;
-  get content() {
+  private _body: ReactNode;
+  get body() {
     if (this.inited) {
-      return this._content;
+      return this._body;
     }
     this.inited = true;
     const { props } = this.config;
 
-    this._content = createElement(PanelDockView, {
+    this._body = createElement(PanelDockView, {
       ...props,
-      key: this.id,
       dock: this,
     });
 
-    return this._content;
+    return this._body;
+  }
+
+  get content(): ReactNode {
+    return createElement(WidgetView, {
+      widget: this,
+      key: this.id,
+    });
+  }
+
+  @obx.ref private _visible: boolean = true;
+  get visible() {
+    return this._visible;
   }
 
   @computed get actived(): boolean {
@@ -52,12 +63,36 @@ export default class PanelDock implements IWidget {
         props: panelProps || {},
         contentProps,
         content,
+        // FIXME! dirty fixed
         area: panelProps?.area || 'leftFloatArea'
       }) as Panel;
     }
   }
 
+  setVisible(flag: boolean) {
+    if (flag === this._visible) {
+      return;
+    }
+    if (flag) {
+      this._visible = true;
+    } else if (this.inited) {
+      this._visible = false;
+    }
+  }
+
+  hide() {
+    this.setVisible(false);
+  }
+
+  show() {
+    this.setVisible(true);
+  }
+
   toggle() {
+    this.setVisible(!this._visible);
+  }
+
+  togglePanel() {
     this.panel?.toggle();
   }
 
@@ -69,11 +104,11 @@ export default class PanelDock implements IWidget {
     return this.content;
   }
 
-  hide() {
+  hidePanel() {
     this.panel?.setActive(false);
   }
 
-  show() {
+  showPanel() {
     this.panel?.setActive(true);
   }
 }

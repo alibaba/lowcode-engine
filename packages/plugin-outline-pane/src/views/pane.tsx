@@ -6,10 +6,10 @@ import TreeView from './tree';
 import './style.less';
 
 @observer
-export default class OutlinePane extends Component<{ config?: any; editor: any; inSettings?: boolean }> {
+export default class OutlinePane extends Component<{ config: any; editor: any; inSettings?: boolean }> {
   private main = new OutlineMain(
     this.props.editor,
-    this.props.config ? this.props.config.pluginKey : this.props.inSettings ? '__IN_SETTINGS__' : null,
+    this.props.config.name || this.props.config.pluginKey,
   );
 
   shouldComponentUpdate() {
@@ -21,6 +21,7 @@ export default class OutlinePane extends Component<{ config?: any; editor: any; 
   }
 
   render() {
+    console.info(this.props);
     const tree = this.main.currentTree;
 
     if (!tree) {

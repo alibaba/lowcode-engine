@@ -5,7 +5,6 @@ import { Button } from '@alifd/next';
 import Area from './area';
 import { PanelConfig } from './types';
 import Panel from './panel';
-import { PanelWrapper } from './widget-views';
 
 @observer
 export default class LeftFixedPane extends Component<{ area: Area<PanelConfig, Panel> }> {
@@ -41,9 +40,7 @@ class Contents extends Component<{ area: Area<PanelConfig, Panel> }> {
     const { area } = this.props;
     return (
       <Fragment>
-        {area.container.items.map((panel) => (
-          <PanelWrapper key={panel.id} panel={panel} />
-        ))}
+        {area.container.items.map((panel) => panel.content)}
       </Fragment>
     );
   }

@@ -2,8 +2,8 @@ import lg from '@ali/vu-logger';
 import { EventEmitter } from 'events';
 import { ComponentClass } from 'react';
 
-import Bundle from '../bundle/bundle';
-import Prototype, { setPackages } from '../bundle/prototype';
+import Bundle from './bundle';
+import Prototype, { setPackages } from './prototype';
 import Bus from '../bus';
 
 interface IComponentInfo {

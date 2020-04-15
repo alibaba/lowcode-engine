@@ -2,18 +2,22 @@ import { ReactNode, createElement } from 'react';
 import { createContent, uniqueId, obx } from '@ali/lowcode-globals';
 import { WidgetConfig } from './types';
 import { Skeleton } from './skeleton';
-import { WidgetWrapper } from './widget-views';
+import { WidgetView } from './widget-views';
 
 export interface IWidget {
   readonly name: string;
-  readonly content: any;
+  readonly content: ReactNode;
   readonly align?: string;
   readonly isWidget: true;
+  readonly visible: boolean;
+  readonly body: ReactNode;
+  readonly skeleton: Skeleton;
 
   getName(): string;
   getContent(): any;
   show(): void;
   hide(): void;
+  toggle(): void;
 }
 
 export default class Widget implements IWidget {
@@ -42,8 +46,8 @@ export default class Widget implements IWidget {
     return this._body;
   }
 
-  get content() {
-    return createElement(WidgetWrapper, {
+  get content(): ReactNode {
+    return createElement(WidgetView, {
       widget: this,
       key: this.id,
     });

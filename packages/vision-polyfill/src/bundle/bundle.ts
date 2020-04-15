@@ -3,7 +3,7 @@ import { camelCase, find, findIndex, upperFirst } from 'lodash';
 import { ComponentClass, ReactElement, ComponentType } from 'react';
 
 import { UnknownComponent } from '../../ui/placeholders';
-import Trunk, { IComponentBundle } from '../bak/trunk';
+import Trunk, { IComponentBundle } from './trunk';
 import Prototype from './prototype';
 
 function basename(name: string) {

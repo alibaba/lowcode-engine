@@ -45,7 +45,7 @@ body {
 }
 
 
-.my-pane {
+.lc-titled-panel {
   width: 100%;
   height: 100%;
   position: relative;
@@ -104,7 +104,7 @@ body {
     top: var(--pane-title-height);
   }
 }
-.lc-panel-wrapper {
+.lc-panel {
   height: 100%;
   width: 100%;
   overflow: auto;
@@ -173,8 +173,6 @@ body {
 }
 
 
-
-
 .lc-workbench {
   height: 100%;
   display: flex;
@@ -197,7 +195,8 @@ body {
       bottom: 0;
       width: var(--dock-pane-width);
       left: calc(var(--left-area-width) + 1px);
-      z-index: 20;
+      background-color: var(--color-pane-background);
+      z-index: 820;
       display: none;
       &.lc-area-visible {
         display: block;

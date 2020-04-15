@@ -1,4 +1,4 @@
-import { skeleton } from './editor';
+import { skeleton, editor } from './editor';
 import { ReactElement } from 'react';
 import { IWidgetBaseConfig } from './skeleton/types';
 
@@ -151,11 +151,27 @@ const dockPane = Object.assign(skeleton.leftArea, {
   /**
    * compatible *VE.dockPane.onDockShow*
    */
-  onDockShow() {},
+  onDockShow(fn: (dock: any) => void): () => void {
+    const f = (_: any, dock: any) => {
+      fn(dock);
+    };
+    editor.on('skeleton.panel-dock.show', f);
+    return () => {
+      editor.removeListener('skeleton.panel-dock.show', f);
+    };
+  },
   /**
    * compatible *VE.dockPane.onDockHide*
    */
-  onDockHide() {},
+  onDockHide(fn: (dock: any) => void): () => void {
+    const f = (_: any, dock: any) => {
+      fn(dock);
+    };
+    editor.on('skeleton.panel-dock.hide', f);
+    return () => {
+      editor.removeListener('skeleton.panel-dock.hide', f);
+    };
+  },
   /**
    * compatible *VE.dockPane.setFixed*
    */

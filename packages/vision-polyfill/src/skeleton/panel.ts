@@ -1,8 +1,8 @@
-import {createElement, ReactNode } from 'react';
+import { createElement, ReactNode } from 'react';
 import { obx, uniqueId, createContent, TitleContent } from '@ali/lowcode-globals';
 import WidgetContainer from './widget-container';
 import { PanelConfig, HelpTipConfig } from './types';
-import { PanelView, TabsPanelView } from './widget-views';
+import { TitledPanelView, TabsPanelView, PanelView } from './widget-views';
 import { Skeleton } from './skeleton';
 import { composeTitle } from './utils';
 import { IWidget } from './widget';
@@ -16,31 +16,12 @@ export default class Panel implements IWidget {
   get actived(): boolean {
     return this._actived;
   }
+
   get visible(): boolean {
     if (this.parent?.visible) {
       return this._actived;
     }
     return false;
-  }
-  setActive(flag: boolean) {
-    if (flag === this._actived) {
-      // TODO: 如果移动到另外一个 container，会有问题
-      return;
-    }
-    if (flag) {
-      if (!this.inited) {
-        this.initBody();
-      }
-      this._actived = true;
-      this.parent?.active(this);
-    } else if (this.inited) {
-      this._actived = false;
-      this.parent?.unactive(this);
-    }
-  }
-
-  toggle() {
-    this.setActive(!this._actived);
   }
 
   readonly isPanel = true;
@@ -52,7 +33,13 @@ export default class Panel implements IWidget {
   }
 
   get content() {
-    return this.plain ? this.body : createElement(PanelView, { panel: this });
+    if (this.plain) {
+      return createElement(PanelView, {
+        panel: this,
+        key: this.id,
+      });
+    }
+    return createElement(TitledPanelView, { panel: this, key: this.id });
   }
 
   readonly title: TitleContent;
@@ -71,13 +58,19 @@ export default class Panel implements IWidget {
     this.plain = hideTitleBar || !title;
     this.help = help;
     if (Array.isArray(content)) {
-      this.container = this.skeleton.createContainer(name, (item) => {
-        if (isPanel(item)) {
-          return item;
-        }
-        return this.skeleton.createPanel(item);
-      }, true, () => this.visible, true);
-      content.forEach(item => this.add(item));
+      this.container = this.skeleton.createContainer(
+        name,
+        (item) => {
+          if (isPanel(item)) {
+            return item;
+          }
+          return this.skeleton.createPanel(item);
+        },
+        true,
+        () => this.visible,
+        true,
+      );
+      content.forEach((item) => this.add(item));
     }
     // todo: process shortcut
   }
@@ -90,18 +83,18 @@ export default class Panel implements IWidget {
     if (this.container) {
       this._body = createElement(TabsPanelView, {
         container: this.container,
-        key: this.id,
       });
     } else {
       const { content, contentProps } = this.config;
       this._body = createContent(content, {
         ...contentProps,
         editor: this.skeleton.editor,
+        config: this.config,
         panel: this,
-        key: this.id,
       });
     }
   }
+
   setParent(parent: WidgetContainer) {
     if (parent === this.parent) {
       return;
@@ -134,6 +127,27 @@ export default class Panel implements IWidget {
 
   getContent() {
     return this.content;
+  }
+
+  setActive(flag: boolean) {
+    if (flag === this._actived) {
+      // TODO: 如果移动到另外一个 container，会有问题
+      return;
+    }
+    if (flag) {
+      if (!this.inited) {
+        this.initBody();
+      }
+      this._actived = true;
+      this.parent?.active(this);
+    } else if (this.inited) {
+      this._actived = false;
+      this.parent?.unactive(this);
+    }
+  }
+
+  toggle() {
+    this.setActive(!this._actived);
   }
 
   hide() {

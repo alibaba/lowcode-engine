@@ -4,7 +4,6 @@ import { observer } from '@ali/lowcode-globals';
 import { Button } from '@alifd/next';
 import Area from './area';
 import Panel from './panel';
-import { PanelWrapper } from './widget-views';
 
 @observer
 export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }> {
@@ -42,9 +41,7 @@ class Contents extends Component<{ area: Area<any, Panel> }> {
     const { area } = this.props;
     return (
       <Fragment>
-        {area.container.items.map((panel) => (
-          <PanelWrapper key={panel.id} panel={panel} />
-        ))}
+        {area.container.items.map((panel) => panel.content)}
       </Fragment>
     );
   }

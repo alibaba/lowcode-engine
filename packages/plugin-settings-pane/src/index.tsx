@@ -138,7 +138,9 @@ class OutlinePaneEntry extends PureComponent<{ main: SettingsMain }> {
     if (!this.state.outlineInited) {
       return null;
     }
-    return <OutlinePane editor={this.props.main.editor} inSettings />;
+    return <OutlinePane editor={this.props.main.editor} config={{
+      name: '__IN_SETTINGS__'
+    }} />;
   }
 }
 
