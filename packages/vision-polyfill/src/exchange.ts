@@ -1,23 +1,20 @@
-import { Selection, DocumentModel, Node } from '@ali/lowcode-designer';
+import { Selection, Node } from '@ali/lowcode-designer';
 import { editor, designer } from './editor';
 
 let currentSelection: Selection;
-// let currentDocument: DocumentModel;
 
 // get selection async
 editor.once('designer.ready', () => {
   const getSelection = () => {
     if (editor.designer.currentSelection) {
       currentSelection = editor.designer.currentSelection;
-      // currentDocument = editor.designer.currentDocument;
 
-      currentSelection.onSelectionChange((ids: string[]) => {
-        // console.log(ids);
-        // const nodes = ids.map((id: string) => currentDocument.getNode(id));
+      currentSelection.onSelectionChange(() => {
+        // const nodes = currentSelection.getNodes();
         // console.log(nodes);
       });
     } else {
-      console.log('waiting ...');
+      // console.log('waiting ...');
       requestAnimationFrame(getSelection);
     }
   };
