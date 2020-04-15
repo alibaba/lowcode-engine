@@ -15,7 +15,12 @@ export class DesignerView extends Component<DesignerProps & {
   constructor(props: any) {
     super(props);
     const { designer, ...designerProps } = props;
-    this.designer = designer || new Designer(designerProps);
+    if (designer) {
+      this.designer = designer;
+      designer.setProps(designerProps);
+    } else {
+      this.designer = new Designer(designerProps);
+    }
   }
 
   shouldComponentUpdate(nextProps: DesignerProps) {

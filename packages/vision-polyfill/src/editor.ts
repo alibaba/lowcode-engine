@@ -1,9 +1,10 @@
 import Editor from '@ali/lowcode-editor-core';
 import OutlinePane from '@ali/lowcode-plugin-outline-pane';
 import SettingsPane from '@ali/lowcode-plugin-settings-pane';
-import Designer from '@ali/lowcode-plugin-designer';
+import DesignerView from '@ali/lowcode-plugin-designer';
 import { registerSetters } from '@ali/lowcode-setters';
 import { Skeleton } from './skeleton/skeleton';
+import { Designer } from 'designer/src/designer';
 
 registerSetters();
 
@@ -11,14 +12,14 @@ export const editor = new Editor();
 
 export const skeleton = new Skeleton(editor);
 
-export const designer = new Designer();
+export const designer = new Designer({editor});
 
 editor.set('designer', designer)
 
 skeleton.mainArea.add({
   name: 'designer',
   type: 'Widget',
-  content: Designer,
+  content: DesignerView,
 });
 skeleton.rightArea.add({
   name: 'settingsPane',
