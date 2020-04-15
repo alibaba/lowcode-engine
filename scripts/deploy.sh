@@ -29,7 +29,8 @@ lerna run cloud-build --stream
 
 cd $WORK_DIR
 # mv deploy-space/packages/demo/build $BUILD_DEST
-mv deploy-space/packages/react-simulator-renderer/dist/* $BUILD_DEST
+# mv deploy-space/packages/react-simulator-renderer/dist/* $BUILD_DEST
+mv deploy-space/packages/react-simulator-renderer/dist $BUILD_DEST
 mv deploy-space/packages/globals/dist/* $BUILD_DEST
 cp deploy-space/html/* $BUILD_DEST
 
