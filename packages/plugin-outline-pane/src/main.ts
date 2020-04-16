@@ -133,19 +133,13 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
   private fixed = false;
   constructor(readonly editor: Editor, at?: string) {
     let inited = false;
-    const setup = () => {
+    const setup = async () => {
       if (inited) {
         return false;
       }
       inited = true;
-      const designer = editor.get(Designer);
-      if (designer) {
-        this.setupDesigner(designer);
-      } else {
-        editor.once('designer.mount', (designer: Designer) => {
-          this.setupDesigner(designer);
-        });
-      }
+      const designer = await editor.onceGot(Designer);
+      this.setupDesigner(designer);
     };
 
     // FIXME: dirty connect to others

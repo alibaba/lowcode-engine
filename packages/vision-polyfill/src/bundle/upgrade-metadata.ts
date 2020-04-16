@@ -35,11 +35,11 @@ export type HandleState = REJECTED | ALLOWED | LIMITED;
  * model.locate: (my, transferData, mouseEvent?) => Location | null, 用于非 node 节点任意数据的定位
  *
  * test-RegExp: /^tagName./
- * test-Pattern: 'tagName,tagName2,Field-*'
+ * test-List: 'tagName,tagName2' | ['tagName', 'tagName2']
  * test-Func: (target, my) => boolean
- * Tester: RegExp | Pattern | Func | { exclude: Tester, include: Tester }
+ * Tester: RegExp | Pattern | Func
  *
- * model.accept
+ * component.accept
  *   accept: '@CHILD'，从子节点寻找一个容器，针对 slot，比如 TabsLayout，ColumnsLayout, 大纲树误定位则错误信息透出，拒绝投入
  *   accept: false|null 表示不是一个容器，是一个端点，比如input，option
  *   accept: true 表示ok，无任何限制，比如 div,
@@ -66,7 +66,6 @@ export type HandleState = REJECTED | ALLOWED | LIMITED;
  * 4. Li 拖拽时高亮所有 UL，根据Li设置的 dropTargetRules 目标规则筛选节点，取并集区域
  * 5. 能弹出提示
  *
- * 父级接受 & 定位：默认值
  */
 
 
@@ -94,7 +93,7 @@ export interface AcceptControl {
    * KeyboardEvent: paste a entiy
    * LocateEvent: drag a entiy from pane
    */
-  accept?: AcceptFunc | AT_CHILD;
+  handleLocate?: AcceptFunc | AT_CHILD;
   handleAccept?: (my: ElementNode, locationData: LocationData) => void;
 }
 
@@ -242,37 +241,35 @@ function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     icon,
     packageName,
     category,
-    defaultProps,
     extraActions,
     view,
-    initialChildren,
     configure,
+    defaultProps,
+    initialChildren,
     snippets,
     transducers,
-    reducers,
     isContainer,
     rectSelector,
     isModal,
     isFloating,
     descriptor,
     context,
-    hasSlot,
     canOperating,
-    canDraging,
-    canDragging,
-    canSelecting,
     canContain,
     canDropTo,
     canDropto,
     canDropIn,
     canDroping,
-    didDropOut,
-    didDropIn,
-    canResizing,
-    onResizeStart,
-    onResize,
-    onResizeEnd,
-    subtreeModified,
+    // handles
+    canDraging, canDragging, // handleDragging
+    canResizing, // handleResizing
+    // hooks
+    didDropOut, // onNodeRemove
+    didDropIn,  // onNodeAdd
+    onResizeStart, // onResizeStart
+    onResize, // onResize
+    onResizeEnd, // onResizeEnd
+    subtreeModified, // onSubtreeModified
   } = oldConfig;
 
 
@@ -305,13 +302,42 @@ function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   if (canOperating === false) {
     component.disableBehaviors = '*';
   }
-  nestingRule
-  disableBehaviors
-  actions
+  if (extraActions) {
+    component.actions = extraActions.map((content) => {
+      return {
+        name: content.displayName || content.name || 'anonymous',
+        content,
+        important: true,
+      };
+    });
+  }
+  const nestingRule: any = {};
+  if (canContain) {
+    nestingRule.descendantWhitelist = canContain;
+  }
+  if (canDropTo || canDropto) {
+    nestingRule.parentWhitelist = canDropTo || canDropto;
+  }
+  if (canDropIn || canDroping) {
+    nestingRule.childWhitelist = canDropIn || canDroping;
+  }
+  component.nestingRule = nestingRule;
+
+  if (canDragging || canDraging) {
+    // hooks|handle
+  }
+
+  // 未考虑清楚的，放在实验性段落
+  const experimental: any = {};
+  if (context) {
+    // for prototype.getContextInfo
+    experimental.context = context;
+  }
+
   const props = {};
   const styles = {};
   const events = {};
-  meta.configure = { props, component, styles, events };
+  meta.configure = { props, component, styles, events, experimental };
 
 }
 
@@ -341,7 +367,6 @@ export interface OldPrototypeConfig {
   configure: IPropConfig[]; // => configure.props
   snippets?: ISnippet[]; // => snippets
   transducers?: any; // => ?
-  reducers?: any; // ?
   /**
    * Selector expression rectangle of a node, it is usually a querySelector string
    * @example '.classname > div'

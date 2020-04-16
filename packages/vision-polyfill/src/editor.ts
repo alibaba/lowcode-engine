@@ -5,7 +5,7 @@ import DesignerView from '@ali/lowcode-plugin-designer';
 import { registerSetters } from '@ali/lowcode-setters';
 import { Skeleton } from './skeleton/skeleton';
 import { Designer } from 'designer/src/designer';
-import { globalContext } from 'globals/src/di';
+import { globalContext } from '@ali/lowcode-globals';
 
 registerSetters();
 

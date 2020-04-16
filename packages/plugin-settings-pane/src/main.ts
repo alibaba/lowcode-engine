@@ -339,21 +339,16 @@ export class SettingsMain implements SettingTarget {
       }
     };
     editor.on('designer.selection.change', setupSelection);
-    const connectTree = (designer: any) => {
-      getTreeMaster(designer).onceEnableBuiltin(() => {
-        this.emitter.emit('outline-visible');
-      });
-    }
-    const designer = editor.get(Designer);
-    if (designer) {
-      connectTree(designer);
-      setupSelection(designer.currentSelection);
-    } else {
-      editor.once('designer.mount', connectTree);
-    }
     this.disposeListener = () => {
       editor.removeListener('designer.selection.change', setupSelection);
     };
+    (async () => {
+      const designer = await editor.onceGot(Designer);
+      getTreeMaster(designer).onceEnableBuiltin(() => {
+        this.emitter.emit('outline-visible');
+      });
+      setupSelection(designer.currentSelection);
+    })();
   }
 
   onEffect(action: () => void): () => void {

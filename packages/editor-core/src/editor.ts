@@ -82,6 +82,58 @@ export default class Editor extends EventEmitter {
     instance = this;
   }
 
+  get<T = undefined, KeyOrType = any>(keyOrType: KeyOrType, opt?: GetOptions): GetReturnType<T, KeyOrType> | undefined {
+    const x = this.context.get<T, KeyOrType>(keyOrType, opt);
+    if (x === NOT_FOUND) {
+      return undefined;
+    }
+    return x;
+  }
+
+  has(keyOrType: KeyType): boolean {
+    return this.context.has(keyOrType);
+  }
+
+  set(key: KeyType, data: any): void {
+    if (this.context.has(key)) {
+      this.context.replace(key, data, undefined, true);
+    } else {
+      this.context.register(data, key);
+    }
+    this.notifyGot(key);
+  }
+
+  onceGot<T = undefined, KeyOrType extends KeyType = any>(keyOrType: KeyOrType): Promise<GetReturnType<T, KeyOrType>> {
+    const x = this.context.get<T, KeyOrType>(keyOrType);
+    if (x !== NOT_FOUND) {
+      return Promise.resolve(x);
+    }
+    return new Promise((resolve) => {
+      this.setWait(keyOrType, resolve, true);
+    });
+  }
+
+  onGot<T = undefined, KeyOrType extends KeyType = any>(
+    keyOrType: KeyOrType,
+    fn: (data: GetReturnType<T, KeyOrType>) => void,
+  ): () => void {
+    const x = this.context.get<T, KeyOrType>(keyOrType);
+    if (x !== NOT_FOUND) {
+      fn(x);
+      return () => {};
+    } else {
+      this.setWait(keyOrType, fn);
+      return () => {
+        this.delWait(keyOrType, fn);
+      };
+    }
+  }
+
+  register(data: any, key?: KeyType, options?: RegisterOptions): void {
+    this.context.register(data, key, options);
+    this.notifyGot(key || data);
+  }
+
   async init(): Promise<any> {
     const { hooks, shortCuts = [], lifeCycles } = this.config || {};
     this.locale = store.get('lowcode-editor-locale') || 'zh-CN';
@@ -115,25 +167,31 @@ export default class Editor extends EventEmitter {
     }
   }
 
-  get<T = undefined, KeyOrType = any>(keyOrType: KeyOrType, opt?: GetOptions): GetReturnType<T, KeyOrType> | undefined {
-    const x = this.context.get<T, KeyOrType>(keyOrType, opt);
-    if (x === NOT_FOUND) {
-      return undefined;
+  batchOn(events: string[], lisenter: (...args: any[]) => void): void {
+    if (!Array.isArray(events)) {
+      return;
     }
-    return x;
+    events.forEach((event): void => {
+      this.on(event, lisenter);
+    });
   }
 
-  has(keyOrType: KeyType): boolean {
-    return this.context.has(keyOrType);
+  batchOnce(events: string[], lisenter: (...args: any[]) => void): void {
+    if (!Array.isArray(events)) {
+      return;
+    }
+    events.forEach((event): void => {
+      this.once(event, lisenter);
+    });
   }
 
-  set(key: KeyType, data: any): void {
-    if (this.context.has(key)) {
-      this.context.replace(key, data, undefined, true);
-    } else {
-      this.context.register(data, key);
+  batchOff(events: string[], lisenter: (...args: any[]) => void): void {
+    if (!Array.isArray(events)) {
+      return;
     }
-    this.notifyGot(key);
+    events.forEach((event): void => {
+      this.off(event, lisenter);
+    });
   }
 
   private waits = new Map<
@@ -172,62 +230,20 @@ export default class Editor extends EventEmitter {
     }
   }
 
-  onceGot<T = undefined, KeyOrType extends KeyType = any>(keyOrType: KeyOrType): Promise<GetReturnType<T, KeyOrType>> {
-    const x = this.context.get<T, KeyOrType>(keyOrType);
-    if (x !== NOT_FOUND) {
-      return Promise.resolve(x);
-    }
-    return new Promise((resolve) => {
-      this.setWait(keyOrType, resolve, true);
-    });
-  }
-
-  onGot<T = undefined, KeyOrType extends KeyType = any>(
-    keyOrType: KeyOrType,
-    fn: (data: GetReturnType<T, KeyOrType>) => void,
-  ): () => void {
-    const x = this.context.get<T, KeyOrType>(keyOrType);
-    if (x !== NOT_FOUND) {
-      fn(x);
-      return () => {};
-    } else {
-      this.setWait(keyOrType, fn);
-      return () => {
-
-      };
-    }
-  }
-
-  register(data: any, key?: KeyType, options?: RegisterOptions): void {
-    this.context.register(data, key, options);
-    this.notifyGot(key || data);
-  }
-
-  batchOn(events: string[], lisenter: (...args: any[]) => void): void {
-    if (!Array.isArray(events)) {
+  private delWait(key: KeyType, fn: any) {
+    const waits = this.waits.get(key);
+    if (!waits) {
       return;
     }
-    events.forEach((event): void => {
-      this.on(event, lisenter);
-    });
-  }
-
-  batchOnce(events: string[], lisenter: (...args: any[]) => void): void {
-    if (!Array.isArray(events)) {
-      return;
+    let i = waits.length;
+    while (i--) {
+      if (waits[i].resolve === fn) {
+        waits.splice(i, 1);
+      }
     }
-    events.forEach((event): void => {
-      this.once(event, lisenter);
-    });
-  }
-
-  batchOff(events: string[], lisenter: (...args: any[]) => void): void {
-    if (!Array.isArray(events)) {
-      return;
+    if (waits.length < 1) {
+      this.waits.delete(key);
     }
-    events.forEach((event): void => {
-      this.off(event, lisenter);
-    });
   }
 
   // 销毁hooks中的消息监听

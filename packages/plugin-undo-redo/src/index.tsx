@@ -30,25 +30,18 @@ export default class UndoRedo extends PureComponent<
     };
   }
 
-  componentDidMount(): void {
+  async componentDidMount() {
     const { editor } = this.props;
-    editor.on('designer.history-change', this.handleHistoryChange);
+    editor.on('designer.history.change', this.handleHistoryChange);
 
-    const designer = editor.get(Designer);
-    if (designer) {
-      this.history = designer.currentHistory;
-      this.updateState(this.history?.getState() || 0);
-    } else {
-      editor.once('designer.ready', (): void => {
-        this.history = editor.get(Designer)?.currentHistory;
-        this.updateState(this.history?.getState() || 0);
-      });
-    }
+    const designer = await editor.onceGot(Designer);
+    this.history = designer.currentHistory;
+    this.updateState(this.history?.getState() || 0);
   }
 
   componentWillUnmount(): void {
     const { editor } = this.props;
-    editor.off('designer.history-change', this.handleHistoryChange);
+    editor.off('designer.history.change', this.handleHistoryChange);
   }
 
   handleHistoryChange = (history: any): void => {
@@ -62,7 +55,7 @@ export default class UndoRedo extends PureComponent<
     this.history = editor.get(Designer)?.currentHistory;
     this.updateState(this.history?.getState() || 0);
 
-    editor.on('designer.history-change', (history: any): void => {
+    editor.on('designer.history.change', (history: any): void => {
       this.history = history;
       this.updateState(this.history?.getState() || 0);
     });

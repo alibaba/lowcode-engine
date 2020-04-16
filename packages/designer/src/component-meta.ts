@@ -200,6 +200,7 @@ export class ComponentMeta {
   }
 
   checkNestingUp(my: Node | NodeData, parent: NodeParent) {
+    // 检查父子关系，直接约束型，在画布中拖拽直接掠过目标容器
     if (this.parentWhitelist) {
       return this.parentWhitelist.includes(parent.componentName);
     }
@@ -207,6 +208,7 @@ export class ComponentMeta {
   }
 
   checkNestingDown(my: Node, target: Node | NodeSchema) {
+    // 检查父子关系，直接约束型，在画布中拖拽直接掠过目标容器
     if (this.childWhitelist) {
       return this.childWhitelist.includes(target.componentName);
     }

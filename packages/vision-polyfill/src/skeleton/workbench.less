@@ -17,13 +17,14 @@
   --top-area-height: 48px;
   --toolbar-height: 32px;
   --dock-pane-width: 372px;
+  --dock-fixed-pane-width: 220px;
 }
-
 
 @media (min-width: 1860px) {
   :root {
     --right-area-width: 400px;
     --dock-pane-width: 452px;
+    --dock-fixed-pane-width: 350px;
   }
 }
 
@@ -188,6 +189,7 @@ body {
   .lc-workbench-body {
     flex: 1;
     display: flex;
+    min-height: 0;
     position: relative;
     .lc-left-float-pane {
       position: absolute;
@@ -212,7 +214,7 @@ body {
       }
     }
     .lc-left-fixed-pane {
-      width: var(--dock-pane-width);
+      width: var(--dock-fixed-pane-width);
       background-color: var(--color-pane-background);
       height: 100%;
       display: none;

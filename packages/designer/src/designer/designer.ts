@@ -138,11 +138,11 @@ export class Designer {
         historyDispose();
         historyDispose = undefined;
       }
-      this.postEvent('history-change', this.currentHistory);
+      this.postEvent('history.change', this.currentHistory);
       if (this.currentHistory) {
         const currentHistory = this.currentHistory;
         historyDispose = currentHistory.onStateChange(() => {
-          this.postEvent('history-change', currentHistory);
+          this.postEvent('history.change', currentHistory);
         });
       }
     };

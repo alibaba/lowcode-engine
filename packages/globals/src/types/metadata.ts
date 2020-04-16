@@ -6,11 +6,18 @@ import { PropConfig } from './prop-config';
 import { NpmInfo } from './npm';
 import { FieldConfig } from './field-config';
 
+export type NestingFilter = (which: any, my: any) => boolean;
 export interface NestingRule {
-  childWhitelist?: string[];
-  parentWhitelist?: string[];
-  descendantBlacklist?: string[];
-  ancestorWhitelist?: string[];
+  // 子级白名单
+  childWhitelist?: string[] | string | RegExp | NestingFilter;
+  // 父级白名单
+  parentWhitelist?: string[] | string | RegExp | NestingFilter;
+  // 后裔白名单
+  descendantWhitelist?: string[] | string | RegExp | NestingFilter;
+  // 后裔黑名单
+  descendantBlacklist?: string[] | string | RegExp | NestingFilter;
+  // 祖先白名单 可用来做区域高亮
+  ancestorWhitelist?: string[] | string | RegExp | NestingFilter;
 }
 
 export interface ComponentConfigure {
