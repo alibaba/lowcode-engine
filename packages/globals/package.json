@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-globals",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "Globals api for Ali lowCode engine",
   "license": "MIT",
   "main": "lib/index.js",
