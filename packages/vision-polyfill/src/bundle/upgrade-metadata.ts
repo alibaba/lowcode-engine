@@ -1,3 +1,108 @@
+/**
+ * 拒绝
+ */
+export type REJECTED = 0 | false;
+/**
+ * 限制性的
+ */
+export type LIMITED = 2;
+/**
+ * 允许
+ */
+export type ALLOWED = true | 4;
+
+export type HandleState = REJECTED | ALLOWED | LIMITED;
+
+/*
+ * model.editing:(dbclick) 父级优先（捕获过程）
+ *   asCode(gotocode) 默认行为 select - option
+ *   asRichText (运行值)
+ *   asPlainText (运行值) 仅包含
+ *   null|undefined 不响应（默认值）
+ *   false 禁用 阻止继续捕获
+ *   handle-function
+ *
+ * ## 检查与控制 handle
+ *
+ * model.shouldRemoveChild: HandleState | (my, child) => HandleState 移除子节点时（触发时），return false，拒绝移除
+ * model.shouldMoveChild: HandleState | (my, child) => HandleState 移动子节点, return false: 拒绝移动;  return 0: 不得改变嵌套关系
+ * model.shouldRemove: HandleState | (my) => HandleState
+ * model.shouldMove:  HandleState | (my) => HandleState return false, 拒绝移动 return 0; 不得改变嵌套关系
+ *
+ * ## 类型嵌套检查 (白名单机制)
+ *
+ * 自定义 locate
+ * model.locate: (my, transferData, mouseEvent?) => Location | null, 用于非 node 节点任意数据的定位
+ *
+ * test-RegExp: /^tagName./
+ * test-Pattern: 'tagName,tagName2,Field-*'
+ * test-Func: (target, my) => boolean
+ * Tester: RegExp | Pattern | Func | { exclude: Tester, include: Tester }
+ *
+ * model.accept
+ *   accept: '@CHILD'，从子节点寻找一个容器，针对 slot，比如 TabsLayout，ColumnsLayout, 大纲树误定位则错误信息透出，拒绝投入
+ *   accept: false|null 表示不是一个容器，是一个端点，比如input，option
+ *   accept: true 表示ok，无任何限制，比如 div,
+ *   accept: Tester, 表示限定接受，作为filter条件，比如 select，不接受的主视图跳过定位，大纲树定位进去后红线提示
+ * model.nesting 多级过滤，错误信息透出 (nextTick异步检查)，拒绝投入
+ *   null | undefined | false | true 未设置 | 无意义值，不作拦截
+ *   Tester
+ * model.dropTarget
+ *   Tester // 实时约束
+ *   {
+ *     highlight?: Tester | boolean, // 高亮，默认false，设为true时根据 parent | ancestor 取值
+ *     parent?: Tester, // 实时约束，主视图限制定位，大纲树定位进去时红线提示
+ *     ancestor?: Tester, // 异步检查，上文检查, 设置此值时，parent 可不设置
+ *   }
+ *   '@ROOT' 只能放根节点，不高亮，异步检查
+ *   null | undefined | boolean 未设置|无意义值，不作拦截，不高亮
+ *
+ * 所有拒绝投放的，在结束时均会检查，并抖动提示原因
+ *
+ *
+ * 1. 分栏容器嵌套栏/UL 嵌套 li 子嵌套约束
+ * 2. Form 嵌套 Button, Input 后裔嵌套约束
+ * 3. 数据实体 拖入 可接受目标，比如变量拖入富文本编辑器（@千緖）
+ * 4. Li 拖拽时高亮所有 UL，根据Li设置的 dropTargetRules 目标规则筛选节点，取并集区域
+ * 5. 能弹出提示
+ *
+ * 父级接受 & 定位：默认值
+ */
+
+
+export interface BehaviorControl {
+  handleMove?: HandleState | ((my: ElementNode) => HandleState);
+  handleRemove?: HandleState | ((my: ElementNode) => HandleState);
+  handleChildMove?: HandleState | ((my: ElementNode, child: INode) => HandleState);
+  handleChildRemove?: HandleState | ((my: ElementNode, child: INode) => HandleState);
+}
+
+export const AT_CHILD = Symbol.for('@CHILD');
+export const AT_ROOT = Symbol.for('@ROOT');
+export type AT_ROOT = typeof AT_ROOT;
+export type AT_CHILD = typeof AT_CHILD;
+
+export type AcceptFunc = (
+  my: ElementNode,
+  e: LocateEvent | KeyboardEvent | MouseEvent,
+) => LocationData | INodeParent | AT_CHILD | null;
+
+// should appear couple
+export interface AcceptControl {
+  /**
+   * MouseEvent: drag a entiy from browser out
+   * KeyboardEvent: paste a entiy
+   * LocateEvent: drag a entiy from pane
+   */
+  accept?: AcceptFunc | AT_CHILD;
+  handleAccept?: (my: ElementNode, locationData: LocationData) => void;
+}
+
+export interface ContentEditable {
+  propTarget: string;
+  selector?: string;
+}
+
 export enum DISPLAY_TYPE {
   NONE = 'none',
   PLAIN = 'plain',

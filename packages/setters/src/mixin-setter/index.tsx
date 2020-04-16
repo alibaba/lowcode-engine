@@ -144,8 +144,8 @@ export default class Mixin extends PureComponent {
         );
       }
     }
-    let TargetNode = this.typeMap[this.state.type]['component'] || 'div';
-    let targetProps = this.typeMap[this.state.type]['props'] || {};
+    let TargetNode = this.typeMap[this.state.type]?.component || 'div';
+    let targetProps = this.typeMap[this.state.type]?.props || {};
     let tarStyle = { position: 'relative', ...style };
     let classes = classNames(className, 'lowcode-setter-mixin');
 

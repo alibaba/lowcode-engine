@@ -1,5 +1,4 @@
 import { Editor } from '@ali/lowcode-editor-core';
-import { inject } from '@ali/lowcode-globals';
 import {
   DockConfig,
   PanelConfig,
@@ -29,8 +28,6 @@ export enum SkeletonEvents {
   WIDGET_HIDE = 'skeleton.widget.hide',
 }
 
-console.log(inject);
-
 export class Skeleton {
   private panels = new Map<string, Panel>();
   private containers = new Map<string, WidgetContainer<any>>();
@@ -44,9 +41,7 @@ export class Skeleton {
   readonly bottomArea: Area<PanelConfig, Panel>;
   readonly stages: Area<StageConfig, Stage>;
 
-  @inject() public editor: Editor;
-
-  constructor() {
+  constructor(readonly editor: Editor) {
     this.leftArea = new Area(
       this,
       'leftArea',

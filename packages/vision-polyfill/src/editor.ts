@@ -12,12 +12,10 @@ registerSetters();
 export const editor = new Editor();
 globalContext.register(editor, Editor);
 
-export const skeleton = new Skeleton();
-
-console.info(skeleton.editor);
+export const skeleton = new Skeleton(editor);
+editor.set(Skeleton, skeleton);
 
 export const designer = new Designer({ eventPipe: editor });
-
 editor.set(Designer, designer);
 
 skeleton.mainArea.add({
