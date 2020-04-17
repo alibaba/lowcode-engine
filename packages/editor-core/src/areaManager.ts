@@ -18,7 +18,7 @@ export default class AreaManager {
     this.pluginStatus = clone(editor.pluginStatus);
   }
 
-  public isPluginStatusUpdate(pluginType?: string, notUpdateStatus?: boolean): boolean {
+  isPluginStatusUpdate(pluginType?: string, notUpdateStatus?: boolean): boolean {
     const { pluginStatus } = this.editor;
     const list = pluginType ? this.config.filter((item): boolean => item.type === pluginType) : this.config;
 

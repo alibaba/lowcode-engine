@@ -68,7 +68,9 @@ export default {
         "align": "top",
         "icon": "zujianku",
         "title": "组件库",
-        "floatable": true
+        "panelProps": {
+          "floatable": true
+        }
       },
       "config": {
         "package": "@ali/lowcode-plugin-components-pane",
