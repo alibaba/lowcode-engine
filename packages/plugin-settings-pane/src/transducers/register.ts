@@ -3,7 +3,7 @@ import parseProps from './parse-props';
 import addonCombine from './addon-combine';
 
 // parseProps
-registerMetadataTransducer(parseProps);
+registerMetadataTransducer(parseProps, 10, 'parse-props');
 
 // addon/platform custom
-registerMetadataTransducer(addonCombine);
+registerMetadataTransducer(addonCombine, 11, 'combine-props');

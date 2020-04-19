@@ -306,24 +306,27 @@ export class Designer {
   private _lostComponentMetasMap = new Map<string, ComponentMeta>();
 
   private buildComponentMetasMap(metas: ComponentMetadata[]) {
-    metas.forEach((data) => {
-      const key = data.componentName;
-      let meta = this._componentMetasMap.get(key);
+    metas.forEach((data) => this.createComponentMeta(data));
+  }
+
+  createComponentMeta(data: ComponentMetadata): ComponentMeta {
+    const key = data.componentName;
+    let meta = this._componentMetasMap.get(key);
+    if (meta) {
+      meta.setMetadata(data);
+    } else {
+      meta = this._lostComponentMetasMap.get(key);
+
       if (meta) {
         meta.setMetadata(data);
+        this._lostComponentMetasMap.delete(key);
       } else {
-        meta = this._lostComponentMetasMap.get(key);
-
-        if (meta) {
-          meta.setMetadata(data);
-          this._lostComponentMetasMap.delete(key);
-        } else {
-          meta = new ComponentMeta(this, data);
-        }
-
-        this._componentMetasMap.set(key, meta);
+        meta = new ComponentMeta(this, data);
       }
-    });
+
+      this._componentMetasMap.set(key, meta);
+    }
+    return meta;
   }
 
   getGlobalComponentActions(): ComponentAction[] | null {

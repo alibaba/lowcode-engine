@@ -7,8 +7,18 @@ export type RegisteredSetter = {
   component: CustomView;
   defaultProps?: object;
   title?: TitleContent;
+  /**
+   * for MixedSetter to check this setter if available
+   */
+  condition?: (field: any) => boolean;
+  /**
+   * for MixedSetter to manual change to this setter
+   */
+  initialValue?: any | ((field: any) => any);
 };
-const settersMap = new Map<string, RegisteredSetter>();
+const settersMap = new Map<string, RegisteredSetter & {
+  type: string;
+}>();
 export function registerSetter(
   typeOrMaps: string | { [key: string]: CustomView | RegisteredSetter },
   setter?: CustomView | RegisteredSetter,
@@ -25,14 +35,18 @@ export function registerSetter(
   if (isCustomView(setter)) {
     setter = {
       component: setter,
+      // todo: intl
       title: (setter as any).displayName || (setter as any).name || 'CustomSetter',
     };
   }
-  settersMap.set(typeOrMaps, setter);
+  settersMap.set(typeOrMaps, { type: typeOrMaps, ...setter });
 }
 
 export function getSetter(type: string): RegisteredSetter | null {
   return settersMap.get(type) || null;
+}
+export function getSettersMap() {
+  return settersMap;
 }
 
 export function createSetterContent(setter: any, props: object): ReactNode {

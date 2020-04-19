@@ -4,7 +4,7 @@ import { EventEmitter } from 'events';
 /**
  * Bus class as an EventEmitter
  */
-class Bus {
+export class Bus {
   private emitter = new EventEmitter();
 
   getEmitter() {

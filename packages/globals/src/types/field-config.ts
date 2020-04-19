@@ -1,5 +1,5 @@
 import { TitleContent } from './title';
-import { SetterType } from './setter-config';
+import { SetterType, DynamicSetter } from './setter-config';
 
 
 export interface FieldExtraProps {
@@ -18,6 +18,14 @@ export interface FieldExtraProps {
    * @default undefined
    */
   condition?: (field: any) => boolean;
+  /**
+   * autorun when something change
+   */
+  autorun?: (field: any) => void;
+  /**
+   * is this field is a virtual field that not save to schema
+   */
+  virtual?: (field: any) => boolean;
   /**
    * default collapsed when display accordion
    */
@@ -46,7 +54,7 @@ export interface FieldConfig extends FieldExtraProps {
   /**
    * the field body contains when .type = 'field'
    */
-  setter?: SetterType;
+  setter?: SetterType | DynamicSetter;
   /**
    * the setting items which group body contains when .type = 'group'
    */

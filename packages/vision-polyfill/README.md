@@ -22,6 +22,8 @@ miniapp view.miniapp.xxx
 view.<device>.xxx
 通配 view.xxx
 
+universal
+
 规则 2
 urls: "view.js,view2 <device selector>, view3 <device selector>",
 urls: [
@@ -66,3 +68,15 @@ load simulator resources
 
 
 simulator 中加载资源，根据 componentsMap 构建组件查询字典，
+
+
+获取 view 相关的样式、脚本
+获取 proto 相关的样式
+在 simulator 中也加载一次
+
+1. meta 信息构造
+2. components 字典构造, proto.getView 或者 通过 npm 信息查询
+3. 
+
+
+componentMeta 段描述的信息，如果包含 x-prototype-urls ，那么这个 meta 信息都可以丢掉

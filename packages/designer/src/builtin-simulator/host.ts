@@ -31,18 +31,18 @@ import clipboard from '../designer/clipboard';
 export interface LibraryItem {
   package: string;
   library: string;
-  urls: Asset;
+  urls?: Asset;
 }
 
 export interface BuiltinSimulatorProps {
   // 从 documentModel 上获取
   // suspended?: boolean;
-  designMode?: 'live' | 'design' | 'mock' | 'extend' | 'border' | 'preview';
+  designMode?: 'live' | 'design' | 'preview' | 'extend' | 'border';
   device?: 'mobile' | 'iphone' | string;
   deviceClassName?: string;
-  simulatorUrl?: Asset;
   environment?: Asset;
   library?: LibraryItem[];
+  simulatorUrl?: Asset;
   theme?: Asset;
   componentsAsset?: Asset;
   [key: string]: any;
@@ -79,8 +79,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   readonly designer = this.document.designer;
 
   @computed get device(): string | undefined {
-    // 根据 device 不同来做画布外框样式变化  渲染时可选择不同组件
-    // renderer 依赖
     return this.get('device') || 'default';
   }
 
@@ -88,7 +86,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     return this.get('deviceClassName');
   }
 
-  @computed get designMode(): 'live' | 'design' | 'extend' | 'border' | 'preview' {
+  @computed get designMode(): 'live' | 'design' | 'preview' {
     // renderer 依赖
     // TODO: 需要根据 design mode 不同切换鼠标响应情况
     return this.get('designMode') || 'design';
@@ -180,7 +178,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     if (library) {
       library.forEach((item) => {
         this.libraryMap[item.package] = item.library;
-        libraryAsset.push(item.urls);
+        if (item.urls) {
+          libraryAsset.push(item.urls);
+        }
       });
     }
 

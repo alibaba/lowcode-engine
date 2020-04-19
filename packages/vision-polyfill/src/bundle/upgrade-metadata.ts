@@ -1,118 +1,20 @@
-/**
- * 拒绝
- */
-export type REJECTED = 0 | false;
-/**
- * 限制性的
- */
-export type LIMITED = 2;
-/**
- * 允许
- */
-export type ALLOWED = true | 4;
+import { ComponentType, ReactElement, isValidElement, ComponentClass } from 'react';
+import { isI18nData } from '@ali/lowcode-globals';
 
-export type HandleState = REJECTED | ALLOWED | LIMITED;
-
-/*
- * model.editing:(dbclick) 父级优先（捕获过程）
- *   asCode(gotocode) 默认行为 select - option
- *   asRichText (运行值)
- *   asPlainText (运行值) 仅包含
- *   null|undefined 不响应（默认值）
- *   false 禁用 阻止继续捕获
- *   handle-function
- *
- * ## 检查与控制 handle
- *
- * model.shouldRemoveChild: HandleState | (my, child) => HandleState 移除子节点时（触发时），return false，拒绝移除
- * model.shouldMoveChild: HandleState | (my, child) => HandleState 移动子节点, return false: 拒绝移动;  return 0: 不得改变嵌套关系
- * model.shouldRemove: HandleState | (my) => HandleState
- * model.shouldMove:  HandleState | (my) => HandleState return false, 拒绝移动 return 0; 不得改变嵌套关系
- *
- * ## 类型嵌套检查 (白名单机制)
- *
- * 自定义 locate
- * model.locate: (my, transferData, mouseEvent?) => Location | null, 用于非 node 节点任意数据的定位
- *
- * test-RegExp: /^tagName./
- * test-List: 'tagName,tagName2' | ['tagName', 'tagName2']
- * test-Func: (target, my) => boolean
- * Tester: RegExp | Pattern | Func
- *
- * component.accept
- *   accept: '@CHILD'，从子节点寻找一个容器，针对 slot，比如 TabsLayout，ColumnsLayout, 大纲树误定位则错误信息透出，拒绝投入
- *   accept: false|null 表示不是一个容器，是一个端点，比如input，option
- *   accept: true 表示ok，无任何限制，比如 div,
- *   accept: Tester, 表示限定接受，作为filter条件，比如 select，不接受的主视图跳过定位，大纲树定位进去后红线提示
- * model.nesting 多级过滤，错误信息透出 (nextTick异步检查)，拒绝投入
- *   null | undefined | false | true 未设置 | 无意义值，不作拦截
- *   Tester
- * model.dropTarget
- *   Tester // 实时约束
- *   {
- *     highlight?: Tester | boolean, // 高亮，默认false，设为true时根据 parent | ancestor 取值
- *     parent?: Tester, // 实时约束，主视图限制定位，大纲树定位进去时红线提示
- *     ancestor?: Tester, // 异步检查，上文检查, 设置此值时，parent 可不设置
- *   }
- *   '@ROOT' 只能放根节点，不高亮，异步检查
- *   null | undefined | boolean 未设置|无意义值，不作拦截，不高亮
- *
- * 所有拒绝投放的，在结束时均会检查，并抖动提示原因
- *
- *
- * 1. 分栏容器嵌套栏/UL 嵌套 li 子嵌套约束
- * 2. Form 嵌套 Button, Input 后裔嵌套约束
- * 3. 数据实体 拖入 可接受目标，比如变量拖入富文本编辑器（@千緖）
- * 4. Li 拖拽时高亮所有 UL，根据Li设置的 dropTargetRules 目标规则筛选节点，取并集区域
- * 5. 能弹出提示
- *
- */
-
-
-export interface BehaviorControl {
-  handleMove?: HandleState | ((my: ElementNode) => HandleState);
-  handleRemove?: HandleState | ((my: ElementNode) => HandleState);
-  handleChildMove?: HandleState | ((my: ElementNode, child: INode) => HandleState);
-  handleChildRemove?: HandleState | ((my: ElementNode, child: INode) => HandleState);
-}
-
-export const AT_CHILD = Symbol.for('@CHILD');
-export const AT_ROOT = Symbol.for('@ROOT');
-export type AT_ROOT = typeof AT_ROOT;
-export type AT_CHILD = typeof AT_CHILD;
-
-export type AcceptFunc = (
-  my: ElementNode,
-  e: LocateEvent | KeyboardEvent | MouseEvent,
-) => LocationData | INodeParent | AT_CHILD | null;
-
-// should appear couple
-export interface AcceptControl {
-  /**
-   * MouseEvent: drag a entiy from browser out
-   * KeyboardEvent: paste a entiy
-   * LocateEvent: drag a entiy from pane
-   */
-  handleLocate?: AcceptFunc | AT_CHILD;
-  handleAccept?: (my: ElementNode, locationData: LocationData) => void;
-}
-
-export interface ContentEditable {
-  propTarget: string;
-  selector?: string;
-}
+type Field = any;
 
 export enum DISPLAY_TYPE {
-  NONE = 'none',
+  NONE = 'none',  // => condition'plain'
   PLAIN = 'plain',
   INLINE = 'inline',
   BLOCK = 'block',
   ACCORDION = 'accordion',
-  TAB = 'tab',
+  TAB = 'tab', // => 'accordion'
   ENTRY = 'entry',
 }
 
-export interface IPropConfig {
+// from vision 5.4
+export interface OldPropConfig {
   /**
    * composite share the namespace
    * group just be tie up together
@@ -121,32 +23,24 @@ export interface IPropConfig {
   /**
    * when type is composite or group
    */
-  items?: IPropConfig[]; // => items
+  items?: OldPropConfig[]; // => items
   /**
    * property name: the field key in props of schema
    */
   name: string; // =>
   title?: string; // =>
   tip?: {
-    // =>
-    title?: string;
     content?: string;
     url?: string;
   };
-  initialValue?: any; // => ?
-  defaultValue?: any; // =>
+  defaultValue?: any; // => extraProps.defaultValue
+  initialValue?: any | ((value: any, defaultValue: any) => any); // => extraProps.initialValue
+  initial?: (value: any, defaultValue: any) => any  // => extraProps.initialValue
+
   display?: DISPLAY_TYPE; // => fieldExtraProps
   fieldStyle?: DISPLAY_TYPE; // => fieldExtraProps
   setter?: ComponentClass | ISetterConfig[] | string | SetterGetter; // =>
-  /**
-   * if a prop is dynamicProp, every-time while rendering setting field
-   *  - getValue() will not include value of getHotValue()
-   *  - getValue() will trigger accessor() to calculate a new value
-   * this prop usually work out when we need to generate prop value
-   * from node of current page
-   */
-  isDynamicProp?: boolean;
-  supportVariable?: boolean; // => use MixinSetter
+  supportVariable?: boolean; // => use MixedSetter
   /**
    * the prop should be collapsed while display value is accordion
    */
@@ -165,75 +59,377 @@ export interface IPropConfig {
    * will not export data to schema
    */
   ignore?: boolean | ReturnBooleanFunction; // => ?virtualProp ? thinkof global transform
-  /**
-   * if a prop is declared as virtual, it will not be saved in
-   * schema props, instead it will be saved into context field
-   */
-  virtual?: boolean | ReturnBooleanFunction; // =>?virtualProp
   hidden?: boolean | ReturnBooleanFunction; // => condition
-  /**
-   * if a prop is a lifeCycle function
-   */
-  lifeCycle?: boolean; // =>?
-  destroy?: () => any; // => x
-  initial?(this: Prop, value: any, initialValue: any): any;
+
   /**
    * when use getValue(), accessor shall be called as initializer
    */
-  accessor?(this: Prop): any; // => getValue
+  accessor?(this: Field, value: any): any; // => getValue
   /**
    * when current prop value mutate, the mutator function shall be called
    */
   mutator?( // => setValue
-    this: Prop,
+    this: Field,
     value: any,
+    /*
     hotValue: any, // => x
     preValue: any, // => x
     preHotValue: any, // => x
+    */
   ): void;
   /**
    * other values' change will trigger sync function here
    */
-  sync?(this: Prop, value: any): void; // => ? autorun
-  /**
-   * transform runtime data between view and setter
-   * @param toHotValue hot value for the setter
-   * @param toViewValue static value for the view
-   */
-  transformer?( // =>?
-    toHotValue: (data: any) => any,
-    toViewValue: (str: string) => any,
-  ): any;
+  sync?(this: Field, value: any): void; // => autorun
   /**
    * user click var to change current field to
    * variable setting field
    */
-  useVariableChange?(data: { isUseVariable: boolean }): any; // => ?
+  useVariableChange?(this: Field, data: { isUseVariable: boolean }): any; // => as MixinSetter param
+
+  slotName?: string;
+  slotTitle?: string;
+  initialChildren?: any; // schema
+  allowTextInput: boolean;
 }
 
-export interface SettingFieldConfig {
-  type?: 'field';
-  title?: string;
-  name: string;
-  setter: ComponentClass | ISetterConfig[] | string | SetterGetter;
-  extraProps?: {
-    [key: string]: any;
+// from vision 5.4
+export interface OldPrototypeConfig {
+  packageName: string; // => npm.package
+  /**
+   * category display in the component pane
+   * component will be hidden while the value is: null
+   */
+  category: string; // => tags
+  componentName: string; // =>
+  docUrl?: string; // =>
+  defaultProps?: any; // => ?
+  /**
+   * extra actions on the outline of current selected node
+   * by default we have: remove / clone
+   */
+  extraActions?: Array<ComponentType<any> | ReactElement> | (() => ReactElement); // => configure.component.actions
+  title?: string; // =>
+  icon?: ComponentType<any> | ReactElement; // =>
+  view: ComponentType; // => ?
+  initialChildren?: (props: any) => any[]; // => snippets
+
+  /**
+   * Props configurations of node
+   */
+  configure: OldPropConfig[]; // => configure.props
+  snippets?: any[]; // => snippets
+  transducers?: any; // => ?
+  /**
+   * Selector expression rectangle of a node, it is usually a querySelector string
+   * @example '.classname > div'
+   */
+  rectSelector?: string; // => configure.component.rectSelector
+  context?: {
+    // => ?
+    [contextInfoName: string]: any;
   };
+
+  isContainer?: boolean; // => configure.component.isContainer
+  isModal?: boolean; // => configure.component.isModal
+  isFloating?: boolean; // => configure.component.isFloating
+  descriptor?: string; // => configure.component.descriptor
+
+  // alias to canDragging
+  canDraging?: boolean; // => onDrag
+  canDragging?: boolean; // => ?
+
+  canOperating?: boolean; // => disabledActions
+  canSelecting?: boolean;
+  canContain?: (dragment: Node) => boolean; // => nestingRule
+
+  canDropTo?: ((container: Node) => boolean) | string | string[]; // => nestingRule
+  canDropto?: (container: Node) => boolean; // => nestingRule
+
+  canDropIn?: ((dragment: Node) => boolean) | string | string[]; // => nestingRule
+  canDroping?: (dragment: Node) => boolean; // => nestingRule
+
+  didDropOut?: (dragment: any, container: any) => void; // => hooks
+  didDropIn?: (dragment: any, container: any) => void; // => hooks
+
+  /**
+   * when sub-node of the current node changed
+   * including: sub-node insert / remove
+   */
+  subtreeModified?(this: Node): any; // => ? hooks
+
+  // => ?
+  canResizing?: ((dragment: any, triggerDirection: string) => boolean) | boolean;
+  onResizeStart?: (e: MouseEvent, triggerDirection: string, dragment: Node) => void;
+  onResize?: (e: MouseEvent, triggerDirection: string, dragment: Node, moveX: number, moveY: number) => void;
+  onResizeEnd?: (e: MouseEvent, triggerDirection: string, dragment: Node) => void;
 }
 
-export interface SettingGroupConfig {
-  type: 'group';
-  title?: string;
-  items: Array<SettingGroupConfig | SettingFieldConfig>;
-  extraProps?: {
-    [key: string]: any;
+export interface ISetterConfig {
+  setter?: ComponentClass;
+  // use value to decide whether this setter is available
+  condition?: (value: any) => boolean;
+}
+
+type SetterGetter = (this: Field, value: any) => ComponentClass;
+
+type ReturnBooleanFunction = (this: Field, value: any) => boolean;
+
+export function upgradePropConfig(config: OldPropConfig) {
+  const {
+    type,
+    name,
+    title,
+    tip,
+    slotName,
+    slotTitle,
+    initialChildren,
+    allowTextInput,
+    initialValue,
+    defaultValue,
+    display,
+    fieldStyle,
+    collapse,
+    collapsed,
+    fieldCollapsed,
+    hidden,
+    disabled,
+    items,
+    ignore,
+    initial,
+    sync,
+    accessor,
+    mutator,
+    setter,
+    useVariableChange,
+    supportVariable,
+  } = config;
+
+  const extraProps: any = {};
+  const newConfig: any = {
+    type: type === 'group' ? 'group' : 'field',
+    name,
+    title,
+    extraProps,
   };
+
+  if (tip) {
+    if (typeof title !== 'object' || isI18nData(title) || isValidElement(title)) {
+      newConfig.title = {
+        title,
+        tip: tip.content,
+        docUrl: tip.url
+      };
+    } else {
+      newConfig.title = {
+        ...(title as any),
+        tip: tip.content,
+        docUrl: tip.url
+      };
+    }
+  }
+
+  if (display || fieldStyle) {
+    extraProps.display = display || fieldStyle;
+    if (extraProps.display === DISPLAY_TYPE.TAB) {
+      extraProps.display = DISPLAY_TYPE.ACCORDION;
+    }
+  }
+
+  if (collapse || collapsed || fieldCollapsed) {
+    extraProps.defaultCollapsed = true;
+  }
+  function isDisabled(field: Field) {
+    if (typeof disabled === 'function') {
+      return disabled.call(field, field.getValue()) === true;
+    }
+    return disabled === true;
+  }
+  function isHidden(field: Field) {
+    if (typeof hidden === 'function') {
+      return hidden.call(field, field.getValue()) === true;
+    }
+    return hidden === true;
+  }
+  if (extraProps.display === DISPLAY_TYPE.NONE) {
+    extraProps.display = undefined;
+    extraProps.condition = () => false;
+  } else if (hidden != null || disabled != null) {
+    extraProps.condition = (field: Field) => !(isHidden(field) || isDisabled(field));
+  }
+  if (ignore != null || disabled != null) {
+    extraProps.virtual = (field: Field) => {
+      if (isDisabled(field)) { return true; }
+
+      if (typeof ignore === 'function') {
+        return ignore.call(field, field.getValue()) === true;
+      }
+      return ignore === true;
+    };
+  }
+
+  if (type === 'group') {
+    newConfig.items = items ? upgradeConfigure(items) : [];
+    return newConfig;
+  }
+
+  if (slotName) {
+    newConfig.name = slotName;
+    if (!newConfig.title && slotTitle) {
+      newConfig.title = slotTitle;
+    }
+    const slotSetter = {
+      componentName: 'SlotSetter',
+      initialValue: () => ({
+        type: 'JSSlot',
+        // params:
+        value: initialChildren
+      }),
+    }
+    if (allowTextInput === false) {
+      newConfig.setter = slotSetter;
+    } else {
+      newConfig.setter = [{
+        componentName: 'StringSetter',
+        initialValue,
+      }, slotSetter];
+    }
+
+    return newConfig;
+  }
+
+  if (defaultValue !== undefined) {
+    extraProps.defaultValue = defaultValue;
+  } else if (typeof initialValue !== 'function') {
+    extraProps.defaultValue = initialValue;
+  }
+
+  const initialFn = initial || initialValue;
+  extraProps.initialValue = (field: Field, defaultValue?: any) => {
+    if (defaultValue === undefined) {
+      defaultValue = extraProps.defaultValue;
+    }
+
+    if (typeof initialFn === 'function') {
+      return initialFn(null, defaultValue);
+    }
+
+    return defaultValue;
+  };
+
+  if (sync) {
+    extraProps.autorun = (field: Field) => {
+      const value = sync.call(field, field.getValue());
+      if (value !== undefined) {
+        field.setValue(value);
+      }
+    }
+  }
+  if (accessor) {
+    extraProps.getValue = (field: Field, fieldValue: any) => {
+      return accessor.call(field, fieldValue);
+    };
+  }
+  if (mutator) {
+    extraProps.setValue = (field: Field, value: any) => {
+      mutator.call(field, value);
+    };
+  }
+
+  let primarySetter: any;
+  if (type === 'composite') {
+    const objItems = items ? upgradeConfigure(items) : [];
+    primarySetter = {
+      componentName: 'ObjectSetter',
+      props: {
+        config: {
+          items: objItems,
+        },
+      },
+      initialValue: (field: Field) => {
+        // FIXME: read from objItems
+        return extraProps.initialValue(field, {});
+      },
+    };
+  } else if (setter) {
+    if (Array.isArray(setter)) {
+      primarySetter = setter.map(({ setter, condition }) => {
+        return {
+          componentName: setter,
+          condition: condition ? (field: Field) => {
+            return condition.call(field, field.getValue());
+          } : null,
+        };
+      });
+    } else {
+      primarySetter = setter;
+    }
+  }
+  if (supportVariable) {
+    if (primarySetter) {
+      const setters = Array.isArray(primarySetter) ? primarySetter.concat('ExpressionSetter') : [primarySetter, 'ExpressionSetter'];
+      primarySetter = {
+        componentName: 'MixedSetter',
+        setters,
+        onSetterChange: (field: Field, name: string) => {
+          if (useVariableChange) {
+            useVariableChange.call(field, { isUseVariable: name === 'ExpressionSetter' });
+          }
+        }
+      };
+    } else {
+      primarySetter = 'ExpressionSetter';
+    }
+  }
+  newConfig.setter = primarySetter;
+
+  return newConfig;
+}
+
+export function upgradeConfigure(items: OldPropConfig[]) {
+  const configure = [];
+  let ignoreSlotName: any = null;
+  return items.forEach((config) => {
+    if (config.slotName) {
+      ignoreSlotName = config.slotName;
+    } else if (ignoreSlotName) {
+      if (config.name === ignoreSlotName) {
+        ignoreSlotName = null;
+        return;
+      }
+      ignoreSlotName = null;
+    }
+    configure.push(upgradePropConfig(config));
+  });
+}
+
+export function upgradeActions(actions?: Array<ComponentType<any> | ReactElement> | (() => ReactElement)) {
+  if (!actions) {
+    return null;
+  }
+  if (!Array.isArray(actions)) {
+    actions = [actions];
+  }
+  return actions.map((content) => {
+    const type: any = isValidElement(content) ? content.type : content;
+    if (typeof content === 'function') {
+      const fn = content as (() => ReactElement);
+      content = (({ node }: any) => {
+        fn.call(node);
+      }) as any;
+    }
+    return {
+      name: type.displayName || type.name || 'anonymous',
+      content,
+      important: true,
+    };
+  })
 }
 
 /**
  * 升级
  */
-function upgradeMetadata(oldConfig: OldPrototypeConfig) {
+export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   const {
     componentName,
     docUrl,
@@ -242,11 +438,11 @@ function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     packageName,
     category,
     extraActions,
-    view,
-    configure,
     defaultProps,
     initialChildren,
     snippets,
+    view,
+    configure,
     transducers,
     isContainer,
     rectSelector,
@@ -260,16 +456,18 @@ function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     canDropto,
     canDropIn,
     canDroping,
-    // handles
-    canDraging, canDragging, // handleDragging
-    canResizing, // handleResizing
+
     // hooks
+    canDraging, canDragging, // handleDragging
+    // events
     didDropOut, // onNodeRemove
     didDropIn,  // onNodeAdd
+    subtreeModified, // onSubtreeModified
+
+    canResizing, // resizing
     onResizeStart, // onResizeStart
     onResize, // onResize
     onResizeEnd, // onResizeEnd
-    subtreeModified, // onSubtreeModified
   } = oldConfig;
 
 
@@ -279,7 +477,7 @@ function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     icon,
     docUrl,
     devMode: 'procode',
-  }
+  };
 
   if (category) {
     meta.tags = [category];
@@ -303,13 +501,7 @@ function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     component.disableBehaviors = '*';
   }
   if (extraActions) {
-    component.actions = extraActions.map((content) => {
-      return {
-        name: content.displayName || content.name || 'anonymous',
-        content,
-        important: true,
-      };
-    });
+    component.actions = upgradeActions(extraActions);
   }
   const nestingRule: any = {};
   if (canContain) {
@@ -323,97 +515,98 @@ function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   }
   component.nestingRule = nestingRule;
 
-  if (canDragging || canDraging) {
-    // hooks|handle
-  }
-
   // 未考虑清楚的，放在实验性段落
   const experimental: any = {};
   if (context) {
     // for prototype.getContextInfo
     experimental.context = context;
   }
+  if (snippets) {
+    experimental.snippets = snippets;
+  }
+  if (defaultProps || initialChildren) {
+    const snippet = {
+      screenshot: icon,
+      label: title,
+      schema: {
+        componentName,
+        props: defaultProps,
+        children: initialChildren,
+      },
+    };
+    if (experimental.snippets) {
+      experimental.snippets.push(snippet);
+    } else {
+      experimental.snippets = [snippet];
+    }
+  }
+  if (view) {
+    experimental.view = view;
+  }
+  if (transducers) {
+    // Array<{ toStatic, toNative }>
+    // ? only twice
+    experimental.transducers = transducers;
+  }
+  if (canResizing) {
+    // TODO: enhance
+    experimental.getResizingHandlers = (currentNode: any) => {
+      const directs = ['n', 'w', 's', 'e'];
+      if (canResizing === true) {
+        return directs;
+      }
+      return directs.filter((d) => canResizing(currentNode, d));
+    };
+  }
 
-  const props = {};
-  const styles = {};
-  const events = {};
-  meta.configure = { props, component, styles, events, experimental };
+  const callbacks: any = {};
+  if (canDragging != null || canDraging != null) {
+    let v = true;
+    if (canDragging === false || canDraging === false) {
+      v = false;
+    }
+    callbacks.onMoveHook = () => v;
+  }
+  if (didDropIn) {
+    callbacks.onNodeAdd = didDropIn;
+  }
+  if (didDropOut) {
+    callbacks.onNodeRemove = didDropOut;
+  }
+  if (subtreeModified) {
+    callbacks.onSubtreeModified = (...args: any[]) => {
+      // FIXME! args not correct
+      subtreeModified.apply(args[0], args as any);
+    };
+  }
+  if (onResize) {
+    callbacks.onResize = (e: any, currentNode: any) => {
+      // todo: what is trigger?
+      const { trigger, deltaX, deltaY } = e;
+      onResize(e, trigger, currentNode, deltaX, deltaY);
+    }
+  }
+  if (onResizeStart) {
+    callbacks.onResizeStart = (e: any, currentNode: any) => {
+      // todo: what is trigger?
+      const { trigger } = e;
+      onResizeStart(e, trigger, currentNode);
+    }
+  }
+  if (onResizeEnd) {
+    callbacks.onResizeEnd = (e: any, currentNode: any) => {
+      // todo: what is trigger?
+      const { trigger } = e;
+      onResizeEnd(e, trigger, currentNode);
+    }
+  }
 
+  experimental.callbacks = callbacks;
+
+  const props = upgradeConfigure(configure || []);
+  meta.configure = { props, component };
+  meta.experimental = experimental;
+  return meta;
 }
 
-export interface OldPrototypeConfig {
-  packageName: string; // => npm.package
-  /**
-   * category display in the component pane
-   * component will be hidden while the value is: null
-   */
-  category: string; // => tags
-  componentName: string; // =>
-  docUrl?: string; // =>
-  defaultProps?: any; // => ?
-  /**
-   * extra actions on the outline of current selected node
-   * by default we have: remove / clone
-   */
-  extraActions?: Component[]; // => configure.component.actions
-  title?: string; // =>
-  icon?: Component; // =>
-  view: Component; // => ?
-  initialChildren?: (props: any) => any[]; // => snippets
 
-  /**
-   * Props configurations of node
-   */
-  configure: IPropConfig[]; // => configure.props
-  snippets?: ISnippet[]; // => snippets
-  transducers?: any; // => ?
-  /**
-   * Selector expression rectangle of a node, it is usually a querySelector string
-   * @example '.classname > div'
-   */
-  rectSelector?: string; // => configure.component.rectSelector
-  context?: {
-    // => ?
-    [contextInfoName: string]: any;
-  };
-
-  isContainer?: boolean; // => configure.component.isContainer
-  isModal?: boolean; // => configure.component.isModal
-  isFloating?: boolean; // => configure.component.isFloating
-  descriptor?: string; // => configure.component.descriptor
-
-  /**
-   * enable slot-mode
-   * @see https://yuque.antfin-inc.com/legao/solutions/atgtdl
-   */
-  hasSlot?: boolean; // => ?
-
-  // alias to canDragging
-  canDraging?: boolean; // => onDrag
-  canDragging?: boolean; // => ?
-
-  canOperating?: boolean; // => disabledActions
-  canSelecting?: boolean;
-  canContain?: (dragment: Node) => boolean; // => nestingRule
-
-  canDropTo?: ((container: Node) => boolean) | string | string[]; // => nestingRule
-  canDropto?: (container: Node) => boolean; // => nestingRule
-
-  canDropIn?: ((dragment: Node) => boolean) | string | string[]; // => nestingRule
-  canDroping?: (dragment: Node) => boolean; // => nestingRule
-
-  didDropOut?: (container: any | Prototype, dragment: any) => boolean; // => hooks
-  didDropIn?: (container: any | Prototype, dragment: any) => boolean; // => hooks
-
-  // => ?
-  canResizing?: ((dragment: Node, triggerDirection: string) => boolean) | boolean;
-  onResizeStart?: (e: MouseEvent, triggerDirection: string, dragment: Node) => void;
-  onResize?: (e: MouseEvent, triggerDirection: string, dragment: Node, moveX: number, moveY: number) => void;
-  onResizeEnd?: (e: MouseEvent, triggerDirection: string, dragment: Node) => void;
-
-  /**
-   * when sub-node of the current node changed
-   * including: sub-node insert / remove
-   */
-  subtreeModified?(this: Node): any; // => ? hooks
-}

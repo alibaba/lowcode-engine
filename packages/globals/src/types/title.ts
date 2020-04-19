@@ -7,6 +7,7 @@ import { IconType } from './icon';
 export interface TitleConfig {
   label?: I18nData | ReactNode;
   tip?: TipContent;
+  docUrl?: string;
   icon?: IconType;
   className?: string;
 }

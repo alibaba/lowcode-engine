@@ -1,11 +1,11 @@
+import { globalContext } from '@ali/lowcode-globals';
 import Editor from '@ali/lowcode-editor-core';
+import { Designer } from '@ali/lowcode-designer';
+import { registerSetters } from '@ali/lowcode-setters';
 import OutlinePane from '@ali/lowcode-plugin-outline-pane';
 import SettingsPane from '@ali/lowcode-plugin-settings-pane';
 import DesignerView from '@ali/lowcode-plugin-designer';
-import { registerSetters } from '@ali/lowcode-setters';
 import { Skeleton } from './skeleton/skeleton';
-import { Designer } from 'designer/src/designer';
-import { globalContext } from '@ali/lowcode-globals';
 
 registerSetters();
 
@@ -41,11 +41,3 @@ skeleton.leftArea.add({
     area: 'leftFixedArea',
   },
 });
-
-// editor-core
-//  1. di 实现
-//  2. general bus: pub/sub
-// editor-skeleton/workbench 视图实现
-//  1. skeleton 区域划分 panes
-//  provide fixed left pane
-//  provide float left pane

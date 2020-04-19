@@ -15,7 +15,9 @@ export interface JSExpression {
 
 export interface JSSlot {
   type: 'JSSlot';
-  value: NodeSchema;
+  // 函数的入参
+  params?: string[];
+  value: NodeSchema[];
 }
 
 // JSON 基本类型

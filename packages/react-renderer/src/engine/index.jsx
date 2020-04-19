@@ -27,17 +27,16 @@ export default class Engine extends PureComponent {
   static propTypes = {
     appHelper: PropTypes.object,
     components: PropTypes.object,
-    componentsMap: PropTypes.object,
     designMode: PropTypes.string,
     suspended: PropTypes.bool,
     schema: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     onCompGetRef: PropTypes.func,
     onCompGetCtx: PropTypes.func,
+    customCreateElement: PropTypes.func,
   };
   static defaultProps = {
     appHelper: null,
     components: {},
-    componentsMap: {},
     designMode: '',
     suspended: false,
     schema: {},
@@ -87,7 +86,7 @@ export default class Engine extends PureComponent {
   };
 
   render() {
-    const { schema, designMode, appHelper, components, componentsMap } = this.props;
+    const { schema, designMode, appHelper, components } = this.props;
     if (isEmpty(schema)) {
       return null;
     }
@@ -103,7 +102,6 @@ export default class Engine extends PureComponent {
           value={{
             appHelper,
             components: allComponents,
-            componentsMap,
             engine: this,
           }}
         >
@@ -112,7 +110,6 @@ export default class Engine extends PureComponent {
             ref={this.__getRef}
             __appHelper={appHelper}
             __components={allComponents}
-            __componentsMap={componentsMap}
             __schema={schema}
             __designMode={designMode}
             {...this.props}

@@ -20,50 +20,36 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
     library: null,
   };
 
-  private _lifeState = 0;
+  private _mounted = true;
 
   constructor(props: any) {
     super(props);
-    const { editor } = this.props;
-    const assets = editor.get('assets');
-
-    if (assets) {
-      this.setupAssets(assets);
-    } else {
-      editor.once('assets.loaded', this.setupAssets);
-    }
-    this._lifeState = 1;
+    this.setupAssets();
   }
 
-  setupAssets = (assets: any) => {
-    if (this._lifeState < 0) {
+  private async setupAssets() {
+    const { editor } = this.props;
+    const assets = await editor.onceGot('assets');
+    if (!this._mounted) {
       return;
     }
     const { components, packages } = assets;
     const state = {
-      componentMetadatas: components ? Object.values(components) : [],
+      componentMetadatas: components ? components.filter(item => item.type === 'ComponentMetadata') : [],
       library: packages ? Object.values(packages) : [],
     };
-    if (this._lifeState === 0) {
-      this.state = state;
-    } else {
-      this.setState(state);
-    }
+    this.setState(state);
   };
 
   componentWillUnmount() {
-    this._lifeState = -1;
+    this._mounted = false;
   }
 
-  handleDesignerMount = (designer: Designer): void => {
+  private handleDesignerMount = (designer: Designer): void => {
     const { editor } = this.props;
     editor.set(Designer, designer);
     editor.emit('designer.ready', designer);
-    const schema = editor.get('schema');
-    if (schema) {
-      designer.project.open(schema);
-    }
-    editor.on('schema.loaded', (schema) => {
+    editor.onGot('schema', (schema) => {
       designer.project.open(schema);
     });
   };

@@ -1,6 +1,7 @@
 export interface AssetItem {
   type: AssetType;
   content?: string | null;
+  device?: string;
   level?: AssetLevel;
   id?: string;
 }
@@ -68,6 +69,14 @@ export function assetBundle(assets?: Asset | AssetList | null, level?: AssetLeve
   };
 }
 
+/*
+urls: "view.js,view2 <device selector>, view3 <device selector>",
+urls: [
+  "view.js",
+  "view.js *",
+  "view1.js mobile|pc",
+  "view2.js <device selector>"
+]*/
 export function assetItem(type: AssetType, content?: string | null, level?: AssetLevel, id?: string): AssetItem | null {
   if (!content) {
     return null;

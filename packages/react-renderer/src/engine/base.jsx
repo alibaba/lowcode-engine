@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, createElement as reactCreateElement } from 'react';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
 import Div from '@ali/iceluna-comp-div';
@@ -41,7 +41,6 @@ export default class BaseEngine extends PureComponent {
     messages: PropTypes.object,
     __appHelper: PropTypes.object,
     __components: PropTypes.object,
-    __componentsMap: PropTypes.object,
     __ctx: PropTypes.object,
     __schema: PropTypes.object,
   };
@@ -199,7 +198,7 @@ export default class BaseEngine extends PureComponent {
   // idx 若为循环渲染的循环Index
   __createVirtualDom = (schema, self, parentInfo, idx) => {
     if (!schema) return null;
-    const { __appHelper: appHelper, __components: components = {}, __componentsMap: componentsMap = {} } =
+    const { __appHelper: appHelper, __components: components = {} } =
       this.props || {};
     const { engine } = this.context || {};
     if (isJSExpression(schema)) {
@@ -277,13 +276,12 @@ export default class BaseEngine extends PureComponent {
           __schema: schema,
           __appHelper: appHelper,
           __components: components,
-          __componentsMap: componentsMap,
         }
       : {};
     if (engine && engine.props.designMode) {
       otherProps.__designMode = engine.props.designMode;
     }
-    const componentInfo = componentsMap[schema.componentName] || {};
+    const componentInfo = {};
     const props = this.__parseProps(schema.props, self, '', {
       schema,
       Comp,
@@ -314,9 +312,12 @@ export default class BaseEngine extends PureComponent {
     } else if (typeof idx === 'number' && !props.key) {
       props.key = idx;
     }
-    const renderComp = (props) => (
-      <Comp {...props}>
-        {(!isFileSchema(schema) &&
+    const createElement = engine.props.customCreateElement || reactCreateElement;
+    const renderComp = (props) => {
+      return createElement(
+        Comp,
+        props,
+        (!isFileSchema(schema) &&
           !!schema.children &&
           this.__createVirtualDom(
             isJSExpression(schema.children) ? parseExpression(schema.children, self) : schema.children,
@@ -326,9 +327,9 @@ export default class BaseEngine extends PureComponent {
               Comp,
             },
           )) ||
-          null}
-      </Comp>
-    );
+          null,
+      );
+    };
     //设计模式下的特殊处理
     if (engine && [DESIGN_MODE.EXTEND, DESIGN_MODE.BORDER].includes(engine.props.designMode)) {
       //对于overlay,dialog等组件为了使其在设计模式下显示，外层需要增加一个div容器

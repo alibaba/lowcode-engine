@@ -6,12 +6,15 @@ import { createElement } from 'react';
 import { VE_EVENTS as EVENTS, VE_HOOKS as HOOKS } from './const';
 import Bus from './bus';
 import Symbols from './symbols';
-import { editor, skeleton } from './editor';
+import { skeleton } from './editor';
 import { VisionWorkbench } from './skeleton/workbench';
 import Panes from './panes';
 import Exchange from './exchange';
 import VisualEngineContext from './context';
 import VisualManager from './base/visualManager';
+import Trunk from './bundle/trunk';
+import Prototype from './bundle/prototype';
+import Bundle from './bundle/bundle';
 
 function init(container?: Element) {
   if (!container) {
@@ -40,7 +43,7 @@ const modules = {
 
 const context = new VisualEngineContext();
 
-export {
+const VisualEngine = {
   /**
    * VE.Popup
    */
@@ -68,9 +71,14 @@ export {
   ui,
   Panes,
   modules,
+  Trunk,
+  Prototype,
+  Bundle,
 };
 
+export default VisualEngine;
 
+(window as any).VisualEngine = VisualEngine;
 /*
 console.log(
   `%cLowcodeEngine %cv${VERSION}`,

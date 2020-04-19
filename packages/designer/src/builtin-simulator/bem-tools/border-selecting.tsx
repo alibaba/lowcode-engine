@@ -100,7 +100,7 @@ class Toolbar extends Component<{ observed: OffsetObserver }> {
         // FIXME: need this?
         return;
       }
-      if (important && (typeof condition === 'function' ? condition(node) : condition !== false)) {
+      if (important && (typeof condition === 'function' ? condition(node) !== false : condition !== false)) {
         actions.push(createAction(content, name, node));
       }
     });
@@ -120,7 +120,7 @@ function createAction(content: ReactNode | ComponentType<any> | ActionContentObj
     return createElement(content, { key, node });
   }
   if (isActionContentObject(content)) {
-    const { action, description, icon } = content;
+    const { action, title, icon } = content;
     return (
       <div
         key={key}
@@ -130,7 +130,7 @@ function createAction(content: ReactNode | ComponentType<any> | ActionContentObj
         }}
       >
         {icon && createIcon(icon)}
-        <EmbedTip>{description}</EmbedTip>
+        <EmbedTip>{title}</EmbedTip>
       </div>
     );
   }

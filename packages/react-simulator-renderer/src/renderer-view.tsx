@@ -1,5 +1,5 @@
 import LowCodeRenderer from '@ali/lowcode-react-renderer';
-import { ReactInstance, Fragment, Component } from 'react';
+import { ReactInstance, Fragment, Component, createElement } from 'react';
 import { observer } from '@recore/obx-react';
 import { SimulatorRenderer } from './renderer';
 import './renderer.less';
@@ -48,9 +48,11 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
         appHelper={renderer.context}
         // context={renderer.context}
         designMode={renderer.designMode}
-        componentsMap={renderer.componentsMap}
         suspended={renderer.suspended}
         self={renderer.scope}
+        customCreateElement={(Component, props, children) => {
+          return createElement(Component, props, children);
+        }}
         onCompGetRef={(schema: any, ref: ReactInstance | null) => {
           renderer.mountInstance(schema.id, ref);
         }}

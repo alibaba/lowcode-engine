@@ -365,197 +365,87 @@
       "version": "1.22.0"
     }
   ],
-  "components": [
+  "x-prototypes": [
     {
-      "componentName": "AliVcDiv",
-      "npm": {
-        "package": "@ali/vc-div",
-        "library": "AliVcDiv",
-        "version": "1.0.1",
-        "destructuring": false
-      },
-      "props": [],
-      "x-prototype-urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-div/1.0.1/proto.a264564.js"]
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-div/1.0.1/proto.a264564.js"]
     },
     {
-      "componentName": "AliVcPage",
-      "npm": {
-        "package": "@ali/vc-page",
-        "library": "AliVcPage",
-        "version": "1.0.5",
-        "destructuring": false
-      },
-      "props": [],
-      "x-prototype-urls": [
+      "urls": [
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-page/1.0.5/proto.899e4b1.css",
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-page/1.0.5/proto.bfe05a5.js"
       ]
     },
     {
-      "componentName": "AliVcDeep",
-      "npm": {
-        "package": "@ali/vc-deep",
-        "library": "AliVcDeep",
-        "version": "2.0.11",
-        "destructuring": false
-      },
-      "props": [],
-      "x-prototype-urls": [
+      "urls": [
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep/2.0.11/proto.15be45f.css",
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep/2.0.11/proto.039dc00.js"
       ]
     },
     {
-      "componentName": "AliVcShell",
-      "npm": {
-        "package": "@ali/vc-shell",
-        "library": "AliVcShell",
-        "version": "1.5.6",
-        "destructuring": false
-      },
-      "props": [],
-      "x-prototype-urls": [
+      "urls": [
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-shell/1.5.6/proto.70bac75.css",
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-shell/1.5.6/proto.8d105cf.js"
       ]
     },
     {
-      "componentName": "AliVcSlot",
-      "npm": {
-        "package": "@ali/vc-slot",
-        "library": "AliVcSlot",
-        "version": "2.0.1",
-        "destructuring": false
-      },
-      "props": [],
-      "x-prototype-urls": [
+      "urls": [
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-slot/2.0.1/proto.0e43387.css",
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-slot/2.0.1/proto.9e01f34.js"
       ]
     },
     {
-      "componentName": "AliVcText",
-      "npm": {
-        "package": "@ali/vc-text",
-        "library": "AliVcText",
-        "version": "4.0.1",
-        "destructuring": false
-      },
-      "props": [],
-      "x-prototype-urls": [
+      "urls": [
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-text/4.0.1/proto.595bd91.css",
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-text/4.0.1/proto.90c4998.js"
       ]
     },
     {
-      "componentName": "AliVcLink",
-      "npm": {
-        "package": "@ali/vc-link",
-        "library": "AliVcLink",
-        "version": "5.1.1",
-        "destructuring": false
-      },
-      "props": [],
-      "x-prototype-urls": [
+      "urls": [
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-link/5.1.1/proto.4828821.css",
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-link/5.1.1/proto.91e063a.js"
       ]
     },
     {
-      "componentName": "AliVcLinkBlock",
-      "npm": {
-        "package": "@ali/vc-link-block",
-        "library": "AliVcLinkBlock",
-        "version": "5.1.0",
-        "destructuring": false
-      },
-      "props": [],
-      "x-prototype-urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-link-block/5.1.0/proto.4e9a9d2.js"]
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-link-block/5.1.0/proto.4e9a9d2.js"]
     },
     {
-      "componentName": "AliVcChartColumn",
-      "npm": {
-        "package": "@ali/vc-chart-column",
-        "library": "AliVcChartColumn",
-        "version": "3.0.5",
-        "destructuring": false
-      },
-      "props": [],
-      "x-prototype-urls": [
+      "urls": [
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-column/3.0.5/proto.5973a33.css",
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-column/3.0.5/proto.df847e6.js"
       ]
     },
     {
-      "componentName": "AliVcChartLine",
-      "npm": {
-        "package": "@ali/vc-chart-line",
-        "library": "AliVcChartLine",
-        "version": "3.0.4",
-        "destructuring": false
-      },
-      "props": [],
-      "x-prototype-urls": [
+      "urls": [
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-line/3.0.4/proto.11e8b2c.css",
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-line/3.0.4/proto.bbc1a73.js"
       ]
     },
     {
-      "componentName": "AliVcChartPie",
-      "npm": {
-        "package": "@ali/vc-chart-pie",
-        "library": "AliVcChartPie",
-        "version": "3.0.2",
-        "destructuring": false
-      },
-      "props": [],
-      "x-prototype-urls": [
+      "urls": [
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-pie/3.0.2/proto.81a7751.css",
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-pie/3.0.2/proto.ce342e4.js"
       ]
     },
     {
-      "componentName": "AliVcChartRadar",
-      "npm": {
-        "package": "@ali/vc-chart-radar",
-        "library": "AliVcChartRadar",
-        "version": "3.0.2",
-        "destructuring": false
-      },
-      "props": [],
-      "x-prototype-urls": [
+      "urls": [
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-radar/3.0.2/proto.81a7751.css",
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-radar/3.0.2/proto.638100d.js"
       ]
     },
     {
-      "componentName": "AliVcMarkdown",
-      "npm": {
-        "package": "@ali/vc-markdown",
-        "library": "AliVcMarkdown",
-        "version": "2.0.0",
-        "destructuring": false
-      },
-      "props": [],
-      "x-prototype-urls": [
+      "urls": [
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-markdown/2.0.0/proto.3f91095.css",
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-markdown/2.0.0/proto.1bed9e5.js"
       ]
     },
     {
-      "componentName": "AliAcAmdpHomeConsumer",
-      "npm": {
-        "package": "@ali/ac-amdp-home-consumer",
-        "library": "AliAcAmdpHomeConsumer",
-        "version": "1.0.11",
-        "destructuring": false
-      },
-      "props": [],
-      "x-prototype-urls": [
+      "urls": [
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/ac-amdp-home-consumer/1.0.11/proto.f3f24d5.css",
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/ac-amdp-home-consumer/1.0.11/proto.f12090f.js"
       ]
-    },
+    }
+  ],
+  "components": [
     {
       "componentName": "AliReactJsonView",
       "npm": {

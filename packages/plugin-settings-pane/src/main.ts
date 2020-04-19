@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { uniqueId } from '@ali/lowcode-globals';
+import { uniqueId, DynamicSetter, isDynamicSetter } from '@ali/lowcode-globals';
 import { ComponentMeta, Node, Designer, Selection } from '@ali/lowcode-designer';
 import { TitleContent, FieldExtraProps, SetterType, CustomView, FieldConfig, isCustomView } from '@ali/lowcode-globals';
 import { getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
@@ -73,7 +73,16 @@ export class SettingField implements SettingTarget {
   readonly title: TitleContent;
   readonly editor: any;
   readonly extraProps: FieldExtraProps;
-  readonly setter?: SetterType;
+  private _setter?: SetterType | DynamicSetter;
+  get setter(): SetterType | null {
+    if (!this._setter) {
+      return null;
+    }
+    if (isDynamicSetter(this._setter)) {
+      return this._setter(this);
+    }
+    return this._setter;
+  }
   readonly isSame: boolean;
   readonly isMulti: boolean;
   readonly isOne: boolean;
@@ -107,7 +116,7 @@ export class SettingField implements SettingTarget {
     this._name = name;
     // make this reactive
     this.title = title || (typeof name === 'number' ? `项目 ${name}` : name);
-    this.setter = setter;
+    this._setter = setter;
     this.extraProps = {
       ...rest,
       ...extraProps,

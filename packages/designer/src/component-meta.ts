@@ -32,44 +32,8 @@ function ensureAList(list?: string | string[]): string[] | null {
   return list;
 }
 
-function npmToURI(npm: {
-  package: string;
-  exportName?: string;
-  subName?: string;
-  destructuring?: boolean;
-  main?: string;
-  version: string;
-}): string {
-  const pkg = [];
-  if (npm.package) {
-    pkg.push(npm.package);
-  }
-  if (npm.main) {
-    if (npm.main[0] === '/') {
-      pkg.push(npm.main.slice(1));
-    } else if (npm.main.slice(0, 2) === './') {
-      pkg.push(npm.main.slice(2));
-    } else {
-      pkg.push(npm.main);
-    }
-  }
-
-  let uri = pkg.join('/');
-  uri += `:${npm.destructuring && npm.exportName ? npm.exportName : 'default'}`;
-
-  if (npm.subName) {
-    uri += `.${npm.subName}`;
-  }
-
-  return uri;
-}
-
 export class ComponentMeta {
   readonly isComponentMeta = true;
-  private _uri?: string;
-  get uri(): string {
-    return this._uri!;
-  }
   private _npm?: NpmInfo;
   get npm() {
     return this._npm;
@@ -125,23 +89,27 @@ export class ComponentMeta {
     this.parseMetadata(metadata);
   }
 
+  setNpm(info: NpmInfo) {
+    if (!this._npm) {
+      this._npm = info;
+    }
+  }
+
   private parseMetadata(metadta: ComponentMetadata) {
-    const { componentName, uri, npm } = metadta;
+    const { componentName, npm } = metadta;
     this._npm = npm;
-    this._uri = uri || (npm ? npmToURI(npm) : componentName);
     this._componentName = componentName;
 
-    metadta.uri = this._uri;
     // 额外转换逻辑
     this._transformedMetadata = this.transformMetadata(metadta);
 
     const title = this._transformedMetadata.title;
-    if (title && typeof title === 'string') {
-      this._title = {
+    if (title) {
+      this._title = typeof title === 'string' ? {
         type: 'i18n',
         'en-US': this.componentName,
         'zh-CN': title,
-      };
+      } : title;
     }
 
     const { configure = {} } = this._transformedMetadata;
@@ -181,12 +149,14 @@ export class ComponentMeta {
 
   @computed get availableActions() {
     let { disableBehaviors, actions } = this._transformedMetadata?.configure.component || {};
+    const disabled = ensureAList(disableBehaviors) || (this.isRootComponent() ? ['copy', 'remove'] : null);
     actions = builtinComponentActions.concat(this.designer.getGlobalComponentActions() || [], actions || []);
-    if (!disableBehaviors && this.isRootComponent()) {
-      disableBehaviors = ['copy', 'remove'];
-    }
-    if (disableBehaviors) {
-      return actions.filter(action => disableBehaviors!.indexOf(action.name) < 0);
+
+    if (disabled) {
+      if (disabled.includes('*')) {
+        return actions.filter((action) => action.condition === 'always');
+      }
+      return actions.filter((action) => disabled.indexOf(action.name) < 0);
     }
     return actions;
   }
@@ -216,6 +186,10 @@ export class ComponentMeta {
   }
 }
 
+export function isComponentMeta(obj: any): obj is ComponentMeta {
+  return obj && obj.isComponentMeta;
+}
+
 function preprocessMetadata(metadata: ComponentMetadata): TransformedComponentMetadata {
   if (metadata.configure) {
     if (Array.isArray(metadata.configure)) {
@@ -235,7 +209,7 @@ function preprocessMetadata(metadata: ComponentMetadata): TransformedComponentMe
   };
 }
 
-registerMetadataTransducer(metadata => {
+registerMetadataTransducer((metadata) => {
   const { configure, componentName } = metadata;
   const { component = {} } = configure;
   if (!component.nestingRule) {
@@ -280,7 +254,7 @@ const builtinComponentActions: ComponentAction[] = [
     name: 'remove',
     content: {
       icon: IconRemove,
-      description: intl('remove'),
+      title: intl('remove'),
       action(node: Node) {
         node.remove();
       },
@@ -291,7 +265,7 @@ const builtinComponentActions: ComponentAction[] = [
     name: 'copy',
     content: {
       icon: IconClone,
-      description: intl('copy'),
+      title: intl('copy'),
       action(node: Node) {
         // node.remove();
       },
@@ -299,3 +273,13 @@ const builtinComponentActions: ComponentAction[] = [
     important: true,
   },
 ];
+
+export function removeBuiltinComponentAction(name: string) {
+  const i = builtinComponentActions.findIndex(action => action.name === name);
+  if (i > -1) {
+    builtinComponentActions.splice(i, 1);
+  }
+}
+export function addBuiltinComponentAction(action: ComponentAction) {
+  builtinComponentActions.push(action);
+}

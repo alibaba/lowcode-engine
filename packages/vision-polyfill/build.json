@@ -1,6 +1,6 @@
 {
   "entry": {
-    "index": "src/demo.ts"
+    "index": "src/demo/index.ts"
   },
   "vendor": false,
   "devServer": {

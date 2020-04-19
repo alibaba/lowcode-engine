@@ -26,6 +26,10 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     const { field } = this.props;
     const { setter } = field;
     let setterProps: object | DynamicProps = {};
+    if (Array.isArray(setter)) {
+      this.setterType = 'MixedSetter';
+      // setterProps =
+    }
     if (isSetterConfig(setter)) {
       this.setterType = setter.componentName;
       if (setter.props) {

@@ -5,7 +5,7 @@ import MixinSetter from './mixin-setter';
 import ColorSetter from './color-setter';
 import JsonSetter from './json-setter';
 import EventsSetter from './events-setter';
-import StyleSetter from './style-setter';
+// import StyleSetter from './style-setter';
 
 export const StringSetter = {
   component: Input,
@@ -29,7 +29,7 @@ export const DateYearSetter = DatePicker.YearPicker;
 export const DateMonthSetter = DatePicker.MonthPicker;
 export const DateRangeSetter = DatePicker.RangePicker;
 
-export { ExpressionSetter, MixinSetter, EventsSetter, StyleSetter }
+export { ExpressionSetter, MixinSetter, EventsSetter }
 
 // todo:
 export const ClassNameSetter = () => {
@@ -50,7 +50,7 @@ const builtinSetters = {
   DateMonthSetter,
   DateRangeSetter,
   EventsSetter,
-  StyleSetter,
+  // StyleSetter,
   ColorSetter,
   JsonSetter,
 };
