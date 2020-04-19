@@ -46,21 +46,20 @@ function transformConfig(config: IAppConfig | (() => IAppConfig)): IRecoreAppCon
   };
 }
 
-export default function run(config?: IAppConfig | (() => IAppConfig)) {
+export default function run() {
   const provider = app.getProvider();
-  if (config) {
-    config = transformConfig(config);
-    const App = provider.createApp();
-    runApp(App, config);
-    return;
+  if (!provider) {
+    throw new Error('');
   }
-  const promise = provider.async();
-  promise.then((config: IAppConfig) => {
-    if (!config) {
-      return;
-    }
-    const App = provider.createApp();
-    config = transformConfig(config);
-    runApp(App, config);
+  provider.onReady(() => {
+    const promise = provider.async();
+    promise.then((config: IAppConfig) => {
+      if (!config) {
+        return;
+      }
+      const App = provider.createApp();
+      config = transformConfig(config);
+      runApp(App, config);
+    });
   });
 }
