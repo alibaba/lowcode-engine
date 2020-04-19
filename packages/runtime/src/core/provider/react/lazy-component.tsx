@@ -38,6 +38,6 @@ export default class LazyComponent extends Component<IProps, IState> {
       // loading扩展点
       return createElement(Loading);
     }
-    return createElement(Renderer as any, { schema, ...restProps });
+    return createElement(Renderer as any, { schema, loading: Loading ? createElement(Loading) : null, ...restProps });
   }
 }
