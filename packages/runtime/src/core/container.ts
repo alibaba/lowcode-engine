@@ -8,7 +8,7 @@ export interface ILayoutOptions {
 
 export default class Container {
   private renderer: ReactType | null = null;
-  private layouts: { [key: string]: ReactType } = {};
+  private layouts: { [key: string]: { content: ReactType; props: any } } = {};
   private loading: ReactType | null = null;
   private provider: any;
 
@@ -20,11 +20,11 @@ export default class Container {
     if (!options) {
       return;
     }
-    const { componentName } = options;
+    const { componentName, props = {} } = options;
     if (!componentName || !Layout) {
       return;
     }
-    this.layouts[componentName] = Layout;
+    this.layouts[componentName] = { content: Layout, props };
   }
 
   registerLoading(component: ReactType) {

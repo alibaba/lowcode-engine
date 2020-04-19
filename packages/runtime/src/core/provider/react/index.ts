@@ -1,4 +1,4 @@
-import { createElement, ReactElement } from 'react';
+import { createElement, ReactType, ReactElement } from 'react';
 import { Router } from '@ali/recore';
 import app from '../../index';
 import Provider from '..';
@@ -7,33 +7,66 @@ import LazyComponent from './lazy-component';
 export default class ReactProvider extends Provider {
   // 定制构造根组件的逻辑，如切换路由机制
   createApp() {
+    const RouterView = this.getRouterView();
+    let App;
+    const layoutConfig = this.getLayoutConfig();
+    if (!layoutConfig || !layoutConfig.componentName) {
+      App = (props: any) => (RouterView ? createElement(RouterView, { ...props }) : null);
+      return App;
+    }
+    const { componentName: layoutName, props: layoutProps } = layoutConfig;
+    const { content: Layout, props: extraLayoutProps } = app.getLayout(layoutName) || {};
+    const sectionalRender = this.isSectionalRender();
+    if (!sectionalRender && Layout) {
+      App = (props: any) =>
+        createElement(
+          Layout,
+          { ...layoutProps, ...extraLayoutProps },
+          RouterView ? createElement(RouterView, props) : null,
+        );
+    } else {
+      App = (props: any) => (RouterView ? createElement(RouterView, props) : null);
+    }
+    return App;
+  }
+
+  // 内置实现 for 动态化渲染
+  getRouterView(): ReactType | null {
     const routerConfig = this.getRouterConfig();
     if (!routerConfig) {
-      return;
+      return null;
     }
-    const routes: Array<{ path: string; children: any; exact: boolean; keepAlive: boolean }> = [];
-    let homePageId = '';
+    const routes: Array<{
+      path: string;
+      children: any;
+      exact: boolean;
+      defined: { keepAlive: boolean; [key: string]: any };
+    }> = [];
+    let homePageId = this.getHomePage();
     Object.keys(routerConfig).forEach((pageId: string, idx: number) => {
       if (!pageId) {
         return;
       }
       const path = routerConfig[pageId];
-      if (idx === 0 || path === '/') {
-        homePageId = pageId;
-      }
       routes.push({
         path,
         children: (props: any) => this.getLazyComponent(pageId, props),
         exact: true,
-        keepAlive: true,
+        defined: { keepAlive: true },
       });
+      if (homePageId) {
+        return;
+      }
+      if (idx === 0 || path === '/') {
+        homePageId = pageId;
+      }
     });
     if (homePageId) {
       routes.push({
         path: '**',
         children: (props: any) => this.getLazyComponent(homePageId, { ...props }),
         exact: true,
-        keepAlive: true,
+        defined: { keepAlive: true },
       });
     }
     const RouterView = (props: any) => {
@@ -45,20 +78,7 @@ export default class ReactProvider extends Provider {
         ...props,
       });
     };
-    let App;
-    const layoutConfig = this.getLayoutConfig();
-    if (!layoutConfig || !layoutConfig.componentName) {
-      App = (props: any) => createElement(RouterView, { ...props });
-      return App;
-    }
-    const { componentName: layoutName, props: layoutProps } = layoutConfig;
-    const Layout = app.getLayout(layoutName);
-    if (Layout) {
-      App = (props: any) => createElement(Layout, layoutProps, RouterView({ props }));
-    } else {
-      App = (props: any) => createElement(RouterView, props);
-    }
-    return App;
+    return RouterView;
   }
 
   getLazyComponent(pageId: string, props: any): ReactElement | null {

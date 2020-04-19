@@ -1,5 +1,6 @@
 import { ReactType } from 'react';
 import Container, { ILayoutOptions } from './container';
+import { IProvider } from './provider';
 import run from './run';
 
 class App {
@@ -41,7 +42,7 @@ class App {
     return this.container.getLoading();
   }
 
-  getProvider() {
+  getProvider(): IProvider {
     return this.container.getProvider();
   }
 }
