@@ -8,6 +8,7 @@ import zhEn from '@ali/lowcode-plugin-zh-en';
 import settingsPane from '@ali/lowcode-plugin-settings-pane';
 import designer from '@ali/lowcode-plugin-designer';
 import eventBindDialog from '@ali/lowcode-plugin-event-bind-dialog';
+import sourceEditor from '@ali/lowcode-plugin-source-editor'
 export default {
   LowcodeSkeleton,
   logo,
@@ -18,5 +19,6 @@ export default {
   zhEn,
   settingsPane,
   designer,
-  eventBindDialog
+  eventBindDialog,
+  sourceEditor
 };
