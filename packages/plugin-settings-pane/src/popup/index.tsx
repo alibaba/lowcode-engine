@@ -28,12 +28,15 @@ export class PopupPipe {
       },
       show: (target: Element, actionKey?: string) => {
         this.currentId = id;
-        this.popup({
-          ...props,
-          actionKey,
-          content: sendContent,
-          title: sendTitle,
-        }, target);
+        this.popup(
+          {
+            ...props,
+            actionKey,
+            content: sendContent,
+            title: sendTitle,
+          },
+          target,
+        );
       },
     };
   }
@@ -121,7 +124,7 @@ export class PopupContent extends PureComponent<{ safeId?: string }> {
         safeNode={id}
         visible={visible}
         style={{ width }}
-        onVisibleChange={visible => {
+        onVisibleChange={(visible) => {
           if (avoidLaterHidden) {
             return;
           }
@@ -136,7 +139,11 @@ export class PopupContent extends PureComponent<{ safeId?: string }> {
         shouldUpdatePosition
       >
         <div className="lc-ballon-title">{title}</div>
-        <div className="lc-ballon-content"><PopupService actionKey={actionKey} safeId={id}>{content}</PopupService></div>
+        <div className="lc-ballon-content">
+          <PopupService actionKey={actionKey} safeId={id}>
+            {content}
+          </PopupService>
+        </div>
       </Balloon>
     );
   }

@@ -3,50 +3,22 @@ import classNames from 'classnames';
 import { Icon } from '@alifd/next';
 import { Title, TitleContent } from '@ali/lowcode-globals';
 import './index.less';
+import { CommonField, PopupField } from './fields';
 
 export interface FieldProps {
   className?: string;
   // span
   title?: TitleContent | null;
+  type?: string;
 }
 
 export class Field extends Component<FieldProps> {
-  private shell: HTMLDivElement | null = null;
-
-  private checkIsBlockField() {
-    if (this.shell) {
-      const setter = this.shell.lastElementChild!.firstElementChild;
-      if (setter && setter.classList.contains('lc-block-setter')) {
-        this.shell.classList.add('lc-block-field');
-        this.shell.classList.remove('lc-inline-field');
-      } else {
-        this.shell.classList.remove('lc-block-field');
-        this.shell.classList.add('lc-inline-field');
-      }
-    }
-  }
-  componentDidUpdate() {
-    this.checkIsBlockField();
-  }
-  componentDidMount() {
-    this.checkIsBlockField();
-  }
-
   render() {
-    const { className, children, title } = this.props;
-
-    return (
-      <div ref={shell => (this.shell = shell)} className={classNames('lc-field lc-inline-field', className)}>
-        {title && (
-          <div className="lc-field-head">
-            <div className="lc-field-title">
-              <Title title={title} />
-            </div>
-          </div>
-        )}
-        <div className="lc-field-body">{children}</div>
-      </div>
-    );
+    const { type, ...rest } = this.props;
+    if (type === 'popup') {
+      return <PopupField {...rest} />;
+    }
+    return <CommonField {...rest} />;
   }
 }
 

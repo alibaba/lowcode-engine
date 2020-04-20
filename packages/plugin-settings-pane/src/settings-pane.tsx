@@ -7,10 +7,10 @@ import {
   shallowIntl,
   isSetterConfig,
   createSetterContent,
-  shallowEqual
+  shallowEqual,
 } from '@ali/lowcode-globals';
 import { SettingField, isSettingField, SettingTarget } from './main';
-import { Field, FieldGroup } from './field';
+import { Field, FieldGroup, PopupField } from './field';
 import PopupService from './popup';
 
 class SettingFieldView extends Component<{ field: SettingField }> {
@@ -34,7 +34,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     } else if (setter) {
       this.setterType = setter;
     }
-    let firstRun: boolean = true;
+    let firstRun = true;
     this.dispose = field.onEffect(() => {
       const state: any = {};
       const { extraProps } = field;
@@ -133,7 +133,7 @@ class SettingGroupView extends Component<{ field: SettingField }> {
     super(props);
     const { field } = this.props;
     const { condition } = field.extraProps;
-    let firstRun: boolean = true;
+    let firstRun = true;
     this.dispose = field.onEffect(() => {
       const state: any = {};
       state.visible = field.isOne && typeof condition === 'function' ? !condition(field) : true;
@@ -200,7 +200,7 @@ export default class SettingsPane extends Component<{ target: SettingTarget }> {
     super(props);
 
     const { target } = this.props;
-    let firstRun: boolean = true;
+    let firstRun = true;
     this.dispose = target.onEffect(() => {
       const state = {
         items: target.items.slice(),

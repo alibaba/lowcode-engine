@@ -16,7 +16,7 @@ hotkey.bind(['backspace', 'del'], (e: KeyboardEvent) => {
   const sel = doc.selection;
   const topItems = sel.getTopNodes();
   // TODO: check can remove
-  topItems.forEach(node => {
+  topItems.forEach((node) => {
     doc.removeNode(node);
   });
   sel.clear();
@@ -54,7 +54,7 @@ hotkey.bind(['command+c', 'ctrl+c', 'command+x', 'ctrl+x'], (e, action) => {
   if (!selected || selected.length < 1) return;
 
   const componentsMap = {};
-  const componentsTree = selected.map(item => item.export(false));
+  const componentsTree = selected.map((item) => item.export(false));
 
   const data = { type: 'nodeSchema', componentsMap, componentsTree };
 
@@ -84,13 +84,12 @@ hotkey.bind(['command+v', 'ctrl+v'], (e) => {
       }
       const nodes = insertChildren(target, componentsTree, index);
       if (nodes) {
-        doc.selection.selectAll(nodes.map(o => o.id));
+        doc.selection.selectAll(nodes.map((o) => o.id));
         setTimeout(() => designer.activeTracker.track(nodes[0]), 10);
       }
     }
   });
 });
-
 
 // command + z undo
 hotkey.bind(['command+z', 'ctrl+z'], (e) => {

@@ -93,7 +93,9 @@ const GlobalPropsConfigure: IGlobalPropConfig[] = [
       },
     ],
     disabled() {
-      const proto = this.getProps().getNode().getPrototype();
+      const proto = this.getProps()
+        .getNode()
+        .getPrototype();
       if (!proto) {
         return true;
       }
@@ -226,13 +228,7 @@ export interface IPropConfig {
   /**
    * when current prop value mutate, the mutator function shall be called
    */
-  mutator?(
-    this: Prop,
-    value: any,
-    hotValue: any,
-    preValue: any,
-    preHotValue: any,
-  ): void;
+  mutator?(this: Prop, value: any, hotValue: any, preValue: any, preHotValue: any): void;
   /**
    * other values' change will trigger sync function here
    */
@@ -242,10 +238,7 @@ export interface IPropConfig {
    * @param toHotValue hot value for the setter
    * @param toViewValue static value for the view
    */
-  transformer?(
-    toHotValue: (data: any) => any,
-    toViewValue: (str: string) => any,
-  ): any;
+  transformer?(toHotValue: (data: any) => any, toViewValue: (str: string) => any): any;
   /**
    * user click var to change current field to
    * variable setting field
@@ -254,10 +247,7 @@ export interface IPropConfig {
 }
 
 export interface IGlobalPropConfig extends IPropConfig {
-  position?:
-    | 'top'
-    | 'bottom'
-    | { [key in 'before' | 'after']: { prop: string; value: any } };
+  position?: 'top' | 'bottom' | { [key in 'before' | 'after']: { prop: string; value: any } };
 }
 
 export interface SettingFieldConfig {
@@ -325,9 +315,7 @@ export interface ISnippet {
   schema: any;
 }
 
-function toPropConfig(
-  configure: Array<SettingFieldConfig | SettingGroupConfig>,
-): IPropConfig[] {
+function toPropConfig(configure: Array<SettingFieldConfig | SettingGroupConfig>): IPropConfig[] {
   if (!configure) {
     return [];
   }
@@ -364,9 +352,7 @@ function accessLibrary(library: string | object) {
   return (window as any)[library];
 }
 
-export function setPackages(
-  packages: Array<{ package: string; library: object | string }>,
-) {
+export function setPackages(packages: Array<{ package: string; library: object | string }>) {
   packages.forEach((item) => {
     let lib: any;
     if (packageMaps.hasOwnProperty(item.package)) {
@@ -477,15 +463,11 @@ function npmToURI(npm: {
   return uri;
 }
 
-function toOlderSpec(
-  options: ComponentDecoratorSpec,
-): IComponentPrototypeConfigure {
+function toOlderSpec(options: ComponentDecoratorSpec): IComponentPrototypeConfigure {
   const uri = options.uri || npmToURI(options.npm);
   const spec: any = {
     packageName: options.npm ? options.npm.package : '',
-    category:
-      options.category ||
-      (Array.isArray(options.tags) ? options.tags[0] : options.tags),
+    category: options.category || (Array.isArray(options.tags) ? options.tags[0] : options.tags),
     componentName: options.componentName,
     docUrl: options.docUrl,
     defaultProps: {},
@@ -514,8 +496,7 @@ function toOlderSpec(
         spec.canDropIn = options.configure.component.nestingRule.childWhitelist;
       }
       if (options.configure.component.nestingRule.parentWhitelist) {
-        spec.canDropTo =
-          options.configure.component.nestingRule.parentWhitelist;
+        spec.canDropTo = options.configure.component.nestingRule.parentWhitelist;
       }
     }
   }
@@ -526,10 +507,7 @@ function toOlderSpec(
 function isNewSpec(options: any): options is ComponentDecoratorSpec {
   return (
     options &&
-    (options.npm ||
-      options.props ||
-      (options.configure &&
-        (options.configure.props || options.configure.component)))
+    (options.npm || options.props || (options.configure && (options.configure.props || options.configure.component)))
   );
 }
 
@@ -602,26 +580,10 @@ export declare interface IComponentPrototypeConfigure {
   didDropOut?: (container: any | Prototype, dragment: any) => boolean;
   didDropIn?: (container: any | Prototype, dragment: any) => boolean;
 
-  canResizing?:
-    | ((dragment: Node, triggerDirection: string) => boolean)
-    | boolean;
-  onResizeStart?: (
-    e: MouseEvent,
-    triggerDirection: string,
-    dragment: Node,
-  ) => void;
-  onResize?: (
-    e: MouseEvent,
-    triggerDirection: string,
-    dragment: Node,
-    moveX: number,
-    moveY: number,
-  ) => void;
-  onResizeEnd?: (
-    e: MouseEvent,
-    triggerDirection: string,
-    dragment: Node,
-  ) => void;
+  canResizing?: ((dragment: Node, triggerDirection: string) => boolean) | boolean;
+  onResizeStart?: (e: MouseEvent, triggerDirection: string, dragment: Node) => void;
+  onResize?: (e: MouseEvent, triggerDirection: string, dragment: Node, moveX: number, moveY: number) => void;
+  onResizeEnd?: (e: MouseEvent, triggerDirection: string, dragment: Node) => void;
 
   /**
    * when sub-node of the current node changed
@@ -635,13 +597,13 @@ export interface IComponentPrototypeExtraConfigs {
 }
 
 class Prototype {
-  public static addGlobalNodeCanDragConfig = addGlobalNodeCanDragConfig;
-  public static addGlobalPropsReducer = addGlobalPropsReducer;
-  public static addGlobalPropsConfigure = addGlobalPropsConfigure;
-  public static addGlobalExtraActions = addGlobalExtraActions;
-  public static removeGlobalPropsConfigure = removeGlobalPropsConfigure;
-  public static overridePropsConfigure = overridePropsConfigure;
-  public static create = function create(
+  static addGlobalNodeCanDragConfig = addGlobalNodeCanDragConfig;
+  static addGlobalPropsReducer = addGlobalPropsReducer;
+  static addGlobalPropsConfigure = addGlobalPropsConfigure;
+  static addGlobalExtraActions = addGlobalExtraActions;
+  static removeGlobalPropsConfigure = removeGlobalPropsConfigure;
+  static overridePropsConfigure = overridePropsConfigure;
+  static create = function create(
     options: IComponentPrototypeConfigure | ComponentDecoratorSpec,
     extraConfigs: IComponentPrototypeExtraConfigs = {},
   ) {
@@ -659,7 +621,7 @@ class Prototype {
    * is this prototype auto-generated by prototypeMocker
    * from a normal VIEW file (React Component Class)
    */
-  private autoGenerated: boolean = false;
+  private autoGenerated = false;
 
   constructor(
     options: IComponentPrototypeConfigure | ComponentDecoratorSpec,
@@ -676,50 +638,50 @@ class Prototype {
     }
   }
 
-  public getId() {
+  getId() {
     return this.id;
   }
 
-  public getUri() {
+  getUri() {
     return this.options.uri;
   }
 
-  public getConfig(configName?: keyof IComponentPrototypeConfigure) {
+  getConfig(configName?: keyof IComponentPrototypeConfigure) {
     if (configName) {
       return this.options[configName];
     }
     return this.options;
   }
 
-  public getPackageName() {
+  getPackageName() {
     return this.packageName || this.options.packageName;
   }
 
-  public getContextInfo(name?: string): any {
+  getContextInfo(name?: string): any {
     return name ? get(this.options, ['context', name], '') : this.options;
   }
 
-  public getTitle() {
+  getTitle() {
     return this.options.title || this.getComponentName();
   }
 
-  public getComponentName() {
+  getComponentName() {
     return this.componentName || this.options.componentName || null;
   }
 
-  public getDocUrl() {
+  getDocUrl() {
     return this.options.docUrl;
   }
 
-  public getDefaultProps() {
+  getDefaultProps() {
     return this.options.defaultProps || {};
   }
 
-  public getPropConfigs() {
+  getPropConfigs() {
     return this.options;
   }
 
-  public getExtraActions() {
+  getExtraActions() {
     let extraActions = this.options.extraActions;
     if (!extraActions) {
       return GlobalExtraActions;
@@ -730,7 +692,7 @@ class Prototype {
     return [...GlobalExtraActions, ...extraActions];
   }
 
-  public getCategory() {
+  getCategory() {
     if (this.category !== undefined) {
       return this.category;
     }
@@ -740,31 +702,31 @@ class Prototype {
     return '*';
   }
 
-  public hasSlot() {
+  hasSlot() {
     return this.options.hasSlot;
   }
 
-  public setCategory(category: string) {
+  setCategory(category: string) {
     this.category = category;
   }
 
-  public getIcon() {
+  getIcon() {
     return this.options.icon || '';
   }
 
-  public setView(view: ComponentClass) {
+  setView(view: ComponentClass) {
     this.view = view;
   }
 
-  public getView() {
+  getView() {
     return this.view || this.options.view || null;
   }
 
-  public getInitialChildren() {
+  getInitialChildren() {
     return this.options.initialChildren || null;
   }
 
-  public getConfigure() {
+  getConfigure() {
     let res = (this.options.configure || []).slice();
     GlobalPropsConfigure.forEach((config) => {
       const position = config.position || 'bottom';
@@ -810,45 +772,45 @@ class Prototype {
     return res;
   }
 
-  public getRectSelector() {
+  getRectSelector() {
     return this.options.rectSelector;
   }
 
-  public isInline() {
+  isInline() {
     return this.options.isInline != null ? this.options.isInline : null;
   }
 
-  public isContainer() {
+  isContainer() {
     if (isFunction(this.options.isContainer)) {
       return (this.options.isContainer as any)(this);
     }
     return this.options.isContainer != null ? this.options.isContainer : false;
   }
 
-  public isModal() {
+  isModal() {
     return this.options.isModal || false;
   }
 
-  public isFloating() {
+  isFloating() {
     return this.options.isFloating || false;
   }
 
-  public isAutoGenerated() {
+  isAutoGenerated() {
     return this.autoGenerated;
   }
 
-  public setPackageName(name: string) {
+  setPackageName(name: string) {
     this.packageName = name;
   }
 
-  public setComponentName(componentName: string) {
+  setComponentName(componentName: string) {
     this.componentName = componentName;
   }
 
   /**
    * transform value from hot-value to view
    */
-  public reduce(props: any) {
+  reduce(props: any) {
     let reducers = this.options.reducers || [];
 
     if (!Array.isArray(reducers)) {
@@ -871,7 +833,7 @@ class Prototype {
     return props;
   }
 
-  public transformToActive(props: any) {
+  transformToActive(props: any) {
     let transducers = this.options.transducers;
     if (!transducers) {
       return props;
@@ -888,7 +850,7 @@ class Prototype {
     return props;
   }
 
-  public transformToStatic(props: any) {
+  transformToStatic(props: any) {
     let transducers = this.options.transducers;
     if (!transducers) {
       return props;
@@ -905,12 +867,9 @@ class Prototype {
     return props;
   }
 
-  public canDragging(node?: Node) {
+  canDragging(node?: Node) {
     if (this.canSelecting()) {
-      const draggable =
-        this.options.canDragging === false || this.options.canDraging === false
-          ? false
-          : true;
+      const draggable = this.options.canDragging === false || this.options.canDraging === false ? false : true;
       if (GlobalNodeCanDragConfig.length > 0) {
         if (!flow(GlobalNodeCanDragConfig)(node)) {
           return false;
@@ -924,73 +883,65 @@ class Prototype {
     return false;
   }
 
-  public canHovering() {
+  canHovering() {
     return this.options.canHovering != null ? this.options.canHovering : true;
   }
 
-  public canSelecting() {
+  canSelecting() {
     return this.options.canSelecting != null ? this.options.canSelecting : true;
   }
 
-  public canOperating() {
+  canOperating() {
     return this.options.canOperating != null ? this.options.canOperating : true;
   }
 
-  public canSetting() {
+  canSetting() {
     return this.canSelecting();
   }
 
-  public canUseCondition() {
-    return this.options.canUseCondition != null
-      ? this.options.canUseCondition
-      : true;
+  canUseCondition() {
+    return this.options.canUseCondition != null ? this.options.canUseCondition : true;
   }
 
-  public canLoop() {
+  canLoop() {
     return this.options.canLoop != null ? this.options.canLoop : true;
   }
 
-  public canDropTo(container: Node) {
+  canDropTo(container: Node) {
     if (!this.canDragging()) {
       return false;
     }
 
-    const oCanDropTo =
-      this.options.canDropTo != null
-        ? this.options.canDropTo
-        : this.options.canDropto;
+    const oCanDropTo = this.options.canDropTo != null ? this.options.canDropTo : this.options.canDropto;
     if (oCanDropTo != null) {
       return this.xcan(oCanDropTo, container);
     }
     return true;
   }
 
-  public canDropIn(dragment: Node) {
-    const oCanDropIn =
-      this.options.canDropIn != null
-        ? this.options.canDropIn
-        : this.options.canDroping;
+  canDropIn(dragment: Node) {
+    const oCanDropIn = this.options.canDropIn != null ? this.options.canDropIn : this.options.canDroping;
     if (oCanDropIn != null) {
       return this.xcan(oCanDropIn, dragment);
     }
     return true;
   }
 
-  public didDropIn(dragment: Node, container: any) {
+  didDropIn(dragment: Node, container: any) {
     const fn = this.options.didDropIn;
     if (typeof fn === 'function') {
       fn.call(container || this, dragment);
     }
   }
 
-  public didDropOut(dragment: Node, container: any) {
+  didDropOut(dragment: Node, container: any) {
     const fn = this.options.didDropOut;
     if (typeof fn === 'function') {
       fn.call(container || this, dragment);
     }
   }
 
-  public canContain(dragment: Node) {
+  canContain(dragment: Node) {
     const oCanContain = this.options.canContain;
     if (oCanContain != null) {
       return this.xcan(oCanContain, dragment);
@@ -998,14 +949,11 @@ class Prototype {
     return true;
   }
 
-  public clone(options: IComponentPrototypeConfigure) {
+  clone(options: IComponentPrototypeConfigure) {
     return new Prototype(assign({}, this.options, options || {}));
   }
 
-  private xcan(
-    ocan: ((dragment: Node) => boolean) | string | string[],
-    placement: Node,
-  ): boolean;
+  private xcan(ocan: ((dragment: Node) => boolean) | string | string[], placement: Node): boolean;
   private xcan(ocan: any, placement: Node): boolean {
     const t = typeof ocan;
     if (t === 'function') {

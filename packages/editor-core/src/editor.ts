@@ -25,7 +25,7 @@ export interface HooksFuncs {
   [idx: number]: (msg: string, handler: (...args: []) => void) => void;
 }
 
-export type KeyType = Function | Symbol | string;
+export type KeyType = Function | symbol | string;
 export type ClassType = Function | (new (...args: any[]) => any);
 export interface GetOptions {
   forceNew?: boolean;

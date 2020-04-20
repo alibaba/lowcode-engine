@@ -29,6 +29,7 @@
     "@ali/vu-logger": "^1.0.7",
     "@ali/vu-style-sheet": "^2.4.0",
     "@alifd/next": "^1.19.12",
+    "@ali/ve-stage-box": "^4.0.0",
     "@alife/theme-lowcode-dark": "^0.1.0",
     "@alife/theme-lowcode-light": "^0.1.0",
     "react": "^16.8.1",
