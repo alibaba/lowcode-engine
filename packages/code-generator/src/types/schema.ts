@@ -144,14 +144,7 @@ export interface IContainerNodeItem extends IComponentNodeItem {
    * • componentWillUnmount()
    * • componentDidCatch(error, info)
    */
-  lifeCycles?: {
-    constructor?: IJSExpression;
-    render?: IJSExpression;
-    componentDidMount?: IJSExpression;
-    componentDidUpdate?: IJSExpression;
-    componentWillUnmount?: IJSExpression;
-    componentDidCatch?: IJSExpression;
-  }; // 生命周期Hook方法
+  lifeCycles?: Record<string, IJSExpression>; // 生命周期Hook方法
   methods?: {
     [methodName: string]: IJSExpression;
   }; // 自定义方法设置

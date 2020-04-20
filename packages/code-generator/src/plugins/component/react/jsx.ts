@@ -1,5 +1,6 @@
 import {
   BuilderComponentPlugin,
+  BuilderComponentPluginFactory,
   ChildNodeItem,
   ChildNodeType,
   ChunkType,
@@ -111,39 +112,42 @@ function generateChildren(children: ChildNodeType): string[] {
   });
 }
 
-const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
-  const next: ICodeStruct = {
-    ...pre,
-  };
+const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
+  const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
+    const next: ICodeStruct = {
+      ...pre,
+    };
 
-  const ir = next.ir as IContainerInfo;
+    const ir = next.ir as IContainerInfo;
 
-  let jsxContent: string;
-  if (!ir.children || (ir.children as unknown[]).length === 0) {
-    jsxContent = 'null';
-  } else {
-    const childrenCode = generateChildren(ir.children);
-    if (childrenCode.length === 1) {
-      jsxContent = `(${childrenCode[0]})`;
+    let jsxContent: string;
+    if (!ir.children || (ir.children as unknown[]).length === 0) {
+      jsxContent = 'null';
     } else {
-      jsxContent = `(<React.Fragment>${childrenCode.join(
-        '',
-      )}</React.Fragment>)`;
+      const childrenCode = generateChildren(ir.children);
+      if (childrenCode.length === 1) {
+        jsxContent = `(${childrenCode[0]})`;
+      } else {
+        jsxContent = `(<React.Fragment>${childrenCode.join(
+          '',
+        )}</React.Fragment>)`;
+      }
     }
-  }
 
-  next.chunks.push({
-    type: ChunkType.STRING,
-    fileType: FileType.JSX,
-    name: REACT_CHUNK_NAME.ClassRenderJSX,
-    content: `return ${jsxContent};`,
-    linkAfter: [
-      REACT_CHUNK_NAME.ClassRenderStart,
-      REACT_CHUNK_NAME.ClassRenderPre,
-    ],
-  });
+    next.chunks.push({
+      type: ChunkType.STRING,
+      fileType: FileType.JSX,
+      name: REACT_CHUNK_NAME.ClassRenderJSX,
+      content: `return ${jsxContent};`,
+      linkAfter: [
+        REACT_CHUNK_NAME.ClassRenderStart,
+        REACT_CHUNK_NAME.ClassRenderPre,
+      ],
+    });
 
-  return next;
+    return next;
+  };
+  return plugin;
 };
 
-export default plugin;
+export default pluginFactory;

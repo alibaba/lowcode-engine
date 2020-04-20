@@ -12,6 +12,8 @@ export enum FileType {
   HTML = 'html',
   JS = 'js',
   JSX = 'jsx',
+  TS = 'ts',
+  TSX = 'tsx',
   JSON = 'json',
 }
 
@@ -32,7 +34,7 @@ export type CodeGeneratorFunction<T> = (content: T) => string;
 
 export interface ICodeChunk {
   type: ChunkType;
-  fileType: FileType;
+  fileType: string;
   name: string;
   subModule?: string;
   content: ChunkContent;
@@ -52,6 +54,8 @@ export interface ICodeStruct extends IBaseCodeStruct {
 export type BuilderComponentPlugin = (
   initStruct: ICodeStruct,
 ) => Promise<ICodeStruct>;
+
+export type BuilderComponentPluginFactory<T> = (config?: T) => BuilderComponentPlugin;
 
 export interface IChunkBuilder {
   run(
@@ -142,6 +146,7 @@ export interface IProjectBuilder {
   generateProject(schema: IProjectSchema): Promise<IResultDir>;
 }
 
+export type PostProcessorFactory<T> = (config?: T) => PostProcessor;
 export type PostProcessor = (content: string, fileType: string) => string;
 
 // TODO: temp interface, need modify
