@@ -143,11 +143,11 @@ export interface OldPrototypeConfig {
   canSelecting?: boolean;
   canContain?: (dragment: Node) => boolean; // => nestingRule
 
-  canDropTo?: ((container: Node) => boolean) | string | string[]; // => nestingRule
-  canDropto?: (container: Node) => boolean; // => nestingRule
+  canDropTo?: ((container: Node) => boolean) | boolean | string | string[]; // => nestingRule
+  canDropto?: ((container: Node) => boolean) | boolean | string | string[]; // => nestingRule
 
-  canDropIn?: ((dragment: Node) => boolean) | string | string[]; // => nestingRule
-  canDroping?: (dragment: Node) => boolean; // => nestingRule
+  canDropIn?: ((dragment: Node) => boolean) | boolean | string | string[]; // => nestingRule
+  canDroping?: ((dragment: Node) => boolean) | boolean | string | string[]; // => nestingRule
 
   didDropOut?: (dragment: any, container: any) => void; // => hooks
   didDropIn?: (dragment: any, container: any) => void; // => hooks
@@ -387,9 +387,9 @@ export function upgradePropConfig(config: OldPropConfig) {
 }
 
 export function upgradeConfigure(items: OldPropConfig[]) {
-  const configure = [];
+  const configure: any[] = [];
   let ignoreSlotName: any = null;
-  return items.forEach((config) => {
+  items.forEach((config) => {
     if (config.slotName) {
       ignoreSlotName = config.slotName;
     } else if (ignoreSlotName) {
@@ -401,6 +401,7 @@ export function upgradeConfigure(items: OldPropConfig[]) {
     }
     configure.push(upgradePropConfig(config));
   });
+  return configure;
 }
 
 export function upgradeActions(actions?: Array<ComponentType<any> | ReactElement> | (() => ReactElement)) {
@@ -507,11 +508,21 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   if (canContain) {
     nestingRule.descendantWhitelist = canContain;
   }
-  if (canDropTo || canDropto) {
-    nestingRule.parentWhitelist = canDropTo || canDropto;
+  if (canDropTo != null || canDropto != null) {
+    if (canDropTo === false || canDropto === false) {
+      nestingRule.parentWhitelist = () => false;
+    }
+    if (canDropTo !== true && canDropto !== true) {
+      nestingRule.parentWhitelist = canDropTo || canDropto;
+    }
   }
-  if (canDropIn || canDroping) {
-    nestingRule.childWhitelist = canDropIn || canDroping;
+  if (canDropIn != null || canDroping != null) {
+    if (canDropIn === false || canDroping === false) {
+      nestingRule.childWhitelist = () => false;
+    }
+    if (canDropIn !== true && canDroping !== true) {
+      nestingRule.childWhitelist = canDropIn || canDroping;
+    }
   }
   component.nestingRule = nestingRule;
 

@@ -148,7 +148,7 @@ class Prototype {
   static overridePropsConfigure = overridePropsConfigure;
   static create(config: OldPrototypeConfig | ComponentMetadata | ComponentMeta) {
     return new Prototype(config);
-  };
+  }
 
   private id: string;
   private meta: ComponentMeta;
@@ -241,6 +241,7 @@ class Prototype {
   setPackageName(name: string) {
     this.meta.setNpm({
       package: name,
+      componentName: this.getComponentName(),
     });
   }
 
@@ -256,7 +257,10 @@ class Prototype {
   }
 
   getView() {
-    return this.meta.getMetadata().experimental?.view || designer.currentDocument?.simulator?.getComponent(this.getComponentName());
+    return (
+      this.meta.getMetadata().experimental?.view ||
+      designer.currentDocument?.simulator?.getComponent(this.getComponentName())
+    );
   }
 }
 

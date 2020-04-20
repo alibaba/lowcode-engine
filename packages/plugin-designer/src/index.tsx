@@ -35,8 +35,8 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
     }
     const { components, packages } = assets;
     const state = {
-      componentMetadatas: components ? components.filter(item => item.type === 'ComponentMetadata') : [],
-      library: packages ? Object.values(packages) : [],
+      componentMetadatas: components || [],
+      library: packages || [],
     };
     this.setState(state);
   };
@@ -62,6 +62,8 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
       // TODO: use a Loading
       return null;
     }
+
+    console.info('metadatas', componentMetadatas);
 
     return (
       <DesignerView

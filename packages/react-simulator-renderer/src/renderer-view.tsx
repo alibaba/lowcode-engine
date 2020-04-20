@@ -3,6 +3,7 @@ import { ReactInstance, Fragment, Component, createElement } from 'react';
 import { observer } from '@recore/obx-react';
 import { SimulatorRenderer } from './renderer';
 import './renderer.less';
+import { host } from './host';
 
 export default class SimulatorRendererView extends Component<{ renderer: SimulatorRenderer }> {
   render() {
@@ -50,8 +51,11 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
         designMode={renderer.designMode}
         suspended={renderer.suspended}
         self={renderer.scope}
-        customCreateElement={(Component, props, children) => {
-          return createElement(Component, props, children);
+        customCreateElement={(Component: any, props: any, children: any) => {
+          const { __id, __desingMode, ...viewProps } = props;
+          viewProps.componentId = __id;
+          viewProps._leaf = host.document.getNode(__id);
+          return createElement(Component, viewProps, children);
         }}
         onCompGetRef={(schema: any, ref: ReactInstance | null) => {
           renderer.mountInstance(schema.id, ref);

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, createElement as reactCreateElement } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
@@ -85,8 +85,12 @@ export default class Engine extends PureComponent {
     }
   };
 
+  createElement(Component, props, children) {
+    return (this.props.customCreateElement || reactCreateElement)(Component, props, children);
+  }
+
   render() {
-    const { schema, designMode, appHelper, components } = this.props;
+    const { schema, designMode, appHelper, components, customCreateElement } = this.props;
     if (isEmpty(schema)) {
       return null;
     }
@@ -94,7 +98,7 @@ export default class Engine extends PureComponent {
       return '模型结构异常';
     }
     debug('entry.render');
-    const allComponents = { ...ENGINE_COMPS, ...components };
+    const allComponents = { ...components, ...ENGINE_COMPS };
     const Comp = allComponents[schema.componentName];
     if (Comp) {
       return (

@@ -4,6 +4,7 @@ import { ComponentMeta, Node, Designer, Selection } from '@ali/lowcode-designer'
 import { TitleContent, FieldExtraProps, SetterType, CustomView, FieldConfig, isCustomView } from '@ali/lowcode-globals';
 import { getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import Editor from '@ali/lowcode-editor-core';
+import { Transducer } from './utils';
 
 export interface SettingTarget {
   // 所设置的节点集，至少一个
@@ -91,6 +92,7 @@ export class SettingField implements SettingTarget {
   readonly componentMeta: ComponentMeta | null;
   readonly designer: Designer;
   readonly top: SettingTarget;
+  readonly transducer: Transducer;
   get path() {
     const path = this.parent.path.slice();
     if (this.type === 'field') {
@@ -139,6 +141,8 @@ export class SettingField implements SettingTarget {
     if (this.type === 'group' && items) {
       this.initItems(items);
     }
+
+    this.transducer = new Transducer(this, { setter });
   }
 
   onEffect(action: () => void): () => void {
@@ -271,6 +275,27 @@ export class SettingField implements SettingTarget {
 
   purge() {
     this.disposeItems();
+  }
+
+  // ======= compatibles ====
+  getHotValue(): any {
+    return this.transducer.toHot(this.getValue());
+  }
+
+  setHotValue(data: any) {
+    this.setValue(this.transducer.toNative(data));
+  }
+
+  getNode() {
+    return this.nodes[0];
+  }
+
+  getProps() {
+    return this.parent;
+  }
+
+  onValueChange() {
+    return () => {};
   }
 }
 

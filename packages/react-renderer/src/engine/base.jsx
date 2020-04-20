@@ -1,4 +1,4 @@
-import React, { PureComponent, createElement as reactCreateElement } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
 import Div from '@ali/iceluna-comp-div';
@@ -312,9 +312,9 @@ export default class BaseEngine extends PureComponent {
     } else if (typeof idx === 'number' && !props.key) {
       props.key = idx;
     }
-    const createElement = engine.props.customCreateElement || reactCreateElement;
+    props.__id = schema.id;
     const renderComp = (props) => {
-      return createElement(
+      return engine.createElement(
         Comp,
         props,
         (!isFileSchema(schema) &&

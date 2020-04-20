@@ -21,6 +21,7 @@
     "@ali/lowcode-plugin-undo-redo": "^0.8.6",
     "@ali/lowcode-plugin-zh-en": "^0.8.8",
     "@ali/lowcode-setters": "^0.8.8",
+    "@ali/ve-i18n-util": "^2.0.2",
     "@ali/ve-icons": "^4.1.9",
     "@ali/ve-less-variables": "2.0.3",
     "@ali/ve-popups": "^4.2.5",

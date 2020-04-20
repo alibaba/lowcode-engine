@@ -1,9 +1,9 @@
-import { createElement, ReactInstance } from 'react';
+import { createElement, ReactInstance, ComponentType } from 'react';
 import { render as reactRender } from 'react-dom';
 import { host } from './host';
 import SimulatorRendererView from './renderer-view';
 import { computed, obx } from '@recore/obx';
-import { Asset } from '@ali/lowcode-globals';
+import { Asset, isReactComponent } from '@ali/lowcode-globals';
 import { getClientRects } from './utils/get-client-rects';
 import loader from './utils/loader';
 import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
@@ -311,12 +311,17 @@ export interface LibraryMap {
   [key: string]: string;
 }
 
-function buildComponents(libraryMap: LibraryMap, componentsMap: { [componentName: string]: NpmInfo }) {
+function buildComponents(libraryMap: LibraryMap, componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> }) {
   const components: any = {};
   Object.keys(componentsMap).forEach((componentName) => {
-    const component = findComponent(libraryMap, componentName, componentsMap[componentName]);
-    if (component) {
+    let component = componentsMap[componentName];
+    if (isReactComponent(component)) {
       components[componentName] = component;
+    } else {
+      component = findComponent(libraryMap, componentName, component);
+      if (component) {
+        components[componentName] = component;
+      }
     }
   });
   return components;

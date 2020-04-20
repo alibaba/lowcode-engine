@@ -466,6 +466,36 @@ export class Node {
     this.props.purge();
     this.document.internalRemoveAndPurgeNode(this);
   }
+
+  // ======= compatibles ====
+  isEmpty(): boolean {
+    return this.children?.isEmpty() || true;
+  }
+  getStatus() {
+    return 'default';
+  }
+  setStatus() {
+
+  }
+  getDOMNode() {
+    const instance = this.document.simulator?.getComponentInstances(this)?.[0];
+    if (!instance) {
+      return;
+    }
+    return this.document.simulator?.findDOMNodes(instance)?.[0];
+  }
+  getChildren() {
+    return this.children;
+  }
+  getPage() {
+    return this.document;
+  }
+  getComponentName() {
+    return this.componentName;
+  }
+  insertBefore(node: Node, ref?: Node) {
+    this.children?.insert(node, ref ? ref.index : null);
+  }
 }
 
 export interface NodeParent extends Node {

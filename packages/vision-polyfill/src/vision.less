@@ -1,0 +1,47 @@
+html.engine-cursor-move, html.engine-cursor-move * {
+  cursor: grabbing !important
+}
+
+html.engine-cursor-copy, html.engine-cursor-copy * {
+  cursor: copy !important
+}
+
+html.engine-cursor-ew-resize, html.engine-cursor-ew-resize * {
+  cursor: ew-resize !important
+}
+
+body, #engine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-text-size-adjust: none;
+  -webkit-touch-callout: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  min-width: 1024px;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+}
+
+html.engine-blur #engine {
+  -webkit-filter: blur(4px);
+}

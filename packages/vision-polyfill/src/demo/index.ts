@@ -1,6 +1,8 @@
-import Engine from '../vision'; // VisualEngine
-import { editor } from '../editor';
+// @ts-ignore
+import Engine from '@ali/visualengine';
 import loadUrls from './loader';
+
+const { editor } = Engine;
 
 Engine.init();
 
@@ -12,14 +14,7 @@ async function load() {
   loadSchema();
 }
 
-const externals = [
-  'react',
-  'react-dom',
-  'prop-types',
-  'react-router',
-  'react-router-dom',
-  '@ali/recore',
-];
+const externals = ['react', 'react-dom', 'prop-types', 'react-router', 'react-router-dom', '@ali/recore'];
 async function loadAssets() {
   const assets = await editor.utils.get('./legao-assets.json');
   // Trunk.setPackages(assets.packages);
@@ -28,7 +23,7 @@ async function loadAssets() {
     assets.packages.forEach((item: any) => {
       if (item.package.indexOf('@ali/vc-') === 0 && item.urls) {
         item.urls = item.urls.filter((url: string) => {
-          return url.indexOf('view.mobile') < 0
+          return url.indexOf('view.mobile') < 0;
         });
       } else if (item.package && externals.indexOf(item.package) > -1) {
         item.urls = null;

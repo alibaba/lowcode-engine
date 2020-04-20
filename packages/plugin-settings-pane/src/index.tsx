@@ -32,7 +32,7 @@ export default class SettingsMainView extends Component {
     if (this.main.isMulti) {
       return (
         <div className="lc-settings-navigator">
-          {createIcon(this.main.componentMeta?.icon)}
+          {createIcon(this.main.componentMeta?.icon, { className: 'lc-settings-navigator-icon'})}
           <Title title={this.main.componentMeta!.title} />
           <span>x {this.main.nodes.length}</span>
         </div>
@@ -57,7 +57,7 @@ export default class SettingsMainView extends Component {
 
     return (
       <div className="lc-settings-navigator">
-        {createIcon(this.main.componentMeta?.icon)}
+        {createIcon(this.main.componentMeta?.icon, { className: 'lc-settings-navigator-icon'})}
         <Breadcrumb className="lc-settings-node-breadcrumb">{items}</Breadcrumb>
       </div>
     );

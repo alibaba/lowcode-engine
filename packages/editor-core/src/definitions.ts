@@ -109,7 +109,7 @@ export interface I18nConfig {
 export type I18nFunction = (key: string, params: any) => string;
 
 export interface Utils {
-  [key: string]: (...args: []) => any;
+  [key: string]: (...args: any[]) => any;
 }
 
 export interface PluginProps {

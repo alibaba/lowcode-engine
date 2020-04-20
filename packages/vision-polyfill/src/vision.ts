@@ -2,11 +2,12 @@ import * as utils from '@ali/ve-utils';
 import Popup from '@ali/ve-popups';
 import Icons from '@ali/ve-icons';
 import { render } from 'react-dom';
+import I18nUtil from '@ali/ve-i18n-util';
 import { createElement } from 'react';
 import { VE_EVENTS as EVENTS, VE_HOOKS as HOOKS } from './const';
 import Bus from './bus';
 import Symbols from './symbols';
-import { skeleton } from './editor';
+import { skeleton, editor } from './editor';
 import { VisionWorkbench } from './skeleton/workbench';
 import Panes from './panes';
 import Exchange from './exchange';
@@ -15,6 +16,11 @@ import VisualManager from './base/visualManager';
 import Trunk from './bundle/trunk';
 import Prototype from './bundle/prototype';
 import Bundle from './bundle/bundle';
+import Pages from './pages';
+import Field from './field';
+import Prop from './prop';
+import Env from './env';
+import './vision.less';
 
 function init(container?: Element) {
   if (!container) {
@@ -31,7 +37,13 @@ function init(container?: Element) {
   );
 }
 
+/**
+ * VE.ui.xxx
+ *
+ * Core UI Components
+ */
 const ui = {
+  Field,
   Icon: Icons,
   Icons,
   Popup,
@@ -39,11 +51,14 @@ const ui = {
 
 const modules = {
   VisualManager,
+  I18nUtil,
+  Prop,
 };
 
 const context = new VisualEngineContext();
 
 const VisualEngine = {
+  editor,
   /**
    * VE.Popup
    */
@@ -52,6 +67,8 @@ const VisualEngine = {
    * VE Utils
    */
   utils,
+  I18nUtil,
+  Env,
   /* pub/sub 集线器 */
   Bus,
   /* 事件 */
@@ -74,11 +91,13 @@ const VisualEngine = {
   Trunk,
   Prototype,
   Bundle,
+  Pages,
 };
 
 export default VisualEngine;
 
 (window as any).VisualEngine = VisualEngine;
+
 /*
 console.log(
   `%cLowcodeEngine %cv${VERSION}`,

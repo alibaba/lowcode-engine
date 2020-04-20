@@ -9,6 +9,7 @@ import {
   getRegisteredMetadataTransducers,
   registerMetadataTransducer,
   computed,
+  NestingFilter,
 } from '@ali/lowcode-globals';
 import { Node, NodeParent } from './document';
 import { Designer } from './designer';
@@ -24,12 +25,36 @@ function ensureAList(list?: string | string[]): string[] | null {
     return null;
   }
   if (!Array.isArray(list)) {
+    if (typeof list !== 'string') {
+      return null;
+    }
     list = list.split(/ *[ ,|] */).filter(Boolean);
   }
   if (list.length < 1) {
     return null;
   }
   return list;
+}
+
+function isRegExp(obj: any): obj is RegExp {
+  return obj && obj.test && obj.exec && obj.compile;
+}
+
+function buildFilter(rule?: string | string[] | RegExp | NestingFilter) {
+  if (!rule) {
+    return null;
+  }
+  if (typeof rule === 'function') {
+    return rule;
+  }
+  if (isRegExp(rule)) {
+    return (testNode: Node | NodeSchema) => rule.test(testNode.componentName);
+  }
+  const list = ensureAList(rule);
+  if (!list) {
+    return null;
+  }
+  return (testNode: Node | NodeSchema) => list.includes(testNode.componentName);
 }
 
 export class ComponentMeta {
@@ -64,8 +89,8 @@ export class ComponentMeta {
     return config?.combined || config?.props || [];
   }
 
-  private parentWhitelist?: string[] | null;
-  private childWhitelist?: string[] | null;
+  private parentWhitelist?: NestingFilter | null;
+  private childWhitelist?: NestingFilter | null;
 
   private _title?: TitleContent;
   get title() {
@@ -123,8 +148,8 @@ export class ComponentMeta {
       this._rectSelector = component.rectSelector;
       if (component.nestingRule) {
         const { parentWhitelist, childWhitelist } = component.nestingRule;
-        this.parentWhitelist = ensureAList(parentWhitelist);
-        this.childWhitelist = ensureAList(childWhitelist);
+        this.parentWhitelist = buildFilter(parentWhitelist);
+        this.childWhitelist = buildFilter(childWhitelist);
       }
     } else {
       this._isContainer = false;
@@ -172,7 +197,7 @@ export class ComponentMeta {
   checkNestingUp(my: Node | NodeData, parent: NodeParent) {
     // 检查父子关系，直接约束型，在画布中拖拽直接掠过目标容器
     if (this.parentWhitelist) {
-      return this.parentWhitelist.includes(parent.componentName);
+      return this.parentWhitelist(parent, my);
     }
     return true;
   }
@@ -180,7 +205,7 @@ export class ComponentMeta {
   checkNestingDown(my: Node, target: Node | NodeSchema) {
     // 检查父子关系，直接约束型，在画布中拖拽直接掠过目标容器
     if (this.childWhitelist) {
-      return this.childWhitelist.includes(target.componentName);
+      return this.childWhitelist(target, my);
     }
     return true;
   }

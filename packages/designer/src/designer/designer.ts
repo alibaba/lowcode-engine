@@ -12,7 +12,7 @@ import {
 import { Project } from '../project';
 import { Node, DocumentModel, insertChildren, isRootNode, NodeParent } from '../document';
 import { ComponentMeta } from '../component-meta';
-import { INodeSelector } from '../simulator';
+import { INodeSelector, Component } from '../simulator';
 import { Scroller, IScrollable } from './scroller';
 import { Dragon, isDragNodeObject, isDragNodeDataObject, LocateEvent, DragObject } from './dragon';
 import { ActiveTracker } from './active-tracker';
@@ -306,6 +306,7 @@ export class Designer {
   private _lostComponentMetasMap = new Map<string, ComponentMeta>();
 
   private buildComponentMetasMap(metas: ComponentMetadata[]) {
+    console.info(this._componentMetasMap);
     metas.forEach((data) => this.createComponentMeta(data));
   }
 
@@ -352,10 +353,13 @@ export class Designer {
     return meta;
   }
 
-  @computed get componentsMap(): { [key: string]: NpmInfo } {
+  @computed get componentsMap(): { [key: string]: NpmInfo | Component } {
     const maps: any = {};
     this._componentMetasMap.forEach((config, key) => {
-      if (config.npm) {
+      const view = config.getMetadata().experimental?.view;
+      if (view) {
+        maps[key] = view;
+      } else if (config.npm) {
         maps[key] = config.npm;
       }
     });

@@ -111,7 +111,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
           forceInline: extraProps.forceInline,
           key: field.id,
           // === injection
-          prop: field, // for compatible
+          prop: field, // for compatible vision
           field,
           // === IO
           value, // reaction point

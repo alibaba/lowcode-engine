@@ -1,6 +1,8 @@
 {
   "entry": {
-    "index": "src/demo/index.ts"
+    "index": "src/demo/index.ts",
+    "react-simulator-renderer": "../react-simulator-renderer/src/index.ts",
+    "vision": "src/vision.ts"
   },
   "vendor": false,
   "devServer": {
@@ -12,7 +14,8 @@
     "react-dom": "window.ReactDOM",
     "prop-types": "window.PropTypes",
     "@alifd/next": "window.Next",
-    "@ali/lowcode-globals": "window.LCEGlobals"
+    "@ali/visualengine": "window.VisualEngine",
+    "@ali/visualengine-utils": "window.VisualEngineUtils"
   },
   "plugins": [
     [
