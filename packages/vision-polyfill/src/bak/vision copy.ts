@@ -18,16 +18,24 @@ const VEOldAPIs = {
    * Core UI Components
    */
   ui: {
+    // FIELD_TYPE_MAP
     Field: {
-      SettingField,
-      Stage,
-      CaptionField,
-      PopupField,
-      EntryField,
+      // SettingField,
+      // Stage,
+      // CaptionField,
+      // PopupField,
+      // EntryField,
+      // AccordionField,
+      // BlockField,
+      // InlineField,
+      // PlainField
       AccordionField,
-      BlockField,
       InlineField,
-      PlainField
+      BlockField,
+      CaptionField, // 不支持 variableSwitcher 版的 BlockField
+      PlainField, // 不渲染 title 的 InlineField
+      EntryField,
+      PopupField,
     },
     Icon: Icons,
     Icons,

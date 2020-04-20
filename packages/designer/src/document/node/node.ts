@@ -471,12 +471,31 @@ export class Node {
   isEmpty(): boolean {
     return this.children ? this.children.isEmpty() : true;
   }
+  getChildren() {
+    return this.children;
+  }
+  getComponentName() {
+    return this.componentName;
+  }
+  insertBefore(node: Node, ref?: Node) {
+    this.children?.insert(node, ref ? ref.index : null);
+  }
+
+  /**
+   * @deprecated
+   */
   getStatus() {
     return 'default';
   }
+  /**
+   * @deprecated
+   */
   setStatus() {
 
   }
+  /**
+   * @deprecated
+   */
   getDOMNode() {
     const instance = this.document.simulator?.getComponentInstances(this)?.[0];
     if (!instance) {
@@ -484,17 +503,12 @@ export class Node {
     }
     return this.document.simulator?.findDOMNodes(instance)?.[0];
   }
-  getChildren() {
-    return this.children;
-  }
+  /**
+   * @deprecated
+   */
   getPage() {
+    console.warn('getPage is deprecated, use document instead');
     return this.document;
-  }
-  getComponentName() {
-    return this.componentName;
-  }
-  insertBefore(node: Node, ref?: Node) {
-    this.children?.insert(node, ref ? ref.index : null);
   }
 }
 

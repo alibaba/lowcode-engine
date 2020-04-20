@@ -149,11 +149,11 @@ export class Skeleton {
       return;
     }
     Object.keys(plugins).forEach((area) => {
-      plugins[area].forEach(item => {
+      plugins[area].forEach((item) => {
         const { pluginKey, type, props = {}, pluginProps } = item;
         const config: any = {
           area,
-          type: "Widget",
+          type: 'Widget',
           name: pluginKey,
           contentProps: pluginProps,
         };
@@ -181,7 +181,7 @@ export class Skeleton {
         }
         this.add(config);
       });
-    })
+    });
   }
 
   postEvent(event: SkeletonEvents, ...args: any[]) {
@@ -218,9 +218,9 @@ export class Skeleton {
   createContainer(
     name: string,
     handle: (item: any) => any,
-    exclusive: boolean = false,
+    exclusive = false,
     checkVisible: () => boolean = () => true,
-    defaultSetCurrent: boolean = false,
+    defaultSetCurrent = false,
   ) {
     const container = new WidgetContainer(name, handle, exclusive, checkVisible, defaultSetCurrent);
     this.containers.set(name, container);
@@ -231,7 +231,7 @@ export class Skeleton {
     const { content, ...restConfig } = config;
     if (content) {
       if (typeof content === 'object' && !isValidElement(content)) {
-        Object.keys(content).forEach(key => {
+        Object.keys(content).forEach((key) => {
           if (/props$/i.test(key) && restConfig[key]) {
             restConfig[key] = {
               ...restConfig[key],
@@ -247,17 +247,24 @@ export class Skeleton {
     }
     const { area } = restConfig;
     switch (area) {
-      case 'leftArea': case 'left':
+      case 'leftArea':
+      case 'left':
         return this.leftArea.add(restConfig as any);
-      case 'rightArea': case 'right':
+      case 'rightArea':
+      case 'right':
         return this.rightArea.add(restConfig as any);
-      case 'topArea': case 'top':
+      case 'topArea':
+      case 'top':
         return this.topArea.add(restConfig as any);
       case 'toolbar':
         return this.toolbar.add(restConfig as any);
-      case 'mainArea': case 'main': case 'center': case 'centerArea':
+      case 'mainArea':
+      case 'main':
+      case 'center':
+      case 'centerArea':
         return this.mainArea.add(restConfig as any);
-      case 'bottomArea': case 'bottom':
+      case 'bottomArea':
+      case 'bottom':
         return this.bottomArea.add(restConfig as any);
       case 'leftFixedArea':
         return this.leftFixedArea.add(restConfig as any);

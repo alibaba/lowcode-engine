@@ -20,10 +20,9 @@ import {
   getRectTarget,
   Rect,
   CanvasPoint,
-  hotkey,
 } from '../designer';
 import { parseProps } from './utils/parse-props';
-import { isElement } from '@ali/lowcode-globals';
+import { isElement, hotkey } from '@ali/lowcode-globals';
 import { ComponentMetadata } from '@ali/lowcode-globals';
 import { BuiltinSimulatorRenderer } from './renderer';
 import clipboard from '../designer/clipboard';

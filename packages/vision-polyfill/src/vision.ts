@@ -3,6 +3,7 @@ import Popup from '@ali/ve-popups';
 import Icons from '@ali/ve-icons';
 import { render } from 'react-dom';
 import I18nUtil from '@ali/ve-i18n-util';
+import { hotkey as Hotkey } from '@ali/lowcode-globals';
 import { createElement } from 'react';
 import { VE_EVENTS as EVENTS, VE_HOOKS as HOOKS } from './const';
 import Bus from './bus';
@@ -68,6 +69,7 @@ const VisualEngine = {
    */
   utils,
   I18nUtil,
+  Hotkey,
   Env,
   /* pub/sub 集线器 */
   Bus,

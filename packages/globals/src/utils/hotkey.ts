@@ -602,3 +602,6 @@ export class Hotkey {
     }
   }
 }
+
+export const hotkey = new Hotkey();
+hotkey.mount(window);
