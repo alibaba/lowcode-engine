@@ -24,7 +24,6 @@ export class Field extends Component<FieldProps> {
 
 export interface FieldGroupProps extends FieldProps {
   defaultCollapsed?: boolean;
-  // gap?: number;
   onExpandChange?: (collapsed: boolean) => void;
 }
 

@@ -1,5 +1,5 @@
 import { TransformedComponentMetadata, FieldConfig } from '@ali/lowcode-globals';
-import { SettingField } from '../main';
+import { SettingField } from '../settings/setting-field';
 
 export default function(metadata: TransformedComponentMetadata): TransformedComponentMetadata {
   const { componentName, configure = {} } = metadata;

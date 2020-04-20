@@ -2,7 +2,7 @@ import React, { PureComponent, Component } from 'react';
 import classNames from 'classnames';
 import { Dropdown, Button, Menu, Icon } from '@alifd/next';
 import { getSetter, getSettersMap, SetterConfig, computed, obx, CustomView, DynamicProps, DynamicSetter, TitleContent, isSetterConfig, Title, createSetterContent } from '@ali/lowcode-globals';
-import { SettingField } from 'plugin-settings-pane/src/main';
+import { SettingField } from 'plugin-settings-pane/src/settings/main';
 
 import './index.scss';
 
@@ -79,7 +79,7 @@ function nomalizeSetters(setters?: Array<string | SetterConfig | CustomView | Dy
 export default class MixedSetter extends Component<{
   field: SettingField;
   setters?: Array<string | SetterConfig | CustomView | DynamicSetter>;
-  onSetterChange: (field: SettingField, name: string) => void;
+  onSetterChange?: (field: SettingField, name: string) => void;
 }> {
   private setters = nomalizeSetters(this.props.setters);
   @obx.ref private used?: string;
