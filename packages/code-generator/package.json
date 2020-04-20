@@ -9,10 +9,12 @@
   "scripts": {
     "build": "rimraf lib && tsc",
     "demo": "ts-node -r tsconfig-paths/register ./src/demo/main.ts",
-    "test": "ava"
+    "test": "ava",
+    "template": "node ./tools/createTemplate.js"
   },
   "dependencies": {
     "@ali/am-eslint-config": "*",
+    "@babel/parser": "^7.9.4",
     "@types/prettier": "^1.19.1",
     "change-case": "^3.1.0",
     "prettier": "^2.0.2",
