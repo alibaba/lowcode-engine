@@ -7,44 +7,89 @@ import './index.less';
 
 export interface FieldProps {
   className?: string;
-  // span
   title?: TitleContent | null;
+  defaultDisplay?: 'accordion' | 'inline' | 'block';
+  collapsed?: boolean;
+  onExpandChange?: (expandState: boolean) => void;
 }
 
-export class CommonField extends Component<FieldProps> {
-  private shell: HTMLDivElement | null = null;
+export class Field extends Component<FieldProps> {
+  state = {
+    collapsed: this.props.collapsed,
+    display: this.props.defaultDisplay || 'inline',
+  };
 
-  private checkIsBlockField() {
-    if (this.shell) {
-      const setter = this.shell.lastElementChild!.firstElementChild;
-      if (setter && setter.classList.contains('lc-block-setter')) {
-        this.shell.classList.add('lc-block-field');
-        this.shell.classList.remove('lc-inline-field');
-      } else {
-        this.shell.classList.remove('lc-block-field');
-        this.shell.classList.add('lc-inline-field');
-      }
+  private toggleExpand = () => {
+    const { onExpandChange } = this.props;
+    const collapsed = !this.state.collapsed;
+    this.setState({
+      collapsed,
+    });
+    onExpandChange && onExpandChange(!collapsed);
+  };
+  private body: HTMLDivElement | null = null;
+  private dispose?: () => void;
+  private deployBlockTesting() {
+    if (this.dispose) {
+      this.dispose();
     }
-  }
-  componentDidUpdate() {
-    this.checkIsBlockField();
+    const body = this.body;
+    if (!body) {
+      return;
+    }
+    const check = () => {
+      const setter = body.firstElementChild;
+      if (setter && setter.classList.contains('lc-block-setter')) {
+        this.setState({
+          display: 'block',
+        });
+      } else {
+        this.setState({
+          display: 'inline',
+        });
+      }
+    };
+    const observer = new MutationObserver(check);
+    check();
+    observer.observe(body, {
+      childList: true,
+      subtree: false,
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+    this.dispose = () => observer.disconnect();
   }
   componentDidMount() {
-    this.checkIsBlockField();
+    const { defaultDisplay } = this.props;
+    if (!defaultDisplay || defaultDisplay === 'inline') {
+      this.deployBlockTesting();
+    }
+  }
+  componentWillUnmount() {
+    if (this.dispose) {
+      this.dispose();
+    }
   }
 
   render() {
     const { className, children, title } = this.props;
+    const { display, collapsed } = this.state;
+    const isAccordion = display === 'accordion';
     return (
-      <div ref={(shell) => (this.shell = shell)} className={classNames('lc-field lc-inline-field', className)}>
-        {title && (
-          <div className="lc-field-head">
-            <div className="lc-field-title">
-              <Title title={title} />
-            </div>
+      <div
+        className={classNames(`lc-field lc-${display}-field`, className, {
+          'lc-field-is-collapsed': isAccordion && collapsed,
+        })}
+      >
+        <div className="lc-field-head" onClick={isAccordion ? this.toggleExpand : undefined}>
+          <div className="lc-field-title">
+            <Title title={title || ''} />
           </div>
-        )}
-        <div className="lc-field-body">{children}</div>
+          {isAccordion && <Icon className="lc-field-icon" type="arrow-up" size="xs" />}
+        </div>
+        <div key="body" ref={(shell) => (this.body = shell)} className="lc-field-body">
+          {children}
+        </div>
       </div>
     );
   }
@@ -96,15 +141,13 @@ export class PopupField extends Component<PopupFieldProps> {
   }
 }
 
-export type EntryFieldProps = FieldProps;
+export interface EntryFieldProps extends FieldProps {
+  stageName?: string;
+}
 
 export class EntryField extends Component<EntryFieldProps> {
-  constructor(props: any) {
-    super(props);
-  }
-
   render() {
-    const { propName, stageName, tip, title, className } = this.props;
+    const { stageName, title, className } = this.props;
     const classNameList = classNames('engine-setting-field', 'engine-entry-field', className);
     const fieldProps: any = {};
 
@@ -117,13 +160,24 @@ export class EntryField extends Component<EntryFieldProps> {
       <span className="engine-field-title" key="field-title">
         {title}
       </span>,
-      renderTip(tip, { propName }),
-      <Icons name="arrow" className="engine-field-arrow" size="12px" key="engine-field-arrow-icon" />,
+      // renderTip(tip, { propName }),
+      // <Icons name="arrow" className="engine-field-arrow" size="12px" key="engine-field-arrow-icon" />,
     ];
 
     return (
       <div className={classNameList} {...fieldProps}>
         {innerElements}
+      </div>
+    );
+  }
+}
+
+export class PlainField extends Component<FieldProps> {
+  render() {
+    const { className, children } = this.props;
+    return (
+      <div className={classNames(`lc-field lc-plain-field`, className)}>
+        <div className="lc-field-body">{children}</div>
       </div>
     );
   }

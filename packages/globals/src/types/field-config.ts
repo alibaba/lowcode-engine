@@ -38,6 +38,10 @@ export interface FieldExtraProps {
    * internal use
    */
   forceInline?: number;
+  /**
+   * compatiable vision display
+   */
+  display?: 'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry';
 }
 
 export interface FieldConfig extends FieldExtraProps {

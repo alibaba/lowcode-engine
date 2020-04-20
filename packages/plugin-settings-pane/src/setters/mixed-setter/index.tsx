@@ -103,22 +103,6 @@ export default class MixedSetter extends Component<{
     });
   }
 
-  private checkIsBlockField() {
-    if (this.shell) {
-      const setter = this.shell.lastElementChild!.firstElementChild;
-      if (setter && setter.classList.contains('lc-block-setter')) {
-        this.shell.classList.add('lc-block-setter');
-      } else {
-        this.shell.classList.remove('lc-block-field');
-      }
-    }
-  }
-  componentDidUpdate() {
-    this.checkIsBlockField();
-  }
-  componentDidMount() {
-    this.checkIsBlockField();
-  }
 
   private useSetter: (id: string) => {
     const { field, onChange } = this.props;

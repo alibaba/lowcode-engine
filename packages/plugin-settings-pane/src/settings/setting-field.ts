@@ -1,4 +1,4 @@
-import { TitleContent, computed, isDynamicSetter, SetterType, DynamicSetter, FieldExtraProps, FieldConfig, CustomView, isCustomView } from '@ali/lowcode-globals';
+import { TitleContent, computed, isDynamicSetter, SetterType, DynamicSetter, FieldExtraProps, FieldConfig, CustomView, isCustomView, obx } from '@ali/lowcode-globals';
 import { Transducer } from '../utils';
 import { SettingPropEntry } from './setting-entry';
 import { SettingTarget } from './setting-target';
@@ -26,8 +26,19 @@ export class SettingField extends SettingPropEntry implements SettingTarget {
     return this._setter;
   }
 
+  @obx.ref private _expanded = true;
+  get expanded(): boolean {
+    return this._expanded;
+  }
+
+  setExpanded(value: boolean) {
+    this._expanded = value;
+  }
+
   constructor(readonly parent: SettingTarget, config: FieldConfig) {
     super(parent, config.name, config.type);
+
+    console.info(config);
 
     const { title, items, setter, extraProps, ...rest } = config;
     this._title = title;
@@ -37,6 +48,7 @@ export class SettingField extends SettingPropEntry implements SettingTarget {
       ...extraProps,
     };
     this.isRequired = config.isRequired || (setter as any)?.isRequired;
+    this._expanded = extraProps?.defaultCollapsed ? false : true;
 
     // initial items
     if (this.type === 'group' && items) {

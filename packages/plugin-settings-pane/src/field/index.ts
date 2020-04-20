@@ -1,0 +1,28 @@
+import { ReactNode, createElement } from 'react';
+import { TitleContent } from '@ali/lowcode-globals';
+import './index.less';
+import { Field, PopupField, EntryField, PlainField } from './fields';
+
+export interface FieldProps {
+  className?: string;
+  title?: TitleContent | null;
+  display?: 'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry';
+  collapsed?: boolean;
+  onExpandChange?: (collapsed: boolean) => void;
+  [extra: string]: any;
+}
+
+export function createField(props: FieldProps, children: ReactNode, type?: 'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry') {
+  if (type === 'popup') {
+    return createElement(PopupField, props, children);
+  }
+  if (type === 'entry') {
+    return createElement(EntryField, props, children);
+  }
+  if (type === 'plain' || !props.title) {
+    return createElement(PlainField, props, children);
+  }
+  return createElement(Field, { ...props, defaultDisplay: type }, children);
+}
+
+export { Field, PopupField, EntryField, PlainField };

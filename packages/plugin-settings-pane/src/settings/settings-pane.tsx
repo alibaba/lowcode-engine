@@ -8,7 +8,7 @@ import {
   createSetterContent,
   observer,
 } from '@ali/lowcode-globals';
-import { Field, FieldGroup } from '../field';
+import { Field, createField } from '../field';
 import PopupService from '../popup';
 import { SettingField, isSettingField } from './setting-field';
 import { SettingTarget } from './setting-target';
@@ -20,7 +20,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     const { field } = this.props;
     const { extraProps } = field;
     const { condition, defaultValue } = extraProps;
-    const visible = field.isOneNode && typeof condition === 'function' ? !condition(field) : true;
+    const visible = field.isOneNode && typeof condition === 'function' ? condition(field) !== false : true;
     if (!visible) {
       return null;
     }
@@ -62,28 +62,29 @@ class SettingFieldView extends Component<{ field: SettingField }> {
         }
       }
     }
+
     // todo: error handling
 
-    return (
-      <Field title={extraProps.forceInline ? null : field.title}>
-        {createSetterContent(setterType, {
-          ...shallowIntl(setterProps),
-          forceInline: extraProps.forceInline,
-          key: field.id,
-          // === injection
-          prop: field, // for compatible vision
-          field,
-          // === IO
-          value, // reaction point
-          onChange: (value: any) => {
-            this.setState({
-              value,
-            });
-            field.setValue(value);
-          },
-        })}
-      </Field>
-    );
+    return createField({
+      title: field.title,
+      collapsed: !field.expanded,
+      onExpandChange: (expandState) => field.setExpanded(expandState),
+    }, createSetterContent(setterType, {
+      ...shallowIntl(setterProps),
+      forceInline: extraProps.forceInline,
+      key: field.id,
+      // === injection
+      prop: field, // for compatible vision
+      field,
+      // === IO
+      value, // reaction point
+      onChange: (value: any) => {
+        this.setState({
+          value,
+        });
+        field.setValue(value);
+      },
+    }), extraProps.forceInline ? 'plain' : extraProps.display);
   }
 }
 
@@ -96,17 +97,20 @@ class SettingGroupView extends Component<{ field: SettingField }> {
   render() {
     const { field } = this.props;
     const { extraProps } = field;
-    const { condition, defaultCollapsed } = extraProps;
-    const visible = field.isOneNode && typeof condition === 'function' ? !condition(field) : true;
+    const { condition } = extraProps;
+    const visible = field.isOneNode && typeof condition === 'function' ? condition(field) !== false : true;
 
     if (!visible) {
       return null;
     }
 
+    // todo: split collapsed state | field.items for optimize
     return (
-      <FieldGroup title={field.title} defaultCollapsed={defaultCollapsed}>
+      <Field defaultDisplay="accordion" title={field.title} collapsed={!field.expanded} onExpandChange={(expandState) => {
+        field.setExpanded(expandState);
+      }}>
         {field.items.map((item, index) => createSettingFieldView(item, field, index))}
-      </FieldGroup>
+      </Field>
     );
   }
 }

@@ -216,7 +216,7 @@ export function upgradePropConfig(config: OldPropConfig) {
   if (tip) {
     if (typeof title !== 'object' || isI18nData(title) || isValidElement(title)) {
       newConfig.title = {
-        title,
+        label: title,
         tip: tip.content,
         docUrl: tip.url
       };
@@ -615,7 +615,9 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   experimental.callbacks = callbacks;
 
   const props = upgradeConfigure(configure || []);
-  meta.configure = { props, component };
+  const events = {};
+  const styles = {};
+  meta.configure = { props, component, events, styles };
   meta.experimental = experimental;
   return meta;
 }

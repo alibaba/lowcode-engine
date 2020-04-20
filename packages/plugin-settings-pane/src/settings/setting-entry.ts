@@ -391,4 +391,47 @@ export class SettingPropEntry implements SettingTarget {
   onValueChange() {
     return () => {};
   }
+
+  getId() {
+    return this.id;
+  }
+
+  getName(): string {
+    return this.path.join('.');
+  }
+
+  getKey() {
+    return this.name;
+  }
+
+  /*
+  getDefaultValue() {
+    return this.extraProps.defaultValue;
+  }
+
+  getConfig<K extends keyof IPropConfig>(configName?: K): IPropConfig[K] | IPropConfig {
+    if (configName) {
+      return this.config[configName];
+    }
+
+    return this.config;
+  }
+  */
+  /*
+  isHidden() {
+    return false;
+  }
+
+  isDisabled() {
+    return false;
+  }
+
+  getSetter() {
+
+  }
+  */
+
+  isIgnore() {
+    return false;
+  }
 }

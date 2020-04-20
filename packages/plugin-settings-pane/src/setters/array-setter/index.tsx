@@ -133,7 +133,7 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
   render() {
     let columns: any = null;
     if (this.props.columns) {
-      columns = this.props.columns.map((column) => <Title title={column.title || (column.name as string)} />);
+      columns = this.props.columns.map((column) => <Title key={column.name} title={column.title || (column.name as string)} />);
     }
 
     const { items } = this.state;

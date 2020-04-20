@@ -102,11 +102,12 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
         title: 'Ref',
         setter: 'StringSetter',
       },
+      /*
       {
         name: '!more',
         title: '更多',
         setter: 'PropertiesSetter',
-      },
+      },*/
     ],
   });
   const combined: FieldConfig[] = [
@@ -168,11 +169,13 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
   }
 
   if (isRoot) {
+    /*
     combined.push({
       name: '#advanced',
       title: { type: 'i18n', 'zh-CN': '高级', 'en-US': 'Advance' },
       items: [],
     });
+    */
   } else {
     combined.push({
       name: '#advanced',

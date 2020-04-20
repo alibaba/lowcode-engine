@@ -16,7 +16,7 @@ async function load() {
 
 const externals = ['react', 'react-dom', 'prop-types', 'react-router', 'react-router-dom', '@ali/recore'];
 async function loadAssets() {
-  const assets = await editor.utils.get('./assets.json');
+  const assets = await editor.utils.get('./legao-assets.json');
 
   if (assets.packages) {
     assets.packages.forEach((item: any) => {
