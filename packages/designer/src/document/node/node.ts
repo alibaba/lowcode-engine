@@ -469,7 +469,7 @@ export class Node {
 
   // ======= compatibles ====
   isEmpty(): boolean {
-    return this.children?.isEmpty() || true;
+    return this.children ? this.children.isEmpty() : true;
   }
   getStatus() {
     return 'default';

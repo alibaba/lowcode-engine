@@ -450,6 +450,11 @@ export class DocumentModel {
     const config = parent.componentMeta;
     return config.checkNestingDown(parent, obj) && this.checkNestingUp(parent, obj);
   }
+
+  // ======= compatibles
+  getRoot() {
+    return this.rootNode;
+  }
 }
 
 export function isDocumentModel(obj: any): obj is DocumentModel {
