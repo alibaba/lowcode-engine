@@ -7,6 +7,10 @@ import SettingsPane from '@ali/lowcode-plugin-settings-pane';
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
 import { Skeleton } from './skeleton/skeleton';
 
+// demo
+import Preview from '@ali/lowcode-plugin-sample-preview';
+import { createElement } from 'react';
+
 registerSetters();
 
 export const editor = new Editor();
@@ -39,6 +43,76 @@ skeleton.leftArea.add({
   content: Pane,
   panelProps: {
     area: 'leftFixedArea',
-    title: 'awefawe',
+    // title: 'awefawe',
   },
 });
+
+
+// demo
+
+skeleton.leftArea.add({
+  name: 'icon1',
+  type: 'Dock',
+  props: {
+    align: 'bottom',
+    icon: 'smile',
+    description: 'smile1',
+  }
+});
+skeleton.leftArea.add({
+  name: 'icon2',
+  type: 'Dock',
+  props: {
+    align: 'bottom',
+    icon: 'smile',
+    description: 'smile1',
+  }
+});
+
+skeleton.topArea.add({
+  type: "Dock",
+  name: 'preview',
+  props: {
+    align: "right",
+  },
+  content: Preview,
+});
+skeleton.topArea.add({
+  type: "Dock",
+  name: 'preview4',
+  props: {
+    align: "right",
+  },
+  content: createElement('img', {
+    src: "https://img.alicdn.com/tfs/TB1WW.VC.z1gK0jSZLeXXb9kVXa-486-64.png",
+    style: {
+      height: 32
+    }
+  }),
+});
+
+skeleton.topArea.add({
+  type: "Dock",
+  name: 'preview1',
+  props: {
+    align: "left",
+  },
+  content: createElement('img', {
+    src: "https://img.alicdn.com/tfs/TB11koUC8v0gK0jSZKbXXbK2FXa-426-76.png",
+    style: {
+      height: 38
+    }
+  }),
+});
+skeleton.topArea.add({
+  type: "Dock",
+  name: 'preview2',
+  props: {
+    align: "center",
+    title: {
+      label: "345",
+      icon: "smile",
+      tip: "123123123"
+    }
+  },
+})

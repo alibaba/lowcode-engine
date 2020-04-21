@@ -81,7 +81,7 @@
         }
       },
       "children": [{
-        "componentName": "Button.Group",
+        "componentName": "Div",
         "props": {},
         "children": [{
           "componentName": "Button",
@@ -100,9 +100,40 @@
             "style": {
               "margin": "0 5px 0 5px"
             },
+            "htmlType": "reset",
+            "children": {
+              "type": "JSSlot",
+              "value": {
+                "componentName": "Div",
+                "children": "重置"
+              }
+            }
+          },
+          "loop": [1,2,3]
+        }, {
+          "componentName": "Button",
+          "props": {
+            "type": "normal",
+            "style": {
+              "margin": "0 5px 0 5px"
+            },
             "htmlType": "reset"
           },
-          "children": "重置"
+          "children": "重置",
+          "condition": true,
+          "conditionGroup": "1"
+        }, {
+          "componentName": "Button",
+          "props": {
+            "type": "normal",
+            "style": {
+              "margin": "0 5px 0 5px"
+            },
+            "htmlType": "reset"
+          },
+          "children": "重置",
+          "condition": false,
+          "conditionGroup": "1"
         }]
       }]
     }]
