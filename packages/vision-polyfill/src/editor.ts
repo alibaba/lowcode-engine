@@ -2,7 +2,7 @@ import { globalContext } from '@ali/lowcode-globals';
 import Editor from '@ali/lowcode-editor-core';
 import { Designer } from '@ali/lowcode-designer';
 import { registerSetters } from '@ali/lowcode-setters';
-import OutlinePane from '@ali/lowcode-plugin-outline-pane';
+import Outline, { Pane } from '@ali/lowcode-plugin-outline-pane';
 import SettingsPane from '@ali/lowcode-plugin-settings-pane';
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
 import { Skeleton } from './skeleton/skeleton';
@@ -33,11 +33,12 @@ skeleton.leftArea.add({
   type: 'PanelDock',
   props: {
     align: 'top',
-    icon: 'shuxingkongjian',
+    icon: 'smile',
     description: '大纲树',
   },
-  content: OutlinePane,
+  content: Pane,
   panelProps: {
     area: 'leftFixedArea',
+    title: 'awefawe',
   },
 });

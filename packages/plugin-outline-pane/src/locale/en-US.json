@@ -9,5 +9,6 @@
   "Conditional": "Condition",
   "Loop": "Loop",
   "Slots": "Slots",
-  "Slot for {prop}": "Slot for {prop}"
+  "Slot for {prop}": "Slot for {prop}",
+  "Outline Tree": "Outline Tree"
 }
