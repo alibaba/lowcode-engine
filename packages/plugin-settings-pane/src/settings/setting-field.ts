@@ -38,8 +38,6 @@ export class SettingField extends SettingPropEntry implements SettingTarget {
   constructor(readonly parent: SettingTarget, config: FieldConfig) {
     super(parent, config.name, config.type);
 
-    console.info(config);
-
     const { title, items, setter, extraProps, ...rest } = config;
     this._title = title;
     this._setter = setter;

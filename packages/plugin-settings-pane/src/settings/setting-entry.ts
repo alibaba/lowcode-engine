@@ -404,11 +404,10 @@ export class SettingPropEntry implements SettingTarget {
     return this.name;
   }
 
-  /*
   getDefaultValue() {
     return this.extraProps.defaultValue;
   }
-
+  /*
   getConfig<K extends keyof IPropConfig>(configName?: K): IPropConfig[K] | IPropConfig {
     if (configName) {
       return this.config[configName];

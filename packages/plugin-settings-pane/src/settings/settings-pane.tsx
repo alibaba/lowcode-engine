@@ -25,6 +25,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
       return null;
     }
     const { setter } = field;
+
     let setterProps: any = {};
     let setterType: any;
     if (Array.isArray(setter)) {

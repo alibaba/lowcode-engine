@@ -15,6 +15,7 @@ export type RegisteredSetter = {
    * for MixedSetter to manual change to this setter
    */
   initialValue?: any | ((field: any) => any);
+  recommend?: boolean;
 };
 const settersMap = new Map<string, RegisteredSetter & {
   type: string;

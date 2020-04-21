@@ -370,10 +370,12 @@ export function upgradePropConfig(config: OldPropConfig) {
       const setters = Array.isArray(primarySetter) ? primarySetter.concat('ExpressionSetter') : [primarySetter, 'ExpressionSetter'];
       primarySetter = {
         componentName: 'MixedSetter',
-        setters,
-        onSetterChange: (field: Field, name: string) => {
-          if (useVariableChange) {
-            useVariableChange.call(field, { isUseVariable: name === 'ExpressionSetter' });
+        props: {
+          setters,
+          onSetterChange: (field: Field, name: string) => {
+            if (useVariableChange) {
+              useVariableChange.call(field, { isUseVariable: name === 'ExpressionSetter' });
+            }
           }
         }
       };

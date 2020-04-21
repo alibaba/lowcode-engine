@@ -1,10 +1,29 @@
-import React, { PureComponent, Component } from 'react';
+import React, { Component, isValidElement } from 'react';
 import classNames from 'classnames';
-import { Dropdown, Button, Menu, Icon } from '@alifd/next';
-import { getSetter, getSettersMap, SetterConfig, computed, obx, CustomView, DynamicProps, DynamicSetter, TitleContent, isSetterConfig, Title, createSetterContent } from '@ali/lowcode-globals';
-import { SettingField } from 'plugin-settings-pane/src/settings/main';
+import { Dropdown, Button, Menu } from '@alifd/next';
+import {
+  getSetter,
+  getSettersMap,
+  SetterConfig,
+  computed,
+  obx,
+  CustomView,
+  DynamicProps,
+  DynamicSetter,
+  TitleContent,
+  isSetterConfig,
+  Title,
+  createSetterContent,
+  observer,
+  isDynamicSetter,
+  shallowIntl,
+  EmbedTip,
+  isI18nData,
+} from '@ali/lowcode-globals';
+import { SettingField } from '../../settings/setting-field';
+import { IconConvert } from '../../icons/convert';
 
-import './index.scss';
+import './style.less';
 
 export interface SetterItem {
   name: string;
@@ -12,7 +31,8 @@ export interface SetterItem {
   setter: string | DynamicSetter | CustomView;
   props?: object | DynamicProps;
   condition?: (field: SettingField) => boolean;
-  initialValue?: (field: SettingField) => any;
+  initialValue?: any | ((field: SettingField) => any);
+  list: boolean;
 }
 
 function nomalizeSetters(setters?: Array<string | SetterConfig | CustomView | DynamicSetter>): SetterItem[] {
@@ -28,6 +48,7 @@ function nomalizeSetters(setters?: Array<string | SetterConfig | CustomView | Dy
         setter: name,
         condition: setter.condition,
         initialValue: setter.initialValue,
+        list: setter.recommend || false,
       });
     });
     return normalized;
@@ -42,9 +63,10 @@ function nomalizeSetters(setters?: Array<string | SetterConfig | CustomView | Dy
     names.push(got);
     return got;
   }
-  return setters.map(setter => {
+  return setters.map((setter) => {
     const config: any = {
       setter,
+      list: true,
     };
     if (isSetterConfig(setter)) {
       config.setter = setter.componentName;
@@ -76,149 +98,158 @@ function nomalizeSetters(setters?: Array<string | SetterConfig | CustomView | Dy
   });
 }
 
+@observer
 export default class MixedSetter extends Component<{
   field: SettingField;
   setters?: Array<string | SetterConfig | CustomView | DynamicSetter>;
   onSetterChange?: (field: SettingField, name: string) => void;
+  onChange?: (val: any) => void;
+  value?: any;
+  className?: string;
 }> {
   private setters = nomalizeSetters(this.props.setters);
   @obx.ref private used?: string;
   @computed private getCurrentSetter() {
     const { field } = this.props;
-    if (this.used != null) {
-      const selected = this.used;
-      if (selected.condition) {
-        if (selected.condition(field)) {
-          return selected;
+    let firstMatched: SetterItem | undefined;
+    for (const setter of this.setters) {
+      const matched = !setter.condition || setter.condition(field);
+      if (matched) {
+        if (setter.name === this.used) {
+          return setter;
         }
-      } else {
-        return selected;
+        if (!firstMatched) {
+          firstMatched = setter;
+        }
       }
     }
-    return this.setters.find(item => {
-      if (!item.condition) {
-        return true;
-      }
-      return item.condition(field);
-    });
+    return firstMatched;
   }
 
-
-  private useSetter: (id: string) => {
+  private useSetter = (name: string) => {
+    if (name === this.used) {
+      return;
+    }
     const { field, onChange } = this.props;
-    const newValue = setter.initialValue?.(field);
-    this.used = setter;
-    onChange && onChange(newValue);
+    const setter = this.setters.find((item) => item.name === name);
+    this.used = name;
+    if (setter) {
+      let newValue: any = setter.initialValue;
+      if (newValue && typeof newValue === 'function') {
+        newValue = newValue(field);
+      }
+      onChange && onChange(newValue);
+    }
+  };
+
+  private shell: HTMLDivElement | null = null;
+  private checkIsBlockField() {
+    if (this.shell) {
+      const setter = this.shell.firstElementChild;
+      if (setter && setter.classList.contains('lc-block-setter')) {
+        this.shell.classList.add('lc-block-setter');
+      } else {
+        this.shell.classList.remove('lc-block-setter');
+      }
+    }
   }
+  componentDidUpdate() {
+    this.checkIsBlockField();
+  }
+  componentDidMount() {
+    this.checkIsBlockField();
+  }
+
   render() {
-    const {
-      style = {},
-      className,
-      types = [],
-      defaultType,
-      ...restProps
-    } = this.props;
-    this.typeMap = {};
-    let realTypes: any[] = [];
-    types.forEach( (el: { name: any; props: any; }) => {
-      const { name, props } = el;
-      const Setter = getSetter(name);
-      if (Setter) {
-        this.typeMap[name] = {
-          label: name,
-          component: Setter.component,
-          props,
+    const { className, field, setters, onSetterChange, ...restProps } = this.props;
+
+    const currentSetter = this.getCurrentSetter();
+    const isTwoType = this.setters.length < 3;
+
+    let setterContent: any;
+    const triggerTitle: any = {
+      tip: {
+        type: 'i18n',
+        'zh-CN': '切换格式',
+        'en-US': 'Switch Format',
+      },
+      icon: <IconConvert size={24} />,
+    };
+    if (currentSetter) {
+      const { setter, title, props } = currentSetter;
+      let setterProps: any = {};
+      let setterType: any;
+      if (isDynamicSetter(setter)) {
+        setterType = setter(field);
+      } else {
+        setterType = setter;
+      }
+      if (props) {
+        setterProps = props;
+        if (typeof setterProps === 'function') {
+          setterProps = setterProps(field);
         }
       }
-      realTypes.push(name);
-    })
-    let moreBtnNode = null;
-    //如果只有2种，且有变量表达式，则直接展示变量按钮
-    if (realTypes.length > 1) {
-      let isTwoType = !!(realTypes.length === 2 && ~realTypes.indexOf('ExpressionSetter'));
-      let btnProps = {
-        size: 'small',
-        text: true,
-        style: {
-          position: 'absolute',
-          left: '100%',
-          top: 0,
-          bottom: 0,
-          margin: 'auto 0 auto 8px',
-          padding: 0,
-          width: 16,
-          height: 16,
-          lineHeight: '16px',
-          textAlign: 'center'
+
+      setterContent = createSetterContent(setterType, {
+        ...shallowIntl(setterProps),
+        field,
+        ...restProps,
+      });
+      if (title) {
+        if (typeof title !== 'object' || isI18nData(title) || isValidElement(title)) {
+          triggerTitle.tip = title;
+        } else {
+          triggerTitle.tip = title.tip || title.label;
         }
-      };
-      if (isTwoType) {
-        btnProps.onClick = this.changeType.bind(this, realTypes.indexOf(this.state.type) ? realTypes[0] : realTypes[1]);
       }
+    } else {
       // 未匹配的 null 值，显示 NullValue 空值
       // 未匹配的 其它 值，显示 InvalidValue 非法值
-      let triggerNode = (
-        <Button {...btnProps} size={isTwoType ? 'large' : 'small'}>
-          <Icon type={isTwoType ? 'edit' : 'ellipsis'} />
-        </Button>
-      );
-      if (isTwoType) {
-        moreBtnNode = triggerNode;
+      if (restProps.value == null) {
+        setterContent = <span>NullValue</span>;
       } else {
-        let MenuItems: {} | null | undefined = [];
-        realTypes.map(type => {
-          if (this.typeMap[type]) {
-            MenuItems.push(<Menu.Item key={type}></Menu.Item>);
-          } else {
-            console.error(
-              this.i18n('typeError', {
-                type
-              })
-            );
-          }
-        });
-        let MenuNode = (
-          <Menu
-            selectMode="single"
-            hasSelectedIcon={false}
-            selectedKeys={this.used}
-            onItemClick={this.useSetter}
-          >
-            {this.setters.map((setter) => {
-              return <Menu.Item key={setter.name}>
-                <Title title={setter.title} />
-              </Menu.Item>
-            })}
-          </Menu>
-        );
-
-        moreBtnNode = (
-          <Dropdown trigger={triggerNode} triggerType="click">
-            <Menu
-              selectMode="single"
-              hasSelectedIcon={false}
-              selectedKeys={this.used}
-              onItemClick={this.useSetter}
-            >
-              {this.setters.map((setter) => {
-                return <Menu.Item key={setter.name}>
-                  <Title title={setter.title} />
-                </Menu.Item>
-              })}
-            </Menu>
-          </Dropdown>
-        );
+        setterContent = <span>InvalidValue</span>;
       }
     }
-    let TargetNode = this.typeMap[this.state.type]?.component || 'div';
-    let targetProps = this.typeMap[this.state.type]?.props || {};
-    let tarStyle = { position: 'relative', ...style };
-    let classes = classNames(className, 'lowcode-setter-mixin');
+    const usedName = currentSetter?.name || this.used;
+    let moreBtnNode = (
+      <Title
+        title={triggerTitle}
+        onClick={
+          isTwoType
+            ? () => {
+                if (this.setters[0]?.name === usedName) {
+                  this.useSetter(this.setters[1]?.name);
+                } else {
+                  this.useSetter(this.setters[0]?.name);
+                }
+              }
+            : undefined
+        }
+      />
+    );
+    if (!isTwoType) {
+      moreBtnNode = (
+        <Dropdown trigger={moreBtnNode} triggerType="click" align="tr br">
+          <Menu selectMode="single" hasSelectedIcon={true} selectedKeys={usedName} onItemClick={this.useSetter}>
+            {this.setters.filter(setter => setter.list || setter.name === usedName).map((setter) => {
+              return (
+                <Menu.Item key={setter.name}>
+                  <Title title={setter.title} />
+                </Menu.Item>
+              );
+            })}
+          </Menu>
+        </Dropdown>
+      );
+    }
 
     return (
-      <div style={tarStyle} className={classes} >
-        {createSetterContent()}
-        {moreBtnNode}
+      <div ref={(shell) => (this.shell = shell)} className={classNames('lc-setter-mixed', className)}>
+        {setterContent}
+
+        <div className="lc-setter-actions">{moreBtnNode}</div>
       </div>
     );
   }

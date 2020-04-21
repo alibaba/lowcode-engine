@@ -53,7 +53,7 @@ export class Field extends Component<FieldProps> {
     check();
     observer.observe(body, {
       childList: true,
-      subtree: false,
+      subtree: true,
       attributes: true,
       attributeFilter: ['class'],
     });

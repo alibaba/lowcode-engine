@@ -7,6 +7,7 @@ const { editor } = Engine;
 Engine.init();
 
 load();
+Engine.Env.setEnv('RE_VERSION', "5.0.1");
 
 async function load() {
   await loadAssets();
