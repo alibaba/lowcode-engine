@@ -34,8 +34,8 @@ export default class Area<C extends IWidgetBaseConfig = any, T extends IWidget =
       if (flag && !current) {
         this.container.active(this.lastCurrent || this.container.getAt(0))
       } else if (current) {
-        this.lastCurrent = this.container.current;
-        this.container.unactive();
+        this.lastCurrent = current;
+        this.container.unactive(current);
       }
       return;
     }
