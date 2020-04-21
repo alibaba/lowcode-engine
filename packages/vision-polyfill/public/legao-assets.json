@@ -1,584 +1,514 @@
 {
-  "version": "1.0.0",
-  "packages": [
+  "externals": [
     {
       "urls": ["//g.alicdn.com/platform/c/react/16.5.2/react.min.js"],
       "library": "React",
-      "package": "react",
+      "name": "react",
       "version": "16.5.2"
     },
     {
       "urls": ["//g.alicdn.com/platform/c/react-dom/16.5.2/react-dom.min.js"],
       "library": "ReactDOM",
-      "package": "react-dom",
+      "name": "react-dom",
       "version": "16.12.0"
     },
     {
       "urls": ["//g.alicdn.com/platform/c/prop-types/15.6.2/prop-types.js"],
       "library": "PropTypes",
-      "package": "prop-types",
+      "name": "prop-types",
       "version": "15.6.2"
     },
-    {
-      "library": "ReactRouter",
-      "package": "react-router"
-    },
-    {
-      "library": "ReactRouterDOM",
-      "package": "react-router-dom"
-    },
-    {
-      "library": "Babel",
-      "package": "babel-standalone"
-    },
-    {
-      "library": "Recore",
-      "package": "@ali/recore"
-    },
+    { "library": "ReactRouter", "name": "react-router" },
+    { "library": "ReactRouterDOM", "name": "react-router-dom" },
+    { "library": "Babel", "name": "babel-standalone" },
+    { "library": "Recore", "name": "@ali/recore" },
     {
       "urls": ["https://g.alicdn.com/code/lib/moment.js/2.24.0/moment-with-locales.min.js"],
       "library": "moment",
-      "package": "moment",
+      "name": "moment",
       "version": "2.24.0"
     },
+    { "library": "VisualEngine", "name": "engine" },
+    { "library": "VisualEngine", "name": "visualengine" },
+    { "library": "VisualEngine", "name": "@ali/visualengine" },
+    { "library": "VisualEngineUtils", "name": "engine-utils" },
+    { "library": "VisualEngineUtils", "name": "@ali/visualengine-utils" },
+    { "library": "VisualEngine.ui.Popup", "name": "@ali/ve-popups" },
+    { "library": "VisualEngineUtils.FieldControl", "name": "@ali/ve-field" },
+    { "library": "VisualEngineUtils.BoolControl", "name": "@ali/ve-bool-control" },
+    { "library": "VisualEngineUtils.ChoiceControl", "name": "@ali/ve-choice-control" },
+    { "library": "VisualEngineUtils.ColorControl", "name": "@ali/ve-color-control" },
+    { "library": "VisualEngineUtils.DateControl", "name": "@ali/ve-date-control" },
+    { "library": "VisualEngineUtils.I18nControl", "name": "@ali/ve-i18n-control" },
+    { "library": "VisualEngineUtils.NumberControl", "name": "@ali/ve-number-control" },
+    { "library": "VisualEngineUtils.SelectControl", "name": "@ali/ve-select-control" },
+    { "library": "VisualEngineUtils.SortableControl", "name": "@ali/ve-sortable" },
+    { "library": "VisualEngineUtils.TextControl", "name": "@ali/ve-text-control" },
+    { "library": "VisualEngineUtils.ImageControl", "name": "@ali/ve-image-control" },
+    { "library": "VisualEngineUtils.SearchControl", "name": "@ali/ve-search-control" },
+    { "library": "VisualEngineUtils.BoolSetter", "name": "@ali/vs-bool" },
+    { "library": "VisualEngineUtils.ChoiceSetter", "name": "@ali/vs-choice" },
+    { "library": "VisualEngineUtils.CodeSetter", "name": "@ali/vs-code" },
+    { "library": "VisualEngineUtils.ColorSetter", "name": "@ali/vs-color" },
+    { "library": "VisualEngineUtils.DateSetter", "name": "@ali/vs-date" },
+    { "library": "VisualEngineUtils.I18nSetter", "name": "@ali/vs-i18n" },
+    { "library": "VisualEngineUtils.JsonSetter", "name": "@ali/vs-json" },
+    { "library": "VisualEngineUtils.ListSetter", "name": "@ali/vs-list" },
+    { "library": "VisualEngineUtils.NumberSetter", "name": "@ali/vs-number" },
+    { "library": "VisualEngineUtils.OptionsSetter", "name": "@ali/vs-options" },
+    { "library": "VisualEngineUtils.SelectSetter", "name": "@ali/vs-select" },
+    { "library": "VisualEngineUtils.TextSetter", "name": "@ali/vs-text" },
+    { "library": "VisualEngineUtils.ValidationSetter", "name": "@ali/vs-validation" },
+    { "library": "VisualEngineUtils.ImageSetter", "name": "@ali/vs-image" },
+    { "library": "VisualEngineUtils.StyleSetter", "name": "@ali/vs-style" },
+    { "library": "VisualEngineUtils.EventSetter", "name": "@ali/vs-event" },
+    { "library": "RenderEngine", "name": "@ali/render-engine" },
+    { "library": "Highcharts", "name": "highcharts" },
+    { "library": "Object", "name": "highcharts-more" },
+    { "library": "Highcharts && window.Highcharts.map", "name": "highcharts/highmaps" },
+    { "library": "jQuery", "name": "$" },
+    { "library": "jQuery", "name": "jquery" },
+    { "library": "_", "name": "lodash" },
+    { "library": "nattyFetch", "name": "natty-fetch" },
+    { "library": "nattyFetch", "name": "natty-fetch/dist/natty-fetch.pc" },
+    { "library": "nattyFetch", "name": "natty-fetch/dist/natty-fetch" },
+    { "library": "nattyStorage", "name": "natty-storage" },
+    { "library": "Rax", "name": "rax" }
+  ],
+  "systemType": "",
+  "appKey": "legao_base_packages",
+  "componentDependencies": [
     {
-      "library": "VisualEngine",
-      "package": "engine"
-    },
-    {
-      "library": "VisualEngine",
-      "package": "visualengine"
-    },
-    {
-      "library": "VisualEngine",
-      "package": "@ali/visualengine"
-    },
-    {
-      "library": "VisualEngineUtils",
-      "package": "engine-utils"
-    },
-    {
-      "library": "VisualEngineUtils",
-      "package": "@ali/visualengine-utils"
-    },
-    {
-      "library": "VisualEngine.ui.Popup",
-      "package": "@ali/ve-popups"
-    },
-    {
-      "library": "VisualEngineUtils.FieldControl",
-      "package": "@ali/ve-field"
-    },
-    {
-      "library": "VisualEngineUtils.BoolControl",
-      "package": "@ali/ve-bool-control"
-    },
-    {
-      "library": "VisualEngineUtils.ChoiceControl",
-      "package": "@ali/ve-choice-control"
-    },
-    {
-      "library": "VisualEngineUtils.ColorControl",
-      "package": "@ali/ve-color-control"
-    },
-    {
-      "library": "VisualEngineUtils.DateControl",
-      "package": "@ali/ve-date-control"
-    },
-    {
-      "library": "VisualEngineUtils.I18nControl",
-      "package": "@ali/ve-i18n-control"
-    },
-    {
-      "library": "VisualEngineUtils.NumberControl",
-      "package": "@ali/ve-number-control"
-    },
-    {
-      "library": "VisualEngineUtils.SelectControl",
-      "package": "@ali/ve-select-control"
-    },
-    {
-      "library": "VisualEngineUtils.SortableControl",
-      "package": "@ali/ve-sortable"
-    },
-    {
-      "library": "VisualEngineUtils.TextControl",
-      "package": "@ali/ve-text-control"
-    },
-    {
-      "library": "VisualEngineUtils.ImageControl",
-      "package": "@ali/ve-image-control"
-    },
-    {
-      "library": "VisualEngineUtils.SearchControl",
-      "package": "@ali/ve-search-control"
-    },
-    {
-      "library": "VisualEngineUtils.BoolSetter",
-      "package": "@ali/vs-bool"
-    },
-    {
-      "library": "VisualEngineUtils.ChoiceSetter",
-      "package": "@ali/vs-choice"
-    },
-    {
-      "library": "VisualEngineUtils.CodeSetter",
-      "package": "@ali/vs-code"
-    },
-    {
-      "library": "VisualEngineUtils.ColorSetter",
-      "package": "@ali/vs-color"
-    },
-    {
-      "library": "VisualEngineUtils.DateSetter",
-      "package": "@ali/vs-date"
-    },
-    {
-      "library": "VisualEngineUtils.I18nSetter",
-      "package": "@ali/vs-i18n"
-    },
-    {
-      "library": "VisualEngineUtils.JsonSetter",
-      "package": "@ali/vs-json"
-    },
-    {
-      "library": "VisualEngineUtils.ListSetter",
-      "package": "@ali/vs-list"
-    },
-    {
-      "library": "VisualEngineUtils.NumberSetter",
-      "package": "@ali/vs-number"
-    },
-    {
-      "library": "VisualEngineUtils.OptionsSetter",
-      "package": "@ali/vs-options"
-    },
-    {
-      "library": "VisualEngineUtils.SelectSetter",
-      "package": "@ali/vs-select"
-    },
-    {
-      "library": "VisualEngineUtils.TextSetter",
-      "package": "@ali/vs-text"
-    },
-    {
-      "library": "VisualEngineUtils.ValidationSetter",
-      "package": "@ali/vs-validation"
-    },
-    {
-      "library": "VisualEngineUtils.ImageSetter",
-      "package": "@ali/vs-image"
-    },
-    {
-      "library": "VisualEngineUtils.StyleSetter",
-      "package": "@ali/vs-style"
-    },
-    {
-      "library": "VisualEngineUtils.EventSetter",
-      "package": "@ali/vs-event"
-    },
-    {
-      "library": "RenderEngine",
-      "package": "@ali/render-engine"
-    },
-    {
-      "library": "Highcharts",
-      "package": "highcharts"
-    },
-    {
-      "library": "Object",
-      "package": "highcharts-more"
-    },
-    {
-      "library": "Highcharts && window.Highcharts.map",
-      "package": "highcharts/highmaps"
-    },
-    {
-      "library": "jQuery",
-      "package": "$"
-    },
-    {
-      "library": "jQuery",
-      "package": "jquery"
-    },
-    {
-      "library": "_",
-      "package": "lodash"
-    },
-    {
-      "library": "nattyFetch",
-      "package": "natty-fetch"
-    },
-    {
-      "library": "nattyFetch",
-      "package": "natty-fetch/dist/natty-fetch.pc"
-    },
-    {
-      "library": "nattyFetch",
-      "package": "natty-fetch/dist/natty-fetch"
-    },
-    {
-      "library": "nattyStorage",
-      "package": "natty-storage"
-    },
-    {
-      "library": "Rax",
-      "package": "rax"
-    },
-    {
+      "prototypeConfigsUrl": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-div/1.0.1/proto.c54985f.js"],
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliVcDiv",
       "urls": [
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-div/1.0.1/view.f31fe6d.css",
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-div/1.0.1/view.d3df802.js"
       ],
-      "library": "AliVcDiv",
-      "package": "@ali/vc-div",
+      "components": null,
+      "packageName": "@ali/vc-div",
       "version": "1.0.1"
     },
     {
+      "prototypeConfigsUrl": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-page/1.0.5/proto.899e4b1.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-page/1.0.5/proto.451d5fc.js"
+      ],
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliVcPage",
       "urls": [
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-page/1.0.5/view.3fdc557.css",
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-page/1.0.5/view.ae881b7.js"
       ],
-      "library": "AliVcPage",
-      "package": "@ali/vc-page",
+      "components": null,
+      "packageName": "@ali/vc-page",
       "version": "1.0.5"
     },
     {
-      "urls": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep/2.0.11/view.1bae686.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep/2.0.11/view.68be89a.js",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep/2.0.11/view.mobile.1bae686.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep/2.0.11/view.mobile.68a5782.js"
+      "prototypeConfigsUrl": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep/2.0.11/proto.3f4f5d1.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep/2.0.11/proto.057b4c5.js"
       ],
+      "prototypeViewsUrl": null,
+      "alias": "",
       "library": "AliVcDeep",
-      "package": "@ali/vc-deep",
+      "urls": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep/2.0.11/view.03e2bef.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep/2.0.11/view.e380202.js",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep/2.0.11/view.mobile.03e2bef.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep/2.0.11/view.mobile.4c4a443.js"
+      ],
+      "components": null,
+      "packageName": "@ali/vc-deep",
       "version": "2.0.11"
     },
     {
-      "urls": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-shell/1.5.6/view.70bac75.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-shell/1.5.6/view.6174a1b.js"
+      "prototypeConfigsUrl": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-shell/1.5.3/proto.81cf560.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-shell/1.5.3/proto.5de342b.js"
       ],
+      "prototypeViewsUrl": null,
+      "alias": "",
       "library": "AliVcShell",
-      "package": "@ali/vc-shell",
-      "version": "1.5.6"
+      "urls": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-shell/1.5.3/view.81cf560.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-shell/1.5.3/view.3ef1990.js"
+      ],
+      "components": null,
+      "packageName": "@ali/vc-shell",
+      "version": "1.5.3"
     },
     {
+      "prototypeConfigsUrl": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-slot/2.0.1/proto.0e43387.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-slot/2.0.1/proto.0bda625.js"
+      ],
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliVcSlot",
       "urls": [
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-slot/2.0.1/view.0e43387.css",
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-slot/2.0.1/view.890474e.js"
       ],
-      "library": "AliVcSlot",
-      "package": "@ali/vc-slot",
+      "components": null,
+      "packageName": "@ali/vc-slot",
       "version": "2.0.1"
     },
     {
-      "urls": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-text/4.0.1/view.764bd38.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-text/4.0.1/view.0dcac71.js",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-text/4.0.1/view.mobile.8a20311.js"
+      "prototypeConfigsUrl": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-text/4.0.0/proto.595bd91.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-text/4.0.0/proto.7afa924.js"
       ],
+      "prototypeViewsUrl": null,
+      "alias": "",
       "library": "AliVcText",
-      "package": "@ali/vc-text",
-      "version": "4.0.1"
+      "urls": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-text/4.0.0/view.764bd38.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-text/4.0.0/view.0dcac71.js",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-text/4.0.0/view.mobile.8a20311.js"
+      ],
+      "components": null,
+      "packageName": "@ali/vc-text",
+      "version": "4.0.0"
     },
     {
+      "prototypeConfigsUrl": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-link/5.1.1/proto.4828821.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-link/5.1.1/proto.dd97364.js"
+      ],
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliVcLink",
       "urls": [
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-link/5.1.1/view.387943c.css",
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-link/5.1.1/view.ec70dd9.js",
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-link/5.1.1/view.mobile.387943c.css",
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-link/5.1.1/view.mobile.bc72f32.js"
       ],
-      "library": "AliVcLink",
-      "package": "@ali/vc-link",
+      "components": null,
+      "packageName": "@ali/vc-link",
       "version": "5.1.1"
     },
     {
+      "prototypeConfigsUrl": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-link-block/5.1.0/proto.b486b90.js"
+      ],
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliVcLinkBlock",
       "urls": [
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-link-block/5.1.0/view.82ef4b0.css",
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-link-block/5.1.0/view.51d10d6.js",
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-link-block/5.1.0/view.mobile.82ef4b0.css",
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-link-block/5.1.0/view.mobile.d608862.js"
       ],
-      "library": "AliVcLinkBlock",
-      "package": "@ali/vc-link-block",
+      "components": null,
+      "packageName": "@ali/vc-link-block",
       "version": "5.1.0"
     },
     {
-      "urls": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-column/3.0.5/view.0e5dd32.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-column/3.0.5/view.e8a81f8.js"
+      "prototypeConfigsUrl": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-html/2.0.0/proto.8b5fefc.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-html/2.0.0/proto.0d2716f.js"
       ],
-      "library": "AliVcChartColumn",
-      "package": "@ali/vc-chart-column",
-      "version": "3.0.5"
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliVcHtml",
+      "urls": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-html/2.0.0/view.0e43387.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-html/2.0.0/view.d3ef287.js"
+      ],
+      "components": null,
+      "packageName": "@ali/vc-html",
+      "version": "2.0.0"
     },
     {
-      "urls": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-line/3.0.4/view.b437757.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-line/3.0.4/view.4c5d11a.js"
+      "prototypeConfigsUrl": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-iframe/3.0.2/proto.6c9d90a.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-iframe/3.0.2/proto.c03e93e.js"
       ],
-      "library": "AliVcChartLine",
-      "package": "@ali/vc-chart-line",
-      "version": "3.0.4"
-    },
-    {
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliVcIframe",
       "urls": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-pie/3.0.2/view.0e43387.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-pie/3.0.2/view.4498f86.js"
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-iframe/3.0.2/view.6c9d90a.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-iframe/3.0.2/view.5bdba85.js"
       ],
-      "library": "AliVcChartPie",
-      "package": "@ali/vc-chart-pie",
+      "components": null,
+      "packageName": "@ali/vc-iframe",
       "version": "3.0.2"
     },
     {
-      "urls": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-radar/3.0.2/view.0e43387.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-radar/3.0.2/view.ff9e48b.js"
-      ],
-      "library": "AliVcChartRadar",
-      "package": "@ali/vc-chart-radar",
-      "version": "3.0.2"
+      "prototypeConfigsUrl": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-jsx/2.0.0/proto.9419927.js"],
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliVcJsx",
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-jsx/2.0.0/view.133d01c.js"],
+      "components": null,
+      "packageName": "@ali/vc-jsx",
+      "version": "2.0.0"
     },
     {
+      "prototypeConfigsUrl": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-markdown/2.0.0/proto.3f91095.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-markdown/2.0.0/proto.fa33aff.js"
+      ],
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliVcMarkdown",
       "urls": [
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-markdown/2.0.0/view.3f91095.css",
         "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-markdown/2.0.0/view.288bb26.js"
       ],
-      "library": "AliVcMarkdown",
-      "package": "@ali/vc-markdown",
+      "components": null,
+      "packageName": "@ali/vc-markdown",
       "version": "2.0.0"
     },
     {
+      "prototypeConfigsUrl": null,
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliDeepLegaoComponentImport",
       "urls": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/ac-amdp-home-consumer/1.0.11/view.f3f24d5.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/ac-amdp-home-consumer/1.0.11/view.f31409e.js"
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/deep-legao-component-import/0.3.0/main.47a28d7.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/deep-legao-component-import/0.3.0/main.0751f12.js"
       ],
-      "library": "AliAcAmdpHomeConsumer",
-      "package": "@ali/ac-amdp-home-consumer",
-      "version": "1.0.11"
+      "components": [
+        {
+          "snippets": [
+            {
+              "schema": {
+                "componentName": "LegaoComponentImport",
+                "props": { "urlPrefix": "https://go.alibaba-inc.com/", "scene": "editConfig" }
+              },
+              "code": "<LegaoComponentImport scene=\"editConfig\" urlPrefix=\"https://go.alibaba-inc.com/\" />",
+              "screenshot": "https://tianshu.alicdn.com/a6115d32-ec32-4d32-bf94-f24aace23ffa.png"
+            }
+          ],
+          "componentName": "LegaoComponentImport",
+          "screenshot": "https://tianshu.alicdn.com/a6115d32-ec32-4d32-bf94-f24aace23ffa.png",
+          "configure": {
+            "component": {},
+            "props": [
+              { "name": "onFinish", "title": "onFinish", "setter": "Function" },
+              { "name": "scene", "title": "scene", "setter": "Input" },
+              { "name": "componentInfo", "title": "componentInfo", "setter": "Object" },
+              { "name": "urlPrefix", "title": "urlPrefix", "setter": "Input" },
+              { "name": "getTicket", "title": "getTicket", "setter": "Function" },
+              { "name": "mode", "title": "mode", "setter": "Input" },
+              { "name": "height", "title": "height", "setter": "Number" },
+              { "name": "configListType", "title": "configListType", "setter": "Input" }
+            ]
+          },
+          "category": "自定义"
+        }
+      ],
+      "packageName": "@ali/deep-legao-component-import",
+      "version": "0.3.0"
     },
     {
-      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/react-json-view/1.22.0/main.8c072ba.js"],
-      "library": "AliReactJsonView",
-      "package": "@ali/react-json-view",
-      "version": "1.22.0"
+      "prototypeConfigsUrl": null,
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliReactCodeToImage",
+      "urls": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/react-code-to-image/0.0.13/main.5ea90fb.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/react-code-to-image/0.0.13/main.08ab636.js"
+      ],
+      "components": [
+        {
+          "snippets": [
+            {
+              "schema": { "componentName": "AliReactCodeToImage", "props": {} },
+              "code": "<AliReactCodeToImage/>",
+              "label": "react code to image",
+              "screenshot": "https://tianshu.alicdn.com/958192c1-1d1a-4186-8438-63c80cb04fb3.png"
+            }
+          ],
+          "componentName": "AliReactCodeToImage",
+          "screenshot": "https://tianshu.alicdn.com/958192c1-1d1a-4186-8438-63c80cb04fb3.png",
+          "configure": {
+            "component": {},
+            "props": [
+              { "name": "library", "title": "library", "setter": "Input" },
+              { "name": "assets", "title": "assets", "setter": "Object" },
+              { "name": "initCode", "title": "initCode", "setter": "Input" },
+              { "name": "showEditor", "title": "showEditor", "setter": "Switch" },
+              { "name": "onRender", "title": "onRender", "setter": "Function" },
+              { "name": "onUploaded", "title": "onUploaded", "setter": "Function" },
+              { "name": "upload", "title": "upload", "setter": "Input" },
+              { "name": "showPreview", "title": "showPreview", "setter": "Switch" },
+              { "name": "builtInReact", "title": "builtInReact", "setter": "Switch" },
+              { "name": "builtInBabel", "title": "builtInBabel", "setter": "Switch" },
+              { "name": "style", "title": "style", "setter": "Input" },
+              { "name": "autoRender", "title": "autoRender", "setter": "Switch" },
+              { "name": "delay", "title": "delay", "setter": "Number" },
+              { "name": "autoUpload", "title": "autoUpload", "setter": "Switch" },
+              { "name": "noUI", "title": "noUI", "setter": "Switch" }
+            ]
+          },
+          "title": "react code to image",
+          "category": "自定义"
+        }
+      ],
+      "packageName": "@ali/react-code-to-image",
+      "version": "0.0.13"
     }
   ],
-  "x-prototypes": [
+  "utilsDependencies": [
     {
-      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-div/1.0.1/proto.a264564.js"]
+      "prototypeConfigsUrl": null,
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliVuFormatter",
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-formatter/2.0.0/main.e75ff20.js"],
+      "components": null,
+      "packageName": "@ali/vu-formatter",
+      "version": "2.0.0"
     },
     {
+      "prototypeConfigsUrl": null,
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliVuFusion",
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-fusion/2.0.0/main.01f2f51.js"],
+      "components": null,
+      "packageName": "@ali/vu-fusion",
+      "version": "2.0.0"
+    },
+    {
+      "prototypeConfigsUrl": null,
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliVuToolkit",
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-toolkit/1.0.4/main.96fb938.js"],
+      "components": null,
+      "packageName": "@ali/vu-toolkit",
+      "version": "1.0.4"
+    },
+    {
+      "prototypeConfigsUrl": null,
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliVuLegaoBuiltin",
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-legao-builtin/1.2.2/main.2178271.js"],
+      "components": null,
+      "packageName": "@ali/vu-legao-builtin",
+      "version": "1.2.2"
+    },
+    {
+      "prototypeConfigsUrl": null,
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliVuDataSource",
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-dataSource/1.0.3/main.c153335.js"],
+      "components": null,
+      "packageName": "@ali/vu-dataSource",
+      "version": "1.0.3"
+    },
+    {
+      "prototypeConfigsUrl": null,
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliVuRouter",
       "urls": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-page/1.0.5/proto.899e4b1.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-page/1.0.5/proto.bfe05a5.js"
-      ]
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-router/1.2.1/main.5a856a4.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-router/1.2.1/main.6f0b6b1.js"
+      ],
+      "components": null,
+      "packageName": "@ali/vu-router",
+      "version": "1.2.1"
     },
     {
+      "prototypeConfigsUrl": null,
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliVuRouterSpa",
       "urls": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep/2.0.11/proto.15be45f.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep/2.0.11/proto.039dc00.js"
-      ]
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-router-spa/1.3.7/main.c231469.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-router-spa/1.3.7/main.756e5a0.js"
+      ],
+      "components": null,
+      "packageName": "@ali/vu-router-spa",
+      "version": "1.3.7"
     },
     {
+      "prototypeConfigsUrl": null,
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliVuSpm",
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-spm/1.1.11/main.0495881.js"],
+      "components": null,
+      "packageName": "@ali/vu-spm",
+      "version": "1.1.11"
+    },
+    {
+      "prototypeConfigsUrl": null,
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliVuSwitchSchema",
       "urls": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-shell/1.5.6/proto.70bac75.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-shell/1.5.6/proto.8d105cf.js"
-      ]
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-switch-schema/1.0.7/main.1d9ec8c.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-switch-schema/1.0.7/main.70ec614.js"
+      ],
+      "components": null,
+      "packageName": "@ali/vu-switch-schema",
+      "version": "1.0.7"
     },
     {
-      "urls": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-slot/2.0.1/proto.0e43387.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-slot/2.0.1/proto.9e01f34.js"
-      ]
+      "prototypeConfigsUrl": null,
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliVuLegaoBuiltin",
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-legao-builtin/1.0.5/main.0ebe6a1.js"],
+      "components": null,
+      "packageName": "@ali/vu-legao-builtin",
+      "version": "1.0.5"
     },
     {
-      "urls": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-text/4.0.1/proto.595bd91.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-text/4.0.1/proto.90c4998.js"
-      ]
-    },
-    {
-      "urls": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-link/5.1.1/proto.4828821.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-link/5.1.1/proto.91e063a.js"
-      ]
-    },
-    {
-      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-link-block/5.1.0/proto.4e9a9d2.js"]
-    },
-    {
-      "urls": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-column/3.0.5/proto.5973a33.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-column/3.0.5/proto.df847e6.js"
-      ]
-    },
-    {
-      "urls": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-line/3.0.4/proto.11e8b2c.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-line/3.0.4/proto.bbc1a73.js"
-      ]
-    },
-    {
-      "urls": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-pie/3.0.2/proto.81a7751.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-pie/3.0.2/proto.ce342e4.js"
-      ]
-    },
-    {
-      "urls": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-radar/3.0.2/proto.81a7751.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-chart-radar/3.0.2/proto.638100d.js"
-      ]
-    },
-    {
-      "urls": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-markdown/2.0.0/proto.3f91095.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-markdown/2.0.0/proto.1bed9e5.js"
-      ]
-    },
-    {
-      "urls": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/ac-amdp-home-consumer/1.0.11/proto.f3f24d5.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/ac-amdp-home-consumer/1.0.11/proto.f12090f.js"
-      ]
+      "prototypeConfigsUrl": null,
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliVuDataSource",
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-dataSource/1.0.2/main.62e0289.js"],
+      "components": null,
+      "packageName": "@ali/vu-dataSource",
+      "version": "1.0.2"
     }
   ],
-  "components": [
+  "otherDependencies": [
     {
-      "componentName": "AliReactJsonView",
-      "npm": {
-        "package": "@ali/react-json-view",
-        "library": "AliReactJsonView",
-        "version": "1.22.0",
-        "destructuring": false
-      },
-      "props": [],
-      "configure": {
-        "component": {},
-        "props": [
-          {
-            "name": "src",
-            "title": "src",
-            "setter": "Object"
-          },
-          {
-            "name": "name",
-            "title": "name",
-            "setter": "Input"
-          },
-          {
-            "name": "theme",
-            "title": "theme",
-            "setter": "Input"
-          },
-          {
-            "name": "collapsed",
-            "title": "collapsed",
-            "setter": "Switch"
-          },
-          {
-            "name": "collapseStringsAfterLength",
-            "title": "collapseStringsAfterLength",
-            "setter": "Switch"
-          },
-          {
-            "name": "shouldCollapse",
-            "title": "shouldCollapse",
-            "setter": "Switch"
-          },
-          {
-            "name": "sortKeys",
-            "title": "sortKeys",
-            "setter": "Switch"
-          },
-          {
-            "name": "groupArraysAfterLength",
-            "title": "groupArraysAfterLength",
-            "setter": "Number"
-          },
-          {
-            "name": "indentWidth",
-            "title": "indentWidth",
-            "setter": "Number"
-          },
-          {
-            "name": "enableClipboard",
-            "title": "enableClipboard",
-            "setter": "Switch"
-          },
-          {
-            "name": "displayObjectSize",
-            "title": "displayObjectSize",
-            "setter": "Switch"
-          },
-          {
-            "name": "displayDataTypes",
-            "title": "displayDataTypes",
-            "setter": "Switch"
-          },
-          {
-            "name": "onEdit",
-            "title": "onEdit",
-            "setter": "Switch"
-          },
-          {
-            "name": "onDelete",
-            "title": "onDelete",
-            "setter": "Switch"
-          },
-          {
-            "name": "onAdd",
-            "title": "onAdd",
-            "setter": "Switch"
-          },
-          {
-            "name": "onSelect",
-            "title": "onSelect",
-            "setter": "Switch"
-          },
-          {
-            "name": "iconStyle",
-            "title": "iconStyle",
-            "setter": "Input"
-          },
-          {
-            "name": "style",
-            "title": "style",
-            "setter": "Object"
-          },
-          {
-            "name": "validationMessage",
-            "title": "validationMessage",
-            "setter": "Input"
-          },
-          {
-            "name": "defaultValue",
-            "title": "defaultValue",
-            "setter": "Input"
-          }
-        ]
-      },
-      "title": "json格式化展示"
-    }
-  ],
-  "componentList": [
+      "prototypeConfigsUrl": null,
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "MyBabel",
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/my-babel/0.9.6/main.8bd0181.js"],
+      "components": null,
+      "packageName": "my-babel",
+      "version": "0.9.6"
+    },
     {
-      "title": "自定义",
-      "icon": "",
-      "children": [{
-        "title": "json格式化展示",
-        "icon": "",
-        "snippets": [{
-          "schema": {
-            "componentName": "AliReactJsonView",
-            "props": {}
-          },
-          "title": "json格式化展示",
-          "screenshot": ""
-        }]
-      }]
+      "prototypeConfigsUrl": null,
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliVmRouter",
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vm-router/1.0.8/main.115bf4f.js"],
+      "components": null,
+      "packageName": "@ali/vm-router",
+      "version": "1.0.8"
+    },
+    {
+      "prototypeConfigsUrl": null,
+      "prototypeViewsUrl": null,
+      "alias": "",
+      "library": "AliVmSchemaNav",
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vm-schema-nav/1.0.0/main.711344e.js"],
+      "components": null,
+      "packageName": "@ali/vm-schema-nav",
+      "version": "1.0.0"
     }
   ]
 }

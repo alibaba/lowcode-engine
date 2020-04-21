@@ -1,6 +1,7 @@
 // @ts-ignore
 import Engine from '@ali/visualengine';
 import loadUrls from './loader';
+import { upgradeAssetsBundle } from './upgrade-assets';
 
 const { editor } = Engine;
 
@@ -17,7 +18,9 @@ async function load() {
 
 const externals = ['react', 'react-dom', 'prop-types', 'react-router', 'react-router-dom', '@ali/recore'];
 async function loadAssets() {
-  const assets = await editor.utils.get('./legao-assets.json');
+  const legaoAssets = await editor.utils.get('./legao-assets.json');
+
+  const assets = upgradeAssetsBundle(legaoAssets);
 
   if (assets.packages) {
     assets.packages.forEach((item: any) => {
@@ -41,6 +44,7 @@ async function loadAssets() {
     // proccess snippets
   }
 
+  editor.set('legao-assets', legaoAssets);
   editor.set('assets', assets);
 }
 
