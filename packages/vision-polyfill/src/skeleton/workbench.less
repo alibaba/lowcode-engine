@@ -217,7 +217,7 @@ body {
       box-shadow: 4px 0 16px 0 rgba(31,50,88,0.08);
       z-index: 820;
       display: none;
-      padding-top: 36px;
+      // padding-top: 36px;
       &.lc-area-visible {
         display: block;
       }
@@ -228,6 +228,23 @@ body {
         .next-icon{
           line-height: 1;
         }
+      }
+      .lc-tabs-title {
+        width: 100%;
+        height: 36px;
+        position: relative;
+        display: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(31,56,88,0.04);
+      }
+      .lc-tabs-content {
+        position: absolute;
+        top: 36px;
+        bottom: 0;
+        left: 0;
+        right: 0;
       }
     }
     .lc-left-area {
