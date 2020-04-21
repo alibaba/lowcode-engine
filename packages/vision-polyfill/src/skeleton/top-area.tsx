@@ -28,9 +28,9 @@ class Contents extends Component<{ area: Area }> {
       if (item.align === 'center') {
         center.push(item.content);
       } else if (item.align === 'left') {
-        right.push(item.content);
-      } else {
         left.push(item.content);
+      } else {
+        right.push(item.content);
       }
     });
     return (

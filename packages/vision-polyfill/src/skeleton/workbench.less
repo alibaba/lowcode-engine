@@ -185,7 +185,22 @@ body {
     width: 100%;
     display: flex;
     margin-bottom: 2px;
-    padding: 8px 16px;
+    padding: 8px 12px 8px 16px;
+    .lc-top-area-left{}
+    .lc-top-area-center{
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      margin-right: 8px;
+    }
+    .lc-top-area-right{
+      display: flex;
+      align-items: center;
+      >* {
+        margin-left: 4px;
+        margin-right: 4px;
+      }
+    }
   }
   .lc-workbench-body {
     flex: 1;
