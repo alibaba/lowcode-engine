@@ -4,7 +4,7 @@ import { DragObjectType, isNode } from '@ali/lowcode-designer';
 const dragon = designer.dragon;
 const DragEngine = {
   from(shell: Element, boost: (e: MouseEvent) => any): any {
-    dragon.from(shell, (e) => {
+    return dragon.from(shell, (e) => {
       const r = boost(e);
       if (!r) {
         return null;
