@@ -10,6 +10,6 @@ export default {
   },
   getSelected: () => {
     const nodes = designer.currentSelection?.getNodes();
-    return nodes;
+    return nodes?.[0];
   },
 }

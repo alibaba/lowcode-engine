@@ -1,11 +1,14 @@
 .lc-setter-mixed {
-  display: flex;
-  align-items: center;
   width: 100%;
+  position: relative;
   .lc-setter-actions {
-    margin-left: 5px;
+    position: absolute;
+    right: 0px;
   }
+  padding-right: 30px;
   &.lc-block-setter {
+    position: static;
     display: block;
+    padding-right: 0;
   }
 }

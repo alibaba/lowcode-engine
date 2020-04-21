@@ -104,6 +104,10 @@ export class Node {
     return this._slotFor != null;
   }
 
+  isRoot() {
+    return (this.document.rootNode as any) == this;
+  }
+
   constructor(readonly document: DocumentModel, nodeSchema: NodeSchema, slotFor?: Prop) {
     const { componentName, id, children, props, ...extras } = nodeSchema;
     this.id = id || `node$${document.nextId()}`;
@@ -480,6 +484,9 @@ export class Node {
   insertBefore(node: Node, ref?: Node) {
     this.children?.insert(node, ref ? ref.index : null);
   }
+  getParent() {
+    return this.parent;
+  }
 
   /**
    * @deprecated
@@ -509,6 +516,15 @@ export class Node {
   getPage() {
     console.warn('getPage is deprecated, use document instead');
     return this.document;
+  }
+  /**
+   * @deprecated
+   */
+  getSuitablePlace(node: Node, ref: any): any {
+    if (this.isRoot()) {
+      return { container: this, ref };
+    }
+    return { container: this.parent, ref: this };
   }
 }
 

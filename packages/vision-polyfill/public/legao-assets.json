@@ -28,6 +28,12 @@
       "name": "moment",
       "version": "2.24.0"
     },
+    {
+      "urls": ["https://g.alicdn.com/platform/c/??react15-polyfill/0.0.1/dist/index.js,lodash/4.6.1/lodash.min.js,immutable/3.7.6/dist/immutable.min.js,natty-storage/2.0.2/dist/natty-storage.min.js,natty-fetch/2.6.0/dist/natty-fetch.pc.min.js,tinymce/4.2.5/tinymce-full.js"],
+      "library": "nattyFetch",
+      "name": "natty-fetch",
+      "version": "2.24.0"
+    },
     { "library": "VisualEngine", "name": "engine" },
     { "library": "VisualEngine", "name": "visualengine" },
     { "library": "VisualEngine", "name": "@ali/visualengine" },
