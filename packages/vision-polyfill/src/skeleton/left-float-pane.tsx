@@ -1,7 +1,7 @@
 import { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import { observer } from '@ali/lowcode-globals';
-import { Button } from '@alifd/next';
+import { Button, Icon } from '@alifd/next';
 import Area from './area';
 import Panel from './panel';
 
@@ -21,11 +21,14 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
         })}
       >
         <Button
+          text
           className="lc-pane-close"
           onClick={() => {
             area.setVisible(false);
           }}
-        />
+        >
+          <Icon type="close" />
+        </Button>
         <Contents area={area} />
       </div>
     );
