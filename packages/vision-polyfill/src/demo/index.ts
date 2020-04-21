@@ -1,10 +1,12 @@
 // @ts-ignore
-import Engine from '@ali/visualengine';
+import Engine, { Panes } from '@ali/visualengine';
+import getTrunkPane from '@ali/ve-trunk-pane';
 import loadUrls from './loader';
 import { upgradeAssetsBundle } from './upgrade-assets';
 
 const { editor } = Engine;
 
+initTrunkPane();
 Engine.init();
 
 load();
@@ -51,4 +53,20 @@ async function loadAssets() {
 async function loadSchema() {
   const schema = await editor.utils.get('./schema.json');
   editor.set('schema', schema);
+}
+
+async function initTrunkPane() {
+  const assets = await editor.onceGot('legao-assets');
+  const config = {
+    disableLowCodeComponent: true,
+    disableComponentStore: true,
+    app: {
+      getAssetsData() {
+        return assets;
+        // return data;
+      },
+    },
+  };
+  const TrunkPane = getTrunkPane(config);
+  Panes.add(TrunkPane);
 }

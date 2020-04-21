@@ -18,6 +18,7 @@ import PanelDock from './panel-dock';
 import Dock from './dock';
 import { Stage, StageConfig } from './stage';
 import { isValidElement } from 'react';
+import { isPlainObject } from 'globals/src/utils';
 
 export enum SkeletonEvents {
   PANEL_DOCK_ACTIVE = 'skeleton.panel-dock.active',
@@ -230,7 +231,7 @@ export class Skeleton {
   add(config: IWidgetBaseConfig & { area: string }) {
     const { content, ...restConfig } = config;
     if (content) {
-      if (typeof content === 'object' && !isValidElement(content)) {
+      if (isPlainObject(content) && !isValidElement(content)) {
         Object.keys(content).forEach((key) => {
           if (/props$/i.test(key) && restConfig[key]) {
             restConfig[key] = {
