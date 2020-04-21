@@ -4,8 +4,10 @@ import { intl } from './locale';
 
 export default {
   name: 'outline-pane',
-  icon: IconOutline,
-  description: intl('Outline Tree'),
+  props: {
+    icon: IconOutline,
+    description: intl('Outline Tree'),
+  },
   content: Pane,
 };
 

@@ -36,20 +36,13 @@ skeleton.rightArea.add({
 skeleton.leftArea.add({
   name: 'outlinePane',
   type: 'PanelDock',
-  props: {
-    align: 'top',
-    icon: 'toggle-right',
-    description: '大纲树',
-  },
-  content: Pane,
+  ...Outline,
   panelProps: {
     area: 'leftFixedArea',
   },
 });
 
-
 // demo
-
 skeleton.leftArea.add({
   name: 'icon1',
   type: 'Dock',
@@ -131,15 +124,3 @@ skeleton.topArea.add({
     }
   }),
 });
-// skeleton.topArea.add({
-//   type: "Dock",
-//   name: 'preview2',
-//   props: {
-//     align: "center",
-//     title: {
-//       label: "345",
-//       icon: "smile",
-//       tip: "123123123"
-//     }
-//   },
-// })

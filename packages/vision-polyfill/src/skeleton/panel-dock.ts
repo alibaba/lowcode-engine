@@ -5,6 +5,7 @@ import { PanelDockConfig } from './types';
 import Panel from './panel';
 import { PanelDockView, WidgetView } from './widget-views';
 import { IWidget } from './widget';
+import { composeTitle } from './utils';
 
 export default class PanelDock implements IWidget {
   readonly isWidget = true;
@@ -52,7 +53,7 @@ export default class PanelDock implements IWidget {
   }
 
   constructor(readonly skeleton: Skeleton, private config: PanelDockConfig) {
-    const { content, contentProps, panelProps, name } = config;
+    const { content, contentProps, panelProps, name, props } = config;
     this.name = name;
     this.id = uniqueId(`dock:${name}$`);
     this.panelName = config.panelName || name;
@@ -60,7 +61,10 @@ export default class PanelDock implements IWidget {
       this._panel = this.skeleton.add({
         type: "Panel",
         name: this.panelName,
-        props: panelProps || {},
+        props: {
+          // title: props ? composeTitle(props?.title, props?.icon, props?.description, true) : '',
+          ...panelProps,
+        },
         contentProps,
         content,
         // FIXME! dirty fixed
