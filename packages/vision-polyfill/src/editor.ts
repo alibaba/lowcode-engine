@@ -10,6 +10,7 @@ import { Skeleton } from './skeleton/skeleton';
 // demo
 import Preview from '@ali/lowcode-plugin-sample-preview';
 import { createElement } from 'react';
+import { Button } from '@alifd/next';
 
 registerSetters();
 
@@ -37,13 +38,12 @@ skeleton.leftArea.add({
   type: 'PanelDock',
   props: {
     align: 'top',
-    icon: 'smile',
+    icon: 'toggle-right',
     description: '大纲树',
   },
   content: Pane,
   panelProps: {
     area: 'leftFixedArea',
-    // title: 'awefawe',
   },
 });
 
@@ -55,8 +55,8 @@ skeleton.leftArea.add({
   type: 'Dock',
   props: {
     align: 'bottom',
-    icon: 'smile',
-    description: 'smile1',
+    icon: 'set',
+    description: '设置',
   }
 });
 skeleton.leftArea.add({
@@ -64,8 +64,8 @@ skeleton.leftArea.add({
   type: 'Dock',
   props: {
     align: 'bottom',
-    icon: 'smile',
-    description: 'smile1',
+    icon: 'help',
+    description: '帮助',
   }
 });
 
@@ -75,13 +75,40 @@ skeleton.topArea.add({
   props: {
     align: "right",
   },
-  content: Preview,
+  content: createElement(Button, {
+    size: 'small',
+    children: '预览'
+  }),
+});
+skeleton.topArea.add({
+  type: "Dock",
+  name: 'publish',
+  props: {
+    align: "right",
+  },
+  content: createElement(Button, {
+    size: 'small',
+    type: 'secondary',
+    children: '发布'
+  }),
+});
+skeleton.topArea.add({
+  type: "Dock",
+  name: 'save',
+  props: {
+    align: "right",
+  },
+  content: createElement(Button, {
+    size: 'small',
+    type: 'primary',
+    children: '保存'
+  }),
 });
 skeleton.topArea.add({
   type: "Dock",
   name: 'preview4',
   props: {
-    align: "right",
+    align: "center",
   },
   content: createElement('img', {
     src: "https://img.alicdn.com/tfs/TB1WW.VC.z1gK0jSZLeXXb9kVXa-486-64.png",
@@ -98,21 +125,21 @@ skeleton.topArea.add({
     align: "left",
   },
   content: createElement('img', {
-    src: "https://img.alicdn.com/tfs/TB11koUC8v0gK0jSZKbXXbK2FXa-426-76.png",
+    src: "https://img.alicdn.com/tfs/TB1zqBfDlr0gK0jSZFnXXbRRXXa-440-64.png",
     style: {
-      height: 38
+      height: 32
     }
   }),
 });
-skeleton.topArea.add({
-  type: "Dock",
-  name: 'preview2',
-  props: {
-    align: "center",
-    title: {
-      label: "345",
-      icon: "smile",
-      tip: "123123123"
-    }
-  },
-})
+// skeleton.topArea.add({
+//   type: "Dock",
+//   name: 'preview2',
+//   props: {
+//     align: "center",
+//     title: {
+//       label: "345",
+//       icon: "smile",
+//       tip: "123123123"
+//     }
+//   },
+// })
