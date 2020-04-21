@@ -12,12 +12,12 @@
   --input-border-radius: @input-border-radius;
   --popup-border-radius: @popup-border-radius;
 
-  --left-area-width: 46px;
-  --right-area-width: 300px;
+  --left-area-width: 48px;
+  --right-area-width: 280px;
   --top-area-height: 48px;
-  --toolbar-height: 32px;
-  --dock-pane-width: 372px;
-  --dock-fixed-pane-width: 220px;
+  --toolbar-height: 36px;
+  --dock-pane-width: 280px;
+  --dock-fixed-pane-width: 280px;
 }
 
 @media (min-width: 1860px) {
@@ -185,6 +185,7 @@ body {
     width: 100%;
     display: flex;
     margin-bottom: 2px;
+    padding: 8px 16px;
   }
   .lc-workbench-body {
     flex: 1;
@@ -198,10 +199,20 @@ body {
       width: var(--dock-pane-width);
       left: calc(var(--left-area-width) + 1px);
       background-color: var(--color-pane-background);
+      box-shadow: 4px 0 16px 0 rgba(31,50,88,0.08);
       z-index: 820;
       display: none;
+      padding-top: 36px;
       &.lc-area-visible {
         display: block;
+      }
+      .lc-pane-close{
+        position: absolute;
+        right: 10px;
+        top: 6px;
+        .next-icon{
+          line-height: 1;
+        }
       }
     }
     .lc-left-area {
@@ -209,8 +220,41 @@ body {
       width: var(--left-area-width);
       background-color: var(--color-pane-background);
       display: none;
+      flex-shrink: 0;
+      flex-direction: column;
+      justify-content: space-between;
       &.lc-area-visible {
         display: flex;
+      }
+      .lc-left-area-top,
+      .lc-left-area-bottom{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        .lc-title{
+          padding: 12px;
+          flex-direction: column;
+          &.has-tip{
+            cursor: pointer;
+          }
+          &.actived{
+            color: #0079F2;
+          }
+          .lc-title-icon{
+            margin: 0;
+            .next-icon:before {
+              line-height: 1 !important;
+            }
+          }
+        }
+      }
+      .lc-left-area-top{
+        padding-top: 12px;
+      }
+      .lc-left-area-bottom{
+        padding-bottom: 12px;
       }
     }
     .lc-left-fixed-pane {
@@ -218,8 +262,19 @@ body {
       background-color: var(--color-pane-background);
       height: 100%;
       display: none;
+      flex-shrink: 0;
+      padding-top: 36px;
+      position: relative;
       &.lc-area-visible {
         display: block;
+      }
+      .lc-pane-close{
+        position: absolute;
+        right: 10px;
+        top: 6px;
+        .next-icon{
+          line-height: 1;
+        }
       }
     }
     .lc-left-area.lc-area-visible ~ .lc-left-fixed-pane {
@@ -228,6 +283,11 @@ body {
     .lc-left-area.lc-area-visible ~ .lc-workbench-center {
       margin-left: 2px;
     }
+    .lc-outline-pane{
+      .lc-outline-tree .tree-node .tree-node-title{
+        border-bottom: none;
+      }
+    }
     .lc-workbench-center {
       flex: 1;
       display: flex;
@@ -235,6 +295,7 @@ body {
       .lc-toolbar {
         height: var(--toolbar-height);
         background-color: var(--color-pane-background);
+        padding: 8px 16px;
       }
       .lc-main-area {
         flex: 1;
@@ -253,9 +314,28 @@ body {
       width: var(--right-area-width);
       background-color: var(--color-pane-background);
       display: none;
+      flex-shrink: 0;
       margin-left: 2px;
       &.lc-area-visible {
         display: block;
+      }
+      .lc-settings-tabs{
+        > .next-tabs-nav-extra{
+          top: 36px !important;
+        }
+        .lc-settings-tab-item{
+          .next-tabs-tab-inner{
+            font-size: 12px;
+            line-height: 12px;
+          }
+        }
+        .lc-title{
+          color: inherit;
+          line-height: inherit !important;
+        }
+      }
+      .lc-settings-tabs-content{
+        top: 66px;
       }
     }
   }
