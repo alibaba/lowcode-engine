@@ -22,6 +22,7 @@ import Field from './field';
 import Prop from './prop';
 import Env from './env';
 import './vision.less';
+import DragEngine from './drag-engine';
 
 function init(container?: Element) {
   if (!container) {
@@ -94,6 +95,7 @@ const VisualEngine = {
   Prototype,
   Bundle,
   Pages,
+  DragEngine,
 };
 
 export default VisualEngine;
