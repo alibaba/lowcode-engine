@@ -22,7 +22,7 @@ skeleton.add({
   props: {
     align: 'top',
     icon: 'code',
-    description: '组件库',
+    description: '动作',
   },
   panelProps: {
     width: 500
