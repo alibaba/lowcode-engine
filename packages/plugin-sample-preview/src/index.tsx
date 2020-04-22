@@ -10,7 +10,7 @@ const SamplePreview = ({ editor }: PluginProps) => {
     if (designer) {
       console.info('save schema:', designer.schema);
       localStorage.setItem('lce-dev-store', JSON.stringify(designer.schema));
-      window.open('./preview.html', 'preview');
+      window.open('http://30.5.157.206:3333/', 'preview');
     }
   };
 

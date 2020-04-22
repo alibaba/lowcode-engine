@@ -57,7 +57,6 @@ export class DesignerView extends Component<DesignerProps & {
       <div className={classNames('lc-designer', className)} style={style}>
         <DragGhost designer={this.designer} />
         <ProjectView designer={this.designer} />
-        <TipContainer />
       </div>
     );
   }

@@ -10,6 +10,13 @@ import EventsSetter from './events-setter';
 export const StringSetter = {
   component: Input,
   defaultProps: { placeholder: '请输入' },
+  title: 'StringSetter', // TODO
+  condition: (field: any) => {
+    const v = field.getValue();
+    return v == null || typeof v === 'string';
+  },
+  initialValue: '',
+  recommend: true,
 };
 export const NumberSetter = NumberPicker;
 export const BoolSetter = Switch;

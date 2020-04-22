@@ -1,14 +1,30 @@
 .lc-setter-mixed {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
+  margin-right: 26px;
+  display: block;
   position: relative;
-  .lc-setter-actions {
+  >.lc-setter-actions {
     position: absolute;
-    right: 0px;
+    right: -2px;
+    top: 50%;
+    transform: translate(100%, -50%);
+    .lc-switch-trigger {
+      cursor: pointer;
+      opacity: 0.6;
+      &:hover {
+        opacity: 1;
+      }
+    }
   }
-  padding-right: 30px;
+  >.next-input {
+    width: 100%;
+  }
   &.lc-block-setter {
     position: static;
-    display: block;
-    padding-right: 0;
+    margin-right: 0;
+    >.lc-setter-actions {
+      transform: none;
+    }
   }
 }

@@ -35,6 +35,7 @@ export class Title extends Component<{ title: TitleContent; className?: string; 
       <span
         className={classNames('lc-title', className, title.className, {
           'has-tip': !!tip,
+          'only-icon': !title.label
         })}
         onClick={onClick}
       >

@@ -216,6 +216,7 @@ export default class MixedSetter extends Component<{
     let moreBtnNode = (
       <Title
         title={triggerTitle}
+        className="lc-switch-trigger"
         onClick={
           isTwoType
             ? () => {

@@ -367,6 +367,10 @@ export class Node {
    * 获取符合搭建协议-节点 schema 结构
    */
   get schema(): NodeSchema {
+    // FIXME! serilize?
+    // for design - pass to Renderer
+    // for save production data
+    // for serilize mutation record
     return this.export(true);
   }
 

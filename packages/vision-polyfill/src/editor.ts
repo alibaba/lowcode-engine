@@ -68,10 +68,7 @@ skeleton.topArea.add({
   props: {
     align: "right",
   },
-  content: createElement(Button, {
-    size: 'small',
-    children: '预览'
-  }),
+  content: Preview,
 });
 skeleton.topArea.add({
   type: "Dock",
