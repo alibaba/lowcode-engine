@@ -148,6 +148,13 @@ export default {
         "version": "^0.8.0"
       }
     },
+    {
+      "pluginKey": "variableBindDialog",
+      "config": {
+        "package": "@ali/lowcode-plugin-variable-bind-dialog",
+        "version": "^0.8.0"
+      }
+    }
     ]
   },
   "hooks": [],

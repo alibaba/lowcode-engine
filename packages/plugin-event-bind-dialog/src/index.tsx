@@ -91,6 +91,13 @@ export default class EventBindDialog extends Component<{
   onOk = () => {
     const {editor} = this.props;
     editor.emit('event-setter.bindEvent',this.state.eventName);
+    // 选中的是新建事件
+    if (this.state.selectedEventName == ''){
+      editor.emit('sourceEditor.addFunction',{
+        functionName:this.state.eventName
+      })
+    }
+
     this.closeDialog();
   };
 
