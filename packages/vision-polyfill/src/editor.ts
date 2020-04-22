@@ -7,6 +7,9 @@ import SettingsPane from '@ali/lowcode-plugin-settings-pane';
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
 import { Skeleton } from './skeleton/skeleton';
 
+
+import Preview from '@ali/lowcode-plugin-sample-preview';
+
 registerSetters();
 
 export const editor = new Editor();
@@ -41,3 +44,12 @@ skeleton.add({
 });
 
 
+skeleton.add({
+  area: 'topArea',
+  type: 'Dock',
+  name: 'preview',
+  props: {
+    align: 'right',
+  },
+  content: Preview,
+});

@@ -3,7 +3,6 @@ import { createElement } from 'react';
 import { Button } from '@alifd/next';
 import Engine, { Panes } from '@ali/visualengine';
 import getTrunkPane from '@ali/ve-trunk-pane';
-import Preview from '@ali/lowcode-plugin-sample-preview';
 import SourceEditor from '@ali/lowcode-plugin-source-editor';
 import EventBindDialog from '@ali/lowcode-plugin-event-bind-dialog';
 import loadUrls from './loader';
@@ -52,15 +51,7 @@ skeleton.add({
   },
 });
 
-skeleton.add({
-  area: 'topArea',
-  type: 'Dock',
-  name: 'preview',
-  props: {
-    align: 'right',
-  },
-  content: Preview,
-});
+
 skeleton.add({
   area: 'topArea',
   type: 'Dock',
