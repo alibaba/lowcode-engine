@@ -488,6 +488,9 @@ export class Node {
   insertBefore(node: Node, ref?: Node) {
     this.children?.insert(node, ref ? ref.index : null);
   }
+  insertAfter(node: Node, ref?: Node) {
+    this.children?.insert(node, ref ? (ref.index + 1) : null);
+  }
   getParent() {
     return this.parent;
   }

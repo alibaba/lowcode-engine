@@ -1,5 +1,5 @@
 import { I18nData } from './i18n';
-import { ReactNode, ReactElement } from 'react';
+import { ReactNode } from 'react';
 
 export interface TipConfig {
   className?: string;
@@ -8,4 +8,4 @@ export interface TipConfig {
   direction?: 'top' | 'bottom' | 'left' | 'right';
 }
 
-export type TipContent = string | I18nData | ReactElement | TipConfig;
+export type TipContent = string | I18nData | ReactNode | TipConfig;

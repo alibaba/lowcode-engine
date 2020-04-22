@@ -1,5 +1,5 @@
 import { ReactElement, ComponentType } from 'react';
-import { TitleContent, IconType, I18nData } from '@ali/lowcode-globals';
+import { TitleContent, IconType, I18nData, TipContent } from '@ali/lowcode-globals';
 
 export interface IWidgetBaseConfig {
   type: string;
@@ -30,7 +30,7 @@ export interface DockProps {
   icon?: IconType;
   size?: 'small' | 'medium' | 'large';
   className?: string;
-  description?: string | I18nData;
+  description?: TipContent;
   onClick?: () => void;
 }
 

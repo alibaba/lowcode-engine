@@ -58,7 +58,7 @@ const builtinSetters = {
   DateRangeSetter,
   EventsSetter,
   // StyleSetter,
-  ColorSetter,
+  // ColorSetter,
   JsonSetter,
 };
 

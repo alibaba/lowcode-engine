@@ -10,10 +10,27 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
   shouldComponentUpdate() {
     return false;
   }
+
+  private dispose?: () => void;
+  componentDidMount() {
+    const { area } = this.props;
+    const triggerClose = () => area.setVisible(false);
+    area.skeleton.editor.on('designer.dragstart', triggerClose);
+    this.dispose = () => {
+      area.skeleton.editor.removeListener('designer.dragstart', triggerClose);
+    }
+  }
+
+  componentWillUnmount() {
+    this.dispose?.();
+  }
+
   render() {
     const { area } = this.props;
     // TODO: add focusingManager
-    // TODO: dragstart close
+    // focusin set focus (push|replace)
+    // focusout remove focus
+    // onEsc
     return (
       <div
         className={classNames('lc-left-float-pane', {
