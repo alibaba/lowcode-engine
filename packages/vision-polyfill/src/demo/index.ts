@@ -6,6 +6,7 @@ import getTrunkPane from '@ali/ve-trunk-pane';
 import EventBindDialog from '@ali/lowcode-plugin-event-bind-dialog';
 import loadUrls from './loader';
 import { upgradeAssetsBundle } from './upgrade-assets';
+import { isCSSUrl } from '@ali/lowcode-globals';
 
 const { editor, skeleton } = Engine;
 
@@ -35,7 +36,6 @@ skeleton.add({
     description: '帮助',
   },
 });
-
 
 skeleton.add({
   area: 'topArea',
@@ -124,9 +124,25 @@ async function loadAssets() {
 
   if (assets['x-prototypes']) {
     const tasks: Array<Promise<any>> = [];
+    const prototypeStyles: string[] = [];
     assets['x-prototypes'].forEach((pkg: any) => {
-      tasks.push(loadUrls(pkg?.urls));
+      if (pkg?.urls) {
+        const urls = Array.isArray(pkg.urls) ? pkg.urls : [pkg.urls];
+        urls.forEach((url: string) => {
+          if (isCSSUrl(url)) {
+            prototypeStyles.push(url);
+          }
+        });
+        tasks.push(loadUrls(urls));
+      }
     });
+    if (prototypeStyles.length > 0) {
+      assets.packages.push({
+        library: '_prototypesStyle',
+        package: '_prototypes-style',
+        urls: prototypeStyles
+      });
+    }
     await Promise.all(tasks);
 
     // proccess snippets
