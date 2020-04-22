@@ -1,9 +1,10 @@
+import { CLASS_DEFINE_CHUNK_NAME, DEFAULT_LINK_AFTER } from '../../../const/generator';
 import { REACT_CHUNK_NAME } from './const';
 
 import {
   getFuncExprBody,
   transformFuncExpr2MethodMember,
-} from '../../utils/jsExpression';
+} from '../../../utils/jsExpression';
 
 import {
   BuilderComponentPlugin,
@@ -17,7 +18,20 @@ import {
   IJSExpression,
 } from '../../../types';
 
-const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
+interface PluginConfig {
+  fileType: string;
+  exportNameMapping: Record<string, string>;
+  normalizeNameMapping: Record<string, string>;
+}
+
+const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
+  const cfg: PluginConfig = {
+    fileType: FileType.JSX,
+    exportNameMapping: {},
+    normalizeNameMapping: {},
+    ...config,
+  };
+
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     const next: ICodeStruct = {
       ...pre,
@@ -28,21 +42,23 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
     if (ir.lifeCycles) {
       const lifeCycles = ir.lifeCycles;
       const chunks = Object.keys(lifeCycles).map<ICodeChunk>(lifeCycleName => {
-        if (lifeCycleName === 'constructor') {
+        const normalizeName = cfg.normalizeNameMapping[lifeCycleName] || lifeCycleName;
+        const exportName = cfg.exportNameMapping[lifeCycleName] || lifeCycleName;
+        if (normalizeName === 'constructor') {
           return {
             type: ChunkType.STRING,
-            fileType: FileType.JSX,
-            name: REACT_CHUNK_NAME.ClassConstructorContent,
+            fileType: cfg.fileType,
+            name: CLASS_DEFINE_CHUNK_NAME.ConstructorContent,
             content: getFuncExprBody(
               (lifeCycles[lifeCycleName] as IJSExpression).value,
             ),
-            linkAfter: [REACT_CHUNK_NAME.ClassConstructorStart],
+            linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.ConstructorStart]],
           };
         }
-        if (lifeCycleName === 'render') {
+        if (normalizeName === 'render') {
           return {
             type: ChunkType.STRING,
-            fileType: FileType.JSX,
+            fileType: cfg.fileType,
             name: REACT_CHUNK_NAME.ClassRenderPre,
             content: getFuncExprBody(
               (lifeCycles[lifeCycleName] as IJSExpression).value,
@@ -50,28 +66,17 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
             linkAfter: [REACT_CHUNK_NAME.ClassRenderStart],
           };
         }
-        if (
-          lifeCycleName === 'componentDidMount' ||
-          lifeCycleName === 'componentDidUpdate' ||
-          lifeCycleName === 'componentWillUnmount' ||
-          lifeCycleName === 'componentDidCatch'
-        ) {
-          return {
-            type: ChunkType.STRING,
-            fileType: FileType.JSX,
-            name: REACT_CHUNK_NAME.ClassLifeCycle,
-            content: transformFuncExpr2MethodMember(
-              lifeCycleName,
-              (lifeCycles[lifeCycleName] as IJSExpression).value,
-            ),
-            linkAfter: [
-              REACT_CHUNK_NAME.ClassStart,
-              REACT_CHUNK_NAME.ClassConstructorEnd,
-            ],
-          };
-        }
 
-        throw new CodeGeneratorError('Unknown life cycle method name');
+        return {
+          type: ChunkType.STRING,
+          fileType: cfg.fileType,
+          name: CLASS_DEFINE_CHUNK_NAME.InsMethod,
+          content: transformFuncExpr2MethodMember(
+            exportName,
+            (lifeCycles[lifeCycleName] as IJSExpression).value,
+          ),
+          linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.InsMethod]],
+        };
       });
 
       next.chunks.push.apply(next.chunks, chunks);

@@ -90,7 +90,7 @@ export class ProjectBuilder implements IProjectBuilder {
         const { files } = await builder.generateModule(containerInfo);
 
         return {
-          moduleName: containerInfo.fileName,
+          moduleName: containerInfo.moduleName,
           path,
           files,
         };
@@ -215,61 +215,19 @@ export class ProjectBuilder implements IProjectBuilder {
   private createModuleBuilders(): Record<string, IModuleBuilder> {
     const builders: Record<string, IModuleBuilder> = {};
 
-    builders.components = createModuleBuilder({
-      plugins: this.plugins.components,
-      postProcessors: this.postProcessors,
+    Object.keys(this.plugins).forEach(pluginName => {
+      if (this.plugins[pluginName].length > 0) {
+        const options: { mainFileName?: string } = {};
+        if (this.template.slots[pluginName] && this.template.slots[pluginName].fileName) {
+          options.mainFileName = this.template.slots[pluginName].fileName;
+        }
+        builders[pluginName] = createModuleBuilder({
+          plugins: this.plugins[pluginName],
+          postProcessors: this.postProcessors,
+          ...options,
+        });
+      }
     });
-    builders.pages = createModuleBuilder({
-      plugins: this.plugins.pages,
-      postProcessors: this.postProcessors,
-    });
-    builders.router = createModuleBuilder({
-      plugins: this.plugins.router,
-      mainFileName: this.template.slots.router.fileName,
-      postProcessors: this.postProcessors,
-    });
-    builders.entry = createModuleBuilder({
-      plugins: this.plugins.entry,
-      mainFileName: this.template.slots.entry.fileName,
-      postProcessors: this.postProcessors,
-    });
-    builders.globalStyle = createModuleBuilder({
-      plugins: this.plugins.globalStyle,
-      mainFileName: this.template.slots.globalStyle.fileName,
-      postProcessors: this.postProcessors,
-    });
-    builders.htmlEntry = createModuleBuilder({
-      plugins: this.plugins.htmlEntry,
-      mainFileName: this.template.slots.htmlEntry.fileName,
-      postProcessors: this.postProcessors,
-    });
-    builders.packageJSON = createModuleBuilder({
-      plugins: this.plugins.packageJSON,
-      mainFileName: this.template.slots.packageJSON.fileName,
-      postProcessors: this.postProcessors,
-    });
-
-    if (this.template.slots.constants && this.plugins.constants) {
-      builders.constants = createModuleBuilder({
-        plugins: this.plugins.constants,
-        mainFileName: this.template.slots.constants.fileName,
-        postProcessors: this.postProcessors,
-      });
-    }
-    if (this.template.slots.utils && this.plugins.utils) {
-      builders.utils = createModuleBuilder({
-        plugins: this.plugins.utils,
-        mainFileName: this.template.slots.utils.fileName,
-        postProcessors: this.postProcessors,
-      });
-    }
-    if (this.template.slots.i18n && this.plugins.i18n) {
-      builders.i18n = createModuleBuilder({
-        plugins: this.plugins.i18n,
-        mainFileName: this.template.slots.i18n.fileName,
-        postProcessors: this.postProcessors,
-      });
-    }
 
     return builders;
   }

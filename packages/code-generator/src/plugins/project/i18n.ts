@@ -1,5 +1,5 @@
 import { COMMON_CHUNK_NAME } from '../../const/generator';
-import { generateCompositeType } from '../../plugins/utils/compositeType';
+import { generateCompositeType } from '../../utils/compositeType';
 import {
   BuilderComponentPlugin,
   BuilderComponentPluginFactory,
@@ -9,7 +9,6 @@ import {
   IProjectInfo,
 } from '../../types';
 
-// TODO: How to merge this logic to common deps
 const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     const next: ICodeStruct = {

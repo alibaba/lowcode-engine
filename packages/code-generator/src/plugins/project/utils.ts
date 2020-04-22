@@ -9,7 +9,6 @@ import {
   IUtilInfo,
 } from '../../types';
 
-// TODO: How to merge this logic to common deps
 const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     const next: ICodeStruct = {

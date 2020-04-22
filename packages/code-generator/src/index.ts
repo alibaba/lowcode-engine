@@ -5,6 +5,7 @@
 import { createProjectBuilder } from './generator/ProjectBuilder';
 import { createDiskPublisher } from './publisher/disk';
 import createIceJsProjectBuilder from './solutions/icejs';
+import createRecoreProjectBuilder from './solutions/recore';
 
 export * from './types';
 
@@ -12,6 +13,7 @@ export default {
   createProjectBuilder,
   solutions: {
     icejs: createIceJsProjectBuilder,
+    recore: createRecoreProjectBuilder,
   },
   publishers: {
     disk: createDiskPublisher,

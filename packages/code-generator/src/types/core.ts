@@ -4,6 +4,8 @@ import {
   IProjectSchema,
   IResultDir,
   IResultFile,
+  IComponentNodeItem,
+  IJSExpression,
 } from './index';
 
 export enum FileType {
@@ -107,7 +109,7 @@ export interface ISchemaParser {
 }
 
 export interface IProjectTemplate {
-  slots: IProjectSlots;
+  slots: Record<string, IProjectSlot>;
   generateTemplate(): IResultDir;
 }
 
@@ -116,30 +118,21 @@ export interface IProjectSlot {
   fileName?: string;
 }
 
-export interface IProjectSlots {
-  components: IProjectSlot;
-  pages: IProjectSlot;
-  router: IProjectSlot;
-  entry: IProjectSlot;
-  constants?: IProjectSlot;
-  utils?: IProjectSlot;
-  i18n?: IProjectSlot;
-  globalStyle: IProjectSlot;
-  htmlEntry: IProjectSlot;
-  packageJSON: IProjectSlot;
-}
+// export interface IProjectSlots {
+//   components: IProjectSlot;
+//   pages: IProjectSlot;
+//   router: IProjectSlot;
+//   entry: IProjectSlot;
+//   constants?: IProjectSlot;
+//   utils?: IProjectSlot;
+//   i18n?: IProjectSlot;
+//   globalStyle: IProjectSlot;
+//   htmlEntry: IProjectSlot;
+//   packageJSON: IProjectSlot;
+// }
 
 export interface IProjectPlugins {
-  components: BuilderComponentPlugin[];
-  pages: BuilderComponentPlugin[];
-  router: BuilderComponentPlugin[];
-  entry: BuilderComponentPlugin[];
-  constants?: BuilderComponentPlugin[];
-  utils?: BuilderComponentPlugin[];
-  i18n?: BuilderComponentPlugin[];
-  globalStyle: BuilderComponentPlugin[];
-  htmlEntry: BuilderComponentPlugin[];
-  packageJSON: BuilderComponentPlugin[];
+  [slotName: string]: BuilderComponentPlugin[];
 }
 
 export interface IProjectBuilder {
@@ -153,3 +146,25 @@ export type PostProcessor = (content: string, fileType: string) => string;
 export interface IPluginOptions {
   fileDirDepth: number;
 }
+
+export enum PIECE_TYPE {
+  BEFORE = 'NodeCodePieceBefore',
+  TAG = 'NodeCodePieceTag',
+  ATTR = 'NodeCodePieceAttr',
+  CHILDREN = 'NodeCodePieceChildren',
+  AFTER = 'NodeCodePieceAfter',
+};
+
+export interface CodePiece {
+  value: string;
+  type: PIECE_TYPE;
+}
+
+export interface HandlerSet<T> {
+  string?: (input: string) => T[];
+  expression?: (input: IJSExpression) => T[];
+  node?: (input: IComponentNodeItem) => T[];
+  common?: (input: unknown) => T[];
+}
+
+export type ExtGeneratorPlugin = (nodeItem: IComponentNodeItem) => CodePiece[];

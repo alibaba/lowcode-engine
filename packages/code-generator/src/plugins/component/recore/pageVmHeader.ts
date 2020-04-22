@@ -4,9 +4,7 @@ import {
   BuilderComponentPlugin,
   BuilderComponentPluginFactory,
   ChunkType,
-  FileType,
   ICodeStruct,
-  IContainerInfo,
 } from '../../../types';
 
 const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
@@ -17,9 +15,9 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
 
     next.chunks.push({
       type: ChunkType.STRING,
-      fileType: FileType.JSX,
-      name: COMMON_CHUNK_NAME.ExternalDepsImport,
-      content: `import React from 'react';`,
+      fileType: 'vx',
+      name: COMMON_CHUNK_NAME.CustomContent,
+      content: `<div {...globalProps.div} className="recore-loading" x-if={this.__loading} />`,
       linkAfter: [],
     });
 

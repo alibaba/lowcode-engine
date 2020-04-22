@@ -21,7 +21,6 @@ interface IIceJsPackageJSON extends IPackageJSON {
   originTemplate: string;
 }
 
-// TODO: How to merge this logic to common deps
 const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     const next: ICodeStruct = {

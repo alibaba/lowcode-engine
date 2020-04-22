@@ -14,7 +14,7 @@ export default function getFile(): [string[], IResultFile] {
 
 ## 安装运行
 
-```bash
+\`\`\`bash
 # install dependencies
 tnpm install
 
@@ -26,11 +26,10 @@ npm test
 
 # local build
 npm run build
-```
+\`\`\`
 
     `,
   );
 
   return [[], file];
 }
-  

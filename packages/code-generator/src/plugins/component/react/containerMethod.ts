@@ -1,6 +1,6 @@
-import { REACT_CHUNK_NAME } from './const';
+import { CLASS_DEFINE_CHUNK_NAME, DEFAULT_LINK_AFTER } from '../../../const/generator';
 
-import { transformFuncExpr2MethodMember } from '../../utils/jsExpression';
+import { transformFuncExpr2MethodMember } from '../../../utils/jsExpression';
 
 import {
   BuilderComponentPlugin,
@@ -13,7 +13,16 @@ import {
   IJSExpression,
 } from '../../../types';
 
-const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
+interface PluginConfig {
+  fileType: string;
+}
+
+const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
+  const cfg: PluginConfig = {
+    fileType: FileType.JSX,
+    ...config,
+  };
+
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     const next: ICodeStruct = {
       ...pre,
@@ -25,17 +34,13 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       const methods = ir.methods;
       const chunks = Object.keys(methods).map<ICodeChunk>(methodName => ({
         type: ChunkType.STRING,
-        fileType: FileType.JSX,
-        name: REACT_CHUNK_NAME.ClassMethod,
+        fileType: cfg.fileType,
+        name: CLASS_DEFINE_CHUNK_NAME.InsMethod,
         content: transformFuncExpr2MethodMember(
           methodName,
           (methods[methodName] as IJSExpression).value,
         ),
-        linkAfter: [
-          REACT_CHUNK_NAME.ClassStart,
-          REACT_CHUNK_NAME.ClassConstructorEnd,
-          REACT_CHUNK_NAME.ClassLifeCycle,
-        ],
+        linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.InsMethod]],
       }));
 
       next.chunks.push.apply(next.chunks, chunks);

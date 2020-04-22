@@ -9,7 +9,18 @@ import {
   IContainerInfo,
 } from '../../../types';
 
-const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
+interface PluginConfig {
+  fileType: string;
+  moduleFileType: string;
+}
+
+const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
+  const cfg: PluginConfig = {
+    fileType: FileType.CSS,
+    moduleFileType: FileType.JSX,
+    ...config,
+  };
+
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     const next: ICodeStruct = {
       ...pre,
@@ -19,7 +30,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
 
     next.chunks.push({
       type: ChunkType.STRING,
-      fileType: FileType.CSS,
+      fileType: cfg.fileType,
       name: COMMON_CHUNK_NAME.StyleCssContent,
       content: ir.css,
       linkAfter: [COMMON_CHUNK_NAME.StyleDepsImport],
@@ -27,9 +38,9 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
 
     next.chunks.push({
       type: ChunkType.STRING,
-      fileType: FileType.JSX,
+      fileType: cfg.moduleFileType,
       name: COMMON_CHUNK_NAME.InternalDepsImport,
-      content: `import './index.css';`,
+      content: `import './index.${cfg.fileType}';`,
       linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport],
     });
 

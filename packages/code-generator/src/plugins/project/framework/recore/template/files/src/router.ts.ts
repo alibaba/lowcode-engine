@@ -11,7 +11,7 @@ export default {
   baseDir: './pages',
   exact: true,
   routes: [
-    { main: './index', path: '/' },
+    { main: './page_index', path: '/' },
   ],
 };
     `,
@@ -19,4 +19,3 @@ export default {
 
   return [['src'], file];
 }
-  

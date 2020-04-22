@@ -1,6 +1,6 @@
-import { REACT_CHUNK_NAME } from './const';
+import { CLASS_DEFINE_CHUNK_NAME, DEFAULT_LINK_AFTER } from '../../../const/generator';
 
-import { generateCompositeType } from '../../utils/compositeType';
+import { generateCompositeType } from '../../../utils/compositeType';
 
 import {
   BuilderComponentPlugin,
@@ -11,7 +11,18 @@ import {
   IContainerInfo,
 } from '../../../types';
 
-const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
+interface PluginConfig {
+  fileType: string;
+  implementType: 'inConstructor' | 'insMember' | 'hooks';
+}
+
+const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
+  const cfg: PluginConfig = {
+    fileType: FileType.JSX,
+    implementType: 'inConstructor',
+    ...config,
+  };
+
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     const next: ICodeStruct = {
       ...pre,
@@ -26,13 +37,23 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
         return `${stateName}: ${isString ? `'${value}'` : value},`;
       });
 
-      next.chunks.push({
-        type: ChunkType.STRING,
-        fileType: FileType.JSX,
-        name: REACT_CHUNK_NAME.ClassConstructorContent,
-        content: `this.state = { ${fields.join('')} };`,
-        linkAfter: [REACT_CHUNK_NAME.ClassConstructorStart],
-      });
+      if (cfg.implementType === 'inConstructor') {
+        next.chunks.push({
+          type: ChunkType.STRING,
+          fileType: cfg.fileType,
+          name: CLASS_DEFINE_CHUNK_NAME.ConstructorContent,
+          content: `this.state = { ${fields.join('')} };`,
+          linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.ConstructorContent]],
+        });
+      } else if (cfg.implementType === 'insMember') {
+        next.chunks.push({
+          type: ChunkType.STRING,
+          fileType: cfg.fileType,
+          name: CLASS_DEFINE_CHUNK_NAME.InsVar,
+          content: `state = { ${fields.join('')} };`,
+          linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.InsVar]],
+        });
+      }
     }
 
     return next;

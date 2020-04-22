@@ -1,4 +1,4 @@
-import { COMMON_CHUNK_NAME } from '../../../const/generator';
+import { COMMON_CHUNK_NAME, CLASS_DEFINE_CHUNK_NAME } from '../../../const/generator';
 import { REACT_CHUNK_NAME } from './const';
 
 import {
@@ -21,8 +21,8 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: FileType.JSX,
-      name: REACT_CHUNK_NAME.ClassStart,
-      content: `class ${ir.componentName} extends React.Component {`,
+      name: CLASS_DEFINE_CHUNK_NAME.Start,
+      content: `class ${ir.moduleName} extends React.Component {`,
       linkAfter: [
         COMMON_CHUNK_NAME.ExternalDepsImport,
         COMMON_CHUNK_NAME.InternalDepsImport,
@@ -34,27 +34,27 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: FileType.JSX,
-      name: REACT_CHUNK_NAME.ClassEnd,
+      name: CLASS_DEFINE_CHUNK_NAME.End,
       content: `}`,
-      linkAfter: [REACT_CHUNK_NAME.ClassStart, REACT_CHUNK_NAME.ClassRenderEnd],
+      linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start, REACT_CHUNK_NAME.ClassRenderEnd],
     });
 
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: FileType.JSX,
-      name: REACT_CHUNK_NAME.ClassConstructorStart,
+      name: CLASS_DEFINE_CHUNK_NAME.ConstructorStart,
       content: 'constructor(props, context) { super(props); ',
-      linkAfter: [REACT_CHUNK_NAME.ClassStart],
+      linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start],
     });
 
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: FileType.JSX,
-      name: REACT_CHUNK_NAME.ClassConstructorEnd,
+      name: CLASS_DEFINE_CHUNK_NAME.ConstructorEnd,
       content: '}',
       linkAfter: [
-        REACT_CHUNK_NAME.ClassConstructorStart,
-        REACT_CHUNK_NAME.ClassConstructorContent,
+        CLASS_DEFINE_CHUNK_NAME.ConstructorStart,
+        CLASS_DEFINE_CHUNK_NAME.ConstructorContent,
       ],
     });
 
@@ -64,10 +64,9 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       name: REACT_CHUNK_NAME.ClassRenderStart,
       content: 'render() {',
       linkAfter: [
-        REACT_CHUNK_NAME.ClassStart,
-        REACT_CHUNK_NAME.ClassConstructorEnd,
-        REACT_CHUNK_NAME.ClassLifeCycle,
-        REACT_CHUNK_NAME.ClassMethod,
+        CLASS_DEFINE_CHUNK_NAME.Start,
+        CLASS_DEFINE_CHUNK_NAME.ConstructorEnd,
+        CLASS_DEFINE_CHUNK_NAME.InsMethod,
       ],
     });
 
@@ -87,13 +86,13 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       type: ChunkType.STRING,
       fileType: FileType.JSX,
       name: COMMON_CHUNK_NAME.FileExport,
-      content: `export default ${ir.componentName};`,
+      content: `export default ${ir.moduleName};`,
       linkAfter: [
         COMMON_CHUNK_NAME.ExternalDepsImport,
         COMMON_CHUNK_NAME.InternalDepsImport,
         COMMON_CHUNK_NAME.FileVarDefine,
         COMMON_CHUNK_NAME.FileUtilDefine,
-        REACT_CHUNK_NAME.ClassEnd,
+        CLASS_DEFINE_CHUNK_NAME.End,
       ],
     });
 

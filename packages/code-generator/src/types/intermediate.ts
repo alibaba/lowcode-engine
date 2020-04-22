@@ -17,8 +17,8 @@ export interface IParseResult {
 }
 
 export interface IContainerInfo extends IContainerNodeItem, IWithDependency {
-  componentName: string;
   containerType: string;
+  moduleName: string;
 }
 
 export interface IWithDependency {

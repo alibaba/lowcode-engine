@@ -1,4 +1,4 @@
-import { REACT_CHUNK_NAME } from './const';
+import { CLASS_DEFINE_CHUNK_NAME } from '../../../const/generator';
 
 import {
   BuilderComponentPlugin,
@@ -8,7 +8,16 @@ import {
   ICodeStruct,
 } from '../../../types';
 
-const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
+interface PluginConfig {
+  fileType: string;
+}
+
+const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
+  const cfg: PluginConfig = {
+    fileType: FileType.JSX,
+    ...config,
+  };
+
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     const next: ICodeStruct = {
       ...pre,
@@ -16,10 +25,10 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
 
     next.chunks.push({
       type: ChunkType.STRING,
-      fileType: FileType.JSX,
-      name: REACT_CHUNK_NAME.ClassConstructorContent,
+      fileType: cfg.fileType,
+      name: CLASS_DEFINE_CHUNK_NAME.ConstructorContent,
       content: `this.utils = utils;`,
-      linkAfter: [REACT_CHUNK_NAME.ClassConstructorStart],
+      linkAfter: [CLASS_DEFINE_CHUNK_NAME.ConstructorStart],
     });
 
     return next;
