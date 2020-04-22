@@ -9,6 +9,7 @@ import { Skeleton } from './skeleton/skeleton';
 
 
 import Preview from '@ali/lowcode-plugin-sample-preview';
+import SourceEditor from '@ali/lowcode-plugin-source-editor';
 
 registerSetters();
 
@@ -52,4 +53,19 @@ skeleton.add({
     align: 'right',
   },
   content: Preview,
+});
+
+skeleton.add({
+  name: 'sourceEditor',
+  type: 'PanelDock',
+  props: {
+    align: 'top',
+    icon: 'code',
+    description: '组件库',
+  },
+  panelProps: {
+    width: 500
+    // area: 'leftFixedArea'
+  },
+  content: SourceEditor,
 });
