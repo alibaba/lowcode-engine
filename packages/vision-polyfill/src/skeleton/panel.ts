@@ -32,7 +32,7 @@ export default class Panel implements IWidget {
     return this._body;
   }
 
-  get content() {
+  get content(): ReactNode {
     if (this.plain) {
       return createElement(PanelView, {
         panel: this,

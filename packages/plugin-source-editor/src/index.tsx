@@ -3,6 +3,7 @@ import { Tab, Search, Input, Button } from '@alifd/next';
 import Editor from '@ali/lowcode-editor-core';
 import { js_beautify, css_beautify } from 'js-beautify';
 import MonacoEditor from 'react-monaco-editor';
+import Panel from '../../vision-polyfill/src/skeleton/panel';
 
 // import lolizer from './sorceEditorPlugin',
 
@@ -46,6 +47,7 @@ interface FunctionEventParam {
 
 export default class SourceEditor extends Component<{
   editor: Editor;
+  panel?: Panel
 }> {
   private monocoEditer: Object;
   private editorCmd: Object;
@@ -118,11 +120,14 @@ export default class SourceEditor extends Component<{
   }
 
   openPluginPannel = () => {
-    const {editor} = this.props;
+    const { editor, panel } = this.props;
     // 判断面板是否处于激活状态
     if (!editor.leftNav || editor.leftNav != 'sourceEditor') {
       // 打开面板
       editor.emit('leftNav.change', 'sourceEditor');
+    }
+    if (panel) {
+      panel.show();
     }
   }
 

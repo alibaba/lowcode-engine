@@ -195,24 +195,32 @@ export class Skeleton {
     }
 
     config = this.parseConfig(config);
+    let widget: IWidget;
     if (isDockConfig(config)) {
       if (isPanelDockConfig(config)) {
-        return new PanelDock(this, config);
-      }
-      // others...
+        widget = new PanelDock(this, config);
+      } else if (false) {
+        // others...
+      } else {
 
-      return new Dock(this, config);
+        widget = new Dock(this, config);
+      }
+    } else if (isPanelConfig(config)) {
+      widget = this.createPanel(config);
+    } else {
+      widget = new Widget(this, config as WidgetConfig);
     }
-    if (isPanelConfig(config)) {
-      return this.createPanel(config);
-    }
-    return new Widget(this, config as WidgetConfig);
+    // ?
+    // this.editor.set(`skeleton.${widget.name}`, widget);
+    return widget;
   }
 
   createPanel(config: PanelConfig) {
     config = this.parseConfig(config);
     const panel = new Panel(this, config);
     this.panels.set(panel.name, panel);
+    // ?
+    // this.editor.set(`skeleton.${panel.name}`, panel);
     return panel;
   }
 
