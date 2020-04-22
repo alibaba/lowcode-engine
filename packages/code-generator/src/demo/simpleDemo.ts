@@ -71,12 +71,21 @@ const demoData: IProjectSchema = {
       state: {
         text: 'outter',
       },
+      lifeCycles: {
+        componentDidMount: {
+          type: 'JSExpression',
+          value: 'function() { this.utils.request(this.props.url); }',
+        },
+      },
       children: [
         {
           componentName: 'Form',
           id: 'node$2',
           props: {
-            labelCol: 4,
+            labelCol: {
+              type: 'JSExpression',
+              value: 'this.state.colNum',
+            },
             style: {},
             ref: 'testForm',
           },

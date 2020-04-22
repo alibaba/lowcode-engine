@@ -1,8 +1,9 @@
 import { IResultDir, IResultFile } from '../types';
 
-import CodeGenerator from '../index';
+import codeGenerator from '../index';
 import { createDiskPublisher } from '../publisher/disk';
-import demoSchema from './simpleDemo';
+// import demoSchema from './simpleDemo';
+import demoSchema from './recoreDemo';
 
 function flatFiles(rootName: string | null, dir: IResultDir): IResultFile[] {
   const dirRoot: string = rootName ? `${rootName}/${dir.name}` : dir.name;
@@ -40,13 +41,18 @@ async function writeResultToDisk(root: IResultDir, path: string): Promise<any> {
 }
 
 function main() {
-  const createIceJsProjectBuilder = CodeGenerator.solutions.icejs;
-  const builder = createIceJsProjectBuilder();
+  // const createIceJsProjectBuilder = codeGenerator.solutions.icejs;
+  // const builder = createIceJsProjectBuilder();
+
+  const createRecoreProjectBuilder = codeGenerator.solutions.recore;
+  const builder = createRecoreProjectBuilder();
+
   builder.generateProject(demoSchema).then(result => {
-    // displayResultInConsole(result, '././src/routes.js');
-    writeResultToDisk(result, '/Users/armslave/lowcodeDemo').then(response =>
-      console.log('Write to disk: ', JSON.stringify(response)),
-    );
+    displayResultInConsole(result);
+    // writeResultToDisk(result, '/Users/armslave/lowcodeDemo').then(response =>
+    //   console.log('Write to disk: ', JSON.stringify(response)),
+    // );
+    return result;
   });
 }
 
