@@ -3,7 +3,6 @@ import { createElement } from 'react';
 import { Button } from '@alifd/next';
 import Engine, { Panes } from '@ali/visualengine';
 import getTrunkPane from '@ali/ve-trunk-pane';
-import SourceEditor from '@ali/lowcode-plugin-source-editor';
 import EventBindDialog from '@ali/lowcode-plugin-event-bind-dialog';
 import loadUrls from './loader';
 import { upgradeAssetsBundle } from './upgrade-assets';
@@ -15,20 +14,6 @@ skeleton.add({
   name: 'eventBindDialog',
   type: 'Widget',
   content: EventBindDialog,
-});
-skeleton.add({
-  name: 'sourceEditor',
-  type: 'PanelDock',
-  props: {
-    align: 'top',
-    icon: 'code',
-    description: '动作',
-  },
-  panelProps: {
-    width: 500
-    // area: 'leftFixedArea'
-  },
-  content: SourceEditor,
 });
 skeleton.add({
   area: 'leftArea',

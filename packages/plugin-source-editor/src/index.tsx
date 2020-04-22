@@ -57,7 +57,7 @@ export default class SourceEditor extends Component<{
     tabKey: TAB_KEY.JS_TAB,
   };
 
-  componentWillMount() {
+  async componentWillMount() {
     const { editor } = this.props;
     editor.on('leftPanel.show', (key: String) => {
       if (key === 'sourceEditor' && !this.monocoEditer) {
@@ -79,44 +79,41 @@ export default class SourceEditor extends Component<{
       this.openPluginPannel();
     })
 
-
-
-    editor.once('designer.mount', (designer: Designer) => {
-      // let schema = designer.project.getSchema();
-      // mock data
-      let schema = {
-        componentTree: [
-          {
-            state: {
-              // 初始state：        选填 对象类型/变量表达式
-              btnText: 'submit', // 默认数据值：              选填 变量表达式
+    const designer = await editor.onceGot(Designer);
+    // let schema = designer.project.getSchema();
+    // mock data
+    let schema = {
+      componentTree: [
+        {
+          state: {
+            // 初始state：        选填 对象类型/变量表达式
+            btnText: 'submit', // 默认数据值：              选填 变量表达式
+          },
+          css: 'body {font-size: 12px;} .botton{widht:100px;color:#ff00ff}', //css样式描述：      选填
+          lifeCycles: {
+            //生命周期:          选填 对象类型
+            didMount: {
+              type: 'JSExpression',
+              value: "function() {\n \t\tconsole.log('did mount');\n\t}",
             },
-            css: 'body {font-size: 12px;} .botton{widht:100px;color:#ff00ff}', //css样式描述：      选填
-            lifeCycles: {
-              //生命周期:          选填 对象类型
-              didMount: {
-                type: 'JSExpression',
-                value: "function() {\n \t\tconsole.log('did mount');\n\t}",
-              },
-              willUnmount: {
-                type: 'JSExpression',
-                value: "function() {\n \t\tconsole.log('will umount');\n\t}",
-              },
-            },
-            methods: {
-              //自定义方法对象：     选填 对象类型
-              getData: {
-                //自定义方法：                  选填 函数类型
-                type: 'JSExpression',
-                value: "function() {\n \t\tconsole.log('testFunc');\n \t}",
-              },
+            willUnmount: {
+              type: 'JSExpression',
+              value: "function() {\n \t\tconsole.log('will umount');\n\t}",
             },
           },
-        ],
-      };
+          methods: {
+            //自定义方法对象：     选填 对象类型
+            getData: {
+              //自定义方法：                  选填 函数类型
+              type: 'JSExpression',
+              value: "function() {\n \t\tconsole.log('testFunc');\n \t}",
+            },
+          },
+        },
+      ],
+    };
 
-      this.initCode(schema);
-    });
+    this.initCode(schema);
   }
 
   openPluginPannel = () => {
