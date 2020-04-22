@@ -14,6 +14,13 @@ export default class Area<C extends IWidgetBaseConfig = any, T extends IWidget =
     return this._visible;
   }
 
+  get current() {
+    if (this.exclusive) {
+      return this.container.current;
+    }
+    return null;
+  }
+
   readonly container: WidgetContainer<T, C>;
   constructor(readonly skeleton: Skeleton, readonly name: string, handle: (item: T | C) => T, private exclusive?: boolean, defaultSetCurrent: boolean = false) {
     this.container = skeleton.createContainer(name, handle, exclusive, () => this.visible, defaultSetCurrent);

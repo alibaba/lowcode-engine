@@ -31,11 +31,16 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
     // focusin set focus (push|replace)
     // focusout remove focus
     // onEsc
+    const width = area.current?.config.props?.width;
+    const style = width ? {
+      width
+    } : undefined;
     return (
       <div
         className={classNames('lc-left-float-pane', {
           'lc-area-visible': area.visible,
         })}
+        style={style}
       >
         <Button
           text

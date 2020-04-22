@@ -38,7 +38,7 @@ export default class Dock implements IWidget {
     if (content) {
       this._body = createContent(content, {
         ...contentProps,
-        config: this.content,
+        config: this.config,
         editor: this.skeleton.editor,
       });
     } else {
@@ -47,7 +47,7 @@ export default class Dock implements IWidget {
     return this._body;
   }
 
-  constructor(readonly skeleton: Skeleton, private config: DockConfig) {
+  constructor(readonly skeleton: Skeleton, readonly config: DockConfig) {
     const { props = {}, name } = config;
     this.name = name;
     this.align = props.align;

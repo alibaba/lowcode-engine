@@ -120,8 +120,12 @@ export class PanelView extends Component<{ panel: Panel }> {
       this.lastVisible = currentVisible;
       if (this.lastVisible) {
         panel.skeleton.postEvent(SkeletonEvents.PANEL_SHOW, panel.name, panel);
+        // FIXME! remove this line
+        panel.skeleton.postEvent('leftPanel.show' as any, panel.name, panel);
       } else {
         panel.skeleton.postEvent(SkeletonEvents.PANEL_HIDE, panel.name, panel);
+        // FIXME! remove this line
+        panel.skeleton.postEvent('leftPanel.hide' as any, panel.name, panel);
       }
     }
   }

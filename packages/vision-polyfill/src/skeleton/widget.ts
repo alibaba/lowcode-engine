@@ -1,6 +1,6 @@
 import { ReactNode, createElement } from 'react';
 import { createContent, uniqueId, obx } from '@ali/lowcode-globals';
-import { WidgetConfig } from './types';
+import { WidgetConfig, IWidgetBaseConfig } from './types';
 import { Skeleton } from './skeleton';
 import { WidgetView } from './widget-views';
 
@@ -12,6 +12,7 @@ export interface IWidget {
   readonly visible: boolean;
   readonly body: ReactNode;
   readonly skeleton: Skeleton;
+  readonly config: IWidgetBaseConfig;
 
   getName(): string;
   getContent(): any;
@@ -41,6 +42,7 @@ export default class Widget implements IWidget {
     const { content, contentProps } = this.config;
     this._body = createContent(content, {
       ...contentProps,
+      config: this.config,
       editor: this.skeleton.editor,
     });
     return this._body;
@@ -53,7 +55,7 @@ export default class Widget implements IWidget {
     });
   }
 
-  constructor(readonly skeleton: Skeleton, private config: WidgetConfig) {
+  constructor(readonly skeleton: Skeleton, readonly config: WidgetConfig) {
     const { props = {}, name } = config;
     this.name = name;
     this.align = props.align;

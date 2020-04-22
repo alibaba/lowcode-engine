@@ -193,10 +193,13 @@ export class Skeleton {
     if (isWidget(config)) {
       return config;
     }
+
+    config = this.parseConfig(config);
     if (isDockConfig(config)) {
       if (isPanelDockConfig(config)) {
         return new PanelDock(this, config);
       }
+      // others...
 
       return new Dock(this, config);
     }
@@ -207,6 +210,7 @@ export class Skeleton {
   }
 
   createPanel(config: PanelConfig) {
+    config = this.parseConfig(config);
     const panel = new Panel(this, config);
     this.panels.set(panel.name, panel);
     return panel;
@@ -228,7 +232,10 @@ export class Skeleton {
     return container;
   }
 
-  add(config: IWidgetBaseConfig & { area: string }) {
+  private parseConfig(config: IWidgetBaseConfig): any {
+    if ((config as any).parsed) {
+      return config;
+    }
     const { content, ...restConfig } = config;
     if (content) {
       if (isPlainObject(content) && !isValidElement(content)) {
@@ -246,33 +253,52 @@ export class Skeleton {
         restConfig.content = content;
       }
     }
-    const { area } = restConfig;
+    restConfig.pluginKey = restConfig.name;
+    restConfig.parsed = true;
+    return restConfig;
+  }
+
+  add(config: IWidgetBaseConfig & { area?: string }, extraConfig?: object) {
+    const parsedConfig: any = {
+      ...this.parseConfig(config),
+      ...extraConfig,
+    };
+    let { area } = parsedConfig;
+    if (!area) {
+      if (parsedConfig.type === 'Panel') {
+        area = 'leftFloatArea'
+      } else if (parsedConfig.type === 'Widget') {
+        area = 'mainArea';
+      } else {
+        area = 'leftArea';
+      }
+    }
     switch (area) {
       case 'leftArea':
       case 'left':
-        return this.leftArea.add(restConfig as any);
+        return this.leftArea.add(parsedConfig);
       case 'rightArea':
       case 'right':
-        return this.rightArea.add(restConfig as any);
+        return this.rightArea.add(parsedConfig);
       case 'topArea':
       case 'top':
-        return this.topArea.add(restConfig as any);
+        return this.topArea.add(parsedConfig);
       case 'toolbar':
-        return this.toolbar.add(restConfig as any);
+        return this.toolbar.add(parsedConfig);
       case 'mainArea':
       case 'main':
       case 'center':
       case 'centerArea':
-        return this.mainArea.add(restConfig as any);
+        return this.mainArea.add(parsedConfig);
       case 'bottomArea':
       case 'bottom':
-        return this.bottomArea.add(restConfig as any);
+        return this.bottomArea.add(parsedConfig);
       case 'leftFixedArea':
-        return this.leftFixedArea.add(restConfig as any);
+        return this.leftFixedArea.add(parsedConfig);
       case 'leftFloatArea':
-        return this.leftFloatArea.add(restConfig as any);
+        return this.leftFloatArea.add(parsedConfig);
       case 'stages':
-        return this.stages.add(restConfig as any);
+        return this.stages.add(parsedConfig);
     }
   }
 }

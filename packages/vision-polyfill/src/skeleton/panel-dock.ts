@@ -52,7 +52,7 @@ export default class PanelDock implements IWidget {
     return this._panel || this.skeleton.getPanel(this.panelName);
   }
 
-  constructor(readonly skeleton: Skeleton, private config: PanelDockConfig) {
+  constructor(readonly skeleton: Skeleton, readonly config: PanelDockConfig) {
     const { content, contentProps, panelProps, name, props } = config;
     this.name = name;
     this.id = uniqueId(`dock:${name}$`);
@@ -62,13 +62,13 @@ export default class PanelDock implements IWidget {
         type: "Panel",
         name: this.panelName,
         props: {
+          // FIXME! give default title for panel
           // title: props ? composeTitle(props?.title, props?.icon, props?.description, true) : '',
           ...panelProps,
         },
         contentProps,
         content,
-        // FIXME! dirty fixed
-        area: panelProps?.area || 'leftFloatArea'
+        area: panelProps?.area
       }) as Panel;
     }
   }

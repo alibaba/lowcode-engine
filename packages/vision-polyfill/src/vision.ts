@@ -61,6 +61,7 @@ const context = new VisualEngineContext();
 
 const VisualEngine = {
   editor,
+  skeleton,
   /**
    * VE.Popup
    */

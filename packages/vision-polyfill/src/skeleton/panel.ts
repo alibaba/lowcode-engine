@@ -49,7 +49,7 @@ export default class Panel implements IWidget {
   private container?: WidgetContainer<Panel, PanelConfig>;
   private parent?: WidgetContainer;
 
-  constructor(readonly skeleton: Skeleton, private config: PanelConfig) {
+  constructor(readonly skeleton: Skeleton, readonly config: PanelConfig) {
     const { name, content, props = {} } = config;
     const { hideTitleBar, title, icon, description, help, shortcut } = props;
     this.name = name;
