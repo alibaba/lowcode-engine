@@ -10,7 +10,18 @@ const SamplePreview = ({ editor }: PluginProps) => {
     if (designer) {
       console.info('save schema:', designer.schema);
       localStorage.setItem('lce-dev-store', JSON.stringify(designer.schema));
-      window.open('http://30.5.157.206:3333/', 'preview');
+      fetch('http://30.5.157.206:3000/legao/save.json', {
+        method: 'POST',
+        body: JSON.stringify(designer.schema),
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
+        mode: 'cors',
+      })
+        .then((res) => res.json())
+        .then(() => {
+          window.open('http://30.5.157.206:3333/', 'preview');
+        });
     }
   };
 
