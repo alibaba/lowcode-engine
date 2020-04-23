@@ -11,7 +11,7 @@ import {
   computed,
   NestingFilter,
 } from '@ali/lowcode-globals';
-import { Node, NodeParent } from './document';
+import { Node, ParentalNode } from './document';
 import { Designer } from './designer';
 import { intl } from './locale';
 import { IconContainer } from './icons/container';
@@ -194,7 +194,7 @@ export class ComponentMeta {
     return this._transformedMetadata!;
   }
 
-  checkNestingUp(my: Node | NodeData, parent: NodeParent) {
+  checkNestingUp(my: Node | NodeData, parent: ParentalNode) {
     // 检查父子关系，直接约束型，在画布中拖拽直接掠过目标容器
     if (this.parentWhitelist) {
       return this.parentWhitelist(parent, my);

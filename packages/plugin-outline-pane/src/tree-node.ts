@@ -11,7 +11,7 @@ export default class TreeNode {
    * 是否可以展开
    */
   @computed get expandable(): boolean {
-    return this.hasChildren() || this.isSlotContainer() || this.dropDetail?.index != null;
+    return this.hasChildren() || this.hasSlots() || this.dropDetail?.index != null;
   }
 
   /**
@@ -169,50 +169,16 @@ export default class TreeNode {
   /**
    * 判断是否有"插槽"
    */
-  isSlotContainer(): boolean {
-    return this.node.isSlotContainer();
+  hasSlots(): boolean {
+    return this.node.hasSlots();
   }
 
   hasChildren(): boolean {
     return this.isContainer() && this.node.children?.notEmpty() ? true : false;
   }
 
-  /*
-  get xForValue() {
-    const node = this.node;
-    return isElementNode(node) && node.xforValue ? node.xforValue : null;
-  }
-
-  get flowHidden() {
-    return (this.node as ElementNode).flowHidden;
-  }
-
-  get flowIndex() {
-    return (this.node as ElementNode).flowIndex;
-  }
-
-  get conditionFlow() {
-    return (this.node as ElementNode).conditionFlow;
-  }
-
-  hasXIf() {
-    return hasConditionFlow(this.node);
-  }
-
-  hasXFor() {
-    const node = this.node;
-    return isElementNode(node) && node.xforFn;
-  }
-  */
-
   select(isMulti: boolean) {
     const node = this.node;
-
-    /*
-    if (this.hasXIf()) {
-      (node as ElementNode).setFlowVisible();
-    }
-    */
 
     const selection = node.document.selection;
     if (isMulti) {

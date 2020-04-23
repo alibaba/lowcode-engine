@@ -10,7 +10,7 @@ import {
   isVertical
 } from '../../designer';
 import { ISimulatorHost, } from '../../simulator';
-import {NodeParent } from '../../document';
+import {ParentalNode } from '../../document';
 import './insertion.less';
 
 interface InsertionData {
@@ -24,7 +24,7 @@ interface InsertionData {
 /**
  * 处理拖拽子节点(INode)情况
  */
-function processChildrenDetail(sim: ISimulatorHost, container: NodeParent, detail: LocationChildrenDetail): InsertionData {
+function processChildrenDetail(sim: ISimulatorHost, container: ParentalNode, detail: LocationChildrenDetail): InsertionData {
   let edge = detail.edge || null;
 
   if (!edge) {

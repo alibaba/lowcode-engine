@@ -13,6 +13,13 @@ export interface NodeSchema {
   loop?: CompositeValue;
   loopArgs?: [string, string];
   children?: NodeData | NodeData[];
+
+  // ------- future support -----
+  conditionGroup?: string;
+  title?: string;
+  ignore?: boolean;
+  locked?: boolean;
+  hidden?: boolean;
 }
 
 export type PropsMap = CompositeObject;
@@ -30,7 +37,7 @@ export function isDOMText(data: any): data is DOMText {
 
 export type DOMText = string;
 
-export interface RootSchema extends NodeSchema {
+export interface ContainerSchema extends NodeSchema {
   componentName: string; // 'Block' | 'Page' | 'Component';
   fileName: string;
   meta?: object;
@@ -48,16 +55,22 @@ export interface RootSchema extends NodeSchema {
   defaultProps?: CompositeObject;
 }
 
-export interface BlockSchema extends RootSchema {
-  componentName: 'Block';
-}
-
-export interface PageSchema extends RootSchema {
+export interface PageSchema extends ContainerSchema {
   componentName: 'Page';
 }
 
-export interface ComponentSchema extends RootSchema {
+export interface ComponentSchema extends ContainerSchema {
   componentName: 'Component';
+}
+
+export type RootSchema = PageSchema | ComponentSchema;
+
+export interface BlockSchema extends NodeSchema {
+  componentName: 'Block';
+}
+export interface SlotSchema extends NodeSchema {
+  componentName: 'Slot';
+  params?: string[];
 }
 
 export interface ProjectSchema {

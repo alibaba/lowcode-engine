@@ -88,7 +88,6 @@ export interface DragNodeObject {
 export interface DragNodeDataObject {
   type: DragObjectType.NodeData;
   data: NodeSchema | NodeSchema[];
-  maps?: { [componentName: string]: string };
   thumbnail?: string;
   description?: string;
   [extra: string]: any;
@@ -233,7 +232,7 @@ export class Dragon {
     const masterSensors = this.getMasterSensors();
     const handleEvents = makeEventsHandler(boostEvent, masterSensors);
     const newBie = !isDragNodeObject(dragObject);
-    const forceCopyState = isDragNodeObject(dragObject) && dragObject.nodes.some((node) => node.isSlotRoot);
+    const forceCopyState = isDragNodeObject(dragObject) && dragObject.nodes.some((node) => node.isSlot());
     const isBoostFromDragAPI = boostEvent.type.substr(0, 4) === 'drag';
     let lastSensor: ISensor | undefined;
 

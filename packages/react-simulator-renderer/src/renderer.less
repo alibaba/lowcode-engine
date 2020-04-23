@@ -57,6 +57,29 @@ html.engine-blur #engine {
   -webkit-filter: blur(4px);
 }
 
+.lc-container {
+  &:empty {
+    background: #f2f3f5;
+    color: #a7b1bd;
+    outline: 1px dashed rgba(31, 56, 88, 0.2);
+    outline-offset: -1px !important;
+    height: 66px;
+    max-height: 100%;
+    min-width: 140px;
+    text-align: center;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    &:before {
+      content: '\62D6\62FD\7EC4\4EF6\6216\6A21\677F\5230\8FD9\91CC';
+      font-size: 14px;
+      z-index: 1;
+      width: 100%;
+      white-space: nowrap;
+    }
+  }
+}
+
 .engine-empty {
   background: #f2f3f5;
   color: #a7b1bd;

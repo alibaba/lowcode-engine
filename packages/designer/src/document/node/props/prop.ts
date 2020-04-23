@@ -2,11 +2,11 @@ import {
   CompositeValue,
   isJSExpression,
   isJSSlot,
-  NodeData,
-  isNodeSchema,
   untracked,
   computed,
-  obx
+  obx,
+  JSSlot,
+  SlotSchema
 } from '@ali/lowcode-globals';
 import { uniqueId } from '@ali/lowcode-globals';
 import { isPlainObject } from '@ali/lowcode-globals';
@@ -14,7 +14,8 @@ import { hasOwnProperty } from '@ali/lowcode-globals';
 import { PropStash } from './prop-stash';
 import { valueToSource } from './value-to-source';
 import { Props } from './props';
-import { Node } from '../node';
+import { SlotNode } from '../node';
+import { ExportType } from '../export-type';
 
 export const UNSET = Symbol.for('unset');
 export type UNSET = typeof UNSET;
@@ -45,10 +46,10 @@ export class Prop implements IPropParent {
    * 属性值
    */
   @computed get value(): CompositeValue | UNSET {
-    return this.export(true);
+    return this.export(ExportType.ForSerilize);
   }
 
-  export(serialize = false): CompositeValue | UNSET {
+  export(exporType: ExportType = ExportType.ForSave): CompositeValue | UNSET {
     const type = this._type;
 
     if (type === 'unset') {
@@ -60,9 +61,18 @@ export class Prop implements IPropParent {
     }
 
     if (type === 'slot') {
+      const schema = this._slotNode!.export(exporType);
+      if (exporType === ExportType.ForSave) {
+        return {
+          type: 'JSSlot',
+          params: schema.params,
+          value: schema.children,
+        };
+      }
       return {
         type: 'JSSlot',
-        value: this._slotNode!.export(serialize),
+        params: schema.params,
+        value: schema,
       };
     }
 
@@ -72,7 +82,7 @@ export class Prop implements IPropParent {
       }
       const maps: any = {};
       this.items!.forEach((prop, key) => {
-        const v = prop.export(serialize);
+        const v = prop.export(exporType);
         if (v !== UNSET) {
           maps[key] = v;
         }
@@ -85,7 +95,7 @@ export class Prop implements IPropParent {
         return this._value;
       }
       return this.items!.map((prop) => {
-        const v = prop.export(serialize);
+        const v = prop.export(exporType);
         return v === UNSET ? null : v;
       });
     }
@@ -103,7 +113,7 @@ export class Prop implements IPropParent {
     }
     // todo: JSFunction ...
     if (this.type === 'slot') {
-      return JSON.stringify(this._slotNode!.export(false));
+      return JSON.stringify(this._slotNode!.export(ExportType.ForSave));
     }
     return this._code != null ? this._code : JSON.stringify(this.value);
   }
@@ -161,7 +171,7 @@ export class Prop implements IPropParent {
       this._type = 'list';
     } else if (isPlainObject(val)) {
       if (isJSSlot(val)) {
-        this.setAsSlot(val.value);
+        this.setAsSlot(val);
         return;
       }
       if (isJSExpression(val)) {
@@ -181,7 +191,7 @@ export class Prop implements IPropParent {
   }
 
   @computed getValue(): CompositeValue {
-    const v = this.export(true);
+    const v = this.export(ExportType.ForSerilize);
     if (v === UNSET) {
       return null;
     }
@@ -204,24 +214,25 @@ export class Prop implements IPropParent {
     }
   }
 
-  private _slotNode?: Node;
+  private _slotNode?: SlotNode;
   get slotNode() {
     return this._slotNode;
   }
-  setAsSlot(data: NodeData) {
+  setAsSlot(data: JSSlot) {
     this._type = 'slot';
-    if (
-      this._slotNode &&
-      isNodeSchema(data) &&
-      (!data.id || this._slotNode.id === data.id) &&
-      this._slotNode.componentName === data.componentName
-    ) {
-      this._slotNode.import(data);
+    const slotSchema: SlotSchema = {
+      componentName: 'Slot',
+      title: data.title,
+      params: data.params,
+      children: data.value,
+    };
+    if (this._slotNode) {
+      this._slotNode.import(slotSchema);
     } else {
-      this._slotNode?.internalSetParent(null);
       const owner = this.props.owner;
-      this._slotNode = owner.document.createNode(data, this);
+      this._slotNode = owner.document.createNode<SlotNode>(slotSchema);
       this._slotNode.internalSetParent(owner as any);
+      this._slotNode.internalSetSlotFor(this);
     }
     this.dispose();
   }

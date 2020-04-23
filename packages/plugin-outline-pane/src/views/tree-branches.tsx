@@ -108,7 +108,7 @@ class TreeNodeSlots extends Component<{
   }
   render() {
     const { treeNode } = this.props;
-    if (!treeNode.isSlotContainer()) {
+    if (!treeNode.hasSlots()) {
       return null;
     }
     return (

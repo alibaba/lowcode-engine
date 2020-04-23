@@ -1,4 +1,4 @@
-import { DropLocation, NodeParent, isLocationChildrenDetail } from '@ali/lowcode-designer';
+import { DropLocation, ParentalNode, isLocationChildrenDetail } from '@ali/lowcode-designer';
 
 const IndentSensitive = 15;
 export class IndentTrack {
@@ -6,7 +6,7 @@ export class IndentTrack {
   reset() {
     this.indentStart = null;
   }
-  getIndentParent(lastLoc: DropLocation, loc: DropLocation): [NodeParent, number] | null {
+  getIndentParent(lastLoc: DropLocation, loc: DropLocation): [ParentalNode, number] | null {
     if (
       lastLoc.target !== loc.target ||
       !isLocationChildrenDetail(lastLoc.detail) ||
@@ -33,7 +33,7 @@ export class IndentTrack {
     const index = loc.detail.index;
 
     if (direction === 'left') {
-      if (!parent.parent || parent.isSlotRoot || index < parent.children.size) {
+      if (parent.isSlot() || !parent.parent || index < parent.children.size) {
         return null;
       }
       return [parent.parent, parent.index + 1];

@@ -198,3 +198,10 @@ export function parseProps(component: any): PropConfig[] {
 
   return Object.keys(result).map(key => result[key]);
 }
+
+export function parseMetadata(component: any): any {
+  return {
+    props: parseProps(component),
+    ...component.componentMetadata,
+  };
+}

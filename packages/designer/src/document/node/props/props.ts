@@ -2,6 +2,7 @@ import { PropsMap, PropsList, CompositeValue, computed, obx, uniqueId } from '@a
 import { PropStash } from './prop-stash';
 import { Prop, IPropParent, UNSET } from './prop';
 import { Node } from '../node';
+import { ExportType } from '../export-type';
 
 export const EXTRA_KEY_PREFIX = '__';
 
@@ -79,7 +80,7 @@ export class Props implements IPropParent {
     });
   }
 
-  export(serialize = false): { props?: PropsMap | PropsList; extras?: object } {
+  export(exportType: ExportType = ExportType.ForSave): { props?: PropsMap | PropsList; extras?: object } {
     if (this.items.length < 1) {
       return {};
     }
@@ -88,7 +89,7 @@ export class Props implements IPropParent {
     if (this.type === 'list') {
       props = [];
       this.items.forEach(item => {
-        let value = item.export(serialize);
+        let value = item.export(exportType);
         if (value === UNSET) {
           value = null;
         }
@@ -111,7 +112,7 @@ export class Props implements IPropParent {
           // todo ...spread
           return;
         }
-        let value = item.export(serialize);
+        let value = item.export(exportType);
         if (value === UNSET) {
           value = null;
         }

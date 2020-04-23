@@ -304,13 +304,24 @@ export function upgradePropConfig(config: OldPropConfig) {
     extraProps.defaultValue = initialValue;
   }
 
-  const initialFn = initial || initialValue;
+  let initialFn = initial || initialValue;
+
+  if (accessor) {
+    extraProps.getValue = (field: Field, fieldValue: any) => {
+      return accessor.call(field, fieldValue);
+    };
+    if (!initialFn) {
+      // FIXME!
+      initialFn
+    }
+  }
   extraProps.initialValue = (field: Field, defaultValue?: any) => {
     if (defaultValue === undefined) {
       defaultValue = extraProps.defaultValue;
     }
 
     if (typeof initialFn === 'function') {
+      // ?
       return initialFn(null, defaultValue);
     }
 
@@ -324,11 +335,6 @@ export function upgradePropConfig(config: OldPropConfig) {
         field.setValue(value);
       }
     }
-  }
-  if (accessor) {
-    extraProps.getValue = (field: Field, fieldValue: any) => {
-      return accessor.call(field, fieldValue);
-    };
   }
   if (mutator) {
     extraProps.setValue = (field: Field, value: any) => {
@@ -535,9 +541,17 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     experimental.context = context;
   }
   if (snippets) {
-    experimental.snippets = snippets;
-  }
-  if (defaultProps || initialChildren) {
+    experimental.snippets = snippets.map(data => {
+      const { schema = {} } = data;
+      if (initialChildren && !schema.children) {
+        schema.children = initialChildren;
+      }
+      return {
+        ...data,
+        schema,
+      };
+    });
+  } else if (defaultProps || initialChildren) {
     const snippet = {
       screenshot: icon,
       label: title,

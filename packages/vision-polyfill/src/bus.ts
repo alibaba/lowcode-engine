@@ -19,6 +19,7 @@ export class Bus {
   // alias to unsub
   off(event: string, func: (...args: any[]) => any) {
     this.unsub(event, func);
+
   }
 
   // alias to pub

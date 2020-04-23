@@ -66,7 +66,7 @@ export default class TreeTitle extends Component<{
     const { editing } = this.state;
     const isCNode = !treeNode.isRoot();
     const { node } = treeNode;
-    const isNodeParent = node.isNodeParent;
+    const isNodeParent = node.isParental();
     let style: any;
     if (isCNode) {
       const depth = treeNode.depth;

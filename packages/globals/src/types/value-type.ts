@@ -1,4 +1,4 @@
-import { NodeSchema } from './schema';
+import { NodeSchema, NodeData } from './schema';
 
 // 表达式
 export interface JSExpression {
@@ -15,9 +15,10 @@ export interface JSExpression {
 
 export interface JSSlot {
   type: 'JSSlot';
+  title?: string;
   // 函数的入参
   params?: string[];
-  value: NodeSchema[];
+  value?: NodeData[] | NodeData;
 }
 
 // JSON 基本类型

@@ -386,6 +386,7 @@ export default class BaseEngine extends PureComponent {
   __parseProps = (props, self, path, info) => {
     const { schema, Comp, componentInfo = {} } = info;
     const propInfo = getValue(componentInfo.props, path);
+    // FIXME! 将这行逻辑外置，解耦，线上环境不要验证参数，调试环境可以有，通过传参自定义
     const propType = propInfo && propInfo.extra && propInfo.extra.propType;
     const ignoreParse = schema.__ignoreParse || [];
     const checkProps = (value) => {

@@ -1,9 +1,10 @@
 import { NodeData, isNodeSchema, obx, computed } from '@ali/lowcode-globals';
-import { Node, NodeParent } from './node';
+import { Node, ParentalNode } from './node';
+import { ExportType } from './export-type';
 
 export class NodeChildren {
   @obx.val private children: Node[];
-  constructor(readonly owner: NodeParent, data: NodeData | NodeData[]) {
+  constructor(readonly owner: ParentalNode, data: NodeData | NodeData[]) {
     this.children = (Array.isArray(data) ? data : [data]).map(child => {
       return this.owner.document.createNode(child);
     });
@@ -15,10 +16,16 @@ export class NodeChildren {
 
   /**
    * 导出 schema
-   * @param serialize 序列化，加 id 标识符，用于储存为操作记录
    */
-  export(serialize = false): NodeData[] {
-    return this.children.map(node => node.export(serialize));
+  export(exportType: ExportType = ExportType.ForSave): NodeData[] {
+    return this.children.map(node => {
+      const data = node.export(exportType);
+      if (node.isLeaf() && ExportType.ForSave === exportType) {
+        // FIXME: filter empty
+        return data.children as NodeData;
+      }
+      return data;
+    });
   }
 
   import(data?: NodeData | NodeData[], checkId = false) {

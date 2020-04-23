@@ -1,16 +1,16 @@
-import { NodeParent, DropLocation, isLocationChildrenDetail, LocateEvent } from '@ali/lowcode-designer';
+import { ParentalNode, DropLocation, isLocationChildrenDetail, LocateEvent } from '@ali/lowcode-designer';
 
 /**
  * 停留检查计时器
  */
 export default class DwellTimer {
   private timer: number | undefined;
-  private previous?: NodeParent;
+  private previous?: ParentalNode;
   private event?: LocateEvent;
 
-  constructor(private decide: (node: NodeParent, event: LocateEvent) => void, private timeout: number = 500) {}
+  constructor(private decide: (node: ParentalNode, event: LocateEvent) => void, private timeout: number = 500) {}
 
-  focus(node: NodeParent, event: LocateEvent) {
+  focus(node: ParentalNode, event: LocateEvent) {
     this.event = event;
     if (this.previous === node) {
       return;

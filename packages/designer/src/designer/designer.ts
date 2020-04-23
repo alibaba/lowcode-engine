@@ -10,7 +10,7 @@ import {
   autorun,
 } from '@ali/lowcode-globals';
 import { Project } from '../project';
-import { Node, DocumentModel, insertChildren, isRootNode, NodeParent } from '../document';
+import { Node, DocumentModel, insertChildren, isRootNode, ParentalNode } from '../document';
 import { ComponentMeta } from '../component-meta';
 import { INodeSelector, Component } from '../simulator';
 import { Scroller, IScrollable } from './scroller';
@@ -201,7 +201,7 @@ export class Designer {
   /**
    * 获得合适的插入位置
    */
-  getSuitableInsertion(): { target: NodeParent; index?: number } | null {
+  getSuitableInsertion(): { target: ParentalNode; index?: number } | null {
     const activedDoc = this.project.currentDocument;
     if (!activedDoc) {
       return null;

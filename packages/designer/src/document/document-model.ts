@@ -1,5 +1,4 @@
 import {
-  RootSchema,
   NodeData,
   isJSExpression,
   isDOMText,
@@ -9,16 +8,26 @@ import {
   autorun,
   isNodeSchema,
   uniqueId,
+  PageSchema,
+  ComponentSchema,
+  RootSchema,
 } from '@ali/lowcode-globals';
 import { Project } from '../project';
 import { ISimulatorHost } from '../simulator';
 import { ComponentMeta } from '../component-meta';
 import { isDragNodeDataObject, DragNodeObject, DragNodeDataObject, DropLocation } from '../designer';
-import { Node, isNodeParent, insertChildren, insertChild, NodeParent, isNode } from './node/node';
+import { Node, insertChildren, insertChild, isNode, RootNode, ParentalNode } from './node/node';
 import { Selection } from './selection';
-import { RootNode } from './node/root-node';
 import { History } from './history';
-import { Prop } from './node/props/prop';
+import { ExportType } from './node';
+
+export type GetDataType<T, NodeType> = T extends undefined
+  ? NodeType extends {
+      schema: infer R;
+    }
+    ? R
+    : any
+  : T;
 
 export class DocumentModel {
   /**
@@ -58,7 +67,7 @@ export class DocumentModel {
     this.rootNode.getExtraProp('fileName', true)?.setValue(fileName);
   }
 
-  private _modalNode?: NodeParent;
+  private _modalNode?: ParentalNode;
   private _blank?: boolean;
   get modalNode() {
     return this._modalNode;
@@ -81,8 +90,9 @@ export class DocumentModel {
       this._blank = true;
     }
 
-    this.rootNode = this.createRootNode(schema || {
+    this.rootNode = this.createNode<RootNode>(schema || {
       componentName: 'Page',
+      id: 'root',
       fileName: ''
     });
 
@@ -130,7 +140,7 @@ export class DocumentModel {
   /**
    * 根据 schema 创建一个节点
    */
-  createNode(data: NodeData, slotFor?: Prop): Node {
+  createNode<T extends Node = Node, C = undefined>(data: GetDataType<C, T>): T {
     let schema: any;
     if (isDOMText(data) || isJSExpression(data)) {
       schema = {
@@ -150,14 +160,13 @@ export class DocumentModel {
           // will move to another position
           // todo: this.activeNodes?.push(node);
         }
-        node.internalSetSlotFor(slotFor);
         node.import(schema, true);
       } else if (node) {
         node = null;
       }
     }
     if (!node) {
-      node = new Node(this, schema, slotFor);
+      node = new Node(this, schema);
       // will add
       // todo: this.activeNodes?.push(node);
     }
@@ -169,27 +178,20 @@ export class DocumentModel {
     this.nodesMap.set(node.id, node);
     this.nodes.add(node);
 
-    return node;
-  }
-
-  private createRootNode(schema: RootSchema) {
-    const node = new RootNode(this, schema);
-    this.nodesMap.set(node.id, node);
-    this.nodes.add(node);
-    return node;
+    return node as any;
   }
 
   /**
    * 插入一个节点
    */
-  insertNode(parent: NodeParent, thing: Node | NodeData, at?: number | null, copy?: boolean): Node {
+  insertNode(parent: ParentalNode, thing: Node | NodeData, at?: number | null, copy?: boolean): Node {
     return insertChild(parent, thing, at, copy);
   }
 
   /**
    * 插入多个节点
    */
-  insertNodes(parent: NodeParent, thing: Node[] | NodeData[], at?: number | null, copy?: boolean) {
+  insertNodes(parent: ParentalNode, thing: Node[] | NodeData[], at?: number | null, copy?: boolean) {
     return insertChildren(parent, thing, at, copy);
   }
 
@@ -249,7 +251,7 @@ export class DocumentModel {
       return null;
     }
     const wrapper = this.createNode(schema);
-    if (isNodeParent(wrapper)) {
+    if (wrapper.isParental()) {
       const first = nodes[0];
       // TODO: check nesting rules x 2
       insertChild(first.parent!, wrapper, first.index);
@@ -270,9 +272,13 @@ export class DocumentModel {
   }
 
   import(schema: RootSchema, checkId = false) {
-    this.rootNode.import(schema, checkId);
+    this.rootNode.import(schema as any, checkId);
     // todo: purge something
     // todo: select added and active track added
+  }
+
+  export(exportType: ExportType = ExportType.ForSerilize) {
+    return this.rootNode.export(exportType);
   }
 
   /**
@@ -409,7 +415,7 @@ export class DocumentModel {
     // todo:
   }
 
-  checkNesting(dropTarget: NodeParent, dragObject: DragNodeObject | DragNodeDataObject): boolean {
+  checkNesting(dropTarget: ParentalNode, dragObject: DragNodeObject | DragNodeDataObject): boolean {
     let items: Array<Node | NodeSchema>;
     if (isDragNodeDataObject(dragObject)) {
       items = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
@@ -419,7 +425,7 @@ export class DocumentModel {
     return items.every((item) => this.checkNestingDown(dropTarget, item));
   }
 
-  checkDropTarget(dropTarget: NodeParent, dragObject: DragNodeObject | DragNodeDataObject): boolean {
+  checkDropTarget(dropTarget: ParentalNode, dragObject: DragNodeObject | DragNodeDataObject): boolean {
     let items: Array<Node | NodeSchema>;
     if (isDragNodeDataObject(dragObject)) {
       items = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
@@ -432,7 +438,7 @@ export class DocumentModel {
   /**
    * 检查对象对父级的要求，涉及配置 parentWhitelist
    */
-  checkNestingUp(parent: NodeParent, obj: NodeSchema | Node): boolean {
+  checkNestingUp(parent: ParentalNode, obj: NodeSchema | Node): boolean {
     if (isNode(obj) || isNodeSchema(obj)) {
       const config = isNode(obj) ? obj.componentMeta : this.getComponentMeta(obj.componentName);
       if (config) {
@@ -446,7 +452,7 @@ export class DocumentModel {
   /**
    * 检查投放位置对子级的要求，涉及配置 childWhitelist
    */
-  checkNestingDown(parent: NodeParent, obj: NodeSchema | Node): boolean {
+  checkNestingDown(parent: ParentalNode, obj: NodeSchema | Node): boolean {
     const config = parent.componentMeta;
     return config.checkNestingDown(parent, obj) && this.checkNestingUp(parent, obj);
   }

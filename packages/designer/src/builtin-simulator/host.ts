@@ -2,7 +2,7 @@ import { obx, autorun, computed } from '@ali/lowcode-globals';
 import { ISimulatorHost, Component, NodeInstance, ComponentInstance } from '../simulator';
 import Viewport from './viewport';
 import { createSimulator } from './create-simulator';
-import { Node, NodeParent, DocumentModel, isNodeParent, isNode, contains, isRootNode } from '../document';
+import { Node, ParentalNode, DocumentModel, isNode, contains, isRootNode } from '../document';
 import ResourceConsumer from './resource-consumer';
 import { AssetLevel, Asset, AssetList, assetBundle, assetItem, AssetType, getPublicPath } from '@ali/lowcode-globals';
 import {
@@ -21,7 +21,7 @@ import {
   Rect,
   CanvasPoint,
 } from '../designer';
-import { parseProps } from './utils/parse-props';
+import { parseProps, parseMetadata } from './utils/parse-metadata';
 import { isElement, hotkey } from '@ali/lowcode-globals';
 import { ComponentMetadata } from '@ali/lowcode-globals';
 import { BuiltinSimulatorRenderer } from './renderer';
@@ -387,16 +387,19 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
     const component = this.getComponent(componentName);
 
-    if (component) {
-      parseProps(component as any);
+    if (!component) {
+      return {
+        componentName,
+      };
     }
 
     // TODO:
     // 1. generate builtin div/p/h1/h2
     // 2. read propTypes
+
     return {
       componentName,
-      props: parseProps(this.getComponent(componentName)),
+      ...parseMetadata(component),
     };
   }
 
@@ -854,7 +857,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       container = currentRoot;
     }
 
-    if (!isNodeParent(container)) {
+    if (!container.isParental()) {
       container = container.parent || currentRoot;
     }
 
@@ -943,7 +946,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     return null;
   }
 
-  isAcceptable(container: NodeParent): boolean {
+  isAcceptable(container: ParentalNode): boolean {
     return false;
     /*
     const meta = container.componentMeta;
@@ -1006,7 +1009,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   /**
    * 查找邻近容器
    */
-  getNearByContainer(container: NodeParent, e: LocateEvent) {
+  getNearByContainer(container: ParentalNode, e: LocateEvent) {
     /*
     const children = container.children;
     if (!children || children.length < 1) {
@@ -1110,6 +1113,6 @@ function getMatched(elements: Array<Element | Text>, selector: string): Element 
 }
 
 interface DropContainer {
-  container: NodeParent;
+  container: ParentalNode;
   instance: ComponentInstance;
 }

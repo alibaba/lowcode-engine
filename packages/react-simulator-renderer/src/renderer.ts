@@ -13,6 +13,8 @@ import { cursor } from '@ali/lowcode-globals';
 import { setNativeSelection } from '@ali/lowcode-globals';
 import { RootSchema, NpmInfo } from '@ali/lowcode-globals';
 import { BuiltinSimulatorRenderer, NodeInstance } from '@ali/lowcode-designer';
+import Slot from './builtin-components/slot';
+import Leaf from './builtin-components/leaf';
 
 export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   readonly isSimulatorRenderer = true;
@@ -25,7 +27,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
       // sync layout config
 
       // sync schema
-      this._schema = host.document.schema;
+      this._schema = host.document.export(1);
 
       // todo: split with others, not all should recompute
       if (this._libraryMap !== host.libraryMap || this._componentsMap !== host.designer.componentsMap) {
@@ -311,8 +313,17 @@ export interface LibraryMap {
   [key: string]: string;
 }
 
+// Slot/Leaf and Fragment|FunctionComponent polyfill(ref)
+
+const builtinComponents = {
+  Slot,
+  Leaf,
+};
+
 function buildComponents(libraryMap: LibraryMap, componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> }) {
-  const components: any = {};
+  const components: any = {
+    ...builtinComponents
+  };
   Object.keys(componentsMap).forEach((componentName) => {
     let component = componentsMap[componentName];
     if (isReactComponent(component)) {

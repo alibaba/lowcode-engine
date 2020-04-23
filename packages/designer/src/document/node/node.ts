@@ -8,6 +8,9 @@ import {
   TitleContent,
   obx,
   computed,
+  SlotSchema,
+  PageSchema,
+  ComponentSchema,
 } from '@ali/lowcode-globals';
 import { Props, EXTRA_KEY_PREFIX } from './props/props';
 import { DocumentModel } from '../document-model';
@@ -15,6 +18,7 @@ import { NodeChildren } from './node-children';
 import { Prop } from './props/prop';
 import { ComponentMeta } from '../../component-meta';
 import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
+import { ExportType } from './export-type';
 
 /**
  * 基础节点
@@ -35,8 +39,36 @@ import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
  *  locked         can not select/hover/ item on canvas but can control on outline
  *  hidden         not visible on canvas
  *  slotArgs       like loopArgs, for slot node
+ *
+ * 根容器节点
+ *
+ * [Node Properties]
+ *  componentName: Page/Block/Component
+ *  props
+ *  children
+ *
+ * [Root Container Extra Properties]
+ *  fileName
+ *  meta
+ *  state
+ *  defaultProps
+ *  dataSource
+ *  lifeCycles
+ *  methods
+ *  css
+ *
+ * [Directives **not used**]
+ *  loop
+ *  loopArgs
+ *  condition
+ *  ------- future support -----
+ *  conditionGroup
+ *  title
+ *  ignore
+ *  locked
+ *  hidden
  */
-export class Node {
+export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 是节点实例
    */
@@ -63,11 +95,11 @@ export class Node {
    */
   readonly props: Props;
   protected _children?: NodeChildren;
-  @obx.ref private _parent: NodeParent | null = null;
+  @obx.ref private _parent: ParentalNode | null = null;
   /**
    * 父级节点
    */
-  get parent(): NodeParent | null {
+  get parent(): ParentalNode | null {
     return this._parent;
   }
   /**
@@ -100,48 +132,71 @@ export class Node {
     return this.componentMeta.title;
   }
 
-  get isSlotRoot(): boolean {
-    return this._slotFor != null;
-  }
-
-  isRoot() {
-    return (this.document.rootNode as any) == this;
-  }
-
-  constructor(readonly document: DocumentModel, nodeSchema: NodeSchema, slotFor?: Prop) {
+  constructor(readonly document: DocumentModel, nodeSchema: Schema) {
     const { componentName, id, children, props, ...extras } = nodeSchema;
     this.id = id || `node$${document.nextId()}`;
     this.componentName = componentName;
-    this._slotFor = slotFor;
     let _props: Props;
-    if (isNodeParent(this)) {
-      _props = new Props(this, props, extras);
-      this._children = new NodeChildren(this as NodeParent, children || []);
-      this._children.interalInitParent();
-    } else {
+    if (this.componentName === 'Leaf') {
       _props = new Props(this, {
         children: isDOMText(children) || isJSExpression(children) ? children : '',
       });
+    } else {
+      _props = new Props(this, this.buildProps(props), extras);
+      this._children = new NodeChildren(this as ParentalNode, children || []);
+      this._children.interalInitParent();
     }
     this.props = _props;
+  }
+
+  private buildProps(props: any): any {
+    // TODO: run componentMeta(initials|initialValue|accessor)
+    return props;
+  }
+
+  isContainer(): boolean {
+    return this.isParental() && this.componentMeta.isContainer;
+  }
+
+  isRoot(): this is RootNode {
+    return this.document.rootNode == this as any;
+  }
+
+  isPage(): this is PageNode {
+    return this.isRoot() && this.componentName === 'Page';
+  }
+
+  isComponent(): this is ComponentNode {
+    return this.isRoot() && this.componentName === 'Component';
+  }
+
+  isSlot(): this is SlotNode {
+    return this._slotFor != null && this.componentName === 'Slot';
   }
 
   /**
    * 是否一个父亲类节点
    */
-  get isNodeParent(): boolean {
-    return this.componentName !== 'Leaf';
+  isParental(): this is ParentalNode {
+    return !this.isLeaf();
+  }
+
+  /**
+   * 终端节点，内容一般为 文字 或者 表达式
+   */
+  isLeaf(): this is LeafNode {
+    return this.componentName === 'Leaf';
   }
 
   /**
    * 内部方法，请勿使用
    */
-  internalSetParent(parent: NodeParent | null) {
+  internalSetParent(parent: ParentalNode | null) {
     if (this._parent === parent) {
       return;
     }
 
-    if (this._parent && !this.isSlotRoot) {
+    if (!this.isSlot() && this._parent) {
       this._parent.children.delete(this);
     }
 
@@ -160,6 +215,9 @@ export class Node {
     this._slotFor = slotFor;
   }
 
+  /**
+   * 关联属性
+   */
   get slotFor() {
     return this._slotFor;
   }
@@ -168,7 +226,7 @@ export class Node {
    * 移除当前节点
    */
   remove() {
-    if (this.parent && !this.isSlotRoot) {
+    if (!this.isSlot() && this.parent) {
       this.parent.children.delete(this, true);
     }
   }
@@ -199,17 +257,13 @@ export class Node {
   }
 
   @computed get propsData(): PropsMap | PropsList | null {
-    if (!this.isNodeParent || this.componentName === 'Fragment') {
+    if (!this.isParental() || this.componentName === 'Fragment') {
       return null;
     }
-    return this.props.export(true).props || null;
+    return this.props.export(ExportType.ForSerilize).props || null;
   }
 
-  isContainer() {
-    return this.isNodeParent && this.componentMeta.isContainer;
-  }
-
-  @computed isSlotContainer() {
+  @computed hasSlots() {
     for (const item of this.props) {
       if (item.type === 'slot') {
         return true;
@@ -280,11 +334,11 @@ export class Node {
     return v != null && v !== '';
   }
 
-  wrapWith(schema: NodeSchema) {
+  wrapWith(schema: Schema) {
     // todo
   }
 
-  replaceWith(schema: NodeSchema, migrate = true) {
+  replaceWith(schema: Schema, migrate = true) {
     // reuse the same id? or replaceSelection
     //
   }
@@ -366,22 +420,18 @@ export class Node {
   /**
    * 获取符合搭建协议-节点 schema 结构
    */
-  get schema(): NodeSchema {
-    // FIXME! serilize?
-    // for design - pass to Renderer
-    // for save production data
-    // for serilize mutation record
-    return this.export(true);
+  get schema(): Schema {
+    return this.export(ExportType.ForSave);
   }
 
-  set schema(data: NodeSchema) {
+  set schema(data: Schema) {
     this.import(data);
   }
 
-  import(data: NodeSchema, checkId = false) {
+  import(data: Schema, checkId = false) {
     const { componentName, id, children, props, ...extras } = data;
 
-    if (isNodeParent(this)) {
+    if (this.isParental()) {
       this.props.import(props, extras);
       (this._children as NodeChildren).import(children, checkId);
     } else {
@@ -391,32 +441,32 @@ export class Node {
 
   /**
    * 导出 schema
-   * @param serialize 序列化，加 id 标识符，用于储存为操作记录
    */
-  export(serialize = false): NodeSchema {
+  export(exportType: ExportType = ExportType.ForSave): Schema {
+    // run transducers
+    // run
     const baseSchema: any = {
-      componentName: this.componentName === 'Leaf' ? 'Fragment' : this.componentName,
+      componentName: this.componentName,
     };
 
-    if (serialize) {
+    if (exportType !== ExportType.ForSave) {
       baseSchema.id = this.id;
     }
 
-    if (!isNodeParent(this)) {
-      baseSchema.children = this.props.get('children')?.export(serialize);
-      // FIXME!
-      return baseSchema.children;
+    if (this.isLeaf()) {
+      baseSchema.children = this.props.get('children')?.export(exportType);
+      return baseSchema;
     }
 
-    const { props = {}, extras } = this.props.export(serialize) || {};
+    const { props = {}, extras } = this.props.export(exportType) || {};
     const schema: any = {
       ...baseSchema,
       props,
       ...extras,
     };
 
-    if (this.children.size > 0) {
-      schema.children = this.children.export(serialize);
+    if (this.isParental() && this.children.size > 0) {
+      schema.children = this.children.export(exportType);
     }
 
     return schema;
@@ -468,7 +518,7 @@ export class Node {
       return;
     }
     this.purged = true;
-    if (isNodeParent(this)) {
+    if (this.isParental()) {
       this.children.purge();
     }
     this.props.purge();
@@ -510,7 +560,7 @@ export class Node {
   /**
    * @deprecated
    */
-  getDOMNode() {
+  getDOMNode(): any {
     const instance = this.document.simulator?.getComponentInstances(this)?.[0];
     if (!instance) {
       return;
@@ -535,17 +585,24 @@ export class Node {
   }
 }
 
-export interface NodeParent extends Node {
+export interface ParentalNode<T extends NodeSchema = NodeSchema> extends Node<T> {
   readonly children: NodeChildren;
-  readonly props: Props;
 }
+export interface LeafNode extends Node {
+  readonly children: null;
+}
+
+export interface SlotNode extends ParentalNode<SlotSchema> {}
+export interface PageNode extends ParentalNode<PageSchema> {}
+export interface ComponentNode extends ParentalNode<ComponentSchema> {}
+export type RootNode = PageNode | ComponentNode;
 
 export function isNode(node: any): node is Node {
   return node && node.isNode;
 }
 
-export function isNodeParent(node: Node): node is NodeParent {
-  return node.isNodeParent;
+export function isRootNode(node: Node): node is RootNode {
+  return node && node.isRoot();
 }
 
 export function getZLevelTop(child: Node, zLevel: number): Node | null {
@@ -568,7 +625,7 @@ export function contains(node1: Node, node2: Node): boolean {
     return true;
   }
 
-  if (!node1.isNodeParent || !node2.parent) {
+  if (!node1.isParental || !node2.parent) {
     return false;
   }
 
@@ -617,10 +674,10 @@ export function comparePosition(node1: Node, node2: Node): PositionNO {
   return PositionNO.BeforeOrAfter;
 }
 
-export function insertChild(container: NodeParent, thing: Node | NodeData, at?: number | null, copy?: boolean): Node {
+export function insertChild(container: ParentalNode, thing: Node | NodeData, at?: number | null, copy?: boolean): Node {
   let node: Node;
-  if (isNode(thing) && (copy || thing.isSlotRoot)) {
-    thing = thing.export(false);
+  if (isNode(thing) && (copy || thing.isSlot())) {
+    thing = thing.export(ExportType.ForSave);
   }
   if (isNode(thing)) {
     node = thing;
@@ -634,7 +691,7 @@ export function insertChild(container: NodeParent, thing: Node | NodeData, at?: 
 }
 
 export function insertChildren(
-  container: NodeParent,
+  container: ParentalNode,
   nodes: Node[] | NodeData[],
   at?: number | null,
   copy?: boolean,

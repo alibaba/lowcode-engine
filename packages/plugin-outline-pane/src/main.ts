@@ -13,7 +13,7 @@ import {
   isLocationChildrenDetail,
   LocationChildrenDetail,
   LocationDetailType,
-  NodeParent,
+  ParentalNode,
   contains,
   Node,
 } from '@ali/lowcode-designer';
@@ -199,7 +199,7 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
     let index: any;
     let focus: any;
     let valid = true;
-    if (target.isSlotContainer()) {
+    if (target.hasSlots()) {
       index = null;
       focus = { type: 'slots' };
     } else {
@@ -301,7 +301,7 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
         if (focusSlots) {
           this.dwell.reset();
           return designer.createLocation({
-            target: node as NodeParent,
+            target: node as ParentalNode,
             source: this.id,
             event: e,
             detail: {
@@ -342,9 +342,9 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
       index = node.index;
     }
 
-    if (node.isSlotRoot) {
+    if (node.isSlot()) {
       // 是个插槽根节点
-      if (!treeNode.isContainer() && !treeNode.isSlotContainer()) {
+      if (!treeNode.isContainer() && !treeNode.hasSlots()) {
         return designer.createLocation({
           target: node.parent!,
           source: this.id,
@@ -377,7 +377,7 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
 
     let focusNode: Node | undefined;
     // focus
-    if (!expanded && (treeNode.isContainer() || treeNode.isSlotContainer())) {
+    if (!expanded && (treeNode.isContainer() || treeNode.hasSlots())) {
       focusNode = node;
     }
 
@@ -439,7 +439,7 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
       return null;
     }
 
-    const container = treeNode.node as NodeParent;
+    const container = treeNode.node as ParentalNode;
     const detail: LocationChildrenDetail = {
       type: LocationDetailType.Children,
     };
@@ -449,10 +449,10 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
       source: this.id,
       event: e,
     };
-    const isSlotContainer = treeNode.isSlotContainer();
+    const isSlotContainer = treeNode.hasSlots();
     const isContainer = treeNode.isContainer();
 
-    if (container.isSlotRoot && !treeNode.expanded) {
+    if (container.isSlot() && !treeNode.expanded) {
       // 未展开，直接定位到内部第一个节点
       if (isSlotContainer) {
         detail.index = null;
@@ -693,7 +693,7 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
   }
 }
 
-function checkRecursion(parent: Node | undefined | null, dragObject: DragObject): parent is NodeParent {
+function checkRecursion(parent: Node | undefined | null, dragObject: DragObject): parent is ParentalNode {
   if (!parent) {
     return false;
   }
