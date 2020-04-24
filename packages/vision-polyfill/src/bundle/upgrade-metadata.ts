@@ -1,7 +1,7 @@
 import { ComponentType, ReactElement, isValidElement, ComponentClass } from 'react';
-import { isI18nData } from '@ali/lowcode-globals';
+import { isI18nData, SettingTarget } from '@ali/lowcode-globals';
 
-type Field = any;
+type Field = SettingTarget;
 
 export enum DISPLAY_TYPE {
   NONE = 'none',  // => condition'plain'
@@ -282,7 +282,6 @@ export function upgradePropConfig(config: OldPropConfig) {
       componentName: 'SlotSetter',
       initialValue: () => ({
         type: 'JSSlot',
-        // params:
         value: initialChildren
       }),
     }
@@ -315,14 +314,14 @@ export function upgradePropConfig(config: OldPropConfig) {
       initialFn
     }
   }
-  extraProps.initialValue = (field: Field, defaultValue?: any) => {
+  extraProps.initialValue = (field: Field, currentValue: any, defaultValue?: any) => {
     if (defaultValue === undefined) {
       defaultValue = extraProps.defaultValue;
     }
 
     if (typeof initialFn === 'function') {
       // ?
-      return initialFn(null, defaultValue);
+      return initialFn.call(field, currentValue, defaultValue);
     }
 
     return defaultValue;

@@ -1,9 +1,9 @@
 import { TitleContent, computed, isDynamicSetter, SetterType, DynamicSetter, FieldExtraProps, FieldConfig, CustomView, isCustomView, obx } from '@ali/lowcode-globals';
-import { Transducer } from '../utils';
-import { SettingPropEntry } from './setting-entry';
-import { SettingTarget } from './setting-target';
+import { Transducer } from './utils';
+import { SettingPropEntry } from './setting-prop-entry';
+import { SettingEntry } from './setting-entry';
 
-export class SettingField extends SettingPropEntry implements SettingTarget {
+export class SettingField extends SettingPropEntry implements SettingEntry {
   readonly isSettingField = true;
   readonly isRequired: boolean;
   readonly transducer: Transducer;
@@ -35,7 +35,7 @@ export class SettingField extends SettingPropEntry implements SettingTarget {
     this._expanded = value;
   }
 
-  constructor(readonly parent: SettingTarget, config: FieldConfig) {
+  constructor(readonly parent: SettingEntry, config: FieldConfig) {
     super(parent, config.name, config.type);
 
     const { title, items, setter, extraProps, ...rest } = config;
@@ -53,6 +53,7 @@ export class SettingField extends SettingPropEntry implements SettingTarget {
       this.initItems(items);
     }
 
+    // compatiable old config
     this.transducer = new Transducer(this, { setter });
   }
 

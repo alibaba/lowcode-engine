@@ -1,9 +1,15 @@
 import { EventEmitter } from 'events';
 import { obx, computed } from '@ali/lowcode-globals';
-import { Node, Designer, Selection } from '@ali/lowcode-designer';
+import { Node, Designer, Selection, SettingTopEntry } from '@ali/lowcode-designer';
 import { getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import Editor from '@ali/lowcode-editor-core';
-import { SettingTopEntry, generateSessionId } from './setting-entry';
+
+function generateSessionId(nodes: Node[]) {
+  return nodes
+    .map((node) => node.id)
+    .sort()
+    .join(',');
+}
 
 export class SettingsMain {
   private emitter = new EventEmitter();
@@ -24,7 +30,13 @@ export class SettingsMain {
 
   private disposeListener: () => void;
 
+  private designer?: Designer;
+
   constructor(readonly editor: Editor) {
+    this.init();
+  }
+
+  private async init() {
     const setupSelection = (selection?: Selection) => {
       if (selection) {
         this.setup(selection.getNodes());
@@ -32,17 +44,16 @@ export class SettingsMain {
         this.setup([]);
       }
     };
-    editor.on('designer.selection.change', setupSelection);
+    this.editor.on('designer.selection.change', setupSelection);
     this.disposeListener = () => {
-      editor.removeListener('designer.selection.change', setupSelection);
+      this.editor.removeListener('designer.selection.change', setupSelection);
     };
-    (async () => {
-      const designer = await editor.onceGot(Designer);
-      getTreeMaster(designer).onceEnableBuiltin(() => {
-        this.emitter.emit('outline-visible');
-      });
-      setupSelection(designer.currentSelection);
-    })();
+    const designer = await this.editor.onceGot(Designer);
+    this.designer = designer;
+    getTreeMaster(designer).onceEnableBuiltin(() => {
+      this.emitter.emit('outline-visible');
+    });
+    setupSelection(designer.currentSelection);
   }
 
   private setup(nodes: Node[]) {
@@ -57,7 +68,11 @@ export class SettingsMain {
       return;
     }
 
-    this._settings = new SettingTopEntry(this.editor, nodes);
+    if (!this.designer) {
+      this.designer = nodes[0].document.designer;
+    }
+
+    this._settings = this.designer.createSettingEntry(this.editor, nodes);
   }
 
   onceOutlineVisible(fn: () => void): () => void {

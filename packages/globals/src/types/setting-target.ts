@@ -1,12 +1,6 @@
-import { ComponentMeta, Designer, Node } from '@ali/lowcode-designer';
-import Editor from '@ali/lowcode-editor-core';
+import { IEditor } from '../di';
 
 export interface SettingTarget {
-
-  readonly nodes: Node[];
-
-  readonly componentMeta: ComponentMeta | null;
-
   /**
    * 同样类型的节点
    */
@@ -15,23 +9,26 @@ export interface SettingTarget {
   /**
    * 一个
    */
-  readonly isOneNode: boolean;
+  readonly isSingle: boolean;
 
   /**
    * 多个
    */
-  readonly isMultiNodes: boolean;
+  readonly isMultiple: boolean;
 
   /**
    * 编辑器引用
    */
-  readonly editor: Editor;
+  readonly editor: IEditor;
 
-  readonly designer: Designer;
-
+  /**
+   * 访问路径
+   */
   readonly path: Array<string| number>;
 
-  // 顶端对应 Props
+  /**
+   * 顶端
+   */
   readonly top: SettingTarget;
 
   // 父级
@@ -52,15 +49,6 @@ export interface SettingTarget {
 
   // 设置子项属性值
   setPropValue(propName: string | number, value: any): void;
-
-  // 取得兄弟项
-  getSibling(propName: string | number): SettingTarget | null;
-
-  // 取得兄弟属性值
-  getSiblingValue(propName: string | number): any;
-
-  // 设置兄弟属性值
-  setSiblingValue(propName: string | number, value: any): void;
 
   // 获取顶层附属属性值
   getExtraPropValue(propName: string): any;

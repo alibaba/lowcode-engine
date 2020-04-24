@@ -142,16 +142,22 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
         children: isDOMText(children) || isJSExpression(children) ? children : '',
       });
     } else {
-      _props = new Props(this, this.buildProps(props), extras);
+      // run initialChildren
       this._children = new NodeChildren(this as ParentalNode, children || []);
       this._children.interalInitParent();
+      _props = new Props(this, this.upgradeProps(props), extras);
     }
     this.props = _props;
   }
 
-  private buildProps(props: any): any {
+  private upgradeProps(props: any): any {
     // TODO: run componentMeta(initials|initialValue|accessor)
+    // run transform
     return props;
+  }
+
+  private transformOut() {
+
   }
 
   isContainer(): boolean {
@@ -525,7 +531,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     this.document.internalRemoveAndPurgeNode(this);
   }
 
-  // ======= compatibles ====
+  // ======= compatible apis ====
   isEmpty(): boolean {
     return this.children ? this.children.isEmpty() : true;
   }
@@ -543,6 +549,12 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
   getParent() {
     return this.parent;
+  }
+  getId() {
+    return this.id;
+  }
+  getNode() {
+    return this;
   }
 
   /**

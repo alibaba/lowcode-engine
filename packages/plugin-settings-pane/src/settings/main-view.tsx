@@ -1,12 +1,11 @@
 import React, { Component, PureComponent } from 'react';
 import { Tab, Breadcrumb } from '@alifd/next';
 import { Title, createIcon, observer } from '@ali/lowcode-globals';
-import { Node } from '@ali/lowcode-designer';
+import { Node, isSettingField, SettingField } from '@ali/lowcode-designer';
 import { Pane as OutlinePane } from '@ali/lowcode-plugin-outline-pane';
 import Editor from '@ali/lowcode-editor-core';
 import { SettingsMain } from './main';
 import SettingsPane from './settings-pane';
-import { isSettingField, SettingField } from './setting-field';
 
 @observer
 export default class SettingsMainView extends Component<{ editor: Editor }> {
@@ -25,7 +24,7 @@ export default class SettingsMainView extends Component<{ editor: Editor }> {
     if (!settings) {
       return null;
     }
-    if (settings.isMultiNodes) {
+    if (settings.isMultiple) {
       return (
         <div className="lc-settings-navigator">
           {createIcon(settings.componentMeta?.icon, { className: 'lc-settings-navigator-icon'})}

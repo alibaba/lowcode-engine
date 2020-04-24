@@ -1,5 +1,6 @@
 import { TitleContent } from './title';
 import { SetterType, DynamicSetter } from './setter-config';
+import { SettingTarget } from './setting-target';
 
 
 export interface FieldExtraProps {
@@ -11,21 +12,21 @@ export interface FieldExtraProps {
    * default value of target prop for setter use
    */
   defaultValue?: any;
-  getValue?: (field: any, fieldValue: any) => any;
-  setValue?: (field: any, value: any) => void;
+  getValue?: (target: SettingTarget, fieldValue: any) => any;
+  setValue?: (target: SettingTarget, value: any) => void;
   /**
    * the field conditional show, is not set always true
    * @default undefined
    */
-  condition?: (field: any) => boolean;
+  condition?: (target: SettingTarget) => boolean;
   /**
    * autorun when something change
    */
-  autorun?: (field: any) => void;
+  autorun?: (target: SettingTarget) => void;
   /**
    * is this field is a virtual field that not save to schema
    */
-  virtual?: (field: any) => boolean;
+  virtual?: (target: SettingTarget) => boolean;
   /**
    * default collapsed when display accordion
    */

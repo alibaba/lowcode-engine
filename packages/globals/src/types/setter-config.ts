@@ -1,11 +1,12 @@
 import { isReactComponent } from '../utils';
 import { ComponentType, ReactElement, isValidElement } from 'react';
 import { TitleContent } from './title';
+import { SettingTarget } from './setting-target';
 
 export type CustomView = ReactElement | ComponentType<any>;
 
-export type DynamicProps = (field: any) => object;
-export type DynamicSetter = (field: any) => string | SetterConfig | CustomView;
+export type DynamicProps = (target: SettingTarget) => object;
+export type DynamicSetter = (target: SettingTarget) => string | SetterConfig | CustomView;
 
 export interface SetterConfig {
   /**
@@ -18,11 +19,11 @@ export interface SetterConfig {
   props?: object | DynamicProps;
   children?: any;
   isRequired?: boolean;
-  initialValue?: any | ((field: any) => any);
+  initialValue?: any | ((target: SettingTarget) => any);
   /* for MixedSetter */
   title?: TitleContent;
   // for MixedSetter check this is available
-  condition?: (field: any) => boolean;
+  condition?: (target: SettingTarget) => boolean;
 }
 
 /**

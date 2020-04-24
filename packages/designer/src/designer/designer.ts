@@ -8,6 +8,7 @@ import {
   obx,
   computed,
   autorun,
+  IEditor,
 } from '@ali/lowcode-globals';
 import { Project } from '../project';
 import { Node, DocumentModel, insertChildren, isRootNode, ParentalNode } from '../document';
@@ -20,6 +21,7 @@ import { Hovering } from './hovering';
 import { DropLocation, LocationData, isLocationChildrenDetail } from './location';
 import { OffsetObserver, createOffsetObserver } from './offset-observer';
 import { focusing } from './focusing';
+import { SettingTopEntry } from './setting';
 
 export interface DesignerProps {
   className?: string;
@@ -196,6 +198,10 @@ export class Designer {
 
   createOffsetObserver(nodeInstance: INodeSelector): OffsetObserver | null {
     return createOffsetObserver(nodeInstance);
+  }
+
+  createSettingEntry(editor: IEditor, nodes: Node[]) {
+    return new SettingTopEntry(editor, nodes);
   }
 
   /**

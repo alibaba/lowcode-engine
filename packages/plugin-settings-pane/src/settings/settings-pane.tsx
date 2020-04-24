@@ -10,9 +10,7 @@ import {
 } from '@ali/lowcode-globals';
 import { Field, createField } from '../field';
 import PopupService from '../popup';
-import { SettingField, isSettingField } from './setting-field';
-import { SettingTarget } from './setting-target';
-import { SettingTopEntry } from './setting-entry';
+import { SettingField, isSettingField, SettingTopEntry, SettingEntry } from '@ali/lowcode-designer';
 
 @observer
 class SettingFieldView extends Component<{ field: SettingField }> {
@@ -20,7 +18,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     const { field } = this.props;
     const { extraProps } = field;
     const { condition, defaultValue } = extraProps;
-    const visible = field.isOneNode && typeof condition === 'function' ? condition(field) !== false : true;
+    const visible = field.isSingle && typeof condition === 'function' ? condition(field) !== false : true;
     if (!visible) {
       return null;
     }
@@ -99,7 +97,7 @@ class SettingGroupView extends Component<{ field: SettingField }> {
     const { field } = this.props;
     const { extraProps } = field;
     const { condition } = extraProps;
-    const visible = field.isOneNode && typeof condition === 'function' ? condition(field) !== false : true;
+    const visible = field.isSingle && typeof condition === 'function' ? condition(field) !== false : true;
 
     if (!visible) {
       return null;
@@ -116,7 +114,7 @@ class SettingGroupView extends Component<{ field: SettingField }> {
   }
 }
 
-export function createSettingFieldView(item: SettingField | CustomView, field: SettingTarget, index?: number) {
+export function createSettingFieldView(item: SettingField | CustomView, field: SettingEntry, index?: number) {
   if (isSettingField(item)) {
     if (item.isGroup) {
       return <SettingGroupView field={item} key={item.id} />;
