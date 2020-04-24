@@ -568,7 +568,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   if (snippets) {
     experimental.snippets = snippets.map(data => {
       const { schema = {} } = data;
-      if (initialChildren && !schema.children) {
+      if (!schema.children && initialChildren && typeof initialChildren !== 'function') {
         schema.children = initialChildren;
       }
       return {
@@ -596,7 +596,9 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     }
   }
   if (initialChildren) {
-    experimental.initialChildren = initialChildren;
+    experimental.initialChildren = typeof initialChildren === 'function' ? (field: Field) => {
+      return initialChildren.call(field, (field as any).props);
+    } : initialChildren;
   }
   if (view) {
     experimental.view = view;

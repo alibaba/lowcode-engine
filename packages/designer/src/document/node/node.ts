@@ -157,10 +157,17 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   private initialChildren(children: any): NodeData[] {
+    // FIXME! this is dirty code
     if (children == null) {
-      return this.componentMeta.getMetadata().experimental?.initialChildren || [];
+      const initialChildren = this.componentMeta.getMetadata().experimental?.initialChildren;
+      if (initialChildren) {
+        if (typeof initialChildren === 'function') {
+          return initialChildren(this as any) || [];
+        }
+        return initialChildren;
+      }
     }
-    return children;
+    return children || [];
   }
 
   isContainer(): boolean {
