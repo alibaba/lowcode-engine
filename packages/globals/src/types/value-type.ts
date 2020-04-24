@@ -21,6 +21,11 @@ export interface JSSlot {
   value?: NodeData[] | NodeData;
 }
 
+export interface JSBlock {
+  type: 'JSBlock';
+  value: NodeSchema;
+}
+
 // JSON 基本类型
 export type JSONValue = boolean | string | number | null | JSONArray | JSONObject;
 export type JSONArray = JSONValue[];
@@ -42,4 +47,8 @@ export function isJSExpression(data: any): data is JSExpression {
 
 export function isJSSlot(data: any): data is JSSlot {
   return data && data.type === 'JSSlot';
+}
+
+export function isJSBlock(data: any): data is JSBlock {
+  return data && data.type === 'JSBlock'
 }

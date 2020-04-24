@@ -1,6 +1,6 @@
 import { NodeData, isNodeSchema, obx, computed } from '@ali/lowcode-globals';
 import { Node, ParentalNode } from './node';
-import { ExportType } from './export-type';
+import { TransformStage } from './transform-stage';
 
 export class NodeChildren {
   @obx.val private children: Node[];
@@ -17,10 +17,10 @@ export class NodeChildren {
   /**
    * 导出 schema
    */
-  export(exportType: ExportType = ExportType.ForSave): NodeData[] {
+  export(stage: TransformStage = TransformStage.Save): NodeData[] {
     return this.children.map(node => {
-      const data = node.export(exportType);
-      if (node.isLeaf() && ExportType.ForSave === exportType) {
+      const data = node.export(stage);
+      if (node.isLeaf() && TransformStage.Save === stage) {
         // FIXME: filter empty
         return data.children as NodeData;
       }
@@ -200,6 +200,46 @@ export class NodeChildren {
     return this.children.map((child, index) => {
       return fn(child, index);
     });
+  }
+
+  some(fn: (item: Node, index: number) => any): boolean {
+    return this.children.some((child, index) => fn(child, index));
+  }
+
+  mergeChildren(remover: () => any, adder: (children: Node[]) => NodeData[] | null, sorter: () => any) {
+    /*
+    const children = this.children.slice();
+    children.forEach(child => child.internalSetParent(null));
+
+    this.children = children;
+    this.interalInitParent();
+    */
+
+    if (remover) {
+      const willRemove = this.children.filter(remover);
+      if (willRemove.length > 0) {
+        willRemove.forEach((node) => {
+          const i = this.children.indexOf(node);
+          if (i > -1) {
+            this.children.splice(i, 1);
+            node.remove();
+          }
+        });
+      }
+    }
+    if (adder) {
+      const items = adder(this.children);
+      if (items && items.length > 0) {
+        items.forEach((child: NodeData) => {
+          const node = this.owner.document.createNode(child);
+          this.children.push(node);
+          node.internalSetParent(this.owner);
+        });
+      }
+    }
+    if (sorter) {
+      this.children = this.children.sort(sorter);
+    }
   }
 
   private purged = false;

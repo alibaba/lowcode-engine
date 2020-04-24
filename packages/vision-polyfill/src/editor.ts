@@ -1,6 +1,6 @@
-import { globalContext } from '@ali/lowcode-globals';
+import { globalContext, isPlainObject, isJSBlock } from '@ali/lowcode-globals';
 import Editor from '@ali/lowcode-editor-core';
-import { Designer } from '@ali/lowcode-designer';
+import { Designer, TransformStage } from '@ali/lowcode-designer';
 import { registerSetters } from '@ali/lowcode-setters';
 import Outline from '@ali/lowcode-plugin-outline-pane';
 import SettingsPane from '@ali/lowcode-plugin-settings-pane';
@@ -10,6 +10,7 @@ import { Skeleton } from './skeleton/skeleton';
 
 import Preview from '@ali/lowcode-plugin-sample-preview';
 import SourceEditor from '@ali/lowcode-plugin-source-editor';
+import { i18nReducer } from './i18n-reducer';
 
 registerSetters();
 
@@ -19,8 +20,53 @@ globalContext.register(editor, Editor);
 export const skeleton = new Skeleton(editor);
 editor.set(Skeleton, skeleton);
 
-export const designer = new Designer({ eventPipe: editor });
+export const designer = new Designer({ editor: editor });
 editor.set(Designer, designer);
+
+designer.addPropsReducer((props, node) => {
+  // run initials
+  const initials = node.componentMeta.getMetadata().experimental?.initials;
+  if (initials) {
+    const newProps: any = {};
+    initials.forEach((item) => {
+      // FIXME! this implements SettingTarget
+      const v = item.initial(node as any, props[item.name]);
+      if (v !== undefined) {
+        newProps[item.name] = v;
+      }
+    });
+    return newProps;
+  }
+  return props;
+}, TransformStage.Init);
+
+designer.addPropsReducer(i18nReducer, TransformStage.Render);
+
+function upgradePropsReducer(props: any) {
+  if (!isPlainObject(props)) {
+    return props;
+  }
+  const newProps: any = {};
+  Object.entries<any>(props).forEach(([key, val]) => {
+    if (/^__slot__/.test(key) && val === true) {
+      return;
+    }
+    if (isJSBlock(val)) {
+      if (val.value.componentName === 'Slot') {
+        val = {
+          type: 'JSSlot',
+          title: (val.value.props as any)?.slotTitle,
+          value: val.value.children
+        };
+      } else {
+        val = val.value;
+      }
+    }
+    newProps[key] = val;
+  });
+  return newProps;
+}
+designer.addPropsReducer(upgradePropsReducer, TransformStage.Init);
 
 skeleton.add({
   area: 'mainArea',
@@ -43,7 +89,6 @@ skeleton.add({
     area: 'leftFixedArea',
   },
 });
-
 
 skeleton.add({
   area: 'topArea',

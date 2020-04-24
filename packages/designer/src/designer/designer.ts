@@ -1,5 +1,4 @@
 import { ComponentType } from 'react';
-import { EventEmitter } from 'events';
 import {
   ProjectSchema,
   ComponentMetadata,
@@ -9,9 +8,11 @@ import {
   computed,
   autorun,
   IEditor,
+  CompositeObject,
+  PropsList,
 } from '@ali/lowcode-globals';
 import { Project } from '../project';
-import { Node, DocumentModel, insertChildren, isRootNode, ParentalNode } from '../document';
+import { Node, DocumentModel, insertChildren, isRootNode, ParentalNode, TransformStage } from '../document';
 import { ComponentMeta } from '../component-meta';
 import { INodeSelector, Component } from '../simulator';
 import { Scroller, IScrollable } from './scroller';
@@ -24,6 +25,7 @@ import { focusing } from './focusing';
 import { SettingTopEntry } from './setting';
 
 export interface DesignerProps {
+  editor: IEditor;
   className?: string;
   style?: object;
   defaultSchema?: ProjectSchema;
@@ -33,7 +35,6 @@ export interface DesignerProps {
   dragGhostComponent?: ComponentType<any>;
   suspensed?: boolean;
   componentMetadatas?: ComponentMetadata[];
-  eventPipe?: EventEmitter;
   globalComponentActions?: ComponentAction[];
   onMount?: (designer: Designer) => void;
   onDragstart?: (e: LocateEvent) => void;
@@ -47,6 +48,7 @@ export class Designer {
   readonly activeTracker = new ActiveTracker();
   readonly hovering = new Hovering();
   readonly project: Project;
+  readonly editor: IEditor;
 
   get currentDocument() {
     return this.project.currentDocument;
@@ -61,6 +63,8 @@ export class Designer {
   }
 
   constructor(props: DesignerProps) {
+    const { editor } = props;
+    this.editor = editor;
     this.setProps(props);
 
     this.project = new Project(this, props.defaultSchema);
@@ -164,7 +168,7 @@ export class Designer {
   }
 
   postEvent(event: string, ...args: any[]) {
-    this.props?.eventPipe?.emit(`designer.${event}`, ...args);
+    this.editor.emit(`designer.${event}`, ...args);
   }
 
   private _dropLocation?: DropLocation;
@@ -312,7 +316,6 @@ export class Designer {
   private _lostComponentMetasMap = new Map<string, ComponentMeta>();
 
   private buildComponentMetasMap(metas: ComponentMetadata[]) {
-    console.info(this._componentMetasMap);
     metas.forEach((data) => this.createComponentMeta(data));
   }
 
@@ -372,6 +375,30 @@ export class Designer {
     return maps;
   }
 
+  private propsReducers = new Map<TransformStage, PropsReducer[]>();
+  transformProps(props: CompositeObject | PropsList, node: Node, stage: TransformStage) {
+    if (Array.isArray(props)) {
+      // current not support, make this future
+      return props;
+    }
+
+    const reducers = this.propsReducers.get(stage);
+    if (!reducers) {
+      return props;
+    }
+
+    return reducers.reduce((xprops, reducer) => reducer(xprops, node), props);
+  }
+
+  addPropsReducer(reducer: PropsReducer, stage: TransformStage) {
+    const reducers = this.propsReducers.get(stage);
+    if (reducers) {
+      reducers.push(reducer);
+    } else {
+      this.propsReducers.set(stage, [reducer]);
+    }
+  }
+
   autorun(action: (context: { firstRun: boolean }) => void, sync = false): () => void {
     return autorun(action, sync as true);
   }
@@ -380,3 +407,5 @@ export class Designer {
     // todo:
   }
 }
+
+export type PropsReducer = (props: CompositeObject, node: Node) => CompositeObject;

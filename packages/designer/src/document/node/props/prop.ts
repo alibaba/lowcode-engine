@@ -15,7 +15,7 @@ import { PropStash } from './prop-stash';
 import { valueToSource } from './value-to-source';
 import { Props } from './props';
 import { SlotNode } from '../node';
-import { ExportType } from '../export-type';
+import { TransformStage } from '../transform-stage';
 
 export const UNSET = Symbol.for('unset');
 export type UNSET = typeof UNSET;
@@ -46,10 +46,10 @@ export class Prop implements IPropParent {
    * 属性值
    */
   @computed get value(): CompositeValue | UNSET {
-    return this.export(ExportType.ForSerilize);
+    return this.export(TransformStage.Serilize);
   }
 
-  export(exporType: ExportType = ExportType.ForSave): CompositeValue | UNSET {
+  export(stage: TransformStage = TransformStage.Save): CompositeValue | UNSET {
     const type = this._type;
 
     if (type === 'unset') {
@@ -61,8 +61,8 @@ export class Prop implements IPropParent {
     }
 
     if (type === 'slot') {
-      const schema = this._slotNode!.export(exporType);
-      if (exporType === ExportType.ForSave) {
+      const schema = this._slotNode!.export(stage);
+      if (stage === TransformStage.Save) {
         return {
           type: 'JSSlot',
           params: schema.params,
@@ -82,7 +82,7 @@ export class Prop implements IPropParent {
       }
       const maps: any = {};
       this.items!.forEach((prop, key) => {
-        const v = prop.export(exporType);
+        const v = prop.export(stage);
         if (v !== UNSET) {
           maps[key] = v;
         }
@@ -95,7 +95,7 @@ export class Prop implements IPropParent {
         return this._value;
       }
       return this.items!.map((prop) => {
-        const v = prop.export(exporType);
+        const v = prop.export(stage);
         return v === UNSET ? null : v;
       });
     }
@@ -113,7 +113,7 @@ export class Prop implements IPropParent {
     }
     // todo: JSFunction ...
     if (this.type === 'slot') {
-      return JSON.stringify(this._slotNode!.export(ExportType.ForSave));
+      return JSON.stringify(this._slotNode!.export(TransformStage.Save));
     }
     return this._code != null ? this._code : JSON.stringify(this.value);
   }
@@ -191,7 +191,7 @@ export class Prop implements IPropParent {
   }
 
   @computed getValue(): CompositeValue {
-    const v = this.export(ExportType.ForSerilize);
+    const v = this.export(TransformStage.Serilize);
     if (v === UNSET) {
       return null;
     }

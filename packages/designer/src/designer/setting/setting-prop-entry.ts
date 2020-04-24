@@ -157,7 +157,7 @@ export class SettingPropEntry implements SettingEntry {
 
   // ======= compatibles for vision ======
   getNode() {
-    return this.top;
+    return this.nodes[0];
   }
 
   getName(): string {

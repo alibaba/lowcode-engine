@@ -12,6 +12,9 @@ export interface FieldExtraProps {
    * default value of target prop for setter use
    */
   defaultValue?: any;
+  /**
+   * get value for field
+   */
   getValue?: (target: SettingTarget, fieldValue: any) => any;
   setValue?: (target: SettingTarget, value: any) => void;
   /**

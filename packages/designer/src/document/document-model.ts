@@ -19,7 +19,7 @@ import { isDragNodeDataObject, DragNodeObject, DragNodeDataObject, DropLocation 
 import { Node, insertChildren, insertChild, isNode, RootNode, ParentalNode } from './node/node';
 import { Selection } from './selection';
 import { History } from './history';
-import { ExportType } from './node';
+import { TransformStage } from './node';
 
 export type GetDataType<T, NodeType> = T extends undefined
   ? NodeType extends {
@@ -277,8 +277,8 @@ export class DocumentModel {
     // todo: select added and active track added
   }
 
-  export(exportType: ExportType = ExportType.ForSerilize) {
-    return this.rootNode.export(exportType);
+  export(stage: TransformStage = TransformStage.Serilize) {
+    return this.rootNode.export(stage);
   }
 
   /**

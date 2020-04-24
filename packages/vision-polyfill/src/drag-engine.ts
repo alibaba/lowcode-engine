@@ -1,5 +1,5 @@
 import { designer } from './editor';
-import { DragObjectType, isNode, ExportType } from '@ali/lowcode-designer';
+import { DragObjectType, isNode, TransformStage } from '@ali/lowcode-designer';
 
 const dragon = designer.dragon;
 const DragEngine = {
@@ -12,7 +12,7 @@ const DragEngine = {
       if (isNode(r)) {
         return {
           type: DragObjectType.NodeData,
-          data: r.export(ExportType.ForSave),
+          data: r.export(TransformStage.Save),
         };
 
         // FIXME! designer has bug
