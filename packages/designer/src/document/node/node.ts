@@ -20,6 +20,8 @@ import { ComponentMeta } from '../../component-meta';
 import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
 import { TransformStage } from './transform-stage';
 
+
+
 /**
  * 基础节点
  *
@@ -202,6 +204,10 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.componentName === 'Leaf';
   }
 
+  internalSetWillPurge() {
+    this.internalSetParent(null);
+    this.document.addWillPurge(this);
+  }
   /**
    * 内部方法，请勿使用
    */
@@ -215,11 +221,14 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
 
     this._parent = parent;
-    if (parent && !this.conditionGroup) {
-      // initial conditionGroup
-      const grp = this.getExtraProp('conditionGroup', false)?.getAsString();
-      if (grp) {
-        this.setConditionGroup(grp);
+    if (parent) {
+      this.document.removeWillPurge(this);
+      if (!this.conditionGroup) {
+        // initial conditionGroup
+        const grp = this.getExtraProp('conditionGroup', false)?.getAsString();
+        if (grp) {
+          this.setConditionGroup(grp);
+        }
       }
     }
   }

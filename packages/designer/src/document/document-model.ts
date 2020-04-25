@@ -78,13 +78,13 @@ export class DocumentModel {
   }
 
   constructor(readonly project: Project, schema?: RootSchema) {
+    /*
+    // TODO
+    // use special purge process
     autorun(() => {
-      this.nodes.forEach((item) => {
-        if (item.parent == null && item !== this.rootNode) {
-          item.purge();
-        }
-      });
+      console.info(this.willPurgeSpace);
     }, true);
+    */
 
     if (!schema) {
       this._blank = true;
@@ -101,6 +101,17 @@ export class DocumentModel {
       (schema) => this.import(schema as RootSchema, true),
     );
     this.setupListenActiveNodes();
+  }
+
+  @obx.val private willPurgeSpace: Node[] = [];
+  addWillPurge(node: Node) {
+    this.willPurgeSpace.push(node);
+  }
+  removeWillPurge(node: Node) {
+    const i = this.willPurgeSpace.indexOf(node);
+    if (i > -1) {
+      this.willPurgeSpace.splice(i, 1);
+    }
   }
 
   @computed isBlank() {
@@ -171,8 +182,10 @@ export class DocumentModel {
       // todo: this.activeNodes?.push(node);
     }
 
-    if (this.nodesMap.has(node.id)) {
-      this.nodesMap.get(node.id)!.internalSetParent(null);
+    const origin = this.nodesMap.get(node.id);
+    if (origin && origin !== node) {
+      // almost will not go here, ensure the id is unique
+      origin.internalSetWillPurge();
     }
 
     this.nodesMap.set(node.id, node);

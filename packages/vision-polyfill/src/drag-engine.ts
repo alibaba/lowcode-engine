@@ -11,17 +11,9 @@ const DragEngine = {
       }
       if (isNode(r)) {
         return {
-          type: DragObjectType.NodeData,
-          data: r.export(TransformStage.Save),
-        };
-
-        // FIXME! designer has bug
-        /*
-        return {
           type: DragObjectType.Node,
           nodes: [r],
         };
-        */
       } else {
         return {
           type: DragObjectType.NodeData,

@@ -144,7 +144,6 @@ async function loadAssets() {
       });
     }
     await Promise.all(tasks);
-
     // proccess snippets
   }
 

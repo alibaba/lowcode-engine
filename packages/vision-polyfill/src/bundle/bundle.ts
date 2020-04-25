@@ -1,7 +1,6 @@
 import lg from '@ali/vu-logger';
 import { ComponentClass, ComponentType } from 'react';
 import Prototype from './prototype';
-import { ComponentMeta } from '@ali/lowcode-designer';
 import { designer } from '../editor';
 
 function basename(name: string) {

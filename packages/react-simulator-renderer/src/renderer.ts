@@ -244,6 +244,9 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
       document.body.appendChild(container);
       container.id = containerId;
     }
+    // ==== compatiable vision
+    document.documentElement.classList.add('engine-page');
+    document.body.classList.add('engine-document'); // important! Stylesheet.invoke depends
 
     reactRender(createElement(SimulatorRendererView, { renderer: this }), container);
   }

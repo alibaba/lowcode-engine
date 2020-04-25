@@ -23,19 +23,18 @@ export function upgradeAssetsBundle(assets) {
       props: [],
     };
 
-    packages.push({
-      urls: item.urls,
-      library: item.library,
-      package: item.packageName,
-      version: item.version,
-    });
-
     if (item.prototypeConfigsUrl) {
       xPrototypes.push({
         package: item.packageName,
         urls: item.prototypeConfigsUrl,
       });
     } else if (item.components) {
+      packages.push({
+        urls: item.urls,
+        library: item.library,
+        package: item.packageName,
+        version: item.version,
+      });
       const meta = item.components[0];
       metadata.componentName = meta.componentName;
       metadata.configure = meta.configure;
