@@ -150,10 +150,8 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   private transformProps(props: any): any {
     // FIXME! support PropsList
-    const x = this.document.designer.transformProps(props, this, TransformStage.Init);
+    return this.document.designer.transformProps(props, this, TransformStage.Init);
     // TODO: run transducers in metadata.experimental
-    console.info(x);
-    return x;
   }
 
   private initialChildren(children: any): NodeData[] {
@@ -566,6 +564,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
   getNode() {
     return this;
+  }
+  getRoot() {
+    return this.document.rootNode;
   }
   getProps() {
     return this.props;

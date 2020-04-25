@@ -673,7 +673,6 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   const styles = {};
   meta.configure = { props, component, events, styles };
   meta.experimental = experimental;
-  console.info(meta);
   return meta;
 }
 

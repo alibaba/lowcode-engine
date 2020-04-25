@@ -1,11 +1,11 @@
 import { Component, Fragment } from 'react';
 import { Icon, Button, Message } from '@alifd/next';
 import { Title, SetterType, FieldConfig, SetterConfig } from '@ali/lowcode-globals';
-import { SettingField } from '../../settings/setting-field';
 import { createSettingFieldView } from '../../settings/settings-pane';
 import { PopupContext, PopupPipe } from '../../popup';
 import Sortable from './sortable';
 import './style.less';
+import { SettingField } from '@ali/lowcode-designer';
 
 interface ArraySetterState {
   items: SettingField[];

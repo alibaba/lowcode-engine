@@ -20,10 +20,10 @@ import {
   EmbedTip,
   isI18nData,
 } from '@ali/lowcode-globals';
-import { SettingField } from '../../settings/setting-field';
 import { IconConvert } from '../../icons/convert';
 
 import './style.less';
+import { SettingField } from '@ali/lowcode-designer';
 
 export interface SetterItem {
   name: string;
@@ -180,7 +180,7 @@ export default class MixedSetter extends Component<{
       let setterProps: any = {};
       let setterType: any;
       if (isDynamicSetter(setter)) {
-        setterType = setter(field);
+        setterType = setter.call(field, field);
       } else {
         setterType = setter;
       }

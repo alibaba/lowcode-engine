@@ -2,8 +2,8 @@ import { Component, Fragment } from 'react';
 import { Icon, Button } from '@alifd/next';
 import { Title, SetterType, FieldConfig } from '@ali/lowcode-globals';
 import { createSettingFieldView } from '../../settings/settings-pane';
-import { SettingField } from '../../settings/setting-field';
 import { PopupContext, PopupPipe } from '../../popup';
+import { SettingField } from '@ali/lowcode-designer';
 import './style.less';
 
 export default class ObjectSetter extends Component<{

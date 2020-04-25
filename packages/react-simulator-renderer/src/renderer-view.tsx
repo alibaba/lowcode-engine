@@ -41,6 +41,7 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
   }
   render() {
     const { renderer } = this.props;
+    console.info(renderer.components)
     return (
       <LowCodeRenderer
         schema={renderer.schema}
