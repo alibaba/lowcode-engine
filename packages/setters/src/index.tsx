@@ -1,7 +1,6 @@
 import { registerSetter, isJSSlot } from '@ali/lowcode-globals';
 import { DatePicker, Input, Radio, Select, Switch, NumberPicker } from '@alifd/next';
 import ExpressionSetter from './expression-setter';
-import MixinSetter from './mixin-setter';
 import ColorSetter from './color-setter';
 import JsonSetter from './json-setter';
 import EventsSetter from './events-setter';
@@ -70,7 +69,6 @@ const builtinSetters: any = {
     },
     recommend: true,
   },
-  MixinSetter,
   RadioGroupSetter,
   TextAreaSetter,
   DateSetter,

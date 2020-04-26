@@ -1,6 +1,7 @@
-import { NodeData, isNodeSchema, obx, computed } from '@ali/lowcode-globals';
+import { obx, computed } from '@ali/lowcode-editor-core';
 import { Node, ParentalNode } from './node';
 import { TransformStage } from './transform-stage';
+import { NodeData, isNodeSchema } from '@ali/lowcode-types';
 
 export class NodeChildren {
   @obx.val private children: Node[];

@@ -1,10 +1,12 @@
-import { PropsMap, PropsList, CompositeValue, computed, obx, uniqueId } from '@ali/lowcode-globals';
+import { computed, obx } from '@ali/lowcode-editor-core';
+import { PropsMap, PropsList, CompositeValue } from '@ali/lowcode-types';
+import { uniqueId } from '@ali/lowcode-utils';
 import { PropStash } from './prop-stash';
 import { Prop, IPropParent, UNSET } from './prop';
 import { Node } from '../node';
 import { TransformStage } from '../transform-stage';
 
-export const EXTRA_KEY_PREFIX = '__';
+export const EXTRA_KEY_PREFIX = '___';
 
 export class Props implements IPropParent {
   readonly id = uniqueId('props');

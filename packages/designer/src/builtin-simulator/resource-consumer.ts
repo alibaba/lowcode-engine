@@ -1,4 +1,4 @@
-import { autorun, obx } from '@ali/lowcode-globals';
+import { autorun, obx } from '@ali/lowcode-editor-core';
 import { BuiltinSimulatorHost } from './host';
 import { EventEmitter } from 'events';
 import { BuiltinSimulatorRenderer, isSimulatorRenderer } from './renderer';

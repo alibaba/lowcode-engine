@@ -1,0 +1,46 @@
+{
+  "name": "@ali/lowcode-types",
+  "version": "0.8.0",
+  "description": "Types for Ali lowCode engine",
+  "files": [
+    "es",
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "scripts": {
+    "build": "build-scripts build --skip-demo",
+    "test": "ava",
+    "test:snapshot": "ava --update-snapshots"
+  },
+  "dependencies": {
+    "@alifd/next": "^1.19.16",
+    "classnames": "^2.2.6",
+    "monaco-editor": "^0.20.0",
+    "react": "^16",
+    "react-dom": "^16.7.0"
+  },
+  "devDependencies": {
+    "@alib/build-scripts": "^0.1.18",
+    "@types/classnames": "^2.2.7",
+    "@types/node": "^13.7.1",
+    "@types/react": "^16",
+    "@types/react-dom": "^16",
+    "build-plugin-component": "^0.2.10",
+    "build-plugin-fusion": "^0.1.0",
+    "build-plugin-moment-locales": "^0.1.0"
+  },
+  "ava": {
+    "compileEnhancements": false,
+    "snapshotDir": "test/fixtures/__snapshots__",
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  },
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
+  }
+}

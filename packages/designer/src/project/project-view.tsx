@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { observer } from '@ali/lowcode-globals';
+import { observer } from '@ali/lowcode-editor-core';
 import { Designer } from '../designer';
 import { DocumentView } from '../document';
 import { intl } from '../locale';

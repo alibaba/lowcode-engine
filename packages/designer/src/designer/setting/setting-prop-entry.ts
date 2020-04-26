@@ -1,4 +1,6 @@
-import { obx, uniqueId, computed, IEditor } from '@ali/lowcode-globals';
+import { obx, computed } from '@ali/lowcode-editor-core';
+import { IEditor } from '@ali/lowcode-types';
+import { uniqueId } from '@ali/lowcode-utils';
 import { SettingEntry } from './setting-entry';
 import { Node } from '../../document';
 import { ComponentMeta } from '../../component-meta';

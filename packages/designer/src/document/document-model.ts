@@ -1,17 +1,5 @@
-import {
-  NodeData,
-  isJSExpression,
-  isDOMText,
-  NodeSchema,
-  computed,
-  obx,
-  autorun,
-  isNodeSchema,
-  uniqueId,
-  PageSchema,
-  ComponentSchema,
-  RootSchema,
-} from '@ali/lowcode-globals';
+import { computed, obx } from '@ali/lowcode-editor-core';
+import { NodeData, isJSExpression, isDOMText, NodeSchema, isNodeSchema, RootSchema } from '@ali/lowcode-types';
 import { Project } from '../project';
 import { ISimulatorHost } from '../simulator';
 import { ComponentMeta } from '../component-meta';
@@ -20,6 +8,7 @@ import { Node, insertChildren, insertChild, isNode, RootNode, ParentalNode } fro
 import { Selection } from './selection';
 import { History } from './history';
 import { TransformStage } from './node';
+import { uniqueId } from '@ali/lowcode-utils';
 
 export type GetDataType<T, NodeType> = T extends undefined
   ? NodeType extends {
@@ -90,11 +79,13 @@ export class DocumentModel {
       this._blank = true;
     }
 
-    this.rootNode = this.createNode<RootNode>(schema || {
-      componentName: 'Page',
-      id: 'root',
-      fileName: ''
-    });
+    this.rootNode = this.createNode<RootNode>(
+      schema || {
+        componentName: 'Page',
+        id: 'root',
+        fileName: '',
+      },
+    );
 
     this.history = new History(
       () => this.schema,

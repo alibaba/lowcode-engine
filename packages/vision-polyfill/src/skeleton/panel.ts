@@ -2,9 +2,9 @@ import { createElement, ReactNode } from 'react';
 import { obx, uniqueId, createContent, TitleContent } from '@ali/lowcode-globals';
 import WidgetContainer from './widget-container';
 import { PanelConfig, HelpTipConfig } from './types';
-import { TitledPanelView, TabsPanelView, PanelView } from './widget-views';
+import { TitledPanelView, TabsPanelView, PanelView } from './components/widget-views';
 import { Skeleton } from './skeleton';
-import { composeTitle } from './utils';
+import { composeTitle } from './widget/utils';
 import { IWidget } from './widget';
 
 export default class Panel implements IWidget {

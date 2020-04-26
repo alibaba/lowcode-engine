@@ -1,6 +1,7 @@
-import { hotkey, isFormEvent } from '@ali/lowcode-globals';
+import { hotkey } from '@ali/lowcode-editor-core';
+import { isFormEvent } from '@ali/lowcode-utils';
 import { focusing } from './focusing';
-import { insertChildren } from '../document';
+import { insertChildren, TransformStage } from '../document';
 import clipboard from './clipboard';
 
 // hotkey binding
@@ -52,7 +53,7 @@ hotkey.bind(['command+c', 'ctrl+c', 'command+x', 'ctrl+x'], (e, action) => {
   if (!selected || selected.length < 1) return;
 
   const componentsMap = {};
-  const componentsTree = selected.map((item) => item.export(false));
+  const componentsTree = selected.map((item) => item.export(TransformStage.Save));
 
   const data = { type: 'nodeSchema', componentsMap, componentsTree };
 

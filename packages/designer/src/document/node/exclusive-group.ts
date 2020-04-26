@@ -1,5 +1,6 @@
-import { obx, computed, TitleContent } from '@ali/lowcode-globals';
-import { uniqueId } from '@ali/lowcode-globals';
+import { obx, computed } from '@ali/lowcode-editor-core';
+import { uniqueId } from '@ali/lowcode-utils';
+import { TitleContent } from '@ali/lowcode-types';
 import { Node } from './node';
 import { intl } from '../../locale';
 

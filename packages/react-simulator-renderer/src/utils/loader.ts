@@ -11,7 +11,7 @@ import {
   assetItem,
   AssetItem,
   isCSSUrl,
-} from '@ali/lowcode-globals';
+} from '@ali/lowcode-utils';
 
 function parseAssetList(scripts: any, styles: any, assets: AssetList, level?: AssetLevel) {
   for (const asset of assets) {

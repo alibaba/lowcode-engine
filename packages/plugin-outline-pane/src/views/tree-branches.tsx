@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import classNames from 'classnames';
-import { observer, Title } from '@ali/lowcode-globals';
+import { observer, Title } from '@ali/lowcode-editor-core';
 import { ExclusiveGroup } from '@ali/lowcode-designer';
 import TreeNode from '../tree-node';
 import TreeNodeView from './tree-node';

@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import classNames from 'classnames';
-import { TipContainer } from '@ali/lowcode-globals';
 import BuiltinDragGhostComponent from './drag-ghost';
 import { Designer, DesignerProps } from './designer';
 import { ProjectView } from '../project';

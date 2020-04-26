@@ -1,7 +1,7 @@
 import { obx, computed } from '@ali/lowcode-globals';
-import WidgetContainer from './widget-container';
+import WidgetContainer from './widget/widget-container';
 import { Skeleton } from './skeleton';
-import { IWidget } from './widget';
+import { IWidget } from './widget/widget';
 import { IWidgetBaseConfig } from './types';
 
 export default class Area<C extends IWidgetBaseConfig = any, T extends IWidget = IWidget> {

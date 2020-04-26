@@ -1,4 +1,5 @@
-import { computed, obx, TitleContent, isI18nData, localeFormat } from '@ali/lowcode-globals';
+import { TitleContent, isI18nData } from '@ali/lowcode-types';
+import { computed, obx, intl } from '@ali/lowcode-editor-core';
 import { Node, DocumentModel, isLocationChildrenDetail, LocationChildrenDetail, Designer } from '@ali/lowcode-designer';
 import { Tree } from './tree';
 
@@ -121,7 +122,7 @@ export default class TreeNode {
       return title;
     }
     if (isI18nData(title)) {
-      return localeFormat(title);
+      return intl(title);
     }
     return this.node.componentName;
   }

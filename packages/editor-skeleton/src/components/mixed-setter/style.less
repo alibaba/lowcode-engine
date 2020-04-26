@@ -1,0 +1,30 @@
+.lc-setter-mixed {
+  flex: 1;
+  min-width: 0;
+  margin-right: 26px;
+  display: block;
+  position: relative;
+  >.lc-setter-actions {
+    position: absolute;
+    right: -2px;
+    top: 50%;
+    transform: translate(100%, -50%);
+    .lc-switch-trigger {
+      cursor: pointer;
+      opacity: 0.6;
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+  .next-input,.next-date-picker {
+    width: 100%;
+  }
+  &.lc-block-setter {
+    position: static;
+    margin-right: 0;
+    >.lc-setter-actions {
+      transform: none;
+    }
+  }
+}

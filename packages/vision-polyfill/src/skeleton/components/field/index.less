@@ -1,0 +1,154 @@
+@import '../variables.less';
+
+@x-gap: 10px;
+@y-gap: 8px;
+
+.lc-field {
+  // head
+  .lc-field-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .lc-field-title {
+      display: flex;
+      align-items: center;
+    }
+    .lc-field-icon {
+      margin-right: @x-gap;
+      transform-origin: center;
+      transition: transform 0.1s;
+    }
+  }
+
+  &.lc-plain-field {
+    // for top-level style
+    padding: 8px 10px;
+    > .lc-field-body {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &.lc-inline-field {
+    display: flex;
+    align-items: center;
+    // for top-level style
+    padding: 8px 10px;
+
+    > .lc-field-head {
+      width: 70px;
+      margin-right: 1px;
+      .lc-title-label {
+        width: 70px;
+        word-break: break-all;
+      }
+    }
+    > .lc-field-body {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &.lc-block-field, &.lc-accordion-field {
+    display: block;
+    &:not(:first-child) {
+      border-top: 1px solid var(--color-line-normal, @dark-alpha-2);
+    }
+    > .lc-field-head {
+      padding-left: @x-gap;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      font-weight: 500;
+      background: var(--color-block-background-shallow, rgba(31,56,88,.06));
+      border-bottom: 1px solid var(--color-line-normal, @dark-alpha-2);
+      color: var(--color-title, @white-alpha-2);
+      user-select: none;
+    }
+
+    > .lc-field-body {
+      padding: @y-gap @x-gap/2;
+    }
+
+    + .lc-inline-field {
+      border-top: 1px solid var(--color-line-normal, @dark-alpha-2);
+    }
+  }
+
+  .lc-setter-actions {
+    display: flex;
+    align-items: center;
+  }
+
+  &.lc-block-field {
+    position: relative;
+    >.lc-field-body>.lc-block-setter>.lc-setter-actions {
+      position: absolute;
+      right: 10px;
+      top: 0;
+      height: 32px;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &.lc-accordion-field {
+    // collapsed
+    &.lc-field-is-collapsed {
+      > .lc-field-head .lc-field-icon {
+        transform: rotate(180deg);
+      }
+      > .lc-field-body {
+        display: none;
+      }
+    }
+
+    // 邻近的保持上下距离
+    + .lc-field {
+      margin-top: @y-gap;
+    }
+  }
+
+  // 2rd level reset
+  .lc-field-body {
+    .lc-inline-field {
+      padding: @y-gap @x-gap/2 0 @x-gap/2;
+      &:first-child {
+        padding-top: 0;
+      }
+      + .lc-accordion-field, +.lc-block-field {
+        margin-top: @y-gap;
+      }
+    }
+
+    .lc-field {
+      border-top: none !important;
+    }
+
+    .lc-accordion-field, .lc-block-field {
+      > .lc-field-head {
+        padding-left: @x-gap/2;
+        background: var(--color-block-background-light);
+        border-bottom-color: var(--color-line-light);
+        > .lc-field-icon {
+          margin-right: @x-gap/2;
+        }
+      }
+    }
+
+    // 3rd level field title width should short
+    .lc-field-body .lc-inline-field {
+      > .lc-field-head {
+        width: 50px;
+        .lc-title-label {
+          width: 50px;
+        }
+      }
+    }
+  }
+}

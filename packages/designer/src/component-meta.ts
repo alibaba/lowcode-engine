@@ -6,11 +6,9 @@ import {
   ComponentAction,
   TitleContent,
   TransformedComponentMetadata,
-  getRegisteredMetadataTransducers,
-  registerMetadataTransducer,
-  computed,
   NestingFilter,
-} from '@ali/lowcode-globals';
+} from '@ali/lowcode-types';
+import { computed } from '@ali/lowcode-editor-core';
 import { Node, ParentalNode } from './document';
 import { Designer } from './designer';
 import { intl } from './locale';
@@ -130,11 +128,14 @@ export class ComponentMeta {
 
     const title = this._transformedMetadata.title;
     if (title) {
-      this._title = typeof title === 'string' ? {
-        type: 'i18n',
-        'en-US': this.componentName,
-        'zh-CN': title,
-      } : title;
+      this._title =
+        typeof title === 'string'
+          ? {
+              type: 'i18n',
+              'en-US': this.componentName,
+              'zh-CN': title,
+            }
+          : title;
     }
 
     const { configure = {} } = this._transformedMetadata;
@@ -300,11 +301,41 @@ const builtinComponentActions: ComponentAction[] = [
 ];
 
 export function removeBuiltinComponentAction(name: string) {
-  const i = builtinComponentActions.findIndex(action => action.name === name);
+  const i = builtinComponentActions.findIndex((action) => action.name === name);
   if (i > -1) {
     builtinComponentActions.splice(i, 1);
   }
 }
 export function addBuiltinComponentAction(action: ComponentAction) {
   builtinComponentActions.push(action);
+}
+
+export interface MetadataTransducer {
+  (prev: TransformedComponentMetadata): TransformedComponentMetadata;
+  /**
+   * 0 - 9   system
+   * 10 - 99 builtin-plugin
+   * 100 -   app & plugin
+   */
+  level?: number;
+  /**
+   * use to replace TODO
+   */
+  id?: string;
+}
+const metadataTransducers: MetadataTransducer[] = [];
+
+export function registerMetadataTransducer(transducer: MetadataTransducer, level: number = 100, id?: string) {
+  transducer.level = level;
+  transducer.id = id;
+  const i = metadataTransducers.findIndex((item) => item.level != null && item.level > level);
+  if (i < 0) {
+    metadataTransducers.push(transducer);
+  } else {
+    metadataTransducers.splice(i, 0, transducer);
+  }
+}
+
+export function getRegisteredMetadataTransducers(): MetadataTransducer[] {
+  return metadataTransducers;
 }

@@ -1,4 +1,4 @@
-import { obx, autorun, untracked, computed } from '@ali/lowcode-globals';
+import { obx, autorun, untracked, computed } from '@ali/lowcode-editor-core';
 import { Prop, IPropParent, UNSET } from './prop';
 import { Props } from './props';
 

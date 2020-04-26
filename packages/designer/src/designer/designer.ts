@@ -1,16 +1,14 @@
 import { ComponentType } from 'react';
+import { obx, computed, autorun } from '@ali/lowcode-editor-core';
 import {
   ProjectSchema,
   ComponentMetadata,
   ComponentAction,
   NpmInfo,
-  obx,
-  computed,
-  autorun,
   IEditor,
   CompositeObject,
   PropsList,
-} from '@ali/lowcode-globals';
+} from '@ali/lowcode-types';
 import { Project } from '../project';
 import { Node, DocumentModel, insertChildren, isRootNode, ParentalNode, TransformStage } from '../document';
 import { ComponentMeta } from '../component-meta';

@@ -1,0 +1,375 @@
+@import "./theme.less";
+
+:root {
+  --font-family: @font-family;
+  --font-size-label: @fontSize-4;
+  --font-size-text: @fontSize-5;
+  --font-size-btn-large: @fontSize-3;
+  --font-size-btn-medium: @fontSize-4;
+  --font-size-btn-small: @fontSize-5;
+
+  --global-border-radius: @global-border-radius;
+  --input-border-radius: @input-border-radius;
+  --popup-border-radius: @popup-border-radius;
+
+  --left-area-width: 48px;
+  --right-area-width: 280px;
+  --top-area-height: 48px;
+  --toolbar-height: 36px;
+  --dock-pane-width: 280px;
+  --dock-fixed-pane-width: 280px;
+}
+
+@media (min-width: 1860px) {
+  :root {
+    --right-area-width: 400px;
+    --dock-pane-width: 452px;
+    --dock-fixed-pane-width: 350px;
+  }
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  font-family: var(--font-family);
+  font-size: var(--font-size-text);
+  color: var(--color-text);
+  background-color:#EDEFF3;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+.lc-titled-panel {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  .pane-title {
+    // height: var(--pane-title-height);
+    background-color: var(--pane-title-bg-color);
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    .my-help-tip {
+      margin-left: 4px;
+    }
+  }
+
+  .pane-body {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: auto;
+    .my-tabs {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      .tabs-title {
+        display: flex;
+        height: var(--pane-title-height);
+        > .tab-title {
+          cursor: pointer;
+          padding: 0;
+          flex: 1;
+          min-width: 0;
+          justify-content: center;
+          border-bottom: 2px solid transparent;
+          &.actived {
+            cursor: default;
+            color: var(--color-text-avtived);
+            border-bottom-color: #3896ee;
+          }
+        }
+      }
+      .tabs-content {
+        position: absolute;
+        top: var(--pane-title-height);
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: calc(100% - var(--pane-title-height));
+        overflow: hidden;
+      }
+    }
+  }
+
+  &.titled > .pane-body {
+    top: var(--pane-title-height);
+  }
+}
+.lc-panel {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  &.hidden {
+    display: none;
+  }
+  .pane-title {
+    height: var(--pane-title-height);
+    background-color: var(--pane-title-bg-color);
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    .my-help-tip {
+      margin-left: 4px;
+    }
+  }
+  .my-tabs {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    .tabs-title {
+      display: flex;
+      height: var(--pane-title-height);
+      margin-right: 30px;
+      > .tab-title {
+        cursor: pointer;
+        padding: 0;
+        flex: 1;
+        min-width: 0;
+        justify-content: center;
+        border-bottom: 2px solid transparent;
+        &.actived {
+          cursor: default;
+          color: var(--color-text-avtived);
+          border-bottom-color: #3896ee;
+        }
+      }
+    }
+    .tabs-content {
+      position: absolute;
+      top: var(--pane-title-height);
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: calc(100% - var(--pane-title-height));
+      overflow: hidden;
+    }
+  }
+}
+
+.my-dock {
+  padding: 0px 10px;
+  cursor: pointer;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  .my-title-label {
+    user-select: none;
+  }
+  &.actived, &:hover {
+    background-color: var(--pane-title-bg-color);
+    .my-title {
+      color: var(--color-actived);
+    }
+  }
+}
+
+
+.lc-workbench {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #EDEFF3;
+  .lc-top-area {
+    height: var(--top-area-height);
+    background-color: var(--color-pane-background);
+    width: 100%;
+    display: flex;
+    margin-bottom: 2px;
+    padding: 8px;
+    .lc-top-area-left{}
+    .lc-top-area-center{
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      margin-right: 8px;
+    }
+    .lc-top-area-right{
+      display: flex;
+      align-items: center;
+      >* {
+        margin-left: 4px;
+        margin-right: 4px;
+      }
+    }
+  }
+  .lc-workbench-body {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+    position: relative;
+    .lc-left-float-pane {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: var(--dock-pane-width);
+      left: calc(var(--left-area-width) + 1px);
+      background-color: var(--color-pane-background);
+      box-shadow: 4px 0 16px 0 rgba(31,50,88,0.08);
+      z-index: 820;
+      display: none;
+      // padding-top: 36px;
+      &.lc-area-visible {
+        display: block;
+      }
+      .lc-pane-close{
+        position: absolute;
+        right: 10px;
+        top: 6px;
+        z-index: 2;
+        .next-icon{
+          line-height: 1;
+        }
+      }
+      .lc-tabs-title {
+        width: 100%;
+        height: 36px;
+        position: relative;
+        display: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(31,56,88,0.04);
+      }
+      .lc-tabs-content {
+        position: absolute;
+        top: 36px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+    }
+    .lc-left-area {
+      height: 100%;
+      width: var(--left-area-width);
+      background-color: var(--color-pane-background);
+      display: none;
+      flex-shrink: 0;
+      flex-direction: column;
+      justify-content: space-between;
+      &.lc-area-visible {
+        display: flex;
+      }
+      .lc-left-area-top,
+      .lc-left-area-bottom{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        .lc-title{
+          padding: 12px;
+          flex-direction: column;
+          &.has-tip{
+            cursor: pointer;
+          }
+          &.actived{
+            color: #0079F2;
+          }
+          .lc-title-icon{
+            margin: 0;
+            .next-icon:before {
+              line-height: 1 !important;
+            }
+          }
+        }
+      }
+      .lc-left-area-top{
+        padding-top: 12px;
+      }
+      .lc-left-area-bottom{
+        padding-bottom: 12px;
+      }
+    }
+    .lc-left-fixed-pane {
+      width: var(--dock-fixed-pane-width);
+      background-color: var(--color-pane-background);
+      height: 100%;
+      display: none;
+      flex-shrink: 0;
+      position: relative;
+      &.lc-area-visible {
+        display: block;
+      }
+      .lc-pane-close {
+        position: absolute;
+        right: 10px;
+        top: 6px;
+        z-index: 2;
+        .next-icon {
+          line-height: 1;
+        }
+      }
+    }
+    .lc-left-area.lc-area-visible ~ .lc-left-fixed-pane {
+      margin-left: 1px;
+    }
+    .lc-left-area.lc-area-visible ~ .lc-workbench-center {
+      margin-left: 2px;
+    }
+    .lc-outline-pane{
+      .lc-outline-tree .tree-node .tree-node-title{
+        border-bottom: none;
+      }
+    }
+    .lc-workbench-center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      .lc-toolbar {
+        height: var(--toolbar-height);
+        background-color: var(--color-pane-background);
+        padding: 8px 16px;
+      }
+      .lc-main-area {
+        flex: 1;
+      }
+      .lc-bottom-area {
+        height: var(--bottom-area-height);
+        background-color: var(--color-pane-background);
+        display: none;
+        &.lc-area-visible {
+          display: block;
+        }
+      }
+    }
+    .lc-right-area {
+      height: 100%;
+      width: var(--right-area-width);
+      background-color: var(--color-pane-background);
+      display: none;
+      flex-shrink: 0;
+      margin-left: 2px;
+      &.lc-area-visible {
+        display: block;
+      }
+      .lc-settings-tabs{
+        > .next-tabs-nav-extra{
+          top: 36px !important;
+        }
+        .lc-settings-tab-item{
+          .next-tabs-tab-inner{
+            font-size: 12px;
+            line-height: 12px;
+          }
+        }
+        .lc-title{
+          color: inherit;
+          line-height: inherit !important;
+        }
+      }
+      .lc-settings-tabs-content{
+        top: 66px;
+      }
+    }
+  }
+}

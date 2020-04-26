@@ -14,7 +14,6 @@ export interface IWidgetBaseConfig {
 
 export interface WidgetConfig extends IWidgetBaseConfig {
   type: "Widget";
-  name: string; // as pluginKey
   props?: {
     align?: "left" | "right" | "bottom" | "center" | "top";
   };
@@ -22,7 +21,7 @@ export interface WidgetConfig extends IWidgetBaseConfig {
 }
 
 export function isWidgetConfig(obj: any): obj is WidgetConfig {
-  return obj && obj.type === "Custom";
+  return obj && obj.type === "Widget";
 }
 
 export interface DockProps {
@@ -32,6 +31,17 @@ export interface DockProps {
   className?: string;
   description?: TipContent;
   onClick?: () => void;
+}
+
+export interface DividerConfig extends IWidgetBaseConfig {
+  type: "Divider";
+  props?: {
+    align?: "left" | "right" | "center";
+  };
+}
+
+export function isDividerConfig(obj: any): obj is DividerConfig {
+  return obj && obj.type === "Divider";
 }
 
 export interface IDockBaseConfig extends IWidgetBaseConfig {

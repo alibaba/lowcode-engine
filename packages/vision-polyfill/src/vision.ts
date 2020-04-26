@@ -9,7 +9,7 @@ import { VE_EVENTS as EVENTS, VE_HOOKS as HOOKS } from './const';
 import Bus from './bus';
 import Symbols from './symbols';
 import { skeleton, editor } from './editor';
-import { VisionWorkbench } from './skeleton/workbench';
+import { VisionWorkbench } from './skeleton/layouts/workbench';
 import Panes from './panes';
 import Exchange from './exchange';
 import VisualEngineContext from './context';

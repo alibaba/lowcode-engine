@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Icon, Search, Select } from '@alifd/next';
 import MaterialShow from '@ali/iceluna-comp-material-show';
-import { PluginProps } from '@ali/lowcode-editor-core';
+import { PluginProps } from '@ali/lowcode-types';
 import { Designer } from '@ali/lowcode-designer';
 
 import './index.scss';

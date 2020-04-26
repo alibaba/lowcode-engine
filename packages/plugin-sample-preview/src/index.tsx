@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@alifd/next';
-import { PluginProps } from '@ali/lowcode-editor-core';
+import { PluginProps } from '@ali/lowcode-types';
 import { Designer } from '@ali/lowcode-designer';
 import './index.scss';
 

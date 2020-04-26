@@ -3,7 +3,7 @@ import { Tab, Search, Input, Button } from '@alifd/next';
 import Editor from '@ali/lowcode-editor-core';
 import { js_beautify, css_beautify } from 'js-beautify';
 import MonacoEditor from 'react-monaco-editor';
-import Panel from '../../vision-polyfill/src/skeleton/panel';
+import Panel from '../../vision-polyfill/src/skeleton/widget/panel';
 
 // import lolizer from './sorceEditorPlugin',
 

@@ -1,6 +1,6 @@
 import { PureComponent } from 'react';
-import { globalLocale, EmbedTip } from '@ali/lowcode-globals';
-import { PluginProps } from '@ali/lowcode-editor-core';
+import { globalLocale, Tip } from '@ali/lowcode-editor-core';
+import { PluginProps } from '@ali/lowcode-types';
 import { intl } from './locale';
 import { IconZh } from './icons/zh';
 import { IconEn } from './icons/en';
@@ -29,7 +29,7 @@ export default class ZhEn extends PureComponent<PluginProps> {
         globalLocale.setLocale(isZh ? 'en-US' : 'zh-CN');
       }}>
         {isZh ? <IconZh size={20} /> : <IconEn size={20} />}
-        <EmbedTip direction="right">{intl('To Locale')}</EmbedTip>
+        <Tip direction="right">{intl('To Locale')}</Tip>
       </div>
     );
   }

@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
-import { NodeSchema, autorun, Reaction, untracked } from '@ali/lowcode-globals';
+import { autorun, Reaction, untracked } from '@ali/lowcode-editor-core';
+import { NodeSchema } from '@ali/lowcode-types';
 
 // TODO: cache to localStorage
 

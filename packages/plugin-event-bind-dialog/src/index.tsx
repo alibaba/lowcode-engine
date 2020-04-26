@@ -1,6 +1,6 @@
 import { Component, isValidElement, ReactElement, ReactNode } from 'react';
 import { Dialog, Search, Input } from '@alifd/next';
-import Editor from '@ali/lowcode-editor-core';
+import { Editor } from '@ali/lowcode-editor-core';
 import './index.scss';
 
 export default class EventBindDialog extends Component<{

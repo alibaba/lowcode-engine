@@ -1,11 +1,11 @@
 import { EventEmitter } from 'events';
-import { NodeSchema, obx } from '@ali/lowcode-globals';
+import { obx } from '@ali/lowcode-editor-core';
+import { NodeSchema } from '@ali/lowcode-types';
+import { setNativeSelection, cursor } from '@ali/lowcode-utils';
 import { DropLocation } from './location';
 import { Node, DocumentModel } from '../document';
 import { ISimulatorHost, isSimulatorHost } from '../simulator';
 import { Designer } from './designer';
-import { setNativeSelection } from '@ali/lowcode-globals';
-import { cursor } from '@ali/lowcode-globals';
 
 export interface LocateEvent {
   readonly type: 'LocateEvent';

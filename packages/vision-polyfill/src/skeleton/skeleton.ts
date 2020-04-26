@@ -9,16 +9,19 @@ import {
   isDockConfig,
   isPanelDockConfig,
   isPanelConfig,
+  DividerConfig,
+  isDividerConfig
 } from './types';
-import Panel, { isPanel } from './panel';
-import WidgetContainer from './widget-container';
+import Panel, { isPanel } from './widget/panel';
+import WidgetContainer from './widget/widget-container';
 import Area from './area';
-import Widget, { isWidget, IWidget } from './widget';
-import PanelDock from './panel-dock';
-import Dock from './dock';
-import { Stage, StageConfig } from './stage';
+import Widget, { isWidget, IWidget } from './widget/widget';
+import PanelDock from './widget/panel-dock';
+import Dock from './widget/dock';
+import { Stage, StageConfig } from './widget/stage';
 import { isValidElement } from 'react';
 import { isPlainObject } from 'globals/src/utils';
+import { Divider } from '@alifd/next';
 
 export enum SkeletonEvents {
   PANEL_DOCK_ACTIVE = 'skeleton.panel-dock.active',
@@ -33,8 +36,8 @@ export class Skeleton {
   private panels = new Map<string, Panel>();
   private containers = new Map<string, WidgetContainer<any>>();
   readonly leftArea: Area<DockConfig | PanelDockConfig | DialogDockConfig>;
-  readonly topArea: Area<DockConfig | PanelDockConfig | DialogDockConfig>;
-  readonly toolbar: Area<DockConfig | PanelDockConfig | DialogDockConfig>;
+  readonly topArea: Area<DockConfig | DividerConfig | PanelDockConfig | DialogDockConfig>;
+  readonly toolbar: Area<DockConfig | DividerConfig | PanelDockConfig | DialogDockConfig>;
   readonly leftFixedArea: Area<PanelConfig, Panel>;
   readonly leftFloatArea: Area<PanelConfig, Panel>;
   readonly rightArea: Area<PanelConfig, Panel>;
@@ -144,7 +147,7 @@ export class Skeleton {
   }
 
   private setupPlugins() {
-    const { config, componentsMap } = this.editor;
+    const { config, components: componentsMap } = this.editor;
     const { plugins } = config;
     if (!plugins) {
       return;
@@ -200,18 +203,23 @@ export class Skeleton {
       if (isPanelDockConfig(config)) {
         widget = new PanelDock(this, config);
       } else if (false) {
+        // DialogDock
         // others...
       } else {
 
         widget = new Dock(this, config);
       }
+    } else if (isDividerConfig(config)) {
+      widget = new Widget(this, {
+        ...config,
+        type: 'Widget',
+        content: Divider,
+      });
     } else if (isPanelConfig(config)) {
       widget = this.createPanel(config);
     } else {
       widget = new Widget(this, config as WidgetConfig);
     }
-    // ?
-    // this.editor.set(`skeleton.${widget.name}`, widget);
     return widget;
   }
 
@@ -219,8 +227,6 @@ export class Skeleton {
     config = this.parseConfig(config);
     const panel = new Panel(this, config);
     this.panels.set(panel.name, panel);
-    // ?
-    // this.editor.set(`skeleton.${panel.name}`, panel);
     return panel;
   }
 

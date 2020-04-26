@@ -2,8 +2,8 @@ import { ReactNode, createElement } from 'react';
 import { uniqueId, createContent, obx } from '@ali/lowcode-globals';
 import { DockConfig } from "./types";
 import { Skeleton } from './skeleton';
-import { DockView, WidgetView } from './widget-views';
-import { IWidget } from './widget';
+import { DockView, WidgetView } from './components/widget-views';
+import { IWidget } from './widget/widget';
 
 /**
  * 带图标（主要）/标题（次要）的扩展

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { observer } from '@ali/lowcode-globals';
+import { observer } from '@ali/lowcode-editor-core';
 import { intl } from '../locale';
 import { OutlineMain } from '../main';
 import TreeView from './tree';

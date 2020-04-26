@@ -2,8 +2,8 @@ import LowCodeRenderer from '@ali/lowcode-react-renderer';
 import { ReactInstance, Fragment, Component, createElement } from 'react';
 import { observer } from '@recore/obx-react';
 import { SimulatorRenderer } from './renderer';
-import './renderer.less';
 import { host } from './host';
+import './renderer.less';
 
 export default class SimulatorRendererView extends Component<{ renderer: SimulatorRenderer }> {
   render() {
