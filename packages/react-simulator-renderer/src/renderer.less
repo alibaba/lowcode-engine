@@ -1,12 +1,11 @@
-html {
-  padding-bottom: 30px;
-  background: transparent !important;
-}
-
 body, html {
   display: block;
-  min-height: 100%;
   background: white;
+  padding: 0;
+  margin: 0;
+}
+html.engine-design-mode {
+  padding-bottom: 30px;
 }
 
 html.engine-cursor-move, html.engine-cursor-move * {
@@ -21,28 +20,6 @@ html.engine-cursor-ew-resize, html.engine-cursor-ew-resize * {
   cursor: ew-resize !important
 }
 
-body, #engine {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-  overflow: hidden;
-  text-rendering: optimizeLegibility;
-  -webkit-user-select: none;
-  -webkit-user-drag: none;
-  -webkit-text-size-adjust: none;
-  -webkit-touch-callout: none;
-  -webkit-font-smoothing: antialiased;
-}
-
-html {
-  min-width: 1024px;
-}
-
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
@@ -51,10 +28,6 @@ html {
 ::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 5px;
-}
-
-html.engine-blur #engine {
-  -webkit-filter: blur(4px);
 }
 
 .lc-container {
@@ -100,4 +73,18 @@ html.engine-blur #engine {
   z-index: 1;
   width: 100%;
   white-space: nowrap;
+}
+
+body.engine-document {
+  &:after, &:before {
+    content: "";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+#app {
+  height: 100vh;
 }

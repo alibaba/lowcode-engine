@@ -5,7 +5,8 @@ import { TitleContent } from './title';
 import { PropConfig } from './prop-config';
 import { NpmInfo } from './npm';
 import { FieldConfig } from './field-config';
-import { NodeSchema } from './schema';
+import { NodeSchema, NodeData } from './schema';
+import { SettingTarget } from './setting-target';
 
 export type NestingFilter = (testNode: any, currentNode: any) => boolean;
 export interface NestingRule {
@@ -40,12 +41,20 @@ export interface Snippet {
   schema: NodeSchema;
 }
 
+export interface InitialItem {
+  name: string;
+  initial: (target: SettingTarget, currentValue: any) => any;
+}
+
 export interface Experimental {
   context?: { [contextInfoName: string]: any };
   snippets?: Snippet[];
   view?: ComponentType<any>;
   transducers?: any; // ? should support
+  initials?: InitialItem[];
   callbacks?: Callbacks;
+  // TODO: thinkof function
+  initialChildren?: NodeData[] | ((target: SettingTarget) => NodeData[]);
 
   // 样式 及 位置，handle上必须有明确的标识以便事件路由判断，或者主动设置事件独占模式
   // NWSE 是交给引擎计算放置位置，ReactElement 必须自己控制初始位置

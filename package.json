@@ -15,7 +15,7 @@
     "commit": "git-cz",
     "pub": "lerna publish --cd-version patch",
     "setup": "./scripts/setup.sh",
-    "start": "lerna exec --scope @ali/lowcode-vision-polyfill -- npm start",
+    "start": "./scripts/start.sh",
     "test": "lerna run test --stream",
     "test:snapshot": "lerna run test:snapshot"
   },

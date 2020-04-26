@@ -18,7 +18,9 @@ import { NodeChildren } from './node-children';
 import { Prop } from './props/prop';
 import { ComponentMeta } from '../../component-meta';
 import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
-import { ExportType } from './export-type';
+import { TransformStage } from './transform-stage';
+
+
 
 /**
  * 基础节点
@@ -136,28 +138,36 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     const { componentName, id, children, props, ...extras } = nodeSchema;
     this.id = id || `node$${document.nextId()}`;
     this.componentName = componentName;
-    let _props: Props;
     if (this.componentName === 'Leaf') {
-      _props = new Props(this, {
+      this.props = new Props(this, {
         children: isDOMText(children) || isJSExpression(children) ? children : '',
       });
     } else {
-      // run initialChildren
-      this._children = new NodeChildren(this as ParentalNode, children || []);
+      this.props = new Props(this, props, extras);
+      this._children = new NodeChildren(this as ParentalNode, this.initialChildren(children));
       this._children.interalInitParent();
-      _props = new Props(this, this.upgradeProps(props), extras);
+      this.props.import(this.transformProps(props || {}), extras);
     }
-    this.props = _props;
   }
 
-  private upgradeProps(props: any): any {
-    // TODO: run componentMeta(initials|initialValue|accessor)
-    // run transform
-    return props;
+  private transformProps(props: any): any {
+    // FIXME! support PropsList
+    return this.document.designer.transformProps(props, this, TransformStage.Init);
+    // TODO: run transducers in metadata.experimental
   }
 
-  private transformOut() {
-
+  private initialChildren(children: any): NodeData[] {
+    // FIXME! this is dirty code
+    if (children == null) {
+      const initialChildren = this.componentMeta.getMetadata().experimental?.initialChildren;
+      if (initialChildren) {
+        if (typeof initialChildren === 'function') {
+          return initialChildren(this as any) || [];
+        }
+        return initialChildren;
+      }
+    }
+    return children || [];
   }
 
   isContainer(): boolean {
@@ -194,6 +204,10 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.componentName === 'Leaf';
   }
 
+  internalSetWillPurge() {
+    this.internalSetParent(null);
+    this.document.addWillPurge(this);
+  }
   /**
    * 内部方法，请勿使用
    */
@@ -207,11 +221,14 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
 
     this._parent = parent;
-    if (parent && !this.conditionGroup) {
-      // initial conditionGroup
-      const grp = this.getExtraProp('conditionGroup', false)?.getAsString();
-      if (grp) {
-        this.setConditionGroup(grp);
+    if (parent) {
+      this.document.removeWillPurge(this);
+      if (!this.conditionGroup) {
+        // initial conditionGroup
+        const grp = this.getExtraProp('conditionGroup', false)?.getAsString();
+        if (grp) {
+          this.setConditionGroup(grp);
+        }
       }
     }
   }
@@ -266,7 +283,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     if (!this.isParental() || this.componentName === 'Fragment') {
       return null;
     }
-    return this.props.export(ExportType.ForSerilize).props || null;
+    return this.props.export(TransformStage.Serilize).props || null;
   }
 
   @computed hasSlots() {
@@ -427,7 +444,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * 获取符合搭建协议-节点 schema 结构
    */
   get schema(): Schema {
-    return this.export(ExportType.ForSave);
+    return this.export(TransformStage.Save);
   }
 
   set schema(data: Schema) {
@@ -448,31 +465,32 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 导出 schema
    */
-  export(exportType: ExportType = ExportType.ForSave): Schema {
+  export(stage: TransformStage = TransformStage.Save): Schema {
     // run transducers
     // run
     const baseSchema: any = {
       componentName: this.componentName,
     };
 
-    if (exportType !== ExportType.ForSave) {
+    if (stage !== TransformStage.Save) {
       baseSchema.id = this.id;
     }
 
     if (this.isLeaf()) {
-      baseSchema.children = this.props.get('children')?.export(exportType);
+      baseSchema.children = this.props.get('children')?.export(stage);
       return baseSchema;
     }
 
-    const { props = {}, extras } = this.props.export(exportType) || {};
+    const { props = {}, extras } = this.props.export(stage) || {};
+
     const schema: any = {
       ...baseSchema,
-      props,
+      props: this.document.designer.transformProps(props, this, stage),
       ...extras,
     };
 
     if (this.isParental() && this.children.size > 0) {
-      schema.children = this.children.export(exportType);
+      schema.children = this.children.export(stage);
     }
 
     return schema;
@@ -556,6 +574,16 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   getNode() {
     return this;
   }
+  getRoot() {
+    return this.document.rootNode;
+  }
+  getProps() {
+    return this.props;
+  }
+
+  mergeChildren(remover: () => any, adder: (children: Node[]) => NodeData[] | null, sorter: () => any) {
+    this.children?.mergeChildren(remover, adder, sorter);
+  }
 
   /**
    * @deprecated
@@ -595,9 +623,15 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
     return { container: this.parent, ref: this };
   }
-
+  /**
+   * @deprecated
+   */
   getAddonData(key: string) {
     return this.getExtraProp(key)?.value;
+  }
+  
+  toString() {
+    return this.id;
   }
 }
 
@@ -693,7 +727,7 @@ export function comparePosition(node1: Node, node2: Node): PositionNO {
 export function insertChild(container: ParentalNode, thing: Node | NodeData, at?: number | null, copy?: boolean): Node {
   let node: Node;
   if (isNode(thing) && (copy || thing.isSlot())) {
-    thing = thing.export(ExportType.ForSave);
+    thing = thing.export(TransformStage.Save);
   }
   if (isNode(thing)) {
     node = thing;

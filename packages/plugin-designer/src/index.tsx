@@ -63,13 +63,11 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
       return null;
     }
 
-    console.info('metadatas', componentMetadatas);
-
     return (
       <DesignerView
         onMount={this.handleDesignerMount}
         className="lowcode-plugin-designer"
-        eventPipe={editor}
+        editor={editor}
         designer={editor.get(Designer)}
         componentMetadatas={componentMetadatas}
         simulatorProps={{

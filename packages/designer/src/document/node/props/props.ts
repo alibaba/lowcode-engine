@@ -2,7 +2,7 @@ import { PropsMap, PropsList, CompositeValue, computed, obx, uniqueId } from '@a
 import { PropStash } from './prop-stash';
 import { Prop, IPropParent, UNSET } from './prop';
 import { Node } from '../node';
-import { ExportType } from '../export-type';
+import { TransformStage } from '../transform-stage';
 
 export const EXTRA_KEY_PREFIX = '___';
 
@@ -80,7 +80,7 @@ export class Props implements IPropParent {
     });
   }
 
-  export(exportType: ExportType = ExportType.ForSave): { props?: PropsMap | PropsList; extras?: object } {
+  export(stage: TransformStage = TransformStage.Save): { props?: PropsMap | PropsList; extras?: object } {
     if (this.items.length < 1) {
       return {};
     }
@@ -89,7 +89,7 @@ export class Props implements IPropParent {
     if (this.type === 'list') {
       props = [];
       this.items.forEach(item => {
-        let value = item.export(exportType);
+        let value = item.export(stage);
         if (value === UNSET) {
           value = null;
         }
@@ -112,7 +112,7 @@ export class Props implements IPropParent {
           // todo ...spread
           return;
         }
-        let value = item.export(exportType);
+        let value = item.export(stage);
         if (value === UNSET) {
           value = null;
         }
@@ -295,5 +295,16 @@ export class Props implements IPropParent {
     this.purged = true;
     this.stash.purge();
     this.items.forEach(item => item.purge());
+  }
+
+  getProp(path: string, stash = true): Prop | null {
+    return this.query(path, stash as any) || null;
+  }
+
+  /**
+   * 获取单个属性值
+   */
+  getPropValue(path: string): any {
+    return this.getProp(path, false)?.value;
   }
 }

@@ -4,23 +4,24 @@ import PropTypes from 'prop-types';
 import Debug from 'debug';
 import AppContext from '../context/appContext';
 import { isFileSchema, goldlog } from '../utils';
-import Page from './pageEngine';
-import Component from './compEngine';
-import Block from './blockEngine';
-import Addon from './addonEngine';
-import Temp from './tempEngine';
+import PageEngine from './pageEngine';
+import ComponentEngine from './compEngine';
+import BlockEngine from './blockEngine';
+import AddonEngine from './addonEngine';
+import TempEngine from './tempEngine';
 import { isEmpty } from '@ali/b3-one/lib/obj';
+import BaseEngine from './base';
 
 window.React = React;
 window.ReactDom = ReactDOM;
 
 const debug = Debug('engine:entry');
 const ENGINE_COMPS = {
-  Page,
-  Component,
-  Block,
-  Addon,
-  Temp,
+  PageEngine,
+  ComponentEngine,
+  BlockEngine,
+  AddonEngine,
+  TempEngine,
 };
 export default class Engine extends PureComponent {
   static dislayName = 'engine';
@@ -98,8 +99,15 @@ export default class Engine extends PureComponent {
       return '模型结构异常';
     }
     debug('entry.render');
-    const allComponents = { ...components, ...ENGINE_COMPS };
-    const Comp = allComponents[schema.componentName];
+    const { componentName } = schema;
+    const allComponents = { ...ENGINE_COMPS, ...components };
+    let Comp = allComponents[componentName];
+    if (Comp && Comp.prototype) {
+      const proto = Comp.prototype;
+      if (!(Comp.prototype instanceof BaseEngine)) {
+        Comp = ENGINE_COMPS[`${componentName}Engine`];
+      }
+    }
     if (Comp) {
       return (
         <AppContext.Provider

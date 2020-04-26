@@ -1,5 +1,11 @@
 import { ComponentType, ReactElement } from 'react';
-import { ComponentMetadata, uniqueId, registerMetadataTransducer, FieldConfig } from '@ali/lowcode-globals';
+import {
+  ComponentMetadata,
+  uniqueId,
+  registerMetadataTransducer,
+  FieldConfig,
+  InitialItem,
+} from '@ali/lowcode-globals';
 import { ComponentMeta, addBuiltinComponentAction, isComponentMeta } from '@ali/lowcode-designer';
 import {
   OldPropConfig,
@@ -11,25 +17,41 @@ import {
 } from './upgrade-metadata';
 import { designer } from '../editor';
 
-const GlobalPropsConfigure: Array<FieldConfig & { position: string }> = [];
-const Overrides: any = {};
+const GlobalPropsConfigure: Array<{ position: string; initials?: InitialItem[]; config: FieldConfig }> = [];
+const Overrides: {
+  [componentName: string]: {
+    initials?: InitialItem[];
+    config: any;
+  };
+} = {};
 
 function addGlobalPropsConfigure(config: OldGlobalPropConfig) {
+  const initials: InitialItem[] = [];
   GlobalPropsConfigure.push({
-    position: config.position,
-    ...upgradePropConfig(config),
+    position: config.position || 'bottom',
+    initials,
+    config: upgradePropConfig(config, (item) => {
+      initials.push(item);
+    }),
   });
 }
 function removeGlobalPropsConfigure(name: string) {
   let l = GlobalPropsConfigure.length;
   while (l-- > 0) {
-    if (GlobalPropsConfigure[l].name === name) {
+    if (GlobalPropsConfigure[l].config.name === name) {
       GlobalPropsConfigure.splice(l, 1);
     }
   }
 }
 function overridePropsConfigure(componentName: string, config: OldPropConfig | OldPropConfig[]) {
-  Overrides[componentName] = Array.isArray(config) ? upgradeConfigure(config) : upgradePropConfig(config);
+  const initials: InitialItem[] = [];
+  const addInitial = (item: InitialItem) => {
+    initials.push(item);
+  };
+  Overrides[componentName] = {
+    initials,
+    config: Array.isArray(config) ? upgradeConfigure(config, addInitial) : upgradePropConfig(config, addInitial),
+  };
 }
 registerMetadataTransducer(
   (metadata) => {
@@ -49,28 +71,28 @@ registerMetadataTransducer(
       metadata.configure.props = top = bottom = [];
     }
 
-    GlobalPropsConfigure.forEach((config) => {
-      const position = config.position || 'bottom';
+    GlobalPropsConfigure.forEach((item) => {
+      const position = item.position || 'bottom';
 
       if (position === 'top') {
-        top.unshift(config);
+        top.unshift(item.config);
       } else if (position === 'bottom') {
-        bottom.push(config);
+        bottom.push(item.config);
       }
     });
 
     const override = Overrides[componentName];
     if (override) {
-      if (Array.isArray(override)) {
-        metadata.configure.combined = override;
+      if (Array.isArray(override.config)) {
+        metadata.configure.combined = override.config;
       } else {
         let l = top.length;
         let item;
         while (l-- > 0) {
           item = top[l];
           if (item.name in override) {
-            if (override[item.name]) {
-              top.splice(l, 1, override[item.name]);
+            if (override.config[item.name]) {
+              top.splice(l, 1, override.config[item.name]);
             } else {
               top.splice(l, 1);
             }
@@ -78,6 +100,8 @@ registerMetadataTransducer(
         }
       }
     }
+
+    // TODO FIXME! append override & globalConfigure initials and then unique
     return metadata;
   },
   100,

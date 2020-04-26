@@ -41,7 +41,6 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
   }
   render() {
     const { renderer } = this.props;
-    console.info(renderer.schema)
     return (
       <LowCodeRenderer
         schema={renderer.schema}
@@ -55,7 +54,11 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
           const { __id, __desingMode, ...viewProps } = props;
           viewProps.componentId = __id;
           viewProps._leaf = host.document.getNode(__id);
-          return createElement(Component, viewProps, children);
+          return createElement(
+            Component,
+            viewProps,
+            children == null ? null : Array.isArray(children) ? children : [children],
+          );
         }}
         onCompGetRef={(schema: any, ref: ReactInstance | null) => {
           renderer.mountInstance(schema.id, ref);

@@ -64,7 +64,7 @@ class Clipboard {
       return;
     }
     const copyPaster = document.createElement<'textarea'>('textarea');
-    copyPaster.style.cssText = 'position: relative;left: -9999px;';
+    copyPaster.style.cssText = 'position: absolute;left: -9999px;top:-100px';
     document.body.appendChild(copyPaster);
     const dispose = this.initCopyPaster(copyPaster);
     return () => {

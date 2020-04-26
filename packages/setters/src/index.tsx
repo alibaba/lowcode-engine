@@ -1,4 +1,4 @@
-import { registerSetter } from '@ali/lowcode-globals';
+import { registerSetter, isJSSlot } from '@ali/lowcode-globals';
 import { DatePicker, Input, Radio, Select, Switch, NumberPicker } from '@alifd/next';
 import ExpressionSetter from './expression-setter';
 import MixinSetter from './mixin-setter';
@@ -10,12 +10,7 @@ import EventsSetter from './events-setter';
 export const StringSetter = {
   component: Input,
   defaultProps: { placeholder: '请输入' },
-  title: 'StringSetter', // TODO
-  condition: (field: any) => {
-    const v = field.getValue();
-    return v == null || typeof v === 'string';
-  },
-  initialValue: '',
+  title: 'StringSetter',
   recommend: true,
 };
 export const NumberSetter = NumberPicker;
@@ -43,12 +38,38 @@ export const ClassNameSetter = () => {
   return <div className="lc-block-setter">这里是类名绑定</div>;
 };
 
-const builtinSetters = {
+export const SlotSetter = () => {
+  return <div>这里是 SlotSetter</div>;
+};
+
+const builtinSetters: any = {
   StringSetter,
   NumberSetter,
   BoolSetter,
   SelectSetter,
-  ExpressionSetter: ExpressionSetter as any,
+  ExpressionSetter: {
+    component: ExpressionSetter,
+    defaultProps: { placeholder: '请输入表达式' },
+    title: '表达式输入',
+    recommend: true,
+  },
+  SlotSetter: {
+    component: SlotSetter,
+    title: '插槽输入',
+    condition: (field: any) => {
+      return isJSSlot(field.getValue());
+    },
+    initialValue: (field: any, value: any) => {
+      if (isJSSlot(value)) {
+        return value;
+      }
+      return {
+        type: 'JSSlot',
+        value: value
+      };
+    },
+    recommend: true,
+  },
   MixinSetter,
   RadioGroupSetter,
   TextAreaSetter,

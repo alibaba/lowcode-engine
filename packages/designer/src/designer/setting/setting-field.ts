@@ -21,7 +21,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
       return null;
     }
     if (isDynamicSetter(this._setter)) {
-      return this._setter(this);
+      return this._setter.call(this,this);
     }
     return this._setter;
   }

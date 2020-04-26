@@ -1,5 +1,5 @@
 import { ComponentType, ReactElement, isValidElement, ComponentClass } from 'react';
-import { isI18nData, SettingTarget } from '@ali/lowcode-globals';
+import { isI18nData, SettingTarget, InitialItem, isPlainObject, isJSSlot, isJSExpression } from '@ali/lowcode-globals';
 
 type Field = SettingTarget;
 
@@ -34,8 +34,8 @@ export interface OldPropConfig {
     url?: string;
   };
   defaultValue?: any; // => extraProps.defaultValue
-  initialValue?: any | ((value: any, defaultValue: any) => any); // => extraProps.initialValue
-  initial?: (value: any, defaultValue: any) => any  // => extraProps.initialValue
+  initialValue?: any | ((value: any, defaultValue: any) => any); // => initials.initialValue
+  initial?: (value: any, defaultValue: any) => any  // => initials.initialValue
 
   display?: DISPLAY_TYPE; // => fieldExtraProps
   fieldStyle?: DISPLAY_TYPE; // => fieldExtraProps
@@ -175,7 +175,7 @@ type SetterGetter = (this: Field, value: any) => ComponentClass;
 
 type ReturnBooleanFunction = (this: Field, value: any) => boolean;
 
-export function upgradePropConfig(config: OldPropConfig) {
+export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) {
   const {
     type,
     name,
@@ -258,6 +258,7 @@ export function upgradePropConfig(config: OldPropConfig) {
     extraProps.condition = (field: Field) => !(isHidden(field) || isDisabled(field));
   }
   if (ignore != null || disabled != null) {
+    // FIXME! addFilter
     extraProps.virtual = (field: Field) => {
       if (isDisabled(field)) { return true; }
 
@@ -269,31 +270,7 @@ export function upgradePropConfig(config: OldPropConfig) {
   }
 
   if (type === 'group') {
-    newConfig.items = items ? upgradeConfigure(items) : [];
-    return newConfig;
-  }
-
-  if (slotName) {
-    newConfig.name = slotName;
-    if (!newConfig.title && slotTitle) {
-      newConfig.title = slotTitle;
-    }
-    const slotSetter = {
-      componentName: 'SlotSetter',
-      initialValue: () => ({
-        type: 'JSSlot',
-        value: initialChildren
-      }),
-    }
-    if (allowTextInput === false) {
-      newConfig.setter = slotSetter;
-    } else {
-      newConfig.setter = [{
-        componentName: 'StringSetter',
-        initialValue,
-      }, slotSetter];
-    }
-
+    newConfig.items = items ? upgradeConfigure(items, addInitial) : [];
     return newConfig;
   }
 
@@ -303,29 +280,30 @@ export function upgradePropConfig(config: OldPropConfig) {
     extraProps.defaultValue = initialValue;
   }
 
-  let initialFn = initial || initialValue;
+  let initialFn = (slotName ? null : initial) || initialValue;
 
-  if (accessor) {
+  if (accessor && !slotName) {
     extraProps.getValue = (field: Field, fieldValue: any) => {
       return accessor.call(field, fieldValue);
     };
     if (!initialFn) {
-      // FIXME!
-      initialFn
+      initialFn = accessor;
     }
   }
-  extraProps.initialValue = (field: Field, currentValue: any, defaultValue?: any) => {
-    if (defaultValue === undefined) {
-      defaultValue = extraProps.defaultValue;
-    }
 
-    if (typeof initialFn === 'function') {
-      // ?
-      return initialFn.call(field, currentValue, defaultValue);
-    }
+  addInitial({
+    name: slotName || name,
+    initial: (field: Field, currentValue: any) => {
+      // FIXME! read from prototype.defaultProps
+      const defaults = extraProps.defaultValue;
 
-    return defaultValue;
-  };
+      if (typeof initialFn === 'function') {
+        return initialFn.call(field, currentValue, defaults);
+      }
+
+      return currentValue == null ? defaults : currentValue;
+    }
+  });
 
   if (sync) {
     extraProps.autorun = (field: Field) => {
@@ -335,15 +313,61 @@ export function upgradePropConfig(config: OldPropConfig) {
       }
     }
   }
-  if (mutator) {
+  if (mutator && !slotName) {
     extraProps.setValue = (field: Field, value: any) => {
       mutator.call(field, value);
     };
   }
 
+  if (slotName) {
+    newConfig.name = slotName;
+    if (!newConfig.title && slotTitle) {
+      newConfig.title = slotTitle;
+    }
+    const setters: any[] = [{
+      componentName: 'SlotSetter',
+      initialValue: (field: any, value: any) => {
+        if (isJSSlot(value)) {
+          return value;
+        }
+        return {
+          type: 'JSSlot',
+          value: value == null ? initialChildren : value
+        };
+      },
+    }];
+    if (allowTextInput !== false) {
+      setters.unshift('StringSetter');
+      // FIXME: use I18nSetter
+    }
+    if (supportVariable) {
+      setters.push('ExpressionSetter');
+    }
+    newConfig.setter = setters.length > 1 ? setters : setters[0];
+
+    return newConfig;
+  }
+
   let primarySetter: any;
   if (type === 'composite') {
-    const objItems = items ? upgradeConfigure(items) : [];
+    const initials: InitialItem[] = [];
+    const objItems = items ? upgradeConfigure(items, (item) => {
+      initials.push(item);
+    }) : [];
+    const initial = (target: SettingTarget, value?: any) => {
+      // TODO:
+      const defaults = extraProps.defaultValue;
+      const data: any = {};
+      initials.forEach(item => {
+        // FIXME! Target may be a wrong
+        data[item.name] = item.initial(target, isPlainObject(value) ? value[item.name] : null);
+      });
+      return data;
+    }
+    addInitial({
+      name,
+      initial,
+    });
     primarySetter = {
       componentName: 'ObjectSetter',
       props: {
@@ -352,12 +376,12 @@ export function upgradePropConfig(config: OldPropConfig) {
         },
       },
       initialValue: (field: Field) => {
-        // FIXME: read from objItems
-        return extraProps.initialValue(field, {});
+        return initial(field, field.getValue());
       },
     };
   } else if (setter) {
     if (Array.isArray(setter)) {
+      // FIXME! read initial from setter
       primarySetter = setter.map(({ setter, condition }) => {
         return {
           componentName: setter,
@@ -393,7 +417,9 @@ export function upgradePropConfig(config: OldPropConfig) {
   return newConfig;
 }
 
-export function upgradeConfigure(items: OldPropConfig[]) {
+type AddIntial = (initialItem: InitialItem) => void;
+
+export function upgradeConfigure(items: OldPropConfig[], addInitial: AddIntial) {
   const configure: any[] = [];
   let ignoreSlotName: any = null;
   items.forEach((config) => {
@@ -406,7 +432,7 @@ export function upgradeConfigure(items: OldPropConfig[]) {
       }
       ignoreSlotName = null;
     }
-    configure.push(upgradePropConfig(config));
+    configure.push(upgradePropConfig(config, addInitial));
   });
   return configure;
 }
@@ -542,7 +568,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   if (snippets) {
     experimental.snippets = snippets.map(data => {
       const { schema = {} } = data;
-      if (initialChildren && !schema.children) {
+      if (!schema.children && initialChildren && typeof initialChildren !== 'function') {
         schema.children = initialChildren;
       }
       return {
@@ -550,7 +576,10 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
         schema,
       };
     });
-  } else if (defaultProps || initialChildren) {
+  }
+  // FIXME! defaultProps for initial input
+  // initialChildren maybe a function
+  else if (defaultProps || initialChildren) {
     const snippet = {
       screenshot: icon,
       label: title,
@@ -565,6 +594,11 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     } else {
       experimental.snippets = [snippet];
     }
+  }
+  if (initialChildren) {
+    experimental.initialChildren = typeof initialChildren === 'function' ? (field: Field) => {
+      return initialChildren.call(field, (field as any).props);
+    } : initialChildren;
   }
   if (view) {
     experimental.view = view;
@@ -629,7 +663,12 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
 
   experimental.callbacks = callbacks;
 
-  const props = upgradeConfigure(configure || []);
+  const initials: InitialItem[] = [];
+  const props = upgradeConfigure(configure || [], (item) => {
+    initials.push(item);
+  });
+  experimental.initials = initials;
+
   const events = {};
   const styles = {};
   meta.configure = { props, component, events, styles };
