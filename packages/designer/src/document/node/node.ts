@@ -595,6 +595,10 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
     return { container: this.parent, ref: this };
   }
+
+  getAddonData(key: string) {
+    return this.getExtraProp(key)?.value;
+  }
 }
 
 export interface ParentalNode<T extends NodeSchema = NodeSchema> extends Node<T> {
