@@ -1,11 +1,11 @@
-import { globalContext, isPlainObject, isJSBlock } from '@ali/lowcode-globals';
-import Editor from '@ali/lowcode-editor-core';
+import { isJSBlock } from '@ali/lowcode-types';
+import { isPlainObject } from '@ali/lowcode-utils';
+import { globalContext, Editor } from '@ali/lowcode-editor-core';
 import { Designer, TransformStage } from '@ali/lowcode-designer';
 import { registerSetters } from '@ali/lowcode-setters';
 import Outline from '@ali/lowcode-plugin-outline-pane';
-import SettingsPane from '@ali/lowcode-plugin-settings-pane';
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
-import { Skeleton } from './skeleton/skeleton';
+import { Skeleton, SettingsPrimaryPane } from '@ali/lowcode-editor-skeleton';
 
 
 import Preview from '@ali/lowcode-plugin-sample-preview';
@@ -78,7 +78,7 @@ skeleton.add({
   area: 'rightArea',
   name: 'settingsPane',
   type: 'Panel',
-  content: SettingsPane,
+  content: SettingsPrimaryPane,
 });
 skeleton.add({
   area: 'leftArea',

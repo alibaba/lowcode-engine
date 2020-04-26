@@ -1,9 +1,8 @@
 import { Component, isValidElement, ReactElement, ReactNode } from 'react';
 import { Tab, Search, Input, Button } from '@alifd/next';
-import Editor from '@ali/lowcode-editor-core';
+import { Editor } from '@ali/lowcode-editor-core';
 import { js_beautify, css_beautify } from 'js-beautify';
 import MonacoEditor from 'react-monaco-editor';
-import Panel from '../../vision-polyfill/src/skeleton/widget/panel';
 
 // import lolizer from './sorceEditorPlugin',
 
@@ -47,12 +46,12 @@ interface FunctionEventParam {
 
 export default class SourceEditor extends Component<{
   editor: Editor;
-  panel?: Panel
+  panel?: any
 }> {
-  private monocoEditer: Object;
-  private editorCmd: Object;
+  private monocoEditer: any;
+  private editorCmd: any;
 
-  state = {
+  state: any = {
     isShow: false,
     tabKey: TAB_KEY.JS_TAB,
   };
@@ -117,18 +116,13 @@ export default class SourceEditor extends Component<{
   }
 
   openPluginPannel = () => {
-    const { editor, panel } = this.props;
-    // 判断面板是否处于激活状态
-    if (!editor.leftNav || editor.leftNav != 'sourceEditor') {
-      // 打开面板
-      editor.emit('leftNav.change', 'sourceEditor');
-    }
+    const { panel } = this.props;
     if (panel) {
       panel.show();
     }
   }
 
-  callEditorEvent = (eventName, params) => {
+  callEditorEvent = (eventName: any, params: any) => {
     if (!this.monocoEditer) {
       this.editorCmd = {
         eventName,
@@ -146,7 +140,7 @@ export default class SourceEditor extends Component<{
 
   };
 
-  initCode = (schema) => {
+  initCode = (schema: any) => {
     let jsCode = js_beautify(transfrom.schema2Code(schema), { indent_size: 2, indent_empty_lines: true });
     let css;
 
@@ -167,13 +161,13 @@ export default class SourceEditor extends Component<{
    */
   addFunction(params: FunctionEventParam) {
     const count = this.monocoEditer.getModel().getLineCount() || 0;
-    const range = new monaco.Range(count, 1, count, 1);
+    const range = new (window as any).monaco.Range(count, 1, count, 1);
     const functionCode = transfrom.getNewFunctionCode(params.functionName);
     this.monocoEditer.executeEdits('log-source', [
       { identifier: 'event_id', range: range, text: functionCode, forceMoveMarkers: true },
     ]);
     setTimeout(() => {
-      let newPosition = new monaco.Position(count + 1, 2);
+      let newPosition = new (window as any).monaco.Position(count + 1, 2);
       this.monocoEditer.setPosition(newPosition);
       this.monocoEditer.focus();
     }, 100);
@@ -204,7 +198,7 @@ export default class SourceEditor extends Component<{
     }
   }
 
-  editorDidMount = (editor, monaco) => {
+  editorDidMount = (editor: any, monaco: any) => {
     console.log('editorDidMount', editor);
     this.monocoEditer = editor;
 
@@ -247,13 +241,13 @@ export default class SourceEditor extends Component<{
     // });
   };
 
-  onTabChange = (key) => {
+  onTabChange = (key: any) => {
     this.setState({
       selectTab: key,
     });
   };
 
-  updateCode = (newCode) => {
+  updateCode = (newCode: any) => {
     const { selectTab } = this.state;
     if (selectTab === TAB_KEY.JS_TAB) {
       this.setState({
@@ -283,7 +277,7 @@ export default class SourceEditor extends Component<{
               {isShow && (
                 <MonacoEditor
                   value={selectTab == TAB_KEY.JS_TAB ? jsCode : css}
-                  {...defaultEditorOption}
+                  {...defaultEditorOption as any}
                   {...{ language: selectTab == TAB_KEY.JS_TAB ? 'javascript' : 'css' }}
                   onChange={(newCode) => this.updateCode(newCode)}
                   editorDidMount={this.editorDidMount}

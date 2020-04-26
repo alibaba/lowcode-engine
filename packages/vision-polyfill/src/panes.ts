@@ -1,6 +1,6 @@
 import { skeleton, editor } from './editor';
 import { ReactElement } from 'react';
-import { IWidgetBaseConfig } from './skeleton/types';
+import { IWidgetBaseConfig } from '@ali/lowcode-editor-skeleton';
 
 export interface IContentItemConfig {
   title: string;

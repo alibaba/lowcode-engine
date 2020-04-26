@@ -1,7 +1,3 @@
-export * from './settings-pane';
-import './transducers/register';
-import './register';
 import './style.less';
-import SettingsMainView from './settings-primary-view';
-
-export default SettingsMainView;
+export * from './settings-primary-pane';
+export * from './settings-pane';

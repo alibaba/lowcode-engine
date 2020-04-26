@@ -1,5 +1,5 @@
 import { designer } from './editor';
-import { RootSchema } from '@ali/lowcode-globals';
+import { RootSchema } from '@ali/lowcode-types';
 import { DocumentModel } from '@ali/lowcode-designer';
 
 const { project } = designer;

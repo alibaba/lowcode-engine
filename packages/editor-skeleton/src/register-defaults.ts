@@ -1,0 +1,39 @@
+import { registerSetter } from '@ali/lowcode-editor-core';
+import { registerMetadataTransducer } from '@ali/lowcode-designer';
+import ArraySetter from './components/array-setter';
+import ObjectSetter from './components/object-setter';
+import MixedSetter from './components/mixed-setter';
+import { isPlainObject } from '@ali/lowcode-utils';
+import parseProps from './transducers/parse-props';
+import addonCombine from './transducers/addon-combine';
+
+registerSetter('ArraySetter', {
+  component: ArraySetter,
+  defaultProps: {},
+  title: 'ArraySetter', // TODO
+  condition: (field: any) => {
+    const v = field.getValue();
+    return v == null || Array.isArray(v);
+  },
+  initialValue: [],
+  recommend: true,
+});
+registerSetter('ObjectSetter', {
+  component: ObjectSetter,
+  // todo: defaultProps
+  defaultProps: {},
+  title: 'ObjectSetter', // TODO
+  condition: (field: any) => {
+    const v = field.getValue();
+    return v == null || isPlainObject(v);
+  },
+  initialValue: {},
+  recommend: true,
+});
+registerSetter('MixedSetter', MixedSetter);
+
+// parseProps
+registerMetadataTransducer(parseProps, 10, 'parse-props');
+
+// addon/platform custom
+registerMetadataTransducer(addonCombine, 11, 'combine-props');

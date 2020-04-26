@@ -1,5 +1,5 @@
 import { designer } from './editor';
-import { DragObjectType, isNode, TransformStage } from '@ali/lowcode-designer';
+import { DragObjectType, isNode } from '@ali/lowcode-designer';
 
 const dragon = designer.dragon;
 const DragEngine = {

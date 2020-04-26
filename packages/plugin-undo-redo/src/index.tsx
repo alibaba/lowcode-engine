@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
 import './index.scss';
-import Editor, { PluginProps } from '@ali/lowcode-editor-core';
+import { Editor } from '@ali/lowcode-editor-core';
 import { TopIcon } from '@ali/lowcode-editor-skeleton';
 import { Designer } from '@ali/lowcode-designer';
+import { PluginProps } from '@ali/lowcode-types';
 
-export interface IProps {
+export interface IProps extends PluginProps {
   editor: Editor;
   logo?: string;
 }
@@ -14,10 +15,7 @@ export interface IState {
   redoEnable: boolean;
 }
 
-export default class UndoRedo extends PureComponent<
-  IProps & PluginProps,
-  IState
-> {
+export default class UndoRedo extends PureComponent<IProps, IState> {
   public static display = 'LowcodeUndoRedo';
 
   private history: any;
@@ -80,18 +78,8 @@ export default class UndoRedo extends PureComponent<
     const { undoEnable, redoEnable } = this.state;
     return (
       <div className="lowcode-plugin-undo-redo">
-        <TopIcon
-          icon="houtui"
-          title="后退"
-          disabled={!undoEnable}
-          onClick={this.handleUndoClick}
-        />
-        <TopIcon
-          icon="qianjin"
-          title="前进"
-          disabled={!redoEnable}
-          onClick={this.handleRedoClick}
-        />
+        <TopIcon icon="houtui" title="后退" disabled={!undoEnable} onClick={this.handleUndoClick} />
+        <TopIcon icon="qianjin" title="前进" disabled={!redoEnable} onClick={this.handleRedoClick} />
       </div>
     );
   }

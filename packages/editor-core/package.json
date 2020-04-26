@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-globals",
-  "version": "0.9.3",
+  "version": "0.8.6",
   "description": "Globals api for Ali lowCode engine",
   "license": "MIT",
   "main": "lib/index.js",
@@ -27,13 +27,14 @@
   },
   "dependencies": {
     "@alifd/next": "^1.19.16",
+    "@ali/lowcode-types": "^0.8.0",
+    "@ali/lowcode-utils": "^0.8.0",
     "@recore/obx": "^1.0.8",
     "@recore/obx-react": "^1.0.7",
     "classnames": "^2.2.6",
     "power-di": "^2.2.4",
     "debug": "^4.1.1",
     "intl-messageformat": "^8.3.1",
-    "lodash": "^4.17.15",
     "store": "^2.0.12",
     "react": "^16",
     "react-dom": "^16.7.0"
@@ -44,8 +45,6 @@
     "@types/node": "^13.7.1",
     "@types/react": "^16",
     "@types/react-dom": "^16",
-
-    "@types/lodash": "^4.14.149",
     "@types/store": "^2.0.2",
     "build-plugin-component": "^0.2.11",
     "build-plugin-fusion": "^0.1.0",

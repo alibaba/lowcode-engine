@@ -3,13 +3,12 @@ import Popup from '@ali/ve-popups';
 import Icons from '@ali/ve-icons';
 import { render } from 'react-dom';
 import I18nUtil from '@ali/ve-i18n-util';
-import { hotkey as Hotkey } from '@ali/lowcode-globals';
+import { hotkey as Hotkey } from '@ali/lowcode-editor-core';
 import { createElement } from 'react';
 import { VE_EVENTS as EVENTS, VE_HOOKS as HOOKS } from './const';
 import Bus from './bus';
-import Symbols from './symbols';
 import { skeleton, editor } from './editor';
-import { VisionWorkbench } from './skeleton/layouts/workbench';
+import { Workbench } from '@ali/lowcode-editor-skeleton';
 import Panes from './panes';
 import Exchange from './exchange';
 import VisualEngineContext from './context';
@@ -23,6 +22,8 @@ import Prop from './prop';
 import Env from './env';
 import './vision.less';
 import DragEngine from './drag-engine';
+import * as EditorCore from '@ali/lowcode-editor-core';
+import * as Designer from '@ali/lowcode-designer';
 
 function init(container?: Element) {
   if (!container) {
@@ -32,7 +33,7 @@ function init(container?: Element) {
   container.id = 'engine';
 
   render(
-    createElement(VisionWorkbench, {
+    createElement(Workbench, {
       skeleton,
     }),
     container,
@@ -60,6 +61,8 @@ const modules = {
 const context = new VisualEngineContext();
 
 const VisualEngine = {
+  EditorCore,
+  Designer,
   editor,
   skeleton,
   /**
@@ -79,8 +82,6 @@ const VisualEngine = {
   EVENTS,
   /* 修饰方法 */
   HOOKS,
-  /* Symbol 管理类 */
-  Symbols,
   Exchange,
   context,
   /**
@@ -102,6 +103,7 @@ const VisualEngine = {
 export default VisualEngine;
 
 (window as any).VisualEngine = VisualEngine;
+
 
 /*
 console.log(

@@ -1,6 +1,6 @@
 import { ReactElement, ComponentType } from 'react';
 import { EventEmitter } from 'events';
-import { registerSetter } from '@ali/lowcode-globals';
+import { registerSetter } from '@ali/lowcode-editor-core';
 import Bundle from './bundle';
 
 export class Trunk {

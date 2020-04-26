@@ -3,8 +3,8 @@
     [
       "build-plugin-component",
       {
-        "filename": "globals",
-        "library": "LCEGlobals",
+        "filename": "core",
+        "library": "LCECore",
         "libraryTarget": "umd"
       }
     ],

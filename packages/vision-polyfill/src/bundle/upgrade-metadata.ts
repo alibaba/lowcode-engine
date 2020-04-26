@@ -1,10 +1,11 @@
 import { ComponentType, ReactElement, isValidElement, ComponentClass } from 'react';
-import { isI18nData, SettingTarget, InitialItem, isPlainObject, isJSSlot, isJSExpression } from '@ali/lowcode-globals';
+import { isPlainObject } from '@ali/lowcode-utils';
+import { isI18nData, SettingTarget, InitialItem, isJSSlot, isJSExpression } from '@ali/lowcode-types';
 
 type Field = SettingTarget;
 
 export enum DISPLAY_TYPE {
-  NONE = 'none',  // => condition'plain'
+  NONE = 'none', // => condition'plain'
   PLAIN = 'plain',
   INLINE = 'inline',
   BLOCK = 'block',
@@ -35,7 +36,7 @@ export interface OldPropConfig {
   };
   defaultValue?: any; // => extraProps.defaultValue
   initialValue?: any | ((value: any, defaultValue: any) => any); // => initials.initialValue
-  initial?: (value: any, defaultValue: any) => any  // => initials.initialValue
+  initial?: (value: any, defaultValue: any) => any; // => initials.initialValue
 
   display?: DISPLAY_TYPE; // => fieldExtraProps
   fieldStyle?: DISPLAY_TYPE; // => fieldExtraProps
@@ -71,12 +72,12 @@ export interface OldPropConfig {
   mutator?( // => setValue
     this: Field,
     value: any,
-    /*
-    hotValue: any, // => x
+    hotValue: any,
+  ): /*
     preValue: any, // => x
     preHotValue: any, // => x
     */
-  ): void;
+  void;
   /**
    * other values' change will trigger sync function here
    */
@@ -218,13 +219,13 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
       newConfig.title = {
         label: title,
         tip: tip.content,
-        docUrl: tip.url
+        docUrl: tip.url,
       };
     } else {
       newConfig.title = {
         ...(title as any),
         tip: tip.content,
-        docUrl: tip.url
+        docUrl: tip.url,
       };
     }
   }
@@ -260,7 +261,9 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
   if (ignore != null || disabled != null) {
     // FIXME! addFilter
     extraProps.virtual = (field: Field) => {
-      if (isDisabled(field)) { return true; }
+      if (isDisabled(field)) {
+        return true;
+      }
 
       if (typeof ignore === 'function') {
         return ignore.call(field, field.getValue()) === true;
@@ -302,7 +305,7 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
       }
 
       return currentValue == null ? defaults : currentValue;
-    }
+    },
   });
 
   if (sync) {
@@ -311,11 +314,11 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
       if (value !== undefined) {
         field.setValue(value);
       }
-    }
+    };
   }
   if (mutator && !slotName) {
     extraProps.setValue = (field: Field, value: any) => {
-      mutator.call(field, value);
+      mutator.call(field, value, value);
     };
   }
 
@@ -324,18 +327,20 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
     if (!newConfig.title && slotTitle) {
       newConfig.title = slotTitle;
     }
-    const setters: any[] = [{
-      componentName: 'SlotSetter',
-      initialValue: (field: any, value: any) => {
-        if (isJSSlot(value)) {
-          return value;
-        }
-        return {
-          type: 'JSSlot',
-          value: value == null ? initialChildren : value
-        };
+    const setters: any[] = [
+      {
+        componentName: 'SlotSetter',
+        initialValue: (field: any, value: any) => {
+          if (isJSSlot(value)) {
+            return value;
+          }
+          return {
+            type: 'JSSlot',
+            value: value == null ? initialChildren : value,
+          };
+        },
       },
-    }];
+    ];
     if (allowTextInput !== false) {
       setters.unshift('StringSetter');
       // FIXME: use I18nSetter
@@ -351,19 +356,21 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
   let primarySetter: any;
   if (type === 'composite') {
     const initials: InitialItem[] = [];
-    const objItems = items ? upgradeConfigure(items, (item) => {
-      initials.push(item);
-    }) : [];
+    const objItems = items
+      ? upgradeConfigure(items, (item) => {
+          initials.push(item);
+        })
+      : [];
     const initial = (target: SettingTarget, value?: any) => {
       // TODO:
       const defaults = extraProps.defaultValue;
       const data: any = {};
-      initials.forEach(item => {
+      initials.forEach((item) => {
         // FIXME! Target may be a wrong
         data[item.name] = item.initial(target, isPlainObject(value) ? value[item.name] : null);
       });
       return data;
-    }
+    };
     addInitial({
       name,
       initial,
@@ -385,9 +392,11 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
       primarySetter = setter.map(({ setter, condition }) => {
         return {
           componentName: setter,
-          condition: condition ? (field: Field) => {
-            return condition.call(field, field.getValue());
-          } : null,
+          condition: condition
+            ? (field: Field) => {
+                return condition.call(field, field.getValue());
+              }
+            : null,
         };
       });
     } else {
@@ -396,7 +405,9 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
   }
   if (supportVariable) {
     if (primarySetter) {
-      const setters = Array.isArray(primarySetter) ? primarySetter.concat('ExpressionSetter') : [primarySetter, 'ExpressionSetter'];
+      const setters = Array.isArray(primarySetter)
+        ? primarySetter.concat('ExpressionSetter')
+        : [primarySetter, 'ExpressionSetter'];
       primarySetter = {
         componentName: 'MixedSetter',
         props: {
@@ -405,8 +416,8 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
             if (useVariableChange) {
               useVariableChange.call(field, { isUseVariable: name === 'ExpressionSetter' });
             }
-          }
-        }
+          },
+        },
       };
     } else {
       primarySetter = 'ExpressionSetter';
@@ -447,7 +458,7 @@ export function upgradeActions(actions?: Array<ComponentType<any> | ReactElement
   return actions.map((content) => {
     const type: any = isValidElement(content) ? content.type : content;
     if (typeof content === 'function') {
-      const fn = content as (() => ReactElement);
+      const fn = content as () => ReactElement;
       content = (({ node }: any) => {
         fn.call(node);
       }) as any;
@@ -457,7 +468,7 @@ export function upgradeActions(actions?: Array<ComponentType<any> | ReactElement
       content,
       important: true,
     };
-  })
+  });
 }
 
 /**
@@ -492,10 +503,11 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     canDroping,
 
     // hooks
-    canDraging, canDragging, // handleDragging
+    canDraging,
+    canDragging, // handleDragging
     // events
     didDropOut, // onNodeRemove
-    didDropIn,  // onNodeAdd
+    didDropIn, // onNodeAdd
     subtreeModified, // onSubtreeModified
 
     canResizing, // resizing
@@ -503,7 +515,6 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     onResize, // onResize
     onResizeEnd, // onResizeEnd
   } = oldConfig;
-
 
   const meta: any = {
     componentName,
@@ -566,7 +577,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     experimental.context = context;
   }
   if (snippets) {
-    experimental.snippets = snippets.map(data => {
+    experimental.snippets = snippets.map((data) => {
       const { schema = {} } = data;
       if (!schema.children && initialChildren && typeof initialChildren !== 'function') {
         schema.children = initialChildren;
@@ -596,9 +607,12 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     }
   }
   if (initialChildren) {
-    experimental.initialChildren = typeof initialChildren === 'function' ? (field: Field) => {
-      return initialChildren.call(field, (field as any).props);
-    } : initialChildren;
+    experimental.initialChildren =
+      typeof initialChildren === 'function'
+        ? (field: Field) => {
+            return initialChildren.call(field, (field as any).props);
+          }
+        : initialChildren;
   }
   if (view) {
     experimental.view = view;
@@ -644,21 +658,21 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
       // todo: what is trigger?
       const { trigger, deltaX, deltaY } = e;
       onResize(e, trigger, currentNode, deltaX, deltaY);
-    }
+    };
   }
   if (onResizeStart) {
     callbacks.onResizeStart = (e: any, currentNode: any) => {
       // todo: what is trigger?
       const { trigger } = e;
       onResizeStart(e, trigger, currentNode);
-    }
+    };
   }
   if (onResizeEnd) {
     callbacks.onResizeEnd = (e: any, currentNode: any) => {
       // todo: what is trigger?
       const { trigger } = e;
       onResizeEnd(e, trigger, currentNode);
-    }
+    };
   }
 
   experimental.callbacks = callbacks;
@@ -675,5 +689,3 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   meta.experimental = experimental;
   return meta;
 }
-
-

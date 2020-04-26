@@ -1,4 +1,4 @@
-import { createIntl } from '@ali/lowcode-globals';
+import { createIntl } from '@ali/lowcode-editor-core';
 import en_US from './en-US.json';
 import zh_CN from './zh-CN.json';
 

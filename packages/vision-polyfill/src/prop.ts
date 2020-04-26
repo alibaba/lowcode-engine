@@ -4,7 +4,7 @@ import { fromJS, Iterable, Map as IMMap } from 'immutable';
 import logger from '@ali/vu-logger';
 import { uniqueId, cloneDeep, isDataEqual, combineInitial, Transducer } from '@ali/ve-utils';
 import I18nUtil from '@ali/ve-i18n-util';
-import { getSetter } from '@ali/lowcode-globals';
+import { getSetter } from '@ali/lowcode-editor-core';
 import { editor } from './editor';
 import { OldPropConfig, DISPLAY_TYPE } from './bundle/upgrade-metadata';
 
@@ -264,7 +264,7 @@ export default class Prop implements IVariableSettable {
   }) {
     const accessor = this.config.accessor;
     if (accessor && (!options || !options.disableAccessor)) {
-      const value = accessor.call(this, this.value);
+      const value = accessor.call(this as any, this.value);
       if (!disableCache) {
         this.value = value;
       }
@@ -314,7 +314,7 @@ export default class Prop implements IVariableSettable {
 
     const sync = this.config.sync;
     if (sync) {
-      const value = sync.call(this, this.getValue(true));
+      const value = sync.call(this as any, this.getValue(true));
       if (value !== undefined) {
         this.setValue(value);
       }
@@ -377,7 +377,7 @@ export default class Prop implements IVariableSettable {
 
     this.emitter.emit('ve.prop.useVariableChange', { isUseVariable: flag });
     if (this.config.useVariableChange) {
-      this.config.useVariableChange.call(this, { isUseVariable: flag });
+      this.config.useVariableChange.call(this as any, { isUseVariable: flag });
     }
   }
 
@@ -418,7 +418,7 @@ export default class Prop implements IVariableSettable {
     }
 
     if (mutator && !extraOptions.disableMutator) {
-      mutator.call(this, this.value);
+      mutator.call(this as any, this.value);
     }
 
     if (this.modify(force)) {
@@ -485,7 +485,7 @@ export default class Prop implements IVariableSettable {
     if (!options || !options.disableMutator) {
       const mutator = this.config.mutator;
       if (mutator) {
-        mutator.call(this, value);
+        mutator.call(this as any, value);
       }
     }
 
@@ -512,7 +512,7 @@ export default class Prop implements IVariableSettable {
 
     let hidden = this.config.hidden;
     if (typeof hidden === 'function') {
-      hidden = hidden.call(this, this.getValue());
+      hidden = hidden.call(this as any, this.getValue());
     }
     return hidden === true;
   }
@@ -520,7 +520,7 @@ export default class Prop implements IVariableSettable {
   public isDisabled() {
     let disabled = this.config.disabled;
     if (typeof disabled === 'function') {
-      disabled = disabled.call(this, this.getValue());
+      disabled = disabled.call(this as any, this.getValue());
     }
     return disabled === true;
   }
@@ -530,7 +530,7 @@ export default class Prop implements IVariableSettable {
 
     let ignore = this.config.ignore;
     if (typeof ignore === 'function') {
-      ignore = ignore.call(this, this.getValue());
+      ignore = ignore.call(this as any, this.getValue());
     }
     return ignore === true;
   }

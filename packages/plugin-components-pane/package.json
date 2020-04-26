@@ -25,6 +25,7 @@
     "@ali/iceluna-sdk": "^1.0.6-beta.6",
     "@ali/lowcode-designer": "^0.9.3",
     "@ali/lowcode-editor-core": "^0.8.6",
+    "@ali/lowcode-types": "^0.8.0",
     "@alifd/next": "^1.19.19",
     "react": "^16.8.1"
   },

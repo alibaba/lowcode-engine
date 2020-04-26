@@ -30,7 +30,7 @@ export const DateYearSetter = DatePicker.YearPicker;
 export const DateMonthSetter = DatePicker.MonthPicker;
 export const DateRangeSetter = DatePicker.RangePicker;
 
-export { ExpressionSetter, MixinSetter, EventsSetter }
+export { ExpressionSetter, EventsSetter }
 
 // todo:
 export const ClassNameSetter = () => {

@@ -1,12 +1,11 @@
 import { ComponentType, ReactElement } from 'react';
+import { ComponentMetadata, FieldConfig, InitialItem } from '@ali/lowcode-types';
 import {
-  ComponentMetadata,
-  uniqueId,
+  ComponentMeta,
+  addBuiltinComponentAction,
+  isComponentMeta,
   registerMetadataTransducer,
-  FieldConfig,
-  InitialItem,
-} from '@ali/lowcode-globals';
-import { ComponentMeta, addBuiltinComponentAction, isComponentMeta } from '@ali/lowcode-designer';
+} from '@ali/lowcode-designer';
 import {
   OldPropConfig,
   OldPrototypeConfig,
@@ -16,6 +15,7 @@ import {
   upgradeConfigure,
 } from './upgrade-metadata';
 import { designer } from '../editor';
+import { uniqueId } from '@ali/lowcode-utils';
 
 const GlobalPropsConfigure: Array<{ position: string; initials?: InitialItem[]; config: FieldConfig }> = [];
 const Overrides: {

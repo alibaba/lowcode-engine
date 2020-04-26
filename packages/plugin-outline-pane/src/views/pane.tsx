@@ -21,7 +21,6 @@ export default class OutlinePane extends Component<{ config: any; editor: any; i
   }
 
   render() {
-    console.info(this.props);
     const tree = this.main.currentTree;
 
     if (!tree) {

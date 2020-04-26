@@ -1,5 +1,6 @@
-import { obx, hasOwnProperty, computed } from '@ali/lowcode-globals';
+import { obx, computed } from '@ali/lowcode-editor-core';
 import { isPanel } from './panel';
+import { hasOwnProperty } from '@ali/lowcode-utils';
 export interface WidgetItem {
   name: string;
 }

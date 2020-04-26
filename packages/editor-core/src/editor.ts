@@ -20,6 +20,8 @@ export type GetReturnType<T, ClsType> = T extends undefined
 
 const NOT_FOUND = Symbol.for('not_found');
 
+import * as utils from './utils';
+
 export class Editor extends EventEmitter implements IEditor {
   /**
    * Ioc Container
@@ -31,6 +33,8 @@ export class Editor extends EventEmitter implements IEditor {
   get locale() {
     return globalLocale.getLocale();
   }
+
+  readonly utils = utils;
 
   constructor(readonly config: EditorConfig = {}, readonly components: PluginClassSet = {}) {
     super();

@@ -14,21 +14,14 @@
     "test:snapshot": "ava --update-snapshots"
   },
   "dependencies": {
-    "@alifd/next": "^1.19.16",
-    "classnames": "^2.2.6",
-    "monaco-editor": "^0.20.0",
     "react": "^16",
-    "react-dom": "^16.7.0"
+    "power-di": "^2.2.4"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",
-    "@types/classnames": "^2.2.7",
     "@types/node": "^13.7.1",
     "@types/react": "^16",
-    "@types/react-dom": "^16",
-    "build-plugin-component": "^0.2.10",
-    "build-plugin-fusion": "^0.1.0",
-    "build-plugin-moment-locales": "^0.1.0"
+    "build-plugin-component": "^0.2.10"
   },
   "ava": {
     "compileEnhancements": false,

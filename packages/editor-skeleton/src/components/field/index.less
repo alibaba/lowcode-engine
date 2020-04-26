@@ -1,5 +1,3 @@
-@import '../variables.less';
-
 @x-gap: 10px;
 @y-gap: 8px;
 
@@ -57,7 +55,7 @@
   &.lc-block-field, &.lc-accordion-field {
     display: block;
     &:not(:first-child) {
-      border-top: 1px solid var(--color-line-normal, @dark-alpha-2);
+      border-top: 1px solid var(--color-line-normal);
     }
     > .lc-field-head {
       padding-left: @x-gap;
@@ -66,8 +64,8 @@
       align-items: center;
       font-weight: 500;
       background: var(--color-block-background-shallow, rgba(31,56,88,.06));
-      border-bottom: 1px solid var(--color-line-normal, @dark-alpha-2);
-      color: var(--color-title, @white-alpha-2);
+      border-bottom: 1px solid var(--color-line-normal);
+      color: var(--color-title);
       user-select: none;
     }
 
@@ -76,7 +74,7 @@
     }
 
     + .lc-inline-field {
-      border-top: 1px solid var(--color-line-normal, @dark-alpha-2);
+      border-top: 1px solid var(--color-line-normal);
     }
   }
 

@@ -1,4 +1,4 @@
-import { IconType, TitleContent, isI18nData, TipContent } from '@ali/lowcode-globals';
+import { IconType, TitleContent, isI18nData, TipContent } from '@ali/lowcode-types';
 import { isValidElement } from 'react';
 
 export function composeTitle(title?: TitleContent, icon?: IconType, tip?: TipContent, tipAsTitle?: boolean) {

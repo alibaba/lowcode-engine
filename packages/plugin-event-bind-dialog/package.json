@@ -19,7 +19,8 @@
   ],
   "author": "zude.hzd",
   "dependencies": {
-    "@ali/lowcode-editor-core": "^0.8.6",
+    "@ali/lowcode-types": "^0.8.0",
+    "@ali/lowcode-editor-core": "^0.8.0",
     "@alifd/next": "^1.19.16",
     "react": "^16.8.1",
     "react-dom": "^16.8.1"

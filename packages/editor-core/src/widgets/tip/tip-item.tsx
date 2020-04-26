@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import classNames from 'classnames';
-import { intl } from '@ali/lowcode-editor-core';
 import { TipConfig } from '@ali/lowcode-types';
+import { intl } from '../../intl';
 import { resolvePosition } from './utils';
 import { tipHandler } from './tip-handler';
 

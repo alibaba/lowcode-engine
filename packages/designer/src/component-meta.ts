@@ -11,7 +11,7 @@ import {
 import { computed } from '@ali/lowcode-editor-core';
 import { Node, ParentalNode } from './document';
 import { Designer } from './designer';
-import { intl } from './locale';
+import { intlNode } from './locale';
 import { IconContainer } from './icons/container';
 import { IconPage } from './icons/page';
 import { IconComponent } from './icons/component';
@@ -235,6 +235,38 @@ function preprocessMetadata(metadata: ComponentMetadata): TransformedComponentMe
   };
 }
 
+
+export interface MetadataTransducer {
+  (prev: TransformedComponentMetadata): TransformedComponentMetadata;
+  /**
+   * 0 - 9   system
+   * 10 - 99 builtin-plugin
+   * 100 -   app & plugin
+   */
+  level?: number;
+  /**
+   * use to replace TODO
+   */
+  id?: string;
+}
+const metadataTransducers: MetadataTransducer[] = [];
+
+export function registerMetadataTransducer(transducer: MetadataTransducer, level: number = 100, id?: string) {
+  transducer.level = level;
+  transducer.id = id;
+  const i = metadataTransducers.findIndex((item) => item.level != null && item.level > level);
+  if (i < 0) {
+    metadataTransducers.push(transducer);
+  } else {
+    metadataTransducers.splice(i, 0, transducer);
+  }
+}
+
+export function getRegisteredMetadataTransducers(): MetadataTransducer[] {
+  return metadataTransducers;
+}
+
+
 registerMetadataTransducer((metadata) => {
   const { configure, componentName } = metadata;
   const { component = {} } = configure;
@@ -280,7 +312,7 @@ const builtinComponentActions: ComponentAction[] = [
     name: 'remove',
     content: {
       icon: IconRemove,
-      title: intl('remove'),
+      title: intlNode('remove'),
       action(node: Node) {
         node.remove();
       },
@@ -291,7 +323,7 @@ const builtinComponentActions: ComponentAction[] = [
     name: 'copy',
     content: {
       icon: IconClone,
-      title: intl('copy'),
+      title: intlNode('copy'),
       action(node: Node) {
         // node.remove();
       },
@@ -308,34 +340,4 @@ export function removeBuiltinComponentAction(name: string) {
 }
 export function addBuiltinComponentAction(action: ComponentAction) {
   builtinComponentActions.push(action);
-}
-
-export interface MetadataTransducer {
-  (prev: TransformedComponentMetadata): TransformedComponentMetadata;
-  /**
-   * 0 - 9   system
-   * 10 - 99 builtin-plugin
-   * 100 -   app & plugin
-   */
-  level?: number;
-  /**
-   * use to replace TODO
-   */
-  id?: string;
-}
-const metadataTransducers: MetadataTransducer[] = [];
-
-export function registerMetadataTransducer(transducer: MetadataTransducer, level: number = 100, id?: string) {
-  transducer.level = level;
-  transducer.id = id;
-  const i = metadataTransducers.findIndex((item) => item.level != null && item.level > level);
-  if (i < 0) {
-    metadataTransducers.push(transducer);
-  } else {
-    metadataTransducers.splice(i, 0, transducer);
-  }
-}
-
-export function getRegisteredMetadataTransducers(): MetadataTransducer[] {
-  return metadataTransducers;
 }

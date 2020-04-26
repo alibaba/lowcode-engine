@@ -1,7 +1,14 @@
-import { isReactComponent } from '@ali/lowcode-utils';
-import { ComponentType, ReactElement, isValidElement } from 'react';
+import { ComponentClass, Component, ComponentType, ReactElement, isValidElement } from 'react';
 import { TitleContent } from './title';
 import { SettingTarget } from './setting-target';
+
+function isReactClass(obj: any): obj is ComponentClass<any> {
+  return obj && obj.prototype && (obj.prototype.isReactComponent || obj.prototype instanceof Component);
+}
+
+function isReactComponent(obj: any): obj is ComponentType<any> {
+  return obj && (isReactClass(obj) || typeof obj === 'function');
+}
 
 export type CustomView = ReactElement | ComponentType<any>;
 

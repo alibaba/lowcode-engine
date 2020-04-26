@@ -6,7 +6,7 @@ import getTrunkPane from '@ali/ve-trunk-pane';
 import EventBindDialog from '@ali/lowcode-plugin-event-bind-dialog';
 import loadUrls from './loader';
 import { upgradeAssetsBundle } from './upgrade-assets';
-import { isCSSUrl } from '@ali/lowcode-globals';
+import { isCSSUrl } from '@ali/lowcode-utils';
 
 const { editor, skeleton } = Engine;
 
