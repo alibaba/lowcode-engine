@@ -3,6 +3,8 @@ import { createElement } from 'react';
 import { Button } from '@alifd/next';
 import Engine, { Panes } from '@ali/visualengine';
 import getTrunkPane from '@ali/ve-trunk-pane';
+import datapoolPane from '@ali/ve-datapool-pane';
+import fetchContext from '@ali/vu-legao-design-fetch-context';
 import EventBindDialog from '@ali/lowcode-plugin-event-bind-dialog';
 import loadUrls from './loader';
 import { upgradeAssetsBundle } from './upgrade-assets';
@@ -93,6 +95,7 @@ skeleton.add({
 });
 
 initTrunkPane();
+initDataPoolPane();
 Engine.init();
 
 load();
@@ -105,6 +108,7 @@ async function load() {
 }
 
 const externals = ['react', 'react-dom', 'prop-types', 'react-router', 'react-router-dom', '@ali/recore'];
+
 async function loadAssets() {
   const legaoAssets = await editor.utils.get('./legao-assets.json');
 
@@ -171,4 +175,66 @@ async function initTrunkPane() {
   };
   const TrunkPane = getTrunkPane(config);
   Panes.add(TrunkPane);
+}
+
+// 数据源面板
+function initDataPoolPane() {
+  const dpConfigs = {};
+
+  if (!dpConfigs) {
+    return;
+  }
+
+  fetchContext.create('DataPoolPaneAPI', {
+    saveGlobalConfig: {
+      url: 'query/appConfig/saveGlobalConfig.json',
+      method: 'POST',
+    },
+    saveOrUpdateAppDataPool: {
+      url: 'query/appDataPool/saveOrUpdateAppDataPool.json',
+      method: 'POST',
+    },
+    batchSaveOrUpdateAppDataPool: {
+      url: 'query/appDataPool/batchSaveOrUpdateAppDataPool.json',
+      method: 'POST'
+    },
+    listAppDataPool: {
+      url: 'query/appDataPool/listAppDataPool.json',
+      method: 'GET',
+    },
+    getAppDataPool: {
+      url: 'query/appDataPool/getAppDataPool.json',
+      method: 'POST',
+    },
+    getEpaasApiInApp: {
+      url: 'query/formdesign/getEpaasApiInApp.jsonp',
+      method: 'GET',
+    },
+    getFormListOrder: {
+      url: 'query/formdesign/getFormListOrder.json',
+      method: 'GET',
+    },
+    // 实时修改 effectForm
+    operateAppDpBind: {
+      url: 'query/appDataPool/operateAppDpBind.json',
+      method: 'POST',
+    },
+    // 校验全局数据源是否被其他页面修改
+    checkAppDataPoolModified: {
+      url: 'query/appDataPool/checkAppDataPoolModified.json',
+      method: 'POST',
+    },
+  });
+
+  const props = {
+    enableGateService: true,
+    enableGlobalFitConfig: true,
+    enableOneAPIService: true,
+    formUuid: 'xxx',
+    api: fetchContext.api.DataPoolPaneAPI,
+  };
+
+  Panes.add(datapoolPane, {
+    props,
+  });
 }
