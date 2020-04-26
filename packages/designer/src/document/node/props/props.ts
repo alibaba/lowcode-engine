@@ -4,7 +4,7 @@ import { Prop, IPropParent, UNSET } from './prop';
 import { Node } from '../node';
 import { ExportType } from '../export-type';
 
-export const EXTRA_KEY_PREFIX = '__';
+export const EXTRA_KEY_PREFIX = '___';
 
 export class Props implements IPropParent {
   readonly id = uniqueId('props');
