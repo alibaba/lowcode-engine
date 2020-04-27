@@ -1,4 +1,5 @@
-import { computed, obx, uniqueId } from '@ali/lowcode-globals';
+import { EventEmitter } from 'events';
+import { computed, obx, Editor } from '@ali/lowcode-editor-core';
 import {
   Designer,
   ISensor,
@@ -17,12 +18,11 @@ import {
   contains,
   Node,
 } from '@ali/lowcode-designer';
-import { Editor } from '@ali/lowcode-editor-core';
 import { Tree } from './tree';
 import TreeNode from './tree-node';
 import { IndentTrack } from './helper/indent-track';
 import DwellTimer from './helper/dwell-timer';
-import { EventEmitter } from 'events';
+import { uniqueId } from '@ali/lowcode-utils';
 
 export interface IScrollBoard {
   scrollToNode(treeNode: TreeNode, detail?: any): void;

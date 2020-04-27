@@ -9,19 +9,13 @@ import {
   ComponentType,
 } from 'react';
 import classNames from 'classnames';
-import {
-  observer,
-  computed,
-  createIcon,
-  EmbedTip,
-  isReactComponent,
-  ActionContentObject,
-  isActionContentObject,
-} from '@ali/lowcode-globals';
+import { observer, computed, Tip } from '@ali/lowcode-editor-core';
+import { createIcon, isReactComponent } from '@ali/lowcode-utils';
+import { ActionContentObject, isActionContentObject } from '@ali/lowcode-types';
 import { SimulatorContext } from '../context';
 import { BuiltinSimulatorHost } from '../host';
-import { OffsetObserver } from '../../../designer';
-import { Node } from '../../../document';
+import { OffsetObserver } from '../../designer';
+import { Node } from '../../document';
 
 @observer
 export class BorderSelectingInstance extends Component<{
@@ -94,9 +88,9 @@ class Toolbar extends Component<{ observed: OffsetObserver }> {
     }
     const { node } = observed;
     const actions: ReactNodeArray = [];
-    node.componentMeta.availableActions.forEach(action => {
+    node.componentMeta.availableActions.forEach((action) => {
       const { important, condition, content, name } = action;
-      if (node.isSlotRoot && (name === 'copy' || name === 'remove')) {
+      if (node.isSlot() && (name === 'copy' || name === 'remove')) {
         // FIXME: need this?
         return;
       }
@@ -130,7 +124,7 @@ function createAction(content: ReactNode | ComponentType<any> | ActionContentObj
         }}
       >
         {icon && createIcon(icon)}
-        <EmbedTip>{title}</EmbedTip>
+        <Tip>{title}</Tip>
       </div>
     );
   }
@@ -167,7 +161,7 @@ export class BorderSelectingForNode extends Component<{ node: Node }> {
     }
     return (
       <Fragment key={node.id}>
-        {instances.map(instance => {
+        {instances.map((instance) => {
           const observed = designer.createOffsetObserver({
             node,
             instance,
@@ -216,7 +210,7 @@ export class BorderSelecting extends Component {
 
     return (
       <Fragment>
-        {selecting.map(node => (
+        {selecting.map((node) => (
           <BorderSelectingForNode key={node.id} node={node} />
         ))}
       </Fragment>

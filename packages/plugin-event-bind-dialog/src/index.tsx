@@ -1,11 +1,9 @@
 import { Component, isValidElement, ReactElement, ReactNode } from 'react';
 import { Dialog, Search, Input } from '@alifd/next';
-import Editor from '@ali/lowcode-editor-core';
+import { PluginProps } from '@ali/lowcode-types';
 import './index.scss';
 
-export default class EventBindDialog extends Component<{
-  editor:Editor,
-}> {
+export default class EventBindDialog extends Component<PluginProps> {
   private eventList: any[] = [
     {
       name: 'getData',
@@ -24,29 +22,29 @@ export default class EventBindDialog extends Component<{
     },
   ];
 
-  state = {
-    visiable:false,
+  state: any = {
+    visiable: false,
     selectedEventName: '',
     eventName: '',
   };
 
-  openDialog = (bindEventName:String) => {
+  openDialog = (bindEventName: String) => {
     this.setState({
-      visiable:true,
-      eventName:bindEventName
-    })
-  }
+      visiable: true,
+      eventName: bindEventName,
+    });
+  };
 
   closeDialog = () => {
     this.setState({
-      visiable:false
-    })
-  }
+      visiable: false,
+    });
+  };
 
-  componentDidMount (){
-    const {editor,config} = this.props;
-    editor.on(`${config.pluginKey}.openDialog`,(bindEventName:String)=>{
-      this.openDialog(bindEventName)
+  componentDidMount() {
+    const { editor, config } = this.props;
+    editor.on(`${config.pluginKey}.openDialog`, (bindEventName: String) => {
+      this.openDialog(bindEventName);
     });
   }
 
@@ -89,22 +87,28 @@ export default class EventBindDialog extends Component<{
   onSearchEvent = (searchEventName: String) => {};
 
   onOk = () => {
-    const {editor} = this.props;
-    editor.emit('event-setter.bindEvent',this.state.eventName);
+    const { editor } = this.props;
+    editor.emit('event-setter.bindEvent', this.state.eventName);
     // 选中的是新建事件
-    if (this.state.selectedEventName == ''){
-      editor.emit('sourceEditor.addFunction',{
-        functionName:this.state.eventName
-      })
+    if (this.state.selectedEventName == '') {
+      editor.emit('sourceEditor.addFunction', {
+        functionName: this.state.eventName,
+      });
     }
 
     this.closeDialog();
   };
 
   render() {
-    const { selectedEventName, eventName,visiable} = this.state;
+    const { selectedEventName, eventName, visiable } = this.state;
     return (
-      <Dialog visible={visiable} title="事件绑定" onClose={this.closeDialog} onCancel={this.closeDialog} onOk={this.onOk}>
+      <Dialog
+        visible={visiable}
+        title="事件绑定"
+        onClose={this.closeDialog}
+        onCancel={this.closeDialog}
+        onOk={this.onOk}
+      >
         <div className="event-dialog-body">
           <div className="dialog-left-container">
             <div className="dialog-small-title">事件选择</div>

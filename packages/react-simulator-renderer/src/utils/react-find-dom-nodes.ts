@@ -1,5 +1,5 @@
 import { ReactInstance } from 'react';
-import { isElement } from '@ali/lowcode-globals';
+import { isElement } from '@ali/lowcode-utils';
 import { isDOMNode } from './is-dom-node';
 
 export const FIBER_KEY = '_reactInternalFiber';

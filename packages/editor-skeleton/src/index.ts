@@ -1,9 +1,7 @@
-import Skeleton from './skeleton';
-import Panel from './components/Panel';
-import TopIcon from './components/TopIcon';
-import TopPlugin from './components/TopPlugin';
-import LeftPlugin from './components/LeftPlugin';
+export { Workbench } from './layouts/workbench';
+export * from './skeleton';
+export * from './types';
+export * from './components/settings';
+export * from './components/field';
 
-export default Skeleton;
-
-export { Panel, TopIcon, TopPlugin, LeftPlugin };
+import './register-defaults';

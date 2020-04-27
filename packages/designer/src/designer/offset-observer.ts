@@ -1,5 +1,5 @@
-import { obx, computed } from '@ali/lowcode-globals';
-import { uniqueId } from '@ali/lowcode-globals';
+import { obx, computed } from '@ali/lowcode-editor-core';
+import { uniqueId } from '@ali/lowcode-utils';
 import { INodeSelector, IViewport } from '../simulator';
 import { isRootNode, Node } from '../document';
 

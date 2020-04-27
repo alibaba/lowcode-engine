@@ -1,7 +1,8 @@
-import { TitleContent, computed, isDynamicSetter, SetterType, DynamicSetter, FieldExtraProps, FieldConfig, CustomView, isCustomView, obx } from '@ali/lowcode-globals';
+import { TitleContent, isDynamicSetter, SetterType, DynamicSetter, FieldExtraProps, FieldConfig, CustomView, isCustomView } from '@ali/lowcode-types';
 import { Transducer } from './utils';
 import { SettingPropEntry } from './setting-prop-entry';
 import { SettingEntry } from './setting-entry';
+import { computed, obx } from '@ali/lowcode-editor-core';
 
 export class SettingField extends SettingPropEntry implements SettingEntry {
   readonly isSettingField = true;

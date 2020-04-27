@@ -1,3 +1,4 @@
+import { obx, computed } from '@ali/lowcode-editor-core';
 import {
   isDOMText,
   isJSExpression,
@@ -6,12 +7,10 @@ import {
   PropsList,
   NodeData,
   TitleContent,
-  obx,
-  computed,
   SlotSchema,
   PageSchema,
   ComponentSchema,
-} from '@ali/lowcode-globals';
+} from '@ali/lowcode-types';
 import { Props, EXTRA_KEY_PREFIX } from './props/props';
 import { DocumentModel } from '../document-model';
 import { NodeChildren } from './node-children';
@@ -19,8 +18,6 @@ import { Prop } from './props/prop';
 import { ComponentMeta } from '../../component-meta';
 import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
 import { TransformStage } from './transform-stage';
-
-
 
 /**
  * 基础节点
@@ -179,7 +176,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   isRoot(): this is RootNode {
-    return this.document.rootNode == this as any;
+    return this.document.rootNode == (this as any);
   }
 
   isPage(): this is PageNode {
@@ -302,7 +299,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   @computed get slots() {
     // TODO: optimize recore/obx, array maked every time, donot as changed
     const slots: Node[] = [];
-    this.props.forEach(item => {
+    this.props.forEach((item) => {
       if (item.type === 'slot') {
         slots.push(item.slotNode!);
       }
@@ -578,7 +575,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     this.children?.insert(node, ref ? ref.index : null);
   }
   insertAfter(node: Node, ref?: Node) {
-    this.children?.insert(node, ref ? (ref.index + 1) : null);
+    this.children?.insert(node, ref ? ref.index + 1 : null);
   }
   getParent() {
     return this.parent;
@@ -609,9 +606,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * @deprecated
    */
-  setStatus() {
-
-  }
+  setStatus() {}
   /**
    * @deprecated
    */

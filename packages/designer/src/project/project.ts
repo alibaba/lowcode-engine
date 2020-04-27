@@ -1,7 +1,8 @@
 import { EventEmitter } from 'events';
-import { ProjectSchema, RootSchema, obx, computed } from '@ali/lowcode-globals';
+import { obx, computed } from '@ali/lowcode-editor-core';
 import { Designer } from '../designer';
 import { DocumentModel, isDocumentModel } from '../document';
+import { ProjectSchema, RootSchema } from '@ali/lowcode-types';
 
 export class Project {
   private emitter = new EventEmitter();

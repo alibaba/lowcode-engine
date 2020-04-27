@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { computed, observer } from '@ali/lowcode-globals';
+import { computed, observer } from '@ali/lowcode-editor-core';
 import { SimulatorContext } from '../context';
 import { BuiltinSimulatorHost } from '../host';
 import {
@@ -10,7 +10,7 @@ import {
   isVertical
 } from '../../designer';
 import { ISimulatorHost, } from '../../simulator';
-import {ParentalNode } from '../../document';
+import { ParentalNode } from '../../document';
 import './insertion.less';
 
 interface InsertionData {

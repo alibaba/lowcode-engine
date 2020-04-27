@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { obx } from '@ali/lowcode-globals';
+import { obx } from '@ali/lowcode-editor-core';
 import { Node, comparePosition, PositionNO } from './node/node';
 import { DocumentModel } from './document-model';
 

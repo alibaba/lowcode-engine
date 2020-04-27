@@ -1,4 +1,4 @@
-import { obx } from '@ali/lowcode-globals';
+import { obx } from '@ali/lowcode-editor-core';
 import { Node, DocumentModel } from '../document';
 
 export class Hovering {

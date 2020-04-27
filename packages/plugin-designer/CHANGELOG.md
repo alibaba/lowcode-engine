@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.6"></a>
+## [0.9.6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-designer@0.9.5...@ali/lowcode-plugin-designer@0.9.6) (2020-04-27)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-designer
+
+<a name="0.9.5"></a>
+## [0.9.5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-designer@0.9.4...@ali/lowcode-plugin-designer@0.9.5) (2020-04-27)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-designer
+
+<a name="0.9.4"></a>
+## [0.9.4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-designer@0.9.3...@ali/lowcode-plugin-designer@0.9.4) (2020-04-27)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-designer
+
 <a name="0.9.3"></a>
 ## [0.9.3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-designer@0.9.2...@ali/lowcode-plugin-designer@0.9.3) (2020-04-16)
 

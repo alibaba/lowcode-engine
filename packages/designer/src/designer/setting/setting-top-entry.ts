@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
-import { CustomView, computed, isCustomView, IEditor } from '@ali/lowcode-globals';
+import { CustomView, isCustomView, IEditor } from '@ali/lowcode-types';
+import { computed } from '@ali/lowcode-editor-core';
 import { SettingEntry } from './setting-entry';
 import { SettingField } from './setting-field';
 import { SettingPropEntry } from './setting-prop-entry';

@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-runtime",
-  "version": "0.8.12",
+  "version": "0.8.13",
   "description": "Runtime for Ali lowCode engine",
   "files": [
     "es",
@@ -25,8 +25,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@ali/recore": "^1.6.9",
-    "@ali/offline-events": "^1.0.0"
+    "@ali/offline-events": "^1.0.0",
+    "@ali/recore": "^1.6.9"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",

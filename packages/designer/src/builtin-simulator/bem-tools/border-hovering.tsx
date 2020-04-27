@@ -1,8 +1,9 @@
 import { Component, Fragment, PureComponent } from 'react';
 import classNames from 'classnames';
-import { computed, observer, TitleContent, Title } from '@ali/lowcode-globals';
+import { computed, observer, Title } from '@ali/lowcode-editor-core';
 import { SimulatorContext } from '../context';
 import { BuiltinSimulatorHost } from '../host';
+import { TitleContent } from '@ali/lowcode-types';
 
 export class BorderHoveringInstance extends PureComponent<{
   title: TitleContent;

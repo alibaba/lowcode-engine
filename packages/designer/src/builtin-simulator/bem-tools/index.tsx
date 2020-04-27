@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { observer } from '@ali/lowcode-globals';
+import { observer } from '@ali/lowcode-editor-core';
 import { BorderHovering } from './border-hovering';
 import { SimulatorContext } from '../context';
 import { BuiltinSimulatorHost } from '../host';

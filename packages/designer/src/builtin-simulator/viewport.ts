@@ -1,4 +1,4 @@
-import { obx, computed } from '@ali/lowcode-globals';
+import { obx, computed } from '@ali/lowcode-editor-core';
 import { Point, ScrollTarget } from '../designer';
 import { AutoFit, IViewport } from '../simulator';
 

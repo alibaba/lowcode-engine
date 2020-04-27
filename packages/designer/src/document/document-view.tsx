@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import classNames from 'classnames';
-import { observer } from '@ali/lowcode-globals';
+import { observer } from '@ali/lowcode-editor-core';
 import { DocumentModel } from './document-model';
 import { BuiltinSimulatorHostView } from '../builtin-simulator';
 

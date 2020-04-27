@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Icon, Search, Select } from '@alifd/next';
 import MaterialShow from '@ali/iceluna-comp-material-show';
-import { PluginProps } from '@ali/lowcode-editor-core';
+import { PluginProps } from '@ali/lowcode-types';
 import { Designer } from '@ali/lowcode-designer';
 
 import './index.scss';
@@ -19,13 +19,10 @@ export interface IState {
   componentList: object[];
 }
 
-export default class ComponentListPlugin extends PureComponent<
-  PluginProps,
-  IState
-> {
+export default class ComponentListPlugin extends PureComponent<PluginProps, IState> {
   static displayName = 'LowcodeComponentListPlugin';
 
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.state = {
       loading: false,
@@ -50,15 +47,15 @@ export default class ComponentListPlugin extends PureComponent<
     }
   }
 
-  transformMaterial = (componentList): any => {
-    return componentList.map(category => {
+  transformMaterial = (componentList: any): any => {
+    return componentList.map((category: any) => {
       return {
         name: category.title,
-        items: category.children.map(comp => {
+        items: category.children.map((comp: any) => {
           return {
             ...comp,
             name: comp.componentName,
-            snippets: comp.snippets.map(snippet => {
+            snippets: comp.snippets.map((snippet: any) => {
               return {
                 name: snippet.title,
                 screenshot: snippet.screenshot,
@@ -76,7 +73,7 @@ export default class ComponentListPlugin extends PureComponent<
     const assets = editor.get('assets') || {};
     const list: string[] = [];
     const libs: LibrayInfo[] = [];
-    Object.values(assets.packages).forEach((item): void => {
+    Object.values(assets.packages).forEach((item: any): void => {
       list.push(item.library);
       libs.push({
         label: item.title,
@@ -100,7 +97,7 @@ export default class ComponentListPlugin extends PureComponent<
     });
 
     editor.set('dndHelper', {
-      handleResourceDragStart: function(ev, tagName, schema) {
+      handleResourceDragStart: function(ev: any, tagName: any, schema: any) {
         const designer = editor.get(Designer);
         if (designer) {
           designer.dragon.boost(
@@ -125,18 +122,16 @@ export default class ComponentListPlugin extends PureComponent<
     const { searchKey, currentLib, componentList } = this.state;
     const libs = currentLib.split(',');
     return (componentList || [])
-      .map(cate => {
+      .map((cate: any) => {
         return {
           ...cate,
-          items: (cate.items || []).filter(item => {
-            let libFlag = libs.some(lib => lib == item.library);
+          items: (cate.items || []).filter((item: any) => {
+            let libFlag = libs.some((lib) => lib == item.library);
 
             let keyFlag = true;
             if (searchKey) {
               keyFlag =
-                `${item.name || ''} ${item.title || ''}`
-                  .toLowerCase()
-                  .indexOf(searchKey.trim().toLowerCase()) >= 0;
+                `${item.name || ''} ${item.title || ''}`.toLowerCase().indexOf(searchKey.trim().toLowerCase()) >= 0;
             } else {
               keyFlag = item.is_show === undefined || !!(item.is_show == 1);
             }
@@ -144,7 +139,7 @@ export default class ComponentListPlugin extends PureComponent<
           }),
         };
       })
-      .filter(cate => {
+      .filter((cate) => {
         return cate.items && cate.items.length > 0;
       });
   };
@@ -159,10 +154,10 @@ export default class ComponentListPlugin extends PureComponent<
         </div>
         <Search
           shape="simple"
-          size="small"
+          size="medium"
           className="search"
           placeholder="请输入关键词"
-          onChange={this.searchAction}
+          onChange={this.searchAction as any}
           onSearch={this.searchAction}
           hasClear
         />

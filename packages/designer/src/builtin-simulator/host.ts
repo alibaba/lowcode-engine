@@ -1,10 +1,10 @@
-import { obx, autorun, computed } from '@ali/lowcode-globals';
+import { obx, autorun, computed, getPublicPath, hotkey } from '@ali/lowcode-editor-core';
 import { ISimulatorHost, Component, NodeInstance, ComponentInstance } from '../simulator';
 import Viewport from './viewport';
 import { createSimulator } from './create-simulator';
 import { Node, ParentalNode, DocumentModel, isNode, contains, isRootNode } from '../document';
 import ResourceConsumer from './resource-consumer';
-import { AssetLevel, Asset, AssetList, assetBundle, assetItem, AssetType, getPublicPath } from '@ali/lowcode-globals';
+import { AssetLevel, Asset, AssetList, assetBundle, assetItem, AssetType, isElement } from '@ali/lowcode-utils';
 import {
   DragObjectType,
   isShaken,
@@ -21,9 +21,8 @@ import {
   Rect,
   CanvasPoint,
 } from '../designer';
-import { parseProps, parseMetadata } from './utils/parse-metadata';
-import { isElement, hotkey } from '@ali/lowcode-globals';
-import { ComponentMetadata } from '@ali/lowcode-globals';
+import { parseMetadata } from './utils/parse-metadata';
+import { ComponentMetadata } from '@ali/lowcode-types';
 import { BuiltinSimulatorRenderer } from './renderer';
 import clipboard from '../designer/clipboard';
 
@@ -54,7 +53,7 @@ const defaultSimulatorUrl = (() => {
   if (dev) {
     urls = [`${prefix}/css/react-simulator-renderer.css`, `${prefix}/js/react-simulator-renderer.js`];
   } else if (process.env.NODE_ENV === 'production') {
-    urls = [`${prefix}/react-simulator-renderer.min.css`, `${prefix}/react-simulator-renderer.min.js`];
+    urls = [`${prefix}/react-simulator-renderer.css`, `${prefix}/react-simulator-renderer.js`];
   } else {
     urls = [`${prefix}/react-simulator-renderer.css`, `${prefix}/react-simulator-renderer.js`];
   }
@@ -967,7 +966,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       return this.document.checkDropTarget(container, dragObject as any);
     }
 
-    const meta = container.componentMeta;
+    const meta = (container as Node).componentMeta;
 
     // FIXME: get containerInstance for accept logic use
     const acceptable: boolean = this.isAcceptable(container);

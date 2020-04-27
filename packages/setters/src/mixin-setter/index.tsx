@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Dropdown, Button, Menu, Icon } from '@alifd/next';
-import { getSetter } from '@ali/lowcode-globals';
+import { getSetter } from '@ali/lowcode-editor-core';
 
 import { generateI18n } from './locale/utils';
 import zhCN from './locale/zh-CN';

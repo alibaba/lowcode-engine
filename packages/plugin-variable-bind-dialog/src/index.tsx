@@ -1,11 +1,9 @@
-import { Component, isValidElement, ReactElement, ReactNode } from 'react';
-import { Dialog, Search, Input ,Button} from '@alifd/next';
-import Editor from '@ali/lowcode-editor-core';
+import { Component } from 'react';
+import { Dialog, Input, Button } from '@alifd/next';
+import { PluginProps } from '@ali/lowcode-types';
 import './index.scss';
 
-export default class VariableBindDialog extends Component<{
-  editor: Editor;
-}> {
+export default class VariableBindDialog extends Component<PluginProps> {
   private loopVariableList: any[] = [
     {
       name: 'item',

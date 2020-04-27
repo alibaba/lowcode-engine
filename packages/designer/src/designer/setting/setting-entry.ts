@@ -1,4 +1,4 @@
-import { SettingTarget } from '@ali/lowcode-globals';
+import { SettingTarget } from '@ali/lowcode-types';
 import { ComponentMeta } from '../../component-meta';
 import { Designer } from '../designer';
 import { Node } from '../../document';

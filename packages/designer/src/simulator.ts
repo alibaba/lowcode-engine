@@ -1,5 +1,5 @@
 import { Component as ReactComponent, ComponentType } from 'react';
-import { ComponentMetadata } from '@ali/lowcode-globals';
+import { ComponentMetadata } from '@ali/lowcode-types';
 import { ISensor, Point, ScrollTarget, IScrollable } from './designer';
 import { Node } from './document';
 

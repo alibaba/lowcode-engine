@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { observer } from '@ali/lowcode-globals';
+import { observer } from '@ali/lowcode-editor-core';
 import { BuiltinSimulatorHost, BuiltinSimulatorProps } from './host';
 import { DocumentModel } from '../document';
 import { SimulatorContext } from './context';
