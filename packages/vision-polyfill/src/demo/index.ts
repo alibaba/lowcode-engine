@@ -3,7 +3,10 @@ import { createElement } from 'react';
 import { Button } from '@alifd/next';
 import Engine, { Panes } from '@ali/visualengine';
 import getTrunkPane from '@ali/ve-trunk-pane';
-import datapoolPane from '@ali/ve-datapool-pane';
+import DatapoolPane from '@ali/ve-datapool-pane';
+// import I18nPane from '@ali/ve-i18n-pane';
+import I18nManagePane from '@ali/ve-i18n-manage-pane';
+import ActionPane from '@ali/ve-action-pane';
 import fetchContext from '@ali/vu-legao-design-fetch-context';
 import EventBindDialog from '@ali/lowcode-plugin-event-bind-dialog';
 import loadUrls from './loader';
@@ -11,101 +14,6 @@ import { upgradeAssetsBundle } from './upgrade-assets';
 import { isCSSUrl } from '@ali/lowcode-globals';
 
 const { editor, skeleton } = Engine;
-
-// demo
-skeleton.add({
-  name: 'eventBindDialog',
-  type: 'Widget',
-  content: EventBindDialog,
-});
-skeleton.add({
-  area: 'leftArea',
-  name: 'icon1',
-  type: 'Dock',
-  props: {
-    align: 'bottom',
-    icon: 'set',
-    description: '设置',
-  },
-});
-skeleton.add({
-  area: 'leftArea',
-  name: 'icon2',
-  type: 'Dock',
-  props: {
-    align: 'bottom',
-    icon: 'help',
-    description: '帮助',
-  },
-});
-
-skeleton.add({
-  area: 'topArea',
-  type: 'Dock',
-  name: 'publish',
-  props: {
-    align: 'right',
-  },
-  content: createElement(Button, {
-    size: 'small',
-    type: 'secondary',
-    children: '发布',
-  }),
-});
-skeleton.add({
-  area: 'topArea',
-  type: 'Dock',
-  name: 'save',
-  props: {
-    align: 'right',
-  },
-  content: createElement(Button, {
-    size: 'small',
-    type: 'primary',
-    children: '保存',
-  }),
-});
-skeleton.add({
-  area: 'topArea',
-  type: 'Dock',
-  name: 'preview4',
-  props: {
-    align: 'center',
-  },
-  content: createElement('img', {
-    src: 'https://img.alicdn.com/tfs/TB1WW.VC.z1gK0jSZLeXXb9kVXa-486-64.png',
-    style: {
-      height: 32,
-    },
-  }),
-});
-skeleton.add({
-  area: 'topArea',
-  type: 'Dock',
-  name: 'preview1',
-  props: {
-    align: 'left',
-  },
-  content: createElement('img', {
-    src: 'https://img.alicdn.com/tfs/TB1zqBfDlr0gK0jSZFnXXbRRXXa-440-64.png',
-    style: {
-      height: 32,
-    },
-  }),
-});
-
-initTrunkPane();
-initDataPoolPane();
-Engine.init();
-
-load();
-Engine.Env.setEnv('RE_VERSION', '5.0.1');
-
-async function load() {
-  await loadAssets();
-
-  loadSchema();
-}
 
 const externals = ['react', 'react-dom', 'prop-types', 'react-router', 'react-router-dom', '@ali/recore'];
 
@@ -158,6 +66,90 @@ async function loadAssets() {
 async function loadSchema() {
   const schema = await editor.utils.get('./schema.json');
   editor.set('schema', schema);
+}
+
+// demo
+function initDemoPanes() {
+  skeleton.add({
+    name: 'eventBindDialog',
+    type: 'Widget',
+    content: EventBindDialog,
+  });
+  skeleton.add({
+    area: 'leftArea',
+    name: 'icon1',
+    type: 'Dock',
+    props: {
+      align: 'bottom',
+      icon: 'set',
+      description: '设置',
+    },
+  });
+  skeleton.add({
+    area: 'leftArea',
+    name: 'icon2',
+    type: 'Dock',
+    props: {
+      align: 'bottom',
+      icon: 'help',
+      description: '帮助',
+    },
+  });
+  
+  skeleton.add({
+    area: 'topArea',
+    type: 'Dock',
+    name: 'publish',
+    props: {
+      align: 'right',
+    },
+    content: createElement(Button, {
+      size: 'small',
+      type: 'secondary',
+      children: '发布',
+    }),
+  });
+  skeleton.add({
+    area: 'topArea',
+    type: 'Dock',
+    name: 'save',
+    props: {
+      align: 'right',
+    },
+    content: createElement(Button, {
+      size: 'small',
+      type: 'primary',
+      children: '保存',
+    }),
+  });
+  skeleton.add({
+    area: 'topArea',
+    type: 'Dock',
+    name: 'preview4',
+    props: {
+      align: 'center',
+    },
+    content: createElement('img', {
+      src: 'https://img.alicdn.com/tfs/TB1WW.VC.z1gK0jSZLeXXb9kVXa-486-64.png',
+      style: {
+        height: 32,
+      },
+    }),
+  });
+  skeleton.add({
+    area: 'topArea',
+    type: 'Dock',
+    name: 'preview1',
+    props: {
+      align: 'left',
+    },
+    content: createElement('img', {
+      src: 'https://img.alicdn.com/tfs/TB1zqBfDlr0gK0jSZFnXXbRRXXa-440-64.png',
+      style: {
+        height: 32,
+      },
+    }),
+  });
 }
 
 async function initTrunkPane() {
@@ -233,7 +225,61 @@ function initDataPoolPane() {
     api: fetchContext.api.DataPoolPaneAPI,
   };
 
-  Panes.add(datapoolPane, {
+  Panes.add(DatapoolPane, {
     props,
   });
 }
+
+// 国际化面板
+function initI18nPane() {
+  fetchContext.create('I18nManagePaneAPI', {
+    // 绑定美杜莎
+    bindMedusa: {
+      url: 'query/app/createMedusa.json',
+    },
+
+    // 解除绑定
+    unbindMedusa: {
+      url: 'query/app/removeMedusa.json',
+    },
+
+    // 同步美杜莎
+    syncMedusa: {
+      url: 'query/formi18n/syncI18n.json',
+    },
+  });
+
+  Panes.add(I18nManagePane, {
+    props: {
+      enableMedusa: true,
+      api: fetchContext.api.I18nManagePaneAPI,
+    },
+  });
+}
+
+// 动作面板
+function initActionPane() {
+  const props = {
+    enableGlobalJS: false,
+    enableVsCodeEdit: false,
+    enableHeaderTip: true,
+  };
+
+  Panes.add(ActionPane, {
+    props,
+  });
+}
+
+async function init() {
+  Engine.Env.setEnv('RE_VERSION', '7.2.0');
+  await loadAssets();
+  await loadSchema();
+  await initTrunkPane();
+  initDataPoolPane();
+  initI18nPane();
+  initActionPane();
+  initDemoPanes();
+
+  Engine.init();
+}
+init();

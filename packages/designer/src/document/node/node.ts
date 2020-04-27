@@ -97,6 +97,10 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    */
   readonly props: Props;
   protected _children?: NodeChildren;
+  /**
+   * @deprecated
+   */
+  private _addons: { [key: string]: any } = {};
   @obx.ref private _parent: ParentalNode | null = null;
   /**
    * 父级节点
@@ -482,11 +486,22 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
 
     const { props = {}, extras } = this.props.export(stage) || {};
+    const _extras_: {[key: string]: any} = {
+      ...extras,
+    };
+    if (_extras_) {
+      Object.keys(_extras_).forEach((key) => {
+        const addon = this._addons[key];
+        if (addon) {
+          _extras_[key] = addon();
+        }
+      });
+    }
 
     const schema: any = {
       ...baseSchema,
       props: this.document.designer.transformProps(props, this, stage),
-      ...extras,
+      ..._extras_,
     };
 
     if (this.isParental() && this.children.size > 0) {
@@ -627,7 +642,21 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * @deprecated
    */
   getAddonData(key: string) {
+    const addon = this._addons[key];
+    if (addon) {
+      return addon();
+    }
     return this.getExtraProp(key)?.value;
+  }
+  /**
+   * @deprecated
+   */
+  registerAddon(key: string, exportData: any) {
+    if (this._addons[key]) {
+      throw new Error(`node addon ${key} exist`);
+    }
+
+    this._addons[key] = exportData;
   }
   
   toString() {
