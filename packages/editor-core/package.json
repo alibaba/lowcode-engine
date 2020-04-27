@@ -7,11 +7,12 @@
   "module": "es/index.js",
   "files": [
     "lib",
-    "es"
+    "es",
+    "dist"
   ],
   "scripts": {
     "build": "build-scripts build --skip-demo",
-    "cloud-build": "build-scripts build --skip-demo --config cloud-build.json"
+    "cloud-build": "build-scripts build --skip-demo"
   },
   "dependencies": {
     "@alifd/next": "^1.19.16",
