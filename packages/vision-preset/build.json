@@ -3,7 +3,7 @@
     [
       "build-plugin-component",
       {
-        "filename": "vision",
+        "filename": "vision-preset",
         "library": "VisualEngine",
         "libraryTarget": "umd",
         "externals": {
