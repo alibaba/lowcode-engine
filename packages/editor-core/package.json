@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-editor-core",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "description": "Core Api for Ali lowCode engine",
   "license": "MIT",
   "main": "lib/index.js",
