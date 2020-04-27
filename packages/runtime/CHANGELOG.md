@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.13"></a>
+## [0.8.13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-runtime@0.8.10...@ali/lowcode-runtime@0.8.13) (2020-04-27)
+
+
+### Features
+
+* add init and ready lifecycles ([fd100c9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fd100c9))
+* 支持编译渲染 ([0a42151](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0a42151))
+* 支持配置layouts属性 ([8464235](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8464235))
+* 透出loading ([e96934a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e96934a))
+
+
+
+
 <a name="0.8.10"></a>
 ## [0.8.10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-runtime@0.8.7...@ali/lowcode-runtime@0.8.10) (2020-04-15)
 

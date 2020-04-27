@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-utils",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Utils for Ali lowCode engine",
   "files": [
     "es",
@@ -14,9 +14,9 @@
     "test:snapshot": "ava --update-snapshots"
   },
   "dependencies": {
-    "react": "^16",
+    "@ali/lowcode-utils": "^0.8.1",
     "@alifd/next": "^1.19.16",
-    "@ali/lowcode-utils": "^0.8.0"
+    "react": "^16"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",

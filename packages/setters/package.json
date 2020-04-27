@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-setters",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "description": "Builtin setters for Ali lowCode engine",
   "files": [
     "es",
