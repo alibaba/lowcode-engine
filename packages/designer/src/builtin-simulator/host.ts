@@ -53,7 +53,7 @@ const defaultSimulatorUrl = (() => {
   if (dev) {
     urls = [`${prefix}/css/react-simulator-renderer.css`, `${prefix}/js/react-simulator-renderer.js`];
   } else if (process.env.NODE_ENV === 'production') {
-    urls = [`${prefix}/react-simulator-renderer.min.css`, `${prefix}/react-simulator-renderer.min.js`];
+    urls = [`${prefix}/react-simulator-renderer.css`, `${prefix}/react-simulator-renderer.js`];
   } else {
     urls = [`${prefix}/react-simulator-renderer.css`, `${prefix}/react-simulator-renderer.js`];
   }
