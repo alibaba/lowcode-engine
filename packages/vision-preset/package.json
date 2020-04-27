@@ -1,23 +1,21 @@
 {
-  "name": "@ali/lowcode-vision-polyfill",
-  "private": true,
-  "version": "0.8.2",
+  "name": "@ali/lowcode-vision-preset",
+  "version": "0.8.0",
   "description": "Vision Polyfill for Ali lowCode engine",
   "main": "lib/index.js",
   "files": [
     "dist"
   ],
   "scripts": {
-    "start": "build-scripts start"
+    "build": "build-scripts build --skip-demo",
+    "cloud-build": "build-scripts build --skip-demo"
   },
   "license": "MIT",
   "dependencies": {
     "@ali/lowcode-editor-core": "^0.8.6",
     "@ali/lowcode-editor-skeleton": "^0.8.7",
-    "@ali/lowcode-plugin-components-pane": "^0.8.5",
     "@ali/lowcode-plugin-designer": "^0.9.3",
     "@ali/lowcode-plugin-outline-pane": "^0.8.9",
-    "@ali/lowcode-plugin-settings-pane": "^0.8.10",
     "@ali/lowcode-plugin-undo-redo": "^0.8.6",
     "@ali/lowcode-plugin-zh-en": "^0.8.8",
     "@ali/lowcode-setters": "^0.8.8",
@@ -33,18 +31,20 @@
     "@alifd/next": "^1.19.12",
     "@alife/theme-lowcode-dark": "^0.1.0",
     "@alife/theme-lowcode-light": "^0.1.0",
+    "domready": "^1.0.8",
     "react": "^16.8.1",
     "react-dom": "^16.8.1"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",
+    "@types/domready": "^1.0.0",
     "@types/events": "^3.0.0",
     "@types/react": "^16.8.3",
     "@types/react-dom": "^16.8.2",
     "build-plugin-fusion": "^0.1.0",
     "build-plugin-moment-locales": "^0.1.0",
     "build-plugin-react-app": "^1.1.2",
-    "tsconfig-paths-webpack-plugin": "^3.2.0",
-    "monaco-editor-webpack-plugin":"^1.9.0"
+    "monaco-editor-webpack-plugin": "^1.9.0",
+    "tsconfig-paths-webpack-plugin": "^3.2.0"
   }
 }

@@ -7,10 +7,12 @@ import Outline from '@ali/lowcode-plugin-outline-pane';
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
 import { Skeleton, SettingsPrimaryPane } from '@ali/lowcode-editor-skeleton';
 
-
 import Preview from '@ali/lowcode-plugin-sample-preview';
 import SourceEditor from '@ali/lowcode-plugin-source-editor';
 import { i18nReducer } from './i18n-reducer';
+
+export * from '@ali/lowcode-editor-core';
+export * from '@ali/lowcode-designer';
 
 registerSetters();
 

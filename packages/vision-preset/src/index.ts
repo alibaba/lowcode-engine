@@ -7,7 +7,7 @@ import { hotkey as Hotkey } from '@ali/lowcode-editor-core';
 import { createElement } from 'react';
 import { VE_EVENTS as EVENTS, VE_HOOKS as HOOKS } from './const';
 import Bus from './bus';
-import { skeleton, editor } from './editor';
+import { skeleton } from './editor';
 import { Workbench } from '@ali/lowcode-editor-skeleton';
 import Panes from './panes';
 import Exchange from './exchange';
@@ -20,10 +20,10 @@ import Pages from './pages';
 import Field from './field';
 import Prop from './prop';
 import Env from './env';
-import './vision.less';
 import DragEngine from './drag-engine';
-import * as EditorCore from '@ali/lowcode-editor-core';
-import * as Designer from '@ali/lowcode-designer';
+export * from './editor';
+
+import './vision.less';
 
 function init(container?: Element) {
   if (!container) {
@@ -61,10 +61,6 @@ const modules = {
 const context = new VisualEngineContext();
 
 const VisualEngine = {
-  EditorCore,
-  Designer,
-  editor,
-  skeleton,
   /**
    * VE.Popup
    */

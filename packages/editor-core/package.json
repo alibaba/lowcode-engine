@@ -1,7 +1,7 @@
 {
-  "name": "@ali/lowcode-globals",
+  "name": "@ali/lowcode-editor-core",
   "version": "0.8.6",
-  "description": "Globals api for Ali lowCode engine",
+  "description": "Core Api for Ali lowCode engine",
   "license": "MIT",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -11,19 +11,7 @@
   ],
   "scripts": {
     "build": "build-scripts build --skip-demo",
-    "cloud-build": "build-scripts build --skip-demo --config cloud-build.json",
-    "test": "ava",
-    "test:snapshot": "ava --update-snapshots"
-  },
-  "ava": {
-    "compileEnhancements": false,
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "ts-node/register"
-    ],
-    "snapshotDir": "test/fixtures/__snapshots__"
+    "cloud-build": "build-scripts build --skip-demo --config cloud-build.json"
   },
   "dependencies": {
     "@alifd/next": "^1.19.16",

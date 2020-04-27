@@ -1,0 +1,23 @@
+{
+  "plugins": [
+    [
+      "build-plugin-component",
+      {
+        "filename": "vision",
+        "library": "VisualEngine",
+        "libraryTarget": "umd",
+        "externals": {
+          "react": "window.React",
+          "react-dom": "window.ReactDOM",
+          "prop-types": "window.PropTypes",
+          "@ali/lowcode-editor-core": "window.LCECore"
+        }
+      }
+    ],
+    "build-plugin-fusion",
+    ["build-plugin-moment-locales", {
+      "locales": ["zh-cn"]
+    }],
+    "./build.plugin.js"
+  ]
+}

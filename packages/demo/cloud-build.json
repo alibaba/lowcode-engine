@@ -1,14 +1,15 @@
 {
   "entry": {
-    "lowcode-editor": "src/index.ts",
-    "lowcode-preview": "src/preview.ts"
+    "lowcode-editor": "src/vision/index.ts"
   },
   "vendor": false,
   "externals": {
     "react": "window.React",
     "react-dom": "window.ReactDOM",
     "prop-types": "window.PropTypes",
-    "@ali/lowcode-globals": "window.LCEGlobals"
+    "@ali/lowcode-editor-core": "window.LCECore",
+    "@ali/visualengine": "window.VisualEngine",
+    "@ali/visualengine-utils": "window.VisualEngineUtils"
   },
   "minify": false,
   "sourcemap": true,

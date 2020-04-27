@@ -9,15 +9,17 @@
     <script src="https://g.alicdn.com/code/lib/react/16.9.0/umd/react.development.js"></script>
     <script src="https://g.alicdn.com/code/lib/react-dom/16.9.0/umd/react-dom.development.js"></script>
     <script src="https://g.alicdn.com/code/lib/prop-types/15.7.2/prop-types.js"></script>
-    <script>
-      React.PropTypes = PropTypes;
-    </script>
+    <script> React.PropTypes = PropTypes; </script>
     <script src="https://g.alicdn.com/platform/c/??react15-polyfill/0.0.1/dist/index.js,lodash/4.6.1/lodash.min.js,immutable/3.7.6/dist/immutable.min.js,natty-storage/2.0.2/dist/natty-storage.min.js,natty-fetch/2.6.0/dist/natty-fetch.pc.min.js,tinymce/4.2.5/tinymce-full.js"></script>
     <script src="https://g.alicdn.com/mylib/moment/2.24.0/min/moment.min.js"></script>
     <link rel="stylesheet" href="https://alifd.alicdn.com/npm/@alifd/next/1.11.6/next.min.css" />
     <script src="https://unpkg.alibaba-inc.com/@alifd/next@1.18.17/dist/next.min.js"></script>
     <!-- lowcode engine globals -->
-    <link href="/css/vision.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./core.css" />
+    <!-- lowcode engine globals -->
+    <link rel="stylesheet" href="./vision-preset.css" />
+    <!-- lowcode engine app -->
+    <link rel="stylesheet" href="./lowcode-editor.css" />
     <script>
       window.pageConfig = {
         env: 'release',
@@ -68,9 +70,13 @@
   </head>
 
   <body>
+    <div id="lce-container"></div>
     <!-- lowcode engine globals -->
-    <script src="/js/vision.js"></script>
-    <!-- <script src="https://g.alicdn.com/vision/visualengine-utils/4.3.1/engine-utils.js"></script> -->
+    <script src="./core.js"></script>
+    <!-- lowcode engine globals -->
+    <script src="./vision-preset.js"></script>
     <script src="https://dev.g.alicdn.com/vision/visualengine-utils/5.0.0/engine-utils.js"></script>
+    <!-- lowcode engine app -->
+    <script src="./lowcode-editor.js"></script>
   </body>
 </html>

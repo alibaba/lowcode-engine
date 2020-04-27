@@ -1,5 +1,6 @@
-import domReady = require('domready');
-import * as EventEmitter from 'events';
+import domReady from 'domready';
+
+import { EventEmitter } from 'events';
 
 const Shells = ['iphone6'];
 

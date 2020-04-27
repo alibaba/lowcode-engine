@@ -1,4 +1,3 @@
-// @ts-ignore
 import { createElement } from 'react';
 import { Button } from '@alifd/next';
 import Engine, { Panes } from '@ali/visualengine';
