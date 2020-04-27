@@ -21,7 +21,7 @@ import Field from './field';
 import Prop from './prop';
 import Env from './env';
 import DragEngine from './drag-engine';
-export * from './editor';
+import { designer, editor } from './editor';
 
 import './vision.less';
 
@@ -61,6 +61,9 @@ const modules = {
 const context = new VisualEngineContext();
 
 const VisualEngine = {
+  designer,
+  editor,
+  skeleton,
   /**
    * VE.Popup
    */
@@ -96,9 +99,48 @@ const VisualEngine = {
   DragEngine,
 };
 
+(window as any).VisualEngine = VisualEngine;
+
 export default VisualEngine;
 
-(window as any).VisualEngine = VisualEngine;
+export {
+  designer,
+  editor,
+  skeleton,
+  /**
+   * VE.Popup
+   */
+  Popup,
+  /**
+   * VE Utils
+   */
+  utils,
+  I18nUtil,
+  Hotkey,
+  Env,
+  /* pub/sub 集线器 */
+  Bus,
+  /* 事件 */
+  EVENTS,
+  /* 修饰方法 */
+  HOOKS,
+  Exchange,
+  context,
+  /**
+   * VE.init
+   *
+   * Initialized the whole VisualEngine UI
+   */
+  init,
+  ui,
+  Panes,
+  modules,
+  Trunk,
+  Prototype,
+  Bundle,
+  Pages,
+  DragEngine,
+};
 
 
 /*

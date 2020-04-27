@@ -11,9 +11,6 @@ import Preview from '@ali/lowcode-plugin-sample-preview';
 import SourceEditor from '@ali/lowcode-plugin-source-editor';
 import { i18nReducer } from './i18n-reducer';
 
-export * from '@ali/lowcode-editor-core';
-export * from '@ali/lowcode-designer';
-
 registerSetters();
 
 export const editor = new Editor();
