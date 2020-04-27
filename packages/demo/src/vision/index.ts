@@ -91,6 +91,16 @@ skeleton.add({
   }),
 });
 
+skeleton.add({
+  area: 'toolbar',
+  type: 'Dock',
+  name: 'preview2',
+  props: {
+    align: 'left',
+  },
+  content: 'aeawfeawe',
+});
+
 initTrunkPane();
 Engine.init();
 
