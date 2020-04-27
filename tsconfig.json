@@ -38,7 +38,8 @@
     "skipLibCheck": true,
     "baseUrl": "./packages",
     "paths": {
-      "@ali/lowcode-*": ["./*/src"]
+      "@ali/lowcode-*": ["./*/src"],
+      "@ali/visualengine": ["./vision-preset/src"]
     },
     "outDir": "lib"
   },
