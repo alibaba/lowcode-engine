@@ -62,6 +62,10 @@ export default class Widget implements IWidget {
     this.align = props.align;
   }
 
+  getId() {
+    return this.id;
+  }
+
   getName() {
     return this.name;
   }
