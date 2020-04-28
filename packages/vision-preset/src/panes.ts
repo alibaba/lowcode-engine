@@ -1,6 +1,7 @@
 import { skeleton, editor } from './editor';
 import { ReactElement } from 'react';
 import { IWidgetBaseConfig } from '@ali/lowcode-editor-skeleton';
+import { uniqueId } from '@ali/lowcode-utils';
 
 export interface IContentItemConfig {
   title: string;
@@ -204,13 +205,15 @@ const widgets = skeleton.mainArea;
 
 const stages = Object.assign(skeleton.stages, {
   getStage(name: string) {
-    skeleton.stages.container.get(name);
+    return skeleton.stages.container.get(name);
   },
 
   createStage(config: any) {
     config = upgradeConfig(config);
     if (config.id) {
       config.name = config.id;
+    } else if (!config.name) {
+      config.name = uniqueId('stage');
     }
 
     const stage = skeleton.stages.add(config);

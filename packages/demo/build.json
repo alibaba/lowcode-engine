@@ -1,6 +1,7 @@
 {
   "entry": {
     "index": "src/vision/index.ts",
+    "vision-preset": "../vision-preset/src/index.ts",
     "react-simulator-renderer": "../react-simulator-renderer/src/index.ts"
   },
   "vendor": false,
@@ -13,6 +14,7 @@
     "react-dom": "var window.ReactDOM",
     "prop-types": "var window.PropTypes",
     "@alifd/next": "var window.Next",
+    "@ali/visualengine": "var window.VisualEngine",
     "@ali/visualengine-utils": "var window.VisualEngineUtils"
   },
   "plugins": [

@@ -298,8 +298,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       'click',
       (e) => {
         // stop response document click event
-        e.preventDefault();
-        e.stopPropagation();
+        // e.preventDefault();
+        // e.stopPropagation();
         // todo: catch link redirect
       },
       true,
