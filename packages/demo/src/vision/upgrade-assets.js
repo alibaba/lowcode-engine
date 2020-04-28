@@ -1,3 +1,4 @@
+/* eslint-disable */
 export function upgradeAssetsBundle(assets) {
   const components = [];
   const xPrototypes = [];
