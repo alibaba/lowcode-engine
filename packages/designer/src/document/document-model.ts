@@ -465,6 +465,9 @@ export class DocumentModel {
   getRoot() {
     return this.rootNode;
   }
+  get root() {
+    return this.rootNode;
+  }
 }
 
 export function isDocumentModel(obj: any): obj is DocumentModel {

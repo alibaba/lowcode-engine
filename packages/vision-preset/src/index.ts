@@ -5,13 +5,13 @@ import { render } from 'react-dom';
 import I18nUtil from '@ali/ve-i18n-util';
 import { hotkey as Hotkey } from '@ali/lowcode-editor-core';
 import { createElement } from 'react';
-import { VE_EVENTS as EVENTS, VE_HOOKS as HOOKS } from './const';
+import { VE_EVENTS as EVENTS, VE_HOOKS as HOOKS } from './base/const';
 import Bus from './bus';
 import { skeleton } from './editor';
 import { Workbench } from '@ali/lowcode-editor-skeleton';
 import Panes from './panes';
 import Exchange from './exchange';
-import VisualEngineContext from './context';
+import context from './context';
 import VisualManager from './base/visualManager';
 import Trunk from './bundle/trunk';
 import Prototype from './bundle/prototype';
@@ -57,8 +57,6 @@ const modules = {
   I18nUtil,
   Prop,
 };
-
-const context = new VisualEngineContext();
 
 const VisualEngine = {
   designer,

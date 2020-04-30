@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { obx } from '../utils/obx';
+import { obx, computed } from '../utils/obx';
 const languageMap: { [key: string]: string } = {
   en: 'en-US',
   zh: 'zh-CN',
@@ -29,8 +29,50 @@ const languageMap: { [key: string]: string } = {
 const LowcodeConfigKey = 'ali-lowcode-config';
 
 class AliGlobalLocale {
-  @obx.ref private locale: string = '';
   private emitter = new EventEmitter();
+  @obx.ref private _locale?: string;
+  @computed get locale() {
+    if (this._locale != null) {
+      return this._locale;
+    }
+    const { g_config, navigator } = window as any;
+    if (hasLocalStorage(window)) {
+      const store = window.localStorage;
+      let config: any;
+      try {
+        config = JSON.parse(store.getItem(LowcodeConfigKey) || '');
+      } catch (e) {
+        // ignore;
+      }
+      if (config?.locale) {
+        return (config.locale || '').replace('_', '-');
+      }
+    } else if (g_config) {
+      if (g_config.locale) {
+        return languageMap[g_config.locale] || (g_config.locale || '').replace('_', '-');
+      }
+    }
+
+    let locale: string = '';
+    if (navigator.language) {
+      locale = (navigator.language as string).replace('_', '-');
+    }
+
+    // IE10 及更低版本使用 browserLanguage
+    if (navigator.browserLanguage) {
+      const it = navigator.browserLanguage.split('-');
+      locale = it[0];
+      if (it[1]) {
+        locale += '-' + it[1].toUpperCase();
+      }
+    }
+
+    if (!locale) {
+      locale = 'zh-CN';
+    }
+
+    return locale;
+  }
 
   constructor() {
     this.emitter.setMaxListeners(0);
@@ -40,7 +82,7 @@ class AliGlobalLocale {
     if (locale === this.locale) {
       return;
     }
-    this.locale = locale;
+    this._locale = locale;
     if (hasLocalStorage(window)) {
       const store = window.localStorage;
       let config: any;
@@ -62,47 +104,6 @@ class AliGlobalLocale {
   }
 
   getLocale() {
-    if (this.locale) {
-      return this.locale;
-    }
-
-    const { g_config, navigator } = window as any;
-    if (hasLocalStorage(window)) {
-      const store = window.localStorage;
-      let config: any;
-      try {
-        config = JSON.parse(store.getItem(LowcodeConfigKey) || '');
-      } catch (e) {
-        // ignore;
-      }
-      if (config?.locale) {
-        this.locale = (config.locale || '').replace('_', '-');
-        return this.locale;
-      }
-    } else if (g_config) {
-      if (g_config.locale) {
-        this.locale = languageMap[g_config.locale] || (g_config.locale || '').replace('_', '-');
-        return this.locale;
-      }
-    }
-
-    if (navigator.language) {
-      this.locale = (navigator.language as string).replace('_', '-');
-    }
-
-    // IE10 及更低版本使用 browserLanguage
-    if (navigator.browserLanguage) {
-      const it = navigator.browserLanguage.split('-');
-      this.locale = it[0];
-      if (it[1]) {
-        this.locale += '-' + it[1].toUpperCase();
-      }
-    }
-
-    if (!this.locale) {
-      this.locale = 'zh-CN';
-    }
-
     return this.locale;
   }
 

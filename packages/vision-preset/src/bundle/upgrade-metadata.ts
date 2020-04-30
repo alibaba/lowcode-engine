@@ -342,11 +342,11 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
       },
     ];
     if (allowTextInput !== false) {
-      setters.unshift('StringSetter');
+      setters.unshift('I18nSetter');
       // FIXME: use I18nSetter
     }
     if (supportVariable) {
-      setters.push('ExpressionSetter');
+      setters.push('VariableSetter');
     }
     newConfig.setter = setters.length > 1 ? setters : setters[0];
 
@@ -403,25 +403,24 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
       primarySetter = setter;
     }
   }
+  if (!primarySetter) {
+    primarySetter = 'I18nSetter';
+  }
   if (supportVariable) {
-    if (primarySetter) {
-      const setters = Array.isArray(primarySetter)
-        ? primarySetter.concat('ExpressionSetter')
-        : [primarySetter, 'ExpressionSetter'];
-      primarySetter = {
-        componentName: 'MixedSetter',
-        props: {
-          setters,
-          onSetterChange: (field: Field, name: string) => {
-            if (useVariableChange) {
-              useVariableChange.call(field, { isUseVariable: name === 'ExpressionSetter' });
-            }
-          },
+    const setters = Array.isArray(primarySetter)
+      ? primarySetter.concat('VariableSetter')
+      : [primarySetter, 'VariableSetter'];
+    primarySetter = {
+      componentName: 'MixedSetter',
+      props: {
+        setters,
+        onSetterChange: (field: Field, name: string) => {
+          if (useVariableChange) {
+            useVariableChange.call(field, { isUseVariable: name === 'VariableSetter' });
+          }
         },
-      };
-    } else {
-      primarySetter = 'ExpressionSetter';
-    }
+      },
+    };
   }
   newConfig.setter = primarySetter;
 

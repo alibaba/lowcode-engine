@@ -618,6 +618,10 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
     return { container: this.parent, ref: this };
   }
+  getAddonData() {
+    // TODO:
+    return { online: [] };
+  }
   toString() {
     return this.id;
   }

@@ -3,30 +3,32 @@ import { assign } from 'lodash';
 import { Component, ReactElement } from 'react';
 import VisualManager from './base/visualManager';
 import Prototype from './bundle/prototype';
+import { VE_HOOKS } from './base/const';
+import { registerSetter } from '@ali/lowcode-editor-core';
 
 // TODO: Env 本地引入后需要兼容方法 getDesignerLocale
 // import Env from './env';
 
-let contextInstance: VisualEngineContext;
 
 // prop is Prop object in Designer
 export type SetterProvider = (prop: any, componentPrototype: Prototype) => Component | ReactElement<any>;
 
-export default class VisualEngineContext {
+export class VisualEngineContext {
   private managerMap: { [name: string]: VisualManager } = {};
   private moduleMap: { [name: string]: any } = {};
   private pluginsMap: { [name: string]: any } = {};
 
-  constructor() {
-    if (!contextInstance) {
-      contextInstance = this;
-    } else {
-      return contextInstance;
-    }
-  }
-
   use(pluginName: string, plugin: any) {
     this.pluginsMap[pluginName || 'unknown'] = plugin;
+    if (pluginName === VE_HOOKS.VE_SETTING_FIELD_VARIABLE_SETTER) {
+      registerSetter('VariableSetter', {
+        component: plugin,
+        title: { type: 'i18n', 'zh-CN': '变量绑定', 'en-US': 'Variable Binding' },
+        // TODO: add logic below
+        // condition?: (field: any) => boolean;
+        // initialValue?: any | ((field: any) => any);
+      });
+    }
   }
 
   getPlugin(name: string) {
@@ -102,3 +104,5 @@ export default class VisualEngineContext {
     }
   }
 }
+
+export default new VisualEngineContext();
