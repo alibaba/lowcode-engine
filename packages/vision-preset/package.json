@@ -25,7 +25,6 @@
     "@ali/ve-icons": "^4.1.9",
     "@ali/ve-less-variables": "2.0.3",
     "@ali/ve-popups": "^4.2.5",
-    "@ali/ve-trunk-pane": "^5.1.0-beta.14",
     "@ali/ve-utils": "^1.1.0",
     "@ali/vu-css-style": "^1.1.3",
     "@ali/vu-logger": "^1.0.7",

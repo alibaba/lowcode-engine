@@ -68,7 +68,18 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
   if (type === 'dock') {
     newConfig.type = 'PanelDock';
     newConfig.area = 'left';
-    const { contents, hideTitleBar, tip, width, maxWidth, height, maxHeight, position, menu, isAction } = config;
+    newConfig.props.description = description || title;
+    const {
+      contents,
+      hideTitleBar,
+      tip,
+      width,
+      maxWidth,
+      height,
+      maxHeight,
+      menu,
+      isAction
+    } = config;
     if (menu) {
       newConfig.props.title = menu;
     }

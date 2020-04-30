@@ -100,17 +100,17 @@ skeleton.add({
   content: Preview,
 });
 
-skeleton.add({
-  name: 'sourceEditor',
-  type: 'PanelDock',
-  props: {
-    align: 'top',
-    icon: 'code',
-    description: '组件库',
-  },
-  panelProps: {
-    width: 500
-    // area: 'leftFixedArea'
-  },
-  content: SourceEditor,
-});
+// skeleton.add({
+//   name: 'sourceEditor',
+//   type: 'PanelDock',
+//   props: {
+//     align: 'top',
+//     icon: 'code',
+//     description: '组件库',
+//   },
+//   panelProps: {
+//     width: 500
+//     // area: 'leftFixedArea'
+//   },
+//   content: SourceEditor,
+// });

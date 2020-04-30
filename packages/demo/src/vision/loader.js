@@ -1,3 +1,4 @@
+/* eslint-disable */
 function getStylePoint(id, level) {
   if (stylePointTable[id]) {
     return stylePointTable[id];
