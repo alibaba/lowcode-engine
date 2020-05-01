@@ -71,7 +71,7 @@ export class Designer {
       this.hovering.enable = false;
       const { dragObject } = e;
       if (isDragNodeObject(dragObject)) {
-        if (dragObject.nodes.length === 1) {
+        if (dragObject.nodes.length === 1 && dragObject.nodes[0].parent) {
           // ensure current selecting
           dragObject.nodes[0].select();
         }

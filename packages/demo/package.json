@@ -28,6 +28,7 @@
     "@ali/lowcode-runtime": "^0.8.13",
     "@ali/lowcode-setters": "^0.8.11",
     "@ali/lowcode-utils": "^0.8.2",
+    "@ali/vs-variable-setter": "^3.1.0",
     "@ali/ve-action-pane": "^4.7.0-beta.0",
     "@ali/ve-datapool-pane": "^6.4.3",
     "@ali/ve-i18n-manage-pane": "^4.3.0",

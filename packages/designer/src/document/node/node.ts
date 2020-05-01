@@ -653,7 +653,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
     this._addons[key] = exportData;
   }
-  
+
   toString() {
     return this.id;
   }

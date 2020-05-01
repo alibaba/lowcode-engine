@@ -12,8 +12,25 @@ import EventBindDialog from '@ali/lowcode-plugin-event-bind-dialog';
 import loadUrls from './loader';
 import { upgradeAssetsBundle } from './upgrade-assets';
 import { isCSSUrl } from '@ali/lowcode-utils';
+import { I18nSetter } from '@ali/visualengine-utils';
+import VariableSetter from '@ali/vs-variable-setter';
 
-const { editor, skeleton } = Engine;
+const { editor, skeleton, context, HOOKS, Trunk } = Engine;
+
+Trunk.registerSetter('I18nSetter', {
+  component: I18nSetter,
+  // todo: add icon
+  title: {
+    type: 'i18n',
+    'zh-CN': '国际化输入',
+    'en-US': 'International Input'
+  },
+  // TODO: below
+  // condition?: (field: any) => boolean;
+  // initialValue?: any | ((field: any) => any);
+  recommend: true,
+});
+context.use(HOOKS.VE_SETTING_FIELD_VARIABLE_SETTER, VariableSetter);
 
 const externals = ['react', 'react-dom', 'prop-types', 'react-router', 'react-router-dom', '@ali/recore'];
 
@@ -52,7 +69,7 @@ async function loadAssets() {
       assets.packages.push({
         library: '_prototypesStyle',
         package: '_prototypes-style',
-        urls: prototypeStyles
+        urls: prototypeStyles,
       });
     }
     await Promise.all(tasks);

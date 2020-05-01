@@ -1,7 +1,8 @@
 import { ReactElement, ComponentType } from 'react';
 import { EventEmitter } from 'events';
-import { registerSetter } from '@ali/lowcode-editor-core';
+import { registerSetter, RegisteredSetter } from '@ali/lowcode-editor-core';
 import Bundle from './bundle';
+import { CustomView } from '@ali/lowcode-types';
 
 export class Trunk {
   private trunk: any[] = [];
@@ -51,7 +52,7 @@ export class Trunk {
     };
   }
 
-  registerSetter(type: string, setter: ReactElement | ComponentType<any>) {
+  registerSetter(type: string, setter: CustomView | RegisteredSetter) {
     console.warn('Trunk.registerSetter is deprecated');
     registerSetter(type, setter);
   }

@@ -1,4 +1,4 @@
-import React, { Component, isValidElement } from 'react';
+import React, { Component, ComponentClass, ReactNode } from 'react';
 import classNames from 'classnames';
 import { Dropdown, Menu } from '@alifd/next';
 import {
@@ -9,7 +9,6 @@ import {
   TitleContent,
   isSetterConfig,
   isDynamicSetter,
-  isI18nData,
 } from '@ali/lowcode-types';
 import {
   getSetter,
@@ -20,13 +19,14 @@ import {
   createSetterContent,
   observer,
   shallowIntl,
-  Tip,
 } from '@ali/lowcode-editor-core';
 
 import { IconConvert } from '../../icons/convert';
+import { intlNode } from '../../locale';
 
 import './style.less';
 import { SettingField } from '@ali/lowcode-designer';
+import { IconVariable } from 'editor-skeleton/src/icons/variable';
 
 export interface SetterItem {
   name: string;
@@ -101,6 +101,10 @@ function nomalizeSetters(setters?: Array<string | SetterConfig | CustomView | Dy
   });
 }
 
+interface VariableSetter extends ComponentClass {
+  show(params: object): void;
+}
+
 @observer
 export default class MixedSetter extends Component<{
   field: SettingField;
@@ -129,11 +133,21 @@ export default class MixedSetter extends Component<{
     return firstMatched;
   }
 
+  // dirty fix vision variable setter logic
+  private hasVariableSetter = this.setters.some((item) => item.name === 'VariableSetter');
+
   private useSetter = (name: string) => {
+    const { field, onChange } = this.props;
+    if (name === 'VariableSetter') {
+      const setterComponent = getSetter('VariableSetter')?.component as any;
+      if (setterComponent && setterComponent.isPopup) {
+        setterComponent.show({ prop: field });
+        return;
+      }
+    }
     if (name === this.used) {
       return;
     }
-    const { field, onChange } = this.props;
     const setter = this.setters.find((item) => item.name === name);
     this.used = name;
     if (setter) {
@@ -163,99 +177,161 @@ export default class MixedSetter extends Component<{
     this.checkIsBlockField();
   }
 
-  render() {
+  private renderCurrentSetter(currentSetter?: SetterItem, extraProps?: object) {
     const { className, field, setters, onSetterChange, ...restProps } = this.props;
-
-    const currentSetter = this.getCurrentSetter();
-    const isTwoType = this.setters.length < 3;
-
-    let setterContent: any;
-    const triggerTitle: any = {
-      tip: {
-        type: 'i18n',
-        'zh-CN': '切换格式',
-        'en-US': 'Switch Format',
-      },
-      icon: <IconConvert size={24} />,
-    };
-    if (currentSetter) {
-      const { setter, title, props } = currentSetter;
-      let setterProps: any = {};
-      let setterType: any;
-      if (isDynamicSetter(setter)) {
-        setterType = setter.call(field, field);
-      } else {
-        setterType = setter;
-      }
-      if (props) {
-        setterProps = props;
-        if (typeof setterProps === 'function') {
-          setterProps = setterProps(field);
-        }
-      }
-
-      setterContent = createSetterContent(setterType, {
-        ...shallowIntl(setterProps),
-        field,
-        ...restProps,
-      });
-      if (title) {
-        if (typeof title !== 'object' || isI18nData(title) || isValidElement(title)) {
-          triggerTitle.tip = title;
-        } else {
-          triggerTitle.tip = title.tip || title.label;
-        }
-      }
-    } else {
-      // 未匹配的 null 值，显示 NullValue 空值
-      // 未匹配的 其它 值，显示 InvalidValue 非法值
+    if (!currentSetter) {
+      // TODO: use intl
       if (restProps.value == null) {
-        setterContent = <span>NullValue</span>;
+        return <span>NullValue</span>;
       } else {
-        setterContent = <span>InvalidValue</span>;
+        return <span>InvalidValue</span>;
       }
     }
+    const { setter, props } = currentSetter;
+    let setterProps: any = {};
+    let setterType: any;
+    if (isDynamicSetter(setter)) {
+      setterType = setter.call(field, field);
+    } else {
+      setterType = setter;
+    }
+    if (props) {
+      setterProps = props;
+      if (typeof setterProps === 'function') {
+        setterProps = setterProps(field);
+      }
+    }
+
+    return createSetterContent(setterType, {
+      ...shallowIntl(setterProps),
+      field,
+      ...restProps,
+      ...extraProps,
+    });
+  }
+
+  private contentsFromPolyfill(setterComponent: VariableSetter) {
+    const { field } = this.props;
+
+    const n = this.setters.length;
+
+    let setterContent: any;
+    let actions: any;
+    if (n < 3) {
+      const tipContent = field.isUseVariable()
+        ? intlNode('Binded: {expr}', { expr: field.getVariableValue() })
+        : intlNode('Variable Binding');
+      if (n === 1) {
+        // =1: 原地展示<当前绑定的值，点击调用 VariableSetter.show>，icon 高亮是否->isUseVaiable，点击 VariableSetter.show
+        setterContent = (
+          <a
+            onClick={() => {
+              setterComponent.show({ prop: field });
+            }}
+          >
+            {tipContent}
+          </a>
+        );
+      } else {
+        // =2: 另外一个 Setter 原地展示，icon 高亮，点击弹出调用 VariableSetter.show
+        const otherSetter = this.setters.find((item) => item.name !== 'VariableSetter')!;
+        setterContent = this.renderCurrentSetter(otherSetter, {
+          value: field.getMockOrValue(),
+        });
+      }
+      actions = (
+        <Title
+          className={field.isUseVariable() ? 'variable-binded' : ''}
+          title={{
+            icon: IconVariable,
+            tip: tipContent,
+          }}
+          onClick={() => {
+            setterComponent.show({ prop: field });
+          }}
+        />
+      );
+    } else {
+      // >=3: 原地展示当前 setter<当前绑定的值，点击调用 VariableSetter.show>，icon tip 提示绑定的值，点击展示切换 Setter，点击其它 setter 直接切换，点击 Variable Setter-> VariableSetter.show
+      const currentSetter = field.isUseVariable()
+        ? this.setters.find((item) => item.name === 'VariableSetter')
+        : this.getCurrentSetter();
+      if (currentSetter?.name === 'VariableSetter') {
+        setterContent = (
+          <a
+            onClick={() => {
+              setterComponent.show({ prop: field });
+            }}
+          >
+            {intlNode('Binded: {expr}', { expr: field.getVariableValue() })}
+          </a>
+        );
+      } else {
+        setterContent = this.renderCurrentSetter(currentSetter);
+      }
+      actions = this.renderSwitchAction(currentSetter);
+    }
+
+    return {
+      setterContent,
+      actions,
+    };
+  }
+
+  private renderSwitchAction(currentSetter?: SetterItem) {
     const usedName = currentSetter?.name || this.used;
-    let moreBtnNode = (
+    const triggerNode = (
       <Title
-        title={triggerTitle}
+        title={{
+          tip: intlNode('Switch Setter'),
+          // FIXME: got a beautiful icon
+          icon: <IconConvert size={24} />,
+        }}
         className="lc-switch-trigger"
-        onClick={
-          isTwoType
-            ? () => {
-                if (this.setters[0]?.name === usedName) {
-                  this.useSetter(this.setters[1]?.name);
-                } else {
-                  this.useSetter(this.setters[0]?.name);
-                }
-              }
-            : undefined
-        }
       />
     );
-    if (!isTwoType) {
-      moreBtnNode = (
-        <Dropdown trigger={moreBtnNode} triggerType="click" align="tr br">
-          <Menu selectMode="single" hasSelectedIcon={true} selectedKeys={usedName} onItemClick={this.useSetter}>
-            {this.setters
-              .filter((setter) => setter.list || setter.name === usedName)
-              .map((setter) => {
-                return (
-                  <Menu.Item key={setter.name}>
-                    <Title title={setter.title} />
-                  </Menu.Item>
-                );
-              })}
-          </Menu>
-        </Dropdown>
-      );
+    return (
+      <Dropdown trigger={triggerNode} triggerType="click" align="tr br">
+        <Menu selectMode="single" hasSelectedIcon={true} selectedKeys={usedName} onItemClick={this.useSetter}>
+          {this.setters
+            .filter((setter) => setter.list || setter.name === usedName)
+            .map((setter) => {
+              return (
+                <Menu.Item key={setter.name}>
+                  <Title title={setter.title} />
+                </Menu.Item>
+              );
+            })}
+        </Menu>
+      </Dropdown>
+    );
+  }
+
+  render() {
+    const { className } = this.props;
+    let contents: {
+      setterContent: ReactNode,
+      actions: ReactNode,
+    } | undefined;
+    if (this.hasVariableSetter) {
+      // FIXME: polyfill vision variable setter logic
+      const setterComponent = getSetter('VariableSetter')?.component as any;
+      if (setterComponent && setterComponent.isPopup) {
+        contents = this.contentsFromPolyfill(setterComponent);
+      }
+    }
+    if (!contents) {
+      const currentSetter = this.getCurrentSetter();
+      contents = {
+        setterContent: this.renderCurrentSetter(currentSetter),
+        actions: this.renderSwitchAction(currentSetter),
+      };
     }
 
     return (
       <div ref={(shell) => (this.shell = shell)} className={classNames('lc-setter-mixed', className)}>
-        {setterContent}
-
-        <div className="lc-setter-actions">{moreBtnNode}</div>
+        {contents.setterContent}
+        <div className="lc-setter-actions">{contents.actions}</div>
       </div>
     );
   }

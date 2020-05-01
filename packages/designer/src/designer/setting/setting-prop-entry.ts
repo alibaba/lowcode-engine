@@ -1,5 +1,5 @@
 import { obx, computed } from '@ali/lowcode-editor-core';
-import { IEditor } from '@ali/lowcode-types';
+import { IEditor, isJSExpression } from '@ali/lowcode-types';
 import { uniqueId } from '@ali/lowcode-utils';
 import { SettingEntry } from './setting-entry';
 import { Node } from '../../document';
@@ -191,4 +191,44 @@ export class SettingPropEntry implements SettingEntry {
     return this.config;
   }
   */
+  getVariableValue() {
+    const v = this.getValue();
+    if (isJSExpression(v)) {
+      return v.value;
+    }
+    return '';
+  }
+  setVariableValue(value: string) {
+    const v = this.getValue();
+    this.setValue({
+      type: 'JSExpression',
+      value,
+      mock: isJSExpression(v) ? v.mock : v,
+    });
+  }
+  setUseVariable(flag: boolean) {
+    if (this.isUseVariable() === flag) {
+      return;
+    }
+    const v = this.getValue();
+    if (isJSExpression(v)) {
+      this.setValue(v.mock);
+    } else {
+      this.setValue({
+        type: 'JSExpression',
+        value: '',
+        mock: v,
+      });
+    }
+  }
+  isUseVariable() {
+    return isJSExpression(this.getValue());
+  }
+  getMockOrValue() {
+    const v = this.getValue();
+    if (isJSExpression(v)) {
+      return v.mock;
+    }
+    return v;
+  }
 }
