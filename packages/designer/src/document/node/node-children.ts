@@ -2,9 +2,13 @@ import { obx, computed } from '@ali/lowcode-editor-core';
 import { Node, ParentalNode } from './node';
 import { TransformStage } from './transform-stage';
 import { NodeData, isNodeSchema } from '@ali/lowcode-types';
+import { shallowEqual } from '@ali/lowcode-utils';
+import { EventEmitter } from 'events';
 
 export class NodeChildren {
   @obx.val private children: Node[];
+  private emitter = new EventEmitter();
+
   constructor(readonly owner: ParentalNode, data: NodeData | NodeData[]) {
     this.children = (Array.isArray(data) ? data : [data]).map(child => {
       return this.owner.document.createNode(child);
@@ -52,6 +56,9 @@ export class NodeChildren {
 
     this.children = children;
     this.interalInitParent();
+    if (!shallowEqual(children, originChildren)) {
+      this.emitter.emit('change');
+    }
   }
 
   /**
@@ -86,6 +93,7 @@ export class NodeChildren {
       deleted.internalSetParent(null);
       deleted.purge();
     }
+    this.emitter.emit('change');
     return false;
   }
 
@@ -117,6 +125,8 @@ export class NodeChildren {
       children.splice(i, 1);
       children.splice(index, 0, node);
     }
+
+    this.emitter.emit('change');
 
     // check condition group
     if (node.conditionGroup) {
@@ -208,14 +218,7 @@ export class NodeChildren {
   }
 
   mergeChildren(remover: () => any, adder: (children: Node[]) => NodeData[] | null, sorter: () => any) {
-    /*
-    const children = this.children.slice();
-    children.forEach(child => child.internalSetParent(null));
-
-    this.children = children;
-    this.interalInitParent();
-    */
-
+    let changed = false;
     if (remover) {
       const willRemove = this.children.filter(remover);
       if (willRemove.length > 0) {
@@ -226,6 +229,7 @@ export class NodeChildren {
             node.remove();
           }
         });
+        changed = true;
       }
     }
     if (adder) {
@@ -236,11 +240,23 @@ export class NodeChildren {
           this.children.push(node);
           node.internalSetParent(this.owner);
         });
+        changed = true;
       }
     }
     if (sorter) {
       this.children = this.children.sort(sorter);
+      changed = true;
     }
+    if (changed) {
+      this.emitter.emit('change');
+    }
+  }
+
+  onChange(fn: () => void) {
+    this.emitter.on('change', fn);
+    return () => {
+      this.emitter.removeListener('change', fn);
+    };
   }
 
   private purged = false;

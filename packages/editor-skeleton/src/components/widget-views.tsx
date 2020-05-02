@@ -95,7 +95,7 @@ export class TitledPanelView extends Component<{ panel: Panel }> {
         hidden: !panel.visible,
       })}>
         <PanelTitle panel={panel} />
-        <div className="lc-pane-body">{panel.body}</div>
+        <div className="lc-panel-body">{panel.body}</div>
       </div>
     );
   }

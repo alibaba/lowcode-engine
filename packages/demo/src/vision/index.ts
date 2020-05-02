@@ -25,9 +25,6 @@ Trunk.registerSetter('I18nSetter', {
     'zh-CN': '国际化输入',
     'en-US': 'International Input'
   },
-  // TODO: below
-  // condition?: (field: any) => boolean;
-  // initialValue?: any | ((field: any) => any);
   recommend: true,
 });
 context.use(HOOKS.VE_SETTING_FIELD_VARIABLE_SETTER, VariableSetter);
@@ -112,7 +109,7 @@ function initDemoPanes() {
       description: '帮助',
     },
   });
-  
+
   skeleton.add({
     area: 'topArea',
     type: 'Dock',
@@ -289,6 +286,10 @@ function initActionPane() {
 
 async function init() {
   Engine.Env.setEnv('RE_VERSION', '7.2.0');
+  Engine.Env.setSupportFeatures({
+    subview: true,
+    i18nPane: true,
+  });
   await loadAssets();
   await loadSchema();
   await initTrunkPane();

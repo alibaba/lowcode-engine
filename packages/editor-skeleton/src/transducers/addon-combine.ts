@@ -181,7 +181,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
       title: { type: 'i18n', 'zh-CN': '高级', 'en-US': 'Advance' },
       items: [
         {
-          name: '__condition',
+          name: '___condition',
           title: { type: 'i18n', 'zh-CN': '条件显示', 'en-US': 'Condition' },
           setter: 'ExpressionSetter',
         },
@@ -190,7 +190,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
           title: { type: 'i18n', 'zh-CN': '循环', 'en-US': 'Loop' },
           items: [
             {
-              name: '__loop',
+              name: '___loop',
               title: { type: 'i18n', 'zh-CN': '循环数据', 'en-US': 'Loop Data' },
               setter: {
                 componentName: 'MixinSetter',
@@ -215,7 +215,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
               },
             },
             {
-              name: '__loopArgs.0',
+              name: '___loopArgs.0',
               title: { type: 'i18n', 'zh-CN': '迭代变量名', 'en-US': 'Loop Item' },
               setter: {
                 componentName: 'StringSetter',
@@ -225,7 +225,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
               },
             },
             {
-              name: '__loopArgs.1',
+              name: '___loopArgs.1',
               title: { type: 'i18n', 'zh-CN': '索引变量名', 'en-US': 'Loop Index' },
               setter: {
                 componentName: 'StringSetter',

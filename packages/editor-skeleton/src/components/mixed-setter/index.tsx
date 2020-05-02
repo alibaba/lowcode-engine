@@ -26,7 +26,7 @@ import { intlNode } from '../../locale';
 
 import './style.less';
 import { SettingField } from '@ali/lowcode-designer';
-import { IconVariable } from 'editor-skeleton/src/icons/variable';
+import { IconVariable } from '../../icons/variable';
 
 export interface SetterItem {
   name: string;
@@ -120,14 +120,12 @@ export default class MixedSetter extends Component<{
     const { field } = this.props;
     let firstMatched: SetterItem | undefined;
     for (const setter of this.setters) {
+      if (setter.name === this.used) {
+        return setter;
+      }
       const matched = !setter.condition || setter.condition(field);
-      if (matched) {
-        if (setter.name === this.used) {
-          return setter;
-        }
-        if (!firstMatched) {
-          firstMatched = setter;
-        }
+      if (matched && !firstMatched) {
+        firstMatched = setter;
       }
     }
     return firstMatched;
@@ -234,6 +232,7 @@ export default class MixedSetter extends Component<{
         );
       } else {
         // =2: 另外一个 Setter 原地展示，icon 高亮，点击弹出调用 VariableSetter.show
+        // FIXME! use variable placeholder setter
         const otherSetter = this.setters.find((item) => item.name !== 'VariableSetter')!;
         setterContent = this.renderCurrentSetter(otherSetter, {
           value: field.getMockOrValue(),
@@ -243,7 +242,7 @@ export default class MixedSetter extends Component<{
         <Title
           className={field.isUseVariable() ? 'variable-binded' : ''}
           title={{
-            icon: IconVariable,
+            icon: <IconVariable size={24} />,
             tip: tipContent,
           }}
           onClick={() => {
@@ -314,7 +313,7 @@ export default class MixedSetter extends Component<{
       actions: ReactNode,
     } | undefined;
     if (this.hasVariableSetter) {
-      // FIXME: polyfill vision variable setter logic
+      // polyfill vision variable setter logic
       const setterComponent = getSetter('VariableSetter')?.component as any;
       if (setterComponent && setterComponent.isPopup) {
         contents = this.contentsFromPolyfill(setterComponent);

@@ -25,7 +25,6 @@ export class VisualEngineContext {
         component: plugin,
         title: { type: 'i18n', 'zh-CN': '变量绑定', 'en-US': 'Variable Binding' },
         // TODO: add logic below
-        // condition?: (field: any) => boolean;
         // initialValue?: any | ((field: any) => any);
       });
     }

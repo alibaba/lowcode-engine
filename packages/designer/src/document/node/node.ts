@@ -593,6 +593,10 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.props;
   }
 
+  onChildrenChange(fn: () => void) {
+    return this.children?.onChange(fn);
+  }
+
   mergeChildren(remover: () => any, adder: (children: Node[]) => NodeData[] | null, sorter: () => any) {
     this.children?.mergeChildren(remover, adder, sorter);
   }
@@ -652,6 +656,10 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
 
     this._addons[key] = exportData;
+  }
+
+  getRect(): DOMRect | null {
+    return this.document.simulator?.computeRect(this) || null;
   }
 
   toString() {
