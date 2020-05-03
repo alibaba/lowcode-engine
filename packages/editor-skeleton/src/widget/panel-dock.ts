@@ -6,6 +6,7 @@ import { PanelDockConfig } from '../types';
 import Panel from './panel';
 import { PanelDockView, WidgetView } from '../components/widget-views';
 import { IWidget } from './widget';
+import { composeTitle } from './utils';
 
 export default class PanelDock implements IWidget {
   readonly isWidget = true;
@@ -63,7 +64,7 @@ export default class PanelDock implements IWidget {
         name: this.panelName,
         props: {
           // FIXME! give default title for panel
-          // title: props ? composeTitle(props?.title, props?.icon, props?.description, true) : '',
+          title: props ? composeTitle(props?.title, props?.icon, props?.description, true) : '',
           ...panelProps,
         },
         contentProps,

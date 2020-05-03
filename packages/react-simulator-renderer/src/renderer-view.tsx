@@ -5,6 +5,36 @@ import { SimulatorRenderer } from './renderer';
 import { host } from './host';
 import './renderer.less';
 
+// patch cloneElement avoid lost keyProps
+const originCloneElement = window.React.cloneElement;
+(window as any).React.cloneElement = (child: any, { _leaf, ...props}: any = {}) => {
+  if (child.ref && props.ref) {
+    const dRef = props.ref;
+    const cRef = child.ref;
+    props.ref = (x: any) => {
+      if (cRef) {
+        if (typeof cRef === 'function') {
+          cRef(x);
+        } else {
+          try {
+            cRef.current = x;
+          } catch (e) { }
+        }
+      }
+      if (dRef) {
+        if (typeof dRef === 'function') {
+          dRef(x);
+        } else {
+          try {
+            dRef.current = x;
+          } catch (e) { }
+        }
+      }
+    }
+  };
+  return originCloneElement(child, props);
+}
+
 export default class SimulatorRendererView extends Component<{ renderer: SimulatorRenderer }> {
   render() {
     const { renderer } = this.props;

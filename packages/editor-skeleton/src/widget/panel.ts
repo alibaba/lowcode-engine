@@ -74,6 +74,8 @@ export default class Panel implements IWidget {
       );
       content.forEach((item) => this.add(item));
     }
+    // compatiable for vision, init at first
+    this.initBody();
     // todo: process shortcut
   }
 
@@ -93,6 +95,7 @@ export default class Panel implements IWidget {
         editor: this.skeleton.editor,
         config: this.config,
         panel: this,
+        pane: this,
       });
     }
   }
@@ -158,6 +161,18 @@ export default class Panel implements IWidget {
 
   show() {
     this.setActive(true);
+  }
+
+
+  getSupportedPositions() {
+    return ['default'];
+  }
+
+  getCurrentPosition() {
+    return 'default';
+  }
+
+  setPosition(position: string) {
   }
 }
 

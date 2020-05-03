@@ -50,24 +50,28 @@ body {
   width: 100%;
   height: 100%;
   position: relative;
-  .pane-title {
-    // height: var(--pane-title-height);
+  &.hidden {
+    display: none;
+  }
+  .lc-panel-title {
+    height: 32px;
     background-color: var(--pane-title-bg-color);
     display: flex;
     align-items: center;
     padding: 0 15px;
-    .my-help-tip {
+    .lc-help-tip {
       margin-left: 4px;
     }
   }
 
-  .pane-body {
+  .lc-panel-body {
     position: absolute;
-    top: 0;
+    top: 32px;
     bottom: 0;
     left: 0;
     right: 0;
     overflow: auto;
+    /*
     .my-tabs {
       width: 100%;
       height: 100%;
@@ -99,10 +103,7 @@ body {
         overflow: hidden;
       }
     }
-  }
-
-  &.titled > .pane-body {
-    top: var(--pane-title-height);
+    */
   }
 }
 .lc-panel {
@@ -112,16 +113,7 @@ body {
   &.hidden {
     display: none;
   }
-  .pane-title {
-    height: var(--pane-title-height);
-    background-color: var(--pane-title-bg-color);
-    display: flex;
-    align-items: center;
-    padding: 0 15px;
-    .my-help-tip {
-      margin-left: 4px;
-    }
-  }
+  /*
   .my-tabs {
     width: 100%;
     height: 100%;
@@ -154,6 +146,7 @@ body {
       overflow: hidden;
     }
   }
+  */
 }
 
 .my-dock {

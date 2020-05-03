@@ -284,6 +284,17 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
   }
 
   let initialFn = (slotName ? null : initial) || initialValue;
+  if (slotName && initialValue === true) {
+    initialFn = (field: any, value: any) => {
+      if (isJSSlot(value)) {
+        return value;
+      }
+      return {
+        type: 'JSSlot',
+        value: initialChildren,
+      };
+    };
+  }
 
   if (accessor && !slotName) {
     extraProps.getValue = (field: Field, fieldValue: any) => {
@@ -294,17 +305,25 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
     }
   }
 
+  const setterInitial = getInitialFromSetter(setter);
+
   addInitial({
     name: slotName || name,
     initial: (field: Field, currentValue: any) => {
       // FIXME! read from prototype.defaultProps
       const defaults = extraProps.defaultValue;
 
-      if (typeof initialFn === 'function') {
-        return initialFn.call(field, currentValue, defaults);
+      if (typeof initialFn !== 'function') {
+        initialFn = defaultInitial;
       }
 
-      return currentValue == null ? defaults : currentValue;
+      const v = initialFn.call(field, currentValue, defaults);
+
+      if (setterInitial) {
+        return setterInitial.call(field, v, defaults);
+      }
+
+      return v;
     },
   });
 
@@ -343,7 +362,6 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
     ];
     if (allowTextInput !== false) {
       setters.unshift('I18nSetter');
-      // FIXME: use I18nSetter
     }
     if (supportVariable) {
       setters.push('VariableSetter');
@@ -428,6 +446,18 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
 }
 
 type AddIntial = (initialItem: InitialItem) => void;
+
+function getInitialFromSetter(setter: any) {
+  return setter && (
+      setter.initial || setter.Initial
+      || (setter.type && (setter.type.initial || setter.type.Initial))
+    ) || null; // eslint-disable-line
+}
+
+function defaultInitial(value: any, defaultValue: any) {
+  return value == null ? defaultValue : value;
+}
+
 
 export function upgradeConfigure(items: OldPropConfig[], addInitial: AddIntial) {
   const configure: any[] = [];
