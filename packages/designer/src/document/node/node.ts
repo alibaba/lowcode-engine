@@ -155,6 +155,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   private transformProps(props: any): any {
     // FIXME! support PropsList
     return this.document.designer.transformProps(props, this, TransformStage.Init);
+
     // TODO: run transducers in metadata.experimental
   }
 

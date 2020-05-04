@@ -14,6 +14,11 @@ import { upgradeAssetsBundle } from './upgrade-assets';
 import { isCSSUrl } from '@ali/lowcode-utils';
 import { I18nSetter } from '@ali/visualengine-utils';
 import VariableSetter from '@ali/vs-variable-setter';
+// import { isObject, isArray } from 'lodash';
+// import funcParser from '@ali/vu-function-parser';
+// import funcParser from './funcParser';
+// import Prototype from '../../../vision-preset/src/index';
+
 
 const { editor, skeleton, context, HOOKS, Trunk } = Engine;
 
@@ -283,6 +288,31 @@ function initActionPane() {
     props,
   });
 }
+// const replaceFuncProp = (props) => {
+//   const replaceProps = {};
+
+//   for (const name in props) {
+//     const prop = props[name];
+//     if (!prop) {
+//       continue;
+//     }
+//     if ((prop.compiled && prop.source) || prop.type === 'actionRef' || prop.type === 'js') {
+//       replaceProps[name] = funcParser(prop);
+//     } else if (isObject(prop)) {
+//       replaceFuncProp(prop);
+//     } else if (isArray(prop)) {
+//       prop.map((propItem) => {
+//         replaceFuncProp(propItem);
+//       });
+//     }
+//   }
+
+//   for (const name in replaceProps) {
+//     props[name] = replaceProps[name];
+//   }
+
+//   return props;
+// };
 
 async function init() {
   Engine.Env.setEnv('RE_VERSION', '7.2.0');
@@ -297,7 +327,10 @@ async function init() {
   initI18nPane();
   initActionPane();
   initDemoPanes();
-
+  // console.log(funcParser,'funcParser')
+  // debugger
+  // Prototype.addGlobalPropsReducer(replaceFuncProp);
+  // debugger
   Engine.init();
 }
 init();
