@@ -336,24 +336,6 @@ function initHistoryPane() {
     enablePageHistory: true,
   };;
 
-  // if (!historyConfigs) {
-  //   return;
-  // }
-
-  // if (historyConfigs === true) {
-  //   historyConfigs = {
-  //     enableRedoAndUndo: true,
-  //     enablePageHistory: true,
-  //   };
-  // }
-
-  // if (historyConfigs.enableRedoAndUndo === undefined) {
-  //   historyConfigs.enableRedoAndUndo = true;
-  // }
-  // if (historyConfigs.enablePageHistory === undefined) {
-  //   historyConfigs.enablePageHistory = true;
-  // }
-
   const isDemoMode = false;
   const isEnvSupportsHistoryPane = true;
   const historyManager = PageHistoryManager.getManager();
@@ -362,19 +344,6 @@ function initHistoryPane() {
   console.log('PageHistoryManager.onOpenPane', historyManager.onOpenPane);
   // 历史撤销、重做以及唤起页面历史按钮
   if (typeof HistoryPane === 'function') {
-    // const historyPane = {
-    //   ...HistoryPane({
-    //     showPageHistory:
-    //       isEnvSupportsHistoryPane
-    //       // && this.app.isForm()
-    //       && !isDemoMode,
-    //     historyManager,
-    //     historyConfigs,
-    //   }),
-    //   index: -940,
-    // };
-    // console.log('aaaaaa', historyPane);
-
     Panes.add(HistoryPane, {
       props : {
         showPageHistory:
@@ -398,10 +367,6 @@ function initHistoryPane() {
     && !isDemoMode
     && isEnvSupportsHistoryPane
   ) {
-    console.log(1111, PageHistoryPane({
-      historyManager: PageHistoryManager.getManager(),
-      app: {},
-    }))
     Panes.add(PageHistoryPane, {
       props : {
         historyManager: {
