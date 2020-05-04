@@ -54,19 +54,25 @@ body {
     display: none;
   }
   .lc-panel-title {
-    height: 32px;
-    background-color: var(--pane-title-bg-color);
+    height: 38px;
+    font-size: 14px;
+    background-color: var(--pane-title-bg-color,rgba(31,56,88,.04));
     display: flex;
     align-items: center;
+    justify-content: center;
     padding: 0 15px;
+    border-bottom: 1px solid var(--color-line-normal,rgba(31,56,88,.1));
+
     .lc-help-tip {
       margin-left: 4px;
+      color: rgba(0,0,0,0.4);
+      cursor: pointer;
     }
   }
 
   .lc-panel-body {
     position: absolute;
-    top: 32px;
+    top: 38px;
     bottom: 0;
     left: 0;
     right: 0;

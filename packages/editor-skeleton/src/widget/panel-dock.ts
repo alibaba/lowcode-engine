@@ -64,7 +64,7 @@ export default class PanelDock implements IWidget {
         name: this.panelName,
         props: {
           // FIXME! give default title for panel
-          // title: props ? composeTitle(props?.title, props?.icon, props?.description, true) : '',
+          title: props ? composeTitle(props?.title, props?.icon, props?.description, true) : '',
           ...panelProps,
         },
         contentProps,

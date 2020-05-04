@@ -32,6 +32,7 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
     // focusout remove focus
     // onEsc
     const width = area.current?.config.props?.width;
+    const hideTitleBar = area.current?.config.props?.hideTitleBar;
     const style = width ? {
       width
     } : undefined;
@@ -42,15 +43,19 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
         })}
         style={style}
       >
-        <Button
-          text
-          className="lc-pane-close"
-          onClick={() => {
-            area.setVisible(false);
-          }}
-        >
-          <Icon type="close" />
-        </Button>
+        {
+          !hideTitleBar && (
+            <Button
+              text
+              className="lc-pane-close"
+              onClick={() => {
+                area.setVisible(false);
+              }}
+            >
+              <Icon type="close" />
+            </Button>
+          )
+        }
         <Contents area={area} />
       </div>
     );
