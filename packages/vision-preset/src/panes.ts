@@ -1,6 +1,6 @@
 import { skeleton, editor } from './editor';
 import { ReactElement } from 'react';
-import { IWidgetBaseConfig } from '@ali/lowcode-editor-skeleton';
+import { IWidgetBaseConfig, Skeleton } from '@ali/lowcode-editor-skeleton';
 import { uniqueId } from '@ali/lowcode-utils';
 
 export interface IContentItemConfig {
@@ -63,7 +63,7 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
       onDestroy: destroy,
     },
     contentProps: props,
-    index,
+    index: index || props?.index,
   };
   if (type === 'dock') {
     newConfig.type = 'PanelDock';
@@ -85,6 +85,7 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
     }
     if (!isAction) {
       newConfig.panelProps = {
+        title,
         hideTitleBar,
         help: tip,
         width,
@@ -156,6 +157,10 @@ const dockPane = Object.assign(skeleton.leftArea, {
    * compatible *VE.dockPane.activeDock*
    */
   activeDock(item: any) {
+    if (!item) {
+      skeleton.leftFloatArea?.current?.hide();
+      return;
+    }
     const name = item.name || item;
     skeleton.getPanel(name)?.active();
   },

@@ -24,7 +24,11 @@ class Contents extends Component<{ area: Area }> {
     const left: any[] = [];
     const center: any[] = [];
     const right: any[] = [];
-    area.container.items.forEach(item => {
+    area.container.items.sort((a,b) => {
+      const index1 = a.config?.index || 0;
+      const index2 = b.config?.index || 0;
+      return index1 === index2 ? 0 : (index1 > index2 ? 1 : -1);
+    }).forEach(item => {
       if (item.align === 'center') {
         center.push(item.content);
       } else if (item.align === 'left') {

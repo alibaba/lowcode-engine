@@ -334,7 +334,7 @@ class Calendar extends Component {
             [CALENDAR_MODE_MONTH]: <MonthPanelHeader {...headerProps} />,
             [CALENDAR_MODE_YEAR]: <YearPanelHeader {...headerProps} />,
         };
-
+        
         return (
             <div
                 {...obj.pickOthers(Calendar.propTypes, others)}

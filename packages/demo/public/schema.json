@@ -2,7 +2,8 @@
   "componentName": "Page",
   "fileName": "test",
   "dataSource": {
-    "list": []
+    "list": [],
+    "online": []
   },
   "state": {
     "text": "outter"

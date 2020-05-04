@@ -74,8 +74,6 @@ export default class Panel implements IWidget {
       );
       content.forEach((item) => this.add(item));
     }
-    // compatiable for vision, init at first
-    this.initBody();
     // todo: process shortcut
   }
 

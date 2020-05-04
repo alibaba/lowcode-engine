@@ -1,10 +1,13 @@
 /* eslint-disable */
 import { createElement } from 'react';
 import { Button } from '@alifd/next';
-import Engine, { Panes } from '@ali/visualengine';
+import Engine, { Panes, Prototype } from '@ali/visualengine';
 import { ActionUtil as actionUtil } from '@ali/visualengine-utils';
 import getTrunkPane from '@ali/ve-trunk-pane';
 import DatapoolPane from '@ali/ve-datapool-pane';
+import PageHistoryManager from '@ali/ve-page-history';
+import HistoryPane from '@ali/ve-history-pane';
+import PageHistoryPane from '@ali/ve-page-history-pane';
 // import I18nPane from '@ali/ve-i18n-pane';
 import I18nManagePane from '@ali/ve-i18n-manage-pane';
 import ActionPane from '@ali/ve-action-pane';
@@ -15,6 +18,9 @@ import { upgradeAssetsBundle } from './upgrade-assets';
 import { isCSSUrl } from '@ali/lowcode-utils';
 import { I18nSetter } from '@ali/visualengine-utils';
 import VariableSetter from '@ali/vs-variable-setter';
+import { isObject, isArray } from 'lodash';
+import funcParser from '@ali/vu-function-parser';
+
 
 const { editor, skeleton, context, HOOKS, Trunk } = Engine;
 
@@ -137,20 +143,20 @@ function initDemoPanes() {
       children: '保存',
     }),
   });
-  skeleton.add({
-    area: 'topArea',
-    type: 'Dock',
-    name: 'preview4',
-    props: {
-      align: 'center',
-    },
-    content: createElement('img', {
-      src: 'https://img.alicdn.com/tfs/TB1WW.VC.z1gK0jSZLeXXb9kVXa-486-64.png',
-      style: {
-        height: 32,
-      },
-    }),
-  });
+  // skeleton.add({
+  //   area: 'topArea',
+  //   type: 'Dock',
+  //   name: 'preview4',
+  //   props: {
+  //     align: 'center',
+  //   },
+  //   content: createElement('img', {
+  //     src: 'https://img.alicdn.com/tfs/TB1WW.VC.z1gK0jSZLeXXb9kVXa-486-64.png',
+  //     style: {
+  //       height: 32,
+  //     },
+  //   }),
+  // });
   skeleton.add({
     area: 'topArea',
     type: 'Dock',
@@ -321,6 +327,87 @@ function initActionPane() {
     props,
   });
 }
+function replaceFuncProp(props?: any){
+  const replaceProps = {};
+  for (const name in props) {
+    const prop = props[name];
+    if (!prop) {
+      continue;
+    }
+    if ((prop.compiled && prop.source) || prop.type === 'actionRef' || prop.type === 'js') {
+      replaceProps[name] = funcParser(prop);
+    } else if (isObject(prop)) {
+      replaceFuncProp(prop);
+    } else if (isArray(prop)) {
+      prop.map((propItem) => {
+        replaceFuncProp(propItem);
+      });
+    }
+  }
+
+  for (const name in replaceProps) {
+    props[name] = replaceProps[name];
+  }
+
+  return props;
+};
+
+// 操作历史与页面历史面板
+function initHistoryPane() {
+  // let historyConfigs = {getDesignerModuleConfigs(
+  //   this.designerConfigs,
+  //   'history',
+  // )};
+  let historyConfigs = {
+    enableRedoAndUndo: true,
+    enablePageHistory: true,
+  };;
+
+  const isDemoMode = false;
+  const isEnvSupportsHistoryPane = true;
+  const historyManager = PageHistoryManager.getManager();
+
+  console.log('PageHistoryManager', historyManager);
+  console.log('PageHistoryManager.onOpenPane', historyManager.onOpenPane);
+  // 历史撤销、重做以及唤起页面历史按钮
+  if (typeof HistoryPane === 'function') {
+    Panes.add(HistoryPane, {
+      props : {
+        showPageHistory:
+          isEnvSupportsHistoryPane
+          // && this.app.isForm()
+          && !isDemoMode,
+        historyManager,
+        historyConfigs,
+        index: -940,
+      }
+    });
+  } else {
+    Panes.add(HistoryPane, {
+      index: -940,
+    });
+  }
+
+  // 页面历史 UI 面板
+  if (
+    PageHistoryPane
+    && !isDemoMode
+    && isEnvSupportsHistoryPane
+  ) {
+    Panes.add(PageHistoryPane, {
+      props : {
+        historyManager: {
+          historyManager,
+          app: {
+  
+          }
+        },
+        index: -940,
+      },
+    });
+  }
+}
+
 
 async function init() {
   Engine.Env.setEnv('RE_VERSION', '7.2.0');
@@ -328,6 +415,7 @@ async function init() {
     subview: true,
     i18nPane: true,
   });
+  Prototype.addGlobalPropsReducer(replaceFuncProp);
   await loadAssets();
   await loadSchema();
   await initTrunkPane();
@@ -335,7 +423,7 @@ async function init() {
   initI18nPane();
   initActionPane();
   initDemoPanes();
-
+  initHistoryPane();
   Engine.init();
 }
 init();

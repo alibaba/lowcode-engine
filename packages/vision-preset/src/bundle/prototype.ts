@@ -5,6 +5,7 @@ import {
   addBuiltinComponentAction,
   isComponentMeta,
   registerMetadataTransducer,
+  TransformStage,
 } from '@ali/lowcode-designer';
 import {
   OldPropConfig,
@@ -112,9 +113,10 @@ function addGlobalExtraActions(action: () => ReactElement) {
   upgradeActions(action)?.forEach(addBuiltinComponentAction);
 }
 
-const GlobalPropsReducers: any[] = [];
+// const GlobalPropsReducers: any[] = [];
 function addGlobalPropsReducer(reducer: () => any) {
-  GlobalPropsReducers.push(reducer);
+  // GlobalPropsReducers.push(reducer);
+  designer.addPropsReducer(reducer, TransformStage.Render);
 }
 
 export interface OldGlobalPropConfig extends OldPropConfig {
