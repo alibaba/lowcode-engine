@@ -1,6 +1,6 @@
-import { isJSBlock } from '@ali/lowcode-types';
+import { isJSBlock, isJSSlot } from '@ali/lowcode-types';
 import { isPlainObject } from '@ali/lowcode-utils';
-import { globalContext, Editor } from '@ali/lowcode-editor-core';
+import { globalContext, Editor, registerSetter } from '@ali/lowcode-editor-core';
 import { Designer, TransformStage } from '@ali/lowcode-designer';
 // import { registerSetters } from '@ali/lowcode-setters';
 import Outline from '@ali/lowcode-plugin-outline-pane';
@@ -10,8 +10,6 @@ import { Skeleton, SettingsPrimaryPane } from '@ali/lowcode-editor-skeleton';
 import Preview from '@ali/lowcode-plugin-sample-preview';
 // import SourceEditor from '@ali/lowcode-plugin-source-editor';
 import { i18nReducer } from './i18n-reducer';
-
-// registerSetters();
 
 export const editor = new Editor();
 globalContext.register(editor, Editor);

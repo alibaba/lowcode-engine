@@ -6,6 +6,8 @@ import MixedSetter from './components/mixed-setter';
 import { isPlainObject } from '@ali/lowcode-utils';
 import parseProps from './transducers/parse-props';
 import addonCombine from './transducers/addon-combine';
+import SlotSetter from './components/slot-setter';
+import { isJSSlot } from '@ali/lowcode-types';
 
 registerSetter('ArraySetter', {
   component: ArraySetter,
@@ -28,6 +30,27 @@ registerSetter('ObjectSetter', {
     return v == null || isPlainObject(v);
   },
   initialValue: {},
+  recommend: true,
+});
+registerSetter('SlotSetter', {
+  component: SlotSetter,
+  title: {
+    type: 'i18n',
+    'zh-CN': '插槽输入',
+    'en-US': 'Slot Setter'
+  },
+  condition: (field: any) => {
+    return isJSSlot(field.getValue());
+  },
+  initialValue: (field: any, value: any) => {
+    if (isJSSlot(value)) {
+      return value;
+    }
+    return {
+      type: 'JSSlot',
+      value: value
+    };
+  },
   recommend: true,
 });
 registerSetter('MixedSetter', MixedSetter);

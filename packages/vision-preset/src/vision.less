@@ -84,3 +84,15 @@ html.engine-blur #engine {
   width: 100%;
   white-space: nowrap;
 }
+
+
+// dirty fix override vision reset
+.engine-design-mode {
+  .next-input-group,
+  .next-checkbox-group,.next-date-picker,.next-input,.next-month-picker,
+  .next-number-picker,.next-radio-group,.next-range,.next-range-picker,
+  .next-rating,.next-select,.next-switch,.next-time-picker,.next-upload,
+  .next-year-picker {
+    pointer-events: auto !important;
+  }
+}

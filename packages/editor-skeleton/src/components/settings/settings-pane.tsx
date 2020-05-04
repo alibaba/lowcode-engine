@@ -20,6 +20,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
 
     let setterProps: any = {};
     let setterType: any;
+    let initialValue: any = null;
     if (Array.isArray(setter)) {
       setterType = 'MixedSetter';
       setterProps = {
@@ -33,6 +34,9 @@ class SettingFieldView extends Component<{ field: SettingField }> {
           setterProps = setterProps(field);
         }
       }
+      if (setter.initialValue != null) {
+        initialValue = setter.initialValue;
+      }
     } else if (setter) {
       setterType = setter;
     }
@@ -40,6 +44,9 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     if (field.type === 'field') {
       if (defaultValue != null && !('defaultValue' in setterProps)) {
         setterProps.defaultValue = defaultValue;
+        if (initialValue == null) {
+          initialValue = defaultValue;
+        }
       }
       if (field.valueState > 0) {
         value = field.getValue();
@@ -79,6 +86,16 @@ class SettingFieldView extends Component<{ field: SettingField }> {
           });
           field.setValue(value);
         },
+        onInitial: () => {
+          if (initialValue == null) {
+            return;
+          }
+          const value = typeof initialValue === 'function' ? initialValue(field) : initialValue;
+          this.setState({
+            value,
+          });
+          field.setValue(value);
+        }
       }),
       extraProps.forceInline ? 'plain' : extraProps.display,
     );
