@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { createElement } from 'react';
 import { Button } from '@alifd/next';
-import Engine, { Panes } from '@ali/visualengine';
+import Engine, { Panes, Prototype } from '@ali/visualengine';
 import { ActionUtil as actionUtil } from '@ali/visualengine-utils';
 import getTrunkPane from '@ali/ve-trunk-pane';
 import DatapoolPane from '@ali/ve-datapool-pane';
@@ -18,10 +18,8 @@ import { upgradeAssetsBundle } from './upgrade-assets';
 import { isCSSUrl } from '@ali/lowcode-utils';
 import { I18nSetter } from '@ali/visualengine-utils';
 import VariableSetter from '@ali/vs-variable-setter';
-// import { isObject, isArray } from 'lodash';
-// import funcParser from '@ali/vu-function-parser';
-// import funcParser from './funcParser';
-// import Prototype from '../../../vision-preset/src/index';
+import { isObject, isArray } from 'lodash';
+import funcParser from '@ali/vu-function-parser';
 
 
 const { editor, skeleton, context, HOOKS, Trunk } = Engine;
@@ -329,31 +327,30 @@ function initActionPane() {
     props,
   });
 }
-// const replaceFuncProp = (props) => {
-//   const replaceProps = {};
+function replaceFuncProp(props?: any){
+  const replaceProps = {};
+  for (const name in props) {
+    const prop = props[name];
+    if (!prop) {
+      continue;
+    }
+    if ((prop.compiled && prop.source) || prop.type === 'actionRef' || prop.type === 'js') {
+      replaceProps[name] = funcParser(prop);
+    } else if (isObject(prop)) {
+      replaceFuncProp(prop);
+    } else if (isArray(prop)) {
+      prop.map((propItem) => {
+        replaceFuncProp(propItem);
+      });
+    }
+  }
 
-//   for (const name in props) {
-//     const prop = props[name];
-//     if (!prop) {
-//       continue;
-//     }
-//     if ((prop.compiled && prop.source) || prop.type === 'actionRef' || prop.type === 'js') {
-//       replaceProps[name] = funcParser(prop);
-//     } else if (isObject(prop)) {
-//       replaceFuncProp(prop);
-//     } else if (isArray(prop)) {
-//       prop.map((propItem) => {
-//         replaceFuncProp(propItem);
-//       });
-//     }
-//   }
+  for (const name in replaceProps) {
+    props[name] = replaceProps[name];
+  }
 
-//   for (const name in replaceProps) {
-//     props[name] = replaceProps[name];
-//   }
-
-//   return props;
-// };
+  return props;
+};
 
 // 操作历史与页面历史面板
 function initHistoryPane() {
@@ -418,6 +415,7 @@ async function init() {
     subview: true,
     i18nPane: true,
   });
+  Prototype.addGlobalPropsReducer(replaceFuncProp);
   await loadAssets();
   await loadSchema();
   await initTrunkPane();
@@ -425,10 +423,6 @@ async function init() {
   initI18nPane();
   initActionPane();
   initDemoPanes();
-  // console.log(funcParser,'funcParser')
-  // debugger
-  // Prototype.addGlobalPropsReducer(replaceFuncProp);
-  // debugger
   initHistoryPane();
   Engine.init();
 }
