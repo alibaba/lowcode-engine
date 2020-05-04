@@ -31,6 +31,7 @@
     "@ali/ve-i18n-manage-pane": "^4.3.0",
     "@ali/ve-i18n-pane": "^4.0.0-beta.0",
     "@ali/ve-trunk-pane": "^5.1.0-beta.14",
+    "@ali/vs-variable-setter": "^3.1.0",
     "@ali/vu-legao-design-fetch-context": "^1.0.3",
     "@alifd/next": "^1.19.12",
     "@alife/theme-lowcode-dark": "^0.1.0",

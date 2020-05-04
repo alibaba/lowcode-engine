@@ -10,6 +10,7 @@ import {
   SlotSchema,
   PageSchema,
   ComponentSchema,
+  NodeStatus,
 } from '@ali/lowcode-types';
 import { Props, EXTRA_KEY_PREFIX } from './props/props';
 import { DocumentModel } from '../document-model';
@@ -483,7 +484,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
 
     const { props = {}, extras } = this.props.export(stage) || {};
-    const _extras_: {[key: string]: any} = {
+    const _extras_: { [key: string]: any } = {
       ...extras,
     };
     if (_extras_) {
@@ -593,20 +594,42 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.props;
   }
 
+  onChildrenChange(fn: () => void) {
+    return this.children?.onChange(fn);
+  }
+
   mergeChildren(remover: () => any, adder: (children: Node[]) => NodeData[] | null, sorter: () => any) {
     this.children?.mergeChildren(remover, adder, sorter);
   }
 
+  @obx.val status: NodeStatus = {
+    inPlaceEditing: false,
+    locking: false,
+    pseudo: false,
+  };
+
   /**
    * @deprecated
    */
-  getStatus() {
-    return 'default';
+  getStatus(field?: keyof NodeStatus) {
+    if (field && this.status[field] != null) {
+      return this.status[field];
+    }
+
+    return this.status;
   }
   /**
    * @deprecated
    */
-  setStatus() {}
+  setStatus(field: keyof NodeStatus, flag: boolean) {
+    if (!this.status.hasOwnProperty(field)) {
+      return;
+    }
+
+    if (flag !== this.status[field]) {
+      this.status[field] = flag;
+    }
+  }
   /**
    * @deprecated
    */
@@ -653,7 +676,11 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
     this._addons[key] = exportData;
   }
-  
+
+  getRect(): DOMRect | null {
+    return this.document.simulator?.computeRect(this) || null;
+  }
+
   toString() {
     return this.id;
   }
@@ -666,9 +693,9 @@ export interface LeafNode extends Node {
   readonly children: null;
 }
 
-export interface SlotNode extends ParentalNode<SlotSchema> {}
-export interface PageNode extends ParentalNode<PageSchema> {}
-export interface ComponentNode extends ParentalNode<ComponentSchema> {}
+export type SlotNode = ParentalNode<SlotSchema>;
+export type PageNode = ParentalNode<PageSchema>;
+export type ComponentNode = ParentalNode<ComponentSchema>;
 export type RootNode = PageNode | ComponentNode;
 
 export function isNode(node: any): node is Node {

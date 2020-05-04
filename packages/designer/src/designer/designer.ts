@@ -72,8 +72,12 @@ export class Designer {
       const { dragObject } = e;
       if (isDragNodeObject(dragObject)) {
         if (dragObject.nodes.length === 1) {
-          // ensure current selecting
-          dragObject.nodes[0].select();
+          if (dragObject.nodes[0].parent) {
+            // ensure current selecting
+            dragObject.nodes[0].select();
+          } else {
+            this.currentSelection?.clear();
+          }
         }
       } else {
         this.currentSelection?.clear();

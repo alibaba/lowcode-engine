@@ -98,19 +98,20 @@ export function createIntl(
     const locale = globalLocale.getLocale();
     if (typeof instance === 'string') {
       if ((window as any)[instance]) {
-        data.messages = (window as any)[instance][locale] || {};
-      } else {
-        const key = `${instance}_${locale.toLocaleLowerCase()}`;
-        data.messages = (window as any)[key] || {};
+        return (window as any)[instance][locale] || {};
       }
-    } else if (instance && typeof instance === 'object') {
-      data.messages = (instance as any)[locale] || {};
+      const key = `${instance}_${locale.toLocaleLowerCase()}`;
+      return (window as any)[key] || {};
     }
+    if (instance && typeof instance === 'object') {
+      return (instance as any)[locale] || {};
+    }
+    return {};
   });
 
   function intl(key: string, params?: object): string {
     // TODO: tries lost language
-    const str = data[key];
+    const str = data.value[key];
 
     if (str == null) {
       return `##intl@${key}##`;

@@ -39,7 +39,22 @@ export function registerSetter(
       title: (setter as any).displayName || (setter as any).name || 'CustomSetter',
     };
   }
+  if (!setter.initialValue) {
+    const initial = getInitialFromSetter(setter.component);
+    if (initial) {
+      setter.initialValue = (field: any) => {
+        return initial.call(field, field.getValue());
+      };
+    }
+  }
   settersMap.set(typeOrMaps, { type: typeOrMaps, ...setter });
+}
+
+function getInitialFromSetter(setter: any) {
+  return setter && (
+      setter.initial || setter.Initial
+      || (setter.type && (setter.type.initial || setter.type.Initial))
+    ) || null; // eslint-disable-line
 }
 
 export function getSetter(type: string): RegisteredSetter | null {

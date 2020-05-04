@@ -61,6 +61,7 @@ function upgradePropsReducer(props: any) {
         val = val.value;
       }
     }
+    // todo: type: variable
     newProps[key] = val;
   });
   return newProps;

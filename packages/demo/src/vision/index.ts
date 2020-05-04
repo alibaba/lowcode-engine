@@ -13,8 +13,22 @@ import EventBindDialog from '@ali/lowcode-plugin-event-bind-dialog';
 import loadUrls from './loader';
 import { upgradeAssetsBundle } from './upgrade-assets';
 import { isCSSUrl } from '@ali/lowcode-utils';
+import { I18nSetter } from '@ali/visualengine-utils';
+import VariableSetter from '@ali/vs-variable-setter';
 
-const { editor, skeleton } = Engine;
+const { editor, skeleton, context, HOOKS, Trunk } = Engine;
+
+Trunk.registerSetter('I18nSetter', {
+  component: I18nSetter,
+  // todo: add icon
+  title: {
+    type: 'i18n',
+    'zh-CN': '国际化输入',
+    'en-US': 'International Input'
+  },
+  recommend: true,
+});
+context.use(HOOKS.VE_SETTING_FIELD_VARIABLE_SETTER, VariableSetter);
 
 const externals = ['react', 'react-dom', 'prop-types', 'react-router', 'react-router-dom', '@ali/recore'];
 
@@ -53,7 +67,7 @@ async function loadAssets() {
       assets.packages.push({
         library: '_prototypesStyle',
         package: '_prototypes-style',
-        urls: prototypeStyles
+        urls: prototypeStyles,
       });
     }
     await Promise.all(tasks);
@@ -96,7 +110,7 @@ function initDemoPanes() {
       description: '帮助',
     },
   });
-  
+
   skeleton.add({
     area: 'topArea',
     type: 'Dock',
@@ -310,6 +324,10 @@ function initActionPane() {
 
 async function init() {
   Engine.Env.setEnv('RE_VERSION', '7.2.0');
+  Engine.Env.setSupportFeatures({
+    subview: true,
+    i18nPane: true,
+  });
   await loadAssets();
   await loadSchema();
   await initTrunkPane();

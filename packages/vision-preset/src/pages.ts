@@ -49,4 +49,10 @@ const pages = Object.assign(project, {
   }
 });
 
+Object.defineProperty(pages, 'currentPage', {
+  get() {
+    return project.currentDocument;
+  }
+})
+
 export default pages;

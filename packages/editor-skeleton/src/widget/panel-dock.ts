@@ -6,6 +6,7 @@ import { PanelDockConfig } from '../types';
 import Panel from './panel';
 import { PanelDockView, WidgetView } from '../components/widget-views';
 import { IWidget } from './widget';
+import { composeTitle } from './utils';
 
 export default class PanelDock implements IWidget {
   readonly isWidget = true;

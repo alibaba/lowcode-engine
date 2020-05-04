@@ -157,17 +157,12 @@ export class EntryField extends Component<EntryFieldProps> {
       fieldProps['data-stage-target'] = stageName;
     }
 
-    const innerElements = [
-      <span className="engine-field-title" key="field-title">
-        {title}
-      </span>,
-      // renderTip(tip, { propName }),
-      // <Icons name="arrow" className="engine-field-arrow" size="12px" key="engine-field-arrow-icon" />,
-    ];
-
     return (
       <div className={classNameList} {...fieldProps}>
-        {innerElements}
+        <div className="lc-field-title">
+          <Title title={title || ''} />
+        </div>
+        <Icon className="lc-field-icon" type="arrow-left" size="xs" />
       </div>
     );
   }

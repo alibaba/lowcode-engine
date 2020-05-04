@@ -284,6 +284,17 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
   }
 
   let initialFn = (slotName ? null : initial) || initialValue;
+  if (slotName && initialValue === true) {
+    initialFn = (field: any, value: any) => {
+      if (isJSSlot(value)) {
+        return value;
+      }
+      return {
+        type: 'JSSlot',
+        value: initialChildren,
+      };
+    };
+  }
 
   if (accessor && !slotName) {
     extraProps.getValue = (field: Field, fieldValue: any) => {
@@ -294,17 +305,25 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
     }
   }
 
+  const setterInitial = getInitialFromSetter(setter);
+
   addInitial({
     name: slotName || name,
     initial: (field: Field, currentValue: any) => {
       // FIXME! read from prototype.defaultProps
       const defaults = extraProps.defaultValue;
 
-      if (typeof initialFn === 'function') {
-        return initialFn.call(field, currentValue, defaults);
+      if (typeof initialFn !== 'function') {
+        initialFn = defaultInitial;
       }
 
-      return currentValue == null ? defaults : currentValue;
+      const v = initialFn.call(field, currentValue, defaults);
+
+      if (setterInitial) {
+        return setterInitial.call(field, v, defaults);
+      }
+
+      return v;
     },
   });
 
@@ -342,11 +361,10 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
       },
     ];
     if (allowTextInput !== false) {
-      setters.unshift('StringSetter');
-      // FIXME: use I18nSetter
+      setters.unshift('I18nSetter');
     }
     if (supportVariable) {
-      setters.push('ExpressionSetter');
+      setters.push('VariableSetter');
     }
     newConfig.setter = setters.length > 1 ? setters : setters[0];
 
@@ -403,25 +421,24 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
       primarySetter = setter;
     }
   }
+  if (!primarySetter) {
+    primarySetter = 'I18nSetter';
+  }
   if (supportVariable) {
-    if (primarySetter) {
-      const setters = Array.isArray(primarySetter)
-        ? primarySetter.concat('ExpressionSetter')
-        : [primarySetter, 'ExpressionSetter'];
-      primarySetter = {
-        componentName: 'MixedSetter',
-        props: {
-          setters,
-          onSetterChange: (field: Field, name: string) => {
-            if (useVariableChange) {
-              useVariableChange.call(field, { isUseVariable: name === 'ExpressionSetter' });
-            }
-          },
+    const setters = Array.isArray(primarySetter)
+      ? primarySetter.concat('VariableSetter')
+      : [primarySetter, 'VariableSetter'];
+    primarySetter = {
+      componentName: 'MixedSetter',
+      props: {
+        setters,
+        onSetterChange: (field: Field, name: string) => {
+          if (useVariableChange) {
+            useVariableChange.call(field, { isUseVariable: name === 'VariableSetter' });
+          }
         },
-      };
-    } else {
-      primarySetter = 'ExpressionSetter';
-    }
+      },
+    };
   }
   newConfig.setter = primarySetter;
 
@@ -429,6 +446,18 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
 }
 
 type AddIntial = (initialItem: InitialItem) => void;
+
+function getInitialFromSetter(setter: any) {
+  return setter && (
+      setter.initial || setter.Initial
+      || (setter.type && (setter.type.initial || setter.type.Initial))
+    ) || null; // eslint-disable-line
+}
+
+function defaultInitial(value: any, defaultValue: any) {
+  return value == null ? defaultValue : value;
+}
+
 
 export function upgradeConfigure(items: OldPropConfig[], addInitial: AddIntial) {
   const configure: any[] = [];
