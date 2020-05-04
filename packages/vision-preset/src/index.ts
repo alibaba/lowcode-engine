@@ -17,7 +17,7 @@ import Trunk from './bundle/trunk';
 import Prototype from './bundle/prototype';
 import Bundle from './bundle/bundle';
 import Pages from './pages';
-import Field from './field';
+import * as Field from './fields';
 import Prop from './prop';
 import Env from './env';
 import DragEngine from './drag-engine';
