@@ -140,20 +140,20 @@ function initDemoPanes() {
       children: '保存',
     }),
   });
-  skeleton.add({
-    area: 'topArea',
-    type: 'Dock',
-    name: 'preview4',
-    props: {
-      align: 'center',
-    },
-    content: createElement('img', {
-      src: 'https://img.alicdn.com/tfs/TB1WW.VC.z1gK0jSZLeXXb9kVXa-486-64.png',
-      style: {
-        height: 32,
-      },
-    }),
-  });
+  // skeleton.add({
+  //   area: 'topArea',
+  //   type: 'Dock',
+  //   name: 'preview4',
+  //   props: {
+  //     align: 'center',
+  //   },
+  //   content: createElement('img', {
+  //     src: 'https://img.alicdn.com/tfs/TB1WW.VC.z1gK0jSZLeXXb9kVXa-486-64.png',
+  //     style: {
+  //       height: 32,
+  //     },
+  //   }),
+  // });
   skeleton.add({
     area: 'topArea',
     type: 'Dock',

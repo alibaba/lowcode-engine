@@ -63,7 +63,7 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
       onDestroy: destroy,
     },
     contentProps: props,
-    index,
+    index: props?.index,
   };
   if (type === 'dock') {
     newConfig.type = 'PanelDock';
