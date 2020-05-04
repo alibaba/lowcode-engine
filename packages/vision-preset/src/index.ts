@@ -26,6 +26,11 @@ import { designer, editor } from './editor';
 import './vision.less';
 
 function init(container?: Element) {
+  //TODO: dirty fix
+  // 之前的组件库依赖了这个样式，临时fix一下。
+  // 取决于预览模式是否保留。
+  document.documentElement.classList.add('engine-design-mode');
+
   if (!container) {
     container = document.createElement('div');
     document.body.appendChild(container);
@@ -35,6 +40,7 @@ function init(container?: Element) {
   render(
     createElement(Workbench, {
       skeleton,
+      className: 'engine-main',
     }),
     container,
   );

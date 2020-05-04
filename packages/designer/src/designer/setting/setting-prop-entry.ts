@@ -1,10 +1,11 @@
-import { obx, computed } from '@ali/lowcode-editor-core';
+import { obx, computed, autorun } from '@ali/lowcode-editor-core';
 import { IEditor, isJSExpression } from '@ali/lowcode-types';
 import { uniqueId } from '@ali/lowcode-utils';
 import { SettingEntry } from './setting-entry';
 import { Node } from '../../document';
 import { ComponentMeta } from '../../component-meta';
 import { Designer } from '../designer';
+import { EventEmitter } from 'events';
 
 export class SettingPropEntry implements SettingEntry {
   // === static properties ===
@@ -19,6 +20,8 @@ export class SettingPropEntry implements SettingEntry {
   readonly isGroup: boolean;
   readonly type: 'field' | 'group';
   readonly id = uniqueId('entry');
+
+  readonly emitter = new EventEmitter();
 
   // ==== dynamic properties ====
   @obx.ref private _name: string | number;
@@ -59,6 +62,14 @@ export class SettingPropEntry implements SettingEntry {
     this.isSingle = parent.isSingle;
     this.designer = parent.designer;
     this.top = parent.top;
+
+    autorun(({ firstRun }) => {
+      const value = this.getValue();
+      if (firstRun) {
+        return;
+      }
+      this.emitter.emit('valuechange', value);
+    });
   }
 
   getId() {
@@ -88,7 +99,7 @@ export class SettingPropEntry implements SettingEntry {
     const propName = this.path.join('.');
     let l = this.nodes.length;
     while (l-- > 1) {
-      this.nodes[l].getProp(propName)?.remove()
+      this.nodes[l].getProp(propName)?.remove();
     }
   }
 
@@ -117,7 +128,6 @@ export class SettingPropEntry implements SettingEntry {
     if (setValue) {
       setValue(this, val);
     }
-    // TODO: emit value change
   }
 
   /**
@@ -170,9 +180,21 @@ export class SettingPropEntry implements SettingEntry {
     return this.top;
   }
 
-  onValueChange() {
-    // TODO:
-    return () => {};
+  onValueChange(func: () => any) {
+    this.emitter.on('valuechange', func);
+
+    return () => {
+      this.emitter.removeListener('valuechange', func);
+    };
+  }
+
+  /**
+   * @deprecated
+   */
+  valueChange() {
+    console.warn('valueChange deprecated');
+
+    this.emitter.emit('valuechange');
   }
 
   getDefaultValue() {

@@ -163,15 +163,23 @@ export default class Panel implements IWidget {
     this.setActive(true);
   }
 
-
+  /**
+   * @deprecated
+   */
   getSupportedPositions() {
     return ['default'];
   }
 
+  /**
+   * @deprecated
+   */
   getCurrentPosition() {
     return 'default';
   }
 
+  /**
+   * @deprecated
+   */
   setPosition(position: string) {
   }
 }

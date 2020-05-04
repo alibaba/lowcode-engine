@@ -13,3 +13,4 @@ export * from './utils';
 export * from './value-type';
 export * from './setter-config';
 export * from './setting-target';
+export * from './node';
