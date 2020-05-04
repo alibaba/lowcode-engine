@@ -327,93 +327,37 @@ function initActionPane() {
 
 // 操作历史与页面历史面板
 function initHistoryPane() {
-  // let historyConfigs = {getDesignerModuleConfigs(
-  //   this.designerConfigs,
-  //   'history',
-  // )};
-  let historyConfigs = {
-    enableRedoAndUndo: true,
-    enablePageHistory: true,
-  };;
-
-  // if (!historyConfigs) {
-  //   return;
-  // }
-
-  // if (historyConfigs === true) {
-  //   historyConfigs = {
-  //     enableRedoAndUndo: true,
-  //     enablePageHistory: true,
-  //   };
-  // }
-
-  // if (historyConfigs.enableRedoAndUndo === undefined) {
-  //   historyConfigs.enableRedoAndUndo = true;
-  // }
-  // if (historyConfigs.enablePageHistory === undefined) {
-  //   historyConfigs.enablePageHistory = true;
-  // }
-
-  const isDemoMode = false;
-  const isEnvSupportsHistoryPane = true;
-  const historyManager = PageHistoryManager.getManager();
-
-  console.log('PageHistoryManager', historyManager);
-  console.log('PageHistoryManager.onOpenPane', historyManager.onOpenPane);
-  // 历史撤销、重做以及唤起页面历史按钮
   if (typeof HistoryPane === 'function') {
-    // const historyPane = {
-    //   ...HistoryPane({
-    //     showPageHistory:
-    //       isEnvSupportsHistoryPane
-    //       // && this.app.isForm()
-    //       && !isDemoMode,
-    //     historyManager,
-    //     historyConfigs,
-    //   }),
-    //   index: -940,
-    // };
-    // console.log('aaaaaa', historyPane);
-
-    Panes.add(HistoryPane, {
-      props : {
-        showPageHistory:
-          isEnvSupportsHistoryPane
-          // && this.app.isForm()
-          && !isDemoMode,
-        historyManager,
-        historyConfigs,
-        index: -940,
-      }
+    Panes.add({
+      ...HistoryPane({
+        showPageHistory: true,
+        historyManager: PageHistoryManager.getManager(),
+        historyConfigs: {
+          enableRedoAndUndo: true,
+          enablePageHistory: true,
+        },
+      }),
+      index: -940,
     });
   } else {
-    Panes.add(HistoryPane, {
+    Panes.add({
+      ...HistoryPane,
       index: -940,
     });
   }
 
   // 页面历史 UI 面板
-  if (
-    PageHistoryPane
-    && !isDemoMode
-    && isEnvSupportsHistoryPane
-  ) {
-    console.log(1111, PageHistoryPane({
-      historyManager: PageHistoryManager.getManager(),
-      app: {},
-    }))
-    Panes.add(PageHistoryPane, {
-      props : {
-        historyManager: {
-          historyManager,
-          app: {
-  
-          }
-        },
-        index: -940,
+  Panes.add(PageHistoryPane, {
+    props : {
+      historyManager: {
+        historyManager: PageHistoryManager.getManager(),
+        app: {
+
+        }
       },
-    });
-  }
+      index: -940,
+    },
+  });
 }
 
 
