@@ -5,6 +5,9 @@ import Engine, { Panes } from '@ali/visualengine';
 import { ActionUtil as actionUtil } from '@ali/visualengine-utils';
 import getTrunkPane from '@ali/ve-trunk-pane';
 import DatapoolPane from '@ali/ve-datapool-pane';
+import PageHistoryManager from '@ali/ve-page-history';
+import HistoryPane from '@ali/ve-history-pane';
+import PageHistoryPane from '@ali/ve-page-history-pane';
 // import I18nPane from '@ali/ve-i18n-pane';
 import I18nManagePane from '@ali/ve-i18n-manage-pane';
 import ActionPane from '@ali/ve-action-pane';
@@ -322,6 +325,98 @@ function initActionPane() {
   });
 }
 
+// 操作历史与页面历史面板
+function initHistoryPane() {
+  // let historyConfigs = {getDesignerModuleConfigs(
+  //   this.designerConfigs,
+  //   'history',
+  // )};
+  let historyConfigs = {
+    enableRedoAndUndo: true,
+    enablePageHistory: true,
+  };;
+
+  // if (!historyConfigs) {
+  //   return;
+  // }
+
+  // if (historyConfigs === true) {
+  //   historyConfigs = {
+  //     enableRedoAndUndo: true,
+  //     enablePageHistory: true,
+  //   };
+  // }
+
+  // if (historyConfigs.enableRedoAndUndo === undefined) {
+  //   historyConfigs.enableRedoAndUndo = true;
+  // }
+  // if (historyConfigs.enablePageHistory === undefined) {
+  //   historyConfigs.enablePageHistory = true;
+  // }
+
+  const isDemoMode = false;
+  const isEnvSupportsHistoryPane = true;
+  const historyManager = PageHistoryManager.getManager();
+
+  console.log('PageHistoryManager', historyManager);
+  console.log('PageHistoryManager.onOpenPane', historyManager.onOpenPane);
+  // 历史撤销、重做以及唤起页面历史按钮
+  if (typeof HistoryPane === 'function') {
+    // const historyPane = {
+    //   ...HistoryPane({
+    //     showPageHistory:
+    //       isEnvSupportsHistoryPane
+    //       // && this.app.isForm()
+    //       && !isDemoMode,
+    //     historyManager,
+    //     historyConfigs,
+    //   }),
+    //   index: -940,
+    // };
+    // console.log('aaaaaa', historyPane);
+
+    Panes.add(HistoryPane, {
+      props : {
+        showPageHistory:
+          isEnvSupportsHistoryPane
+          // && this.app.isForm()
+          && !isDemoMode,
+        historyManager,
+        historyConfigs,
+        index: -940,
+      }
+    });
+  } else {
+    Panes.add(HistoryPane, {
+      index: -940,
+    });
+  }
+
+  // 页面历史 UI 面板
+  if (
+    PageHistoryPane
+    && !isDemoMode
+    && isEnvSupportsHistoryPane
+  ) {
+    console.log(1111, PageHistoryPane({
+      historyManager: PageHistoryManager.getManager(),
+      app: {},
+    }))
+    Panes.add(PageHistoryPane, {
+      props : {
+        historyManager: {
+          historyManager,
+          app: {
+  
+          }
+        },
+        index: -940,
+      },
+    });
+  }
+}
+
+
 async function init() {
   Engine.Env.setEnv('RE_VERSION', '7.2.0');
   Engine.Env.setSupportFeatures({
@@ -335,6 +430,7 @@ async function init() {
   initI18nPane();
   initActionPane();
   initDemoPanes();
+  initHistoryPane();
 
   Engine.init();
 }
