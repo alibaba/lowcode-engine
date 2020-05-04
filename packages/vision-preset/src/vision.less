@@ -46,6 +46,23 @@ html.engine-blur #engine {
   -webkit-filter: blur(4px);
 }
 
+.engine-main {
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  .ve-icon-button {
+    > .ve-icon-contents {
+      color: var(--color-text, rgba(51,51,51,.6));
+    }
+    &:hover, &.active {
+      > .ve-icon-contents {
+        color: var(--color-text-light, rgba(51,51,51,.8));
+      }
+    }
+  }
+}
+
 .engine-empty {
   background: #f2f3f5;
   color: #a7b1bd;
