@@ -1,12 +1,16 @@
+// all this file for polyfill vision logic
+
+import { isValidElement } from 'react';
+
 function getHotterFromSetter(setter) {
   return setter && (setter.Hotter || (setter.type && setter.type.Hotter)) || []; // eslint-disable-line
 }
 
 function getTransducerFromSetter(setter) {
   return setter && (
-      setter.transducer || setter.Transducer
-      || (setter.type && (setter.type.transducer || setter.type.Transducer))
-    ) || null; // eslint-disable-line
+    setter.transducer || setter.Transducer
+    || (setter.type && (setter.type.transducer || setter.type.Transducer))
+  ) || null; // eslint-disable-line
 }
 
 function combineTransducer(transducer, arr, context) {
@@ -23,9 +27,22 @@ function combineTransducer(transducer, arr, context) {
 
 export class Transducer {
   constructor(context, config) {
+    let { setter } = config;
+
+    // 1. validElement 
+    // 2. SetterConfig
+    // 3. SetterConfig[] 
+    if (Array.isArray(setter)) {
+      setter = setter[0];
+    } else if (isValidElement(setter) && setter.type.displayName === 'MixedSetter') {
+      setter = setter.props.setters[0];
+    } else if (typeof setter === 'object' && setter.componentName === 'MixedSetter') {
+      setter = setter.props.setters[0];
+    }
+
     this.setterTransducer = combineTransducer(
-      getTransducerFromSetter(config.setter),
-      getHotterFromSetter(config.setter),
+      getTransducerFromSetter(setter),
+      getHotterFromSetter(setter),
       context,
     );
     this.context = context;
