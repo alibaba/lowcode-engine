@@ -35,6 +35,7 @@ function init(container?: Element) {
   render(
     createElement(Workbench, {
       skeleton,
+      className: 'engine-main',
     }),
     container,
   );

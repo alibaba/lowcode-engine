@@ -93,6 +93,7 @@ export default class Panel implements IWidget {
         editor: this.skeleton.editor,
         config: this.config,
         panel: this,
+        pane: this,
       });
     }
   }
@@ -158,6 +159,20 @@ export default class Panel implements IWidget {
 
   show() {
     this.setActive(true);
+  }
+
+  /**
+   * @deprecated
+   */
+  getCurrentPosition() {
+    return 'left';
+  }
+
+  /**
+   * @deprecated
+   */
+  getSupportedPositions() {
+    return ['left'];
   }
 }
 

@@ -9,7 +9,7 @@ import settingsPane from '@ali/lowcode-plugin-settings-pane';
 import designer from '@ali/lowcode-plugin-designer';
 import eventBindDialog from '@ali/lowcode-plugin-event-bind-dialog';
 import variableBindDialog from '@ali/lowcode-plugin-variable-bind-dialog';
-import sourceEditor from '@ali/lowcode-plugin-source-editor';
+// import sourceEditor from '@ali/lowcode-plugin-source-editor';
 export default {
   LowcodeSkeleton,
   logo,
@@ -22,5 +22,5 @@ export default {
   designer,
   eventBindDialog,
   variableBindDialog,
-  sourceEditor
+  // sourceEditor
 };
