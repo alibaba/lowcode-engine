@@ -1,0 +1,20 @@
+@import '~@ali/ve-less-variables/index.less';
+
+.engine-field-variable-switcher {
+  cursor: pointer;
+  opacity: 0.6;
+  margin-left: 2px;
+
+  &.engine-active {
+    opacity: 1;
+    background: var(--color-brand, @brand-color-1);
+    color: #fff !important;
+    border-radius: 3px;
+    margin-left: 4px;
+
+    svg {
+      height: 22px !important;
+      width: 22px !important;
+    }
+  }
+}

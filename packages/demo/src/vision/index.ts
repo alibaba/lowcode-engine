@@ -2,8 +2,12 @@
 import { createElement } from 'react';
 import { Button } from '@alifd/next';
 import Engine, { Panes } from '@ali/visualengine';
+import { ActionUtil as actionUtil } from '@ali/visualengine-utils';
 import getTrunkPane from '@ali/ve-trunk-pane';
 import DatapoolPane from '@ali/ve-datapool-pane';
+import PageHistoryManager from '@ali/ve-page-history';
+import HistoryPane from '@ali/ve-history-pane';
+import PageHistoryPane from '@ali/ve-page-history-pane';
 // import I18nPane from '@ali/ve-i18n-pane';
 import I18nManagePane from '@ali/ve-i18n-manage-pane';
 import ActionPane from '@ali/ve-action-pane';
@@ -278,6 +282,43 @@ function initI18nPane() {
 
 // 动作面板
 function initActionPane() {
+  actionUtil.setActions({
+    module: {
+      compiled: "'use strict';\n\nexports.__esModule = true;\n\nvar _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };\n\nexports.submit = submit;\nexports.onLoadData = onLoadData;\nexports.add = add;\nexports.edit = edit;\nexports.del = del;\nexports.search = search;\nexports.reset = reset;\n/**\n* 点击弹框的“确认”\n*/\nfunction submit() {\n  var _this = this;\n\n  this.$('form').submit(function (data, error) {\n    if (data) {\n      _this.dataSourceMap['table_submit'].load(data).then(function (res) {\n        _this.utils.toast({\n          type: 'success',\n          title: '提交成功'\n        });\n        _this.$('dialog').hide();\n        _this.dataSourceMap['table_list'].load();\n      }).catch(function () {\n        _this.utils.toast({\n          type: 'error',\n          title: '提交失败'\n        });\n      });\n    }\n  });\n}\n\n/**\n* tablePc onLoadData\n* @param currentPage 当前页码\n* @param pageSize 每页显示条数\n* @param searchKey 搜索关键字\n* @param orderColumn 排序列\n* @param orderType 排序方式（desc,asc）\n* @param from 触发来源（order,search,pagination）\n*/\nfunction onLoadData(currentPage, pageSize, searchKey, orderColumn, orderType, from) {\n  var tableParams = {\n    currentPage: from === 'search' ? 1 : currentPage,\n    pageSize: pageSize,\n    searchKey: searchKey,\n    orderColumn: orderColumn,\n    orderType: orderType\n  };\n  this.setState({ tableParams: tableParams });\n}\n\n// 点击新增\nfunction add() {\n  this.setState({\n    formData: null\n  });\n  this.$('dialog').show();\n}\n\n// 点击编辑\nfunction edit(rowData) {\n  this.setState({\n    formData: rowData\n  });\n  this.$('dialog').show();\n}\n\n// 点击删除\nfunction del(rowData) {\n  var _this2 = this;\n\n  this.utils.dialog({\n    method: 'confirm',\n    title: '提示',\n    content: '确认删除该条目吗？',\n    onOk: function onOk() {\n      _this2.dataSourceMap['table_delete'].load({ id: rowData.id }).then(function () {\n        _this2.utils.toast({\n          type: 'success',\n          title: '删除成功'\n        });\n        _this2.dataSourceMap['table_list'].load();\n      }).catch(function () {\n        _this2.utils.toast({\n          type: 'error',\n          title: '删除失败'\n        });\n      });\n    }\n  });\n}\n\n/**\n* button onClick\n*/\nfunction search() {\n  var filterData = this.$('filter').getValue();\n  this.setState({\n    filterData: filterData,\n    tableParams: _extends({}, this.state.tableParams, {\n      time: Date.now(),\n      currentPage: 1\n    })\n  });\n}\n\n/**\n* button onClick\n*/\nfunction reset() {\n  this.$('filter').reset();\n  this.setState({\n    filterData: {},\n    tableParams: _extends({}, this.state.tableParams, {\n      time: Date.now(),\n      currentPage: 1\n    })\n  });\n}",
+      source: "/**\n* 点击弹框的“确认”\n*/\nexport function submit() {\n  this.$('form').submit((data, error) => {\n    if (data) {\n      this.dataSourceMap['table_submit'].load(data).then((res) => {\n        this.utils.toast({\n          type: 'success',\n          title: '提交成功'\n        });\n        this.$('dialog').hide();\n        this.dataSourceMap['table_list'].load();\n      }).catch(()=>{\n        this.utils.toast({\n          type: 'error',\n          title: '提交失败'\n        });\n      })\n    }\n  })\n}\n\n/**\n* tablePc onLoadData\n* @param currentPage 当前页码\n* @param pageSize 每页显示条数\n* @param searchKey 搜索关键字\n* @param orderColumn 排序列\n* @param orderType 排序方式（desc,asc）\n* @param from 触发来源（order,search,pagination）\n*/\nexport function onLoadData(currentPage, pageSize, searchKey, orderColumn, orderType, from) {\n  const tableParams = {\n    currentPage: from === 'search' ? 1 : currentPage,\n    pageSize,\n    searchKey,\n    orderColumn,\n    orderType\n  };\n  this.setState({ tableParams });\n}\n\n// 点击新增\nexport function add() {\n  this.setState({\n    formData: null,\n  });\n  this.$('dialog').show();\n}\n\n\n// 点击编辑\nexport function edit(rowData) {\n  this.setState({\n    formData: rowData\n  });\n  this.$('dialog').show();\n}\n\n// 点击删除\nexport function del(rowData) {\n  this.utils.dialog({\n    method: 'confirm',\n    title: '提示',\n    content: '确认删除该条目吗？',\n    onOk: () => {\n      this.dataSourceMap['table_delete'].load({ id: rowData.id }).then(() => {\n        this.utils.toast({\n          type: 'success',\n          title: '删除成功'\n        });\n        this.dataSourceMap['table_list'].load();\n      }).catch(()=>{\n        this.utils.toast({\n          type: 'error',\n          title: '删除失败'\n        });\n      })\n    }\n  })\n}\n\n/**\n* button onClick\n*/\nexport function search(){\n  const filterData = this.$('filter').getValue();\n  this.setState({\n    filterData,\n    tableParams: {\n      ...this.state.tableParams,\n      time: Date.now(),\n      currentPage: 1\n    }\n  });\n}\n\n/**\n* button onClick\n*/\nexport function reset(){\n  this.$('filter').reset();\n  this.setState({\n    filterData: {},\n    tableParams: {\n      ...this.state.tableParams,\n      time: Date.now(),\n      currentPage: 1\n    }\n  });\n}"
+    },
+    type: "FUNCTION",
+    list: [
+      {
+        "id": "submit",
+        "title": "submit"
+      },
+      {
+        "id": "onLoadData",
+        "title": "onLoadData"
+      },
+      {
+        "id": "add",
+        "title": "add"
+      },
+      {
+        "id": "edit",
+        "title": "edit"
+      },
+      {
+        "id": "del",
+        "title": "del"
+      },
+      {
+        "id": "search",
+        "title": "search"
+      },
+      {
+        "id": "reset",
+        "title": "reset"
+      }
+    ]
+  });
   const props = {
     enableGlobalJS: false,
     enableVsCodeEdit: false,
@@ -314,6 +355,63 @@ function initActionPane() {
 //   return props;
 // };
 
+// 操作历史与页面历史面板
+function initHistoryPane() {
+  // let historyConfigs = {getDesignerModuleConfigs(
+  //   this.designerConfigs,
+  //   'history',
+  // )};
+  let historyConfigs = {
+    enableRedoAndUndo: true,
+    enablePageHistory: true,
+  };;
+
+  const isDemoMode = false;
+  const isEnvSupportsHistoryPane = true;
+  const historyManager = PageHistoryManager.getManager();
+
+  console.log('PageHistoryManager', historyManager);
+  console.log('PageHistoryManager.onOpenPane', historyManager.onOpenPane);
+  // 历史撤销、重做以及唤起页面历史按钮
+  if (typeof HistoryPane === 'function') {
+    Panes.add(HistoryPane, {
+      props : {
+        showPageHistory:
+          isEnvSupportsHistoryPane
+          // && this.app.isForm()
+          && !isDemoMode,
+        historyManager,
+        historyConfigs,
+        index: -940,
+      }
+    });
+  } else {
+    Panes.add(HistoryPane, {
+      index: -940,
+    });
+  }
+
+  // 页面历史 UI 面板
+  if (
+    PageHistoryPane
+    && !isDemoMode
+    && isEnvSupportsHistoryPane
+  ) {
+    Panes.add(PageHistoryPane, {
+      props : {
+        historyManager: {
+          historyManager,
+          app: {
+  
+          }
+        },
+        index: -940,
+      },
+    });
+  }
+}
+
+
 async function init() {
   Engine.Env.setEnv('RE_VERSION', '7.2.0');
   Engine.Env.setSupportFeatures({
@@ -331,6 +429,7 @@ async function init() {
   // debugger
   // Prototype.addGlobalPropsReducer(replaceFuncProp);
   // debugger
+  initHistoryPane();
   Engine.init();
 }
 init();

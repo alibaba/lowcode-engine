@@ -1,6 +1,7 @@
 import { Component, ReactElement } from 'react';
+import { Icon } from '@alifd/next';
 import classNames from 'classnames';
-import { Title, observer } from '@ali/lowcode-editor-core';
+import { Title, observer, Tip } from '@ali/lowcode-editor-core';
 import { DockProps } from '../types';
 import PanelDock from '../widget/panel-dock';
 import { composeTitle } from '../widget/utils';
@@ -19,6 +20,25 @@ export function DockView({ title, icon, description, size, className, onClick }:
       onClick={onClick}
     />
   );
+}
+
+function HelpTip({ tip }: any) {
+  if (tip && tip.url) {
+    return (
+      <div>
+        <a href={tip.url} target="_blank" rel="noopener noreferrer">
+          <Icon type="help" size="small" className="lc-help-tip"/>
+        </a>
+        <Tip>{tip.content}</Tip>
+      </div>
+    );
+  }
+  return (
+    <div>
+      <Icon type="help" size="small" className="lc-help-tip"/>
+      <Tip>{tip.content}</Tip>
+    </div>
+  )
 }
 
 @observer
@@ -196,7 +216,7 @@ class PanelTitle extends Component<{ panel: Panel; className?: string }> {
         data-name={panel.name}
       >
         <Title title={panel.title || panel.name} />
-        {/*pane.help ? <HelpTip tip={panel.help} /> : null*/}
+        {panel.help ? <HelpTip tip={panel.help} /> : null}
       </div>
     );
   }

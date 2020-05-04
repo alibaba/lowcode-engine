@@ -12,8 +12,8 @@ import { uniqueId } from '@ali/lowcode-utils';
 
 export type GetDataType<T, NodeType> = T extends undefined
   ? NodeType extends {
-      schema: infer R;
-    }
+    schema: infer R;
+  }
     ? R
     : any
   : T;
@@ -465,6 +465,14 @@ export class DocumentModel {
   getRoot() {
     return this.rootNode;
   }
+
+  /**
+   * 兼容vision
+   */
+  getHistory(): History {
+    return this.history;
+  }
+
   get root() {
     return this.rootNode;
   }

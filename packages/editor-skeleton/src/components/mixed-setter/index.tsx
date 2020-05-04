@@ -115,6 +115,8 @@ export default class MixedSetter extends Component<{
   className?: string;
 }> {
   private setters = nomalizeSetters(this.props.setters);
+  // set name ,used in setting Transducer
+  static displayName = 'MixedSetter';
   @obx.ref private used?: string;
   @computed private getCurrentSetter() {
     const { field } = this.props;

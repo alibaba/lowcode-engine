@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { TipContainer, observer } from '@ali/lowcode-editor-core';
+import classNames from 'classnames';
 import { Skeleton } from '../skeleton';
 import TopArea from './top-area';
 import LeftArea from './left-area';
@@ -12,15 +13,15 @@ import RightArea from './right-area';
 import './workbench.less';
 
 @observer
-export class Workbench extends Component<{ skeleton: Skeleton}> {
+export class Workbench extends Component<{ skeleton: Skeleton, className?: string }> {
   shouldComponentUpdate() {
     return false;
   }
 
   render() {
-    const { skeleton } = this.props;
+    const { skeleton, className } = this.props;
     return (
-      <div className="lc-workbench">
+      <div className={classNames('lc-workbench', className)}>
         <TopArea area={skeleton.topArea} />
         <div className="lc-workbench-body">
           <LeftArea area={skeleton.leftArea} />
