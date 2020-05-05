@@ -44,6 +44,7 @@ function init(container?: Element) {
     createElement(Workbench, {
       skeleton,
       className: 'engine-main',
+      topAreaItemClassName: 'engine-actionitem',
     }),
     container,
   );
