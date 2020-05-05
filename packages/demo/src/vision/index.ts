@@ -48,11 +48,7 @@ async function loadAssets() {
 
   if (assets.packages) {
     assets.packages.forEach((item: any) => {
-      if (item.package.indexOf('@ali/vc-') === 0 && item.urls) {
-        item.urls = item.urls.filter((url: string) => {
-          return url.indexOf('view.mobile') < 0;
-        });
-      } else if (item.package && externals.indexOf(item.package) > -1) {
+      if (item.package && externals.indexOf(item.package) > -1) {
         item.urls = null;
       }
     });
@@ -425,7 +421,7 @@ function initHistoryPane() {
         historyManager: {
           historyManager,
           app: {
-  
+
           }
         },
         index: -940,

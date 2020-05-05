@@ -112,24 +112,19 @@ function processDetail({ target, detail, document }: DropLocation): InsertionDat
 }
 
 @observer
-export class InsertionView extends Component {
-  static contextType = SimulatorContext;
-
-  @computed get host(): BuiltinSimulatorHost {
-    return this.context;
-  }
-
+export class InsertionView extends Component<{ host: BuiltinSimulatorHost }> {
   shouldComponentUpdate() {
     return false;
   }
 
   render() {
-    const loc = this.host.document.dropLocation;
+    const { host } = this.props;
+    const loc = host.document.dropLocation;
     if (!loc) {
       return null;
     }
 
-    const { scale, scrollX, scrollY } = this.host.viewport;
+    const { scale, scrollX, scrollY } = host.viewport;
     const { edge, insertType, coverRect, nearRect, vertical } = processDetail(loc);
 
     if (!edge) {
