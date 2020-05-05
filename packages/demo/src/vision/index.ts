@@ -102,10 +102,7 @@ function initDemoPanes() {
     props: {
       align: 'bottom',
       icon: 'set',
-      description: '设置',
-      // onClick:()=>{
-      //   Engine.Pages.currentPage.root.select();
-      // }
+      description: '设置'
     },
   });
   skeleton.add({
@@ -115,16 +112,7 @@ function initDemoPanes() {
     props: {
       align: 'bottom',
       icon: 'help',
-      description: '帮助',
-      onClick:()=>{
-        const linkConfig = getDesignerModuleConfigs({}, 'helpLink');
-        const reVersion = getConfig('RE_VERSION');
-        let defaultLink = 'https://go.alibaba-inc.com/help/';
-        if (cv(reVersion, '7.0.0') >= 0) {
-          defaultLink = 'https://go.alibaba-inc.com/help3/';
-        }
-        window.open(linkConfig.url ? linkConfig.url : defaultLink, '_blank');
-      }
+      description: '帮助'
     },
   });
 
@@ -200,18 +188,6 @@ async function initTrunkPane() {
   Panes.add(TrunkPane);
 }
 
-// 帮助面板
-function getDesignerModuleConfigs(source?:any, moduleName?:any) {
-  return _get(source, ['modules', moduleName], {});
-}
-function getConfig(name: any) {
-  const { g_config, pageConfig } = window as any;
-  return (
-    window[name]
-    || (g_config || {})[name]
-    || (pageConfig || {})[name]
-  );
-}
 // 数据源面板
 function initDataPoolPane() {
   const dpConfigs = {};

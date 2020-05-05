@@ -8,7 +8,7 @@ export default class TopArea extends Component<{ area: Area }> {
   render() {
     const { area } = this.props;
     return (
-      <div className={classNames("lc-top-area", {
+      <div className={classNames("lc-top-area engine-actionpane", {
         'lc-area-visible': area.visible
       })}>
         <Contents area={area} />

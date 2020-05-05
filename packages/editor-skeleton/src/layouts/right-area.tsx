@@ -12,7 +12,7 @@ export default class RightArea extends Component<{ area: Area<any, Panel> }> {
   render() {
     const { area } = this.props;
     return (
-      <div className={classNames('lc-right-area', {
+      <div className={classNames('lc-right-area engine-tabpane', {
         'lc-area-visible': area.visible,
       })}>
         <Contents area={area} />

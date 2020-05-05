@@ -84,16 +84,6 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
           const { __id, __desingMode, ...viewProps } = props;
           viewProps.componentId = __id;
           viewProps._leaf = host.document.getNode(__id);
-          // if (Component.displayName === 'Calendar') {
-          //   // debugger
-          //   const testProps = {
-          //     // defaultDate: undefined,
-          //     // dateCellRender:(date: any)=>{return date.date();}
-          //     // onSelect:(value:any)=>{console.log(value,'test')}
-          //     // defaultMonth: undefined,
-          //   };
-          //   Object.assign(viewProps, testProps);
-          // }
           return createElement(
             Component,
             viewProps,
