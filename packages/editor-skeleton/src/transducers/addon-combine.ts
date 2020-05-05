@@ -46,7 +46,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
   const supportedLifecycles =
     events.supportedLifecycles ||
     (isRoot
-      ? [
+      ? /*[
           {
             description: '初始化时',
             name: 'constructor',
@@ -63,7 +63,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
             description: '卸载时',
             name: 'componentWillUnmount',
           },
-        ]
+        ]*/ null
       : null);
   if (supportedLifecycles) {
     eventsDefinition.push({
@@ -81,6 +81,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
   }
   //  通用设置
   const propsGroup = props || [];
+  /*
   propsGroup.push({
     name: '#generals',
     title: { type: 'i18n', 'zh-CN': '通用', 'en-US': 'General' },
@@ -101,14 +102,14 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
         title: 'Ref',
         setter: 'StringSetter',
       },
-      /*
       {
         name: '!more',
         title: '更多',
         setter: 'PropertiesSetter',
-      },*/
+      },
     ],
   });
+  */
   const combined: FieldConfig[] = [
     {
       title: { type: 'i18n', 'zh-CN': '属性', 'en-US': 'Props' },
