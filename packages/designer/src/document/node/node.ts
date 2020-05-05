@@ -358,7 +358,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   @computed hasCondition() {
     const v = this.getExtraProp('condition', false)?.getValue();
-    return v != null && v !== '';
+    return v != null && v !== '' && v !== true;
   }
 
   @computed hasLoop() {
