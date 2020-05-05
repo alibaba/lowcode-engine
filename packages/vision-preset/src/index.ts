@@ -1,11 +1,12 @@
 import * as utils from '@ali/ve-utils';
 import Popup from '@ali/ve-popups';
 import Icons from '@ali/ve-icons';
+import logger from '@ali/vu-logger';
 import { render } from 'react-dom';
 import I18nUtil from '@ali/ve-i18n-util';
 import { hotkey as Hotkey } from '@ali/lowcode-editor-core';
 import { createElement } from 'react';
-import { VE_EVENTS as EVENTS, VE_HOOKS as HOOKS } from './base/const';
+import { VE_EVENTS as EVENTS, VE_HOOKS as HOOKS, VERSION as Version } from './base/const';
 import Bus from './bus';
 import { skeleton } from './editor';
 import { Workbench } from '@ali/lowcode-editor-skeleton';
@@ -21,6 +22,8 @@ import * as Field from './fields';
 import Prop from './prop';
 import Env from './env';
 import DragEngine from './drag-engine';
+import Viewport from './viewport';
+import Project from './project';
 import { designer, editor } from './editor';
 
 import './vision.less';
@@ -101,6 +104,10 @@ const VisualEngine = {
   Bundle,
   Pages,
   DragEngine,
+  Viewport,
+  Version,
+  Project,
+  logger,
 };
 
 (window as any).VisualEngine = VisualEngine;
@@ -144,6 +151,10 @@ export {
   Bundle,
   Pages,
   DragEngine,
+  Viewport,
+  Version,
+  Project,
+  logger,
 };
 
 
