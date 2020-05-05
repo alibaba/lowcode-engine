@@ -21,6 +21,7 @@
     "@recore/obx-react": "^1.0.7",
     "classnames": "^2.2.6",
     "react": "^16",
+    "@ali/vu-css-style": "^1.0.2",
     "react-dom": "^16.7.0"
   },
   "devDependencies": {
