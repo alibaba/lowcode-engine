@@ -9,7 +9,6 @@ interface I18nObject {
 }
 
 export function i18nReducer(obj?: any): any {
-  console.info(obj);
   if (!obj) { return obj; }
   if (Array.isArray(obj)) {
     return obj.map((item) => i18nReducer(item));

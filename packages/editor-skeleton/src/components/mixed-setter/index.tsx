@@ -121,16 +121,22 @@ export default class MixedSetter extends Component<{
   @computed private getCurrentSetter() {
     const { field } = this.props;
     let firstMatched: SetterItem | undefined;
+    let firstDefault: SetterItem | undefined;
     for (const setter of this.setters) {
       if (setter.name === this.used) {
         return setter;
       }
-      const matched = !setter.condition || setter.condition(field);
-      if (matched && !firstMatched) {
+      if (!setter.condition) {
+        if (!firstDefault) {
+          firstDefault = setter;
+        }
+        continue;
+      }
+      if (!firstMatched && setter.condition(field)) {
         firstMatched = setter;
       }
     }
-    return firstMatched;
+    return firstMatched || firstDefault || this.setters[0];
   }
 
   // dirty fix vision variable setter logic
@@ -151,13 +157,18 @@ export default class MixedSetter extends Component<{
     const setter = this.setters.find((item) => item.name === name);
     this.used = name;
     if (setter) {
-      let newValue: any = setter.initialValue;
-      if (newValue && typeof newValue === 'function') {
-        newValue = newValue(field);
-      }
-      onChange && onChange(newValue);
+      this.handleInitial(setter);
     }
   };
+
+  private handleInitial({ initialValue }: SetterItem) {
+    const { field, onChange } = this.props;
+    let newValue: any = initialValue;
+    if (newValue && typeof newValue === 'function') {
+      newValue = newValue(field);
+    }
+    onChange && onChange(newValue);
+  }
 
   private shell: HTMLDivElement | null = null;
   private checkIsBlockField() {
@@ -207,6 +218,9 @@ export default class MixedSetter extends Component<{
       field,
       ...restProps,
       ...extraProps,
+      onInitial: () => {
+        this.handleInitial(currentSetter);
+      }
     });
   }
 
