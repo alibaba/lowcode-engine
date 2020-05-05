@@ -100,6 +100,22 @@ export default class Bundle {
     cp.setView(view);
   }
 
+  /**
+   * TODO dirty fix
+   */
+  addComponentBundle(bundles: any) {
+    /**
+     * Normal Component bundle: [ Prototype, PrototypeView ]
+     * Component without Prototype.js: [ View ]
+     */
+    if (bundles.length >= 2) {
+      const prototype = bundles[0];
+      const prototypeView = bundles[1];
+      prototype.setView(prototypeView);
+      this.registerPrototype(prototype);
+    }
+  }
+
   private recursivelyRegisterViews(list: any[], viewName?: string): void {
     list.forEach((item: any) => {
       if (Array.isArray(item.module)) {

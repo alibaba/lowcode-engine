@@ -180,6 +180,11 @@ export class SettingPropEntry implements SettingEntry {
     return this.top;
   }
 
+  // add settingfield props 
+  get props() {
+    return this.top;
+  }
+  
   onValueChange(func: () => any) {
     this.emitter.on('valuechange', func);
 

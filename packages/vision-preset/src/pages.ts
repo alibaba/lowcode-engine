@@ -15,8 +15,8 @@ const pages = Object.assign(project, {
     project.load({
       version: '1.0.0',
       componentsMap: [],
-      componentsTree: pages.map(page => page.layout),
-    });
+      componentsTree: pages[0].componentsTree,
+    }, true);
   },
   addPage(data: OldPageData) {
     return project.open(data.layout);

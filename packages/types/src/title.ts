@@ -13,3 +13,6 @@ export interface TitleConfig {
 
 export type TitleContent = string | I18nData | ReactElement | TitleConfig;
 
+export function isTitleConfig(obj: any): obj is TitleConfig {
+  return obj && (obj.label || obj.tip || obj.icon);
+}
