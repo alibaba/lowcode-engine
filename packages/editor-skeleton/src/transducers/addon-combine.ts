@@ -183,8 +183,12 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
       items: [
         {
           name: '___condition',
-          title: { type: 'i18n', 'zh-CN': '条件显示', 'en-US': 'Condition' },
-          setter: 'ExpressionSetter',
+          title: { type: 'i18n', 'zh-CN': '是否渲染', 'en-US': 'Condition' },
+          setter: [{
+            componentName: 'BoolSetter',
+          }, {
+            componentName: 'VariableSetter'
+          }],
         },
         {
           name: '#loop',
@@ -193,27 +197,14 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
             {
               name: '___loop',
               title: { type: 'i18n', 'zh-CN': '循环数据', 'en-US': 'Loop Data' },
-              setter: {
-                componentName: 'MixinSetter',
+              setter: [{
+                componentName: 'JsonSetter',
                 props: {
-                  // TODO:
-                  setters: [
-                    {
-                      componentName: 'JSONSetter',
-                      props: {
-                        mode: 'popup',
-                        placeholder: { type: 'i18n', 'zh-CN': '编辑数据', 'en-US': 'Edit Data' },
-                      },
-                    },
-                    {
-                      componentName: 'ExpressionSetter',
-                      props: {
-                        placeholder: { type: 'i18n', 'zh-CN': '绑定数据', 'en-US': 'Bind Data' },
-                      },
-                    },
-                  ],
+                  label: { type: 'i18n', 'zh-CN': '编辑数据', 'en-US': 'Edit Data'},
                 },
-              },
+              }, {
+                componentName: 'VariableSetter'
+              }],
             },
             {
               name: '___loopArgs.0',
@@ -237,8 +228,12 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
             },
             {
               name: 'key',
-              title: 'Key',
-              setter: 'ExpressionSetter',
+              title: '循环 Key',
+              setter: [{
+                componentName: 'StringSetter',
+              }, {
+                componentName: 'VariableSetter'
+              }],
             },
           ],
         },
