@@ -20,6 +20,7 @@ import { IconComponent } from './icons/component';
 import { IconRemove } from './icons/remove';
 import { IconClone } from './icons/clone';
 import { ReactElement } from 'react';
+import { IconHidden } from './icons/hidden';
 
 function ensureAList(list?: string | string[]): string[] | null {
   if (!list) {
@@ -338,6 +339,20 @@ const builtinComponentActions: ComponentAction[] = [
       action(node: Node) {
         // node.remove();
       },
+    },
+    important: true,
+  },
+  {
+    name: 'hide',
+    content: {
+      icon: IconHidden,
+      title: intlNode('hide'),
+      action(node: Node) {
+        node.getExtraProp('hidden', true)?.setValue(true);
+      },
+    },
+    condition: (node: Node) => {
+      return node.componentMeta.isModal;
     },
     important: true,
   },

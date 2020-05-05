@@ -1,9 +1,11 @@
 import LowCodeRenderer from '@ali/lowcode-react-renderer';
+import { isObject } from 'lodash';
 import { ReactInstance, Fragment, Component, createElement } from 'react';
 import { observer } from '@recore/obx-react';
 import { SimulatorRenderer } from './renderer';
 import { host } from './host';
 import './renderer.less';
+import { toCss } from '@ali/vu-css-style';
 
 // patch cloneElement avoid lost keyProps
 const originCloneElement = window.React.cloneElement;
@@ -84,6 +86,10 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
           const { __id, __desingMode, ...viewProps } = props;
           viewProps.componentId = __id;
           viewProps._leaf = host.document.getNode(__id);
+
+          // FIXME: 此处未来使用propsReducer方式处理
+          this.createNodeStyleSheet(viewProps);
+
           return createElement(
             Component,
             viewProps,
@@ -98,5 +104,29 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
         //}}
       />
     );
+  }
+  createNodeStyleSheet(props: any) {
+    if (props && props.fieldId) {
+      let styleProp = props.__style__;
+
+      if (isObject(styleProp)) {
+        styleProp = toCss(styleProp);
+      }
+
+      if (typeof styleProp === 'string') {
+        const s = document.createElement('style');
+        const cssId = '_style_pesudo_' + props.fieldId;
+        const cssClass = '_css_pesudo_' + props.fieldId;
+
+        props.className = cssClass;
+        s.setAttribute('type', 'text/css');
+        s.setAttribute('id', cssId);
+        document.getElementsByTagName('head')[0].appendChild(s);
+
+        s.appendChild(document.createTextNode(styleProp.replace(/:root/g, '.' + cssClass)));
+
+        return s;
+      }
+    }
   }
 }

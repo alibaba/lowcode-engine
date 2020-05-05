@@ -185,12 +185,12 @@ body {
     display: flex;
     margin-bottom: 2px;
     padding: 8px;
-    .lc-top-area-left{}
+
     .lc-top-area-center{
       flex: 1;
       display: flex;
-      justify-content: flex-end;
-      margin-right: 8px;
+      justify-content: center;
+      margin: 0 8px;
     }
     .lc-top-area-right{
       display: flex;
@@ -268,6 +268,13 @@ body {
         .lc-title{
           padding: 12px;
           flex-direction: column;
+          width: 46px;
+          height: 46px;
+
+          svg {
+            fill: var(--color-icon-normal,rgba(31,56,88,.4));
+          }
+
           &.has-tip{
             cursor: pointer;
           }
@@ -324,6 +331,7 @@ body {
       flex: 1;
       display: flex;
       flex-direction: column;
+      z-index: 10;
       .lc-toolbar {
         height: var(--toolbar-height);
         background-color: var(--color-pane-background);
