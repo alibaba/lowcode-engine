@@ -78,15 +78,15 @@ skeleton.add({
   type: 'Panel',
   content: SettingsPrimaryPane,
 });
-skeleton.add({
-  area: 'leftArea',
-  name: 'outlinePane',
-  type: 'PanelDock',
-  content: Outline,
-  panelProps: {
-    area: 'leftFixedArea',
-  },
-});
+// skeleton.add({
+//   area: 'leftArea',
+//   name: 'outlinePane',
+//   type: 'PanelDock',
+//   content: Outline,
+//   panelProps: {
+//     area: 'leftFixedArea',
+//   },
+// });
 
 skeleton.add({
   area: 'topArea',
