@@ -228,7 +228,6 @@ export default class BaseEngine extends PureComponent {
 
     let Comp = components[schema.componentName] || Div;
 
-    console.info('node schema', schema, engine.props);
     if (schema.hidden) {
       return null;
     }

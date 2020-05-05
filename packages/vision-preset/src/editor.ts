@@ -108,4 +108,5 @@ addBuiltinComponentAction({
   name: 'instance-node-selector',
   content: InstanceNodeSelector,
   important: true,
+  condition: 'always'
 });

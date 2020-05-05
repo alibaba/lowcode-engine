@@ -685,6 +685,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   getRect(): DOMRect | null {
+    if (this.isRoot()) {
+      return this.document.simulator?.viewport.contentBounds || null;
+    }
     return this.document.simulator?.computeRect(this) || null;
   }
 

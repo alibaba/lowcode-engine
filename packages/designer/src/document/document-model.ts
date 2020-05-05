@@ -461,20 +461,21 @@ export class DocumentModel {
     return config.checkNestingDown(parent, obj) && this.checkNestingUp(parent, obj);
   }
 
-  // ======= compatibles
+  // ======= compatibles for vision
   getRoot() {
     return this.rootNode;
   }
 
-  /**
-   * 兼容vision
-   */
   getHistory(): History {
     return this.history;
   }
 
   get root() {
     return this.rootNode;
+  }
+
+  toData() {
+    return this.export(TransformStage.Save);
   }
 }
 

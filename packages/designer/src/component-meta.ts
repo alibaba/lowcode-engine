@@ -332,17 +332,6 @@ const builtinComponentActions: ComponentAction[] = [
     important: true,
   },
   {
-    name: 'copy',
-    content: {
-      icon: IconClone,
-      title: intlNode('copy'),
-      action(node: Node) {
-        // node.remove();
-      },
-    },
-    important: true,
-  },
-  {
     name: 'hide',
     content: {
       icon: IconHidden,
@@ -353,6 +342,17 @@ const builtinComponentActions: ComponentAction[] = [
     },
     condition: (node: Node) => {
       return node.componentMeta.isModal;
+    },
+    important: true,
+  },
+  {
+    name: 'copy',
+    content: {
+      icon: IconClone,
+      title: intlNode('copy'),
+      action(node: Node) {
+        // node.remove();
+      },
     },
     important: true,
   },
