@@ -466,16 +466,17 @@ export class DocumentModel {
     return this.rootNode;
   }
 
+  // add toData
+  toData() {
+    return { componentsTree: [this.project?.currentDocument?.export(TransformStage.Save)] };
+  }
+
   getHistory(): History {
     return this.history;
   }
 
   get root() {
     return this.rootNode;
-  }
-
-  toData() {
-    return this.export(TransformStage.Save);
   }
 }
 
