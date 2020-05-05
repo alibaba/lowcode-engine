@@ -18,8 +18,11 @@ import { upgradeAssetsBundle } from './upgrade-assets';
 import { isCSSUrl } from '@ali/lowcode-utils';
 import { I18nSetter } from '@ali/visualengine-utils';
 import VariableSetter from '@ali/vs-variable-setter';
-import { isObject, isArray } from 'lodash';
+import _isArray from "lodash/isArray";
+import _isObject from "lodash/isObject";
+import _get from 'lodash/get';
 import funcParser from '@ali/vu-function-parser';
+import cv from 'compare-versions';
 
 
 const { editor, skeleton, context, HOOKS, Trunk } = Engine;
@@ -104,6 +107,9 @@ function initDemoPanes() {
       align: 'bottom',
       icon: 'set',
       description: '设置',
+      // onClick:()=>{
+      //   Engine.Pages.currentPage.root.select();
+      // }
     },
   });
   skeleton.add({
@@ -114,6 +120,15 @@ function initDemoPanes() {
       align: 'bottom',
       icon: 'help',
       description: '帮助',
+      onClick:()=>{
+        const linkConfig = getDesignerModuleConfigs({}, 'helpLink');
+        const reVersion = getConfig('RE_VERSION');
+        let defaultLink = 'https://go.alibaba-inc.com/help/';
+        if (cv(reVersion, '7.0.0') >= 0) {
+          defaultLink = 'https://go.alibaba-inc.com/help3/';
+        }
+        window.open(linkConfig.url ? linkConfig.url : defaultLink, '_blank');
+      }
     },
   });
 
@@ -189,6 +204,18 @@ async function initTrunkPane() {
   Panes.add(TrunkPane);
 }
 
+// 帮助面板
+function getDesignerModuleConfigs(source?:any, moduleName?:any) {
+  return _get(source, ['modules', moduleName], {});
+}
+function getConfig(name: any) {
+  const { g_config, pageConfig } = window as any;
+  return (
+    window[name]
+    || (g_config || {})[name]
+    || (pageConfig || {})[name]
+  );
+}
 // 数据源面板
 function initDataPoolPane() {
   const dpConfigs = {};
@@ -336,9 +363,9 @@ function replaceFuncProp(props?: any){
     }
     if ((prop.compiled && prop.source) || prop.type === 'actionRef' || prop.type === 'js') {
       replaceProps[name] = funcParser(prop);
-    } else if (isObject(prop)) {
+    } else if (_isObject(prop)) {
       replaceFuncProp(prop);
-    } else if (isArray(prop)) {
+    } else if (_isArray(prop)) {
       prop.map((propItem) => {
         replaceFuncProp(propItem);
       });
@@ -348,7 +375,6 @@ function replaceFuncProp(props?: any){
   for (const name in replaceProps) {
     props[name] = replaceProps[name];
   }
-
   return props;
 };
 
