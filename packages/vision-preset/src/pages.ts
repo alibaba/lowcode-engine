@@ -12,6 +12,11 @@ export interface OldPageData {
 
 const pages = Object.assign(project, {
   setPages(pages: OldPageData[]) {
+    // FIXME: upgrade schema
+    pages[0].componentsTree.forEach((item: any) => {
+      item.lifeCycles = {};
+      item.methods = {};
+    });
     project.load({
       version: '1.0.0',
       componentsMap: [],

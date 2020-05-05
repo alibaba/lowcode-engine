@@ -39,27 +39,25 @@ export class BorderHoveringInstance extends PureComponent<{
 }
 
 @observer
-export class BorderHovering extends Component {
-  static contextType = SimulatorContext;
-
+export class BorderHovering extends Component<{ host: BuiltinSimulatorHost }> {
   shouldComponentUpdate() {
     return false;
   }
 
   @computed get scale() {
-    return (this.context as BuiltinSimulatorHost).viewport.scale;
+    return this.props.host.viewport.scale;
   }
 
   @computed get scrollX() {
-    return (this.context as BuiltinSimulatorHost).viewport.scrollX;
+    return this.props.host.viewport.scrollX;
   }
 
   @computed get scrollY() {
-    return (this.context as BuiltinSimulatorHost).viewport.scrollY;
+    return this.props.host.viewport.scrollY;
   }
 
   @computed get current() {
-    const host = this.context as BuiltinSimulatorHost;
+    const host = this.props.host;
     const doc = host.document;
     const selection = doc.selection;
     const current = host.designer.hovering.current;
@@ -70,7 +68,7 @@ export class BorderHovering extends Component {
   }
 
   render() {
-    const host = this.context as BuiltinSimulatorHost;
+    const host = this.props.host;
     const current = this.current;
     if (!current || host.viewport.scrolling) {
       return <Fragment />;
