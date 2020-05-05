@@ -98,6 +98,7 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
         newConfig.content = contents.map(({ title, content, tip }) => {
           return {
             type: "Panel",
+            name: title,
             content,
             props: {
               title,
