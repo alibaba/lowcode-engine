@@ -7,6 +7,7 @@ import {
   PropsList,
   NodeData,
   TitleContent,
+  I18nData,
   SlotSchema,
   PageSchema,
   ComponentSchema,
@@ -19,6 +20,7 @@ import { Prop } from './props/prop';
 import { ComponentMeta } from '../../component-meta';
 import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
 import { TransformStage } from './transform-stage';
+import { ReactElement } from 'react';
 
 /**
  * 基础节点
@@ -122,7 +124,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return 0;
   }
 
-  @computed get title(): TitleContent {
+  @computed get title(): string | I18nData | ReactElement {
     let t = this.getExtraProp('title');
     if (!t && this.componentMeta.descriptor) {
       t = this.getProp(this.componentMeta.descriptor, false);
@@ -134,6 +136,10 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       }
     }
     return this.componentMeta.title;
+  }
+
+  get icon() {
+    return this.componentMeta.icon;
   }
 
   constructor(readonly document: DocumentModel, nodeSchema: Schema) {
