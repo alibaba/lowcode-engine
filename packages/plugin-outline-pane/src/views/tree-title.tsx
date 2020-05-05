@@ -126,7 +126,7 @@ export default class TreeTitle extends Component<{
           )}
         </div>
         {isCNode && isNodeParent && <HideBtn treeNode={treeNode} />}
-        {isCNode && isNodeParent && <LockBtn treeNode={treeNode} />}
+        {/*isCNode && isNodeParent && <LockBtn treeNode={treeNode} />*/}
       </div>
     );
   }
