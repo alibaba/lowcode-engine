@@ -2,17 +2,14 @@ import { isJSBlock, isJSSlot } from '@ali/lowcode-types';
 import { isPlainObject } from '@ali/lowcode-utils';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
 import { Designer, TransformStage, addBuiltinComponentAction } from '@ali/lowcode-designer';
-import { registerSetters } from '@ali/lowcode-setters';
-// import Outline from '@ali/lowcode-plugin-outline-pane';
+// import { registerSetters } from '@ali/lowcode-setters';
+import Outline from '@ali/lowcode-plugin-outline-pane';
 
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
 import { Skeleton, SettingsPrimaryPane } from '@ali/lowcode-editor-skeleton';
 
-import Preview from '@ali/lowcode-plugin-sample-preview';
-// import SourceEditor from '@ali/lowcode-plugin-source-editor';
 import { i18nReducer } from './i18n-reducer';
 import { InstanceNodeSelector } from './components';
-import { Divider } from '@alifd/next';
 
 export const editor = new Editor();
 globalContext.register(editor, Editor);
@@ -81,24 +78,14 @@ skeleton.add({
   type: 'Panel',
   content: SettingsPrimaryPane,
 });
-// skeleton.add({
-//   area: 'leftArea',
-//   name: 'outlinePane',
-//   type: 'PanelDock',
-//   content: Outline,
-//   panelProps: {
-//     area: 'leftFixedArea',
-//   },
-// });
-
 skeleton.add({
-  area: 'topArea',
-  type: 'Dock',
-  name: 'preview',
-  props: {
-    align: 'right',
+  area: 'leftArea',
+  name: 'outlinePane',
+  type: 'PanelDock',
+  content: Outline,
+  panelProps: {
+    area: 'leftFixedArea',
   },
-  content: Preview,
 });
 
 // skeleton.add({
