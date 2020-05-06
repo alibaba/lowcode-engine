@@ -48,12 +48,27 @@ export class InstanceNodeSelector extends React.Component<IProps, IState> {
       node.select();
     }
   };
-
+  onMouseOver = (node: Node) => (_: any, flag = true) => {
+    if (node && typeof node.hover === 'function') {
+      node.hover(flag);
+    }
+  };
+  onMouseOut = (node: Node) => (_: any, flag = false) => {
+    if (node && typeof node.hover === 'function') {
+      node.hover(flag);
+    }
+  };
   renderNodes = (node: Node) => {
     const nodes = this.state.parentNodes || [];
     const children = nodes.map((node, key) => {
       return (
-        <div key={key} onClick={this.onSelect(node)} className="instance-node-selector-node">
+        <div
+          key={key}
+          onClick={this.onSelect(node)}
+          onMouseEnter={this.onMouseOver(node)}
+          onMouseLeave={this.onMouseOut(node)}
+          className="instance-node-selector-node"
+        >
           <div className="instance-node-selector-node-content">
             <Title
               className="instance-node-selector-node-title"
