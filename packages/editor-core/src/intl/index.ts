@@ -37,9 +37,12 @@ function injectVars(msg: string, params: any, locale: string): string {
   });*/
 }
 
-export function intl(data: any, params?: object): string {
+export function intl(data: any, params?: object): ReactNode {
   if (!isI18nData(data)) {
     return data;
+  }
+  if (data.intl) {
+    return data.intl;
   }
   const locale = globalLocale.getLocale();
   const tries = generateTryLocales(locale);

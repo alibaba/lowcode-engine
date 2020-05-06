@@ -1,6 +1,8 @@
 // all this file for polyfill vision logic
 
 import { isValidElement } from 'react';
+import { isSetterConfig } from '@ali/lowcode-types';
+import { getSetter } from '@ali/lowcode-editor-core';
 
 function getHotterFromSetter(setter) {
   return setter && (setter.Hotter || (setter.type && setter.type.Hotter)) || []; // eslint-disable-line
@@ -29,15 +31,22 @@ export class Transducer {
   constructor(context, config) {
     let { setter } = config;
 
-    // 1. validElement 
+    // 1. validElement
     // 2. SetterConfig
-    // 3. SetterConfig[] 
+    // 3. SetterConfig[]
     if (Array.isArray(setter)) {
       setter = setter[0];
     } else if (isValidElement(setter) && setter.type.displayName === 'MixedSetter') {
       setter = setter.props.setters[0];
     } else if (typeof setter === 'object' && setter.componentName === 'MixedSetter') {
       setter = setter.props.setters[0];
+    }
+
+    if (isSetterConfig(setter)) {
+      setter = setter.componentName;
+    }
+    if (typeof setter === 'string') {
+      setter = getSetter(setter);
     }
 
     this.setterTransducer = combineTransducer(

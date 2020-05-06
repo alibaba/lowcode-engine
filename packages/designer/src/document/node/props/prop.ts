@@ -221,7 +221,7 @@ export class Prop implements IPropParent {
     } else {
       const owner = this.props.owner;
       this._slotNode = owner.document.createNode<SlotNode>(slotSchema);
-      this._slotNode.internalSetParent(owner as any);
+      owner.addSlot(this._slotNode);
       this._slotNode.internalSetSlotFor(this);
     }
     this.dispose();

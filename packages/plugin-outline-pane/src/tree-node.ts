@@ -122,7 +122,7 @@ export default class TreeNode {
       return title;
     }
     if (isI18nData(title)) {
-      return intl(title);
+      return intl(title) as string;
     }
     return this.node.componentName;
   }

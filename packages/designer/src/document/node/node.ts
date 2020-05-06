@@ -160,8 +160,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   private transformProps(props: any): any {
     // FIXME! support PropsList
-    return this.document.designer.transformProps(props, this, TransformStage.Init);
+    const x = this.document.designer.transformProps(props, this, TransformStage.Init);
 
+    return x;
     // TODO: run transducers in metadata.experimental
   }
 
@@ -183,19 +184,19 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.isParental() && this.componentMeta.isContainer;
   }
 
-  isRoot(): this is RootNode {
+  isRoot(): boolean {
     return this.document.rootNode == (this as any);
   }
 
-  isPage(): this is PageNode {
+  isPage(): boolean {
     return this.isRoot() && this.componentName === 'Page';
   }
 
-  isComponent(): this is ComponentNode {
+  isComponent(): boolean {
     return this.isRoot() && this.componentName === 'Component';
   }
 
-  isSlot(): this is SlotNode {
+  isSlot(): boolean {
     return this._slotFor != null && this.componentName === 'Slot';
   }
 
@@ -225,8 +226,12 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       return;
     }
 
-    if (!this.isSlot() && this._parent) {
-      this._parent.children.delete(this);
+    if (this._parent) {
+      if (this.isSlot()) {
+        this._parent.removeSlot(this, false);
+      } else {
+        this._parent.children.delete(this);
+      }
     }
 
     this._parent = parent;
@@ -258,8 +263,12 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * 移除当前节点
    */
   remove() {
-    if (!this.isSlot() && this.parent) {
-      this.parent.children.delete(this, true);
+    if (this.parent) {
+      if (this.isSlot()) {
+        this.parent.removeSlot(this, true);
+      } else {
+        this.parent.children.delete(this, true);
+      }
     }
   }
 
@@ -295,24 +304,13 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.props.export(TransformStage.Serilize).props || null;
   }
 
+  @obx.val _slots: Node[] = [];
   @computed hasSlots() {
-    for (const item of this.props) {
-      if (item.type === 'slot') {
-        return true;
-      }
-    }
-    return false;
+    return this._slots.length > 0;
   }
 
-  @computed get slots() {
-    // TODO: optimize recore/obx, array maked every time, donot as changed
-    const slots: Node[] = [];
-    this.props.forEach((item) => {
-      if (item.type === 'slot') {
-        slots.push(item.slotNode!);
-      }
-    });
-    return slots;
+  get slots() {
+    return this._slots;
   }
 
   @obx.ref private _conditionGroup: ExclusiveGroup | null = null;
@@ -540,6 +538,28 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    */
   comparePosition(otherNode: Node): PositionNO {
     return comparePosition(this, otherNode);
+  }
+
+  /**
+   * 删除一个Slot节点
+   */
+  removeSlot(slotNode: Node, purge = false): boolean {
+    const i = this._slots.indexOf(slotNode);
+    if (i < 0) {
+      return false;
+    }
+    const deleted = this._slots.splice(i, 1)[0];
+    if (purge) {
+      // should set parent null
+      deleted.internalSetParent(null);
+      deleted.purge();
+    }
+    return false;
+  }
+
+  addSlot(slotNode: Node) {
+    slotNode.internalSetParent(this as ParentalNode);
+    this._slots.push(slotNode);
   }
 
   private purged = false;

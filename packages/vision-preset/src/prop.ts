@@ -2,11 +2,12 @@ import { Component } from 'react';
 import { EventEmitter } from 'events';
 import { fromJS, Iterable, Map as IMMap } from 'immutable';
 import logger from '@ali/vu-logger';
-import { uniqueId, cloneDeep, isDataEqual, combineInitial, Transducer } from '@ali/ve-utils';
+import { cloneDeep, isDataEqual, combineInitial, Transducer } from '@ali/ve-utils';
 import I18nUtil from '@ali/ve-i18n-util';
 import { getSetter } from '@ali/lowcode-editor-core';
 import { editor } from './editor';
 import { OldPropConfig, DISPLAY_TYPE } from './bundle/upgrade-metadata';
+import { uniqueId } from '@ali/lowcode-utils';
 
 type IPropConfig = OldPropConfig;
 
@@ -108,7 +109,7 @@ export default class Prop implements IVariableSettable {
       this.parent = parent;
     }
 
-    this.id = uniqueId(null as any, 'prop', 'engine-prop');
+    this.id = uniqueId('prop');
 
     if (typeof config.setter === 'string') {
       config.setter = getSetter(config.setter)?.component as any;

@@ -1,4 +1,5 @@
 import { TransformedComponentMetadata, FieldConfig, SettingTarget } from '@ali/lowcode-types';
+import { IconSlot } from '../icons/slot';
 
 export default function(metadata: TransformedComponentMetadata): TransformedComponentMetadata {
   const { componentName, configure = {} } = metadata;
@@ -80,7 +81,21 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
     });
   }
   //  通用设置
-  const propsGroup = props || [];
+  let propsGroup = props || [];
+  const basicInfo: any = {};
+  if (componentName === 'Slot') {
+    basicInfo.icon = IconSlot;
+    propsGroup = [{
+      name: '___title',
+      title: {
+        type: 'i18n',
+        'en-US': 'Slot Title',
+        'zh-CN': '插槽标题'
+      },
+      setter: 'StringSetter',
+      defaultValue: '插槽容器'
+    }]
+  }
   /*
   propsGroup.push({
     name: '#generals',
@@ -186,6 +201,9 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
           title: { type: 'i18n', 'zh-CN': '是否渲染', 'en-US': 'Condition' },
           setter: [{
             componentName: 'BoolSetter',
+            props: {
+              defaultValue: true,
+            }
           }, {
             componentName: 'VariableSetter'
           }],
@@ -243,6 +261,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
 
   return {
     ...metadata,
+    ...basicInfo,
     configure: {
       ...configure,
       combined,
