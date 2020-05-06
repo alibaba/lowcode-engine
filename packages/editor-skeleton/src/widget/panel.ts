@@ -60,6 +60,9 @@ export default class Panel implements IWidget {
     this.plain = hideTitleBar || !title;
     this.help = help;
     if (Array.isArray(content)) {
+      if (content.length === 1) {
+        // todo: not show tabs
+      }
       this.container = this.skeleton.createContainer(
         name,
         (item) => {

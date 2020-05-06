@@ -59,14 +59,14 @@ export default class PanelDock implements IWidget {
     this.id = uniqueId(`dock:${name}$`);
     this.panelName = config.panelName || name;
     if (content) {
+      const _panelProps: any = { ...panelProps };
+      if (_panelProps.title == null && props) {
+        _panelProps.title = composeTitle(props.title, undefined, props.description, true, true);
+      }
       this._panel = this.skeleton.add({
         type: "Panel",
         name: this.panelName,
-        props: {
-          // FIXME! give default title for panel
-          title: props ? composeTitle(props?.title, props?.icon, props?.description, true) : '',
-          ...panelProps,
-        },
+        props: _panelProps,
         contentProps,
         content,
         area: panelProps?.area
