@@ -12,6 +12,8 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
   }
 
   private dispose?: () => void;
+  // private focusing?: FocusingItem;
+  private shell: HTMLElement | null = null;
   componentDidMount() {
     const { area } = this.props;
     const triggerClose = () => area.setVisible(false);
@@ -19,18 +21,44 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
     this.dispose = () => {
       area.skeleton.editor.removeListener('designer.dragstart', triggerClose);
     }
+
+    /*
+    this.focusing = focusingTrack.create(this.shell!, {
+      onEsc: () => {
+        this.props.area.setVisible(false);
+      },
+      onBlur: () => {
+        this.props.area.setVisible(false);
+      },
+      // modal: boolean
+    });
+    */
+
+    this.onEffect();
+  }
+
+  onEffect() {
+    /*
+    const { area } = this.props;
+    if (area.visible) {
+      this.focusing?.active();
+    } else {
+      this.focusing?.suspense();
+    }
+    */
+  }
+
+  componentDidUpdate() {
+    this.onEffect();
   }
 
   componentWillUnmount() {
+    // this.focusing?.purge();
     this.dispose?.();
   }
 
   render() {
     const { area } = this.props;
-    // TODO: add focusingManager
-    // focusin set focus (push|replace)
-    // focusout remove focus
-    // onEsc
     const width = area.current?.config.props?.width;
     const hideTitleBar = area.current?.config.props?.hideTitleBar;
     const style = width ? {
@@ -38,6 +66,7 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
     } : undefined;
     return (
       <div
+        ref={(ref) => { this.shell = ref }}
         className={classNames('lc-left-float-pane', {
           'lc-area-visible': area.visible,
         })}
