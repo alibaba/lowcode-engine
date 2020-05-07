@@ -1,3 +1,4 @@
+import { EventEmitter } from 'events';
 import { createElement, ReactNode } from 'react';
 import { obx } from '@ali/lowcode-editor-core';
 import { uniqueId, createContent } from '@ali/lowcode-utils';
@@ -13,8 +14,9 @@ export default class Panel implements IWidget {
   readonly isWidget = true;
   readonly name: string;
   readonly id: string;
-  @obx.ref inited: boolean = false;
-  @obx.ref private _actived: boolean = false;
+  @obx.ref inited = false;
+  @obx.ref private _actived = false;
+  private emitter = new EventEmitter();
   get actived(): boolean {
     return this._actived;
   }
@@ -46,7 +48,7 @@ export default class Panel implements IWidget {
 
   readonly title: TitleContent;
   readonly help?: HelpTipConfig;
-  private plain: boolean = false;
+  private plain = false;
 
   private container?: WidgetContainer<Panel, PanelConfig>;
   private parent?: WidgetContainer;
@@ -143,9 +145,11 @@ export default class Panel implements IWidget {
       }
       this._actived = true;
       this.parent?.active(this);
+      this.emitter.emit('activechange', true);
     } else if (this.inited) {
       this._actived = false;
       this.parent?.unactive(this);
+      this.emitter.emit('activechange', false);
     }
   }
 
@@ -179,6 +183,16 @@ export default class Panel implements IWidget {
    * @deprecated
    */
   setPosition(position: string) {
+    // noop
+  }
+  /**
+   * @deprecated
+   */
+  onActiveChange(fn: (flag: boolean) => void): () => void {
+    this.emitter.on('activechange', fn);
+    return () => {
+      this.emitter.removeListener('activechange', fn);
+    };
   }
 }
 
