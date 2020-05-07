@@ -1,24 +1,26 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Select, Balloon } from '@alife/next';
+import { Select, Balloon, Icon } from '@alife/next';
 import * as acorn from 'acorn';
 
 import { isJSExpression, generateI18n } from './locale/utils';
 import zhCN from './locale/zh-CN';
 
+import './index.scss';
+
 const { Option, AutoComplete } = Select;
 const { Tooltip } = Balloon;
 const helpMap = {
   this: '容器上下文对象',
-  'this.state': '容器的state',
-  'this.props': '容器的props',
-  'this.context': '容器的context',
-  'this.page': '页面上下文对象',
-  'this.component': '组件上下文对象',
-  'this.constants': '应用常量对象',
-  'this.utils': '应用工具对象',
-  'this.dataSourceMap': '容器数据源Map',
-  'this.field': '表单Field对象'
+  'state': '容器的state',
+  'props': '容器的props',
+  'context': '容器的context',
+  'schema': '页面上下文对象',
+  'component': '组件上下文对象',
+  'constants': '应用常量对象',
+  'utils': '应用工具对象',
+  'dataSourceMap': '容器数据源Map',
+  'field': '表单Field对象'
 }
 
 export default class ExpressionView extends PureComponent {
@@ -45,7 +47,7 @@ export default class ExpressionView extends PureComponent {
   i18n: any;
   t: void;
   $input: any;
-  listenerFun: (event: any) => void;
+  listenerFun: ((event: any) => void) | undefined;
 
   static getInitValue(val: { value: any; match: (arg0: RegExp) => any; }) {
     if (isJSExpression(val)) {
@@ -81,51 +83,12 @@ export default class ExpressionView extends PureComponent {
   onChange(value: string, actionType: string) {
     let realInputValue = value;
     let realDataSource = null;
-    const cursorIndex = this.getInputCursorPosition();
     let nextCursorIndex: number;
     //更新值
     if (actionType === 'itemClick' || actionType === 'enter') {
       let curValue = this.state.value;
       if (curValue) {
-        //如果是非.结束，则替换当前这个变量；
-        let preStr = curValue.substr(0, cursorIndex);
-        let nextStr = curValue.substr(cursorIndex);
-        let preArr = preStr.split('.');
-        let preArrLen = preArr.length;
-        let tarPreStr = '';
-        if (!preArr[preArrLen - 1]) {
-          //如果是.结束，则增加到.后面
-          if (preArr[preArrLen - 2] === 'this') {
-            preArr = preArr.slice(0, preArrLen - 2);
-            preArr.push(value);
-            tarPreStr = preArr.join('.');
-          } else {
-            tarPreStr = preStr + value;
-          }
-        } else {
-          if (preArr[preArrLen - 2] === 'this') {
-            preArr = preArr.slice(0, preArrLen - 2);
-          } else {
-            preArr = preArr.slice(0, preArrLen - 1);
-          }
-          preArr.push(value);
-          tarPreStr = preArr.join('.');
-        }
-        realInputValue = tarPreStr + nextStr;
-        realDataSource = this.getDataSource(tarPreStr + '.') || [];
-        nextCursorIndex = tarPreStr.length;
-      }
-    } else {
-      let tarPreStr = value.substr(0, cursorIndex);
-      if (tarPreStr) {
-        let lastChar = tarPreStr.charAt(tarPreStr.length - 1);
-        if (lastChar === '.') {
-          realDataSource = this.getDataSource(tarPreStr) || [];
-        } else {
-          realDataSource = this.getDataSource(tarPreStr + '.');
-        }
-      } else {
-        realDataSource = this.getDataSource('this.');
+        realInputValue = curValue + realInputValue;
       }
     }
     //更新数据源
@@ -154,21 +117,16 @@ export default class ExpressionView extends PureComponent {
    * @return {Array}
    */
   getDataSource(tempStr: string): Array<any> {
-    if (tempStr === '' || /[^\w\.]$/.test(tempStr)) {
-      return this.getDataSource('this.') || [];
+    if (/[^\w\.]$/.test(tempStr)) {
+      return [];
+    } else if (tempStr === null || tempStr === '') {
+      return this.getContextKeys([]);
     } else if (/\w\.$/.test(tempStr)) {
       let currentField = this.getCurrentFiled(tempStr);
       if (!currentField) return null;
       let tempKeys = this.getObjectKeys(currentField.str);
       tempKeys = this.getContextKeys(tempKeys);
       if (!tempKeys) return null;
-      //给默认情况增加this
-      if (tempStr === 'this.') {
-        tempKeys = tempKeys.map((item: string) => {
-          return 'this.' + item;
-        });
-        tempKeys.unshift('this');
-      }
       return tempKeys;
     } else if (/\.$/.test(tempStr)) {
       return [];
@@ -202,34 +160,31 @@ export default class ExpressionView extends PureComponent {
    * @param  {Array}
    * @return {Array}
    */
-  getContextKeys(keys: any) {
-    // let context = {};
-    // const { appHelper } = this.context;
-    // const activeKey = appHelper && appHelper.activeKey;
-    // if (!activeKey) return;
-    // const activeCtx = appHelper.schemaHelper.compCtxMap && appHelper.schemaHelper.compCtxMap[activeKey];
-    // if (!activeCtx) return null;
-    // let __self = activeCtx;
-    // if (keys && keys.length > 1) {
-    //   keys.shift(0);
-    //   let path = '/' + keys.join('/');
-    //   path = path.replace(/[\[\]]/g, '/');
-    //   context = jsonuri.get(__self, path);
-    //   if (context && typeof context === 'object') {
-    //     return this.filterKey(context);
-    //   }
-    // } else if (keys && keys[0] === 'this') {
-    //   return this.filterKey(__self);
-    // }
-    // return null;
-    return [
-      "page",
-      "component"
-    ]
+  getContextKeys(keys: []) {
+    const editor = this.props.field.editor;
+    console.log(editor);
+    const limitKeys = ['schema', 'utils', 'constants'];
+    if (keys.length === 0) return limitKeys;
+    if (!limitKeys.includes(keys[0])) return [];
+    let result = [];
+    let keyValue = editor;
+    let assert = false;
+    keys.forEach(item => {
+      if (!keyValue[item] || typeof keyValue[item] !== 'object') {
+        assert = true;
+      }
+      if (keyValue[item]) {
+        keyValue = keyValue[item];
+      }
+    })
+    if (assert) return [];
+    result = Object.keys(keyValue);
+    return result;
+    // return utilsKeys.concat(constantsKeys).concat(schemaKeys);
   }
 
   /*过滤key */
-  filterKey(obj: any) {
+  filterKey(obj: any, name: string) {
     let filterKeys = [
       'reloadDataSource',
       'REACT_HOT_LOADER_RENDERED_GENERATION',
@@ -244,7 +199,7 @@ export default class ExpressionView extends PureComponent {
     let result = [];
     for (let key in obj) {
       if (key.indexOf('_') !== 0 && filterKeys.indexOf(key) === -1) {
-        result.push(key);
+        result.push(`${name}.${key}`);
       }
     }
     return result;
@@ -259,11 +214,15 @@ export default class ExpressionView extends PureComponent {
   filterOption(inputValue: string, item: { value: string | any[]; }) {
     const cursorIndex = this.getInputCursorPosition();
     let preStr = inputValue.substr(0, cursorIndex);
-    let lastKey = preStr.split('.').slice(-1);
+    let lastKey: string[] = preStr.split('.').slice(-1);
     if (!lastKey) return true;
     if (item.value.indexOf(lastKey) > -1) return true;
     return false;
   }
+
+  // handleClick = () => {
+  //   this.props.field.editor.emit('variableBindDialog.open');
+  // }
 
   render() {
     const { value, dataSource } = this.state;
@@ -293,26 +252,30 @@ export default class ExpressionView extends PureComponent {
             isValObject ? (
               value
             ) : (
-              <AutoComplete
-                {...this.props}
-                style={{ width: '100%' }}
-                dataSource={dataSource}
-                placeholder={placeholder || this.i18n('jsExpression')}
-                value={value}
-                disabled={isValObject}
-                innerBefore={<span style={{ color: '#999', marginLeft: 4 }}>{'{{'}</span>}
-                innerAfter={<span style={{ color: '#999', marginRight: 4 }}>{'}}'}</span>}
-                itemRender={({ value }) => {
-                  return (
-                    <Option key={value} text={value} value={value}>
-                      <div className="code-input-value">{value}</div>
-                      <div className="code-input-help">{helpMap[value]}</div>
-                    </Option>
-                  );
-                }}
-                onChange={this.onChange.bind(this)}
-                filter={this.filterOption.bind(this)}
-              />
+              <div>
+                <AutoComplete
+                  {...this.props}
+                  style={{ width: '100%' }}
+                  dataSource={dataSource}
+                  placeholder={placeholder || this.i18n('jsExpression')}
+                  value={value}
+                  disabled={isValObject}
+                  innerBefore={<span style={{ color: '#999', marginLeft: 4 }}>{'{{'}</span>}
+                  innerAfter={<span style={{ color: '#999', marginRight: 4 }}>{'}}'}</span>}
+                  popupClassName="expression-setter-item-inner"
+                  itemRender={({ value }) => {
+                    console.log(value);
+                    return (
+                      <Option key={value} text={value} value={value}>
+                        <div className="code-input-value">{value}</div>
+                        <div className="code-input-help">{helpMap[value]}</div>
+                      </Option>
+                    );
+                  }}
+                  onChange={this.onChange.bind(this)}
+                  filter={this.filterOption.bind(this)}
+                />
+              </div>
             )
           }
         >
@@ -363,7 +326,7 @@ export default class ExpressionView extends PureComponent {
    * 字符串取得对象keys
    */
   getObjectKeys(str: string) {
-    let keys = [];
+    let keys: string | any[] = [];
     if (str) keys = str.split('.');
     return keys.slice(0, keys.length - 1);
   }
