@@ -126,7 +126,11 @@ export default class Panel implements IWidget {
   }
 
   active(item?: Panel | string | null) {
-    this.container?.active(item);
+    if (item) {
+      this.container?.active(item);
+    } else {
+      this.setActive(true);
+    }
   }
 
   getName() {

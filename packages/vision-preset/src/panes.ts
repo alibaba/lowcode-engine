@@ -69,17 +69,7 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
     newConfig.type = 'PanelDock';
     newConfig.area = 'left';
     newConfig.props.description = description || title;
-    const {
-      contents,
-      hideTitleBar,
-      tip,
-      width,
-      maxWidth,
-      height,
-      maxHeight,
-      menu,
-      isAction
-    } = config;
+    const { contents, hideTitleBar, tip, width, maxWidth, height, maxHeight, menu, isAction } = config;
     if (menu) {
       newConfig.props.title = menu;
     }
@@ -97,14 +87,14 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
       if (contents && Array.isArray(contents)) {
         newConfig.content = contents.map(({ title, content, tip }) => {
           return {
-            type: "Panel",
+            type: 'Panel',
             name: title,
             content,
             props: {
               title,
               help: tip,
-            }
-          }
+            },
+          };
         });
       }
     }
@@ -163,7 +153,11 @@ const dockPane = Object.assign(skeleton.leftArea, {
       return;
     }
     const name = item.name || item;
-    skeleton.getPanel(name)?.active();
+    const pane = skeleton.getPanel(name);
+    if (!pane) {
+      console.warn(`Could not find pane with name ${name}`);
+    }
+    pane?.active();
   },
 
   /**
