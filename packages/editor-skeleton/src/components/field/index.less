@@ -13,7 +13,7 @@
       align-items: center;
     }
     .lc-field-icon {
-      margin-right: @x-gap;
+      // margin-right: @x-gap;
       transform-origin: center;
       transition: transform 0.1s;
     }
@@ -21,7 +21,7 @@
 
   &.lc-plain-field {
     // for top-level style
-    padding: 8px 10px;
+    // padding: 8px 10px;
     > .lc-field-body {
       flex: 1;
       min-width: 0;
@@ -34,7 +34,16 @@
     display: flex;
     align-items: center;
     // for top-level style
-    padding: 8px 10px;
+    padding: 16px;
+    &:first-child{
+      padding-top: 16px;
+    }
+    &:last-child{
+      padding-bottom: 16px;
+    }
+    &+.lc-inline-field{
+      padding-top: 0;
+    }
 
     > .lc-field-head {
       width: 70px;
@@ -58,19 +67,29 @@
       border-top: 1px solid var(--color-line-normal);
     }
     > .lc-field-head {
-      padding-left: @x-gap;
+      // padding-left: @x-gap;
       height: 32px;
       display: flex;
       align-items: center;
       font-weight: 500;
-      background: var(--color-block-background-shallow, rgba(31,56,88,.06));
-      border-bottom: 1px solid var(--color-line-normal);
-      color: var(--color-title);
+      // background: var(--color-block-background-shallow, rgba(31,56,88,.06));
+      // border-bottom: 1px solid var(--color-line-normal);
+      // color: var(--color-title);
+      padding: 0 16px;
+      background-color: #F7F9FC;
+      color: #8F9BB3;
       user-select: none;
     }
 
     > .lc-field-body {
-      padding: @y-gap @x-gap/2;
+      // padding: @y-gap @x-gap/2;
+      padding: 16px;
+      .lc-inline-field{
+        margin-bottom: 16px;
+        &:last-child{
+          margin-bottom: 0;
+        }
+      }
     }
 
     + .lc-inline-field {
@@ -94,7 +113,11 @@
   }
 
   &.lc-accordion-field {
+    position: relative;
     // collapsed
+    &:last-child.lc-field-is-collapsed{
+      border-bottom: 1px solid var(--color-line-normal);
+    }
     &.lc-field-is-collapsed {
       > .lc-field-head .lc-field-icon {
         transform: rotate(180deg);
@@ -106,14 +129,15 @@
 
     // 邻近的保持上下距离
     + .lc-field {
-      margin-top: @y-gap;
+      // margin-top: @y-gap;
     }
   }
 
   // 2rd level reset
   .lc-field-body {
     .lc-inline-field {
-      padding: @y-gap @x-gap/2 0 @x-gap/2;
+      // padding: @y-gap @x-gap/2 0 @x-gap/2;
+      padding: 0;
       &:first-child {
         padding-top: 0;
       }
@@ -132,7 +156,8 @@
         background: var(--color-block-background-light);
         border-bottom-color: var(--color-line-light, rgba(31, 56, 88, .1));
         > .lc-field-icon {
-          margin-right: @x-gap/2;
+          // margin-right: @x-gap/2;
+          margin-right: 0;
         }
       }
     }
