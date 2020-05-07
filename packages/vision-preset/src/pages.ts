@@ -18,6 +18,9 @@ const pages = Object.assign(project, {
 
     if (pages[0].componentsTree[0]) {
       pages[0].componentsTree[0].componentName = 'Page';
+      // FIXME
+      pages[0].componentsTree[0].lifeCycles = {};
+      pages[0].componentsTree[0].methods = {};
     }
 
     project.load({
