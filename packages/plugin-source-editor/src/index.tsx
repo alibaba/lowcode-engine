@@ -37,19 +37,23 @@ const defaultEditorOption = {
       vertical: 'auto',
       horizontal: 'auto',
     },
-  }
+  },
 };
+
+interface FunctionEventParam {
+  functionName: String;
+}
 
 export default class SourceEditor extends Component<{
   editor: Editor;
 }> {
-  private monocoEditer:Object;
-  private editorCmd:Object;
+  private monocoEditer: Object;
+  private editorCmd: Object;
 
   state = {
     isShow: false,
-    tabKey: TAB_KEY.JS_TAB
-  }
+    tabKey: TAB_KEY.JS_TAB,
+  };
 
   componentWillMount() {
     const { editor } = this.props;
@@ -62,9 +66,18 @@ export default class SourceEditor extends Component<{
     });
 
     // 添加函数
-    editor.on('sourceEditor.addFunction',(params:Object)=>{
-      this.callEditorEvent('sourceEditor.addFunction',params);
+    editor.on('sourceEditor.addFunction', (params: FunctionEventParam) => {
+      this.callEditorEvent('sourceEditor.addFunction', params);
+      this.openPluginPannel();
+    });
+
+    // 定位函数
+    editor.on('sourceEditor.focusByFunction',(params:FunctionEventParam)=>{
+      this.callEditorEvent('sourceEditor.focusByFunction', params);
+      this.openPluginPannel();
     })
+
+
 
     editor.once('designer.mount', (designer: Designer) => {
       // let schema = designer.project.getSchema();
@@ -90,7 +103,7 @@ export default class SourceEditor extends Component<{
             },
             methods: {
               //自定义方法对象：     选填 对象类型
-              testFunc: {
+              getData: {
                 //自定义方法：                  选填 函数类型
                 type: 'JSExpression',
                 value: "function() {\n \t\tconsole.log('testFunc');\n \t}",
@@ -102,37 +115,41 @@ export default class SourceEditor extends Component<{
 
       this.initCode(schema);
     });
-
-
-    setTimeout (()=>{
-      editor.emit('sourceEditor.addFunction',{
-        functionName:'testgaga'
-      })
-    },3000)
-
   }
 
-  callEditorEvent = (eventName,params) => {
-    if (!this.monocoEditer){
+  openPluginPannel = () => {
+    const {editor} = this.props;
+    // 判断面板是否处于激活状态
+    if (!editor.leftNav || editor.leftNav != 'sourceEditor') {
+      // 打开面板
+      editor.emit('leftNav.change', 'sourceEditor');
+    }
+  }
+
+  callEditorEvent = (eventName, params) => {
+    if (!this.monocoEditer) {
       this.editorCmd = {
         eventName,
-        params
+        params,
       };
       return;
     }
 
-    if (eventName === 'sourceEditor.addFunction'){
-        this.addFunction(params);
+    if (eventName === 'sourceEditor.addFunction') {
+      this.addFunction(params);
+    }else if (eventName === 'sourceEditor.focusByFunction'){
+      this.focusByFunctionName(params);
     }
 
-  }
+
+  };
 
   initCode = (schema) => {
-    let jsCode = js_beautify(transfrom.schema2Code(schema),{ indent_size: 2, indent_empty_lines: true });
+    let jsCode = js_beautify(transfrom.schema2Code(schema), { indent_size: 2, indent_empty_lines: true });
     let css;
 
     if (schema.componentTree[0].css) {
-      css = css_beautify(schema.componentTree[0].css,{ indent_size: 2 });
+      css = css_beautify(schema.componentTree[0].css, { indent_size: 2 });
     }
 
     this.setState({
@@ -140,24 +157,57 @@ export default class SourceEditor extends Component<{
       css,
       selectTab: TAB_KEY.JS_TAB,
     });
-
   };
 
-  addFunction (params){
+  /**
+   * 在js面板中添加一个新函数
+   * @param params
+   */
+  addFunction(params: FunctionEventParam) {
     const count = this.monocoEditer.getModel().getLineCount() || 0;
     const range = new monaco.Range(count, 1, count, 1);
     const functionCode = transfrom.getNewFunctionCode(params.functionName);
-    this.monocoEditer.executeEdits('log-source', [{ identifier: 'event_id', range:range , text: functionCode, forceMoveMarkers:true }]);
+    this.monocoEditer.executeEdits('log-source', [
+      { identifier: 'event_id', range: range, text: functionCode, forceMoveMarkers: true },
+    ]);
+    setTimeout(() => {
+      let newPosition = new monaco.Position(count + 1, 2);
+      this.monocoEditer.setPosition(newPosition);
+      this.monocoEditer.focus();
+    }, 100);
 
-    this.updateCode(this.monocoEditer.getModel().getValue())
+    this.updateCode(this.monocoEditer.getModel().getValue());
+  }
+
+  /**
+   * 根据函数名进行定位
+   * @param functionName
+   */
+  focusByFunctionName(params: FunctionEventParam) {
+    const functionName = params.functionName;
+    const matchedResult = this.monocoEditer
+      .getModel()
+      .findMatches(`${functionName}\\s*\\([\\s\\S]*\\)[\\s\\S]*\\{`, false, true)[0];
+    if (matchedResult) {
+
+      setTimeout(()=>{
+        this.monocoEditer.revealLineInCenter(matchedResult.range.startLineNumber);
+        this.monocoEditer.setPosition({
+          column: matchedResult.range.endColumn,
+          lineNumber: matchedResult.range.endLineNumber,
+        });
+
+        this.monocoEditer.focus();
+      },100)
+    }
   }
 
   editorDidMount = (editor, monaco) => {
     console.log('editorDidMount', editor);
     this.monocoEditer = editor;
 
-    if (this.editorCmd){
-      this.callEditorEvent(this.editorCmd.eventName,this.editorCmd.params);
+    if (this.editorCmd) {
+      this.callEditorEvent(this.editorCmd.eventName, this.editorCmd.params);
     }
 
     // var commandId = editor.addCommand(
@@ -214,7 +264,7 @@ export default class SourceEditor extends Component<{
     }
 
     transfrom.code2Schema(newCode);
-  }
+  };
 
   render() {
     const { isShow, selectTab, jsCode, css } = this.state;
@@ -226,7 +276,7 @@ export default class SourceEditor extends Component<{
     return (
       <div className="source-editor-container">
         <Tab size="small" shape="wrapped" onChange={this.onTabChange}>
-           {tabs.map((item) => (
+          {tabs.map((item) => (
             <Tab.Item key={item.key} title={item.tab}>
               {isShow && (
                 <MonacoEditor

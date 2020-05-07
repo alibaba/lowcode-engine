@@ -190,7 +190,7 @@ export default class EventsSetter extends Component<{
         </div>
         <div className="event-cell" style={{ marginTop: '8px' }}>
           <Icon type="attachment" size="small" className="related-icon" />
-          <span className="related-event-name">
+          <span className="related-event-name" onClick={()=>this.onRelatedEventNameClick(record.relatedEventName)}>
             {record.relatedEventName || ''}
           </span>
         </div>
@@ -248,6 +248,8 @@ export default class EventsSetter extends Component<{
     });
   };
 
+
+
   onEventMenuClick = (eventName: String) => {
     const { selectType, eventDataList } = this.state;
     eventDataList.push({
@@ -263,6 +265,13 @@ export default class EventsSetter extends Component<{
     this.closeEventMenu();
     this.openDialog(eventName);
   };
+
+  onRelatedEventNameClick = (eventName:String) => {
+    const {editor} =  this.props.field;
+    editor.emit('sourceEditor.focusByFunction',{
+      functionName:eventName
+    })
+  }
 
   closeEventMenu = () => {
     if (this.state.selectType !== null) {
