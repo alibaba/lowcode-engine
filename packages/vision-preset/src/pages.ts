@@ -6,17 +6,20 @@ const { project } = designer;
 
 export interface OldPageData {
   id: string;
-  layout: RootSchema;
+  componentsTree: RootSchema[];
   [dataAddon: string]: any;
 }
 
 const pages = Object.assign(project, {
   setPages(pages: OldPageData[]) {
-    // FIXME: upgrade schema
-    pages[0].componentsTree.forEach((item: any) => {
-      item.lifeCycles = {};
-      item.methods = {};
-    });
+    if (!pages || !Array.isArray(pages) || pages.length === 0) {
+      throw new Error('pages schema 不合法');
+    }
+
+    if (pages[0].componentsTree[0]) {
+      pages[0].componentsTree[0].componentName = 'Page';
+    }
+
     project.load({
       version: '1.0.0',
       componentsMap: [],
