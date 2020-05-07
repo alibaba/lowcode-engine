@@ -54,20 +54,25 @@ body {
     display: none;
   }
   .lc-panel-title {
-    height: 48px;
-    font-size: 16px;
     // background-color: var(--pane-title-bg-color,rgba(31,56,88,.04));
     display: flex;
     align-items: center;
     justify-content: flex-start;
     padding: 0 15px;
-    border-bottom: 1px solid var(--color-line-normal,rgba(31,56,88,.1));
 
     .lc-help-tip {
       margin-left: 4px;
       color: rgba(0,0,0,0.4);
       cursor: pointer;
     }
+  }
+  > .lc-panel-title {
+    height: 48px;
+    font-size: 16px;
+    padding: 0 15px;
+    border-bottom: 1px solid var(--color-line-normal,rgba(31,56,88,.1));
+    color: #0F1726;
+    font-weight: bold;
   }
 
   .lc-panel-body {
@@ -221,23 +226,6 @@ body {
   }
 }
 
-.my-dock {
-  padding: 0px 10px;
-  cursor: pointer;
-  align-self: stretch;
-  display: flex;
-  align-items: center;
-  .my-title-label {
-    user-select: none;
-  }
-  &.actived, &:hover {
-    background-color: var(--pane-title-bg-color);
-    .my-title {
-      color: var(--color-actived);
-    }
-  }
-}
-
 
 .lc-workbench {
   height: 100%;
@@ -306,8 +294,7 @@ body {
         align-items: center;
         // background: rgba(31,56,88,0.04);
         border-bottom: 1px solid #EDEFF3;
-        margin-top: 48px;
-        .lc-tab-title{
+        .lc-tab-title {
           flex: 1;
           height: 32px;
           display: flex;
@@ -315,14 +302,16 @@ body {
           justify-content: center;
           border-bottom: 2px solid transparent;
           cursor: pointer;
-          &.actived{
+          font-size: 12px;
+          &.actived {
+            color: #0079F2;
             border-bottom-color: #0079F2;
           }
         }
       }
       .lc-tabs-content {
         position: absolute;
-        top: 80px;
+        top: 32px;
         bottom: 0;
         left: 0;
         right: 0;
@@ -346,23 +335,23 @@ body {
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
-        .lc-title{
-          padding: 12px;
+        .lc-title {
           flex-direction: column;
           width: 46px;
           height: 46px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
 
-          svg {
-            // fill: var(--color-icon-normal,rgba(31,56,88,.4));
-          }
-
-          &.has-tip{
+          &.has-tip {
             cursor: pointer;
           }
           &.actived{
             color: #0079F2;
           }
-          .lc-title-icon{
+          .lc-title-icon {
+            height: 20px;
+            width: 20px;
             margin: 0;
             .next-icon:before {
               line-height: 1 !important;

@@ -19,6 +19,8 @@ export function composeTitle(title?: TitleContent, icon?: IconType, tip?: TipCon
           if (tipAsTitle) {
             title = tip as any;
             tip = null;
+          } else {
+            title = undefined;
           }
         }
       }
