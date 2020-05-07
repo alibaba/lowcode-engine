@@ -1,4 +1,4 @@
-import React, { PureComponent, createElement as reactCreateElement } from 'react';
+import React, { Component, PureComponent, createElement as reactCreateElement } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
@@ -11,6 +11,7 @@ import AddonEngine from './addonEngine';
 import TempEngine from './tempEngine';
 import { isEmpty } from '@ali/b3-one/lib/obj';
 import BaseEngine from './base';
+import Div from '@ali/iceluna-comp-div';
 
 window.React = React;
 window.ReactDom = ReactDOM;
@@ -23,6 +24,26 @@ const ENGINE_COMPS = {
   AddonEngine,
   TempEngine,
 };
+
+class FaultComponent extends PureComponent {
+  render() {
+    // FIXME: errorlog
+    console.error('render error', this.props);
+    return <Div>RenderError</Div>;
+  }
+}
+
+class NotFoundComponent extends PureComponent {
+  render() {
+    console.error('component not found', this.props);
+    return <Div {...this.props} />;
+  }
+}
+
+function isReactClass(obj) {
+  return obj && obj.prototype && (obj.prototype.isReactComponent || obj.prototype instanceof Component);
+}
+
 export default class Engine extends PureComponent {
   static dislayName = 'engine';
   static propTypes = {
@@ -86,8 +107,47 @@ export default class Engine extends PureComponent {
     }
   };
 
+  patchDidCatch(Component) {
+    if (!isReactClass(Component)) {
+      return;
+    }
+    if (Component.patchedCatch) {
+      return;
+    }
+    Component.patchedCatch = true;
+    Component.getDerivedStateFromError = (error) => {
+      return { engineRenderError: true, error };
+    };
+    const engine = this;
+    const originRender = Component.prototype.render;
+    Component.prototype.render = function () {
+      if (this.state && this.state.engineRenderError) {
+        return engine.createElement(this.getFaultComponent(), {
+          error: this.state.error,
+          props: this.props,
+        });
+      }
+      return originRender.call(this);
+    };
+    const originShouldComponentUpdate = Component.prototype.shouldComponentUpdate;
+    Component.prototype.shouldComponentUpdate = function (nextProps, nextState) {
+      if (nextState && nextState.engineRenderError) {
+        return true;
+      }
+      return originShouldComponentUpdate ? originShouldComponentUpdate.call(this, nextProps, nextState) : true;
+    };
+  }
+
   createElement(Component, props, children) {
+    // TODO: enable in runtime mode?
+    this.patchDidCatch(Component);
     return (this.props.customCreateElement || reactCreateElement)(Component, props, children);
+  }
+  getNotFoundComponent() {
+    return this.props.notFoundComponent || NotFoundComponent;
+  }
+  getFaultComponent() {
+    return this.props.faultComponent || FaultComponent;
   }
 
   render() {
