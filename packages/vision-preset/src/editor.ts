@@ -1,8 +1,7 @@
-import { isJSBlock, isJSSlot } from '@ali/lowcode-types';
+import { isJSBlock } from '@ali/lowcode-types';
 import { isPlainObject } from '@ali/lowcode-utils';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
 import { Designer, TransformStage, addBuiltinComponentAction } from '@ali/lowcode-designer';
-// import { registerSetters } from '@ali/lowcode-setters';
 import Outline from '@ali/lowcode-plugin-outline-pane';
 import { toCss } from '@ali/vu-css-style';
 
@@ -140,5 +139,5 @@ addBuiltinComponentAction({
   name: 'instance-node-selector',
   content: InstanceNodeSelector,
   important: true,
-  condition: 'always'
+  condition: 'always',
 });

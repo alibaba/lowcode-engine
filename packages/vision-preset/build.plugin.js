@@ -9,6 +9,7 @@ module.exports = ({ onGetWebpackConfig }) => {
         configFile: "./tsconfig.json"
       }]);
 
+    /*
     config
       // 定义插件名称
       .plugin('MonacoWebpackPlugin')
@@ -16,6 +17,7 @@ module.exports = ({ onGetWebpackConfig }) => {
       .use(new MonacoWebpackPlugin({
         languages:["javascript","css","json"]
       }), []);
+      */
     config.plugins.delete('hot');
     config.devServer.hot(false);
   });
