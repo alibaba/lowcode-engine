@@ -70,7 +70,7 @@ body {
     height: 48px;
     font-size: 16px;
     padding: 0 15px;
-    border-bottom: 1px solid var(--color-line-normal,rgba(31,56,88,.1));
+    // border-bottom: 1px solid var(--color-line-normal,rgba(31,56,88,.1));
     color: #0F1726;
     font-weight: bold;
   }
@@ -116,6 +116,9 @@ body {
     }
     */
   }
+  .lc-outline-pane{
+    border-top: 1px solid var(--color-line-normal,rgba(31,56,88,.1));
+  }
 }
 .lc-panel {
   height: 100%;
@@ -160,70 +163,86 @@ body {
   */
   /*覆盖旧面板*/
   /*组件面板*/
-  .ve-component-list {
-    .ve-component-list-body{
-      .ve-component-list-sidebar{
-        .ve-component-list-navigator{
-          .navigator-group{
-            &:last-child{
-              &::after{
-                display: none;
-              }
-            }
-            &::after{
-              content: '';
-              display: block;
-              height: 1px;
-              background-color: #EDEFF3;
-              line-height: 0;
-              margin: 4px 12px 0;
-            }
-            .navigator-group-head{
-              .navigator-group-title{
-                border-bottom: none;
-              }
-            }
-            .navigator-group-item{
-              border-left: 2px solid transparent;
-              &.active{
-                border-left-color: #0079f2;
-                border-right: none;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+  // .ve-component-list {
+  //   .ve-component-list-body{
+  //     .ve-component-list-sidebar{
+  //       .ve-component-list-navigator{
+  //         .navigator-group{
+  //           &:last-child{
+  //             &::after{
+  //               display: none;
+  //             }
+  //           }
+  //           &::after{
+  //             content: '';
+  //             display: block;
+  //             height: 1px;
+  //             background-color: #EDEFF3;
+  //             line-height: 0;
+  //             margin: 4px 12px 0;
+  //           }
+  //           .navigator-group-head{
+  //             .navigator-group-title{
+  //               border-bottom: none;
+  //             }
+  //           }
+  //           .navigator-group-item{
+  //             border-left: 2px solid transparent;
+  //             &.active{
+  //               border-left-color: #0079f2;
+  //               border-right: none;
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
   /*数据源*/
-  .engine-datapool{
-    .engine-datapool-view-group{
-      padding-top: 48px;
-      .engine-datapool-view-group-title{
-        height: 48px;
-        line-height: 48px;
-        font-size: 16px;
-        background-color: transparent;
-        padding: 0 16px;
-        border-bottom: 1px solid #EDEFF3;
-      }
-    }
-  }
+  // .engine-datapool{
+  //   .engine-datapool-view-group{
+  //     padding-top: 48px;
+  //     .engine-datapool-view-group-title{
+  //       height: 48px;
+  //       line-height: 48px;
+  //       font-size: 16px;
+  //       background-color: transparent;
+  //       padding: 0 16px;
+  //       border-bottom: 1px solid #EDEFF3;
+  //     }
+  //   }
+  // }
   /*动作面板*/
-  .ve-action-pane{
-    border-top: none;
-    .rc-tabs{
-      .rc-tabs-bar{
-        background-color: transparent;
-        .rc-tabs-tab{
-          line-height: 1;
-          &.rc-tabs-tab-active{
+  // .ve-action-pane{
+  //   border-top: none;
+  //   .rc-tabs{
+  //     .rc-tabs-bar{
+  //       background-color: transparent;
+  //       .rc-tabs-tab{
+  //         line-height: 1;
+  //         &.rc-tabs-tab-active{
 
-          }
-        }
-      }
-    }
-  }
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+
+  /*设置面板*/
+  // .ve-field .ve-field-head,
+  // .ve-field.ve-accordion2-field > .ve-field-head .ve-field-title-content{
+  //   padding: 0;
+  // }
+  // .ve-field.ve-accordion2-field > .ve-field-split-line{
+  //   display: none;
+  // }
+  // .vs-style .vs-style-source{
+  //   margin: 0 0 16px;
+  // }
+  // .vs-code-button,
+  // .vs-json-button{
+  //   margin: 0;
+  // }
 }
 
 
@@ -238,7 +257,7 @@ body {
     width: 100%;
     display: flex;
     margin-bottom: 2px;
-    padding: 8px;
+    padding: 8px 12px 8px 16px;
 
     .lc-top-area-center{
       flex: 1;
@@ -294,7 +313,7 @@ body {
         align-items: center;
         // background: rgba(31,56,88,0.04);
         border-bottom: 1px solid #EDEFF3;
-        .lc-tab-title {
+        .lc-tab-title{
           flex: 1;
           height: 32px;
           display: flex;
