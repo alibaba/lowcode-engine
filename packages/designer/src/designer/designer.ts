@@ -114,7 +114,6 @@ export class Designer {
           }
         }
       }
-      this.clearLocation();
       if (this.props?.onDragend) {
         this.props.onDragend(e, loc);
       }
@@ -174,6 +173,10 @@ export class Designer {
   }
 
   private _dropLocation?: DropLocation;
+
+  get dropLocation() {
+    return this._dropLocation;
+  }
   /**
    * 创建插入位置，考虑放到 dragon 中
    */

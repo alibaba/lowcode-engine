@@ -1,15 +1,17 @@
 import { obx, computed } from '@ali/lowcode-editor-core';
 import { uniqueId } from '@ali/lowcode-utils';
-import { createElement, ReactNode } from 'react';
+import { createElement, ReactNode, ReactInstance } from 'react';
 import { Skeleton } from '../skeleton';
 import { PanelDockConfig } from '../types';
 import Panel from './panel';
 import { PanelDockView, WidgetView } from '../components/widget-views';
 import { IWidget } from './widget';
 import { composeTitle } from './utils';
+import { findDOMNode } from 'react-dom';
 
 export default class PanelDock implements IWidget {
   readonly isWidget = true;
+  readonly isPanelDock = true;
   readonly id: string;
   readonly name: string;
   readonly align?: string;
@@ -31,11 +33,19 @@ export default class PanelDock implements IWidget {
     return this._body;
   }
 
+  private _shell: ReactInstance | null = null;
   get content(): ReactNode {
     return createElement(WidgetView, {
       widget: this,
+      ref: (ref) => {
+        this._shell = ref;
+      },
       key: this.id,
     });
+  }
+
+  getDOMNode() {
+    return this._shell ? findDOMNode(this._shell) : null;
   }
 
   @obx.ref private _visible: boolean = true;
@@ -64,12 +74,12 @@ export default class PanelDock implements IWidget {
         _panelProps.title = composeTitle(props.title, undefined, props.description, true, true);
       }
       this._panel = this.skeleton.add({
-        type: "Panel",
+        type: 'Panel',
         name: this.panelName,
         props: _panelProps,
         contentProps,
         content,
-        area: panelProps?.area
+        area: panelProps?.area,
       }) as Panel;
     }
   }
@@ -116,4 +126,9 @@ export default class PanelDock implements IWidget {
   showPanel() {
     this.panel?.setActive(true);
   }
+}
+
+
+export function isPanelDock(obj: any): obj is PanelDock {
+  return obj && obj.isPanelDock;
 }

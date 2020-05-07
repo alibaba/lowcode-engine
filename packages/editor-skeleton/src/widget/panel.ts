@@ -9,6 +9,7 @@ import { TitledPanelView, TabsPanelView, PanelView } from '../components/widget-
 import { Skeleton } from '../skeleton';
 import { composeTitle } from './utils';
 import { IWidget } from './widget';
+import PanelDock, { isPanelDock } from './panel-dock';
 
 export default class Panel implements IWidget {
   readonly isWidget = true;
@@ -166,6 +167,12 @@ export default class Panel implements IWidget {
 
   show() {
     this.setActive(true);
+  }
+
+  getAssocDocks(): PanelDock[] {
+    return this.skeleton.widgets.filter(item => {
+      return isPanelDock(item) && item.panelName === this.name;
+    }) as any;
   }
 
   /**

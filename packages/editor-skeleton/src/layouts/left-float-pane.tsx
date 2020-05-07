@@ -23,7 +23,20 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
     }
 
     this.focusing = focusTracker.create({
-      range: this.shell!,
+      range: (e) => {
+        const target = e.target as HTMLElement;
+        if (!target) {
+          return false;
+        }
+        if (this.shell?.contains(target)) {
+          return true;
+        }
+        const docks = area.current?.getAssocDocks();
+        if (docks && docks?.length) {
+          return docks.some(dock => dock.getDOMNode()?.contains(target));
+        }
+        return false;
+      },
       onEsc: () => {
         this.props.area.setVisible(false);
       },

@@ -4,9 +4,10 @@ export class FocusTracker {
       if (this.checkModalDown(e)) {
         return;
       }
-      if (this.first && !this.first.internalCheckInRange(e)) {
-        this.internalSuspenseItem(this.first);
-        this.first.internalTriggerBlur();
+      const first = this.first;
+      if (first && !first.internalCheckInRange(e)) {
+        this.internalSuspenseItem(first);
+        first.internalTriggerBlur();
       }
     };
     win.document.addEventListener('mousedown', checkDown, true);
@@ -42,9 +43,10 @@ export class FocusTracker {
     }
   }
   execEsc() {
-    if (this.first) {
-      this.internalSuspenseItem(this.first);
-      this.first.internalTriggerEsc();
+    const first = this.first;
+    if (first) {
+      this.internalSuspenseItem(first);
+      first.internalTriggerEsc();
     }
   }
   create(config: FocusableConfig) {

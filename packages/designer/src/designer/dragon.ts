@@ -365,6 +365,7 @@ export class Dragon {
           exception = ex;
         }
       }
+      designer.clearLocation();
 
       handleEvents((doc) => {
         if (isBoostFromDragAPI) {
