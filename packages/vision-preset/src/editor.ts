@@ -4,6 +4,7 @@ import { globalContext, Editor } from '@ali/lowcode-editor-core';
 import { Designer, TransformStage, addBuiltinComponentAction } from '@ali/lowcode-designer';
 // import { registerSetters } from '@ali/lowcode-setters';
 import Outline from '@ali/lowcode-plugin-outline-pane';
+import { toCss } from '@ali/vu-css-style';
 
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
 import { Skeleton, SettingsPrimaryPane } from '@ali/lowcode-editor-skeleton';
@@ -65,6 +66,37 @@ function upgradePropsReducer(props: any) {
   return newProps;
 }
 designer.addPropsReducer(upgradePropsReducer, TransformStage.Init);
+
+// 设计器组件样式处理
+function stylePropsReducer(props: any, node: any) {
+  if (props && typeof props === 'object' && props.__style__) {
+    const doc = designer.currentDocument?.simulator?.contentDocument;
+    if (!doc) {
+      return;
+    }
+    const cssId = '_style_pesudo_' + node.id.replace(/\$/g, '_');
+    const cssClass = '_css_pesudo_' + node.id.replace(/\$/g, '_');
+    const dom = doc.getElementById(cssId);
+    if (dom) {
+      dom.parentNode?.removeChild(dom);
+    }
+    let styleProp = props.__style__;
+    if (typeof styleProp === 'object') {
+      styleProp = toCss(styleProp);
+    }
+    if (typeof styleProp === 'string') {
+      const s = doc.createElement('style');
+      props.className = cssClass;
+      s.setAttribute('type', 'text/css');
+      s.setAttribute('id', cssId);
+      doc.getElementsByTagName('head')[0].appendChild(s);
+
+      s.appendChild(doc.createTextNode(styleProp.replace(/:root/g, '.' + cssClass)));
+    }
+  }
+  return props;
+}
+designer.addPropsReducer(stylePropsReducer, TransformStage.Render);
 
 skeleton.add({
   area: 'mainArea',
