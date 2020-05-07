@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.11"></a>
+## [0.8.11](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.10...@ali/lowcode-editor-skeleton@0.8.11) (2020-05-07)
+
+
+### Bug Fixes
+
+* 🐛 history pane zindex ([48f3be1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/48f3be1))
+* 🐛 修复编辑面板 ([a0bad77](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a0bad77))
+* 🐛 绑定动作无法打开代码面板 ([160d6f7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/160d6f7))
+* 在Transducer中添加对MixedSetter的支持 ([7317f2f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7317f2f))
+
+
+### Features
+
+* left pane style ([c149f64](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c149f64))
+* left pane title style; setting pane style ([66e8c25](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/66e8c25))
+
+
+
+
 <a name="0.8.10"></a>
 ## [0.8.10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.9...@ali/lowcode-editor-skeleton@0.8.10) (2020-04-27)
 

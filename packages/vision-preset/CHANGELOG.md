@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.4"></a>
+## [0.8.4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-vision-preset@0.8.3...@ali/lowcode-vision-preset@0.8.4) (2020-05-07)
+
+
+### Bug Fixes
+
+* 🐛 i18n面板不生效 ([27cd916](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/27cd916))
+* 🐛 修复区块面板命名冲突的问题 ([de50ebf](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/de50ebf))
+* 🐛 修复富文本高级内容弹层样式问题 ([edb480d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/edb480d))
+* 🐛 绑定动作无法打开代码面板 ([160d6f7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/160d6f7))
+
+
+### Features
+
+* 🎸 增加一个hover事件效果 ([da5dd1a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/da5dd1a))
+* 🎸 增加节点选择组件调用入口 ([e945d79](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e945d79))
+* 🎸 旧的组件无法继续沿用,增加了一个节点选择组件 ([f042041](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f042041))
+
+
+
+
 <a name="0.8.3"></a>
 ## [0.8.3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-vision-preset@0.8.2...@ali/lowcode-vision-preset@0.8.3) (2020-04-27)
 
