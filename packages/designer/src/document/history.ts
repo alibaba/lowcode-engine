@@ -174,6 +174,10 @@ export class History {
     this.emitter.removeAllListeners();
     this.records = [];
   }
+
+  isModified() {
+    return this.point !== this.session.cursor;
+  }
 }
 
 class Session {

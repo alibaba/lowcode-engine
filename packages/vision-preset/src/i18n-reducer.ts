@@ -1,5 +1,5 @@
-const I18nUtil = require('@ali/ve-i18n-util');
 import Env from './env';
+const I18nUtil = require('@ali/ve-i18n-util');
 
 interface I18nObject {
   type?: string;
@@ -9,7 +9,9 @@ interface I18nObject {
 }
 
 export function i18nReducer(obj?: any): any {
-  if (!obj) { return obj; }
+  if (!obj) {
+    return obj;
+  }
   if (Array.isArray(obj)) {
     return obj.map((item) => i18nReducer(item));
   }
@@ -18,6 +20,7 @@ export function i18nReducer(obj?: any): any {
       // FIXME! use editor.get
       let locale = Env.getLocale();
       if (obj.key) {
+        // FIXME: 此处需要升级I18nUtil，改成响应式
         return I18nUtil.get(obj.key, locale);
       }
       if (locale !== 'zh_CN' && locale !== 'zh_TW' && !obj[locale]) {

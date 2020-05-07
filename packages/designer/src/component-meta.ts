@@ -352,6 +352,8 @@ const builtinComponentActions: ComponentAction[] = [
       title: intlNode('copy'),
       action(node: Node) {
         // node.remove();
+        const { document: doc, parent, schema, index } = node;
+        parent && doc.insertNode(parent, schema, index);
       },
     },
     important: true,

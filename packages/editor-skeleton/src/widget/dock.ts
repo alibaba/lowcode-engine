@@ -45,6 +45,8 @@ export default class Dock implements IWidget {
     } else {
       this._body = createElement(DockView, props);
     }
+    this.inited = true;
+    
     return this._body;
   }
 

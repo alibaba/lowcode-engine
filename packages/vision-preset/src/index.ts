@@ -25,6 +25,7 @@ import DragEngine from './drag-engine';
 import Viewport from './viewport';
 import Project from './project';
 import { designer, editor } from './editor';
+import Symbols from './symbols';
 
 import './vision.less';
 
@@ -109,6 +110,7 @@ const VisualEngine = {
   Version,
   Project,
   logger,
+  Symbols,
 };
 
 (window as any).VisualEngine = VisualEngine;
@@ -156,6 +158,7 @@ export {
   Version,
   Project,
   logger,
+  Symbols,
 };
 
 

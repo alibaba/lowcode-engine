@@ -58,14 +58,15 @@ hotkey.bind(['command+c', 'ctrl+c', 'command+x', 'ctrl+x'], (e, action) => {
   const data = { type: 'nodeSchema', componentsMap, componentsTree };
 
   clipboard.setData(data);
-  /*
+
   const cutMode = action.indexOf('x') > 0;
   if (cutMode) {
-    const parentNode = selected.getParent();
-    parentNode.select();
-    selected.remove();
+    selected.forEach((node) => {
+      const parentNode = node.getParent();
+      parentNode?.select();
+      node.remove();
+    });
   }
-  */
 });
 
 // command + v paste

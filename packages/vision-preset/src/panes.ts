@@ -85,10 +85,10 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
       };
 
       if (contents && Array.isArray(contents)) {
-        newConfig.content = contents.map(({ title, content, tip }) => {
+        newConfig.content = contents.map(({ title, content, tip }, index) => {
           return {
             type: 'Panel',
-            name: title,
+            name: typeof title === 'string' ? title : `${name}:${index}`,
             content,
             props: {
               title,
