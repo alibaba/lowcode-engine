@@ -1,6 +1,6 @@
 import { Component, Fragment } from 'react';
 import classNames from 'classnames';
-import { observer } from '@ali/lowcode-editor-core';
+import { observer, Focusable, focusTracker } from '@ali/lowcode-editor-core';
 import { Button, Icon } from '@alifd/next';
 import Area from '../area';
 import Panel from '../widget/panel';
@@ -12,7 +12,7 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
   }
 
   private dispose?: () => void;
-  // private focusing?: FocusingItem;
+  private focusing?: Focusable;
   private shell: HTMLElement | null = null;
   componentDidMount() {
     const { area } = this.props;
@@ -22,30 +22,26 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
       area.skeleton.editor.removeListener('designer.dragstart', triggerClose);
     }
 
-    /*
-    this.focusing = focusingTrack.create(this.shell!, {
+    this.focusing = focusTracker.create({
+      range: this.shell!,
       onEsc: () => {
         this.props.area.setVisible(false);
       },
       onBlur: () => {
         this.props.area.setVisible(false);
       },
-      // modal: boolean
     });
-    */
 
     this.onEffect();
   }
 
   onEffect() {
-    /*
     const { area } = this.props;
     if (area.visible) {
       this.focusing?.active();
     } else {
       this.focusing?.suspense();
     }
-    */
   }
 
   componentDidUpdate() {
@@ -53,7 +49,7 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
   }
 
   componentWillUnmount() {
-    // this.focusing?.purge();
+    this.focusing?.purge();
     this.dispose?.();
   }
 

@@ -1,4 +1,4 @@
-import { obx, autorun, computed, getPublicPath, hotkey } from '@ali/lowcode-editor-core';
+import { obx, autorun, computed, getPublicPath, hotkey, focusTracker } from '@ali/lowcode-editor-core';
 import { ISimulatorHost, Component, NodeInstance, ComponentInstance } from '../simulator';
 import Viewport from './viewport';
 import { createSimulator } from './create-simulator';
@@ -214,6 +214,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
     // bind hotkey & clipboard
     hotkey.mount(this._contentWindow);
+    focusTracker.mount(this._contentWindow);
     clipboard.injectCopyPaster(this._contentDocument);
     // TODO: dispose the bindings
   }
