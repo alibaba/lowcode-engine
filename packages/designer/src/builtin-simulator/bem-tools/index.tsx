@@ -4,7 +4,7 @@ import { BorderHovering } from './border-hovering';
 import { SimulatorContext } from '../context';
 import { BuiltinSimulatorHost } from '../host';
 import { BorderSelecting } from './border-selecting';
-import BoxResizing from './box-resizing';
+import BorderResizing from './border-resizing';
 import { InsertionView } from './insertion';
 import './bem-tools.less';
 import './borders.less';
@@ -25,7 +25,7 @@ export class BemTools extends Component {
         <BorderHovering key="hovering" />
         <BorderSelecting key="selecting" />
         <InsertionView key="insertion" />
-        <BoxResizing key="resizing" />
+        <BorderResizing key="resizing" />
       </div>
     );
   }
