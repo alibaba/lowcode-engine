@@ -1,0 +1,55 @@
+@import '../../style/themes/index';
+@import '../../style/mixins/index';
+@import '../../tree/style/index';
+@import '../../checkbox/style/mixin';
+
+@tree-select-prefix-cls: ~'@{ant-prefix}-tree-select';
+@select-tree-prefix-cls: ~'@{ant-prefix}-select-tree';
+
+.antCheckboxFn(@checkbox-prefix-cls: ~'@{select-tree-prefix-cls}-checkbox');
+
+.@{tree-select-prefix-cls} {
+  // ======================= Dropdown =======================
+  &-dropdown {
+    padding: @padding-xs (@padding-xs / 2) 0;
+
+    &-rtl {
+      direction: rtl;
+    }
+    // ======================== Tree ========================
+    .@{select-tree-prefix-cls} {
+      border-radius: 0;
+
+      &-list-holder-inner {
+        align-items: stretch;
+
+        .@{select-tree-prefix-cls}-treenode {
+          padding-bottom: @padding-xs;
+
+          .@{select-tree-prefix-cls}-node-content-wrapper {
+            flex: auto;
+          }
+        }
+      }
+    }
+  }
+}
+
+// ========================== Tree ==========================
+.antTreeFn(@select-tree-prefix-cls);
+
+// change switcher icon rotation in rtl direction
+.@{select-tree-prefix-cls} {
+  // >>> Switcher
+  & &-switcher {
+    &_close {
+      .@{select-tree-prefix-cls}-switcher-icon {
+        svg {
+          .@{tree-select-prefix-cls}-dropdown-rtl & {
+            transform: rotate(90deg);
+          }
+        }
+      }
+    }
+  }
+}

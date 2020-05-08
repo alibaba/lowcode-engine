@@ -45,10 +45,10 @@ export async function genManifest(
     npm: {
       package: matScanModel.pkgName,
       version: matScanModel.pkgVersion,
-      exportName: matParsedModel.componentName,
+      exportName: matParsedModel.meta?.exportName || matParsedModel.componentName,
       main: matScanModel.mainFilePath,
-      destructuring: false,
-      subName: '',
+      destructuring: matParsedModel.meta?.exportName !== 'default',
+      subName: matParsedModel.meta?.subName || '',
     },
   };
 
