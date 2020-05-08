@@ -118,7 +118,11 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
   // ======= compatibles for vision ======
   getHotValue(): any {
-    return this.transducer.toHot(this.getValue());
+    let v = this.getValue();
+    if (v == null) {
+      v = this.extraProps.defaultValue;
+    }
+    return this.transducer.toHot(v);
   }
 
   setHotValue(data: any) {

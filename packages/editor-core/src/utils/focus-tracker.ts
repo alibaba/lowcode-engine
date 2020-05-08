@@ -10,9 +10,9 @@ export class FocusTracker {
         first.internalTriggerBlur();
       }
     };
-    win.document.addEventListener('mousedown', checkDown, true);
+    win.document.addEventListener('click', checkDown, true);
     return () => {
-      win.document.removeEventListener('mousedown', checkDown, true);
+      win.document.removeEventListener('click', checkDown, true);
     };
   }
   private actives: Focusable[] = [];

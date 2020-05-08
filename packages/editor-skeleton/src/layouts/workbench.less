@@ -127,122 +127,6 @@ body {
   &.hidden {
     display: none;
   }
-  /*
-  .my-tabs {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    .tabs-title {
-      display: flex;
-      height: var(--pane-title-height);
-      margin-right: 30px;
-      > .tab-title {
-        cursor: pointer;
-        padding: 0;
-        flex: 1;
-        min-width: 0;
-        justify-content: center;
-        border-bottom: 2px solid transparent;
-        &.actived {
-          cursor: default;
-          color: var(--color-text-avtived);
-          border-bottom-color: #3896ee;
-        }
-      }
-    }
-    .tabs-content {
-      position: absolute;
-      top: var(--pane-title-height);
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: calc(100% - var(--pane-title-height));
-      overflow: hidden;
-    }
-  }
-  */
-  /*覆盖旧面板*/
-  /*组件面板*/
-  // .ve-component-list {
-  //   .ve-component-list-body{
-  //     .ve-component-list-sidebar{
-  //       .ve-component-list-navigator{
-  //         .navigator-group{
-  //           &:last-child{
-  //             &::after{
-  //               display: none;
-  //             }
-  //           }
-  //           &::after{
-  //             content: '';
-  //             display: block;
-  //             height: 1px;
-  //             background-color: #EDEFF3;
-  //             line-height: 0;
-  //             margin: 4px 12px 0;
-  //           }
-  //           .navigator-group-head{
-  //             .navigator-group-title{
-  //               border-bottom: none;
-  //             }
-  //           }
-  //           .navigator-group-item{
-  //             border-left: 2px solid transparent;
-  //             &.active{
-  //               border-left-color: #0079f2;
-  //               border-right: none;
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-  /*数据源*/
-  // .engine-datapool{
-  //   .engine-datapool-view-group{
-  //     padding-top: 48px;
-  //     .engine-datapool-view-group-title{
-  //       height: 48px;
-  //       line-height: 48px;
-  //       font-size: 16px;
-  //       background-color: transparent;
-  //       padding: 0 16px;
-  //       border-bottom: 1px solid #EDEFF3;
-  //     }
-  //   }
-  // }
-  /*动作面板*/
-  // .ve-action-pane{
-  //   border-top: none;
-  //   .rc-tabs{
-  //     .rc-tabs-bar{
-  //       background-color: transparent;
-  //       .rc-tabs-tab{
-  //         line-height: 1;
-  //         &.rc-tabs-tab-active{
-
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-
-  /*设置面板*/
-  // .ve-field .ve-field-head,
-  // .ve-field.ve-accordion2-field > .ve-field-head .ve-field-title-content{
-  //   padding: 0;
-  // }
-  // .ve-field.ve-accordion2-field > .ve-field-split-line{
-  //   display: none;
-  // }
-  // .vs-style .vs-style-source{
-  //   margin: 0 0 16px;
-  // }
-  // .vs-code-button,
-  // .vs-json-button{
-  //   margin: 0;
-  // }
 }
 
 
@@ -283,10 +167,11 @@ body {
       position: absolute;
       top: 0;
       bottom: 0;
-      // width: var(--dock-pane-width);
+      width: var(--dock-pane-width);
+      min-width: var(--dock-fixed-pane-width);
       left: calc(var(--left-area-width) + 1px);
       background-color: var(--color-pane-background);
-      box-shadow: 4px 0 16px 0 rgba(31,50,88,0.08);
+      box-shadow: 4px 6px 6px 0 rgba(31,50,88,0.08);
       z-index: 820;
       display: none;
       // padding-top: 36px;

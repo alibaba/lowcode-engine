@@ -205,8 +205,30 @@ export class Designer {
     return new Scroller(scrollable);
   }
 
+  private oobxList: OffsetObserver[] = [];
   createOffsetObserver(nodeInstance: INodeSelector): OffsetObserver | null {
-    return createOffsetObserver(nodeInstance);
+    const oobx = createOffsetObserver(nodeInstance);
+    this.clearOobxList();
+    if (oobx) {
+      this.oobxList.push(oobx);
+    }
+    return oobx;
+  }
+
+  private clearOobxList(force?: boolean) {
+    let l = this.oobxList.length;
+    if (l > 20 || force) {
+      while (l-- > 0) {
+        if (this.oobxList[l].isPurged()) {
+          this.oobxList.splice(l, 1);
+        }
+      }
+    }
+  }
+
+  touchOffsetObserver() {
+    this.clearOobxList(true);
+    this.oobxList.forEach(item => item.compute());
   }
 
   createSettingEntry(editor: IEditor, nodes: Node[]) {
