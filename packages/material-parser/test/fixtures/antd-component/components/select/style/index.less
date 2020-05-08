@@ -1,0 +1,290 @@
+@import '../../style/themes/index';
+@import '../../style/mixins/index';
+@import '../../input/style/mixin';
+
+@import './single';
+@import './multiple';
+
+@select-prefix-cls: ~'@{ant-prefix}-select';
+@select-height-without-border: @input-height-base - 2 * @border-width-base;
+@select-dropdown-edge-child-vertical-padding: @dropdown-edge-child-vertical-padding;
+
+.select-selector() {
+  position: relative;
+  background-color: @select-background;
+  border: @border-width-base @border-style-base @select-border-color;
+  border-radius: @border-radius-base;
+  transition: all 0.3s @ease-in-out;
+
+  input {
+    cursor: pointer;
+  }
+
+  .@{select-prefix-cls}-show-search& {
+    cursor: text;
+
+    input {
+      cursor: auto;
+    }
+  }
+
+  .@{select-prefix-cls}-focused& {
+    .active();
+  }
+
+  .@{select-prefix-cls}-disabled& {
+    color: @disabled-color;
+    background: @input-disabled-bg;
+    cursor: not-allowed;
+
+    input {
+      cursor: not-allowed;
+    }
+  }
+}
+
+/* Reset search input style */
+.select-search-input-without-border() {
+  .@{select-prefix-cls}-selection-search-input {
+    background: transparent;
+    border: none;
+    outline: none;
+  }
+}
+
+.@{select-prefix-cls} {
+  .reset-component;
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+
+  &:not(.@{select-prefix-cls}-disabled):hover &-selector {
+    .hover();
+  }
+
+  // ======================== Selection ========================
+  &-selection-item {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    // IE11 css hack. `*::-ms-backdrop,` is a must have
+    @media all and (-ms-high-contrast: none) {
+      *::-ms-backdrop,
+      & {
+        flex: auto;
+      }
+    }
+  }
+
+  // ======================= Placeholder =======================
+  &-selection-placeholder {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    opacity: 0.4;
+
+    // IE11 css hack. `*::-ms-backdrop,` is a must have
+    @media all and (-ms-high-contrast: none) {
+      *::-ms-backdrop,
+      & {
+        flex: auto;
+      }
+    }
+  }
+
+  // ========================== Arrow ==========================
+  &-arrow {
+    .iconfont-mixin();
+    position: absolute;
+    top: 53%;
+    right: @control-padding-horizontal - 1px;
+    width: @font-size-sm;
+    height: @font-size-sm;
+    margin-top: -@font-size-sm / 2;
+    color: @disabled-color;
+    font-size: @font-size-sm;
+    line-height: 1;
+    text-align: center;
+
+    .anticon {
+      vertical-align: top;
+      transition: transform 0.3s;
+
+      > svg {
+        vertical-align: top;
+      }
+
+      .@{select-prefix-cls}-open &.anticon-down {
+        transform: rotate(180deg);
+      }
+    }
+
+    &.anticon-down {
+      pointer-events: none;
+    }
+  }
+
+  // ========================== Clear ==========================
+  &-clear {
+    position: absolute;
+    top: 50%;
+    right: @control-padding-horizontal - 1px;
+    z-index: 1;
+    display: inline-block;
+    width: @font-size-sm;
+    height: @font-size-sm;
+    margin-top: -@font-size-sm / 2;
+    color: @disabled-color;
+    font-size: @font-size-sm;
+    font-style: normal;
+    line-height: 1;
+    text-align: center;
+    text-transform: none;
+    background: @select-clear-background;
+    cursor: pointer;
+    opacity: 0;
+    transition: color 0.3s ease, opacity 0.15s ease;
+    text-rendering: auto;
+    &::before {
+      display: block;
+    }
+    &:hover {
+      color: @text-color-secondary;
+    }
+
+    .@{select-prefix-cls}:hover & {
+      opacity: 1;
+    }
+  }
+
+  // ========================== Popup ==========================
+  &-dropdown {
+    .reset-component;
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+    z-index: @zindex-dropdown;
+    box-sizing: border-box;
+    padding: @select-dropdown-edge-child-vertical-padding 0;
+    overflow: hidden;
+    font-size: @font-size-base;
+    // Fix select render lag of long text in chrome
+    // https://github.com/ant-design/ant-design/issues/11456
+    // https://github.com/ant-design/ant-design/issues/11843
+    font-variant: initial;
+    background-color: @select-dropdown-bg;
+    border-radius: @border-radius-base;
+    outline: none;
+    box-shadow: @box-shadow-base;
+
+    &.slide-up-enter.slide-up-enter-active&-placement-bottomLeft,
+    &.slide-up-appear.slide-up-appear-active&-placement-bottomLeft {
+      animation-name: antSlideUpIn;
+    }
+
+    &.slide-up-enter.slide-up-enter-active&-placement-topLeft,
+    &.slide-up-appear.slide-up-appear-active&-placement-topLeft {
+      animation-name: antSlideDownIn;
+    }
+
+    &.slide-up-leave.slide-up-leave-active&-placement-bottomLeft {
+      animation-name: antSlideUpOut;
+    }
+
+    &.slide-up-leave.slide-up-leave-active&-placement-topLeft {
+      animation-name: antSlideDownOut;
+    }
+
+    &-hidden {
+      display: none;
+    }
+  }
+
+  // ========================= Options =========================
+  .item() {
+    position: relative;
+    display: block;
+    min-height: @select-dropdown-height;
+    padding: @select-dropdown-vertical-padding @control-padding-horizontal;
+    color: @text-color;
+    font-weight: normal;
+    font-size: @select-dropdown-font-size;
+    line-height: @select-dropdown-line-height;
+  }
+
+  &-item-empty {
+    .item();
+  }
+
+  &-item {
+    .item();
+
+    cursor: pointer;
+    transition: background 0.3s ease;
+
+    // =========== Group ============
+    &-group {
+      color: @text-color-secondary;
+      font-size: @font-size-sm;
+      cursor: default;
+    }
+
+    // =========== Option ===========
+    &-option {
+      display: flex;
+
+      &-content {
+        flex: auto;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      &-state {
+        flex: none;
+      }
+
+      &-active:not(&-disabled) {
+        background-color: @select-item-active-bg;
+      }
+
+      &-selected:not(&-disabled) {
+        color: @text-color;
+        font-weight: @select-item-selected-font-weight;
+        background-color: @select-item-selected-bg;
+
+        .@{select-prefix-cls}-item-option-state {
+          color: @primary-color;
+        }
+      }
+
+      &-disabled {
+        color: @disabled-color;
+        cursor: not-allowed;
+      }
+
+      &-grouped {
+        padding-left: @control-padding-horizontal * 2;
+      }
+    }
+  }
+
+  // ============================================================
+  // ==                          Size                          ==
+  // ============================================================
+  &-lg {
+    font-size: @font-size-lg;
+  }
+
+  // no border style
+  &-borderless &-selector {
+    background-color: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+}
+
+@import './rtl';

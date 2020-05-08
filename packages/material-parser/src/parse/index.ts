@@ -14,6 +14,9 @@ export default function parse(params: { fileContent: string; filePath: string })
       return resolver(ast);
     },
     handlers,
+    {
+      filename: filePath,
+    },
   );
   const coms = result.reduce((res: any[], info: any) => {
     if (!info || !info.props) return res;
@@ -29,6 +32,7 @@ export default function parse(params: { fileContent: string; filePath: string })
     res.push({
       componentName: info.displayName,
       props,
+      meta: info.meta || {},
     });
     return res;
   }, []);
