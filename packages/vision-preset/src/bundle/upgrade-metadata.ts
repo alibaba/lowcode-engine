@@ -369,7 +369,14 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
       },
     ];
     if (allowTextInput !== false) {
-      setters.unshift('I18nSetter');
+      setters.unshift({
+        componentName: 'I18nSetter',
+        title: {
+          'type': 'i18n',
+          'zh-CN': '国际化输入',
+          'en-US': 'Internationalized Input'
+        },
+      });
     }
     if (supportVariable) {
       setters.push('VariableSetter');
