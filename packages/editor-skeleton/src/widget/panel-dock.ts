@@ -68,6 +68,7 @@ export default class PanelDock implements IWidget {
     this.name = name;
     this.id = uniqueId(`dock:${name}$`);
     this.panelName = config.panelName || name;
+    this.align = props?.align;
     if (content) {
       const _panelProps: any = { ...panelProps };
       if (_panelProps.title == null && props) {

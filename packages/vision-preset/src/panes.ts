@@ -73,7 +73,9 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
     if (menu) {
       newConfig.props.title = menu;
     }
-    if (!isAction) {
+    if (isAction) {
+      newConfig.type = 'Dock';
+    } else {
       newConfig.panelProps = {
         title,
         hideTitleBar,
