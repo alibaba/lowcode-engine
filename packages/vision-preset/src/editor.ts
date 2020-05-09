@@ -1,4 +1,4 @@
-import { isJSBlock } from '@ali/lowcode-types';
+import { isJSBlock, isJSExpression, isJSSlot } from '@ali/lowcode-types';
 import { isPlainObject } from '@ali/lowcode-utils';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
 import { Designer, TransformStage, addBuiltinComponentAction } from '@ali/lowcode-designer';
@@ -20,6 +20,7 @@ editor.set(Skeleton, skeleton);
 export const designer = new Designer({ editor: editor });
 editor.set(Designer, designer);
 
+// 节点 props 初始化
 designer.addPropsReducer((props, node) => {
   // run initials
   const initials = node.componentMeta.getMetadata().experimental?.initials;
@@ -37,6 +38,7 @@ designer.addPropsReducer((props, node) => {
   return props;
 }, TransformStage.Init);
 
+// 国际化渲染时处理
 designer.addPropsReducer(i18nReducer, TransformStage.Render);
 
 function upgradePropsReducer(props: any) {
@@ -64,6 +66,7 @@ function upgradePropsReducer(props: any) {
   });
   return newProps;
 }
+// 升级 Props
 designer.addPropsReducer(upgradePropsReducer, TransformStage.Init);
 
 // 设计器组件样式处理
@@ -96,6 +99,31 @@ function stylePropsReducer(props: any, node: any) {
   return props;
 }
 designer.addPropsReducer(stylePropsReducer, TransformStage.Render);
+
+// FIXME: 表达式使用 mock 值，未来live 模式直接使用原始值
+function expressionReducer(obj?: any): any {
+  if (!obj) {
+    return obj;
+  }
+  if (Array.isArray(obj)) {
+    return obj.map((item) => expressionReducer(item));
+  }
+  if (isPlainObject(obj)) {
+    if (isJSExpression(obj)) {
+      return obj.mock;
+    }
+    if (isJSSlot(obj)) {
+      return obj;
+    }
+    const out: any = {};
+    Object.keys(obj).forEach((key) => {
+      out[key] = expressionReducer(obj[key]);
+    });
+    return out;
+  }
+  return obj;
+}
+designer.addPropsReducer(expressionReducer, TransformStage.Render);
 
 skeleton.add({
   area: 'mainArea',

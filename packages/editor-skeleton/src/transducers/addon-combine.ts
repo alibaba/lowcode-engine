@@ -13,7 +13,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
             name: 'children',
             title: { type: 'i18n', 'zh-CN': '内容设置', 'en-US': 'Content' },
             setter: {
-              componentName: 'MixinSetter',
+              componentName: 'MixedSetter',
               props: {
                 // TODO:
                 setters: [
@@ -41,11 +41,11 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
     };
   }
 
-  const { props, events = {}, styles } = configure as any;
+  const { props, supports = {} } = configure as any;
   const isRoot: boolean = componentName === 'Page' || componentName === 'Component';
   const eventsDefinition: any[] = [];
   const supportedLifecycles =
-    events.supportedLifecycles ||
+  supports.lifecycles ||
     (isRoot
       ? /*[
           {
@@ -73,11 +73,11 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
       list: supportedLifecycles.map((event: any) => (typeof event === 'string' ? { name: event } : event)),
     });
   }
-  if (events.supportedEvents) {
+  if (supports.events) {
     eventsDefinition.push({
       type: 'events',
       title: '事件',
-      list: (events.supportedEvents || []).map((event: any) => (typeof event === 'string' ? { name: event } : event)),
+      list: (supports.events || []).map((event: any) => (typeof event === 'string' ? { name: event } : event)),
     });
   }
   //  通用设置
@@ -150,14 +150,14 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
       items: propsGroup,
     },
   ];
-  if (styles?.supportClassName) {
+  if (supports.className) {
     stylesGroup.push({
       name: 'className',
       title: { type: 'i18n', 'zh-CN': '类名绑定', 'en-US': 'ClassName' },
       setter: 'ClassNameSetter',
     });
   }
-  if (styles?.supportInlineStyle) {
+  if (supports.style) {
     stylesGroup.push({
       name: 'style',
       title: { type: 'i18n', 'zh-CN': '行内样式', 'en-US': 'Style' },
@@ -201,8 +201,8 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
   }
 
   if (!isRoot) {
-    advanceGroup = advanceGroup.concat([
-      {
+    if (supports.condition !== false) {
+      advanceGroup.push({
         name: '___condition',
         title: { type: 'i18n', 'zh-CN': '是否渲染', 'en-US': 'Condition' },
         defaultValue: true,
@@ -211,14 +211,17 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
         }, {
           componentName: 'VariableSetter'
         }],
-      },
-      {
+      });
+    }
+    if (supports.loop !== false) {
+      advanceGroup.push({
         name: '#loop',
         title: { type: 'i18n', 'zh-CN': '循环', 'en-US': 'Loop' },
         items: [
           {
             name: '___loop',
             title: { type: 'i18n', 'zh-CN': '循环数据', 'en-US': 'Loop Data' },
+            defaultValue: [],
             setter: [{
               componentName: 'JsonSetter',
               props: {
@@ -258,8 +261,8 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
             }],
           },
         ],
-      },
-    ])
+      })
+    }
   }
   if (advanceGroup.length > 0) {
     combined.push({

@@ -78,9 +78,16 @@ export interface Experimental {
 
 export interface Configure {
   props?: FieldConfig[];
-  styles?: object;
-  events?: object;
   component?: ComponentConfigure;
+  supports?: {
+    events?: any[];
+    className?: boolean;
+    style?: boolean;
+    lifecycles?: any[];
+    // general?: boolean;
+    loop?: boolean;
+    condition?: boolean;
+  };
 }
 
 export interface ActionContentObject {

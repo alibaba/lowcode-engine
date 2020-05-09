@@ -101,7 +101,7 @@ export class SettingPropEntry implements SettingEntry {
    * 获取当前属性值
    */
   @computed getValue(): any {
-    let val: any = null;
+    let val: any = undefined;
     if (this.type === 'field') {
       val = this.parent.getPropValue(this.name);
     }

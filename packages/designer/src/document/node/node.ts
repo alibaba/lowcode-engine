@@ -504,7 +504,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     const schema: any = {
       ...baseSchema,
       props: this.document.designer.transformProps(props, this, stage),
-      ..._extras_,
+      ...this.document.designer.transformProps(_extras_, this, stage),
     };
 
     if (this.isParental() && this.children.size > 0) {

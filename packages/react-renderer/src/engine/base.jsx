@@ -233,7 +233,7 @@ export default class BaseEngine extends PureComponent {
         return null;
       }
 
-      if (schema.loop !== undefined) {
+      if (schema.loop != null) {
         return this.__createLoopVirtualDom(
           {
             ...schema,
@@ -244,7 +244,7 @@ export default class BaseEngine extends PureComponent {
           idx,
         );
       }
-      const condition = schema.condition === undefined ? true : parseData(schema.condition, self);
+      const condition = schema.condition == null ? true : parseData(schema.condition, self);
       if (!condition) return null;
 
       let scopeKey = '';

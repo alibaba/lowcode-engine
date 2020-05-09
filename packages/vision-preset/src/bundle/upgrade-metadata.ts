@@ -141,7 +141,8 @@ export interface OldPrototypeConfig {
   canDragging?: boolean; // => ?
 
   canOperating?: boolean; // => disabledActions
-  canSelecting?: boolean;
+  canUseCondition?: boolean;
+  canLoop?: boolean;
   canContain?: (dragment: Node) => boolean; // => nestingRule
 
   canDropTo?: ((container: Node) => boolean) | boolean | string | string[]; // => nestingRule
@@ -545,6 +546,8 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     canDropto,
     canDropIn,
     canDroping,
+    canUseCondition,
+    canLoop,
 
     // hooks
     canDraging,
@@ -727,9 +730,16 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   });
   experimental.initials = initials;
 
-  const events = {};
-  const styles = {};
-  meta.configure = { props, component, events, styles };
+  const supports: any = {};
+  if (canUseCondition != null) {
+    console.info('canUseCondition', componentName);
+    supports.condition = canUseCondition;
+  }
+  if (canLoop != null) {
+    console.info('canLoop', componentName);
+    supports.loop = canLoop;
+  }
+  meta.configure = { props, component, supports };
   meta.experimental = experimental;
   return meta;
 }

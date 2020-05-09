@@ -120,7 +120,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
   // ======= compatibles for vision ======
   getHotValue(): any {
     // avoid View modify
-    let v = cloneDeep(this.getValue());
+    let v = cloneDeep(this.getMockOrValue());
     if (v == null) {
       v = this.extraProps.defaultValue;
     }
@@ -128,7 +128,17 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
   }
 
   setHotValue(data: any) {
-    this.setValue(this.transducer.toNative(data));
+    const v = this.transducer.toNative(data);
+    if (this.isUseVariable()) {
+      const ov = this.getValue();
+      this.setValue({
+        type: 'JSExpression',
+        value: ov.value,
+        mock: v,
+      });
+    } else {
+      this.setValue(v);
+    }
     this.valueChange();
   }
 
