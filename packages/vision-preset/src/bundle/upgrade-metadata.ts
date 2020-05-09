@@ -732,11 +732,9 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
 
   const supports: any = {};
   if (canUseCondition != null) {
-    console.info('canUseCondition', componentName);
     supports.condition = canUseCondition;
   }
   if (canLoop != null) {
-    console.info('canLoop', componentName);
     supports.loop = canLoop;
   }
   meta.configure = { props, component, supports };

@@ -83,6 +83,9 @@ export default class PanelDock implements IWidget {
         area: panelProps?.area,
       }) as Panel;
     }
+    if (props?.onInit) {
+      props.onInit.call(this, this);
+    }
   }
 
   setVisible(flag: boolean) {

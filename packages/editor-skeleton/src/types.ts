@@ -1,5 +1,6 @@
 import { ReactElement, ComponentType } from 'react';
 import { TitleContent, IconType, I18nData, TipContent } from '@ali/lowcode-types';
+import { IWidget } from './widget/widget';
 
 export interface IWidgetBaseConfig {
   type: string;
@@ -16,6 +17,7 @@ export interface WidgetConfig extends IWidgetBaseConfig {
   type: "Widget";
   props?: {
     align?: "left" | "right" | "bottom" | "center" | "top";
+    onInit?: (widget: IWidget) => void;
   };
   content?: string | ReactElement | ComponentType<any>; // children
 }
@@ -47,6 +49,7 @@ export function isDividerConfig(obj: any): obj is DividerConfig {
 export interface IDockBaseConfig extends IWidgetBaseConfig {
   props?: DockProps & {
     align?: "left" | "right" | "bottom" | "center" | "top";
+    onInit?: (widget: IWidget) => void;
   };
 }
 
@@ -95,7 +98,8 @@ export interface PanelProps {
   height?: number; // panel.props
   maxWidth?: number; // panel.props
   maxHeight?: number; // panel.props
-  onInit?: () => any;
+  condition?: (widget: IWidget) => any;
+  onInit?: (widget: IWidget) => any;
   onDestroy?: () => any;
   shortcut?: string; // 只有在特定位置，可触发 toggle show
 }

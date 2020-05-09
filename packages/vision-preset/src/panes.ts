@@ -59,8 +59,6 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
       title,
       description,
       align: place,
-      onInit: init,
-      onDestroy: destroy,
     },
     contentProps: props,
     index: index || props?.index,
@@ -84,6 +82,8 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
         maxWidth,
         height,
         maxHeight,
+        onInit: init,
+        onDestroy: destroy,
       };
 
       if (contents && Array.isArray(contents)) {
@@ -100,18 +100,22 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
         });
       }
     }
-  } else if (type === 'action') {
-    newConfig.area = 'top';
-    newConfig.type = 'Dock';
-  } else if (type === 'tab') {
-    newConfig.area = 'right';
-    newConfig.type = 'Panel';
-  } else if (type === 'stage') {
-    newConfig.area = 'stages';
-    newConfig.type = 'Widget';
   } else {
-    newConfig.area = 'main';
-    newConfig.type = 'Widget';
+    newConfig.props.onInit = init;
+    newConfig.props.onDestroy = destroy;
+    if (type === 'action') {
+      newConfig.area = 'top';
+      newConfig.type = 'Dock';
+    } else if (type === 'tab') {
+      newConfig.area = 'right';
+      newConfig.type = 'Panel';
+    } else if (type === 'stage') {
+      newConfig.area = 'stages';
+      newConfig.type = 'Widget';
+    } else {
+      newConfig.area = 'main';
+      newConfig.type = 'Widget';
+    }
   }
 
   return newConfig;

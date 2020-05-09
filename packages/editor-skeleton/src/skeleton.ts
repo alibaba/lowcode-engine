@@ -110,7 +110,7 @@ export class Skeleton {
         }
         return this.createPanel(config);
       },
-      true,
+      false,
       true,
     );
     this.mainArea = new Area(

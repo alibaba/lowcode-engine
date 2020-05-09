@@ -139,8 +139,6 @@ export interface Utils {
 export interface PluginProps {
   editor: IEditor;
   config: PluginConfig;
-  i18n?: I18nFunction;
-  ref?: RefObject<ReactElement>;
   [key: string]: any;
 }
 

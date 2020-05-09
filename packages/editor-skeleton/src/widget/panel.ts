@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { createElement, ReactNode } from 'react';
-import { obx } from '@ali/lowcode-editor-core';
+import { obx, computed } from '@ali/lowcode-editor-core';
 import { uniqueId, createContent } from '@ali/lowcode-utils';
 import { TitleContent } from '@ali/lowcode-types';
 import WidgetContainer from './widget-container';
@@ -16,14 +16,18 @@ export default class Panel implements IWidget {
   readonly name: string;
   readonly id: string;
   @obx.ref inited = false;
-  @obx.ref private _actived = false;
+  @obx.ref private _actived: boolean = false;
   private emitter = new EventEmitter();
   get actived(): boolean {
     return this._actived;
   }
 
-  get visible(): boolean {
-    if (this.parent?.visible) {
+  @computed get visible(): boolean {
+    if (!this.parent || this.parent.visible) {
+      const { props } = this.config;
+      if (props?.condition) {
+        return props.condition(this);
+      }
       return this._actived;
     }
     return false;
@@ -79,6 +83,9 @@ export default class Panel implements IWidget {
         true,
       );
       content.forEach((item) => this.add(item));
+    }
+    if (props.onInit) {
+      props.onInit.call(this, this);
     }
     // todo: process shortcut
   }

@@ -2,7 +2,7 @@ import { isJSBlock, isJSExpression, isJSSlot } from '@ali/lowcode-types';
 import { isPlainObject } from '@ali/lowcode-utils';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
 import { Designer, TransformStage, addBuiltinComponentAction } from '@ali/lowcode-designer';
-import Outline from '@ali/lowcode-plugin-outline-pane';
+import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import { toCss } from '@ali/vu-css-style';
 
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
@@ -16,9 +16,11 @@ globalContext.register(editor, Editor);
 
 export const skeleton = new Skeleton(editor);
 editor.set(Skeleton, skeleton);
+editor.set('skeleton', skeleton);
 
 export const designer = new Designer({ editor: editor });
 editor.set(Designer, designer);
+editor.set('designer', designer);
 
 // 节点 props 初始化
 designer.addPropsReducer((props, node) => {
@@ -145,6 +147,17 @@ skeleton.add({
   panelProps: {
     area: 'leftFixedArea',
   },
+});
+skeleton.add({
+  area: 'rightArea',
+  name: 'backupOutline',
+  type: 'Panel',
+  props: {
+    condition: () => {
+      return designer.dragon.dragging && !getTreeMaster(designer).hasVisibleTreeBoard();
+    }
+  },
+  content: OutlineBackupPane,
 });
 
 // skeleton.add({
