@@ -122,9 +122,10 @@ export default class Engine extends PureComponent {
     const originRender = Component.prototype.render;
     Component.prototype.render = function () {
       if (this.state && this.state.engineRenderError) {
-        return engine.createElement(this.getFaultComponent(), {
+        this.state.engineRenderError = false;
+        return engine.createElement(engine.getFaultComponent(), {
+          ...this.props,
           error: this.state.error,
-          props: this.props,
         });
       }
       return originRender.call(this);

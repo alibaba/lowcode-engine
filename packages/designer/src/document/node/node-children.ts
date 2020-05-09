@@ -217,6 +217,10 @@ export class NodeChildren {
     return this.children.some((child, index) => fn(child, index));
   }
 
+  filter(fn: (item: Node, index: number) => item is Node) {
+    return this.children.filter(fn);
+  }
+
   mergeChildren(remover: () => any, adder: (children: Node[]) => NodeData[] | null, sorter: () => any) {
     let changed = false;
     if (remover) {

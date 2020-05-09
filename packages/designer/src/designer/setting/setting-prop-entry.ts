@@ -62,14 +62,6 @@ export class SettingPropEntry implements SettingEntry {
     this.isSingle = parent.isSingle;
     this.designer = parent.designer;
     this.top = parent.top;
-
-    autorun(({ firstRun }) => {
-      const value = this.getValue();
-      if (firstRun) {
-        return;
-      }
-      this.emitter.emit('valuechange', value);
-    });
   }
 
   getId() {
@@ -180,11 +172,11 @@ export class SettingPropEntry implements SettingEntry {
     return this.top;
   }
 
-  // add settingfield props 
+  // add settingfield props
   get props() {
     return this.top;
   }
-  
+
   onValueChange(func: () => any) {
     this.emitter.on('valuechange', func);
 
@@ -197,8 +189,6 @@ export class SettingPropEntry implements SettingEntry {
    * @deprecated
    */
   valueChange() {
-    console.warn('valueChange deprecated');
-
     this.emitter.emit('valuechange');
   }
 

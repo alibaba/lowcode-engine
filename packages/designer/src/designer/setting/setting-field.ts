@@ -3,6 +3,7 @@ import { Transducer } from './utils';
 import { SettingPropEntry } from './setting-prop-entry';
 import { SettingEntry } from './setting-entry';
 import { computed, obx } from '@ali/lowcode-editor-core';
+import { cloneDeep } from '@ali/lowcode-utils';
 
 export class SettingField extends SettingPropEntry implements SettingEntry {
   readonly isSettingField = true;
@@ -118,7 +119,8 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
   // ======= compatibles for vision ======
   getHotValue(): any {
-    let v = this.getValue();
+    // avoid View modify
+    let v = cloneDeep(this.getValue());
     if (v == null) {
       v = this.extraProps.defaultValue;
     }
@@ -127,6 +129,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
   setHotValue(data: any) {
     this.setValue(this.transducer.toNative(data));
+    this.valueChange();
   }
 
   onEffect(action: () => void): () => void {
