@@ -36,7 +36,6 @@ function getNextForSelect(next: any, head?: any, parent?: any): any {
 
 function getPrevForSelect(prev: any, head?: any, parent?: any): any {
   if (prev) {
-    debugger;
     let ret;
     if (!head && prev.isContainer()) {
       const children = prev.getChildren() || [];
@@ -213,7 +212,7 @@ hotkey.bind(['up', 'down'], (e, action) => {
   }
 });
 
-hotkey.bind(['option+up', 'option+down', 'option+left', 'option+right'], (e, action) => {
+hotkey.bind(['option+left', 'option+right'], (e, action) => {
   const designer = focusing.focusDesigner;
   const doc = designer?.currentDocument;
   if (isFormEvent(e) || !doc) {
@@ -225,24 +224,17 @@ hotkey.bind(['option+up', 'option+down', 'option+left', 'option+right'], (e, act
     return;
   }
   // TODO: 此处需要增加判断当前节点是否可被操作移动，原ve里是用 node.canOperating()来判断
+  // TODO: 移动逻辑也需要重新梳理，对于移动目标位置的选择，是否可以移入，需要增加判断
 
   const firstNode = selected[0];
   const parent = firstNode.getParent();
   if (!parent) return;
 
-  const isPrev = /(up|left)$/.test(action);
-  const isTravel = /(up|down)$/.test(action);
+  const isPrev = /(left)$/.test(action);
 
   const silbing = isPrev ? firstNode.prevSibling : firstNode.nextSibling;
   if (silbing) {
-    if (isTravel && silbing.isContainer()) {
-      const place = silbing.getSuitablePlace(firstNode, null);
-      if (isPrev) {
-        place.container.insertAfter(firstNode, place.ref);
-      } else {
-        place.container.insertBefore(firstNode, place.ref);
-      }
-    } else if (isPrev) {
+    if (isPrev) {
       parent.insertBefore(firstNode, silbing);
     } else {
       parent.insertAfter(firstNode, silbing);
@@ -250,14 +242,82 @@ hotkey.bind(['option+up', 'option+down', 'option+left', 'option+right'], (e, act
     firstNode?.select();
     return;
   }
-  if (isTravel) {
+});
+
+hotkey.bind(['option+up'], (e, action) => {
+  const designer = focusing.focusDesigner;
+  const doc = designer?.currentDocument;
+  if (isFormEvent(e) || !doc) {
+    return;
+  }
+  e.preventDefault();
+  const selected = doc.selection.getTopNodes(true);
+  if (!selected || selected.length < 1) {
+    return;
+  }
+  // TODO: 此处需要增加判断当前节点是否可被操作移动，原ve里是用 node.canOperating()来判断
+  // TODO: 移动逻辑也需要重新梳理，对于移动目标位置的选择，是否可以移入，需要增加判断
+
+  const firstNode = selected[0];
+  const parent = firstNode.getParent();
+  if (!parent) {
+    return;
+  }
+
+  const silbing = firstNode.prevSibling;
+  if (silbing) {
+    if (silbing.isContainer()) {
+      const place = silbing.getSuitablePlace(firstNode, null);
+      place.container.insertAfter(firstNode, place.ref);
+    } else {
+      parent.insertBefore(firstNode, silbing);
+    }
+    firstNode?.select();
+    return;
+  } else {
     const place = parent.getSuitablePlace(firstNode, null); // upwards
     if (place) {
-      if (isPrev) {
-        place.container.insertBefore(firstNode, place.ref);
-      } else {
-        place.container.insertAfter(firstNode, place.ref);
-      }
+      place.container.insertBefore(firstNode, place.ref);
+      firstNode?.select();
+    }
+  }
+});
+
+hotkey.bind(['option+down'], (e, action) => {
+  const designer = focusing.focusDesigner;
+  const doc = designer?.currentDocument;
+  if (isFormEvent(e) || !doc) {
+    return;
+  }
+  e.preventDefault();
+  const selected = doc.selection.getTopNodes(true);
+  if (!selected || selected.length < 1) {
+    return;
+  }
+  // TODO: 此处需要增加判断当前节点是否可被操作移动，原ve里是用 node.canOperating()来判断
+  // TODO: 移动逻辑也需要重新梳理，对于移动目标位置的选择，是否可以移入，需要增加判断
+
+  const firstNode = selected[0];
+  const parent = firstNode.getParent();
+  if (!parent) {
+    return;
+  }
+
+  const silbing = firstNode.nextSibling;
+  if (silbing) {
+    if (silbing.isContainer()) {
+      // const place = silbing.getSuitablePlace(firstNode, null);
+      silbing.insertBefore(firstNode, undefined);
+      // place.container.insertBefore(firstNode, place.ref);
+    } else {
+      parent.insertAfter(firstNode, silbing);
+    }
+    firstNode?.select();
+    return;
+  } else {
+    const place = parent.getSuitablePlace(firstNode, null); // upwards
+    if (place) {
+      place.container.insertAfter(firstNode, place.ref);
       firstNode?.select();
     }
   }
