@@ -4,6 +4,67 @@ import { focusing } from './focusing';
 import { insertChildren, TransformStage } from '../document';
 import clipboard from './clipboard';
 
+function getNextForSelect(next: any, head?: any, parent?: any): any {
+  if (next) {
+    if (!head) {
+      return next;
+    }
+
+    let ret;
+    if (next.isContainer()) {
+      const children = next.getChildren() || [];
+      if (children && !children.isEmpty()) {
+        ret = getNextForSelect(children.get(0));
+        if (ret) {
+          return ret;
+        }
+      }
+    }
+
+    ret = getNextForSelect(next.nextSibling);
+    if (ret) {
+      return ret;
+    }
+  }
+
+  if (parent) {
+    return getNextForSelect(parent.nextSibling, false, parent.getParent());
+  }
+
+  return null;
+}
+
+function getPrevForSelect(prev: any, head?: any, parent?: any): any {
+  if (prev) {
+    debugger;
+    let ret;
+    if (!head && prev.isContainer()) {
+      const children = prev.getChildren() || [];
+      const lastChild = children && !children.isEmpty() ? children.get(children.size - 1) : null;
+
+      ret = getPrevForSelect(lastChild);
+      if (ret) {
+        return ret;
+      }
+    }
+
+    if (!head) {
+      return prev;
+    }
+
+    ret = getPrevForSelect(prev.prevSibling);
+    if (ret) {
+      return ret;
+    }
+  }
+
+  if (parent) {
+    return parent;
+  }
+
+  return null;
+}
+
 // hotkey binding
 hotkey.bind(['backspace', 'del'], (e: KeyboardEvent) => {
   const doc = focusing.focusDesigner?.currentDocument;
@@ -112,3 +173,87 @@ hotkey.bind(['command+y', 'ctrl+y', 'command+shift+z'], (e) => {
 
   his.forward();
 });
+
+// sibling selection
+hotkey.bind(['left', 'right'], (e, action) => {
+  const designer = focusing.focusDesigner;
+  const doc = designer?.currentDocument;
+  if (isFormEvent(e) || !doc) {
+    return;
+  }
+  e.preventDefault();
+  const selected = doc.selection.getTopNodes(true);
+  if (!selected || selected.length < 1) {
+    return;
+  }
+  const firstNode = selected[0];
+  const silbing = action === 'left' ? firstNode?.prevSibling : firstNode?.nextSibling;
+  silbing?.select();
+});
+
+hotkey.bind(['up', 'down'], (e, action) => {
+  const designer = focusing.focusDesigner;
+  const doc = designer?.currentDocument;
+  if (isFormEvent(e) || !doc) {
+    return;
+  }
+  e.preventDefault();
+  const selected = doc.selection.getTopNodes(true);
+  if (!selected || selected.length < 1) {
+    return;
+  }
+  const firstNode = selected[0];
+
+  if (action === 'down') {
+    const next = getNextForSelect(firstNode, true, firstNode.getParent());
+    next?.select();
+  } else if (action === 'up') {
+    const prev = getPrevForSelect(firstNode, true, firstNode.getParent());
+    prev?.select();
+  }
+});
+
+// HotKey.bind(['option+up', 'option+down', 'option+left', 'option+right'], (e, action) => {
+//   if (Viewport.isPreview() || isFormEvent(e) || !isInEditingArea(e)) {
+//     return;
+//   }
+
+//   e.preventDefault();
+//   const selected = Exchange.getSelected();
+//   if (!selected || !selected.canOperating()) return;
+
+//   const parent = selected.getParent();
+//   if (!parent) return;
+
+//   const isPrev = /(up|left)$/.test(action);
+//   const isTravel = /(up|down)$/.test(action);
+
+//   const silbing = isPrev ? selected.prevSibling() : selected.nextSibling();
+//   if (silbing) {
+//     if (isTravel && silbing.isContainer()) {
+//       const place = silbing.getSuitablePlace(selected, null, true);
+//       if (isPrev) {
+//         place.container.insertAfter(selected, place.ref);
+//       } else {
+//         place.container.insertBefore(selected, place.ref);
+//       }
+//     } else if (isPrev) {
+//       parent.insertBefore(selected, silbing);
+//     } else {
+//       parent.insertAfter(selected, silbing);
+//     }
+//     Exchange.select(selected);
+//     return;
+//   }
+//   if (isTravel) {
+//     const place = parent.getSuitablePlace(selected); // upwards
+//     if (place) {
+//       if (isPrev) {
+//         place.container.insertBefore(selected, place.ref);
+//       } else {
+//         place.container.insertAfter(selected, place.ref);
+//       }
+//       Exchange.select(selected);
+//     }
+//   }
+// });
