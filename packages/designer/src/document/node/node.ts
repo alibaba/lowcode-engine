@@ -711,6 +711,14 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.document.simulator?.computeRect(this) || null;
   }
 
+  getPrototype() {
+    return this;
+  }
+
+  getIcon() {
+    return this.icon;
+  }
+
   toString() {
     return this.id;
   }

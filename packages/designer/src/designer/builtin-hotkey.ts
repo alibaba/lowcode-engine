@@ -4,6 +4,67 @@ import { focusing } from './focusing';
 import { insertChildren, TransformStage } from '../document';
 import clipboard from './clipboard';
 
+function getNextForSelect(next: any, head?: any, parent?: any): any {
+  if (next) {
+    if (!head) {
+      return next;
+    }
+
+    let ret;
+    if (next.isContainer()) {
+      const children = next.getChildren() || [];
+      if (children && !children.isEmpty()) {
+        ret = getNextForSelect(children.get(0));
+        if (ret) {
+          return ret;
+        }
+      }
+    }
+
+    ret = getNextForSelect(next.nextSibling);
+    if (ret) {
+      return ret;
+    }
+  }
+
+  if (parent) {
+    return getNextForSelect(parent.nextSibling, false, parent.getParent());
+  }
+
+  return null;
+}
+
+function getPrevForSelect(prev: any, head?: any, parent?: any): any {
+  if (prev) {
+    debugger;
+    let ret;
+    if (!head && prev.isContainer()) {
+      const children = prev.getChildren() || [];
+      const lastChild = children && !children.isEmpty() ? children.get(children.size - 1) : null;
+
+      ret = getPrevForSelect(lastChild);
+      if (ret) {
+        return ret;
+      }
+    }
+
+    if (!head) {
+      return prev;
+    }
+
+    ret = getPrevForSelect(prev.prevSibling);
+    if (ret) {
+      return ret;
+    }
+  }
+
+  if (parent) {
+    return parent;
+  }
+
+  return null;
+}
+
 // hotkey binding
 hotkey.bind(['backspace', 'del'], (e: KeyboardEvent) => {
   const doc = focusing.focusDesigner?.currentDocument;
@@ -111,4 +172,93 @@ hotkey.bind(['command+y', 'ctrl+y', 'command+shift+z'], (e) => {
   e.preventDefault();
 
   his.forward();
+});
+
+// sibling selection
+hotkey.bind(['left', 'right'], (e, action) => {
+  const designer = focusing.focusDesigner;
+  const doc = designer?.currentDocument;
+  if (isFormEvent(e) || !doc) {
+    return;
+  }
+  e.preventDefault();
+  const selected = doc.selection.getTopNodes(true);
+  if (!selected || selected.length < 1) {
+    return;
+  }
+  const firstNode = selected[0];
+  const silbing = action === 'left' ? firstNode?.prevSibling : firstNode?.nextSibling;
+  silbing?.select();
+});
+
+hotkey.bind(['up', 'down'], (e, action) => {
+  const designer = focusing.focusDesigner;
+  const doc = designer?.currentDocument;
+  if (isFormEvent(e) || !doc) {
+    return;
+  }
+  e.preventDefault();
+  const selected = doc.selection.getTopNodes(true);
+  if (!selected || selected.length < 1) {
+    return;
+  }
+  const firstNode = selected[0];
+
+  if (action === 'down') {
+    const next = getNextForSelect(firstNode, true, firstNode.getParent());
+    next?.select();
+  } else if (action === 'up') {
+    const prev = getPrevForSelect(firstNode, true, firstNode.getParent());
+    prev?.select();
+  }
+});
+
+hotkey.bind(['option+up', 'option+down', 'option+left', 'option+right'], (e, action) => {
+  const designer = focusing.focusDesigner;
+  const doc = designer?.currentDocument;
+  if (isFormEvent(e) || !doc) {
+    return;
+  }
+  e.preventDefault();
+  const selected = doc.selection.getTopNodes(true);
+  if (!selected || selected.length < 1) {
+    return;
+  }
+  // TODO: 此处需要增加判断当前节点是否可被操作移动，原ve里是用 node.canOperating()来判断
+
+  const firstNode = selected[0];
+  const parent = firstNode.getParent();
+  if (!parent) return;
+
+  const isPrev = /(up|left)$/.test(action);
+  const isTravel = /(up|down)$/.test(action);
+
+  const silbing = isPrev ? firstNode.prevSibling : firstNode.nextSibling;
+  if (silbing) {
+    if (isTravel && silbing.isContainer()) {
+      const place = silbing.getSuitablePlace(firstNode, null);
+      if (isPrev) {
+        place.container.insertAfter(firstNode, place.ref);
+      } else {
+        place.container.insertBefore(firstNode, place.ref);
+      }
+    } else if (isPrev) {
+      parent.insertBefore(firstNode, silbing);
+    } else {
+      parent.insertAfter(firstNode, silbing);
+    }
+    firstNode?.select();
+    return;
+  }
+  if (isTravel) {
+    const place = parent.getSuitablePlace(firstNode, null); // upwards
+    if (place) {
+      if (isPrev) {
+        place.container.insertBefore(firstNode, place.ref);
+      } else {
+        place.container.insertAfter(firstNode, place.ref);
+      }
+      firstNode?.select();
+    }
+  }
 });
