@@ -213,47 +213,52 @@ hotkey.bind(['up', 'down'], (e, action) => {
   }
 });
 
-// HotKey.bind(['option+up', 'option+down', 'option+left', 'option+right'], (e, action) => {
-//   if (Viewport.isPreview() || isFormEvent(e) || !isInEditingArea(e)) {
-//     return;
-//   }
+hotkey.bind(['option+up', 'option+down', 'option+left', 'option+right'], (e, action) => {
+  const designer = focusing.focusDesigner;
+  const doc = designer?.currentDocument;
+  if (isFormEvent(e) || !doc) {
+    return;
+  }
+  e.preventDefault();
+  const selected = doc.selection.getTopNodes(true);
+  if (!selected || selected.length < 1) {
+    return;
+  }
+  // TODO: 此处需要增加判断当前节点是否可被操作移动，原ve里是用 node.canOperating()来判断
 
-//   e.preventDefault();
-//   const selected = Exchange.getSelected();
-//   if (!selected || !selected.canOperating()) return;
+  const firstNode = selected[0];
+  const parent = firstNode.getParent();
+  if (!parent) return;
 
-//   const parent = selected.getParent();
-//   if (!parent) return;
+  const isPrev = /(up|left)$/.test(action);
+  const isTravel = /(up|down)$/.test(action);
 
-//   const isPrev = /(up|left)$/.test(action);
-//   const isTravel = /(up|down)$/.test(action);
-
-//   const silbing = isPrev ? selected.prevSibling() : selected.nextSibling();
-//   if (silbing) {
-//     if (isTravel && silbing.isContainer()) {
-//       const place = silbing.getSuitablePlace(selected, null, true);
-//       if (isPrev) {
-//         place.container.insertAfter(selected, place.ref);
-//       } else {
-//         place.container.insertBefore(selected, place.ref);
-//       }
-//     } else if (isPrev) {
-//       parent.insertBefore(selected, silbing);
-//     } else {
-//       parent.insertAfter(selected, silbing);
-//     }
-//     Exchange.select(selected);
-//     return;
-//   }
-//   if (isTravel) {
-//     const place = parent.getSuitablePlace(selected); // upwards
-//     if (place) {
-//       if (isPrev) {
-//         place.container.insertBefore(selected, place.ref);
-//       } else {
-//         place.container.insertAfter(selected, place.ref);
-//       }
-//       Exchange.select(selected);
-//     }
-//   }
-// });
+  const silbing = isPrev ? firstNode.prevSibling : firstNode.nextSibling;
+  if (silbing) {
+    if (isTravel && silbing.isContainer()) {
+      const place = silbing.getSuitablePlace(firstNode, null);
+      if (isPrev) {
+        place.container.insertAfter(firstNode, place.ref);
+      } else {
+        place.container.insertBefore(firstNode, place.ref);
+      }
+    } else if (isPrev) {
+      parent.insertBefore(firstNode, silbing);
+    } else {
+      parent.insertAfter(firstNode, silbing);
+    }
+    firstNode?.select();
+    return;
+  }
+  if (isTravel) {
+    const place = parent.getSuitablePlace(firstNode, null); // upwards
+    if (place) {
+      if (isPrev) {
+        place.container.insertBefore(firstNode, place.ref);
+      } else {
+        place.container.insertAfter(firstNode, place.ref);
+      }
+      firstNode?.select();
+    }
+  }
+});
