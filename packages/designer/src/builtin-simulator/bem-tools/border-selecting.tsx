@@ -12,7 +12,6 @@ import classNames from 'classnames';
 import { observer, computed, Tip } from '@ali/lowcode-editor-core';
 import { createIcon, isReactComponent } from '@ali/lowcode-utils';
 import { ActionContentObject, isActionContentObject } from '@ali/lowcode-types';
-import { SimulatorContext } from '../context';
 import { BuiltinSimulatorHost } from '../host';
 import { OffsetObserver } from '../../designer';
 import { Node } from '../../document';
@@ -186,7 +185,7 @@ export class BorderSelecting extends Component<{ host: BuiltinSimulatorHost }> {
 
   @computed get selecting() {
     const doc = this.host.document;
-    if (doc.suspensed) {
+    if (doc.suspensed || this.host.liveEditing.editing) {
       return null;
     }
     const selection = doc.selection;
@@ -200,8 +199,7 @@ export class BorderSelecting extends Component<{ host: BuiltinSimulatorHost }> {
   render() {
     const selecting = this.selecting;
     if (!selecting || selecting.length < 1) {
-      // DIRTY FIX, recore has a bug!
-      return <Fragment />;
+      return null;
     }
 
     return (

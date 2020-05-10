@@ -29,7 +29,7 @@ export interface ComponentConfigure {
   descriptor?: string;
   nestingRule?: NestingRule;
 
-  rectSelector?: string;
+  rootSelector?: string;
   // copy,move,delete | *
   disableBehaviors?: string[] | string;
   actions?: ComponentAction[];
@@ -74,6 +74,17 @@ export interface Experimental {
   //           请求 hud 显示
   // drag 时 计算 并 设置效果
   //     更新控制柄位置
+
+  // 纯文本编辑：如果 children 内容是
+  // 文本编辑：配置
+  liveTextEditing?: Array<{
+    propTarget: string;
+    selector?: string;
+    // 编辑模式 纯文本|段落编辑|文章编辑（默认纯文本，无跟随工具条）
+    mode?: 'plaintext' | 'paragraph' | 'article';
+    // 从 contentEditable 获取内容并设置到属性
+    onSaveContent?: (content: string, prop: any) => any;
+  }>;
 }
 
 export interface Configure {

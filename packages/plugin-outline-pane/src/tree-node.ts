@@ -65,8 +65,8 @@ export default class TreeNode {
     this._expanded = value;
   }
 
-  @computed get hovering() {
-    return this.designer.hovering.current === this.node;
+  @computed get detecting() {
+    return this.designer.detecting.current === this.node;
   }
 
   @computed get hidden(): boolean {

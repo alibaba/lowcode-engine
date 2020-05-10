@@ -25,6 +25,7 @@ import { parseMetadata } from './utils/parse-metadata';
 import { ComponentMetadata } from '@ali/lowcode-types';
 import { BuiltinSimulatorRenderer } from './renderer';
 import clipboard from '../designer/clipboard';
+import { LiveEditing } from './live-editing/live-editing';
 
 export interface LibraryItem {
   package: string;
@@ -224,7 +225,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     //       just listen special callback
     // because iframe maybe reload
     this.setupDragAndClick();
-    this.setupHovering();
+    this.setupDetecting();
+    this.setupLiveEditing();
   }
 
   setupDragAndClick() {
@@ -238,6 +240,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     doc.addEventListener(
       'mousedown',
       (downEvent: MouseEvent) => {
+        if (this.liveEditing.editing) {
+          return;
+        }
         // stop response document focus event
         downEvent.stopPropagation();
         downEvent.preventDefault();
@@ -250,7 +255,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           doc.removeEventListener('mouseup', checkSelect, true);
           if (!isShaken(downEvent, e)) {
             const id = node.id;
-            designer.activeTracker.track(node);
+            designer.activeTracker.track({ node, instance: nodeInst?.instance });
             if (isMulti && !isRootNode(node) && selection.has(id)) {
               selection.remove(id);
             } else {
@@ -265,7 +270,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           if (isMulti) {
             // multi select mode, directily add
             if (!selection.has(node.id)) {
-              designer.activeTracker.track(node);
+              designer.activeTracker.track({ node, instance: nodeInst?.instance });
               selection.add(node.id);
               ignoreUpSelected = true;
             }
@@ -305,36 +310,24 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       },
       true,
     );
-
-    // cause edit
-    doc.addEventListener(
-      'dblclick',
-      (e: MouseEvent) => {
-        // stop response document dblclick event
-        e.stopPropagation();
-        e.preventDefault();
-        // todo: quick editing
-      },
-      true,
-    );
   }
 
   private disableHovering?: () => void;
   /**
    * 设置悬停处理
    */
-  setupHovering() {
+  setupDetecting() {
     const doc = this.contentDocument!;
-    const hovering = this.document.designer.hovering;
+    const detecting = this.document.designer.detecting;
     const hover = (e: MouseEvent) => {
-      if (!hovering.enable) {
+      if (!detecting.enable) {
         return;
       }
       const nodeInst = this.getNodeInstanceFromElement(e.target as Element);
-      hovering.hover(nodeInst?.node || null);
+      detecting.capture(nodeInst?.node || null);
       e.stopPropagation();
     };
-    const leave = () => hovering.leave(this.document);
+    const leave = () => detecting.leave(this.document);
 
     doc.addEventListener('mouseover', hover, true);
     doc.addEventListener('mouseleave', leave, false);
@@ -349,11 +342,45 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     );
 
     this.disableHovering = () => {
-      hovering.leave(this.document);
+      detecting.leave(this.document);
       doc.removeEventListener('mouseover', hover, true);
       doc.removeEventListener('mouseleave', leave, false);
       this.disableHovering = undefined;
     };
+  }
+
+  readonly liveEditing = new LiveEditing();
+  setupLiveEditing() {
+    const doc = this.contentDocument!;
+    // cause edit
+    doc.addEventListener(
+      'dblclick',
+      (e: MouseEvent) => {
+        // stop response document dblclick event
+        e.stopPropagation();
+        e.preventDefault();
+
+        const targetElement = e.target as HTMLElement;
+        const nodeInst = this.getNodeInstanceFromElement(targetElement);
+        if (!nodeInst) {
+          return;
+        }
+        const node = nodeInst.node || this.document.rootNode;
+
+        const rootElement = this.findDOMNodes(nodeInst.instance, node.componentMeta.rootSelector)?.find(item => item.contains(targetElement)) as HTMLElement;
+        if (!rootElement) {
+          return;
+        }
+
+        this.liveEditing.apply({
+          node,
+          rootElement,
+          event: e,
+        });
+      },
+      true,
+    );
+
   }
 
   /**
@@ -368,7 +395,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     } else {
       // weekup some autorun reaction
       if (!this.disableHovering) {
-        this.setupHovering();
+        this.setupDetecting();
       }
     }
   }
@@ -455,7 +482,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     if (!instances) {
       return null;
     }
-    return this.computeComponentInstanceRect(instances[0], node.componentMeta.rectSelector);
+    return this.computeComponentInstanceRect(instances[0], node.componentMeta.rootSelector);
   }
 
   /**
@@ -463,19 +490,12 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
    */
   computeComponentInstanceRect(instance: ComponentInstance, selector?: string): Rect | null {
     const renderer = this.renderer!;
-    const elements = renderer.findDOMNodes(instance);
+    const elements = this.findDOMNodes(instance, selector);
     if (!elements) {
       return null;
     }
 
-    let elems = elements.slice();
-    if (selector) {
-      const matched = getMatched(elems, selector);
-      if (!matched) {
-        return null;
-      }
-      elems = [matched];
-    }
+    const elems = elements.slice();
     let rects: DOMRect[] | undefined;
     let last: { x: number; y: number; r: number; b: number } | undefined;
     let computed = false;
@@ -534,8 +554,20 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   /**
    * @see ISimulator
    */
-  findDOMNodes(instance: ComponentInstance): Array<Element | Text> | null {
-    return this._renderer?.findDOMNodes(instance) || null;
+  findDOMNodes(instance: ComponentInstance, selector?: string): Array<Element | Text> | null {
+    const elements = this._renderer?.findDOMNodes(instance);
+    if (!elements) {
+      return null;
+    }
+
+    if (selector) {
+      const matched = getMatched(elements, selector);
+      if (!matched) {
+        return null;
+      }
+      return [matched];
+    }
+    return elements;
   }
 
   /**
@@ -717,7 +749,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
     const { container, instance: containerInstance } = dropContainer;
 
-    const edge = this.computeComponentInstanceRect(containerInstance, container.componentMeta.rectSelector);
+    const edge = this.computeComponentInstanceRect(containerInstance, container.componentMeta.rootSelector);
 
     if (!edge) {
       return null;
@@ -758,7 +790,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           ? instances.find((inst) => this.getClosestNodeInstance(inst, container.id)?.instance === containerInstance)
           : instances[0]
         : null;
-      const rect = inst ? this.computeComponentInstanceRect(inst, node.componentMeta.rectSelector) : null;
+      const rect = inst ? this.computeComponentInstanceRect(inst, node.componentMeta.rootSelector) : null;
 
       if (!rect) {
         continue;

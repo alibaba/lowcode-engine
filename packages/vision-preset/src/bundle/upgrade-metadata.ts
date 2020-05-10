@@ -583,7 +583,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
 
   const component: any = {
     isContainer,
-    rectSelector,
+    rootSelector: rectSelector,
     isModal,
     isFloating,
     descriptor,

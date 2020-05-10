@@ -16,7 +16,7 @@ import { INodeSelector, Component } from '../simulator';
 import { Scroller, IScrollable } from './scroller';
 import { Dragon, isDragNodeObject, isDragNodeDataObject, LocateEvent, DragObject } from './dragon';
 import { ActiveTracker } from './active-tracker';
-import { Hovering } from './hovering';
+import { Detecting } from './detecting';
 import { DropLocation, LocationData, isLocationChildrenDetail } from './location';
 import { OffsetObserver, createOffsetObserver } from './offset-observer';
 import { focusing } from './focusing';
@@ -44,7 +44,7 @@ export interface DesignerProps {
 export class Designer {
   readonly dragon = new Dragon(this);
   readonly activeTracker = new ActiveTracker();
-  readonly hovering = new Hovering();
+  readonly detecting = new Detecting();
   readonly project: Project;
   readonly editor: IEditor;
 
@@ -68,7 +68,7 @@ export class Designer {
     this.project = new Project(this, props.defaultSchema);
 
     this.dragon.onDragstart((e) => {
-      this.hovering.enable = false;
+      this.detecting.enable = false;
       const { dragObject } = e;
       if (isDragNodeObject(dragObject)) {
         if (dragObject.nodes.length === 1) {
@@ -118,7 +118,7 @@ export class Designer {
         this.props.onDragend(e, loc);
       }
       this.postEvent('dragend', e, loc);
-      this.hovering.enable = true;
+      this.detecting.enable = true;
     });
 
     this.activeTracker.onChange(({ node, detail }) => {

@@ -66,6 +66,7 @@ function getPrevForSelect(prev: any, head?: any, parent?: any): any {
 
 // hotkey binding
 hotkey.bind(['backspace', 'del'], (e: KeyboardEvent) => {
+  // TODO: use focus-tracker
   const doc = focusing.focusDesigner?.currentDocument;
   if (isFormEvent(e) || !doc) {
     return;
@@ -101,14 +102,6 @@ hotkey.bind(['command+c', 'ctrl+c', 'command+x', 'ctrl+x'], (e, action) => {
   }
   e.preventDefault();
 
-  /*
-  const doc = getCurrentDocument();
-  if (isFormEvent(e) || !doc || !(focusing.id === 'outline' || focusing.id === 'canvas')) {
-    return;
-  }
-  e.preventDefault();
-  */
-
   const selected = doc.selection.getTopNodes(true);
   if (!selected || selected.length < 1) return;
 
@@ -119,7 +112,7 @@ hotkey.bind(['command+c', 'ctrl+c', 'command+x', 'ctrl+x'], (e, action) => {
 
   clipboard.setData(data);
 
-  const cutMode = action.indexOf('x') > 0;
+  const cutMode = action && action.indexOf('x') > 0;
   if (cutMode) {
     selected.forEach((node) => {
       const parentNode = node.getParent();
@@ -230,7 +223,7 @@ hotkey.bind(['option+left', 'option+right'], (e, action) => {
   const parent = firstNode.getParent();
   if (!parent) return;
 
-  const isPrev = /(left)$/.test(action);
+  const isPrev = action && /(left)$/.test(action);
 
   const silbing = isPrev ? firstNode.prevSibling : firstNode.nextSibling;
   if (silbing) {

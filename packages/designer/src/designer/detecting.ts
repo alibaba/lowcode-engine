@@ -1,7 +1,7 @@
 import { obx } from '@ali/lowcode-editor-core';
 import { Node, DocumentModel } from '../document';
 
-export class Hovering {
+export class Detecting {
   @obx.ref private _enable = true;
   get enable() {
     return this._enable;
@@ -19,11 +19,11 @@ export class Hovering {
     return this._current;
   }
 
-  hover(node: Node | null) {
+  capture(node: Node | null) {
     this._current = node;
   }
 
-  unhover(node: Node) {
+  release(node: Node) {
     if (this._current === node) {
       this._current = null;
     }

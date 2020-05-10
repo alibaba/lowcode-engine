@@ -106,7 +106,7 @@ function processDetail({ target, detail, document }: DropLocation): InsertionDat
     if (!instances) {
       return {};
     }
-    const edge = sim.computeComponentInstanceRect(instances[0], target.componentMeta.rectSelector);
+    const edge = sim.computeComponentInstanceRect(instances[0], target.componentMeta.rootSelector);
     return edge ? { edge, insertType: 'cover', coverRect: edge } : {};
   }
 }

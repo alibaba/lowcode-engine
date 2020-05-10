@@ -284,9 +284,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    */
   hover(flag = true) {
     if (flag) {
-      this.document.designer.hovering.hover(this);
+      this.document.designer.detecting.capture(this);
     } else {
-      this.document.designer.hovering.unhover(this);
+      this.document.designer.detecting.release(this);
     }
   }
 

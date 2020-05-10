@@ -105,7 +105,7 @@ export class OffsetObserver {
         return;
       }
 
-      const rect = host.computeComponentInstanceRect(instance!, node.componentMeta.rectSelector);
+      const rect = host.computeComponentInstanceRect(instance!, node.componentMeta.rootSelector);
 
       if (!rect) {
         this.hasOffset = false;

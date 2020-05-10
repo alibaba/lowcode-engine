@@ -81,9 +81,9 @@ export class ComponentMeta {
   get descriptor(): string | undefined {
     return this._descriptor;
   }
-  private _rectSelector?: string;
-  get rectSelector(): string | undefined {
-    return this._rectSelector;
+  private _rootSelector?: string;
+  get rootSelector(): string | undefined {
+    return this._rootSelector;
   }
   private _transformedMetadata?: TransformedComponentMetadata;
   get configure() {
@@ -158,7 +158,7 @@ export class ComponentMeta {
       this._isContainer = component.isContainer ? true : false;
       this._isModal = component.isModal ? true : false;
       this._descriptor = component.descriptor;
-      this._rectSelector = component.rectSelector;
+      this._rootSelector = component.rootSelector;
       if (component.nestingRule) {
         const { parentWhitelist, childWhitelist } = component.nestingRule;
         this.parentWhitelist = buildFilter(parentWhitelist);

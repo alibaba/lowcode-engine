@@ -1,11 +1,10 @@
 import { Component, Fragment, PureComponent } from 'react';
 import classNames from 'classnames';
 import { computed, observer, Title } from '@ali/lowcode-editor-core';
-import { SimulatorContext } from '../context';
 import { BuiltinSimulatorHost } from '../host';
 import { TitleContent } from '@ali/lowcode-types';
 
-export class BorderHoveringInstance extends PureComponent<{
+export class BorderDetectingInstance extends PureComponent<{
   title: TitleContent;
   rect: DOMRect | null;
   scale: number;
@@ -24,7 +23,7 @@ export class BorderHoveringInstance extends PureComponent<{
       transform: `translate(${(scrollX + rect.left) * scale}px, ${(scrollY + rect.top) * scale}px)`,
     };
 
-    const className = classNames('lc-borders lc-borders-hovering');
+    const className = classNames('lc-borders lc-borders-detecting');
 
     // TODO:
     // 1. thinkof icon
@@ -39,7 +38,7 @@ export class BorderHoveringInstance extends PureComponent<{
 }
 
 @observer
-export class BorderHovering extends Component<{ host: BuiltinSimulatorHost }> {
+export class BorderDetecting extends Component<{ host: BuiltinSimulatorHost }> {
   shouldComponentUpdate() {
     return false;
   }
@@ -60,7 +59,7 @@ export class BorderHovering extends Component<{ host: BuiltinSimulatorHost }> {
     const host = this.props.host;
     const doc = host.document;
     const selection = doc.selection;
-    const current = host.designer.hovering.current;
+    const current = host.designer.detecting.current;
     if (!current || current.document !== doc || selection.has(current.id)) {
       return null;
     }
@@ -70,36 +69,36 @@ export class BorderHovering extends Component<{ host: BuiltinSimulatorHost }> {
   render() {
     const host = this.props.host;
     const current = this.current;
-    if (!current || host.viewport.scrolling) {
-      return <Fragment />;
+    if (!current || host.viewport.scrolling || host.liveEditing.editing) {
+      return null;
     }
     const instances = host.getComponentInstances(current);
     if (!instances || instances.length < 1) {
-      return <Fragment />;
+      return null;
     }
 
     if (instances.length === 1) {
       return (
-        <BorderHoveringInstance
+        <BorderDetectingInstance
           key="line-h"
           title={current.title}
           scale={this.scale}
           scrollX={this.scrollX}
           scrollY={this.scrollY}
-          rect={host.computeComponentInstanceRect(instances[0], current.componentMeta.rectSelector)}
+          rect={host.computeComponentInstanceRect(instances[0], current.componentMeta.rootSelector)}
         />
       );
     }
     return (
       <Fragment>
         {instances.map((inst, i) => (
-          <BorderHoveringInstance
+          <BorderDetectingInstance
             key={`line-h-${i}`}
             title={current.title}
             scale={this.scale}
             scrollX={this.scrollX}
             scrollY={this.scrollY}
-            rect={host.computeComponentInstanceRect(inst, current.componentMeta.rectSelector)}
+            rect={host.computeComponentInstanceRect(inst, current.componentMeta.rootSelector)}
           />
         ))}
       </Fragment>
