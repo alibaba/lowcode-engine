@@ -396,6 +396,13 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   /**
+   * 清除已设置的值
+   */
+  clearPropValue(path: string): void {
+    this.getProp(path, false)?.unset();
+  }
+
+  /**
    * 设置多个属性值，和原有值合并
    */
   mergeProps(props: PropsMap) {

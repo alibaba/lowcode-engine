@@ -1,10 +1,11 @@
 import { Component } from 'react';
-import { intl, shallowIntl, createSetterContent, observer } from '@ali/lowcode-editor-core';
+import { shallowIntl, createSetterContent, observer } from '@ali/lowcode-editor-core';
 import { createContent } from '@ali/lowcode-utils';
 import { Field, createField } from '../field';
 import PopupService from '../popup';
 import { SettingField, isSettingField, SettingTopEntry, SettingEntry } from '@ali/lowcode-designer';
 import { isSetterConfig, CustomView } from '@ali/lowcode-types';
+import { intl } from '../../locale';
 
 @observer
 class SettingFieldView extends Component<{ field: SettingField }> {
@@ -41,26 +42,19 @@ class SettingFieldView extends Component<{ field: SettingField }> {
       setterType = setter;
     }
     let value = null;
-    if (field.type === 'field') {
-      if (defaultValue != null && !('defaultValue' in setterProps)) {
-        setterProps.defaultValue = defaultValue;
-        if (initialValue == null) {
-          initialValue = defaultValue;
-        }
+    if (defaultValue != null && !('defaultValue' in setterProps)) {
+      setterProps.defaultValue = defaultValue;
+      if (initialValue == null) {
+        initialValue = defaultValue;
       }
-      if (field.valueState > 0) {
-        value = field.getValue();
-      } else {
-        setterProps.multiValue = true;
-        if (!('placeholder' in setterProps)) {
-          // FIXME! move to locale file
-          setterProps.placeholder = intl({
-            type: 'i18n',
-            'zh-CN': '多种值',
-            'en-US': 'Multiple Value',
-          });
-        }
+    }
+    if (field.valueState === -1) {
+      setterProps.multiValue = true;
+      if (!('placeholder' in setterProps)) {
+        setterProps.placeholder = intl('Multiple Value');
       }
+    } else {
+      value = field.getValue();
     }
 
     // todo: error handling
@@ -69,7 +63,9 @@ class SettingFieldView extends Component<{ field: SettingField }> {
       {
         title: field.title,
         collapsed: !field.expanded,
+        valueState: field.isRequired ? 10 : field.valueState,
         onExpandChange: (expandState) => field.setExpanded(expandState),
+        onClear: () => field.clearValue(),
       },
       createSetterContent(setterType, {
         ...shallowIntl(setterProps),

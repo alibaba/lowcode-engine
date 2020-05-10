@@ -84,35 +84,6 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     return new SettingField(this, config);
   }
 
-  // ====== 当前属性读写 =====
-
-  /**
-   * 判断当前属性值是否一致
-   * 0 无值/多种值
-   * 1 类似值，比如数组长度一样
-   * 2 单一植
-   */
-  get valueState(): number {
-    if (this.type !== 'field') {
-      return 0;
-    }
-    const propName = this.path.join('.');
-    const first = this.nodes[0].getProp(propName)!;
-    let l = this.nodes.length;
-    let state = 2;
-    while (l-- > 1) {
-      const next = this.nodes[l].getProp(propName, false);
-      const s = first.compare(next);
-      if (s > 1) {
-        return 0;
-      }
-      if (s === 1) {
-        state = 1;
-      }
-    }
-    return state;
-  }
-
   purge() {
     this.disposeItems();
   }

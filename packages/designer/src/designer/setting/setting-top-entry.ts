@@ -137,6 +137,15 @@ export class SettingTopEntry implements SettingEntry {
   }
 
   /**
+   * 清除已设置值
+   */
+  clearPropValue(propName: string) {
+    this.nodes.forEach((node) => {
+      node.clearPropValue(propName);
+    });
+  }
+
+  /**
    * 获取子级属性值
    */
   getPropValue(propName: string): any {
