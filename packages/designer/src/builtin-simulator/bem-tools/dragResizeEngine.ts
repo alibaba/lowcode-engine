@@ -25,7 +25,6 @@ class DragResizeEngine {
   from(shell: Element, direction: string, boost: (e: MouseEvent) => any) {
     let node: any;
     let startEvent: MouseEvent;
-    console.log('drag from');
 
     if (!shell) {
       return () => {};
@@ -65,7 +64,6 @@ class DragResizeEngine {
   }
 
   onResizeStart(func: (e: MouseEvent, direction: string, node: any) => any) {
-    console.log('hello resize start');
     this.emitter.on('resizestart', func);
     return () => {
       this.emitter.removeListener('resizestart', func);
@@ -73,7 +71,6 @@ class DragResizeEngine {
   }
 
   onResize(func: (e: MouseEvent, direction: string, node: any, moveX: number, moveY: number) => any) {
-    console.log('hello on resize');
     this.emitter.on('resize', func);
     return () => {
       this.emitter.removeListener('resize', func);

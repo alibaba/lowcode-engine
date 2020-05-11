@@ -10,11 +10,11 @@ import { BuiltinSimulatorHost } from '../host';
 import { OffsetObserver } from '../../designer';
 
 @observer
-export default class BoxResizing extends Component {
+export default class BoxResizing extends Component<{ host: BuiltinSimulatorHost }> {
   static contextType = SimulatorContext;
 
   get host(): BuiltinSimulatorHost {
-    return this.context;
+    return this.props.host;
   }
 
   get dragging(): boolean {
@@ -80,7 +80,7 @@ export default class BoxResizing extends Component {
     return (
       <Fragment>
         {selecting.map((node) => (
-          <BoxResizingForNode key={node.id} node={node} />
+          <BoxResizingForNode key={node.id} node={node} host={this.props.host} />
         ))}
       </Fragment>
     );
@@ -88,11 +88,11 @@ export default class BoxResizing extends Component {
 }
 
 @observer
-export class BoxResizingForNode extends Component<{ node: Node }> {
+export class BoxResizingForNode extends Component<{ host: BuiltinSimulatorHost; node: Node }> {
   static contextType = SimulatorContext;
 
   get host(): BuiltinSimulatorHost {
-    return this.context;
+    return this.props.host;
   }
 
   get dragging(): boolean {
@@ -117,7 +117,7 @@ export class BoxResizingForNode extends Component<{ node: Node }> {
     }
     return (
       <Fragment key={node.id}>
-        {instances.map((instance) => {
+        {instances.map((instance: any) => {
           const observed = designer.createOffsetObserver({
             node,
             instance,
@@ -147,28 +147,49 @@ export class BoxResizingInstance extends Component<{
     this.props.observed.purge();
   }
 
+  getExperiMentalFns = (metaData: any) => {
+    if (metaData.experimental && metaData.experimental.callbacks) {
+      return metaData.experimantal.callbacks;
+    }
+  };
+
   componentDidMount() {
     // this.hoveringCapture.setBoundary(this.outline);
     this.willBind();
 
     const resize = (e: MouseEvent, direction: string, node: any, moveX: number, moveY: number) => {
-      const proto = node.getPrototype();
-      if (proto && proto.options && typeof proto.options.onResize === 'function') {
-        proto.options.onResize(e, direction, node, moveX, moveY);
+      const metaData = node.componentMeta.getMetadata();
+      if (
+        metaData &&
+        metaData.experimental &&
+        metaData.experimental.callbacks &&
+        metaData.experimental.callbacks.onResize === 'funtion'
+      ) {
+        metaData.experimental.callbacks.onResize(e, direction, node, moveX, moveY);
       }
     };
 
     const resizeStart = (e: MouseEvent, direction: string, node: any) => {
-      const proto = node.getPrototype();
-      if (proto && proto.options && typeof proto.options.onResizeStart === 'function') {
-        proto.options.onResizeStart(e, direction, node);
+      const metaData = node.componentMeta.getMetadata();
+      if (
+        metaData &&
+        metaData.experimental &&
+        metaData.experimental.callbacks &&
+        metaData.experimental.callbacks.onResizeStart === 'funtion'
+      ) {
+        metaData.experimental.callbacks.onResizeStart(e, direction, node);
       }
     };
 
     const resizeEnd = (e: MouseEvent, direction: string, node: any) => {
-      const proto = node.getPrototype();
-      if (proto && proto.options && typeof proto.options.onResizeEnd === 'function') {
-        proto.options.onResizeEnd(e, direction, node);
+      const metaData = node.componentMeta.getMetadata();
+      if (
+        metaData &&
+        metaData.experimental &&
+        metaData.experimental.callbacks &&
+        metaData.experimental.callbacks.onResizeEnd === 'funtion'
+      ) {
+        metaData.experimental.callbacks.onResizeStart(e, direction, node);
       }
     };
 
@@ -194,10 +215,12 @@ export class BoxResizingInstance extends Component<{
         //   return null;
         // }
         // return this.hoveringLine.getCurrentNode();
+        return this.props.observed.node;
       }),
     );
     unBind.push(
       DragResizeEngine.from(this.outlineLeft, 'w', () => {
+        return this.props.observed.node;
         // if (!this.hoveringLine.hasOutline()) {
         //   return null;
         // }
@@ -222,39 +245,17 @@ export class BoxResizingInstance extends Component<{
     }
 
     const { node, offsetWidth, offsetHeight, offsetTop, offsetLeft } = observed;
-    const triggerVisible = {
-      w: true,
-      e: true,
-    };
-    // let triggerVisible: any = {};
+    let triggerVisible: any = [];
     const metaData = node.componentMeta.getMetadata();
-    let resizingHandler: any = {};
     if (metaData && metaData.experimental && metaData.experimental.getResizingHandlers) {
-      resizingHandler = metaData.experimental.getResizingHandlers(node);
+      triggerVisible = metaData.experimental.getResizingHandlers(node);
     }
-    console.log(resizingHandler, 'resizing handle');
-    // if (proto && proto.options && typeof proto.options.canResizing === 'boolean') {
-    //   triggerVisible = {
-    //     e: proto.options.canResizing,
-    //     w: proto.options.canResizing,
-    //     n: proto.options.canResizing,
-    //     s: proto.options.canResizing,
-    //   };
-    // } else if (proto && proto.options && typeof proto.options.canResizing === 'function') {
-    //   triggerVisible = {
-    //     e: proto.options.canResizing(node, 'e'),
-    //     w: proto.options.canResizing(node, 'w'),
-    //     n: proto.options.canResizing(node, 'n'),
-    //     s: proto.options.canResizing(node, 's'),
-    //   };
-    // }
-    console.log(resizingHandler, 'node data');
 
     const className = classNames('lc-borders lc-resize-box');
 
     return (
       <div>
-        {triggerVisible.w && (
+        {triggerVisible.includes('w') && (
           <div
             ref={(ref) => {
               this.outlineLeft = ref;
@@ -267,7 +268,7 @@ export class BoxResizingInstance extends Component<{
             }}
           />
         )}
-        {triggerVisible.e && (
+        {triggerVisible.includes('e') && (
           <div
             className={className}
             ref={(ref) => {
