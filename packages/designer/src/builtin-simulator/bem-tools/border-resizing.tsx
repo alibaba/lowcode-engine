@@ -1,7 +1,7 @@
 import { Component, Fragment } from 'react';
 
 // import Bus from '../../../../core/bus';
-// import DragResizeEngine from '../../../../core/dragResizeEngine';
+import DragResizeEngine from './dragResizeEngine';
 // import OverlayCore from '../../../../core/overlay';
 import { observer, computed, Tip } from '@ali/lowcode-editor-core';
 import classNames from 'classnames';
@@ -52,89 +52,20 @@ export default class BoxResizing extends Component {
     // this.bus = new Bus();
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
     // this.hoveringCapture.setBoundary(this.outline);
     // this.willBind();
-
-    const resize = (e: MouseEvent, direction: string, node: any, moveX: number, moveY: number) => {
-      const proto = node.getPrototype();
-      if (proto && proto.options && typeof proto.options.onResize === 'function') {
-        proto.options.onResize(e, direction, node, moveX, moveY);
-      }
-    };
-
-    const resizeStart = (e: MouseEvent, direction: string, node: any) => {
-      const proto = node.getPrototype();
-      if (proto && proto.options && typeof proto.options.onResizeStart === 'function') {
-        proto.options.onResizeStart(e, direction, node);
-      }
-    };
-
-    const resizeEnd = (e: MouseEvent, direction: string, node: any) => {
-      const proto = node.getPrototype();
-      if (proto && proto.options && typeof proto.options.onResizeEnd === 'function') {
-        proto.options.onResizeEnd(e, direction, node);
-      }
-    };
-
-    // DragResizeEngine.onResize(resize);
-    // DragResizeEngine.onResizeStart(resizeStart);
-    // DragResizeEngine.onResizeEnd(resizeEnd);
   }
 
-  // componentDidUpdate() {
-  //   this.hoveringCapture.setBoundary(this.outline);
-  //   this.willBind();
-  // }
-
-  // componentWillUnmount() {
-  //   this.hoveringCapture.setBoundary(null);
-  //   if (this.willDetach) {
-  //     this.willDetach();
-  //   }
-  //   if (this.willUnbind) {
-  //     this.willUnbind();
-  //   }
-  // }
-
-  // willBind() {
-  //   if (this.willUnbind) {
-  //     this.willUnbind();
-  //   }
-
-  //   if (!this.outlineRight && !this.outlineLeft) {
-  //     return;
-  //   }
-
-  //   const unBind: any[] = [];
-  //   unBind
-  //     .push
-  //     //   DragResizeEngine.from(this.outlineRight, 'e', () => {
-  //     //     if (!this.hoveringLine.hasOutline()) {
-  //     //       return null;
-  //     //     }
-  //     //     return this.hoveringLine.getCurrentNode();
-  //     //   }),
-  //     ();
-  //   unBind
-  //     .push
-  //     //   DragResizeEngine.from(this.outlineLeft, 'w', () => {
-  //     //     if (!this.hoveringLine.hasOutline()) {
-  //     //       return null;
-  //     //     }
-  //     //     return this.hoveringLine.getCurrentNode();
-  //     //   }),
-  //     ();
-
-  //   this.willUnbind = () => {
-  //     if (unBind && unBind.length > 0) {
-  //       unBind.forEach((item) => {
-  //         item();
-  //       });
-  //     }
-  //     this.willUnbind = null;
-  //   };
-  // }
+  componentWillUnmount() {
+    // // this.hoveringCapture.setBoundary(null);
+    // if (this.willDetach) {
+    //   this.willDetach();
+    // }
+    // if (this.willUnbind) {
+    //   this.willUnbind();
+    // }
+  }
 
   render() {
     const selecting = this.selecting;
@@ -142,10 +73,9 @@ export default class BoxResizing extends Component {
       // DIRTY FIX, recore has a bug!
       return <Fragment />;
     }
-    // console.log(selecting[0].componentMeta, 'component meta data');
-    const componentMeta = selecting[0].componentMeta;
-    const metaData = componentMeta.getMetadata();
-    console.log('meta data', metaData);
+
+    // const componentMeta = selecting[0].componentMeta;
+    // const metaData = componentMeta.getMetadata();
 
     return (
       <Fragment>
@@ -208,8 +138,81 @@ export class BoxResizingInstance extends Component<{
   highlight?: boolean;
   dragging?: boolean;
 }> {
+  // private outline: any;
+  private willUnbind: () => any;
+  private outlineRight: any;
+  private outlineLeft: any;
+
   componentWillUnmount() {
     this.props.observed.purge();
+  }
+
+  componentDidMount() {
+    // this.hoveringCapture.setBoundary(this.outline);
+    this.willBind();
+
+    const resize = (e: MouseEvent, direction: string, node: any, moveX: number, moveY: number) => {
+      const proto = node.getPrototype();
+      if (proto && proto.options && typeof proto.options.onResize === 'function') {
+        proto.options.onResize(e, direction, node, moveX, moveY);
+      }
+    };
+
+    const resizeStart = (e: MouseEvent, direction: string, node: any) => {
+      const proto = node.getPrototype();
+      if (proto && proto.options && typeof proto.options.onResizeStart === 'function') {
+        proto.options.onResizeStart(e, direction, node);
+      }
+    };
+
+    const resizeEnd = (e: MouseEvent, direction: string, node: any) => {
+      const proto = node.getPrototype();
+      if (proto && proto.options && typeof proto.options.onResizeEnd === 'function') {
+        proto.options.onResizeEnd(e, direction, node);
+      }
+    };
+
+    DragResizeEngine.onResize(resize);
+    DragResizeEngine.onResizeStart(resizeStart);
+    DragResizeEngine.onResizeEnd(resizeEnd);
+  }
+
+  willBind() {
+    if (this.willUnbind) {
+      this.willUnbind();
+    }
+
+    if (!this.outlineRight && !this.outlineLeft) {
+      return;
+    }
+
+    const unBind: any[] = [];
+
+    unBind.push(
+      DragResizeEngine.from(this.outlineRight, 'e', () => {
+        // if (!this.hoveringLine.hasOutline()) {
+        //   return null;
+        // }
+        // return this.hoveringLine.getCurrentNode();
+      }),
+    );
+    unBind.push(
+      DragResizeEngine.from(this.outlineLeft, 'w', () => {
+        // if (!this.hoveringLine.hasOutline()) {
+        //   return null;
+        // }
+        // return this.hoveringLine.getCurrentNode();
+      }),
+    );
+
+    this.willUnbind = () => {
+      if (unBind && unBind.length > 0) {
+        unBind.forEach((item) => {
+          item();
+        });
+      }
+      this.willUnbind = () => {};
+    };
   }
 
   render() {
@@ -218,12 +221,34 @@ export class BoxResizingInstance extends Component<{
       return null;
     }
 
-    const { offsetWidth, offsetHeight, offsetTop, offsetLeft } = observed;
+    const { node, offsetWidth, offsetHeight, offsetTop, offsetLeft } = observed;
     const triggerVisible = {
       w: true,
       e: true,
     };
-    console.log('hee');
+    // let triggerVisible: any = {};
+    const metaData = node.componentMeta.getMetadata();
+    let resizingHandler: any = {};
+    if (metaData && metaData.experimental && metaData.experimental.getResizingHandlers) {
+      resizingHandler = metaData.experimental.getResizingHandlers(node);
+    }
+    console.log(resizingHandler, 'resizing handle');
+    // if (proto && proto.options && typeof proto.options.canResizing === 'boolean') {
+    //   triggerVisible = {
+    //     e: proto.options.canResizing,
+    //     w: proto.options.canResizing,
+    //     n: proto.options.canResizing,
+    //     s: proto.options.canResizing,
+    //   };
+    // } else if (proto && proto.options && typeof proto.options.canResizing === 'function') {
+    //   triggerVisible = {
+    //     e: proto.options.canResizing(node, 'e'),
+    //     w: proto.options.canResizing(node, 'w'),
+    //     n: proto.options.canResizing(node, 'n'),
+    //     s: proto.options.canResizing(node, 's'),
+    //   };
+    // }
+    console.log(resizingHandler, 'node data');
 
     const className = classNames('lc-borders lc-resize-box');
 
@@ -231,6 +256,9 @@ export class BoxResizingInstance extends Component<{
       <div>
         {triggerVisible.w && (
           <div
+            ref={(ref) => {
+              this.outlineLeft = ref;
+            }}
             className={className}
             style={{
               height: offsetHeight,
@@ -242,6 +270,9 @@ export class BoxResizingInstance extends Component<{
         {triggerVisible.e && (
           <div
             className={className}
+            ref={(ref) => {
+              this.outlineRight = ref;
+            }}
             style={{
               height: offsetHeight,
               transform: `translate(${offsetLeft + offsetWidth - 10}px, ${offsetTop}px)`,
