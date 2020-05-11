@@ -142,19 +142,8 @@ export default class MixedSetter extends Component<{
   // dirty fix vision variable setter logic
   private hasVariableSetter = this.setters.some((item) => item.name === 'VariableSetter');
 
-  private getDefaultValueWhenUseSetter(oldUsed?: string): any {
-    if (this.used === 'I18nSetter') {
-      return {
-        type: 'i18n',
-        zh_CN: '',
-        en_US: '',
-      }
-    }
-  }
-
   private useSetter = (name: string) => {
     const { field, onChange } = this.props;
-    const oldUsed = this.used;
     if (name === 'VariableSetter') {
       const setterComponent = getSetter('VariableSetter')?.component as any;
       if (setterComponent && setterComponent.isPopup) {
@@ -167,10 +156,7 @@ export default class MixedSetter extends Component<{
     }
     const setter = this.setters.find((item) => item.name === name);
     this.used = name;
-    const newValue = this.getDefaultValueWhenUseSetter(oldUsed);
-    if (newValue !== undefined) {
-      onChange && onChange(newValue);
-    } else if (setter) {
+    if (setter) {
       this.handleInitial(setter);
     }
   };
