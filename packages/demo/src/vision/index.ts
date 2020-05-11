@@ -18,8 +18,11 @@ import { upgradeAssetsBundle } from './upgrade-assets';
 import { isCSSUrl } from '@ali/lowcode-utils';
 import { I18nSetter } from '@ali/visualengine-utils';
 import VariableSetter from '@ali/vs-variable-setter';
-import { isObject, isArray } from 'lodash';
+import _isArray from "lodash/isArray";
+import _isObject from "lodash/isObject";
+import _get from 'lodash/get';
 import funcParser from '@ali/vu-function-parser';
+import cv from 'compare-versions';
 
 
 const { editor, skeleton, context, HOOKS, Trunk } = Engine;
@@ -45,11 +48,7 @@ async function loadAssets() {
 
   if (assets.packages) {
     assets.packages.forEach((item: any) => {
-      if (item.package.indexOf('@ali/vc-') === 0 && item.urls) {
-        item.urls = item.urls.filter((url: string) => {
-          return url.indexOf('view.mobile') < 0;
-        });
-      } else if (item.package && externals.indexOf(item.package) > -1) {
+      if (item.package && externals.indexOf(item.package) > -1) {
         item.urls = null;
       }
     });
@@ -103,7 +102,7 @@ function initDemoPanes() {
     props: {
       align: 'bottom',
       icon: 'set',
-      description: '设置',
+      description: '设置'
     },
   });
   skeleton.add({
@@ -113,7 +112,7 @@ function initDemoPanes() {
     props: {
       align: 'bottom',
       icon: 'help',
-      description: '帮助',
+      description: '帮助'
     },
   });
 
@@ -336,9 +335,9 @@ function replaceFuncProp(props?: any){
     }
     if ((prop.compiled && prop.source) || prop.type === 'actionRef' || prop.type === 'js') {
       replaceProps[name] = funcParser(prop);
-    } else if (isObject(prop)) {
+    } else if (_isObject(prop)) {
       replaceFuncProp(prop);
-    } else if (isArray(prop)) {
+    } else if (_isArray(prop)) {
       prop.map((propItem) => {
         replaceFuncProp(propItem);
       });
@@ -348,7 +347,6 @@ function replaceFuncProp(props?: any){
   for (const name in replaceProps) {
     props[name] = replaceProps[name];
   }
-
   return props;
 };
 
@@ -399,7 +397,7 @@ function initHistoryPane() {
         historyManager: {
           historyManager,
           app: {
-  
+
           }
         },
         index: -940,

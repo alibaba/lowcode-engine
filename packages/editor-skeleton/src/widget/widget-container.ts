@@ -39,7 +39,7 @@ export default class WidgetContainer<T extends WidgetItem = any, G extends Widge
     if (nameOrItem && typeof nameOrItem === 'string') {
       item = this.get(nameOrItem);
     }
-    if (!isActiveable(nameOrItem)) {
+    if (!isActiveable(item)) {
       item = null;
     }
 
@@ -63,7 +63,7 @@ export default class WidgetContainer<T extends WidgetItem = any, G extends Widge
     if (nameOrItem && typeof nameOrItem === 'string') {
       item = this.get(nameOrItem);
     }
-    if (!isActiveable(nameOrItem)) {
+    if (!isActiveable(item)) {
       item = null;
     }
     if (this._current === item) {

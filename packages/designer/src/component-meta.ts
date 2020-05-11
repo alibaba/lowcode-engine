@@ -7,6 +7,8 @@ import {
   TitleContent,
   TransformedComponentMetadata,
   NestingFilter,
+  isTitleConfig,
+  I18nData,
 } from '@ali/lowcode-types';
 import { computed } from '@ali/lowcode-editor-core';
 import { Node, ParentalNode } from './document';
@@ -17,6 +19,8 @@ import { IconPage } from './icons/page';
 import { IconComponent } from './icons/component';
 import { IconRemove } from './icons/remove';
 import { IconClone } from './icons/clone';
+import { ReactElement } from 'react';
+import { IconHidden } from './icons/hidden';
 
 function ensureAList(list?: string | string[]): string[] | null {
   if (!list) {
@@ -91,12 +95,20 @@ export class ComponentMeta {
   private childWhitelist?: NestingFilter | null;
 
   private _title?: TitleContent;
-  get title() {
+  get title(): string | I18nData | ReactElement {
+    // TODO: 标记下。这块需要康师傅加一下API，页面正常渲染。
+    // string | i18nData | ReactElement
+    // TitleConfig  title.label
+    if (isTitleConfig(this._title)) {
+      return (this._title.label as any) || this.componentName;
+    }
     return this._title || this.componentName;
   }
 
   @computed get icon() {
+    // TODO: 标记下。这块需要康师傅加一下API，页面正常渲染。
     // give Slot default icon
+    // if _title is TitleConfig  get _title.icon
     return (
       this._transformedMetadata?.icon ||
       (this.componentName === 'Page' ? IconPage : this.isContainer ? IconContainer : IconComponent)
@@ -131,10 +143,10 @@ export class ComponentMeta {
       this._title =
         typeof title === 'string'
           ? {
-              type: 'i18n',
-              'en-US': this.componentName,
-              'zh-CN': title,
-            }
+            type: 'i18n',
+            'en-US': this.componentName,
+            'zh-CN': title,
+          }
           : title;
     }
 
@@ -320,12 +332,28 @@ const builtinComponentActions: ComponentAction[] = [
     important: true,
   },
   {
+    name: 'hide',
+    content: {
+      icon: IconHidden,
+      title: intlNode('hide'),
+      action(node: Node) {
+        node.getExtraProp('hidden', true)?.setValue(true);
+      },
+    },
+    condition: (node: Node) => {
+      return node.componentMeta.isModal;
+    },
+    important: true,
+  },
+  {
     name: 'copy',
     content: {
       icon: IconClone,
       title: intlNode('copy'),
       action(node: Node) {
         // node.remove();
+        const { document: doc, parent, schema, index } = node;
+        parent && doc.insertNode(parent, schema, index);
       },
     },
     important: true,

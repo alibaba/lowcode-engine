@@ -1,4 +1,5 @@
 import { TransformedComponentMetadata, FieldConfig, SettingTarget } from '@ali/lowcode-types';
+import { IconSlot } from '../icons/slot';
 
 export default function(metadata: TransformedComponentMetadata): TransformedComponentMetadata {
   const { componentName, configure = {} } = metadata;
@@ -46,7 +47,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
   const supportedLifecycles =
     events.supportedLifecycles ||
     (isRoot
-      ? [
+      ? /*[
           {
             description: '初始化时',
             name: 'constructor',
@@ -63,7 +64,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
             description: '卸载时',
             name: 'componentWillUnmount',
           },
-        ]
+        ]*/ null
       : null);
   if (supportedLifecycles) {
     eventsDefinition.push({
@@ -80,7 +81,22 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
     });
   }
   //  通用设置
-  const propsGroup = props || [];
+  let propsGroup = props || [];
+  const basicInfo: any = {};
+  if (componentName === 'Slot') {
+    basicInfo.icon = IconSlot;
+    propsGroup = [{
+      name: '___title',
+      title: {
+        type: 'i18n',
+        'en-US': 'Slot Title',
+        'zh-CN': '插槽标题'
+      },
+      setter: 'StringSetter',
+      defaultValue: '插槽容器'
+    }]
+  }
+  /*
   propsGroup.push({
     name: '#generals',
     title: { type: 'i18n', 'zh-CN': '通用', 'en-US': 'General' },
@@ -101,14 +117,14 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
         title: 'Ref',
         setter: 'StringSetter',
       },
-      /*
       {
         name: '!more',
         title: '更多',
         setter: 'PropertiesSetter',
-      },*/
+      },
     ],
   });
+  */
   const combined: FieldConfig[] = [
     {
       title: { type: 'i18n', 'zh-CN': '属性', 'en-US': 'Props' },
@@ -182,8 +198,15 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
       items: [
         {
           name: '___condition',
-          title: { type: 'i18n', 'zh-CN': '条件显示', 'en-US': 'Condition' },
-          setter: 'ExpressionSetter',
+          title: { type: 'i18n', 'zh-CN': '是否渲染', 'en-US': 'Condition' },
+          setter: [{
+            componentName: 'BoolSetter',
+            props: {
+              defaultValue: true,
+            }
+          }, {
+            componentName: 'VariableSetter'
+          }],
         },
         {
           name: '#loop',
@@ -192,27 +215,14 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
             {
               name: '___loop',
               title: { type: 'i18n', 'zh-CN': '循环数据', 'en-US': 'Loop Data' },
-              setter: {
-                componentName: 'MixinSetter',
+              setter: [{
+                componentName: 'JsonSetter',
                 props: {
-                  // TODO:
-                  setters: [
-                    {
-                      componentName: 'JSONSetter',
-                      props: {
-                        mode: 'popup',
-                        placeholder: { type: 'i18n', 'zh-CN': '编辑数据', 'en-US': 'Edit Data' },
-                      },
-                    },
-                    {
-                      componentName: 'ExpressionSetter',
-                      props: {
-                        placeholder: { type: 'i18n', 'zh-CN': '绑定数据', 'en-US': 'Bind Data' },
-                      },
-                    },
-                  ],
+                  label: { type: 'i18n', 'zh-CN': '编辑数据', 'en-US': 'Edit Data'},
                 },
-              },
+              }, {
+                componentName: 'VariableSetter'
+              }],
             },
             {
               name: '___loopArgs.0',
@@ -236,8 +246,12 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
             },
             {
               name: 'key',
-              title: 'Key',
-              setter: 'ExpressionSetter',
+              title: '循环 Key',
+              setter: [{
+                componentName: 'StringSetter',
+              }, {
+                componentName: 'VariableSetter'
+              }],
             },
           ],
         },
@@ -247,6 +261,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
 
   return {
     ...metadata,
+    ...basicInfo,
     configure: {
       ...configure,
       combined,

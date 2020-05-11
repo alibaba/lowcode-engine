@@ -4,7 +4,7 @@ import { observer, Title } from '@ali/lowcode-editor-core';
 import { ExclusiveGroup } from '@ali/lowcode-designer';
 import TreeNode from '../tree-node';
 import TreeNodeView from './tree-node';
-import { intl } from '../locale';
+import { intlNode } from '../locale';
 
 @observer
 export default class TreeBranches extends Component<{
@@ -119,7 +119,7 @@ class TreeNodeSlots extends Component<{
         data-id={treeNode.id}
       >
         <div className="tree-node-slots-title">
-          <Title title={{ type: 'i18n', intl: intl('Slots') }} />
+          <Title title={{ type: 'i18n', intl: intlNode('Slots') }} />
         </div>
         {treeNode.slots.map(tnode => (
           <TreeNodeView key={tnode.id} treeNode={tnode} />

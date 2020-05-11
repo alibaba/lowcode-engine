@@ -6,17 +6,28 @@ const { project } = designer;
 
 export interface OldPageData {
   id: string;
-  layout: RootSchema;
+  componentsTree: RootSchema[];
   [dataAddon: string]: any;
 }
 
 const pages = Object.assign(project, {
   setPages(pages: OldPageData[]) {
+    if (!pages || !Array.isArray(pages) || pages.length === 0) {
+      throw new Error('pages schema 不合法');
+    }
+
+    if (pages[0].componentsTree[0]) {
+      pages[0].componentsTree[0].componentName = 'Page';
+      // FIXME
+      pages[0].componentsTree[0].lifeCycles = {};
+      pages[0].componentsTree[0].methods = {};
+    }
+
     project.load({
       version: '1.0.0',
       componentsMap: [],
-      componentsTree: pages.map(page => page.layout),
-    });
+      componentsTree: pages[0].componentsTree,
+    }, true);
   },
   addPage(data: OldPageData) {
     return project.open(data.layout);

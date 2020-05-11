@@ -309,4 +309,11 @@ export class Props implements IPropParent {
   getPropValue(path: string): any {
     return this.getProp(path, false)?.value;
   }
+
+  /**
+   * 设置单个属性值
+   */
+  setPropValue(path: string, value: any) {
+    this.getProp(path, true)!.setValue(value);
+  }
 }

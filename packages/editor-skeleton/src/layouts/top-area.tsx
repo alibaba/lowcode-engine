@@ -4,23 +4,23 @@ import { observer } from '@ali/lowcode-editor-core';
 import Area from '../area';
 
 @observer
-export default class TopArea extends Component<{ area: Area }> {
+export default class TopArea extends Component<{ area: Area, itemClassName?: string }> {
   render() {
-    const { area } = this.props;
+    const { area, itemClassName } = this.props;
     return (
-      <div className={classNames("lc-top-area", {
+      <div className={classNames("lc-top-area engine-actionpane", {
         'lc-area-visible': area.visible
       })}>
-        <Contents area={area} />
+        <Contents area={area} itemClassName={itemClassName} />
       </div>
     );
   }
 }
 
 @observer
-class Contents extends Component<{ area: Area }> {
+class Contents extends Component<{ area: Area, itemClassName?: string }> {
   render() {
-    const { area } = this.props;
+    const { area, itemClassName } = this.props;
     const left: any[] = [];
     const center: any[] = [];
     const right: any[] = [];
@@ -29,12 +29,17 @@ class Contents extends Component<{ area: Area }> {
       const index2 = b.config?.index || 0;
       return index1 === index2 ? 0 : (index1 > index2 ? 1 : -1);
     }).forEach(item => {
+      const content = (
+        <div className={itemClassName || ''}>
+          {item.content}
+        </div>
+      );
       if (item.align === 'center') {
-        center.push(item.content);
+        center.push(content);
       } else if (item.align === 'left') {
-        left.push(item.content);
+        left.push(content);
       } else {
-        right.push(item.content);
+        right.push(content);
       }
     });
     return (

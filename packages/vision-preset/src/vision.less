@@ -92,11 +92,18 @@ html.engine-blur #engine {
   .next-checkbox-group,.next-date-picker,.next-input,.next-month-picker,
   .next-number-picker,.next-radio-group,.next-range,.next-range-picker,
   .next-rating,.next-select,.next-switch,.next-time-picker,.next-upload,
-  .next-year-picker {
+  .next-year-picker,
+  .next-breadcrumb-item,.next-calendar-header,.next-calendar-table {
     pointer-events: auto !important;
   }
 }
 
 .lc-left-float-pane {
   font-size: 14px;
+}
+
+html.engine-preview-mode  {
+  .lc-left-area, .lc-right-area {
+    display: none !important;
+  }
 }

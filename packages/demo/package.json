@@ -41,7 +41,8 @@
     "@alife/theme-lowcode-light": "^0.1.0",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
-    "@ali/vu-function-parser": "^2.5.0-beta.0"
+    "@ali/vu-function-parser": "^2.5.0-beta.0",
+    "compare-versions": "^3.0.1"
   },
   "devDependencies": {
     "@ali/iceluna-cli": "^0.0.16",

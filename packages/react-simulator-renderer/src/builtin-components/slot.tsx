@@ -6,7 +6,7 @@ class Slot extends Component {
     componentName: 'Slot',
     configure: {
       props: [{
-        name: '___title___',
+        name: '___title',
         title: {
           type: 'i18n',
           'en-US': 'Slot Title',
@@ -15,7 +15,7 @@ class Slot extends Component {
         setter: 'StringSetter',
         defaultValue: '插槽容器'
       }, {
-        name: '___params___',
+        name: '___params',
         title: {
           type: 'i18n',
           'en-US': 'Slot Params',

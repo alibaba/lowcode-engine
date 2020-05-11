@@ -12,4 +12,13 @@ export default {
     const nodes = designer.currentSelection?.getNodes();
     return nodes?.[0];
   },
+  /**
+   * TODO dirty fix
+   */
+  onIntoView(func: (node: any, insertion: any) => any) {
+    // this.emitter.on('intoview', func);
+    return () => {
+      // this.emitter.removeListener('intoview', func);
+    };
+  }
 }

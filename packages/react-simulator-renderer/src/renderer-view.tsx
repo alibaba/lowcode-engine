@@ -1,4 +1,5 @@
 import LowCodeRenderer from '@ali/lowcode-react-renderer';
+import { isObject } from 'lodash';
 import { ReactInstance, Fragment, Component, createElement } from 'react';
 import { observer } from '@recore/obx-react';
 import { SimulatorRenderer } from './renderer';
@@ -7,7 +8,7 @@ import './renderer.less';
 
 // patch cloneElement avoid lost keyProps
 const originCloneElement = window.React.cloneElement;
-(window as any).React.cloneElement = (child: any, { _leaf, ...props}: any = {}) => {
+(window as any).React.cloneElement = (child: any, { _leaf, ...props }: any = {}) => {
   if (child.ref && props.ref) {
     const dRef = props.ref;
     const cRef = child.ref;
@@ -18,7 +19,7 @@ const originCloneElement = window.React.cloneElement;
         } else {
           try {
             cRef.current = x;
-          } catch (e) { }
+          } catch (e) {}
         }
       }
       if (dRef) {
@@ -27,13 +28,13 @@ const originCloneElement = window.React.cloneElement;
         } else {
           try {
             dRef.current = x;
-          } catch (e) { }
+          } catch (e) {}
         }
       }
-    }
-  };
+    };
+  }
   return originCloneElement(child, props);
-}
+};
 
 export default class SimulatorRendererView extends Component<{ renderer: SimulatorRenderer }> {
   render() {
@@ -84,10 +85,11 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
           const { __id, __desingMode, ...viewProps } = props;
           viewProps.componentId = __id;
           viewProps._leaf = host.document.getNode(__id);
+
           return createElement(
             Component,
             viewProps,
-            children == null ? null : Array.isArray(children) ? children : [children],
+            children == null ? [] : Array.isArray(children) ? children : [children],
           );
         }}
         onCompGetRef={(schema: any, ref: ReactInstance | null) => {

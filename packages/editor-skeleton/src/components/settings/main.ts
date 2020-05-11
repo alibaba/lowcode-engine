@@ -70,13 +70,6 @@ export class SettingsMain {
     this._settings = this.designer.createSettingEntry(this.editor, nodes);
   }
 
-  onceOutlineVisible(fn: () => void): () => void {
-    this.emitter.on('outline-visible', fn);
-    return () => {
-      this.emitter.removeListener('outline-visible', fn);
-    };
-  }
-
   purge() {
     this.disposeListener();
     this.emitter.removeAllListeners();

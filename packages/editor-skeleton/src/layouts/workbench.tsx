@@ -13,16 +13,16 @@ import RightArea from './right-area';
 import './workbench.less';
 
 @observer
-export class Workbench extends Component<{ skeleton: Skeleton, className?: string }> {
+export class Workbench extends Component<{ skeleton: Skeleton, className?: string, topAreaItemClassName?: string }> {
   shouldComponentUpdate() {
     return false;
   }
 
   render() {
-    const { skeleton, className } = this.props;
+    const { skeleton, className, topAreaItemClassName } = this.props;
     return (
       <div className={classNames('lc-workbench', className)}>
-        <TopArea area={skeleton.topArea} />
+        <TopArea area={skeleton.topArea} itemClassName={topAreaItemClassName} />
         <div className="lc-workbench-body">
           <LeftArea area={skeleton.leftArea} />
           <LeftFloatPane area={skeleton.leftFloatArea} />

@@ -5,12 +5,11 @@ import { IconArrowRight } from '../icons/arrow-right';
 import { IconEyeClose } from '../icons/eye-close';
 import { IconLock } from '../icons/lock';
 import { IconUnlock } from '../icons/unlock';
-import { intl } from '../locale';
+import { intl, intlNode } from '../locale';
 import TreeNode from '../tree-node';
 import { IconEye } from '../icons/eye';
 import { IconCond } from '../icons/cond';
 import { IconLoop } from '../icons/loop';
-import { IconSlot } from '../icons/slot';
 import { createIcon } from '@ali/lowcode-utils';
 
 @observer
@@ -104,29 +103,28 @@ export default class TreeTitle extends Component<{
               {node.slotFor && (
                 <a className="tree-node-tag slot">
                   {/* todo: click redirect to prop */}
-                  <IconSlot />
-                  <Tip>{intl('Slot for {prop}', { prop: node.slotFor.key })}</Tip>
+                  <Tip>{intlNode('Slot for {prop}', { prop: node.slotFor.key })}</Tip>
                 </a>
               )}
               {node.hasLoop() && (
                 <a className="tree-node-tag loop">
                   {/* todo: click todo something */}
                   <IconLoop />
-                  <Tip>{intl('Loop')}</Tip>
+                  <Tip>{intlNode('Loop')}</Tip>
                 </a>
               )}
               {node.hasCondition() && !node.conditionGroup && (
                 <a className="tree-node-tag cond">
                   {/* todo: click todo something */}
                   <IconCond />
-                  <Tip>{intl('Conditional')}</Tip>
+                  <Tip>{intlNode('Conditional')}</Tip>
                 </a>
               )}
             </Fragment>
           )}
         </div>
         {isCNode && isNodeParent && <HideBtn treeNode={treeNode} />}
-        {isCNode && isNodeParent && <LockBtn treeNode={treeNode} />}
+        {/*isCNode && isNodeParent && <LockBtn treeNode={treeNode} />*/}
       </div>
     );
   }

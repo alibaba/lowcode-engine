@@ -132,11 +132,9 @@ function createAction(content: ReactNode | ComponentType<any> | ActionContentObj
 }
 
 @observer
-export class BorderSelectingForNode extends Component<{ node: Node }> {
-  static contextType = SimulatorContext;
-
+export class BorderSelectingForNode extends Component<{ host: BuiltinSimulatorHost; node: Node }> {
   get host(): BuiltinSimulatorHost {
-    return this.context;
+    return this.props.host;
   }
 
   get dragging(): boolean {
@@ -177,11 +175,9 @@ export class BorderSelectingForNode extends Component<{ node: Node }> {
 }
 
 @observer
-export class BorderSelecting extends Component {
-  static contextType = SimulatorContext;
-
+export class BorderSelecting extends Component<{ host: BuiltinSimulatorHost }> {
   get host(): BuiltinSimulatorHost {
-    return this.context;
+    return this.props.host;
   }
 
   get dragging(): boolean {
@@ -211,7 +207,7 @@ export class BorderSelecting extends Component {
     return (
       <Fragment>
         {selecting.map((node) => (
-          <BorderSelectingForNode key={node.id} node={node} />
+          <BorderSelectingForNode key={node.id} host={this.props.host} node={node} />
         ))}
       </Fragment>
     );

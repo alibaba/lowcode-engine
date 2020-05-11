@@ -237,7 +237,7 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
     }
   }
 
-  if (collapse || collapsed || fieldCollapsed) {
+  if (collapse || collapsed || fieldCollapsed || extraProps.display === DISPLAY_TYPE.ENTRY) {
     extraProps.defaultCollapsed = true;
   }
   function isDisabled(field: Field) {
@@ -287,10 +287,14 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
   if (slotName && initialValue === true) {
     initialFn = (field: any, value: any) => {
       if (isJSSlot(value)) {
-        return value;
+        return {
+          title: slotTitle || title,
+          ...value,
+        };
       }
       return {
         type: 'JSSlot',
+        title: slotTitle || title,
         value: initialChildren,
       };
     };
@@ -351,10 +355,14 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
         componentName: 'SlotSetter',
         initialValue: (field: any, value: any) => {
           if (isJSSlot(value)) {
-            return value;
+            return {
+              title: slotTitle || title,
+              ...value,
+            };
           }
           return {
             type: 'JSSlot',
+            title: slotTitle || title,
             value: value == null ? initialChildren : value,
           };
         },

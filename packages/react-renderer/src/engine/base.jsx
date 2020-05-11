@@ -228,6 +228,10 @@ export default class BaseEngine extends PureComponent {
 
     let Comp = components[schema.componentName] || Div;
 
+    if (schema.hidden) {
+      return null;
+    }
+
     if (schema.loop !== undefined) {
       return this.__createLoopVirtualDom(
         {

@@ -49,13 +49,14 @@ class AliGlobalLocale {
       }
     } else if (g_config) {
       if (g_config.locale) {
-        return languageMap[g_config.locale] || (g_config.locale || '').replace('_', '-');
+        return languageMap[g_config.locale] || g_config.locale.replace('_', '-');
       }
     }
 
     let locale: string = '';
     if (navigator.language) {
-      locale = (navigator.language as string).replace('_', '-');
+      const lang = (navigator.language as string);
+      return languageMap[lang] || lang.replace('_', '-');
     }
 
     // IE10 及更低版本使用 browserLanguage
