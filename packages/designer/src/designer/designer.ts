@@ -99,7 +99,7 @@ export class Designer {
       const { dragObject, copy } = e;
       const loc = this._dropLocation;
       if (loc) {
-        if (isLocationChildrenDetail(loc.detail)) {
+        if (isLocationChildrenDetail(loc.detail) && loc.detail.valid !== false) {
           let nodes: Node[] | undefined;
           if (isDragNodeObject(dragObject)) {
             nodes = insertChildren(loc.target, dragObject.nodes, loc.detail.index, copy);
