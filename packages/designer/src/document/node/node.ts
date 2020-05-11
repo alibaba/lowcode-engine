@@ -420,6 +420,13 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   /**
+   * alias index
+   */
+  getIndex = () => {
+    return this.index;
+  };
+
+  /**
    * 获取下一个兄弟节点
    */
   get nextSibling(): Node | null {
