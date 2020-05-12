@@ -35,10 +35,21 @@ export default class Panel implements IWidget {
 
   readonly isPanel = true;
 
-  private _body?: ReactNode;
   get body() {
-    this.initBody();
-    return this._body;
+    if (this.container) {
+      return createElement(TabsPanelView, {
+        container: this.container,
+      });
+    }
+
+    const { content, contentProps } = this.config;
+    return createContent(content, {
+      ...contentProps,
+      editor: this.skeleton.editor,
+      config: this.config,
+      panel: this,
+      pane: this,
+    });
   }
 
   get content(): ReactNode {
@@ -90,27 +101,6 @@ export default class Panel implements IWidget {
     // todo: process shortcut
   }
 
-  private initBody() {
-    if (this.inited) {
-      return;
-    }
-    this.inited = true;
-    if (this.container) {
-      this._body = createElement(TabsPanelView, {
-        container: this.container,
-      });
-    } else {
-      const { content, contentProps } = this.config;
-      this._body = createContent(content, {
-        ...contentProps,
-        editor: this.skeleton.editor,
-        config: this.config,
-        panel: this,
-        pane: this,
-      });
-    }
-  }
-
   setParent(parent: WidgetContainer) {
     if (parent === this.parent) {
       return;
@@ -155,11 +145,11 @@ export default class Panel implements IWidget {
       return;
     }
     if (flag) {
-      if (!this.inited) {
-        this.initBody();
-      }
       this._actived = true;
       this.parent?.active(this);
+      if (!this.inited) {
+        this.inited = true;
+      }
       this.emitter.emit('activechange', true);
     } else if (this.inited) {
       this._actived = false;
