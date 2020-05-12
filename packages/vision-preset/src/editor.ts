@@ -1,7 +1,7 @@
 import { isJSBlock, isJSExpression, isJSSlot } from '@ali/lowcode-types';
 import { isPlainObject } from '@ali/lowcode-utils';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
-import { Designer, TransformStage, addBuiltinComponentAction } from '@ali/lowcode-designer';
+import { Designer, LiveEditing, TransformStage, addBuiltinComponentAction } from '@ali/lowcode-designer';
 import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import { toCss } from '@ali/vu-css-style';
 
@@ -158,6 +158,12 @@ skeleton.add({
     }
   },
   content: OutlineBackupPane,
+});
+
+LiveEditing.addLiveEditingSpecificRule((target) => {
+  // TODO: enhance for legao specific
+  const contentValue = target.node.getPropValue('content');
+  return null;
 });
 
 // skeleton.add({
