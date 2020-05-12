@@ -175,7 +175,7 @@ export class ComponentMeta {
       });
     }
     collectLiveTextEditing(this.configure);
-    this._liveTextEditing = liveTextEditing;
+    this._liveTextEditing = liveTextEditing.length > 0 ? liveTextEditing : undefined;
 
     const { configure = {} } = this._transformedMetadata;
     this._acceptable = false;

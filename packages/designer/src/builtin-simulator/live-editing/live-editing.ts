@@ -44,7 +44,7 @@ export class LiveEditing {
 
     let setterPropElement = getSetterPropElement(targetElement, rootElement);
     let propTarget = setterPropElement?.dataset.setterProp;
-    let matched: LiveTextEditingConfig & { propElement?: HTMLElement; } | undefined;
+    let matched: (LiveTextEditingConfig & { propElement?: HTMLElement; }) | undefined | null;
     if (liveTextEditing) {
       if (propTarget) {
         // 已埋点命中 data-setter-prop="proptarget", 从 liveTextEditing 读取配置（mode|onSaveContent）
@@ -151,9 +151,9 @@ export class LiveEditing {
   }
 }
 
-export type SpecificRule = (target: EditingTarget) => LiveTextEditingConfig & {
+export type SpecificRule = (target: EditingTarget) => (LiveTextEditingConfig & {
   propElement?: HTMLElement;
-};
+}) | null;
 
 export interface SaveHandler {
   condition: (prop: Prop) => boolean;

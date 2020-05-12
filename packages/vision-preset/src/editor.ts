@@ -10,6 +10,7 @@ import { Skeleton, SettingsPrimaryPane } from '@ali/lowcode-editor-skeleton';
 
 import { i18nReducer } from './i18n-reducer';
 import { InstanceNodeSelector } from './components';
+import { liveEditingRule } from './vc-live-editing';
 
 export const editor = new Editor();
 globalContext.register(editor, Editor);
@@ -160,26 +161,7 @@ skeleton.add({
   content: OutlineBackupPane,
 });
 
-LiveEditing.addLiveEditingSpecificRule((target) => {
-  // TODO: enhance for legao specific
-  const contentValue = target.node.getPropValue('content');
-  return null;
-});
-
-// skeleton.add({
-//   name: 'sourceEditor',
-//   type: 'PanelDock',
-//   props: {
-//     align: 'top',
-//     icon: 'code',
-//     description: '组件库',
-//   },
-//   panelProps: {
-//     width: 500
-//     // area: 'leftFixedArea'
-//   },
-//   content: SourceEditor,
-// });
+LiveEditing.addLiveEditingSpecificRule(liveEditingRule);
 
 // 实例节点选择器，线框高亮
 addBuiltinComponentAction({
