@@ -66,6 +66,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
         valueState: field.isRequired ? 10 : field.valueState,
         onExpandChange: (expandState) => field.setExpanded(expandState),
         onClear: () => field.clearValue(),
+        ...extraProps,
       },
       createSetterContent(setterType, {
         ...shallowIntl(setterProps),
@@ -91,7 +92,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
             value,
           });
           field.setValue(value);
-        }
+        },
       }),
       extraProps.forceInline ? 'plain' : extraProps.display,
     );
