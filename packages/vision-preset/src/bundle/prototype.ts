@@ -22,7 +22,7 @@ const GlobalPropsConfigure: Array<{ position: string; initials?: InitialItem[]; 
 const Overrides: {
   [componentName: string]: {
     initials?: InitialItem[];
-    config: any;
+    override: any;
   };
 } = {};
 
@@ -44,14 +44,23 @@ function removeGlobalPropsConfigure(name: string) {
     }
   }
 }
-function overridePropsConfigure(componentName: string, config: OldPropConfig | OldPropConfig[]) {
+function overridePropsConfigure(componentName: string, config: { [name: string]: OldPropConfig } | OldPropConfig[]) {
   const initials: InitialItem[] = [];
   const addInitial = (item: InitialItem) => {
     initials.push(item);
   };
+  let override: any;
+  if (Array.isArray(config)) {
+    override = upgradeConfigure(config, addInitial);
+  } else {
+    override = {};
+    Object.keys(config).forEach(key => {
+      override[key] = upgradePropConfig(config[key], addInitial);
+    });
+  }
   Overrides[componentName] = {
     initials,
-    config: Array.isArray(config) ? upgradeConfigure(config, addInitial) : upgradePropConfig(config, addInitial),
+    override,
   };
 }
 registerMetadataTransducer(
@@ -82,18 +91,18 @@ registerMetadataTransducer(
       }
     });
 
-    const override = Overrides[componentName];
+    const override = Overrides[componentName]?.override;
     if (override) {
-      if (Array.isArray(override.config)) {
-        metadata.configure.combined = override.config;
+      if (Array.isArray(override)) {
+        metadata.configure.combined = override;
       } else {
         let l = top.length;
         let item;
         while (l-- > 0) {
           item = top[l];
           if (item.name in override) {
-            if (override.config[item.name]) {
-              top.splice(l, 1, override.config[item.name]);
+            if (override[item.name]) {
+              top.splice(l, 1, override[item.name]);
             } else {
               top.splice(l, 1);
             }
@@ -102,7 +111,6 @@ registerMetadataTransducer(
       }
     }
 
-    // TODO FIXME! append override & globalConfigure initials and then unique
     return metadata;
   },
   100,
@@ -249,7 +257,7 @@ class Prototype {
   }
 
   getRectSelector() {
-    return this.meta.rectSelector;
+    return this.meta.rootSelector;
   }
 
   isContainer() {

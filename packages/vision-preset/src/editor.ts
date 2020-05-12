@@ -1,7 +1,7 @@
 import { isJSBlock, isJSExpression, isJSSlot } from '@ali/lowcode-types';
 import { isPlainObject } from '@ali/lowcode-utils';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
-import { Designer, TransformStage, addBuiltinComponentAction } from '@ali/lowcode-designer';
+import { Designer, LiveEditing, TransformStage, addBuiltinComponentAction } from '@ali/lowcode-designer';
 import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import { toCss } from '@ali/vu-css-style';
 
@@ -10,6 +10,7 @@ import { Skeleton, SettingsPrimaryPane } from '@ali/lowcode-editor-skeleton';
 
 import { i18nReducer } from './i18n-reducer';
 import { InstanceNodeSelector } from './components';
+import { liveEditingRule } from './vc-live-editing';
 
 export const editor = new Editor();
 globalContext.register(editor, Editor);
@@ -176,20 +177,7 @@ skeleton.add({
   content: OutlineBackupPane,
 });
 
-// skeleton.add({
-//   name: 'sourceEditor',
-//   type: 'PanelDock',
-//   props: {
-//     align: 'top',
-//     icon: 'code',
-//     description: '组件库',
-//   },
-//   panelProps: {
-//     width: 500
-//     // area: 'leftFixedArea'
-//   },
-//   content: SourceEditor,
-// });
+LiveEditing.addLiveEditingSpecificRule(liveEditingRule);
 
 // 实例节点选择器，线框高亮
 addBuiltinComponentAction({

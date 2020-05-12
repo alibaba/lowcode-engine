@@ -9,6 +9,8 @@ import {
   NestingFilter,
   isTitleConfig,
   I18nData,
+  LiveTextEditingConfig,
+  FieldConfig,
 } from '@ali/lowcode-types';
 import { computed } from '@ali/lowcode-editor-core';
 import { Node, ParentalNode } from './document';
@@ -91,6 +93,11 @@ export class ComponentMeta {
     return config?.combined || config?.props || [];
   }
 
+  private _liveTextEditing?: LiveTextEditingConfig[];
+  get liveTextEditing() {
+    return this._liveTextEditing;
+  }
+
   private parentWhitelist?: NestingFilter | null;
   private childWhitelist?: NestingFilter | null;
 
@@ -149,6 +156,26 @@ export class ComponentMeta {
           }
           : title;
     }
+
+    const liveTextEditing = this._transformedMetadata.experimental?.liveTextEditing || [];
+
+    function collectLiveTextEditing(items: FieldConfig[]) {
+      items.forEach(config => {
+        if (config.items) {
+          collectLiveTextEditing(config.items);
+        } else {
+          const liveConfig = config.liveTextEditing || config.extraProps?.liveTextEditing;
+          if (liveConfig) {
+            liveTextEditing.push({
+              propTarget: String(config.name),
+              ...liveConfig,
+            });
+          }
+        }
+      });
+    }
+    collectLiveTextEditing(this.configure);
+    this._liveTextEditing = liveTextEditing.length > 0 ? liveTextEditing : undefined;
 
     const { configure = {} } = this._transformedMetadata;
     this._acceptable = false;

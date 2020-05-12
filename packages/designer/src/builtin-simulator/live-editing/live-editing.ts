@@ -16,39 +16,59 @@ function defaultSaveContent(content: string, prop: Prop) {
   prop.setValue(content);
 }
 
+export interface EditingTarget {
+  node: Node;
+  rootElement: HTMLElement;
+  event: MouseEvent;
+}
+
+const saveHandlers: SaveHandler[] = [];
+function addLiveEditingSaveHandler(handler: SaveHandler) {
+  saveHandlers.push(handler);
+}
+
+const specificRules: SpecificRule[] = [];
+function addLiveEditingSpecificRule(rule: SpecificRule) {
+  specificRules.push(rule);
+}
+
 export class LiveEditing {
+  static addLiveEditingSpecificRule = addLiveEditingSpecificRule;
+  static addLiveEditingSaveHandler = addLiveEditingSaveHandler;
+
   @obx.ref private _editing: Prop | null = null;
-  apply(target: { node: Node; rootElement: HTMLElement; event: MouseEvent }) {
+  apply(target: EditingTarget) {
     const { node, event, rootElement } = target;
     const targetElement = event.target as HTMLElement;
-    const liveTextEditing = node.componentMeta.getMetadata().experimental?.liveTextEditing || [];
+    const liveTextEditing = node.componentMeta.liveTextEditing;
 
     let setterPropElement = getSetterPropElement(targetElement, rootElement);
     let propTarget = setterPropElement?.dataset.setterProp;
-    let matched: LiveTextEditingConfig | undefined;
-    if (propTarget) {
-      // 已埋点命中 data-setter-prop="proptarget", 从 liveTextEditing 读取配置（mode|onSaveContent）
-      matched = liveTextEditing.find(config => config.propTarget == propTarget);
-    } else {
-      // 执行 embedTextEditing selector 规则，获得第一个节点 是否 contains e.target，若匹配，读取配置
-      matched = liveTextEditing.find(config => {
-        if (!config.selector) {
-          return false;
-        }
-        setterPropElement = config.selector === ':root' ? rootElement : rootElement.querySelector(config.selector);
-        if (!setterPropElement) {
-          return false;
-        }
-        if (!setterPropElement.contains(targetElement)) {
-          // try selectorAll
-          setterPropElement = Array.from(rootElement.querySelectorAll(config.selector)).find(item => item.contains(targetElement)) as HTMLElement;
-          if (!setterPropElement) {
+    let matched: (LiveTextEditingConfig & { propElement?: HTMLElement; }) | undefined | null;
+    if (liveTextEditing) {
+      if (propTarget) {
+        // 已埋点命中 data-setter-prop="proptarget", 从 liveTextEditing 读取配置（mode|onSaveContent）
+        matched = liveTextEditing.find(config => config.propTarget == propTarget);
+      } else {
+        // 执行 embedTextEditing selector 规则，获得第一个节点 是否 contains e.target，若匹配，读取配置
+        matched = liveTextEditing.find(config => {
+          if (!config.selector) {
             return false;
           }
-        }
-        return true;
+          setterPropElement = queryPropElement(rootElement, targetElement, config.selector);
+          return setterPropElement ? true : false;
+        });
+        propTarget = matched?.propTarget;
+      }
+    } else {
+      specificRules.some((rule) => {
+        matched = rule(target);
+        return matched ? true : false;
       });
-      propTarget = matched?.propTarget;
+      if (matched) {
+        propTarget = matched.propTarget;
+        setterPropElement = matched.propElement || queryPropElement(rootElement, targetElement, matched.selector);
+      }
     }
 
     if (!propTarget) {
@@ -75,7 +95,7 @@ export class LiveEditing {
       //  4. 监听 blur 事件
       //  5. 设置编辑锁定：disable hover | disable select | disable canvas drag
 
-      const onSaveContent = matched?.onSaveContent || this.saveHandlers.find(item => item.condition(prop))?.onSaveContent || defaultSaveContent;
+      const onSaveContent = matched?.onSaveContent || saveHandlers.find(item => item.condition(prop))?.onSaveContent || defaultSaveContent;
 
       setterPropElement.setAttribute('contenteditable', matched?.mode && matched.mode !== 'plaintext' ? 'true' : 'plaintext-only');
       setterPropElement.classList.add('engine-live-editing');
@@ -98,6 +118,8 @@ export class LiveEditing {
 
       this._editing = prop;
     }
+
+    // TODO: process enter | esc events & joint the FocusTracker
 
     // TODO: upward testing for b/i/a html elements
 
@@ -127,12 +149,11 @@ export class LiveEditing {
     }
     this._editing = null;
   }
-
-  private saveHandlers: SaveHandler[] = [];
-  setSaveHandler(handler: SaveHandler) {
-    this.saveHandlers.push(handler);
-  }
 }
+
+export type SpecificRule = (target: EditingTarget) => (LiveTextEditingConfig & {
+  propElement?: HTMLElement;
+}) | null;
 
 export interface SaveHandler {
   condition: (prop: Prop) => boolean;
@@ -154,4 +175,23 @@ function selectRange(doc: Document, range: Range) {
     selection.removeAllRanges();
     selection.addRange(range);
   }
+}
+
+
+function queryPropElement(rootElement: HTMLElement, targetElement: HTMLElement, selector?: string) {
+  if (!selector) {
+    return null;
+  }
+  let propElement = selector === ':root' ? rootElement : rootElement.querySelector(selector);
+  if (!propElement) {
+    return null;
+  }
+  if (!propElement.contains(targetElement)) {
+    // try selectorAll
+    propElement = Array.from(rootElement.querySelectorAll(selector)).find(item => item.contains(targetElement)) as HTMLElement;
+    if (!propElement) {
+      return null;
+    }
+  }
+  return propElement as HTMLElement;
 }

@@ -92,6 +92,7 @@ export interface OldPropConfig {
   slotTitle?: string;
   initialChildren?: any; // schema
   allowTextInput: boolean;
+  liveTextEditing?: any;
 }
 
 // from vision 5.4
@@ -205,6 +206,7 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
     setter,
     useVariableChange,
     supportVariable,
+    liveTextEditing,
   } = config;
 
   const extraProps: any = {};
@@ -450,6 +452,10 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
     };
   }
   newConfig.setter = primarySetter;
+
+  if (liveTextEditing) {
+    extraProps.liveTextEditing = liveTextEditing;
+  }
 
   return newConfig;
 }
