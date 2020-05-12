@@ -16,6 +16,7 @@ import { SimulatorContext } from '../context';
 import { BuiltinSimulatorHost } from '../host';
 import { OffsetObserver } from '../../designer';
 import { Node } from '../../document';
+import NodeSelector from '../node-selector';
 
 @observer
 export class BorderSelectingInstance extends Component<{
@@ -101,6 +102,7 @@ class Toolbar extends Component<{ observed: OffsetObserver }> {
     return (
       <div className="lc-borders-actions" style={style}>
         {actions}
+        <NodeSelector node={node} />
       </div>
     );
   }
