@@ -1,11 +1,8 @@
 import { Component, isValidElement, ReactElement, ReactNode } from 'react';
 import { Tab, Search, Input, Button } from '@alifd/next';
-import { Editor } from '@ali/lowcode-editor-core';
+import {Editor} from '@ali/lowcode-editor-core';
 import { js_beautify, css_beautify } from 'js-beautify';
 import MonacoEditor from 'react-monaco-editor';
-
-// import lolizer from './sorceEditorPlugin',
-
 import { Designer } from '@ali/lowcode-designer';
 const TAB_KEY = {
   JS_TAB: 'js_tab',
@@ -46,23 +43,33 @@ interface FunctionEventParam {
 
 export default class SourceEditor extends Component<{
   editor: Editor;
-  panel?: any
 }> {
-  private monocoEditer: any;
-  private editorCmd: any;
+  private monocoEditor: Object;
+  private editorCmd: Object;
+  private editorRef = React.createRef();
+  private editorNode: Object;
+  private editorParentNode: Object;
 
-  state: any = {
+  state = {
     isShow: false,
     tabKey: TAB_KEY.JS_TAB,
   };
 
-  async componentWillMount() {
+  componentWillMount() {
     const { editor } = this.props;
     editor.on('leftPanel.show', (key: String) => {
-      if (key === 'sourceEditor' && !this.monocoEditer) {
+      debugger;
+      if (key === 'sourceEditor' && !this.monocoEditor) {
         this.setState({
           isShow: true,
         });
+
+
+        setTimeout(()=>{
+          this.editorNode = this.editorRef.current; //记录当前dom节点；
+          this.editorParentNode = this.editorNode.parentNode; //记录父节点;
+          console.log(this.editorNode);
+        },0)
       }
     });
 
@@ -73,57 +80,68 @@ export default class SourceEditor extends Component<{
     });
 
     // 定位函数
-    editor.on('sourceEditor.focusByFunction',(params:FunctionEventParam)=>{
+    editor.on('sourceEditor.focusByFunction', (params: FunctionEventParam) => {
       this.callEditorEvent('sourceEditor.focusByFunction', params);
       this.openPluginPannel();
-    })
+    });
 
-    const designer = await editor.onceGot(Designer);
-    // let schema = designer.project.getSchema();
-    // mock data
-    let schema = {
-      componentTree: [
-        {
-          state: {
-            // 初始state：        选填 对象类型/变量表达式
-            btnText: 'submit', // 默认数据值：              选填 变量表达式
-          },
-          css: 'body {font-size: 12px;} .botton{widht:100px;color:#ff00ff}', //css样式描述：      选填
-          lifeCycles: {
-            //生命周期:          选填 对象类型
-            didMount: {
-              type: 'JSExpression',
-              value: "function() {\n \t\tconsole.log('did mount');\n\t}",
+    //editor.once('designer.mount', (designer: Designer) => {
+      // let schema = designer.project.getSchema();
+      // mock data
+      let schema = {
+        componentTree: [
+          {
+            state: {
+              // 初始state：        选填 对象类型/变量表达式
+              btnText: 'submit', // 默认数据值：              选填 变量表达式
             },
-            willUnmount: {
-              type: 'JSExpression',
-              value: "function() {\n \t\tconsole.log('will umount');\n\t}",
+            css: 'body {font-size: 12px;} .botton{widht:100px;color:#ff00ff}', //css样式描述：      选填
+            lifeCycles: {
+              //生命周期:          选填 对象类型
+              didMount: {
+                type: 'JSExpression',
+                value: "function() {\n \t\tconsole.log('did mount');\n\t}",
+              },
+              willUnmount: {
+                type: 'JSExpression',
+                value: "function() {\n \t\tconsole.log('will umount');\n\t}",
+              },
+            },
+            methods: {
+              //自定义方法对象：     选填 对象类型
+              getData: {
+                //自定义方法：                  选填 函数类型
+                type: 'JSExpression',
+                value: "function() {\n \t\tconsole.log('testFunc');\n \t}",
+              },
             },
           },
-          methods: {
-            //自定义方法对象：     选填 对象类型
-            getData: {
-              //自定义方法：                  选填 函数类型
-              type: 'JSExpression',
-              value: "function() {\n \t\tconsole.log('testFunc');\n \t}",
-            },
-          },
-        },
-      ],
-    };
+        ],
+      };
 
-    this.initCode(schema);
+      this.initCode(schema);
+    //});
+  }
+
+  componentDidMount(){
+
+
   }
 
   openPluginPannel = () => {
-    const { panel } = this.props;
-    if (panel) {
-      panel.show();
+    const { editor } = this.props;
+    // 判断面板是否处于激活状态
+    if (!editor.leftNav || editor.leftNav != 'sourceEditor') {
+      // 打开面板
+      editor.emit('leftNav.change', 'sourceEditor');
     }
-  }
+  };
 
-  callEditorEvent = (eventName: any, params: any) => {
-    if (!this.monocoEditer) {
+  /**
+   * 执行编辑器事件
+   */
+  callEditorEvent = (eventName, params) => {
+    if (!this.monocoEditor) {
       this.editorCmd = {
         eventName,
         params,
@@ -131,16 +149,24 @@ export default class SourceEditor extends Component<{
       return;
     }
 
-    if (eventName === 'sourceEditor.addFunction') {
-      this.addFunction(params);
-    }else if (eventName === 'sourceEditor.focusByFunction'){
-      this.focusByFunctionName(params);
+    if (this.state.selectTab == TAB_KEY.CSS_TAB) {
+      this.setState({
+        selectTab: TAB_KEY.JS_TAB,
+      });
     }
 
-
+    if (eventName === 'sourceEditor.addFunction') {
+      setTimeout(() => {
+        this.addFunction(params);
+      }, 100);
+    } else if (eventName === 'sourceEditor.focusByFunction') {
+      setTimeout(() => {
+        this.focusByFunctionName(params);
+      }, 100);
+    }
   };
 
-  initCode = (schema: any) => {
+  initCode = (schema) => {
     let jsCode = js_beautify(transfrom.schema2Code(schema), { indent_size: 2, indent_empty_lines: true });
     let css;
 
@@ -160,19 +186,19 @@ export default class SourceEditor extends Component<{
    * @param params
    */
   addFunction(params: FunctionEventParam) {
-    const count = this.monocoEditer.getModel().getLineCount() || 0;
-    const range = new (window as any).monaco.Range(count, 1, count, 1);
+    const count = this.monocoEditor.getModel().getLineCount() || 0;
+    const range = new monaco.Range(count, 1, count, 1);
     const functionCode = transfrom.getNewFunctionCode(params.functionName);
-    this.monocoEditer.executeEdits('log-source', [
+    this.monocoEditor.executeEdits('log-source', [
       { identifier: 'event_id', range: range, text: functionCode, forceMoveMarkers: true },
     ]);
     setTimeout(() => {
-      let newPosition = new (window as any).monaco.Position(count + 1, 2);
-      this.monocoEditer.setPosition(newPosition);
-      this.monocoEditer.focus();
+      let newPosition = new monaco.Position(count + 1, 2);
+      this.monocoEditor.setPosition(newPosition);
+      this.monocoEditor.focus();
     }, 100);
 
-    this.updateCode(this.monocoEditer.getModel().getValue());
+    this.updateCode(this.monocoEditor.getModel().getValue());
   }
 
   /**
@@ -181,30 +207,24 @@ export default class SourceEditor extends Component<{
    */
   focusByFunctionName(params: FunctionEventParam) {
     const functionName = params.functionName;
-    const matchedResult = this.monocoEditer
+    const matchedResult = this.monocoEditor
       .getModel()
       .findMatches(`${functionName}\\s*\\([\\s\\S]*\\)[\\s\\S]*\\{`, false, true)[0];
     if (matchedResult) {
-
-      setTimeout(()=>{
-        this.monocoEditer.revealLineInCenter(matchedResult.range.startLineNumber);
-        this.monocoEditer.setPosition({
+      let monocoEditor = this.monocoEditor;
+      setTimeout(() => {
+        monocoEditor.revealLineInCenter(matchedResult.range.startLineNumber);
+        monocoEditor.setPosition({
           column: matchedResult.range.endColumn,
           lineNumber: matchedResult.range.endLineNumber,
         });
-
-        this.monocoEditer.focus();
-      },100)
+        monocoEditor.focus();
+      }, 100);
     }
   }
 
-  editorDidMount = (editor: any, monaco: any) => {
+  editorDidMount = (editor, monaco) => {
     console.log('editorDidMount', editor);
-    this.monocoEditer = editor;
-
-    if (this.editorCmd) {
-      this.callEditorEvent(this.editorCmd.eventName, this.editorCmd.params);
-    }
 
     // var commandId = editor.addCommand(
     //   0,
@@ -215,39 +235,22 @@ export default class SourceEditor extends Component<{
     //   '',
     // );
 
-    // monaco.languages.registerCodeLensProvider('javascript', {
-    //   provideCodeLenses: function(model, token) {
-    //     return {
-    //       lenses: [
-    //         {
-    //           range: {
-    //             startLineNumber: 1,
-    //             startColumn: 1,
-    //             endLineNumber: 1,
-    //             endColumn: 1,
-    //           },
-    //           id: 'First Line',
-    //           command: {
-    //             id: commandId,
-    //             title: 'First Line',
-    //           },
-    //         },
-    //       ],
-    //     };
-    //   },
-    //   resolveCodeLens: function(model, codeLens, token) {
-    //     return codeLens;
-    //   },
-    // });
+    if (this.state.selectTab == TAB_KEY.JS_TAB) {
+      this.monocoEditor = editor;
+    }
+
+    if (this.editorCmd) {
+      this.callEditorEvent(this.editorCmd.eventName, this.editorCmd.params);
+    }
   };
 
-  onTabChange = (key: any) => {
+  onTabChange = (key) => {
     this.setState({
       selectTab: key,
     });
   };
 
-  updateCode = (newCode: any) => {
+  updateCode = (newCode) => {
     const { selectTab } = this.state;
     if (selectTab === TAB_KEY.JS_TAB) {
       this.setState({
@@ -270,22 +273,28 @@ export default class SourceEditor extends Component<{
     ];
 
     return (
-      <div className="source-editor-container">
-        <Tab size="small" shape="wrapped" onChange={this.onTabChange}>
+      <div className="source-editor-container" >
+        <Tab size="small" shape="wrapped" onChange={this.onTabChange} activeKey={selectTab}>
           {tabs.map((item) => (
             <Tab.Item key={item.key} title={item.tab}>
               {isShow && (
-                <MonacoEditor
-                  value={selectTab == TAB_KEY.JS_TAB ? jsCode : css}
-                  {...defaultEditorOption as any}
-                  {...{ language: selectTab == TAB_KEY.JS_TAB ? 'javascript' : 'css' }}
-                  onChange={(newCode) => this.updateCode(newCode)}
-                  editorDidMount={this.editorDidMount}
-                />
+                <div style={{ height: '100%' }} ref={this.editorRef}>
+                  <MonacoEditor
+                    value={selectTab == TAB_KEY.JS_TAB ? jsCode : css}
+                    {...defaultEditorOption}
+                    {...{ language: selectTab == TAB_KEY.JS_TAB ? 'typescript' : 'css' }}
+                    onChange={(newCode) => this.updateCode(newCode)}
+                    editorDidMount={(editor, monaco) => this.editorDidMount.call(this, editor, monaco)}
+                  />
+                </div>
               )}
             </Tab.Item>
           ))}
         </Tab>
+
+        <div className="full-screen-container" onClick={this.fullScreen}>
+          <img src="https://gw.alicdn.com/tfs/TB1d7XqE1T2gK0jSZFvXXXnFXXa-200-200.png"></img>
+        </div>
       </div>
     );
   }
