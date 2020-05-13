@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.14"></a>
+## [0.8.14](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.13...@ali/lowcode-react-simulator-renderer@0.8.14) (2020-05-13)
+
+
+### Bug Fixes
+
+* live editing outline colore ([791771c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/791771c))
+
+
+### Features
+
+* support plaintext liveediting ([ea62f12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ea62f12))
+
+
+
+
 <a name="0.8.13"></a>
 ## [0.8.13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.12...@ali/lowcode-react-simulator-renderer@0.8.13) (2020-05-08)
 

@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.7"></a>
+## [0.8.7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-vision-preset@0.8.6...@ali/lowcode-vision-preset@0.8.7) (2020-05-13)
+
+
+### Bug Fixes
+
+* supports ([371b84c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/371b84c))
+
+
+### Features
+
+* add label for i18n setter in slots ([b298c18](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b298c18))
+* support global inline editing ([4f7179b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/4f7179b))
+* support plaintext liveediting ([ea62f12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ea62f12))
+* 支持body和背景样式 ([661d98d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/661d98d))
+
+
+
+
 <a name="0.8.6"></a>
 ## [0.8.6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-vision-preset@0.8.5...@ali/lowcode-vision-preset@0.8.6) (2020-05-08)
 

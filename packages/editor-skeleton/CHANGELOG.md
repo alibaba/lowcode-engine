@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.14"></a>
+## [0.8.14](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.13...@ali/lowcode-editor-skeleton@0.8.14) (2020-05-13)
+
+
+### Bug Fixes
+
+* 🐛 add tip on setter title ([c93c1d0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c93c1d0))
+* panel visible time ([18ac1fa](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/18ac1fa))
+* set i18n setter value when change mixed setter ([72d81c2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/72d81c2))
+* supports ([371b84c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/371b84c))
+
+
+### Features
+
+* show value state ([bd49e50](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd49e50))
+
+
+
+
 <a name="0.8.13"></a>
 ## [0.8.13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.12...@ali/lowcode-editor-skeleton@0.8.13) (2020-05-08)
 

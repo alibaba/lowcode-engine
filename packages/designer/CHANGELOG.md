@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.9"></a>
+## [0.9.9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.8...@ali/lowcode-designer@0.9.9) (2020-05-13)
+
+
+### Bug Fixes
+
+* 🐛 add hotkey up/down/left/right ([9c8afe8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9c8afe8))
+* 🐛 error when quick search ([801d954](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/801d954))
+* 🐛 快捷键支持 ([73374dd](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/73374dd))
+* 🐛 移动快捷键 ([7c8a27c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7c8a27c))
+* cancel dragging on invalid position ([f961096](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f961096))
+* panel visible time ([18ac1fa](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/18ac1fa))
+* quickSearch error ([a8009ef](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a8009ef))
+* supports ([371b84c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/371b84c))
+
+
+### Features
+
+* show value state ([bd49e50](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd49e50))
+* support global inline editing ([4f7179b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/4f7179b))
+* support plaintext liveediting ([ea62f12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ea62f12))
+
+
+
+
 <a name="0.9.8"></a>
 ## [0.9.8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.7...@ali/lowcode-designer@0.9.8) (2020-05-08)
 
