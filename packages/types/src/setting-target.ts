@@ -50,6 +50,9 @@ export interface SettingTarget {
   // 设置子项属性值
   setPropValue(propName: string | number, value: any): void;
 
+  // 清除已设置值
+  clearPropValue(propName: string | number): void;
+
   // 获取顶层附属属性值
   getExtraPropValue(propName: string): any;
 

@@ -1,17 +1,25 @@
 import { Component } from 'react';
+import { isObject } from 'lodash';
 import classNames from 'classnames';
 import { Icon } from '@alifd/next';
-import { Title } from '@ali/lowcode-editor-core';
+import { Title, Tip } from '@ali/lowcode-editor-core';
 import { TitleContent } from '@ali/lowcode-types';
 import { PopupPipe, PopupContext } from '../popup';
+import { intlNode } from '../../locale';
 import './index.less';
+import { IconClear } from '../../icons/clear';
+import InlineTip from './inlinetip';
 
 export interface FieldProps {
   className?: string;
   title?: TitleContent | null;
   defaultDisplay?: 'accordion' | 'inline' | 'block';
   collapsed?: boolean;
+  valueState?: number;
+  name?: string;
+  tip?: any;
   onExpandChange?: (expandState: boolean) => void;
+  onClear?: () => void;
 }
 
 export class Field extends Component<FieldProps> {
@@ -72,10 +80,36 @@ export class Field extends Component<FieldProps> {
     }
   }
 
+  getTipContent(propName: string, tip?: any): any {
+    let tipContent = (
+      <div>
+        <div>属性：{propName}</div>
+      </div>
+    );
+
+    if (isObject(tip)) {
+      tipContent = (
+        <div>
+          <div>属性：{propName}</div>
+          <div>说明：{(tip as any).content}</div>
+        </div>
+      );
+    } else if (tip) {
+      tipContent = (
+        <div>
+          <div>属性：{propName}</div>
+          <div>说明：{tip}</div>
+        </div>
+      );
+    }
+    return tipContent;
+  }
+
   render() {
-    const { className, children, title } = this.props;
+    const { className, children, title, valueState, onClear, name: propName, tip } = this.props;
     const { display, collapsed } = this.state;
     const isAccordion = display === 'accordion';
+    const tipContent = this.getTipContent(propName!, tip);
     return (
       <div
         className={classNames(`lc-field lc-${display}-field`, className, {
@@ -84,7 +118,9 @@ export class Field extends Component<FieldProps> {
       >
         <div className="lc-field-head" onClick={isAccordion ? this.toggleExpand : undefined}>
           <div className="lc-field-title">
+            {createValueState(valueState, onClear)}
             <Title title={title || ''} />
+            <InlineTip position="top">{tipContent}</InlineTip>
           </div>
           {isAccordion && <Icon className="lc-field-icon" type="arrow-up" size="xs" />}
         </div>
@@ -94,6 +130,51 @@ export class Field extends Component<FieldProps> {
       </div>
     );
   }
+}
+
+/**
+ * **交互专利点**
+ *
+ * -1 多种值
+ * 0 | null 无值
+ * 1 类似值，比如数组长度一样
+ * 2 单一植
+ * 10 必填
+ *
+ * TODO: turn number to enum
+ */
+function createValueState(valueState?: number, onClear?: () => void) {
+  let tip: any = null;
+  let className = 'lc-valuestate';
+  let icon: any = null;
+  if (valueState) {
+    if (valueState < 0) {
+      // multiple value 橘黄色点： tip：多种值，点击清除
+      tip = intlNode('Multiple Value, Click to Clear');
+      className += ' valuestate-multiple';
+      icon = <IconClear size={6} />;
+    } else if (valueState === 10) {
+      // isset  orangered tip: 必填项
+      tip = intlNode('Required');
+      className += ' valuestate-required';
+      onClear = undefined;
+    } else if (valueState > 0) {
+      // isset  蓝点 tip: 已设置值，点击清除
+      tip = intlNode('Setted Value, Click to Clear');
+      className += ' valuestate-isset';
+      icon = <IconClear size={6} />;
+    }
+  } else {
+    onClear = undefined;
+    // unset 占位空间
+  }
+
+  return (
+    <i className={className} onClick={onClear}>
+      {icon}
+      {tip && <Tip>{tip}</Tip>}
+    </i>
+  );
 }
 
 export interface PopupFieldProps extends FieldProps {

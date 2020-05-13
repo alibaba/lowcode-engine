@@ -9,6 +9,8 @@ import {
   NestingFilter,
   isTitleConfig,
   I18nData,
+  LiveTextEditingConfig,
+  FieldConfig,
 } from '@ali/lowcode-types';
 import { computed } from '@ali/lowcode-editor-core';
 import { Node, ParentalNode } from './document';
@@ -81,14 +83,19 @@ export class ComponentMeta {
   get descriptor(): string | undefined {
     return this._descriptor;
   }
-  private _rectSelector?: string;
-  get rectSelector(): string | undefined {
-    return this._rectSelector;
+  private _rootSelector?: string;
+  get rootSelector(): string | undefined {
+    return this._rootSelector;
   }
   private _transformedMetadata?: TransformedComponentMetadata;
   get configure() {
     const config = this._transformedMetadata?.configure;
     return config?.combined || config?.props || [];
+  }
+
+  private _liveTextEditing?: LiveTextEditingConfig[];
+  get liveTextEditing() {
+    return this._liveTextEditing;
   }
 
   private parentWhitelist?: NestingFilter | null;
@@ -150,6 +157,26 @@ export class ComponentMeta {
           : title;
     }
 
+    const liveTextEditing = this._transformedMetadata.experimental?.liveTextEditing || [];
+
+    function collectLiveTextEditing(items: FieldConfig[]) {
+      items.forEach(config => {
+        if (config.items) {
+          collectLiveTextEditing(config.items);
+        } else {
+          const liveConfig = config.liveTextEditing || config.extraProps?.liveTextEditing;
+          if (liveConfig) {
+            liveTextEditing.push({
+              propTarget: String(config.name),
+              ...liveConfig,
+            });
+          }
+        }
+      });
+    }
+    collectLiveTextEditing(this.configure);
+    this._liveTextEditing = liveTextEditing.length > 0 ? liveTextEditing : undefined;
+
     const { configure = {} } = this._transformedMetadata;
     this._acceptable = false;
 
@@ -158,7 +185,7 @@ export class ComponentMeta {
       this._isContainer = component.isContainer ? true : false;
       this._isModal = component.isModal ? true : false;
       this._descriptor = component.descriptor;
-      this._rectSelector = component.rectSelector;
+      this._rootSelector = component.rootSelector;
       if (component.nestingRule) {
         const { parentWhitelist, childWhitelist } = component.nestingRule;
         this.parentWhitelist = buildFilter(parentWhitelist);

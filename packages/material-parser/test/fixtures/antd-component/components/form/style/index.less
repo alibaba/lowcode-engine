@@ -1,0 +1,227 @@
+@import '../../style/themes/index';
+@import '../../style/mixins/index';
+@import '../../input/style/mixin';
+@import '../../button/style/mixin';
+@import '../../grid/style/mixin';
+@import './components';
+@import './inline';
+@import './horizontal';
+@import './vertical';
+@import './status';
+@import './mixin';
+
+@form-prefix-cls: ~'@{ant-prefix}-form';
+@form-item-prefix-cls: ~'@{form-prefix-cls}-item';
+@form-font-height: ceil(@font-size-base * @line-height-base);
+
+.@{form-prefix-cls} {
+  .reset-component;
+  .reset-form;
+
+  .@{form-prefix-cls}-text {
+    display: inline-block;
+    padding-right: 8px;
+  }
+
+  // ================================================================
+  // =                             Size                             =
+  // ================================================================
+  .formSize(@input-height) {
+    .@{form-item-prefix-cls}-label > label {
+      height: @input-height;
+    }
+
+    .@{form-item-prefix-cls}-control-input {
+      min-height: @input-height;
+    }
+  }
+
+  &-small {
+    .formSize(@input-height-sm);
+  }
+  &-large {
+    .formSize(@input-height-lg);
+  }
+}
+
+.explainAndExtraDistance(@num) when (@num>=0) {
+  padding-top: floor(@num);
+}
+.explainAndExtraDistance(@num) when (@num<0) {
+  margin-top: floor(@num);
+}
+
+// ================================================================
+// =                             Item                             =
+// ================================================================
+.@{form-item-prefix-cls} {
+  .reset-component;
+
+  margin-bottom: @form-item-margin-bottom;
+  vertical-align: top;
+
+  &-with-help {
+    margin-bottom: 0;
+  }
+
+  // ==============================================================
+  // =                            Label                           =
+  // ==============================================================
+  &-label {
+    display: inline-block;
+    flex-grow: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: right;
+    vertical-align: middle;
+
+    &-left {
+      text-align: left;
+    }
+
+    > label {
+      position: relative;
+      // display: inline;
+      display: inline-flex;
+      align-items: center;
+      height: @form-item-label-height;
+      color: @label-color;
+      font-size: @form-item-label-font-size;
+
+      > .@{iconfont-css-prefix} {
+        font-size: @form-item-label-font-size;
+        vertical-align: top;
+      }
+
+      &.@{form-item-prefix-cls}-required::before {
+        display: inline-block;
+        margin-right: 4px;
+        color: @label-required-color;
+        font-size: @form-item-label-font-size;
+        font-family: SimSun, sans-serif;
+        line-height: 1;
+        content: '*';
+
+        .@{form-prefix-cls}-hide-required-mark & {
+          display: none;
+        }
+      }
+
+      &::after {
+        & when (@form-item-trailing-colon=true) {
+          content: ':';
+        }
+        & when not (@form-item-trailing-colon=true) {
+          content: ' ';
+        }
+
+        position: relative;
+        top: -0.5px;
+        margin: 0 @form-item-label-colon-margin-right 0 @form-item-label-colon-margin-left;
+      }
+
+      &.@{form-item-prefix-cls}-no-colon::after {
+        content: ' ';
+      }
+    }
+  }
+
+  // ==============================================================
+  // =                            Input                           =
+  // ==============================================================
+  &-control {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    &:first-child:not([class^=~"'@{ant-prefix}-col-'"]):not([class*=~"' @{ant-prefix}-col-'"]) {
+      width: 100%;
+    }
+  }
+
+  &-control-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: @input-height-base;
+
+    &-content {
+      flex: auto;
+      max-width: 100%;
+    }
+  }
+
+  &-explain,
+  &-extra {
+    clear: both;
+    min-height: @form-item-margin-bottom;
+    .explainAndExtraDistance((@form-item-margin-bottom - @form-font-height) / 2);
+    color: @text-color-secondary;
+    font-size: @font-size-base;
+    line-height: @line-height-base;
+    transition: color 0.3s @ease-out; // sync input color transition
+  }
+}
+
+.show-help-motion(@className, @keyframeName, @duration: @animation-duration-slow) {
+  .make-motion(@className, @keyframeName, @duration);
+  .@{className}-enter,
+  .@{className}-appear {
+    opacity: 0;
+    animation-timing-function: @ease-in-out;
+  }
+  .@{className}-leave {
+    animation-timing-function: @ease-in-out;
+  }
+}
+
+.show-help-motion(show-help, antShowHelp, 0.3s);
+
+@keyframes antShowHelpIn {
+  0% {
+    transform: translateY(-5px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes antShowHelpOut {
+  to {
+    transform: translateY(-5px);
+    opacity: 0;
+  }
+}
+
+// need there different zoom animation
+// otherwise won't trigger anim
+@keyframes diffZoomIn1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes diffZoomIn2 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes diffZoomIn3 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@import './rtl';

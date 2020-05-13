@@ -25,12 +25,12 @@ export default class TreeView extends Component<{ tree: Tree }> {
     const { tree } = this.props;
 
     const doc = tree.document;
-    const hovering = doc.designer.hovering;
-    if (!hovering.enable) {
+    const detecting = doc.designer.detecting;
+    if (!detecting.enable) {
       return;
     }
     const node = this.getTreeNodeFromEvent(e)?.node;
-    hovering.hover(node || null);
+    detecting.capture(node || null);
   }
 
   private onClick = (e: ReactMouseEvent) => {
@@ -129,7 +129,7 @@ export default class TreeView extends Component<{ tree: Tree }> {
   private onMouseLeave = () => {
     const { tree } = this.props;
     const doc = tree.document;
-    doc.designer.hovering.leave(doc);
+    doc.designer.detecting.leave(doc);
   };
 
   render() {

@@ -82,6 +82,8 @@ export class OffsetObserver {
   private isRoot: boolean;
   readonly node: Node;
 
+  readonly compute: () => void;
+
   constructor(readonly nodeInstance: INodeSelector) {
     const { node, instance } = nodeInstance;
     this.node = node;
@@ -103,7 +105,7 @@ export class OffsetObserver {
         return;
       }
 
-      const rect = host.computeComponentInstanceRect(instance!, node.componentMeta.rectSelector);
+      const rect = host.computeComponentInstanceRect(instance!, node.componentMeta.rootSelector);
 
       if (!rect) {
         this.hasOffset = false;
@@ -121,6 +123,8 @@ export class OffsetObserver {
       this.pid = pid = (window as any).requestIdleCallback(compute);
     };
 
+    this.compute = compute;
+
     // try first
     compute();
     // try second, ensure the dom mounted
@@ -132,6 +136,10 @@ export class OffsetObserver {
       (window as any).cancelIdleCallback(this.pid);
     }
     this.pid = undefined;
+  }
+
+  isPurged() {
+    return this.pid == null;
   }
 }
 

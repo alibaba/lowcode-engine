@@ -64,8 +64,17 @@ function resolveDirection(popup: any, target: any, edge: any, bounds: any, prefe
   return prefer;
 }
 
-function resolvePrefer(prefer: any) {
+function resolvePrefer(prefer: any, targetRect: any, bounds: any) {
   if (!prefer) {
+    if (targetRect.left - bounds.left < 10) {
+      return { dir: 'right' };
+    } else if (targetRect.top - bounds.top < 10) {
+      return { dir: 'bottom' };
+    } else if (bounds.bottom - targetRect.bottom < 10) {
+      return { dir: 'top' };
+    } else if (bounds.right - targetRect.right < 10) {
+      return { dir: 'left' };
+    }
     return {};
   }
   const force = prefer[0] === '!';
@@ -105,7 +114,7 @@ export function resolvePosition(popup: any, target: any, arrow: any, bounds: any
     width: popup.width,
   };
 
-  const prefers = resolvePrefer(prefer);
+  const prefers = resolvePrefer(prefer, target, bounds);
 
   const edge = resolveEdge(popup, target, arrow, bounds);
 

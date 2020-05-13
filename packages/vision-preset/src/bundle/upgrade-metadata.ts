@@ -92,6 +92,7 @@ export interface OldPropConfig {
   slotTitle?: string;
   initialChildren?: any; // schema
   allowTextInput: boolean;
+  liveTextEditing?: any;
 }
 
 // from vision 5.4
@@ -141,7 +142,8 @@ export interface OldPrototypeConfig {
   canDragging?: boolean; // => ?
 
   canOperating?: boolean; // => disabledActions
-  canSelecting?: boolean;
+  canUseCondition?: boolean;
+  canLoop?: boolean;
   canContain?: (dragment: Node) => boolean; // => nestingRule
 
   canDropTo?: ((container: Node) => boolean) | boolean | string | string[]; // => nestingRule
@@ -204,6 +206,7 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
     setter,
     useVariableChange,
     supportVariable,
+    liveTextEditing,
   } = config;
 
   const extraProps: any = {};
@@ -450,6 +453,10 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
   }
   newConfig.setter = primarySetter;
 
+  if (liveTextEditing) {
+    extraProps.liveTextEditing = liveTextEditing;
+  }
+
   return newConfig;
 }
 
@@ -538,6 +545,8 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     canDropto,
     canDropIn,
     canDroping,
+    canUseCondition,
+    canLoop,
 
     // hooks
     canDraging,
@@ -573,7 +582,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
 
   const component: any = {
     isContainer,
-    rectSelector,
+    rootSelector: rectSelector,
     isModal,
     isFloating,
     descriptor,
@@ -720,9 +729,14 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   });
   experimental.initials = initials;
 
-  const events = {};
-  const styles = {};
-  meta.configure = { props, component, events, styles };
+  const supports: any = {};
+  if (canUseCondition != null) {
+    supports.condition = canUseCondition;
+  }
+  if (canLoop != null) {
+    supports.loop = canLoop;
+  }
+  meta.configure = { props, component, supports };
   meta.experimental = experimental;
   return meta;
 }

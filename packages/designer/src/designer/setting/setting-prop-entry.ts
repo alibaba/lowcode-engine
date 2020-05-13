@@ -62,14 +62,6 @@ export class SettingPropEntry implements SettingEntry {
     this.isSingle = parent.isSingle;
     this.designer = parent.designer;
     this.top = parent.top;
-
-    autorun(({ firstRun }) => {
-      const value = this.getValue();
-      if (firstRun) {
-        return;
-      }
-      this.emitter.emit('valuechange', value);
-    });
   }
 
   getId() {
@@ -106,10 +98,42 @@ export class SettingPropEntry implements SettingEntry {
   // ====== 当前属性读写 =====
 
   /**
+   * 判断当前属性值是否一致
+   * -1 多种值
+   * 0 无值
+   * 1 类似值，比如数组长度一样
+   * 2 单一植
+   */
+  @computed get valueState(): number {
+    if (this.type !== 'field') {
+      const { getValue } = this.extraProps;
+      return getValue ? (getValue(this, undefined) === undefined ? 0 : 1) : 0;
+    }
+    const propName = this.path.join('.');
+    const first = this.nodes[0].getProp(propName)!;
+    let l = this.nodes.length;
+    let state = 2;
+    while (l-- > 1) {
+      const next = this.nodes[l].getProp(propName, false);
+      const s = first.compare(next);
+      if (s > 1) {
+        return -1;
+      }
+      if (s === 1) {
+        state = 1;
+      }
+    }
+    if (state === 2 && first.isUnset()) {
+      return 0;
+    }
+    return state;
+  }
+
+  /**
    * 获取当前属性值
    */
   @computed getValue(): any {
-    let val: any = null;
+    let val: any = undefined;
     if (this.type === 'field') {
       val = this.parent.getPropValue(this.name);
     }
@@ -131,6 +155,19 @@ export class SettingPropEntry implements SettingEntry {
   }
 
   /**
+   * 清除已设置的值
+   */
+  clearValue() {
+    if (this.type === 'field') {
+      this.parent.clearPropValue(this.name);
+    }
+    const { setValue } = this.extraProps;
+    if (setValue) {
+      setValue(this, undefined);
+    }
+  }
+
+  /**
    * 获取子项
    */
   get(propName: string | number) {
@@ -144,6 +181,14 @@ export class SettingPropEntry implements SettingEntry {
   setPropValue(propName: string | number, value: any) {
     const path = this.path.concat(propName).join('.');
     this.top.setPropValue(path, value);
+  }
+
+  /**
+   * 清除已设置值
+   */
+  clearPropValue(propName: string | number) {
+    const path = this.path.concat(propName).join('.');
+    this.top.clearPropValue(path);
   }
 
   /**
@@ -180,11 +225,11 @@ export class SettingPropEntry implements SettingEntry {
     return this.top;
   }
 
-  // add settingfield props 
+  // add settingfield props
   get props() {
     return this.top;
   }
-  
+
   onValueChange(func: () => any) {
     this.emitter.on('valuechange', func);
 
@@ -197,8 +242,6 @@ export class SettingPropEntry implements SettingEntry {
    * @deprecated
    */
   valueChange() {
-    console.warn('valueChange deprecated');
-
     this.emitter.emit('valuechange');
   }
 

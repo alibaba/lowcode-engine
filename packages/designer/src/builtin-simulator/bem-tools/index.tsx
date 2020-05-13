@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { observer } from '@ali/lowcode-editor-core';
-import { BorderHovering } from './border-hovering';
+import { BorderDetecting } from './border-detecting';
 import { BuiltinSimulatorHost } from '../host';
 import { BorderSelecting } from './border-selecting';
 import BorderResizing from './border-resizing';
@@ -19,10 +19,9 @@ export class BemTools extends Component<{ host: BuiltinSimulatorHost }> {
     const { scrollX, scrollY, scale } = host.viewport;
     return (
       <div className="lc-bem-tools" style={{ transform: `translate(${-scrollX * scale}px,${-scrollY * scale}px)` }}>
-        <BorderHovering key="hovering" />
-        <BorderSelecting key="selecting" />
-        <InsertionView key="insertion" />
-        <BorderResizing key="resizing" />
+        <BorderDetecting key="hovering" host={host} />
+        <BorderSelecting key="selecting" host={host} />
+        <InsertionView key="insertion" host={host} />
       </div>
     );
   }

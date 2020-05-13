@@ -1,6 +1,6 @@
 import { isObject } from './is-object';
 
-export function isPlainObject(value: any): value is object {
+export function isPlainObject(value: any): value is any {
   if (!isObject(value)) {
     return false;
   }

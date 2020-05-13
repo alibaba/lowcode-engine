@@ -41,7 +41,6 @@ export class DocumentModel {
   private seqId = 0;
   private _simulator?: ISimulatorHost;
 
-
   /**
    * 模拟器
    */
@@ -118,7 +117,6 @@ export class DocumentModel {
   //   }
   //   return this.addonsData[name];
   // }
-
 
   /**
    * 生成唯一id
@@ -240,12 +238,12 @@ export class DocumentModel {
     node.remove();
   }
   getAddonData(name: string) {
-    const addon = this.getNode(name)
+    const addon = this.getNode(name);
     if (addon) {
       // 无法确定是否有这个api
       // return addon.exportData();
     }
-    return addon
+    return addon;
   }
 
   @obx.ref private _dropLocation: DropLocation | null = null;
@@ -485,7 +483,8 @@ export class DocumentModel {
 
   // add toData
   toData() {
-    return { componentsTree: [this.project?.currentDocument?.export(TransformStage.Save)] };
+    const node = this.project?.currentDocument?.export(TransformStage.Serilize);
+    return { componentsTree: [node] };
   }
 
   getHistory(): History {

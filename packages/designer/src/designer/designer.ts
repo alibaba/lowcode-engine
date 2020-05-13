@@ -16,7 +16,7 @@ import { INodeSelector, Component } from '../simulator';
 import { Scroller, IScrollable } from './scroller';
 import { Dragon, isDragNodeObject, isDragNodeDataObject, LocateEvent, DragObject } from './dragon';
 import { ActiveTracker } from './active-tracker';
-import { Hovering } from './hovering';
+import { Detecting } from './detecting';
 import { DropLocation, LocationData, isLocationChildrenDetail } from './location';
 import { OffsetObserver, createOffsetObserver } from './offset-observer';
 import { focusing } from './focusing';
@@ -44,7 +44,7 @@ export interface DesignerProps {
 export class Designer {
   readonly dragon = new Dragon(this);
   readonly activeTracker = new ActiveTracker();
-  readonly hovering = new Hovering();
+  readonly detecting = new Detecting();
   readonly project: Project;
   readonly editor: IEditor;
 
@@ -68,7 +68,7 @@ export class Designer {
     this.project = new Project(this, props.defaultSchema);
 
     this.dragon.onDragstart((e) => {
-      this.hovering.enable = false;
+      this.detecting.enable = false;
       const { dragObject } = e;
       if (isDragNodeObject(dragObject)) {
         if (dragObject.nodes.length === 1) {
@@ -99,7 +99,7 @@ export class Designer {
       const { dragObject, copy } = e;
       const loc = this._dropLocation;
       if (loc) {
-        if (isLocationChildrenDetail(loc.detail)) {
+        if (isLocationChildrenDetail(loc.detail) && loc.detail.valid !== false) {
           let nodes: Node[] | undefined;
           if (isDragNodeObject(dragObject)) {
             nodes = insertChildren(loc.target, dragObject.nodes, loc.detail.index, copy);
@@ -114,12 +114,11 @@ export class Designer {
           }
         }
       }
-      this.clearLocation();
       if (this.props?.onDragend) {
         this.props.onDragend(e, loc);
       }
       this.postEvent('dragend', e, loc);
-      this.hovering.enable = true;
+      this.detecting.enable = true;
     });
 
     this.activeTracker.onChange(({ node, detail }) => {
@@ -174,6 +173,10 @@ export class Designer {
   }
 
   private _dropLocation?: DropLocation;
+
+  get dropLocation() {
+    return this._dropLocation;
+  }
   /**
    * 创建插入位置，考虑放到 dragon 中
    */
@@ -202,8 +205,30 @@ export class Designer {
     return new Scroller(scrollable);
   }
 
+  private oobxList: OffsetObserver[] = [];
   createOffsetObserver(nodeInstance: INodeSelector): OffsetObserver | null {
-    return createOffsetObserver(nodeInstance);
+    const oobx = createOffsetObserver(nodeInstance);
+    this.clearOobxList();
+    if (oobx) {
+      this.oobxList.push(oobx);
+    }
+    return oobx;
+  }
+
+  private clearOobxList(force?: boolean) {
+    let l = this.oobxList.length;
+    if (l > 20 || force) {
+      while (l-- > 0) {
+        if (this.oobxList[l].isPurged()) {
+          this.oobxList.splice(l, 1);
+        }
+      }
+    }
+  }
+
+  touchOffsetObserver() {
+    this.clearOobxList(true);
+    this.oobxList.forEach(item => item.compute());
   }
 
   createSettingEntry(editor: IEditor, nodes: Node[]) {

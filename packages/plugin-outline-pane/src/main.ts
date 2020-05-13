@@ -1,5 +1,4 @@
-import { EventEmitter } from 'events';
-import { computed, obx, Editor } from '@ali/lowcode-editor-core';
+import { computed, obx } from '@ali/lowcode-editor-core';
 import {
   Designer,
   ISensor,
@@ -18,108 +17,15 @@ import {
   contains,
   Node,
 } from '@ali/lowcode-designer';
-import { Tree } from './tree';
 import TreeNode from './tree-node';
 import { IndentTrack } from './helper/indent-track';
 import DwellTimer from './helper/dwell-timer';
 import { uniqueId } from '@ali/lowcode-utils';
+import { Backup } from './views/backup-pane';
+import { IEditor } from '@ali/lowcode-types';
+import { ITreeBoard, TreeMaster, getTreeMaster } from './tree-master';
 
-export interface IScrollBoard {
-  scrollToNode(treeNode: TreeNode, detail?: any): void;
-}
-
-class TreeMaster {
-  private emitter = new EventEmitter();
-  private currentFixed?: OutlineMain;
-  constructor(readonly designer: Designer) {
-    designer.dragon.onDragstart((e) => {
-      const tree = this.currentTree;
-      if (tree) {
-        tree.document.selection.getTopNodes().forEach((node) => {
-          tree.getTreeNode(node).setExpanded(false);
-        });
-      }
-      if (!this.currentFixed) {
-        this.emitter.emit('enable-builtin');
-      }
-    });
-    designer.activeTracker.onChange(({ node, detail }) => {
-      const tree = this.currentTree;
-      if (!tree || node.document !== tree.document) {
-        return;
-      }
-
-      const treeNode = tree.getTreeNode(node);
-      if (detail && isLocationChildrenDetail(detail)) {
-        treeNode.expand(true);
-      } else {
-        treeNode.expandParents();
-      }
-
-      this.boards.forEach((board) => {
-        board.scrollToNode(treeNode, detail);
-      });
-    });
-  }
-
-  setFixed(entry: OutlineMain) {
-    this.currentFixed = entry;
-  }
-
-  unFixed(entry: OutlineMain) {
-    if (entry === this.currentFixed) {
-      this.currentFixed = undefined;
-    }
-  }
-
-  onceEnableBuiltin(fn: () => void): () => void {
-    this.emitter.once('enable-builtin', fn);
-    return () => {
-      this.emitter.removeListener('enable-builtin', fn);
-    }
-  }
-
-  private boards = new Set<IScrollBoard>();
-  addBoard(board: IScrollBoard) {
-    this.boards.add(board);
-  }
-  removeBoard(board: IScrollBoard) {
-    this.boards.delete(board);
-  }
-
-  purge() {
-    this.emitter.removeAllListeners();
-    // todo others purge
-  }
-
-  private treeMap = new Map<string, Tree>();
-  @computed get currentTree(): Tree | null {
-    const doc = this.designer?.currentDocument;
-    if (doc) {
-      const id = doc.id;
-      if (this.treeMap.has(id)) {
-        return this.treeMap.get(id)!;
-      }
-      const tree = new Tree(doc);
-      // TODO: listen purge event to remove
-      this.treeMap.set(id, tree);
-      return tree;
-    }
-    return null;
-  }
-}
-
-const mastersMap = new Map<Designer, TreeMaster>();
-export function getTreeMaster(designer: Designer): TreeMaster {
-  let master = mastersMap.get(designer);
-  if (!master) {
-    master = new TreeMaster(designer);
-    mastersMap.set(designer, master);
-  }
-  return master;
-}
-
-export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
+export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
   private _designer?: Designer;
   @obx.ref private _master?: TreeMaster;
   get master() {
@@ -130,8 +36,11 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
   }
   readonly id = uniqueId('outline');
 
-  private fixed = false;
-  constructor(readonly editor: Editor, at?: string) {
+  @obx.ref _visible: boolean = false;
+  get visible() {
+    return this._visible;
+  }
+  constructor(readonly editor: IEditor, readonly at: string | Symbol) {
     let inited = false;
     const setup = async () => {
       if (inited) {
@@ -142,29 +51,18 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
       this.setupDesigner(designer);
     };
 
-    // FIXME: dirty connect to others
-    if (at === '__IN_SETTINGS__') {
+    if (at === Backup) {
       setup();
     } else {
       editor.on('skeleton.panel.show', (key: string) => {
         if (key === at) {
           setup();
-          if (this.master) {
-            this.master.setFixed(this);
-          } else {
-            this.fixed = true;
-          }
-          document.documentElement.classList.add('lowcode-has-fixed-tree');
+          this._visible = true;
         }
       });
       editor.on('skeleton.panel.hide', (key: string) => {
         if (key === at) {
-          document.documentElement.classList.remove('lowcode-has-fixed-tree');
-          if (this.master) {
-            this.master.unFixed(this);
-          } else {
-            this.fixed = false;
-          }
+          this._visible = false;
         }
       });
     }
@@ -628,9 +526,6 @@ export class OutlineMain implements ISensor, IScrollBoard, IScrollable {
     this._designer = designer;
     this._master = getTreeMaster(designer);
     this._master.addBoard(this);
-    if (this.fixed) {
-      this._master.setFixed(this);
-    }
     designer.dragon.addSensor(this);
     this.scroller = designer.createScroller(this);
   }

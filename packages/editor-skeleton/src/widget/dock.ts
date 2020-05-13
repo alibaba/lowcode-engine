@@ -46,7 +46,7 @@ export default class Dock implements IWidget {
       this._body = createElement(DockView, props);
     }
     this.inited = true;
-    
+
     return this._body;
   }
 
@@ -54,6 +54,9 @@ export default class Dock implements IWidget {
     const { props = {}, name } = config;
     this.name = name;
     this.align = props.align;
+    if (props.onInit) {
+      props.onInit.call(this, this);
+    }
   }
 
   setVisible(flag: boolean) {

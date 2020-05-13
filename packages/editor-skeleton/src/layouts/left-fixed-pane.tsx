@@ -5,11 +5,16 @@ import { Button, Icon } from '@alifd/next';
 import Area from '../area';
 import { PanelConfig } from '../types';
 import Panel from '../widget/panel';
+import { Designer } from '@ali/lowcode-designer';
 
 @observer
 export default class LeftFixedPane extends Component<{ area: Area<PanelConfig, Panel> }> {
   shouldComponentUpdate() {
     return false;
+  }
+  componentDidUpdate() {
+    // FIXME: dirty fix, need deep think
+    this.props.area.skeleton.editor.get(Designer)?.touchOffsetObserver();
   }
   render() {
     const { area } = this.props;

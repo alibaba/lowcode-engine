@@ -1,5 +1,5 @@
 import { designer } from './editor';
-import { DragObjectType, isNode } from '@ali/lowcode-designer';
+import { DragObjectType, isNode, isDragNodeDataObject } from '@ali/lowcode-designer';
 
 const dragon = designer.dragon;
 const DragEngine = {
@@ -36,7 +36,11 @@ const DragEngine = {
   onDragend(func: (dragment: any, location: any, copy: any) => any) {
     return dragon.onDragend(({ dragObject, copy }) => {
       const loc = designer.currentDocument?.dropLocation;
-      func(dragObject.nodes[0], loc, copy);
+      if (isDragNodeDataObject(dragObject)) {
+        func(dragObject.data, loc, copy);
+      } else {
+        func(dragObject.nodes[0], loc, copy);
+      }
     });
   },
   inDragging() {

@@ -3,6 +3,64 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.9"></a>
+## [0.9.9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.8...@ali/lowcode-designer@0.9.9) (2020-05-13)
+
+
+### Bug Fixes
+
+* 🐛 add hotkey up/down/left/right ([9c8afe8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9c8afe8))
+* 🐛 error when quick search ([801d954](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/801d954))
+* 🐛 快捷键支持 ([73374dd](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/73374dd))
+* 🐛 移动快捷键 ([7c8a27c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7c8a27c))
+* cancel dragging on invalid position ([f961096](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f961096))
+* panel visible time ([18ac1fa](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/18ac1fa))
+* quickSearch error ([a8009ef](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a8009ef))
+* supports ([371b84c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/371b84c))
+
+
+### Features
+
+* show value state ([bd49e50](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd49e50))
+* support global inline editing ([4f7179b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/4f7179b))
+* support plaintext liveediting ([ea62f12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ea62f12))
+
+
+
+
+<a name="0.9.8"></a>
+## [0.9.8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.7...@ali/lowcode-designer@0.9.8) (2020-05-08)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+<a name="0.9.7"></a>
+## [0.9.7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.6...@ali/lowcode-designer@0.9.7) (2020-05-07)
+
+
+### Bug Fixes
+
+* 🐛 add pollyfill for vision page.getHistory ([0b905d0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0b905d0))
+* 🐛 title缺少icon字段，临时转接一下 ([2f9bb25](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2f9bb25))
+* 🐛 增加 getAddonData api ([68b7e29](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/68b7e29))
+* 🐛 增加剪切快捷键 ([a73a82e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a73a82e))
+* border action style ([6b91535](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6b91535))
+* documentModel toData 方法 ([1ea0d73](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1ea0d73))
+* settingfield添加props修复地区组件切换类型报错 ([88348f7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/88348f7))
+* 在Transducer中添加对MixedSetter的支持 ([7317f2f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7317f2f))
+
+
+### Features
+
+* 🎸 增加icon获取api ([f1a0823](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f1a0823))
+* duplicate ([ec932aa](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ec932aa))
+* 修复状态切换失效 ([2e3f60d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2e3f60d))
+
+
+
+
 <a name="0.9.6"></a>
 ## [0.9.6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.5...@ali/lowcode-designer@0.9.6) (2020-04-27)
 

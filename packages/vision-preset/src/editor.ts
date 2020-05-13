@@ -1,9 +1,8 @@
-import { isJSBlock, isJSSlot } from '@ali/lowcode-types';
+import { isJSBlock, isJSExpression, isJSSlot } from '@ali/lowcode-types';
 import { isPlainObject } from '@ali/lowcode-utils';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
-import { Designer, TransformStage, addBuiltinComponentAction } from '@ali/lowcode-designer';
-// import { registerSetters } from '@ali/lowcode-setters';
-import Outline from '@ali/lowcode-plugin-outline-pane';
+import { Designer, LiveEditing, TransformStage, addBuiltinComponentAction } from '@ali/lowcode-designer';
+import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import { toCss } from '@ali/vu-css-style';
 
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
@@ -11,16 +10,20 @@ import { Skeleton, SettingsPrimaryPane } from '@ali/lowcode-editor-skeleton';
 
 import { i18nReducer } from './i18n-reducer';
 import { InstanceNodeSelector } from './components';
+import { liveEditingRule } from './vc-live-editing';
 
 export const editor = new Editor();
 globalContext.register(editor, Editor);
 
 export const skeleton = new Skeleton(editor);
 editor.set(Skeleton, skeleton);
+editor.set('skeleton', skeleton);
 
 export const designer = new Designer({ editor: editor });
 editor.set(Designer, designer);
+editor.set('designer', designer);
 
+// 节点 props 初始化
 designer.addPropsReducer((props, node) => {
   // run initials
   const initials = node.componentMeta.getMetadata().experimental?.initials;
@@ -38,6 +41,7 @@ designer.addPropsReducer((props, node) => {
   return props;
 }, TransformStage.Init);
 
+// 国际化渲染时处理
 designer.addPropsReducer(i18nReducer, TransformStage.Render);
 
 function upgradePropsReducer(props: any) {
@@ -65,38 +69,80 @@ function upgradePropsReducer(props: any) {
   });
   return newProps;
 }
+// 升级 Props
 designer.addPropsReducer(upgradePropsReducer, TransformStage.Init);
 
 // 设计器组件样式处理
 function stylePropsReducer(props: any, node: any) {
   if (props && typeof props === 'object' && props.__style__) {
-    const doc = designer.currentDocument?.simulator?.contentDocument;
-    if (!doc) {
-      return;
-    }
     const cssId = '_style_pesudo_' + node.id.replace(/\$/g, '_');
     const cssClass = '_css_pesudo_' + node.id.replace(/\$/g, '_');
-    const dom = doc.getElementById(cssId);
-    if (dom) {
-      dom.parentNode?.removeChild(dom);
-    }
-    let styleProp = props.__style__;
-    if (typeof styleProp === 'object') {
-      styleProp = toCss(styleProp);
-    }
-    if (typeof styleProp === 'string') {
-      const s = doc.createElement('style');
-      props.className = cssClass;
-      s.setAttribute('type', 'text/css');
-      s.setAttribute('id', cssId);
-      doc.getElementsByTagName('head')[0].appendChild(s);
-
-      s.appendChild(doc.createTextNode(styleProp.replace(/:root/g, '.' + cssClass)));
-    }
+    const styleProp = props.__style__;
+    appendStyleNode(props, styleProp, cssClass, cssId);
+  }
+  if (props && typeof props === 'object' && props.pageStyle) {
+    const cssId = '_style_pesudo_engine-document';
+    const cssClass = 'engine-document';
+    const styleProp = props.pageStyle;
+    appendStyleNode(props, styleProp, cssClass, cssId);
+  }
+  if (props && typeof props === 'object' && props.containerStyle) {
+    const cssId = '_style_pesudo_' + node.id;
+    const cssClass = '_css_pesudo_' + node.id.replace(/\$/g, '_');
+    const styleProp = props.containerStyle;
+    appendStyleNode(props, styleProp, cssClass, cssId);
   }
   return props;
 }
+
+function appendStyleNode(props: any, styleProp: any, cssClass: string, cssId: string) {
+  const doc = designer.currentDocument?.simulator?.contentDocument;
+  if (!doc) {
+    return;
+  }
+  const dom = doc.getElementById(cssId);
+  if (dom) {
+    dom.parentNode?.removeChild(dom);
+  }
+  if (typeof styleProp === 'object') {
+    styleProp = toCss(styleProp);
+  }
+  if (typeof styleProp === 'string') {
+    const s = doc.createElement('style');
+    props.className = cssClass;
+    s.setAttribute('type', 'text/css');
+    s.setAttribute('id', cssId);
+    doc.getElementsByTagName('head')[0].appendChild(s);
+
+    s.appendChild(doc.createTextNode(styleProp.replace(/:root/g, '.' + cssClass)));
+  }
+}
 designer.addPropsReducer(stylePropsReducer, TransformStage.Render);
+
+// FIXME: 表达式使用 mock 值，未来live 模式直接使用原始值
+function expressionReducer(obj?: any): any {
+  if (!obj) {
+    return obj;
+  }
+  if (Array.isArray(obj)) {
+    return obj.map((item) => expressionReducer(item));
+  }
+  if (isPlainObject(obj)) {
+    if (isJSExpression(obj)) {
+      return obj.mock;
+    }
+    if (isJSSlot(obj)) {
+      return obj;
+    }
+    const out: any = {};
+    Object.keys(obj).forEach((key) => {
+      out[key] = expressionReducer(obj[key]);
+    });
+    return out;
+  }
+  return obj;
+}
+designer.addPropsReducer(expressionReducer, TransformStage.Render);
 
 skeleton.add({
   area: 'mainArea',
@@ -119,26 +165,24 @@ skeleton.add({
     area: 'leftFixedArea',
   },
 });
+skeleton.add({
+  area: 'rightArea',
+  name: 'backupOutline',
+  type: 'Panel',
+  props: {
+    condition: () => {
+      return designer.dragon.dragging && !getTreeMaster(designer).hasVisibleTreeBoard();
+    }
+  },
+  content: OutlineBackupPane,
+});
 
-// skeleton.add({
-//   name: 'sourceEditor',
-//   type: 'PanelDock',
-//   props: {
-//     align: 'top',
-//     icon: 'code',
-//     description: '组件库',
-//   },
-//   panelProps: {
-//     width: 500
-//     // area: 'leftFixedArea'
-//   },
-//   content: SourceEditor,
-// });
+LiveEditing.addLiveEditingSpecificRule(liveEditingRule);
 
 // 实例节点选择器，线框高亮
-// addBuiltinComponentAction({
-//   name: 'instance-node-selector',
-//   content: InstanceNodeSelector,
-//   important: true,
-//   condition: 'always'
-// });
+addBuiltinComponentAction({
+  name: 'instance-node-selector',
+  content: InstanceNodeSelector,
+  important: true,
+  condition: 'always',
+});

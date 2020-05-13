@@ -143,7 +143,7 @@ function propTypeToSetter(propType: PropType): SetterType {
       };
     case 'oneOfType':
       return {
-        componentName: 'MixinSetter',
+        componentName: 'MixedSetter',
         props: {
           // TODO:
           // setters: (propType as OneOfType).value.map(item => propTypeToSetter(item)),
@@ -153,7 +153,7 @@ function propTypeToSetter(propType: PropType): SetterType {
   }
 
   return {
-    componentName: 'MixinSetter',
+    componentName: 'MixedSetter',
     isRequired,
   };
 }
@@ -175,8 +175,8 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
       },
     };
   }
-  const { component = {}, events = {}, styles = {} } = configure;
-  const supportedEvents: any[] | null = (events as any).supportedEvents ? null : [];
+  const { component = {}, supports = {} } = configure;
+  const supportedEvents: any[] | null = (supports as any).events ? null : [];
   const props: FieldConfig[] = [];
 
   metadata.props.forEach((prop) => {
@@ -197,21 +197,21 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
           name,
           description,
         });
-        (events as any).supportedEvents = supportedEvents;
+        (supports as any).events = supportedEvents;
       }
       return;
     }
 
     if (name === 'className' && (propType === 'string' || propType === 'any')) {
-      if ((styles as any).supportClassName == null) {
-        (styles as any).supportClassName = true;
+      if ((supports as any).className == null) {
+        (supports as any).className = true;
       }
       return;
     }
 
     if (name === 'style' && (propType === 'object' || propType === 'any')) {
-      if ((styles as any).supportInlineStyle == null) {
-        (styles as any).supportInlineStyle = true;
+      if ((supports as any).style == null) {
+        (supports as any).style = true;
       }
       return;
     }
@@ -224,8 +224,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
     configure: {
       ...configure,
       props,
-      events,
-      styles,
+      supports,
       component,
     },
   };

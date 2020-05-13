@@ -17,7 +17,7 @@ export default class TreeNodeView extends Component<{ treeNode: TreeNode }> {
       // 是否展开
       expanded: treeNode.expanded,
       // 是否悬停中
-      hovering: treeNode.hovering,
+      detecting: treeNode.detecting,
       // 是否选中的
       selected: treeNode.selected,
       // 是否隐藏的

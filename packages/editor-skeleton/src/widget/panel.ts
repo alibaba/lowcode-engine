@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { createElement, ReactNode } from 'react';
-import { obx } from '@ali/lowcode-editor-core';
+import { obx, computed } from '@ali/lowcode-editor-core';
 import { uniqueId, createContent } from '@ali/lowcode-utils';
 import { TitleContent } from '@ali/lowcode-types';
 import WidgetContainer from './widget-container';
@@ -9,20 +9,25 @@ import { TitledPanelView, TabsPanelView, PanelView } from '../components/widget-
 import { Skeleton } from '../skeleton';
 import { composeTitle } from './utils';
 import { IWidget } from './widget';
+import PanelDock, { isPanelDock } from './panel-dock';
 
 export default class Panel implements IWidget {
   readonly isWidget = true;
   readonly name: string;
   readonly id: string;
   @obx.ref inited = false;
-  @obx.ref private _actived = false;
+  @obx.ref private _actived: boolean = false;
   private emitter = new EventEmitter();
   get actived(): boolean {
     return this._actived;
   }
 
-  get visible(): boolean {
-    if (this.parent?.visible) {
+  @computed get visible(): boolean {
+    if (!this.parent || this.parent.visible) {
+      const { props } = this.config;
+      if (props?.condition) {
+        return props.condition(this);
+      }
       return this._actived;
     }
     return false;
@@ -30,10 +35,21 @@ export default class Panel implements IWidget {
 
   readonly isPanel = true;
 
-  private _body?: ReactNode;
   get body() {
-    this.initBody();
-    return this._body;
+    if (this.container) {
+      return createElement(TabsPanelView, {
+        container: this.container,
+      });
+    }
+
+    const { content, contentProps } = this.config;
+    return createContent(content, {
+      ...contentProps,
+      editor: this.skeleton.editor,
+      config: this.config,
+      panel: this,
+      pane: this,
+    });
   }
 
   get content(): ReactNode {
@@ -79,28 +95,10 @@ export default class Panel implements IWidget {
       );
       content.forEach((item) => this.add(item));
     }
+    if (props.onInit) {
+      props.onInit.call(this, this);
+    }
     // todo: process shortcut
-  }
-
-  private initBody() {
-    if (this.inited) {
-      return;
-    }
-    this.inited = true;
-    if (this.container) {
-      this._body = createElement(TabsPanelView, {
-        container: this.container,
-      });
-    } else {
-      const { content, contentProps } = this.config;
-      this._body = createContent(content, {
-        ...contentProps,
-        editor: this.skeleton.editor,
-        config: this.config,
-        panel: this,
-        pane: this,
-      });
-    }
   }
 
   setParent(parent: WidgetContainer) {
@@ -147,11 +145,11 @@ export default class Panel implements IWidget {
       return;
     }
     if (flag) {
-      if (!this.inited) {
-        this.initBody();
-      }
       this._actived = true;
       this.parent?.active(this);
+      if (!this.inited) {
+        this.inited = true;
+      }
       this.emitter.emit('activechange', true);
     } else if (this.inited) {
       this._actived = false;
@@ -170,6 +168,12 @@ export default class Panel implements IWidget {
 
   show() {
     this.setActive(true);
+  }
+
+  getAssocDocks(): PanelDock[] {
+    return this.skeleton.widgets.filter(item => {
+      return isPanelDock(item) && item.panelName === this.name;
+    }) as any;
   }
 
   /**

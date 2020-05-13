@@ -213,8 +213,16 @@ export class NodeChildren {
     });
   }
 
+  every(fn: (item: Node, index: number) => any): boolean {
+    return this.children.every((child, index) => fn(child, index));
+  }
+
   some(fn: (item: Node, index: number) => any): boolean {
     return this.children.some((child, index) => fn(child, index));
+  }
+
+  filter(fn: (item: Node, index: number) => item is Node) {
+    return this.children.filter(fn);
   }
 
   mergeChildren(remover: () => any, adder: (children: Node[]) => NodeData[] | null, sorter: () => any) {

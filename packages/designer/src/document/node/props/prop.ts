@@ -245,7 +245,9 @@ export class Prop implements IPropParent {
     return typeof this.key === 'string' && this.key.charAt(0) === '!';
   }
 
-  // TODO: improve this logic
+  /**
+   * @returns  0: the same 1: maybe & like 2: not the same
+   */
   compare(other: Prop | null): number {
     if (!other || other.isUnset()) {
       return this.isUnset() ? 0 : 2;

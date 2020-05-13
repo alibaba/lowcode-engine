@@ -1,9 +1,9 @@
-export function transformType(type: any) {
-  if (typeof type === 'string') return type;
-  const { name, elements, value = elements, computed, required } = type;
-  if (!value && !required) {
-    return name;
-  }
+export function transformType(itemType: any) {
+  if (typeof itemType === 'string') return itemType;
+  const { name, elements, value = elements, computed, required, type } = itemType;
+  // if (!value && !required && !type) {
+  //   return name;
+  // }
   if (computed !== undefined && value) {
     return eval(value);
   }
@@ -21,6 +21,7 @@ export function transformType(type: any) {
     case 'func':
     case 'symbol':
     case 'object':
+    case 'null':
       break;
     case 'literal':
       return eval(value);
@@ -36,13 +37,24 @@ export function transformType(type: any) {
     case 'boolean':
       result.type = 'bool';
       break;
-    case 'Array': {
+    case 'Function':
+      result.type = 'func';
+      break;
+    case 'unknown':
+      result.type = 'any';
+      break;
+    case 'Array':
+    case 'arrayOf': {
       result.type = 'arrayOf';
       const v = transformType(value[0]);
       if (typeof v.type === 'string') result.value = v.type;
       break;
     }
     case 'signature': {
+      if (typeof type === 'string') {
+        result.type = type;
+        break;
+      }
       result.type = 'shape';
       const {
         signature: { properties },
@@ -103,22 +115,28 @@ export function transformType(type: any) {
       result.value = name;
       break;
   }
+  if (Object.keys(result).length === 1) {
+    return result.type;
+  }
   return result;
 }
 
 export function transformItem(name: string, item: any) {
-  const { description, flowType, type = flowType, required, defaultValue } = item;
+  const { description, flowType, tsType, type = tsType || flowType, required, defaultValue } = item;
   const result: any = {
     name,
-    propType: transformType({
+  };
+
+  if (type) {
+    result.propType = transformType({
       ...type,
       required: !!required,
-    }),
-  };
+    });
+  }
   if (description) {
     result.description = description;
   }
-  if (defaultValue) {
+  if (defaultValue !== undefined) {
     try {
       const value = eval(defaultValue.value);
       result.defaultValue = value;
@@ -127,6 +145,5 @@ export function transformItem(name: string, item: any) {
   if (result.propType === undefined) {
     delete result.propType;
   }
-
   return result;
 }

@@ -27,7 +27,7 @@ export class Title extends Component<{ title: TitleContent; className?: string; 
           typeof title.tip === 'object' && !(isValidElement(title.tip) || isI18nData(title.tip))
             ? title.tip
             : { children: title.tip };
-        tip = <Tip direction="top" theme="black" {...tipProps} />;
+        tip = <Tip {...tipProps} />;
       }
     }
 

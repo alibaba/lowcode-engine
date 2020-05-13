@@ -60,6 +60,9 @@ export default class Widget implements IWidget {
     const { props = {}, name } = config;
     this.name = name;
     this.align = props.align;
+    if (props.onInit) {
+      props.onInit.call(this, this);
+    }
   }
 
   getId() {

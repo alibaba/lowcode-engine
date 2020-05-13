@@ -110,7 +110,7 @@ export class Skeleton {
         }
         return this.createPanel(config);
       },
-      true,
+      false,
       true,
     );
     this.mainArea = new Area(
@@ -192,6 +192,7 @@ export class Skeleton {
     this.editor.emit(event, ...args);
   }
 
+  readonly widgets: IWidget[] = [];
   createWidget(config: IWidgetBaseConfig | IWidget) {
     if (isWidget(config)) {
       return config;
@@ -220,6 +221,7 @@ export class Skeleton {
     } else {
       widget = new Widget(this, config as WidgetConfig);
     }
+    this.widgets.push(widget);
     return widget;
   }
 

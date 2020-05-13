@@ -13,7 +13,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
             name: 'children',
             title: { type: 'i18n', 'zh-CN': '内容设置', 'en-US': 'Content' },
             setter: {
-              componentName: 'MixinSetter',
+              componentName: 'MixedSetter',
               props: {
                 // TODO:
                 setters: [
@@ -41,11 +41,11 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
     };
   }
 
-  const { props, events = {}, styles } = configure as any;
+  const { props, supports = {} } = configure as any;
   const isRoot: boolean = componentName === 'Page' || componentName === 'Component';
   const eventsDefinition: any[] = [];
   const supportedLifecycles =
-    events.supportedLifecycles ||
+  supports.lifecycles ||
     (isRoot
       ? /*[
           {
@@ -73,11 +73,11 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
       list: supportedLifecycles.map((event: any) => (typeof event === 'string' ? { name: event } : event)),
     });
   }
-  if (events.supportedEvents) {
+  if (supports.events) {
     eventsDefinition.push({
       type: 'events',
       title: '事件',
-      list: (events.supportedEvents || []).map((event: any) => (typeof event === 'string' ? { name: event } : event)),
+      list: (supports.events || []).map((event: any) => (typeof event === 'string' ? { name: event } : event)),
     });
   }
   //  通用设置
@@ -125,6 +125,24 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
     ],
   });
   */
+  const stylesGroup: FieldConfig[] = [];
+  let advanceGroup: FieldConfig[] = [];
+  if (propsGroup) {
+    let l = propsGroup.length;
+    while (l-- > 0) {
+      const item = propsGroup[l];
+      if (item.type === 'group' && (item.title === '高级' || item.title?.label === '高级')) {
+        advanceGroup = item.items || [];
+        propsGroup.splice(l, 1);
+      } else if (item.name === '__style__' || item.name === 'containerStyle' || item.name === 'pageStyle') {
+        propsGroup.splice(l, 1);
+        stylesGroup.push(item);
+        if (item.extraProps?.defaultCollapsed && item.name !== 'containerStyle') {
+          item.extraProps.defaultCollapsed = false;
+        }
+      }
+    }
+  }
   const combined: FieldConfig[] = [
     {
       title: { type: 'i18n', 'zh-CN': '属性', 'en-US': 'Props' },
@@ -132,15 +150,14 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
       items: propsGroup,
     },
   ];
-  const stylesGroup: FieldConfig[] = [];
-  if (styles?.supportClassName) {
+  if (supports.className) {
     stylesGroup.push({
       name: 'className',
       title: { type: 'i18n', 'zh-CN': '类名绑定', 'en-US': 'ClassName' },
       setter: 'ClassNameSetter',
     });
   }
-  if (styles?.supportInlineStyle) {
+  if (supports.style) {
     stylesGroup.push({
       name: 'style',
       title: { type: 'i18n', 'zh-CN': '行内样式', 'en-US': 'Style' },
@@ -183,79 +200,75 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
     });
   }
 
-  if (isRoot) {
-    /*
+  if (!isRoot) {
+    if (supports.condition !== false) {
+      advanceGroup.push({
+        name: '___condition',
+        title: { type: 'i18n', 'zh-CN': '是否渲染', 'en-US': 'Condition' },
+        defaultValue: true,
+        setter: [{
+          componentName: 'BoolSetter',
+        }, {
+          componentName: 'VariableSetter'
+        }],
+      });
+    }
+    if (supports.loop !== false) {
+      advanceGroup.push({
+        name: '#loop',
+        title: { type: 'i18n', 'zh-CN': '循环', 'en-US': 'Loop' },
+        items: [
+          {
+            name: '___loop',
+            title: { type: 'i18n', 'zh-CN': '循环数据', 'en-US': 'Loop Data' },
+            defaultValue: [],
+            setter: [{
+              componentName: 'JsonSetter',
+              props: {
+                label: { type: 'i18n', 'zh-CN': '编辑数据', 'en-US': 'Edit Data'},
+              },
+            }, {
+              componentName: 'VariableSetter'
+            }],
+          },
+          {
+            name: '___loopArgs.0',
+            title: { type: 'i18n', 'zh-CN': '迭代变量名', 'en-US': 'Loop Item' },
+            setter: {
+              componentName: 'StringSetter',
+              props: {
+                placeholder: { type: 'i18n', 'zh-CN': '默认为: item', 'en-US': 'Defaults: item' },
+              }
+            },
+          },
+          {
+            name: '___loopArgs.1',
+            title: { type: 'i18n', 'zh-CN': '索引变量名', 'en-US': 'Loop Index' },
+            setter: {
+              componentName: 'StringSetter',
+              props: {
+                placeholder: { type: 'i18n', 'zh-CN': '默认为: index', 'en-US': 'Defaults: index' },
+              }
+            },
+          },
+          {
+            name: 'key',
+            title: '循环 Key',
+            setter: [{
+              componentName: 'StringSetter',
+            }, {
+              componentName: 'VariableSetter'
+            }],
+          },
+        ],
+      })
+    }
+  }
+  if (advanceGroup.length > 0) {
     combined.push({
       name: '#advanced',
       title: { type: 'i18n', 'zh-CN': '高级', 'en-US': 'Advance' },
-      items: [],
-    });
-    */
-  } else {
-    combined.push({
-      name: '#advanced',
-      title: { type: 'i18n', 'zh-CN': '高级', 'en-US': 'Advance' },
-      items: [
-        {
-          name: '___condition',
-          title: { type: 'i18n', 'zh-CN': '是否渲染', 'en-US': 'Condition' },
-          setter: [{
-            componentName: 'BoolSetter',
-            props: {
-              defaultValue: true,
-            }
-          }, {
-            componentName: 'VariableSetter'
-          }],
-        },
-        {
-          name: '#loop',
-          title: { type: 'i18n', 'zh-CN': '循环', 'en-US': 'Loop' },
-          items: [
-            {
-              name: '___loop',
-              title: { type: 'i18n', 'zh-CN': '循环数据', 'en-US': 'Loop Data' },
-              setter: [{
-                componentName: 'JsonSetter',
-                props: {
-                  label: { type: 'i18n', 'zh-CN': '编辑数据', 'en-US': 'Edit Data'},
-                },
-              }, {
-                componentName: 'VariableSetter'
-              }],
-            },
-            {
-              name: '___loopArgs.0',
-              title: { type: 'i18n', 'zh-CN': '迭代变量名', 'en-US': 'Loop Item' },
-              setter: {
-                componentName: 'StringSetter',
-                props: {
-                  placeholder: { type: 'i18n', 'zh-CN': '默认为: item', 'en-US': 'Defaults: item' },
-                }
-              },
-            },
-            {
-              name: '___loopArgs.1',
-              title: { type: 'i18n', 'zh-CN': '索引变量名', 'en-US': 'Loop Index' },
-              setter: {
-                componentName: 'StringSetter',
-                props: {
-                  placeholder: { type: 'i18n', 'zh-CN': '默认为: index', 'en-US': 'Defaults: index' },
-                }
-              },
-            },
-            {
-              name: 'key',
-              title: '循环 Key',
-              setter: [{
-                componentName: 'StringSetter',
-              }, {
-                componentName: 'VariableSetter'
-              }],
-            },
-          ],
-        },
-      ],
+      items: advanceGroup,
     });
   }
 

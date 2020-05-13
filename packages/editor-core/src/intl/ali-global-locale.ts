@@ -35,7 +35,16 @@ class AliGlobalLocale {
     if (this._locale != null) {
       return this._locale;
     }
-    const { g_config, navigator } = window as any;
+
+    // TODO: store 1 & store 2 abstract out as custom implements
+
+    // store 1: config from window
+    let locale: string = getConfig('locale');
+    if (locale) {
+      return languageMap[locale] || locale.replace('_', '-');
+    }
+
+    // store 2: config from storage
     if (hasLocalStorage(window)) {
       const store = window.localStorage;
       let config: any;
@@ -47,20 +56,14 @@ class AliGlobalLocale {
       if (config?.locale) {
         return (config.locale || '').replace('_', '-');
       }
-    } else if (g_config) {
-      if (g_config.locale) {
-        return languageMap[g_config.locale] || g_config.locale.replace('_', '-');
-      }
     }
 
-    let locale: string = '';
+    // store 2: config from system
+    const { navigator } = window as any;
     if (navigator.language) {
       const lang = (navigator.language as string);
       return languageMap[lang] || lang.replace('_', '-');
-    }
-
-    // IE10 及更低版本使用 browserLanguage
-    if (navigator.browserLanguage) {
+    } else if (navigator.browserLanguage) {
       const it = navigator.browserLanguage.split('-');
       locale = it[0];
       if (it[1]) {
@@ -114,6 +117,15 @@ class AliGlobalLocale {
       this.emitter.removeListener('localechange', fn);
     };
   }
+}
+
+function getConfig(name: string) {
+  const win: any = window;
+  return (
+    win[name]
+    || (win.g_config || {})[name]
+    || (win.pageConfig || {})[name]
+  );
 }
 
 function hasLocalStorage(obj: any): obj is WindowLocalStorage {

@@ -8,7 +8,9 @@ export interface FieldProps {
   title?: TitleContent | null;
   display?: 'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry';
   collapsed?: boolean;
+  valueState?: number;
   onExpandChange?: (collapsed: boolean) => void;
+  onClear?: () => void;
   [extra: string]: any;
 }
 

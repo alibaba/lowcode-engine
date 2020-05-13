@@ -1,28 +1,16 @@
 import { PureComponent } from 'react';
 import { PluginProps } from '@ali/lowcode-types';
-import OutlinePane from './pane';
+import { OutlinePane } from './pane';
+
+export const Backup = Symbol.for('backup-outline');
 
 export class OutlineBackupPane extends PureComponent<PluginProps> {
-  state = {
-    outlineInited: false,
-  };
-  private dispose = this.props.main.onceOutlineVisible(() => {
-    this.setState({
-      outlineInited: true,
-    });
-  });
-  componentWillUnmount() {
-    this.dispose();
-  }
   render() {
-    if (!this.state.outlineInited) {
-      return null;
-    }
     return (
       <OutlinePane
-        editor={this.props.main.editor}
+        editor={this.props.editor}
         config={{
-          name: '__IN_SETTINGS__',
+          name: Backup,
         }}
       />
     );

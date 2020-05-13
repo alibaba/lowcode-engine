@@ -284,9 +284,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    */
   hover(flag = true) {
     if (flag) {
-      this.document.designer.hovering.hover(this);
+      this.document.designer.detecting.capture(this);
     } else {
-      this.document.designer.hovering.unhover(this);
+      this.document.designer.detecting.release(this);
     }
   }
 
@@ -393,6 +393,13 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    */
   setPropValue(path: string, value: any) {
     this.getProp(path, true)!.setValue(value);
+  }
+
+  /**
+   * 清除已设置的值
+   */
+  clearPropValue(path: string): void {
+    this.getProp(path, false)?.unset();
   }
 
   /**
@@ -511,7 +518,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     const schema: any = {
       ...baseSchema,
       props: this.document.designer.transformProps(props, this, stage),
-      ..._extras_,
+      ...this.document.designer.transformProps(_extras_, this, stage),
     };
 
     if (this.isParental() && this.children.size > 0) {

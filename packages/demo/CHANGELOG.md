@@ -3,6 +3,50 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.18"></a>
+## [0.8.18](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.17...@ali/lowcode-demo@0.8.18) (2020-05-13)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-demo
+
+<a name="0.8.17"></a>
+## [0.8.17](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.16...@ali/lowcode-demo@0.8.17) (2020-05-13)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-demo
+
+<a name="0.8.16"></a>
+## [0.8.16](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.15...@ali/lowcode-demo@0.8.16) (2020-05-08)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-demo
+
+<a name="0.8.15"></a>
+## [0.8.15](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.14...@ali/lowcode-demo@0.8.15) (2020-05-08)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-demo
+
+<a name="0.8.14"></a>
+## [0.8.14](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.13...@ali/lowcode-demo@0.8.14) (2020-05-07)
+
+
+### Bug Fixes
+
+* 🐛 add history pane for vision demo ([3ce7079](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3ce7079))
+* 🐛 清理无用代码 ([015b58a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/015b58a))
+
+
+
+
 <a name="0.8.13"></a>
 ## [0.8.13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.12...@ali/lowcode-demo@0.8.13) (2020-04-27)
 

@@ -100,3 +100,6 @@ typings/
 
 # mac config files
 .DS_Store
+
+# codealike
+codealike.json

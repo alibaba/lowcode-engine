@@ -1,23 +1,23 @@
-import {
-  propTypeHandler,
-  contextTypeHandler,
-  childContextTypeHandler,
-} from './propTypeHandler';
+import { propTypeHandler, contextTypeHandler, childContextTypeHandler } from './propTypeHandler';
 import defaultPropsHandler from './defaultPropsHandler';
+import flowTypeHandler from './flowTypeHandler';
+import componentMethodsHandler from './componentMethodsHandler';
+import preProcessHandler from './preProcessHandler';
 
 const { handlers } = require('react-docgen');
 
 const defaultHandlers = [
+  preProcessHandler,
   propTypeHandler,
   contextTypeHandler,
   childContextTypeHandler,
   handlers.propTypeCompositionHandler,
   handlers.propDocBlockHandler,
-  handlers.flowTypeHandler,
+  flowTypeHandler,
   defaultPropsHandler,
   handlers.componentDocblockHandler,
   handlers.displayNameHandler,
-  handlers.componentMethodsHandler,
+  componentMethodsHandler,
   handlers.componentMethodsJsDocHandler,
 ];
 
