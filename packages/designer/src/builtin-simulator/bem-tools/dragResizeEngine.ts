@@ -1,4 +1,5 @@
 import * as EventEmitter from 'events';
+import { setNativeSelection, cursor } from '@ali/lowcode-utils';
 // import Cursor from './cursor';
 // import Pages from './pages';
 
@@ -31,20 +32,24 @@ class DragResizeEngine {
     }
 
     const move = (e: MouseEvent) => {
+      console.log('move');
       const moveX = e.clientX - startEvent.clientX;
       const moveY = e.clientY - startEvent.clientY;
 
       this.emitter.emit('resize', e, direction, node, moveX, moveY);
     };
+
     const over = (e: MouseEvent) => {
+      console.log('over');
       document.removeEventListener('mousemove', move, true);
       document.removeEventListener('mouseup', over, true);
 
       this.dragResizing = false;
-      // Cursor.release();
+      cursor.release();
 
       this.emitter.emit('resizeEnd', e, direction, node);
     };
+
     const mousedown = (e: MouseEvent) => {
       node = boost(e);
       startEvent = e;
@@ -55,9 +60,10 @@ class DragResizeEngine {
       document.addEventListener('mouseup', over, true);
 
       this.dragResizing = true;
-      // Cursor.addState('ew-resize');
+      cursor.addState('ew-resize');
     };
     shell.addEventListener('mousedown', mousedown);
+    shell.addEventListener('mouseup', over);
     return () => {
       shell.removeEventListener('mousedown', mousedown);
     };
@@ -78,7 +84,6 @@ class DragResizeEngine {
   }
 
   onResizeEnd(func: (e: MouseEvent, direction: string, node: any) => any) {
-    console.log('resize end');
     this.emitter.on('resizeEnd', func);
     return () => {
       this.emitter.removeListener('resizeEnd', func);

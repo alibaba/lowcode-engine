@@ -3,7 +3,7 @@ import { Component, Fragment } from 'react';
 // import Bus from '../../../../core/bus';
 import DragResizeEngine from './dragResizeEngine';
 // import OverlayCore from '../../../../core/overlay';
-import { observer, computed, Tip } from '@ali/lowcode-editor-core';
+import { observer, computed } from '@ali/lowcode-editor-core';
 import classNames from 'classnames';
 import { SimulatorContext } from '../context';
 import { BuiltinSimulatorHost } from '../host';
@@ -30,41 +30,13 @@ export default class BoxResizing extends Component<{ host: BuiltinSimulatorHost 
     return this.dragging ? selection.getTopNodes() : selection.getNodes();
   }
 
-  private hoveringLine: any;
-  private hoveringCapture: any;
-  private willDetach: () => any;
-  private willUnbind: () => any;
-  private handler: any;
-  //   private bus: Bus;
-
-  private outline: any;
-  private outlineRight: any;
-  private outlineLeft: any;
-
   shouldComponentUpdate() {
     return false;
-  }
-
-  componentWillMount() {
-    // this.hoveringLine = OverlayCore.getHoveringLine();
-    // this.hoveringCapture = OverlayCore.getHoveringCapture();
-    // this.willDetach = this.hoveringLine.onSync(() => this.forceUpdate());
-    // this.bus = new Bus();
   }
 
   componentDidUpdate() {
     // this.hoveringCapture.setBoundary(this.outline);
     // this.willBind();
-  }
-
-  componentWillUnmount() {
-    // // this.hoveringCapture.setBoundary(null);
-    // if (this.willDetach) {
-    //   this.willDetach();
-    // }
-    // if (this.willUnbind) {
-    //   this.willUnbind();
-    // }
   }
 
   render() {
@@ -144,6 +116,9 @@ export class BoxResizingInstance extends Component<{
   private outlineLeft: any;
 
   componentWillUnmount() {
+    if (this.willUnbind) {
+      this.willUnbind();
+    }
     this.props.observed.purge();
   }
 
@@ -163,9 +138,13 @@ export class BoxResizingInstance extends Component<{
         metaData &&
         metaData.experimental &&
         metaData.experimental.callbacks &&
-        metaData.experimental.callbacks.onResize === 'funtion'
+        typeof metaData.experimental.callbacks.onResize === 'function'
       ) {
-        metaData.experimental.callbacks.onResize(e, direction, node, moveX, moveY);
+        console.log('resize inner');
+        e.trigger = direction;
+        e.deltaX = moveX;
+        e.deltaY = moveY;
+        metaData.experimental.callbacks.onResize(e, node);
       }
     };
 
@@ -175,9 +154,10 @@ export class BoxResizingInstance extends Component<{
         metaData &&
         metaData.experimental &&
         metaData.experimental.callbacks &&
-        metaData.experimental.callbacks.onResizeStart === 'funtion'
+        typeof metaData.experimental.callbacks.onResizeStart === 'function'
       ) {
-        metaData.experimental.callbacks.onResizeStart(e, direction, node);
+        e.trigger = direction;
+        metaData.experimental.callbacks.onResizeStart(e, node);
       }
     };
 
@@ -187,9 +167,11 @@ export class BoxResizingInstance extends Component<{
         metaData &&
         metaData.experimental &&
         metaData.experimental.callbacks &&
-        metaData.experimental.callbacks.onResizeEnd === 'funtion'
+        typeof metaData.experimental.callbacks.onResizeEnd === 'function'
       ) {
-        metaData.experimental.callbacks.onResizeStart(e, direction, node);
+        console.log('resize end');
+        e.trigger = direction;
+        metaData.experimental.callbacks.onResizeStart(e, node);
       }
     };
 

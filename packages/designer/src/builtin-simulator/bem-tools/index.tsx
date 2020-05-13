@@ -22,6 +22,7 @@ export class BemTools extends Component<{ host: BuiltinSimulatorHost }> {
         <BorderDetecting key="hovering" host={host} />
         <BorderSelecting key="selecting" host={host} />
         <InsertionView key="insertion" host={host} />
+        <BorderResizing key="resizing" host={host} />
       </div>
     );
   }
