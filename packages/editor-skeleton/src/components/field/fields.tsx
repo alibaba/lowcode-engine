@@ -5,9 +5,9 @@ import { Icon } from '@alifd/next';
 import { Title, Tip } from '@ali/lowcode-editor-core';
 import { TitleContent } from '@ali/lowcode-types';
 import { PopupPipe, PopupContext } from '../popup';
-import { intl, intlNode } from '../../locale';
+import { intlNode } from '../../locale';
 import './index.less';
-import { IconClear } from 'editor-skeleton/src/icons/clear';
+import { IconClear } from '../../icons/clear';
 import InlineTip from './inlinetip';
 
 export interface FieldProps {
@@ -91,7 +91,7 @@ export class Field extends Component<FieldProps> {
       tipContent = (
         <div>
           <div>属性：{propName}</div>
-          <div>说明：{tip.content}</div>
+          <div>说明：{(tip as any).content}</div>
         </div>
       );
     } else if (tip) {
@@ -109,7 +109,7 @@ export class Field extends Component<FieldProps> {
     const { className, children, title, valueState, onClear, name: propName, tip } = this.props;
     const { display, collapsed } = this.state;
     const isAccordion = display === 'accordion';
-    const tipContent = this.getTipContent(propName, tip);
+    const tipContent = this.getTipContent(propName!, tip);
     return (
       <div
         className={classNames(`lc-field lc-${display}-field`, className, {
