@@ -426,12 +426,6 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.parent.children.indexOf(this);
   }
 
-  /**
-   * alias index
-   */
-  getIndex = () => {
-    return this.index;
-  };
 
   /**
    * 获取下一个兄弟节点
@@ -624,6 +618,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
   getId() {
     return this.id;
+  }
+  getIndex() {
+    return this.index;
   }
   getNode() {
     return this;
