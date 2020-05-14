@@ -57,6 +57,9 @@ const pages = Object.assign(project, {
   },
   onCurrentPageChange(fn: (page: DocumentModel) => void) {
     return project.onCurrentDocumentChange(fn);
+  },
+  toData() {
+    return project.documents.map(doc => doc.toData());
   }
 });
 
