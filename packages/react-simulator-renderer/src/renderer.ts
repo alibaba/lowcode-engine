@@ -35,6 +35,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
       }
 
       // sync designMode
+      this._designMode = host.designMode;
 
       // sync suspended
 
@@ -84,8 +85,9 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   @computed get context(): any {
     return this._appContext;
   }
+  @obx.ref private _designMode: string = 'design';
   @computed get designMode(): any {
-    return 'preview';
+    return this._designMode;
   }
   @obx.ref private _device: string = 'default';
   @computed get device() {

@@ -47,22 +47,23 @@ export default class SimulatorRendererView extends Component<{ renderer: Simulat
   }
 }
 
-function getDeviceView(view: any, device: string) {
-  if (!view || typeof view === 'string' || device === 'default') {
+function ucfirst(s: string) {
+  return s.charAt(0).toUpperCase() + s.substring(1);
+}
+function getDeviceView(view: any, device: string, mode: string) {
+  if (!view || typeof view === 'string') {
     return view;
   }
 
-  /*
-  const viewport = Viewport.getViewport();
-  if (viewport) {
-    if (view.hasOwnProperty(device)) {
-      view = view[device];
-    }
-
-    if (view.hasOwnProperty(mode)) {
-      view = view[mode];
-    }
-  }*/
+  // compatible vision Mobile | Preview
+  device = ucfirst(device);
+  if (device === 'Mobile' && view.hasOwnProperty(device)) {
+    view = view[device];
+  }
+  mode = ucfirst(mode);
+  if (mode === 'Preview' && view.hasOwnProperty(mode)) {
+    view = view[mode];
+  }
   return view;
 }
 
@@ -91,14 +92,14 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
   }
   render() {
     const { renderer } = this.props;
-    const device = renderer.designMode
+    const { device, designMode } = renderer;
     return (
       <LowCodeRenderer
         schema={renderer.schema}
         components={renderer.components}
         appHelper={renderer.context}
         // context={renderer.context}
-        designMode={renderer.designMode}
+        designMode={designMode}
         suspended={renderer.suspended}
         self={renderer.scope}
         customCreateElement={(Component: any, props: any, children: any) => {
@@ -107,7 +108,7 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
           viewProps._leaf = host.document.getNode(__id);
 
           return createElement(
-            getDeviceView(Component, device),
+            getDeviceView(Component, device, designMode),
             viewProps,
             children == null ? [] : Array.isArray(children) ? children : [children],
           );
