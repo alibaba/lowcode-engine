@@ -55,7 +55,6 @@ export default class DragResizeEngine {
   }
 
   isDragResizing() {
-    console.log('is drag resizign');
     return this.dragResizing;
   }
 
@@ -87,10 +86,7 @@ export default class DragResizeEngine {
       handleEvents((doc) => {
         doc.removeEventListener('mousemove', move, true);
         doc.removeEventListener('mouseup', over, true);
-        // doc.addEventListener('mousedown', over, true);
       });
-      // document.removeEventListener('mousemove', move, true);
-      // document.removeEventListener('mouseup', over, true);
 
       this.dragResizing = false;
       cursor.release();
@@ -105,17 +101,13 @@ export default class DragResizeEngine {
       handleEvents((doc) => {
         doc.addEventListener('mousemove', move, true);
         doc.addEventListener('mouseup', over, true);
-        // doc.addEventListener('mousedown', over, true);
       });
 
       this.emitter.emit('resizestart', e, direction, node);
-      // document.addEventListener('mousemove', move, true);
-      // document.addEventListener('mouseup', over, true);
       this.dragResizing = true;
       cursor.addState('ew-resize');
     };
     shell.addEventListener('mousedown', mousedown);
-    // shell.addEventListener('mouseup', over);
     return () => {
       shell.removeEventListener('mousedown', mousedown);
     };

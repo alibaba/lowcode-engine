@@ -146,7 +146,6 @@ export class BoxResizingInstance extends Component<{
         metaData.experimental.callbacks &&
         typeof metaData.experimental.callbacks.onResize === 'function'
       ) {
-        console.log('resize inner');
         e.trigger = direction;
         e.deltaX = moveX;
         e.deltaY = moveY;
