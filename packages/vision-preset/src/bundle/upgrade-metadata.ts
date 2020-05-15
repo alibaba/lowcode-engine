@@ -261,19 +261,6 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
   } else if (hidden != null || disabled != null) {
     extraProps.condition = (field: Field) => !(isHidden(field) || isDisabled(field));
   }
-  if (ignore != null || disabled != null) {
-    // FIXME! addFilter
-    extraProps.virtual = (field: Field) => {
-      if (isDisabled(field)) {
-        return true;
-      }
-
-      if (typeof ignore === 'function') {
-        return ignore.call(field, field.getValue()) === true;
-      }
-      return ignore === true;
-    };
-  }
 
   if (type === 'group') {
     newConfig.items = items ? upgradeConfigure(items, collector) : [];

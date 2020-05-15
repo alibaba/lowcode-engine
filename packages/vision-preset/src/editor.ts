@@ -58,7 +58,7 @@ function filterReducer(props: any, node: Node): any {
   }
   return props;
 }
-designer.addPropsReducer(filterReducer, TransformStage.Serilize);
+designer.addPropsReducer(filterReducer, TransformStage.Save);
 designer.addPropsReducer(filterReducer, TransformStage.Render);
 
 function upgradePropsReducer(props: any) {

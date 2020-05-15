@@ -486,9 +486,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       componentName: this.componentName,
     };
 
-    if (stage !== TransformStage.Save) {
+    // if (stage !== TransformStage.Save) {
       baseSchema.id = this.id;
-    }
+    // }
 
     if (this.isLeaf()) {
       baseSchema.children = this.props.get('children')?.export(stage);
