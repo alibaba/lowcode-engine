@@ -1,13 +1,10 @@
 import { Component, Fragment } from 'react';
-
-// import Bus from '../../../../core/bus';
-import DragResizeEngine from './dragResizeEngine';
-// import OverlayCore from '../../../../core/overlay';
+import DragResizeEngine from './drag-resize-engine';
 import { observer, computed } from '@ali/lowcode-editor-core';
 import classNames from 'classnames';
 import { SimulatorContext } from '../context';
 import { BuiltinSimulatorHost } from '../host';
-import { OffsetObserver } from '../../designer';
+import { OffsetObserver, Designer } from '../../designer';
 
 @observer
 export default class BoxResizing extends Component<{ host: BuiltinSimulatorHost }> {
@@ -97,7 +94,9 @@ export class BoxResizingForNode extends Component<{ host: BuiltinSimulatorHost; 
           if (!observed) {
             return null;
           }
-          return <BoxResizingInstance key={observed.id} dragging={this.dragging} observed={observed} />;
+          return (
+            <BoxResizingInstance key={observed.id} dragging={this.dragging} designer={designer} observed={observed} />
+          );
         })}
       </Fragment>
     );
@@ -109,11 +108,18 @@ export class BoxResizingInstance extends Component<{
   observed: OffsetObserver;
   highlight?: boolean;
   dragging?: boolean;
+  designer?: Designer;
 }> {
   // private outline: any;
   private willUnbind: () => any;
   private outlineRight: any;
   private outlineLeft: any;
+  private dragEngine: DragResizeEngine;
+
+  constructor(props: any) {
+    super(props);
+    this.dragEngine = new DragResizeEngine(props.designer);
+  }
 
   componentWillUnmount() {
     if (this.willUnbind) {
@@ -169,15 +175,14 @@ export class BoxResizingInstance extends Component<{
         metaData.experimental.callbacks &&
         typeof metaData.experimental.callbacks.onResizeEnd === 'function'
       ) {
-        console.log('resize end');
         e.trigger = direction;
         metaData.experimental.callbacks.onResizeStart(e, node);
       }
     };
 
-    DragResizeEngine.onResize(resize);
-    DragResizeEngine.onResizeStart(resizeStart);
-    DragResizeEngine.onResizeEnd(resizeEnd);
+    this.dragEngine.onResize(resize);
+    this.dragEngine.onResizeStart(resizeStart);
+    this.dragEngine.onResizeEnd(resizeEnd);
   }
 
   willBind() {
@@ -192,7 +197,7 @@ export class BoxResizingInstance extends Component<{
     const unBind: any[] = [];
 
     unBind.push(
-      DragResizeEngine.from(this.outlineRight, 'e', () => {
+      this.dragEngine.from(this.outlineRight, 'e', () => {
         // if (!this.hoveringLine.hasOutline()) {
         //   return null;
         // }
@@ -201,7 +206,7 @@ export class BoxResizingInstance extends Component<{
       }),
     );
     unBind.push(
-      DragResizeEngine.from(this.outlineLeft, 'w', () => {
+      this.dragEngine.from(this.outlineLeft, 'w', () => {
         return this.props.observed.node;
         // if (!this.hoveringLine.hasOutline()) {
         //   return null;
@@ -221,7 +226,7 @@ export class BoxResizingInstance extends Component<{
   }
 
   render() {
-    const { observed, highlight, dragging } = this.props;
+    const { observed } = this.props;
     if (!observed.hasOffset) {
       return null;
     }
