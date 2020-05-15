@@ -101,6 +101,7 @@ export default class InstanceNodeSelector extends React.Component<IProps, IState
             </div>
           }
           triggerType="hover"
+          offset={[0, 2]}
         >
           <div className="instance-node-selector">{this.renderNodes(node)}</div>
         </Popup>
