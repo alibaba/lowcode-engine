@@ -96,6 +96,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
     return (
       <div className="lc-settings-main">
         <Tab
+          key={settings.id}
           navClassName="lc-settings-tabs"
           animation={false}
           excessMode="dropdown"

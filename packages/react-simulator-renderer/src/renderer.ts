@@ -35,12 +35,14 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
       }
 
       // sync designMode
+      this._designMode = host.designMode;
 
       // sync suspended
 
       // sync scope
 
       // sync device
+      this._device = host.device;
     });
     host.componentsConsumer.consume(async (componentsAsset) => {
       if (componentsAsset) {
@@ -83,9 +85,13 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   @computed get context(): any {
     return this._appContext;
   }
-
+  @obx.ref private _designMode: string = 'design';
   @computed get designMode(): any {
-    return 'preview';
+    return this._designMode;
+  }
+  @obx.ref private _device: string = 'default';
+  @computed get device() {
+    return this._device;
   }
   @obx.ref private _componentsMap = {};
   @computed get componentsMap(): any {

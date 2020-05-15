@@ -180,9 +180,9 @@ skeleton.add({
 LiveEditing.addLiveEditingSpecificRule(liveEditingRule);
 
 // 实例节点选择器，线框高亮
-addBuiltinComponentAction({
-  name: 'instance-node-selector',
-  content: InstanceNodeSelector,
-  important: true,
-  condition: 'always',
-});
+// addBuiltinComponentAction({
+//   name: 'instance-node-selector',
+//   content: InstanceNodeSelector,
+//   important: true,
+//   condition: 'always'
+// });
