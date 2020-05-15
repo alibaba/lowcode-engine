@@ -3,7 +3,7 @@ import { ReactNode, ReactElement, RefObject, ComponentType } from 'react';
 import { NpmInfo } from './npm';
 import { RegisterOptions } from 'power-di';
 
-export type KeyType = Function | symbol | string;
+export type KeyType = Function | Symbol | string;
 export type ClassType = Function | (new (...args: any[]) => any);
 export interface GetOptions {
   forceNew?: boolean;

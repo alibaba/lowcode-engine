@@ -1,22 +1,8 @@
 import { EventEmitter } from 'events';
-import { IEditor, EditorConfig, PluginClassSet } from '@ali/lowcode-types';
+import { IEditor, EditorConfig, PluginClassSet, KeyType, GetOptions, GetReturnType } from '@ali/lowcode-types';
 import { IocContext, RegisterOptions } from './di';
 import { globalLocale } from './intl';
 EventEmitter.defaultMaxListeners = 100;
-
-export type KeyType = Function | Symbol | string;
-export type ClassType = Function | (new (...args: any[]) => any);
-export interface GetOptions {
-  forceNew?: boolean;
-  sourceCls?: ClassType;
-}
-export type GetReturnType<T, ClsType> = T extends undefined
-  ? ClsType extends {
-      prototype: infer R;
-    }
-    ? R
-    : any
-  : T;
 
 const NOT_FOUND = Symbol.for('not_found');
 
@@ -35,10 +21,6 @@ export class Editor extends EventEmitter implements IEditor {
   }
 
   readonly utils = utils;
-
-  constructor(readonly config: EditorConfig = {}, readonly components: PluginClassSet = {}) {
-    super();
-  }
 
   get<T = undefined, KeyOrType = any>(keyOrType: KeyOrType, opt?: GetOptions): GetReturnType<T, KeyOrType> | undefined {
     const x = this.context.get<T, KeyOrType>(keyOrType, opt);
@@ -92,14 +74,17 @@ export class Editor extends EventEmitter implements IEditor {
     this.notifyGot(key || data);
   }
 
-  async init(): Promise<any> {
-    const { shortCuts = [], lifeCycles } = this.config || {};
+  config?: EditorConfig;
+  components?: PluginClassSet;
+  async init(config?: EditorConfig, components?: PluginClassSet): Promise<any> {
+    this.config = config || {};
+    this.components = components || {};
+    const { shortCuts = [], lifeCycles } = this.config;
 
     this.emit('editor.beforeInit');
     const init = (lifeCycles && lifeCycles.init) || ((): void => {});
-    // 用户可以通过设置extensions.init自定义初始化流程；
     try {
-      // await transformToPromise(init(this));
+      await init(this);
       // 注册快捷键
       // registShortCuts(shortCuts, this);
       this.emit('editor.afterInit');
@@ -110,6 +95,9 @@ export class Editor extends EventEmitter implements IEditor {
   }
 
   destroy(): void {
+    if (!this.config) {
+      return;
+    }
     try {
       const { shortCuts = [], lifeCycles = {} } = this.config;
       // unRegistShortCuts(shortCuts);

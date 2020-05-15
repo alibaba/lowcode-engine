@@ -1,21 +1,21 @@
 {
   "version": "1.0.0",
-  "packages": {
-    "moment": {
+  "packages": [
+    {
       "package": "moment",
       "urls": ["https://g.alicdn.com/mylib/moment/2.24.0/min/moment.min.js"],
       "library": "moment"
     },
-    "@alifd/next": {
+    {
       "title": "fusion组件库",
       "package": "@alifd/next",
       "version": "1.19.18",
       "urls": ["https://unpkg.antfin-inc.com/@alife/next@1.19.18/dist/next.js", "https://unpkg.antfin-inc.com/@alife/next@1.19.18/dist/next.css"],
       "library": "Next"
     }
-  },
-  "components": {
-    "Page": {
+  ],
+  "components": [
+    {
       "componentName": "Page",
       "title": "页面",
       "configure": {
@@ -39,7 +39,7 @@
         }
       }
     },
-    "Div": {
+    {
       "componentName": "Div",
       "title": "容器",
       "configure": {
@@ -48,7 +48,7 @@
         }
       }
     },
-    "Button": {
+    {
       "componentName": "Button",
       "title": "按钮",
       "devMode": "proCode",
@@ -147,7 +147,7 @@
         "propType": "node"
       }]
     },
-    "Button.Group": {
+    {
       "componentName": "Button.Group",
       "title": "按钮组",
       "devMode": "proCode",
@@ -186,7 +186,7 @@
         }
       }
     },
-    "Input": {
+    {
       "componentName": "Input",
       "title": "输入框",
       "devMode": "proCode",
@@ -300,7 +300,7 @@
         "description": "预览态模式下渲染的内容\n@param {number} value 评分值"
       }]
     },
-    "Form": {
+    {
       "componentName": "Form",
       "title": "表单容器",
       "devMode": "proCode",
@@ -423,7 +423,7 @@
         }
       }
     },
-    "Form.Item": {
+    {
       "componentName": "Form.Item",
       "title": "表单项",
       "devMode": "proCode",
@@ -677,7 +677,7 @@
         }
       }
     },
-    "NumberPicker": {
+    {
       "componentName": "NumberPicker",
       "title": "数字输入",
       "devMode": "proCode",
@@ -829,7 +829,7 @@
         "description": "预设屏幕宽度"
       }]
     },
-    "Select": {
+    {
       "componentName": "Select",
       "title": "下拉",
       "devMode": "proCode",
@@ -1461,7 +1461,7 @@
         }]
       }
     },
-    "Select.Option": {
+    {
       "componentName": "Select.Option",
       "title": "选择项",
       "devMode": "proCode",
@@ -1496,7 +1496,7 @@
         }
       }
     }
-  },
+  ],
   "componentList": [{
     "title": "基础",
     "icon": "",

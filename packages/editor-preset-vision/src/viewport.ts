@@ -56,7 +56,7 @@ class StyleResource {
 
     const { type, content } = this.config;
 
-    let styleElement;
+    let styleElement: any;
     if (type === 'URL') {
       styleElement = document.createElement('link');
       styleElement.href = content || '';

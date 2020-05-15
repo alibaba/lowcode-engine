@@ -11,9 +11,15 @@ import MainArea from './main-area';
 import BottomArea from './bottom-area';
 import RightArea from './right-area';
 import './workbench.less';
+import { EditorConfig, PluginClassSet } from '@ali/lowcode-types';
 
 @observer
-export class Workbench extends Component<{ skeleton: Skeleton, className?: string, topAreaItemClassName?: string }> {
+export class Workbench extends Component<{ skeleton: Skeleton; config?: EditorConfig; components?: PluginClassSet; className?: string; topAreaItemClassName?: string }> {
+  constructor(props: any) {
+    super(props);
+    const { config, components, skeleton } = this.props;
+    skeleton.buildFromConfig(config, components);
+  }
   shouldComponentUpdate() {
     return false;
   }
