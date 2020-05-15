@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.11"></a>
+## [0.9.11](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.10...@ali/lowcode-designer@0.9.11) (2020-05-15)
+
+
+### Features
+
+* add ? to component designer/src/designer/setting/utils.js ([0025e3c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0025e3c))
+* add alias for get index ([e853a4f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e853a4f))
+* add resize box ([14a55ae](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/14a55ae))
+* bord resizing ([361f4f6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/361f4f6))
+* border resizing ([c7fc28c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c7fc28c))
+* for box resizing ([77e325f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/77e325f))
+* for box resizing ([cb2854d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/cb2854d))
+
+
+
+
 <a name="0.9.10"></a>
 ## [0.9.10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.9...@ali/lowcode-designer@0.9.10) (2020-05-15)
 
