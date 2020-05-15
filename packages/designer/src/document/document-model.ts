@@ -483,7 +483,7 @@ export class DocumentModel {
 
   // add toData
   toData() {
-    const node = this.project?.currentDocument?.export(TransformStage.Serilize);
+    const node = this.project?.currentDocument?.export(TransformStage.Save);
     return { componentsTree: [node] };
   }
 

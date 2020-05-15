@@ -108,6 +108,8 @@ hotkey.bind(['command+c', 'ctrl+c', 'command+x', 'ctrl+x'], (e, action) => {
   const componentsMap = {};
   const componentsTree = selected.map((item) => item.export(TransformStage.Save));
 
+  // FIXME: clear node.id
+
   const data = { type: 'nodeSchema', componentsMap, componentsTree };
 
   clipboard.setData(data);

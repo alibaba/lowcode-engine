@@ -1,6 +1,6 @@
 import { ComponentType, ReactElement, isValidElement, ComponentClass } from 'react';
 import { isPlainObject } from '@ali/lowcode-utils';
-import { isI18nData, SettingTarget, InitialItem, isJSSlot, isJSExpression } from '@ali/lowcode-types';
+import { isI18nData, SettingTarget, InitialItem, FilterItem, isJSSlot, isJSExpression } from '@ali/lowcode-types';
 
 type Field = SettingTarget;
 
@@ -178,7 +178,7 @@ type SetterGetter = (this: Field, value: any) => ComponentClass;
 
 type ReturnBooleanFunction = (this: Field, value: any) => boolean;
 
-export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) {
+export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollector) {
   const {
     type,
     name,
@@ -261,22 +261,9 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
   } else if (hidden != null || disabled != null) {
     extraProps.condition = (field: Field) => !(isHidden(field) || isDisabled(field));
   }
-  if (ignore != null || disabled != null) {
-    // FIXME! addFilter
-    extraProps.virtual = (field: Field) => {
-      if (isDisabled(field)) {
-        return true;
-      }
-
-      if (typeof ignore === 'function') {
-        return ignore.call(field, field.getValue()) === true;
-      }
-      return ignore === true;
-    };
-  }
 
   if (type === 'group') {
-    newConfig.items = items ? upgradeConfigure(items, addInitial) : [];
+    newConfig.items = items ? upgradeConfigure(items, collector) : [];
     return newConfig;
   }
 
@@ -314,7 +301,7 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
 
   const setterInitial = getInitialFromSetter(setter);
 
-  addInitial({
+  collector.addInitial({
     name: slotName || name,
     initial: (field: Field, currentValue: any) => {
       // FIXME! read from prototype.defaultProps
@@ -333,6 +320,28 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
       return v;
     },
   });
+
+  if (ignore != null || disabled != null) {
+    collector.addFilter({
+      name: slotName || name,
+      filter: (field: Field, currentValue: any) => {
+        let disabledValue: boolean;
+        if (typeof disabled === 'function') {
+          disabledValue = disabled.call(field, currentValue) === true;
+        }
+        else {
+          disabledValue = disabled === true;
+        }
+        if (disabledValue) {
+          return false;
+        }
+        if (typeof ignore === 'function') {
+          return ignore.call(field, currentValue) !== true;
+        }
+        return ignore !== true;
+      }
+    });
+  }
 
   if (sync) {
     extraProps.autorun = (field: Field) => {
@@ -385,10 +394,18 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
   let primarySetter: any;
   if (type === 'composite') {
     const initials: InitialItem[] = [];
+    const filters: FilterItem[] = [];
     const objItems = items
-      ? upgradeConfigure(items, (item) => {
-          initials.push(item);
-        })
+      ? upgradeConfigure(items, 
+        {
+          addInitial: (item) => {
+            initials.push(item);
+          },
+          addFilter: (item) => {
+            filters.push(item);
+          }
+        }
+      )
       : [];
     const initial = (target: SettingTarget, value?: any) => {
       // TODO:
@@ -400,7 +417,7 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
       });
       return data;
     };
-    addInitial({
+    collector.addInitial({
       name,
       initial,
     });
@@ -460,7 +477,13 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
   return newConfig;
 }
 
-type AddIntial = (initialItem: InitialItem) => void;
+type AddInitial = (initialItem: InitialItem) => void;
+type AddFilter = (filterItem: FilterItem) => void;
+
+type ConfigCollector = {
+  addInitial: AddInitial,
+  addFilter: AddFilter,
+}
 
 function getInitialFromSetter(setter: any) {
   return setter && (
@@ -474,7 +497,7 @@ function defaultInitial(value: any, defaultValue: any) {
 }
 
 
-export function upgradeConfigure(items: OldPropConfig[], addInitial: AddIntial) {
+export function upgradeConfigure(items: OldPropConfig[], collector: ConfigCollector) {
   const configure: any[] = [];
   let ignoreSlotName: any = null;
   items.forEach((config) => {
@@ -487,7 +510,7 @@ export function upgradeConfigure(items: OldPropConfig[], addInitial: AddIntial) 
       }
       ignoreSlotName = null;
     }
-    configure.push(upgradePropConfig(config, addInitial));
+    configure.push(upgradePropConfig(config, collector));
   });
   return configure;
 }
@@ -724,10 +747,19 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   experimental.callbacks = callbacks;
 
   const initials: InitialItem[] = [];
-  const props = upgradeConfigure(configure || [], (item) => {
-    initials.push(item);
-  });
+  const filters: FilterItem[] = [];
+  const props = upgradeConfigure(configure || [],
+    {
+      addInitial: (item) => {
+        initials.push(item);
+      },
+      addFilter: (item) => {
+        filters.push(item);
+      },
+    }
+  );
   experimental.initials = initials;
+  experimental.filters = filters;
 
   const supports: any = {};
   if (canUseCondition != null) {
