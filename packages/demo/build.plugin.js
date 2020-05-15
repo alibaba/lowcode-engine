@@ -16,7 +16,7 @@ module.exports = ({ onGetWebpackConfig }) => {
     .plugin('MonacoWebpackPlugin')
     // 第一项为具体插件，第二项为插件参数
     .use(new MonacoWebpackPlugin({
-      languages:["javascript","css","json"]
+      languages:["typescript","css","json"]
      }), []);
 
     config.plugins.delete('hot');

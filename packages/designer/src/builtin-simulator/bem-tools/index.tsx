@@ -3,6 +3,7 @@ import { observer } from '@ali/lowcode-editor-core';
 import { BorderDetecting } from './border-detecting';
 import { BuiltinSimulatorHost } from '../host';
 import { BorderSelecting } from './border-selecting';
+import BorderResizing from './border-resizing';
 import { InsertionView } from './insertion';
 import './bem-tools.less';
 import './borders.less';
@@ -21,6 +22,7 @@ export class BemTools extends Component<{ host: BuiltinSimulatorHost }> {
         <BorderDetecting key="hovering" host={host} />
         <BorderSelecting key="selecting" host={host} />
         <InsertionView key="insertion" host={host} />
+        <BorderResizing key="resizing" host={host} />
       </div>
     );
   }

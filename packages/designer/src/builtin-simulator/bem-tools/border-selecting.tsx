@@ -15,6 +15,7 @@ import { ActionContentObject, isActionContentObject } from '@ali/lowcode-types';
 import { BuiltinSimulatorHost } from '../host';
 import { OffsetObserver } from '../../designer';
 import { Node } from '../../document';
+import NodeSelector from '../node-selector';
 
 @observer
 export class BorderSelectingInstance extends Component<{
@@ -68,7 +69,6 @@ class Toolbar extends Component<{ observed: OffsetObserver }> {
     let style: any;
     if (observed.top > SPACE_HEIGHT) {
       style = {
-        right: Math.max(-BORDER, observed.right - width - BORDER),
         top: -SPACE_HEIGHT,
         height: BAR_HEIGHT,
       };
@@ -76,14 +76,17 @@ class Toolbar extends Component<{ observed: OffsetObserver }> {
       style = {
         bottom: -SPACE_HEIGHT,
         height: BAR_HEIGHT,
-        right: Math.max(-BORDER, observed.right - width - BORDER),
       };
     } else {
       style = {
         height: BAR_HEIGHT,
         top: Math.max(MARGIN, MARGIN - observed.top),
-        right: Math.max(MARGIN, MARGIN + observed.right - width),
       };
+    }
+    if (observed.width < 140) {
+      style.left = Math.max(-BORDER, observed.left - width - BORDER);
+    } else {
+      style.right = Math.max(-BORDER, observed.right - width - BORDER);
     }
     const { node } = observed;
     const actions: ReactNodeArray = [];
@@ -100,6 +103,7 @@ class Toolbar extends Component<{ observed: OffsetObserver }> {
     return (
       <div className="lc-borders-actions" style={style}>
         {actions}
+        <NodeSelector node={node} />
       </div>
     );
   }

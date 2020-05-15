@@ -1,5 +1,5 @@
 import { ComponentType, ReactElement } from 'react';
-import { ComponentMetadata, FieldConfig, InitialItem } from '@ali/lowcode-types';
+import { ComponentMetadata, FieldConfig, InitialItem, FilterItem } from '@ali/lowcode-types';
 import {
   ComponentMeta,
   addBuiltinComponentAction,
@@ -18,22 +18,35 @@ import {
 import { designer } from '../editor';
 import { uniqueId } from '@ali/lowcode-utils';
 
-const GlobalPropsConfigure: Array<{ position: string; initials?: InitialItem[]; config: FieldConfig }> = [];
+const GlobalPropsConfigure: Array<{
+  position: string;
+  initials?: InitialItem[];
+  filters?: FilterItem[];
+  config: FieldConfig
+}> = [];
 const Overrides: {
   [componentName: string]: {
     initials?: InitialItem[];
+    filters?: FilterItem[];
     override: any;
   };
 } = {};
 
 function addGlobalPropsConfigure(config: OldGlobalPropConfig) {
   const initials: InitialItem[] = [];
+  const filters: FilterItem[] = [];
   GlobalPropsConfigure.push({
     position: config.position || 'bottom',
     initials,
-    config: upgradePropConfig(config, (item) => {
-      initials.push(item);
-    }),
+    filters,
+    config: upgradePropConfig(config, {
+      addInitial: (item) => {
+        initials.push(item);
+      },
+      addFilter: (item) => {
+        filters.push(item);
+      },
+    })
   });
 }
 function removeGlobalPropsConfigure(name: string) {
@@ -46,20 +59,25 @@ function removeGlobalPropsConfigure(name: string) {
 }
 function overridePropsConfigure(componentName: string, config: { [name: string]: OldPropConfig } | OldPropConfig[]) {
   const initials: InitialItem[] = [];
+  const filters: FilterItem[] = [];
   const addInitial = (item: InitialItem) => {
     initials.push(item);
   };
+  const addFilter = (item: FilterItem) => {
+    filters.push(item);
+  };
   let override: any;
   if (Array.isArray(config)) {
-    override = upgradeConfigure(config, addInitial);
+    override = upgradeConfigure(config, { addInitial, addFilter });
   } else {
     override = {};
     Object.keys(config).forEach(key => {
-      override[key] = upgradePropConfig(config[key], addInitial);
+      override[key] = upgradePropConfig(config[key], { addInitial, addFilter });
     });
   }
   Overrides[componentName] = {
     initials,
+    filters,
     override,
   };
 }

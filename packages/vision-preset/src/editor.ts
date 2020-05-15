@@ -1,7 +1,7 @@
 import { isJSBlock, isJSExpression, isJSSlot } from '@ali/lowcode-types';
 import { isPlainObject } from '@ali/lowcode-utils';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
-import { Designer, LiveEditing, TransformStage, addBuiltinComponentAction } from '@ali/lowcode-designer';
+import { Designer, LiveEditing, TransformStage, addBuiltinComponentAction, Node } from '@ali/lowcode-designer';
 import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import { toCss } from '@ali/vu-css-style';
 
@@ -43,6 +43,23 @@ designer.addPropsReducer((props, node) => {
 
 // 国际化渲染时处理
 designer.addPropsReducer(i18nReducer, TransformStage.Render);
+
+function filterReducer(props: any, node: Node): any {
+  const filters = node.componentMeta.getMetadata().experimental?.filters;
+  if (filters && filters.length) {
+    const newProps = { ...props };
+    filters.forEach((item) => {
+      const v = item.filter(node as any, props[item.name]);
+      if (!v) {
+        delete newProps[item.name];
+      }
+    });
+    return newProps;
+  }
+  return props;
+}
+designer.addPropsReducer(filterReducer, TransformStage.Save);
+designer.addPropsReducer(filterReducer, TransformStage.Render);
 
 function upgradePropsReducer(props: any) {
   if (!isPlainObject(props)) {
@@ -180,9 +197,9 @@ skeleton.add({
 LiveEditing.addLiveEditingSpecificRule(liveEditingRule);
 
 // 实例节点选择器，线框高亮
-addBuiltinComponentAction({
-  name: 'instance-node-selector',
-  content: InstanceNodeSelector,
-  important: true,
-  condition: 'always',
-});
+// addBuiltinComponentAction({
+//   name: 'instance-node-selector',
+//   content: InstanceNodeSelector,
+//   important: true,
+//   condition: 'always'
+// });

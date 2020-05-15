@@ -98,6 +98,7 @@ export class LiveEditing {
       const onSaveContent = matched?.onSaveContent || saveHandlers.find(item => item.condition(prop))?.onSaveContent || defaultSaveContent;
 
       setterPropElement.setAttribute('contenteditable', matched?.mode && matched.mode !== 'plaintext' ? 'true' : 'plaintext-only');
+      setterPropElement.removeAttribute('for');
       setterPropElement.classList.add('engine-live-editing');
       // be sure
       setterPropElement.focus();
@@ -107,14 +108,24 @@ export class LiveEditing {
         onSaveContent(setterPropElement!.innerText, prop);
       };
 
-      this._dispose = () => {
-        setterPropElement!.removeAttribute('contenteditable');
-        setterPropElement!.classList.remove('engine-live-editing');
+      const keydown = (e: KeyboardEvent) => {
+        console.info(e.code);
+        // esc
+        // enter
+        // tab
       };
-
-      setterPropElement.addEventListener('focusout', (e) => {
+      const focusout = (e: FocusEvent) => {
         this.saveAndDispose();
-      });
+      };
+      setterPropElement.addEventListener('focusout', focusout);
+      setterPropElement.addEventListener('keydown', keydown, true);
+
+      this._dispose = () => {
+        setterPropElement!.classList.remove('engine-live-editing');
+        setterPropElement!.removeAttribute('contenteditable');
+        setterPropElement!.removeEventListener('focusout', focusout);
+        setterPropElement!.removeEventListener('keydown', keydown, true);
+      };
 
       this._editing = prop;
     }

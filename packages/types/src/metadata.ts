@@ -45,6 +45,10 @@ export interface InitialItem {
   name: string;
   initial: (target: SettingTarget, currentValue: any) => any;
 }
+export interface FilterItem {
+  name: string;
+  filter: (target: SettingTarget, currentValue: any) => any;
+}
 
 export interface Experimental {
   context?: { [contextInfoName: string]: any };
@@ -52,6 +56,7 @@ export interface Experimental {
   view?: ComponentType<any>;
   transducers?: any; // ? should support
   initials?: InitialItem[];
+  filters?: FilterItem[];
   callbacks?: Callbacks;
   // TODO: thinkof function
   initialChildren?: NodeData[] | ((target: SettingTarget) => NodeData[]);

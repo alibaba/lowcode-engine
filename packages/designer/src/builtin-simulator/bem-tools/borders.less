@@ -30,7 +30,8 @@
     }
   }
 
-  &-action {
+  &-action,
+  .ve-icon-button.ve-action-save {
     box-sizing: border-box;
     cursor: pointer;
     height: 20px;
@@ -48,6 +49,28 @@
     }
   }
 
+  &.lc-resize-box {
+    border-width: 0;
+    z-index: 1;
+    cursor: ew-resize;
+    pointer-events: auto;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+
+    &:after {
+      content: "";
+      display: block;
+      height: calc(100% - 20px);
+      min-height: 50%;
+      width: 4px;
+      background: #738397;
+      border-radius: 2px;
+      // animation: flashing 1.5s infinite linear;
+    }
+  }
+
+  // &&-hovering {
   &&-detecting {
     z-index: 1;
     border-style: dashed;

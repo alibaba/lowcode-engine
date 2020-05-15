@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-designer",
-  "version": "0.9.9",
+  "version": "0.9.11",
   "description": "Designer for Ali LowCode Engine",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -19,6 +19,7 @@
     "@ali/lowcode-types": "^0.8.3",
     "@ali/lowcode-utils": "^0.8.4",
     "classnames": "^2.2.6",
+    "event": "^1.0.0",
     "react": "^16",
     "react-dom": "^16.7.0"
   },

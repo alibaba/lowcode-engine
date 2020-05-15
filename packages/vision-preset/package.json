@@ -1,7 +1,7 @@
 {
   "name": "@ali/lowcode-vision-preset",
   "private": true,
-  "version": "0.8.8",
+  "version": "0.8.10",
   "description": "Vision Polyfill for Ali lowCode engine",
   "main": "lib/index.js",
   "files": [
@@ -15,9 +15,9 @@
   "license": "MIT",
   "dependencies": {
     "@ali/lowcode-editor-core": "^0.8.12",
-    "@ali/lowcode-editor-skeleton": "^0.8.15",
-    "@ali/lowcode-plugin-designer": "^0.9.9",
-    "@ali/lowcode-plugin-outline-pane": "^0.8.15",
+    "@ali/lowcode-editor-skeleton": "^0.8.17",
+    "@ali/lowcode-plugin-designer": "^0.9.11",
+    "@ali/lowcode-plugin-outline-pane": "^0.8.17",
     "@ali/ve-i18n-util": "^2.0.2",
     "@ali/ve-icons": "^4.1.9",
     "@ali/ve-less-variables": "2.0.3",

@@ -426,6 +426,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.parent.children.indexOf(this);
   }
 
+
   /**
    * 获取下一个兄弟节点
    */
@@ -486,9 +487,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       componentName: this.componentName,
     };
 
-    if (stage !== TransformStage.Save) {
+    // if (stage !== TransformStage.Save) {
       baseSchema.id = this.id;
-    }
+    // }
 
     if (this.isLeaf()) {
       baseSchema.children = this.props.get('children')?.export(stage);
@@ -617,6 +618,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
   getId() {
     return this.id;
+  }
+  getIndex() {
+    return this.index;
   }
   getNode() {
     return this;

@@ -19,5 +19,16 @@
     height: 100%;
   }
 
+  .full-screen-container{
+    position: absolute;
+    top: 40px;
+    right: 20px;
+    cursor: pointer;
+    img{
+      width: 20px;
+      height: 20px;
+    }
+  }
+
 }
 
