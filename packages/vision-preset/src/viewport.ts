@@ -2,6 +2,7 @@ import { EventEmitter } from 'events';
 
 const domReady = require('domready');
 import Flags from './flags';
+import { designer } from './editor';
 
 function enterFullscreen() {
   const elem = document.documentElement;
@@ -185,8 +186,9 @@ export class Viewport {
   setDevice(device = 'pc') {
     if (this.getDevice() !== device) {
       this.device = device;
-      Flags.setSimulator(device);
-      this.applyMediaCSS();
+      designer.currentDocument?.simulator?.set('device', device === 'mobile' ? 'mobile' : 'default');
+      // Flags.setSimulator(device);
+      // this.applyMediaCSS();
       this.emitter.emit('devicechange', device);
       this.changeViewport();
     }
@@ -229,7 +231,7 @@ export class Viewport {
   }
 
   setWithShell(shell: string) {
-    Flags.setWithShell(shell);
+    // Flags.setWithShell(shell);
   }
 
   onFullscreenChange(func: () => any) {

@@ -47,6 +47,25 @@ export default class SimulatorRendererView extends Component<{ renderer: Simulat
   }
 }
 
+function getDeviceView(view: any, device: string) {
+  if (!view || typeof view === 'string' || device === 'default') {
+    return view;
+  }
+
+  /*
+  const viewport = Viewport.getViewport();
+  if (viewport) {
+    if (view.hasOwnProperty(device)) {
+      view = view[device];
+    }
+
+    if (view.hasOwnProperty(mode)) {
+      view = view[mode];
+    }
+  }*/
+  return view;
+}
+
 @observer
 class Layout extends Component<{ renderer: SimulatorRenderer }> {
   shouldComponentUpdate() {
@@ -72,6 +91,7 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
   }
   render() {
     const { renderer } = this.props;
+    const device = renderer.designMode
     return (
       <LowCodeRenderer
         schema={renderer.schema}
@@ -87,7 +107,7 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
           viewProps._leaf = host.document.getNode(__id);
 
           return createElement(
-            Component,
+            getDeviceView(Component, device),
             viewProps,
             children == null ? [] : Array.isArray(children) ? children : [children],
           );

@@ -81,7 +81,10 @@ export interface ISimulatorHost<P = object> extends ISensor {
   // later:
   // layout: ComponentName
   // 获取区块代码, 通过 components 传递，可异步获取
+  // 设置 simulator Props
   setProps(props: P): void;
+  // 设置单个 Prop
+  set(key: string, value: any): void;
 
   setSuspense(suspensed: boolean): void;
 

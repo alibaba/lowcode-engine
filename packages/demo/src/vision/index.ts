@@ -11,6 +11,7 @@ import PageHistoryPane from '@ali/ve-page-history-pane';
 // import I18nPane from '@ali/ve-i18n-pane';
 import I18nManagePane from '@ali/ve-i18n-manage-pane';
 import ActionPane from '@ali/ve-action-pane';
+import SourceEditor from '@ali/lowcode-plugin-source-editor';
 import fetchContext from '@ali/vu-legao-design-fetch-context';
 import EventBindDialog from '@ali/lowcode-plugin-event-bind-dialog';
 import loadUrls from './loader';
@@ -95,16 +96,43 @@ function initDemoPanes() {
     type: 'Widget',
     content: EventBindDialog,
   });
-  skeleton.add({
-    area: 'leftArea',
-    name: 'icon1',
-    type: 'Dock',
-    props: {
-      align: 'bottom',
-      icon: 'set',
-      description: '设置'
-    },
-  });
+
+  // skeleton.add({
+  //   area: 'left',
+  //   name: 'sourceEditor',
+  //   type: "PanelDock",
+  //   content: SourceEditor,
+  //   props: {
+  //     align: undefined,
+  //     description: "动作面板",
+  //     onDestroy: undefined,
+  //     icon: 'set',
+  //     onInit: undefined
+  //   },
+  //   panelProps:{
+  //     height: 300,
+  //     help: undefined,
+  //     hideTitleBar: true,
+  //     maxHeight: 800,
+  //     maxWidth: 1200,
+  //     title: "动作面板",
+  //     width: 600
+  //   }
+
+  // });
+
+  // skeleton.add({
+  //   area: 'leftArea',
+  //   name: 'icon1',
+  //   type: 'PanelDock',
+  //   props: {
+  //     align: 'bottom',
+  //     icon: 'set',
+  //     description: '设置'
+  //   },
+  // });
+
+
   skeleton.add({
     area: 'leftArea',
     name: 'icon2',
@@ -129,6 +157,8 @@ function initDemoPanes() {
       children: '发布',
     }),
   });
+
+
   skeleton.add({
     area: 'topArea',
     type: 'Dock',
@@ -321,6 +351,7 @@ function initActionPane() {
     enableVsCodeEdit: false,
     enableHeaderTip: true,
   };
+
 
   Panes.add(ActionPane, {
     props,

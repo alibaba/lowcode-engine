@@ -77,8 +77,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   readonly designer = this.document.designer;
 
-  @computed get device(): string | undefined {
-    return this.get('device') || 'mobile';
+  @computed get device(): string {
+    return this.get('device') || 'default';
   }
 
   @computed get deviceClassName(): string | undefined {
