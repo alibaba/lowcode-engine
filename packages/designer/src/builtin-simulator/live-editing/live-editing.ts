@@ -108,7 +108,7 @@ export class LiveEditing {
         onSaveContent(setterPropElement!.innerText, prop);
       };
 
-      const keydown = (e: KeyboardEvent) {
+      const keydown = (e: KeyboardEvent) => {
         console.info(e.code);
         // esc
         // enter

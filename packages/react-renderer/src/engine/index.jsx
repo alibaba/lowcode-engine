@@ -162,7 +162,7 @@ export default class Engine extends PureComponent {
     debug('entry.render');
     const { componentName } = schema;
     const allComponents = { ...ENGINE_COMPS, ...components };
-    let Comp = allComponents[componentName];
+    let Comp = allComponents[componentName] || ENGINE_COMPS[`${componentName}Engine`];
     if (Comp && Comp.prototype) {
       const proto = Comp.prototype;
       if (!(Comp.prototype instanceof BaseEngine)) {
