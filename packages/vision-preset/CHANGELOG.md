@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.11"></a>
+## [0.8.11](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-vision-preset@0.8.10...@ali/lowcode-vision-preset@0.8.11) (2020-05-15)
+
+
+### Features
+
+* add filter reducer ([17c6ed3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/17c6ed3))
+* change reducer stage ([c2e83c7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c2e83c7))
+
+
+
+
 <a name="0.8.10"></a>
 ## [0.8.10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-vision-preset@0.8.9...@ali/lowcode-vision-preset@0.8.10) (2020-05-15)
 

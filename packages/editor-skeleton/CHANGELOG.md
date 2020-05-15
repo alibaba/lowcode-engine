@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.18"></a>
+## [0.8.18](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.17...@ali/lowcode-editor-skeleton@0.8.18) (2020-05-15)
+
+
+### Bug Fixes
+
+* 解决点击数据源，自动隐藏的问题 ([7dcd61c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7dcd61c))
+
+
+
+
 <a name="0.8.17"></a>
 ## [0.8.17](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.16...@ali/lowcode-editor-skeleton@0.8.17) (2020-05-15)
 

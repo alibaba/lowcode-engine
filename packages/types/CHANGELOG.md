@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.4"></a>
+## [0.8.4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.8.3...@ali/lowcode-types@0.8.4) (2020-05-15)
+
+
+### Features
+
+* add filter reducer ([17c6ed3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/17c6ed3))
+
+
+
+
 <a name="0.8.3"></a>
 ## [0.8.3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.8.2...@ali/lowcode-types@0.8.3) (2020-05-13)
 
