@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.10"></a>
+## [0.9.10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.9...@ali/lowcode-designer@0.9.10) (2020-05-15)
+
+
+### Bug Fixes
+
+* handling the undefined variable ([0efe8b4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0efe8b4))
+* lc-borders-actions ([56d9f5f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/56d9f5f))
+* 修复 toolbar 弹出位置异常 ([b40b9a4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b40b9a4))
+
+
+
+
 <a name="0.9.9"></a>
 ## [0.9.9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.8...@ali/lowcode-designer@0.9.9) (2020-05-13)
 

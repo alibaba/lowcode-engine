@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.16"></a>
+## [0.8.16](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.15...@ali/lowcode-editor-skeleton@0.8.16) (2020-05-15)
+
+
+### Bug Fixes
+
+* setting pane tab active ([06d7b50](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/06d7b50))
+* topbar search icon ([0447801](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0447801))
+* 修复 toolbar 弹出位置异常 ([b40b9a4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b40b9a4))
+
+
+
+
 <a name="0.8.15"></a>
 ## [0.8.15](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.14...@ali/lowcode-editor-skeleton@0.8.15) (2020-05-13)
 
