@@ -46,7 +46,10 @@ export class Transducer {
       setter = setter.componentName;
     }
     if (typeof setter === 'string') {
-      setter = getSetter(setter).component;
+      setter = getSetter(setter)?.component;
+      if (!setter) {
+        debugger;
+      }
     }
 
     this.setterTransducer = combineTransducer(
