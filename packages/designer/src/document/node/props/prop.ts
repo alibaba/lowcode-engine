@@ -95,7 +95,7 @@ export class Prop implements IPropParent {
       this.items!.forEach((prop, key) => {
         const v = prop.export(stage);
         if (v !== UNSET) {
-          maps[key] = v;
+          maps[prop.key == null ? key : prop.key] = v;
         }
       });
       return maps;

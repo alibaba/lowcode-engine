@@ -1,11 +1,13 @@
-import { Component } from 'react';
+import { Component, MouseEvent } from 'react';
 import { shallowIntl, createSetterContent, observer } from '@ali/lowcode-editor-core';
 import { createContent } from '@ali/lowcode-utils';
 import { Field, createField } from '../field';
-import PopupService from '../popup';
+import PopupService, { PopupPipe } from '../popup';
+import { SkeletonContext } from '../../context';
 import { SettingField, isSettingField, SettingTopEntry, SettingEntry } from '@ali/lowcode-designer';
 import { isSetterConfig, CustomView } from '@ali/lowcode-types';
 import { intl } from '../../locale';
+import { Skeleton } from 'editor-skeleton/src/skeleton';
 
 @observer
 class SettingFieldView extends Component<{ field: SettingField }> {
@@ -145,17 +147,54 @@ export function createSettingFieldView(item: SettingField | CustomView, field: S
 
 @observer
 export class SettingsPane extends Component<{ target: SettingTopEntry | SettingField }> {
+  static contextType = SkeletonContext;
   shouldComponentUpdate() {
     return false;
   }
+
+  private popupPipe = new PopupPipe();
+  private pipe = this.popupPipe.create();
+
+  private handleClick = (e: MouseEvent) => {
+    // compatiable vision stageBox
+    // TODO: optimize these codes
+    const pane = e.currentTarget as HTMLDivElement;
+    let entry: any;
+    function getTarget(node: any): any {
+      if (!pane.contains(node) || (node.nodeName === 'A' && node.getAttribute('href'))) {
+        return null;
+      }
+
+      const target = node.dataset ? node.dataset.stageTarget : null;
+      if (target) {
+        entry = node;
+        return target;
+      }
+      return getTarget(node.parentNode);
+    }
+    const target = getTarget(e.target);
+    if (!target) {
+      return;
+    }
+
+    const skeleton = this.context as Skeleton;
+    if (!skeleton || !skeleton.stages) {
+      return;
+    }
+    const stage = skeleton.stages.container.get(target);
+    if (stage) {
+      this.pipe.send(stage.content, stage.title);
+      this.pipe.show(entry);
+    }
+  };
 
   render() {
     const { target } = this.props;
     const items = target.items;
     return (
-      <div className="lc-settings-pane">
+      <div className="lc-settings-pane" onClick={this.handleClick}>
         {/* todo: add head for single use */}
-        <PopupService>
+        <PopupService popupPipe={this.popupPipe}>
           <div className="lc-settings-content">
             {items.map((item, index) => createSettingFieldView(item, target, index))}
           </div>

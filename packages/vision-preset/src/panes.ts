@@ -132,7 +132,18 @@ function add(config: (() => OldPaneConfig) | OldPaneConfig, extraConfig?: any) {
     config = { ...config, ...extraConfig };
   }
 
-  skeleton.add(upgradeConfig(config));
+  const upgraded = upgradeConfig(config);
+  if (upgraded.area === 'stages') {
+    if (upgraded.id) {
+      upgraded.name = upgraded.id;
+    } else if (!upgraded.name) {
+      upgraded.name = uniqueId('stage');
+    }
+    const stage = skeleton.add(upgraded);
+    return stage?.getName();
+  } else {
+    return skeleton.add(upgraded);
+  }
 }
 
 const actionPane = Object.assign(skeleton.topArea, {
