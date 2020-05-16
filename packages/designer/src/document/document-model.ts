@@ -88,7 +88,7 @@ export class DocumentModel {
     );
 
     this.history = new History(
-      () => this.schema,
+      () => this.export(TransformStage.Serilize),
       (schema) => this.import(schema as RootSchema, true),
     );
     this.setupListenActiveNodes();

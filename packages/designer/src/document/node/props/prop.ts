@@ -20,6 +20,27 @@ export type ValueTypes = 'unset' | 'literal' | 'map' | 'list' | 'expression' | '
 export class Prop implements IPropParent {
   readonly isProp = true;
 
+  /**
+   * @see SettingTarget
+   */
+  getPropValue(propName: string | number): any {
+    return this.get(propName)!.getValue();
+  }
+
+  /**
+   * @see SettingTarget
+   */
+  setPropValue(propName: string | number, value: any): void {
+    this.set(propName, value);
+  }
+
+  /**
+   * @see SettingTarget
+   */
+  clearPropValue(propName: string | number): void {
+    this.get(propName, false)?.unset();
+  }
+
   readonly id = uniqueId('prop$');
 
   @obx.ref private _type: ValueTypes = 'unset';
@@ -341,7 +362,7 @@ export class Prop implements IPropParent {
    * 获取某个属性
    * @param stash 如果不存在，临时获取一个待写入
    */
-  get(path: string | number, stash = true): Prop | null {
+  get(path: string | number, stash: boolean = true): Prop | null {
     const type = this._type;
     if (type !== 'map' && type !== 'list' && type !== 'unset' && !stash) {
       return null;
@@ -587,6 +608,10 @@ export class Prop implements IPropParent {
     return items.map((item, index) => {
       return isMap ? fn(item, item.key) : fn(item, index);
     });
+  }
+
+  getProps() {
+    return this.parent;
   }
 }
 

@@ -302,6 +302,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
   const setterInitial = getInitialFromSetter(setter);
 
   collector.addInitial({
+    // FIXME! name should be "xxx.xxx"
     name: slotName || name,
     initial: (field: Field, currentValue: any) => {
       // FIXME! read from prototype.defaultProps
@@ -323,6 +324,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
 
   if (ignore != null || disabled != null) {
     collector.addFilter({
+      // FIXME! name should be "xxx.xxx"
       name: slotName || name,
       filter: (field: Field, currentValue: any) => {
         let disabledValue: boolean;
@@ -396,7 +398,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
     const initials: InitialItem[] = [];
     const filters: FilterItem[] = [];
     const objItems = items
-      ? upgradeConfigure(items, 
+      ? upgradeConfigure(items,
         {
           addInitial: (item) => {
             initials.push(item);

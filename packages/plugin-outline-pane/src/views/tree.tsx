@@ -52,7 +52,7 @@ export default class TreeView extends Component<{ tree: Tree }> {
     const doc = node.document;
     const selection = doc.selection;
     const id = node.id;
-    const isMulti = e.metaKey || e.ctrlKey;
+    const isMulti = e.metaKey || e.ctrlKey || e.shiftKey;
     designer.activeTracker.track(node);
     if (isMulti && !isRootNode(node) && selection.has(id)) {
       if (!isFormEvent(e.nativeEvent)) {
@@ -96,7 +96,8 @@ export default class TreeView extends Component<{ tree: Tree }> {
     const doc = node.document;
     const selection = doc.selection;
 
-    const isMulti = e.metaKey || e.ctrlKey;
+    // TODO: shift selection
+    const isMulti = e.metaKey || e.ctrlKey || e.shiftKey;
     const isLeftButton = e.button === 0;
 
     if (isLeftButton && !isRootNode(node)) {

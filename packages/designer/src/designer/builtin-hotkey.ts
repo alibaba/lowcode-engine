@@ -106,7 +106,7 @@ hotkey.bind(['command+c', 'ctrl+c', 'command+x', 'ctrl+x'], (e, action) => {
   if (!selected || selected.length < 1) return;
 
   const componentsMap = {};
-  const componentsTree = selected.map((item) => item.export(TransformStage.Save));
+  const componentsTree = selected.map((item) => item.export(TransformStage.Clone));
 
   // FIXME: clear node.id
 

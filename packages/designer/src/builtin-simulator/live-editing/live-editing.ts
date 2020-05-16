@@ -98,7 +98,6 @@ export class LiveEditing {
       const onSaveContent = matched?.onSaveContent || saveHandlers.find(item => item.condition(prop))?.onSaveContent || defaultSaveContent;
 
       setterPropElement.setAttribute('contenteditable', matched?.mode && matched.mode !== 'plaintext' ? 'true' : 'plaintext-only');
-      setterPropElement.removeAttribute('for');
       setterPropElement.classList.add('engine-live-editing');
       // be sure
       setterPropElement.focus();
@@ -110,6 +109,13 @@ export class LiveEditing {
 
       const keydown = (e: KeyboardEvent) => {
         console.info(e.code);
+        switch (e.code) {
+          case 'Enter':
+            // TODO: check is richtext?
+          case 'Escape':
+          case 'Tab':
+            setterPropElement?.blur();
+        }
         // esc
         // enter
         // tab

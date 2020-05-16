@@ -1,4 +1,4 @@
-class Project {
+export class Project {
   private schema: any;
 
   constructor() {

@@ -1,9 +1,10 @@
-import { isJSBlock, isJSExpression, isJSSlot } from '@ali/lowcode-types';
-import { isPlainObject } from '@ali/lowcode-utils';
+import { isJSBlock, isJSExpression, isJSSlot, isI18nData } from '@ali/lowcode-types';
+import { isPlainObject, hasOwnProperty } from '@ali/lowcode-utils';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
 import { Designer, LiveEditing, TransformStage, addBuiltinComponentAction, Node } from '@ali/lowcode-designer';
 import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import { toCss } from '@ali/vu-css-style';
+import logger from '@ali/vu-logger';
 
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
 import { Skeleton, SettingsPrimaryPane } from '@ali/lowcode-editor-skeleton';
@@ -31,9 +32,16 @@ designer.addPropsReducer((props, node) => {
     const newProps: any = {};
     initials.forEach((item) => {
       // FIXME! this implements SettingTarget
-      const v = item.initial(node as any, props[item.name]);
-      if (v !== undefined) {
-        newProps[item.name] = v;
+      try {
+        // FIXME! item.name could be 'xxx.xxx'
+        const v = item.initial(node as any, props[item.name]);
+        if (v !== undefined) {
+          newProps[item.name] = v;
+        }
+      } catch (e) {
+        if (hasOwnProperty(props, item.name)) {
+          newProps[item.name] = props[item.name];
+        }
       }
     });
     return newProps;
@@ -49,9 +57,17 @@ function filterReducer(props: any, node: Node): any {
   if (filters && filters.length) {
     const newProps = { ...props };
     filters.forEach((item) => {
-      const v = item.filter(node as any, props[item.name]);
-      if (!v) {
-        delete newProps[item.name];
+      // FIXME! item.name could be 'xxx.xxx'
+      if (!hasOwnProperty(newProps, item.name)) {
+        return;
+      }
+      try {
+        if (item.filter(node.getProp(item.name) as any, props[item.name]) === false) {
+          delete newProps[item.name];
+        }
+      } catch (e) {
+        console.warn(e);
+        logger.trace(e);
       }
     });
     return newProps;
@@ -138,6 +154,7 @@ designer.addPropsReducer(stylePropsReducer, TransformStage.Render);
 
 // FIXME: 表达式使用 mock 值，未来live 模式直接使用原始值
 function expressionReducer(obj?: any): any {
+  // TODO: merge with i18nReducer for optimize
   if (!obj) {
     return obj;
   }
@@ -148,7 +165,7 @@ function expressionReducer(obj?: any): any {
     if (isJSExpression(obj)) {
       return obj.mock;
     }
-    if (isJSSlot(obj)) {
+    if (isJSSlot(obj) || isI18nData(obj)) {
       return obj;
     }
     const out: any = {};

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Tab, Breadcrumb } from '@alifd/next';
-import { Title, observer, Editor } from '@ali/lowcode-editor-core';
+import { Title, observer, Editor, obx } from '@ali/lowcode-editor-core';
 import { Node, isSettingField, SettingField } from '@ali/lowcode-designer';
 import { SettingsMain } from './main';
 import { SettingsPane } from './settings-pane';
@@ -9,6 +9,8 @@ import { createIcon } from '@ali/lowcode-utils';
 @observer
 export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
   private main = new SettingsMain(this.props.editor);
+
+  @obx.ref private _activeKey?: any;
 
   shouldComponentUpdate() {
     return false;
@@ -26,7 +28,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
     if (settings.isMultiple) {
       return (
         <div className="lc-settings-navigator">
-          {createIcon(settings.componentMeta?.icon, { className: 'lc-settings-navigator-icon'})}
+          {createIcon(settings.componentMeta?.icon, { className: 'lc-settings-navigator-icon' })}
           <Title title={settings.componentMeta!.title} />
           <span>x {settings.nodes.length}</span>
         </div>
@@ -45,13 +47,17 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
               onMouseOut: hoverNode.bind(null, node, false),
               onClick: selectNode.bind(null, node),
             };
-      items.unshift(<Breadcrumb.Item {...props} key={node.id}><Title title={node.title} /></Breadcrumb.Item>);
+      items.unshift(
+        <Breadcrumb.Item {...props} key={node.id}>
+          <Title title={node.title} />
+        </Breadcrumb.Item>,
+      );
       node = node.parent;
     }
 
     return (
       <div className="lc-settings-navigator">
-        {createIcon(this.main.componentMeta?.icon, { className: 'lc-settings-navigator-icon'})}
+        {createIcon(this.main.componentMeta?.icon, { className: 'lc-settings-navigator-icon' })}
         <Breadcrumb className="lc-settings-node-breadcrumb">{items}</Breadcrumb>
       </div>
     );
@@ -82,7 +88,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
     }
 
     const { items } = settings;
-    if (items.length > 5 || items.some(item => !isSettingField(item) || !item.isGroup)) {
+    if (items.length > 5 || items.some((item) => !isSettingField(item) || !item.isGroup)) {
       return (
         <div className="lc-settings-main">
           {this.renderBreadcrumb()}
@@ -93,21 +99,33 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
       );
     }
 
+    let matched = false;
+    const tabs = (items as SettingField[]).map((field) => {
+      if (this._activeKey === field.name) {
+        matched = true;
+      }
+      return (
+        <Tab.Item className="lc-settings-tab-item" title={<Title title={field.title} />} key={field.name}>
+          <SettingsPane target={field} key={field.id} />
+        </Tab.Item>
+      );
+    });
+    const activeKey = matched ? this._activeKey : (items[0] as SettingField).name;
+
     return (
       <div className="lc-settings-main">
         <Tab
-          key={settings.id}
+          activeKey={activeKey}
+          onChange={(tabKey) => {
+            this._activeKey = tabKey;
+          }}
           navClassName="lc-settings-tabs"
           animation={false}
           excessMode="dropdown"
           contentClassName="lc-settings-tabs-content"
           extra={this.renderBreadcrumb()}
         >
-          {(items as SettingField[]).map(field => (
-            <Tab.Item className="lc-settings-tab-item" title={<Title title={field.title} />} key={field.name}>
-              <SettingsPane target={field} key={field.id} />
-            </Tab.Item>
-          ))}
+          {tabs}
         </Tab>
       </div>
     );

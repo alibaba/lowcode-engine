@@ -53,8 +53,7 @@ export function liveEditingRule(target: EditingTarget) {
 
   const innerText = targetElement.innerText;
   const propTarget = ['title', 'label', 'text', 'content'].find(prop => {
-    // TODO: enhance compare text logic
-    return getText(node, prop) === innerText;
+    return equalText(getText(node, prop), innerText);
   });
 
   if (propTarget) {
@@ -64,6 +63,14 @@ export function liveEditingRule(target: EditingTarget) {
     };
   }
   return null;
+}
+
+function equalText(v: any, innerText: string) {
+  // TODO: enhance compare text logic
+  if (typeof v !== 'string') {
+    return false;
+  }
+  return v.trim() === innerText
 }
 
 // TODO:

@@ -481,15 +481,13 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * 导出 schema
    */
   export(stage: TransformStage = TransformStage.Save): Schema {
-    // run transducers
-    // run
     const baseSchema: any = {
       componentName: this.componentName,
     };
 
-    // if (stage !== TransformStage.Save) {
+    if (stage !== TransformStage.Clone) {
       baseSchema.id = this.id;
-    // }
+    }
 
     if (this.isLeaf()) {
       baseSchema.children = this.props.get('children')?.export(stage);
@@ -827,7 +825,7 @@ export function comparePosition(node1: Node, node2: Node): PositionNO {
 export function insertChild(container: ParentalNode, thing: Node | NodeData, at?: number | null, copy?: boolean): Node {
   let node: Node;
   if (isNode(thing) && (copy || thing.isSlot())) {
-    thing = thing.export(TransformStage.Save);
+    thing = thing.export(TransformStage.Clone);
   }
   if (isNode(thing)) {
     node = thing;

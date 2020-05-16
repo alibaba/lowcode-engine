@@ -247,6 +247,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         downEvent.stopPropagation();
         downEvent.preventDefault();
 
+        // FIXME: dirty fix remove label-for fro liveEditing
+        (downEvent.target as HTMLElement).removeAttribute('for');
+
         const nodeInst = this.getNodeInstanceFromElement(downEvent.target as Element);
         const node = nodeInst?.node || this.document.rootNode;
         const isMulti = downEvent.metaKey || downEvent.ctrlKey;

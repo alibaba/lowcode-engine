@@ -161,11 +161,10 @@ export {
   Symbols,
 };
 
+const version = '6.0.0(LowcodeEngine 0.9.0-beta)';
 
-/*
 console.log(
-  `%cLowcodeEngine %cv${VERSION}`,
+  `%cVisionEngine %cv${version}`,
   "color:#000;font-weight:bold;",
   "color:green;font-weight:bold;"
 );
-*/

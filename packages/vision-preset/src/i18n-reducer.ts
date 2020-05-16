@@ -1,4 +1,6 @@
 import Env from './env';
+import { isJSSlot, isI18nData, isJSExpression } from '@ali/lowcode-types';
+import { isPlainObject } from '@ali/lowcode-utils';
 const I18nUtil = require('@ali/ve-i18n-util');
 
 interface I18nObject {
@@ -15,8 +17,8 @@ export function i18nReducer(obj?: any): any {
   if (Array.isArray(obj)) {
     return obj.map((item) => i18nReducer(item));
   }
-  if (typeof obj === 'object') {
-    if (obj.type === 'i18n') {
+  if (isPlainObject(obj)) {
+    if (isI18nData(obj)) {
       // FIXME! use editor.get
       let locale = Env.getLocale();
       if (obj.key) {
@@ -27,6 +29,9 @@ export function i18nReducer(obj?: any): any {
         locale = 'en_US';
       }
       return obj[obj.use || locale] || obj.zh_CN;
+    }
+    if (isJSSlot(obj) || isJSExpression(obj)) {
+      return obj;
     }
     const out: I18nObject = {};
     Object.keys(obj).forEach((key) => {
