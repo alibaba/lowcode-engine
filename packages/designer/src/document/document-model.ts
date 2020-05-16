@@ -66,6 +66,7 @@ export class DocumentModel {
     return this.modalNode || this.rootNode;
   }
 
+  private inited = false;
   constructor(readonly project: Project, schema?: RootSchema) {
     /*
     // TODO
@@ -92,6 +93,7 @@ export class DocumentModel {
       (schema) => this.import(schema as RootSchema, true),
     );
     this.setupListenActiveNodes();
+    this.inited = true;
   }
 
   @obx.val private willPurgeSpace: Node[] = [];
@@ -161,6 +163,9 @@ export class DocumentModel {
     }
 
     let node: Node | null = null;
+    if (!this.inited) {
+      schema.id = null;
+    }
     if (schema.id) {
       node = this.getNode(schema.id);
       if (node && node.componentName === schema.componentName) {
