@@ -40,7 +40,13 @@
       }
     },
     {
-      "componentName": "Div",
+      "componentName": "Card",
+      "npm": {
+        "package": "@alifd/next",
+        "version": "1.19.18",
+        "destructuring": true,
+        "exportName": "Card"
+      },
       "title": "容器",
       "configure": {
         "component": {
@@ -197,6 +203,10 @@
         "exportName": "Input"
       },
       "props": [{
+        "name": "value",
+        "propType": "string",
+        "description": ""
+      },{
         "name": "label",
         "propType": "node",
         "description": "label"
@@ -1503,7 +1513,7 @@
     "children": [{
       "componentName": "Button",
       "title": "按钮",
-      "icon": "",
+      "icon": "add",
       "package": "@alife/next",
       "library": "Next",
       "snippets": [{
@@ -1532,7 +1542,8 @@
         "schema": {
           "componentName": "Button",
           "props": {
-            "type": "normal"
+            "type": "normal",
+            "value": "normal"
           },
           "children": "normal"
         }
@@ -1588,7 +1599,7 @@
     "title": "其他",
     "icon": "",
     "children": [{
-      "componentName": "Div",
+      "componentName": "Card",
       "library": "Next",
       "title": "容器",
       "icon": "",
@@ -1596,7 +1607,7 @@
         "title": "默认",
         "screenshot": "",
         "schema": {
-          "componentName": "Div",
+          "componentName": "Card",
           "props": {}
         }
       }]

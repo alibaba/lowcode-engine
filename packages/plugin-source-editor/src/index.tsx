@@ -58,7 +58,7 @@ export default class SourceEditor extends Component<{
   componentWillMount() {
     const { editor } = this.props;
     editor.on('leftPanel.show', (key: String) => {
-      debugger;
+      // debugger;
       if (key === 'sourceEditor' && !this.monocoEditor) {
         this.setState({
           isShow: true,

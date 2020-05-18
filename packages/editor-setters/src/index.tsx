@@ -1,4 +1,4 @@
-import { registerSetter } from '@ali/lowcode-globals';
+import { registerSetter } from '@ali/lowcode-editor-core';
 import { DatePicker, Input, Radio, Select, Switch, NumberPicker } from '@alifd/next';
 import ExpressionSetter from './expression-setter';
 import ColorSetter from './color-setter';

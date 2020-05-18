@@ -57,7 +57,10 @@ export default function GeneralWorkbench(props: any) {
     ...props,
   });
 }
-
+window.__ctx = {
+  editor,
+  appHelper: editor,
+};
 export function init(container?: Element) {
   if (!container) {
     container = document.createElement('div');
