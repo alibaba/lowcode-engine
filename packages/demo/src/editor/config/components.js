@@ -1,6 +1,6 @@
-import LowcodeSkeleton from '@ali/lowcode-editor-skeleton';
+import { Workbench as LowcodeSkeleton } from '@ali/lowcode-editor-skeleton';
 import logo from '@ali/lowcode-plugin-sample-logo';
-import undoRedo from '@ali/lowcode-plugin-undo-redo';
+// import undoRedo from '@ali/lowcode-plugin-undo-redo';
 import samplePreview from '@ali/lowcode-plugin-sample-preview';
 import componentsPane from '@ali/lowcode-plugin-components-pane';
 import outlinePane from '@ali/lowcode-plugin-outline-pane';
@@ -13,7 +13,7 @@ import variableBindDialog from '@ali/lowcode-plugin-variable-bind-dialog';
 export default {
   LowcodeSkeleton,
   logo,
-  undoRedo,
+  // undoRedo,
   samplePreview,
   componentsPane,
   outlinePane,
