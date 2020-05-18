@@ -65,6 +65,7 @@ export default {
         props: {
           align: 'top',
           icon: 'zujianku',
+          description: '资源面板',
           panelProps: {
             floatable: true,
             defaultWidth: 500,
