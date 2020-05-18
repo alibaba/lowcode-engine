@@ -1,40 +1,23 @@
-import React, { PureComponent } from 'react';
-import { Icon, Search, Select } from '@alifd/next';
-import MaterialShow from '@ali/iceluna-comp-material-show';
+import { Component, ReactNode } from 'react';
+import ComponentList, { AdditiveType } from "@ali/ve-component-list";
 import { PluginProps } from '@ali/lowcode-types';
 import { Designer } from '@ali/lowcode-designer';
 
 import './index.scss';
 
-export interface LibrayInfo {
-  label: string;
-  value: string;
-}
-
 export interface IState {
-  loading: boolean;
-  libs: LibrayInfo[];
-  searchKey: string;
-  currentLib: string;
-  componentList: object[];
+  metaData: object[];
 }
 
-export default class ComponentListPlugin extends PureComponent<PluginProps, IState> {
+export default class ComponentListPlugin extends Component<PluginProps, IState> {
   static displayName = 'LowcodeComponentListPlugin';
+
+  snippetsMap = new Map();
 
   constructor(props: any) {
     super(props);
     this.state = {
-      loading: false,
-      libs: [
-        {
-          label: '全部',
-          value: 'all',
-        },
-      ],
-      searchKey: '',
-      currentLib: 'all',
-      componentList: [],
+      metaData: [],
     };
   }
 
@@ -47,141 +30,110 @@ export default class ComponentListPlugin extends PureComponent<PluginProps, ISta
     }
   }
 
-  transformMaterial = (componentList: any): any => {
-    return componentList.map((category: any) => {
-      return {
-        name: category.title,
-        items: category.children.map((comp: any) => {
-          return {
-            ...comp,
-            name: comp.componentName,
-            snippets: comp.snippets.map((snippet: any) => {
-              return {
-                name: snippet.title,
-                screenshot: snippet.screenshot,
-                code: JSON.stringify(snippet.schema),
+  transformMetaData(componentList: any): any {
+    const metaData: object[] = [];
+    componentList.forEach((category: any, categoryId: number) => {
+      if (Array.isArray(category?.children)) {
+        category.children.forEach((comp: any, compId: number) => {
+          metaData.push({
+            id: `${categoryId}-${compId}`,
+            componentName: comp.componentName,
+            title: comp.title,
+            category: category.title,
+            snippets: comp.snippets.map((snippet: any, snippetId: number) => {
+              const item = {
+                id: `${categoryId}-${compId}-${snippetId}`,
+                description: snippet.title,
+                thumbnail: snippet.screenshot,
+                schema: snippet.schema,
               };
+              this.snippetsMap.set(item.id, item.schema);
+              return item;
             }),
-          };
-        }),
-      };
+          });
+        });
+      }
     });
-  };
+    return metaData;
+  }
 
   initComponentList = (): void => {
-    debugger;
     const { editor } = this.props;
     const assets = editor.get('assets') || {};
-    const list: string[] = [];
-    const libs: LibrayInfo[] = [];
-    assets.packages.forEach((item: any): void => {
-      list.push(item.library);
-      libs.push({
-        label: item.title,
-        value: item.library,
-      });
-    });
+    const metaData = this.transformMetaData(assets.componentList);
 
-    if (list.length > 1) {
-      libs.unshift({
-        label: '全部',
-        value: list.join(','),
-      });
+    this.setState({
+      metaData,
+    });
+  };
+
+  registerAdditive(shell: Element | null) {
+    if (!shell) {
+      return;
     }
 
-    const componentList = this.transformMaterial(assets.componentList);
-
-    this.setState({
-      libs,
-      componentList,
-      currentLib: libs[0] && libs[0].value,
-    });
-
-    (window as any).__ctx = {
-      appHelper: editor,
-    };
-    (editor as any).dndHelper = {
-      handleResourceDragStart: function(ev: any, tagName: any, schema: any) {
-        debugger
-        const designer = editor.get(Designer);
-        if (designer) {
-          designer.dragon.boost(
-            {
-              type: 'nodedata',
-              data: schema,
-            },
-            ev.nativeEvent,
-          );
+    function getSnippetId(elem: any, operation = AdditiveType.All) {
+      if (!elem || !operation) {
+        return null;
+      }
+      while (shell !== elem) {
+        if (elem.classList.contains(operation) || elem.classList.contains(AdditiveType.All)) {
+          return elem.dataset.id;
         }
-      },
+        // tslint:disable-next-line
+        elem = elem.parentNode;
+      }
+      return null;
+    }
+
+    const { editor } = this.props;
+    const designer = editor.get(Designer);
+    if (!designer) {
+      return;
+    }
+
+    const click = (e: Event) => {
+      if (
+        (e.target.tagName === 'ICON'
+          && e.target.parentNode
+          && e.target.parentNode.classList.contains('engine-additive-helper'))
+        || e.target.classList.contains('engine-additive-helper')
+      ) {
+        return;
+      }
+      const snippetId = getSnippetId(e.target, AdditiveType.Clickable);
+      if (!snippetId || !this.snippetsMap.get(snippetId)) {
+        return;
+      }
     };
-  };
 
-  searchAction = (value: string): void => {
-    this.setState({
-      searchKey: value,
+    shell.addEventListener('click', click);
+
+    designer.dragon.from(shell, (e: Event) => {
+      const doc = designer.currentDocument;
+      const id = getSnippetId(e.target, AdditiveType.Draggable);
+
+      if (!doc || !id) {
+        return false;
+      }
+
+      const dragTarget = {
+        type: 'nodedata',
+        data: this.snippetsMap.get(id),
+      };
+      return dragTarget;
     });
-  };
+  }
 
-  filterMaterial = (): any => {
-    const { searchKey, currentLib, componentList } = this.state;
-    const libs = currentLib.split(',');
-    return (componentList || [])
-      .map((cate: any) => {
-        return {
-          ...cate,
-          items: (cate.items || []).filter((item: any) => {
-            let libFlag = libs.some((lib) => lib == item.library);
-
-            let keyFlag = true;
-            if (searchKey) {
-              keyFlag =
-                `${item.name || ''} ${item.title || ''}`.toLowerCase().indexOf(searchKey.trim().toLowerCase()) >= 0;
-            } else {
-              keyFlag = item.is_show === undefined || !!(item.is_show == 1);
-            }
-            return libFlag && keyFlag;
-          }),
-        };
-      })
-      .filter((cate) => {
-        return cate.items && cate.items.length > 0;
-      });
-  };
-
-  render(): React.ReactNode {
-    const { libs, loading, currentLib } = this.state;
+  render(): ReactNode {
+    const { metaData } = this.state;
     return (
       <div className="lowcode-component-list">
-        <div className="title">
-          <Icon type="jihe" size="small" />
-          <span>组件库</span>
-        </div>
-        <Search
-          shape="simple"
-          size="medium"
-          className="search"
-          placeholder="请输入关键词"
-          onChange={this.searchAction as any}
-          onSearch={this.searchAction}
-          hasClear
-        />
-        <Select
-          size="small"
-          className="select"
-          dataSource={libs}
-          value={currentLib}
-          onChange={(value): void => {
-            this.setState({
-              currentLib: value,
-            });
-          }}
-        />
-        <MaterialShow
-          className="components-show"
-          loading={loading}
-          type="component"
-          dataSource={this.filterMaterial()}
+        <ComponentList
+          key="component-pane"
+          metaData={metaData}
+          registerAdditive={(shell: Element | null) => this.registerAdditive(shell)}
+          enableSearch
         />
       </div>
     );
