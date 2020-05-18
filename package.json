@@ -10,7 +10,7 @@
     ]
   },
   "scripts": {
-    "build": "lerna run build --stream",
+    "build": "./scripts/build.sh",
     "clean": "rm -rf ./packages/*/lib ./packages/*/es ./packages/*/dist ./packages/*/build",
     "commit": "git-cz",
     "pub": "lerna publish --cd-version patch",

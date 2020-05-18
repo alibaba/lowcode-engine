@@ -2,11 +2,11 @@
   "componentName": "Page",
   "fileName": "test",
   "dataSource": {
-    "list": [],
-    "online": []
+    "list": []
   },
   "state": {
-    "text": "outter"
+    "text": "outter",
+    "abc": [1,2,3]
   },
   "props": {
     "ref": "outterView",
@@ -15,5 +15,45 @@
       "padding": 20
     }
   },
-  "children": []
+  "children": [{
+    "componentName": "Form",
+    "props": {
+      "labelCol": 3,
+      "style": {},
+      "ref": "testForm"
+    },
+    "children": [{
+      "componentName": "Div",
+      "props": {
+        "style": {
+          "textAlign": "center"
+        }
+      },
+      "children": [{
+        "componentName": "Button.Group",
+        "props": {},
+        "children": [{
+          "componentName": "Button",
+          "props": {
+            "type": "primary",
+            "style": {
+              "margin": "0 5px 0 5px"
+            },
+            "htmlType": "submit"
+          },
+          "children": "提交"
+        }, {
+          "componentName": "Button",
+          "props": {
+            "type": "normal",
+            "style": {
+              "margin": "0 5px 0 5px"
+            },
+            "htmlType": "reset"
+          },
+          "children": "重置"
+        }]
+      }]
+    }]
+  }]
 }
