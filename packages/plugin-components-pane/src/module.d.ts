@@ -1,1 +1,1 @@
-declare module "@ali/iceluna-comp-material-show";
+declare module '@ali/ve-component-list';
