@@ -22,6 +22,7 @@ import { Stage, StageConfig } from './widget/stage';
 import { isValidElement } from 'react';
 import { isPlainObject } from '@ali/lowcode-utils';
 import { Divider } from '@alifd/next';
+import { EditorConfig, PluginClassSet } from '@ali/lowcode-types';
 
 export enum SkeletonEvents {
   PANEL_DOCK_ACTIVE = 'skeleton.panel-dock.active',
@@ -146,8 +147,19 @@ export class Skeleton {
     this.setupPlugins();
   }
 
+  buildFromConfig(config?: EditorConfig, components: PluginClassSet = {}) {
+    if (config) {
+      this.editor.init(config, components);
+    }
+    this.setupPlugins();
+  }
+
   private setupPlugins() {
-    const { config, components: componentsMap } = this.editor;
+    const { config, components = {} } = this.editor;
+    if (!config) {
+      return;
+    }
+
     const { plugins } = config;
     if (!plugins) {
       return;
@@ -180,8 +192,8 @@ export class Skeleton {
         } else if (/Icon$/.test(type)) {
           config.type = type.replace('Icon', 'Dock');
         }
-        if (pluginKey in componentsMap) {
-          config.content = componentsMap[pluginKey];
+        if (pluginKey in components) {
+          config.content = components[pluginKey];
         }
         this.add(config);
       });

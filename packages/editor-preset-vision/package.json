@@ -1,5 +1,5 @@
 {
-  "name": "@ali/lowcode-vision-preset",
+  "name": "@ali/lowcode-editor-preset-vision",
   "private": true,
   "version": "0.8.14",
   "description": "Vision Polyfill for Ali lowCode engine",
@@ -10,6 +10,7 @@
     "lib"
   ],
   "scripts": {
+    "build": "build-scripts build --skip-demo",
     "cloud-build": "build-scripts build --skip-demo"
   },
   "license": "MIT",

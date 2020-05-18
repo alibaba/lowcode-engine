@@ -1,0 +1,46 @@
+{
+  "name": "@ali/lowcode-editor-preset-general",
+  "version": "0.9.0",
+  "description": "Ali General Editor Preset",
+  "main": "lib/index.js",
+  "files": [
+    "dist",
+    "es",
+    "lib"
+  ],
+  "scripts": {
+    "build": "build-scripts build --skip-demo",
+    "cloud-build": "build-scripts build --skip-demo"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@ali/lowcode-utils": "^0.8.0",
+    "@ali/lowcode-types": "^0.8.0",
+    "@ali/lowcode-editor-core": "^0.8.12",
+    "@ali/lowcode-editor-skeleton": "^0.8.17",
+    "@ali/lowcode-plugin-designer": "^0.9.11",
+    "@ali/lowcode-plugin-outline-pane": "^0.8.17",
+    "@alifd/next": "^1.19.12",
+    "@alife/theme-lowcode-dark": "^0.1.0",
+    "@alife/theme-lowcode-light": "^0.1.0",
+    "domready": "^1.0.8",
+    "immutable": "^3.8.1",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1"
+  },
+  "devDependencies": {
+    "@ali/lowcode-editor-setters": "^0.9.0",
+    "@alib/build-scripts": "^0.1.18",
+    "@types/domready": "^1.0.0",
+    "@types/events": "^3.0.0",
+    "@types/react": "^16.8.3",
+    "@types/react-dom": "^16.8.2",
+    "build-plugin-fusion": "^0.1.0",
+    "build-plugin-moment-locales": "^0.1.0",
+    "build-plugin-react-app": "^1.1.2",
+    "tsconfig-paths-webpack-plugin": "^3.2.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
+  }
+}

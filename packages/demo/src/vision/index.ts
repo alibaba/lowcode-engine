@@ -17,27 +17,86 @@ import EventBindDialog from '@ali/lowcode-plugin-event-bind-dialog';
 import loadUrls from './loader';
 import { upgradeAssetsBundle } from './upgrade-assets';
 import { isCSSUrl } from '@ali/lowcode-utils';
-import { I18nSetter } from '@ali/visualengine-utils';
 import VariableSetter from '@ali/vs-variable-setter';
 import _isArray from "lodash/isArray";
 import _isObject from "lodash/isObject";
 import _get from 'lodash/get';
 import funcParser from '@ali/vu-function-parser';
-import cv from 'compare-versions';
-
+import {
+  NumberSetter,
+  BoolSetter,
+  ChoiceSetter,
+  CodeSetter,
+  ColorSetter,
+  DateSetter,
+  I18nSetter,
+  JsonSetter,
+  ListSetter,
+  SelectSetter,
+  OptionsSetter,
+  TextSetter,
+  ValidationSetter,
+  ActionSetter,
+} from '@ali/visualengine-utils';
 
 const { editor, skeleton, context, HOOKS, Trunk } = Engine;
 
-Trunk.registerSetter('I18nSetter', {
-  component: I18nSetter,
-  // todo: add icon
-  title: {
-    type: 'i18n',
-    'zh-CN': '国际化输入',
-    'en-US': 'International Input'
-  },
-  recommend: true,
-});
+Trunk.registerSetter('Input', TextSetter);
+Trunk.registerSetter('StringSetter', TextSetter);
+Trunk.registerSetter('TextArea', TextSetter);
+Trunk.registerSetter('Object', JsonSetter);
+Trunk.registerSetter('Function', ActionSetter);
+Trunk.registerSetter('Node', CodeSetter);
+Trunk.registerSetter('Mixin', CodeSetter);
+Trunk.registerSetter('Expression', CodeSetter);
+Trunk.registerSetter('List', ListSetter);
+Trunk.registerSetter('Switch', BoolSetter);
+Trunk.registerSetter('Number', NumberSetter);
+Trunk.registerSetter('Select', SelectSetter);
+
+Trunk.registerSetter('ActionSetter', ActionSetter);
+Trunk.registerSetter('BoolSetter', BoolSetter);
+Trunk.registerSetter('ChoiceSetter', ChoiceSetter);
+Trunk.registerSetter('CodeSetter', CodeSetter);
+Trunk.registerSetter('ColorSetter', ColorSetter);
+Trunk.registerSetter('DateSetter', DateSetter);
+Trunk.registerSetter('JsonSetter', JsonSetter);
+Trunk.registerSetter('ListSetter', ListSetter);
+Trunk.registerSetter('SelectSetter', SelectSetter);
+Trunk.registerSetter('OptionsSetter', OptionsSetter);
+Trunk.registerSetter('TextSetter', TextSetter);
+Trunk.registerSetter('NumberSetter', NumberSetter);
+Trunk.registerSetter('ValidationSetter', ValidationSetter);
+
+// 需要额外覆盖配置的 setters
+
+function wrapSetter(component: any, title: any, initialValueWrapper: any) {
+  return {
+    component,
+    title,
+    recommend: true,
+    initialValue: initialValueWrapper ? (field: any) => {
+      let defaultValueFromSetter;
+      if (component.initial) {
+        defaultValueFromSetter = component.initial.call(field, field.getValue());
+      }
+      const defaultValue = initialValueWrapper(defaultValueFromSetter);
+      return defaultValue;
+    } : undefined,
+  }
+}
+
+Trunk.registerSetter('I18nSetter', wrapSetter(
+  I18nSetter,
+  { type: 'i18n', 'zh-CN': '国际化输入', 'en-US': 'International Input' },
+  (defaultValue: any) => {
+    if (defaultValue[defaultValue.use] && typeof defaultValue[defaultValue.use] !== 'string') {
+      defaultValue[defaultValue.use] = null;
+    }
+    return defaultValue;
+  }
+));
+
 context.use(HOOKS.VE_SETTING_FIELD_VARIABLE_SETTER, VariableSetter);
 
 const externals = ['react', 'react-dom', 'prop-types', 'react-router', 'react-router-dom', '@ali/recore'];
@@ -358,7 +417,7 @@ function initActionPane() {
   });
 }
 function replaceFuncProp(props?: any){
-  const replaceProps = {};
+  const replaceProps: any = {};
   for (const name in props) {
     const prop = props[name];
     if (!prop) {
@@ -448,11 +507,11 @@ async function init() {
   await loadAssets();
   await loadSchema();
   await initTrunkPane();
-  initDataPoolPane();
-  initI18nPane();
-  initActionPane();
+  // initDataPoolPane();
+  // initI18nPane();
+  // initActionPane();
   initDemoPanes();
-  initHistoryPane();
+  // initHistoryPane();
   Engine.init();
 }
 init();

@@ -3,8 +3,8 @@
     [
       "build-plugin-component",
       {
-        "filename": "vision-preset",
-        "library": "VisualEngine",
+        "filename": "editor-preset-general",
+        "library": "LowcodeEditor",
         "libraryTarget": "umd",
         "externals": {
           "react": "var window.React",

@@ -5,8 +5,6 @@
   "description": "低代码引擎 DEMO",
   "scripts": {
     "cloud-build": "build-scripts build --config cloud-build.json",
-    "gen": "npm run genSkeleton && tyarn",
-    "genSkeleton": "iceluna gen lowcode -c ./skeleton.config.js -t ./src/editor/config",
     "start": "build-scripts start"
   },
   "config": {},
@@ -38,14 +36,12 @@
     "@ali/vu-function-parser": "^2.5.0-beta.0",
     "@ali/vu-legao-design-fetch-context": "^1.0.3",
     "@alifd/next": "^1.19.12",
-    "@alife/theme-lowcode-dark": "^0.1.0",
     "@alife/theme-lowcode-light": "^0.1.0",
     "compare-versions": "^3.0.1",
     "react": "^16.8.1",
     "react-dom": "^16.8.1"
   },
   "devDependencies": {
-    "@ali/iceluna-cli": "^0.0.16",
     "@alib/build-scripts": "^0.1.18",
     "@types/events": "^3.0.0",
     "@types/react": "^16.8.3",

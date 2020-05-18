@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import './index.scss';
-import { Editor } from '@ali/lowcode-editor-core';
+import { Editor, Title } from '@ali/lowcode-editor-core';
 import { TopIcon } from '@ali/lowcode-editor-skeleton';
 import { Designer } from '@ali/lowcode-designer';
 import { PluginProps } from '@ali/lowcode-types';

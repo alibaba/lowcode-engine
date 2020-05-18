@@ -1,6 +1,7 @@
 {
   "entry": {
-    "vision-preset": "../vision-preset/src/index.ts",
+    "index": "src/index.ts",
+    "editor-preset-vision": "../editor-preset-vision/src/index.ts",
     "react-simulator-renderer": "../react-simulator-renderer/src/index.ts"
   },
   "vendor": false,
