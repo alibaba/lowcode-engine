@@ -45,28 +45,26 @@ export default {
         props: {
           align: 'top',
           icon: 'zujianku',
-          title: '组件库',
+          description: '组件库',
         },
         pluginProps: {},
       },
       {
-        pluginKey: 'outlinePane',
+        pluginKey: 'outline',
         type: 'PanelIcon',
         props: {
           align: 'top',
           icon: 'shuxingkongjian',
-          title: '大纲树',
+          description: '大纲树',
         },
         pluginProps: {},
       },
-
       {
         pluginKey: 'sourceEditor',
         type: 'PanelIcon',
         props: {
           align: 'top',
           icon: 'zujianku',
-          title: '组件库',
           panelProps: {
             floatable: true,
             defaultWidth: 500,

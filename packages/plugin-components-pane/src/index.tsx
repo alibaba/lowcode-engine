@@ -69,11 +69,12 @@ export default class ComponentListPlugin extends PureComponent<PluginProps, ISta
   };
 
   initComponentList = (): void => {
+    debugger;
     const { editor } = this.props;
     const assets = editor.get('assets') || {};
     const list: string[] = [];
     const libs: LibrayInfo[] = [];
-    Object.values(assets.packages).forEach((item: any): void => {
+    assets.packages.forEach((item: any): void => {
       list.push(item.library);
       libs.push({
         label: item.title,
@@ -96,8 +97,12 @@ export default class ComponentListPlugin extends PureComponent<PluginProps, ISta
       currentLib: libs[0] && libs[0].value,
     });
 
-    editor.set('dndHelper', {
+    (window as any).__ctx = {
+      appHelper: editor,
+    };
+    (editor as any).dndHelper = {
       handleResourceDragStart: function(ev: any, tagName: any, schema: any) {
+        debugger
         const designer = editor.get(Designer);
         if (designer) {
           designer.dragon.boost(
@@ -109,7 +114,7 @@ export default class ComponentListPlugin extends PureComponent<PluginProps, ISta
           );
         }
       },
-    });
+    };
   };
 
   searchAction = (value: string): void => {
