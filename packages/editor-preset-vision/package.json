@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-editor-preset-vision",
-  "version": "0.8.16",
+  "version": "0.8.17",
   "description": "Vision Polyfill for Ali lowCode engine",
   "main": "lib/index.js",
   "files": [
@@ -45,5 +45,8 @@
     "build-plugin-moment-locales": "^0.1.0",
     "build-plugin-react-app": "^1.1.2",
     "tsconfig-paths-webpack-plugin": "^3.2.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
   }
 }
