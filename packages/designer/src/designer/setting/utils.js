@@ -39,7 +39,7 @@ export class Transducer {
     } else if (isValidElement(setter) && setter.type.displayName === 'MixedSetter') {
       setter = setter.props.setters[0];
     } else if (typeof setter === 'object' && setter.componentName === 'MixedSetter') {
-      setter = setter.props.setters[0];
+      setter = setter.props.setters?.[0];
     }
 
     if (isSetterConfig(setter)) {
