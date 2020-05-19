@@ -29,6 +29,7 @@ const pages = Object.assign(project, {
       componentsTree: pages[0].componentsTree,
     }, true);
   },
+  // FIXME:
   addPage(data: OldPageData) {
     return project.open(data.layout);
   },

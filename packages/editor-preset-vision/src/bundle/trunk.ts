@@ -41,6 +41,34 @@ export class Trunk {
     return this.metaBundle.getFromMeta(name);
   }
 
+  listByCategory() {
+    const categories: any[] = [];
+    const categoryMap: any = {};
+    const categoryItems: any[] = [];
+    const defaultCategory = {
+      items: categoryItems,
+      name: '*',
+    };
+    categories.push(defaultCategory);
+    categoryMap['*'] = defaultCategory;
+    this.getList().forEach((prototype) => {
+      const cat = prototype.getCategory();
+      if (!cat) {
+        return;
+      }
+      if (!categoryMap.hasOwnProperty(cat)) {
+        const categoryMapItems: any[] = [];
+        categoryMap[cat] = {
+          items: categoryMapItems,
+          name: cat,
+        };
+        categories.push(categoryMap[cat]);
+      }
+      categoryMap[cat].items.push(prototype);
+    });
+    return categories;
+  }
+
   getPrototypeView(componentName: string) {
     return this.getPrototype(componentName)?.getView();
   }

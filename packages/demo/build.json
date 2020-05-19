@@ -1,6 +1,5 @@
 {
   "entry": {
-    "index": "src/index.ts",
     "editor-preset-vision": "../editor-preset-vision/src/index.ts",
     "react-simulator-renderer": "../react-simulator-renderer/src/index.ts"
   },

@@ -9,6 +9,9 @@ import './title.less';
 export class Title extends Component<{ title: TitleContent; className?: string; onClick?: () => void }> {
   render() {
     let { title, className, onClick } = this.props;
+    if (title == null) {
+      return null;
+    }
     if (isValidElement(title)) {
       return title;
     }
