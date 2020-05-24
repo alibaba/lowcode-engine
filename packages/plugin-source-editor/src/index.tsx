@@ -1,9 +1,10 @@
 import { Component, isValidElement, ReactElement, ReactNode } from 'react';
 import { Tab, Search, Input, Button } from '@alifd/next';
-import {Editor} from '@ali/lowcode-editor-core';
+import { Editor } from '@ali/lowcode-editor-core';
 import { js_beautify, css_beautify } from 'js-beautify';
 import MonacoEditor from 'react-monaco-editor';
 import { Designer } from '@ali/lowcode-designer';
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.main.js';
 const TAB_KEY = {
   JS_TAB: 'js_tab',
   CSS_TAB: 'css_tab',
@@ -45,8 +46,10 @@ export default class SourceEditor extends Component<{
   editor: Editor;
 }> {
   private monocoEditor: Object;
+  private monocoEditorCss: Object;
   private editorCmd: Object;
-  private editorRef = React.createRef();
+  private editorJsRef = React.createRef();
+  private editorCssRef = React.createRef();
   private editorNode: Object;
   private editorParentNode: Object;
 
@@ -64,12 +67,12 @@ export default class SourceEditor extends Component<{
           isShow: true,
         });
 
-
-        setTimeout(()=>{
-          this.editorNode = this.editorRef.current; //记录当前dom节点；
-          this.editorParentNode = this.editorNode.parentNode; //记录父节点;
-          console.log(this.editorNode);
-        },0)
+        // setTimeout(() => {
+        //   this.editorNode = this.editorCssRef.current; //记录当前dom节点；
+        //   debugger
+        //   this.editorParentNode = this.editorNode.parentNode; //记录父节点;
+        //   console.log(this.editorNode);
+        // }, 0);
       }
     });
 
@@ -86,47 +89,44 @@ export default class SourceEditor extends Component<{
     });
 
     //editor.once('designer.mount', (designer: Designer) => {
-      // let schema = designer.project.getSchema();
-      // mock data
-      let schema = {
-        componentTree: [
-          {
-            state: {
-              // 初始state：        选填 对象类型/变量表达式
-              btnText: 'submit', // 默认数据值：              选填 变量表达式
+    // let schema = designer.project.getSchema();
+    // mock data
+    let schema = {
+      componentTree: [
+        {
+          state: {
+            // 初始state：        选填 对象类型/变量表达式
+            btnText: 'submit', // 默认数据值：              选填 变量表达式
+          },
+          css: 'body {font-size: 12px;} .botton{widht:100px;color:#ff00ff}', //css样式描述：      选填
+          lifeCycles: {
+            //生命周期:          选填 对象类型
+            didMount: {
+              type: 'JSExpression',
+              value: "function() {\n \t\tconsole.log('did mount');\n\t}",
             },
-            css: 'body {font-size: 12px;} .botton{widht:100px;color:#ff00ff}', //css样式描述：      选填
-            lifeCycles: {
-              //生命周期:          选填 对象类型
-              didMount: {
-                type: 'JSExpression',
-                value: "function() {\n \t\tconsole.log('did mount');\n\t}",
-              },
-              willUnmount: {
-                type: 'JSExpression',
-                value: "function() {\n \t\tconsole.log('will umount');\n\t}",
-              },
-            },
-            methods: {
-              //自定义方法对象：     选填 对象类型
-              getData: {
-                //自定义方法：                  选填 函数类型
-                type: 'JSExpression',
-                value: "function() {\n \t\tconsole.log('testFunc');\n \t}",
-              },
+            willUnmount: {
+              type: 'JSExpression',
+              value: "function() {\n \t\tconsole.log('will umount');\n\t}",
             },
           },
-        ],
-      };
+          methods: {
+            //自定义方法对象：     选填 对象类型
+            getData: {
+              //自定义方法：                  选填 函数类型
+              type: 'JSExpression',
+              value: "function() {\n \t\tconsole.log('testFunc');\n \t}",
+            },
+          },
+        },
+      ],
+    };
 
-      this.initCode(schema);
+    this.initCode(schema);
     //});
   }
 
-  componentDidMount(){
-
-
-  }
+  componentDidMount() {}
 
   openPluginPannel = () => {
     const { editor } = this.props;
@@ -224,17 +224,6 @@ export default class SourceEditor extends Component<{
   }
 
   editorDidMount = (editor, monaco) => {
-    console.log('editorDidMount', editor);
-
-    // var commandId = editor.addCommand(
-    //   0,
-    //   function() {
-    //     // services available in `ctx`
-    //     alert('my command is executing!');
-    //   },
-    //   '',
-    // );
-
     if (this.state.selectTab == TAB_KEY.JS_TAB) {
       this.monocoEditor = editor;
     }
@@ -248,6 +237,14 @@ export default class SourceEditor extends Component<{
     this.setState({
       selectTab: key,
     });
+
+    if (key === TAB_KEY.JS_TAB) {
+      document.getElementById('cssEditorDom').setAttribute('style', 'display:none');
+      document.getElementById('jsEditorDom').setAttribute('style', 'block');
+    } else {
+      document.getElementById('jsEditorDom').setAttribute('style', 'display:none');
+      document.getElementById('cssEditorDom').setAttribute('style', 'block');
+    }
   };
 
   updateCode = (newCode) => {
@@ -273,24 +270,35 @@ export default class SourceEditor extends Component<{
     ];
 
     return (
-      <div className="source-editor-container" >
+      <div className="source-editor-container">
         <Tab size="small" shape="wrapped" onChange={this.onTabChange} activeKey={selectTab}>
           {tabs.map((item) => (
-            <Tab.Item key={item.key} title={item.tab}>
-              {isShow && (
-                <div style={{ height: '100%' }} ref={this.editorRef}>
-                  <MonacoEditor
-                    value={selectTab == TAB_KEY.JS_TAB ? jsCode : css}
-                    {...defaultEditorOption}
-                    {...{ language: selectTab == TAB_KEY.JS_TAB ? 'typescript' : 'css' }}
-                    onChange={(newCode) => this.updateCode(newCode)}
-                    editorDidMount={(editor, monaco) => this.editorDidMount.call(this, editor, monaco)}
-                  />
-                </div>
-              )}
-            </Tab.Item>
+            <Tab.Item key={item.key} title={item.tab} />
           ))}
         </Tab>
+
+        {isShow && (
+          <div style={{ height: '100%' }} className="editor-context-container">
+            <div id="jsEditorDom" className="editor-context">
+              <MonacoEditor
+                value={jsCode}
+                {...defaultEditorOption}
+                {...{ language: 'typescript' }}
+                onChange={(newCode) => this.updateCode(newCode)}
+                editorDidMount={(editor, monaco) => this.editorDidMount.call(this, editor, monaco)}
+              />
+            </div>
+            <div className="editor-context" id="cssEditorDom">
+              <MonacoEditor
+                value={css}
+                {...defaultEditorOption}
+                {...{ language: 'css' }}
+                onChange={(newCode) => this.updateCode(newCode)}
+                editorDidMount={(editor, monaco) => this.editorDidMount.call(this, editor, monaco)}
+              />
+            </div>
+          </div>
+        )}
 
         <div className="full-screen-container" onClick={this.fullScreen}>
           <img src="https://gw.alicdn.com/tfs/TB1d7XqE1T2gK0jSZFvXXXnFXXa-200-200.png"></img>
