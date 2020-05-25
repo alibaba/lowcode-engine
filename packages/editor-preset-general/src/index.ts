@@ -1,8 +1,7 @@
 import { render } from 'react-dom';
 import { createElement } from 'react';
-import { Workbench } from '@ali/lowcode-editor-skeleton';
+import { Workbench, Skeleton, SettingsPrimaryPane } from '@ali/lowcode-editor-skeleton';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
-import { Skeleton, SettingsPrimaryPane } from '@ali/lowcode-editor-skeleton';
 import { Designer } from '@ali/lowcode-designer';
 import { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
