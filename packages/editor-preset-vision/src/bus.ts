@@ -1,5 +1,6 @@
 import logger from '@ali/vu-logger';
 import { EventEmitter } from 'events';
+import { editor } from './editor';
 
 /**
  * Bus class as an EventEmitter
@@ -19,7 +20,6 @@ export class Bus {
   // alias to unsub
   off(event: string, func: (...args: any[]) => any) {
     this.unsub(event, func);
-
   }
 
   // alias to pub
@@ -62,4 +62,18 @@ export class Bus {
   }
 }
 
-export default new Bus();
+const bus = new Bus();
+
+editor.on('hotkey.callback.call', (data) => {
+  bus.emit('ve.hotkey.callback.call', data);
+});
+
+editor.on('history.back', (data) => {
+  bus.emit('ve.history.back', data);
+});
+
+editor.on('history.forward', (data) => {
+  bus.emit('ve.history.forward', data);
+});
+
+export default bus;
