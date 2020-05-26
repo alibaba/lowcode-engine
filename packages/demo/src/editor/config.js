@@ -64,7 +64,7 @@ export default {
         type: 'PanelIcon',
         props: {
           align: 'top',
-          icon: 'zujianku',
+          icon: 'wenjian',
           description: '资源面板',
           panelProps: {
             floatable: true,
