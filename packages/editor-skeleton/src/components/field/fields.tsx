@@ -28,6 +28,11 @@ export class Field extends Component<FieldProps> {
     display: this.props.defaultDisplay || 'inline',
   };
 
+  constructor(props: any) {
+    super(props);
+    this.handleClear = this.handleClear.bind(this);
+  }
+
   private toggleExpand = () => {
     const { onExpandChange } = this.props;
     const collapsed = !this.state.collapsed;
@@ -67,6 +72,10 @@ export class Field extends Component<FieldProps> {
       attributeFilter: ['class'],
     });
     this.dispose = () => observer.disconnect();
+  }
+  private handleClear(e: React.MouseEvent) {
+    e.stopPropagation();
+    this.props.onClear && this.props.onClear();
   }
   componentDidMount() {
     const { defaultDisplay } = this.props;
@@ -118,7 +127,7 @@ export class Field extends Component<FieldProps> {
       >
         <div className="lc-field-head" onClick={isAccordion ? this.toggleExpand : undefined}>
           <div className="lc-field-title">
-            {createValueState(valueState, onClear)}
+            {createValueState(valueState, this.handleClear)}
             <Title title={title || ''} />
             <InlineTip position="top">{tipContent}</InlineTip>
           </div>
@@ -143,7 +152,7 @@ export class Field extends Component<FieldProps> {
  *
  * TODO: turn number to enum
  */
-function createValueState(valueState?: number, onClear?: () => void) {
+function createValueState(valueState?: number, onClear?: (e: React.MouseEvent) => void) {
   let tip: any = null;
   let className = 'lc-valuestate';
   let icon: any = null;

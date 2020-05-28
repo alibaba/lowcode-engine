@@ -22,7 +22,7 @@ import {
   CanvasPoint,
 } from '../designer';
 import { parseMetadata } from './utils/parse-metadata';
-import { ComponentMetadata } from '@ali/lowcode-types';
+import { ComponentMetadata, ComponentSchema } from '@ali/lowcode-types';
 import { BuiltinSimulatorRenderer } from './renderer';
 import clipboard from '../designer/clipboard';
 import { LiveEditing } from './live-editing/live-editing';
@@ -445,6 +445,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
    */
   getComponent(componentName: string): Component | null {
     return this.renderer?.getComponent(componentName) || null;
+  }
+
+  createComponent(schema: ComponentSchema): Component | null {
+    return this.renderer?.createComponent(schema) || null;
   }
 
   @obx.val private instancesMap = new Map<string, ComponentInstance[]>();

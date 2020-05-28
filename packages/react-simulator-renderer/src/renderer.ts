@@ -1,4 +1,4 @@
-import { createElement, ReactInstance, ComponentType } from 'react';
+import React, { createElement, ReactInstance, ComponentType, ReactElement } from 'react';
 import { render as reactRender } from 'react-dom';
 import { host } from './host';
 import SimulatorRendererView from './renderer-view';
@@ -8,9 +8,9 @@ import { getClientRects } from './utils/get-client-rects';
 import loader from './utils/loader';
 import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
 import { isESModule, isElement, cursor, setNativeSelection } from '@ali/lowcode-utils';
-import { RootSchema, NpmInfo } from '@ali/lowcode-types';
+import { RootSchema, NpmInfo, ComponentSchema } from '@ali/lowcode-types';
 // just use types
-import { BuiltinSimulatorRenderer, NodeInstance } from '@ali/lowcode-designer';
+import { BuiltinSimulatorRenderer, NodeInstance, Component, TransformStage } from '@ali/lowcode-designer';
 import Slot from './builtin-components/slot';
 import Leaf from './builtin-components/leaf';
 
@@ -208,6 +208,39 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
 
   getComponentInstances(id: string): ReactInstance[] | null {
     return this.instancesMap.get(id) || null;
+  }
+
+  createComponent(schema: ComponentSchema): Component | null {
+    const _schema = {
+      ...schema,
+    };
+    _schema.methods = {};
+    _schema.lifeCycles = {};
+    
+    const getElement = (componentsMap: any, schema: any): ReactElement => {
+      const Com = componentsMap[schema.componentName];
+      let children = null;
+      if (schema.children && schema.children.length > 0) {
+        children = schema.children.map((item: any) => getElement(componentsMap, item));
+      }
+      const _leaf = host.document.designer.currentDocument?.createNode(schema);
+      const props = host.document.designer.transformProps(schema.props || {}, host.document.createNode(schema), TransformStage.Render);
+      return createElement(Com, {...props, _leaf}, children);
+    }
+
+    const renderer = this;
+    class Com extends React.Component {
+      render() {
+        const componentsMap = renderer.componentsMap;
+        let children = null;
+        if (_schema.children && Array.isArray(_schema.children)) {
+          children = _schema.children?.map((item:any) => getElement(componentsMap, item));
+        }
+        return createElement(React.Fragment, {}, children);
+      }
+    }
+
+    return Com;
   }
 
   getClosestNodeInstance(from: ReactInstance, nodeId?: string): NodeInstance<ReactInstance> | null {
