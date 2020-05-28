@@ -3,7 +3,7 @@ import Popup from '@ali/ve-popups';
 import Icons from '@ali/ve-icons';
 import logger from '@ali/vu-logger';
 import { render } from 'react-dom';
-import I18nUtil from '@ali/ve-i18n-util';
+import I18nUtil from './i18n-util';
 import { hotkey as Hotkey } from '@ali/lowcode-editor-core';
 import { createElement } from 'react';
 import { VE_EVENTS as EVENTS, VE_HOOKS as HOOKS, VERSION as Version } from './base/const';
