@@ -13,7 +13,7 @@ import {
   ComponentSchema,
   NodeStatus,
 } from '@ali/lowcode-types';
-import { Props, EXTRA_KEY_PREFIX } from './props/props';
+import { Props, getConvertedExtraKey } from './props/props';
 import { DocumentModel } from '../document-model';
 import { NodeChildren } from './node-children';
 import { Prop } from './props/prop';
@@ -378,7 +378,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   getExtraProp(key: string, stash = true): Prop | null {
-    return this.props.get(EXTRA_KEY_PREFIX + key, stash) || null;
+    return this.props.get(getConvertedExtraKey(key), stash) || null;
   }
 
   /**

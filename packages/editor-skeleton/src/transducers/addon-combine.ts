@@ -1,5 +1,6 @@
 import { TransformedComponentMetadata, FieldConfig, SettingTarget } from '@ali/lowcode-types';
 import { IconSlot } from '../icons/slot';
+import { getConvertedExtraKey } from '@ali/lowcode-designer';
 
 export default function(metadata: TransformedComponentMetadata): TransformedComponentMetadata {
   const { componentName, configure = {} } = metadata;
@@ -86,7 +87,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
   if (componentName === 'Slot') {
     basicInfo.icon = IconSlot;
     propsGroup = [{
-      name: '___title',
+      name: getConvertedExtraKey('title'),
       title: {
         type: 'i18n',
         'en-US': 'Slot Title',
@@ -203,7 +204,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
   if (!isRoot) {
     if (supports.condition !== false) {
       advanceGroup.push({
-        name: '___condition',
+        name: getConvertedExtraKey('condition'),
         title: { type: 'i18n', 'zh-CN': '是否渲染', 'en-US': 'Condition' },
         defaultValue: true,
         setter: [{
@@ -219,7 +220,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
         title: { type: 'i18n', 'zh-CN': '循环', 'en-US': 'Loop' },
         items: [
           {
-            name: '___loop',
+            name: getConvertedExtraKey('loop'),
             title: { type: 'i18n', 'zh-CN': '循环数据', 'en-US': 'Loop Data' },
             defaultValue: [],
             setter: [{
@@ -232,7 +233,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
             }],
           },
           {
-            name: '___loopArgs.0',
+            name: getConvertedExtraKey('loopArgs.0'),
             title: { type: 'i18n', 'zh-CN': '迭代变量名', 'en-US': 'Loop Item' },
             setter: {
               componentName: 'StringSetter',
@@ -242,7 +243,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
             },
           },
           {
-            name: '___loopArgs.1',
+            name: getConvertedExtraKey('loopArgs.1'),
             title: { type: 'i18n', 'zh-CN': '索引变量名', 'en-US': 'Loop Index' },
             setter: {
               componentName: 'StringSetter',
