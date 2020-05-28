@@ -744,7 +744,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   getPrototype() {
-    return this;
+    return this.componentMeta.prototype;
   }
 
   getIcon() {

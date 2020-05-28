@@ -249,6 +249,9 @@ export class ComponentMeta {
     }
     return true;
   }
+
+  // compatiable vision
+  prototype?: any;
 }
 
 export function isComponentMeta(obj: any): obj is ComponentMeta {

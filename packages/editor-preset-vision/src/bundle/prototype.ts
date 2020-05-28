@@ -229,6 +229,7 @@ class Prototype {
       const metadata = isNewSpec(input) ? input : upgradeMetadata(input);
       this.meta = designer.createComponentMeta(metadata);
     }
+    (this.meta as any).prototype = this;
   }
 
   getId() {
