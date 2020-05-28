@@ -2,6 +2,7 @@ import { skeleton, editor } from './editor';
 import { ReactElement } from 'react';
 import { IWidgetBaseConfig, Skeleton } from '@ali/lowcode-editor-skeleton';
 import { uniqueId } from '@ali/lowcode-utils';
+import bus from './bus';
 
 export interface IContentItemConfig {
   title: string;
@@ -175,6 +176,7 @@ const dockPane = Object.assign(skeleton.leftArea, {
       console.warn(`Could not find pane with name ${name}`);
     }
     pane?.active();
+    bus.emit('ve.dock_pane.active_doc', pane);
   },
 
   /**

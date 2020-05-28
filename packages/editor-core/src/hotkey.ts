@@ -1,3 +1,6 @@
+import { globalContext } from './di';
+import { Editor } from './editor';
+
 interface KeyMap {
   [key: number]: string;
 }
@@ -329,6 +332,16 @@ function fireCallback(callback: HotkeyCallback, e: KeyboardEvent, combo?: string
     e.preventDefault();
     e.stopPropagation();
   }
+  const editor = globalContext.get(Editor);
+  if (!editor) {
+    return;
+  }
+  editor.emit('hotkey.callback.call', {
+    callback,
+    e,
+    combo,
+    sequence,
+  });
 }
 
 export class Hotkey {
