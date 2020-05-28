@@ -1,6 +1,7 @@
 import { ComponentType, ReactElement, isValidElement, ComponentClass } from 'react';
 import { isPlainObject } from '@ali/lowcode-utils';
-import { isI18nData, SettingTarget, InitialItem, FilterItem, isJSSlot, isJSExpression } from '@ali/lowcode-types';
+import { isI18nData, SettingTarget, InitialItem, FilterItem, isJSSlot, isJSExpression, AutorunItem } from '@ali/lowcode-types';
+import { untracked } from '@ali/lowcode-editor-core';
 
 type Field = SettingTarget;
 
@@ -290,19 +291,44 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
     };
   }
 
-  if (accessor && !slotName) {
-    extraProps.getValue = (field: Field, fieldValue: any) => {
-      return accessor.call(field, fieldValue);
-    };
-    if (!initialFn) {
-      initialFn = accessor;
+  if (!slotName) {
+    if (accessor) {
+      extraProps.getValue = (field: Field, fieldValue: any) => {
+        return accessor.call(field, fieldValue);
+      };
+    }
+
+    if (sync || accessor) {
+      collector.addAutorun({
+        name,
+        autorun: (field: Field) => {
+          let fieldValue = untracked(() => field.getValue());
+          if (accessor) {
+            fieldValue = accessor.call(field, fieldValue)
+          }
+          if (sync) {
+            fieldValue = sync.call(field, fieldValue);
+            if (fieldValue !== undefined) {
+              field.setValue(fieldValue);
+            }
+          } else {
+            field.setValue(fieldValue);
+          }
+        }
+      });
+    }
+
+    if (mutator) {
+      extraProps.setValue = (field: Field, value: any) => {
+        mutator.call(field, value, value);
+      };
     }
   }
 
   const setterInitial = getInitialFromSetter(setter);
 
   collector.addInitial({
-    // FIXME! name should be "xxx.xxx"
+    // FIXME! name could be "xxx.xxx"
     name: slotName || name,
     initial: (field: Field, currentValue: any) => {
       // FIXME! read from prototype.defaultProps
@@ -345,20 +371,6 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
     });
   }
 
-  if (sync) {
-    extraProps.autorun = (field: Field) => {
-      const value = sync.call(field, field.getValue());
-      if (value !== undefined) {
-        field.setValue(value);
-      }
-    };
-  }
-  if (mutator && !slotName) {
-    extraProps.setValue = (field: Field, value: any) => {
-      mutator.call(field, value, value);
-    };
-  }
-
   if (slotName) {
     newConfig.name = slotName;
     if (!newConfig.title && slotTitle) {
@@ -396,7 +408,6 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
   let primarySetter: any;
   if (type === 'composite') {
     const initials: InitialItem[] = [];
-    const filters: FilterItem[] = [];
     const objItems = items
       ? upgradeConfigure(items,
         {
@@ -404,8 +415,17 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
             initials.push(item);
           },
           addFilter: (item) => {
-            filters.push(item);
-          }
+            collector.addFilter({
+              name: `${name}.${item.name}`,
+              filter: item.filter,
+            });
+          },
+          addAutorun: (item) => {
+            collector.addAutorun({
+              name: `${name}.${item.name}`,
+              autorun: item.autorun,
+            });
+          },
         }
       )
       : [];
@@ -481,10 +501,12 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
 
 type AddInitial = (initialItem: InitialItem) => void;
 type AddFilter = (filterItem: FilterItem) => void;
+type AddAutorun = (autorunItem: AutorunItem) => void;
 
 type ConfigCollector = {
-  addInitial: AddInitial,
-  addFilter: AddFilter,
+  addInitial: AddInitial;
+  addFilter: AddFilter;
+  addAutorun: AddAutorun;
 }
 
 function getInitialFromSetter(setter: any) {
@@ -750,6 +772,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
 
   const initials: InitialItem[] = [];
   const filters: FilterItem[] = [];
+  const autoruns: AutorunItem[] = [];
   const props = upgradeConfigure(configure || [],
     {
       addInitial: (item) => {
@@ -758,10 +781,14 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
       addFilter: (item) => {
         filters.push(item);
       },
+      addAutorun: (item) => {
+        autoruns.push(item);
+      }
     }
   );
   experimental.initials = initials;
   experimental.filters = filters;
+  experimental.autoruns = autoruns;
 
   const supports: any = {};
   if (canUseCondition != null) {

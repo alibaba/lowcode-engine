@@ -1,4 +1,4 @@
-import { obx, computed } from '@ali/lowcode-editor-core';
+import { obx, computed, autorun } from '@ali/lowcode-editor-core';
 import {
   isDOMText,
   isJSExpression,
@@ -155,15 +155,27 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       this._children = new NodeChildren(this as ParentalNode, this.initialChildren(children));
       this._children.interalInitParent();
       this.props.import(this.transformProps(props || {}), extras);
+      this.setupAutoruns();
     }
   }
 
   private transformProps(props: any): any {
     // FIXME! support PropsList
-    const x = this.document.designer.transformProps(props, this, TransformStage.Init);
-
-    return x;
+    return this.document.designer.transformProps(props, this, TransformStage.Init);
     // TODO: run transducers in metadata.experimental
+  }
+
+  private autoruns?: Array<() => void>;
+  private setupAutoruns() {
+    const autoruns = this.componentMeta.getMetadata().experimental?.autoruns;
+    if (!autoruns || autoruns.length < 1) {
+      return;
+    }
+    this.autoruns = autoruns.map(item => {
+      return autorun(() => {
+        item.autorun(this.props.get(item.name, true) as any)
+      }, true);
+    });
   }
 
   private initialChildren(children: any): NodeData[] {
@@ -591,6 +603,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     if (this.isParental()) {
       this.children.purge();
     }
+    this.autoruns?.forEach(dispose => dispose());
     this.props.purge();
     this.document.internalRemoveAndPurgeNode(this);
   }
@@ -608,7 +621,16 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   insertBefore(node: Node, ref?: Node) {
     this.children?.insert(node, ref ? ref.index : null);
   }
-  insertAfter(node: Node, ref?: Node) {
+  insertAfter(node: any, ref?: Node) {
+    if (!isNode(node)) {
+      if (node.getComponentName) {
+        node = this.document.createNode({
+          componentName: node.getComponentName(),
+        });
+      } else {
+        node = this.document.createNode(node);
+      }
+    }
     this.children?.insert(node, ref ? ref.index + 1 : null);
   }
   getParent() {
@@ -687,6 +709,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * @deprecated
    */
   getSuitablePlace(node: Node, ref: any): any {
+    // TODO:
     if (this.isRoot()) {
       return { container: this, ref };
     }
