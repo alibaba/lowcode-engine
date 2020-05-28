@@ -228,7 +228,7 @@ export class Designer {
 
   touchOffsetObserver() {
     this.clearOobxList(true);
-    this.oobxList.forEach(item => item.compute());
+    this.oobxList.forEach((item) => item.compute());
   }
 
   createSettingEntry(editor: IEditor, nodes: Node[]) {
@@ -392,11 +392,16 @@ export class Designer {
   @computed get componentsMap(): { [key: string]: NpmInfo | Component } {
     const maps: any = {};
     this._componentMetasMap.forEach((config, key) => {
-      const view = config.getMetadata().experimental?.view;
-      if (view) {
-        maps[key] = view;
-      } else if (config.npm) {
-        maps[key] = config.npm;
+      const metaData = config.getMetadata();
+      if (metaData.devMode === 'lowcode') {
+        maps[key] = this.currentDocument?.simulator?.createComponent(metaData.schema);
+      } else {
+        const view = metaData.experimental?.view;
+        if (view) {
+          maps[key] = view;
+        } else if (config.npm) {
+          maps[key] = config.npm;
+        }
       }
     });
     return maps;

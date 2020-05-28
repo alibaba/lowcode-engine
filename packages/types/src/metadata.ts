@@ -5,7 +5,7 @@ import { TitleContent } from './title';
 import { PropConfig } from './prop-config';
 import { NpmInfo } from './npm';
 import { FieldConfig } from './field-config';
-import { NodeSchema, NodeData } from './schema';
+import { NodeSchema, NodeData, ComponentSchema } from './schema';
 import { SettingTarget } from './setting-target';
 
 export type NestingFilter = (testNode: any, currentNode: any) => boolean;
@@ -158,6 +158,7 @@ export interface ComponentMetadata {
   props?: PropConfig[];
   configure?: FieldConfig[] | Configure;
   experimental?: Experimental;
+  schema?: ComponentSchema;
 }
 
 export interface TransformedComponentMetadata extends ComponentMetadata {

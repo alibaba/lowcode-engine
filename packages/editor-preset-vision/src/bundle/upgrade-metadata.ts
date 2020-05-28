@@ -1,6 +1,6 @@
 import { ComponentType, ReactElement, isValidElement, ComponentClass } from 'react';
 import { isPlainObject } from '@ali/lowcode-utils';
-import { isI18nData, SettingTarget, InitialItem, FilterItem, isJSSlot, isJSExpression } from '@ali/lowcode-types';
+import { isI18nData, SettingTarget, InitialItem, FilterItem, isJSSlot, ProjectSchema } from '@ali/lowcode-types';
 
 type Field = SettingTarget;
 
@@ -166,6 +166,8 @@ export interface OldPrototypeConfig {
   onResizeStart?: (e: MouseEvent, triggerDirection: string, dragment: Node) => void;
   onResize?: (e: MouseEvent, triggerDirection: string, dragment: Node, moveX: number, moveY: number) => void;
   onResizeEnd?: (e: MouseEvent, triggerDirection: string, dragment: Node) => void;
+  devMode?: string;
+  schema?: ProjectSchema;
 }
 
 export interface ISetterConfig {
@@ -585,6 +587,8 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     onResizeStart, // onResizeStart
     onResize, // onResize
     onResizeEnd, // onResizeEnd
+    devMode,
+    schema,
   } = oldConfig;
 
   const meta: any = {
@@ -592,7 +596,8 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     title,
     icon,
     docUrl,
-    devMode: 'procode',
+    devMode: devMode || 'procode',
+    schema: schema?.componentsTree[0],
   };
 
   if (category) {
