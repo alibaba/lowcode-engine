@@ -105,12 +105,13 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
         customCreateElement={(Component: any, props: any, children: any) => {
           const { __id, __desingMode, ...viewProps } = props;
           viewProps.componentId = __id;
-          viewProps._leaf = host.document.getNode(__id);
+          const leaf = host.document.getNode(__id);
+          viewProps._leaf = leaf;
 
           return createElement(
             getDeviceView(Component, device, designMode),
             viewProps,
-            children == null ? [] : Array.isArray(children) ? children : [children],
+            leaf?.isContainer() ? (children == null ? [] : Array.isArray(children) ? children : [children]) : null,
           );
         }}
         onCompGetRef={(schema: any, ref: ReactInstance | null) => {
