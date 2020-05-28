@@ -41,6 +41,10 @@ export class Trunk {
     return this.metaBundle.getFromMeta(name);
   }
 
+  getPrototypeById(id: string) {
+    return this.getPrototype(id);
+  }
+
   listByCategory() {
     const categories: any[] = [];
     const categoryMap: any = {};
