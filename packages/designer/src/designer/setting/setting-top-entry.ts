@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 import { CustomView, isCustomView, IEditor } from '@ali/lowcode-types';
 import { computed } from '@ali/lowcode-editor-core';
 import { SettingEntry } from './setting-entry';
-import { SettingField } from './setting-field';
+import { SettingField, isSettingField } from './setting-field';
 import { SettingPropEntry } from './setting-prop-entry';
 import { Node } from '../../document';
 import { ComponentMeta } from '../../component-meta';
@@ -124,7 +124,14 @@ export class SettingTopEntry implements SettingEntry {
    * 获取子项
    */
   get(propName: string | number): SettingPropEntry {
-    return new SettingPropEntry(this, propName);
+    const matched = this.items.find(item => {
+      if (isSettingField(item)) {
+        // TODO: thinkof use name or path?
+        return item.name === propName;
+      }
+      return false;
+    }) as SettingPropEntry;
+    return matched || (new SettingPropEntry(this, propName));
   }
 
   /**
