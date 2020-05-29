@@ -23,28 +23,6 @@ export interface IAppConfig {
   [key: string]: any;
 }
 
-// export interface IRecoreAppConfig {
-//   history?: HistoryMode;
-//   globalComponents?: IComponents;
-//   globalUtils?: IUtils;
-//   containerId?: string;
-// }
-
-// function transformConfig(config: IAppConfig | (() => IAppConfig)): IRecoreAppConfig {
-//   if (!config) {
-//     return {};
-//   }
-//   if (typeof config === 'function') {
-//     config = config();
-//   }
-//   return {
-//     history: config.history,
-//     globalComponents: config.components,
-//     globalUtils: config.utils,
-//     containerId: config.containerId,
-//   };
-// }
-
 export default function runApp() {
   const provider = app.getProvider();
   if (!provider) {

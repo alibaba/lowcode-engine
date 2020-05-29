@@ -182,7 +182,7 @@ export default class Provider implements IProvider {
   }
 
   getAppData(): any {
-    throw new Error('Method called "getPageData" not implemented.');
+    throw new Error('Method called "getAppData" not implemented.');
   }
 
   getPageData(pageId?: string): any {
