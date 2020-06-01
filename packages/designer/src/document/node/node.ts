@@ -157,6 +157,10 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       this.props.import(this.transformProps(props || {}), extras);
       this.setupAutoruns();
     }
+
+    if (this.componentMeta.isModal) {
+      this.getExtraProp('hidden', true)?.setValue(true);
+    }
   }
 
   private transformProps(props: any): any {
