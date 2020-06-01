@@ -88,8 +88,13 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     this.disposeItems();
   }
 
+  private hotValue: any;
+  
   // ======= compatibles for vision ======
   getHotValue(): any {
+    if (this.hotValue) {
+      return this.hotValue;
+    }
     // avoid View modify
     let v = cloneDeep(this.getMockOrValue());
     if (v == null) {
@@ -99,6 +104,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
   }
 
   setHotValue(data: any) {
+    this.hotValue = data;
     const v = this.transducer.toNative(data);
     if (this.isUseVariable()) {
       const ov = this.getValue();
