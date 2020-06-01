@@ -294,7 +294,7 @@ export class Skeleton {
     let { area } = parsedConfig;
     if (!area) {
       if (parsedConfig.type === 'Panel') {
-        area = 'leftFloatArea'
+        area = 'leftFloatArea';
       } else if (parsedConfig.type === 'Widget') {
         area = 'mainArea';
       } else {

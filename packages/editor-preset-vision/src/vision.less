@@ -43,7 +43,7 @@ html {
 }
 
 html.engine-blur #engine {
-  -webkit-filter: blur(4px);
+  filter: blur(4px);
 }
 
 .engine-main {
@@ -98,6 +98,11 @@ html.engine-blur #engine {
   }
 }
 
+.vs-icon .vs-icon-del, .vs-icon .vs-icon-entry {
+  width: 16px!important;
+  height: 16px!important;
+}
+
 .lc-left-float-pane {
   font-size: 14px;
 }
@@ -105,5 +110,15 @@ html.engine-blur #engine {
 html.engine-preview-mode  {
   .lc-left-area, .lc-right-area {
     display: none !important;
+  }
+}
+
+.ve-popups .ve-message {
+  right: 290px;
+
+  .ve-message-content {
+    display: flex;
+    align-items: center;
+    line-height: 22px;
   }
 }

@@ -49,6 +49,11 @@ export interface FilterItem {
   name: string;
   filter: (target: SettingTarget, currentValue: any) => any;
 }
+export interface AutorunItem {
+  name: string;
+  autorun: (target: SettingTarget) => any;
+}
+
 
 export interface Experimental {
   context?: { [contextInfoName: string]: any };
@@ -57,8 +62,8 @@ export interface Experimental {
   transducers?: any; // ? should support
   initials?: InitialItem[];
   filters?: FilterItem[];
+  autoruns?: AutorunItem[];
   callbacks?: Callbacks;
-  // TODO: thinkof function
   initialChildren?: NodeData[] | ((target: SettingTarget) => NodeData[]);
 
   // 样式 及 位置，handle上必须有明确的标识以便事件路由判断，或者主动设置事件独占模式
@@ -85,7 +90,7 @@ export interface Experimental {
   liveTextEditing?: LiveTextEditingConfig[];
 }
 
-// thinkof Array 
+// thinkof Array
 export interface LiveTextEditingConfig {
   propTarget: string;
   selector?: string;

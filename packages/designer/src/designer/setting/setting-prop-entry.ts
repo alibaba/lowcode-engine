@@ -294,6 +294,9 @@ export class SettingPropEntry implements SettingEntry {
   isUseVariable() {
     return isJSExpression(this.getValue());
   }
+  get useVariable() {
+    return this.isUseVariable();
+  }
   getMockOrValue() {
     const v = this.getValue();
     if (isJSExpression(v)) {

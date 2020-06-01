@@ -1,5 +1,5 @@
 import { ComponentType, ReactElement } from 'react';
-import { ComponentMetadata, FieldConfig, InitialItem, FilterItem } from '@ali/lowcode-types';
+import { ComponentMetadata, FieldConfig, InitialItem, FilterItem, AutorunItem } from '@ali/lowcode-types';
 import {
   ComponentMeta,
   addBuiltinComponentAction,
@@ -22,12 +22,14 @@ const GlobalPropsConfigure: Array<{
   position: string;
   initials?: InitialItem[];
   filters?: FilterItem[];
+  autoruns?: AutorunItem[];
   config: FieldConfig
 }> = [];
 const Overrides: {
   [componentName: string]: {
     initials?: InitialItem[];
     filters?: FilterItem[];
+    autoruns?: AutorunItem[];
     override: any;
   };
 } = {};
@@ -35,16 +37,21 @@ const Overrides: {
 function addGlobalPropsConfigure(config: OldGlobalPropConfig) {
   const initials: InitialItem[] = [];
   const filters: FilterItem[] = [];
+  const autoruns: AutorunItem[] = [];
   GlobalPropsConfigure.push({
     position: config.position || 'bottom',
     initials,
     filters,
+    autoruns,
     config: upgradePropConfig(config, {
       addInitial: (item) => {
         initials.push(item);
       },
       addFilter: (item) => {
         filters.push(item);
+      },
+      addAutorun: (item) => {
+        autoruns.push(item);
       },
     })
   });
@@ -60,24 +67,29 @@ function removeGlobalPropsConfigure(name: string) {
 function overridePropsConfigure(componentName: string, config: { [name: string]: OldPropConfig } | OldPropConfig[]) {
   const initials: InitialItem[] = [];
   const filters: FilterItem[] = [];
+  const autoruns: AutorunItem[] = [];
   const addInitial = (item: InitialItem) => {
     initials.push(item);
   };
   const addFilter = (item: FilterItem) => {
     filters.push(item);
   };
+  const addAutorun = (item: AutorunItem) => {
+    autoruns.push(item);
+  };
   let override: any;
   if (Array.isArray(config)) {
-    override = upgradeConfigure(config, { addInitial, addFilter });
+    override = upgradeConfigure(config, { addInitial, addFilter, addAutorun });
   } else {
     override = {};
     Object.keys(config).forEach(key => {
-      override[key] = upgradePropConfig(config[key], { addInitial, addFilter });
+      override[key] = upgradePropConfig(config[key], { addInitial, addFilter, addAutorun });
     });
   }
   Overrides[componentName] = {
     initials,
     filters,
+    autoruns,
     override,
   };
 }
@@ -107,6 +119,7 @@ registerMetadataTransducer(
       } else if (position === 'bottom') {
         bottom.push(item.config);
       }
+      // TODO: replace autoruns,initials,filters
     });
 
     const override = Overrides[componentName]?.override;
@@ -127,6 +140,7 @@ registerMetadataTransducer(
           }
         }
       }
+      // TODO: replace autoruns,initials,filters
     }
 
     return metadata;
@@ -202,7 +216,7 @@ class Prototype {
     return new Prototype(config);
   }
 
-  private id: string;
+  readonly isPrototype = true;
   private meta: ComponentMeta;
   readonly options: OldPrototypeConfig | ComponentMetadata;
 
@@ -215,11 +229,11 @@ class Prototype {
       const metadata = isNewSpec(input) ? input : upgradeMetadata(input);
       this.meta = designer.createComponentMeta(metadata);
     }
-    this.id = uniqueId('prototype');
+    (this.meta as any).prototype = this;
   }
 
   getId() {
-    return this.id;
+    return this.getComponentName();
   }
 
   getConfig(configName?: keyof (OldPrototypeConfig | ComponentMetadata)) {
@@ -314,6 +328,10 @@ class Prototype {
       designer.currentDocument?.simulator?.getComponent(this.getComponentName())
     );
   }
+}
+
+export function isPrototype(obj: any): obj is Prototype {
+  return obj && obj.isPrototype;
 }
 
 export default Prototype;

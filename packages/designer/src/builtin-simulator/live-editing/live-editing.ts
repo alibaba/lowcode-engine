@@ -140,9 +140,7 @@ export class LiveEditing {
 
     // TODO: upward testing for b/i/a html elements
 
-    // 非文本编辑
-    //  国际化数据，改变当前
-    //  JSExpression, 改变 mock 或 弹出绑定变量
+    
   }
 
   get editing() {

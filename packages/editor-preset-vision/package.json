@@ -19,7 +19,6 @@
     "@ali/lowcode-editor-skeleton": "^0.8.24",
     "@ali/lowcode-plugin-designer": "^0.9.18",
     "@ali/lowcode-plugin-outline-pane": "^0.8.24",
-    "@ali/ve-i18n-util": "^2.0.2",
     "@ali/ve-icons": "^4.1.9",
     "@ali/ve-less-variables": "2.0.3",
     "@ali/ve-popups": "^4.2.5",
