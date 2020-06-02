@@ -93,6 +93,7 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
             type: 'Panel',
             name: typeof title === 'string' ? title : `${name}:${index}`,
             content,
+            contentProps: props,
             props: {
               title,
               help: tip,
