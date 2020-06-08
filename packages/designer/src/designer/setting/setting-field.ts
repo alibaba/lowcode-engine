@@ -37,7 +37,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     this._expanded = value;
   }
 
-  constructor(readonly parent: SettingEntry, config: FieldConfig) {
+  constructor(readonly parent: SettingEntry, config: FieldConfig, settingFieldCollector?: (name: string | number, field: SettingField) => void) {
     super(parent, config.name, config.type);
 
     const { title, items, setter, extraProps, ...rest } = config;
@@ -52,7 +52,9 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
     // initial items
     if (this.type === 'group' && items) {
-      this.initItems(items);
+      this.initItems(items, settingFieldCollector);
+    } else if (settingFieldCollector && config.name) {
+      settingFieldCollector(config.name, this);
     }
 
     // compatiable old config
@@ -65,12 +67,12 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     return this._items;
   }
 
-  private initItems(items: Array<FieldConfig | CustomView>) {
+  private initItems(items: Array<FieldConfig | CustomView>, settingFieldCollector?: { (name: string | number, field: SettingField): void; (name: string, field: SettingField): void; }) {
     this._items = items.map((item) => {
       if (isCustomView(item)) {
         return item;
       }
-      return new SettingField(this, item);
+      return new SettingField(this, item, settingFieldCollector);
     });
   }
 

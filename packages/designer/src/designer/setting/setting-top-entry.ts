@@ -20,6 +20,7 @@ export class SettingTopEntry implements SettingEntry {
   private _items: Array<SettingField | CustomView> = [];
   private _componentMeta: ComponentMeta | null = null;
   private _isSame: boolean = true;
+  private _settingFieldMap: { [prop: string]: SettingField } = {};
   readonly path = [];
   readonly top = this;
   readonly parent = this;
@@ -95,13 +96,19 @@ export class SettingTopEntry implements SettingEntry {
   }
 
   private setupItems() {
+    console.log('set')
     if (this.componentMeta) {
+      const settingFieldMap: { [prop: string]: SettingField } = {};
+      const settingFieldCollector = (name: string | number, field: SettingField) => {
+        settingFieldMap[name] = field;
+      }
       this._items = this.componentMeta.configure.map((item) => {
         if (isCustomView(item)) {
           return item;
         }
-        return new SettingField(this, item as any);
+        return new SettingField(this, item as any, settingFieldCollector);
       });
+      this._settingFieldMap = settingFieldMap;
     }
   }
 
@@ -124,14 +131,7 @@ export class SettingTopEntry implements SettingEntry {
    * 获取子项
    */
   get(propName: string | number): SettingPropEntry {
-    const matched = this.items.find(item => {
-      if (isSettingField(item)) {
-        // TODO: thinkof use name or path?
-        return item.name === propName;
-      }
-      return false;
-    }) as SettingPropEntry;
-    return matched || (new SettingPropEntry(this, propName));
+    return this._settingFieldMap[propName] || (new SettingPropEntry(this, propName));
   }
 
   /**
