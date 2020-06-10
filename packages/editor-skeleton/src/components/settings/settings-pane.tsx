@@ -63,6 +63,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
 
     return createField(
       {
+        meta: field?.componentMeta?.npm || field?.componentMeta?.componentName || '',
         title: field.title,
         collapsed: !field.expanded,
         valueState: field.isRequired ? 10 : field.valueState,
@@ -121,6 +122,7 @@ class SettingGroupView extends Component<{ field: SettingField }> {
     return (
       <Field
         defaultDisplay="accordion"
+        meta={field?.componentMeta?.npm || field?.componentMeta?.componentName || ''}
         title={field.title}
         collapsed={!field.expanded}
         onExpandChange={(expandState) => {

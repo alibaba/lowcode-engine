@@ -30,7 +30,7 @@ class Contents extends Component<{ area: Area, itemClassName?: string }> {
       return index1 === index2 ? 0 : (index1 > index2 ? 1 : -1);
     }).forEach(item => {
       const content = (
-        <div className={itemClassName || ''}>
+        <div className={itemClassName || ''} id={`top-area-${item.name}`}>
           {item.content}
         </div>
       );
