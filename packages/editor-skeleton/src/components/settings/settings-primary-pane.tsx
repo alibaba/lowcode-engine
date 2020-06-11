@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import { Breadcrumb } from '@alifd/next';
-import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
+import { Tab, Breadcrumb } from '@alifd/next';
 import { Title, observer, Editor, obx } from '@ali/lowcode-editor-core';
 import { Node, isSettingField, SettingField } from '@ali/lowcode-designer';
 import { SettingsMain } from './main';
 import { SettingsPane } from './settings-pane';
 import { createIcon } from '@ali/lowcode-utils';
-import 'react-tabs/style/react-tabs.css';
 
 @observer
 export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
@@ -116,33 +114,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
 
     return (
       <div className="lc-settings-main">
-        <Tabs
-          selectedKey={activeKey}
-          onSelect={(tabKey) => {
-            this._activeKey = tabKey;
-          }}
-          className="lc-settings-tabs"
-        >
-          <TabList>
-            {
-              (items as SettingField[]).map((field) => {
-                return <Tab><Title title={field.title} /></Tab>
-              })
-            }
-          </TabList>
-
-          {
-            (items as SettingField[]).map((field) => {
-              return (
-                <TabPanel className="lc-settings-tabs-content">
-                  { this.renderBreadcrumb() }
-                  <SettingsPane target={field} key={field.id} />
-                </TabPanel>
-              )
-            })
-          }
-        </Tabs>
-        {/* <Tab
+        <Tab
           activeKey={activeKey}
           onChange={(tabKey) => {
             this._activeKey = tabKey;
@@ -151,10 +123,11 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
           animation={false}
           excessMode="dropdown"
           contentClassName="lc-settings-tabs-content"
+          disableKeyboard={true}
           extra={this.renderBreadcrumb()}
         >
           {tabs}
-        </Tab> */}
+        </Tab>
       </div>
     );
   }
