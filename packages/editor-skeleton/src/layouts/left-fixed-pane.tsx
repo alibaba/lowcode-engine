@@ -25,19 +25,17 @@ export default class LeftFixedPane extends Component<{ area: Area<PanelConfig, P
           'lc-area-visible': area.visible,
         })}
       >
-        {
-          !hideTitleBar && (
-            <Button
-              text
-              className="lc-pane-close"
-              onClick={() => {
-                area.setVisible(false);
-              }}
-            >
-              <Icon type="close" />
-            </Button>
-          )
-        }
+        {!hideTitleBar && (
+          <Button
+            text
+            className="lc-pane-close"
+            onClick={() => {
+              area.setVisible(false);
+            }}
+          >
+            <Icon type="close" />
+          </Button>
+        )}
         <Contents area={area} />
       </div>
     );
@@ -51,10 +49,6 @@ class Contents extends Component<{ area: Area<PanelConfig, Panel> }> {
   }
   render() {
     const { area } = this.props;
-    return (
-      <Fragment>
-        {area.container.items.map((panel) => panel.content)}
-      </Fragment>
-    );
+    return <Fragment>{area.container.items.map((panel) => panel.content)}</Fragment>;
   }
 }
