@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.19"></a>
+## [0.9.19](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.18...@ali/lowcode-designer@0.9.19) (2020-06-15)
+
+
+### Bug Fixes
+
+* force schema ([6d0a8ff](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6d0a8ff))
+* patch prototype ([f20bfaa](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f20bfaa))
+* try get settingfield ([56f242f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/56f242f))
+* 禁止组件拉到 Page 的直接子节点, 以及替换 tab 组件 ([d93a291](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d93a291))
+
+
+### Features
+
+* complete live-editing expr & i18n ([3ac08ba](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3ac08ba))
+* get SettingField instead of SettingPropEntry for compatibility ([2787a12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2787a12))
+* support prop.autorun ([c0a5235](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c0a5235))
+* ve事件埋点 ([700e5b0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/700e5b0))
+
+
+
+
 <a name="0.9.18"></a>
 ## [0.9.18](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.17...@ali/lowcode-designer@0.9.18) (2020-05-20)
 

@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-designer",
-  "version": "0.9.18",
+  "version": "0.9.19",
   "description": "alibaba lowcode editor designer plugin",
   "files": [
     "es",
@@ -20,8 +20,8 @@
   ],
   "author": "xiayang.xy",
   "dependencies": {
-    "@ali/lowcode-designer": "^0.9.18",
-    "@ali/lowcode-editor-core": "^0.8.15",
+    "@ali/lowcode-designer": "^0.9.19",
+    "@ali/lowcode-editor-core": "^0.8.16",
     "react": "^16.8.1",
     "react-dom": "^16.8.1"
   },

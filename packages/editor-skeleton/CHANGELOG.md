@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.25"></a>
+## [0.8.25](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.24...@ali/lowcode-editor-skeleton@0.8.25) (2020-06-15)
+
+
+### Bug Fixes
+
+* 修复bool类型对应的setter ([2df6230](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2df6230))
+* 禁止组件拉到 Page 的直接子节点, 以及替换 tab 组件 ([d93a291](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d93a291))
+* 调整保存成功弹出框位置 ([5198dae](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5198dae))
+
+
+### Features
+
+* add URL link for setter titles ([4678408](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/4678408))
+* panel增加自动埋点 ([afc7758](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/afc7758))
+* 自动埋点 ([fecf34d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fecf34d))
+
+
+
+
 <a name="0.8.24"></a>
 ## [0.8.24](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.23...@ali/lowcode-editor-skeleton@0.8.24) (2020-05-20)
 
