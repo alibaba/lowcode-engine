@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.26"></a>
+## [0.8.26](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.25...@ali/lowcode-plugin-outline-pane@0.8.26) (2020-06-16)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
+
 <a name="0.8.25"></a>
 ## [0.8.25](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.24...@ali/lowcode-plugin-outline-pane@0.8.25) (2020-06-15)
 
