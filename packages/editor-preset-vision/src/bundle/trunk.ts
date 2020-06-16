@@ -106,7 +106,11 @@ export class Trunk {
   }
 
   getSetter(type: string): any{
-    return getSetter(type);
+    const setter = getSetter(type);
+    if (setter?.component) {
+      return setter.component;
+    }
+    return setter;
   }
 }
 
