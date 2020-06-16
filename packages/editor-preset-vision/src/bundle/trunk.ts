@@ -1,6 +1,6 @@
 import { ReactElement, ComponentType } from 'react';
 import { EventEmitter } from 'events';
-import { registerSetter, RegisteredSetter } from '@ali/lowcode-editor-core';
+import { registerSetter, RegisteredSetter, getSetter } from '@ali/lowcode-editor-core';
 import Bundle from './bundle';
 import { CustomView } from '@ali/lowcode-types';
 
@@ -103,6 +103,14 @@ export class Trunk {
 
   setPackages() {
     console.warn('Trunk.setPackages is deprecated');
+  }
+
+  getSetter(type: string): any{
+    const setter = getSetter(type);
+    if (setter?.component) {
+      return setter.component;
+    }
+    return setter;
   }
 }
 
