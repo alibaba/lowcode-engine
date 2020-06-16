@@ -212,7 +212,9 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
     liveTextEditing,
   } = config;
 
-  const extraProps: any = {};
+  const extraProps: any = {
+    display: DISPLAY_TYPE.BLOCK,
+  };
   const newConfig: any = {
     type: type === 'group' ? 'group' : 'field',
     name,
