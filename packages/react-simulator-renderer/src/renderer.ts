@@ -10,7 +10,7 @@ import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
 import { isESModule, isElement, cursor, setNativeSelection } from '@ali/lowcode-utils';
 import { RootSchema, NpmInfo, ComponentSchema } from '@ali/lowcode-types';
 // just use types
-import { BuiltinSimulatorRenderer, NodeInstance, Component, TransformStage } from '@ali/lowcode-designer';
+import { BuiltinSimulatorRenderer, NodeInstance, Component } from '@ali/lowcode-designer';
 import Slot from './builtin-components/slot';
 import Leaf from './builtin-components/leaf';
 
@@ -216,7 +216,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
     };
     _schema.methods = {};
     _schema.lifeCycles = {};
-    
+
     const getElement = (componentsMap: any, schema: any): ReactElement => {
       const Com = componentsMap[schema.componentName];
       let children = null;
@@ -224,7 +224,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
         children = schema.children.map((item: any) => getElement(componentsMap, item));
       }
       const _leaf = host.document.designer.currentDocument?.createNode(schema);
-      const props = host.document.designer.transformProps(schema.props || {}, host.document.createNode(schema), TransformStage.Render);
+      const props = host.document.designer.transformProps(schema.props || {}, host.document.createNode(schema), 1 /*TransformStage.Render*/);
       return createElement(Com, {...props, _leaf}, children);
     }
 
