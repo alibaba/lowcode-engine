@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.20"></a>
+## [0.8.20](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.19...@ali/lowcode-editor-preset-vision@0.8.20) (2020-06-15)
+
+
+### Bug Fixes
+
+* compatiable old VE api ([45af1c5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/45af1c5))
+* i18n parser & setting ([dbdd9e4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/dbdd9e4))
+* patch prototype ([f20bfaa](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f20bfaa))
+* render children ([487f257](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/487f257))
+* style ([4694331](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/4694331))
+* 调整保存成功弹出框位置 ([5198dae](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5198dae))
+
+
+### Features
+
+* complete live-editing expr & i18n ([3ac08ba](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3ac08ba))
+* support prop.autorun ([c0a5235](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c0a5235))
+* ve事件埋点 ([700e5b0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/700e5b0))
+
+
+
+
 <a name="0.8.19"></a>
 ## [0.8.19](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.18...@ali/lowcode-editor-preset-vision@0.8.19) (2020-05-20)
 

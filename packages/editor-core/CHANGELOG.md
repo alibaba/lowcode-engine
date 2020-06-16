@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.16"></a>
+## [0.8.16](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-core@0.8.15...@ali/lowcode-editor-core@0.8.16) (2020-06-15)
+
+
+### Features
+
+* add Monitor ([f915d19](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f915d19))
+* add URL link for setter titles ([4678408](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/4678408))
+* ve事件埋点 ([700e5b0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/700e5b0))
+
+
+
+
 <a name="0.8.15"></a>
 ## [0.8.15](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-core@0.8.14...@ali/lowcode-editor-core@0.8.15) (2020-05-20)
 

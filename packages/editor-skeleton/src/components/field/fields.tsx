@@ -12,6 +12,7 @@ import InlineTip from './inlinetip';
 
 export interface FieldProps {
   className?: string;
+  meta?: { package: string; componentName: string } | string;
   title?: TitleContent | null;
   defaultDisplay?: 'accordion' | 'inline' | 'block';
   collapsed?: boolean;
@@ -115,15 +116,23 @@ export class Field extends Component<FieldProps> {
   }
 
   render() {
-    const { className, children, title, valueState, onClear, name: propName, tip } = this.props;
+    const { className, children, meta, title, valueState, onClear, name: propName, tip } = this.props;
     const { display, collapsed } = this.state;
     const isAccordion = display === 'accordion';
+    let hostName = '';
+    if (typeof meta === 'object') {
+      hostName = `${meta?.package || ''}-${meta.componentName || ''}`;
+    } else if (typeof meta === 'string') {
+      hostName = meta;
+    }
+    const id = `${hostName}-${propName || (title as any)['en-US'] || (title as any)['zh-CN']}`;
     const tipContent = this.getTipContent(propName!, tip);
     return (
       <div
         className={classNames(`lc-field lc-${display}-field`, className, {
           'lc-field-is-collapsed': isAccordion && collapsed,
         })}
+        id={id}
       >
         <div className="lc-field-head" onClick={isAccordion ? this.toggleExpand : undefined}>
           <div className="lc-field-title">

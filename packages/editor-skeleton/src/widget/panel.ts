@@ -57,9 +57,10 @@ export default class Panel implements IWidget {
       return createElement(PanelView, {
         panel: this,
         key: this.id,
+        area: this.parent?.name,
       });
     }
-    return createElement(TitledPanelView, { panel: this, key: this.id });
+    return createElement(TitledPanelView, { panel: this, key: this.id, area: this.parent?.name });
   }
 
   readonly title: TitleContent;

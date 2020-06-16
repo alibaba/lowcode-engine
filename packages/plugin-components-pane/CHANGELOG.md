@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.22"></a>
+## [0.8.22](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@0.8.21...@ali/lowcode-plugin-components-pane@0.8.22) (2020-06-15)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-components-pane
+
 <a name="0.8.21"></a>
 ## [0.8.21](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@0.8.20...@ali/lowcode-plugin-components-pane@0.8.21) (2020-05-20)
 

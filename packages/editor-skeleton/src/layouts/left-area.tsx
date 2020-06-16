@@ -24,11 +24,12 @@ class Contents extends Component<{ area: Area }> {
     const { area } = this.props;
     const top: any[] = [];
     const bottom: any[] = [];
-    area.container.items.forEach(item => {
+    area.container.items.forEach((item) => {
+      const content = <div id={`left-area-${item.name}`}>{item.content}</div>;
       if (item.align === 'bottom') {
-        bottom.push(item.content);
+        bottom.push(content);
       } else {
-        top.push(item.content);
+        top.push(content);
       }
     });
     return (

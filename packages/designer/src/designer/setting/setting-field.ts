@@ -37,7 +37,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     this._expanded = value;
   }
 
-  constructor(readonly parent: SettingEntry, config: FieldConfig) {
+  constructor(readonly parent: SettingEntry, config: FieldConfig, settingFieldCollector?: (name: string | number, field: SettingField) => void) {
     super(parent, config.name, config.type);
 
     const { title, items, setter, extraProps, ...rest } = config;
@@ -52,7 +52,9 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
     // initial items
     if (this.type === 'group' && items) {
-      this.initItems(items);
+      this.initItems(items, settingFieldCollector);
+    } else if (settingFieldCollector && config.name) {
+      settingFieldCollector(config.name, this);
     }
 
     // compatiable old config
@@ -65,12 +67,12 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     return this._items;
   }
 
-  private initItems(items: Array<FieldConfig | CustomView>) {
+  private initItems(items: Array<FieldConfig | CustomView>, settingFieldCollector?: { (name: string | number, field: SettingField): void; (name: string, field: SettingField): void; }) {
     this._items = items.map((item) => {
       if (isCustomView(item)) {
         return item;
       }
-      return new SettingField(this, item);
+      return new SettingField(this, item, settingFieldCollector);
     });
   }
 
@@ -89,8 +91,16 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
   }
 
   private hotValue: any;
-  
+
   // ======= compatibles for vision ======
+  setValue(val: any, isHotValue?: boolean, force?: boolean, extraOptions?: any) {
+    if (isHotValue) {
+      this.setHotValue(val, extraOptions);
+      return;
+    }
+    super.setValue(val, false, false, extraOptions);
+  }
+
   getHotValue(): any {
     if (this.hotValue) {
       return this.hotValue;
@@ -103,7 +113,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     return this.transducer.toHot(v);
   }
 
-  setHotValue(data: any) {
+  setHotValue(data: any, options?: any) {
     this.hotValue = data;
     const v = this.transducer.toNative(data);
     if (this.isUseVariable()) {
@@ -112,10 +122,16 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
         type: 'JSExpression',
         value: ov.value,
         mock: v,
-      });
+      }, false, false, options);
     } else {
-      this.setValue(v);
+      this.setValue(v, false, false, options);
     }
+
+    // dirty fix list setter
+    if (Array.isArray(data) && data[0] && data[0].__sid__) {
+      return;
+    }
+
     this.valueChange();
   }
 
