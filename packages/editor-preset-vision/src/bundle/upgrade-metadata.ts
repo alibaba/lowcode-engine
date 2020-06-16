@@ -2,6 +2,7 @@ import { ComponentType, ReactElement, isValidElement, ComponentClass } from 'rea
 import { isPlainObject } from '@ali/lowcode-utils';
 import { isI18nData, SettingTarget, InitialItem, FilterItem, isJSSlot, ProjectSchema, AutorunItem } from '@ali/lowcode-types';
 import { untracked } from '@ali/lowcode-editor-core';
+import { editor, designer } from '../editor';
 
 type Field = SettingTarget;
 
@@ -707,8 +708,9 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   if (initialChildren) {
     experimental.initialChildren =
       typeof initialChildren === 'function'
-        ? (field: Field) => {
-            return initialChildren.call(field, (field as any).props);
+        ? (node: any) => {
+            const props = designer.createSettingEntry(editor, [ node ]);
+            return initialChildren.call(node, props);
           }
         : initialChildren;
   }
