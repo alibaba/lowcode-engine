@@ -399,7 +399,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
         },
       },
     ];
-    if (allowTextInput !== false) {
+    if (allowTextInput) {
       setters.unshift('I18nSetter');
     }
     if (supportVariable) {
