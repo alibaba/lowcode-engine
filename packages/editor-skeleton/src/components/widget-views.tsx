@@ -1,7 +1,7 @@
 import { Component, ReactElement } from 'react';
 import { Icon } from '@alifd/next';
 import classNames from 'classnames';
-import { Title, observer, Tip } from '@ali/lowcode-editor-core';
+import { Title, observer, Tip, globalContext, Editor } from '@ali/lowcode-editor-core';
 import { DockProps } from '../types';
 import PanelDock from '../widget/panel-dock';
 import { composeTitle } from '../widget/utils';
@@ -108,12 +108,18 @@ export class TitledPanelView extends Component<{ panel: Panel; area?: string }> 
     if (!panel.inited) {
       return null;
     }
+    const editor = globalContext.get(Editor);
+    const panelName = area ? `${area}-${panel.name}` : panel.name;
+    editor.emit('skeleton.panel.toggle', {
+      name: panelName || '',
+      status: panel.visible ? 'show' : 'hide',
+    });
     return (
       <div
         className={classNames('lc-titled-panel', {
           hidden: !panel.visible,
         })}
-        id={`${area || ''}-${panel.name}`}
+        id={panelName}
       >
         <PanelTitle panel={panel} />
         <div className="lc-panel-body">{panel.body}</div>
@@ -155,12 +161,18 @@ export class PanelView extends Component<{ panel: Panel; area?: string }> {
     if (!panel.inited) {
       return null;
     }
+    const editor = globalContext.get(Editor);
+    const panelName = area ? `${area}-${panel.name}` : panel.name;
+    editor.emit('skeleton.panel.toggle', {
+      name: panelName || '',
+      status: panel.visible ? 'show' : 'hide',
+    });
     return (
       <div
         className={classNames('lc-panel', {
           hidden: !panel.visible,
         })}
-        id={`${area || ''}-${panel.name}`}
+        id={panelName}
       >
         {panel.body}
       </div>

@@ -1,4 +1,4 @@
-import { obx } from '@ali/lowcode-editor-core';
+import { obx, globalContext, Editor } from '@ali/lowcode-editor-core';
 import { LiveTextEditingConfig } from '@ali/lowcode-types';
 import { Node, Prop } from '../../document';
 
@@ -41,6 +41,14 @@ export class LiveEditing {
     const { node, event, rootElement } = target;
     const targetElement = event.target as HTMLElement;
     const liveTextEditing = node.componentMeta.liveTextEditing;
+
+    const editor = globalContext.get(Editor);
+    const npm = node?.componentMeta?.npm;
+    const targetInfo =
+      [npm?.package, npm?.componentName].filter((item) => !!item).join('-') || node?.componentMeta?.componentName || '';
+    editor?.emit('designer.builinSimulator.LiveEditing', {
+      target: targetInfo,
+    });
 
     let setterPropElement = getSetterPropElement(targetElement, rootElement);
     let propTarget = setterPropElement?.dataset.setterProp;

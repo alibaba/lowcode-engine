@@ -1,7 +1,7 @@
 import { Overlay } from '@alifd/next';
 import React from 'react';
+import { Title, globalContext, Editor } from '@ali/lowcode-editor-core';
 import './index.less';
-import { Title } from '@ali/lowcode-editor-core';
 
 import { Node, ParentalNode } from '@ali/lowcode-designer';
 
@@ -46,6 +46,16 @@ export default class InstanceNodeSelector extends React.Component<IProps, IState
   onSelect = (node: Node) => () => {
     if (node && typeof node.select === 'function') {
       node.select();
+      const editor = globalContext.get(Editor);
+      const npm = node?.componentMeta?.npm;
+      const selected =
+        [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
+        node?.componentMeta?.componentName ||
+        '';
+      editor.emit('designer.border.action', {
+        name: 'select-node',
+        selected,
+      });
     }
   };
   onMouseOver = (node: Node) => (_: any, flag = true) => {

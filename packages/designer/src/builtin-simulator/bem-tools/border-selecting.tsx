@@ -9,7 +9,7 @@ import {
   ComponentType,
 } from 'react';
 import classNames from 'classnames';
-import { observer, computed, Tip } from '@ali/lowcode-editor-core';
+import { observer, computed, Tip, globalContext, Editor } from '@ali/lowcode-editor-core';
 import { createIcon, isReactComponent } from '@ali/lowcode-utils';
 import { ActionContentObject, isActionContentObject } from '@ali/lowcode-types';
 import { BuiltinSimulatorHost } from '../host';
@@ -124,6 +124,16 @@ function createAction(content: ReactNode | ComponentType<any> | ActionContentObj
         className="lc-borders-action"
         onClick={() => {
           action && action(node);
+          const editor = globalContext.get(Editor);
+          const npm = node?.componentMeta?.npm;
+          const target =
+            [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
+            node?.componentMeta?.componentName ||
+            '';
+          editor?.emit('designer.borders.action', {
+            name: key,
+            target,
+          });
         }}
       >
         {icon && createIcon(icon)}

@@ -333,14 +333,17 @@ function fireCallback(callback: HotkeyCallback, e: KeyboardEvent, combo?: string
     e.stopPropagation();
   }
   const editor = globalContext.get(Editor);
-  if (!editor) {
-    return;
-  }
-  editor.emit('hotkey.callback.call', {
+  const designer = editor.get('designer');
+  const node = designer?.currentSelection?.getNodes()?.[0];
+  const npm = node?.componentMeta?.npm;
+  const selected =
+    [npm?.package, npm?.componentName].filter((item) => !!item).join('-') || node?.componentMeta?.componentName || '';
+  editor?.emit('hotkey.callback.call', {
     callback,
     e,
     combo,
     sequence,
+    selected,
   });
 }
 

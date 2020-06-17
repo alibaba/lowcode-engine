@@ -67,10 +67,19 @@ export class Designer {
 
     this.project = new Project(this, props.defaultSchema);
 
+    let startTime: any;
+    let src = '';
     this.dragon.onDragstart((e) => {
+      startTime = Date.now() / 1000;
       this.detecting.enable = false;
       const { dragObject } = e;
       if (isDragNodeObject(dragObject)) {
+        const node = dragObject.nodes[0]?.parent;
+        const npm = node?.componentMeta?.npm;
+        src =
+          [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
+          node?.componentMeta?.componentName ||
+          '';
         if (dragObject.nodes.length === 1) {
           if (dragObject.nodes[0].parent) {
             // ensure current selecting
@@ -111,6 +120,32 @@ export class Designer {
           if (nodes) {
             loc.document.selection.selectAll(nodes.map((o) => o.id));
             setTimeout(() => this.activeTracker.track(nodes![0]), 10);
+            const endTime: any = Date.now() / 1000;
+            const parent = nodes[0]?.parent;
+            const npm = parent?.componentMeta?.npm;
+            const dest =
+              [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
+              parent?.componentMeta?.componentName ||
+              '';
+            this.editor?.emit('designer.drag', {
+              time: (endTime - startTime).toFixed(2),
+              target: nodes
+                ?.map((n) => {
+                  if (!n) {
+                    return;
+                  }
+                  const npm = n?.componentMeta?.npm;
+                  return (
+                    [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
+                    n?.componentMeta?.componentName
+                  );
+                })
+                .join('&'),
+              align: loc?.detail?.near?.align || '',
+              pos: loc?.detail?.near?.pos || '',
+              src,
+              dest,
+            });
           }
         }
       }

@@ -1,4 +1,4 @@
-import { obx, autorun, computed, getPublicPath, hotkey, focusTracker } from '@ali/lowcode-editor-core';
+import { obx, autorun, computed, getPublicPath, hotkey, focusTracker, globalContext, Editor } from '@ali/lowcode-editor-core';
 import { ISimulatorHost, Component, NodeInstance, ComponentInstance } from '../simulator';
 import Viewport from './viewport';
 import { createSimulator } from './create-simulator';
@@ -227,6 +227,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.setupDragAndClick();
     this.setupDetecting();
     this.setupLiveEditing();
+    this.setupContextMenu();
   }
 
   setupDragAndClick() {
@@ -265,6 +266,15 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
               selection.remove(id);
             } else {
               selection.select(id);
+              const editor = globalContext.get(Editor);
+              const npm = node?.componentMeta?.npm;
+              const selected =
+                [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
+                node?.componentMeta?.componentName ||
+                '';
+              editor.emit('designer.builtinSimulator.select', {
+                selected,
+              });
             }
           }
         };
@@ -408,6 +418,30 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         this.setupDetecting();
       }
     }
+  }
+
+  setupContextMenu() {
+    const doc = this.contentDocument!;
+    doc.addEventListener('contextmenu', (e: MouseEvent) => {
+      const targetElement = e.target as HTMLElement;
+      const nodeInst = this.getNodeInstanceFromElement(targetElement);
+      if (!nodeInst) {
+        return;
+      }
+      const node = nodeInst.node || this.document.rootNode;
+      if (!node) {
+        return;
+      }
+      const editor = globalContext.get(Editor);
+      const npm = node?.componentMeta?.npm;
+      const target =
+        [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
+        node?.componentMeta?.componentName ||
+        '';
+      editor?.emit('desiger.builtinSimulator.contextmenu', {
+        target: target,
+      });
+    });
   }
 
   /**

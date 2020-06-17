@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Tab, Breadcrumb } from '@alifd/next';
-import { Title, observer, Editor, obx } from '@ali/lowcode-editor-core';
-import { Node, isSettingField, SettingField } from '@ali/lowcode-designer';
+import { Title, observer, Editor, obx, globalContext } from '@ali/lowcode-editor-core';
+import { Node, isSettingField, SettingField, Designer } from '@ali/lowcode-designer';
 import { SettingsMain } from './main';
 import { SettingsPane } from './settings-pane';
 import { createIcon } from '@ali/lowcode-utils';
@@ -35,6 +35,9 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
       );
     }
 
+    const editor = globalContext.get(Editor);
+    const designer = editor.get(Designer);
+    const current = designer?.currentSelection?.getNodes()?.[0];
     let node: Node | null = settings.first;
     const items = [];
     let l = 3;
@@ -43,10 +46,24 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
         l === 2
           ? {}
           : {
-              onMouseOver: hoverNode.bind(null, node, true),
-              onMouseOut: hoverNode.bind(null, node, false),
-              onClick: selectNode.bind(null, node),
-            };
+            onMouseOver: hoverNode.bind(null, node, true),
+            onMouseOut: hoverNode.bind(null, node, false),
+            onClick: () => {
+              selectNode.call(null, node);
+              const getName = (node) => {
+                const npm = node?.componentMeta?.npm;
+                return [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
+                  node?.componentMeta?.componentName ||
+                  '';
+              };
+              const selected = getName(current);
+              const target = getName(node);
+              editor.emit('skeleton.settingsPane.Breadcrumb', {
+                selected,
+                target,
+              });
+            },
+          };
       items.unshift(
         <Breadcrumb.Item {...props} key={node.id}>
           <Title title={node.title} />
