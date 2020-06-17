@@ -1,4 +1,4 @@
-import { CodeGeneratorError, IResultDir } from '@/types';
+import { CodeGeneratorError, IResultDir } from '../../types';
 
 export type PublisherFactory<T, U> = (configuration?: Partial<T>) => U;
 

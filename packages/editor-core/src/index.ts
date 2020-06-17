@@ -1,7 +1,6 @@
 import Editor from './editor';
 
 import * as utils from './utils';
-export * from './definitions';
 
 export { default as PluginFactory } from './pluginFactory';
 export { default as EditorContext } from './context';

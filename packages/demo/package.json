@@ -18,6 +18,7 @@
     "@ali/lowcode-plugin-event-bind-dialog": "^0.8.0",
     "@ali/lowcode-plugin-outline-pane": "^0.8.7",
     "@ali/lowcode-plugin-sample-logo": "^0.8.0",
+    "@ali/lowcode-plugin-source-editor":"^0.8.2",
     "@ali/lowcode-plugin-sample-preview": "^0.8.6",
     "@ali/lowcode-plugin-settings-pane": "^0.8.8",
     "@ali/lowcode-plugin-undo-redo": "^0.8.0",
@@ -41,6 +42,7 @@
     "build-plugin-fusion": "^0.1.0",
     "build-plugin-moment-locales": "^0.1.0",
     "build-plugin-react-app": "^1.1.2",
+    "monaco-editor-webpack-plugin":"^1.9.0",
     "tsconfig-paths-webpack-plugin": "^3.2.0"
   }
 }

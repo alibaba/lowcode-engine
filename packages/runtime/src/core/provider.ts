@@ -1,4 +1,5 @@
-import { IAppConfig, IUtils, IComponents, HistoryMode } from '../run';
+import { IAppConfig, IUtils, IComponents, HistoryMode } from './runApp';
+import EventEmitter from '@ali/offline-events';
 
 interface IConstants {
   [key: string]: any;
@@ -27,7 +28,7 @@ interface IHistoryConfig {
   basement?: string;
 }
 
-interface IAppData {
+export interface IAppData {
   history?: HistoryMode;
   layout?: ILayoutConfig;
   routes?: IRouterConfig;
@@ -36,6 +37,7 @@ interface IAppData {
   componentsMap?: IComponentMap[];
   utils?: IUtils;
   constants?: IConstants;
+  i18n?: I18n;
 }
 
 export interface ComponentProps {
@@ -92,15 +94,26 @@ export interface ComponentModel {
   loopArgs?: string[];
 }
 
-// export interface IProvider {
-//   init?(): void;
-//   getAppData?(appkey: string): Promise<IAppData | undefined>;
-//   getPageData?(pageId: string): Promise<ComponentModel | undefined>;
-//   getLazyComponent?(pageId: string, props: any): any;
-//   createApp?(): void;
-// }
+export interface I18n {
+  'zh-CN': { [key: string]: string };
+  'en-US': { [key: string]: string };
+}
 
-export default class Provider {
+type Locale = 'zh-CN' | 'en-US';
+
+export interface IProvider {
+  init(): void;
+  ready(): void;
+  onReady(cb: any): void;
+  async(): Promise<IAppConfig>;
+  getAppData(): Promise<IAppData | undefined>;
+  getPageData(pageId: string): Promise<ComponentModel | undefined>;
+  getLazyComponent(pageId: string, props: any): any;
+  createApp(): void;
+  runApp(App: any, config: IAppConfig): void;
+}
+
+export default class Provider implements IProvider {
   private components: IComponents = {};
   private utils: IUtils = {};
   private constants: IConstants = {};
@@ -109,7 +122,11 @@ export default class Provider {
   private componentsMap: IComponentMap[] = [];
   private history: HistoryMode = 'hash';
   private containerId = '';
+  private i18n: I18n | null = null;
+  private homePage = '';
   private lazyElementsMap: { [key: string]: any } = {};
+  private sectionalRender = false;
+  private emitter: EventEmitter = new EventEmitter();
 
   constructor() {
     this.init();
@@ -118,15 +135,16 @@ export default class Provider {
   async(): Promise<IAppConfig> {
     return new Promise(async (resolve, reject) => {
       try {
-        const appData = await this.getAppData();
+        const appData: IAppData = await this.getAppData();
         if (!appData) {
           return;
         }
-        const { history, layout, routes, containerId, components, componentsMap, utils, constants } = appData;
+        const { history, layout, routes, containerId, components, componentsMap, utils, constants, i18n } = appData;
         this.setHistory(history);
         this.setLayoutConfig(layout);
         this.setRouterConfig(routes);
         this.setContainerId(containerId);
+        this.setI18n(i18n);
         this.registerComponents(components);
         this.registerComponentsMap(componentsMap);
         this.registerUtils(utils);
@@ -143,8 +161,24 @@ export default class Provider {
     });
   }
 
-  async init() {
+  init() {
     console.log('init');
+    // 默认 ready，当重载了init时需手动触发 this.ready()
+    this.ready();
+  }
+
+  ready(params?: any) {
+    if (params && typeof params === 'function') {
+      params = params();
+    }
+    this.emitter.emit('ready', params || '');
+  }
+
+  onReady(cb: (params?: any) => void) {
+    if (!cb || typeof cb !== 'function') {
+      return;
+    }
+    this.emitter.on('ready', cb);
   }
 
   getAppData(): any {
@@ -162,6 +196,10 @@ export default class Provider {
   // 定制构造根组件的逻辑，如切换路由机制
   createApp() {
     throw new Error('Method called "createApp" not implemented.');
+  }
+
+  runApp(App: any, config: IAppConfig) {
+    throw new Error('Method called "runApp" not implemented.');
   }
 
   registerComponents(components: IComponents | undefined) {
@@ -220,11 +258,28 @@ export default class Provider {
     this.containerId = id;
   }
 
+  setI18n(i18n: I18n | undefined) {
+    if (!i18n) {
+      return;
+    }
+    this.i18n = i18n;
+  }
+
   setlazyElement(pageId: string, cache: any) {
     if (!pageId || !cache) {
       return;
     }
     this.lazyElementsMap[pageId] = cache;
+  }
+
+  setHomePage(pageId: string) {
+    if (pageId) {
+      this.homePage = pageId;
+    }
+  }
+
+  setSectionalRender() {
+    this.sectionalRender = true;
   }
 
   getComponents() {
@@ -281,10 +336,25 @@ export default class Provider {
     return this.containerId;
   }
 
+  getI18n(locale?: Locale) {
+    if (!this.i18n) {
+      return;
+    }
+    return locale ? this.i18n[locale] : this.i18n;
+  }
+
+  getHomePage() {
+    return this.homePage;
+  }
+
   getlazyElement(pageId: string) {
     if (!pageId) {
       return;
     }
     return this.lazyElementsMap[pageId];
+  }
+
+  isSectionalRender() {
+    return this.sectionalRender;
   }
 }

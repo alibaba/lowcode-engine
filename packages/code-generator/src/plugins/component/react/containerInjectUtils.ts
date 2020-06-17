@@ -5,7 +5,6 @@ import {
   ChunkType,
   FileType,
   ICodeStruct,
-  IContainerInfo,
 } from '../../../types';
 
 const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {

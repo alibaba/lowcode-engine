@@ -1,6 +1,6 @@
-import { ReactType } from 'react';
-import Container from './container';
-import run from './run';
+import Container, { ILayoutOptions } from './container';
+import { IProvider } from './provider';
+import runApp from './runApp';
 
 class App {
   private container: Container;
@@ -10,18 +10,18 @@ class App {
   }
 
   run() {
-    run();
+    runApp();
   }
 
-  registerRenderer(renderer: ReactType): any {
+  registerRenderer(renderer: any): any {
     this.container.registerRenderer(renderer);
   }
 
-  registerLayout(componentName: string, Layout: ReactType): any {
-    this.container.registerLayout(componentName, Layout);
+  registerLayout(Layout: any, options: ILayoutOptions): any {
+    this.container.registerLayout(Layout, options);
   }
 
-  registerLoading(component: ReactType) {
+  registerLoading(component: any) {
     this.container.registerLoading(component);
   }
 
@@ -33,15 +33,15 @@ class App {
     return this.container.getLayout(componentName);
   }
 
-  getRenderer(): ReactType | null {
+  getRenderer(): any | null {
     return this.container.getRenderer();
   }
 
-  getLoading(): ReactType | null {
+  getLoading(): any | null {
     return this.container.getLoading();
   }
 
-  getProvider() {
+  getProvider(): IProvider {
     return this.container.getProvider();
   }
 }

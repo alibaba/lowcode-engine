@@ -83,17 +83,18 @@ module.exports =  {
         pluginProps: {
         }
       },
+
       {
-        pluginKey: 'outlinePane',
+        pluginKey: 'soueceEditor',
         type: 'PanelIcon',
         props: {
           align: 'top',
           icon: 'shuxingkongjian',
-          title: '大纲树'
+          title: '源码面板'
         },
         config: {
-          package: '@ali/lowcode-plugin-outline-pane',
-          version: '^0.8.0'
+          package: '@ali/lowcode-plugin-source-editor',
+          version: '^0.8.2'
         },
         pluginProps: {}
       },
@@ -137,6 +138,7 @@ module.exports =  {
           version: '^0.8.0'
         }
       }
+
     ]
   },
   hooks: [],

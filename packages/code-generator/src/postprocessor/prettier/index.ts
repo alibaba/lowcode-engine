@@ -1,6 +1,6 @@
 import prettier from 'prettier';
 
-import { PostProcessor } from '@/types';
+import { PostProcessor } from '../../types';
 
 const PARSERS = ['css', 'scss', 'less', 'json', 'html', 'vue'];
 

@@ -68,7 +68,9 @@ export default {
         "align": "top",
         "icon": "zujianku",
         "title": "组件库",
-        "floatable": true
+        "panelProps": {
+          "floatable": true
+        }
       },
       "config": {
         "package": "@ali/lowcode-plugin-components-pane",
@@ -88,7 +90,30 @@ export default {
         "version": "^0.8.0"
       },
       "pluginProps": {}
-    }, {
+    },
+
+    {
+      "pluginKey": "sourceEditor",
+      "type": "PanelIcon",
+      "props": {
+        "align": "top",
+        "icon": "zujianku",
+        "title": "组件库",
+        "panelProps":{
+          "floatable": true,
+          "defaultWidth":500
+
+        },
+
+      },
+      "config": {
+        "package": "@ali/lowcode-plugin-source-editor",
+        "version": "^0.8.0"
+      },
+      "pluginProps": {}
+    },
+
+    {
       "pluginKey": "zhEn",
       "type": "Custom",
       "props": {
@@ -122,7 +147,15 @@ export default {
         "package": "@ali/lowcode-plugin-event-bind-dialog",
         "version": "^0.8.0"
       }
-    }]
+    },
+    {
+      "pluginKey": "variableBindDialog",
+      "config": {
+        "package": "@ali/lowcode-plugin-variable-bind-dialog",
+        "version": "^0.8.0"
+      }
+    }
+    ]
   },
   "hooks": [],
   "shortCuts": [],

@@ -1054,6 +1054,14 @@
           "title": "最多显示多少个 tag",
           "setter": "ExpressionSetter"
         }, {
+          "name": "color",
+          "title": "颜色选择",
+          "setter": "ColorSetter"
+        }, {
+          "name": "json",
+          "title": "JSON设置",
+          "setter": "JsonSetter"
+        }, {
           "name": "MixinSetter",
           "placeholder": "混合",
           "setter": {
@@ -1081,11 +1089,14 @@
                   }, {
                     "label": "左",
                     "value": "l"
-                  }]
+                  }],
+                  "defaultValue": "l"
                 }
               }, {
                 "name": "NumberSetter",
-                "props": {}
+                "props": {
+                  "defaultValue": 5
+                }
               }, {
                 "name": "BoolSetter",
                 "props": {}

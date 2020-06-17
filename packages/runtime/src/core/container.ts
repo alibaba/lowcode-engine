@@ -1,24 +1,32 @@
-import { ReactType } from 'react';
 import Provider from './provider';
 
+export interface ILayoutOptions {
+  componentName?: string;
+  props?: any;
+}
+
 export default class Container {
-  private renderer: ReactType | null = null;
-  private layouts: { [key: string]: ReactType } = {};
-  private loading: ReactType | null = null;
+  private renderer: any = null;
+  private layouts: { [key: string]: { content: any; props: any } } = {};
+  private loading: any = null;
   private provider: any;
 
-  registerRenderer(renderer: ReactType): any {
+  registerRenderer(renderer: any): any {
     this.renderer = renderer;
   }
 
-  registerLayout(componentName: string, Layout: ReactType): any {
+  registerLayout(Layout: any, options: ILayoutOptions): any {
+    if (!options) {
+      return;
+    }
+    const { componentName, props = {} } = options;
     if (!componentName || !Layout) {
       return;
     }
-    this.layouts[componentName] = Layout;
+    this.layouts[componentName] = { content: Layout, props };
   }
 
-  registerLoading(component: ReactType) {
+  registerLoading(component: any) {
     if (!component) {
       return;
     }
@@ -41,11 +49,11 @@ export default class Container {
     return this.layouts[componentName];
   }
 
-  getRenderer(): ReactType | null {
+  getRenderer(): any {
     return this.renderer;
   }
 
-  getLoading(): ReactType | null {
+  getLoading(): any {
     return this.loading;
   }
 

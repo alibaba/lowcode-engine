@@ -77,7 +77,7 @@ export default class Editor extends EventEmitter {
     return instance;
   };
 
-  public config: EditorConfig;
+  config: EditorConfig;
 
   public components: PluginClassSet;
 
