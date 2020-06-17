@@ -102,6 +102,32 @@ function upgradePropsReducer(props: any) {
 // 升级 Props
 designer.addPropsReducer(upgradePropsReducer, TransformStage.Init);
 
+function compatiableReducer(props: any) {
+  if (!isPlainObject(props)) {
+    return props;
+  }
+  const newProps: any = {};
+  Object.entries<any>(props).forEach(([key, val]) => {
+    if (isJSSlot(val)) {
+      val.value
+      val = {
+        type: 'JSBlock',
+        value: {
+          componentName: 'Slot',
+          children: val.value,
+          props: {
+            slotTitle: val.title,
+          },
+        },
+      }
+    }
+    newProps[key] = val;
+  });
+  return newProps;
+}
+// Dirty fix: will remove this reducer
+designer.addPropsReducer(compatiableReducer, TransformStage.Save);
+
 // 设计器组件样式处理
 function stylePropsReducer(props: any, node: any) {
   if (props && typeof props === 'object' && props.__style__) {

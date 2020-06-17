@@ -96,7 +96,6 @@ export class SettingTopEntry implements SettingEntry {
   }
 
   private setupItems() {
-    console.log('set')
     if (this.componentMeta) {
       const settingFieldMap: { [prop: string]: SettingField } = {};
       const settingFieldCollector = (name: string | number, field: SettingField) => {

@@ -2,6 +2,7 @@ import { ComponentType, ReactElement, isValidElement, ComponentClass } from 'rea
 import { isPlainObject } from '@ali/lowcode-utils';
 import { isI18nData, SettingTarget, InitialItem, FilterItem, isJSSlot, ProjectSchema, AutorunItem } from '@ali/lowcode-types';
 import { untracked } from '@ali/lowcode-editor-core';
+import { editor, designer } from '../editor';
 
 type Field = SettingTarget;
 
@@ -212,7 +213,9 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
     liveTextEditing,
   } = config;
 
-  const extraProps: any = {};
+  const extraProps: any = {
+    display: DISPLAY_TYPE.BLOCK,
+  };
   const newConfig: any = {
     type: type === 'group' ? 'group' : 'field',
     name,
@@ -396,7 +399,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
         },
       },
     ];
-    if (allowTextInput !== false) {
+    if (allowTextInput) {
       setters.unshift('I18nSetter');
     }
     if (supportVariable) {
@@ -707,8 +710,9 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   if (initialChildren) {
     experimental.initialChildren =
       typeof initialChildren === 'function'
-        ? (field: Field) => {
-            return initialChildren.call(field, (field as any).props);
+        ? (node: any) => {
+            const props = designer.createSettingEntry(editor, [ node ]);
+            return initialChildren.call(node, props);
           }
         : initialChildren;
   }
