@@ -129,7 +129,7 @@ export class Designer {
               '';
             this.editor?.emit('designer.drag', {
               time: (endTime - startTime).toFixed(2),
-              target: nodes
+              selected: nodes
                 ?.map((n) => {
                   if (!n) {
                     return;

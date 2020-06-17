@@ -272,7 +272,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
                 [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
                 node?.componentMeta?.componentName ||
                 '';
-              editor.emit('designer.builtinSimulator.select', {
+              editor?.emit('designer.builtinSimulator.select', {
                 selected,
               });
             }
@@ -434,12 +434,12 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       }
       const editor = globalContext.get(Editor);
       const npm = node?.componentMeta?.npm;
-      const target =
+      const selected =
         [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
         node?.componentMeta?.componentName ||
         '';
       editor?.emit('desiger.builtinSimulator.contextmenu', {
-        target: target,
+        selected,
       });
     });
   }

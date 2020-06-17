@@ -130,7 +130,7 @@ function createAction(content: ReactNode | ComponentType<any> | ActionContentObj
             [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
             node?.componentMeta?.componentName ||
             '';
-          editor?.emit('designer.borders.action', {
+          editor?.emit('designer.border.action', {
             name: key,
             target,
           });

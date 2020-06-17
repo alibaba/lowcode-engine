@@ -110,7 +110,7 @@ export class TitledPanelView extends Component<{ panel: Panel; area?: string }> 
     }
     const editor = globalContext.get(Editor);
     const panelName = area ? `${area}-${panel.name}` : panel.name;
-    editor.emit('skeleton.panel.toggle', {
+    editor?.emit('skeleton.panel.toggle', {
       name: panelName || '',
       status: panel.visible ? 'show' : 'hide',
     });
@@ -163,7 +163,7 @@ export class PanelView extends Component<{ panel: Panel; area?: string }> {
     }
     const editor = globalContext.get(Editor);
     const panelName = area ? `${area}-${panel.name}` : panel.name;
-    editor.emit('skeleton.panel.toggle', {
+    editor?.emit('skeleton.panel.toggle', {
       name: panelName || '',
       status: panel.visible ? 'show' : 'hide',
     });

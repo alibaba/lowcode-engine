@@ -52,8 +52,8 @@ export default class InstanceNodeSelector extends React.Component<IProps, IState
         [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
         node?.componentMeta?.componentName ||
         '';
-      editor.emit('designer.border.action', {
-        name: 'select-node',
+      editor?.emit('designer.border.action', {
+        name: 'select',
         selected,
       });
     }

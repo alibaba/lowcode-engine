@@ -44,10 +44,10 @@ export class LiveEditing {
 
     const editor = globalContext.get(Editor);
     const npm = node?.componentMeta?.npm;
-    const targetInfo =
+    const selected =
       [npm?.package, npm?.componentName].filter((item) => !!item).join('-') || node?.componentMeta?.componentName || '';
     editor?.emit('designer.builinSimulator.LiveEditing', {
-      target: targetInfo,
+      selected,
     });
 
     let setterPropElement = getSetterPropElement(targetElement, rootElement);

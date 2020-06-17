@@ -58,7 +58,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
               };
               const selected = getName(current);
               const target = getName(node);
-              editor.emit('skeleton.settingsPane.Breadcrumb', {
+              editor?.emit('skeleton.settingsPane.Breadcrumb', {
                 selected,
                 target,
               });

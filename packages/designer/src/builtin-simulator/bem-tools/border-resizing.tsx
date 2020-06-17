@@ -184,7 +184,7 @@ export class BoxResizingInstance extends Component<{
         [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
         node?.componentMeta?.componentName ||
         '';
-      editor.emit('designer.border.resize', {
+      editor?.emit('designer.border.resize', {
         selected,
         layout: node?.parent?.getPropValue('layout') || '',
       });
