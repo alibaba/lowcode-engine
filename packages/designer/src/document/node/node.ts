@@ -175,9 +175,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     if (!autoruns || autoruns.length < 1) {
       return;
     }
-    this.autoruns = autoruns.map(item => {
+    this.autoruns = autoruns.map((item) => {
       return autorun(() => {
-        item.autorun(this.props.get(item.name, true) as any)
+        item.autorun(this.props.get(item.name, true) as any);
       }, true);
     });
   }
@@ -384,9 +384,33 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     // todo
   }
 
-  replaceWith(schema: Schema, migrate = true) {
+  replaceWith(schema: Schema, migrate = false) {
     // reuse the same id? or replaceSelection
-    //
+    schema = Object.assign({}, migrate ? this.export() : {}, schema);
+    return this.parent?.replaceChild(this, schema);
+  }
+
+  /**
+   * 替换子节点
+   *
+   * @param {Node} node
+   * @param {object} data
+   */
+  replaceChild(node: Node, data: any) {
+    if (this.children?.has(node)) {
+      const selected = this.document.selection.has(node.id);
+
+      delete data.id;
+      const newNode = this.document.createNode(data);
+
+      this.insertBefore(newNode, node);
+      node.remove();
+
+      if (selected) {
+        this.document.selection.select(newNode.id);
+      }
+    }
+    return node;
   }
 
   getProp(path: string, stash = true): Prop | null {
@@ -441,7 +465,6 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
     return this.parent.children.indexOf(this);
   }
-
 
   /**
    * 获取下一个兄弟节点
@@ -607,7 +630,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     if (this.isParental()) {
       this.children.purge();
     }
-    this.autoruns?.forEach(dispose => dispose());
+    this.autoruns?.forEach((dispose) => dispose());
     this.props.purge();
     this.document.internalRemoveAndPurgeNode(this);
   }
