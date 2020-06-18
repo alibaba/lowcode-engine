@@ -152,6 +152,9 @@ function getSourceSensor(dragObject: DragObject): ISimulatorHost | null {
   return dragObject.nodes[0]?.document.simulator || null;
 }
 
+/**
+ * make a handler that listen all sensors:document, avoid frame lost
+ */
 function makeEventsHandler(
   boostEvent: MouseEvent | DragEvent,
   sensors: ISimulatorHost[],
