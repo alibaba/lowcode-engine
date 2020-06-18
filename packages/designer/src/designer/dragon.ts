@@ -178,6 +178,9 @@ function isDragEvent(e: any): e is DragEvent {
   return e?.type?.substr(0, 4) === 'drag';
 }
 
+/**
+ * Drag-on 拖拽引擎
+ */
 export class Dragon {
   private sensors: ISensor[] = [];
 
@@ -195,12 +198,15 @@ export class Dragon {
   }
 
   private emitter = new EventEmitter();
-  // private emptyImage: HTMLImageElement = new Image();
 
   constructor(readonly designer: Designer) {
-    // this.emptyImage.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
   }
 
+  /**
+   * Quick listen a shell(container element) drag behavior
+   * @param shell container element
+   * @param boost boost got a drag object
+   */
   from(shell: Element, boost: (e: MouseEvent) => DragObject | null) {
     const mousedown = (e: MouseEvent) => {
       // ESC or RightClick
@@ -222,6 +228,12 @@ export class Dragon {
     };
   }
 
+  /**
+   * boost your dragObject for dragging(flying) 发射拖拽对象
+   *
+   * @param dragObject 拖拽对象
+   * @param boostEvent 拖拽初始时事件
+   */
   boost(dragObject: DragObject, boostEvent: MouseEvent | DragEvent) {
     const designer = this.designer;
     const masterSensors = this.getMasterSensors();
@@ -313,16 +325,20 @@ export class Dragon {
       this.emitter.emit('dragstart', locateEvent);
     };
 
+    // route: drag-move
     const move = (e: MouseEvent | DragEvent) => {
       if (isBoostFromDragAPI) {
         e.preventDefault();
       }
       if (this._dragging) {
+        // process dragging
         drag(e);
         return;
       }
 
+      // first move check is shaken
       if (isShaken(boostEvent, e)) {
+        // is shaken dragstart
         dragstart();
         drag(e);
       }
@@ -335,6 +351,7 @@ export class Dragon {
       didDrop = true;
     };
 
+    // end-tail drag process
     const over = (e?: any) => {
       if (e && isDragEvent(e)) {
         e.preventDefault();
@@ -381,6 +398,7 @@ export class Dragon {
       }
     };
 
+    // create drag locate event
     const createLocateEvent = (e: MouseEvent | DragEvent): LocateEvent => {
       const evt: any = {
         type: 'LocateEvent',
@@ -391,12 +409,14 @@ export class Dragon {
 
       const sourceDocument = e.view?.document;
 
+      // event from current document
       if (!sourceDocument || sourceDocument === document) {
         evt.globalX = e.clientX;
         evt.globalY = e.clientY;
-      } else {
+      } else { // event from simulator sandbox
         let srcSim: ISimulatorHost | undefined;
         const lastSim = lastSensor && isSimulatorHost(lastSensor) ? lastSensor : null;
+        // check source simulator
         if (lastSim && lastSim.contentDocument === sourceDocument) {
           srcSim = lastSim;
         } else {
@@ -406,6 +426,7 @@ export class Dragon {
           }
         }
         if (srcSim) {
+          // transform point by simulator
           const g = srcSim.viewport.toGlobalPoint(e);
           evt.globalX = g.clientX;
           evt.globalY = g.clientY;
@@ -454,9 +475,7 @@ export class Dragon {
       const { dataTransfer } = boostEvent;
 
       if (dataTransfer) {
-        // dataTransfer.setDragImage(this.emptyImage, 0, 0);
         dataTransfer.effectAllowed = 'all';
-        // dataTransfer.dropEffect = newBie || forceCopyState ? 'copy' : 'move';
 
         try {
           dataTransfer.setData('application/json', '{}');
