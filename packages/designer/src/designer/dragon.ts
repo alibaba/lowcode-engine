@@ -159,20 +159,15 @@ function makeEventsHandler(
   const topDoc = window.top.document;
   const sourceDoc = boostEvent.view?.document || topDoc;
   // TODO: optimize this logic, reduce listener
-  // const boostPrevented = boostEvent.defaultPrevented;
   const docs = new Set<Document>();
-  // if (boostPrevented || isDragEvent(boostEvent)) {
   docs.add(topDoc);
-  // }
   docs.add(sourceDoc);
-  // if (sourceDoc !== topDoc || isDragEvent(boostEvent)) {
   sensors.forEach((sim) => {
     const sdoc = sim.contentDocument;
     if (sdoc) {
       docs.add(sdoc);
     }
   });
-  // }
 
   return (handle: (sdoc: Document) => void) => {
     docs.forEach((doc) => handle(doc));

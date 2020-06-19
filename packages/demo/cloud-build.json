@@ -7,9 +7,12 @@
     "react": "window.React",
     "react-dom": "window.ReactDOM",
     "prop-types": "window.PropTypes",
-    "@ali/lowcode-editor-core": "window.LCECore",
     "@ali/visualengine": "window.VisualEngine",
-    "@ali/visualengine-utils": "window.VisualEngineUtils"
+    "@ali/visualengine-utils": "window.VisualEngineUtils",
+    "@ali/lowcode-editor-preset-general": "window.LowcodeEditor",
+    "@ali/lowcode-editor-core": "window.LowcodeEditor",
+    "@ali/lowcode-editor-skeleton": "window.LowcodeEditor",
+    "@ali/lowcode-designer": "window.LowcodeEditor"
   },
   "minify": false,
   "sourcemap": true,

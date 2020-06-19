@@ -31,6 +31,15 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
         if (this.shell?.contains(target)) {
           return true;
         }
+        // 点击了 iframe 内容，算失焦
+        if (document.querySelector('.lc-simulator-content-frame')
+            .contentWindow.document.documentElement.contains(target)) {
+          return false;
+        }
+        // 点击非编辑区域的 popup / dialog 等，不触发失焦
+        if (!document.querySelector('.lc-workbench')?.contains(target)) {
+          return true;
+        }
         const docks = area.current?.getAssocDocks();
         if (docks && docks?.length) {
           return docks.some(dock => dock.getDOMNode()?.contains(target));
@@ -41,6 +50,7 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
         this.props.area.setVisible(false);
       },
       onBlur: () => {
+        // debugger
         this.props.area.setVisible(false);
       },
     });

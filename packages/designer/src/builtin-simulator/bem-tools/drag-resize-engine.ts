@@ -1,6 +1,6 @@
-import * as EventEmitter from 'events';
-import { ISimulatorHost, isSimulatorHost } from '../../../../designer/src/simulator';
-import { Designer } from '../../../../designer/src/designer/designer';
+import { EventEmitter } from 'events';
+import { ISimulatorHost, isSimulatorHost } from '../../simulator';
+import { Designer, Point } from '../../designer';
 import { setNativeSelection, cursor } from '@ali/lowcode-utils';
 // import Cursor from './cursor';
 // import Pages from './pages';
@@ -66,20 +66,36 @@ export default class DragResizeEngine {
    */
   from(shell: Element, direction: string, boost: (e: MouseEvent) => any) {
     let node: any;
-    let startEvent: MouseEvent;
+    let startEvent: Point;
 
     if (!shell) {
       return () => {};
     }
 
     const move = (e: MouseEvent) => {
-      const moveX = e.clientX - startEvent.clientX;
-      const moveY = e.clientY - startEvent.clientY;
+      const x = createResizeEvent(e);
+      const moveX = x.clientX - startEvent.clientX;
+      const moveY = x.clientY - startEvent.clientY;
 
       this.emitter.emit('resize', e, direction, node, moveX, moveY);
     };
 
     const masterSensors = this.getMasterSensors();
+
+    const createResizeEvent = (e: MouseEvent | DragEvent): Point => {
+      const evt: any = {};
+
+      const sourceDocument = e.view?.document;
+
+      if (!sourceDocument || sourceDocument === document) {
+        return e;
+      }
+      const srcSim = masterSensors.find((sim) => sim.contentDocument === sourceDocument);
+      if (srcSim) {
+        return srcSim.viewport.toGlobalPoint(e);
+      }
+      return e;
+    };
 
     const over = (e: MouseEvent) => {
       const handleEvents = makeEventsHandler(e, masterSensors);
@@ -96,7 +112,7 @@ export default class DragResizeEngine {
 
     const mousedown = (e: MouseEvent) => {
       node = boost(e);
-      startEvent = e;
+      startEvent = createResizeEvent(e);
       const handleEvents = makeEventsHandler(e, masterSensors);
       handleEvents((doc) => {
         doc.addEventListener('mousemove', move, true);

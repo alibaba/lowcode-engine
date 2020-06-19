@@ -13,7 +13,7 @@ import {
   FieldConfig,
 } from '@ali/lowcode-types';
 import { computed } from '@ali/lowcode-editor-core';
-import { Node, ParentalNode } from './document';
+import { Node, ParentalNode, TransformStage } from './document';
 import { Designer } from './designer';
 import { intlNode } from './locale';
 import { IconContainer } from './icons/container';
@@ -249,6 +249,9 @@ export class ComponentMeta {
     }
     return true;
   }
+
+  // compatiable vision
+  prototype?: any;
 }
 
 export function isComponentMeta(obj: any): obj is ComponentMeta {
@@ -379,8 +382,8 @@ const builtinComponentActions: ComponentAction[] = [
       title: intlNode('copy'),
       action(node: Node) {
         // node.remove();
-        const { document: doc, parent, schema, index } = node;
-        parent && doc.insertNode(parent, schema, index);
+        const { document: doc, parent, index } = node;
+        parent && doc.insertNode(parent, node, index, true);
       },
     },
     important: true,

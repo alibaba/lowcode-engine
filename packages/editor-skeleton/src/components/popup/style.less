@@ -13,10 +13,16 @@
   }
   .lc-ballon-content {
     margin-top: 10px;
-    // width: 300px;
+    // FIXME: popup position is bad
+    max-height: calc(60vh);
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  &.next-balloon-closable {
+    padding: 10px !important;
   }
   .next-balloon-close {
-    top: 4px;
-    right: 4px;
+    top: 4px !important;
+    right: 4px !important;
   }
 }

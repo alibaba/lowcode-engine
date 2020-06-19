@@ -159,6 +159,13 @@ export class NodeChildren {
   }
 
   /**
+   *
+   */
+  splice(start: number, deleteCount: number, node: Node): Node[] {
+    return this.children.splice(start, deleteCount, node);
+  }
+
+  /**
    * 根据索引获得节点
    */
   get(index: number): Node | null {

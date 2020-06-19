@@ -53,13 +53,16 @@ export default class Panel implements IWidget {
   }
 
   get content(): ReactNode {
+    const area = this.config?.area || this.parent?.name;
+    console.log(area);
     if (this.plain) {
       return createElement(PanelView, {
         panel: this,
         key: this.id,
+        area,
       });
     }
-    return createElement(TitledPanelView, { panel: this, key: this.id });
+    return createElement(TitledPanelView, { panel: this, key: this.id, area });
   }
 
   readonly title: TitleContent;

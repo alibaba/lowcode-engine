@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 import { CustomView, isCustomView, IEditor } from '@ali/lowcode-types';
 import { computed } from '@ali/lowcode-editor-core';
 import { SettingEntry } from './setting-entry';
-import { SettingField } from './setting-field';
+import { SettingField, isSettingField } from './setting-field';
 import { SettingPropEntry } from './setting-prop-entry';
 import { Node } from '../../document';
 import { ComponentMeta } from '../../component-meta';
@@ -20,6 +20,7 @@ export class SettingTopEntry implements SettingEntry {
   private _items: Array<SettingField | CustomView> = [];
   private _componentMeta: ComponentMeta | null = null;
   private _isSame: boolean = true;
+  private _settingFieldMap: { [prop: string]: SettingField } = {};
   readonly path = [];
   readonly top = this;
   readonly parent = this;
@@ -96,12 +97,17 @@ export class SettingTopEntry implements SettingEntry {
 
   private setupItems() {
     if (this.componentMeta) {
+      const settingFieldMap: { [prop: string]: SettingField } = {};
+      const settingFieldCollector = (name: string | number, field: SettingField) => {
+        settingFieldMap[name] = field;
+      }
       this._items = this.componentMeta.configure.map((item) => {
         if (isCustomView(item)) {
           return item;
         }
-        return new SettingField(this, item as any);
+        return new SettingField(this, item as any, settingFieldCollector);
       });
+      this._settingFieldMap = settingFieldMap;
     }
   }
 
@@ -124,7 +130,7 @@ export class SettingTopEntry implements SettingEntry {
    * 获取子项
    */
   get(propName: string | number): SettingPropEntry {
-    return new SettingPropEntry(this, propName);
+    return this._settingFieldMap[propName] || (new SettingPropEntry(this, propName));
   }
 
   /**

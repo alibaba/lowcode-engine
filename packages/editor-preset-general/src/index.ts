@@ -3,7 +3,7 @@ import { createElement } from 'react';
 import { Workbench, Skeleton, SettingsPrimaryPane } from '@ali/lowcode-editor-skeleton';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
 import { Designer } from '@ali/lowcode-designer';
-import { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
+import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
 import '@ali/lowcode-editor-setters';
 
@@ -29,6 +29,15 @@ skeleton.add({
   name: 'designer',
   type: 'Widget',
   content: DesignerPlugin,
+});
+skeleton.add({
+  area: 'leftArea',
+  name: 'outlinePane',
+  type: 'PanelDock',
+  content: Outline,
+  panelProps: {
+    area: 'leftFixedArea',
+  },
 });
 skeleton.add({
   area: 'rightArea',
@@ -74,7 +83,7 @@ export function init(container?: Element) {
 }
 
 console.log(
-  `%cLowcodeEditorPresetGeneral %cv${version}`,
+  `%cLowcodeEngine %cv${version}`,
   "color:#000;font-weight:bold;",
   "color:green;font-weight:bold;"
 );

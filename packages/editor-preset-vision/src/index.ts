@@ -3,7 +3,7 @@ import Popup from '@ali/ve-popups';
 import Icons from '@ali/ve-icons';
 import logger from '@ali/vu-logger';
 import { render } from 'react-dom';
-import I18nUtil from '@ali/ve-i18n-util';
+import I18nUtil from './i18n-util';
 import { hotkey as Hotkey } from '@ali/lowcode-editor-core';
 import { createElement } from 'react';
 import { VE_EVENTS as EVENTS, VE_HOOKS as HOOKS, VERSION as Version } from './base/const';
@@ -161,11 +161,10 @@ export {
   Symbols,
 };
 
+const version = '6.0.0(LowcodeEngine 0.9.0-beta)';
 
-/*
 console.log(
-  `%cLowcodeEngine %cv${VERSION}`,
-  "color:#000;font-weight:bold;",
-  "color:green;font-weight:bold;"
+  `%c VisionEngine %c v${version} `,
+  "padding: 2px 1px; border-radius: 3px 0 0 3px; color: #fff; background: #606060;font-weight:bold;",
+  "padding: 2px 1px; border-radius: 0 3px 3px 0; color: #fff; background: #42c02e;font-weight:bold;"
 );
-*/

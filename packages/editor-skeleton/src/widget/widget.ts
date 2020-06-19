@@ -4,6 +4,7 @@ import { createContent, uniqueId } from '@ali/lowcode-utils';
 import { WidgetConfig, IWidgetBaseConfig } from '../types';
 import { Skeleton } from '../skeleton';
 import { WidgetView } from '../components/widget-views';
+import { TitleContent } from '@ali/lowcode-types';
 
 export interface IWidget {
   readonly name: string;
@@ -56,10 +57,13 @@ export default class Widget implements IWidget {
     });
   }
 
+  readonly title: TitleContent;
+
   constructor(readonly skeleton: Skeleton, readonly config: WidgetConfig) {
     const { props = {}, name } = config;
     this.name = name;
     this.align = props.align;
+    this.title = props.title || name;
     if (props.onInit) {
       props.onInit.call(this, this);
     }

@@ -58,7 +58,7 @@ const demoData: IProjectSchema = {
   componentsTree: [
     {
       componentName: 'Page',
-      id: 'node$1',
+      id: 'node_1',
       meta: {
         title: '测试',
         router: '/',
@@ -74,7 +74,7 @@ const demoData: IProjectSchema = {
       children: [
         {
           componentName: 'Form',
-          id: 'node$2',
+          id: 'node_2',
           props: {
             labelCol: 4,
             style: {},
@@ -83,7 +83,7 @@ const demoData: IProjectSchema = {
           children: [
             {
               componentName: 'Form.Item',
-              id: 'node$3',
+              id: 'node_3',
               props: {
                 label: '姓名：',
                 name: 'name',
@@ -92,7 +92,7 @@ const demoData: IProjectSchema = {
               children: [
                 {
                   componentName: 'Input',
-                  id: 'node$4',
+                  id: 'node_4',
                   props: {
                     placeholder: '请输入',
                     size: 'medium',
@@ -105,7 +105,7 @@ const demoData: IProjectSchema = {
             },
             {
               componentName: 'Form.Item',
-              id: 'node$5',
+              id: 'node_5',
               props: {
                 label: '年龄：',
                 name: 'age',
@@ -114,7 +114,7 @@ const demoData: IProjectSchema = {
               children: [
                 {
                   componentName: 'NumberPicker',
-                  id: 'node$6',
+                  id: 'node_6',
                   props: {
                     size: 'medium',
                     type: 'normal',
@@ -124,7 +124,7 @@ const demoData: IProjectSchema = {
             },
             {
               componentName: 'Form.Item',
-              id: 'node$7',
+              id: 'node_7',
               props: {
                 label: '职业：',
                 name: 'profession',
@@ -132,7 +132,7 @@ const demoData: IProjectSchema = {
               children: [
                 {
                   componentName: 'Select',
-                  id: 'node$8',
+                  id: 'node_8',
                   props: {
                     dataSource: [
                       {
@@ -154,7 +154,7 @@ const demoData: IProjectSchema = {
             },
             {
               componentName: 'Div',
-              id: 'node$9',
+              id: 'node_9',
               props: {
                 style: {
                   textAlign: 'center',
@@ -163,12 +163,12 @@ const demoData: IProjectSchema = {
               children: [
                 {
                   componentName: 'Button.Group',
-                  id: 'node$a',
+                  id: 'node_a',
                   props: {},
                   children: [
                     {
                       componentName: 'Button',
-                      id: 'node$b',
+                      id: 'node_b',
                       props: {
                         type: 'primary',
                         style: {
@@ -180,7 +180,7 @@ const demoData: IProjectSchema = {
                     },
                     {
                       componentName: 'Button',
-                      id: 'node$d',
+                      id: 'node_d',
                       props: {
                         type: 'normal',
                         style: {

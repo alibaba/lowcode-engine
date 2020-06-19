@@ -1,6 +1,6 @@
 import { ReactElement, ComponentType } from 'react';
 import { EventEmitter } from 'events';
-import { registerSetter, RegisteredSetter } from '@ali/lowcode-editor-core';
+import { registerSetter, RegisteredSetter, getSetter } from '@ali/lowcode-editor-core';
 import Bundle from './bundle';
 import { CustomView } from '@ali/lowcode-types';
 
@@ -41,6 +41,38 @@ export class Trunk {
     return this.metaBundle.getFromMeta(name);
   }
 
+  getPrototypeById(id: string) {
+    return this.getPrototype(id);
+  }
+
+  listByCategory() {
+    const categories: any[] = [];
+    const categoryMap: any = {};
+    const categoryItems: any[] = [];
+    const defaultCategory = {
+      items: categoryItems,
+      name: '*',
+    };
+    categories.push(defaultCategory);
+    categoryMap['*'] = defaultCategory;
+    this.getList().forEach((prototype) => {
+      const cat = prototype.getCategory();
+      if (!cat) {
+        return;
+      }
+      if (!categoryMap.hasOwnProperty(cat)) {
+        const categoryMapItems: any[] = [];
+        categoryMap[cat] = {
+          items: categoryMapItems,
+          name: cat,
+        };
+        categories.push(categoryMap[cat]);
+      }
+      categoryMap[cat].items.push(prototype);
+    });
+    return categories;
+  }
+
   getPrototypeView(componentName: string) {
     return this.getPrototype(componentName)?.getView();
   }
@@ -71,6 +103,14 @@ export class Trunk {
 
   setPackages() {
     console.warn('Trunk.setPackages is deprecated');
+  }
+
+  getSetter(type: string): any{
+    const setter = getSetter(type);
+    if (setter?.component) {
+      return setter.component;
+    }
+    return setter;
   }
 }
 

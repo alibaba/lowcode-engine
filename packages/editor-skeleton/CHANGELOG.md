@@ -3,6 +3,93 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.26"></a>
+## [0.8.26](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.25...@ali/lowcode-editor-skeleton@0.8.26) (2020-06-16)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+
+<a name="0.8.25"></a>
+## [0.8.25](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.24...@ali/lowcode-editor-skeleton@0.8.25) (2020-06-15)
+
+
+### Bug Fixes
+
+* 修复bool类型对应的setter ([2df6230](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2df6230))
+* 禁止组件拉到 Page 的直接子节点, 以及替换 tab 组件 ([d93a291](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d93a291))
+* 调整保存成功弹出框位置 ([5198dae](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5198dae))
+
+
+### Features
+
+* add URL link for setter titles ([4678408](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/4678408))
+* panel增加自动埋点 ([afc7758](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/afc7758))
+* 自动埋点 ([fecf34d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fecf34d))
+
+
+
+
+<a name="0.8.24"></a>
+## [0.8.24](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.23...@ali/lowcode-editor-skeleton@0.8.24) (2020-05-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+
+<a name="0.8.23"></a>
+## [0.8.23](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.22...@ali/lowcode-editor-skeleton@0.8.23) (2020-05-19)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+
+<a name="0.8.22"></a>
+## [0.8.22](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.21...@ali/lowcode-editor-skeleton@0.8.22) (2020-05-18)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+
+<a name="0.8.21"></a>
+## [0.8.21](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.20...@ali/lowcode-editor-skeleton@0.8.21) (2020-05-16)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+
+<a name="0.8.20"></a>
+## [0.8.20](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.19...@ali/lowcode-editor-skeleton@0.8.20) (2020-05-16)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+
+<a name="0.8.19"></a>
+## [0.8.19](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.18...@ali/lowcode-editor-skeleton@0.8.19) (2020-05-16)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+
+<a name="0.8.18"></a>
+## [0.8.18](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.17...@ali/lowcode-editor-skeleton@0.8.18) (2020-05-15)
+
+
+### Bug Fixes
+
+* 解决点击数据源，自动隐藏的问题 ([7dcd61c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7dcd61c))
+
+
+
+
 <a name="0.8.17"></a>
 ## [0.8.17](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.16...@ali/lowcode-editor-skeleton@0.8.17) (2020-05-15)
 

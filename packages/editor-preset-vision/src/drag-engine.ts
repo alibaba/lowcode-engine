@@ -1,5 +1,6 @@
 import { designer } from './editor';
 import { DragObjectType, isNode, isDragNodeDataObject } from '@ali/lowcode-designer';
+import { isPrototype } from './bundle/prototype';
 
 const dragon = designer.dragon;
 const DragEngine = {
@@ -9,7 +10,14 @@ const DragEngine = {
       if (!r) {
         return null;
       }
-      if (isNode(r)) {
+      if (isPrototype(r)) {
+        return {
+          type: DragObjectType.NodeData,
+          data: {
+            componentName: r.getComponentName(),
+          },
+        };
+      } else if (isNode(r)) {
         return {
           type: DragObjectType.Node,
           nodes: [r],

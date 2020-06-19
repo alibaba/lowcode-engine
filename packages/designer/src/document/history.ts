@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { autorun, Reaction, untracked } from '@ali/lowcode-editor-core';
+import { autorun, Reaction, untracked, globalContext, Editor } from '@ali/lowcode-editor-core';
 import { NodeSchema } from '@ali/lowcode-types';
 
 // TODO: cache to localStorage
@@ -114,6 +114,11 @@ export class History {
     }
     const cursor = this.session.cursor - 1;
     this.go(cursor);
+    const editor = globalContext.get(Editor);
+    if (!editor) {
+      return;
+    }
+    editor.emit('history.back', cursor);
   }
 
   forward() {
@@ -122,6 +127,11 @@ export class History {
     }
     const cursor = this.session.cursor + 1;
     this.go(cursor);
+    const editor = globalContext.get(Editor);
+    if (!editor) {
+      return;
+    }
+    editor.emit('history.forward', cursor);
   }
 
   savePoint() {

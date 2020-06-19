@@ -1,10 +1,10 @@
-import { obx, autorun, computed, getPublicPath, hotkey, focusTracker } from '@ali/lowcode-editor-core';
+import { obx, autorun, computed, getPublicPath, hotkey, focusTracker, globalContext, Editor } from '@ali/lowcode-editor-core';
 import { ISimulatorHost, Component, NodeInstance, ComponentInstance } from '../simulator';
 import Viewport from './viewport';
 import { createSimulator } from './create-simulator';
 import { Node, ParentalNode, DocumentModel, isNode, contains, isRootNode } from '../document';
 import ResourceConsumer from './resource-consumer';
-import { AssetLevel, Asset, AssetList, assetBundle, assetItem, AssetType, isElement } from '@ali/lowcode-utils';
+import { AssetLevel, Asset, AssetList, assetBundle, assetItem, AssetType, isElement, isFormEvent } from '@ali/lowcode-utils';
 import {
   DragObjectType,
   isShaken,
@@ -22,7 +22,7 @@ import {
   CanvasPoint,
 } from '../designer';
 import { parseMetadata } from './utils/parse-metadata';
-import { ComponentMetadata } from '@ali/lowcode-types';
+import { ComponentMetadata, ComponentSchema } from '@ali/lowcode-types';
 import { BuiltinSimulatorRenderer } from './renderer';
 import clipboard from '../designer/clipboard';
 import { LiveEditing } from './live-editing/live-editing';
@@ -227,6 +227,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.setupDragAndClick();
     this.setupDetecting();
     this.setupLiveEditing();
+    this.setupContextMenu();
   }
 
   setupDragAndClick() {
@@ -240,12 +241,17 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     doc.addEventListener(
       'mousedown',
       (downEvent: MouseEvent) => {
+        // fix for popups close logic
+        document.dispatchEvent(new Event('mousedown'));
         if (this.liveEditing.editing) {
           return;
         }
         // stop response document focus event
         downEvent.stopPropagation();
         downEvent.preventDefault();
+
+        // FIXME: dirty fix remove label-for fro liveEditing
+        (downEvent.target as HTMLElement).removeAttribute('for');
 
         const nodeInst = this.getNodeInstanceFromElement(downEvent.target as Element);
         const node = nodeInst?.node || this.document.rootNode;
@@ -260,6 +266,15 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
               selection.remove(id);
             } else {
               selection.select(id);
+              const editor = globalContext.get(Editor);
+              const npm = node?.componentMeta?.npm;
+              const selected =
+                [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
+                node?.componentMeta?.componentName ||
+                '';
+              editor?.emit('designer.builtinSimulator.select', {
+                selected,
+              });
             }
           }
         };
@@ -303,9 +318,14 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     doc.addEventListener(
       'click',
       (e) => {
+        // fix for popups close logic
+        document.dispatchEvent(new Event('click'));
+        const target = e.target as HTMLElement;
+        if (isFormEvent(e) || target?.closest('.next-input-group,.next-checkbox-group,.next-date-picker,.next-input,.next-month-picker,.next-number-picker,.next-radio-group,.next-range,.next-range-picker,.next-rating,.next-select,.next-switch,.next-time-picker,.next-upload,.next-year-picker,.next-breadcrumb-item,.next-calendar-header,.next-calendar-table')) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
         // stop response document click event
-        // e.preventDefault();
-        // e.stopPropagation();
         // todo: catch link redirect
       },
       true,
@@ -400,6 +420,30 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     }
   }
 
+  setupContextMenu() {
+    const doc = this.contentDocument!;
+    doc.addEventListener('contextmenu', (e: MouseEvent) => {
+      const targetElement = e.target as HTMLElement;
+      const nodeInst = this.getNodeInstanceFromElement(targetElement);
+      if (!nodeInst) {
+        return;
+      }
+      const node = nodeInst.node || this.document.rootNode;
+      if (!node) {
+        return;
+      }
+      const editor = globalContext.get(Editor);
+      const npm = node?.componentMeta?.npm;
+      const selected =
+        [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
+        node?.componentMeta?.componentName ||
+        '';
+      editor?.emit('desiger.builtinSimulator.contextmenu', {
+        selected,
+      });
+    });
+  }
+
   /**
    * @see ISimulator
    */
@@ -435,6 +479,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
    */
   getComponent(componentName: string): Component | null {
     return this.renderer?.getComponent(componentName) || null;
+  }
+
+  createComponent(schema: ComponentSchema): Component | null {
+    return this.renderer?.createComponent(schema) || null;
   }
 
   @obx.val private instancesMap = new Map<string, ComponentInstance[]>();
@@ -739,7 +787,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.sensing = true;
     this.scroller.scrolling(e);
     const dropContainer = this.getDropContainer(e);
-    if (!dropContainer) {
+    if (!dropContainer ||
+        (typeof dropContainer.container?.componentMeta?.prototype?.options?.canDropIn === 'function' &&
+          !dropContainer.container?.componentMeta?.prototype?.options?.canDropIn(e.dragObject.nodes[0]))) {
       return null;
     }
 
