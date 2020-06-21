@@ -1,0 +1,6 @@
+{
+  "pages": ["pages/index"],
+  "window": {
+    "title": "demo"
+  }
+}
