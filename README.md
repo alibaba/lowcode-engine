@@ -6,7 +6,7 @@
 
 #### 创建新包：
 
-- `./create.sh <package-name>`
+- `./scripts/create.sh <package-name>`
 
 #### 跑起来：
 
