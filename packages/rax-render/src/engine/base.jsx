@@ -2,7 +2,7 @@ import { Component, createElement } from 'rax';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
 import View from 'rax-view';
-import DataHelper from '@ali/iceluna-sdk/lib/utils/dataHelper';
+import DataHelper from '../utils/dataHelper';
 import {
   forEach,
   getValue,
@@ -18,7 +18,7 @@ import {
   checkPropTypes,
   generateI18n,
   acceptsRef,
-} from '@ali/iceluna-sdk/lib/utils';
+} from '../utils';
 import VisualDom from '../comp/visualDom';
 import AppContext from '../context/appContext';
 import CompWrapper from '../hoc/compWrapper';

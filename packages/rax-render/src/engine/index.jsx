@@ -1,9 +1,9 @@
 import { Component, createElement } from 'rax';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
-import * as isEmpty from 'lodash.isempty';
+import * as isEmpty from 'lodash/isEmpty';
 import findDOMNode from 'rax-find-dom-node';
-import { isFileSchema, goldlog } from '@ali/iceluna-sdk/lib/utils';
+import { isFileSchema, goldlog } from '../utils';
 import AppContext from '../context/appContext';
 import Page from './pageEngine';
 import CustomComp from './compEngine';

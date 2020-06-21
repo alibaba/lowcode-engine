@@ -2,7 +2,7 @@ import { createElement } from 'rax';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
 import classnames from 'classnames';
-import { isSchema, getFileCssName } from '@ali/iceluna-sdk/lib/utils';
+import { isSchema, getFileCssName } from '../utils';
 import BaseEngine from './base';
 
 const debug = Debug('engine:page');

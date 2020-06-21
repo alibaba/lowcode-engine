@@ -1,7 +1,7 @@
 import { Component, createElement } from 'rax';
 import PropTypes from 'prop-types';
-import AppHelper from '@ali/iceluna-sdk/lib/utils/appHelper';
-import { forEach, isFileSchema } from '@ali/iceluna-sdk/lib/utils';
+import AppHelper from '../utils/appHelper';
+import { forEach, isFileSchema } from '../utils';
 import CompEngine from '../engine/compEngine';
 import BlockEngine from '../engine/blockEngine';
 import AppContext from '../context/appContext';

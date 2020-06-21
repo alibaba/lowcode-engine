@@ -1,7 +1,7 @@
 import { createElement } from 'rax';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
-import { isSchema } from '@ali/iceluna-sdk/lib/utils';
+import { isSchema } from '../utils';
 import AppContext from '../context/appContext';
 import BaseEngine from './base';
 
