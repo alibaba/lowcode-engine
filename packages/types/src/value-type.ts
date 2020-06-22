@@ -27,7 +27,7 @@ export interface JSBlock {
 }
 
 // JSON 基本类型
-export type JSONValue = boolean | string | number | null | JSONArray | JSONObject;
+export type JSONValue = boolean | string | number | null | undefined | JSONArray | JSONObject;
 export type JSONArray = JSONValue[];
 export interface JSONObject {
   [key: string]: JSONValue;
