@@ -27,7 +27,7 @@ export class DocumentModel {
   /**
    * 文档编号
    */
-  readonly id: string = uniqueId('doc');
+  id: string = uniqueId('doc');
   /**
    * 选区控制
    */
@@ -42,6 +42,7 @@ export class DocumentModel {
   private seqId = 0;
   private _simulator?: ISimulatorHost;
   private emitter: EventEmitter;
+  private rootNodeVisitorMap: { [visitorName: string]: any } = {};
 
   /**
    * 模拟器
@@ -197,7 +198,12 @@ export class DocumentModel {
     this.nodesMap.set(node.id, node);
     this.nodes.add(node);
 
+    this.emitter.emit('nodecreate', node);
     return node as any;
+  }
+
+  public destroyNode(node: Node) {
+    this.emitter.emit('nodedestroy', node);
   }
 
   /**
@@ -409,7 +415,7 @@ export class DocumentModel {
   /**
    * 打开，已载入，默认建立时就打开状态，除非手动关闭
    */
-  open(): void {
+  open(): DocumentModel {
     const originState = this._opened;
     this._opened = true;
     if (originState === false) {
@@ -420,6 +426,7 @@ export class DocumentModel {
     } else {
       this.project.checkExclusive(this);
     }
+    return this;
   }
 
   /**
@@ -512,6 +519,41 @@ export class DocumentModel {
 
   setRendererReady(renderer) {
     this.emitter.emit('lowcode_engine_renderer_ready', renderer);
+  }
+
+  acceptRootNodeVisitor(
+    visitorName: string = 'default',
+    visitorFn: (node: RootNode) => any ) {
+      let visitorResult = {};
+      if (!visitorName) {
+        /* tslint:disable no-console */
+        console.warn('Invalid or empty RootNodeVisitor name.');
+      }
+      try {
+        visitorResult = visitorFn.call(this, this.rootNode);
+        this.rootNodeVisitorMap[visitorName] = visitorResult;
+      } catch (e) {
+        console.error('RootNodeVisitor is not valid.');
+      }
+      return visitorResult;
+  }
+
+  getRootNodeVisitor(name: string) {
+    return this.rootNodeVisitorMap[name];
+  }
+
+  onNodeCreate(func: (node: Node) => void) {
+    this.emitter.on('nodecreate', func);
+    return () => {
+      this.emitter.removeListener('nodecreate', func);
+    };
+  }
+
+  onNodeDestroy(func: (node: Node) => void) {
+    this.emitter.on('nodedestroy', func);
+    return () => {
+      this.emitter.removeListener('nodedestroy', func);
+    };
   }
 }
 

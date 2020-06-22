@@ -633,6 +633,8 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     this.autoruns?.forEach((dispose) => dispose());
     this.props.purge();
     this.document.internalRemoveAndPurgeNode(this);
+
+    this.document.destroyNode(this);
   }
 
   // ======= compatible apis ====
