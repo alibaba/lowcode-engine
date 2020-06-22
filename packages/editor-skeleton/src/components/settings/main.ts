@@ -67,7 +67,7 @@ export class SettingsMain {
       this.designer = nodes[0].document.designer;
     }
 
-    this._settings = this.designer.createSettingEntry(this.editor, nodes);
+    this._settings = this.designer.createSettingEntry(nodes);
   }
 
   purge() {

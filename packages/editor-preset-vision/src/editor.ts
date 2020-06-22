@@ -59,7 +59,7 @@ function filterReducer(props: any, node: Node): any {
         return;
       }
       try {
-        if (item.filter(node.getProp(item.name) as any, props[item.name]) === false) {
+        if (item.filter(node.settingEntry.getProp(item.name), props[item.name]) === false) {
           delete newProps[item.name];
         }
       } catch (e) {

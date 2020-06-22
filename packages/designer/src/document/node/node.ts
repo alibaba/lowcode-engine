@@ -21,6 +21,7 @@ import { ComponentMeta } from '../../component-meta';
 import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
 import { TransformStage } from './transform-stage';
 import { ReactElement } from 'react';
+import { SettingTopEntry } from 'designer/src/designer';
 
 /**
  * 基础节点
@@ -142,6 +143,8 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.componentMeta.icon;
   }
 
+  readonly settingEntry: SettingTopEntry;
+
   constructor(readonly document: DocumentModel, nodeSchema: Schema) {
     const { componentName, id, children, props, ...extras } = nodeSchema;
     this.id = id || `node_${document.nextId()}`;
@@ -161,6 +164,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     if (this.componentMeta.isModal) {
       this.getExtraProp('hidden', true)?.setValue(true);
     }
+    this.settingEntry = this.document.designer.createSettingEntry([ this ]);
   }
 
   private transformProps(props: any): any {
@@ -384,7 +388,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     // todo
   }
 
-  replaceWith(schema: Schema, migrate = false) {
+  replaceWith(schema: Schema, migrate = false): any {
     // reuse the same id? or replaceSelection
     schema = Object.assign({}, migrate ? this.export() : {}, schema);
     return this.parent?.replaceChild(this, schema);
@@ -396,7 +400,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * @param {Node} node
    * @param {object} data
    */
-  replaceChild(node: Node, data: any) {
+  replaceChild(node: Node, data: any): Node {
     if (this.children?.has(node)) {
       const selected = this.document.selection.has(node.id);
 
