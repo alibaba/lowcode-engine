@@ -24,7 +24,8 @@ export class Trunk {
   }
 
   getList(): any[] {
-    return this.trunk.reduceRight((prev, cur) => prev.concat(cur.getList()), []);
+    const list = this.trunk.reduceRight((prev, cur) => prev.concat(cur.getList()), []);
+    return Array.from(new Set(list));
   }
 
   getPrototype(name: string) {
@@ -85,7 +86,7 @@ export class Trunk {
   }
 
   registerSetter(type: string, setter: CustomView | RegisteredSetter) {
-    console.warn('Trunk.registerSetter is deprecated');
+    // console.warn('Trunk.registerSetter is deprecated');
     registerSetter(type, setter);
   }
 

@@ -57,7 +57,7 @@ export default class Bundle {
         this.revisePrototype(item, prototype);
         const componentName = item.componentName || prototype.getComponentName()!;
         const matchedView = this.viewsMap[componentName] || null;
-        if (!prototype.getView() && matchedView) {
+        if (matchedView) {
           prototype.setView(matchedView);
         }
         this.registerPrototype(prototype);

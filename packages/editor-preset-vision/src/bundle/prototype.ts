@@ -212,24 +212,30 @@ class Prototype {
   static addGlobalExtraActions = addGlobalExtraActions;
   static removeGlobalPropsConfigure = removeGlobalPropsConfigure;
   static overridePropsConfigure = overridePropsConfigure;
-  static create(config: OldPrototypeConfig | ComponentMetadata | ComponentMeta) {
-    return new Prototype(config);
+  static create(config: OldPrototypeConfig | ComponentMetadata | ComponentMeta, lookup: boolean = false) {
+    return new Prototype(config, lookup);
   }
 
   readonly isPrototype = true;
   readonly meta: ComponentMeta;
   readonly options: OldPrototypeConfig | ComponentMetadata;
 
-  constructor(input: OldPrototypeConfig | ComponentMetadata | ComponentMeta) {
-    if (isComponentMeta(input)) {
-      this.meta = input;
-      this.options = input.getMetadata();
+  constructor(input: OldPrototypeConfig | ComponentMetadata | ComponentMeta, lookup: boolean = false) {
+    if (lookup) {
+      this.meta = designer.getComponentMeta(input.componentName);
+      this.options = this.meta.getMetadata();
+      return this.meta.prototype || this;
     } else {
-      this.options = input;
-      const metadata = isNewSpec(input) ? input : upgradeMetadata(input);
-      this.meta = designer.createComponentMeta(metadata);
+      if (isComponentMeta(input)) {
+        this.meta = input;
+        this.options = input.getMetadata();
+      } else {
+        this.options = input;
+        const metadata = isNewSpec(input) ? input : upgradeMetadata(input);
+        this.meta = designer.createComponentMeta(metadata);
+      }
+      (this.meta as any).prototype = this;
     }
-    (this.meta as any).prototype = this;
   }
 
   getId() {
