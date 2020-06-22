@@ -138,7 +138,13 @@ export class SettingPropEntry implements SettingEntry {
       val = this.parent.getPropValue(this.name);
     }
     const { getValue } = this.extraProps;
-    return getValue ? getValue(this, val) : val;
+    try {
+      return getValue ? getValue(this, val) : val;
+    } catch (e) {
+      // todo: add log
+      console.warn(e);
+      return val;
+    }
   }
 
   /**
@@ -153,7 +159,12 @@ export class SettingPropEntry implements SettingEntry {
     }
     const { setValue } = this.extraProps;
     if (setValue && !extraOptions.disableMutator) {
-      setValue(this, val);
+      try {
+        setValue(this, val);
+      } catch (e) {
+        // todo: add log
+        console.warn(e);
+      }
     }
   }
 
@@ -166,7 +177,12 @@ export class SettingPropEntry implements SettingEntry {
     }
     const { setValue } = this.extraProps;
     if (setValue) {
-      setValue(this, undefined);
+      try {
+        setValue(this, undefined);
+      } catch (e) {
+        // todo: add log
+        console.warn(e);
+      }
     }
   }
 
