@@ -1,6 +1,6 @@
 import { Component, KeyboardEvent, FocusEvent, Fragment } from 'react';
 import classNames from 'classnames';
-import { observer, Title, Tip } from '@ali/lowcode-editor-core';
+import { observer, Title, Tip, globalContext, Editor } from '@ali/lowcode-editor-core';
 import { IconArrowRight } from '../icons/arrow-right';
 import { IconEyeClose } from '../icons/eye-close';
 import { IconLock } from '../icons/lock';
@@ -165,6 +165,16 @@ class HideBtn extends Component<{ treeNode: TreeNode }> {
         onClick={(e) => {
           e.stopPropagation();
           treeNode.setHidden(!treeNode.hidden);
+          const editor = globalContext.get(Editor);
+          const node = treeNode?.node;
+          const npm = node?.componentMeta?.npm;
+          const selected =
+            [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
+            node?.componentMeta?.componentName ||
+            '';
+          editor?.emit('outlinePane.hide', {
+            selected,
+          });
         }}
       >
         {treeNode.hidden ? <IconEyeClose /> : <IconEye />}
