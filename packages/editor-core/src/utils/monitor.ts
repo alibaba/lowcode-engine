@@ -42,4 +42,5 @@ class Monitor {
   }
 }
 
-export { Monitor };
+const monitor = new Monitor();
+export { monitor };
