@@ -1,5 +1,6 @@
 import React, { createElement, ReactInstance, ComponentType, ReactElement } from 'react';
 import { render as reactRender } from 'react-dom';
+import { EventEmitter } from 'events';
 import { host } from './host';
 import SimulatorRendererView from './renderer-view';
 import { computed, obx } from '@recore/obx';
@@ -17,10 +18,14 @@ import Leaf from './builtin-components/leaf';
 export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   readonly isSimulatorRenderer = true;
   private dispose?: () => void;
+  private emitter: EventEmitter;
+
   constructor() {
     if (!host) {
       return;
     }
+
+    this.emitter = new EventEmitter();
     this.dispose = host.connect(this, () => {
       // sync layout config
 
@@ -286,6 +291,14 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
     document.body.classList.add('engine-document'); // important! Stylesheet.invoke depends
 
     reactRender(createElement(SimulatorRendererView, { renderer: this }), container);
+    this.emitter.emit('lowcode_engine_render_run');
+  }
+
+  onRendered(fn: () => void): () => void {
+    this.emitter.on('lowcode_engine_render_run', fn);
+    return () => {
+      this.emitter.removeListener('lowcode_engine_render_run', fn);
+    };
   }
 }
 

@@ -14,6 +14,7 @@ export interface BuiltinSimulatorRenderer {
   setCopyState(state: boolean): void;
   clearState(): void;
   run(): void;
+  onRendered(fn: () => void): () => void;
 }
 
 export function isSimulatorRenderer(obj: any): obj is BuiltinSimulatorRenderer {

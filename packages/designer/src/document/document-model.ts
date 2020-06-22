@@ -1,5 +1,6 @@
 import { computed, obx } from '@ali/lowcode-editor-core';
 import { NodeData, isJSExpression, isDOMText, NodeSchema, isNodeSchema, RootSchema } from '@ali/lowcode-types';
+import { EventEmitter } from 'events';
 import { Project } from '../project';
 import { ISimulatorHost } from '../simulator';
 import { ComponentMeta } from '../component-meta';
@@ -40,6 +41,7 @@ export class DocumentModel {
   @obx.val private nodes = new Set<Node>();
   private seqId = 0;
   private _simulator?: ISimulatorHost;
+  private emitter: EventEmitter;
 
   /**
    * 模拟器
@@ -75,6 +77,7 @@ export class DocumentModel {
       console.info(this.willPurgeSpace);
     }, true);
     */
+    this.emitter = new EventEmitter();
 
     if (!schema) {
       this._blank = true;
@@ -342,6 +345,11 @@ export class DocumentModel {
     // TODO: 多设备 simulator 支持
     this._simulator = simulator;
     // TODO: emit simulator mounted
+    this._simulator?.onRendererConnect((renderer) => {
+      this.emitter.emit('lowcode_engine_renderer_ready', {
+        renderer,
+      });
+    })
   }
 
   // FIXME: does needed?
@@ -498,6 +506,13 @@ export class DocumentModel {
 
   get root() {
     return this.rootNode;
+  }
+
+  onRendererReady(fn: (args: any) => void): () => void {
+    this.emitter.on('lowcode_engine_renderer_ready', fn);
+    return () => {
+      this.emitter.removeListener('lowcode_engine_renderer_ready', fn);
+    };
   }
 }
 
