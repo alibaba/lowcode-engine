@@ -1,4 +1,4 @@
-import { obx } from '@ali/lowcode-editor-core';
+import { obx, globalContext, Editor } from '@ali/lowcode-editor-core';
 import { LiveTextEditingConfig } from '@ali/lowcode-types';
 import { Node, Prop } from '../../document';
 
@@ -41,6 +41,14 @@ export class LiveEditing {
     const { node, event, rootElement } = target;
     const targetElement = event.target as HTMLElement;
     const liveTextEditing = node.componentMeta.liveTextEditing;
+
+    const editor = globalContext.get(Editor);
+    const npm = node?.componentMeta?.npm;
+    const selected =
+      [npm?.package, npm?.componentName].filter((item) => !!item).join('-') || node?.componentMeta?.componentName || '';
+    editor?.emit('designer.builinSimulator.LiveEditing', {
+      selected,
+    });
 
     let setterPropElement = getSetterPropElement(targetElement, rootElement);
     let propTarget = setterPropElement?.dataset.setterProp;
@@ -98,7 +106,6 @@ export class LiveEditing {
       const onSaveContent = matched?.onSaveContent || saveHandlers.find(item => item.condition(prop))?.onSaveContent || defaultSaveContent;
 
       setterPropElement.setAttribute('contenteditable', matched?.mode && matched.mode !== 'plaintext' ? 'true' : 'plaintext-only');
-      setterPropElement.removeAttribute('for');
       setterPropElement.classList.add('engine-live-editing');
       // be sure
       setterPropElement.focus();
@@ -110,6 +117,13 @@ export class LiveEditing {
 
       const keydown = (e: KeyboardEvent) => {
         console.info(e.code);
+        switch (e.code) {
+          case 'Enter':
+            // TODO: check is richtext?
+          case 'Escape':
+          case 'Tab':
+            setterPropElement?.blur();
+        }
         // esc
         // enter
         // tab
@@ -134,9 +148,7 @@ export class LiveEditing {
 
     // TODO: upward testing for b/i/a html elements
 
-    // 非文本编辑
-    //  国际化数据，改变当前
-    //  JSExpression, 改变 mock 或 弹出绑定变量
+    
   }
 
   get editing() {

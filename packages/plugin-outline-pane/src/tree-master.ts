@@ -12,7 +12,9 @@ export interface ITreeBoard {
 
 export class TreeMaster {
   constructor(readonly designer: Designer) {
+    let startTime: any;
     designer.dragon.onDragstart(() => {
+      startTime = Date.now() / 1000;
       // needs?
       this.toVision();
     });
@@ -31,6 +33,25 @@ export class TreeMaster {
 
       this.boards.forEach((board) => {
         board.scrollToNode(treeNode, detail);
+      });
+    });
+    designer.dragon.onDragend(() => {
+      const endTime: any = Date.now() / 1000;
+      const editor = designer?.editor;
+      const nodes = designer.currentSelection?.getNodes();
+      editor?.emit('outlinePane.drag', {
+        selected: nodes
+          ?.map((n) => {
+            if (!n) {
+              return;
+            }
+            const npm = n?.componentMeta?.npm;
+            return (
+              [npm?.package, npm?.componentName].filter((item) => !!item).join('-') || n?.componentMeta?.componentName
+            );
+          })
+          .join('&'),
+        time: (endTime - startTime).toFixed(2),
       });
     });
   }

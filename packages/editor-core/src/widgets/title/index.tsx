@@ -7,8 +7,26 @@ import { Tip } from '../tip';
 import './title.less';
 
 export class Title extends Component<{ title: TitleContent; className?: string; onClick?: () => void }> {
+  constructor(props: any) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleClick(e: React.MouseEvent) {
+    const { title, onClick } = this.props as any;
+    const url = title && (title.docUrl || title.url);
+    if (url) {
+      window.open(url);
+      // 防止触发行操作（如折叠面板）
+      e.stopPropagation();
+    }
+    // TODO: 操作交互冲突，目前 mixedSetter 仅有 2 个 setter 注册时用到了 onClick
+    onClick && onClick(e);
+  }
   render() {
-    let { title, className, onClick } = this.props;
+    let { title, className } = this.props;
+    if (title == null) {
+      return null;
+    }
     if (isValidElement(title)) {
       return title;
     }
@@ -37,7 +55,7 @@ export class Title extends Component<{ title: TitleContent; className?: string; 
           'has-tip': !!tip,
           'only-icon': !title.label
         })}
-        onClick={onClick}
+        onClick={this.handleClick}
       >
         {icon ? <b className="lc-title-icon">{icon}</b> : null}
         {title.label ? intl(title.label) : null}

@@ -1,4 +1,4 @@
-import { obx, computed } from '@ali/lowcode-editor-core';
+import { obx, computed, autorun } from '@ali/lowcode-editor-core';
 import {
   isDOMText,
   isJSExpression,
@@ -13,7 +13,7 @@ import {
   ComponentSchema,
   NodeStatus,
 } from '@ali/lowcode-types';
-import { Props, EXTRA_KEY_PREFIX } from './props/props';
+import { Props, getConvertedExtraKey } from './props/props';
 import { DocumentModel } from '../document-model';
 import { NodeChildren } from './node-children';
 import { Prop } from './props/prop';
@@ -144,7 +144,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   constructor(readonly document: DocumentModel, nodeSchema: Schema) {
     const { componentName, id, children, props, ...extras } = nodeSchema;
-    this.id = id || `node$${document.nextId()}`;
+    this.id = id || `node_${document.nextId()}`;
     this.componentName = componentName;
     if (this.componentName === 'Leaf') {
       this.props = new Props(this, {
@@ -155,15 +155,31 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       this._children = new NodeChildren(this as ParentalNode, this.initialChildren(children));
       this._children.interalInitParent();
       this.props.import(this.transformProps(props || {}), extras);
+      this.setupAutoruns();
+    }
+
+    if (this.componentMeta.isModal) {
+      this.getExtraProp('hidden', true)?.setValue(true);
     }
   }
 
   private transformProps(props: any): any {
     // FIXME! support PropsList
-    const x = this.document.designer.transformProps(props, this, TransformStage.Init);
-
-    return x;
+    return this.document.designer.transformProps(props, this, TransformStage.Init);
     // TODO: run transducers in metadata.experimental
+  }
+
+  private autoruns?: Array<() => void>;
+  private setupAutoruns() {
+    const autoruns = this.componentMeta.getMetadata().experimental?.autoruns;
+    if (!autoruns || autoruns.length < 1) {
+      return;
+    }
+    this.autoruns = autoruns.map((item) => {
+      return autorun(() => {
+        item.autorun(this.props.get(item.name, true) as any);
+      }, true);
+    });
   }
 
   private initialChildren(children: any): NodeData[] {
@@ -368,9 +384,33 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     // todo
   }
 
-  replaceWith(schema: Schema, migrate = true) {
+  replaceWith(schema: Schema, migrate = false) {
     // reuse the same id? or replaceSelection
-    //
+    schema = Object.assign({}, migrate ? this.export() : {}, schema);
+    return this.parent?.replaceChild(this, schema);
+  }
+
+  /**
+   * 替换子节点
+   *
+   * @param {Node} node
+   * @param {object} data
+   */
+  replaceChild(node: Node, data: any) {
+    if (this.children?.has(node)) {
+      const selected = this.document.selection.has(node.id);
+
+      delete data.id;
+      const newNode = this.document.createNode(data);
+
+      this.insertBefore(newNode, node);
+      node.remove();
+
+      if (selected) {
+        this.document.selection.select(newNode.id);
+      }
+    }
+    return node;
   }
 
   getProp(path: string, stash = true): Prop | null {
@@ -378,7 +418,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   getExtraProp(key: string, stash = true): Prop | null {
-    return this.props.get(EXTRA_KEY_PREFIX + key, stash) || null;
+    return this.props.get(getConvertedExtraKey(key), stash) || null;
   }
 
   /**
@@ -425,7 +465,6 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
     return this.parent.children.indexOf(this);
   }
-
 
   /**
    * 获取下一个兄弟节点
@@ -481,13 +520,11 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * 导出 schema
    */
   export(stage: TransformStage = TransformStage.Save): Schema {
-    // run transducers
-    // run
     const baseSchema: any = {
       componentName: this.componentName,
     };
 
-    if (stage !== TransformStage.Save) {
+    if (stage !== TransformStage.Clone) {
       baseSchema.id = this.id;
     }
 
@@ -593,6 +630,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     if (this.isParental()) {
       this.children.purge();
     }
+    this.autoruns?.forEach((dispose) => dispose());
     this.props.purge();
     this.document.internalRemoveAndPurgeNode(this);
   }
@@ -610,7 +648,16 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   insertBefore(node: Node, ref?: Node) {
     this.children?.insert(node, ref ? ref.index : null);
   }
-  insertAfter(node: Node, ref?: Node) {
+  insertAfter(node: any, ref?: Node) {
+    if (!isNode(node)) {
+      if (node.getComponentName) {
+        node = this.document.createNode({
+          componentName: node.getComponentName(),
+        });
+      } else {
+        node = this.document.createNode(node);
+      }
+    }
     this.children?.insert(node, ref ? ref.index + 1 : null);
   }
   getParent() {
@@ -689,6 +736,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * @deprecated
    */
   getSuitablePlace(node: Node, ref: any): any {
+    // TODO:
     if (this.isRoot()) {
       return { container: this, ref };
     }
@@ -723,7 +771,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   getPrototype() {
-    return this;
+    return this.componentMeta.prototype;
   }
 
   getIcon() {
@@ -827,7 +875,7 @@ export function comparePosition(node1: Node, node2: Node): PositionNO {
 export function insertChild(container: ParentalNode, thing: Node | NodeData, at?: number | null, copy?: boolean): Node {
   let node: Node;
   if (isNode(thing) && (copy || thing.isSlot())) {
-    thing = thing.export(TransformStage.Save);
+    thing = thing.export(TransformStage.Clone);
   }
   if (isNode(thing)) {
     node = thing;

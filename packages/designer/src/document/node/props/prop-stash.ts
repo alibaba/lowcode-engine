@@ -1,6 +1,7 @@
 import { obx, autorun, untracked, computed } from '@ali/lowcode-editor-core';
 import { Prop, IPropParent, UNSET } from './prop';
 import { Props } from './props';
+import { Node } from '../node';
 
 export type PendingItem = Prop[];
 export class PropStash implements IPropParent {
@@ -15,8 +16,10 @@ export class PropStash implements IPropParent {
     return maps;
   }
   private willPurge: () => void;
+  readonly owner: Node;
 
   constructor(readonly props: Props, write: (item: Prop) => void) {
+    this.owner = props.owner;
     this.willPurge = autorun(() => {
       if (this.space.size < 1) {
         return;

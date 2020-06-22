@@ -144,12 +144,15 @@ export class SettingPropEntry implements SettingEntry {
   /**
    * 设置当前属性值
    */
-  setValue(val: any) {
+  setValue(val: any, isHotValue?: boolean, force?: boolean, extraOptions?: any) {
     if (this.type === 'field') {
       this.parent.setPropValue(this.name, val);
     }
+    if (!extraOptions) {
+      extraOptions = {};
+    }
     const { setValue } = this.extraProps;
-    if (setValue) {
+    if (setValue && !extraOptions.disableMutator) {
       setValue(this, val);
     }
   }
@@ -293,6 +296,9 @@ export class SettingPropEntry implements SettingEntry {
   }
   isUseVariable() {
     return isJSExpression(this.getValue());
+  }
+  get useVariable() {
+    return this.isUseVariable();
   }
   getMockOrValue() {
     const v = this.getValue();

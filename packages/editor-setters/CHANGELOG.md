@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.3"></a>
+## [0.9.3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.2...@ali/lowcode-editor-setters@0.9.3) (2020-06-15)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-setters
+
+<a name="0.9.2"></a>
+## [0.9.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.1...@ali/lowcode-editor-setters@0.9.2) (2020-05-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-setters
+
+<a name="0.9.1"></a>
+## 0.9.1 (2020-05-18)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-setters
+
+<a name="0.8.15"></a>
+## [0.8.15](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-setters@0.8.14...@ali/lowcode-setters@0.8.15) (2020-05-15)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-setters
+
 <a name="0.8.14"></a>
 ## [0.8.14](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-setters@0.8.13...@ali/lowcode-setters@0.8.14) (2020-05-13)
 

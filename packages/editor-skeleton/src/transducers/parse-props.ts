@@ -55,7 +55,7 @@ function propTypeToSetter(propType: PropType): SetterType {
       };
     case 'bool':
       return {
-        componentName: 'NumberSetter',
+        componentName: 'BoolSetter',
         isRequired,
         initialValue: false,
       };

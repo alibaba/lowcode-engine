@@ -2,6 +2,7 @@ import { skeleton, editor } from './editor';
 import { ReactElement } from 'react';
 import { IWidgetBaseConfig, Skeleton } from '@ali/lowcode-editor-skeleton';
 import { uniqueId } from '@ali/lowcode-utils';
+import bus from './bus';
 
 export interface IContentItemConfig {
   title: string;
@@ -92,6 +93,7 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
             type: 'Panel',
             name: typeof title === 'string' ? title : `${name}:${index}`,
             content,
+            contentProps: props,
             props: {
               title,
               help: tip,
@@ -132,7 +134,18 @@ function add(config: (() => OldPaneConfig) | OldPaneConfig, extraConfig?: any) {
     config = { ...config, ...extraConfig };
   }
 
-  skeleton.add(upgradeConfig(config));
+  const upgraded = upgradeConfig(config);
+  if (upgraded.area === 'stages') {
+    if (upgraded.id) {
+      upgraded.name = upgraded.id;
+    } else if (!upgraded.name) {
+      upgraded.name = uniqueId('stage');
+    }
+    const stage = skeleton.add(upgraded);
+    return stage?.getName();
+  } else {
+    return skeleton.add(upgraded);
+  }
 }
 
 const actionPane = Object.assign(skeleton.topArea, {
@@ -164,6 +177,7 @@ const dockPane = Object.assign(skeleton.leftArea, {
       console.warn(`Could not find pane with name ${name}`);
     }
     pane?.active();
+    bus.emit('ve.dock_pane.active_doc', pane);
   },
 
   /**

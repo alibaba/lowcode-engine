@@ -1,7 +1,7 @@
 import { Component, ReactElement } from 'react';
 import { Icon } from '@alifd/next';
 import classNames from 'classnames';
-import { Title, observer, Tip } from '@ali/lowcode-editor-core';
+import { Title, observer, Tip, globalContext, Editor } from '@ali/lowcode-editor-core';
 import { DockProps } from '../types';
 import PanelDock from '../widget/panel-dock';
 import { composeTitle } from '../widget/utils';
@@ -27,7 +27,7 @@ function HelpTip({ tip }: any) {
     return (
       <div>
         <a href={tip.url} target="_blank" rel="noopener noreferrer">
-          <Icon type="help" size="small" className="lc-help-tip"/>
+          <Icon type="help" size="small" className="lc-help-tip" />
         </a>
         <Tip>{tip.content}</Tip>
       </div>
@@ -35,10 +35,10 @@ function HelpTip({ tip }: any) {
   }
   return (
     <div>
-      <Icon type="help" size="small" className="lc-help-tip"/>
+      <Icon type="help" size="small" className="lc-help-tip" />
       <Tip>{tip.content}</Tip>
     </div>
-  )
+  );
 }
 
 @observer
@@ -49,7 +49,7 @@ export class PanelDockView extends Component<DockProps & { dock: PanelDock }> {
   componentDidUpdate() {
     this.checkActived();
   }
-  private lastActived: boolean = false;
+  private lastActived = false;
   checkActived() {
     const { dock } = this.props;
     if (dock.actived !== this.lastActived) {
@@ -77,12 +77,10 @@ export class PanelDockView extends Component<DockProps & { dock: PanelDock }> {
   }
 }
 
-export class DialogDockView extends Component {
-
-}
+export class DialogDockView extends Component {}
 
 @observer
-export class TitledPanelView extends Component<{ panel: Panel }> {
+export class TitledPanelView extends Component<{ panel: Panel; area?: string }> {
   shouldComponentUpdate() {
     return false;
   }
@@ -92,7 +90,7 @@ export class TitledPanelView extends Component<{ panel: Panel }> {
   componentDidUpdate() {
     this.checkVisible();
   }
-  private lastVisible: boolean = false;
+  private lastVisible = false;
   checkVisible() {
     const { panel } = this.props;
     const currentVisible = panel.inited && panel.visible;
@@ -106,14 +104,23 @@ export class TitledPanelView extends Component<{ panel: Panel }> {
     }
   }
   render() {
-    const { panel } = this.props;
+    const { panel, area } = this.props;
     if (!panel.inited) {
       return null;
     }
+    const editor = globalContext.get(Editor);
+    const panelName = area ? `${area}-${panel.name}` : panel.name;
+    editor?.emit('skeleton.panel.toggle', {
+      name: panelName || '',
+      status: panel.visible ? 'show' : 'hide',
+    });
     return (
-      <div className={classNames('lc-titled-panel', {
-        hidden: !panel.visible,
-      })}>
+      <div
+        className={classNames('lc-titled-panel', {
+          hidden: !panel.visible,
+        })}
+        id={panelName}
+      >
         <PanelTitle panel={panel} />
         <div className="lc-panel-body">{panel.body}</div>
       </div>
@@ -122,7 +129,7 @@ export class TitledPanelView extends Component<{ panel: Panel }> {
 }
 
 @observer
-export class PanelView extends Component<{ panel: Panel }> {
+export class PanelView extends Component<{ panel: Panel; area?: string }> {
   shouldComponentUpdate() {
     return false;
   }
@@ -132,7 +139,7 @@ export class PanelView extends Component<{ panel: Panel }> {
   componentDidUpdate() {
     this.checkVisible();
   }
-  private lastVisible: boolean = false;
+  private lastVisible = false;
   checkVisible() {
     const { panel } = this.props;
     const currentVisible = panel.inited && panel.visible;
@@ -150,15 +157,22 @@ export class PanelView extends Component<{ panel: Panel }> {
     }
   }
   render() {
-    const { panel } = this.props;
+    const { panel, area } = this.props;
     if (!panel.inited) {
       return null;
     }
+    const editor = globalContext.get(Editor);
+    const panelName = area ? `${area}-${panel.name}` : panel.name;
+    editor?.emit('skeleton.panel.toggle', {
+      name: panelName || '',
+      status: panel.visible ? 'show' : 'hide',
+    });
     return (
       <div
         className={classNames('lc-panel', {
           hidden: !panel.visible,
         })}
+        id={panelName}
       >
         {panel.body}
       </div>
@@ -233,7 +247,7 @@ export class WidgetView extends Component<{ widget: IWidget }> {
   componentDidUpdate() {
     this.checkVisible();
   }
-  private lastVisible: boolean = false;
+  private lastVisible = false;
   checkVisible() {
     const { widget } = this.props;
     const currentVisible = widget.visible;

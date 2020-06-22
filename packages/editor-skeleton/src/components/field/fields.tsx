@@ -12,6 +12,7 @@ import InlineTip from './inlinetip';
 
 export interface FieldProps {
   className?: string;
+  meta?: { package: string; componentName: string } | string;
   title?: TitleContent | null;
   defaultDisplay?: 'accordion' | 'inline' | 'block';
   collapsed?: boolean;
@@ -27,6 +28,11 @@ export class Field extends Component<FieldProps> {
     collapsed: this.props.collapsed,
     display: this.props.defaultDisplay || 'inline',
   };
+
+  constructor(props: any) {
+    super(props);
+    this.handleClear = this.handleClear.bind(this);
+  }
 
   private toggleExpand = () => {
     const { onExpandChange } = this.props;
@@ -68,6 +74,10 @@ export class Field extends Component<FieldProps> {
     });
     this.dispose = () => observer.disconnect();
   }
+  private handleClear(e: React.MouseEvent) {
+    e.stopPropagation();
+    this.props.onClear && this.props.onClear();
+  }
   componentDidMount() {
     const { defaultDisplay } = this.props;
     if (!defaultDisplay || defaultDisplay === 'inline') {
@@ -106,19 +116,27 @@ export class Field extends Component<FieldProps> {
   }
 
   render() {
-    const { className, children, title, valueState, onClear, name: propName, tip } = this.props;
+    const { className, children, meta, title, valueState, onClear, name: propName, tip } = this.props;
     const { display, collapsed } = this.state;
     const isAccordion = display === 'accordion';
+    let hostName = '';
+    if (typeof meta === 'object') {
+      hostName = `${meta?.package || ''}-${meta.componentName || ''}`;
+    } else if (typeof meta === 'string') {
+      hostName = meta;
+    }
+    const id = `${hostName}-${propName || (title as any)['en-US'] || (title as any)['zh-CN']}`;
     const tipContent = this.getTipContent(propName!, tip);
     return (
       <div
         className={classNames(`lc-field lc-${display}-field`, className, {
           'lc-field-is-collapsed': isAccordion && collapsed,
         })}
+        id={id}
       >
         <div className="lc-field-head" onClick={isAccordion ? this.toggleExpand : undefined}>
           <div className="lc-field-title">
-            {createValueState(valueState, onClear)}
+            {createValueState(valueState, this.handleClear)}
             <Title title={title || ''} />
             <InlineTip position="top">{tipContent}</InlineTip>
           </div>
@@ -143,7 +161,7 @@ export class Field extends Component<FieldProps> {
  *
  * TODO: turn number to enum
  */
-function createValueState(valueState?: number, onClear?: () => void) {
+function createValueState(valueState?: number, onClear?: (e: React.MouseEvent) => void) {
   let tip: any = null;
   let className = 'lc-valuestate';
   let icon: any = null;

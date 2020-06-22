@@ -3,6 +3,113 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.21"></a>
+## [0.8.21](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.20...@ali/lowcode-editor-preset-vision@0.8.21) (2020-06-16)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-vision
+
+<a name="0.8.20"></a>
+## [0.8.20](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.19...@ali/lowcode-editor-preset-vision@0.8.20) (2020-06-15)
+
+
+### Bug Fixes
+
+* compatiable old VE api ([45af1c5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/45af1c5))
+* i18n parser & setting ([dbdd9e4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/dbdd9e4))
+* patch prototype ([f20bfaa](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f20bfaa))
+* render children ([487f257](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/487f257))
+* style ([4694331](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/4694331))
+* 调整保存成功弹出框位置 ([5198dae](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5198dae))
+
+
+### Features
+
+* complete live-editing expr & i18n ([3ac08ba](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3ac08ba))
+* support prop.autorun ([c0a5235](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c0a5235))
+* ve事件埋点 ([700e5b0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/700e5b0))
+
+
+
+
+<a name="0.8.19"></a>
+## [0.8.19](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.18...@ali/lowcode-editor-preset-vision@0.8.19) (2020-05-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-vision
+
+<a name="0.8.18"></a>
+## [0.8.18](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.17...@ali/lowcode-editor-preset-vision@0.8.18) (2020-05-19)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-vision
+
+<a name="0.8.17"></a>
+## [0.8.17](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.16...@ali/lowcode-editor-preset-vision@0.8.17) (2020-05-18)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-vision
+
+<a name="0.8.16"></a>
+## [0.8.16](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.15...@ali/lowcode-editor-preset-vision@0.8.16) (2020-05-18)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-vision
+
+<a name="0.8.15"></a>
+## 0.8.15 (2020-05-18)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-vision
+
+<a name="0.8.14"></a>
+## [0.8.14](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-vision-preset@0.8.13...@ali/lowcode-vision-preset@0.8.14) (2020-05-16)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-vision-preset
+
+<a name="0.8.13"></a>
+## [0.8.13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-vision-preset@0.8.12...@ali/lowcode-vision-preset@0.8.13) (2020-05-16)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-vision-preset
+
+<a name="0.8.12"></a>
+## [0.8.12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-vision-preset@0.8.11...@ali/lowcode-vision-preset@0.8.12) (2020-05-16)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-vision-preset
+
+<a name="0.8.11"></a>
+## [0.8.11](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-vision-preset@0.8.10...@ali/lowcode-vision-preset@0.8.11) (2020-05-15)
+
+
+### Features
+
+* add filter reducer ([17c6ed3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/17c6ed3))
+* change reducer stage ([c2e83c7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c2e83c7))
+
+
+
+
 <a name="0.8.10"></a>
 ## [0.8.10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-vision-preset@0.8.9...@ali/lowcode-vision-preset@0.8.10) (2020-05-15)
 

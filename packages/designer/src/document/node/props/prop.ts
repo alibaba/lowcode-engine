@@ -4,7 +4,7 @@ import { uniqueId, isPlainObject, hasOwnProperty } from '@ali/lowcode-utils';
 import { PropStash } from './prop-stash';
 import { valueToSource } from './value-to-source';
 import { Props } from './props';
-import { SlotNode } from '../node';
+import { SlotNode, Node } from '../node';
 import { TransformStage } from '../transform-stage';
 
 export const UNSET = Symbol.for('unset');
@@ -13,12 +13,35 @@ export type UNSET = typeof UNSET;
 export interface IPropParent {
   delete(prop: Prop): void;
   readonly props: Props;
+  readonly owner: Node;
 }
 
 export type ValueTypes = 'unset' | 'literal' | 'map' | 'list' | 'expression' | 'slot';
 
 export class Prop implements IPropParent {
   readonly isProp = true;
+  readonly owner: Node;
+
+  /**
+   * @see SettingTarget
+   */
+  getPropValue(propName: string | number): any {
+    return this.get(propName)!.getValue();
+  }
+
+  /**
+   * @see SettingTarget
+   */
+  setPropValue(propName: string | number, value: any): void {
+    this.set(propName, value);
+  }
+
+  /**
+   * @see SettingTarget
+   */
+  clearPropValue(propName: string | number): void {
+    this.get(propName, false)?.unset();
+  }
 
   readonly id = uniqueId('prop$');
 
@@ -74,7 +97,7 @@ export class Prop implements IPropParent {
       this.items!.forEach((prop, key) => {
         const v = prop.export(stage);
         if (v !== UNSET) {
-          maps[key] = v;
+          maps[prop.key == null ? key : prop.key] = v;
         }
       });
       return maps;
@@ -329,6 +352,7 @@ export class Prop implements IPropParent {
     key?: string | number,
     spread = false,
   ) {
+    this.owner = parent.owner;
     this.props = parent.props;
     if (value !== UNSET) {
       this.setValue(value);
@@ -341,7 +365,7 @@ export class Prop implements IPropParent {
    * 获取某个属性
    * @param stash 如果不存在，临时获取一个待写入
    */
-  get(path: string | number, stash = true): Prop | null {
+  get(path: string | number, stash: boolean = true): Prop | null {
     const type = this._type;
     if (type !== 'map' && type !== 'list' && type !== 'unset' && !stash) {
       return null;
@@ -587,6 +611,14 @@ export class Prop implements IPropParent {
     return items.map((item, index) => {
       return isMap ? fn(item, item.key) : fn(item, index);
     });
+  }
+
+  getProps() {
+    return this.parent;
+  }
+
+  getNode() {
+    return this.owner;
   }
 }
 

@@ -7,6 +7,19 @@ import { Node } from '../node';
 import { TransformStage } from '../transform-stage';
 
 export const EXTRA_KEY_PREFIX = '___';
+export function getConvertedExtraKey(key: string): string {
+  if (!key) {
+    return '';
+  }
+  let _key = key;
+  if (key.indexOf('.') > 0) {
+    _key = key.split('.')[0];
+  }
+  return EXTRA_KEY_PREFIX + _key + EXTRA_KEY_PREFIX + key.substr(_key.length);
+}
+export function getOriginalExtraKey(key: string): string {
+  return key.replace(new RegExp(`${EXTRA_KEY_PREFIX}`, 'g'), '');
+}
 
 export class Props implements IPropParent {
   readonly id = uniqueId('props');
@@ -50,7 +63,7 @@ export class Props implements IPropParent {
     }
     if (extras) {
       Object.keys(extras).forEach(key => {
-        this.items.push(new Prop(this, (extras as any)[key], EXTRA_KEY_PREFIX + key));
+        this.items.push(new Prop(this, (extras as any)[key], getConvertedExtraKey(key)));
       });
     }
   }
@@ -70,7 +83,7 @@ export class Props implements IPropParent {
     }
     if (extras) {
       Object.keys(extras).forEach(key => {
-        this.items.push(new Prop(this, (extras as any)[key], EXTRA_KEY_PREFIX + key));
+        this.items.push(new Prop(this, (extras as any)[key], getConvertedExtraKey(key)));
       });
     }
     originItems.forEach(item => item.purge());
@@ -97,7 +110,7 @@ export class Props implements IPropParent {
         }
         let name = item.key as string;
         if (name && typeof name === 'string' && name.startsWith(EXTRA_KEY_PREFIX)) {
-          name = name.substr(EXTRA_KEY_PREFIX.length);
+          name = getOriginalExtraKey(name);
           extras[name] = value;
         } else {
           props.push({
@@ -119,7 +132,7 @@ export class Props implements IPropParent {
           value = null;
         }
         if (typeof name === 'string' && name.startsWith(EXTRA_KEY_PREFIX)) {
-          name = name.substr(EXTRA_KEY_PREFIX.length);
+          name = getOriginalExtraKey(name);
           extras[name] = value;
         } else {
           props[name] = value;

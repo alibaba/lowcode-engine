@@ -1,6 +1,8 @@
 import { ComponentType, ReactElement, isValidElement, ComponentClass } from 'react';
 import { isPlainObject } from '@ali/lowcode-utils';
-import { isI18nData, SettingTarget, InitialItem, isJSSlot, isJSExpression } from '@ali/lowcode-types';
+import { isI18nData, SettingTarget, InitialItem, FilterItem, isJSSlot, ProjectSchema, AutorunItem } from '@ali/lowcode-types';
+import { untracked } from '@ali/lowcode-editor-core';
+import { editor, designer } from '../editor';
 
 type Field = SettingTarget;
 
@@ -166,6 +168,8 @@ export interface OldPrototypeConfig {
   onResizeStart?: (e: MouseEvent, triggerDirection: string, dragment: Node) => void;
   onResize?: (e: MouseEvent, triggerDirection: string, dragment: Node, moveX: number, moveY: number) => void;
   onResizeEnd?: (e: MouseEvent, triggerDirection: string, dragment: Node) => void;
+  devMode?: string;
+  schema?: ProjectSchema;
 }
 
 export interface ISetterConfig {
@@ -178,7 +182,7 @@ type SetterGetter = (this: Field, value: any) => ComponentClass;
 
 type ReturnBooleanFunction = (this: Field, value: any) => boolean;
 
-export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) {
+export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollector) {
   const {
     type,
     name,
@@ -209,7 +213,9 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
     liveTextEditing,
   } = config;
 
-  const extraProps: any = {};
+  const extraProps: any = {
+    display: DISPLAY_TYPE.BLOCK,
+  };
   const newConfig: any = {
     type: type === 'group' ? 'group' : 'field',
     name,
@@ -261,22 +267,9 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
   } else if (hidden != null || disabled != null) {
     extraProps.condition = (field: Field) => !(isHidden(field) || isDisabled(field));
   }
-  if (ignore != null || disabled != null) {
-    // FIXME! addFilter
-    extraProps.virtual = (field: Field) => {
-      if (isDisabled(field)) {
-        return true;
-      }
-
-      if (typeof ignore === 'function') {
-        return ignore.call(field, field.getValue()) === true;
-      }
-      return ignore === true;
-    };
-  }
 
   if (type === 'group') {
-    newConfig.items = items ? upgradeConfigure(items, addInitial) : [];
+    newConfig.items = items ? upgradeConfigure(items, collector) : [];
     return newConfig;
   }
 
@@ -303,18 +296,44 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
     };
   }
 
-  if (accessor && !slotName) {
-    extraProps.getValue = (field: Field, fieldValue: any) => {
-      return accessor.call(field, fieldValue);
-    };
-    if (!initialFn) {
-      initialFn = accessor;
+  if (!slotName) {
+    if (accessor) {
+      extraProps.getValue = (field: Field, fieldValue: any) => {
+        return accessor.call(field, fieldValue);
+      };
+    }
+
+    if (sync || accessor) {
+      collector.addAutorun({
+        name,
+        autorun: (field: Field) => {
+          let fieldValue = untracked(() => field.getValue());
+          if (accessor) {
+            fieldValue = accessor.call(field, fieldValue)
+          }
+          if (sync) {
+            fieldValue = sync.call(field, fieldValue);
+            if (fieldValue !== undefined) {
+              field.setValue(fieldValue);
+            }
+          } else {
+            field.setValue(fieldValue);
+          }
+        }
+      });
+    }
+
+    if (mutator) {
+      extraProps.setValue = (field: Field, value: any) => {
+        mutator.call(field, value, value);
+      };
     }
   }
 
   const setterInitial = getInitialFromSetter(setter);
 
-  addInitial({
+  collector.addInitial({
+    // FIXME! name could be "xxx.xxx"
     name: slotName || name,
     initial: (field: Field, currentValue: any) => {
       // FIXME! read from prototype.defaultProps
@@ -334,18 +353,27 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
     },
   });
 
-  if (sync) {
-    extraProps.autorun = (field: Field) => {
-      const value = sync.call(field, field.getValue());
-      if (value !== undefined) {
-        field.setValue(value);
+  if (ignore != null || disabled != null) {
+    collector.addFilter({
+      // FIXME! name should be "xxx.xxx"
+      name: slotName || name,
+      filter: (field: Field, currentValue: any) => {
+        let disabledValue: boolean;
+        if (typeof disabled === 'function') {
+          disabledValue = disabled.call(field, currentValue) === true;
+        }
+        else {
+          disabledValue = disabled === true;
+        }
+        if (disabledValue) {
+          return false;
+        }
+        if (typeof ignore === 'function') {
+          return ignore.call(field, currentValue) !== true;
+        }
+        return ignore !== true;
       }
-    };
-  }
-  if (mutator && !slotName) {
-    extraProps.setValue = (field: Field, value: any) => {
-      mutator.call(field, value, value);
-    };
+    });
   }
 
   if (slotName) {
@@ -371,7 +399,7 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
         },
       },
     ];
-    if (allowTextInput !== false) {
+    if (allowTextInput) {
       setters.unshift('I18nSetter');
     }
     if (supportVariable) {
@@ -386,9 +414,25 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
   if (type === 'composite') {
     const initials: InitialItem[] = [];
     const objItems = items
-      ? upgradeConfigure(items, (item) => {
-          initials.push(item);
-        })
+      ? upgradeConfigure(items,
+        {
+          addInitial: (item) => {
+            initials.push(item);
+          },
+          addFilter: (item) => {
+            collector.addFilter({
+              name: `${name}.${item.name}`,
+              filter: item.filter,
+            });
+          },
+          addAutorun: (item) => {
+            collector.addAutorun({
+              name: `${name}.${item.name}`,
+              autorun: item.autorun,
+            });
+          },
+        }
+      )
       : [];
     const initial = (target: SettingTarget, value?: any) => {
       // TODO:
@@ -400,7 +444,7 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
       });
       return data;
     };
-    addInitial({
+    collector.addInitial({
       name,
       initial,
     });
@@ -460,7 +504,15 @@ export function upgradePropConfig(config: OldPropConfig, addInitial: AddIntial) 
   return newConfig;
 }
 
-type AddIntial = (initialItem: InitialItem) => void;
+type AddInitial = (initialItem: InitialItem) => void;
+type AddFilter = (filterItem: FilterItem) => void;
+type AddAutorun = (autorunItem: AutorunItem) => void;
+
+type ConfigCollector = {
+  addInitial: AddInitial;
+  addFilter: AddFilter;
+  addAutorun: AddAutorun;
+}
 
 function getInitialFromSetter(setter: any) {
   return setter && (
@@ -474,7 +526,7 @@ function defaultInitial(value: any, defaultValue: any) {
 }
 
 
-export function upgradeConfigure(items: OldPropConfig[], addInitial: AddIntial) {
+export function upgradeConfigure(items: OldPropConfig[], collector: ConfigCollector) {
   const configure: any[] = [];
   let ignoreSlotName: any = null;
   items.forEach((config) => {
@@ -487,7 +539,7 @@ export function upgradeConfigure(items: OldPropConfig[], addInitial: AddIntial) 
       }
       ignoreSlotName = null;
     }
-    configure.push(upgradePropConfig(config, addInitial));
+    configure.push(upgradePropConfig(config, collector));
   });
   return configure;
 }
@@ -560,6 +612,8 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     onResizeStart, // onResizeStart
     onResize, // onResize
     onResizeEnd, // onResizeEnd
+    devMode,
+    schema,
   } = oldConfig;
 
   const meta: any = {
@@ -567,7 +621,8 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     title,
     icon,
     docUrl,
-    devMode: 'procode',
+    devMode: devMode || 'procode',
+    schema: schema?.componentsTree[0],
   };
 
   if (category) {
@@ -655,8 +710,9 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   if (initialChildren) {
     experimental.initialChildren =
       typeof initialChildren === 'function'
-        ? (field: Field) => {
-            return initialChildren.call(field, (field as any).props);
+        ? (node: any) => {
+            const props = designer.createSettingEntry(editor, [ node ]);
+            return initialChildren.call(node, props);
           }
         : initialChildren;
   }
@@ -724,10 +780,24 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   experimental.callbacks = callbacks;
 
   const initials: InitialItem[] = [];
-  const props = upgradeConfigure(configure || [], (item) => {
-    initials.push(item);
-  });
+  const filters: FilterItem[] = [];
+  const autoruns: AutorunItem[] = [];
+  const props = upgradeConfigure(configure || [],
+    {
+      addInitial: (item) => {
+        initials.push(item);
+      },
+      addFilter: (item) => {
+        filters.push(item);
+      },
+      addAutorun: (item) => {
+        autoruns.push(item);
+      }
+    }
+  );
   experimental.initials = initials;
+  experimental.filters = filters;
+  experimental.autoruns = autoruns;
 
   const supports: any = {};
   if (canUseCondition != null) {

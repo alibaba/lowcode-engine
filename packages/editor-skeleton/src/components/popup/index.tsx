@@ -59,8 +59,8 @@ export class PopupPipe {
   }
 }
 
-export default class PopupService extends Component<{ actionKey?: string; safeId?: string }> {
-  private popupPipe = new PopupPipe();
+export default class PopupService extends Component<{ popupPipe?: PopupPipe; actionKey?: string; safeId?: string }> {
+  private popupPipe = this.props.popupPipe || new PopupPipe();
 
   componentWillUnmount() {
     this.popupPipe.purge();
@@ -121,6 +121,7 @@ export class PopupContent extends PureComponent<{ safeId?: string }> {
         className="lc-ballon"
         align="l"
         id={this.props.safeId}
+        alignEdge
         safeNode={id}
         visible={visible}
         style={{ width }}
@@ -135,7 +136,7 @@ export class PopupContent extends PureComponent<{ safeId?: string }> {
         trigger={<div className="lc-popup-placeholder" style={pos} />}
         triggerType="click"
         animation={false}
-        // needAdjust
+        needAdjust
         shouldUpdatePosition
       >
         <div className="lc-ballon-title">{title}</div>

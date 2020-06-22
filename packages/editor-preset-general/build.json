@@ -4,7 +4,7 @@
       "build-plugin-component",
       {
         "filename": "editor-preset-general",
-        "library": "LowcodeEditorPresetGeneral",
+        "library": "LowcodeEditor",
         "libraryTarget": "umd",
         "externals": {
           "react": "var window.React",
