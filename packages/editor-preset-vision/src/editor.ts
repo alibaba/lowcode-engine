@@ -125,7 +125,7 @@ function compatiableReducer(props: any) {
   });
   return newProps;
 }
-// Dirty fix: will remove this reducer
+// FIXME: Dirty fix, will remove this reducer
 designer.addPropsReducer(compatiableReducer, TransformStage.Save);
 
 // 设计器组件样式处理

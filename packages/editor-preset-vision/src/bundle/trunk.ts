@@ -35,7 +35,7 @@ export class Trunk {
       bundle = this.trunk[i];
       prototype = bundle.get(name);
       if (prototype) {
-        return prototype;
+        return (prototype.meta as any).prototype;
       }
     }
     return this.metaBundle.getFromMeta(name);
