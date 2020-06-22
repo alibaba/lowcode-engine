@@ -1,4 +1,4 @@
-import { obx, autorun, computed, getPublicPath, hotkey, focusTracker, globalContext, Editor } from '@ali/lowcode-editor-core';
+import { obx, autorun, computed, getPublicPath, hotkey, focusTracker } from '@ali/lowcode-editor-core';
 import { ISimulatorHost, Component, NodeInstance, ComponentInstance } from '../simulator';
 import Viewport from './viewport';
 import { createSimulator } from './create-simulator';
@@ -269,7 +269,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
               selection.remove(id);
             } else {
               selection.select(id);
-              const editor = globalContext.get(Editor);
+              const editor = this.designer?.editor;
               const npm = node?.componentMeta?.npm;
               const selected =
                 [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
@@ -435,7 +435,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       if (!node) {
         return;
       }
-      const editor = globalContext.get(Editor);
+      const editor = this.designer?.editor;
       const npm = node?.componentMeta?.npm;
       const selected =
         [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||

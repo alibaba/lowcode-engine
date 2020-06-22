@@ -1,5 +1,5 @@
 import { Component, MouseEvent as ReactMouseEvent } from 'react';
-import { observer } from '@ali/lowcode-editor-core';
+import { observer, Editor, globalContext } from '@ali/lowcode-editor-core';
 import { isRootNode, Node, DragObjectType, isShaken } from '@ali/lowcode-designer';
 import { isFormEvent } from '@ali/lowcode-utils';
 import { Tree } from '../tree';
@@ -60,6 +60,16 @@ export default class TreeView extends Component<{ tree: Tree }> {
       }
     } else {
       selection.select(id);
+      const editor = globalContext.get(Editor);
+      const selectedNode = designer.currentSelection?.getNodes()?.[0];
+      const npm = selectedNode?.componentMeta?.npm;
+      const selected =
+        [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
+        selectedNode?.componentMeta?.componentName ||
+        '';
+      editor?.emit('outlinePane.select', {
+        selected,
+      });
     }
   };
 
