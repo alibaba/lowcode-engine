@@ -791,6 +791,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.scroller.scrolling(e);
     const dropContainer = this.getDropContainer(e);
     if (!dropContainer ||
+       // too dirty
         (typeof dropContainer.container?.componentMeta?.prototype?.options?.canDropIn === 'function' &&
           !dropContainer.container?.componentMeta?.prototype?.options?.canDropIn(e.dragObject.nodes[0]))) {
       return null;
