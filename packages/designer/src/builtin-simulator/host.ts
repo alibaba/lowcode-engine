@@ -40,6 +40,7 @@ export interface BuiltinSimulatorProps {
   device?: 'mobile' | 'iphone' | string;
   deviceClassName?: string;
   environment?: Asset;
+  extraEnvironment?: Asset;
   library?: LibraryItem[];
   simulatorUrl?: Asset;
   theme?: Asset;
@@ -186,6 +187,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     const vendors = [
       // required & use once
       assetBundle(this.get('environment') || defaultEnvironment, AssetLevel.Environment),
+      // required & use once
+      assetBundle(this.get('extraEnvironment'), AssetLevel.Environment),
       // required & use once
       assetBundle(libraryAsset, AssetLevel.Library),
       // required & TODO: think of update

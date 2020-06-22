@@ -1,6 +1,6 @@
 import lg from '@ali/vu-logger';
 import { ComponentClass, ComponentType } from 'react';
-import Prototype from './prototype';
+import Prototype, { isPrototype } from './prototype';
 import { designer } from '../editor';
 
 function basename(name: string) {
@@ -141,12 +141,12 @@ export default class Bundle {
 
   private recursivelyRegisterPrototypes(list: any[], cp: ComponentProtoBundle) {
     const propList: ComponentProtoBundle[] = list;
-    propList.forEach((proto: ComponentProtoBundle, index: number) => {
+    propList.forEach((proto: any, index: number) => {
       if (Array.isArray(proto)) {
         this.recursivelyRegisterPrototypes(proto, cp);
         return;
       }
-      if (proto instanceof Prototype) {
+      if (isPrototype(proto)) {
         const componentName = proto.getComponentName()!;
         if (!proto.getView() && this.viewsMap[componentName]) {
           proto.setView(this.viewsMap[componentName]);

@@ -217,7 +217,7 @@ class Prototype {
   }
 
   readonly isPrototype = true;
-  private meta: ComponentMeta;
+  readonly meta: ComponentMeta;
   readonly options: OldPrototypeConfig | ComponentMetadata;
 
   constructor(input: OldPrototypeConfig | ComponentMetadata | ComponentMeta) {
