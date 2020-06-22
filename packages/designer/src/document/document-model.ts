@@ -345,11 +345,6 @@ export class DocumentModel {
     // TODO: 多设备 simulator 支持
     this._simulator = simulator;
     // TODO: emit simulator mounted
-    this._simulator?.onRendererConnect((renderer) => {
-      this.emitter.emit('lowcode_engine_renderer_ready', {
-        renderer,
-      });
-    })
   }
 
   // FIXME: does needed?
@@ -513,6 +508,10 @@ export class DocumentModel {
     return () => {
       this.emitter.removeListener('lowcode_engine_renderer_ready', fn);
     };
+  }
+
+  setRendererReady(renderer) {
+    this.emitter.emit('lowcode_engine_renderer_ready', renderer);
   }
 }
 

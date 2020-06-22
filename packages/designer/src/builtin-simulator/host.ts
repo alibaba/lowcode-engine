@@ -1,5 +1,4 @@
 import { obx, autorun, computed, getPublicPath, hotkey, focusTracker, globalContext, Editor } from '@ali/lowcode-editor-core';
-import { EventEmitter } from 'events';
 import { ISimulatorHost, Component, NodeInstance, ComponentInstance } from '../simulator';
 import Viewport from './viewport';
 import { createSimulator } from './create-simulator';
@@ -73,12 +72,10 @@ const defaultEnvironment = [
 
 export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProps> {
   readonly isSimulator = true;
-  readonly designer = this.document.designer;
-  private emitter: EventEmitter;
 
-  constructor(readonly document: DocumentModel) {
-    this.emitter = new EventEmitter();
-  }
+  constructor(readonly document: DocumentModel) {}
+
+  readonly designer = this.document.designer;
 
   @computed get device(): string {
     return this.get('device') || 'default';
@@ -129,7 +126,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
    */
   connect(renderer: BuiltinSimulatorRenderer, fn: (context: { dispose: () => void; firstRun: boolean }) => void) {
     this._renderer = renderer;
-    this.emitter.emit('lowcode_engine_renderer_connect', renderer);
     return autorun(fn as any, true);
   }
 
@@ -1134,13 +1130,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     */
   }
   // #endregion
-
-  onRendererConnect(fn: (renderer: BuiltinSimulatorRenderer) => void): () => void {
-    this.emitter.on('lowcode_engine_renderer_connect', fn);
-    return () => {
-      this.emitter.removeListener('lowcode_engine_renderer_connect', fn);
-    };
-  }
 }
 
 function isHTMLTag(name: string) {

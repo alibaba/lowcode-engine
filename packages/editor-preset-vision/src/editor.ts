@@ -26,12 +26,9 @@ editor.set(Designer, designer);
 editor.set('designer', designer);
 
 designer.project.onCurrentDocumentChange((doc) => {
-  doc.onRendererReady((args) => {
-    const { renderer } = args;
-    renderer.onRendered(() => {
-      bus.emit(VE_EVENTS.VE_PAGE_PAGE_READY);
-    });
-  })
+  doc.onRendererReady(() => {
+    bus.emit(VE_EVENTS.VE_PAGE_PAGE_READY);
+  });
 });
 
 // 节点 props 初始化
