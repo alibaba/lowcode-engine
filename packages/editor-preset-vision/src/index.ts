@@ -4,7 +4,7 @@ import Icons from '@ali/ve-icons';
 import logger from '@ali/vu-logger';
 import { render } from 'react-dom';
 import I18nUtil from './i18n-util';
-import { hotkey as Hotkey } from '@ali/lowcode-editor-core';
+import { hotkey as Hotkey, Monitor } from '@ali/lowcode-editor-core';
 import { createElement } from 'react';
 import { VE_EVENTS as EVENTS, VE_HOOKS as HOOKS, VERSION as Version } from './base/const';
 import Bus from './bus';
@@ -84,6 +84,7 @@ const VisualEngine = {
   I18nUtil,
   Hotkey,
   Env,
+  Monitor,
   /* pub/sub 集线器 */
   Bus,
   /* 事件 */
@@ -132,6 +133,7 @@ export {
   I18nUtil,
   Hotkey,
   Env,
+  Monitor,
   /* pub/sub 集线器 */
   Bus,
   /* 事件 */

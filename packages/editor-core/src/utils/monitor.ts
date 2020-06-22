@@ -2,7 +2,7 @@ class Monitor {
   fn = (params: any) => {
     const { AES } = window as any;
     if (typeof AES.log === 'function') {
-      const { p1, p2, p3, p4 = 'OTHER', ...rest } = params || {};
+      const { p1 = '', p2 = '', p3 = '', p4 = 'OTHER', ...rest } = params || {};
       AES.log('event', {
         p1,
         p2,
@@ -42,5 +42,4 @@ class Monitor {
   }
 }
 
-const monitor = new Monitor();
-export { monitor };
+export { Monitor };
