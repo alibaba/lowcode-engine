@@ -1,5 +1,5 @@
 import { render } from 'react-dom';
-import GeneralWorkbench from '@ali/lowcode-editor-preset-general';
+import GeneralWorkbench, { editor } from '../../../editor-preset-general/src';
 import config from './config';
 import components from './components';
 import './global.scss';

@@ -1,5 +1,5 @@
 import { Component, createElement } from 'react';
-import app from '../../index';
+import { app } from '@ali/lowcode-runtime';
 
 interface IProps {
   getPageData: () => any;

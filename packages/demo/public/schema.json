@@ -1,6 +1,6 @@
 {
   "componentName": "Page",
-  "id": "node$1",
+  "id": "node_1",
   "props": {
     "ref": "outterView",
     "autoLoading": true,
@@ -23,7 +23,7 @@
   "children": [
     {
       "componentName": "Steps",
-      "id": "node$1i",
+      "id": "node_1i",
       "props": {
         "dataSource": [
           {
@@ -87,7 +87,7 @@
     },
     {
       "componentName": "Title",
-      "id": "node$b",
+      "id": "node_b",
       "props": {
         "text": "请填写以下人员信息表单",
         "type": "primary",
@@ -98,7 +98,7 @@
     },
     {
       "componentName": "Paragraph",
-      "id": "node$e",
+      "id": "node_e",
       "props": {
         "content": "人最宝贵的是生命。它给予我们只有一次。人的一生应当这样度过：当他回首往事时不因虚度年华而悔恨，也不因碌碌无为而羞耻。这样在他临死的时侯就能够说:我已把我整个的生命和全部精力都献给最壮丽的事业——为人类的解放而斗争。",
         "size": "medium",
@@ -109,7 +109,7 @@
     },
     {
       "componentName": "ColumnsLayout",
-      "id": "node$r",
+      "id": "node_r",
       "props": {
         "layout": "6:6",
         "columnGap": "16px",
@@ -122,7 +122,7 @@
       "children": [
         {
           "componentName": "Column",
-          "id": "node$s",
+          "id": "node_s",
           "props": {
             "fieldId": "column_kadcb0o9",
             "__style__": {}
@@ -130,7 +130,7 @@
           "children": [
             {
               "componentName": "Card",
-              "id": "node$n",
+              "id": "node_n",
               "props": {
                 "title": "基本信息",
                 "subTitle": {
@@ -144,7 +144,7 @@
                   "value": [
                     {
                       "componentName": "Icon",
-                      "id": "node$q",
+                      "id": "node_q",
                       "props": {
                         "type": {
                           "useType": true,
@@ -168,12 +168,12 @@
               "children": [
                 {
                   "componentName": "CardContent",
-                  "id": "node$o",
+                  "id": "node_o",
                   "props": {},
                   "children": [
                     {
                       "componentName": "Form",
-                      "id": "node$f",
+                      "id": "node_f",
                       "props": {
                         "labelAlign": "top",
                         "size": "medium",
@@ -190,7 +190,7 @@
                       "children": [
                         {
                           "componentName": "TextField",
-                          "id": "node$g",
+                          "id": "node_g",
                           "props": {
                             "__category__": "form",
                             "__useMediator": "value",
@@ -256,7 +256,7 @@
                         },
                         {
                           "componentName": "RadioField",
-                          "id": "node$14",
+                          "id": "node_14",
                           "props": {
                             "__category__": "form",
                             "__useMediator": "value",
@@ -324,7 +324,7 @@
                         },
                         {
                           "componentName": "SelectField",
-                          "id": "node$h",
+                          "id": "node_h",
                           "props": {
                             "__category__": "form",
                             "__useMediator": "value",
@@ -404,7 +404,7 @@
                         },
                         {
                           "componentName": "Div",
-                          "id": "node$i",
+                          "id": "node_i",
                           "props": {
                             "behavior": "NORMAL",
                             "__style__": {},
@@ -413,7 +413,7 @@
                           "children": [
                             {
                               "componentName": "Button",
-                              "id": "node$j",
+                              "id": "node_j",
                               "props": {
                                 "content": {
                                   "type": "i18n",
@@ -449,7 +449,7 @@
                             },
                             {
                               "componentName": "Button",
-                              "id": "node$k",
+                              "id": "node_k",
                               "props": {
                                 "content": {
                                   "type": "i18n",
@@ -495,7 +495,7 @@
         },
         {
           "componentName": "Column",
-          "id": "node$t",
+          "id": "node_t",
           "props": {
             "fieldId": "column_kadcb0oa",
             "__style__": {}
@@ -503,7 +503,7 @@
           "children": [
             {
               "componentName": "Card",
-              "id": "node$u",
+              "id": "node_u",
               "props": {
                 "title": {
                   "type": "JSSlot",
@@ -511,7 +511,7 @@
                   "value": [
                     {
                       "componentName": "Icon",
-                      "id": "node$18",
+                      "id": "node_18",
                       "props": {
                         "type": {
                           "useType": true,
@@ -525,7 +525,7 @@
                     },
                     {
                       "componentName": "Link",
-                      "id": "node$19",
+                      "id": "node_19",
                       "props": {
                         "content": {
                           "type": "i18n",
@@ -559,7 +559,7 @@
                   "value": [
                     {
                       "componentName": "Icon",
-                      "id": "node$1a",
+                      "id": "node_1a",
                       "props": {
                         "type": {
                           "useType": true,
@@ -583,12 +583,12 @@
               "children": [
                 {
                   "componentName": "CardContent",
-                  "id": "node$v",
+                  "id": "node_v",
                   "props": {},
                   "children": [
                     {
                       "componentName": "Form",
-                      "id": "node$x",
+                      "id": "node_x",
                       "props": {
                         "labelAlign": "top",
                         "size": "medium",
@@ -605,7 +605,7 @@
                       "children": [
                         {
                           "componentName": "TextField",
-                          "id": "node$y",
+                          "id": "node_y",
                           "props": {
                             "__category__": "form",
                             "__useMediator": "value",
@@ -671,7 +671,7 @@
                         },
                         {
                           "componentName": "DateField",
-                          "id": "node$15",
+                          "id": "node_15",
                           "props": {
                             "__category__": "form",
                             "__useMediator": "value",
@@ -716,7 +716,7 @@
                         },
                         {
                           "componentName": "SelectField",
-                          "id": "node$z",
+                          "id": "node_z",
                           "props": {
                             "__category__": "form",
                             "__useMediator": "value",
@@ -796,7 +796,7 @@
                         },
                         {
                           "componentName": "Div",
-                          "id": "node$10",
+                          "id": "node_10",
                           "props": {
                             "behavior": "NORMAL",
                             "__style__": {},
@@ -805,7 +805,7 @@
                           "children": [
                             {
                               "componentName": "Button",
-                              "id": "node$11",
+                              "id": "node_11",
                               "props": {
                                 "content": {
                                   "type": "i18n",
@@ -841,7 +841,7 @@
                             },
                             {
                               "componentName": "Button",
-                              "id": "node$12",
+                              "id": "node_12",
                               "props": {
                                 "content": {
                                   "type": "i18n",

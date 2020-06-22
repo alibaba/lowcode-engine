@@ -24,15 +24,12 @@
     "@alifd/next": "^1.19.12",
     "@alife/theme-lowcode-dark": "^0.1.0",
     "@alife/theme-lowcode-light": "^0.1.0",
-    "domready": "^1.0.8",
-    "immutable": "^3.8.1",
     "react": "^16.8.1",
     "react-dom": "^16.8.1"
   },
   "devDependencies": {
     "@ali/lowcode-editor-setters": "^0.9.3",
     "@alib/build-scripts": "^0.1.18",
-    "@types/domready": "^1.0.0",
     "@types/events": "^3.0.0",
     "@types/react": "^16.8.3",
     "@types/react-dom": "^16.8.2",

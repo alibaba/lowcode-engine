@@ -64,14 +64,19 @@ export default {
         type: 'PanelIcon',
         props: {
           align: 'top',
-          icon: 'zujianku',
+          icon: 'wenjian',
           description: '资源面板',
           panelProps: {
             floatable: true,
-            defaultWidth: 500,
+            height: 300,
+            help: undefined,
+            hideTitleBar: true,
+            maxHeight: 800,
+            maxWidth: 1200,
+            title: "动作面板",
+            width: 600
           },
-        },
-        pluginProps: {},
+        }
       },
       {
         pluginKey: 'zhEn',
@@ -82,7 +87,6 @@ export default {
         pluginProps: {},
       },
     ],
-    /*
     centerArea: [
       {
         pluginKey: 'eventBindDialog',
@@ -90,7 +94,7 @@ export default {
       {
         pluginKey: 'variableBindDialog',
       },
-    ],*/
+    ]
   },
   shortCuts: [],
   lifeCycles: {

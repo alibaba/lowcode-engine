@@ -1,7 +1,7 @@
 import { createElement, ReactType, ReactElement } from 'react';
-import { Router } from '@ali/recore';
-import app from '../../index';
-import Provider from '..';
+import ReactDOM from 'react-dom';
+import { Router } from '@recore/router';
+import { app, Provider } from '@ali/lowcode-runtime';
 import LazyComponent from './lazy-component';
 
 export default class ReactProvider extends Provider {
@@ -28,6 +28,10 @@ export default class ReactProvider extends Provider {
       App = (props: any) => (RouterView ? createElement(RouterView, props) : null);
     }
     return App;
+  }
+
+  runApp(App: any, config: any) {
+    ReactDOM.render(<App />, document.getElementById(config?.containerId || 'App'));
   }
 
   // 内置实现 for 动态化渲染

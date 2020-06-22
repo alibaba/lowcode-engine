@@ -1,4 +1,4 @@
-import { IAppConfig, IUtils, IComponents, HistoryMode } from '../run';
+import { IAppConfig, IUtils, IComponents, HistoryMode } from './runApp';
 import EventEmitter from '@ali/offline-events';
 
 interface IConstants {
@@ -110,6 +110,7 @@ export interface IProvider {
   getPageData(pageId: string): Promise<ComponentModel | undefined>;
   getLazyComponent(pageId: string, props: any): any;
   createApp(): void;
+  runApp(App: any, config: IAppConfig): void;
 }
 
 export default class Provider implements IProvider {
@@ -181,7 +182,7 @@ export default class Provider implements IProvider {
   }
 
   getAppData(): any {
-    throw new Error('Method called "getPageData" not implemented.');
+    throw new Error('Method called "getAppData" not implemented.');
   }
 
   getPageData(pageId?: string): any {
@@ -195,6 +196,10 @@ export default class Provider implements IProvider {
   // 定制构造根组件的逻辑，如切换路由机制
   createApp() {
     throw new Error('Method called "createApp" not implemented.');
+  }
+
+  runApp(App: any, config: IAppConfig) {
+    throw new Error('Method called "runApp" not implemented.');
   }
 
   registerComponents(components: IComponents | undefined) {

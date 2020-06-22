@@ -1,6 +1,6 @@
 .source-editor-container{
   height: 100%;
-
+  position: relative;
 
   .next-tabs {
     -webkit-box-sizing: border-box;
@@ -10,6 +10,18 @@
   }
 
   .next-tabs-content{
+    height: 100%;
+  }
+
+  .editor-context-container{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 35px;
+
+  }
+
+  .editor-context{
     height: 100%;
   }
 

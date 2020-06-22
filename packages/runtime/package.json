@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-runtime",
-  "version": "0.8.13",
+  "version": "0.8.15",
   "description": "Runtime for Ali lowCode engine",
   "files": [
     "es",
@@ -26,14 +26,12 @@
   "license": "MIT",
   "dependencies": {
     "@ali/offline-events": "^1.0.0",
-    "@ali/recore": "^1.6.9"
+    "history": "^4.10.1"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",
     "@types/node": "^13.7.1",
-    "@types/react": "^16",
-    "@types/react-dom": "^16",
-    "build-plugin-component": "^0.2.11"
+    "build-plugin-component": "^0.2.16"
   },
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"
