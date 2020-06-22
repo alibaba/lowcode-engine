@@ -54,7 +54,6 @@ export default class Panel implements IWidget {
 
   get content(): ReactNode {
     const area = this.config?.area || this.parent?.name;
-    console.log(area);
     if (this.plain) {
       return createElement(PanelView, {
         panel: this,
