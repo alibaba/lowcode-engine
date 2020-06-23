@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.27"></a>
+## [0.8.27](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.26...@ali/lowcode-editor-skeleton@0.8.27) (2020-06-23)
+
+
+### Bug Fixes
+
+* 修复低代码组件设计器、区块设计器根节点为 Page 的问题，修复 topArea 样式 ([e85b542](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e85b542))
+* 右侧配置面板样式修复 ([05f62da](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/05f62da))
+
+
+### Features
+
+* 引擎层埋点 ([69de533](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/69de533))
+
+
+
+
 <a name="0.8.26"></a>
 ## [0.8.26](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.25...@ali/lowcode-editor-skeleton@0.8.26) (2020-06-16)
 

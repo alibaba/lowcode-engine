@@ -1,6 +1,7 @@
 {
   "name": "@ali/lowcode-engine-rax-renderer",
-  "version": "0.1.0",
+  "version": "0.1.1",
+  "private": true,
   "description": "Rax renderer for Ali lowCode engine",
   "main": "lib/index.js",
   "module": "lib/index.js",
@@ -24,12 +25,11 @@
     "npm": ">=3.0.0"
   },
   "peerDependencies": {
-    "rax": "^1.1.0",
-    "prop-types": "^15.7.2"
+    "prop-types": "^15.7.2",
+    "rax": "^1.1.0"
   },
   "scripts": {
     "start": "build-scripts start",
-    "build": "build-scripts build",
     "prepublish": "npm run build"
   },
   "dependencies": {

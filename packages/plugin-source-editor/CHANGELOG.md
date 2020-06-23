@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.14"></a>
+## [0.8.14](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-source-editor@0.8.13...@ali/lowcode-plugin-source-editor@0.8.14) (2020-06-23)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-source-editor
+
 <a name="0.8.13"></a>
 ## [0.8.13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-source-editor@0.8.12...@ali/lowcode-plugin-source-editor@0.8.13) (2020-06-15)
 

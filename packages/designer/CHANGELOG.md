@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.21"></a>
+## [0.9.21](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.20...@ali/lowcode-designer@0.9.21) (2020-06-23)
+
+
+### Bug Fixes
+
+* 1. 修复dialog拖入不显示问题  2. dialog 只能在根节点下  3. 引入 modalNodeManager ([65977e7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/65977e7))
+* add extraEnv ([9058ac8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9058ac8))
+* 修复低代码组件设计器、区块设计器根节点为 Page 的问题，修复 topArea 样式 ([e85b542](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e85b542))
+* 支持事件 VE_EVENTS.VE_PAGE_PAGE_READY ([935ffad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/935ffad))
+* 支持页面回滚 ([5d7dc2f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5d7dc2f))
+* 更改生成 id 的规则, 否则命中 recore 解析 id 的一个限制 ([5adff44](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5adff44))
+* 根据目标元素的canDropIn函数判断是否能放入其他元素 ([21d4f64](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/21d4f64))
+* 简化 onPageReady 实现逻辑 ([a36e5f2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a36e5f2))
+
+
+### Features
+
+* 增加 node replaceWith 方法 ([d44f95b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d44f95b))
+* 引擎层埋点 ([69de533](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/69de533))
+
+
+
+
 <a name="0.9.20"></a>
 ## [0.9.20](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.19...@ali/lowcode-designer@0.9.20) (2020-06-16)
 

@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-editor-core",
-  "version": "0.8.16",
+  "version": "0.8.17",
   "description": "Core Api for Ali lowCode engine",
   "license": "MIT",
   "main": "lib/index.js",
@@ -15,8 +15,8 @@
     "cloud-build": "build-scripts build --skip-demo"
   },
   "dependencies": {
-    "@ali/lowcode-types": "^0.8.6",
-    "@ali/lowcode-utils": "^0.8.7",
+    "@ali/lowcode-types": "^0.8.7",
+    "@ali/lowcode-utils": "^0.8.8",
     "@alifd/next": "^1.19.16",
     "@recore/obx": "^1.0.9",
     "@recore/obx-react": "^1.0.8",
