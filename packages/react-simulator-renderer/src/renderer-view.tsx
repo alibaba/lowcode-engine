@@ -107,6 +107,7 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
           viewProps.componentId = __id;
           const leaf = host.document.getNode(__id);
           viewProps._leaf = leaf;
+          viewProps._componentName = leaf?.componentName;
 
           return createElement(
             getDeviceView(Component, device, designMode),
