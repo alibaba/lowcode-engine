@@ -8,7 +8,7 @@ import './renderer.less';
 
 // patch cloneElement avoid lost keyProps
 const originCloneElement = window.React.cloneElement;
-(window as any).React.cloneElement = (child: any, { _leaf, ...props }: any = {}) => {
+(window as any).React.cloneElement = (child: any, { _leaf, ...props }: any = {}, ...rest: any[]) => {
   if (child.ref && props.ref) {
     const dRef = props.ref;
     const cRef = child.ref;
@@ -33,7 +33,7 @@ const originCloneElement = window.React.cloneElement;
       }
     };
   }
-  return originCloneElement(child, props);
+  return originCloneElement(child, props, ...rest);
 };
 
 export default class SimulatorRendererView extends Component<{ renderer: SimulatorRenderer }> {
@@ -108,6 +108,26 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
           const leaf = host.document.getNode(__id);
           viewProps._leaf = leaf;
           viewProps._componentName = leaf?.componentName;
+
+          if (viewProps._componentName === 'Menu') {
+            Object.assign(viewProps, {
+              _componentName: 'Menu',
+              className: '_css_pesudo_menu_kbrzyh0f',
+              context: { VE: (window as any).VisualEngine },
+              direction: undefined,
+              events: { ignored: true },
+              fieldId: 'menu_kbrzyh0f',
+              footer: '',
+              header: '',
+              mode: 'inline',
+              onItemClick: { ignored: true },
+              onSelect: { ignored: true },
+              popupAlign: 'follow',
+              selectMode: false,
+              triggerType: 'click',
+            });
+            console.info('menuprops', viewProps);
+          }
 
           return createElement(
             getDeviceView(Component, device, designMode),
