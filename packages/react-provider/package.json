@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-react-provider",
-  "version": "0.8.15",
+  "version": "0.8.16",
   "private": true,
   "description": "React Provider for Runtime",
   "files": [
