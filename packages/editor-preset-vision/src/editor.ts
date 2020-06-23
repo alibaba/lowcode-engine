@@ -5,6 +5,8 @@ import { Designer, LiveEditing, TransformStage, Node } from '@ali/lowcode-design
 import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import { toCss } from '@ali/vu-css-style';
 import logger from '@ali/vu-logger';
+import bus from './bus';
+import { VE_EVENTS } from './base/const';
 
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
 import { Skeleton, SettingsPrimaryPane } from '@ali/lowcode-editor-skeleton';
@@ -22,6 +24,12 @@ editor.set('skeleton', skeleton);
 export const designer = new Designer({ editor: editor });
 editor.set(Designer, designer);
 editor.set('designer', designer);
+
+designer.project.onCurrentDocumentChange((doc) => {
+  doc.onRendererReady(() => {
+    bus.emit(VE_EVENTS.VE_PAGE_PAGE_READY);
+  });
+});
 
 // 节点 props 初始化
 designer.addPropsReducer((props, node) => {

@@ -1,6 +1,7 @@
 import { designer } from './editor';
 import { RootSchema } from '@ali/lowcode-types';
 import { DocumentModel } from '@ali/lowcode-designer';
+import NodeCacheVisitor from './rootNodeVisitor';
 
 const { project } = designer;
 
@@ -95,5 +96,16 @@ Object.defineProperty(pages, 'currentPage', {
     return project.currentDocument;
   }
 })
+
+pages.onCurrentPageChange((page: DocumentModel) => {
+  if (!page) { return; }
+  page.acceptRootNodeVisitor('NodeCache', (rootNode) => {
+    const visitor: NodeCacheVisitor = page.getRootNodeVisitor('NodeCache');
+    if (visitor) {
+      visitor.destroy();
+    }
+    return new NodeCacheVisitor(page, rootNode);
+  });
+});
 
 export default pages;

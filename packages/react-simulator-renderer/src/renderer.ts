@@ -17,10 +17,12 @@ import Leaf from './builtin-components/leaf';
 export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   readonly isSimulatorRenderer = true;
   private dispose?: () => void;
+
   constructor() {
     if (!host) {
       return;
     }
+
     this.dispose = host.connect(this, () => {
       // sync layout config
 
@@ -286,6 +288,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
     document.body.classList.add('engine-document'); // important! Stylesheet.invoke depends
 
     reactRender(createElement(SimulatorRendererView, { renderer: this }), container);
+    host.document.setRendererReady(this);
   }
 }
 
