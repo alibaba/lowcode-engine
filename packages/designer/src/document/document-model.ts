@@ -10,6 +10,7 @@ import { Selection } from './selection';
 import { History } from './history';
 import { TransformStage } from './node';
 import { uniqueId } from '@ali/lowcode-utils';
+import ModalNodesManager from './node/modalNodesManager';
 
 export type GetDataType<T, NodeType> = T extends undefined
   ? NodeType extends {
@@ -43,6 +44,7 @@ export class DocumentModel {
   private _simulator?: ISimulatorHost;
   private emitter: EventEmitter;
   private rootNodeVisitorMap: { [visitorName: string]: any } = {};
+  private modalNodesManager: ModalNodesManager;
 
   /**
    * 模拟器
@@ -97,6 +99,7 @@ export class DocumentModel {
       (schema) => this.import(schema as RootSchema, true),
     );
     this.setupListenActiveNodes();
+    this.modalNodesManager = new ModalNodesManager(this);
     this.inited = true;
   }
 

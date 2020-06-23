@@ -161,9 +161,6 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       this.setupAutoruns();
     }
 
-    if (this.componentMeta.isModal) {
-      this.getExtraProp('hidden', true)?.setValue(true);
-    }
     this.settingEntry = this.document.designer.createSettingEntry([ this ]);
   }
 

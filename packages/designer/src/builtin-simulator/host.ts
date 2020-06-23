@@ -824,6 +824,15 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       event: e,
     };
 
+    if (e.dragObject.nodes[0].getPrototype().isModal()) {
+      return this.designer.createLocation({
+        target: this.document.rootNode,
+        detail,
+        source: 'simulator' + this.document.id,
+        event: e,
+      }); 
+    }
+
     if (!children || children.size < 1 || !edge) {
       return this.designer.createLocation(locationData);
     }
