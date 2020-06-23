@@ -39,10 +39,13 @@ const pages = Object.assign(project, {
     } else {
       componentsTree = pages[0].componentsTree;
       if (componentsTree[0]) {
-        componentsTree[0].componentName = 'Page';
+        componentsTree[0].componentName = componentsTree[0].componentName || 'Page';
         // FIXME
-        componentsTree[0].lifeCycles = {};
-        componentsTree[0].methods = {};
+        if (componentsTree[0].componentName === 'Page' ||
+        componentsTree[0].componentName === 'Component') {
+          componentsTree[0].lifeCycles = {};
+          componentsTree[0].methods = {};
+        }
       }
     }
 

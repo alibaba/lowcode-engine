@@ -69,7 +69,7 @@ export function isSchema(schema, ignoreArr) {
 
 export function isFileSchema(schema) {
   if (isEmpty(schema)) return false;
-  return ['Page', 'Block', 'Component', 'Addon', 'Temp'].includes(schema.componentName);
+  return ['Page', 'Block', 'Component', 'Addon', 'Temp', 'Div'].includes(schema.componentName);
 }
 
 // 判断当前页面是否被嵌入到同域的页面中

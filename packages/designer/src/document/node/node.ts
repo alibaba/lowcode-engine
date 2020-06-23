@@ -517,6 +517,10 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
   }
 
+  toData() {
+    return this.export();
+  }
+
   /**
    * 导出 schema
    */
