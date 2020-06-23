@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-outline-pane",
-  "version": "0.8.27",
+  "version": "0.8.28",
   "description": "Outline pane for Ali lowCode engine",
   "files": [
     "es",
