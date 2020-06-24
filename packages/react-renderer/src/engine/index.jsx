@@ -23,7 +23,7 @@ const ENGINE_COMPS = {
   BlockEngine,
   AddonEngine,
   TempEngine,
-  DivEngine: BlockEngine,
+  // DivEngine: BlockEngine,
 };
 
 class FaultComponent extends PureComponent {
