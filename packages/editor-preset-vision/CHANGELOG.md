@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.24"></a>
+## [0.8.24](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.23...@ali/lowcode-editor-preset-vision@0.8.24) (2020-06-24)
+
+
+### Bug Fixes
+
+* variable init bug ([6d55bd3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6d55bd3))
+
+
+
+
 <a name="0.8.23"></a>
 ## [0.8.23](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.22...@ali/lowcode-editor-preset-vision@0.8.23) (2020-06-23)
 

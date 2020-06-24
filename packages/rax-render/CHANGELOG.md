@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.1.2"></a>
+## [0.1.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-engine-rax-renderer@0.1.1...@ali/lowcode-engine-rax-renderer@0.1.2) (2020-06-24)
+
+
+### Bug Fixes
+
+* div 不显示问题 ([1b6533c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1b6533c))
+
+
+
+
 <a name="0.1.1"></a>
 ## 0.1.1 (2020-06-23)
 
