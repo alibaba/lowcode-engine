@@ -8,7 +8,7 @@ import { getClientRects } from './utils/get-client-rects';
 import loader from './utils/loader';
 import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
 import { isESModule, isElement, cursor, setNativeSelection } from '@ali/lowcode-utils';
-import { RootSchema, NpmInfo, ComponentSchema } from '@ali/lowcode-types';
+import { RootSchema, NpmInfo, ComponentSchema, TransformStage } from '@ali/lowcode-types';
 // just use types
 import { BuiltinSimulatorRenderer, NodeInstance, Component } from '@ali/lowcode-designer';
 import Slot from './builtin-components/slot';
@@ -226,7 +226,9 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
         children = schema.children.map((item: any) => getElement(componentsMap, item));
       }
       const _leaf = host.document.designer.currentDocument?.createNode(schema);
-      const props = host.document.designer.transformProps(schema.props || {}, host.document.createNode(schema), 1 /*TransformStage.Render*/);
+      const node = host.document.createNode(schema);
+      let props = host.document.designer.transformProps(schema.props || {}, node, TransformStage.Init);
+      props = host.document.designer.transformProps(props, node, TransformStage.Render);
       return createElement(Com, {...props, _leaf}, children);
     }
 
