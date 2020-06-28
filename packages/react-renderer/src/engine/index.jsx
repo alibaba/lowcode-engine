@@ -141,7 +141,7 @@ export default class Engine extends PureComponent {
   }
 
   createElement(Component, props, children) {
-    // TODO: enable in runtime mode?s
+    // TODO: enable in runtime mode?
     this.patchDidCatch(Component);
     return (this.props.customCreateElement || reactCreateElement)(Component, props, children);
   }
