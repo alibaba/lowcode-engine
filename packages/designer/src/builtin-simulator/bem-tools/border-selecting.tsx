@@ -126,13 +126,13 @@ function createAction(content: ReactNode | ComponentType<any> | ActionContentObj
           action && action(node);
           const editor = globalContext.get(Editor);
           const npm = node?.componentMeta?.npm;
-          const target =
+          const selected =
             [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
             node?.componentMeta?.componentName ||
             '';
           editor?.emit('designer.border.action', {
             name: key,
-            target,
+            selected,
           });
         }}
       >
