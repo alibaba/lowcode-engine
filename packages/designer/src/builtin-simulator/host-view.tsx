@@ -38,7 +38,6 @@ export class BuiltinSimulatorHostView extends Component<SimulatorHostProps> {
     }
   }
   render() {
-    const { Provider } = SimulatorContext;
     return (
       <div className="lc-simulator">
         {/*progressing.visible ? <PreLoaderView /> : null*/}

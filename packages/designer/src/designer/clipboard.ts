@@ -6,7 +6,17 @@ function getDataFromPasteEvent(event: ClipboardEvent) {
 
   try {
     // { componentsMap, componentsTree, ... }
-    return JSON.parse(clipboardData.getData('text/plain'));
+    const data = JSON.parse(clipboardData.getData('text/plain'));
+    if (!data) {
+      return {};
+    }
+    if (data.componentsTree) {
+      return data;
+    } else if (data.componentName) {
+      return {
+        componentsTree: [ data ]
+      };
+    }
   } catch (error) {
     /*
     const html = clipboardData.getData('text/html');
@@ -19,7 +29,7 @@ function getDataFromPasteEvent(event: ClipboardEvent) {
     }
     */
     // TODO: open the parser implement
-    return null;
+    return { };
     /*
     return {
       code: clipboardData.getData('text/plain'),

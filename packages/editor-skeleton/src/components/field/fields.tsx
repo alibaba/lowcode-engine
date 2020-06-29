@@ -162,6 +162,8 @@ export class Field extends Component<FieldProps> {
  * TODO: turn number to enum
  */
 function createValueState(valueState?: number, onClear?: (e: React.MouseEvent) => void) {
+  return null;
+  /*
   let tip: any = null;
   let className = 'lc-valuestate';
   let icon: any = null;
@@ -193,6 +195,7 @@ function createValueState(valueState?: number, onClear?: (e: React.MouseEvent) =
       {tip && <Tip>{tip}</Tip>}
     </i>
   );
+  */
 }
 
 export interface PopupFieldProps extends FieldProps {

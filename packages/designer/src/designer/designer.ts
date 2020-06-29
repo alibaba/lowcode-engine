@@ -266,8 +266,8 @@ export class Designer {
     this.oobxList.forEach((item) => item.compute());
   }
 
-  createSettingEntry(editor: IEditor, nodes: Node[]) {
-    return new SettingTopEntry(editor, nodes);
+  createSettingEntry(nodes: Node[]) {
+    return new SettingTopEntry(this.editor, nodes);
   }
 
   /**
@@ -454,7 +454,15 @@ export class Designer {
       return props;
     }
 
-    return reducers.reduce((xprops, reducer) => reducer(xprops, node), props);
+    return reducers.reduce((xprops, reducer) => {
+      try {
+        return reducer(xprops, node)
+      } catch (e) {
+        // todo: add log
+        console.warn(e);
+        return xprops;
+      }
+    }, props);
   }
 
   addPropsReducer(reducer: PropsReducer, stage: TransformStage) {

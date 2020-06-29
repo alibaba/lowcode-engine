@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.19"></a>
+## [0.8.19](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-core@0.8.17...@ali/lowcode-editor-core@0.8.19) (2020-06-23)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-core
+
+<a name="0.8.17"></a>
+## [0.8.17](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-core@0.8.16...@ali/lowcode-editor-core@0.8.17) (2020-06-23)
+
+
+### Features
+
+* export Monitor ([51025f0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/51025f0))
+* 引擎层埋点 ([69de533](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/69de533))
+
+
+
+
 <a name="0.8.16"></a>
 ## [0.8.16](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-core@0.8.15...@ali/lowcode-editor-core@0.8.16) (2020-06-15)
 

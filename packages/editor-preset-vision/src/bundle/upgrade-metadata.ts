@@ -711,8 +711,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     experimental.initialChildren =
       typeof initialChildren === 'function'
         ? (node: any) => {
-            const props = designer.createSettingEntry(editor, [ node ]);
-            return initialChildren.call(node, props);
+            return initialChildren.call(node, node.settingEntry);
           }
         : initialChildren;
   }

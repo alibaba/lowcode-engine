@@ -40,6 +40,7 @@ export interface BuiltinSimulatorProps {
   device?: 'mobile' | 'iphone' | string;
   deviceClassName?: string;
   environment?: Asset;
+  extraEnvironment?: Asset;
   library?: LibraryItem[];
   simulatorUrl?: Asset;
   theme?: Asset;
@@ -187,6 +188,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       // required & use once
       assetBundle(this.get('environment') || defaultEnvironment, AssetLevel.Environment),
       // required & use once
+      assetBundle(this.get('extraEnvironment'), AssetLevel.Environment),
+      // required & use once
       assetBundle(libraryAsset, AssetLevel.Library),
       // required & TODO: think of update
       assetBundle(this.theme, AssetLevel.Theme),
@@ -319,7 +322,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       'click',
       (e) => {
         // fix for popups close logic
-        document.dispatchEvent(new Event('click'));
+        const x = new Event('click');
+        x.initEvent('click', true);
+        this._iframe?.dispatchEvent(x);
         const target = e.target as HTMLElement;
         if (isFormEvent(e) || target?.closest('.next-input-group,.next-checkbox-group,.next-date-picker,.next-input,.next-month-picker,.next-number-picker,.next-radio-group,.next-range,.next-range-picker,.next-rating,.next-select,.next-switch,.next-time-picker,.next-upload,.next-year-picker,.next-breadcrumb-item,.next-calendar-header,.next-calendar-table')) {
           e.preventDefault();
@@ -788,6 +793,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.scroller.scrolling(e);
     const dropContainer = this.getDropContainer(e);
     if (!dropContainer ||
+       // too dirty
         (typeof dropContainer.container?.componentMeta?.prototype?.options?.canDropIn === 'function' &&
           !dropContainer.container?.componentMeta?.prototype?.options?.canDropIn(e.dragObject.nodes[0]))) {
       return null;
@@ -819,6 +825,15 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       source: 'simulator' + this.document.id,
       event: e,
     };
+
+    if (e.dragObject.nodes[0].getPrototype().isModal()) {
+      return this.designer.createLocation({
+        target: this.document.rootNode,
+        detail,
+        source: 'simulator' + this.document.id,
+        event: e,
+      }); 
+    }
 
     if (!children || children.size < 1 || !edge) {
       return this.designer.createLocation(locationData);

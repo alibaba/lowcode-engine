@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.24"></a>
+## [0.8.24](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.23...@ali/lowcode-editor-preset-vision@0.8.24) (2020-06-24)
+
+
+### Bug Fixes
+
+* variable init bug ([6d55bd3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6d55bd3))
+
+
+
+
+<a name="0.8.23"></a>
+## [0.8.23](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.22...@ali/lowcode-editor-preset-vision@0.8.23) (2020-06-23)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-vision
+
+<a name="0.8.22"></a>
+## [0.8.22](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.21...@ali/lowcode-editor-preset-vision@0.8.22) (2020-06-23)
+
+
+### Bug Fixes
+
+* add extraEnv ([9058ac8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9058ac8))
+* compatiable bug ([45574db](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/45574db))
+* Trunk add getSetter ([b6d64c3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b6d64c3))
+* Trunk.getSetter return ReactElement ([34bf71d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/34bf71d))
+* 修复低代码组件设计器、区块设计器根节点为 Page 的问题，修复 topArea 样式 ([e85b542](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e85b542))
+* 右侧配置面板样式修复 ([05f62da](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/05f62da))
+* 支持事件 VE_EVENTS.VE_PAGE_PAGE_READY ([935ffad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/935ffad))
+* 支持页面回滚 ([5d7dc2f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5d7dc2f))
+* 简化 onPageReady 实现逻辑 ([a36e5f2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a36e5f2))
+
+
+### Features
+
+* export Monitor ([51025f0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/51025f0))
+
+
+
+
 <a name="0.8.21"></a>
 ## [0.8.21](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.20...@ali/lowcode-editor-preset-vision@0.8.21) (2020-06-16)
 

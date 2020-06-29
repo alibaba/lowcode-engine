@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.29"></a>
+## [0.8.29](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.28...@ali/lowcode-react-simulator-renderer@0.8.29) (2020-06-24)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-react-simulator-renderer
+
+<a name="0.8.28"></a>
+## [0.8.28](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.27...@ali/lowcode-react-simulator-renderer@0.8.28) (2020-06-23)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-react-simulator-renderer
+
+<a name="0.8.27"></a>
+## [0.8.27](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.26...@ali/lowcode-react-simulator-renderer@0.8.27) (2020-06-23)
+
+
+### Bug Fixes
+
+* cloneElement bug ([d5c5614](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d5c5614))
+* 支持事件 VE_EVENTS.VE_PAGE_PAGE_READY ([935ffad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/935ffad))
+* 简化 onPageReady 实现逻辑 ([a36e5f2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a36e5f2))
+
+
+
+
 <a name="0.8.26"></a>
 ## [0.8.26](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.25...@ali/lowcode-react-simulator-renderer@0.8.26) (2020-06-16)
 

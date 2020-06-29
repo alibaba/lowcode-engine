@@ -1,5 +1,6 @@
 import { computed, obx } from '@ali/lowcode-editor-core';
 import { NodeData, isJSExpression, isDOMText, NodeSchema, isNodeSchema, RootSchema } from '@ali/lowcode-types';
+import { EventEmitter } from 'events';
 import { Project } from '../project';
 import { ISimulatorHost } from '../simulator';
 import { ComponentMeta } from '../component-meta';
@@ -9,6 +10,7 @@ import { Selection } from './selection';
 import { History } from './history';
 import { TransformStage } from './node';
 import { uniqueId } from '@ali/lowcode-utils';
+import ModalNodesManager from './node/modalNodesManager';
 
 export type GetDataType<T, NodeType> = T extends undefined
   ? NodeType extends {
@@ -26,7 +28,7 @@ export class DocumentModel {
   /**
    * 文档编号
    */
-  readonly id: string = uniqueId('doc');
+  id: string = uniqueId('doc');
   /**
    * 选区控制
    */
@@ -40,6 +42,9 @@ export class DocumentModel {
   @obx.val private nodes = new Set<Node>();
   private seqId = 0;
   private _simulator?: ISimulatorHost;
+  private emitter: EventEmitter;
+  private rootNodeVisitorMap: { [visitorName: string]: any } = {};
+  private modalNodesManager: ModalNodesManager;
 
   /**
    * 模拟器
@@ -75,6 +80,7 @@ export class DocumentModel {
       console.info(this.willPurgeSpace);
     }, true);
     */
+    this.emitter = new EventEmitter();
 
     if (!schema) {
       this._blank = true;
@@ -93,6 +99,7 @@ export class DocumentModel {
       (schema) => this.import(schema as RootSchema, true),
     );
     this.setupListenActiveNodes();
+    this.modalNodesManager = new ModalNodesManager(this);
     this.inited = true;
   }
 
@@ -194,7 +201,12 @@ export class DocumentModel {
     this.nodesMap.set(node.id, node);
     this.nodes.add(node);
 
+    this.emitter.emit('nodecreate', node);
     return node as any;
+  }
+
+  public destroyNode(node: Node) {
+    this.emitter.emit('nodedestroy', node);
   }
 
   /**
@@ -406,7 +418,7 @@ export class DocumentModel {
   /**
    * 打开，已载入，默认建立时就打开状态，除非手动关闭
    */
-  open(): void {
+  open(): DocumentModel {
     const originState = this._opened;
     this._opened = true;
     if (originState === false) {
@@ -417,6 +429,7 @@ export class DocumentModel {
     } else {
       this.project.checkExclusive(this);
     }
+    return this;
   }
 
   /**
@@ -498,6 +511,52 @@ export class DocumentModel {
 
   get root() {
     return this.rootNode;
+  }
+
+  onRendererReady(fn: (args: any) => void): () => void {
+    this.emitter.on('lowcode_engine_renderer_ready', fn);
+    return () => {
+      this.emitter.removeListener('lowcode_engine_renderer_ready', fn);
+    };
+  }
+
+  setRendererReady(renderer) {
+    this.emitter.emit('lowcode_engine_renderer_ready', renderer);
+  }
+
+  acceptRootNodeVisitor(
+    visitorName: string = 'default',
+    visitorFn: (node: RootNode) => any ) {
+      let visitorResult = {};
+      if (!visitorName) {
+        /* tslint:disable no-console */
+        console.warn('Invalid or empty RootNodeVisitor name.');
+      }
+      try {
+        visitorResult = visitorFn.call(this, this.rootNode);
+        this.rootNodeVisitorMap[visitorName] = visitorResult;
+      } catch (e) {
+        console.error('RootNodeVisitor is not valid.');
+      }
+      return visitorResult;
+  }
+
+  getRootNodeVisitor(name: string) {
+    return this.rootNodeVisitorMap[name];
+  }
+
+  onNodeCreate(func: (node: Node) => void) {
+    this.emitter.on('nodecreate', func);
+    return () => {
+      this.emitter.removeListener('nodecreate', func);
+    };
+  }
+
+  onNodeDestroy(func: (node: Node) => void) {
+    this.emitter.on('nodedestroy', func);
+    return () => {
+      this.emitter.removeListener('nodedestroy', func);
+    };
   }
 }
 

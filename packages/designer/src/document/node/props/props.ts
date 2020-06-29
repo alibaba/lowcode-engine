@@ -106,7 +106,7 @@ export class Props implements IPropParent {
       this.items.forEach(item => {
         let value = item.export(stage);
         if (value === UNSET) {
-          value = null;
+          value = undefined;
         }
         let name = item.key as string;
         if (name && typeof name === 'string' && name.startsWith(EXTRA_KEY_PREFIX)) {
@@ -129,7 +129,7 @@ export class Props implements IPropParent {
         }
         let value = item.export(stage);
         if (value === UNSET) {
-          value = null;
+          value = undefined;
         }
         if (typeof name === 'string' && name.startsWith(EXTRA_KEY_PREFIX)) {
           name = getOriginalExtraKey(name);

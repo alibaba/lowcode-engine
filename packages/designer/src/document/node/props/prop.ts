@@ -109,11 +109,11 @@ export class Prop implements IPropParent {
       }
       return this.items!.map((prop) => {
         const v = prop.export(stage);
-        return v === UNSET ? null : v;
+        return v === UNSET ? undefined : v;
       });
     }
 
-    return null;
+    return undefined;
   }
 
   private _code: string | null = null;
@@ -176,7 +176,7 @@ export class Prop implements IPropParent {
     this._code = null;
     const t = typeof val;
     if (val == null) {
-      this._value = null;
+      this._value = undefined;
       this._type = 'literal';
     } else if (t === 'string' || t === 'number' || t === 'boolean') {
       this._type = 'literal';
@@ -192,7 +192,6 @@ export class Prop implements IPropParent {
       } else {
         this._type = 'map';
       }
-      this._type = 'map';
     } else {
       this._type = 'expression';
       this._value = {
@@ -206,7 +205,7 @@ export class Prop implements IPropParent {
   @computed getValue(): CompositeValue {
     const v = this.export(TransformStage.Serilize);
     if (v === UNSET) {
-      return null;
+      return undefined;
     }
     return v;
   }

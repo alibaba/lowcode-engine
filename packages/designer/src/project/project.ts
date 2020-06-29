@@ -122,7 +122,7 @@ export class Project {
       if (data) {
         doc = new DocumentModel(this, data);
         this.documents.push(doc);
-        doc.open();
+        return doc.open();
       }
 
       return;
@@ -134,7 +134,7 @@ export class Project {
 
     doc = new DocumentModel(this, doc);
     this.documents.push(doc);
-    doc.open();
+    return doc.open();
   }
 
   checkExclusive(actived: DocumentModel) {

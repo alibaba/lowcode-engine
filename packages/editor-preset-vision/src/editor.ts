@@ -5,6 +5,8 @@ import { Designer, LiveEditing, TransformStage, Node } from '@ali/lowcode-design
 import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import { toCss } from '@ali/vu-css-style';
 import logger from '@ali/vu-logger';
+import bus from './bus';
+import { VE_EVENTS } from './base/const';
 
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
 import { Skeleton, SettingsPrimaryPane } from '@ali/lowcode-editor-skeleton';
@@ -23,6 +25,57 @@ export const designer = new Designer({ editor: editor });
 editor.set(Designer, designer);
 editor.set('designer', designer);
 
+designer.project.onCurrentDocumentChange((doc) => {
+  doc.onRendererReady(() => {
+    bus.emit(VE_EVENTS.VE_PAGE_PAGE_READY);
+  });
+});
+
+interface Variable {
+  type: 'variable';
+  variable: string;
+  value: any;
+}
+
+function isVariable(obj: any): obj is Variable {
+  return obj && obj.type === 'variable';
+}
+
+function upgradePropsReducer(props: any) {
+  if (!isPlainObject(props)) {
+    return props;
+  }
+  const newProps: any = {};
+  Object.entries<any>(props).forEach(([key, val]) => {
+    if (/^__slot__/.test(key) && val === true) {
+      return;
+    }
+    if (isJSBlock(val)) {
+      if (val.value.componentName === 'Slot') {
+        val = {
+          type: 'JSSlot',
+          title: (val.value.props as any)?.slotTitle,
+          value: val.value.children
+        };
+      } else {
+        val = val.value;
+      }
+    }
+    // todo: deep find
+    if (isVariable(val)) {
+      val = {
+        type: 'JSExpression',
+        value: val.variable,
+        mock: val.value,
+      };
+    }
+    newProps[key] = val;
+  });
+  return newProps;
+}
+// 升级 Props
+designer.addPropsReducer(upgradePropsReducer, TransformStage.Init);
+
 // 节点 props 初始化
 designer.addPropsReducer((props, node) => {
   // run initials
@@ -33,9 +86,13 @@ designer.addPropsReducer((props, node) => {
       // FIXME! this implements SettingTarget
       try {
         // FIXME! item.name could be 'xxx.xxx'
-        const v = item.initial(node as any, props[item.name]);
+        const ov = props[item.name];
+        const v = item.initial(node as any, isJSExpression(ov) ? ov.mock : ov);
         if (v !== undefined) {
-          newProps[item.name] = v;
+          newProps[item.name] = isJSExpression(ov) ? {
+            ...ov,
+            mock: v,
+          } : v;
         }
       } catch (e) {
         if (hasOwnProperty(props, item.name)) {
@@ -59,7 +116,7 @@ function filterReducer(props: any, node: Node): any {
         return;
       }
       try {
-        if (item.filter(node.getProp(item.name) as any, props[item.name]) === false) {
+        if (item.filter(node.settingEntry.getProp(item.name), props[item.name]) === false) {
           delete newProps[item.name];
         }
       } catch (e) {
@@ -73,34 +130,6 @@ function filterReducer(props: any, node: Node): any {
 }
 designer.addPropsReducer(filterReducer, TransformStage.Save);
 designer.addPropsReducer(filterReducer, TransformStage.Render);
-
-function upgradePropsReducer(props: any) {
-  if (!isPlainObject(props)) {
-    return props;
-  }
-  const newProps: any = {};
-  Object.entries<any>(props).forEach(([key, val]) => {
-    if (/^__slot__/.test(key) && val === true) {
-      return;
-    }
-    if (isJSBlock(val)) {
-      if (val.value.componentName === 'Slot') {
-        val = {
-          type: 'JSSlot',
-          title: (val.value.props as any)?.slotTitle,
-          value: val.value.children
-        };
-      } else {
-        val = val.value;
-      }
-    }
-    // todo: type: variable
-    newProps[key] = val;
-  });
-  return newProps;
-}
-// 升级 Props
-designer.addPropsReducer(upgradePropsReducer, TransformStage.Init);
 
 function compatiableReducer(props: any) {
   if (!isPlainObject(props)) {
@@ -125,7 +154,7 @@ function compatiableReducer(props: any) {
   });
   return newProps;
 }
-// Dirty fix: will remove this reducer
+// FIXME: Dirty fix, will remove this reducer
 designer.addPropsReducer(compatiableReducer, TransformStage.Save);
 
 // 设计器组件样式处理
