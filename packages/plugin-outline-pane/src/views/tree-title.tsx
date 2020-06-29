@@ -206,6 +206,7 @@ class ExpandBtn extends Component<{ treeNode: TreeNode }> {
           if (treeNode.expanded) {
             e.stopPropagation();
           }
+          report(treeNode.expanded ? 'collapse' : 'expand', treeNode);
           treeNode.setExpanded(!treeNode.expanded);
         }}
       >
