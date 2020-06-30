@@ -23,7 +23,7 @@ const ENGINE_COMPS = {
   BlockEngine,
   AddonEngine,
   TempEngine,
-  // DivEngine: BlockEngine,
+  DivEngine: BlockEngine,
 };
 
 class FaultComponent extends PureComponent {
@@ -157,7 +157,8 @@ export default class Engine extends PureComponent {
     if (isEmpty(schema)) {
       return null;
     }
-    if (!isFileSchema(schema)) {
+    // 兼容乐高区块模板
+    if (schema.componentName !== 'Div' && !isFileSchema(schema)) {
       return '模型结构异常';
     }
     debug('entry.render');

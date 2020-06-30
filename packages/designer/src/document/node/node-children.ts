@@ -285,4 +285,9 @@ export class NodeChildren {
     this.purged = true;
     this.children.forEach(child => child.purge());
   }
+
+  get [Symbol.toStringTag]() {
+    // 保证向前兼容性
+    return "Array";
+  }
 }
