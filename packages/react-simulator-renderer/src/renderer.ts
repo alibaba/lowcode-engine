@@ -219,15 +219,36 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
     _schema.methods = {};
     _schema.lifeCycles = {};
 
-    const getElement = (componentsMap: any, schema: any): ReactElement => {
+    const processPropsSchema = (propsSchema: any, propsMap: any): any => {
+      if (!propsSchema) {
+        return {};
+      }
+
+      const result = {...propsSchema};
+      const reg = /^(?:this\.props|props)\.(\S+)$/;
+      Object.keys(propsSchema).map((key: string) => {
+        if (propsSchema[key].type === 'JSExpression') {
+          const { value } = propsSchema[key];
+          const matched = reg.exec(value);
+          if (matched) {
+            const propName = matched[1];
+            result[key] = propsMap[propName];
+          }
+        }
+      });
+      return result;
+    };
+
+    const getElement = (componentsMap: any, schema: any, propsMap: any): ReactElement => {
       const Com = componentsMap[schema.componentName];
       let children = null;
       if (schema.children && schema.children.length > 0) {
-        children = schema.children.map((item: any) => getElement(componentsMap, item));
+        children = schema.children.map((item: any) => getElement(componentsMap, item, propsMap));
       }
       const _leaf = host.document.designer.currentDocument?.createNode(schema);
       const node = host.document.createNode(schema);
-      let props = host.document.designer.transformProps(schema.props || {}, node, TransformStage.Init);
+      let props = processPropsSchema(schema.props, propsMap);
+      props = host.document.designer.transformProps(props, node, TransformStage.Init);
       props = host.document.designer.transformProps(props, node, TransformStage.Render);
       return createElement(Com, {...props, _leaf}, children);
     }
@@ -238,7 +259,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
         const componentsMap = renderer.componentsMap;
         let children = null;
         if (_schema.children && Array.isArray(_schema.children)) {
-          children = _schema.children?.map((item:any) => getElement(componentsMap, item));
+          children = _schema.children?.map((item:any) => getElement(componentsMap, item, this.props));
         }
         return createElement(React.Fragment, {}, children);
       }
