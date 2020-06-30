@@ -12,7 +12,7 @@ import { IconCond } from '../icons/cond';
 import { IconLoop } from '../icons/loop';
 import { createIcon } from '@ali/lowcode-utils';
 
-function report(type: string, treeNode: TreeNode, rest?: object) {
+function emitOutlineEvent(type: string, treeNode: TreeNode, rest?: object) {
   const editor = globalContext.get(Editor);
   const node = treeNode?.node;
   const npm = node?.componentMeta?.npm;
@@ -51,7 +51,7 @@ export default class TreeTitle extends Component<{
     const { treeNode } = this.props;
     const value = (e.target as HTMLInputElement).value || '';
     treeNode.setTitleLabel(value);
-    report('rename', treeNode, { value });
+    emitOutlineEvent('rename', treeNode, { value });
     this.cancelEdit();
   };
 
@@ -178,7 +178,7 @@ class HideBtn extends Component<{ treeNode: TreeNode }> {
         className="tree-node-hide-btn"
         onClick={(e) => {
           e.stopPropagation();
-          report(treeNode.hidden ? 'show' : 'hide', treeNode);
+          emitOutlineEvent(treeNode.hidden ? 'show' : 'hide', treeNode);
           treeNode.setHidden(!treeNode.hidden);
         }}
       >
@@ -206,7 +206,7 @@ class ExpandBtn extends Component<{ treeNode: TreeNode }> {
           if (treeNode.expanded) {
             e.stopPropagation();
           }
-          report(treeNode.expanded ? 'collapse' : 'expand', treeNode);
+          emitOutlineEvent(treeNode.expanded ? 'collapse' : 'expand', treeNode);
           treeNode.setExpanded(!treeNode.expanded);
         }}
       >
