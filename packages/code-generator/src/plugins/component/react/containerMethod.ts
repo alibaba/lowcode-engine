@@ -13,7 +13,7 @@ import {
   IJSExpression,
 } from '../../../types';
 
-interface PluginConfig {
+type PluginConfig = {
   fileType: string;
 }
 

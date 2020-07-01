@@ -46,11 +46,22 @@ class SchemaParser implements ISchemaParser {
     return true;
   }
 
-  public parse(schema: IProjectSchema): IParseResult {
+  public parse(schemaSrc: IProjectSchema | string): IParseResult {
     // TODO: collect utils depends in JSExpression
     const compDeps: Record<string, IExternalDependency> = {};
     const internalDeps: Record<string, IInternalDependency> = {};
     let utilsDeps: IExternalDependency[] = [];
+
+    let schema: IProjectSchema;
+    if (typeof schemaSrc === 'string') {
+      try {
+        schema = JSON.parse(schemaSrc);
+      } catch (error) {
+        throw new CodeGeneratorError(`Parse schema failed: ${error.message || 'unknown reason'}`);
+      }
+    } else {
+      schema = schemaSrc;
+    }
 
     // 解析三方组件依赖
     schema.componentsMap.forEach(info => {

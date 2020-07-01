@@ -78,12 +78,13 @@ export interface ICompiledModule {
 }
 
 export interface IModuleBuilder {
-  generateModule: (input: unknown) => Promise<ICompiledModule>;
-  linkCodeChunks: (
+  generateModule(input: unknown): Promise<ICompiledModule>;
+  generateModuleCode(schema: IBasicSchema | string): Promise<IResultDir>;
+  linkCodeChunks(
     chunks: Record<string, ICodeChunk[]>,
     fileName: string,
-  ) => IResultFile[];
-  addPlugin: (plugin: BuilderComponentPlugin) => void;
+  ): IResultFile[];
+  addPlugin(plugin: BuilderComponentPlugin): void;
 }
 
 /**
@@ -105,7 +106,7 @@ export interface ICodeGenerator {
 
 export interface ISchemaParser {
   validate(schema: IBasicSchema): boolean;
-  parse(schema: IBasicSchema): IParseResult;
+  parse(schema: IBasicSchema | string): IParseResult;
 }
 
 export interface IProjectTemplate {
@@ -136,7 +137,7 @@ export interface IProjectPlugins {
 }
 
 export interface IProjectBuilder {
-  generateProject(schema: IProjectSchema): Promise<IResultDir>;
+  generateProject(schema: IProjectSchema | string): Promise<IResultDir>;
 }
 
 export type PostProcessorFactory<T> = (config?: T) => PostProcessor;
@@ -168,3 +169,9 @@ export interface HandlerSet<T> {
 }
 
 export type ExtGeneratorPlugin = (nodeItem: IComponentNodeItem) => CodePiece[];
+
+// export interface InteratorScope {
+//   [$item: string]: string;           // $item 默认取值 "item"
+//   [$index: string]: string | number; // $index 默认取值 "index"
+//   __proto__: BlockInstance;
+// }

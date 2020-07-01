@@ -8,7 +8,7 @@ import {
   ICodeStruct,
 } from '../../../types';
 
-interface PluginConfig {
+type PluginConfig = {
   fileType: string;
 }
 

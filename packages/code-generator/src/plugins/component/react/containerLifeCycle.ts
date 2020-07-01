@@ -18,7 +18,7 @@ import {
   IJSExpression,
 } from '../../../types';
 
-interface PluginConfig {
+type PluginConfig = {
   fileType: string;
   exportNameMapping: Record<string, string>;
   normalizeNameMapping: Record<string, string>;

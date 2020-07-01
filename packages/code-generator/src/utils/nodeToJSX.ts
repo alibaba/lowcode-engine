@@ -1,7 +1,6 @@
 import {
   ChildNodeType,
   IComponentNodeItem,
-  IInlineStyle,
   IJSExpression,
   ChildNodeItem,
   CodeGeneratorError,
@@ -37,20 +36,6 @@ export function handleChildren<T>(
   }
 }
 
-export function generateInlineStyle(style: IInlineStyle): string | null {
-  const attrLines = Object.keys(style).map((cssAttribute: string) => {
-    const [isString, valueStr] = generateCompositeType(style[cssAttribute]);
-    const valuePart = isString ? `'${valueStr}'` : valueStr;
-    return `${cssAttribute}: ${valuePart},`;
-  });
-
-  if (attrLines.length === 0) {
-    return null;
-  }
-
-  return `{ ${attrLines.join('')} }`;
-}
-
 export function generateAttr(attrName: string, attrValue: any): CodePiece[] {
   if (attrName === 'initValue' || attrName === 'labelCol') {
     return [];
@@ -63,23 +48,8 @@ export function generateAttr(attrName: string, attrValue: any): CodePiece[] {
 }
 
 export function generateAttrs(nodeItem: IComponentNodeItem): CodePiece[] {
-  const { className, style, ...props } = nodeItem.props;
+  const { props } = nodeItem;
   let pieces: CodePiece[] = [];
-  if (className) {
-    pieces.push({
-      value: `className="${className}"`,
-      type: PIECE_TYPE.ATTR,
-    });
-  }
-  if (style) {
-    const inlineStyle = generateInlineStyle(style);
-    if (inlineStyle !== null) {
-      pieces.push({
-        value: `style={${inlineStyle}}`,
-        type: PIECE_TYPE.ATTR,
-      });
-    }
-  }
 
   Object.keys(props).forEach((propName: string) =>
     pieces = pieces.concat(generateAttr(propName, props[propName])),

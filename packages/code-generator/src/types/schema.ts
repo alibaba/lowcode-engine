@@ -88,10 +88,6 @@ export interface IUtilItem {
   content: IExternalDependency | IJSExpression;
 }
 
-export interface IInlineStyle {
-  [cssAttribute: string]: string | number | IJSExpression;
-}
-
 export type ChildNodeItem = string | IJSExpression | IComponentNodeItem;
 export type ChildNodeType = ChildNodeItem | ChildNodeItem[];
 
@@ -107,9 +103,7 @@ export interface IComponentNodeItem {
   id?: string;
   componentName: string; // 组件名称 必填、首字母大写
   props: {
-    className?: string; // 组件样式类名
-    style?: IInlineStyle; // 组件内联样式
-    [propName: string]: any; // 业务属性
+    [propName: string]: CompositeValue; // 业务属性
   }; // 组件属性对象
   condition?: CompositeValue; // 渲染条件
   loop?: CompositeValue; // 循环数据
@@ -127,13 +121,10 @@ export interface IComponentNodeItem {
 export interface IContainerNodeItem extends IComponentNodeItem {
   componentName: 'Page' | 'Block' | 'Component'; // 'Page' | 'Block' | 'Component'  组件类型 必填、首字母大写
   fileName: string; // 文件名称 必填、英文
-  defaultProps?: {
-    [propName: string]: any; // 业务属性
-  };
   state?: {
-    [stateName: string]: any; // 容器初始数据
+    [stateName: string]: CompositeValue; // 容器初始数据
   };
-  css: string; // 样式文件 用于描述容器组件内部节点的样式，对应生成一个独立的样式文件，在对应容器组件生成的 .jsx 文件中 import 引入；
+  css?: string; // 样式文件 用于描述容器组件内部节点的样式，对应生成一个独立的样式文件，在对应容器组件生成的 .jsx 文件中 import 引入；
   /**
    * LifeCycle
    * • constructor(props, context)
@@ -146,28 +137,11 @@ export interface IContainerNodeItem extends IComponentNodeItem {
    * • componentDidCatch(error, info)
    */
   lifeCycles?: Record<string, IJSExpression>; // 生命周期Hook方法
-  methods?: {
-    [methodName: string]: IJSExpression;
-  }; // 自定义方法设置
-  dataSource?: IDataSource; // 异步数据源配置
+  methods?: Record<string, IJSExpression>; // 自定义方法设置
+  dataSource?: {
+    list: IDataSourceConfig[];
+  }; // 异步数据源配置
   meta?: IBasicMeta | IPageMeta;
-}
-
-/**
- * 搭建基础协议 - 数据源
- *
- * @export
- * @interface IDataSource
- */
-export interface IDataSource {
-  list: IDataSourceConfig[]; // 成为为单个请求配置
-  /**
-   * 参数：为dataMap对象，key:数据id, value: 单个请求结果
-   * 返回值：数据对象data，将会在渲染引擎和schemaToCode中通过调用this.setState(...)将返回的数据对象生效到state中；
-   * 支持返回一个Promise，通过resolve(返回数据)，常用于串型发送请求场景，配合this.dataSourceMap[oneRequest.id].load()使用；
-   */
-  dataHandler?: IJSExpression;
-  [extConfigName: string]: any;
 }
 
 /**

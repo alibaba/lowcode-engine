@@ -57,8 +57,8 @@ export class ProjectBuilder implements IProjectBuilder {
     this.postProcessors = postProcessors;
   }
 
-  public async generateProject(schema: IProjectSchema): Promise<IResultDir> {
-    // Init working parts
+  public async generateProject(schema: IProjectSchema | string): Promise<IResultDir> {
+    // Init
     const schemaParser: ISchemaParser = new SchemaParser();
     const builders = this.createModuleBuilders();
     const projectRoot = this.template.generateTemplate();

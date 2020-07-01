@@ -9,7 +9,7 @@ import {
   IContainerInfo,
 } from '../../../types';
 
-interface PluginConfig {
+type PluginConfig = {
   fileType: string;
   moduleFileType: string;
 }

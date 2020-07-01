@@ -8,8 +8,7 @@
   ],
   "scripts": {
     "build": "rimraf lib && tsc",
-    "demo": "ts-node -r tsconfig-paths/register ./src/demo/main.ts",
-    "demo:exp": "ts-node -r tsconfig-paths/register ./src/demo/expressionTest.ts",
+    "demo": "node ./demo/demo.js",
     "test": "ava",
     "template": "node ./tools/createTemplate.js"
   },

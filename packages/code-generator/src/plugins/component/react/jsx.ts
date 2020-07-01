@@ -11,7 +11,7 @@ import { REACT_CHUNK_NAME } from './const';
 
 import { createReactNodeGenerator } from '../../../utils/nodeToJSX';
 
-interface PluginConfig {
+type PluginConfig = {
   fileType: string;
 }
 

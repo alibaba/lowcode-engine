@@ -123,7 +123,7 @@ function buildPackageImport(
   return chunks;
 }
 
-interface PluginConfig {
+type PluginConfig = {
   fileType: string;
 }
 
