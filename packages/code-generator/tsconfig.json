@@ -5,6 +5,7 @@
     "lib": [
       "es6"
     ],
+    "module": "commonjs",
     "types": ["node"],
     "baseUrl": ".",            /* Base directory to resolve non-absolute module names. */
   },

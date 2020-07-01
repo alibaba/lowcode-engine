@@ -5,7 +5,7 @@
 
 import { SUPPORT_SCHEMA_VERSION_LIST } from '../const';
 
-import { handleChildren } from '../utils/children';
+import { handleChildren } from '../utils/nodeToJSX';
 
 import {
   ChildNodeType,
@@ -28,7 +28,8 @@ import {
 
 const defaultContainer: IContainerInfo = {
   containerType: 'Component',
-  componentName: 'Index',
+  componentName: 'Component',
+  moduleName: 'Index',
   fileName: 'Index',
   css: '',
   props: {},
@@ -45,11 +46,22 @@ class SchemaParser implements ISchemaParser {
     return true;
   }
 
-  public parse(schema: IProjectSchema): IParseResult {
+  public parse(schemaSrc: IProjectSchema | string): IParseResult {
     // TODO: collect utils depends in JSExpression
     const compDeps: Record<string, IExternalDependency> = {};
     const internalDeps: Record<string, IInternalDependency> = {};
     let utilsDeps: IExternalDependency[] = [];
+
+    let schema: IProjectSchema;
+    if (typeof schemaSrc === 'string') {
+      try {
+        schema = JSON.parse(schemaSrc);
+      } catch (error) {
+        throw new CodeGeneratorError(`Parse schema failed: ${error.message || 'unknown reason'}`);
+      }
+    } else {
+      schema = schemaSrc;
+    }
 
     // 解析三方组件依赖
     schema.componentsMap.forEach(info => {
@@ -78,7 +90,7 @@ class SchemaParser implements ISchemaParser {
           const container: IContainerInfo = {
             ...subRoot,
             containerType: subRoot.componentName,
-            componentName: subRoot.fileName,
+            moduleName: subRoot.fileName, // TODO: 驼峰化名称
           };
           return container;
         });
@@ -104,9 +116,9 @@ class SchemaParser implements ISchemaParser {
 
       const dep: IInternalDependency = {
         type,
-        moduleName: container.componentName,
+        moduleName: container.moduleName,
         destructuring: false,
-        exportName: container.componentName,
+        exportName: container.moduleName,
         dependencyType: DependencyType.Internal,
       };
 
@@ -131,9 +143,15 @@ class SchemaParser implements ISchemaParser {
       .filter(container => container.containerType === 'Page')
       .map(page => {
         const meta = page.meta as IPageMeta;
+        if (meta) {
+          return {
+            path: meta.router,
+            componentName: page.moduleName,
+          };
+        }
         return {
-          path: meta.router,
-          componentName: page.componentName,
+          path: '',
+          componentName: page.moduleName,
         };
       });
 
