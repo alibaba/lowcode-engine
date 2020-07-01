@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
-import { observer } from '@ali/lowcode-globals';
+import { observer } from '@ali/lowcode-editor-core';
 import { intl } from '../locale';
 import { OutlineMain } from '../main';
 import TreeView from './tree';
 import './style.less';
+import { IEditor } from '@ali/lowcode-types';
 
 @observer
-export default class OutlinePane extends Component<{ config?: any; editor: any; inSettings?: boolean }> {
-  private main = new OutlineMain(
-    this.props.editor,
-    this.props.config ? this.props.config.pluginKey : this.props.inSettings ? '__IN_SETTINGS__' : null,
-  );
+export class OutlinePane extends Component<{ config: any; editor: IEditor }> {
+  private main = new OutlineMain(this.props.editor, this.props.config.name || this.props.config.pluginKey);
 
   shouldComponentUpdate() {
     return false;

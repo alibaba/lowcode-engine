@@ -1,4 +1,5 @@
-import { computed, obx, TitleContent, isI18nData, localeFormat } from '@ali/lowcode-globals';
+import { TitleContent, isI18nData } from '@ali/lowcode-types';
+import { computed, obx, intl } from '@ali/lowcode-editor-core';
 import { Node, DocumentModel, isLocationChildrenDetail, LocationChildrenDetail, Designer } from '@ali/lowcode-designer';
 import { Tree } from './tree';
 
@@ -11,7 +12,7 @@ export default class TreeNode {
    * 是否可以展开
    */
   @computed get expandable(): boolean {
-    return this.hasChildren() || this.isSlotContainer() || this.dropDetail?.index != null;
+    return this.hasChildren() || this.hasSlots() || this.dropDetail?.index != null;
   }
 
   /**
@@ -64,8 +65,8 @@ export default class TreeNode {
     this._expanded = value;
   }
 
-  @computed get hovering() {
-    return this.designer.hovering.current === this.node;
+  @computed get detecting() {
+    return this.designer.detecting.current === this.node;
   }
 
   @computed get hidden(): boolean {
@@ -121,7 +122,7 @@ export default class TreeNode {
       return title;
     }
     if (isI18nData(title)) {
-      return localeFormat(title);
+      return intl(title) as string;
     }
     return this.node.componentName;
   }
@@ -169,50 +170,16 @@ export default class TreeNode {
   /**
    * 判断是否有"插槽"
    */
-  isSlotContainer(): boolean {
-    return this.node.isSlotContainer();
+  hasSlots(): boolean {
+    return this.node.hasSlots();
   }
 
   hasChildren(): boolean {
     return this.isContainer() && this.node.children?.notEmpty() ? true : false;
   }
 
-  /*
-  get xForValue() {
-    const node = this.node;
-    return isElementNode(node) && node.xforValue ? node.xforValue : null;
-  }
-
-  get flowHidden() {
-    return (this.node as ElementNode).flowHidden;
-  }
-
-  get flowIndex() {
-    return (this.node as ElementNode).flowIndex;
-  }
-
-  get conditionFlow() {
-    return (this.node as ElementNode).conditionFlow;
-  }
-
-  hasXIf() {
-    return hasConditionFlow(this.node);
-  }
-
-  hasXFor() {
-    const node = this.node;
-    return isElementNode(node) && node.xforFn;
-  }
-  */
-
   select(isMulti: boolean) {
     const node = this.node;
-
-    /*
-    if (this.hasXIf()) {
-      (node as ElementNode).setFlowVisible();
-    }
-    */
 
     const selection = node.document.selection;
     if (isMulti) {

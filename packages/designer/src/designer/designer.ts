@@ -1,27 +1,29 @@
 import { ComponentType } from 'react';
-import { EventEmitter } from 'events';
+import { obx, computed, autorun } from '@ali/lowcode-editor-core';
 import {
   ProjectSchema,
   ComponentMetadata,
   ComponentAction,
   NpmInfo,
-  obx,
-  computed,
-  autorun,
-} from '@ali/lowcode-globals';
+  IEditor,
+  CompositeObject,
+  PropsList,
+} from '@ali/lowcode-types';
 import { Project } from '../project';
-import { Node, DocumentModel, insertChildren, isRootNode, NodeParent } from '../document';
+import { Node, DocumentModel, insertChildren, isRootNode, ParentalNode, TransformStage } from '../document';
 import { ComponentMeta } from '../component-meta';
-import { INodeSelector } from '../simulator';
+import { INodeSelector, Component } from '../simulator';
 import { Scroller, IScrollable } from './scroller';
 import { Dragon, isDragNodeObject, isDragNodeDataObject, LocateEvent, DragObject } from './dragon';
 import { ActiveTracker } from './active-tracker';
-import { Hovering } from './hovering';
+import { Detecting } from './detecting';
 import { DropLocation, LocationData, isLocationChildrenDetail } from './location';
 import { OffsetObserver, createOffsetObserver } from './offset-observer';
 import { focusing } from './focusing';
+import { SettingTopEntry } from './setting';
 
 export interface DesignerProps {
+  editor: IEditor;
   className?: string;
   style?: object;
   defaultSchema?: ProjectSchema;
@@ -31,7 +33,6 @@ export interface DesignerProps {
   dragGhostComponent?: ComponentType<any>;
   suspensed?: boolean;
   componentMetadatas?: ComponentMetadata[];
-  eventPipe?: EventEmitter;
   globalComponentActions?: ComponentAction[];
   onMount?: (designer: Designer) => void;
   onDragstart?: (e: LocateEvent) => void;
@@ -43,8 +44,9 @@ export interface DesignerProps {
 export class Designer {
   readonly dragon = new Dragon(this);
   readonly activeTracker = new ActiveTracker();
-  readonly hovering = new Hovering();
+  readonly detecting = new Detecting();
   readonly project: Project;
+  readonly editor: IEditor;
 
   get currentDocument() {
     return this.project.currentDocument;
@@ -59,17 +61,32 @@ export class Designer {
   }
 
   constructor(props: DesignerProps) {
+    const { editor } = props;
+    this.editor = editor;
     this.setProps(props);
 
     this.project = new Project(this, props.defaultSchema);
 
+    let startTime: any;
+    let src = '';
     this.dragon.onDragstart((e) => {
-      this.hovering.enable = false;
+      startTime = Date.now() / 1000;
+      this.detecting.enable = false;
       const { dragObject } = e;
       if (isDragNodeObject(dragObject)) {
+        const node = dragObject.nodes[0]?.parent;
+        const npm = node?.componentMeta?.npm;
+        src =
+          [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
+          node?.componentMeta?.componentName ||
+          '';
         if (dragObject.nodes.length === 1) {
-          // ensure current selecting
-          dragObject.nodes[0].select();
+          if (dragObject.nodes[0].parent) {
+            // ensure current selecting
+            dragObject.nodes[0].select();
+          } else {
+            this.currentSelection?.clear();
+          }
         }
       } else {
         this.currentSelection?.clear();
@@ -91,7 +108,7 @@ export class Designer {
       const { dragObject, copy } = e;
       const loc = this._dropLocation;
       if (loc) {
-        if (isLocationChildrenDetail(loc.detail)) {
+        if (isLocationChildrenDetail(loc.detail) && loc.detail.valid !== false) {
           let nodes: Node[] | undefined;
           if (isDragNodeObject(dragObject)) {
             nodes = insertChildren(loc.target, dragObject.nodes, loc.detail.index, copy);
@@ -103,15 +120,40 @@ export class Designer {
           if (nodes) {
             loc.document.selection.selectAll(nodes.map((o) => o.id));
             setTimeout(() => this.activeTracker.track(nodes![0]), 10);
+            const endTime: any = Date.now() / 1000;
+            const parent = nodes[0]?.parent;
+            const npm = parent?.componentMeta?.npm;
+            const dest =
+              [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
+              parent?.componentMeta?.componentName ||
+              '';
+            this.editor?.emit('designer.drag', {
+              time: (endTime - startTime).toFixed(2),
+              selected: nodes
+                ?.map((n) => {
+                  if (!n) {
+                    return;
+                  }
+                  const npm = n?.componentMeta?.npm;
+                  return (
+                    [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
+                    n?.componentMeta?.componentName
+                  );
+                })
+                .join('&'),
+              align: loc?.detail?.near?.align || '',
+              pos: loc?.detail?.near?.pos || '',
+              src,
+              dest,
+            });
           }
         }
       }
-      this.clearLocation();
       if (this.props?.onDragend) {
         this.props.onDragend(e, loc);
       }
       this.postEvent('dragend', e, loc);
-      this.hovering.enable = true;
+      this.detecting.enable = true;
     });
 
     this.activeTracker.onChange(({ node, detail }) => {
@@ -124,11 +166,11 @@ export class Designer {
         selectionDispose();
         selectionDispose = undefined;
       }
-      this.postEvent('selection-change', this.currentSelection);
+      this.postEvent('selection.change', this.currentSelection);
       if (this.currentSelection) {
         const currentSelection = this.currentSelection;
         selectionDispose = currentSelection.onSelectionChange(() => {
-          this.postEvent('selection-change', currentSelection);
+          this.postEvent('selection.change', currentSelection);
         });
       }
     };
@@ -138,18 +180,18 @@ export class Designer {
         historyDispose();
         historyDispose = undefined;
       }
-      this.postEvent('history-change', this.currentHistory);
+      this.postEvent('history.change', this.currentHistory);
       if (this.currentHistory) {
         const currentHistory = this.currentHistory;
         historyDispose = currentHistory.onStateChange(() => {
-          this.postEvent('history-change', currentHistory);
+          this.postEvent('history.change', currentHistory);
         });
       }
     };
     this.project.onCurrentDocumentChange(() => {
-      this.postEvent('current-document-change', this.currentDocument);
-      this.postEvent('selection-change', this.currentSelection);
-      this.postEvent('history-change', this.currentHistory);
+      this.postEvent('current-document.change', this.currentDocument);
+      this.postEvent('selection.change', this.currentSelection);
+      this.postEvent('history.change', this.currentHistory);
       setupSelection();
       setupHistory();
     });
@@ -162,10 +204,14 @@ export class Designer {
   }
 
   postEvent(event: string, ...args: any[]) {
-    this.props?.eventPipe?.emit(`designer.${event}`, ...args);
+    this.editor.emit(`designer.${event}`, ...args);
   }
 
   private _dropLocation?: DropLocation;
+
+  get dropLocation() {
+    return this._dropLocation;
+  }
   /**
    * 创建插入位置，考虑放到 dragon 中
    */
@@ -194,14 +240,40 @@ export class Designer {
     return new Scroller(scrollable);
   }
 
+  private oobxList: OffsetObserver[] = [];
   createOffsetObserver(nodeInstance: INodeSelector): OffsetObserver | null {
-    return createOffsetObserver(nodeInstance);
+    const oobx = createOffsetObserver(nodeInstance);
+    this.clearOobxList();
+    if (oobx) {
+      this.oobxList.push(oobx);
+    }
+    return oobx;
+  }
+
+  private clearOobxList(force?: boolean) {
+    let l = this.oobxList.length;
+    if (l > 20 || force) {
+      while (l-- > 0) {
+        if (this.oobxList[l].isPurged()) {
+          this.oobxList.splice(l, 1);
+        }
+      }
+    }
+  }
+
+  touchOffsetObserver() {
+    this.clearOobxList(true);
+    this.oobxList.forEach((item) => item.compute());
+  }
+
+  createSettingEntry(nodes: Node[]) {
+    return new SettingTopEntry(this.editor, nodes);
   }
 
   /**
    * 获得合适的插入位置
    */
-  getSuitableInsertion(): { target: NodeParent; index?: number } | null {
+  getSuitableInsertion(): { target: ParentalNode; index?: number } | null {
     const activedDoc = this.project.currentDocument;
     if (!activedDoc) {
       return null;
@@ -306,24 +378,27 @@ export class Designer {
   private _lostComponentMetasMap = new Map<string, ComponentMeta>();
 
   private buildComponentMetasMap(metas: ComponentMetadata[]) {
-    metas.forEach((data) => {
-      const key = data.componentName;
-      let meta = this._componentMetasMap.get(key);
+    metas.forEach((data) => this.createComponentMeta(data));
+  }
+
+  createComponentMeta(data: ComponentMetadata): ComponentMeta {
+    const key = data.componentName;
+    let meta = this._componentMetasMap.get(key);
+    if (meta) {
+      meta.setMetadata(data);
+    } else {
+      meta = this._lostComponentMetasMap.get(key);
+
       if (meta) {
         meta.setMetadata(data);
+        this._lostComponentMetasMap.delete(key);
       } else {
-        meta = this._lostComponentMetasMap.get(key);
-
-        if (meta) {
-          meta.setMetadata(data);
-          this._lostComponentMetasMap.delete(key);
-        } else {
-          meta = new ComponentMeta(this, data);
-        }
-
-        this._componentMetasMap.set(key, meta);
+        meta = new ComponentMeta(this, data);
       }
-    });
+
+      this._componentMetasMap.set(key, meta);
+    }
+    return meta;
   }
 
   getGlobalComponentActions(): ComponentAction[] | null {
@@ -349,14 +424,54 @@ export class Designer {
     return meta;
   }
 
-  @computed get componentsMap(): { [key: string]: NpmInfo } {
+  @computed get componentsMap(): { [key: string]: NpmInfo | Component } {
     const maps: any = {};
     this._componentMetasMap.forEach((config, key) => {
-      if (config.npm) {
-        maps[key] = config.npm;
+      const metaData = config.getMetadata();
+      if (metaData.devMode === 'lowcode') {
+        maps[key] = this.currentDocument?.simulator?.createComponent(metaData.schema!);
+      } else {
+        const view = metaData.experimental?.view;
+        if (view) {
+          maps[key] = view;
+        } else if (config.npm) {
+          maps[key] = config.npm;
+        }
       }
     });
     return maps;
+  }
+
+  private propsReducers = new Map<TransformStage, PropsReducer[]>();
+  transformProps(props: CompositeObject | PropsList, node: Node, stage: TransformStage) {
+    if (Array.isArray(props)) {
+      // current not support, make this future
+      return props;
+    }
+
+    const reducers = this.propsReducers.get(stage);
+    if (!reducers) {
+      return props;
+    }
+
+    return reducers.reduce((xprops, reducer) => {
+      try {
+        return reducer(xprops, node)
+      } catch (e) {
+        // todo: add log
+        console.warn(e);
+        return xprops;
+      }
+    }, props);
+  }
+
+  addPropsReducer(reducer: PropsReducer, stage: TransformStage) {
+    const reducers = this.propsReducers.get(stage);
+    if (reducers) {
+      reducers.push(reducer);
+    } else {
+      this.propsReducers.set(stage, [reducer]);
+    }
   }
 
   autorun(action: (context: { firstRun: boolean }) => void, sync = false): () => void {
@@ -367,3 +482,5 @@ export class Designer {
     // todo:
   }
 }
+
+export type PropsReducer = (props: CompositeObject, node: Node) => CompositeObject;

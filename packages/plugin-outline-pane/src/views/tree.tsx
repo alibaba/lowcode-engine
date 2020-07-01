@@ -1,8 +1,9 @@
 import { Component, MouseEvent as ReactMouseEvent } from 'react';
-import { observer, isFormEvent } from '@ali/lowcode-globals';
+import { observer, Editor, globalContext } from '@ali/lowcode-editor-core';
+import { isRootNode, Node, DragObjectType, isShaken } from '@ali/lowcode-designer';
+import { isFormEvent } from '@ali/lowcode-utils';
 import { Tree } from '../tree';
 import TreeNodeView from './tree-node';
-import { isRootNode, Node, DragObjectType, isShaken } from '@ali/lowcode-designer';
 
 function getTreeNodeIdByEvent(e: ReactMouseEvent, stop: Element): null | string {
   let target: Element | null = e.target as Element;
@@ -24,12 +25,12 @@ export default class TreeView extends Component<{ tree: Tree }> {
     const { tree } = this.props;
 
     const doc = tree.document;
-    const hovering = doc.designer.hovering;
-    if (!hovering.enable) {
+    const detecting = doc.designer.detecting;
+    if (!detecting.enable) {
       return;
     }
     const node = this.getTreeNodeFromEvent(e)?.node;
-    hovering.hover(node || null);
+    detecting.capture(node || null);
   }
 
   private onClick = (e: ReactMouseEvent) => {
@@ -51,7 +52,7 @@ export default class TreeView extends Component<{ tree: Tree }> {
     const doc = node.document;
     const selection = doc.selection;
     const id = node.id;
-    const isMulti = e.metaKey || e.ctrlKey;
+    const isMulti = e.metaKey || e.ctrlKey || e.shiftKey;
     designer.activeTracker.track(node);
     if (isMulti && !isRootNode(node) && selection.has(id)) {
       if (!isFormEvent(e.nativeEvent)) {
@@ -59,6 +60,16 @@ export default class TreeView extends Component<{ tree: Tree }> {
       }
     } else {
       selection.select(id);
+      const editor = globalContext.get(Editor);
+      const selectedNode = designer.currentSelection?.getNodes()?.[0];
+      const npm = selectedNode?.componentMeta?.npm;
+      const selected =
+        [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
+        selectedNode?.componentMeta?.componentName ||
+        '';
+      editor?.emit('outlinePane.select', {
+        selected,
+      });
     }
   };
 
@@ -95,7 +106,8 @@ export default class TreeView extends Component<{ tree: Tree }> {
     const doc = node.document;
     const selection = doc.selection;
 
-    const isMulti = e.metaKey || e.ctrlKey;
+    // TODO: shift selection
+    const isMulti = e.metaKey || e.ctrlKey || e.shiftKey;
     const isLeftButton = e.button === 0;
 
     if (isLeftButton && !isRootNode(node)) {
@@ -128,7 +140,7 @@ export default class TreeView extends Component<{ tree: Tree }> {
   private onMouseLeave = () => {
     const { tree } = this.props;
     const doc = tree.document;
-    doc.designer.hovering.leave(doc);
+    doc.designer.detecting.leave(doc);
   };
 
   render() {

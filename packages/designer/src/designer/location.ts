@@ -1,8 +1,8 @@
-import { DocumentModel, Node as ComponentNode, NodeParent } from '../document';
+import { DocumentModel, Node as ComponentNode, ParentalNode } from '../document';
 import { LocateEvent } from './dragon';
 
 export interface LocationData {
-  target: NodeParent; // shadowNode | ConditionFlow | ElementNode | RootNode
+  target: ParentalNode; // shadowNode | ConditionFlow | ElementNode | RootNode
   detail: LocationDetail;
   source: string;
   event: LocateEvent;
@@ -27,7 +27,7 @@ export interface LocationChildrenDetail {
     rect?: Rect;
     align?: 'V' | 'H';
   };
-  focus?: { type: 'slots' } | { type: 'node'; node: NodeParent };
+  focus?: { type: 'slots' } | { type: 'node'; node: ParentalNode };
 }
 
 export interface LocationPropDetail {
@@ -126,7 +126,7 @@ export function getWindow(elem: Element | Document): Window {
 }
 
 export class DropLocation {
-  readonly target: NodeParent;
+  readonly target: ParentalNode;
   readonly detail: LocationDetail;
   readonly event: LocateEvent;
   readonly source: string;

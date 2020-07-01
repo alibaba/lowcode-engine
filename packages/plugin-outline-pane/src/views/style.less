@@ -2,6 +2,8 @@
   height: 100%;
   width: 100%;
   position: relative;
+  z-index: 2;
+  background-color: white;
 
   > .lc-outline-tree-container {
     top: 0;
@@ -153,6 +155,9 @@
       & > svg {
         width: 16px;
         height: 16px;
+        * {
+          fill: var(--color-icon-normal, rgba(31, 56, 88, 0.4));
+        }
       }
     }
 
@@ -255,7 +260,7 @@
       }
     }
 
-    &.hovering > .tree-node-title {
+    &.detecting > .tree-node-title {
       background: var(--color-block-background-light);
     }
 

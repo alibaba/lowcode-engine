@@ -1,5 +1,5 @@
 import { Component as ReactComponent, ComponentType } from 'react';
-import { ComponentMetadata } from '@ali/lowcode-globals';
+import { ComponentMetadata, ComponentSchema } from '@ali/lowcode-types';
 import { ISensor, Point, ScrollTarget, IScrollable } from './designer';
 import { Node } from './document';
 
@@ -81,7 +81,10 @@ export interface ISimulatorHost<P = object> extends ISensor {
   // later:
   // layout: ComponentName
   // 获取区块代码, 通过 components 传递，可异步获取
+  // 设置 simulator Props
   setProps(props: P): void;
+  // 设置单个 Prop
+  set(key: string, value: any): void;
 
   setSuspense(suspensed: boolean): void;
 
@@ -124,6 +127,10 @@ export interface ISimulatorHost<P = object> extends ISensor {
    */
   getComponentInstances(node: Node): ComponentInstance[] | null;
   /**
+   * 根据低代码组件 schema 创建组件类
+   */
+  createComponent(schema: ComponentSchema): Component | null;
+  /**
    * 根据节点获取节点的组件运行上下文
    */
   getComponentContext(node: Node): object | null;
@@ -134,8 +141,8 @@ export interface ISimulatorHost<P = object> extends ISensor {
 
   computeComponentInstanceRect(instance: ComponentInstance, selector?: string): DOMRect | null;
 
-  findDOMNodes(instance: ComponentInstance): Array<Element | Text> | null;
-
+  findDOMNodes(instance: ComponentInstance, selector?: string): Array<Element | Text> | null;
+  
   /**
    * 销毁
    */

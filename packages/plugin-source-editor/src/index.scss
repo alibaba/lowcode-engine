@@ -1,0 +1,46 @@
+.source-editor-container{
+  height: 100%;
+  position: relative;
+
+  .next-tabs {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+  }
+
+  .next-tabs-content{
+    height: 100%;
+  }
+
+  .editor-context-container{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 35px;
+
+  }
+
+  .editor-context{
+    height: 100%;
+  }
+
+  .next-tabs-tabpane.active {
+    visibility: visible;
+    opacity: 1;
+    height: 100%;
+  }
+
+  .full-screen-container{
+    position: absolute;
+    top: 40px;
+    right: 20px;
+    cursor: pointer;
+    img{
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+}
+

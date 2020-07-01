@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { computed, observer } from '@ali/lowcode-globals';
+import { computed, observer } from '@ali/lowcode-editor-core';
 import { SimulatorContext } from '../context';
 import { BuiltinSimulatorHost } from '../host';
 import {
@@ -10,7 +10,7 @@ import {
   isVertical
 } from '../../designer';
 import { ISimulatorHost, } from '../../simulator';
-import {NodeParent } from '../../document';
+import { ParentalNode } from '../../document';
 import './insertion.less';
 
 interface InsertionData {
@@ -24,7 +24,7 @@ interface InsertionData {
 /**
  * 处理拖拽子节点(INode)情况
  */
-function processChildrenDetail(sim: ISimulatorHost, container: NodeParent, detail: LocationChildrenDetail): InsertionData {
+function processChildrenDetail(sim: ISimulatorHost, container: ParentalNode, detail: LocationChildrenDetail): InsertionData {
   let edge = detail.edge || null;
 
   if (!edge) {
@@ -106,30 +106,25 @@ function processDetail({ target, detail, document }: DropLocation): InsertionDat
     if (!instances) {
       return {};
     }
-    const edge = sim.computeComponentInstanceRect(instances[0], target.componentMeta.rectSelector);
+    const edge = sim.computeComponentInstanceRect(instances[0], target.componentMeta.rootSelector);
     return edge ? { edge, insertType: 'cover', coverRect: edge } : {};
   }
 }
 
 @observer
-export class InsertionView extends Component {
-  static contextType = SimulatorContext;
-
-  @computed get host(): BuiltinSimulatorHost {
-    return this.context;
-  }
-
+export class InsertionView extends Component<{ host: BuiltinSimulatorHost }> {
   shouldComponentUpdate() {
     return false;
   }
 
   render() {
-    const loc = this.host.document.dropLocation;
+    const { host } = this.props;
+    const loc = host.document.dropLocation;
     if (!loc) {
       return null;
     }
 
-    const { scale, scrollX, scrollY } = this.host.viewport;
+    const { scale, scrollX, scrollY } = host.viewport;
     const { edge, insertType, coverRect, nearRect, vertical } = processDetail(loc);
 
     if (!edge) {

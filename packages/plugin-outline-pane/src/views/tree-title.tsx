@@ -1,16 +1,16 @@
 import { Component, KeyboardEvent, FocusEvent, Fragment } from 'react';
 import classNames from 'classnames';
-import { observer, createIcon, Title, EmbedTip } from '@ali/lowcode-globals';
+import { observer, Title, Tip, globalContext, Editor } from '@ali/lowcode-editor-core';
 import { IconArrowRight } from '../icons/arrow-right';
 import { IconEyeClose } from '../icons/eye-close';
 import { IconLock } from '../icons/lock';
 import { IconUnlock } from '../icons/unlock';
-import { intl } from '../locale';
+import { intl, intlNode } from '../locale';
 import TreeNode from '../tree-node';
 import { IconEye } from '../icons/eye';
 import { IconCond } from '../icons/cond';
 import { IconLoop } from '../icons/loop';
-import { IconSlot } from '../icons/slot';
+import { createIcon } from '@ali/lowcode-utils';
 
 @observer
 export default class TreeTitle extends Component<{
@@ -66,7 +66,7 @@ export default class TreeTitle extends Component<{
     const { editing } = this.state;
     const isCNode = !treeNode.isRoot();
     const { node } = treeNode;
-    const isNodeParent = node.isNodeParent;
+    const isNodeParent = node.isParental();
     let style: any;
     if (isCNode) {
       const depth = treeNode.depth;
@@ -103,29 +103,28 @@ export default class TreeTitle extends Component<{
               {node.slotFor && (
                 <a className="tree-node-tag slot">
                   {/* todo: click redirect to prop */}
-                  <IconSlot />
-                  <EmbedTip>{intl('Slot for {prop}', { prop: node.slotFor.key })}</EmbedTip>
+                  <Tip>{intlNode('Slot for {prop}', { prop: node.slotFor.key })}</Tip>
                 </a>
               )}
               {node.hasLoop() && (
                 <a className="tree-node-tag loop">
                   {/* todo: click todo something */}
                   <IconLoop />
-                  <EmbedTip>{intl('Loop')}</EmbedTip>
+                  <Tip>{intlNode('Loop')}</Tip>
                 </a>
               )}
               {node.hasCondition() && !node.conditionGroup && (
                 <a className="tree-node-tag cond">
                   {/* todo: click todo something */}
                   <IconCond />
-                  <EmbedTip>{intl('Conditional')}</EmbedTip>
+                  <Tip>{intlNode('Conditional')}</Tip>
                 </a>
               )}
             </Fragment>
           )}
         </div>
         {isCNode && isNodeParent && <HideBtn treeNode={treeNode} />}
-        {isCNode && isNodeParent && <LockBtn treeNode={treeNode} />}
+        {/*isCNode && isNodeParent && <LockBtn treeNode={treeNode} />*/}
       </div>
     );
   }
@@ -147,7 +146,7 @@ class LockBtn extends Component<{ treeNode: TreeNode }> {
         }}
       >
         {treeNode.locked ? <IconLock /> : <IconUnlock />}
-        <EmbedTip>{treeNode.locked ? intl('Unlock') : intl('Lock')}</EmbedTip>
+        <Tip>{treeNode.locked ? intl('Unlock') : intl('Lock')}</Tip>
       </div>
     );
   }
@@ -166,10 +165,20 @@ class HideBtn extends Component<{ treeNode: TreeNode }> {
         onClick={(e) => {
           e.stopPropagation();
           treeNode.setHidden(!treeNode.hidden);
+          const editor = globalContext.get(Editor);
+          const node = treeNode?.node;
+          const npm = node?.componentMeta?.npm;
+          const selected =
+            [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
+            node?.componentMeta?.componentName ||
+            '';
+          editor?.emit('outlinePane.hide', {
+            selected,
+          });
         }}
       >
         {treeNode.hidden ? <IconEyeClose /> : <IconEye />}
-        <EmbedTip>{treeNode.hidden ? intl('Show') : intl('Hide')}</EmbedTip>
+        <Tip>{treeNode.hidden ? intl('Show') : intl('Hide')}</Tip>
       </div>
     );
   }

@@ -1,20 +1,11 @@
-import {
-  CompositeValue,
-  isJSExpression,
-  isJSSlot,
-  NodeData,
-  isNodeSchema,
-  untracked,
-  computed,
-  obx
-} from '@ali/lowcode-globals';
-import { uniqueId } from '@ali/lowcode-globals';
-import { isPlainObject } from '@ali/lowcode-globals';
-import { hasOwnProperty } from '@ali/lowcode-globals';
+import { untracked, computed, obx } from '@ali/lowcode-editor-core';
+import { CompositeValue, isJSExpression, isJSSlot, JSSlot, SlotSchema } from '@ali/lowcode-types';
+import { uniqueId, isPlainObject, hasOwnProperty } from '@ali/lowcode-utils';
 import { PropStash } from './prop-stash';
 import { valueToSource } from './value-to-source';
 import { Props } from './props';
-import { Node } from '../node';
+import { SlotNode, Node } from '../node';
+import { TransformStage } from '../transform-stage';
 
 export const UNSET = Symbol.for('unset');
 export type UNSET = typeof UNSET;
@@ -22,12 +13,35 @@ export type UNSET = typeof UNSET;
 export interface IPropParent {
   delete(prop: Prop): void;
   readonly props: Props;
+  readonly owner: Node;
 }
 
 export type ValueTypes = 'unset' | 'literal' | 'map' | 'list' | 'expression' | 'slot';
 
 export class Prop implements IPropParent {
   readonly isProp = true;
+  readonly owner: Node;
+
+  /**
+   * @see SettingTarget
+   */
+  getPropValue(propName: string | number): any {
+    return this.get(propName)!.getValue();
+  }
+
+  /**
+   * @see SettingTarget
+   */
+  setPropValue(propName: string | number, value: any): void {
+    this.set(propName, value);
+  }
+
+  /**
+   * @see SettingTarget
+   */
+  clearPropValue(propName: string | number): void {
+    this.get(propName, false)?.unset();
+  }
 
   readonly id = uniqueId('prop$');
 
@@ -45,10 +59,10 @@ export class Prop implements IPropParent {
    * 属性值
    */
   @computed get value(): CompositeValue | UNSET {
-    return this.export(true);
+    return this.export(TransformStage.Serilize);
   }
 
-  export(serialize = false): CompositeValue | UNSET {
+  export(stage: TransformStage = TransformStage.Save): CompositeValue | UNSET {
     const type = this._type;
 
     if (type === 'unset') {
@@ -60,9 +74,18 @@ export class Prop implements IPropParent {
     }
 
     if (type === 'slot') {
+      const schema = this._slotNode!.export(stage);
+      if (stage === TransformStage.Render) {
+        return {
+          type: 'JSSlot',
+          params: schema.params,
+          value: schema,
+        };
+      }
       return {
         type: 'JSSlot',
-        value: this._slotNode!.export(serialize),
+        params: schema.params,
+        value: schema.children,
       };
     }
 
@@ -72,9 +95,9 @@ export class Prop implements IPropParent {
       }
       const maps: any = {};
       this.items!.forEach((prop, key) => {
-        const v = prop.export(serialize);
+        const v = prop.export(stage);
         if (v !== UNSET) {
-          maps[key] = v;
+          maps[prop.key == null ? key : prop.key] = v;
         }
       });
       return maps;
@@ -85,12 +108,12 @@ export class Prop implements IPropParent {
         return this._value;
       }
       return this.items!.map((prop) => {
-        const v = prop.export(serialize);
-        return v === UNSET ? null : v;
+        const v = prop.export(stage);
+        return v === UNSET ? undefined : v;
       });
     }
 
-    return null;
+    return undefined;
   }
 
   private _code: string | null = null;
@@ -103,7 +126,7 @@ export class Prop implements IPropParent {
     }
     // todo: JSFunction ...
     if (this.type === 'slot') {
-      return JSON.stringify(this._slotNode!.export(false));
+      return JSON.stringify(this._slotNode!.export(TransformStage.Save));
     }
     return this._code != null ? this._code : JSON.stringify(this.value);
   }
@@ -153,7 +176,7 @@ export class Prop implements IPropParent {
     this._code = null;
     const t = typeof val;
     if (val == null) {
-      this._value = null;
+      this._value = undefined;
       this._type = 'literal';
     } else if (t === 'string' || t === 'number' || t === 'boolean') {
       this._type = 'literal';
@@ -161,7 +184,7 @@ export class Prop implements IPropParent {
       this._type = 'list';
     } else if (isPlainObject(val)) {
       if (isJSSlot(val)) {
-        this.setAsSlot(val.value);
+        this.setAsSlot(val);
         return;
       }
       if (isJSExpression(val)) {
@@ -169,7 +192,6 @@ export class Prop implements IPropParent {
       } else {
         this._type = 'map';
       }
-      this._type = 'map';
     } else {
       this._type = 'expression';
       this._value = {
@@ -181,9 +203,9 @@ export class Prop implements IPropParent {
   }
 
   @computed getValue(): CompositeValue {
-    const v = this.export(true);
+    const v = this.export(TransformStage.Serilize);
     if (v === UNSET) {
-      return null;
+      return undefined;
     }
     return v;
   }
@@ -204,24 +226,25 @@ export class Prop implements IPropParent {
     }
   }
 
-  private _slotNode?: Node;
+  private _slotNode?: SlotNode;
   get slotNode() {
     return this._slotNode;
   }
-  setAsSlot(data: NodeData) {
+  setAsSlot(data: JSSlot) {
     this._type = 'slot';
-    if (
-      this._slotNode &&
-      isNodeSchema(data) &&
-      (!data.id || this._slotNode.id === data.id) &&
-      this._slotNode.componentName === data.componentName
-    ) {
-      this._slotNode.import(data);
+    const slotSchema: SlotSchema = {
+      componentName: 'Slot',
+      title: data.title,
+      params: data.params,
+      children: data.value,
+    };
+    if (this._slotNode) {
+      this._slotNode.import(slotSchema);
     } else {
-      this._slotNode?.internalSetParent(null);
       const owner = this.props.owner;
-      this._slotNode = owner.document.createNode(data, this);
-      this._slotNode.internalSetParent(owner as any);
+      this._slotNode = owner.document.createNode<SlotNode>(slotSchema);
+      owner.addSlot(this._slotNode);
+      this._slotNode.internalSetSlotFor(this);
     }
     this.dispose();
   }
@@ -244,7 +267,9 @@ export class Prop implements IPropParent {
     return typeof this.key === 'string' && this.key.charAt(0) === '!';
   }
 
-  // TODO: improve this logic
+  /**
+   * @returns  0: the same 1: maybe & like 2: not the same
+   */
   compare(other: Prop | null): number {
     if (!other || other.isUnset()) {
       return this.isUnset() ? 0 : 2;
@@ -326,6 +351,7 @@ export class Prop implements IPropParent {
     key?: string | number,
     spread = false,
   ) {
+    this.owner = parent.owner;
     this.props = parent.props;
     if (value !== UNSET) {
       this.setValue(value);
@@ -338,7 +364,7 @@ export class Prop implements IPropParent {
    * 获取某个属性
    * @param stash 如果不存在，临时获取一个待写入
    */
-  get(path: string | number, stash = true): Prop | null {
+  get(path: string | number, stash: boolean = true): Prop | null {
     const type = this._type;
     if (type !== 'map' && type !== 'list' && type !== 'unset' && !stash) {
       return null;
@@ -584,6 +610,14 @@ export class Prop implements IPropParent {
     return items.map((item, index) => {
       return isMap ? fn(item, item.key) : fn(item, index);
     });
+  }
+
+  getProps() {
+    return this.parent;
+  }
+
+  getNode() {
+    return this.owner;
   }
 }
 

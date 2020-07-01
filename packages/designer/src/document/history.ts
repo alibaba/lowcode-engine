@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
-import { NodeSchema, autorun, Reaction, untracked } from '@ali/lowcode-globals';
+import { autorun, Reaction, untracked, globalContext, Editor } from '@ali/lowcode-editor-core';
+import { NodeSchema } from '@ali/lowcode-types';
 
 // TODO: cache to localStorage
 
@@ -113,6 +114,11 @@ export class History {
     }
     const cursor = this.session.cursor - 1;
     this.go(cursor);
+    const editor = globalContext.get(Editor);
+    if (!editor) {
+      return;
+    }
+    editor.emit('history.back', cursor);
   }
 
   forward() {
@@ -121,6 +127,11 @@ export class History {
     }
     const cursor = this.session.cursor + 1;
     this.go(cursor);
+    const editor = globalContext.get(Editor);
+    if (!editor) {
+      return;
+    }
+    editor.emit('history.forward', cursor);
   }
 
   savePoint() {
@@ -172,6 +183,10 @@ export class History {
   destroy() {
     this.emitter.removeAllListeners();
     this.records = [];
+  }
+
+  isModified() {
+    return this.point !== this.session.cursor;
   }
 }
 

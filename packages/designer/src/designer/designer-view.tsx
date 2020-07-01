@@ -1,18 +1,25 @@
 import { Component } from 'react';
 import classNames from 'classnames';
-import { TipContainer } from '@ali/lowcode-globals';
 import BuiltinDragGhostComponent from './drag-ghost';
 import { Designer, DesignerProps } from './designer';
 import { ProjectView } from '../project';
 import './designer.less';
 import clipboard from './clipboard';
 
-export class DesignerView extends Component<DesignerProps> {
+export class DesignerView extends Component<DesignerProps & {
+  designer?: Designer;
+}> {
   readonly designer: Designer;
 
   constructor(props: any) {
     super(props);
-    this.designer = new Designer(props);
+    const { designer, ...designerProps } = props;
+    if (designer) {
+      this.designer = designer;
+      designer.setProps(designerProps);
+    } else {
+      this.designer = new Designer(designerProps);
+    }
   }
 
   shouldComponentUpdate(nextProps: DesignerProps) {
@@ -49,7 +56,6 @@ export class DesignerView extends Component<DesignerProps> {
       <div className={classNames('lc-designer', className)} style={style}>
         <DragGhost designer={this.designer} />
         <ProjectView designer={this.designer} />
-        <TipContainer />
       </div>
     );
   }

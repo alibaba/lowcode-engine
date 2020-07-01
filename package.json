@@ -10,10 +10,10 @@
     ]
   },
   "scripts": {
-    "build": "lerna run build --stream",
+    "build": "./scripts/build.sh",
     "clean": "rm -rf ./packages/*/lib ./packages/*/es ./packages/*/dist ./packages/*/build",
     "commit": "git-cz",
-    "pub": "lerna publish",
+    "pub": "lerna publish --cd-version patch",
     "setup": "./scripts/setup.sh",
     "start": "./scripts/start.sh",
     "test": "lerna run test --stream",
@@ -48,5 +48,9 @@
   },
   "engines": {
     "node": ">=10.0.0"
+  },
+  "tnpm": {
+    "mode": "yarn",
+    "lockfile": "enable"
   }
 }

@@ -1,21 +1,21 @@
 {
   "version": "1.0.0",
-  "packages": {
-    "moment": {
+  "packages": [
+    {
       "package": "moment",
       "urls": ["https://g.alicdn.com/mylib/moment/2.24.0/min/moment.min.js"],
       "library": "moment"
     },
-    "@alifd/next": {
+    {
       "title": "fusion组件库",
       "package": "@alifd/next",
       "version": "1.19.18",
       "urls": ["https://unpkg.antfin-inc.com/@alife/next@1.19.18/dist/next.js", "https://unpkg.antfin-inc.com/@alife/next@1.19.18/dist/next.css"],
       "library": "Next"
     }
-  },
-  "components": {
-    "Page": {
+  ],
+  "components": [
+    {
       "componentName": "Page",
       "title": "页面",
       "configure": {
@@ -39,8 +39,14 @@
         }
       }
     },
-    "Div": {
-      "componentName": "Div",
+    {
+      "componentName": "Card",
+      "npm": {
+        "package": "@alifd/next",
+        "version": "1.19.18",
+        "destructuring": true,
+        "exportName": "Card"
+      },
       "title": "容器",
       "configure": {
         "component": {
@@ -48,7 +54,7 @@
         }
       }
     },
-    "Button": {
+    {
       "componentName": "Button",
       "title": "按钮",
       "devMode": "proCode",
@@ -147,7 +153,7 @@
         "propType": "node"
       }]
     },
-    "Button.Group": {
+    {
       "componentName": "Button.Group",
       "title": "按钮组",
       "devMode": "proCode",
@@ -186,7 +192,7 @@
         }
       }
     },
-    "Input": {
+    {
       "componentName": "Input",
       "title": "输入框",
       "devMode": "proCode",
@@ -197,6 +203,10 @@
         "exportName": "Input"
       },
       "props": [{
+        "name": "value",
+        "propType": "string",
+        "description": ""
+      },{
         "name": "label",
         "propType": "node",
         "description": "label"
@@ -300,7 +310,7 @@
         "description": "预览态模式下渲染的内容\n@param {number} value 评分值"
       }]
     },
-    "Form": {
+    {
       "componentName": "Form",
       "title": "表单容器",
       "devMode": "proCode",
@@ -423,7 +433,7 @@
         }
       }
     },
-    "Form.Item": {
+    {
       "componentName": "Form.Item",
       "title": "表单项",
       "devMode": "proCode",
@@ -677,7 +687,7 @@
         }
       }
     },
-    "NumberPicker": {
+    {
       "componentName": "NumberPicker",
       "title": "数字输入",
       "devMode": "proCode",
@@ -829,7 +839,7 @@
         "description": "预设屏幕宽度"
       }]
     },
-    "Select": {
+    {
       "componentName": "Select",
       "title": "下拉",
       "devMode": "proCode",
@@ -1054,6 +1064,14 @@
           "title": "最多显示多少个 tag",
           "setter": "ExpressionSetter"
         }, {
+          "name": "color",
+          "title": "颜色选择",
+          "setter": "ColorSetter"
+        }, {
+          "name": "json",
+          "title": "JSON设置",
+          "setter": "JsonSetter"
+        }, {
           "name": "MixinSetter",
           "placeholder": "混合",
           "setter": {
@@ -1081,11 +1099,14 @@
                   }, {
                     "label": "左",
                     "value": "l"
-                  }]
+                  }],
+                  "defaultValue": "l"
                 }
               }, {
                 "name": "NumberSetter",
-                "props": {}
+                "props": {
+                  "defaultValue": 5
+                }
               }, {
                 "name": "BoolSetter",
                 "props": {}
@@ -1450,7 +1471,7 @@
         }]
       }
     },
-    "Select.Option": {
+    {
       "componentName": "Select.Option",
       "title": "选择项",
       "devMode": "proCode",
@@ -1485,14 +1506,14 @@
         }
       }
     }
-  },
+  ],
   "componentList": [{
     "title": "基础",
     "icon": "",
     "children": [{
       "componentName": "Button",
       "title": "按钮",
-      "icon": "",
+      "icon": "add",
       "package": "@alife/next",
       "library": "Next",
       "snippets": [{
@@ -1521,7 +1542,8 @@
         "schema": {
           "componentName": "Button",
           "props": {
-            "type": "normal"
+            "type": "normal",
+            "value": "normal"
           },
           "children": "normal"
         }
@@ -1577,7 +1599,7 @@
     "title": "其他",
     "icon": "",
     "children": [{
-      "componentName": "Div",
+      "componentName": "Card",
       "library": "Next",
       "title": "容器",
       "icon": "",
@@ -1585,7 +1607,7 @@
         "title": "默认",
         "screenshot": "",
         "schema": {
-          "componentName": "Div",
+          "componentName": "Card",
           "props": {}
         }
       }]

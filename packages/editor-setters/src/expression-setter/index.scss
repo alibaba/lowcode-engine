@@ -1,0 +1,17 @@
+.expression-setter-item-inner {
+  .next-menu-item-text {
+    vertical-align: middle;
+    display: flex;
+    justify-content: space-between;
+  }
+  .next-menu-item {
+    padding: 0 10px;
+  }
+}
+.code-input-value {
+  float: left;
+}
+.code-input-help {
+  float: right;
+  color: #6897f2;
+}

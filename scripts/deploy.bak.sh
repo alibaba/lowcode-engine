@@ -31,5 +31,5 @@ mv packages/demo/build $BUILD_DEST
 mv packages/react-simulator-renderer/dist/* $BUILD_DEST
 mv packages/globals/dist/* $BUILD_DEST
 
-cp html/* $BUILD_DEST
+cp deploy-space/html/* $BUILD_DEST
 echo "complete"

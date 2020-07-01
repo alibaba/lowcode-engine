@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { observer } from '@ali/lowcode-globals';
+import { observer } from '@ali/lowcode-editor-core';
 import { BuiltinSimulatorHost, BuiltinSimulatorProps } from './host';
 import { DocumentModel } from '../document';
 import { SimulatorContext } from './context';
@@ -38,23 +38,19 @@ export class BuiltinSimulatorHostView extends Component<SimulatorHostProps> {
     }
   }
   render() {
-    const { Provider } = SimulatorContext;
     return (
       <div className="lc-simulator">
-        <Provider value={this.host}>
-          {/*progressing.visible ? <PreLoaderView /> : null*/}
-          <Canvas />
-        </Provider>
+        {/*progressing.visible ? <PreLoaderView /> : null*/}
+        <Canvas host={this.host} />
       </div>
     );
   }
 }
 
 @observer
-class Canvas extends Component {
-  static contextType = SimulatorContext;
+class Canvas extends Component<{ host: BuiltinSimulatorHost }> {
   render() {
-    const sim = this.context as BuiltinSimulatorHost;
+    const sim = this.props.host;
     let className = 'lc-simulator-canvas';
     if (sim.deviceClassName) {
       className += ` ${sim.deviceClassName}`;
@@ -65,8 +61,8 @@ class Canvas extends Component {
     return (
       <div className={className}>
         <div ref={elmt => sim.mountViewport(elmt)} className="lc-simulator-canvas-viewport">
-          <BemTools />
-          <Content />
+          <BemTools host={sim} />
+          <Content host={sim} />
         </div>
       </div>
     );
@@ -74,10 +70,9 @@ class Canvas extends Component {
 }
 
 @observer
-class Content extends Component {
-  static contextType = SimulatorContext;
+class Content extends Component<{ host: BuiltinSimulatorHost }> {
   render() {
-    const sim = this.context as BuiltinSimulatorHost;
+    const sim = this.props.host;
     const viewport = sim.viewport;
     let frameStyle = {};
     if (viewport.scale < 1) {

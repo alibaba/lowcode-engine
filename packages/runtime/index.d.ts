@@ -1,8 +1,7 @@
-import { ReactType } from 'react';
 type HistoryMode = 'browser' | 'hash';
 
 interface ComponentsMap {
-  [key: string]: ReactType;
+  [key: string]: any;
 }
 
 interface UtilsMap {

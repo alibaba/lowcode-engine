@@ -1,4 +1,4 @@
-import { SVGIcon, IconProps } from '@ali/lowcode-globals';
+import { SVGIcon, IconProps } from '@ali/lowcode-utils';
 
 export function IconSetting(props: IconProps) {
   return (

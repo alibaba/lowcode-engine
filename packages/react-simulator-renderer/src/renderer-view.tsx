@@ -1,8 +1,40 @@
 import LowCodeRenderer from '@ali/lowcode-react-renderer';
-import { ReactInstance, Fragment, Component } from 'react';
+import { isObject } from 'lodash';
+import { ReactInstance, Fragment, Component, createElement } from 'react';
 import { observer } from '@recore/obx-react';
 import { SimulatorRenderer } from './renderer';
+import { host } from './host';
 import './renderer.less';
+
+// patch cloneElement avoid lost keyProps
+const originCloneElement = window.React.cloneElement;
+(window as any).React.cloneElement = (child: any, { _leaf, ...props }: any = {}, ...rest: any[]) => {
+  if (child.ref && props.ref) {
+    const dRef = props.ref;
+    const cRef = child.ref;
+    props.ref = (x: any) => {
+      if (cRef) {
+        if (typeof cRef === 'function') {
+          cRef(x);
+        } else {
+          try {
+            cRef.current = x;
+          } catch (e) {}
+        }
+      }
+      if (dRef) {
+        if (typeof dRef === 'function') {
+          dRef(x);
+        } else {
+          try {
+            dRef.current = x;
+          } catch (e) {}
+        }
+      }
+    };
+  }
+  return originCloneElement(child, props, ...rest);
+};
 
 export default class SimulatorRendererView extends Component<{ renderer: SimulatorRenderer }> {
   render() {
@@ -13,6 +45,26 @@ export default class SimulatorRendererView extends Component<{ renderer: Simulat
       </Layout>
     );
   }
+}
+
+function ucfirst(s: string) {
+  return s.charAt(0).toUpperCase() + s.substring(1);
+}
+function getDeviceView(view: any, device: string, mode: string) {
+  if (!view || typeof view === 'string') {
+    return view;
+  }
+
+  // compatible vision Mobile | Preview
+  device = ucfirst(device);
+  if (device === 'Mobile' && view.hasOwnProperty(device)) {
+    view = view[device];
+  }
+  mode = ucfirst(mode);
+  if (mode === 'Preview' && view.hasOwnProperty(mode)) {
+    view = view[mode];
+  }
+  return view;
 }
 
 @observer
@@ -40,17 +92,49 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
   }
   render() {
     const { renderer } = this.props;
-    // const { components, schemas } = LowCodeRenderer.others;
+    const { device, designMode } = renderer;
     return (
       <LowCodeRenderer
         schema={renderer.schema}
         components={renderer.components}
         appHelper={renderer.context}
         // context={renderer.context}
-        designMode={renderer.designMode}
-        componentsMap={renderer.componentsMap}
+        designMode={designMode}
         suspended={renderer.suspended}
         self={renderer.scope}
+        customCreateElement={(Component: any, props: any, children: any) => {
+          const { __id, __desingMode, ...viewProps } = props;
+          viewProps.componentId = __id;
+          const leaf = host.document.getNode(__id);
+          viewProps._leaf = leaf;
+          viewProps._componentName = leaf?.componentName;
+
+          if (viewProps._componentName === 'Menu') {
+            Object.assign(viewProps, {
+              _componentName: 'Menu',
+              className: '_css_pesudo_menu_kbrzyh0f',
+              context: { VE: (window as any).VisualEngine },
+              direction: undefined,
+              events: { ignored: true },
+              fieldId: 'menu_kbrzyh0f',
+              footer: '',
+              header: '',
+              mode: 'inline',
+              onItemClick: { ignored: true },
+              onSelect: { ignored: true },
+              popupAlign: 'follow',
+              selectMode: false,
+              triggerType: 'click',
+            });
+            console.info('menuprops', viewProps);
+          }
+
+          return createElement(
+            getDeviceView(Component, device, designMode),
+            viewProps,
+            leaf?.isContainer() ? (children == null ? [] : Array.isArray(children) ? children : [children]) : null,
+          );
+        }}
         onCompGetRef={(schema: any, ref: ReactInstance | null) => {
           renderer.mountInstance(schema.id, ref);
         }}

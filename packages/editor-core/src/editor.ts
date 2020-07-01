@@ -1,136 +1,106 @@
-import Debug from 'debug';
 import { EventEmitter } from 'events';
-import store from 'store';
-import {
-  EditorConfig,
-  HooksConfig,
-  LocaleType,
-  PluginStatusSet,
-  Utils,
-  PluginClassSet,
-  PluginSet,
-} from './definitions';
-
-import pluginFactory from './pluginFactory';
-
-import * as editorUtils from './utils';
-
-const { registShortCuts, transformToPromise, unRegistShortCuts } = editorUtils;
-
-declare global {
-  interface Window {
-    __isDebug?: boolean;
-    __newFunc?: (funcStr: string) => (...args: any[]) => any;
-  }
-}
-
-// 根据url参数设置debug选项
-const debugRegRes = /_?debug=(.*?)(&|$)/.exec(location.search);
-if (debugRegRes && debugRegRes[1]) {
-  // eslint-disable-next-line no-underscore-dangle
-  window.__isDebug = true;
-  store.storage.write('debug', debugRegRes[1] === 'true' ? '*' : debugRegRes[1]);
-} else {
-  // eslint-disable-next-line no-underscore-dangle
-  window.__isDebug = false;
-  store.remove('debug');
-}
-
-// 重要，用于矫正画布执行new Function的window对象上下文
-// eslint-disable-next-line no-underscore-dangle
-window.__newFunc = (funContext: string): ((...args: any[]) => any) => {
-  // eslint-disable-next-line no-new-func
-  return new Function(funContext) as (...args: any[]) => any;
-};
-
-// 关闭浏览器前提醒,只有产生过交互才会生效
-window.onbeforeunload = function(e: Event): string | void {
-  const ev = e || window.event;
-  // 本地调试不生效
-  if (location.href.indexOf('localhost') > 0) {
-    return;
-  }
-  const msg = '您确定要离开此页面吗？';
-  ev.cancelBubble = true;
-  ev.returnValue = true;
-  if (e.stopPropagation) {
-    e.stopPropagation();
-    e.preventDefault();
-  }
-  return msg;
-};
-
-let instance: Editor;
-
-const debug = Debug('editor');
+import { IEditor, EditorConfig, PluginClassSet, KeyType, GetOptions, GetReturnType } from '@ali/lowcode-types';
+import { IocContext, RegisterOptions } from './di';
+import { globalLocale } from './intl';
 EventEmitter.defaultMaxListeners = 100;
 
-export interface HooksFuncs {
-  [idx: number]: (msg: string, handler: (...args: []) => void) => void;
-}
+const NOT_FOUND = Symbol.for('not_found');
 
-export default class Editor extends EventEmitter {
-  public static getInstance = (config: EditorConfig, components: PluginClassSet, utils?: Utils): Editor => {
-    if (!instance) {
-      instance = new Editor(config, components, utils);
-    }
-    return instance;
-  };
+import * as utils from './utils';
 
-  public config: EditorConfig;
+export class Editor extends EventEmitter implements IEditor {
+  /**
+   * Ioc Container
+   */
+  private context = new IocContext({
+    notFoundHandler: (type: KeyType) => NOT_FOUND,
+  });
 
-  public components: PluginClassSet;
-
-  public utils: Utils;
-
-  public pluginStatus: PluginStatusSet;
-
-  public plugins: PluginSet;
-
-  public locale: LocaleType;
-
-  private hooksFuncs: HooksFuncs;
-
-  constructor(config: EditorConfig, components: PluginClassSet, utils?: Utils) {
-    super();
-    this.config = config;
-    this.components = {};
-    Object.entries(components).forEach(([key, value]): void => {
-      this.components[key] = pluginFactory(value);
-    });
-    this.utils = { ...editorUtils, ...utils };
-    instance = this;
+  get locale() {
+    return globalLocale.getLocale();
   }
 
-  public init(): Promise<any> {
-    const { hooks, shortCuts = [], lifeCycles } = this.config || {};
-    this.locale = store.get('lowcode-editor-locale') || 'zh-CN';
-    // this.messages = this.messagesSet[this.locale];
-    // this.i18n = generateI18n(this.locale, this.messages);
-    this.pluginStatus = this.initPluginStatus();
-    this.initHooks(hooks || []);
+  readonly utils = utils;
+
+  get<T = undefined, KeyOrType = any>(keyOrType: KeyOrType, opt?: GetOptions): GetReturnType<T, KeyOrType> | undefined {
+    const x = this.context.get<T, KeyOrType>(keyOrType, opt);
+    if (x === NOT_FOUND) {
+      return undefined;
+    }
+    return x;
+  }
+
+  has(keyOrType: KeyType): boolean {
+    return this.context.has(keyOrType);
+  }
+
+  set(key: KeyType, data: any): void {
+    if (this.context.has(key)) {
+      this.context.replace(key, data, undefined, true);
+    } else {
+      this.context.register(data, key);
+    }
+    this.notifyGot(key);
+  }
+
+  onceGot<T = undefined, KeyOrType extends KeyType = any>(keyOrType: KeyOrType): Promise<GetReturnType<T, KeyOrType>> {
+    const x = this.context.get<T, KeyOrType>(keyOrType);
+    if (x !== NOT_FOUND) {
+      return Promise.resolve(x);
+    }
+    return new Promise((resolve) => {
+      this.setWait(keyOrType, resolve, true);
+    });
+  }
+
+  onGot<T = undefined, KeyOrType extends KeyType = any>(
+    keyOrType: KeyOrType,
+    fn: (data: GetReturnType<T, KeyOrType>) => void,
+  ): () => void {
+    const x = this.context.get<T, KeyOrType>(keyOrType);
+    if (x !== NOT_FOUND) {
+      fn(x);
+      return () => {};
+    } else {
+      this.setWait(keyOrType, fn);
+      return () => {
+        this.delWait(keyOrType, fn);
+      };
+    }
+  }
+
+  register(data: any, key?: KeyType, options?: RegisterOptions): void {
+    this.context.register(data, key, options);
+    this.notifyGot(key || data);
+  }
+
+  config?: EditorConfig;
+  components?: PluginClassSet;
+  async init(config?: EditorConfig, components?: PluginClassSet): Promise<any> {
+    this.config = config || {};
+    this.components = components || {};
+    const { shortCuts = [], lifeCycles } = this.config;
 
     this.emit('editor.beforeInit');
     const init = (lifeCycles && lifeCycles.init) || ((): void => {});
-    // 用户可以通过设置extensions.init自定义初始化流程；
-    return transformToPromise(init(this))
-      .then((): boolean => {
-        // 注册快捷键
-        registShortCuts(shortCuts, this);
-        this.emit('editor.afterInit');
-        return true;
-      })
-      .catch((err): void => {
-        console.error(err);
-      });
+    try {
+      await init(this);
+      // 注册快捷键
+      // registShortCuts(shortCuts, this);
+      this.emit('editor.afterInit');
+      return true;
+    } catch (err) {
+      console.error(err);
+    }
   }
 
-  public destroy(): void {
-    debug('destroy');
+  destroy(): void {
+    if (!this.config) {
+      return;
+    }
     try {
-      const { hooks = [], shortCuts = [], lifeCycles = {} } = this.config;
-      unRegistShortCuts(shortCuts);
-      this.destroyHooks(hooks);
+      const { shortCuts = [], lifeCycles = {} } = this.config;
+      // unRegistShortCuts(shortCuts);
       if (lifeCycles.destroy) {
         lifeCycles.destroy(this);
       }
@@ -139,94 +109,55 @@ export default class Editor extends EventEmitter {
     }
   }
 
-  public get(key: string): any {
-    return this[key];
-  }
-
-  public set(key: string | object, val: any): void {
-    if (typeof key === 'string') {
-      if (['init', 'destroy', 'get', 'set', 'batchOn', 'batchOff', 'batchOnce'].includes(key)) {
-        console.error('init, destroy, get, set, batchOn, batchOff, batchOnce is private attribute');
-        return;
+  private waits = new Map<
+    KeyType,
+    Array<{
+      once?: boolean;
+      resolve: (data: any) => void;
+    }>
+  >();
+  private notifyGot(key: KeyType) {
+    let waits = this.waits.get(key);
+    if (!waits) {
+      return;
+    }
+    waits = waits.slice().reverse();
+    let i = waits.length;
+    while (i--) {
+      waits[i].resolve(this.get(key));
+      if (waits[i].once) {
+        waits.splice(i, 1);
       }
-      this[key] = val;
-    } else if (typeof key === 'object') {
-      Object.keys(key).forEach((item): void => {
-        this[item] = key[item];
-      });
+    }
+    if (waits.length > 0) {
+      this.waits.set(key, waits);
+    } else {
+      this.waits.delete(key);
     }
   }
 
-  public batchOn(events: string[], lisenter: (...args) => void): void {
-    if (!Array.isArray(events)) {
+  private setWait(key: KeyType, resolve: (data: any) => void, once?: boolean) {
+    const waits = this.waits.get(key);
+    if (waits) {
+      waits.push({ resolve, once });
+    } else {
+      this.waits.set(key, [{ resolve, once }]);
+    }
+  }
+
+  private delWait(key: KeyType, fn: any) {
+    const waits = this.waits.get(key);
+    if (!waits) {
       return;
     }
-    events.forEach((event): void => {
-      this.on(event, lisenter);
-    });
-  }
-
-  public batchOnce(events: string[], lisenter: (...args) => void): void {
-    if (!Array.isArray(events)) {
-      return;
-    }
-    events.forEach((event): void => {
-      this.once(event, lisenter);
-    });
-  }
-
-  public batchOff(events: string[], lisenter: (...args) => void): void {
-    if (!Array.isArray(events)) {
-      return;
-    }
-    events.forEach((event): void => {
-      this.off(event, lisenter);
-    });
-  }
-
-  // 销毁hooks中的消息监听
-  private destroyHooks(hooks: HooksConfig = []): void {
-    hooks.forEach((item, idx): void => {
-      if (typeof this.hooksFuncs[idx] === 'function') {
-        this.off(item.message, this.hooksFuncs[idx]);
+    let i = waits.length;
+    while (i--) {
+      if (waits[i].resolve === fn) {
+        waits.splice(i, 1);
       }
-    });
-    delete this.hooksFuncs;
-  }
-
-  // 初始化hooks中的消息监听
-  private initHooks(hooks: HooksConfig = []): void {
-    this.hooksFuncs = hooks.map((item): ((...arg) => void) => {
-      const func = (...args): void => {
-        item.handler(this, ...args);
-      };
-      this[item.type](item.message, func);
-      return func;
-    });
-  }
-
-  private initPluginStatus(): PluginStatusSet {
-    const { plugins = {} } = this.config;
-    const pluginAreas = Object.keys(plugins);
-    const res: PluginStatusSet = {};
-    pluginAreas.forEach((area): void => {
-      (plugins[area] || []).forEach((plugin): void => {
-        if (plugin.type === 'Divider') {
-          return;
-        }
-        const { visible, disabled, marked } = plugin.props || {};
-        res[plugin.pluginKey] = {
-          visible: typeof visible === 'boolean' ? visible : true,
-          disabled: typeof disabled === 'boolean' ? disabled : false,
-          marked: typeof marked === 'boolean' ? marked : false,
-        };
-        const pluginClass = this.components[plugin.pluginKey];
-        // 判断如果编辑器插件有init静态方法，则在此执行init方法
-        if (pluginClass && pluginClass.init) {
-          pluginClass.init(this);
-        }
-      });
-    });
-    return res;
+    }
+    if (waits.length < 1) {
+      this.waits.delete(key);
+    }
   }
 }

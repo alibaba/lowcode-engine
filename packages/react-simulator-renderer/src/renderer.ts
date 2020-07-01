@@ -1,31 +1,33 @@
-import { createElement, ReactInstance } from 'react';
+import React, { createElement, ReactInstance, ComponentType, ReactElement } from 'react';
 import { render as reactRender } from 'react-dom';
 import { host } from './host';
 import SimulatorRendererView from './renderer-view';
 import { computed, obx } from '@recore/obx';
-import { Asset } from '@ali/lowcode-globals';
+import { Asset, isReactComponent } from '@ali/lowcode-utils';
 import { getClientRects } from './utils/get-client-rects';
 import loader from './utils/loader';
 import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
-import { isESModule } from '@ali/lowcode-globals';
-import { isElement } from '@ali/lowcode-globals';
-import { cursor } from '@ali/lowcode-globals';
-import { setNativeSelection } from '@ali/lowcode-globals';
-import { RootSchema, NpmInfo } from '@ali/lowcode-globals';
-import { BuiltinSimulatorRenderer, NodeInstance } from '@ali/lowcode-designer';
+import { isESModule, isElement, cursor, setNativeSelection } from '@ali/lowcode-utils';
+import { RootSchema, NpmInfo, ComponentSchema, TransformStage } from '@ali/lowcode-types';
+// just use types
+import { BuiltinSimulatorRenderer, NodeInstance, Component } from '@ali/lowcode-designer';
+import Slot from './builtin-components/slot';
+import Leaf from './builtin-components/leaf';
 
 export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   readonly isSimulatorRenderer = true;
   private dispose?: () => void;
+
   constructor() {
     if (!host) {
       return;
     }
+
     this.dispose = host.connect(this, () => {
       // sync layout config
 
       // sync schema
-      this._schema = host.document.schema;
+      this._schema = host.document.export(1);
 
       // todo: split with others, not all should recompute
       if (this._libraryMap !== host.libraryMap || this._componentsMap !== host.designer.componentsMap) {
@@ -35,12 +37,14 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
       }
 
       // sync designMode
+      this._designMode = host.designMode;
 
       // sync suspended
 
       // sync scope
 
       // sync device
+      this._device = host.device;
     });
     host.componentsConsumer.consume(async (componentsAsset) => {
       if (componentsAsset) {
@@ -83,9 +87,13 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   @computed get context(): any {
     return this._appContext;
   }
-
+  @obx.ref private _designMode: string = 'design';
   @computed get designMode(): any {
-    return 'preview';
+    return this._designMode;
+  }
+  @obx.ref private _device: string = 'default';
+  @computed get device() {
+    return this._device;
   }
   @obx.ref private _componentsMap = {};
   @computed get componentsMap(): any {
@@ -204,6 +212,62 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
     return this.instancesMap.get(id) || null;
   }
 
+  createComponent(schema: ComponentSchema): Component | null {
+    const _schema = {
+      ...schema,
+    };
+    _schema.methods = {};
+    _schema.lifeCycles = {};
+
+    const processPropsSchema = (propsSchema: any, propsMap: any): any => {
+      if (!propsSchema) {
+        return {};
+      }
+
+      const result = {...propsSchema};
+      const reg = /^(?:this\.props|props)\.(\S+)$/;
+      Object.keys(propsSchema).map((key: string) => {
+        if (propsSchema[key].type === 'JSExpression') {
+          const { value } = propsSchema[key];
+          const matched = reg.exec(value);
+          if (matched) {
+            const propName = matched[1];
+            result[key] = propsMap[propName];
+          }
+        }
+      });
+      return result;
+    };
+
+    const getElement = (componentsMap: any, schema: any, propsMap: any): ReactElement => {
+      const Com = componentsMap[schema.componentName];
+      let children = null;
+      if (schema.children && schema.children.length > 0) {
+        children = schema.children.map((item: any) => getElement(componentsMap, item, propsMap));
+      }
+      const _leaf = host.document.designer.currentDocument?.createNode(schema);
+      const node = host.document.createNode(schema);
+      let props = processPropsSchema(schema.props, propsMap);
+      props = host.document.designer.transformProps(props, node, TransformStage.Init);
+      props = host.document.designer.transformProps(props, node, TransformStage.Render);
+      return createElement(Com, {...props, _leaf}, children);
+    }
+
+    const renderer = this;
+    class Com extends React.Component {
+      render() {
+        const componentsMap = renderer.componentsMap;
+        let children = null;
+        if (_schema.children && Array.isArray(_schema.children)) {
+          children = _schema.children?.map((item:any) => getElement(componentsMap, item, this.props));
+        }
+        return createElement(React.Fragment, {}, children);
+      }
+    }
+
+    return Com;
+  }
+
   getClosestNodeInstance(from: ReactInstance, nodeId?: string): NodeInstance<ReactInstance> | null {
     return getClosestNodeInstance(from, nodeId);
   }
@@ -242,8 +306,12 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
       document.body.appendChild(container);
       container.id = containerId;
     }
+    // ==== compatiable vision
+    document.documentElement.classList.add('engine-page');
+    document.body.classList.add('engine-document'); // important! Stylesheet.invoke depends
 
     reactRender(createElement(SimulatorRendererView, { renderer: this }), container);
+    host.document.setRendererReady(this);
   }
 }
 
@@ -311,12 +379,26 @@ export interface LibraryMap {
   [key: string]: string;
 }
 
-function buildComponents(libraryMap: LibraryMap, componentsMap: { [componentName: string]: NpmInfo }) {
-  const components: any = {};
+// Slot/Leaf and Fragment|FunctionComponent polyfill(ref)
+
+const builtinComponents = {
+  Slot,
+  Leaf,
+};
+
+function buildComponents(libraryMap: LibraryMap, componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> }) {
+  const components: any = {
+    ...builtinComponents
+  };
   Object.keys(componentsMap).forEach((componentName) => {
-    const component = findComponent(libraryMap, componentName, componentsMap[componentName]);
-    if (component) {
+    let component = componentsMap[componentName];
+    if (isReactComponent(component)) {
       components[componentName] = component;
+    } else {
+      component = findComponent(libraryMap, componentName, component);
+      if (component) {
+        components[componentName] = component;
+      }
     }
   });
   return components;

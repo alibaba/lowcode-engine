@@ -1,16 +1,16 @@
-import Pane from './views/pane';
+import { OutlinePane } from './views/pane';
+import { OutlineBackupPane } from './views/backup-pane';
+import { IconOutline } from './icons/outline';
+import { intlNode } from './locale';
+import { getTreeMaster } from './tree-master';
 
-/*
 export default {
-  name: 'outline-tree',
-  title: {
-    label: '大纲树',
-    icon: { name: 'outline', size: '14px' },
+  name: 'outline-pane',
+  props: {
+    icon: IconOutline,
+    description: intlNode('Outline Tree'),
   },
-  content: Pane,
+  content: OutlinePane,
 };
-*/
 
-export { getTreeMaster } from './main';
-
-export default Pane;
+export { OutlinePane, OutlineBackupPane, getTreeMaster };

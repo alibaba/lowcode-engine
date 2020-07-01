@@ -1,9 +1,15 @@
-import { NodeData, isNodeSchema, obx, computed } from '@ali/lowcode-globals';
-import { Node, NodeParent } from './node';
+import { obx, computed } from '@ali/lowcode-editor-core';
+import { Node, ParentalNode } from './node';
+import { TransformStage } from './transform-stage';
+import { NodeData, isNodeSchema } from '@ali/lowcode-types';
+import { shallowEqual } from '@ali/lowcode-utils';
+import { EventEmitter } from 'events';
 
 export class NodeChildren {
   @obx.val private children: Node[];
-  constructor(readonly owner: NodeParent, data: NodeData | NodeData[]) {
+  private emitter = new EventEmitter();
+
+  constructor(readonly owner: ParentalNode, data: NodeData | NodeData[]) {
     this.children = (Array.isArray(data) ? data : [data]).map(child => {
       return this.owner.document.createNode(child);
     });
@@ -15,10 +21,16 @@ export class NodeChildren {
 
   /**
    * 导出 schema
-   * @param serialize 序列化，加 id 标识符，用于储存为操作记录
    */
-  export(serialize = false): NodeData[] {
-    return this.children.map(node => node.export(serialize));
+  export(stage: TransformStage = TransformStage.Save): NodeData[] {
+    return this.children.map(node => {
+      const data = node.export(stage);
+      if (node.isLeaf() && TransformStage.Save === stage) {
+        // FIXME: filter empty
+        return data.children as NodeData;
+      }
+      return data;
+    });
   }
 
   import(data?: NodeData | NodeData[], checkId = false) {
@@ -44,6 +56,9 @@ export class NodeChildren {
 
     this.children = children;
     this.interalInitParent();
+    if (!shallowEqual(children, originChildren)) {
+      this.emitter.emit('change');
+    }
   }
 
   /**
@@ -78,6 +93,7 @@ export class NodeChildren {
       deleted.internalSetParent(null);
       deleted.purge();
     }
+    this.emitter.emit('change');
     return false;
   }
 
@@ -110,6 +126,8 @@ export class NodeChildren {
       children.splice(index, 0, node);
     }
 
+    this.emitter.emit('change');
+
     // check condition group
     if (node.conditionGroup) {
       if (
@@ -138,6 +156,13 @@ export class NodeChildren {
    */
   indexOf(node: Node): number {
     return this.children.indexOf(node);
+  }
+
+  /**
+   *
+   */
+  splice(start: number, deleteCount: number, node: Node): Node[] {
+    return this.children.splice(start, deleteCount, node);
   }
 
   /**
@@ -195,6 +220,60 @@ export class NodeChildren {
     });
   }
 
+  every(fn: (item: Node, index: number) => any): boolean {
+    return this.children.every((child, index) => fn(child, index));
+  }
+
+  some(fn: (item: Node, index: number) => any): boolean {
+    return this.children.some((child, index) => fn(child, index));
+  }
+
+  filter(fn: (item: Node, index: number) => item is Node) {
+    return this.children.filter(fn);
+  }
+
+  mergeChildren(remover: () => any, adder: (children: Node[]) => NodeData[] | null, sorter: () => any) {
+    let changed = false;
+    if (remover) {
+      const willRemove = this.children.filter(remover);
+      if (willRemove.length > 0) {
+        willRemove.forEach((node) => {
+          const i = this.children.indexOf(node);
+          if (i > -1) {
+            this.children.splice(i, 1);
+            node.remove();
+          }
+        });
+        changed = true;
+      }
+    }
+    if (adder) {
+      const items = adder(this.children);
+      if (items && items.length > 0) {
+        items.forEach((child: NodeData) => {
+          const node = this.owner.document.createNode(child);
+          this.children.push(node);
+          node.internalSetParent(this.owner);
+        });
+        changed = true;
+      }
+    }
+    if (sorter) {
+      this.children = this.children.sort(sorter);
+      changed = true;
+    }
+    if (changed) {
+      this.emitter.emit('change');
+    }
+  }
+
+  onChange(fn: () => void) {
+    this.emitter.on('change', fn);
+    return () => {
+      this.emitter.removeListener('change', fn);
+    };
+  }
+
   private purged = false;
   /**
    * 回收销毁
@@ -205,5 +284,10 @@ export class NodeChildren {
     }
     this.purged = true;
     this.children.forEach(child => child.purge());
+  }
+
+  get [Symbol.toStringTag]() {
+    // 保证向前兼容性
+    return "Array";
   }
 }

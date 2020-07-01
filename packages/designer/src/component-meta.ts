@@ -6,24 +6,32 @@ import {
   ComponentAction,
   TitleContent,
   TransformedComponentMetadata,
-  getRegisteredMetadataTransducers,
-  registerMetadataTransducer,
-  computed,
-} from '@ali/lowcode-globals';
-import { Node, NodeParent } from './document';
+  NestingFilter,
+  isTitleConfig,
+  I18nData,
+  LiveTextEditingConfig,
+  FieldConfig,
+} from '@ali/lowcode-types';
+import { computed } from '@ali/lowcode-editor-core';
+import { Node, ParentalNode, TransformStage } from './document';
 import { Designer } from './designer';
-import { intl } from './locale';
+import { intlNode } from './locale';
 import { IconContainer } from './icons/container';
 import { IconPage } from './icons/page';
 import { IconComponent } from './icons/component';
 import { IconRemove } from './icons/remove';
 import { IconClone } from './icons/clone';
+import { ReactElement } from 'react';
+import { IconHidden } from './icons/hidden';
 
 function ensureAList(list?: string | string[]): string[] | null {
   if (!list) {
     return null;
   }
   if (!Array.isArray(list)) {
+    if (typeof list !== 'string') {
+      return null;
+    }
     list = list.split(/ *[ ,|] */).filter(Boolean);
   }
   if (list.length < 1) {
@@ -32,44 +40,29 @@ function ensureAList(list?: string | string[]): string[] | null {
   return list;
 }
 
-function npmToURI(npm: {
-  package: string;
-  exportName?: string;
-  subName?: string;
-  destructuring?: boolean;
-  main?: string;
-  version: string;
-}): string {
-  const pkg = [];
-  if (npm.package) {
-    pkg.push(npm.package);
-  }
-  if (npm.main) {
-    if (npm.main[0] === '/') {
-      pkg.push(npm.main.slice(1));
-    } else if (npm.main.slice(0, 2) === './') {
-      pkg.push(npm.main.slice(2));
-    } else {
-      pkg.push(npm.main);
-    }
-  }
+function isRegExp(obj: any): obj is RegExp {
+  return obj && obj.test && obj.exec && obj.compile;
+}
 
-  let uri = pkg.join('/');
-  uri += `:${npm.destructuring && npm.exportName ? npm.exportName : 'default'}`;
-
-  if (npm.subName) {
-    uri += `.${npm.subName}`;
+function buildFilter(rule?: string | string[] | RegExp | NestingFilter) {
+  if (!rule) {
+    return null;
   }
-
-  return uri;
+  if (typeof rule === 'function') {
+    return rule;
+  }
+  if (isRegExp(rule)) {
+    return (testNode: Node | NodeSchema) => rule.test(testNode.componentName);
+  }
+  const list = ensureAList(rule);
+  if (!list) {
+    return null;
+  }
+  return (testNode: Node | NodeSchema) => list.includes(testNode.componentName);
 }
 
 export class ComponentMeta {
   readonly isComponentMeta = true;
-  private _uri?: string;
-  get uri(): string {
-    return this._uri!;
-  }
   private _npm?: NpmInfo;
   get npm() {
     return this._npm;
@@ -90,9 +83,9 @@ export class ComponentMeta {
   get descriptor(): string | undefined {
     return this._descriptor;
   }
-  private _rectSelector?: string;
-  get rectSelector(): string | undefined {
-    return this._rectSelector;
+  private _rootSelector?: string;
+  get rootSelector(): string | undefined {
+    return this._rootSelector;
   }
   private _transformedMetadata?: TransformedComponentMetadata;
   get configure() {
@@ -100,16 +93,29 @@ export class ComponentMeta {
     return config?.combined || config?.props || [];
   }
 
-  private parentWhitelist?: string[] | null;
-  private childWhitelist?: string[] | null;
+  private _liveTextEditing?: LiveTextEditingConfig[];
+  get liveTextEditing() {
+    return this._liveTextEditing;
+  }
+
+  private parentWhitelist?: NestingFilter | null;
+  private childWhitelist?: NestingFilter | null;
 
   private _title?: TitleContent;
-  get title() {
+  get title(): string | I18nData | ReactElement {
+    // TODO: 标记下。这块需要康师傅加一下API，页面正常渲染。
+    // string | i18nData | ReactElement
+    // TitleConfig  title.label
+    if (isTitleConfig(this._title)) {
+      return (this._title.label as any) || this.componentName;
+    }
     return this._title || this.componentName;
   }
 
   @computed get icon() {
+    // TODO: 标记下。这块需要康师傅加一下API，页面正常渲染。
     // give Slot default icon
+    // if _title is TitleConfig  get _title.icon
     return (
       this._transformedMetadata?.icon ||
       (this.componentName === 'Page' ? IconPage : this.isContainer ? IconContainer : IconComponent)
@@ -125,24 +131,51 @@ export class ComponentMeta {
     this.parseMetadata(metadata);
   }
 
+  setNpm(info: NpmInfo) {
+    if (!this._npm) {
+      this._npm = info;
+    }
+  }
+
   private parseMetadata(metadta: ComponentMetadata) {
-    const { componentName, uri, npm } = metadta;
+    const { componentName, npm } = metadta;
     this._npm = npm;
-    this._uri = uri || (npm ? npmToURI(npm) : componentName);
     this._componentName = componentName;
 
-    metadta.uri = this._uri;
     // 额外转换逻辑
     this._transformedMetadata = this.transformMetadata(metadta);
 
     const title = this._transformedMetadata.title;
-    if (title && typeof title === 'string') {
-      this._title = {
-        type: 'i18n',
-        'en-US': this.componentName,
-        'zh-CN': title,
-      };
+    if (title) {
+      this._title =
+        typeof title === 'string'
+          ? {
+            type: 'i18n',
+            'en-US': this.componentName,
+            'zh-CN': title,
+          }
+          : title;
     }
+
+    const liveTextEditing = this._transformedMetadata.experimental?.liveTextEditing || [];
+
+    function collectLiveTextEditing(items: FieldConfig[]) {
+      items.forEach(config => {
+        if (config.items) {
+          collectLiveTextEditing(config.items);
+        } else {
+          const liveConfig = config.liveTextEditing || config.extraProps?.liveTextEditing;
+          if (liveConfig) {
+            liveTextEditing.push({
+              propTarget: String(config.name),
+              ...liveConfig,
+            });
+          }
+        }
+      });
+    }
+    collectLiveTextEditing(this.configure);
+    this._liveTextEditing = liveTextEditing.length > 0 ? liveTextEditing : undefined;
 
     const { configure = {} } = this._transformedMetadata;
     this._acceptable = false;
@@ -152,11 +185,11 @@ export class ComponentMeta {
       this._isContainer = component.isContainer ? true : false;
       this._isModal = component.isModal ? true : false;
       this._descriptor = component.descriptor;
-      this._rectSelector = component.rectSelector;
+      this._rootSelector = component.rootSelector;
       if (component.nestingRule) {
         const { parentWhitelist, childWhitelist } = component.nestingRule;
-        this.parentWhitelist = ensureAList(parentWhitelist);
-        this.childWhitelist = ensureAList(childWhitelist);
+        this.parentWhitelist = buildFilter(parentWhitelist);
+        this.childWhitelist = buildFilter(childWhitelist);
       }
     } else {
       this._isContainer = false;
@@ -181,12 +214,14 @@ export class ComponentMeta {
 
   @computed get availableActions() {
     let { disableBehaviors, actions } = this._transformedMetadata?.configure.component || {};
+    const disabled = ensureAList(disableBehaviors) || (this.isRootComponent() ? ['copy', 'remove'] : null);
     actions = builtinComponentActions.concat(this.designer.getGlobalComponentActions() || [], actions || []);
-    if (!disableBehaviors && this.isRootComponent()) {
-      disableBehaviors = ['copy', 'remove'];
-    }
-    if (disableBehaviors) {
-      return actions.filter(action => disableBehaviors!.indexOf(action.name) < 0);
+
+    if (disabled) {
+      if (disabled.includes('*')) {
+        return actions.filter((action) => action.condition === 'always');
+      }
+      return actions.filter((action) => disabled.indexOf(action.name) < 0);
     }
     return actions;
   }
@@ -199,19 +234,28 @@ export class ComponentMeta {
     return this._transformedMetadata!;
   }
 
-  checkNestingUp(my: Node | NodeData, parent: NodeParent) {
+  checkNestingUp(my: Node | NodeData, parent: ParentalNode) {
+    // 检查父子关系，直接约束型，在画布中拖拽直接掠过目标容器
     if (this.parentWhitelist) {
-      return this.parentWhitelist.includes(parent.componentName);
+      return this.parentWhitelist(parent, my);
     }
     return true;
   }
 
   checkNestingDown(my: Node, target: Node | NodeSchema) {
+    // 检查父子关系，直接约束型，在画布中拖拽直接掠过目标容器
     if (this.childWhitelist) {
-      return this.childWhitelist.includes(target.componentName);
+      return this.childWhitelist(target, my);
     }
     return true;
   }
+
+  // compatiable vision
+  prototype?: any;
+}
+
+export function isComponentMeta(obj: any): obj is ComponentMeta {
+  return obj && obj.isComponentMeta;
 }
 
 function preprocessMetadata(metadata: ComponentMetadata): TransformedComponentMetadata {
@@ -233,7 +277,39 @@ function preprocessMetadata(metadata: ComponentMetadata): TransformedComponentMe
   };
 }
 
-registerMetadataTransducer(metadata => {
+
+export interface MetadataTransducer {
+  (prev: TransformedComponentMetadata): TransformedComponentMetadata;
+  /**
+   * 0 - 9   system
+   * 10 - 99 builtin-plugin
+   * 100 -   app & plugin
+   */
+  level?: number;
+  /**
+   * use to replace TODO
+   */
+  id?: string;
+}
+const metadataTransducers: MetadataTransducer[] = [];
+
+export function registerMetadataTransducer(transducer: MetadataTransducer, level: number = 100, id?: string) {
+  transducer.level = level;
+  transducer.id = id;
+  const i = metadataTransducers.findIndex((item) => item.level != null && item.level > level);
+  if (i < 0) {
+    metadataTransducers.push(transducer);
+  } else {
+    metadataTransducers.splice(i, 0, transducer);
+  }
+}
+
+export function getRegisteredMetadataTransducers(): MetadataTransducer[] {
+  return metadataTransducers;
+}
+
+
+registerMetadataTransducer((metadata) => {
   const { configure, componentName } = metadata;
   const { component = {} } = configure;
   if (!component.nestingRule) {
@@ -278,7 +354,7 @@ const builtinComponentActions: ComponentAction[] = [
     name: 'remove',
     content: {
       icon: IconRemove,
-      description: intl('remove'),
+      title: intlNode('remove'),
       action(node: Node) {
         node.remove();
       },
@@ -286,14 +362,40 @@ const builtinComponentActions: ComponentAction[] = [
     important: true,
   },
   {
+    name: 'hide',
+    content: {
+      icon: IconHidden,
+      title: intlNode('hide'),
+      action(node: Node) {
+        node.getExtraProp('hidden', true)?.setValue(true);
+      },
+    },
+    condition: (node: Node) => {
+      return node.componentMeta.isModal;
+    },
+    important: true,
+  },
+  {
     name: 'copy',
     content: {
       icon: IconClone,
-      description: intl('copy'),
+      title: intlNode('copy'),
       action(node: Node) {
         // node.remove();
+        const { document: doc, parent, index } = node;
+        parent && doc.insertNode(parent, node, index, true);
       },
     },
     important: true,
   },
 ];
+
+export function removeBuiltinComponentAction(name: string) {
+  const i = builtinComponentActions.findIndex((action) => action.name === name);
+  if (i > -1) {
+    builtinComponentActions.splice(i, 1);
+  }
+}
+export function addBuiltinComponentAction(action: ComponentAction) {
+  builtinComponentActions.push(action);
+}

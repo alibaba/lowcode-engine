@@ -16,6 +16,7 @@
     // "noEmit": true,
     // Enable strictest settings like strictNullChecks & noImplicitAny.
     "strict": true,
+    "strictPropertyInitialization": false,
     // Allow default imports from modules with no default export. This does not affect code emit, just typechecking.
     "allowSyntheticDefaultImports": true,
     // Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'.
@@ -26,6 +27,7 @@
     "importHelpers": true,
     // Enables experimental support for ES7 decorators.
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     // Generates corresponding .map file.
     "sourceMap": true,
     // Disallow inconsistently-cased references to the same file.
@@ -36,7 +38,8 @@
     "skipLibCheck": true,
     "baseUrl": "./packages",
     "paths": {
-      "@ali/lowcode-*": ["./*/src"]
+      "@ali/lowcode-*": ["./*/src"],
+      "@ali/visualengine": ["./vision-preset/src"]
     },
     "outDir": "lib"
   },

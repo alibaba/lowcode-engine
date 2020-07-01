@@ -1,7 +1,6 @@
 import { Designer } from './designer';
 
-// TODO:
-// 当前激活区域管理
+// TODO: use focus-tracker replace
 class Focusing {
   focusDesigner?: Designer;
 }

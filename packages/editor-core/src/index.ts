@@ -1,12 +1,6 @@
-import Editor from './editor';
-
-import * as utils from './utils';
-export * from './definitions';
-
-export { default as PluginFactory } from './pluginFactory';
-export { default as EditorContext } from './context';
-export { default as AreaManager } from './areaManager';
-
-export default Editor;
-
-export { Editor, utils };
+export * from './intl';
+export * from './editor';
+export * from './utils';
+export * from './di';
+export * from './hotkey';
+export * from './widgets';

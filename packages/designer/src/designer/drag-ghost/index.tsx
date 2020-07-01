@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { observer, obx, Title } from '@ali/lowcode-globals';
+import { observer, obx, Title } from '@ali/lowcode-editor-core';
 import { Designer } from '../designer';
 import { DragObject, isDragNodeObject, isDragNodeDataObject } from '../dragon';
 import './ghost.less';

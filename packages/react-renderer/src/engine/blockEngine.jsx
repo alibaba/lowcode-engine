@@ -61,7 +61,7 @@ export default class BlockEngine extends BaseEngine {
   render() {
     const { __schema } = this.props;
 
-    if (!isSchema(__schema, true) || __schema.componentName !== 'Block') {
+    if (!isSchema(__schema, true) || (__schema.componentName !== 'Block' && __schema.componentName !== 'Div')) {
       return '区块schema结构异常！';
     }
 

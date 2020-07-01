@@ -62,7 +62,7 @@ export default class PageEngine extends BaseEngine {
   }
 
   render() {
-    const { __schema } = this.props;
+    const { __schema, __components } = this.props;
     if (!isSchema(__schema, true) || __schema.componentName !== 'Page') {
       return '页面schema结构异常！';
     }
@@ -72,7 +72,34 @@ export default class PageEngine extends BaseEngine {
     });
     this.__render();
 
-    const { id, className, style, autoLoading, defaultHeight = 300, loading } = this.__parseData(__schema.props);
+    const props = this.__parseData(__schema.props);
+    const { id, className, style, autoLoading, defaultHeight = 300, loading } = props;
+
+    const { Page } = __components;
+    if (Page) {
+      const { engine } = this.context || {};
+      return (
+        <AppContext.Provider
+          value={{
+            ...this.context,
+            pageContext: this,
+            blockContext: this,
+          }}
+        >
+          {engine.createElement(
+            Page,
+            {
+              ...props,
+              ref: this.__getRef,
+              className: classnames(getFileCssName(__schema.fileName), className, this.props.className),
+              __id: __schema.id,
+            },
+            this.__createDom(),
+          )}
+        </AppContext.Provider>
+      );
+    }
+
     const renderContent = () => (
       <AppContext.Provider
         value={{

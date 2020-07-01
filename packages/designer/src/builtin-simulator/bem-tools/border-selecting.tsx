@@ -9,19 +9,13 @@ import {
   ComponentType,
 } from 'react';
 import classNames from 'classnames';
-import {
-  observer,
-  computed,
-  createIcon,
-  EmbedTip,
-  isReactComponent,
-  ActionContentObject,
-  isActionContentObject,
-} from '@ali/lowcode-globals';
-import { SimulatorContext } from '../context';
+import { observer, computed, Tip, globalContext, Editor } from '@ali/lowcode-editor-core';
+import { createIcon, isReactComponent } from '@ali/lowcode-utils';
+import { ActionContentObject, isActionContentObject } from '@ali/lowcode-types';
 import { BuiltinSimulatorHost } from '../host';
-import { OffsetObserver } from '../../../designer';
-import { Node } from '../../../document';
+import { OffsetObserver } from '../../designer';
+import { Node } from '../../document';
+import NodeSelector from '../node-selector';
 
 @observer
 export class BorderSelectingInstance extends Component<{
@@ -75,7 +69,6 @@ class Toolbar extends Component<{ observed: OffsetObserver }> {
     let style: any;
     if (observed.top > SPACE_HEIGHT) {
       style = {
-        right: Math.max(-BORDER, observed.right - width - BORDER),
         top: -SPACE_HEIGHT,
         height: BAR_HEIGHT,
       };
@@ -83,30 +76,34 @@ class Toolbar extends Component<{ observed: OffsetObserver }> {
       style = {
         bottom: -SPACE_HEIGHT,
         height: BAR_HEIGHT,
-        right: Math.max(-BORDER, observed.right - width - BORDER),
       };
     } else {
       style = {
         height: BAR_HEIGHT,
         top: Math.max(MARGIN, MARGIN - observed.top),
-        right: Math.max(MARGIN, MARGIN + observed.right - width),
       };
+    }
+    if (observed.width < 140) {
+      style.left = Math.max(-BORDER, observed.left - width - BORDER);
+    } else {
+      style.right = Math.max(-BORDER, observed.right - width - BORDER);
     }
     const { node } = observed;
     const actions: ReactNodeArray = [];
-    node.componentMeta.availableActions.forEach(action => {
+    node.componentMeta.availableActions.forEach((action) => {
       const { important, condition, content, name } = action;
-      if (node.isSlotRoot && (name === 'copy' || name === 'remove')) {
+      if (node.isSlot() && (name === 'copy' || name === 'remove')) {
         // FIXME: need this?
         return;
       }
-      if (important && (typeof condition === 'function' ? condition(node) : condition !== false)) {
+      if (important && (typeof condition === 'function' ? condition(node) !== false : condition !== false)) {
         actions.push(createAction(content, name, node));
       }
     });
     return (
       <div className="lc-borders-actions" style={style}>
         {actions}
+        <NodeSelector node={node} />
       </div>
     );
   }
@@ -120,17 +117,27 @@ function createAction(content: ReactNode | ComponentType<any> | ActionContentObj
     return createElement(content, { key, node });
   }
   if (isActionContentObject(content)) {
-    const { action, description, icon } = content;
+    const { action, title, icon } = content;
     return (
       <div
         key={key}
         className="lc-borders-action"
         onClick={() => {
           action && action(node);
+          const editor = globalContext.get(Editor);
+          const npm = node?.componentMeta?.npm;
+          const target =
+            [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
+            node?.componentMeta?.componentName ||
+            '';
+          editor?.emit('designer.border.action', {
+            name: key,
+            target,
+          });
         }}
       >
         {icon && createIcon(icon)}
-        <EmbedTip>{description}</EmbedTip>
+        <Tip>{title}</Tip>
       </div>
     );
   }
@@ -138,11 +145,9 @@ function createAction(content: ReactNode | ComponentType<any> | ActionContentObj
 }
 
 @observer
-export class BorderSelectingForNode extends Component<{ node: Node }> {
-  static contextType = SimulatorContext;
-
+export class BorderSelectingForNode extends Component<{ host: BuiltinSimulatorHost; node: Node }> {
   get host(): BuiltinSimulatorHost {
-    return this.context;
+    return this.props.host;
   }
 
   get dragging(): boolean {
@@ -167,7 +172,7 @@ export class BorderSelectingForNode extends Component<{ node: Node }> {
     }
     return (
       <Fragment key={node.id}>
-        {instances.map(instance => {
+        {instances.map((instance) => {
           const observed = designer.createOffsetObserver({
             node,
             instance,
@@ -183,11 +188,9 @@ export class BorderSelectingForNode extends Component<{ node: Node }> {
 }
 
 @observer
-export class BorderSelecting extends Component {
-  static contextType = SimulatorContext;
-
+export class BorderSelecting extends Component<{ host: BuiltinSimulatorHost }> {
   get host(): BuiltinSimulatorHost {
-    return this.context;
+    return this.props.host;
   }
 
   get dragging(): boolean {
@@ -196,7 +199,7 @@ export class BorderSelecting extends Component {
 
   @computed get selecting() {
     const doc = this.host.document;
-    if (doc.suspensed) {
+    if (doc.suspensed || this.host.liveEditing.editing) {
       return null;
     }
     const selection = doc.selection;
@@ -210,14 +213,13 @@ export class BorderSelecting extends Component {
   render() {
     const selecting = this.selecting;
     if (!selecting || selecting.length < 1) {
-      // DIRTY FIX, recore has a bug!
-      return <Fragment />;
+      return null;
     }
 
     return (
       <Fragment>
-        {selecting.map(node => (
-          <BorderSelectingForNode key={node.id} node={node} />
+        {selecting.map((node) => (
+          <BorderSelectingForNode key={node.id} host={this.props.host} node={node} />
         ))}
       </Fragment>
     );

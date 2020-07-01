@@ -1,14 +1,18 @@
 {
   "entry": {
-    "lowcode-editor": "src/index.ts",
-    "lowcode-preview": "src/preview.ts"
+    "lowcode-editor": "src/vision/index.ts"
   },
   "vendor": false,
   "externals": {
     "react": "window.React",
     "react-dom": "window.ReactDOM",
     "prop-types": "window.PropTypes",
-    "@ali/lowcode-globals": "window.LCEGlobals"
+    "@ali/visualengine": "window.VisualEngine",
+    "@ali/visualengine-utils": "window.VisualEngineUtils",
+    "@ali/lowcode-editor-preset-general": "window.LowcodeEditor",
+    "@ali/lowcode-editor-core": "window.LowcodeEditor",
+    "@ali/lowcode-editor-skeleton": "window.LowcodeEditor",
+    "@ali/lowcode-designer": "window.LowcodeEditor"
   },
   "minify": false,
   "sourcemap": true,

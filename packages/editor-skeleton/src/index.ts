@@ -1,7 +1,8 @@
-import Skeleton from './skeleton';
-import Panel from './components/Panel';
-import TopIcon from './components/TopIcon';
+export { Workbench } from './layouts/workbench';
+export * from './skeleton';
+export * from './types';
+export * from './components/settings';
+export * from './components/field';
+export * from './context';
 
-export default Skeleton;
-
-export { Panel, TopIcon };
+import './register-defaults';

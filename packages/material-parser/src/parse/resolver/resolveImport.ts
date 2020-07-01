@@ -1,21 +1,10 @@
 import { namedTypes as t } from 'ast-types';
 import fs from 'fs';
 import p from 'path';
+import getRoot from '../utils/getRoot';
 
-function getRoot(node: any) {
-  let root = node.parent;
-  while (root.parent) {
-    root = root.parent;
-  }
-  return root.node;
-}
-
-function isImportLike(node: any) {
-  return (
-    t.ImportDeclaration.check(node) ||
-    t.ExportAllDeclaration.check(node) ||
-    t.ExportNamedDeclaration.check(node)
-  );
+export function isImportLike(node: any) {
+  return t.ImportDeclaration.check(node) || t.ExportAllDeclaration.check(node) || t.ExportNamedDeclaration.check(node);
 }
 
 function getPath(path: any, name: any) {
@@ -27,7 +16,7 @@ function getPath(path: any, name: any) {
   if (fs.existsSync(p.resolve(__path, name))) {
     name = name + '/index';
   }
-  const suffix = suffixes.find(suf => {
+  const suffix = suffixes.find((suf) => {
     return fs.existsSync(p.resolve(__path, name + suf));
   });
   if (!suffix) return;
@@ -35,8 +24,11 @@ function getPath(path: any, name: any) {
 }
 
 const buildParser = require('react-docgen/dist/babelParser').default;
-const parser = buildParser();
 const suffixes = ['.js', '.jsx', '.ts', '.tsx'];
+
+const cache: {
+  [name: string]: any;
+} = {};
 
 export default function resolveImport(path: any, callback: any) {
   let name;
@@ -50,11 +42,19 @@ export default function resolveImport(path: any, callback: any) {
   if (name) {
     const __path = getPath(path, name);
     if (!__path) return path;
-    const fileContent = fs.readFileSync(__path, 'utf8');
-    const ast = parser.parse(fileContent);
-    ast.__src = fileContent;
-    ast.__path = __path;
-    return callback(ast);
+    let ast;
+    if (!cache[__path]) {
+      const fileContent = fs.readFileSync(__path, 'utf8');
+      const parser = buildParser({ filename: __path });
+      ast = parser.parse(fileContent);
+      ast.__src = fileContent;
+      ast.__path = __path;
+      cache[__path] = ast;
+    } else {
+      ast = cache[__path];
+    }
+
+    return callback(ast, __path);
   }
   return path;
 }
