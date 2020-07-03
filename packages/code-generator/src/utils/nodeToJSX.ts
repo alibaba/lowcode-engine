@@ -96,8 +96,10 @@ export function generateReactCtrlLine(nodeItem: IComponentNodeItem): CodePiece[]
   }
 
   if (nodeItem.condition) {
+    const [isString, value] = generateCompositeType(nodeItem.condition);
+
     pieces.unshift({
-      value: `(${generateCompositeType(nodeItem.condition)}) && (`,
+      value: `(${isString ? `'${value}'` : value}) && (`,
       type: PIECE_TYPE.BEFORE,
     });
     pieces.push({
