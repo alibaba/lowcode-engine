@@ -154,6 +154,9 @@ export default class Panel implements IWidget {
       }
       this.emitter.emit('activechange', true);
     } else if (this.inited) {
+      if (this.parent?.name && this.name.startsWith(this.parent.name)) {
+        this.inited = false;
+      }
       this._actived = false;
       this.parent?.unactive(this);
       this.emitter.emit('activechange', false);
