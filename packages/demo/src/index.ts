@@ -1,1 +1,1 @@
-import './vision';
+import './editor';
