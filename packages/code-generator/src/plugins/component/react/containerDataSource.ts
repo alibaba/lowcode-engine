@@ -1,39 +1,52 @@
-import { REACT_CHUNK_NAME } from './const';
+import { CLASS_DEFINE_CHUNK_NAME } from '../../../const/generator';
 
-import { generateCompositeType } from '../../utils/compositeType';
+import { generateCompositeType } from '../../../utils/compositeType';
 
 import {
   BuilderComponentPlugin,
+  BuilderComponentPluginFactory,
   ChunkType,
   FileType,
   ICodeStruct,
   IContainerInfo,
 } from '../../../types';
 
-const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
-  const next: ICodeStruct = {
-    ...pre,
+type PluginConfig = {
+  fileType: string;
+}
+
+const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
+  const cfg: PluginConfig = {
+    fileType: FileType.JSX,
+    ...config,
   };
 
-  const ir = next.ir as IContainerInfo;
+  const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
+    const next: ICodeStruct = {
+      ...pre,
+    };
 
-  if (ir.state) {
-    const state = ir.state;
-    const fields = Object.keys(state).map<string>(stateName => {
-      const [isString, value] = generateCompositeType(state[stateName]);
-      return `${stateName}: ${isString ? `'${value}'` : value},`;
-    });
+    const ir = next.ir as IContainerInfo;
 
-    next.chunks.push({
-      type: ChunkType.STRING,
-      fileType: FileType.JSX,
-      name: REACT_CHUNK_NAME.ClassConstructorContent,
-      content: `this.state = { ${fields.join('')} };`,
-      linkAfter: [REACT_CHUNK_NAME.ClassConstructorStart],
-    });
-  }
+    if (ir.state) {
+      const state = ir.state;
+      const fields = Object.keys(state).map<string>(stateName => {
+        const [isString, value] = generateCompositeType(state[stateName]);
+        return `${stateName}: ${isString ? `'${value}'` : value},`;
+      });
 
-  return next;
+      next.chunks.push({
+        type: ChunkType.STRING,
+        fileType: cfg.fileType,
+        name: CLASS_DEFINE_CHUNK_NAME.ConstructorContent,
+        content: `this.state = { ${fields.join('')} };`,
+        linkAfter: [CLASS_DEFINE_CHUNK_NAME.ConstructorStart],
+      });
+    }
+
+    return next;
+  };
+  return plugin;
 };
 
-export default plugin;
+export default pluginFactory;

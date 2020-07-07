@@ -2,6 +2,7 @@ import { COMMON_CHUNK_NAME } from '../../const/generator';
 
 import {
   BuilderComponentPlugin,
+  BuilderComponentPluginFactory,
   ChunkType,
   CodeGeneratorError,
   DependencyType,
@@ -41,7 +42,7 @@ function groupDepsByPack(deps: IDependency[]): Record<string, IDependency[]> {
 function buildPackageImport(
   pkg: string,
   deps: IDependency[],
-  isJSX: boolean,
+  targetFileType: string,
 ): ICodeChunk[] {
   const chunks: ICodeChunk[] = [];
   let defaultImport: string = '';
@@ -58,7 +59,7 @@ function buildPackageImport(
     if (dep.subName) {
       chunks.push({
         type: ChunkType.STRING,
-        fileType: isJSX ? FileType.JSX : FileType.JS,
+        fileType: targetFileType,
         name: COMMON_CHUNK_NAME.FileVarDefine,
         content: `const ${targetName} = ${srcName}.${dep.subName};`,
         linkAfter: [
@@ -103,7 +104,7 @@ function buildPackageImport(
     statementL.push(`'@/${(deps[0] as IInternalDependency).type}/${pkg}';`);
     chunks.push({
       type: ChunkType.STRING,
-      fileType: isJSX ? FileType.JSX : FileType.JS,
+      fileType: targetFileType,
       name: COMMON_CHUNK_NAME.InternalDepsImport,
       content: statementL.join(' '),
       linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport],
@@ -112,7 +113,7 @@ function buildPackageImport(
     statementL.push(`'${pkg}';`);
     chunks.push({
       type: ChunkType.STRING,
-      fileType: isJSX ? FileType.JSX : FileType.JS,
+      fileType: targetFileType,
       name: COMMON_CHUNK_NAME.ExternalDepsImport,
       content: statementL.join(' '),
       linkAfter: [],
@@ -122,25 +123,36 @@ function buildPackageImport(
   return chunks;
 }
 
-const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
-  const next: ICodeStruct = {
-    ...pre,
+type PluginConfig = {
+  fileType: string;
+}
+
+const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?: PluginConfig) => {
+  const cfg: PluginConfig = {
+    fileType: FileType.JS,
+    ...config,
   };
 
-  const isJSX = next.chunks.some(chunk => chunk.fileType === FileType.JSX);
+  const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
+    const next: ICodeStruct = {
+      ...pre,
+    };
 
-  const ir = next.ir as IWithDependency;
+    const ir = next.ir as IWithDependency;
 
-  if (ir && ir.deps && ir.deps.length > 0) {
-    const packs = groupDepsByPack(ir.deps);
+    if (ir && ir.deps && ir.deps.length > 0) {
+      const packs = groupDepsByPack(ir.deps);
 
-    Object.keys(packs).forEach(pkg => {
-      const chunks = buildPackageImport(pkg, packs[pkg], isJSX);
-      next.chunks.push.apply(next.chunks, chunks);
-    });
-  }
+      Object.keys(packs).forEach(pkg => {
+        const chunks = buildPackageImport(pkg, packs[pkg], cfg.fileType);
+        next.chunks.push.apply(next.chunks, chunks);
+      });
+    }
 
-  return next;
+    return next;
+  };
+
+  return plugin;
 };
 
-export default plugin;
+export default pluginFactory;

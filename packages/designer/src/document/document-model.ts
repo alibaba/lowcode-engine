@@ -131,7 +131,7 @@ export class DocumentModel {
    * 生成唯一id
    */
   nextId() {
-    return (++this.seqId).toString(36).toLocaleLowerCase();
+    return this.id + (++this.seqId).toString(36).toLocaleLowerCase();
   }
 
   /**
