@@ -4,6 +4,8 @@ import {
   IProjectSchema,
   IResultDir,
   IResultFile,
+  IComponentNodeItem,
+  IJSExpression,
 } from './index';
 
 export enum FileType {
@@ -12,6 +14,8 @@ export enum FileType {
   HTML = 'html',
   JS = 'js',
   JSX = 'jsx',
+  TS = 'ts',
+  TSX = 'tsx',
   JSON = 'json',
 }
 
@@ -32,7 +36,7 @@ export type CodeGeneratorFunction<T> = (content: T) => string;
 
 export interface ICodeChunk {
   type: ChunkType;
-  fileType: FileType;
+  fileType: string;
   name: string;
   subModule?: string;
   content: ChunkContent;
@@ -53,6 +57,8 @@ export type BuilderComponentPlugin = (
   initStruct: ICodeStruct,
 ) => Promise<ICodeStruct>;
 
+export type BuilderComponentPluginFactory<T> = (config?: T) => BuilderComponentPlugin;
+
 export interface IChunkBuilder {
   run(
     ir: any,
@@ -72,12 +78,13 @@ export interface ICompiledModule {
 }
 
 export interface IModuleBuilder {
-  generateModule: (input: unknown) => Promise<ICompiledModule>;
-  linkCodeChunks: (
+  generateModule(input: unknown): Promise<ICompiledModule>;
+  generateModuleCode(schema: IBasicSchema | string): Promise<IResultDir>;
+  linkCodeChunks(
     chunks: Record<string, ICodeChunk[]>,
     fileName: string,
-  ) => IResultFile[];
-  addPlugin: (plugin: BuilderComponentPlugin) => void;
+  ): IResultFile[];
+  addPlugin(plugin: BuilderComponentPlugin): void;
 }
 
 /**
@@ -99,11 +106,11 @@ export interface ICodeGenerator {
 
 export interface ISchemaParser {
   validate(schema: IBasicSchema): boolean;
-  parse(schema: IBasicSchema): IParseResult;
+  parse(schema: IBasicSchema | string): IParseResult;
 }
 
 export interface IProjectTemplate {
-  slots: IProjectSlots;
+  slots: Record<string, IProjectSlot>;
   generateTemplate(): IResultDir;
 }
 
@@ -112,39 +119,59 @@ export interface IProjectSlot {
   fileName?: string;
 }
 
-export interface IProjectSlots {
-  components: IProjectSlot;
-  pages: IProjectSlot;
-  router: IProjectSlot;
-  entry: IProjectSlot;
-  constants?: IProjectSlot;
-  utils?: IProjectSlot;
-  i18n?: IProjectSlot;
-  globalStyle: IProjectSlot;
-  htmlEntry: IProjectSlot;
-  packageJSON: IProjectSlot;
-}
+// export interface IProjectSlots {
+//   components: IProjectSlot;
+//   pages: IProjectSlot;
+//   router: IProjectSlot;
+//   entry: IProjectSlot;
+//   constants?: IProjectSlot;
+//   utils?: IProjectSlot;
+//   i18n?: IProjectSlot;
+//   globalStyle: IProjectSlot;
+//   htmlEntry: IProjectSlot;
+//   packageJSON: IProjectSlot;
+// }
 
 export interface IProjectPlugins {
-  components: BuilderComponentPlugin[];
-  pages: BuilderComponentPlugin[];
-  router: BuilderComponentPlugin[];
-  entry: BuilderComponentPlugin[];
-  constants?: BuilderComponentPlugin[];
-  utils?: BuilderComponentPlugin[];
-  i18n?: BuilderComponentPlugin[];
-  globalStyle: BuilderComponentPlugin[];
-  htmlEntry: BuilderComponentPlugin[];
-  packageJSON: BuilderComponentPlugin[];
+  [slotName: string]: BuilderComponentPlugin[];
 }
 
 export interface IProjectBuilder {
-  generateProject(schema: IProjectSchema): Promise<IResultDir>;
+  generateProject(schema: IProjectSchema | string): Promise<IResultDir>;
 }
 
+export type PostProcessorFactory<T> = (config?: T) => PostProcessor;
 export type PostProcessor = (content: string, fileType: string) => string;
 
 // TODO: temp interface, need modify
 export interface IPluginOptions {
   fileDirDepth: number;
 }
+
+export enum PIECE_TYPE {
+  BEFORE = 'NodeCodePieceBefore',
+  TAG = 'NodeCodePieceTag',
+  ATTR = 'NodeCodePieceAttr',
+  CHILDREN = 'NodeCodePieceChildren',
+  AFTER = 'NodeCodePieceAfter',
+};
+
+export interface CodePiece {
+  value: string;
+  type: PIECE_TYPE;
+}
+
+export interface HandlerSet<T> {
+  string?: (input: string) => T[];
+  expression?: (input: IJSExpression) => T[];
+  node?: (input: IComponentNodeItem) => T[];
+  common?: (input: unknown) => T[];
+}
+
+export type ExtGeneratorPlugin = (nodeItem: IComponentNodeItem) => CodePiece[];
+
+// export interface InteratorScope {
+//   [$item: string]: string;           // $item 默认取值 "item"
+//   [$index: string]: string | number; // $index 默认取值 "index"
+//   __proto__: BlockInstance;
+// }

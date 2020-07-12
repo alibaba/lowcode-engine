@@ -1,18 +1,24 @@
 import {
   BuilderComponentPlugin,
   CodeGeneratorError,
+  IBasicSchema,
   ICodeChunk,
   ICompiledModule,
   IModuleBuilder,
+  IParseResult,
+  IResultDir,
   IResultFile,
+  ISchemaParser,
   PostProcessor,
 } from '../types';
 
 import { COMMON_SUB_MODULE_NAME } from '../const/generator';
 
+import SchemaParser from '../parser/SchemaParser';
 import ChunkBuilder from './ChunkBuilder';
 import CodeBuilder from './CodeBuilder';
 
+import ResultDir from '../model/ResultDir';
 import ResultFile from '../model/ResultFile';
 
 export function createModuleBuilder(
@@ -66,6 +72,20 @@ export function createModuleBuilder(
     };
   };
 
+  const generateModuleCode = async (schema: IBasicSchema | string): Promise<IResultDir> => {
+    // Init
+    const schemaParser: ISchemaParser = new SchemaParser();
+    const parseResult: IParseResult = schemaParser.parse(schema);
+
+    const containerInfo = parseResult.containers[0];
+    const { files } = await generateModule(containerInfo);
+
+    const dir = new ResultDir(containerInfo.moduleName);
+    files.forEach(file => dir.addFile(file));
+
+    return dir;
+  }
+
   const linkCodeChunks = (
     chunks: Record<string, ICodeChunk[]>,
     fileName: string,
@@ -88,6 +108,7 @@ export function createModuleBuilder(
 
   return {
     generateModule,
+    generateModuleCode,
     linkCodeChunks,
     addPlugin: chunkGenerator.addPlugin.bind(chunkGenerator),
   };

@@ -1,26 +1,39 @@
-import { REACT_CHUNK_NAME } from './const';
+import { CLASS_DEFINE_CHUNK_NAME } from '../../../const/generator';
 
 import {
   BuilderComponentPlugin,
+  BuilderComponentPluginFactory,
   ChunkType,
   FileType,
   ICodeStruct,
 } from '../../../types';
 
-const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
-  const next: ICodeStruct = {
-    ...pre,
+type PluginConfig = {
+  fileType: string;
+}
+
+const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
+  const cfg: PluginConfig = {
+    fileType: FileType.JSX,
+    ...config,
   };
 
-  next.chunks.push({
-    type: ChunkType.STRING,
-    fileType: FileType.JSX,
-    name: REACT_CHUNK_NAME.ClassConstructorContent,
-    content: `this.utils = utils;`,
-    linkAfter: [REACT_CHUNK_NAME.ClassConstructorStart],
-  });
+  const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
+    const next: ICodeStruct = {
+      ...pre,
+    };
 
-  return next;
+    next.chunks.push({
+      type: ChunkType.STRING,
+      fileType: cfg.fileType,
+      name: CLASS_DEFINE_CHUNK_NAME.ConstructorContent,
+      content: `this.utils = utils;`,
+      linkAfter: [CLASS_DEFINE_CHUNK_NAME.ConstructorStart],
+    });
+
+    return next;
+  };
+  return plugin;
 };
 
-export default plugin;
+export default pluginFactory;

@@ -2,8 +2,8 @@ import ResultDir from '../../../../../model/ResultDir';
 import {
   IProjectTemplate,
   IResultDir,
-  IResultFile,
 } from '../../../../../types';
+import { runFileGenerator } from '../../../../../utils/templateHelper';
 
 import file12 from './files/abc.json';
 import file11 from './files/build.json';
@@ -25,29 +25,6 @@ import file15 from './files/src/layouts/BasicLayout/menuConfig.js';
 import file3 from './files/stylelintignore';
 import file2 from './files/stylelintrc.js';
 import file1 from './files/tsconfig.json';
-
-type FuncFileGenerator = () => [string[], IResultFile];
-
-function insertFile(root: IResultDir, path: string[], file: IResultFile) {
-  let current: IResultDir = root;
-  path.forEach(pathNode => {
-    const dir = current.dirs.find(d => d.name === pathNode);
-    if (dir) {
-      current = dir;
-    } else {
-      const newDir = new ResultDir(pathNode);
-      current.addDirectory(newDir);
-      current = newDir;
-    }
-  });
-
-  current.addFile(file);
-}
-
-function runFileGenerator(root: IResultDir, fun: FuncFileGenerator) {
-  const [path, file] = fun();
-  insertFile(root, path, file);
-}
 
 const icejsTemplate: IProjectTemplate = {
   slots: {

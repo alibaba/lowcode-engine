@@ -1,54 +1,57 @@
 import { COMMON_CHUNK_NAME } from '../../const/generator';
-import { generateCompositeType } from '../../plugins/utils/compositeType';
+import { generateCompositeType } from '../../utils/compositeType';
 import {
   BuilderComponentPlugin,
+  BuilderComponentPluginFactory,
   ChunkType,
   FileType,
   ICodeStruct,
   IProjectInfo,
 } from '../../types';
 
-// TODO: How to merge this logic to common deps
-const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
-  const next: ICodeStruct = {
-    ...pre,
+const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
+  const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
+    const next: ICodeStruct = {
+      ...pre,
+    };
+
+    const ir = next.ir as IProjectInfo;
+    if (ir.constants) {
+      const [, constantStr] = generateCompositeType(ir.constants);
+
+      next.chunks.push({
+        type: ChunkType.STRING,
+        fileType: FileType.JS,
+        name: COMMON_CHUNK_NAME.FileVarDefine,
+        content: `
+          const constantConfig = ${constantStr};
+        `,
+        linkAfter: [
+          COMMON_CHUNK_NAME.ExternalDepsImport,
+          COMMON_CHUNK_NAME.InternalDepsImport,
+        ],
+      });
+
+      next.chunks.push({
+        type: ChunkType.STRING,
+        fileType: FileType.JS,
+        name: COMMON_CHUNK_NAME.FileExport,
+        content: `
+          export default constantConfig;
+        `,
+        linkAfter: [
+          COMMON_CHUNK_NAME.ExternalDepsImport,
+          COMMON_CHUNK_NAME.InternalDepsImport,
+          COMMON_CHUNK_NAME.FileVarDefine,
+          COMMON_CHUNK_NAME.FileUtilDefine,
+          COMMON_CHUNK_NAME.FileMainContent,
+        ],
+      });
+    }
+
+    return next;
   };
-
-  const ir = next.ir as IProjectInfo;
-  if (ir.constants) {
-    const [, constantStr] = generateCompositeType(ir.constants);
-
-    next.chunks.push({
-      type: ChunkType.STRING,
-      fileType: FileType.JS,
-      name: COMMON_CHUNK_NAME.FileVarDefine,
-      content: `
-        const constantConfig = ${constantStr};
-      `,
-      linkAfter: [
-        COMMON_CHUNK_NAME.ExternalDepsImport,
-        COMMON_CHUNK_NAME.InternalDepsImport,
-      ],
-    });
-
-    next.chunks.push({
-      type: ChunkType.STRING,
-      fileType: FileType.JS,
-      name: COMMON_CHUNK_NAME.FileExport,
-      content: `
-        export default constantConfig;
-      `,
-      linkAfter: [
-        COMMON_CHUNK_NAME.ExternalDepsImport,
-        COMMON_CHUNK_NAME.InternalDepsImport,
-        COMMON_CHUNK_NAME.FileVarDefine,
-        COMMON_CHUNK_NAME.FileUtilDefine,
-        COMMON_CHUNK_NAME.FileMainContent,
-      ],
-    });
-  }
-
-  return next;
+  return plugin;
 };
 
-export default plugin;
+export default pluginFactory;

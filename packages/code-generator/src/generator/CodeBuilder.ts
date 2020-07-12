@@ -62,10 +62,12 @@ export default class Builder implements ICodeBuilder {
       }
 
       unprocessedChunks.splice(indexToRemove, 1);
-      unprocessedChunks.forEach(
-        // remove the processed chunk from all the linkAfter arrays from the remaining chunks
-        ch => (ch.linkAfter = ch.linkAfter.filter(after => after !== name)),
-      );
+      if (!unprocessedChunks.some(ch => ch.name === name)) {
+        unprocessedChunks.forEach(
+          // remove the processed chunk from all the linkAfter arrays from the remaining chunks
+          ch => (ch.linkAfter = ch.linkAfter.filter(after => after !== name)),
+        );
+      }
     }
 
     return resultingString.join('\n');
