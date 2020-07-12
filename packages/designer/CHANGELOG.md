@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.25"></a>
+## [0.9.25](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.24...@ali/lowcode-designer@0.9.25) (2020-07-12)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
 <a name="0.9.24"></a>
 ## [0.9.24](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.23...@ali/lowcode-designer@0.9.24) (2020-07-12)
 
