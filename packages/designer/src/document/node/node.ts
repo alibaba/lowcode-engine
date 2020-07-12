@@ -101,7 +101,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * @deprecated
    */
-  private _addons: { [key: string]: any } = {};
+  private _addons: { [key: string]: { exportData: () => any; isProp: boolean; } } = {};
   @obx.ref private _parent: ParentalNode | null = null;
   /**
    * 父级节点
@@ -544,7 +544,11 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     Object.keys(this._addons).forEach((key) => {
       const addon = this._addons[key];
       if (addon) {
-        _extras_[key] = addon();
+        if (addon.isProp) {
+          (props as any)[key] = addon.exportData();
+        } else {
+          _extras_[key] = addon.exportData();
+        }
       }
     });
 
@@ -752,19 +756,19 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   getAddonData(key: string) {
     const addon = this._addons[key];
     if (addon) {
-      return addon();
+      return addon.exportData();
     }
     return this.getExtraProp(key)?.value;
   }
   /**
    * @deprecated
    */
-  registerAddon(key: string, exportData: any) {
+  registerAddon(key: string, exportData: () => any, isProp: boolean = false) {
     if (this._addons[key]) {
       throw new Error(`node addon ${key} exist`);
     }
 
-    this._addons[key] = exportData;
+    this._addons[key] = { exportData, isProp };
   }
 
   getRect(): DOMRect | null {
