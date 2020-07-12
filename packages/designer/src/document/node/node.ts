@@ -157,7 +157,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       this.props = new Props(this, props, extras);
       this._children = new NodeChildren(this as ParentalNode, this.initialChildren(children));
       this._children.interalInitParent();
-      this.props.import(this.transformProps(props || {}), extras);
+      this.props.import(this.transformProps(props || {}), this.transformProps(extras || {}));
       this.setupAutoruns();
     }
 
@@ -167,7 +167,6 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   private transformProps(props: any): any {
     // FIXME! support PropsList
     return this.document.designer.transformProps(props, this, TransformStage.Init);
-    // TODO: run transducers in metadata.experimental
   }
 
   private autoruns?: Array<() => void>;
@@ -542,14 +541,12 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     const _extras_: { [key: string]: any } = {
       ...extras,
     };
-    if (_extras_) {
-      Object.keys(_extras_).forEach((key) => {
-        const addon = this._addons[key];
-        if (addon) {
-          _extras_[key] = addon();
-        }
-      });
-    }
+    Object.keys(this._addons).forEach((key) => {
+      const addon = this._addons[key];
+      if (addon) {
+        _extras_[key] = addon();
+      }
+    });
 
     const schema: any = {
       ...baseSchema,
