@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.30"></a>
+## [0.8.30](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.29...@ali/lowcode-editor-skeleton@0.8.30) (2020-07-12)
+
+
+### Bug Fixes
+
+* 区块模板切换之后数据不显示 ([292c1c3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/292c1c3))
+
+
+
+
 <a name="0.8.29"></a>
 ## [0.8.29](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.27...@ali/lowcode-editor-skeleton@0.8.29) (2020-06-23)
 

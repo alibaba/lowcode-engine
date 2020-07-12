@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.20"></a>
+## [0.8.20](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-core@0.8.19...@ali/lowcode-editor-core@0.8.20) (2020-07-12)
+
+
+### Bug Fixes
+
+* 修复删除时，当前组件信息丢失问题 ([3bd1248](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3bd1248))
+
+
+
+
 <a name="0.8.19"></a>
 ## [0.8.19](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-core@0.8.17...@ali/lowcode-editor-core@0.8.19) (2020-06-23)
 
