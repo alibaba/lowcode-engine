@@ -520,7 +520,7 @@ export class DocumentModel {
     };
   }
 
-  setRendererReady(renderer) {
+  setRendererReady(renderer: any) {
     this.emitter.emit('lowcode_engine_renderer_ready', renderer);
   }
 

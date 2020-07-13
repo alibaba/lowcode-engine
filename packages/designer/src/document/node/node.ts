@@ -157,16 +157,18 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       this.props = new Props(this, props, extras);
       this._children = new NodeChildren(this as ParentalNode, this.initialChildren(children));
       this._children.interalInitParent();
-      this.props.import(this.transformProps(props || {}), this.transformProps(extras || {}));
+      this.props.import(this.upgradeProps(this.initProps(props || {})), this.upgradeProps(extras || {}));
       this.setupAutoruns();
     }
 
     this.settingEntry = this.document.designer.createSettingEntry([ this ]);
   }
 
-  private transformProps(props: any): any {
-    // FIXME! support PropsList
+  private initProps(props: any): any {
     return this.document.designer.transformProps(props, this, TransformStage.Init);
+  }
+  private upgradeProps(props: any): any {
+    return this.document.designer.transformProps(props, this, TransformStage.Upgrade);
   }
 
   private autoruns?: Array<() => void>;
@@ -545,7 +547,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       const addon = this._addons[key];
       if (addon) {
         if (addon.isProp) {
-          (props as any)[key] = addon.exportData();
+          (props as any)[getConvertedExtraKey(key)] = addon.exportData();
         } else {
           _extras_[key] = addon.exportData();
         }
