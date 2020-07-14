@@ -112,6 +112,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   readonly designer = this.document.designer;
 
+  @computed get renderEnv(): string {
+    return this.get('renderEnv') || 'default';
+  }
+
   @computed get device(): string {
     return this.get('device') || 'default';
   }
@@ -221,7 +225,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     const vendors = [
       // required & use once
       assetBundle(
-        this.get('environment') || this.device === 'default' ? defaultRaxEnvironment : defaultEnvironment,
+        this.get('environment') || this.renderEnv === 'rax' ? defaultRaxEnvironment : defaultEnvironment,
         AssetLevel.Environment,
       ),
       // required & use once
@@ -232,7 +236,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       assetBundle(this.theme, AssetLevel.Theme),
       // required & use once
       assetBundle(
-        this.get('simulatorUrl') || this.device === 'default' ? defaultRaxSimulatorUrl : defaultSimulatorUrl,
+        this.get('simulatorUrl') || this.renderEnv === 'rax' ? defaultRaxSimulatorUrl : defaultSimulatorUrl,
         AssetLevel.Runtime,
       ),
     ];
