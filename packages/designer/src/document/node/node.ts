@@ -760,7 +760,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     if (addon) {
       return addon.exportData();
     }
-    return this.getExtraProp(key)?.value;
+    return this.getExtraProp(key)?.getValue();
   }
   /**
    * @deprecated

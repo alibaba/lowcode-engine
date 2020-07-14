@@ -170,7 +170,7 @@ export class DocumentModel {
     }
 
     let node: Node | null = null;
-    if (!this.inited) {
+    if (this.inited) {
       schema.id = null;
     }
     if (schema.id) {
