@@ -102,6 +102,7 @@ context.use(HOOKS.VE_SETTING_FIELD_VARIABLE_SETTER, VariableSetter);
 const externals = ['react', 'react-dom', 'prop-types', 'react-router', 'react-router-dom', '@ali/recore'];
 
 async function loadAssets() {
+  // const legaoAssets = await editor.utils.get('./raxAssets.json');
   const legaoAssets = await editor.utils.get('./legao-assets.json');
 
   const assets = upgradeAssetsBundle(legaoAssets);
@@ -144,6 +145,7 @@ async function loadAssets() {
 }
 
 async function loadSchema() {
+  // const schema = await editor.utils.get('./rax.json');
   const schema = await editor.utils.get('./schema.json');
   editor.set('schema', schema);
 }

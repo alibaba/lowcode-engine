@@ -1,5 +1,5 @@
 {
-  "name": "@ali/lowcode-engine-rax-renderer",
+  "name": "@ali/lowcode-rax-renderer",
   "version": "0.1.2",
   "private": true,
   "description": "Rax renderer for Ali lowCode engine",
@@ -30,7 +30,8 @@
   },
   "scripts": {
     "start": "build-scripts start",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "build": "build-scripts build"
   },
   "dependencies": {
     "@ali/b3-one": "^0.0.17",

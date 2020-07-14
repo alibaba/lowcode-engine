@@ -8,13 +8,15 @@ import BaseEngine from './base';
 const debug = Debug('engine:temp');
 export default class TempEngine extends BaseEngine {
   static dislayName = 'temp-engine';
+
   static propTypes = {
     __ctx: PropTypes.object,
-    __schema: PropTypes.object
+    __schema: PropTypes.object,
   };
+
   static defaultProps = {
     __ctx: {},
-    __schema: {}
+    __schema: {},
   };
 
   constructor(props, context) {
@@ -27,7 +29,7 @@ export default class TempEngine extends BaseEngine {
   componentDidMount() {
     const ctx = this.props.__ctx;
     if (!ctx) return;
-    const setState = ctx.setState;
+    const { setState } = ctx;
     this.cacheSetState = setState;
     ctx.setState = (...args) => {
       setState.call(ctx, ...args);
@@ -35,9 +37,11 @@ export default class TempEngine extends BaseEngine {
     };
     debug(`temp.componentDidMount - ${this.props.__schema.fileName}`);
   }
+
   componentDidUpdate(prevProps, prevState, snapshot) {
     debug(`temp.componentDidUpdate - ${this.props.__schema.fileName}`);
   }
+
   componentWillUnmount() {
     const ctx = this.props.__ctx;
     if (!ctx || !this.cacheSetState) return;
@@ -45,6 +49,7 @@ export default class TempEngine extends BaseEngine {
     delete this.cacheSetState;
     debug(`temp.componentWillUnmount - ${this.props.__schema.fileName}`);
   }
+
   componentDidCatch(e) {
     console.warn(e);
     debug(`temp.componentDidCatch - ${this.props.__schema.fileName}`);
@@ -59,7 +64,10 @@ export default class TempEngine extends BaseEngine {
     debug(`temp.render - ${__schema.fileName}`);
 
     return (
-      <div ref={this.__getRef} className="luna-temp">
+      <div
+        // ref={this.__getRef}
+        className="luna-temp"
+      >
         <AppContext.Provider value={{ ...this.context, ...__ctx }}>{this.__createDom()}</AppContext.Provider>
       </div>
     );

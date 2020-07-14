@@ -10,12 +10,15 @@ module.exports = ({ onGetWebpackConfig }) => {
     ]);
 
     config
-    // 定义插件名称
-    .plugin('MonacoWebpackPlugin')
-    // 第一项为具体插件，第二项为插件参数
-    .use(new MonacoWebpackPlugin({
-      languages:["typescript","css","json"]
-     }), []);
+      // 定义插件名称
+      .plugin('MonacoWebpackPlugin')
+      // 第一项为具体插件，第二项为插件参数
+      .use(
+        new MonacoWebpackPlugin({
+          languages: ['typescript', 'css', 'json'],
+        }),
+        [],
+      );
 
     config.plugins.delete('hot');
     config.devServer.hot(false);

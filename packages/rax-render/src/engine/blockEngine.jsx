@@ -9,15 +9,17 @@ const debug = Debug('engine:block');
 
 export default class BlockEngine extends BaseEngine {
   static dislayName = 'block-engine';
+
   static propTypes = {
-    __schema: PropTypes.object
+    __schema: PropTypes.object,
   };
+
   static defaultProps = {
-    __schema: {}
+    __schema: {},
   };
 
   static getDerivedStateFromProps(props, state) {
-    debug(`block.getDerivedStateFromProps`);
+    debug('block.getDerivedStateFromProps');
     const func = props.__schema.lifeCycles && props.__schema.lifeCycles.getDerivedStateFromProps;
     if (func) {
       return func(props, state);
@@ -39,18 +41,22 @@ export default class BlockEngine extends BaseEngine {
     super.getSnapshotBeforeUpdate(...arguments);
     debug(`block.getSnapshotBeforeUpdate - ${this.props.__schema.fileName}`);
   }
+
   async componentDidMount() {
     super.componentDidMount(...arguments);
     debug(`block.componentDidMount - ${this.props.__schema.fileName}`);
   }
+
   async componentDidUpdate() {
     super.componentDidUpdate(...arguments);
     debug(`block.componentDidUpdate - ${this.props.__schema.fileName}`);
   }
+
   async componentWillUnmount() {
     super.componentWillUnmount(...arguments);
     debug(`block.componentWillUnmount - ${this.props.__schema.fileName}`);
   }
+
   async componentDidCatch() {
     await super.componentDidCatch(...arguments);
     debug(`block.componentDidCatch - ${this.props.__schema.fileName}`);
@@ -69,13 +75,13 @@ export default class BlockEngine extends BaseEngine {
 
     return (
       <div
-        ref={this.__getRef}
+        // ref={this.__getRef}
         className={classnames('luna-block', getFileCssName(__schema.fileName), className, this.props.className)}
         id={id}
         style={style}
       >
         {this.__createContextDom({
-          blockContext: this
+          blockContext: this,
         })}
       </div>
     );
