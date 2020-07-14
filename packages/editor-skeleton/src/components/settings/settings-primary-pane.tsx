@@ -42,22 +42,26 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
     const items = [];
     let l = 3;
     while (l-- > 0 && node) {
+      const _node = node;
       const props =
         l === 2
           ? {}
           : {
-            onMouseOver: hoverNode.bind(null, node, true),
-            onMouseOut: hoverNode.bind(null, node, false),
+            onMouseOver: hoverNode.bind(null, _node, true),
+            onMouseOut: hoverNode.bind(null, _node, false),
             onClick: () => {
-              selectNode.call(null, node);
-              const getName = (node) => {
+              if (!_node) {
+                return;
+              }
+              selectNode.call(null, _node);
+              const getName = (node: any) => {
                 const npm = node?.componentMeta?.npm;
                 return [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
                   node?.componentMeta?.componentName ||
                   '';
               };
               const selected = getName(current);
-              const target = getName(node);
+              const target = getName(_node);
               editor?.emit('skeleton.settingsPane.Breadcrumb', {
                 selected,
                 target,

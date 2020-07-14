@@ -6,7 +6,7 @@
   position: relative;
   >.lc-setter-actions {
     position: absolute;
-    right: -2px;
+    right: -4px;
     top: 50%;
     transform: translate(100%, -50%);
     .lc-switch-trigger {
@@ -18,11 +18,19 @@
     }
     .lc-title {
       cursor: pointer;
+
+      .lc-title-icon svg {
+        fill: #8F9BB3;
+      }
     }
     .variable-binded {
       background: var(--color-brand, #006cff);
       color: #fff!important;
       border-radius: 3px;
+
+      .lc-title-icon svg {
+        fill: #fff;
+      }
     }
   }
   .next-input,.next-date-picker,.next-month-picker {
@@ -42,7 +50,7 @@
   margin-right: 0;
   >.lc-setter-actions {
     position: absolute;
-    right: 16px;
+    right: 12px;
     top: 0;
     height: 32px;
     transform: none;
@@ -56,8 +64,8 @@
   position: static;
   margin-right: 0;
   > .lc-setter-actions{
-    right: 32px;
-    top: 6px;
+    right: 36px;
+    top: 4px;
     transform: none;
   }
 }
