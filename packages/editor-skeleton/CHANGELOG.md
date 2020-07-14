@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.33"></a>
+## [0.8.33](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.32...@ali/lowcode-editor-skeleton@0.8.33) (2020-07-14)
+
+
+### Bug Fixes
+
+* 右侧配置面板面包屑点击无效 ([353fb10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/353fb10))
+
+
+
+
 <a name="0.8.32"></a>
 ## [0.8.32](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.31...@ali/lowcode-editor-skeleton@0.8.32) (2020-07-13)
 
