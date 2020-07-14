@@ -119,13 +119,6 @@ export class DocumentModel {
   }
 
   readonly designer = this.project.designer;
-  //  getAddonData(name: string) {
-  //   const addon = this.addons.find((item) => item.name === name);
-  //   if (addon) {
-  //     return addon.exportData();
-  //   }
-  //   return this.addonsData[name];
-  // }
 
   /**
    * 生成唯一id
@@ -253,14 +246,6 @@ export class DocumentModel {
     this.nodes.delete(node);
     this.selection.remove(node.id);
     node.remove();
-  }
-  getAddonData(name: string) {
-    const addon = this.getNode(name);
-    if (addon) {
-      // 无法确定是否有这个api
-      // return addon.exportData();
-    }
-    return addon;
   }
 
   @obx.ref private _dropLocation: DropLocation | null = null;
