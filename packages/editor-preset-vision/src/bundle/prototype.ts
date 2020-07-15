@@ -15,6 +15,7 @@ import {
   upgradePropConfig,
   upgradeConfigure,
 } from './upgrade-metadata';
+import { globalLocale } from '@ali/lowcode-editor-core';
 import { designer } from '../editor';
 import { uniqueId } from '@ali/lowcode-utils';
 
@@ -23,7 +24,7 @@ const GlobalPropsConfigure: Array<{
   initials?: InitialItem[];
   filters?: FilterItem[];
   autoruns?: AutorunItem[];
-  config: FieldConfig
+  config: FieldConfig;
 }> = [];
 const Overrides: {
   [componentName: string]: {
@@ -53,7 +54,7 @@ function addGlobalPropsConfigure(config: OldGlobalPropConfig) {
       addAutorun: (item) => {
         autoruns.push(item);
       },
-    })
+    }),
   });
 }
 function removeGlobalPropsConfigure(name: string) {
@@ -82,7 +83,7 @@ function overridePropsConfigure(componentName: string, config: { [name: string]:
     override = upgradeConfigure(config, { addInitial, addFilter, addAutorun });
   } else {
     override = {};
-    Object.keys(config).forEach(key => {
+    Object.keys(config).forEach((key) => {
       override[key] = upgradePropConfig(config[key], { addInitial, addFilter, addAutorun });
     });
   }
@@ -212,7 +213,7 @@ class Prototype {
   static addGlobalExtraActions = addGlobalExtraActions;
   static removeGlobalPropsConfigure = removeGlobalPropsConfigure;
   static overridePropsConfigure = overridePropsConfigure;
-  static create(config: OldPrototypeConfig | ComponentMetadata | ComponentMeta, lookup: boolean = false) {
+  static create(config: OldPrototypeConfig | ComponentMetadata | ComponentMeta, lookup = false) {
     return new Prototype(config, lookup);
   }
 
@@ -220,7 +221,7 @@ class Prototype {
   readonly meta: ComponentMeta;
   readonly options: OldPrototypeConfig | ComponentMetadata;
 
-  constructor(input: OldPrototypeConfig | ComponentMetadata | ComponentMeta, lookup: boolean = false) {
+  constructor(input: OldPrototypeConfig | ComponentMetadata | ComponentMeta, lookup = false) {
     if (lookup) {
       this.meta = designer.getComponentMeta(input.componentName);
       this.options = this.meta.getMetadata();
@@ -257,7 +258,15 @@ class Prototype {
     return this.meta.getMetadata().experimental?.context?.[name];
   }
 
-  getTitle() {
+  getTitle(currentLocale?: string) {
+    if (currentLocale && this.meta.title[currentLocale]) {
+      return this.meta.title[currentLocale];
+    }
+    const locale = globalLocale.getLocale();
+    if (this.meta.title && this.meta.title.type === 'i18n') {
+      return this.meta.title[locale] || this.meta.title;
+    }
+
     return this.meta.title;
   }
 
