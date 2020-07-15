@@ -14,6 +14,7 @@ export interface JSExpression {
 }
 
 export interface JSSlot {
+  name?: string;
   type: 'JSSlot';
   title?: string;
   // 函数的入参

@@ -86,6 +86,8 @@ export class Prop implements IPropParent {
         type: 'JSSlot',
         params: schema.params,
         value: schema.children,
+        title: schema.title,
+        name: schema.name,
       };
     }
 
@@ -235,6 +237,7 @@ export class Prop implements IPropParent {
     const slotSchema: SlotSchema = {
       componentName: 'Slot',
       title: data.title,
+      name: data.name,
       params: data.params,
       children: data.value,
     };
