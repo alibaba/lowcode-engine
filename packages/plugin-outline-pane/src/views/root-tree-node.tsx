@@ -1,4 +1,3 @@
-import TreeNodeView from './tree-node';
 import { Component } from 'react';
 import classNames from 'classnames';
 import { observer } from '@ali/lowcode-editor-core';
@@ -7,7 +6,6 @@ import TreeTitle from './tree-title';
 import TreeBranches from './tree-branches';
 import { ModalNodesManager } from '@ali/lowcode-designer';
 import { IconEyeClose } from '../icons/eye-close';
-import { IconEye } from '../icons/eye';
 
 @observer
 class ModalTreeNodeView extends Component<{ treeNode: TreeNode }> {
@@ -18,75 +16,11 @@ class ModalTreeNodeView extends Component<{ treeNode: TreeNode }> {
 
     // 模态管理对象
     this.modalNodesManager = props.treeNode.document.modalNodesManager;
-    if (!this.modalNodesManager) {
-      return;
-    }
-
-    // 当前选中的节点
-    let selectedNode;
-    const modalNodes = this.modalNodesManager.getModalNodes();
-    if (modalNodes && modalNodes.length > 0) {
-      const visibleModalNode = this.modalNodesManager.getVisibleModalNode();
-      if (visibleModalNode) {
-        selectedNode = visibleModalNode;
-      } else {
-        selectedNode = modalNodes[0];
-      }
-    }
-
-    this.state = {
-      selectedNode,
-    };
   }
-
-  // componentWillMount() {
-  //   if (!this.modalNodesManager) {
-  //     return;
-  //   }
-
-  //   this.willDetach = [
-  //     this.modalNodesManager.onModalNodesChange(() => {
-  //       console.log('onModalNodesChange');
-  //       setTimeout(() => {
-  //         this.modalNodesChangeHandler();
-  //       });
-  //     }),
-  //     this.modalNodesManager.onVisibleChange(() => {
-  //       console.log('onVisibleChange');
-  //       this.modalNodesChangeHandler();
-  //     }),
-  //   ];
-  // }
 
   shouldComponentUpdate() {
     return false;
   }
-
-  // componentWillUnmount() {
-  //   if (this.willDetach) {
-  //     this.willDetach.forEach((off: any) => {
-  //       off();
-  //     });
-  //   }
-  // }
-
-  // // 模态节点改变的处理函数
-  // modalNodesChangeHandler() {
-  //   if (!this.modalNodesManager) {
-  //     return;
-  //   }
-  //   const visibleNode = this.modalNodesManager.getVisibleModalNode();
-  //   if (visibleNode) {
-  //     this.setState({
-  //       selectedNode: visibleNode,
-  //     });
-  //   }
-  //   this.forceUpdate();
-  // }
-
-  // selectNode(leaf) {
-  //   this.modalNodesManager.setVisible(leaf.getNode());
-  // }
 
   hideAllNodes() {
     this.modalNodesManager.hideModalNodes();
