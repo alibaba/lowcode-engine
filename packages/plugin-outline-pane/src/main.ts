@@ -134,6 +134,20 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
     const pos = getPosFromEvent(e, this._shell);
     const irect = this.getInsertionRect();
     const originLoc = document.dropLocation;
+
+    if (e.dragObject.type === 'node' && e.dragObject.nodes[0].getPrototype().isModal()) {
+      return designer.createLocation({
+        target: document.rootNode,
+        detail: {
+          type: LocationDetailType.Children,
+          index: 0,
+          valid: true,
+        },
+        source: this.id,
+        event: e,
+      });
+    }
+
     if (originLoc && ((pos && pos === 'unchanged') || (irect && globalY >= irect.top && globalY <= irect.bottom))) {
       const loc = originLoc.clone(e);
       const indented = this.indentTrack.getIndentParent(originLoc, loc);

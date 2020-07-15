@@ -72,7 +72,7 @@ export default class TreeNode {
   @computed get hidden(): boolean {
     const cv = this.node.isConditionalVisible();
     if (cv == null) {
-      return this.node.getExtraProp('hidden', false)?.getValue() === true;
+      return !this.node.getVisible();
     }
     return !cv;
   }
@@ -81,11 +81,7 @@ export default class TreeNode {
     if (this.node.conditionGroup) {
       return;
     }
-    if (flag) {
-      this.node.getExtraProp('hidden', true)?.setValue(true);
-    } else {
-      this.node.getExtraProp('hidden', false)?.remove();
-    }
+    this.node.setVisible(!flag);
   }
 
   @computed get locked(): boolean {

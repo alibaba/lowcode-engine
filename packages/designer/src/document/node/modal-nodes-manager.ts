@@ -17,11 +17,11 @@ function getModalNodes(node: Node) {
   return nodes;
 }
 
-export default class ModalNodesManager {
+export class ModalNodesManager {
   public willDestroy: any;
 
   private page: DocumentModel;
-  private modalNodes: [Node];
+  private modalNodes: Node[];
   private nodeRemoveEvents: any;
   private emitter: EventEmitter;
 
@@ -44,7 +44,7 @@ export default class ModalNodesManager {
   public getVisibleModalNode() {
     const visibleNode = this.modalNodes
       ? this.modalNodes.find((node: Node) => {
-          return !node.getExtraProp('hidden');
+          return node.getVisible();
         })
       : null;
     return visibleNode;
@@ -53,18 +53,18 @@ export default class ModalNodesManager {
   public hideModalNodes() {
     if (this.modalNodes) {
       this.modalNodes.forEach((node: Node) => {
-        node.getExtraProp('hidden')?.setValue(true);
+        node.setVisible(false);
       });
     }
   }
 
   public setVisible(node: Node) {
     this.hideModalNodes();
-    node.getExtraProp('hidden')?.setValue(false);
+    node.setVisible(true);
   }
 
   public setInvisible(node: Node) {
-    node.getExtraProp('hidden')?.setValue(true);
+    node.setVisible(false);
   }
 
   public onVisibleChange(func: () => any) {
@@ -101,26 +101,24 @@ export default class ModalNodesManager {
       }
       this.removeNodeEvent(node);
       this.emitter.emit('modalNodesChange');
-      if (!node.getExtraProp('hidden')) {
+      if (node.getVisible()) {
         this.emitter.emit('visibleChange');
       }
     }
   }
 
   private addNodeEvent(node: Node) {
-    // this.nodeRemoveEvents[node.getId()] =
-    //     node.onStatusChange((status: any, field: any) => {
-    //       if (field === 'visibility') { 
-    //         this.emitter.emit('visibleChange');
-    //       }
-    //     });
+    this.nodeRemoveEvents[node.getId()] =
+      node.onVisibleChange((flag) => {
+        this.emitter.emit('visibleChange');
+      });
   }
 
   private removeNodeEvent(node: Node) {
-    // if (this.nodeRemoveEvents[node.getId()]) {
-    //   this.nodeRemoveEvents[node.getId()]();
-    //   delete this.nodeRemoveEvents[node.getId()];
-    // }
+    if (this.nodeRemoveEvents[node.getId()]) {
+      this.nodeRemoveEvents[node.getId()]();
+      delete this.nodeRemoveEvents[node.getId()];
+    }
   }
 
   private setNodes() {

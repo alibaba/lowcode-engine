@@ -22,6 +22,7 @@ import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
 import { TransformStage } from './transform-stage';
 import { ReactElement } from 'react';
 import { SettingTopEntry } from 'designer/src/designer';
+import { EventEmitter } from 'events';
 
 /**
  * 基础节点
@@ -72,6 +73,7 @@ import { SettingTopEntry } from 'designer/src/designer';
  *  hidden
  */
 export class Node<Schema extends NodeSchema = NodeSchema> {
+  private emitter: EventEmitter;
   /**
    * 是节点实例
    */
@@ -162,6 +164,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
 
     this.settingEntry = this.document.designer.createSettingEntry([ this ]);
+    this.emitter = new EventEmitter();
   }
 
   private initProps(props: any): any {
@@ -413,6 +416,22 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       }
     }
     return node;
+  }
+
+  setVisible(flag: boolean): void {
+    this.getExtraProp('hidden')?.setValue(!flag);
+    this.emitter.emit('visibleChange', flag);
+  }
+
+  getVisible(): boolean {
+    return !this.getExtraProp('hidden', false)?.getValue();
+  }
+
+  onVisibleChange(func: (flag: boolean) => any) {
+    this.emitter.on('visibleChange', func);
+    return () => {
+      this.emitter.removeListener('visibleChange', func);
+    };
   }
 
   getProp(path: string, stash = true): Prop | null {
