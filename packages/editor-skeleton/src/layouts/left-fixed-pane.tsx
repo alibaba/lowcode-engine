@@ -19,11 +19,19 @@ export default class LeftFixedPane extends Component<{ area: Area<PanelConfig, P
   render() {
     const { area } = this.props;
     const hideTitleBar = area.current?.config.props?.hideTitleBar;
+    const width = area.current?.config.props?.width;
+    const style = width
+      ? {
+        width,
+      }
+      : undefined;
+
     return (
       <div
         className={classNames('lc-left-fixed-pane', {
           'lc-area-visible': area.visible,
         })}
+        style={style}
       >
         {!hideTitleBar && (
           <Button
