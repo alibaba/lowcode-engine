@@ -4,6 +4,7 @@ import ExpressionSetter from './expression-setter';
 import ColorSetter from './color-setter';
 import JsonSetter from './json-setter';
 import EventsSetter from './events-setter';
+import StyleSetter from './style-setter';
 
 export const StringSetter = {
   component: Input,
@@ -51,6 +52,7 @@ const builtinSetters: any = {
   EventsSetter,
   ColorSetter,
   JsonSetter,
+  StyleSetter,
 };
 
 registerSetter(builtinSetters);
