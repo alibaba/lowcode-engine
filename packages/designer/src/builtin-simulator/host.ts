@@ -398,7 +398,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         return;
       }
       const nodeInst = this.getNodeInstanceFromElement(e.target as Element);
-      console.log('nodeInst', nodeInst);
       detecting.capture(nodeInst?.node || null);
       e.stopPropagation();
     };
