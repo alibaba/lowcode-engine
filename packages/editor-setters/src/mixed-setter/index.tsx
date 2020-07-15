@@ -8,8 +8,8 @@ import { generateI18n } from './locale/utils';
 import zhCN from './locale/zh-CN';
 import './index.scss';
 
-export default class Mixin extends PureComponent {
-  static displayName = 'Mixin';
+export default class Mixed extends PureComponent {
+  static displayName = 'Mixed';
   static propTypes = {
     locale: PropTypes.string,
     messages: PropTypes.object,
@@ -147,7 +147,7 @@ export default class Mixin extends PureComponent {
     let TargetNode = this.typeMap[this.state.type]?.component || 'div';
     let targetProps = this.typeMap[this.state.type]?.props || {};
     let tarStyle = { position: 'relative', ...style };
-    let classes = classNames(className, 'lowcode-setter-mixin');
+    let classes = classNames(className, 'lowcode-setter-mixed');
 
     return (
       <div style={tarStyle} className={classes} >
