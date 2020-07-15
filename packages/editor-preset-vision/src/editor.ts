@@ -55,6 +55,7 @@ function upgradePropsReducer(props: any) {
         val = {
           type: 'JSSlot',
           title: (val.value.props as any)?.slotTitle,
+          name: (val.value.props as any)?.slotName,
           value: val.value.children
         };
       } else {
@@ -138,7 +139,6 @@ function compatiableReducer(props: any) {
   const newProps: any = {};
   Object.entries<any>(props).forEach(([key, val]) => {
     if (isJSSlot(val)) {
-      val.value
       val = {
         type: 'JSBlock',
         value: {
@@ -146,6 +146,7 @@ function compatiableReducer(props: any) {
           children: val.value,
           props: {
             slotTitle: val.title,
+            slotName: val.name,
           },
         },
       }
