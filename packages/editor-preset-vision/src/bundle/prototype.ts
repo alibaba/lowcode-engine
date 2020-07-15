@@ -1,5 +1,5 @@
 import { ComponentType, ReactElement } from 'react';
-import { ComponentMetadata, FieldConfig, InitialItem, FilterItem, AutorunItem } from '@ali/lowcode-types';
+import { ComponentMetadata, FieldConfig, InitialItem, FilterItem, AutorunItem, isI18nData } from '@ali/lowcode-types';
 import {
   ComponentMeta,
   addBuiltinComponentAction,
@@ -259,12 +259,14 @@ class Prototype {
   }
 
   getTitle(currentLocale?: string) {
-    if (currentLocale && this.meta.title[currentLocale]) {
-      return this.meta.title[currentLocale];
-    }
-    const locale = globalLocale.getLocale();
-    if (this.meta.title && this.meta.title.type === 'i18n') {
-      return this.meta.title[locale] || this.meta.title;
+    if (isI18nData(this.meta.title)) {
+      if (currentLocale && this.meta.title[currentLocale]) {
+        return this.meta.title[currentLocale];
+      }
+      const locale = globalLocale.getLocale();
+      if (this.meta.title && this.meta.title.type === 'i18n') {
+        return this.meta.title[locale] || this.meta.title;
+      }
     }
 
     return this.meta.title;
