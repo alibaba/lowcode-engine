@@ -139,9 +139,13 @@ body {
     height: var(--top-area-height);
     background-color: var(--color-pane-background);
     width: 100%;
-    display: flex;
+    display: none;
     margin-bottom: 2px;
     padding: 8px 12px 8px 16px;
+
+    &.lc-area-visible {
+      display: flex;
+    }
 
     .lc-top-area-left {
       display: flex;

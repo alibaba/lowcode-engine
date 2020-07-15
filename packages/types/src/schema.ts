@@ -69,6 +69,7 @@ export interface BlockSchema extends NodeSchema {
   componentName: 'Block';
 }
 export interface SlotSchema extends NodeSchema {
+  name?: string;
   componentName: 'Slot';
   params?: string[];
 }

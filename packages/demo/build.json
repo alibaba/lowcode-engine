@@ -2,7 +2,8 @@
   "entry": {
     "index": "src/index",
     "editor-preset-vision": "../editor-preset-vision/src/index.ts",
-    "react-simulator-renderer": "../react-simulator-renderer/src/index.ts"
+    "react-simulator-renderer": "../react-simulator-renderer/src/index.ts",
+    "rax-simulator-renderer": "../rax-simulator-renderer/src/index.ts"
   },
   "vendor": false,
   "devServer": {
@@ -15,7 +16,8 @@
     "prop-types": "var window.PropTypes",
     "@alifd/next": "var window.Next",
     "@ali/visualengine": "var window.VisualEngine",
-    "@ali/visualengine-utils": "var window.VisualEngineUtils"
+    "@ali/visualengine-utils": "var window.VisualEngineUtils",
+    "rax": "var window.Rax"
   },
   "plugins": [
     [

@@ -281,7 +281,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
 
   let initialFn = (slotName ? null : initial) || initialValue;
   if (slotName && initialValue === true) {
-    initialFn = (field: any, value: any) => {
+    initialFn = (value: any, defaultValue: any) => {
       if (isJSSlot(value)) {
         return {
           title: slotTitle || title,

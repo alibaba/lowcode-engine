@@ -10,11 +10,14 @@ import TreeNode from '../tree-node';
 import { IconEye } from '../icons/eye';
 import { IconCond } from '../icons/cond';
 import { IconLoop } from '../icons/loop';
+import { IconRadioActive } from '../icons/radio-active';
+import { IconRadio } from '../icons/radio';
 import { createIcon } from '@ali/lowcode-utils';
 
 @observer
 export default class TreeTitle extends Component<{
   treeNode: TreeNode;
+  isModal?: boolean;
 }> {
   state: {
     editing: boolean;
@@ -62,7 +65,7 @@ export default class TreeTitle extends Component<{
   };
 
   render() {
-    const { treeNode } = this.props;
+    const { treeNode, isModal } = this.props;
     const { editing } = this.state;
     const isCNode = !treeNode.isRoot();
     const { node } = treeNode;
@@ -72,7 +75,7 @@ export default class TreeTitle extends Component<{
       const depth = treeNode.depth;
       const indent = depth * 12;
       style = {
-        paddingLeft: indent,
+        paddingLeft: indent + (isModal ? 12 : 0),
         marginLeft: -indent,
       };
     }
@@ -84,8 +87,31 @@ export default class TreeTitle extends Component<{
         })}
         style={style}
         data-id={treeNode.id}
-        onClick={node.conditionGroup ? () => node.setConditionalVisible() : undefined}
+        onClick={() => {
+          if (isModal) {
+            node.document.modalNodesManager.setVisible(node);
+            return;
+          }
+          if (node.conditionGroup) {
+            node.setConditionalVisible();
+            return;
+          }
+        }}
       >
+        {isModal && node.getVisible() && (
+          <div onClick={() => {
+            node.document.modalNodesManager.setInvisible(node);
+          }}>
+            <IconRadioActive className="tree-node-modal-radio-active"/>
+          </div>
+        )}
+        {isModal && !node.getVisible() && (
+          <div onClick={() => {
+            node.document.modalNodesManager.setVisible(node);
+          }}>
+            <IconRadio className="tree-node-modal-radio"/>
+          </div>
+        )}
         {isCNode && <ExpandBtn treeNode={treeNode} />}
         <div className="tree-node-icon">{createIcon(treeNode.icon)}</div>
         <div className="tree-node-title-label" onDoubleClick={isNodeParent ? this.enableEdit : undefined}>
@@ -123,7 +149,7 @@ export default class TreeTitle extends Component<{
             </Fragment>
           )}
         </div>
-        {isCNode && isNodeParent && <HideBtn treeNode={treeNode} />}
+        {isCNode && isNodeParent && !isModal && <HideBtn treeNode={treeNode} />}
         {/*isCNode && isNodeParent && <LockBtn treeNode={treeNode} />*/}
       </div>
     );

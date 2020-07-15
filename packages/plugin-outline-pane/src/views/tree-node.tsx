@@ -6,13 +6,16 @@ import TreeTitle from './tree-title';
 import TreeBranches from './tree-branches';
 
 @observer
-export default class TreeNodeView extends Component<{ treeNode: TreeNode }> {
+export default class TreeNodeView extends Component<{
+    treeNode: TreeNode;
+    isModal?: boolean;
+  }> {
   shouldComponentUpdate() {
     return false;
   }
 
   render() {
-    const { treeNode } = this.props;
+    const { treeNode, isModal } = this.props;
     const className = classNames('tree-node', {
       // 是否展开
       expanded: treeNode.expanded,
@@ -35,8 +38,8 @@ export default class TreeNodeView extends Component<{ treeNode: TreeNode }> {
 
     return (
       <div className={className} data-id={treeNode.id}>
-        <TreeTitle treeNode={treeNode} />
-        <TreeBranches treeNode={treeNode} />
+        <TreeTitle treeNode={treeNode} isModal={isModal}/>
+        <TreeBranches treeNode={treeNode} isModal={false}/>
       </div>
     );
   }

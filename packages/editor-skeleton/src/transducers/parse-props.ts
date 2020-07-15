@@ -155,6 +155,7 @@ function propTypeToSetter(propType: PropType): SetterType {
   return {
     componentName: 'MixedSetter',
     isRequired,
+    props: {},
   };
 }
 

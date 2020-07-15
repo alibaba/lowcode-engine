@@ -1,0 +1,21 @@
+{
+  "plugins": [
+    [
+      "build-plugin-rax-component",
+      {
+        "type": "rax",
+        "targets": ["web"]
+      }
+    ],
+    [
+      "build-plugin-component",
+      {
+        "filename": "rax-simulator-renderer",
+        "library": "SimulatorRenderer",
+        "libraryExport": "default",
+        "libraryTarget": "umd"
+      }
+    ],
+    "./build.plugin.js"
+  ]
+}

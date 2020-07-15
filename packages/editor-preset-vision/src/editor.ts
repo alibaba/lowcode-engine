@@ -55,6 +55,7 @@ function upgradePropsReducer(props: any) {
         val = {
           type: 'JSSlot',
           title: (val.value.props as any)?.slotTitle,
+          name: (val.value.props as any)?.slotName,
           value: val.value.children
         };
       } else {
@@ -74,14 +75,16 @@ function upgradePropsReducer(props: any) {
   return newProps;
 }
 // 升级 Props
-designer.addPropsReducer(upgradePropsReducer, TransformStage.Init);
+designer.addPropsReducer(upgradePropsReducer, TransformStage.Upgrade);
 
 // 节点 props 初始化
 designer.addPropsReducer((props, node) => {
   // run initials
   const initials = node.componentMeta.getMetadata().experimental?.initials;
   if (initials) {
-    const newProps: any = {};
+    const newProps: any = {
+      ...props,
+    };
     initials.forEach((item) => {
       // FIXME! this implements SettingTarget
       try {
@@ -138,7 +141,6 @@ function compatiableReducer(props: any) {
   const newProps: any = {};
   Object.entries<any>(props).forEach(([key, val]) => {
     if (isJSSlot(val)) {
-      val.value
       val = {
         type: 'JSBlock',
         value: {
@@ -146,6 +148,7 @@ function compatiableReducer(props: any) {
           children: val.value,
           props: {
             slotTitle: val.title,
+            slotName: val.name,
           },
         },
       }

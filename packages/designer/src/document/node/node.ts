@@ -22,6 +22,7 @@ import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
 import { TransformStage } from './transform-stage';
 import { ReactElement } from 'react';
 import { SettingTopEntry } from 'designer/src/designer';
+import { EventEmitter } from 'events';
 
 /**
  * 基础节点
@@ -72,6 +73,7 @@ import { SettingTopEntry } from 'designer/src/designer';
  *  hidden
  */
 export class Node<Schema extends NodeSchema = NodeSchema> {
+  private emitter: EventEmitter;
   /**
    * 是节点实例
    */
@@ -101,7 +103,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * @deprecated
    */
-  private _addons: { [key: string]: any } = {};
+  private _addons: { [key: string]: { exportData: () => any; isProp: boolean; } } = {};
   @obx.ref private _parent: ParentalNode | null = null;
   /**
    * 父级节点
@@ -157,17 +159,19 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       this.props = new Props(this, props, extras);
       this._children = new NodeChildren(this as ParentalNode, this.initialChildren(children));
       this._children.interalInitParent();
-      this.props.import(this.transformProps(props || {}), extras);
+      this.props.import(this.upgradeProps(this.initProps(props || {})), this.upgradeProps(extras || {}));
       this.setupAutoruns();
     }
 
     this.settingEntry = this.document.designer.createSettingEntry([ this ]);
+    this.emitter = new EventEmitter();
   }
 
-  private transformProps(props: any): any {
-    // FIXME! support PropsList
+  private initProps(props: any): any {
     return this.document.designer.transformProps(props, this, TransformStage.Init);
-    // TODO: run transducers in metadata.experimental
+  }
+  private upgradeProps(props: any): any {
+    return this.document.designer.transformProps(props, this, TransformStage.Upgrade);
   }
 
   private autoruns?: Array<() => void>;
@@ -414,6 +418,22 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return node;
   }
 
+  setVisible(flag: boolean): void {
+    this.getExtraProp('hidden')?.setValue(!flag);
+    this.emitter.emit('visibleChange', flag);
+  }
+
+  getVisible(): boolean {
+    return !this.getExtraProp('hidden', false)?.getValue();
+  }
+
+  onVisibleChange(func: (flag: boolean) => any) {
+    this.emitter.on('visibleChange', func);
+    return () => {
+      this.emitter.removeListener('visibleChange', func);
+    };
+  }
+
   getProp(path: string, stash = true): Prop | null {
     return this.props.query(path, stash as any) || null;
   }
@@ -542,14 +562,16 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     const _extras_: { [key: string]: any } = {
       ...extras,
     };
-    if (_extras_) {
-      Object.keys(_extras_).forEach((key) => {
-        const addon = this._addons[key];
-        if (addon) {
-          _extras_[key] = addon();
+    Object.keys(this._addons).forEach((key) => {
+      const addon = this._addons[key];
+      if (addon) {
+        if (addon.isProp) {
+          (props as any)[getConvertedExtraKey(key)] = addon.exportData();
+        } else {
+          _extras_[key] = addon.exportData();
         }
-      });
-    }
+      }
+    });
 
     const schema: any = {
       ...baseSchema,
@@ -755,19 +777,19 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   getAddonData(key: string) {
     const addon = this._addons[key];
     if (addon) {
-      return addon();
+      return addon.exportData();
     }
-    return this.getExtraProp(key)?.value;
+    return this.getExtraProp(key)?.getValue();
   }
   /**
    * @deprecated
    */
-  registerAddon(key: string, exportData: any) {
+  registerAddon(key: string, exportData: () => any, isProp: boolean = false) {
     if (this._addons[key]) {
       throw new Error(`node addon ${key} exist`);
     }
 
-    this._addons[key] = exportData;
+    this._addons[key] = { exportData, isProp };
   }
 
   getRect(): DOMRect | null {

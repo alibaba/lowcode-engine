@@ -3,6 +3,43 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.27"></a>
+## [0.9.27](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.26...@ali/lowcode-designer@0.9.27) (2020-07-14)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+<a name="0.9.26"></a>
+## [0.9.26](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.25...@ali/lowcode-designer@0.9.26) (2020-07-13)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+<a name="0.9.25"></a>
+## [0.9.25](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.24...@ali/lowcode-designer@0.9.25) (2020-07-12)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+<a name="0.9.24"></a>
+## [0.9.24](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.23...@ali/lowcode-designer@0.9.24) (2020-07-12)
+
+
+### Bug Fixes
+
+* nextId append the id of document ([80a5c93](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/80a5c93))
+* NodeChildren伪装为Array保证向前兼容 ([7950bf5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7950bf5))
+* 低代码组件 props 显示 object 问题 ([116498e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/116498e))
+
+
+
+
 <a name="0.9.23"></a>
 ## [0.9.23](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.21...@ali/lowcode-designer@0.9.23) (2020-06-23)
 
