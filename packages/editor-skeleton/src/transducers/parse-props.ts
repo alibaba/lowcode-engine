@@ -32,9 +32,11 @@ function propTypeToSetter(propType: PropType): SetterType {
   let isRequired: boolean | undefined = false;
   if (typeof propType === 'string') {
     typeName = propType;
-  } else {
+  } else if (typeof propType === 'object'){
     typeName = propType.type;
     isRequired = propType.isRequired;
+  } else {
+    typeName = 'string';
   }
   // TODO: use mixinSetter wrapper
   switch (typeName) {
