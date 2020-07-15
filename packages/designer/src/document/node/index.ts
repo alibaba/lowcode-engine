@@ -5,3 +5,4 @@ export * from './props/prop';
 export * from './props/prop-stash';
 export * from './props/props';
 export * from './transform-stage';
+export * from './modal-nodes-manager';

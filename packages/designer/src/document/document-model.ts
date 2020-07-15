@@ -10,7 +10,7 @@ import { Selection } from './selection';
 import { History } from './history';
 import { TransformStage } from './node';
 import { uniqueId } from '@ali/lowcode-utils';
-import ModalNodesManager from './node/modalNodesManager';
+import { ModalNodesManager } from './node';
 
 export type GetDataType<T, NodeType> = T extends undefined
   ? NodeType extends {
@@ -37,6 +37,10 @@ export class DocumentModel {
    * 操作记录控制
    */
   readonly history: History;
+  /**
+   * 模态节点管理
+   */
+  readonly modalNodesManager: ModalNodesManager;
 
   private nodesMap = new Map<string, Node>();
   @obx.val private nodes = new Set<Node>();
@@ -44,7 +48,6 @@ export class DocumentModel {
   private _simulator?: ISimulatorHost;
   private emitter: EventEmitter;
   private rootNodeVisitorMap: { [visitorName: string]: any } = {};
-  private modalNodesManager: ModalNodesManager;
 
   /**
    * 模拟器
