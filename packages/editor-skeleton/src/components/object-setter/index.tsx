@@ -161,7 +161,7 @@ class FormSetter extends Component<FormSetterProps> {
   constructor(props: RowSetterProps) {
     super(props);
     const { config, field } = props;
-    this.items = (config.items || []).map((conf) => field.createField(conf));
+    this.items = (config?.items || []).map((conf) => field.createField(conf));
 
     // TODO: extraConfig for custom fields
   }

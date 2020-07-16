@@ -40,14 +40,10 @@ const transfrom = {
       }
     })
 
-    console.log(JSON.stringify(a.state));
-
-    console.log(functionMap);
 
     if (a.state){
       functionMap.state = a.state
     }
-
 
     return functionMap;
 
@@ -63,11 +59,32 @@ const transfrom = {
         if (key == 'state'){
            pageNode.state = functionMap[key];
         }else{
+          // 判断是否属于lifeCycles节点
           if (LIFECYCLES_FUNCTION_MAP.react.indexOf(key)>=0){
             // 判断有没有lifecycles节点
+            if (!pageNode.lifeCycles){
+              pageNode.lifeCycles = {}
+            }else{
+              pageNode.lifeCycles[key] = {
+                "type": "JSFunction",
+                "value": functionMap[key],
+              }
+            }
+          }else{
+            // methods节点
+            if (!pageNode.methods){
+              pageNode.methods = {}
+            }else{
+              pageNode.methods[key] = {
+                "type": "JSFunction",
+                "value": functionMap[key],
+              }
+            }
           }
         }
     }
+
+    return schema;
 
   }
 };
