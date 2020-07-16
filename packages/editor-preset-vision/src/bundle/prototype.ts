@@ -15,7 +15,7 @@ import {
   upgradePropConfig,
   upgradeConfigure,
 } from './upgrade-metadata';
-import { globalLocale } from '@ali/lowcode-editor-core';
+import { intl } from '@ali/lowcode-editor-core';
 import { designer } from '../editor';
 import { uniqueId } from '@ali/lowcode-utils';
 
@@ -258,12 +258,8 @@ class Prototype {
     return this.meta.getMetadata().experimental?.context?.[name];
   }
 
-  getTitle(currentLocale?: string) {
-    if (isI18nData(this.meta.title)) {
-      const locale = currentLocale || globalLocale.getLocale();
-      return this.meta.title[locale] || this.meta.title;
-    }
-    return this.meta.title;
+  getTitle() {
+    return intl(this.meta.title);
   }
 
   getComponentName() {
