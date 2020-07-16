@@ -52,6 +52,7 @@ export default class EventBindDialog extends Component<PluginProps> {
       let schema = editor.get('designer').project.getSchema();
       let pageNode = schema.componentsTree[0];
       if (pageNode.methods){
+        this.eventList = [];
         for (let key in pageNode.methods){
           this.eventList.push({
             name:key
