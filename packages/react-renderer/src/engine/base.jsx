@@ -109,9 +109,18 @@ export default class BaseEngine extends PureComponent {
 
   __setLifeCycleMethods = (method, args) => {
     const lifeCycleMethods = getValue(this.props.__schema, 'lifeCycles', {});
-    if (lifeCycleMethods[method]) {
+    let fn = lifeCycleMethods[method];
+    if (fn) {
+      // TODO, cache
+      if (isJSExpression(fn) || isJSFunction(fn)) {
+        fn = parseExpression(fn, this);
+      }
+      if (typeof fn !== 'function') {
+        console.error(`生命周期${method}类型不符`, fn);
+        return;
+      }
       try {
-        return lifeCycleMethods[method].apply(this, args);
+        return fn.apply(this, args);
       } catch (e) {
         console.error(`[${this.props.__schema.componentName}]生命周期${method}出错`, e);
       }
@@ -129,6 +138,13 @@ export default class BaseEngine extends PureComponent {
       });
     this.__customMethodsList = customMethodsList;
     forEach(__schema.methods, (val, key) => {
+      if (isJSExpression(val) || isJSFunction(val)) {
+        val = parseExpression(val, this);
+      }
+      if (typeof val !== 'function') {
+        console.error(`自定义函数${key}类型不符`, val);
+        return;
+      }
       this[key] = val.bind(this);
     });
   };
