@@ -74,7 +74,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   }
   private _libraryMap: { [key: string]: string } = {};
   private buildComponents() {
-    this._components = buildComponents(this._libraryMap, this._componentsMap);
+    this._components = buildComponents(this._libraryMap, this._componentsMap, this.createComponent.bind(this));
   }
   @obx.ref private _components: any = {};
   @computed get components(): object {
@@ -386,13 +386,17 @@ const builtinComponents = {
   Leaf,
 };
 
-function buildComponents(libraryMap: LibraryMap, componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> }) {
+function buildComponents(libraryMap: LibraryMap,
+  componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> },
+  createComponent: (schema: ComponentSchema) => Component | null) {
   const components: any = {
     ...builtinComponents
   };
   Object.keys(componentsMap).forEach((componentName) => {
     let component = componentsMap[componentName];
-    if (isReactComponent(component)) {
+    if (component && component.componentName === 'Component') {
+      components[componentName] = createComponent(component);
+    } else if (isReactComponent(component)) {
       components[componentName] = component;
     } else {
       component = findComponent(libraryMap, componentName, component);
