@@ -268,9 +268,19 @@ export default class EventsSetter extends Component<{
 
   onRelatedEventNameClick = (eventName:String) => {
     const {editor} =  this.props.field;
-    editor.emit('sourceEditor.focusByFunction',{
-      functionName:eventName
-    })
+
+    editor.get('skeleton').getPanel('sourceEditor').show();
+
+    setTimeout(()=>{
+      editor.emit('sourceEditor.focusByFunction',{
+        functionName:eventName
+      })
+    },300)
+
+
+    // editor.emit('sourceEditor.focusByFunction',{
+    //   functionName:eventName
+    // })
   }
 
   closeEventMenu = () => {
@@ -323,6 +333,7 @@ export default class EventsSetter extends Component<{
     this.setState({
       eventDataList
     })
+
 
     this.props.onChange(eventDataList);
 

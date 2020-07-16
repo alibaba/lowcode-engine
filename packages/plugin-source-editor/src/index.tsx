@@ -99,16 +99,6 @@ export default class SourceEditor extends Component<{
     //});
   }
 
-  componentDidMount() {}
-
-  openPluginPannel = () => {
-    const { editor } = this.props;
-    // 判断面板是否处于激活状态
-    if (!editor.leftNav || editor.leftNav != 'sourceEditor') {
-      // 打开面板
-      editor.emit('leftNav.change', 'sourceEditor');
-    }
-  };
 
   /**
    * 执行编辑器事件
@@ -122,7 +112,6 @@ export default class SourceEditor extends Component<{
       return;
     }
 
-    debugger;
     if (this.state.selectTab == TAB_KEY.CSS_TAB) {
       this.setState({
         selectTab: TAB_KEY.JS_TAB,
@@ -173,7 +162,6 @@ export default class SourceEditor extends Component<{
       this.monocoEditor.focus();
     }, 100);
 
-    debugger;
 
     this.updateCode(this.monocoEditor.getModel().getValue());
   }
@@ -213,6 +201,10 @@ export default class SourceEditor extends Component<{
   }
 
   onTabChange = (key) => {
+    const { editor } = this.props;
+    let schema = editor.get('designer').project.getSchema();
+    console.log(schema);
+
     this.setState({
       selectTab: key,
     });

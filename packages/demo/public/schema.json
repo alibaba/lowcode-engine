@@ -19,12 +19,14 @@
       "value": "function() {\n \t\tconsole.log('will umount');\n\t}"
     }
   },
+
   "methods": {
     "testFunc": {
       "type": "JSFunction",
-      "value": "function() { console.log('test func');}"
+      "value": "function() {console.log('test func');}"
     }
   },
+
   "props": {
     "ref": "outterView",
     "autoLoading": true,

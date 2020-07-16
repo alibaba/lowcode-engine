@@ -59,7 +59,15 @@ const transfrom = {
 
   setFunction2Schema(functionMap,schema){
     let pageNode = schema.componentsTree[0];
-    pageNode.state = functionMap.state;
+    for (let key in functionMap){
+        if (key == 'state'){
+           pageNode.state = functionMap[key];
+        }else{
+          if (LIFECYCLES_FUNCTION_MAP.react.indexOf(key)>=0){
+            // 判断有没有lifecycles节点
+          }
+        }
+    }
 
   }
 };
@@ -104,7 +112,7 @@ function initMethodsCode(componentSchema: Object) {
 }
 
 function createFunctionCode(functionName: String, functionNode: Object) {
-  if (functionNode.type === 'JSExpression') {
+  if (functionNode.type === 'JSExpression' || functionNode.type === 'JSFunction') {
     let functionCode = functionNode.value;
     functionCode = functionCode.replace(/function/, functionName);
     return functionCode;
