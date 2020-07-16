@@ -158,5 +158,5 @@ function hoverNode(node: Node, flag: boolean) {
   node.hover(flag);
 }
 function selectNode(node: Node) {
-  node.select();
+  node?.select();
 }

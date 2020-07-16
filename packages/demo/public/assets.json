@@ -12,6 +12,13 @@
       "version": "1.19.18",
       "urls": ["https://unpkg.antfin-inc.com/@alife/next@1.19.18/dist/next.js", "https://unpkg.antfin-inc.com/@alife/next@1.19.18/dist/next.css"],
       "library": "Next"
+    },
+    {
+      "title": "MCBreadcrumb",
+      "package": "mc-breadcrumb",
+      "version": "1.0.0",
+      "urls": ["https://unpkg.alibaba-inc.com/mc-breadcrumb@1.0.0/dist/MCBreadcrumb.js", "https://unpkg.alibaba-inc.com/mc-breadcrumb@1.0.0/dist/MCBreadcrumb.css"],
+      "library": "MCBreadcrumb"
     }
   ],
   "components": [
@@ -650,6 +657,87 @@
       ]
     },
     {
+      "componentName": "MCBreadcrumb",
+      "title": "MCBreadcrumb",
+      "docUrl": "",
+      "screenshot": "",
+      "npm": {
+        "package": "mc-breadcrumb",
+        "version": "1.0.0",
+        "exportName": "MCBreadcrumb",
+        "main": "lib/index.js",
+        "destructuring": false,
+        "subName": ""
+      },
+      "props": [
+        {
+          "name": "prefix",
+          "propType": "string",
+          "description": "样式类名的品牌前缀",
+          "defaultValue": "next-"
+        },
+        {
+          "name": "title",
+          "propType": "string",
+          "description": "标题",
+          "defaultValue": "next-"
+        },
+        {
+          "name": "rtl",
+          "propType": "bool"
+        },
+        {
+          "name": "children",
+          "propType": {
+            "type": "instanceOf",
+            "value": "custom"
+          },
+          "description": "面包屑子节点，需传入 Breadcrumb.Item"
+        },
+        {
+          "name": "maxNode",
+          "propType": {
+            "type": "oneOfType",
+            "value": [
+              "number",
+              {
+                "type": "oneOf",
+                "value": [
+                  "auto"
+                ]
+              }
+            ]
+          },
+          "description": "面包屑最多显示个数，超出部分会被隐藏, 设置为 auto 会自动根据父元素的宽度适配。",
+          "defaultValue": 100
+        },
+        {
+          "name": "separator",
+          "propType": {
+            "type": "instanceOf",
+            "value": "node"
+          },
+          "description": "分隔符，可以是文本或 Icon"
+        },
+        {
+          "name": "component",
+          "propType": {
+            "type": "oneOfType",
+            "value": [
+              "string",
+              "func"
+            ]
+          },
+          "description": "设置标签类型",
+          "defaultValue": "nav"
+        },
+        {
+          "name": "className",
+          "propType": "any"
+        }
+      ]
+    },
+    {
       "componentName": "Breadcrumb.Item",
       "title": "@alifd/next",
       "docUrl": "",
@@ -856,7 +944,7 @@
     },
     {
       "componentName": "Button.Group",
-      "title": "@alifd/next",
+      "title": "Button.Group",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -4079,7 +4167,7 @@
     },
     {
       "componentName": "Form",
-      "title": "@alifd/next",
+      "title": "Form",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -4241,7 +4329,7 @@
     },
     {
       "componentName": "Form.Item",
-      "title": "@alifd/next",
+      "title": "Form.Item",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -12184,6 +12272,27 @@
                   "prefix": "next-",
                   "maxNode": 100,
                   "component": "nav"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "MCBreadcrumb",
+          "title": "MC面包屑",
+          "icon": "",
+          "package": "mc-breadcrumb",
+          "library": "MCBreadcrumb",
+          "snippets": [
+            {
+              "title": "面包屑",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_breadcrumb.png",
+              "schema": {
+                "componentName": "MCBreadcrumb",
+                "props": {
+                  "title": "物料中心",
+                  "prefix": "next-",
+                  "maxNode": 100
                 }
               }
             }
