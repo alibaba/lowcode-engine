@@ -213,7 +213,7 @@ class Prototype {
   static addGlobalExtraActions = addGlobalExtraActions;
   static removeGlobalPropsConfigure = removeGlobalPropsConfigure;
   static overridePropsConfigure = overridePropsConfigure;
-  static create(config: OldPrototypeConfig | ComponentMetadata | ComponentMeta, lookup: boolean = false) {
+  static create(config: OldPrototypeConfig | ComponentMetadata | ComponentMeta, lookup = false) {
     return new Prototype(config, lookup);
   }
 
@@ -221,7 +221,7 @@ class Prototype {
   readonly meta: ComponentMeta;
   readonly options: OldPrototypeConfig | ComponentMetadata;
 
-  constructor(input: OldPrototypeConfig | ComponentMetadata | ComponentMeta, lookup: boolean = false) {
+  constructor(input: OldPrototypeConfig | ComponentMetadata | ComponentMeta, lookup = false) {
     if (lookup) {
       this.meta = designer.getComponentMeta(input.componentName);
       this.options = this.meta.getMetadata();
@@ -260,15 +260,9 @@ class Prototype {
 
   getTitle(currentLocale?: string) {
     if (isI18nData(this.meta.title)) {
-      if (currentLocale && this.meta.title[currentLocale]) {
-        return this.meta.title[currentLocale];
-      }
-      const locale = globalLocale.getLocale();
-      if (this.meta.title && this.meta.title.type === 'i18n') {
-        return this.meta.title[locale] || this.meta.title;
-      }
+      const locale = currentLocale || globalLocale.getLocale();
+      return this.meta.title[locale] || this.meta.title;
     }
-
     return this.meta.title;
   }
 
