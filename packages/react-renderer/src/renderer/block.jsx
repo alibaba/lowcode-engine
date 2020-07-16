@@ -4,13 +4,14 @@ import Debug from 'debug';
 import classnames from 'classnames';
 import Loading from '@alifd/next/lib/loading';
 import '@alifd/next/lib/loading/style';
-
+import BaseRenderer from './base';
 import AppContext from '../context/appContext';
-import BaseEngine from './base';
 import { isSchema, getFileCssName } from '../utils';
-const debug = Debug('engine:comp');
-export default class CompEngine extends BaseEngine {
-  static dislayName = 'comp-engine';
+
+const debug = Debug('renderer:block');
+
+export default class BlockRenderer extends BaseRenderer {
+  static dislayName = 'block-renderer';
   static propTypes = {
     __schema: PropTypes.object,
   };
@@ -19,7 +20,7 @@ export default class CompEngine extends BaseEngine {
   };
 
   static getDerivedStateFromProps(props, state) {
-    debug(`comp.getDerivedStateFromProps`);
+    debug(`block.getDerivedStateFromProps`);
     const func = props.__schema.lifeCycles && props.__schema.lifeCycles.getDerivedStateFromProps;
     if (func) {
       return func(props, state);
@@ -29,58 +30,51 @@ export default class CompEngine extends BaseEngine {
 
   constructor(props, context) {
     super(props, context);
-    this.__generateCtx({
-      component: this,
-    });
+    this.__generateCtx();
     const schema = props.__schema || {};
     this.state = this.__parseData(schema.state || {});
     this.__initDataSource(props);
     this.__setLifeCycleMethods('constructor', arguments);
-    debug(`comp.constructor - ${schema.fileName}`);
+    debug(`block.constructor - ${schema.fileName}`);
   }
 
   async getSnapshotBeforeUpdate() {
     super.getSnapshotBeforeUpdate(...arguments);
-    debug(`comp.getSnapshotBeforeUpdate - ${this.props.__schema.fileName}`);
+    debug(`block.getSnapshotBeforeUpdate - ${this.props.__schema.fileName}`);
   }
   async componentDidMount() {
     super.componentDidMount(...arguments);
-    debug(`comp.componentDidMount - ${this.props.__schema.fileName}`);
+    debug(`block.componentDidMount - ${this.props.__schema.fileName}`);
   }
   async componentDidUpdate() {
     super.componentDidUpdate(...arguments);
-    debug(`comp.componentDidUpdate - ${this.props.__schema.fileName}`);
+    debug(`block.componentDidUpdate - ${this.props.__schema.fileName}`);
   }
   async componentWillUnmount() {
     super.componentWillUnmount(...arguments);
-    debug(`comp.componentWillUnmount - ${this.props.__schema.fileName}`);
+    debug(`block.componentWillUnmount - ${this.props.__schema.fileName}`);
   }
-  async componentDidCatch(e) {
-    super.componentDidCatch(...arguments);
-    debug(`comp.componentDidCatch - ${this.props.__schema.fileName}`);
+  async componentDidCatch() {
+    await super.componentDidCatch(...arguments);
+    debug(`block.componentDidCatch - ${this.props.__schema.fileName}`);
   }
 
   render() {
     const { __schema } = this.props;
 
-    if (!isSchema(__schema, true) || __schema.componentName !== 'Component') {
-      return '自定义组件schema结构异常！';
+    if (!isSchema(__schema, true) || (__schema.componentName !== 'Block' && __schema.componentName !== 'Div')) {
+      return '区块schema结构异常！';
     }
 
-    debug(`comp.render - ${__schema.fileName}`);
-    this.__generateCtx({
-      component: this,
-    });
+    debug(`block.render - ${__schema.fileName}`);
+    this.__generateCtx();
     this.__render();
 
-    const { id, className, style, noContainer, autoLoading, defaultHeight = 300, loading } = this.__parseData(
-      __schema.props,
-    );
+    const { id, className, style, autoLoading, defaultHeight = 300, loading } = this.__parseData(__schema.props);
     const renderContent = () => (
       <AppContext.Provider
         value={{
           ...this.context,
-          compContext: this,
           blockContext: this,
         }}
       >
@@ -88,9 +82,6 @@ export default class CompEngine extends BaseEngine {
       </AppContext.Provider>
     );
 
-    if (noContainer) {
-      return renderContent();
-    }
     if (autoLoading || loading !== undefined) {
       return (
         <Loading
@@ -101,19 +92,20 @@ export default class CompEngine extends BaseEngine {
             display: 'block',
             ...style,
           }}
-          className={classnames('luna-comp', getFileCssName(__schema.fileName), className, this.props.className)}
-          id={this.props.id || id}
+          className={classnames('luna-block', getFileCssName(__schema.fileName), className, this.props.className)}
+          id={id}
         >
           {!this.__showPlaceholder && renderContent()}
         </Loading>
       );
     }
+
     return (
       <div
         ref={this.__getRef}
-        className={classnames('luna-comp', getFileCssName(__schema.fileName), className, this.props.className)}
-        id={this.props.id || id}
-        style={{ ...style, ...this.props.style }}
+        className={classnames('luna-block', getFileCssName(__schema.fileName), className, this.props.className)}
+        id={id}
+        style={style}
       >
         {renderContent()}
       </div>

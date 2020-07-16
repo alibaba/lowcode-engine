@@ -2,11 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
 import AppContext from '../context/appContext';
-import BaseEngine from './base';
+import BaseRenderer from './base';
 import { isSchema } from '../utils';
-const debug = Debug('engine:temp');
-export default class TempEngine extends BaseEngine {
-  static dislayName = 'temp-engine';
+
+const debug = Debug('renderer:temp');
+
+export default class TempRenderer extends BaseRenderer {
+  static dislayName = 'temp-renderer';
   static propTypes = {
     __ctx: PropTypes.object,
     __schema: PropTypes.object,
@@ -52,7 +54,7 @@ export default class TempEngine extends BaseEngine {
   render() {
     const { __schema, __ctx } = this.props;
     if (!isSchema(__schema, true) || __schema.componentName !== 'Temp') {
-      return '下钻编辑schema结构异常！';
+      return '下钻编辑 schema 结构异常！';
     }
 
     debug(`temp.render - ${__schema.fileName}`);
