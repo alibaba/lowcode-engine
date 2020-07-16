@@ -18,3 +18,10 @@ export class CompatibilityError extends CodeGeneratorError {
     super(errorString);
   }
 }
+
+// tslint:disable-next-line: max-classes-per-file
+export class PublisherError extends CodeGeneratorError {
+  constructor(errorString: string) {
+    super(errorString);
+  }
+}

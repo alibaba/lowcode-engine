@@ -5,6 +5,7 @@
 import { createProjectBuilder } from './generator/ProjectBuilder';
 import { createModuleBuilder } from './generator/ModuleBuilder';
 import { createDiskPublisher } from './publisher/disk';
+import { createZipPublisher } from './publisher/zip';
 import createIceJsProjectBuilder from './solutions/icejs';
 import createRecoreProjectBuilder from './solutions/recore';
 
@@ -57,6 +58,7 @@ export default {
   },
   publishers: {
     disk: createDiskPublisher,
+    zip: createZipPublisher,
   },
   plugins: {
     common: {

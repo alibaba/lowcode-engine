@@ -1,21 +1,10 @@
-import { CodeGeneratorError, IResultDir } from '../../types';
-
-export type PublisherFactory<T, U> = (configuration?: Partial<T>) => U;
-
-export interface IPublisher<T, U> {
-  publish: (options?: T) => Promise<IPublisherResponse<U>>;
-  getProject: () => IResultDir | void;
-  setProject: (project: IResultDir) => void;
-}
-
-export interface IPublisherFactoryParams {
-  project?: IResultDir;
-}
-export interface IPublisherResponse<T> {
-  success: boolean;
-  payload?: T;
-}
-
+import {
+  IResultDir,
+  PublisherFactory,
+  IPublisher,
+  IPublisherFactoryParams,
+  PublisherError,
+} from '../../types';
 import { writeFolder } from './utils';
 
 export interface IDiskFactoryParams extends IPublisherFactoryParams {
@@ -37,7 +26,7 @@ export const createDiskPublisher: PublisherFactory<
 
   const getProject = (): IResultDir => {
     if (!project) {
-      throw new CodeGeneratorError('Missing Project');
+      throw new PublisherError('Missing Project');
     }
     return project;
   };
@@ -55,7 +44,7 @@ export const createDiskPublisher: PublisherFactory<
   const publish = async (options: IDiskFactoryParams = {}) => {
     const projectToPublish = options.project || project;
     if (!projectToPublish) {
-      throw new CodeGeneratorError('Missing Project');
+      throw new PublisherError('Missing Project');
     }
 
     const projectOutputPath = options.outputPath || outputPath;
@@ -75,7 +64,7 @@ export const createDiskPublisher: PublisherFactory<
       );
       return { success: true, payload: projectOutputPath };
     } catch (error) {
-      throw new CodeGeneratorError(error);
+      throw new PublisherError(error);
     }
   };
 
