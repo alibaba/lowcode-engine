@@ -14,6 +14,14 @@ const Codeout = ({ editor }: PluginProps) => {
   const handleClick = () => {
     const designer = editor.get(Designer);
     if (designer) {
+      const assets = editor.get('assets');
+      console.log(assets.components);
+
+      const componentsMap = assets.components.map((c) => ({
+        componentName: c.componentName,
+        ...(c.npm || {}),
+      }));
+
       const fullSchema = {
         ...designer.schema,
         config: {
@@ -23,30 +31,28 @@ const Codeout = ({ editor }: PluginProps) => {
         meta: {
           name: 'demoproject',
         },
+        componentsMap,
       };
 
       console.info('codeout schema:', fullSchema);
-      // localStorage.setItem('lce-dev-store', JSON.stringify(designer.schema));
-      fetch(`http://${CODEOUT_SERVICE_HOST}/api/generate/project`, {
-        method: 'POST',
-        body: JSON.stringify({ schema: JSON.stringify(fullSchema) }),
-        headers: new Headers({
-          'Content-Type': 'application/json',
-        }),
-        mode: 'cors',
-      }).then((res) => {
-        console.log(res);
-
-        const fileStream = streamSaver.createWriteStream('demoProject.zip');
-        res.body.pipeTo(fileStream).then(
-          () => {
-            console.log('success');
-          },
-          (err) => {
-            console.log(err);
-          },
-        );
-      });
+      // fetch(`http://${CODEOUT_SERVICE_HOST}/api/generate/project`, {
+      //   method: 'POST',
+      //   body: JSON.stringify({ schema: JSON.stringify(fullSchema) }),
+      //   headers: new Headers({
+      //     'Content-Type': 'application/json',
+      //   }),
+      //   mode: 'cors',
+      // }).then((res) => {
+      //   const fileStream = streamSaver.createWriteStream('demoProject.zip');
+      //   res.body.pipeTo(fileStream).then(
+      //     () => {
+      //       console.log('success');
+      //     },
+      //     (err) => {
+      //       console.log(err);
+      //     },
+      //   );
+      // });
     }
   };
 
