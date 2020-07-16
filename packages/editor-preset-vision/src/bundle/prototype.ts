@@ -213,7 +213,7 @@ class Prototype {
   static addGlobalExtraActions = addGlobalExtraActions;
   static removeGlobalPropsConfigure = removeGlobalPropsConfigure;
   static overridePropsConfigure = overridePropsConfigure;
-  static create(config: OldPrototypeConfig | ComponentMetadata | ComponentMeta, lookup = false) {
+  static create(config: OldPrototypeConfig | ComponentMetadata | ComponentMeta, lookup: boolean = false) {
     return new Prototype(config, lookup);
   }
 
@@ -221,7 +221,7 @@ class Prototype {
   readonly meta: ComponentMeta;
   readonly options: OldPrototypeConfig | ComponentMetadata;
 
-  constructor(input: OldPrototypeConfig | ComponentMetadata | ComponentMeta, lookup = false) {
+  constructor(input: OldPrototypeConfig | ComponentMetadata | ComponentMeta, lookup: boolean = false) {
     if (lookup) {
       this.meta = designer.getComponentMeta(input.componentName);
       this.options = this.meta.getMetadata();
