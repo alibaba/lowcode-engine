@@ -112,7 +112,15 @@
             },
             "htmlType": "submit"
           },
-          "children": "提交"
+          "children": [
+            {
+              "componentName": "Icon",
+              "props": {
+                "type": "success"
+              }
+            },
+            "提交"
+          ]
         }, {
           "componentName": "Button",
           "props": {

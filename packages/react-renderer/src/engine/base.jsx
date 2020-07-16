@@ -310,7 +310,7 @@ export default class BaseEngine extends PureComponent {
           ...componentInfo,
           props: transformArrayToMap(componentInfo.props, 'name'),
         },
-      });
+      }) || {};
       // 对于可以获取到ref的组件做特殊处理
       if (acceptsRef(Comp)) {
         otherProps.ref = (ref) => {

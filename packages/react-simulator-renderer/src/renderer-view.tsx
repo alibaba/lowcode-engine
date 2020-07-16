@@ -128,11 +128,10 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
             });
             console.info('menuprops', viewProps);
           }
-
           return createElement(
             getDeviceView(Component, device, designMode),
             viewProps,
-            leaf?.isContainer() ? (children == null ? [] : Array.isArray(children) ? children : [children]) : null,
+            leaf?.isContainer() ? (children == null ? [] : Array.isArray(children) ? children : [children]) : children,
           );
         }}
         onCompGetRef={(schema: any, ref: ReactInstance | null) => {
