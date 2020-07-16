@@ -37,6 +37,14 @@ export default {
           width: 64,
         },
       },
+      {
+        pluginKey: 'codeout',
+        type: 'Custom',
+        props: {
+          align: 'right',
+          width: 64,
+        },
+      },
     ],
     leftArea: [
       {

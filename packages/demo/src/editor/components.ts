@@ -8,6 +8,8 @@ import eventBindDialog from '@ali/lowcode-plugin-event-bind-dialog';
 import variableBindDialog from '@ali/lowcode-plugin-variable-bind-dialog';
 import sourceEditor from '@ali/lowcode-plugin-source-editor';
 
+import codeout from './plugins/codeout';
+
 export default {
   logo,
   samplePreview,
@@ -18,4 +20,5 @@ export default {
   eventBindDialog,
   variableBindDialog,
   sourceEditor,
-}
+  codeout,
+};

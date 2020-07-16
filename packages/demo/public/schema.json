@@ -94,7 +94,7 @@
         }
       }]
     }, {
-      "componentName": "Div",
+      "componentName": "Box",
       "props": {
         "style": {
           "textAlign": "center"
