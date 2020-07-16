@@ -4,7 +4,8 @@
   "description": "出码引擎 for LowCode Engine",
   "main": "lib/index.js",
   "files": [
-    "lib"
+    "lib",
+    "demo"
   ],
   "scripts": {
     "build": "rimraf lib && tsc",
@@ -21,6 +22,7 @@
     "@babel/types": "^7.9.5",
     "@types/prettier": "^1.19.1",
     "change-case": "^3.1.0",
+    "jszip": "^3.5.0",
     "prettier": "^2.0.2",
     "short-uuid": "^3.1.1"
   },

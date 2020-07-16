@@ -5,11 +5,17 @@
 import { createProjectBuilder } from './generator/ProjectBuilder';
 import { createModuleBuilder } from './generator/ModuleBuilder';
 import { createDiskPublisher } from './publisher/disk';
+import { createZipPublisher } from './publisher/zip';
 import createIceJsProjectBuilder from './solutions/icejs';
 import createRecoreProjectBuilder from './solutions/recore';
 
 // 引入说明
 import { REACT_CHUNK_NAME } from './plugins/component/react/const';
+import {
+  COMMON_CHUNK_NAME,
+  CLASS_DEFINE_CHUNK_NAME,
+  DEFAULT_LINK_AFTER,
+} from './const/generator';
 
 // 引入通用插件组
 import esmodule from './plugins/common/esmodule';
@@ -26,6 +32,7 @@ import css from './plugins/component/style/css';
 import constants from './plugins/project/constants';
 import i18n from './plugins/project/i18n';
 import utils from './plugins/project/utils';
+import prettier from './postprocessor/prettier';
 
 // 引入常用工具
 import * as utilsCommon from './utils/common';
@@ -33,6 +40,9 @@ import * as utilsCompositeType from './utils/compositeType';
 import * as utilsJsExpression from './utils/jsExpression';
 import * as utilsNodeToJSX from './utils/nodeToJSX';
 import * as utilsTemplateHelper from './utils/templateHelper';
+
+// 引入内置解决方案模块
+import icejs from './plugins/project/framework/icejs';
 
 export * from './types';
 
@@ -43,8 +53,12 @@ export default {
     icejs: createIceJsProjectBuilder,
     recore: createRecoreProjectBuilder,
   },
+  solutionParts: {
+    icejs,
+  },
   publishers: {
     disk: createDiskPublisher,
+    zip: createZipPublisher,
   },
   plugins: {
     common: {
@@ -70,11 +84,22 @@ export default {
       utils,
     },
   },
+  postprocessor: {
+    prettier,
+  },
   utils: {
     common: utilsCommon,
     compositeType: utilsCompositeType,
     jsExpression: utilsJsExpression,
     nodeToJSX: utilsNodeToJSX,
     templateHelper: utilsTemplateHelper,
+  },
+  chunkNames: {
+    COMMON_CHUNK_NAME,
+    CLASS_DEFINE_CHUNK_NAME,
+    REACT_CHUNK_NAME,
+  },
+  defaultLinkAfter: {
+    COMMON_DEFAULT_LINK_AFTER: DEFAULT_LINK_AFTER,
   },
 };

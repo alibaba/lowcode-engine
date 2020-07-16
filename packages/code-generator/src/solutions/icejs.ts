@@ -12,20 +12,16 @@ import jsx from '../plugins/component/react/jsx';
 import reactCommonDeps from '../plugins/component/react/reactCommonDeps';
 import css from '../plugins/component/style/css';
 import constants from '../plugins/project/constants';
-import iceJsEntry from '../plugins/project/framework/icejs/plugins/entry';
-import iceJsEntryHtml from '../plugins/project/framework/icejs/plugins/entryHtml';
-import iceJsGlobalStyle from '../plugins/project/framework/icejs/plugins/globalStyle';
-import iceJsPackageJSON from '../plugins/project/framework/icejs/plugins/packageJSON';
-import iceJsRouter from '../plugins/project/framework/icejs/plugins/router';
-import template from '../plugins/project/framework/icejs/template';
 import i18n from '../plugins/project/i18n';
 import utils from '../plugins/project/utils';
+
+import icejs from '../plugins/project/framework/icejs';
 
 import { prettier } from '../postprocessor';
 
 export default function createIceJsProjectBuilder(): IProjectBuilder {
   return createProjectBuilder({
-    template,
+    template: icejs.template,
     plugins: {
       components: [
         reactCommonDeps(),
@@ -53,14 +49,14 @@ export default function createIceJsProjectBuilder(): IProjectBuilder {
         jsx(),
         css(),
       ],
-      router: [esmodule(), iceJsRouter()],
-      entry: [iceJsEntry()],
+      router: [esmodule(), icejs.plugins.router()],
+      entry: [icejs.plugins.entry()],
       constants: [constants()],
       utils: [esmodule(), utils()],
       i18n: [i18n()],
-      globalStyle: [iceJsGlobalStyle()],
-      htmlEntry: [iceJsEntryHtml()],
-      packageJSON: [iceJsPackageJSON()],
+      globalStyle: [icejs.plugins.globalStyle()],
+      htmlEntry: [icejs.plugins.entryHtml()],
+      packageJSON: [icejs.plugins.packageJSON()],
     },
     postProcessors: [prettier()],
   });
