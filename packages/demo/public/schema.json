@@ -94,7 +94,7 @@
         }
       }]
     }, {
-      "componentName": "Box",
+      "componentName": "Form.Item",
       "props": {
         "style": {
           "textAlign": "center"
