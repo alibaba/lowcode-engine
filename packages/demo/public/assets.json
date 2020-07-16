@@ -982,7 +982,12 @@
             "value": "node"
           }
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "Calendar",
@@ -4706,7 +4711,12 @@
           "propType": "func",
           "description": "预览态模式下渲染的内容\n@param {any} value 根据包裹的组件的 value 类型而决定"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "Form.Submit",
@@ -11449,7 +11459,7 @@
     },
     {
       "componentName": "Box",
-      "title": "@alifd/next",
+      "title": "弹性布局",
       "docUrl": "",
       "screenshot": "",
       "npm": {
