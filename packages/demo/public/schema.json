@@ -49,7 +49,7 @@
         "initValue": "李雷"
       },
       "children": [{
-        "componentName": "From.Input",
+        "componentName": "Input",
         "props": {
           "placeholder": "请输入",
           "size": "medium",

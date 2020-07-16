@@ -4802,7 +4802,7 @@
       ]
     },
     {
-      "componentName": "From.Error",
+      "componentName": "Form.Error",
       "title": "@alifd/next",
       "docUrl": "",
       "screenshot": "",
@@ -12479,7 +12479,7 @@
           ]
         },
         {
-          "componentName": "Field",
+          "componentName": "Form.Item",
           "title": "表单辅助工具",
           "icon": "",
           "package": "@alife/next",
@@ -12489,7 +12489,7 @@
               "title": "表单辅助工具",
               "screenshot": "",
               "schema": {
-                "componentName": "Field",
+                "componentName": "Form.Item",
                 "props": {}
               }
             }
