@@ -4,6 +4,7 @@ import ExpressionSetter from './expression-setter';
 import ColorSetter from './color-setter';
 import JsonSetter from './json-setter';
 import EventsSetter from './events-setter';
+import MixedSetter from './mixed-setter';
 
 export const StringSetter = {
   component: Input,
@@ -29,7 +30,12 @@ export const DateYearSetter = DatePicker.YearPicker;
 export const DateMonthSetter = DatePicker.MonthPicker;
 export const DateRangeSetter = DatePicker.RangePicker;
 
-export { ExpressionSetter, EventsSetter };
+export {
+  ExpressionSetter,
+  EventsSetter,
+  JsonSetter,
+  MixedSetter,
+};
 
 const builtinSetters: any = {
   StringSetter,
@@ -51,6 +57,7 @@ const builtinSetters: any = {
   EventsSetter,
   ColorSetter,
   JsonSetter,
+  MixedSetter,
 };
 
 registerSetter(builtinSetters);
