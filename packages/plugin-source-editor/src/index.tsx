@@ -60,6 +60,7 @@ export default class SourceEditor extends Component<{
 
   componentWillMount() {
     const { editor } = this.props;
+
     editor.on('leftPanel.show', (key: String) => {
       // debugger;
       if (key === 'sourceEditor' && !this.monocoEditor) {
@@ -75,53 +76,25 @@ export default class SourceEditor extends Component<{
         // }, 0);
       }
     });
-
     // 添加函数
     editor.on('sourceEditor.addFunction', (params: FunctionEventParam) => {
       this.callEditorEvent('sourceEditor.addFunction', params);
-      this.openPluginPannel();
+      // this.openPluginPannel();
     });
 
     // 定位函数
     editor.on('sourceEditor.focusByFunction', (params: FunctionEventParam) => {
       this.callEditorEvent('sourceEditor.focusByFunction', params);
-      this.openPluginPannel();
+      // this.openPluginPannel();
     });
 
     //editor.once('designer.mount', (designer: Designer) => {
     // let schema = designer.project.getSchema();
     // mock data
-    let schema = {
-      componentTree: [
-        {
-          state: {
-            // 初始state：        选填 对象类型/变量表达式
-            btnText: 'submit', // 默认数据值：              选填 变量表达式
-          },
-          css: 'body {font-size: 12px;} .botton{widht:100px;color:#ff00ff}', //css样式描述：      选填
-          lifeCycles: {
-            //生命周期:          选填 对象类型
-            didMount: {
-              type: 'JSExpression',
-              value: "function() {\n \t\tconsole.log('did mount');\n\t}",
-            },
-            willUnmount: {
-              type: 'JSExpression',
-              value: "function() {\n \t\tconsole.log('will umount');\n\t}",
-            },
-          },
-          methods: {
-            //自定义方法对象：     选填 对象类型
-            getData: {
-              //自定义方法：                  选填 函数类型
-              type: 'JSExpression',
-              value: "function() {\n \t\tconsole.log('testFunc');\n \t}",
-            },
-          },
-        },
-      ],
-    };
 
+    //debugger;
+
+    let schema = editor.get('designer').project.getSchema();
     this.initCode(schema);
     //});
   }
@@ -149,6 +122,7 @@ export default class SourceEditor extends Component<{
       return;
     }
 
+    debugger;
     if (this.state.selectTab == TAB_KEY.CSS_TAB) {
       this.setState({
         selectTab: TAB_KEY.JS_TAB,
@@ -170,8 +144,8 @@ export default class SourceEditor extends Component<{
     let jsCode = js_beautify(transfrom.schema2Code(schema), { indent_size: 2, indent_empty_lines: true });
     let css;
 
-    if (schema.componentTree[0].css) {
-      css = css_beautify(schema.componentTree[0].css, { indent_size: 2 });
+    if (schema.componentsTree[0].css) {
+      css = css_beautify(schema.componentsTree[0].css, { indent_size: 2 });
     }
 
     this.setState({
@@ -192,11 +166,14 @@ export default class SourceEditor extends Component<{
     this.monocoEditor.executeEdits('log-source', [
       { identifier: 'event_id', range: range, text: functionCode, forceMoveMarkers: true },
     ]);
+
     setTimeout(() => {
       let newPosition = new monaco.Position(count + 1, 2);
       this.monocoEditor.setPosition(newPosition);
       this.monocoEditor.focus();
     }, 100);
+
+    debugger;
 
     this.updateCode(this.monocoEditor.getModel().getValue());
   }
@@ -223,15 +200,17 @@ export default class SourceEditor extends Component<{
     }
   }
 
-  editorDidMount = (editor, monaco) => {
-    if (this.state.selectTab == TAB_KEY.JS_TAB) {
-      this.monocoEditor = editor;
-    }
+  editorDidMount = (editor, monaco,tab) => {
+    this.monocoEditor = editor;
 
     if (this.editorCmd) {
       this.callEditorEvent(this.editorCmd.eventName, this.editorCmd.params);
     }
   };
+
+  fullScreen = () => {
+
+  }
 
   onTabChange = (key) => {
     this.setState({
@@ -249,6 +228,7 @@ export default class SourceEditor extends Component<{
 
   updateCode = (newCode) => {
     const { selectTab } = this.state;
+    const {editor} = this.props;
     if (selectTab === TAB_KEY.JS_TAB) {
       this.setState({
         jsCode: newCode,
@@ -259,7 +239,9 @@ export default class SourceEditor extends Component<{
       });
     }
 
-    transfrom.code2Schema(newCode);
+    let functionMap = transfrom.code2Schema(newCode);
+    let schema = editor.get('designer').project.getSchema();
+    let newSchema = transfrom.setFunction2Schema(functionMap,schema);
   };
 
   render() {
@@ -285,7 +267,7 @@ export default class SourceEditor extends Component<{
                 {...defaultEditorOption}
                 {...{ language: 'typescript' }}
                 onChange={(newCode) => this.updateCode(newCode)}
-                editorDidMount={(editor, monaco) => this.editorDidMount.call(this, editor, monaco)}
+                editorDidMount={(editor, monaco) => this.editorDidMount.call(this, editor, monaco,TAB_KEY.JS_TAB)}
               />
             </div>
             <div className="editor-context" id="cssEditorDom">
@@ -294,7 +276,7 @@ export default class SourceEditor extends Component<{
                 {...defaultEditorOption}
                 {...{ language: 'css' }}
                 onChange={(newCode) => this.updateCode(newCode)}
-                editorDidMount={(editor, monaco) => this.editorDidMount.call(this, editor, monaco)}
+                //editorDidMount={(editor, monaco) => this.editorDidMount.call(this, editor, monaco,TAB_KEY.CSS_TAB)}
               />
             </div>
           </div>

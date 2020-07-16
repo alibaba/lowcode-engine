@@ -1,8 +1,11 @@
-import walkSourcePlugin from './sorceEditorPlugin';
+const LIFECYCLES_FUNCTION_MAP = {
+    react:['constructor','render','componentDidMount','componentDidUpdate','componentWillUnmount','componentDidCatch']
+}
+
 
 const transfrom = {
   schema2Code(schema: Object) {
-    let componentSchema = schema.componentTree[0];
+    let componentSchema = schema.componentsTree[0];
     let code =
 `export default class {
   ${initStateCode(componentSchema)}
@@ -41,10 +44,23 @@ const transfrom = {
 
     console.log(functionMap);
 
+    if (a.state){
+      functionMap.state = a.state
+    }
+
+
+    return functionMap;
+
   },
 
   getNewFunctionCode(functionName:String){
     return `\n\t${functionName}(){\n\t}\n`
+  },
+
+  setFunction2Schema(functionMap,schema){
+    let pageNode = schema.componentsTree[0];
+    pageNode.state = functionMap.state;
+
   }
 };
 
@@ -94,5 +110,7 @@ function createFunctionCode(functionName: String, functionNode: Object) {
     return functionCode;
   }
 }
+
+
 
 export default transfrom;

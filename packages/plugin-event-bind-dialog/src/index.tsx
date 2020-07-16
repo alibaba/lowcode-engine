@@ -91,9 +91,16 @@ export default class EventBindDialog extends Component<PluginProps> {
     editor.emit('event-setter.bindEvent', this.state.eventName);
     // 选中的是新建事件
     if (this.state.selectedEventName == '') {
-      editor.emit('sourceEditor.addFunction', {
-        functionName: this.state.eventName,
-      });
+      // 判断面板是否处于激活状态
+      // debugger;
+      editor.get('skeleton').getPanel('sourceEditor').show();
+
+      setTimeout(()=>{
+        editor.emit('sourceEditor.addFunction', {
+          functionName: this.state.eventName,
+        });
+      },300)
+
     }
 
     this.closeDialog();
