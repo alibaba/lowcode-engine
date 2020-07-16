@@ -234,6 +234,7 @@ export default class SourceEditor extends Component<{
     let functionMap = transfrom.code2Schema(newCode);
     let schema = editor.get('designer').project.getSchema();
     let newSchema = transfrom.setFunction2Schema(functionMap,schema);
+    editor.get('designer').project.load(newSchema);
   };
 
   render() {
