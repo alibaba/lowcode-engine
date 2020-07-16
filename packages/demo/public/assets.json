@@ -24,22 +24,27 @@
   "components": [
     {
       "componentName": "Page",
-      "title": "页面",
+      "title": "Page",
       "configure": {
         "events": {
-          "supportedLifecycles": [{
-            "description": "初始化时",
-            "name": "constructor"
-          }, {
-            "description": "装载后",
-            "name": "componentDidMount"
-          }, {
-            "description": "更新时",
-            "name": "componentDidMount"
-          }, {
-            "description": "卸载时",
-            "name": "componentWillUnmount"
-          }]
+          "supportedLifecycles": [
+            {
+              "description": "初始化时",
+              "name": "constructor"
+            },
+            {
+              "description": "装载后",
+              "name": "componentDidMount"
+            },
+            {
+              "description": "更新时",
+              "name": "componentDidMount"
+            },
+            {
+              "description": "卸载时",
+              "name": "componentWillUnmount"
+            }
+          ]
         },
         "component": {
           "isContainer": true
@@ -48,7 +53,7 @@
     },
     {
       "componentName": "Div",
-      "title": "容器",
+      "title": "Div",
       "configure": {
         "component": {
           "isContainer": true
@@ -57,7 +62,7 @@
     },
     {
       "componentName": "Badge",
-      "title": "@alifd/next",
+      "title": "Badge",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -142,7 +147,7 @@
     },
     {
       "componentName": "Balloon",
-      "title": "@alifd/next",
+      "title": "Balloon",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -389,7 +394,7 @@
     },
     {
       "componentName": "Tooltip",
-      "title": "@alifd/next",
+      "title": "Tooltip",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -509,7 +514,7 @@
     },
     {
       "componentName": "BalloonInner",
-      "title": "@alifd/next",
+      "title": "BalloonInner",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -583,7 +588,7 @@
     },
     {
       "componentName": "Breadcrumb",
-      "title": "@alifd/next",
+      "title": "Breadcrumb",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -653,6 +658,10 @@
         {
           "name": "className",
           "propType": "any"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
@@ -734,12 +743,16 @@
         {
           "name": "className",
           "propType": "any"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Breadcrumb.Item",
-      "title": "@alifd/next",
+      "title": "Breadcrumb.Item",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -786,12 +799,16 @@
             "type": "instanceOf",
             "value": "node"
           }
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Button",
-      "title": "@alifd/next",
+      "title": "Button",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -939,6 +956,11 @@
             "type": "instanceOf",
             "value": "node"
           }
+        },
+        {
+          "name": "style",
+          "propType": "object",
+          "description": "自定义内联样式"
         }
       ]
     },
@@ -981,6 +1003,11 @@
             "type": "instanceOf",
             "value": "node"
           }
+        },
+        {
+          "name": "style",
+          "propType": "object",
+          "description": "自定义内联样式"
         }
       ],
       "configure": {
@@ -991,7 +1018,7 @@
     },
     {
       "componentName": "Calendar",
-      "title": "@alifd/next",
+      "title": "Calendar",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -1113,12 +1140,16 @@
           "name": "locale",
           "propType": "object",
           "description": "国际化配置"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "RangeCalendar",
-      "title": "@alifd/next",
+      "title": "RangeCalendar",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -1230,12 +1261,16 @@
         {
           "name": "className",
           "propType": "string"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Card",
-      "title": "@alifd/next",
+      "title": "Card",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -1336,12 +1371,16 @@
             "type": "instanceOf",
             "value": "node"
           }
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "CardHeader",
-      "title": "@alifd/next",
+      "title": "CardHeader",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -1394,12 +1433,16 @@
         {
           "name": "className",
           "propType": "string"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "CardMedia",
-      "title": "@alifd/next",
+      "title": "CardMedia",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -1447,7 +1490,7 @@
     },
     {
       "componentName": "CardDivider",
-      "title": "@alifd/next",
+      "title": "CardDivider",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -1481,12 +1524,16 @@
         {
           "name": "className",
           "propType": "string"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "CardContent",
-      "title": "@alifd/next",
+      "title": "CardContent",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -1515,12 +1562,16 @@
         {
           "name": "className",
           "propType": "string"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "CardActions",
-      "title": "@alifd/next",
+      "title": "CardActions",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -1549,12 +1600,16 @@
         {
           "name": "className",
           "propType": "string"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "CardBulletHeader",
-      "title": "@alifd/next",
+      "title": "CardBulletHeader",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -1600,12 +1655,16 @@
             "value": "node"
           },
           "description": "标题区域的用户自定义内容"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "CardCollaspeContent",
-      "title": "@alifd/next",
+      "title": "CardCollaspeContent",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -1644,12 +1703,16 @@
             "type": "instanceOf",
             "value": "node"
           }
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Cascader",
-      "title": "@alifd/next",
+      "title": "Cascader",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -1778,12 +1841,16 @@
         {
           "name": "resultRender",
           "propType": "func"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "CascaderSelect",
-      "title": "@alifd/next",
+      "title": "CascaderSelect",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -2037,12 +2104,16 @@
           "name": "renderPreview",
           "propType": "func",
           "description": "预览态模式下渲染的内容\n@param {Array<data>} value 选择值 { label: , value:}"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Checkbox",
-      "title": "@alifd/next",
+      "title": "Checkbox",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -2159,7 +2230,7 @@
     },
     {
       "componentName": "CheckboxGroup",
-      "title": "@alifd/next",
+      "title": "CheckboxGroup",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -2257,7 +2328,7 @@
     },
     {
       "componentName": "Collapse",
-      "title": "@alifd/next",
+      "title": "Collapse",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -2344,7 +2415,7 @@
     },
     {
       "componentName": "Panel",
-      "title": "@alifd/next",
+      "title": "Panel",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -2406,7 +2477,7 @@
     },
     {
       "componentName": "ErrorBoundary",
-      "title": "@alifd/next",
+      "title": "ErrorBoundary",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -2434,12 +2505,16 @@
           "name": "fallbackUI",
           "propType": "func",
           "description": "捕获错误后的展现 自定义组件\n@param {Object} error 错误\n@param {Object} errorInfo 错误详细信息\n@returns {Element} 捕获错误后的处理"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "DatePicker",
-      "title": "@alifd/next",
+      "title": "DatePicker",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -2706,12 +2781,16 @@
         {
           "name": "disableChangeMode",
           "propType": "bool"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "RangePicker",
-      "title": "@alifd/next",
+      "title": "RangePicker",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -3001,12 +3080,16 @@
             "type": "instanceOf",
             "value": "node"
           }
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "MonthPicker",
-      "title": "@alifd/next",
+      "title": "MonthPicker",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -3231,12 +3314,16 @@
             "type": "instanceOf",
             "value": "node"
           }
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "YearPicker",
-      "title": "@alifd/next",
+      "title": "YearPicker",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -3451,12 +3538,16 @@
             "type": "instanceOf",
             "value": "node"
           }
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "WeekPicker",
-      "title": "@alifd/next",
+      "title": "WeekPicker",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -3686,12 +3777,16 @@
             "type": "instanceOf",
             "value": "node"
           }
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Dialog",
-      "title": "@alifd/next",
+      "title": "Dialog",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -3895,12 +3990,16 @@
         {
           "name": "popupContainer",
           "propType": "any"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Inner",
-      "title": "@alifd/next",
+      "title": "Inner",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -4012,12 +4111,16 @@
         {
           "name": "height",
           "propType": "string"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Dropdown",
-      "title": "@alifd/next",
+      "title": "Dropdown",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -4151,12 +4254,16 @@
             ]
           },
           "description": "配置动画的播放方式，支持 { in: 'enter-class', out: 'leave-class' } 的对象参数，如果设置为 false，则不播放动画\n@default { in: 'expandInDown', out: 'expandOutUp' }"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Table",
-      "title": "@alifd/next",
+      "title": "Table",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -4168,6 +4275,10 @@
         "subName": ""
       },
       "props": [
+        {
+          "name": "style",
+          "propType": "object"
+        }
       ]
     },
     {
@@ -4720,7 +4831,7 @@
     },
     {
       "componentName": "Form.Submit",
-      "title": "@alifd/next",
+      "title": "Form.Submit",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -4762,12 +4873,16 @@
             "type": "instanceOf",
             "value": "node"
           }
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Form.Reset",
-      "title": "@alifd/next",
+      "title": "Form.Reset",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -4808,12 +4923,16 @@
             "type": "instanceOf",
             "value": "node"
           }
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Form.Error",
-      "title": "@alifd/next",
+      "title": "Form.Error",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -4875,7 +4994,7 @@
     },
     {
       "componentName": "Icon",
-      "title": "@alifd/next",
+      "title": "Icon",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -4940,7 +5059,7 @@
     },
     {
       "componentName": "Input",
-      "title": "@alifd/next",
+      "title": "Input",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -5108,12 +5227,16 @@
           "name": "renderPreview",
           "propType": "func",
           "description": "预览态模式下渲染的内容\n@param {number} value 评分值"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Input.Password",
-      "title": "@alifd/next",
+      "title": "Input.Password",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -5130,12 +5253,16 @@
           "propType": "bool",
           "description": "是否展示切换按钮",
           "defaultValue": true
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Input.TextArea",
-      "title": "@alifd/next",
+      "title": "Input.TextArea",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -5192,12 +5319,16 @@
           "name": "renderPreview",
           "propType": "func",
           "description": "预览态模式下渲染的内容\n@param {number} value 评分值"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Input.Group",
-      "title": "@alifd/next",
+      "title": "Input.Group",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -5265,7 +5396,7 @@
     },
     {
       "componentName": "Loading",
-      "title": "@alifd/next",
+      "title": "Loading",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -5370,7 +5501,7 @@
     },
     {
       "componentName": "Menu",
-      "title": "@alifd/next",
+      "title": "Menu",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -5705,12 +5836,16 @@
         {
           "name": "itemClassName",
           "propType": "string"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "SubMenu",
-      "title": "@alifd/next",
+      "title": "SubMenu",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -5822,12 +5957,16 @@
               "popup"
             ]
           }
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "SelectableItem",
-      "title": "@alifd/next",
+      "title": "SelectableItem",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -5905,12 +6044,16 @@
         {
           "name": "isSelectIconRight",
           "propType": "bool"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "CheckboxItem",
-      "title": "@alifd/next",
+      "title": "CheckboxItem",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -5965,12 +6108,16 @@
           "name": "checkboxDisabled",
           "propType": "bool",
           "defaultValue": false
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "RadioItem",
-      "title": "@alifd/next",
+      "title": "RadioItem",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -6014,12 +6161,16 @@
             "value": "node"
           },
           "description": "标签内容"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "PopupItem",
-      "title": "@alifd/next",
+      "title": "PopupItem",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -6104,12 +6255,16 @@
         {
           "name": "autoWidth",
           "propType": "bool"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Group",
-      "title": "@alifd/next",
+      "title": "Group",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -6154,12 +6309,16 @@
               "popup"
             ]
           }
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Divider",
-      "title": "@alifd/next",
+      "title": "Divider",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -6178,12 +6337,16 @@
         {
           "name": "className",
           "propType": "string"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "MenuButton",
-      "title": "@alifd/next",
+      "title": "MenuButton",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -6325,7 +6488,7 @@
     },
     {
       "componentName": "Message",
-      "title": "@alifd/next",
+      "title": "Message",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -6462,7 +6625,7 @@
     },
     {
       "componentName": "Nav",
-      "title": "@alifd/next",
+      "title": "Nav",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -6702,7 +6865,7 @@
     },
     {
       "componentName": "Item",
-      "title": "@alifd/next",
+      "title": "Item",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -6745,12 +6908,16 @@
               "popup"
             ]
           }
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Group",
-      "title": "@alifd/next",
+      "title": "Group",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -6782,12 +6949,16 @@
             "value": "node"
           },
           "description": "导航项和子导航"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "SubNav",
-      "title": "@alifd/next",
+      "title": "SubNav",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -6839,12 +7010,16 @@
             "value": "node"
           },
           "description": "导航项和子导航"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "PopupItem",
-      "title": "@alifd/next",
+      "title": "PopupItem",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -6890,12 +7065,16 @@
             "value": "node"
           },
           "description": "弹出内容"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "NumberPicker",
-      "title": "@alifd/next",
+      "title": "NumberPicker",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -7102,7 +7281,7 @@
     },
     {
       "componentName": "Pagination",
-      "title": "@alifd/next",
+      "title": "Pagination",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -7294,12 +7473,16 @@
           "name": "popupProps",
           "propType": "object",
           "description": "弹层组件属性，透传给Popup"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Progress",
-      "title": "@alifd/next",
+      "title": "Progress",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -7390,12 +7573,16 @@
         {
           "name": "rtl",
           "propType": "bool"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Radio",
-      "title": "@alifd/next",
+      "title": "Radio",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -7500,7 +7687,7 @@
     },
     {
       "componentName": "RadioGroup",
-      "title": "@alifd/next",
+      "title": "RadioGroup",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -7629,7 +7816,7 @@
     },
     {
       "componentName": "Range",
-      "title": "@alifd/next",
+      "title": "Range",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -7775,7 +7962,7 @@
     },
     {
       "componentName": "Rating",
-      "title": "@alifd/next",
+      "title": "Rating",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -7897,12 +8084,16 @@
           "propType": "bool",
           "description": "是否为只读态，效果上同 disabeld",
           "defaultValue": false
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Search",
-      "title": "@alifd/next",
+      "title": "Search",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -8097,7 +8288,7 @@
     },
     {
       "componentName": "Select",
-      "title": "@alifd/next",
+      "title": "Select",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -8274,7 +8465,7 @@
     },
     {
       "componentName": "Slider",
-      "title": "@alifd/next",
+      "title": "Slider",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -8608,7 +8799,7 @@
     },
     {
       "componentName": "SplitButton",
-      "title": "@alifd/next",
+      "title": "SplitButton",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -8810,7 +9001,7 @@
     },
     {
       "componentName": "Step",
-      "title": "@alifd/next",
+      "title": "Step",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -8895,12 +9086,16 @@
           "propType": "func",
           "description": "StepItem 的自定义渲染\n@param {Number} index   节点索引\n@param {String} status  节点状态\n@returns {Node} 节点的渲染结果",
           "defaultValue": null
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "StepItem",
-      "title": "@alifd/next",
+      "title": "StepItem",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -9047,12 +9242,16 @@
         {
           "name": "readOnly",
           "propType": "bool"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Switch",
-      "title": "@alifd/next",
+      "title": "Switch",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -9165,7 +9364,7 @@
     },
     {
       "componentName": "Tab",
-      "title": "@alifd/next",
+      "title": "Tab",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -9361,12 +9560,16 @@
         {
           "name": "className",
           "propType": "string"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "TabItem",
-      "title": "@alifd/next",
+      "title": "TabItem",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -9417,12 +9620,16 @@
         {
           "name": "children",
           "propType": "any"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "TabItem",
-      "title": "@alifd/next",
+      "title": "TabItem",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -9473,12 +9680,16 @@
         {
           "name": "children",
           "propType": "any"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "TimePicker",
-      "title": "@alifd/next",
+      "title": "TimePicker",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -9707,12 +9918,16 @@
         },
         {
           "name": "locale"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Timeline",
-      "title": "@alifd/next",
+      "title": "Timeline",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -9761,12 +9976,16 @@
           "name": "animation",
           "propType": "bool",
           "defaultValue": true
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "TimelineItem",
-      "title": "@alifd/next",
+      "title": "TimelineItem",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -9875,12 +10094,16 @@
           "propType": "bool",
           "description": "动画",
           "defaultValue": true
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Transfer",
-      "title": "@alifd/next",
+      "title": "Transfer",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -10015,12 +10238,16 @@
           "name": "children",
           "propType": "func",
           "description": "接收 children 自定义渲染列表"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Tree",
-      "title": "@alifd/next",
+      "title": "Tree",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -10259,12 +10486,16 @@
         {
           "name": "onItemKeyDown",
           "propType": "func"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "TreeNode",
-      "title": "@alifd/next",
+      "title": "TreeNode",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -10400,12 +10631,16 @@
           "name": "size",
           "propType": "number",
           "defaultValue": 1
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "TreeSelect",
-      "title": "@alifd/next",
+      "title": "TreeSelect",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -10626,12 +10861,16 @@
           "name": "renderPreview",
           "propType": "func",
           "description": "预览态模式下渲染的内容\n@param {Array<data>} value 选择值 { label: , value:}"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Typography",
-      "title": "@alifd/next",
+      "title": "Typography",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -10651,12 +10890,16 @@
           },
           "description": "设置标签类型",
           "defaultValue": "article"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Paragraph",
-      "title": "@alifd/next",
+      "title": "Paragraph",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -10689,12 +10932,16 @@
         {
           "name": "size",
           "defaultValue": "medium"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Text",
-      "title": "@alifd/next",
+      "title": "Text",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -10761,12 +11008,16 @@
           "name": "rtl",
           "propType": "bool",
           "defaultValue": false
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Upload",
-      "title": "@alifd/next",
+      "title": "Upload",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -10980,7 +11231,7 @@
     },
     {
       "componentName": "Selecter",
-      "title": "@alifd/next",
+      "title": "Selecter",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -11061,7 +11312,7 @@
     },
     {
       "componentName": "Dragger",
-      "title": "@alifd/next",
+      "title": "Dragger",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -11137,7 +11388,7 @@
     },
     {
       "componentName": "List",
-      "title": "@alifd/next",
+      "title": "List",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -11239,12 +11490,16 @@
         {
           "name": "isPreview",
           "propType": "bool"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Avatar",
-      "title": "@alifd/next",
+      "title": "Avatar",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -11333,12 +11588,16 @@
           "name": "srcSet",
           "propType": "string",
           "description": "图片类头像响应式资源地址"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "ResponsiveGrid",
-      "title": "@alifd/next",
+      "title": "ResponsiveGrid",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -11401,12 +11660,16 @@
           },
           "description": "设置标签类型",
           "defaultValue": "div"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Cell",
-      "title": "@alifd/next",
+      "title": "Cell",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -11454,12 +11717,16 @@
           },
           "description": "设置标签类型",
           "defaultValue": "div"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ]
     },
     {
       "componentName": "Box",
-      "title": "弹性布局",
+      "title": "Box",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -12089,7 +12356,7 @@
                   "size": "medium",
                   "htmlType": "button",
                   "component": "button",
-                  "children": [ "123" ]
+                  "children": [  ]
                 }
               }
             },
