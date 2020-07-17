@@ -826,7 +826,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       event: e,
     };
 
-    if (e.dragObject.type === 'node' && e.dragObject.nodes[0].getPrototype().isModal()) {
+    if (e.dragObject.type === 'node' && e.dragObject.nodes[0]?.getPrototype()?.isModal()) {
       return this.designer.createLocation({
         target: this.document.rootNode,
         detail: {
