@@ -11,6 +11,10 @@ export interface JSExpression {
    * 模拟值
    */
   mock?: any;
+  /**
+   * 额外扩展属性，如 extType、events
+   */
+  [key: string]: any;
 }
 
 export interface JSSlot {

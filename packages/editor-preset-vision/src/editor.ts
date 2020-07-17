@@ -152,7 +152,7 @@ function compatiableReducer(props: any) {
       }
     }
     // 为了能降级到老版本，建议在后期版本去掉以下代码
-    if (isJSExpression(val)) {
+    if (isJSExpression(val) && !val.events) {
       val = {
         type: 'variable',
         value: val.mock,
