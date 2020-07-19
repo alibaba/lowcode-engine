@@ -33,15 +33,24 @@ export default class EventsSetter extends Component<{
     relatedEventName: '',
   };
 
-
+  // constructor (){
+  //   super();
+  //   debugger;
+  //   if (!this.props || !this.props.value){
+  //     this.setState({
+  //       eventDataList:[]
+  //     })
+  //   }
+  // }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { value } = nextProps;
-    if (value !== prevState.eventDataList) {
-      return {
-        value,
-      };
-    }
+    // const { value } = nextProps;
+    // debugger;
+    // if (value !== prevState.eventDataList) {
+    //   return {
+    //     value,
+    //   };
+    // }
     return null;
   }
 
