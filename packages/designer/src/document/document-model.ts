@@ -173,7 +173,7 @@ export class DocumentModel {
     }
 
     let node: Node | null = null;
-    if (!this.inited) {
+    if (this.inited) {
       schema.id = null;
     }
     if (schema.id) {
@@ -523,7 +523,7 @@ export class DocumentModel {
     };
   }
 
-  setRendererReady(renderer) {
+  setRendererReady(renderer: any) {
     this.emitter.emit('lowcode_engine_renderer_ready', renderer);
   }
 

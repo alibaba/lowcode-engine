@@ -4,4 +4,5 @@ export enum TransformStage {
   Save = 3,
   Clone = 4,
   Init = 5,
+  Upgrade = 6,
 }

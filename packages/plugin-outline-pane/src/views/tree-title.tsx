@@ -14,6 +14,18 @@ import { IconRadioActive } from '../icons/radio-active';
 import { IconRadio } from '../icons/radio';
 import { createIcon } from '@ali/lowcode-utils';
 
+function emitOutlineEvent(type: string, treeNode: TreeNode, rest?: object) {
+  const editor = globalContext.get(Editor);
+  const node = treeNode?.node;
+  const npm = node?.componentMeta?.npm;
+  const selected =
+    [npm?.package, npm?.componentName].filter((item) => !!item).join('-') || node?.componentMeta?.componentName || '';
+  editor?.emit(`outlinePane.${type}`, {
+    selected,
+    ...rest,
+  });
+}
+
 @observer
 export default class TreeTitle extends Component<{
   treeNode: TreeNode;
@@ -40,7 +52,9 @@ export default class TreeTitle extends Component<{
 
   private saveEdit = (e: FocusEvent<HTMLInputElement> | KeyboardEvent<HTMLInputElement>) => {
     const { treeNode } = this.props;
-    treeNode.setTitleLabel((e.target as HTMLInputElement).value || '');
+    const value = (e.target as HTMLInputElement).value || '';
+    treeNode.setTitleLabel(value);
+    emitOutlineEvent('rename', treeNode, { value });
     this.cancelEdit();
   };
 
@@ -190,17 +204,8 @@ class HideBtn extends Component<{ treeNode: TreeNode }> {
         className="tree-node-hide-btn"
         onClick={(e) => {
           e.stopPropagation();
+          emitOutlineEvent(treeNode.hidden ? 'show' : 'hide', treeNode);
           treeNode.setHidden(!treeNode.hidden);
-          const editor = globalContext.get(Editor);
-          const node = treeNode?.node;
-          const npm = node?.componentMeta?.npm;
-          const selected =
-            [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
-            node?.componentMeta?.componentName ||
-            '';
-          editor?.emit('outlinePane.hide', {
-            selected,
-          });
         }}
       >
         {treeNode.hidden ? <IconEyeClose /> : <IconEye />}
@@ -227,6 +232,7 @@ class ExpandBtn extends Component<{ treeNode: TreeNode }> {
           if (treeNode.expanded) {
             e.stopPropagation();
           }
+          emitOutlineEvent(treeNode.expanded ? 'collapse' : 'expand', treeNode);
           treeNode.setExpanded(!treeNode.expanded);
         }}
       >

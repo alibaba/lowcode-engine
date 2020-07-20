@@ -75,14 +75,16 @@ function upgradePropsReducer(props: any) {
   return newProps;
 }
 // 升级 Props
-designer.addPropsReducer(upgradePropsReducer, TransformStage.Init);
+designer.addPropsReducer(upgradePropsReducer, TransformStage.Upgrade);
 
 // 节点 props 初始化
 designer.addPropsReducer((props, node) => {
   // run initials
   const initials = node.componentMeta.getMetadata().experimental?.initials;
   if (initials) {
-    const newProps: any = {};
+    const newProps: any = {
+      ...props,
+    };
     initials.forEach((item) => {
       // FIXME! this implements SettingTarget
       try {

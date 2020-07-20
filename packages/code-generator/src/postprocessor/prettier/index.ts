@@ -5,7 +5,7 @@ import { PostProcessor, PostProcessorFactory } from '../../types';
 
 const PARSERS = ['css', 'scss', 'less', 'json', 'html', 'vue'];
 
-interface ProcessorConfig {
+type ProcessorConfig = {
   customFileTypeParser: Record<string, string>;
 }
 
