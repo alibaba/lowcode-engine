@@ -49,7 +49,7 @@
         "initValue": "李雷"
       },
       "children": [{
-        "componentName": "From.Input",
+        "componentName": "Input",
         "props": {
           "placeholder": "请输入",
           "size": "medium",
@@ -94,7 +94,7 @@
         }
       }]
     }, {
-      "componentName": "Box",
+      "componentName": "Form.Item",
       "props": {
         "style": {
           "textAlign": "center"
@@ -112,7 +112,15 @@
             },
             "htmlType": "submit"
           },
-          "children": "提交"
+          "children": [
+            {
+              "componentName": "Icon",
+              "props": {
+                "type": "success"
+              }
+            },
+            "提交"
+          ]
         }, {
           "componentName": "Button",
           "props": {

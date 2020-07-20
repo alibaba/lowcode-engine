@@ -108,6 +108,17 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
           const leaf = host.document.getNode(__id);
           viewProps._leaf = leaf;
           viewProps._componentName = leaf?.componentName;
+          // 如果是容器 && 无children && 高宽为空 增加一个占位容器，方便拖动
+          if (leaf.isContainer() && children == null && !viewProps.style){
+            Object.assign(viewProps, {
+              style:{
+                height:'100px',
+                backgroundColor:'#f0f0f0',
+                borderColor:'#666666',
+                border: '1px dotted'
+              }
+            })
+          }
 
           if (viewProps._componentName === 'Menu') {
             Object.assign(viewProps, {
@@ -128,11 +139,10 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
             });
             console.info('menuprops', viewProps);
           }
-
           return createElement(
             getDeviceView(Component, device, designMode),
             viewProps,
-            leaf?.isContainer() ? (children == null ? [] : Array.isArray(children) ? children : [children]) : null,
+            leaf?.isContainer() ? (children == null ? [] : Array.isArray(children) ? children : [children]) : children,
           );
         }}
         onCompGetRef={(schema: any, ref: ReactInstance | null) => {

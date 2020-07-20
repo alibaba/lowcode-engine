@@ -5,21 +5,21 @@ import './index.scss';
 
 export default class EventBindDialog extends Component<PluginProps> {
   private eventList: any[] = [
-    {
-      name: 'getData',
-    },
-    {
-      name: 'deleteData',
-    },
-    {
-      name: 'initData',
-    },
-    {
-      name: 'editData',
-    },
-    {
-      name: 'submitData',
-    },
+    // {
+    //   name: 'getData',
+    // },
+    // {
+    //   name: 'deleteData',
+    // },
+    // {
+    //   name: 'initData',
+    // },
+    // {
+    //   name: 'editData',
+    // },
+    // {
+    //   name: 'submitData',
+    // },
   ];
 
   state: any = {
@@ -41,10 +41,24 @@ export default class EventBindDialog extends Component<PluginProps> {
     });
   };
 
+
+
+
   componentDidMount() {
     const { editor, config } = this.props;
     editor.on(`${config.pluginKey}.openDialog`, (bindEventName: String) => {
       this.openDialog(bindEventName);
+
+      let schema = editor.get('designer').project.getSchema();
+      let pageNode = schema.componentsTree[0];
+      if (pageNode.methods){
+        this.eventList = [];
+        for (let key in pageNode.methods){
+          this.eventList.push({
+            name:key
+          })
+        }
+      }
     });
   }
 

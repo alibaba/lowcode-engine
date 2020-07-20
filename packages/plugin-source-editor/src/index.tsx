@@ -258,7 +258,7 @@ export default class SourceEditor extends Component<{
               <MonacoEditor
                 value={jsCode}
                 {...defaultEditorOption}
-                {...{ language: 'typescript' }}
+                {...{ language: 'javascript' }}
                 onChange={(newCode) => this.updateCode(newCode)}
                 editorDidMount={(editor, monaco) => this.editorDidMount.call(this, editor, monaco,TAB_KEY.JS_TAB)}
               />
