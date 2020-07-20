@@ -631,6 +631,14 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     this._slots.push(slotNode);
   }
 
+  /**
+   * 删除一个节点
+   * @param node 
+   */
+  removeChild(node: Node) {
+    this.children?.delete(node);
+  }
+
   private purged = false;
   /**
    * 是否已销毁

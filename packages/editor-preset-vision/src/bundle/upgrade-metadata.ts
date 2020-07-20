@@ -749,10 +749,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     callbacks.onNodeRemove = didDropOut;
   }
   if (subtreeModified) {
-    callbacks.onSubtreeModified = (...args: any[]) => {
-      // FIXME! args not correct
-      subtreeModified.apply(args[0], args as any);
-    };
+    callbacks.onSubtreeModified = subtreeModified;
   }
   if (onResize) {
     callbacks.onResize = (e: any, currentNode: any) => {
