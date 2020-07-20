@@ -18,4 +18,4 @@ export default {
   eventBindDialog,
   variableBindDialog,
   sourceEditor,
-};
+}

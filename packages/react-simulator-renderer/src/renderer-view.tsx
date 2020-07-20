@@ -1,5 +1,5 @@
 import LowCodeRenderer from '@ali/lowcode-react-renderer';
-// import { isObject } from 'lodash';
+import { isObject } from 'lodash';
 import { ReactInstance, Fragment, Component, createElement } from 'react';
 import { observer } from '@recore/obx-react';
 import { SimulatorRenderer } from './renderer';

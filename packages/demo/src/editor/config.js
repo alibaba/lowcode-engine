@@ -28,7 +28,7 @@ export default {
         props: {
           align: 'right',
         },
-      }, */
+      },*/
       {
         pluginKey: 'samplePreview',
         type: 'Custom',
@@ -73,10 +73,10 @@ export default {
             hideTitleBar: true,
             maxHeight: 800,
             maxWidth: 1200,
-            title: '动作面板',
-            width: 600,
+            title: "动作面板",
+            width: 600
           },
-        },
+        }
       },
       {
         pluginKey: 'zhEn',
@@ -94,7 +94,7 @@ export default {
       {
         pluginKey: 'variableBindDialog',
       },
-    ],
+    ]
   },
   shortCuts: [],
   lifeCycles: {

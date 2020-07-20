@@ -11,7 +11,6 @@ interface DesignerPluginState {
   componentMetadatas?: any[] | null;
   library?: any[] | null;
   extraEnvironment?: any[] | null;
-  renderEnv?: string;
 }
 
 export default class DesignerPlugin extends PureComponent<PluginProps, DesignerPluginState> {
@@ -21,7 +20,6 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
     componentMetadatas: null,
     library: null,
     extraEnvironment: null,
-    renderEnv: 'default',
   };
 
   private _mounted = true;
@@ -34,7 +32,6 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
   private async setupAssets() {
     const { editor } = this.props;
     const assets = await editor.onceGot('assets');
-    const renderEnv = await editor.onceGot('renderEnv');
     if (!this._mounted) {
       return;
     }
@@ -43,10 +40,9 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
       componentMetadatas: components || [],
       library: packages || [],
       extraEnvironment,
-      renderEnv,
     };
     this.setState(state);
-  }
+  };
 
   componentWillUnmount() {
     this._mounted = false;
@@ -63,7 +59,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
 
   render(): React.ReactNode {
     const { editor } = this.props;
-    const { componentMetadatas, library, extraEnvironment, renderEnv } = this.state;
+    const { componentMetadatas, library, extraEnvironment } = this.state;
 
     if (!library || !componentMetadatas) {
       // TODO: use a Loading
@@ -80,7 +76,6 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
         simulatorProps={{
           library,
           extraEnvironment,
-          renderEnv,
         }}
       />
     );

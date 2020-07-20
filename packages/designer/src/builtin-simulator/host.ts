@@ -4,16 +4,7 @@ import Viewport from './viewport';
 import { createSimulator } from './create-simulator';
 import { Node, ParentalNode, DocumentModel, isNode, contains, isRootNode } from '../document';
 import ResourceConsumer from './resource-consumer';
-import {
-  AssetLevel,
-  Asset,
-  AssetList,
-  assetBundle,
-  assetItem,
-  AssetType,
-  isElement,
-  isFormEvent,
-} from '@ali/lowcode-utils';
+import { AssetLevel, Asset, AssetList, assetBundle, assetItem, AssetType, isElement, isFormEvent } from '@ali/lowcode-utils';
 import {
   DragObjectType,
   isShaken,
@@ -71,34 +62,9 @@ const defaultSimulatorUrl = (() => {
   return urls;
 })();
 
-const defaultRaxSimulatorUrl = (() => {
-  const publicPath = getPublicPath();
-  let urls;
-  const [_, prefix = '', dev] = /^(.+?)(\/js)?\/?$/.exec(publicPath) || [];
-  if (dev) {
-    urls = [`${prefix}/css/rax-simulator-renderer.css`, `${prefix}/js/rax-simulator-renderer.js`];
-  } else if (process.env.NODE_ENV === 'production') {
-    urls = [`${prefix}/rax-simulator-renderer.css`, `${prefix}/rax-simulator-renderer.js`];
-  } else {
-    urls = [`${prefix}/rax-simulator-renderer.css`, `${prefix}/rax-simulator-renderer.js`];
-  }
-  return urls;
-})();
-
 const defaultEnvironment = [
   // https://g.alicdn.com/mylib/??react/16.11.0/umd/react.production.min.js,react-dom/16.8.6/umd/react-dom.production.min.js,prop-types/15.7.2/prop-types.min.js
   assetItem(AssetType.JSText, 'window.React=parent.React;window.ReactDOM=parent.ReactDOM;', undefined, 'react'),
-  assetItem(
-    AssetType.JSText,
-    'window.PropTypes=parent.PropTypes;React.PropTypes=parent.PropTypes; window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;',
-  ),
-];
-
-const defaultRaxEnvironment = [
-  assetItem(
-    AssetType.JSText,
-    'window.Rax=parent.Rax;window.React=parent.React;window.ReactDOM=parent.ReactDOM;window.VisualEngineUtils=parent.VisualEngineUtils;window.VisualEngine=parent.VisualEngine',
-  ),
   assetItem(
     AssetType.JSText,
     'window.PropTypes=parent.PropTypes;React.PropTypes=parent.PropTypes; window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;',
@@ -111,10 +77,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   constructor(readonly document: DocumentModel) {}
 
   readonly designer = this.document.designer;
-
-  @computed get renderEnv(): string {
-    return this.get('renderEnv') || 'default';
-  }
 
   @computed get device(): string {
     return this.get('device') || 'default';
@@ -224,10 +186,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
     const vendors = [
       // required & use once
-      assetBundle(
-        this.get('environment') || this.renderEnv === 'rax' ? defaultRaxEnvironment : defaultEnvironment,
-        AssetLevel.Environment,
-      ),
+      assetBundle(this.get('environment') || defaultEnvironment, AssetLevel.Environment),
       // required & use once
       assetBundle(this.get('extraEnvironment'), AssetLevel.Environment),
       // required & use once
@@ -235,10 +194,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       // required & TODO: think of update
       assetBundle(this.theme, AssetLevel.Theme),
       // required & use once
-      assetBundle(
-        this.get('simulatorUrl') || this.renderEnv === 'rax' ? defaultRaxSimulatorUrl : defaultSimulatorUrl,
-        AssetLevel.Runtime,
-      ),
+      assetBundle(this.get('simulatorUrl') || defaultSimulatorUrl, AssetLevel.Runtime),
     ];
 
     // wait 准备 iframe 内容、依赖库注入
@@ -370,12 +326,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         x.initEvent('click', true);
         this._iframe?.dispatchEvent(x);
         const target = e.target as HTMLElement;
-        if (
-          isFormEvent(e) ||
-          target?.closest(
-            '.next-input-group,.next-checkbox-group,.next-date-picker,.next-input,.next-month-picker,.next-number-picker,.next-radio-group,.next-range,.next-range-picker,.next-rating,.next-select,.next-switch,.next-time-picker,.next-upload,.next-year-picker,.next-breadcrumb-item,.next-calendar-header,.next-calendar-table',
-          )
-        ) {
+        if (isFormEvent(e) || target?.closest('.next-input-group,.next-checkbox-group,.next-date-picker,.next-input,.next-month-picker,.next-number-picker,.next-radio-group,.next-range,.next-range-picker,.next-rating,.next-select,.next-switch,.next-time-picker,.next-upload,.next-year-picker,.next-breadcrumb-item,.next-calendar-header,.next-calendar-table')) {
           e.preventDefault();
           e.stopPropagation();
         }
@@ -441,9 +392,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         }
         const node = nodeInst.node || this.document.rootNode;
 
-        const rootElement = this.findDOMNodes(nodeInst.instance, node.componentMeta.rootSelector)?.find((item) =>
-          item.contains(targetElement),
-        ) as HTMLElement;
+        const rootElement = this.findDOMNodes(nodeInst.instance, node.componentMeta.rootSelector)?.find(item => item.contains(targetElement)) as HTMLElement;
         if (!rootElement) {
           return;
         }
@@ -456,6 +405,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       },
       true,
     );
+
   }
 
   /**
@@ -842,12 +792,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.sensing = true;
     this.scroller.scrolling(e);
     const dropContainer = this.getDropContainer(e);
-    if (
-      !dropContainer ||
-      // too dirty
-      (typeof dropContainer.container?.componentMeta?.prototype?.options?.canDropIn === 'function' &&
-        !dropContainer.container?.componentMeta?.prototype?.options?.canDropIn(e.dragObject.nodes[0]))
-    ) {
+    if (!dropContainer ||
+       // too dirty
+        (typeof dropContainer.container?.componentMeta?.prototype?.options?.canDropIn === 'function' &&
+          !dropContainer.container?.componentMeta?.prototype?.options?.canDropIn(e.dragObject.nodes[0]))) {
       return null;
     }
 
@@ -888,7 +836,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         },
         source: 'simulator' + this.document.id,
         event: e,
-      });
+      }); 
     }
 
     if (!children || children.size < 1 || !edge) {
