@@ -2,6 +2,8 @@ import React, { Component, PureComponent, createElement as reactCreateElement } 
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
+import { isEmpty } from '@ali/b3-one/lib/obj';
+import Div from '@ali/iceluna-comp-div';
 import AppContext from '../context/appContext';
 import { isFileSchema, goldlog } from '../utils';
 import PageEngine from './pageEngine';
@@ -9,9 +11,7 @@ import ComponentEngine from './compEngine';
 import BlockEngine from './blockEngine';
 import AddonEngine from './addonEngine';
 import TempEngine from './tempEngine';
-import { isEmpty } from '@ali/b3-one/lib/obj';
 import BaseEngine from './base';
-import Div from '@ali/iceluna-comp-div';
 
 window.React = React;
 window.ReactDom = ReactDOM;
@@ -47,6 +47,7 @@ function isReactClass(obj) {
 
 export default class Engine extends PureComponent {
   static dislayName = 'engine';
+
   static propTypes = {
     appHelper: PropTypes.object,
     components: PropTypes.object,
@@ -57,6 +58,7 @@ export default class Engine extends PureComponent {
     onCompGetCtx: PropTypes.func,
     customCreateElement: PropTypes.func,
   };
+
   static defaultProps = {
     appHelper: null,
     components: {},
@@ -116,12 +118,10 @@ export default class Engine extends PureComponent {
       return;
     }
     Component.patchedCatch = true;
-    Component.getDerivedStateFromError = (error) => {
-      return { engineRenderError: true, error };
-    };
+    Component.getDerivedStateFromError = (error) => ({ engineRenderError: true, error });
     const engine = this;
     const originRender = Component.prototype.render;
-    Component.prototype.render = function () {
+    Component.prototype.render = function() {
       if (this.state && this.state.engineRenderError) {
         this.state.engineRenderError = false;
         return engine.createElement(engine.getFaultComponent(), {
@@ -132,7 +132,7 @@ export default class Engine extends PureComponent {
       return originRender.call(this);
     };
     const originShouldComponentUpdate = Component.prototype.shouldComponentUpdate;
-    Component.prototype.shouldComponentUpdate = function (nextProps, nextState) {
+    Component.prototype.shouldComponentUpdate = function(nextProps, nextState) {
       if (nextState && nextState.engineRenderError) {
         return true;
       }
@@ -145,15 +145,19 @@ export default class Engine extends PureComponent {
     this.patchDidCatch(Component);
     return (this.props.customCreateElement || reactCreateElement)(Component, props, children);
   }
+
   getNotFoundComponent() {
     return this.props.notFoundComponent || NotFoundComponent;
   }
+
   getFaultComponent() {
     return this.props.faultComponent || FaultComponent;
   }
 
   render() {
-    const { schema, designMode, appHelper, components, customCreateElement } = this.props;
+    const {
+ schema, designMode, appHelper, components, customCreateElement
+} = this.props;
     if (isEmpty(schema)) {
       return null;
     }

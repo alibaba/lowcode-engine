@@ -1,6 +1,14 @@
 // NOTE: 仅用作类型标注，切勿作为实体使用
 import { BuiltinSimulatorHost } from './host';
-import { AssetLevel, AssetLevels, AssetList, isAssetBundle, isAssetItem, AssetType, assetItem } from '@ali/lowcode-utils';
+import {
+  AssetLevel,
+  AssetLevels,
+  AssetList,
+  isAssetBundle,
+  isAssetItem,
+  AssetType,
+  assetItem,
+} from '@ali/lowcode-utils';
 import { isCSSUrl } from '@ali/lowcode-utils';
 import { BuiltinSimulatorRenderer } from './renderer';
 
@@ -16,7 +24,7 @@ export function createSimulator(
 
   const styles: any = {};
   const scripts: any = {};
-  AssetLevels.forEach(lv => {
+  AssetLevels.forEach((lv) => {
     styles[lv] = [];
     scripts[lv] = [];
   });
@@ -56,12 +64,12 @@ export function createSimulator(
   parseAssetList(vendors);
 
   const styleFrags = Object.keys(styles)
-    .map(key => {
+    .map((key) => {
       return styles[key].join('\n') + `<meta level="${key}" />`;
     })
     .join('');
   const scriptFrags = Object.keys(scripts)
-    .map(key => {
+    .map((key) => {
       return scripts[key].join('\n');
     })
     .join('');
@@ -72,7 +80,7 @@ export function createSimulator(
 </head><body>${scriptFrags}</body></html>`);
   doc.close();
 
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     if (win.SimulatorRenderer || host.renderer) {
       return resolve(win.SimulatorRenderer || host.renderer);
     }
