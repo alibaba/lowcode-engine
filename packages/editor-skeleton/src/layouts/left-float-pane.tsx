@@ -2,6 +2,7 @@ import { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import { observer, Focusable, focusTracker } from '@ali/lowcode-editor-core';
 import { Button, Icon } from '@alifd/next';
+import { IconFix } from '../icons/fix';
 import Area from '../area';
 import Panel from '../widget/panel';
 
@@ -76,6 +77,18 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
     this.dispose?.();
   }
 
+  // 固定
+  setFixed() {
+    const { area } = this.props;
+    const { current } = area;
+    if (!current) {
+      return;
+    }
+    area.skeleton.leftFloatArea.remove(current);
+    area.skeleton.leftFixedArea.add(current);
+    area.skeleton.leftFixedArea.container.active(current);
+  }
+
   render() {
     const { area } = this.props;
     const width = area.current?.config.props?.width;
@@ -93,15 +106,24 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
       >
         {
           !hideTitleBar && (
-            <Button
-              text
-              className="lc-pane-close"
-              onClick={() => {
-                area.setVisible(false);
-              }}
-            >
-              <Icon type="close" />
-            </Button>
+            <Fragment>
+              <Button
+                text
+                className="lc-pane-icon-fix"
+                onClick={this.setFixed.bind(this)}
+              >
+                <IconFix />
+              </Button>
+              <Button
+                text
+                className="lc-pane-icon-close"
+                onClick={() => {
+                  area.setVisible(false);
+                }}
+              >
+                <Icon type="close" />
+              </Button>
+            </Fragment>
           )
         }
         <Contents area={area} />

@@ -34,6 +34,10 @@ export default class Area<C extends IWidgetBaseConfig = any, T extends IWidget =
     return this.container.add(config);
   }
 
+  remove(config: T | string): number {
+    return this.container.remove(config);
+  }
+
   private lastCurrent: T | null = null;
   setVisible(flag: boolean) {
     if (this.exclusive) {
