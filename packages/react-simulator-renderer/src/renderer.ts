@@ -248,8 +248,8 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
       const _leaf = host.document.designer.currentDocument?.createNode(schema);
       const node = host.document.createNode(schema);
       let { props } = schema;
-      props = host.document.designer.transformProps(props, node, TransformStage.Upgrade);
       props = host.document.designer.transformProps(props, node, TransformStage.Init);
+      props = host.document.designer.transformProps(props, node, TransformStage.Upgrade);
       props = processPropsSchema(props, propsMap);
       props = host.document.designer.transformProps(props, node, TransformStage.Render);
       return createElement(Com, { ...props, _leaf }, children);
