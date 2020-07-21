@@ -28,11 +28,11 @@ function groupDepsByPack(deps: IDependency[]): Record<string, IDependency[]> {
   deps.forEach(dep => {
     if (dep.dependencyType === DependencyType.Internal) {
       addDep(
-        `${(dep as IInternalDependency).moduleName}${dep.main || ''}`,
+        `${(dep as IInternalDependency).moduleName}${`/${dep.main}` || ''}`,
         dep,
       );
     } else {
-      addDep(`${(dep as IExternalDependency).package}${dep.main || ''}`, dep);
+      addDep(`${(dep as IExternalDependency).package}${`/${dep.main}` || ''}`, dep);
     }
   });
 

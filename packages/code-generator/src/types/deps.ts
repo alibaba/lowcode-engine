@@ -1,13 +1,15 @@
+export interface INpmPackage {
+  package: string; // 组件包的名称
+  version: string; // 组件包的版本
+}
+
 /**
  * 外部依赖描述
  *
  * @export
  * @interface IExternalDependency
  */
-export interface IExternalDependency extends IDependency {
-  package: string; // 组件包的名称
-  version: string; // 组件包的版本
-}
+export interface IExternalDependency extends INpmPackage, IDependency {}
 
 export enum InternalDependencyType {
   PAGE = 'pages',

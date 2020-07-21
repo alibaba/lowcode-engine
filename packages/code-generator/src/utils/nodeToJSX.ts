@@ -16,14 +16,26 @@ import { generateExpression } from './jsExpression';
 // tslint:disable-next-line: no-empty
 const noop = () => [];
 
+const handleChildrenDefaultOptions = {
+  rerun: false,
+};
+
 export function handleChildren<T>(
   children: ChildNodeType,
   handlers: HandlerSet<T>,
+  options?: {
+    rerun?: boolean,
+  },
 ): T[] {
+  const opt = {
+    ...handleChildrenDefaultOptions,
+    ...(options || {}),
+  };
+
   if (Array.isArray(children)) {
     const list: ChildNodeItem[] = children as ChildNodeItem[];
     return list
-      .map(child => handleChildren(child, handlers))
+      .map(child => handleChildren(child, handlers, opt))
       .reduce((p, c) => p.concat(c), []);
   } else if (typeof children === 'string') {
     const handler = handlers.string || handlers.common || noop;
@@ -33,7 +45,12 @@ export function handleChildren<T>(
     return handler(children as IJSExpression);
   } else {
     const handler = handlers.node || handlers.common || noop;
-    return handler(children as IComponentNodeItem);
+    let curRes = handler(children as IComponentNodeItem);
+    if (opt.rerun && children.children) {
+      const childRes = handleChildren(children.children, handlers, opt);
+      curRes = curRes.concat(childRes || []);
+    }
+    return curRes;
   }
 }
 
