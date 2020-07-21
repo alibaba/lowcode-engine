@@ -56,7 +56,7 @@ class RowSetter extends Component<RowSetterProps> {
     super(props);
     const { config, descriptor, field, columns } = props;
     const items: SettingField[] = [];
-    if (columns && config.items) {
+    if (columns && config?.items) {
       const l = Math.min(config.items.length, columns);
       for (let i = 0; i < l; i++) {
         const conf = config.items[i];
