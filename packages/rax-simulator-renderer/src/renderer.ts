@@ -135,10 +135,6 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
 
   getClosestNodeInstance(from: any, nodeId?: string): NodeInstance<any> | null {
     const node = getClosestNodeInstance(from, nodeId);
-    if (node) {
-      node.nodeId = (node as any).props?.componentId;
-    }
-
     return node;
   }
 
@@ -405,7 +401,14 @@ function getNodeInstance(dom: HTMLElement): NodeInstance<any> | null {
     }
     instance = instance[INTERNAL].__parentInstance;
   }
-  return parent;
+  if (!parent) {
+    return null;
+  }
+  return {
+    nodeId: parent.props.componentId,
+    instance: parent
+  }
+  // return parent;
   // const instance = fiberNode.stateNode;
   // if (instance) {
   //   console.log(instance);
