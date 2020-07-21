@@ -8,7 +8,7 @@ import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import ReactRenderer from '@ali/lowcode-react-renderer';
 import schema from './schemas/table';
-import components from './config/components';
+import components from './config/components/index';
 import utils from './config/utils';
 import constants from './config/constants';
 

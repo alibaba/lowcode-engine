@@ -5,12 +5,13 @@ import classnames from 'classnames';
 import Loading from '@alifd/next/lib/loading';
 import '@alifd/next/lib/loading/style';
 import AppContext from '../context/appContext';
-import BaseEngine from './base';
+import BaseRenderer from './base';
 import { isSchema, getFileCssName } from '../utils';
-const debug = Debug('engine:page');
 
-export default class PageEngine extends BaseEngine {
-  static dislayName = 'page-engine';
+const debug = Debug('renderer:comp');
+
+export default class CompRenderer extends BaseRenderer {
+  static dislayName = 'comp-renderer';
   static propTypes = {
     __schema: PropTypes.object,
   };
@@ -19,7 +20,7 @@ export default class PageEngine extends BaseEngine {
   };
 
   static getDerivedStateFromProps(props, state) {
-    debug(`page.getDerivedStateFromProps`);
+    debug(`comp.getDerivedStateFromProps`);
     const func = props.__schema.lifeCycles && props.__schema.lifeCycles.getDerivedStateFromProps;
     if (func) {
       return func(props, state);
@@ -30,81 +31,57 @@ export default class PageEngine extends BaseEngine {
   constructor(props, context) {
     super(props, context);
     this.__generateCtx({
-      page: this,
+      component: this,
     });
     const schema = props.__schema || {};
     this.state = this.__parseData(schema.state || {});
     this.__initDataSource(props);
     this.__setLifeCycleMethods('constructor', arguments);
-
-    debug(`page.constructor - ${schema.fileName}`);
+    debug(`comp.constructor - ${schema.fileName}`);
   }
 
   async getSnapshotBeforeUpdate() {
     super.getSnapshotBeforeUpdate(...arguments);
-    debug(`page.getSnapshotBeforeUpdate - ${this.props.__schema.fileName}`);
+    debug(`comp.getSnapshotBeforeUpdate - ${this.props.__schema.fileName}`);
   }
   async componentDidMount() {
     super.componentDidMount(...arguments);
-    debug(`page.componentDidMount - ${this.props.__schema.fileName}`);
+    debug(`comp.componentDidMount - ${this.props.__schema.fileName}`);
   }
   async componentDidUpdate() {
     super.componentDidUpdate(...arguments);
-    debug(`page.componentDidUpdate - ${this.props.__schema.fileName}`);
+    debug(`comp.componentDidUpdate - ${this.props.__schema.fileName}`);
   }
   async componentWillUnmount() {
     super.componentWillUnmount(...arguments);
-    debug(`page.componentWillUnmount - ${this.props.__schema.fileName}`);
+    debug(`comp.componentWillUnmount - ${this.props.__schema.fileName}`);
   }
-  async componentDidCatch() {
-    await super.componentDidCatch(...arguments);
-    debug(`page.componentDidCatch - ${this.props.__schema.fileName}`);
+  async componentDidCatch(e) {
+    super.componentDidCatch(...arguments);
+    debug(`comp.componentDidCatch - ${this.props.__schema.fileName}`);
   }
 
   render() {
-    const { __schema, __components } = this.props;
-    if (!isSchema(__schema, true) || __schema.componentName !== 'Page') {
-      return '页面schema结构异常！';
+    const { __schema } = this.props;
+
+    if (!isSchema(__schema, true) || __schema.componentName !== 'Component') {
+      return '自定义组件schema结构异常！';
     }
-    debug(`page.render - ${__schema.fileName}`);
+
+    debug(`comp.render - ${__schema.fileName}`);
     this.__generateCtx({
-      page: this,
+      component: this,
     });
     this.__render();
 
-    const props = this.__parseData(__schema.props);
-    const { id, className, style, autoLoading, defaultHeight = 300, loading } = props;
-
-    const { Page } = __components;
-    if (Page) {
-      const { engine } = this.context || {};
-      return (
-        <AppContext.Provider
-          value={{
-            ...this.context,
-            pageContext: this,
-            blockContext: this,
-          }}
-        >
-          {engine.createElement(
-            Page,
-            {
-              ...props,
-              ref: this.__getRef,
-              className: classnames(getFileCssName(__schema.fileName), className, this.props.className),
-              __id: __schema.id,
-            },
-            this.__createDom(),
-          )}
-        </AppContext.Provider>
-      );
-    }
-
+    const { id, className, style, noContainer, autoLoading, defaultHeight = 300, loading } = this.__parseData(
+      __schema.props,
+    );
     const renderContent = () => (
       <AppContext.Provider
         value={{
           ...this.context,
-          pageContext: this,
+          compContext: this,
           blockContext: this,
         }}
       >
@@ -112,6 +89,9 @@ export default class PageEngine extends BaseEngine {
       </AppContext.Provider>
     );
 
+    if (noContainer) {
+      return renderContent();
+    }
     if (autoLoading || loading !== undefined) {
       return (
         <Loading
@@ -122,20 +102,19 @@ export default class PageEngine extends BaseEngine {
             display: 'block',
             ...style,
           }}
-          className={classnames('luna-page', getFileCssName(__schema.fileName), className, this.props.className)}
-          id={id}
+          className={classnames('luna-comp', getFileCssName(__schema.fileName), className, this.props.className)}
+          id={this.props.id || id}
         >
           {!this.__showPlaceholder && renderContent()}
         </Loading>
       );
     }
-
     return (
       <div
         ref={this.__getRef}
-        className={classnames('luna-page', getFileCssName(__schema.fileName), className, this.props.className)}
-        id={id}
-        style={style}
+        className={classnames('luna-comp', getFileCssName(__schema.fileName), className, this.props.className)}
+        id={this.props.id || id}
+        style={{ ...style, ...this.props.style }}
       >
         {renderContent()}
       </div>

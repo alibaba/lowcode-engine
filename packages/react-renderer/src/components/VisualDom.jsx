@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import './index.scss';
+import './VisualDom.scss';
 export default class VisualDom extends PureComponent {
   static displayName = 'VisualDom';
   static propTypes = {
