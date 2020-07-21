@@ -268,9 +268,8 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
     extraProps.condition = (field: Field) => !(isHidden(field) || isDisabled(field));
   }
 
-  newConfig.items = items ? upgradeConfigure(items, collector) : [];
-
   if (type === 'group') {
+    newConfig.items = items ? upgradeConfigure(items, collector) : [];
     return newConfig;
   }
 
@@ -333,27 +332,29 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
 
   const setterInitial = getInitialFromSetter(setter);
 
-  collector.addInitial({
-    // FIXME! name could be "xxx.xxx"
-    name: slotName || name,
-    initial: (field: Field, currentValue: any) => {
-      // FIXME! read from prototype.defaultProps
-      const defaults = extraProps.defaultValue;
-
-      if (typeof initialFn !== 'function') {
-        initialFn = defaultInitial;
-      }
-
-      const v = initialFn.call(field, currentValue, defaults);
-
-      if (setterInitial) {
-        return setterInitial.call(field, v, defaults);
-      }
-
-      return v;
-    },
-  });
-
+  if (type !== 'composite') {
+    collector.addInitial({
+      // FIXME! name could be "xxx.xxx"
+      name: slotName || name,
+      initial: (field: Field, currentValue: any) => {
+        // FIXME! read from prototype.defaultProps
+        const defaults = extraProps.defaultValue;
+  
+        if (typeof initialFn !== 'function') {
+          initialFn = defaultInitial;
+        }
+  
+        const v = initialFn.call(field, currentValue, defaults);
+  
+        if (setterInitial) {
+          return setterInitial.call(field, v, defaults);
+        }
+  
+        return v;
+      },
+    });
+  }
+  
   if (ignore != null || disabled != null) {
     collector.addFilter({
       // FIXME! name should be "xxx.xxx"
@@ -432,9 +433,11 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
               autorun: item.autorun,
             });
           },
-        }
+        },
       )
       : [];
+    newConfig.items = objItems;
+
     const initial = (target: SettingTarget, value?: any) => {
       // TODO:
       const defaults = extraProps.defaultValue;
