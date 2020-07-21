@@ -21,7 +21,7 @@ echo ""
 
 # work
 mkdir packages
-cp -r $WORK_DIR/packages/demo packages/demo
+# cp -r $WORK_DIR/packages/demo packages/demo
 cp -r $WORK_DIR/packages/react-simulator-renderer packages/react-simulator-renderer
 cp -r $WORK_DIR/packages/rax-simulator-renderer packages/rax-simulator-renderer
 cp -r $WORK_DIR/packages/editor-preset-vision packages/editor-preset-vision
@@ -35,6 +35,6 @@ mv deploy-space/packages/react-simulator-renderer/dist/* $BUILD_DEST
 mv deploy-space/packages/rax-simulator-renderer/dist/* $BUILD_DEST
 mv deploy-space/packages/editor-preset-vision/dist/* $BUILD_DEST
 # mv deploy-space/packages/editor-preset-general/dist/* $BUILD_DEST
-cp deploy-space/static/* $BUILD_DEST
+# cp deploy-space/static/* $BUILD_DEST
 
 echo "complete"
