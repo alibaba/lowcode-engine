@@ -1,6 +1,6 @@
 import { Fragment, Component, createElement } from 'rax';
 // import { observer } from './obx-rax/observer';
-import RaxEngine from '../../rax-render/src/index';
+import RaxEngine from '@ali/lowcode-rax-renderer';
 import { SimulatorRenderer } from './renderer';
 import { host } from './host';
 
