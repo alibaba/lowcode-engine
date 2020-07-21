@@ -63,9 +63,11 @@ export default {
         props: {
           align: 'top',
           icon: 'shuxingkongjian',
-          description: '大纲树',
+          description: '大纲树'
         },
-        pluginProps: {},
+        pluginProps: {
+
+        },
       },
       {
         pluginKey: 'sourceEditor',
