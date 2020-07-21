@@ -39,8 +39,6 @@
     "localforage": "^1.7.3",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
-    "rax": "^1.1.1",
-    "rax-find-dom-node": "^1.0.1",
     "react-is": "^16.10.1",
     "serialize-javascript": "^1.7.0",
     "socket.io-client": "^2.2.0",

@@ -1,12 +1,12 @@
 import { BuiltinSimulatorRenderer, NodeInstance, Component } from '@ali/lowcode-designer';
-import { shared, render, createElement } from 'rax';
+import { shared, render as raxRender, createElement } from 'rax';
 import DriverUniversal from 'driver-universal';
 import { computed, obx } from '@recore/obx';
 import { RootSchema, NpmInfo, ComponentSchema } from '@ali/lowcode-types';
 import { Asset, isReactComponent, isESModule, setNativeSelection, cursor, isElement } from '@ali/lowcode-utils';
 
 import SimulatorRendererView from './renderer-view';
-import RaxEngine from '../../rax-render/src/index';
+import { raxFindDOMNodes } from './utils/find-dom-nodes';
 import { getClientRects } from './utils/get-client-rects';
 import loader from './utils/loader';
 
@@ -192,7 +192,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   }
 
   findDOMNodes(instance: any): Array<Element | Text> | null {
-    return [RaxEngine.findDOMNode(instance)];
+    return [raxFindDOMNodes(instance)];
   }
 
   /**
@@ -294,7 +294,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
     document.documentElement.classList.add('engine-page');
     document.body.classList.add('engine-document'); // important! Stylesheet.invoke depends
 
-    render(createElement(SimulatorRendererView, { renderer: this }), document.getElementById('app'), {
+    raxRender(createElement(SimulatorRendererView, { renderer: this }), container, {
       driver: DriverUniversal,
     });
     host.document.setRendererReady(this);

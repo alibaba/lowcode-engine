@@ -268,7 +268,7 @@ export function generateI18n(locale = 'zh-CN', messages = {}) {
  * @param {*} Comp 需要判断的组件
  */
 export function acceptsRef(Comp) {
-  return !!Comp;
+  return true;
 }
 
 /**

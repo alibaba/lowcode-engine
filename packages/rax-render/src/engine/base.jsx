@@ -207,6 +207,7 @@ export default class BaseEngine extends Component {
   // parentInfo 父组件的信息，包含schema和Comp
   // idx 若为循环渲染的循环Index
   __createVirtualDom = (schema, self, parentInfo, idx) => {
+
     if (!schema) return null;
     // rax text prop 兼容处理
     if (schema.componentName === 'Text') {
@@ -243,7 +244,7 @@ export default class BaseEngine extends Component {
       return schema;
     }
     if (!isSchema(schema)) return null;
-    let Comp = components[schema.componentName] || View;
+    let Comp = components[schema.componentName] || engine.getNotFoundComponent();
 
     if (schema.loop !== undefined) {
       return this.__createLoopVirtualDom(
@@ -367,9 +368,9 @@ export default class BaseEngine extends Component {
       if (OVERLAY_LIST.includes(schema.componentName)) {
         const { ref, ...overlayProps } = otherProps;
         return (
-          <Div ref={ref} __designMode={engine.props.designMode}>
+          <div ref={ref} __designMode={engine.props.designMode}>
             {renderComp({ ...props, ...overlayProps })}
-          </Div>
+          </div>
         );
       }
       // 虚拟dom显示
