@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.8"></a>
+## [0.9.8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.7...@ali/lowcode-editor-setters@0.9.8) (2020-07-21)
+
+
+### Bug Fixes
+
+* rename MixinSetter to MixedSetter ([0e9a740](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0e9a740))
+
+
+
+
 <a name="0.9.7"></a>
 ## [0.9.7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.6...@ali/lowcode-editor-setters@0.9.7) (2020-07-13)
 

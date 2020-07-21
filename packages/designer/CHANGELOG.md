@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.28"></a>
+## [0.9.28](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.27...@ali/lowcode-designer@0.9.28) (2020-07-21)
+
+
+### Bug Fixes
+
+* modal node locate ([9a72dd7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9a72dd7))
+* 修复取不到值的情况 ([5e7e488](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5e7e488))
+* 可以降级到历史的 JSBlock 格式 ([af1746b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/af1746b))
+* 画布BorderAction埋点数据 ([d813b50](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d813b50))
+
+
+### Features
+
+* 大纲树支持模态视图 ([3785e1c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3785e1c))
+
+
+
+
 <a name="0.9.27"></a>
 ## [0.9.27](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.26...@ali/lowcode-designer@0.9.27) (2020-07-14)
 

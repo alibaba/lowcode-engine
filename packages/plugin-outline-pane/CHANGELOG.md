@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.34"></a>
+## [0.8.34](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.33...@ali/lowcode-plugin-outline-pane@0.8.34) (2020-07-21)
+
+
+### Bug Fixes
+
+* modal node locate ([9a72dd7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9a72dd7))
+* 大纲树节点显示隐藏埋点 ([e91ab1f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e91ab1f))
+* 没有 modal node 时不显示模态视图 ([555824c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/555824c))
+
+
+### Features
+
+* 大纲树展开折叠埋点 ([d9828f2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d9828f2))
+* 大纲树支持模态视图 ([3785e1c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3785e1c))
+
+
+
+
 <a name="0.8.33"></a>
 ## [0.8.33](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.32...@ali/lowcode-plugin-outline-pane@0.8.33) (2020-07-14)
 
