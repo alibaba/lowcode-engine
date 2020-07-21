@@ -268,7 +268,9 @@ export function generateI18n(locale = 'zh-CN', messages = {}) {
  * @param {*} Comp 需要判断的组件
  */
 export function acceptsRef(Comp) {
-  return !!Comp;
+  return (
+    (Comp.$$typeof && Comp.$$typeof === REACT_FORWARD_REF_TYPE) || (Comp.prototype && Comp.prototype.isReactComponent)
+  );
 }
 
 /**
