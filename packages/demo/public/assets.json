@@ -61,6 +61,256 @@
       }
     },
     {
+      "componentName": "Table",
+      "title": "Table",
+      "docUrl": "",
+      "screenshot": "",
+      "npm": {
+        "package": "@alifd/next",
+        "version": "1.19.18",
+        "exportName": "Table",
+        "main": "src/index.js",
+        "destructuring": true,
+        "subName": ""
+      },
+      "props": [
+        {
+          "name": "prefix",
+          "propType": "string"
+        },
+        {
+          "name": "pure",
+          "propType": "bool"
+        },
+        {
+          "name": "rtl",
+          "propType": "bool"
+        },
+        {
+          "name": "tableLayout",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "fixed",
+              "auto"
+            ]
+          }
+        },
+        {
+          "name": "tableWidth",
+          "propType": "number"
+        },
+        {
+          "name": "className",
+          "propType": "string"
+        },
+        {
+          "name": "style",
+          "propType": "object"
+        },
+        {
+          "name": "size",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "small",
+              "medium"
+            ]
+          }
+        },
+        {
+          "name": "dataSource",
+          "propType": {
+            "type": "arrayOf",
+            "value": "object"
+          }
+        },
+        {
+          "name": "entireDataSource",
+          "propType": "array"
+        },
+        {
+          "name": "onRowClick",
+          "propType": "func"
+        },
+        {
+          "name": "onRowMouseEnter",
+          "propType": "func"
+        },
+        {
+          "name": "rowProps",
+          "propType": "func"
+        },
+        {
+          "name": "cellProps",
+          "propType": "func"
+        },
+        {
+          "name": "hasBorder",
+          "propType": "bool"
+        },
+        {
+          "name": "hasHeader",
+          "propType": "bool"
+        },
+        {
+          "name": "isZebra",
+          "propType": "bool"
+        },
+        {
+          "name": "loading",
+          "propType": "bool"
+        },
+        {
+          "name": "filterParams",
+          "propType": "object"
+        },
+        {
+          "name": "sort",
+          "propType": "object"
+        },
+        {
+          "name": "sortIcons",
+          "propType": "object"
+        },
+        {
+          "name": "locale",
+          "propType": "object"
+        },
+        {
+          "name": "components",
+          "propType": "object"
+        },
+        {
+          "name": "columns",
+          "propType": "array"
+        },
+        {
+          "name": "emptyContent",
+          "propType": "node"
+        },
+        {
+          "name": "primaryKey",
+          "propType": "string"
+        },
+        {
+          "name": "lockType",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "left",
+              "right"
+            ]
+          }
+        },{
+          "name": "style",
+          "propType": "object"
+        },
+        {
+          "name": "wrapperContent",
+          "propType": "any"
+        },
+        {
+          "name": "refs",
+          "propType": "object"
+        },
+        {
+          "name": "expandedRowRender",
+          "propType": "func"
+        },
+        {
+          "name": "expandedRowIndent",
+          "propType": "array"
+        },
+        {
+          "name": "hasExpandedRowCtrl",
+          "propType": "bool"
+        },
+        {
+          "name": "getExpandedColProps",
+          "propType": "func"
+        },
+        {
+          "name": "openRowKeys",
+          "propType": "array"
+        },
+        {
+          "name": "onRowOpen",
+          "propType": "func"
+        },
+        {
+          "name": "onExpandedRowClick",
+          "propType": "func"
+        },
+        {
+          "name": "fixedHeader",
+          "propType": "bool"
+        },
+        {
+          "name": "rowSelection",
+          "propType": "object"
+        },
+        {
+          "name": "stickyHeader",
+          "propType": "bool"
+        },
+        {
+          "name": "offsetTop",
+          "propType": "number"
+        },
+        {
+          "name": "affixProps",
+          "propType": "object"
+        },
+        {
+          "name": "indent",
+          "propType": "number"
+        },
+        {
+          "name": "isTree",
+          "propType": "bool"
+        },
+        {
+          "name": "useVirtual",
+          "propType": "bool"
+        },
+        {
+          "name": "onBodyScroll",
+          "propType": "func"
+        },
+        {
+          "name": "expandedIndexSimulate",
+          "propType": "bool"
+        },
+        {
+          "name": "crossline",
+          "propType": "bool"
+        },
+        {
+          "name": "lengths",
+          "propType": "object"
+        }
+      ]
+    },
+    {
+      "componentName": "Table.Column",
+      "title": "Table.Column",
+      "npm": {
+        "package": "@alifd/next",
+        "version": "1.19.18",
+        "exportName": "Table",
+        "main": "src/index.js",
+        "destructuring": true,
+        "subName": ""
+      },
+      "props": [
+        {
+          "name": "title",
+          "propType": "string"
+        }
+      ]
+    },
+    {
       "componentName": "Badge",
       "title": "Badge",
       "docUrl": "",
@@ -614,7 +864,7 @@
           "name": "children",
           "propType": {
             "type": "instanceOf",
-            "value": "custom"
+            "value": "node"
           },
           "description": "面包屑子节点，需传入 Breadcrumb.Item"
         },
@@ -663,7 +913,12 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "MCBreadcrumb",
@@ -699,7 +954,7 @@
           "name": "children",
           "propType": {
             "type": "instanceOf",
-            "value": "custom"
+            "value": "node"
           },
           "description": "面包屑子节点，需传入 Breadcrumb.Item"
         },
@@ -748,7 +1003,12 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "Breadcrumb.Item",
@@ -804,7 +1064,12 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "Button",
@@ -4260,26 +4525,6 @@
           },
           "description": "配置动画的播放方式，支持 { in: 'enter-class', out: 'leave-class' } 的对象参数，如果设置为 false，则不播放动画\n@default { in: 'expandInDown', out: 'expandOutUp' }"
         },
-        {
-          "name": "style",
-          "propType": "object"
-        }
-      ]
-    },
-    {
-      "componentName": "Table",
-      "title": "Table",
-      "docUrl": "",
-      "screenshot": "",
-      "npm": {
-        "package": "@alifd/next",
-        "version": "1.19.18",
-        "exportName": "Table",
-        "main": "src/index.js",
-        "destructuring": true,
-        "subName": ""
-      },
-      "props": [
         {
           "name": "style",
           "propType": "object"
@@ -11888,6 +12133,46 @@
               }
             }
           ]
+        },{
+          "componentName": "Table",
+          "title": "表格",
+          "icon": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_table.png",
+          "package": "@alife/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "表格",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_table.png",
+              "schema": {
+                "componentName": "Table",
+                "props": {
+                  "dataSource": [{
+                    "title": {"name": "Quotation"},
+                    "id": 100306660940,
+                    "time": 2000
+                    }],
+                  "size": "medium",
+                  "prefix": "next-",
+                  "hasBorder": true,
+                  "hasHeader": true,
+                  "isZebra": false,
+                  "loading": false,
+                  "expandedIndexSimulate": false,
+                  "primaryKey": "id",
+                  "locale": "zhCN.Table",
+                  "crossline": false
+                },
+                "children": [
+                  {
+                    "componentName": "Table.Column",
+                    "props": {
+                      "title": "name"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
           "componentName": "Calendar",
@@ -12556,6 +12841,28 @@
                   "maxNode": 100,
                   "component": "nav"
                 }
+              }
+            }
+          ]
+        },{
+          "componentName": "Breadcrumb.Item",
+          "title": "面包屑 Item",
+          "icon": "",
+          "package": "@alife/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "面包屑",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_breadcrumb.png",
+              "schema": {
+                "componentName": "Breadcrumb.Item",
+                "props": {
+                  "prefix": "next-"
+                },
+                "children": [
+                  "222",
+                  "222111"
+                ]
               }
             }
           ]
