@@ -12667,6 +12667,54 @@
           ]
         },
         {
+          "componentName": "Button.Group",
+          "title": "按钮组",
+          "icon": "",
+          "package": "@alife/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "按钮组",
+              "screenshot": "https://img.alicdn.com/tfs/TB1t6dhvV67gK0jSZPfXXahhFXa-310-122.png",
+              "schema": {
+                "componentName": "Button.Group",
+                "props": {
+
+                },
+                "children": [{
+                  "componentName": "Button",
+                  "props": {
+                    "type": "primary",
+                    "style": {
+                      "margin": "0 5px 0 5px"
+                    },
+                    "htmlType": "submit"
+                  },
+                  "children": [
+                    {
+                      "componentName": "Icon",
+                      "props": {
+                        "type": "success"
+                      }
+                    },
+                    "提交"
+                  ]
+                }, {
+                  "componentName": "Button",
+                  "props": {
+                    "type": "normal",
+                    "style": {
+                      "margin": "0 5px 0 5px"
+                    },
+                    "htmlType": "reset"
+                  },
+                  "children": "重置"
+                }]
+              }
+            }
+          ]
+        },
+        {
           "componentName": "Divider",
           "title": "分隔符",
           "icon": "",
