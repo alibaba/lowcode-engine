@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.34"></a>
+## [0.8.34](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.33...@ali/lowcode-editor-skeleton@0.8.34) (2020-07-21)
+
+
+### Bug Fixes
+
+* left-fixed-pane 设置宽度不生效 ([a5f0d5e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a5f0d5e))
+* skeleton.topArea.hide() 不生效的问题 ([6d2b955](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6d2b955))
+* typeName 为 any 时转换出的 MixedSetter 缺少 props 的问题 ([4b9084f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/4b9084f))
+
+
+
+
 <a name="0.8.33"></a>
 ## [0.8.33](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.32...@ali/lowcode-editor-skeleton@0.8.33) (2020-07-14)
 

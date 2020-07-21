@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.29"></a>
+## [0.8.29](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.28...@ali/lowcode-editor-preset-vision@0.8.29) (2020-07-21)
+
+
+### Bug Fixes
+
+* 🐛 eslint ([e3ca0bd](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e3ca0bd))
+* 🐛 eslint ([14803dd](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/14803dd))
+* 🐛 use intl ([a22e66a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a22e66a))
+* 🐛 用 isI18nData 判断 meta title ([732bccf](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/732bccf))
+* 🐛 逻辑简化 ([710f3ba](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/710f3ba))
+* 可以降级到历史的 JSBlock 格式 ([af1746b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/af1746b))
+
+
+### Features
+
+* 🎸 prototype getTitle 支持 i18n ([18807ab](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/18807ab))
+
+
+
+
 <a name="0.8.28"></a>
 ## [0.8.28](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.27...@ali/lowcode-editor-preset-vision@0.8.28) (2020-07-14)
 

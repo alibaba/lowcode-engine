@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.10"></a>
+## [0.8.10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@0.8.9...@ali/lowcode-code-generator@0.8.10) (2020-07-21)
+
+
+### Bug Fixes
+
+* 修复 condition 代码导出错误 ([57b30cf](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/57b30cf))
+* 新增自定义模式 demo & 导出自定义需要的信息 ([07e2759](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/07e2759))
+
+
+### Features
+
+* add zip publisher ([31156ed](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/31156ed))
+* prepare publish for code-generator ([93ff5c2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/93ff5c2))
+
+
+
+
 <a name="0.8.9"></a>
 ## [0.8.9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@0.8.7...@ali/lowcode-code-generator@0.8.9) (2020-07-12)
 
