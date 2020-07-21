@@ -268,8 +268,9 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
     extraProps.condition = (field: Field) => !(isHidden(field) || isDisabled(field));
   }
 
+  newConfig.items = items ? upgradeConfigure(items, collector) : [];
+
   if (type === 'group') {
-    newConfig.items = items ? upgradeConfigure(items, collector) : [];
     return newConfig;
   }
 

@@ -51,10 +51,15 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     this._expanded = extraProps?.defaultCollapsed ? false : true;
 
     // initial items
-    if (this.type === 'group' && items) {
+    if (items && items.length > 0) {
       this.initItems(items, settingFieldCollector);
-    } else if (settingFieldCollector && config.name) {
-      settingFieldCollector(config.name, this);
+    }
+    if (settingFieldCollector && config.name) {
+      if (parent && parent instanceof SettingField && parent.type !== 'group') {
+        settingFieldCollector((parent as SettingField).name + '.' + config.name, this);
+      } else {
+        settingFieldCollector(config.name, this);
+      }
     }
 
     // compatiable old config
