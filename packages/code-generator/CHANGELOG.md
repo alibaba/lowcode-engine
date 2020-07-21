@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.9"></a>
+## [0.8.9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@0.8.7...@ali/lowcode-code-generator@0.8.9) (2020-07-12)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-code-generator
+
+<a name="0.8.7"></a>
+## [0.8.7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@0.8.6...@ali/lowcode-code-generator@0.8.7) (2020-07-12)
+
+
+### Bug Fixes
+
+* demo data ([b4a27fc](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b4a27fc))
+* factory api ([237b866](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/237b866))
+* same name chunk case ([d6855e2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d6855e2))
+
+
+### Features
+
+* add recore project template ([267953b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/267953b))
+* add template create tool ([e906683](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e906683))
+* recore solution ([3bfe758](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3bfe758))
+* rewrite demo & export plugins and utils ([6cf7c3d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6cf7c3d))
+
+
+
+
 <a name="0.8.6"></a>
 ## [0.8.6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@0.8.5...@ali/lowcode-code-generator@0.8.6) (2020-06-23)
 
