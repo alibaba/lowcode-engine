@@ -87,11 +87,11 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   @computed get context(): any {
     return this._appContext;
   }
-  @obx.ref private _designMode: string = 'design';
+  @obx.ref private _designMode = 'design';
   @computed get designMode(): any {
     return this._designMode;
   }
-  @obx.ref private _device: string = 'default';
+  @obx.ref private _device = 'default';
   @computed get device() {
     return this._device;
   }
@@ -224,7 +224,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
         return {};
       }
 
-      const result = {...propsSchema};
+      const result = { ...propsSchema };
       const reg = /^(?:this\.props|props)\.(\S+)$/;
       Object.keys(propsSchema).map((key: string) => {
         if (propsSchema[key].type === 'JSExpression') {
@@ -247,11 +247,13 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
       }
       const _leaf = host.document.designer.currentDocument?.createNode(schema);
       const node = host.document.createNode(schema);
-      let props = processPropsSchema(schema.props, propsMap);
+      let { props } = schema;
+      props = host.document.designer.transformProps(props, node, TransformStage.Upgrade);
       props = host.document.designer.transformProps(props, node, TransformStage.Init);
+      props = processPropsSchema(props, propsMap);
       props = host.document.designer.transformProps(props, node, TransformStage.Render);
-      return createElement(Com, {...props, _leaf}, children);
-    }
+      return createElement(Com, { ...props, _leaf }, children);
+    };
 
     const renderer = this;
     class Com extends React.Component {
@@ -259,7 +261,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
         const componentsMap = renderer.componentsMap;
         let children = null;
         if (_schema.children && Array.isArray(_schema.children)) {
-          children = _schema.children?.map((item:any) => getElement(componentsMap, item, this.props));
+          children = _schema.children?.map((item: any) => getElement(componentsMap, item, this.props));
         }
         return createElement(React.Fragment, {}, children);
       }
@@ -387,15 +389,15 @@ const builtinComponents = {
 };
 
 function buildComponents(libraryMap: LibraryMap,
-  componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> },
+  componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> | ComponentSchema },
   createComponent: (schema: ComponentSchema) => Component | null) {
   const components: any = {
-    ...builtinComponents
+    ...builtinComponents,
   };
   Object.keys(componentsMap).forEach((componentName) => {
     let component = componentsMap[componentName];
-    if (component && component.componentName === 'Component') {
-      components[componentName] = createComponent(component);
+    if (component && (component as ComponentSchema).componentName === 'Component') {
+      components[componentName] = createComponent(component as ComponentSchema);
     } else if (isReactComponent(component)) {
       components[componentName] = component;
     } else {
