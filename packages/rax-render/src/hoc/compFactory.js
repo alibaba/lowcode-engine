@@ -1,4 +1,4 @@
-import { Component, createElement } from 'rax';
+import { Component, createElement, forwardRef } from 'rax';
 import PropTypes from 'prop-types';
 import AppHelper from '../utils/appHelper';
 import { forEach, isFileSchema } from '../utils';
@@ -62,7 +62,7 @@ export default function compFactory(schema, components = {}, componentsMap = {},
     }
   }
 
-  const ResComp = React.forwardRef((props, ref) => <LNCompView {...props} forwardedRef={ref} />);
+  const ResComp = forwardRef((props, ref) => <LNCompView {...props} forwardedRef={ref} />);
   forEach(schema.static, (val, key) => {
     ResComp[key] = val;
   });

@@ -119,13 +119,6 @@ export class DocumentModel {
   }
 
   readonly designer = this.project.designer;
-  //  getAddonData(name: string) {
-  //   const addon = this.addons.find((item) => item.name === name);
-  //   if (addon) {
-  //     return addon.exportData();
-  //   }
-  //   return this.addonsData[name];
-  // }
 
   /**
    * 生成唯一id
@@ -170,7 +163,7 @@ export class DocumentModel {
     }
 
     let node: Node | null = null;
-    if (!this.inited) {
+    if (this.inited) {
       schema.id = null;
     }
     if (schema.id) {
@@ -253,14 +246,6 @@ export class DocumentModel {
     this.nodes.delete(node);
     this.selection.remove(node.id);
     node.remove();
-  }
-  getAddonData(name: string) {
-    const addon = this.getNode(name);
-    if (addon) {
-      // 无法确定是否有这个api
-      // return addon.exportData();
-    }
-    return addon;
   }
 
   @obx.ref private _dropLocation: DropLocation | null = null;
@@ -520,7 +505,7 @@ export class DocumentModel {
     };
   }
 
-  setRendererReady(renderer) {
+  setRendererReady(renderer: any) {
     this.emitter.emit('lowcode_engine_renderer_ready', renderer);
   }
 

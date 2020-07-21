@@ -99,7 +99,6 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
   render() {
     const { renderer } = this.props;
     const { device, designMode } = renderer;
-    console.info(renderer.schema);
 
     return (
       <RaxEngine
@@ -109,7 +108,7 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
         designMode={renderer.designMode}
         suspended={renderer.suspended}
         self={renderer.scope}
-        onCompGetRef={(schema: any, ref: ReactInstance | null) => {
+        onCompGetRef={(schema: any, ref: any) => {
           renderer.mountInstance(schema.id, ref);
         }}
         customCreateElement={(Component: any, props: any, children: any) => {
@@ -123,7 +122,7 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
           //   Object.assign(viewProps, {
           //     _componentName: 'Menu',
           //     className: '_css_pesudo_menu_kbrzyh0f',
-          //     context: { VE: (window as any).VisualEngine },
+          //     context: { VE: (window as any).VisualLowCodeRenderer },
           //     direction: undefined,
           //     events: { ignored: true },
           //     fieldId: 'menu_kbrzyh0f',
