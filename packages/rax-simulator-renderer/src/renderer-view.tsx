@@ -1,6 +1,6 @@
 import { Fragment, Component, createElement } from 'rax';
 // import { observer } from './obx-rax/observer';
-import LowCodeRenderer from '../../rax-render/src/index';
+import RaxEngine from '@ali/lowcode-rax-renderer';
 import { SimulatorRenderer } from './renderer';
 import { host } from './host';
 
@@ -101,7 +101,7 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
     const { device, designMode } = renderer;
 
     return (
-      <LowCodeRenderer
+      <RaxEngine
         schema={renderer.schema}
         components={renderer.components}
         context={renderer.context}
