@@ -33,19 +33,23 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
 
   private async setupAssets() {
     const { editor } = this.props;
-    const assets = await editor.onceGot('assets');
-    const renderEnv = await editor.onceGot('renderEnv');
-    if (!this._mounted) {
-      return;
+    try {
+      const assets = await editor.onceGot('assets');
+      const renderEnv = await editor.get('renderEnv');
+      if (!this._mounted) {
+        return;
+      }
+      const { components, packages, extraEnvironment } = assets;
+      const state = {
+        componentMetadatas: components || [],
+        library: packages || [],
+        extraEnvironment,
+        renderEnv,
+      };
+      this.setState(state);
+    } catch (e) {
+      console.log(e);
     }
-    const { components, packages, extraEnvironment } = assets;
-    const state = {
-      componentMetadatas: components || [],
-      library: packages || [],
-      extraEnvironment,
-      renderEnv,
-    };
-    this.setState(state);
   }
 
   componentWillUnmount() {

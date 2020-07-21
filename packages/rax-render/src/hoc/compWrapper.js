@@ -1,28 +1,17 @@
-import { Component, createElement, forwardRef } from 'rax';
+import { createElement, Component } from 'rax';
 
-function enhanced(Comp) {
-  class WrappedComponent extends Component {
+export default function (Comp) {
+  class compWrapper extends Component {
+    constructor(props, context) {
+      super(props, context);
+    }
+
     render() {
-      const { forwardedRef, ...rest} = this.props;
-      console.log('forwardedRef', forwardedRef)
-      return <Comp { ...rest } ref={forwardedRef}></Comp>
+      return createElement(Comp, {
+        ...this.props,
+      });
     }
   }
 
-  function forwardedRef(props, ref) {
-    return createElement(
-      WrappedComponent,
-      {
-        ...props,
-        forwardedRef: ref
-      }
-    )
-  }
-
-  forwardedRef.displayName = Comp.displayName;
-
-  return forwardRef(forwardedRef);
-
-};
-
-export default enhanced;
+  return compWrapper;
+}

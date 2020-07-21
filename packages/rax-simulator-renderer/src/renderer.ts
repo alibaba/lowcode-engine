@@ -10,7 +10,8 @@ import { raxFindDOMNodes } from './utils/find-dom-nodes';
 import { getClientRects } from './utils/get-client-rects';
 import loader from './utils/loader';
 
-import Leaf from './builtin-components/Leaf';
+import Leaf from './builtin-components/leaf';
+import Slot from './builtin-components/slot';
 
 import { host } from './host';
 import { EventEmitter } from 'events';
@@ -354,7 +355,7 @@ function findComponent(libraryMap: LibraryMap, componentName: string, npm?: NpmI
 }
 
 const builtinComponents = {
-  // Slot,
+  Slot,
   Leaf,
 };
 
@@ -390,7 +391,7 @@ function getClosestNodeInstance(from: any, specId?: string): NodeInstance<any> |
 }
 
 function matcher(parent: any) {
-  return parent.__isReactiveComponent;
+  return parent.__isReactiveComponent && parent.props.componentId;
 }
 
 function getNodeInstance(dom: HTMLElement): NodeInstance<any> | null {
