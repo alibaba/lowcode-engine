@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.13"></a>
+## [0.8.13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.8.12...@ali/lowcode-types@0.8.13) (2020-07-21)
+
+
+### Bug Fixes
+
+* 兼容事件绑定 ([f4c07af](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f4c07af))
+
+
+
+
 <a name="0.8.12"></a>
 ## [0.8.12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.8.11...@ali/lowcode-types@0.8.12) (2020-07-21)
 

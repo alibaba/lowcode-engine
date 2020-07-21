@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.36"></a>
+## [0.8.36](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.35...@ali/lowcode-editor-skeleton@0.8.36) (2020-07-21)
+
+
+### Features
+
+* support float pane fixed ([40d8260](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/40d8260))
+
+
+
+
 <a name="0.8.35"></a>
 ## [0.8.35](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.34...@ali/lowcode-editor-skeleton@0.8.35) (2020-07-21)
 
