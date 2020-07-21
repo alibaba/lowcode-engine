@@ -1,8 +1,8 @@
 /* eslint-disable */
-import { Component, createElement as raxCreateElement } from 'rax';
+import { Component, createElement } from 'rax';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
-import * as isEmpty from 'lodash/isEmpty';
+import isEmpty from 'lodash/isEmpty';
 import findDOMNode from 'rax-find-dom-node';
 import { isFileSchema, goldlog } from '../utils';
 import AppContext from '../context/appContext';
@@ -20,6 +20,8 @@ const ENGINE_COMPS = {
   BlockEngine,
   TempEngine,
 };
+
+const raxCreateElement = createElement;
 
 class FaultComponent extends Component {
   render() {
@@ -169,9 +171,10 @@ export default class Engine extends Component {
         Comp = ENGINE_COMPS[`${componentName}Engine`];
       }
     }
-    if (Comp) {
-      return (
-        <AppContext.Provider
+
+    return (
+      Comp
+      ? <AppContext.Provider
           value={{
             appHelper,
             components: allComponents,
@@ -189,9 +192,8 @@ export default class Engine extends Component {
             {...this.props}
           />
         </AppContext.Provider>
-      );
-    }
-    return null;
+      : null
+    );
   }
 }
 

@@ -393,20 +393,20 @@ function matcher(parent: any) {
 function getNodeInstance(dom: HTMLElement): NodeInstance<any> | null {
   const INTERNAL = '_internal';
   let instance = Instance.get(dom);
-  let parent;
+  let node;
   while (instance && instance[INTERNAL]) {
     if (matcher(instance)) {
-      parent = instance;
+      node = instance;
       break;
     }
     instance = instance[INTERNAL].__parentInstance;
   }
-  if (!parent) {
+  if (!node) {
     return null;
   }
   return {
-    nodeId: parent.props.componentId,
-    instance: parent
+    nodeId: node.props.componentId,
+    instance: node
   }
   // return parent;
   // const instance = fiberNode.stateNode;
