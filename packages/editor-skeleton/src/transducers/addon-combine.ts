@@ -198,7 +198,6 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
           },
 
           setValue(field: SettingTarget, eventDataList: any[]) {
-            // todo:
             eventDataList.map((item)=>{
               field.setPropValue(item.name,{
                 type: 'JSFunction',
@@ -207,6 +206,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
               })
               return item;
             })
+
             return;
           },
         },

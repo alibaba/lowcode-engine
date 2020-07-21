@@ -54,51 +54,26 @@ export default class SourceEditor extends Component<{
   private editorParentNode: Object;
 
   state = {
-    isShow: false,
+    isShow: true,
     tabKey: TAB_KEY.JS_TAB,
   };
 
   componentWillMount() {
     const { editor } = this.props;
 
-    editor.on('leftPanel.show', (key: String) => {
-      // debugger;
-      if (key === 'sourceEditor' && !this.monocoEditor) {
-        this.setState({
-          isShow: true,
-        });
-
-        // setTimeout(() => {
-        //   this.editorNode = this.editorCssRef.current; //记录当前dom节点；
-        //   debugger
-        //   this.editorParentNode = this.editorNode.parentNode; //记录父节点;
-        //   console.log(this.editorNode);
-        // }, 0);
-      }
-    });
     // 添加函数
     editor.on('sourceEditor.addFunction', (params: FunctionEventParam) => {
       this.callEditorEvent('sourceEditor.addFunction', params);
-      // this.openPluginPannel();
     });
 
     // 定位函数
     editor.on('sourceEditor.focusByFunction', (params: FunctionEventParam) => {
       this.callEditorEvent('sourceEditor.focusByFunction', params);
-      // this.openPluginPannel();
     });
-
-    //editor.once('designer.mount', (designer: Designer) => {
-    // let schema = designer.project.getSchema();
-    // mock data
-
-    //debugger;
 
     let schema = editor.get('designer').project.getSchema();
     this.initCode(schema);
-    //});
   }
-
 
   /**
    * 执行编辑器事件
@@ -162,7 +137,6 @@ export default class SourceEditor extends Component<{
       this.monocoEditor.focus();
     }, 100);
 
-
     this.updateCode(this.monocoEditor.getModel().getValue());
   }
 
@@ -188,7 +162,7 @@ export default class SourceEditor extends Component<{
     }
   }
 
-  editorDidMount = (editor, monaco,tab) => {
+  editorDidMount = (editor, monaco, tab) => {
     this.monocoEditor = editor;
 
     if (this.editorCmd) {
@@ -196,9 +170,7 @@ export default class SourceEditor extends Component<{
     }
   };
 
-  fullScreen = () => {
-
-  }
+  fullScreen = () => {};
 
   onTabChange = (key) => {
     const { editor } = this.props;
@@ -220,7 +192,7 @@ export default class SourceEditor extends Component<{
 
   updateCode = (newCode) => {
     const { selectTab } = this.state;
-    const {editor} = this.props;
+    const { editor } = this.props;
     if (selectTab === TAB_KEY.JS_TAB) {
       this.setState({
         jsCode: newCode,
@@ -233,7 +205,7 @@ export default class SourceEditor extends Component<{
 
     let functionMap = transfrom.code2Schema(newCode);
     let schema = editor.get('designer').project.getSchema();
-    let newSchema = transfrom.setFunction2Schema(functionMap,schema);
+    let newSchema = transfrom.setFunction2Schema(functionMap, schema);
     editor.get('designer').project.load(newSchema);
   };
 
@@ -260,7 +232,7 @@ export default class SourceEditor extends Component<{
                 {...defaultEditorOption}
                 {...{ language: 'javascript' }}
                 onChange={(newCode) => this.updateCode(newCode)}
-                editorDidMount={(editor, monaco) => this.editorDidMount.call(this, editor, monaco,TAB_KEY.JS_TAB)}
+                editorDidMount={(editor, monaco) => this.editorDidMount.call(this, editor, monaco, TAB_KEY.JS_TAB)}
               />
             </div>
             <div className="editor-context" id="cssEditorDom">
