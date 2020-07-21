@@ -109,7 +109,7 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
           viewProps._leaf = leaf;
           viewProps._componentName = leaf?.componentName;
           // 如果是容器 && 无children && 高宽为空 增加一个占位容器，方便拖动
-          if (leaf.isContainer() && children == null && !viewProps.style){
+          if (leaf?.isContainer() && children == null && !viewProps.style){
             Object.assign(viewProps, {
               style:{
                 height:'100px',

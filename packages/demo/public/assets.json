@@ -25,6 +25,12 @@
     {
       "componentName": "Page",
       "title": "Page",
+      "props": [
+        {
+          "name": "style",
+          "propType": "object"
+        }
+      ],
       "configure": {
         "events": {
           "supportedLifecycles": [
@@ -4265,7 +4271,12 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "Inner",

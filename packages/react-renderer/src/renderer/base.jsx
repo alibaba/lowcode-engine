@@ -211,11 +211,11 @@ export default class BaseRender extends PureComponent {
   // parentInfo 父组件的信息，包含schema和Comp
   // idx 若为循环渲染的循环Index
   __createVirtualDom = (schema, self, parentInfo, idx) => {
+    const { engine } = this.context || {};
     try {
       if (!schema) return null;
       const { __appHelper: appHelper, __components: components = {} } =
         this.props || {};
-      const { engine } = this.context || {};
       if (isJSExpression(schema)) {
         return parseExpression(schema, self);
       }

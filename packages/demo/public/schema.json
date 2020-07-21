@@ -5,7 +5,7 @@
       "ref":"outterView",
       "autoLoading":true,
       "style":{
-          "padding":20
+          "padding": "0 5px 0 5px"
       }
   },
   "fileName":"test",
