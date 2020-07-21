@@ -346,7 +346,7 @@ export default class BaseEngine extends Component {
       engine.createElement(
       Comp,
         props,
-      (!isFileSchema(schema)
+      (!isFileSchema(schema) &&
           !!schema.children &&
           this.__createVirtualDom(
             isJSExpression(schema.children) ? parseExpression(schema.children, self) : schema.children,
