@@ -1,7 +1,7 @@
-import Div from '@ali/iceluna-components-div';
-import Text from '@ali/iceluna-components-text';
-import A from '@ali/iceluna-components-a';
-import Image from '@ali/iceluna-components-image';
+import Div from './Div';
+import Text from './Text';
+import A from './A';
+import Image from './Image';
 
 import {
   Balloon,

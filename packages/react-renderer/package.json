@@ -26,7 +26,6 @@
   "dependencies": {
     "@ali/b3-one": "^0.0.17",
     "@ali/bzb-request": "^2.6.0-beta.13",
-    "@ali/iceluna-comp-div": "^1.0.0",
     "@ali/lib-mtop": "^2.5.1",
     "@alifd/next": "^1.18.17",
     "debug": "^4.1.1",
@@ -43,10 +42,6 @@
     "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
-    "@ali/iceluna-components-a": "^0.1.0",
-    "@ali/iceluna-components-div": "^0.1.0",
-    "@ali/iceluna-components-image": "^0.1.0",
-    "@ali/iceluna-components-text": "^0.1.0",
     "@alib/build-scripts": "^0.1.18",
     "build-plugin-component": "^0.2.10",
     "build-plugin-fusion": "^0.1.0",

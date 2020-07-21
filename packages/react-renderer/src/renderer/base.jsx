@@ -1,12 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
-import Div from '@ali/iceluna-comp-div';
-import VisualDom from '../comp/visualDom';
-
+import Div from '../components/Div';
+import VisualDom from '../components/VisualDom';
 import AppContext from '../context/appContext';
 import DataHelper from '../utils/dataHelper';
-
 import {
   forEach,
   getValue,
@@ -25,7 +23,7 @@ import {
   acceptsRef,
 } from '../utils';
 
-const debug = Debug('engine:base');
+const debug = Debug('renderer:base');
 const DESIGN_MODE = {
   EXTEND: 'extend',
   BORDER: 'border',
@@ -34,8 +32,8 @@ const DESIGN_MODE = {
 const OVERLAY_LIST = ['Dialog', 'Overlay', 'Animate', 'ConfigProvider'];
 let scopeIdx = 0;
 
-export default class BaseEngine extends PureComponent {
-  static dislayName = 'base-engine';
+export default class BaseRender extends PureComponent {
+  static dislayName = 'base-renderer';
   static propTypes = {
     locale: PropTypes.string,
     messages: PropTypes.object,

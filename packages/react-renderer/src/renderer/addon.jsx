@@ -1,13 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
-import AppContext from '../context/appContext';
 import classnames from 'classnames';
-import BaseEngine from './base';
+import AppContext from '../context/appContext';
+import BaseRenderer from './base';
 import { isSchema, getFileCssName, isEmpty, goldlog } from '../utils';
-const debug = Debug('engine:addon');
-export default class AddonEngine extends BaseEngine {
-  static dislayName = 'addon-engine';
+
+const debug = Debug('renderer:addon');
+
+export default class AddonRenderer extends BaseRenderer {
+  static dislayName = 'addon-renderer';
   static propTypes = {
     config: PropTypes.object,
     __schema: PropTypes.object,
