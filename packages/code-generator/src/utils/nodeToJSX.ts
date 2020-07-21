@@ -8,6 +8,7 @@ import {
   CodePiece,
   HandlerSet,
   ExtGeneratorPlugin,
+  INodeGeneratorConfig,
 } from '../types';
 import { generateCompositeType } from './compositeType';
 import { generateExpression } from './jsExpression';
@@ -37,7 +38,7 @@ export function handleChildren<T>(
 }
 
 export function generateAttr(attrName: string, attrValue: any): CodePiece[] {
-  if (attrName === 'initValue' || attrName === 'labelCol') {
+  if (attrName === 'initValue') {
     return [];
   }
   const [isString, valueStr] = generateCompositeType(attrValue);
@@ -58,17 +59,17 @@ export function generateAttrs(nodeItem: IComponentNodeItem): CodePiece[] {
   return pieces;
 }
 
-export function mapNodeName(src: string): string {
-  if (src === 'Div') {
-    return 'div';
+function mapNodeName(src: string, mapping: Record<string, string>): string {
+  if (mapping[src]) {
+    return mapping[src];
   }
   return src;
 }
 
-export function generateBasicNode(nodeItem: IComponentNodeItem): CodePiece[] {
+export function generateBasicNode(nodeItem: IComponentNodeItem, mapping: Record<string, string>): CodePiece[] {
   const pieces: CodePiece[] = [];
   pieces.push({
-    value: mapNodeName(nodeItem.componentName),
+    value: mapNodeName(nodeItem.componentName, mapping),
     type: PIECE_TYPE.TAG,
   });
 
@@ -157,14 +158,23 @@ export function linkPieces(pieces: CodePiece[]): string {
   return `${beforeParts}<${tagName}${attrsParts} />${afterParts}`;
 }
 
-export function createNodeGenerator(handlers: HandlerSet<string>, plugins: ExtGeneratorPlugin[]) {
+export function createNodeGenerator(
+  handlers: HandlerSet<string>,
+  plugins: ExtGeneratorPlugin[],
+  cfg?: INodeGeneratorConfig,
+) {
+  let nodeTypeMapping: Record<string, string> = {};
+  if (cfg && cfg.nodeTypeMapping) {
+    nodeTypeMapping = cfg.nodeTypeMapping;
+  }
+
   const generateNode = (nodeItem: IComponentNodeItem): string => {
     let pieces: CodePiece[] = [];
 
     plugins.forEach(p => {
       pieces = pieces.concat(p(nodeItem));
     });
-    pieces = pieces.concat(generateBasicNode(nodeItem));
+    pieces = pieces.concat(generateBasicNode(nodeItem, nodeTypeMapping));
     pieces = pieces.concat(generateAttrs(nodeItem));
     if (nodeItem.children && (nodeItem.children as unknown[]).length > 0) {
       pieces = pieces.concat(handleChildren<string>(nodeItem.children, handlers).map(l => ({
@@ -183,11 +193,11 @@ export function createNodeGenerator(handlers: HandlerSet<string>, plugins: ExtGe
 
 export const generateString = (input: string) => [input];
 
-export function createReactNodeGenerator() {
+export function createReactNodeGenerator(cfg?: INodeGeneratorConfig) {
   return createNodeGenerator({
     string: generateString,
     expression: (input) => [generateExpression(input)],
   }, [
     generateReactCtrlLine,
-  ]);
+  ], cfg);
 }

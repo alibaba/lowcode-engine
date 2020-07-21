@@ -5,7 +5,7 @@ import { createProjectBuilder } from '../generator/ProjectBuilder';
 import esmodule from '../plugins/common/esmodule';
 import containerClass from '../plugins/component/react/containerClass';
 import containerInitState from '../plugins/component/react/containerInitState';
-import containerInjectUtils from '../plugins/component/react/containerInjectUtils';
+// import containerInjectUtils from '../plugins/component/react/containerInjectUtils';
 import containerLifeCycle from '../plugins/component/react/containerLifeCycle';
 import containerMethod from '../plugins/component/react/containerMethod';
 import jsx from '../plugins/component/react/jsx';
@@ -29,11 +29,18 @@ export default function createIceJsProjectBuilder(): IProjectBuilder {
           fileType: 'jsx',
         }),
         containerClass(),
-        containerInjectUtils(),
+        // containerInjectUtils(),
         containerInitState(),
         containerLifeCycle(),
         containerMethod(),
-        jsx(),
+        jsx({
+          nodeTypeMapping: {
+            Div: 'div',
+            Component: 'div',
+            Page: 'div',
+            Block: 'div',
+          },
+        }),
         css(),
       ],
       pages: [
@@ -42,11 +49,18 @@ export default function createIceJsProjectBuilder(): IProjectBuilder {
           fileType: 'jsx',
         }),
         containerClass(),
-        containerInjectUtils(),
+        // containerInjectUtils(),
         containerInitState(),
         containerLifeCycle(),
         containerMethod(),
-        jsx(),
+        jsx({
+          nodeTypeMapping: {
+            Div: 'div',
+            Component: 'div',
+            Page: 'div',
+            Block: 'div',
+          },
+        }),
         css(),
       ],
       router: [esmodule(), icejs.plugins.router()],

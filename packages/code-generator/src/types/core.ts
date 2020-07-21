@@ -170,6 +170,10 @@ export interface HandlerSet<T> {
 
 export type ExtGeneratorPlugin = (nodeItem: IComponentNodeItem) => CodePiece[];
 
+export interface INodeGeneratorConfig {
+  nodeTypeMapping?: Record<string, string>;
+}
+
 // export interface InteratorScope {
 //   [$item: string]: string;           // $item 默认取值 "item"
 //   [$index: string]: string | number; // $index 默认取值 "index"
