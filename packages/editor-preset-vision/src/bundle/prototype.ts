@@ -220,6 +220,9 @@ class Prototype {
   readonly isPrototype = true;
   readonly meta: ComponentMeta;
   readonly options: OldPrototypeConfig | ComponentMetadata;
+  get packageName() {
+    return this.meta.npm?.package;
+  }
 
   constructor(input: OldPrototypeConfig | ComponentMetadata | ComponentMeta, lookup: boolean = false) {
     if (lookup) {
@@ -251,7 +254,7 @@ class Prototype {
   }
 
   getPackageName() {
-    return this.meta.npm?.package;
+    return this.packageName;
   }
 
   getContextInfo(name: string): any {

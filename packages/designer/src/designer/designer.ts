@@ -386,6 +386,8 @@ export class Designer {
     let meta = this._componentMetasMap.get(key);
     if (meta) {
       meta.setMetadata(data);
+
+      this._componentMetasMap.set(key, meta);
     } else {
       meta = this._lostComponentMetasMap.get(key);
 
@@ -426,10 +428,11 @@ export class Designer {
 
   @computed get componentsMap(): { [key: string]: NpmInfo | Component } {
     const maps: any = {};
-    this._componentMetasMap.forEach((config, key) => {
+    const designer = this;
+    designer._componentMetasMap.forEach((config, key) => {
       const metaData = config.getMetadata();
       if (metaData.devMode === 'lowcode') {
-        maps[key] = this.currentDocument?.simulator?.createComponent(metaData.schema!);
+        maps[key] = metaData.schema;
       } else {
         const view = metaData.experimental?.view;
         if (view) {

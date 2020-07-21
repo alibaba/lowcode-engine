@@ -5,6 +5,18 @@ import { SettingEntry } from './setting-entry';
 import { computed, obx } from '@ali/lowcode-editor-core';
 import { cloneDeep } from '@ali/lowcode-utils';
 
+function getSettingFieldCollectorKey(parent: SettingEntry, config: FieldConfig) {
+  let top = parent;
+  const path = [config.name];
+  while (top !== parent.top) {
+    if (top instanceof SettingField && top.type !== 'group') {
+      path.unshift(top.name);
+    }
+    top = top.parent;
+  }
+  return path.join('.');
+}
+
 export class SettingField extends SettingPropEntry implements SettingEntry {
   readonly isSettingField = true;
   readonly isRequired: boolean;
@@ -51,10 +63,11 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     this._expanded = extraProps?.defaultCollapsed ? false : true;
 
     // initial items
-    if (this.type === 'group' && items) {
+    if (items && items.length > 0) {
       this.initItems(items, settingFieldCollector);
-    } else if (settingFieldCollector && config.name) {
-      settingFieldCollector(config.name, this);
+    }
+    if (this.type !== 'group' && settingFieldCollector && config.name) {
+      settingFieldCollector(getSettingFieldCollectorKey(parent, config), this);
     }
 
     // compatiable old config

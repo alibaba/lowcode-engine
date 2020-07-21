@@ -85,17 +85,35 @@ designer.addPropsReducer((props, node) => {
     const newProps: any = {
       ...props,
     };
+    const getRealValue = (propValue: any) => {
+      if (isVariable(propValue)) {
+        return propValue.value;
+      }
+      if (isJSExpression(propValue)) {
+        return propValue.mock;
+      }
+      return propValue;
+    };
     initials.forEach((item) => {
       // FIXME! this implements SettingTarget
       try {
         // FIXME! item.name could be 'xxx.xxx'
         const ov = props[item.name];
-        const v = item.initial(node as any, isJSExpression(ov) ? ov.mock : ov);
+        const v = item.initial(node as any, getRealValue(ov));
         if (v !== undefined) {
-          newProps[item.name] = isJSExpression(ov) ? {
-            ...ov,
-            mock: v,
-          } : v;
+          if (isVariable(ov)) {
+            newProps[item.name] = {
+              ...ov,
+              value: v,
+            };
+          } else if (isJSExpression(ov)) {
+            newProps[item.name] = {
+              ...ov,
+              mock: v,
+            };
+          } else {
+            newProps[item.name] = v;
+          }
         }
       } catch (e) {
         if (hasOwnProperty(props, item.name)) {
@@ -151,6 +169,14 @@ function compatiableReducer(props: any) {
             slotName: val.name,
           },
         },
+      }
+    }
+    // 为了能降级到老版本，建议在后期版本去掉以下代码
+    if (isJSExpression(val) && !val.events) {
+      val = {
+        type: 'variable',
+        value: val.mock,
+        variable: val.value,
       }
     }
     newProps[key] = val;
