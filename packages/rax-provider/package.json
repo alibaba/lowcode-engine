@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-rax-provider",
-  "version": "0.8.14",
+  "version": "0.8.15",
   "private": true,
   "description": "Rax Provider for Runtime",
   "files": [
