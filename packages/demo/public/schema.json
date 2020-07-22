@@ -74,8 +74,8 @@
                                       "prefix":"next-"
                                   },
                                   "children":[
-                                      "222",
-                                      "222111"]
+                                      "首页"
+                                  ]
                               },
                               {
                                   "componentName":"Breadcrumb.Item",
@@ -84,8 +84,8 @@
                                       "prefix":"next-"
                                   },
                                   "children":[
-                                      "222",
-                                      "222111"]
+                                      "品质中台"
+                                  ]
                               },
                               {
                                   "componentName":"Breadcrumb.Item",
@@ -94,9 +94,19 @@
                                       "prefix":"next-"
                                   },
                                   "children":[
-                                      "222",
-                                      "222111"]
-                              }]
+                                      "商家品质页面管理"
+                                  ]
+                              },
+                              {
+                                  "componentName":"Breadcrumb.Item",
+                                  "props":{
+                                      "prefix":"next-"
+                                  },
+                                  "children":[
+                                      "质检知识条配置"
+                                  ]
+                              }
+                          ]
                       }]
               },
               {
@@ -126,6 +136,7 @@
                                   "id":"node_dockcviv8fo2y",
                                   "props":{
                                       "style":{
+                                        "margin-bottom": "0"
                                       },
                                       "label":"类目名："
                                   },
@@ -148,6 +159,7 @@
                                   "id":"node_dockcviv8fo30",
                                   "props":{
                                       "style":{
+                                        "margin-bottom": "0"
                                       },
                                       "label":"项目类型："
                                   },
@@ -170,6 +182,7 @@
                                   "id":"node_dockcviv8fo32",
                                   "props":{
                                       "style":{
+                                        "margin-bottom": "0"
                                       },
                                       "label":"项目 ID："
                                   },
@@ -285,12 +298,25 @@
                           "props":{
                               "dataSource":[
                                   {
-                                      "title":{
-                                          "name":"Quotation"
-                                      },
-                                      "id":100306660940,
-                                      "time":2000
-                                  }],
+                                    "firstCategory": "其他",
+                                    "secondCategory": "新品预览",
+                                    "leafCategory": "",
+                                    "projectType": "标识判断",
+                                    "projectId": "",
+                                    "title": "其他类目->新品预览类目类型知识库",
+                                    "url": "其他",
+                                    "operation": "编辑"
+                                  },{
+                                    "firstCategory": "其他",
+                                    "secondCategory": "新品预览",
+                                    "leafCategory": "",
+                                    "projectType": "",
+                                    "projectId": "1",
+                                    "title": "其他类目->新品预览项目Id知识库",
+                                    "url": "其他",
+                                    "operation": "编辑"
+                                  }
+                              ],
                               "size":"medium",
                               "prefix":"next-",
                               "hasBorder":true,
@@ -310,9 +336,60 @@
                                   "componentName":"Table.Column",
                                   "id":"node_dockcviv8fo3f",
                                   "props":{
-                                      "title":"name"
+                                      "title":"一级类目",
+                                      "dataIndex": "firstCategory"
                                   }
-                              }]
+                              },{
+                                  "componentName":"Table.Column",
+                                  "id":"node_dockcviv8fo41",
+                                  "props":{
+                                      "title":"二级类目",
+                                      "dataIndex": "secondCategory"
+                                  }
+                              },{
+                                  "componentName":"Table.Column",
+                                  "id":"node_dockcviv8fo42",
+                                  "props":{
+                                      "title":"叶子类目",
+                                      "dataIndex": "leafCategory"
+                                  }
+                              },{
+                                  "componentName":"Table.Column",
+                                  "id":"node_dockcviv8fo43",
+                                  "props":{
+                                      "title":"项目类型",
+                                      "dataIndex": "projectType"
+                                  }
+                              },{
+                                  "componentName":"Table.Column",
+                                  "id":"node_dockcviv8fo44",
+                                  "props":{
+                                      "title":"项目 ID",
+                                      "dataIndex": "projectId"
+                                  }
+                              },{
+                                  "componentName":"Table.Column",
+                                  "id":"node_dockcviv8fo45",
+                                  "props":{
+                                      "title":"知识条标题",
+                                      "dataIndex": "title"
+                                  }
+                              },{
+                                  "componentName":"Table.Column",
+                                  "id":"node_dockcviv8fo46",
+                                  "props":{
+                                      "title":"知识条链接",
+                                      "dataIndex": "url"
+                                  }
+                              },{
+                                  "componentName":"Table.Column",
+                                  "id":"node_dockcviv8fo47",
+                                  "props":{
+                                      "title":"操作",
+                                      "dataIndex": "operation"
+                                  }
+                              }
+                          ]
                       }]
               },
               {

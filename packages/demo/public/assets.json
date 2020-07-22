@@ -296,7 +296,12 @@
           "name": "lengths",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "Table.Column",
@@ -312,6 +317,10 @@
       "props": [
         {
           "name": "title",
+          "propType": "string"
+        },
+        {
+          "name": "dataIndex",
           "propType": "string"
         }
       ]
@@ -12152,10 +12161,10 @@
                 "componentName": "Table",
                 "props": {
                   "dataSource": [{
-                    "title": {"name": "Quotation"},
-                    "id": 100306660940,
-                    "time": 2000
-                    }],
+                    "id": 1, "time": "2016"
+                  },{
+                    "id": 2, "time": "2017"
+                  }],
                   "size": "medium",
                   "prefix": "next-",
                   "hasBorder": true,
@@ -12171,10 +12180,36 @@
                   {
                     "componentName": "Table.Column",
                     "props": {
-                      "title": "name"
+                      "title": "id",
+                      "dataIndex": "id"
+                    }
+                  },
+                  {
+                    "componentName": "Table.Column",
+                    "props": {
+                      "title": "time",
+                      "dataIndex": "time"
                     }
                   }
                 ]
+              }
+            }
+          ]
+        },{
+          "componentName": "Table.Column",
+          "title": "表格列",
+          "icon": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_table.png",
+          "package": "@alife/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "表格列",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_table.png",
+              "schema": {
+                "componentName": "Table.Column",
+                "props": {
+                  "title": "name"
+                }
               }
             }
           ]
@@ -13133,7 +13168,13 @@
               "screenshot": "",
               "schema": {
                 "componentName": "Form.Item",
-                "props": {}
+                "props": {
+                  "style":{
+                    "margin-bottom": "0",
+                    "min-width": "200px",
+                    "min-height": "28px"
+                  }
+                }
               }
             }
           ]
