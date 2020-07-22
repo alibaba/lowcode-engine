@@ -406,8 +406,8 @@ function getNodeInstance(dom: HTMLElement): NodeInstance<any> | null {
   }
   return {
     nodeId: node.props.componentId,
-    instance: node
-  }
+    instance: node,
+  };
   // return parent;
   // const instance = fiberNode.stateNode;
   // if (instance) {
