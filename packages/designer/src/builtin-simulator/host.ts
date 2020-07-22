@@ -442,7 +442,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         const node = nodeInst.node || this.document.rootNode;
 
         const rootElement = this.findDOMNodes(nodeInst.instance, node.componentMeta.rootSelector)?.find((item) =>
-          item.contains(targetElement),
+          // 可能是 [null];
+          item && item.contains(targetElement),
         ) as HTMLElement;
         if (!rootElement) {
           return;

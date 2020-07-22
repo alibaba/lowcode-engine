@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.31"></a>
+## [0.9.31](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.30...@ali/lowcode-designer@0.9.31) (2020-07-22)
+
+
+### Features
+
+* rax simulator ([05b262d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/05b262d))
+
+
+
+
+<a name="0.9.30"></a>
+## [0.9.30](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.29...@ali/lowcode-designer@0.9.30) (2020-07-21)
+
+
+### Bug Fixes
+
+* settingField items is empty when type is not 'group' ([582c41a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/582c41a))
+* updateProps before init ([760e6a6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/760e6a6))
+* 低代码组件修改之后渲染为空 ([ef71632](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ef71632))
+* 修复导入的组件拖入画布报错 ([caf9915](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/caf9915))
+* 调整 upgrade 和 init 的流程 ([09fc1a0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/09fc1a0))
+
+
+### Features
+
+* support subtreeModified ([7eeb51c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7eeb51c))
+
+
+
+
 <a name="0.9.29"></a>
 ## [0.9.29](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.28...@ali/lowcode-designer@0.9.29) (2020-07-21)
 
