@@ -1,7 +1,6 @@
 import { Component, createElement } from 'rax';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
-import View from 'rax-view';
 import classnames from 'classnames';
 import DataHelper from '../utils/dataHelper';
 import {
@@ -24,7 +23,7 @@ import {
 import VisualDom from '../comp/visualDom';
 import AppContext from '../context/appContext';
 
-import CompWrapper from '../hoc/compWrapper';
+import compWrapper from '../hoc/compWrapper';
 
 const debug = Debug('engine:base');
 const DESIGN_MODE = {
@@ -206,6 +205,7 @@ export default class BaseEngine extends Component {
   // parentInfo 父组件的信息，包含schema和Comp
   // idx 若为循环渲染的循环Index
   __createVirtualDom = (schema, self, parentInfo, idx) => {
+
     if (!schema) return null;
     // rax text prop 兼容处理
     if (schema.componentName === 'Text') {
@@ -239,7 +239,7 @@ export default class BaseEngine extends Component {
       return schema;
     }
     if (!isSchema(schema)) return null;
-    let Comp = components[schema.componentName] || View;
+    let Comp = components[schema.componentName] || engine.getNotFoundComponent();
 
     if (schema.loop !== undefined) {
       return this.__createLoopVirtualDom(
@@ -306,7 +306,7 @@ export default class BaseEngine extends Component {
     });
     // 对于可以获取到ref的组件做特殊处理
     if (!acceptsRef(Comp)) {
-      Comp = CompWrapper(Comp);
+      Comp = compWrapper(Comp);
     }
     otherProps.ref = (ref) => {
       const refProps = props.ref;
@@ -364,9 +364,9 @@ export default class BaseEngine extends Component {
       if (OVERLAY_LIST.includes(schema.componentName)) {
         const { ref, ...overlayProps } = otherProps;
         return (
-          <Div ref={ref} __designMode={engine.props.designMode}>
+          <div ref={ref} __designMode={engine.props.designMode}>
             {renderComp({ ...props, ...overlayProps })}
-          </Div>
+          </div>
         );
       }
       // 虚拟dom显示

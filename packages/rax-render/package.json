@@ -60,5 +60,6 @@
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-rax-renderer@0.1.2/build/index.html"
 }
