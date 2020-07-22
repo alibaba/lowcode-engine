@@ -31,15 +31,6 @@ skeleton.add({
   content: DesignerPlugin,
 });
 skeleton.add({
-  area: 'leftArea',
-  name: 'outlinePane',
-  type: 'PanelDock',
-  content: Outline,
-  panelProps: {
-    area: 'leftFixedArea',
-  },
-});
-skeleton.add({
   area: 'rightArea',
   name: 'settingsPane',
   type: 'Panel',

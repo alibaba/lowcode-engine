@@ -28,7 +28,7 @@ export default {
         props: {
           align: 'right',
         },
-      },*/
+      }, */
       {
         pluginKey: 'samplePreview',
         type: 'Custom',
@@ -48,6 +48,19 @@ export default {
     ],
     leftArea: [
       {
+        pluginKey: 'outline',
+        type: 'PanelIcon',
+        props: {
+          align: 'top',
+          icon: 'shuxingkongjian',
+          description: '大纲树',
+          panelProps: {
+            area: 'leftFixedArea',
+          },
+        },
+        pluginProps: {},
+      },
+      {
         pluginKey: 'componentsPane',
         type: 'PanelIcon',
         props: {
@@ -56,18 +69,6 @@ export default {
           description: '组件库',
         },
         pluginProps: {},
-      },
-      {
-        pluginKey: 'outline',
-        type: 'PanelIcon',
-        props: {
-          align: 'top',
-          icon: 'shuxingkongjian',
-          description: '大纲树'
-        },
-        pluginProps: {
-
-        },
       },
       {
         pluginKey: 'sourceEditor',
@@ -83,10 +84,10 @@ export default {
             hideTitleBar: true,
             maxHeight: 800,
             maxWidth: 1200,
-            title: "动作面板",
-            width: 600
+            title: '动作面板',
+            width: 600,
           },
-        }
+        },
       },
       {
         pluginKey: 'zhEn',
@@ -104,7 +105,7 @@ export default {
       {
         pluginKey: 'variableBindDialog',
       },
-    ]
+    ],
   },
   shortCuts: [],
   lifeCycles: {
