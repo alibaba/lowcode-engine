@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",
+    "@babel/plugin-transform-react-jsx": "^7.10.4",
     "@recore/obx": "^1.0.8",
     "@types/classnames": "^2.2.7",
     "@types/node": "^13.7.1",
