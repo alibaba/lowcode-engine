@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.15"></a>
+## [0.8.15](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@0.8.14...@ali/lowcode-react-renderer@0.8.15) (2020-07-21)
+
+
+### Bug Fixes
+
+* 支持自定义 Block 容器 ([1c0b508](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1c0b508))
+
+
+
+
 <a name="0.8.14"></a>
 ## [0.8.14](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@0.8.13...@ali/lowcode-react-renderer@0.8.14) (2020-07-21)
 

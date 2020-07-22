@@ -59,7 +59,7 @@ export default class BlockEngine extends BaseEngine {
   }
 
   render() {
-    const { __schema } = this.props;
+    const { __schema, __components } = this.props;
 
     if (!isSchema(__schema, true) || (__schema.componentName !== 'Block' && __schema.componentName !== 'Div')) {
       return '区块schema结构异常！';
@@ -69,7 +69,33 @@ export default class BlockEngine extends BaseEngine {
     this.__generateCtx();
     this.__render();
 
-    const { id, className, style, autoLoading, defaultHeight = 300, loading } = this.__parseData(__schema.props);
+    const props = this.__parseData(__schema.props);
+    const { id, className, style, autoLoading, defaultHeight = 300, loading } = props;
+
+    const { Block } = __components;
+    if (Block) {
+      const { engine } = this.context || {};
+      return (
+        <AppContext.Provider
+          value={{
+            ...this.context,
+            blockContext: this,
+          }}
+        >
+          {engine.createElement(
+            Block,
+            {
+              ...props,
+              ref: this.__getRef,
+              className: classnames(getFileCssName(__schema.fileName), className, this.props.className),
+              __id: __schema.id,
+            },
+            this.__createDom(),
+          )}
+        </AppContext.Provider>
+      );
+    }
+    
     const renderContent = () => (
       <AppContext.Provider
         value={{

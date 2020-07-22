@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.31"></a>
+## [0.8.31](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.30...@ali/lowcode-editor-preset-vision@0.8.31) (2020-07-21)
+
+
+### Bug Fixes
+
+* settingField items is empty when type is not 'group' ([582c41a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/582c41a))
+* 修复 initial 重复、type = 'composite' 时 items 为空 ([bf79e63](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bf79e63))
+* 修复组件面板详情加载不了的 bug ([cca3309](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/cca3309))
+* 兼容 variable 历史数据格式 ([d666317](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d666317))
+* 兼容事件绑定 ([f4c07af](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f4c07af))
+* 调整 upgrade 和 init 的流程 ([09fc1a0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/09fc1a0))
+
+
+### Features
+
+* support subtreeModified ([7eeb51c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7eeb51c))
+
+
+
+
+<a name="0.8.30"></a>
+## [0.8.30](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.29...@ali/lowcode-editor-preset-vision@0.8.30) (2020-07-21)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-vision
+
 <a name="0.8.29"></a>
 ## [0.8.29](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.28...@ali/lowcode-editor-preset-vision@0.8.29) (2020-07-21)
 

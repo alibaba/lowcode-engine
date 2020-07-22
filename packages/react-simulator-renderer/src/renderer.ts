@@ -74,7 +74,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   }
   private _libraryMap: { [key: string]: string } = {};
   private buildComponents() {
-    this._components = buildComponents(this._libraryMap, this._componentsMap);
+    this._components = buildComponents(this._libraryMap, this._componentsMap, this.createComponent.bind(this));
   }
   @obx.ref private _components: any = {};
   @computed get components(): object {
@@ -247,8 +247,10 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
       }
       const _leaf = host.document.designer.currentDocument?.createNode(schema);
       const node = host.document.createNode(schema);
-      let props = processPropsSchema(schema.props, propsMap);
+      let { props } = schema;
       props = host.document.designer.transformProps(props, node, TransformStage.Init);
+      props = host.document.designer.transformProps(props, node, TransformStage.Upgrade);
+      props = processPropsSchema(props, propsMap);
       props = host.document.designer.transformProps(props, node, TransformStage.Render);
       return createElement(Com, { ...props, _leaf }, children);
     };
@@ -386,16 +388,17 @@ const builtinComponents = {
   Leaf,
 };
 
-function buildComponents(
-  libraryMap: LibraryMap,
-  componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> },
-) {
+function buildComponents(libraryMap: LibraryMap,
+  componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> | ComponentSchema },
+  createComponent: (schema: ComponentSchema) => Component | null) {
   const components: any = {
     ...builtinComponents,
   };
   Object.keys(componentsMap).forEach((componentName) => {
     let component = componentsMap[componentName];
-    if (isReactComponent(component)) {
+    if (component && (component as ComponentSchema).componentName === 'Component') {
+      components[componentName] = createComponent(component as ComponentSchema);
+    } else if (isReactComponent(component)) {
       components[componentName] = component;
     } else {
       component = findComponent(libraryMap, componentName, component);

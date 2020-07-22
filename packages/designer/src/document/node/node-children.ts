@@ -79,6 +79,10 @@ export class NodeChildren {
     return this.size > 0;
   }
 
+  @computed length() {
+    return this.children.length;
+  }
+
   /**
    * 删除一个节点
    */
@@ -94,6 +98,7 @@ export class NodeChildren {
       deleted.purge();
     }
     this.emitter.emit('change');
+    this.reportModified(node, this.owner, {type: 'remove', removeIndex: i, removeNode: node});
     return false;
   }
 
@@ -289,5 +294,18 @@ export class NodeChildren {
   get [Symbol.toStringTag]() {
     // 保证向前兼容性
     return "Array";
+  }
+
+  private reportModified(node: Node, owner: Node, options = {}) {
+    if (!node) { return; }
+    if (node.isRoot()) { return; }
+    const callbacks = owner.componentMeta.getMetadata().experimental?.callbacks;
+    if (callbacks?.onSubtreeModified) {
+      callbacks?.onSubtreeModified.call(node, owner, options);
+    }
+
+    if (owner.parent && !owner.parent.isRoot()) {
+      this.reportModified(node, owner.parent, options); 
+    }
   }
 }
