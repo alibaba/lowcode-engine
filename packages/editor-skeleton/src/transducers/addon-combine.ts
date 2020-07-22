@@ -85,6 +85,13 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
   let propsGroup = props || [];
   const basicInfo: any = {};
   if (componentName === 'Slot') {
+    if (!configure.component) {
+      configure.component = {
+        isContainer: true
+      }
+    } else if (typeof configure.component === 'object'){
+      configure.component.isContainer = true;
+    }
     basicInfo.icon = IconSlot;
     propsGroup = [{
       name: getConvertedExtraKey('title'),

@@ -43,7 +43,7 @@ skeleton.add({
   props: {
     condition: () => {
       return designer.dragon.dragging && !getTreeMaster(designer).hasVisibleTreeBoard();
-    }
+    },
   },
   content: OutlineBackupPane,
 });
@@ -67,14 +67,7 @@ export function init(container?: Element) {
   }
   container.id = 'lowcodeEditorPresetGeneral';
 
-  render(
-    createElement(GeneralWorkbench),
-    container,
-  );
+  render(createElement(GeneralWorkbench), container);
 }
 
-console.log(
-  `%cLowcodeEngine %cv${version}`,
-  "color:#000;font-weight:bold;",
-  "color:green;font-weight:bold;"
-);
+console.log(`%cLowcodeEngine %cv${version}`, 'color:#000;font-weight:bold;', 'color:green;font-weight:bold;');
