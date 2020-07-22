@@ -1233,12 +1233,7 @@
           "propType": "object",
           "description": "自定义内联样式"
         }
-      ],
-      "configure": {
-        "component": {
-          "isContainer": true
-        }
-      }
+      ]
     },
     {
       "componentName": "Button.Group",
@@ -4273,9 +4268,8 @@
         }
       ],
       "configure": {
-        "component": {
-          "isContainer": true
-        }
+        "isContainer": true,
+        "isModel": true
       }
     },
     {
@@ -13129,13 +13123,13 @@
         },
         {
           "componentName": "Form.Item",
-          "title": "表单辅助工具",
+          "title": "Form.Item",
           "icon": "",
           "package": "@alife/next",
           "library": "Next",
           "snippets": [
             {
-              "title": "表单辅助工具",
+              "title": "Form.Item",
               "screenshot": "",
               "schema": {
                 "componentName": "Form.Item",
