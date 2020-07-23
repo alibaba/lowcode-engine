@@ -14,7 +14,7 @@ export interface FieldProps {
   className?: string;
   meta?: { package: string; componentName: string } | string;
   title?: TitleContent | null;
-  defaultDisplay?: 'accordion' | 'inline' | 'block';
+  defaultDisplay?: 'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry';
   collapsed?: boolean;
   valueState?: number;
   name?: string;
@@ -134,14 +134,18 @@ export class Field extends Component<FieldProps> {
         })}
         id={id}
       >
-        <div className="lc-field-head" onClick={isAccordion ? this.toggleExpand : undefined}>
-          <div className="lc-field-title">
-            {createValueState(valueState, this.handleClear)}
-            <Title title={title || ''} />
-            <InlineTip position="top">{tipContent}</InlineTip>
-          </div>
-          {isAccordion && <Icon className="lc-field-icon" type="arrow-up" size="xs" />}
-        </div>
+        {
+          display !== 'plain' && (
+            <div className="lc-field-head" onClick={isAccordion ? this.toggleExpand : undefined}>
+              <div className="lc-field-title">
+                {createValueState(valueState, this.handleClear)}
+                <Title title={title || ''} />
+                <InlineTip position="top">{tipContent}</InlineTip>
+              </div>
+              {isAccordion && <Icon className="lc-field-icon" type="arrow-up" size="xs" />}
+            </div>
+          )
+        }
         <div key="body" ref={(shell) => (this.body = shell)} className="lc-field-body">
           {children}
         </div>

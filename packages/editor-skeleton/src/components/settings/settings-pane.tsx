@@ -111,7 +111,7 @@ class SettingGroupView extends Component<{ field: SettingField }> {
   render() {
     const { field } = this.props;
     const { extraProps } = field;
-    const { condition } = extraProps;
+    const { condition, display } = extraProps;
     const visible = field.isSingle && typeof condition === 'function' ? condition(field) !== false : true;
 
     if (!visible) {
@@ -119,9 +119,18 @@ class SettingGroupView extends Component<{ field: SettingField }> {
     }
 
     // todo: split collapsed state | field.items for optimize
+    // return createField({
+    //     meta: field?.componentMeta?.npm || field?.componentMeta?.componentName || '',
+    //     title: field.title,
+    //     collapsed: !field.expanded,
+    //     onExpandChange: (expandState) => field.setExpanded(expandState),
+    //   }, 
+    //   field.items.map((item, index) => createSettingFieldView(item, field, index)),
+    //   display);
     return (
       <Field
         defaultDisplay="accordion"
+        // defaultDisplay={display}
         meta={field?.componentMeta?.npm || field?.componentMeta?.componentName || ''}
         title={field.title}
         collapsed={!field.expanded}

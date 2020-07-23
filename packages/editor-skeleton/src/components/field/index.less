@@ -68,16 +68,9 @@
   &.lc-inline-field {
     display: flex;
     align-items: center;
-    // for top-level style
-    padding: 16px;
-    &:first-child{
-      padding-top: 16px;
-    }
+    margin-bottom: 12px;
     &:last-child{
-      padding-bottom: 16px;
-    }
-    &+.lc-inline-field{
-      padding-top: 0;
+      margin-bottom: 0;
     }
 
     > .lc-field-head {
@@ -93,6 +86,12 @@
       min-width: 0;
       display: flex;
       align-items: center;
+    }
+  }
+
+  &.lc-plain-field {
+    .lc-inline-field {
+      margin: 12px;
     }
   }
 
@@ -123,12 +122,6 @@
     > .lc-field-body {
       // padding: @y-gap @x-gap/2;
       padding: 12px;
-      .lc-inline-field{
-        margin-bottom: 12px;
-        &:last-child{
-          margin-bottom: 0;
-        }
-      }
     }
 
     + .lc-inline-field {
@@ -180,8 +173,6 @@
   // 2rd level reset
   .lc-field-body {
     .lc-inline-field {
-      // padding: @y-gap @x-gap/2 0 @x-gap/2;
-      padding: 0;
       &:first-child {
         padding-top: 0;
       }
