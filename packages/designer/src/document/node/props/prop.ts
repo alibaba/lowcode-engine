@@ -66,7 +66,7 @@ export class Prop implements IPropParent {
     const type = this._type;
 
     if (type === 'unset') {
-      return UNSET;
+      return undefined;
     }
 
     if (type === 'literal' || type === 'expression') {
@@ -98,9 +98,7 @@ export class Prop implements IPropParent {
       const maps: any = {};
       this.items!.forEach((prop, key) => {
         const v = prop.export(stage);
-        if (v !== UNSET) {
-          maps[prop.key == null ? key : prop.key] = v;
-        }
+        maps[prop.key == null ? key : prop.key] = v;
       });
       return maps;
     }
