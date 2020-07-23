@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.37"></a>
+## [0.8.37](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.36...@ali/lowcode-react-simulator-renderer@0.8.37) (2020-07-22)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-react-simulator-renderer
+
+<a name="0.8.36"></a>
+## [0.8.36](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.35...@ali/lowcode-react-simulator-renderer@0.8.36) (2020-07-21)
+
+
+### Bug Fixes
+
+* 低代码组件修改之后渲染为空 ([ef71632](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ef71632))
+* 调整 upgrade 和 init 的流程 ([09fc1a0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/09fc1a0))
+
+
+
+
 <a name="0.8.35"></a>
 ## [0.8.35](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.34...@ali/lowcode-react-simulator-renderer@0.8.35) (2020-07-21)
 
