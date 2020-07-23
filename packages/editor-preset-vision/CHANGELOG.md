@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.33"></a>
+## [0.8.33](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.32...@ali/lowcode-editor-preset-vision@0.8.33) (2020-07-23)
+
+
+### Bug Fixes
+
+* vision prop 初始化时有依赖已初始化的 prop，需要实时添加 ([1feb46f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1feb46f))
+
+
+
+
 <a name="0.8.32"></a>
 ## [0.8.32](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.31...@ali/lowcode-editor-preset-vision@0.8.32) (2020-07-22)
 
