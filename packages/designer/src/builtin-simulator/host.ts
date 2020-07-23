@@ -842,12 +842,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.sensing = true;
     this.scroller.scrolling(e);
     const dropContainer = this.getDropContainer(e);
-    if (
-      !dropContainer ||
-      // too dirty
-      (typeof dropContainer.container?.componentMeta?.prototype?.options?.canDropIn === 'function' &&
-        !dropContainer.container?.componentMeta?.prototype?.options?.canDropIn(e.dragObject.nodes[0]))
-    ) {
+
+    if (!dropContainer) {
       return null;
     }
 
@@ -1116,16 +1112,21 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
    */
   handleAccept({ container, instance }: DropContainer, e: LocateEvent) {
     const { dragObject } = e;
-    if (isRootNode(container)) {
-      return this.document.checkDropTarget(container, dragObject as any);
-    }
-
     const meta = (container as Node).componentMeta;
 
     // FIXME: get containerInstance for accept logic use
     const acceptable: boolean = this.isAcceptable(container);
     if (!meta.isContainer && !acceptable) {
       return false;
+    }
+
+    if (typeof meta.prototype?.options?.canDropIn === 'function' &&
+    !meta.prototype?.options?.canDropIn(dragObject.nodes[0])) {
+      return false;
+    }
+
+    if (isRootNode(container)) {
+      return this.document.checkDropTarget(container, dragObject as any);
     }
 
     // first use accept
