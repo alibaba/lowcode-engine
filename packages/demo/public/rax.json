@@ -4,7 +4,7 @@
   "props": {},
   "children": [
     {
-      "componentName": "View",
+      "componentName": "Container",
       "props": {},
       "children": [
         {

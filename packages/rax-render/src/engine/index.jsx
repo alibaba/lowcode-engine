@@ -1,8 +1,8 @@
 /* eslint-disable */
-import { Component, createElement as raxCreateElement } from 'rax';
+import { Component, createElement } from 'rax';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
-import * as isEmpty from 'lodash/isEmpty';
+import isEmpty from 'lodash/isEmpty';
 import findDOMNode from 'rax-find-dom-node';
 import { isFileSchema, goldlog } from '../utils';
 import AppContext from '../context/appContext';
@@ -11,6 +11,7 @@ import ComponentEngine from './compEngine';
 import BlockEngine from './blockEngine';
 import TempEngine from './tempEngine';
 import BaseEngine from './base';
+import compWrapper from '../hoc/compWrapper';
 
 const debug = Debug('engine:entry');
 const ENGINE_COMPS = {
@@ -20,18 +21,20 @@ const ENGINE_COMPS = {
   TempEngine,
 };
 
+const raxCreateElement = createElement;
+
 class FaultComponent extends Component {
   render() {
     // FIXME: errorlog
     console.error('render error', this.props);
-    return <Div>RenderError</Div>;
+    return <div>RenderError</div>;
   }
 }
 
 class NotFoundComponent extends Component {
   render() {
     console.error('component not found', this.props);
-    return <Div {...this.props} />;
+    return <div {...this.props} />;
   }
 }
 
@@ -168,9 +171,10 @@ export default class Engine extends Component {
         Comp = ENGINE_COMPS[`${componentName}Engine`];
       }
     }
-    if (Comp) {
-      return (
-        <AppContext.Provider
+
+    return (
+      Comp
+      ? <AppContext.Provider
           value={{
             appHelper,
             components: allComponents,
@@ -188,9 +192,8 @@ export default class Engine extends Component {
             {...this.props}
           />
         </AppContext.Provider>
-      );
-    }
-    return null;
+      : null
+    );
   }
 }
 

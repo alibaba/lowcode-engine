@@ -1,7 +1,7 @@
 import { createElement, Component } from 'rax';
 
 export default function (Comp) {
-  class CompWrapper extends Component {
+  class compWrapper extends Component {
     constructor(props, context) {
       super(props, context);
     }
@@ -13,5 +13,5 @@ export default function (Comp) {
     }
   }
 
-  return CompWrapper;
+  return compWrapper;
 }

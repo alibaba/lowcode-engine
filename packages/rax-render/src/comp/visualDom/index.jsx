@@ -1,6 +1,4 @@
 import { Component } from 'rax';
-import View from 'rax-view';
-import Text from 'rax-text';
 import './index.css';
 
 export default class VisualDom extends Component {
@@ -12,12 +10,12 @@ export default class VisualDom extends Component {
     const { children, title, label, text, __componentName } = this.props;
 
     return (
-      <View className="visual-dom">
-        <View className="panel-container">
-          <Text className="title">{title || label || text || __componentName}</Text>
-          <View className="content">{children}</View>
-        </View>
-      </View>
+      <div className="visual-dom">
+        <div className="panel-container">
+          <span className="title">{title || label || text || __componentName}</span>
+          <div className="content">{children}</div>
+        </div>
+      </div>
     );
   }
 }
