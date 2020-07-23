@@ -186,7 +186,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
       title: { type: 'i18n', 'zh-CN': '事件', 'en-US': 'Events' },
       items: [
         {
-          name: 'events',
+          name: '__events',
           title: { type: 'i18n', 'zh-CN': '事件设置', 'en-US': 'Events' },
           setter: {
             componentName: 'EventsSetter',
@@ -195,25 +195,17 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
             },
           },
           getValue(field: SettingTarget, val?: any[]) {
-            let eventDataList = []
-            for (let key in val){
-              if (val[key].__eventData){
-                eventDataList.push(val[key].__eventData)
-              }
-            }
-            return eventDataList;
+            return val;
           },
 
           setValue(field: SettingTarget, eventDataList: any[]) {
             eventDataList.map((item)=>{
-              field.setPropValue(item.name,{
+              field.parent.setPropValue(item.name,{
                 type: 'JSFunction',
-                value: `function(){ this.${item.relatedEventName}() }`,
-                __eventData:item
+                value: `function(){ this.${item.relatedEventName}() }`
               })
               return item;
             })
-
             return;
           },
         },

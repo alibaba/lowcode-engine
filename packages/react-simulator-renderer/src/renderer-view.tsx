@@ -109,15 +109,13 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
           viewProps._leaf = leaf;
           viewProps._componentName = leaf?.componentName;
           // 如果是容器 && 无children && 高宽为空 增加一个占位容器，方便拖动
-          if (leaf?.isContainer() && children == null && !viewProps.style){
-            Object.assign(viewProps, {
-              style:{
-                height:'100px',
-                backgroundColor:'#f0f0f0',
-                borderColor:'#666666',
-                border: '1px dotted'
-              }
-            })
+          if (leaf?.isContainer() && children == null){
+            children = <div style={{
+              height:'100px',
+              backgroundColor:'#f0f0f0',
+              borderColor:'#666666',
+              border: '1px dotted'
+            }}></div>
           }
 
           if (viewProps._componentName === 'Menu') {

@@ -5,7 +5,7 @@
       "ref":"outterView",
       "autoLoading":true,
       "style":{
-          "padding": "0 5px 0 5px"
+          "padding":"0 5px 0 5px"
       }
   },
   "fileName":"test",
@@ -14,7 +14,8 @@
       ]
   },
   "state":{
-      "text":"outter"
+      "text":"outter",
+      "isShowDialog":false
   },
   "css":"body {font-size: 12px;} .botton{width:100px;color:#ff00ff}",
   "lifeCycles":{
@@ -34,13 +35,13 @@
       },
       "onClick":{
           "type":"JSFunction",
-          "value":"function(){\n\t}"
+          "value":"function(){\n    this.setState({\n      isShowDialog:true\n    })\n\t}"
       }
   },
   "children":[
       {
           "componentName":"Box",
-          "id":"node_dockcviv8fo2k",
+          "id":"node_dockcy8n9xed",
           "props":{
               "style":{
                   "backgroundColor":"rgba(31,56,88,0.1)",
@@ -50,7 +51,7 @@
           "children":[
               {
                   "componentName":"Box",
-                  "id":"node_dockcviv8fo2l",
+                  "id":"node_dockcy8n9xee",
                   "props":{
                       "style":{
                           "padding":"12px 12px 12px 12px",
@@ -60,7 +61,7 @@
                   "children":[
                       {
                           "componentName":"Breadcrumb",
-                          "id":"node_dockcviv8fo2m",
+                          "id":"node_dockcy8n9xef",
                           "props":{
                               "prefix":"next-",
                               "maxNode":100,
@@ -69,49 +70,45 @@
                           "children":[
                               {
                                   "componentName":"Breadcrumb.Item",
-                                  "id":"node_dockcviv8fo2n",
+                                  "id":"node_dockcy8n9xeg",
                                   "props":{
                                       "prefix":"next-"
                                   },
                                   "children":[
-                                      "首页"
-                                  ]
+                                      "首页"]
                               },
                               {
                                   "componentName":"Breadcrumb.Item",
-                                  "id":"node_dockcviv8fo2q",
+                                  "id":"node_dockcy8n9xei",
                                   "props":{
                                       "prefix":"next-"
                                   },
                                   "children":[
-                                      "品质中台"
-                                  ]
+                                      "品质中台"]
                               },
                               {
                                   "componentName":"Breadcrumb.Item",
-                                  "id":"node_dockcviv8fo2t",
+                                  "id":"node_dockcy8n9xek",
                                   "props":{
                                       "prefix":"next-"
                                   },
                                   "children":[
-                                      "商家品质页面管理"
-                                  ]
+                                      "商家品质页面管理"]
                               },
                               {
                                   "componentName":"Breadcrumb.Item",
+                                  "id":"node_dockcy8n9xem",
                                   "props":{
                                       "prefix":"next-"
                                   },
                                   "children":[
-                                      "质检知识条配置"
-                                  ]
-                              }
-                          ]
+                                      "质检知识条配置"]
+                              }]
                       }]
               },
               {
                   "componentName":"Box",
-                  "id":"node_dockcviv8fo2w",
+                  "id":"node_dockcy8n9xeo",
                   "props":{
                       "style":{
                           "marginTop":"12px",
@@ -121,29 +118,31 @@
                   "children":[
                       {
                           "componentName":"Form",
-                          "id":"node_dockcviv8fo2x",
+                          "id":"node_dockcy8n9xep",
                           "props":{
                               "inline":true,
                               "style":{
                                   "marginTop":"12px",
                                   "marginRight":"12px",
                                   "marginLeft":"12px"
-                              }
+                              },
+                              "__events":[
+                              ]
                           },
                           "children":[
                               {
                                   "componentName":"Form.Item",
-                                  "id":"node_dockcviv8fo2y",
+                                  "id":"node_dockcy8n9xeq",
                                   "props":{
                                       "style":{
-                                        "margin-bottom": "0"
+                                          "margin-bottom":"0"
                                       },
                                       "label":"类目名："
                                   },
                                   "children":[
                                       {
                                           "componentName":"Select",
-                                          "id":"node_dockcviv8fo2z",
+                                          "id":"node_dockcy8n9xer",
                                           "props":{
                                               "mode":"single",
                                               "hasArrow":true,
@@ -156,17 +155,17 @@
                               },
                               {
                                   "componentName":"Form.Item",
-                                  "id":"node_dockcviv8fo30",
+                                  "id":"node_dockcy8n9xes",
                                   "props":{
                                       "style":{
-                                        "margin-bottom": "0"
+                                          "margin-bottom":"0"
                                       },
                                       "label":"项目类型："
                                   },
                                   "children":[
                                       {
                                           "componentName":"Select",
-                                          "id":"node_dockcviv8fo31",
+                                          "id":"node_dockcy8n9xet",
                                           "props":{
                                               "mode":"single",
                                               "hasArrow":true,
@@ -179,17 +178,17 @@
                               },
                               {
                                   "componentName":"Form.Item",
-                                  "id":"node_dockcviv8fo32",
+                                  "id":"node_dockcy8n9xeu",
                                   "props":{
                                       "style":{
-                                        "margin-bottom": "0"
+                                          "margin-bottom":"0"
                                       },
                                       "label":"项目 ID："
                                   },
                                   "children":[
                                       {
                                           "componentName":"Input",
-                                          "id":"node_dockcviv8fo33",
+                                          "id":"node_dockcy8n9xev",
                                           "props":{
                                               "hasBorder":true,
                                               "size":"medium",
@@ -202,13 +201,13 @@
                               },
                               {
                                   "componentName":"Button.Group",
-                                  "id":"node_dockcviv8fo34",
+                                  "id":"node_dockcy8n9xew",
                                   "props":{
                                   },
                                   "children":[
                                       {
                                           "componentName":"Button",
-                                          "id":"node_dockcviv8fo35",
+                                          "id":"node_dockcy8n9xex",
                                           "props":{
                                               "type":"primary",
                                               "style":{
@@ -219,7 +218,7 @@
                                           "children":[
                                               {
                                                   "componentName":"Icon",
-                                                  "id":"node_dockcviv8fo36",
+                                                  "id":"node_dockcy8n9xey",
                                                   "props":{
                                                       "type":"success"
                                                   }
@@ -228,7 +227,7 @@
                                       },
                                       {
                                           "componentName":"Button",
-                                          "id":"node_dockcviv8fo38",
+                                          "id":"node_dockcy8n9xe10",
                                           "props":{
                                               "type":"normal",
                                               "style":{
@@ -244,7 +243,7 @@
               },
               {
                   "componentName":"Box",
-                  "id":"node_dockcviv8fo3a",
+                  "id":"node_dockcy8n9xe12",
                   "props":{
                       "style":{
                           "justifyContent":"flex-end",
@@ -257,7 +256,7 @@
                   "children":[
                       {
                           "componentName":"Button",
-                          "id":"node_dockcviv8fo3b",
+                          "id":"node_dockcy8n9xe13",
                           "props":{
                               "prefix":"next-",
                               "type":"primary",
@@ -277,6 +276,16 @@
                                           "relatedEventName":"onClick"
                                       }
                                   }
+                              },
+                              "__events":[
+                                  {
+                                      "type":"componentEvent",
+                                      "name":"onClick",
+                                      "relatedEventName":"onClick"
+                                  }],
+                              "onClick":{
+                                  "type":"JSFunction",
+                                  "value":"function(){ this.onClick() }"
                               }
                           },
                           "children":[
@@ -285,7 +294,7 @@
               },
               {
                   "componentName":"Box",
-                  "id":"node_dockcviv8fo3d",
+                  "id":"node_dockcy8n9xe15",
                   "props":{
                       "style":{
                           "backgroundColor":"#ffffff"
@@ -294,29 +303,29 @@
                   "children":[
                       {
                           "componentName":"Table",
-                          "id":"node_dockcviv8fo3e",
+                          "id":"node_dockcy8n9xe16",
                           "props":{
                               "dataSource":[
                                   {
-                                    "firstCategory": "其他",
-                                    "secondCategory": "新品预览",
-                                    "leafCategory": "",
-                                    "projectType": "标识判断",
-                                    "projectId": "",
-                                    "title": "其他类目->新品预览类目类型知识库",
-                                    "url": "其他",
-                                    "operation": "编辑"
-                                  },{
-                                    "firstCategory": "其他",
-                                    "secondCategory": "新品预览",
-                                    "leafCategory": "",
-                                    "projectType": "",
-                                    "projectId": "1",
-                                    "title": "其他类目->新品预览项目Id知识库",
-                                    "url": "其他",
-                                    "operation": "编辑"
-                                  }
-                              ],
+                                      "firstCategory":"其他",
+                                      "secondCategory":"新品预览",
+                                      "leafCategory":"",
+                                      "projectType":"标识判断",
+                                      "projectId":"",
+                                      "title":"其他类目->新品预览类目类型知识库",
+                                      "url":"其他",
+                                      "operation":"编辑"
+                                  },
+                                  {
+                                      "firstCategory":"其他",
+                                      "secondCategory":"新品预览",
+                                      "leafCategory":"",
+                                      "projectType":"",
+                                      "projectId":"1",
+                                      "title":"其他类目->新品预览项目Id知识库",
+                                      "url":"其他",
+                                      "operation":"编辑"
+                                  }],
                               "size":"medium",
                               "prefix":"next-",
                               "hasBorder":true,
@@ -334,67 +343,73 @@
                           "children":[
                               {
                                   "componentName":"Table.Column",
-                                  "id":"node_dockcviv8fo3f",
+                                  "id":"node_dockcy8n9xe17",
                                   "props":{
                                       "title":"一级类目",
-                                      "dataIndex": "firstCategory"
+                                      "dataIndex":"firstCategory"
                                   }
-                              },{
+                              },
+                              {
                                   "componentName":"Table.Column",
-                                  "id":"node_dockcviv8fo41",
+                                  "id":"node_dockcy8n9xe18",
                                   "props":{
                                       "title":"二级类目",
-                                      "dataIndex": "secondCategory"
+                                      "dataIndex":"secondCategory"
                                   }
-                              },{
+                              },
+                              {
                                   "componentName":"Table.Column",
-                                  "id":"node_dockcviv8fo42",
+                                  "id":"node_dockcy8n9xe19",
                                   "props":{
                                       "title":"叶子类目",
-                                      "dataIndex": "leafCategory"
+                                      "dataIndex":"leafCategory"
                                   }
-                              },{
+                              },
+                              {
                                   "componentName":"Table.Column",
-                                  "id":"node_dockcviv8fo43",
+                                  "id":"node_dockcy8n9xe1a",
                                   "props":{
                                       "title":"项目类型",
-                                      "dataIndex": "projectType"
+                                      "dataIndex":"projectType"
                                   }
-                              },{
+                              },
+                              {
                                   "componentName":"Table.Column",
-                                  "id":"node_dockcviv8fo44",
+                                  "id":"node_dockcy8n9xe1b",
                                   "props":{
                                       "title":"项目 ID",
-                                      "dataIndex": "projectId"
+                                      "dataIndex":"projectId"
                                   }
-                              },{
+                              },
+                              {
                                   "componentName":"Table.Column",
-                                  "id":"node_dockcviv8fo45",
+                                  "id":"node_dockcy8n9xe1c",
                                   "props":{
                                       "title":"知识条标题",
-                                      "dataIndex": "title"
+                                      "dataIndex":"title"
                                   }
-                              },{
+                              },
+                              {
                                   "componentName":"Table.Column",
-                                  "id":"node_dockcviv8fo46",
+                                  "id":"node_dockcy8n9xe1d",
                                   "props":{
                                       "title":"知识条链接",
-                                      "dataIndex": "url"
+                                      "dataIndex":"url"
                                   }
-                              },{
+                              },
+                              {
                                   "componentName":"Table.Column",
-                                  "id":"node_dockcviv8fo47",
+                                  "id":"node_dockcy8n9xe1e",
                                   "props":{
                                       "title":"操作",
-                                      "dataIndex": "operation"
+                                      "dataIndex":"operation"
                                   }
-                              }
-                          ]
+                              }]
                       }]
               },
               {
                   "componentName":"Box",
-                  "id":"node_dockcviv8fo3g",
+                  "id":"node_dockcy8n9xe1f",
                   "props":{
                       "style":{
                           "backgroundColor":"#ffffff",
@@ -404,7 +419,7 @@
                   "children":[
                       {
                           "componentName":"Pagination",
-                          "id":"node_dockcviv8fo3h",
+                          "id":"node_dockcy8n9xe1g",
                           "props":{
                               "prefix":"next-",
                               "type":"normal",
@@ -426,7 +441,7 @@
       },
       {
           "componentName":"Dialog",
-          "id":"node_dockcviv8fo3i",
+          "id":"node_dockcy8n9xe1h",
           "props":{
               "prefix":"next-",
               "footerAlign":"right",
@@ -437,7 +452,10 @@
               "hasMask":true,
               "align":"cc cc",
               "minMargin":40,
-              "visible":false,
+              "visible":{
+                  "type":"JSExpression",
+                  "value":"this.state.isShowDialog"
+              },
               "children":{
                   "type":"JSSlot"
               },
