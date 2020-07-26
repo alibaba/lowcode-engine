@@ -300,6 +300,13 @@
       "configure": {
         "component": {
           "isContainer": true
+        },
+        "props": {
+          "isExtends": true,
+          "override": [{
+            "name": "dataSource",
+            "setter": "JsonSetter"
+          }]
         }
       }
     },

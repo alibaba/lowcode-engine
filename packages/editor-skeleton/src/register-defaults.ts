@@ -37,7 +37,7 @@ registerSetter('SlotSetter', {
   title: {
     type: 'i18n',
     'zh-CN': '插槽输入',
-    'en-US': 'Slot Setter'
+    'en-US': 'Slot Setter',
   },
   condition: (field: any) => {
     return isJSSlot(field.getValue());
@@ -48,7 +48,7 @@ registerSetter('SlotSetter', {
     }
     return {
       type: 'JSSlot',
-      value: value
+      value: value,
     };
   },
   recommend: true,

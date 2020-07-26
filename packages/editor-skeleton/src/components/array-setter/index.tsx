@@ -39,7 +39,7 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
     }
 
     const itemsMap = state ? state.itemsMap : new Map<string | number, SettingField>();
-    let items = state ? state.items.slice() : [];
+    const items = state ? state.items.slice() : [];
     if (newLength > originLength) {
       for (let i = originLength; i < newLength; i++) {
         const item = field.createField({
@@ -82,9 +82,10 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
     });
   }
 
-  private scrollToLast: boolean = false;
+  private scrollToLast = false;
   onAdd() {
     const { items, itemsMap } = this.state;
+    debugger;
     const { itemSetter } = this.props;
     const initialValue = typeof itemSetter === 'object' ? (itemSetter as any).initialValue : null;
     const item = this.props.field.createField({
@@ -134,7 +135,9 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
   render() {
     let columns: any = null;
     if (this.props.columns) {
-      columns = this.props.columns.map((column) => <Title key={column.name} title={column.title || (column.name as string)} />);
+      columns = this.props.columns.map((column) => (
+        <Title key={column.name} title={column.title || (column.name as string)} />
+      ));
     }
 
     const { items } = this.state;

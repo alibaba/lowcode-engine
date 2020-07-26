@@ -46,7 +46,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
   const isRoot: boolean = componentName === 'Page' || componentName === 'Component';
   const eventsDefinition: any[] = [];
   const supportedLifecycles =
-  supports.lifecycles ||
+    supports.lifecycles ||
     (isRoot
       ? /*[
           {
@@ -87,22 +87,24 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
   if (componentName === 'Slot') {
     if (!configure.component) {
       configure.component = {
-        isContainer: true
-      }
-    } else if (typeof configure.component === 'object'){
+        isContainer: true,
+      };
+    } else if (typeof configure.component === 'object') {
       configure.component.isContainer = true;
     }
     basicInfo.icon = IconSlot;
-    propsGroup = [{
-      name: getConvertedExtraKey('title'),
-      title: {
-        type: 'i18n',
-        'en-US': 'Slot Title',
-        'zh-CN': '插槽标题'
+    propsGroup = [
+      {
+        name: getConvertedExtraKey('title'),
+        title: {
+          type: 'i18n',
+          'en-US': 'Slot Title',
+          'zh-CN': '插槽标题',
+        },
+        setter: 'StringSetter',
+        defaultValue: '插槽容器',
       },
-      setter: 'StringSetter',
-      defaultValue: '插槽容器'
-    }]
+    ];
   }
   /*
   propsGroup.push({
@@ -199,13 +201,13 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
           },
 
           setValue(field: SettingTarget, eventDataList: any[]) {
-            eventDataList.map((item)=>{
-              field.parent.setPropValue(item.name,{
+            eventDataList.map((item) => {
+              field.parent.setPropValue(item.name, {
                 type: 'JSFunction',
-                value: `function(){ this.${item.relatedEventName}() }`
-              })
+                value: `function(){ this.${item.relatedEventName}() }`,
+              });
               return item;
-            })
+            });
             return;
           },
         },
@@ -219,11 +221,14 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
         name: getConvertedExtraKey('condition'),
         title: { type: 'i18n', 'zh-CN': '是否渲染', 'en-US': 'Condition' },
         defaultValue: true,
-        setter: [{
-          componentName: 'BoolSetter',
-        }, {
-          componentName: 'VariableSetter'
-        }],
+        setter: [
+          {
+            componentName: 'BoolSetter',
+          },
+          {
+            componentName: 'VariableSetter',
+          },
+        ],
       });
     }
     if (supports.loop !== false) {
@@ -235,14 +240,17 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
             name: getConvertedExtraKey('loop'),
             title: { type: 'i18n', 'zh-CN': '循环数据', 'en-US': 'Loop Data' },
             defaultValue: [],
-            setter: [{
-              componentName: 'JsonSetter',
-              props: {
-                label: { type: 'i18n', 'zh-CN': '编辑数据', 'en-US': 'Edit Data'},
+            setter: [
+              {
+                componentName: 'JsonSetter',
+                props: {
+                  label: { type: 'i18n', 'zh-CN': '编辑数据', 'en-US': 'Edit Data' },
+                },
               },
-            }, {
-              componentName: 'VariableSetter'
-            }],
+              {
+                componentName: 'VariableSetter',
+              },
+            ],
           },
           {
             name: getConvertedExtraKey('loopArgs.0'),
@@ -251,7 +259,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
               componentName: 'StringSetter',
               props: {
                 placeholder: { type: 'i18n', 'zh-CN': '默认为: item', 'en-US': 'Defaults: item' },
-              }
+              },
             },
           },
           {
@@ -261,20 +269,23 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
               componentName: 'StringSetter',
               props: {
                 placeholder: { type: 'i18n', 'zh-CN': '默认为: index', 'en-US': 'Defaults: index' },
-              }
+              },
             },
           },
           {
             name: 'key',
             title: '循环 Key',
-            setter: [{
-              componentName: 'StringSetter',
-            }, {
-              componentName: 'VariableSetter'
-            }],
+            setter: [
+              {
+                componentName: 'StringSetter',
+              },
+              {
+                componentName: 'VariableSetter',
+              },
+            ],
           },
         ],
-      })
+      });
     }
   }
   if (advanceGroup.length > 0) {

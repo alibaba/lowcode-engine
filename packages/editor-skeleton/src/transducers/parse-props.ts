@@ -23,7 +23,8 @@ function propConfigToFieldConfig(propConfig: PropConfig): FieldConfig {
   return {
     title,
     ...propConfig,
-    setter: propTypeToSetter(propConfig.propType),
+    // TODO 这边直接用propConfig，将setter丢在propconfig里，需要确认是否在PropConfig扩展还是换实现
+    setter: propConfig.setter ? propConfig.setter : propTypeToSetter(propConfig.propType),
   };
 }
 
@@ -32,7 +33,7 @@ function propTypeToSetter(propType: PropType): SetterType {
   let isRequired: boolean | undefined = false;
   if (typeof propType === 'string') {
     typeName = propType;
-  } else if (typeof propType === 'object'){
+  } else if (typeof propType === 'object') {
     typeName = propType.type;
     isRequired = propType.isRequired;
   } else {
@@ -123,6 +124,7 @@ function propTypeToSetter(propType: PropType): SetterType {
           },
         },
         isRequired,
+        initialValue: {},
       };
     case 'array':
     case 'arrayOf':
@@ -163,9 +165,29 @@ function propTypeToSetter(propType: PropType): SetterType {
 const EVENT_RE = /^on[A-Z][\w]*$/;
 
 export default function(metadata: TransformedComponentMetadata): TransformedComponentMetadata {
-  const { configure } = metadata;
+  const { configure = {} } = metadata;
+  // TODO types后续补充
+  let extendsProps: any = null;
   if (configure.props) {
-    return metadata;
+    if (Array.isArray(configure.props)) {
+      return metadata;
+    }
+    const { isExtends, override = [] } = configure.props;
+    // 不开启继承时，直接返回configure配置
+    if (!isExtends) {
+      return {
+        ...metadata,
+        configure: {
+          props: [...override],
+        },
+      };
+    }
+
+    extendsProps = {};
+    // 开启继承后，缓存重写内容的配置
+    override.forEach((prop: any) => {
+      extendsProps[prop.name] = prop;
+    });
   }
 
   if (!metadata.props) {
@@ -216,6 +238,14 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
         (supports as any).style = true;
       }
       return;
+    }
+
+    // 存在覆盖配置时
+    if (extendsProps) {
+      debugger;
+      if (name in extendsProps) {
+        prop = extendsProps[name];
+      }
     }
 
     props.push(propConfigToFieldConfig(prop));
