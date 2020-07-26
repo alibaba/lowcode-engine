@@ -336,9 +336,14 @@ export class Props implements IPropParent {
    */
   getNode() {
     const nodeForVision = this.owner;
-    nodeForVision.getChildren = () => {
-      return this.owner?.getChildren()?.getChildrenArray() || [];
-    };
+    // 判断是否已经是 nodeForVision
+    if (!nodeForVision.isVisionNode) {
+      const children = nodeForVision.getChildren();
+      nodeForVision.getChildren = () => {
+        return children?.getChildrenArray() || [];
+      };
+      nodeForVision.isVisionNode = true;
+    }
     return nodeForVision;
   }
 }
