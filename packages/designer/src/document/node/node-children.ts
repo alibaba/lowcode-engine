@@ -313,9 +313,10 @@ export class NodeChildren {
       return;
     }
     const callbacks = owner.componentMeta.getMetadata().experimental?.callbacks;
-    if (callbacks?.onSubtreeModified) {
+    if (callbacks?.onSubtreeModified && options?.type !== 'insert') {
       try {
-        callbacks?.onSubtreeModified.call(node, owner, options);
+        // 此处传入的 owner节点需要对getChildren进行处理，兼容老的数据结构
+        callbacks?.onSubtreeModified.call(node, owner.getVisionCapabledNode(), options);
       } catch (e) {
         console.error('error when excute experimental.callbacks.onNodeAdd', e);
       }
@@ -323,7 +324,7 @@ export class NodeChildren {
 
     if (callbacks?.onNodeAdd && options?.type === 'insert') {
       try {
-        callbacks?.onNodeAdd.call(owner, node, owner);
+        callbacks?.onNodeAdd.call(owner, node.getVisionCapabledNode(), owner);
       } catch (e) {
         console.error('error when excute experimental.callbacks.onNodeAdd', e);
       }
