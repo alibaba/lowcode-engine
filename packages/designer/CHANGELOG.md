@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.32"></a>
+## [0.9.32](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.31...@ali/lowcode-designer@0.9.32) (2020-07-23)
+
+
+### Bug Fixes
+
+* prop type=UNSET 时返回 undefined ([f437f30](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f437f30))
+
+
+
+
 <a name="0.9.31"></a>
 ## [0.9.31](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.30...@ali/lowcode-designer@0.9.31) (2020-07-22)
 
