@@ -212,6 +212,9 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
         }, {
           componentName: 'VariableSetter'
         }],
+        extraProps: {
+          display: 'block',
+        },
       });
     }
     if (supports.loop !== false) {
@@ -252,18 +255,28 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
               }
             },
           },
-          {
-            name: 'key',
-            title: '循环 Key',
-            setter: [{
-              componentName: 'StringSetter',
-            }, {
-              componentName: 'VariableSetter'
-            }],
-          },
         ],
+        extraProps: {
+          display: 'accordion',
+        },
       })
     }
+    advanceGroup.push({
+      name: 'key',
+      title: {
+        label: '渲染唯一标识（key）',
+        tip: '搭配「条件渲染」或「循环渲染」时使用，和 react 组件中的 key 原理相同，点击查看帮助',
+        docUrl: 'https://yuque.antfin-inc.com/legao/help3.0/ca5in7',
+      },
+      setter: [{
+        componentName: 'StringSetter',
+      }, {
+        componentName: 'VariableSetter'
+      }],
+      extraProps: {
+        display: 'block',
+      },
+    },)
   }
   if (advanceGroup.length > 0) {
     combined.push({

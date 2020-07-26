@@ -1,5 +1,5 @@
 import { ComponentType, ReactElement, isValidElement, ComponentClass } from 'react';
-import { isPlainObject } from '@ali/lowcode-utils';
+import { isPlainObject, uniqueId } from '@ali/lowcode-utils';
 import { isI18nData, SettingTarget, InitialItem, FilterItem, isJSSlot, ProjectSchema, AutorunItem } from '@ali/lowcode-types';
 import { untracked } from '@ali/lowcode-editor-core';
 import { editor, designer } from '../editor';
@@ -218,7 +218,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
   };
   const newConfig: any = {
     type: type === 'group' ? 'group' : 'field',
-    name,
+    name: type === 'group' && !name ? uniqueId('group') : name,
     title,
     extraProps,
   };
