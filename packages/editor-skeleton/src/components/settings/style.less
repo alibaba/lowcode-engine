@@ -3,6 +3,42 @@
   height: 100%;
   overflow: hidden;
 
+  .lc-settings-content {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    overflow-y: auto;
+  }
+
+  .lc-setting-stage-back + .lc-settings-content {
+    top: 38px;
+  }
+
+  .lc-setting-stage-back {
+    height: 32px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    background: var(--color-block-background-shallow, rgba(31,56,88,.06));
+    color: var(--color-title);
+    padding: 0 16px;
+    user-select: none;
+    position: relative;
+    margin-bottom: 4px;
+    position: absolute;
+
+    .lc-setting-stage-back-icon {
+      position: absolute;
+      left: 8px;
+      top: 8px;
+      color: #8F9BB3;
+      cursor: pointer;
+    }
+  }
+
   .lc-settings-notice {
     text-align: center;
     font-size: 12px;

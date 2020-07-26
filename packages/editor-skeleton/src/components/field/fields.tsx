@@ -2,12 +2,10 @@ import { Component } from 'react';
 import { isObject } from 'lodash';
 import classNames from 'classnames';
 import { Icon } from '@alifd/next';
-import { Title, Tip } from '@ali/lowcode-editor-core';
+import { Title } from '@ali/lowcode-editor-core';
 import { TitleContent } from '@ali/lowcode-types';
 import { PopupPipe, PopupContext } from '../popup';
-import { intlNode } from '../../locale';
 import './index.less';
-import { IconClear } from '../../icons/clear';
 import InlineTip from './inlinetip';
 
 export interface FieldProps {
@@ -254,21 +252,17 @@ export interface EntryFieldProps extends FieldProps {
 
 export class EntryField extends Component<EntryFieldProps> {
   render() {
-    const { stageName, title, className } = this.props;
-    const classNameList = classNames('engine-setting-field', 'engine-entry-field', className);
-    const fieldProps: any = {};
-
-    if (stageName) {
-      // 为 stage 切换奠定基础
-      fieldProps['data-stage-target'] = stageName;
-    }
+    const { title, className, stageName } = this.props;
+    const classNameList = classNames('lc-field', 'lc-entry-field', className);
 
     return (
-      <div className={classNameList} {...fieldProps}>
-        <div className="lc-field-title">
-          <Title title={title || ''} />
+      <div className={classNameList}>
+        <div className="lc-field-head" data-stage-target={stageName}>
+          <div className="lc-field-title">
+            <Title title={title || ''} />
+          </div>
+          <Icon className="lc-field-icon" type="arrow-right" size="xs" />
         </div>
-        <Icon className="lc-field-icon" type="arrow-left" size="xs" />
       </div>
     );
   }

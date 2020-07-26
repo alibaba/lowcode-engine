@@ -1,6 +1,10 @@
 @x-gap: 12px;
 @y-gap: 8px;
 
+.lc-settings-content > .lc-field:first-child > .lc-field-head{
+  border-top: none !important;
+}
+
 .lc-field {
   .lc-field-head {
     display: flex;
@@ -68,10 +72,7 @@
   &.lc-inline-field {
     display: flex;
     align-items: center;
-    margin-bottom: 12px;
-    &:last-child{
-      margin-bottom: 0;
-    }
+    margin: 12px;
 
     > .lc-field-head {
       width: 70px;
@@ -89,17 +90,11 @@
     }
   }
 
-  &.lc-plain-field {
-    .lc-inline-field {
-      margin: 12px;
-    }
-  }
-
-  &.lc-block-field, &.lc-accordion-field {
+  &.lc-block-field, &.lc-accordion-field, &.lc-entry-field {
     display: block;
     &:first-child {
       > .lc-field-head {
-        border-top: none;
+        // border-top: none;
       }
     }
     > .lc-field-head {
@@ -111,7 +106,7 @@
       border-top: 1px solid var(--color-line-normal,rgba(31,56,88,.1));
       border-bottom: 1px solid var(--color-line-normal,rgba(31,56,88,.1));
       color: var(--color-title);
-      padding: 0 16px;
+      padding: 0 12px;
       user-select: none;
 
       > .lc-field-icon {
@@ -120,12 +115,30 @@
     }
 
     > .lc-field-body {
-      // padding: @y-gap @x-gap/2;
       padding: 12px;
+
+      .lc-inline-field {
+        margin: 12px 0;
+
+        &:first-child {
+          margin-top: 0;
+        }
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
     }
 
-    + .lc-inline-field {
-      border-top: 1px solid var(--color-line-normal);
+    // + .lc-inline-field {
+    //   border-top: 1px solid var(--color-line-normal);
+    // }
+  }
+
+  &.lc-entry-field {
+    margin-bottom: 6px;
+
+    > .lc-field-head {
+      cursor: pointer;
     }
   }
 
@@ -146,6 +159,10 @@
 
   &.lc-accordion-field {
     position: relative;
+
+    > .lc-field-head {
+      cursor: pointer;
+    }
     
     &.lc-field-is-collapsed {
       margin-bottom: 6px;
@@ -172,35 +189,35 @@
 
   // 2rd level reset
   .lc-field-body {
-    .lc-inline-field {
-      &:first-child {
-        padding-top: 0;
-      }
-      + .lc-accordion-field, +.lc-block-field {
-        margin-top: @y-gap;
-      }
-    }
+    // .lc-inline-field {
+    //   &:first-child {
+    //     padding-top: 0;
+    //   }
+    //   + .lc-accordion-field, +.lc-block-field {
+    //     margin-top: @y-gap;
+    //   }
+    // }
 
-    .lc-field {
-      border-top: none !important;
-    }
+    // .lc-field {
+    //   border-top: none !important;
+    // }
 
-    .lc-accordion-field, .lc-block-field {
-      > .lc-field-head {
-        padding-left: @x-gap;
-        background: var(--color-block-background-light);
-        border-bottom: none;
-        border-top: none;
-        > .lc-field-icon {
-          // margin-right: @x-gap/2;
-          margin-right: 0;
-        }
-      }
+    // .lc-accordion-field, .lc-block-field {
+    //   > .lc-field-head {
+    //     padding-left: @x-gap;
+    //     background: var(--color-block-background-light);
+    //     border-bottom: none;
+    //     border-top: none;
+    //     > .lc-field-icon {
+    //       // margin-right: @x-gap/2;
+    //       margin-right: 0;
+    //     }
+    //   }
 
-      > .lc-field-body {
-        padding: 8px;
-      }
-    }
+    //   > .lc-field-body {
+    //     padding: 8px;
+    //   }
+    // }
 
     // 3rd level field title width should short
     // .lc-field-body .lc-inline-field {
@@ -211,8 +228,8 @@
     //     }
     //   }
     // }
-    >.lc-block-setter {
-      flex: 1;
-    }
+    // >.lc-block-setter {
+    //   flex: 1;
+    // }
   }
 }
