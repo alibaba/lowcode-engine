@@ -26,7 +26,10 @@
     "@alifd/next": "^1.20.12",
     "classnames": "^2.2.6",
     "react": "^16.8.1",
-    "react-dom": "^16.8.1"
+    "react-dom": "^16.8.1",
+    "events": "^3.2.0",
+    "@ali/ve-icons": "latest",
+    "@ali/ve-less-variables": "^2.0.0"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.3",
