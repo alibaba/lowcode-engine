@@ -31,6 +31,10 @@ export default class Area<C extends IWidgetBaseConfig = any, T extends IWidget =
   }
 
   add(config: T | C): T {
+    const item = this.container.get(config.name);
+    if (item) {
+      return item;
+    }
     return this.container.add(config);
   }
 

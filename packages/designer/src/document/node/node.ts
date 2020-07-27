@@ -818,6 +818,33 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   toString() {
     return this.id;
   }
+
+  /**
+   * 慎用，可能有极端未知后果
+   * @deprecated
+   */
+  getVisionCapabledNode() {
+    // 判断是否已经是 nodeForVision
+    if (!this.isVisionNode) {
+      const children = this.getChildren();
+      this.getChildren = () => {
+        return children?.getChildrenArray() || [];
+      };
+      this.getProps = () => {
+        const props = this.props.export();
+        props.getPropValue = (key) => {
+          return this.props.getPropValue(key);
+        };
+        props.getNode = () => {
+          return this;
+        };
+        return props;
+      };
+      this.isVisionNode = true;
+    } 
+    return this;
+  }
+
 }
 
 export interface ParentalNode<T extends NodeSchema = NodeSchema> extends Node<T> {

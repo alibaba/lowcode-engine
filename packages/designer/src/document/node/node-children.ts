@@ -132,6 +132,7 @@ export class NodeChildren {
     }
 
     this.emitter.emit('change');
+    this.reportModified(node, this.owner, { type: 'insert' });
 
     // check condition group
     if (node.conditionGroup) {
@@ -288,24 +289,49 @@ export class NodeChildren {
       return;
     }
     this.purged = true;
-    this.children.forEach(child => child.purge());
+    this.children.forEach((child) => child.purge());
   }
 
   get [Symbol.toStringTag]() {
     // 保证向前兼容性
-    return "Array";
+    return 'Array';
+  }
+
+  /**
+   * @deprecated
+   * 为了兼容vision体系存量api
+   */
+  getChildrenArray() {
+    return this.children;
   }
 
   private reportModified(node: Node, owner: Node, options = {}) {
-    if (!node) { return; }
-    if (node.isRoot()) { return; }
+    if (!node) {
+      return;
+    }
+    if (node.isRoot()) {
+      return;
+    }
     const callbacks = owner.componentMeta.getMetadata().experimental?.callbacks;
-    if (callbacks?.onSubtreeModified) {
-      callbacks?.onSubtreeModified.call(node, owner, options);
+    if (callbacks?.onSubtreeModified && options?.type !== 'insert') {
+      try {
+        // 此处传入的 owner节点需要对getChildren进行处理，兼容老的数据结构
+        callbacks?.onSubtreeModified.call(node, owner.getVisionCapabledNode(), options);
+      } catch (e) {
+        console.error('error when excute experimental.callbacks.onNodeAdd', e);
+      }
+    }
+
+    if (callbacks?.onNodeAdd && options?.type === 'insert') {
+      try {
+        callbacks?.onNodeAdd.call(owner, node.getVisionCapabledNode(), owner);
+      } catch (e) {
+        console.error('error when excute experimental.callbacks.onNodeAdd', e);
+      }
     }
 
     if (owner.parent && !owner.parent.isRoot()) {
-      this.reportModified(node, owner.parent, options); 
+      this.reportModified(node, owner.parent, options);
     }
   }
 }

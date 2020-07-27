@@ -329,4 +329,13 @@ export class Props implements IPropParent {
   setPropValue(path: string, value: any) {
     this.getProp(path, true)!.setValue(value);
   }
+
+  /**
+   * @deprecated
+   * 兼容vision体系
+   */
+  getNode() {
+    const nodeForVision = this.owner?.getVisionCapabledNode();
+    return nodeForVision;
+  }
 }
