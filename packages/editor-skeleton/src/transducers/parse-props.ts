@@ -92,7 +92,7 @@ function propTypeToSetter(propType: PropType): SetterType {
       };
     case 'shape':
     case 'exact':
-      const items = (propType as Shape).value.map((item) => propConfigToFieldConfig(item));
+      const items = ((propType as any).value || []).map((item: any) => propConfigToFieldConfig(item));
       return {
         componentName: 'ObjectSetter',
         props: {
@@ -242,7 +242,6 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
 
     // 存在覆盖配置时
     if (extendsProps) {
-      debugger;
       if (name in extendsProps) {
         prop = extendsProps[name];
       }

@@ -189,7 +189,21 @@
         },
         {
           "name": "columns",
-          "propType": "array"
+          "propType": {
+            "type": "arrayOf",
+            "value": {
+              "type": "shape",
+              "value": [{
+                "name": "title",
+                "description": "列标题",
+                "propType": "string"
+              },{
+                "name": "dataIndex",
+                "description": "列名称",
+                "propType": "string"
+              }]
+            }
+          }
         },
         {
           "name": "emptyContent",
