@@ -9,8 +9,8 @@
     {
       "title": "fusion组件库",
       "package": "@alifd/next",
-      "version": "1.19.18",
-      "urls": ["https://unpkg.antfin-inc.com/@alife/next@1.19.18/dist/next.js", "https://unpkg.antfin-inc.com/@alife/next@1.19.18/dist/next.css"],
+      "version": "1.20.0",
+      "urls": ["https://unpkg.antfin-inc.com/@alifd/next@1.20.0/dist/next.js", "https://unpkg.antfin-inc.com/@alifd/next@1.20.0/dist/next.css"],
       "library": "Next"
     },
     {
@@ -65,6 +65,262 @@
           "isContainer": true
         }
       }
+    },
+    {
+      "componentName": "Drawer",
+      "title": "抽屉",
+      "docUrl": "",
+      "screenshot": "",
+      "npm": {
+        "package": "@alifd/next",
+        "version": "1.19.18",
+        "exportName": "Drawer",
+        "main": "src/index.js",
+        "destructuring": true,
+        "subName": ""
+      },
+      "props": [
+        {
+          "name": "prefix",
+          "propType": "string",
+          "defaultValue": "next-"
+        },
+        {
+          "name": "style",
+          "propType": "object"
+        },
+        {
+          "name": "pure",
+          "propType": "bool"
+        },
+        {
+          "name": "rtl",
+          "propType": "bool"
+        },
+        {
+          "name": "trigger",
+          "propType": {
+            "type": "instanceOf",
+            "value": "element"
+          },
+          "defaultValue": null
+        },
+        {
+          "name": "triggerType",
+          "propType": {
+            "type": "oneOfType",
+            "value": [
+              "string",
+              {
+                "type": "instanceOf",
+                "value": "array"
+              }
+            ]
+          },
+          "defaultValue": "click"
+        },
+        {
+          "name": "width",
+          "propType": {
+            "type": "oneOfType",
+            "value": [
+              "number",
+              "string"
+            ]
+          },
+          "description": "宽度，仅在 placement是 left right 的时候生效"
+        },
+        {
+          "name": "height",
+          "propType": {
+            "type": "oneOfType",
+            "value": [
+              "number",
+              "string"
+            ]
+          },
+          "description": "高度，仅在 placement是 top bottom 的时候生效"
+        },
+        {
+          "name": "closeable",
+          "propType": {
+            "type": "oneOfType",
+            "value": [
+              "string",
+              "bool"
+            ]
+          },
+          "description": "控制对话框关闭的方式，值可以为字符串或者布尔值，其中字符串是由以下值组成：\n**close** 表示点击关闭按钮可以关闭对话框\n**mask** 表示点击遮罩区域可以关闭对话框\n**esc** 表示按下 esc 键可以关闭对话框\n如 'close' 或 'close,esc,mask'\n如果设置为 true，则以上关闭方式全部生效\n如果设置为 false，则以上关闭方式全部失效",
+          "defaultValue": true
+        },
+        {
+          "name": "onClose",
+          "propType": "func",
+          "description": "对话框关闭时触发的回调函数\n@param {String} trigger 关闭触发行为的描述字符串\n@param {Object} event 关闭时事件对象"
+        },
+        {
+          "name": "placement",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "top",
+              "right",
+              "bottom",
+              "left"
+            ]
+          },
+          "description": "位于页面的位置",
+          "defaultValue": "right"
+        },
+        {
+          "name": "title",
+          "propType": {
+            "type": "instanceOf",
+            "value": "node"
+          },
+          "description": "标题"
+        },
+        {
+          "name": "headerStyle",
+          "propType": "object",
+          "description": "header上的样式"
+        },
+        {
+          "name": "bodyStyle",
+          "propType": "object",
+          "description": "body上的样式"
+        },
+        {
+          "name": "visible",
+          "propType": "bool",
+          "description": "是否显示"
+        },
+        {
+          "name": "hasMask",
+          "propType": "bool",
+          "description": "是否显示遮罩",
+          "defaultValue": true
+        },
+        {
+          "name": "onVisibleChange",
+          "propType": "func"
+        },
+        {
+          "name": "animation",
+          "propType": {
+            "type": "oneOfType",
+            "value": [
+              "object",
+              "bool"
+            ]
+          },
+          "description": "显示隐藏时动画的播放方式\n@property {String} in 进场动画\n@property {String} out 出场动画"
+        },
+        {
+          "name": "locale",
+          "propType": "object"
+        },
+        {
+          "name": "popupContainer",
+          "propType": "any"
+        }
+      ],"configure": {
+      "component": {
+        "isContainer": true,
+        "isModel": true
+      }
+    }
+    },
+    {
+      "componentName": "Drawer.Inner",
+      "title": "Drawer.Inner",
+      "docUrl": "",
+      "screenshot": "",
+      "npm": {
+        "package": "@alifd/next",
+        "version": "1.19.18",
+        "exportName": "Drawer",
+        "main": "src/index.js",
+        "destructuring": true,
+        "subName": "Inner"
+      },
+      "props": [
+        {
+          "name": "prefix",
+          "propType": "string",
+          "defaultValue": "next-"
+        },
+        {
+          "name": "className",
+          "propType": "string"
+        },
+        {
+          "name": "closeable",
+          "propType": "bool",
+          "defaultValue": true
+        },
+        {
+          "name": "role",
+          "propType": "string",
+          "defaultValue": "dialog"
+        },
+        {
+          "name": "title",
+          "propType": "string"
+        },
+        {
+          "name": "placement",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "top",
+              "right",
+              "bottom",
+              "left"
+            ]
+          }
+        },
+        {
+          "name": "rtl",
+          "propType": "bool"
+        },
+        {
+          "name": "onClose",
+          "propType": "func"
+        },
+        {
+          "name": "locale",
+          "propType": "object"
+        },
+        {
+          "name": "headerStyle",
+          "propType": "object"
+        },
+        {
+          "name": "bodyStyle",
+          "propType": "object"
+        },
+        {
+          "name": "afterClose",
+          "propType": "func"
+        },
+        {
+          "name": "beforeOpen",
+          "propType": "func"
+        },
+        {
+          "name": "beforeClose",
+          "propType": "func"
+        },
+        {
+          "name": "cache",
+          "propType": "bool"
+        },
+        {
+          "name": "shouldUpdatePosition",
+          "propType": "bool"
+        }
+      ]
     },
     {
       "componentName": "Table",
@@ -333,7 +589,7 @@
         "exportName": "Table",
         "main": "src/index.js",
         "destructuring": true,
-        "subName": ""
+        "subName": "Column"
       },
       "props": [
         {
@@ -401,7 +657,7 @@
           "name": "showZero",
           "propType": "bool",
           "description": "当count为0时，是否显示count",
-          "defaultValue": false
+          "defaultValue": true
         },
         {
           "name": "content",
@@ -1091,10 +1347,8 @@
         },
         {
           "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          }
+          "description": "内容",
+          "propType": "array"
         },
         {
           "name": "style",
@@ -1253,17 +1507,19 @@
         },
         {
           "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          }
+          "propType": "array"
         },
         {
           "name": "style",
           "propType": "object",
           "description": "自定义内联样式"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "Button.Group",
@@ -4134,8 +4390,14 @@
         {
           "name": "children",
           "propType": {
-            "type": "instanceOf",
-            "value": "node"
+            "type": "oneOfType",
+            "value": [
+              "bool",
+              {
+                "type": "instanceOf",
+                "value": "node"
+              }
+            ]
           },
           "description": "内容"
         },
@@ -4298,8 +4560,10 @@
         }
       ],
       "configure": {
-        "isContainer": true,
-        "isModel": true
+        "component": {
+          "isContainer": true,
+          "isModel": true
+        }
       }
     },
     {
@@ -6126,7 +6390,12 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "SubMenu",
@@ -6250,7 +6519,7 @@
       ]
     },
     {
-      "componentName": "SelectableItem",
+      "componentName": "Menu.Item",
       "title": "SelectableItem",
       "docUrl": "",
       "screenshot": "",
@@ -6548,8 +6817,8 @@
       ]
     },
     {
-      "componentName": "Group",
-      "title": "Group",
+      "componentName": "Menu.Group",
+      "title": "Menu.Group",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -7852,7 +8121,7 @@
         },
         {
           "name": "backgroundColor",
-          "propType": "string",
+          "propType": "color",
           "description": "背景色"
         },
         {
@@ -8242,6 +8511,11 @@
           "name": "renderPreview",
           "propType": "func",
           "description": "预览态模式下渲染的内容\n@param {number} value 评分值"
+        },
+        {
+          "name": "value",
+          "propType": "number",
+          "description": "分值"
         }
       ]
     },
@@ -9973,6 +10247,73 @@
       ]
     },
     {
+      "componentName": "Tag",
+      "title": "Tag",
+      "docUrl": "",
+      "screenshot": "",
+      "npm": {
+        "package": "@alifd/next",
+        "version": "1.19.18",
+        "exportName": "Tag",
+        "main": "src/index.js",
+        "destructuring": true
+      },
+      "props": [
+        {
+          "name": "prefix",
+          "propType": "string",
+          "defaultValue": "next-"
+        },
+        {
+          "name": "type",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "normal",
+              "primary"
+            ]
+          },
+          "description": "标签的类型"
+        },
+        {
+          "name": "size",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "small",
+              "medium",
+              "large"
+            ]
+          },
+          "description": "标签的尺寸（large 尺寸为兼容表单场景 large = medium）"
+        },
+        {
+          "name": "closeArea",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "tag",
+              "tail"
+            ]
+          }
+        },
+        {
+          "name": "color",
+          "propType": "string",
+          "description": "标签颜色, 目前支持：blue、 green、 orange、red、 turquoise、 yellow 和 hex 颜色值 （`color keywords`作为 Tag 组件的保留字，请勿直接使用 ）, `1.19.0` 以上版本生效"
+        },
+        {
+          "name": "children",
+          "propType": "array"
+        }
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
+    },
+    {
       "componentName": "TimePicker",
       "title": "TimePicker",
       "docUrl": "",
@@ -10266,7 +10607,12 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "TimelineItem",
@@ -10525,10 +10871,23 @@
           "description": "接收 children 自定义渲染列表"
         },
         {
+          "name": "dataSource",
+          "propType": "array"
+        },
+        {
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "props": {
+          "isExtends": true,
+          "override": [{
+            "name": "dataSource",
+            "setter": "JsonSetter"
+          }]
+        }
+      }
     },
     {
       "componentName": "Tree",
@@ -10776,7 +11135,12 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "TreeNode",
@@ -11950,11 +12314,16 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
-      "componentName": "Cell",
-      "title": "Cell",
+      "componentName": "ResponsiveGrid.Cell",
+      "title": "ResponsiveGrid.Cell",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -12007,7 +12376,12 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "Box",
@@ -12163,12 +12537,37 @@
                 "componentName": "Badge",
                 "props": {
                   "prefix": "next-",
-                  "overflowCount": 99
+                  "showZero": true
                 }
               }
             }
           ]
-        },{
+        },
+        {
+          "componentName": "Drawer",
+          "title": "抽屉",
+          "icon": "",
+          "package": "@alife/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "抽屉",
+              "screenshot": "https://img.alicdn.com/tfs/TB1RiM3lgHqK1RjSZFEXXcGMXXa-404-422.png",
+              "schema": {
+                "componentName": "Drawer",
+                "props": {
+                  "prefix": "next-",
+                  "triggerType": "click",
+                  "closeable": true,
+                  "placement": "right",
+                  "hasMask": true,
+                  "visible": true
+                }
+              }
+            }
+          ]
+        },
+        {
           "componentName": "Table",
           "title": "表格",
           "icon": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_table.png",
@@ -12413,6 +12812,30 @@
           ]
         },
         {
+          "componentName": "Menu.Item",
+          "title": "菜单项",
+          "icon": "",
+          "package": "@alife/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "菜单项",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_menu.png",
+              "schema": {
+                "componentName": "Menu.Item",
+                "props": {
+                  "parentMode": "inline",
+                  "type": "item",
+                  "component": "",
+                  "disabled": true,
+                  "className": "",
+                  "needIndent": ""
+                }
+              }
+            }
+          ]
+        },
+        {
           "componentName": "Progress",
           "title": "进度指示器",
           "icon": "",
@@ -12506,6 +12929,46 @@
               "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_timeline.png",
               "schema": {
                 "componentName": "Timeline",
+                "props": {
+                  "prefix": "next-",
+                  "fold": [],
+                  "animation": true
+                },"children": [
+                  {
+                    "componentName": "TimelineItem",
+                    "props": {
+                      "state": "process",
+                      "title": "12344"
+                    }
+                  },
+                  {
+                    "componentName": "TimelineItem",
+                    "props": {
+                      "title": "Ship"
+                    }
+                  },
+                  {
+                    "componentName": "TimelineItem",
+                    "props": {
+                      "title": "Order"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },{
+          "componentName": "TimelineItem",
+          "title": "时间轴 Item",
+          "icon": "",
+          "package": "@alife/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "时间轴 Item",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_timeline.png",
+              "schema": {
+                "componentName": "TimelineItem",
                 "props": {
                   "prefix": "next-",
                   "fold": [],
@@ -12648,23 +13111,6 @@
               }
             }
           ]
-        },
-        {
-          "componentName": "Notification",
-          "title": "通知",
-          "icon": "",
-          "package": "@alife/next",
-          "library": "Next",
-          "snippets": [
-            {
-              "title": "通知",
-              "screenshot": "",
-              "schema": {
-                "componentName": "Notification",
-                "props": {}
-              }
-            }
-          ]
         }
       ],
       "icon": ""
@@ -12720,9 +13166,9 @@
                   "type": "primary",
                   "size": "large",
                   "htmlType": "button",
-                  "component": "button"
-                },
-                "children": "提交"
+                  "component": "button",
+                  "children": ["提交"]
+                }
               }
             }
           ]
@@ -12825,7 +13271,9 @@
               "screenshot": "",
               "schema": {
                 "componentName": "Icon",
-                "props": {}
+                "props": {
+                  "type": "smile"
+                }
               }
             }
           ]
@@ -12870,17 +13318,17 @@
           ]
         },
         {
-          "componentName": "Shell",
-          "title": "框架",
+          "componentName": "ResponsiveGrid.Cell",
+          "title": "栅格布局 Cell",
           "icon": "",
           "package": "@alife/next",
           "library": "Next",
           "snippets": [
             {
-              "title": "框架",
+              "title": "栅格布局 Cell",
               "screenshot": "",
               "schema": {
-                "componentName": "Shell",
+                "componentName": "ResponsiveGrid.Cell",
                 "props": {}
               }
             }
@@ -12966,12 +13414,12 @@
               "schema": {
                 "componentName": "Breadcrumb.Item",
                 "props": {
-                  "prefix": "next-"
-                },
-                "children": [
-                  "222",
-                  "222111"
-                ]
+                  "prefix": "next-",
+                  "children": [
+                    "222",
+                    "222111"
+                  ]
+                }
               }
             }
           ]

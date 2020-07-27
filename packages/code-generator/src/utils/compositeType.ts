@@ -1,38 +1,40 @@
-import { CompositeArray, CompositeValue, ICompositeObject } from '../types';
-import { generateExpression, isJsExpression } from './jsExpression';
+import {
+  CompositeArray,
+  CompositeValue,
+  ICompositeObject,
+  CompositeValueGeneratorOptions,
+  CodeGeneratorError,
+} from '../types';
+import { generateExpression, generateFunction, isJsExpression, isJsFunction } from './jsExpression';
+import { isJsSlot, generateJsSlot } from './jsSlot';
 
-type CustomHandler = (data: unknown) => string;
-interface CustomHandlerSet {
-  boolean?: CustomHandler;
-  number?: CustomHandler;
-  string?: CustomHandler;
-  array?: CustomHandler;
-  object?: CustomHandler;
-  expression?: CustomHandler;
-}
-
-function generateArray(
-  value: CompositeArray,
-  handlers: CustomHandlerSet = {},
-): string {
-  const body = value.map(v => generateUnknownType(v, handlers)).join(',');
+function generateArray(value: CompositeArray, options: CompositeValueGeneratorOptions = {}): string {
+  const body = value.map((v) => generateUnknownType(v, options)).join(',');
   return `[${body}]`;
 }
 
-function generateObject(
-  value: ICompositeObject,
-  handlers: CustomHandlerSet = {},
-): string {
+function generateObject(value: ICompositeObject, options: CompositeValueGeneratorOptions = {}): string {
   if (isJsExpression(value)) {
-    if (handlers.expression) {
-      return handlers.expression(value);
+    if (options.handlers && options.handlers.expression) {
+      return options.handlers.expression(value);
     }
     return generateExpression(value);
   }
 
+  if (isJsFunction(value)) {
+    return generateFunction(value, { isArrow: true });
+  }
+
+  if (isJsSlot(value)) {
+    if (options.nodeGenerator) {
+      return generateJsSlot(value, options.nodeGenerator);
+    }
+    throw new CodeGeneratorError("Can't find Node Generator");
+  }
+
   const body = Object.keys(value)
-    .map(key => {
-      const v = generateUnknownType(value[key], handlers);
+    .map((key) => {
+      const v = generateUnknownType(value[key], options);
       return `${key}: ${v}`;
     })
     .join(',\n');
@@ -40,38 +42,35 @@ function generateObject(
   return `{${body}}`;
 }
 
-export function generateUnknownType(
-  value: CompositeValue,
-  handlers: CustomHandlerSet = {},
-): string {
+export function generateUnknownType(value: CompositeValue, options: CompositeValueGeneratorOptions = {}): string {
   if (Array.isArray(value)) {
-    if (handlers.array) {
-      return handlers.array(value);
+    if (options.handlers && options.handlers.array) {
+      return options.handlers.array(value);
     }
-    return generateArray(value as CompositeArray, handlers);
+    return generateArray(value as CompositeArray, options);
   } else if (typeof value === 'object') {
-    if (handlers.object) {
-      return handlers.object(value);
+    if (options.handlers && options.handlers.object) {
+      return options.handlers.object(value);
     }
-    return generateObject(value as ICompositeObject, handlers);
+    return generateObject(value as ICompositeObject, options);
   } else if (typeof value === 'string') {
-    if (handlers.string) {
-      return handlers.string(value);
+    if (options.handlers && options.handlers.string) {
+      return options.handlers.string(value);
     }
     return `'${value}'`;
-  } else if (typeof value === 'number' && handlers.number) {
-    return handlers.number(value);
-  } else if (typeof value === 'boolean' && handlers.boolean) {
-    return handlers.boolean(value);
+  } else if (typeof value === 'number' && options.handlers && options.handlers.number) {
+    return options.handlers.number(value);
+  } else if (typeof value === 'boolean' && options.handlers && options.handlers.boolean) {
+    return options.handlers.boolean(value);
   }
   return `${value}`;
 }
 
 export function generateCompositeType(
   value: CompositeValue,
-  handlers: CustomHandlerSet = {},
+  options: CompositeValueGeneratorOptions = {},
 ): [boolean, string] {
-  const result = generateUnknownType(value, handlers);
+  const result = generateUnknownType(value, options);
 
   if (result.substr(0, 1) === "'" && result.substr(-1, 1) === "'") {
     return [true, result.substring(1, result.length - 1)];

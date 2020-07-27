@@ -29,14 +29,11 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
     const ir = next.ir as IContainerInfo;
     if (ir.dataSource) {
       const { dataSource } = ir;
-      const {
-        list,
-        ...rest
-      } = dataSource;
+      const { list, ...rest } = dataSource;
 
       let attrs: string[] = [];
 
-      const extConfigs = Object.keys(rest).map(extConfigName => {
+      const extConfigs = Object.keys(rest).map((extConfigName) => {
         const value = (rest as Record<string, CompositeValue>)[extConfigName];
         const [isString, valueStr] = generateCompositeType(value);
         return `${extConfigName}: ${isString ? `'${valueStr}'` : valueStr}`;
@@ -44,9 +41,13 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
 
       attrs = [...attrs, ...extConfigs];
 
-      const listProp = handleStringValueDefault(generateCompositeType(list as unknown as CompositeValue, {
-        expression: packJsExpression,
-      }));
+      const listProp = handleStringValueDefault(
+        generateCompositeType((list as unknown) as CompositeValue, {
+          handlers: {
+            expression: packJsExpression,
+          },
+        }),
+      );
 
       attrs.push(`list: ${listProp}`);
 
