@@ -53,17 +53,12 @@ export interface ICodeStruct extends IBaseCodeStruct {
   chunks: ICodeChunk[];
 }
 
-export type BuilderComponentPlugin = (
-  initStruct: ICodeStruct,
-) => Promise<ICodeStruct>;
+export type BuilderComponentPlugin = (initStruct: ICodeStruct) => Promise<ICodeStruct>;
 
 export type BuilderComponentPluginFactory<T> = (config?: T) => BuilderComponentPlugin;
 
 export interface IChunkBuilder {
-  run(
-    ir: any,
-    initialStructure?: ICodeStruct,
-  ): Promise<{ chunks: ICodeChunk[][] }>;
+  run(ir: any, initialStructure?: ICodeStruct): Promise<{ chunks: ICodeChunk[][] }>;
   getPlugins(): BuilderComponentPlugin[];
   addPlugin(plugin: BuilderComponentPlugin): void;
 }
@@ -80,10 +75,7 @@ export interface ICompiledModule {
 export interface IModuleBuilder {
   generateModule(input: unknown): Promise<ICompiledModule>;
   generateModuleCode(schema: IBasicSchema | string): Promise<IResultDir>;
-  linkCodeChunks(
-    chunks: Record<string, ICodeChunk[]>,
-    fileName: string,
-  ): IResultFile[];
+  linkCodeChunks(chunks: Record<string, ICodeChunk[]>, fileName: string): IResultFile[];
   addPlugin(plugin: BuilderComponentPlugin): void;
 }
 
@@ -154,7 +146,7 @@ export enum PIECE_TYPE {
   ATTR = 'NodeCodePieceAttr',
   CHILDREN = 'NodeCodePieceChildren',
   AFTER = 'NodeCodePieceAfter',
-};
+}
 
 export interface CodePiece {
   value: string;
@@ -168,10 +160,16 @@ export interface HandlerSet<T> {
   common?: (input: unknown) => T[];
 }
 
-export type ExtGeneratorPlugin = (nodeItem: IComponentNodeItem) => CodePiece[];
+export type ExtGeneratorPlugin = (ctx: INodeGeneratorContext, nodeItem: IComponentNodeItem) => CodePiece[];
 
 export interface INodeGeneratorConfig {
   nodeTypeMapping?: Record<string, string>;
+}
+
+export type NodeGenerator = (nodeItem: IComponentNodeItem) => string;
+
+export interface INodeGeneratorContext {
+  generator: NodeGenerator;
 }
 
 // export interface InteratorScope {
@@ -179,3 +177,18 @@ export interface INodeGeneratorConfig {
 //   [$index: string]: string | number; // $index 默认取值 "index"
 //   __proto__: BlockInstance;
 // }
+
+export type CompositeValueCustomHandler = (data: unknown) => string;
+export interface CompositeValueCustomHandlerSet {
+  boolean?: CompositeValueCustomHandler;
+  number?: CompositeValueCustomHandler;
+  string?: CompositeValueCustomHandler;
+  array?: CompositeValueCustomHandler;
+  object?: CompositeValueCustomHandler;
+  expression?: CompositeValueCustomHandler;
+}
+
+export interface CompositeValueGeneratorOptions {
+  handlers?: CompositeValueCustomHandlerSet;
+  nodeGenerator?: NodeGenerator;
+}

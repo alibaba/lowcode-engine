@@ -33,7 +33,8 @@ export interface IJSFunction {
  */
 export interface IJSSlot {
   type: 'JSSlot';
-  value: IComponentNodeItem;
+  value: IComponentNodeItem[];
+  params?: string[];
   [extConfigName: string]: any;
 }
 

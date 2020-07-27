@@ -5,7 +5,7 @@
 
 import { SUPPORT_SCHEMA_VERSION_LIST } from '../const';
 
-import { handleChildren } from '../utils/nodeToJSX';
+import { handleSubNodes } from '../utils/nodeToJSX';
 import { uniqueArray } from '../utils/common';
 
 import {
@@ -198,11 +198,15 @@ class SchemaParser implements ISchemaParser {
   }
 
   getComponentNames(children: ChildNodeType): string[] {
-    return handleChildren<string>(children, {
-      node: (i: IComponentNodeItem) => [i.componentName],
-    }, {
-      rerun: true,
-    });
+    return handleSubNodes<string>(
+      children,
+      {
+        node: (i: IComponentNodeItem) => [i.componentName],
+      },
+      {
+        rerun: true,
+      },
+    );
   }
 }
 
