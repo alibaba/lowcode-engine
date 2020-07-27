@@ -9,6 +9,7 @@ import variableBindDialog from '@ali/lowcode-plugin-variable-bind-dialog';
 import sourceEditor from '@ali/lowcode-plugin-source-editor';
 
 import codeout from './plugins/codeout';
+import saveload from './plugins/saveload';
 
 export default {
   logo,
@@ -21,4 +22,5 @@ export default {
   variableBindDialog,
   sourceEditor,
   codeout,
+  saveload,
 };

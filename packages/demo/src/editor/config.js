@@ -45,6 +45,14 @@ export default {
           width: 64,
         },
       },
+      {
+        pluginKey: 'saveload',
+        type: 'Custom',
+        props: {
+          align: 'right',
+          width: 128,
+        },
+      },
     ],
     leftArea: [
       {
