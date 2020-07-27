@@ -335,10 +335,7 @@ export class Props implements IPropParent {
    * 兼容vision体系
    */
   getNode() {
-    const nodeForVision = this.owner;
-    nodeForVision.getChildren = () => {
-      return this.owner?.getChildren()?.getChildrenArray() || [];
-    };
+    const nodeForVision = this.owner?.getVisionCapabledNode();
     return nodeForVision;
   }
 }
