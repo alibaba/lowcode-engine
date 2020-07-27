@@ -72,37 +72,37 @@
                                   "componentName":"Breadcrumb.Item",
                                   "id":"node_dockcy8n9xeg",
                                   "props":{
-                                      "prefix":"next-"
-                                  },
-                                  "children":[
-                                      "首页"]
+                                      "prefix":"next-",
+                                      "children":[
+                                        "首页"]
+                                  }
                               },
                               {
                                   "componentName":"Breadcrumb.Item",
                                   "id":"node_dockcy8n9xei",
                                   "props":{
-                                      "prefix":"next-"
-                                  },
-                                  "children":[
-                                      "品质中台"]
+                                      "prefix":"next-",
+                                      "children":[
+                                        "品质中台"]
+                                  }
                               },
                               {
                                   "componentName":"Breadcrumb.Item",
                                   "id":"node_dockcy8n9xek",
                                   "props":{
-                                      "prefix":"next-"
-                                  },
-                                  "children":[
-                                      "商家品质页面管理"]
+                                      "prefix":"next-",
+                                      "children":[
+                                        "商家品质页面管理"]
+                                  }
                               },
                               {
                                   "componentName":"Breadcrumb.Item",
                                   "id":"node_dockcy8n9xem",
                                   "props":{
-                                      "prefix":"next-"
-                                  },
-                                  "children":[
-                                      "质检知识条配置"]
+                                      "prefix":"next-",
+                                      "children":[
+                                        "质检知识条配置"]
+                                  }
                               }]
                       }]
               },
@@ -213,17 +213,17 @@
                                               "style":{
                                                   "margin":"0 5px 0 5px"
                                               },
-                                              "htmlType":"submit"
-                                          },
-                                          "children":[
-                                              {
+                                              "htmlType":"submit",
+                                              "children":[
+                                                {
                                                   "componentName":"Icon",
                                                   "id":"node_dockcy8n9xey",
                                                   "props":{
-                                                      "type":"success"
+                                                    "type":"success"
                                                   }
-                                              },
-                                              "搜索"]
+                                                },
+                                                "搜索"]
+                                          }
                                       },
                                       {
                                           "componentName":"Button",
@@ -233,10 +233,10 @@
                                               "style":{
                                                   "margin":"0 5px 0 5px"
                                               },
-                                              "htmlType":"reset"
-                                          },
-                                          "children":[
-                                              "清空"]
+                                              "htmlType":"reset",
+                                              "children":[
+                                                "清空"]
+                                          }
                                       }]
                               }]
                       }]
@@ -266,6 +266,7 @@
                               "style":{
                                   "width":"100px"
                               },
+                              "children":["新建配置"],
                               "events":{
                                   "onClick":{
                                       "type":"JSFunction",
@@ -286,9 +287,7 @@
                               "onClick":{
                                   "type":"JSFunction",
                                   "value":"function(){ this.onClick() }"
-                              },
-                            "children":[
-                              "新建配置"]
+                              }
                           }
                       }]
               },
