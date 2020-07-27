@@ -286,10 +286,10 @@
                               "onClick":{
                                   "type":"JSFunction",
                                   "value":"function(){ this.onClick() }"
-                              }
-                          },
-                          "children":[
+                              },
+                            "children":[
                               "新建配置"]
+                          }
                       }]
               },
               {
@@ -456,13 +456,9 @@
                   "type":"JSExpression",
                   "value":"this.state.isShowDialog"
               },
-              "children":{
-                  "type":"JSSlot"
-              },
+
               "title":"标题",
-              "footer":{
-                  "type":"JSSlot"
-              },
+
               "events":[
               ]
           }
