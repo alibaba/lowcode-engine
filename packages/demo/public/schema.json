@@ -135,7 +135,7 @@
                                   "id":"node_dockcy8n9xeq",
                                   "props":{
                                       "style":{
-                                          "margin-bottom":"0"
+                                          "marginBottom":"0"
                                       },
                                       "label":"类目名："
                                   },
@@ -158,7 +158,7 @@
                                   "id":"node_dockcy8n9xes",
                                   "props":{
                                       "style":{
-                                          "margin-bottom":"0"
+                                          "marginBottom":"0"
                                       },
                                       "label":"项目类型："
                                   },
@@ -181,7 +181,7 @@
                                   "id":"node_dockcy8n9xeu",
                                   "props":{
                                       "style":{
-                                          "margin-bottom":"0"
+                                          "marginBottom":"0"
                                       },
                                       "label":"项目 ID："
                                   },
