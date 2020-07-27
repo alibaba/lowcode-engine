@@ -188,8 +188,9 @@
           "propType": "object"
         },
         {
-          "name": "columns",
-          "propType": "array"
+          "name": "children",
+          "propType": "array",
+          "description": "列"
         },
         {
           "name": "emptyContent",
@@ -1077,10 +1078,8 @@
         },
         {
           "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          }
+          "description": "内容",
+          "propType": "array"
         },
         {
           "name": "style",
@@ -1239,17 +1238,19 @@
         },
         {
           "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          }
+          "propType": "array"
         },
         {
           "name": "style",
           "propType": "object",
           "description": "自定义内联样式"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "Button.Group",
@@ -4120,8 +4121,14 @@
         {
           "name": "children",
           "propType": {
-            "type": "instanceOf",
-            "value": "node"
+            "type": "oneOfType",
+            "value": [
+              "bool",
+              {
+                "type": "instanceOf",
+                "value": "node"
+              }
+            ]
           },
           "description": "内容"
         },
@@ -4284,8 +4291,10 @@
         }
       ],
       "configure": {
-        "isContainer": true,
-        "isModel": true
+        "component": {
+          "isContainer": true,
+          "isModel": true
+        }
       }
     },
     {
@@ -10511,10 +10520,23 @@
           "description": "接收 children 自定义渲染列表"
         },
         {
+          "name": "dataSource",
+          "propType": "array"
+        },
+        {
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "props": {
+          "isExtends": true,
+          "override": [{
+            "name": "dataSource",
+            "setter": "JsonSetter"
+          }]
+        }
+      }
     },
     {
       "componentName": "Tree",
@@ -12706,9 +12728,9 @@
                   "type": "primary",
                   "size": "large",
                   "htmlType": "button",
-                  "component": "button"
-                },
-                "children": "提交"
+                  "component": "button",
+                  "children": ["提交"]
+                }
               }
             }
           ]
@@ -12952,12 +12974,12 @@
               "schema": {
                 "componentName": "Breadcrumb.Item",
                 "props": {
-                  "prefix": "next-"
-                },
-                "children": [
-                  "222",
-                  "222111"
-                ]
+                  "prefix": "next-",
+                  "children": [
+                    "222",
+                    "222111"
+                  ]
+                }
               }
             }
           ]

@@ -142,10 +142,18 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
             });
             console.info('menuprops', viewProps);
           }
+          let _children = leaf?.isContainer() ? (children == null ? [] : Array.isArray(children) ? children : [children]) : children;
+          if (props.children && props.children.length) {
+            if (Array.isArray(props.children)) {
+              _children = Array.isArray(_children) ? _children.concat(props.children) : props.children.unshift(_children);
+            } else {
+              Array.isArray(_children) && _children.push(props.children) || (_children = [_children].push(props.children));
+            }
+          }
           return createElement(
             getDeviceView(Component, device, designMode),
             viewProps,
-            leaf?.isContainer() ? (children == null ? [] : Array.isArray(children) ? children : [children]) : children,
+            _children,
           );
         }}
         onCompGetRef={(schema: any, ref: ReactInstance | null) => {

@@ -211,6 +211,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
     ) {
       if (component.isContainer !== false) {
         component.isContainer = true;
+        props.push(propConfigToFieldConfig(prop));
         return;
       }
     }
