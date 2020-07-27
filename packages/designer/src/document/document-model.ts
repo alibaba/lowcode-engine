@@ -50,6 +50,11 @@ export class DocumentModel {
   private rootNodeVisitorMap: { [visitorName: string]: any } = {};
 
   /**
+   * @deprecated
+   */
+  private _addons: { [key: string]: { exportData: () => any; isProp: boolean;} } = {};
+
+  /**
    * 模拟器
    */
   get simulator(): ISimulatorHost | null {
@@ -511,6 +516,32 @@ export class DocumentModel {
   setRendererReady(renderer: any) {
     this.emitter.emit('lowcode_engine_renderer_ready', renderer);
   }
+
+  /**
+   * @deprecated
+   */
+  getAddonData(name: string) {
+    const addon = this._addons[name];
+    return addon?.exportData();
+  }
+
+  /**
+   * @deprecated
+   */
+  registerAddon(name: string, exportData: any) {
+    if (['id', 'params', 'layout'].indexOf(name) > -1) {
+      throw new Error('addon name cannot be id, params, layout');
+    }
+    const i = this._addons?.findIndex((item) => item.name === name);
+    if (i > -1) {
+      this._addons?.splice(i, 1);
+    }
+    this._addons?.push({
+      exportData,
+      name,
+    });
+  }
+
 
   acceptRootNodeVisitor(
     visitorName: string = 'default',
