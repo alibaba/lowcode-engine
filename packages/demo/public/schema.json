@@ -286,10 +286,10 @@
                               "onClick":{
                                   "type":"JSFunction",
                                   "value":"function(){ this.onClick() }"
-                              }
-                          },
-                          "children":[
+                              },
+                            "children":[
                               "新建配置"]
+                          }
                       }]
               },
               {

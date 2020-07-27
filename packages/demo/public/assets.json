@@ -9,8 +9,8 @@
     {
       "title": "fusion组件库",
       "package": "@alifd/next",
-      "version": "1.19.18",
-      "urls": ["https://unpkg.antfin-inc.com/@alife/next@1.19.18/dist/next.js", "https://unpkg.antfin-inc.com/@alife/next@1.19.18/dist/next.css"],
+      "version": "1.20.0",
+      "urls": ["https://unpkg.antfin-inc.com/@alifd/next@1.20.0/dist/next.js", "https://unpkg.antfin-inc.com/@alifd/next@1.20.0/dist/next.css"],
       "library": "Next"
     },
     {
@@ -320,7 +320,7 @@
         "exportName": "Table",
         "main": "src/index.js",
         "destructuring": true,
-        "subName": ""
+        "subName": "Column"
       },
       "props": [
         {
@@ -388,7 +388,7 @@
           "name": "showZero",
           "propType": "bool",
           "description": "当count为0时，是否显示count",
-          "defaultValue": false
+          "defaultValue": true
         },
         {
           "name": "content",
@@ -6121,7 +6121,12 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "SubMenu",
@@ -6245,7 +6250,7 @@
       ]
     },
     {
-      "componentName": "SelectableItem",
+      "componentName": "Menu.Item",
       "title": "SelectableItem",
       "docUrl": "",
       "screenshot": "",
@@ -6543,8 +6548,8 @@
       ]
     },
     {
-      "componentName": "Group",
-      "title": "Group",
+      "componentName": "Menu.Group",
+      "title": "Menu.Group",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -7847,7 +7852,7 @@
         },
         {
           "name": "backgroundColor",
-          "propType": "string",
+          "propType": "color",
           "description": "背景色"
         },
         {
@@ -8237,6 +8242,11 @@
           "name": "renderPreview",
           "propType": "func",
           "description": "预览态模式下渲染的内容\n@param {number} value 评分值"
+        },
+        {
+          "name": "value",
+          "propType": "number",
+          "description": "分值"
         }
       ]
     },
@@ -9968,6 +9978,73 @@
       ]
     },
     {
+      "componentName": "Tag",
+      "title": "Tag",
+      "docUrl": "",
+      "screenshot": "",
+      "npm": {
+        "package": "@alifd/next",
+        "version": "1.19.18",
+        "exportName": "Tag",
+        "main": "src/index.js",
+        "destructuring": true
+      },
+      "props": [
+        {
+          "name": "prefix",
+          "propType": "string",
+          "defaultValue": "next-"
+        },
+        {
+          "name": "type",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "normal",
+              "primary"
+            ]
+          },
+          "description": "标签的类型"
+        },
+        {
+          "name": "size",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "small",
+              "medium",
+              "large"
+            ]
+          },
+          "description": "标签的尺寸（large 尺寸为兼容表单场景 large = medium）"
+        },
+        {
+          "name": "closeArea",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "tag",
+              "tail"
+            ]
+          }
+        },
+        {
+          "name": "color",
+          "propType": "string",
+          "description": "标签颜色, 目前支持：blue、 green、 orange、red、 turquoise、 yellow 和 hex 颜色值 （`color keywords`作为 Tag 组件的保留字，请勿直接使用 ）, `1.19.0` 以上版本生效"
+        },
+        {
+          "name": "children",
+          "propType": "array"
+        }
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
+    },
+    {
       "componentName": "TimePicker",
       "title": "TimePicker",
       "docUrl": "",
@@ -10261,7 +10338,12 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "TimelineItem",
@@ -10784,7 +10866,12 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "TreeNode",
@@ -11958,11 +12045,16 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
-      "componentName": "Cell",
-      "title": "Cell",
+      "componentName": "ResponsiveGrid.Cell",
+      "title": "ResponsiveGrid.Cell",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -12015,7 +12107,12 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "Box",
@@ -12171,7 +12268,7 @@
                 "componentName": "Badge",
                 "props": {
                   "prefix": "next-",
-                  "overflowCount": 99
+                  "showZero": true
                 }
               }
             }
@@ -12421,6 +12518,30 @@
           ]
         },
         {
+          "componentName": "Menu.Item",
+          "title": "菜单项",
+          "icon": "",
+          "package": "@alife/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "菜单项",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_menu.png",
+              "schema": {
+                "componentName": "Menu.Item",
+                "props": {
+                  "parentMode": "inline",
+                  "type": "item",
+                  "component": "",
+                  "disabled": true,
+                  "className": "",
+                  "needIndent": ""
+                }
+              }
+            }
+          ]
+        },
+        {
           "componentName": "Progress",
           "title": "进度指示器",
           "icon": "",
@@ -12514,6 +12635,46 @@
               "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_timeline.png",
               "schema": {
                 "componentName": "Timeline",
+                "props": {
+                  "prefix": "next-",
+                  "fold": [],
+                  "animation": true
+                },"children": [
+                  {
+                    "componentName": "TimelineItem",
+                    "props": {
+                      "state": "process",
+                      "title": "12344"
+                    }
+                  },
+                  {
+                    "componentName": "TimelineItem",
+                    "props": {
+                      "title": "Ship"
+                    }
+                  },
+                  {
+                    "componentName": "TimelineItem",
+                    "props": {
+                      "title": "Order"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },{
+          "componentName": "TimelineItem",
+          "title": "时间轴 Item",
+          "icon": "",
+          "package": "@alife/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "时间轴 Item",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_timeline.png",
+              "schema": {
+                "componentName": "TimelineItem",
                 "props": {
                   "prefix": "next-",
                   "fold": [],
@@ -12653,23 +12814,6 @@
                   "defaultVisible": true,
                   "animation": true
                 }
-              }
-            }
-          ]
-        },
-        {
-          "componentName": "Notification",
-          "title": "通知",
-          "icon": "",
-          "package": "@alife/next",
-          "library": "Next",
-          "snippets": [
-            {
-              "title": "通知",
-              "screenshot": "",
-              "schema": {
-                "componentName": "Notification",
-                "props": {}
               }
             }
           ]
@@ -12833,7 +12977,9 @@
               "screenshot": "",
               "schema": {
                 "componentName": "Icon",
-                "props": {}
+                "props": {
+                  "type": "smile"
+                }
               }
             }
           ]
@@ -12878,17 +13024,17 @@
           ]
         },
         {
-          "componentName": "Shell",
-          "title": "框架",
+          "componentName": "ResponsiveGrid.Cell",
+          "title": "栅格布局 Cell",
           "icon": "",
           "package": "@alife/next",
           "library": "Next",
           "snippets": [
             {
-              "title": "框架",
+              "title": "栅格布局 Cell",
               "screenshot": "",
               "schema": {
-                "componentName": "Shell",
+                "componentName": "ResponsiveGrid.Cell",
                 "props": {}
               }
             }

@@ -108,9 +108,17 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
           const leaf = host.document.getNode(__id);
           viewProps._leaf = leaf;
           viewProps._componentName = leaf?.componentName;
+          let _children = leaf?.isContainer() ? (children == null ? [] : Array.isArray(children) ? children : [children]) : children;
+          if (props.children && props.children.length) {
+            if (Array.isArray(props.children)) {
+              _children = Array.isArray(_children) ? _children.concat(props.children) : props.children.unshift(_children);
+            } else {
+              Array.isArray(_children) && _children.push(props.children) || (_children = [_children].push(props.children));
+            }
+          }
           // 如果是容器 && 无children && 高宽为空 增加一个占位容器，方便拖动
-          if (leaf?.isContainer() && children == null && (!viewProps.style || Object.keys(viewProps.style).length == 0)){
-            children = <div style={{
+          if (leaf?.isContainer() && (_children == null || !_children.length) && (!viewProps.style || Object.keys(viewProps.style).length == 0)){
+            _children = <div style={{
               height:'66px',
               backgroundColor:'#f0f0f0',
               borderColor:'#a7b1bd',
@@ -142,14 +150,7 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
             });
             console.info('menuprops', viewProps);
           }
-          let _children = leaf?.isContainer() ? (children == null ? [] : Array.isArray(children) ? children : [children]) : children;
-          if (props.children && props.children.length) {
-            if (Array.isArray(props.children)) {
-              _children = Array.isArray(_children) ? _children.concat(props.children) : props.children.unshift(_children);
-            } else {
-              Array.isArray(_children) && _children.push(props.children) || (_children = [_children].push(props.children));
-            }
-          }
+
           return createElement(
             getDeviceView(Component, device, designMode),
             viewProps,
