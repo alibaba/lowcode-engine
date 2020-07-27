@@ -1,5 +1,5 @@
 import { CompositeArray, CompositeValue, ICompositeObject } from '../types';
-import { generateExpression, isJsExpression } from './jsExpression';
+import { generateExpression, generateFunction, isJsExpression, isJsFunction } from './jsExpression';
 
 type CustomHandler = (data: unknown) => string;
 interface CustomHandlerSet {
@@ -11,18 +11,12 @@ interface CustomHandlerSet {
   expression?: CustomHandler;
 }
 
-function generateArray(
-  value: CompositeArray,
-  handlers: CustomHandlerSet = {},
-): string {
-  const body = value.map(v => generateUnknownType(v, handlers)).join(',');
+function generateArray(value: CompositeArray, handlers: CustomHandlerSet = {}): string {
+  const body = value.map((v) => generateUnknownType(v, handlers)).join(',');
   return `[${body}]`;
 }
 
-function generateObject(
-  value: ICompositeObject,
-  handlers: CustomHandlerSet = {},
-): string {
+function generateObject(value: ICompositeObject, handlers: CustomHandlerSet = {}): string {
   if (isJsExpression(value)) {
     if (handlers.expression) {
       return handlers.expression(value);
@@ -30,8 +24,12 @@ function generateObject(
     return generateExpression(value);
   }
 
+  if (isJsFunction(value)) {
+    return generateFunction(value, { isArrow: true });
+  }
+
   const body = Object.keys(value)
-    .map(key => {
+    .map((key) => {
       const v = generateUnknownType(value[key], handlers);
       return `${key}: ${v}`;
     })
@@ -40,10 +38,7 @@ function generateObject(
   return `{${body}}`;
 }
 
-export function generateUnknownType(
-  value: CompositeValue,
-  handlers: CustomHandlerSet = {},
-): string {
+export function generateUnknownType(value: CompositeValue, handlers: CustomHandlerSet = {}): string {
   if (Array.isArray(value)) {
     if (handlers.array) {
       return handlers.array(value);
@@ -67,10 +62,7 @@ export function generateUnknownType(
   return `${value}`;
 }
 
-export function generateCompositeType(
-  value: CompositeValue,
-  handlers: CustomHandlerSet = {},
-): [boolean, string] {
+export function generateCompositeType(value: CompositeValue, handlers: CustomHandlerSet = {}): [boolean, string] {
   const result = generateUnknownType(value, handlers);
 
   if (result.substr(0, 1) === "'" && result.substr(-1, 1) === "'") {

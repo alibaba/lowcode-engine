@@ -11,7 +11,7 @@ import {
   INodeGeneratorConfig,
 } from '../types';
 import { generateCompositeType } from './compositeType';
-import { generateExpression } from './jsExpression';
+import { generateExpression, isJsExpression } from './jsExpression';
 
 // tslint:disable-next-line: no-empty
 const noop = () => [];
@@ -24,7 +24,7 @@ export function handleChildren<T>(
   children: ChildNodeType,
   handlers: HandlerSet<T>,
   options?: {
-    rerun?: boolean,
+    rerun?: boolean;
   },
 ): T[] {
   const opt = {
@@ -34,13 +34,11 @@ export function handleChildren<T>(
 
   if (Array.isArray(children)) {
     const list: ChildNodeItem[] = children as ChildNodeItem[];
-    return list
-      .map(child => handleChildren(child, handlers, opt))
-      .reduce((p, c) => p.concat(c), []);
+    return list.map((child) => handleChildren(child, handlers, opt)).reduce((p, c) => p.concat(c), []);
   } else if (typeof children === 'string') {
     const handler = handlers.string || handlers.common || noop;
     return handler(children as string);
-  } else if ((children as IJSExpression).type === 'JSExpression') {
+  } else if (isJsExpression(children)) {
     const handler = handlers.expression || handlers.common || noop;
     return handler(children as IJSExpression);
   } else {
@@ -59,19 +57,19 @@ export function generateAttr(attrName: string, attrValue: any): CodePiece[] {
     return [];
   }
   const [isString, valueStr] = generateCompositeType(attrValue);
-  return [{
-    value: `${attrName}=${isString ? `"${valueStr}"` : `{${valueStr}}`}`,
-    type: PIECE_TYPE.ATTR,
-  }];
+  return [
+    {
+      value: `${attrName}=${isString ? `"${valueStr}"` : `{${valueStr}}`}`,
+      type: PIECE_TYPE.ATTR,
+    },
+  ];
 }
 
 export function generateAttrs(nodeItem: IComponentNodeItem): CodePiece[] {
   const { props } = nodeItem;
   let pieces: CodePiece[] = [];
 
-  Object.keys(props).forEach((propName: string) =>
-    pieces = pieces.concat(generateAttr(propName, props[propName])),
-  );
+  Object.keys(props).forEach((propName: string) => (pieces = pieces.concat(generateAttr(propName, props[propName]))));
 
   return pieces;
 }
@@ -98,8 +96,8 @@ export function generateReactCtrlLine(nodeItem: IComponentNodeItem): CodePiece[]
 
   if (nodeItem.loop && nodeItem.loopArgs) {
     let loopDataExp;
-    if ((nodeItem.loop as IJSExpression).type === 'JSExpression') {
-      loopDataExp = `(${(nodeItem.loop as IJSExpression).value})`;
+    if (isJsExpression(nodeItem.loop)) {
+      loopDataExp = `(${generateExpression(nodeItem.loop)})`;
     } else {
       loopDataExp = JSON.stringify(nodeItem.loop);
     }
@@ -141,29 +139,29 @@ export function generateReactCtrlLine(nodeItem: IComponentNodeItem): CodePiece[]
 }
 
 export function linkPieces(pieces: CodePiece[]): string {
-  if (pieces.filter(p => p.type === PIECE_TYPE.TAG).length !== 1) {
+  if (pieces.filter((p) => p.type === PIECE_TYPE.TAG).length !== 1) {
     throw new CodeGeneratorError('One node only need one tag define');
   }
-  const tagName = pieces.filter(p => p.type === PIECE_TYPE.TAG)[0].value;
+  const tagName = pieces.filter((p) => p.type === PIECE_TYPE.TAG)[0].value;
 
   const beforeParts = pieces
-    .filter(p => p.type === PIECE_TYPE.BEFORE)
-    .map(p => p.value)
+    .filter((p) => p.type === PIECE_TYPE.BEFORE)
+    .map((p) => p.value)
     .join('');
 
   const afterParts = pieces
-    .filter(p => p.type === PIECE_TYPE.AFTER)
-    .map(p => p.value)
+    .filter((p) => p.type === PIECE_TYPE.AFTER)
+    .map((p) => p.value)
     .join('');
 
   const childrenParts = pieces
-    .filter(p => p.type === PIECE_TYPE.CHILDREN)
-    .map(p => p.value)
+    .filter((p) => p.type === PIECE_TYPE.CHILDREN)
+    .map((p) => p.value)
     .join('');
 
   let attrsParts = pieces
-    .filter(p => p.type === PIECE_TYPE.ATTR)
-    .map(p => p.value)
+    .filter((p) => p.type === PIECE_TYPE.ATTR)
+    .map((p) => p.value)
     .join(' ');
 
   attrsParts = !!attrsParts ? ` ${attrsParts}` : '';
@@ -188,16 +186,18 @@ export function createNodeGenerator(
   const generateNode = (nodeItem: IComponentNodeItem): string => {
     let pieces: CodePiece[] = [];
 
-    plugins.forEach(p => {
+    plugins.forEach((p) => {
       pieces = pieces.concat(p(nodeItem));
     });
     pieces = pieces.concat(generateBasicNode(nodeItem, nodeTypeMapping));
     pieces = pieces.concat(generateAttrs(nodeItem));
     if (nodeItem.children && (nodeItem.children as unknown[]).length > 0) {
-      pieces = pieces.concat(handleChildren<string>(nodeItem.children, handlers).map(l => ({
-        type: PIECE_TYPE.CHILDREN,
-        value: l,
-      })));
+      pieces = pieces.concat(
+        handleChildren<string>(nodeItem.children, handlers).map((l) => ({
+          type: PIECE_TYPE.CHILDREN,
+          value: l,
+        })),
+      );
     }
 
     return linkPieces(pieces);
@@ -211,10 +211,12 @@ export function createNodeGenerator(
 export const generateString = (input: string) => [input];
 
 export function createReactNodeGenerator(cfg?: INodeGeneratorConfig) {
-  return createNodeGenerator({
-    string: generateString,
-    expression: (input) => [generateExpression(input)],
-  }, [
-    generateReactCtrlLine,
-  ], cfg);
+  return createNodeGenerator(
+    {
+      string: generateString,
+      expression: (input) => [generateExpression(input)],
+    },
+    [generateReactCtrlLine],
+    cfg,
+  );
 }

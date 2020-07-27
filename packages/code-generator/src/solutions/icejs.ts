@@ -59,6 +59,7 @@ export default function createIceJsProjectBuilder(): IProjectBuilder {
             Component: 'div',
             Page: 'div',
             Block: 'div',
+            // Box: 'div',
           },
         }),
         css(),
@@ -72,6 +73,6 @@ export default function createIceJsProjectBuilder(): IProjectBuilder {
       htmlEntry: [icejs.plugins.entryHtml()],
       packageJSON: [icejs.plugins.packageJSON()],
     },
-    postProcessors: [prettier()],
+    postProcessors: [prettier()], // prettier()
   });
 }
