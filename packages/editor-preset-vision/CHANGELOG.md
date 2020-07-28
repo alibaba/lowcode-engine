@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.34"></a>
+## [0.8.34](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.33...@ali/lowcode-editor-preset-vision@0.8.34) (2020-07-28)
+
+
+### Bug Fixes
+
+* vc-filter bug fix ([31ea5d5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/31ea5d5))
+
+
+### Features
+
+* 支持 entry 模式 ([fe1f6f1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fe1f6f1))
+
+
+
+
 <a name="0.8.33"></a>
 ## [0.8.33](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.32...@ali/lowcode-editor-preset-vision@0.8.33) (2020-07-23)
 
