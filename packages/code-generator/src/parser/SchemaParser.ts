@@ -135,6 +135,27 @@ class SchemaParser implements ISchemaParser {
       }
     });
 
+    // TODO: 不应该在出码部分解决？
+    // 处理 children 写在了 props 里的情况
+    containers.forEach((container) => {
+      if (container.children) {
+        handleSubNodes<string>(
+          container.children,
+          {
+            node: (i: IComponentNodeItem) => {
+              if (i.props && i.props.children && !i.children) {
+                i.children = i.props.children as ChildNodeType;
+              }
+              return [''];
+            },
+          },
+          {
+            rerun: true,
+          },
+        );
+      }
+    });
+
     // 分析路由配置
     const routes = containers
       .filter((container) => container.containerType === 'Page')
