@@ -213,21 +213,21 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   }
 
   createComponent(schema: ComponentSchema): Component | null {
-    const _schema = {
+    let _schema: any = {
       ...schema,
     };
     _schema.methods = {};
     _schema.lifeCycles = {};
 
-    const processPropsSchema = (propsSchema: any, propsMap: any, node: any): any => {
+    const node = host.document.createNode(_schema);
+    _schema = node.export(TransformStage.Render);
+
+    const processPropsSchema = (propsSchema: any, propsMap: any): any => {
       if (!propsSchema) {
         return {};
       }
 
       let result = { ...propsSchema };
-      result = host.document.designer.transformProps(result, node, TransformStage.Init);
-      result = host.document.designer.transformProps(result, node, TransformStage.Upgrade);
-
       const reg = /^(?:this\.props|props)\.(\S+)$/;
       Object.keys(result).map((key: string) => {
         if (result[key].type === 'JSExpression') {
@@ -237,10 +237,12 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
             const propName = matched[1];
             result[key] = propsMap[propName];
           }
+        } else if (result[key].type === 'JSSlot') {
+          const schema = result[key].value;
+          result[key] = createElement(Ele, {schema, propsMap: {}});
         }
       });
 
-      result = host.document.designer.transformProps(result, node, TransformStage.Render);
       return result;
     };
 
@@ -249,8 +251,6 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
 
     class Ele extends React.Component<{ schema: any, propsMap: any }> {
       private isModal: boolean;
-      private node: any;
-      private renderProps: any;
 
       constructor(props: any){
         super(props);
@@ -259,20 +259,6 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
           this.isModal = true;
           return;
         }
-        this.node = host.document.createNode(props.schema);
-        this.renderProps = processPropsSchema(props.schema.props, props.propsMap, this.node);
-      }
-
-      shouldComponentUpdate(nextProps: any) {
-        if (this.isModal) {
-          return false;
-        }
-        const renderProps = processPropsSchema(nextProps.schema.props, nextProps.propsMap, this.node);
-        if (renderProps && this.renderProps && JSON.stringify({...renderProps, fieldId: ''}) === JSON.stringify({...this.renderProps, fieldId: ''})) {
-          return false;
-        }
-        this.renderProps = renderProps;
-        return true;
       }
 
       render() {
@@ -280,23 +266,24 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
           return null;
         }
         const { schema, propsMap } = this.props;
-        const { node } = this;
         const Com = componentsMap[schema.componentName];
         let children = null;
         if (schema.children && schema.children.length > 0) {
           children = schema.children.map((item: any) => createElement(Ele, {schema: item, propsMap}));
         }
+        const props = processPropsSchema(schema.props, propsMap);
+        const _leaf = host.document.createNode(schema);
 
-        return createElement(Com, { ...this.renderProps, _leaf: node }, children);
+        return createElement(Com, {...props, _leaf}, children);
       }
     }
 
     class Com extends React.Component {
       render() {
-        let children = null;
+        let children = [];
         const propsMap = this.props;
         if (_schema.children && Array.isArray(_schema.children)) {
-          children = _schema.children?.map((item: any) => createElement(Ele, {schema: item, propsMap}));
+          children = _schema.children.map((item: any) => createElement(Ele, {schema: item, propsMap}));
         }
         return createElement(React.Fragment, {}, children);
       }
