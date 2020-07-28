@@ -8,12 +8,14 @@ import {
   CodePiece,
   HandlerSet,
   ExtGeneratorPlugin,
+  IJSSlot,
   INodeGeneratorConfig,
   INodeGeneratorContext,
   NodeGenerator,
 } from '../types';
 import { generateCompositeType } from './compositeType';
 import { generateExpression, isJsExpression } from './jsExpression';
+import { isJsSlot } from './jsSlot';
 
 // tslint:disable-next-line: no-empty
 const noop = () => [];
@@ -49,6 +51,17 @@ export function handleSubNodes<T>(
     if (opt.rerun && children.children) {
       const childRes = handleSubNodes(children.children, handlers, opt);
       curRes = curRes.concat(childRes || []);
+    }
+    if (children.props) {
+      Object.keys(children.props)
+        .filter((propName) => isJsSlot(children.props[propName]))
+        .forEach((propName) => {
+          const soltVals = (children.props[propName] as IJSSlot).value;
+          (soltVals || []).forEach((soltVal) => {
+            const childRes = handleSubNodes(soltVal, handlers, opt);
+            curRes = curRes.concat(childRes || []);
+          });
+        });
     }
     return curRes;
   }
