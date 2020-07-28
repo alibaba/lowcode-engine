@@ -331,14 +331,9 @@ export class Props implements IPropParent {
   }
 
   /**
-   * @deprecated
-   * 兼容vision体系
+   * 获取 props 对应的 node
    */
   getNode() {
-    const nodeForVision = this.owner;
-    nodeForVision.getChildren = () => {
-      return this.owner?.getChildren()?.getChildrenArray() || [];
-    };
-    return nodeForVision;
+    return this.owner;
   }
 }
