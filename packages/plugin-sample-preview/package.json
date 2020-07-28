@@ -9,6 +9,7 @@
   "main": "lib/index.js",
   "module": "es/index.js",
   "scripts": {
+    "start": "build-scripts start",
     "build": "build-scripts build --skip-demo",
     "test": "ava",
     "test:snapshot": "ava --update-snapshots"
@@ -29,7 +30,8 @@
     "@types/react-dom": "^16.9.4",
     "build-plugin-component": "^0.2.11",
     "build-plugin-fusion": "^0.1.0",
-    "build-plugin-moment-locales": "^0.1.0"
+    "build-plugin-moment-locales": "^0.1.0",
+    "@ali/lowcode-react-renderer": "^0.8.0"
   },
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"
