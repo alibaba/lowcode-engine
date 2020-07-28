@@ -331,14 +331,6 @@ export class NodeChildren {
       }
     }
 
-    // if (callbacks?.onNodeAdd && options?.type === 'insert') {
-    //   try {
-    //     callbacks?.onNodeAdd.call(owner, node, owner);
-    //   } catch (e) {
-    //     console.error('error when excute experimental.callbacks.onNodeAdd', e);
-    //   }
-    // }
-
     if (owner.parent && !owner.parent.isRoot()) {
       this.reportModified(node, owner.parent, options);
     }
