@@ -56,7 +56,7 @@ function upgradePropsReducer(props: any) {
           type: 'JSSlot',
           title: (val.value.props as any)?.slotTitle,
           name: (val.value.props as any)?.slotName,
-          value: val.value.children
+          value: val.value.children,
         };
       } else {
         val = val.value;
@@ -126,7 +126,6 @@ designer.addPropsReducer((props, node) => {
   return props;
 }, TransformStage.Init);
 
-
 function filterReducer(props: any, node: Node): any {
   const filters = node.componentMeta.getMetadata().experimental?.filters;
   if (filters && filters.length) {
@@ -169,7 +168,7 @@ function compatiableReducer(props: any) {
             slotName: val.name,
           },
         },
-      }
+      };
     }
     // 为了能降级到老版本，建议在后期版本去掉以下代码
     // if (isJSExpression(val) && !val.events) {
@@ -264,7 +263,7 @@ skeleton.add({
   props: {
     condition: () => {
       return designer.dragon.dragging && !getTreeMaster(designer).hasVisibleTreeBoard();
-    }
+    },
   },
   content: OutlineBackupPane,
 });
