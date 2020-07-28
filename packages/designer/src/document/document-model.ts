@@ -178,7 +178,7 @@ export class DocumentModel {
       node = this.getNode(schema.id);
       if (node && node.componentName === schema.componentName) {
         if (node.parent) {
-          node.internalSetParent(null);
+          node.internalSetParent(null, false);
           // will move to another position
           // todo: this.activeNodes?.push(node);
         }
@@ -576,6 +576,13 @@ export class DocumentModel {
     return () => {
       this.emitter.removeListener('nodedestroy', func);
     };
+  }
+
+  /**
+   * @deprecated
+   */
+  refresh() {
+    console.warn('refresh method is deprecated');
   }
 }
 

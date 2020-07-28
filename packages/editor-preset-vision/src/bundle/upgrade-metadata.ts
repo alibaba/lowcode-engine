@@ -3,6 +3,7 @@ import { isPlainObject, uniqueId } from '@ali/lowcode-utils';
 import { isI18nData, SettingTarget, InitialItem, FilterItem, isJSSlot, ProjectSchema, AutorunItem } from '@ali/lowcode-types';
 import { untracked } from '@ali/lowcode-editor-core';
 import { editor, designer } from '../editor';
+import { SettingField } from '@ali/lowcode-designer';
 
 type Field = SettingTarget;
 
@@ -325,6 +326,10 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
 
     if (mutator) {
       extraProps.setValue = (field: Field, value: any) => {
+        // TODO: 兼容代码，不触发查询组件的 Mutator
+        if (field instanceof SettingField && field.componentMeta?.componentName === 'Filter') {
+          return;
+        }
         mutator.call(field, value, value);
       };
     }
