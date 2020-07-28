@@ -2,10 +2,11 @@ import { render } from 'react-dom';
 import { createElement } from 'react';
 import { Workbench, Skeleton, SettingsPrimaryPane } from '@ali/lowcode-editor-skeleton';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
-import { Designer } from '@ali/lowcode-designer';
+import { Designer, LiveEditing, TransformStage, Node } from '@ali/lowcode-designer';
 import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
 import '@ali/lowcode-editor-setters';
+import { liveEditingRule, liveEditingSaveHander } from './live-editing';
 
 export * from '@ali/lowcode-types';
 export * from '@ali/lowcode-utils';
@@ -71,3 +72,6 @@ export function init(container?: Element) {
 }
 
 console.log(`%cLowcodeEngine %cv${version}`, 'color:#000;font-weight:bold;', 'color:green;font-weight:bold;');
+
+LiveEditing.addLiveEditingSpecificRule(liveEditingRule);
+LiveEditing.addLiveEditingSaveHandler(liveEditingSaveHander);
