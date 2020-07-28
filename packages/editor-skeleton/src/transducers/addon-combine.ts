@@ -132,10 +132,11 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
     let l = propsGroup.length;
     while (l-- > 0) {
       const item = propsGroup[l];
-      if (item.type === 'group' && (item.title === '高级' || item.title?.label === '高级')) {
-        advanceGroup = item.items || [];
-        propsGroup.splice(l, 1);
-      } else if (item.name === '__style__' || item.name === 'containerStyle' || item.name === 'pageStyle') {
+      // if (item.type === 'group' && (item.title === '高级' || item.title?.label === '高级')) {
+      //   advanceGroup = item.items || [];
+      //   propsGroup.splice(l, 1);
+      // } 
+      if (item.name === '__style__' || item.name === 'containerStyle' || item.name === 'pageStyle') {
         propsGroup.splice(l, 1);
         stylesGroup.push(item);
         if (item.extraProps?.defaultCollapsed && item.name !== 'containerStyle') {
