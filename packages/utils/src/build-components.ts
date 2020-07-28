@@ -1,5 +1,10 @@
-function isESModule(obj: any): obj is { [key: string]: any } {
-  return obj && obj.__esModule;
+import { ComponentType } from 'react';
+import { NpmInfo} from '@ali/lowcode-types';
+import { isReactComponent } from './is-react';
+import { isESModule } from './is-es-module';
+
+interface LibraryMap {
+  [key: string]: string;
 }
 
 function accessLibrary(library: string | object) {
@@ -10,7 +15,7 @@ function accessLibrary(library: string | object) {
   return (window as any)[library];
 }
 
-function getSubComponent(library: any, paths: string[]) {
+export function getSubComponent(library: any, paths: string[]) {
   const l = paths.length;
   if (l < 1 || !library) {
     return library;
@@ -62,39 +67,18 @@ function findComponent(libraryMap: LibraryMap, componentName: string, npm?: NpmI
   return getSubComponent(library, paths);
 }
 
-export interface LibraryMap {
-  [key: string]: string;
-}
-
-export interface NpmInfo {
-  componentName?: string;
-  package: string;
-  version: string;
-  destructuring?: boolean;
-  exportName?: string;
-  subName?: string;
-  main?: string;
-}
-
-export function buildComponents(
-  libraryMap: LibraryMap,
-  componentsMap: { [componentName: string]: NpmInfo } | NpmInfo[],
-) {
-  const components: any = {};
-  if (componentsMap && Array.isArray(componentsMap)) {
-    const compMapObj: any = {};
-    componentsMap.forEach((item: NpmInfo) => {
-      if (!item || !item.componentName) {
-        return;
-      }
-      compMapObj[item.componentName] = item;
-    });
-    componentsMap = compMapObj;
-  }
+export function buildComponents(libraryMap: LibraryMap, componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> }) {
+  const components: any = {
+  };
   Object.keys(componentsMap).forEach((componentName) => {
-    const component = findComponent(libraryMap, componentName, (componentsMap as any)[componentName]);
-    if (component) {
+    let component = componentsMap[componentName];
+    if (isReactComponent(component)) {
       components[componentName] = component;
+    } else {
+      component = findComponent(libraryMap, componentName, component);
+      if (component) {
+        components[componentName] = component;
+      }
     }
   });
   return components;

@@ -18,3 +18,4 @@ export * from './set-prototype-of';
 export * from './shallow-equal';
 export * from './svg-icon';
 export * from './unique-id';
+export * from './build-components';

@@ -3,12 +3,12 @@ import { render as reactRender } from 'react-dom';
 import { host } from './host';
 import SimulatorRendererView from './renderer-view';
 import { computed, obx } from '@recore/obx';
-import { Asset, isReactComponent } from '@ali/lowcode-utils';
+import { Asset } from '@ali/lowcode-utils';
 import { getClientRects } from './utils/get-client-rects';
 import loader from './utils/loader';
 import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
-import { isESModule, isElement, cursor, setNativeSelection } from '@ali/lowcode-utils';
-import { RootSchema, NpmInfo, ComponentSchema, TransformStage } from '@ali/lowcode-types';
+import { isElement, cursor, setNativeSelection, buildComponents, getSubComponent } from '@ali/lowcode-utils';
+import { RootSchema, ComponentSchema, TransformStage } from '@ali/lowcode-types';
 // just use types
 import { BuiltinSimulatorRenderer, NodeInstance, Component } from '@ali/lowcode-designer';
 import Slot from './builtin-components/slot';
@@ -74,7 +74,10 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   }
   private _libraryMap: { [key: string]: string } = {};
   private buildComponents() {
-    this._components = buildComponents(this._libraryMap, this._componentsMap);
+    this._components = {
+      ...builtinComponents,
+      ...buildComponents(this._libraryMap, this._componentsMap)
+    };
   }
   @obx.ref private _components: any = {};
   @computed get components(): object {
@@ -315,94 +318,12 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   }
 }
 
-function accessLibrary(library: string | object) {
-  if (typeof library !== 'string') {
-    return library;
-  }
-
-  return (window as any)[library];
-}
-
-function getSubComponent(library: any, paths: string[]) {
-  const l = paths.length;
-  if (l < 1 || !library) {
-    return library;
-  }
-  let i = 0;
-  let component: any;
-  while (i < l) {
-    const key = paths[i]!;
-    let ex: any;
-    try {
-      component = library[key];
-    } catch (e) {
-      ex = e;
-      component = null;
-    }
-    if (i === 0 && component == null && key === 'default') {
-      if (ex) {
-        return l === 1 ? library : null;
-      }
-      component = library;
-    } else if (component == null) {
-      return null;
-    }
-    library = component;
-    i++;
-  }
-  return component;
-}
-
-function findComponent(libraryMap: LibraryMap, componentName: string, npm?: NpmInfo) {
-  if (!npm) {
-    return accessLibrary(componentName);
-  }
-  // libraryName the key access to global
-  // export { exportName } from xxx exportName === global.libraryName.exportName
-  // export exportName from xxx   exportName === global.libraryName.default || global.libraryName
-  // export { exportName as componentName } from package
-  // if exportName == null exportName === componentName;
-  // const componentName = exportName.subName, if exportName empty subName donot use
-  const exportName = npm.exportName || npm.componentName || componentName;
-  const libraryName = libraryMap[npm.package] || exportName;
-  const library = accessLibrary(libraryName);
-  const paths = npm.exportName && npm.subName ? npm.subName.split('.') : [];
-  if (npm.destructuring) {
-    paths.unshift(exportName);
-  } else if (isESModule(library)) {
-    paths.unshift('default');
-  }
-  return getSubComponent(library, paths);
-}
-
-export interface LibraryMap {
-  [key: string]: string;
-}
-
 // Slot/Leaf and Fragment|FunctionComponent polyfill(ref)
 
 const builtinComponents = {
   Slot,
   Leaf,
 };
-
-function buildComponents(libraryMap: LibraryMap, componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> }) {
-  const components: any = {
-    ...builtinComponents
-  };
-  Object.keys(componentsMap).forEach((componentName) => {
-    let component = componentsMap[componentName];
-    if (isReactComponent(component)) {
-      components[componentName] = component;
-    } else {
-      component = findComponent(libraryMap, componentName, component);
-      if (component) {
-        components[componentName] = component;
-      }
-    }
-  });
-  return components;
-}
 
 let REACT_KEY = '';
 function cacheReactKey(el: Element): Element {
