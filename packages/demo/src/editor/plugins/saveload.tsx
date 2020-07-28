@@ -24,7 +24,7 @@ const Codeout = ({ editor }: PluginProps) => {
   const handleSaveClick = () => {
     const designer = editor.get(Designer);
     if (designer) {
-      const schema = designer.schema.componentsTree[0]; // editor.get('schema');
+      const schema = designer.schema.componentsTree[designer.schema.componentsTree.length - 1]; // editor.get('schema');
       const schemaStr = JSON.stringify(schema);
       window.localStorage.setItem('schema_data', schemaStr);
       console.info('save schema:', schemaStr);

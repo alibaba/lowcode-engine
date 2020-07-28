@@ -38,7 +38,6 @@ const Codeout = ({ editor }: PluginProps) => {
         }));
 
       const fullSchema = {
-        ...designer.schema,
         config: {
           historyMode: 'hash',
           targetRootID: 'J_Container',
@@ -47,6 +46,7 @@ const Codeout = ({ editor }: PluginProps) => {
           name: 'demoproject',
         },
         componentsMap,
+        componentsTree: [designer.schema.componentsTree[designer.schema.componentsTree.length - 1]],
       };
 
       console.info('codeout schema:', fullSchema);
