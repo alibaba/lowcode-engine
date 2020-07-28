@@ -21,7 +21,7 @@ interface BasicSection {
   [k: string]: any;
 }
 
-const CODEOUT_SERVICE_HOST = '30.13.91.30:3000';
+const CODEOUT_SERVICE_HOST = '30.13.90.55:3000';
 
 const Codeout = ({ editor }: PluginProps) => {
   const handleClick = () => {
