@@ -8,7 +8,7 @@ import './index.scss';
 const SamplePreview = ({ editor }: PluginProps) => {
   const [data, setData] = useState({});
   const [visible, setVisible] = useState(false);
-  const handleClick = async () => {
+  async function handleClick() {
     if (!editor) {
       return;
     }
@@ -25,6 +25,10 @@ const SamplePreview = ({ editor }: PluginProps) => {
     }
   };
 
+  function handleClose() {
+    setVisible(false);
+  }
+
   const { schema, components } = data;
   return (
     <div className="lowcode-plugin-sample-preview">
@@ -34,11 +38,12 @@ const SamplePreview = ({ editor }: PluginProps) => {
       <Dialog
         visible={visible}
         footer={false}
+        onClose={handleClose}
       >
-        <ReactRenderer 
-          schema={schema}
+        {visible && <ReactRenderer 
+          schema={schema.componentsTree[0]}
           components={components}
-        />
+        />}
       </Dialog>
     </div>
   );
