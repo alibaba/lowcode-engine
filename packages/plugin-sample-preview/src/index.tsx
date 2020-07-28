@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Dialog } from '@alifd/next';
-// import { PluginProps } from '@ali/lowcode-types';
-// import { Designer } from '@ali/lowcode-designer';
-// import ReactRenderer from '@ali/lowcode-react-renderer';
+import { PluginProps } from '@ali/lowcode-types';
+import { Designer } from '@ali/lowcode-designer';
+import ReactRenderer from '@ali/lowcode-react-renderer';
 import './index.scss';
 
 const SamplePreview = ({ editor }: PluginProps) => {
