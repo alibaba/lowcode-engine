@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.34"></a>
+## [0.9.34](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.33...@ali/lowcode-designer@0.9.34) (2020-07-29)
+
+
+### Bug Fixes
+
+* getSuitablePlace ([03e7c57](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/03e7c57))
+* slot 兼容问题 + loop key bug fix ([bc64017](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bc64017))
+
+
+
+
 <a name="0.9.33"></a>
 ## [0.9.33](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.32...@ali/lowcode-designer@0.9.33) (2020-07-28)
 

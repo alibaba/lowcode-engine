@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.37"></a>
+## [0.8.37](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-rax-simulator-renderer@0.8.36...@ali/lowcode-rax-simulator-renderer@0.8.37) (2020-07-29)
+
+
+### Bug Fixes
+
+* getSuitablePlace ([03e7c57](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/03e7c57))
+
+
+
+
 <a name="0.8.36"></a>
 ## [0.8.36](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-rax-simulator-renderer@0.8.35...@ali/lowcode-rax-simulator-renderer@0.8.36) (2020-07-28)
 

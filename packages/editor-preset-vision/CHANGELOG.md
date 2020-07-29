@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.35"></a>
+## [0.8.35](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.34...@ali/lowcode-editor-preset-vision@0.8.35) (2020-07-29)
+
+
+### Bug Fixes
+
+* slot 兼容问题 + loop key bug fix ([bc64017](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bc64017))
+
+
+
+
 <a name="0.8.34"></a>
 ## [0.8.34](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.33...@ali/lowcode-editor-preset-vision@0.8.34) (2020-07-28)
 
