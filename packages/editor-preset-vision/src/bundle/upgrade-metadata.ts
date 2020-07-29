@@ -281,21 +281,24 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
   }
 
   let initialFn = (slotName ? null : initial) || initialValue;
-  if (slotName && initialValue === true) {
-    initialFn = (value: any, defaultValue: any) => {
-      if (isJSSlot(value)) {
-        return {
-          title: slotTitle || title,
-          ...value,
-        };
-      }
-      return {
-        type: 'JSSlot',
-        title: slotTitle || title,
-        value: initialChildren,
-      };
-    };
-  }
+  // 在 upgrade reducer 做了 JSBlock ——> JSSlot
+  // if (slotName && initialValue === true) {
+  //   initialFn = (value: any, defaultValue: any) => {
+  //     if (isJSSlot(value)) {
+  //       return {
+  //         title: slotTitle || title,
+  //         name: slotName,
+  //         ...value,
+  //       };
+  //     }
+  //     return {
+  //       type: 'JSSlot',
+  //       title: slotTitle || title,
+  //       name: slotName,
+  //       value: initialChildren,
+  //     };
+  //   };
+  // }
 
   if (!slotName) {
     if (accessor) {
@@ -401,6 +404,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
           return {
             type: 'JSSlot',
             title: slotTitle || title,
+            name: slotName,
             value: value == null ? initialChildren : value,
           };
         },

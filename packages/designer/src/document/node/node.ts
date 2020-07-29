@@ -813,9 +813,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * @deprecated
    */
   registerAddon(key: string, exportData: () => any, isProp: boolean = false) {
-    if (this._addons[key]) {
-      throw new Error(`node addon ${key} exist`);
-    }
+    // if (this._addons[key]) {
+    //   throw new Error(`node addon ${key} exist`);
+    // }
 
     this._addons[key] = { exportData, isProp };
   }
