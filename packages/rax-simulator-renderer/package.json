@@ -51,5 +51,5 @@
       "ts-node/register"
     ]
   },
-  "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-rax-simulator-renderer@0.8.35/build/index.html"
+  "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-rax-simulator-renderer@0.8.36/build/index.html"
 }
