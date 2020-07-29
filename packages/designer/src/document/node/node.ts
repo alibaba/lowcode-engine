@@ -793,11 +793,39 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * @deprecated
    */
   getSuitablePlace(node: Node, ref: any): any {
-    // TODO:
-    if (this.isRoot()) {
+    if (this.isRoot() && this.children) {
+      const dropElement = this.children.filter((c: Node) => {
+        if (!c.isContainer()) {
+          return false;
+        }
+        const canDropIn = c.componentMeta?.prototype?.options?.canDropIn;
+        if (typeof canDropIn === 'function') {
+          return canDropIn(node);
+        } else if (typeof canDropIn === 'boolean'){
+          return canDropIn;
+        }
+        return true;
+      })[0];
+      if (dropElement) {
+        return { container: dropElement, ref };
+      }
       return { container: this, ref };
     }
-    return { container: this.parent, ref: this };
+
+    const canDropIn = this.componentMeta?.prototype?.options?.canDropIn;
+    if (this.isContainer()) {
+      if (canDropIn === undefined ||
+        (typeof canDropIn === 'boolean' && canDropIn) ||
+      (typeof canDropIn === 'function' && canDropIn(node))){
+        return { container: this, ref };
+      }
+    }
+
+    if (this.parent) {
+      return this.parent.getSuitablePlace(node, ref);
+    }
+    
+    return null;
   }
   /**
    * @deprecated
@@ -813,9 +841,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * @deprecated
    */
   registerAddon(key: string, exportData: () => any, isProp: boolean = false) {
-    if (this._addons[key]) {
-      throw new Error(`node addon ${key} exist`);
-    }
+    // if (this._addons[key]) {
+    //   throw new Error(`node addon ${key} exist`);
+    // }
 
     this._addons[key] = { exportData, isProp };
   }

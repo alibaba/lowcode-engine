@@ -244,7 +244,7 @@ export class NodeChildren {
     return this.children.some((child, index) => fn(child, index));
   }
 
-  filter(fn: (item: Node, index: number) => item is Node) {
+  filter(fn: (item: Node, index: number) => any) {
     return this.children.filter(fn);
   }
 
