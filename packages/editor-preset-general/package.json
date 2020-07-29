@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-editor-preset-general",
-  "version": "0.9.17",
+  "version": "0.9.18",
   "private": true,
   "description": "Ali General Editor Preset",
   "main": "lib/index.js",
@@ -15,10 +15,10 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@ali/lowcode-editor-core": "^0.8.24",
-    "@ali/lowcode-editor-skeleton": "^0.8.38",
-    "@ali/lowcode-plugin-designer": "^0.9.32",
-    "@ali/lowcode-plugin-outline-pane": "^0.8.38",
+    "@ali/lowcode-editor-core": "^0.8.25",
+    "@ali/lowcode-editor-skeleton": "^0.8.39",
+    "@ali/lowcode-plugin-designer": "^0.9.33",
+    "@ali/lowcode-plugin-outline-pane": "^0.8.39",
     "@ali/lowcode-types": "^0.8.13",
     "@ali/lowcode-utils": "^0.8.15",
     "@alifd/next": "^1.19.12",
@@ -28,7 +28,7 @@
     "react-dom": "^16.8.1"
   },
   "devDependencies": {
-    "@ali/lowcode-editor-setters": "^0.9.10",
+    "@ali/lowcode-editor-setters": "^0.9.11",
     "@alib/build-scripts": "^0.1.18",
     "@types/events": "^3.0.0",
     "@types/react": "^16.8.3",
