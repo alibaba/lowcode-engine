@@ -35,8 +35,10 @@ const transfrom = {
 
     functionNameList.map((functionName)=>{
       if (functionName != 'constructor'){
-          let functionCode = a[functionName].toString().replace(new RegExp(functionName),'function');
-          functionMap[functionName] = functionCode;
+          if (a[functionName]){
+            let functionCode = a[functionName].toString().replace(new RegExp(functionName),'function');
+            functionMap[functionName] = functionCode;
+          }
       }
     })
 
