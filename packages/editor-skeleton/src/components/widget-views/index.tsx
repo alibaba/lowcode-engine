@@ -2,13 +2,15 @@ import { Component, ReactElement } from 'react';
 import { Icon } from '@alifd/next';
 import classNames from 'classnames';
 import { Title, observer, Tip, globalContext, Editor } from '@ali/lowcode-editor-core';
-import { DockProps } from '../types';
-import PanelDock from '../widget/panel-dock';
-import { composeTitle } from '../widget/utils';
-import WidgetContainer from '../widget/widget-container';
-import Panel from '../widget/panel';
-import { IWidget } from '../widget/widget';
-import { SkeletonEvents } from '../skeleton';
+import { DockProps } from '../../types';
+import PanelDock from '../../widget/panel-dock';
+import { composeTitle } from '../../widget/utils';
+import WidgetContainer from '../../widget/widget-container';
+import Panel from '../../widget/panel';
+import { IWidget } from '../../widget/widget';
+import { SkeletonEvents } from '../../skeleton';
+
+import './index.less';
 
 export function DockView({ title, icon, description, size, className, onClick }: DockProps) {
   return (
@@ -262,9 +264,6 @@ export class WidgetView extends Component<{ widget: IWidget }> {
   }
   render() {
     const { widget } = this.props;
-    if (!widget.visible) {
-      return null;
-    }
-    return widget.body;
+    return <div className={classNames('lc-widget-view-container', { hidden: !widget.visible })}>{widget.body}</div>;
   }
 }
