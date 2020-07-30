@@ -18,7 +18,13 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     const { field } = this.props;
     const { extraProps } = field;
     const { condition, defaultValue, display } = extraProps;
-    const visible = field.isSingle && typeof condition === 'function' ? condition(field) !== false : true;
+    let visible;
+    try {
+      visible = field.isSingle && typeof condition === 'function' ? condition(field) !== false : true;
+    } catch (error) {
+      console.error('exception when condition (hidden) is excuted', error);
+    }
+
     if (!visible) {
       return null;
     }
