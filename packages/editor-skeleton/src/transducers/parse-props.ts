@@ -60,6 +60,14 @@ function propTypeToSetter(propType: PropType): SetterType {
         isRequired,
         initialValue: false,
       };
+    case 'JSExpression':
+      return {
+        componentName: 'ExpressionSetter',
+        initialValue: {
+          type: 'JSExpression',
+          value: '',
+        },
+      };
     case 'oneOf':
       const dataSource = ((propType as OneOf).value || []).map((value, index) => {
         const t = typeof value;

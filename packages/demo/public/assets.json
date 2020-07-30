@@ -1364,6 +1364,7 @@
     {
       "componentName": "Button",
       "title": "Button",
+      "icon": "https://img.alicdn.com/tfs/TB1rT0gPQL0gK0jSZFAXXcA9pXa-200-200.svg",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -1386,6 +1387,7 @@
         },
         {
           "name": "type",
+          "title": "类型",
           "propType": {
             "type": "oneOf",
             "value": [
@@ -1399,6 +1401,7 @@
         },
         {
           "name": "size",
+          "title": "尺寸",
           "propType": {
             "type": "oneOf",
             "value": [
@@ -1412,6 +1415,7 @@
         },
         {
           "name": "iconSize",
+          "title": "Icon 尺寸",
           "propType": {
             "type": "oneOf",
             "value": [
@@ -1425,10 +1429,12 @@
               "xxxl"
             ]
           },
+          "defaultValue": "small",
           "description": "按钮中 Icon 的尺寸，用于替代 Icon 的默认大小"
         },
         {
           "name": "htmlType",
+          "title": "htmlType",
           "propType": {
             "type": "oneOf",
             "value": [
@@ -1456,6 +1462,7 @@
         },
         {
           "name": "loading",
+          "title": "是否 loading",
           "propType": "bool",
           "description": "设置按钮的载入状态",
           "defaultValue": false
@@ -1494,6 +1501,7 @@
         },
         {
           "name": "onClick",
+          "title": "onClick",
           "propType": "func",
           "description": "点击按钮的回调\n@param {Object} e Event Object"
         },
@@ -4375,7 +4383,7 @@
         },
         {
           "name": "visible",
-          "propType": "oneOfType",
+          "propType": "JSExpression",
           "description": "是否显示",
           "defaultValue": false
         },
@@ -4562,7 +4570,8 @@
       "configure": {
         "component": {
           "isContainer": true,
-          "isModel": true
+          "isModel": true,
+          "rootSelector": "div.next-dialog"
         }
       }
     },
@@ -5018,11 +5027,8 @@
         },
         {
           "name": "label",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "label 标签的文本"
+          "propType": "string",
+          "description": "标签"
         },
         {
           "name": "labelCol",
@@ -13152,9 +13158,9 @@
                   "type": "normal",
                   "size": "medium",
                   "htmlType": "button",
-                  "component": "button"
-                },
-                "children": "取消"
+                  "component": "button",
+                  "children": ["取消"]
+                }
               }
             },
             {
@@ -13416,8 +13422,7 @@
                 "props": {
                   "prefix": "next-",
                   "children": [
-                    "222",
-                    "222111"
+                    "一级"
                   ]
                 }
               }
@@ -13639,9 +13644,9 @@
                 "componentName": "Form.Item",
                 "props": {
                   "style":{
-                    "margin-bottom": "0",
-                    "min-width": "200px",
-                    "min-height": "28px"
+                    "marginBottom": "0",
+                    "minWidth": "200px",
+                    "minHeight": "28px"
                   }
                 }
               }
