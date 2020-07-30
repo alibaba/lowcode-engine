@@ -20,7 +20,7 @@ import PanelDock from './widget/panel-dock';
 import Dock from './widget/dock';
 import { Stage, StageConfig } from './widget/stage';
 import { isValidElement } from 'react';
-import { isPlainObject } from '@ali/lowcode-utils';
+import { isPlainObject, uniqueId } from '@ali/lowcode-utils';
 import { Divider } from '@alifd/next';
 import { EditorConfig, PluginClassSet } from '@ali/lowcode-types';
 
@@ -246,6 +246,19 @@ export class Skeleton {
 
   getPanel(name: string): Panel | undefined {
     return this.panels.get(name);
+  }
+
+  getStage(name: string) {
+    return this.stages.container.get(name);
+  }
+
+  createStage(config: any) {
+    const stage = this.add({
+      name: uniqueId('stage'),
+      area: 'stages',
+      ...config,
+    });
+    return stage?.getName();
   }
 
   createContainer(

@@ -147,8 +147,13 @@ export function createSettingFieldView(item: SettingField | CustomView, field: S
   }
 }
 
+export type SettingsPaneProps = {
+  target: SettingTopEntry | SettingField;
+  usePopup?: boolean;
+};
+
 @observer
-export class SettingsPane extends Component<{ target: SettingTopEntry | SettingField }> {
+export class SettingsPane extends Component<SettingsPaneProps> {
   static contextType = SkeletonContext;
   shouldComponentUpdate() {
     return false;
@@ -160,6 +165,8 @@ export class SettingsPane extends Component<{ target: SettingTopEntry | SettingF
   private handleClick = (e: MouseEvent) => {
     // compatiable vision stageBox
     // TODO: optimize these codes
+    const { usePopup = true } = this.props;
+    if (!usePopup) return;
     const pane = e.currentTarget as HTMLDivElement;
     let entry: any;
     function getTarget(node: any): any {
