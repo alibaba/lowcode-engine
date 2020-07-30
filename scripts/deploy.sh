@@ -21,9 +21,9 @@ echo ""
 
 # work
 mkdir packages
-cp -r $WORK_DIR/packages/demo packages/demo
+# cp -r $WORK_DIR/packages/demo packages/demo
 cp -r $WORK_DIR/packages/react-simulator-renderer packages/react-simulator-renderer
-# cp -r $WORK_DIR/packages/rax-simulator-renderer packages/rax-simulator-renderer
+cp -r $WORK_DIR/packages/rax-simulator-renderer packages/rax-simulator-renderer
 cp -r $WORK_DIR/packages/editor-preset-vision packages/editor-preset-vision
 # cp -r $WORK_DIR/packages/editor-preset-general packages/editor-preset-general
 lerna bootstrap
