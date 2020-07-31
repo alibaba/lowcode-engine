@@ -9122,6 +9122,39 @@
           "name": "locale",
           "propType": "object"
         }
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
+    },
+    {
+      "componentName": "Select.Option",
+      "title": "Select.Option",
+      "docUrl": "",
+      "screenshot": "",
+      "npm": {
+        "package": "@alifd/next",
+        "version": "1.19.18",
+        "exportName": "Select",
+        "main": "src/index.js",
+        "destructuring": true,
+        "subName": "Option"
+      },
+      "props": [
+        {
+          "name": "value",
+          "propType": "string",
+          "description": "选项值",
+          "defaultValue": "test"
+        },
+        {
+          "name": "disabled",
+          "propType": "bool",
+          "description": "是否禁用",
+          "defaultValue": false
+        }
       ]
     },
     {
@@ -13926,6 +13959,24 @@
                   "mode": "single",
                   "hasArrow": true,
                   "cacheValue": true
+                }
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "Select.Option",
+          "title": "Select.Option",
+          "icon": "",
+          "package": "@alife/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "Select.Option",
+              "screenshot": "",
+              "schema": {
+                "componentName": "Select.Option",
+                "props": {
                 }
               }
             }
