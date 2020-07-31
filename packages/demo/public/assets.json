@@ -67,6 +67,34 @@
       }
     },
     {
+      "componentName": "Divider",
+      "title": "Divider",
+      "docUrl": "",
+      "screenshot": "",
+      "npm": {
+        "package": "@alifd/next",
+        "version": "1.19.18",
+        "exportName": "Divider",
+        "main": "src/index.js",
+        "destructuring": true,
+        "subName": ""
+      },
+      "props": [
+        {
+          "name": "root",
+          "propType": "object"
+        },
+        {
+          "name": "className",
+          "propType": "string"
+        },
+        {
+          "name": "style",
+          "propType": "object"
+        }
+      ]
+    },
+    {
       "componentName": "Drawer",
       "title": "抽屉",
       "docUrl": "",
@@ -4918,12 +4946,50 @@
         },
         {
           "name": "labelCol",
-          "propType": "object",
+          "propType": {
+            "type": "shape",
+            "value": [{
+              "name": "span",
+              "description": "fixedSpan",
+              "propType": "number"
+            },{
+              "name": "fixedSpan",
+              "description": "fixedSpan",
+              "propType": "number"
+            },{
+              "name": "offset",
+              "description": "offset",
+              "propType": "number"
+            },{
+              "name": "fixedOffset",
+              "description": "fixedOffset",
+              "propType": "number"
+            }]
+          },
           "description": "控制第一级 Item 的 labelCol"
         },
         {
           "name": "wrapperCol",
-          "propType": "object",
+          "propType": {
+            "type": "shape",
+            "value": [{
+              "name": "span",
+              "description": "fixedSpan",
+              "propType": "number"
+            },{
+              "name": "fixedSpan",
+              "description": "fixedSpan",
+              "propType": "number"
+            },{
+              "name": "offset",
+              "description": "offset",
+              "propType": "number"
+            },{
+              "name": "fixedOffset",
+              "description": "fixedOffset",
+              "propType": "number"
+            }]
+          },
           "description": "控制第一级 Item 的 wrapperCol"
         },
         {
@@ -6877,7 +6943,7 @@
       ]
     },
     {
-      "componentName": "Divider",
+      "componentName": "Menu.Divider",
       "title": "Divider",
       "docUrl": "",
       "screenshot": "",
@@ -13644,7 +13710,6 @@
                 "componentName": "Form.Item",
                 "props": {
                   "style":{
-                    "marginBottom": "0",
                     "minWidth": "200px",
                     "minHeight": "28px"
                   }
