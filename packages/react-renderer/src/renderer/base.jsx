@@ -195,11 +195,25 @@ export default class BaseRender extends PureComponent {
     this.__ref = ref;
   };
 
+  getSchemaChildren = (schema) => {
+    let _children = schema.children;
+    if (!_children) return schema.props.children;
+    if (schema.props.children && schema.props.children.length) {
+      if (Array.isArray(schema.props.children)) {
+        _children = Array.isArray(_children) ? _children.concat(schema.props.children) : schema.props.children.unshift(_children);
+      } else {
+        Array.isArray(_children) && _children.push(schema.props.children) || (_children = [_children] && _children.push(schema.props.children));
+      }
+    }
+    return _children;
+  };
+
   __createDom = () => {
     const { __schema, __ctx, __components = {} } = this.props;
     const self = {};
     self.__proto__ = __ctx || this;
-    return this.__createVirtualDom(__schema.children, self, {
+    let _children = this.getSchemaChildren(__schema);
+    return this.__createVirtualDom(_children, self, {
       schema: __schema,
       Comp: __components[__schema.componentName],
     });
@@ -230,9 +244,10 @@ export default class BaseRender extends PureComponent {
         );
       }
 
+      const _children = this.getSchemaChildren(schema);
       //解析占位组件
-      if (schema.componentName === 'Flagment' && schema.children) {
-        let tarChildren = isJSExpression(schema.children) ? parseExpression(schema.children, self) : schema.children;
+      if (schema.componentName === 'Flagment' && _children) {
+        let tarChildren = isJSExpression(_children) ? parseExpression(_children, self) : _children;
         return this.__createVirtualDom(tarChildren, self, parentInfo);
       }
 
@@ -337,9 +352,9 @@ export default class BaseRender extends PureComponent {
           Comp,
           props,
           (!isFileSchema(schema) &&
-            !!schema.children &&
+            !!_children &&
             this.__createVirtualDom(
-              isJSExpression(schema.children) ? parseExpression(schema.children, self) : schema.children,
+              isJSExpression(_children) ? parseExpression(_children, self) : _children,
               self,
               {
                 schema,
