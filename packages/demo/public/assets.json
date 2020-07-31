@@ -80,17 +80,47 @@
         "subName": ""
       },
       "props": [
+
         {
-          "name": "root",
-          "propType": "object"
+          "name": "children",
+          "propType": "string",
+          "description": "子元素",
+          "defaultValue": "Test"
+        },
+
+        {
+          "name": "dashed",
+          "propType": {
+            "type": "bool"
+          },
+          "description": "是否为虚线",
+          "defaultValue": false
+        },
+
+        {
+          "name": "direction",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "hoz",
+              "ver"
+            ]
+          },
+          "description": "线是水平还是垂直类型",
+          "defaultValue": "hoz"
         },
         {
-          "name": "className",
-          "propType": "string"
-        },
-        {
-          "name": "style",
-          "propType": "object"
+          "name": "orientation",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "left",
+              "right",
+              "center"
+            ]
+          },
+          "description": "分割线标题的位置",
+          "defaultValue": "center"
         }
       ]
     },
