@@ -283,10 +283,10 @@
           "propType": "any"
         }
       ],"configure": {
-      "component": {
-        "isContainer": true,
-        "isModel": true
-      }
+        "component": {
+          "isContainer": true,
+          "isModel": true
+        }
     }
     },
     {
@@ -1384,6 +1384,11 @@
           "propType": "bool"
         },
         {
+          "name": "children",
+          "description": "内容",
+          "propType": "string"
+        },
+        {
           "name": "link",
           "propType": "string",
           "description": "面包屑节点链接，如果设置这个属性，则该节点为`<a />` ，否则是`<span />`"
@@ -1402,11 +1407,6 @@
         {
           "name": "className",
           "propType": "any"
-        },
-        {
-          "name": "children",
-          "description": "内容",
-          "propType": "array"
         },
         {
           "name": "style",
@@ -11645,8 +11645,19 @@
         {
           "name": "style",
           "propType": "object"
+        },
+        {
+          "name": "children",
+          "title": "内容",
+          "propType": "string"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true,
+          "isModel": true
+        }
+      }
     },
     {
       "componentName": "Paragraph",
@@ -11691,8 +11702,8 @@
       ]
     },
     {
-      "componentName": "Text",
-      "title": "Text",
+      "componentName": "Typography.Text",
+      "title": "Typography.Text",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -11750,10 +11761,7 @@
         },
         {
           "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          }
+          "propType": "string"
         },
         {
           "name": "rtl",
@@ -11764,7 +11772,12 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "Upload",
@@ -13472,7 +13485,10 @@
               "screenshot": "",
               "schema": {
                 "componentName": "Typography",
-                "props": {}
+                "props": {
+                  "component": "span",
+                  "children": "基于 Ali-Lowcode-Engine 快速打造高生产力的低代码研发平台"
+                }
               }
             }
           ]
@@ -13517,9 +13533,7 @@
                 "componentName": "Breadcrumb.Item",
                 "props": {
                   "prefix": "next-",
-                  "children": [
-                    "一级"
-                  ]
+                  "children": "一级"
                 }
               }
             }
