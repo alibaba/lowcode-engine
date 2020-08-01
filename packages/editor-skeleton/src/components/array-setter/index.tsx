@@ -85,7 +85,6 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
   private scrollToLast = false;
   onAdd() {
     const { items, itemsMap } = this.state;
-    debugger;
     const { itemSetter } = this.props;
     const initialValue = typeof itemSetter === 'object' ? (itemSetter as any).initialValue : null;
     const item = this.props.field.createField({
@@ -104,18 +103,25 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
   }
 
   onRemove(field: SettingField) {
-    const { items } = this.state;
+    const {onChange, itemSetter} = this.props;
+    const { items, itemsMap } = this.state;
     let i = items.indexOf(field);
+    const values = items.map((item) => {
+      return item.getValue();
+    });
     if (i < 0) {
       return;
     }
     items.splice(i, 1);
+    values.splice(i, 1);
     const l = items.length;
     while (i < l) {
       items[i].setKey(i);
       i++;
     }
+    itemsMap.delete(field.id);
     field.remove();
+    onChange(values)
     this.setState({ items: items.slice() });
   }
 
