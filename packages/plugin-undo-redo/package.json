@@ -24,6 +24,7 @@
     "@ali/lowcode-editor-skeleton": "^0.8.33",
     "@ali/lowcode-types": "^0.8.11",
     "@ali/lowcode-utils": "^0.8.12",
+    "@ali/ve-icons": "^4.1.14",
     "react": "^16.8.1",
     "react-dom": "^16.8.1"
   },
