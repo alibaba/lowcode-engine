@@ -136,7 +136,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
       //   advanceGroup = item.items || [];
       //   propsGroup.splice(l, 1);
       // } 
-      if (item.name === '__style__' || item.name === 'containerStyle' || item.name === 'pageStyle') {
+      if (item.name === '__style__' || item.name === 'style' || item.name === 'containerStyle' || item.name === 'pageStyle') {
         propsGroup.splice(l, 1);
         stylesGroup.push(item);
         if (item.extraProps?.defaultCollapsed && item.name !== 'containerStyle') {
