@@ -1,8 +1,9 @@
 import { ComponentType, ReactElement, isValidElement, ComponentClass } from 'react';
-import { isPlainObject } from '@ali/lowcode-utils';
+import { isPlainObject, uniqueId } from '@ali/lowcode-utils';
 import { isI18nData, SettingTarget, InitialItem, FilterItem, isJSSlot, ProjectSchema, AutorunItem } from '@ali/lowcode-types';
 import { untracked } from '@ali/lowcode-editor-core';
 import { editor, designer } from '../editor';
+import { SettingField } from '@ali/lowcode-designer';
 
 type Field = SettingTarget;
 
@@ -218,7 +219,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
   };
   const newConfig: any = {
     type: type === 'group' ? 'group' : 'field',
-    name,
+    name: type === 'group' && !name ? uniqueId('group') : name,
     title,
     extraProps,
   };
@@ -280,21 +281,24 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
   }
 
   let initialFn = (slotName ? null : initial) || initialValue;
-  if (slotName && initialValue === true) {
-    initialFn = (value: any, defaultValue: any) => {
-      if (isJSSlot(value)) {
-        return {
-          title: slotTitle || title,
-          ...value,
-        };
-      }
-      return {
-        type: 'JSSlot',
-        title: slotTitle || title,
-        value: initialChildren,
-      };
-    };
-  }
+  // 在 upgrade reducer 做了 JSBlock ——> JSSlot
+  // if (slotName && initialValue === true) {
+  //   initialFn = (value: any, defaultValue: any) => {
+  //     if (isJSSlot(value)) {
+  //       return {
+  //         title: slotTitle || title,
+  //         name: slotName,
+  //         ...value,
+  //       };
+  //     }
+  //     return {
+  //       type: 'JSSlot',
+  //       title: slotTitle || title,
+  //       name: slotName,
+  //       value: initialChildren,
+  //     };
+  //   };
+  // }
 
   if (!slotName) {
     if (accessor) {
@@ -325,6 +329,10 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
 
     if (mutator) {
       extraProps.setValue = (field: Field, value: any) => {
+        // TODO: 兼容代码，不触发查询组件的 Mutator
+        if (field instanceof SettingField && field.componentMeta?.componentName === 'Filter') {
+          return;
+        }
         mutator.call(field, value, value);
       };
     }
@@ -396,6 +404,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
           return {
             type: 'JSSlot',
             title: slotTitle || title,
+            name: slotName,
             value: value == null ? initialChildren : value,
           };
         },

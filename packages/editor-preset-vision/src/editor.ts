@@ -120,7 +120,11 @@ designer.addPropsReducer((props, node) => {
           newProps[item.name] = props[item.name];
         }
       }
+      if (newProps[item.name] && !node.props.has(item.name)) {
+        node.props.add(newProps[item.name], item.name);
+      }
     });
+
     return newProps;
   }
   return props;

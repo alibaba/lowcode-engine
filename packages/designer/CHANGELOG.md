@@ -3,6 +3,45 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.34"></a>
+## [0.9.34](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.33...@ali/lowcode-designer@0.9.34) (2020-07-29)
+
+
+### Bug Fixes
+
+* getSuitablePlace ([03e7c57](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/03e7c57))
+* slot 兼容问题 + loop key bug fix ([bc64017](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bc64017))
+
+
+
+
+<a name="0.9.33"></a>
+## [0.9.33](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.32...@ali/lowcode-designer@0.9.33) (2020-07-28)
+
+
+### Bug Fixes
+
+* props.getNode 防死循环 ([444e25c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/444e25c))
+* vc-filter bug fix ([31ea5d5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/31ea5d5))
+* VC-Filter组件的适配问题 ([1f581b8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1f581b8))
+* 增加 getNode 兼容接口 ([5b6792f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5b6792f))
+* 补充documnet-model中addonData 相关方法 ([cbc70ea](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/cbc70ea))
+* 调整visionNode修改未知 ([da59235](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/da59235))
+
+
+
+
+<a name="0.9.32"></a>
+## [0.9.32](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.31...@ali/lowcode-designer@0.9.32) (2020-07-23)
+
+
+### Bug Fixes
+
+* prop type=UNSET 时返回 undefined ([f437f30](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f437f30))
+
+
+
+
 <a name="0.9.31"></a>
 ## [0.9.31](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.30...@ali/lowcode-designer@0.9.31) (2020-07-22)
 

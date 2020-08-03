@@ -329,4 +329,11 @@ export class Props implements IPropParent {
   setPropValue(path: string, value: any) {
     this.getProp(path, true)!.setValue(value);
   }
+
+  /**
+   * 获取 props 对应的 node
+   */
+  getNode() {
+    return this.owner;
+  }
 }
