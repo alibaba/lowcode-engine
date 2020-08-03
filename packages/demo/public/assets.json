@@ -2468,6 +2468,13 @@
         {
           "name": "style",
           "propType": "object"
+        },
+        {
+          "name": "dataSource",
+          "propType": {
+            "type": "arrayOf",
+            "value": "object"
+          }
         }
       ]
     },
@@ -12884,7 +12891,16 @@
                 "componentName": "Cascader",
                 "props": {
                   "prefix": "next-",
-                  "expandTriggerType": "click"
+                  "expandTriggerType": "click",
+                  "dataSource": [{
+                    "value": "2974",
+                    "label": "西安",
+                    "children": [
+                      { "value": "2975", "label": "西安市" },
+                      { "value": "2976", "label": "高陵县" },
+                      { "value": "2977", "label": "蓝田县" }
+                    ]
+                  }]
                 }
               }
             }
