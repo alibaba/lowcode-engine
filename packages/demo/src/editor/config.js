@@ -13,7 +13,7 @@ export default {
           href: '/',
         },
       },
-      /*
+      
       {
         pluginKey: 'undoRedo',
         type: 'Custom',
@@ -22,6 +22,7 @@ export default {
           width: 88,
         },
       },
+      /*
       {
         pluginKey: 'divider',
         type: 'Divider',
