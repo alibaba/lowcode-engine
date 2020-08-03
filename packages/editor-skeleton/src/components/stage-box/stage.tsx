@@ -71,10 +71,10 @@ export default class Stage extends Component<StageProps> {
     );
 
     const stageBacker = stage?.hasBack() ? (
-      <div className="skeleton-stagebox-stagebacker" data-stage-target="stageback">
-        <Icons name="arrow" className="skeleton-stagebox-stage-arrow" size="medium" />
+      <div className="skeleton-stagebox-stagebacker">
+        <Icons name="arrow" className="skeleton-stagebox-stage-arrow" size="medium" data-stage-target="stageback" />
         <span className="skeleton-stagebox-stage-title">{stage.title}</span>
-        <Icons name="exit" className="skeleton-stagebox-stage-exit" size="medium" />
+        <Icons name="exit" className="skeleton-stagebox-stage-exit" size="medium" data-stage-target="stageexit" />
       </div>
     ) : null;
 
