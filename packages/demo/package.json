@@ -10,7 +10,7 @@
   "config": {},
   "dependencies": {
     "@ali/lowcode-editor-core": "^0.8.25",
-    "@ali/lowcode-editor-skeleton": "^0.8.40",
+    "@ali/lowcode-editor-skeleton": "^0.8.41-beta1",
     "@ali/lowcode-plugin-components-pane": "^0.8.36",
     "@ali/lowcode-plugin-designer": "^0.9.34",
     "@ali/lowcode-plugin-event-bind-dialog": "^0.8.24",
