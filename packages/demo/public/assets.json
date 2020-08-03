@@ -2474,7 +2474,8 @@
           "propType": {
             "type": "arrayOf",
             "value": "object"
-          }
+          },
+          "setter": "JsonSetter"
         }
       ]
     },
@@ -2738,6 +2739,14 @@
         {
           "name": "style",
           "propType": "object"
+        },
+        {
+          "name": "dataSource",
+          "propType": {
+            "type": "arrayOf",
+            "value": "object"
+          },
+          "setter": "JsonSetter"
         }
       ]
     },
@@ -13748,7 +13757,16 @@
                   "hasBorder": true,
                   "expandTriggerType": "click",
                   "resultAutoWidth": true,
-                  "notFoundContent": "Not Found"
+                  "notFoundContent": "Not Found",
+                  "dataSource": [{
+                    "value": "2974",
+                    "label": "西安",
+                    "children": [
+                      { "value": "2975", "label": "西安市" },
+                      { "value": "2976", "label": "高陵县" },
+                      { "value": "2977", "label": "蓝田县" }
+                    ]
+                  }]
                 }
               }
             }
