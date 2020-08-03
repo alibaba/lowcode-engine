@@ -12904,7 +12904,15 @@
                 "componentName": "Collapse",
                 "props": {
                   "prefix": "next-"
-                }
+                },
+                "children": [{
+                  "componentName": "Panel",
+                  "props": {
+                    "prefix": "next-",
+                    "isExpanded": true,
+                    "title": "面板标题"
+                  }
+                }]
               }
             }
           ]
