@@ -72,6 +72,8 @@ export default class StageBox extends Component<StageBoxProps> {
 
       if (target === 'stageback') {
         this.stageChain.stageBack();
+      } else if (target === 'stageexit') {
+        this.stageChain.stageBackToRoot();
       } else {
         const { skeleton } = this.props;
         this.stageChain.stagePush(skeleton.getStage(target));

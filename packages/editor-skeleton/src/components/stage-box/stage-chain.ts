@@ -30,12 +30,13 @@ export default class StageChain {
    * 回到最开始
    */
   stageBackToRoot() {
-    while (!this.stage.isRoot) {
-      const stage = this.stage.getPrevious();
-      if (!stage) return;
-      stage.setReferRight(this.stage);
-      this.stage = stage;
+    let rootStage = this.stage.getPrevious();
+    while (rootStage && !rootStage.isRoot) {
+      rootStage = rootStage.getPrevious();
     }
+    if (!rootStage) return;
+    rootStage.setReferRight(this.stage);
+    this.stage = rootStage;
     this.emitter.emit('stagechange');
   }
 

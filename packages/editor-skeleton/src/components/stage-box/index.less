@@ -1,9 +1,13 @@
 @import "~@ali/ve-less-variables/index.less";
 
 .skeleton-stagebox {
-  overflow: hidden;
-  position: relative;
-  min-height: 50px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
   .skeleton-stagebox-stage {
     height: auto;
     overflow: hidden;
