@@ -55,5 +55,5 @@ export function isJSSlot(data: any): data is JSSlot {
 }
 
 export function isJSBlock(data: any): data is JSBlock {
-  return data && data.type === 'JSBlock'
+  return data && data.type === 'JSBlock';
 }

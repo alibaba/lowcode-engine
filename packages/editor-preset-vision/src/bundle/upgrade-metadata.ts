@@ -1,6 +1,6 @@
 import { ComponentType, ReactElement, isValidElement, ComponentClass } from 'react';
 import { isPlainObject, uniqueId } from '@ali/lowcode-utils';
-import { isI18nData, SettingTarget, InitialItem, FilterItem, isJSSlot, ProjectSchema, AutorunItem } from '@ali/lowcode-types';
+import { isI18nData, SettingTarget, InitialItem, FilterItem, isJSSlot, ProjectSchema, AutorunItem, isJSBlock } from '@ali/lowcode-types';
 import { untracked } from '@ali/lowcode-editor-core';
 import { editor, designer } from '../editor';
 import { SettingField } from '@ali/lowcode-designer';
@@ -281,24 +281,19 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
   }
 
   let initialFn = (slotName ? null : initial) || initialValue;
-  // 在 upgrade reducer 做了 JSBlock ——> JSSlot
-  // if (slotName && initialValue === true) {
-  //   initialFn = (value: any, defaultValue: any) => {
-  //     if (isJSSlot(value)) {
-  //       return {
-  //         title: slotTitle || title,
-  //         name: slotName,
-  //         ...value,
-  //       };
-  //     }
-  //     return {
-  //       type: 'JSSlot',
-  //       title: slotTitle || title,
-  //       name: slotName,
-  //       value: initialChildren,
-  //     };
-  //   };
-  // }
+  if (slotName && initialValue === true) {
+    initialFn = (value: any, defaultValue: any) => {
+      if (isJSBlock(value)) {
+        return value;
+      }
+      return {
+        type: 'JSSlot',
+        title: slotTitle || title,
+        name: slotName,
+        value: initialChildren,
+      };
+    };
+  }
 
   if (!slotName) {
     if (accessor) {
@@ -347,22 +342,22 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
       initial: (field: Field, currentValue: any) => {
         // FIXME! read from prototype.defaultProps
         const defaults = extraProps.defaultValue;
-  
+
         if (typeof initialFn !== 'function') {
           initialFn = defaultInitial;
         }
-  
+
         const v = initialFn.call(field, currentValue, defaults);
-  
+
         if (setterInitial) {
           return setterInitial.call(field, v, defaults);
         }
-  
+
         return v;
       },
     });
   }
-  
+
   if (ignore != null || disabled != null) {
     collector.addFilter({
       // FIXME! name should be "xxx.xxx"
