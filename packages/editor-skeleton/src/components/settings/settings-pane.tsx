@@ -56,6 +56,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
         setters: [setter, 'VariableSetter'],
       };
     }
+
     let value = null;
     if (defaultValue != null && !('defaultValue' in setterProps)) {
       setterProps.defaultValue = defaultValue;
