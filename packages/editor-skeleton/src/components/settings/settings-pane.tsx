@@ -35,7 +35,6 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     let setterType: any;
     let initialValue: any = null;
     const isReactComponent = prototype === null || prototype === undefined;
-    console.log(111, this.props);
     if (Array.isArray(setter)) {
       setterType = 'MixedSetter';
       setterProps = {
