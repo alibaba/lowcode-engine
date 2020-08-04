@@ -657,8 +657,21 @@
         {
           "name": "dataIndex",
           "propType": "string"
+        },
+        {
+          "name": "cell",
+          "propType": "func"
         }
-      ]
+      ],
+      "configure": {
+        "props": {
+          "isExtends": true,
+          "override": [{
+            "name": "cell",
+            "setter": "JsonSetter"
+          }]
+        }
+      }
     },
     {
       "componentName": "Badge",
@@ -1184,7 +1197,12 @@
           "propType": "bool",
           "defaultValue": false
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "Breadcrumb",
@@ -1444,6 +1462,11 @@
           "propType": "bool"
         },
         {
+          "name": "children",
+          "title": "内容",
+          "propType": "array"
+        },
+        {
           "name": "type",
           "title": "类型",
           "propType": {
@@ -1570,10 +1593,6 @@
         {
           "name": "onMouseUp",
           "propType": "func"
-        },
-        {
-          "name": "children",
-          "propType": "array"
         },
         {
           "name": "style",
@@ -7533,11 +7552,16 @@
           "name": "popupProps",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
-      "componentName": "Item",
-      "title": "Item",
+      "componentName": "Nav.Item",
+      "title": "Nav.Item",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -8234,7 +8258,7 @@
         },
         {
           "name": "color",
-          "propType": "string",
+          "propType": "color",
           "description": "进度条颜色, 显示优先级: color > progressive > state"
         },
         {
@@ -10278,8 +10302,8 @@
       ]
     },
     {
-      "componentName": "TabItem",
-      "title": "TabItem",
+      "componentName": "Tab.Item",
+      "title": "Tab.Item",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -10338,8 +10362,8 @@
       ]
     },
     {
-      "componentName": "TabItem",
-      "title": "TabItem",
+      "componentName": "Tab.TabPane",
+      "title": "Tab.TabPane",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -12043,8 +12067,8 @@
       ]
     },
     {
-      "componentName": "Selecter",
-      "title": "Selecter",
+      "componentName": "Upload.Selecter",
+      "title": "Upload.Selecter",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -12124,8 +12148,8 @@
       ]
     },
     {
-      "componentName": "Dragger",
-      "title": "Dragger",
+      "componentName": "Upload.Dragger",
+      "title": "Upload.Dragger",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -12200,8 +12224,8 @@
       ]
     },
     {
-      "componentName": "List",
-      "title": "List",
+      "componentName": "Upload.List",
+      "title": "Upload.List",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -12282,10 +12306,7 @@
         },
         {
           "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          }
+          "propType": "node"
         },
         {
           "name": "uploader",
@@ -12637,6 +12658,94 @@
           "isContainer": true
         }
       }
+    },
+    {
+      "componentName": "List",
+      "title": "List",
+      "docUrl": "",
+      "screenshot": "",
+      "npm": {
+        "package": "@alifd/next",
+        "version": "1.19.18",
+        "exportName": "List",
+        "main": "src/index.js",
+        "destructuring": true,
+        "subName": ""
+      },
+      "props": [
+        {
+          "name": "prefix",
+          "propType": "string",
+          "defaultValue": "next-"
+        },
+        {
+          "name": "style",
+          "propType": "object"
+        },
+        {
+          "name": "header",
+          "propType": "node"
+        },
+        {
+          "name": "size",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "small",
+              "medium"
+            ]
+          }
+        },
+        {
+          "name": "footer",
+          "propType": "node"
+        },
+        {
+          "name": "divider",
+          "propType": "node"
+        }
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
+    },
+    {
+      "componentName": "List.Item",
+      "title": "List.Item",
+      "docUrl": "",
+      "screenshot": "",
+      "npm": {
+        "package": "@alifd/next",
+        "version": "1.19.18",
+        "exportName": "List",
+        "main": "src/index.js",
+        "destructuring": true,
+        "subName": "Item"
+      },
+      "props": [
+        {
+          "name": "style",
+          "propType": "object"
+        },
+        {
+          "name": "title",
+          "propType": "node"
+        },
+        {
+          "name": "description",
+          "propType": "node"
+        },
+        {
+          "name": "media",
+          "propType": "node"
+        },
+        {
+          "name": "extra",
+          "propType": "node"
+        }
+      ]
     }
   ],
   "componentList": [
@@ -12958,6 +13067,22 @@
               }
             }
           ]
+        },{
+          "componentName": "List.Item",
+          "title": "列表项",
+          "icon": "",
+          "package": "@alife/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "列表项",
+              "screenshot": "",
+              "schema": {
+                "componentName": "List.Item",
+                "props": {}
+              }
+            }
+          ]
         },
         {
           "componentName": "Menu",
@@ -13178,6 +13303,25 @@
                   "autoExpandParent": true,
                   "animation": true,
                   "focusable": true
+                }
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "TreeNode",
+          "title": "树形控件节点",
+          "icon": "",
+          "package": "@alife/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "树形控件节点",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_tree.png",
+              "schema": {
+                "componentName": "TreeNode",
+                "props": {
+                  "prefix": "next-"
                 }
               }
             }
@@ -13656,6 +13800,35 @@
           ]
         },
         {
+          "componentName": "Nav.Item",
+          "title": "导航Item",
+          "icon": "",
+          "package": "@alife/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "导航",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_nav.png",
+              "schema": {
+                "componentName": "Nav.Item",
+                "props": {
+                  "prefix": "next-",
+                  "type": "normal",
+                  "direction": "ver",
+                  "hozAlign": "left",
+                  "mode": "inline",
+                  "triggerType": "click",
+                  "inlineIndent": 20,
+                  "openMode": "multiple",
+                  "defaultSelectedKeys": [],
+                  "popupAlign": "follow",
+                  "hasArrow": true
+                }
+              }
+            }
+          ]
+        },
+        {
           "componentName": "Pagination",
           "title": "翻页器",
           "icon": "",
@@ -13727,6 +13900,27 @@
                   "size": "medium",
                   "triggerType": "click",
                   "lazyLoad": true
+                }
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "Tab.Item",
+          "title": "选项卡Item",
+          "icon": "",
+          "package": "@alife/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "选项卡",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_tab.png",
+              "schema": {
+                "componentName": "Tab.Item",
+                "props": {
+                  "prefix": "next-",
+                  "title": "",
+                  "closeable": true
                 }
               }
             }

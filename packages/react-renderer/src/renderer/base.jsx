@@ -196,6 +196,9 @@ export default class BaseRender extends PureComponent {
   };
 
   getSchemaChildren = (schema) => {
+    if (!schema || !schema.props) {
+      return schema?.children;
+    }
     let _children = schema.children;
     if (!_children) return schema.props.children;
     if (schema.props.children && schema.props.children.length) {
@@ -255,7 +258,6 @@ export default class BaseRender extends PureComponent {
         return schema;
       }
       if (!isSchema(schema)) return null;
-
       let Comp = components[schema.componentName] || engine.getNotFoundComponent();
 
       if (schema.hidden) {

@@ -47,6 +47,12 @@ function propTypeToSetter(propType: PropType): SetterType {
         isRequired,
         initialValue: '',
       };
+    case 'color':
+      return {
+        componentName: 'ColorSetter',
+        isRequired,
+        initialValue: '',
+      };
 
     case 'number':
       return {
@@ -84,20 +90,20 @@ function propTypeToSetter(propType: PropType): SetterType {
         initialValue: dataSource[0] ? dataSource[0].value : null,
       };
 
-    case 'element':
-    case 'node': // TODO: use Mixin
-      return {
-        // slotSetter
-        componentName: 'NodeSetter',
-        props: {
-          mode: typeName,
-        },
-        isRequired,
-        initialValue: {
-          type: 'JSSlot',
-          value: '',
-        },
-      };
+    // case 'element':
+    // case 'node': // TODO: use Mixin
+    //   return {
+    //     // slotSetter
+    //     componentName: 'NodeSetter',
+    //     props: {
+    //       mode: typeName,
+    //     },
+    //     isRequired,
+    //     initialValue: {
+    //       type: 'JSSlot',
+    //       value: '',
+    //     },
+    //   };
     case 'shape':
     case 'exact':
       const items = ((propType as any).value || []).map((item: any) => propConfigToFieldConfig(item));
