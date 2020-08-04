@@ -50,8 +50,13 @@ class SettingFieldView extends Component<{ field: SettingField }> {
         initialValue = setter.initialValue;
       }
     } else if (setter) {
-      setterType = setter;
+      // 默认配置上变量绑定功能
+      setterType = 'MixedSetter';
+      setterProps = {
+        setters: [setter, 'VariableSetter'],
+      };
     }
+
     let value = null;
     if (defaultValue != null && !('defaultValue' in setterProps)) {
       setterProps.defaultValue = defaultValue;
