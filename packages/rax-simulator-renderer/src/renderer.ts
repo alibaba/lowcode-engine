@@ -386,35 +386,34 @@ function getClosestNodeInstance(from: any, specId?: string): NodeInstance<any> |
   return null;
 }
 
-function matcher(parent: any) {
-  return parent.__isReactiveComponent && parent.props.componentId;
+function isValidDesignModeRaxComponentInstance(
+  raxComponentInst: any,
+): raxComponentInst is {
+  props: {
+    _leaf: Exclude<NodeInstance<any>['node'], null | undefined>;
+  };
+} {
+  const leaf = raxComponentInst?.props?._leaf;
+  return leaf && typeof leaf === 'object' && leaf.isNode;
 }
 
 function getNodeInstance(dom: HTMLElement): NodeInstance<any> | null {
   const INTERNAL = '_internal';
+
   let instance = Instance.get(dom);
-  let node;
   while (instance && instance[INTERNAL]) {
-    if (matcher(instance)) {
-      node = instance;
-      break;
+    if (isValidDesignModeRaxComponentInstance(instance)) {
+      return {
+        nodeId: instance.props._leaf.getId(),
+        instance: instance,
+        node: instance.props._leaf,
+      };
     }
+
     instance = instance[INTERNAL].__parentInstance;
   }
-  if (!node) {
-    return null;
-  }
-  return {
-    nodeId: node.props.componentId,
-    instance: node
-  }
-  // return parent;
-  // const instance = fiberNode.stateNode;
-  // if (instance) {
-  //   console.log(instance);
-  // }
-  // return getNodeInstance(fiberNode.return);
-  // return instance;
+
+  return null;
 }
 
 function checkInstanceMounted(instance: any): boolean {
