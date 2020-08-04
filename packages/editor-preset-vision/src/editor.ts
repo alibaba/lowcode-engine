@@ -100,7 +100,7 @@ designer.addPropsReducer((props, node) => {
         // FIXME! item.name could be 'xxx.xxx'
         const ov = props[item.name];
         const v = item.initial(node as any, getRealValue(ov));
-        if (v !== undefined) {
+        if (!ov && v !== undefined) {
           if (isVariable(ov)) {
             newProps[item.name] = {
               ...ov,

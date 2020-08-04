@@ -3,10 +3,18 @@ import { isJSSlot, isI18nData, isJSExpression } from '@ali/lowcode-types';
 import { isPlainObject } from '@ali/lowcode-utils';
 import i18nUtil from './i18n-util';
 
+function isVariable(obj: any) {
+  return obj && obj.type === 'variable';
+}
+
 // FIXME: 表达式使用 mock 值，未来live 模式直接使用原始值
 export function deepValueParser(obj?: any): any {
   if (isJSExpression(obj)) {
     obj = obj.mock;
+  }
+  // 兼容 ListSetter 中的变量结构
+  if (isVariable(obj)) {
+    obj = obj.value;
   }
   if (!obj) {
     return obj;
