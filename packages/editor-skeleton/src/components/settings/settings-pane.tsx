@@ -16,8 +16,9 @@ class SettingFieldView extends Component<{ field: SettingField }> {
 
   render() {
     const { field } = this.props;
-    const { extraProps } = field;
+    const { extraProps, componentMeta } = field;
     const { condition, defaultValue, display } = extraProps;
+    const { prototype } = componentMeta;
     let visible;
     try {
       visible = field.isSingle && typeof condition === 'function' ? condition(field) !== false : true;
@@ -33,6 +34,8 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     let setterProps: any = {};
     let setterType: any;
     let initialValue: any = null;
+    const isReactComponent = prototype === null || prototype === undefined;
+    console.log(111, this.props);
     if (Array.isArray(setter)) {
       setterType = 'MixedSetter';
       setterProps = {
@@ -49,12 +52,13 @@ class SettingFieldView extends Component<{ field: SettingField }> {
       if (setter.initialValue != null) {
         initialValue = setter.initialValue;
       }
-    } else if (setter) {
-      // 默认配置上变量绑定功能
+    } else if (isReactComponent) {
       setterType = 'MixedSetter';
       setterProps = {
         setters: [setter, 'VariableSetter'],
       };
+    } else if (setter) {
+      setterType = setter;
     }
 
     let value = null;
