@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.14"></a>
+## [0.8.14](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.8.13...@ali/lowcode-types@0.8.14) (2020-08-04)
+
+
+### Bug Fixes
+
+* 修复 slot 获取初始值异常的 bug ([63b19f1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/63b19f1))
+
+
+
+
 <a name="0.8.13"></a>
 ## [0.8.13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.8.12...@ali/lowcode-types@0.8.13) (2020-07-21)
 

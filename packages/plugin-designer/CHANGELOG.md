@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.36"></a>
+## [0.9.36](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-designer@0.9.34...@ali/lowcode-plugin-designer@0.9.36) (2020-08-04)
+
+
+### Bug Fixes
+
+* plugin-desiger 支持从 editor 获取 device 参数 ([43bc29b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/43bc29b))
+
+
+
+
+<a name="0.9.35"></a>
+## [0.9.35](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-designer@0.9.34...@ali/lowcode-plugin-designer@0.9.35) (2020-08-04)
+
+
+### Bug Fixes
+
+* plugin-desiger 支持从 editor 获取 device 参数 ([43bc29b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/43bc29b))
+
+
+
+
 <a name="0.9.34"></a>
 ## [0.9.34](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-designer@0.9.33...@ali/lowcode-plugin-designer@0.9.34) (2020-07-29)
 
