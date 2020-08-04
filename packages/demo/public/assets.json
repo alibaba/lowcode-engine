@@ -12764,7 +12764,8 @@
               "screenshot": "",
               "schema": {
                 "componentName": "Dropdown",
-                "props": {}
+                "props": {  "trigger": [{    "componentName": "Button",    "props": {      "type": "primary"    },    "children": "确定"  }],  "triggerType": "click"},
+                "children": [{  "componentName": "Menu",  "props": {    "style": {      "width": 200    }  },  "children": [{    "componentName": "MenuItem",    "props": {},    "children": "Option 1"  }, {    "componentName": "MenuItem",    "props": {      "disabled": false    },    "children": "option 2"  }, {    "componentName": "MenuItem",    "props": {      "disabled": false    },    "children": "option 3"  }]}]
               }
             }
           ]
@@ -13130,13 +13131,8 @@
               "schema": {
                 "componentName": "Menu.Item",
                 "props": {
-                  "parentMode": "inline",
-                  "type": "item",
-                  "component": "",
-                  "disabled": true,
-                  "className": "",
-                  "needIndent": ""
-                }
+                },
+                "children": "Option"
               }
             }
           ]
