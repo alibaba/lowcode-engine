@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.43"></a>
+## [0.8.43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.42...@ali/lowcode-editor-skeleton@0.8.43) (2020-08-04)
+
+
+### Bug Fixes
+
+* 🐛 mainArea 画布切换，MainArea 重新初始化导致 iframe 初始化报错 ([5054d06](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5054d06))
+
+
+
+
 <a name="0.8.42"></a>
 ## [0.8.42](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.40...@ali/lowcode-editor-skeleton@0.8.42) (2020-08-04)
 
