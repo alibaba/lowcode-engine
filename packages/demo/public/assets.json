@@ -1409,15 +1409,6 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "rtl",
-          "propType": "bool"
-        },
-        {
           "name": "children",
           "title": "内容",
           "propType": "array"
@@ -1468,34 +1459,6 @@
           },
           "defaultValue": "small",
           "description": "按钮中 Icon 的尺寸，用于替代 Icon 的默认大小"
-        },
-        {
-          "name": "htmlType",
-          "title": "htmlType",
-          "propType": {
-            "type": "oneOf",
-            "value": [
-              "submit",
-              "reset",
-              "button"
-            ]
-          },
-          "description": "当 component = 'button' 时，设置 button 标签的 type 值",
-          "defaultValue": "button"
-        },
-        {
-          "name": "component",
-          "propType": {
-            "type": "oneOf",
-            "value": [
-              "button",
-              "a",
-              "div",
-              "span"
-            ]
-          },
-          "description": "设置标签类型",
-          "defaultValue": "button"
         },
         {
           "name": "loading",
