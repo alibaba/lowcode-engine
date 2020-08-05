@@ -84,8 +84,8 @@
         {
           "name": "children",
           "propType": "string",
-          "description": "子元素",
-          "defaultValue": "Test"
+          "description": "文案",
+          "defaultValue": "分隔符"
         },
 
         {
@@ -154,28 +154,6 @@
         {
           "name": "rtl",
           "propType": "bool"
-        },
-        {
-          "name": "trigger",
-          "propType": {
-            "type": "instanceOf",
-            "value": "element"
-          },
-          "defaultValue": null
-        },
-        {
-          "name": "triggerType",
-          "propType": {
-            "type": "oneOfType",
-            "value": [
-              "string",
-              {
-                "type": "instanceOf",
-                "value": "array"
-              }
-            ]
-          },
-          "defaultValue": "click"
         },
         {
           "name": "width",
@@ -303,11 +281,6 @@
         "subName": "Inner"
       },
       "props": [
-        {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
         {
           "name": "className",
           "propType": "string"
@@ -662,16 +635,7 @@
           "name": "cell",
           "propType": "func"
         }
-      ],
-      "configure": {
-        "props": {
-          "isExtends": true,
-          "override": [{
-            "name": "cell",
-            "setter": "JsonSetter"
-          }]
-        }
-      }
+      ]
     },
     {
       "componentName": "Badge",
@@ -687,15 +651,6 @@
         "subName": ""
       },
       "props": [
-        {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "rtl",
-          "propType": "bool"
-        },
         {
           "name": "className",
           "propType": "string"
@@ -714,18 +669,14 @@
         },
         {
           "name": "count",
-          "propType": {
-            "type": "oneOfType",
-            "value": [
-              "number",
-              "string"
-            ]
-          },
+          "title": "count",
+          "propType": "string",
           "description": "展示的数字，大于 overflowCount 时显示为 ${overflowCount}+，为 0 时默认隐藏",
           "defaultValue": 0
         },
         {
           "name": "showZero",
+          "title": "showZero",
           "propType": "bool",
           "description": "当count为0时，是否显示count",
           "defaultValue": true
@@ -1003,7 +954,12 @@
           "propType": "string",
           "description": "弹层id, 传入值才会支持无障碍"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "Tooltip",
@@ -5759,10 +5715,7 @@
       "props": [
         {
           "name": "label",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "string",
           "description": "label"
         },
         {
@@ -5771,13 +5724,8 @@
           "description": "是否出现clear按钮"
         },
         {
-          "name": "hasBorder",
-          "propType": "bool",
-          "description": "是否有边框",
-          "defaultValue": true
-        },
-        {
           "name": "state",
+          "title": "状态",
           "propType": {
             "type": "oneOf",
             "value": [
@@ -5791,6 +5739,7 @@
         },
         {
           "name": "size",
+          "title": "尺寸",
           "propType": {
             "type": "oneOf",
             "value": [
@@ -5812,72 +5761,40 @@
           "propType": "func"
         },
         {
-          "name": "htmlType",
-          "propType": "string",
-          "description": "原生type"
-        },
-        {
-          "name": "htmlSize",
-          "propType": "string"
-        },
-        {
           "name": "hint",
+          "title": "Icon 水印",
           "propType": "string",
           "description": "水印 (Icon的type类型，和hasClear占用一个地方)"
         },
         {
           "name": "innerBefore",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "string",
           "description": "文字前附加内容"
         },
         {
           "name": "innerAfter",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "string",
           "description": "文字后附加内容"
         },
         {
           "name": "addonBefore",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "string",
           "description": "输入框前附加内容"
         },
         {
           "name": "addonAfter",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "string",
           "description": "输入框后附加内容"
         },
         {
           "name": "addonTextBefore",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "string",
           "description": "输入框前附加文字"
         },
         {
           "name": "addonTextAfter",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "输入框后附加文字"
-        },
-        {
-          "name": "autoComplete",
           "propType": "string",
-          "description": "(原生input支持)",
-          "defaultValue": "off"
+          "description": "输入框后附加文字"
         },
         {
           "name": "autoFocus",
@@ -5885,34 +5802,10 @@
           "description": "自动聚焦(原生input支持)"
         },
         {
-          "name": "inputRender",
-          "propType": "func"
-        },
-        {
-          "name": "extra",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          }
-        },
-        {
-          "name": "innerBeforeClassName",
-          "propType": "string"
-        },
-        {
-          "name": "innerAfterClassName",
-          "propType": "string"
-        },
-        {
           "name": "isPreview",
           "propType": "bool",
           "description": "是否为预览态",
           "defaultValue": false
-        },
-        {
-          "name": "renderPreview",
-          "propType": "func",
-          "description": "预览态模式下渲染的内容\n@param {number} value 评分值"
         },
         {
           "name": "style",
@@ -5979,13 +5872,7 @@
         },
         {
           "name": "autoHeight",
-          "propType": {
-            "type": "oneOfType",
-            "value": [
-              "bool",
-              "object"
-            ]
-          },
+          "propType": "bool",
           "description": "自动高度 true / {minRows: 2, maxRows: 4}",
           "defaultValue": false
         },
@@ -6000,11 +5887,6 @@
           "propType": "bool",
           "description": "是否为预览态",
           "defaultValue": false
-        },
-        {
-          "name": "renderPreview",
-          "propType": "func",
-          "description": "预览态模式下渲染的内容\n@param {number} value 评分值"
         },
         {
           "name": "style",
@@ -9195,7 +9077,12 @@
           "description": "是否禁用",
           "defaultValue": false
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "Slider",
@@ -12346,13 +12233,8 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
           "name": "children",
-          "propType": "any"
+          "propType": "string"
         },
         {
           "name": "className",
@@ -12391,16 +12273,7 @@
         },
         {
           "name": "icon",
-          "propType": {
-            "type": "oneOfType",
-            "value": [
-              {
-                "type": "instanceOf",
-                "value": "node"
-              },
-              "string"
-            ]
-          },
+          "propType": "string",
           "description": "icon 类头像的图标类型，可设为 Icon 的 `type` 或 `ReactNode`"
         },
         {
@@ -12427,7 +12300,12 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "ResponsiveGrid",
@@ -12874,7 +12752,12 @@
                     "componentName": "Table.Column",
                     "props": {
                       "title": "id",
-                      "dataIndex": "id"
+                      "dataIndex": "id",
+                      "cell": {
+                        "type": "JSSlot",
+                        "value": "123",
+                        "params": []
+                      }
                     }
                   },
                   {
@@ -13568,23 +13451,6 @@
           ]
         },
         {
-          "componentName": "Grid",
-          "title": "栅格",
-          "icon": "",
-          "package": "@alife/next",
-          "library": "Next",
-          "snippets": [
-            {
-              "title": "栅格",
-              "screenshot": "",
-              "schema": {
-                "componentName": "Grid",
-                "props": {}
-              }
-            }
-          ]
-        },
-        {
           "componentName": "Icon",
           "title": "图标",
           "icon": "",
@@ -14060,6 +13926,30 @@
               "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_input.png",
               "schema": {
                 "componentName": "Input",
+                "props": {
+                  "hasBorder": true,
+                  "size": "medium",
+                  "autoComplete": "off"
+                }
+              }
+            },
+            {
+              "title": "密码框",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_input.png",
+              "schema": {
+                "componentName": "Input.Password",
+                "props": {
+                  "hasBorder": true,
+                  "size": "medium",
+                  "autoComplete": "off"
+                }
+              }
+            },
+            {
+              "title": "TextArea",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_input.png",
+              "schema": {
+                "componentName": "Input.TextArea",
                 "props": {
                   "hasBorder": true,
                   "size": "medium",
