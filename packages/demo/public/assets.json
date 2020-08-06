@@ -7628,24 +7628,6 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "description": "样式前缀",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "type",
-          "propType": {
-            "type": "oneOf",
-            "value": [
-              "normal",
-              "inline"
-            ]
-          },
-          "description": "设置类型\n@enumdesc 普通, 内联",
-          "defaultValue": "normal"
-        },
-        {
           "name": "size",
           "propType": {
             "type": "oneOf",
@@ -7656,6 +7638,18 @@
           },
           "description": "大小",
           "defaultValue": "medium"
+        },
+        {
+          "name": "type",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "normal",
+              "inline"
+            ]
+          },
+          "description": "设置类型",
+          "defaultValue": "normal"
         },
         {
           "name": "value",
@@ -7674,13 +7668,7 @@
         },
         {
           "name": "step",
-          "propType": {
-            "type": "oneOfType",
-            "value": [
-              "number",
-              "string"
-            ]
-          },
+          "propType": "number",
           "description": "步长",
           "defaultValue": 1
         },
@@ -7700,6 +7688,57 @@
           "name": "autoFocus",
           "propType": "bool",
           "description": "自动焦点"
+        },
+        {
+          "name": "max",
+          "propType": "number",
+          "description": "最大值",
+          "defaultValue": null
+        },
+        {
+          "name": "min",
+          "propType": "number",
+          "description": "最小值",
+          "defaultValue": null
+        },
+        {
+          "name": "format",
+          "propType": "func",
+          "description": "格式化当前值"
+        },
+        {
+          "name": "upBtnProps",
+          "propType": "object",
+          "description": "增加按钮的props"
+        },
+        {
+          "name": "downBtnProps",
+          "propType": "object",
+          "description": "减少按钮的props"
+        },
+        {
+          "name": "label",
+          "propType": "string",
+          "description": "内联 label"
+        },
+        {
+          "name": "innerAfter",
+          "propType": "string",
+          "description": "inner after"
+        },
+        {
+          "name": "rtl",
+          "propType": "bool"
+        },
+        {
+          "name": "isPreview",
+          "propType": "bool",
+          "description": "是否为预览态"
+        },
+        {
+          "name": "renderPreview",
+          "propType": "func",
+          "description": "预览态模式下渲染的内容\n@param {number} value 评分值"
         },
         {
           "name": "onChange",
@@ -7731,18 +7770,6 @@
           "propType": "func"
         },
         {
-          "name": "max",
-          "propType": "number",
-          "description": "最大值",
-          "defaultValue": null
-        },
-        {
-          "name": "min",
-          "propType": "number",
-          "description": "最小值",
-          "defaultValue": null
-        },
-        {
           "name": "className",
           "propType": "string",
           "description": "自定义class"
@@ -7751,74 +7778,23 @@
           "name": "style",
           "propType": "object",
           "description": "自定义内联样式"
-        },
-        {
-          "name": "state",
-          "propType": {
-            "type": "oneOf",
-            "value": [
-              "error"
-            ]
-          }
-        },
-        {
-          "name": "format",
-          "propType": "func",
-          "description": "格式化当前值\n@param {Number} value\n@return {String|Number}"
-        },
-        {
-          "name": "upBtnProps",
-          "propType": "object",
-          "description": "增加按钮的props"
-        },
-        {
-          "name": "downBtnProps",
-          "propType": "object",
-          "description": "减少按钮的props"
-        },
-        {
-          "name": "label",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "内联 label"
-        },
-        {
-          "name": "innerAfter",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "inner after"
-        },
-        {
-          "name": "rtl",
-          "propType": "bool"
-        },
-        {
-          "name": "isPreview",
-          "propType": "bool",
-          "description": "是否为预览态"
-        },
-        {
-          "name": "renderPreview",
-          "propType": "func",
-          "description": "预览态模式下渲染的内容\n@param {number} value 评分值"
-        },
-        {
-          "name": "device",
-          "propType": {
-            "type": "oneOf",
-            "value": [
-              "phone",
-              "tablet",
-              "desktop"
-            ]
-          },
-          "description": "预设屏幕宽度"
         }
-      ]
+      ],
+      "configure": {
+        "props": {
+          "isExtends": true,
+          "override": [
+            {
+              "name": "upBtnProps",
+              "setter": "JsonSetter"
+            },
+            {
+              "name": "downBtnProps",
+              "setter": "JsonSetter"
+            }
+          ]
+        }
+      }
     },
     {
       "componentName": "Pagination",
