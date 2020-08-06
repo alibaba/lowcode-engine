@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.41"></a>
+## [0.8.41](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.40...@ali/lowcode-editor-preset-vision@0.8.41) (2020-08-06)
+
+
+### Bug Fixes
+
+*  fieldId 重复问题 ([e761b1a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e761b1a))
+
+
+
+
 <a name="0.8.40"></a>
 ## [0.8.40](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.39...@ali/lowcode-editor-preset-vision@0.8.40) (2020-08-06)
 

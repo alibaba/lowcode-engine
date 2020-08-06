@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-designer",
-  "version": "0.9.39",
+  "version": "0.9.40",
   "description": "Designer for Ali LowCode Engine",
   "main": "lib/index.js",
   "module": "es/index.js",
