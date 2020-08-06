@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@ali/lowcode-rax-simulator-renderer",
-  "version": "0.8.40",
+  "version": "0.8.41",
   "description": "rax simulator renderer for alibaba lowcode designer",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -14,7 +14,7 @@
     "test:snapshot": "ava --update-snapshots"
   },
   "dependencies": {
-    "@ali/lowcode-designer": "^0.9.37",
+    "@ali/lowcode-designer": "^0.9.38",
     "@ali/lowcode-rax-renderer": "^0.1.6",
     "@ali/lowcode-types": "^0.8.14",
     "@ali/lowcode-utils": "^0.8.16",

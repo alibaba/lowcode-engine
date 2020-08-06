@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.23"></a>
+## [0.9.23](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.22...@ali/lowcode-editor-preset-general@0.9.23) (2020-08-06)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-general
+
 <a name="0.9.22"></a>
 ## [0.9.22](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.21...@ali/lowcode-editor-preset-general@0.9.22) (2020-08-04)
 
