@@ -328,23 +328,27 @@ function getKeyInfo(combination: string, action?: string): KeyInfo {
  * convention - prevent default and stop propogation on the event
  */
 function fireCallback(callback: HotkeyCallback, e: KeyboardEvent, combo?: string, sequence?: string): void {
-  const editor = globalContext.get(Editor);
-  const designer = editor.get('designer');
-  const node = designer?.currentSelection?.getNodes()?.[0];
-  const npm = node?.componentMeta?.npm;
-  const selected =
-    [npm?.package, npm?.componentName].filter((item) => !!item).join('-') || node?.componentMeta?.componentName || '';
-  if (callback(e, combo) === false) {
-    e.preventDefault();
-    e.stopPropagation();
+  try {
+    const editor = globalContext.get(Editor);
+    const designer = editor.get('designer');
+    const node = designer?.currentSelection?.getNodes()?.[0];
+    const npm = node?.componentMeta?.npm;
+    const selected =
+      [npm?.package, npm?.componentName].filter((item) => !!item).join('-') || node?.componentMeta?.componentName || '';
+    if (callback(e, combo) === false) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    editor?.emit('hotkey.callback.call', {
+      callback,
+      e,
+      combo,
+      sequence,
+      selected,
+    });
+  } catch(err) {
+    console.error(err.message);
   }
-  editor?.emit('hotkey.callback.call', {
-    callback,
-    e,
-    combo,
-    sequence,
-    selected,
-  });
 }
 
 export class Hotkey {

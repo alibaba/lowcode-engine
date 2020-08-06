@@ -3,6 +3,72 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.40"></a>
+## [0.9.40](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.39...@ali/lowcode-designer@0.9.40) (2020-08-06)
+
+
+### Bug Fixes
+
+*  fieldId 重复问题 ([e761b1a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e761b1a))
+
+
+
+
+<a name="0.9.39"></a>
+## [0.9.39](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.38...@ali/lowcode-designer@0.9.39) (2020-08-06)
+
+
+### Bug Fixes
+
+* 增加兼容 API ([2960446](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2960446))
+* 复制之后 fieldId 重复 ([36621ea](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/36621ea))
+
+
+
+
+<a name="0.9.38"></a>
+## [0.9.38](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.37...@ali/lowcode-designer@0.9.38) (2020-08-06)
+
+
+### Bug Fixes
+
+* 修复 preset-vision 版本 lifeCycles 丢失以及 slot 初始化问题 ([7cf6d24](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7cf6d24))
+
+
+
+
+<a name="0.9.37"></a>
+## [0.9.37](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.36...@ali/lowcode-designer@0.9.37) (2020-08-04)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+<a name="0.9.36"></a>
+## [0.9.36](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.34...@ali/lowcode-designer@0.9.36) (2020-08-04)
+
+
+### Bug Fixes
+
+* 修复js面板引用计数问题 ([fcc1a6f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fcc1a6f))
+* 灵犀vc组件中调用config, 补充进去 ([7171aa2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7171aa2))
+
+
+
+
+<a name="0.9.35"></a>
+## [0.9.35](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.34...@ali/lowcode-designer@0.9.35) (2020-08-04)
+
+
+### Bug Fixes
+
+* 修复js面板引用计数问题 ([fcc1a6f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fcc1a6f))
+* 灵犀vc组件中调用config, 补充进去 ([7171aa2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7171aa2))
+
+
+
+
 <a name="0.9.34"></a>
 ## [0.9.34](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.33...@ali/lowcode-designer@0.9.34) (2020-07-29)
 

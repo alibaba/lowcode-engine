@@ -310,8 +310,11 @@ export class DocumentModel {
   }
 
   import(schema: RootSchema, checkId = false) {
+    // TODO: do purge
+    this.nodes.forEach(node => {
+      this.destroyNode(node);
+    });
     this.rootNode.import(schema as any, checkId);
-    // todo: purge something
     // todo: select added and active track added
   }
 
@@ -627,6 +630,13 @@ export class DocumentModel {
    */
   refresh() {
     console.warn('refresh method is deprecated');
+  }
+
+  /**
+   * @deprecated
+   */
+  onRefresh(func: () => void) {
+    console.warn('onRefresh method is deprecated');
   }
 }
 

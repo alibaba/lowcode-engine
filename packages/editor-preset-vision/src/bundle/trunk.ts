@@ -113,6 +113,10 @@ export class Trunk {
     }
     return setter;
   }
+
+  getRecents(limit: number) {
+    return this.getList().filter((prototype) => prototype.getCategory()).slice(0, limit);
+  }
 }
 
 export default new Trunk();

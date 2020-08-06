@@ -336,4 +336,12 @@ export class Props implements IPropParent {
   getNode() {
     return this.owner;
   }
+
+  /**
+   * @deprecated
+   * 获取 props 对应的 node
+   */
+  toData() {
+    return this.export()?.props;
+  }
 }

@@ -383,7 +383,10 @@ const builtinComponentActions: ComponentAction[] = [
       action(node: Node) {
         // node.remove();
         const { document: doc, parent, index } = node;
-        parent && doc.insertNode(parent, node, index, true);
+        if (parent) {
+          const newNode = doc.insertNode(parent, node, index + 1, true);
+          newNode.select();
+        }
       },
     },
     important: true,

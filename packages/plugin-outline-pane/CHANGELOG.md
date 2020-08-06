@@ -3,6 +3,54 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.46"></a>
+## [0.8.46](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.45...@ali/lowcode-plugin-outline-pane@0.8.46) (2020-08-06)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
+
+<a name="0.8.45"></a>
+## [0.8.45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.44...@ali/lowcode-plugin-outline-pane@0.8.45) (2020-08-06)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
+
+<a name="0.8.44"></a>
+## [0.8.44](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.43...@ali/lowcode-plugin-outline-pane@0.8.44) (2020-08-06)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
+
+<a name="0.8.43"></a>
+## [0.8.43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.42...@ali/lowcode-plugin-outline-pane@0.8.43) (2020-08-04)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
+
+<a name="0.8.42"></a>
+## [0.8.42](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.40...@ali/lowcode-plugin-outline-pane@0.8.42) (2020-08-04)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
+
+<a name="0.8.41"></a>
+## [0.8.41](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.40...@ali/lowcode-plugin-outline-pane@0.8.41) (2020-08-04)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
+
 <a name="0.8.40"></a>
 ## [0.8.40](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.39...@ali/lowcode-plugin-outline-pane@0.8.40) (2020-07-29)
 

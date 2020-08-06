@@ -1,7 +1,7 @@
 import { isJSBlock, isJSExpression, isJSSlot, isI18nData } from '@ali/lowcode-types';
 import { isPlainObject, hasOwnProperty } from '@ali/lowcode-utils';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
-import { Designer, LiveEditing, TransformStage, Node } from '@ali/lowcode-designer';
+import { Designer, LiveEditing, TransformStage, Node, getConvertedExtraKey } from '@ali/lowcode-designer';
 import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import { toCss } from '@ali/vu-css-style';
 import logger from '@ali/vu-logger';
@@ -25,9 +25,16 @@ export const designer = new Designer({ editor: editor });
 editor.set(Designer, designer);
 editor.set('designer', designer);
 
+const nodeCache: any = {};
 designer.project.onCurrentDocumentChange((doc) => {
   doc.onRendererReady(() => {
     bus.emit(VE_EVENTS.VE_PAGE_PAGE_READY);
+  });
+  doc.onNodeCreate((node) => {
+    nodeCache[node.id] = node;
+  });
+  doc.onNodeDestroy((node) => {
+    delete nodeCache[node.id];
   });
 });
 
@@ -56,7 +63,7 @@ function upgradePropsReducer(props: any) {
           type: 'JSSlot',
           title: (val.value.props as any)?.slotTitle,
           name: (val.value.props as any)?.slotName,
-          value: val.value.children
+          value: val.value.children,
         };
       } else {
         val = val.value;
@@ -80,11 +87,23 @@ designer.addPropsReducer(upgradePropsReducer, TransformStage.Upgrade);
 // 节点 props 初始化
 designer.addPropsReducer((props, node) => {
   // run initials
+  const newProps: any = {
+    ...props,
+  };
+  if (newProps.fieldId) {
+    const fieldIds: any = [];
+    Object.keys(nodeCache).forEach(nodeId => {
+      const fieldId = nodeCache[nodeId].getPropValue('fieldId');
+      if (fieldId) {
+        fieldIds.push(fieldId);
+      }
+    });
+    if (fieldIds.indexOf(props.fieldId) >= 0) {
+      newProps.fieldId = undefined;
+    }
+  }
   const initials = node.componentMeta.getMetadata().experimental?.initials;
   if (initials) {
-    const newProps: any = {
-      ...props,
-    };
     const getRealValue = (propValue: any) => {
       if (isVariable(propValue)) {
         return propValue.value;
@@ -98,22 +117,10 @@ designer.addPropsReducer((props, node) => {
       // FIXME! this implements SettingTarget
       try {
         // FIXME! item.name could be 'xxx.xxx'
-        const ov = props[item.name];
+        const ov = newProps[item.name];
         const v = item.initial(node as any, getRealValue(ov));
-        if (v !== undefined) {
-          if (isVariable(ov)) {
-            newProps[item.name] = {
-              ...ov,
-              value: v,
-            };
-          } else if (isJSExpression(ov)) {
-            newProps[item.name] = {
-              ...ov,
-              mock: v,
-            };
-          } else {
-            newProps[item.name] = v;
-          }
+        if (ov === undefined && v !== undefined) {
+          newProps[item.name] = v;
         }
       } catch (e) {
         if (hasOwnProperty(props, item.name)) {
@@ -124,12 +131,19 @@ designer.addPropsReducer((props, node) => {
         node.props.add(newProps[item.name], item.name);
       }
     });
-
-    return newProps;
   }
-  return props;
+  return newProps;
 }, TransformStage.Init);
 
+designer.addPropsReducer((props: any, node: Node) => {
+  if (node.isRoot() && props && props.lifeCycles) {
+    return {
+      ...props,
+      lifeCycles: {},
+    }
+  }
+  return props;
+}, TransformStage.Render);
 
 function filterReducer(props: any, node: Node): any {
   const filters = node.componentMeta.getMetadata().experimental?.filters;
@@ -173,7 +187,7 @@ function compatiableReducer(props: any) {
             slotName: val.name,
           },
         },
-      }
+      };
     }
     // 为了能降级到老版本，建议在后期版本去掉以下代码
     if (isJSExpression(val) && !val.events) {
@@ -189,6 +203,20 @@ function compatiableReducer(props: any) {
 }
 // FIXME: Dirty fix, will remove this reducer
 designer.addPropsReducer(compatiableReducer, TransformStage.Save);
+// 兼容历史版本的 Page 组件
+designer.addPropsReducer((props: any, node: Node) => {
+  const lifeCycleNames = ['didMount', 'willUnmount'];
+  if (node.isRoot()) {
+    lifeCycleNames.forEach(key => {
+      if (props[key]) {
+        const lifeCycles = node.props.getPropValue(getConvertedExtraKey('lifeCycles')) || {};
+        lifeCycles[key] = props[key];
+        node.props.setPropValue(getConvertedExtraKey('lifeCycles'), lifeCycles);
+      }
+    });
+  }
+  return props;
+}, TransformStage.Save);
 
 // 设计器组件样式处理
 function stylePropsReducer(props: any, node: any) {
@@ -268,7 +296,7 @@ skeleton.add({
   props: {
     condition: () => {
       return designer.dragon.dragging && !getTreeMaster(designer).hasVisibleTreeBoard();
-    }
+    },
   },
   content: OutlineBackupPane,
 });

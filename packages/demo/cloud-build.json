@@ -12,9 +12,9 @@
     "@ali/lowcode-editor-preset-general": "window.LowcodeEditor",
     "@ali/lowcode-editor-core": "window.LowcodeEditor",
     "@ali/lowcode-editor-skeleton": "window.LowcodeEditor",
-    "@ali/lowcode-designer": "window.LowcodeEditor"
+    "@ali/lowcode-designer": "window.LowcodeEditor",
+    "rax": "var window.Rax"
   },
-  "minify": false,
   "sourcemap": true,
   "outputAssetsPath": {
     "js": "", "css": ""
