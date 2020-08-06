@@ -21,7 +21,7 @@
   "dependencies": {
     "@ali/lowcode-designer": "^0.9.34",
     "@ali/lowcode-editor-core": "^0.8.25",
-    "@ali/lowcode-editor-skeleton": "^0.8.41-beta1",
+    "@ali/lowcode-editor-skeleton": "^0.8.41-beta2",
     "@ali/lowcode-types": "^0.8.13",
     "@ali/lowcode-utils": "^0.8.15",
     "react": "^16.8.1",
