@@ -584,6 +584,13 @@ export class DocumentModel {
   refresh() {
     console.warn('refresh method is deprecated');
   }
+
+  /**
+   * @deprecated
+   */
+  onRefresh(func: () => void) {
+    console.warn('onRefresh method is deprecated');
+  }
 }
 
 export function isDocumentModel(obj: any): obj is DocumentModel {

@@ -161,6 +161,9 @@ const actionPane = Object.assign(skeleton.topArea, {
   setActions() {
     // empty
   },
+  get actions() {
+    return skeleton.topArea.container.items;
+  },
 });
 const dockPane = Object.assign(skeleton.leftArea, {
   /**
