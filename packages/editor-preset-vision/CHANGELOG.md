@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.40"></a>
+## [0.8.40](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.39...@ali/lowcode-editor-preset-vision@0.8.40) (2020-08-06)
+
+
+### Bug Fixes
+
+* 保存区块按钮渲染异常 ([33a7227](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/33a7227))
+* 增加兼容 API ([2960446](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2960446))
+
+
+
+
 <a name="0.8.39"></a>
 ## [0.8.39](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.38...@ali/lowcode-editor-preset-vision@0.8.39) (2020-08-06)
 
