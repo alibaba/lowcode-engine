@@ -70,11 +70,6 @@ export class Prop implements IPropParent {
       return undefined;
     }
 
-    // 兼容 vision 之前逻辑
-    if (this.key === 'fieldId' && stage === TransformStage.Clone) {
-      return undefined;
-    }
-
     if (type === 'literal' || type === 'expression') {
       // TODO 后端改造之后删除此逻辑
       if (this._value === null && stage === TransformStage.Save) {

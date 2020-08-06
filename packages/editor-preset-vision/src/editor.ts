@@ -25,9 +25,16 @@ export const designer = new Designer({ editor: editor });
 editor.set(Designer, designer);
 editor.set('designer', designer);
 
+const nodeCache: any = {};
 designer.project.onCurrentDocumentChange((doc) => {
   doc.onRendererReady(() => {
     bus.emit(VE_EVENTS.VE_PAGE_PAGE_READY);
+  });
+  doc.onNodeCreate((node) => {
+    nodeCache[node.id] = node;
+  });
+  doc.onNodeDestroy((node) => {
+    delete nodeCache[node.id];
   });
 });
 
@@ -80,11 +87,23 @@ designer.addPropsReducer(upgradePropsReducer, TransformStage.Upgrade);
 // 节点 props 初始化
 designer.addPropsReducer((props, node) => {
   // run initials
+  const newProps: any = {
+    ...props,
+  };
+  if (newProps.fieldId) {
+    const fieldIds: any = [];
+    Object.keys(nodeCache).forEach(nodeId => {
+      const fieldId = nodeCache[nodeId].getPropValue('fieldId');
+      if (fieldId) {
+        fieldIds.push(fieldId);
+      }
+    });
+    if (fieldIds.indexOf(props.fieldId) >= 0) {
+      newProps.fieldId = undefined;
+    }
+  }
   const initials = node.componentMeta.getMetadata().experimental?.initials;
   if (initials) {
-    const newProps: any = {
-      ...props,
-    };
     const getRealValue = (propValue: any) => {
       if (isVariable(propValue)) {
         return propValue.value;
@@ -98,7 +117,7 @@ designer.addPropsReducer((props, node) => {
       // FIXME! this implements SettingTarget
       try {
         // FIXME! item.name could be 'xxx.xxx'
-        const ov = props[item.name];
+        const ov = newProps[item.name];
         const v = item.initial(node as any, getRealValue(ov));
         if (ov === undefined && v !== undefined) {
           newProps[item.name] = v;
@@ -112,10 +131,8 @@ designer.addPropsReducer((props, node) => {
         node.props.add(newProps[item.name], item.name);
       }
     });
-
-    return newProps;
   }
-  return props;
+  return newProps;
 }, TransformStage.Init);
 
 designer.addPropsReducer((props: any, node: Node) => {
