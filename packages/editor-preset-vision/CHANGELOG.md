@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.38"></a>
+## [0.8.38](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.37...@ali/lowcode-editor-preset-vision@0.8.38) (2020-08-04)
+
+
+### Bug Fixes
+
+* 🐛 解决点击组件时无法聚焦到点中的组件上的问题 ([852d882](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/852d882))
+
+
+
+
+<a name="0.8.37"></a>
+## [0.8.37](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.35...@ali/lowcode-editor-preset-vision@0.8.37) (2020-08-04)
+
+
+### Bug Fixes
+
+* 修复 slot 获取初始值异常的 bug ([63b19f1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/63b19f1))
+* 兼容 listSetter 内部变量，修复回退 fieldId 重置问题 ([c95e618](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c95e618))
+
+
+
+
+<a name="0.8.36"></a>
+## [0.8.36](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.35...@ali/lowcode-editor-preset-vision@0.8.36) (2020-08-04)
+
+
+### Bug Fixes
+
+* 修复 slot 获取初始值异常的 bug ([63b19f1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/63b19f1))
+* 兼容 listSetter 内部变量，修复回退 fieldId 重置问题 ([c95e618](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c95e618))
+
+
+
+
 <a name="0.8.35"></a>
 ## [0.8.35](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.34...@ali/lowcode-editor-preset-vision@0.8.35) (2020-07-29)
 

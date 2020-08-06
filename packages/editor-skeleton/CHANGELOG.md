@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.43"></a>
+## [0.8.43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.42...@ali/lowcode-editor-skeleton@0.8.43) (2020-08-04)
+
+
+### Bug Fixes
+
+* 🐛 mainArea 画布切换，MainArea 重新初始化导致 iframe 初始化报错 ([5054d06](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5054d06))
+
+
+
+
+<a name="0.8.42"></a>
+## [0.8.42](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.40...@ali/lowcode-editor-skeleton@0.8.42) (2020-08-04)
+
+
+### Bug Fixes
+
+* condition增加异常保护 ([8324368](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8324368))
+* CR 问题修复 ([f054cbf](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f054cbf))
+* remove console ([6c703d8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6c703d8))
+* 兼容vision体系代码面板中引用计数功能 ([8ade6d8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8ade6d8))
+* 导入的组件默认怎么变量绑定 ([fc398c2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fc398c2))
+* 导入的组件默认怎么变量绑定 ([194d8d8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/194d8d8))
+
+
+
+
+<a name="0.8.41"></a>
+## [0.8.41](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.40...@ali/lowcode-editor-skeleton@0.8.41) (2020-08-04)
+
+
+### Bug Fixes
+
+* condition增加异常保护 ([8324368](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8324368))
+* CR 问题修复 ([f054cbf](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f054cbf))
+* remove console ([6c703d8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6c703d8))
+* 兼容vision体系代码面板中引用计数功能 ([8ade6d8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8ade6d8))
+* 导入的组件默认怎么变量绑定 ([fc398c2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fc398c2))
+* 导入的组件默认怎么变量绑定 ([194d8d8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/194d8d8))
+
+
+
+
 <a name="0.8.40"></a>
 ## [0.8.40](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.39...@ali/lowcode-editor-skeleton@0.8.40) (2020-07-29)
 
