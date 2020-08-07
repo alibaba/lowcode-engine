@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.42"></a>
+## [0.8.42](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.41...@ali/lowcode-editor-preset-vision@0.8.42) (2020-08-07)
+
+
+### Bug Fixes
+
+* vision API 兼容 DockPane.getDocks() ([f72fb66](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f72fb66))
+
+
+
+
 <a name="0.8.41"></a>
 ## [0.8.41](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.40...@ali/lowcode-editor-preset-vision@0.8.41) (2020-08-06)
 

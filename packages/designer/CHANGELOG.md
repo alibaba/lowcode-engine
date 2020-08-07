@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.41"></a>
+## [0.9.41](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.40...@ali/lowcode-designer@0.9.41) (2020-08-07)
+
+
+### Bug Fixes
+
+* canDropIn 为 boolean 时失效 ([7508fb6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7508fb6))
+
+
+
+
 <a name="0.9.40"></a>
 ## [0.9.40](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.39...@ali/lowcode-designer@0.9.40) (2020-08-06)
 

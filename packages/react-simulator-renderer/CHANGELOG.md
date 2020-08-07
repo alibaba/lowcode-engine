@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.46"></a>
+## [0.8.46](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.45...@ali/lowcode-react-simulator-renderer@0.8.46) (2020-08-07)
+
+
+### Bug Fixes
+
+* 部分低代码组件渲染报错 ([093015c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/093015c))
+
+
+
+
 <a name="0.8.45"></a>
 ## [0.8.45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.44...@ali/lowcode-react-simulator-renderer@0.8.45) (2020-08-06)
 
