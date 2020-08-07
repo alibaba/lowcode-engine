@@ -230,14 +230,14 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
       let result = { ...propsSchema };
       const reg = /^(?:this\.props|props)\.(\S+)$/;
       Object.keys(result).map((key: string) => {
-        if (result[key].type === 'JSExpression') {
+        if (result[key]?.type === 'JSExpression') {
           const { value } = result[key];
           const matched = reg.exec(value);
           if (matched) {
             const propName = matched[1];
             result[key] = propsMap[propName];
           }
-        } else if (result[key].type === 'JSSlot') {
+        } else if (result[key]?.type === 'JSSlot') {
           const schema = result[key].value;
           result[key] = createElement(Ele, {schema, propsMap: {}});
         }
