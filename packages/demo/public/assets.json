@@ -8117,52 +8117,34 @@
           "description": "自定义类名"
         },
         {
-          "name": "id",
-          "propType": "string",
-          "description": "组件input的id"
-        },
-        {
           "name": "style",
           "propType": "object",
           "description": "自定义内敛样式"
         },
         {
+          "name": "id",
+          "propType": "string",
+          "description": "input元素id"
+        },
+        {
           "name": "checked",
           "propType": "bool",
-          "description": "设置radio是否选中"
+          "description": "是否选中"
         },
         {
           "name": "defaultChecked",
           "propType": "bool",
-          "description": "设置radio是否默认选中"
+          "description": "是否默认选中"
         },
         {
           "name": "label",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "string",
           "description": "通过属性配置label"
-        },
-        {
-          "name": "onChange",
-          "propType": "func",
-          "description": "状态变化时触发的事件\n@param {Boolean} checked 是否选中\n@param {Event} e Dom 事件对象"
-        },
-        {
-          "name": "onMouseEnter",
-          "propType": "func",
-          "description": "鼠标进入enter事件\n@param {Event} e Dom 事件对象"
-        },
-        {
-          "name": "onMouseLeave",
-          "propType": "func",
-          "description": "鼠标离开事件\n@param {Event} e Dom 事件对象"
         },
         {
           "name": "disabled",
           "propType": "bool",
-          "description": "radio是否被禁用"
+          "description": "是否被禁用"
         },
         {
           "name": "value",
@@ -8174,7 +8156,7 @@
               "bool"
             ]
           },
-          "description": "radio 的value"
+          "description": "value"
         },
         {
           "name": "name",
@@ -8190,21 +8172,28 @@
         {
           "name": "renderPreview",
           "propType": "func",
-          "description": "预览态模式下渲染的内容\n@param {number} value 评分值"
+          "description": "预览态模式下渲染的内容"
         },
         {
-          "name": "tabIndex",
-          "defaultValue": 0
+          "name": "onChange",
+          "propType": "func",
+          "description": "状态变化时触发的事件\n@param {Boolean} checked 是否选中\n@param {Event} e Dom 事件对象"
         },
         {
-          "name": "prefix",
-          "defaultValue": "next-"
+          "name": "onMouseEnter",
+          "propType": "func",
+          "description": "鼠标进入enter事件\n@param {Event} e Dom 事件对象"
+        },
+        {
+          "name": "onMouseLeave",
+          "propType": "func",
+          "description": "鼠标离开事件\n@param {Event} e Dom 事件对象"
         }
       ]
     },
     {
-      "componentName": "RadioGroup",
-      "title": "RadioGroup",
+      "componentName": "Radio.Group",
+      "title": "Radio.Group",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -8216,12 +8205,6 @@
         "subName": "Group"
       },
       "props": [
-        {
-          "name": "prefix",
-          "propType": "string",
-          "description": "样式类名的品牌前缀",
-          "defaultValue": "next-"
-        },
         {
           "name": "className",
           "propType": "string",
@@ -8238,6 +8221,31 @@
           "description": "name"
         },
         {
+          "name": "size",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "large",
+              "medium",
+              "small"
+            ]
+          },
+          "description": "尺寸",
+          "defaultValue": "medium"
+        },
+
+        {
+          "name": "shape",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "normal",
+              "button"
+            ]
+          },
+          "description": "展示形态"
+        },
+        {
           "name": "value",
           "propType": {
             "type": "oneOfType",
@@ -8247,7 +8255,7 @@
               "bool"
             ]
           },
-          "description": "radio group的选中项的值"
+          "description": "选中项的值"
         },
         {
           "name": "defaultValue",
@@ -8259,52 +8267,23 @@
               "bool"
             ]
           },
-          "description": "radio group的默认值"
+          "description": "默认值"
         },
         {
           "name": "component",
-          "propType": {
-            "type": "oneOfType",
-            "value": [
-              "string",
-              "func"
-            ]
-          },
+          "propType": "string",
           "description": "设置标签类型",
           "defaultValue": "div"
         },
         {
-          "name": "onChange",
-          "propType": "func",
-          "description": "选中值改变时的事件\n@param {String/Number} value 选中项的值\n@param {Event} e Dom 事件对象"
-        },
-        {
           "name": "disabled",
           "propType": "bool",
-          "description": "表示radio被禁用"
+          "description": "是否被禁用"
         },
         {
-          "name": "shape",
-          "propType": {
-            "type": "oneOf",
-            "value": [
-              "button"
-            ]
-          },
-          "description": "可以设置成 button 展示形状\n@enumdesc 按钮状"
-        },
-        {
-          "name": "size",
-          "propType": {
-            "type": "oneOf",
-            "value": [
-              "large",
-              "medium",
-              "small"
-            ]
-          },
-          "description": "与 `shape` 属性配套使用，shape设为button时有效\n@enumdesc 大, 中, 小",
-          "defaultValue": "medium"
+          "name": "dataSource",
+          "propType": "object",
+          "description": "可选项列表"
         },
         {
           "name": "itemDirection",
@@ -8315,7 +8294,7 @@
               "ver"
             ]
           },
-          "description": "子项目的排列方式\n- hoz: 水平排列 (default)\n- ver: 垂直排列",
+          "description": "子项目的排列方式",
           "defaultValue": "hoz"
         },
         {
@@ -8328,8 +8307,25 @@
           "name": "renderPreview",
           "propType": "func",
           "description": "预览态模式下渲染的内容\n@param {number} value 评分值"
+        },
+        {
+          "name": "onChange",
+          "propType": "func",
+          "description": "选中值改变时的事件\n@param {String/Number} value 选中项的值\n@param {Event} e Dom 事件对象"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        },
+        "props": {
+          "isExtends": true,
+          "override": [{
+            "name": "dataSource",
+            "setter": "JsonSetter"
+          }]
+        }
+      }
     },
     {
       "componentName": "Range",
@@ -13933,6 +13929,23 @@
               "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_radio.png",
               "schema": {
                 "componentName": "Radio",
+                "props": {}
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "Radio.Group",
+          "title": "单选框组",
+          "icon": "",
+          "package": "@alife/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "单选框组",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_radio.png",
+              "schema": {
+                "componentName": "Radio.Group",
                 "props": {}
               }
             }
