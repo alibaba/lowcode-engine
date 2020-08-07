@@ -1948,29 +1948,12 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "rtl",
-          "propType": "bool"
-        },
-        {
-          "name": "media",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "卡片的上的图片 / 视频"
-        },
-        {
           "name": "title",
           "propType": {
             "type": "instanceOf",
             "value": "node"
           },
-          "description": "卡片的标题"
+          "description": "标题"
         },
         {
           "name": "subTitle",
@@ -1978,7 +1961,35 @@
             "type": "instanceOf",
             "value": "node"
           },
-          "description": "卡片的副标题"
+          "description": "副标题"
+        },
+        {
+          "name": "extra",
+          "propType": {
+            "type": "instanceOf",
+            "value": "node"
+          },
+          "description": "标题栏用户自定义内容"
+        },
+        {
+          "name": "showTitleBullet",
+          "propType": "bool",
+          "description": "标题的项目符号",
+          "defaultValue": true
+        },
+        {
+          "name": "showHeadDivider",
+          "propType": "bool",
+          "description": "头部分隔线",
+          "defaultValue": true
+        },
+        {
+          "name": "media",
+          "propType": {
+            "type": "instanceOf",
+            "value": "node"
+          },
+          "description": "顶部的图片/视频"
         },
         {
           "name": "actions",
@@ -1986,19 +1997,7 @@
             "type": "instanceOf",
             "value": "node"
           },
-          "description": "卡片操作组，位置在卡片底部"
-        },
-        {
-          "name": "showTitleBullet",
-          "propType": "bool",
-          "description": "是否显示标题的项目符号",
-          "defaultValue": true
-        },
-        {
-          "name": "showHeadDivider",
-          "propType": "bool",
-          "description": "是否展示头部的分隔线",
-          "defaultValue": true
+          "description": "底部操作组"
         },
         {
           "name": "contentHeight",
@@ -2013,35 +2012,24 @@
           "defaultValue": 120
         },
         {
-          "name": "extra",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "标题区域的用户自定义内容"
-        },
-        {
-          "name": "free",
-          "propType": "bool",
-          "description": "是否开启自由模式，开启后card 将使用子组件配合使用, 设置此项后 title, subtitle, 等等属性都将失效",
-          "defaultValue": false
-        },
-        {
           "name": "className",
           "propType": "string"
         },
         {
-          "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          }
-        },
-        {
           "name": "style",
           "propType": "object"
+        },
+        {
+          "name": "rtl",
+          "propType": "bool",
+          "description": "文本方向是从右向左"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "CardHeader",
@@ -12986,48 +12974,33 @@
         {
           "componentName": "Card",
           "title": "卡片",
-          "icon": "",
+          "icon": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_card.png",
           "package": "@alife/next",
           "library": "Next",
           "snippets": [
             {
               "screenshot": "https://img.alicdn.com/tfs/TB1CHN3u4z1gK0jSZSgXXavwpXa-112-64.png",
-              "label": "普通型",
+              "title": "普通型",
               "schema": {
                 "componentName": "Card",
-                "props": {},
-                "children": [
-                  {
-                    "componentName": "CardContent"
-                  }
-                ]
+                "props": {
+                  "title": "普通型卡片"
+                },
+                "children": []
               }
             },
             {
               "screenshot": "https://img.alicdn.com/tfs/TB1.Ut6u4D1gK0jSZFKXXcJrVXa-112-64.png",
-              "label": "自定义",
+              "title": "自定义",
               "schema": {
                 "componentName": "Card",
                 "props": {
-                  "__slot__extra": true,
+                  "title": "自定义卡片",
                   "extra": {
-                    "type": "JSBlock",
-                    "value": {
-                      "componentName": "Slot",
-                      "props": {
-                        "slotName": "extra",
-                        "slotTitle": "自定义内容"
-                      },
-                      "condition": true,
-                      "children": []
-                    }
+                    "type": "JSSlot"
                   }
                 },
-                "children": [
-                  {
-                    "componentName": "CardContent"
-                  }
-                ]
+                "children": []
               }
             }
           ]
