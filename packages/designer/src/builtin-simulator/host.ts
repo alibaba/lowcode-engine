@@ -843,11 +843,13 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.sensing = true;
     this.scroller.scrolling(e);
     const dropContainer = this.getDropContainer(e);
+    const canDropIn = dropContainer.container?.componentMeta?.prototype?.options?.canDropIn;
     if (
       !dropContainer ||
+      canDropIn === false ||
       // too dirty
-      (typeof dropContainer.container?.componentMeta?.prototype?.options?.canDropIn === 'function' &&
-        !dropContainer.container?.componentMeta?.prototype?.options?.canDropIn(e.dragObject.nodes[0]))
+      (typeof canDropIn === 'function' &&
+        !canDropIn(e.dragObject.nodes[0]))
     ) {
       return null;
     }
