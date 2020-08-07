@@ -213,6 +213,9 @@ const dockPane = Object.assign(skeleton.leftArea, {
   setFixed(flag: boolean) {
     // todo:
   },
+  getDocks() {
+    return skeleton.leftFloatArea?.container.items;
+  },
 });
 const tabPane = Object.assign(skeleton.rightArea, {
   setFloat(flag: boolean) {
