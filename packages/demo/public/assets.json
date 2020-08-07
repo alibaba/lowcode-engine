@@ -10285,6 +10285,112 @@
           "description": "标签的尺寸（large 尺寸为兼容表单场景 large = medium）"
         },
         {
+          "name": "color",
+          "propType": "color",
+          "description": "标签颜色, 目前支持：blue、 green、 orange、red、 turquoise、 yellow 和 hex 颜色值 （`color keywords`作为 Tag 组件的保留字，请勿直接使用 ）, `1.19.0` 以上版本生效"
+        },
+        {
+          "name": "animation",
+          "propType": "bool",
+          "description": "是否开启动效"
+        },
+        {
+          "name": "afterAppear",
+          "propType": "func",
+          "description": "标签出现动画结束后执行的回调"
+        },
+        {
+          "name": "onClick",
+          "propType": "func",
+          "description": "点击回调"
+        },
+        {
+          "name": "children",
+          "propType": {
+            "type": "instanceOf",
+            "value": "node"
+          }
+        }
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
+    },
+    {
+      "componentName": "Tag.Selectable",
+      "title": "Tag.Selectable",
+      "docUrl": "",
+      "screenshot": "",
+      "npm": {
+        "package": "@alifd/next",
+        "version": "1.19.18",
+        "exportName": "Tag",
+        "main": "src/index.js",
+        "destructuring": true,
+        "subName": "Selectable"
+      },
+      "props": [
+        {
+          "name": "prefix",
+          "propType": "string",
+          "defaultValue": "next-"
+        },
+        {
+          "name": "checked",
+          "propType": "bool",
+          "description": "标签是否被选中，受控用法"
+        },
+        {
+          "name": "defaultChecked",
+          "propType": "bool",
+          "description": "标签是否默认被选中，非受控用法"
+        },
+        {
+          "name": "disabled",
+          "propType": "bool",
+          "description": "标签是否被禁用"
+        },
+        {
+          "name": "onChange",
+          "propType": "func",
+          "description": "选中状态变化时触发的事件 Function(checked: Boolean, e: Event) => void"
+        },
+        {
+          "name": "children",
+          "propType": {
+            "type": "instanceOf",
+            "value": "node"
+          }
+        }
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
+    },
+    {
+      "componentName": "Tag.Closeable",
+      "title": "Tag.Closeable",
+      "docUrl": "",
+      "screenshot": "",
+      "npm": {
+        "package": "@alifd/next",
+        "version": "1.19.18",
+        "exportName": "Tag",
+        "main": "src/index.js",
+        "destructuring": true,
+        "subName": "Closeable"
+      },
+      "props": [
+        {
+          "name": "prefix",
+          "propType": "string",
+          "defaultValue": "next-"
+        },
+        {
           "name": "closeArea",
           "propType": {
             "type": "oneOf",
@@ -10292,16 +10398,42 @@
               "tag",
               "tail"
             ]
-          }
+          },
+          "description": "closeable 标签的 onClose 响应区域, tag: 标签体, tail(默认): 关闭按钮"
         },
         {
-          "name": "color",
-          "propType": "string",
-          "description": "标签颜色, 目前支持：blue、 green、 orange、red、 turquoise、 yellow 和 hex 颜色值 （`color keywords`作为 Tag 组件的保留字，请勿直接使用 ）, `1.19.0` 以上版本生效"
+          "name": "size",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "small",
+              "medium",
+              "large"
+            ]
+          },
+          "description": "标签的尺寸（large 尺寸为兼容表单场景 large = medium）"
+        },
+        {
+          "name": "onClose",
+          "propType": "func",
+          "description": "点击关闭按钮时的回调，返回值 true 则关闭, false 阻止关闭"
+        },
+        {
+          "name": "afterClose",
+          "propType": "func",
+          "description": "标签关闭后执行的回调"
+        },
+        {
+          "name": "onClick",
+          "propType": "func",
+          "description": "点击回调"
         },
         {
           "name": "children",
-          "propType": "array"
+          "propType": {
+            "type": "instanceOf",
+            "value": "node"
+          }
         }
       ],
       "configure": {
@@ -13036,6 +13168,40 @@
               "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_tag.png",
               "schema": {
                 "componentName": "Tag",
+                "props": {}
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "Tag.Closeable",
+          "title": "可关闭标签",
+          "icon": "",
+          "package": "@alife/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "可关闭标签",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_tag.png",
+              "schema": {
+                "componentName": "Tag.Closeable",
+                "props": {}
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "Tag.Selectable",
+          "title": "可选中标签",
+          "icon": "",
+          "package": "@alife/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "可选中标签",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_tag.png",
+              "schema": {
+                "componentName": "Tag.Selectable",
                 "props": {}
               }
             }
