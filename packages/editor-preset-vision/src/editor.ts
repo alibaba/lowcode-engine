@@ -25,10 +25,8 @@ export const designer = new Designer({ editor: editor });
 editor.set(Designer, designer);
 editor.set('designer', designer);
 
-designer.project.onCurrentDocumentChange((doc) => {
-  doc.onRendererReady(() => {
-    bus.emit(VE_EVENTS.VE_PAGE_PAGE_READY);
-  });
+designer.project.onRendererReady(() => {
+  bus.emit(VE_EVENTS.VE_PAGE_PAGE_READY);
 });
 
 interface Variable {

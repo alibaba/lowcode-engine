@@ -1,4 +1,4 @@
-class Monitor {
+export class Monitor {
   fn = (params: any) => {
     const { AES } = window as any;
     if (typeof AES.log === 'function') {

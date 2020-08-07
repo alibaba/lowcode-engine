@@ -142,7 +142,7 @@ export interface ISimulatorHost<P = object> extends ISensor {
   computeComponentInstanceRect(instance: ComponentInstance, selector?: string): DOMRect | null;
 
   findDOMNodes(instance: ComponentInstance, selector?: string): Array<Element | Text> | null;
-  
+
   /**
    * 销毁
    */
@@ -154,6 +154,7 @@ export function isSimulatorHost(obj: any): obj is ISimulatorHost {
 }
 
 export interface NodeInstance<T = ComponentInstance> {
+  docId: string;
   nodeId: string;
   instance: T;
   node?: Node | null;

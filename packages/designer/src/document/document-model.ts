@@ -41,7 +41,6 @@ export class DocumentModel {
   private nodesMap = new Map<string, Node>();
   @obx.val private nodes = new Set<Node>();
   private seqId = 0;
-  private _simulator?: ISimulatorHost;
   private emitter: EventEmitter;
   private rootNodeVisitorMap: { [visitorName: string]: any } = {};
   private modalNodesManager: ModalNodesManager;
@@ -50,7 +49,7 @@ export class DocumentModel {
    * 模拟器
    */
   get simulator(): ISimulatorHost | null {
-    return this._simulator || null;
+    return this.project.simulator;
   }
 
   get fileName(): string {
@@ -320,27 +319,6 @@ export class DocumentModel {
     return !this.history.isSavePoint();
   }
 
-  /**
-   * 提供给模拟器的参数
-   */
-  @computed get simulatorProps(): object {
-    let simulatorProps = this.designer.simulatorProps;
-    if (typeof simulatorProps === 'function') {
-      simulatorProps = simulatorProps(this);
-    }
-    return {
-      ...simulatorProps,
-      documentContext: this,
-      onMount: this.mountSimulator.bind(this),
-    };
-  }
-
-  private mountSimulator(simulator: ISimulatorHost) {
-    // TODO: 多设备 simulator 支持
-    this._simulator = simulator;
-    // TODO: emit simulator mounted
-  }
-
   // FIXME: does needed?
   getComponent(componentName: string): any {
     return this.simulator!.getComponent(componentName);
@@ -496,17 +474,6 @@ export class DocumentModel {
 
   get root() {
     return this.rootNode;
-  }
-
-  onRendererReady(fn: (args: any) => void): () => void {
-    this.emitter.on('lowcode_engine_renderer_ready', fn);
-    return () => {
-      this.emitter.removeListener('lowcode_engine_renderer_ready', fn);
-    };
-  }
-
-  setRendererReady(renderer: any) {
-    this.emitter.emit('lowcode_engine_renderer_ready', renderer);
   }
 
   acceptRootNodeVisitor(

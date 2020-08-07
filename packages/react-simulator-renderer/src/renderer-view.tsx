@@ -1,9 +1,7 @@
 import LowCodeRenderer from '@ali/lowcode-react-renderer';
-import { isObject } from 'lodash';
 import { ReactInstance, Fragment, Component, createElement } from 'react';
 import { observer } from '@recore/obx-react';
-import { SimulatorRenderer } from './renderer';
-import { host } from './host';
+import { SimulatorRendererContainer, DocumentInstance } from './renderer';
 import './renderer.less';
 
 // patch cloneElement avoid lost keyProps
@@ -36,12 +34,20 @@ const originCloneElement = window.React.cloneElement;
   return originCloneElement(child, props, ...rest);
 };
 
-export default class SimulatorRendererView extends Component<{ renderer: SimulatorRenderer }> {
+export default class SimulatorRendererView extends Component<{ rendererContainer: SimulatorRendererContainer }> {
   render() {
-    const { renderer } = this.props;
+    const { rendererContainer } = this.props;
     return (
-      <Layout renderer={renderer}>
-        <Renderer renderer={renderer} />
+      <Layout rendererContainer={rendererContainer}>
+        <Router onChange={(currentPath: string) => {
+          rendererContainer.redirect(currentPath);
+        }}>
+          {rendererContainer.getDocumentInstances().map((instance) => {
+            return <Route path={instance.document.get('fileName')}>
+              <Renderer documentInstance={instance} />
+            </Route>
+          })}
+        </Router>
       </Layout>
     );
   }
@@ -68,13 +74,13 @@ function getDeviceView(view: any, device: string, mode: string) {
 }
 
 @observer
-class Layout extends Component<{ renderer: SimulatorRenderer }> {
+class Layout extends Component<{ rendererContainer: SimulatorRendererContainer }> {
   shouldComponentUpdate() {
     return false;
   }
   render() {
-    const { renderer, children } = this.props;
-    const layout = renderer.layout;
+    const { rendererContainer, children } = this.props;
+    const layout = rendererContainer.layout;
 
     if (layout) {
       const { Component, props } = layout;
@@ -86,26 +92,28 @@ class Layout extends Component<{ renderer: SimulatorRenderer }> {
 }
 
 @observer
-class Renderer extends Component<{ renderer: SimulatorRenderer }> {
+class Renderer extends Component<{ documentInstance: DocumentInstance }> {
   shouldComponentUpdate() {
     return false;
   }
   render() {
-    const { renderer } = this.props;
-    const { device, designMode } = renderer;
+    const { documentInstance } = this.props;
+    const { container } = documentInstance;
+    const { designMode, device } = container;
+
     return (
       <LowCodeRenderer
-        schema={renderer.schema}
-        components={renderer.components}
-        appHelper={renderer.context}
+        schema={documentInstance.schema}
+        components={container.components}
+        appHelper={container.context}
         // context={renderer.context}
         designMode={designMode}
-        suspended={renderer.suspended}
-        self={renderer.scope}
+        suspended={documentInstance.suspended}
+        self={documentInstance.scope}
         customCreateElement={(Component: any, props: any, children: any) => {
           const { __id, __desingMode, ...viewProps } = props;
           viewProps.componentId = __id;
-          const leaf = host.document.getNode(__id);
+          const leaf = documentInstance.getNode(__id);
           viewProps._leaf = leaf;
           viewProps._componentName = leaf?.componentName;
           let _children = leaf?.isContainer() ? (children == null ? [] : Array.isArray(children) ? children : [children]) : children;
@@ -158,7 +166,7 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
           );
         }}
         onCompGetRef={(schema: any, ref: ReactInstance | null) => {
-          renderer.mountInstance(schema.id, ref);
+          documentInstance.mountInstance(schema.id, ref);
         }}
         //onCompGetCtx={(schema: any, ctx: object) => {
         // renderer.mountContext(schema.id, ctx);

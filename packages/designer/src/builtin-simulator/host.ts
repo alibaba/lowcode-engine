@@ -4,7 +4,17 @@ import Viewport from './viewport';
 import { createSimulator } from './create-simulator';
 import { Node, ParentalNode, DocumentModel, isNode, contains, isRootNode } from '../document';
 import ResourceConsumer from './resource-consumer';
-import { AssetLevel, Asset, AssetList, assetBundle, assetItem, AssetType, isElement, isFormEvent } from '@ali/lowcode-utils';
+import {
+  AssetLevel,
+  Asset,
+  AssetList,
+  assetBundle,
+  assetItem,
+  AssetType,
+  isElement,
+  isFormEvent,
+  hasOwnProperty,
+} from '@ali/lowcode-utils';
 import {
   DragObjectType,
   isShaken,
@@ -26,6 +36,7 @@ import { ComponentMetadata, ComponentSchema } from '@ali/lowcode-types';
 import { BuiltinSimulatorRenderer } from './renderer';
 import clipboard from '../designer/clipboard';
 import { LiveEditing } from './live-editing/live-editing';
+import { Project } from '../project';
 
 export interface LibraryItem {
   package: string;
@@ -74,9 +85,9 @@ const defaultEnvironment = [
 export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProps> {
   readonly isSimulator = true;
 
-  constructor(readonly document: DocumentModel) {}
+  constructor(readonly project: Project) {}
 
-  readonly designer = this.document.designer;
+  readonly designer = this.project.designer;
 
   @computed get device(): string {
     return this.get('device') || 'default';
@@ -326,7 +337,12 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         x.initEvent('click', true);
         this._iframe?.dispatchEvent(x);
         const target = e.target as HTMLElement;
-        if (isFormEvent(e) || target?.closest('.next-input-group,.next-checkbox-group,.next-date-picker,.next-input,.next-month-picker,.next-number-picker,.next-radio-group,.next-range,.next-range-picker,.next-rating,.next-select,.next-switch,.next-time-picker,.next-upload,.next-year-picker,.next-breadcrumb-item,.next-calendar-header,.next-calendar-table')) {
+        if (
+          isFormEvent(e) ||
+          target?.closest(
+            '.next-input-group,.next-checkbox-group,.next-date-picker,.next-input,.next-month-picker,.next-number-picker,.next-radio-group,.next-range,.next-range-picker,.next-rating,.next-select,.next-switch,.next-time-picker,.next-upload,.next-year-picker,.next-breadcrumb-item,.next-calendar-header,.next-calendar-table',
+          )
+        ) {
           e.preventDefault();
           e.stopPropagation();
         }
@@ -392,7 +408,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         }
         const node = nodeInst.node || this.document.rootNode;
 
-        const rootElement = this.findDOMNodes(nodeInst.instance, node.componentMeta.rootSelector)?.find(item => item.contains(targetElement)) as HTMLElement;
+        const rootElement = this.findDOMNodes(nodeInst.instance, node.componentMeta.rootSelector)?.find((item) =>
+          item.contains(targetElement),
+        ) as HTMLElement;
         if (!rootElement) {
           return;
         }
@@ -405,7 +423,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       },
       true,
     );
-
   }
 
   /**
@@ -490,12 +507,17 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     return this.renderer?.createComponent(schema) || null;
   }
 
-  @obx.val private instancesMap = new Map<string, ComponentInstance[]>();
-  setInstance(id: string, instances: ComponentInstance[] | null) {
+  @obx private instancesMap: {
+    [docId: string]: Map<string, ComponentInstance[]>;
+  } = {};
+  setInstance(docId: string, id: string, instances: ComponentInstance[] | null) {
+    if (hasOwnProperty(this.instancesMap, docId)) {
+      this.instancesMap[docId] = new Map();
+    }
     if (instances == null) {
-      this.instancesMap.delete(id);
+      this.instancesMap[docId].delete(id);
     } else {
-      this.instancesMap.set(id, instances.slice());
+      this.instancesMap[docId].set(id, instances.slice());
     }
   }
 
@@ -503,7 +525,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
    * @see ISimulator
    */
   getComponentInstances(node: Node): ComponentInstance[] | null {
-    return this.instancesMap.get(node.id) || null;
+    const docId = node.document.id;
+
+    return this.instancesMap[docId]?.get(node.id) || null;
   }
 
   /**
@@ -792,10 +816,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.sensing = true;
     this.scroller.scrolling(e);
     const dropContainer = this.getDropContainer(e);
-    if (!dropContainer ||
-       // too dirty
-        (typeof dropContainer.container?.componentMeta?.prototype?.options?.canDropIn === 'function' &&
-          !dropContainer.container?.componentMeta?.prototype?.options?.canDropIn(e.dragObject.nodes[0]))) {
+    if (!dropContainer) {
       return null;
     }
 
@@ -826,7 +847,12 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       event: e,
     };
 
-    if (e.dragObject && e.dragObject.nodes && e.dragObject.nodes.length && e.dragObject.nodes[0].getPrototype()?.isModal()) {
+    if (
+      e.dragObject &&
+      e.dragObject.nodes &&
+      e.dragObject.nodes.length &&
+      e.dragObject.nodes[0].getPrototype()?.isModal()
+    ) {
       return this.designer.createLocation({
         target: this.document.rootNode,
         detail,

@@ -348,7 +348,7 @@ export class Designer {
 
   @obx.ref private _simulatorProps?: object | ((document: DocumentModel) => object);
 
-  @computed get simulatorProps(): object | ((document: DocumentModel) => object) {
+  @computed get simulatorProps(): object | ((project: Project) => object) {
     return this._simulatorProps || {};
   }
 

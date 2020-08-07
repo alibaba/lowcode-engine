@@ -533,6 +533,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     if (stage !== TransformStage.Clone) {
       baseSchema.id = this.id;
     }
+    if (stage === TransformStage.Render) {
+      baseSchema.docId = this.document.id;
+    }
 
     if (this.isLeaf()) {
       baseSchema.children = this.props.get('children')?.export(stage);

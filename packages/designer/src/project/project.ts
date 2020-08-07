@@ -3,6 +3,7 @@ import { obx, computed } from '@ali/lowcode-editor-core';
 import { Designer } from '../designer';
 import { DocumentModel, isDocumentModel } from '../document';
 import { ProjectSchema, RootSchema } from '@ali/lowcode-types';
+import { ISimulatorHost } from '../simulator';
 
 export class Project {
   private emitter = new EventEmitter();
@@ -11,6 +12,15 @@ export class Project {
   private data: ProjectSchema = { version: '1.0.0', componentsMap: [], componentsTree: [] };
 
   @obx.ref canvasDisplayMode: 'exclusive' | 'overview' = 'exclusive';
+
+  private _simulator?: ISimulatorHost;
+
+  /**
+   * 模拟器
+   */
+  get simulator(): ISimulatorHost | null {
+    return this._simulator || null;
+  }
 
   // TODO: 考虑项目级别 History
 
@@ -102,7 +112,7 @@ export class Project {
       | string,
   ): any {}
 
-  open(doc?: string | DocumentModel | RootSchema): void {
+  open(doc?: string | DocumentModel | RootSchema): DocumentModel | null {
     if (!doc) {
       const got = this.documents.find((item) => item.isBlank());
       if (got) {
@@ -125,7 +135,7 @@ export class Project {
         return doc.open();
       }
 
-      return;
+      return null;
     }
 
     if (isDocumentModel(doc)) {
@@ -152,6 +162,37 @@ export class Project {
         doc.close();
       }
     });
+  }
+
+  /**
+   * 提供给模拟器的参数
+   */
+  @computed get simulatorProps(): object {
+    let simulatorProps = this.designer.simulatorProps;
+    if (typeof simulatorProps === 'function') {
+      simulatorProps = simulatorProps(this);
+    }
+    return {
+      ...simulatorProps,
+      project: this,
+      onMount: this.mountSimulator.bind(this),
+    };
+  }
+
+  private mountSimulator(simulator: ISimulatorHost) {
+    // TODO: 多设备 simulator 支持
+    this._simulator = simulator;
+  }
+
+  setRendererReady(renderer: any) {
+    this.emitter.emit('lowcode_engine_renderer_ready', renderer);
+  }
+
+  onRendererReady(fn: (args: any) => void): () => void {
+    this.emitter.on('lowcode_engine_renderer_ready', fn);
+    return () => {
+      this.emitter.removeListener('lowcode_engine_renderer_ready', fn);
+    };
   }
 
   onCurrentDocumentChange(fn: (doc: DocumentModel) => void): () => void {
