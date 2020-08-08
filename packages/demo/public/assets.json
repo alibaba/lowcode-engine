@@ -1441,6 +1441,11 @@
           "propType": "string"
         },
         {
+          "name": "icon",
+          "propType": "string",
+          "description": "自定义内联样式"
+        },
+        {
           "name": "type",
           "title": "类型",
           "propType": {
@@ -1489,13 +1494,14 @@
         },
         {
           "name": "loading",
-          "title": "是否 loading",
+          "title": "loading",
           "propType": "bool",
           "description": "设置按钮的载入状态",
           "defaultValue": false
         },
         {
           "name": "ghost",
+          "title": "ghost",
           "propType": {
             "type": "oneOf",
             "value": [
@@ -1510,18 +1516,21 @@
         },
         {
           "name": "text",
+          "title": "text",
           "propType": "bool",
           "description": "是否为文本按钮",
           "defaultValue": false
         },
         {
           "name": "warning",
+          "title": "warning",
           "propType": "bool",
           "description": "是否为警告按钮",
           "defaultValue": false
         },
         {
           "name": "disabled",
+          "title": "disabled",
           "propType": "bool",
           "description": "是否禁用",
           "defaultValue": false
@@ -1551,33 +1560,25 @@
           "isExtends": true,
           "override": [
             {
+              "name": "icon",
+              "setter": "StringSetter",
+              "extraProps": {
+                "defaultValue": "success",
+                "onChange": {
+                  "type": "JSFunction",
+                  "value": "(val, field, editor) => {\n  field.nodes[0].children.import({\"componentName\": \"Icon\", \"props\": {\"type\": val, \"style\": {\"marginRight\": 5}}}, true); //field.top.setPropValue('children', [{\"componentName\": \"Icon\", \"props\": {\"type\": val}}, (field.top.getPropValue('children') || []).slice(-1)]);\n}"
+                }
+              }
+            },
+            {
               "name": "children",
               "setter": {
-                "componentName": "ArraySetter",
+                "componentName": "MixedSetter",
                 "props": {
-                  "itemSetter": {
-                    "componentName": "MixedSetter",
-                    "props": {
-                      "setters": [
-                        {
-                          "componentName": "SlotSetter",
-                          "initialValue": {
-                            "type": "JSSlot",
-                            "value": [
-                              {
-                                "componentName": "Icon",
-                                "props": {
-                                  "type": "smile"
-                                }
-                              }
-                            ]
-                          }
-                        },
-                        "StringSetter",
-                        "ExpressionSetter"
-                      ]
-                    }
-                  }
+                  "setters": [
+                    "StringSetter",
+                    "ExpressionSetter"
+                  ]
                 }
               }
             }
@@ -11807,7 +11808,7 @@
     },
     {
       "componentName": "Typography.Text",
-      "title": "Typography.Text",
+      "title": "Text",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -11820,9 +11821,8 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
+          "name": "children",
+          "propType": "string"
         },
         {
           "name": "delete",
@@ -11857,20 +11857,17 @@
         {
           "name": "component",
           "propType": {
-            "type": "instanceOf",
-            "value": "elementType"
+            "type": "oneOf",
+            "value": [
+              "span",
+              "H1",
+              "H2",
+              "H3",
+              "H4"
+            ]
           },
           "description": "设置标签类型",
           "defaultValue": "span"
-        },
-        {
-          "name": "children",
-          "propType": "string"
-        },
-        {
-          "name": "rtl",
-          "propType": "bool",
-          "defaultValue": false
         },
         {
           "name": "style",
@@ -11878,8 +11875,14 @@
         }
       ],
       "configure": {
-        "component": {
-          "isContainer": true
+        "props": {
+          "isExtends": true,
+          "override": [
+            {
+              "name": "children",
+              "setter": "TextAreaSetter"
+            }
+          ]
         }
       }
     },
@@ -13735,16 +13738,16 @@
         },
         {
           "componentName": "Typography",
-          "title": "排版",
+          "title": "Text",
           "icon": "",
           "package": "@alife/next",
           "library": "Next",
           "snippets": [
             {
-              "title": "排版",
+              "title": "Text",
               "screenshot": "",
               "schema": {
-                "componentName": "Typography",
+                "componentName": "Typography.Text",
                 "props": {
                   "component": "span",
                   "children": "基于 Ali-Lowcode-Engine 快速打造高生产力的低代码研发平台"
