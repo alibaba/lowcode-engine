@@ -6023,14 +6023,8 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "description": "样式前缀",
-          "defaultValue": "next-"
-        },
-        {
           "name": "tip",
-          "propType": "any",
+          "propType": "string",
           "description": "自定义内容"
         },
         {
@@ -6042,7 +6036,7 @@
               "bottom"
             ]
           },
-          "description": "自定义内容位置\n@enumdesc 出现在动画右边, 出现在动画下面",
+          "description": "自定义内容位置",
           "defaultValue": "bottom"
         },
         {
@@ -6078,13 +6072,8 @@
           "defaultValue": "large"
         },
         {
-          "name": "indicator",
-          "propType": "any",
-          "description": "自定义动画"
-        },
-        {
           "name": "color",
-          "propType": "string",
+          "propType": "color",
           "description": "动画颜色"
         },
         {
@@ -6093,25 +6082,18 @@
           "description": "全屏展示"
         },
         {
-          "name": "children",
-          "propType": "any",
-          "description": "子元素"
-        },
-        {
           "name": "inline",
+          "title": "inline",
           "propType": "bool",
           "description": "should loader be displayed inline",
           "defaultValue": true
-        },
-        {
-          "name": "rtl",
-          "propType": "bool"
-        },
-        {
-          "name": "animate",
-          "defaultValue": null
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "Menu",
