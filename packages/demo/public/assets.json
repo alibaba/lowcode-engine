@@ -264,7 +264,17 @@
         "component": {
           "isContainer": true,
           "isModel": true
-        }
+        },
+        "props": [
+          {
+            "name": "prefix",
+            "title": {
+              "type": "i18n",
+              "zh_CN": "前缀",
+              "en_US": "prefix"
+            }
+          }
+        ]
     }
     },
     {
@@ -635,7 +645,24 @@
           "name": "cell",
           "propType": "func"
         }
-      ]
+      ],
+      "configure": {
+        "props": {
+          "isExtends": true,
+          "override": [{
+            "name": "cell",
+            "setter": {
+              "componentName": "SlotSetter",
+              "props": {
+                "supportParams": true
+              }
+            },
+            "extraProps": {
+              "display": "block"
+            }
+          }]
+        }
+      }
     },
     {
       "componentName": "Badge",
@@ -1411,7 +1438,7 @@
         {
           "name": "children",
           "title": "内容",
-          "propType": "array"
+          "propType": "string"
         },
         {
           "name": "type",
@@ -1520,8 +1547,41 @@
         }
       ],
       "configure": {
-        "component": {
-          "isContainer": true
+        "props": {
+          "isExtends": true,
+          "override": [
+            {
+              "name": "children",
+              "setter": {
+                "componentName": "ArraySetter",
+                "props": {
+                  "itemSetter": {
+                    "componentName": "MixedSetter",
+                    "props": {
+                      "setters": [
+                        {
+                          "componentName": "SlotSetter",
+                          "initialValue": {
+                            "type": "JSSlot",
+                            "value": [
+                              {
+                                "componentName": "Icon",
+                                "props": {
+                                  "type": "smile"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        "StringSetter",
+                        "ExpressionSetter"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
         }
       }
     },
@@ -1827,7 +1887,30 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+      "props": {
+        "isExtends": true,
+        "override": [
+          {
+            "name": "startValue",
+            "setter": "DateSetter"
+          },
+          {
+            "name": "defaultStartValue",
+            "setter": "DateSetter"
+          },
+          {
+            "name": "defaultEndValue",
+            "setter": "DateSetter"
+          },
+          {
+            "name": "endValue",
+            "setter": "DateSetter"
+          }
+        ]
+      }
+    }
     },
     {
       "componentName": "Card",
@@ -3363,7 +3446,18 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "props": {
+          "isExtends": true,
+          "override": [
+            {
+              "name": "value",
+              "setter": "DateSetter"
+            }
+          ]
+        }
+      }
     },
     {
       "componentName": "RangePicker",
@@ -5617,13 +5711,6 @@
           "description": "指定显示哪种图标"
         },
         {
-          "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          }
-        },
-        {
           "name": "size",
           "propType": {
             "type": "oneOfType",
@@ -5655,10 +5742,6 @@
         {
           "name": "style",
           "propType": "object"
-        },
-        {
-          "name": "prefix",
-          "defaultValue": "next-"
         }
       ]
     },
@@ -8908,7 +8991,7 @@
         {
           "name": "itemRender",
           "propType": "func",
-          "description": "渲染 MenuItem 内容的方法\n@param {Object} item 渲染节点的item\n@param {String} searchValue 搜索关键字（如果开启搜索）\n@return {ReactNode} item node"
+          "description": "渲染 Menu.Item 内容的方法\n@param {Object} item 渲染节点的item\n@param {String} searchValue 搜索关键字（如果开启搜索）\n@return {ReactNode} item node"
         },
         {
           "name": "notFoundContent",
@@ -10468,10 +10551,7 @@
         },
         {
           "name": "label",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "string",
           "description": "按钮的文案"
         },
         {
@@ -10678,7 +10758,22 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "props": {
+          "isExtends": true,
+          "override": [
+            {
+              "name": "defaultValue",
+              "setter": "TimePicker"
+            },
+            {
+              "name": "value",
+              "setter": "TimePicker"
+            }
+          ]
+        }
+      }
     },
     {
       "componentName": "Timeline",
@@ -12710,7 +12805,7 @@
               "schema": {
                 "componentName": "Dropdown",
                 "props": {  "trigger": [{    "componentName": "Button",    "props": {      "type": "primary"    },    "children": "确定"  }],  "triggerType": "click"},
-                "children": [{  "componentName": "Menu",  "props": {    "style": {      "width": 200    }  },  "children": [{    "componentName": "MenuItem",    "props": {},    "children": "Option 1"  }, {    "componentName": "MenuItem",    "props": {      "disabled": false    },    "children": "option 2"  }, {    "componentName": "MenuItem",    "props": {      "disabled": false    },    "children": "option 3"  }]}]
+                "children": [{  "componentName": "Menu",  "props": {    "style": {      "width": 200    }  },  "children": [{    "componentName": "Menu.Item",    "props": {},    "children": "Option 1"  }, {    "componentName": "Menu.Item",    "props": {      "disabled": false    },    "children": "option 2"  }, {    "componentName": "Menu.Item",    "props": {      "disabled": false    },    "children": "option 3"  }]}]
               }
             }
           ]
@@ -12823,8 +12918,17 @@
                       "dataIndex": "id",
                       "cell": {
                         "type": "JSSlot",
-                        "value": "123",
-                        "params": []
+                        "params": ["value", "index", "record"],
+                        "value": [{
+                          "componentName": "Button",
+                          "props": {
+                            "type": "primary",
+                            "children": [{
+                              "type": "JSExpression",
+                              "value": "this.value"
+                            }]
+                          }
+                        }]
                       }
                     }
                   },
@@ -13326,6 +13430,7 @@
               "schema": {
                 "componentName": "Balloon",
                 "props": {
+                  "visible": true,
                   "prefix": "next-",
                   "size": "medium",
                   "type": "normal",

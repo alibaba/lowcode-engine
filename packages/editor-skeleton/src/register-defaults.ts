@@ -7,7 +7,7 @@ import { isPlainObject } from '@ali/lowcode-utils';
 import parseProps from './transducers/parse-props';
 import addonCombine from './transducers/addon-combine';
 import SlotSetter from './components/slot-setter';
-import { isJSSlot } from '@ali/lowcode-types';
+import { isJSSlot, isJSExpression } from '@ali/lowcode-types';
 
 registerSetter('ArraySetter', {
   component: ArraySetter,
@@ -27,7 +27,7 @@ registerSetter('ObjectSetter', {
   title: 'ObjectSetter', // TODO
   condition: (field: any) => {
     const v = field.getValue();
-    return v == null || isPlainObject(v);
+    return v == null || (isPlainObject(v) && !isJSExpression(v) && !isJSSlot(v));
   },
   initialValue: {},
   recommend: true,

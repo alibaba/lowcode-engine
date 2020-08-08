@@ -236,6 +236,9 @@ export default class BaseRender extends PureComponent {
       if (isJSExpression(schema)) {
         return parseExpression(schema, self);
       }
+      if (isJSSlot(schema)) {
+        return this.__createVirtualDom(schema.value, self, parentInfo);
+      }
       if (typeof schema === 'string') return schema;
       if (typeof schema === 'number' || typeof schema === 'boolean') {
         return schema.toString();
@@ -247,6 +250,7 @@ export default class BaseRender extends PureComponent {
         );
       }
 
+      // FIXME
       const _children = this.getSchemaChildren(schema);
       //解析占位组件
       if (schema.componentName === 'Flagment' && _children) {
@@ -349,6 +353,9 @@ export default class BaseRender extends PureComponent {
         props.key = idx;
       }
       props.__id = schema.id;
+      if (!props.key) {
+        props.key = props.__id;
+      }
       const renderComp = (props) => {
         return engine.createElement(
           Comp,
