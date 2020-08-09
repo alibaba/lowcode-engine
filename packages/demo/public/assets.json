@@ -7103,22 +7103,18 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "pure",
-          "propType": "bool",
-          "defaultValue": false
-        },
-        {
           "name": "className",
           "propType": "string"
         },
         {
           "name": "style",
           "propType": "object"
+        },
+        {
+          "name": "title",
+          "propType": "string",
+          "description": "标题",
+          "defaultValue": "标题"
         },
         {
           "name": "type",
@@ -7146,7 +7142,7 @@
               "toast"
             ]
           },
-          "description": "反馈外观",
+          "description": "外观",
           "defaultValue": "inline"
         },
         {
@@ -7158,30 +7154,19 @@
               "large"
             ]
           },
-          "description": "反馈大小",
+          "description": "尺寸",
           "defaultValue": "medium"
-        },
-        {
-          "name": "title",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "标题"
         },
         {
           "name": "children",
           "propType": {
-            "type": "instanceOf",
-            "value": "node"
+            "type": "oneOfType",
+            "value": [
+              "string",
+              "node"
+            ]
           },
           "description": "内容"
-        },
-        {
-          "name": "defaultVisible",
-          "propType": "bool",
-          "description": "默认是否显示",
-          "defaultValue": true
         },
         {
           "name": "visible",
@@ -7212,16 +7197,8 @@
         {
           "name": "animation",
           "propType": "bool",
-          "description": "是否开启展开收起动画",
+          "description": "收起动画",
           "defaultValue": true
-        },
-        {
-          "name": "locale",
-          "propType": "object"
-        },
-        {
-          "name": "rtl",
-          "propType": "bool"
         }
       ]
     },
@@ -13496,11 +13473,11 @@
               "schema": {
                 "componentName": "Message",
                 "props": {
-                  "prefix": "next-",
+                  "title": "标题",
                   "type": "success",
                   "shape": "inline",
                   "size": "medium",
-                  "defaultVisible": true,
+                  "visible": true,
                   "animation": true
                 }
               }
