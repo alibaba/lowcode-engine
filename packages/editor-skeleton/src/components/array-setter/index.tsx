@@ -40,6 +40,7 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
 
     const itemsMap = state ? state.itemsMap : new Map<string | number, SettingField>();
     const items = state ? state.items.slice() : [];
+    debugger;
     if (newLength > originLength) {
       for (let i = originLength; i < newLength; i++) {
         const item = field.createField({
@@ -57,6 +58,7 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
         itemsMap.delete(item.id);
       });
     }
+
     return {
       items,
       itemsMap,
@@ -72,7 +74,7 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
 
   onSort(sortedIds: Array<string | number>) {
     const { itemsMap } = this.state;
-    const { onChange } = this.props;
+    const { onChange ,itemSetter,field} = this.props;
     const items = sortedIds.map((id, index) => {
       const item = itemsMap.get(id)!;
       // item.setKey(index);
@@ -82,10 +84,26 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
     const values = items.map((item) => {
       return item.getValue();
     });
-    console.log('values',values);
+
+    // 对itemsMap重新生成并刷新当前setter数据
+    let newItems = [],newItemsMap = {}
+    itemsMap.clear();
+    for (let i = 0; i < items.length; i++) {
+      const newItem = field.createField({
+        name: i,
+        setter: itemSetter,
+        // FIXME:
+        forceInline: 1,
+      });
+      newItems[i] = newItem;
+
+      itemsMap.set(newItem.id, newItem);
+    }
+
     onChange(values);
     this.setState({
-      items,
+      items:newItems,
+      itemsMap
     });
   }
 
