@@ -40,15 +40,10 @@ const SamplePreview = ({ editor }: PluginProps) => {
       <Button type="primary" onClick={handleClick}>
         预览
       </Button>
-      <Dialog
-        visible={visible}
-        footer={false}
-        onClose={handleClose}
-      >
-        {visible && <ReactRenderer 
-          schema={schema}
-          components={components}
-        />}
+      <Dialog visible={visible} footer={false} onClose={handleClose}>
+        {visible &&
+          <ReactRenderer className="lowcode-plugin-sample-preview-content" schema={schema} components={components} />
+        }
       </Dialog>
     </div>
   );

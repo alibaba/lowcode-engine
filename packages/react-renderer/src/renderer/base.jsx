@@ -199,14 +199,13 @@ export default class BaseRender extends PureComponent {
     if (!schema || !schema.props) {
       return schema?.children;
     }
-    let _children = schema.children;
-    if (!_children) return schema.props.children;
-    if (schema.props.children && schema.props.children.length) {
-      if (Array.isArray(schema.props.children)) {
-        _children = Array.isArray(_children) ? _children.concat(schema.props.children) : schema.props.children.unshift(_children);
-      } else {
-        Array.isArray(_children) && _children.push(schema.props.children) || (_children = [_children] && _children.push(schema.props.children));
-      }
+    if (!schema.children) return schema.props.children;
+    if (!schema.props.children) return schema.children;
+    var _children = [].concat(schema.children);
+    if (Array.isArray(schema.props.children)) {
+      _children = _children.concat(schema.props.children);
+    } else {
+      _children.push(schema.props.children);
     }
     return _children;
   };
@@ -233,8 +232,12 @@ export default class BaseRender extends PureComponent {
       if (!schema) return null;
       const { __appHelper: appHelper, __components: components = {} } =
         this.props || {};
+
       if (isJSExpression(schema)) {
         return parseExpression(schema, self);
+      }
+      if (isJSSlot(schema)) {
+        return this.__createVirtualDom(schema.value, self, parentInfo);
       }
       if (typeof schema === 'string') return schema;
       if (typeof schema === 'number' || typeof schema === 'boolean') {
@@ -246,7 +249,7 @@ export default class BaseRender extends PureComponent {
           this.__createVirtualDom(item, self, parentInfo, item && item.__ctx && item.__ctx.lunaKey ? '' : idx),
         );
       }
-
+      // FIXME
       const _children = this.getSchemaChildren(schema);
       //解析占位组件
       if (schema.componentName === 'Flagment' && _children) {
@@ -349,6 +352,9 @@ export default class BaseRender extends PureComponent {
         props.key = idx;
       }
       props.__id = schema.id;
+      if (!props.key) {
+        props.key = props.__id;
+      }
       const renderComp = (props) => {
         return engine.createElement(
           Comp,

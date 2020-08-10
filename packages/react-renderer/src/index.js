@@ -37,7 +37,7 @@ class FaultComponent extends PureComponent {
 class NotFoundComponent extends PureComponent {
   render() {
     console.error('component not found', this.props);
-    return <Div {...this.props} />;
+  return <Div {...this.props} >{this.props.children || 'Component Not Found'}</Div>;
   }
 }
 
@@ -45,7 +45,7 @@ function isReactClass(obj) {
   return obj && obj.prototype && (obj.prototype.isReactComponent || obj.prototype instanceof Component);
 }
 
-export default class Renderer extends PureComponent {
+export default class Renderer extends Component {
   static dislayName = 'renderer';
   static propTypes = {
     appHelper: PropTypes.object,

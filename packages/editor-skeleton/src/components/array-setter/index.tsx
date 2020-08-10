@@ -72,11 +72,18 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
 
   onSort(sortedIds: Array<string | number>) {
     const { itemsMap } = this.state;
+    const { onChange } = this.props;
     const items = sortedIds.map((id, index) => {
       const item = itemsMap.get(id)!;
-      item.setKey(index);
+      // item.setKey(index);
       return item;
     });
+
+    const values = items.map((item) => {
+      return item.getValue();
+    });
+    console.log('values',values);
+    onChange(values);
     this.setState({
       items,
     });
@@ -253,6 +260,7 @@ export default class ArraySetter extends Component<{
     }
 
     if (mode === 'popup' || forceInline) {
+
       const title = (
         <Fragment>
           编辑：
@@ -270,6 +278,7 @@ export default class ArraySetter extends Component<{
         }
         this.pipe = (this.context as PopupPipe).create({ width });
       }
+
       this.pipe.send(<TableSetter key={field.id} {...props} columns={columns} />, title);
       return (
         <Button

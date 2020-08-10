@@ -8,7 +8,10 @@ import { SettingField, isSettingField, SettingTopEntry, SettingEntry } from '@al
 import { isSetterConfig, CustomView } from '@ali/lowcode-types';
 import { intl } from '../../locale';
 import { Skeleton } from 'editor-skeleton/src/skeleton';
-
+function transformStringToFunction(str) {
+  if (typeof str !== 'string') return str;
+  return new Function(`"use strict"; return ${str}`)();
+}
 @observer
 class SettingFieldView extends Component<{ field: SettingField }> {
   render() {
@@ -60,7 +63,10 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     }
 
     // todo: error handling
-
+    let _onChange = extraProps?.onChange?.value;
+    if (extraProps && extraProps.onChange && extraProps.onChange.type === 'JSFunction') {
+      _onChange = transformStringToFunction(extraProps.onChange.value);
+    }
     return createField(
       {
         meta: field?.componentMeta?.npm || field?.componentMeta?.componentName || '',
@@ -85,6 +91,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
             value,
           });
           field.setValue(value);
+          if(_onChange) _onChange(value, field);
         },
         onInitial: () => {
           if (initialValue == null) {

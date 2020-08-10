@@ -1,19 +1,30 @@
 import { registerSetter } from '@ali/lowcode-editor-core';
-import { DatePicker, Input, Radio, Select, Switch, NumberPicker } from '@alifd/next';
+import { isJSExpression } from '@ali/lowcode-types';
+import { DatePicker, TimePicker, Input, Radio, Select, Switch, NumberPicker } from '@alifd/next';
 import ExpressionSetter from './expression-setter';
 import ColorSetter from './color-setter';
 import JsonSetter from './json-setter';
 import EventsSetter from './events-setter';
 import StyleSetter from './style-setter';
-
+import React, { Component } from 'react';
 export const StringSetter = {
   component: Input,
-  defaultProps: { placeholder: '请输入' },
+  defaultProps: { placeholder: '请输入', style: { maxWidth: 180 } },
   title: 'StringSetter',
   recommend: true,
 };
 export const NumberSetter = NumberPicker;
-export const BoolSetter = Switch;
+export class BoolSetter extends Component {
+
+  render() {
+    const { onChange, value, defaultValue } = this.props;
+    return <Switch checked={value || defaultValue} onChange={
+      val => {
+        onChange(val)
+      }
+    }/>;
+  }
+}
 export const SelectSetter = Select;
 
 // suggest: 做成 SelectSetter 一种变体
@@ -24,13 +35,41 @@ export const RadioGroupSetter = {
   },
 };
 // suggest: 做成 StringSetter 的一个参数，
-export const TextAreaSetter = Input.TextArea;
+export const TextAreaSetter = {
+  component: Input.TextArea,
+  defaultProps: { placeholder: '请输入', style: { maxWidth: 180 } },
+  title: 'TextAreaSetter',
+  recommend: true,
+};
 export const DateSetter = DatePicker;
 export const DateYearSetter = DatePicker.YearPicker;
 export const DateMonthSetter = DatePicker.MonthPicker;
 export const DateRangeSetter = DatePicker.RangePicker;
 
 export { ExpressionSetter, EventsSetter };
+
+class StringDateSetter extends Component {
+
+  render() {
+    const { onChange, editor } = this.props;
+    return <DatePicker onChange={
+      val => {
+        onChange(val.format())
+      }
+    }/>;
+  }
+}
+class StringTimePicker extends Component {
+
+  render() {
+    const { onChange, editor } = this.props;
+    return <TimePicker onChange={
+      val => {
+        onChange(val.format('HH:mm:ss'))
+      }
+    }/>;
+  }
+}
 
 const builtinSetters: any = {
   StringSetter,
@@ -39,13 +78,18 @@ const builtinSetters: any = {
   SelectSetter,
   ExpressionSetter: {
     component: ExpressionSetter,
+    condition: (field: any) => {
+      const v = field.getValue();
+      return v == null || isJSExpression(v);
+    },
     defaultProps: { placeholder: '请输入表达式' },
     title: '表达式输入',
     recommend: true,
   },
   RadioGroupSetter,
   TextAreaSetter,
-  DateSetter,
+  DateSetter: StringDateSetter,
+  TimePicker: StringTimePicker,
   DateYearSetter,
   DateMonthSetter,
   DateRangeSetter,

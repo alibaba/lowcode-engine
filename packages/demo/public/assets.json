@@ -264,7 +264,17 @@
         "component": {
           "isContainer": true,
           "isModel": true
-        }
+        },
+        "props": [
+          {
+            "name": "prefix",
+            "title": {
+              "type": "i18n",
+              "zh_CN": "前缀",
+              "en_US": "prefix"
+            }
+          }
+        ]
     }
     },
     {
@@ -635,7 +645,24 @@
           "name": "cell",
           "propType": "func"
         }
-      ]
+      ],
+      "configure": {
+        "props": {
+          "isExtends": true,
+          "override": [{
+            "name": "cell",
+            "setter": {
+              "componentName": "SlotSetter",
+              "props": {
+                "supportParams": true
+              }
+            },
+            "extraProps": {
+              "display": "block"
+            }
+          }]
+        }
+      }
     },
     {
       "componentName": "Badge",
@@ -957,7 +984,8 @@
       ],
       "configure": {
         "component": {
-          "isContainer": true
+          "isModel": true,
+          "rootSelector": "div.next-balloon"
         }
       }
     },
@@ -1241,7 +1269,22 @@
       "configure": {
         "component": {
           "isContainer": true
-        }
+        },
+        "props": [
+          {
+            "name": "maxNode",
+            "title": {
+              "label": "最大节点数",
+              "tip": "默认 100"
+            },
+            "setter": "NumberSetter"
+          },
+          {
+            "name": "separator",
+            "title": "分隔符",
+            "setter": "StringSetter"
+          }
+        ]
       }
     },
     {
@@ -1330,7 +1373,9 @@
       ],
       "configure": {
         "component": {
-          "isContainer": true
+          "isContainer": true,
+          "isModel": true,
+          "rootSelector": "div.MCBreadcrumb"
         }
       }
     },
@@ -1388,9 +1433,11 @@
         }
       ],
       "configure": {
-        "component": {
-          "isContainer": true
-        }
+        "props": [{
+          "name": "children",
+          "title": "文本内容",
+          "setter": "StringSetter"
+        }]
       }
     },
     {
@@ -1411,7 +1458,12 @@
         {
           "name": "children",
           "title": "内容",
-          "propType": "array"
+          "propType": "string"
+        },
+        {
+          "name": "icon",
+          "propType": "string",
+          "description": "自定义内联样式"
         },
         {
           "name": "type",
@@ -1462,13 +1514,14 @@
         },
         {
           "name": "loading",
-          "title": "是否 loading",
+          "title": "loading",
           "propType": "bool",
           "description": "设置按钮的载入状态",
           "defaultValue": false
         },
         {
           "name": "ghost",
+          "title": "ghost",
           "propType": {
             "type": "oneOf",
             "value": [
@@ -1483,18 +1536,21 @@
         },
         {
           "name": "text",
+          "title": "text",
           "propType": "bool",
           "description": "是否为文本按钮",
           "defaultValue": false
         },
         {
           "name": "warning",
+          "title": "warning",
           "propType": "bool",
           "description": "是否为警告按钮",
           "defaultValue": false
         },
         {
           "name": "disabled",
+          "title": "disabled",
           "propType": "bool",
           "description": "是否禁用",
           "defaultValue": false
@@ -1520,8 +1576,33 @@
         }
       ],
       "configure": {
-        "component": {
-          "isContainer": true
+        "props": {
+          "isExtends": true,
+          "override": [
+            {
+              "name": "icon",
+              "setter": "StringSetter",
+              "extraProps": {
+                "defaultValue": "success",
+                "onChange": {
+                  "type": "JSFunction",
+                  "value": "(val, field, editor) => {\n  field.nodes[0].children.import({\"componentName\": \"Icon\", \"props\": {\"type\": val, \"style\": {\"marginRight\": 5}}}, true); //field.top.setPropValue('children', [{\"componentName\": \"Icon\", \"props\": {\"type\": val}}, (field.top.getPropValue('children') || []).slice(-1)]);\n}"
+                }
+              }
+            },
+            {
+              "name": "children",
+              "setter": {
+                "componentName": "MixedSetter",
+                "props": {
+                  "setters": [
+                    "StringSetter",
+                    "ExpressionSetter"
+                  ]
+                }
+              }
+            }
+          ]
         }
       }
     },
@@ -1827,7 +1908,30 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+      "props": {
+        "isExtends": true,
+        "override": [
+          {
+            "name": "startValue",
+            "setter": "DateSetter"
+          },
+          {
+            "name": "defaultStartValue",
+            "setter": "DateSetter"
+          },
+          {
+            "name": "defaultEndValue",
+            "setter": "DateSetter"
+          },
+          {
+            "name": "endValue",
+            "setter": "DateSetter"
+          }
+        ]
+      }
+    }
     },
     {
       "componentName": "Card",
@@ -1844,29 +1948,12 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "rtl",
-          "propType": "bool"
-        },
-        {
-          "name": "media",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "卡片的上的图片 / 视频"
-        },
-        {
           "name": "title",
           "propType": {
             "type": "instanceOf",
             "value": "node"
           },
-          "description": "卡片的标题"
+          "description": "标题"
         },
         {
           "name": "subTitle",
@@ -1874,7 +1961,35 @@
             "type": "instanceOf",
             "value": "node"
           },
-          "description": "卡片的副标题"
+          "description": "副标题"
+        },
+        {
+          "name": "extra",
+          "propType": {
+            "type": "instanceOf",
+            "value": "node"
+          },
+          "description": "标题栏用户自定义内容"
+        },
+        {
+          "name": "showTitleBullet",
+          "propType": "bool",
+          "description": "标题的项目符号",
+          "defaultValue": true
+        },
+        {
+          "name": "showHeadDivider",
+          "propType": "bool",
+          "description": "头部分隔线",
+          "defaultValue": true
+        },
+        {
+          "name": "media",
+          "propType": {
+            "type": "instanceOf",
+            "value": "node"
+          },
+          "description": "顶部的图片/视频"
         },
         {
           "name": "actions",
@@ -1882,19 +1997,7 @@
             "type": "instanceOf",
             "value": "node"
           },
-          "description": "卡片操作组，位置在卡片底部"
-        },
-        {
-          "name": "showTitleBullet",
-          "propType": "bool",
-          "description": "是否显示标题的项目符号",
-          "defaultValue": true
-        },
-        {
-          "name": "showHeadDivider",
-          "propType": "bool",
-          "description": "是否展示头部的分隔线",
-          "defaultValue": true
+          "description": "底部操作组"
         },
         {
           "name": "contentHeight",
@@ -1909,35 +2012,24 @@
           "defaultValue": 120
         },
         {
-          "name": "extra",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "标题区域的用户自定义内容"
-        },
-        {
-          "name": "free",
-          "propType": "bool",
-          "description": "是否开启自由模式，开启后card 将使用子组件配合使用, 设置此项后 title, subtitle, 等等属性都将失效",
-          "defaultValue": false
-        },
-        {
           "name": "className",
           "propType": "string"
         },
         {
-          "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          }
-        },
-        {
           "name": "style",
           "propType": "object"
+        },
+        {
+          "name": "rtl",
+          "propType": "bool",
+          "description": "文本方向是从右向左"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "CardHeader",
@@ -3363,7 +3455,18 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "props": {
+          "isExtends": true,
+          "override": [
+            {
+              "name": "value",
+              "setter": "DateSetter"
+            }
+          ]
+        }
+      }
     },
     {
       "componentName": "RangePicker",
@@ -5617,13 +5720,6 @@
           "description": "指定显示哪种图标"
         },
         {
-          "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          }
-        },
-        {
           "name": "size",
           "propType": {
             "type": "oneOfType",
@@ -5655,10 +5751,6 @@
         {
           "name": "style",
           "propType": "object"
-        },
-        {
-          "name": "prefix",
-          "defaultValue": "next-"
         }
       ]
     },
@@ -5940,14 +6032,8 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "description": "样式前缀",
-          "defaultValue": "next-"
-        },
-        {
           "name": "tip",
-          "propType": "any",
+          "propType": "string",
           "description": "自定义内容"
         },
         {
@@ -5959,7 +6045,7 @@
               "bottom"
             ]
           },
-          "description": "自定义内容位置\n@enumdesc 出现在动画右边, 出现在动画下面",
+          "description": "自定义内容位置",
           "defaultValue": "bottom"
         },
         {
@@ -5995,13 +6081,8 @@
           "defaultValue": "large"
         },
         {
-          "name": "indicator",
-          "propType": "any",
-          "description": "自定义动画"
-        },
-        {
           "name": "color",
-          "propType": "string",
+          "propType": "color",
           "description": "动画颜色"
         },
         {
@@ -6010,25 +6091,18 @@
           "description": "全屏展示"
         },
         {
-          "name": "children",
-          "propType": "any",
-          "description": "子元素"
-        },
-        {
           "name": "inline",
+          "title": "inline",
           "propType": "bool",
           "description": "should loader be displayed inline",
           "defaultValue": true
-        },
-        {
-          "name": "rtl",
-          "propType": "bool"
-        },
-        {
-          "name": "animate",
-          "defaultValue": null
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "Menu",
@@ -7037,22 +7111,18 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "pure",
-          "propType": "bool",
-          "defaultValue": false
-        },
-        {
           "name": "className",
           "propType": "string"
         },
         {
           "name": "style",
           "propType": "object"
+        },
+        {
+          "name": "title",
+          "propType": "string",
+          "description": "标题",
+          "defaultValue": "标题"
         },
         {
           "name": "type",
@@ -7080,7 +7150,7 @@
               "toast"
             ]
           },
-          "description": "反馈外观",
+          "description": "外观",
           "defaultValue": "inline"
         },
         {
@@ -7092,30 +7162,19 @@
               "large"
             ]
           },
-          "description": "反馈大小",
+          "description": "尺寸",
           "defaultValue": "medium"
-        },
-        {
-          "name": "title",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "标题"
         },
         {
           "name": "children",
           "propType": {
-            "type": "instanceOf",
-            "value": "node"
+            "type": "oneOfType",
+            "value": [
+              "string",
+              "node"
+            ]
           },
           "description": "内容"
-        },
-        {
-          "name": "defaultVisible",
-          "propType": "bool",
-          "description": "默认是否显示",
-          "defaultValue": true
         },
         {
           "name": "visible",
@@ -7146,16 +7205,8 @@
         {
           "name": "animation",
           "propType": "bool",
-          "description": "是否开启展开收起动画",
+          "description": "收起动画",
           "defaultValue": true
-        },
-        {
-          "name": "locale",
-          "propType": "object"
-        },
-        {
-          "name": "rtl",
-          "propType": "bool"
         }
       ]
     },
@@ -7628,24 +7679,6 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "description": "样式前缀",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "type",
-          "propType": {
-            "type": "oneOf",
-            "value": [
-              "normal",
-              "inline"
-            ]
-          },
-          "description": "设置类型\n@enumdesc 普通, 内联",
-          "defaultValue": "normal"
-        },
-        {
           "name": "size",
           "propType": {
             "type": "oneOf",
@@ -7656,6 +7689,18 @@
           },
           "description": "大小",
           "defaultValue": "medium"
+        },
+        {
+          "name": "type",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "normal",
+              "inline"
+            ]
+          },
+          "description": "设置类型",
+          "defaultValue": "normal"
         },
         {
           "name": "value",
@@ -7674,13 +7719,7 @@
         },
         {
           "name": "step",
-          "propType": {
-            "type": "oneOfType",
-            "value": [
-              "number",
-              "string"
-            ]
-          },
+          "propType": "number",
           "description": "步长",
           "defaultValue": 1
         },
@@ -7700,6 +7739,57 @@
           "name": "autoFocus",
           "propType": "bool",
           "description": "自动焦点"
+        },
+        {
+          "name": "max",
+          "propType": "number",
+          "description": "最大值",
+          "defaultValue": null
+        },
+        {
+          "name": "min",
+          "propType": "number",
+          "description": "最小值",
+          "defaultValue": null
+        },
+        {
+          "name": "format",
+          "propType": "func",
+          "description": "格式化当前值"
+        },
+        {
+          "name": "upBtnProps",
+          "propType": "object",
+          "description": "增加按钮的props"
+        },
+        {
+          "name": "downBtnProps",
+          "propType": "object",
+          "description": "减少按钮的props"
+        },
+        {
+          "name": "label",
+          "propType": "string",
+          "description": "内联 label"
+        },
+        {
+          "name": "innerAfter",
+          "propType": "string",
+          "description": "inner after"
+        },
+        {
+          "name": "rtl",
+          "propType": "bool"
+        },
+        {
+          "name": "isPreview",
+          "propType": "bool",
+          "description": "是否为预览态"
+        },
+        {
+          "name": "renderPreview",
+          "propType": "func",
+          "description": "预览态模式下渲染的内容\n@param {number} value 评分值"
         },
         {
           "name": "onChange",
@@ -7731,18 +7821,6 @@
           "propType": "func"
         },
         {
-          "name": "max",
-          "propType": "number",
-          "description": "最大值",
-          "defaultValue": null
-        },
-        {
-          "name": "min",
-          "propType": "number",
-          "description": "最小值",
-          "defaultValue": null
-        },
-        {
           "name": "className",
           "propType": "string",
           "description": "自定义class"
@@ -7751,74 +7829,23 @@
           "name": "style",
           "propType": "object",
           "description": "自定义内联样式"
-        },
-        {
-          "name": "state",
-          "propType": {
-            "type": "oneOf",
-            "value": [
-              "error"
-            ]
-          }
-        },
-        {
-          "name": "format",
-          "propType": "func",
-          "description": "格式化当前值\n@param {Number} value\n@return {String|Number}"
-        },
-        {
-          "name": "upBtnProps",
-          "propType": "object",
-          "description": "增加按钮的props"
-        },
-        {
-          "name": "downBtnProps",
-          "propType": "object",
-          "description": "减少按钮的props"
-        },
-        {
-          "name": "label",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "内联 label"
-        },
-        {
-          "name": "innerAfter",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "inner after"
-        },
-        {
-          "name": "rtl",
-          "propType": "bool"
-        },
-        {
-          "name": "isPreview",
-          "propType": "bool",
-          "description": "是否为预览态"
-        },
-        {
-          "name": "renderPreview",
-          "propType": "func",
-          "description": "预览态模式下渲染的内容\n@param {number} value 评分值"
-        },
-        {
-          "name": "device",
-          "propType": {
-            "type": "oneOf",
-            "value": [
-              "phone",
-              "tablet",
-              "desktop"
-            ]
-          },
-          "description": "预设屏幕宽度"
         }
-      ]
+      ],
+      "configure": {
+        "props": {
+          "isExtends": true,
+          "override": [
+            {
+              "name": "upBtnProps",
+              "setter": "JsonSetter"
+            },
+            {
+              "name": "downBtnProps",
+              "setter": "JsonSetter"
+            }
+          ]
+        }
+      }
     },
     {
       "componentName": "Pagination",
@@ -8141,52 +8168,34 @@
           "description": "自定义类名"
         },
         {
-          "name": "id",
-          "propType": "string",
-          "description": "组件input的id"
-        },
-        {
           "name": "style",
           "propType": "object",
           "description": "自定义内敛样式"
         },
         {
+          "name": "id",
+          "propType": "string",
+          "description": "input元素id"
+        },
+        {
           "name": "checked",
           "propType": "bool",
-          "description": "设置radio是否选中"
+          "description": "是否选中"
         },
         {
           "name": "defaultChecked",
           "propType": "bool",
-          "description": "设置radio是否默认选中"
+          "description": "是否默认选中"
         },
         {
           "name": "label",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "string",
           "description": "通过属性配置label"
-        },
-        {
-          "name": "onChange",
-          "propType": "func",
-          "description": "状态变化时触发的事件\n@param {Boolean} checked 是否选中\n@param {Event} e Dom 事件对象"
-        },
-        {
-          "name": "onMouseEnter",
-          "propType": "func",
-          "description": "鼠标进入enter事件\n@param {Event} e Dom 事件对象"
-        },
-        {
-          "name": "onMouseLeave",
-          "propType": "func",
-          "description": "鼠标离开事件\n@param {Event} e Dom 事件对象"
         },
         {
           "name": "disabled",
           "propType": "bool",
-          "description": "radio是否被禁用"
+          "description": "是否被禁用"
         },
         {
           "name": "value",
@@ -8198,7 +8207,7 @@
               "bool"
             ]
           },
-          "description": "radio 的value"
+          "description": "value"
         },
         {
           "name": "name",
@@ -8214,21 +8223,28 @@
         {
           "name": "renderPreview",
           "propType": "func",
-          "description": "预览态模式下渲染的内容\n@param {number} value 评分值"
+          "description": "预览态模式下渲染的内容"
         },
         {
-          "name": "tabIndex",
-          "defaultValue": 0
+          "name": "onChange",
+          "propType": "func",
+          "description": "状态变化时触发的事件\n@param {Boolean} checked 是否选中\n@param {Event} e Dom 事件对象"
         },
         {
-          "name": "prefix",
-          "defaultValue": "next-"
+          "name": "onMouseEnter",
+          "propType": "func",
+          "description": "鼠标进入enter事件\n@param {Event} e Dom 事件对象"
+        },
+        {
+          "name": "onMouseLeave",
+          "propType": "func",
+          "description": "鼠标离开事件\n@param {Event} e Dom 事件对象"
         }
       ]
     },
     {
-      "componentName": "RadioGroup",
-      "title": "RadioGroup",
+      "componentName": "Radio.Group",
+      "title": "Radio.Group",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -8240,12 +8256,6 @@
         "subName": "Group"
       },
       "props": [
-        {
-          "name": "prefix",
-          "propType": "string",
-          "description": "样式类名的品牌前缀",
-          "defaultValue": "next-"
-        },
         {
           "name": "className",
           "propType": "string",
@@ -8262,6 +8272,31 @@
           "description": "name"
         },
         {
+          "name": "size",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "large",
+              "medium",
+              "small"
+            ]
+          },
+          "description": "尺寸",
+          "defaultValue": "medium"
+        },
+
+        {
+          "name": "shape",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "normal",
+              "button"
+            ]
+          },
+          "description": "展示形态"
+        },
+        {
           "name": "value",
           "propType": {
             "type": "oneOfType",
@@ -8271,7 +8306,7 @@
               "bool"
             ]
           },
-          "description": "radio group的选中项的值"
+          "description": "选中项的值"
         },
         {
           "name": "defaultValue",
@@ -8283,52 +8318,23 @@
               "bool"
             ]
           },
-          "description": "radio group的默认值"
+          "description": "默认值"
         },
         {
           "name": "component",
-          "propType": {
-            "type": "oneOfType",
-            "value": [
-              "string",
-              "func"
-            ]
-          },
+          "propType": "string",
           "description": "设置标签类型",
           "defaultValue": "div"
         },
         {
-          "name": "onChange",
-          "propType": "func",
-          "description": "选中值改变时的事件\n@param {String/Number} value 选中项的值\n@param {Event} e Dom 事件对象"
-        },
-        {
           "name": "disabled",
           "propType": "bool",
-          "description": "表示radio被禁用"
+          "description": "是否被禁用"
         },
         {
-          "name": "shape",
-          "propType": {
-            "type": "oneOf",
-            "value": [
-              "button"
-            ]
-          },
-          "description": "可以设置成 button 展示形状\n@enumdesc 按钮状"
-        },
-        {
-          "name": "size",
-          "propType": {
-            "type": "oneOf",
-            "value": [
-              "large",
-              "medium",
-              "small"
-            ]
-          },
-          "description": "与 `shape` 属性配套使用，shape设为button时有效\n@enumdesc 大, 中, 小",
-          "defaultValue": "medium"
+          "name": "dataSource",
+          "propType": "object",
+          "description": "可选项列表"
         },
         {
           "name": "itemDirection",
@@ -8339,7 +8345,7 @@
               "ver"
             ]
           },
-          "description": "子项目的排列方式\n- hoz: 水平排列 (default)\n- ver: 垂直排列",
+          "description": "子项目的排列方式",
           "defaultValue": "hoz"
         },
         {
@@ -8352,8 +8358,25 @@
           "name": "renderPreview",
           "propType": "func",
           "description": "预览态模式下渲染的内容\n@param {number} value 评分值"
+        },
+        {
+          "name": "onChange",
+          "propType": "func",
+          "description": "选中值改变时的事件\n@param {String/Number} value 选中项的值\n@param {Event} e Dom 事件对象"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        },
+        "props": {
+          "isExtends": true,
+          "override": [{
+            "name": "dataSource",
+            "setter": "JsonSetter"
+          }]
+        }
+      }
     },
     {
       "componentName": "Range",
@@ -8936,7 +8959,7 @@
         {
           "name": "itemRender",
           "propType": "func",
-          "description": "渲染 MenuItem 内容的方法\n@param {Object} item 渲染节点的item\n@param {String} searchValue 搜索关键字（如果开启搜索）\n@return {ReactNode} item node"
+          "description": "渲染 Menu.Item 内容的方法\n@param {Object} item 渲染节点的item\n@param {String} searchValue 搜索关键字（如果开启搜索）\n@return {ReactNode} item node"
         },
         {
           "name": "notFoundContent",
@@ -10496,10 +10519,7 @@
         },
         {
           "name": "label",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "string",
           "description": "按钮的文案"
         },
         {
@@ -10706,7 +10726,22 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "props": {
+          "isExtends": true,
+          "override": [
+            {
+              "name": "defaultValue",
+              "setter": "TimePicker"
+            },
+            {
+              "name": "value",
+              "setter": "TimePicker"
+            }
+          ]
+        }
+      }
     },
     {
       "componentName": "Timeline",
@@ -11758,7 +11793,7 @@
     },
     {
       "componentName": "Typography.Text",
-      "title": "Typography.Text",
+      "title": "Text",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -11771,9 +11806,8 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
+          "name": "children",
+          "propType": "string"
         },
         {
           "name": "delete",
@@ -11808,20 +11842,17 @@
         {
           "name": "component",
           "propType": {
-            "type": "instanceOf",
-            "value": "elementType"
+            "type": "oneOf",
+            "value": [
+              "span",
+              "H1",
+              "H2",
+              "H3",
+              "H4"
+            ]
           },
           "description": "设置标签类型",
           "defaultValue": "span"
-        },
-        {
-          "name": "children",
-          "propType": "string"
-        },
-        {
-          "name": "rtl",
-          "propType": "bool",
-          "defaultValue": false
         },
         {
           "name": "style",
@@ -11829,8 +11860,14 @@
         }
       ],
       "configure": {
-        "component": {
-          "isContainer": true
+        "props": {
+          "isExtends": true,
+          "override": [
+            {
+              "name": "children",
+              "setter": "TextAreaSetter"
+            }
+          ]
         }
       }
     },
@@ -12737,7 +12774,8 @@
               "screenshot": "",
               "schema": {
                 "componentName": "Dropdown",
-                "props": {}
+                "props": {  "trigger": [{    "componentName": "Button",    "props": {      "type": "primary"    },    "children": "确定"  }],  "triggerType": "click"},
+                "children": [{  "componentName": "Menu",  "props": {    "style": {      "width": 200    }  },  "children": [{    "componentName": "Menu.Item",    "props": {},    "children": "Option 1"  }, {    "componentName": "Menu.Item",    "props": {      "disabled": false    },    "children": "option 2"  }, {    "componentName": "Menu.Item",    "props": {      "disabled": false    },    "children": "option 3"  }]}]
               }
             }
           ]
@@ -12850,8 +12888,17 @@
                       "dataIndex": "id",
                       "cell": {
                         "type": "JSSlot",
-                        "value": "123",
-                        "params": []
+                        "params": ["value", "index", "record"],
+                        "value": [{
+                          "componentName": "Button",
+                          "props": {
+                            "type": "primary",
+                            "children": [{
+                              "type": "JSExpression",
+                              "value": "this.value"
+                            }]
+                          }
+                        }]
                       }
                     }
                   },
@@ -12927,48 +12974,33 @@
         {
           "componentName": "Card",
           "title": "卡片",
-          "icon": "",
+          "icon": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_card.png",
           "package": "@alife/next",
           "library": "Next",
           "snippets": [
             {
               "screenshot": "https://img.alicdn.com/tfs/TB1CHN3u4z1gK0jSZSgXXavwpXa-112-64.png",
-              "label": "普通型",
+              "title": "普通型",
               "schema": {
                 "componentName": "Card",
-                "props": {},
-                "children": [
-                  {
-                    "componentName": "CardContent"
-                  }
-                ]
+                "props": {
+                  "title": "普通型卡片"
+                },
+                "children": []
               }
             },
             {
               "screenshot": "https://img.alicdn.com/tfs/TB1.Ut6u4D1gK0jSZFKXXcJrVXa-112-64.png",
-              "label": "自定义",
+              "title": "自定义",
               "schema": {
                 "componentName": "Card",
                 "props": {
-                  "__slot__extra": true,
+                  "title": "自定义卡片",
                   "extra": {
-                    "type": "JSBlock",
-                    "value": {
-                      "componentName": "Slot",
-                      "props": {
-                        "slotName": "extra",
-                        "slotTitle": "自定义内容"
-                      },
-                      "condition": true,
-                      "children": []
-                    }
+                    "type": "JSSlot"
                   }
                 },
-                "children": [
-                  {
-                    "componentName": "CardContent"
-                  }
-                ]
+                "children": []
               }
             }
           ]
@@ -13108,13 +13140,8 @@
               "schema": {
                 "componentName": "Menu.Item",
                 "props": {
-                  "parentMode": "inline",
-                  "type": "item",
-                  "component": "",
-                  "disabled": true,
-                  "className": "",
-                  "needIndent": ""
-                }
+                },
+                "children": "Option"
               }
             }
           ]
@@ -13358,6 +13385,7 @@
               "schema": {
                 "componentName": "Balloon",
                 "props": {
+                  "visible": true,
                   "prefix": "next-",
                   "size": "medium",
                   "type": "normal",
@@ -13368,7 +13396,13 @@
                     0
                   ],
                   "triggerType": "hover",
-                  "autoFocus": true
+                  "autoFocus": true,
+                  "trigger": {
+                    "componentName": "Avatar",
+                    "props": {
+                      "icon": "success"
+                    }
+                  }
                 }
               }
             }
@@ -13438,11 +13472,11 @@
               "schema": {
                 "componentName": "Message",
                 "props": {
-                  "prefix": "next-",
+                  "title": "标题",
                   "type": "success",
                   "shape": "inline",
                   "size": "medium",
-                  "defaultVisible": true,
+                  "visible": true,
                   "animation": true
                 }
               }
@@ -13680,16 +13714,16 @@
         },
         {
           "componentName": "Typography",
-          "title": "排版",
+          "title": "Text",
           "icon": "",
           "package": "@alife/next",
           "library": "Next",
           "snippets": [
             {
-              "title": "排版",
+              "title": "Text",
               "screenshot": "",
               "schema": {
-                "componentName": "Typography",
+                "componentName": "Typography.Text",
                 "props": {
                   "component": "span",
                   "children": "基于 Ali-Lowcode-Engine 快速打造高生产力的低代码研发平台"
@@ -13717,10 +13751,33 @@
               "schema": {
                 "componentName": "Breadcrumb",
                 "props": {
-                  "prefix": "next-",
                   "maxNode": 100,
-                  "component": "nav"
-                }
+                  "component": "nav",
+                  "style": {
+                    "margin": 10,
+                    "padding": 5
+                  }
+                },
+                "children": [
+                  {
+                    "componentName": "Breadcrumb.Item",
+                    "props": {
+                      "children": "一级"
+                    }
+                  },
+                  {
+                    "componentName": "Breadcrumb.Item",
+                    "props": {
+                      "children": "二级"
+                    }
+                  },
+                  {
+                    "componentName": "Breadcrumb.Item",
+                    "props": {
+                      "children": "三级"
+                    }
+                  }
+                ]
               }
             }
           ]
@@ -14123,6 +14180,23 @@
               "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_radio.png",
               "schema": {
                 "componentName": "Radio",
+                "props": {}
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "Radio.Group",
+          "title": "单选框组",
+          "icon": "",
+          "package": "@alife/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "单选框组",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_radio.png",
+              "schema": {
+                "componentName": "Radio.Group",
                 "props": {}
               }
             }

@@ -90,20 +90,20 @@ function propTypeToSetter(propType: PropType): SetterType {
         initialValue: dataSource[0] ? dataSource[0].value : null,
       };
 
-    // case 'element':
-    // case 'node': // TODO: use Mixin
-    //   return {
-    //     // slotSetter
-    //     componentName: 'NodeSetter',
-    //     props: {
-    //       mode: typeName,
-    //     },
-    //     isRequired,
-    //     initialValue: {
-    //       type: 'JSSlot',
-    //       value: '',
-    //     },
-    //   };
+    case 'element':
+    case 'node': // TODO: use Mixin
+      return {
+        // slotSetter
+        componentName: 'SlotSetter',
+        props: {
+          mode: typeName,
+        },
+        isRequired,
+        initialValue: {
+          type: 'JSSlot',
+          value: [],
+        },
+      };
     case 'shape':
     case 'exact':
       const items = ((propType as any).value || []).map((item: any) => propConfigToFieldConfig(item));
@@ -164,12 +164,11 @@ function propTypeToSetter(propType: PropType): SetterType {
         componentName: 'MixedSetter',
         props: {
           // TODO:
-          // setters: (propType as OneOfType).value.map(item => propTypeToSetter(item)),
+          setters: (propType as OneOfType).value.map(item => propTypeToSetter(item)),
         },
         isRequired,
       };
   }
-
   return {
     componentName: 'MixedSetter',
     isRequired,
