@@ -179,6 +179,7 @@ export interface INodeGeneratorContext {
 // }
 
 export type CompositeValueCustomHandler = (data: unknown) => string;
+export type CompositeTypeContainerHandler = (value: string) => string;
 export interface CompositeValueCustomHandlerSet {
   boolean?: CompositeValueCustomHandler;
   number?: CompositeValueCustomHandler;
@@ -188,7 +189,13 @@ export interface CompositeValueCustomHandlerSet {
   expression?: CompositeValueCustomHandler;
 }
 
+export interface CompositeTypeContainerHandlerSet {
+  default?: CompositeTypeContainerHandler;
+  string?: CompositeValueCustomHandler;
+}
+
 export interface CompositeValueGeneratorOptions {
   handlers?: CompositeValueCustomHandlerSet;
+  containerHandlers?: CompositeTypeContainerHandlerSet;
   nodeGenerator?: NodeGenerator;
 }
