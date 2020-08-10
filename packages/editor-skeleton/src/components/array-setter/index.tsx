@@ -40,7 +40,6 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
 
     const itemsMap = state ? state.itemsMap : new Map<string | number, SettingField>();
     const items = state ? state.items.slice() : [];
-    debugger;
     if (newLength > originLength) {
       for (let i = originLength; i < newLength; i++) {
         const item = field.createField({
