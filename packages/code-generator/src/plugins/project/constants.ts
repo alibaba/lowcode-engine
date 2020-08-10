@@ -17,7 +17,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
 
     const ir = next.ir as IProjectInfo;
     if (ir.constants) {
-      const [, constantStr] = generateCompositeType(ir.constants);
+      const constantStr = generateCompositeType(ir.constants);
 
       next.chunks.push({
         type: ChunkType.STRING,

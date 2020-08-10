@@ -11,7 +11,7 @@ import {
   CompositeValue,
 } from '../../../types';
 
-import { generateCompositeType, handleStringValueDefault } from '../../../utils/compositeType';
+import { generateCompositeType } from '../../../utils/compositeType';
 import { generateExpression } from '../../../utils/jsExpression';
 
 function packJsExpression(exp: unknown): string {
@@ -35,19 +35,17 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
 
       const extConfigs = Object.keys(rest).map((extConfigName) => {
         const value = (rest as Record<string, CompositeValue>)[extConfigName];
-        const [isString, valueStr] = generateCompositeType(value);
-        return `${extConfigName}: ${isString ? `'${valueStr}'` : valueStr}`;
+        const valueStr = generateCompositeType(value);
+        return `${extConfigName}: ${valueStr}`;
       });
 
       attrs = [...attrs, ...extConfigs];
 
-      const listProp = handleStringValueDefault(
-        generateCompositeType((list as unknown) as CompositeValue, {
-          handlers: {
-            expression: packJsExpression,
-          },
-        }),
-      );
+      const listProp = generateCompositeType((list as unknown) as CompositeValue, {
+        handlers: {
+          expression: packJsExpression,
+        },
+      });
 
       attrs.push(`list: ${listProp}`);
 

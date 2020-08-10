@@ -104,12 +104,16 @@ export function generateAttr(ctx: INodeGeneratorContext, attrName: string, attrV
   if (attrName === 'initValue') {
     return [];
   }
-  const [isString, valueStr] = generateCompositeType(attrValue, {
+  const valueStr = generateCompositeType(attrValue, {
+    containerHandlers: {
+      default: (v) => `{${v}}`,
+      string: (v) => `"${v}"`,
+    },
     nodeGenerator: ctx.generator,
   });
   return [
     {
-      value: `${attrName}=${isString ? `"${valueStr}"` : `{${valueStr}}`}`,
+      value: `${attrName}=${valueStr}`,
       type: PIECE_TYPE.ATTR,
     },
   ];
@@ -180,12 +184,12 @@ export function generateReactCtrlLine(ctx: INodeGeneratorContext, nodeItem: ICom
   }
 
   if (nodeItem.condition) {
-    const [isString, value] = generateCompositeType(nodeItem.condition, {
+    const value = generateCompositeType(nodeItem.condition, {
       nodeGenerator: ctx.generator,
     });
 
     pieces.unshift({
-      value: `(${isString ? `'${value}'` : value}) && (`,
+      value: `(${value}) && (`,
       type: PIECE_TYPE.BEFORE,
     });
     pieces.push({
