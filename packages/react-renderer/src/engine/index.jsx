@@ -36,8 +36,18 @@ class FaultComponent extends PureComponent {
 
 class NotFoundComponent extends PureComponent {
   render() {
-    console.error('component not found', this.props);
-    return <Div {...this.props} />;
+    console.error('component not found:', this.props);
+    const { _componentName: componentName } = this.props;
+    return <Div 
+      {...this.props}
+      style={{
+        backgroundColor: '#3E91C9',
+        padding: '15px',
+        fontSize: '18px',
+        textAlign: 'center',
+        color: 'white',
+      }}
+      >组件 {componentName} 无视图，请打开控制台排查</Div>;
   }
 }
 
