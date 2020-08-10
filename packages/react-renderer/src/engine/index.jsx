@@ -38,7 +38,6 @@ class NotFoundComponent extends PureComponent {
   render() {
     console.error('component not found:', this.props);
     const { _componentName: componentName } = this.props;
-    debugger;
     return <Div 
       {...this.props}
       style={{
