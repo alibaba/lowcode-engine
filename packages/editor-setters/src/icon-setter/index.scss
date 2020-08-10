@@ -1,0 +1,44 @@
+.lowcode-icon-box {
+  display: inline-block;
+  margin-right: -5px;
+  padding: 3px 0 3px 0;
+  width: 26px;
+  height: 26px;
+  text-align: center;
+  line-height: 20px;
+  background: #f2f2f2;
+  div {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ddd;
+  }
+}
+
+
+.lc-icon-setter{
+  .next-input{
+    width: auto !important;
+  }
+}
+
+
+.lowcode-icon-setter-popup{
+  max-width: 354px;
+  .lowcode-icon-list{
+
+    overflow: auto;
+    li{
+      float: left;
+      margin-bottom: 10px;
+      width: 40px;
+      color: #666;
+      cursor: pointer;
+      text-align: center;
+
+      &:hover{
+        color: #000;
+      }
+    }
+  }
+}
+

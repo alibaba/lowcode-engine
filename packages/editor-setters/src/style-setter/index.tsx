@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import LowStyleSetter from '@ali/lc-style-setter';
 import { globalLocale } from '@ali/lowcode-editor-core';
 
-export default class StyleSetter extends Component{
+export default class StyleSetter extends Component {
 
   static displayName = 'StyleSetter';
   static propTypes = {
@@ -15,7 +15,7 @@ export default class StyleSetter extends Component{
   };
   static defaultProps = {
     value: {},
-    onChange: () => {},
+    onChange: () => { },
     placeholder: '',
     locale: globalLocale.getLocale() || 'en-US'
   };
@@ -25,7 +25,7 @@ export default class StyleSetter extends Component{
     onChange(val.native);
   }
 
-  render () {
+  render() {
     const { value } = this.props;
     return (
       <div className="lc-block-setter">

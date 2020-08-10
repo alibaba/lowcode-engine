@@ -9776,7 +9776,7 @@
         },
         {
           "name": "icon",
-          "propType": "string",
+          "propType": "icon",
           "description": "图标"
         },
         {
@@ -10857,7 +10857,7 @@
         },
         {
           "name": "icon",
-          "propType": "string",
+          "propType": "icon",
           "description": "图标"
         },
         {
