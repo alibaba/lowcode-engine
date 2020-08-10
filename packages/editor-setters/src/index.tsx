@@ -19,14 +19,7 @@ export const NumberSetter = NumberPicker;
 export class BoolSetter extends Component {
   render() {
     const { onChange, value, defaultValue } = this.props;
-    return (
-      <Switch
-        checked={value || defaultValue}
-        onChange={(val) => {
-          onChange(val);
-        }}
-      />
-    );
+    return <Switch checked={value} defaultChecked={defaultValue} onChange={onChange} />;
   }
 }
 export const SelectSetter = Select;

@@ -64,31 +64,68 @@ const icons = [
 ];
 interface IconSetterProps {
   value: string;
+  defaultValue: string;
+  placeholder: string;
+  hasClear: boolean;
   onChange: (icon: string) => undefined;
   icons: string[];
 }
 export default class IconSetter extends PureComponent<IconSetterProps, {}> {
   static defaultProps = {
-    value: '',
+    value: undefined,
+    defaultValue: '',
+    hasClear: true,
     icons: icons,
+    placeholder: '请点击选择 Icon',
     onChange: (icon: string) => undefined,
   };
 
-  onInputChange() {
-    console.log(this);
-  }
+  state = {
+    firstLoad: true,
+  };
 
-  onSelectIcon(icon: string) {
+  onInputChange = (icon: string) => {
     const { onChange } = this.props;
     onChange(icon);
-  }
+  };
+
+  onSelectIcon = (icon: string) => {
+    const { onChange } = this.props;
+    onChange(icon);
+  };
 
   render() {
-    const { icons, value } = this.props;
+    const { icons, value, defaultValue, onChange, placeholder, hasClear } = this.props;
+    const { firstLoad } = this.state;
+    if (firstLoad && defaultValue && typeof value === 'undefined') onChange(defaultValue);
+    this.setState({
+      firstLoad: false,
+    });
+    const currentIcon = <Icon size="xs" type={value} />;
+    const clearIcon = hasClear && (
+      <Icon
+        size="xs"
+        id="icon-clear"
+        type="delete-filling"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.onSelectIcon('');
+        }}
+      />
+    );
 
     const triggerNode = (
-      <div className="lowcode-icon-box">
-        <Icon type={value} />
+      <div>
+        <Input
+          placeholder={placeholder}
+          addonTextBefore={currentIcon}
+          onChange={this.onInputChange}
+          value={value}
+          defaultValue={defaultValue}
+          readOnly
+          addonTextAfter={clearIcon}
+        />
       </div>
     );
     const InnerBeforeNode = (
@@ -105,17 +142,13 @@ export default class IconSetter extends PureComponent<IconSetterProps, {}> {
         <ul className="lowcode-icon-list">
           {icons.map((icon) => (
             <li onClick={() => this.onSelectIcon(icon)}>
-              <Icon type={icon} size="large" />
+              <Icon type={icon} size="medium" />
             </li>
           ))}
         </ul>
       </Balloon>
     );
 
-    return (
-      <div className="lc-icon-setter">
-        <Input innerBefore={InnerBeforeNode} onChange={this.onInputChange} value={value} />
-      </div>
-    );
+    return <div className="lc-icon-setter">{InnerBeforeNode}</div>;
   }
 }

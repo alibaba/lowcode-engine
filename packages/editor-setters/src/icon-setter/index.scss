@@ -1,23 +1,15 @@
-.lowcode-icon-box {
-  display: inline-block;
-  margin-right: -5px;
-  padding: 3px 0 3px 0;
-  width: 26px;
-  height: 26px;
-  text-align: center;
-  line-height: 20px;
-  background: #f2f2f2;
-  div {
-    width: 20px;
-    height: 20px;
-    border: 1px solid #ddd;
-  }
-}
-
-
 .lc-icon-setter{
   .next-input{
     width: auto !important;
+  }
+  i {
+    min-width: 12px;
+  }
+  i:hover {
+    cursor: pointer;
+  }
+  input:hover {
+    cursor: pointer;
   }
 }
 
