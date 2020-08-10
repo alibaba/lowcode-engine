@@ -653,6 +653,16 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     slotNode.internalSetParent(this as ParentalNode, true);
     this._slots.push(slotNode);
   }
+  /**
+   * 当前node对应组件是否已注册可用
+   */
+  isValidComponent() {
+    const allComponents = this.document?.designer?.componentsMap;
+    if (allComponents && allComponents[this.componentName]) {
+      return true;
+    }
+    return false;
+  }
 
   /**
    * 删除一个节点
@@ -702,6 +712,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   getComponentName() {
     return this.componentName;
   }
+
   insertBefore(node: Node, ref?: Node, useMutator = true) {
     this.children?.insert(node, ref ? ref.index : null, useMutator);
   }

@@ -302,6 +302,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
         const nodeInst = this.getNodeInstanceFromElement(downEvent.target as Element);
         const node = nodeInst?.node || this.document.rootNode;
+        if (!node?.isValidComponent()) {
+          // 对于未注册组件直接返回
+          return;
+        }
+
         const isMulti = downEvent.metaKey || downEvent.ctrlKey;
         const isLeftButton = downEvent.which === 1 || downEvent.button === 0;
         const checkSelect = (e: MouseEvent) => {
