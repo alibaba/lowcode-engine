@@ -54,6 +54,12 @@ function propTypeToSetter(propType: PropType): SetterType {
         initialValue: '',
       };
 
+    case 'icon':
+      return {
+        componentName: 'IconSetter',
+        isRequired,
+        initialValue: '',
+      };
     case 'number':
       return {
         componentName: 'NumberSetter',
@@ -164,7 +170,7 @@ function propTypeToSetter(propType: PropType): SetterType {
         componentName: 'MixedSetter',
         props: {
           // TODO:
-          setters: (propType as OneOfType).value.map(item => propTypeToSetter(item)),
+          setters: (propType as OneOfType).value.map((item) => propTypeToSetter(item)),
         },
         isRequired,
       };

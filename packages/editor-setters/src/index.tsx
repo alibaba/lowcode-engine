@@ -1,3 +1,4 @@
+import React, { Component } from 'react';
 import { registerSetter } from '@ali/lowcode-editor-core';
 import { isJSExpression } from '@ali/lowcode-types';
 import { DatePicker, TimePicker, Input, Radio, Select, Switch, NumberPicker } from '@alifd/next';
@@ -6,7 +7,8 @@ import ColorSetter from './color-setter';
 import JsonSetter from './json-setter';
 import EventsSetter from './events-setter';
 import StyleSetter from './style-setter';
-import React, { Component } from 'react';
+import IconSetter from './icon-setter';
+
 export const StringSetter = {
   component: Input,
   defaultProps: { placeholder: '请输入', style: { maxWidth: 180 } },
@@ -15,14 +17,16 @@ export const StringSetter = {
 };
 export const NumberSetter = NumberPicker;
 export class BoolSetter extends Component {
-
   render() {
     const { onChange, value, defaultValue } = this.props;
-    return <Switch checked={value || defaultValue} onChange={
-      val => {
-        onChange(val)
-      }
-    }/>;
+    return (
+      <Switch
+        checked={value || defaultValue}
+        onChange={(val) => {
+          onChange(val);
+        }}
+      />
+    );
   }
 }
 export const SelectSetter = Select;
@@ -49,25 +53,27 @@ export const DateRangeSetter = DatePicker.RangePicker;
 export { ExpressionSetter, EventsSetter };
 
 class StringDateSetter extends Component {
-
   render() {
     const { onChange, editor } = this.props;
-    return <DatePicker onChange={
-      val => {
-        onChange(val.format())
-      }
-    }/>;
+    return (
+      <DatePicker
+        onChange={(val) => {
+          onChange(val.format());
+        }}
+      />
+    );
   }
 }
 class StringTimePicker extends Component {
-
   render() {
     const { onChange, editor } = this.props;
-    return <TimePicker onChange={
-      val => {
-        onChange(val.format('HH:mm:ss'))
-      }
-    }/>;
+    return (
+      <TimePicker
+        onChange={(val) => {
+          onChange(val.format('HH:mm:ss'));
+        }}
+      />
+    );
   }
 }
 
@@ -97,6 +103,7 @@ const builtinSetters: any = {
   ColorSetter,
   JsonSetter,
   StyleSetter,
+  IconSetter,
 };
 
 registerSetter(builtinSetters);

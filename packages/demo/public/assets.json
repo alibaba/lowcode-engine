@@ -5771,12 +5771,13 @@
         {
           "name": "label",
           "propType": "string",
+          "title":"标签文案",
           "description": "label"
         },
         {
           "name": "hasClear",
           "propType": "bool",
-          "description": "是否出现clear按钮"
+          "description": "是否出现清除按钮"
         },
         {
           "name": "state",
@@ -5806,6 +5807,47 @@
           "description": "尺寸\n@enumdesc 小, 中, 大",
           "defaultValue": "medium"
         },
+        {
+          "name": "disabled",
+          "propType": "bool",
+          "description": "是否禁用"
+        },
+        {
+          "name": "maxLength",
+          "propType": "number",
+          "description": "最大长度"
+        },
+        {
+          "name": "hasLimitHint",
+          "propType": "bool",
+          "description": "是否展现最大长度样式"
+        },
+        {
+          "name": "cutString",
+          "propType": "bool",
+          "description": "是否截断超出字符串"
+        },
+        {
+          "name": "readOnly",
+          "propType": "bool",
+          "description": "是否只读"
+        },
+        {
+          "name": "trim",
+          "propType": "bool",
+          "description": "onChange返回会自动去除头尾空字符"
+        },
+        {
+          "name": "placeholder",
+          "propType": "string",
+          "description": "输入提示"
+        },
+        {
+          "name": "hasBorder",
+          "propType": "bool",
+          "description": "是否有边框"
+        },
+
         {
           "name": "onPressEnter",
           "propType": "func",
@@ -5854,13 +5896,7 @@
         {
           "name": "autoFocus",
           "propType": "bool",
-          "description": "自动聚焦(原生input支持)"
-        },
-        {
-          "name": "isPreview",
-          "propType": "bool",
-          "description": "是否为预览态",
-          "defaultValue": false
+          "description": "自动聚焦"
         },
         {
           "name": "style",
@@ -9776,7 +9812,7 @@
         },
         {
           "name": "icon",
-          "propType": "string",
+          "propType": "icon",
           "description": "图标"
         },
         {
@@ -9871,19 +9907,6 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "rtl",
-          "propType": "bool"
-        },
-        {
-          "name": "pure",
-          "propType": "bool"
-        },
-        {
           "name": "className",
           "propType": "string",
           "description": "自定义类名"
@@ -9894,35 +9917,14 @@
           "description": "自定义内敛样式"
         },
         {
-          "name": "checkedChildren",
-          "propType": "any",
-          "description": "打开时的内容"
-        },
-        {
-          "name": "unCheckedChildren",
-          "propType": "any",
-          "description": "关闭时的内容"
-        },
-        {
-          "name": "onChange",
-          "propType": "func",
-          "description": "开关状态改变是触发此事件\n@param {Boolean} checked 是否为打开状态\n@param {Event} e DOM事件对象"
-        },
-        {
           "name": "checked",
           "propType": "bool",
-          "description": "开关当前的值(针对受控组件)"
-        },
-        {
-          "name": "defaultChecked",
-          "propType": "bool",
-          "description": "开关默认值 (针对非受控组件)",
-          "defaultValue": false
+          "description": "当前状态"
         },
         {
           "name": "disabled",
           "propType": "bool",
-          "description": "表示开关被禁用",
+          "description": "是否禁用",
           "defaultValue": false
         },
         {
@@ -9934,9 +9936,25 @@
               "small"
             ]
           },
-          "description": "switch的尺寸\n@enumdesc 正常大小, 缩小版大小",
+          "description": "尺寸",
           "defaultValue": "medium"
         },
+        {
+          "name": "checkedChildren",
+          "propType": "string",
+          "description": "打开时的内容"
+        },
+        {
+          "name": "unCheckedChildren",
+          "propType": "string",
+          "description": "关闭时的内容"
+        },
+        {
+          "name": "onChange",
+          "propType": "func",
+          "description": "开关状态改变是触发此事件\n@param {Boolean} checked 是否为打开状态\n@param {Event} e DOM事件对象"
+        },
+
         {
           "name": "onClick",
           "propType": "func",
@@ -9946,26 +9964,6 @@
           "name": "onKeyDown",
           "propType": "func",
           "description": "键盘按键事件\n@param {Event} e DOM事件对象"
-        },
-        {
-          "name": "isPreview",
-          "propType": "bool",
-          "description": "是否为预览态",
-          "defaultValue": false
-        },
-        {
-          "name": "renderPreview",
-          "propType": "func",
-          "description": "预览态模式下渲染的内容\n@param {number} value 评分值"
-        },
-        {
-          "name": "locale",
-          "propType": "object",
-          "description": "国际化配置"
-        },
-        {
-          "name": "readOnly",
-          "defaultValue": false
         }
       ]
     },
@@ -10857,7 +10855,7 @@
         },
         {
           "name": "icon",
-          "propType": "string",
+          "propType": "icon",
           "description": "图标"
         },
         {
