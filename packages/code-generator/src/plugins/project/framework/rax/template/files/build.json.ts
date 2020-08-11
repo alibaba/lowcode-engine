@@ -6,8 +6,7 @@ export default function getFile(): [string[], IResultFile] {
   const file = new ResultFile(
     'build',
     'json',
-    `
-{
+    `{
   "inlineStyle": false,
   "plugins": [
     [
@@ -19,10 +18,8 @@ export default function getFile(): [string[], IResultFile] {
     "@ali/build-plugin-rax-app-def"
   ]
 }
-
-    `,
+`,
   );
 
   return [[], file];
 }
-  

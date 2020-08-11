@@ -6,8 +6,7 @@ export default function getFile(): [string[], IResultFile] {
   const file = new ResultFile(
     '.gitignore',
     '',
-    `
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+    `# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 *~
 *.swp
@@ -24,10 +23,8 @@ coverage/
 node_modules/
 
 template.yml
-
-    `,
+`,
   );
 
   return [[], file];
 }
-  

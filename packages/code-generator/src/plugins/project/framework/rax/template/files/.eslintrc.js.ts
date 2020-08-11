@@ -6,14 +6,11 @@ export default function getFile(): [string[], IResultFile] {
   const file = new ResultFile(
     '.eslintrc',
     'js',
-    `
-module.exports = {
+    `module.exports = {
   extends: ['rax'],
 };
-
-    `,
+`,
   );
 
   return [[], file];
 }
-  

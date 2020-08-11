@@ -19,7 +19,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
 
     next.chunks.push({
       type: ChunkType.STRING,
-      fileType: FileType.SCSS,
+      fileType: FileType.SCSS, // TODO: 样式文件的类型定制化？
       name: COMMON_CHUNK_NAME.StyleDepsImport,
       content: `
 // TODO: 引入默认全局样式

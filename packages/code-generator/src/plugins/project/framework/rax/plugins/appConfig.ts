@@ -17,6 +17,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
 
     const ir = next.ir as IRouterInfo;
 
+    // TODO: 如何生成路由?
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: FileType.JSON,

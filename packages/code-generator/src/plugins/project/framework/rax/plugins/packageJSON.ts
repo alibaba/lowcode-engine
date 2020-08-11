@@ -10,17 +10,6 @@ import {
   IProjectInfo,
 } from '../../../../../types';
 
-interface IIceJsPackageJSON extends IPackageJSON {
-  ideMode: {
-    name: string;
-  };
-  iceworks: {
-    type: string;
-    adapter: string;
-  };
-  originTemplate: string;
-}
-
 const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     const next: ICodeStruct = {
@@ -29,48 +18,36 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
 
     const ir = next.ir as IProjectInfo;
 
-    const packageJson: IIceJsPackageJSON = {
-      name: '@alifd/scaffold-lite-js',
-      version: '0.1.5',
-      description: '轻量级模板，使用 JavaScript，仅包含基础的 Layout。',
+    const packageJson: IPackageJSON = {
+      name: '@ali/rax-component-demo',
+      version: '1.0.0',
+      scripts: {
+        build:
+          'rm -f ./dist/miniapp.tar.gz && npm run build:miniapp && cd build/miniapp && tar czf ../../dist/miniapp.tar.gz *',
+        'build:miniapp': 'build-scripts build',
+        start: 'build-scripts start',
+        lint: 'eslint --ext .js --ext .jsx ./',
+      },
       dependencies: {
-        moment: '^2.24.0',
-        react: '^16.4.1',
-        'react-dom': '^16.4.1',
-        '@alifd/theme-design-pro': '^0.x',
+        rax: '^1.1.0',
+        'rax-app': '^2.0.0',
+        'rax-document': '^0.1.0',
+        'rax-text': '^1.0.0',
+        'rax-view': '^1.0.0',
       },
       devDependencies: {
-        '@ice/spec': '^1.0.0',
-        'build-plugin-fusion': '^0.1.0',
-        'build-plugin-moment-locales': '^0.1.0',
-        eslint: '^6.0.1',
-        'ice.js': '^1.0.0',
-        stylelint: '^13.2.0',
-        '@ali/build-plugin-ice-def': '^0.1.0',
+        'build-plugin-rax-app': '^5.0.0',
+        '@alib/build-scripts': '^0.1.0',
+        '@typescript-eslint/eslint-plugin': '^2.11.0',
+        '@typescript-eslint/parser': '^2.11.0',
+        'babel-eslint': '^10.0.3',
+        eslint: '^6.8.0',
+        'eslint-config-rax': '^0.1.0',
+        'eslint-plugin-import': '^2.20.0',
+        'eslint-plugin-module': '^0.1.0',
+        'eslint-plugin-react': '^7.18.0',
+        '@ali/build-plugin-rax-app-def': '^1.0.0',
       },
-      scripts: {
-        start: 'icejs start',
-        build: 'icejs build',
-        lint: 'npm run eslint && npm run stylelint',
-        eslint: 'eslint --cache --ext .js,.jsx ./',
-        stylelint: 'stylelint ./**/*.scss',
-      },
-      ideMode: {
-        name: 'ice-react',
-      },
-      iceworks: {
-        type: 'react',
-        adapter: 'adapter-react-v3',
-      },
-      engines: {
-        node: '>=8.0.0',
-      },
-      repository: {
-        type: 'git',
-        url: 'http://gitlab.alibaba-inc.com/msd/leak-scan/tree/master',
-      },
-      private: true,
-      originTemplate: '@alifd/scaffold-lite-js',
     };
 
     next.chunks.push({

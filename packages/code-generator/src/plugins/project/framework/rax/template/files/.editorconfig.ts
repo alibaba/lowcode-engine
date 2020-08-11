@@ -6,8 +6,7 @@ export default function getFile(): [string[], IResultFile] {
   const file = new ResultFile(
     '.editorconfig',
     '',
-    `
-# http://editorconfig.org
+    `# http://editorconfig.org
 root = true
 
 [*]
@@ -19,10 +18,8 @@ insert_final_newline = true
 
 [*.md]
 trim_trailing_whitespace = false
-
-    `,
+`,
   );
 
   return [[], file];
 }
-  

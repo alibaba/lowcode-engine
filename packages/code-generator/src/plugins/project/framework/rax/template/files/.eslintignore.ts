@@ -6,8 +6,7 @@ export default function getFile(): [string[], IResultFile] {
   const file = new ResultFile(
     '.eslintignore',
     '',
-    `
-# 忽略目录
+    `# 忽略目录
 build/
 tests/
 demo/
@@ -18,10 +17,8 @@ coverage/
 # 忽略文件
 **/*-min.js
 **/*.min.js
-
-    `,
+`,
   );
 
   return [[], file];
 }
-  
