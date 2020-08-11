@@ -1,8 +1,9 @@
 import { ComponentType, ReactElement, isValidElement, ComponentClass } from 'react';
-import { isPlainObject } from '@ali/lowcode-utils';
-import { isI18nData, SettingTarget, InitialItem, FilterItem, isJSSlot, ProjectSchema, AutorunItem } from '@ali/lowcode-types';
+import { isPlainObject, uniqueId } from '@ali/lowcode-utils';
+import { isI18nData, SettingTarget, InitialItem, FilterItem, isJSSlot, ProjectSchema, AutorunItem, isJSBlock } from '@ali/lowcode-types';
 import { untracked } from '@ali/lowcode-editor-core';
 import { editor, designer } from '../editor';
+import { SettingField } from '@ali/lowcode-designer';
 
 type Field = SettingTarget;
 
@@ -218,7 +219,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
   };
   const newConfig: any = {
     type: type === 'group' ? 'group' : 'field',
-    name,
+    name: type === 'group' && !name ? uniqueId('group') : name,
     title,
     extraProps,
   };
@@ -281,16 +282,14 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
 
   let initialFn = (slotName ? null : initial) || initialValue;
   if (slotName && initialValue === true) {
-    initialFn = (field: any, value: any) => {
-      if (isJSSlot(value)) {
-        return {
-          title: slotTitle || title,
-          ...value,
-        };
+    initialFn = (value: any, defaultValue: any) => {
+      if (isJSBlock(value)) {
+        return value;
       }
       return {
         type: 'JSSlot',
         title: slotTitle || title,
+        name: slotName,
         value: initialChildren,
       };
     };
@@ -325,6 +324,10 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
 
     if (mutator) {
       extraProps.setValue = (field: Field, value: any) => {
+        // TODO: 兼容代码，不触发查询组件的 Mutator
+        if (field instanceof SettingField && field.componentMeta?.componentName === 'Filter') {
+          return;
+        }
         mutator.call(field, value, value);
       };
     }
@@ -332,26 +335,28 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
 
   const setterInitial = getInitialFromSetter(setter);
 
-  collector.addInitial({
-    // FIXME! name could be "xxx.xxx"
-    name: slotName || name,
-    initial: (field: Field, currentValue: any) => {
-      // FIXME! read from prototype.defaultProps
-      const defaults = extraProps.defaultValue;
+  if (type !== 'composite') {
+    collector.addInitial({
+      // FIXME! name could be "xxx.xxx"
+      name: slotName || name,
+      initial: (field: Field, currentValue: any) => {
+        // FIXME! read from prototype.defaultProps
+        const defaults = extraProps.defaultValue;
 
-      if (typeof initialFn !== 'function') {
-        initialFn = defaultInitial;
-      }
+        if (typeof initialFn !== 'function') {
+          initialFn = defaultInitial;
+        }
 
-      const v = initialFn.call(field, currentValue, defaults);
+        const v = initialFn.call(field, currentValue, defaults);
 
-      if (setterInitial) {
-        return setterInitial.call(field, v, defaults);
-      }
+        if (setterInitial) {
+          return setterInitial.call(field, v, defaults);
+        }
 
-      return v;
-    },
-  });
+        return v;
+      },
+    });
+  }
 
   if (ignore != null || disabled != null) {
     collector.addFilter({
@@ -394,6 +399,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
           return {
             type: 'JSSlot',
             title: slotTitle || title,
+            name: slotName,
             value: value == null ? initialChildren : value,
           };
         },
@@ -431,9 +437,11 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
               autorun: item.autorun,
             });
           },
-        }
+        },
       )
       : [];
+    newConfig.items = objItems;
+
     const initial = (target: SettingTarget, value?: any) => {
       // TODO:
       const defaults = extraProps.defaultValue;
@@ -749,10 +757,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     callbacks.onNodeRemove = didDropOut;
   }
   if (subtreeModified) {
-    callbacks.onSubtreeModified = (...args: any[]) => {
-      // FIXME! args not correct
-      subtreeModified.apply(args[0], args as any);
-    };
+    callbacks.onSubtreeModified = subtreeModified;
   }
   if (onResize) {
     callbacks.onResize = (e: any, currentNode: any) => {

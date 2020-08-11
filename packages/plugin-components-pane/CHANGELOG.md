@@ -3,6 +3,86 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.39"></a>
+## [0.8.39](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@0.8.38...@ali/lowcode-plugin-components-pane@0.8.39) (2020-08-04)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-components-pane
+
+<a name="0.8.38"></a>
+## [0.8.38](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@0.8.36...@ali/lowcode-plugin-components-pane@0.8.38) (2020-08-04)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-components-pane
+
+<a name="0.8.37"></a>
+## [0.8.37](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@0.8.36...@ali/lowcode-plugin-components-pane@0.8.37) (2020-08-04)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-components-pane
+
+<a name="0.8.36"></a>
+## [0.8.36](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@0.8.35...@ali/lowcode-plugin-components-pane@0.8.36) (2020-07-29)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-components-pane
+
+<a name="0.8.35"></a>
+## [0.8.35](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@0.8.34...@ali/lowcode-plugin-components-pane@0.8.35) (2020-07-28)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-components-pane
+
+<a name="0.8.34"></a>
+## [0.8.34](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@0.8.33...@ali/lowcode-plugin-components-pane@0.8.34) (2020-07-23)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-components-pane
+
+<a name="0.8.33"></a>
+## [0.8.33](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@0.8.32...@ali/lowcode-plugin-components-pane@0.8.33) (2020-07-22)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-components-pane
+
+<a name="0.8.32"></a>
+## [0.8.32](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@0.8.31...@ali/lowcode-plugin-components-pane@0.8.32) (2020-07-21)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-components-pane
+
+<a name="0.8.31"></a>
+## [0.8.31](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@0.8.30...@ali/lowcode-plugin-components-pane@0.8.31) (2020-07-21)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-components-pane
+
+<a name="0.8.30"></a>
+## [0.8.30](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@0.8.29...@ali/lowcode-plugin-components-pane@0.8.30) (2020-07-21)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-components-pane
+
 <a name="0.8.29"></a>
 ## [0.8.29](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@0.8.28...@ali/lowcode-plugin-components-pane@0.8.29) (2020-07-14)
 

@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-sample-preview",
-  "version": "0.8.31",
+  "version": "0.8.41",
   "description": "alibaba lowcode editor sample preview plugin",
   "files": [
     "es",

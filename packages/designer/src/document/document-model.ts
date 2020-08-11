@@ -10,7 +10,7 @@ import { Selection } from './selection';
 import { History } from './history';
 import { TransformStage } from './node';
 import { uniqueId } from '@ali/lowcode-utils';
-import ModalNodesManager from './node/modalNodesManager';
+import { ModalNodesManager } from './node';
 
 export type GetDataType<T, NodeType> = T extends undefined
   ? NodeType extends {
@@ -37,6 +37,10 @@ export class DocumentModel {
    * 操作记录控制
    */
   readonly history: History;
+  /**
+   * 模态节点管理
+   */
+  readonly modalNodesManager: ModalNodesManager;
 
   private nodesMap = new Map<string, Node>();
   @obx.val private nodes = new Set<Node>();
@@ -44,7 +48,11 @@ export class DocumentModel {
   private _simulator?: ISimulatorHost;
   private emitter: EventEmitter;
   private rootNodeVisitorMap: { [visitorName: string]: any } = {};
-  private modalNodesManager: ModalNodesManager;
+
+  /**
+   * @deprecated
+   */
+  private _addons: { [key: string]: { exportData: () => any; isProp: boolean;} } = {};
 
   /**
    * 模拟器
@@ -170,7 +178,7 @@ export class DocumentModel {
       node = this.getNode(schema.id);
       if (node && node.componentName === schema.componentName) {
         if (node.parent) {
-          node.internalSetParent(null);
+          node.internalSetParent(null, false);
           // will move to another position
           // todo: this.activeNodes?.push(node);
         }
@@ -509,6 +517,32 @@ export class DocumentModel {
     this.emitter.emit('lowcode_engine_renderer_ready', renderer);
   }
 
+  /**
+   * @deprecated
+   */
+  getAddonData(name: string) {
+    const addon = this._addons[name];
+    return addon?.exportData();
+  }
+
+  /**
+   * @deprecated
+   */
+  registerAddon(name: string, exportData: any) {
+    if (['id', 'params', 'layout'].indexOf(name) > -1) {
+      throw new Error('addon name cannot be id, params, layout');
+    }
+    const i = this._addons?.findIndex((item) => item.name === name);
+    if (i > -1) {
+      this._addons?.splice(i, 1);
+    }
+    this._addons?.push({
+      exportData,
+      name,
+    });
+  }
+
+
   acceptRootNodeVisitor(
     visitorName: string = 'default',
     visitorFn: (node: RootNode) => any ) {
@@ -542,6 +576,13 @@ export class DocumentModel {
     return () => {
       this.emitter.removeListener('nodedestroy', func);
     };
+  }
+
+  /**
+   * @deprecated
+   */
+  refresh() {
+    console.warn('refresh method is deprecated');
   }
 }
 

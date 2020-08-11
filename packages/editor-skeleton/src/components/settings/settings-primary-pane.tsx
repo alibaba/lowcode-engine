@@ -4,6 +4,8 @@ import { Title, observer, Editor, obx, globalContext } from '@ali/lowcode-editor
 import { Node, isSettingField, SettingField, Designer } from '@ali/lowcode-designer';
 import { SettingsMain } from './main';
 import { SettingsPane } from './settings-pane';
+import { StageBox } from '../stage-box';
+import { SkeletonContext } from '../../context';
 import { createIcon } from '@ali/lowcode-utils';
 
 @observer
@@ -114,7 +116,18 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
         <div className="lc-settings-main">
           {this.renderBreadcrumb()}
           <div className="lc-settings-body">
-            <SettingsPane target={settings} />
+            <SkeletonContext.Consumer>
+              {(skeleton) => {
+                if (skeleton) {
+                  return (
+                    <StageBox skeleton={skeleton} target={settings}>
+                      <SettingsPane target={settings} usePopup={false} />
+                    </StageBox>
+                  );
+                }
+                return null;
+              }}
+            </SkeletonContext.Consumer>
           </div>
         </div>
       );
@@ -127,7 +140,18 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
       }
       return (
         <Tab.Item className="lc-settings-tab-item" title={<Title title={field.title} />} key={field.name}>
-          <SettingsPane target={field} key={field.id} />
+          <SkeletonContext.Consumer>
+            {(skeleton) => {
+              if (skeleton) {
+                return (
+                  <StageBox skeleton={skeleton} target={field} key={field.id}>
+                    <SettingsPane target={field} key={field.id} usePopup={false} />
+                  </StageBox>
+                );
+              }
+              return null;
+            }}
+          </SkeletonContext.Consumer>
         </Tab.Item>
       );
     });

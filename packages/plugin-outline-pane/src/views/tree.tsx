@@ -3,7 +3,7 @@ import { observer, Editor, globalContext } from '@ali/lowcode-editor-core';
 import { isRootNode, Node, DragObjectType, isShaken } from '@ali/lowcode-designer';
 import { isFormEvent } from '@ali/lowcode-utils';
 import { Tree } from '../tree';
-import TreeNodeView from './tree-node';
+import RootTreeNodeView from './root-tree-node';
 
 function getTreeNodeIdByEvent(e: ReactMouseEvent, stop: Element): null | string {
   let target: Element | null = e.target as Element;
@@ -155,7 +155,7 @@ export default class TreeView extends Component<{ tree: Tree }> {
         onClick={this.onClick}
         onMouseLeave={this.onMouseLeave}
       >
-        <TreeNodeView key={root.id} treeNode={root} />
+        <RootTreeNodeView key={root.id} treeNode={root} />
       </div>
     );
   }

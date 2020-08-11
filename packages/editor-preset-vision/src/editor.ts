@@ -55,7 +55,8 @@ function upgradePropsReducer(props: any) {
         val = {
           type: 'JSSlot',
           title: (val.value.props as any)?.slotTitle,
-          value: val.value.children
+          name: (val.value.props as any)?.slotName,
+          value: val.value.children,
         };
       } else {
         val = val.value;
@@ -84,29 +85,50 @@ designer.addPropsReducer((props, node) => {
     const newProps: any = {
       ...props,
     };
+    const getRealValue = (propValue: any) => {
+      if (isVariable(propValue)) {
+        return propValue.value;
+      }
+      if (isJSExpression(propValue)) {
+        return propValue.mock;
+      }
+      return propValue;
+    };
     initials.forEach((item) => {
       // FIXME! this implements SettingTarget
       try {
         // FIXME! item.name could be 'xxx.xxx'
         const ov = props[item.name];
-        const v = item.initial(node as any, isJSExpression(ov) ? ov.mock : ov);
-        if (v !== undefined) {
-          newProps[item.name] = isJSExpression(ov) ? {
-            ...ov,
-            mock: v,
-          } : v;
+        const v = item.initial(node as any, getRealValue(ov));
+        if (!ov && v !== undefined) {
+          if (isVariable(ov)) {
+            newProps[item.name] = {
+              ...ov,
+              value: v,
+            };
+          } else if (isJSExpression(ov)) {
+            newProps[item.name] = {
+              ...ov,
+              mock: v,
+            };
+          } else {
+            newProps[item.name] = v;
+          }
         }
       } catch (e) {
         if (hasOwnProperty(props, item.name)) {
           newProps[item.name] = props[item.name];
         }
       }
+      if (newProps[item.name] && !node.props.has(item.name)) {
+        node.props.add(newProps[item.name], item.name);
+      }
     });
+
     return newProps;
   }
   return props;
 }, TransformStage.Init);
-
 
 function filterReducer(props: any, node: Node): any {
   const filters = node.componentMeta.getMetadata().experimental?.filters;
@@ -140,7 +162,6 @@ function compatiableReducer(props: any) {
   const newProps: any = {};
   Object.entries<any>(props).forEach(([key, val]) => {
     if (isJSSlot(val)) {
-      val.value
       val = {
         type: 'JSBlock',
         value: {
@@ -148,8 +169,17 @@ function compatiableReducer(props: any) {
           children: val.value,
           props: {
             slotTitle: val.title,
+            slotName: val.name,
           },
         },
+      };
+    }
+    // 为了能降级到老版本，建议在后期版本去掉以下代码
+    if (isJSExpression(val) && !val.events) {
+      val = {
+        type: 'variable',
+        value: val.mock,
+        variable: val.value,
       }
     }
     newProps[key] = val;
@@ -237,7 +267,7 @@ skeleton.add({
   props: {
     condition: () => {
       return designer.dragon.dragging && !getTreeMaster(designer).hasVisibleTreeBoard();
-    }
+    },
   },
   content: OutlineBackupPane,
 });

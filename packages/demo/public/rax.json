@@ -1,0 +1,20 @@
+{
+  "componentName": "Page",
+  "fileName": "home",
+  "props": {},
+  "children": [
+    {
+      "componentName": "Container",
+      "props": {},
+      "children": [
+        {
+          "componentName": "Text",
+          "props": {
+            "type": "primary"
+          },
+          "children": ["Welcome to Your Rax App!"]
+        }
+      ]
+    }
+  ]
+}

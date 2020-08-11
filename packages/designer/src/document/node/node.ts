@@ -22,6 +22,7 @@ import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
 import { TransformStage } from './transform-stage';
 import { ReactElement } from 'react';
 import { SettingTopEntry } from 'designer/src/designer';
+import { EventEmitter } from 'events';
 
 /**
  * 基础节点
@@ -72,6 +73,7 @@ import { SettingTopEntry } from 'designer/src/designer';
  *  hidden
  */
 export class Node<Schema extends NodeSchema = NodeSchema> {
+  private emitter: EventEmitter;
   /**
    * 是节点实例
    */
@@ -96,7 +98,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 属性抽象
    */
-  readonly props: Props;
+  props: Props;
   protected _children?: NodeChildren;
   /**
    * @deprecated
@@ -162,6 +164,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
 
     this.settingEntry = this.document.designer.createSettingEntry([ this ]);
+    this.emitter = new EventEmitter();
   }
 
   private initProps(props: any): any {
@@ -236,10 +239,22 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     this.internalSetParent(null);
     this.document.addWillPurge(this);
   }
+
+  private didDropIn(dragment: Node) {
+    const callbacks = this.componentMeta.getMetadata().experimental?.callbacks;
+    if (callbacks?.onNodeAdd) {
+      callbacks?.onNodeAdd.call(this, dragment, this);
+    }
+    if (this._parent) {
+      this._parent.didDropIn(dragment);
+    }
+  }
+
   /**
    * 内部方法，请勿使用
+   * @param useMutator 是否触发联动逻辑
    */
-  internalSetParent(parent: ParentalNode | null) {
+  internalSetParent(parent: ParentalNode | null, useMutator = false) {
     if (this._parent === parent) {
       return;
     }
@@ -248,7 +263,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       if (this.isSlot()) {
         this._parent.removeSlot(this, false);
       } else {
-        this._parent.children.delete(this);
+        this._parent.children.delete(this, false, useMutator);
       }
     }
 
@@ -261,6 +276,10 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
         if (grp) {
           this.setConditionGroup(grp);
         }
+      }
+
+      if (useMutator) {
+        parent.didDropIn(this);
       }
     }
   }
@@ -280,12 +299,12 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 移除当前节点
    */
-  remove() {
+  remove(useMutator = true) {
     if (this.parent) {
       if (this.isSlot()) {
         this.parent.removeSlot(this, true);
       } else {
-        this.parent.children.delete(this, true);
+        this.parent.children.delete(this, true, useMutator);
       }
     }
   }
@@ -405,14 +424,30 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       delete data.id;
       const newNode = this.document.createNode(data);
 
-      this.insertBefore(newNode, node);
-      node.remove();
+      this.insertBefore(newNode, node, false);
+      node.remove(false);
 
       if (selected) {
         this.document.selection.select(newNode.id);
       }
     }
     return node;
+  }
+
+  setVisible(flag: boolean): void {
+    this.getExtraProp('hidden')?.setValue(!flag);
+    this.emitter.emit('visibleChange', flag);
+  }
+
+  getVisible(): boolean {
+    return !this.getExtraProp('hidden', false)?.getValue();
+  }
+
+  onVisibleChange(func: (flag: boolean) => any) {
+    this.emitter.on('visibleChange', func);
+    return () => {
+      this.emitter.removeListener('visibleChange', func);
+    };
   }
 
   getProp(path: string, stash = true): Prop | null {
@@ -454,7 +489,11 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 设置多个属性值，替换原有值
    */
-  setProps(props?: PropsMap | PropsList | null) {
+  setProps(props?: PropsMap | PropsList | Props | null) {
+    if(props instanceof Props) {
+      this.props = props;
+      return;
+    }
     this.props.import(props);
   }
 
@@ -611,8 +650,16 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   addSlot(slotNode: Node) {
-    slotNode.internalSetParent(this as ParentalNode);
+    slotNode.internalSetParent(this as ParentalNode, true);
     this._slots.push(slotNode);
+  }
+
+  /**
+   * 删除一个节点
+   * @param node 
+   */
+  removeChild(node: Node) {
+    this.children?.delete(node);
   }
 
   private purged = false;
@@ -625,18 +672,18 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 销毁
    */
-  purge() {
+  purge(useMutator = true) {
     if (this.purged) {
       return;
     }
     if (this._parent) {
       // should remove thisNode before purge
-      this.remove();
+      this.remove(useMutator);
       return;
     }
     this.purged = true;
     if (this.isParental()) {
-      this.children.purge();
+      this.children.purge(useMutator);
     }
     this.autoruns?.forEach((dispose) => dispose());
     this.props.purge();
@@ -655,10 +702,10 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   getComponentName() {
     return this.componentName;
   }
-  insertBefore(node: Node, ref?: Node) {
-    this.children?.insert(node, ref ? ref.index : null);
+  insertBefore(node: Node, ref?: Node, useMutator = true) {
+    this.children?.insert(node, ref ? ref.index : null, useMutator);
   }
-  insertAfter(node: any, ref?: Node) {
+  insertAfter(node: any, ref?: Node, useMutator = true) {
     if (!isNode(node)) {
       if (node.getComponentName) {
         node = this.document.createNode({
@@ -668,7 +715,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
         node = this.document.createNode(node);
       }
     }
-    this.children?.insert(node, ref ? ref.index + 1 : null);
+    this.children?.insert(node, ref ? ref.index + 1 : null, useMutator);
   }
   getParent() {
     return this.parent;
@@ -746,11 +793,39 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * @deprecated
    */
   getSuitablePlace(node: Node, ref: any): any {
-    // TODO:
-    if (this.isRoot()) {
+    if (this.isRoot() && this.children) {
+      const dropElement = this.children.filter((c: Node) => {
+        if (!c.isContainer()) {
+          return false;
+        }
+        const canDropIn = c.componentMeta?.prototype?.options?.canDropIn;
+        if (typeof canDropIn === 'function') {
+          return canDropIn(node);
+        } else if (typeof canDropIn === 'boolean'){
+          return canDropIn;
+        }
+        return true;
+      })[0];
+      if (dropElement) {
+        return { container: dropElement, ref };
+      }
       return { container: this, ref };
     }
-    return { container: this.parent, ref: this };
+
+    const canDropIn = this.componentMeta?.prototype?.options?.canDropIn;
+    if (this.isContainer()) {
+      if (canDropIn === undefined ||
+        (typeof canDropIn === 'boolean' && canDropIn) ||
+      (typeof canDropIn === 'function' && canDropIn(node))){
+        return { container: this, ref };
+      }
+    }
+
+    if (this.parent) {
+      return this.parent.getSuitablePlace(node, ref);
+    }
+    
+    return null;
   }
   /**
    * @deprecated
@@ -766,9 +841,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * @deprecated
    */
   registerAddon(key: string, exportData: () => any, isProp: boolean = false) {
-    if (this._addons[key]) {
-      throw new Error(`node addon ${key} exist`);
-    }
+    // if (this._addons[key]) {
+    //   throw new Error(`node addon ${key} exist`);
+    // }
 
     this._addons[key] = { exportData, isProp };
   }

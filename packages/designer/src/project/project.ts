@@ -102,7 +102,7 @@ export class Project {
       | string,
   ): any {}
 
-  open(doc?: string | DocumentModel | RootSchema): void {
+  open(doc?: string | DocumentModel | RootSchema): DocumentModel {
     if (!doc) {
       const got = this.documents.find((item) => item.isBlank());
       if (got) {

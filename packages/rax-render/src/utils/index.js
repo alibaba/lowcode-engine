@@ -30,7 +30,9 @@ export const throttle = _throttle;
 export const debounce = _debounce;
 export const serialize = _serialize;
 export const jsonuri = _jsonuri;
-export { get, post, jsonp, mtop, request } from './request';
+export {
+ get, post, jsonp, mtop, request
+} from './request';
 
 const ReactIs = require('react-is');
 
@@ -43,18 +45,18 @@ const PropTypes2 = factoryWithTypeCheckers(ReactIs.isElement, true);
 const EXPRESSION_TYPE = {
   JSEXPRESSION: 'JSExpression',
   JSFUNCTION: 'JSFunction',
-  JSSLOT: 'JSSlot'
+  JSSLOT: 'JSSlot',
 };
 const EXPRESSION_REG = /^\{\{(\{.*\}|.*?)\}\}$/;
-const hasSymbol = typeof Symbol === 'function' && Symbol['for'];
-const REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol['for']('react.forward_ref') : 0xead0;
+const hasSymbol = typeof Symbol === 'function' && Symbol.for;
+const REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
 const debug = Debug('utils:index');
 
 const ENV = {
   TBE: 'TBE',
   WEBIDE: 'WEB-IDE',
   VSCODE: 'VSCODE',
-  WEB: 'WEB'
+  WEB: 'WEB',
 };
 
 /**
@@ -63,7 +65,7 @@ const ENV = {
  */
 export function isSchema(schema, ignoreArr) {
   if (isEmpty(schema)) return false;
-  if (!ignoreArr && Array.isArray(schema)) return schema.every(item => isSchema(item));
+  if (!ignoreArr && Array.isArray(schema)) return schema.every((item) => isSchema(item));
   return !!(schema.componentName && schema.props && (typeof schema.props === 'object' || isJSExpression(schema.props)));
 }
 
@@ -83,10 +85,10 @@ export function inSameDomain() {
 
 export function getFileCssName(fileName) {
   if (!fileName) return;
-  let name = fileName.replace(/([A-Z])/g, '-$1').toLowerCase();
-  return ('luna-' + name)
+  const name = fileName.replace(/([A-Z])/g, '-$1').toLowerCase();
+  return `luna-${name}`
     .split('-')
-    .filter(p => !!p)
+    .filter((p) => !!p)
     .join('-');
 }
 
@@ -97,9 +99,8 @@ export function isJSFunction(obj) {
   return obj && typeof obj === 'object' && EXPRESSION_TYPE.JSFUNCTION === obj.type;
 }
 export function isJSExpression(obj) {
-  //兼容两种写法，有js构造表达式的情况
-  const isJSExpressionObj =
-    obj && typeof obj === 'object' && EXPRESSION_TYPE.JSEXPRESSION === obj.type && typeof obj.value === 'string';
+  // 兼容两种写法，有js构造表达式的情况
+  const isJSExpressionObj =    obj && typeof obj === 'object' && EXPRESSION_TYPE.JSEXPRESSION === obj.type && typeof obj.value === 'string';
   const isJSExpressionStr = typeof obj === 'string' && EXPRESSION_REG.test(obj.trim());
   return isJSExpressionObj || isJSExpressionStr;
 }
@@ -109,13 +110,11 @@ export function isJSExpression(obj) {
  * @description 等待函数
  */
 export function wait(ms) {
-  return new Promise(resolve => setTimeout(() => resolve(true), ms));
+  return new Promise((resolve) => setTimeout(() => resolve(true), ms));
 }
 
 export function curry(Comp, hocs = []) {
-  return hocs.reverse().reduce((pre, cur) => {
-    return cur(pre);
-  }, Comp);
+  return hocs.reverse().reduce((pre, cur) => cur(pre), Comp);
 }
 
 /**
@@ -130,16 +129,14 @@ export function getParentWinValue(key) {
 
 export function getValue(obj, path, defaultValue) {
   if (isEmpty(obj) || typeof obj !== 'object') return defaultValue;
-  const res = path.split('.').reduce((pre, cur) => {
-    return pre && pre[cur];
-  }, obj);
+  const res = path.split('.').reduce((pre, cur) => pre && pre[cur], obj);
   if (res === undefined) return defaultValue;
   return res;
 }
 
 export function parseObj(schemaStr) {
   if (typeof schemaStr !== 'string') return schemaStr;
-  //默认调用顶层窗口的parseObj,保障new Function的window对象是顶层的window对象
+  // 默认调用顶层窗口的parseObj,保障new Function的window对象是顶层的window对象
   try {
     if (inSameDomain() && window.parent.__newFunc) {
       return window.parent.__newFunc(`"use strict"; return ${schemaStr}`)();
@@ -157,7 +154,7 @@ export function parseSearch(search) {
   const str = search.replace(/^\?/, '');
   const paramStr = str.split('&');
   const res = {};
-  paramStr.forEach(item => {
+  paramStr.forEach((item) => {
     const regRes = item.split('=');
     if (regRes[0] && regRes[1]) {
       res[regRes[0]] = decodeURIComponent(regRes[1]);
@@ -172,7 +169,7 @@ export function fastClone(obj) {
 
 // 更新obj的内容但不改变obj的指针
 export function fillObj(receiver = {}, ...suppliers) {
-  Object.keys(receiver).forEach(item => {
+  Object.keys(receiver).forEach((item) => {
     delete receiver[item];
   });
   Object.assign(receiver, ...suppliers);
@@ -181,9 +178,7 @@ export function fillObj(receiver = {}, ...suppliers) {
 
 // 中划线转驼峰
 export function toHump(name) {
-  return name.replace(/\-(\w)/g, function(all, letter) {
-    return letter.toUpperCase();
-  });
+  return name.replace(/\-(\w)/g, (all, letter) => letter.toUpperCase());
 }
 // 驼峰转中划线
 export function toLine(name) {
@@ -192,7 +187,7 @@ export function toLine(name) {
 
 // 获取当前环境
 export function getEnv() {
-  const userAgent = navigator.userAgent;
+  const { userAgent } = navigator;
   const isVscode = /Electron\//.test(userAgent);
   if (isVscode) return ENV.VSCODE;
   const isTheia = window.is_theia === true;
@@ -206,12 +201,14 @@ export function getEnv() {
  * @param {*} 用户自定义配置
  */
 export function comboSkeletonConfig(defaultConfig = {}, customConfig) {
-  const { skeleton, theme, addons, hooks, shortCuts, extensions, constants, utils, i18n } = customConfig || {};
+  const {
+ skeleton, theme, addons, hooks, shortCuts, extensions, constants, utils, i18n
+} = customConfig || {};
 
   if (skeleton && skeleton.handler && typeof skeleton.handler === 'function') {
     return skeleton.handler({
       skeleton,
-      ...defaultConfig
+      ...defaultConfig,
     });
   }
 
@@ -219,37 +216,37 @@ export function comboSkeletonConfig(defaultConfig = {}, customConfig) {
   const customShortCuts = transformArrayToMap(shortCuts || [], 'keyboard');
   const localeList = ['zh-CN', 'zh-TW', 'en-US', 'ja-JP'];
   const i18nConfig = {};
-  localeList.forEach(key => {
+  localeList.forEach((key) => {
     i18nConfig[key] = {
       ...(defaultConfig.i18n && defaultConfig.i18n[key]),
-      ...(i18n && i18n[key])
+      ...(i18n && i18n[key]),
     };
   });
   return {
     skeleton,
     theme: {
       ...defaultConfig.theme,
-      ...theme
+      ...theme,
     },
     addons: {
       ...defaultConfig.addons,
-      ...addons
+      ...addons,
     },
     hooks: [...(defaultConfig.hooks || []), ...(hooks || [])],
     shortCuts: Object.values({
       ...defaultShortCuts,
-      ...customShortCuts
+      ...customShortCuts,
     }),
     extensions: {
       ...defaultConfig.extensions,
-      ...extensions
+      ...extensions,
     },
     constants: {
       ...defaultConfig.constants,
-      ...constants
+      ...constants,
     },
     utils: [...(defaultConfig.utils || []), ...(utils || [])],
-    i18n: i18nConfig
+    i18n: i18nConfig,
   };
 }
 
@@ -271,9 +268,7 @@ export function generateI18n(locale = 'zh-CN', messages = {}) {
  * @param {*} Comp 需要判断的组件
  */
 export function acceptsRef(Comp) {
-  return (
-    (Comp.$$typeof && Comp.$$typeof === REACT_FORWARD_REF_TYPE) || (Comp.prototype && Comp.prototype.isReactComponent)
-  );
+  return Comp && Comp.prototype && Comp.prototype.setState;
 }
 
 /**
@@ -288,7 +283,7 @@ export function goldlog(gmKey, params = {}, logKey = 'other') {
   const goKey = serializeParams({
     sdkVersion: pkg.version,
     env: getEnv(),
-    ...params
+    ...params,
   });
   if (sendIDEMessage) {
     sendIDEMessage({
@@ -296,8 +291,8 @@ export function goldlog(gmKey, params = {}, logKey = 'other') {
       data: {
         logKey: `/iceluna.core.${logKey}`,
         gmKey,
-        goKey
-      }
+        goKey,
+      },
     });
   }
   window.goldlog && window.goldlog.record(`/iceluna.core.${logKey}`, gmKey, goKey, 'POST');
@@ -307,7 +302,7 @@ export function goldlog(gmKey, params = {}, logKey = 'other') {
 export function generateUtils(utils, utilsConfig) {
   if (!Array.isArray(utilsConfig)) return { ...utils };
   const res = {};
-  utilsConfig.forEach(item => {
+  utilsConfig.forEach((item) => {
     if (!item.name || !item.type || !item.content) return;
     if (item.type === 'function' && typeof item.content === 'function') {
       res[item.name] = item.content;
@@ -327,7 +322,7 @@ export function setClipboardData(str) {
         .then(() => {
           resolve();
         })
-        .catch(err => {
+        .catch((err) => {
           reject('复制失败，请重试！', err);
         });
     } else {
@@ -337,7 +332,7 @@ export function setClipboardData(str) {
       textArea.focus();
       textArea.select();
       try {
-        let successful = document.execCommand('copy');
+        const successful = document.execCommand('copy');
         if (successful) {
           document.body.removeChild(textArea);
           resolve();
@@ -357,10 +352,10 @@ export function getClipboardData() {
     } else if (navigator.clipboard) {
       return navigator.clipboard
         .readText()
-        .then(res => {
+        .then((res) => {
           resolve(res);
         })
-        .catch(err => {
+        .catch((err) => {
           reject('粘贴板获取失败', err);
         });
     } else {
@@ -382,14 +377,15 @@ export function transformToPromise(input) {
 
 export function moveArrayItem(arr, sourceIdx, distIdx, direction) {
   if (
-    !Array.isArray(arr) ||
-    sourceIdx === distIdx ||
-    sourceIdx < 0 ||
-    sourceIdx >= arr.length ||
-    distIdx < 0 ||
-    distIdx >= arr.length
-  )
+    !Array.isArray(arr)
+    || sourceIdx === distIdx
+    || sourceIdx < 0
+    || sourceIdx >= arr.length
+    || distIdx < 0
+    || distIdx >= arr.length
+  ) {
     return arr;
+  }
   const item = arr[sourceIdx];
   if (direction === 'after') {
     arr.splice(distIdx + 1, 0, item);
@@ -407,7 +403,7 @@ export function moveArrayItem(arr, sourceIdx, distIdx, direction) {
 export function transformArrayToMap(arr, key, overwrite = true) {
   if (isEmpty(arr) || !Array.isArray(arr)) return {};
   const res = {};
-  arr.forEach(item => {
+  arr.forEach((item) => {
     const curKey = item[key];
     if (item[key] === undefined) return;
     if (res[curKey] && !overwrite) return;
@@ -426,13 +422,13 @@ export function checkPropTypes(value, name, rule, componentName) {
   }
   const err = rule(
     {
-      [name]: value
+      [name]: value,
     },
     name,
     componentName,
     'prop',
     null,
-    ReactPropTypesSecret
+    ReactPropTypesSecret,
   );
   if (err) {
     console.warn(err);
@@ -441,10 +437,11 @@ export function checkPropTypes(value, name, rule, componentName) {
 }
 
 export function transformSchemaToPure(obj) {
-  const pureObj = obj => {
+  const pureObj = (obj) => {
     if (Array.isArray(obj)) {
-      return obj.map(item => pureObj(item));
-    } else if (typeof obj === 'object') {
+      return obj.map((item) => pureObj(item));
+    }
+    if (typeof obj === 'object') {
       // 对于undefined及null直接返回
       if (!obj) return obj;
       const res = {};
@@ -460,10 +457,11 @@ export function transformSchemaToPure(obj) {
 }
 
 export function transformSchemaToStandard(obj) {
-  const standardObj = obj => {
+  const standardObj = (obj) => {
     if (Array.isArray(obj)) {
-      return obj.map(item => standardObj(item));
-    } else if (typeof obj === 'object') {
+      return obj.map((item) => standardObj(item));
+    }
+    if (typeof obj === 'object') {
       // 对于undefined及null直接返回
       if (!obj) return obj;
       const res = {};
@@ -472,7 +470,7 @@ export function transformSchemaToStandard(obj) {
         if (isSchema(val) && key !== 'children' && obj.type !== 'JSSlot') {
           res[key] = {
             type: 'JSSlot',
-            value: standardObj(val)
+            value: standardObj(val),
           };
           // table特殊处理
           if (key === 'cell') {
@@ -483,16 +481,18 @@ export function transformSchemaToStandard(obj) {
         }
       });
       return res;
-    } else if (typeof obj === 'function') {
+    }
+    if (typeof obj === 'function') {
       return {
         type: 'JSFunction',
-        value: obj.toString()
+        value: obj.toString(),
       };
-    } else if (typeof obj === 'string' && EXPRESSION_REG.test(obj.trim())) {
+    }
+    if (typeof obj === 'string' && EXPRESSION_REG.test(obj.trim())) {
       const regRes = obj.trim().match(EXPRESSION_REG);
       return {
         type: 'JSExpression',
-        value: (regRes && regRes[1]) || ''
+        value: (regRes && regRes[1]) || '',
       };
     }
     return obj;
@@ -504,9 +504,8 @@ export function transformStringToFunction(str) {
   if (typeof str !== 'string') return str;
   if (inSameDomain() && window.parent.__newFunc) {
     return window.parent.__newFunc(`"use strict"; return ${str}`)();
-  } else {
-    return new Function(`"use strict"; return ${str}`)();
   }
+  return new Function(`"use strict"; return ${str}`)();
 }
 
 export function addCssTag(id, content) {
@@ -524,11 +523,11 @@ export function addCssTag(id, content) {
 
 // 注册快捷
 export function registShortCuts(config, appHelper) {
-  const keyboardFilter = (keymaster.filter = event => {
+  const keyboardFilter = (keymaster.filter = (event) => {
     const eTarget = event.target || event.srcElement;
-    const tagName = eTarget.tagName;
+    const { tagName } = eTarget;
     const isInput = !!(tagName == 'INPUT' || tagName == 'SELECT' || tagName == 'TEXTAREA');
-    const isContenteditable = target => {
+    const isContenteditable = (target) => {
       while (target) {
         if (target.contentEditable === 'true') return true;
         target = target.parentNode;
@@ -536,24 +535,23 @@ export function registShortCuts(config, appHelper) {
       return false;
     };
     if (isInput || isContenteditable(eTarget)) {
-      if (event.metaKey === true && [70, 83].includes(event.keyCode)) event.preventDefault(); //禁止触发chrome原生的页面保存或查找
+      if (event.metaKey === true && [70, 83].includes(event.keyCode)) event.preventDefault(); // 禁止触发chrome原生的页面保存或查找
       return false;
-    } else {
-      return true;
     }
+    return true;
   });
 
   const ideMessage = appHelper.utils && appHelper.utils.ideMessage;
 
-  //复制
+  // 复制
   if (!document.copyListener) {
-    document.copyListener = e => {
+    document.copyListener = (e) => {
       if (!keyboardFilter(e) || appHelper.isCopying) return;
       const schema = appHelper.schemaHelper && appHelper.schemaHelper.schemaMap[appHelper.activeKey];
       if (!schema || !isSchema(schema)) return;
       appHelper.isCopying = true;
       const schemaStr = serialize(transformSchemaToPure(schema), {
-        unsafe: true
+        unsafe: true,
       });
       setClipboardData(schemaStr)
         .then(() => {
@@ -561,7 +559,7 @@ export function registShortCuts(config, appHelper) {
           appHelper.emit('schema.copy', schemaStr, schema);
           appHelper.isCopying = false;
         })
-        .catch(errMsg => {
+        .catch((errMsg) => {
           ideMessage && ideMessage('error', errMsg);
           appHelper.isCopying = false;
         });
@@ -572,16 +570,16 @@ export function registShortCuts(config, appHelper) {
     }
   }
 
-  //粘贴
+  // 粘贴
   if (!document.pasteListener) {
     const doPaste = (e, text) => {
       if (!keyboardFilter(e) || appHelper.isPasting) return;
-      const schemaHelper = appHelper.schemaHelper;
+      const { schemaHelper } = appHelper;
       let targetKey = appHelper.activeKey;
       let direction = 'after';
       const topKey = schemaHelper.schema && schemaHelper.schema.__ctx && schemaHelper.schema.__ctx.lunaKey;
       if (!targetKey || topKey === targetKey) {
-        const schemaHelper = appHelper.schemaHelper;
+        const { schemaHelper } = appHelper;
         const topKey = schemaHelper.schema && schemaHelper.schema.__ctx && schemaHelper.schema.__ctx.lunaKey;
         if (!topKey) return;
         targetKey = topKey;
@@ -599,36 +597,36 @@ export function registShortCuts(config, appHelper) {
       appHelper.emit('material.add', {
         schema,
         targetKey,
-        direction
+        direction,
       });
       appHelper.isPasting = false;
       appHelper.emit('schema.paste', schema);
     };
-    document.pasteListener = e => {
+    document.pasteListener = (e) => {
       const clipboardData = e.clipboardData || window.clipboardData;
       const text = clipboardData && clipboardData.getData('text');
       doPaste(e, text);
     };
     document.addEventListener('paste', document.pasteListener);
     if (getParentWinValue('vscode')) {
-      keymaster('command+v', e => {
+      keymaster('command+v', (e) => {
         const sendIDEMessage = getParentWinValue('sendIDEMessage');
-        sendIDEMessage &&
-          sendIDEMessage({
-            action: 'readClipboard'
+        sendIDEMessage
+          && sendIDEMessage({
+            action: 'readClipboard',
           })
-            .then(text => {
+            .then((text) => {
               doPaste(e, text);
             })
-            .catch(err => {
+            .catch((err) => {
               console.warn(err);
             });
       });
     }
   }
 
-  (config || []).forEach(item => {
-    keymaster(item.keyboard, ev => {
+  (config || []).forEach((item) => {
+    keymaster(item.keyboard, (ev) => {
       ev.preventDefault();
       item.handler(ev, appHelper, keymaster);
     });
@@ -637,7 +635,7 @@ export function registShortCuts(config, appHelper) {
 
 // 取消注册快捷
 export function unRegistShortCuts(config) {
-  (config || []).forEach(item => {
+  (config || []).forEach((item) => {
     keymaster.unbind(item.keyboard);
   });
   if (getParentWinValue('vscode')) {
@@ -657,13 +655,17 @@ export function unRegistShortCuts(config) {
 export function parseData(schema, self) {
   if (isJSExpression(schema)) {
     return parseExpression(schema, self);
-  } else if (typeof schema === 'string') {
+  }
+  if (typeof schema === 'string') {
     return schema.trim();
-  } else if (Array.isArray(schema)) {
-    return schema.map(item => parseData(item, self));
-  } else if (typeof schema === 'function') {
+  }
+  if (Array.isArray(schema)) {
+    return schema.map((item) => parseData(item, self));
+  }
+  if (typeof schema === 'function') {
     return schema.bind(self);
-  } else if (typeof schema === 'object') {
+  }
+  if (typeof schema === 'object') {
     // 对于undefined及null直接返回
     if (!schema) return schema;
     const res = {};
@@ -676,13 +678,13 @@ export function parseData(schema, self) {
   return schema;
 }
 
-/*全匹配{{开头,}}结尾的变量表达式，或者对象类型JSExpression，且均不支持省略this */
+/* 全匹配{{开头,}}结尾的变量表达式，或者对象类型JSExpression，且均不支持省略this */
 export function parseExpression(str, self) {
   try {
     const contextArr = ['"use strict";', 'var __self = arguments[0];'];
     contextArr.push('return ');
     let tarStr;
-    //向前兼容，支持标准协议新格式
+    // 向前兼容，支持标准协议新格式
     if (typeof str === 'string') {
       const regRes = str.trim().match(EXPRESSION_REG);
       tarStr = regRes[1];
@@ -691,7 +693,7 @@ export function parseExpression(str, self) {
     }
     tarStr = tarStr.replace(/this(\W|$)/g, (a, b) => `__self${b}`);
     tarStr = contextArr.join('\n') + tarStr;
-    //默认调用顶层窗口的parseObj,保障new Function的window对象是顶层的window对象
+    // 默认调用顶层窗口的parseObj,保障new Function的window对象是顶层的window对象
     if (inSameDomain() && window.parent.__newFunc) {
       return window.parent.__newFunc(tarStr)(self);
     }
@@ -707,12 +709,13 @@ export function parseExpression(str, self) {
  * @param {*} componentInfo
  */
 export function hasReactNodeFuncProps(componentInfo) {
-  const isReactNodeFuncProps = config => {
+  const isReactNodeFuncProps = (config) => {
     if (config.type === 'ReactNode') {
       return config.props && config.props.type === 'function';
-    } else if (config.type === 'Mixin') {
+    }
+    if (config.type === 'Mixin') {
       return config.props && config.props.reactNodeProps && config.props.reactNodeProps.type === 'function';
     }
   };
-  return componentInfo && (componentInfo.props || []).some(item => isReactNodeFuncProps(item));
+  return componentInfo && (componentInfo.props || []).some((item) => isReactNodeFuncProps(item));
 }

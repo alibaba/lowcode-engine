@@ -1,5 +1,5 @@
 import { ComponentType, ReactElement } from 'react';
-import { ComponentMetadata, FieldConfig, InitialItem, FilterItem, AutorunItem } from '@ali/lowcode-types';
+import { ComponentMetadata, FieldConfig, InitialItem, FilterItem, AutorunItem, isI18nData } from '@ali/lowcode-types';
 import {
   ComponentMeta,
   addBuiltinComponentAction,
@@ -15,6 +15,7 @@ import {
   upgradePropConfig,
   upgradeConfigure,
 } from './upgrade-metadata';
+import { intl } from '@ali/lowcode-editor-core';
 import { designer } from '../editor';
 import { uniqueId } from '@ali/lowcode-utils';
 
@@ -23,7 +24,7 @@ const GlobalPropsConfigure: Array<{
   initials?: InitialItem[];
   filters?: FilterItem[];
   autoruns?: AutorunItem[];
-  config: FieldConfig
+  config: FieldConfig;
 }> = [];
 const Overrides: {
   [componentName: string]: {
@@ -53,7 +54,7 @@ function addGlobalPropsConfigure(config: OldGlobalPropConfig) {
       addAutorun: (item) => {
         autoruns.push(item);
       },
-    })
+    }),
   });
 }
 function removeGlobalPropsConfigure(name: string) {
@@ -82,7 +83,7 @@ function overridePropsConfigure(componentName: string, config: { [name: string]:
     override = upgradeConfigure(config, { addInitial, addFilter, addAutorun });
   } else {
     override = {};
-    Object.keys(config).forEach(key => {
+    Object.keys(config).forEach((key) => {
       override[key] = upgradePropConfig(config[key], { addInitial, addFilter, addAutorun });
     });
   }
@@ -219,6 +220,9 @@ class Prototype {
   readonly isPrototype = true;
   readonly meta: ComponentMeta;
   readonly options: OldPrototypeConfig | ComponentMetadata;
+  get packageName() {
+    return this.meta.npm?.package;
+  }
 
   constructor(input: OldPrototypeConfig | ComponentMetadata | ComponentMeta, lookup: boolean = false) {
     if (lookup) {
@@ -250,7 +254,7 @@ class Prototype {
   }
 
   getPackageName() {
-    return this.meta.npm?.package;
+    return this.packageName;
   }
 
   getContextInfo(name: string): any {
@@ -258,7 +262,7 @@ class Prototype {
   }
 
   getTitle() {
-    return this.meta.title;
+    return intl(this.meta.title);
   }
 
   getComponentName() {

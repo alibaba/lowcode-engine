@@ -10,11 +10,26 @@ import TreeNode from '../tree-node';
 import { IconEye } from '../icons/eye';
 import { IconCond } from '../icons/cond';
 import { IconLoop } from '../icons/loop';
+import { IconRadioActive } from '../icons/radio-active';
+import { IconRadio } from '../icons/radio';
 import { createIcon } from '@ali/lowcode-utils';
+
+function emitOutlineEvent(type: string, treeNode: TreeNode, rest?: object) {
+  const editor = globalContext.get(Editor);
+  const node = treeNode?.node;
+  const npm = node?.componentMeta?.npm;
+  const selected =
+    [npm?.package, npm?.componentName].filter((item) => !!item).join('-') || node?.componentMeta?.componentName || '';
+  editor?.emit(`outlinePane.${type}`, {
+    selected,
+    ...rest,
+  });
+}
 
 @observer
 export default class TreeTitle extends Component<{
   treeNode: TreeNode;
+  isModal?: boolean;
 }> {
   state: {
     editing: boolean;
@@ -37,7 +52,9 @@ export default class TreeTitle extends Component<{
 
   private saveEdit = (e: FocusEvent<HTMLInputElement> | KeyboardEvent<HTMLInputElement>) => {
     const { treeNode } = this.props;
-    treeNode.setTitleLabel((e.target as HTMLInputElement).value || '');
+    const value = (e.target as HTMLInputElement).value || '';
+    treeNode.setTitleLabel(value);
+    emitOutlineEvent('rename', treeNode, { value });
     this.cancelEdit();
   };
 
@@ -62,7 +79,7 @@ export default class TreeTitle extends Component<{
   };
 
   render() {
-    const { treeNode } = this.props;
+    const { treeNode, isModal } = this.props;
     const { editing } = this.state;
     const isCNode = !treeNode.isRoot();
     const { node } = treeNode;
@@ -72,7 +89,7 @@ export default class TreeTitle extends Component<{
       const depth = treeNode.depth;
       const indent = depth * 12;
       style = {
-        paddingLeft: indent,
+        paddingLeft: indent + (isModal ? 12 : 0),
         marginLeft: -indent,
       };
     }
@@ -84,8 +101,31 @@ export default class TreeTitle extends Component<{
         })}
         style={style}
         data-id={treeNode.id}
-        onClick={node.conditionGroup ? () => node.setConditionalVisible() : undefined}
+        onClick={() => {
+          if (isModal) {
+            node.document.modalNodesManager.setVisible(node);
+            return;
+          }
+          if (node.conditionGroup) {
+            node.setConditionalVisible();
+            return;
+          }
+        }}
       >
+        {isModal && node.getVisible() && (
+          <div onClick={() => {
+            node.document.modalNodesManager.setInvisible(node);
+          }}>
+            <IconRadioActive className="tree-node-modal-radio-active"/>
+          </div>
+        )}
+        {isModal && !node.getVisible() && (
+          <div onClick={() => {
+            node.document.modalNodesManager.setVisible(node);
+          }}>
+            <IconRadio className="tree-node-modal-radio"/>
+          </div>
+        )}
         {isCNode && <ExpandBtn treeNode={treeNode} />}
         <div className="tree-node-icon">{createIcon(treeNode.icon)}</div>
         <div className="tree-node-title-label" onDoubleClick={isNodeParent ? this.enableEdit : undefined}>
@@ -123,7 +163,7 @@ export default class TreeTitle extends Component<{
             </Fragment>
           )}
         </div>
-        {isCNode && isNodeParent && <HideBtn treeNode={treeNode} />}
+        {isCNode && isNodeParent && !isModal && <HideBtn treeNode={treeNode} />}
         {/*isCNode && isNodeParent && <LockBtn treeNode={treeNode} />*/}
       </div>
     );
@@ -164,17 +204,8 @@ class HideBtn extends Component<{ treeNode: TreeNode }> {
         className="tree-node-hide-btn"
         onClick={(e) => {
           e.stopPropagation();
+          emitOutlineEvent(treeNode.hidden ? 'show' : 'hide', treeNode);
           treeNode.setHidden(!treeNode.hidden);
-          const editor = globalContext.get(Editor);
-          const node = treeNode?.node;
-          const npm = node?.componentMeta?.npm;
-          const selected =
-            [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
-            node?.componentMeta?.componentName ||
-            '';
-          editor?.emit('outlinePane.hide', {
-            selected,
-          });
         }}
       >
         {treeNode.hidden ? <IconEyeClose /> : <IconEye />}
@@ -201,6 +232,7 @@ class ExpandBtn extends Component<{ treeNode: TreeNode }> {
           if (treeNode.expanded) {
             e.stopPropagation();
           }
+          emitOutlineEvent(treeNode.expanded ? 'collapse' : 'expand', treeNode);
           treeNode.setExpanded(!treeNode.expanded);
         }}
       >

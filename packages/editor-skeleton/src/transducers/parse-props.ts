@@ -39,6 +39,7 @@ function propTypeToSetter(propType: PropType): SetterType {
   } else {
     typeName = 'string';
   }
+  debugger;
   // TODO: use mixinSetter wrapper
   switch (typeName) {
     case 'string':
@@ -178,6 +179,7 @@ function propTypeToSetter(propType: PropType): SetterType {
   return {
     componentName: 'MixedSetter',
     isRequired,
+    props: {},
   };
 }
 

@@ -1,7 +1,7 @@
 import { Component, createElement } from 'rax';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
-import View from 'rax-view';
+import classnames from 'classnames';
 import DataHelper from '../utils/dataHelper';
 import {
   forEach,
@@ -18,10 +18,12 @@ import {
   checkPropTypes,
   generateI18n,
   acceptsRef,
+  getFileCssName,
 } from '../utils';
 import VisualDom from '../comp/visualDom';
 import AppContext from '../context/appContext';
-import CompWrapper from '../hoc/compWrapper';
+
+import compWrapper from '../hoc/compWrapper';
 
 const debug = Debug('engine:base');
 const DESIGN_MODE = {
@@ -34,6 +36,7 @@ let scopeIdx = 0;
 
 export default class BaseEngine extends Component {
   static dislayName = 'base-engine';
+
   static propTypes = {
     locale: PropTypes.string,
     messages: PropTypes.object,
@@ -41,11 +44,13 @@ export default class BaseEngine extends Component {
     __components: PropTypes.object,
     __componentsMap: PropTypes.object,
     __ctx: PropTypes.object,
-    __schema: PropTypes.object
+    __schema: PropTypes.object,
   };
+
   static defaultProps = {
-    __schema: {}
+    __schema: {},
   };
+
   static contextType = AppContext;
 
   constructor(props, context) {
@@ -79,8 +84,7 @@ export default class BaseEngine extends Component {
     console.warn(e);
   }
 
-  reloadDataSource = () => {
-    return new Promise((resolve, reject) => {
+  reloadDataSource = () => new Promise((resolve, reject) => {
       debug('reload data source');
       if (!this.__dataHelper) {
         this.__showPlaceholder = false;
@@ -88,7 +92,7 @@ export default class BaseEngine extends Component {
       }
       this.__dataHelper
         .getInitData()
-        .then(res => {
+        .then((res) => {
           this.__showPlaceholder = false;
           if (isEmpty(res)) {
             this.forceUpdate();
@@ -96,7 +100,7 @@ export default class BaseEngine extends Component {
           }
           this.setState(res, resolve);
         })
-        .catch(err => {
+        .catch((err) => {
           if (this.__showPlaceholder) {
             this.__showPlaceholder = false;
             this.forceUpdate();
@@ -104,7 +108,6 @@ export default class BaseEngine extends Component {
           reject(err);
         });
     });
-  };
 
   __setLifeCycleMethods = (method, args) => {
     const lifeCycleMethods = getValue(this.props.__schema, 'lifeCycles', {});
@@ -120,8 +123,8 @@ export default class BaseEngine extends Component {
   __bindCustomMethods = (props = this.props) => {
     const { __schema } = props;
     const customMethodsList = Object.keys(__schema.methods || {}) || [];
-    this.__customMethodsList &&
-      this.__customMethodsList.forEach(item => {
+    this.__customMethodsList
+      && this.__customMethodsList.forEach((item) => {
         if (!customMethodsList.includes(item)) {
           delete this[item];
         }
@@ -132,12 +135,12 @@ export default class BaseEngine extends Component {
     });
   };
 
-  __generateCtx = ctx => {
+  __generateCtx = (ctx) => {
     const { pageContext, compContext } = this.context;
     const obj = {
       page: pageContext,
       component: compContext,
-      ...ctx
+      ...ctx,
     };
     forEach(obj, (val, key) => {
       this[key] = val;
@@ -153,19 +156,22 @@ export default class BaseEngine extends Component {
     const schema = props.__schema || {};
     const appHelper = props.__appHelper;
     const dataSource = (schema && schema.dataSource) || {};
-    this.__dataHelper = new DataHelper(this, dataSource, appHelper, config => this.__parseData(config));
+    this.__dataHelper = new DataHelper(this, dataSource, appHelper, (config) => this.__parseData(config));
     this.dataSourceMap = this.__dataHelper.dataSourceMap;
     // 设置容器组件占位，若设置占位则在初始异步请求完成之前用loading占位且不渲染容器组件内部内容
-    this.__showPlaceholder =
-      this.__parseData(schema.props && schema.props.autoLoading) &&
-      (dataSource.list || []).some(item => !!this.__parseData(item.isInit));
+    if (this.__parseData(schema.props && schema.props.autoLoading)) {
+      this.__showPlaceholder = (dataSource.list || []).some((item) => !!this.__parseData(item.isInit));
+    }
+    // this.__showPlaceholder = this.__parseData(schema.props && schema.props.autoLoading) && (dataSource.list || []).some(
+    //   (item) => !!this.__parseData(item.isInit),
+    // );
   };
 
   __render = () => {
     const schema = this.props.__schema;
     this.__setLifeCycleMethods('render');
 
-    const engine = this.context.engine;
+    const { engine } = this.context;
     if (engine) {
       engine.props.onCompGetCtx(schema, this);
       // 画布场景才需要每次渲染bind自定义方法
@@ -176,7 +182,10 @@ export default class BaseEngine extends Component {
     }
   };
 
-  __getRef = ref => {
+  __getRef = (ref) => {
+    const { engine } = this.context;
+    const { __schema } = this.props;
+    engine && engine.props.onCompGetRef(__schema, ref);
     this.__ref = ref;
   };
 
@@ -186,7 +195,7 @@ export default class BaseEngine extends Component {
     self.__proto__ = __ctx || this;
     return this.__createVirtualDom(__schema.children, self, {
       schema: __schema,
-      Comp: __components[__schema.componentName]
+      Comp: __components[__schema.componentName],
     });
   };
 
@@ -196,17 +205,17 @@ export default class BaseEngine extends Component {
   // parentInfo 父组件的信息，包含schema和Comp
   // idx 若为循环渲染的循环Index
   __createVirtualDom = (schema, self, parentInfo, idx) => {
+
     if (!schema) return null;
     // rax text prop 兼容处理
     if (schema.componentName === 'Text') {
       if (typeof schema.props.text === 'string') {
-        schema = Object.assign({}, schema);
+        schema = { ...schema };
         schema.children = [schema.props.text];
       }
     }
 
-    const { __appHelper: appHelper, __components: components = {}, __componentsMap: componentsMap = {} } =
-      this.props || {};
+    const { __appHelper: appHelper, __components: components = {}, __componentsMap: componentsMap = {} } = this.props || {};
     const { engine } = this.context || {};
     if (isJSExpression(schema)) {
       return parseExpression(schema, self);
@@ -217,14 +226,12 @@ export default class BaseEngine extends Component {
     }
     if (Array.isArray(schema)) {
       if (schema.length === 1) return this.__createVirtualDom(schema[0], self, parentInfo);
-      return schema.map((item, idx) =>
-        this.__createVirtualDom(item, self, parentInfo, item && item.__ctx && item.__ctx.lunaKey ? '' : idx)
-      );
+      return schema.map((item, idx) => this.__createVirtualDom(item, self, parentInfo, item && item.__ctx && item.__ctx.lunaKey ? '' : idx),);
     }
 
-    //解析占位组件
+    // 解析占位组件
     if (schema.componentName === 'Flagment' && schema.children) {
-      let tarChildren = isJSExpression(schema.children) ? parseExpression(schema.children, self) : schema.children;
+      const tarChildren = isJSExpression(schema.children) ? parseExpression(schema.children, self) : schema.children;
       return this.__createVirtualDom(tarChildren, self, parentInfo);
     }
 
@@ -232,17 +239,17 @@ export default class BaseEngine extends Component {
       return schema;
     }
     if (!isSchema(schema)) return null;
-    let Comp = components[schema.componentName] || View;
+    let Comp = components[schema.componentName] || engine.getNotFoundComponent();
 
     if (schema.loop !== undefined) {
       return this.__createLoopVirtualDom(
         {
           ...schema,
-          loop: parseData(schema.loop, self)
+          loop: parseData(schema.loop, self),
         },
         self,
         parentInfo,
-        idx
+        idx,
       );
     }
     const condition = schema.condition === undefined ? true : parseData(schema.condition, self);
@@ -258,7 +265,7 @@ export default class BaseEngine extends Component {
       } else if (!schema.__ctx) {
         // 在生产环境schema没有__ctx上下文，需要手动生成一个lunaKey
         schema.__ctx = {
-          lunaKey: `luna${++scopeIdx}`
+          lunaKey: `luna${++scopeIdx}`,
         };
         scopeKey = schema.__ctx.lunaKey;
       } else {
@@ -279,11 +286,11 @@ export default class BaseEngine extends Component {
     // 容器类组件的上下文通过props传递，避免context传递带来的嵌套问题
     const otherProps = isFileSchema(schema)
       ? {
-          __schema: schema,
-          __appHelper: appHelper,
-          __components: components,
-          __componentsMap: componentsMap
-        }
+        __schema: schema,
+        __appHelper: appHelper,
+        __components: components,
+        // __componentsMap: componentsMap,
+      }
       : {};
     if (engine && engine.props.designMode) {
       otherProps.__designMode = engine.props.designMode;
@@ -294,20 +301,21 @@ export default class BaseEngine extends Component {
       Comp,
       componentInfo: {
         ...componentInfo,
-        props: transformArrayToMap(componentInfo.props, 'name')
-      }
+        props: transformArrayToMap(componentInfo.props, 'name'),
+      },
     });
     // 对于可以获取到ref的组件做特殊处理
     if (!acceptsRef(Comp)) {
-      Comp = CompWrapper(Comp);
+      Comp = compWrapper(Comp);
     }
-    otherProps.ref = ref => {
+    otherProps.ref = (ref) => {
       const refProps = props.ref;
       if (refProps && typeof refProps === 'string') {
         this[refProps] = ref;
       }
       engine && engine.props.onCompGetRef(schema, ref);
     };
+
     // scope需要传入到组件上
     if (scopeKey && this.__compScopes[scopeKey]) {
       props.__scope = this.__compScopes[scopeKey];
@@ -320,30 +328,45 @@ export default class BaseEngine extends Component {
     } else if (typeof idx === 'number' && !props.key) {
       props.key = idx;
     }
-    const renderComp = props => (
-      <Comp {...props}>
-        {(!isFileSchema(schema) &&
+    props.__id = schema.id;
+
+    let Child = null;
+    if (!isFileSchema(schema) && schema.children) {
+      Child = this.__createVirtualDom(
+        isJSExpression(schema.children) ? parseExpression(schema.children, self) : schema.children,
+        self,
+        {
+          schema,
+          Comp,
+        },
+      );
+    }
+
+    const renderComp = (props) =>
+      engine.createElement(
+      Comp,
+        props,
+      (!isFileSchema(schema) &&
           !!schema.children &&
           this.__createVirtualDom(
             isJSExpression(schema.children) ? parseExpression(schema.children, self) : schema.children,
             self,
             {
               schema,
-              Comp
-            }
-          )) ||
-          null}
-      </Comp>
-    );
-    //设计模式下的特殊处理
+              Comp,
+            },
+          ))
+          || null,
+      );
+    // 设计模式下的特殊处理
     if (engine && [DESIGN_MODE.EXTEND, DESIGN_MODE.BORDER].includes(engine.props.designMode)) {
-      //对于overlay,dialog等组件为了使其在设计模式下显示，外层需要增加一个div容器
+      // 对于overlay,dialog等组件为了使其在设计模式下显示，外层需要增加一个div容器
       if (OVERLAY_LIST.includes(schema.componentName)) {
         const { ref, ...overlayProps } = otherProps;
         return (
-          <Div ref={ref} __designMode={engine.props.designMode}>
+          <div ref={ref} __designMode={engine.props.designMode}>
             {renderComp({ ...props, ...overlayProps })}
-          </Div>
+          </div>
         );
       }
       // 虚拟dom显示
@@ -373,49 +396,56 @@ export default class BaseEngine extends Component {
     return schema.loop.map((item, i) => {
       const loopSelf = {
         [itemArg]: item,
-        [indexArg]: i
+        [indexArg]: i,
       };
       loopSelf.__proto__ = self;
       return this.__createVirtualDom(
         {
           ...schema,
-          loop: undefined
+          loop: undefined,
         },
         loopSelf,
         parentInfo,
-        idx ? `${idx}_${i}` : i
+        idx ? `${idx}_${i}` : i,
       );
     });
   };
 
-  __createContextDom = (childCtx, currCtx) => {
-    return (
-      <AppContext.Consumer>
-        {context => {
-          this.context = context;
-          this.__generateCtx(currCtx);
-          this.__render();
-          return (
-            <AppContext.Provider
-              value={{
-                ...this.context,
-                ...childCtx
-              }}
-            >
-              {this.__createDom()}
-            </AppContext.Provider>
-          );
-        }}
-      </AppContext.Consumer>
-    );
-  };
+  __createContextDom = (childCtx, currCtx, props) => (
+    <AppContext.Consumer>
+      {(context) => {
+        this.context = context;
+        this.__generateCtx(currCtx);
+        this.__render();
+        return (
+          <AppContext.Provider
+            value={{
+              ...this.context,
+              ...childCtx,
+            }}
+          >
+            {context.engine.createElement(
+              props.__components.Page,
+              {
+                ...props,
+                ref: this.__getRef,
+                className: classnames(getFileCssName(props.__schema.fileName), props.className),
+                __id: props.__schema.id,
+              },
+              this.__createDom(),
+            )}
+          </AppContext.Provider>
+        );
+      }}
+    </AppContext.Consumer>
+  );
 
   __parseProps = (props, self, path, info) => {
     const { schema, Comp, componentInfo = {} } = info;
     const propInfo = getValue(componentInfo.props, path);
     const propType = propInfo && propInfo.extra && propInfo.extra.propType;
     const ignoreParse = schema.__ignoreParse || [];
-    const checkProps = value => {
+    const checkProps = (value) => {
       if (!propType) return value;
       return checkPropTypes(value, path, propType, componentInfo.name) ? value : undefined;
     };
@@ -423,27 +453,26 @@ export default class BaseEngine extends Component {
     const parseReactNode = (data, params) => {
       if (isEmpty(params)) {
         return checkProps(this.__createVirtualDom(data, self, { schema, Comp }));
-      } else {
-        return checkProps(function() {
-          const args = {};
-          if (Array.isArray(params) && params.length) {
-            params.map((item, idx) => {
-              if (typeof item === 'string') {
-                args[item] = arguments[idx];
-              } else if (item && typeof item === 'object') {
-                args[item.name] = arguments[idx];
-              }
-            });
-          }
-          args.__proto__ = self;
-          return self.__createVirtualDom(data, args, { schema, Comp });
-        });
       }
+      return checkProps(function () {
+        const args = {};
+        if (Array.isArray(params) && params.length) {
+          params.map((item, idx) => {
+            if (typeof item === 'string') {
+              args[item] = arguments[idx];
+            } else if (item && typeof item === 'object') {
+              args[item.name] = arguments[idx];
+            }
+          });
+        }
+        args.__proto__ = self;
+        return self.__createVirtualDom(data, args, { schema, Comp });
+      });
     };
 
     // 判断是否需要解析变量
     if (
-      ignoreParse.some(item => {
+      ignoreParse.some((item) => {
         if (item instanceof RegExp) {
           return item.test(path);
         }
@@ -469,11 +498,14 @@ export default class BaseEngine extends Component {
     // 兼容通过componentInfo判断的情况
     if (isSchema(props)) {
       return parseReactNode(props);
-    } else if (Array.isArray(props)) {
+    }
+    if (Array.isArray(props)) {
       return checkProps(props.map((item, idx) => this.__parseProps(item, self, path ? `${path}.${idx}` : idx, info)));
-    } else if (typeof props === 'function') {
+    }
+    if (typeof props === 'function') {
       return checkProps(props.bind(self));
-    } else if (props && typeof props === 'object') {
+    }
+    if (props && typeof props === 'object') {
       if (props.$$typeof) return checkProps(props);
       const res = {};
       forEach(props, (val, key) => {
@@ -484,7 +516,8 @@ export default class BaseEngine extends Component {
         res[key] = this.__parseProps(val, self, path ? `${path}.${key}` : key, info);
       });
       return checkProps(res);
-    } else if (typeof props === 'string') {
+    }
+    if (typeof props === 'string') {
       return checkProps(props.trim());
     }
     return checkProps(props);
@@ -493,15 +526,19 @@ export default class BaseEngine extends Component {
   get utils() {
     return this.appHelper && this.appHelper.utils;
   }
+
   get constants() {
     return this.appHelper && this.appHelper.constants;
   }
+
   get history() {
     return this.appHelper && this.appHelper.history;
   }
+
   get location() {
     return this.appHelper && this.appHelper.location;
   }
+
   get match() {
     return this.appHelper && this.appHelper.match;
   }

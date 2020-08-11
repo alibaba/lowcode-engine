@@ -3,6 +3,89 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.47"></a>
+## [0.8.47](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.46...@ali/lowcode-demo@0.8.47) (2020-08-04)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-demo
+
+<a name="0.8.46"></a>
+## [0.8.46](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.44...@ali/lowcode-demo@0.8.46) (2020-08-04)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-demo
+
+<a name="0.8.45"></a>
+## [0.8.45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.44...@ali/lowcode-demo@0.8.45) (2020-08-04)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-demo
+
+<a name="0.8.44"></a>
+## [0.8.44](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.43...@ali/lowcode-demo@0.8.44) (2020-07-29)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-demo
+
+<a name="0.8.43"></a>
+## [0.8.43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.42...@ali/lowcode-demo@0.8.43) (2020-07-28)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-demo
+
+<a name="0.8.42"></a>
+## [0.8.42](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.41...@ali/lowcode-demo@0.8.42) (2020-07-23)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-demo
+
+<a name="0.8.41"></a>
+## [0.8.41](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.40...@ali/lowcode-demo@0.8.41) (2020-07-22)
+
+
+### Features
+
+* rax render ([95bf331](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/95bf331))
+
+
+
+
+<a name="0.8.40"></a>
+## [0.8.40](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.39...@ali/lowcode-demo@0.8.40) (2020-07-21)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-demo
+
+<a name="0.8.39"></a>
+## [0.8.39](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.38...@ali/lowcode-demo@0.8.39) (2020-07-21)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-demo
+
+<a name="0.8.38"></a>
+## [0.8.38](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.37...@ali/lowcode-demo@0.8.38) (2020-07-21)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-demo
+
 <a name="0.8.37"></a>
 ## [0.8.37](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.36...@ali/lowcode-demo@0.8.37) (2020-07-14)
 

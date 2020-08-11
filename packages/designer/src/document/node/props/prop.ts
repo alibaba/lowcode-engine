@@ -66,7 +66,8 @@ export class Prop implements IPropParent {
     const type = this._type;
 
     if (type === 'unset') {
-      return UNSET;
+      // return UNSET; @康为 之后 review 下这块改造
+      return undefined;
     }
 
     if (type === 'literal' || type === 'expression') {
@@ -86,6 +87,8 @@ export class Prop implements IPropParent {
         type: 'JSSlot',
         params: schema.params,
         value: schema.children,
+        title: schema.title,
+        name: schema.name,
       };
     }
 
@@ -96,9 +99,11 @@ export class Prop implements IPropParent {
       const maps: any = {};
       this.items!.forEach((prop, key) => {
         const v = prop.export(stage);
-        if (v !== UNSET) {
-          maps[prop.key == null ? key : prop.key] = v;
-        }
+        // if (v !== UNSET) {
+        //   maps[prop.key == null ? key : prop.key] = v;
+        // }
+        // @康为 之后 review 下这块改造
+        maps[prop.key == null ? key : prop.key] = v;
       });
       return maps;
     }
@@ -235,6 +240,7 @@ export class Prop implements IPropParent {
     const slotSchema: SlotSchema = {
       componentName: 'Slot',
       title: data.title,
+      name: data.name,
       params: data.params,
       children: data.value,
     };

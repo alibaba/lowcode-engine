@@ -224,6 +224,13 @@ export class SettingTopEntry implements SettingEntry {
   getPage() {
     return this.first.document;
   }
+
+  /**
+   * @deprecated
+   */
+  getNode() {
+    return this.nodes[0];
+  }
 }
 
 interface Purgeable {

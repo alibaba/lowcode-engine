@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { createElement } from 'react';
 import { Button } from '@alifd/next';
-import Engine, { Panes, Prototype } from '@ali/visualengine';
+import Engine, { Panes, Prototype, Editor } from '@ali/visualengine';
 import { ActionUtil as actionUtil } from '@ali/visualengine-utils';
 import getTrunkPane from '@ali/ve-trunk-pane';
 import DatapoolPane from '@ali/ve-datapool-pane';
@@ -102,6 +102,7 @@ context.use(HOOKS.VE_SETTING_FIELD_VARIABLE_SETTER, VariableSetter);
 const externals = ['react', 'react-dom', 'prop-types', 'react-router', 'react-router-dom', '@ali/recore'];
 
 async function loadAssets() {
+  // const legaoAssets = await editor.utils.get('./raxAssets.json');
   const legaoAssets = await editor.utils.get('./legao-assets.json');
 
   const assets = upgradeAssetsBundle(legaoAssets);
@@ -144,8 +145,12 @@ async function loadAssets() {
 }
 
 async function loadSchema() {
+  // const schema = await editor.utils.get('./rax.json');
   const schema = await editor.utils.get('./schema.json');
   editor.set('schema', schema);
+  // editor.set('renderEnv', 'rax');
+  // editor.set('clientTypes', ['mobile']);
+
 }
 
 // demo
@@ -513,5 +518,7 @@ async function init() {
   initDemoPanes();
   // initHistoryPane();
   Engine.init();
+  // Engine.Env.set('renderEnv', 'rax');
+
 }
 init();

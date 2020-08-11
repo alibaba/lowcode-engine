@@ -5,10 +5,23 @@ import { SettingEntry } from './setting-entry';
 import { computed, obx } from '@ali/lowcode-editor-core';
 import { cloneDeep } from '@ali/lowcode-utils';
 
+function getSettingFieldCollectorKey(parent: SettingEntry, config: FieldConfig) {
+  let top = parent;
+  const path = [config.name];
+  while (top !== parent.top) {
+    if (top instanceof SettingField && top.type !== 'group') {
+      path.unshift(top.name);
+    }
+    top = top.parent;
+  }
+  return path.join('.');
+}
+
 export class SettingField extends SettingPropEntry implements SettingEntry {
   readonly isSettingField = true;
   readonly isRequired: boolean;
   readonly transducer: Transducer;
+  private _config: FieldConfig;
   extraProps: FieldExtraProps;
 
   // ==== dynamic properties ====
@@ -41,6 +54,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     super(parent, config.name, config.type);
 
     const { title, items, setter, extraProps, ...rest } = config;
+    this._config = config;
     this._title = title;
     this._setter = setter;
     this.extraProps = {
@@ -51,10 +65,11 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     this._expanded = extraProps?.defaultCollapsed ? false : true;
 
     // initial items
-    if (this.type === 'group' && items) {
+    if (items && items.length > 0) {
       this.initItems(items, settingFieldCollector);
-    } else if (settingFieldCollector && config.name) {
-      settingFieldCollector(config.name, this);
+    }
+    if (this.type !== 'group' && settingFieldCollector && config.name) {
+      settingFieldCollector(getSettingFieldCollectorKey(parent, config), this);
     }
 
     // compatiable old config
@@ -65,6 +80,10 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
   get items(): Array<SettingField | CustomView> {
     return this._items;
+  }
+
+  get config(): FieldConfig {
+    return this._config;
   }
 
   private initItems(items: Array<FieldConfig | CustomView>, settingFieldCollector?: { (name: string | number, field: SettingField): void; (name: string, field: SettingField): void; }) {

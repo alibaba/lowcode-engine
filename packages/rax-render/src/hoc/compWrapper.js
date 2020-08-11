@@ -1,15 +1,17 @@
 import { createElement, Component } from 'rax';
 
-export default function(Comp) {
-  class CompWrapper extends Component {
+export default function (Comp) {
+  class compWrapper extends Component {
     constructor(props, context) {
       super(props, context);
     }
 
     render() {
-      return <Comp {...this.props} />;
+      return createElement(Comp, {
+        ...this.props,
+      });
     }
   }
 
-  return CompWrapper;
+  return compWrapper;
 }

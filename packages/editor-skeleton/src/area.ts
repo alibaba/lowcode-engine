@@ -31,7 +31,15 @@ export default class Area<C extends IWidgetBaseConfig = any, T extends IWidget =
   }
 
   add(config: T | C): T {
+    const item = this.container.get(config.name);
+    if (item) {
+      return item;
+    }
     return this.container.add(config);
+  }
+
+  remove(config: T | string): number {
+    return this.container.remove(config);
   }
 
   private lastCurrent: T | null = null;

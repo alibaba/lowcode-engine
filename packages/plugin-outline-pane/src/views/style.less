@@ -21,6 +21,46 @@
   margin-bottom: @treeNodeHeight;
   user-select: none;
 
+  .tree-node-modal {
+    margin: 5px;
+    border: 1px solid rgba(31, 56, 88, 0.2);
+    border-radius: 3px;
+    box-shadow: 0 1px 4px 0 rgba(31, 56, 88, 0.15);
+
+    .tree-node-modal-title {
+      position: relative;
+      background: rgba(31, 56, 88, 0.04);
+      padding: 0 10px;
+      height: 32px;
+      line-height: 32px;
+      border-bottom: 1px solid rgba(31, 56, 88, 0.2);
+
+      .tree-node-modal-title-visible-icon {
+        position: absolute;
+        top: 4px;
+        right: 12px;
+        cursor: pointer;
+      }
+    }
+
+    .tree-pane-modal-content {
+      & > .tree-node-branches::before {
+        display: none;
+      }
+    }
+
+    .tree-node-modal-radio, .tree-node-modal-radio-active {
+      margin-right: 4px;
+      opacity: 0.8;
+      position: absolute;
+      top: 7px;
+      left: 6px;
+    }
+    .tree-node-modal-radio-active {
+      color: #006cff;
+    }
+  }
+
   .tree-node-branches::before {
     position: absolute;
     display: block;

@@ -8,8 +8,8 @@ import { generateI18n } from './locale/utils';
 import zhCN from './locale/zh-CN';
 import './index.scss';
 
-export default class Mixin extends PureComponent {
-  static displayName = 'Mixin';
+export default class Mixed extends PureComponent {
+  static displayName = 'Mixed';
   static propTypes = {
     locale: PropTypes.string,
     messages: PropTypes.object,

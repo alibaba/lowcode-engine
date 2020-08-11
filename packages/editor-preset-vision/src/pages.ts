@@ -41,19 +41,21 @@ const pages = Object.assign(project, {
       if (componentsTree[0]) {
         componentsTree[0].componentName = componentsTree[0].componentName || 'Page';
         // FIXME
-        if (componentsTree[0].componentName === 'Page' ||
-        componentsTree[0].componentName === 'Component') {
+        if (componentsTree[0].componentName === 'Page' || componentsTree[0].componentName === 'Component') {
           componentsTree[0].lifeCycles = {};
           componentsTree[0].methods = {};
         }
       }
     }
 
-    project.load({
-      version: '1.0.0',
-      componentsMap: [],
-      componentsTree,
-    }, true);
+    project.load(
+      {
+        version: '1.0.0',
+        componentsMap: [],
+        componentsTree,
+      },
+      true,
+    );
   },
   addPage(data: OldPageData | RootSchema) {
     if (isPageDataV1(data)) {
@@ -90,18 +92,20 @@ const pages = Object.assign(project, {
     return project.onCurrentDocumentChange(fn);
   },
   toData() {
-    return project.documents.map(doc => doc.toData());
-  }
+    return project.documents.map((doc) => doc.toData());
+  },
 });
 
 Object.defineProperty(pages, 'currentPage', {
   get() {
     return project.currentDocument;
-  }
-})
+  },
+});
 
 pages.onCurrentPageChange((page: DocumentModel) => {
-  if (!page) { return; }
+  if (!page) {
+    return;
+  }
   page.acceptRootNodeVisitor('NodeCache', (rootNode) => {
     const visitor: NodeCacheVisitor = page.getRootNodeVisitor('NodeCache');
     if (visitor) {

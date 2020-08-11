@@ -3,6 +3,137 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.38"></a>
+## [0.8.38](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.37...@ali/lowcode-editor-preset-vision@0.8.38) (2020-08-04)
+
+
+### Bug Fixes
+
+* 🐛 解决点击组件时无法聚焦到点中的组件上的问题 ([852d882](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/852d882))
+
+
+
+
+<a name="0.8.37"></a>
+## [0.8.37](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.35...@ali/lowcode-editor-preset-vision@0.8.37) (2020-08-04)
+
+
+### Bug Fixes
+
+* 修复 slot 获取初始值异常的 bug ([63b19f1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/63b19f1))
+* 兼容 listSetter 内部变量，修复回退 fieldId 重置问题 ([c95e618](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c95e618))
+
+
+
+
+<a name="0.8.36"></a>
+## [0.8.36](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.35...@ali/lowcode-editor-preset-vision@0.8.36) (2020-08-04)
+
+
+### Bug Fixes
+
+* 修复 slot 获取初始值异常的 bug ([63b19f1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/63b19f1))
+* 兼容 listSetter 内部变量，修复回退 fieldId 重置问题 ([c95e618](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c95e618))
+
+
+
+
+<a name="0.8.35"></a>
+## [0.8.35](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.34...@ali/lowcode-editor-preset-vision@0.8.35) (2020-07-29)
+
+
+### Bug Fixes
+
+* slot 兼容问题 + loop key bug fix ([bc64017](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bc64017))
+
+
+
+
+<a name="0.8.34"></a>
+## [0.8.34](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.33...@ali/lowcode-editor-preset-vision@0.8.34) (2020-07-28)
+
+
+### Bug Fixes
+
+* vc-filter bug fix ([31ea5d5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/31ea5d5))
+
+
+### Features
+
+* 支持 entry 模式 ([fe1f6f1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fe1f6f1))
+
+
+
+
+<a name="0.8.33"></a>
+## [0.8.33](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.32...@ali/lowcode-editor-preset-vision@0.8.33) (2020-07-23)
+
+
+### Bug Fixes
+
+* vision prop 初始化时有依赖已初始化的 prop，需要实时添加 ([1feb46f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1feb46f))
+
+
+
+
+<a name="0.8.32"></a>
+## [0.8.32](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.31...@ali/lowcode-editor-preset-vision@0.8.32) (2020-07-22)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-vision
+
+<a name="0.8.31"></a>
+## [0.8.31](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.30...@ali/lowcode-editor-preset-vision@0.8.31) (2020-07-21)
+
+
+### Bug Fixes
+
+* settingField items is empty when type is not 'group' ([582c41a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/582c41a))
+* 修复 initial 重复、type = 'composite' 时 items 为空 ([bf79e63](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bf79e63))
+* 修复组件面板详情加载不了的 bug ([cca3309](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/cca3309))
+* 兼容 variable 历史数据格式 ([d666317](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d666317))
+* 兼容事件绑定 ([f4c07af](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f4c07af))
+* 调整 upgrade 和 init 的流程 ([09fc1a0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/09fc1a0))
+
+
+### Features
+
+* support subtreeModified ([7eeb51c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7eeb51c))
+
+
+
+
+<a name="0.8.30"></a>
+## [0.8.30](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.29...@ali/lowcode-editor-preset-vision@0.8.30) (2020-07-21)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-vision
+
+<a name="0.8.29"></a>
+## [0.8.29](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.28...@ali/lowcode-editor-preset-vision@0.8.29) (2020-07-21)
+
+
+### Bug Fixes
+
+* 🐛 eslint ([e3ca0bd](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e3ca0bd))
+* 🐛 eslint ([14803dd](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/14803dd))
+* 🐛 use intl ([a22e66a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a22e66a))
+* 🐛 用 isI18nData 判断 meta title ([732bccf](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/732bccf))
+* 🐛 逻辑简化 ([710f3ba](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/710f3ba))
+* 可以降级到历史的 JSBlock 格式 ([af1746b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/af1746b))
+
+
+### Features
+
+* 🎸 prototype getTitle 支持 i18n ([18807ab](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/18807ab))
+
+
+
+
 <a name="0.8.28"></a>
 ## [0.8.28](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.27...@ali/lowcode-editor-preset-vision@0.8.28) (2020-07-14)
 

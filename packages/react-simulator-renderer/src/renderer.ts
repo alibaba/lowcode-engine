@@ -76,7 +76,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   private buildComponents() {
     this._components = {
       ...builtinComponents,
-      ...buildComponents(this._libraryMap, this._componentsMap)
+      ...buildComponents(this._libraryMap, this._componentsMap),
     };
   }
   @obx.ref private _components: any = {};
@@ -90,11 +90,11 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   @computed get context(): any {
     return this._appContext;
   }
-  @obx.ref private _designMode: string = 'design';
+  @obx.ref private _designMode = 'design';
   @computed get designMode(): any {
     return this._designMode;
   }
-  @obx.ref private _device: string = 'default';
+  @obx.ref private _device = 'default';
   @computed get device() {
     return this._device;
   }
@@ -216,53 +216,77 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   }
 
   createComponent(schema: ComponentSchema): Component | null {
-    const _schema = {
+    let _schema: any = {
       ...schema,
     };
     _schema.methods = {};
     _schema.lifeCycles = {};
+
+    const node = host.document.createNode(_schema);
+    _schema = node.export(TransformStage.Render);
 
     const processPropsSchema = (propsSchema: any, propsMap: any): any => {
       if (!propsSchema) {
         return {};
       }
 
-      const result = {...propsSchema};
+      const result = { ...propsSchema };
       const reg = /^(?:this\.props|props)\.(\S+)$/;
-      Object.keys(propsSchema).map((key: string) => {
-        if (propsSchema[key].type === 'JSExpression') {
-          const { value } = propsSchema[key];
+      Object.keys(result).map((key: string) => {
+        if (result[key].type === 'JSExpression') {
+          const { value } = result[key];
           const matched = reg.exec(value);
           if (matched) {
             const propName = matched[1];
             result[key] = propsMap[propName];
           }
+        } else if (result[key].type === 'JSSlot') {
+          const schema = result[key].value;
+          result[key] = createElement(Ele, { schema, propsMap: {} });
         }
       });
+
       return result;
     };
 
-    const getElement = (componentsMap: any, schema: any, propsMap: any): ReactElement => {
-      const Com = componentsMap[schema.componentName];
-      let children = null;
-      if (schema.children && schema.children.length > 0) {
-        children = schema.children.map((item: any) => getElement(componentsMap, item, propsMap));
+    const renderer = this;
+    const componentsMap = renderer.componentsMap;
+
+    class Ele extends React.Component<{ schema: any; propsMap: any }> {
+      private isModal: boolean;
+
+      constructor(props: any) {
+        super(props);
+        const componentMeta = host.document.getComponentMeta(props.schema.componentName);
+        if (componentMeta?.prototype?.isModal()) {
+          this.isModal = true;
+          return;
+        }
       }
-      const _leaf = host.document.designer.currentDocument?.createNode(schema);
-      const node = host.document.createNode(schema);
-      let props = processPropsSchema(schema.props, propsMap);
-      props = host.document.designer.transformProps(props, node, TransformStage.Init);
-      props = host.document.designer.transformProps(props, node, TransformStage.Render);
-      return createElement(Com, {...props, _leaf}, children);
+
+      render() {
+        if (this.isModal) {
+          return null;
+        }
+        const { schema, propsMap } = this.props;
+        const Com = componentsMap[schema.componentName];
+        let children = null;
+        if (schema.children && schema.children.length > 0) {
+          children = schema.children.map((item: any) => createElement(Ele, { schema: item, propsMap }));
+        }
+        const props = processPropsSchema(schema.props, propsMap);
+        const _leaf = host.document.createNode(schema);
+
+        return createElement(Com, { ...props, _leaf }, children);
+      }
     }
 
-    const renderer = this;
     class Com extends React.Component {
       render() {
-        const componentsMap = renderer.componentsMap;
-        let children = null;
+        let children = [];
+        const propsMap = this.props;
         if (_schema.children && Array.isArray(_schema.children)) {
-          children = _schema.children?.map((item:any) => getElement(componentsMap, item, this.props));
+          children = _schema.children.map((item: any) => createElement(Ele, { schema: item, propsMap }));
         }
         return createElement(React.Fragment, {}, children);
       }

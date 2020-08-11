@@ -11,9 +11,14 @@ export interface JSExpression {
    * 模拟值
    */
   mock?: any;
+  /**
+   * 额外扩展属性，如 extType、events
+   */
+  [key: string]: any;
 }
 
 export interface JSSlot {
+  name?: string;
   type: 'JSSlot';
   title?: string;
   // 函数的入参
@@ -50,5 +55,5 @@ export function isJSSlot(data: any): data is JSSlot {
 }
 
 export function isJSBlock(data: any): data is JSBlock {
-  return data && data.type === 'JSBlock'
+  return data && data.type === 'JSBlock';
 }

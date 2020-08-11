@@ -59,9 +59,7 @@ function main() {
 
   builder.generateProject(schemaJson).then((result) => {
     displayResultInConsole(result);
-    writeResultToDisk(result, 'output/lowcodeDemo').then((response) =>
-      console.log('Write to disk: ', JSON.stringify(response)),
-    );
+    writeResultToDisk(result, 'output/lowcodeDemo').then((response) => console.log('Write to disk: ', JSON.stringify(response)),);
     return result;
   });
 }
@@ -162,9 +160,7 @@ function exportProject() {
 
   builder.generateProject(schemaJson).then((result) => {
     displayResultInConsole(result);
-    writeResultToDisk(result, 'output/lowcodeDemo').then((response) =>
-      console.log('Write to disk: ', JSON.stringify(response)),
-    );
+    writeResultToDisk(result, 'output/lowcodeDemo').then((response) => console.log('Write to disk: ', JSON.stringify(response)),);
     return result;
   });
 }

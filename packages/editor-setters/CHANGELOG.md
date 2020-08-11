@@ -3,6 +3,65 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.14"></a>
+## [0.9.14](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.13...@ali/lowcode-editor-setters@0.9.14) (2020-08-04)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-setters
+
+<a name="0.9.13"></a>
+## [0.9.13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.11...@ali/lowcode-editor-setters@0.9.13) (2020-08-04)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-setters
+
+<a name="0.9.12"></a>
+## [0.9.12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.11...@ali/lowcode-editor-setters@0.9.12) (2020-08-04)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-setters
+
+<a name="0.9.11"></a>
+## [0.9.11](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.10...@ali/lowcode-editor-setters@0.9.11) (2020-07-28)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-setters
+
+<a name="0.9.10"></a>
+## [0.9.10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.9...@ali/lowcode-editor-setters@0.9.10) (2020-07-22)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-setters
+
+<a name="0.9.9"></a>
+## [0.9.9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.8...@ali/lowcode-editor-setters@0.9.9) (2020-07-21)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-setters
+
+<a name="0.9.8"></a>
+## [0.9.8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.7...@ali/lowcode-editor-setters@0.9.8) (2020-07-21)
+
+
+### Bug Fixes
+
+* rename MixinSetter to MixedSetter ([0e9a740](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0e9a740))
+
+
+
+
 <a name="0.9.7"></a>
 ## [0.9.7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.6...@ali/lowcode-editor-setters@0.9.7) (2020-07-13)
 
