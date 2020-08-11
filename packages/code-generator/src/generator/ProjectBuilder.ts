@@ -121,6 +121,19 @@ export class ProjectBuilder implements IProjectBuilder {
         files,
       });
     }
+
+    // appConfig
+    if (parseResult.project && builders.appConfig) {
+      const { files } = await builders.appConfig.generateModule(
+        parseResult.project,
+      );
+
+      buildResult.push({
+        path: this.template.slots.appConfig.path,
+        files,
+      });
+    }
+
     // constants?
     if (
       parseResult.project &&
@@ -136,6 +149,7 @@ export class ProjectBuilder implements IProjectBuilder {
         files,
       });
     }
+
     // utils?
     if (
       parseResult.globalUtils &&
@@ -151,6 +165,7 @@ export class ProjectBuilder implements IProjectBuilder {
         files,
       });
     }
+
     // i18n?
     if (parseResult.globalI18n && builders.i18n && this.template.slots.i18n) {
       const { files } = await builders.i18n.generateModule(
@@ -162,6 +177,7 @@ export class ProjectBuilder implements IProjectBuilder {
         files,
       });
     }
+
     // globalStyle
     if (parseResult.project && builders.globalStyle) {
       const { files } = await builders.globalStyle.generateModule(
@@ -173,6 +189,7 @@ export class ProjectBuilder implements IProjectBuilder {
         files,
       });
     }
+
     // htmlEntry
     if (parseResult.project && builders.htmlEntry) {
       const { files } = await builders.htmlEntry.generateModule(
@@ -184,6 +201,7 @@ export class ProjectBuilder implements IProjectBuilder {
         files,
       });
     }
+
     // packageJSON
     if (parseResult.project && builders.packageJSON) {
       const { files } = await builders.packageJSON.generateModule(

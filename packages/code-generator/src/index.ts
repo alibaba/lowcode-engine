@@ -6,8 +6,8 @@ import { createProjectBuilder } from './generator/ProjectBuilder';
 import { createModuleBuilder } from './generator/ModuleBuilder';
 import { createDiskPublisher } from './publisher/disk';
 import { createZipPublisher } from './publisher/zip';
-import createIceJsProjectBuilder from './solutions/icejs';
-import createRecoreProjectBuilder from './solutions/recore';
+// import createIceJsProjectBuilder from './solutions/icejs';
+// import createRecoreProjectBuilder from './solutions/recore';
 
 // 引入说明
 import { REACT_CHUNK_NAME } from './plugins/component/react/const';
@@ -50,8 +50,8 @@ export default {
   createProjectBuilder,
   createModuleBuilder,
   solutions: {
-    icejs: createIceJsProjectBuilder,
-    recore: createRecoreProjectBuilder,
+    // icejs: createIceJsProjectBuilder,
+    // recore: createRecoreProjectBuilder,
   },
   solutionParts: {
     icejs,
