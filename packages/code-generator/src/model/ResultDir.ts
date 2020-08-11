@@ -15,7 +15,7 @@ export default class ResultDir implements IResultDir {
     if (this.dirs.findIndex(d => d.name === dir.name) < 0) {
       this.dirs.push(dir);
     } else {
-      throw new CodeGeneratorError('Adding same directory to one directory');
+      throw new CodeGeneratorError(`Adding same directory to one directory: ${dir.name} -> ${this.name}`);
     }
   }
 
@@ -25,7 +25,7 @@ export default class ResultDir implements IResultDir {
     ) {
       this.files.push(file);
     } else {
-      throw new CodeGeneratorError('Adding same file to one directory');
+      throw new CodeGeneratorError(`Adding same file to one directory: ${file.name} -> ${this.name}`);
     }
   }
 }
