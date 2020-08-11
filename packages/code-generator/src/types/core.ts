@@ -11,6 +11,7 @@ import {
 export enum FileType {
   CSS = 'css',
   SCSS = 'scss',
+  LESS = 'less',
   HTML = 'html',
   JS = 'js',
   JSX = 'jsx',
