@@ -41,7 +41,7 @@
     targetRootID: 'root',
   },
   meta: {
-    name: '示例应用',
+    name: 'Rax App Demo',
     git_group: 'demo-group',
     project_name: 'demo-project',
     description: '这是一个示例应用',

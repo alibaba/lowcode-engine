@@ -4,6 +4,7 @@ import fs from 'fs';
 import glob from 'glob';
 import JSON from 'json5';
 import path from 'path';
+import chalk from 'chalk';
 
 import CodeGenerator from '../src';
 import createRaxAppBuilder from '../src/solutions/rax-app';
@@ -25,30 +26,30 @@ async function exportProject(schemaJson: IProjectSchema, targetPath: string, pro
 
 const defineTest = (caseDirName: string) => {
   test(`rax-app ${caseDirName} should works`, async (t) => {
-    const caseFullDir = path.join(TEST_CASES_DIR, caseDirName);
-    const schema = JSON.parse(fs.readFileSync(path.join(caseFullDir, 'schema.json5'), 'utf-8'));
-    const actualDir = path.join(caseFullDir, 'actual');
+    try {
+      const caseFullDir = path.join(TEST_CASES_DIR, caseDirName);
+      const schema = JSON.parse(fs.readFileSync(path.join(caseFullDir, 'schema.json5'), 'utf-8'));
+      const actualDir = path.join(caseFullDir, 'actual');
 
-    await exportProject(schema, actualDir, 'demo-project');
+      removeActualDirRecursiveSync(actualDir, caseFullDir);
 
-    const actualFiles = glob.sync('**/*.{js,jsx,json,ts,tsx,less,css,scss,sass}', { cwd: actualDir });
+      await exportProject(schema, actualDir, 'demo-project');
 
-    t.true(actualFiles.length > 0)
+      const actualFiles = glob.sync('**/*.{js,jsx,json,ts,tsx,less,css,scss,sass}', { cwd: actualDir });
 
-    spawnSync('npx', ['prettier', '--write', ...actualFiles], {
-      stdio: 'inherit',
-      shell: true,
-      cwd: actualDir,
-    });
+      t.true(actualFiles.length > 0)
 
-    const diffRes = spawnSync('diff', ['-bur', 'actual', 'expected'], {
-      stdio: 'pipe',
-      shell: true,
-      cwd: caseFullDir,
-      encoding: 'utf-8',
-    });
+      runPrettierSync(actualFiles, actualDir);
 
-    t.is(diffRes.stdout, '')
+      const diffRes = diffActualAndExpectedSync(caseFullDir);
+      if (diffRes) {
+        t.fail(diffRes);
+      } else {
+        t.pass();
+      }
+    } catch(e){
+      throw e; // just for debugger
+    }
   });
 };
 
@@ -57,4 +58,49 @@ test('simple truth should pass', async (t) => {
 });
 
 fs.readdirSync(TEST_CASES_DIR).forEach(defineTest);
+
+function removeActualDirRecursiveSync(actualDir: string, caseFullDir: string) {
+  spawnSync('rm', ['-rf', actualDir], {
+    stdio: 'inherit',
+    shell: true,
+    cwd: caseFullDir
+  });
+}
+
+function runPrettierSync(files: string[], cwd: string) {
+  spawnSync('npx', ['prettier', '--write', ...files], {
+    stdio: 'inherit',
+    shell: true,
+    cwd,
+  });
+}
+
+function diffActualAndExpectedSync(caseFullDir: string): string {
+  const res = spawnSync('diff', ['-wur', 'expected', 'actual'], {
+    stdio: 'pipe',
+    shell: true,
+    cwd: caseFullDir,
+    encoding: 'utf-8',
+  });
+
+  return colorizeDiffOutput(res.stdout);
+}
+
+function colorizeDiffOutput(output: string): string {
+  if (!output){
+    return output;
+  }
+
+  return output.split('\n').map(line => {
+    if (/^Only/i.test(line)){
+      return chalk.red(line);
+    } else if (line[0] === '+'){
+      return chalk.yellow(line);
+    } else if (line[0] === '-'){
+      return chalk.red(line);
+    } else {
+      return line;
+    }
+  }).join('\n');
+}
 

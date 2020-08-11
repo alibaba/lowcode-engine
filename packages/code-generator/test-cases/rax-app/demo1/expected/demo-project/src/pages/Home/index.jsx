@@ -1,6 +1,7 @@
 import { createElement, Component } from 'rax';
 
 import Page from 'rax-view';
+
 import Text from 'rax-text';
 
 import './index.css';

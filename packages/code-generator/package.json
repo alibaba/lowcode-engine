@@ -37,6 +37,9 @@
   "ava": {
     "compileEnhancements": false,
     "snapshotDir": "test/fixtures/__snapshots__",
+    "files": [
+      "test/*.test.ts"
+    ],
     "extensions": [
       "ts"
     ],
