@@ -31,7 +31,7 @@ import {
   CanvasPoint,
 } from '../designer';
 import { parseMetadata } from './utils/parse-metadata';
-import { ComponentMetadata, ComponentSchema } from '@ali/lowcode-types';
+import { ComponentMetadata, NodeSchema } from '@ali/lowcode-types';
 import { BuiltinSimulatorRenderer } from './renderer';
 import clipboard from '../designer/clipboard';
 import { LiveEditing } from './live-editing/live-editing';
@@ -542,7 +542,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     return this.renderer?.getComponent(componentName) || null;
   }
 
-  createComponent(schema: ComponentSchema): Component | null {
+  createComponent(schema: NodeSchema): Component | null {
     return this.renderer?.createComponent(schema) || null;
   }
 

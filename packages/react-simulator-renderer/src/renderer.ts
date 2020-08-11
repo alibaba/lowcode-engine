@@ -8,7 +8,7 @@ import { getClientRects } from './utils/get-client-rects';
 import loader from './utils/loader';
 import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
 import { isESModule, isElement, cursor, setNativeSelection } from '@ali/lowcode-utils';
-import { RootSchema, NpmInfo, ComponentSchema, TransformStage } from '@ali/lowcode-types';
+import { RootSchema, NpmInfo, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
 // just use types
 import { BuiltinSimulatorRenderer, NodeInstance, Component } from '@ali/lowcode-designer';
 import Slot from './builtin-components/slot';
@@ -212,7 +212,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
     return this.instancesMap.get(id) || null;
   }
 
-  createComponent(schema: ComponentSchema): Component | null {
+  createComponent(schema: NodeSchema): Component | null {
     let _schema: any = {
       ...schema,
     };
@@ -267,6 +267,9 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
         }
         const { schema, propsMap } = this.props;
         const Com = componentsMap[schema.componentName];
+        if (!Com) {
+          return null;
+        }
         let children = null;
         if (schema.children && schema.children.length > 0) {
           children = schema.children.map((item: any) => createElement(Ele, {schema: item, propsMap}));
@@ -280,12 +283,17 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
 
     class Com extends React.Component {
       render() {
-        let children = [];
-        const propsMap = this.props;
-        if (_schema.children && Array.isArray(_schema.children)) {
-          children = _schema.children.map((item: any) => createElement(Ele, {schema: item, propsMap}));
+        const componentName = _schema.componentName;
+        if (componentName === 'Component') {
+          let children = [];
+          const propsMap = this.props || {};
+          if (_schema.children && Array.isArray(_schema.children)) {
+            children = _schema.children.map((item: any) => createElement(Ele, {schema: item, propsMap}));
+          }
+          return createElement(React.Fragment, {}, children);
+        } else {
+          return createElement(Ele, {schema: _schema, propsMap: {}});
         }
-        return createElement(React.Fragment, {}, children);
       }
     }
 

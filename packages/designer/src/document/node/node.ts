@@ -73,6 +73,7 @@ import { EventEmitter } from 'events';
  *  hidden
  */
 export class Node<Schema extends NodeSchema = NodeSchema> {
+  static Props = Props;
   private emitter: EventEmitter;
   /**
    * 是节点实例
@@ -866,8 +867,18 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.document.simulator?.computeRect(this) || null;
   }
 
+  /**
+   * @deprecated
+   */
   getPrototype() {
     return this.componentMeta.prototype;
+  }
+
+  /**
+   * @deprecated
+   */
+  setPrototype(proto: any) {
+    this.componentMeta.prototype = proto;
   }
 
   getIcon() {
