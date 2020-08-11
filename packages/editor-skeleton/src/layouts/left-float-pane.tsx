@@ -97,7 +97,6 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
   }
 
   render() {
-    console.log('00000');
     const { area } = this.props;
     const width = area.current?.config.props?.width;
     const hideTitleBar = area.current?.config.props?.hideTitleBar;
