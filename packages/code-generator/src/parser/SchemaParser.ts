@@ -2,7 +2,7 @@
  * 解析器是对输入的固定格式数据做拆解，使其符合引擎后续步骤预期，完成统一处理逻辑的步骤。
  * 本解析器面向的是标准 schema 协议。
  */
-
+import changeCase from 'change-case';
 import { SUPPORT_SCHEMA_VERSION_LIST } from '../const';
 
 import { handleChildren } from '../utils/nodeToJSX';
@@ -90,7 +90,7 @@ class SchemaParser implements ISchemaParser {
           const container: IContainerInfo = {
             ...subRoot,
             containerType: subRoot.componentName,
-            moduleName: subRoot.fileName, // TODO: 驼峰化名称
+            moduleName: changeCase.pascalCase(subRoot.fileName),
           };
           return container;
         });
