@@ -1583,7 +1583,7 @@
               "name": "icon",
               "setter": "IconSetter",
               "extraProps": {
-                "defaultValue": "success",
+                "defaultValue": "",
                 "onChange": {
                   "type": "JSFunction",
                   "value": "(val, field, editor) => {\n  field.nodes[0].children.import(val && {\"componentName\": \"Icon\", \"props\": {\"type\": val, \"style\": {\"marginRight\": 5}}}, true); //field.top.setPropValue('children', [{\"componentName\": \"Icon\", \"props\": {\"type\": val}}, (field.top.getPropValue('children') || []).slice(-1)]);\n}"
@@ -1592,6 +1592,7 @@
             },
             {
               "name": "children",
+              "title": "文本内容",
               "setter": {
                 "componentName": "MixedSetter",
                 "props": {
@@ -13940,7 +13941,14 @@
                   "labelPlacement": "ver",
                   "shape": "circle",
                   "animation": true
-                }
+                },
+                "children": [
+                  {
+                    "componentName": "StepItem",
+                    "status": "process",
+                    "title": "测试"
+                  }
+                ]
               }
             }
           ]

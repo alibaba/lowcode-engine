@@ -92,7 +92,7 @@ function nomalizeSetters(setters?: Array<string | SetterConfig | CustomView | Dy
         config.initialValue = info?.initialValue;
       }
     } else {
-      config.name = generateName((config.setter as any).displayName || (config.setter as any).name || 'CustomSetter');
+      config.name = generateName((config.setter as any)?.displayName || (config.setter as any)?.name || 'CustomSetter');
       if (!config.title) {
         config.title = config.name;
       }

@@ -8,7 +8,7 @@ import JsonSetter from './json-setter';
 import EventsSetter from './events-setter';
 import StyleSetter from './style-setter';
 import IconSetter from './icon-setter';
-import MixedSetter from './mixed-setter';
+// import MixedSetter from './mixed-setter';
 
 export const StringSetter = {
   component: Input,
@@ -44,7 +44,7 @@ export const DateYearSetter = DatePicker.YearPicker;
 export const DateMonthSetter = DatePicker.MonthPicker;
 export const DateRangeSetter = DatePicker.RangePicker;
 
-export { ExpressionSetter, EventsSetter, JsonSetter, MixedSetter };
+export { ExpressionSetter, EventsSetter, JsonSetter, IconSetter };
 
 class StringDateSetter extends Component {
   render() {
@@ -71,21 +71,24 @@ class StringTimePicker extends Component {
   }
 }
 
+const VariableSetter ={
+  component: ExpressionSetter,
+  condition: (field: any) => {
+    const v = field.getValue();
+    return v == null || isJSExpression(v);
+  },
+  defaultProps: { placeholder: '请输入表达式' },
+  title: '表达式输入',
+  recommend: true,
+};
+
 const builtinSetters: any = {
   StringSetter,
   NumberSetter,
   BoolSetter,
   SelectSetter,
-  ExpressionSetter: {
-    component: ExpressionSetter,
-    condition: (field: any) => {
-      const v = field.getValue();
-      return v == null || isJSExpression(v);
-    },
-    defaultProps: { placeholder: '请输入表达式' },
-    title: '表达式输入',
-    recommend: true,
-  },
+  VariableSetter,
+  ExpressionSetter: VariableSetter,
   RadioGroupSetter,
   TextAreaSetter,
   DateSetter: StringDateSetter,
@@ -98,7 +101,6 @@ const builtinSetters: any = {
   JsonSetter,
   StyleSetter,
   IconSetter,
-  MixedSetter,
 };
 
 registerSetter(builtinSetters);
