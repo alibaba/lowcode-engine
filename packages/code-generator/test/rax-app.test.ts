@@ -31,11 +31,9 @@ function defineTest(caseDirName: string) {
 
       runPrettierSync(actualFiles, actualDir);
 
-      const diffRes = diffActualAndExpectedSync(caseFullDir);
-      if (diffRes) {
-        t.fail(diffRes);
-      } else {
-        t.pass();
+      const differences = diffActualAndExpectedSync(caseFullDir);
+      if (differences) {
+        t.fail(differences);
       }
     } catch (e) {
       throw e; // just for debugger
@@ -64,8 +62,11 @@ function runPrettierSync(files: string[], cwd: string) {
 }
 
 function diffActualAndExpectedSync(caseFullDir: string): string {
-  const res = ensureShellExec('diff', ['-wur', 'expected', 'actual'], {
+  const res = spawnSync('diff', ['-wur', 'expected', 'actual'], {
     cwd: caseFullDir,
+    stdio: 'pipe',
+    shell: true,
+    encoding: 'utf-8',
   });
 
   return colorizeDiffOutput(res.stdout);
@@ -84,7 +85,7 @@ function ensureShellExec(
   });
 
   if (res.status !== 0) {
-    throw new Error(`Shell command "${shellCmd}" failed with status: ${res.status}`);
+    throw new Error(`Shell command "${shellCmd} ${args.slice(0,2).join(' ')}..." failed with status: ${res.status} (Full command: "${shellCmd} ${args.join(' ')}" )`);
   }
 
   return res;
