@@ -4,7 +4,7 @@ import Page from 'rax-view';
 
 import Text from 'rax-text';
 
-import { createDataSourceEngine } from '@ali/lowcode-data-source-engine';
+import { createDataSourceEngine } from '@ali/lowcode-datasource-engine';
 
 import './index.css';
 

@@ -29,7 +29,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       fileType: FileType.JSX,
       name: COMMON_CHUNK_NAME.ExternalDepsImport,
       content: `
-        import { createDataSourceEngine } from '@ali/lowcode-data-source-engine';
+        import { createDataSourceEngine } from '@ali/lowcode-datasource-engine';
       `,
       linkAfter: [],
     });
