@@ -17,6 +17,22 @@ export interface JSExpression {
   [key: string]: any;
 }
 
+/**
+ * 事件函数类型
+ * @see https://yuque.antfin-inc.com/mo/spec/spec-low-code-building-schema#feHTW
+ */
+export interface JSFunction {
+  type: 'JSFunction';
+
+  /**
+   * 函数定义，或直接函数表达式
+   */
+  value: string;
+
+  /** 源码 */
+  compiled?: string;
+}
+
 export interface JSSlot {
   name?: string;
   type: 'JSSlot';
@@ -48,6 +64,10 @@ export interface CompositeObject {
 
 export function isJSExpression(data: any): data is JSExpression {
   return data && data.type === 'JSExpression';
+}
+
+export function isJSFunction(x: any): x is JSFunction {
+  return typeof x === 'object' && x && x.type === 'JSFunction';
 }
 
 export function isJSSlot(data: any): data is JSSlot {
