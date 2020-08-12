@@ -4,5 +4,4 @@ export * from './types';
 export * from './components/settings';
 export * from './components/field';
 export * from './context';
-
-import './register-defaults';
+export * from './register-defaults';
