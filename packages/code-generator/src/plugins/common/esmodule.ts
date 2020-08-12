@@ -25,12 +25,9 @@ function groupDepsByPack(deps: IDependency[]): Record<string, IDependency[]> {
     depMap[pkg].push(dep);
   };
 
-  deps.forEach(dep => {
+  deps.forEach((dep) => {
     if (dep.dependencyType === DependencyType.Internal) {
-      addDep(
-        `${(dep as IInternalDependency).moduleName}${dep.main || ''}`,
-        dep,
-      );
+      addDep(`${(dep as IInternalDependency).moduleName}${dep.main || ''}`, dep);
     } else {
       addDep(`${(dep as IExternalDependency).package}${dep.main || ''}`, dep);
     }
@@ -39,17 +36,13 @@ function groupDepsByPack(deps: IDependency[]): Record<string, IDependency[]> {
   return depMap;
 }
 
-function buildPackageImport(
-  pkg: string,
-  deps: IDependency[],
-  targetFileType: string,
-): ICodeChunk[] {
+function buildPackageImport(pkg: string, deps: IDependency[], targetFileType: string): ICodeChunk[] {
   const chunks: ICodeChunk[] = [];
   let defaultImport: string = '';
   let defaultImportAs: string = '';
   const imports: Record<string, string> = {};
 
-  deps.forEach(dep => {
+  deps.forEach((dep) => {
     const srcName = dep.exportName;
     let targetName = dep.importName || dep.exportName;
     if (dep.subName) {
@@ -60,12 +53,14 @@ function buildPackageImport(
       chunks.push({
         type: ChunkType.STRING,
         fileType: targetFileType,
-        name: COMMON_CHUNK_NAME.FileVarDefine,
+        name: COMMON_CHUNK_NAME.ImportAliasDefine,
         content: `const ${targetName} = ${srcName}.${dep.subName};`,
-        linkAfter: [
-          COMMON_CHUNK_NAME.ExternalDepsImport,
-          COMMON_CHUNK_NAME.InternalDepsImport,
-        ],
+        linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport, COMMON_CHUNK_NAME.InternalDepsImport],
+        ext: {
+          originalName: `${srcName}.${dep.subName}`,
+          aliasName: targetName,
+          dependency: dep,
+        },
       });
 
       targetName = srcName;
@@ -74,18 +69,26 @@ function buildPackageImport(
     if (dep.destructuring) {
       imports[srcName] = targetName;
     } else if (defaultImport) {
-      throw new CodeGeneratorError(
-        `[${pkg}] has more than one default export.`,
-      );
+      // 有些时候，可能已经从某个包里引入了一个东东，但是希望能再起个别名，这时候用赋值语句代替
+      chunks.push({
+        type: ChunkType.STRING,
+        fileType: targetFileType,
+        name: COMMON_CHUNK_NAME.ImportAliasDefine,
+        content: `const ${targetName} = ${defaultImportAs};`,
+        linkAfter: [COMMON_CHUNK_NAME.InternalDepsImport, COMMON_CHUNK_NAME.ExternalDepsImport],
+        ext: {
+          originalName: defaultImportAs,
+          aliasName: targetName,
+          dependency: dep,
+        },
+      });
     } else {
       defaultImport = srcName;
       defaultImportAs = targetName;
     }
   });
 
-  const items = Object.keys(imports).map(src =>
-    src === imports[src] ? src : `${src} as ${imports[src]}`,
-  );
+  const items = Object.keys(imports).map((src) => (src === imports[src] ? src : `${src} as ${imports[src]}`));
 
   const statementL = ['import'];
   if (defaultImport) {
@@ -125,7 +128,7 @@ function buildPackageImport(
 
 type PluginConfig = {
   fileType: string;
-}
+};
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?: PluginConfig) => {
   const cfg: PluginConfig = {
@@ -143,9 +146,9 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?: Plu
     if (ir && ir.deps && ir.deps.length > 0) {
       const packs = groupDepsByPack(ir.deps);
 
-      Object.keys(packs).forEach(pkg => {
+      Object.keys(packs).forEach((pkg) => {
         const chunks = buildPackageImport(pkg, packs[pkg], cfg.fileType);
-        next.chunks.push.apply(next.chunks, chunks);
+        next.chunks.push(...chunks);
       });
     }
 

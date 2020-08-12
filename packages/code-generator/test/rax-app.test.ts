@@ -62,7 +62,7 @@ function runPrettierSync(files: string[], cwd: string) {
 }
 
 function diffActualAndExpectedSync(caseFullDir: string): string {
-  const res = spawnSync('diff', ['-wur', 'expected', 'actual'], {
+  const res = spawnSync('diff', ['-wBur', 'expected', 'actual'], {
     cwd: caseFullDir,
     stdio: 'pipe',
     shell: true,

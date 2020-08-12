@@ -30,6 +30,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       linkAfter: [
         COMMON_CHUNK_NAME.ExternalDepsImport,
         COMMON_CHUNK_NAME.InternalDepsImport,
+        COMMON_CHUNK_NAME.ImportAliasDefine,
         COMMON_CHUNK_NAME.FileVarDefine,
         COMMON_CHUNK_NAME.FileUtilDefine,
       ],
@@ -97,6 +98,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       linkAfter: [
         COMMON_CHUNK_NAME.ExternalDepsImport,
         COMMON_CHUNK_NAME.InternalDepsImport,
+        COMMON_CHUNK_NAME.ImportAliasDefine,
         COMMON_CHUNK_NAME.FileVarDefine,
         COMMON_CHUNK_NAME.FileUtilDefine,
         CLASS_DEFINE_CHUNK_NAME.End,

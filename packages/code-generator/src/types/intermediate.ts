@@ -16,10 +16,11 @@ export interface IParseResult {
   project?: IProjectInfo;
 }
 
-export interface IContainerInfo extends IContainerNodeItem, IWithDependency {
-  containerType: string;
-  moduleName: string;
-}
+export type IContainerInfo = IContainerNodeItem &
+  IWithDependency & {
+    containerType: string;
+    moduleName: string;
+  };
 
 export interface IWithDependency {
   deps?: IDependency[];

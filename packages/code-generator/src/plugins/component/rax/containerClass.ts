@@ -30,11 +30,11 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       linkAfter: [
         COMMON_CHUNK_NAME.ExternalDepsImport,
         COMMON_CHUNK_NAME.InternalDepsImport,
+        COMMON_CHUNK_NAME.ImportAliasDefine,
         COMMON_CHUNK_NAME.FileVarDefine,
         COMMON_CHUNK_NAME.FileUtilDefine,
       ],
     });
-
 
     next.chunks.push({
       type: ChunkType.STRING,
@@ -43,8 +43,9 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       content: `}`,
       linkAfter: [
         CLASS_DEFINE_CHUNK_NAME.Start,
-        RAX_CHUNK_NAME.ClassRenderEnd,
         CLASS_DEFINE_CHUNK_NAME.InsPrivateMethod,
+        RAX_CHUNK_NAME.ClassRenderEnd,
+        RAX_CHUNK_NAME.MethodsEnd,
       ],
     });
 
@@ -70,13 +71,9 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: FileType.JSX,
-      name: RAX_CHUNK_NAME.ClassDidMountStart,
+      name: RAX_CHUNK_NAME.ClassDidMountBegin,
       content: `componentDidMount() {`,
-      linkAfter: [
-        CLASS_DEFINE_CHUNK_NAME.Start,
-        CLASS_DEFINE_CHUNK_NAME.InsVar,
-        CLASS_DEFINE_CHUNK_NAME.InsMethod,
-      ],
+      linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start, CLASS_DEFINE_CHUNK_NAME.InsVar, CLASS_DEFINE_CHUNK_NAME.InsMethod],
     });
 
     next.chunks.push({
@@ -84,20 +81,15 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       fileType: FileType.JSX,
       name: RAX_CHUNK_NAME.ClassDidMountEnd,
       content: `}`,
-      linkAfter: [
-        RAX_CHUNK_NAME.ClassDidMountStart,
-        RAX_CHUNK_NAME.ClassDidMountContent,
-      ],
+      linkAfter: [RAX_CHUNK_NAME.ClassDidMountBegin, RAX_CHUNK_NAME.ClassDidMountContent],
     });
 
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: FileType.JSX,
-      name: RAX_CHUNK_NAME.ClassRenderStart,
+      name: RAX_CHUNK_NAME.ClassRenderBegin,
       content: 'render() {',
-      linkAfter: [
-        RAX_CHUNK_NAME.ClassDidMountEnd,
-      ],
+      linkAfter: [RAX_CHUNK_NAME.ClassDidMountEnd],
     });
 
     next.chunks.push({
@@ -105,7 +97,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       fileType: FileType.JSX,
       name: RAX_CHUNK_NAME.ClassRenderEnd,
       content: '}',
-      linkAfter: [RAX_CHUNK_NAME.ClassRenderStart, RAX_CHUNK_NAME.ClassRenderPre, RAX_CHUNK_NAME.ClassRenderJSX],
+      linkAfter: [RAX_CHUNK_NAME.ClassRenderBegin, RAX_CHUNK_NAME.ClassRenderPre, RAX_CHUNK_NAME.ClassRenderJSX],
     });
 
     next.chunks.push({
@@ -116,6 +108,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       linkAfter: [
         COMMON_CHUNK_NAME.ExternalDepsImport,
         COMMON_CHUNK_NAME.InternalDepsImport,
+        COMMON_CHUNK_NAME.ImportAliasDefine,
         COMMON_CHUNK_NAME.FileVarDefine,
         COMMON_CHUNK_NAME.FileUtilDefine,
         CLASS_DEFINE_CHUNK_NAME.End,

@@ -38,6 +38,7 @@ runApp(appConfig);
       linkAfter: [
         COMMON_CHUNK_NAME.ExternalDepsImport,
         COMMON_CHUNK_NAME.InternalDepsImport,
+        COMMON_CHUNK_NAME.ImportAliasDefine,
         COMMON_CHUNK_NAME.FileVarDefine,
         COMMON_CHUNK_NAME.FileUtilDefine,
       ],

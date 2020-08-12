@@ -4,8 +4,8 @@ import { createProjectBuilder } from '../generator/ProjectBuilder';
 
 import esModule from '../plugins/common/esmodule';
 import containerClass from '../plugins/component/rax/containerClass';
-import containerLifeCycle from '../plugins/component/rax/containerLifeCycle';
-import containerMethod from '../plugins/component/rax/containerMethod';
+import containerLifeCycles from '../plugins/component/rax/containerLifeCycle';
+import containerMethods from '../plugins/component/rax/containerMethods';
 import containerInitState from '../plugins/component/rax/containerInitState';
 import containerInjectContext from '../plugins/component/rax/containerInjectContext';
 import containerInjectDataSourceEngine from '../plugins/component/rax/containerInjectDataSourceEngine';
@@ -27,29 +27,27 @@ export default function createIceJsProjectBuilder(): IProjectBuilder {
     plugins: {
       components: [
         commonDeps(),
-        esModule({
-          fileType: 'jsx',
-        }),
+        esModule({ fileType: 'jsx' }),
         containerClass(),
-        containerInjectUtils(),
         containerInitState(),
-        containerLifeCycle(),
-        containerMethod(),
+        containerMethods(),
+        containerInjectContext(),
+        containerInjectDataSourceEngine(),
+        containerInjectUtils(),
+        containerLifeCycles(),
         jsx(),
         css(),
       ],
       pages: [
         commonDeps(),
-        esModule({
-          fileType: 'jsx',
-        }),
+        esModule({ fileType: 'jsx' }),
         containerClass(),
         containerInitState(),
+        containerMethods(),
         containerInjectContext(),
         containerInjectDataSourceEngine(),
         containerInjectUtils(),
-        containerLifeCycle(),
-        containerMethod(),
+        containerLifeCycles(),
         jsx(),
         css(),
       ],

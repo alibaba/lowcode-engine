@@ -1,4 +1,4 @@
-import { CLASS_DEFINE_CHUNK_NAME } from '../../../const/generator';
+import { CLASS_DEFINE_CHUNK_NAME, COMMON_CHUNK_NAME } from '../../../const/generator';
 
 import {
   BuilderComponentPlugin,
@@ -11,7 +11,7 @@ import { RAX_CHUNK_NAME } from './const';
 
 type PluginConfig = {
   fileType: string;
-}
+};
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
   const cfg: PluginConfig = {
@@ -24,7 +24,17 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       ...pre,
     };
 
-    // TODO: utils 怎么注入？
+    next.chunks.push({
+      type: ChunkType.STRING,
+      fileType: cfg.fileType,
+      name: COMMON_CHUNK_NAME.InternalDepsImport,
+      // TODO: 下面这个路径有没有更好的方式来获取？而非写死
+      content: `
+        import __$$projectUtils from '../../utils';
+      `,
+      linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport],
+    });
+
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: cfg.fileType,
@@ -33,18 +43,29 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start],
     });
 
-
+    // TODO: Page methods...
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: cfg.fileType,
       name: CLASS_DEFINE_CHUNK_NAME.InsPrivateMethod,
+
+      // 绑定下上下文，这样在所有的 utils 里面都能通过 this.xxx 来访问上下文了
+      // TODO: 要不要优化为通过 Proxy 的方式懒绑定？
       content: `
         _defineUtils() {
-          return {};
+          const utils = {
+            ...__$$projectUtils,
+          };
+
+          Object.entries(utils).forEach(([name, util]) => {
+            if (typeof util === 'function') {
+              utils[name] = util.bind(this._context);
+            }
+          });
+
+          return utils;
         }`,
-      linkAfter: [
-        RAX_CHUNK_NAME.ClassRenderEnd
-      ],
+      linkAfter: [RAX_CHUNK_NAME.ClassRenderEnd],
     });
 
     return next;

@@ -1,12 +1,6 @@
-import {
-  IBasicSchema,
-  IParseResult,
-  IProjectSchema,
-  IResultDir,
-  IResultFile,
-  IComponentNodeItem,
-  IJSExpression,
-} from './index';
+import { JSExpression, JSFunction, NodeSchema } from '@ali/lowcode-types';
+import { CustomHandlerSet } from '../utils/compositeType';
+import { IBasicSchema, IParseResult, IProjectSchema, IResultDir, IResultFile, IComponentNodeItem } from './index';
 
 export enum FileType {
   CSS = 'css',
@@ -42,6 +36,7 @@ export interface ICodeChunk {
   subModule?: string;
   content: ChunkContent;
   linkAfter: string[];
+  ext?: Record<string, unknown>;
 }
 
 export interface IBaseCodeStruct {
@@ -54,17 +49,12 @@ export interface ICodeStruct extends IBaseCodeStruct {
   chunks: ICodeChunk[];
 }
 
-export type BuilderComponentPlugin = (
-  initStruct: ICodeStruct,
-) => Promise<ICodeStruct>;
+export type BuilderComponentPlugin = (initStruct: ICodeStruct) => Promise<ICodeStruct>;
 
 export type BuilderComponentPluginFactory<T> = (config?: T) => BuilderComponentPlugin;
 
 export interface IChunkBuilder {
-  run(
-    ir: any,
-    initialStructure?: ICodeStruct,
-  ): Promise<{ chunks: ICodeChunk[][] }>;
+  run(ir: any, initialStructure?: ICodeStruct): Promise<{ chunks: ICodeChunk[][] }>;
   getPlugins(): BuilderComponentPlugin[];
   addPlugin(plugin: BuilderComponentPlugin): void;
 }
@@ -81,10 +71,7 @@ export interface ICompiledModule {
 export interface IModuleBuilder {
   generateModule(input: unknown): Promise<ICompiledModule>;
   generateModuleCode(schema: IBasicSchema | string): Promise<IResultDir>;
-  linkCodeChunks(
-    chunks: Record<string, ICodeChunk[]>,
-    fileName: string,
-  ): IResultFile[];
+  linkCodeChunks(chunks: Record<string, ICodeChunk[]>, fileName: string): IResultFile[];
   addPlugin(plugin: BuilderComponentPlugin): void;
 }
 
@@ -155,21 +142,23 @@ export enum PIECE_TYPE {
   ATTR = 'NodeCodePieceAttr',
   CHILDREN = 'NodeCodePieceChildren',
   AFTER = 'NodeCodePieceAfter',
-};
+}
 
 export interface CodePiece {
   value: string;
   type: PIECE_TYPE;
 }
 
+// TODO: 这个 HandlerSet 和 CustomHandlerSet 为啥定义还不一样？
 export interface HandlerSet<T> {
   string?: (input: string) => T[];
-  expression?: (input: IJSExpression) => T[];
-  node?: (input: IComponentNodeItem) => T[];
+  expression?: (input: JSExpression) => T[];
+  function?: (input: JSFunction) => T[];
+  node?: (input: NodeSchema) => T[];
   common?: (input: unknown) => T[];
 }
 
-export type ExtGeneratorPlugin = (nodeItem: IComponentNodeItem) => CodePiece[];
+export type ExtGeneratorPlugin = (nodeItem: IComponentNodeItem, handlers: CustomHandlerSet) => CodePiece[];
 
 // export interface InteratorScope {
 //   [$item: string]: string;           // $item 默认取值 "item"

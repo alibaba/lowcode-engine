@@ -39,9 +39,7 @@ const defaultContainer: IContainerInfo = {
 class SchemaParser implements ISchemaParser {
   public validate(schema: IBasicSchema): boolean {
     if (SUPPORT_SCHEMA_VERSION_LIST.indexOf(schema.version) < 0) {
-      throw new CompatibilityError(
-        `Not support schema with version [${schema.version}]`,
-      );
+      throw new CompatibilityError(`Not support schema with version [${schema.version}]`);
     }
 
     return true;
@@ -65,19 +63,25 @@ class SchemaParser implements ISchemaParser {
     }
 
     // 解析三方组件依赖
-    schema.componentsMap.forEach(info => {
-      info.dependencyType = DependencyType.External;
-      info.importName = info.componentName;
-      compDeps[info.componentName] = info;
+    schema.componentsMap.forEach((info) => {
+      if (info.componentName) {
+        compDeps[info.componentName] = {
+          ...info,
+          dependencyType: DependencyType.External,
+          importName: info.componentName,
+          exportName: info.exportName ?? info.componentName,
+          version: info.version || '*',
+          destructuring: info.destructuring ?? false,
+        };
+      }
     });
 
     let containers: IContainerInfo[];
     // Test if this is a lowcode component without container
     if (schema.componentsTree.length > 0) {
-      const firstRoot: IContainerNodeItem = schema
-        .componentsTree[0] as IContainerNodeItem;
+      const firstRoot: IContainerNodeItem = schema.componentsTree[0] as IContainerNodeItem;
 
-      if (!firstRoot.fileName) {
+      if (!('fileName' in firstRoot) || !firstRoot.fileName) {
         // 整个 schema 描述一个容器，且无根节点定义
         const container: IContainerInfo = {
           ...defaultContainer,
@@ -86,8 +90,8 @@ class SchemaParser implements ISchemaParser {
         containers = [container];
       } else {
         // 普通带 1 到多个容器的 schema
-        containers = schema.componentsTree.map(n => {
-          const subRoot = n as IContainerNodeItem;
+        containers = schema.componentsTree.map((n) => {
+          const subRoot = n;
           const container: IContainerInfo = {
             ...subRoot,
             containerType: subRoot.componentName,
@@ -101,7 +105,7 @@ class SchemaParser implements ISchemaParser {
     }
 
     // 建立所有容器的内部依赖索引
-    containers.forEach(container => {
+    containers.forEach((container) => {
       let type;
       switch (container.containerType) {
         case 'Page':
@@ -127,31 +131,31 @@ class SchemaParser implements ISchemaParser {
     });
 
     // 分析容器内部组件依赖
-    containers.forEach(container => {
+    containers.forEach((container) => {
       if (container.children) {
         // const depNames = this.getComponentNames(container.children);
         // container.deps = uniqueArray<string>(depNames)
         //   .map(depName => internalDeps[depName] || compDeps[depName])
         //   .filter(dep => !!dep);
-        container.deps = Object.keys(compDeps).map(
-          depName => compDeps[depName],
-        );
+        container.deps = Object.keys(compDeps).map((depName) => compDeps[depName]);
       }
     });
 
-    const containersDeps = ([] as IDependency[]).concat(...containers.map(c => c.deps || []));
+    const containersDeps = ([] as IDependency[]).concat(...containers.map((c) => c.deps || []));
 
     // 分析路由配置
+    // TODO: 低代码规范里面的路由是咋弄的？
     const routes = containers
-      .filter(container => container.containerType === 'Page')
-      .map(page => {
-        const meta = page.meta as IPageMeta;
+      .filter((container) => container.containerType === 'Page')
+      .map((page) => {
+        const meta = (page as { meta?: IPageMeta }).meta as IPageMeta;
         if (meta) {
           return {
             path: meta.router,
             componentName: page.moduleName,
           };
         }
+
         return {
           path: '',
           componentName: page.moduleName,
@@ -159,16 +163,14 @@ class SchemaParser implements ISchemaParser {
       });
 
     const routerDeps = routes
-      .map(r => internalDeps[r.componentName] || compDeps[r.componentName])
-      .filter(dep => !!dep);
+      .map((r) => internalDeps[r.componentName] || compDeps[r.componentName])
+      .filter((dep) => !!dep);
 
     // 分析 Utils 依赖
     let utils: IUtilItem[];
     if (schema.utils) {
       utils = schema.utils;
-      utilsDeps = schema.utils
-        .filter(u => u.type !== 'function')
-        .map(u => u.content as IExternalDependency);
+      utilsDeps = schema.utils.filter((u) => u.type !== 'function').map((u) => u.content as IExternalDependency);
     } else {
       utils = [];
     }
@@ -197,7 +199,7 @@ class SchemaParser implements ISchemaParser {
   }
 
   public getComponentNames(children: ChildNodeType): string[] {
-    return handleChildren<string>(children, {
+    return handleChildren(children, {
       node: (i: IComponentNodeItem) => [i.componentName],
     });
   }

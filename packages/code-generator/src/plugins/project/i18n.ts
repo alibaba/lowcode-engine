@@ -17,7 +17,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
 
     const ir = next.ir as IProjectInfo;
     if (ir.i18n) {
-      const [, i18nStr] = generateCompositeType(ir.i18n);
+      const [, i18nStr] = generateCompositeType(ir.i18n, {});
 
       next.chunks.push({
         type: ChunkType.STRING,
@@ -36,6 +36,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
         linkAfter: [
           COMMON_CHUNK_NAME.ExternalDepsImport,
           COMMON_CHUNK_NAME.InternalDepsImport,
+          COMMON_CHUNK_NAME.ImportAliasDefine,
           COMMON_CHUNK_NAME.FileVarDefine,
           COMMON_CHUNK_NAME.FileUtilDefine,
         ],
@@ -54,6 +55,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
         linkAfter: [
           COMMON_CHUNK_NAME.ExternalDepsImport,
           COMMON_CHUNK_NAME.InternalDepsImport,
+          COMMON_CHUNK_NAME.ImportAliasDefine,
           COMMON_CHUNK_NAME.FileVarDefine,
           COMMON_CHUNK_NAME.FileUtilDefine,
           COMMON_CHUNK_NAME.FileMainContent,

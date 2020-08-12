@@ -54,11 +54,11 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       content: `
         this._dataSourceEngine.reloadDataSource();
       `,
-      linkAfter: [RAX_CHUNK_NAME.ClassDidMountStart],
+      linkAfter: [RAX_CHUNK_NAME.ClassDidMountBegin],
     });
 
     const dataSource = isContainerSchema(pre.ir) ? pre.ir.dataSource : null;
-    const dataSourceItems: DataSourceConfig[] = dataSource && dataSource.list || [];
+    const dataSourceItems: DataSourceConfig[] = (dataSource && dataSource.list) || [];
 
     next.chunks.push({
       type: ChunkType.STRING,

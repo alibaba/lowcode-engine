@@ -1,9 +1,12 @@
 export const RAX_CHUNK_NAME = {
-  ClassDidMountStart: 'RaxComponentClassDidMountStart',
+  ClassDidMountBegin: 'RaxComponentClassDidMountBegin',
   ClassDidMountContent: 'RaxComponentClassDidMountContent',
   ClassDidMountEnd: 'RaxComponentClassDidMountEnd',
-  ClassRenderStart: 'RaxComponentClassRenderStart',
+  ClassRenderBegin: 'RaxComponentClassRenderBegin',
   ClassRenderPre: 'RaxComponentClassRenderPre',
   ClassRenderJSX: 'RaxComponentClassRenderJSX',
   ClassRenderEnd: 'RaxComponentClassRenderEnd',
+  MethodsBegin: 'RaxComponentMethodsBegin',
+  MethodsContent: 'RaxComponentMethodsContent',
+  MethodsEnd: 'RaxComponentMethodsEnd',
 };
