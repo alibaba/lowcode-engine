@@ -12,19 +12,9 @@ import { IProjectSchema } from '../src/types/schema';
 
 const TEST_CASES_DIR = path.join(__dirname, '../test-cases/rax-app');
 
-async function exportProject(schemaJson: IProjectSchema, targetPath: string, projectName: string) {
-  const raxAppBuilder = createRaxAppBuilder();
-  const result = await raxAppBuilder.generateProject(schemaJson);
-  const publisher = CodeGenerator.publishers.disk();
-  await publisher.publish({
-    project: result,
-    outputPath: targetPath,
-    projectSlug: projectName,
-    createProjectFolder: true,
-  });
-}
+fs.readdirSync(TEST_CASES_DIR).forEach(defineTest);
 
-const defineTest = (caseDirName: string) => {
+function defineTest(caseDirName: string) {
   test(`rax-app ${caseDirName} should works`, async (t) => {
     try {
       const caseFullDir = path.join(TEST_CASES_DIR, caseDirName);
@@ -37,7 +27,7 @@ const defineTest = (caseDirName: string) => {
 
       const actualFiles = glob.sync('**/*.{js,jsx,json,ts,tsx,less,css,scss,sass}', { cwd: actualDir });
 
-      t.true(actualFiles.length > 0)
+      t.true(actualFiles.length > 0);
 
       runPrettierSync(actualFiles, actualDir);
 
@@ -47,60 +37,76 @@ const defineTest = (caseDirName: string) => {
       } else {
         t.pass();
       }
-    } catch(e){
+    } catch (e) {
       throw e; // just for debugger
     }
   });
-};
+}
 
-test('simple truth should pass', async (t) => {
-  t.is(0, 0);
-});
-
-fs.readdirSync(TEST_CASES_DIR).forEach(defineTest);
+async function exportProject(schemaJson: IProjectSchema, targetPath: string, projectName: string) {
+  const raxAppBuilder = createRaxAppBuilder();
+  const result = await raxAppBuilder.generateProject(schemaJson);
+  const publisher = CodeGenerator.publishers.disk();
+  await publisher.publish({
+    project: result,
+    outputPath: targetPath,
+    projectSlug: projectName,
+    createProjectFolder: true,
+  });
+}
 
 function removeActualDirRecursiveSync(actualDir: string, caseFullDir: string) {
-  spawnSync('rm', ['-rf', actualDir], {
-    stdio: 'inherit',
-    shell: true,
-    cwd: caseFullDir
-  });
+  ensureShellExec('rm', ['-rf', actualDir], { cwd: caseFullDir });
 }
 
 function runPrettierSync(files: string[], cwd: string) {
-  spawnSync('npx', ['prettier', '--write', ...files], {
-    stdio: 'inherit',
-    shell: true,
-    cwd,
-  });
+  ensureShellExec('npx', ['prettier', '--write', ...files], { cwd });
 }
 
 function diffActualAndExpectedSync(caseFullDir: string): string {
-  const res = spawnSync('diff', ['-wur', 'expected', 'actual'], {
-    stdio: 'pipe',
-    shell: true,
+  const res = ensureShellExec('diff', ['-wur', 'expected', 'actual'], {
     cwd: caseFullDir,
-    encoding: 'utf-8',
   });
 
   return colorizeDiffOutput(res.stdout);
 }
 
+function ensureShellExec(
+  shellCmd: string,
+  args: string[],
+  { cwd = process.cwd() }: { cwd?: string } = {},
+): { stdout: string; stderr: string } {
+  const res = spawnSync(shellCmd, args, {
+    stdio: 'pipe',
+    shell: true,
+    cwd,
+    encoding: 'utf-8',
+  });
+
+  if (res.status !== 0) {
+    throw new Error(`Shell command "${shellCmd}" failed with status: ${res.status}`);
+  }
+
+  return res;
+}
+
 function colorizeDiffOutput(output: string): string {
-  if (!output){
+  if (!output) {
     return output;
   }
 
-  return output.split('\n').map(line => {
-    if (/^Only/i.test(line)){
-      return chalk.red(line);
-    } else if (line[0] === '+'){
-      return chalk.yellow(line);
-    } else if (line[0] === '-'){
-      return chalk.red(line);
-    } else {
-      return line;
-    }
-  }).join('\n');
+  return output
+    .split('\n')
+    .map((line) => {
+      if (/^Only/i.test(line)) {
+        return chalk.red(line);
+      } else if (line[0] === '+') {
+        return chalk.yellow(line);
+      } else if (line[0] === '-') {
+        return chalk.red(line);
+      } else {
+        return line;
+      }
+    })
+    .join('\n');
 }
-
