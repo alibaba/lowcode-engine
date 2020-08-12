@@ -148,7 +148,7 @@ export default class Bundle {
       }
       if (isPrototype(proto)) {
         const componentName = proto.getComponentName()!;
-        if (!proto.getView() && this.viewsMap[componentName]) {
+        if (this.viewsMap[componentName]) {
           proto.setView(this.viewsMap[componentName]);
         }
         if (cp.name && !proto.getPackageName()) {
