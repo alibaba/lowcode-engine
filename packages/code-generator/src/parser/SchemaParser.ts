@@ -16,6 +16,7 @@ import {
   IComponentNodeItem,
   IContainerInfo,
   IContainerNodeItem,
+  IDependency,
   IExternalDependency,
   IInternalDependency,
   InternalDependencyType,
@@ -138,6 +139,8 @@ class SchemaParser implements ISchemaParser {
       }
     });
 
+    const containersDeps = ([] as IDependency[]).concat(...containers.map(c => c.deps || []));
+
     // 分析路由配置
     const routes = containers
       .filter(container => container.containerType === 'Page')
@@ -187,6 +190,8 @@ class SchemaParser implements ISchemaParser {
         css: schema.css,
         constants: schema.constants,
         i18n: schema.i18n,
+        containersDeps,
+        utilsDeps,
       },
     };
   }

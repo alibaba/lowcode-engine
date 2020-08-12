@@ -13,8 +13,8 @@
     "rax": "^1.1.0",
     "rax-app": "^2.0.0",
     "rax-document": "^0.1.0",
-    "rax-text": "^1.0.0",
-    "rax-view": "^1.0.0"
+    "rax-view": "^1.0.0",
+    "rax-text": "^1.0.0"
   },
   "devDependencies": {
     "build-plugin-rax-app": "^5.0.0",

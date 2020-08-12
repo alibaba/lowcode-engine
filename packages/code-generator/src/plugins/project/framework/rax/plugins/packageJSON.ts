@@ -1,3 +1,4 @@
+import { NpmInfo } from '@ali/lowcode-types';
 import { COMMON_CHUNK_NAME } from '../../../../../const/generator';
 
 import {
@@ -9,6 +10,8 @@ import {
   IPackageJSON,
   IProjectInfo,
 } from '../../../../../types';
+import { isNpmInfo } from '../../../../../utils/schema';
+import { calcCompatibleVersion } from '../../../../../utils/version';
 
 const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
@@ -17,6 +20,8 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
     };
 
     const ir = next.ir as IProjectInfo;
+
+    const npmDeps = getNpmDependencies(ir);
 
     const packageJson: IPackageJSON = {
       name: '@ali/rax-app-demo',
@@ -34,8 +39,13 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
         rax: '^1.1.0',
         'rax-app': '^2.0.0',
         'rax-document': '^0.1.0',
-        'rax-text': '^1.0.0',
-        'rax-view': '^1.0.0',
+        ...npmDeps.reduce(
+          (acc, npm) => ({
+            ...acc,
+            [npm.package]: npm.version || '*',
+          }),
+          {} as Record<string, string>,
+        ),
       },
       devDependencies: {
         'build-plugin-rax-app': '^5.0.0',
@@ -66,3 +76,36 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
 };
 
 export default pluginFactory;
+
+function getNpmDependencies(project: IProjectInfo): NpmInfo[] {
+  const npmDeps: NpmInfo[] = [];
+  const npmNameToPkgMap = new Map<string, NpmInfo>();
+
+  const allDeps = [...(project.containersDeps || []), ...(project.utilsDeps || [])];
+
+  allDeps.forEach((dep) => {
+    if (!isNpmInfo(dep)) {
+      return;
+    }
+
+    const existing = npmNameToPkgMap.get(dep.package);
+    if (!existing) {
+      npmNameToPkgMap.set(dep.package, dep);
+      npmDeps.push(dep);
+      return;
+    }
+
+    if (existing.version !== dep.version) {
+      try {
+        npmNameToPkgMap.set(dep.package, {
+          ...existing,
+          version: calcCompatibleVersion(existing.version, dep.version),
+        });
+      } catch (e) {
+        throw new Error(`Cannot find compatible version for ${dep.package}. Detail: ${e.message}`);
+      }
+    }
+  });
+
+  return npmDeps;
+}

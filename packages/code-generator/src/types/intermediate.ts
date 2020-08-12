@@ -42,6 +42,8 @@ export interface IProjectInfo {
   css?: string;
   constants?: Record<string, string>;
   i18n?: II18nMap;
+  containersDeps?: IDependency[];
+  utilsDeps?: IDependency[];
 }
 
 /**

@@ -26,6 +26,7 @@
     "change-case": "^3.1.0",
     "jszip": "^3.5.0",
     "prettier": "^2.0.2",
+    "semver": "^7.3.2",
     "short-uuid": "^3.1.1"
   },
   "devDependencies": {
@@ -40,7 +41,7 @@
     "compileEnhancements": false,
     "snapshotDir": "test/fixtures/__snapshots__",
     "files": [
-      "test/*.test.ts"
+      "test/**/*.test.ts"
     ],
     "extensions": [
       "ts"
