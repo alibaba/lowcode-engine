@@ -707,7 +707,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * 是否可执行某action
    */
   canPerformAction(action: string): boolean {
-    const availableActions = this.componentMeta?.availableActions?.map((action) => action.name);
+    const availableActions = this.componentMeta?.availableActions?.map((action) => action.name) || [];
     return availableActions.indexOf(action) >= 0;
   }
 
