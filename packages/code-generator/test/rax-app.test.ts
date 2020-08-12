@@ -12,7 +12,7 @@ import { IProjectSchema } from '../src/types/schema';
 
 const TEST_CASES_DIR = path.join(__dirname, '../test-cases/rax-app');
 
-fs.readdirSync(TEST_CASES_DIR).forEach(defineTest);
+getSubDirectoriesSync(TEST_CASES_DIR).forEach(defineTest);
 
 function defineTest(caseDirName: string) {
   test(`rax-app ${caseDirName} should works`, async (t) => {
@@ -114,4 +114,10 @@ function colorizeDiffOutput(output: string): string {
       }
     })
     .join('\n');
+}
+
+function getSubDirectoriesSync(baseDir: string) {
+  return fs
+    .readdirSync(baseDir)
+    .filter((dirOrFileName: string) => fs.statSync(path.join(baseDir, dirOrFileName)).isDirectory());
 }
