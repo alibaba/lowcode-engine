@@ -1,39 +1,8 @@
-import traverse from '@babel/traverse';
-import * as parser from '@babel/parser';
-import { CodeGeneratorError, IJSExpression } from '../types';
+import { JSExpression, JSFunction } from '@ali/lowcode-types';
 
-let count = 0;
+import { CodeGeneratorError } from '../types';
 
-function test(functionBody: string) {
-  console.log(functionBody);
-  console.log('---->');
-  try {
-    const parseResult = parser.parse(functionBody);
-    // console.log(JSON.stringify(parseResult));
-    traverse(parseResult, {
-      enter(path) {
-        console.log('path: ', JSON.stringify(path));
-      }
-    });
-
-    if (count === 0) {
-      count++;
-
-      test('this.aaa && this.bbb');
-    }
-  } catch (error) {
-    // console.log('Error');
-    console.log(error.message);
-  }
-  console.log('=====================');
-}
-
-export function transformFuncExpr2MethodMember(
-  methodName: string,
-  functionBody: string,
-): string {
-  // test(functionBody);
-
+export function transformFuncExpr2MethodMember(methodName: string, functionBody: string): string {
   const args = getFuncExprArguments(functionBody);
   const body = getFuncExprBody(functionBody);
 
@@ -66,20 +35,60 @@ export function getFuncExprBody(functionBody: string) {
   return body;
 }
 
-export function generateExpression(value: any): string {
-  if (value && (value as IJSExpression).type === 'JSExpression') {
-    // test((value as IJSExpression).value);
+export function getArrowFunction(functionBody: string) {
+  const args = getFuncExprArguments(functionBody);
+  const body = getFuncExprBody(functionBody);
 
-    return (value as IJSExpression).value || 'null';
+  return `(${args}) => { ${body} }`;
+}
+
+export function isJSExpression(value: unknown): boolean {
+  return value && typeof value === 'object' && (value as JSExpression).type === 'JSExpression';
+}
+
+export function isJSFunction(value: unknown): boolean {
+  return value && typeof value === 'object' && (value as JSFunction).type === 'JSFunction';
+}
+
+export function isJsCode(value: unknown): boolean {
+  return isJSExpression(value) || isJSFunction(value);
+}
+
+export function generateExpression(value: any): string {
+  if (isJSExpression(value)) {
+    return (value as JSExpression).value || 'null';
   }
 
   throw new CodeGeneratorError('Not a JSExpression');
 }
 
-export function isJsExpression(value: any): boolean {
-  return (
-    value &&
-    typeof value === 'object' &&
-    (value as IJSExpression).type === 'JSExpression'
-  );
+export function generateFunction(
+  value: any,
+  config: {
+    name?: string;
+    isMember?: boolean;
+    isBlock?: boolean;
+    isArrow?: boolean;
+  } = {
+    name: undefined,
+    isMember: false,
+    isBlock: false,
+    isArrow: false,
+  },
+) {
+  if (isJsCode(value)) {
+    const functionCfg = value as JSFunction;
+    if (config.isMember) {
+      return transformFuncExpr2MethodMember(config.name || '', functionCfg.value);
+    }
+    if (config.isBlock) {
+      return getFuncExprBody(functionCfg.value);
+    }
+    if (config.isArrow) {
+      return getArrowFunction(functionCfg.value);
+    }
+    return functionCfg.value;
+  }
+
+  throw new CodeGeneratorError('Not a JSFunction or JSExpression');
 }

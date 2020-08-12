@@ -1,10 +1,5 @@
-import {
-  IResultDir,
-  PublisherFactory,
-  IPublisher,
-  IPublisherFactoryParams,
-  PublisherError,
-} from '../../types';
+import { ResultDir } from '@ali/lowcode-types';
+import { PublisherFactory, IPublisher, IPublisherFactoryParams, PublisherError } from '../../types';
 import { writeFolder } from './utils';
 
 export interface IDiskFactoryParams extends IPublisherFactoryParams {
@@ -18,19 +13,18 @@ export interface IDiskPublisher extends IPublisher<IDiskFactoryParams, string> {
   setOutputPath: (path: string) => void;
 }
 
-export const createDiskPublisher: PublisherFactory<
-  IDiskFactoryParams,
-  IDiskPublisher
-> = (params: IDiskFactoryParams = {}): IDiskPublisher => {
+export const createDiskPublisher: PublisherFactory<IDiskFactoryParams, IDiskPublisher> = (
+  params: IDiskFactoryParams = {},
+): IDiskPublisher => {
   let { project, outputPath = './' } = params;
 
-  const getProject = (): IResultDir => {
+  const getProject = (): ResultDir => {
     if (!project) {
       throw new PublisherError('Missing Project');
     }
     return project;
   };
-  const setProject = (projectToSet: IResultDir): void => {
+  const setProject = (projectToSet: ResultDir): void => {
     project = projectToSet;
   };
 
@@ -49,19 +43,14 @@ export const createDiskPublisher: PublisherFactory<
 
     const projectOutputPath = options.outputPath || outputPath;
     const overrideProjectSlug = options.projectSlug || params.projectSlug;
-    const createProjectFolder =
-      options.createProjectFolder || params.createProjectFolder;
+    const createProjectFolder = options.createProjectFolder || params.createProjectFolder;
 
     if (overrideProjectSlug) {
       projectToPublish.name = overrideProjectSlug;
     }
 
     try {
-      await writeFolder(
-        projectToPublish,
-        projectOutputPath,
-        createProjectFolder,
-      );
+      await writeFolder(projectToPublish, projectOutputPath, createProjectFolder);
       return { success: true, payload: projectOutputPath };
     } catch (error) {
       throw new PublisherError(error);

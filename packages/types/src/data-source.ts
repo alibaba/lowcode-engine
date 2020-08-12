@@ -12,5 +12,5 @@ export interface DataSourceConfig {
 }
 
 export interface DataSource {
-  items: DataSourceConfig[];
+  list: DataSourceConfig[];
 }

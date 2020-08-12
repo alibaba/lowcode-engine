@@ -1,32 +1,26 @@
-import {
-  IAppConfig,
-  IAppMeta,
-  IContainerNodeItem,
-  IDependency,
-  II18nMap,
-  IInternalDependency,
-  IUtilItem,
-} from './index';
+import { I18nMap, UtilsMap, ContainerSchema, JSONObject } from '@ali/lowcode-types';
+
+import { IDependency, INpmPackage } from './deps';
 
 export interface IParseResult {
   containers: IContainerInfo[];
   globalUtils?: IUtilInfo;
-  globalI18n?: II18nMap;
+  globalI18n?: I18nMap;
   globalRouter?: IRouterInfo;
   project?: IProjectInfo;
-}
-
-export interface IContainerInfo extends IContainerNodeItem, IWithDependency {
-  containerType: string;
-  moduleName: string;
 }
 
 export interface IWithDependency {
   deps?: IDependency[];
 }
 
+export interface IContainerInfo extends ContainerSchema, IWithDependency {
+  containerType: string;
+  moduleName: string;
+}
+
 export interface IUtilInfo extends IWithDependency {
-  utils: IUtilItem[];
+  utils: UtilsMap;
 }
 
 export interface IRouterInfo extends IWithDependency {
@@ -37,11 +31,10 @@ export interface IRouterInfo extends IWithDependency {
 }
 
 export interface IProjectInfo {
-  config: IAppConfig;
-  meta: IAppMeta;
   css?: string;
-  constants?: Record<string, string>;
-  i18n?: II18nMap;
+  constants?: JSONObject;
+  i18n?: I18nMap;
+  packages: INpmPackage[];
 }
 
 /**

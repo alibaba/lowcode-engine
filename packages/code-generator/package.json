@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@ali/am-eslint-config": "*",
+    "@ali/lowcode-types": "^0.8.11",
     "@ali/my-prettier": "^1.0.0",
     "@babel/generator": "^7.9.5",
     "@babel/parser": "^7.9.4",

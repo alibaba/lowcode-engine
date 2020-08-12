@@ -1,12 +1,6 @@
-import {
-  IBasicSchema,
-  IParseResult,
-  IProjectSchema,
-  IResultDir,
-  IResultFile,
-  IComponentNodeItem,
-  IJSExpression,
-} from './index';
+import { ResultDir, ResultFile, NodeData, NodeSchema, ProjectSchema, JSExpression } from '@ali/lowcode-types';
+
+import { IParseResult } from './index';
 
 export enum FileType {
   CSS = 'css',
@@ -53,17 +47,12 @@ export interface ICodeStruct extends IBaseCodeStruct {
   chunks: ICodeChunk[];
 }
 
-export type BuilderComponentPlugin = (
-  initStruct: ICodeStruct,
-) => Promise<ICodeStruct>;
+export type BuilderComponentPlugin = (initStruct: ICodeStruct) => Promise<ICodeStruct>;
 
 export type BuilderComponentPluginFactory<T> = (config?: T) => BuilderComponentPlugin;
 
 export interface IChunkBuilder {
-  run(
-    ir: any,
-    initialStructure?: ICodeStruct,
-  ): Promise<{ chunks: ICodeChunk[][] }>;
+  run(ir: any, initialStructure?: ICodeStruct): Promise<{ chunks: ICodeChunk[][] }>;
   getPlugins(): BuilderComponentPlugin[];
   addPlugin(plugin: BuilderComponentPlugin): void;
 }
@@ -74,16 +63,13 @@ export interface ICodeBuilder {
 }
 
 export interface ICompiledModule {
-  files: IResultFile[];
+  files: ResultFile[];
 }
 
 export interface IModuleBuilder {
   generateModule(input: unknown): Promise<ICompiledModule>;
-  generateModuleCode(schema: IBasicSchema | string): Promise<IResultDir>;
-  linkCodeChunks(
-    chunks: Record<string, ICodeChunk[]>,
-    fileName: string,
-  ): IResultFile[];
+  generateModuleCode(schema: ProjectSchema | string): Promise<ResultDir>;
+  linkCodeChunks(chunks: Record<string, ICodeChunk[]>, fileName: string): ResultFile[];
   addPlugin(plugin: BuilderComponentPlugin): void;
 }
 
@@ -97,21 +83,21 @@ export interface ICodeGenerator {
   /**
    * 出码接口，把 Schema 转换成代码文件系统描述
    *
-   * @param {(IBasicSchema)} schema 传入的 Schema
-   * @returns {IResultDir}
+   * @param {(ProjectSchema)} schema 传入的 Schema
+   * @returns {ResultDir}
    * @memberof ICodeGenerator
    */
-  toCode(schema: IBasicSchema): Promise<IResultDir>;
+  toCode(schema: ProjectSchema): Promise<ResultDir>;
 }
 
 export interface ISchemaParser {
-  validate(schema: IBasicSchema): boolean;
-  parse(schema: IBasicSchema | string): IParseResult;
+  validate(schema: ProjectSchema): boolean;
+  parse(schema: ProjectSchema | string): IParseResult;
 }
 
 export interface IProjectTemplate {
   slots: Record<string, IProjectSlot>;
-  generateTemplate(): IResultDir;
+  generateTemplate(): ResultDir;
 }
 
 export interface IProjectSlot {
@@ -119,25 +105,12 @@ export interface IProjectSlot {
   fileName?: string;
 }
 
-// export interface IProjectSlots {
-//   components: IProjectSlot;
-//   pages: IProjectSlot;
-//   router: IProjectSlot;
-//   entry: IProjectSlot;
-//   constants?: IProjectSlot;
-//   utils?: IProjectSlot;
-//   i18n?: IProjectSlot;
-//   globalStyle: IProjectSlot;
-//   htmlEntry: IProjectSlot;
-//   packageJSON: IProjectSlot;
-// }
-
 export interface IProjectPlugins {
   [slotName: string]: BuilderComponentPlugin[];
 }
 
 export interface IProjectBuilder {
-  generateProject(schema: IProjectSchema | string): Promise<IResultDir>;
+  generateProject(schema: ProjectSchema | string): Promise<ResultDir>;
 }
 
 export type PostProcessorFactory<T> = (config?: T) => PostProcessor;
@@ -154,7 +127,7 @@ export enum PIECE_TYPE {
   ATTR = 'NodeCodePieceAttr',
   CHILDREN = 'NodeCodePieceChildren',
   AFTER = 'NodeCodePieceAfter',
-};
+}
 
 export interface CodePiece {
   value: string;
@@ -163,15 +136,41 @@ export interface CodePiece {
 
 export interface HandlerSet<T> {
   string?: (input: string) => T[];
-  expression?: (input: IJSExpression) => T[];
-  node?: (input: IComponentNodeItem) => T[];
+  expression?: (input: JSExpression) => T[];
+  node?: (input: NodeSchema) => T[];
   common?: (input: unknown) => T[];
 }
 
-export type ExtGeneratorPlugin = (nodeItem: IComponentNodeItem) => CodePiece[];
+export type ExtGeneratorPlugin = (ctx: INodeGeneratorContext, nodeItem: NodeSchema) => CodePiece[];
 
-// export interface InteratorScope {
-//   [$item: string]: string;           // $item 默认取值 "item"
-//   [$index: string]: string | number; // $index 默认取值 "index"
-//   __proto__: BlockInstance;
-// }
+export interface INodeGeneratorConfig {
+  nodeTypeMapping?: Record<string, string>;
+}
+
+export type NodeGenerator = (nodeItem: NodeData) => string;
+
+export interface INodeGeneratorContext {
+  generator: NodeGenerator;
+}
+
+export type CompositeValueCustomHandler = (data: unknown) => string;
+export type CompositeTypeContainerHandler = (value: string) => string;
+export interface CompositeValueCustomHandlerSet {
+  boolean?: CompositeValueCustomHandler;
+  number?: CompositeValueCustomHandler;
+  string?: CompositeValueCustomHandler;
+  array?: CompositeValueCustomHandler;
+  object?: CompositeValueCustomHandler;
+  expression?: CompositeValueCustomHandler;
+}
+
+export interface CompositeTypeContainerHandlerSet {
+  default?: CompositeTypeContainerHandler;
+  string?: CompositeValueCustomHandler;
+}
+
+export interface CompositeValueGeneratorOptions {
+  handlers?: CompositeValueCustomHandlerSet;
+  containerHandlers?: CompositeTypeContainerHandlerSet;
+  nodeGenerator?: NodeGenerator;
+}

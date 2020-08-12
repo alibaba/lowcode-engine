@@ -1,18 +1,20 @@
 import { ComponentsMap } from './npm';
-import { CompositeValue, JSExpression, CompositeObject, JSONObject } from './value-type';
+import { CompositeValue, JSExpression, JSFunction, CompositeObject, JSONObject } from './value-type';
 import { DataSource } from './data-source';
 import { I18nMap } from './i18n';
 import { UtilsMap } from './utils';
 
+// 搭建基础协议 - 单个组件树节点描述
+// 转换成一个 .jsx 文件内 React Class 类 render 函数返回的 jsx 代码
 export interface NodeSchema {
   id?: string;
-  componentName: string;
-  props?: PropsMap | PropsList;
+  componentName: string; // 组件名称 必填、首字母大写
+  props?: PropsMap | PropsList; // 组件属性对象
   leadingComponents?: string;
-  condition?: CompositeValue;
-  loop?: CompositeValue;
-  loopArgs?: [string, string];
-  children?: NodeData | NodeData[];
+  condition?: CompositeValue; // 渲染条件
+  loop?: CompositeValue; // 循环数据
+  loopArgs?: [string, string]; // 循环迭代对象、索引名称 ["item", "index"]
+  children?: NodeData | NodeData[]; // 子节点
 
   // ------- future support -----
   conditionGroup?: string;
@@ -30,6 +32,7 @@ export type PropsList = Array<{
 }>;
 
 export type NodeData = NodeSchema | JSExpression | DOMText;
+export type NodeDataType = NodeData | NodeData[];
 
 export function isDOMText(data: any): data is DOMText {
   return typeof data === 'string';
@@ -45,10 +48,10 @@ export interface ContainerSchema extends NodeSchema {
     [key: string]: CompositeValue;
   };
   methods?: {
-    [key: string]: JSExpression;
+    [key: string]: JSExpression | JSFunction;
   };
   lifeCycles?: {
-    [key: string]: JSExpression;
+    [key: string]: JSExpression | JSFunction;
   };
   css?: string;
   dataSource?: DataSource;
@@ -69,7 +72,6 @@ export interface BlockSchema extends NodeSchema {
   componentName: 'Block';
 }
 export interface SlotSchema extends NodeSchema {
-  name?: string;
   componentName: 'Slot';
   params?: string[];
 }

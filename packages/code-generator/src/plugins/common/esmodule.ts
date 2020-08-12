@@ -15,6 +15,8 @@ import {
   IWithDependency,
 } from '../../types';
 
+import { isValidIdentifier } from '../../utils/validate';
+
 function groupDepsByPack(deps: IDependency[]): Record<string, IDependency[]> {
   const depMap: Record<string, IDependency[]> = {};
 
@@ -25,48 +27,53 @@ function groupDepsByPack(deps: IDependency[]): Record<string, IDependency[]> {
     depMap[pkg].push(dep);
   };
 
-  deps.forEach(dep => {
+  // TODO: main 这个信息到底怎么用，是不是外部包不需要使用？
+  // deps.forEach(dep => {
+  //   if (dep.dependencyType === DependencyType.Internal) {
+  //     addDep(
+  //       `${(dep as IInternalDependency).moduleName}${`/${dep.main}` || ''}`,
+  //       dep,
+  //     );
+  //   } else {
+  //     addDep(`${(dep as IExternalDependency).package}${`/${dep.main}` || ''}`, dep);
+  //   }
+  // });
+
+  deps.forEach((dep) => {
     if (dep.dependencyType === DependencyType.Internal) {
-      addDep(
-        `${(dep as IInternalDependency).moduleName}${dep.main || ''}`,
-        dep,
-      );
+      addDep(`${(dep as IInternalDependency).moduleName}`, dep);
     } else {
-      addDep(`${(dep as IExternalDependency).package}${dep.main || ''}`, dep);
+      addDep(`${(dep as IExternalDependency).package}`, dep);
     }
   });
 
   return depMap;
 }
 
-function buildPackageImport(
-  pkg: string,
-  deps: IDependency[],
-  targetFileType: string,
-): ICodeChunk[] {
+function buildPackageImport(pkg: string, deps: IDependency[], targetFileType: string): ICodeChunk[] {
   const chunks: ICodeChunk[] = [];
-  let defaultImport: string = '';
-  let defaultImportAs: string = '';
+  let defaultImport = '';
+  let defaultImportAs = '';
   const imports: Record<string, string> = {};
 
-  deps.forEach(dep => {
+  deps.forEach((dep) => {
     const srcName = dep.exportName;
-    let targetName = dep.importName || dep.exportName;
-    if (dep.subName) {
-      return;
-    }
+    let targetName = dep.componentName || dep.exportName;
 
     if (dep.subName) {
-      chunks.push({
-        type: ChunkType.STRING,
-        fileType: targetFileType,
-        name: COMMON_CHUNK_NAME.FileVarDefine,
-        content: `const ${targetName} = ${srcName}.${dep.subName};`,
-        linkAfter: [
-          COMMON_CHUNK_NAME.ExternalDepsImport,
-          COMMON_CHUNK_NAME.InternalDepsImport,
-        ],
-      });
+      if (targetName !== `${srcName}.${dep.subName}`) {
+        if (!isValidIdentifier(targetName)) {
+          throw new CodeGeneratorError(`Invalid Identifier [${targetName}]`);
+        }
+
+        chunks.push({
+          type: ChunkType.STRING,
+          fileType: targetFileType,
+          name: COMMON_CHUNK_NAME.FileVarDefine,
+          content: `const ${targetName} = ${srcName}.${dep.subName};`,
+          linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport, COMMON_CHUNK_NAME.InternalDepsImport],
+        });
+      }
 
       targetName = srcName;
     }
@@ -74,18 +81,14 @@ function buildPackageImport(
     if (dep.destructuring) {
       imports[srcName] = targetName;
     } else if (defaultImport) {
-      throw new CodeGeneratorError(
-        `[${pkg}] has more than one default export.`,
-      );
+      throw new CodeGeneratorError(`[${pkg}] has more than one default export.`);
     } else {
       defaultImport = srcName;
       defaultImportAs = targetName;
     }
   });
 
-  const items = Object.keys(imports).map(src =>
-    src === imports[src] ? src : `${src} as ${imports[src]}`,
-  );
+  const items = Object.keys(imports).map((src) => (src === imports[src] ? src : `${src} as ${imports[src]}`));
 
   const statementL = ['import'];
   if (defaultImport) {
@@ -125,7 +128,7 @@ function buildPackageImport(
 
 type PluginConfig = {
   fileType: string;
-}
+};
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?: PluginConfig) => {
   const cfg: PluginConfig = {
@@ -143,9 +146,9 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?: Plu
     if (ir && ir.deps && ir.deps.length > 0) {
       const packs = groupDepsByPack(ir.deps);
 
-      Object.keys(packs).forEach(pkg => {
+      Object.keys(packs).forEach((pkg) => {
         const chunks = buildPackageImport(pkg, packs[pkg], cfg.fileType);
-        next.chunks.push.apply(next.chunks, chunks);
+        next.chunks.push(...chunks);
       });
     }
 

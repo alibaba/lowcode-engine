@@ -1,9 +1,8 @@
+import { ResultFile } from '@ali/lowcode-types';
+import { createResultFile } from '../../../../../../../../utils/resultHelper';
 
-import ResultFile from '../../../../../../../../model/ResultFile';
-import { IResultFile } from '../../../../../../../../types';
-
-export default function getFile(): [string[], IResultFile] {
-  const file = new ResultFile(
+export default function getFile(): [string[], ResultFile] {
+  const file = createResultFile(
     'app',
     'ts',
     `
@@ -72,6 +71,5 @@ export default {
     `,
   );
 
-  return [['src','config'], file];
+  return [['src', 'config'], file];
 }
-  

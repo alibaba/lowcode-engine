@@ -17,7 +17,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
 
     const ir = next.ir as IProjectInfo;
     if (ir.constants) {
-      const [, constantStr] = generateCompositeType(ir.constants);
+      const constantStr = generateCompositeType(ir.constants);
 
       next.chunks.push({
         type: ChunkType.STRING,
@@ -26,10 +26,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
         content: `
           const constantConfig = ${constantStr};
         `,
-        linkAfter: [
-          COMMON_CHUNK_NAME.ExternalDepsImport,
-          COMMON_CHUNK_NAME.InternalDepsImport,
-        ],
+        linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport, COMMON_CHUNK_NAME.InternalDepsImport],
       });
 
       next.chunks.push({
