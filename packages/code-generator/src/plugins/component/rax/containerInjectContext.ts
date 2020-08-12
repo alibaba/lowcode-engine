@@ -34,7 +34,6 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start],
     });
 
-    // TODO: 补充数据源的定义
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: cfg.fileType,

@@ -1,3 +1,5 @@
+import { DataSourceConfig } from '@ali/lowcode-types';
+
 import { CLASS_DEFINE_CHUNK_NAME, COMMON_CHUNK_NAME } from '../../../const/generator';
 
 import {
@@ -7,11 +9,12 @@ import {
   FileType,
   ICodeStruct,
 } from '../../../types';
+import { isContainerSchema } from '../../../utils/schema';
 import { RAX_CHUNK_NAME } from './const';
 
 type PluginConfig = {
   fileType: string;
-}
+};
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
   const cfg: PluginConfig = {
@@ -51,23 +54,22 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       content: `
         this._dataSourceEngine.reloadDataSource();
       `,
-      linkAfter: [
-        RAX_CHUNK_NAME.ClassDidMountStart,
-      ],
+      linkAfter: [RAX_CHUNK_NAME.ClassDidMountStart],
     });
 
-    // TODO: 补充数据源的定义
+    const dataSource = isContainerSchema(pre.ir) ? pre.ir.dataSource : null;
+    const dataSourceItems: DataSourceConfig[] = dataSource && dataSource.list || [];
+
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: cfg.fileType,
       name: CLASS_DEFINE_CHUNK_NAME.InsPrivateMethod,
+      // TODO: 下面的定义应该需要调用 @ali/lowcode-datasource-engine 的方法来搞:
       content: `
         _defineDataSourceList() {
-          return [];
+          return ${JSON.stringify(dataSourceItems)};
         }`,
-      linkAfter: [
-        RAX_CHUNK_NAME.ClassRenderEnd
-      ],
+      linkAfter: [RAX_CHUNK_NAME.ClassRenderEnd],
     });
 
     return next;

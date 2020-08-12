@@ -19,7 +19,8 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
     const ir = next.ir as IProjectInfo;
 
     const packageJson: IPackageJSON = {
-      name: '@ali/rax-component-demo',
+      name: '@ali/rax-app-demo',
+      private: true,
       version: '1.0.0',
       scripts: {
         build:
@@ -29,6 +30,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
         lint: 'eslint --ext .js --ext .jsx ./',
       },
       dependencies: {
+        '@ali/lowcode-datasource-engine': '^0.1.0',
         rax: '^1.1.0',
         'rax-app': '^2.0.0',
         'rax-document': '^0.1.0',
