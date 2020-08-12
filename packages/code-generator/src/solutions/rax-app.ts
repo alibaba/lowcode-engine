@@ -3,13 +3,13 @@ import { IProjectBuilder } from '../types';
 import { createProjectBuilder } from '../generator/ProjectBuilder';
 
 import esModule from '../plugins/common/esmodule';
-import containerClass from '../plugins/component/react/containerClass';
-import containerInitState from '../plugins/component/react/containerInitState';
-import containerInjectUtils from '../plugins/component/react/containerInjectUtils';
-import containerLifeCycle from '../plugins/component/react/containerLifeCycle';
-import containerMethod from '../plugins/component/react/containerMethod';
-import jsx from '../plugins/component/react/jsx';
-import reactCommonDeps from '../plugins/component/react/reactCommonDeps';
+import containerClass from '../plugins/component/rax/containerClass';
+import containerInitState from '../plugins/component/rax/containerInitState';
+import containerInjectUtils from '../plugins/component/rax/containerInjectUtils';
+import containerLifeCycle from '../plugins/component/rax/containerLifeCycle';
+import containerMethod from '../plugins/component/rax/containerMethod';
+import jsx from '../plugins/component/rax/jsx';
+import commonDeps from '../plugins/component/rax/commonDeps';
 import css from '../plugins/component/style/css';
 import constants from '../plugins/project/constants';
 import i18n from '../plugins/project/i18n';
@@ -24,7 +24,7 @@ export default function createIceJsProjectBuilder(): IProjectBuilder {
     template: raxApp.template,
     plugins: {
       components: [
-        reactCommonDeps(),
+        commonDeps(),
         esModule({
           fileType: 'jsx',
         }),
@@ -37,7 +37,7 @@ export default function createIceJsProjectBuilder(): IProjectBuilder {
         css(),
       ],
       pages: [
-        reactCommonDeps(),
+        commonDeps(),
         esModule({
           fileType: 'jsx',
         }),

@@ -1,0 +1,52 @@
+import { CLASS_DEFINE_CHUNK_NAME } from '../../../const/generator';
+
+import { generateCompositeType } from '../../../utils/compositeType';
+
+import {
+  BuilderComponentPlugin,
+  BuilderComponentPluginFactory,
+  ChunkType,
+  FileType,
+  ICodeStruct,
+  IContainerInfo,
+} from '../../../types';
+
+type PluginConfig = {
+  fileType: string;
+}
+
+const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
+  const cfg: PluginConfig = {
+    fileType: FileType.JSX,
+    ...config,
+  };
+
+  const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
+    const next: ICodeStruct = {
+      ...pre,
+    };
+
+    const ir = next.ir as IContainerInfo;
+
+    if (ir.state) {
+      const state = ir.state;
+      const fields = Object.keys(state).map<string>(stateName => {
+        const [isString, value] = generateCompositeType(state[stateName]);
+        return `${stateName}: ${isString ? `'${value}'` : value},`;
+      });
+
+      next.chunks.push({
+        type: ChunkType.STRING,
+        fileType: cfg.fileType,
+        name: CLASS_DEFINE_CHUNK_NAME.ConstructorContent,
+        content: `this.state = { ${fields.join('')} };`,
+        linkAfter: [CLASS_DEFINE_CHUNK_NAME.ConstructorStart],
+      });
+    }
+
+    return next;
+  };
+  return plugin;
+};
+
+export default pluginFactory;
