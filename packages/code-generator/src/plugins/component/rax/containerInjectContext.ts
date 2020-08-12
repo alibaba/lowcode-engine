@@ -11,7 +11,7 @@ import { RAX_CHUNK_NAME } from './const';
 
 type PluginConfig = {
   fileType: string;
-}
+};
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
   const cfg: PluginConfig = {
@@ -50,10 +50,10 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
               self.setState(newState);
             },
             get dataSourceMap() {
-              return self._dataSourceEngine?.dataSourceMap || {};
+              return self._dataSourceEngine.dataSourceMap || {};
             },
             async reloadDataSource() {
-              self._dataSourceEngine?.reloadDataSource();
+              self._dataSourceEngine.reloadDataSource();
             },
             get utils() {
               return self._utils;
@@ -72,9 +72,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
           return context;
         }
       `,
-      linkAfter: [
-        RAX_CHUNK_NAME.ClassRenderEnd
-      ],
+      linkAfter: [RAX_CHUNK_NAME.ClassRenderEnd],
     });
 
     return next;
