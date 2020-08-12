@@ -55,7 +55,7 @@ export interface JSONObject {
 }
 
 // 复合类型
-export type CompositeValue = JSONValue | JSExpression | JSSlot | CompositeArray | CompositeObject;
+export type CompositeValue = JSONValue | JSExpression | JSFunction | JSSlot | CompositeArray | CompositeObject;
 export type CompositeArray = CompositeValue[];
 export interface CompositeObject {
   [key: string]: CompositeValue;
