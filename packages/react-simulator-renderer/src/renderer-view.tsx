@@ -2,6 +2,7 @@ import LowCodeRenderer from '@ali/lowcode-react-renderer';
 import { ReactInstance, Fragment, Component, createElement } from 'react';
 import { observer } from '@recore/obx-react';
 import { SimulatorRendererContainer, DocumentInstance } from './renderer';
+import { Router, Route, Switch } from 'react-router';
 import './renderer.less';
 
 // patch cloneElement avoid lost keyProps
@@ -38,17 +39,19 @@ export default class SimulatorRendererView extends Component<{ rendererContainer
   render() {
     const { rendererContainer } = this.props;
     return (
-      <Layout rendererContainer={rendererContainer}>
-        <Router onChange={(currentPath: string) => {
-          rendererContainer.redirect(currentPath);
-        }}>
-          {rendererContainer.getDocumentInstances().map((instance) => {
-            return <Route path={instance.document.get('fileName')}>
-              <Renderer documentInstance={instance} />
-            </Route>
-          })}
-        </Router>
-      </Layout>
+      <Router history={rendererContainer.history}>
+        <Layout rendererContainer={rendererContainer}>
+          <Switch>
+            {rendererContainer.documentInstances.map((instance) => (
+              <Route
+                path={instance.path}
+                key={instance.id}
+                render={(routeProps) => <Renderer documentInstance={instance} {...routeProps} />}
+              />
+            ))}
+          </Switch>
+        </Layout>
+      </Router>
     );
   }
 }
@@ -106,7 +109,6 @@ class Renderer extends Component<{ documentInstance: DocumentInstance }> {
         schema={documentInstance.schema}
         components={container.components}
         appHelper={container.context}
-        // context={renderer.context}
         designMode={designMode}
         suspended={documentInstance.suspended}
         self={documentInstance.scope}
@@ -116,27 +118,44 @@ class Renderer extends Component<{ documentInstance: DocumentInstance }> {
           const leaf = documentInstance.getNode(__id);
           viewProps._leaf = leaf;
           viewProps._componentName = leaf?.componentName;
-          let _children = leaf?.isContainer() ? (children == null ? [] : Array.isArray(children) ? children : [children]) : children;
+          let _children = leaf?.isContainer()
+            ? children == null
+              ? []
+              : Array.isArray(children)
+              ? children
+              : [children]
+            : children;
           if (props.children && props.children.length) {
             if (Array.isArray(props.children)) {
-              _children = Array.isArray(_children) ? _children.concat(props.children) : props.children.unshift(_children);
+              _children = Array.isArray(_children)
+                ? _children.concat(props.children)
+                : props.children.unshift(_children);
             } else {
-              Array.isArray(_children) && _children.push(props.children) || (_children = [_children].push(props.children));
+              (Array.isArray(_children) && _children.push(props.children)) ||
+                (_children = [_children].push(props.children));
             }
           }
           // 如果是容器 && 无children && 高宽为空 增加一个占位容器，方便拖动
-          if (leaf?.isContainer() && (_children == null || !_children.length) && (!viewProps.style || Object.keys(viewProps.style).length == 0)){
-            _children = <div style={{
-              height:'66px',
-              backgroundColor:'#f0f0f0',
-              borderColor:'#a7b1bd',
-              border: '1px dotted',
-              color:'#a7b1bd',
-              textAlign:'center',
-              lineHeight:'66px'
-            }}>
-              拖拽组件或模板到这里
-            </div>
+          if (
+            leaf?.isContainer() &&
+            (_children == null || !_children.length) &&
+            (!viewProps.style || Object.keys(viewProps.style).length == 0)
+          ) {
+            _children = (
+              <div
+                style={{
+                  height: '66px',
+                  backgroundColor: '#f0f0f0',
+                  borderColor: '#a7b1bd',
+                  border: '1px dotted',
+                  color: '#a7b1bd',
+                  textAlign: 'center',
+                  lineHeight: '66px',
+                }}
+              >
+                拖拽组件或模板到这里
+              </div>
+            );
           }
 
           if (viewProps._componentName === 'Menu') {
@@ -159,17 +178,13 @@ class Renderer extends Component<{ documentInstance: DocumentInstance }> {
             console.info('menuprops', viewProps);
           }
 
-          return createElement(
-            getDeviceView(Component, device, designMode),
-            viewProps,
-            _children,
-          );
+          return createElement(getDeviceView(Component, device, designMode), viewProps, _children);
         }}
         onCompGetRef={(schema: any, ref: ReactInstance | null) => {
           documentInstance.mountInstance(schema.id, ref);
         }}
         //onCompGetCtx={(schema: any, ctx: object) => {
-        // renderer.mountContext(schema.id, ctx);
+        // documentInstance.mountContext(schema.id, ctx);
         //}}
       />
     );

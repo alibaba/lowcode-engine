@@ -82,9 +82,6 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
       e.target = document.elementFromPoint(e.canvasX!, e.canvasY!);
     }
 
-    // documentModel : 目标文档
-    e.documentModel = this._designer?.currentDocument;
-
     // 事件已订正
     e.fixed = true;
     return e;

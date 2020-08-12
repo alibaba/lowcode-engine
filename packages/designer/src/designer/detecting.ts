@@ -29,7 +29,7 @@ export class Detecting {
     }
   }
 
-  leave(document: DocumentModel) {
+  leave(document: DocumentModel | undefined) {
     if (this.current && this.current.document === document) {
       this._current = null;
     }

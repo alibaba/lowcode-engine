@@ -28,6 +28,10 @@ export class ExclusiveGroup {
     return this.children[0]!;
   }
 
+  get index() {
+    return this.firstNode.index;
+  }
+
   add(node: Node) {
     if (node.nextSibling && node.nextSibling.conditionGroup === this) {
       const i = this.children.indexOf(node.nextSibling);

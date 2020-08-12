@@ -86,7 +86,6 @@ export class Trunk {
   }
 
   registerSetter(type: string, setter: CustomView | RegisteredSetter) {
-    // console.warn('Trunk.registerSetter is deprecated');
     registerSetter(type, setter);
   }
 

@@ -11,8 +11,6 @@ export class Project {
 
   private data: ProjectSchema = { version: '1.0.0', componentsMap: [], componentsTree: [] };
 
-  @obx.ref canvasDisplayMode: 'exclusive' | 'overview' = 'exclusive';
-
   private _simulator?: ISimulatorHost;
 
   /**
@@ -112,14 +110,26 @@ export class Project {
       | string,
   ): any {}
 
+
+  private documentsMap = new Map<string, DocumentModel>();
+  getDocument(id: string): DocumentModel | null {
+    return this.documentsMap.get(id) || null;
+  }
+
+  createDocument(data?: RootSchema): DocumentModel {
+    const doc = new DocumentModel(this, data);
+    this.documents.push(doc);
+    this.documentsMap.set(doc.id, doc);
+    return doc;
+  }
+
   open(doc?: string | DocumentModel | RootSchema): DocumentModel | null {
     if (!doc) {
       const got = this.documents.find((item) => item.isBlank());
       if (got) {
         return got.open();
       }
-      doc = new DocumentModel(this);
-      this.documents.push(doc);
+      doc = this.createDocument();
       return doc.open();
     }
     if (typeof doc === 'string') {
@@ -130,8 +140,7 @@ export class Project {
 
       const data = this.data.componentsTree.find((data) => data.fileName === doc);
       if (data) {
-        doc = new DocumentModel(this, data);
-        this.documents.push(doc);
+        doc = this.createDocument(data);
         return doc.open();
       }
 
@@ -142,8 +151,7 @@ export class Project {
       return doc.open();
     }
 
-    doc = new DocumentModel(this, doc);
-    this.documents.push(doc);
+    doc = this.createDocument(doc);
     return doc.open();
   }
 

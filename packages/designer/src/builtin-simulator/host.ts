@@ -2,7 +2,7 @@ import { obx, autorun, computed, getPublicPath, hotkey, focusTracker } from '@al
 import { ISimulatorHost, Component, NodeInstance, ComponentInstance } from '../simulator';
 import Viewport from './viewport';
 import { createSimulator } from './create-simulator';
-import { Node, ParentalNode, DocumentModel, isNode, contains, isRootNode } from '../document';
+import { Node, ParentalNode, isNode, contains, isRootNode } from '../document';
 import ResourceConsumer from './resource-consumer';
 import {
   AssetLevel,
@@ -89,6 +89,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   readonly designer = this.project.designer;
 
+  get currentDocument() {
+    return this.project.currentDocument;
+  }
+
   @computed get device(): string {
     return this.get('device') || 'default';
   }
@@ -138,6 +142,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
    */
   connect(renderer: BuiltinSimulatorRenderer, fn: (context: { dispose: () => void; firstRun: boolean }) => void) {
     this._renderer = renderer;
+    return autorun(fn as any, true);
+  }
+
+  autorun(fn: (context: { dispose: () => void; firstRun: boolean }) => void) {
     return autorun(fn as any, true);
   }
 
@@ -245,9 +253,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   }
 
   setupDragAndClick() {
-    const documentModel = this.document;
-    const selection = documentModel.selection;
-    const designer = documentModel.designer;
+    const designer = this.designer;
     const doc = this.contentDocument!;
 
     // TODO: think of lock when edit a node
@@ -257,9 +263,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       (downEvent: MouseEvent) => {
         // fix for popups close logic
         document.dispatchEvent(new Event('mousedown'));
-        if (this.liveEditing.editing) {
+        const documentModel = this.project.currentDocument;
+        if (this.liveEditing.editing || !documentModel) {
           return;
         }
+        const selection = documentModel.selection;
         // stop response document focus event
         downEvent.stopPropagation();
         downEvent.preventDefault();
@@ -267,8 +275,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         // FIXME: dirty fix remove label-for fro liveEditing
         (downEvent.target as HTMLElement).removeAttribute('for');
 
+
         const nodeInst = this.getNodeInstanceFromElement(downEvent.target as Element);
-        const node = nodeInst?.node || this.document.rootNode;
+        const node = nodeInst?.node || documentModel.rootNode;
         const isMulti = downEvent.metaKey || downEvent.ctrlKey;
         const isLeftButton = downEvent.which === 1 || downEvent.button === 0;
         const checkSelect = (e: MouseEvent) => {
@@ -280,6 +289,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
               selection.remove(id);
             } else {
               selection.select(id);
+
+              // dirty code should refector
               const editor = this.designer?.editor;
               const npm = node?.componentMeta?.npm;
               const selected =
@@ -303,7 +314,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
               selection.add(node.id);
               ignoreUpSelected = true;
             }
-            selection.remove(this.document.rootNode.id);
+            selection.remove(documentModel.rootNode.id);
             // 获得顶层 nodes
             nodes = selection.getTopNodes();
           } else if (selection.containsNode(node, true)) {
@@ -359,7 +370,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
    */
   setupDetecting() {
     const doc = this.contentDocument!;
-    const detecting = this.document.designer.detecting;
+    const detecting = this.designer.detecting;
     const hover = (e: MouseEvent) => {
       if (!detecting.enable) {
         return;
@@ -368,7 +379,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       detecting.capture(nodeInst?.node || null);
       e.stopPropagation();
     };
-    const leave = () => detecting.leave(this.document);
+    const leave = () => detecting.leave(this.project.currentDocument);
 
     doc.addEventListener('mouseover', hover, true);
     doc.addEventListener('mouseleave', leave, false);
@@ -383,7 +394,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     );
 
     this.disableHovering = () => {
-      detecting.leave(this.document);
+      detecting.leave(this.project.currentDocument);
       doc.removeEventListener('mouseover', hover, true);
       doc.removeEventListener('mouseleave', leave, false);
       this.disableHovering = undefined;
@@ -406,7 +417,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         if (!nodeInst) {
           return;
         }
-        const node = nodeInst.node || this.document.rootNode;
+        const node = nodeInst.node || this.project.currentDocument?.rootNode;
+        if (!node) {
+          return;
+        }
 
         const rootElement = this.findDOMNodes(nodeInst.instance, node.componentMeta.rootSelector)?.find((item) =>
           item.contains(targetElement),
@@ -450,10 +464,12 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       if (!nodeInst) {
         return;
       }
-      const node = nodeInst.node || this.document.rootNode;
+      const node = nodeInst.node || this.project.currentDocument?.rootNode;
       if (!node) {
         return;
       }
+
+      // dirty code should refector
       const editor = this.designer?.editor;
       const npm = node?.componentMeta?.npm;
       const selected =
@@ -504,14 +520,15 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   }
 
   createComponent(schema: ComponentSchema): Component | null {
-    return this.renderer?.createComponent(schema) || null;
+    return null;
+    // return this.renderer?.createComponent(schema) || null;
   }
 
   @obx private instancesMap: {
     [docId: string]: Map<string, ComponentInstance[]>;
   } = {};
   setInstance(docId: string, id: string, instances: ComponentInstance[] | null) {
-    if (hasOwnProperty(this.instancesMap, docId)) {
+    if (!hasOwnProperty(this.instancesMap, docId)) {
       this.instancesMap[docId] = new Map();
     }
     if (instances == null) {
@@ -524,17 +541,18 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   /**
    * @see ISimulator
    */
-  getComponentInstances(node: Node): ComponentInstance[] | null {
+  getComponentInstances(node: Node, context?: NodeInstance): ComponentInstance[] | null {
     const docId = node.document.id;
 
-    return this.instancesMap[docId]?.get(node.id) || null;
-  }
+    let instances = this.instancesMap[docId]?.get(node.id) || null;
+    if (!instances || !context) {
+      return instances;
+    }
 
-  /**
-   * @see ISimulator
-   */
-  getComponentInstanceId(instance: ComponentInstance) {
-    throw new Error('Method not implemented.');
+    // filter with context
+    return instances.filter((instance) => {
+      return this.getClosestNodeInstance(instance, context.nodeId)?.instance === context.instance
+    });
   }
 
   /**
@@ -659,7 +677,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     if (!nodeIntance) {
       return null;
     }
-    const node = this.document.getNode(nodeIntance.nodeId);
+    const { docId } = nodeIntance;
+    const doc = this.project.getDocument(docId)!;
+    const node = doc.getNode(nodeIntance.nodeId);
     return {
       ...nodeIntance,
       node,
@@ -782,9 +802,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       e.target = this.contentDocument!.elementFromPoint(e.canvasX!, e.canvasY!);
     }
 
-    // documentModel : 目标文档
-    e.documentModel = this.document;
-
     // 事件已订正
     e.fixed = true;
     return e;
@@ -815,6 +832,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   locate(e: LocateEvent): any {
     this.sensing = true;
     this.scroller.scrolling(e);
+    const document = this.project.currentDocument;
+    if (!document) {
+      return null;
+    }
     const dropContainer = this.getDropContainer(e);
     if (!dropContainer) {
       return null;
@@ -841,9 +862,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     };
 
     const locationData = {
-      target: container,
+      target: container as ParentalNode,
       detail,
-      source: 'simulator' + this.document.id,
+      source: 'simulator' + document.id,
       event: e,
     };
 
@@ -854,9 +875,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       e.dragObject.nodes[0].getPrototype()?.isModal()
     ) {
       return this.designer.createLocation({
-        target: this.document.rootNode,
+        target: document.rootNode,
         detail,
-        source: 'simulator' + this.document.id,
+        source: 'simulator' + document.id,
         event: e,
       });
     }
@@ -960,7 +981,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   getDropContainer(e: LocateEvent): DropContainer | LocationData | null {
     const { target, dragObject } = e;
     const isAny = isDragAnyObject(dragObject);
-    const { modalNode, currentRoot } = this.document;
+    const document = this.project.currentDocument!;
+    const { currentRoot } = document;
     let container: Node;
     let nodeInstance: NodeInstance<ComponentInstance> | undefined;
 
@@ -984,11 +1006,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       container = container.parent || currentRoot;
     }
 
-    // check container if in modalNode layer, if not, use modalNode
-    if (modalNode && !modalNode.contains(container)) {
-      container = modalNode;
-    }
-
     // TODO: use spec container to accept specialData
     if (isAny) {
       // will return locationData
@@ -996,7 +1013,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     }
 
     // get common parent, avoid drop container contains by dragObject
-    // TODO: renderengine support pointerEvents: none for acceleration
     const drillDownExcludes = new Set<Node>();
     if (isDragNodeObject(dragObject)) {
       const nodes = dragObject.nodes;
@@ -1008,63 +1024,70 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         }
       }
       if (p !== container) {
-        container = p || this.document.rootNode;
+        container = p || document.rootNode;
         drillDownExcludes.add(container);
       }
     }
 
-    const ret: any = {
-      container,
-    };
+    let instance: any;
     if (nodeInstance) {
       if (nodeInstance.node === container) {
-        ret.instance = nodeInstance.instance;
+        instance = nodeInstance.instance;
       } else {
-        ret.instance = this.getClosestNodeInstance(nodeInstance.instance as any, container.id)?.instance;
+        instance = this.getClosestNodeInstance(nodeInstance.instance as any, container.id)?.instance;
       }
     } else {
-      ret.instance = this.getComponentInstances(container)?.[0];
+      instance = this.getComponentInstances(container)?.[0];
     }
 
+    let dropContainer: DropContainer = {
+      container: container as any,
+      instance
+    };
+
     let res: any;
-    let upward: any;
-    // TODO: complete drill down logic
+    let upward: DropContainer | null = null;
     while (container) {
-      if (ret.container !== container) {
-        ret.container = container;
-        ret.instance = this.getClosestNodeInstance(ret.instance, container.id)?.instance;
-      }
-      res = this.handleAccept(ret, e);
+      res = this.handleAccept(dropContainer, e);
       if (isLocationData(res)) {
         return res;
       }
       if (res === true) {
-        return ret;
+        return dropContainer;
       }
       if (!res) {
         drillDownExcludes.add(container);
         if (upward) {
-          container = upward;
+          dropContainer = upward;
+          container = dropContainer.container;
           upward = null;
         } else if (container.parent) {
           container = container.parent;
+          instance = this.getClosestNodeInstance(dropContainer.instance, container.id)?.instance;
+          dropContainer = {
+            container: container as ParentalNode,
+            instance
+          };
         } else {
           return null;
         }
-      } else if (isNode(res)) {
-        /* else if (res === DRILL_DOWN) {
+      }/* else if (res === DRILL_DOWN) {
         if (!upward) {
-          upward = container.parent;
+          container = container.parent;
+          instance = this.getClosestNodeInstance(dropContainer.instance, container.id)?.instance;
+          upward = {
+            container,
+            instance
+          };
         }
-        container = this.getNearByContainer(container, drillExcludes, e);
-        if (!container) {
-          container = upward;
+        dropContainer = this.getNearByContainer(dropContainer, drillDownExcludes, e);
+        if (!dropContainer) {
+          dropContainer = upward;
           upward = null;
         }
+      } else if (isNode(res)) {
+        // TODO:
       }*/
-        container = res;
-        upward = null;
-      }
     }
     return null;
   }
@@ -1086,8 +1109,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
    */
   handleAccept({ container, instance }: DropContainer, e: LocateEvent) {
     const { dragObject } = e;
+    const document = this.currentDocument!;
     if (isRootNode(container)) {
-      return this.document.checkDropTarget(container, dragObject as any);
+      return document.checkDropTarget(container, dragObject as any);
     }
 
     const meta = (container as Node).componentMeta;
@@ -1126,36 +1150,44 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     }
 
     // check nesting
-    return this.document.checkNesting(container, dragObject as any);
+    return document.checkNesting(container, dragObject as any);
   }
 
   /**
    * 查找邻近容器
    */
-  getNearByContainer(container: ParentalNode, e: LocateEvent) {
-    /*
+  getNearByContainer({ container, instance }: DropContainer, drillDownExcludes: Set<Node>, e: LocateEvent) {
     const children = container.children;
-    if (!children || children.length < 1) {
+    const document = this.project.currentDocument!;
+    if (!children || children.isEmpty()) {
       return null;
     }
 
     let nearDistance: any = null;
     let nearBy: any = null;
-    for (let i = 0, l = children.length; i < l; i++) {
-      let child: any = children[i];
-      if (!isElementNode(child)) {
+    for (let i = 0, l = children.size; i < l; i++) {
+      let child = children.get(i);
+
+      if (!child) {
         continue;
       }
-      if (hasConditionFlow(child)) {
-        const bn = child.conditionFlow;
+      if (child.conditionGroup) {
+        const bn = child.conditionGroup;
         i = bn.index + bn.length - 1;
         child = bn.visibleNode;
       }
-      const rect = this.document.computeRect(child);
+      if (!child.isParental() || drillDownExcludes.has(child)) {
+        continue;
+      }
+      // TODO:
+      this.findDOMNodes(instance);
+      this.getComponentInstances(child)
+      const rect = this.computeRect(child);
       if (!rect) {
         continue;
       }
 
+      /*
       if (isPointInRect(e, rect)) {
         return child;
       }
@@ -1164,11 +1196,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       if (nearDistance === null || distance < nearDistance) {
         nearDistance = distance;
         nearBy = child;
-      }
+      }*/
     }
 
     return nearBy;
-    */
   }
   // #endregion
 }

@@ -25,7 +25,7 @@ class Contents extends Component<{ area: Area }> {
     const top: any[] = [];
     const bottom: any[] = [];
     area.container.items.forEach((item) => {
-      const content = <div id={`left-area-${item.name}`}>{item.content}</div>;
+      const content = <div key={`left-area-${item.name}`}>{item.content}</div>;
       if (item.align === 'bottom') {
         bottom.push(content);
       } else {

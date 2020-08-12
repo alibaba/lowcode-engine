@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { SimulatorContext } from '../context';
 import { BuiltinSimulatorHost } from '../host';
 import { OffsetObserver, Designer } from '../../designer';
+import { Node } from '../../document';
 
 @observer
 export default class BoxResizing extends Component<{ host: BuiltinSimulatorHost }> {
@@ -19,8 +20,8 @@ export default class BoxResizing extends Component<{ host: BuiltinSimulatorHost 
   }
 
   @computed get selecting() {
-    const doc = this.host.document;
-    if (doc.suspensed) {
+    const doc = this.host.currentDocument;
+    if (!doc || doc.suspensed) {
       return null;
     }
     const selection = doc.selection;
@@ -146,9 +147,9 @@ export class BoxResizingInstance extends Component<{
         metaData.experimental.callbacks &&
         typeof metaData.experimental.callbacks.onResize === 'function'
       ) {
-        e.trigger = direction;
-        e.deltaX = moveX;
-        e.deltaY = moveY;
+        (e as any).trigger = direction;
+        (e as any).deltaX = moveX;
+        (e as any).deltaY = moveY;
         metaData.experimental.callbacks.onResize(e, node);
       }
     };
@@ -161,7 +162,7 @@ export class BoxResizingInstance extends Component<{
         metaData.experimental.callbacks &&
         typeof metaData.experimental.callbacks.onResizeStart === 'function'
       ) {
-        e.trigger = direction;
+        (e as any).trigger = direction;
         metaData.experimental.callbacks.onResizeStart(e, node);
       }
     };
@@ -174,7 +175,7 @@ export class BoxResizingInstance extends Component<{
         metaData.experimental.callbacks &&
         typeof metaData.experimental.callbacks.onResizeEnd === 'function'
       ) {
-        e.trigger = direction;
+        (e as any).trigger = direction;
         metaData.experimental.callbacks.onResizeStart(e, node);
       }
 

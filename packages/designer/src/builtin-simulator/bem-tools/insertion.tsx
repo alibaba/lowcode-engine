@@ -119,7 +119,7 @@ export class InsertionView extends Component<{ host: BuiltinSimulatorHost }> {
 
   render() {
     const { host } = this.props;
-    const loc = host.document.dropLocation;
+    const loc = host.currentDocument?.dropLocation;
     if (!loc) {
       return null;
     }

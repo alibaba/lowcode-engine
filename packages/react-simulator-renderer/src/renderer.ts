@@ -9,8 +9,8 @@ import loader from './utils/loader';
 import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
 import { isESModule, isElement, cursor, setNativeSelection } from '@ali/lowcode-utils';
 import { RootSchema, NpmInfo, ComponentSchema, TransformStage } from '@ali/lowcode-types';
-// just use types
 import { BuiltinSimulatorRenderer, NodeInstance, Component, DocumentModel, Node } from '@ali/lowcode-designer';
+import { createMemoryHistory, MemoryHistory } from 'history';
 import Slot from './builtin-components/slot';
 import Leaf from './builtin-components/leaf';
 
@@ -22,13 +22,13 @@ export class DocumentInstance {
     return this._schema;
   }
 
-  constructor(readonly container: SimulatorRendererContainer, readonly document: DocumentModel) {
-    this.dispose = host.connect(this, () => {
-      // sync layout config
+  private dispose?: () => void;
 
+  constructor(readonly container: SimulatorRendererContainer, readonly document: DocumentModel) {
+    this.dispose = host.autorun(() => {
       // sync schema
-      this._schema = host.document.export(1);
-    })
+      this._schema = document.export(1);
+    });
   }
 
   @computed get suspended(): any {
@@ -36,6 +36,14 @@ export class DocumentInstance {
   }
   @computed get scope(): any {
     return null;
+  }
+
+  get path(): string {
+    return '/' + this.document.fileName;
+  }
+
+  get id() {
+    return this.document.id;
   }
 
   private unmountIntance(id: string, instance: ReactInstance) {
@@ -114,62 +122,6 @@ export class DocumentInstance {
     // this.ctxMap.set(id, ctx);
   }
 
-  createComponent(schema: ComponentSchema): Component | null {
-    const _schema = {
-      ...schema,
-    };
-    _schema.methods = {};
-    _schema.lifeCycles = {};
-
-    const processPropsSchema = (propsSchema: any, propsMap: any): any => {
-      if (!propsSchema) {
-        return {};
-      }
-
-      const result = {...propsSchema};
-      const reg = /^(?:this\.props|props)\.(\S+)$/;
-      Object.keys(propsSchema).map((key: string) => {
-        if (propsSchema[key].type === 'JSExpression') {
-          const { value } = propsSchema[key];
-          const matched = reg.exec(value);
-          if (matched) {
-            const propName = matched[1];
-            result[key] = propsMap[propName];
-          }
-        }
-      });
-      return result;
-    };
-
-    const getElement = (componentsMap: any, schema: any, propsMap: any): ReactElement => {
-      const Com = componentsMap[schema.componentName];
-      let children = null;
-      if (schema.children && schema.children.length > 0) {
-        children = schema.children.map((item: any) => getElement(componentsMap, item, propsMap));
-      }
-      const _leaf = this.document.designer.currentDocument?.createNode(schema);
-      const node = this.document.createNode(schema);
-      let props = processPropsSchema(schema.props, propsMap);
-      props = this.document.designer.transformProps(props, node, TransformStage.Init);
-      props = this.document.designer.transformProps(props, node, TransformStage.Render);
-      return createElement(Com, {...props, _leaf}, children);
-    }
-
-    const container = this.container;
-    class Com extends React.Component {
-      render() {
-        const componentsMap = container.componentsMap;
-        let children = null;
-        if (_schema.children && Array.isArray(_schema.children)) {
-          children = _schema.children?.map((item:any) => getElement(componentsMap, item, this.props));
-        }
-        return createElement(React.Fragment, {}, children);
-      }
-    }
-
-    return Com;
-  }
-
   getNode(id: string): Node | null {
     return this.document.getNode(id);
   }
@@ -178,12 +130,14 @@ export class DocumentInstance {
 export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   readonly isSimulatorRenderer = true;
   private dispose?: () => void;
+  readonly history: MemoryHistory;
+
+  @obx.ref private _documentInstances: DocumentInstance[] = [];
+  get documentInstances() {
+    return this._documentInstances;
+  }
 
   constructor() {
-    if (!host) {
-      return;
-    }
-
     this.dispose = host.connect(this, () => {
       // sync layout config
       // todo: split with others, not all should recompute
@@ -199,6 +153,27 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       // sync device
       this._device = host.device;
     });
+    const documentInstanceMap = new Map<string, DocumentInstance>();
+    host.autorun(() => {
+      this._documentInstances = host.project.documents.map((doc) => {
+        let inst = documentInstanceMap.get(doc.id);
+        if (!inst) {
+          inst = new DocumentInstance(this, doc);
+          documentInstanceMap.set(doc.id, inst);
+        }
+        return inst;
+      });
+      console.info('instances', this._documentInstances);
+    });
+    const initialEntry = host.project.currentDocument
+      ? documentInstanceMap.get(host.project.currentDocument.id)!.path
+      : '/';
+    this.history = createMemoryHistory({
+      initialEntries: [initialEntry],
+    });
+    this.history.listen((location, action) => {
+      console.info(location);
+    });
     host.componentsConsumer.consume(async (componentsAsset) => {
       if (componentsAsset) {
         await this.load(componentsAsset);
@@ -208,10 +183,13 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     host.injectionConsumer.consume((data) => {
       // sync utils, i18n, contants,... config
       this._appContext = {
-        utils: {},
-        constants: {
-          name: 'demo',
+        utils: {
+          router: {
+            push() {},
+            replace() {},
+          },
         },
+        constants: {},
       };
     });
   }
@@ -253,13 +231,6 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
    */
   load(asset: Asset): Promise<any> {
     return loader.load(asset);
-  }
-
-  private documentInstanceMap = new Map<string, DocumentInstance>();
-
-
-  redirect(path: string) {
-
   }
 
   getComponent(componentName: string) {
@@ -308,6 +279,66 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     cursor.release();
   }
 
+  createComponent(schema: ComponentSchema): Component | null {
+    return null;
+    // TODO: use ComponentEngine refactor
+    /*
+    const _schema = {
+      ...schema,
+    };
+    _schema.methods = {};
+    _schema.lifeCycles = {};
+
+    const processPropsSchema = (propsSchema: any, propsMap: any): any => {
+      if (!propsSchema) {
+        return {};
+      }
+
+      const result = { ...propsSchema };
+      const reg = /^(?:this\.props|props)\.(\S+)$/;
+      Object.keys(propsSchema).map((key: string) => {
+        if (propsSchema[key].type === 'JSExpression') {
+          const { value } = propsSchema[key];
+          const matched = reg.exec(value);
+          if (matched) {
+            const propName = matched[1];
+            result[key] = propsMap[propName];
+          }
+        }
+      });
+      return result;
+    };
+
+    const getElement = (componentsMap: any, schema: any, propsMap: any): ReactElement => {
+      const Com = componentsMap[schema.componentName];
+      let children = null;
+      if (schema.children && schema.children.length > 0) {
+        children = schema.children.map((item: any) => getElement(componentsMap, item, propsMap));
+      }
+      const _leaf = this.document.designer.currentDocument?.createNode(schema);
+      const node = this.document.createNode(schema);
+      let props = processPropsSchema(schema.props, propsMap);
+      props = this.document.designer.transformProps(props, node, TransformStage.Init);
+      props = this.document.designer.transformProps(props, node, TransformStage.Render);
+      return createElement(Com, { ...props, _leaf }, children);
+    };
+
+    const container = this;
+    class Com extends React.Component {
+      render() {
+        const componentsMap = container.componentsMap;
+        let children = null;
+        if (_schema.children && Array.isArray(_schema.children)) {
+          children = _schema.children?.map((item: any) => getElement(componentsMap, item, this.props));
+        }
+        return createElement(React.Fragment, {}, children);
+      }
+    }
+
+    return Com;
+    */
+  }
+
   private _running = false;
   run() {
     if (this._running) {
@@ -321,6 +352,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       document.body.appendChild(container);
       container.id = containerId;
     }
+
     // ==== compatiable vision
     document.documentElement.classList.add('engine-page');
     document.body.classList.add('engine-document'); // important! Stylesheet.invoke depends
@@ -401,9 +433,12 @@ const builtinComponents = {
   Leaf,
 };
 
-function buildComponents(libraryMap: LibraryMap, componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> }) {
+function buildComponents(
+  libraryMap: LibraryMap,
+  componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> },
+) {
   const components: any = {
-    ...builtinComponents
+    ...builtinComponents,
   };
   Object.keys(componentsMap).forEach((componentName) => {
     let component = componentsMap[componentName];
