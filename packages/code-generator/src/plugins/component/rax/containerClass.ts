@@ -35,12 +35,17 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       ],
     });
 
+
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: FileType.JSX,
       name: CLASS_DEFINE_CHUNK_NAME.End,
       content: `}`,
-      linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start, RAX_CHUNK_NAME.ClassRenderEnd],
+      linkAfter: [
+        CLASS_DEFINE_CHUNK_NAME.Start,
+        RAX_CHUNK_NAME.ClassRenderEnd,
+        CLASS_DEFINE_CHUNK_NAME.InsPrivateMethod,
+      ],
     });
 
     // next.chunks.push({
@@ -65,12 +70,33 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: FileType.JSX,
+      name: RAX_CHUNK_NAME.ClassDidMountStart,
+      content: `componentDidMount() {`,
+      linkAfter: [
+        CLASS_DEFINE_CHUNK_NAME.Start,
+        CLASS_DEFINE_CHUNK_NAME.InsVar,
+        CLASS_DEFINE_CHUNK_NAME.InsMethod,
+      ],
+    });
+
+    next.chunks.push({
+      type: ChunkType.STRING,
+      fileType: FileType.JSX,
+      name: RAX_CHUNK_NAME.ClassDidMountEnd,
+      content: `}`,
+      linkAfter: [
+        RAX_CHUNK_NAME.ClassDidMountStart,
+        RAX_CHUNK_NAME.ClassDidMountContent,
+      ],
+    });
+
+    next.chunks.push({
+      type: ChunkType.STRING,
+      fileType: FileType.JSX,
       name: RAX_CHUNK_NAME.ClassRenderStart,
       content: 'render() {',
       linkAfter: [
-        CLASS_DEFINE_CHUNK_NAME.Start,
-        CLASS_DEFINE_CHUNK_NAME.ConstructorEnd,
-        CLASS_DEFINE_CHUNK_NAME.InsMethod,
+        RAX_CHUNK_NAME.ClassDidMountEnd,
       ],
     });
 
@@ -79,11 +105,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       fileType: FileType.JSX,
       name: RAX_CHUNK_NAME.ClassRenderEnd,
       content: '}',
-      linkAfter: [
-        RAX_CHUNK_NAME.ClassRenderStart,
-        RAX_CHUNK_NAME.ClassRenderPre,
-        RAX_CHUNK_NAME.ClassRenderJSX,
-      ],
+      linkAfter: [RAX_CHUNK_NAME.ClassRenderStart, RAX_CHUNK_NAME.ClassRenderPre, RAX_CHUNK_NAME.ClassRenderJSX],
     });
 
     next.chunks.push({

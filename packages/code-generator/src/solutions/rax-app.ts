@@ -4,10 +4,12 @@ import { createProjectBuilder } from '../generator/ProjectBuilder';
 
 import esModule from '../plugins/common/esmodule';
 import containerClass from '../plugins/component/rax/containerClass';
-import containerInitState from '../plugins/component/rax/containerInitState';
-import containerInjectUtils from '../plugins/component/rax/containerInjectUtils';
 import containerLifeCycle from '../plugins/component/rax/containerLifeCycle';
 import containerMethod from '../plugins/component/rax/containerMethod';
+import containerInitState from '../plugins/component/rax/containerInitState';
+import containerInjectContext from '../plugins/component/rax/containerInjectContext';
+import containerInjectDataSourceEngine from '../plugins/component/rax/containerInjectDataSourceEngine';
+import containerInjectUtils from '../plugins/component/rax/containerInjectUtils';
 import jsx from '../plugins/component/rax/jsx';
 import commonDeps from '../plugins/component/rax/commonDeps';
 import css from '../plugins/component/style/css';
@@ -42,8 +44,10 @@ export default function createIceJsProjectBuilder(): IProjectBuilder {
           fileType: 'jsx',
         }),
         containerClass(),
-        containerInjectUtils(),
         containerInitState(),
+        containerInjectContext(),
+        containerInjectDataSourceEngine(),
+        containerInjectUtils(),
         containerLifeCycle(),
         containerMethod(),
         jsx(),
@@ -58,6 +62,8 @@ export default function createIceJsProjectBuilder(): IProjectBuilder {
       htmlEntry: [raxApp.plugins.entryDocument()],
       packageJSON: [raxApp.plugins.packageJSON()],
     },
-    postProcessors: [prettier()],
+    postProcessors: [
+      // prettier() // 暂且禁用 prettier
+    ],
   });
 }

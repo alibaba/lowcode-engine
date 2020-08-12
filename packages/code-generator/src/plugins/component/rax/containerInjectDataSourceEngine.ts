@@ -1,4 +1,4 @@
-import { CLASS_DEFINE_CHUNK_NAME } from '../../../const/generator';
+import { CLASS_DEFINE_CHUNK_NAME, COMMON_CHUNK_NAME } from '../../../const/generator';
 
 import {
   BuilderComponentPlugin,
@@ -24,23 +24,46 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       ...pre,
     };
 
-    // TODO: utils 怎么注入？
+    next.chunks.push({
+      type: ChunkType.STRING,
+      fileType: FileType.JSX,
+      name: COMMON_CHUNK_NAME.ExternalDepsImport,
+      content: `
+        import { createDataSourceEngine } from '@ali/lowcode-data-source-engine';
+      `,
+      linkAfter: [],
+    });
+
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: cfg.fileType,
       name: CLASS_DEFINE_CHUNK_NAME.InsVar,
-      content: `_utils = this._defineUtils();`,
+      content: `
+      _dataSourceList = this._defineDataSourceList();
+      _dataSourceEngine = createDataSourceEngine(this._dataSourceList, this._context);`,
       linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start],
     });
 
+    next.chunks.push({
+      type: ChunkType.STRING,
+      fileType: cfg.fileType,
+      name: RAX_CHUNK_NAME.ClassDidMountContent,
+      content: `
+        this._dataSourceEngine.reloadDataSource();
+      `,
+      linkAfter: [
+        RAX_CHUNK_NAME.ClassDidMountStart,
+      ],
+    });
 
+    // TODO: 补充数据源的定义
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: cfg.fileType,
       name: CLASS_DEFINE_CHUNK_NAME.InsPrivateMethod,
       content: `
-        _defineUtils() {
-          return {};
+        _defineDataSourceList() {
+          return [];
         }`,
       linkAfter: [
         RAX_CHUNK_NAME.ClassRenderEnd

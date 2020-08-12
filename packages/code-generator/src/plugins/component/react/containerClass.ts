@@ -40,7 +40,10 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       fileType: FileType.JSX,
       name: CLASS_DEFINE_CHUNK_NAME.End,
       content: `}`,
-      linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start, REACT_CHUNK_NAME.ClassRenderEnd],
+      linkAfter: [
+        CLASS_DEFINE_CHUNK_NAME.Start,
+        REACT_CHUNK_NAME.ClassRenderEnd,
+      ],
     });
 
     next.chunks.push({

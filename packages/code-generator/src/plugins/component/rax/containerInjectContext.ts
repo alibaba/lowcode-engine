@@ -24,24 +24,55 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       ...pre,
     };
 
-    // TODO: utils 怎么注入？
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: cfg.fileType,
       name: CLASS_DEFINE_CHUNK_NAME.InsVar,
-      content: `_utils = this._defineUtils();`,
+      content: `
+        _context = this._createContext();
+      `,
       linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start],
     });
 
-
+    // TODO: 补充数据源的定义
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: cfg.fileType,
       name: CLASS_DEFINE_CHUNK_NAME.InsPrivateMethod,
       content: `
-        _defineUtils() {
-          return {};
-        }`,
+        _createContext() {
+          const self = this;
+
+          const context = {
+            get state() {
+              return self.state;
+            },
+            setState(newState) {
+              self.setState(newState);
+            },
+            get dataSourceMap() {
+              return self._dataSourceEngine?.dataSourceMap || {};
+            },
+            async reloadDataSource() {
+              self._dataSourceEngine?.reloadDataSource();
+            },
+            get utils() {
+              return self._utils;
+            },
+            get page() {
+              return context;
+            },
+            get component() {
+              return context;
+            },
+            get props() {
+              return self.props;
+            },
+          };
+
+          return context;
+        }
+      `,
       linkAfter: [
         RAX_CHUNK_NAME.ClassRenderEnd
       ],

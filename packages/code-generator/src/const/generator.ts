@@ -21,6 +21,7 @@ export const CLASS_DEFINE_CHUNK_NAME = {
   InsVar: 'CommonClassDefineInsVar',
   InsVarMethod: 'CommonClassDefineInsVarMethod',
   InsMethod: 'CommonClassDefineInsMethod',
+  InsPrivateMethod: 'CommonClassDefineInsPrivateMethod',
   End: 'CommonClassDefineEnd',
 };
 
@@ -82,6 +83,15 @@ export const DEFAULT_LINK_AFTER = {
     CLASS_DEFINE_CHUNK_NAME.InsVarMethod,
     CLASS_DEFINE_CHUNK_NAME.ConstructorEnd,
   ],
+  [CLASS_DEFINE_CHUNK_NAME.InsPrivateMethod]: [
+    CLASS_DEFINE_CHUNK_NAME.Start,
+    CLASS_DEFINE_CHUNK_NAME.StaticVar,
+    CLASS_DEFINE_CHUNK_NAME.StaticMethod,
+    CLASS_DEFINE_CHUNK_NAME.InsVar,
+    CLASS_DEFINE_CHUNK_NAME.InsVarMethod,
+    CLASS_DEFINE_CHUNK_NAME.InsMethod,
+    CLASS_DEFINE_CHUNK_NAME.ConstructorEnd,
+  ],
   [CLASS_DEFINE_CHUNK_NAME.End]: [
     CLASS_DEFINE_CHUNK_NAME.Start,
     CLASS_DEFINE_CHUNK_NAME.StaticVar,
@@ -89,6 +99,7 @@ export const DEFAULT_LINK_AFTER = {
     CLASS_DEFINE_CHUNK_NAME.InsVar,
     CLASS_DEFINE_CHUNK_NAME.InsVarMethod,
     CLASS_DEFINE_CHUNK_NAME.InsMethod,
+    CLASS_DEFINE_CHUNK_NAME.InsPrivateMethod,
     CLASS_DEFINE_CHUNK_NAME.ConstructorEnd,
   ],
   [COMMON_CHUNK_NAME.FileMainContent]: [

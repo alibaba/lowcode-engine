@@ -8,6 +8,7 @@
     "demo"
   ],
   "scripts": {
+    "start": "ava --watch",
     "build": "rimraf lib && tsc",
     "demo": "node ./demo/demo.js",
     "test": "ava",
@@ -45,6 +46,11 @@
     ],
     "require": [
       "ts-node/register/transpile-only"
+    ],
+    "sources": [
+      "src/**/*",
+      "test/**/*",
+      "test-cases/**/expected/**/*"
     ]
   },
   "publishConfig": {
