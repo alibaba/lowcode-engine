@@ -55,19 +55,32 @@ export interface ContainerSchema extends NodeSchema {
   defaultProps?: CompositeObject;
 }
 
+/**
+ * 页面容器
+ * @see https://yuque.antfin-inc.com/mo/spec/spec-low-code-building-schema#XMeF5
+ */
 export interface PageSchema extends ContainerSchema {
   componentName: 'Page';
 }
 
+/**
+ * 低代码业务组件容器
+ * @see https://yuque.antfin-inc.com/mo/spec/spec-low-code-building-schema#XMeF5
+ */
 export interface ComponentSchema extends ContainerSchema {
   componentName: 'Component';
 }
 
-export type RootSchema = PageSchema | ComponentSchema;
-
-export interface BlockSchema extends NodeSchema {
+/**
+ * 区块容器
+ * @see https://yuque.antfin-inc.com/mo/spec/spec-low-code-building-schema#XMeF5
+ */
+export interface BlockSchema extends ContainerSchema {
   componentName: 'Block';
 }
+
+export type RootSchema = PageSchema | ComponentSchema | BlockSchema;
+
 export interface SlotSchema extends NodeSchema {
   name?: string;
   componentName: 'Slot';
