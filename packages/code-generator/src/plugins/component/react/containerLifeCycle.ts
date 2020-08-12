@@ -1,10 +1,7 @@
 import { CLASS_DEFINE_CHUNK_NAME, DEFAULT_LINK_AFTER } from '../../../const/generator';
 import { REACT_CHUNK_NAME } from './const';
 
-import {
-  getFuncExprBody,
-  transformFuncExpr2MethodMember,
-} from '../../../utils/jsExpression';
+import { getFuncExprBody, transformFuncExpr2MethodMember } from '../../../utils/jsExpression';
 
 import {
   BuilderComponentPlugin,
@@ -15,14 +12,14 @@ import {
   ICodeChunk,
   ICodeStruct,
   IContainerInfo,
-  IJSExpression,
+  JSExpression,
 } from '../../../types';
 
 type PluginConfig = {
   fileType: string;
   exportNameMapping: Record<string, string>;
   normalizeNameMapping: Record<string, string>;
-}
+};
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
   const cfg: PluginConfig = {
@@ -41,7 +38,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
 
     if (ir.lifeCycles) {
       const lifeCycles = ir.lifeCycles;
-      const chunks = Object.keys(lifeCycles).map<ICodeChunk>(lifeCycleName => {
+      const chunks = Object.keys(lifeCycles).map<ICodeChunk>((lifeCycleName) => {
         const normalizeName = cfg.normalizeNameMapping[lifeCycleName] || lifeCycleName;
         const exportName = cfg.exportNameMapping[lifeCycleName] || lifeCycleName;
         if (normalizeName === 'constructor') {
@@ -49,9 +46,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
             type: ChunkType.STRING,
             fileType: cfg.fileType,
             name: CLASS_DEFINE_CHUNK_NAME.ConstructorContent,
-            content: getFuncExprBody(
-              (lifeCycles[lifeCycleName] as IJSExpression).value,
-            ),
+            content: getFuncExprBody((lifeCycles[lifeCycleName] as JSExpression).value),
             linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.ConstructorStart]],
           };
         }
@@ -60,9 +55,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
             type: ChunkType.STRING,
             fileType: cfg.fileType,
             name: REACT_CHUNK_NAME.ClassRenderPre,
-            content: getFuncExprBody(
-              (lifeCycles[lifeCycleName] as IJSExpression).value,
-            ),
+            content: getFuncExprBody((lifeCycles[lifeCycleName] as JSExpression).value),
             linkAfter: [REACT_CHUNK_NAME.ClassRenderStart],
           };
         }
@@ -71,10 +64,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
           type: ChunkType.STRING,
           fileType: cfg.fileType,
           name: CLASS_DEFINE_CHUNK_NAME.InsMethod,
-          content: transformFuncExpr2MethodMember(
-            exportName,
-            (lifeCycles[lifeCycleName] as IJSExpression).value,
-          ),
+          content: transformFuncExpr2MethodMember(exportName, (lifeCycles[lifeCycleName] as JSExpression).value),
           linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.InsMethod]],
         };
       });

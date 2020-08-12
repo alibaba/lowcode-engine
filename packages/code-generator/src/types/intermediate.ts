@@ -1,12 +1,4 @@
-import {
-  IAppConfig,
-  IAppMeta,
-  IContainerNodeItem,
-  IDependency,
-  II18nMap,
-  IInternalDependency,
-  IUtilItem,
-} from './index';
+import { IAppConfig, IAppMeta, IContainerNodeItem, IDependency, II18nMap, UtilItem } from '.';
 
 export interface IParseResult {
   containers: IContainerInfo[];
@@ -27,7 +19,7 @@ export interface IWithDependency {
 }
 
 export interface IUtilInfo extends IWithDependency {
-  utils: IUtilItem[];
+  utils: UtilItem[];
 }
 
 export interface IRouterInfo extends IWithDependency {

@@ -10,12 +10,12 @@ import {
   ICodeChunk,
   ICodeStruct,
   IContainerInfo,
-  IJSExpression,
+  JSExpression,
 } from '../../../types';
 
 type PluginConfig = {
   fileType: string;
-}
+};
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
   const cfg: PluginConfig = {
@@ -32,14 +32,11 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
 
     if (ir.methods) {
       const methods = ir.methods;
-      const chunks = Object.keys(methods).map<ICodeChunk>(methodName => ({
+      const chunks = Object.keys(methods).map<ICodeChunk>((methodName) => ({
         type: ChunkType.STRING,
         fileType: cfg.fileType,
         name: CLASS_DEFINE_CHUNK_NAME.InsMethod,
-        content: transformFuncExpr2MethodMember(
-          methodName,
-          (methods[methodName] as IJSExpression).value,
-        ),
+        content: transformFuncExpr2MethodMember(methodName, (methods[methodName] as JSExpression).value),
         linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.InsMethod]],
       }));
 

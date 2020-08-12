@@ -8,12 +8,12 @@ import { SUPPORT_SCHEMA_VERSION_LIST } from '../const';
 import { handleChildren } from '../utils/nodeToJSX';
 
 import {
-  ChildNodeType,
+  NodeData,
   CodeGeneratorError,
   CompatibilityError,
   DependencyType,
   IBasicSchema,
-  IComponentNodeItem,
+  NodeSchema,
   IContainerInfo,
   IContainerNodeItem,
   IDependency,
@@ -24,7 +24,7 @@ import {
   IParseResult,
   IProjectSchema,
   ISchemaParser,
-  IUtilItem,
+  UtilItem,
 } from '../types';
 
 const defaultContainer: IContainerInfo = {
@@ -85,7 +85,7 @@ class SchemaParser implements ISchemaParser {
         // 整个 schema 描述一个容器，且无根节点定义
         const container: IContainerInfo = {
           ...defaultContainer,
-          children: schema.componentsTree as IComponentNodeItem[],
+          children: schema.componentsTree as NodeSchema[],
         };
         containers = [container];
       } else {
@@ -167,7 +167,7 @@ class SchemaParser implements ISchemaParser {
       .filter((dep) => !!dep);
 
     // 分析 Utils 依赖
-    let utils: IUtilItem[];
+    let utils: UtilItem[];
     if (schema.utils) {
       utils = schema.utils;
       utilsDeps = schema.utils.filter((u) => u.type !== 'function').map((u) => u.content as IExternalDependency);
@@ -198,9 +198,9 @@ class SchemaParser implements ISchemaParser {
     };
   }
 
-  public getComponentNames(children: ChildNodeType): string[] {
+  public getComponentNames(children: NodeData | NodeData[]): string[] {
     return handleChildren(children, {
-      node: (i: IComponentNodeItem) => [i.componentName],
+      node: (i: NodeSchema) => [i.componentName],
     });
   }
 }

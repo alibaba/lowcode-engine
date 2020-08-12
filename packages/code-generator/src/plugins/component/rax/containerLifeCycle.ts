@@ -12,7 +12,7 @@ import {
   ICodeChunk,
   ICodeStruct,
   IContainerInfo,
-  IJSExpression,
+  JSExpression,
 } from '../../../types';
 
 type PluginConfig = {
@@ -50,7 +50,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     //         fileType: cfg.fileType,
     //         name: CLASS_DEFINE_CHUNK_NAME.ConstructorContent,
     //         content: getFuncExprBody(
-    //           (lifeCycles[lifeCycleName] as IJSExpression).value,
+    //           (lifeCycles[lifeCycleName] as JSExpression).value,
     //         ),
     //         linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.ConstructorStart]],
     //       };
@@ -61,7 +61,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     //         fileType: cfg.fileType,
     //         name: RAX_CHUNK_NAME.ClassRenderPre,
     //         content: getFuncExprBody(
-    //           (lifeCycles[lifeCycleName] as IJSExpression).value,
+    //           (lifeCycles[lifeCycleName] as JSExpression).value,
     //         ),
     //         linkAfter: [RAX_CHUNK_NAME.ClassRenderStart],
     //       };
@@ -73,7 +73,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     //       name: CLASS_DEFINE_CHUNK_NAME.InsMethod,
     //       content: transformFuncExpr2MethodMember(
     //         exportName,
-    //         (lifeCycles[lifeCycleName] as IJSExpression).value,
+    //         (lifeCycles[lifeCycleName] as JSExpression).value,
     //       ),
     //       linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.InsMethod]],
     //     };

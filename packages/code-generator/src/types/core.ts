@@ -1,6 +1,9 @@
 import { JSExpression, JSFunction, NodeSchema } from '@ali/lowcode-types';
+
 import { CustomHandlerSet } from '../utils/compositeType';
-import { IBasicSchema, IParseResult, IProjectSchema, IResultDir, IResultFile, IComponentNodeItem } from './index';
+import { IParseResult } from './intermediate';
+import { IResultDir, IResultFile } from './result';
+import { IBasicSchema, IProjectSchema } from './schema';
 
 export enum FileType {
   CSS = 'css',
@@ -158,7 +161,7 @@ export interface HandlerSet<T> {
   common?: (input: unknown) => T[];
 }
 
-export type ExtGeneratorPlugin = (nodeItem: IComponentNodeItem, handlers: CustomHandlerSet) => CodePiece[];
+export type ExtGeneratorPlugin = (nodeItem: NodeSchema, handlers: CustomHandlerSet) => CodePiece[];
 
 // export interface InteratorScope {
 //   [$item: string]: string;           // $item 默认取值 "item"

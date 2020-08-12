@@ -4,7 +4,7 @@ import {
   ChunkType,
   ICodeStruct,
   IContainerInfo,
-  IComponentNodeItem,
+  NodeSchema,
   CodePiece,
   PIECE_TYPE,
 } from '../../../types';
@@ -14,14 +14,16 @@ import { createNodeGenerator, generateString } from '../../../utils/nodeToJSX';
 import { generateExpression } from '../../../utils/jsExpression';
 import { generateCompositeType, handleStringValueDefault } from '../../../utils/compositeType';
 
-const generateGlobalProps = (nodeItem: IComponentNodeItem): CodePiece[] => {
-  return [{
-    value: `{...globalProps.${nodeItem.componentName}}`,
-    type: PIECE_TYPE.ATTR,
-  }];
+const generateGlobalProps = (nodeItem: NodeSchema): CodePiece[] => {
+  return [
+    {
+      value: `{...globalProps.${nodeItem.componentName}}`,
+      type: PIECE_TYPE.ATTR,
+    },
+  ];
 };
 
-const generateCtrlLine = (nodeItem: IComponentNodeItem): CodePiece[] => {
+const generateCtrlLine = (nodeItem: NodeSchema): CodePiece[] => {
   const pieces: CodePiece[] = [];
 
   if (nodeItem.loop && nodeItem.loopArgs) {
@@ -49,13 +51,13 @@ const generateCtrlLine = (nodeItem: IComponentNodeItem): CodePiece[] => {
 };
 
 const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
-  const generator = createNodeGenerator({
-    string: generateString,
-    expression: (input) => [generateExpression(input)],
-  }, [
-    generateGlobalProps,
-    generateCtrlLine,
-  ]);
+  const generator = createNodeGenerator(
+    {
+      string: generateString,
+      expression: (input) => [generateExpression(input)],
+    },
+    [generateGlobalProps, generateCtrlLine],
+  );
 
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     const next: ICodeStruct = {
