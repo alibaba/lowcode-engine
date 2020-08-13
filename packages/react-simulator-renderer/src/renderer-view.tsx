@@ -186,7 +186,6 @@ class Renderer extends Component<{ documentInstance: DocumentInstance }> {
               selectMode: false,
               triggerType: 'click',
             });
-            console.info('menuprops', viewProps);
           }
 
           return createElement(getDeviceView(Component, device, designMode), viewProps, _children);

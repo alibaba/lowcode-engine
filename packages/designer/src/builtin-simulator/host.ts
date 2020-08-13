@@ -364,7 +364,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     );
   }
 
-  private disableHovering?: () => void;
+  private disableDetecting?: () => void;
   /**
    * 设置悬停处理
    */
@@ -376,7 +376,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         return;
       }
       const nodeInst = this.getNodeInstanceFromElement(e.target as Element);
-      console.info(nodeInst);
       detecting.capture(nodeInst?.node || null);
       e.stopPropagation();
     };
@@ -394,11 +393,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       true,
     );
 
-    this.disableHovering = () => {
+    this.disableDetecting = () => {
       detecting.leave(this.project.currentDocument);
       doc.removeEventListener('mouseover', hover, true);
       doc.removeEventListener('mouseleave', leave, false);
-      this.disableHovering = undefined;
+      this.disableDetecting = undefined;
     };
   }
 
@@ -445,15 +444,19 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
    */
   setSuspense(suspended: boolean) {
     if (suspended) {
-      if (this.disableHovering) {
-        this.disableHovering();
+      /*
+      if (this.disableDetecting) {
+        this.disableDetecting();
       }
+      */
       // sleep some autorun reaction
     } else {
       // weekup some autorun reaction
-      if (!this.disableHovering) {
+      /*
+      if (!this.disableDetecting) {
         this.setupDetecting();
       }
+      */
     }
   }
 
