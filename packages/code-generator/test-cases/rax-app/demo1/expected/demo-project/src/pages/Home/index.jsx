@@ -1,10 +1,12 @@
+// 注意: 出码引擎注入的临时变量默认都以 "__$$" 开头，禁止在搭建的代码中直接访问。
+// 例外：rax 框架的导出名和各种组件名除外。
 import { createElement, Component } from 'rax';
 
 import Page from 'rax-view';
 
 import Text from 'rax-text';
 
-import { createDataSourceEngine } from '@ali/lowcode-datasource-engine';
+import { create as __$$createDataSourceEngine } from '@ali/lowcode-datasource-engine';
 
 import __$$projectUtils from '../../utils';
 
@@ -16,7 +18,7 @@ class Home$$Page extends Component {
   _context = this._createContext();
 
   _dataSourceList = this._defineDataSourceList();
-  _dataSourceEngine = createDataSourceEngine(this._dataSourceList, this._context);
+  _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceList, this._context);
 
   _utils = this._defineUtils();
 
@@ -62,6 +64,7 @@ class Home$$Page extends Component {
       get props() {
         return self.props;
       },
+      ...this._methods,
     };
 
     return context;
@@ -86,7 +89,18 @@ class Home$$Page extends Component {
   }
 
   _defineMethods() {
-    return {};
+    const __$$methods = {};
+
+    // 为所有的方法绑定上下文
+    Object.entries(__$$methods).forEach(([methodName, method]) => {
+      if (typeof method === 'function') {
+        __$$methods[methodName] = (...args) => {
+          return method.apply(this._context, args);
+        };
+      }
+    });
+
+    return __$$methods;
   }
 }
 

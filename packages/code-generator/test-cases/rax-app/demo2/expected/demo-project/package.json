@@ -17,7 +17,8 @@
     "rax-text": "^1.0.0",
     "rax-image": "^1.0.0",
     "moment": "*",
-    "lodash": "*"
+    "lodash": "*",
+    "universal-toast": "^1.2.0"
   },
   "devDependencies": {
     "build-plugin-rax-app": "^5.0.0",

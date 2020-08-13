@@ -32,7 +32,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       fileType: FileType.JSX,
       name: COMMON_CHUNK_NAME.ExternalDepsImport,
       content: `
-        import { createDataSourceEngine } from '@ali/lowcode-datasource-engine';
+        import { create as __$$createDataSourceEngine } from '@ali/lowcode-datasource-engine';
       `,
       linkAfter: [],
     });
@@ -43,7 +43,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       name: CLASS_DEFINE_CHUNK_NAME.InsVar,
       content: `
       _dataSourceList = this._defineDataSourceList();
-      _dataSourceEngine = createDataSourceEngine(this._dataSourceList, this._context);`,
+      _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceList, this._context);`,
       linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start],
     });
 

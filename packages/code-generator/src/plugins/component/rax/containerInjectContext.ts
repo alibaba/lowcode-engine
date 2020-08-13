@@ -67,6 +67,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
             get props() {
               return self.props;
             },
+            ...this._methods,
           };
 
           return context;

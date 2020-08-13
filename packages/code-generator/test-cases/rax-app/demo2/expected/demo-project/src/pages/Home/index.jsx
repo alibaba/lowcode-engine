@@ -1,3 +1,5 @@
+// 注意: 出码引擎注入的临时变量默认都以 "__$$" 开头，禁止在搭建的代码中直接访问。
+// 例外：rax 框架的导出名和各种组件名除外。
 import { createElement, Component } from 'rax';
 
 import View from 'rax-view';
@@ -6,7 +8,7 @@ import Text from 'rax-text';
 
 import Image from 'rax-image';
 
-import { createDataSourceEngine } from '@ali/lowcode-datasource-engine';
+import { create as __$$createDataSourceEngine } from '@ali/lowcode-datasource-engine';
 
 import __$$projectUtils from '../../utils';
 
@@ -30,9 +32,11 @@ class Home$$Page extends Component {
   };
 
   _methods = this._defineMethods();
+
   _context = this._createContext();
+
   _dataSourceList = this._defineDataSourceList();
-  _dataSourceEngine = createDataSourceEngine(this._dataSourceList, this._context);
+  _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceList, this._context);
 
   _utils = this._defineUtils();
 
@@ -57,7 +61,7 @@ class Home$$Page extends Component {
               source={{ uri: __$$eval(() => __$$context.state.user.avatar) }}
               style={{ width: '32px', height: '32px' }}
             />
-            <View>
+            <View onClick={__$$eval(() => __$$context.hello)}>
               <Text>{__$$eval(() => __$$context.state.user.name)}</Text>
               <Text>{__$$eval(() => __$$context.state.user.age)}岁</Text>
             </View>
@@ -67,7 +71,15 @@ class Home$$Page extends Component {
           <Text>=== Orders: ===</Text>
         </View>
         {__$$evalArray(() => __$$context.state.orders).map((item, index) => (
-          <View style={{ flexDirection: 'row' }}>
+          <View
+            style={{ flexDirection: 'row' }}
+            onClick={__$$eval(
+              () =>
+                function () {
+                  __$$context.utils.recordEvent(`CLICK_ORDER`, item.title);
+                },
+            )}
+          >
             <View>
               <Image source={{ uri: __$$eval(() => item.coverUrl) }} style={{ width: '80px', height: '60px' }} />
             </View>
@@ -77,6 +89,11 @@ class Home$$Page extends Component {
             </View>
           </View>
         ))}
+        <View>
+          <Text>操作提示：</Text>
+          <Text>1. 点击会员名，可以弹出 Toast "Hello xxx!"</Text>
+          <Text>2. 点击订单，会记录点击的订单信息，并弹出 Toast 提示</Text>
+        </View>
       </View>
     );
   }
@@ -109,6 +126,7 @@ class Home$$Page extends Component {
       get props() {
         return self.props;
       },
+      ...this._methods,
     };
 
     return context;
@@ -141,11 +159,23 @@ class Home$$Page extends Component {
   }
 
   _defineMethods() {
-    return {
+    const __$$methods = {
       hello: function hello() {
-        console.log('Hello world!');
+        this.utils.Toast.show(`Hello ${this.state.user.name}!`);
+        console.log(`Hello ${this.state.user.name}!`);
       },
     };
+
+    // 为所有的方法绑定上下文
+    Object.entries(__$$methods).forEach(([methodName, method]) => {
+      if (typeof method === 'function') {
+        __$$methods[methodName] = (...args) => {
+          return method.apply(this._context, args);
+        };
+      }
+    });
+
+    return __$$methods;
   }
 }
 

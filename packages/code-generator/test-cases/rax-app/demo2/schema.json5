@@ -55,7 +55,7 @@
       methods: {
         hello: {
           type: 'JSExpression',
-          value: 'function hello(){ console.log("Hello world!"); }',
+          value: 'function hello(){\n  this.utils.Toast.show(`Hello ${this.state.user.name}!`);\n  console.log(`Hello ${this.state.user.name}!`); }',
         },
       },
       dataSource: {
@@ -132,6 +132,12 @@
             },
             {
               componentName: 'View',
+              props: {
+                onClick: {
+                  type: 'JSFunction',
+                  value: 'this.hello',
+                },
+              },
               children: [
                 {
                   componentName: 'Text',
@@ -172,6 +178,10 @@
           },
           props: {
             style: { flexDirection: 'row' },
+            onClick: {
+              type: 'JSFunction',
+              value: 'function(){ this.utils.recordEvent(`CLICK_ORDER`, this.item.title) }',
+            },
           },
           children: [
             {
@@ -215,10 +225,31 @@
             },
           ],
         },
+        {
+          componentName: 'View',
+          children: [
+            {
+              componentName: 'Text',
+              props: {},
+              children: '操作提示：',
+            },
+            {
+              componentName: 'Text',
+              props: {},
+              children: '1. 点击会员名，可以弹出 Toast "Hello xxx!"',
+            },
+            {
+              componentName: 'Text',
+              props: {},
+              children: '2. 点击订单，会记录点击的订单信息，并弹出 Toast 提示',
+            },
+          ],
+        },
       ],
     },
   ],
   utils: [
+    // 可以直接定义一个函数
     {
       name: 'formatPrice',
       type: 'function',
@@ -227,6 +258,16 @@
         value: 'function formatPrice(price, unit) { return Number(price).toFixed(2) + unit; }',
       },
     },
+    // 在 utils 里面也可以用 this 访问当前上下文:
+    {
+      name: 'recordEvent',
+      type: 'function',
+      content: {
+        type: 'JSFunction',
+        value: 'function recordEvent(eventName, eventDetail) { \n  this.utils.Toast.show(`[EVENT]: ${eventName} ${eventDetail}`);\n  console.log(`[EVENT]: ${eventName} (detail: %o) (user: %o)`, eventDetail, this.state.user); }',
+      },
+    },
+    // 也可以直接从 npm 包引入 (下例等价于 `import moment from 'moment';`)
     {
       name: 'moment',
       type: 'npm',
@@ -236,6 +277,7 @@
         exportName: 'moment',
       },
     },
+    // 可以引入子目录（下例等价于 `import clone from 'lodash/clone';`)
     {
       name: 'clone',
       type: 'npm',
@@ -245,6 +287,16 @@
         exportName: 'clone',
         destructuring: false,
         main: '/clone',
+      },
+    },
+    // 支持 TNPM
+    {
+      name: 'Toast',
+      type: 'tnpm',
+      content: {
+        package: 'universal-toast',
+        version: '^1.2.0',
+        exportName: 'Toast', // TODO: 这个 exportName 是否可以省略？省略后默认是上一层的 name？
       },
     },
   ],
