@@ -112,10 +112,12 @@ export default class IconSetter extends PureComponent<IconSetterProps, {}> {
     const { icons, value, defaultValue, onChange, placeholder, hasClear, type } = this.props;
     const { firstLoad } = this.state;
     const _value = typeof value === 'object' ? value?.props?.type : value;
-    if (firstLoad && defaultValue && typeof value === 'undefined') onChange(defaultValue);
-    this.setState({
-      firstLoad: false,
-    });
+    if (firstLoad && defaultValue && typeof value === 'undefined') {
+      onChange(defaultValue);
+      this.setState({
+        firstLoad: false,
+      });
+    }
     const currentIcon = <Icon size="xs" type={_value} />;
     const clearIcon = hasClear && (
       <Icon
@@ -156,7 +158,7 @@ export default class IconSetter extends PureComponent<IconSetterProps, {}> {
       >
         <ul className="lowcode-icon-list">
           {icons.map((icon) => (
-            <li onClick={() => this.onSelectIcon(icon)}>
+            <li key={icon} onClick={() => this.onSelectIcon(icon)}>
               <Icon type={icon} size="medium" />
             </li>
           ))}

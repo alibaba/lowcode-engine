@@ -48,6 +48,12 @@ function propTypeToSetter(propType: PropType): SetterType {
         isRequired,
         initialValue: '',
       };
+    case 'Json':
+      return {
+        componentName: 'JsonSetter',
+        isRequired,
+        initialValue: '',
+      };
     case 'color':
       return {
         componentName: 'ColorSetter',
