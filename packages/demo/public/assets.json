@@ -5106,8 +5106,8 @@
       }
     },
     {
-      "componentName": "FormItem",
-      "title": "FormItem",
+      "componentName": "Form.Item",
+      "title": "Form.Item",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -14119,7 +14119,7 @@
                 },
                 "children": [
                   {
-                    "componentName": "FormItem",
+                    "componentName": "Form.Item",
                     "props": {
                       "label": "Email: ",
                       "required": true
@@ -14136,7 +14136,7 @@
                     ]
                   },
                   {
-                    "componentName": "FormItem",
+                    "componentName": "Form.Item",
                     "props": {
                       "label": "Password: ",
                       "required": true
@@ -14153,7 +14153,7 @@
                     ]
                   },
                   {
-                    "componentName": "FormItem",
+                    "componentName": "Form.Item",
                     "props": {
                       "wrapperCol": {
                         "offset": 7
@@ -14187,17 +14187,17 @@
           ]
         },
         {
-          "componentName": "FormItem",
+          "componentName": "Form.Item",
           "title": "表单项",
           "icon": "https://img.alicdn.com/tfs/TB1nYqOuW61gK0jSZFlXXXDKFXa-112-64.png",
           "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
-              "title": "FormItem",
+              "title": "Form.Item",
               "screenshot": "https://img.alicdn.com/tfs/TB1nYqOuW61gK0jSZFlXXXDKFXa-112-64.png",
               "schema": {
-                "componentName": "FormItem",
+                "componentName": "Form.Item",
                 "props": {
                   "placeholder": "拖动组件到这里"
                 }
@@ -14216,7 +14216,7 @@
               "title": "输入框",
               "screenshot": "https://img.alicdn.com/tfs/TB1ysp3u8v0gK0jSZKbXXbK2FXa-112-64.png",
               "schema": {
-                "componentName": "FormItem",
+                "componentName": "Form.Item",
                 "props": {
                   "label": "标签",
                   "labelAlign": "top",
