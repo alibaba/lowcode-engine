@@ -60,6 +60,7 @@ export class Project {
       if (autoOpen === true) {
         // auto open first document or open a blank page
         this.open(this.data.componentsTree[0]);
+        // this.data.componentsTree.map((data) => this.createDocument(data))[0].open();
       } else {
         // auto open should be string of fileName
         this.open(autoOpen);

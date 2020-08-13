@@ -53,7 +53,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
     editor.set(Designer, designer);
     editor.emit('designer.ready', designer);
     editor.onGot('schema', (schema) => {
-      designer.project.open(schema);
+      designer.project.load(schema, true);
     });
   };
 

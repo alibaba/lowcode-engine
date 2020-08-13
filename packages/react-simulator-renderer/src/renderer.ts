@@ -13,6 +13,7 @@ import { BuiltinSimulatorRenderer, NodeInstance, Component, DocumentModel, Node 
 import { createMemoryHistory, MemoryHistory } from 'history';
 import Slot from './builtin-components/slot';
 import Leaf from './builtin-components/leaf';
+import { withQueryParams, parseQuery } from './utils/url';
 
 export class DocumentInstance {
   private instancesMap = new Map<string, ReactInstance[]>();
@@ -154,7 +155,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       this._device = host.device;
     });
     const documentInstanceMap = new Map<string, DocumentInstance>();
-    host.autorun(() => {
+    let initialEntry = '/';
+    host.autorun(({ firstRun }) => {
       this._documentInstances = host.project.documents.map((doc) => {
         let inst = documentInstanceMap.get(doc.id);
         if (!inst) {
@@ -163,16 +165,23 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         }
         return inst;
       });
-      console.info('instances', this._documentInstances);
+      const path = host.project.currentDocument
+        ? documentInstanceMap.get(host.project.currentDocument.id)!.path
+        : '/';
+      if (firstRun) {
+        initialEntry = path;
+      } else {
+        if (this.history.location.pathname !== path) {
+          this.history.replace(path);
+        }
+      }
     });
-    const initialEntry = host.project.currentDocument
-      ? documentInstanceMap.get(host.project.currentDocument.id)!.path
-      : '/';
-    this.history = createMemoryHistory({
+    const history = createMemoryHistory({
       initialEntries: [initialEntry],
     });
-    this.history.listen((location, action) => {
-      console.info(location);
+    this.history = history;
+    history.listen((location, action) => {
+      host.project.open(location.pathname.substr(1));
     });
     host.componentsConsumer.consume(async (componentsAsset) => {
       if (componentsAsset) {
@@ -180,17 +189,27 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         this.buildComponents();
       }
     });
-    host.injectionConsumer.consume((data) => {
-      // sync utils, i18n, contants,... config
-      this._appContext = {
-        utils: {
-          router: {
-            push() {},
-            replace() {},
+    this._appContext = {
+      utils: {
+        router: {
+          push(path: string, params?: object) {
+            history.push(withQueryParams(path, params));
+          },
+          replace(path: string, params?: object) {
+            history.replace(withQueryParams(path, params));
           },
         },
-        constants: {},
-      };
+        legaoBuiltins: {
+          getUrlParams() {
+            const search = history.location.search;
+            return parseQuery(search);
+          }
+        }
+      },
+      constants: {},
+    };
+    host.injectionConsumer.consume((data) => {
+      // sync utils, i18n, contants,... config
     });
   }
 

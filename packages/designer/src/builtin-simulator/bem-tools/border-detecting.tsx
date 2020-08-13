@@ -58,6 +58,7 @@ export class BorderDetecting extends Component<{ host: BuiltinSimulatorHost }> {
   @computed get current() {
     const host = this.props.host;
     const doc = host.currentDocument;
+    console.info(doc);
     if (!doc) {
       return null;
     }

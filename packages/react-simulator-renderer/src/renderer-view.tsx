@@ -41,21 +41,32 @@ export default class SimulatorRendererView extends Component<{ rendererContainer
     return (
       <Router history={rendererContainer.history}>
         <Layout rendererContainer={rendererContainer}>
-          <Switch>
-            {rendererContainer.documentInstances.map((instance) => (
-              <Route
-                path={instance.path}
-                key={instance.id}
-                render={(routeProps) => <Renderer documentInstance={instance} {...routeProps} />}
-              />
-            ))}
-          </Switch>
+          <Routes rendererContainer={rendererContainer} />
         </Layout>
       </Router>
     );
   }
 }
 
+@observer
+export class Routes extends Component<{ rendererContainer: SimulatorRendererContainer }> {
+  render() {
+    const { rendererContainer } = this.props;
+    return (
+      <Switch>
+        {rendererContainer.documentInstances.map((instance) => {
+          return (
+            <Route
+              path={instance.path}
+              key={instance.id}
+              render={(routeProps) => <Renderer documentInstance={instance} {...routeProps} />}
+            />
+          );
+        })}
+      </Switch>
+    );
+  }
+}
 function ucfirst(s: string) {
   return s.charAt(0).toUpperCase() + s.substring(1);
 }
