@@ -109,20 +109,29 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
           viewProps._leaf = leaf;
           viewProps._componentName = leaf?.componentName;
           // 如果是容器 && 无children && 高宽为空 增加一个占位容器，方便拖动
-          if (leaf?.isContainer() && (children == null || (Array.isArray(children) && !children.length)) && (!viewProps.style || Object.keys(viewProps.style).length == 0)){
-            children = <div style={{
-              height:'66px',
-              backgroundColor:'#f0f0f0',
-              borderColor:'#a7b1bd',
-              border: '1px dotted',
-              color:'#a7b1bd',
-              textAlign:'center',
-              lineHeight:'66px'
-            }}>
-              拖拽组件或模板到这里
-            </div>
+          if (
+            !viewProps.dataSource &&
+            leaf?.isContainer() &&
+            (children == null || (Array.isArray(children) && !children.length)) &&
+            (!viewProps.style || Object.keys(viewProps.style).length === 0)
+          ) {
+            children = (
+              <div
+                style={{
+                  height: '66px',
+                  backgroundColor: '#f0f0f0',
+                  borderColor: '#a7b1bd',
+                  border: '1px dotted',
+                  color: '#a7b1bd',
+                  textAlign: 'center',
+                  lineHeight: '66px',
+                }}
+              >
+                {viewProps.placeholder || '拖拽组件或模板到这里'}
+              </div>
+            );
           }
-
+          // FIXME: 渲染仍有问题
           if (viewProps._componentName === 'Menu') {
             Object.assign(viewProps, {
               _componentName: 'Menu',

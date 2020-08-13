@@ -28,7 +28,10 @@
       "props": [
         {
           "name": "style",
-          "propType": "object"
+          "propType": "object",
+          "defaultValue": {
+            "padding": 12
+          }
         }
       ],
       "configure": {
@@ -1592,7 +1595,14 @@
             },
             {
               "name": "children",
-              "title": "文本内容",
+              "title": {
+                "label": {
+                  "type": "i18n",
+                  "zh_CN": "文本内容",
+                  "en_US": "content"
+                },
+                "tip": "按钮文本内容"
+              },
               "setter": {
                 "componentName": "MixedSetter",
                 "props": {
@@ -5942,6 +5952,136 @@
           "defaultValue": true
         },
         {
+          "name": "label",
+          "propType": "string",
+          "title":"标签文案",
+          "description": "label"
+        },
+        {
+          "name": "hasClear",
+          "propType": "bool",
+          "description": "是否出现清除按钮"
+        },
+        {
+          "name": "state",
+          "title": "状态",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "error",
+              "loading",
+              "success",
+              "warning"
+            ]
+          },
+          "description": "状态\n@enumdesc 错误, 校验中, 成功, 警告"
+        },
+        {
+          "name": "size",
+          "title": "尺寸",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "small",
+              "medium",
+              "large"
+            ]
+          },
+          "description": "尺寸\n@enumdesc 小, 中, 大",
+          "defaultValue": "medium"
+        },
+        {
+          "name": "disabled",
+          "propType": "bool",
+          "description": "是否禁用"
+        },
+        {
+          "name": "maxLength",
+          "propType": "number",
+          "description": "最大长度"
+        },
+        {
+          "name": "hasLimitHint",
+          "propType": "bool",
+          "description": "是否展现最大长度样式"
+        },
+        {
+          "name": "cutString",
+          "propType": "bool",
+          "description": "是否截断超出字符串"
+        },
+        {
+          "name": "readOnly",
+          "propType": "bool",
+          "description": "是否只读"
+        },
+        {
+          "name": "trim",
+          "propType": "bool",
+          "description": "onChange返回会自动去除头尾空字符"
+        },
+        {
+          "name": "placeholder",
+          "propType": "string",
+          "description": "输入提示"
+        },
+        {
+          "name": "hasBorder",
+          "propType": "bool",
+          "description": "是否有边框"
+        },
+
+        {
+          "name": "onPressEnter",
+          "propType": "func",
+          "description": "按下回车的回调"
+        },
+        {
+          "name": "onClear",
+          "propType": "func"
+        },
+        {
+          "name": "hint",
+          "title": "Icon 水印",
+          "propType": "string",
+          "description": "水印 (Icon的type类型，和hasClear占用一个地方)"
+        },
+        {
+          "name": "innerBefore",
+          "propType": "string",
+          "description": "文字前附加内容"
+        },
+        {
+          "name": "innerAfter",
+          "propType": "string",
+          "description": "文字后附加内容"
+        },
+        {
+          "name": "addonBefore",
+          "propType": "string",
+          "description": "输入框前附加内容"
+        },
+        {
+          "name": "addonAfter",
+          "propType": "string",
+          "description": "输入框后附加内容"
+        },
+        {
+          "name": "addonTextBefore",
+          "propType": "string",
+          "description": "输入框前附加文字"
+        },
+        {
+          "name": "addonTextAfter",
+          "propType": "string",
+          "description": "输入框后附加文字"
+        },
+        {
+          "name": "autoFocus",
+          "propType": "bool",
+          "description": "自动聚焦"
+        },
+        {
           "name": "style",
           "propType": "object"
         }
@@ -7827,7 +7967,13 @@
         },
         {
           "name": "innerAfter",
-          "propType": "string",
+          "propType": {
+            "type": "oneOfType",
+            "value": [
+              "string",
+              "icon"
+            ]
+          },
           "description": "inner after"
         },
         {
@@ -7895,6 +8041,23 @@
             {
               "name": "downBtnProps",
               "setter": "JsonSetter"
+            },
+            {
+              "name": "innerAfter",
+              "setter": {
+                "componentName": "MixedSetter",
+                "props": {
+                  "setters": [
+                    "StringSetter",
+                    {
+                      "componentName": "IconSetter",
+                      "props": {
+                        "type": "node"
+                      }
+                    }
+                  ]
+                }
+              }
             }
           ]
         }
@@ -12389,6 +12552,7 @@
         },
         {
           "name": "size",
+          "title": "size",
           "propType": {
             "type": "oneOfType",
             "value": [
@@ -12408,6 +12572,7 @@
         },
         {
           "name": "shape",
+          "title": "shap",
           "propType": {
             "type": "oneOf",
             "value": [
@@ -12420,11 +12585,13 @@
         },
         {
           "name": "icon",
-          "propType": "string",
+          "title": "icon",
+          "propType": "icon",
           "description": "icon 类头像的图标类型，可设为 Icon 的 `type` 或 `ReactNode`"
         },
         {
           "name": "src",
+          "title": "src",
           "propType": "string",
           "description": "图片类头像的资源地址"
         },
@@ -12432,16 +12599,6 @@
           "name": "onError",
           "propType": "func",
           "description": "图片加载失败的事件，返回 false 会关闭组件默认的 fallback 行为"
-        },
-        {
-          "name": "alt",
-          "propType": "string",
-          "description": "图像无法显示时的 alt 替代文本"
-        },
-        {
-          "name": "srcSet",
-          "propType": "string",
-          "description": "图片类头像响应式资源地址"
         },
         {
           "name": "style",
@@ -12784,7 +12941,7 @@
           "componentName": "Dropdown",
           "title": "下拉菜单",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -12808,7 +12965,7 @@
           "componentName": "Avatar",
           "title": "头像",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -12819,7 +12976,8 @@
                 "props": {
                   "prefix": "next-",
                   "size": "medium",
-                  "shape": "circle"
+                  "shape": "circle",
+                  "icon": "smile"
                 }
               }
             }
@@ -12829,7 +12987,7 @@
           "componentName": "Badge",
           "title": "徽标数",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -12849,7 +13007,7 @@
           "componentName": "Drawer",
           "title": "抽屉",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -12873,7 +13031,7 @@
           "componentName": "Table",
           "title": "表格",
           "icon": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_table.png",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -12911,10 +13069,10 @@
                           "componentName": "Button",
                           "props": {
                             "type": "primary",
-                            "children": [{
+                            "children": {
                               "type": "JSExpression",
                               "value": "this.value"
-                            }]
+                            }
                           }
                         }]
                       }
@@ -12935,7 +13093,7 @@
           "componentName": "Table.Column",
           "title": "表格列",
           "icon": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_table.png",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -12954,7 +13112,7 @@
           "componentName": "Calendar",
           "title": "日历",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -12993,7 +13151,7 @@
           "componentName": "Card",
           "title": "卡片",
           "icon": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_card.png",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13027,7 +13185,7 @@
           "componentName": "Cascader",
           "title": "级联",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13056,7 +13214,7 @@
           "componentName": "Collapse",
           "title": "折叠面板",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13083,7 +13241,7 @@
           "componentName": "List",
           "title": "列表",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13099,7 +13257,7 @@
           "componentName": "List.Item",
           "title": "列表项",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13116,7 +13274,7 @@
           "componentName": "Menu",
           "title": "菜单",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13149,7 +13307,7 @@
           "componentName": "Menu.Item",
           "title": "菜单项",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13168,7 +13326,7 @@
           "componentName": "Progress",
           "title": "进度指示器",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13190,7 +13348,7 @@
           "componentName": "Slider",
           "title": "图片轮播",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13233,7 +13391,7 @@
           "componentName": "Tag",
           "title": "标签",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13250,7 +13408,7 @@
           "componentName": "Tag.Closeable",
           "title": "可关闭标签",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13267,7 +13425,7 @@
           "componentName": "Tag.Selectable",
           "title": "可选中标签",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13284,7 +13442,7 @@
           "componentName": "Timeline",
           "title": "时间轴",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13324,7 +13482,7 @@
           "componentName": "TimelineItem",
           "title": "时间轴 Item",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13345,7 +13503,7 @@
           "componentName": "Tree",
           "title": "树形控件",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13369,7 +13527,7 @@
           "componentName": "TreeNode",
           "title": "树形控件节点",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13394,7 +13552,7 @@
           "componentName": "Balloon",
           "title": "气泡提示",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13430,7 +13588,7 @@
           "componentName": "Dialog",
           "title": "弹窗",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13458,7 +13616,7 @@
           "componentName": "Loading",
           "title": "加载",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13467,6 +13625,7 @@
               "schema": {
                 "componentName": "Loading",
                 "props": {
+                  "color": "red",
                   "prefix": "next-",
                   "tipAlign": "bottom",
                   "visible": true,
@@ -13481,7 +13640,7 @@
           "componentName": "Message",
           "title": "信息提示",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13511,7 +13670,7 @@
           "componentName": "Box",
           "title": "弹性布局",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13528,17 +13687,17 @@
           "componentName": "Button",
           "title": "按钮",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
-              "title": "按钮",
+              "title": "主要",
               "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_button.png",
               "schema": {
                 "componentName": "Button",
                 "props": {
                   "prefix": "next-",
-                  "type": "normal",
+                  "type": "primary",
                   "size": "medium",
                   "htmlType": "button",
                   "component": "button",
@@ -13552,8 +13711,8 @@
               "schema": {
                 "componentName": "Button",
                 "props": {
-                  "type": "primary",
-                  "size": "large",
+                  "type": "secondary",
+                  "size": "medium",
                   "htmlType": "button",
                   "component": "button",
                   "children": ["提交"]
@@ -13566,7 +13725,7 @@
           "componentName": "Button.Group",
           "title": "按钮组",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13614,7 +13773,7 @@
           "componentName": "Divider",
           "title": "分隔符",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13635,7 +13794,7 @@
           "componentName": "Icon",
           "title": "图标",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13654,7 +13813,7 @@
           "componentName": "MenuButton",
           "title": "菜单按钮",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13676,7 +13835,7 @@
           "componentName": "ResponsiveGrid",
           "title": "栅格布局",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13693,7 +13852,7 @@
           "componentName": "ResponsiveGrid.Cell",
           "title": "栅格布局 Cell",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13710,7 +13869,7 @@
           "componentName": "SplitButton",
           "title": "分隔按钮",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13734,7 +13893,7 @@
           "componentName": "Typography",
           "title": "Text",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13760,7 +13919,7 @@
           "componentName": "Breadcrumb",
           "title": "面包屑",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13803,7 +13962,7 @@
           "componentName": "Breadcrumb.Item",
           "title": "面包屑 Item",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13844,7 +14003,7 @@
           "componentName": "Nav",
           "title": "导航",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13873,7 +14032,7 @@
           "componentName": "Nav.Item",
           "title": "导航Item",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13902,7 +14061,7 @@
           "componentName": "Pagination",
           "title": "翻页器",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13930,7 +14089,7 @@
           "componentName": "Step",
           "title": "步骤",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13960,7 +14119,7 @@
           "componentName": "Tab",
           "title": "选项卡",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -13986,7 +14145,7 @@
           "componentName": "Tab.Item",
           "title": "选项卡Item",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -14007,13 +14166,338 @@
       "icon": ""
     },
     {
-      "title": "DataEntry",
+      "title": "表单",
       "children": [
+        {
+          "componentName": "Form",
+          "title": "表单容器",
+          "icon": "https://img.alicdn.com/tfs/TB1oH02u2b2gK0jSZK9XXaEgFXa-112-64.png",
+          "package": "@alifd/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "表单容器",
+              "screenshot": "https://img.alicdn.com/tfs/TB1oH02u2b2gK0jSZK9XXaEgFXa-112-64.png",
+              "schema": {
+                "componentName": "Form",
+                "props": {
+                  "labelCol": 4
+                },
+                "children": [
+                  {
+                    "componentName": "Form.Item",
+                    "props": {
+                      "name": "email"
+                    },
+                    "children": [
+                      {
+                        "componentName": "Input",
+                        "props": {
+                          "size": "medium",
+                          "placeholder": "用户名"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "componentName": "Form.Item",
+                    "props": {
+                      "name": "pwd2"
+                    },
+                    "children": [
+                      {
+                        "componentName": "Input.Password",
+                        "props": {
+                          "placeholder": "密码",
+                          "size": "medium",
+                          "innerAfter": {
+                            "componentName": "Icon",
+                            "props": {
+                              "size": "large",
+                              "style": {
+                                "marginRight": 10,
+                                "color": "#9b9b9b"
+                              },
+                              "type": "help"
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "componentName": "Box",
+                    "props": {
+                      "direction": "column",
+                      "wrap": true,
+                      "style": {
+                        "margin": "5px 0 5px 0"
+                      }
+                    },
+                    "children": [
+                      {
+                        "componentName": "Radio.Group",
+                        "props": {
+                          "dataSource": [
+                            {
+                              "label": "自动登录",
+                              "value": "auto"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "componentName": "Button.Group",
+                        "props": {
+                          "style": {
+                            "margin": "10px 0 10px 0"
+                          }
+                        },
+                        "children": [
+                          {
+                            "componentName": "Button",
+                            "props": {
+                              "type": "normal",
+                              "htmlType": "submit",
+                              "children": "注册"
+                            }
+                          },
+                          {
+                            "componentName": "Button",
+                            "props": {
+                              "type": "primary",
+                              "htmlType": "submit",
+                              "children": "登录",
+                              "style": {
+                                "margin": "0 5px 0 5px"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "Form.Item",
+          "title": "表单项",
+          "icon": "https://img.alicdn.com/tfs/TB1nYqOuW61gK0jSZFlXXXDKFXa-112-64.png",
+          "package": "@alifd/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "Form.Item",
+              "screenshot": "https://img.alicdn.com/tfs/TB1nYqOuW61gK0jSZFlXXXDKFXa-112-64.png",
+              "schema": {
+                "componentName": "Form.Item",
+                "props": {
+                  "placeholder": "拖动组件到这里"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "Input",
+          "title": "输入框",
+          "icon": "",
+          "package": "@alifd/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "输入框",
+              "screenshot": "https://img.alicdn.com/tfs/TB1ysp3u8v0gK0jSZKbXXbK2FXa-112-64.png",
+              "schema": {
+                "componentName": "Form.Item",
+                "props": {
+                  "label": "标签",
+                  "labelAlign": "top",
+                  "labelCol": {
+                    "span": 4
+                  }
+                },
+                "children": [
+                  {
+                    "componentName": "Input",
+                    "props": {
+                      "hasBorder": true,
+                      "size": "medium",
+                      "autoComplete": "off"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "title": "密码框",
+              "screenshot": "https://img.alicdn.com/tfs/TB1ikF3u7P2gK0jSZPxXXacQpXa-112-64.png",
+              "schema": {
+                "componentName": "Input.Password",
+                "props": {
+                  "hasBorder": true,
+                  "size": "medium",
+                  "autoComplete": "off"
+                }
+              }
+            },
+            {
+              "title": "TextArea",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_input.png",
+              "schema": {
+                "componentName": "Input.TextArea",
+                "props": {
+                  "hasBorder": true,
+                  "size": "medium",
+                  "autoComplete": "off"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "NumberPicker",
+          "title": "数字输入框",
+          "icon": "",
+          "package": "@alifd/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "数字输入框",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_number-picker.png",
+              "schema": {
+                "componentName": "NumberPicker",
+                "props": {
+                  "prefix": "next-",
+                  "type": "normal",
+                  "size": "medium",
+                  "step": 1,
+                  "editable": true
+                }
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "Radio",
+          "title": "单选框",
+          "icon": "",
+          "package": "@alifd/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "单选框",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_radio.png",
+              "schema": {
+                "componentName": "Radio",
+                "props": {}
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "Radio.Group",
+          "title": "单选框组",
+          "icon": "",
+          "package": "@alifd/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "单选框组",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_radio.png",
+              "schema": {
+                "componentName": "Radio.Group",
+                "props": {}
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "Checkbox",
+          "title": "复选按钮",
+          "icon": "",
+          "package": "@alifd/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "复选按钮",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_checkbox.png",
+              "schema": {
+                "componentName": "Checkbox",
+                "props": {
+                  "prefix": "next-"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "Select",
+          "title": "选择器",
+          "icon": "",
+          "package": "@alifd/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "选择器",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_select.png",
+              "schema": {
+                "componentName": "Select",
+                "props": {
+                  "mode": "single",
+                  "hasArrow": true,
+                  "cacheValue": true
+                }
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "Select.Option",
+          "title": "Select.Option",
+          "icon": "",
+          "package": "@alifd/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "Select.Option",
+              "screenshot": "",
+              "schema": {
+                "componentName": "Select.Option",
+                "props": {
+                }
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "Switch",
+          "title": "开关组件",
+          "icon": "",
+          "package": "@alifd/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "开关组件",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_switch.png",
+              "schema": {
+                "componentName": "Switch",
+                "props": {
+                  "prefix": "next-",
+                  "size": "medium"
+                }
+              }
+            }
+          ]
+        },
         {
           "componentName": "CascaderSelect",
           "title": "级联选择",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -14044,29 +14528,10 @@
           ]
         },
         {
-          "componentName": "Checkbox",
-          "title": "复选按钮",
-          "icon": "",
-          "package": "@alife/next",
-          "library": "Next",
-          "snippets": [
-            {
-              "title": "复选按钮",
-              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_checkbox.png",
-              "schema": {
-                "componentName": "Checkbox",
-                "props": {
-                  "prefix": "next-"
-                }
-              }
-            }
-          ]
-        },
-        {
           "componentName": "DatePicker",
           "title": "日期选择框",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -14087,151 +14552,10 @@
           ]
         },
         {
-          "componentName": "Form.Item",
-          "title": "Form.Item",
-          "icon": "",
-          "package": "@alife/next",
-          "library": "Next",
-          "snippets": [
-            {
-              "title": "Form.Item",
-              "screenshot": "",
-              "schema": {
-                "componentName": "Form.Item",
-                "props": {
-                  "style":{
-                    "minWidth": "200px",
-                    "minHeight": "28px"
-                  }
-                }
-              }
-            }
-          ]
-        },
-        {
-          "componentName": "Form",
-          "title": "表单",
-          "icon": "",
-          "package": "@alife/next",
-          "library": "Next",
-          "snippets": [
-            {
-              "title": "表单",
-              "screenshot": "",
-              "schema": {
-                "componentName": "Form",
-                "props": {}
-              }
-            }
-          ]
-        },
-        {
-          "componentName": "Input",
-          "title": "输入框",
-          "icon": "",
-          "package": "@alife/next",
-          "library": "Next",
-          "snippets": [
-            {
-              "title": "输入框",
-              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_input.png",
-              "schema": {
-                "componentName": "Input",
-                "props": {
-                  "hasBorder": true,
-                  "size": "medium",
-                  "autoComplete": "off"
-                }
-              }
-            },
-            {
-              "title": "密码框",
-              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_input.png",
-              "schema": {
-                "componentName": "Input.Password",
-                "props": {
-                  "hasBorder": true,
-                  "size": "medium",
-                  "autoComplete": "off"
-                }
-              }
-            },
-            {
-              "title": "TextArea",
-              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_input.png",
-              "schema": {
-                "componentName": "Input.TextArea",
-                "props": {
-                  "hasBorder": true,
-                  "size": "medium",
-                  "autoComplete": "off"
-                }
-              }
-            }
-          ]
-        },
-        {
-          "componentName": "NumberPicker",
-          "title": "数字输入框",
-          "icon": "",
-          "package": "@alife/next",
-          "library": "Next",
-          "snippets": [
-            {
-              "title": "数字输入框",
-              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_number-picker.png",
-              "schema": {
-                "componentName": "NumberPicker",
-                "props": {
-                  "prefix": "next-",
-                  "type": "normal",
-                  "size": "medium",
-                  "step": 1,
-                  "editable": true
-                }
-              }
-            }
-          ]
-        },
-        {
-          "componentName": "Radio",
-          "title": "单选框",
-          "icon": "",
-          "package": "@alife/next",
-          "library": "Next",
-          "snippets": [
-            {
-              "title": "单选框",
-              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_radio.png",
-              "schema": {
-                "componentName": "Radio",
-                "props": {}
-              }
-            }
-          ]
-        },
-        {
-          "componentName": "Radio.Group",
-          "title": "单选框组",
-          "icon": "",
-          "package": "@alife/next",
-          "library": "Next",
-          "snippets": [
-            {
-              "title": "单选框组",
-              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_radio.png",
-              "schema": {
-                "componentName": "Radio.Group",
-                "props": {}
-              }
-            }
-          ]
-        },
-        {
           "componentName": "Range",
           "title": "区段选择器",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -14255,7 +14579,7 @@
           "componentName": "Rating",
           "title": "评分",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -14277,7 +14601,7 @@
           "componentName": "Search",
           "title": "搜索",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -14298,69 +14622,10 @@
           ]
         },
         {
-          "componentName": "Select",
-          "title": "选择器",
-          "icon": "",
-          "package": "@alife/next",
-          "library": "Next",
-          "snippets": [
-            {
-              "title": "选择器",
-              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_select.png",
-              "schema": {
-                "componentName": "Select",
-                "props": {
-                  "mode": "single",
-                  "hasArrow": true,
-                  "cacheValue": true
-                }
-              }
-            }
-          ]
-        },
-        {
-          "componentName": "Select.Option",
-          "title": "Select.Option",
-          "icon": "",
-          "package": "@alife/next",
-          "library": "Next",
-          "snippets": [
-            {
-              "title": "Select.Option",
-              "screenshot": "",
-              "schema": {
-                "componentName": "Select.Option",
-                "props": {
-                }
-              }
-            }
-          ]
-        },
-        {
-          "componentName": "Switch",
-          "title": "开关组件",
-          "icon": "",
-          "package": "@alife/next",
-          "library": "Next",
-          "snippets": [
-            {
-              "title": "开关组件",
-              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_switch.png",
-              "schema": {
-                "componentName": "Switch",
-                "props": {
-                  "prefix": "next-",
-                  "size": "medium"
-                }
-              }
-            }
-          ]
-        },
-        {
           "componentName": "TimePicker",
           "title": "时间选择框",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -14384,7 +14649,7 @@
           "componentName": "Transfer",
           "title": "穿梭框",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -14405,7 +14670,7 @@
           "componentName": "TreeSelect",
           "title": "树型选择控件",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
@@ -14430,7 +14695,7 @@
           "componentName": "Upload",
           "title": "上传组件",
           "icon": "",
-          "package": "@alife/next",
+          "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {

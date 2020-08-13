@@ -64,44 +64,59 @@ const icons = [
 ];
 interface IconSetterProps {
   value: string;
+  type: string;
   defaultValue: string;
   placeholder: string;
   hasClear: boolean;
-  onChange: (icon: string) => undefined;
+  onChange: (icon: string | object) => undefined;
   icons: string[];
 }
 export default class IconSetter extends PureComponent<IconSetterProps, {}> {
   static defaultProps = {
     value: undefined,
+    type: 'string',
     defaultValue: '',
     hasClear: true,
     icons: icons,
     placeholder: '请点击选择 Icon',
-    onChange: (icon: string) => undefined,
+    onChange: (icon: string | object) => undefined,
   };
 
   state = {
     firstLoad: true,
   };
 
+  _onChange = (icon: string) => {
+    const { onChange, type } = this.props;
+    if (type === 'string') {
+      onChange(icon);
+    } else if (type === 'node') {
+      onChange({
+        componentName: 'Icon',
+        props: {
+          type: icon,
+        },
+      });
+    }
+  };
+
   onInputChange = (icon: string) => {
-    const { onChange } = this.props;
-    onChange(icon);
+    this._onChange(icon);
   };
 
   onSelectIcon = (icon: string) => {
-    const { onChange } = this.props;
-    onChange(icon);
+    this._onChange(icon);
   };
 
   render() {
-    const { icons, value, defaultValue, onChange, placeholder, hasClear } = this.props;
+    const { icons, value, defaultValue, onChange, placeholder, hasClear, type } = this.props;
     const { firstLoad } = this.state;
+    const _value = typeof value === 'object' ? value?.props?.type : value;
     if (firstLoad && defaultValue && typeof value === 'undefined') onChange(defaultValue);
     this.setState({
       firstLoad: false,
     });
-    const currentIcon = <Icon size="xs" type={value} />;
+    const currentIcon = <Icon size="xs" type={_value} />;
     const clearIcon = hasClear && (
       <Icon
         size="xs"
@@ -121,7 +136,7 @@ export default class IconSetter extends PureComponent<IconSetterProps, {}> {
           placeholder={placeholder}
           addonTextBefore={currentIcon}
           onChange={this.onInputChange}
-          value={value}
+          value={_value}
           defaultValue={defaultValue}
           readOnly
           addonTextAfter={clearIcon}

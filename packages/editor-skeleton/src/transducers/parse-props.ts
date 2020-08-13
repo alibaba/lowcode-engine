@@ -89,7 +89,7 @@ function propTypeToSetter(propType: PropType): SetterType {
           value,
         };
       });
-      const componentName = dataSource.length > 4 ? 'SelectSetter' : 'RadioGroupSetter';
+      const componentName = dataSource.length >= 4 ? 'SelectSetter' : 'RadioGroupSetter';
       return {
         componentName,
         props: { dataSource },
