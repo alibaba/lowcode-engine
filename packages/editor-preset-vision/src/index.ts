@@ -26,7 +26,6 @@ import Viewport from './viewport';
 import Project from './project';
 import { designer, editor } from './editor';
 import Symbols from './symbols';
-import { Node } from '@ali/lowcode-designer';
 
 import './vision.less';
 
@@ -113,7 +112,6 @@ const VisualEngine = {
   Project,
   logger,
   Symbols,
-  Node,
 };
 
 (window as any).VisualEngine = VisualEngine;
@@ -165,7 +163,7 @@ export {
   Symbols,
 };
 
-const version = '6.0.0(LowcodeEngine 0.9.0-beta)';
+const version = '6.0.0(LowcodeEngine 0.9.3)';
 
 console.log(
   `%c VisionEngine %c v${version} `,

@@ -73,7 +73,6 @@ import { EventEmitter } from 'events';
  *  hidden
  */
 export class Node<Schema extends NodeSchema = NodeSchema> {
-  static Props = Props;
   private emitter: EventEmitter;
   /**
    * 是节点实例
