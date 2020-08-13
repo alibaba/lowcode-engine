@@ -1,6 +1,6 @@
 import { CLASS_DEFINE_CHUNK_NAME, DEFAULT_LINK_AFTER } from '../../../const/generator';
 
-import { transformFuncExpr2MethodMember } from '../../../utils/jsExpression';
+import { generateFunction } from '../../../utils/jsExpression';
 
 import {
   BuilderComponentPlugin,
@@ -10,7 +10,6 @@ import {
   ICodeChunk,
   ICodeStruct,
   IContainerInfo,
-  JSExpression,
 } from '../../../types';
 
 type PluginConfig = {
@@ -36,11 +35,11 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
         type: ChunkType.STRING,
         fileType: cfg.fileType,
         name: CLASS_DEFINE_CHUNK_NAME.InsMethod,
-        content: transformFuncExpr2MethodMember(methodName, (methods[methodName] as JSExpression).value),
+        content: generateFunction(methods[methodName], { name: methodName, isMember: true }),
         linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.InsMethod]],
       }));
 
-      next.chunks.push.apply(next.chunks, chunks);
+      next.chunks.push(...chunks);
     }
 
     return next;

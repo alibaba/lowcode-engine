@@ -2,98 +2,100 @@ import {
   CompositeArray,
   CompositeValue,
   CompositeObject,
-  JSExpression,
-  JSFunction,
-  JSONArray,
-  JSONObject,
   isJSExpression,
   isJSFunction,
   isJSSlot,
-  JSSlot,
-  NodeSchema,
-  NodeData,
-} from '../types';
+} from '@ali/lowcode-types';
 import { generateExpression, generateFunction } from './jsExpression';
+import { generateJsSlot } from './jsSlot';
+import { isValidIdentifier } from './validate';
+import { camelize } from './common';
 
-export interface CustomHandlerSet {
-  boolean?: (bool: boolean) => string;
-  number?: (num: number) => string;
-  string?: (str: string) => string;
-  array?: (arr: JSONArray | CompositeArray) => string;
-  object?: (obj: JSONObject | CompositeObject) => string;
-  expression?: (jsExpr: JSExpression) => string;
-  function?: (jsFunc: JSFunction) => string;
-  slot?: (jsSlot: JSSlot) => string;
-  node?: (node: NodeSchema) => string;
-  loopDataExpr?: (loopDataExpr: string) => string;
-  conditionExpr?: (conditionExpr: string) => string;
-  tagName?: (tagName: string) => string;
-}
+import { CompositeValueGeneratorOptions, CompositeTypeContainerHandlerSet, CodeGeneratorError } from '../types';
 
-function generateArray(value: CompositeArray, handlers: CustomHandlerSet): string {
-  const body = value.map((v) => generateUnknownType(v, handlers)).join(',');
+const defaultContainerHandlers: CompositeTypeContainerHandlerSet = {
+  default: (v) => v,
+  string: (v) => `'${v}'`,
+};
+
+function generateArray(value: CompositeArray, options: CompositeValueGeneratorOptions = {}): string {
+  const body = value.map((v) => generateUnknownType(v, options)).join(',');
   return `[${body}]`;
 }
 
-function generateObject(value: CompositeObject, handlers: CustomHandlerSet): string {
+function generateObject(value: CompositeObject, options: CompositeValueGeneratorOptions = {}): string {
   const body = Object.keys(value)
     .map((key) => {
-      const v = generateUnknownType(value[key], handlers);
-      return `${key}: ${v}`;
+      let propName = key;
+
+      // TODO: 可以增加更多智能修复的方法
+      const fixMethods: Array<(v: string) => string> = [camelize];
+      // Try to fix propName
+      while (!isValidIdentifier(propName)) {
+        const fixMethod = fixMethods.pop();
+        if (fixMethod) {
+          try {
+            propName = fixMethod(propName);
+          } catch (error) {
+            throw new CodeGeneratorError(error.message);
+          }
+        } else {
+          throw new CodeGeneratorError(`Propname: ${key} is not a valid identifier.`);
+        }
+      }
+      const v = generateUnknownType(value[key], options);
+      return `${propName}: ${v}`;
     })
     .join(',\n');
 
   return `{${body}}`;
 }
 
-export function generateUnknownType(value: CompositeValue, handlers: CustomHandlerSet = {}): string {
+function generateUnknownType(value: CompositeValue, options: CompositeValueGeneratorOptions = {}): string {
   if (Array.isArray(value)) {
-    if (handlers.array) {
-      return handlers.array(value);
+    if (options.handlers && options.handlers.array) {
+      return options.handlers.array(value);
     }
-    return generateArray(value, handlers);
+    return generateArray(value, options);
   } else if (typeof value === 'object') {
     if (value === null) {
       return 'null';
     }
 
     if (isJSExpression(value)) {
-      if (handlers.expression) {
-        return handlers.expression(value);
+      if (options.handlers && options.handlers.expression) {
+        return options.handlers.expression(value);
       }
       return generateExpression(value);
     }
 
     if (isJSFunction(value)) {
-      if (handlers.function) {
-        return handlers.function(value);
+      if (options.handlers && options.handlers.function) {
+        return options.handlers.function(value);
       }
-      return generateFunction(value);
+      return generateFunction(value, { isArrow: true });
     }
 
     if (isJSSlot(value)) {
-      if (handlers.slot) {
-        return handlers.slot(value);
+      if (options.nodeGenerator) {
+        return generateJsSlot(value, options.nodeGenerator);
       }
-
-      return generateSlot(value, handlers);
+      throw new CodeGeneratorError("Can't find Node Generator");
     }
 
-    if (handlers.object) {
-      return handlers.object(value);
+    if (options.handlers && options.handlers.object) {
+      return options.handlers.object(value);
     }
-
-    return generateObject(value, handlers);
+    return generateObject(value as CompositeObject, options);
   } else if (typeof value === 'string') {
-    if (handlers.string) {
-      return handlers.string(value);
+    if (options.handlers && options.handlers.string) {
+      return options.handlers.string(value);
     }
-
-    return JSON.stringify(value);
-  } else if (typeof value === 'number' && handlers.number) {
-    return handlers.number(value);
-  } else if (typeof value === 'boolean' && handlers.boolean) {
-    return handlers.boolean(value);
+    return `'${value}'`;
+  } else if (typeof value === 'number' && options.handlers && options.handlers.number) {
+    return options.handlers.number(value);
+  } else if (typeof value === 'boolean' && options.handlers && options.handlers.boolean) {
+    return options.handlers.boolean(value);
   } else if (typeof value === 'undefined') {
     return 'undefined';
   }
@@ -101,65 +103,16 @@ export function generateUnknownType(value: CompositeValue, handlers: CustomHandl
   return JSON.stringify(value);
 }
 
-export function generateCompositeType(value: CompositeValue, handlers: CustomHandlerSet = {}): [boolean, string] {
-  const result = generateUnknownType(value, handlers);
+export function generateCompositeType(value: CompositeValue, options: CompositeValueGeneratorOptions = {}): string {
+  const result = generateUnknownType(value, options);
+  const containerHandlers = {
+    ...defaultContainerHandlers,
+    ...(options.containerHandlers || {}),
+  };
 
-  // TODO：什么场景下会返回这样的字符串？？
-  if (result.substr(0, 1) === "'" && result.substr(-1, 1) === "'") {
-    return [true, result.substring(1, result.length - 1)];
+  const isStringType = result.substr(0, 1) === "'" && result.substr(-1, 1) === "'";
+  if (isStringType) {
+    return (containerHandlers.string && containerHandlers.string(result.substring(1, result.length - 1))) || '';
   }
-
-  return [false, result];
-}
-
-export function handleStringValueDefault([isString, result]: [boolean, string]) {
-  if (isString) {
-    return `'${result}'`;
-  }
-
-  return result;
-}
-
-function generateSlot({ title, params, value }: JSSlot, handlers: CustomHandlerSet): string {
-  return [
-    title && generateSingleLineComment(title),
-    `(`,
-    ...(params || []),
-    `) => (`,
-    ...(!value
-      ? ['null']
-      : !Array.isArray(value)
-      ? [generateNodeData(value, handlers)]
-      : value.map((node) => generateNodeData(node, handlers))),
-    `)`,
-  ]
-    .filter(Boolean)
-    .join('');
-}
-
-function generateNodeData(node: NodeData, handlers: CustomHandlerSet): string {
-  if (typeof node === 'string') {
-    if (handlers.string) {
-      return handlers.string(node);
-    }
-
-    return JSON.stringify(node);
-  }
-
-  if (isJSExpression(node)) {
-    if (handlers.expression) {
-      return handlers.expression(node);
-    }
-    return generateExpression(node);
-  }
-
-  if (!handlers.node) {
-    throw new Error('cannot handle NodeSchema, handlers.node is missing');
-  }
-
-  return handlers.node(node);
-}
-
-function generateSingleLineComment(commentText: string): string {
-  return '/* ' + commentText.split('\n').join(' ').replace(/\*\//g, '*-/') + '*/';
+  return (containerHandlers.default && containerHandlers.default(result)) || '';
 }

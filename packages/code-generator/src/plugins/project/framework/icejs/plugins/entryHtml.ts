@@ -31,7 +31,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
             <title>${ir.meta.name}</title>
           </head>
           <body>
-            <div id="${ir.config.targetRootID}"></div>
+            <div id="app"></div>
           </body>
         </html>
       `,

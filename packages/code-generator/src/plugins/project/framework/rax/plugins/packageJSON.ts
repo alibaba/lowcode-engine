@@ -1,4 +1,4 @@
-import { NpmInfo } from '@ali/lowcode-types';
+import { NpmInfo, PackageJSON } from '@ali/lowcode-types';
 import { COMMON_CHUNK_NAME } from '../../../../../const/generator';
 
 import {
@@ -7,7 +7,6 @@ import {
   ChunkType,
   FileType,
   ICodeStruct,
-  IPackageJSON,
   IProjectInfo,
 } from '../../../../../types';
 import { isNpmInfo } from '../../../../../utils/schema';
@@ -23,7 +22,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
 
     const npmDeps = getNpmDependencies(ir);
 
-    const packageJson: IPackageJSON = {
+    const packageJson: PackageJSON = {
       name: '@ali/rax-app-demo',
       private: true,
       version: '1.0.0',

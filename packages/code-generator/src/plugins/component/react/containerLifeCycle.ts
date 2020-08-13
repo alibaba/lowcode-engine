@@ -1,18 +1,16 @@
 import { CLASS_DEFINE_CHUNK_NAME, DEFAULT_LINK_AFTER } from '../../../const/generator';
 import { REACT_CHUNK_NAME } from './const';
 
-import { getFuncExprBody, transformFuncExpr2MethodMember } from '../../../utils/jsExpression';
+import { generateFunction } from '../../../utils/jsExpression';
 
 import {
   BuilderComponentPlugin,
   BuilderComponentPluginFactory,
   ChunkType,
-  CodeGeneratorError,
   FileType,
   ICodeChunk,
   ICodeStruct,
   IContainerInfo,
-  JSExpression,
 } from '../../../types';
 
 type PluginConfig = {
@@ -46,7 +44,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
             type: ChunkType.STRING,
             fileType: cfg.fileType,
             name: CLASS_DEFINE_CHUNK_NAME.ConstructorContent,
-            content: getFuncExprBody((lifeCycles[lifeCycleName] as JSExpression).value),
+            content: generateFunction(lifeCycles[lifeCycleName], { isBlock: true }),
             linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.ConstructorStart]],
           };
         }
@@ -55,7 +53,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
             type: ChunkType.STRING,
             fileType: cfg.fileType,
             name: REACT_CHUNK_NAME.ClassRenderPre,
-            content: getFuncExprBody((lifeCycles[lifeCycleName] as JSExpression).value),
+            content: generateFunction(lifeCycles[lifeCycleName], { isBlock: true }),
             linkAfter: [REACT_CHUNK_NAME.ClassRenderStart],
           };
         }
@@ -64,12 +62,12 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
           type: ChunkType.STRING,
           fileType: cfg.fileType,
           name: CLASS_DEFINE_CHUNK_NAME.InsMethod,
-          content: transformFuncExpr2MethodMember(exportName, (lifeCycles[lifeCycleName] as JSExpression).value),
+          content: generateFunction(lifeCycles[lifeCycleName], { name: exportName, isMember: true }),
           linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.InsMethod]],
         };
       });
 
-      next.chunks.push.apply(next.chunks, chunks);
+      next.chunks.push(...chunks);
     }
 
     return next;

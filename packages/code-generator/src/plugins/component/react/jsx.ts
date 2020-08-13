@@ -12,16 +12,18 @@ import { REACT_CHUNK_NAME } from './const';
 import { createReactNodeGenerator } from '../../../utils/nodeToJSX';
 
 type PluginConfig = {
-  fileType: string;
-}
+  fileType?: string;
+  nodeTypeMapping?: Record<string, string>;
+};
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
-  const cfg: PluginConfig = {
+  const cfg = {
     fileType: FileType.JSX,
+    nodeTypeMapping: {},
     ...config,
   };
 
-  const generator = createReactNodeGenerator();
+  const generator = createReactNodeGenerator({ nodeTypeMapping: cfg.nodeTypeMapping });
 
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     const next: ICodeStruct = {
@@ -36,10 +38,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       fileType: cfg.fileType,
       name: REACT_CHUNK_NAME.ClassRenderJSX,
       content: `return ${jsxContent};`,
-      linkAfter: [
-        REACT_CHUNK_NAME.ClassRenderStart,
-        REACT_CHUNK_NAME.ClassRenderPre,
-      ],
+      linkAfter: [REACT_CHUNK_NAME.ClassRenderStart, REACT_CHUNK_NAME.ClassRenderPre],
     });
 
     return next;

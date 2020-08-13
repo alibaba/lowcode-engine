@@ -15,6 +15,8 @@ import {
   IWithDependency,
 } from '../../types';
 
+import { isValidIdentifier } from '../../utils/validate';
+
 function groupDepsByPack(deps: IDependency[]): Record<string, IDependency[]> {
   const depMap: Record<string, IDependency[]> = {};
 
@@ -25,11 +27,23 @@ function groupDepsByPack(deps: IDependency[]): Record<string, IDependency[]> {
     depMap[pkg].push(dep);
   };
 
+  // TODO: main 这个信息到底怎么用，是不是外部包不需要使用？
+  // deps.forEach(dep => {
+  //   if (dep.dependencyType === DependencyType.Internal) {
+  //     addDep(
+  //       `${(dep as IInternalDependency).moduleName}${`/${dep.main}` || ''}`,
+  //       dep,
+  //     );
+  //   } else {
+  //     addDep(`${(dep as IExternalDependency).package}${`/${dep.main}` || ''}`, dep);
+  //   }
+  // });
+
   deps.forEach((dep) => {
     if (dep.dependencyType === DependencyType.Internal) {
-      addDep(`${(dep as IInternalDependency).moduleName}${dep.main || ''}`, dep);
+      addDep(`${(dep as IInternalDependency).moduleName}`, dep);
     } else {
-      addDep(`${(dep as IExternalDependency).package}${dep.main || ''}`, dep);
+      addDep(`${(dep as IExternalDependency).package}`, dep);
     }
   });
 
@@ -38,16 +52,13 @@ function groupDepsByPack(deps: IDependency[]): Record<string, IDependency[]> {
 
 function buildPackageImport(pkg: string, deps: IDependency[], targetFileType: string): ICodeChunk[] {
   const chunks: ICodeChunk[] = [];
-  let defaultImport: string = '';
-  let defaultImportAs: string = '';
+  let defaultImport = '';
+  let defaultImportAs = '';
   const imports: Record<string, string> = {};
 
   deps.forEach((dep) => {
     const srcName = dep.exportName;
-    let targetName = dep.importName || dep.exportName;
-    if (dep.subName) {
-      return;
-    }
+    let targetName = dep.componentName || dep.exportName;
 
     if (dep.subName) {
       chunks.push({
@@ -62,6 +73,20 @@ function buildPackageImport(pkg: string, deps: IDependency[], targetFileType: st
           dependency: dep,
         },
       });
+
+      if (targetName !== `${srcName}.${dep.subName}`) {
+        if (!isValidIdentifier(targetName)) {
+          throw new CodeGeneratorError(`Invalid Identifier [${targetName}]`);
+        }
+
+        chunks.push({
+          type: ChunkType.STRING,
+          fileType: targetFileType,
+          name: COMMON_CHUNK_NAME.FileVarDefine,
+          content: `const ${targetName} = ${srcName}.${dep.subName};`,
+          linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport, COMMON_CHUNK_NAME.InternalDepsImport],
+        });
+      }
 
       targetName = srcName;
     }

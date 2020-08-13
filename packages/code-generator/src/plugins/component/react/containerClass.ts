@@ -60,10 +60,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       fileType: FileType.JSX,
       name: CLASS_DEFINE_CHUNK_NAME.ConstructorEnd,
       content: '}',
-      linkAfter: [
-        CLASS_DEFINE_CHUNK_NAME.ConstructorStart,
-        CLASS_DEFINE_CHUNK_NAME.ConstructorContent,
-      ],
+      linkAfter: [CLASS_DEFINE_CHUNK_NAME.ConstructorStart, CLASS_DEFINE_CHUNK_NAME.ConstructorContent],
     });
 
     next.chunks.push({
@@ -83,11 +80,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       fileType: FileType.JSX,
       name: REACT_CHUNK_NAME.ClassRenderEnd,
       content: '}',
-      linkAfter: [
-        REACT_CHUNK_NAME.ClassRenderStart,
-        REACT_CHUNK_NAME.ClassRenderPre,
-        REACT_CHUNK_NAME.ClassRenderJSX,
-      ],
+      linkAfter: [REACT_CHUNK_NAME.ClassRenderStart, REACT_CHUNK_NAME.ClassRenderPre, REACT_CHUNK_NAME.ClassRenderJSX],
     });
 
     next.chunks.push({

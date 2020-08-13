@@ -1,3 +1,5 @@
+import { JSExpression, CompositeValue } from '@ali/lowcode-types';
+
 import { CLASS_DEFINE_CHUNK_NAME, DEFAULT_LINK_AFTER } from '../../../const/generator';
 
 import {
@@ -7,15 +9,14 @@ import {
   FileType,
   ICodeStruct,
   IContainerInfo,
-  CompositeValue,
-  JSExpression,
 } from '../../../types';
 
-import { generateCompositeType, handleStringValueDefault } from '../../../utils/compositeType';
+import { generateCompositeType } from '../../../utils/compositeType';
 import { generateExpression } from '../../../utils/jsExpression';
 
-function packJsExpression(exp: JSExpression): string {
-  const funcStr = generateExpression(exp);
+function packJsExpression(exp: unknown): string {
+  const expression = exp as JSExpression;
+  const funcStr = generateExpression(expression);
   return `function() { return (${funcStr}); }`;
 }
 
@@ -40,11 +41,11 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
 
       attrs = [...attrs, ...extConfigs];
 
-      const listProp = handleStringValueDefault(
-        generateCompositeType((list as unknown) as CompositeValue, {
+      const listProp = generateCompositeType((list as unknown) as CompositeValue, {
+        handlers: {
           expression: packJsExpression,
-        }),
-      );
+        },
+      });
 
       attrs.push(`list: ${listProp}`);
 

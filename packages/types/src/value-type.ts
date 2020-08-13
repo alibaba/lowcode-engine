@@ -11,10 +11,15 @@ export interface JSExpression {
    * 模拟值
    */
   mock?: any;
+}
+
+// 函数
+export interface JSFunction {
+  type: 'JSFunction';
   /**
-   * 额外扩展属性，如 extType、events
+   * 表达式字符串
    */
-  [key: string]: any;
+  value: string;
 }
 
 /**
@@ -34,7 +39,6 @@ export interface JSFunction {
 }
 
 export interface JSSlot {
-  name?: string;
   type: 'JSSlot';
   title?: string;
   // 函数的入参
@@ -60,7 +64,6 @@ export type CompositeArray = CompositeValue[];
 export interface CompositeObject {
   [key: string]: CompositeValue;
 }
-
 
 export function isJSExpression(data: any): data is JSExpression {
   return data && data.type === 'JSExpression';

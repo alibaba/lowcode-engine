@@ -1,20 +1,22 @@
+import { NodeSchema } from '@ali/lowcode-types';
+
 import {
   BuilderComponentPlugin,
   BuilderComponentPluginFactory,
   ChunkType,
   ICodeStruct,
   IContainerInfo,
-  NodeSchema,
+  INodeGeneratorContext,
   CodePiece,
   PIECE_TYPE,
 } from '../../../types';
-import { COMMON_CHUNK_NAME, DEFAULT_LINK_AFTER } from '../../../const/generator';
+import { COMMON_CHUNK_NAME } from '../../../const/generator';
 
 import { createNodeGenerator, generateString } from '../../../utils/nodeToJSX';
 import { generateExpression } from '../../../utils/jsExpression';
-import { generateCompositeType, handleStringValueDefault } from '../../../utils/compositeType';
+import { generateCompositeType } from '../../../utils/compositeType';
 
-const generateGlobalProps = (nodeItem: NodeSchema): CodePiece[] => {
+const generateGlobalProps = (ctx: INodeGeneratorContext, nodeItem: NodeSchema): CodePiece[] => {
   return [
     {
       value: `{...globalProps.${nodeItem.componentName}}`,
@@ -23,11 +25,11 @@ const generateGlobalProps = (nodeItem: NodeSchema): CodePiece[] => {
   ];
 };
 
-const generateCtrlLine = (nodeItem: NodeSchema): CodePiece[] => {
+const generateCtrlLine = (ctx: INodeGeneratorContext, nodeItem: NodeSchema): CodePiece[] => {
   const pieces: CodePiece[] = [];
 
   if (nodeItem.loop && nodeItem.loopArgs) {
-    const loopDataExp = handleStringValueDefault(generateCompositeType(nodeItem.loop));
+    const loopDataExp = generateCompositeType(nodeItem.loop);
     pieces.push({
       type: PIECE_TYPE.ATTR,
       value: `x-for={${loopDataExp}}`,
@@ -40,7 +42,7 @@ const generateCtrlLine = (nodeItem: NodeSchema): CodePiece[] => {
   }
 
   if (nodeItem.condition) {
-    const conditionExp = handleStringValueDefault(generateCompositeType(nodeItem.condition));
+    const conditionExp = generateCompositeType(nodeItem.condition);
     pieces.push({
       type: PIECE_TYPE.ATTR,
       value: `x-if={${conditionExp}}`,

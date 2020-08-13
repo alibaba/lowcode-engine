@@ -1,3 +1,5 @@
+import { isJSExpression, isJSFunction, JSExpression, JSFunction, NpmInfo } from '@ali/lowcode-types';
+
 import {
   BuilderComponentPlugin,
   BuilderComponentPluginFactory,
@@ -6,11 +8,6 @@ import {
   ICodeChunk,
   ICodeStruct,
   IContainerInfo,
-  isJSExpression,
-  isJSFunction,
-  JSExpression,
-  JSFunction,
-  NpmInfo,
 } from '../../../types';
 
 import { RAX_CHUNK_NAME } from './const';
@@ -73,9 +70,9 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       },
       [generateReactCtrlLine],
       {
-        expression: (input) => (isJSExpression(input) ? handlers.expression(input) : ''),
-        function: (input) => (isJSFunction(input) ? handlers.function(input) : ''),
-        loopDataExpr: (input) => (typeof input === 'string' ? transformers.transformLoopExpr(input) : ''),
+        expression: (input: JSExpression) => (isJSExpression(input) ? handlers.expression(input) : ''),
+        function: (input: JSFunction) => (isJSFunction(input) ? handlers.function(input) : ''),
+        loopDataExpr: (input: string) => (typeof input === 'string' ? transformers.transformLoopExpr(input) : ''),
         tagName: mapComponentNameToAliasOrKeepIt,
       },
     );

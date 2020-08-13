@@ -1,4 +1,5 @@
-import { CodeGeneratorError, isJSExpression, isJSFunction } from '../types';
+import { JSExpression, JSFunction, isJsExpression, isJsFunction } from '@ali/lowcode-types';
+import { CodeGeneratorError } from '../types';
 
 export function transformFuncExpr2MethodMember(methodName: string, functionBody: string): string {
   const args = getFuncExprArguments(functionBody);
@@ -31,19 +32,52 @@ export function getFuncExprBody(functionBody: string) {
   return body;
 }
 
+export function getArrowFunction(functionBody: string) {
+  const args = getFuncExprArguments(functionBody);
+  const body = getFuncExprBody(functionBody);
+
+  return `(${args}) => { ${body} }`;
+}
+
+export function isJsCode(value: unknown): boolean {
+  return isJsExpression(value) || isJsFunction(value);
+}
+
 export function generateExpression(value: any): string {
-  if (isJSExpression(value)) {
-    return value.value || 'null';
+  if (isJsExpression(value)) {
+    return (value as JSExpression).value || 'null';
   }
 
   throw new CodeGeneratorError('Not a JSExpression');
 }
 
-// TODO: 这样真的可以吗？
-export function generateFunction(value: any): string {
-  if (isJSFunction(value)) {
-    return value.value || 'null';
+export function generateFunction(
+  value: any,
+  config: {
+    name?: string;
+    isMember?: boolean;
+    isBlock?: boolean;
+    isArrow?: boolean;
+  } = {
+    name: undefined,
+    isMember: false,
+    isBlock: false,
+    isArrow: false,
+  },
+) {
+  if (isJsCode(value)) {
+    const functionCfg = value as JSFunction;
+    if (config.isMember) {
+      return transformFuncExpr2MethodMember(config.name || '', functionCfg.value);
+    }
+    if (config.isBlock) {
+      return getFuncExprBody(functionCfg.value);
+    }
+    if (config.isArrow) {
+      return getArrowFunction(functionCfg.value);
+    }
+    return functionCfg.value;
   }
 
-  throw new CodeGeneratorError('Not a isJSFunction');
+  throw new CodeGeneratorError('Not a JSFunction or JSExpression');
 }

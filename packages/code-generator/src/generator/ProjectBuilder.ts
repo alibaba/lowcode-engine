@@ -1,36 +1,35 @@
+import { ResultDir, ResultFile, ProjectSchema } from '@ali/lowcode-types';
+
 import {
   IModuleBuilder,
   IParseResult,
   IProjectBuilder,
   IProjectPlugins,
-  IProjectSchema,
   IProjectTemplate,
-  IResultDir,
-  IResultFile,
   ISchemaParser,
   PostProcessor,
 } from '../types';
 
-import ResultDir from '../model/ResultDir';
 import SchemaParser from '../parser/SchemaParser';
+import { createResultDir, addDirectory, addFile } from '../utils/resultHelper';
 
 import { createModuleBuilder } from '../generator/ModuleBuilder';
 
 interface IModuleInfo {
   moduleName?: string;
   path: string[];
-  files: IResultFile[];
+  files: ResultFile[];
 }
 
-function getDirFromRoot(root: IResultDir, path: string[]): IResultDir {
-  let current: IResultDir = root;
-  path.forEach(p => {
-    const exist = current.dirs.find(d => d.name === p);
+function getDirFromRoot(root: ResultDir, path: string[]): ResultDir {
+  let current: ResultDir = root;
+  path.forEach((p) => {
+    const exist = current.dirs.find((d) => d.name === p);
     if (exist) {
       current = exist;
     } else {
-      const newDir = new ResultDir(p);
-      current.addDirectory(newDir);
+      const newDir = createResultDir(p);
+      addDirectory(current, newDir);
       current = newDir;
     }
   });
@@ -57,7 +56,7 @@ export class ProjectBuilder implements IProjectBuilder {
     this.postProcessors = postProcessors;
   }
 
-  public async generateProject(schema: IProjectSchema | string): Promise<IResultDir> {
+  async generateProject(schema: ProjectSchema | string): Promise<ResultDir> {
     // Init
     const schemaParser: ISchemaParser = new SchemaParser();
     const builders = this.createModuleBuilders();
@@ -76,7 +75,7 @@ export class ProjectBuilder implements IProjectBuilder {
     // components
     // pages
     const containerBuildResult: IModuleInfo[] = await Promise.all<IModuleInfo>(
-      parseResult.containers.map(async containerInfo => {
+      parseResult.containers.map(async (containerInfo) => {
         let builder: IModuleBuilder;
         let path: string[];
         if (containerInfo.containerType === 'Page') {
@@ -100,9 +99,7 @@ export class ProjectBuilder implements IProjectBuilder {
 
     // router
     if (parseResult.globalRouter && builders.router) {
-      const { files } = await builders.router.generateModule(
-        parseResult.globalRouter,
-      );
+      const { files } = await builders.router.generateModule(parseResult.globalRouter);
 
       buildResult.push({
         path: this.template.slots.router.path,
@@ -112,9 +109,7 @@ export class ProjectBuilder implements IProjectBuilder {
 
     // entry
     if (parseResult.project && builders.entry) {
-      const { files } = await builders.entry.generateModule(
-        parseResult.project,
-      );
+      const { files } = await builders.entry.generateModule(parseResult.project);
 
       buildResult.push({
         path: this.template.slots.entry.path,
@@ -124,9 +119,7 @@ export class ProjectBuilder implements IProjectBuilder {
 
     // appConfig
     if (parseResult.project && builders.appConfig) {
-      const { files } = await builders.appConfig.generateModule(
-        parseResult.project,
-      );
+      const { files } = await builders.appConfig.generateModule(parseResult.project);
 
       buildResult.push({
         path: this.template.slots.appConfig.path,
@@ -135,14 +128,8 @@ export class ProjectBuilder implements IProjectBuilder {
     }
 
     // constants?
-    if (
-      parseResult.project &&
-      builders.constants &&
-      this.template.slots.constants
-    ) {
-      const { files } = await builders.constants.generateModule(
-        parseResult.project,
-      );
+    if (parseResult.project && builders.constants && this.template.slots.constants) {
+      const { files } = await builders.constants.generateModule(parseResult.project);
 
       buildResult.push({
         path: this.template.slots.constants.path,
@@ -151,14 +138,8 @@ export class ProjectBuilder implements IProjectBuilder {
     }
 
     // utils?
-    if (
-      parseResult.globalUtils &&
-      builders.utils &&
-      this.template.slots.utils
-    ) {
-      const { files } = await builders.utils.generateModule(
-        parseResult.globalUtils,
-      );
+    if (parseResult.globalUtils && builders.utils && this.template.slots.utils) {
+      const { files } = await builders.utils.generateModule(parseResult.globalUtils);
 
       buildResult.push({
         path: this.template.slots.utils.path,
@@ -168,9 +149,7 @@ export class ProjectBuilder implements IProjectBuilder {
 
     // i18n?
     if (parseResult.globalI18n && builders.i18n && this.template.slots.i18n) {
-      const { files } = await builders.i18n.generateModule(
-        parseResult.globalI18n,
-      );
+      const { files } = await builders.i18n.generateModule(parseResult.globalI18n);
 
       buildResult.push({
         path: this.template.slots.i18n.path,
@@ -180,9 +159,7 @@ export class ProjectBuilder implements IProjectBuilder {
 
     // globalStyle
     if (parseResult.project && builders.globalStyle) {
-      const { files } = await builders.globalStyle.generateModule(
-        parseResult.project,
-      );
+      const { files } = await builders.globalStyle.generateModule(parseResult.project);
 
       buildResult.push({
         path: this.template.slots.globalStyle.path,
@@ -192,9 +169,7 @@ export class ProjectBuilder implements IProjectBuilder {
 
     // htmlEntry
     if (parseResult.project && builders.htmlEntry) {
-      const { files } = await builders.htmlEntry.generateModule(
-        parseResult.project,
-      );
+      const { files } = await builders.htmlEntry.generateModule(parseResult.project);
 
       buildResult.push({
         path: this.template.slots.htmlEntry.path,
@@ -204,9 +179,7 @@ export class ProjectBuilder implements IProjectBuilder {
 
     // packageJSON
     if (parseResult.project && builders.packageJSON) {
-      const { files } = await builders.packageJSON.generateModule(
-        parseResult.project,
-      );
+      const { files } = await builders.packageJSON.generateModule(parseResult.project);
 
       buildResult.push({
         path: this.template.slots.packageJSON.path,
@@ -217,14 +190,14 @@ export class ProjectBuilder implements IProjectBuilder {
     // Post Process
 
     // Combine Modules
-    buildResult.forEach(moduleInfo => {
+    buildResult.forEach((moduleInfo) => {
       let targetDir = getDirFromRoot(projectRoot, moduleInfo.path);
       if (moduleInfo.moduleName) {
-        const dir = new ResultDir(moduleInfo.moduleName);
-        targetDir.addDirectory(dir);
+        const dir = createResultDir(moduleInfo.moduleName);
+        addDirectory(targetDir, dir);
         targetDir = dir;
       }
-      moduleInfo.files.forEach(file => targetDir.addFile(file));
+      moduleInfo.files.forEach((file) => addFile(targetDir, file));
     });
 
     return projectRoot;
@@ -233,7 +206,7 @@ export class ProjectBuilder implements IProjectBuilder {
   private createModuleBuilders(): Record<string, IModuleBuilder> {
     const builders: Record<string, IModuleBuilder> = {};
 
-    Object.keys(this.plugins).forEach(pluginName => {
+    Object.keys(this.plugins).forEach((pluginName) => {
       if (this.plugins[pluginName].length > 0) {
         const options: { mainFileName?: string } = {};
         if (this.template.slots[pluginName] && this.template.slots[pluginName].fileName) {

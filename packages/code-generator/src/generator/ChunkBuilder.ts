@@ -1,28 +1,18 @@
-import {
-  BuilderComponentPlugin,
-  IChunkBuilder,
-  ICodeChunk,
-  ICodeStruct,
-} from '../types';
+import { BuilderComponentPlugin, IChunkBuilder, ICodeChunk, ICodeStruct } from '../types';
 
 import { COMMON_SUB_MODULE_NAME } from '../const/generator';
 
 export const groupChunks = (chunks: ICodeChunk[]): ICodeChunk[][] => {
-  const col = chunks.reduce(
-    (chunksSet: Record<string, ICodeChunk[]>, chunk) => {
-      const fileKey = `${chunk.subModule || COMMON_SUB_MODULE_NAME}.${
-        chunk.fileType
-      }`;
-      if (!chunksSet[fileKey]) {
-        chunksSet[fileKey] = [];
-      }
-      chunksSet[fileKey].push(chunk);
-      return chunksSet;
-    },
-    {},
-  );
+  const col = chunks.reduce((chunksSet: Record<string, ICodeChunk[]>, chunk) => {
+    const fileKey = `${chunk.subModule || COMMON_SUB_MODULE_NAME}.${chunk.fileType}`;
+    if (!chunksSet[fileKey]) {
+      chunksSet[fileKey] = [];
+    }
+    chunksSet[fileKey].push(chunk);
+    return chunksSet;
+  }, {});
 
-  return Object.keys(col).map(key => col[key]);
+  return Object.keys(col).map((key) => col[key]);
 };
 
 /**
@@ -39,7 +29,7 @@ export default class ChunkBuilder implements IChunkBuilder {
     this.plugins = plugins;
   }
 
-  public async run(
+  async run(
     ir: unknown,
     initialStructure: ICodeStruct = {
       ir,
@@ -64,11 +54,11 @@ export default class ChunkBuilder implements IChunkBuilder {
     };
   }
 
-  public getPlugins() {
+  getPlugins() {
     return this.plugins;
   }
 
-  public addPlugin(plugin: BuilderComponentPlugin) {
+  addPlugin(plugin: BuilderComponentPlugin) {
     this.plugins.push(plugin);
   }
 }
