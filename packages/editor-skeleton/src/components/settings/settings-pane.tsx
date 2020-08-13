@@ -2,14 +2,13 @@ import { Component, MouseEvent, Fragment } from 'react';
 import { shallowIntl, createSetterContent, observer, obx, Title } from '@ali/lowcode-editor-core';
 import { createContent } from '@ali/lowcode-utils';
 import { createField } from '../field';
+import PopupService, { PopupPipe } from '../popup';
 import { SkeletonContext } from '../../context';
 import { SettingField, isSettingField, SettingTopEntry, SettingEntry } from '@ali/lowcode-designer';
-import { Icon } from '@alifd/next';
+// import { Icon } from '@alifd/next';
 import { isSetterConfig, CustomView } from '@ali/lowcode-types';
 import { intl } from '../../locale';
 import { Skeleton } from 'editor-skeleton/src/skeleton';
-import { Skeleton } from '../../skeleton';
-import { Stage } from '../../widget/stage';
 function transformStringToFunction(str) {
   if (typeof str !== 'string') return str;
   return new Function(`"use strict"; return ${str}`)();
@@ -227,6 +226,9 @@ export class SettingsPane extends Component<SettingsPaneProps> {
     return false;
   }
 
+  private popupPipe = new PopupPipe();
+  private pipe = this.popupPipe.create();
+
   private handleClick = (e: MouseEvent) => {
     // compatiable vision stageBox
     // TODO: optimize these codes
@@ -268,25 +270,16 @@ export class SettingsPane extends Component<SettingsPaneProps> {
 
   render() {
     const { target } = this.props;
+    const items = target.items;
 
     return (
       <div className="lc-settings-pane" onClick={this.handleClick}>
-        {this.currentStage && (
-          <div className="lc-setting-stage-back">
-            <Icon
-              className="lc-setting-stage-back-icon"
-              type="arrow-left"
-              size="xs"
-              onClick={this.popStage.bind(this)}
-            />
-            <Title title={this.currentStage.title} />
+        {/* todo: add head for single use */}
+        <PopupService popupPipe={this.popupPipe}>
+          <div className="lc-settings-content">
+            {items.map((item, index) => createSettingFieldView(item, target, index))}
           </div>
-        )}
-        <div className="lc-settings-content">
-          {this.currentStage
-            ? this.currentStage.content
-            : target.items.map((item, index) => createSettingFieldView(item, target, index))}
-        </div>
+        </PopupService>
       </div>
     );
   }

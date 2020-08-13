@@ -18,7 +18,7 @@ export interface IState {
 }
 
 export default class UndoRedo extends PureComponent<IProps, IState> {
-  public static display = 'LowcodeUndoRedo';
+  static displayName = 'LowcodeUndoRedo';
 
   private history: any;
 

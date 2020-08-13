@@ -13,7 +13,6 @@ export default {
           href: '/',
         },
       },
-      
       {
         pluginKey: 'undoRedo',
         type: 'Custom',
