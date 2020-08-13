@@ -12608,20 +12608,11 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "style",
-          "propType": "object"
-        },
-        {
-          "name": "className",
-          "propType": "any"
-        },
-        {
           "name": "direction",
+          "title": {
+            "label": "布局方向",
+            "tip": "布局方向，默认为 column ，一个元素占据一整行，默认为column"
+          },
           "propType": {
             "type": "oneOf",
             "value": [
@@ -12629,17 +12620,21 @@
               "column"
             ]
           },
-          "description": "布局方向，默认为 column ，一个元素占据一整行\n@default column",
           "defaultValue": "column"
         },
         {
           "name": "wrap",
+          "title": "是否折行",
           "propType": "bool",
           "description": "是否折行",
           "defaultValue": false
         },
         {
           "name": "justify",
+          "title": {
+            "label": "沿主轴排布关系",
+            "tip": "沿着主轴方向，子元素们的排布关系 （兼容性同 justify-content ）"
+          },
           "propType": {
             "type": "oneOf",
             "value": [
@@ -12649,11 +12644,14 @@
               "space-between",
               "space-around"
             ]
-          },
-          "description": "沿着主轴方向，子元素们的排布关系 （兼容性同 justify-content ）"
+          }
         },
         {
           "name": "align",
+          "title": {
+            "label": "垂直主轴排布关系",
+            "tip": "垂直主轴方向，子元素们的排布关系 （兼容性同 align-items ）"
+          },
           "propType": {
             "type": "oneOf",
             "value": [
@@ -12663,17 +12661,22 @@
               "baseline",
               "stretch"
             ]
-          },
-          "description": "垂直主轴方向，子元素们的排布关系 （兼容性同 align-items ）"
+          }
         },
         {
-          "name": "device",
+          "name": "spacing",
+          "title": {
+            "label": "元素间距",
+            "tip": "元素之间的间距 [bottom&top, right&left]"
+          },
           "propType": {
-            "type": "oneOf",
+            "type": "oneOfType",
             "value": [
-              "phone",
-              "tablet",
-              "desktop"
+              "number",
+              {
+                "type": "arrayOf",
+                "value": "number"
+              }
             ]
           }
         }
