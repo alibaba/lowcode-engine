@@ -43,8 +43,16 @@ class Home$$Page extends Component {
 
   _utils = this._defineUtils();
 
+  _lifeCycles = this._defineLifeCycles();
+
   componentDidMount() {
     this._dataSourceEngine.reloadDataSource();
+
+    this._lifeCycles.didMount();
+  }
+
+  componentWillUnmount() {
+    this._lifeCycles.willUnmount();
   }
 
   render() {
@@ -177,6 +185,29 @@ class Home$$Page extends Component {
     });
 
     return utils;
+  }
+
+  _defineLifeCycles() {
+    const __$$lifeCycles = {
+      didMount: function didMount() {
+        this.utils.Toast.show(`Hello ${this.state.user.name}!`);
+      },
+
+      willUnmount: function didMount() {
+        this.utils.Toast.show(`Bye, ${this.state.user.name}!`);
+      },
+    };
+
+    // 为所有的方法绑定上下文
+    Object.entries(__$$lifeCycles).forEach(([lifeCycleName, lifeCycleMethod]) => {
+      if (typeof lifeCycleMethod === 'function') {
+        __$$lifeCycles[lifeCycleName] = (...args) => {
+          return lifeCycleMethod.apply(this._context, args);
+        };
+      }
+    });
+
+    return __$$lifeCycles;
   }
 
   _defineMethods() {

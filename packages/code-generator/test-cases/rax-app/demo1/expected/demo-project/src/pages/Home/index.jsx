@@ -28,6 +28,8 @@ class Home$$Page extends Component {
     this._dataSourceEngine.reloadDataSource();
   }
 
+  componentWillUnmount() {}
+
   render() {
     const __$$context = this._context;
 

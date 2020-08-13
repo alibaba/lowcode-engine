@@ -52,7 +52,16 @@
         ],
       },
       props: {},
-      lifeCycles: {},
+      lifeCycles: {
+        didMount: {
+          type: 'JSExpression',
+          value: 'function didMount(){\n  this.utils.Toast.show(`Hello ${this.state.user.name}!`);\n}',
+        },
+        willUnmount: {
+          type: 'JSExpression',
+          value: 'function didMount(){\n  this.utils.Toast.show(`Bye, ${this.state.user.name}!`);\n}',
+        },
+      },
       methods: {
         hello: {
           type: 'JSExpression',

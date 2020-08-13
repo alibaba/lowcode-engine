@@ -46,7 +46,11 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
         _defineMethods() {
           const __$$methods = ({
       `,
-      linkAfter: [RAX_CHUNK_NAME.ClassRenderEnd, CLASS_DEFINE_CHUNK_NAME.InsPrivateMethod],
+      linkAfter: [
+        RAX_CHUNK_NAME.ClassRenderEnd,
+        CLASS_DEFINE_CHUNK_NAME.InsPrivateMethod,
+        RAX_CHUNK_NAME.LifeCyclesEnd,
+      ],
     });
 
     next.chunks.push({

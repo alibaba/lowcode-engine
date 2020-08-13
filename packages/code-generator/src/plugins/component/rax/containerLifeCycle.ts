@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { CLASS_DEFINE_CHUNK_NAME, DEFAULT_LINK_AFTER } from '../../../const/generator';
 import { RAX_CHUNK_NAME } from './const';
 
@@ -7,7 +8,6 @@ import {
   BuilderComponentPlugin,
   BuilderComponentPluginFactory,
   ChunkType,
-  CodeGeneratorError,
   FileType,
   ICodeChunk,
   ICodeStruct,
@@ -34,53 +34,86 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       ...pre,
     };
 
-    // TODO: Rax 程序的生命周期暂未明确，此处先屏蔽
-    // @see https://yuque.antfin-inc.com/mo/spec/spec-low-code-building-schema#XMeF5
+    // Rax 先只支持 didMount 和 willUnmount 吧
 
-    // const ir = next.ir as IContainerInfo;
+    const ir = next.ir as IContainerInfo;
+    const lifeCycles = ir.lifeCycles;
 
-    // if (ir.lifeCycles) {
-    //   const lifeCycles = ir.lifeCycles;
-    //   const chunks = Object.keys(lifeCycles).map<ICodeChunk>(lifeCycleName => {
-    //     const normalizeName = cfg.normalizeNameMapping[lifeCycleName] || lifeCycleName;
-    //     const exportName = cfg.exportNameMapping[lifeCycleName] || lifeCycleName;
-    //     if (normalizeName === 'constructor') {
-    //       return {
-    //         type: ChunkType.STRING,
-    //         fileType: cfg.fileType,
-    //         name: CLASS_DEFINE_CHUNK_NAME.ConstructorContent,
-    //         content: getFuncExprBody(
-    //           (lifeCycles[lifeCycleName] as JSExpression).value,
-    //         ),
-    //         linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.ConstructorStart]],
-    //       };
-    //     }
-    //     if (normalizeName === 'render') {
-    //       return {
-    //         type: ChunkType.STRING,
-    //         fileType: cfg.fileType,
-    //         name: RAX_CHUNK_NAME.ClassRenderPre,
-    //         content: getFuncExprBody(
-    //           (lifeCycles[lifeCycleName] as JSExpression).value,
-    //         ),
-    //         linkAfter: [RAX_CHUNK_NAME.ClassRenderStart],
-    //       };
-    //     }
+    if (lifeCycles && !_.isEmpty(lifeCycles)) {
+      Object.entries(lifeCycles).forEach(([lifeCycleName, lifeCycleMethodExpr]) => {
+        const normalizeName = cfg.normalizeNameMapping[lifeCycleName] || lifeCycleName;
+        const exportName = cfg.exportNameMapping[lifeCycleName] || lifeCycleName;
 
-    //     return {
-    //       type: ChunkType.STRING,
-    //       fileType: cfg.fileType,
-    //       name: CLASS_DEFINE_CHUNK_NAME.InsMethod,
-    //       content: transformFuncExpr2MethodMember(
-    //         exportName,
-    //         (lifeCycles[lifeCycleName] as JSExpression).value,
-    //       ),
-    //       linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.InsMethod]],
-    //     };
-    //   });
+        next.chunks.push({
+          type: ChunkType.STRING,
+          fileType: cfg.fileType,
+          name: RAX_CHUNK_NAME.LifeCyclesContent,
+          content: `${exportName}: (${lifeCycleMethodExpr.value}),`,
+          linkAfter: [RAX_CHUNK_NAME.LifeCyclesBegin],
+        });
 
-    //   next.chunks.push.apply(next.chunks, chunks);
-    // }
+        if (normalizeName === 'didMount') {
+          next.chunks.push({
+            type: ChunkType.STRING,
+            fileType: cfg.fileType,
+            name: RAX_CHUNK_NAME.ClassDidMountContent,
+            content: `this._lifeCycles.${exportName}();`,
+            linkAfter: [RAX_CHUNK_NAME.ClassDidMountBegin],
+          });
+        } else if (normalizeName === 'willUnmount') {
+          next.chunks.push({
+            type: ChunkType.STRING,
+            fileType: cfg.fileType,
+            name: RAX_CHUNK_NAME.ClassWillUnmountContent,
+            content: `this._lifeCycles.${exportName}();`,
+            linkAfter: [RAX_CHUNK_NAME.ClassWillUnmountBegin],
+          });
+        } else {
+          // TODO: print warnings? Unknown life cycle
+        }
+      });
+
+      next.chunks.push({
+        type: ChunkType.STRING,
+        fileType: cfg.fileType,
+        name: CLASS_DEFINE_CHUNK_NAME.InsVar,
+        content: `_lifeCycles = this._defineLifeCycles();`,
+        linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start],
+      });
+
+      next.chunks.push({
+        type: ChunkType.STRING,
+        fileType: cfg.fileType,
+        name: RAX_CHUNK_NAME.LifeCyclesBegin,
+        content: `
+          _defineLifeCycles() {
+            const __$$lifeCycles = ({
+        `,
+        linkAfter: [RAX_CHUNK_NAME.ClassRenderEnd, CLASS_DEFINE_CHUNK_NAME.InsPrivateMethod],
+      });
+
+      next.chunks.push({
+        type: ChunkType.STRING,
+        fileType: cfg.fileType,
+        name: RAX_CHUNK_NAME.LifeCyclesEnd,
+        content: `
+            });
+
+            // 为所有的方法绑定上下文
+            Object.entries(__$$lifeCycles).forEach(([lifeCycleName, lifeCycleMethod]) => {
+              if (typeof lifeCycleMethod === 'function') {
+                __$$lifeCycles[lifeCycleName] = (...args) => {
+                  return lifeCycleMethod.apply(this._context, args);
+                }
+              }
+            });
+
+            return __$$lifeCycles;
+          }
+        `,
+        linkAfter: [RAX_CHUNK_NAME.LifeCyclesBegin, RAX_CHUNK_NAME.LifeCyclesContent],
+      });
+    }
 
     return next;
   };

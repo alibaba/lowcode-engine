@@ -87,9 +87,30 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: FileType.JSX,
+      name: RAX_CHUNK_NAME.ClassWillUnmountBegin,
+      content: `componentWillUnmount() {`,
+      linkAfter: [
+        CLASS_DEFINE_CHUNK_NAME.Start,
+        CLASS_DEFINE_CHUNK_NAME.InsVar,
+        CLASS_DEFINE_CHUNK_NAME.InsMethod,
+        RAX_CHUNK_NAME.ClassDidMountEnd,
+      ],
+    });
+
+    next.chunks.push({
+      type: ChunkType.STRING,
+      fileType: FileType.JSX,
+      name: RAX_CHUNK_NAME.ClassWillUnmountEnd,
+      content: `}`,
+      linkAfter: [RAX_CHUNK_NAME.ClassWillUnmountBegin, RAX_CHUNK_NAME.ClassWillUnmountContent],
+    });
+
+    next.chunks.push({
+      type: ChunkType.STRING,
+      fileType: FileType.JSX,
       name: RAX_CHUNK_NAME.ClassRenderBegin,
       content: 'render() {',
-      linkAfter: [RAX_CHUNK_NAME.ClassDidMountEnd],
+      linkAfter: [RAX_CHUNK_NAME.ClassDidMountEnd, RAX_CHUNK_NAME.ClassWillUnmountEnd],
     });
 
     next.chunks.push({
