@@ -703,6 +703,14 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     this.document.destroyNode(this);
   }
 
+  /**
+   * 是否可执行某action
+   */
+  canPerformAction(action: string): boolean {
+    const availableActions = this.componentMeta?.availableActions?.map((action) => action.name) || [];
+    return availableActions.indexOf(action) >= 0;
+  }
+
   // ======= compatible apis ====
   isEmpty(): boolean {
     return this.children ? this.children.isEmpty() : true;
