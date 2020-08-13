@@ -12,22 +12,27 @@ import {
   JSSlot,
   NodeSchema,
   NodeData,
+  CodePiece,
 } from '../types';
 import { generateExpression, generateFunction } from './jsExpression';
+import { IScopeBindings } from './ScopeBindings';
 
 export interface CustomHandlerSet {
-  boolean?: (bool: boolean) => string;
-  number?: (num: number) => string;
-  string?: (str: string) => string;
-  array?: (arr: JSONArray | CompositeArray) => string;
-  object?: (obj: JSONObject | CompositeObject) => string;
-  expression?: (jsExpr: JSExpression) => string;
-  function?: (jsFunc: JSFunction) => string;
-  slot?: (jsSlot: JSSlot) => string;
-  node?: (node: NodeSchema) => string;
-  loopDataExpr?: (loopDataExpr: string) => string;
-  conditionExpr?: (conditionExpr: string) => string;
-  tagName?: (tagName: string) => string;
+  boolean?(this: CustomHandlerSet, bool: boolean): string;
+  number?(this: CustomHandlerSet, num: number): string;
+  string?(this: CustomHandlerSet, str: string): string;
+  array?(this: CustomHandlerSet, arr: JSONArray | CompositeArray): string;
+  object?(this: CustomHandlerSet, obj: JSONObject | CompositeObject): string;
+  expression?(this: CustomHandlerSet, jsExpr: JSExpression): string;
+  function?(this: CustomHandlerSet, jsFunc: JSFunction): string;
+  slot?(this: CustomHandlerSet, jsSlot: JSSlot): string;
+  node?(this: CustomHandlerSet, node: NodeSchema): string;
+  nodeAttrs?(this: CustomHandlerSet, node: NodeSchema): CodePiece[];
+  nodeAttr?(this: CustomHandlerSet, attrName: string, attrValue: CompositeValue): CodePiece[];
+  loopDataExpr?(this: CustomHandlerSet, loopDataExpr: string): string;
+  conditionExpr?(this: CustomHandlerSet, conditionExpr: string): string;
+  tagName?(this: CustomHandlerSet, tagName: string): string;
+  scopeBindings?: IScopeBindings;
 }
 
 function generateArray(value: CompositeArray, handlers: CustomHandlerSet): string {

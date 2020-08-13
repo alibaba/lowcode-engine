@@ -10,12 +10,15 @@ import Image from 'rax-image';
 
 import { create as __$$createDataSourceEngine } from '@ali/lowcode-datasource-engine';
 
+import { isMiniApp as __$$isMiniApp } from 'universal-env';
+
 import __$$projectUtils from '../../utils';
 
 import './index.css';
 
 class Home$$Page extends Component {
   state = {
+    clickCount: 0,
     user: { name: '张三', age: 18, avatar: 'https://gw.alicdn.com/tfs/TB1Ui9BMkY2gK0jSZFgXXc5OFXa-50-50.png' },
     orders: [
       {
@@ -61,7 +64,7 @@ class Home$$Page extends Component {
               source={{ uri: __$$eval(() => __$$context.state.user.avatar) }}
               style={{ width: '32px', height: '32px' }}
             />
-            <View onClick={__$$eval(() => __$$context.hello)}>
+            <View onClick={__$$context.hello}>
               <Text>{__$$eval(() => __$$context.state.user.name)}</Text>
               <Text>{__$$eval(() => __$$context.state.user.age)}岁</Text>
             </View>
@@ -70,29 +73,47 @@ class Home$$Page extends Component {
         <View>
           <Text>=== Orders: ===</Text>
         </View>
-        {__$$evalArray(() => __$$context.state.orders).map((item, index) => (
+        {__$$evalArray(() => __$$context.state.orders).map((order, index) => (
           <View
             style={{ flexDirection: 'row' }}
-            onClick={__$$eval(
-              () =>
-                function () {
-                  __$$context.utils.recordEvent(`CLICK_ORDER`, item.title);
-                },
-            )}
+            data-order={order}
+            onClick={(...__$$args) => {
+              if (__$$isMiniApp) {
+                const __$$event = __$$args[0];
+                const order = __$$event.target.dataset.order;
+                return function () {
+                  __$$context.utils.recordEvent(`CLICK_ORDER`, order.title);
+                }.apply(this, __$$args);
+              } else {
+                return function () {
+                  __$$context.utils.recordEvent(`CLICK_ORDER`, order.title);
+                }.apply(this, __$$args);
+              }
+            }}
           >
             <View>
-              <Image source={{ uri: __$$eval(() => item.coverUrl) }} style={{ width: '80px', height: '60px' }} />
+              <Image source={{ uri: __$$eval(() => order.coverUrl) }} style={{ width: '80px', height: '60px' }} />
             </View>
             <View>
-              <Text>{__$$eval(() => item.title)}</Text>
-              <Text>{__$$eval(() => __$$context.utils.formatPrice(item.price, '元'))}</Text>
+              <Text>{__$$eval(() => order.title)}</Text>
+              <Text>{__$$eval(() => __$$context.utils.formatPrice(order.price, '元'))}</Text>
             </View>
           </View>
         ))}
+        <View
+          onClick={function () {
+            __$$context.setState({
+              clickCount: __$$context.state.clickCount + 1,
+            });
+          }}
+        >
+          <Text>点击次数：{__$$eval(() => __$$context.state.clickCount)}(点击加 1)</Text>
+        </View>
         <View>
           <Text>操作提示：</Text>
           <Text>1. 点击会员名，可以弹出 Toast "Hello xxx!"</Text>
           <Text>2. 点击订单，会记录点击的订单信息，并弹出 Toast 提示</Text>
+          <Text>3. 最下面的【点击次数】，点一次应该加 1</Text>
         </View>
       </View>
     );
@@ -112,7 +133,7 @@ class Home$$Page extends Component {
         return self._dataSourceEngine.dataSourceMap || {};
       },
       async reloadDataSource() {
-        self._dataSourceEngine.reloadDataSource();
+        await self._dataSourceEngine.reloadDataSource();
       },
       get utils() {
         return self._utils;

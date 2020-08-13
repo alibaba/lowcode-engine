@@ -8,6 +8,8 @@ import Text from 'rax-text';
 
 import { create as __$$createDataSourceEngine } from '@ali/lowcode-datasource-engine';
 
+import { isMiniApp as __$$isMiniApp } from 'universal-env';
+
 import __$$projectUtils from '../../utils';
 
 import './index.css';
@@ -50,7 +52,7 @@ class Home$$Page extends Component {
         return self._dataSourceEngine.dataSourceMap || {};
       },
       async reloadDataSource() {
-        self._dataSourceEngine.reloadDataSource();
+        await self._dataSourceEngine.reloadDataSource();
       },
       get utils() {
         return self._utils;

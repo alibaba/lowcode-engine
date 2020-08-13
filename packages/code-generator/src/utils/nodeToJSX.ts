@@ -35,11 +35,21 @@ export function handleChildren(children: NodeData | NodeData[], handlers: Handle
   }
 }
 
-export function generateAttr(attrName: string, attrValue: CompositeValue, handlers: CustomHandlerSet): CodePiece[] {
+export function generateAttr(
+  attrName: string,
+  attrValue: CompositeValue,
+  customHandlers: CustomHandlerSet,
+): CodePiece[] {
+  if (customHandlers.nodeAttr) {
+    return customHandlers.nodeAttr(attrName, attrValue);
+  }
+
+  // TODO: 这两个为啥要特殊处理？？
   if (attrName === 'initValue' || attrName === 'labelCol') {
     return [];
   }
-  const [isString, valueStr] = generateCompositeType(attrValue, handlers);
+
+  const [isString, valueStr] = generateCompositeType(attrValue, customHandlers);
   return [
     {
       value: `${attrName}=${isString ? `"${valueStr}"` : `{${valueStr}}`}`,
@@ -48,7 +58,11 @@ export function generateAttr(attrName: string, attrValue: CompositeValue, handle
   ];
 }
 
-export function generateAttrs(nodeItem: NodeSchema, handlers: CustomHandlerSet): CodePiece[] {
+export function generateAttrs(nodeItem: NodeSchema, customHandlers: CustomHandlerSet): CodePiece[] {
+  if (customHandlers.nodeAttrs) {
+    return customHandlers.nodeAttrs(nodeItem);
+  }
+
   const { props } = nodeItem;
 
   let pieces: CodePiece[] = [];
@@ -56,12 +70,12 @@ export function generateAttrs(nodeItem: NodeSchema, handlers: CustomHandlerSet):
   if (props) {
     if (!Array.isArray(props)) {
       Object.keys(props).forEach((propName: string) => {
-        pieces = pieces.concat(generateAttr(propName, props[propName], handlers));
+        pieces = pieces.concat(generateAttr(propName, props[propName], customHandlers));
       });
     } else {
       props.forEach((prop) => {
         if (prop.name && !prop.spread) {
-          pieces = pieces.concat(generateAttr(prop.name, prop.value, handlers));
+          pieces = pieces.concat(generateAttr(prop.name, prop.value, customHandlers));
         }
 
         // TODO: 处理 spread 场景（<Xxx {...(something)}/>)
@@ -97,10 +111,11 @@ export function generateReactCtrlLine(nodeItem: NodeSchema, handlers: CustomHand
     const loopItemName = nodeItem.loopArgs?.[0] || 'item';
     const loopIndexName = nodeItem.loopArgs?.[1] || 'index';
 
-    // TODO: 静态的值可以抽离出来？
-    const loopDataExpr = (handlers.loopDataExpr || _.identity)(
-      isJSExpression(nodeItem.loop) ? `(${nodeItem.loop.value})` : `(${JSON.stringify(nodeItem.loop)})`,
-    );
+    const rawLoopDataExpr = isJSExpression(nodeItem.loop)
+      ? `(${nodeItem.loop.value})`
+      : `(${JSON.stringify(nodeItem.loop)})`;
+
+    const loopDataExpr = handlers.loopDataExpr ? handlers.loopDataExpr(rawLoopDataExpr) : rawLoopDataExpr;
 
     pieces.unshift({
       value: `${loopDataExpr}.map((${loopItemName}, ${loopIndexName}) => (`,
@@ -115,7 +130,8 @@ export function generateReactCtrlLine(nodeItem: NodeSchema, handlers: CustomHand
 
   if (nodeItem.condition) {
     const [isString, value] = generateCompositeType(nodeItem.condition, handlers);
-    const conditionExpr = (handlers.conditionExpr || _.identity)(isString ? `'${value}'` : value);
+    const rawConditionExpr = isString ? `'${value}'` : value;
+    const conditionExpr = handlers.conditionExpr ? handlers.conditionExpr(rawConditionExpr) : rawConditionExpr;
 
     pieces.unshift({
       value: `(${conditionExpr}) && (`,
@@ -149,7 +165,8 @@ export function linkPieces(pieces: CodePiece[], handlers: CustomHandlerSet): str
     throw new CodeGeneratorError('One node only need one tag define');
   }
 
-  const tagName = (handlers.tagName || _.identity)(tagsPieces[0].value);
+  const rawTagName = tagsPieces[0].value;
+  const tagName = handlers.tagName ? handlers.tagName(rawTagName) : rawTagName;
 
   const beforeParts = pieces
     .filter((p) => p.type === PIECE_TYPE.BEFORE)

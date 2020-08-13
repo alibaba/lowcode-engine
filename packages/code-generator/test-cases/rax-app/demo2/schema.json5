@@ -36,6 +36,7 @@
       componentName: 'Page',
       fileName: 'home',
       state: {
+        clickCount: 0,
         user: { name: '张三', age: 18, avatar: 'https://gw.alicdn.com/tfs/TB1Ui9BMkY2gK0jSZFgXXc5OFXa-50-50.png' },
         orders: [
           {
@@ -176,11 +177,12 @@
             type: 'JSExpression',
             value: 'this.state.orders',
           },
+          loopArgs: ['order', 'index'],
           props: {
             style: { flexDirection: 'row' },
             onClick: {
               type: 'JSFunction',
-              value: 'function(){ this.utils.recordEvent(`CLICK_ORDER`, this.item.title) }',
+              value: 'function(){ this.utils.recordEvent(`CLICK_ORDER`, this.order.title) }',
             },
           },
           children: [
@@ -193,7 +195,7 @@
                     source: {
                       uri: {
                         type: 'JSExpression',
-                        value: 'this.item.coverUrl',
+                        value: 'this.order.coverUrl',
                       },
                     },
                     style: {
@@ -211,16 +213,38 @@
                   componentName: 'Text',
                   children: {
                     type: 'JSExpression',
-                    value: 'this.item.title',
+                    value: 'this.order.title',
                   },
                 },
                 {
                   componentName: 'Text',
                   children: {
                     type: 'JSExpression',
-                    value: 'this.utils.formatPrice(this.item.price, "元")',
+                    value: 'this.utils.formatPrice(this.order.price, "元")',
                   },
                 },
+              ],
+            },
+          ],
+        },
+        {
+          componentName: 'View',
+          props: {
+            onClick: {
+              type: 'JSFunction',
+              value: 'function (){ this.setState({ clickCount: this.state.clickCount + 1 }) }',
+            },
+          },
+          children: [
+            {
+              componentName: 'Text',
+              children: [
+                '点击次数：',
+                {
+                  type: 'JSExpression',
+                  value: 'this.state.clickCount',
+                },
+                '(点击加 1)',
               ],
             },
           ],
@@ -242,6 +266,11 @@
               componentName: 'Text',
               props: {},
               children: '2. 点击订单，会记录点击的订单信息，并弹出 Toast 提示',
+            },
+            {
+              componentName: 'Text',
+              props: {},
+              children: '3. 最下面的【点击次数】，点一次应该加 1',
             },
           ],
         },

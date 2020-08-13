@@ -36,6 +36,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       },
       dependencies: {
         '@ali/lowcode-datasource-engine': '^0.1.0',
+        'universal-env': '^3.2.0',
         rax: '^1.1.0',
         'rax-app': '^2.0.0',
         'rax-document': '^0.1.0',
