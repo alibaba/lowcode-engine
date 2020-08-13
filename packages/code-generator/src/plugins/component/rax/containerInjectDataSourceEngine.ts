@@ -1,5 +1,3 @@
-import { CompositeValue, DataSourceConfig, isJSExpression, isJSFunction } from '@ali/lowcode-types';
-
 import { CLASS_DEFINE_CHUNK_NAME, COMMON_CHUNK_NAME } from '../../../const/generator';
 
 import {
@@ -8,7 +6,12 @@ import {
   ChunkType,
   FileType,
   ICodeStruct,
+  CompositeValue,
+  DataSourceConfig,
+  isJSExpression,
+  isJSFunction,
 } from '../../../types';
+
 import { generateUnknownType } from '../../../utils/compositeType';
 import { isContainerSchema } from '../../../utils/schema';
 import { RAX_CHUNK_NAME } from './const';

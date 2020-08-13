@@ -1,4 +1,4 @@
-import { ContainerSchema, NpmInfo } from '@ali/lowcode-types';
+import { ContainerSchema, NpmInfo } from '../types';
 
 export function isContainerSchema(x: any): x is ContainerSchema {
   return typeof x === 'object' && x && typeof x.componentName === 'string' && typeof x.fileName === 'string';

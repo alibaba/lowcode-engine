@@ -1,9 +1,7 @@
-import { JSExpression, JSFunction, NodeSchema } from '@ali/lowcode-types';
-
 import { CustomHandlerSet } from '../utils/compositeType';
 import { IParseResult } from './intermediate';
 import { IResultDir, IResultFile } from './result';
-import { IBasicSchema, IProjectSchema } from './schema';
+import { IBasicSchema, IProjectSchema, JSExpression, JSFunction, NodeSchema } from './schema';
 
 export enum FileType {
   CSS = 'css',

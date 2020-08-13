@@ -1,4 +1,3 @@
-import { NpmInfo } from '@ali/lowcode-types';
 import { COMMON_CHUNK_NAME } from '../../../../../const/generator';
 
 import {
@@ -9,6 +8,7 @@ import {
   ICodeStruct,
   IPackageJSON,
   IProjectInfo,
+  NpmInfo,
 } from '../../../../../types';
 import { isNpmInfo } from '../../../../../utils/schema';
 import { calcCompatibleVersion } from '../../../../../utils/version';
