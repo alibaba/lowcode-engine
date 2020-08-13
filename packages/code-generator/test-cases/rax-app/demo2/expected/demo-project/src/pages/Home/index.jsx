@@ -162,15 +162,23 @@ class Home$$Page extends Component {
   }
 
   _defineDataSourceList() {
-    return [
-      { id: 'urlParams', type: 'urlParams' },
-      { id: 'user', type: 'fetch', options: { method: 'GET', uri: 'https://shs.alibaba-inc.com/mock/1458/demo/user' } },
-      {
-        id: 'orders',
-        type: 'fetch',
-        options: { method: 'GET', uri: 'https://shs.alibaba-inc.com/mock/1458/demo/orders' },
-      },
-    ];
+    return function () {
+      return [
+        { id: 'urlParams', type: 'urlParams', isInit: () => undefined, options: () => undefined },
+        {
+          id: 'user',
+          type: 'fetch',
+          options: () => ({ method: 'GET', uri: 'https://shs.alibaba-inc.com/mock/1458/demo/user' }),
+          isInit: () => undefined,
+        },
+        {
+          id: 'orders',
+          type: 'fetch',
+          options: () => ({ method: 'GET', uri: this.state.user.ordersApiUri }),
+          isInit: () => undefined,
+        },
+      ];
+    }.call(this._context);
   }
 
   _defineUtils() {

@@ -89,7 +89,10 @@
             type: 'fetch',
             options: {
               method: 'GET',
-              uri: 'https://shs.alibaba-inc.com/mock/1458/demo/orders',
+              uri: {
+                type: 'JSExpression',
+                value: 'this.state.user.ordersApiUri',
+              },
             },
           },
         ],

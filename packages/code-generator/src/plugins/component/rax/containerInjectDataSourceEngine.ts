@@ -1,4 +1,4 @@
-import { DataSourceConfig } from '@ali/lowcode-types';
+import { CompositeValue, DataSourceConfig, isJSExpression, isJSFunction } from '@ali/lowcode-types';
 
 import { CLASS_DEFINE_CHUNK_NAME, COMMON_CHUNK_NAME } from '../../../const/generator';
 
@@ -9,6 +9,7 @@ import {
   FileType,
   ICodeStruct,
 } from '../../../types';
+import { generateUnknownType } from '../../../utils/compositeType';
 import { isContainerSchema } from '../../../utils/schema';
 import { RAX_CHUNK_NAME } from './const';
 
@@ -67,7 +68,15 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       // TODO: 下面的定义应该需要调用 @ali/lowcode-datasource-engine 的方法来搞:
       content: `
         _defineDataSourceList() {
-          return ${JSON.stringify(dataSourceItems)};
+          return (function(){
+            return (${generateUnknownType([
+              ...dataSourceItems.map((item) => ({
+                ...item,
+                isInit: wrapAsFunction(item.isInit),
+                options: wrapAsFunction(item.options),
+              })),
+            ])});
+          }).call(this._context);
         }`,
       linkAfter: [RAX_CHUNK_NAME.ClassRenderEnd],
     });
@@ -78,3 +87,17 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
 };
 
 export default pluginFactory;
+
+function wrapAsFunction(value: CompositeValue): CompositeValue {
+  if (isJSExpression(value) || isJSFunction(value)) {
+    return {
+      type: 'JSExpression',
+      value: `() => (${value.value})`,
+    };
+  }
+
+  return {
+    type: 'JSExpression',
+    value: `() => (${generateUnknownType(value)})`,
+  };
+}
