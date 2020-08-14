@@ -219,6 +219,15 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
     _schema.methods = {};
     _schema.lifeCycles = {};
 
+    if (schema.componentName === 'Component' && (schema as ComponentSchema).css) {
+      const doc = window.document;
+      const s = doc.createElement('style');
+      s.setAttribute('type', 'text/css');
+      s.setAttribute('id', `Component-${schema.id || ''}`);
+      s.appendChild(doc.createTextNode((schema as ComponentSchema).css || ''));
+      doc.getElementsByTagName('head')[0].appendChild(s);
+    }
+
     const node = host.document.createNode(_schema);
     _schema = node.export(TransformStage.Render);
 
