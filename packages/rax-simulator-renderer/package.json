@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@ali/lowcode-rax-simulator-renderer",
-  "version": "0.8.46",
+  "version": "0.8.47",
   "description": "rax simulator renderer for alibaba lowcode designer",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -53,5 +53,5 @@
       "ts-node/register"
     ]
   },
-  "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-rax-simulator-renderer@0.8.45/build/index.html"
+  "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-rax-simulator-renderer@0.8.46/build/index.html"
 }
