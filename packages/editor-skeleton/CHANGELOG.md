@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.48"></a>
+## [0.8.48](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.47...@ali/lowcode-editor-skeleton@0.8.48) (2020-08-14)
+
+
+### Bug Fixes
+
+* remove console ([6889123](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6889123))
+* setter 报错不影响页面渲染 ([c0a6022](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c0a6022))
+* vision 大包 window 指向问题 ([aa1b526](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/aa1b526))
+* 钉住行为调整 ([91a390e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/91a390e))
+
+
+
+
+<a name="0.8.47"></a>
+## [0.8.47](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.46...@ali/lowcode-editor-skeleton@0.8.47) (2020-08-07)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+
+<a name="0.8.46"></a>
+## [0.8.46](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.45...@ali/lowcode-editor-skeleton@0.8.46) (2020-08-06)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+
+<a name="0.8.45"></a>
+## [0.8.45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.44...@ali/lowcode-editor-skeleton@0.8.45) (2020-08-06)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+
+<a name="0.8.44"></a>
+## [0.8.44](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.43...@ali/lowcode-editor-skeleton@0.8.44) (2020-08-06)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+
 <a name="0.8.43"></a>
 ## [0.8.43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.42...@ali/lowcode-editor-skeleton@0.8.43) (2020-08-04)
 

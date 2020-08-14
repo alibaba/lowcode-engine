@@ -653,6 +653,16 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     slotNode.internalSetParent(this as ParentalNode, true);
     this._slots.push(slotNode);
   }
+  /**
+   * 当前node对应组件是否已注册可用
+   */
+  isValidComponent() {
+    const allComponents = this.document?.designer?.componentsMap;
+    if (allComponents && allComponents[this.componentName]) {
+      return true;
+    }
+    return false;
+  }
 
   /**
    * 删除一个节点
@@ -692,6 +702,14 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     this.document.destroyNode(this);
   }
 
+  /**
+   * 是否可执行某action
+   */
+  canPerformAction(action: string): boolean {
+    const availableActions = this.componentMeta?.availableActions?.map((action) => action.name) || [];
+    return availableActions.indexOf(action) >= 0;
+  }
+
   // ======= compatible apis ====
   isEmpty(): boolean {
     return this.children ? this.children.isEmpty() : true;
@@ -702,6 +720,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   getComponentName() {
     return this.componentName;
   }
+
   insertBefore(node: Node, ref?: Node, useMutator = true) {
     this.children?.insert(node, ref ? ref.index : null, useMutator);
   }
@@ -855,8 +874,18 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.document.simulator?.computeRect(this) || null;
   }
 
+  /**
+   * @deprecated
+   */
   getPrototype() {
     return this.componentMeta.prototype;
+  }
+
+  /**
+   * @deprecated
+   */
+  setPrototype(proto: any) {
+    this.componentMeta.prototype = proto;
   }
 
   getIcon() {

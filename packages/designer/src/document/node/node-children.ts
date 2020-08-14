@@ -87,7 +87,7 @@ export class NodeChildren {
     return this.size > 0;
   }
 
-  @computed length() {
+  @computed get length(): number {
     return this.children.length;
   }
 

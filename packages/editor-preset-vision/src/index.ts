@@ -163,7 +163,7 @@ export {
   Symbols,
 };
 
-const version = '6.0.0(LowcodeEngine 0.9.0-beta)';
+const version = '6.0.0(LowcodeEngine 0.9.3)';
 
 console.log(
   `%c VisionEngine %c v${version} `,

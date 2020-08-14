@@ -25,6 +25,7 @@ export class Field extends Component<FieldProps> {
   state = {
     collapsed: this.props.collapsed,
     display: this.props.defaultDisplay || 'inline',
+    hasError: false,
   };
 
   constructor(props: any) {
@@ -88,6 +89,10 @@ export class Field extends Component<FieldProps> {
     }
   }
 
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
   getTipContent(propName: string, tip?: any): any {
     let tipContent = (
       <div>
@@ -114,6 +119,11 @@ export class Field extends Component<FieldProps> {
   }
 
   render() {
+    const { hasError } = this.state;
+    if (hasError) {
+      return null;
+    }
+
     const { className, children, meta, title, valueState, onClear, name: propName, tip } = this.props;
     const { display, collapsed } = this.state;
     const isAccordion = display === 'accordion';

@@ -3,6 +3,73 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.42"></a>
+## [0.9.42](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.41...@ali/lowcode-designer@0.9.42) (2020-08-14)
+
+
+### Bug Fixes
+
+* createComponent 支持所有 schema ([7f946f5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7f946f5))
+* 不对外暴露 Node ([05957ce](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/05957ce))
+* 卡片内容不可用拖动 ([6a85c43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6a85c43))
+* 处理选区的 toolkit 位置不对的 bug ([bfc63db](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bfc63db))
+* 快捷键增加判断 ([0f64829](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0f64829))
+* 快捷键增加判断 ([e18a231](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e18a231))
+* 组件缺失占位 ([aff2f34](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/aff2f34))
+
+
+### Features
+
+* 导出的schema增加componentsMap ([dbc958c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/dbc958c))
+
+
+
+
+<a name="0.9.41"></a>
+## [0.9.41](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.40...@ali/lowcode-designer@0.9.41) (2020-08-07)
+
+
+### Bug Fixes
+
+* canDropIn 为 boolean 时失效 ([7508fb6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7508fb6))
+
+
+
+
+<a name="0.9.40"></a>
+## [0.9.40](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.39...@ali/lowcode-designer@0.9.40) (2020-08-06)
+
+
+### Bug Fixes
+
+*  fieldId 重复问题 ([e761b1a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e761b1a))
+
+
+
+
+<a name="0.9.39"></a>
+## [0.9.39](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.38...@ali/lowcode-designer@0.9.39) (2020-08-06)
+
+
+### Bug Fixes
+
+* 增加兼容 API ([2960446](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2960446))
+* 复制之后 fieldId 重复 ([36621ea](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/36621ea))
+
+
+
+
+<a name="0.9.38"></a>
+## [0.9.38](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.37...@ali/lowcode-designer@0.9.38) (2020-08-06)
+
+
+### Bug Fixes
+
+* 修复 preset-vision 版本 lifeCycles 丢失以及 slot 初始化问题 ([7cf6d24](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7cf6d24))
+
+
+
+
 <a name="0.9.37"></a>
 ## [0.9.37](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.36...@ali/lowcode-designer@0.9.37) (2020-08-04)
 

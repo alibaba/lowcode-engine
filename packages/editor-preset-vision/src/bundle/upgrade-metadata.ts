@@ -564,7 +564,7 @@ export function upgradeActions(actions?: Array<ComponentType<any> | ReactElement
     if (typeof content === 'function') {
       const fn = content as () => ReactElement;
       content = (({ node }: any) => {
-        fn.call(node);
+        return fn.call(node);
       }) as any;
     }
     return {

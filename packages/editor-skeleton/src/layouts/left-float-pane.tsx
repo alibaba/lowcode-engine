@@ -63,6 +63,13 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
     const { area } = this.props;
     if (area.visible) {
       this.focusing?.active();
+      // 关闭当前fixed区域的面板
+      // TODO: 看看有没有更合适的地方
+      const fixedContainer = area?.skeleton?.leftFixedArea?.container;
+      const currentFixed = fixedContainer?.current;
+      if (currentFixed) {
+        fixedContainer.unactive(currentFixed);
+      }
     } else {
       this.focusing?.suspense();
     }

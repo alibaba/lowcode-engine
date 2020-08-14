@@ -1,7 +1,7 @@
 import { isJSBlock, isJSExpression, isJSSlot, isI18nData } from '@ali/lowcode-types';
 import { isPlainObject, hasOwnProperty } from '@ali/lowcode-utils';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
-import { Designer, LiveEditing, TransformStage, Node } from '@ali/lowcode-designer';
+import { Designer, LiveEditing, TransformStage, Node, getConvertedExtraKey } from '@ali/lowcode-designer';
 import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import { toCss } from '@ali/vu-css-style';
 import logger from '@ali/vu-logger';
@@ -25,9 +25,16 @@ export const designer = new Designer({ editor: editor });
 editor.set(Designer, designer);
 editor.set('designer', designer);
 
+const nodeCache: any = {};
 designer.project.onCurrentDocumentChange((doc) => {
   doc.onRendererReady(() => {
     bus.emit(VE_EVENTS.VE_PAGE_PAGE_READY);
+  });
+  doc.onNodeCreate((node) => {
+    nodeCache[node.id] = node;
+  });
+  doc.onNodeDestroy((node) => {
+    delete nodeCache[node.id];
   });
 });
 
@@ -42,49 +49,61 @@ function isVariable(obj: any): obj is Variable {
 }
 
 function upgradePropsReducer(props: any) {
-  if (!isPlainObject(props)) {
+  if (!props || !isPlainObject(props)) {
     return props;
   }
+  if (isJSBlock(props)) {
+    if (props.value.componentName === 'Slot') {
+      return {
+        type: 'JSSlot',
+        title: (props.value.props as any)?.slotTitle,
+        name: (props.value.props as any)?.slotName,
+        value: props.value.children,
+      };
+    } else {
+      return props.value;
+    }
+  }
+  if (isVariable(props)) {
+    return {
+      type: 'JSExpression',
+      value: props.variable,
+      mock: props.value,
+    };
+  }
   const newProps: any = {};
-  Object.entries<any>(props).forEach(([key, val]) => {
-    if (/^__slot__/.test(key) && val === true) {
+  Object.keys(props).forEach(key => {
+    if (/^__slot__/.test(key) && props[key] === true) {
       return;
     }
-    if (isJSBlock(val)) {
-      if (val.value.componentName === 'Slot') {
-        val = {
-          type: 'JSSlot',
-          title: (val.value.props as any)?.slotTitle,
-          name: (val.value.props as any)?.slotName,
-          value: val.value.children,
-        };
-      } else {
-        val = val.value;
-      }
-    }
-    // todo: deep find
-    if (isVariable(val)) {
-      val = {
-        type: 'JSExpression',
-        value: val.variable,
-        mock: val.value,
-      };
-    }
-    newProps[key] = val;
+    newProps[key] = upgradePropsReducer(props[key]);
   });
   return newProps;
 }
+
 // 升级 Props
 designer.addPropsReducer(upgradePropsReducer, TransformStage.Upgrade);
 
 // 节点 props 初始化
 designer.addPropsReducer((props, node) => {
   // run initials
+  const newProps: any = {
+    ...props,
+  };
+  if (newProps.fieldId) {
+    const fieldIds: any = [];
+    Object.keys(nodeCache).forEach(nodeId => {
+      const fieldId = nodeCache[nodeId].getPropValue('fieldId');
+      if (fieldId) {
+        fieldIds.push(fieldId);
+      }
+    });
+    if (fieldIds.indexOf(props.fieldId) >= 0) {
+      newProps.fieldId = undefined;
+    }
+  }
   const initials = node.componentMeta.getMetadata().experimental?.initials;
   if (initials) {
-    const newProps: any = {
-      ...props,
-    };
     const getRealValue = (propValue: any) => {
       if (isVariable(propValue)) {
         return propValue.value;
@@ -98,22 +117,10 @@ designer.addPropsReducer((props, node) => {
       // FIXME! this implements SettingTarget
       try {
         // FIXME! item.name could be 'xxx.xxx'
-        const ov = props[item.name];
+        const ov = newProps[item.name];
         const v = item.initial(node as any, getRealValue(ov));
-        if (!ov && v !== undefined) {
-          if (isVariable(ov)) {
-            newProps[item.name] = {
-              ...ov,
-              value: v,
-            };
-          } else if (isJSExpression(ov)) {
-            newProps[item.name] = {
-              ...ov,
-              mock: v,
-            };
-          } else {
-            newProps[item.name] = v;
-          }
+        if (ov === undefined && v !== undefined) {
+          newProps[item.name] = v;
         }
       } catch (e) {
         if (hasOwnProperty(props, item.name)) {
@@ -124,11 +131,19 @@ designer.addPropsReducer((props, node) => {
         node.props.add(newProps[item.name], item.name);
       }
     });
+  }
+  return newProps;
+}, TransformStage.Init);
 
-    return newProps;
+designer.addPropsReducer((props: any, node: Node) => {
+  if (node.isRoot() && props && props.lifeCycles) {
+    return {
+      ...props,
+      lifeCycles: {},
+    }
   }
   return props;
-}, TransformStage.Init);
+}, TransformStage.Render);
 
 function filterReducer(props: any, node: Node): any {
   const filters = node.componentMeta.getMetadata().experimental?.filters;
@@ -188,6 +203,20 @@ function compatiableReducer(props: any) {
 }
 // FIXME: Dirty fix, will remove this reducer
 designer.addPropsReducer(compatiableReducer, TransformStage.Save);
+// 兼容历史版本的 Page 组件
+designer.addPropsReducer((props: any, node: Node) => {
+  const lifeCycleNames = ['didMount', 'willUnmount'];
+  if (node.isRoot()) {
+    lifeCycleNames.forEach(key => {
+      if (props[key]) {
+        const lifeCycles = node.props.getPropValue(getConvertedExtraKey('lifeCycles')) || {};
+        lifeCycles[key] = props[key];
+        node.props.setPropValue(getConvertedExtraKey('lifeCycles'), lifeCycles);
+      }
+    });
+  }
+  return props;
+}, TransformStage.Save);
 
 // 设计器组件样式处理
 function stylePropsReducer(props: any, node: any) {
