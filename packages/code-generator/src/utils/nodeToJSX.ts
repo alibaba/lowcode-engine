@@ -166,15 +166,13 @@ export function generateBasicNode(
 export function generateReactCtrlLine(ctx: INodeGeneratorContext, nodeItem: IComponentNodeItem): CodePiece[] {
   const pieces: CodePiece[] = [];
 
-  if (nodeItem.loop && nodeItem.loopArgs) {
-    let loopDataExp;
-    if (isJsExpression(nodeItem.loop)) {
-      loopDataExp = `(${generateExpression(nodeItem.loop)})`;
-    } else {
-      loopDataExp = JSON.stringify(nodeItem.loop);
-    }
+  if (nodeItem.loop) {
+    const args: [string, string] = nodeItem.loopArgs || ['item', 'index'];
+    const loopData = generateCompositeType(nodeItem.loop, {
+      nodeGenerator: ctx.generator,
+    });
     pieces.unshift({
-      value: `${loopDataExp}.map((${nodeItem.loopArgs[0]}, ${nodeItem.loopArgs[1]}) => (`,
+      value: `(${loopData}).map((${args[0]}, ${args[1]}) => (`,
       type: PIECE_TYPE.BEFORE,
     });
     pieces.push({
@@ -198,7 +196,7 @@ export function generateReactCtrlLine(ctx: INodeGeneratorContext, nodeItem: ICom
     });
   }
 
-  if (nodeItem.condition || (nodeItem.loop && nodeItem.loopArgs)) {
+  if (nodeItem.condition || nodeItem.loop) {
     pieces.unshift({
       value: '{',
       type: PIECE_TYPE.BEFORE,

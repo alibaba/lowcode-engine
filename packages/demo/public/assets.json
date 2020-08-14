@@ -5797,7 +5797,7 @@
         {
           "name": "hint",
           "title": "Icon 水印",
-          "propType": "string",
+          "propType": "icon",
           "description": "水印 (Icon的type类型，和hasClear占用一个地方)"
         },
         {
@@ -7286,7 +7286,7 @@
         },
         {
           "name": "iconType",
-          "propType": "string",
+          "propType": "icon",
           "description": "显示的图标类型，会覆盖内部设置的IconType"
         },
         {

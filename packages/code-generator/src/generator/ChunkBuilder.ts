@@ -1,28 +1,72 @@
-import {
-  BuilderComponentPlugin,
-  IChunkBuilder,
-  ICodeChunk,
-  ICodeStruct,
-} from '../types';
+import { BuilderComponentPlugin, IChunkBuilder, ICodeChunk, ICodeStruct, FileType } from '../types';
 
 import { COMMON_SUB_MODULE_NAME } from '../const/generator';
+import { FILE_TYPE_FAMILY } from '../const/file';
+
+type ChunkGroupInfo = {
+  chunk: ICodeChunk;
+  familyIdx?: number;
+};
+
+function whichFamily(type: FileType): [number, FileType[]] | undefined {
+  const idx = FILE_TYPE_FAMILY.findIndex((family) => family.indexOf(type) >= 0);
+  if (idx < 0) {
+    return undefined;
+  }
+  return [idx, FILE_TYPE_FAMILY[idx]];
+}
 
 export const groupChunks = (chunks: ICodeChunk[]): ICodeChunk[][] => {
-  const col = chunks.reduce(
-    (chunksSet: Record<string, ICodeChunk[]>, chunk) => {
-      const fileKey = `${chunk.subModule || COMMON_SUB_MODULE_NAME}.${
-        chunk.fileType
-      }`;
-      if (!chunksSet[fileKey]) {
-        chunksSet[fileKey] = [];
+  const tmp: Record<string, Record<number, number>> = {};
+  const col = chunks.reduce((chunksSet: Record<string, ChunkGroupInfo[]>, chunk) => {
+    const fileKey = chunk.subModule || COMMON_SUB_MODULE_NAME;
+    if (!chunksSet[fileKey]) {
+      chunksSet[fileKey] = [];
+    }
+    const res = whichFamily(chunk.fileType as FileType);
+    const info: ChunkGroupInfo = {
+      chunk,
+    };
+    if (res) {
+      const [familyIdx, family] = res;
+      const rank = family.indexOf(chunk.fileType as FileType);
+      if (tmp[fileKey]) {
+        if (tmp[fileKey][familyIdx] !== undefined) {
+          if (tmp[fileKey][familyIdx] > rank) {
+            tmp[fileKey][familyIdx] = rank;
+          }
+        } else {
+          tmp[fileKey][familyIdx] = rank;
+        }
+      } else {
+        tmp[fileKey] = {};
+        tmp[fileKey][familyIdx] = rank;
       }
-      chunksSet[fileKey].push(chunk);
-      return chunksSet;
-    },
-    {},
-  );
+      info.familyIdx = familyIdx;
+    }
 
-  return Object.keys(col).map(key => col[key]);
+    chunksSet[fileKey].push(info);
+    return chunksSet;
+  }, {});
+
+  const result: ICodeChunk[][] = [];
+  Object.keys(col).forEach((key) => {
+    const byType: Record<string, ICodeChunk[]> = {};
+    col[key].forEach((info) => {
+      let t: string = info.chunk.fileType;
+      if (info.familyIdx !== undefined) {
+        t = FILE_TYPE_FAMILY[info.familyIdx][tmp[key][info.familyIdx]];
+        info.chunk.fileType = t;
+      }
+      if (!byType[t]) {
+        byType[t] = [];
+      }
+      byType[t].push(info.chunk);
+    });
+    result.push(...Object.keys(byType).map((t) => byType[t]));
+  });
+
+  return result;
 };
 
 /**
@@ -39,7 +83,7 @@ export default class ChunkBuilder implements IChunkBuilder {
     this.plugins = plugins;
   }
 
-  public async run(
+  async run(
     ir: unknown,
     initialStructure: ICodeStruct = {
       ir,
@@ -64,11 +108,11 @@ export default class ChunkBuilder implements IChunkBuilder {
     };
   }
 
-  public getPlugins() {
+  getPlugins() {
     return this.plugins;
   }
 
-  public addPlugin(plugin: BuilderComponentPlugin) {
+  addPlugin(plugin: BuilderComponentPlugin) {
     this.plugins.push(plugin);
   }
 }
