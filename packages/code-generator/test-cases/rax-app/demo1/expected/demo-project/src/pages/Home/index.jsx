@@ -75,7 +75,9 @@ class Home$$Page extends Component {
   }
 
   _defineDataSourceList() {
-    return [];
+    return function () {
+      return [];
+    }.call(this._context);
   }
 
   _defineUtils() {
