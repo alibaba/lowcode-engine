@@ -299,7 +299,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
           if (_schema.children && Array.isArray(_schema.children)) {
             children = _schema.children.map((item: any) => createElement(Ele, {schema: item, propsMap}));
           }
-          return createElement(React.Fragment, {}, children);
+          return createElement('div', {}, children);
         } else {
           return createElement(Ele, {schema: _schema, propsMap: {}});
         }
