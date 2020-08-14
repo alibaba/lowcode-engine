@@ -61,6 +61,99 @@
       }
     },
     {
+      "componentName": "a",
+      "title": "Link",
+      "npm": {
+        "exportName": "a"
+      },
+      "props": [
+        {
+          "name": "href",
+          "title": "链接",
+          "propType": "string",
+          "defaultValue": "https://fusion.design"
+        },
+        {
+          "name": "children",
+          "title": "内容",
+          "propType": {
+            "type": "oneOfType",
+            "value": [
+              "string",
+              "node"
+            ]
+          },
+          "defaultValue": "这是一个超链接"
+        },
+        {
+          "name": "style",
+          "propType": "object"
+        },
+        {
+          "name": "target",
+          "title": "新开页面",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "_blank",
+              "_self"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "componentName": "img",
+      "title": "Image",
+      "npm": {
+        "exportName": "img"
+      },
+      "props": [
+        {
+          "name": "src",
+          "title": "图片链接",
+          "propType": "string",
+          "defaultValue": "https://img.alicdn.com/tps/TB16TQvOXXXXXbiaFXXXXXXXXXX-120-120.svg"
+        },
+        {
+          "name": "title",
+          "title": {
+            "label": "标题",
+            "tip": "HTML 原生 title 属性"
+          },
+          "propType": "string"
+        },
+        {
+          "name": "alt",
+          "title": {
+            "label": "代替文本",
+            "tip": "HTML 原生 alt 属性"
+          },
+          "propType": "string"
+        },
+        {
+          "name": "width",
+          "title": {
+            "label": "宽度",
+            "tip": "HTML 原生 width 属性"
+          },
+          "propType": "number"
+        },
+        {
+          "name": "height",
+          "title": {
+            "label": "高度",
+            "tip": "HTML 原生 height 属性"
+          },
+          "propType": "number"
+        },
+        {
+          "name": "style",
+          "propType": "object"
+        }
+      ]
+    },
+    {
       "componentName": "Div",
       "title": "Div",
       "configure": {
@@ -13609,6 +13702,52 @@
               "schema": {
                 "componentName": "Box",
                 "props": {}
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "a",
+          "title": "Link",
+          "icon": "",
+          "snippets": [
+            {
+              "title": "Link",
+              "screenshot": "https://img.alicdn.com/tfs/TB15DZVReL2gK0jSZFmXXc7iXXa-200-200.svg",
+              "schema": {
+                "componentName": "a",
+                "title": "Link",
+                "props": {
+                  "href": "https://fusion.design",
+                  "target": "_blank",
+                  "children": {
+                    "type": "JSSlot",
+                    "value": {
+                      "componentName": "Typography.Text",
+                      "props": {
+                        "children": "这是一个超链接"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "img",
+          "title": "Image",
+          "icon": "",
+          "snippets": [
+            {
+              "title": "Image",
+              "screenshot": "https://img.alicdn.com/tfs/TB10nEur.Y1gK0jSZFCXXcwqXXa-234-230.png",
+              "schema": {
+                "title": "Image",
+                "componentName": "img",
+                "props": {
+                  "src": "https://img.alicdn.com/tps/TB16TQvOXXXXXbiaFXXXXXXXXXX-120-120.svg"
+                }
               }
             }
           ]
