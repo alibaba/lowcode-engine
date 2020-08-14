@@ -12,7 +12,7 @@ function accessLibrary(library: string | object) {
     return library;
   }
 
-  return (window as any)[library];
+  return (window as any)[library] || library;
 }
 
 export function getSubComponent(library: any, paths: string[]) {

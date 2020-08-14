@@ -15,6 +15,10 @@ export const StringSetter = {
   defaultProps: { placeholder: '请输入', style: { maxWidth: 180 } },
   title: 'StringSetter',
   recommend: true,
+  condition: (field: any) => {
+    const v = field.getValue();
+    return typeof v === 'string';
+  },
 };
 export const NumberSetter = NumberPicker;
 export class BoolSetter extends Component {
@@ -38,6 +42,10 @@ export const TextAreaSetter = {
   defaultProps: { placeholder: '请输入', style: { maxWidth: 180 } },
   title: 'TextAreaSetter',
   recommend: true,
+  condition: (field: any) => {
+    const v = field.getValue();
+    return typeof v === 'string';
+  },
 };
 export const DateSetter = DatePicker;
 export const DateYearSetter = DatePicker.YearPicker;

@@ -37,29 +37,23 @@ export function createModuleBuilder(
   const generateModule = async (input: unknown): Promise<ICompiledModule> => {
     const moduleMainName = options.mainFileName || COMMON_SUB_MODULE_NAME;
     if (chunkGenerator.getPlugins().length <= 0) {
-      throw new CodeGeneratorError(
-        'No plugins found. Component generation cannot work without any plugins!',
-      );
+      throw new CodeGeneratorError('No plugins found. Component generation cannot work without any plugins!');
     }
 
     let files: IResultFile[] = [];
 
     const { chunks } = await chunkGenerator.run(input);
-    chunks.forEach(fileChunkList => {
+    chunks.forEach((fileChunkList) => {
       const content = linker.link(fileChunkList);
-      const file = new ResultFile(
-        fileChunkList[0].subModule || moduleMainName,
-        fileChunkList[0].fileType,
-        content,
-      );
+      const file = new ResultFile(fileChunkList[0].subModule || moduleMainName, fileChunkList[0].fileType, content);
       files.push(file);
     });
 
     if (options.postProcessors.length > 0) {
-      files = files.map(file => {
+      files = files.map((file) => {
         let content = file.content;
         const type = file.ext;
-        options.postProcessors.forEach(processer => {
+        options.postProcessors.forEach((processer) => {
           content = processer(content, type);
         });
 
@@ -81,25 +75,18 @@ export function createModuleBuilder(
     const { files } = await generateModule(containerInfo);
 
     const dir = new ResultDir(containerInfo.moduleName);
-    files.forEach(file => dir.addFile(file));
+    files.forEach((file) => dir.addFile(file));
 
     return dir;
-  }
+  };
 
-  const linkCodeChunks = (
-    chunks: Record<string, ICodeChunk[]>,
-    fileName: string,
-  ) => {
+  const linkCodeChunks = (chunks: Record<string, ICodeChunk[]>, fileName: string) => {
     const files: IResultFile[] = [];
 
-    Object.keys(chunks).forEach(fileKey => {
+    Object.keys(chunks).forEach((fileKey) => {
       const fileChunkList = chunks[fileKey];
       const content = linker.link(fileChunkList);
-      const file = new ResultFile(
-        fileChunkList[0].subModule || fileName,
-        fileChunkList[0].fileType,
-        content,
-      );
+      const file = new ResultFile(fileChunkList[0].subModule || fileName, fileChunkList[0].fileType, content);
       files.push(file);
     });
 

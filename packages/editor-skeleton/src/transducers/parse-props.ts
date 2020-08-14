@@ -47,6 +47,12 @@ function propTypeToSetter(propType: PropType): SetterType {
         isRequired,
         initialValue: '',
       };
+    case 'Json':
+      return {
+        componentName: 'JsonSetter',
+        isRequired,
+        initialValue: '',
+      };
     case 'color':
       return {
         componentName: 'ColorSetter',
@@ -88,7 +94,7 @@ function propTypeToSetter(propType: PropType): SetterType {
           value,
         };
       });
-      const componentName = dataSource.length > 4 ? 'SelectSetter' : 'RadioGroupSetter';
+      const componentName = dataSource.length >= 4 ? 'SelectSetter' : 'RadioGroupSetter';
       return {
         componentName,
         props: { dataSource },

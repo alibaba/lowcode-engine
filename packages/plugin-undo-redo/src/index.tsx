@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Editor, Title } from '@ali/lowcode-editor-core';
+import { Editor } from '@ali/lowcode-editor-core';
 import Icon from '@ali/ve-icons';
 import { Button } from '@alifd/next';
 import { Designer } from '@ali/lowcode-designer';
@@ -81,7 +81,7 @@ export default class UndoRedo extends PureComponent<IProps, IState> {
     return (
       <div className="lowcode-plugin-undo-redo">
         <Button
-          size="18px"
+          size="medium"
           data-tip="撤销"
           data-dir="bottom"
           className="ve-local-history-item"
@@ -92,7 +92,7 @@ export default class UndoRedo extends PureComponent<IProps, IState> {
           <Icon name="amindUndo" size="18px" />
         </Button>
         <Button
-          size="18px"
+          size="medium"
           data-tip="恢复"
           data-dir="bottom"
           className="ve-local-history-item"
