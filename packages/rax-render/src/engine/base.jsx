@@ -241,6 +241,10 @@ export default class BaseEngine extends Component {
     if (!isSchema(schema)) return null;
     let Comp = components[schema.componentName] || engine.getNotFoundComponent();
 
+    if (schema.hidden) {
+      return null;
+    }
+
     if (schema.loop !== undefined) {
       return this.__createLoopVirtualDom(
         {
