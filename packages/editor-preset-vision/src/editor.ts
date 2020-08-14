@@ -260,7 +260,9 @@ function appendStyleNode(props: any, styleProp: any, cssClass: string, cssId: st
     s.setAttribute('id', cssId);
     doc.getElementsByTagName('head')[0].appendChild(s);
 
-    s.appendChild(doc.createTextNode(styleProp.replace(/:root/g, '.' + cssClass)));
+    s.appendChild(doc.createTextNode(styleProp.replace(/(\d+)rpx/g, (a, b) => {
+      return `${b / 2}px`;
+    }).replace(/:root/g, '.' + cssClass)));
   }
 }
 designer.addPropsReducer(stylePropsReducer, TransformStage.Render);
