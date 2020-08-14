@@ -1,11 +1,10 @@
 {
   "name": "@ali/lowcode-demo-server",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "private": true,
   "description": "低代码引擎 DEMO Server 端",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "start": "nest start",
