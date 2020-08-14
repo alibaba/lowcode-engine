@@ -1,0 +1,85 @@
+@charset "UTF-8";
+
+////
+/// @module number-picker: 数字输入框
+/// @tag NumberPicker
+/// @category component
+/// @family data-entry
+/// @varPrefix $number-picker-
+/// @classPrefix {prefix}-number-picker
+/// @order {"statement/normal":10,"statement/normal/input":100,"statement/normal/button":101,"statement/hover":11,"statement/hover/button":110,"statement/disabled":12,"statement/disabled/button":120,"size/bounding":10,"size/text":11,"size/input":12,"size/button":13}
+////
+
+$number-picker-prefix: '.#{$css-prefix}number-picker';
+
+// Normal
+// --------------------------------------------------
+
+/// width
+/// @namespace size/button
+$number-picker-normal-s-button-width: $s-5 !default;
+/// width
+/// @namespace size/button
+$number-picker-normal-m-button-width: $s-5 !default;
+/// width
+/// @namespace size/button
+$number-picker-normal-l-button-width: $s-5 !default;
+
+/// width
+/// @namespace size/input
+$number-picker-normal-m-input-width: $s-20 !default;
+/// width
+/// @namespace size/input
+$number-picker-normal-l-input-width: $s-20 !default;
+
+/// icon
+/// @namespace size/button
+$number-picker-normal-s-button-icon-size: $icon-xxs !default;
+
+/// icon
+/// @namespace size/button
+$number-picker-normal-m-button-icon-size: $icon-xxs !default;
+
+/// icon
+/// @namespace size/button
+$number-picker-normal-l-button-icon-size: $icon-xxs !default;
+
+// inline
+// --------------------------------------------------
+
+/// icon
+/// @namespace size/button
+$number-picker-inline-s-button-icon-size: $icon-xs !default;
+/// margin
+/// @type number
+/// @namespace size/button
+$number-picker-inline-s-button-margin: 2px !default;
+/// corner
+/// @namespace size/button
+$number-picker-inline-s-button-corner: $corner-1 !default;
+/// icon
+/// @namespace size/button
+$number-picker-inline-m-button-icon-size: $icon-xs !default;
+/// margin
+/// @type number
+/// @namespace size/button
+$number-picker-inline-m-button-margin: 2px !default;
+/// corner
+/// @namespace size/button
+$number-picker-inline-m-button-corner: $corner-1 !default;
+/// width
+/// @namespace size/input
+$number-picker-inline-m-input-width: $s-25 !default;
+/// icon
+/// @namespace size/button
+$number-picker-inline-l-button-icon-size: $icon-xs !default;
+/// margin
+/// @type number
+/// @namespace size/button
+$number-picker-inline-l-button-margin: 2px !default;
+/// corner
+/// @namespace size/button
+$number-picker-inline-l-button-corner: $corner-1 !default;
+/// width
+/// @namespace size/bounding
+$number-picker-inline-l-input-width: $s-32 !default;

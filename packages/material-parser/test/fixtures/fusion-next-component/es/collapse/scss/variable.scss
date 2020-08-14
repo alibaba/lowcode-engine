@@ -1,0 +1,108 @@
+@charset "UTF-8";
+
+////
+/// @module collapse: 折叠面板
+/// @tag Collapse
+/// @category component
+/// @family data-display
+/// @varPrefix $collapse-
+/// @classPrefix {prefix}-collapse
+/// @order {"size/bounding":10,"size/divider":11,"size/title":12,"size/icon":13,"size/content":14,"statement/normal":10,"statement/normal/title":100,"statement/normal/icon":101,"statement/normal/content":102,"statement/divider":11,"statement/disabled":12,"statement/disabled/title":120,"statement/hover":13,"statement/hover/title":130}
+////
+
+$collapse-prefix: '.#{$css-prefix}collapse';
+
+// collapse variables
+// --------------------------------------------------
+
+// Common
+
+/// border
+/// @namespace size/bounding
+$collapse-border-width: $line-1 !default;
+
+/// corner
+/// @namespace size/bounding
+$collapse-border-corner: $corner-1 !default;
+/// border
+/// @namespace statement/normal
+$collapse-border-color: $color-line1-2 !default;
+/// border
+/// @namespace statement/divider
+$collapse-panel-border-color: $color-line1-2 !default;
+/// border
+/// @namespace statement/disabled
+$collapse-disabled-border-color: $color-line1-1 !default;
+
+/// border
+/// @namespace size/divider
+$collapse-title-border-width: $line-1 !default;
+/// line height
+/// @namespace size/title
+$collapse-title-height: $s-5 !default;
+/// background
+/// @namespace statement/normal/title
+$collapse-title-bg-color: $color-fill1-2 !default;
+/// background
+/// @namespace statement/hover/title
+$collapse-title-hover-bg-color: $color-fill1-3 !default;
+/// background
+/// @namespace statement/disabled/title
+$collapse-title-disabled-bg-color: $color-fill1-2 !default;
+/// text
+/// @namespace statement/normal/title
+$collapse-title-font-color: $color-text1-4 !default;
+/// text
+/// @namespace statement/disabled/title
+$collapse-title-font-disabled-color: $color-text1-1 !default;
+/// text
+/// @namespace statement/hover/title
+$collapse-title-hover-font-color: $color-text1-4 !default;
+/// text
+/// @namespace size/title
+$collapse-title-font-size: $font-size-body-2 !default;
+/// weight
+/// @namespace size/title
+$collapse-title-font-weight: $font-weight-2 !default;
+/// weight
+/// @namespace statement/hover/title
+$collapse-title-hover-font-weight: $font-weight-2 !default;
+/// padding(t,b)
+/// @namespace size/title
+$collapse-title-padding-tb: $s-2 !default;
+
+/// size
+/// @namespace size/icon
+$collapse-icon-size: $icon-xxs !default;
+/// color
+/// @namespace statement/normal/icon
+$collapse-icon-color: $color-text1-4 !default;
+/// color
+/// @namespace statement/hover/icon
+$collapse-icon-hover-color: $color-text1-4 !default;
+/// margin (r)
+/// @namespace size/icon
+$collapse-icon-margin-r: $s-2 !default;
+/// margin (l)
+/// @namespace size/icon
+$collapse-icon-margin-l: $s-3 !default;
+
+$collapse-icon-rotation-collapsed: 90deg;
+$collapse-icon-rotation-expanded: 180deg;
+$collapse-icon-rotation-collapsed-rtl: $collapse-icon-rotation-collapsed * 3;
+
+/// background
+/// @namespace statement/normal/content
+$collapse-content-bg-color: $color-white !default;
+/// padding (l,r)
+/// @namespace size/content
+$collapse-content-padding-x: $s-4 !default;
+/// padding (t,b)
+/// @namespace size/content
+$collapse-content-padding-y: $s-3 !default;
+/// text
+/// @namespace size/content
+$collapse-content-font-size: $font-size-body-1 !default;
+/// text
+/// @namespace statement/normal/content
+$collapse-content-color: $color-text1-3 !default;

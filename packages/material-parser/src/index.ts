@@ -1,3 +1,4 @@
+import { remove } from 'fs-extra';
 export { default as validate } from './validate';
 export { default as schema } from './validate/schema.json';
 
@@ -11,16 +12,26 @@ import parse from './parse';
 import localize from './localize';
 
 export default async function(options: IMaterializeOptions): Promise<ComponentMeta[]> {
-  const { accesser = 'local' } = options;
+  const { accesser = 'local', entry = '' } = options;
+  let workDir = entry;
+  let moduleDir = '';
   if (accesser === 'online') {
-    const entry = await localize(options);
-    options.entry = entry;
+    const result = await localize(options);
+    workDir = result.workDir;
+    moduleDir = result.moduleDir;
+    options.entry = moduleDir;
   }
   const scanedModel = await scan(options);
   const parsedModel = await parse({
-    filePath: scanedModel.entryFilePath,
-    fileContent: scanedModel.entryFileContent,
+    ...scanedModel,
+    accesser,
+    npmClient: options.npmClient,
+    workDir,
+    moduleDir,
   });
   const result = await generate(scanedModel, parsedModel);
+  if (workDir && accesser === 'online') {
+    await remove(workDir);
+  }
   return result;
 }

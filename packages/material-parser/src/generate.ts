@@ -9,7 +9,6 @@ export default async function(
 ): Promise<ComponentMeta[]> {
   const containerList = [];
   for (const matParsedModel of matParsedModels) {
-    // TODO 可以开放扩展点让上层使用者指定导出哪些组件或者不导出哪些组件
     // 默认排除掉 defaultExportName 为空的组件
     if (!matParsedModel.componentName) {
       log('skip');

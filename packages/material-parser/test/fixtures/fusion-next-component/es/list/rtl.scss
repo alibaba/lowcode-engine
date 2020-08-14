@@ -1,0 +1,24 @@
+@charset "UTF-8";
+
+#{$list-prefix}[dir="rtl"] {
+    #{$list-prefix}-item-media {
+        padding-left: $list-size-m-item-media-margin;
+        padding-right: 0;
+    }
+    #{$list-prefix}-item-extra {
+        padding-right: $list-size-m-item-media-margin;
+        padding-left: 0;
+    }
+
+    #{$list-prefix}-small {
+        #{$list-prefix}-item-media {
+            padding-left: $list-size-s-item-media-margin;
+            padding-right: 0;
+        }
+
+        #{$list-prefix}-item-extra {
+            padding-right: $list-size-s-item-media-margin;
+            padding-left: 0;
+        }
+    }
+}

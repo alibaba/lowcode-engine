@@ -1,0 +1,165 @@
+////
+/// @module timeline: 时间轴
+/// @tag Timeline
+/// @category component
+/// @family data-display
+/// @varPrefix $timeline-
+/// @classPrefix {prefix}-timeline
+/// @order {"size/node":10,"size/divider":11,"size/content":12,"size/expand button":13,"statement/normal":10,"statement/normal/content":100,"statement/normal/divider":101,"statement/normal/expand button":102,"statement/hover":11,"statement/hover/expand button":110,"statement/done":12,"statement/done/node":120,"statement/process":13,"statement/process/node":130,"statement/success":14,"statement/success/node":140,"statement/error":15,"statement/error/node":150}
+////
+
+$timeline-prefix: '.' + $css-prefix + 'timeline';
+
+$timeline-icon-prefix: '.' + $css-prefix + 'icon';
+
+/// size
+/// @namespace size/node
+$timeline-item-node-size: $s-4 !default;
+
+/// custom node size
+/// @namespace size/node
+$timeline-item-custom-node-size: $s-10 !default;
+
+/// custom node font size
+/// @namespace size/node
+$timeline-item-custom-node-font-size: $font-size-caption !default;
+
+/// padding (t, b)
+/// @namespace size/node
+$timeline-item-node-padding: $s-1 !default;
+
+/// dot size
+/// @namespace size/node
+$timeline-item-dot-size: $s-2 !default;
+
+/// icon size
+/// @namespace size/node
+$timeline-item-icon-size: $icon-xs !default;
+
+/// line width
+/// @namespace size/divider
+$timeline-item-tail-size: $line-1 !default;
+
+/// left content width
+/// @namespace size/content
+$timeline-item-left-content-width: $s-20 !default;
+
+/// margin (l)
+/// @namespace size/content
+$timeline-item-content-margin-left: $s-3 !default;
+
+/// margin (t)
+/// @namespace size/content
+$timeline-item-body-margin-top: $s-2 !default;
+
+/// title text
+/// @namespace size/content
+$timeline-item-title-font-size: $font-size-body-1 !default;
+
+/// title weight
+/// @namespace size/content
+$timeline-item-title-font-weight: $font-weight-3 !default;
+
+/// title margin (t)
+/// @namespace size/content
+$timeline-item-title-margin-top: $s-1 !default;
+
+/// time margin (t)
+/// @namespace size/content
+$timeline-item-time-margin-top: $s-1 !default;
+
+/// time margin (b)
+/// @namespace size/content
+$timeline-item-time-margin-bottom: $s-3 !default;
+
+/// body text
+/// @namespace size/content
+$timeline-item-body-font-size: $font-size-caption !default;
+
+/// left time text
+/// @namespace size/content
+$timeline-item-left-body-font-size: $font-size-caption !default;
+
+/// time text
+/// @namespace size/content
+$timeline-item-time-font-size: $font-size-caption !default;
+
+/// text
+/// @namespace size/expand button
+$timeline-item-folder-font-size: $font-size-caption !default;
+
+/// margin (t)
+/// @namespace size/expand button
+$timeline-item-folder-margin-top: $s-1 !default;
+
+/// margin (b)
+/// @namespace size/expand button
+$timeline-item-folder-margin-bottom: $s-1 !default;
+
+/// title text
+/// @namespace statement/normal/content
+$timeline-item-title-color: $color-text1-4 !default;
+
+/// body text
+/// @namespace statement/normal/content
+$timeline-item-body-color: $color-text1-3 !default;
+
+/// left body text
+/// @namespace statement/normal/content
+$timeline-item-left-body-color: $color-text1-2 !default;
+
+/// time text
+/// @namespace statement/normal/content
+$timeline-item-time-color: $color-text1-2 !default;
+
+/// color
+/// @namespace statement/normal/divider
+$timeline-item-tail-color: $color-line1-2 !default;
+
+/// dot size
+/// @namespace statement/done/node
+$timeline-item-done-dot-size: $s-2 !default;
+
+/// background
+/// @namespace statement/done/node
+$timeline-item-done-background: $color-line1-3 !default;
+
+/// color
+/// @namespace statement/done/node
+$timeline-item-done-color: $color-white !default;
+
+/// dot size
+/// @namespace statement/process/node
+$timeline-item-process-dot-size: $s-2 !default;
+
+/// background
+/// @namespace statement/process/node
+$timeline-item-process-background: $color-brand1-6 !default;
+
+/// color
+/// @namespace statement/process/node
+$timeline-item-process-color: $color-white !default;
+
+/// dot size
+/// @namespace statement/success/node
+$timeline-item-success-dot-size: $s-2 !default;
+
+/// background
+/// @namespace statement/success/node
+$timeline-item-success-background: $color-success-3 !default;
+
+/// color
+/// @namespace statement/success/node
+$timeline-item-success-color: $color-white !default;
+
+/// dot size
+/// @namespace statement/error/node
+$timeline-item-error-dot-size: $s-2 !default;
+
+/// background
+/// @namespace statement/error/node
+$timeline-item-error-background: $color-error-3 !default;
+
+/// color
+/// @namespace statement/error/node
+$timeline-item-error-color: $color-white !default;

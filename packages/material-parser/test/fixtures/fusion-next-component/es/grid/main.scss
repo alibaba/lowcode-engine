@@ -1,0 +1,113 @@
+@charset "UTF-8";
+
+@import "../core/index-noreset.scss";
+@import "scss/mixin";
+@import "scss/variable";
+
+/* Grid System */
+/* 根据 Alibaba Base DPL(BASE DPL)设计规范实现 */
+/* 栅格系统, 根据不同的屏幕尺寸情况，调整这些区块的排版，将页面划分为若干等宽的列，然后推荐通过等宽列来创建响应式的页面区块。另外，屏幕宽度较大的时候，区块倾向于水平分布，而屏幕宽度较小的时候，区块倾向于竖直堆叠。 */
+/* ------------------------------- */
+
+.#{$css-prefix}row {
+    @include box-sizing;
+    display: flex;
+
+    &.#{$css-prefix}row-wrap {
+        flex-wrap: wrap;
+    }
+
+    &.#{$css-prefix}row-fixed {
+        @include breakpoint-row-width();
+    }
+
+    &.#{$css-prefix}row-fixed-xxs {
+        width: $grid-xxs;
+    }
+    &.#{$css-prefix}row-fixed-xs {
+        width: $grid-xs;
+    }
+    &.#{$css-prefix}row-fixed-s {
+        width: $grid-s;
+    }
+    &.#{$css-prefix}row-fixed-m {
+        width: $grid-m;
+    }
+    &.#{$css-prefix}row-fixed-l {
+        width: $grid-l;
+    }
+    &.#{$css-prefix}row-fixed-xl {
+        width: $grid-xl;
+    }
+
+    &.#{$css-prefix}row-justify-start {
+        justify-content: flex-start;
+    }
+    &.#{$css-prefix}row-justify-end {
+        justify-content: flex-end;
+    }
+    &.#{$css-prefix}row-justify-center {
+        justify-content: center;
+    }
+    &.#{$css-prefix}row-justify-space-between {
+        justify-content: space-between;
+    }
+    &.#{$css-prefix}row-justify-space-around {
+        justify-content: space-around;
+    }
+
+    &.#{$css-prefix}row-align-top {
+        align-items: flex-start;
+    }
+    &.#{$css-prefix}row-align-bottom {
+        align-items: flex-end;
+    }
+    &.#{$css-prefix}row-align-center {
+        align-items: center;
+    }
+    &.#{$css-prefix}row-align-baseline {
+        align-items: baseline;
+    }
+    &.#{$css-prefix}row-align-stretch {
+        align-items: stretch;
+    }
+}
+
+.#{$css-prefix}col {
+    flex: 1;
+
+    &.#{$css-prefix}col-top {
+        align-self: flex-start;
+    }
+    &.#{$css-prefix}col-bottom {
+        align-self: flex-end;
+    }
+    &.#{$css-prefix}col-center {
+        align-self: center;
+    }
+}
+
+/* IE9 pack */
+@media all and (min-width: 0\0) and (min-resolution: .001dpcm) {
+    .#{$css-prefix}row {
+        display: table;
+        width: 100%;
+    }
+
+    .#{$css-prefix}col {
+        display: table-cell;
+        vertical-align: top;
+    }
+}
+
+@include make-columns();
+@include make-5columns();
+@include make-columns-fixed();
+
+@include make-offset();
+@include make-offset-fixed();
+
+@include visible-hidden-all-points();
+@include visible-hidden-all-points-row();
+
+@import "./rtl.scss";

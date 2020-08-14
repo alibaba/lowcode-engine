@@ -7,7 +7,6 @@ import IExtensionConfigManifest from './IExtensionConfigManifest';
 import IMaterializeOptions from './IMaterializeOptions';
 import IMaterialScanModel from './IMaterialScanModel';
 import { IMaterialParsedModel } from './IMaterialParsedModel';
-import SourceType from './SourceType';
 
 export {
   ExtensionName,
@@ -15,7 +14,6 @@ export {
   IMaterialParsedModel,
   IMaterializeOptions,
   IMaterialScanModel,
-  SourceType,
   ChannelType,
   EcologyType,
   IAccesser,

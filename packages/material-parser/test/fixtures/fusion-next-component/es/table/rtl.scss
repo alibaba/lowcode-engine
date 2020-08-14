@@ -1,0 +1,156 @@
+@mixin table-border-rtl($border-width) {
+    table {
+        tr td:first-child,
+        tr th:first-child {
+            // border-left-width: $border-width;
+            border-left-width: 0;
+            border-right-width: $border-width;
+        }
+    }
+    #{$table-prefix}-header {
+        th {
+            border-top-width: $border-width;
+        }
+        tr th:last-child {
+            border-left-width: $border-width;
+            border-right-width: 0;
+            // border-right-width: $border-width;
+        }
+    }
+    #{$table-prefix}-body {
+        td {
+            border-top-width: $border-width;
+        }
+        tr:last-child td {
+            border-bottom-width: $border-width;
+        }
+        tr td:last-child {
+            border-left-width: $border-width;
+            border-right-width: 0;
+            // border-right-width: $border-width;
+        }
+    }
+}
+
+
+#{$table-prefix}[dir="rtl"] {
+    th {
+        text-align: right;
+    }
+
+    #{$table-prefix}-header-resizable {
+        #{$table-prefix}-resize-handler {
+            right: auto;
+            left: 0;
+        }
+    }
+    td {
+        #{$table-prefix}-cell-wrapper {
+            .#{$css-prefix}icon-arrow-down.#{$css-prefix}table-tree-arrow,
+            .#{$css-prefix}icon-arrow-right.#{$css-prefix}table-tree-arrow,
+            #{$table-prefix}-tree-placeholder {
+                margin-left: 3px;
+                margin-right: 0;
+                float: right;
+            }
+        }
+    }
+
+    #{$table-prefix}-expanded-row {
+        td {
+            &:first-child {
+                border-left-width: 0;
+                border-right-width: 1px;
+            }
+            &:last-child {
+                border-left-width: 1px;
+                border-right-width: 0;
+            }
+        }
+    }
+
+
+    &.only-bottom-border {
+        #{$table-prefix}-expanded-row {
+            th {
+                border-width: 0 0 $table-normal-border-width 0;
+            }
+            td {
+                border-width: 0 0 $table-normal-border-width 0;
+            }
+        }
+    }
+
+    #{$table-prefix}-filter-footer {
+        button {
+            margin-left: 5px;
+            margin-right: 0;
+        }
+    }
+
+    #{$table-prefix}-lock-left,
+    #{$table-prefix}-lock-right {
+        left: auto;
+        right: 0;
+    }
+
+    #{$table-prefix}-lock-right {
+        right: auto;
+        left: 0;
+        table tr td:first-child,
+        table tr th:first-child {
+            border-right-width: 1px;
+        }
+        &.shadow {
+            box-shadow: 2px 0 3px rgba(0, 0, 0, .12);
+        }
+    }
+
+    #{$table-prefix}-lock-left {
+        &.shadow {
+            box-shadow: -2px 0 3px rgba(0, 0, 0, .12);
+        }
+    }
+
+    #{$table-prefix}-sort {
+        .#{$css-prefix}icon {
+            right: 0;
+            left: auto;
+        }
+        .#{$css-prefix}icon-ascending {
+            right: 4px;
+            left: auto;
+        }
+    }
+
+    #{$table-prefix}-filter {
+        margin-right: 5px;
+        margin-left: 0;
+    }
+}
+
+#{$table-prefix}-fixed[dir="rtl"] {
+
+    table {
+        tr td:first-child,
+        tr th:first-child {
+            border-left-width: $table-normal-border-width;
+            border-right-width: 0;
+        }
+    }
+    #{$table-prefix}-header {
+        tr th:last-child {
+            border-left-width: $table-normal-border-width;
+        }
+    }
+    #{$table-prefix}-body {
+        tr td:last-child {
+            border-left-width: $table-normal-border-width;
+        }
+    }
+
+    // @include table-border-rtl(0);
+    // &#{$table-prefix}-group {
+    //     @include table-border-rtl($table-normal-border-width);
+    // }
+}

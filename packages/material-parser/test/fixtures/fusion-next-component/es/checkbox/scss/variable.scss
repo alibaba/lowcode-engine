@@ -1,0 +1,86 @@
+////
+/// @module checkbox: 复选框
+/// @tag checkbox
+/// @category component
+/// @family data-entry
+/// @varPrefix $checkbox-
+/// @classPrefix {prefix}-checkbox
+/// @order {"size/bounding":10,"size/icon":11,"size/label":12,"statement/normal":10,"statement/normal/bounding":100,"statement/hover":11,"statement/hover/bounding":110,"statement/checked":12,"statement/checked/bounding":120,"statement/checked/icon":121,"statement/disabled":13,"statement/disabled/bounding":130,"statement/disabled/icon":131,"statement/checked hover":14,"statement/checked hover/bounding":140,"statement/checked hover/icon":141}
+////
+
+@charset "UTF-8";
+
+$checkbox-prefix: '.#{$css-prefix}checkbox';
+
+/// size
+/// @namespace size/bounding
+$checkbox-size: $s-4 !default;
+/// radius
+/// @namespace size/bounding
+$checkbox-border-radius: $corner-1 !default;
+/// border-width
+/// @namespace size/bounding
+$checkbox-border-width: $line-1 !default;
+
+/// size
+/// @namespace size/icon
+$checkbox-circle-size: $icon-xxs !default;
+
+/// shadow
+/// @namespace size/bounding
+$checkbox-shadow: $shadow-zero !default;
+
+/// border
+/// @namespace statement/normal/bounding
+$checkbox-border-color: $color-line1-3 !default;
+/// border
+/// @namespace statement/hover/bounding
+$checkbox-hovered-border-color: $color-brand1-6 !default;
+/// border
+/// @namespace statement/checked/bounding
+$checkbox-checked-border-color: $color-transparent !default;
+/// border
+/// @namespace statement/disabled/bounding
+$checkbox-disabled-border-color: $color-line1-1 !default;
+/// border
+/// @namespace statement/checked hover/bounding
+$checkbox-checked-hovered-border-color: $color-transparent !default;
+
+/// text
+/// @namespace statement/checked/icon
+$checkbox-checked-circle-color: $color-white !default;
+/// text
+/// @namespace statement/normal/label
+$checkbox-label-color: $color-text1-4 !default;
+/// text
+/// @namespace statement/disabled/label
+$checkbox-disabled-label-color: $color-text1-4 !default;
+/// text
+/// @namespace statement/disabled/icon
+$checkbox-disabled-circle-color: $color-text1-1 !default;
+/// text
+/// @namespace statement/checked hover/icon
+$checkbox-checked-hovered-circle-color: $color-white !default;
+
+/// background
+/// @namespace statement/normal/bounding
+$checkbox-bg-color: $color-white !default;
+/// background
+/// @namespace statement/checked/bounding
+$checkbox-checked-bg-color: $color-brand1-6 !default;
+/// background
+/// @namespace statement/hover/bounding
+$checkbox-hovered-bg-color: $color-brand1-1 !default;
+/// background
+/// @namespace statement/checked hover/bounding
+$checkbox-checked-hovered-bg-color: $color-brand1-9 !default;
+/// background
+/// @namespace statement/disabled/bounding
+$checkbox-disabled-bg-color: $color-fill1-1 !default;
+
+/// size
+/// @namespace size/label
+$checkbox-font-size: $font-size-body-1 !default;
+/// margin(L)
+/// @namespace size/label
+$checkbox-margin-left: $s-1 !default;

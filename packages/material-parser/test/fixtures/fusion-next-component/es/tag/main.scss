@@ -1,0 +1,239 @@
+@charset "UTF-8";
+@import "../core/index-noreset.scss";
+@import "./scss/animation.scss";
+@import "./scss/mixin.scss";
+@import "./scss/placeholder.scss";
+@import "./scss/variable.scss";
+@import "./rtl.scss";
+
+.#{$css-prefix} {
+    &tag-group {
+        .#{$css-prefix}tag-medium,
+        .#{$css-prefix}tag-large {
+            @include tag-group-margin($tag-size-m-margin);
+        }
+
+        .#{$css-prefix}tag-small {
+            @include tag-group-margin($tag-size-s-margin);
+        }
+    }
+
+    &tag {
+        @include box-sizing();
+        display: inline-block;
+        max-width: 100%;
+        vertical-align: middle;
+        border-width: $tag-border-width;
+        border-radius: $tag-corner-radius;
+        box-shadow: $tag-shadow;
+        border-style: solid; /* 可配置??? */
+        overflow: hidden;
+        white-space: nowrap;
+        transition: all $motion-duration-immediately $motion-linear;
+        font-size: 0;
+        outline: 0;
+
+        > .#{$css-prefix}tag-body {
+            position: relative;
+            display: inline-block;
+            height: 100%;
+            text-align: center;
+            vertical-align: middle;
+            @extend %ellipsis;
+            max-width: 100%;
+            user-select: none;
+
+            > a {
+                text-decoration: none;
+                color: inherit;
+                &:before {
+                    content: " ";
+                    @include placeholder-full;
+                }
+            }
+
+            /* 用户手动传的 icon 的大小也保持一致？ */
+            .#{$css-prefix}icon {
+                line-height: 1;
+                vertical-align: middle;
+
+                &:before {
+                    font-size: inherit;
+                }
+            }
+        }
+
+        &.#{$css-prefix}tag-body-pointer {
+            cursor: pointer;
+        }
+
+        &[disabled], &.disabled {
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* 预设颜色值 */
+        @include tag-preset-color('blue', $tag-color-preset-blue);
+        @include tag-preset-color('green', $tag-color-preset-green);
+        @include tag-preset-color('orange', $tag-color-preset-orange);
+        @include tag-preset-color('red', $tag-color-preset-red);
+        @include tag-preset-color('turquoise', $tag-color-preset-turquoise);
+        @include tag-preset-color('yellow', $tag-color-preset-yellow);
+    }
+
+    &tag-large {
+        @include tag-size(
+            $tag-size-l-height,
+            $tag-size-line-height,
+            $tag-border-width,
+            $tag-size-l-padding-lr,
+            $tag-size-l-text-size,
+            $tag-size-l-icon-font,
+            $tag-size-l-content-min-width
+        );
+    }
+
+    &tag-medium {
+        @include tag-size(
+            $tag-size-m-height,
+            $tag-size-line-height,
+            $tag-border-width,
+            $tag-size-m-padding-lr,
+            $tag-size-m-text-size,
+            $tag-size-m-icon-font,
+            $tag-size-m-content-min-width
+        );
+    }
+
+    &tag-small {
+        @include tag-size(
+            $tag-size-s-height,
+            $tag-size-line-height,
+            $tag-border-width,
+            $tag-size-s-padding-lr,
+            $tag-size-s-text-size,
+            $tag-size-s-icon-font,
+            $tag-size-s-content-min-width
+        );
+    }
+
+    &tag-default {
+        cursor: default;
+
+        &.#{$css-prefix}tag-level-normal {
+            @extend %tag-statement-bordered;
+        }
+
+        &.#{$css-prefix}tag-level-primary {
+            @extend %tag-statement-primary;
+        }
+    }
+
+    &tag-closable {
+        position: relative;
+        > .#{$css-prefix}tag-close-btn {
+            display: inline-block;
+            vertical-align: middle;
+            height: 100%;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        &.#{$css-prefix}tag-level-normal {
+            @extend %tag-statement-closable-bordered;
+            @extend %tag-closable-normal-tick;
+        }
+
+        &.#{$css-prefix}tag-level-primary {
+            @extend %tag-statement-closable-primary;
+        }
+    }
+
+    &tag-checkable {
+        cursor: pointer;
+        position: relative;
+        border-radius: $tag-corner-radius;
+
+        &.checked {
+            &:before {
+                animation: fadeInRightForTag .4s $ease-in-out-circ;
+            }
+            &:after {
+                animation: zoomIn .4s $ease-in-out-circ;
+            }
+        }
+
+        &.#{$css-prefix}tag-small {
+            &:not(.#{$css-prefix}tag-level-primary) {
+                @include checkable-tag-tick-size(
+                    $tag-size-s-tick-icon-bg-size,
+                    $tag-size-s-tick-icon-size
+                );
+            }
+        }
+
+        &.#{$css-prefix}tag-medium {
+            &:not(.#{$css-prefix}tag-level-primary) {
+                @include checkable-tag-tick-size(
+                    $tag-size-m-tick-icon-bg-size,
+                    $tag-size-m-tick-icon-size
+                );
+            }
+        }
+
+        &.#{$css-prefix}tag-large {
+            &:not(.#{$css-prefix}tag-level-primary) {
+                @include checkable-tag-tick-size(
+                    $tag-size-l-tick-icon-bg-size,
+                    $tag-size-l-tick-icon-size
+                );
+            }
+        }
+
+        &.#{$css-prefix}tag-level-normal {
+            @extend %tag-selectable-normal;
+
+            &.checked {
+                @extend %tag-statement-normal;
+                @extend %tag-checkable-normal-tick;
+            }
+        }
+
+        &.#{$css-prefix}tag-level-primary {
+            @extend %tag-statement-checkable-fill;
+
+            &.checked {
+                @extend %tag-statement-checkable-fill-checked;
+            }
+        }
+
+        &.#{$css-prefix}tag-level-secondary {
+            @extend %tag-statement-text;
+
+            &.checked {
+                @extend %tag-statement-secondary;
+                @extend %tag-checkable-secondary-tick;
+            }
+
+            &[disabled], &.disabled {
+                color: $tag-text-color-disabled;
+                border-color: $tag-border-color-disabled;
+                background-color: $tag-fill-bg-color-disabled;
+            }
+        }
+    }
+
+    /* Animation */
+    /* ----------- */
+    &tag-zoom-enter,
+    &tag-zoom-appear {
+        animation: fadeInLeft .4s $ease-in-out-circ;
+        animation-fill-mode: both;
+    }
+
+    &tag-zoom-leave {
+        animation: zoomOut .3s ease-in;
+        animation-fill-mode: both;
+    }
+}
+
