@@ -62,6 +62,14 @@ export class NodeChildren {
   }
 
   /**
+   * @deprecated
+   * @param nodes 
+   */
+  concat(nodes: Node[]) {
+    return this.children.concat(nodes);
+  }
+
+  /**
    * 元素个数
    */
   @computed get size(): number {
@@ -79,10 +87,14 @@ export class NodeChildren {
     return this.size > 0;
   }
 
+  @computed get length(): number {
+    return this.children.length;
+  }
+
   /**
    * 删除一个节点
    */
-  delete(node: Node, purge = false): boolean {
+  delete(node: Node, purge = false, useMutator = true): boolean {
     const i = this.children.indexOf(node);
     if (i < 0) {
       return false;
@@ -90,17 +102,20 @@ export class NodeChildren {
     const deleted = this.children.splice(i, 1)[0];
     if (purge) {
       // should set parent null
-      deleted.internalSetParent(null);
-      deleted.purge();
+      deleted.internalSetParent(null, useMutator);
+      deleted.purge(useMutator);
     }
     this.emitter.emit('change');
+    if (useMutator) {
+      this.reportModified(node, this.owner, {type: 'remove', removeIndex: i, removeNode: node});
+    }
     return false;
   }
 
   /**
    * 插入一个节点，返回新长度
    */
-  insert(node: Node, at?: number | null): void {
+  insert(node: Node, at?: number | null, useMutator = true): void {
     const children = this.children;
     let index = at == null || at === -1 ? children.length : at;
 
@@ -112,7 +127,7 @@ export class NodeChildren {
       } else {
         children.push(node);
       }
-      node.internalSetParent(this.owner);
+      node.internalSetParent(this.owner, useMutator);
     } else {
       if (index > i) {
         index -= 1;
@@ -127,6 +142,7 @@ export class NodeChildren {
     }
 
     this.emitter.emit('change');
+    // this.reportModified(node, this.owner, { type: 'insert' });
 
     // check condition group
     if (node.conditionGroup) {
@@ -228,7 +244,7 @@ export class NodeChildren {
     return this.children.some((child, index) => fn(child, index));
   }
 
-  filter(fn: (item: Node, index: number) => item is Node) {
+  filter(fn: (item: Node, index: number) => any) {
     return this.children.filter(fn);
   }
 
@@ -241,7 +257,7 @@ export class NodeChildren {
           const i = this.children.indexOf(node);
           if (i > -1) {
             this.children.splice(i, 1);
-            node.remove();
+            node.remove(false);
           }
         });
         changed = true;
@@ -278,16 +294,45 @@ export class NodeChildren {
   /**
    * 回收销毁
    */
-  purge() {
+  purge(useMutator = true) {
     if (this.purged) {
       return;
     }
     this.purged = true;
-    this.children.forEach(child => child.purge());
+    this.children.forEach((child) => child.purge(useMutator));
   }
 
   get [Symbol.toStringTag]() {
     // 保证向前兼容性
-    return "Array";
+    return 'Array';
+  }
+
+  // /**
+  //  * @deprecated
+  //  * 为了兼容vision体系存量api
+  //  */
+  // getChildrenArray() {
+  //   return this.children;
+  // }
+
+  private reportModified(node: Node, owner: Node, options = {}) {
+    if (!node) {
+      return;
+    }
+    if (node.isRoot()) {
+      return;
+    }
+    const callbacks = owner.componentMeta.getMetadata().experimental?.callbacks;
+    if (callbacks?.onSubtreeModified) {
+      try {
+        callbacks?.onSubtreeModified.call(node, owner, options);
+      } catch (e) {
+        console.error('error when excute experimental.callbacks.onNodeAdd', e);
+      }
+    }
+
+    if (owner.parent && !owner.parent.isRoot()) {
+      this.reportModified(node, owner.parent, options);
+    }
   }
 }

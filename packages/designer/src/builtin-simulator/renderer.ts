@@ -1,8 +1,9 @@
 import { ComponentInstance, NodeInstance, Component } from '../simulator';
-import { ComponentSchema } from '@ali/lowcode-types';
+import { NodeSchema } from '@ali/lowcode-types';
 
 export interface BuiltinSimulatorRenderer {
   readonly isSimulatorRenderer: true;
+  createComponent(schema: NodeSchema): Component | null;
   getComponent(componentName: string): Component;
   getClosestNodeInstance(from: ComponentInstance, nodeId?: string): NodeInstance<ComponentInstance> | null;
   findDOMNodes(instance: ComponentInstance): Array<Element | Text> | null;

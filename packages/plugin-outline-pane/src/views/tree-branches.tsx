@@ -9,13 +9,14 @@ import { intlNode } from '../locale';
 @observer
 export default class TreeBranches extends Component<{
   treeNode: TreeNode;
+  isModal?: boolean;
 }> {
   shouldComponentUpdate() {
     return false;
   }
 
   render() {
-    const treeNode = this.props.treeNode;
+    const { treeNode, isModal } = this.props;
     const { expanded } = treeNode;
 
     if (!expanded) {
@@ -24,8 +25,10 @@ export default class TreeBranches extends Component<{
 
     return (
       <div className="tree-node-branches">
-        <TreeNodeSlots treeNode={treeNode} />
-        <TreeNodeChildren treeNode={treeNode} />
+        {
+          !isModal && <TreeNodeSlots treeNode={treeNode}/>
+        }
+        <TreeNodeChildren treeNode={treeNode} isModal={isModal || false}/>
       </div>
     );
   }
@@ -34,12 +37,13 @@ export default class TreeBranches extends Component<{
 @observer
 class TreeNodeChildren extends Component<{
   treeNode: TreeNode;
+  isModal?: boolean;
 }> {
   shouldComponentUpdate() {
     return false;
   }
   render() {
-    const { treeNode } = this.props;
+    const { treeNode, isModal } = this.props;
     let children: any = [];
     let groupContents: any[] = [];
     let currentGrp: ExclusiveGroup;
@@ -67,6 +71,10 @@ class TreeNodeChildren extends Component<{
       />
     );
     treeNode.children?.forEach((child, index) => {
+      const childIsModal = child.node.getPrototype()?.isModal() || false;
+      if (isModal != childIsModal) {
+        return;
+      }
       const { conditionGroup } = child.node;
       if (conditionGroup !== currentGrp) {
         endGroup();
@@ -81,12 +89,12 @@ class TreeNodeChildren extends Component<{
             children.push(insertion);
           }
         }
-        groupContents.push(<TreeNodeView key={child.id} treeNode={child} />);
+        groupContents.push(<TreeNodeView key={child.id} treeNode={child} isModal={isModal}/>);
       } else {
         if (index === dropIndex) {
           children.push(insertion);
         }
-        children.push(<TreeNodeView key={child.id} treeNode={child} />);
+        children.push(<TreeNodeView key={child.id} treeNode={child} isModal={isModal}/>);
       }
     });
     endGroup();

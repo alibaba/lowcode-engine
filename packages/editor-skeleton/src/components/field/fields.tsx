@@ -2,19 +2,17 @@ import { Component } from 'react';
 import { isObject } from 'lodash';
 import classNames from 'classnames';
 import { Icon } from '@alifd/next';
-import { Title, Tip } from '@ali/lowcode-editor-core';
+import { Title } from '@ali/lowcode-editor-core';
 import { TitleContent } from '@ali/lowcode-types';
 import { PopupPipe, PopupContext } from '../popup';
-import { intlNode } from '../../locale';
 import './index.less';
-import { IconClear } from '../../icons/clear';
 import InlineTip from './inlinetip';
 
 export interface FieldProps {
   className?: string;
   meta?: { package: string; componentName: string } | string;
   title?: TitleContent | null;
-  defaultDisplay?: 'accordion' | 'inline' | 'block';
+  defaultDisplay?: 'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry';
   collapsed?: boolean;
   valueState?: number;
   name?: string;
@@ -27,6 +25,7 @@ export class Field extends Component<FieldProps> {
   state = {
     collapsed: this.props.collapsed,
     display: this.props.defaultDisplay || 'inline',
+    hasError: false,
   };
 
   constructor(props: any) {
@@ -90,6 +89,10 @@ export class Field extends Component<FieldProps> {
     }
   }
 
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
   getTipContent(propName: string, tip?: any): any {
     let tipContent = (
       <div>
@@ -116,6 +119,11 @@ export class Field extends Component<FieldProps> {
   }
 
   render() {
+    const { hasError } = this.state;
+    if (hasError) {
+      return null;
+    }
+
     const { className, children, meta, title, valueState, onClear, name: propName, tip } = this.props;
     const { display, collapsed } = this.state;
     const isAccordion = display === 'accordion';
@@ -134,14 +142,18 @@ export class Field extends Component<FieldProps> {
         })}
         id={id}
       >
-        <div className="lc-field-head" onClick={isAccordion ? this.toggleExpand : undefined}>
-          <div className="lc-field-title">
-            {createValueState(valueState, this.handleClear)}
-            <Title title={title || ''} />
-            <InlineTip position="top">{tipContent}</InlineTip>
-          </div>
-          {isAccordion && <Icon className="lc-field-icon" type="arrow-up" size="xs" />}
-        </div>
+        {
+          display !== 'plain' && (
+            <div className="lc-field-head" onClick={isAccordion ? this.toggleExpand : undefined}>
+              <div className="lc-field-title">
+                {createValueState(valueState, this.handleClear)}
+                <Title title={title || ''} />
+                <InlineTip position="top">{tipContent}</InlineTip>
+              </div>
+              {isAccordion && <Icon className="lc-field-icon" type="arrow-up" size="xs" />}
+            </div>
+          )
+        }
         <div key="body" ref={(shell) => (this.body = shell)} className="lc-field-body">
           {children}
         </div>
@@ -250,21 +262,17 @@ export interface EntryFieldProps extends FieldProps {
 
 export class EntryField extends Component<EntryFieldProps> {
   render() {
-    const { stageName, title, className } = this.props;
-    const classNameList = classNames('engine-setting-field', 'engine-entry-field', className);
-    const fieldProps: any = {};
-
-    if (stageName) {
-      // 为 stage 切换奠定基础
-      fieldProps['data-stage-target'] = stageName;
-    }
+    const { title, className, stageName } = this.props;
+    const classNameList = classNames('lc-field', 'lc-entry-field', className);
 
     return (
-      <div className={classNameList} {...fieldProps}>
-        <div className="lc-field-title">
-          <Title title={title || ''} />
+      <div className={classNameList}>
+        <div className="lc-field-head" data-stage-target={stageName}>
+          <div className="lc-field-title">
+            <Title title={title || ''} />
+          </div>
+          <Icon className="lc-field-icon" type="arrow-right" size="xs" />
         </div>
-        <Icon className="lc-field-icon" type="arrow-left" size="xs" />
       </div>
     );
   }

@@ -1,0 +1,367 @@
+{
+  "externals": [
+    {
+      "urls": ["//g.alicdn.com/platform/c/react/16.5.2/react.min.js"],
+      "library": "React",
+      "name": "react",
+      "version": "16.5.2"
+    },
+    {
+      "urls": ["//g.alicdn.com/platform/c/react-dom/16.5.2/react-dom.min.js"],
+      "library": "ReactDOM",
+      "name": "react-dom",
+      "version": "16.12.0"
+    },
+    {
+      "urls": ["//g.alicdn.com/platform/c/prop-types/15.6.2/prop-types.js"],
+      "library": "PropTypes",
+      "name": "prop-types",
+      "version": "15.6.2"
+    },
+    { "library": "ReactRouter", "name": "react-router" },
+    { "library": "ReactRouterDOM", "name": "react-router-dom" },
+    { "library": "Babel", "name": "babel-standalone" },
+    { "library": "Recore", "name": "@ali/recore" },
+    {
+      "urls": ["https://g.alicdn.com/code/lib/moment.js/2.24.0/moment-with-locales.min.js"],
+      "library": "moment",
+      "name": "moment",
+      "version": "2.24.0"
+    },
+    { "library": "VisualEngine", "name": "engine" },
+    { "library": "VisualEngine", "name": "visualengine" },
+    { "library": "VisualEngine", "name": "@ali/visualengine" },
+    { "library": "VisualEngineUtils", "name": "engine-utils" },
+    { "library": "VisualEngineUtils", "name": "@ali/visualengine-utils" },
+    { "library": "VisualEngine.ui.Popup", "name": "@ali/ve-popups" },
+    { "library": "VisualEngineUtils.FieldControl", "name": "@ali/ve-field" },
+    { "library": "VisualEngineUtils.BoolControl", "name": "@ali/ve-bool-control" },
+    { "library": "VisualEngineUtils.ChoiceControl", "name": "@ali/ve-choice-control" },
+    { "library": "VisualEngineUtils.ColorControl", "name": "@ali/ve-color-control" },
+    { "library": "VisualEngineUtils.DateControl", "name": "@ali/ve-date-control" },
+    { "library": "VisualEngineUtils.I18nControl", "name": "@ali/ve-i18n-control" },
+    { "library": "VisualEngineUtils.NumberControl", "name": "@ali/ve-number-control" },
+    { "library": "VisualEngineUtils.SelectControl", "name": "@ali/ve-select-control" },
+    { "library": "VisualEngineUtils.SortableControl", "name": "@ali/ve-sortable" },
+    { "library": "VisualEngineUtils.TextControl", "name": "@ali/ve-text-control" },
+    { "library": "VisualEngineUtils.ImageControl", "name": "@ali/ve-image-control" },
+    { "library": "VisualEngineUtils.SearchControl", "name": "@ali/ve-search-control" },
+    { "library": "VisualEngineUtils.BoolSetter", "name": "@ali/vs-bool" },
+    { "library": "VisualEngineUtils.ChoiceSetter", "name": "@ali/vs-choice" },
+    { "library": "VisualEngineUtils.CodeSetter", "name": "@ali/vs-code" },
+    { "library": "VisualEngineUtils.ColorSetter", "name": "@ali/vs-color" },
+    { "library": "VisualEngineUtils.DateSetter", "name": "@ali/vs-date" },
+    { "library": "VisualEngineUtils.I18nSetter", "name": "@ali/vs-i18n" },
+    { "library": "VisualEngineUtils.JsonSetter", "name": "@ali/vs-json" },
+    { "library": "VisualEngineUtils.ListSetter", "name": "@ali/vs-list" },
+    { "library": "VisualEngineUtils.NumberSetter", "name": "@ali/vs-number" },
+    { "library": "VisualEngineUtils.OptionsSetter", "name": "@ali/vs-options" },
+    { "library": "VisualEngineUtils.SelectSetter", "name": "@ali/vs-select" },
+    { "library": "VisualEngineUtils.TextSetter", "name": "@ali/vs-text" },
+    { "library": "VisualEngineUtils.ValidationSetter", "name": "@ali/vs-validation" },
+    { "library": "VisualEngineUtils.ImageSetter", "name": "@ali/vs-image" },
+    { "library": "VisualEngineUtils.StyleSetter", "name": "@ali/vs-style" },
+    { "library": "VisualEngineUtils.EventSetter", "name": "@ali/vs-event" },
+    { "library": "RenderEngine", "name": "@ali/render-engine" },
+    { "library": "Highcharts", "name": "highcharts" },
+    { "library": "Object", "name": "highcharts-more" },
+    { "library": "Highcharts && window.Highcharts.map", "name": "highcharts/highmaps" },
+    { "library": "jQuery", "name": "$" },
+    { "library": "jQuery", "name": "jquery" },
+    { "library": "_", "name": "lodash" },
+    { "library": "nattyFetch", "name": "natty-fetch" },
+    { "library": "nattyFetch", "name": "natty-fetch/dist/natty-fetch.pc" },
+    { "library": "nattyFetch", "name": "natty-fetch/dist/natty-fetch" },
+    { "library": "nattyStorage", "name": "natty-storage" },
+    { "library": "Rax", "name": "rax" },
+    {
+      "urls": ["https://g.alicdn.com/ib-fe/ib-vendor/mx/gl.js"],
+      "library": "mapboxgl",
+      "name": "@ali/ib-mapbox",
+      "version": "1.0.0"
+    }
+  ],
+  "appKey": "template_deep_mobile",
+  "systemType": "",
+  "componentDependencies": [
+    {
+      "prototypeViewsUrl": null,
+      "prototypeUrls": {
+        "default": [
+          "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-rax-page/4.0.4/proto.c94ee38.css",
+          "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-rax-page/4.0.4/proto.bf61331.js"
+        ]
+      },
+      "prototypeConfigsUrl": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-rax-page/4.0.4/proto.c94ee38.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-rax-page/4.0.4/proto.bf61331.js"
+      ],
+      "alias": "",
+      "urls": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-rax-page/4.0.4/view.5030228.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-rax-page/4.0.4/view.6186d2f.js"
+      ],
+      "library": "AliVcRaxPage",
+      "components": null,
+      "packageName": "@ali/vc-rax-page",
+      "version": "4.0.4"
+    },
+    {
+      "prototypeViewsUrl": null,
+      "prototypeUrls": {
+        "default": [
+          "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile-open-button/1.0.5/proto.798dd4e.css",
+          "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile-open-button/1.0.5/proto.78c100c.js"
+        ]
+      },
+      "prototypeConfigsUrl": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile-open-button/1.0.5/proto.798dd4e.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile-open-button/1.0.5/proto.78c100c.js"
+      ],
+      "alias": "",
+      "urls": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile-open-button/1.0.5/view.23d106a.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile-open-button/1.0.5/view.314cec4.js"
+      ],
+      "library": "AliVcDeepMobileOpenButton",
+      "components": null,
+      "packageName": "@ali/vc-deep-mobile-open-button",
+      "version": "1.0.5"
+    },
+    {
+      "prototypeViewsUrl": null,
+      "prototypeUrls": {
+        "default": [
+          "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/proto.2f23cdf.css",
+          "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/proto.9a739a7.js"
+        ]
+      },
+      "prototypeConfigsUrl": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/proto.2f23cdf.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/proto.9a739a7.js"
+      ],
+      "alias": "",
+      "urls": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/view.d6d0d1f.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/view.14bb8e8.js",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/view.mobile. d6d0d1f.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/view.mobile.fe36565.js"
+      ],
+      "library": "AliVcDeepMobile",
+      "components": null,
+      "packageName": "@ali/vc-deep-mobile",
+      "version": "2.0.1-beta.25"
+    },
+    {
+      "prototypeViewsUrl": null,
+      "prototypeUrls": {
+        "default": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-component/1.1.1/proto.55a6360.js"]
+      },
+      "prototypeConfigsUrl": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-component/1.1.1/proto.55a6360.js"
+      ],
+      "alias": "",
+      "urls": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-component/1.1.1/view.0e43387.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-component/1.1.1/view.4ea485d.js"
+      ],
+      "library": "AliVcComponent",
+      "components": null,
+      "packageName": "@ali/vc-component",
+      "version": "1.1.1"
+    },
+    {
+      "prototypeViewsUrl": null,
+      "prototypeUrls": {
+        "default": [
+          "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-block-wrapper/1.0.6/proto.1cca36a.css",
+          "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-block-wrapper/1.0.6/proto.a3ca779.js"
+        ]
+      },
+      "prototypeConfigsUrl": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-block-wrapper/1.0.6/proto.1cca36a.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-block-wrapper/1.0.6/proto.a3ca779.js"
+      ],
+      "alias": "",
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-block-wrapper/1.0.6/view.54ba1c5.js"],
+      "library": "AliVcBlockWrapper",
+      "components": null,
+      "packageName": "@ali/vc-block-wrapper",
+      "version": "1.0.6"
+    }
+  ],
+  "utilsDependencies": [
+    {
+      "prototypeViewsUrl": null,
+      "prototypeUrls": null,
+      "prototypeConfigsUrl": null,
+      "alias": "",
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-toolkit/1.0.8/main.e3b517b.js"],
+      "library": "AliVuToolkit",
+      "components": null,
+      "packageName": "@ali/vu-toolkit",
+      "version": "1.0.8"
+    },
+    {
+      "prototypeViewsUrl": null,
+      "prototypeUrls": null,
+      "prototypeConfigsUrl": null,
+      "alias": "",
+      "urls": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-fusion-miniapp/2.0.0/main.a9303b0.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-fusion-miniapp/2.0.0/main.0a9dcbf.js"
+      ],
+      "library": "AliVuFusionMiniapp",
+      "components": null,
+      "packageName": "@ali/vu-fusion-miniapp",
+      "version": "2.0.0"
+    },
+    {
+      "prototypeViewsUrl": null,
+      "prototypeUrls": null,
+      "prototypeConfigsUrl": null,
+      "alias": "",
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-legao-builtin/1.4.0-beta.5/main.ce04344.js"],
+      "library": "AliVuLegaoBuiltin",
+      "components": null,
+      "packageName": "@ali/vu-legao-builtin",
+      "version": "1.4.0-beta.5"
+    },
+    {
+      "prototypeViewsUrl": null,
+      "prototypeUrls": null,
+      "prototypeConfigsUrl": null,
+      "alias": "",
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-dataSource/1.0.4/main.f11b596.js"],
+      "library": "AliVuDataSource",
+      "components": null,
+      "packageName": "@ali/vu-dataSource",
+      "version": "1.0.4"
+    },
+    {
+      "prototypeViewsUrl": null,
+      "prototypeUrls": null,
+      "prototypeConfigsUrl": null,
+      "alias": "",
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-formatter/2.0.0/main.60e759a.js"],
+      "library": "AliVuFormatter",
+      "components": null,
+      "packageName": "@ali/vu-formatter",
+      "version": "2.0.0"
+    },
+    {
+      "prototypeViewsUrl": null,
+      "prototypeUrls": null,
+      "prototypeConfigsUrl": null,
+      "alias": "",
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-router-miniapp/0.1.1/main.3d126aa.js"],
+      "library": "AliVuRouterMiniapp",
+      "components": null,
+      "packageName": "@ali/vu-router-miniapp",
+      "version": "0.1.1"
+    },
+    {
+      "prototypeViewsUrl": null,
+      "prototypeUrls": null,
+      "prototypeConfigsUrl": null,
+      "alias": "universal",
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/deep-mobile-universal-api/1.1.2/main.0cfe8ef.js"],
+      "library": "AliDeepMobileUniversalApi",
+      "components": null,
+      "packageName": "@ali/deep-mobile-universal-api",
+      "version": "1.1.2"
+    },
+    {
+      "prototypeViewsUrl": null,
+      "prototypeUrls": null,
+      "prototypeConfigsUrl": null,
+      "alias": "",
+      "urls": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-router/1.2.1/main.5a856a4.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-router/1.2.1/main.e896278.js"
+      ],
+      "library": "AliVuRouter",
+      "components": null,
+      "packageName": "@ali/vu-router",
+      "version": "1.2.1"
+    },
+    {
+      "prototypeViewsUrl": null,
+      "prototypeUrls": null,
+      "prototypeConfigsUrl": null,
+      "alias": "",
+      "urls": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-router-spa/1.3.13/main.bc8c738.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-router-spa/1.3.13/main.1cff595.js"
+      ],
+      "library": "AliVuRouterSpa",
+      "components": null,
+      "packageName": "@ali/vu-router-spa",
+      "version": "1.3.13"
+    },
+    {
+      "prototypeViewsUrl": null,
+      "prototypeUrls": null,
+      "prototypeConfigsUrl": null,
+      "alias": "",
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-spm/1.1.11/main.2f6a6e1.js"],
+      "library": "AliVuSpm",
+      "components": null,
+      "packageName": "@ali/vu-spm",
+      "version": "1.1.11"
+    },
+    {
+      "prototypeViewsUrl": null,
+      "prototypeUrls": null,
+      "prototypeConfigsUrl": null,
+      "alias": "",
+      "urls": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-switch-schema/1.0.7/main.1d9ec8c.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vu-switch-schema/1.0.7/main.0e44788.js"
+      ],
+      "library": "AliVuSwitchSchema",
+      "components": null,
+      "packageName": "@ali/vu-switch-schema",
+      "version": "1.0.7"
+    }
+  ],
+  "otherDependencies": [
+    {
+      "prototypeViewsUrl": null,
+      "prototypeUrls": null,
+      "prototypeConfigsUrl": null,
+      "alias": "",
+      "urls": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vp-rax-vision-page/2.0.3/main.a344c97.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vp-rax-vision-page/2.0.3/main.1b46312.js"
+      ],
+      "library": "AliVpRaxVisionPage",
+      "components": null,
+      "packageName": "@ali/vp-rax-vision-page",
+      "version": "2.0.3"
+    },
+    {
+      "prototypeViewsUrl": null,
+      "prototypeUrls": null,
+      "prototypeConfigsUrl": null,
+      "alias": "",
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vm-router/1.0.8/main.fd43d18.js"],
+      "library": "AliVmRouter",
+      "components": null,
+      "packageName": "@ali/vm-router",
+      "version": "1.0.8"
+    },
+    {
+      "prototypeViewsUrl": null,
+      "prototypeUrls": null,
+      "prototypeConfigsUrl": null,
+      "alias": "",
+      "urls": ["https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vm-schema-nav/1.0.0/main.427ff0d.js"],
+      "library": "AliVmSchemaNav",
+      "components": null,
+      "packageName": "@ali/vm-schema-nav",
+      "version": "1.0.0"
+    }
+  ],
+  "lowCodeDependencies": []
+}

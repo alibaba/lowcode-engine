@@ -2,6 +2,7 @@ import { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import { observer, Focusable, focusTracker } from '@ali/lowcode-editor-core';
 import { Button, Icon } from '@alifd/next';
+import { IconFix } from '../icons/fix';
 import Area from '../area';
 import Panel from '../widget/panel';
 
@@ -62,6 +63,13 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
     const { area } = this.props;
     if (area.visible) {
       this.focusing?.active();
+      // 关闭当前fixed区域的面板
+      // TODO: 看看有没有更合适的地方
+      const fixedContainer = area?.skeleton?.leftFixedArea?.container;
+      const currentFixed = fixedContainer?.current;
+      if (currentFixed) {
+        fixedContainer.unactive(currentFixed);
+      }
     } else {
       this.focusing?.suspense();
     }
@@ -74,6 +82,18 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
   componentWillUnmount() {
     this.focusing?.purge();
     this.dispose?.();
+  }
+
+  // 固定
+  setFixed() {
+    const { area } = this.props;
+    const { current } = area;
+    if (!current) {
+      return;
+    }
+    area.skeleton.leftFloatArea.remove(current);
+    area.skeleton.leftFixedArea.add(current);
+    area.skeleton.leftFixedArea.container.active(current);
   }
 
   render() {
@@ -93,15 +113,24 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
       >
         {
           !hideTitleBar && (
-            <Button
-              text
-              className="lc-pane-close"
-              onClick={() => {
-                area.setVisible(false);
-              }}
-            >
-              <Icon type="close" />
-            </Button>
+            <Fragment>
+              <Button
+                text
+                className="lc-pane-icon-fix"
+                onClick={this.setFixed.bind(this)}
+              >
+                <IconFix />
+              </Button>
+              <Button
+                text
+                className="lc-pane-icon-close"
+                onClick={() => {
+                  area.setVisible(false);
+                }}
+              >
+                <Icon type="close" />
+              </Button>
+            </Fragment>
           )
         }
         <Contents area={area} />

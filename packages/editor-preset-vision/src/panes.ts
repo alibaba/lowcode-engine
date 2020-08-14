@@ -161,6 +161,9 @@ const actionPane = Object.assign(skeleton.topArea, {
   setActions() {
     // empty
   },
+  get actions() {
+    return skeleton.topArea.container.items;
+  },
 });
 const dockPane = Object.assign(skeleton.leftArea, {
   /**
@@ -209,6 +212,9 @@ const dockPane = Object.assign(skeleton.leftArea, {
    */
   setFixed(flag: boolean) {
     // todo:
+  },
+  getDocks() {
+    return skeleton.leftFloatArea?.container.items;
   },
 });
 const tabPane = Object.assign(skeleton.rightArea, {

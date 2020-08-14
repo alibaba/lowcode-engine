@@ -3,6 +3,146 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.48"></a>
+## [0.8.48](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.47...@ali/lowcode-plugin-outline-pane@0.8.48) (2020-08-14)
+
+
+### Bug Fixes
+
+* 卡片内容不可用拖动 ([6a85c43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6a85c43))
+
+
+
+
+<a name="0.8.47"></a>
+## [0.8.47](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.46...@ali/lowcode-plugin-outline-pane@0.8.47) (2020-08-07)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
+
+<a name="0.8.46"></a>
+## [0.8.46](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.45...@ali/lowcode-plugin-outline-pane@0.8.46) (2020-08-06)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
+
+<a name="0.8.45"></a>
+## [0.8.45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.44...@ali/lowcode-plugin-outline-pane@0.8.45) (2020-08-06)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
+
+<a name="0.8.44"></a>
+## [0.8.44](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.43...@ali/lowcode-plugin-outline-pane@0.8.44) (2020-08-06)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
+
+<a name="0.8.43"></a>
+## [0.8.43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.42...@ali/lowcode-plugin-outline-pane@0.8.43) (2020-08-04)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
+
+<a name="0.8.42"></a>
+## [0.8.42](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.40...@ali/lowcode-plugin-outline-pane@0.8.42) (2020-08-04)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
+
+<a name="0.8.41"></a>
+## [0.8.41](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.40...@ali/lowcode-plugin-outline-pane@0.8.41) (2020-08-04)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
+
+<a name="0.8.40"></a>
+## [0.8.40](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.39...@ali/lowcode-plugin-outline-pane@0.8.40) (2020-07-29)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
+
+<a name="0.8.39"></a>
+## [0.8.39](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.38...@ali/lowcode-plugin-outline-pane@0.8.39) (2020-07-28)
+
+
+### Bug Fixes
+
+* 🐛 getPrototype is undefined ([95b3409](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/95b3409))
+
+
+
+
+<a name="0.8.38"></a>
+## [0.8.38](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.37...@ali/lowcode-plugin-outline-pane@0.8.38) (2020-07-23)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
+
+<a name="0.8.37"></a>
+## [0.8.37](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.36...@ali/lowcode-plugin-outline-pane@0.8.37) (2020-07-22)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
+
+<a name="0.8.36"></a>
+## [0.8.36](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.35...@ali/lowcode-plugin-outline-pane@0.8.36) (2020-07-21)
+
+
+### Bug Fixes
+
+* 修复导入的组件拖入画布报错 ([caf9915](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/caf9915))
+
+
+
+
+<a name="0.8.35"></a>
+## [0.8.35](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.34...@ali/lowcode-plugin-outline-pane@0.8.35) (2020-07-21)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
+
+<a name="0.8.34"></a>
+## [0.8.34](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.33...@ali/lowcode-plugin-outline-pane@0.8.34) (2020-07-21)
+
+
+### Bug Fixes
+
+* modal node locate ([9a72dd7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9a72dd7))
+* 大纲树节点显示隐藏埋点 ([e91ab1f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e91ab1f))
+* 没有 modal node 时不显示模态视图 ([555824c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/555824c))
+
+
+### Features
+
+* 大纲树展开折叠埋点 ([d9828f2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d9828f2))
+* 大纲树支持模态视图 ([3785e1c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3785e1c))
+
+
+
+
 <a name="0.8.33"></a>
 ## [0.8.33](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.32...@ali/lowcode-plugin-outline-pane@0.8.33) (2020-07-14)
 

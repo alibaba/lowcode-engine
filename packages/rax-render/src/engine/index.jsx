@@ -1,24 +1,46 @@
+/* eslint-disable */
 import { Component, createElement } from 'rax';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
-import * as isEmpty from 'lodash/isEmpty';
+import isEmpty from 'lodash/isEmpty';
 import findDOMNode from 'rax-find-dom-node';
 import { isFileSchema, goldlog } from '../utils';
 import AppContext from '../context/appContext';
-import Page from './pageEngine';
-import CustomComp from './compEngine';
-import Block from './blockEngine';
-import Temp from './tempEngine';
+import PageEngine from './pageEngine';
+import ComponentEngine from './compEngine';
+import BlockEngine from './blockEngine';
+import TempEngine from './tempEngine';
+import BaseEngine from './base';
+import compWrapper from '../hoc/compWrapper';
 
 const debug = Debug('engine:entry');
 const ENGINE_COMPS = {
-  Page,
-  Component: CustomComp,
-  Block,
-  Temp,
+  PageEngine,
+  ComponentEngine,
+  BlockEngine,
+  TempEngine,
 };
+
+const raxCreateElement = createElement;
+
+class FaultComponent extends Component {
+  render() {
+    // FIXME: errorlog
+    console.error('render error', this.props);
+    return <div>RenderError</div>;
+  }
+}
+
+class NotFoundComponent extends Component {
+  render() {
+    console.error('component not found', this.props);
+    return <div {...this.props} />;
+  }
+}
+
 export default class Engine extends Component {
   static dislayName = 'engine';
+
   static propTypes = {
     appHelper: PropTypes.object,
     components: PropTypes.object,
@@ -27,8 +49,12 @@ export default class Engine extends Component {
     suspended: PropTypes.bool,
     schema: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     onCompGetRef: PropTypes.func,
-    onCompGetCtx: PropTypes.func
+    onCompGetCtx: PropTypes.func,
+    customCreateElement: PropTypes.func,
+    notFoundComponent: PropTypes.element,
+    faultComponent: PropTypes.element,
   };
+
   static defaultProps = {
     appHelper: null,
     components: {},
@@ -37,7 +63,7 @@ export default class Engine extends Component {
     suspended: false,
     schema: {},
     onCompGetRef: () => {},
-    onCompGetCtx: () => {}
+    onCompGetCtx: () => {},
   };
 
   constructor(props, context) {
@@ -51,9 +77,9 @@ export default class Engine extends Component {
       'EXP',
       {
         action: 'appear',
-        value: !!this.props.designMode
+        value: !!this.props.designMode,
       },
-      'engine'
+      'engine',
     );
     debug(`entry.componentDidMount - ${this.props.schema && this.props.schema.componentName}`);
   }
@@ -74,15 +100,60 @@ export default class Engine extends Component {
     return !nextProps.suspended;
   }
 
-  __getRef = ref => {
+  getNotFoundComponent() {
+    const { notFoundComponent } = this.props;
+    return notFoundComponent || NotFoundComponent;
+  }
+
+  getFaultComponent() {
+    const { faultComponent } = this.props;
+    return faultComponent || FaultComponent;
+  }
+
+  __getRef = (ref) => {
+    const { schema, onCompGetRef } = this.props;
     this.__ref = ref;
     if (ref) {
-      this.props.onCompGetRef(this.props.schema, ref, true);
+      onCompGetRef(schema, ref, true);
     }
   };
 
+  patchDidCatch(Comp) {
+    if (Comp.patchedCatch) {
+      return;
+    }
+    Comp.patchedCatch = true;// eslint-disable-line
+    Comp.getDerivedStateFromError = (error) => ({ engineRenderError: true, error });// eslint-disable-line
+    // const engine = this;
+    const originRender = Comp.prototype.render;
+    Comp.prototype.render = function() {
+      if (this.state && this.state.engineRenderError) {
+        this.state.engineRenderError = false;
+        return engine.createElement(engine.getFaultComponent(), {
+          ...this.props,
+          error: this.state.error,
+        });
+      }
+      return originRender.call(this);
+    };
+    const originShouldComponentUpdate = Comp.prototype.shouldComponentUpdate;
+    Comp.prototype.shouldComponentUpdate = (nextProps, nextState) => {// eslint-disable-line
+      if (nextState && nextState.engineRenderError) {
+        return true;
+      }
+      return originShouldComponentUpdate ? originShouldComponentUpdate.call(this, nextProps, nextState) : true;// eslint-disable-line
+    };
+  }
+
+  createElement(Comp, props, children) {
+    const { customCreateElement } = this.props;
+    // TODO: enable in runtime mode?
+    this.patchDidCatch(Component);
+    return (customCreateElement || raxCreateElement)(Comp, props, children);
+  }
+
   render() {
-    const { schema, designMode, appHelper, components, componentsMap } = this.props;
+    const { schema, designMode, appHelper, components } = this.props;
     if (isEmpty(schema)) {
       return null;
     }
@@ -91,15 +162,23 @@ export default class Engine extends Component {
     }
     debug('entry.render');
     const allComponents = { ...ENGINE_COMPS, ...components };
-    const Comp = allComponents[schema.componentName];
-    if (Comp) {
-      return (
-        <AppContext.Provider
+    const { componentName } = schema;
+    // const Comp = allComponents[schema.componentName];
+    let Comp = allComponents[componentName] || ENGINE_COMPS[`${componentName}Engine`];
+    if (Comp && Comp.prototype) {
+      // const proto = Comp.prototype;
+      if (!(Comp.prototype instanceof BaseEngine)) {
+        Comp = ENGINE_COMPS[`${componentName}Engine`];
+      }
+    }
+
+    return (
+      Comp
+      ? <AppContext.Provider
           value={{
             appHelper,
             components: allComponents,
-            componentsMap,
-            engine: this
+            engine: this,
           }}
         >
           <Comp
@@ -107,15 +186,14 @@ export default class Engine extends Component {
             ref={this.__getRef}
             __appHelper={appHelper}
             __components={allComponents}
-            __componentsMap={componentsMap}
             __schema={schema}
             __designMode={designMode}
+            // __id={schema.id}
             {...this.props}
           />
         </AppContext.Provider>
-      );
-    }
-    return null;
+      : null
+    );
   }
 }
 

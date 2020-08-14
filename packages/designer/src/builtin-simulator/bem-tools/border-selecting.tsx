@@ -66,7 +66,9 @@ class Toolbar extends Component<{ observed: OffsetObserver }> {
     const MARGIN = 1;
     const BORDER = 2;
     const SPACE_HEIGHT = BAR_HEIGHT + MARGIN + BORDER;
+    const SPACE_MINIMUM_WIDTH = 140; // magic number
     let style: any;
+    // 计算 toolbar 的上/下位置
     if (observed.top > SPACE_HEIGHT) {
       style = {
         top: -SPACE_HEIGHT,
@@ -83,10 +85,12 @@ class Toolbar extends Component<{ observed: OffsetObserver }> {
         top: Math.max(MARGIN, MARGIN - observed.top),
       };
     }
-    if (observed.width < 140) {
+    // 计算 toolbar 的左/右位置
+    if (SPACE_MINIMUM_WIDTH > observed.left + observed.width) {
       style.left = Math.max(-BORDER, observed.left - width - BORDER);
     } else {
       style.right = Math.max(-BORDER, observed.right - width - BORDER);
+      style.justifyContent = 'flex-start';
     }
     const { node } = observed;
     const actions: ReactNodeArray = [];
@@ -126,13 +130,13 @@ function createAction(content: ReactNode | ComponentType<any> | ActionContentObj
           action && action(node);
           const editor = globalContext.get(Editor);
           const npm = node?.componentMeta?.npm;
-          const target =
+          const selected =
             [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
             node?.componentMeta?.componentName ||
             '';
           editor?.emit('designer.border.action', {
             name: key,
-            target,
+            selected,
           });
         }}
       >

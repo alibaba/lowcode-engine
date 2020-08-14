@@ -2,6 +2,7 @@ import lg from '@ali/vu-logger';
 import { ComponentClass, ComponentType } from 'react';
 import Prototype, { isPrototype } from './prototype';
 import { designer } from '../editor';
+import trunk from './trunk';
 
 function basename(name: string) {
   return name ? (/[^\/]+$/.exec(name) || [''])[0] : '';
@@ -63,6 +64,22 @@ export default class Bundle {
         this.registerPrototype(prototype);
       } else if (Array.isArray(prototype)) {
         this.recursivelyRegisterPrototypes(prototype, item);
+      }
+    });
+
+    // invoke prototype mocker while the prototype does not exist
+    Object.keys(this.viewsMap).forEach((viewName) => {
+      const test = this;
+      // console.log(test, viewName);
+      if (!this.prototypeList.find((proto) => proto.getComponentName() === viewName)) {
+        const mockedPrototype = trunk.mockComponentPrototype(this.viewsMap[viewName]);
+        if (mockedPrototype) {
+          mockedPrototype.setView(this.viewsMap[viewName]);
+          this.registerPrototype(mockedPrototype);
+          if (!mockedPrototype.getPackageName()) {
+            mockedPrototype.setPackageName((this.viewsMap[viewName] as any)._packageName_);
+          }
+        }
       }
     });
   }
@@ -148,7 +165,7 @@ export default class Bundle {
       }
       if (isPrototype(proto)) {
         const componentName = proto.getComponentName()!;
-        if (!proto.getView() && this.viewsMap[componentName]) {
+        if (this.viewsMap[componentName]) {
           proto.setView(this.viewsMap[componentName]);
         }
         if (cp.name && !proto.getPackageName()) {

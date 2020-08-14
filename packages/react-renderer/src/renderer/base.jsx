@@ -323,6 +323,8 @@ export default class BaseRender extends PureComponent {
       if (scopeKey && this.__compScopes[scopeKey]) {
         props.__scope = this.__compScopes[scopeKey];
       }
+      // FIXME 这里清除 key 是为了避免循环渲染中更改 key 导致的渲染重复
+      props.key = '';
       if (schema.__ctx && schema.__ctx.lunaKey) {
         if (!isFileSchema(schema)) {
           engine && engine.props.onCompGetCtx(schema, self);
@@ -331,6 +333,7 @@ export default class BaseRender extends PureComponent {
       } else if (typeof idx === 'number' && !props.key) {
         props.key = idx;
       }
+
       props.__id = schema.id;
       const renderComp = (props) => {
         return engine.createElement(

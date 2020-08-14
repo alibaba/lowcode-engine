@@ -32,7 +32,7 @@ import {
   CanvasPoint,
 } from '../designer';
 import { parseMetadata } from './utils/parse-metadata';
-import { ComponentMetadata, ComponentSchema } from '@ali/lowcode-types';
+import { ComponentMetadata, NodeSchema, ComponentSchema } from '@ali/lowcode-types';
 import { BuiltinSimulatorRenderer } from './renderer';
 import clipboard from '../designer/clipboard';
 import { LiveEditing } from './live-editing/live-editing';
@@ -73,9 +73,34 @@ const defaultSimulatorUrl = (() => {
   return urls;
 })();
 
+const defaultRaxSimulatorUrl = (() => {
+  const publicPath = getPublicPath();
+  let urls;
+  const [_, prefix = '', dev] = /^(.+?)(\/js)?\/?$/.exec(publicPath) || [];
+  if (dev) {
+    urls = [`${prefix}/css/rax-simulator-renderer.css`, `${prefix}/js/rax-simulator-renderer.js`];
+  } else if (process.env.NODE_ENV === 'production') {
+    urls = [`${prefix}/rax-simulator-renderer.css`, `${prefix}/rax-simulator-renderer.js`];
+  } else {
+    urls = [`${prefix}/rax-simulator-renderer.css`, `${prefix}/rax-simulator-renderer.js`];
+  }
+  return urls;
+})();
+
 const defaultEnvironment = [
   // https://g.alicdn.com/mylib/??react/16.11.0/umd/react.production.min.js,react-dom/16.8.6/umd/react-dom.production.min.js,prop-types/15.7.2/prop-types.min.js
   assetItem(AssetType.JSText, 'window.React=parent.React;window.ReactDOM=parent.ReactDOM;', undefined, 'react'),
+  assetItem(
+    AssetType.JSText,
+    'window.PropTypes=parent.PropTypes;React.PropTypes=parent.PropTypes; window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;',
+  ),
+];
+
+const defaultRaxEnvironment = [
+  assetItem(
+    AssetType.JSText,
+    'window.Rax=parent.Rax;window.React=parent.React;window.ReactDOM=parent.ReactDOM;window.VisualEngineUtils=parent.VisualEngineUtils;window.VisualEngine=parent.VisualEngine',
+  ),
   assetItem(
     AssetType.JSText,
     'window.PropTypes=parent.PropTypes;React.PropTypes=parent.PropTypes; window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;',
@@ -91,6 +116,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   get currentDocument() {
     return this.project.currentDocument;
+  }
+
+  @computed get renderEnv(): string {
+    return this.get('renderEnv') || 'default';
   }
 
   @computed get device(): string {
@@ -205,7 +234,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
     const vendors = [
       // required & use once
-      assetBundle(this.get('environment') || defaultEnvironment, AssetLevel.Environment),
+      assetBundle(
+        this.get('environment') || this.renderEnv === 'rax' ? defaultRaxEnvironment : defaultEnvironment,
+        AssetLevel.Environment,
+      ),
       // required & use once
       assetBundle(this.get('extraEnvironment'), AssetLevel.Environment),
       // required & use once
@@ -213,7 +245,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       // required & TODO: think of update
       assetBundle(this.theme, AssetLevel.Theme),
       // required & use once
-      assetBundle(this.get('simulatorUrl') || defaultSimulatorUrl, AssetLevel.Runtime),
+      assetBundle(
+        this.get('simulatorUrl') || this.renderEnv === 'rax' ? defaultRaxSimulatorUrl : defaultSimulatorUrl,
+        AssetLevel.Runtime,
+      ),
     ];
 
     // wait 准备 iframe 内容、依赖库注入
@@ -278,6 +313,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
         const nodeInst = this.getNodeInstanceFromElement(downEvent.target as Element);
         const node = nodeInst?.node || documentModel.rootNode;
+        if (!node?.isValidComponent()) {
+          // 对于未注册组件直接返回
+          return;
+        }
+
         const isMulti = downEvent.metaKey || downEvent.ctrlKey;
         const isLeftButton = downEvent.which === 1 || downEvent.button === 0;
         const checkSelect = (e: MouseEvent) => {
@@ -423,7 +463,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         }
 
         const rootElement = this.findDOMNodes(nodeInst.instance, node.componentMeta.rootSelector)?.find((item) =>
-          item.contains(targetElement),
+          // 可能是 [null];
+          item && item.contains(targetElement),
         ) as HTMLElement;
         if (!rootElement) {
           return;
@@ -828,12 +869,25 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.scroller.cancel();
   }
 
-  // ========= drag location logic: hepler for locate ==========
+  // ========= drag location logic: helper for locate ==========
 
   /**
    * @see ISensor
    */
   locate(e: LocateEvent): any {
+    const { dragObject } = e;
+    const { nodes } = dragObject;
+
+    const operationalNodes = nodes?.filter((node: any) => {
+      const onMoveHook = node.componentMeta?.getMetadata()?.experimental?.callbacks?.onMoveHook;
+      const canMove = onMoveHook && typeof onMoveHook === 'function' ? onMoveHook() : true;
+
+      return canMove;
+    });
+
+    if (!operationalNodes || operationalNodes.length === 0) {
+      return;
+    }
     this.sensing = true;
     this.scroller.scrolling(e);
     const document = this.project.currentDocument;
@@ -841,7 +895,14 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       return null;
     }
     const dropContainer = this.getDropContainer(e);
-    if (!dropContainer) {
+    const canDropIn = dropContainer?.container?.componentMeta?.prototype?.options?.canDropIn;
+
+    if (
+      !dropContainer ||
+      canDropIn === false ||
+      // too dirty
+      (typeof canDropIn === 'function' && !canDropIn(operationalNodes[0]))
+    ) {
       return null;
     }
 
@@ -872,12 +933,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       event: e,
     };
 
-    if (
-      e.dragObject &&
-      e.dragObject.nodes &&
-      e.dragObject.nodes.length &&
-      e.dragObject.nodes[0].getPrototype()?.isModal()
-    ) {
+    if (dragObject.type === 'node' && operationalNodes[0]?.getPrototype()?.isModal()) {
       return this.designer.createLocation({
         target: document.rootNode,
         detail,

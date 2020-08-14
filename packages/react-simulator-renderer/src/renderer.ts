@@ -8,7 +8,7 @@ import { getClientRects } from './utils/get-client-rects';
 import loader from './utils/loader';
 import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
 import { isESModule, isElement, cursor, setNativeSelection } from '@ali/lowcode-utils';
-import { RootSchema, NpmInfo, ComponentSchema, TransformStage } from '@ali/lowcode-types';
+import { RootSchema, NpmInfo, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
 import { BuiltinSimulatorRenderer, NodeInstance, Component, DocumentModel, Node } from '@ali/lowcode-designer';
 import { createMemoryHistory, MemoryHistory } from 'history';
 import Slot from './builtin-components/slot';
@@ -220,7 +220,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
 
   private _libraryMap: { [key: string]: string } = {};
   private buildComponents() {
-    this._components = buildComponents(this._libraryMap, this._componentsMap);
+    // TODO: remove this.createComponent
+    this._components = buildComponents(this._libraryMap, this._componentsMap, this.createComponent.bind(this));
   }
   @obx.ref private _components: any = {};
   @computed get components(): object {
@@ -308,6 +309,9 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     _schema.methods = {};
     _schema.lifeCycles = {};
 
+    const node = host.document.createNode(_schema);
+    _schema = node.export(TransformStage.Render);
+
     const processPropsSchema = (propsSchema: any, propsMap: any): any => {
       if (!propsSchema) {
         return {};
@@ -315,24 +319,55 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
 
       const result = { ...propsSchema };
       const reg = /^(?:this\.props|props)\.(\S+)$/;
-      Object.keys(propsSchema).map((key: string) => {
-        if (propsSchema[key].type === 'JSExpression') {
-          const { value } = propsSchema[key];
+      Object.keys(result).map((key: string) => {
+        if (result[key]?.type === 'JSExpression') {
+          const { value } = result[key];
           const matched = reg.exec(value);
           if (matched) {
             const propName = matched[1];
             result[key] = propsMap[propName];
           }
+        } else if (result[key]?.type === 'JSSlot') {
+          const schema = result[key].value;
+          result[key] = createElement(Ele, {schema, propsMap: {}});
         }
       });
+
       return result;
     };
 
-    const getElement = (componentsMap: any, schema: any, propsMap: any): ReactElement => {
-      const Com = componentsMap[schema.componentName];
-      let children = null;
-      if (schema.children && schema.children.length > 0) {
-        children = schema.children.map((item: any) => getElement(componentsMap, item, propsMap));
+    const renderer = this;
+    const componentsMap = renderer.componentsMap;
+
+    class Ele extends React.Component<{ schema: any, propsMap: any }> {
+      private isModal: boolean;
+
+      constructor(props: any){
+        super(props);
+        const componentMeta = host.document.getComponentMeta(props.schema.componentName);
+        if (componentMeta?.prototype?.isModal()) {
+          this.isModal = true;
+          return;
+        }
+      }
+
+      render() {
+        if (this.isModal) {
+          return null;
+        }
+        const { schema, propsMap } = this.props;
+        const Com = componentsMap[schema.componentName];
+        if (!Com) {
+          return null;
+        }
+        let children = null;
+        if (schema.children && schema.children.length > 0) {
+          children = schema.children.map((item: any) => createElement(Ele, {schema: item, propsMap}));
+        }
+        const props = processPropsSchema(schema.props, propsMap);
+        const _leaf = host.document.createNode(schema);
+
+        return createElement(Com, {...props, _leaf}, children);
       }
       const _leaf = this.document.designer.currentDocument?.createNode(schema);
       const node = this.document.createNode(schema);
@@ -350,7 +385,6 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         if (_schema.children && Array.isArray(_schema.children)) {
           children = _schema.children?.map((item: any) => getElement(componentsMap, item, this.props));
         }
-        return createElement(React.Fragment, {}, children);
       }
     }
 
@@ -452,19 +486,20 @@ const builtinComponents = {
   Leaf,
 };
 
-function buildComponents(
-  libraryMap: LibraryMap,
-  componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> },
-) {
+function buildComponents(libraryMap: LibraryMap,
+  componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> | ComponentSchema },
+  createComponent: (schema: ComponentSchema) => Component | null) {
   const components: any = {
     ...builtinComponents,
   };
   Object.keys(componentsMap).forEach((componentName) => {
     let component = componentsMap[componentName];
-    if (isReactComponent(component)) {
+    if (component && (component as ComponentSchema).componentName === 'Component') {
+      components[componentName] = createComponent(component as ComponentSchema);
+    } else if (isReactComponent(component)) {
       components[componentName] = component;
     } else {
-      component = findComponent(libraryMap, componentName, component);
+      component = findComponent(libraryMap, componentName, component as NpmInfo);
       if (component) {
         components[componentName] = component;
       }

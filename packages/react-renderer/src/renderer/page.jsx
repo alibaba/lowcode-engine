@@ -15,12 +15,13 @@ export default class PageRenderer extends BaseRenderer {
   static propTypes = {
     __schema: PropTypes.object,
   };
+
   static defaultProps = {
     __schema: {},
   };
 
   static getDerivedStateFromProps(props, state) {
-    debug(`page.getDerivedStateFromProps`);
+    debug('page.getDerivedStateFromProps');
     const func = props.__schema.lifeCycles && props.__schema.lifeCycles.getDerivedStateFromProps;
     if (func) {
       return func(props, state);
@@ -45,18 +46,22 @@ export default class PageRenderer extends BaseRenderer {
     super.getSnapshotBeforeUpdate(...arguments);
     debug(`page.getSnapshotBeforeUpdate - ${this.props.__schema.fileName}`);
   }
+
   async componentDidMount() {
     super.componentDidMount(...arguments);
     debug(`page.componentDidMount - ${this.props.__schema.fileName}`);
   }
+
   async componentDidUpdate() {
     super.componentDidUpdate(...arguments);
     debug(`page.componentDidUpdate - ${this.props.__schema.fileName}`);
   }
+
   async componentWillUnmount() {
     super.componentWillUnmount(...arguments);
     debug(`page.componentWillUnmount - ${this.props.__schema.fileName}`);
   }
+
   async componentDidCatch() {
     await super.componentDidCatch(...arguments);
     debug(`page.componentDidCatch - ${this.props.__schema.fileName}`);
@@ -74,7 +79,9 @@ export default class PageRenderer extends BaseRenderer {
     this.__render();
 
     const props = this.__parseData(__schema.props);
-    const { id, className, style, autoLoading, defaultHeight = 300, loading } = props;
+    const {
+ id, className, style, autoLoading, defaultHeight = 300, loading
+} = props;
 
     const { Page } = __components;
     if (Page) {

@@ -3,11 +3,13 @@ import { EventEmitter } from 'events';
 import { registerSetter, RegisteredSetter, getSetter } from '@ali/lowcode-editor-core';
 import Bundle from './bundle';
 import { CustomView } from '@ali/lowcode-types';
+import Prototype from './prototype';
 
 export class Trunk {
   private trunk: any[] = [];
   private emitter: EventEmitter = new EventEmitter();
   private metaBundle = new Bundle();
+  private componentPrototypeMocker: any;
 
   isReady() {
     return this.getList().length > 0;
@@ -25,7 +27,13 @@ export class Trunk {
 
   getList(): any[] {
     const list = this.trunk.reduceRight((prev, cur) => prev.concat(cur.getList()), []);
-    return Array.from(new Set(list));
+    const result: Prototype[] = [];
+    list.forEach((item: Prototype) => {
+      if (!result.find(r => r.options.componentName === item.options.componentName)) {
+        result.push(item);
+      }
+    });
+    return result;
   }
 
   getPrototype(name: string) {
@@ -97,8 +105,16 @@ export class Trunk {
     console.warn('Trunk.afterLoadBundle is deprecated');
   }
 
-  registerComponentPrototypeMocker() {
-    console.warn('Trunk.registerComponentPrototypeMocker is deprecated');
+  registerComponentPrototypeMocker(mocker: any) {
+    this.componentPrototypeMocker = mocker;
+  }
+
+  mockComponentPrototype(bundle: any) {
+    if (!this.componentPrototypeMocker) {
+      lg.error('ERROR: no component prototypeMocker is set');
+    }
+    return this.componentPrototypeMocker
+      && this.componentPrototypeMocker.mockPrototype(bundle);
   }
 
   setPackages() {
@@ -111,6 +127,10 @@ export class Trunk {
       return setter.component;
     }
     return setter;
+  }
+
+  getRecents(limit: number) {
+    return this.getList().filter((prototype) => prototype.getCategory()).slice(0, limit);
   }
 }
 

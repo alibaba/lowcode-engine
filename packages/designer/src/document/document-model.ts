@@ -10,7 +10,7 @@ import { Selection } from './selection';
 import { History } from './history';
 import { TransformStage } from './node';
 import { uniqueId } from '@ali/lowcode-utils';
-import ModalNodesManager from './node/modalNodesManager';
+import { ModalNodesManager } from './node';
 
 export type GetDataType<T, NodeType> = T extends undefined
   ? NodeType extends {
@@ -19,6 +19,15 @@ export type GetDataType<T, NodeType> = T extends undefined
     ? R
     : any
   : T;
+
+  export interface ComponentMap {
+    componentName: string;
+    package: string;
+    version?: string;
+    destructuring?: boolean;
+    exportName?: string;
+    subName?: string;
+  }
 
 export class DocumentModel {
   /**
@@ -37,13 +46,21 @@ export class DocumentModel {
    * 操作记录控制
    */
   readonly history: History;
+  /**
+   * 模态节点管理
+   */
+  readonly modalNodesManager: ModalNodesManager;
 
   private nodesMap = new Map<string, Node>();
   @obx.val private nodes = new Set<Node>();
   private seqId = 0;
   private emitter: EventEmitter;
   private rootNodeVisitorMap: { [visitorName: string]: any } = {};
-  private modalNodesManager: ModalNodesManager;
+
+  /**
+   * @deprecated
+   */
+  private _addons: { [key: string]: { exportData: () => any; isProp: boolean;} } = {};
 
   /**
    * 模拟器
@@ -169,7 +186,7 @@ export class DocumentModel {
       node = this.getNode(schema.id);
       if (node && node.componentName === schema.componentName) {
         if (node.parent) {
-          node.internalSetParent(null);
+          node.internalSetParent(null, false);
           // will move to another position
           // todo: this.activeNodes?.push(node);
         }
@@ -292,8 +309,11 @@ export class DocumentModel {
   }
 
   import(schema: RootSchema, checkId = false) {
+    // TODO: do purge
+    this.nodes.forEach(node => {
+      this.destroyNode(node);
+    });
     this.rootNode.import(schema as any, checkId);
-    // todo: purge something
     // todo: select added and active track added
   }
 
@@ -463,9 +483,13 @@ export class DocumentModel {
   }
 
   // add toData
-  toData() {
+  toData(extraComps?: string[]) {
     const node = this.project?.currentDocument?.export(TransformStage.Save);
-    return { componentsTree: [node] };
+    const data = {
+      componentsMap: this.getComponentsMap(extraComps),
+      componentsTree: [node],
+   };
+   return data;
   }
 
   getHistory(): History {
@@ -475,6 +499,32 @@ export class DocumentModel {
   get root() {
     return this.rootNode;
   }
+
+  /**
+   * @deprecated
+   */
+  getAddonData(name: string) {
+    const addon = this._addons[name];
+    return addon?.exportData();
+  }
+
+  /**
+   * @deprecated
+   */
+  registerAddon(name: string, exportData: any) {
+    if (['id', 'params', 'layout'].indexOf(name) > -1) {
+      throw new Error('addon name cannot be id, params, layout');
+    }
+    const i = this._addons?.findIndex((item) => item.name === name);
+    if (i > -1) {
+      this._addons?.splice(i, 1);
+    }
+    this._addons?.push({
+      exportData,
+      name,
+    });
+  }
+
 
   acceptRootNodeVisitor(
     visitorName: string = 'default',
@@ -497,6 +547,37 @@ export class DocumentModel {
     return this.rootNodeVisitorMap[name];
   }
 
+  getComponentsMap(extraComps?: string[]) {
+    const componentsMap: ComponentMap[] = [];
+    // 组件去重
+    const map: any = {};
+    for (let node of this.nodesMap.values()) {
+      const { componentName } = node || {};
+      if (!map[componentName] && node?.componentMeta?.npm?.package) {
+        map[componentName] = true;
+        componentsMap.push({
+          componentName,
+          package: node?.componentMeta?.npm?.package,
+        });
+      }
+    }
+    // 合并外界传入的自定义渲染的组件
+    if (Array.isArray(extraComps)) {
+      extraComps.forEach(c => {
+        if (c && !map[c]) {
+          const m = this.getComponentMeta(c);
+          if (m && m.npm?.package) {
+            componentsMap.push({
+              componentName: c,
+              package: m.npm?.package,
+            });
+          }
+        }
+      });
+    }
+    return componentsMap;
+  }
+
   onNodeCreate(func: (node: Node) => void) {
     this.emitter.on('nodecreate', func);
     return () => {
@@ -509,6 +590,20 @@ export class DocumentModel {
     return () => {
       this.emitter.removeListener('nodedestroy', func);
     };
+  }
+
+  /**
+   * @deprecated
+   */
+  refresh() {
+    console.warn('refresh method is deprecated');
+  }
+
+  /**
+   * @deprecated
+   */
+  onRefresh(func: () => void) {
+    console.warn('onRefresh method is deprecated');
   }
 }
 
