@@ -1,0 +1,31 @@
+////
+/// @module tree-select: 树选择
+/// @tag TreeSelect
+/// @category component
+/// @family data-entry
+/// @varPrefix $tree-select-
+/// @classPrefix {prefix}-tree-select
+/// @order {"size/dropdown":10,"statement/normal":10,"statement/normal/dropdown":100}
+////
+
+// tree-select variables
+// --------------------------------------------------
+
+// unconfigurable
+$tree-select-prefix: ".#{$css-prefix}tree-select";
+
+// Size
+// ----------------------------------------
+
+/// padding (t, b)
+/// @namespace size/dropdown
+$tree-select-padding-vertical: $s-2 !default;
+/// padding (l, r)
+/// @namespace size/dropdown
+$tree-select-padding-horizontal: $s-5 !default;
+
+// Statement
+// ----------------------------------------
+/// background
+/// @namespace statement/normal/dropdown
+$tree-select-background: $color-white !default;

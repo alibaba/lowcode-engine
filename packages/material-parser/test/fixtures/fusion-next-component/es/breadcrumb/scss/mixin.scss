@@ -1,0 +1,131 @@
+@charset "UTF-8";
+
+// breadcrumb mixins
+// --------------------------------------------------
+
+@mixin breadcrumb-bounding() {
+    display: block;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+
+    .#{$css-prefix}breadcrumb-item {
+        display: inline-block;
+
+        .#{$css-prefix}breadcrumb-text {
+            display: inline-block;
+            text-decoration: none;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            transition: all $motion-duration-immediately $motion-linear;
+
+            > b {
+                font-weight: normal;
+            }
+        }
+
+        .#{$css-prefix}breadcrumb-separator {
+            display: inline-block;
+            vertical-align: top;
+        }
+    }
+}
+
+@mixin breadcrumb-size(
+    $height,
+    $minWidth,
+    $fontSize,
+    $ellipsisFontSize,
+    $separatorSize,
+    $separatorMargin
+) {
+    height: $height;
+    line-height: $height;
+
+    .#{$css-prefix}breadcrumb-text {
+        height: $height;
+        min-width: $minWidth;
+        font-size: $fontSize;
+        line-height: $height;
+    }
+
+    .#{$css-prefix}breadcrumb-separator {
+        height: $height;
+        margin: 0 $separatorMargin;
+        font-size: $separatorSize;
+        line-height: $height;
+
+        .#{$css-prefix}icon {
+            @include icon-size($separatorSize);
+        }
+    }
+
+    .#{$css-prefix}breadcrumb-text-ellipsis {
+        font-size: $ellipsisFontSize;
+    }
+}
+
+@mixin breadcrumb-state(
+    $textColor,
+    $ellipsisTextColor,
+    $currentTextColor,
+    $currentTextWeight,
+    $keywordTextColor,
+    $iconColor,
+    $textColorHover,
+    $currentTextColorHover,
+    $keywordTextColorHover
+) {
+    .#{$css-prefix}breadcrumb-text {
+        color: $textColor;
+        > b {
+            color: $keywordTextColor;
+        }
+        > a {
+            color: $textColor;
+            text-decoration: none;
+            text-align: center;
+        }
+    }
+
+    .#{$css-prefix}breadcrumb-text.activated {
+        color: $currentTextColor;
+        font-weight: $currentTextWeight;
+        > a {
+            color: $currentTextColor;
+            font-weight: $currentTextWeight;
+        }
+    }
+
+    .#{$css-prefix}breadcrumb-text-ellipsis {
+        color: $ellipsisTextColor;
+        cursor: default;
+    }
+
+    .#{$css-prefix}breadcrumb-separator {
+        color: $iconColor;
+    }
+
+    .#{$css-prefix}breadcrumb-text:not(.#{$css-prefix}breadcrumb-text-ellipsis):hover > a {
+        color: $textColorHover;
+    }
+
+    a.#{$css-prefix}breadcrumb-text.activated:hover > a {
+        color: $currentTextColorHover;
+    }
+
+    a.#{$css-prefix}breadcrumb-text:not(.#{$css-prefix}breadcrumb-text-ellipsis):hover {
+        color: $textColorHover;
+
+        > b {
+            color: $keywordTextColorHover;
+        }
+    }
+
+    a.#{$css-prefix}breadcrumb-text.activated:hover {
+        color: $currentTextColorHover;
+        font-weight: $currentTextWeight;
+    }
+}

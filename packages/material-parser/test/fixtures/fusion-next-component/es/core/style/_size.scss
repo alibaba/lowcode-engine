@@ -1,0 +1,285 @@
+////
+/// @module size: 尺寸
+/// @type String
+/// @category style
+////
+
+
+/**
+ * 尺寸 基础尺寸
+ * 命名能在语义的前提下简单就尽量简单, 这里可以是 size-2x, space-2x, size-base ...
+ * 不过可以在语义的前提下做的更精简一些, 于是用了s2, s1等
+ * 可用变量: `$s1 - $s8`
+ * @example scss - 使用
+ *   .element {
+ *     padding: $s1 !default;
+ *   }
+ *
+ * @example css - CSS 输出
+ *   .element {
+ *     padding: 4px !default;
+ *   }
+ */
+
+/// size-base
+/// @semantic 基础尺寸
+/// @type Length
+$size-base: 4px !default;
+
+/// s-zero
+/// @export
+/// @unconfigurable
+$s-zero: 0;
+
+/// s-1
+/// @unconfigurable
+/// @export
+$s-1: $size-base * 1;
+
+/// s-2
+/// @export
+/// @unconfigurable
+$s-2: $size-base * 2;
+
+/// s-3
+/// @export
+/// @unconfigurable
+$s-3: $size-base * 3;
+
+/// s-4
+/// @export
+/// @unconfigurable
+$s-4: $size-base * 4;
+
+/// s-5
+/// @export
+/// @unconfigurable
+$s-5: $size-base * 5;
+
+/// s-6
+/// @export
+/// @unconfigurable
+$s-6: $size-base * 6;
+
+/// s-7
+/// @export
+/// @unconfigurable
+$s-7: $size-base * 7;
+
+/// s-8
+/// @export
+/// @unconfigurable
+$s-8: $size-base * 8;
+
+/// s-9
+/// @export
+/// @unconfigurable
+$s-9: $size-base * 9;
+
+/// s-10
+/// @export
+/// @unconfigurable
+$s-10: $size-base * 10;
+
+/// s-11
+/// @export
+/// @unconfigurable
+$s-11: $size-base * 11;
+
+/// s-12
+/// @export
+/// @unconfigurable
+$s-12: $size-base * 12;
+
+/// s-13
+/// @export
+/// @unconfigurable
+$s-13: $size-base * 13;
+
+/// s-14
+/// @export
+/// @unconfigurable
+$s-14: $size-base * 14;
+
+/// s-15
+/// @export
+/// @unconfigurable
+$s-15: $size-base * 15;
+
+/// s-16
+/// @export
+/// @unconfigurable
+$s-16: $size-base * 16;
+
+/// s-17
+/// @export
+/// @unconfigurable
+$s-17: $size-base * 17;
+
+/// s-18
+/// @export
+/// @unconfigurable
+$s-18: $size-base * 18;
+
+/// s-19
+/// @export
+/// @unconfigurable
+$s-19: $size-base * 19;
+
+/// s-20
+/// @export
+/// @unconfigurable
+$s-20: $size-base * 20;
+
+/// s-21
+/// @export
+/// @unconfigurable
+$s-21: $size-base * 21;
+
+/// s-22
+/// @export
+/// @unconfigurable
+$s-22: $size-base * 22;
+
+/// s-23
+/// @export
+/// @unconfigurable
+$s-23: $size-base * 23;
+
+/// s-24
+/// @export
+/// @unconfigurable
+$s-24: $size-base * 24;
+
+/// s-25
+/// @export
+/// @unconfigurable
+$s-25: $size-base * 25;
+
+/// s-26
+/// @export
+/// @unconfigurable
+$s-26: $size-base * 26;
+
+/// s-27
+/// @export
+/// @unconfigurable
+$s-27: $size-base * 27;
+
+/// s-28
+/// @export
+/// @unconfigurable
+$s-28: $size-base * 28;
+
+/// s-29
+/// @export
+/// @unconfigurable
+$s-29: $size-base * 29;
+
+/// s-30
+/// @export
+/// @unconfigurable
+$s-30: $size-base * 30;
+
+/// s-31
+/// @export
+/// @unconfigurable
+$s-31: $size-base * 31;
+
+/// s-32
+/// @export
+/// @unconfigurable
+$s-32: $size-base * 32;
+
+/// s-33
+/// @export
+/// @unconfigurable
+$s-33: $size-base * 33;
+
+/// s-34
+/// @export
+/// @unconfigurable
+$s-34: $size-base * 34;
+
+/// s-35
+/// @export
+/// @unconfigurable
+$s-35: $size-base * 35;
+
+/// s-36
+/// @export
+/// @unconfigurable
+$s-36: $size-base * 36;
+
+/// s-37
+/// @export
+/// @unconfigurable
+$s-37: $size-base * 37;
+
+/// s-38
+/// @export
+/// @unconfigurable
+$s-38: $size-base * 38;
+
+/// s-39
+/// @export
+/// @unconfigurable
+$s-39: $size-base * 39;
+
+/// s-40
+/// @export
+/// @unconfigurable
+$s-40: $size-base * 40;
+
+/// s-41
+/// @export
+/// @unconfigurable
+$s-41: $size-base * 41;
+
+/// s-42
+/// @export
+/// @unconfigurable
+$s-42: $size-base * 42;
+
+/// s-43
+/// @export
+/// @unconfigurable
+$s-43: $size-base * 43;
+
+/// s-44
+/// @export
+/// @unconfigurable
+$s-44: $size-base * 44;
+
+/// s-45
+/// @export
+/// @unconfigurable
+$s-45: $size-base * 45;
+
+/// s-46
+/// @export
+/// @unconfigurable
+$s-46: $size-base * 46;
+
+/// s-47
+/// @export
+/// @unconfigurable
+$s-47: $size-base * 47;
+
+/// s-48
+/// @export
+/// @unconfigurable
+$s-48: $size-base * 48;
+
+/// s-49
+/// @export
+/// @unconfigurable
+$s-49: $size-base * 49;
+
+/// s-50
+/// @export
+/// @unconfigurable
+$s-50: $size-base * 50;
+
+// ----------- patch ----------- //
+$s-0: $s-zero;

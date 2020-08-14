@@ -1,0 +1,325 @@
+@charset "UTF-8";
+@import "../core/index-noreset.scss";
+@import "../input/scss/mixin.scss";
+@import "scss/mixin";
+@import "scss/variable";
+@import "./rtl.scss";
+
+#{$search-prefix} {
+    @include box-sizing;
+
+    width: 100%;
+    display: inline-block;
+
+    .#{$css-prefix}input,
+    .#{$css-prefix}select {
+        border: none;
+    }
+    .#{$css-prefix}select {
+        .#{$css-prefix}input {
+            height: auto;
+            .#{$css-prefix}input-text-field {
+                height: auto;
+            }
+        }
+    }
+
+    #{$search-prefix}-left {
+        border-style: solid;
+        transition: all $motion-duration-immediately $motion-linear;
+    }
+
+    #{$search-prefix}-left-addon {
+        .#{$css-prefix}input,
+        .#{$css-prefix}select-trigger-search {
+            min-height: 100%;
+            border-bottom-right-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        .#{$css-prefix}select-values {
+            line-height: 1;
+        }
+
+        &.#{$css-prefix}input-group-addon .#{$css-prefix}select {
+            margin: 0;
+        }
+    }
+
+    #{$search-prefix}-left-addon + #{$search-prefix}-input .#{$css-prefix}input {
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+    }
+
+    #{$search-prefix}-input {
+        width: 100%;
+    }
+
+    #{$search-prefix}-btn {
+        box-shadow: none;
+    }
+    &-normal {
+        width: 600px;
+
+        #{$search-prefix}-left {
+            // border-right: none; 该属性一旦添加 无法被 rtl.scss覆盖 故在后面用 :not选择器进行
+
+            border-top-left-radius: $search-normal-corner;
+            border-bottom-left-radius: $search-normal-corner;
+        }
+
+        .#{$css-prefix}input {
+            border-radius: $search-normal-corner 0 0 $search-normal-corner;
+        }
+
+        .#{$css-prefix}btn {
+            border-radius: 0 $search-normal-corner $search-normal-corner 0;
+        }
+
+        &.#{$css-prefix}primary {
+            @include search-type-color(
+                $search-normal-primary-color,
+                $search-normal-primary-hover-color,
+                $search-normal-primary-color,
+                $search-normal-primary-btn-text-color,
+                $search-normal-primary-color,
+                $search-normal-primary-btn-hover-bg-color,
+                $search-normal-primary-btn-hover-text-color,
+                $search-normal-primary-split-color
+            );
+
+            &.#{$css-prefix}large {
+                @include search-type(
+                    $search-normal-primary-l-height,
+                    $search-normal-primary-l-btn-text-size,
+                    $search-normal-primary-l-icon-size,
+                    $search-normal-primary-border-width,
+                    $search-normal-primary-btn-text-padding-left,
+                    $search-normal-primary-shadow);
+            }
+
+            &.#{$css-prefix}medium {
+                @include search-type(
+                    $search-normal-primary-m-height,
+                    $search-normal-primary-m-btn-text-size,
+                    $search-normal-primary-m-icon-size,
+                    $search-normal-primary-border-width,
+                    $search-normal-primary-btn-text-padding-left,
+                    $search-normal-primary-shadow);
+            }
+
+            .#{$css-prefix}input {
+                border-top-left-radius: $search-normal-corner - $search-normal-primary-border-width;
+                border-bottom-left-radius: $search-normal-corner - $search-normal-primary-border-width;
+            }
+        }
+
+        &.#{$css-prefix}secondary {
+            @include search-type-color(
+                $search-normal-secondary-color,
+                $search-normal-secondary-hover-color,
+                $search-normal-secondary-btn-bg-color,
+                $search-normal-secondary-btn-text-color,
+                $search-normal-secondary-btn-bg-color,
+                $search-normal-secondary-btn-hover-bg-color,
+                $search-normal-secondary-btn-hover-text-color,
+                $search-normal-secondary-split-color);
+
+            &.#{$css-prefix}large {
+                @include search-type(
+                    $search-normal-secondary-l-height,
+                    $search-normal-secondary-l-btn-text-size,
+                    $search-normal-secondary-l-icon-size,
+                    $search-normal-secondary-border-width,
+                    $search-normal-secondary-btn-text-padding-left,
+                    $search-normal-secondary-shadow);
+            }
+
+            &.#{$css-prefix}medium {
+                @include search-type(
+                    $search-normal-secondary-m-height,
+                    $search-normal-secondary-m-btn-text-size,
+                    $search-normal-secondary-m-icon-size,
+                    $search-normal-secondary-border-width,
+                    $search-normal-secondary-btn-text-padding-left,
+                    $search-normal-secondary-shadow);
+            }
+
+            .#{$css-prefix}input {
+                border-top-left-radius: $search-normal-corner - $search-normal-secondary-border-width;
+                border-bottom-left-radius: $search-normal-corner - $search-normal-secondary-border-width;
+            }
+        }
+
+        &.#{$css-prefix}normal {
+            @include search-type-color(
+                $search-normal-normal-color,
+                $search-normal-normal-hover-color,
+                $search-normal-normal-btn-bg-color,
+                $search-normal-normal-btn-text-color,
+                $search-normal-normal-color,
+                $search-normal-normal-btn-hover-bg-color,
+                $search-normal-normal-btn-hover-text-color,
+                $search-normal-normal-split-color);
+
+            &.#{$css-prefix}large {
+                @include search-type(
+                    $search-normal-normal-l-height,
+                    $search-normal-normal-l-btn-text-size,
+                    $search-normal-normal-l-icon-size,
+                    $search-normal-normal-border-width,
+                    $search-normal-normal-btn-text-padding-left,
+                    $search-normal-normal-shadow);
+            }
+
+            &.#{$css-prefix}medium {
+                @include search-type(
+                    $search-normal-normal-m-height,
+                    $search-normal-normal-m-btn-text-size,
+                    $search-normal-normal-m-icon-size,
+                    $search-normal-normal-border-width,
+                    $search-normal-normal-btn-text-padding-left,
+                    $search-normal-normal-shadow);
+            }
+
+            .#{$css-prefix}input {
+                border-top-left-radius: $search-normal-corner - $search-normal-normal-border-width;
+                border-bottom-left-radius: $search-normal-corner - $search-normal-normal-border-width;
+            }
+        }
+
+        &.#{$css-prefix}dark {
+            @include search-type-color(
+                $search-normal-dark-color,
+                $search-normal-dark-hover-color,
+                $search-normal-dark-color,
+                $search-normal-dark-btn-text-color,
+                $search-normal-dark-color,
+                $search-normal-dark-btn-hover-bg-color,
+                $search-normal-dark-btn-hover-text-color,
+                $search-normal-dark-color);
+
+            .#{$css-prefix}select-inner,
+            input {
+                color: $search-normal-dark-text-color;
+            }
+
+            .#{$css-prefix}input {
+                background: $color-calculate-search-normal-dark-bg;
+            }
+            .#{$css-prefix}select {
+                background: $color-calculate-search-normal-dark-bg;
+            }
+
+            &.#{$css-prefix}large {
+                @include search-type(
+                    $search-normal-dark-l-height,
+                    $search-normal-dark-l-btn-text-size,
+                    $search-normal-dark-l-icon-size,
+                    $search-normal-dark-border-width,
+                    $search-normal-dark-btn-text-padding-left,
+                    $search-normal-dark-shadow);
+            }
+
+            &.#{$css-prefix}medium {
+                @include search-type(
+                    $search-normal-dark-m-height,
+                    $search-normal-dark-m-btn-text-size,
+                    $search-normal-dark-m-icon-size,
+                    $search-normal-dark-border-width,
+                    $search-normal-dark-btn-text-padding-left,
+                    $search-normal-dark-shadow);
+            }
+        }
+    }
+    &-normal:not([dir=rtl]) {
+        #{$search-prefix}-left {
+            border-right: none;
+        }
+    }
+    &-simple {
+        width: 300px;
+        box-shadow: $search-simple-normal-shadow;
+        #{$search-prefix}-icon {
+            cursor: pointer;
+            transition: all $motion-duration-immediately $motion-linear;
+        }
+
+        #{$search-prefix}-left,.#{$css-prefix}input {
+            border-radius: $search-simple-corner;
+        }
+        border-radius: $search-simple-corner;
+
+        &.#{$css-prefix}large {
+            #{$search-prefix}-icon {
+                margin-right: $search-simple-l-icon-margin-right;
+            }
+        }
+
+        &.#{$css-prefix}medium {
+            #{$search-prefix}-icon {
+                margin-right: $search-simple-m-icon-margin-right;
+            }
+        }
+
+        &.#{$css-prefix}normal {
+            @include search-simple-color(
+                $search-simple-normal-color,
+                $search-simple-normal-hover-color,
+                $search-simple-normal-icon-text-color,
+                $search-simple-normal-icon-hover-text-color,
+                $search-simple-normal-split-color);
+
+            #{$search-prefix}-left {
+                border-width: $search-simple-normal-border-width;
+            }
+
+            &.#{$css-prefix}large {
+                @include search-simple-type($search-simple-normal-l-icon-size);
+            }
+
+            &.#{$css-prefix}medium {
+                @include search-simple-type($search-simple-normal-m-icon-size);
+            }
+        }
+
+        &.#{$css-prefix}dark {
+            @include search-simple-color( $search-simple-dark-color, $search-simple-dark-hover-color, $search-simple-dark-icon-text-color, $search-simple-dark-icon-hover-text-color, $search-simple-dark-split-color );
+
+            .#{$css-prefix}select-inner,
+            input {
+                color: $search-simple-dark-text-color;
+            }
+            .#{$css-prefix}input {
+                background: $color-calculate-search-simple-dark-bg;
+            }
+            .#{$css-prefix}select {
+                background: $color-calculate-search-simple-dark-bg;
+            }
+
+            #{$search-prefix}-left {
+                border-width: $search-simple-dark-border-width;
+            }
+
+            &.#{$css-prefix}large {
+                @include search-simple-type($search-simple-dark-l-icon-size);
+            }
+
+            &.#{$css-prefix}medium {
+                @include search-simple-type($search-simple-dark-m-icon-size);
+            }
+        }
+    }
+}
+
+.#{$css-prefix}search-simple {
+
+    .#{$css-prefix}select.#{$css-prefix}large {
+        height: $form-element-large-height - 2;
+    }
+
+    .#{$css-prefix}select.#{$css-prefix}medium {
+        height: $form-element-medium-height - 2;
+    }
+}
+

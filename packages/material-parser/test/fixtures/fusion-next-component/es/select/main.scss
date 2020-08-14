@@ -1,0 +1,462 @@
+@charset "UTF-8";
+@import "../core/index-noreset.scss";
+@import "../input/scss/variable.scss";
+@import "../input/scss/mixin.scss";
+@import "scss/mixin";
+@import "scss/variable";
+
+#{$select-prefix} {
+    @include box-sizing;
+    display: inline-block;
+    font-size: 0;
+    vertical-align: middle;
+
+    /* Select trigger */
+    &-trigger {
+        min-width: 100px;
+        outline: 0;
+        transition: all $motion-duration-immediately $motion-linear;
+
+        .#{$css-prefix}input-label {
+            flex: 0 0 auto;
+            width: auto;
+        }
+
+        #{$select-prefix}-values {
+            display: block;
+            width: 100%;
+            flex: 1 1 0;
+            overflow: hidden;
+
+            > em {
+                font-style: inherit;
+            }
+
+            input {
+                padding-left: 0;
+                padding-right: 0;
+            }
+        }
+
+        .#{$css-prefix}input-control {
+            flex: 0 0 auto;
+            width: auto;
+            > * {
+                display: inline-block;
+                width: auto;
+            }
+            > .#{$css-prefix}select-arrow {
+                padding-right: 0;
+            }
+        }
+
+        .#{$css-prefix}input.#{$css-prefix}disabled {
+            em {
+                color: $input-disabled-color;
+            }
+            #{$select-prefix}-arrow {
+                cursor: not-allowed;
+            }
+        }
+
+        .#{$css-prefix}select-clear {
+            display: none;
+        }
+
+        &.#{$css-prefix}has-clear:hover {
+            .#{$css-prefix}select-clear {
+                display: inline-block;
+            }
+            .#{$css-prefix}select-arrow {
+                display: none;
+            }
+        }
+    }
+
+    #{$select-prefix}-inner {
+        display: inline-flex;
+        align-items: center;
+        width: 100%;
+        min-width: 100px;
+
+        outline: 0;
+        color: $select-color;
+
+        #{$tag-prefix} {
+            line-height: 1;
+            margin-right: $select-tag-spacing-lr;
+            margin-bottom: $select-tag-spacing-tb;
+            padding-left: $select-tag-padding-lr;
+            padding-right: $select-tag-padding-lr;
+        }
+
+        .#{$css-prefix}input-inner {
+            width: auto;
+        }
+    }
+
+    &-trigger-search {
+        position: relative;
+        display: inline-block;
+        vertical-align: top;
+        overflow: hidden;
+        width: 100%;
+        max-width: 100%;
+
+        > input, > span {
+            display: block;
+            font-size: inherit;
+            font-family: inherit;
+            letter-spacing: inherit;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        input {
+            position: absolute;
+            background-color: $color-transparent;
+            width: 100%;
+            height: 100% !important;
+            z-index: 1;
+            left: 0;
+            border: 0;
+            outline: 0;
+            margin: 0;
+            padding: 0;
+            cursor: inherit;
+        }
+
+        > span {
+            position: relative;
+            visibility: hidden;
+            white-space: pre;
+            max-width: 100%; /* 在 table 布局中，100% 并没有什么x用 */
+            z-index: -1;
+        }
+    }
+
+    &-single {
+        &.#{$css-prefix}no-search {
+            cursor: pointer;
+        }
+
+        /* 搜索框激活时，展开后不显示值，只显示搜索框 */
+        &.#{$css-prefix}has-search.#{$css-prefix}active {
+            #{$select-prefix}-values > em {
+                display: none;
+            }
+        }
+
+        /* 搜索框未激活，或者menu未展开，如果有值，则不显示搜索(placeholder) */
+        &.#{$css-prefix}no-search,
+        &.#{$css-prefix}inactive {
+            #{$select-prefix}-values > em + #{$select-prefix}-trigger-search {
+                width: 1px;
+                opacity: 0;
+                filter: alpha(opacity=0); /* for IE 9 */
+            }
+
+            #{$select-prefix}-trigger-search input {
+                color: $color-transparent;
+            }
+        }
+
+        #{$select-prefix}-values {
+            display: inline-flex;
+            align-items: center;
+
+            > em {
+                vertical-align: middle;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+    }
+
+    &-multiple {
+        #{$select-prefix}-compact {
+            position: relative;
+            white-space: nowrap;
+            #{$select-prefix}-trigger-search {
+                width: auto;
+            }
+            #{$select-prefix}-tag-compact {
+                position: absolute;
+                top: 0;
+                right: 0;
+                z-index: 1;
+                padding: 0 4px 0 16px;
+                color: $input-text-color;
+                background: linear-gradient(90deg, rgba(255, 255, 255, 0), $input-bg-color 10px);
+            }
+        }
+    }
+
+    &-multiple, &-tag {
+        #{$select-prefix}-values {
+            /* Tag 有 3px 的 margin-bottom，所以包裹 Tag 的容器要作一下处理 */
+            margin-bottom: -$select-tag-spacing-tb;
+            height: auto !important;
+        }
+
+        #{$select-prefix}-trigger-search {
+            margin-bottom: $select-tag-spacing-tb;
+        }
+
+        /* 如果有值，则搜索框变为1px */
+        #{$tag-prefix} + #{$select-prefix}-trigger-search {
+            width: auto;
+            min-width: 1px; /* 保留一个光标的宽度 */
+        }
+        .#{$css-prefix}input {
+            height: auto;
+            align-items: start;
+        }
+
+        &.#{$css-prefix}small {
+            #{$select-prefix}-values {
+                @include select-size($form-element-small-height, $select-s-lineheight);
+            }
+            #{$select-prefix}-values-compact {
+                height: $form-element-small-height !important;
+            }
+            #{$tag-prefix} {
+                border: 0;
+                @include select-tag-size($select-s-lineheight, -1);
+
+                &-body {
+                    line-height: $select-s-lineheight;
+                }
+            }
+            .#{$css-prefix}input-label, .#{$css-prefix}input-control, #{$select-prefix}-tag-compact {
+                line-height: $form-element-small-height - 2;
+            }
+        }
+
+        &.#{$css-prefix}medium {
+            #{$select-prefix}-values {
+                @include select-size($form-element-medium-height, $select-m-lineheight);
+            }
+            #{$select-prefix}-values-compact {
+                height: $form-element-medium-height !important;
+            }
+            #{$tag-prefix} {
+                @include select-tag-size($select-m-lineheight);
+            }
+            .#{$css-prefix}input-label, .#{$css-prefix}input-control, #{$select-prefix}-tag-compact {
+                line-height: $form-element-medium-height - 2;
+            }
+        }
+
+        &.#{$css-prefix}large {
+            #{$select-prefix}-values {
+                @include select-size($form-element-large-height, $select-l-lineheight);
+            }
+            #{$select-prefix}-values-compact {
+                height: $form-element-large-height !important;
+            }
+            #{$tag-prefix} {
+                @include select-tag-size($select-l-lineheight);
+            }
+            .#{$css-prefix}input-label, .#{$css-prefix}input-control, #{$select-prefix}-tag-compact {
+                line-height: $form-element-large-height - 2;
+            }
+        }
+    }
+
+    &.#{$css-prefix}no-search {
+        /* 在搜索框未激活时，将 input 的 color 置为透明 */
+        /* ISSUE: 在 firefox 中，readonly 的 input 仍然会显示光标 */
+        #{$select-prefix}-trigger-search input {
+            color: $color-transparent;
+        }
+    }
+
+    &-auto-complete {
+        width: 160px;
+
+        .#{$css-prefix}input {
+            width: 100%;
+            .#{$css-prefix}input-hint-wrap {
+                padding-right: 1px;
+            }
+            /* table-cell 下 margin 无效 */
+            #{$select-prefix}-arrow {
+                padding-left: 0;
+            }
+        }
+    }
+
+    &.#{$css-prefix}active {
+        #{$select-prefix}-arrow .#{$css-prefix}icon-arrow-down {
+            transform: rotate(180deg);
+        }
+    }
+
+    &-arrow {
+        cursor: pointer;
+        width: auto !important;
+        text-align: center;
+        transition: all $motion-duration-immediately $motion-linear;
+        /* transform-origin: center 41.8%; // icon 图像中心 */
+    }
+
+    &-popup-wrap {
+        animation-duration: $motion-duration-standard;
+        animation-timing-function: $motion-ease;
+    }
+
+    &-menu-wrapper {
+        max-height: 260px;
+        overflow: auto;
+        border: $popup-local-border-width $popup-local-border-style $popup-local-border-color;
+        border-radius: $popup-local-corner;
+        box-shadow: $popup-local-shadow;
+        #{$select-prefix}-menu {
+            max-height: none;
+            border: none;
+        }
+    }
+
+    /* 弹层 */
+    &-menu {
+        max-height: 260px;
+        overflow: auto;
+
+        #{$select-prefix}-menu-empty-content {
+            padding-left: $s-2;
+            padding-right: $s-2;
+            color: $select-hint-color;
+        }
+
+        /* autoComplete 没有选项时 menu 不显示 */
+        &#{$select-prefix}-auto-complete-menu#{$select-prefix}-menu-empty {
+            display: none;
+        }
+
+        .#{$css-prefix}menu-item-text .#{$css-prefix}icon {
+            vertical-align: middle;
+        }
+    }
+
+    /* 全选按钮 */
+    &-all {
+        display: block;
+        cursor: pointer;
+        padding: 0 $s-2;
+        margin: 0 $s-3 $s-2;
+        border-bottom: 1px solid $color-line1-2;
+
+        &:hover {
+            color: $color-link-3;
+        }
+
+        .#{$css-prefix}menu-icon-selected.#{$css-prefix}icon {
+            // remove display: inline-block !important; in next Y
+            display: inline-block !important;
+            top: initial;
+            color: $select-menu-icon-color;
+        }
+    }
+
+    &-highlight {
+        color: $select-highlight-color;
+        font-size: $select-highlight-font;
+    }
+
+    /* -------------- IE polyfill -------------- */
+    /* 根据最新的数据，在中国，PC 端的 IE9 份额为 2%， */
+    /* 所以不应该因为 IE9 而不使用 flex，而是应该做降级 polyfill */
+    /* @see http://gs.statcounter.com/ */
+    /* IE10、IE11 虽然支持 flex，但还是会有各种各样奇奇怪怪的问题 */
+    &-in-ie#{$select-prefix}-trigger {
+        #{$select-prefix}-values {
+            /* 在 table 布局中，overflow: hidden 会导致负的 margin 失效 */
+            overflow: visible;
+        }
+
+        .#{$css-prefix}input-control, .#{$css-prefix}input-label {
+            width: 1px;
+        }
+        .#{$css-prefix}input-control > * {
+            display: table-cell;
+            width: 1%;
+        }
+        #{$select-prefix}-arrow {
+            display: table-cell;
+        }
+        #{$select-prefix}-clear {
+            display: none;
+        }
+
+        &#{$select-prefix}-multiple,
+        &#{$select-prefix}-tag {
+            #{$select-prefix}-inner {
+                vertical-align: top;
+            }
+        }
+
+        #{$select-prefix}-inner {
+            display: inline-table;
+        }
+
+        &#{$select-prefix}-single {
+            #{$select-prefix}-values {
+                display: inline-table;
+            }
+            .#{$css-prefix}input.#{$css-prefix}small #{$select-prefix}-values {
+                line-height: $form-element-small-height;
+            }
+            .#{$css-prefix}input.#{$css-prefix}medium #{$select-prefix}-values {
+                line-height: $form-element-medium-height;
+            }
+            .#{$css-prefix}input.#{$css-prefix}large #{$select-prefix}-values {
+                line-height: $form-element-large-height;
+            }
+        }
+
+        #{$select-prefix}-trigger-search {
+            > span {
+                max-width: 100px;
+            }
+        }
+
+        &#{$select-prefix}-single {
+            &#{$select-prefix}-in-ie-fixwidth #{$select-prefix}-values {
+                position: relative;
+                > em {
+                    position: absolute;
+                    display: inline-block;
+                    height: 100%;
+                    line-height: 1;
+                    vertical-align: middle;
+                    overflow: hidden;
+                    left: 4px;
+                    right: 0;
+                    top: 30%;
+                }
+            }
+            /* 搜索框未激活，或者menu未展开，如果有值，则不显示搜索(placeholder) */
+            &.#{$css-prefix}no-search,
+            &.#{$css-prefix}inactive {
+                #{$select-prefix}-values > em + #{$select-prefix}-trigger-search {
+                    filter: alpha(opacity=0); /* for IE 9 */
+                    font-size: 0;
+                }
+
+                #{$select-prefix}-trigger-search input {
+                    color: inherit;
+                }
+            }
+        }
+
+        &.#{$css-prefix}no-search {
+            #{$select-prefix}-trigger-search input {
+                color: inherit;
+            }
+        }
+    }
+}
+
+@import "./rtl.scss";

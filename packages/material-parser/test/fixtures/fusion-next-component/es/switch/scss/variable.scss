@@ -1,0 +1,196 @@
+@charset "UTF-8";
+
+////
+/// @module switch: 开关
+/// @tag Switch
+/// @category component
+/// @family data-entry
+/// @varPrefix $switch-
+/// @classPrefix {prefix}-switch
+/// @order {"size/bounding":10,"size/handle":11,"size/content":12,"statement/normal":10,"statement/normal/bounding":100,"statement/normal/handle":101,"statement/normal/content":102,"statement/hover":11,"statement/hover/bounding":110,"statement/hover/handle":111,"statement/hover/content":112,"statement/disabled":12,"statement/disabled/bounding":120,"statement/disabled/handle":121,"statement/disabled/content":122}
+////
+// switch variables
+// --------------------------------------------------
+
+// Medium
+// ----------------------------------------
+/// width
+/// @namespace size/bounding
+$switch-size-m-width: $s-14 !default;
+/// radius
+/// @namespace size/bounding
+$switch-size-m-radius-container: $corner-3 !default;
+
+/// height
+/// @namespace size/handle
+$switch-size-m-trigger: $s-6 !default;
+/// radius
+/// @namespace size/handle
+$switch-size-m-radius-trigger: $corner-3 !default;
+
+// Small
+// ----------------------------------------
+/// width
+/// @namespace size/bounding
+$switch-size-s-width: $s-11 !default;
+
+/// radius
+/// @namespace size/bounding
+$switch-size-s-radius-container: $corner-3 !default;
+
+/// height
+/// @namespace size/handle
+$switch-size-s-trigger: $s-5 !default;
+/// radius
+/// @namespace size/handle
+$switch-size-s-radius-trigger: $corner-3 !default;
+
+/// border
+/// @namespace size/bounding
+$switch-border-width-container: $line-1 !default;
+
+/// on(l)
+/// @namespace size/content
+$switch-text-on-left: $s-2 !default;
+
+/// on-small(l)
+/// @namespace size/content
+$switch-size-s-text-on-left: $s-1 !default;
+
+/// off(r)
+/// @namespace size/content
+$switch-text-off-right: $s-2 !default;
+
+/// off-small(r)
+/// @namespace size/content
+$switch-size-s-text-off-right: $s-1 !default;
+
+/// border
+/// @namespace size/handle
+$switch-border-width-trigger: $line-1 !default;
+// level - on
+
+/// background
+/// @level on
+/// @namespace statement/normal/bounding
+$switch-normal-on-bg-color: $color-brand1-6 !default;
+/// background
+/// @level on
+/// @state hover
+/// @namespace statement/hover/bounding
+$switch-hover-on-bg-color: $color-brand1-9 !default;
+/// background
+/// @level on
+/// @state disabled
+/// @namespace statement/disabled/bounding
+$switch-disabled-on-bg-color: $color-fill1-3 !default;
+
+/// background
+/// @level on
+/// @namespace statement/normal/handle
+$switch-normal-on-trigger-bg-color: $color-white !default;
+/// background
+/// @level on
+/// @state hover
+/// @namespace statement/hover/handle
+$switch-hover-on-trigger-bg-color: $color-white !default;
+
+/// background
+/// @level on
+/// @state disabled
+/// @namespace statement/disabled/handle
+$switch-disabled-on-trigger-bg-color: $color-fill1-1 !default;
+
+/// text
+/// @level on
+/// @namespace statement/normal/content
+$switch-normal-on-color-font: $color-white !default;
+
+/// text
+/// @level on
+/// @state disabled
+/// @namespace statement/disabled/content
+$switch-disabled-on-color-font: $color-text1-1 !default;
+
+/// border color
+/// @level on
+/// @state disabled
+/// @namespace statement/disabled/bounding
+$switch-disabled-on-border-color: $color-line1-3 !default;
+
+/// border color
+/// @state disabled
+/// @namespace statement/normal/handle
+$switch-handle-on-border-color: $color-transparent !default;
+
+/// shadow
+/// @level on
+/// @namespace statement/normal/bounding
+$switch-on-shadow: $shadow-1 !default;
+
+// level - off
+
+/// background
+/// @level off
+/// @namespace statement/normal/bounding
+$switch-normal-off-bg-color: $color-white !default;
+/// background
+/// @level off
+/// @state hover
+/// @namespace statement/hover/bounding
+$switch-hover-off-bg-color: $color-fill1-2 !default;
+/// background
+/// @level off
+/// @state disabled
+/// @namespace statement/disabled/bounding
+$switch-disabled-off-bg-color: $color-fill1-1 !default;
+
+/// background
+/// @level off
+/// @namespace statement/normal/handle
+$switch-normal-off-trigger-bg-color: $color-white !default;
+/// background
+/// @level off
+/// @state hover
+/// @namespace statement/hover/handle
+$switch-hover-off-trigger-bg-color: $color-white !default;
+/// background
+/// @level off
+/// @state disabled
+/// @namespace statement/disabled/handle
+$switch-disabled-off-trigger-bg-color: $color-fill1-1 !default;
+/// border color
+/// @state disabled
+/// @namespace statement/disabled/handle
+$switch-handle-disabled-border-color: $color-line1-1 !default;
+/// text
+/// @level on
+/// @namespace statement/normal/content
+$switch-normal-off-color-font: $color-text1-2 !default;
+
+/// text
+/// @level on
+/// @state disabled
+/// @namespace statement/hover/content
+$switch-disabled-off-color-font: $color-line1-3 !default;
+/// border
+/// @state disabled
+/// @namespace statement/normal/handle
+$switch-handle-off-border-color: $color-transparent !default;
+
+/// border
+/// @level off
+/// @namespace statement/normal/bounding
+$switch-normal-off-border-color: $color-line1-3 !default;
+/// border
+/// @level off
+/// @state hover
+/// @namespace statement/hover/bounding
+$switch-hover-off-border-color: $color-line1-3 !default;
+/// shadow
+/// @level off
+/// @namespace statement/normal/bounding
+$switch-off-shadow: $shadow-1 !default;
+
+/// rtl shadow
+$switch-rtl-on-shadow: $shadow-1-left !default;

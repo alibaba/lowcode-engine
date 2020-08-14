@@ -1,0 +1,30 @@
+@mixin progress-bar-size(
+    $underlay-size,
+    $overlay-size,
+    $font-size,
+    $corner
+) {
+    #{$progress-prefix}-line-underlay {
+        border-radius: $corner;
+        height: $underlay-size;
+    }
+    #{$progress-prefix}-line-overlay {
+        height: $overlay-size;
+        border-radius: $corner;
+        top: 50%;
+        margin-top: -$overlay-size/2;
+    }
+    #{$progress-prefix}-line-text {
+        font-size: $font-size;
+        line-height: $underlay-size;
+    }
+}
+
+@mixin progress-circle-size(
+    $size,
+    $font-size
+) {
+    width: $size;
+    height: $size;
+    font-size: $font-size;
+}

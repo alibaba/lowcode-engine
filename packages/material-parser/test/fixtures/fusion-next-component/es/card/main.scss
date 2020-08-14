@@ -1,0 +1,197 @@
+@import "../core/index-noreset.scss";
+@import "scss/variable";
+@import "scss/normalize";
+@import "scss/mixin";
+@import "rtl.scss";
+
+#{$card-prefix} {
+    @include box-sizing;
+
+    & {
+        min-width: $s-25;
+        border: $card-border-width $card-border-style $card-border-color;
+        border-radius: $card-corner;
+        box-shadow: $card-shadow;
+        background: $card-background;
+        overflow: hidden;
+    }
+
+    &-head {
+        background: $card-header-background;
+        padding-left: $card-padding-lr;
+        padding-right: $card-padding-lr;
+        &-show-bullet {
+            #{$card-prefix}-title {
+                padding-left: $card-title-padding-left;
+            }
+
+            #{$card-prefix}-title:before {
+                content: '';
+                display: inline-block;
+                height: $card-title-bullet-height;
+                width: $card-title-bullet-width;
+                background: $card-title-bullet-color;
+                position: absolute;
+                left: 0;
+                top: calc(50% - #{$card-title-bullet-height} / 2);
+            }
+        }
+
+        &-main {
+            position: relative;
+            margin-top: $card-head-main-margin-top;
+            margin-bottom: $card-head-main-margin-bottom;
+            height: $card-head-main-height;
+            line-height: $card-head-main-height;
+        }
+    }
+
+    &-title {
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 80%;
+        height: 100%;
+        color: $card-title-color;
+        font-size: $card-title-font-size;
+        font-weight: $card-title-font-weight;
+    }
+
+    &-subtitle {
+        font-size: $card-sub-title-font-size;
+        color: $card-sub-title-color;
+        padding-left: $card-sub-title-padding-left;
+    }
+
+    &-extra {
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        font-size: $card-title-extra-font-size;
+        color: $card-title-extra-color;
+    }
+
+    &-body {
+        padding-bottom: $card-body-padding-bottom;
+        padding-left: $card-padding-lr;
+        padding-right: $card-padding-lr;
+    }
+
+    &-show-divider {
+        #{$card-prefix}-head-main {
+            border-bottom: $card-head-bottom-border-width $card-border-style $card-head-bottom-border-color;
+        }
+
+        #{$card-prefix}-body {
+            padding-top: $card-body-show-divider-padding-top;
+        }
+    }
+
+    &-hide-divider {
+        #{$card-prefix}-body {
+            padding-top: $card-body-hide-divider-padding-top;
+        }
+    }
+
+    &—free {
+        padding: 0;
+    }
+    &-content {
+        overflow: hidden;
+        transition: all $motion-duration-standard $motion-ease;
+        position: relative;
+    }
+
+    &-footer {
+        .#{$css-prefix}icon {
+            transition: all $motion-duration-immediately $motion-linear;
+
+            &.expand {
+                transform-origin: 50% 47%;
+                transform: rotate(180deg);
+            }
+        }
+    }
+
+    &-header {
+        background: $card-header-background;
+        padding: 0 $card-padding-lr;
+        margin-bottom: $card-body-show-divider-padding-top;
+        margin-top: $card-body-padding-bottom;
+    }
+
+    &-media,
+    &-media > * {
+        display: block;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    &-header-titles {
+        overflow: hidden;
+    }
+
+    &-header-extra {
+        float: right;
+        text-align: right;
+        & .#{$css-prefix}-btn {
+            margin-left: $s-3;
+            vertical-align: middle;
+        }
+    }
+
+    &-header-title {
+        color: $card-title-color;
+        font-size: $card-title-font-size;
+        font-weight: $card-title-font-weight;
+        line-height: 1.5;
+    }
+
+    &-header-subtitle {
+        font-size: $card-sub-title-font-size;
+        color: $card-sub-title-color;
+    }
+
+    &-actions {
+        display: block;
+        padding-left: $card-padding-lr;
+        padding-right: $card-padding-lr;
+        padding-top: $card-body-show-divider-padding-top;
+        padding-bottom: $card-body-padding-bottom;
+        .#{$css-prefix}btn:not(:last-child) {
+            margin-right: $s-3;
+            vertical-align: middle;
+        }
+    }
+
+    &-divider {
+        border-style: none;
+        width: 100%;
+        margin: 0;
+        position: relative;
+        &::before {
+            content: '';
+            display: block;
+            border-bottom: $card-head-bottom-border-width $card-border-style $card-head-bottom-border-color;
+        }
+    }
+
+    &-divider--inset {
+        padding: 0 $card-padding-lr;
+    }
+
+    &-content-container {
+        margin-top: $card-body-show-divider-padding-top;
+        padding-bottom: $card-body-padding-bottom;
+        padding-left: $card-padding-lr;
+        padding-right: $card-padding-lr;
+        font-size: $card-content-font-size;
+        line-height: $card-content-line-height;
+        color: $card-content-color;
+    }
+}

@@ -1,0 +1,97 @@
+@import "../core/index-noreset.scss";
+@import "scss/variable.scss";
+
+#{$typography-prefix} {
+    color: $typography-text-color;
+
+    &-title {
+        font-weight: $typography-title-font-weight;
+        margin-bottom: .5em;
+    }
+
+    & + &-title {
+        margin-top: 1.2em;
+    }
+
+
+
+    &-paragraph {
+        color: $typography-text-color;
+        margin-bottom: 1em;
+        font-size: $typography-paragraph-font-size;
+        line-height: $typography-paragraph-line-height;
+    }
+
+    mark {
+        padding: 0;
+        background: $typography-text-mark-background;
+        color: $typography-text-mark-color;
+    }
+
+    strong {
+        font-weight: $typography-text-strong-font-weight;
+    }
+
+    code {
+        background-color: $typography-text-code-background;
+        color: $typography-text-code-color;
+        border: 1px solid $typography-text-code-border-color;
+        margin: 0 .2em;
+        padding: .2em .4em .1em;
+        font-size: 85%;
+        border-radius: $typography-text-code-corner;
+    }
+
+    ul,
+    ol {
+        margin: 0 0 1em 0;
+        padding: 0;
+    }
+
+    li {
+        list-style-type: circle;
+        margin: 0 0 0 20px;
+        padding: 0 0 0 4px;
+    }
+
+    a {
+        text-decoration: none;
+        &:link {
+            color: $color-link-1;
+        }
+        &:visited {
+            color: $color-link-2;
+        }
+        &:hover {
+            color: $color-link-3;
+        }
+        &:active {
+            text-decoration: underline;
+            color: $color-link-3;
+        }
+    }
+}
+
+h1#{$typography-prefix}-title {
+    font-size: $typography-title-h1-font-size;
+}
+
+h2#{$typography-prefix}-title {
+    font-size: $typography-title-h2-font-size;
+}
+
+h3#{$typography-prefix}-title {
+    font-size: $typography-title-h3-font-size;
+}
+
+h4#{$typography-prefix}-title {
+    font-size: $typography-title-h4-font-size;
+}
+
+h5#{$typography-prefix}-title {
+    font-size: $typography-title-h5-font-size;
+}
+
+h6#{$typography-prefix}-title {
+    font-size: $typography-title-h6-font-size;
+}

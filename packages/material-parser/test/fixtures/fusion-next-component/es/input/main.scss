@@ -1,0 +1,425 @@
+@charset "UTF-8";
+@import '../core/index-noreset.scss';
+@import 'scss/mixin';
+@import 'scss/variable';
+
+#{$input-prefix} {
+    @include box-sizing;
+    vertical-align: middle;
+
+    input {
+        height: 100%;
+
+        &[type="reset"],
+        &[type="submit"] {
+            -webkit-appearance: button;
+            cursor: pointer;
+        }
+
+        &::-moz-focus-inner {
+            border: 0;
+            padding: 0;
+        }
+
+        /* remove autoFill yellow background */
+        &:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0 1000px $input-bg-color inset;
+        }
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    input,
+    textarea {
+        width: 100%;
+        border: none;
+        outline: none;
+        padding: 0;
+        margin: 0;
+        font-weight: normal;
+        vertical-align: middle;
+        background-color: transparent;
+        color: $input-text-color;
+
+        &::-ms-clear {
+            display: none;
+        }
+    }
+
+    display: inline-table;
+    border-collapse: separate;
+    font-size: 0;
+    line-height: 1;
+    width: 200px;
+    border-spacing: 0;
+    transition: all $motion-duration-immediately $motion-linear;
+
+    border: $input-border-width solid $input-border-color;
+    background-color: $input-bg-color;
+
+    &#{$input-prefix}-textarea {
+        textarea {
+            color: $input-text-color;
+            padding: $input-multiple-padding-tb $input-multiple-padding-lr;
+            font-size: $input-multiple-font-size;
+            border-radius: $input-multiple-corner;
+        }
+
+        #{$input-prefix}-control {
+            display: block;
+            width: auto;
+            border-radius: $input-multiple-corner;
+        }
+
+        #{$input-prefix}-len {
+            padding: 0 $input-l-icon-padding-right 4px;
+            display: block;
+            text-align: right;
+            width: auto;
+        }
+        border-radius: $input-multiple-corner;
+        font-size: 0;
+    }
+
+    &.#{$css-prefix}small {
+        @include input-size($form-element-small-height, $input-s-padding, $form-element-small-font-size, $input-s-label-padding-left, $input-s-icon-padding-right);
+        @include input-icon-size($form-element-small-icon-size);
+        @include input-border-radius($form-element-small-corner);
+    }
+
+    &.#{$css-prefix}medium {
+        @include input-size($form-element-medium-height, $input-m-padding, $form-element-medium-font-size, $input-m-label-padding-left, $input-m-icon-padding-right);
+        @include input-icon-size($form-element-medium-icon-size);
+        @include input-border-radius($form-element-medium-corner);
+    }
+
+    &.#{$css-prefix}large {
+        @include input-size($form-element-large-height, $input-l-padding, $form-element-large-font-size, $input-l-label-padding-left, $input-l-icon-padding-right);
+        @include input-icon-size($form-element-large-icon-size);
+        @include input-border-radius($form-element-large-corner);
+    }
+
+    &-hint-wrap {
+        color: $input-hint-color;
+        position: relative;
+
+        #{$input-prefix}-clear {
+            opacity: 0;
+            z-index: 1;
+            position: absolute;
+        }
+        #{$input-prefix}-hint {
+            opacity: 1;
+        }
+    }
+
+    .#{$css-prefix}icon-delete-filling, .#{$css-prefix}icon-eye, .#{$css-prefix}icon-eye-close {
+        &:hover {
+            cursor: pointer;
+            color: $input-hint-hover-color;
+        }
+    }
+
+    @mixin clear-icon-visible {
+        opacity: 1;
+
+        + #{$input-prefix}-hint {
+            opacity: 0;
+        }
+    }
+
+    &:hover, &.#{$css-prefix}focus {
+        border-color: $input-hover-border-color;
+        background-color: $input-hover-bg-color;
+
+        #{$input-prefix}-clear {
+            @include clear-icon-visible;
+        }
+    }
+
+    #{$input-prefix}-clear:focus {
+        @include clear-icon-visible;
+    }
+
+    &.#{$css-prefix}focus {
+        border-color: $input-focus-border-color;
+        background-color: $input-focus-bg-color;
+        box-shadow: 0 0 0 $input-focus-shadow-spread $color-calculate-input-focus-shadow;
+    }
+
+    &.#{$css-prefix}warning {
+        border-color: $input-feedback-warning-border-color;
+        background-color: $input-feedback-warning-bg-color;
+
+        &.#{$css-prefix}focus,
+        &:hover {
+            border-color: $input-feedback-warning-border-color;
+        }
+
+        &.#{$css-prefix}focus {
+            box-shadow: 0 0 0 $input-focus-shadow-spread $color-calculate-input-feedback-warning-shadow;
+        }
+    }
+
+    &.#{$css-prefix}error {
+        border-color: $input-feedback-error-border-color;
+        background-color: $input-feedback-error-bg-color;
+
+        &.#{$css-prefix}focus,
+        &:hover {
+            border-color: $input-feedback-error-border-color;
+        }
+
+        &.#{$css-prefix}focus {
+            box-shadow: 0 0 0 $input-focus-shadow-spread $color-calculate-input-feedback-error-shadow;
+        }
+    }
+
+    &.#{$css-prefix}hidden {
+        display: none;
+    }
+
+    &.#{$css-prefix}noborder {
+        border: none;
+    }
+
+    &-control {
+        #{$input-prefix}-len {
+            font-size: $input-maxlen-font-size;
+            line-height: $input-maxlen-font-size;
+            color: $input-maxlen-color;
+            display: table-cell;
+            width: 1px;
+            vertical-align: bottom;
+
+            &.#{$css-prefix}error {
+                color: $input-maxlen-error-color;
+            }
+
+            &.#{$css-prefix}warning {
+                color: $input-maxlen-warning-color;
+            }
+        }
+
+        > * {
+            display: table-cell;
+            width: 1%;
+            top: 0;
+        }
+
+        > *:not(:last-child) {
+            padding-right: $s-1;
+        }
+
+        .#{$css-prefix}icon {
+            transition: all $motion-duration-immediately $motion-linear;
+            color: $input-hint-color;
+        }
+
+        .#{$css-prefix}icon-warning {
+            color: $input-feedback-warning-color;
+        }
+        .#{$css-prefix}icon-success-filling {
+            color: $input-feedback-success-color;
+        }
+        .#{$css-prefix}icon-loading {
+            color: $input-feedback-loading-color;
+        }
+    }
+
+    &-label {
+        color: $input-label-color;
+    }
+
+    input,
+    textarea {
+        @include input-placeholder($input-placeholder-color);
+    }
+
+    &.#{$css-prefix}disabled {
+        @include input-disabled();
+
+        input, textarea {
+            @include input-placeholder($input-disabled-color);
+        }
+
+        #{$input-prefix}-label {
+            color: $input-disabled-color;
+        }
+        #{$input-prefix}-len {
+            color: $input-disabled-color;
+        }
+        background-color: $input-disabled-bg-color;
+
+        input,
+        textarea {
+            @include input-disabled();
+        }
+
+        #{$input-prefix}-hint-wrap {
+            #{$input-prefix}-clear {
+                opacity: 0;
+            }
+            #{$input-prefix}-hint {
+                opacity: 1;
+            }
+
+            color: $input-disabled-color;
+
+            .#{$css-prefix}icon-delete-filling:hover {
+                cursor: not-allowed;
+                color: $input-disabled-color;
+            }
+        }
+
+        .#{$css-prefix}icon {
+            color: $input-disabled-color;
+        }
+    }
+
+    &-inner, &-control, &-label {
+        display: table-cell;
+        width: 1px;
+        vertical-align: middle;
+        line-height: 1;
+        background-color: transparent;
+        white-space: nowrap;
+    }
+
+    &-group {
+        @include box-sizing;
+
+        display: inline-table;
+        border-collapse: separate;
+        border-spacing: 0;
+        line-height: 0;
+        width: 100%;
+
+        &-auto-width {
+            width: 100%;
+            border-radius: 0 !important;
+        }
+
+        > #{$input-prefix} {
+            border-radius: 0;
+            &.#{$css-prefix}focus {
+                position: relative;
+                z-index: 1;
+            }
+        }
+
+        > #{$input-prefix}:first-child {
+            &.#{$css-prefix}small {
+                border-top-left-radius: $form-element-small-corner !important;
+                border-bottom-left-radius: $form-element-small-corner !important;
+            }
+
+            &.#{$css-prefix}medium {
+                border-top-left-radius: $form-element-medium-corner !important;
+                border-bottom-left-radius: $form-element-medium-corner !important;
+            }
+
+            &.#{$css-prefix}large {
+                border-top-left-radius: $form-element-large-corner !important;
+                border-bottom-left-radius: $form-element-large-corner !important;
+            }
+        }
+        > #{$input-prefix}:last-child {
+            &.#{$css-prefix}small {
+                border-top-right-radius: $form-element-small-corner !important;
+                border-bottom-right-radius: $form-element-small-corner !important;
+            }
+
+            &.#{$css-prefix}medium {
+                border-top-right-radius: $form-element-medium-corner !important;
+                border-bottom-right-radius: $form-element-medium-corner !important;
+            }
+
+            &.#{$css-prefix}large {
+                border-top-right-radius: $form-element-large-corner !important;
+                border-bottom-right-radius: $form-element-large-corner !important;
+            }
+        }
+    }
+    &-group-addon {
+        width: 1px;
+        display: table-cell;
+        vertical-align: middle;
+        white-space: nowrap;
+
+        /* stylelint-disable declaration-no-important */
+        &:first-child {
+            border-bottom-right-radius: 0 !important;
+            border-top-right-radius: 0 !important;
+            //TODO: removed in 2.x
+            > * {
+                margin-right: -$input-border-width;
+                border-bottom-right-radius: 0 !important;
+                border-top-right-radius: 0 !important;
+                &.#{$css-prefix}focus {
+                    position: relative;
+                    z-index: 1;
+                }
+                > #{$input-prefix} {
+                    border-bottom-right-radius: 0 !important;
+                    border-top-right-radius: 0 !important;
+                }
+                > #{$input-prefix}.#{$css-prefix}focus {
+                    position: relative;
+                    z-index: 1;
+                }
+            }
+        }
+        &:last-child {
+            border-bottom-left-radius: 0 !important;
+            border-top-left-radius: 0 !important;
+            //TODO: removed in 2.x
+            > * {
+                margin-left: -$input-border-width;
+                border-bottom-left-radius: 0 !important;
+                border-top-left-radius: 0 !important;
+                > #{$input-prefix} {
+                    border-bottom-left-radius: 0 !important;
+                    border-top-left-radius: 0 !important;
+                }
+            }
+        }
+    }
+    &-group-text {
+        color: $input-addon-text-color;
+        background-color: $input-addon-bg-color;
+        text-align: center;
+        border: $input-border-width solid $input-border-color;
+        padding: 0 $input-addon-padding;
+
+        &:first-child {
+            border-right-width: 0;
+        }
+        &:last-child {
+            border-left-width: 0;
+        }
+
+        &.#{$css-prefix}disabled {
+            @include input-disabled();
+        }
+
+        &.#{$css-prefix}small {
+            @include input-addon-size($form-element-small-font-size);
+            border-radius: $form-element-small-corner;
+        }
+
+        &.#{$css-prefix}medium {
+            @include input-addon-size($form-element-medium-font-size);
+            border-radius: $form-element-medium-corner;
+        }
+
+        &.#{$css-prefix}large {
+            @include input-addon-size($form-element-large-font-size);
+            border-radius: $form-element-large-corner;
+        }
+    }
+}
+
+@import './rtl.scss';

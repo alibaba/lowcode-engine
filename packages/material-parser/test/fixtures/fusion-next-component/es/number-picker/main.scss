@@ -1,0 +1,317 @@
+@charset "UTF-8";
+
+@import "../core/index-noreset.scss";
+@import "scss/mixin";
+@import "scss/variable";
+
+#{$number-picker-prefix} {
+    @include box-sizing;
+    display: inline-block;
+
+    /* stylelint-disable declaration-no-important */
+    .#{$css-prefix}btn {
+        padding: 0 !important;
+        line-height: 0 !important;
+        box-shadow: none !important;
+    }
+
+    &-normal {
+        .#{$css-prefix}input {
+            width: 100%;
+
+            input {
+                padding-right: 2px;
+            }
+
+            .#{$css-prefix}input-control {
+                padding-right: 0;
+            }
+        }
+
+        .#{$css-prefix}btn {
+            display: block;
+
+            &:hover {
+                z-index: 1;
+            }
+
+            &:first-child {
+                border-right: none;
+                border-top: none;
+                height: calc(50%);
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+            }
+
+            &:last-child {
+                border-right: none;
+                border-bottom: none;
+                margin-top: -1px;
+                height: calc(50% + 1px);
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+                border-top-right-radius: 0;
+            }
+        }
+
+        #{$number-picker-prefix}-handler {
+            opacity: 0;
+            transition: opacity $motion-duration-immediately $motion-linear;
+            height: 100%;
+            display: block;
+        }
+
+        &:hover #{$number-picker-prefix}-handler,
+        &.hover #{$number-picker-prefix}-handler {
+            opacity: 1;
+        }
+
+        .#{$css-prefix}input.#{$css-prefix}disabled #{$number-picker-prefix}-handler {
+            opacity: 0;
+        }
+
+        &.#{$css-prefix}small {
+            width: 68px;
+            .#{$css-prefix}btn {
+                width: $number-picker-normal-s-button-width;
+
+                &:first-child {
+                    border-top-right-radius: $form-element-small-corner;
+                }
+
+                &:last-child {
+                    border-bottom-right-radius: $form-element-small-corner;
+                }
+            }
+
+            .#{$css-prefix}icon {
+                @include icon-size($number-picker-normal-s-button-icon-size);
+            }
+        }
+
+        &.#{$css-prefix}medium {
+            width: $number-picker-normal-m-input-width;
+            .#{$css-prefix}btn {
+                width: $number-picker-normal-m-button-width;
+
+                &:first-child {
+                    border-top-right-radius: $form-element-medium-corner;
+                }
+
+                &:last-child {
+                    border-bottom-right-radius: $form-element-medium-corner;
+                }
+            }
+
+            .#{$css-prefix}icon {
+                @include icon-size($number-picker-normal-m-button-icon-size);
+            }
+        }
+
+        &.#{$css-prefix}large {
+            width: $number-picker-normal-l-input-width;
+            .#{$css-prefix}btn {
+                width: $number-picker-normal-l-button-width;
+
+                &:first-child {
+                    border-top-right-radius: $form-element-large-corner;
+                }
+
+                &:last-child {
+                    border-bottom-right-radius: $form-element-large-corner;
+                }
+            }
+
+            .#{$css-prefix}icon {
+                @include icon-size($number-picker-normal-l-button-icon-size);
+            }
+        }
+    }
+
+    &-inline {
+        input {
+            text-align: center;
+        }
+
+        .#{$css-prefix}input input {
+            padding: 0;
+        }
+
+        &.#{$css-prefix}small {
+            width: 68px;
+
+            .#{$css-prefix}icon {
+                @include icon-size($number-picker-inline-s-button-icon-size);
+            }
+
+            .#{$css-prefix}btn {
+                height: $form-element-small-height;
+            }
+
+            .#{$css-prefix}before .#{$css-prefix}btn {
+                margin-right: $number-picker-inline-s-button-margin;
+                border-top-left-radius: $number-picker-inline-s-button-corner;
+                border-bottom-left-radius: $number-picker-inline-s-button-corner;
+            }
+
+            .#{$css-prefix}after .#{$css-prefix}btn {
+                margin-left: $number-picker-inline-s-button-margin;
+                border-top-right-radius: $number-picker-inline-s-button-corner;
+                border-bottom-right-radius: $number-picker-inline-s-button-corner;
+            }
+        }
+
+        &.#{$css-prefix}medium {
+            width: $number-picker-inline-m-input-width;
+
+            .#{$css-prefix}icon {
+                @include icon-size($number-picker-inline-m-button-icon-size);
+            }
+
+            .#{$css-prefix}btn {
+                height: $form-element-medium-height;
+            }
+
+            .#{$css-prefix}before .#{$css-prefix}btn {
+                margin-right: $number-picker-inline-m-button-margin;
+                border-top-left-radius: $number-picker-inline-m-button-corner;
+                border-bottom-left-radius: $number-picker-inline-m-button-corner;
+            }
+
+            .#{$css-prefix}after .#{$css-prefix}btn {
+                margin-left: $number-picker-inline-m-button-margin;
+                border-top-right-radius: $number-picker-inline-m-button-corner;
+                border-bottom-right-radius: $number-picker-inline-m-button-corner;
+            }
+        }
+
+        &.#{$css-prefix}large {
+            width: $number-picker-inline-l-input-width;
+
+            .#{$css-prefix}icon {
+                @include icon-size($number-picker-inline-l-button-icon-size);
+            }
+
+            .#{$css-prefix}btn {
+                height: $form-element-large-height;
+            }
+
+            .#{$css-prefix}before .#{$css-prefix}btn {
+                margin-right: $number-picker-inline-l-button-margin;
+                border-top-left-radius: $number-picker-inline-l-button-corner;
+                border-bottom-left-radius: $number-picker-inline-l-button-corner;
+            }
+
+            .#{$css-prefix}after .#{$css-prefix}btn {
+                margin-left: $number-picker-inline-l-button-margin;
+                border-top-right-radius: $number-picker-inline-l-button-corner;
+                border-bottom-right-radius: $number-picker-inline-l-button-corner;
+            }
+        }
+
+        .#{$css-prefix}btn {
+            &.#{$css-prefix}small {
+                width: $form-element-small-height;
+            }
+
+            &.#{$css-prefix}medium {
+                width: $form-element-medium-height;
+            }
+
+            &.#{$css-prefix}large {
+                width: $form-element-large-height;
+            }
+        }
+    }
+}
+
+#{$number-picker-prefix}-normal[dir="rtl"] {
+    .#{$css-prefix}btn {
+        &:first-child {
+            border-right: 1px solid $color-line1-3;
+            border-left: 0;
+            border-top-right-radius: 0;
+
+            &.#{$css-prefix}small {
+                border-top-left-radius: $form-element-small-corner;
+            }
+
+            &.#{$css-prefix}medium {
+                border-top-left-radius: $form-element-medium-corner;
+            }
+
+            &.#{$css-prefix}large {
+                border-top-left-radius: $form-element-large-corner;
+            }
+        }
+
+        &:last-child {
+            border-right: 1px solid $color-line1-3;
+            border-left: 0;
+            border-bottom-right-radius: 0;
+
+            &.#{$css-prefix}small {
+                border-bottom-left-radius: $form-element-small-corner;
+            }
+
+            &.#{$css-prefix}medium {
+                border-bottom-left-radius: $form-element-medium-corner;
+            }
+
+            &.#{$css-prefix}large {
+                border-bottom-left-radius: $form-element-large-corner;
+            }
+        }
+    }
+
+    .#{$css-prefix}input .#{$css-prefix}input-control {
+        padding-left: 0;
+    }
+}
+
+#{$number-picker-prefix}-inline[dir="rtl"] {
+    .#{$css-prefix}before .#{$css-prefix}btn {
+        margin-right: 0;
+
+        &.#{$css-prefix}small {
+            margin-left: $number-picker-inline-s-button-margin;
+            border-top-right-radius: $number-picker-inline-s-button-corner !important;
+            border-bottom-right-radius: $number-picker-inline-s-button-corner !important;
+        }
+
+        &.#{$css-prefix}medium {
+            margin-left: $number-picker-inline-m-button-margin;
+            border-top-right-radius: $number-picker-inline-m-button-corner !important;
+            border-bottom-right-radius: $number-picker-inline-m-button-corner !important;
+        }
+
+        &.#{$css-prefix}large {
+            margin-left: $number-picker-inline-l-button-margin;
+            border-top-right-radius: $number-picker-inline-l-button-corner !important;
+            border-bottom-right-radius: $number-picker-inline-l-button-corner !important;
+        }
+    }
+
+    .#{$css-prefix}after .#{$css-prefix}btn {
+        margin-left: 0;
+
+        &.#{$css-prefix}small {
+            margin-right: $number-picker-inline-s-button-margin;
+            border-top-left-radius: $number-picker-inline-s-button-corner !important;
+            border-bottom-left-radius: $number-picker-inline-s-button-corner !important;
+        }
+
+        &.#{$css-prefix}medium {
+            margin-right: $number-picker-inline-m-button-margin;
+            border-top-left-radius: $number-picker-inline-m-button-corner !important;
+            border-bottom-left-radius: $number-picker-inline-m-button-corner !important;
+        }
+
+        &.#{$css-prefix}large {
+            margin-right: $number-picker-inline-l-button-margin;
+            border-top-left-radius: $number-picker-inline-l-button-corner !important;
+            border-bottom-left-radius: $number-picker-inline-l-button-corner !important;
+        }
+    }
+}

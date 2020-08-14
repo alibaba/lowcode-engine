@@ -1,0 +1,207 @@
+@import "./_color";
+@import "../util/_function";
+
+////
+/// @module shadow: 阴影
+/// @category style
+////
+
+// Elevation & Shadow
+// 根据 Alibaba Base DPL(BASE DPL)设计规范实现
+// 在现实生活中，不同对象可以被堆积或粘贴起来，但是不能彼此交叉。对象自身塑造了自己的阴影并返回自己的光影。
+// 规则: x == y, 所有方向阴影的 blur 值, 透明度, 颜色都应该相同
+// -------------------------------
+
+// 变量: x, y, color, opacity, elevation
+// 常量: base(45度), top, right, bottom, left
+
+// ---------------- 阴影方向 ---------------- //
+
+/// Sides Base
+/// @type String
+$shadow-sides-base: "base" !default;
+/// Sides Up
+/// @type String
+$shadow-sides-up: "up" !default;
+/// Sides Right
+/// @type String
+$shadow-sides-right: "right" !default;
+/// Sides Down
+/// @type String
+$shadow-sides-down: "down" !default;
+/// Sides Left
+/// @type String
+$shadow-sides-left: "left" !default;
+
+// ---------------- 阴影距离 ----------------- //
+
+/// Distance 1x
+/// @type Number
+$shadow-distance-sd1: 1;
+/// Distance 2x
+/// @type Number
+$shadow-distance-sd2: 2;
+/// Distance 3x
+/// @type Number
+$shadow-distance-sd3: 3;
+
+/// Distance 1y
+/// @type Number
+$shadow-distance-sd1y: 1;
+/// Distance 2y
+/// @type Number
+$shadow-distance-sd2y: 2;
+/// Distance 3y
+/// @type Number
+$shadow-distance-sd3y: 3;
+
+// ---------------- 阴影透明度 ----------------- //
+
+/// Opacity 1
+/// @type Number
+$shadow-opacity-sd1: .12 !default;
+/// Opacity 2
+/// @type Number
+$shadow-opacity-sd2: .12 !default;
+/// Opacity 3
+/// @type Number
+$shadow-opacity-sd3: .12 !default;
+
+// ---------------- 阴影颜色 ----------------- //
+
+/// Color 1
+/// @type Color
+$shadow-color-sd1: $color-black !default;
+
+/// Color 2
+/// @type Color
+$shadow-color-sd2: $color-black !default;
+
+/// Color 3
+/// @type Color
+$shadow-color-sd3: $color-black !default;
+
+// 带透明度的颜色变量
+$shadow-color-opacity-sd1: rgba($shadow-color-sd1, $shadow-opacity-sd1) !default;
+$shadow-color-opacity-sd2: rgba($shadow-color-sd2, $shadow-opacity-sd2) !default;
+$shadow-color-opacity-sd3: rgba($shadow-color-sd3, $shadow-opacity-sd3) !default;
+
+// ------------------ 阴影羽化值 ---------------- //
+
+/// Blur 1
+/// @type Number
+$shadow-blur-sd1: 3 !default;
+
+/// Blur 2
+/// @type Number
+$shadow-blur-sd2: 4 !default;
+
+/// Blur 3
+/// @type Number
+$shadow-blur-sd3: 5 !default;
+
+// ------------------ 阴影扩散值 ---------------- //
+
+/// Spread 1
+/// @type Number
+$shadow-spread-sd1: 0 !default;
+
+/// Spread 2
+/// @type Number
+$shadow-spread-sd2: 0 !default;
+
+/// Spread 3
+/// @type Number
+$shadow-spread-sd3: 0 !default;
+
+// ------------------ Shadow Values ---------------- //
+
+/// shadow-zero
+/// @export
+/// @unconfigurable
+$shadow-zero: none;
+
+/// shadow-1
+/// @semantic 阴影1-右下
+/// @export
+/// @unconfigurable
+$shadow-1: shadow-maker($shadow-sides-base, $shadow-blur-sd1, $shadow-color-opacity-sd1, $shadow-distance-sd1, $shadow-distance-sd1y, $shadow-spread-sd1);
+
+/// shadow-1-up
+/// @semantic 阴影1-上
+/// @export
+/// @unconfigurable
+$shadow-1-up: shadow-maker($shadow-sides-up, $shadow-blur-sd1, $shadow-color-opacity-sd1, $shadow-distance-sd1, $shadow-distance-sd1y, $shadow-spread-sd1);
+
+/// shadow-1-right
+/// @semantic 阴影1-右
+/// @export
+/// @unconfigurable
+$shadow-1-right: shadow-maker($shadow-sides-right, $shadow-blur-sd1, $shadow-color-opacity-sd1, $shadow-distance-sd1, $shadow-distance-sd1y, $shadow-spread-sd1);
+
+/// shadow-1-down
+/// @semantic 阴影1-下
+/// @export
+/// @unconfigurable
+$shadow-1-down: shadow-maker($shadow-sides-down, $shadow-blur-sd1, $shadow-color-opacity-sd1, $shadow-distance-sd1, $shadow-distance-sd1y, $shadow-spread-sd1);
+
+/// shadow-1-left
+/// @semantic 阴影1-左
+/// @export
+/// @unconfigurable
+$shadow-1-left: shadow-maker($shadow-sides-left, $shadow-blur-sd1, $shadow-color-opacity-sd1, $shadow-distance-sd1, $shadow-distance-sd1y, $shadow-spread-sd1);
+
+/// shadow-2
+/// @semantic 阴影2-右下
+/// @export
+/// @unconfigurable
+$shadow-2: shadow-maker($shadow-sides-base, $shadow-blur-sd2, $shadow-color-opacity-sd2, $shadow-distance-sd2, $shadow-distance-sd2y, $shadow-spread-sd2);
+/// shadow-2-up
+/// @semantic 阴影2-上
+/// @export
+/// @unconfigurable
+$shadow-2-up: shadow-maker($shadow-sides-up, $shadow-blur-sd2, $shadow-color-opacity-sd2, $shadow-distance-sd2, $shadow-distance-sd2y, $shadow-spread-sd2);
+/// shadow-2-right
+/// @semantic 阴影2-右
+/// @export
+/// @unconfigurable
+$shadow-2-right: shadow-maker($shadow-sides-right, $shadow-blur-sd2, $shadow-color-opacity-sd2, $shadow-distance-sd2, $shadow-distance-sd2y, $shadow-spread-sd2);
+/// shadow-2-down
+/// @semantic 阴影2-下
+/// @export
+/// @unconfigurable
+$shadow-2-down: shadow-maker($shadow-sides-down, $shadow-blur-sd2, $shadow-color-opacity-sd2, $shadow-distance-sd2, $shadow-distance-sd2y, $shadow-spread-sd2);
+/// shadow-2-left
+/// @semantic 阴影2-左
+/// @export
+/// @unconfigurable
+$shadow-2-left: shadow-maker($shadow-sides-left, $shadow-blur-sd2, $shadow-color-opacity-sd2, $shadow-distance-sd2, $shadow-distance-sd2y, $shadow-spread-sd2);
+
+/// shadow-3
+/// @semantic 阴影3-右下
+/// @export
+/// @unconfigurable
+$shadow-3: shadow-maker($shadow-sides-base, $shadow-blur-sd3, $shadow-color-opacity-sd3, $shadow-distance-sd3, $shadow-distance-sd3y, $shadow-spread-sd3);
+/// shadow-3-up
+/// @semantic 阴影3-上
+/// @export
+/// @unconfigurable
+$shadow-3-up: shadow-maker($shadow-sides-up, $shadow-blur-sd3, $shadow-color-opacity-sd3, $shadow-distance-sd3, $shadow-distance-sd3y, $shadow-spread-sd3);
+/// shadow-3-right
+/// @semantic 阴影3-右
+/// @export
+/// @unconfigurable
+$shadow-3-right: shadow-maker($shadow-sides-right, $shadow-blur-sd3, $shadow-color-opacity-sd3, $shadow-distance-sd3, $shadow-distance-sd3y, $shadow-spread-sd3);
+/// shadow-3-down
+/// @semantic 阴影3-下
+/// @export
+/// @unconfigurable
+$shadow-3-down: shadow-maker($shadow-sides-down, $shadow-blur-sd3, $shadow-color-opacity-sd3, $shadow-distance-sd3, $shadow-distance-sd3y, $shadow-spread-sd3);
+/// shadow-3-left
+/// @semantic 阴影3-左
+/// @export
+/// @unconfigurable
+$shadow-3-left: shadow-maker($shadow-sides-left, $shadow-blur-sd3, $shadow-color-opacity-sd3, $shadow-distance-sd3, $shadow-distance-sd3y, $shadow-spread-sd3);
+
+// ----------- patch ----------- //
+$shadow-0: $shadow-zero;

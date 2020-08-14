@@ -1,0 +1,133 @@
+@import "../core/index-noreset.scss";
+@import "scss/variable";
+
+#{$transfer-prefix} {
+    @include box-sizing;
+    display: inline-block;
+
+    &-panel {
+        display: inline-block;
+        border: $transfer-panel-border-width $line-solid $transfer-panel-border-color;
+        border-radius: $transfer-panel-border-corner;
+        background-color: $transfer-panel-background-color;
+        vertical-align: middle;
+    }
+
+    &-panel-header {
+        padding: $transfer-panel-header-padding-top-bottom $transfer-panel-header-padding-left-right;
+        border-bottom: $transfer-panel-border-width $line-solid $transfer-panel-border-color;
+        background-color: $transfer-panel-header-background-color;
+        color: $transfer-panel-header-text-color;
+        font-size: $transfer-panel-header-text-size;
+    }
+
+    &-panel-search {
+        padding: 0 $transfer-panel-search-margin-left-right;
+        margin-top: $transfer-panel-search-margin-top;
+        margin-bottom: $transfer-panel-search-margin-bottom;
+        width: 100%;
+    }
+
+    & &-panel-list {
+        width: $transfer-panel-list-width;
+        /* TODO */
+        height: $transfer-panel-list-height;
+        padding: 0;
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+        overflow-y: auto;
+    }
+
+    &-panel-not-found-container {
+        display: table;
+        width: 100%;
+        height: 100%;
+    }
+
+    &-panel-not-found {
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+        color: $color-text1-2;
+        font-size: $font-size-body-2;
+    }
+
+    &-panel-item {
+        &.#{$css-prefix}focused {
+            transition: background-color $motion-duration-immediately $motion-linear;
+        }
+
+        &:not(.#{$css-prefix}disabled).#{$css-prefix}simple:hover {
+            color: $transfer-simple-panel-item-hover-text-color;
+        }
+
+        &.#{$css-prefix}insert-before:before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            content: '';
+            width: 100%;
+            border-top: $line-1 solid $color-brand1-6;
+        }
+
+        &.#{$css-prefix}insert-after:after {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            content: '';
+            width: 100%;
+            border-bottom: $line-1 solid $color-brand1-6;
+        }
+    }
+
+    &-panel-footer {
+        position: relative;
+        padding: $transfer-panel-footer-padding-top-bottom $transfer-panel-footer-padding-left-right;
+        border-top: $transfer-panel-border-width $line-solid $transfer-panel-border-color;
+        background-color: $transfer-panel-footer-background-color;
+        font-size: 0;
+        box-shadow: $transfer-panel-footer-shadow;
+    }
+
+    &-panel-count {
+        /* TODO */
+        margin-left: $s-1;
+        font-size: $font-size-body-1;
+        vertical-align: middle;
+        color: $transfer-panel-footer-text-color;
+    }
+
+    &-panel-move-all {
+        font-size: $font-size-body-1;
+        color: $transfer-simple-panel-footer-text-color;
+        cursor: pointer;
+
+        &.#{$css-prefix}disabled {
+            color: $color-text1-1;
+            cursor: not-allowed;
+        }
+    }
+
+    &-operations {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0 $transfer-operation-margin-left-right;
+    }
+
+    &-move.#{$css-prefix}icon {
+        color: $transfer-simple-move-icon-color;
+    }
+
+    &-operation.#{$css-prefix}btn {
+        display: block;
+
+        & + & {
+            margin-top: $transfer-operation-margin-gutter;
+        }
+
+        .#{$css-prefix}icon {
+            @include icon-size($transfer-operation-icon-size);
+        }
+    }
+}

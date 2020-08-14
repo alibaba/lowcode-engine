@@ -1,0 +1,17 @@
+@mixin menu-item-state(
+    $color,
+    $bgColor,
+    $arrowIconColor,
+    $selectedIconColor
+) {
+    color: $color;
+    background-color: $bgColor;
+
+    #{$menu-prefix}-icon-arrow {
+        color: $arrowIconColor;
+    }
+
+    #{$menu-prefix}-icon-selected {
+        color: $selectedIconColor;
+    }
+}

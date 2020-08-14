@@ -10165,11 +10165,6 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
           "name": "rtl",
           "propType": "bool"
         },
@@ -10183,28 +10178,6 @@
               "phone"
             ]
           }
-        },
-        {
-          "name": "activeKey",
-          "propType": {
-            "type": "oneOfType",
-            "value": [
-              "number",
-              "string"
-            ]
-          },
-          "description": "被激活的选项卡的 key, 赋值则tab为受控组件, 用户无法切换"
-        },
-        {
-          "name": "defaultActiveKey",
-          "propType": {
-            "type": "oneOfType",
-            "value": [
-              "number",
-              "string"
-            ]
-          },
-          "description": "初始化时被激活的选项卡的 key"
         },
         {
           "name": "shape",
@@ -10289,19 +10262,9 @@
           "defaultValue": false
         },
         {
-          "name": "navStyle",
-          "propType": "object",
-          "description": "导航条的自定义样式"
-        },
-        {
           "name": "navClassName",
           "propType": "string",
           "description": "导航条的自定义样式类"
-        },
-        {
-          "name": "contentStyle",
-          "propType": "object",
-          "description": "内容区容器的自定义样式"
         },
         {
           "name": "contentClassName",
@@ -10332,20 +10295,6 @@
           "description": "选项卡被关闭时的事件回调\n@param {String|Number} key   关闭的选项卡的 key"
         },
         {
-          "name": "tabRender",
-          "propType": "func",
-          "description": "自定义选项卡模板渲染函数\n@param {String} key 当前 Tab.Item 的 key 值\n@param {Object} props 传给 Tab.Item 的所有属性键值对\n@return {ReactNode} 返回自定义组件"
-        },
-        {
-          "name": "popupProps",
-          "propType": "object",
-          "description": "弹层属性透传, 只有当 excessMode 为 dropdown 时生效"
-        },
-        {
-          "name": "children",
-          "propType": "any"
-        },
-        {
           "name": "className",
           "propType": "string"
         },
@@ -10353,7 +10302,12 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "Tab.Item",
@@ -10370,16 +10324,8 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
           "name": "title",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "string",
           "description": "选项卡标题"
         },
         {
@@ -10394,26 +10340,15 @@
           "description": "选项卡是否被禁用"
         },
         {
-          "name": "active",
-          "propType": "bool"
-        },
-        {
-          "name": "lazyLoad",
-          "propType": "bool"
-        },
-        {
-          "name": "unmountInactiveTabs",
-          "propType": "bool"
-        },
-        {
-          "name": "children",
-          "propType": "any"
-        },
-        {
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "Tab.TabPane",
@@ -10454,26 +10389,15 @@
           "description": "选项卡是否被禁用"
         },
         {
-          "name": "active",
-          "propType": "bool"
-        },
-        {
-          "name": "lazyLoad",
-          "propType": "bool"
-        },
-        {
-          "name": "unmountInactiveTabs",
-          "propType": "bool"
-        },
-        {
-          "name": "children",
-          "propType": "any"
-        },
-        {
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "Tag",
@@ -10530,6 +10454,10 @@
           "name": "children",
           "propType": "string",
           "description": "内容"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ],
       "configure": {}
@@ -10572,6 +10500,10 @@
           "name": "children",
           "propType": "string",
           "description": "内容"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ],
       "configure": {}
@@ -10627,6 +10559,10 @@
           "name": "children",
           "propType": "string",
           "description": "内容"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         }
       ],
       "configure": {}
@@ -14176,7 +14112,15 @@
                   "size": "medium",
                   "triggerType": "click",
                   "lazyLoad": true
-                }
+                },
+                "children": [{
+                  "componentName": "Tab.Item",
+                  "props": {
+                    "prefix": "next-",
+                    "title": "Tab Title",
+                    "closeable": true
+                  }
+                }]
               }
             }
           ]
@@ -14195,7 +14139,7 @@
                 "componentName": "Tab.Item",
                 "props": {
                   "prefix": "next-",
-                  "title": "",
+                  "title": "Tab Title",
                   "closeable": true
                 }
               }

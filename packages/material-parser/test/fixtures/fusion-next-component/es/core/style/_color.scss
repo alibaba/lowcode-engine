@@ -1,0 +1,300 @@
+////
+/// @module color: 颜色
+/// @type Color
+/// @category style
+////
+
+
+// ----------- 品牌主色 ----------- //
+
+/// brand1-1
+/// @group brand
+/// @semantic 浅
+/// @export
+$color-brand1-1: #DEE8FF !default;
+/// brand1-6
+/// @group brand
+/// @semantic 常规
+/// @export
+$color-brand1-6: #5584FF !default;
+/// brand1-9
+/// @group brand
+/// @semantic 深
+/// @export
+$color-brand1-9: #3E71F7 !default;
+
+// ----------- 功能色 ----------- //
+
+// 成功
+
+/// success-1
+/// @group function
+/// @semantic 浅
+/// @export
+$color-success-1: #E4FDDA !default;
+/// success-2
+/// @group function
+/// @semantic 常规
+/// @export
+$color-success-2: #CDF2BE !default;
+/// success-3
+/// @group function
+/// @semantic 深
+/// @export
+$color-success-3: #46BC15 !default;
+/// success-4
+/// @group function
+/// @semantic 重
+/// @export
+$color-success-4: #41A716 !default;
+
+// 提示
+
+/// notice-1
+/// @group function
+/// @semantic 浅
+/// @export
+$color-notice-1: #E3F2FD !default;
+/// notice-2
+/// @group function
+/// @semantic 常规
+/// @export
+$color-notice-2: #BAD9FF !default;
+/// notice-3
+/// @group function
+/// @semantic 深
+/// @export
+$color-notice-3: #4494F9 !default;
+/// notice-4
+/// @group function
+/// @semantic 重
+/// @export
+$color-notice-4: #2E7DE0 !default;
+
+// 警告
+
+/// warning-1
+/// @group function
+/// @semantic 浅
+/// @export
+$color-warning-1: #FFF3E0 !default;
+/// warning-2
+/// @group function
+/// @semantic 常规
+/// @export
+$color-warning-2: #FFE6BD !default;
+/// warning-3
+/// @group function
+/// @semantic 深
+/// @export
+$color-warning-3: #FF9300 !default;
+/// warning-4
+/// @group function
+/// @semantic 重
+/// @export
+$color-warning-4: #EB7E10 !default;
+
+// 错误
+
+/// error-1
+/// @group function
+/// @semantic 浅
+/// @export
+$color-error-1: #FFECE4 !default;
+/// error-2
+/// @group function
+/// @semantic 常规
+/// @export
+$color-error-2: #FFC8B2 !default;
+/// error-3
+/// @group function
+/// @semantic 深
+/// @export
+$color-error-3: #FF3000 !default;
+/// error-4
+/// @group function
+/// @semantic 重
+/// @export
+$color-error-4: #E72B00 !default;
+
+// 帮助
+
+/// help-1
+/// @group function
+/// @semantic 浅
+/// @export
+$color-help-1: #E3FFF8 !default;
+/// help-2
+/// @group function
+/// @semantic 常规
+/// @export
+$color-help-2: #C0ECE2 !default;
+/// help-3
+/// @group function
+/// @semantic 深
+/// @export
+$color-help-3: #01C1B2 !default;
+/// help-4
+/// @group function
+/// @semantic 重
+/// @export
+$color-help-4: #01A79A !default;
+
+// 链接
+
+/// link-1
+/// @group function
+/// @semantic 默认
+/// @export
+$color-link-1: #5584FF !default;
+/// link-2
+/// @group function
+/// @semantic 已访问
+/// @export
+$color-link-2: #5584FF !default;
+/// link-3
+/// @group function
+/// @semantic 鼠标滑过
+/// @export
+$color-link-3: #3E71F7 !default;
+
+// 其它
+
+/// other-1
+/// @group function
+/// @export
+$color-other-1: #FFEB3B !default;
+
+/// other-2
+/// @group function
+/// @export
+$color-other-2: #FCCC12 !default;
+
+/// other-3
+/// @group function
+/// @export
+$color-other-3: #EABB06 !default;
+
+// ----------- 中立色 ----------- //
+
+// 预设
+
+/// white
+/// @semantic 纯白
+/// @export
+$color-white: #FFFFFF;
+/// black
+/// @semantic 纯黑
+/// @export
+$color-black: #000000;
+/// transparent
+/// @export
+$color-transparent: transparent;
+
+// 线条
+
+/// line1-1
+/// @group neutural
+/// @semantic 浅
+/// @export
+$color-line1-1: #E6E7EB !default;
+/// line1-2
+/// @group neutural
+/// @semantic 常规
+/// @export
+$color-line1-2: #DCDEE3 !default;
+/// line1-3
+/// @group neutural
+/// @semantic 深
+/// @export
+$color-line1-3: #C4C6CF !default;
+/// line1-4
+/// @group neutural
+/// @semantic 重
+/// @export
+$color-line1-4: #A0A2AD !default;
+
+// 填充
+
+/// fill1-1
+/// @group neutural
+/// @semantic 浅
+/// @export
+$color-fill1-1: #F7F8FA !default;
+/// fill1-2
+/// @group neutural
+/// @semantic 常规
+/// @export
+$color-fill1-2: #F2F3F7 !default;
+/// fill1-3
+/// @group neutural
+/// @semantic 深
+/// @export
+$color-fill1-3: #EBECF0 !default;
+/// fill1-4
+/// @group neutural
+/// @semantic 重
+/// @export
+$color-fill1-4: #E2E4E8 !default;
+
+// 文字
+
+/// text1-1
+/// @group neutural
+/// @semantic 禁用
+/// @export
+$color-text1-1: #CCCCCC !default;
+/// text1-2
+/// @group neutural
+/// @semantic 水印/提示
+/// @export
+$color-text1-2: #999999 !default;
+/// text1-3
+/// @group neutural
+/// @semantic 正文/标题
+/// @export
+$color-text1-3: #666666 !default;
+/// text1-4
+/// @group neutural
+/// @semantic 正文/标题
+/// @export
+$color-text1-4: #333333 !default;
+
+
+
+// ----------- 数据色 ----------- //
+
+// 数据序列
+
+/// data1-1
+/// @group data
+/// @export
+$color-data1-1: #00DCCD !default;
+/// data1-2
+/// @group data
+/// @export
+$color-data1-2: #506FED !default;
+/// data1-3
+/// @group data
+/// @export
+$color-data1-3: #AE66FC !default;
+/// data1-4
+/// @group data
+/// @export
+$color-data1-4: #FF445F !default;
+/// data1-5
+/// @group data
+/// @export
+$color-data1-5: #FF934D !default;
+/// data1-6
+/// @group data
+/// @export
+$color-data1-6: #FFD74D !default;
+/// data1-7
+/// @group data
+/// @export
+$color-data1-7: #4DDE6D !default;
+/// data1-8
+/// @group data
+/// @export
+$color-data1-8: #18B1F7 !default;
