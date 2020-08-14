@@ -1,0 +1,84 @@
+////
+/// @module typography: 段落
+/// @tag Typography
+/// @category component
+/// @family general
+/// @varPrefix $typography-
+/// @classPrefix {prefix}-typography
+/// @order {"size/text":10,"statement/normal":11,"size/text/size":101,"size/text/line height":102,"statement/normal/text":111}
+////
+
+// paragraph variables
+// --------------------------------------------------
+
+// unconfigurable
+$typography-prefix: ".#{$css-prefix}typography";
+
+/// text
+/// @namespace statement/normal
+$typography-text-color: $color-text1-4 !default;
+
+/// weight
+/// @namespace size/strong
+$typography-text-strong-font-weight: $font-weight-semi-bold !default;
+
+/// corner
+/// @namespace size/code
+$typography-text-code-corner: $corner-1 !default;
+
+/// color
+/// @namespace statement/normal/mark
+$typography-text-mark-color: $color-text1-4 !default;
+
+/// background
+/// @namespace statement/normal/mark
+$typography-text-mark-background: $color-warning-2 !default;
+
+/// color
+/// @namespace statement/normal/code
+$typography-text-code-color: $color-text1-4 !default;
+
+/// background
+/// @namespace statement/normal/code
+$typography-text-code-background: $color-fill1-2 !default;
+
+/// border color
+/// @namespace statement/normal/code
+$typography-text-code-border-color: $color-line1-1 !default;
+
+/// size
+/// @namespace size/paragraph/text
+$typography-paragraph-font-size: $font-size-body-2 !default;
+
+/// line height
+/// @namespace size/paragraph/text
+$typography-paragraph-line-height: $font-lineheight-2 !default;
+
+/// size
+/// @namespace size/title
+$typography-title-h1-font-size: $font-size-headline !default;
+
+/// size
+/// @namespace size/title
+$typography-title-h2-font-size: $font-size-title !default;
+
+/// size
+/// @namespace size/title
+$typography-title-h3-font-size: $font-size-subhead !default;
+
+/// size
+/// @namespace size/title
+$typography-title-h4-font-size: $font-size-subhead !default;
+
+/// size
+/// @namespace size/title
+$typography-title-h5-font-size: $font-size-body-2 !default;
+
+/// size
+/// @namespace size/title
+$typography-title-h6-font-size: $font-size-body-1 !default;
+
+/// weight
+/// @namespace size/title
+$typography-title-font-weight: $font-weight-semi-bold !default;
+

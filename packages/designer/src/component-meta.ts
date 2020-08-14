@@ -150,17 +150,16 @@ export class ComponentMeta {
       this._title =
         typeof title === 'string'
           ? {
-              type: 'i18n',
-              'en-US': this.componentName,
-              'zh-CN': title,
-            }
+            type: 'i18n',
+            'en-US': this.componentName,
+            'zh-CN': title,
+          }
           : title;
     }
 
     const liveTextEditing = this._transformedMetadata.experimental?.liveTextEditing || [];
 
     function collectLiveTextEditing(items: FieldConfig[]) {
-      debugger;
       items.forEach((config) => {
         if (config?.items) {
           collectLiveTextEditing(config.items);

@@ -39,7 +39,6 @@ function propTypeToSetter(propType: PropType): SetterType {
   } else {
     typeName = 'string';
   }
-  debugger;
   // TODO: use mixinSetter wrapper
   switch (typeName) {
     case 'string':

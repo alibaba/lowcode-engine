@@ -1,0 +1,199 @@
+@mixin node-state(
+    $direction,
+    $background,
+    $color,
+    $dot-size: $s-2
+) {
+    position: relative;
+    #{$timeline-prefix}-item-timeline {
+        position: absolute;
+        @if $direction == 'rtl' {
+            left: auto;
+            right: 0;
+        } @else {
+            left: 0;
+        }
+        top: 0;
+        height: 100%;
+
+        #{$timeline-prefix}-item-node {
+            position: relative;
+            width: $timeline-item-node-size;
+            height: $timeline-item-node-size + $timeline-item-node-padding * 2;
+            padding: $timeline-item-node-padding 0;
+            text-align: center;
+            @if $direction == 'rtl' {
+                float: right;
+            } @else {
+                float: left;
+            }
+        }
+
+        #{$timeline-prefix}-item-node#{$timeline-prefix}-item-node-custom {
+            width: $timeline-item-custom-node-size;
+            height: auto;
+            font-size: $timeline-item-custom-node-font-size;
+            word-break: break-all;
+            @if $direction == 'rtl' {
+                margin-right: calc(-#{($timeline-item-custom-node-size - $timeline-item-node-size) / 2});
+                margin-left: 0;
+            } @else {
+                margin-left: calc(-#{($timeline-item-custom-node-size - $timeline-item-node-size) / 2});
+            }
+            line-height: 1;
+        }
+
+        #{$timeline-prefix}-item-dot {
+            display: block;
+            position: absolute;
+            width: $dot-size;
+            height: $dot-size;
+            border-radius: 100%;
+            top: 50%;
+            margin-top: -$dot-size/2;
+            left: 50%;
+            margin-left: -$dot-size/2;
+        }
+
+        #{$timeline-prefix}-item-icon {
+            display: block;
+            position: absolute;
+            width: $timeline-item-icon-size + 4;
+            height: $timeline-item-icon-size + 4;
+            line-height: $timeline-item-icon-size + 4;
+            border-radius: 100%;
+            top: 50%;
+            left: 50%;
+            margin-top: -$timeline-item-icon-size/2 - 2;
+            margin-left: -$timeline-item-icon-size/2 - 2;
+
+            #{$timeline-icon-prefix} {
+                @include icon-size($timeline-item-icon-size);
+            }
+        }
+
+        #{$timeline-prefix}-item-tail {
+            position: absolute;
+            width: auto;
+            height: calc(100% - #{$timeline-item-node-size + 2*$timeline-item-node-padding});
+            top: $timeline-item-node-size + 2*$timeline-item-node-padding;
+            @if $direction == 'rtl' {
+                left: auto;
+                right: $timeline-item-node-size/2;
+            } @else {
+                left: $timeline-item-node-size/2;
+            }
+
+            i {
+                display: inline-block;
+                vertical-align: top;
+                height: 100%;
+                width: $timeline-item-tail-size;
+                position: relative;
+                background: $timeline-item-tail-color;
+                -webkit-transition: all $motion-duration-immediately $motion-linear;
+                transition: all $motion-duration-immediately $motion-linear;
+            }
+        }
+    }
+
+    #{$timeline-prefix}-item-content {
+        display: inline-block;
+        @if $direction == 'rtl' {
+            margin-right: $timeline-item-content-margin-left + $timeline-item-node-size;
+            margin-left: 0;
+        } @else {
+            margin-left: $timeline-item-content-margin-left + $timeline-item-node-size;
+        }
+        #{$timeline-prefix}-item-title {
+            margin: 0;
+            font-size: $timeline-item-title-font-size;
+            font-weight: $timeline-item-title-font-weight;
+            line-height: $timeline-item-title-font-size + 4;
+            margin-top: $timeline-item-title-margin-top;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: $timeline-item-title-color;
+            @if $direction == 'rtl' {
+                text-align: right;
+            } @else {
+                text-align: left;
+            }
+        }
+
+        #{$timeline-prefix}-item-body {
+            margin: 0;
+            margin-top: $timeline-item-body-margin-top;
+            font-size: $timeline-item-body-font-size;
+            line-height: $timeline-item-body-font-size + 4;
+            color: $timeline-item-body-color;
+            @if $direction == 'rtl' {
+                text-align: right;
+            } @else {
+                text-align: left;
+            }
+        }
+
+        #{$timeline-prefix}-item-time {
+            margin: 0;
+            margin-top: $timeline-item-time-margin-top;
+            margin-bottom: $timeline-item-time-margin-bottom;
+            font-size: $timeline-item-time-font-size;
+            color: $timeline-item-time-color;
+            @if $direction == 'rtl' {
+                text-align: right;
+            } @else {
+                text-align: left;
+            }
+        }
+    }
+
+    // 时间轴左边存在内容的情况
+    &#{$timeline-prefix}-item-has-left-content {
+        & > #{$timeline-prefix}-item-left-content {
+            position: absolute;
+            width: $timeline-item-left-content-width;
+            display: inline-block;
+            font-size: $timeline-item-left-body-font-size;
+            color: $timeline-item-left-body-color;
+            line-height: $timeline-item-left-body-font-size + 4;
+            margin-top: $timeline-item-title-margin-top;
+            @if $direction == 'rtl' {
+                text-align: left;
+                padding-left: $timeline-item-content-margin-left;
+                padding-right: 0;
+            } @else {
+                text-align: right;
+                padding-right: $timeline-item-content-margin-left;
+            }
+            p {
+                word-break: break-word;
+            }
+        }
+        & > #{$timeline-prefix}-item-timeline {
+            @if $direction == 'rtl' {
+                margin-right: $timeline-item-left-content-width;
+                margin-left: 0;
+            } @else {
+                margin-left: $timeline-item-left-content-width;
+            }
+        }
+        & > #{$timeline-prefix}-item-content {
+            @if $direction == 'rtl' {
+                margin-right: $timeline-item-left-content-width + $timeline-item-content-margin-left + $timeline-item-node-size;
+                margin-left: 0;
+            } @else {
+                margin-left: $timeline-item-left-content-width + $timeline-item-content-margin-left + $timeline-item-node-size;
+            }
+        }
+    }
+    #{$timeline-prefix}-item-dot {
+        background: $background;
+    }
+
+    #{$timeline-prefix}-item-icon {
+        background: $background;
+        color: $color;
+    }
+}

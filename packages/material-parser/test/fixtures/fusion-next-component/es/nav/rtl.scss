@@ -1,0 +1,90 @@
+@import "../core/index-noreset.scss";
+
+
+@mixin nav-border-fix-rtl($border-width) {
+    &.#{$css-prefix}ver {
+        &.#{$css-prefix}left #{$nav-prefix}-item:before {
+            right: - $border-width;
+            left: auto;
+        }
+
+        &.#{$css-prefix}right #{$nav-prefix}-item:before {
+            left: - $border-width;
+            right: auto;
+        }
+    }
+}
+
+
+#{$nav-prefix}[dir="rtl"] {
+    #{$nav-prefix}-icon.#{$css-prefix}icon {
+        @include icon-size(
+            $size: $nav-icon-self-size,
+            $marginRight: 0,
+            $marginLeft: $nav-icon-self-margin
+
+        );
+    }
+
+    &.#{$css-prefix}hoz {
+
+        #{$menu-prefix}-header {
+            float: right;
+        }
+
+        #{$menu-prefix}-footer {
+            float: left;
+        }
+
+        #{$nav-prefix}-item:before {
+            width: 0;
+            left: 50%;
+        }
+
+
+        .#{$css-prefix}selected#{$nav-prefix}-item:before {
+            width: 100%;
+            left: auto;
+            right: 0;
+        }
+    }
+
+    @include nav-border-fix-rtl(
+        $popup-local-border-width
+    );
+
+
+    &.#{$css-prefix}primary {
+        @include nav-border-fix-rtl(
+            $nav-primary-border-width
+        );
+    }
+
+    &.#{$css-prefix}secondary {
+        @include nav-border-fix-rtl(
+            $nav-secondary-border-width
+        );
+    }
+
+    #{$nav-prefix}.#{$css-prefix}line {
+        &.#{$css-prefix}ver {
+            border-top-color: $nav-line-bg-color;
+            border-right-color: $nav-line-bg-color;
+            border-left-color: none;
+            border-bottom-color: $nav-line-bg-color;
+        }
+    }
+
+    &.#{$css-prefix}icon-only {
+
+        #{$nav-prefix}-icon.#{$css-prefix}icon,
+        #{$nav-prefix}-icon-only-arrow.#{$css-prefix}icon,
+        #{$nav-prefix}-item.#{$css-prefix}opened #{$nav-prefix}-icon-only-arrow.#{$css-prefix}icon-arrow-down {
+            @include icon-size(
+                $size: $nav-icon-only-font-size,
+                $marginLeft: 0,
+                $marginRight: (18px - $nav-icon-only-font-size) / 2
+            );
+        }
+    }
+}

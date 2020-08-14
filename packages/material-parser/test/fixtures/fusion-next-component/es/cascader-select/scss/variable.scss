@@ -1,0 +1,17 @@
+////
+/// @module cascader-select: 级联选择
+/// @tag CascaderSelect
+/// @category component
+/// @family data-entry
+/// @varPrefix $cascader-select-
+/// @classPrefix {prefix}-cascader-select
+/// @order {}
+////
+
+// cascader-select variables
+// --------------------------------------------------
+
+/// unconfigurable
+$cascader-select: "cascader-select";
+
+$cascader-select-prefix: ".#{$css-prefix}#{$cascader-select}";

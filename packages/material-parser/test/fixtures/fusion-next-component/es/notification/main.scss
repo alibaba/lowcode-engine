@@ -1,0 +1,42 @@
+@charset "UTF-8";
+
+@import "../core/index-noreset.scss";
+
+.#{$css-prefix}notification {
+    width: 384px;
+    position: fixed;
+    z-index: 1010;
+    padding: 0;
+    margin: 0;
+    .#{$css-prefix}message {
+        margin-bottom: 16px;
+        overflow: hidden;
+    }
+}
+
+.#{$css-prefix}notification-fade-leave {
+    animation-duration: 300ms;
+    animation-play-state: paused;
+    animation-fill-mode: both;
+    animation-timing-function: ease;
+}
+
+.#{$css-prefix}notification-fade-leave.#{$css-prefix}notification-fade-leave-active {
+    animation-name: NotificationFadeOut;
+    animation-play-state: running;
+}
+
+@keyframes NotificationFadeOut {
+    0% {
+        max-height: 150px;
+        margin-bottom: 16px;
+        opacity: 1;
+    }
+    100% {
+        max-height: 0;
+        margin-bottom: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        opacity: 0;
+    }
+}

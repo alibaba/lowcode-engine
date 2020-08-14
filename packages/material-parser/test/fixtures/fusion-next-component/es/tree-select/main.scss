@@ -1,0 +1,22 @@
+@import "../core/index-noreset.scss";
+@import "scss/variable";
+
+#{$tree-select-prefix} {
+    @include box-sizing;
+
+    &-dropdown {
+        padding: $tree-select-padding-vertical $tree-select-padding-horizontal;
+        background: $tree-select-background;
+        border: $popup-local-border-width $popup-local-border-style $popup-local-border-color;
+        border-radius: $popup-local-corner;
+        box-shadow: $popup-local-shadow;
+        max-height: 260px;
+        overflow: auto;
+    }
+
+    &-not-found {
+        height: $s-4;
+        font-size: $font-size-body-1;
+        color: $color-text1-2;
+    }
+}

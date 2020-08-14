@@ -1,0 +1,27 @@
+@mixin table-border($border-width) {
+    table {
+        tr td:first-child,
+        tr th:first-child {
+            border-left-width: $border-width;
+        }
+    }
+    #{$table-prefix}-header {
+        th {
+            border-top-width: $border-width;
+        }
+        tr th:last-child {
+            border-right-width: $border-width;
+        }
+    }
+    #{$table-prefix}-body {
+        td {
+            border-top-width: $border-width;
+        }
+        tr:last-child td {
+            border-bottom-width: $border-width;
+        }
+        tr td:last-child {
+            border-right-width: $border-width;
+        }
+    }
+}

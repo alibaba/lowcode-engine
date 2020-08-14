@@ -1,0 +1,120 @@
+@charset "UTF-8";
+
+@import "../core/index-noreset.scss";
+@import "scss/variable";
+@import "scss/mixin";
+
+.#{$css-prefix}balloon {
+    @include box-sizing;
+    @include balloon-bounding($balloon-border-style);
+
+    font-size: $balloon-content-font-size;
+    font-weight: $balloon-content-font-weight;
+    animation-duration: $motion-duration-standard;
+    animation-timing-function: $motion-ease-in-out;
+    word-wrap: break-all;
+    word-wrap: break-word;
+    z-index: 0;
+    &:focus,
+    & *:focus {
+        outline: 0;
+    }
+
+    &-primary {
+        @include balloon-state(
+            $balloon-primary-color,
+            $balloon-primary-color-border,
+            $balloon-primary-color-bg,
+            $balloon-primary-shadow,
+            $balloon-primary-border-width
+        );
+        @include balloon-close(
+            $balloon-size-close-margin-top,
+            $balloon-size-close-margin-right,
+            $balloon-size-close,
+            $balloon-primary-color-close,
+            $balloon-primary-color-close-hover
+        );
+        @include balloon-arrow(
+            $balloon-size-arrow-size,
+            $balloon-size-arrow-size,
+            $balloon-primary-color-border,
+            $balloon-primary-color-bg,
+            $balloon-primary-shadow,
+            $balloon-primary-border-width,
+            $balloon-size-arrow-expose-primary
+        );
+    }
+
+    &-normal {
+        @include balloon-state(
+            $balloon-normal-color,
+            $balloon-normal-color-border,
+            $balloon-normal-color-bg,
+            $balloon-normal-shadow,
+            $balloon-normal-border-width
+        );
+        @include balloon-close(
+            $balloon-size-close-margin-top,
+            $balloon-size-close-margin-right,
+            $balloon-size-close,
+            $balloon-normal-color-close,
+            $balloon-normal-color-close-hover
+        );
+        @include balloon-arrow(
+            $balloon-size-arrow-size,
+            $balloon-size-arrow-size,
+            $balloon-normal-color-border,
+            $balloon-normal-color-bg,
+            $balloon-normal-shadow,
+            $balloon-normal-border-width,
+            $balloon-size-arrow-expose
+        );
+    }
+
+    @include show-hidden();
+
+    /* size */
+    &-medium {
+        @include balloon-size($balloon-size-padding-top, $balloon-size-padding-right, $balloon-size-padding-top, $balloon-size-padding-right);
+    }
+    /* 带关闭按钮的右侧padding变大 */
+    &-closable {
+        @include balloon-size($balloon-size-padding-top, $balloon-size-padding-closable-right, $balloon-size-padding-top, $balloon-size-padding-right);
+    }
+}
+
+.#{$css-prefix}balloon-tooltip {
+    @include box-sizing;
+    @include balloon-bounding($balloon-tooltip-border-style);
+
+    font-size: $balloon-tooltip-content-font-size;
+    font-weight: $balloon-tooltip-content-font-weight;
+    z-index: 0;
+    word-wrap: break-all;
+    word-wrap: break-word;
+
+    @include tooltip-state(
+        $balloon-tooltip-color,
+        $balloon-tooltip-color-border,
+        $balloon-tooltip-color-bg,
+        $balloon-tooltip-shadow,
+        $balloon-tooltip-border-width
+    );
+
+    @include tooltip-arrow(
+        $balloon-size-arrow-size,
+        $balloon-size-arrow-size,
+        $balloon-tooltip-color-border,
+        $balloon-tooltip-color-bg
+    );
+
+    @include show-hidden();
+
+    /* size */
+    &-medium {
+        @include balloon-size($balloon-tooltip-size-padding-top, $balloon-tooltip-size-padding-right, $balloon-tooltip-size-padding-bottom, $balloon-tooltip-size-padding-left);
+    }
+}
+
+@import "./rtl.scss";

@@ -1,0 +1,425 @@
+@charset "UTF-8";
+
+////
+/// @module nav: 导航
+/// @tag Nav
+/// @category component
+/// @family navigation
+/// @varPrefix $nav-
+/// @classPrefix {prefix}-nav
+/// @order {"size/bounding":10,"size/item":11,"size/sub nav":12,"size/group":13,"size/icon":14,"statement/normal":10,"statement/normal/sub nav":100,"statement/normal/group":101,"statement/hover":11,"statement/hover/sub nav":110,"statement/selected":12,"statement/selected/sub nav":120,"statement/open":13}
+////
+
+
+// nav variables
+// --------------------------------------------------
+
+$nav-prefix: '.#{$css-prefix}nav';
+$menu-prefix: '.#{$css-prefix}menu';
+
+// Size:Hoz
+// ----------------------------------------
+/// height
+/// @namespace size/bounding
+$nav-hoz-height: $s-11 !default;
+/// text
+/// @namespace size/bounding
+$nav-hoz-font-size: $font-size-body-1 !default;
+/// margin (t, b)
+/// @namespace size/item
+$nav-hoz-item-margin-tb: $s-zero !default;
+/// margin (l, r)
+/// @namespace size/item
+$nav-hoz-item-margin-lr: $s-zero !default;
+/// padding (l, r)
+/// @namespace size/item
+$nav-hoz-item-padding-lr: $s-5 !default;
+/// corner
+/// @namespace size/item
+$nav-hoz-item-corner: $corner-zero !default;
+/// active line width
+/// @namespace size/item
+$nav-hoz-item-selected-active-line: $line-2 !default;
+/// hover line width
+/// @namespace size/item
+$nav-hoz-item-hover-active-line: $line-zero !default;
+
+// Size:Ver
+// ----------------------------------------
+/// height
+/// @namespace size/bounding
+$nav-ver-height: $s-10 !default;
+/// text
+/// @namespace size/bounding
+$nav-ver-font-size: $font-size-body-1 !default;
+/// margin (t, b)
+/// @namespace size/item
+$nav-ver-item-margin-tb: $s-zero !default;
+/// margin (l, r)
+/// @namespace size/item
+$nav-ver-item-margin-lr: $s-zero !default;
+/// padding (l, r)
+/// @namespace size/item
+$nav-ver-item-padding-lr: $s-5 !default;
+/// corner
+/// @namespace size/item
+$nav-ver-item-corner: $corner-zero !default;
+/// active line width
+/// @namespace size/item
+$nav-ver-item-selected-active-line: $line-2 !default;
+/// hover line width
+/// @namespace size/item
+$nav-ver-item-hover-active-line: $line-zero !default;
+/// height
+/// @namespace size/sub nav
+$nav-ver-sub-nav-height: $s-10 !default;
+/// text
+/// @namespace size/sub nav
+$nav-ver-sub-nav-font-size: $font-size-caption !default;
+/// height
+/// @namespace size/group
+$nav-group-height: $s-10 !default;
+/// text
+/// @namespace size/group
+$nav-group-font-size: $font-size-subhead !default;
+
+// Size:Common
+// ----------------------------------------
+/// size
+/// @namespace size/icon
+$nav-icon-self-size: $icon-xs !default;
+/// margin (r)
+/// @namespace size/icon
+$nav-icon-self-margin: $s-1 !default;
+/// size
+/// @namespace size/icon
+$nav-icon-only-font-size: $icon-s !default;
+
+// Statement:Primary
+// ----------------------------------------
+/// background
+/// @namespace statement/normal
+$nav-primary-bg-color: $color-text1-4 !default;
+
+/// border
+/// @namespace size/normal
+$nav-primary-border-width: $line-zero !default;
+
+/// border
+/// @namespace statement/normal
+$nav-primary-border-color: $color-text1-4 !default;
+/// text
+/// @namespace statement/normal
+$nav-primary-text-color: $color-white !default;
+/// text style
+/// @namespace statement/normal
+$nav-primary-text-style: $font-weight-2 !default;
+/// shadow
+/// @namespace statement/normal
+$nav-primary-shadow: $shadow-2 !default;
+/// background
+/// @namespace statement/normal/sub nav
+$nav-primary-sub-nav-bg-color: $color-text1-4 !default;
+/// text
+/// @namespace statement/normal/sub nav
+$nav-primary-sub-nav-text-color: $color-white !default;
+/// text style
+/// @namespace statement/normal/sub nav
+$nav-primary-sub-nav-text-style: $font-weight-2 !default;
+/// text
+/// @namespace statement/normal/group
+$nav-primary-group-text-color: $color-text1-2 !default;
+/// text style
+/// @namespace statement/normal/group
+$nav-primary-group-text-style: $font-weight-2 !default;
+/// background
+/// @namespace statement/hover
+$nav-primary-item-hover-bg-color: $color-black !default;
+/// text
+/// @namespace statement/hover
+$nav-primary-item-hover-text-color: $color-white !default;
+/// text style
+/// @namespace statement/hover
+$nav-primary-item-hover-text-style: $font-weight-2 !default;
+/// hover line color
+/// @namespace statement/hover
+$nav-primary-item-hover-active-color: $color-brand1-6 !default;
+/// background
+/// @namespace statement/hover/sub nav
+$nav-primary-sub-nav-hover-bg-color: $color-black !default;
+/// text
+/// @namespace statement/hover/sub nav
+$nav-primary-sub-nav-hover-text-color: $color-white !default;
+/// background
+/// @namespace statement/selected
+$nav-primary-item-selected-bg-color: $color-black !default;
+/// text color
+/// @namespace statement/selected
+$nav-primary-item-selected-text-color: $color-white !default;
+/// text style
+/// @namespace statement/selected
+$nav-primary-item-selected-text-style: $font-weight-3 !default;
+/// active line color
+/// @namespace statement/selected
+$nav-primary-item-selected-active-color: $color-brand1-6 !default;
+/// background
+/// @namespace statement/selected/sub nav
+$nav-primary-sub-nav-selected-bg-color: $color-black !default;
+/// text color
+/// @namespace statement/selected/sub nav
+$nav-primary-sub-nav-selected-text-color: $color-white !default;
+/// active line color
+/// @namespace statement/selected/sub nav
+$nav-primary-sub-nav-active-color: $color-brand1-6 !default;
+/// background
+/// @namespace statement/open
+$nav-primary-item-opened-bg-color: $color-black !default;
+/// text
+/// @namespace statement/open
+$nav-primary-item-opened-text-color: $color-white !default;
+
+// Statement:Secondary
+// ----------------------------------------
+/// background
+/// @namespace statement/normal
+$nav-secondary-bg-color: $color-brand1-6 !default;
+/// border
+/// @namespace size/normal
+$nav-secondary-border-width: $line-zero !default;
+/// border
+/// @namespace statement/normal
+$nav-secondary-border-color: $color-brand1-6 !default;
+/// text
+/// @namespace statement/normal
+$nav-secondary-text-color: $color-white !default;
+/// text style
+/// @namespace statement/normal
+$nav-secondary-text-style: $font-weight-2 !default;
+/// shadow
+/// @namespace statement/normal
+$nav-secondary-shadow: $shadow-2 !default;
+/// background
+/// @namespace statement/normal/sub nav
+$nav-secondary-sub-nav-bg-color: $color-brand1-6 !default;
+/// text
+/// @namespace statement/normal/sub nav
+$nav-secondary-sub-nav-text-color: $color-white !default;
+/// text style
+/// @namespace statement/normal/sub nav
+$nav-secondary-sub-nav-text-style: $font-weight-2 !default;
+/// text
+/// @namespace statement/normal/group
+$nav-secondary-group-text-color: $color-white !default;
+/// text style
+/// @namespace statement/normal/group
+$nav-secondary-group-text-style: $font-weight-2 !default;
+/// background
+/// @namespace statement/hover
+$nav-secondary-item-hover-bg-color: $color-brand1-9 !default;
+/// text
+/// @namespace statement/hover
+$nav-secondary-item-hover-text-color: $color-white !default;
+/// text style
+/// @namespace statement/hover
+$nav-secondary-item-hover-text-style: $font-weight-2 !default;
+/// hover line color
+/// @namespace statement/hover
+$nav-secondary-item-hover-active-color: $color-brand1-9 !default;
+/// background
+/// @namespace statement/hover/sub nav
+$nav-secondary-sub-nav-hover-bg-color: $color-brand1-9 !default;
+/// text
+/// @namespace statement/hover/sub nav
+$nav-secondary-sub-nav-hover-text-color: $color-white !default;
+/// background
+/// @namespace statement/selected
+$nav-secondary-item-selected-bg-color: $color-brand1-9 !default;
+/// text color
+/// @namespace statement/selected
+$nav-secondary-item-selected-text-color: $color-white !default;
+/// text style
+/// @namespace statement/selected
+$nav-secondary-item-selected-text-style: $font-weight-3 !default;
+/// active line color
+/// @namespace statement/selected
+$nav-secondary-item-selected-active-color: $color-brand1-9 !default;
+/// background
+/// @namespace statement/selected/sub nav
+$nav-secondary-sub-nav-selected-bg-color: $color-brand1-9 !default;
+/// text color
+/// @namespace statement/selected/sub nav
+$nav-secondary-sub-nav-selected-text-color: $color-white !default;
+/// active line color
+/// @namespace statement/selected/sub nav
+$nav-secondary-sub-nav-active-color: $color-brand1-6 !default;
+/// background
+/// @namespace statement/open
+$nav-secondary-item-opened-bg-color: $color-brand1-9 !default;
+/// text
+/// @namespace statement/open
+$nav-secondary-item-opened-text-color: $color-white !default;
+
+// Statement:Normal
+// ----------------------------------------
+/// background
+/// @namespace statement/normal
+$nav-normal-bg-color: $color-white !default;
+/// border
+/// @namespace statement/normal
+$nav-normal-border-color: $color-line1-2 !default;
+/// text
+/// @namespace statement/normal
+$nav-normal-text-color: $color-text1-4 !default;
+/// text style
+/// @namespace statement/normal
+$nav-normal-text-style: $font-weight-2 !default;
+/// border
+/// @namespace statement/normal
+$nav-normal-border-color: $color-line1-1 !default;
+/// border
+/// @namespace statement/normal
+$nav-normal-border-line: $line-1 !default;
+/// shadow
+/// @namespace statement/normal
+$nav-normal-shadow: $shadow-2 !default;
+/// background
+/// @namespace statement/normal/sub nav
+$nav-normal-sub-nav-bg-color: $color-white !default;
+/// text
+/// @namespace statement/normal/sub nav
+$nav-normal-sub-nav-text-color: $color-text1-4 !default;
+/// text style
+/// @namespace statement/normal/sub nav
+$nav-normal-sub-nav-text-style: $font-weight-2 !default;
+/// text
+/// @namespace statement/normal/group
+$nav-normal-group-text-color: $color-text1-2 !default;
+/// text style
+/// @namespace statement/normal/group
+$nav-normal-group-text-style: $font-weight-2 !default;
+/// background
+/// @namespace statement/hover
+$nav-normal-item-hover-bg-color: $color-white !default;
+/// text
+/// @namespace statement/hover
+$nav-normal-item-hover-text-color: $color-brand1-6 !default;
+/// text style
+/// @namespace statement/hover
+$nav-normal-item-hover-text-style: $font-weight-2 !default;
+/// hover line color
+/// @namespace statement/hover
+$nav-normal-item-hover-active-color: $color-brand1-6 !default;
+/// background
+/// @namespace statement/hover/sub nav
+$nav-normal-sub-nav-hover-bg-color: $color-fill1-2 !default;
+/// text
+/// @namespace statement/hover/sub nav
+$nav-normal-sub-nav-hover-text-color: $color-brand1-6 !default;
+/// background
+/// @namespace statement/selected
+$nav-normal-item-selected-bg-color: $color-fill1-2 !default;
+/// text color
+/// @namespace statement/selected
+$nav-normal-item-selected-text-color: $color-brand1-6 !default;
+/// text style
+/// @namespace statement/selected
+$nav-normal-item-selected-text-style: $font-weight-3 !default;
+/// active line color
+/// @namespace statement/selected
+$nav-normal-item-selected-active-color: $color-brand1-6 !default;
+/// background
+/// @namespace statement/selected/sub nav
+$nav-normal-sub-nav-selected-bg-color: $color-fill1-2 !default;
+/// text color
+/// @namespace statement/selected/sub nav
+$nav-normal-sub-nav-selected-text-color: $color-brand1-6 !default;
+/// active line color
+/// @namespace statement/selected/sub nav
+$nav-normal-sub-nav-active-color: $color-brand1-6 !default;
+/// background
+/// @namespace statement/open
+$nav-normal-item-opened-bg-color: $color-fill1-2 !default;
+/// text
+/// @namespace statement/open
+$nav-normal-item-opened-text-color: $color-brand1-6 !default;
+
+// Statement:Line
+// ----------------------------------------
+/// background
+/// @namespace statement/normal
+$nav-line-bg-color: $color-transparent !default;
+/// border
+/// @namespace statement/normal
+$nav-line-border-color: $color-line1-2 !default;
+/// text
+/// @namespace statement/normal
+$nav-line-text-color: $color-text1-4 !default;
+/// text style
+/// @namespace statement/normal
+$nav-line-text-style: $font-weight-2 !default;
+/// border
+/// @namespace statement/normal
+$nav-line-border-color: $color-line1-2 !default;
+/// border
+/// @namespace statement/normal
+$nav-line-border-line: $line-1 !default;
+/// background
+/// @namespace statement/normal/sub nav
+$nav-line-sub-nav-bg-color: $color-transparent !default;
+/// text
+/// @namespace statement/normal/sub nav
+$nav-line-sub-nav-text-color: $color-text1-4 !default;
+/// text style
+/// @namespace statement/normal/sub nav
+$nav-line-sub-nav-text-style: $font-weight-2 !default;
+/// background
+/// @namespace statement/hover
+$nav-line-item-hover-bg-color: $color-transparent !default;
+/// text
+/// @namespace statement/hover
+$nav-line-item-hover-text-color: $color-brand1-6 !default;
+/// text style
+/// @namespace statement/hover
+$nav-line-item-hover-text-style: $font-weight-2 !default;
+/// hover line color
+/// @namespace statement/hover
+$nav-line-item-hover-active-color: $color-brand1-6 !default;
+/// background
+/// @namespace statement/hover/sub nav
+$nav-line-sub-nav-hover-bg-color: $color-transparent !default;
+/// text
+/// @namespace statement/hover/sub nav
+$nav-line-sub-nav-hover-text-color: $color-brand1-6 !default;
+/// background
+/// @namespace statement/selected
+$nav-line-item-selected-bg-color: $color-transparent !default;
+/// text color
+/// @namespace statement/selected
+$nav-line-item-selected-text-color: $color-brand1-6 !default;
+/// text style
+/// @namespace statement/selected
+$nav-line-item-selected-text-style: $font-weight-3 !default;
+/// active line color
+/// @namespace statement/selected
+$nav-line-item-selected-active-color: $color-brand1-6 !default;
+/// background
+/// @namespace statement/selected/sub nav
+$nav-line-sub-nav-selected-bg-color: $color-transparent !default;
+/// text color
+/// @namespace statement/selected/sub nav
+$nav-line-sub-nav-selected-text-color: $color-brand1-6 !default;
+/// active line color
+/// @namespace statement/selected/sub nav
+$nav-line-sub-nav-active-color: $color-brand1-6 !default;
+/// background
+/// @namespace statement/open
+$nav-line-item-opened-bg-color: $color-transparent !default;
+/// text
+/// @namespace statement/open
+$nav-line-item-opened-text-color: $color-brand1-6 !default;
+/// text
+/// @namespace statement/normal/group
+$nav-line-group-text-color: $color-text1-2 !default;
+/// text style
+/// @namespace statement/normal/group
+$nav-line-group-text-style: $font-weight-2 !default;

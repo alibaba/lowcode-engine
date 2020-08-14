@@ -1,0 +1,51 @@
+////
+/// @group popup
+/// @module popup: 弹层通用
+/// @type String
+/// @tag popup
+/// @category utility
+/// @family popup
+/// @varPrefix $popup-
+/// @classPrefix {prefix}-popup
+////
+
+
+/// border width
+/// @semantic 边框宽度
+$popup-local-border-width: $line-1 !default;
+
+/// border style
+/// @semantic 边框样式
+$popup-local-border-style: $line-solid !default;
+
+/// border color
+/// @semantic 边框颜色
+$popup-local-border-color: $color-line1-2 !default;
+
+/// corner
+/// @semantic 圆角
+$popup-local-corner: $corner-1 !default;
+
+/// shadow
+/// @semantic 阴影
+$popup-local-shadow: $shadow-zero !default;
+
+/// border width
+/// @semantic 边框宽度
+$popup-global-border-width: $line-zero !default;
+
+/// border style
+/// @semantic 边框样式
+$popup-global-border-style: $line-solid !default;
+
+/// border color
+/// @semantic 边框颜色
+$popup-global-border-color: $color-line1-2 !default;
+
+/// corner
+/// @semantic 圆角
+$popup-global-corner: $corner-1 !default;
+
+/// shadow
+/// @semantic 阴影
+$popup-global-shadow: $shadow-2-down !default;

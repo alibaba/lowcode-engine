@@ -1,0 +1,178 @@
+// 圆形
+// ----------------------------------------
+
+#{$step-prefix}-circle {
+
+    #{$step-prefix}-item-container {
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+        padding: 0 $step-circle-item-node-padding;
+        #{$step-prefix}-item-progress {
+            #{$step-progress-prefix}-circle-text {
+                color: $step-circle-item-node-process-percent-color;
+                font-size: $step-circle-item-node-process-percent-size;
+            }
+
+            #{$step-progress-prefix}-circle-underlay {
+                stroke: $step-circle-item-node-wait-border-color;
+                stroke-width: 3 * $step-circle-item-node-border-width;
+            }
+
+            #{$step-progress-prefix}-circle-overlay-normal {
+                stroke: $step-circle-item-node-finish-border-color;
+                stroke-width: 3 * $step-circle-item-node-border-width;
+            }
+        }
+        #{$step-prefix}-item-node-placeholder {
+            display: inline-block;
+        }
+    }
+
+    & > #{$step-prefix}-item-wait {
+        @include step-item-state(
+            'circle',
+            $step-circle-item-node-wait-background,
+            $step-circle-item-title-wait-color,
+            $step-circle-item-node-wait-color,
+            $step-circle-item-tail-wait-color,
+            $step-circle-item-tail-bg-color,
+            $step-circle-item-node-wait-border-color,
+            $step-circle-item-title-wait-color
+        );
+    }
+
+    & > #{$step-prefix}-item-process {
+        @include step-item-state(
+            'circle',
+            $step-circle-item-node-process-background,
+            $step-circle-item-title-process-color,
+            $step-circle-item-node-process-color,
+            $step-circle-item-tail-process-color,
+            $step-circle-item-tail-bg-color,
+            $step-circle-item-node-process-border-color,
+            $step-circle-item-title-process-color,
+            $step-circle-item-node-process-size
+        );
+    }
+
+    & > #{$step-prefix}-item-finish {
+        @include step-item-state(
+            'circle',
+            $step-circle-item-node-finish-background,
+            $step-circle-item-title-finish-color,
+            $step-circle-item-node-finish-color,
+            $step-circle-item-tail-finish-color,
+            $step-circle-item-tail-bg-color,
+            $step-circle-item-node-finish-border-color,
+            $step-circle-item-title-finish-color
+        );
+    }
+
+    #{$step-prefix}-item-disabled {
+        @include step-item-state(
+            'circle',
+            $step-circle-item-node-disabled-background,
+            $step-circle-item-title-disabled-color,
+            $step-circle-item-node-disabled-color,
+            $step-circle-item-tail-disabled-color,
+            $step-circle-item-tail-bg-color,
+            $step-circle-item-node-disabled-border-color,
+            $step-circle-item-title-disabled-color
+        );
+
+        #{$step-prefix}-item-node-placeholder,
+        #{$step-prefix}-item-node {
+            cursor: not-allowed;
+        }
+    }
+
+    #{$step-prefix}-item-read-only {
+        #{$step-prefix}-item-node-placeholder,
+        #{$step-prefix}-item-node {
+            cursor: default;
+        }
+    }
+
+    #{$step-prefix}-item-last {
+        #{$step-prefix}-item-tail {
+            display: none;
+        }
+    }
+
+    // 圆形 水平
+    // ----------------------------------------
+    &#{$step-prefix}-horizontal {
+        // padding: 0 $step-circle-item-body-width / 2;
+        text-align: center;
+        white-space: nowrap;
+        & > #{$step-prefix}-item {
+            #{$step-prefix}-item-title {
+                white-space: normal;
+            }
+            #{$step-prefix}-item-content {
+                white-space: normal;
+            }
+        }
+        & > #{$step-prefix}-item-wait {
+            @include state-node-size('hor', 'circle');
+        }
+        & > #{$step-prefix}-item-process {
+            @include state-node-size('hor', 'circle', $step-circle-item-node-process-size);
+        }
+        & > #{$step-prefix}-item-finish {
+            @include state-node-size('hor', 'circle');
+        }
+        & > #{$step-prefix}-item-disabled {
+            @include state-node-size('hor', 'circle');
+        }
+    }
+
+    &#{$step-prefix}-horizontal#{$step-prefix}-label-horizontal {
+        & > #{$step-prefix}-item {
+            vertical-align: unset;
+        }
+        & > #{$step-prefix}-item-wait {
+            @include label-placement();
+        }
+        & > #{$step-prefix}-item-process {
+            @include label-placement($step-circle-item-node-process-size);
+        }
+        & > #{$step-prefix}-item-finish {
+            @include label-placement();
+        }
+        & > #{$step-prefix}-item-disabled {
+            @include label-placement();
+        }
+    }
+
+    // 圆形 垂直
+    // ----------------------------------------
+    &#{$step-prefix}-vertical {
+        font-size: 0;
+        display: table-cell;
+        vertical-align: middle;
+        position: relative;
+        #{$step-prefix}-item-container {
+            padding: 0;
+        }
+        & > #{$step-prefix}-item:last-child {
+            #{$step-prefix}-item-tail {
+                display: block;
+                visibility: hidden;
+            }
+        }
+        & > #{$step-prefix}-item-wait {
+            @include state-node-size('ver', 'circle');
+        }
+        & > #{$step-prefix}-item-process {
+            @include state-node-size('ver', 'circle', $step-circle-item-node-process-size);
+        }
+        & > #{$step-prefix}-item-finish {
+            @include state-node-size('ver', 'circle');
+        }
+        & > #{$step-prefix}-item-disabled {
+            @include state-node-size('ver', 'circle');
+        }
+    }
+}

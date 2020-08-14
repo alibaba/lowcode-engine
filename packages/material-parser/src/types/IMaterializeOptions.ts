@@ -23,6 +23,11 @@ interface IMaterializeOptions {
   accesser: 'local' | 'online';
 
   /**
+   * 解析模式
+   */
+  mode?: 'static' | 'dynamic' | 'mixed' | 'auto'
+
+  /**
    * 扩展点
    */
   extensions?: {

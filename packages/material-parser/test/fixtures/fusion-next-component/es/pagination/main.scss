@@ -1,0 +1,248 @@
+@import "../core/index-noreset.scss";
+@import "scss/variable";
+@import "scss/mixin";
+@import "./rtl.scss";
+
+#{$pagination-prefix} {
+    @include box-sizing;
+    @include clearfix;
+    font-size: 0;
+
+    &-total {
+        display: inline-block;
+        font-size: $font-size-body-2;
+        margin-right: $s-4;
+    }
+
+    &-pages {
+        display: inline-block;
+    }
+
+    &-list {
+        display: inline-block;
+        vertical-align: top;
+    }
+    & &-item:not([disabled]) {
+        display: inline-block;
+        border-style: $pagination-item-border-style;
+        border-color: $pagination-item-border-color;
+        background: $pagination-item-bg;
+        color: $pagination-item-color;
+        box-shadow: $pagination-item-shadow;
+    }
+
+    & &-item {
+        &.#{$css-prefix}current {
+            border-color: $pagination-item-current-border-color;
+            background: $pagination-item-current-bg;
+            color: $pagination-item-current-color;
+            box-shadow: $pagination-item-current-shadow;
+        }
+        &.#{$css-prefix}current:hover,
+        &.#{$css-prefix}current:focus {
+            border-color: $pagination-item-current-hover-border-color;
+            background: $pagination-item-current-hover-bg;
+            color: $pagination-item-current-hover-color;
+            box-shadow: $pagination-item-current-hover-shadow;
+        }
+    }
+
+    &-ellipsis {
+        display: inline-block;
+        color: $pagination-ellipsis-color;
+        vertical-align: top;
+    }
+
+    &-display {
+        display: inline-block;
+        margin: 0 $s-4;
+        color: $pagination-total-color;
+        vertical-align: middle;
+
+        em {
+            font-style: normal;
+            color: $pagination-current-color;
+        }
+    }
+
+    &-jump {
+        &-text {
+            display: inline-block;
+            vertical-align: middle;
+            color: $pagination-jump-color;
+        }
+
+        &-input {
+            margin: 0 $pagination-input-margin;
+            vertical-align: top;
+        }
+
+        &-go {
+            margin-left: $s-1;
+            vertical-align: top;
+        }
+    }
+
+    &-size-selector {
+        display: inline-block;
+        position: relative;
+        &-title {
+            margin-right: $pagination-size-selector-title-margin-right;
+            color: $pagination-size-selector-title-color;
+        }
+        &-filter {
+            display: inline-block;
+            vertical-align: middle;
+        }
+        &-dropdown {
+            vertical-align: top;
+            min-width: $s-16;
+        }
+        &-dropdown .#{$css-prefix}select-inner {
+            min-width: $s-16;
+        }
+        &-popup {
+            min-width: $s-16;
+        }
+        &-btn.#{$css-prefix}btn-text {
+            height: initial;
+            line-height: initial;
+            color: $pagination-size-selector-filter-color;
+            border-radius: 0;
+
+            &.#{$css-prefix}current {
+                color: $pagination-size-selector-filter-current-color;
+            }
+
+            & + #{$pagination-prefix}-size-selector-btn {
+                border-left: $line-1 solid $color-line1-2;
+            }
+        }
+    }
+
+    &-pages + #{$pagination-prefix}-size-selector,
+    &-size-selector + #{$pagination-prefix}-pages {
+        margin-left: $s-10;
+    }
+
+    &.#{$css-prefix}hide {
+        display: none;
+    }
+
+    &.#{$css-prefix}start {
+        #{$pagination-prefix}-pages {
+            float: right;
+        }
+        #{$pagination-prefix}-size-selector {
+            float: left;
+        }
+    }
+
+    &.#{$css-prefix}end {
+        #{$pagination-prefix}-pages {
+            float: left;
+        }
+        #{$pagination-prefix}-size-selector {
+            float: right;
+        }
+    }
+
+    &.#{$css-prefix}small {
+        @include pagination-size(
+            'ltr',
+            $itemSplit: $pagination-small-item-split,
+            $itemPaddingLeftRight: $s-2 - 2px,
+            $itemBorderWidth: $pagination-small-item-border-width,
+            $itemCorner: $pagination-small-item-corner,
+            $ellipsisSize: $pagination-small-ellipsis-size,
+            $totalFontSize: $pagination-small-total-font-size,
+            $currentFontSize: $pagination-small-current-font-size,
+            $otherFontSize: $pagination-small-jump-font-size,
+            $pageHeihgt: $form-element-small-height,
+            $numberPaddingLeftRight: $pagination-small-size-selector-number-padding,
+            $inputWidth: $pagination-small-input-width
+        );
+
+        &.#{$css-prefix}arrow-only {
+            @include arrow-only-size($s-5);
+        }
+
+        &.#{$css-prefix}arrow-prev-only {
+            @include arrow-prev-only-size($s-5);
+        }
+
+        &.#{$css-prefix}no-border {
+            @include no-border-size($s-2);
+        }
+
+        &.#{$css-prefix}mini {
+            @include mini-size($s-1);
+        }
+    }
+
+    &.#{$css-prefix}medium {
+        @include pagination-size(
+            'ltr',
+            $itemSplit: $pagination-item-split,
+            $itemPaddingLeftRight: $s-3 - 2px,
+            $itemBorderWidth: $pagination-item-border-width,
+            $itemCorner: $pagination-item-corner,
+            $ellipsisSize: $pagination-ellipsis-size,
+            $totalFontSize: $pagination-total-font-size,
+            $currentFontSize: $pagination-current-font-size,
+            $otherFontSize: $pagination-jump-font-size,
+            $pageHeihgt: $form-element-medium-height,
+            $numberPaddingLeftRight: $pagination-size-selector-number-padding,
+            $inputWidth: $pagination-input-width
+        );
+
+        &.#{$css-prefix}arrow-only {
+            @include arrow-only-size($s-7);
+        }
+
+        &.#{$css-prefix}arrow-prev-only {
+            @include arrow-prev-only-size($s-7);
+        }
+
+        &.#{$css-prefix}no-border {
+            @include no-border-size($s-3);
+        }
+
+        &.#{$css-prefix}mini {
+            @include mini-size($s-1);
+        }
+    }
+
+    &.#{$css-prefix}large {
+        @include pagination-size(
+            'ltr',
+            $itemSplit: $pagination-large-item-split,
+            $itemPaddingLeftRight: $s-4 - 1px,
+            $itemBorderWidth: $pagination-large-item-border-width,
+            $itemCorner: $pagination-large-item-corner,
+            $ellipsisSize: $pagination-large-ellipsis-size,
+            $totalFontSize: $pagination-large-total-font-size,
+            $currentFontSize: $pagination-large-current-font-size,
+            $otherFontSize: $pagination-large-jump-font-size,
+            $pageHeihgt: $form-element-large-height,
+            $numberPaddingLeftRight: $pagination-large-size-selector-number-padding,
+            $inputWidth: $pagination-large-input-width
+        );
+
+        &.#{$css-prefix}arrow-only {
+            @include arrow-only-size($s-10);
+        }
+
+        &.#{$css-prefix}arrow-prev-only {
+            @include arrow-prev-only-size($s-10);
+        }
+
+        &.#{$css-prefix}no-border {
+            @include no-border-size($s-4);
+        }
+
+        &.#{$css-prefix}mini {
+            @include mini-size($s-2);
+        }
+    }
+}

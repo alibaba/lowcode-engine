@@ -1,0 +1,81 @@
+@import "../core/index-noreset.scss";
+
+@import "scss/variable";
+@import "scss/normalize";
+@import "scss/mixin";
+@import "scss/util";
+@import "./rtl.scss";
+
+#{$timeline-prefix} {
+    & {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        & > li {
+            outline: 0;
+        }
+    }
+}
+
+#{$timeline-prefix}-item {
+    &-folder {
+        padding-left: $timeline-item-content-margin-left + $timeline-item-node-size;
+        padding-top: $timeline-item-folder-margin-top;
+        padding-bottom: $timeline-item-folder-margin-bottom;
+        font-size: $timeline-item-folder-font-size;
+        line-height: $timeline-item-folder-font-size + 4;
+        position: relative;
+        /* min-height: auto !important; */
+    }
+
+    &-dot-tail {
+        position: absolute;
+        top: 0;
+        left: $timeline-item-node-size / 2;
+        height: 100%;
+        border-top: 0;
+        border-bottom: 0;
+        border-right: 0;
+        border-left: $timeline-item-tail-size dotted $timeline-item-tail-color;
+    }
+
+    &-dot-tail-solid {
+        border-style: solid;
+    }
+
+    /* 时间轴左边存在内容的情况 */
+    &-has-left-content {
+        &#{$timeline-prefix}-item-folder {
+            margin-left: $timeline-item-left-content-width;
+        }
+    }
+}
+
+#{$timeline-prefix}-item-done {
+    @include node-state('ltr', $timeline-item-done-background, $timeline-item-done-color, $timeline-item-done-dot-size);
+}
+
+#{$timeline-prefix}-item-process {
+    @include node-state('ltr', $timeline-item-process-background, $timeline-item-process-color, $timeline-item-process-dot-size);
+}
+
+#{$timeline-prefix}-item-success {
+    @include node-state('ltr', $timeline-item-success-background, $timeline-item-success-color, $timeline-item-success-dot-size);
+}
+
+#{$timeline-prefix}-item-error {
+    @include node-state('ltr', $timeline-item-error-background, $timeline-item-error-color, $timeline-item-error-dot-size);
+}
+
+#{$timeline-prefix}-item-last {
+    #{$timeline-prefix}-item-tail {
+        display: none;
+    }
+}
+
+#{$timeline-prefix}-item-has-left-content {
+    min-height: $s-12;
+}
+#{$timeline-prefix}-item-folder#{$timeline-prefix}-item-has-left-content {
+    min-height: auto;
+}

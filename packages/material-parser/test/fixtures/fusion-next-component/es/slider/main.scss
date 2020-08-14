@@ -1,0 +1,275 @@
+@charset "UTF-8";
+
+@import "../core/index-noreset.scss";
+@import "scss/mixin";
+@import "scss/variable";
+
+/* Slider */
+/* -------------------------------------- */
+
+#{$slick-prefix} {
+    @include box-sizing;
+
+    position: relative;
+    display: block;
+    -webkit-touch-callout: none;
+    user-select: none;
+    -ms-touch-action: pan-y;
+    touch-action: pan-y;
+    -webkit-tap-highlight-color: transparent;
+
+    &-initialized {
+        #{$slick-prefix}-slide {
+            display: block;
+        }
+    }
+
+    &-list {
+        position: relative;
+        overflow: hidden;
+        display: block;
+        margin: 0;
+        padding: 0;
+        transform: translate3d(0, 0, 0);
+
+        &:focus {
+            outline: none;
+        }
+
+        &.dragging {
+            cursor: pointer;
+            cursor: hand;
+        }
+    }
+
+    &-track {
+        position: relative;
+        top: 0;
+        left: 0;
+        display: block;
+        transform: translate3d(0, 0, 0);
+    }
+
+    &-slide {
+        float: left;
+        height: 100%;
+        min-height: 1px;
+        outline: 0;
+        transition: all $motion-duration-immediately $motion-linear;
+
+        #{$slick-prefix}[dir="rtl"] & {
+            float: right;
+        }
+
+        img {
+            display: block;
+        }
+    }
+
+    &-arrow {
+        display: block;
+        position: absolute;
+        cursor: pointer;
+        text-align: center;
+        transition: all $motion-duration-immediately $motion-linear;
+
+        /* prev/next 按钮不同位置下的外观 */
+        &.inner {
+            @include slick-arrow-statement(
+                $slick-arrow-icon-color-normal,
+                $slick-arrow-icon-color-hover,
+                $slick-arrow-icon-color-disabled,
+                $slick-arrow-bg-color-normal,
+                $slick-arrow-bg-color-hover,
+                $slick-arrow-bg-color-disabled,
+                $slick-arrow-bg-opacity-normal,
+                $slick-arrow-bg-opacity-hover,
+                $slick-arrow-bg-opacity-disabled
+            );
+        }
+
+        &.outer {
+            @include slick-arrow-statement(
+                $slick-arrow-icon-color-normal-outer,
+                $slick-arrow-icon-color-hover-outer,
+                $slick-arrow-icon-color-disabled-outer,
+                $slick-arrow-bg-color-normal-outer,
+                $slick-arrow-bg-color-hover-outer,
+                $slick-arrow-bg-color-disabled-outer,
+                $slick-arrow-bg-opacity-normal-outer,
+                $slick-arrow-bg-opacity-hover-outer,
+                $slick-arrow-bg-opacity-disabled-outer
+            );
+            border-radius: $slick-arrow-corner-radius-outer;
+        }
+        &.disabled {
+            cursor: not-allowed;
+        }
+    }
+
+    &-dots {
+        display: block;
+        position: absolute;
+        margin: 0;
+        padding: 0;
+
+        &-item {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+
+            button {
+                cursor: pointer;
+                border-width: $slick-dots-border-width;
+                border-color: rgba($slick-dots-border-color-normal, $slick-dots-border-opacity-normal);
+                border-style: solid;
+                outline: none;
+                padding: 0;
+                height: $slick-dots-height;
+                width: $slick-dots-width;
+                border-radius: $slick-dots-border-radius;
+                background: rgba($slick-dots-background-color-normal, $slick-dots-background-opacity-normal);
+
+                &:hover {
+                    background-color: rgba($slick-dots-background-color-hover, $slick-dots-background-opacity-hover);
+                    /* border-width: $slick-dots-border-width-hover; */
+                    border-color: rgba($slick-dots-border-color-hover, $slick-dots-border-opacity-hover);
+                }
+            }
+
+            & button:focus,
+            & button:hover {
+                background: rgba($color-white, .5);
+            }
+            &.active button {
+                background: rgba($slick-dots-background-color-selected, $slick-dots-background-opacity-selected);
+                /* border-width: $slick-dots-border-width-selected; */
+                border-color: rgba($slick-dots-border-color-selected, $slick-dots-border-opacity-selected);
+                animation: zoom .3s cubic-bezier(.86, 0, .07, 1);
+            }
+        }
+
+        /* dots 位于水平位置 */
+        &.hoz {
+            @include slick-dots-position(
+                100%,
+                $slick-dots-position-bottom,
+                'hoz'
+            );
+            text-align: center;
+
+            #{$slick-prefix}-dots-item {
+                margin: 0 $slick-dots-margin-lr;
+            }
+        }
+
+        /* dots 位于右侧垂直位置 */
+        &.ver {
+            @include slick-dots-position(
+                $slick-dots-width + 4 * 2,
+                $slick-dots-position-right,
+                'ver'
+            );
+
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+
+            #{$slick-prefix}-dots-item {
+                margin: $slick-dots-margin-tb 0;
+            }
+        }
+    }
+
+    /* 水平滑动 */
+    &#{$slick-prefix}-hoz {
+
+        &#{$slick-prefix}-outer {
+            padding: 0 $slick-track-padding-lr;
+        }
+
+        #{$slick-prefix}-arrow {
+            &.medium {
+                @include slick-arrow-size($slick-arrow-width-m, $slick-arrow-height-m, $slick-arrow-icon-m);
+            }
+
+            &.medium.inner {
+                @include slick-arrow-position-hoz(calc((100% - #{$slick-arrow-height-m}) / 2), 0, null, 0);
+            }
+
+            &.medium.outer {
+                @include slick-arrow-position-hoz(
+                    calc((100% - #{$slick-arrow-height-m}) / 2), // top
+                    -$slick-arrow-position-lr-m, // right
+                    null, // bottom
+                    -$slick-arrow-position-lr-m // left
+                );
+            }
+
+            &.large {
+                @include slick-arrow-size($slick-arrow-width-l, $slick-arrow-height-l, $slick-arrow-icon-l);
+            }
+
+            &.large.inner {
+                @include slick-arrow-position-hoz(calc((100% - #{$slick-arrow-height-l}) / 2), 0, null, 0);
+            }
+
+            &.large.outer {
+                @include slick-arrow-position-hoz(
+                    calc((100% - #{$slick-arrow-height-l}) / 2),
+                    -$slick-arrow-position-lr-l,
+                    null,
+                    -$slick-arrow-position-lr-l
+                );
+            }
+        }
+    }
+
+    /* 垂直滑动 */
+    &#{$slick-prefix}-ver {
+
+        &#{$slick-prefix}-outer {
+            padding: $slick-ver-track-padding-tb 0;
+        }
+
+        #{$slick-prefix} {
+            &-slide {
+                display: block;
+                height: auto;
+                /* border: $slick-ver-slide-border-width solid transparent; */
+            }
+
+            &-arrow {
+                /* size medium */
+                &.medium {
+                    @include slick-arrow-size($slick-ver-arrow-width-m, $slick-ver-arrow-height-m, $slick-arrow-icon-m);
+                }
+
+                /* size medium & position inner */
+                &.medium.inner {
+                    @include slick-arrow-position-ver(0, null, 0, calc((100% - #{$slick-ver-arrow-width-m}) / 2));
+                }
+
+                /* size medium & position outer */
+                &.medium.outer {
+                    @include slick-arrow-position-ver(-$slick-ver-arrow-position-tb-m, null, -$slick-ver-arrow-position-tb-m, calc((100% - #{$slick-ver-arrow-width-m}) / 2));
+                }
+
+                /* size large */
+                &.large {
+                    @include slick-arrow-size($slick-ver-arrow-width-l, $slick-ver-arrow-height-l, $slick-arrow-icon-l);
+                }
+
+                /* size large & position inner */
+                &.large.inner {
+                    @include slick-arrow-position-ver(0, null, 0, calc((100% - #{$slick-ver-arrow-width-l}) / 2));
+                }
+
+                /* size large & position outer */
+                &.large.outer {
+                    @include slick-arrow-position-ver(-$slick-ver-arrow-position-tb-l, null, -$slick-ver-arrow-position-tb-l, calc((100% - #{$slick-ver-arrow-width-l}) / 2));
+                }
+            }
+        }
+    }
+}

@@ -20,29 +20,37 @@ const log = debug.extend('mat');
  * @memberof OnlineAccesser
  */
 export async function createFakePackage(params: {
-  tempDir: string;
+  workDir: string;
   pkgName: string;
   pkgVersion: string;
   npmClient?: string;
 }): Promise<void> {
   // 创建临时组件包
-  const tempDir = params.tempDir;
-  const pkgJsonFilePath = join(tempDir, 'package.json');
+  const workDir = params.workDir;
+  const pkgJsonFilePath = join(workDir, 'package.json');
   await ensureFile(pkgJsonFilePath);
   await writeFile(
     pkgJsonFilePath,
-    JSON.stringify({
-      name: params.pkgName,
-      version: params.pkgVersion || '0.0.0',
-      dependencies: {
-        [params.pkgName]: params.pkgVersion || 'latest',
+    JSON.stringify(
+      {
+        name: params.pkgName,
+        version: params.pkgVersion || '0.0.0',
+        dependencies: {
+          [params.pkgName]: params.pkgVersion || 'latest',
+          react: 'latest',
+          'react-dom': 'latest',
+          'parse-prop-types': '^0.3.0',
+          typesync: 'latest',
+        },
       },
-    }),
+      null,
+      2,
+    ),
   );
 
   // 安装依赖
   const npmClient = params.npmClient || 'tnpm';
-  await spawn(npmClient, ['i'], { stdio: 'inherit', cwd: tempDir } as any);
+  await spawn(npmClient, ['i'], { stdio: 'inherit', cwd: workDir } as any);
 }
 
 /**
@@ -52,12 +60,12 @@ export async function createFakePackage(params: {
  * @returns {Promise<string>} 返回临时文件夹路径
  * @memberof LocalGenerator
  */
-export async function createTempDir(): Promise<string> {
-  const tempDirName = uuid.generate();
-  const tempDir = join(__dirname, '../../node_modules/.temp/', tempDirName);
-  await ensureDir(tempDir);
-  log('create temp dir successfully', tempDir);
-  return tempDir;
+export async function createworkDir(): Promise<string> {
+  const workDirName = uuid.generate();
+  const workDir = join(__dirname, '../../node_modules/.temp/', workDirName);
+  await ensureDir(workDir);
+  log('create temp dir successfully', workDir);
+  return workDir;
 }
 
 /**
@@ -69,32 +77,39 @@ export async function createTempDir(): Promise<string> {
  * @memberof OnlineAccesser
  */
 export function getPkgNameAndVersion(pkgNameWithVersion: string): { [key: string]: any } {
-  const matches = pkgNameWithVersion.match(/(@\d+\.\d+\.\d+)$/);
+  const matches = pkgNameWithVersion.match(/(@[^/]+)$/);
   if (!matches) {
     return {
       name: pkgNameWithVersion,
     };
   }
-  const semverObj = semver.coerce(matches[0]);
   const name = pkgNameWithVersion.replace(matches[0], '');
   return {
-    version: semverObj && semverObj.version,
+    version: matches[0].slice(1),
     name,
   };
 }
 
 // 将问题转化为本地物料化场景
-export default async function localize(options: IMaterializeOptions): Promise<string> {
+export default async function localize(
+  options: IMaterializeOptions,
+): Promise<{
+  workDir: string;
+  moduleDir: string;
+}> {
   // 创建临时目录
-  const tempDir = await createTempDir();
+  const workDir = await createworkDir();
   // 创建组件包
   const { name, version } = getPkgNameAndVersion(options.entry);
   await createFakePackage({
     pkgName: name,
     pkgVersion: version,
-    tempDir,
+    workDir,
     npmClient: options.npmClient,
   });
 
-  return join(tempDir, 'node_modules', name);
+  return {
+    workDir,
+    moduleDir: join(workDir, 'node_modules', name),
+  };
 }

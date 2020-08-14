@@ -1,0 +1,33 @@
+#{$time-picker-prefix}-panel {
+    @include box-sizing;
+    @include clearfix;
+
+    &-header {
+        border-bottom: $line-1 $line-solid $time-picker-panel-border-color;
+    }
+
+    &-input.#{$css-prefix}input {
+        width: 100%;
+        padding: 6px;
+        border-color: $color-transparent;
+        vertical-align: middle;
+    }
+
+    &-col-3 {
+        #{$time-picker-prefix}-menu {
+            width: calc(100% / 3);
+        }
+    }
+
+    &-col-2 {
+        #{$time-picker-prefix}-menu {
+            width: 50%;
+        }
+    }
+
+    &-col-1 {
+        #{$time-picker-prefix}-menu {
+            width: 100%;
+        }
+    }
+}
