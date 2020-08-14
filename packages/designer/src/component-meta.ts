@@ -137,13 +137,13 @@ export class ComponentMeta {
     }
   }
 
-  private parseMetadata(metadta: ComponentMetadata) {
-    const { componentName, npm } = metadta;
+  private parseMetadata(metadata: ComponentMetadata) {
+    const { componentName, npm } = metadata;
     this._npm = npm;
     this._componentName = componentName;
 
     // 额外转换逻辑
-    this._transformedMetadata = this.transformMetadata(metadta);
+    this._transformedMetadata = this.transformMetadata(metadata);
 
     const title = this._transformedMetadata.title;
     if (title) {
