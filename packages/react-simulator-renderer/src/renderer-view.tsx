@@ -131,6 +131,9 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
               </div>
             );
           }
+          if(viewProps._componentName === 'a') {
+            delete viewProps.href;
+          }
           // FIXME: 渲染仍有问题
           if (viewProps._componentName === 'Menu') {
             Object.assign(viewProps, {
