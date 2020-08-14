@@ -24,6 +24,8 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       content: `
 import { runApp } from 'rax-app';
 import appConfig from './app.json';
+
+import './global.scss';
 `,
       linkAfter: [],
     });

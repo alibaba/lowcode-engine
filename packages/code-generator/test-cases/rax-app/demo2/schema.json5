@@ -341,6 +341,7 @@
       },
     },
   ],
+  css: 'page,body{\n  width: 750rpx;\n  overflow-x: hidden;\n}',
   config: {
     sdkVersion: '1.0.3',
     historyMode: 'hash',

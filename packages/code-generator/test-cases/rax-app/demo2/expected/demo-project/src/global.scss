@@ -1,5 +1,9 @@
-// TODO: 引入默认全局样式
-
 body {
   -webkit-font-smoothing: antialiased;
+}
+
+page,
+body {
+  width: 750rpx;
+  overflow-x: hidden;
 }
