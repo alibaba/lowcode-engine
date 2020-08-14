@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.48"></a>
+## [0.8.48](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.47...@ali/lowcode-plugin-outline-pane@0.8.48) (2020-08-14)
+
+
+### Bug Fixes
+
+* 卡片内容不可用拖动 ([6a85c43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6a85c43))
+
+
+
+
 <a name="0.8.47"></a>
 ## [0.8.47](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.46...@ali/lowcode-plugin-outline-pane@0.8.47) (2020-08-07)
 

@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.43"></a>
+## [0.8.43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.42...@ali/lowcode-editor-preset-vision@0.8.43) (2020-08-14)
+
+
+### Bug Fixes
+
+* createComponent 支持所有 schema ([7f946f5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7f946f5))
+* upgradePropsReducer ([e68977f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e68977f))
+* vision 大包 window 指向问题 ([aa1b526](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/aa1b526))
+* 不对外暴露 Node ([05957ce](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/05957ce))
+* 支持 AC 组件 ([c287bad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c287bad))
+
+
+
+
 <a name="0.8.42"></a>
 ## [0.8.42](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.41...@ali/lowcode-editor-preset-vision@0.8.42) (2020-08-07)
 

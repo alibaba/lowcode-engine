@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.42"></a>
+## [0.9.42](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.41...@ali/lowcode-designer@0.9.42) (2020-08-14)
+
+
+### Bug Fixes
+
+* createComponent 支持所有 schema ([7f946f5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7f946f5))
+* 不对外暴露 Node ([05957ce](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/05957ce))
+* 卡片内容不可用拖动 ([6a85c43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6a85c43))
+* 处理选区的 toolkit 位置不对的 bug ([bfc63db](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bfc63db))
+* 快捷键增加判断 ([0f64829](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0f64829))
+* 快捷键增加判断 ([e18a231](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e18a231))
+* 组件缺失占位 ([aff2f34](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/aff2f34))
+
+
+### Features
+
+* 导出的schema增加componentsMap ([dbc958c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/dbc958c))
+
+
+
+
 <a name="0.9.41"></a>
 ## [0.9.41](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.40...@ali/lowcode-designer@0.9.41) (2020-08-07)
 
