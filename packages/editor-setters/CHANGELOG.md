@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.10.0"></a>
+# [0.10.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.14...@ali/lowcode-editor-setters@0.10.0) (2020-08-14)
+
+
+### Features
+
+* add style-setters ([99b1d84](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/99b1d84))
+
+
+
+
 <a name="0.9.14"></a>
 ## [0.9.14](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.13...@ali/lowcode-editor-setters@0.9.14) (2020-08-04)
 

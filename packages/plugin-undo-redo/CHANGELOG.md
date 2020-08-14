@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.0"></a>
+# [0.9.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-undo-redo@0.8.41...@ali/lowcode-plugin-undo-redo@0.9.0) (2020-08-14)
+
+
+### Bug Fixes
+
+* 🐛 Tag assets ([b460dcf](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b460dcf))
+
+
+
+
 <a name="0.8.41"></a>
 ## [0.8.41](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-undo-redo@0.8.40...@ali/lowcode-plugin-undo-redo@0.8.41) (2020-08-04)
 
