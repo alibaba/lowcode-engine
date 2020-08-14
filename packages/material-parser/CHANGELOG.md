@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.11.0"></a>
+# [0.11.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@0.10.0...@ali/lowcode-material-parser@0.11.0) (2020-08-14)
+
+
+### Features
+
+* support typescript & dynamic parsing in material parser ([6168ef5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6168ef5))
+
+
+
+
 <a name="0.10.0"></a>
 # [0.10.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@0.9.3...@ali/lowcode-material-parser@0.10.0) (2020-08-14)
 
