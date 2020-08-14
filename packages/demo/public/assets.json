@@ -10489,11 +10489,6 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
           "name": "type",
           "propType": {
             "type": "oneOf",
@@ -10527,28 +10522,17 @@
           "description": "是否开启动效"
         },
         {
-          "name": "afterAppear",
-          "propType": "func",
-          "description": "标签出现动画结束后执行的回调"
-        },
-        {
           "name": "onClick",
           "propType": "func",
           "description": "点击回调"
         },
         {
           "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          }
+          "propType": "string",
+          "description": "内容"
         }
       ],
-      "configure": {
-        "component": {
-          "isContainer": true
-        }
-      }
+      "configure": {}
     },
     {
       "componentName": "Tag.Selectable",
@@ -10564,11 +10548,6 @@
         "subName": "Selectable"
       },
       "props": [
-        {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
         {
           "name": "checked",
           "propType": "bool",
@@ -10591,17 +10570,11 @@
         },
         {
           "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          }
+          "propType": "string",
+          "description": "内容"
         }
       ],
-      "configure": {
-        "component": {
-          "isContainer": true
-        }
-      }
+      "configure": {}
     },
     {
       "componentName": "Tag.Closeable",
@@ -10617,11 +10590,6 @@
         "subName": "Closeable"
       },
       "props": [
-        {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
         {
           "name": "closeArea",
           "propType": {
@@ -10651,28 +10619,17 @@
           "description": "点击关闭按钮时的回调，返回值 true 则关闭, false 阻止关闭"
         },
         {
-          "name": "afterClose",
-          "propType": "func",
-          "description": "标签关闭后执行的回调"
-        },
-        {
           "name": "onClick",
           "propType": "func",
           "description": "点击回调"
         },
         {
           "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          }
+          "propType": "string",
+          "description": "内容"
         }
       ],
-      "configure": {
-        "component": {
-          "isContainer": true
-        }
-      }
+      "configure": {}
     },
     {
       "componentName": "TimePicker",
@@ -13422,7 +13379,13 @@
               "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_tag.png",
               "schema": {
                 "componentName": "Tag",
-                "props": {}
+                "props": {
+                  "prefix": "next-",
+                  "type": "normal",
+                  "size": "medium",
+                  "animation": false,
+                  "children": "Tag"
+                }
               }
             }
           ]
@@ -13439,7 +13402,12 @@
               "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_tag.png",
               "schema": {
                 "componentName": "Tag.Closeable",
-                "props": {}
+                "props": {
+                  "prefix": "next-",
+                  "closeArea": "tail",
+                  "size": "medium",
+                  "children": "Tag"
+                }
               }
             }
           ]
@@ -13456,7 +13424,10 @@
               "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_tag.png",
               "schema": {
                 "componentName": "Tag.Selectable",
-                "props": {}
+                "props": {
+                  "prefix": "next-",
+                  "children": "Tag"
+                }
               }
             }
           ]
