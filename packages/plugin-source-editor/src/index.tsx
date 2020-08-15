@@ -275,9 +275,9 @@ export default class SourceEditor extends Component<{
           </div>
 
 
-        <div className="full-screen-container" onClick={this.fullScreen}>
+        {/* <div className="full-screen-container" onClick={this.fullScreen}>
           <img src="https://gw.alicdn.com/tfs/TB1d7XqE1T2gK0jSZFvXXXnFXXa-200-200.png"></img>
-        </div>
+        </div> */}
       </div>
     );
   }

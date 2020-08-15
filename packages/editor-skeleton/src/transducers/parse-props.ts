@@ -188,7 +188,7 @@ function propTypeToSetter(propType: PropType): SetterType {
   };
 }
 
-const EVENT_RE = /^on[A-Z][\w]*$/;
+const EVENT_RE = /^on|after[A-Z][\w]*$/;
 
 export default function(metadata: TransformedComponentMetadata): TransformedComponentMetadata {
   const { configure = {} } = metadata;
