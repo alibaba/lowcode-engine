@@ -12396,11 +12396,6 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
           "name": "className",
           "propType": "any"
         },
@@ -12414,38 +12409,14 @@
               "desktop"
             ]
           },
-          "description": "设备，用来做自适应，默认为 PC\n@enumdesc 手机, 平板, PC",
+          "description": "设备，用来做自适应，默认为PC",
           "defaultValue": "desktop"
         },
         {
-          "name": "rows",
-          "propType": {
-            "type": "oneOfType",
-            "value": [
-              "number",
-              "string"
-            ]
-          }
-        },
-        {
           "name": "columns",
-          "propType": {
-            "type": "oneOfType",
-            "value": [
-              "number",
-              "string"
-            ]
-          },
-          "description": "分为几列， 默认是 12 列"
-        },
-        {
-          "name": "component",
-          "propType": {
-            "type": "instanceOf",
-            "value": "elementType"
-          },
-          "description": "设置标签类型",
-          "defaultValue": "div"
+          "propType": "number",
+          "description": "分为几列",
+          "defaultValue": 4
         },
         {
           "name": "style",
@@ -12473,41 +12444,14 @@
       },
       "props": [
         {
-          "name": "device",
-          "propType": {
-            "type": "oneOf",
-            "value": [
-              "phone",
-              "tablet",
-              "desktop"
-            ]
-          },
-          "defaultValue": "desktop"
-        },
-        {
           "name": "colSpan",
-          "propType": {
-            "type": "oneOfType",
-            "value": [
-              "number",
-              "object"
-            ]
-          },
+          "propType": "number",
           "description": "横向，占据几列"
         },
         {
           "name": "rowSpan",
           "propType": "number",
           "description": "纵向，占据几行"
-        },
-        {
-          "name": "component",
-          "propType": {
-            "type": "instanceOf",
-            "value": "elementType"
-          },
-          "description": "设置标签类型",
-          "defaultValue": "div"
         },
         {
           "name": "style",
@@ -13673,7 +13617,21 @@
               "screenshot": "",
               "schema": {
                 "componentName": "ResponsiveGrid",
-                "props": {}
+                "props": {},
+                "children": [
+                  {
+                    "componentName": "ResponsiveGrid.Cell"
+                  },
+                  {
+                    "componentName": "ResponsiveGrid.Cell"
+                  },
+                  {
+                    "componentName": "ResponsiveGrid.Cell"
+                  },
+                  {
+                    "componentName": "ResponsiveGrid.Cell"
+                  }
+                ]
               }
             }
           ]
