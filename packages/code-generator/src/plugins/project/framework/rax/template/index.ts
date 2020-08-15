@@ -1,7 +1,8 @@
-import ResultDir from '../../../../../model/ResultDir';
-import { IProjectTemplate, IResultDir } from '../../../../../types';
+import { ResultDir } from '@ali/lowcode-types';
+import { IProjectTemplate } from '../../../../../types';
 
 import { runFileGenerator } from '../../../../../utils/templateHelper';
+import { createResultDir } from '../../../../../utils/resultHelper';
 
 import file0 from './files/.editorconfig';
 import file1 from './files/.eslintignore';
@@ -57,8 +58,8 @@ const raxAppTemplate: IProjectTemplate = {
     },
   },
 
-  generateTemplate(): IResultDir {
-    const root = new ResultDir('.');
+  generateTemplate(): ResultDir {
+    const root = createResultDir('.');
 
     runFileGenerator(root, file0);
     runFileGenerator(root, file1);
