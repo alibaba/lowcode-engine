@@ -2054,24 +2054,33 @@
         {
           "name": "title",
           "propType": {
-            "type": "instanceOf",
-            "value": "node"
+            "type": "oneOfType",
+            "value": [
+                "node",
+                "string"
+              ]
           },
           "description": "标题"
         },
         {
           "name": "subTitle",
           "propType": {
-            "type": "instanceOf",
-            "value": "node"
+            "type": "oneOfType",
+            "value": [
+                "node",
+                "string"
+              ]
           },
           "description": "副标题"
         },
         {
           "name": "extra",
           "propType": {
-            "type": "instanceOf",
-            "value": "node"
+            "type": "oneOfType",
+            "value": [
+                "node",
+                "string"
+              ]
           },
           "description": "标题栏用户自定义内容"
         },
@@ -2086,22 +2095,6 @@
           "propType": "bool",
           "description": "头部分隔线",
           "defaultValue": true
-        },
-        {
-          "name": "media",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "顶部的图片/视频"
-        },
-        {
-          "name": "actions",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "底部操作组"
         },
         {
           "name": "contentHeight",
@@ -2899,15 +2892,6 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "rtl",
-          "propType": "bool"
-        },
-        {
           "name": "className",
           "propType": "string",
           "description": "自定义类名"
@@ -2915,7 +2899,7 @@
         {
           "name": "id",
           "propType": "string",
-          "description": "checkbox id, 挂载在input上"
+          "description": "ID"
         },
         {
           "name": "style",
@@ -2940,64 +2924,34 @@
         },
         {
           "name": "label",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "通过属性配置label，"
+          "propType": "string",
+          "description": "label"
         },
         {
           "name": "indeterminate",
           "propType": "bool",
-          "description": "Checkbox 的中间状态，只会影响到 Checkbox 的样式，并不影响其 checked 属性"
+          "description": "中间状态"
         },
         {
           "name": "defaultIndeterminate",
           "propType": "bool",
-          "description": "Checkbox 的默认中间态，只会影响到 Checkbox 的样式，并不影响其 checked 属性",
+          "description": "默认中间态",
           "defaultValue": false
-        },
-        {
-          "name": "onChange",
-          "propType": "func",
-          "description": "状态变化时触发的事件\n@param {Boolean} checked 是否选中\n@param {Event} e Dom 事件对象"
-        },
-        {
-          "name": "onMouseEnter",
-          "propType": "func",
-          "description": "鼠标进入enter事件\n@param {Event} e Dom 事件对象"
-        },
-        {
-          "name": "onMouseLeave",
-          "propType": "func",
-          "description": "鼠标离开Leave事件\n@param {Event} e Dom 事件对象"
         },
         {
           "name": "value",
           "propType": {
             "type": "oneOfType",
             "value": [
-              "string",
-              "number"
+              "string"
             ]
           },
-          "description": "checkbox 的value"
+          "description": "value"
         },
         {
           "name": "name",
           "propType": "string",
           "description": "name"
-        },
-        {
-          "name": "isPreview",
-          "propType": "bool",
-          "description": "是否为预览态",
-          "defaultValue": false
-        },
-        {
-          "name": "renderPreview",
-          "propType": "func",
-          "description": "预览态模式下渲染的内容\n@param {number} value 评分值"
         }
       ]
     },
@@ -4583,24 +4537,6 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "pure",
-          "propType": "bool",
-          "defaultValue": false
-        },
-        {
-          "name": "rtl",
-          "propType": "bool"
-        },
-        {
-          "name": "className",
-          "propType": "string"
-        },
-        {
           "name": "visible",
           "propType": {
             "type": "oneOfType",
@@ -4615,8 +4551,11 @@
         {
           "name": "title",
           "propType": {
-            "type": "instanceOf",
-            "value": "node"
+            "type": "oneOfType",
+            "value": [
+              "string",
+              "node"
+            ]
           },
           "description": "标题"
         },
@@ -4639,14 +4578,10 @@
           "propType": {
             "type": "oneOfType",
             "value": [
-              "bool",
-              {
-                "type": "instanceOf",
-                "value": "node"
-              }
+              "bool"
             ]
           },
-          "description": "底部内容，设置为 false，则不进行显示\n@default [<Button type=\"primary\">确定</Button>, <Button>取消</Button>]"
+          "description": "底部按钮"
         },
         {
           "name": "footerAlign",
@@ -4658,62 +4593,23 @@
               "right"
             ]
           },
-          "description": "底部按钮的对齐方式",
+          "description": "操作对齐方式",
           "defaultValue": "right"
-        },
-        {
-          "name": "footerActions",
-          "propType": {
-            "type": "instanceOf",
-            "value": "array"
-          },
-          "description": "指定确定按钮和取消按钮是否存在以及如何排列,<br><br>**可选值**：\n['ok', 'cancel']（确认取消按钮同时存在，确认按钮在左）\n['cancel', 'ok']（确认取消按钮同时存在，确认按钮在右）\n['ok']（只存在确认按钮）\n['cancel']（只存在取消按钮）",
-          "defaultValue": [
-            "ok",
-            "cancel"
-          ]
-        },
-        {
-          "name": "onOk",
-          "propType": "func",
-          "description": "在点击确定按钮时触发的回调函数\n@param {Object} event 点击事件对象"
-        },
-        {
-          "name": "onCancel",
-          "propType": "func",
-          "description": "在点击取消按钮时触发的回调函数\n@param {Object} event 点击事件对象"
-        },
-        {
-          "name": "okProps",
-          "propType": "object",
-          "description": "应用于确定按钮的属性对象"
-        },
-        {
-          "name": "cancelProps",
-          "propType": "object",
-          "description": "应用于取消按钮的属性对象"
         },
         {
           "name": "closeable",
           "propType": {
-            "type": "oneOfType",
+            "type": "oneOf",
             "value": [
-              "string",
-              "bool"
+              "close",
+              "mask",
+              "esc,close",
+              "close,esc,mask",
+              "esc"
             ]
           },
-          "description": "控制对话框关闭的方式，值可以为字符串或者布尔值，其中字符串是由以下值组成：\n**close** 表示点击关闭按钮可以关闭对话框\n**mask** 表示点击遮罩区域可以关闭对话框\n**esc** 表示按下 esc 键可以关闭对话框\n如 'close' 或 'close,esc,mask'\n如果设置为 true，则以上关闭方式全部生效\n如果设置为 false，则以上关闭方式全部失效",
+          "description": "关闭方式",
           "defaultValue": "esc,close"
-        },
-        {
-          "name": "onClose",
-          "propType": "func",
-          "description": "对话框关闭时触发的回调函数\n@param {String} trigger 关闭触发行为的描述字符串\n@param {Object} event 关闭时事件对象"
-        },
-        {
-          "name": "afterClose",
-          "propType": "func",
-          "description": "对话框关闭后触发的回调函数, 如果有动画，则在动画结束后触发"
         },
         {
           "name": "hasMask",
@@ -4722,20 +4618,9 @@
           "defaultValue": true
         },
         {
-          "name": "animation",
-          "propType": {
-            "type": "oneOfType",
-            "value": [
-              "object",
-              "bool"
-            ]
-          },
-          "description": "显示隐藏时动画的播放方式\n@property {String} in 进场动画\n@property {String} out 出场动画"
-        },
-        {
           "name": "autoFocus",
           "propType": "bool",
-          "description": "对话框弹出时是否自动获得焦点",
+          "description": "自动获得焦点",
           "defaultValue": false
         },
         {
@@ -4753,39 +4638,8 @@
         {
           "name": "isFullScreen",
           "propType": "bool",
-          "description": "当对话框高度超过浏览器视口高度时，是否显示所有内容而不是出现滚动条以保证对话框完整显示在浏览器视口内，该属性仅在对话框垂直水平居中时生效，即 align 被设置为 'cc cc' 时",
+          "description": "是否全屏",
           "defaultValue": false
-        },
-        {
-          "name": "shouldUpdatePosition",
-          "propType": "bool",
-          "description": "是否在对话框重新渲染时及时更新对话框位置，一般用于对话框高度变化后依然能保证原来的对齐方式",
-          "defaultValue": false
-        },
-        {
-          "name": "minMargin",
-          "propType": "number",
-          "description": "对话框距离浏览器顶部和底部的最小间距，align 被设置为 'cc cc' 并且 isFullScreen 被设置为 true 时不生效",
-          "defaultValue": 40
-        },
-        {
-          "name": "overlayProps",
-          "propType": "object",
-          "description": "透传到弹层组件的属性对象"
-        },
-        {
-          "name": "locale",
-          "propType": "object",
-          "description": "自定义国际化文案对象\n@property {String} ok 确认按钮文案\n@property {String} cancel 取消按钮文案"
-        },
-        {
-          "name": "height",
-          "propType": "string",
-          "description": "对话框的高度样式属性"
-        },
-        {
-          "name": "popupContainer",
-          "propType": "any"
         },
         {
           "name": "style",
