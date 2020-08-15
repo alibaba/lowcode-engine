@@ -35,8 +35,8 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
 
       const extConfigs = Object.keys(rest).map((extConfigName) => {
         const value = (rest as Record<string, CompositeValue>)[extConfigName];
-        const [isString, valueStr] = generateCompositeType(value);
-        return `${extConfigName}: ${isString ? `'${valueStr}'` : valueStr}`;
+        const valueStr = generateCompositeType(value);
+        return `${extConfigName}: ${valueStr}`;
       });
 
       attrs = [...attrs, ...extConfigs];

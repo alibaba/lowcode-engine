@@ -34,8 +34,8 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       const state = ir.state;
       const fields = Object.keys(state).map<string>((stateName) => {
         // TODO: 这里用什么 handlers?
-        const [isString, value] = generateCompositeType(state[stateName], {});
-        return `${stateName}: ${isString ? `'${value}'` : value},`;
+        const value = generateCompositeType(state[stateName], {});
+        return `${stateName}: ${value}`;
       });
 
       if (cfg.implementType === 'inConstructor') {
@@ -43,7 +43,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
           type: ChunkType.STRING,
           fileType: cfg.fileType,
           name: CLASS_DEFINE_CHUNK_NAME.ConstructorContent,
-          content: `this.state = { ${fields.join('')} };`,
+          content: `this.state = { ${fields.join(',')} };`,
           linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.ConstructorContent]],
         });
       } else if (cfg.implementType === 'insMember') {
@@ -51,7 +51,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
           type: ChunkType.STRING,
           fileType: cfg.fileType,
           name: CLASS_DEFINE_CHUNK_NAME.InsVar,
-          content: `state = { ${fields.join('')} };`,
+          content: `state = { ${fields.join(',')} };`,
           linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.InsVar]],
         });
       }

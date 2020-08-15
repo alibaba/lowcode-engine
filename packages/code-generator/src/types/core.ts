@@ -186,13 +186,8 @@ export interface CompositeValueCustomHandlerSet {
   function?: CompositeValueCustomHandler;
 }
 
-export interface CompositeTypeContainerHandlerSet {
-  default?: CompositeTypeContainerHandler;
-  string?: CompositeTypeContainerHandler;
-}
-
 export type CompositeValueGeneratorOptions = {
   handlers?: CompositeValueCustomHandlerSet;
-  containerHandlers?: CompositeTypeContainerHandlerSet;
+  containerHandler?: (value: string, isString: boolean, valStr: string) => string;
   nodeGenerator?: NodeGenerator;
 };

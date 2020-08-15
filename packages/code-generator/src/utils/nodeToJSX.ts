@@ -114,10 +114,7 @@ export function generateAttr(ctx: INodeGeneratorContext, attrName: string, attrV
     return [];
   }
   const valueStr = generateCompositeType(attrValue, {
-    containerHandlers: {
-      default: (v) => `{${v}}`,
-      string: (v) => `"${v}"`,
-    },
+    containerHandler: (v, isStr, vStr) => (isStr ? `"${vStr}"` : `{${v}}`),
     nodeGenerator: ctx.generator,
   });
   return [

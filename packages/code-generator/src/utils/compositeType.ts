@@ -6,17 +6,14 @@ import {
   isJSFunction,
   isJSSlot,
 } from '@ali/lowcode-types';
+import _ from 'lodash';
+
 import { generateExpression, generateFunction } from './jsExpression';
 import { generateJsSlot } from './jsSlot';
 import { isValidIdentifier } from './validate';
 import { camelize } from './common';
 
-import { CompositeValueGeneratorOptions, CompositeTypeContainerHandlerSet, CodeGeneratorError } from '../types';
-
-const defaultContainerHandlers: CompositeTypeContainerHandlerSet = {
-  default: (v) => v,
-  string: (v) => `'${v}'`,
-};
+import { CompositeValueGeneratorOptions, CompositeTypeContainerHandler, CodeGeneratorError } from '../types';
 
 function generateArray(value: CompositeArray, options: CompositeValueGeneratorOptions = {}): string {
   const body = value.map((v) => generateUnknownType(v, options)).join(',');
@@ -52,67 +49,77 @@ function generateObject(value: CompositeObject, options: CompositeValueGenerator
 }
 
 function generateUnknownType(value: CompositeValue, options: CompositeValueGeneratorOptions = {}): string {
-  if (Array.isArray(value)) {
-    if (options.handlers && options.handlers.array) {
+  if (_.isUndefined(value)) {
+    return 'undefined';
+  }
+
+  if (_.isNull(value)) {
+    return 'null';
+  }
+
+  if (_.isArray(value)) {
+    if (options.handlers?.array) {
       return options.handlers.array(value);
     }
     return generateArray(value, options);
-  } else if (typeof value === 'object') {
-    if (value === null) {
-      return 'null';
-    }
+  }
 
-    if (isJSExpression(value)) {
-      if (options.handlers && options.handlers.expression) {
-        return options.handlers.expression(value);
-      }
-      return generateExpression(value);
+  if (isJSExpression(value)) {
+    if (options.handlers?.expression) {
+      return options.handlers.expression(value);
     }
+    return generateExpression(value);
+  }
 
-    if (isJSFunction(value)) {
-      if (options.handlers && options.handlers.function) {
-        return options.handlers.function(value);
-      }
-      return generateFunction(value, { isArrow: true });
+  if (isJSFunction(value)) {
+    if (options.handlers?.function) {
+      return options.handlers.function(value);
     }
+    return generateFunction(value, { isArrow: true });
+  }
 
-    if (isJSSlot(value)) {
-      if (options.nodeGenerator) {
-        return generateJsSlot(value, options.nodeGenerator);
-      }
-      throw new CodeGeneratorError("Can't find Node Generator");
+  if (isJSSlot(value)) {
+    if (options.nodeGenerator) {
+      return generateJsSlot(value, options.nodeGenerator);
     }
+    throw new CodeGeneratorError("Can't find Node Generator");
+  }
 
-    if (options.handlers && options.handlers.object) {
+  if (_.isObject(value)) {
+    if (options.handlers?.object) {
       return options.handlers.object(value);
     }
     return generateObject(value as CompositeObject, options);
-  } else if (typeof value === 'string') {
-    if (options.handlers && options.handlers.string) {
+  }
+
+  if (_.isString(value)) {
+    if (options.handlers?.string) {
       return options.handlers.string(value);
     }
     return `'${value}'`;
-  } else if (typeof value === 'number' && options.handlers && options.handlers.number) {
+  }
+
+  if (_.isNumber(value) && options.handlers?.number) {
     return options.handlers.number(value);
-  } else if (typeof value === 'boolean' && options.handlers && options.handlers.boolean) {
+  }
+
+  if (_.isBoolean(value) && options.handlers?.boolean) {
     return options.handlers.boolean(value);
-  } else if (typeof value === 'undefined') {
-    return 'undefined';
   }
 
   return JSON.stringify(value);
 }
 
-export function generateCompositeType(value: CompositeValue, options: CompositeValueGeneratorOptions = {}): string {
-  const result = generateUnknownType(value, options);
-  const containerHandlers = {
-    ...defaultContainerHandlers,
-    ...(options.containerHandlers || {}),
-  };
+const defaultContainer: CompositeTypeContainerHandler = (v: string) => v;
 
-  const isStringType = result.substr(0, 1) === "'" && result.substr(-1, 1) === "'";
-  if (isStringType) {
-    return (containerHandlers.string && containerHandlers.string(result.substring(1, result.length - 1))) || '';
+export function generateCompositeType(value: CompositeValue, options: CompositeValueGeneratorOptions = {}): string {
+  const isStringType = _.isString(value);
+  const result = generateUnknownType(value, options);
+  const handler: CompositeTypeContainerHandler = options.containerHandler || defaultContainer;
+
+  if (isStringType && result.length >= 2) {
+    return handler(result, true, result.substring(1, result.length - 1));
   }
-  return (containerHandlers.default && containerHandlers.default(result)) || '';
+
+  return handler(result, false, result);
 }
