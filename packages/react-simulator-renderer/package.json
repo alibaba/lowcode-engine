@@ -1,16 +1,19 @@
 {
-  "private": true,
   "name": "@ali/lowcode-react-simulator-renderer",
-  "version": "0.11.0",
+  "version": "0.11.2",
   "description": "react simulator renderer for alibaba lowcode designer",
   "main": "lib/index.js",
   "module": "es/index.js",
   "license": "MIT",
-  "files": [],
+  "files": [
+    "es",
+    "lib"
+  ],
   "scripts": {
     "cloud-build": "build-scripts build --skip-demo",
     "test": "ava",
-    "test:snapshot": "ava --update-snapshots"
+    "test:snapshot": "ava --update-snapshots",
+    "build": "build-scripts build --skip-demo"
   },
   "dependencies": {
     "@ali/lowcode-designer": "^0.10.0",
@@ -41,5 +44,8 @@
     "require": [
       "ts-node/register"
     ]
+  },
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
   }
 }

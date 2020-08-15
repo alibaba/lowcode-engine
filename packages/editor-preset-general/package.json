@@ -1,7 +1,6 @@
 {
-  "name": "@ali/lowcode-editor-preset-general",
+  "name": "@ali/lowcode-editor-preset-general-beta",
   "version": "0.10.0",
-  "private": true,
   "description": "Ali General Editor Preset",
   "main": "lib/index.js",
   "files": [
