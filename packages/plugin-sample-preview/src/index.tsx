@@ -37,7 +37,7 @@ const SamplePreview = ({ editor }: PluginProps) => {
 
       // TODO asset may cause pollution
       const assetLoader = new AssetLoader();
-      assetLoader.load(libraryAsset);
+      await assetLoader.load(libraryAsset);
       const components = buildComponents(libraryMap, componentsMap);
       console.log('components', components);
 
