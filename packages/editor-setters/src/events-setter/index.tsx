@@ -29,30 +29,31 @@ export default class EventsSetter extends Component<{
     selectType: null,
     nativeEventList: [],
     lifeCycleEventList: [],
-    eventDataList: this.props.value || [],
+    eventDataList: (this.props.value.eventDataList?this.props.value.eventDataList:this.props.value) || [],
     relatedEventName: '',
   };
 
   // constructor (){
   //   super();
   //   debugger;
-  //   if (!this.props || !this.props.value){
-  //     this.setState({
-  //       eventDataList:[]
-  //     })
-  //   }
+  //   // if (!this.props || !this.props.value){
+  //   //   this.setState({
+  //   //     eventDataList:[]
+  //   //   })
+  //   // }
   // }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    // const { value } = nextProps;
-    // debugger;
-    // if (value !== prevState.eventDataList) {
-    //   return {
-    //     value,
-    //   };
-    // }
-    return null;
-  }
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   debugger;
+  //   // const { value } = nextProps;
+  //   // debugger;
+  //   // if (value !== prevState.eventDataList) {
+  //   //   return {
+  //   //     value,
+  //   //   };
+  //   // }
+  //   return null;
+  // }
 
   private bindEventName:String;
 
@@ -310,7 +311,7 @@ export default class EventsSetter extends Component<{
   };
 
   deleteEvent = (eventName: String) => {
-    const { eventDataList } = this.state;
+    const { eventDataList,eventList} = this.state;
     eventDataList.map((item, index) => {
       if (item.name === eventName) {
         eventDataList.splice(index, 1);
@@ -320,7 +321,7 @@ export default class EventsSetter extends Component<{
     this.setState({
       eventDataList,
     });
-
+    this.props.onChange({eventDataList,eventList});
     this.updateEventListStatus(eventName, true);
   };
 
@@ -332,7 +333,7 @@ export default class EventsSetter extends Component<{
 
 
   bindEvent = (relatedEventName: String) => {
-    const {eventDataList} = this.state;
+    const {eventDataList,eventList} = this.state;
     eventDataList.map(item => {
       if (item.name === this.bindEventName) {
         item.relatedEventName = relatedEventName;
@@ -344,7 +345,7 @@ export default class EventsSetter extends Component<{
     })
 
 
-    this.props.onChange(eventDataList);
+    this.props.onChange({eventDataList,eventList});
 
     //this.closeDialog();
   };
