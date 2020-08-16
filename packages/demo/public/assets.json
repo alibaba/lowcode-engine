@@ -9226,13 +9226,22 @@
           "defaultValue": "single"
         },
         {
-          "name": "value",
-          "propType": "any",
-          "description": "当前值，用于受控模式"
+          "name": "dataSource",
+          "propType": "Json"
         },
         {
           "name": "defaultValue",
-          "propType": "any",
+          "title": {
+            "label": "默认值",
+            "tip": "初始的默认值"
+          },
+          "propType": {
+            "type": "oneOfType",
+            "value": [
+              "string",
+              "JSExpression"
+            ]
+          },
           "description": "初始的默认值"
         },
         {
@@ -9242,17 +9251,29 @@
         },
         {
           "name": "hasBorder",
+          "title": {
+            "label": "边框",
+            "tip": "是否有边框"
+          },
           "propType": "bool",
           "description": "是否有边框"
         },
         {
           "name": "hasArrow",
+          "title": {
+            "label": "箭头",
+            "tip": "是否有下拉箭头"
+          },
           "propType": "bool",
           "description": "是否有下拉箭头",
           "defaultValue": true
         },
         {
           "name": "showSearch",
+          "title": {
+            "label": "搜索框",
+            "tip": "展开后是否能搜索（tag 模式下固定为true）"
+          },
           "propType": "bool",
           "description": "展开后是否能搜索（tag 模式下固定为true）",
           "defaultValue": false
@@ -9269,47 +9290,29 @@
         },
         {
           "name": "hasSelectAll",
-          "propType": {
-            "type": "oneOfType",
-            "value": [
-              "bool",
-              "string"
-            ]
+          "title": {
+            "label": "全选",
+            "tip": "多选模式下是否有全选功能"
           },
+          "propType": "bool",
           "description": "多选模式下是否有全选功能"
         },
         {
           "name": "fillProps",
+          "title": {
+            "label": "FillProps",
+            "tip": "填充到选择框里的值的 key"
+          },
           "propType": "string",
           "description": "填充到选择框里的值的 key\b\b"
         },
         {
-          "name": "useDetailValue",
-          "propType": "bool",
-          "description": "onChange 返回的 value 使用 dataSource 的对象"
-        },
-        {
-          "name": "cacheValue",
-          "propType": "bool",
-          "description": "dataSource 变化的时是否保留已选的内容",
-          "defaultValue": true
-        },
-        {
-          "name": "valueRender",
-          "propType": "func",
-          "description": "渲染 Select 展现内容的方法\n@param {Object} item 渲染节点的item\n@return {ReactNode} 展现内容\n@default item => item.label \\|\\| item.value"
-        },
-        {
-          "name": "itemRender",
-          "propType": "func",
-          "description": "渲染 Menu.Item 内容的方法\n@param {Object} item 渲染节点的item\n@param {String} searchValue 搜索关键字（如果开启搜索）\n@return {ReactNode} item node"
-        },
-        {
           "name": "notFoundContent",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
+          "title": {
+            "label": "空文案",
+            "tip": "notFoundContent|弹层内容为空的文案"
           },
+          "propType": "string",
           "description": "弹层内容为空的文案"
         },
         {
@@ -9317,28 +9320,39 @@
           "propType": "object"
         },
         {
-          "name": "searchValue",
-          "propType": "string",
-          "description": "受控搜索值，一般不需要设置\n@type {[type]}"
-        },
-        {
           "name": "tagInline",
+          "title": {
+            "label": "Inline",
+            "tip": "tagInline|是否一行显示，仅在 mode 为 multiple 的时候生效"
+          },
           "propType": "bool",
           "description": "是否一行显示，仅在 mode 为 multiple 的时候生效",
           "defaultValue": false
         },
         {
           "name": "maxTagCount",
+          "title": {
+            "label": "最大标签数",
+            "tip": "maxTagCount|最多显示多少个 tag"
+          },
           "propType": "number",
           "description": "最多显示多少个 tag"
         },
         {
           "name": "maxTagPlaceholder",
-          "propType": "func",
+          "title": {
+            "label": "隐藏 tag 占位符",
+            "tip": "maxTagPlaceholder|隐藏多余 tag 时显示的内容，在 maxTagCount 生效时起作用\n@param {number} selectedValues 当前已选中的元素\n@param {number} totalValues 总待选元素"
+          },
+          "propType": "string",
           "description": "隐藏多余 tag 时显示的内容，在 maxTagCount 生效时起作用\n@param {number} selectedValues 当前已选中的元素\n@param {number} totalValues 总待选元素"
         },
         {
           "name": "hiddenSelected",
+          "title": {
+            "label": "隐藏菜单",
+            "tip": "hiddenSelected|选择后是否立即隐藏菜单 (mode=multiple/tag 模式生效)"
+          },
           "propType": "bool",
           "description": "选择后是否立即隐藏菜单 (mode=multiple/tag 模式生效)"
         },
@@ -9368,10 +9382,6 @@
         {
           "name": "onKeyDown",
           "propType": "func"
-        },
-        {
-          "name": "locale",
-          "propType": "object"
         }
       ],
       "configure": {
@@ -14673,7 +14683,16 @@
                 "props": {
                   "mode": "single",
                   "hasArrow": true,
-                  "cacheValue": true
+                  "cacheValue": true,
+                  "dataSource": [
+                    {"value": "10001", "label": "Lucy King"},
+                    {"value": 10002, "label": "Lily King"},
+                    {"value": 10003, "label": "Tom Cat", "disabled": true},
+                    {"label": "Special Group", "children": [
+                        {"value": -1, "label": "FALSE"},
+                        {"value": 0, "label": "ZERO"}
+                    ]}
+                  ]
                 }
               }
             }
