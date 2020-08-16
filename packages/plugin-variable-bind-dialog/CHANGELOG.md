@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.10.0"></a>
+# [0.10.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-variable-bind-dialog@0.9.0...@ali/lowcode-plugin-variable-bind-dialog@0.10.0) (2020-08-16)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-variable-bind-dialog
+
 <a name="0.9.0"></a>
 # [0.9.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-variable-bind-dialog@0.8.25...@ali/lowcode-plugin-variable-bind-dialog@0.9.0) (2020-08-14)
 
