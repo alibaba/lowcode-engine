@@ -2,7 +2,7 @@ import React, { useState, ComponentType } from 'react';
 import { Button, Dialog } from '@alifd/next';
 import { PluginProps, NpmInfo } from '@ali/lowcode-types';
 import { Designer } from '@ali/lowcode-designer';
-import { buildComponents } from '@ali/lowcode-utils';
+import { buildComponents, assetBundle, AssetList, AssetLevel, AssetLoader } from '@ali/lowcode-utils';
 import ReactRenderer from '@ali/lowcode-react-renderer';
 import './index.scss';
 
@@ -16,15 +16,34 @@ const SamplePreview = ({ editor }: PluginProps) => {
     const designer = editor.get(Designer);
     if (designer) {
       const assets = await editor.get('assets');
+      const { packages } = assets;
+      const { componentsMap, schema } = designer;
+
       console.info('save schema:', designer, assets);
 
       const libraryMap = {};
-      assets.packages.forEach(({ package, library }) => {
+      const libraryAsset: AssetList = [];
+      packages.forEach(({ package, library, urls }) => {
         libraryMap[package] = library;
+        if (urls) {
+          libraryAsset.push(urls);
+        }
       });
+
+      const vendors = [
+        assetBundle(libraryAsset, AssetLevel.Library),
+      ];
+      console.log('libraryMap&vendors', libraryMap, vendors);
+
+      // TODO asset may cause pollution
+      const assetLoader = new AssetLoader();
+      assetLoader.load(libraryAsset);
+      const components = buildComponents(libraryMap, componentsMap);
+      console.log('components', components);
+
       setData({
-        schema: designer.schema.componentsTree[0],
-        components: buildComponents(libraryMap, designer.componentsMap),
+        schema: schema.componentsTree[0],
+        components,
       });
       setVisible(true);
     }

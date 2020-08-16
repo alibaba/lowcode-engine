@@ -5,14 +5,15 @@ import SimulatorRendererView from './renderer-view';
 import { computed, obx } from '@recore/obx';
 import { Asset } from '@ali/lowcode-utils';
 import { getClientRects } from './utils/get-client-rects';
-import loader from './utils/loader';
 import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
-import { isElement, cursor, setNativeSelection, buildComponents, getSubComponent } from '@ali/lowcode-utils';
+import { isElement, cursor, setNativeSelection, buildComponents, getSubComponent, AssetLoader } from '@ali/lowcode-utils';
 import { RootSchema, ComponentSchema, TransformStage } from '@ali/lowcode-types';
 // just use types
 import { BuiltinSimulatorRenderer, NodeInstance, Component } from '@ali/lowcode-designer';
 import Slot from './builtin-components/slot';
 import Leaf from './builtin-components/leaf';
+
+const loader = new AssetLoader();
 
 export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   readonly isSimulatorRenderer = true;
