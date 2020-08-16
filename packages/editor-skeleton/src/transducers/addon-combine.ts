@@ -206,7 +206,12 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
             return val;
           },
 
-          setValue(field: SettingTarget, eventDataList: any[]) {
+          setValue(field: SettingTarget, eventData) {
+            const {eventDataList,eventList} = eventData;
+            eventList.map((item)=>{
+              field.parent.clearPropValue(item.name);
+              return item;
+            })
             eventDataList.map((item) => {
               field.parent.setPropValue(item.name, {
                 type: 'JSFunction',

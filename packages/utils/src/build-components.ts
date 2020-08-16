@@ -1,5 +1,5 @@
-import { ComponentType } from 'react';
-import { NpmInfo} from '@ali/lowcode-types';
+import { ComponentType, forwardRef, createElement } from 'react';
+import { NpmInfo } from '@ali/lowcode-types';
 import { isReactComponent } from './is-react';
 import { isESModule } from './is-es-module';
 
@@ -11,8 +11,16 @@ function accessLibrary(library: string | object) {
   if (typeof library !== 'string') {
     return library;
   }
+  
+  return (window as any)[library] || generateHtmlComp(library);
+}
 
-  return (window as any)[library] || library;
+export function generateHtmlComp(library: string) {
+  if (['a', 'img', 'div', 'span', 'svg'].includes(library)) {
+    return forwardRef((props, ref) => {
+      return createElement(library, { ref, ...props }, props.children);
+    });
+  }
 }
 
 export function getSubComponent(library: any, paths: string[]) {
