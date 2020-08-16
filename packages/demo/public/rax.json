@@ -1,21 +1,44 @@
-{"componentsTree": [{
-  "componentName": "Page",
-  "fileName": "home",
-  "props": {},
-  "children": [
+{
+  "componentsTree": [
     {
-      "componentName": "Container",
+      "componentName": "Page",
+      "fileName": "home1",
       "props": {},
       "children": [
         {
-          "componentName": "Text",
-          "props": {
-            "type": "primary"
-          },
-          "children": ["Welcome to Your Rax App!"]
+          "componentName": "Container",
+          "props": {},
+          "children": [
+            {
+              "componentName": "Text",
+              "props": {
+                "type": "primary",
+                "content": "Page 1"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "componentName": "Page",
+      "fileName": "home2",
+      "props": {},
+      "children": [
+        {
+          "componentName": "Container",
+          "props": {},
+          "children": [
+            {
+              "componentName": "Text",
+              "props": {
+                "type": "primary",
+                "content": "Page 2"
+              }
+            }
+          ]
         }
       ]
     }
   ]
-}]
 }
