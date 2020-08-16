@@ -5435,22 +5435,161 @@
           "description": "是否校验/需要校验的 name 数组"
         },
         {
-          "name": "field",
-          "propType": "object",
-          "description": "自定义 field (在 Form 内不需要设置)"
+          "name": "style",
+          "propType": "object"
         },
         {
           "name": "children",
+          "title": "内容",
+          "propType": "string"
+        },
+        {
+          "name": "icon",
+          "propType": "string",
+          "description": "自定义内联样式"
+        },
+        {
+          "name": "type",
+          "title": "类型",
           "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          }
+            "type": "oneOf",
+            "value": [
+              "primary",
+              "secondary",
+              "normal"
+            ]
+          },
+          "description": "按钮的类型",
+          "defaultValue": "normal"
+        },
+        {
+          "name": "size",
+          "title": "尺寸",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "small",
+              "medium",
+              "large"
+            ]
+          },
+          "description": "按钮的尺寸",
+          "defaultValue": "medium"
+        },
+        {
+          "name": "iconSize",
+          "title": "Icon 尺寸",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "xxs",
+              "xs",
+              "small",
+              "medium",
+              "large",
+              "xl",
+              "xxl",
+              "xxxl"
+            ]
+          },
+          "defaultValue": "small",
+          "description": "按钮中 Icon 的尺寸，用于替代 Icon 的默认大小"
+        },
+        {
+          "name": "loading",
+          "title": "loading",
+          "propType": "bool",
+          "description": "设置按钮的载入状态",
+          "defaultValue": false
+        },
+        {
+          "name": "ghost",
+          "title": "ghost",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              true,
+              false,
+              "light",
+              "dark"
+            ]
+          },
+          "description": "是否为幽灵按钮",
+          "defaultValue": false
+        },
+        {
+          "name": "text",
+          "title": "text",
+          "propType": "bool",
+          "description": "是否为文本按钮",
+          "defaultValue": false
+        },
+        {
+          "name": "warning",
+          "title": "warning",
+          "propType": "bool",
+          "description": "是否为警告按钮",
+          "defaultValue": false
+        },
+        {
+          "name": "disabled",
+          "title": "disabled",
+          "propType": "bool",
+          "description": "是否禁用",
+          "defaultValue": false
+        },
+        {
+          "name": "className",
+          "propType": "string"
+        },
+        {
+          "name": "onMouseUp",
+          "propType": "func"
         },
         {
           "name": "style",
-          "propType": "object"
+          "propType": "object",
+          "description": "自定义内联样式"
         }
-      ]
+      ],
+      "configure": {
+        "props": {
+          "isExtends": true,
+          "override": [
+            {
+              "name": "icon",
+              "setter": "IconSetter",
+              "extraProps": {
+                "defaultValue": "",
+                "onChange": {
+                  "type": "JSFunction",
+                  "value": "(val, field, editor) => {\n  field.nodes[0].children.import(val && {\"componentName\": \"Icon\", \"props\": {\"type\": val, \"style\": {\"marginRight\": 5}}}, true); //field.top.setPropValue('children', [{\"componentName\": \"Icon\", \"props\": {\"type\": val}}, (field.top.getPropValue('children') || []).slice(-1)]);\n}"
+                }
+              }
+            },
+            {
+              "name": "children",
+              "title": {
+                "label": {
+                  "type": "i18n",
+                  "zh_CN": "文本内容",
+                  "en_US": "content"
+                },
+                "tip": "按钮文本内容"
+              },
+              "setter": {
+                "componentName": "MixedSetter",
+                "props": {
+                  "setters": [
+                    "StringSetter",
+                    "ExpressionSetter"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
     },
     {
       "componentName": "Form.Reset",
@@ -5467,14 +5606,6 @@
       },
       "props": [
         {
-          "name": "names",
-          "propType": {
-            "type": "instanceOf",
-            "value": "array"
-          },
-          "description": "自定义重置的字段"
-        },
-        {
           "name": "onClick",
           "propType": "func",
           "description": "点击提交后触发"
@@ -5485,22 +5616,161 @@
           "description": "返回默认值"
         },
         {
-          "name": "field",
-          "propType": "object",
-          "description": "自定义 field (在 Form 内不需要设置)"
+          "name": "style",
+          "propType": "object"
         },
         {
           "name": "children",
+          "title": "内容",
+          "propType": "string"
+        },
+        {
+          "name": "icon",
+          "propType": "string",
+          "description": "自定义内联样式"
+        },
+        {
+          "name": "type",
+          "title": "类型",
           "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          }
+            "type": "oneOf",
+            "value": [
+              "primary",
+              "secondary",
+              "normal"
+            ]
+          },
+          "description": "按钮的类型",
+          "defaultValue": "normal"
+        },
+        {
+          "name": "size",
+          "title": "尺寸",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "small",
+              "medium",
+              "large"
+            ]
+          },
+          "description": "按钮的尺寸",
+          "defaultValue": "medium"
+        },
+        {
+          "name": "iconSize",
+          "title": "Icon 尺寸",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              "xxs",
+              "xs",
+              "small",
+              "medium",
+              "large",
+              "xl",
+              "xxl",
+              "xxxl"
+            ]
+          },
+          "defaultValue": "small",
+          "description": "按钮中 Icon 的尺寸，用于替代 Icon 的默认大小"
+        },
+        {
+          "name": "loading",
+          "title": "loading",
+          "propType": "bool",
+          "description": "设置按钮的载入状态",
+          "defaultValue": false
+        },
+        {
+          "name": "ghost",
+          "title": "ghost",
+          "propType": {
+            "type": "oneOf",
+            "value": [
+              true,
+              false,
+              "light",
+              "dark"
+            ]
+          },
+          "description": "是否为幽灵按钮",
+          "defaultValue": false
+        },
+        {
+          "name": "text",
+          "title": "text",
+          "propType": "bool",
+          "description": "是否为文本按钮",
+          "defaultValue": false
+        },
+        {
+          "name": "warning",
+          "title": "warning",
+          "propType": "bool",
+          "description": "是否为警告按钮",
+          "defaultValue": false
+        },
+        {
+          "name": "disabled",
+          "title": "disabled",
+          "propType": "bool",
+          "description": "是否禁用",
+          "defaultValue": false
+        },
+        {
+          "name": "className",
+          "propType": "string"
+        },
+        {
+          "name": "onMouseUp",
+          "propType": "func"
         },
         {
           "name": "style",
-          "propType": "object"
+          "propType": "object",
+          "description": "自定义内联样式"
         }
-      ]
+      ],
+      "configure": {
+        "props": {
+          "isExtends": true,
+          "override": [
+            {
+              "name": "icon",
+              "setter": "IconSetter",
+              "extraProps": {
+                "defaultValue": "",
+                "onChange": {
+                  "type": "JSFunction",
+                  "value": "(val, field, editor) => {\n  field.nodes[0].children.import(val && {\"componentName\": \"Icon\", \"props\": {\"type\": val, \"style\": {\"marginRight\": 5}}}, true); //field.top.setPropValue('children', [{\"componentName\": \"Icon\", \"props\": {\"type\": val}}, (field.top.getPropValue('children') || []).slice(-1)]);\n}"
+                }
+              }
+            },
+            {
+              "name": "children",
+              "title": {
+                "label": {
+                  "type": "i18n",
+                  "zh_CN": "文本内容",
+                  "en_US": "content"
+                },
+                "tip": "按钮文本内容"
+              },
+              "setter": {
+                "componentName": "MixedSetter",
+                "props": {
+                  "setters": [
+                    "StringSetter",
+                    "ExpressionSetter"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
     },
     {
       "componentName": "Form.Error",
@@ -12383,7 +12653,7 @@
     },
     {
       "componentName": "ResponsiveGrid",
-      "title": "ResponsiveGrid",
+      "title": "布局容器",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -12431,7 +12701,7 @@
     },
     {
       "componentName": "ResponsiveGrid.Cell",
-      "title": "ResponsiveGrid.Cell",
+      "title": "布局容器 Cell",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -12466,7 +12736,7 @@
     },
     {
       "componentName": "Box",
-      "title": "Box",
+      "title": "容器",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -13396,13 +13666,13 @@
       "children": [
         {
           "componentName": "Box",
-          "title": "弹性布局",
+          "title": "容器",
           "icon": "",
           "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
-              "title": "弹性布局",
+              "title": "容器",
               "screenshot": "",
               "schema": {
                 "componentName": "Box",
@@ -13599,29 +13869,221 @@
         },
         {
           "componentName": "ResponsiveGrid",
-          "title": "栅格布局",
+          "title": "布局容器",
           "icon": "",
           "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
-              "title": "栅格布局",
-              "screenshot": "",
+              "title": "1 + 2",
+              "screenshot": "https://img.alicdn.com/tfs/TB1BgObx5_1gK0jSZFqXXcpaXXa-112-64.png",
               "schema": {
                 "componentName": "ResponsiveGrid",
                 "props": {},
                 "children": [
                   {
-                    "componentName": "ResponsiveGrid.Cell"
+                    "componentName": "ResponsiveGrid.Cell",
+                    "props": {
+                      "colSpan": 12
+                    }
                   },
                   {
-                    "componentName": "ResponsiveGrid.Cell"
+                    "componentName": "ResponsiveGrid.Cell",
+                    "props": {
+                      "colSpan": 8
+                    }
                   },
                   {
-                    "componentName": "ResponsiveGrid.Cell"
+                    "componentName": "ResponsiveGrid.Cell",
+                    "props": {
+                      "colSpan": 4
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "title": "1 + 3",
+              "screenshot": "https://img.alicdn.com/tfs/TB1glaexYj1gK0jSZFuXXcrHpXa-112-64.png",
+              "schema": {
+                "componentName": "ResponsiveGrid",
+                "props": {},
+                "children": [
+                  {
+                    "componentName": "ResponsiveGrid.Cell",
+                    "props": {
+                      "colSpan": 12
+                    }
                   },
                   {
-                    "componentName": "ResponsiveGrid.Cell"
+                    "componentName": "ResponsiveGrid.Cell",
+                    "props": {
+                      "colSpan": 8
+                    }
+                  },
+                  {
+                    "componentName": "ResponsiveGrid.Cell",
+                    "props": {
+                      "colSpan": 4
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "title": "混合",
+              "screenshot": "https://img.alicdn.com/tfs/TB1cb9ex1H2gK0jSZJnXXaT1FXa-112-64.png",
+              "schema": {
+                "componentName": "ResponsiveGrid",
+                "props": {},
+                "children": [
+                  {
+                    "componentName": "ResponsiveGrid.Cell",
+                    "props": {
+                      "colSpan": 12
+                    }
+                  },
+                  {
+                    "componentName": "ResponsiveGrid.Cell",
+                    "props": {
+                      "colSpan": 4
+                    }
+                  },
+                  {
+                    "componentName": "ResponsiveGrid.Cell",
+                    "props": {
+                      "colSpan": 4
+                    }
+                  },
+                  {
+                    "componentName": "ResponsiveGrid.Cell",
+                    "props": {
+                      "colSpan": 4
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "title": "单栏",
+              "screenshot": "https://img.alicdn.com/tfs/TB1y5RLyO_1gK0jSZFqXXcpaXXa-112-40.png",
+              "schema": {
+                "componentName": "ResponsiveGrid",
+                "props": {},
+                "children": [
+                  {
+                    "componentName": "ResponsiveGrid.Cell",
+                    "props": {
+                      "colSpan": 12
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "title": "两栏",
+              "screenshot": "https://img.alicdn.com/tfs/TB1Sw4MyKL2gK0jSZFmXXc7iXXa-112-40.png",
+              "schema": {
+                "componentName": "ResponsiveGrid",
+                "props": {},
+                "children": [
+                  {
+                    "componentName": "ResponsiveGrid.Cell",
+                    "props": {
+                      "colSpan": 6
+                    }
+                  },
+                  {
+                    "componentName": "ResponsiveGrid.Cell",
+                    "props": {
+                      "colSpan": 6
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "title": "三栏",
+              "screenshot": "https://img.alicdn.com/tfs/TB1uq4LyQY2gK0jSZFgXXc5OFXa-112-40.png",
+              "schema": {
+                "componentName": "ResponsiveGrid",
+                "props": {},
+                "children": [
+                  {
+                    "componentName": "ResponsiveGrid.Cell",
+                    "props": {
+                      "colSpan": 4
+                    }
+                  },
+                  {
+                    "componentName": "ResponsiveGrid.Cell",
+                    "props": {
+                      "colSpan": 4
+                    }
+                  },
+                  {
+                    "componentName": "ResponsiveGrid.Cell",
+                    "props": {
+                      "colSpan": 4
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "title": "四栏",
+              "screenshot": "https://img.alicdn.com/tfs/TB1mpEjyQL0gK0jSZFtXXXQCXXa-112-40.png",
+              "schema": {
+                "componentName": "ResponsiveGrid",
+                "props": {},
+                "children": [
+                  {
+                    "componentName": "ResponsiveGrid.Cell",
+                    "props": {
+                      "colSpan": 3
+                    }
+                  },
+                  {
+                    "componentName": "ResponsiveGrid.Cell",
+                    "props": {
+                      "colSpan": 3
+                    }
+                  },
+                  {
+                    "componentName": "ResponsiveGrid.Cell",
+                    "props": {
+                      "colSpan": 3
+                    }
+                  },
+                  {
+                    "componentName": "ResponsiveGrid.Cell",
+                    "props": {
+                      "colSpan": 3
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "title": "1:3 分栏",
+              "screenshot": "https://img.alicdn.com/tfs/TB1x_RMyQT2gK0jSZPcXXcKkpXa-112-40.png",
+              "schema": {
+                "componentName": "ResponsiveGrid",
+                "props": {
+                  "columns": 4
+                },
+                "children": [
+                  {
+                    "componentName": "ResponsiveGrid.Cell",
+                    "props": {
+                      "colSpan": 1
+                    }
+                  },
+                  {
+                    "componentName": "ResponsiveGrid.Cell",
+                    "props": {
+                      "colSpan": 3
+                    }
                   }
                 ]
               }
@@ -13630,13 +14092,13 @@
         },
         {
           "componentName": "ResponsiveGrid.Cell",
-          "title": "栅格布局 Cell",
+          "title": "布局容器 Cell",
           "icon": "",
           "package": "@alifd/next",
           "library": "Next",
           "snippets": [
             {
-              "title": "栅格布局 Cell",
+              "title": "布局容器 Cell",
               "screenshot": "",
               "schema": {
                 "componentName": "ResponsiveGrid.Cell",
@@ -14026,16 +14488,16 @@
                           "onClick": {
                             "type": "JSFunction",
                             "value": "(v, e) => { console.log(v, e) }"
-                          }
-                        },
-                        "children": "Submit"
+                          },
+                          "children": "Submit"
+                        }
                       },
                       {
                         "componentName": "Form.Reset",
                         "props": {
-                          "style": {"marginLeft": 10}
-                        },
-                        "children": "Reset"
+                          "style": {"marginLeft": 10},
+                          "children": "Reset"
+                        }
                       }
                     ]
                   }
