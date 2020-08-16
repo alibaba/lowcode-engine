@@ -237,6 +237,10 @@ export class DocumentInstance {
     // this.ctxMap.set(id, ctx);
   }
 
+  getComponentInstances(id: string): any[] | null {
+    return this.instancesMap.get(id) || null;
+  }
+
   getNode(id: string): Node | null {
     return null;
     // return this.document.getNode(id);
@@ -248,6 +252,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   private dispose?: () => void;
   // TODO: history
   readonly history: any;
+  private emitter = new EventEmitter();
 
   @obx.ref private _documentInstances: DocumentInstance[] = [];
   get documentInstances() {
@@ -269,6 +274,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
 
       // sync device
       this._device = host.device;
+
+      this.emitter.emit('rerender');
     });
     const documentInstanceMap = new Map<string, DocumentInstance>();
     let initialEntry = '/';
@@ -287,48 +294,46 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       if (firstRun) {
         initialEntry = path;
       } else {
-        if (this.history.location.pathname !== path) {
-          this.history.replace(path);
-        }
+        // if (this.history.location.pathname !== path) {
+        //   this.history.replace(path);
+        // }
       }
     });
-    /*
-    const history = createMemoryHistory({
-      initialEntries: [initialEntry],
-    });
-    this.history = history;
-    history.listen((location, action) => {
-      host.project.open(location.pathname.substr(1));
-    });
+    // const history = createMemoryHistory({
+    //   initialEntries: [initialEntry],
+    // });
+    // this.history = history;
+    // history.listen((location, action) => {
+    //   host.project.open(location.pathname.substr(1));
+    // });
     host.componentsConsumer.consume(async (componentsAsset) => {
       if (componentsAsset) {
         await this.load(componentsAsset);
         this.buildComponents();
       }
     });
-    this._appContext = {
-      utils: {
-        router: {
-          push(path: string, params?: object) {
-            history.push(withQueryParams(path, params));
-          },
-          replace(path: string, params?: object) {
-            history.replace(withQueryParams(path, params));
-          },
-        },
-        legaoBuiltins: {
-          getUrlParams() {
-            const search = history.location.search;
-            return parseQuery(search);
-          }
-        }
-      },
-      constants: {},
-    };
+    // this._appContext = {
+    //   utils: {
+    //     router: {
+    //       push(path: string, params?: object) {
+    //         history.push(withQueryParams(path, params));
+    //       },
+    //       replace(path: string, params?: object) {
+    //         history.replace(withQueryParams(path, params));
+    //       },
+    //     },
+    //     legaoBuiltins: {
+    //       getUrlParams() {
+    //         const search = history.location.search;
+    //         return parseQuery(search);
+    //       }
+    //     }
+    //   },
+    //   constants: {},
+    // };
     host.injectionConsumer.consume((data) => {
       // sync utils, i18n, contants,... config
     });
-    */
   }
 
   @computed get layout(): any {
