@@ -14,6 +14,13 @@
       "library": "Next"
     },
     {
+      "title": "NextTable",
+      "package": "NextTable",
+      "version": "1.0.0",
+      "urls": ["http://localhost:3333/NextTable.js", "http://localhost:3333/NextTable.css"],
+      "library": "NextTable"
+    },
+    {
       "title": "MCBreadcrumb",
       "package": "mc-breadcrumb",
       "version": "1.0.0",
@@ -176,7 +183,6 @@
         "subName": ""
       },
       "props": [
-
         {
           "name": "children",
           "propType": "string",
@@ -218,7 +224,16 @@
           "description": "分割线标题的位置",
           "defaultValue": "center"
         }
-      ]
+      ],
+      "experimental": {
+        "filters": [{
+          "name": "",
+          "filter": {
+            "type": "JSFunction",
+            "value": "filters"
+          }
+        }]
+      }
     },
     {
       "componentName": "Drawer",
@@ -460,6 +475,163 @@
       ]
     },
     {
+      "componentName": "NextTable",
+      "title": "NextTable",
+      "docUrl": "",
+      "screenshot": "",
+      "npm": {
+        "package": "NextTable",
+        "version": "1.19.18",
+        "exportName": "NextTable",
+        "main": "lib/index.js",
+        "subName": ""
+      },
+      "props": [
+        {
+          "name": "columns",
+          "title": "数据列",
+          "propType": {
+            "type": "arrayOf",
+            "value": {
+              "type": "shape",
+              "value": [
+                {
+                  "name": "title",
+                  "description": "列标题",
+                  "propType": "string",
+                  "defaultValue": "Title"
+                },
+                {
+                  "name": "dataKey",
+                  "description": "列索引",
+                  "propType": "string",
+                  "defaultValue": "Key"
+                },
+                {
+                  "name": "dataType",
+                  "description": "数据类型",
+                  "propType": {
+                    "type": "oneOf",
+                    "value": [
+                      "text",
+                      "timestamp",
+                      "cascadeTimestamp",
+                      "employee",
+                      "money",
+                      "moneyRange"
+                    ]
+                  },
+                  "defaultValue": "Key"
+                },
+                {
+                  "name": "editType",
+                  "description": "编辑类型",
+                  "propType": {
+                    "type": "oneOf",
+                    "value": [
+                      "select",
+                      "text",
+                      "radio",
+                      "date",
+                      "employee"
+                    ]
+                  },
+                  "defaultValue": "Key"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "data",
+          "title": "数据源",
+          "propType": {
+            "type": "oneOfType",
+            "value": [
+              "Json",
+              "JSExpression"
+            ]
+          }
+        },
+        {
+          "name": "actionTitle",
+          "title": "操作列标题",
+          "propType": "string"
+        },
+        {
+          "name": "actionColumn",
+          "title": "操作列",
+          "propType": {
+            "type": "arrayOf",
+            "value": {
+              "type": "shape",
+              "value": [{
+                "name": "title",
+                "description": "列标题",
+                "propType": "string",
+                "defaultValue": "Title"
+              },{
+                "name": "callback",
+                "description": "callback",
+                "propType": "func",
+                "defaultValue": {
+                  "type": "JSFunction",
+                  "value": "(rowData, action, table) => {\n return table.editRow(rowData).then((row) => {\n console.log(row);\n })}"
+                }
+              }]
+            }
+          }
+        }
+      ],
+      "configure": {
+        "props": [
+          {
+            "name": "action",
+            "title": "操作列",
+            "extraProps": {
+              "display": "entry"
+            },
+            "items": [
+              {
+                "name": "actionTitle",
+                "setter": "StringSetter"
+              },
+              {
+                "name": "actionColumn",
+                "title": "操作列",
+                "setter": {
+                  "componentName": "ArraySetter",
+                  "props": {
+                    "itemSetter": {
+                      "componentName": "ObjectSetter",
+                      "props": {
+                        "config": {
+                          "items": [{
+                            "name": "title",
+                            "description": "列标题",
+                            "setter": "StringSetter",
+                            "defaultValue": "Title"
+                          },{
+                            "name": "callback",
+                            "description": "callback",
+                            "propType": "FunctionSetter",
+                            "defaultValue": {
+                              "type": "JSFunction",
+                              "value": "(rowData, action, table) => {\n return table.editRow(rowData).then((row) => {\n console.log(row);\n })}"
+                            }
+                          }]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
       "componentName": "Table",
       "title": "Table",
       "docUrl": "",
@@ -475,6 +647,10 @@
       "props": [
         {
           "name": "prefix",
+          "propType": "string"
+        },
+        {
+          "name": "children",
           "propType": "string"
         },
         {
@@ -705,15 +881,71 @@
         }
       ],
       "configure": {
-        "component": {
-          "isContainer": true
-        },
         "props": {
           "isExtends": true,
-          "override": [{
-            "name": "dataSource",
-            "setter": "JsonSetter"
-          }]
+          "override": [
+            {
+              "name": "dataSource",
+              "setter": "JsonSetter"
+            },
+            {
+              "name": "children",
+              "setter": {
+                "componentName": "ArraySetter",
+                "props": {
+                  "itemSetter": {
+                    "componentName": "ObjectSetter",
+                    "props": {
+                      "config": {
+                        "items": [
+                          {
+                            "name": "componentName",
+                            "title": "子组件",
+                            "defaultValue": "Table.Column",
+                            "setter": {
+                              "componentName": "StringSetter"
+                            }
+                          },
+                          {
+                            "name": "props",
+                            "title": "props",
+                            "setter": {
+                              "componentName": "ObjectSetter",
+                              "props": {
+                                "config": {
+                                  "items": [
+                                    {
+                                      "name": "title",
+                                      "setter": {
+                                        "componentName": "StringSetter"
+                                      }
+                                    },
+                                    {
+                                      "name": "dataIndex",
+                                      "setter": {
+                                        "componentName": "StringSetter"
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "extraProps": {
+                "defaultValue": "",
+                "onChange": {
+                  "type": "JSFunction",
+                  "value": "(val, field, editor) => {\n debugger;\n console.log('val', val);//field.nodes[0].children.import(val && {\"componentName\": \"Table.Column\", \"props\": {\"type\": val, \"style\": {\"marginRight\": 5}}}, true); //field.top.setPropValue('children', [{\"componentName\": \"Icon\", \"props\": {\"type\": val}}, (field.top.getPropValue('children') || []).slice(-1)]);\n}"
+                }
+              }
+            }
+          ]
         }
       }
     },
@@ -13020,6 +13252,98 @@
               }
             }
           ]
+        },
+        {
+          "componentName": "NextTable",
+          "title": "NextTable",
+          "icon": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_table.png",
+          "package": "NextTable",
+          "library": "NextTable",
+          "snippets": [{
+            "title": "NextTable",
+            "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_table.png",
+            "schema": {
+              "componentName": "NextTable",
+              "props": {
+                "showMiniPager": true,
+                "showActionBar": true,
+                "actionBar": [
+                  {
+                    "title": "新增",
+                    "type": "primary"
+                  },
+                  {
+                    "title": "编辑"
+                  }
+                ],
+                "columns": [
+                  {
+                    "dataKey": "name",
+                    "width": 200,
+                    "align": "center",
+                    "title": "姓名",
+                    "editType": "text"
+                  },
+                  {
+                    "dataKey": "age",
+                    "width": 200,
+                    "align": "center",
+                    "title": "年龄"
+                  },
+                  {
+                    "dataKey": "email",
+                    "width": 200,
+                    "align": "center",
+                    "title": "邮箱"
+                  }
+                ],
+                "data": [
+                  {
+                    "name": "王小",
+                    "id": "1",
+                    "age": 15000,
+                    "email": "aaa@abc.com"
+                  },
+                  {
+                    "name": "王中",
+                    "id": "2",
+                    "age": 25000,
+                    "email": "bbb@abc.com"
+                  },
+                  {
+                    "name": "王大",
+                    "id": "3",
+                    "age": 35000,
+                    "email": "ccc@abc.com"
+                  }
+                ],
+                "actionTitle": "操作",
+                "actionWidth": 180,
+                "actionType": "link",
+                "actionFixed": "right",
+                "actionHidden": false,
+                "maxWebShownActionCount": 2,
+                "actionColumn": [
+                  {
+                    "title": "编辑",
+                    "callback": {
+                      "type": "JSFunction",
+                      "value": "(rowData, action, table) => {\n return table.editRow(rowData).then((row) => {\n console.log(row);\n });\n }"
+                    },
+                    "device": ["desktop"]
+                  },
+                  {
+                    "title": "保存",
+                    "callback": {
+                      "type": "JSFunction",
+                      "value": "(rowData, action, table) => { \nreturn table.saveRow(rowData).then((row) => { \nconsole.log(row); \n}); \n}"
+                    },
+                    "mode": "EDIT"
+                  }
+                ]
+              }
+            }
+          }]
         },
         {
           "componentName": "Table",
