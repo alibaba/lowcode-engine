@@ -288,7 +288,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   }
 
   setupDragAndClick() {
-    const designer = this.designer;
+    const documentModel = this.project.currentDocument;
+    if (!documentModel) return;
+    const selection = documentModel.selection;
+    const designer = documentModel.designer;
     const doc = this.contentDocument!;
 
     // TODO: think of lock when edit a node
@@ -299,10 +302,17 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         // fix for popups close logic
         document.dispatchEvent(new Event('mousedown'));
         const documentModel = this.project.currentDocument;
-        if (this.liveEditing.editing || !documentModel) {
+        let isMulti = false;
+        if (this.designMode === 'design') {
+          isMulti = downEvent.metaKey || downEvent.ctrlKey;
+        } else if (!downEvent.metaKey) {
           return;
         }
-        const selection = documentModel.selection;
+
+        if (this.liveEditing.editing) {
+          return;
+        }
+        const selection = documentModel?.selection;
         // stop response document focus event
         downEvent.stopPropagation();
         downEvent.preventDefault();
@@ -312,23 +322,29 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
 
         const nodeInst = this.getNodeInstanceFromElement(downEvent.target as Element);
-        const node = nodeInst?.node || documentModel.rootNode;
+        const node = nodeInst?.node || documentModel?.rootNode;
         if (!node?.isValidComponent()) {
           // 对于未注册组件直接返回
           return;
         }
-
-        const isMulti = downEvent.metaKey || downEvent.ctrlKey;
         const isLeftButton = downEvent.which === 1 || downEvent.button === 0;
         const checkSelect = (e: MouseEvent) => {
           doc.removeEventListener('mouseup', checkSelect, true);
+          // 鼠标是否移动
           if (!isShaken(downEvent, e)) {
-            const id = node.id;
+            let id = node.id;
             designer.activeTracker.track({ node, instance: nodeInst?.instance });
-            if (isMulti && !isRootNode(node) && selection.has(id)) {
+            if (isMulti && !isRootNode(node) && selection?.has(id)) {
               selection.remove(id);
             } else {
-              selection.select(id);
+              if (node.isPage() && node.getChildren()?.notEmpty()) {
+                const firstChildId = node
+                  .getChildren()
+                  ?.get(0)
+                  ?.getId();
+                if (firstChildId) id = firstChildId;
+              }
+              selection?.select(id);
 
               // dirty code should refector
               const editor = this.designer?.editor;
@@ -349,15 +365,15 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           let ignoreUpSelected = false;
           if (isMulti) {
             // multi select mode, directily add
-            if (!selection.has(node.id)) {
+            if (!selection?.has(node.id)) {
               designer.activeTracker.track({ node, instance: nodeInst?.instance });
-              selection.add(node.id);
+              selection?.add(node.id);
               ignoreUpSelected = true;
             }
-            selection.remove(documentModel.rootNode.id);
+            selection?.remove(documentModel.rootNode.id);
             // 获得顶层 nodes
-            nodes = selection.getTopNodes();
-          } else if (selection.containsNode(node, true)) {
+            nodes = selection?.getTopNodes();
+          } else if (selection?.containsNode(node, true)) {
             nodes = selection.getTopNodes();
           } else {
             // will clear current selection & select dragment in dragstart
@@ -412,7 +428,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     const doc = this.contentDocument!;
     const detecting = this.designer.detecting;
     const hover = (e: MouseEvent) => {
-      if (!detecting.enable) {
+      if (!detecting.enable || this.designMode !== 'design') {
         return;
       }
       const nodeInst = this.getNodeInstanceFromElement(e.target as Element);

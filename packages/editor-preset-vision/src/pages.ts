@@ -52,6 +52,15 @@ const pages = Object.assign(project, {
       version: '1.0.0',
       componentsMap: [],
       componentsTree,
+      config: {
+        layout: {
+          componentName: 'MiniappTabNav',
+          props: {
+            logo: '',
+            name: '测试网站',
+          },
+        },
+      },
     }, true);
   },
   addPage(data: OldPageData | RootSchema) {

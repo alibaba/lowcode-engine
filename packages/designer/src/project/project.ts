@@ -30,6 +30,15 @@ export class Project {
     return this.documents.find((doc) => doc.actived);
   }
 
+  @obx private _config: any = {};
+  @computed get config(): any {
+    // TODO: parse layout Component
+    return this._config;
+  }
+  set config(value: any) {
+    this._config = value;
+  }
+
   /**
    * 获取项目整体 schema
    */
@@ -55,6 +64,7 @@ export class Project {
       componentsTree: [],
       ...schema,
     };
+    this.config = schema?.config;
 
     if (autoOpen) {
       if (autoOpen === true) {
@@ -91,9 +101,14 @@ export class Project {
       | 'i18n'
       | 'css'
       | 'dataSource'
+      | 'config'
       | string,
     value: any,
-  ): void {}
+  ): void {
+    if (key === 'config') {
+      this.config = value;
+    }
+  }
 
   /**
    * 分字段设置储存数据
@@ -108,8 +123,13 @@ export class Project {
       | 'i18n'
       | 'css'
       | 'dataSource'
+      | 'config'
       | string,
-  ): any {}
+  ): any {
+    if (key === 'config') {
+      return this.config;
+    }
+  }
 
 
   private documentsMap = new Map<string, DocumentModel>();

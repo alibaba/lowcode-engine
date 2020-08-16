@@ -3,6 +3,7 @@ import { CompositeValue, JSExpression, CompositeObject, JSONObject } from './val
 import { DataSource } from './data-source';
 import { I18nMap } from './i18n';
 import { UtilsMap } from './utils';
+import { AppConfig } from './app-config';
 
 export interface NodeSchema {
   id?: string;
@@ -83,6 +84,7 @@ export interface ProjectSchema {
   constants?: JSONObject;
   css?: string;
   dataSource?: DataSource;
+  config?: AppConfig;
 }
 
 export function isNodeSchema(data: any): data is NodeSchema {

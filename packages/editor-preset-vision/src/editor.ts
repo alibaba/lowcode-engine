@@ -20,6 +20,7 @@ globalContext.register(editor, Editor);
 export const skeleton = new Skeleton(editor);
 editor.set(Skeleton, skeleton);
 editor.set('skeleton', skeleton);
+editor.set('designMode', 'live');
 
 export const designer = new Designer({ editor: editor });
 editor.set(Designer, designer);
@@ -279,6 +280,9 @@ skeleton.add({
   name: 'settingsPane',
   type: 'Panel',
   content: SettingsPrimaryPane,
+  props: {
+    ignoreRoot: true,
+  },
 });
 skeleton.add({
   area: 'leftArea',

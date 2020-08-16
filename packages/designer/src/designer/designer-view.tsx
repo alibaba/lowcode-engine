@@ -40,7 +40,7 @@ export class DesignerView extends Component<DesignerProps & {
     if (onMount) {
       onMount(this.designer);
     }
-    clipboard.injectCopyPaster(document)
+    clipboard.injectCopyPaster(document);
     this.designer.postEvent('mount', this.designer);
   }
 

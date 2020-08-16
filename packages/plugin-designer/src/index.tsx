@@ -13,6 +13,7 @@ interface DesignerPluginState {
   extraEnvironment?: any[] | null;
   renderEnv?: string;
   device?: string;
+  designMode?: string;
 }
 
 export default class DesignerPlugin extends PureComponent<PluginProps, DesignerPluginState> {
@@ -24,6 +25,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
     extraEnvironment: null,
     renderEnv: 'default',
     device: 'default',
+    designMode: 'live',
   };
 
   private _mounted = true;
@@ -39,6 +41,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
       const assets = await editor.onceGot('assets');
       const renderEnv = await editor.get('renderEnv');
       const device = await editor.get('device');
+      const designMode = await editor.get('designMode');
       if (!this._mounted) {
         return;
       }
@@ -49,6 +52,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
         extraEnvironment,
         renderEnv,
         device,
+        designMode,
       };
       this.setState(state);
     } catch (e) {
@@ -71,7 +75,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
 
   render(): React.ReactNode {
     const { editor } = this.props;
-    const { componentMetadatas, library, extraEnvironment, renderEnv, device } = this.state;
+    const { componentMetadatas, library, extraEnvironment, renderEnv, device, designMode } = this.state;
 
     if (!library || !componentMetadatas) {
       // TODO: use a Loading
@@ -90,6 +94,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
           extraEnvironment,
           renderEnv,
           device,
+          designMode,
         }}
       />
     );

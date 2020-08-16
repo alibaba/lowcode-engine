@@ -1,17 +1,15 @@
-export class Project {
-  private schema: any;
+import { designer } from './editor';
 
-  constructor() {
-    this.schema = {};
-  }
+const { project } = designer;
 
-  getSchema() {
-    return this.schema;
-  }
+Object.assign(project, {
+  getSchema(): any {
+    return this.schema || {};
+  },
 
   setSchema(schema: any) {
     this.schema = schema;
-  }
-}
+  },
+});
 
-export default new Project();
+export default project;

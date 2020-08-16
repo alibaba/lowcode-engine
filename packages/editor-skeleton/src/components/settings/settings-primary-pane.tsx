@@ -7,7 +7,7 @@ import { SettingsPane } from './settings-pane';
 import { createIcon } from '@ali/lowcode-utils';
 
 @observer
-export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
+export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any }> {
   private main = new SettingsMain(this.props.editor);
 
   @obx.ref private _activeKey?: any;
@@ -22,6 +22,8 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
 
   renderBreadcrumb() {
     const { settings } = this.main;
+    const { config } = this.props;
+    const shouldIgnoreRoot = config.props?.ignoreRoot;
     if (!settings) {
       return null;
     }
@@ -43,6 +45,10 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
     let l = 3;
     while (l-- > 0 && node) {
       const _node = node;
+      if (shouldIgnoreRoot && node.isRoot()) {
+        node = null;
+        continue;
+      }
       const props =
         l === 2
           ? {}
