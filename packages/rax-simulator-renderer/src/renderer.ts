@@ -75,41 +75,6 @@ function cacheReactKey(el: Element): Element {
   return el;
 }
 
-function getClosestNodeInstance(from: any, specId?: string): NodeInstance<any> | null {
-  const el: any = from;
-  if (el) {
-    // if (isElement(el)) {
-    //   el = cacheReactKey(el);
-    // } else {
-    //   return getNodeInstance(el, specId);
-    // }
-    return getNodeInstance(el);
-  }
-  return null;
-}
-
-function getNodeInstance(dom: HTMLElement): NodeInstance<any> | null {
-  const INTERNAL = '_internal';
-
-  let instance = Instance.get(dom);
-  while (instance && instance[INTERNAL]) {
-    if (isValidDesignModeRaxComponentInstance(instance)) {
-      const docId = (instance as any)[SYMBOL_VDID];
-      return {
-        docId,
-        nodeId: instance.props._leaf.getId(),
-        instance: instance,
-        node: instance.props._leaf,
-      };
-    }
-
-    instance = instance[INTERNAL].__parentInstance;
-  }
-
-  return null;
-}
-
-
 function checkInstanceMounted(instance: any): boolean {
   if (isElement(instance)) {
     return instance.parentElement != null;
@@ -241,9 +206,8 @@ export class DocumentInstance {
     return this.instancesMap.get(id) || null;
   }
 
-  getNode(id: string): Node | null {
-    return null;
-    // return this.document.getNode(id);
+  getNode(id: string): Node<NodeSchema> | null {
+    return this.document.getNode(id);
   }
 }
 
@@ -397,6 +361,27 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     return null;
   }
 
+  getNodeInstance(dom: HTMLElement): NodeInstance<any> | null {
+    const INTERNAL = '_internal';
+
+    let instance = Instance.get(dom);
+    while (instance && instance[INTERNAL]) {
+      if (isValidDesignModeRaxComponentInstance(instance)) {
+        const docId = (instance.props as any).schema.docId;
+        return {
+          docId,
+          nodeId: instance.props._leaf.getId(),
+          instance: instance,
+          node: instance.props._leaf,
+        };
+      }
+
+      instance = instance[INTERNAL].__parentInstance;
+    }
+
+    return null;
+  }
+
   getClosestNodeInstance(from: any, nodeId?: string): NodeInstance<any> | null {
     const el: any = from;
     if (el) {
@@ -405,13 +390,9 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       // } else {
       //   return getNodeInstance(el, specId);
       // }
-      return getNodeInstance(el);
+      return this.getNodeInstance(el);
     }
     return null;
-  }
-
-  getComponentInstances(id: string): any[] | null {
-    return this.instancesMap.get(id) || null;
   }
 
   onReRender(fn: () => void) {
