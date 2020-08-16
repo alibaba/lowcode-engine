@@ -39,11 +39,23 @@ const originCloneElement = (window as any).Rax.cloneElement;
 };
 
 export default class SimulatorRendererView extends Component<{ rendererContainer: SimulatorRendererContainer }> {
-  render() {
+  private unlisten: any;
+
+  componentDidMount() {
     const { rendererContainer } = this.props;
-    rendererContainer.onDocumentChange(() => {
+    this.unlisten = rendererContainer.onDocumentChange(() => {
       this.forceUpdate();
     });
+  }
+
+  componentWillUnmount() {
+    if (this.unlisten) {
+      this.unlisten();
+    }
+  }
+
+  render() {
+    const { rendererContainer } = this.props;
     return (
       <Layout rendererContainer={rendererContainer}>
         <Routes rendererContainer={rendererContainer} history={rendererContainer.history} />
@@ -94,9 +106,6 @@ function getDeviceView(view: any, device: string, mode: string) {
 }
 
 class Layout extends Component<{ rendererContainer: SimulatorRendererContainer }> {
-  shouldComponentUpdate() {
-    return true;
-  }
   render() {
     const { rendererContainer, children } = this.props;
     const layout = rendererContainer.layout;
@@ -124,9 +133,6 @@ class Renderer extends Component<{
     this.props.documentInstance.onReRender(() => {
       this.forceUpdate();
     });
-  }
-  shouldComponentUpdate() {
-    return true;
   }
   render() {
     const { documentInstance } = this.props;
