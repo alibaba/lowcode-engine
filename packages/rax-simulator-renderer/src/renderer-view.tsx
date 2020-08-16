@@ -76,7 +76,7 @@ export const Routes = (props: {
     routes: documentInstances.map(instance => {
       return {
         path: instance.path,
-        component: (props: any) => <Renderer rendererContainer={rendererContainer} documentInstance={instance} {...props} />
+        component: (props: any) => <Renderer key={instance.id} rendererContainer={rendererContainer} documentInstance={instance} {...props} />
       };
     })
   };
@@ -128,12 +128,21 @@ class Renderer extends Component<{
   rendererContainer: SimulatorRendererContainer;
   documentInstance: DocumentInstance;
 }> {
-  constructor(props: any) {
-    super(props);
-    this.props.documentInstance.onReRender(() => {
+  private unlisten: any;
+
+  componentDidMount() {
+    const { documentInstance } = this.props;
+    this.unlisten = documentInstance.onReRender(() => {
       this.forceUpdate();
     });
   }
+
+  componentWillUnmount() {
+    if (this.unlisten) {
+      this.unlisten();
+    }
+  }
+
   render() {
     const { documentInstance } = this.props;
     const { container } = documentInstance;
