@@ -17,7 +17,7 @@
       "title": "NextTable",
       "package": "NextTable",
       "version": "1.0.0",
-      "urls": ["http://alifd.alibabausercontent.com/materials/NextTable.js"],
+      "urls": ["http://alifd.alibabausercontent.com/materials/NextTable.js", "http://alifd.alibabausercontent.com/materials/NextTable.css"],
       "library": "NextTable"
     },
     {
@@ -585,6 +585,381 @@
       ],
       "configure": {
         "props": [
+          {
+            "name": "StyleAndTheme",
+            "title": "风格和样式",
+            "type": "group",
+            "extraProps": {
+              "display": "entry"
+            },
+            "items": [
+              {
+                "name": "theme",
+                "title": "主题",
+                "setter": {
+                  "componentName": "RadioGroupSetter",
+                  "props": {
+                    "dataSource": [
+                      {
+                        "label": "zebra",
+                        "value": "zebra"
+                      },{
+                        "label": "split",
+                        "value": "split"
+                      },{
+                        "label": "border",
+                        "value": "border"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "name": "hasHeader",
+                "title": "是否显示表头",
+                "setter": "BoolSetter"
+              },
+              {
+                "name": "fixedHeader",
+                "title": "是否固定表头",
+                "setter": "BoolSetter"
+              },
+              {
+                "name": "stickyHeader",
+                "title": "表头是否是sticky",
+                "setter": "BoolSetter"
+              }
+            ]
+          },
+          {
+            "name": "Selector",
+            "title": "行选择器",
+            "type": "group",
+            "extraProps": {
+              "display": "entry"
+            },
+            "items": [
+              {
+                "name": "rowSelector",
+                "title": "选择器模式",
+                "setter": {
+                  "componentName": "RadioGroupSetter",
+                  "props": {
+                    "dataSource": [
+                      {
+                        "label": "checkboxSelector",
+                        "value": "checkboxSelector"
+                      },{
+                        "label": "radioSelector",
+                        "value": "radioSelector"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "name": "showRowSelector",
+                "title": "是否启用选择模式",
+                "setter": "BoolSetter"
+              }
+            ]
+          },
+          {
+            "name": "Pagination",
+            "title": "分页设置",
+            "type": "group",
+            "extraProps": {
+              "display": "entry"
+            },
+            "items": [
+              {
+                "name": "isPagination",
+                "title": "是否显示分页",
+                "setter": "BoolSetter",
+                "initialValue": true
+              },
+              {
+                "name": "pagination",
+                "title": "分页设置",
+                "setter": {
+                  "componentName": "ObjectSetter",
+                  "props": {
+                    "config": {
+                      "items": [
+                        {
+                          "name": "paginationPosition",
+                          "title": "翻页器显示位置",
+                          "setter": {
+                            "componentName": "RadioGroupSetter",
+                            "props": {
+                              "dataSource": [
+                                {
+                                  "label": "left",
+                                  "value": "left"
+                                },{
+                                  "label": "right",
+                                  "value": "right"
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "name": "size",
+                          "title": "分页组件大小",
+                          "setter": {
+                            "componentName": "RadioGroupSetter",
+                            "props": {
+                              "dataSource": [
+                                {
+                                  "label": "small",
+                                  "value": "small"
+                                },{
+                                  "label": "medium",
+                                  "value": "medium"
+                                },{
+                                  "label": "large",
+                                  "value": "large"
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "name": "type",
+                          "title": "分页组件类型",
+                          "setter": {
+                            "componentName": "RadioGroupSetter",
+                            "props": {
+                              "dataSource": [
+                                {
+                                  "label": "normal",
+                                  "value": "normal"
+                                },{
+                                  "label": "simple",
+                                  "value": "simple"
+                                },{
+                                  "label": "mini",
+                                  "value": "mini"
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "name": "shape",
+                          "title": "前进后退按钮样式",
+                          "setter": {
+                            "componentName": "SelectSetter",
+                            "props": {
+                              "dataSource": [
+                                {
+                                  "label": "normal",
+                                  "value": "normal"
+                                },{
+                                  "label": "arrow-only",
+                                  "value": "arrow-only"
+                                },{
+                                  "label": "arrow-prev-only",
+                                  "value": "arrow-prev-only"
+                                },{
+                                  "label": "no-border",
+                                  "value": "no-border"
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "name": "pageSizeSelector",
+                          "title": "每页显示选择器类型",
+                          "setter": "BoolSetter"
+                        },
+                        {
+                          "name": "pageSizeList",
+                          "title": "每页显示选择器可选值",
+                          "setter": "StringSetter"
+                        },
+                        {
+                          "name": "pageSizePosition",
+                          "title": "每页显示选择器在组件中的位置",
+                          "setter": {
+                            "componentName": "SelectSetter",
+                            "props": {
+                              "dataSource": [
+                                {
+                                  "label": "start",
+                                  "value": "start"
+                                },{
+                                  "label": "end",
+                                  "value": "end"
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "name": "hideOnlyOnePage",
+                          "title": "hideOnlyOnePage",
+                          "setter": "BoolSetter"
+                        },
+                        {
+                          "name": "showJump",
+                          "title": "showJump",
+                          "setter": "BoolSetter"
+                        },
+                        {
+                          "name": "pageShowCount",
+                          "title": "页码显示的数量",
+                          "setter": "NumberSetter"
+                        }
+                      ]
+                    }
+                  },
+                  "initialValue": {
+                    "type" : "normal",
+                    "shape" : "arrow-only",
+                    "pageSize" : 10,
+                    "pageSizeSelector" : false,
+                    "pageSizeList" : "5,10,20",
+                    "pageSizePosition" : "end",
+                    "paginationPosition" : "right",
+                    "hideOnlyOnePage" : false,
+                    "showJump" : true
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "ExpandAndTree",
+            "title": "可折叠/树形表格",
+            "type": "group",
+            "extraProps": {
+              "display": "entry"
+            },
+            "items": [
+              {
+                "name": "hasExpandedRowCtrl",
+                "title": "启用折叠",
+                "setter": "BoolSetter"
+              },
+              {
+                "name": "isTree",
+                "title": "启用树形",
+                "setter": "BoolSetter"
+              }
+            ]
+          },
+          {
+            "name": "TopAction",
+            "title": "顶部操作选项",
+            "type": "group",
+            "extraProps": {
+              "display": "entry"
+            },
+            "items": [
+              {
+                "name": "showActionBar",
+                "title": "显示操作条",
+                "setter": "BoolSetter"
+              },
+              {
+                "name": "showLinkBar",
+                "title": "显示外链条",
+                "setter": "BoolSetter"
+              },
+              {
+                "name": "showSearch",
+                "title": "显示搜索",
+                "setter": "BoolSetter"
+              },
+              {
+                "name": "searchBarPlaceholder",
+                "title": "搜索 placeholder",
+                "setter": "StringSetter"
+              },
+              {
+                "name": "showCustomColumn",
+                "title": "显示筛选器",
+                "setter": "BoolSetter"
+              }
+            ]
+          },
+          {
+            "name": "actionBar",
+            "title": "操作条",
+            "setter": {
+              "componentName": "ArraySetter",
+              "props": {
+                "itemSetter": {
+                  "componentName": "ObjectSetter",
+                  "props": {
+                    "config": {
+                      "items": [{
+                        "name": "title",
+                        "description": "标题",
+                        "setter": "StringSetter",
+                        "defaultValue": "Title"
+                      },{
+                        "name": "callback",
+                        "description": "callback",
+                        "propType": "JsonSetter",
+                        "defaultValue": {
+                          "type": "JSFunction",
+                          "value": "(rowData, action, table) => {\n return table.editRow(rowData).then((row) => {\n console.log(row);\n })}"
+                        }
+                      }]
+                    }
+                  },
+                  "initialValue": {
+                    "title": "Title",
+                    "callback": {
+                      "type": "JSFunction",
+                      "value": "(rowData, action, table) => {\n return table.editRow(rowData).then((row) => {\n console.log(row);\n })}"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "name": "linkBar",
+            "title": "外链操作条",
+            "setter": {
+              "componentName": "ArraySetter",
+              "props": {
+                "itemSetter": {
+                  "componentName": "ObjectSetter",
+                  "props": {
+                    "config": {
+                      "items": [{
+                        "name": "title",
+                        "description": "标题",
+                        "setter": "StringSetter",
+                        "defaultValue": "Title"
+                      },{
+                        "name": "callback",
+                        "description": "callback",
+                        "propType": "JsonSetter",
+                        "defaultValue": {
+                          "type": "JSFunction",
+                          "value": "(rowData, action, table) => {\n return table.editRow(rowData).then((row) => {\n console.log(row);\n })}"
+                        }
+                      }]
+                    }
+                  },
+                  "initialValue": {
+                    "title": "Title",
+                    "callback": {
+                      "type": "JSFunction",
+                      "value": "(rowData, action, table) => {\n return table.editRow(rowData).then((row) => {\n console.log(row);\n })}"
+                    }
+                  }
+                }
+              }
+            }
+          },
           {
             "name": "columns",
             "title": "数据列",
