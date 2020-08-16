@@ -1,4 +1,4 @@
-{
+{"componentsTree": [{
   "componentName": "Page",
   "fileName": "home",
   "props": {},
@@ -17,4 +17,5 @@
       ]
     }
   ]
+}]
 }

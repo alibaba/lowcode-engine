@@ -85,7 +85,6 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
   private scrollToLast = false;
   onAdd() {
     const { items, itemsMap } = this.state;
-    debugger;
     const { itemSetter } = this.props;
     const initialValue = typeof itemSetter === 'object' ? (itemSetter as any).initialValue : null;
     const item = this.props.field.createField({
