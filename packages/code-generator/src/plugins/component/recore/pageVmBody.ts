@@ -12,8 +12,7 @@ import {
 } from '../../../types';
 import { COMMON_CHUNK_NAME } from '../../../const/generator';
 
-import { createNodeGenerator, generateString } from '../../../utils/nodeToJSX';
-import { generateExpression } from '../../../utils/jsExpression';
+import { createNodeGenerator } from '../../../utils/nodeToJSX';
 import { generateCompositeType } from '../../../utils/compositeType';
 
 const generateGlobalProps = (ctx: INodeGeneratorContext, nodeItem: NodeSchema): CodePiece[] => {
@@ -53,13 +52,9 @@ const generateCtrlLine = (ctx: INodeGeneratorContext, nodeItem: NodeSchema): Cod
 };
 
 const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
-  const generator = createNodeGenerator(
-    {
-      string: generateString,
-      expression: (input) => [generateExpression(input)],
-    },
-    [generateGlobalProps, generateCtrlLine],
-  );
+  const generator = createNodeGenerator({
+    plugins: [generateGlobalProps, generateCtrlLine],
+  });
 
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     const next: ICodeStruct = {

@@ -13,7 +13,7 @@ import {
 import { RAX_CHUNK_NAME } from './const';
 import { COMMON_CHUNK_NAME } from '../../../const/generator';
 
-import { createNodeGenerator, generateReactCtrlLine, generateString } from '../../../utils/nodeToJSX';
+import { createNodeGenerator, generateReactCtrlLine } from '../../../utils/nodeToJSX';
 import { generateExpression } from '../../../utils/jsExpression';
 
 type PluginConfig = {
@@ -62,20 +62,15 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     next.chunks = next.chunks.filter((chunk) => !isImportAliasDefineChunk(chunk));
 
     // 创建代码生成器
-    const generator = createNodeGenerator(
-      {
-        string: generateString,
-        expression: (input) => [handlers.expression(input)],
-        function: (input) => [handlers.function(input)],
-      },
-      [generateReactCtrlLine],
-      {
+    const generator = createNodeGenerator({
+      handlers: {
         expression: (input: JSExpression) => (isJSExpression(input) ? handlers.expression(input) : ''),
         function: (input: JSFunction) => (isJSFunction(input) ? handlers.function(input) : ''),
         loopDataExpr: (input: string) => (typeof input === 'string' ? transformers.transformLoopExpr(input) : ''),
         tagName: mapComponentNameToAliasOrKeepIt,
       },
-    );
+      plugins: [generateReactCtrlLine],
+    });
 
     // 生成 JSX 代码
     const jsxContent = generator(ir);

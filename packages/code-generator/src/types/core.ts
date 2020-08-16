@@ -1,15 +1,11 @@
 import {
   ResultDir,
   ResultFile,
-  NodeData,
+  NodeDataType,
   NodeSchema,
   ProjectSchema,
   JSExpression,
   JSFunction,
-  CompositeArray,
-  CompositeObject,
-  JSONArray,
-  JSONObject,
   JSSlot,
 } from '@ali/lowcode-types';
 
@@ -149,45 +145,38 @@ export interface CodePiece {
   type: PIECE_TYPE;
 }
 
-// TODO: 这个 HandlerSet 和 CustomHandlerSet 为啥定义还不一样？
 export interface HandlerSet<T> {
-  string?: (input: string) => T[];
-  expression?: (input: JSExpression) => T[];
-  function?: (input: JSFunction) => T[];
-  node?: (input: NodeSchema) => T[];
-  common?: (input: unknown) => T[];
+  string?: (input: string) => T;
+  boolean?: (input: boolean) => T;
+  number?: (input: number) => T;
+  expression?: (input: JSExpression) => T;
+  function?: (input: JSFunction) => T;
+  slot?: (input: JSSlot) => T;
+  node?: (input: NodeSchema) => T;
+  array?: (input: any[]) => T;
+  object?: (input: object) => T;
+  common?: (input: unknown) => T;
+  tagName?: (input: string) => T;
 }
 
-export type ExtGeneratorPlugin = (
-  ctx: INodeGeneratorContext,
-  nodeItem: NodeSchema,
-  handlers: CustomHandlerSet,
-) => CodePiece[];
+export type ExtGeneratorPlugin = (ctx: INodeGeneratorContext, nodeItem: NodeSchema) => CodePiece[];
 
-export interface INodeGeneratorConfig {
-  nodeTypeMapping?: Record<string, string>;
-}
+export type NodeGeneratorConfig = {
+  handlers?: HandlerSet<string>;
+  plugins?: ExtGeneratorPlugin[];
+};
 
-export type NodeGenerator = (nodeItem: NodeData) => string;
+export type NodeGenerator = (nodeItem: NodeDataType) => string;
 
 export interface INodeGeneratorContext {
+  handlers: HandlerSet<string>;
   generator: NodeGenerator;
 }
 
 export type CompositeValueCustomHandler = (data: unknown) => string;
-export type CompositeTypeContainerHandler = (value: string) => string;
-export interface CompositeValueCustomHandlerSet {
-  boolean?: CompositeValueCustomHandler;
-  number?: CompositeValueCustomHandler;
-  string?: CompositeValueCustomHandler;
-  array?: CompositeValueCustomHandler;
-  object?: CompositeValueCustomHandler;
-  expression?: CompositeValueCustomHandler;
-  function?: CompositeValueCustomHandler;
-}
 
 export type CompositeValueGeneratorOptions = {
-  handlers?: CompositeValueCustomHandlerSet;
+  handlers?: HandlerSet<string>;
   containerHandler?: (value: string, isString: boolean, valStr: string) => string;
   nodeGenerator?: NodeGenerator;
 };

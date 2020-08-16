@@ -13,7 +13,7 @@ import { generateJsSlot } from './jsSlot';
 import { isValidIdentifier } from './validate';
 import { camelize } from './common';
 
-import { CompositeValueGeneratorOptions, CompositeTypeContainerHandler, CodeGeneratorError } from '../types';
+import { CompositeValueGeneratorOptions, CodeGeneratorError } from '../types';
 
 function generateArray(value: CompositeArray, options: CompositeValueGeneratorOptions = {}): string {
   const body = value.map((v) => generateUnknownType(v, options)).join(',');
@@ -110,12 +110,12 @@ function generateUnknownType(value: CompositeValue, options: CompositeValueGener
   return JSON.stringify(value);
 }
 
-const defaultContainer: CompositeTypeContainerHandler = (v: string) => v;
+const defaultContainer = (v: string) => v;
 
 export function generateCompositeType(value: CompositeValue, options: CompositeValueGeneratorOptions = {}): string {
   const isStringType = _.isString(value);
   const result = generateUnknownType(value, options);
-  const handler: CompositeTypeContainerHandler = options.containerHandler || defaultContainer;
+  const handler = options.containerHandler || defaultContainer;
 
   if (isStringType && result.length >= 2) {
     return handler(result, true, result.substring(1, result.length - 1));

@@ -23,7 +23,13 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     ...config,
   };
 
-  const generator = createReactNodeGenerator({ nodeTypeMapping: cfg.nodeTypeMapping });
+  const { nodeTypeMapping } = cfg;
+
+  const generator = createReactNodeGenerator({
+    handlers: {
+      tagName: (v) => nodeTypeMapping[v] || v,
+    },
+  });
 
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     const next: ICodeStruct = {
