@@ -17,7 +17,7 @@
       "title": "NextTable",
       "package": "NextTable",
       "version": "1.0.0",
-      "urls": ["http://localhost:3333/NextTable.js", "http://localhost:3333/NextTable.css"],
+      "urls": ["http://alifd.alibabausercontent.com/materials/NextTable.js"],
       "library": "NextTable"
     },
     {
@@ -586,47 +586,204 @@
       "configure": {
         "props": [
           {
+            "name": "columns",
+            "title": "数据列",
+            "setter": {
+              "componentName": "ArraySetter",
+              "props": {
+                "itemSetter": {
+                  "componentName": "ObjectSetter",
+                  "props": {
+                    "config": {
+                      "items": [
+                        {
+                          "name": "title",
+                          "description": "列标题",
+                          "setter": "StringSetter"
+                        },
+                        {
+                          "name": "dataKey",
+                          "description": "列索引",
+                          "setter": "StringSetter"
+                        },
+                        {
+                          "name": "dataType",
+                          "description": "数据类型",
+                          "setter": {
+                            "componentName": "SelectSetter",
+                            "props": {
+                              "dataSource": [
+                                {
+                                  "label": "text",
+                                  "value": "text"
+                                },{
+                                  "label": "timestamp",
+                                  "value": "timestamp"
+                                },{
+                                  "label": "cascadeTimestamp",
+                                  "value": "cascadeTimestamp"
+                                },{
+                                  "label": "employee",
+                                  "value": "employee"
+                                },{
+                                  "label": "money",
+                                  "value": "money"
+                                },{
+                                  "label": "moneyRange",
+                                  "value": "moneyRange"
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "name": "editType",
+                          "description": "编辑类型",
+                          "setter": {
+                            "componentName": "SelectSetter",
+                            "props": {
+                              "dataSource": [
+                                {
+                                  "label": "select",
+                                  "value": "select"
+                                },{
+                                  "label": "text",
+                                  "value": "text"
+                                },{
+                                  "label": "radio",
+                                  "value": "radio"
+                                },{
+                                  "label": "date",
+                                  "value": "date"
+                                },{
+                                  "label": "employee",
+                                  "value": "employee"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "initialValue": {
+                    "title": "Title",
+                    "dataKey": "Key",
+                    "dataType": "text",
+                    "editType": "text"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "name": "data",
+            "title": "数据源",
+            "setter": {
+              "componentName": "MixedSetter",
+              "props": {
+                "setters": [
+                  "JsonSetter",
+                  "ExpressionSetter"
+                ]
+              }
+            }
+          },
+          {
             "name": "action",
-            "title": "操作列",
+            "title": "操作列选项",
+            "type": "group",
             "extraProps": {
               "display": "entry"
             },
             "items": [
               {
                 "name": "actionTitle",
+                "title": "操作列标题",
                 "setter": "StringSetter"
               },
               {
-                "name": "actionColumn",
-                "title": "操作列",
+                "name": "actionWidth",
+                "title": "操作列宽度",
+                "setter": "NumberSetter"
+              },
+              {
+                "name": "actionType",
                 "setter": {
-                  "componentName": "ArraySetter",
+                  "componentName": "RadioGroupSetter",
                   "props": {
-                    "itemSetter": {
-                      "componentName": "ObjectSetter",
-                      "props": {
-                        "config": {
-                          "items": [{
-                            "name": "title",
-                            "description": "列标题",
-                            "setter": "StringSetter",
-                            "defaultValue": "Title"
-                          },{
-                            "name": "callback",
-                            "description": "callback",
-                            "propType": "FunctionSetter",
-                            "defaultValue": {
-                              "type": "JSFunction",
-                              "value": "(rowData, action, table) => {\n return table.editRow(rowData).then((row) => {\n console.log(row);\n })}"
-                            }
-                          }]
-                        }
+                    "dataSource": [
+                      {
+                        "label": "link",
+                        "value": "link"
+                      },{
+                        "label": "button",
+                        "value": "button"
                       }
+                    ]
+                  }
+                }
+              },
+              {
+                "name": "actionFixed",
+                "setter": {
+                  "componentName": "RadioGroupSetter",
+                  "props": {
+                    "dataSource": [
+                      {
+                        "label": "right",
+                        "value": "right"
+                      },{
+                        "label": "none",
+                        "value": "none"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "name": "actionHidden",
+                "setter": "BoolSetter",
+                "initialValue": false
+              }
+            ]
+          },
+          {
+            "name": "actionColumn",
+            "title": "操作列",
+            "setter": {
+              "componentName": "ArraySetter",
+              "props": {
+                "itemSetter": {
+                  "componentName": "ObjectSetter",
+                  "props": {
+                    "config": {
+                      "items": [{
+                        "name": "title",
+                        "description": "列标题",
+                        "setter": "StringSetter",
+                        "defaultValue": "Title"
+                      },{
+                        "name": "callback",
+                        "description": "callback",
+                        "propType": "JsonSetter",
+                        "defaultValue": {
+                          "type": "JSFunction",
+                          "value": "(rowData, action, table) => {\n return table.editRow(rowData).then((row) => {\n console.log(row);\n })}"
+                        }
+                      }]
+                    }
+                  },
+                  "initialValue": {
+                    "title": "Title",
+                    "callback": {
+                      "type": "JSFunction",
+                      "value": "(rowData, action, table) => {\n return table.editRow(rowData).then((row) => {\n console.log(row);\n })}"
                     }
                   }
                 }
               }
-            ]
+            }
           }
         ]
       }
@@ -13938,7 +14095,8 @@
                   "closeable": "esc,close",
                   "hasMask": true,
                   "align": "cc cc",
-                  "minMargin": 40
+                  "minMargin": 40,
+                  "visible": true
                 }
               }
             }
