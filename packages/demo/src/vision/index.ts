@@ -150,7 +150,6 @@ async function loadSchema() {
   editor.set('schema', schema);
   editor.set('renderEnv', 'rax');
   editor.set('clientTypes', ['mobile']);
-
 }
 
 // demo
