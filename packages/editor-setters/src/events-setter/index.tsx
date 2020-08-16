@@ -29,7 +29,7 @@ export default class EventsSetter extends Component<{
     selectType: null,
     nativeEventList: [],
     lifeCycleEventList: [],
-    eventDataList: (this.props.value.eventDataList?this.props.value.eventDataList:this.props.value) || [],
+    eventDataList: (this.props?.value?.eventDataList ? this.props.value.eventDataList : this.props?.value) || [],
     relatedEventName: '',
   };
 

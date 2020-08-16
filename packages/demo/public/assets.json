@@ -13737,7 +13737,7 @@
                   "size": "medium",
                   "htmlType": "button",
                   "component": "button",
-                  "children": ["取消"]
+                  "children": "取消"
                 }
               }
             },
@@ -13751,7 +13751,7 @@
                   "size": "medium",
                   "htmlType": "button",
                   "component": "button",
-                  "children": ["提交"]
+                  "children": "提交"
                 }
               }
             }
@@ -13779,7 +13779,8 @@
                     "style": {
                       "margin": "0 5px 0 5px"
                     },
-                    "htmlType": "submit"
+                    "htmlType": "submit",
+                    "children": "提交"
                   },
                   "children": [
                     {
@@ -13787,8 +13788,7 @@
                       "props": {
                         "type": "success"
                       }
-                    },
-                    "提交"
+                    }
                   ]
                 }, {
                   "componentName": "Button",
@@ -13797,9 +13797,9 @@
                     "style": {
                       "margin": "0 5px 0 5px"
                     },
-                    "htmlType": "reset"
-                  },
-                  "children": "重置"
+                    "htmlType": "reset",
+                    "children": "重置"
+                  }
                 }]
               }
             }
