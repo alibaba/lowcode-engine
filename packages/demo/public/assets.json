@@ -4617,11 +4617,6 @@
           "description": "对话框关闭时触发的回调函数\n@param {String} trigger 关闭触发行为的描述字符串\n@param {Object} event 关闭时事件对象"
         },
         {
-          "name": "afterClose",
-          "propType": "func",
-          "description": "对话框关闭后触发的回调函数, 如果有动画，则在动画结束后触发"
-        },
-        {
           "name": "hasMask",
           "propType": "bool",
           "description": "是否显示遮罩",
