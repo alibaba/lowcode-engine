@@ -53,9 +53,10 @@ export class Routes extends Component<{ rendererContainer: SimulatorRendererCont
     const { rendererContainer } = this.props;
     return (
       <Fragment>
-        {rendererContainer.documentInstances.map((instance) => {
+        {rendererContainer.documentInstances.map((instance, index) => {
+          console.log("Routes");
           return (
-            <Renderer rendererContainer={rendererContainer} documentInstance={instance} />
+            <Renderer key={index} rendererContainer={rendererContainer} documentInstance={instance} />
           );
         })}
       </Fragment>
@@ -130,8 +131,7 @@ class Renderer extends Component<{ rendererContainer: SimulatorRendererContainer
         customCreateElement={(Component: any, props: any, children: any) => {
           const { __id, __desingMode, ...viewProps } = props;
           viewProps.componentId = __id;
-          const leaf: any = null;
-          // const leaf = host.document.getNode(__id);
+          const leaf = documentInstance.getNode(__id);
           viewProps._leaf = leaf;
           viewProps._componentName = leaf?.componentName;
 
