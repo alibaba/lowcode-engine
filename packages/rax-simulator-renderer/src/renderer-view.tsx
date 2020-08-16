@@ -54,10 +54,8 @@ export class Routes extends Component<{ rendererContainer: SimulatorRendererCont
     return (
       <Fragment>
         {rendererContainer.documentInstances.map((instance, index) => {
-          console.log("Routes");
-          return (
-            <Renderer key={index} rendererContainer={rendererContainer} documentInstance={instance} />
-          );
+          console.log('Routes');
+          return <Renderer key={index} rendererContainer={rendererContainer} documentInstance={instance} />;
         })}
       </Fragment>
     );
@@ -100,10 +98,13 @@ class Layout extends Component<{ rendererContainer: SimulatorRendererContainer }
   }
 }
 
-class Renderer extends Component<{ rendererContainer: SimulatorRendererContainer, documentInstance: DocumentInstance }> {
+class Renderer extends Component<{
+  rendererContainer: SimulatorRendererContainer;
+  documentInstance: DocumentInstance;
+}> {
   constructor(props: any) {
     super(props);
-    this.props.rendererContainer.onReRender(() => {
+    this.props.documentInstance.onReRender(() => {
       this.forceUpdate();
     });
   }

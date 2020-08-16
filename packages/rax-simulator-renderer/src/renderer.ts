@@ -1,21 +1,18 @@
-import { BuiltinSimulatorRenderer, NodeInstance, Component, DocumentModel } from '@ali/lowcode-designer';
-// @ts-ignore
-import { shared, render as raxRender, createElement, ComponentType } from 'rax';
-import DriverUniversal from 'driver-universal';
+import { BuiltinSimulatorRenderer, Component, DocumentModel, Node, NodeInstance } from '@ali/lowcode-designer';
+import { ComponentSchema, NodeSchema, NpmInfo, RootSchema } from '@ali/lowcode-types';
+import { Asset, cursor, isElement, isESModule, isReactComponent, setNativeSelection } from '@ali/lowcode-utils';
 import { computed, obx } from '@recore/obx';
-import { RootSchema, NpmInfo, ComponentSchema } from '@ali/lowcode-types';
-import { Asset, isReactComponent, isESModule, setNativeSelection, cursor, isElement } from '@ali/lowcode-utils';
-
+import DriverUniversal from 'driver-universal';
+import { EventEmitter } from 'events';
+// @ts-ignore
+import { ComponentType, createElement, render as raxRender, shared } from 'rax';
+import Leaf from './builtin-components/leaf';
+import Slot from './builtin-components/slot';
+import { host } from './host';
 import SimulatorRendererView from './renderer-view';
 import { raxFindDOMNodes } from './utils/find-dom-nodes';
 import { getClientRects } from './utils/get-client-rects';
 import loader from './utils/loader';
-
-import Leaf from './builtin-components/leaf';
-import Slot from './builtin-components/slot';
-
-import { host } from './host';
-import { EventEmitter } from 'events';
 
 const { Instance } = shared;
 
@@ -41,9 +38,11 @@ const builtinComponents = {
   Leaf,
 };
 
-function buildComponents(libraryMap: LibraryMap,
+function buildComponents(
+  libraryMap: LibraryMap,
   componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> | ComponentSchema },
-  createComponent: (schema: ComponentSchema) => Component | null) {
+  createComponent: (schema: ComponentSchema) => Component | null,
+) {
   const components: any = {
     ...builtinComponents,
   };
@@ -82,7 +81,6 @@ function checkInstanceMounted(instance: any): boolean {
   return true;
 }
 
-
 function isValidDesignModeRaxComponentInstance(
   raxComponentInst: any,
 ): raxComponentInst is {
@@ -97,6 +95,8 @@ function isValidDesignModeRaxComponentInstance(
 export class DocumentInstance {
   private instancesMap = new Map<string, any[]>();
 
+  private emitter = new EventEmitter();
+
   @obx.ref private _schema?: RootSchema;
   @computed get schema(): any {
     return this._schema;
@@ -108,6 +108,8 @@ export class DocumentInstance {
     this.dispose = host.autorun(() => {
       // sync schema
       this._schema = document.export(1);
+
+      this.emitter.emit('rerender');
     });
   }
 
@@ -135,6 +137,13 @@ export class DocumentInstance {
         host.setInstance(this.document.id, id, instances);
       }
     }
+  }
+
+  onReRender(fn: () => void) {
+    this.emitter.on('rerender', fn);
+    return () => {
+      this.emitter.removeListener('renderer', fn);
+    };
   }
 
   mountInstance(id: string, instance: any) {
@@ -216,7 +225,6 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   private dispose?: () => void;
   // TODO: history
   readonly history: any;
-  private emitter = new EventEmitter();
 
   @obx.ref private _documentInstances: DocumentInstance[] = [];
   get documentInstances() {
@@ -238,8 +246,6 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
 
       // sync device
       this._device = host.device;
-
-      this.emitter.emit('rerender');
     });
     const documentInstanceMap = new Map<string, DocumentInstance>();
     let initialEntry = '/';
@@ -252,9 +258,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         }
         return inst;
       });
-      const path = host.project.currentDocument
-        ? documentInstanceMap.get(host.project.currentDocument.id)!.path
-        : '/';
+      const path = host.project.currentDocument ? documentInstanceMap.get(host.project.currentDocument.id)!.path : '/';
       if (firstRun) {
         initialEntry = path;
       } else {
@@ -393,13 +397,6 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       return this.getNodeInstance(el);
     }
     return null;
-  }
-
-  onReRender(fn: () => void) {
-    this.emitter.on('rerender', fn);
-    return () => {
-      this.emitter.removeListener('renderer', fn);
-    };
   }
 
   findDOMNodes(instance: any): Array<Element | Text> | null {
