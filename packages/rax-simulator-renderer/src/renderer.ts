@@ -13,6 +13,9 @@ import SimulatorRendererView from './renderer-view';
 import { raxFindDOMNodes } from './utils/find-dom-nodes';
 import { getClientRects } from './utils/get-client-rects';
 import loader from './utils/loader';
+// @ts-ignore
+// import { createMemoryHistory, MemoryHistory } from 'history/umd/history.development';
+import { createMemoryHistory, MemoryHistory } from 'history';
 
 const { Instance } = shared;
 
@@ -223,8 +226,9 @@ export class DocumentInstance {
 export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   readonly isSimulatorRenderer = true;
   private dispose?: () => void;
-  // TODO: history
-  readonly history: any;
+  readonly history: MemoryHistory;
+
+  private emitter = new EventEmitter();
 
   @obx.ref private _documentInstances: DocumentInstance[] = [];
   get documentInstances() {
@@ -258,47 +262,48 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         }
         return inst;
       });
+      this.emitter.emit('documentChange');
       const path = host.project.currentDocument ? documentInstanceMap.get(host.project.currentDocument.id)!.path : '/';
       if (firstRun) {
         initialEntry = path;
       } else {
-        // if (this.history.location.pathname !== path) {
-        //   this.history.replace(path);
-        // }
+        if (this.history.location.pathname !== path) {
+          this.history.replace(path);
+        }
       }
     });
-    // const history = createMemoryHistory({
-    //   initialEntries: [initialEntry],
-    // });
-    // this.history = history;
-    // history.listen((location, action) => {
-    //   host.project.open(location.pathname.substr(1));
-    // });
+    const history = createMemoryHistory({
+      initialEntries: [initialEntry],
+    });
+    this.history = history;
+    history.listen(({ location }) => {
+      host.project.open(location.pathname.substr(1));
+    });
     host.componentsConsumer.consume(async (componentsAsset) => {
       if (componentsAsset) {
         await this.load(componentsAsset);
         this.buildComponents();
       }
     });
-    // this._appContext = {
-    //   utils: {
-    //     router: {
-    //       push(path: string, params?: object) {
-    //         history.push(withQueryParams(path, params));
-    //       },
-    //       replace(path: string, params?: object) {
-    //         history.replace(withQueryParams(path, params));
-    //       },
-    //     },
-    //     legaoBuiltins: {
-    //       getUrlParams() {
-    //         const search = history.location.search;
-    //         return parseQuery(search);
-    //       }
-    //     }
-    //   },
-    //   constants: {},
-    // };
+    this._appContext = {
+      utils: {
+        router: {
+          push(path: string, params?: object) {
+            // history.push(withQueryParams(path, params));
+          },
+          replace(path: string, params?: object) {
+            // history.replace(withQueryParams(path, params));
+          },
+        },
+        legaoBuiltins: {
+          getUrlParams() {
+            const search = history.location.search;
+            // return parseQuery(search);
+          }
+        }
+      },
+      constants: {},
+    };
     host.injectionConsumer.consume((data) => {
       // sync utils, i18n, contants,... config
     });
@@ -418,6 +423,13 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   }
   clearState() {
     cursor.release();
+  }
+
+  onDocumentChange(cb: () => void) {
+    this.emitter.on('documentChange', cb);
+    return () => {
+      this.emitter.removeListener('renderer', fn);
+    };
   }
 
   createComponent(schema: ComponentSchema): Component | null {

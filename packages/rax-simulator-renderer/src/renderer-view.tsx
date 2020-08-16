@@ -1,11 +1,12 @@
-import { Fragment, Component, createElement } from 'rax';
 // import { observer } from './obx-rax/observer';
 import RaxEngine from '@ali/lowcode-rax-renderer/lib/index';
+import { History } from 'history';
+import { Component, createElement, Fragment, useState } from 'rax';
+import { useRouter } from './rax-use-router';
 // import RaxEngine from '../../rax-render/lib/index';
-import { SimulatorRendererContainer, DocumentInstance } from './renderer';
-import { host } from './host';
-
+import { DocumentInstance, SimulatorRendererContainer } from './renderer';
 import './renderer.less';
+
 
 // patch cloneElement avoid lost keyProps
 const originCloneElement = (window as any).Rax.cloneElement;
@@ -40,27 +41,38 @@ const originCloneElement = (window as any).Rax.cloneElement;
 export default class SimulatorRendererView extends Component<{ rendererContainer: SimulatorRendererContainer }> {
   render() {
     const { rendererContainer } = this.props;
+    rendererContainer.onDocumentChange(() => {
+      this.forceUpdate();
+    });
     return (
       <Layout rendererContainer={rendererContainer}>
-        <Routes rendererContainer={rendererContainer} />
+        <Routes rendererContainer={rendererContainer} history={rendererContainer.history} />
       </Layout>
     );
   }
 }
 
-export class Routes extends Component<{ rendererContainer: SimulatorRendererContainer }> {
-  render() {
-    const { rendererContainer } = this.props;
-    return (
-      <Fragment>
-        {rendererContainer.documentInstances.map((instance, index) => {
-          console.log('Routes');
-          return <Renderer key={index} rendererContainer={rendererContainer} documentInstance={instance} />;
-        })}
-      </Fragment>
-    );
-  }
+export const Routes = (props: {
+  rendererContainer: SimulatorRendererContainer,
+  history: History
+}) => {
+  const { rendererContainer, history } = props;
+  const { documentInstances } = rendererContainer;
+
+  const routes = {
+    history,
+    routes: documentInstances.map(instance => {
+      return {
+        path: instance.path,
+        component: (props: any) => <Renderer rendererContainer={rendererContainer} documentInstance={instance} {...props} />
+      };
+    })
+  };
+
+  const { component } = useRouter(routes);
+  return component;
 }
+
 function ucfirst(s: string) {
   return s.charAt(0).toUpperCase() + s.substring(1);
 }
@@ -83,7 +95,7 @@ function getDeviceView(view: any, device: string, mode: string) {
 
 class Layout extends Component<{ rendererContainer: SimulatorRendererContainer }> {
   shouldComponentUpdate() {
-    return false;
+    return true;
   }
   render() {
     const { rendererContainer, children } = this.props;
@@ -109,14 +121,13 @@ class Renderer extends Component<{
     });
   }
   shouldComponentUpdate() {
-    return false;
+    return true;
   }
   render() {
     const { documentInstance } = this.props;
     const { container } = documentInstance;
     const { designMode, device } = container;
     const { rendererContainer: renderer } = this.props;
-    // const { device, designMode } = renderer;
 
     return (
       <RaxEngine
