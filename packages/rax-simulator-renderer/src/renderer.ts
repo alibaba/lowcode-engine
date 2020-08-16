@@ -5,6 +5,8 @@ import { computed, obx } from '@recore/obx';
 import DriverUniversal from 'driver-universal';
 import { EventEmitter } from 'events';
 // @ts-ignore
+import { createMemoryHistory, MemoryHistory } from 'history';
+// @ts-ignore
 import { ComponentType, createElement, render as raxRender, shared } from 'rax';
 import Leaf from './builtin-components/leaf';
 import Slot from './builtin-components/slot';
@@ -13,9 +15,7 @@ import SimulatorRendererView from './renderer-view';
 import { raxFindDOMNodes } from './utils/find-dom-nodes';
 import { getClientRects } from './utils/get-client-rects';
 import loader from './utils/loader';
-// @ts-ignore
-// import { createMemoryHistory, MemoryHistory } from 'history/umd/history.development';
-import { createMemoryHistory, MemoryHistory } from 'history';
+import { parseQuery, withQueryParams } from './utils/url';
 
 const { Instance } = shared;
 
@@ -289,16 +289,16 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       utils: {
         router: {
           push(path: string, params?: object) {
-            // history.push(withQueryParams(path, params));
+            history.push(withQueryParams(path, params));
           },
           replace(path: string, params?: object) {
-            // history.replace(withQueryParams(path, params));
+            history.replace(withQueryParams(path, params));
           },
         },
         legaoBuiltins: {
           getUrlParams() {
             const search = history.location.search;
-            // return parseQuery(search);
+            return parseQuery(search);
           }
         }
       },
