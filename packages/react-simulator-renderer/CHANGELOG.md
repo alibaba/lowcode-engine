@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.15.0"></a>
+# [0.15.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.14.0...@ali/lowcode-react-simulator-renderer@0.15.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-react-simulator-renderer
+
 <a name="0.14.0"></a>
 # [0.14.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.12.0...@ali/lowcode-react-simulator-renderer@0.14.0) (2020-08-17)
 
