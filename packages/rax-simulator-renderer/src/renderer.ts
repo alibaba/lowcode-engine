@@ -4,7 +4,6 @@ import { Asset, cursor, isElement, isESModule, isReactComponent, setNativeSelect
 import { computed, obx } from '@recore/obx';
 import DriverUniversal from 'driver-universal';
 import { EventEmitter } from 'events';
-// @ts-ignore
 import { createMemoryHistory, MemoryHistory } from 'history';
 // @ts-ignore
 import { ComponentType, createElement, render as raxRender, shared } from 'rax';
@@ -404,8 +403,23 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     return null;
   }
 
-  findDOMNodes(instance: any): Array<Element | Text> | null {
-    return raxFindDOMNodes(instance);
+  findDOMNodes(instance: any, selector?: string): Array<Element | Text> | null {
+    let el = instance;
+    if (selector) {
+      el = document.querySelector(selector);
+    }
+    try {
+      return raxFindDOMNodes(el);
+    } catch (e) {
+      // ignore
+    }
+    if (el && el.type && el.props && el.props.componentId) {
+      el = document.querySelector(`${el.type}[componentid=${el.props.componentId}]`);
+    } else {
+      console.error(instance);
+      throw new Error('This instance may not a valid element');
+    }
+    return raxFindDOMNodes(el);
   }
 
   getClientRects(element: Element | Text) {
@@ -428,7 +442,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   onDocumentChange(cb: () => void) {
     this.emitter.on('documentChange', cb);
     return () => {
-      this.emitter.removeListener('renderer', fn);
+      this.emitter.removeListener('documentChange', cb);
     };
   }
 
