@@ -27,6 +27,9 @@ editor.set('designer', designer);
 
 const nodeCache: any = {};
 designer.project.onCurrentDocumentChange((doc) => {
+  doc.nodesMap.forEach((node) => {
+    nodeCache[node.id] = node;
+  });
   doc.onRendererReady(() => {
     bus.emit(VE_EVENTS.VE_PAGE_PAGE_READY);
   });
