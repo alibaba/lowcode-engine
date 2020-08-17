@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-react-renderer",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "react renderer for ali lowcode engine",
   "main": "lib/index.js",
   "module": "es/index.js",
