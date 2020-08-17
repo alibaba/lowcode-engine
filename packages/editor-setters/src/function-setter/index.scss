@@ -1,0 +1,36 @@
+.lc-icon-setter{
+  .next-input{
+    width: auto !important;
+  }
+  i {
+    min-width: 12px;
+  }
+  i:hover {
+    cursor: pointer;
+  }
+  input:hover {
+    cursor: pointer;
+  }
+}
+
+
+.lowcode-icon-setter-popup{
+  max-width: 354px;
+  .lowcode-icon-list{
+
+    overflow: auto;
+    li{
+      float: left;
+      margin-bottom: 10px;
+      width: 40px;
+      color: #666;
+      cursor: pointer;
+      text-align: center;
+
+      &:hover{
+        color: #000;
+      }
+    }
+  }
+}
+

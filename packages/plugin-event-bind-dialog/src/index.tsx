@@ -24,6 +24,7 @@ export default class EventBindDialog extends Component<PluginProps> {
 
   state: any = {
     visiable: false,
+    setterName:'event-setter',
     selectedEventName: '',
     eventName: '',
   };
@@ -46,8 +47,11 @@ export default class EventBindDialog extends Component<PluginProps> {
 
   componentDidMount() {
     const { editor, config } = this.props;
-    editor.on(`${config.pluginKey}.openDialog`, (bindEventName: String) => {
+    editor.on(`${config.pluginKey}.openDialog`, (bindEventName: String,setterName:String) => {
       this.openDialog(bindEventName);
+      this.setState({
+        setterName
+      })
 
       let schema = editor.get('designer').project.getSchema();
       let pageNode = schema.componentsTree[0];
@@ -102,7 +106,10 @@ export default class EventBindDialog extends Component<PluginProps> {
 
   onOk = () => {
     const { editor } = this.props;
-    editor.emit('event-setter.bindEvent', this.state.eventName);
+    const {setterName,eventName} = this.state;
+
+    editor.emit(`${setterName}.bindEvent`, eventName);
+
     // 选中的是新建事件
     if (this.state.selectedEventName == '') {
       // 判断面板是否处于激活状态
