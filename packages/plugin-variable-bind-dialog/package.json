@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-variable-bind-dialog",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "alibaba lowcode editor variable bind dialog plugin",
   "files": [
     "es",
@@ -19,7 +19,7 @@
   ],
   "author": "zude.hzd",
   "dependencies": {
-    "@ali/lowcode-editor-core": "^0.10.0",
+    "@ali/lowcode-editor-core": "^0.11.0",
     "@alifd/next": "^1.19.16",
     "react": "^16.8.1",
     "react-dom": "^16.8.1"
