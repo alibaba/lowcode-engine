@@ -13,6 +13,7 @@ import {
 } from '../../../types';
 
 import { generateUnknownType } from '../../../utils/compositeType';
+import { parseExpressionConvertThis2Context } from '../../../utils/expressionParser';
 import { isContainerSchema } from '../../../utils/schema';
 import { RAX_CHUNK_NAME } from './const';
 
@@ -46,8 +47,8 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       fileType: cfg.fileType,
       name: CLASS_DEFINE_CHUNK_NAME.InsVar,
       content: `
-      _dataSourceList = this._defineDataSourceList();
-      _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceList, this._context);`,
+      _dataSourceConfig = this._defineDataSourceConfig();
+      _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceConfig, this._context, { runtimeConfig: true });`,
       linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start],
     });
 
@@ -61,26 +62,33 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       linkAfter: [RAX_CHUNK_NAME.ClassDidMountBegin],
     });
 
-    const dataSource = isContainerSchema(pre.ir) ? pre.ir.dataSource : null;
-    const dataSourceItems: DataSourceConfig[] = (dataSource && dataSource.list) || [];
+    const dataSourceConfig = isContainerSchema(pre.ir) ? pre.ir.dataSource : null;
+    const dataSourceItems: DataSourceConfig[] = (dataSourceConfig && dataSourceConfig.list) || [];
 
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: cfg.fileType,
       name: CLASS_DEFINE_CHUNK_NAME.InsPrivateMethod,
-      // TODO: 下面的定义应该需要调用 @ali/lowcode-datasource-engine 的方法来搞:
       content: `
-        _defineDataSourceList() {
-          return (function(){
-            return (${generateUnknownType([
+      _defineDataSourceConfig() {
+        const __$$context = this._context;
+        return (${generateUnknownType(
+          {
+            ...dataSourceConfig,
+            list: [
               ...dataSourceItems.map((item) => ({
                 ...item,
                 isInit: wrapAsFunction(item.isInit),
                 options: wrapAsFunction(item.options),
               })),
-            ])});
-          }).call(this._context);
-        }`,
+            ],
+          },
+          {
+            function: (jsFunc) => parseExpressionConvertThis2Context(jsFunc.value, '__$$context'),
+            expression: (jsExpr) => parseExpressionConvertThis2Context(jsExpr.value, '__$$context'),
+          },
+        )});
+      }`,
       linkAfter: [RAX_CHUNK_NAME.ClassRenderEnd],
     });
 
@@ -95,12 +103,12 @@ function wrapAsFunction(value: CompositeValue): CompositeValue {
   if (isJSExpression(value) || isJSFunction(value)) {
     return {
       type: 'JSExpression',
-      value: `() => (${value.value})`,
+      value: `function(){ return ((${value.value}))}`,
     };
   }
 
   return {
     type: 'JSExpression',
-    value: `() => (${generateUnknownType(value)})`,
+    value: `function(){return((${generateUnknownType(value)}))}`,
   };
 }

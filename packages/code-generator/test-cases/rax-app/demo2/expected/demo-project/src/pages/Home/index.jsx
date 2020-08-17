@@ -38,8 +38,8 @@ class Home$$Page extends Component {
 
   _context = this._createContext();
 
-  _dataSourceList = this._defineDataSourceList();
-  _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceList, this._context);
+  _dataSourceConfig = this._defineDataSourceConfig();
+  _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceConfig, this._context, { runtimeConfig: true });
 
   _utils = this._defineUtils();
 
@@ -161,24 +161,65 @@ class Home$$Page extends Component {
     return context;
   }
 
-  _defineDataSourceList() {
-    return function () {
-      return [
-        { id: 'urlParams', type: 'urlParams', isInit: () => undefined, options: () => undefined },
+  _defineDataSourceConfig() {
+    const __$$context = this._context;
+    return {
+      list: [
+        {
+          id: 'urlParams',
+          type: 'urlParams',
+          isInit: function () {
+            return undefined;
+          },
+          options: function () {
+            return undefined;
+          },
+        },
         {
           id: 'user',
           type: 'fetch',
-          options: () => ({ method: 'GET', uri: 'https://shs.alibaba-inc.com/mock/1458/demo/user' }),
-          isInit: () => undefined,
+          options: function () {
+            return {
+              method: 'GET',
+              uri: 'https://shs.alibaba-inc.com/mock/1458/demo/user',
+            };
+          },
+          dataHandler: function (response) {
+            if (!response.success) {
+              throw new Error(response.message);
+            }
+
+            return response.data;
+          },
+          isInit: function () {
+            return undefined;
+          },
         },
         {
           id: 'orders',
           type: 'fetch',
-          options: () => ({ method: 'GET', uri: this.state.user.ordersApiUri }),
-          isInit: () => undefined,
+          options: function () {
+            return {
+              method: 'GET',
+              uri: __$$context.state.user.ordersApiUri,
+            };
+          },
+          dataHandler: function (response) {
+            if (!response.success) {
+              throw new Error(response.message);
+            }
+
+            return response.data.result;
+          },
+          isInit: function () {
+            return undefined;
+          },
         },
-      ];
-    }.call(this._context);
+      ],
+      dataHander: function (dataMap) {
+        console.info('All datasources loaded:', dataMap);
+      },
+    };
   }
 
   _defineUtils() {

@@ -19,8 +19,8 @@ class Home$$Page extends Component {
 
   _context = this._createContext();
 
-  _dataSourceList = this._defineDataSourceList();
-  _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceList, this._context);
+  _dataSourceConfig = this._defineDataSourceConfig();
+  _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceConfig, this._context, { runtimeConfig: true });
 
   _utils = this._defineUtils();
 
@@ -74,10 +74,9 @@ class Home$$Page extends Component {
     return context;
   }
 
-  _defineDataSourceList() {
-    return function () {
-      return [];
-    }.call(this._context);
+  _defineDataSourceConfig() {
+    const __$$context = this._context;
+    return { list: [] };
   }
 
   _defineUtils() {

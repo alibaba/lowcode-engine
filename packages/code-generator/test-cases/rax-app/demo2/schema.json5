@@ -82,6 +82,10 @@
               method: 'GET',
               uri: 'https://shs.alibaba-inc.com/mock/1458/demo/user',
             },
+            dataHandler: {
+              type: 'JSFunction',
+              value: 'function (response) {\nif (!response.success){\n    throw new Error(response.message);\n  }\n  return response.data;\n}',
+            },
           },
           // 示例数据源：https://shs.alibaba-inc.com/mock/1458/demo/orders
           {
@@ -94,8 +98,16 @@
                 value: 'this.state.user.ordersApiUri',
               },
             },
+            dataHandler: {
+              type: 'JSFunction',
+              value: 'function (response) {\nif (!response.success){\n    throw new Error(response.message);\n  }\n  return response.data.result;\n}',
+            },
           },
         ],
+        dataHander: {
+          type: 'JSFunction',
+          value: 'function (dataMap) {\n  console.info("All datasources loaded:", dataMap);\n}',
+        },
       },
       children: [
         {
