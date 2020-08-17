@@ -3,10 +3,10 @@ import { IProjectTemplate, IResultDir } from '../../../../../types';
 
 import { runFileGenerator } from '../../../../../utils/templateHelper';
 
-import file0 from './files/.editorconfig';
-import file1 from './files/.eslintignore';
-import file2 from './files/.eslintrc.js';
-import file3 from './files/.gitignore';
+import file0 from './files/editorconfig';
+import file1 from './files/eslintignore';
+import file2 from './files/eslintrc.js';
+import file3 from './files/gitignore';
 import file4 from './files/README.md';
 import file5 from './files/abc.json';
 import file6 from './files/build.json';
