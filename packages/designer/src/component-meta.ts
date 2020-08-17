@@ -337,9 +337,9 @@ registerMetadataTransducer((metadata) => {
       };
     }
   }
-  if (component.isModal == null && /Dialog/.test(componentName)) {
-    component.isModal = true;
-  }
+  // if (component.isModal == null && /Dialog/.test(componentName)) {
+  //   component.isModal = true;
+  // }
   return {
     ...metadata,
     configure: {
