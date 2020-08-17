@@ -10,7 +10,7 @@ export interface DataSourceConfig {
   type: string;
   requestHandler?: JSFunction;
   dataHandler?: JSFunction;
-  options: {
+  options?: {
     uri: string | JSExpression;
     params?: JSONObject | JSExpression;
     method?: string | JSExpression;
