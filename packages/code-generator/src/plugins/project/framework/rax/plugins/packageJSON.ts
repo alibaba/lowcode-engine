@@ -28,9 +28,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       private: true,
       version: '1.0.0',
       scripts: {
-        build:
-          'rm -f ./dist/miniapp.tar.gz && npm run build:miniapp && cd build/miniapp && tar czf ../../dist/miniapp.tar.gz *',
-        'build:miniapp': 'build-scripts build',
+        build: 'build-scripts build',
         start: 'build-scripts start',
         lint: 'eslint --ext .js --ext .jsx ./',
       },
