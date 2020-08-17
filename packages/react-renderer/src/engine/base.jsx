@@ -325,8 +325,7 @@ export default class BaseEngine extends PureComponent {
         return engine.createElement(
           Comp,
           props,
-          (!isFileSchema(schema) &&
-            !!schema.children &&
+          (!!schema.children &&
             this.__createVirtualDom(
               isJSExpression(schema.children) ? parseExpression(schema.children, self) : schema.children,
               self,
