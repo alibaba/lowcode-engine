@@ -291,6 +291,11 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
     }
 
     class Com extends React.Component {
+      // TODO: 暂时解决性能问题
+      shouldComponentUpdate() {
+        return false;
+      }
+
       render() {
         const componentName = _schema.componentName;
         if (componentName === 'Component') {
