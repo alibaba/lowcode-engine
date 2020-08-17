@@ -278,6 +278,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   }
 
   setupEvents() {
+    debugger;
     // TODO: Thinkof move events control to simulator renderer
     //       just listen special callback
     // because iframe maybe reload
@@ -288,10 +289,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   }
 
   setupDragAndClick() {
-    const documentModel = this.project.currentDocument;
-    if (!documentModel) return;
-    const selection = documentModel.selection;
-    const designer = documentModel.designer;
+    const designer = this.designer;
     const doc = this.contentDocument!;
 
     // TODO: think of lock when edit a node
@@ -302,24 +300,22 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         // fix for popups close logic
         document.dispatchEvent(new Event('mousedown'));
         const documentModel = this.project.currentDocument;
+        if (this.liveEditing.editing || !documentModel) {
+          return;
+        }
+        const selection = documentModel.selection;
         let isMulti = false;
         if (this.designMode === 'design') {
           isMulti = downEvent.metaKey || downEvent.ctrlKey;
         } else if (!downEvent.metaKey) {
           return;
         }
-
-        if (this.liveEditing.editing) {
-          return;
-        }
-        const selection = documentModel?.selection;
         // stop response document focus event
         downEvent.stopPropagation();
         downEvent.preventDefault();
 
         // FIXME: dirty fix remove label-for fro liveEditing
         (downEvent.target as HTMLElement).removeAttribute('for');
-
 
         const nodeInst = this.getNodeInstanceFromElement(downEvent.target as Element);
         const node = nodeInst?.node || documentModel?.rootNode;
@@ -334,7 +330,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           if (!isShaken(downEvent, e)) {
             let id = node.id;
             designer.activeTracker.track({ node, instance: nodeInst?.instance });
-            if (isMulti && !isRootNode(node) && selection?.has(id)) {
+            if (isMulti && !isRootNode(node) && selection.has(id)) {
               selection.remove(id);
             } else {
               if (node.isPage() && node.getChildren()?.notEmpty()) {
@@ -344,7 +340,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
                   ?.getId();
                 if (firstChildId) id = firstChildId;
               }
-              selection?.select(id);
+              selection.select(id);
 
               // dirty code should refector
               const editor = this.designer?.editor;
@@ -365,15 +361,15 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           let ignoreUpSelected = false;
           if (isMulti) {
             // multi select mode, directily add
-            if (!selection?.has(node.id)) {
+            if (!selection.has(node.id)) {
               designer.activeTracker.track({ node, instance: nodeInst?.instance });
-              selection?.add(node.id);
+              selection.add(node.id);
               ignoreUpSelected = true;
             }
-            selection?.remove(documentModel.rootNode.id);
+            selection.remove(documentModel.rootNode.id);
             // 获得顶层 nodes
-            nodes = selection?.getTopNodes();
-          } else if (selection?.containsNode(node, true)) {
+            nodes = selection.getTopNodes();
+          } else if (selection.containsNode(node, true)) {
             nodes = selection.getTopNodes();
           } else {
             // will clear current selection & select dragment in dragstart
