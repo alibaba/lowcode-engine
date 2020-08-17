@@ -104,7 +104,7 @@
             },
           },
         ],
-        dataHander: {
+        dataHandler: {
           type: 'JSFunction',
           value: 'function (dataMap) {\n  console.info("All datasources loaded:", dataMap);\n}',
         },

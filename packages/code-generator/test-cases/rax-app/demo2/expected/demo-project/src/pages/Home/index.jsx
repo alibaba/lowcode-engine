@@ -216,7 +216,7 @@ class Home$$Page extends Component {
           },
         },
       ],
-      dataHander: function (dataMap) {
+      dataHandler: function (dataMap) {
         console.info('All datasources loaded:', dataMap);
       },
     };
