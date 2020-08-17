@@ -35,6 +35,9 @@
     {
       componentName: 'Page',
       fileName: 'home',
+      meta: {
+        router: '/',
+      },
       state: {
         clickCount: 0,
         user: { name: '张三', age: 18, avatar: 'https://gw.alicdn.com/tfs/TB1Ui9BMkY2gK0jSZFgXXc5OFXa-50-50.png' },

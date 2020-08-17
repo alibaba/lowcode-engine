@@ -11,7 +11,7 @@ import {
   CompositeValue,
   NodeSchema,
 } from '../types';
-import { CustomHandlerSet, generateCompositeType } from './compositeType';
+import { CustomHandlerSet, generateCompositeType, generateUnknownType } from './compositeType';
 import { generateExpression } from './jsExpression';
 
 // tslint:disable-next-line: no-empty
@@ -49,10 +49,18 @@ export function generateAttr(
     return [];
   }
 
-  const [isString, valueStr] = generateCompositeType(attrValue, customHandlers);
+  if (typeof attrValue === 'string') {
+    return [
+      {
+        value: `${attrName}=${JSON.stringify(attrValue)}`,
+        type: PIECE_TYPE.ATTR,
+      },
+    ];
+  }
+
   return [
     {
-      value: `${attrName}=${isString ? `"${valueStr}"` : `{${valueStr}}`}`,
+      value: `${attrName}={${generateUnknownType(attrValue, customHandlers)}}`,
       type: PIECE_TYPE.ATTR,
     },
   ];

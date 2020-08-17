@@ -25,6 +25,7 @@ export interface IUtilInfo extends IWithDependency {
 export interface IRouterInfo extends IWithDependency {
   routes: Array<{
     path: string;
+    fileName: string;
     componentName: string;
   }>;
 }

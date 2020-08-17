@@ -25,6 +25,7 @@ import {
   IProjectSchema,
   ISchemaParser,
   UtilItem,
+  IRouterInfo,
 } from '../types';
 
 const defaultContainer: IContainerInfo = {
@@ -144,20 +145,21 @@ class SchemaParser implements ISchemaParser {
     const containersDeps = ([] as IDependency[]).concat(...containers.map((c) => c.deps || []));
 
     // 分析路由配置
-    // TODO: 低代码规范里面的路由是咋弄的？
-    const routes = containers
+    const routes: IRouterInfo['routes'] = containers
       .filter((container) => container.containerType === 'Page')
       .map((page) => {
         const meta = (page as { meta?: IPageMeta }).meta as IPageMeta;
         if (meta) {
           return {
             path: meta.router,
+            fileName: page.fileName,
             componentName: page.moduleName,
           };
         }
 
         return {
           path: '',
+          fileName: page.fileName,
           componentName: page.moduleName,
         };
       });

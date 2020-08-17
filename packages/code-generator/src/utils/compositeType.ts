@@ -108,12 +108,6 @@ export function generateUnknownType(value: CompositeValue, handlers: CustomHandl
 
 export function generateCompositeType(value: CompositeValue, handlers: CustomHandlerSet = {}): [boolean, string] {
   const result = generateUnknownType(value, handlers);
-
-  // TODO：什么场景下会返回这样的字符串？？
-  if (result.substr(0, 1) === "'" && result.substr(-1, 1) === "'") {
-    return [true, result.substring(1, result.length - 1)];
-  }
-
   return [false, result];
 }
 
