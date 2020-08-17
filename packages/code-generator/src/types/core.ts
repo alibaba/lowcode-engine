@@ -154,9 +154,12 @@ export interface HandlerSet<T> {
   slot?: (input: JSSlot) => T;
   node?: (input: NodeSchema) => T;
   array?: (input: any[]) => T;
+  children?: (input: T[]) => T;
   object?: (input: object) => T;
   common?: (input: unknown) => T;
   tagName?: (input: string) => T;
+  loopDataExpr?: (input: string) => T;
+  conditionExpr?: (input: string) => T;
 }
 
 export type ExtGeneratorPlugin = (ctx: INodeGeneratorContext, nodeItem: NodeSchema) => CodePiece[];
@@ -170,6 +173,7 @@ export type NodeGenerator = (nodeItem: NodeDataType) => string;
 
 export interface INodeGeneratorContext {
   handlers: HandlerSet<string>;
+  plugins: ExtGeneratorPlugin[];
   generator: NodeGenerator;
 }
 

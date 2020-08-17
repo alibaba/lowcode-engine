@@ -1,19 +1,11 @@
-import { CLASS_DEFINE_CHUNK_NAME, DEFAULT_LINK_AFTER } from '../../../const/generator';
-import { RAX_CHUNK_NAME } from './const';
+// import { JSExpression } from '@ali/lowcode-types';
 
-import { getFuncExprBody, transformFuncExpr2MethodMember } from '../../../utils/jsExpression';
+// import { CLASS_DEFINE_CHUNK_NAME, DEFAULT_LINK_AFTER } from '../../../const/generator';
+// import { RAX_CHUNK_NAME } from './const';
 
-import {
-  BuilderComponentPlugin,
-  BuilderComponentPluginFactory,
-  ChunkType,
-  CodeGeneratorError,
-  FileType,
-  ICodeChunk,
-  ICodeStruct,
-  IContainerInfo,
-  JSExpression,
-} from '../../../types';
+// import { getFuncExprBody, transformFuncExpr2MethodMember } from '../../../utils/jsExpression';
+
+import { BuilderComponentPlugin, BuilderComponentPluginFactory, ICodeStruct } from '../../../types';
 
 type PluginConfig = {
   fileType: string;
@@ -22,12 +14,12 @@ type PluginConfig = {
 };
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
-  const cfg: PluginConfig = {
-    fileType: FileType.JSX,
-    exportNameMapping: {},
-    normalizeNameMapping: {},
-    ...config,
-  };
+  // const cfg: PluginConfig = {
+  //   fileType: FileType.JSX,
+  //   exportNameMapping: {},
+  //   normalizeNameMapping: {},
+  //   ...config,
+  // };
 
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     const next: ICodeStruct = {

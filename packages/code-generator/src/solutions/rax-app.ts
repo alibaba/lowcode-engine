@@ -27,7 +27,7 @@ export default function createIceJsProjectBuilder(): IProjectBuilder {
     plugins: {
       components: [
         commonDeps(),
-        esModule({ fileType: 'jsx' }),
+        esModule({ fileType: 'jsx', useAliasName: false }),
         containerClass(),
         containerInitState(),
         containerMethods(),

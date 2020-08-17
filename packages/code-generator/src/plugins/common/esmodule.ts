@@ -50,7 +50,12 @@ function groupDepsByPack(deps: IDependency[]): Record<string, IDependency[]> {
   return depMap;
 }
 
-function buildPackageImport(pkg: string, deps: IDependency[], targetFileType: string): ICodeChunk[] {
+function buildPackageImport(
+  pkg: string,
+  deps: IDependency[],
+  targetFileType: string,
+  useAliasName: boolean,
+): ICodeChunk[] {
   const chunks: ICodeChunk[] = [];
   let defaultImport = '';
   let defaultImportAs = '';
@@ -60,20 +65,8 @@ function buildPackageImport(pkg: string, deps: IDependency[], targetFileType: st
     const srcName = dep.exportName;
     let targetName = dep.componentName || dep.exportName;
 
+    // 如果是自组件，则导出父组件，并且根据自组件命名规则，判断是否需要定义标识符
     if (dep.subName) {
-      chunks.push({
-        type: ChunkType.STRING,
-        fileType: targetFileType,
-        name: COMMON_CHUNK_NAME.ImportAliasDefine,
-        content: `const ${targetName} = ${srcName}.${dep.subName};`,
-        linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport, COMMON_CHUNK_NAME.InternalDepsImport],
-        ext: {
-          originalName: `${srcName}.${dep.subName}`,
-          aliasName: targetName,
-          dependency: dep,
-        },
-      });
-
       if (targetName !== `${srcName}.${dep.subName}`) {
         if (!isValidIdentifier(targetName)) {
           throw new CodeGeneratorError(`Invalid Identifier [${targetName}]`);
@@ -82,9 +75,14 @@ function buildPackageImport(pkg: string, deps: IDependency[], targetFileType: st
         chunks.push({
           type: ChunkType.STRING,
           fileType: targetFileType,
-          name: COMMON_CHUNK_NAME.FileVarDefine,
+          name: COMMON_CHUNK_NAME.ImportAliasDefine,
           content: `const ${targetName} = ${srcName}.${dep.subName};`,
           linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport, COMMON_CHUNK_NAME.InternalDepsImport],
+          ext: {
+            originalName: `${srcName}.${dep.subName}`,
+            aliasName: targetName,
+            dependency: dep,
+          },
         });
       }
 
@@ -94,30 +92,35 @@ function buildPackageImport(pkg: string, deps: IDependency[], targetFileType: st
     if (dep.destructuring) {
       imports[srcName] = targetName;
     } else if (defaultImport) {
-      // 有些时候，可能已经从某个包里引入了一个东东，但是希望能再起个别名，这时候用赋值语句代替
-      chunks.push({
-        type: ChunkType.STRING,
-        fileType: targetFileType,
-        name: COMMON_CHUNK_NAME.ImportAliasDefine,
-        content: `const ${targetName} = ${defaultImportAs};`,
-        linkAfter: [COMMON_CHUNK_NAME.InternalDepsImport, COMMON_CHUNK_NAME.ExternalDepsImport],
-        ext: {
-          originalName: defaultImportAs,
-          aliasName: targetName,
-          dependency: dep,
-        },
-      });
+      throw new CodeGeneratorError(`[${pkg}] has more than one default export.`);
     } else {
       defaultImport = srcName;
       defaultImportAs = targetName;
     }
+
+    if (targetName !== srcName) {
+      chunks.push({
+        type: ChunkType.STRING,
+        fileType: targetFileType,
+        name: COMMON_CHUNK_NAME.ImportAliasDefine,
+        content: '',
+        linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport, COMMON_CHUNK_NAME.InternalDepsImport],
+        ext: {
+          originalName: srcName,
+          aliasName: targetName,
+          dependency: dep,
+        },
+      });
+    }
   });
 
-  const items = Object.keys(imports).map((src) => (src === imports[src] ? src : `${src} as ${imports[src]}`));
+  const items = Object.keys(imports).map((src) =>
+    src === imports[src] || !useAliasName ? src : `${src} as ${imports[src]}`,
+  );
 
   const statementL = ['import'];
   if (defaultImport) {
-    statementL.push(defaultImportAs);
+    statementL.push(useAliasName ? defaultImportAs : defaultImport);
     if (items.length > 0) {
       statementL.push(',');
     }
@@ -152,13 +155,15 @@ function buildPackageImport(pkg: string, deps: IDependency[], targetFileType: st
 }
 
 type PluginConfig = {
-  fileType: string;
+  fileType?: string; // 导出的文件类型
+  useAliasName?: boolean; // 是否使用 componentName 重命名组件 identifier
 };
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?: PluginConfig) => {
-  const cfg: PluginConfig = {
+  const cfg = {
     fileType: FileType.JS,
-    ...config,
+    useAliasName: true,
+    ...(config || {}),
   };
 
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
@@ -172,7 +177,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?: Plu
       const packs = groupDepsByPack(ir.deps);
 
       Object.keys(packs).forEach((pkg) => {
-        const chunks = buildPackageImport(pkg, packs[pkg], cfg.fileType);
+        const chunks = buildPackageImport(pkg, packs[pkg], cfg.fileType, cfg.useAliasName);
         next.chunks.push(...chunks);
       });
     }

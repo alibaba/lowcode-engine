@@ -18,7 +18,6 @@ import {
   CodePiece,
   HandlerSet,
   NodeGenerator,
-  ExtGeneratorPlugin,
   INodeGeneratorContext,
   NodeGeneratorConfig,
 } from '../types';
@@ -26,7 +25,7 @@ import {
 import { generateCompositeType } from './compositeType';
 
 // tslint:disable-next-line: no-empty
-const noop = () => [];
+const noop = () => undefined;
 
 const handleChildrenDefaultOptions = {
   rerun: false,
@@ -47,19 +46,24 @@ export function handleSubNodes<T>(
   if (Array.isArray(children)) {
     const list: NodeData[] = children as NodeData[];
     return list.map((child) => handleSubNodes(child, handlers, opt)).reduce((p, c) => p.concat(c), []);
-  } else if (isDOMText(children)) {
+  }
+
+  let result: T | undefined = undefined;
+  const childrenRes: T[] = [];
+  if (isDOMText(children)) {
     const handler = handlers.string || handlers.common || noop;
-    return handler(children as string);
+    result = handler(children as string);
   } else if (isJSExpression(children)) {
     const handler = handlers.expression || handlers.common || noop;
-    return handler(children as JSExpression);
+    result = handler(children as JSExpression);
   } else {
     const handler = handlers.node || handlers.common || noop;
     const child = children as NodeSchema;
-    let curRes = handler(child);
+    result = handler(child);
+
     if (opt.rerun && child.children) {
       const childRes = handleSubNodes(child.children, handlers, opt);
-      curRes = curRes.concat(childRes || []);
+      childrenRes.push(...childRes);
     }
     if (child.props) {
       // FIXME: currently only support PropsMap
@@ -69,11 +73,16 @@ export function handleSubNodes<T>(
         .forEach((propName) => {
           const soltVals = (childProps[propName] as JSSlot).value;
           const childRes = handleSubNodes(soltVals, handlers, opt);
-          curRes = curRes.concat(childRes || []);
+          childrenRes.push(...childRes);
         });
     }
-    return curRes;
   }
+
+  if (result !== undefined) {
+    childrenRes.unshift(result);
+  }
+
+  return childrenRes;
 }
 
 export function generateAttr(ctx: INodeGeneratorContext, attrName: string, attrValue: any): CodePiece[] {
@@ -167,18 +176,19 @@ export function linkPieces(pieces: CodePiece[]): string {
 export function generateNodeSchema(nodeItem: NodeSchema, ctx: INodeGeneratorContext): string {
   let pieces: CodePiece[] = [];
 
-  plugins.forEach((p) => {
+  ctx.plugins.forEach((p) => {
     pieces = pieces.concat(p(ctx, nodeItem));
   });
   pieces = pieces.concat(generateBasicNode(ctx, nodeItem));
   pieces = pieces.concat(generateAttrs(ctx, nodeItem));
-  if (nodeItem.children && (nodeItem.children as unknown[]).length > 0) {
-    pieces = pieces.concat(
-      handleChildren<string>(ctx, nodeItem.children, handlers).map((l) => ({
-        type: PIECE_TYPE.CHILDREN,
-        value: l,
-      })),
-    );
+
+  if (nodeItem.children) {
+    const childrenStr = ctx.generator(nodeItem.children);
+
+    pieces.push({
+      type: PIECE_TYPE.CHILDREN,
+      value: childrenStr,
+    });
   }
 
   return linkPieces(pieces);
@@ -191,6 +201,7 @@ export function generateNodeSchema(nodeItem: NodeSchema, ctx: INodeGeneratorCont
 
 /**
  * JSX 生成逻辑插件。在 React 代码模式下生成 loop 与 condition 相关的逻辑代码
+ * @type ExtGeneratorPlugin
  *
  * @export
  * @param {NodeSchema} nodeItem 当前 UI 节点
@@ -251,15 +262,15 @@ export function generateReactCtrlLine(ctx: INodeGeneratorContext, nodeItem: Node
   return pieces;
 }
 
-const handleArray = (v: string[]) => v.join('');
+const handleChildren = (v: string[]) => v.join('');
 
 export function createNodeGenerator(cfg: NodeGeneratorConfig = {}): NodeGenerator {
-  let ctx: INodeGeneratorContext = { handlers: {}, generator: () => '' };
+  let ctx: INodeGeneratorContext = { handlers: {}, plugins: [], generator: () => '' };
 
   const generateNode = (nodeItem: NodeDataType): string => {
     if (_.isArray(nodeItem)) {
       const resList = nodeItem.map((n) => generateNode(n));
-      return (cfg?.handlers?.array || handleArray)(resList);
+      return (cfg?.handlers?.children || handleChildren)(resList);
     }
 
     if (isNodeSchema(nodeItem)) {
@@ -281,6 +292,7 @@ export function createNodeGenerator(cfg: NodeGeneratorConfig = {}): NodeGenerato
 
   ctx = {
     handlers: cfg?.handlers || {},
+    plugins: cfg.plugins || [],
     generator: generateNode,
   };
 

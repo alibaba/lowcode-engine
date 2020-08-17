@@ -146,7 +146,7 @@ class SchemaParser implements ISchemaParser {
                   }
                 }
               }
-              return [''];
+              return '';
             },
           },
           {
@@ -236,7 +236,7 @@ class SchemaParser implements ISchemaParser {
     return handleSubNodes<string>(
       children,
       {
-        node: (i: NodeSchema) => [i.componentName],
+        node: (i: NodeSchema) => i.componentName,
       },
       {
         rerun: true,

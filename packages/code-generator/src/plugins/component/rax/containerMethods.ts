@@ -1,4 +1,4 @@
-import { CLASS_DEFINE_CHUNK_NAME, COMMON_CHUNK_NAME, DEFAULT_LINK_AFTER } from '../../../const/generator';
+import { CLASS_DEFINE_CHUNK_NAME } from '../../../const/generator';
 
 import {
   BuilderComponentPlugin,

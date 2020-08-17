@@ -1,4 +1,4 @@
-import { JSExpression, JSFunction, isJsExpression, isJsFunction } from '@ali/lowcode-types';
+import { JSExpression, JSFunction, isJSExpression, isJSFunction } from '@ali/lowcode-types';
 import { CodeGeneratorError } from '../types';
 
 export function transformFuncExpr2MethodMember(methodName: string, functionBody: string): string {
@@ -40,11 +40,11 @@ export function getArrowFunction(functionBody: string) {
 }
 
 export function isJsCode(value: unknown): boolean {
-  return isJsExpression(value) || isJsFunction(value);
+  return isJSExpression(value) || isJSFunction(value);
 }
 
 export function generateExpression(value: any): string {
-  if (isJsExpression(value)) {
+  if (isJSExpression(value)) {
     return (value as JSExpression).value || 'null';
   }
 
