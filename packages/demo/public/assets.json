@@ -9651,9 +9651,16 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
+          "name": "id",
+          "propType": "string"
+        },
+        {
+          "name": "className",
+          "propType": "string"
+        },
+        {
+          "name": "style",
+          "propType": "object"
         },
         {
           "name": "defaultValue",
@@ -9665,18 +9672,6 @@
           "name": "value",
           "propType": "number",
           "description": "值"
-        },
-        {
-          "name": "count",
-          "propType": "number",
-          "description": "评分的总数",
-          "defaultValue": 5
-        },
-        {
-          "name": "showGrade",
-          "propType": "bool",
-          "description": "是否显示 grade",
-          "defaultValue": false
         },
         {
           "name": "size",
@@ -9692,9 +9687,48 @@
           "defaultValue": "medium"
         },
         {
+          "name": "count",
+          "propType": "number",
+          "description": "评分的总数",
+          "defaultValue": 5
+        },
+        {
+          "name": "showGrade",
+          "propType": "bool",
+          "description": "是否显示 grade",
+          "defaultValue": false
+        },
+        {
           "name": "allowHalf",
           "propType": "bool",
           "description": "是否允许半星评分",
+          "defaultValue": false
+        },
+        {
+          "name": "disabled",
+          "propType": "bool",
+          "description": "是否禁用",
+          "defaultValue": false
+        },
+        {
+          "name": "rtl",
+          "propType": "bool"
+        },
+        {
+          "name": "isPreview",
+          "propType": "bool",
+          "description": "是否为预览态",
+          "defaultValue": false
+        },
+        {
+          "name": "renderPreview",
+          "propType": "func",
+          "description": "预览态模式下渲染的内容"
+        },
+        {
+          "name": "readOnly",
+          "propType": "bool",
+          "description": "是否为只读态，效果上同 disabeld",
           "defaultValue": false
         },
         {
@@ -9706,64 +9740,6 @@
           "name": "onHoverChange",
           "propType": "func",
           "description": "用户hover评分时触发的回调\n@param {String} value 评分值"
-        },
-        {
-          "name": "disabled",
-          "propType": "bool",
-          "description": "是否禁用",
-          "defaultValue": false
-        },
-        {
-          "name": "readAs",
-          "propType": "func",
-          "description": "评分文案生成方法，传入id支持无障碍时，读屏软件可读"
-        },
-        {
-          "name": "iconType",
-          "propType": "string",
-          "defaultValue": "favorites-filling"
-        },
-        {
-          "name": "strokeMode",
-          "propType": "bool"
-        },
-        {
-          "name": "className",
-          "propType": "string"
-        },
-        {
-          "name": "id",
-          "propType": "string"
-        },
-        {
-          "name": "rtl",
-          "propType": "bool"
-        },
-        {
-          "name": "locale",
-          "propType": "object",
-          "description": "自定义国际化文案对象"
-        },
-        {
-          "name": "isPreview",
-          "propType": "bool",
-          "description": "是否为预览态",
-          "defaultValue": false
-        },
-        {
-          "name": "renderPreview",
-          "propType": "func",
-          "description": "预览态模式下渲染的内容\n@param {number} value 评分值"
-        },
-        {
-          "name": "readOnly",
-          "propType": "bool",
-          "description": "是否为只读态，效果上同 disabeld",
-          "defaultValue": false
-        },
-        {
-          "name": "style",
-          "propType": "object"
         }
       ]
     },
@@ -11911,22 +11887,21 @@
       },
       "props": [
         {
-          "name": "prefix",
+          "name": "id",
           "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "pure",
-          "propType": "bool",
-          "defaultValue": false
-        },
-        {
-          "name": "rtl",
-          "propType": "bool"
+          "description": "请设置 id 以保证transfer的可访问性"
         },
         {
           "name": "className",
           "propType": "string"
+        },
+        {
+          "name": "style",
+          "propType": "object"
+        },
+        {
+          "name": "rtl",
+          "propType": "bool"
         },
         {
           "name": "mode",
@@ -11941,9 +11916,19 @@
           "defaultValue": "normal"
         },
         {
-          "name": "onChange",
-          "propType": "func",
-          "description": "值发生改变的时候触发的回调函数\n@param {Array} value 右面板值\n@param {Array} data 右面板数据\n@param {Object} extra 额外参数\n@param {Array} extra.leftValue 左面板值\n@param {Array} extra.leftData 左面板数据\n@param {Array} extra.movedValue 发生移动的值\n@param {Object} extra.movedData 发生移动的数据\n@param {String} extra.direction 移动的方向，值为'left'或'right'"
+          "name": "dataSource",
+          "propType": "array",
+          "description": "数据源"
+        },
+        {
+          "name": "value",
+          "propType": "array",
+          "description": "当前值"
+        },
+        {
+          "name": "defaultValue",
+          "propType": "array",
+          "description": "默认值"
         },
         {
           "name": "disabled",
@@ -11966,7 +11951,7 @@
         {
           "name": "itemRender",
           "propType": "func",
-          "description": "列表项渲染函数\n@param {Object} data 数据\n@return {ReactNode} 列表项内容"
+          "description": "列表项渲染函数"
         },
         {
           "name": "showSearch",
@@ -11977,12 +11962,7 @@
         {
           "name": "filter",
           "propType": "func",
-          "description": "自定义搜索函数\n@param {String} searchedValue 搜索的内容\n@param {Object} data 数据\n@return {Boolean} 是否匹配到\n@default 根据 label 属性匹配"
-        },
-        {
-          "name": "onSearch",
-          "propType": "func",
-          "description": "搜索框输入时触发的回调函数\n@param {String} searchedValue 搜索的内容\n@param {String} position 搜索面板的位置"
+          "description": "自定义搜索函数"
         },
         {
           "name": "searchPlaceholder",
@@ -11997,6 +11977,26 @@
           },
           "description": "列表为空显示内容",
           "defaultValue": "Not Found"
+        },
+        {
+          "name": "titles",
+          "propType": "array",
+          "description": "左右面板标题"
+        },
+        {
+          "name": "operations",
+          "propType": "array",
+          "description": "向右向左移动按钮显示内容"
+        },
+        {
+          "name": "defaultLeftChecked",
+          "propType": "array",
+          "description": "左面板默认选中值"
+        },
+        {
+          "name": "defaultRightChecked",
+          "propType": "array",
+          "description": "右面板默认选中值"
         },
         {
           "name": "listClassName",
@@ -12015,33 +12015,26 @@
           "defaultValue": false
         },
         {
-          "name": "onSort",
-          "propType": "func",
-          "description": "拖拽排序时触发的回调函数\n@param {Array} value 排序后的值\n@param {String} position 拖拽的面板位置，值为：left 或 right"
-        },
-        {
-          "name": "locale",
-          "propType": "object",
-          "description": "自定义国际化文案对象"
-        },
-        {
-          "name": "id",
-          "propType": "string",
-          "description": "请设置 id 以保证transfer的可访问性"
-        },
-        {
           "name": "children",
           "propType": "func",
           "description": "接收 children 自定义渲染列表"
         },
         {
-          "name": "dataSource",
-          "propType": "array"
+          "name": "onChange",
+          "propType": "func",
+          "description": "值发生改变的时候触发的回调函数"
         },
         {
-          "name": "style",
-          "propType": "object"
+          "name": "onSearch",
+          "propType": "func",
+          "description": "搜索框输入时触发的回调函数"
+        },
+        {
+          "name": "onSort",
+          "propType": "func",
+          "description": "拖拽排序时触发的回调函数"
         }
+        
       ],
       "configure": {
         "props": {
