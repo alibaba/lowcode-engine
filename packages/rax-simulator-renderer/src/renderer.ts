@@ -237,6 +237,9 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   constructor() {
     this.dispose = host.connect(this, () => {
       // sync layout config
+      debugger;
+      this._layout = host.project.get('config').layout;
+
       // todo: split with others, not all should recompute
       if (this._libraryMap !== host.libraryMap || this._componentsMap !== host.designer.componentsMap) {
         this._libraryMap = host.libraryMap || {};
@@ -249,6 +252,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
 
       // sync device
       this._device = host.device;
+
+      this.emitter.emit('layoutChange');
     });
     const documentInstanceMap = new Map<string, DocumentInstance>();
     let initialEntry = '/';
@@ -261,7 +266,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         }
         return inst;
       });
-      this.emitter.emit('documentChange');
+      this.emitter.emit('layoutChange');
       const path = host.project.currentDocument ? documentInstanceMap.get(host.project.currentDocument.id)!.path : '/';
       if (firstRun) {
         initialEntry = path;
@@ -308,9 +313,13 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     });
   }
 
+  @obx private _layout: any = null;
   @computed get layout(): any {
     // TODO: parse layout Component
-    return null;
+    return this._layout;
+  }
+  set layout(value: any) {
+    this._layout = value;
   }
 
   private _libraryMap: { [key: string]: string } = {};
@@ -439,10 +448,17 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     cursor.release();
   }
 
-  onDocumentChange(cb: () => void) {
-    this.emitter.on('documentChange', cb);
+  onLayoutChange(cb: () => void) {
+    this.emitter.on('layoutChange', cb);
     return () => {
-      this.emitter.removeListener('documentChange', cb);
+      this.emitter.removeListener('layoutChange', cb);
+    };
+  }
+
+  onReRender(fn: () => void) {
+    this.emitter.on('rerender', fn);
+    return () => {
+      this.emitter.removeListener('renderer', fn);
     };
   }
 

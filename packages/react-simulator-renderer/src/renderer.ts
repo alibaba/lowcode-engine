@@ -141,6 +141,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   constructor() {
     this.dispose = host.connect(this, () => {
       // sync layout config
+      this._layout = host.project.get('config').layout;
+
       // todo: split with others, not all should recompute
       if (this._libraryMap !== host.libraryMap || this._componentsMap !== host.designer.componentsMap) {
         this._libraryMap = host.libraryMap || {};
@@ -213,9 +215,13 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     });
   }
 
+  @obx private _layout: any = null;
   @computed get layout(): any {
     // TODO: parse layout Component
-    return null;
+    return this._layout;
+  }
+  set layout(value: any) {
+    this._layout = value;
   }
 
   private _libraryMap: { [key: string]: string } = {};

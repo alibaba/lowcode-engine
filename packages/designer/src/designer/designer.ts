@@ -166,9 +166,17 @@ export class Designer {
         selectionDispose();
         selectionDispose = undefined;
       }
-      this.postEvent('selection.change', this.currentSelection);
-      if (this.currentSelection) {
-        const currentSelection = this.currentSelection;
+      // TODO: 加开关控制(yiyi)
+      // 避免选中 Page 组件，默认选中第一个子节点
+      const currentSelection = this.currentSelection;
+      if (currentSelection && currentSelection.selected.length === 0) {
+        const rootNodeChildrens = this.currentDocument.getRoot().getChildren().children;
+        if (rootNodeChildrens.length > 0) {
+          currentSelection.select(rootNodeChildrens[0].id);
+        }
+      }
+      this.postEvent('selection.change', currentSelection);
+      if (currentSelection) {
         selectionDispose = currentSelection.onSelectionChange(() => {
           this.postEvent('selection.change', currentSelection);
         });

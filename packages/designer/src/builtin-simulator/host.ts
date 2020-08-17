@@ -278,7 +278,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   }
 
   setupEvents() {
-    debugger;
     // TODO: Thinkof move events control to simulator renderer
     //       just listen special callback
     // because iframe maybe reload
@@ -333,6 +332,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
             if (isMulti && !isRootNode(node) && selection.has(id)) {
               selection.remove(id);
             } else {
+              // TODO: 加个开关控制（yiyi）
+              // 如果选中的为 Page 节点，则默认选中第一个子节点
               if (node.isPage() && node.getChildren()?.notEmpty()) {
                 const firstChildId = node
                   .getChildren()

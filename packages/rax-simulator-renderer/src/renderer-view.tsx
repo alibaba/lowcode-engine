@@ -41,7 +41,7 @@ export default class SimulatorRendererView extends Component<{ rendererContainer
 
   componentDidMount() {
     const { rendererContainer } = this.props;
-    this.unlisten = rendererContainer.onDocumentChange(() => {
+    this.unlisten = rendererContainer.onLayoutChange(() => {
       this.forceUpdate();
     });
   }
@@ -104,6 +104,13 @@ function getDeviceView(view: any, device: string, mode: string) {
 }
 
 class Layout extends Component<{ rendererContainer: SimulatorRendererContainer }> {
+  constructor(props: any) {
+    super(props);
+    this.props.rendererContainer.onReRender(() => {
+      this.forceUpdate();
+    });
+  }
+
   render() {
     const { rendererContainer, children } = this.props;
     const layout = rendererContainer.layout;
@@ -114,7 +121,14 @@ class Layout extends Component<{ rendererContainer: SimulatorRendererContainer }
         return <Component props={props}>{children}</Component>;
       }
       if (componentName) {
-        return createElement(rendererContainer.getComponent(componentName), {}, [children]);
+        return createElement(
+          rendererContainer.getComponent(componentName),
+          {
+            ...props,
+            rendererContainer,
+          },
+          [children],
+        );
       }
     }
 

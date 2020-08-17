@@ -15,8 +15,6 @@ export class BemTools extends Component<{ host: BuiltinSimulatorHost }> {
   }
 
   render() {
-    // yiyi
-    // live 模式选中，画布会不会有相关交互
     const { host } = this.props;
     const { designMode } = host;
     const { scrollX, scrollY, scale } = host.viewport;

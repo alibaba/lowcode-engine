@@ -218,7 +218,7 @@ export function useRouter(routerConfig) {
   }
 
   useLayoutEffect(() => {
-    if (_initialized) throw new Error('Error: useRouter can only be called once.');
+    if (_initialized) return;
     _initialized = true;
     const history = _routerConfig.history;
     const routes = _routerConfig.routes;
