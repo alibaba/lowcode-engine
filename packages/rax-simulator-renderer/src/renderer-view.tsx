@@ -1,9 +1,7 @@
-// import { observer } from './obx-rax/observer';
 import RaxEngine from '@ali/lowcode-rax-renderer/lib/index';
 import { History } from 'history';
-import { Component, createElement, Fragment, useState } from 'rax';
+import { Component, createElement, Fragment } from 'rax';
 import { useRouter } from './rax-use-router';
-// import RaxEngine from '../../rax-render/lib/index';
 import { DocumentInstance, SimulatorRendererContainer } from './renderer';
 import './renderer.less';
 

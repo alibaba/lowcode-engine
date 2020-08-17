@@ -557,7 +557,9 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     document.documentElement.classList.add('engine-page');
     document.body.classList.add('engine-document'); // important! Stylesheet.invoke depends
 
-    raxRender(createElement(SimulatorRendererView, { rendererContainer: this }), container, {
+    raxRender(createElement(SimulatorRendererView, {
+      rendererContainer: this
+    }), container, {
       driver: DriverUniversal,
     });
     host.project.setRendererReady(this);
