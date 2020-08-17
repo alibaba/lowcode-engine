@@ -1,16 +1,14 @@
-import {
-  IResultDir,
-  PublisherFactory,
-  IPublisher,
-  IPublisherFactoryParams,
-  PublisherError,
-} from '../../types';
-import { writeFolder } from './utils';
+import * as defaultFs from 'fs';
+import { IResultDir, PublisherFactory, IPublisher, IPublisherFactoryParams, PublisherError } from '../../types';
+import { writeFolder, IFileSystem } from './utils';
+
+export type { IFileSystem };
 
 export interface IDiskFactoryParams extends IPublisherFactoryParams {
   outputPath?: string;
   projectSlug?: string;
   createProjectFolder?: boolean;
+  fs?: IFileSystem;
 }
 
 export interface IDiskPublisher extends IPublisher<IDiskFactoryParams, string> {
@@ -18,11 +16,10 @@ export interface IDiskPublisher extends IPublisher<IDiskFactoryParams, string> {
   setOutputPath: (path: string) => void;
 }
 
-export const createDiskPublisher: PublisherFactory<
-  IDiskFactoryParams,
-  IDiskPublisher
-> = (params: IDiskFactoryParams = {}): IDiskPublisher => {
-  let { project, outputPath = './' } = params;
+export const createDiskPublisher: PublisherFactory<IDiskFactoryParams, IDiskPublisher> = (
+  params: IDiskFactoryParams = {},
+): IDiskPublisher => {
+  let { project, outputPath = './', fs = defaultFs } = params;
 
   const getProject = (): IResultDir => {
     if (!project) {
@@ -49,19 +46,14 @@ export const createDiskPublisher: PublisherFactory<
 
     const projectOutputPath = options.outputPath || outputPath;
     const overrideProjectSlug = options.projectSlug || params.projectSlug;
-    const createProjectFolder =
-      options.createProjectFolder || params.createProjectFolder;
+    const createProjectFolder = options.createProjectFolder || params.createProjectFolder;
 
     if (overrideProjectSlug) {
       projectToPublish.name = overrideProjectSlug;
     }
 
     try {
-      await writeFolder(
-        projectToPublish,
-        projectOutputPath,
-        createProjectFolder,
-      );
+      await writeFolder(projectToPublish, projectOutputPath, createProjectFolder, fs);
       return { success: true, payload: projectOutputPath };
     } catch (error) {
       throw new PublisherError(error);
