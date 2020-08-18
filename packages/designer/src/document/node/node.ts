@@ -6,7 +6,6 @@ import {
   PropsMap,
   PropsList,
   NodeData,
-  TitleContent,
   I18nData,
   SlotSchema,
   PageSchema,
@@ -396,9 +395,23 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return v != null && v !== '' && v !== true;
   }
 
+  /**
+   * has loop when 1. loop is validArray with length > 1 ; OR  2. loop is variable object
+   * @return boolean, has loop config or not
+   */
   @computed hasLoop() {
-    const v = this.getExtraProp('loop', false)?.getValue();
-    return v != null && v !== '';
+    const value = this.getExtraProp('loop', false)?.getValue();
+    if (value === undefined || value === null) {
+      return false;
+    }
+
+    if (Array.isArray(value) && value.length > 0) {
+      return true;
+    }
+    if (isJSExpression(value)) {
+      return true;
+    }
+    return false;
   }
 
   wrapWith(schema: Schema) {
