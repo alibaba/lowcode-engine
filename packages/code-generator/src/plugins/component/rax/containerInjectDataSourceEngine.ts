@@ -38,7 +38,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     const dataSourceEngineOptions = { runtimeConfig: true };
     if (dataSourceItems.length > 0) {
       Object.assign(dataSourceEngineOptions, {
-        requestHandlers: dataSourceItems.reduce(
+        requestHandlersMap: dataSourceItems.reduce(
           (handlers, ds) =>
             ds.type in handlers && ds.type !== 'custom'
               ? handlers
