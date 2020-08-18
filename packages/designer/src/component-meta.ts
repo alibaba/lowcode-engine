@@ -208,13 +208,13 @@ export class ComponentMeta {
     return result as any;
   }
 
-  isRootComponent() {
-    return this.componentName === 'Page' || this.componentName === 'Block' || this.componentName === 'Component';
+  isRootComponent(includeBlock: boolean = true) {
+    return this.componentName === 'Page' || this.componentName === 'Component' || (includeBlock && this.componentName === 'Block');
   }
 
   @computed get availableActions() {
     let { disableBehaviors, actions } = this._transformedMetadata?.configure.component || {};
-    const disabled = ensureAList(disableBehaviors) || (this.isRootComponent() ? ['copy', 'remove'] : null);
+    const disabled = ensureAList(disableBehaviors) || (this.isRootComponent(false) ? ['copy', 'remove'] : null);
     actions = builtinComponentActions.concat(this.designer.getGlobalComponentActions() || [], actions || []);
 
     if (disabled) {
