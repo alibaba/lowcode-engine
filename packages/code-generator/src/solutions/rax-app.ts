@@ -52,6 +52,7 @@ export default function createIceJsProjectBuilder(): IProjectBuilder {
         css(),
       ],
       appConfig: [raxApp.plugins.appConfig()],
+      buildConfig: [raxApp.plugins.buildConfig()],
       entry: [raxApp.plugins.entry()],
       constants: [constants()],
       utils: [esModule(), utils()],

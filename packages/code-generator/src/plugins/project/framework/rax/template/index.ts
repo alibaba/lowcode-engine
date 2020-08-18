@@ -9,7 +9,6 @@ import file2 from './files/eslintrc.js';
 import file3 from './files/gitignore';
 import file4 from './files/README.md';
 import file5 from './files/abc.json';
-import file6 from './files/build.json';
 
 const raxAppTemplate: IProjectTemplate = {
   slots: {
@@ -30,6 +29,10 @@ const raxAppTemplate: IProjectTemplate = {
     appConfig: {
       path: ['src'],
       fileName: 'app',
+    },
+    buildConfig: {
+      path: [],
+      fileName: 'build',
     },
     constants: {
       path: ['src'],
@@ -66,7 +69,6 @@ const raxAppTemplate: IProjectTemplate = {
     runFileGenerator(root, file3);
     runFileGenerator(root, file4);
     runFileGenerator(root, file5);
-    runFileGenerator(root, file6);
 
     return root;
   },

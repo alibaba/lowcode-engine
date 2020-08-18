@@ -56,6 +56,7 @@ export interface IAppConfig {
   targetRootID?: string; // 渲染根节点 ID
   layout?: NodeSchema;
   theme?: object; // 主题配置，根据接入的主题模块不同
+  miniAppBuildType?: 'runtime' | 'compile'; // 小程序的构建类型
 }
 
 export interface IAppMeta {
