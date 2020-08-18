@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.44"></a>
+## [0.9.44](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.43...@ali/lowcode-designer@0.9.44) (2020-08-17)
+
+
+### Bug Fixes
+
+* fieldId 重复 ([5d64312](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5d64312))
+* 去掉根据 componentName 判断 isModal 的逻辑 ([28f0213](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/28f0213))
+* 页面加载之后就被标记位 isModified ([2840d27](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2840d27))
+
+
+
+
 <a name="0.9.43"></a>
 ## [0.9.43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.42...@ali/lowcode-designer@0.9.43) (2020-08-14)
 

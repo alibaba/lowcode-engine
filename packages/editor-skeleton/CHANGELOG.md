@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.50"></a>
+## [0.8.50](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.49...@ali/lowcode-editor-skeleton@0.8.50) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+
 <a name="0.8.49"></a>
 ## [0.8.49](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.48...@ali/lowcode-editor-skeleton@0.8.49) (2020-08-14)
 

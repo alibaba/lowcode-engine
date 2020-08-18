@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.19"></a>
+## [0.8.19](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@0.8.18...@ali/lowcode-react-renderer@0.8.19) (2020-08-17)
+
+
+### Bug Fixes
+
+* 修复判断动态 setter 的逻辑 ([d195d7f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d195d7f))
+
+
+
+
 <a name="0.8.18"></a>
 ## [0.8.18](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@0.8.17...@ali/lowcode-react-renderer@0.8.18) (2020-08-14)
 
