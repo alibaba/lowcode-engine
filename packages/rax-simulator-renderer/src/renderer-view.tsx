@@ -120,7 +120,7 @@ class Layout extends Component<{ rendererContainer: SimulatorRendererContainer }
       if (Component) {
         return <Component props={props}>{children}</Component>;
       }
-      if (componentName) {
+      if (componentName && rendererContainer.getComponent(componentName)) {
         return createElement(
           rendererContainer.getComponent(componentName),
           {

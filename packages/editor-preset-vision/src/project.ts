@@ -10,6 +10,10 @@ Object.assign(project, {
   setSchema(schema: any) {
     this.schema = schema;
   },
+
+  setConfig(config: any) {
+    this.set('config', config);
+  },
 });
 
 export default project;

@@ -95,10 +95,22 @@ class Layout extends Component<{ rendererContainer: SimulatorRendererContainer }
   render() {
     const { rendererContainer, children } = this.props;
     const layout = rendererContainer.layout;
-
     if (layout) {
-      const { Component, props } = layout;
-      return <Component props={props}>{children}</Component>;
+      const { Component, props, componentName } = layout;
+      if (Component) {
+        return <Component key='layout' props={props}>{children}</Component>;
+      }
+      if (componentName && rendererContainer.getComponent(componentName)) {
+        return createElement(
+          rendererContainer.getComponent(componentName),
+          {
+            ...props,
+            rendererContainer,
+            key: 'layout',
+          },
+          [children],
+        );
+      }
     }
 
     return <Fragment>{children}</Fragment>;

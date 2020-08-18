@@ -47,36 +47,12 @@ const pages = Object.assign(project, {
         }
       }
     }
-
+    debugger;
     project.load({
       version: '1.0.0',
       componentsMap: [],
       componentsTree,
-      config: {
-        layout: {
-          componentName: 'MiniappTabNav',
-          props: {
-            logo: '',
-            name: '测试网站',
-            tabBars: {
-              items: [
-                {
-                  name: "页面1", 
-                  pagePath: "home1", 
-                  icon: "https://pre-go.alibaba-inc.com/filehandle?fileName…8e9-ff58-4e7a-bd24-9e5c32244e14.png&type=download", 
-                  activeIcon: ""
-                },
-                {
-                  activeIcon: "", 
-                  name: "页面2", 
-                  icon: "", 
-                  pagePath: "home2"
-                }
-              ]
-            } 
-          },
-        },
-      },
+      config: project.config
     }, true);
   },
   addPage(data: OldPageData | RootSchema) {
