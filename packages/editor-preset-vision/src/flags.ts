@@ -16,7 +16,7 @@ export class Flags {
 
   constructor() {
     this.emitter = new EventEmitter();
-    this.flags = ['design-mode'];
+    this.flags = [];
 
     domReady(() => {
       this.ready = true;

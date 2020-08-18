@@ -83,6 +83,7 @@ export interface ProjectSchema {
   constants?: JSONObject;
   css?: string;
   dataSource?: DataSource;
+  id?: string;
 }
 
 export function isNodeSchema(data: any): data is NodeSchema {

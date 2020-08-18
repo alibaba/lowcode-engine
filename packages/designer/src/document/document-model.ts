@@ -105,6 +105,8 @@ export class DocumentModel {
 
     if (!schema) {
       this._blank = true;
+    } else {
+      this.id = project.getSchema()?.id || this.id;
     }
 
     this.rootNode = this.createNode<RootNode>(
