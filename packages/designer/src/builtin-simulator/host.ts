@@ -398,7 +398,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           '.next-calendar-table',
           '.editor-container', // 富文本组件
         ];
-        const ignoreSelectorsString = String.prototype.concat(ignoreSelectors);
+        const ignoreSelectorsString = ignoreSelectors.join(',');
         if (isFormEvent(e) || target?.closest(ignoreSelectorsString)) {
           e.preventDefault();
           e.stopPropagation();
