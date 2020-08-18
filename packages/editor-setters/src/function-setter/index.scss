@@ -1,36 +1,30 @@
-.lc-icon-setter{
-  .next-input{
-    width: auto !important;
+.lc-function-setter{
+
+  .function-container{
+    position: relative;
+    
   }
-  i {
-    min-width: 12px;
+
+  .funtion-icon{
+    float: left;
+    width: 25px;
+    height: 25px;
   }
-  i:hover {
+
+  .function-name{
+    font-size: 14px;
+    color:#5584FF;
+    margin-left:5px;
     cursor: pointer;
+  
   }
-  input:hover {
+
+  .funtion-operate-icon{
+    font-size: 16px;
+    margin-left:5px;
     cursor: pointer;
   }
 }
 
 
-.lowcode-icon-setter-popup{
-  max-width: 354px;
-  .lowcode-icon-list{
-
-    overflow: auto;
-    li{
-      float: left;
-      margin-bottom: 10px;
-      width: 40px;
-      color: #666;
-      cursor: pointer;
-      text-align: center;
-
-      &:hover{
-        color: #000;
-      }
-    }
-  }
-}
 
