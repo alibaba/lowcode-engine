@@ -75,7 +75,7 @@ export function createSimulator(
     .join('');
 
   doc.open();
-  doc.write(`<!doctype html><html><head><meta charset="utf-8"/>
+  doc.write(`<!doctype html><html class="engine-design-mode"><head><meta charset="utf-8"/>
   ${styleFrags}
 </head><body>${scriptFrags}</body></html>`);
   doc.close();

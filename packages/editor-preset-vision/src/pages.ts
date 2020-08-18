@@ -52,6 +52,7 @@ const pages = Object.assign(project, {
       version: '1.0.0',
       componentsMap: [],
       componentsTree,
+      id: pages[0].id,
     }, true);
 
     // FIXME: 根本原因应该是 propStash 导致的，这样可以避免页面加载之后就被标记为 isModified
