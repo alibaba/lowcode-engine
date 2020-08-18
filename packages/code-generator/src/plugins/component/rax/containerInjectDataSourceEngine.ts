@@ -11,6 +11,7 @@ import {
   DataSourceConfig,
   isJSExpression,
   isJSFunction,
+  JSExpression,
 } from '../../../types';
 
 import { generateUnknownType } from '../../../utils/compositeType';
@@ -37,23 +38,30 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     const dataSourceItems: DataSourceConfig[] = (dataSourceConfig && dataSourceConfig.list) || [];
     const dataSourceEngineOptions = { runtimeConfig: true };
     if (dataSourceItems.length > 0) {
-      Object.assign(dataSourceEngineOptions, {
-        requestHandlersMap: dataSourceItems.reduce(
-          (handlers, ds) =>
-            ds.type in handlers && ds.type !== 'custom'
-              ? handlers
-              : {
-                  ...handlers,
-                  [ds.type]: {
-                    type: 'JSExpression',
-                    value:
-                      `require('@ali/lowcode-datasource-engine/handlers/${changeCase.kebabCase(ds.type)}')` +
-                      (ds.type === 'urlParams' ? '({ search: this.props.location.search })' : ''),
-                  },
-                },
-          {} as Record<string, CompositeValue>,
-        ),
+      const requestHandlersMap = {} as Record<string, JSExpression>;
+
+      dataSourceItems.forEach((ds) => {
+        if (!(ds.type in requestHandlersMap) && ds.type !== 'custom') {
+          const handlerName = '__$$' + changeCase.camelCase(ds.type) + 'RequestHandler';
+
+          requestHandlersMap[ds.type] = {
+            type: 'JSExpression',
+            value: handlerName + (ds.type === 'urlParams' ? '({ search: this.props.location.search })' : ''),
+          };
+
+          next.chunks.push({
+            type: ChunkType.STRING,
+            fileType: FileType.JSX,
+            name: COMMON_CHUNK_NAME.ExternalDepsImport,
+            content: `
+              import ${handlerName} from '@ali/lowcode-datasource-engine/handlers/${changeCase.kebabCase(ds.type)}';
+            `,
+            linkAfter: [],
+          });
+        }
       });
+
+      Object.assign(dataSourceEngineOptions, { requestHandlersMap });
     }
 
     next.chunks.push({

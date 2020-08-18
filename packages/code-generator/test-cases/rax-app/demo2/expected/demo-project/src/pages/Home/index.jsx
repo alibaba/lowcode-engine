@@ -9,6 +9,10 @@ import Text from 'rax-text';
 
 import Image from 'rax-image';
 
+import __$$urlParamsRequestHandler from '@ali/lowcode-datasource-engine/handlers/url-params';
+
+import __$$fetchRequestHandler from '@ali/lowcode-datasource-engine/handlers/fetch';
+
 import { create as __$$createDataSourceEngine } from '@ali/lowcode-datasource-engine';
 
 import { isMiniApp as __$$isMiniApp } from 'universal-env';
@@ -44,9 +48,9 @@ class Home$$Page extends Component {
   _dataSourceConfig = this._defineDataSourceConfig();
   _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceConfig, this._context, {
     runtimeConfig: true,
-    requestHandlers: {
-      urlParams: require('@ali/lowcode-datasource-engine/handlers/url-params')({ search: this.props.location.search }),
-      fetch: require('@ali/lowcode-datasource-engine/handlers/fetch'),
+    requestHandlersMap: {
+      urlParams: __$$urlParamsRequestHandler({ search: this.props.location.search }),
+      fetch: __$$fetchRequestHandler,
     },
   });
 
