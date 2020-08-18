@@ -130,27 +130,27 @@
     },
     {
       "prototypeViewsUrl": null,
+      "packageName": "@ali/vc-deep-mobile-yidaplus",
+      "version": "1.0.4",
+      "prototypeConfigsUrl": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile-yidaplus/1.0.4/proto.23e380d.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile-yidaplus/1.0.4/proto.4d55c72.js"
+      ],
       "prototypeUrls": {
         "default": [
-          "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/proto.2f23cdf.css",
-          "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/proto.9a739a7.js"
+          "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile-yidaplus/1.0.4/proto.23e380d.css",
+          "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile-yidaplus/1.0.4/proto.4d55c72.js"
         ]
       },
-      "prototypeConfigsUrl": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/proto.2f23cdf.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/proto.9a739a7.js"
+      "library": "AliVcDeepMobileYidaplus",
+      "urls": [
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile-yidaplus/1.0.4/view.574f830.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile-yidaplus/1.0.4/view.fe356f3.js",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile-yidaplus/1.0.4/view.mobile.574f830.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile-yidaplus/1.0.4/view.mobile.f993078.js"
       ],
       "alias": "",
-      "urls": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/view.d6d0d1f.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/view.14bb8e8.js",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/view.mobile. d6d0d1f.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/view.mobile.fe36565.js"
-      ],
-      "library": "AliVcDeepMobile",
-      "components": null,
-      "packageName": "@ali/vc-deep-mobile",
-      "version": "2.0.1-beta.25"
+      "components": null
     },
     {
       "prototypeViewsUrl": null,

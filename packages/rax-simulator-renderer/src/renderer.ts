@@ -237,7 +237,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   constructor() {
     this.dispose = host.connect(this, () => {
       // sync layout config
-      debugger;
+      // debugger;
       this._layout = host.project.get('config').layout;
 
       // todo: split with others, not all should recompute

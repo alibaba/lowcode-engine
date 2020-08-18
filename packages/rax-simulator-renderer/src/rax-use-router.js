@@ -208,6 +208,8 @@ function getInitialComponent(routerConfig) {
   return InitialComponent;
 }
 
+let unlisten = null;
+let handleId = null;
 export function useRouter(routerConfig) {
   const [component, setComponent] = useState(getInitialComponent(routerConfig));
 
@@ -218,29 +220,41 @@ export function useRouter(routerConfig) {
   }
 
   useLayoutEffect(() => {
-    if (_initialized) return;
-    _initialized = true;
+    if (unlisten) {
+      unlisten();
+      unlisten = null;
+    }
+
+    if (handleId) {
+      router.removeHandle(handleId);
+      handleId = null;
+    }
+
     const history = _routerConfig.history;
     const routes = _routerConfig.routes;
 
     router.root = Array.isArray(routes) ? { routes } : routes;
 
-    const handleId = router.addHandle((component) => {
+    handleId = router.addHandle((component) => {
       setComponent(component);
     });
 
     // Init path match
-    if (!_routerConfig.InitialComponent) {
+    if (_initialized || !_routerConfig.InitialComponent) {
       matchLocation(history.location);
     }
 
-    const unlisten = history.listen(({ location }) => {
+    unlisten = history.listen(({ location }) => {
       matchLocation(location);
     });
 
+    _initialized = true;
+
     return () => {
       router.removeHandle(handleId);
+      handleId = null;
       unlisten();
+      unlisten = null;
     };
   }, []);
 
