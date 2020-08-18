@@ -234,15 +234,18 @@ export default class BaseEngine extends PureComponent {
       }
 
       if (schema.loop != null) {
-        return this.__createLoopVirtualDom(
-          {
-            ...schema,
-            loop: parseData(schema.loop, self),
-          },
-          self,
-          parentInfo,
-          idx,
-        );
+        const loop = parseData(schema.loop, self);
+        if (Array.isArray(loop) && loop.length > 0 || isJSExpression(loop)) {
+          return this.__createLoopVirtualDom(
+            {
+              ...schema,
+              loop,
+            },
+            self,
+            parentInfo,
+            idx,
+          );
+        }
       }
       const condition = schema.condition == null ? true : parseData(schema.condition, self);
       if (!condition) return null;
