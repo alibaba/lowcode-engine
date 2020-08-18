@@ -40,7 +40,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       Object.assign(dataSourceEngineOptions, {
         requestHandlers: dataSourceItems.reduce(
           (handlers, ds) =>
-            ds.type in handlers
+            ds.type in handlers && ds.type !== 'custom'
               ? handlers
               : {
                   ...handlers,
