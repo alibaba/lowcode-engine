@@ -1,3 +1,4 @@
+import changeCase from 'change-case';
 import { CLASS_DEFINE_CHUNK_NAME, COMMON_CHUNK_NAME } from '../../../const/generator';
 
 import {
@@ -32,6 +33,27 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       ...pre,
     };
 
+    const dataSourceConfig = isContainerSchema(pre.ir) ? pre.ir.dataSource : null;
+    const dataSourceItems: DataSourceConfig[] = (dataSourceConfig && dataSourceConfig.list) || [];
+    const dataSourceEngineOptions = { runtimeConfig: true };
+    if (dataSourceItems.length > 0) {
+      Object.assign(dataSourceEngineOptions, {
+        requestHandlers: dataSourceItems.reduce(
+          (handlers, ds) =>
+            ds.type in handlers
+              ? handlers
+              : {
+                  ...handlers,
+                  [ds.type]: {
+                    type: 'JSExpression',
+                    value: `require('@ali/lowcode-datasource-engine/handlers/${changeCase.kebabCase(ds.type)}')`,
+                  },
+                },
+          {} as Record<string, CompositeValue>,
+        ),
+      });
+    }
+
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: FileType.JSX,
@@ -47,8 +69,12 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       fileType: cfg.fileType,
       name: CLASS_DEFINE_CHUNK_NAME.InsVar,
       content: `
-      _dataSourceConfig = this._defineDataSourceConfig();
-      _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceConfig, this._context, { runtimeConfig: true });`,
+        _dataSourceConfig = this._defineDataSourceConfig();
+        _dataSourceEngine = __$$createDataSourceEngine(
+          this._dataSourceConfig,
+          this._context,
+          ${generateUnknownType(dataSourceEngineOptions)}
+        );`,
       linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start],
     });
 
@@ -61,9 +87,6 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       `,
       linkAfter: [RAX_CHUNK_NAME.ClassDidMountBegin],
     });
-
-    const dataSourceConfig = isContainerSchema(pre.ir) ? pre.ir.dataSource : null;
-    const dataSourceItems: DataSourceConfig[] = (dataSourceConfig && dataSourceConfig.list) || [];
 
     next.chunks.push({
       type: ChunkType.STRING,

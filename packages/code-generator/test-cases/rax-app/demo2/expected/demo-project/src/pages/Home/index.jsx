@@ -39,7 +39,13 @@ class Home$$Page extends Component {
   _context = this._createContext();
 
   _dataSourceConfig = this._defineDataSourceConfig();
-  _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceConfig, this._context, { runtimeConfig: true });
+  _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceConfig, this._context, {
+    runtimeConfig: true,
+    requestHandlers: {
+      urlParams: require('@ali/lowcode-datasource-engine/handlers/url-params'),
+      fetch: require('@ali/lowcode-datasource-engine/handlers/fetch'),
+    },
+  });
 
   _utils = this._defineUtils();
 
