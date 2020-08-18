@@ -198,6 +198,7 @@ class Home$$Page extends Component {
             return {
               method: 'GET',
               uri: 'https://shs.alibaba-inc.com/mock/1458/demo/user',
+              isSync: true,
             };
           },
           dataHandler: function (response) {
@@ -218,6 +219,7 @@ class Home$$Page extends Component {
             return {
               method: 'GET',
               uri: __$$context.state.user.ordersApiUri,
+              isSync: true,
             };
           },
           dataHandler: function (response) {

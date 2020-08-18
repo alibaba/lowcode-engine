@@ -84,6 +84,7 @@
             options: {
               method: 'GET',
               uri: 'https://shs.alibaba-inc.com/mock/1458/demo/user',
+              isSync: true,
             },
             dataHandler: {
               type: 'JSFunction',
@@ -100,6 +101,7 @@
                 type: 'JSExpression',
                 value: 'this.state.user.ordersApiUri',
               },
+              isSync: true,
             },
             dataHandler: {
               type: 'JSFunction',
