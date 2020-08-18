@@ -125,7 +125,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       type: ChunkType.STRING,
       fileType: FileType.JSX,
       name: COMMON_CHUNK_NAME.FileExport,
-      content: `export default ${componentClassName};`,
+      content: `export default __$$withRouter(${componentClassName});`,
       linkAfter: [
         COMMON_CHUNK_NAME.ExternalDepsImport,
         COMMON_CHUNK_NAME.InternalDepsImport,

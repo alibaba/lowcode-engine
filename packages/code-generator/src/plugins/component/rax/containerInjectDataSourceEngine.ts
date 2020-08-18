@@ -46,7 +46,9 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
                   ...handlers,
                   [ds.type]: {
                     type: 'JSExpression',
-                    value: `require('@ali/lowcode-datasource-engine/handlers/${changeCase.kebabCase(ds.type)}')`,
+                    value:
+                      `require('@ali/lowcode-datasource-engine/handlers/${changeCase.kebabCase(ds.type)}')` +
+                      (ds.type === 'urlParams' ? '({ search: this.props.location.search })' : ''),
                   },
                 },
           {} as Record<string, CompositeValue>,
