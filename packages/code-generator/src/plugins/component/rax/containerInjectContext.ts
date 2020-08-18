@@ -1,4 +1,4 @@
-import { CLASS_DEFINE_CHUNK_NAME } from '../../../const/generator';
+import { CLASS_DEFINE_CHUNK_NAME, COMMON_CHUNK_NAME } from '../../../const/generator';
 
 import {
   BuilderComponentPlugin,
@@ -23,6 +23,14 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     const next: ICodeStruct = {
       ...pre,
     };
+
+    next.chunks.push({
+      type: ChunkType.STRING,
+      fileType: cfg.fileType,
+      name: COMMON_CHUNK_NAME.InternalDepsImport,
+      content: `import __$$constants from '../../constants';`,
+      linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport],
+    });
 
     next.chunks.push({
       type: ChunkType.STRING,
@@ -66,6 +74,9 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
             },
             get props() {
               return self.props;
+            },
+            get constants() {
+              return __$$constants;
             },
             ...this._methods,
           };

@@ -15,6 +15,8 @@ import { create as __$$createDataSourceEngine } from '@ali/lowcode-datasource-en
 
 import { isMiniApp as __$$isMiniApp } from 'universal-env';
 
+import __$$constants from '../../constants';
+
 import __$$projectUtils from '../../utils';
 
 import './index.css';
@@ -82,6 +84,9 @@ class List$$Page extends Component {
       },
       get props() {
         return self.props;
+      },
+      get constants() {
+        return __$$constants;
       },
       ...this._methods,
     };
