@@ -174,33 +174,33 @@ designer.addPropsReducer(filterReducer, TransformStage.Save);
 designer.addPropsReducer(filterReducer, TransformStage.Render);
 
 function compatiableReducer(props: any) {
-  if (!isPlainObject(props)) {
+  if (!props || !isPlainObject(props)) {
     return props;
+  }
+  if (isJSSlot(props)) {
+    return {
+      type: 'JSBlock',
+      value: {
+        componentName: 'Slot',
+        children: props.value,
+        props: {
+          slotTitle: props.title,
+          slotName: props.name,
+        },
+      },
+    };
+  }
+  // 为了能降级到老版本，建议在后期版本去掉以下代码
+  if (isJSExpression(props) && !props.events) {
+    return {
+      type: 'variable',
+      value: props.mock,
+      variable: props.value,
+    }
   }
   const newProps: any = {};
   Object.entries<any>(props).forEach(([key, val]) => {
-    if (isJSSlot(val)) {
-      val = {
-        type: 'JSBlock',
-        value: {
-          componentName: 'Slot',
-          children: val.value,
-          props: {
-            slotTitle: val.title,
-            slotName: val.name,
-          },
-        },
-      };
-    }
-    // 为了能降级到老版本，建议在后期版本去掉以下代码
-    if (isJSExpression(val) && !val.events) {
-      val = {
-        type: 'variable',
-        value: val.mock,
-        variable: val.value,
-      }
-    }
-    newProps[key] = val;
+    newProps[key] = compatiableReducer(val);
   });
   return newProps;
 }
