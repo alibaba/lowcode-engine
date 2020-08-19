@@ -1,4 +1,5 @@
-import LowCodeRenderer from '@ali/lowcode-react-renderer';
+// import LowCodeRenderer from '@ali/lowcode-react-renderer';
+import LowCodeRenderer from '../../react-renderer/src/index';
 import { ReactInstance, Fragment, Component, createElement } from 'react';
 import { observer } from '@recore/obx-react';
 import { SimulatorRendererContainer, DocumentInstance } from './renderer';
@@ -126,7 +127,6 @@ class Renderer extends Component<{ documentInstance: DocumentInstance }> {
     const { documentInstance } = this.props;
     const { container } = documentInstance;
     const { designMode, device } = container;
-
     return (
       <LowCodeRenderer
         schema={documentInstance.schema}

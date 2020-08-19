@@ -10,7 +10,6 @@ import { VE_EVENTS } from './base/const';
 
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
 import { Skeleton, SettingsPrimaryPane } from '@ali/lowcode-editor-skeleton';
-
 import { deepValueParser } from './deep-value-parser';
 import { liveEditingRule, liveEditingSaveHander } from './vc-live-editing';
 
@@ -73,7 +72,7 @@ function upgradePropsReducer(props: any) {
     };
   }
   const newProps: any = {};
-  Object.keys(props).forEach(key => {
+  Object.keys(props).forEach((key) => {
     if (/^__slot__/.test(key) && props[key] === true) {
       return;
     }
@@ -94,7 +93,7 @@ designer.addPropsReducer((props, node) => {
   };
   if (newProps.fieldId) {
     const fieldIds: any = [];
-    Object.keys(nodeCache).forEach(nodeId => {
+    Object.keys(nodeCache).forEach((nodeId) => {
       const fieldId = nodeCache[nodeId].getPropValue('fieldId');
       if (fieldId) {
         fieldIds.push(fieldId);
@@ -142,7 +141,7 @@ designer.addPropsReducer((props: any, node: Node) => {
     return {
       ...props,
       lifeCycles: {},
-    }
+    };
   }
   return props;
 }, TransformStage.Render);
@@ -197,7 +196,7 @@ function compatiableReducer(props: any) {
         type: 'variable',
         value: val.mock,
         variable: val.value,
-      }
+      };
     }
     newProps[key] = val;
   });
@@ -209,7 +208,7 @@ designer.addPropsReducer(compatiableReducer, TransformStage.Save);
 designer.addPropsReducer((props: any, node: Node) => {
   const lifeCycleNames = ['didMount', 'willUnmount'];
   if (node.isRoot()) {
-    lifeCycleNames.forEach(key => {
+    lifeCycleNames.forEach((key) => {
       if (props[key]) {
         const lifeCycles = node.props.getPropValue(getConvertedExtraKey('lifeCycles')) || {};
         lifeCycles[key] = props[key];
@@ -266,9 +265,26 @@ function appendStyleNode(props: any, styleProp: any, cssClass: string, cssId: st
   }
 }
 designer.addPropsReducer(stylePropsReducer, TransformStage.Render);
-
 // 国际化 & Expression 渲染时处理
 designer.addPropsReducer(deepValueParser, TransformStage.Render);
+
+designer.addPropsReducer((props: any, node: Node) => {
+  if (node.isRoot()) {
+    if (props.dataSource) {
+      const { online } = props.dataSource;
+      // if (online && online.length) {
+      //   online.forEach((item: any) => {
+      //     if (item.dataHandler && item.dataHandler.type && item.dataHandler.type === 'js') {
+      //       item.dataHandler.type = 'JSFunction';
+      //     }
+      //   });
+      // }
+      props.dataSource.list = online;
+      console.log(props);
+    }
+  }
+  return props;
+}, TransformStage.Render);
 
 skeleton.add({
   area: 'mainArea',
