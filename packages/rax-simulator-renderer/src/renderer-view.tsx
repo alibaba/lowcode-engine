@@ -165,7 +165,7 @@ class Renderer extends Component<{
       <RaxEngine
         schema={documentInstance.schema}
         components={renderer.components}
-        context={renderer.context}
+        appHelper={renderer.context}
         designMode={renderer.designMode}
         suspended={documentInstance.suspended}
         self={documentInstance.scope}

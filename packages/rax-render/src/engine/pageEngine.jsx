@@ -22,6 +22,7 @@ export default class PageEngine extends BaseEngine {
   static contextType = AppContext;
 
   static getDerivedStateFromProps(props, state) {
+    debugger;
     debug('page.getDerivedStateFromProps');
     const func = props.__schema.lifeCycles && props.__schema.lifeCycles.getDerivedStateFromProps;
     if (func) {

@@ -2,6 +2,7 @@ import Env from './env';
 import { isJSSlot, isI18nData, isJSExpression } from '@ali/lowcode-types';
 import { isPlainObject } from '@ali/lowcode-utils';
 import i18nUtil from './i18n-util';
+import { editor } from './editor';
 
 function isVariable(obj: any) {
   return obj && obj.type === 'variable';
@@ -9,6 +10,10 @@ function isVariable(obj: any) {
 
 // FIXME: 表达式使用 mock 值，未来live 模式直接使用原始值
 export function deepValueParser(obj?: any): any {
+  // live
+  if (editor.get('designMode') === 'live') {
+    return obj;
+  }
   if (isJSExpression(obj)) {
     obj = obj.mock;
   }

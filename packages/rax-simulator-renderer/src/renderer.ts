@@ -303,8 +303,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
           getUrlParams() {
             const search = history.location.search;
             return parseQuery(search);
-          }
-        }
+          },
+        },
       },
       constants: {},
     };

@@ -87,6 +87,7 @@ designer.addPropsReducer(upgradePropsReducer, TransformStage.Upgrade);
 
 // 节点 props 初始化
 designer.addPropsReducer((props, node) => {
+  // debugger;
   // run initials
   const newProps: any = {
     ...props,

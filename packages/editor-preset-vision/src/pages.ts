@@ -47,7 +47,6 @@ const pages = Object.assign(project, {
         }
       }
     }
-    debugger;
     project.load({
       version: '1.0.0',
       componentsMap: [],

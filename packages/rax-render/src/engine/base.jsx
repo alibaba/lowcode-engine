@@ -205,7 +205,6 @@ export default class BaseEngine extends Component {
   // parentInfo 父组件的信息，包含schema和Comp
   // idx 若为循环渲染的循环Index
   __createVirtualDom = (schema, self, parentInfo, idx) => {
-
     if (!schema) return null;
     // rax text prop 兼容处理
     if (schema.componentName === 'Text') {
