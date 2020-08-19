@@ -1,3 +1,4 @@
+import changeCase from 'change-case';
 import { COMMON_CHUNK_NAME } from '../../../../../const/generator';
 
 import {
@@ -6,7 +7,7 @@ import {
   ChunkType,
   FileType,
   ICodeStruct,
-  IRouterInfo,
+  IParseResult,
 } from '../../../../../types';
 
 const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
@@ -15,23 +16,22 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       ...pre,
     };
 
-    const ir = next.ir as IRouterInfo;
+    const ir = next.ir as IParseResult;
 
-    // TODO: 如何生成路由?
+    const routes = ir.globalRouter?.routes?.map((route) => ({
+      path: route.path,
+      source: `pages/${changeCase.pascalCase(route.fileName)}/index`,
+    })) || [{ path: '/', source: 'pages/Home/index' }];
+
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: FileType.JSON,
       name: COMMON_CHUNK_NAME.CustomContent,
       content: `
 {
-  "routes": [
-    {
-      "path": "/",
-      "source": "pages/Home/index"
-    }
-  ],
+  "routes": ${JSON.stringify(routes, null, 2)},
   "window": {
-    "title": "Rax App Demo"
+    "title": ${JSON.stringify(ir.project?.meta?.title || ir.project?.meta?.name || '')}
   }
 }
       `,

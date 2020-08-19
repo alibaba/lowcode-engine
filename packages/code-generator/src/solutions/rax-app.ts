@@ -60,8 +60,6 @@ export default function createIceJsProjectBuilder(): IProjectBuilder {
       htmlEntry: [raxApp.plugins.entryDocument()],
       packageJSON: [raxApp.plugins.packageJSON()],
     },
-    postProcessors: [
-      // prettier() // 暂且禁用 prettier
-    ],
+    postProcessors: process.env.NODE_ENV !== 'test' ? [prettier()] : [],
   });
 }

@@ -1,4 +1,9 @@
 import {
+  JSONArray,
+  JSONObject,
+  CompositeValue,
+  CompositeArray,
+  CompositeObject,
   ResultDir,
   ResultFile,
   NodeDataType,
@@ -145,6 +150,8 @@ export interface CodePiece {
   type: PIECE_TYPE;
 }
 
+// FIXME: 在新的实现中，添加了第一参数 this: CustomHandlerSet 作为上下文。究其本质
+// scopeBindings?: IScopeBindings;
 export interface HandlerSet<T> {
   string?: (input: string) => T;
   boolean?: (input: boolean) => T;
@@ -153,13 +160,15 @@ export interface HandlerSet<T> {
   function?: (input: JSFunction) => T;
   slot?: (input: JSSlot) => T;
   node?: (input: NodeSchema) => T;
-  array?: (input: any[]) => T;
+  array?: (input: JSONArray | CompositeArray) => T;
   children?: (input: T[]) => T;
-  object?: (input: object) => T;
+  object?: (input: JSONObject | CompositeObject) => T;
   common?: (input: unknown) => T;
   tagName?: (input: string) => T;
   loopDataExpr?: (input: string) => T;
   conditionExpr?: (input: string) => T;
+  nodeAttrs?(node: NodeSchema): CodePiece[];
+  nodeAttr?(attrName: string, attrValue: CompositeValue): CodePiece[];
 }
 
 export type ExtGeneratorPlugin = (ctx: INodeGeneratorContext, nodeItem: NodeSchema) => CodePiece[];

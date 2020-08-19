@@ -1,10 +1,14 @@
+// 注意: 出码引擎注入的临时变量默认都以 "__$$" 开头，禁止在搭建的代码中直接访问。
+// 例外：rax 框架的导出名和各种组件名除外。
 import { createElement, Component } from 'rax';
 
 import Page from 'rax-view';
 
 import Text from 'rax-text';
 
-import { createDataSourceEngine } from '@ali/lowcode-datasource-engine';
+import { create as __$$createDataSourceEngine } from '@ali/lowcode-datasource-engine';
+
+import { isMiniApp as __$$isMiniApp } from 'universal-env';
 
 import __$$projectUtils from '../../utils';
 
@@ -15,14 +19,16 @@ class Home$$Page extends Component {
 
   _context = this._createContext();
 
-  _dataSourceList = this._defineDataSourceList();
-  _dataSourceEngine = createDataSourceEngine(this._dataSourceList, this._context);
+  _dataSourceConfig = this._defineDataSourceConfig();
+  _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceConfig, this._context, { runtimeConfig: true });
 
   _utils = this._defineUtils();
 
   componentDidMount() {
     this._dataSourceEngine.reloadDataSource();
   }
+
+  componentWillUnmount() {}
 
   render() {
     const __$$context = this._context;
@@ -48,7 +54,7 @@ class Home$$Page extends Component {
         return self._dataSourceEngine.dataSourceMap || {};
       },
       async reloadDataSource() {
-        self._dataSourceEngine.reloadDataSource();
+        await self._dataSourceEngine.reloadDataSource();
       },
       get utils() {
         return self._utils;
@@ -62,13 +68,15 @@ class Home$$Page extends Component {
       get props() {
         return self.props;
       },
+      ...this._methods,
     };
 
     return context;
   }
 
-  _defineDataSourceList() {
-    return [];
+  _defineDataSourceConfig() {
+    const __$$context = this._context;
+    return { list: [] };
   }
 
   _defineUtils() {
@@ -86,7 +94,18 @@ class Home$$Page extends Component {
   }
 
   _defineMethods() {
-    return {};
+    const __$$methods = {};
+
+    // 为所有的方法绑定上下文
+    Object.entries(__$$methods).forEach(([methodName, method]) => {
+      if (typeof method === 'function') {
+        __$$methods[methodName] = (...args) => {
+          return method.apply(this._context, args);
+        };
+      }
+    });
+
+    return __$$methods;
   }
 }
 

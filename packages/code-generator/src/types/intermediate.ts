@@ -26,6 +26,7 @@ export interface IUtilInfo extends IWithDependency {
 export interface IRouterInfo extends IWithDependency {
   routes: Array<{
     path: string;
+    fileName: string;
     componentName: string;
   }>;
 }
@@ -39,7 +40,12 @@ export interface IProjectInfo {
   packages: INpmPackage[];
   meta?: {
     name?: string;
+    title?: string;
   };
+}
+
+export interface IPageMeta {
+  router?: string;
 }
 
 /**

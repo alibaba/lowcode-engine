@@ -44,9 +44,13 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       name: RAX_CHUNK_NAME.MethodsBegin,
       content: `
         _defineMethods() {
-          return ({
+          const __$$methods = ({
       `,
-      linkAfter: [RAX_CHUNK_NAME.ClassRenderEnd, CLASS_DEFINE_CHUNK_NAME.InsPrivateMethod],
+      linkAfter: [
+        RAX_CHUNK_NAME.ClassRenderEnd,
+        CLASS_DEFINE_CHUNK_NAME.InsPrivateMethod,
+        RAX_CHUNK_NAME.LifeCyclesEnd,
+      ],
     });
 
     next.chunks.push({
@@ -55,6 +59,17 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       name: RAX_CHUNK_NAME.MethodsEnd,
       content: `
           });
+
+          // 为所有的方法绑定上下文
+          Object.entries(__$$methods).forEach(([methodName, method]) => {
+            if (typeof method === 'function') {
+              __$$methods[methodName] = (...args) => {
+                return method.apply(this._context, args);
+              }
+            }
+          });
+
+          return __$$methods;
         }
       `,
       linkAfter: [RAX_CHUNK_NAME.MethodsBegin, RAX_CHUNK_NAME.MethodsContent],

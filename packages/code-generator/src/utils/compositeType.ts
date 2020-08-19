@@ -8,12 +8,11 @@ import {
 } from '@ali/lowcode-types';
 import _ from 'lodash';
 
+import { CompositeValueGeneratorOptions, CodeGeneratorError } from '../types';
 import { generateExpression, generateFunction } from './jsExpression';
 import { generateJsSlot } from './jsSlot';
 import { isValidIdentifier } from './validate';
 import { camelize } from './common';
-
-import { CompositeValueGeneratorOptions, CodeGeneratorError } from '../types';
 
 function generateArray(value: CompositeArray, options: CompositeValueGeneratorOptions = {}): string {
   const body = value.map((v) => generateUnknownType(v, options)).join(',');

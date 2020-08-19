@@ -86,13 +86,15 @@ export function handleSubNodes<T>(
 }
 
 export function generateAttr(ctx: INodeGeneratorContext, attrName: string, attrValue: any): CodePiece[] {
-  if (attrName === 'initValue') {
-    return [];
+  if (ctx.handlers.nodeAttr) {
+    return ctx.handlers.nodeAttr(attrName, attrValue);
   }
+
   const valueStr = generateCompositeType(attrValue, {
     containerHandler: (v, isStr, vStr) => (isStr ? `"${vStr}"` : `{${v}}`),
     nodeGenerator: ctx.generator,
   });
+
   return [
     {
       value: `${attrName}=${valueStr}`,
@@ -102,6 +104,10 @@ export function generateAttr(ctx: INodeGeneratorContext, attrName: string, attrV
 }
 
 export function generateAttrs(ctx: INodeGeneratorContext, nodeItem: NodeSchema): CodePiece[] {
+  if (ctx.handlers.nodeAttrs) {
+    return ctx.handlers.nodeAttrs(nodeItem);
+  }
+
   const { props } = nodeItem;
 
   let pieces: CodePiece[] = [];
@@ -118,6 +124,7 @@ export function generateAttrs(ctx: INodeGeneratorContext, nodeItem: NodeSchema):
         }
 
         // TODO: 处理 spread 场景（<Xxx {...(something)}/>)
+        // 这种在 schema 里面怎么描述
       });
     }
   }
@@ -214,9 +221,11 @@ export function generateReactCtrlLine(ctx: INodeGeneratorContext, nodeItem: Node
     const loopItemName = nodeItem.loopArgs?.[0] || 'item';
     const loopIndexName = nodeItem.loopArgs?.[1] || 'index';
 
-    const loopDataExpr = (ctx.handlers.loopDataExpr || _.identity)(
-      isJSExpression(nodeItem.loop) ? `(${nodeItem.loop.value})` : `(${JSON.stringify(nodeItem.loop)})`,
-    );
+    const rawLoopDataExpr = isJSExpression(nodeItem.loop)
+      ? `(${nodeItem.loop.value})`
+      : `(${JSON.stringify(nodeItem.loop)})`;
+
+    const loopDataExpr = ctx.handlers.loopDataExpr ? ctx.handlers.loopDataExpr(rawLoopDataExpr) : rawLoopDataExpr;
 
     pieces.unshift({
       value: `${loopDataExpr}.map((${loopItemName}, ${loopIndexName}) => (`,

@@ -3,13 +3,16 @@
   "version": "0.8.10",
   "description": "出码引擎 for LowCode Engine",
   "main": "lib/index.js",
+  "module": "es/index.js",
+  "typings": "es/index.d.ts",
   "files": [
     "lib",
+    "es",
     "demo"
   ],
   "scripts": {
     "start": "ava --watch",
-    "build": "rimraf lib && tsc",
+    "build": "rimraf lib && build-scripts build --skip-demo",
     "demo": "node ./demo/demo.js",
     "test": "ava",
     "template": "node ./tools/createTemplate.js"
@@ -30,6 +33,7 @@
     "short-uuid": "^3.1.1"
   },
   "devDependencies": {
+    "@alib/build-scripts": "^0.1.18",
     "@types/babel__traverse": "^7.0.10",
     "ava": "^1.0.1",
     "rimraf": "^3.0.2",

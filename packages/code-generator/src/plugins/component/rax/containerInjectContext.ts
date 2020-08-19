@@ -53,7 +53,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
               return self._dataSourceEngine.dataSourceMap || {};
             },
             async reloadDataSource() {
-              self._dataSourceEngine.reloadDataSource();
+              await self._dataSourceEngine.reloadDataSource();
             },
             get utils() {
               return self._utils;
@@ -67,6 +67,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
             get props() {
               return self.props;
             },
+            ...this._methods,
           };
 
           return context;

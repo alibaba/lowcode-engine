@@ -35,7 +35,11 @@
     {
       componentName: 'Page',
       fileName: 'home',
+      meta: {
+        router: '/',
+      },
       state: {
+        clickCount: 0,
         user: { name: '张三', age: 18, avatar: 'https://gw.alicdn.com/tfs/TB1Ui9BMkY2gK0jSZFgXXc5OFXa-50-50.png' },
         orders: [
           {
@@ -51,11 +55,20 @@
         ],
       },
       props: {},
-      lifeCycles: {},
+      lifeCycles: {
+        didMount: {
+          type: 'JSExpression',
+          value: 'function didMount(){\n  this.utils.Toast.show(`Hello ${this.state.user.name}!`);\n}',
+        },
+        willUnmount: {
+          type: 'JSExpression',
+          value: 'function didMount(){\n  this.utils.Toast.show(`Bye, ${this.state.user.name}!`);\n}',
+        },
+      },
       methods: {
         hello: {
           type: 'JSExpression',
-          value: 'function hello(){ console.log("Hello world!"); }',
+          value: 'function hello(){\n  this.utils.Toast.show(`Hello ${this.state.user.name}!`);\n  console.log(`Hello ${this.state.user.name}!`); }',
         },
       },
       dataSource: {
@@ -72,6 +85,10 @@
               method: 'GET',
               uri: 'https://shs.alibaba-inc.com/mock/1458/demo/user',
             },
+            dataHandler: {
+              type: 'JSFunction',
+              value: 'function (response) {\nif (!response.success){\n    throw new Error(response.message);\n  }\n  return response.data;\n}',
+            },
           },
           // 示例数据源：https://shs.alibaba-inc.com/mock/1458/demo/orders
           {
@@ -79,10 +96,21 @@
             type: 'fetch',
             options: {
               method: 'GET',
-              uri: 'https://shs.alibaba-inc.com/mock/1458/demo/orders',
+              uri: {
+                type: 'JSExpression',
+                value: 'this.state.user.ordersApiUri',
+              },
+            },
+            dataHandler: {
+              type: 'JSFunction',
+              value: 'function (response) {\nif (!response.success){\n    throw new Error(response.message);\n  }\n  return response.data.result;\n}',
             },
           },
         ],
+        dataHandler: {
+          type: 'JSFunction',
+          value: 'function (dataMap) {\n  console.info("All datasources loaded:", dataMap);\n}',
+        },
       },
       children: [
         {
@@ -132,6 +160,12 @@
             },
             {
               componentName: 'View',
+              props: {
+                onClick: {
+                  type: 'JSFunction',
+                  value: 'this.hello',
+                },
+              },
               children: [
                 {
                   componentName: 'Text',
@@ -170,8 +204,13 @@
             type: 'JSExpression',
             value: 'this.state.orders',
           },
+          loopArgs: ['order', 'index'],
           props: {
             style: { flexDirection: 'row' },
+            onClick: {
+              type: 'JSFunction',
+              value: 'function(){ this.utils.recordEvent(`CLICK_ORDER`, this.order.title) }',
+            },
           },
           children: [
             {
@@ -183,7 +222,7 @@
                     source: {
                       uri: {
                         type: 'JSExpression',
-                        value: 'this.item.coverUrl',
+                        value: 'this.order.coverUrl',
                       },
                     },
                     style: {
@@ -201,17 +240,64 @@
                   componentName: 'Text',
                   children: {
                     type: 'JSExpression',
-                    value: 'this.item.title',
+                    value: 'this.order.title',
                   },
                 },
                 {
                   componentName: 'Text',
                   children: {
                     type: 'JSExpression',
-                    value: 'this.utils.formatPrice(this.item.price, "元")',
+                    value: 'this.utils.formatPrice(this.order.price, "元")',
                   },
                 },
               ],
+            },
+          ],
+        },
+        {
+          componentName: 'View',
+          props: {
+            onClick: {
+              type: 'JSFunction',
+              value: 'function (){ this.setState({ clickCount: this.state.clickCount + 1 }) }',
+            },
+          },
+          children: [
+            {
+              componentName: 'Text',
+              children: [
+                '点击次数：',
+                {
+                  type: 'JSExpression',
+                  value: 'this.state.clickCount',
+                },
+                '(点击加 1)',
+              ],
+            },
+          ],
+        },
+        {
+          componentName: 'View',
+          children: [
+            {
+              componentName: 'Text',
+              props: {},
+              children: '操作提示：',
+            },
+            {
+              componentName: 'Text',
+              props: {},
+              children: '1. 点击会员名，可以弹出 Toast "Hello xxx!"',
+            },
+            {
+              componentName: 'Text',
+              props: {},
+              children: '2. 点击订单，会记录点击的订单信息，并弹出 Toast 提示',
+            },
+            {
+              componentName: 'Text',
+              props: {},
+              children: '3. 最下面的【点击次数】，点一次应该加 1',
             },
           ],
         },
@@ -219,6 +305,7 @@
     },
   ],
   utils: [
+    // 可以直接定义一个函数
     {
       name: 'formatPrice',
       type: 'function',
@@ -227,6 +314,16 @@
         value: 'function formatPrice(price, unit) { return Number(price).toFixed(2) + unit; }',
       },
     },
+    // 在 utils 里面也可以用 this 访问当前上下文:
+    {
+      name: 'recordEvent',
+      type: 'function',
+      content: {
+        type: 'JSFunction',
+        value: 'function recordEvent(eventName, eventDetail) { \n  this.utils.Toast.show(`[EVENT]: ${eventName} ${eventDetail}`);\n  console.log(`[EVENT]: ${eventName} (detail: %o) (user: %o)`, eventDetail, this.state.user); }',
+      },
+    },
+    // 也可以直接从 npm 包引入 (下例等价于 `import moment from 'moment';`)
     {
       name: 'moment',
       type: 'npm',
@@ -236,6 +333,7 @@
         exportName: 'moment',
       },
     },
+    // 可以引入子目录（下例等价于 `import clone from 'lodash/clone';`)
     {
       name: 'clone',
       type: 'npm',
@@ -247,7 +345,18 @@
         main: '/clone',
       },
     },
+    // 支持 TNPM
+    {
+      name: 'Toast',
+      type: 'tnpm',
+      content: {
+        package: 'universal-toast',
+        version: '^1.2.0',
+        exportName: 'Toast', // TODO: 这个 exportName 是否可以省略？省略后默认是上一层的 name？
+      },
+    },
   ],
+  css: 'page,body{\n  width: 750rpx;\n  overflow-x: hidden;\n}',
   config: {
     sdkVersion: '1.0.3',
     historyMode: 'hash',

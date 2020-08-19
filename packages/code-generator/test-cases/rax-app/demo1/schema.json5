@@ -23,6 +23,9 @@
       props: {},
       lifeCycles: {},
       fileName: 'home',
+      meta: {
+        router: '/',
+      },
       dataSource: {
         list: [],
       },

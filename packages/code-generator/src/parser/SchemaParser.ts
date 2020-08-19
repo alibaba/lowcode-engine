@@ -4,6 +4,7 @@
  */
 import changeCase from 'change-case';
 import { UtilItem, NodeDataType, NodeSchema, ContainerSchema, ProjectSchema, PropsMap } from '@ali/lowcode-types';
+import { IPageMeta } from '../types';
 
 import { SUPPORT_SCHEMA_VERSION_LIST } from '../const';
 
@@ -22,6 +23,7 @@ import {
   IParseResult,
   ISchemaParser,
   INpmPackage,
+  IRouterInfo,
 } from '../types';
 
 const defaultContainer: IContainerInfo = {
@@ -168,21 +170,21 @@ class SchemaParser implements ISchemaParser {
     });
 
     // 分析路由配置
-    // TODO: 低代码规范里面的路由是咋弄的？
-    const routes = containers
+    const routes: IRouterInfo['routes'] = containers
       .filter((container) => container.containerType === 'Page')
       .map((page) => {
-        let router = '';
-        if (page.meta) {
-          router = (page.meta as any)?.router || '';
-        }
-
-        if (!router) {
-          router = `/${page.fileName}`;
+        const meta = page.meta;
+        if (meta) {
+          return {
+            path: (meta as IPageMeta).router || `/${page.fileName}`, // 如果无法找到页面路由信息，则用 fileName 做兜底
+            fileName: page.fileName,
+            componentName: page.moduleName,
+          };
         }
 
         return {
-          path: router,
+          path: '',
+          fileName: page.fileName,
           componentName: page.moduleName,
         };
       });

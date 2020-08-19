@@ -118,8 +118,8 @@ export class ProjectBuilder implements IProjectBuilder {
     }
 
     // appConfig
-    if (parseResult.project && builders.appConfig) {
-      const { files } = await builders.appConfig.generateModule(parseResult.project);
+    if (builders.appConfig) {
+      const { files } = await builders.appConfig.generateModule(parseResult);
 
       buildResult.push({
         path: this.template.slots.appConfig.path,
