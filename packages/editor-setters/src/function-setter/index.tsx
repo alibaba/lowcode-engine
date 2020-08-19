@@ -55,8 +55,8 @@ export default class FunctionSetter extends PureComponent<FunctionSetterProps, {
   }
 
   removeFunctionBind = () => {
-    const { field ,onChange} = this.props;
-    field.parent.clearPropValue(field.name);
+    const { field ,removeProp} = this.props;
+    removeProp();
   }
 
   parseFunctionName = (functionString: String) => {
