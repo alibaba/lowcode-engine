@@ -138,11 +138,23 @@ designer.addPropsReducer((props, node) => {
 }, TransformStage.Init);
 
 designer.addPropsReducer((props: any, node: Node) => {
+  // live 模式下解析 lifeCycles
   if (node.isRoot() && props && props.lifeCycles) {
+    if (editor.get('designMode') === 'live') {
+      const lifeCycleMap = {
+        didMount: 'componentDidMount',
+        willUnmount: 'componentWillUnMount',
+      };
+      const lifeCycles = props.lifeCycles;
+      Object.keys(lifeCycleMap).forEach(key => {
+        lifeCycles[lifeCycleMap[key]] = lifeCycles[key];
+      });
+      return props;
+    }
     return {
       ...props,
       lifeCycles: {},
-    }
+    };
   }
   return props;
 }, TransformStage.Render);
@@ -219,6 +231,29 @@ designer.addPropsReducer((props: any, node: Node) => {
   }
   return props;
 }, TransformStage.Save);
+
+// designer.addPropsReducer((props: any, node: Node) => {
+//   const lifeCycleNames = ['didMount', 'willUnmount'];
+//   const lifeCycleMap = {
+//     didMount: 'componentDidMount',
+//     willUnmount: 'componentWillUnMount',
+//   };
+//   if (node.componentName === 'Page') {
+//     debugger;
+//     lifeCycleNames.forEach(key => {
+//       if (props[key]) {
+//         const lifeCycles = node.props.getPropValue(getConvertedExtraKey('lifeCycles')) || {};
+//         lifeCycles[lifeCycleMap[key]] = props[key];
+//         node.props.setPropValue(getConvertedExtraKey('lifeCycles'), lifeCycles);
+//       } else if (node.props.getPropValue(getConvertedExtraKey('lifeCycles'))) {
+//         const lifeCycles = node.props.getPropValue(getConvertedExtraKey('lifeCycles')) || {};
+//         lifeCycles[lifeCycleMap[key]] = lifeCycles[key];
+//         node.props.setPropValue(getConvertedExtraKey('lifeCycles'), lifeCycles);
+//       }
+//     });
+//   }
+//   return props;
+// }, TransformStage.Init);
 
 // 设计器组件样式处理
 function stylePropsReducer(props: any, node: any) {

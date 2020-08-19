@@ -19,7 +19,7 @@ export function deepValueParser(obj?: any): any {
   }
   // 兼容 ListSetter 中的变量结构
   if (isVariable(obj)) {
-    if (editor.get('designMode') === 'live'){
+    if (editor.get('designMode') === 'live') {
       return {
         type: 'JSExpression',
         value: obj.variable,
