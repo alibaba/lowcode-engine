@@ -2,7 +2,6 @@ import { RootSchema } from '@ali/lowcode-types';
 import { DocumentModel } from '@ali/lowcode-designer';
 import { designer } from './editor';
 import NodeCacheVisitor from './rootNodeVisitor';
-import { getFormUuid } from './util';
 
 const { project } = designer;
 
@@ -52,7 +51,8 @@ const pages = Object.assign(project, {
     project.load({
       version: '1.0.0',
       componentsMap: [],
-      componentsTree
+      componentsTree,
+      id: pages[0].id,
     }, true);
 
     // FIXME: 根本原因应该是 propStash 导致的，这样可以避免页面加载之后就被标记为 isModified
@@ -89,7 +89,7 @@ const pages = Object.assign(project, {
     if (!project.currentDocument) {
       return null;
     }
-    const currentPage = { ...project.currentDocument, id: getFormUuid() };
+    const currentPage = { ...project.currentDocument, id: project.getSchema().id };
     Object.setPrototypeOf(currentPage, Object.getPrototypeOf(project.currentDocument || {}));
     return currentPage;
   },
