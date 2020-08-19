@@ -9,5 +9,9 @@ export function raxFindDOMNodes(instance: any): Array<Element | Text> | null {
   if (isElement(instance)) {
     return [instance];
   }
-  return findDOMNode(instance);
+  const result = findDOMNode(instance);
+  if (Array.isArray(result)) {
+    return result;
+  }
+  return [result];
 }
