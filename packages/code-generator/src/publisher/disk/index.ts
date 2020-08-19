@@ -1,11 +1,14 @@
+import * as defaultFs from 'fs';
+
 import { ResultDir } from '@ali/lowcode-types';
 import { PublisherFactory, IPublisher, IPublisherFactoryParams, PublisherError } from '../../types';
-import { writeFolder } from './utils';
+import { writeFolder, IFileSystem } from './utils';
 
 export interface IDiskFactoryParams extends IPublisherFactoryParams {
   outputPath?: string;
   projectSlug?: string;
   createProjectFolder?: boolean;
+  fs?: IFileSystem;
 }
 
 export interface IDiskPublisher extends IPublisher<IDiskFactoryParams, string> {
@@ -17,6 +20,7 @@ export const createDiskPublisher: PublisherFactory<IDiskFactoryParams, IDiskPubl
   params: IDiskFactoryParams = {},
 ): IDiskPublisher => {
   let { project, outputPath = './' } = params;
+  const { fs = defaultFs } = params;
 
   const getProject = (): ResultDir => {
     if (!project) {
@@ -50,7 +54,7 @@ export const createDiskPublisher: PublisherFactory<IDiskFactoryParams, IDiskPubl
     }
 
     try {
-      await writeFolder(projectToPublish, projectOutputPath, createProjectFolder);
+      await writeFolder(projectToPublish, projectOutputPath, createProjectFolder, fs);
       return { success: true, payload: projectOutputPath };
     } catch (error) {
       throw new PublisherError(error);

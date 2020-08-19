@@ -1,6 +1,7 @@
 // 注意: 出码引擎注入的临时变量默认都以 "__$$" 开头，禁止在搭建的代码中直接访问。
 // 例外：rax 框架的导出名和各种组件名除外。
 import { createElement, Component } from 'rax';
+import { withRouter as __$$withRouter } from 'rax-app';
 
 import Page from 'rax-view';
 
@@ -9,6 +10,8 @@ import Text from 'rax-text';
 import { create as __$$createDataSourceEngine } from '@ali/lowcode-datasource-engine';
 
 import { isMiniApp as __$$isMiniApp } from 'universal-env';
+
+import __$$constants from '../../constants';
 
 import __$$projectUtils from '../../utils';
 
@@ -68,6 +71,9 @@ class Home$$Page extends Component {
       get props() {
         return self.props;
       },
+      get constants() {
+        return __$$constants;
+      },
       ...this._methods,
     };
 
@@ -109,7 +115,7 @@ class Home$$Page extends Component {
   }
 }
 
-export default Home$$Page;
+export default __$$withRouter(Home$$Page);
 
 function __$$eval(expr) {
   try {

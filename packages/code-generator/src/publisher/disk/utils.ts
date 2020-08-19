@@ -1,36 +1,43 @@
-import { existsSync, mkdir, writeFile } from 'fs';
+import * as systemFs from 'fs';
 import { join } from 'path';
 import { ResultDir, ResultFile } from '@ali/lowcode-types';
+
+export interface IFileSystem {
+  existsSync: typeof systemFs.existsSync;
+  mkdir: typeof systemFs.mkdir;
+  writeFile: typeof systemFs.writeFile;
+}
 
 export const writeFolder = async (
   folder: ResultDir,
   currentPath: string,
   createProjectFolder = true,
+  fs: IFileSystem = systemFs,
 ): Promise<void> => {
   const { name, files, dirs } = folder;
 
   const folderPath = createProjectFolder ? join(currentPath, name) : currentPath;
 
-  if (!existsSync(folderPath)) {
-    await createDirectory(folderPath);
+  if (!fs.existsSync(folderPath)) {
+    await createDirectory(folderPath, fs);
   }
 
-  const promises = [writeFilesToFolder(folderPath, files), writeSubFoldersToFolder(folderPath, dirs)];
+  const promises = [writeFilesToFolder(folderPath, files, fs), writeSubFoldersToFolder(folderPath, dirs, fs)];
 
   await Promise.all(promises);
 };
 
-const writeFilesToFolder = async (folderPath: string, files: ResultFile[]): Promise<void> => {
+const writeFilesToFolder = async (folderPath: string, files: ResultFile[], fs: IFileSystem): Promise<void> => {
   const promises = files.map((file) => {
     const fileName = file.ext ? `${file.name}.${file.ext}` : file.name;
     const filePath = join(folderPath, fileName);
-    return writeContentToFile(filePath, file.content);
+    return writeContentToFile(filePath, file.content, 'utf8', fs);
   });
 
   await Promise.all(promises);
 };
 
-const writeSubFoldersToFolder = async (folderPath: string, subFolders: ResultDir[]): Promise<void> => {
+const writeSubFoldersToFolder = async (folderPath: string, subFolders: ResultDir[], fs: IFileSystem): Promise<void> => {
   const promises = subFolders.map((subFolder) => {
     return writeFolder(subFolder, folderPath);
   });
@@ -38,17 +45,22 @@ const writeSubFoldersToFolder = async (folderPath: string, subFolders: ResultDir
   await Promise.all(promises);
 };
 
-const createDirectory = (pathToDir: string): Promise<void> => {
+const createDirectory = (pathToDir: string, fs: IFileSystem): Promise<void> => {
   return new Promise((resolve, reject) => {
-    mkdir(pathToDir, { recursive: true }, (err) => {
+    fs.mkdir(pathToDir, { recursive: true }, (err) => {
       err ? reject(err) : resolve();
     });
   });
 };
 
-const writeContentToFile = (filePath: string, fileContent: string, encoding = 'utf8'): Promise<void> => {
+const writeContentToFile = (
+  filePath: string,
+  fileContent: string,
+  encoding = 'utf8',
+  fs: IFileSystem,
+): Promise<void> => {
   return new Promise((resolve, reject) => {
-    writeFile(filePath, fileContent, encoding, (err) => {
+    fs.writeFile(filePath, fileContent, encoding, (err) => {
       err ? reject(err) : resolve();
     });
   });

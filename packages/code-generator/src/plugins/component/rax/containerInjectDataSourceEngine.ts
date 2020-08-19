@@ -1,4 +1,5 @@
-import { CompositeValue, DataSourceConfig, isJSExpression, isJSFunction } from '@ali/lowcode-types';
+import { CompositeValue, JSExpression, DataSourceConfig, isJSExpression, isJSFunction } from '@ali/lowcode-types';
+import changeCase from 'change-case';
 
 import { CLASS_DEFINE_CHUNK_NAME, COMMON_CHUNK_NAME } from '../../../const/generator';
 
@@ -30,6 +31,36 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       ...pre,
     };
 
+    const dataSourceConfig = isContainerSchema(pre.ir) ? pre.ir.dataSource : null;
+    const dataSourceItems: DataSourceConfig[] = (dataSourceConfig && dataSourceConfig.list) || [];
+    const dataSourceEngineOptions = { runtimeConfig: true };
+    if (dataSourceItems.length > 0) {
+      const requestHandlersMap = {} as Record<string, JSExpression>;
+
+      dataSourceItems.forEach((ds) => {
+        if (!(ds.type in requestHandlersMap) && ds.type !== 'custom') {
+          const handlerName = '__$$' + changeCase.camelCase(ds.type) + 'RequestHandler';
+
+          requestHandlersMap[ds.type] = {
+            type: 'JSExpression',
+            value: handlerName + (ds.type === 'urlParams' ? '({ search: this.props.location.search })' : ''),
+          };
+
+          next.chunks.push({
+            type: ChunkType.STRING,
+            fileType: FileType.JSX,
+            name: COMMON_CHUNK_NAME.ExternalDepsImport,
+            content: `
+              import ${handlerName} from '@ali/lowcode-datasource-engine/handlers/${changeCase.kebabCase(ds.type)}';
+            `,
+            linkAfter: [],
+          });
+        }
+      });
+
+      Object.assign(dataSourceEngineOptions, { requestHandlersMap });
+    }
+
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: FileType.JSX,
@@ -45,8 +76,12 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       fileType: cfg.fileType,
       name: CLASS_DEFINE_CHUNK_NAME.InsVar,
       content: `
-      _dataSourceConfig = this._defineDataSourceConfig();
-      _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceConfig, this._context, { runtimeConfig: true });`,
+        _dataSourceConfig = this._defineDataSourceConfig();
+        _dataSourceEngine = __$$createDataSourceEngine(
+          this._dataSourceConfig,
+          this._context,
+          ${generateCompositeType(dataSourceEngineOptions)}
+        );`,
       linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start],
     });
 
@@ -59,9 +94,6 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       `,
       linkAfter: [RAX_CHUNK_NAME.ClassDidMountBegin],
     });
-
-    const dataSourceConfig = isContainerSchema(pre.ir) ? pre.ir.dataSource : null;
-    const dataSourceItems: DataSourceConfig[] = (dataSourceConfig && dataSourceConfig.list) || [];
 
     next.chunks.push({
       type: ChunkType.STRING,

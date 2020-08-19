@@ -127,6 +127,16 @@ export class ProjectBuilder implements IProjectBuilder {
       });
     }
 
+    // buildConfig
+    if (builders.buildConfig) {
+      const { files } = await builders.buildConfig.generateModule(parseResult);
+
+      buildResult.push({
+        path: this.template.slots.buildConfig.path,
+        files,
+      });
+    }
+
     // constants?
     if (parseResult.project && builders.constants && this.template.slots.constants) {
       const { files } = await builders.constants.generateModule(parseResult.project);
@@ -186,6 +196,8 @@ export class ProjectBuilder implements IProjectBuilder {
         files,
       });
     }
+
+    // TODO: 更多 slots 的处理？？是不是可以考虑把 template 中所有的 slots 都处理下？
 
     // Post Process
 
