@@ -1,6 +1,6 @@
-import { designer } from './editor';
 import { RootSchema } from '@ali/lowcode-types';
 import { DocumentModel } from '@ali/lowcode-designer';
+import { designer } from './editor';
 import NodeCacheVisitor from './rootNodeVisitor';
 
 const { project } = designer;
@@ -86,7 +86,12 @@ const pages = Object.assign(project, {
     page.active();
   },
   getCurrentPage() {
-    return project.currentDocument;
+    if (!project.currentDocument) {
+      return null;
+    }
+    const currentPage = { ...project.currentDocument, id: project.getSchema().id };
+    Object.setPrototypeOf(currentPage, Object.getPrototypeOf(project.currentDocument || {}));
+    return currentPage;
   },
   onPagesChange() {
     // noop
@@ -101,7 +106,7 @@ const pages = Object.assign(project, {
 
 Object.defineProperty(pages, 'currentPage', {
   get() {
-    return project.currentDocument;
+    return pages.getCurrentPage();
   }
 })
 
