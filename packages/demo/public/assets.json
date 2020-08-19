@@ -3925,7 +3925,14 @@
           },
           "description": "标题"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "nestingRule": {
+            "parentWhitelist": ["Collapse"]
+          }
+        }
+      }
     },
     {
       "componentName": "ErrorBoundary",
