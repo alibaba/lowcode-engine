@@ -855,9 +855,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       return canMove;
     });
 
-    if (!operationalNodes || operationalNodes.length === 0) {
+    if (nodes && (!operationalNodes || operationalNodes.length === 0)) {
       return;
     }
+    
     this.sensing = true;
     this.scroller.scrolling(e);
     const dropContainer = this.getDropContainer(e);
@@ -867,7 +868,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       !dropContainer ||
       canDropIn === false ||
       // too dirty
-      (typeof canDropIn === 'function' && !canDropIn(operationalNodes[0]))
+      (nodes && typeof canDropIn === 'function' && !canDropIn(operationalNodes[0]))
     ) {
       return null;
     }
@@ -899,7 +900,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       event: e,
     };
 
-    if (dragObject.type === 'node' && operationalNodes[0]?.getPrototype()?.isModal()) {
+    if (dragObject.type === 'node' && nodes && operationalNodes[0]?.getPrototype()?.isModal()) {
       return this.designer.createLocation({
         target: this.document.rootNode,
         detail: {

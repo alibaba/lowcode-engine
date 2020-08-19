@@ -8,6 +8,7 @@ import {
   IEditor,
   CompositeObject,
   PropsList,
+  isNodeSchema,
 } from '@ali/lowcode-types';
 import { Project } from '../project';
 import { Node, DocumentModel, insertChildren, isRootNode, ParentalNode, TransformStage } from '../document';
@@ -111,10 +112,14 @@ export class Designer {
         if (isLocationChildrenDetail(loc.detail) && loc.detail.valid !== false) {
           let nodes: Node[] | undefined;
           if (isDragNodeObject(dragObject)) {
-            nodes = insertChildren(loc.target, dragObject.nodes, loc.detail.index, copy);
+            nodes = insertChildren(loc.target, [...dragObject.nodes], loc.detail.index, copy);
           } else if (isDragNodeDataObject(dragObject)) {
             // process nodeData
             const nodeData = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
+            const isNotNodeSchema = nodeData.find(item => !isNodeSchema(item));
+            if (isNotNodeSchema) {
+              return;
+            }
             nodes = insertChildren(loc.target, nodeData, loc.detail.index);
           }
           if (nodes) {
