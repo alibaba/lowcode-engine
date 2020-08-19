@@ -86,12 +86,7 @@ const pages = Object.assign(project, {
     page.active();
   },
   getCurrentPage() {
-    if (!project.currentDocument) {
-      return null;
-    }
-    const currentPage = { ...project.currentDocument, id: project.getSchema().id };
-    Object.setPrototypeOf(currentPage, Object.getPrototypeOf(project.currentDocument || {}));
-    return currentPage;
+    return project.currentDocument;
   },
   onPagesChange() {
     // noop
@@ -106,7 +101,7 @@ const pages = Object.assign(project, {
 
 Object.defineProperty(pages, 'currentPage', {
   get() {
-    return pages.getCurrentPage();
+    return project.currentDocument;
   }
 })
 
