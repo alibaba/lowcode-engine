@@ -9,7 +9,7 @@ import bus from './bus';
 import { VE_EVENTS } from './base/const';
 
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
-import { Skeleton, SettingsPrimaryPane } from '@ali/lowcode-editor-skeleton';
+import { Skeleton, SettingsPrimaryPane, registerDefaults } from '@ali/lowcode-editor-skeleton';
 
 import { deepValueParser } from './deep-value-parser';
 import { liveEditingRule, liveEditingSaveHander } from './vc-live-editing';
@@ -20,6 +20,7 @@ globalContext.register(editor, Editor);
 export const skeleton = new Skeleton(editor);
 editor.set(Skeleton, skeleton);
 editor.set('skeleton', skeleton);
+registerDefaults();
 
 export const designer = new Designer({ editor: editor });
 editor.set(Designer, designer);
