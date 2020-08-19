@@ -9,16 +9,23 @@ function isVariable(obj: any) {
 }
 
 // FIXME: 表达式使用 mock 值，未来live 模式直接使用原始值
+// TODO: designType
 export function deepValueParser(obj?: any): any {
-  // live
-  if (editor.get('designMode') === 'live') {
-    return obj;
-  }
   if (isJSExpression(obj)) {
+    if (editor.get('designMode') === 'live') {
+      return obj;
+    }
     obj = obj.mock;
   }
   // 兼容 ListSetter 中的变量结构
   if (isVariable(obj)) {
+    if (editor.get('designMode') === 'live'){
+      return {
+        type: 'JSExpression',
+        value: obj.variable,
+        mock: obj.value,
+      };
+    }
     obj = obj.value;
   }
   if (!obj) {
