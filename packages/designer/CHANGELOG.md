@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.47"></a>
+## [0.9.47](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.46...@ali/lowcode-designer@0.9.47) (2020-08-19)
+
+
+### Bug Fixes
+
+* 修复获取 currentPage 的逻辑 ([d8221db](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d8221db))
+
+
+
+
 <a name="0.9.46"></a>
 ## [0.9.46](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.45...@ali/lowcode-designer@0.9.46) (2020-08-19)
 
