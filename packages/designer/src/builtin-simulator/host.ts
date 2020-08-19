@@ -375,12 +375,31 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         x.initEvent('click', true);
         this._iframe?.dispatchEvent(x);
         const target = e.target as HTMLElement;
-        if (
-          isFormEvent(e) ||
-          target?.closest(
-            '.next-input-group,.next-checkbox-group,.next-date-picker,.next-input,.next-month-picker,.next-number-picker,.next-radio-group,.next-range,.next-range-picker,.next-rating,.next-select,.next-switch,.next-time-picker,.next-upload,.next-year-picker,.next-breadcrumb-item,.next-calendar-header,.next-calendar-table',
-          )
-        ) {
+
+        // TODO: need more elegant solution to ignore click events of compoents in designer
+        const ignoreSelectors: any = [
+          '.next-input-group',
+          '.next-checkbox-group',
+          '.next-date-picker',
+          '.next-input',
+          '.next-month-picker',
+          '.next-number-picker',
+          '.next-radio-group',
+          '.next-range',
+          '.next-range-picker',
+          '.next-rating',
+          '.next-select',
+          '.next-switch',
+          '.next-time-picker',
+          '.next-upload',
+          '.next-year-picker',
+          '.next-breadcrumb-item',
+          '.next-calendar-header',
+          '.next-calendar-table',
+          '.editor-container', // 富文本组件
+        ];
+        const ignoreSelectorsString = ignoreSelectors.join(',');
+        if (isFormEvent(e) || target?.closest(ignoreSelectorsString)) {
           e.preventDefault();
           e.stopPropagation();
         }
