@@ -734,6 +734,12 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.componentName;
   }
 
+  /**
+   * @deprecated
+   */
+  insert(node: Node, ref?: Node, useMutator = true) {
+    this.insertAfter(node, ref, useMutator);
+  }
   insertBefore(node: Node, ref?: Node, useMutator = true) {
     this.children?.insert(node, ref ? ref.index : null, useMutator);
   }

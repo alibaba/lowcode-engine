@@ -149,4 +149,29 @@ export class DropLocation {
       event,
     });
   }
+
+  /**
+   * @deprecated
+   * 兼容 vision
+   */
+  getContainer() {
+    return this.target;
+  }
+
+  /**
+   * @deprecated
+   * 兼容 vision
+   */
+  getInsertion() {
+    if (!this.detail) {
+      return null;
+    }
+    if (this.detail.type === 'Children') {
+      if (this.detail.index <= 0) {
+        return null;
+      }
+      return this.target.children.get(this.detail.index - 1);
+    }
+    return (this.detail as any)?.near?.node;
+  }
 }
