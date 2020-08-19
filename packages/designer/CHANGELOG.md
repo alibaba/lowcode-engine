@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.45"></a>
+## [0.9.45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.44...@ali/lowcode-designer@0.9.45) (2020-08-19)
+
+
+### Bug Fixes
+
+* **designer/node.ts:** fix hasLoop logic ([99a7288](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/99a7288))
+* currentPage.id 返回 formUuid ([775725d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/775725d))
+* 优化画布中点击事件屏蔽，增加富文本组件的部分屏蔽 ([ec08c6c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ec08c6c))
+* 优化画布中点击事件屏蔽，增加富文本组件的部分屏蔽 ([a5b6557](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a5b6557))
+* 区块组件无法删除 ([d936d2b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d936d2b))
+
+
+
+
 <a name="0.9.44"></a>
 ## [0.9.44](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.43...@ali/lowcode-designer@0.9.44) (2020-08-17)
 

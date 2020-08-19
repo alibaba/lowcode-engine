@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.20"></a>
+## [0.8.20](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@0.8.19...@ali/lowcode-react-renderer@0.8.20) (2020-08-19)
+
+
+### Bug Fixes
+
+* **react-renderer:** fix hasLoop logic ([577e0eb](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/577e0eb))
+
+
+
+
 <a name="0.8.19"></a>
 ## [0.8.19](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@0.8.18...@ali/lowcode-react-renderer@0.8.19) (2020-08-17)
 

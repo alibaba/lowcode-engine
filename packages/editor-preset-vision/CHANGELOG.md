@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.47"></a>
+## [0.8.47](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.46...@ali/lowcode-editor-preset-vision@0.8.47) (2020-08-19)
+
+
+### Bug Fixes
+
+* currentPage.id 返回 formUuid ([775725d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/775725d))
+* formUuid 可能不在 url 中 ([8657ab8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8657ab8))
+* 区块组件无法删除 ([d936d2b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d936d2b))
+
+
+
+
 <a name="0.8.46"></a>
 ## [0.8.46](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.45...@ali/lowcode-editor-preset-vision@0.8.46) (2020-08-17)
 
