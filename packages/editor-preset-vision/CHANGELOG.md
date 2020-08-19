@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.48"></a>
+## [0.8.48](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.47...@ali/lowcode-editor-preset-vision@0.8.48) (2020-08-19)
+
+
+### Bug Fixes
+
+* compatiableReducer 递归 ([e905928](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e905928))
+
+
+
+
 <a name="0.8.47"></a>
 ## [0.8.47](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.46...@ali/lowcode-editor-preset-vision@0.8.47) (2020-08-19)
 
