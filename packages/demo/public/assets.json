@@ -11224,7 +11224,10 @@
       ],
       "configure": {
         "component": {
-          "isContainer": true
+          "isContainer": true,
+          "nestingRule": {
+            "parentWhitelist": ["Tab"]
+          }
         }
       }
     },
@@ -11322,6 +11325,11 @@
           "name": "animation",
           "propType": "bool",
           "description": "是否开启动效"
+        },
+        {
+          "name": "afterAppear",
+          "propType": "func",
+          "description": "标签出现动画结束后执行的回调"
         },
         {
           "name": "onClick",
@@ -11432,6 +11440,11 @@
           "name": "onClick",
           "propType": "func",
           "description": "点击回调"
+        },
+        {
+          "name": "afterClose",
+          "propType": "func",
+          "description": "标签关闭后执行的回调"
         },
         {
           "name": "children",
@@ -12038,7 +12051,7 @@
           "propType": "func",
           "description": "拖拽排序时触发的回调函数"
         }
-        
+
       ],
       "configure": {
         "props": {
