@@ -100,6 +100,7 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
         appHelper={renderer.context}
         // context={renderer.context}
         designMode={designMode}
+        device={device}
         suspended={renderer.suspended}
         self={renderer.scope}
         customCreateElement={(Component: any, props: any, children: any) => {
