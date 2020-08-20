@@ -3832,37 +3832,23 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "description": "样式前缀",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "style",
-          "propType": "object",
-          "description": "组件接受行内样式"
-        },
-        {
           "name": "dataSource",
-          "propType": {
-            "type": "instanceOf",
-            "value": "array"
-          },
+          "propType": "Json",
           "description": "使用数据模型构建"
         },
         {
           "name": "defaultExpandedKeys",
           "propType": {
-            "type": "instanceOf",
-            "value": "array"
+            "type": "arrayOf",
+            "value": "string"
           },
           "description": "默认展开keys"
         },
         {
           "name": "expandedKeys",
           "propType": {
-            "type": "instanceOf",
-            "value": "array"
+            "type": "arrayOf",
+            "value": "string"
           },
           "description": "受控展开keys"
         },
@@ -3882,31 +3868,30 @@
           "description": "扩展class"
         },
         {
+          "name": "style",
+          "propType": "object",
+          "description": "组件接受行内样式"
+        },
+        {
           "name": "accordion",
           "propType": "bool",
           "description": "手风琴模式，一次只能打开一个",
           "defaultValue": false
         },
         {
-          "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          }
-        },
-        {
-          "name": "id",
-          "propType": "string"
-        },
-        {
           "name": "rtl",
           "propType": "bool"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
-      "componentName": "Panel",
-      "title": "Panel",
+      "componentName": "Collapse.Panel",
+      "title": "Collapse.Panel",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -3919,24 +3904,13 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "description": "样式类名的品牌前缀",
-          "defaultValue": "next-"
+          "name": "children",
+          "propType": "any"
         },
         {
           "name": "style",
           "propType": "object",
           "description": "子组件接受行内样式"
-        },
-        {
-          "name": "children",
-          "propType": "any"
-        },
-        {
-          "name": "isExpanded",
-          "propType": "bool",
-          "defaultValue": false
         },
         {
           "name": "disabled",
@@ -3950,21 +3924,15 @@
             "value": "node"
           },
           "description": "标题"
-        },
-        {
-          "name": "className",
-          "propType": "string",
-          "description": "扩展class"
-        },
-        {
-          "name": "onClick",
-          "propType": "func"
-        },
-        {
-          "name": "id",
-          "propType": "string"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "nestingRule": {
+            "parentWhitelist": ["Collapse"]
+          }
+        }
+      }
     },
     {
       "componentName": "ErrorBoundary",
@@ -14073,13 +14041,31 @@
                   "prefix": "next-"
                 },
                 "children": [{
-                  "componentName": "Panel",
+                  "componentName": "Collapse.Panel",
                   "props": {
-                    "prefix": "next-",
-                    "isExpanded": true,
                     "title": "面板标题"
                   }
                 }]
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "Collapse.Panel",
+          "title": "折叠面板Panel",
+          "icon": "",
+          "package": "@alifd/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "折叠面板Panel",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_collapse.png",
+              "schema": {
+                "componentName": "Collapse.Panel",
+                "props": {
+                  "prefix": "next-",
+                  "title": "面板标题"
+                }
               }
             }
           ]

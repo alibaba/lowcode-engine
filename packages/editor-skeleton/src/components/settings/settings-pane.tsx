@@ -142,6 +142,10 @@ class SettingFieldView extends Component<{ field: SettingField }> {
             });
             field.setValue(value);
           },
+
+          removeProp:()=>{
+            field.parent.clearPropValue(field.name);
+          }
         }),
       extraProps.forceInline ? 'plain' : extraProps.display,
     );

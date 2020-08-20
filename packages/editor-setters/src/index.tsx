@@ -8,6 +8,7 @@ import JsonSetter from './json-setter';
 import EventsSetter from './events-setter';
 import StyleSetter from './style-setter';
 import IconSetter from './icon-setter';
+import FunctionSetter from './function-setter';
 // import MixedSetter from './mixed-setter';
 
 export const StringSetter = {
@@ -109,6 +110,7 @@ const builtinSetters: any = {
   JsonSetter,
   StyleSetter,
   IconSetter,
+  FunctionSetter
 };
 
 registerSetter(builtinSetters);

@@ -18,6 +18,8 @@ const DEFINITION_EVENT_TYPE = {
   LIFE_CYCLE_EVENT: 'lifeCycleEvent',
 };
 
+const SETTER_NAME = 'event-setter'
+
 export default class EventsSetter extends Component<{
   value: any[];
   onChange: (eventList: any[]) => void;
@@ -61,7 +63,7 @@ export default class EventsSetter extends Component<{
     const {editor} = this.props.field;
     this.initEventBtns();
     this.initEventList();
-    editor.on('event-setter.bindEvent',(relatedEventName)=>{
+    editor.on(`${SETTER_NAME}.bindEvent`,(relatedEventName)=>{
       this.bindEvent(relatedEventName);
     })
 
@@ -328,7 +330,7 @@ export default class EventsSetter extends Component<{
   openDialog = (bindEventName: String) => {
     const {editor} = this.props.field;
     this.bindEventName = bindEventName;
-    editor.emit('eventBindDialog.openDialog',bindEventName);
+    editor.emit('eventBindDialog.openDialog',bindEventName,SETTER_NAME);
   };
 
 
