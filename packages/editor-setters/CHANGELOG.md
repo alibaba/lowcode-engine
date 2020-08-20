@@ -3,7 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-<<<<<<< HEAD
+<a name="1.0.1-0"></a>
+## [1.0.1-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.16...@ali/lowcode-editor-setters@1.0.1-0) (2020-08-20)
+
+
+### Bug Fixes
+
+* fix function-setter bug ([8fd77df](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8fd77df))
+
+
+### Features
+
+* add function setter ([114b6b0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/114b6b0))
+* add style-setters ([99b1d84](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/99b1d84))
+* setting-pane 新增removeProp 函数 ([b97c807](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b97c807))
+* 新增functionSetter ([9359ac6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9359ac6))
+
+
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.14.0...@ali/lowcode-editor-setters@1.0.0) (2020-08-17)
 =======

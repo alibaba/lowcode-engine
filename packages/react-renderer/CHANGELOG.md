@@ -3,8 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+<a name="1.0.1-0"></a>
+## [1.0.1-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@0.8.20...@ali/lowcode-react-renderer@1.0.1-0) (2020-08-20)
+
+
+### Bug Fixes
+
+* dropdown and menu schema ([ae1d125](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ae1d125))
+* parse custom methods function ([87d8b86](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/87d8b86))
+
+
+### Features
+
+* 🎸 add demo-server ([df35c6a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/df35c6a))
+
+
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@0.15.0...@ali/lowcode-react-renderer@1.0.0) (2020-08-17)
 

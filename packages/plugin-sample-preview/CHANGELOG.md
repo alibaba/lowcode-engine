@@ -3,8 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+<a name="1.0.1-0"></a>
+## [1.0.1-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-preview@0.8.51...@ali/lowcode-plugin-sample-preview@1.0.1-0) (2020-08-20)
+
+
+### Bug Fixes
+
+* schema should be componentsTree ([69a2a89](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/69a2a89))
+
+
+### Features
+
+* load assets for preview ([5376469](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5376469))
+* plugin preview ([18f149e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/18f149e))
+* support components ([d72c0d1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d72c0d1))
+
+
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-preview@0.15.0...@ali/lowcode-plugin-sample-preview@1.0.0) (2020-08-17)
 =======

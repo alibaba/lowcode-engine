@@ -3,7 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-<<<<<<< HEAD
+<a name="1.0.1-0"></a>
+## [1.0.1-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-event-bind-dialog@0.8.29...@ali/lowcode-plugin-event-bind-dialog@1.0.1-0) (2020-08-20)
+
+
+### Features
+
+* 新增functionSetter ([9359ac6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9359ac6))
+
+
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-event-bind-dialog@0.13.0...@ali/lowcode-plugin-event-bind-dialog@1.0.0) (2020-08-17)
 =======
