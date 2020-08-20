@@ -57,6 +57,7 @@ export default class BaseEngine extends Component {
     super(props, context);
     this.appHelper = props.__appHelper;
     this.__compScopes = {};
+    this.__instanceMap = {};
     const { locale, messages } = props;
     this.i18n = generateI18n(locale, messages);
     this.__bindCustomMethods(props);
@@ -312,6 +313,7 @@ export default class BaseEngine extends Component {
       Comp = compWrapper(Comp);
     }
     otherProps.ref = (ref) => {
+      this.$(props.fieldId, ref); // 收集ref
       const refProps = props.ref;
       if (refProps && typeof refProps === 'string') {
         this[refProps] = ref;
@@ -525,6 +527,17 @@ export default class BaseEngine extends Component {
     }
     return checkProps(props);
   };
+
+  $(filedId, instance) {
+    this.__instanceMap = this.__instanceMap || {};
+    if (!filedId) {
+      return this.__instanceMap;
+    }
+    if (instance) {
+      this.__instanceMap[filedId] = instance;
+    }
+    return this.__instanceMap[filedId];
+  }
 
   get utils() {
     return this.appHelper && this.appHelper.utils;
