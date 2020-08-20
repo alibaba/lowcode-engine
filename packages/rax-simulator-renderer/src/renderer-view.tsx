@@ -1,4 +1,5 @@
-import RaxEngine from '@ali/lowcode-rax-renderer/lib/index';
+// import RaxEngine from '@ali/lowcode-rax-renderer/lib/index';
+import RaxEngine from '../../rax-render/src/index';
 import { History } from 'history';
 import { Component, createElement, Fragment } from 'rax';
 import { useRouter } from './rax-use-router';

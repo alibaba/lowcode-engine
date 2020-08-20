@@ -1,4 +1,4 @@
-import { transformArrayToMap, isJSFunction, transformStringToFunction, clone } from './index';
+import { transformArrayToMap, isJSFunction, transformStringToFunction, clone, comboSkeletonConfig } from './index';
 import { jsonp, mtop, request, get, post, bzb } from './request';
 
 const DS_STATUS = {
@@ -286,6 +286,12 @@ export default class DataHelper {
           headers,
           ...otherProps
         });
+      case 'legao':
+        // todo:
+        if (method === 'JSONP') {
+          return jsonp(otherProps.url, params, otherProps);
+        }
+        break;
       default:
         method = method.toUpperCase();
         if (method === 'GET') {
