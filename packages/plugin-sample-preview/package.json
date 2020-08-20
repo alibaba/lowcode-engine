@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-sample-preview",
-  "version": "0.8.51",
+  "version": "0.8.52",
   "description": "alibaba lowcode editor sample preview plugin",
   "files": [
     "es",
@@ -18,8 +18,8 @@
     "editor"
   ],
   "dependencies": {
-    "@ali/lowcode-designer": "^0.9.47",
-    "@ali/lowcode-editor-core": "^0.8.30",
+    "@ali/lowcode-designer": "^0.9.48",
+    "@ali/lowcode-editor-core": "^0.8.32",
     "@alifd/next": "^1.x",
     "react": "^16.8.1"
   },
