@@ -47,5 +47,5 @@ export function isCustomView(obj: any): obj is CustomView {
 }
 
 export function isDynamicSetter(obj: any): obj is DynamicSetter {
-  return obj && typeof obj === 'function' && !obj.displayName;
+  return obj && typeof obj === 'function' && !isReactClass(obj);
 }

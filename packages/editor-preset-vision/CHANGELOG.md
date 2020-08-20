@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 <a name="1.0.0"></a>
 # [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.13.0...@ali/lowcode-editor-preset-vision@1.0.0) (2020-08-17)
 
@@ -15,6 +16,60 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 <a name="0.13.0"></a>
 # [0.13.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.12.0...@ali/lowcode-editor-preset-vision@0.13.0) (2020-08-17)
 =======
+=======
+<a name="0.8.49"></a>
+## [0.8.49](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.48...@ali/lowcode-editor-preset-vision@0.8.49) (2020-08-19)
+
+
+### Bug Fixes
+
+* 修复获取 currentPage 的逻辑 ([d8221db](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d8221db))
+
+
+### Features
+
+* register-defaults 改为可选项 ([2195797](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2195797))
+
+
+
+
+<a name="0.8.48"></a>
+## [0.8.48](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.47...@ali/lowcode-editor-preset-vision@0.8.48) (2020-08-19)
+
+
+### Bug Fixes
+
+* compatiableReducer 递归 ([e905928](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e905928))
+
+
+
+
+<a name="0.8.47"></a>
+## [0.8.47](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.46...@ali/lowcode-editor-preset-vision@0.8.47) (2020-08-19)
+
+
+### Bug Fixes
+
+* currentPage.id 返回 formUuid ([775725d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/775725d))
+* formUuid 可能不在 url 中 ([8657ab8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8657ab8))
+* 区块组件无法删除 ([d936d2b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d936d2b))
+
+
+
+
+<a name="0.8.46"></a>
+## [0.8.46](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.45...@ali/lowcode-editor-preset-vision@0.8.46) (2020-08-17)
+
+
+### Bug Fixes
+
+* fieldId 重复 ([5d64312](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5d64312))
+* 页面加载之后就被标记位 isModified ([2840d27](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2840d27))
+
+
+
+
+>>>>>>> master
 <a name="0.8.45"></a>
 ## [0.8.45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.44...@ali/lowcode-editor-preset-vision@0.8.45) (2020-08-14)
 

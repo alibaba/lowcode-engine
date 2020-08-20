@@ -4,9 +4,44 @@ All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 <a name="1.0.0"></a>
 # [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-preview@0.15.0...@ali/lowcode-plugin-sample-preview@1.0.0) (2020-08-17)
 =======
+=======
+<a name="0.8.51"></a>
+## [0.8.51](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-preview@0.8.50...@ali/lowcode-plugin-sample-preview@0.8.51) (2020-08-19)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-sample-preview
+
+<a name="0.8.50"></a>
+## [0.8.50](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-preview@0.8.49...@ali/lowcode-plugin-sample-preview@0.8.50) (2020-08-19)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-sample-preview
+
+<a name="0.8.49"></a>
+## [0.8.49](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-preview@0.8.48...@ali/lowcode-plugin-sample-preview@0.8.49) (2020-08-19)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-sample-preview
+
+<a name="0.8.48"></a>
+## [0.8.48](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-preview@0.8.47...@ali/lowcode-plugin-sample-preview@0.8.48) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-sample-preview
+
+>>>>>>> master
 <a name="0.8.47"></a>
 ## [0.8.47](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-preview@0.8.46...@ali/lowcode-plugin-sample-preview@0.8.47) (2020-08-14)
 >>>>>>> master

@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<<<<<<< HEAD
 <a name="1.0.0"></a>
 # [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.13.0...@ali/lowcode-types@1.0.0) (2020-08-17)
 
@@ -21,10 +22,31 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="0.12.0"></a>
 # [0.12.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.10.0...@ali/lowcode-types@0.12.0) (2020-08-17)
+=======
+<a name="0.8.16"></a>
+## [0.8.16](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.8.15...@ali/lowcode-types@0.8.16) (2020-08-19)
+
+
+### Bug Fixes
+
+* currentPage.id 返回 formUuid ([775725d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/775725d))
 
 
 
 
+<a name="0.8.15"></a>
+## [0.8.15](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.8.14...@ali/lowcode-types@0.8.15) (2020-08-17)
+
+
+### Bug Fixes
+
+* 修复判断动态 setter 的逻辑 ([d195d7f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d195d7f))
+>>>>>>> master
+
+
+
+
+<<<<<<< HEAD
 **Note:** Version bump only for package @ali/lowcode-types
 
 <a name="0.11.0"></a>
@@ -51,6 +73,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-types
 
+=======
+>>>>>>> master
 <a name="0.8.14"></a>
 ## [0.8.14](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.8.13...@ali/lowcode-types@0.8.14) (2020-08-04)
 

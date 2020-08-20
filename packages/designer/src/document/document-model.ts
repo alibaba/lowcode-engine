@@ -51,7 +51,7 @@ export class DocumentModel {
    */
   readonly modalNodesManager: ModalNodesManager;
 
-  private nodesMap = new Map<string, Node>();
+  private _nodesMap = new Map<string, Node>();
   @obx.val private nodes = new Set<Node>();
   private seqId = 0;
   private _simulator?: ISimulatorHost;
@@ -68,6 +68,10 @@ export class DocumentModel {
    */
   get simulator(): ISimulatorHost | null {
     return this._simulator || null;
+  }
+
+  get nodesMap(): Map<string, Node> {
+    return this._nodesMap;
   }
 
   get fileName(): string {
@@ -102,6 +106,9 @@ export class DocumentModel {
     if (!schema) {
       this._blank = true;
     }
+
+    // 兼容 vision
+    this.id = project.getSchema()?.id || this.id;
 
     this.rootNode = this.createNode<RootNode>(
       schema || {
@@ -141,14 +148,14 @@ export class DocumentModel {
    * 生成唯一id
    */
   nextId() {
-    return this.id + (++this.seqId).toString(36).toLocaleLowerCase();
+    return (this.id.slice(-10) + (++this.seqId).toString(36)).toLocaleLowerCase();
   }
 
   /**
    * 根据 id 获取节点
    */
   getNode(id: string): Node | null {
-    return this.nodesMap.get(id) || null;
+    return this._nodesMap.get(id) || null;
   }
 
   /**
@@ -202,13 +209,13 @@ export class DocumentModel {
       // todo: this.activeNodes?.push(node);
     }
 
-    const origin = this.nodesMap.get(node.id);
+    const origin = this._nodesMap.get(node.id);
     if (origin && origin !== node) {
       // almost will not go here, ensure the id is unique
       origin.internalSetWillPurge();
     }
 
-    this.nodesMap.set(node.id, node);
+    this._nodesMap.set(node.id, node);
     this.nodes.add(node);
 
     this.emitter.emit('nodecreate', node);
@@ -259,7 +266,7 @@ export class DocumentModel {
     if (!this.nodes.has(node)) {
       return;
     }
-    this.nodesMap.delete(node.id);
+    this._nodesMap.delete(node.id);
     this.nodes.delete(node);
     this.selection.remove(node.id);
     node.remove();
@@ -584,7 +591,7 @@ export class DocumentModel {
     const componentsMap: ComponentMap[] = [];
     // 组件去重
     const map: any = {};
-    for (let node of this.nodesMap.values()) {
+    for (let node of this._nodesMap.values()) {
       const { componentName } = node || {};
       if (!map[componentName] && node?.componentMeta?.npm?.package) {
         map[componentName] = true;

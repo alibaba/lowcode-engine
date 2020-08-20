@@ -1,6 +1,6 @@
-import { designer } from './editor';
 import { RootSchema } from '@ali/lowcode-types';
 import { DocumentModel } from '@ali/lowcode-designer';
+import { designer } from './editor';
 import NodeCacheVisitor from './rootNodeVisitor';
 
 const { project } = designer;
@@ -52,6 +52,7 @@ const pages = Object.assign(project, {
         version: '1.0.0',
         componentsMap: [],
         componentsTree,
+        id: pages[0].id,
       },
       true,
     );

@@ -188,8 +188,23 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
     cursor.release();
   }
 
-  findDOMNodes(instance: any): Array<Element | Text> | null {
-    return [raxFindDOMNodes(instance)];
+  findDOMNodes(instance: any, selector?: string): Array<Element | Text> | null {
+    let el = instance;
+    if (selector) {
+      el = document.querySelector(selector);
+    }
+    try {
+      return raxFindDOMNodes(el);
+    } catch (e) {
+      // ignore
+    }
+    if (el && el.type && el.props && el.props.componentId) {
+      el = document.querySelector(`${el.type}[componentid=${el.props.componentId}]`);
+    } else {
+      console.error(instance);
+      throw new Error('This instance may not a valid element');
+    }
+    return raxFindDOMNodes(el);
   }
 
   /**

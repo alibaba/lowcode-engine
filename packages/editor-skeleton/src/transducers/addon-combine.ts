@@ -207,11 +207,11 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
           },
 
           setValue(field: SettingTarget, eventData) {
-            const {eventDataList,eventList} = eventData;
-            eventList.map((item)=>{
+            const { eventDataList, eventList } = eventData;
+            eventList.map((item) => {
               field.parent.clearPropValue(item.name);
               return item;
-            })
+            });
             eventDataList.map((item) => {
               field.parent.setPropValue(item.name, {
                 type: 'JSFunction',
@@ -304,25 +304,28 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
         },
       });
     }
-    advanceGroup.push({
-      name: 'key',
-      title: {
-        label: '渲染唯一标识（key）',
-        tip: '搭配「条件渲染」或「循环渲染」时使用，和 react 组件中的 key 原理相同，点击查看帮助',
-        docUrl: 'https://yuque.antfin-inc.com/legao/help3.0/ca5in7',
-      },
-      setter: [
-        {
-          componentName: 'StringSetter',
+
+    if (supports.condition !== false || supports.loop !== false) {
+      advanceGroup.push({
+        name: 'key',
+        title: {
+          label: '渲染唯一标识（key）',
+          tip: '搭配「条件渲染」或「循环渲染」时使用，和 react 组件中的 key 原理相同，点击查看帮助',
+          docUrl: 'https://yuque.antfin-inc.com/legao/help3.0/ca5in7',
         },
-        {
-          componentName: 'VariableSetter',
+        setter: [
+          {
+            componentName: 'StringSetter',
+          },
+          {
+            componentName: 'VariableSetter',
+          },
+        ],
+        extraProps: {
+          display: 'block',
         },
-      ],
-      extraProps: {
-        display: 'block',
-      },
-    });
+      });
+    }
   }
   if (advanceGroup.length > 0) {
     combined.push({

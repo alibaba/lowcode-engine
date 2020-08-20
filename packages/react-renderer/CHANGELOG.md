@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 <a name="1.0.0"></a>
 # [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@0.15.0...@ali/lowcode-react-renderer@1.0.0) (2020-08-17)
 
@@ -22,10 +23,31 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="0.14.0"></a>
 # [0.14.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@0.12.0...@ali/lowcode-react-renderer@0.14.0) (2020-08-17)
+=======
+<a name="0.8.20"></a>
+## [0.8.20](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@0.8.19...@ali/lowcode-react-renderer@0.8.20) (2020-08-19)
+
+
+### Bug Fixes
+
+* **react-renderer:** fix hasLoop logic ([577e0eb](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/577e0eb))
 
 
 
 
+<a name="0.8.19"></a>
+## [0.8.19](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@0.8.18...@ali/lowcode-react-renderer@0.8.19) (2020-08-17)
+
+
+### Bug Fixes
+
+* 修复判断动态 setter 的逻辑 ([d195d7f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d195d7f))
+>>>>>>> master
+
+
+
+
+<<<<<<< HEAD
 **Note:** Version bump only for package @ali/lowcode-react-renderer
 
 <a name="0.13.0"></a>
@@ -63,6 +85,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 <a name="0.9.0"></a>
 # [0.9.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@0.8.17...@ali/lowcode-react-renderer@0.9.0) (2020-08-14)
 =======
+=======
+>>>>>>> master
 <a name="0.8.18"></a>
 ## [0.8.18](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@0.8.17...@ali/lowcode-react-renderer@0.8.18) (2020-08-14)
 >>>>>>> master

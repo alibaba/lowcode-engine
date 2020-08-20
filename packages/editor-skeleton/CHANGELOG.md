@@ -4,9 +4,51 @@ All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 <a name="1.0.0"></a>
 # [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.13.0...@ali/lowcode-editor-skeleton@1.0.0) (2020-08-17)
 =======
+=======
+<a name="0.8.53"></a>
+## [0.8.53](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.52...@ali/lowcode-editor-skeleton@0.8.53) (2020-08-19)
+
+
+### Features
+
+* register-defaults 改为可选项 ([2195797](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2195797))
+
+
+
+
+<a name="0.8.52"></a>
+## [0.8.52](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.51...@ali/lowcode-editor-skeleton@0.8.52) (2020-08-19)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+
+<a name="0.8.51"></a>
+## [0.8.51](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.50...@ali/lowcode-editor-skeleton@0.8.51) (2020-08-19)
+
+
+### Bug Fixes
+
+* 🐛 添加 loop 和 condition 的判断 ([b521ebe](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b521ebe))
+* 兼容小程序面板的特殊情况 ([3c686ab](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3c686ab))
+
+
+
+
+<a name="0.8.50"></a>
+## [0.8.50](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.49...@ali/lowcode-editor-skeleton@0.8.50) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+
+>>>>>>> master
 <a name="0.8.49"></a>
 ## [0.8.49](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.48...@ali/lowcode-editor-skeleton@0.8.49) (2020-08-14)
 >>>>>>> master

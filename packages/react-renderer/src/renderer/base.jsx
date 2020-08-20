@@ -268,15 +268,18 @@ export default class BaseRender extends PureComponent {
       }
 
       if (schema.loop != null) {
-        return this.__createLoopVirtualDom(
-          {
-            ...schema,
-            loop: parseData(schema.loop, self),
-          },
-          self,
-          parentInfo,
-          idx,
-        );
+        const loop = parseData(schema.loop, self);
+        if (Array.isArray(loop) && loop.length > 0 || isJSExpression(loop)) {
+          return this.__createLoopVirtualDom(
+            {
+              ...schema,
+              loop,
+            },
+            self,
+            parentInfo,
+            idx,
+          );
+        }
       }
       const condition = schema.condition == null ? true : parseData(schema.condition, self);
       if (!condition) return null;
@@ -362,8 +365,12 @@ export default class BaseRender extends PureComponent {
         return engine.createElement(
           Comp,
           props,
+<<<<<<< HEAD:packages/react-renderer/src/renderer/base.jsx
           (!isFileSchema(schema) &&
             !!_children &&
+=======
+          (!!schema.children &&
+>>>>>>> master:packages/react-renderer/src/engine/base.jsx
             this.__createVirtualDom(
               isJSExpression(_children) ? parseExpression(_children, self) : _children,
               self,
