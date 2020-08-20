@@ -30,14 +30,33 @@ class FaultComponent extends PureComponent {
   render() {
     // FIXME: errorlog
     console.error('render error', this.props);
-    return <Div>RenderError</Div>;
+    const { _componentName: componentName } = this.props;
+    return <Div 
+    style={{
+      backgroundColor: '#DE2710',
+      padding: '15px',
+      fontSize: '18px',
+      textAlign: 'center',
+      color: 'white',
+    }}
+    >组件 {componentName} 渲染错误，请打开控制台排查</Div>;;
   }
 }
 
 class NotFoundComponent extends PureComponent {
   render() {
-    console.error('component not found', this.props);
-    return <Div {...this.props} />;
+    console.error('component not found:', this.props);
+    const { _componentName: componentName } = this.props;
+    return <Div 
+      {...this.props}
+      style={{
+        backgroundColor: '#3E91C9',
+        padding: '15px',
+        fontSize: '18px',
+        textAlign: 'center',
+        color: 'white',
+      }}
+      >组件 {componentName} 无视图，请打开控制台排查</Div>;
   }
 }
 

@@ -77,7 +77,9 @@ hotkey.bind(['backspace', 'del'], (e: KeyboardEvent) => {
   const topItems = sel.getTopNodes();
   // TODO: check can remove
   topItems.forEach((node) => {
-    doc.removeNode(node);
+    if (node.canPerformAction('remove')) {
+      doc.removeNode(node);
+    }
   });
   sel.clear();
 });
@@ -102,8 +104,13 @@ hotkey.bind(['command+c', 'ctrl+c', 'command+x', 'ctrl+x'], (e, action) => {
   }
   e.preventDefault();
 
-  const selected = doc.selection.getTopNodes(true);
-  if (!selected || selected.length < 1) return;
+  let selected = doc.selection.getTopNodes(true);
+  selected = selected.filter((node) => {
+    return node.canPerformAction('copy');
+  })
+  if (!selected || selected.length < 1) {
+    return;
+  }
 
   const componentsMap = {};
   const componentsTree = selected.map((item) => item.export(TransformStage.Clone));

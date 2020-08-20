@@ -36,8 +36,6 @@ export class History {
 
     this.obx = autorun(() => {
       const data = logger();
-      // TODO: remove this line
-      console.info('log');
       if (this.justWokeup) {
         this.justWokeup = false;
         return;

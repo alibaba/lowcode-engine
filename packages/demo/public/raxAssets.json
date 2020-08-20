@@ -149,25 +149,25 @@
       "prototypeViewsUrl": null,
       "prototypeUrls": {
         "default": [
-          "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.5/proto.bb4ec38.css",
-          "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.5/proto.ed31eab.js"
+          "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/proto.2f23cdf.css",
+          "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/proto.9a739a7.js"
         ]
       },
       "prototypeConfigsUrl": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.5/proto.bb4ec38.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.5/proto.ed31eab.js"
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/proto.2f23cdf.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/proto.9a739a7.js"
       ],
       "alias": "",
       "urls": [
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.5/view.f2b6dde.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.5/view.46f546f.js",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.5/view.mobile.f2b6dde.css",
-        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.5/view.mobile.6b901e9.js"
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/view.d6d0d1f.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/view.14bb8e8.js",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/view.mobile. d6d0d1f.css",
+        "https://g.alicdn.com/legao-comp/web_bundle_0724/@ali/vc-deep-mobile/2.0.1-beta.25/view.mobile.fe36565.js"
       ],
       "library": "AliVcDeepMobile",
       "components": null,
       "packageName": "@ali/vc-deep-mobile",
-      "version": "2.0.1-beta.5"
+      "version": "2.0.1-beta.25"
     },
     {
       "prototypeViewsUrl": null,

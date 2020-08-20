@@ -6,8 +6,15 @@ import { computed, obx } from '@recore/obx';
 import { Asset } from '@ali/lowcode-utils';
 import { getClientRects } from './utils/get-client-rects';
 import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
-import { isElement, cursor, setNativeSelection, buildComponents, getSubComponent, AssetLoader } from '@ali/lowcode-utils';
-import { RootSchema, ComponentSchema, TransformStage } from '@ali/lowcode-types';
+import {
+  isElement,
+  cursor,
+  setNativeSelection,
+  buildComponents,
+  getSubComponent,
+  AssetLoader,
+} from '@ali/lowcode-utils';
+import { RootSchema, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
 // just use types
 import { BuiltinSimulatorRenderer, NodeInstance, Component } from '@ali/lowcode-designer';
 import Slot from './builtin-components/slot';
@@ -216,12 +223,21 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
     return this.instancesMap.get(id) || null;
   }
 
-  createComponent(schema: ComponentSchema): Component | null {
+  createComponent(schema: NodeSchema): Component | null {
     let _schema: any = {
       ...schema,
     };
     _schema.methods = {};
     _schema.lifeCycles = {};
+
+    if (schema.componentName === 'Component' && (schema as ComponentSchema).css) {
+      const doc = window.document;
+      const s = doc.createElement('style');
+      s.setAttribute('type', 'text/css');
+      s.setAttribute('id', `Component-${schema.id || ''}`);
+      s.appendChild(doc.createTextNode((schema as ComponentSchema).css || ''));
+      doc.getElementsByTagName('head')[0].appendChild(s);
+    }
 
     const node = host.document.createNode(_schema);
     _schema = node.export(TransformStage.Render);
@@ -234,14 +250,14 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
       const result = { ...propsSchema };
       const reg = /^(?:this\.props|props)\.(\S+)$/;
       Object.keys(result).map((key: string) => {
-        if (result[key].type === 'JSExpression') {
+        if (result[key]?.type === 'JSExpression') {
           const { value } = result[key];
           const matched = reg.exec(value);
           if (matched) {
             const propName = matched[1];
             result[key] = propsMap[propName];
           }
-        } else if (result[key].type === 'JSSlot') {
+        } else if (result[key]?.type === 'JSSlot') {
           const schema = result[key].value;
           result[key] = createElement(Ele, { schema, propsMap: {} });
         }
@@ -271,6 +287,9 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
         }
         const { schema, propsMap } = this.props;
         const Com = componentsMap[schema.componentName];
+        if (!Com) {
+          return null;
+        }
         let children = null;
         if (schema.children && schema.children.length > 0) {
           children = schema.children.map((item: any) => createElement(Ele, { schema: item, propsMap }));
@@ -283,13 +302,23 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
     }
 
     class Com extends React.Component {
+      // TODO: 暂时解决性能问题
+      shouldComponentUpdate() {
+        return false;
+      }
+
       render() {
-        let children = [];
-        const propsMap = this.props;
-        if (_schema.children && Array.isArray(_schema.children)) {
-          children = _schema.children.map((item: any) => createElement(Ele, { schema: item, propsMap }));
+        const componentName = _schema.componentName;
+        if (componentName === 'Component') {
+          let children = [];
+          const propsMap = this.props || {};
+          if (_schema.children && Array.isArray(_schema.children)) {
+            children = _schema.children.map((item: any) => createElement(Ele, { schema: item, propsMap }));
+          }
+          return createElement('div', {}, children);
+        } else {
+          return createElement(Ele, { schema: _schema, propsMap: {} });
         }
-        return createElement(React.Fragment, {}, children);
       }
     }
 

@@ -31,7 +31,7 @@ import {
   CanvasPoint,
 } from '../designer';
 import { parseMetadata } from './utils/parse-metadata';
-import { ComponentMetadata, ComponentSchema } from '@ali/lowcode-types';
+import { ComponentMetadata, NodeSchema } from '@ali/lowcode-types';
 import { BuiltinSimulatorRenderer } from './renderer';
 import clipboard from '../designer/clipboard';
 import { LiveEditing } from './live-editing/live-editing';
@@ -302,6 +302,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
         const nodeInst = this.getNodeInstanceFromElement(downEvent.target as Element);
         const node = nodeInst?.node || this.document.rootNode;
+        if (!node?.isValidComponent()) {
+          // 对于未注册组件直接返回
+          return;
+        }
+
         const isMulti = downEvent.metaKey || downEvent.ctrlKey;
         const isLeftButton = downEvent.which === 1 || downEvent.button === 0;
         const checkSelect = (e: MouseEvent) => {
@@ -538,7 +543,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     return this.renderer?.getComponent(componentName) || null;
   }
 
-  createComponent(schema: ComponentSchema): Component | null {
+  createComponent(schema: NodeSchema): Component | null {
     return this.renderer?.createComponent(schema) || null;
   }
 
@@ -835,20 +840,35 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.scroller.cancel();
   }
 
-  // ========= drag location logic: hepler for locate ==========
+  // ========= drag location logic: helper for locate ==========
 
   /**
    * @see ISensor
    */
   locate(e: LocateEvent): any {
+    const { dragObject } = e;
+    const { nodes } = dragObject;
+
+    const operationalNodes = nodes?.filter((node: any) => {
+      const onMoveHook = node.componentMeta?.getMetadata()?.experimental?.callbacks?.onMoveHook;
+      const canMove = onMoveHook && typeof onMoveHook === 'function' ? onMoveHook() : true;
+
+      return canMove;
+    });
+
+    if (!operationalNodes || operationalNodes.length === 0) {
+      return;
+    }
     this.sensing = true;
     this.scroller.scrolling(e);
     const dropContainer = this.getDropContainer(e);
+    const canDropIn = dropContainer?.container?.componentMeta?.prototype?.options?.canDropIn;
+
     if (
       !dropContainer ||
+      canDropIn === false ||
       // too dirty
-      (typeof dropContainer.container?.componentMeta?.prototype?.options?.canDropIn === 'function' &&
-        !dropContainer.container?.componentMeta?.prototype?.options?.canDropIn(e.dragObject.nodes[0]))
+      (typeof canDropIn === 'function' && !canDropIn(operationalNodes[0]))
     ) {
       return null;
     }

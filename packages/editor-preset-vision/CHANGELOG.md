@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<<<<<<< HEAD
 <a name="1.0.0"></a>
 # [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.13.0...@ali/lowcode-editor-preset-vision@1.0.0) (2020-08-17)
 
@@ -13,12 +14,28 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="0.13.0"></a>
 # [0.13.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.12.0...@ali/lowcode-editor-preset-vision@0.13.0) (2020-08-17)
+=======
+<a name="0.8.45"></a>
+## [0.8.45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.44...@ali/lowcode-editor-preset-vision@0.8.45) (2020-08-14)
+
+
+### Bug Fixes
+
+* 兼容 rpx ([5050af7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5050af7))
+
+
+
+
+<a name="0.8.44"></a>
+## [0.8.44](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.43...@ali/lowcode-editor-preset-vision@0.8.44) (2020-08-14)
+>>>>>>> master
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-editor-preset-vision
 
+<<<<<<< HEAD
 <a name="0.12.0"></a>
 # [0.12.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.10.0...@ali/lowcode-editor-preset-vision@0.12.0) (2020-08-17)
 
@@ -37,10 +54,35 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="0.10.0"></a>
 # [0.10.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.9.0...@ali/lowcode-editor-preset-vision@0.10.0) (2020-08-16)
+=======
+<a name="0.8.43"></a>
+## [0.8.43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.42...@ali/lowcode-editor-preset-vision@0.8.43) (2020-08-14)
+
+
+### Bug Fixes
+
+* createComponent 支持所有 schema ([7f946f5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7f946f5))
+* upgradePropsReducer ([e68977f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e68977f))
+* vision 大包 window 指向问题 ([aa1b526](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/aa1b526))
+* 不对外暴露 Node ([05957ce](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/05957ce))
+* 支持 AC 组件 ([c287bad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c287bad))
 
 
 
 
+<a name="0.8.42"></a>
+## [0.8.42](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.41...@ali/lowcode-editor-preset-vision@0.8.42) (2020-08-07)
+
+
+### Bug Fixes
+
+* vision API 兼容 DockPane.getDocks() ([f72fb66](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f72fb66))
+>>>>>>> master
+
+
+
+
+<<<<<<< HEAD
 **Note:** Version bump only for package @ali/lowcode-editor-preset-vision
 
 <a name="0.9.0"></a>
@@ -50,6 +92,42 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 **Note:** Version bump only for package @ali/lowcode-editor-preset-vision
+=======
+<a name="0.8.41"></a>
+## [0.8.41](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.40...@ali/lowcode-editor-preset-vision@0.8.41) (2020-08-06)
+
+
+### Bug Fixes
+
+*  fieldId 重复问题 ([e761b1a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e761b1a))
+
+
+
+
+<a name="0.8.40"></a>
+## [0.8.40](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.39...@ali/lowcode-editor-preset-vision@0.8.40) (2020-08-06)
+
+
+### Bug Fixes
+
+* 保存区块按钮渲染异常 ([33a7227](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/33a7227))
+* 增加兼容 API ([2960446](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2960446))
+
+
+
+
+<a name="0.8.39"></a>
+## [0.8.39](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.38...@ali/lowcode-editor-preset-vision@0.8.39) (2020-08-06)
+
+
+### Bug Fixes
+
+* 修复 preset-vision 版本 lifeCycles 丢失以及 slot 初始化问题 ([7cf6d24](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7cf6d24))
+* 框架样式调整 ([58790c5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/58790c5))
+
+
+
+>>>>>>> master
 
 <a name="0.8.38"></a>
 ## [0.8.38](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.37...@ali/lowcode-editor-preset-vision@0.8.38) (2020-08-04)

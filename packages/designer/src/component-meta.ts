@@ -137,13 +137,13 @@ export class ComponentMeta {
     }
   }
 
-  private parseMetadata(metadta: ComponentMetadata) {
-    const { componentName, npm } = metadta;
+  private parseMetadata(metadata: ComponentMetadata) {
+    const { componentName, npm } = metadata;
     this._npm = npm;
     this._componentName = componentName;
 
     // 额外转换逻辑
-    this._transformedMetadata = this.transformMetadata(metadta);
+    this._transformedMetadata = this.transformMetadata(metadata);
 
     const title = this._transformedMetadata.title;
     if (title) {
@@ -381,7 +381,10 @@ const builtinComponentActions: ComponentAction[] = [
       action(node: Node) {
         // node.remove();
         const { document: doc, parent, index } = node;
-        parent && doc.insertNode(parent, node, index, true);
+        if (parent) {
+          const newNode = doc.insertNode(parent, node, index + 1, true);
+          newNode.select();
+        }
       },
     },
     important: true,

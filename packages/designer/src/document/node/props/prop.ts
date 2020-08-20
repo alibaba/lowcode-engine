@@ -71,6 +71,10 @@ export class Prop implements IPropParent {
     }
 
     if (type === 'literal' || type === 'expression') {
+      // TODO 后端改造之后删除此逻辑
+      if (this._value === null && stage === TransformStage.Save) {
+        return '';
+      }
       return this._value;
     }
 
@@ -181,7 +185,7 @@ export class Prop implements IPropParent {
     this._code = null;
     const t = typeof val;
     if (val == null) {
-      this._value = undefined;
+      // this._value = undefined;
       this._type = 'literal';
     } else if (t === 'string' || t === 'number' || t === 'boolean') {
       this._type = 'literal';

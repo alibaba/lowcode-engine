@@ -122,15 +122,27 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
   locate(e: LocateEvent): DropLocation | undefined | null {
     this.sensing = true;
     this.scroller?.scrolling(e);
+    const { globalY, dragObject } = e;
+    const { nodes } = dragObject;
 
     const tree = this._master?.currentTree;
     if (!tree || !this._shell) {
       return null;
     }
 
+    const operationalNodes = nodes?.filter((node: any) => {
+      const onMoveHook = node.componentMeta?.getMetadata()?.experimental?.callbacks?.onMoveHook;
+      const canMove = onMoveHook && typeof onMoveHook === 'function' ? onMoveHook() : true;
+
+      return canMove;
+    });
+
+    if (!operationalNodes || operationalNodes.length === 0) {
+      return;
+    }
+
     const document = tree.document;
     const designer = document.designer;
-    const { globalY, dragObject } = e;
     const pos = getPosFromEvent(e, this._shell);
     const irect = this.getInsertionRect();
     const originLoc = document.dropLocation;
@@ -196,7 +208,7 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
         let focusSlots = pos.focusSlots;
         let { node } = treeNode;
         if (isDragNodeObject(dragObject)) {
-          const nodes = dragObject.nodes;
+          const nodes = operationalNodes;
           let i = nodes.length;
           let p: any = node;
           while (i-- > 0) {

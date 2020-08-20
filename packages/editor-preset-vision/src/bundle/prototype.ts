@@ -213,8 +213,8 @@ class Prototype {
   static addGlobalExtraActions = addGlobalExtraActions;
   static removeGlobalPropsConfigure = removeGlobalPropsConfigure;
   static overridePropsConfigure = overridePropsConfigure;
-  static create(config: OldPrototypeConfig | ComponentMetadata | ComponentMeta, lookup: boolean = false) {
-    return new Prototype(config, lookup);
+  static create(config: OldPrototypeConfig | ComponentMetadata | ComponentMeta, extraConfigs: any = null, lookup: boolean = false) {
+    return new Prototype(config, extraConfigs, lookup);
   }
 
   readonly isPrototype = true;
@@ -224,7 +224,7 @@ class Prototype {
     return this.meta.npm?.package;
   }
 
-  constructor(input: OldPrototypeConfig | ComponentMetadata | ComponentMeta, lookup: boolean = false) {
+  constructor(input: OldPrototypeConfig | ComponentMetadata | ComponentMeta, extraConfigs: any = null, lookup: boolean = false) {
     if (lookup) {
       this.meta = designer.getComponentMeta(input.componentName);
       this.options = this.meta.getMetadata();
@@ -279,15 +279,15 @@ class Prototype {
 
   private category?: string;
   getCategory() {
-    if (this.category != null) {
-      return this.category;
+    if (this.options.category != null) {
+      return this.options.category;
     }
 
     return this.meta.getMetadata().tags?.[0] || '*';
   }
 
   setCategory(category: string) {
-    this.category = category;
+    this.options.category = category;
   }
 
   getIcon() {

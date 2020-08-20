@@ -1,5 +1,5 @@
 import { Component as ReactComponent, ComponentType } from 'react';
-import { ComponentMetadata, ComponentSchema } from '@ali/lowcode-types';
+import { ComponentMetadata, NodeSchema } from '@ali/lowcode-types';
 import { ISensor, Point, ScrollTarget, IScrollable } from './designer';
 import { Node } from './document';
 
@@ -127,9 +127,9 @@ export interface ISimulatorHost<P = object> extends ISensor {
    */
   getComponentInstances(node: Node): ComponentInstance[] | null;
   /**
-   * 根据低代码组件 schema 创建组件类
+   * 根据 schema 创建组件类
    */
-  createComponent(schema: ComponentSchema): Component | null;
+  createComponent(schema: NodeSchema): Component | null;
   /**
    * 根据节点获取节点的组件运行上下文
    */

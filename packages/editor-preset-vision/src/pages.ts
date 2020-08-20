@@ -42,7 +42,6 @@ const pages = Object.assign(project, {
         componentsTree[0].componentName = componentsTree[0].componentName || 'Page';
         // FIXME
         if (componentsTree[0].componentName === 'Page' || componentsTree[0].componentName === 'Component') {
-          componentsTree[0].lifeCycles = {};
           componentsTree[0].methods = {};
         }
       }
@@ -56,6 +55,11 @@ const pages = Object.assign(project, {
       },
       true,
     );
+
+    // FIXME: 根本原因应该是 propStash 导致的，这样可以避免页面加载之后就被标记为 isModified
+    setTimeout(() => {
+      project.currentDocument?.history.savePoint();
+    }, 0);
   },
   addPage(data: OldPageData | RootSchema) {
     if (isPageDataV1(data)) {

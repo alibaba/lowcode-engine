@@ -3,14 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<<<<<<< HEAD
 <a name="1.0.0"></a>
 # [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.13.0...@ali/lowcode-editor-skeleton@1.0.0) (2020-08-17)
+=======
+<a name="0.8.49"></a>
+## [0.8.49](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.48...@ali/lowcode-editor-skeleton@0.8.49) (2020-08-14)
+>>>>>>> master
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-editor-skeleton
 
+<<<<<<< HEAD
 <a name="0.13.0"></a>
 # [0.13.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.12.0...@ali/lowcode-editor-skeleton@0.13.0) (2020-08-17)
 
@@ -21,28 +27,51 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="0.12.0"></a>
 # [0.12.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.10.0...@ali/lowcode-editor-skeleton@0.12.0) (2020-08-17)
+=======
+<a name="0.8.48"></a>
+## [0.8.48](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.47...@ali/lowcode-editor-skeleton@0.8.48) (2020-08-14)
+
+
+### Bug Fixes
+
+* remove console ([6889123](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6889123))
+* setter 报错不影响页面渲染 ([c0a6022](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c0a6022))
+* vision 大包 window 指向问题 ([aa1b526](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/aa1b526))
+* 钉住行为调整 ([91a390e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/91a390e))
+>>>>>>> master
 
 
 
 
+<<<<<<< HEAD
 **Note:** Version bump only for package @ali/lowcode-editor-skeleton
 
 <a name="0.11.0"></a>
 # [0.11.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.10.0...@ali/lowcode-editor-skeleton@0.11.0) (2020-08-17)
+=======
+<a name="0.8.47"></a>
+## [0.8.47](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.46...@ali/lowcode-editor-skeleton@0.8.47) (2020-08-07)
+>>>>>>> master
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-editor-skeleton
 
+<<<<<<< HEAD
 <a name="0.10.0"></a>
 # [0.10.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.9.0...@ali/lowcode-editor-skeleton@0.10.0) (2020-08-16)
+=======
+<a name="0.8.46"></a>
+## [0.8.46](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.45...@ali/lowcode-editor-skeleton@0.8.46) (2020-08-06)
+>>>>>>> master
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-editor-skeleton
 
+<<<<<<< HEAD
 <a name="0.9.0"></a>
 # [0.9.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.43...@ali/lowcode-editor-skeleton@0.9.0) (2020-08-14)
 
@@ -61,6 +90,23 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+=======
+<a name="0.8.45"></a>
+## [0.8.45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.44...@ali/lowcode-editor-skeleton@0.8.45) (2020-08-06)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+
+<a name="0.8.44"></a>
+## [0.8.44](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.43...@ali/lowcode-editor-skeleton@0.8.44) (2020-08-06)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+>>>>>>> master
 
 <a name="0.8.43"></a>
 ## [0.8.43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.42...@ali/lowcode-editor-skeleton@0.8.43) (2020-08-04)
