@@ -32,27 +32,32 @@ const pages = Object.assign(project, {
     if (!pages || !Array.isArray(pages) || pages.length === 0) {
       throw new Error('pages schema 不合法');
     }
-
-    let componentsTree: any;
-    if (isPageDataV1(pages[0])) {
-      componentsTree = [pages[0].layout];
-    } else {
-      componentsTree = pages[0].componentsTree;
-      if (componentsTree[0]) {
-        componentsTree[0].componentName = componentsTree[0].componentName || 'Page';
-        // FIXME
-        if (componentsTree[0].componentName === 'Page' ||
-        componentsTree[0].componentName === 'Component') {
-          componentsTree[0].methods = {};
-        }
+    // todo: miniapp
+    const componentsTree: any = [];
+    pages.forEach((item: any) => {
+      if (isPageDataV1(item)) {
+        componentsTree.push(item.layout);
+      } else {
+        componentsTree.push(item.componentsTree[0]);
       }
-    }
-    project.load({
-      version: '1.0.0',
-      componentsMap: [],
-      componentsTree,
-      config: project.config
-    }, true);
+    });
+    componentsTree.forEach((item: any) => {
+      item.componentName = item.componentName || 'Page';
+      if (item.componentName === 'Page' || item.componentName === 'Component') {
+        item.methods = {};
+      }
+    });
+    console.log(pages, componentsTree);
+
+    project.load(
+      {
+        version: '1.0.0',
+        componentsMap: [],
+        componentsTree,
+        config: project.config,
+      },
+      true,
+    );
   },
   addPage(data: OldPageData | RootSchema) {
     if (isPageDataV1(data)) {
