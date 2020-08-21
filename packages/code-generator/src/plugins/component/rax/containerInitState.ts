@@ -33,7 +33,6 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     if (ir.state) {
       const state = ir.state;
       const fields = Object.keys(state).map<string>((stateName) => {
-        // TODO: 这里用什么 handlers?
         const [isString, value] = generateCompositeType(state[stateName], {});
         return `${stateName}: ${isString ? `'${value}'` : value},`;
       });
