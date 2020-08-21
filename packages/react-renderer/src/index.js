@@ -30,7 +30,16 @@ class FaultComponent extends PureComponent {
   render() {
     // FIXME: errorlog
     console.error('render error', this.props);
-    return <Div>RenderError</Div>;
+    return <Div style={{
+      width:'100%',
+      height:'50px',
+      lineHeight: '50px',
+      textAlign: 'center',
+      fontSize: '15px',
+      color: '#ff0000',
+      border: '2px solid #ff0000'
+    }}>组件渲染异常，请查看控制台日志</Div>;
+
   }
 }
 
