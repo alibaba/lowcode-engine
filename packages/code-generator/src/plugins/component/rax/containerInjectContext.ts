@@ -32,6 +32,15 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport],
     });
 
+    // TODO: i18n 是可选的，如果没有 i18n 这个文件怎么办？该怎么判断？
+    next.chunks.push({
+      type: ChunkType.STRING,
+      fileType: cfg.fileType,
+      name: COMMON_CHUNK_NAME.InternalDepsImport,
+      content: `import * as __$$i18n from '../../i18n';`,
+      linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport],
+    });
+
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: cfg.fileType,
@@ -78,6 +87,16 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
             get constants() {
               return __$$constants;
             },
+            get i18n() {
+              return self._i18n;
+            },
+            getLocale() {
+              return __$$i18n.getLocale();
+            },
+            setLocale(locale) {
+              __$$i18n.setLocale(locale);
+              self.forceUpdate();
+            },
             ...this._methods,
           };
 
@@ -87,6 +106,34 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       linkAfter: [RAX_CHUNK_NAME.ClassRenderEnd],
     });
 
+    next.chunks.push({
+      type: ChunkType.STRING,
+      fileType: cfg.fileType,
+      name: CLASS_DEFINE_CHUNK_NAME.InsVar,
+      content: `
+        _i18n = this._createI18nDelegate();
+      `,
+      linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start],
+    });
+
+    next.chunks.push({
+      type: ChunkType.STRING,
+      fileType: cfg.fileType,
+      name: CLASS_DEFINE_CHUNK_NAME.InsPrivateMethod,
+      content: `
+        _createI18nDelegate() {
+          return new Proxy(
+            {},
+            {
+              get(target, prop) {
+                return __$$i18n.i18n(prop);
+              },
+            },
+          );
+        }
+      `,
+      linkAfter: [RAX_CHUNK_NAME.ClassRenderEnd],
+    });
     return next;
   };
   return plugin;

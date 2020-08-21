@@ -182,17 +182,13 @@ function transformJsExpr(expr: string, handlers: CustomHandlerSet) {
   }
 
   const exprAst = parseExpression(expr);
-  switch (exprAst.type) {
-    // 对于下面这些比较安全的字面值，可以直接返回对应的表达式，而非包一层
-    case 'BigIntLiteral':
-    case 'BooleanLiteral':
-    case 'DecimalLiteral':
-    case 'NullLiteral':
-    case 'NumericLiteral':
-    case 'RegExpLiteral':
-    case 'StringLiteral':
-      return expr;
 
+  // 对于下面这些比较安全的字面值，可以直接返回对应的表达式，而非包一层
+  if (isSimpleStraightLiteral(exprAst)) {
+    return expr;
+  }
+
+  switch (exprAst.type) {
     // 对于直接写个函数的，则不用再包下，因为这样不会抛出异常的
     case 'ArrowFunctionExpression':
     case 'FunctionExpression':
@@ -221,14 +217,33 @@ function isSimpleDirectlyAccessingThis(exprAst: MemberExpression) {
 
 /** this.state.xxx 和 this.utils.xxx 等安全的肯定应该存在的东东 */
 function isSimpleDirectlyAccessingSafeProperties(exprAst: MemberExpression): boolean {
+  const isPropertySimpleStraight =
+    !exprAst.computed || (exprAst.property.type !== 'PrivateName' && isSimpleStraightLiteral(exprAst.property));
+
   return (
-    !exprAst.computed &&
+    isPropertySimpleStraight &&
     exprAst.object.type === 'MemberExpression' &&
     exprAst.object.object.type === 'ThisExpression' &&
     !exprAst.object.computed &&
     exprAst.object.property.type === 'Identifier' &&
     /^(state|utils|constants|i18n)$/.test(exprAst.object.property.name)
   );
+}
+
+/** 判断是非是一些简单直接的字面值 */
+function isSimpleStraightLiteral(expr: Expression): boolean {
+  switch (expr.type) {
+    case 'BigIntLiteral':
+    case 'BooleanLiteral':
+    case 'DecimalLiteral':
+    case 'NullLiteral':
+    case 'NumericLiteral':
+    case 'RegExpLiteral':
+    case 'StringLiteral':
+      return true;
+    default:
+      return false;
+  }
 }
 
 function isImportAliasDefineChunk(

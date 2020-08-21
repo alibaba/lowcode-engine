@@ -159,8 +159,8 @@ export class ProjectBuilder implements IProjectBuilder {
     }
 
     // i18n?
-    if (parseResult.globalI18n && builders.i18n && this.template.slots.i18n) {
-      const { files } = await builders.i18n.generateModule(parseResult.globalI18n);
+    if (builders.i18n && this.template.slots.i18n) {
+      const { files } = await builders.i18n.generateModule(parseResult.project);
 
       buildResult.push({
         path: this.template.slots.i18n.path,
