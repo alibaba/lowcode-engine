@@ -7,7 +7,7 @@ import { createModuleBuilder } from './generator/ModuleBuilder';
 import { createDiskPublisher } from './publisher/disk';
 import { createZipPublisher } from './publisher/zip';
 import createIceJsProjectBuilder from './solutions/icejs';
-import createRecoreProjectBuilder from './solutions/recore';
+// import createRecoreProjectBuilder from './solutions/recore';
 import createRaxAppProjectBuilder from './solutions/rax-app';
 
 // 引入说明
@@ -49,7 +49,7 @@ export default {
   createModuleBuilder,
   solutions: {
     icejs: createIceJsProjectBuilder,
-    recore: createRecoreProjectBuilder,
+    // recore: createRecoreProjectBuilder,
     rax: createRaxAppProjectBuilder,
   },
   solutionParts: {
