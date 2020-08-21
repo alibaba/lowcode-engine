@@ -194,14 +194,6 @@ function transformJsExpr(expr: string, handlers: CustomHandlerSet) {
     case 'FunctionExpression':
       return transformThis2Context(exprAst, handlers);
 
-    // 对于直接访问 this.xxx, this.utils.xxx, this.state.xxx 的也不用再包下
-    case 'MemberExpression':
-      if (isSimpleDirectlyAccessingThis(exprAst) || isSimpleDirectlyAccessingSafeProperties(exprAst)) {
-        return transformThis2Context(exprAst, handlers);
-      }
-
-      break;
-
     default:
       break;
   }

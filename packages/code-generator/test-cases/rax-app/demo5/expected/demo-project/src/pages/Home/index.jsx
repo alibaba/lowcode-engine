@@ -47,7 +47,7 @@ class Home$$Page extends Component {
             __$$context.setLocale(__$$context.getLocale() === 'en-US' ? 'zh-CN' : 'en-US');
           }}
         >
-          {__$$context.i18n['hello-world']}
+          {__$$eval(() => __$$context.i18n['hello-world'])}
         </Text>
       </Page>
     );

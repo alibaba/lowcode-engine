@@ -83,13 +83,13 @@ class Home$$Page extends Component {
         <View>
           <Text>=== User Info: ===</Text>
         </View>
-        {__$$context.state.user && (
+        {__$$eval(() => __$$context.state.user) && (
           <View style={{ flexDirection: 'row' }}>
             <Image
               source={{ uri: __$$eval(() => __$$context.state.user.avatar) }}
               style={{ width: '32px', height: '32px' }}
             />
-            <View onClick={__$$context.hello}>
+            <View onClick={__$$eval(() => __$$context.hello)}>
               <Text>{__$$eval(() => __$$context.state.user.name)}</Text>
               <Text>{__$$eval(() => __$$context.state.user.age)}岁</Text>
             </View>
@@ -132,7 +132,7 @@ class Home$$Page extends Component {
             });
           }}
         >
-          <Text>点击次数：{__$$context.state.clickCount}(点击加 1)</Text>
+          <Text>点击次数：{__$$eval(() => __$$context.state.clickCount)}(点击加 1)</Text>
         </View>
         <View>
           <Text>操作提示：</Text>
