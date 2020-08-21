@@ -72,7 +72,7 @@ export default class FunctionSetter extends PureComponent<FunctionSetterProps, {
    * 渲染按钮(初始状态)
    */
   renderButton = () => {
-    return <Button type="primary" onClick={() => this.bindFunction()}>绑定函数</Button>
+    return <Button type="normal" onClick={() => this.bindFunction()}>绑定函数</Button>
   }
 
   focusFunctionName = (functionName) => {

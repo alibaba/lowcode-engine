@@ -217,7 +217,7 @@ class MonacoEditorDefaultView extends PureComponent {
             width="100%"
             height="300"
             language={tarLanguage}
-            theme={theme || window.__monacoTheme || 'vs-dark'}
+            theme={theme || window.__monacoTheme}
             options={isFullScreen ? this.fullScreenOptions : this.options}
             onChange={this.onChange}
             editorWillMount={editorWillMount}
