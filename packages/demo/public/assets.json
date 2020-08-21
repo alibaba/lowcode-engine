@@ -7175,64 +7175,9 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "pure",
-          "propType": "bool",
-          "defaultValue": false
-        },
-        {
-          "name": "rtl",
-          "propType": "bool"
-        },
-        {
-          "name": "className",
-          "propType": "string"
-        },
-        {
-          "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "菜单项和子菜单"
-        },
-        {
           "name": "onItemClick",
           "propType": "func",
           "description": "点击菜单项触发的回调函数\n@param {String} key 点击的菜单项的 key 值\n@param {Object} item 点击的菜单项对象\n@param {Object} event 点击的事件对象"
-        },
-        {
-          "name": "openKeys",
-          "propType": {
-            "type": "oneOfType",
-            "value": [
-              "string",
-              {
-                "type": "instanceOf",
-                "value": "array"
-              }
-            ]
-          },
-          "description": "当前打开的子菜单的 key 值"
-        },
-        {
-          "name": "defaultOpenKeys",
-          "propType": {
-            "type": "oneOfType",
-            "value": [
-              "string",
-              {
-                "type": "instanceOf",
-                "value": "array"
-              }
-            ]
-          },
-          "description": "初始打开的子菜单的 key 值",
-          "defaultValue": []
         },
         {
           "name": "defaultOpenAll",
@@ -7317,54 +7262,9 @@
           "defaultValue": "follow"
         },
         {
-          "name": "popupProps",
-          "propType": {
-            "type": "oneOfType",
-            "value": [
-              "object",
-              "func"
-            ]
-          },
-          "description": "弹层自定义 props"
-        },
-        {
           "name": "popupClassName",
           "propType": "string",
           "description": "弹出子菜单自定义 className"
-        },
-        {
-          "name": "popupStyle",
-          "propType": "object",
-          "description": "弹出子菜单自定义 style"
-        },
-        {
-          "name": "selectedKeys",
-          "propType": {
-            "type": "oneOfType",
-            "value": [
-              "string",
-              {
-                "type": "instanceOf",
-                "value": "array"
-              }
-            ]
-          },
-          "description": "当前选中菜单项的 key 值"
-        },
-        {
-          "name": "defaultSelectedKeys",
-          "propType": {
-            "type": "oneOfType",
-            "value": [
-              "string",
-              {
-                "type": "instanceOf",
-                "value": "array"
-              }
-            ]
-          },
-          "description": "初始选中菜单项的 key 值",
-          "defaultValue": []
         },
         {
           "name": "onSelect",
@@ -7436,23 +7336,13 @@
           "defaultValue": false
         },
         {
-          "name": "renderMore",
-          "propType": "func"
-        },
-        {
           "name": "header",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "node",
           "description": "自定义菜单头部"
         },
         {
           "name": "footer",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "node",
           "description": "自定义菜单尾部"
         },
         {
@@ -7501,6 +7391,64 @@
         {
           "name": "style",
           "propType": "object"
+        },
+        {
+          "name": "openKeys",
+          "propType": {
+            "type": "oneOfType",
+            "value": [
+              "string",
+              {
+                "type": "arrayOf",
+                "value": "string"
+              }
+            ]
+          },
+          "description": "当前打开的子菜单的 key 值"
+        },
+        {
+          "name": "defaultOpenKeys",
+          "propType": {
+            "type": "oneOfType",
+            "value": [
+              "string",
+              {
+                "type": "arrayOf",
+                "value": "string"
+              }
+            ]
+          },
+          "description": "初始打开的子菜单的 key 值",
+          "defaultValue": []
+        },
+        {
+          "name": "selectedKeys",
+          "propType": {
+            "type": "oneOfType",
+            "value": [
+              "string",
+              {
+                "type": "arrayOf",
+                "value": "string"
+              }
+            ]
+          },
+          "description": "当前选中菜单项的 key 值"
+        },
+        {
+          "name": "defaultSelectedKeys",
+          "propType": {
+            "type": "oneOfType",
+            "value": [
+              "string",
+              {
+                "type": "arrayOf",
+                "value": "string"
+              }
+            ]
+          },
+          "description": "初始选中菜单项的 key 值",
+          "defaultValue": []
         }
       ],
       "configure": {
@@ -7511,7 +7459,7 @@
     },
     {
       "componentName": "SubMenu",
-      "title": "SubMenu",
+      "title": "子菜单",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -7524,37 +7472,13 @@
       },
       "props": [
         {
-          "name": "_key",
-          "propType": "string"
-        },
-        {
-          "name": "root",
-          "propType": "object"
-        },
-        {
-          "name": "level",
-          "propType": "number"
-        },
-        {
-          "name": "inlineLevel",
-          "propType": "number"
-        },
-        {
-          "name": "groupIndent",
-          "propType": "number",
-          "defaultValue": 0
-        },
-        {
-          "name": "noIcon",
-          "propType": "bool",
-          "defaultValue": false
+          "name": "key",
+          "propType": "string",
+          "description": "子菜单标识符"
         },
         {
           "name": "label",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "node",
           "description": "标签内容"
         },
         {
@@ -7575,64 +7499,22 @@
           "description": "子菜单打开方式，如果设置会覆盖 Menu 上的同名属性\n@default Menu 的 mode 属性值"
         },
         {
-          "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "菜单项或下一级子菜单"
-        },
-        {
-          "name": "onMouseEnter",
-          "propType": "func"
-        },
-        {
-          "name": "onMouseLeave",
-          "propType": "func"
-        },
-        {
-          "name": "subMenuContentClassName",
-          "propType": "string"
-        },
-        {
-          "name": "triggerType",
-          "propType": {
-            "type": "oneOf",
-            "value": [
-              "click",
-              "hover"
-            ]
-          }
-        },
-        {
-          "name": "align",
-          "propType": {
-            "type": "oneOf",
-            "value": [
-              "outside",
-              "follow"
-            ]
-          }
-        },
-        {
-          "name": "parentMode",
-          "propType": {
-            "type": "oneOf",
-            "value": [
-              "inline",
-              "popup"
-            ]
-          }
-        },
-        {
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true,
+          "nestingRule": {
+            "parentWhitelist": ["Menu", "SubMenu", "Menu.Group", "MenuButton"]
+          }
+        }
+      }
     },
     {
       "componentName": "Menu.Item",
-      "title": "SelectableItem",
+      "title": "Menu.Item",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -7645,24 +7527,9 @@
       },
       "props": [
         {
-          "name": "_key",
-          "propType": "string"
-        },
-        {
-          "name": "root",
-          "propType": "object"
-        },
-        {
-          "name": "selected",
-          "propType": "bool"
-        },
-        {
-          "name": "onSelect",
-          "propType": "func"
-        },
-        {
-          "name": "inlineIndent",
-          "propType": "number"
+          "name": "key",
+          "propType": "string",
+          "description": "菜单项标识符"
         },
         {
           "name": "disabled",
@@ -7672,50 +7539,22 @@
         },
         {
           "name": "helper",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "node",
           "description": "帮助文本"
-        },
-        {
-          "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "菜单项标签内容"
-        },
-        {
-          "name": "className",
-          "propType": "string"
-        },
-        {
-          "name": "onKeyDown",
-          "propType": "func"
-        },
-        {
-          "name": "onClick",
-          "propType": "func"
-        },
-        {
-          "name": "needIndent",
-          "propType": "bool",
-          "defaultValue": true
-        },
-        {
-          "name": "hasSelectedIcon",
-          "propType": "bool"
-        },
-        {
-          "name": "isSelectIconRight",
-          "propType": "bool"
         },
         {
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true,
+          "nestingRule": {
+            "parentWhitelist": ["Menu", "SubMenu", "Menu.Group", "MenuButton"]
+          }
+        }
+      }
     },
     {
       "componentName": "CheckboxItem",
@@ -7756,30 +7595,22 @@
         },
         {
           "name": "helper",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "node",
           "description": "帮助文本"
-        },
-        {
-          "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "标签内容"
-        },
-        {
-          "name": "checkboxDisabled",
-          "propType": "bool",
-          "defaultValue": false
         },
         {
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true,
+          "nestingRule": {
+            "parentWhitelist": ["Menu", "SubMenu", "Menu.Group", "MenuButton"]
+          }
+        }
+      }
     },
     {
       "componentName": "RadioItem",
@@ -7814,29 +7645,26 @@
         },
         {
           "name": "helper",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "node",
           "description": "帮助文本"
-        },
-        {
-          "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "标签内容"
         },
         {
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true,
+          "nestingRule": {
+            "parentWhitelist": ["Menu", "SubMenu", "Menu.Group", "MenuButton"]
+          }
+        }
+      }
     },
     {
-      "componentName": "PopupItem",
-      "title": "PopupItem",
+      "componentName": "Menu.PopupItem",
+      "title": "Menu.PopupItem",
       "docUrl": "",
       "screenshot": "",
       "npm": {
@@ -7849,84 +7677,33 @@
       },
       "props": [
         {
-          "name": "_key",
-          "propType": "string"
-        },
-        {
-          "name": "root",
-          "propType": "object"
-        },
-        {
-          "name": "level",
-          "propType": "number"
-        },
-        {
-          "name": "hasSubMenu",
-          "propType": "bool"
-        },
-        {
-          "name": "noIcon",
-          "propType": "bool",
-          "defaultValue": false
-        },
-        {
-          "name": "rtl",
-          "propType": "bool"
-        },
-        {
-          "name": "selectable",
-          "propType": "bool",
-          "defaultValue": false
+          "name": "key",
+          "propType": "string",
+          "description": "菜单项标识符"
         },
         {
           "name": "label",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "node",
           "description": "标签内容"
         },
         {
           "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "node",
           "description": "自定义弹层内容"
-        },
-        {
-          "name": "className",
-          "propType": "string"
-        },
-        {
-          "name": "triggerType",
-          "propType": {
-            "type": "oneOf",
-            "value": [
-              "click",
-              "hover"
-            ]
-          }
-        },
-        {
-          "name": "align",
-          "propType": {
-            "type": "oneOf",
-            "value": [
-              "outside",
-              "follow"
-            ]
-          }
-        },
-        {
-          "name": "autoWidth",
-          "propType": "bool"
         },
         {
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true,
+          "nestingRule": {
+            "parentWhitelist": ["Menu", "SubMenu", "Menu.Group", "MenuButton"]
+          }
+        }
+      }
     },
     {
       "componentName": "Menu.Group",
@@ -7943,14 +7720,6 @@
       },
       "props": [
         {
-          "name": "root",
-          "propType": "object"
-        },
-        {
-          "name": "className",
-          "propType": "string"
-        },
-        {
           "name": "label",
           "propType": {
             "type": "instanceOf",
@@ -7959,28 +7728,18 @@
           "description": "标签内容"
         },
         {
-          "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "菜单项"
-        },
-        {
-          "name": "parentMode",
-          "propType": {
-            "type": "oneOf",
-            "value": [
-              "inline",
-              "popup"
-            ]
-          }
-        },
-        {
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true,
+          "nestingRule": {
+            "parentWhitelist": ["Menu", "SubMenu", "Menu.Group", "MenuButton"]
+          }
+        }
+      }
     },
     {
       "componentName": "Menu.Divider",
@@ -7997,18 +7756,18 @@
       },
       "props": [
         {
-          "name": "root",
-          "propType": "object"
-        },
-        {
-          "name": "className",
-          "propType": "string"
-        },
-        {
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": false,
+          "nestingRule": {
+            "parentWhitelist": ["Menu", "SubMenu", "Menu.Group", "MenuButton"]
+          }
+        }
+      }
     },
     {
       "componentName": "MenuButton",
@@ -8025,16 +7784,8 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
           "name": "label",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "string",
           "description": "按钮上的文本内容"
         },
         {
@@ -8098,8 +7849,8 @@
         {
           "name": "defaultSelectedKeys",
           "propType": {
-            "type": "instanceOf",
-            "value": "array"
+            "type": "arrayOf",
+            "value": "string"
           },
           "description": "默认激活的菜单项（用法同 Menu 非受控）",
           "defaultValue": []
@@ -8107,8 +7858,8 @@
         {
           "name": "selectedKeys",
           "propType": {
-            "type": "instanceOf",
-            "value": "array"
+            "type": "arrayOf",
+            "value": "string"
           },
           "description": "激活的菜单项（用法同 Menu 受控）"
         },
@@ -8141,16 +7892,13 @@
         {
           "name": "style",
           "propType": "object"
-        },
-        {
-          "name": "className",
-          "propType": "string"
-        },
-        {
-          "name": "children",
-          "propType": "any"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "Message",
@@ -8281,33 +8029,12 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "pure",
-          "propType": "bool",
-          "defaultValue": false
-        },
-        {
-          "name": "rtl",
-          "propType": "bool"
-        },
-        {
-          "name": "className",
-          "propType": "string"
-        },
-        {
           "name": "style",
           "propType": "object"
         },
         {
           "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "node",
           "description": "导航项和子导航"
         },
         {
@@ -11192,7 +10919,10 @@
       ],
       "configure": {
         "component": {
-          "isContainer": true
+          "isContainer": true,
+          "nestingRule": {
+            "parentWhitelist": ["Tab"]
+          }
         }
       }
     },
@@ -11290,6 +11020,11 @@
           "name": "animation",
           "propType": "bool",
           "description": "是否开启动效"
+        },
+        {
+          "name": "afterAppear",
+          "propType": "func",
+          "description": "标签出现动画结束后执行的回调"
         },
         {
           "name": "onClick",
@@ -11400,6 +11135,11 @@
           "name": "onClick",
           "propType": "func",
           "description": "点击回调"
+        },
+        {
+          "name": "afterClose",
+          "propType": "func",
+          "description": "标签关闭后执行的回调"
         },
         {
           "name": "children",
@@ -11678,42 +11418,26 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "description": "样式的品牌前缀",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "rtl",
-          "propType": "bool",
-          "defaultValue": false
-        },
-        {
           "name": "fold",
           "propType": {
-            "type": "instanceOf",
-            "value": "array"
+            "type": "arrayOf",
+            "value": {
+              "type": "exact",
+              "value": [{
+                "name": "foldArea",
+                "propType": {
+                  "type": "arrayOf",
+                  "value": "number"
+                }
+              }, {
+                "name": "foldShow",
+                "propType": "bool"
+              }]
+
+            }
           },
           "description": "自定义折叠选项 示例`[{foldArea: [startIndex, endIndex], foldShow: boolean}]`",
           "defaultValue": []
-        },
-        {
-          "name": "className",
-          "propType": "string",
-          "description": "自定义类名"
-        },
-        {
-          "name": "children",
-          "propType": "any"
-        },
-        {
-          "name": "locale",
-          "propType": "object"
-        },
-        {
-          "name": "animation",
-          "propType": "bool",
-          "defaultValue": true
         },
         {
           "name": "style",
@@ -11722,7 +11446,10 @@
       ],
       "configure": {
         "component": {
-          "isContainer": true
+          "isContainer": true,
+          "nestingRule": {
+            "childWhitelist": ["TimelineItem"]
+          }
         }
       }
     },
@@ -11740,27 +11467,6 @@
         "subName": "Item"
       },
       "props": [
-        {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "index",
-          "propType": "number"
-        },
-        {
-          "name": "total",
-          "propType": "number"
-        },
-        {
-          "name": "folderIndex",
-          "propType": "number"
-        },
-        {
-          "name": "foldShow",
-          "propType": "bool"
-        },
         {
           "name": "state",
           "propType": {
@@ -11782,55 +11488,34 @@
         },
         {
           "name": "dot",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "node",
           "description": "自定义时间轴节点"
         },
         {
           "name": "time",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "string",
           "description": "格式化后的时间"
         },
         {
           "name": "title",
           "propType": {
-            "type": "instanceOf",
-            "value": "node"
+            "type": "oneOfType",
+            "value": ["string", "node"]
           },
           "description": "标题"
         },
         {
           "name": "timeLeft",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "string",
           "description": "左侧时间"
         },
         {
           "name": "content",
           "propType": {
-            "type": "instanceOf",
-            "value": "node"
+            "type": "oneOfType",
+            "value": ["string", "node"]
           },
           "description": "右侧内容"
-        },
-        {
-          "name": "toggleFold",
-          "propType": "func"
-        },
-        {
-          "name": "className",
-          "propType": "string"
-        },
-        {
-          "name": "locale",
-          "propType": "object"
         },
         {
           "name": "animation",
@@ -11842,7 +11527,15 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": false,
+          "nestingRule": {
+            "parentWhitelist": ["Timeline"]
+          }
+        }
+      }
     },
     {
       "componentName": "Transfer",
@@ -12006,7 +11699,7 @@
           "propType": "func",
           "description": "拖拽排序时触发的回调函数"
         }
-        
+
       ],
       "configure": {
         "props": {
@@ -12033,37 +11726,13 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "rtl",
-          "propType": "bool",
-          "defaultValue": false
-        },
-        {
-          "name": "pure",
-          "propType": "bool",
-          "defaultValue": false
-        },
-        {
           "name": "className",
           "propType": "string"
         },
         {
-          "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "树节点"
-        },
-        {
           "name": "dataSource",
           "propType": {
-            "type": "instanceOf",
-            "value": "array"
+            "type": "Json"
           },
           "description": "数据源，该属性优先级高于 children"
         },
@@ -12187,22 +11856,22 @@
         {
           "name": "canDrop",
           "propType": "func",
-          "description": "节点是否可被作为拖拽的目标节点\n@param {Object} info 拖拽信息\n@param {Object} info.node 目标节点\n@param {Object} info.dragNode 拖拽的节点\n@param {Array} info.dragNodesKeys 拖拽的节点和其子节点 key 的数组\n@param {Number} info.dropPosition 放置位置，-1代表当前节点前，0代表当前节点里，1代表当前节点后\n@return {Boolean} 是否可以被当作目标节点"
+          "description": "节点是否可被作为拖拽的目标节点"
         },
         {
           "name": "loadData",
           "propType": "func",
-          "description": "异步加载数据的函数\n@param {Object} node 被点击展开的节点"
+          "description": "异步加载数据的函数"
         },
         {
           "name": "filterTreeNode",
           "propType": "func",
-          "description": "按需筛选高亮节点\n@param {Object} node 待筛选的节点\n@return {Boolean} 是否被筛选中"
+          "description": "按需筛选高亮节点"
         },
         {
           "name": "onRightClick",
           "propType": "func",
-          "description": "右键点击节点时触发的回调函数\n@param {Object} info 信息对象\n@param {Object} info.event 事件对象\n@param {Object} info.node 点击的节点"
+          "description": "右键点击节点时触发的回调函数"
         },
         {
           "name": "isLabelBlock",
@@ -12212,13 +11881,7 @@
         },
         {
           "name": "isNodeBlock",
-          "propType": {
-            "type": "oneOfType",
-            "value": [
-              "bool",
-              "object"
-            ]
-          },
+          "propType": "bool",
           "description": "设置节点是否占满一行",
           "defaultValue": false
         },
@@ -12236,17 +11899,12 @@
         {
           "name": "renderChildNodes",
           "propType": "func",
-          "description": "渲染子节点\n@param {Array<ReactNode>} nodes 所有的子节点\n@return {ReactNode} 返回节点"
+          "description": "渲染子节点"
         },
         {
-          "name": "focusable",
+          "name": "useVirtual",
           "propType": "bool",
-          "defaultValue": true
-        },
-        {
-          "name": "autoFocus",
-          "propType": "bool",
-          "defaultValue": false
+          "description": "是否开启虚拟滚动"
         },
         {
           "name": "onItemFocus",
@@ -12286,19 +11944,6 @@
       },
       "props": [
         {
-          "name": "_key",
-          "propType": "string"
-        },
-        {
-          "name": "prefix",
-          "propType": "string"
-        },
-        {
-          "name": "rtl",
-          "propType": "bool",
-          "defaultValue": false
-        },
-        {
           "name": "className",
           "propType": "string"
         },
@@ -12313,8 +11958,11 @@
         {
           "name": "label",
           "propType": {
-            "type": "instanceOf",
-            "value": "node"
+            "type": "oneOfType",
+            "value": [
+              "string",
+              "node"
+            ]
           },
           "description": "节点文本内容",
           "defaultValue": "---"
@@ -12354,65 +12002,8 @@
         {
           "name": "isLeaf",
           "propType": "bool",
-          "description": "是否是叶子节点，设置loadData时生效",
+          "description": "是否是叶子节点",
           "defaultValue": false
-        },
-        {
-          "name": "root",
-          "propType": "object"
-        },
-        {
-          "name": "eventKey",
-          "propType": "string"
-        },
-        {
-          "name": "pos",
-          "propType": "string"
-        },
-        {
-          "name": "expanded",
-          "propType": "bool"
-        },
-        {
-          "name": "selected",
-          "propType": "bool"
-        },
-        {
-          "name": "checked",
-          "propType": "bool"
-        },
-        {
-          "name": "indeterminate",
-          "propType": "bool"
-        },
-        {
-          "name": "dragOver",
-          "propType": "bool"
-        },
-        {
-          "name": "dragOverGapTop",
-          "propType": "bool"
-        },
-        {
-          "name": "dragOverGapBottom",
-          "propType": "bool"
-        },
-        {
-          "name": "parentNode",
-          "propType": "object"
-        },
-        {
-          "name": "onKeyDown",
-          "propType": "func"
-        },
-        {
-          "name": "size",
-          "propType": "number",
-          "defaultValue": 1
-        },
-        {
-          "name": "style",
-          "propType": "object"
         }
       ]
     },
@@ -14116,7 +13707,6 @@
               "schema": {
                 "componentName": "Menu",
                 "props": {
-                  "prefix": "next-",
                   "defaultOpenKeys": [],
                   "mode": "inline",
                   "triggerType": "click",
@@ -14131,7 +13721,39 @@
                   "hozAlign": "left",
                   "focusable": true,
                   "expandAnimation": true
-                }
+                },
+                "children": [{
+                  "componentName": "Menu.Item",
+                  "props": {
+                  },
+                  "children": "Option"
+                }]
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "SubMenu",
+          "title": "子菜单",
+          "icon": "",
+          "package": "@alifd/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "子菜单",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_menu.png",
+              "schema": {
+                "componentName": "SubMenu",
+                "props": {
+                  "label": "子菜单",
+                  "mode": "inline"
+                },
+                "children": [{
+                  "componentName": "Menu.Item",
+                  "props": {
+                  },
+                  "children": "Option"
+                }]
               }
             }
           ]
@@ -14151,6 +13773,110 @@
                 "props": {
                 },
                 "children": "Option"
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "CheckboxItem",
+          "title": "可选中菜单项",
+          "icon": "",
+          "package": "@alifd/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "可选中菜单项",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_menu.png",
+              "schema": {
+                "componentName": "CheckboxItem",
+                "props": {
+                },
+                "children": "Check Option"
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "RadioItem",
+          "title": "单选菜单项",
+          "icon": "",
+          "package": "@alifd/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "单选菜单项",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_menu.png",
+              "schema": {
+                "componentName": "RadioItem",
+                "props": {
+                },
+                "children": "Radio Option"
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "Menu.PopupItem",
+          "title": "自定义弹出内容",
+          "icon": "",
+          "package": "@alifd/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "自定义弹出内容",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_menu.png",
+              "schema": {
+                "componentName": "Menu.PopupItem",
+                "props": {
+                  "label": "Popup item"
+                },
+                "children": {
+                  "componentName": "Box",
+                  "props": {},
+                  "children": "Custom content"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "Menu.Group",
+          "title": "菜单组",
+          "icon": "",
+          "package": "@alifd/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "菜单组",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_menu.png",
+              "schema": {
+                "componentName": "Menu.Group",
+                "props": {
+                  "label": "菜单组"
+                },
+                "children": [{
+                  "componentName": "Menu.Item",
+                  "props": {
+                  },
+                  "children": "Option"
+                }]
+              }
+            }
+          ]
+        },
+        {
+          "componentName": "Menu.Divider",
+          "title": "菜单分隔线",
+          "icon": "",
+          "package": "@alifd/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "菜单分隔线",
+              "screenshot": "https://alifd.oss-cn-hangzhou.aliyuncs.com/fusion-cool/icons/icon-light/ic_light_menu.png",
+              "schema": {
+                "componentName": "Menu.Divider",
+                "props": {}
               }
             }
           ]
@@ -14383,7 +14109,7 @@
               "schema": {
                 "componentName": "TreeNode",
                 "props": {
-                  "prefix": "next-"
+                  "label": "节点内容文本"
                 }
               }
             }
@@ -14712,7 +14438,13 @@
                   "autoWidth": true,
                   "popupTriggerType": "click",
                   "defaultSelectedKeys": []
-                }
+                },
+                "children": [{
+                  "componentName": "Menu.Item",
+                  "props": {
+                  },
+                  "children": "Option"
+                }]
               }
             }
           ]
