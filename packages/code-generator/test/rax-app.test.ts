@@ -7,8 +7,8 @@ import path from 'path';
 import chalk from 'chalk';
 
 import CodeGenerator from '../src';
-import createRaxAppBuilder from '../src/solutions/rax-app';
-import { IProjectSchema } from '../src/types/schema';
+
+import type { IProjectSchema } from '../src/types/schema';
 
 const TEST_CASES_DIR = path.join(__dirname, '../test-cases/rax-app');
 
@@ -42,7 +42,7 @@ function defineTest(caseDirName: string) {
 }
 
 async function exportProject(schemaJson: IProjectSchema, targetPath: string, projectName: string) {
-  const raxAppBuilder = createRaxAppBuilder();
+  const raxAppBuilder = CodeGenerator.solutions.rax();
   const result = await raxAppBuilder.generateProject(schemaJson);
   const publisher = CodeGenerator.publishers.disk();
   await publisher.publish({

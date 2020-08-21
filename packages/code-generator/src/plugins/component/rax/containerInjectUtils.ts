@@ -43,14 +43,12 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start],
     });
 
-    // TODO: Page methods...
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: cfg.fileType,
       name: CLASS_DEFINE_CHUNK_NAME.InsPrivateMethod,
 
       // 绑定下上下文，这样在所有的 utils 里面都能通过 this.xxx 来访问上下文了
-      // TODO: 要不要优化为通过 Proxy 的方式懒绑定？
       content: `
         _defineUtils() {
           const utils = {

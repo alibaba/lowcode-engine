@@ -17,6 +17,8 @@ import { isMiniApp as __$$isMiniApp } from 'universal-env';
 
 import __$$constants from '../../constants';
 
+import * as __$$i18n from '../../i18n';
+
 import __$$projectUtils from '../../utils';
 
 import './index.css';
@@ -27,6 +29,8 @@ class List$$Page extends Component {
   _methods = this._defineMethods();
 
   _context = this._createContext();
+
+  _i18n = this._createI18nDelegate();
 
   _dataSourceConfig = this._defineDataSourceConfig();
   _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceConfig, this._context, { runtimeConfig: true });
@@ -88,10 +92,31 @@ class List$$Page extends Component {
       get constants() {
         return __$$constants;
       },
+      get i18n() {
+        return self._i18n;
+      },
+      getLocale() {
+        return __$$i18n.getLocale();
+      },
+      setLocale(locale) {
+        __$$i18n.setLocale(locale);
+        self.forceUpdate();
+      },
       ...this._methods,
     };
 
     return context;
+  }
+
+  _createI18nDelegate() {
+    return new Proxy(
+      {},
+      {
+        get(target, prop) {
+          return __$$i18n.i18n(prop);
+        },
+      },
+    );
   }
 
   _defineDataSourceConfig() {

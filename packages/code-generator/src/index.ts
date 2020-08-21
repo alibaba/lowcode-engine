@@ -6,8 +6,9 @@ import { createProjectBuilder } from './generator/ProjectBuilder';
 import { createModuleBuilder } from './generator/ModuleBuilder';
 import { createDiskPublisher } from './publisher/disk';
 import { createZipPublisher } from './publisher/zip';
-// import createIceJsProjectBuilder from './solutions/icejs';
+import createIceJsProjectBuilder from './solutions/icejs';
 // import createRecoreProjectBuilder from './solutions/recore';
+import createRaxAppProjectBuilder from './solutions/rax-app';
 
 // 引入说明
 import { REACT_CHUNK_NAME } from './plugins/component/react/const';
@@ -42,6 +43,7 @@ import * as utilsValidate from './utils/validate';
 
 // 引入内置解决方案模块
 import icejs from './plugins/project/framework/icejs';
+import rax from './plugins/project/framework/rax';
 
 export * from './types';
 
@@ -49,11 +51,13 @@ export default {
   createProjectBuilder,
   createModuleBuilder,
   solutions: {
-    // icejs: createIceJsProjectBuilder,
+    icejs: createIceJsProjectBuilder,
     // recore: createRecoreProjectBuilder,
+    rax: createRaxAppProjectBuilder,
   },
   solutionParts: {
     icejs,
+    rax,
   },
   publishers: {
     disk: createDiskPublisher,

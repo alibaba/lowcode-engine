@@ -9,7 +9,18 @@ import {
   IProjectInfo,
 } from '../../../../../types';
 
-const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
+export type GlobalStylePluginConfig = {
+  fileType: string;
+};
+
+const pluginFactory: BuilderComponentPluginFactory<GlobalStylePluginConfig> = (
+  config?: Partial<GlobalStylePluginConfig>,
+) => {
+  const cfg: GlobalStylePluginConfig = {
+    fileType: FileType.SCSS,
+    ...config,
+  };
+
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     const next: ICodeStruct = {
       ...pre,
@@ -19,7 +30,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
 
     next.chunks.push({
       type: ChunkType.STRING,
-      fileType: FileType.SCSS, // TODO: 样式文件的类型定制化？
+      fileType: cfg.fileType,
       name: COMMON_CHUNK_NAME.StyleDepsImport,
       content: ``,
       linkAfter: [],
@@ -27,7 +38,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
 
     next.chunks.push({
       type: ChunkType.STRING,
-      fileType: FileType.SCSS,
+      fileType: cfg.fileType,
       name: COMMON_CHUNK_NAME.StyleCssContent,
       content: `
 body {
@@ -39,7 +50,7 @@ body {
 
     next.chunks.push({
       type: ChunkType.STRING,
-      fileType: FileType.SCSS,
+      fileType: cfg.fileType,
       name: COMMON_CHUNK_NAME.StyleCssContent,
       content: ir.css || '',
       linkAfter: [COMMON_CHUNK_NAME.StyleDepsImport],

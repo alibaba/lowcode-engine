@@ -1,4 +1,5 @@
 {
+  // 本例是为了测试一下小程序的 runtime 模式
   version: '1.0.0',
   componentsMap: [
     {

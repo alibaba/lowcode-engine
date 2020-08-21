@@ -1,4 +1,5 @@
 {
+  // 本例是一个比较复杂的，带有循环和条件渲染的，以及有各种事件处理函数的页面
   // Schema 参见：https://yuque.antfin-inc.com/mo/spec/spec-materials#eNCJr
   version: '1.0.0',
   componentsMap: [
@@ -87,7 +88,7 @@
               isSync: true,
             },
             dataHandler: {
-              type: 'JSFunction',
+              type: 'JSExpression',
               value: 'function (response) {\nif (!response.success){\n    throw new Error(response.message);\n  }\n  return response.data;\n}',
             },
           },
@@ -104,13 +105,13 @@
               isSync: true,
             },
             dataHandler: {
-              type: 'JSFunction',
+              type: 'JSExpression',
               value: 'function (response) {\nif (!response.success){\n    throw new Error(response.message);\n  }\n  return response.data.result;\n}',
             },
           },
         ],
         dataHandler: {
-          type: 'JSFunction',
+          type: 'JSExpression',
           value: 'function (dataMap) {\n  console.info("All datasources loaded:", dataMap);\n}',
         },
       },
@@ -164,7 +165,7 @@
               componentName: 'View',
               props: {
                 onClick: {
-                  type: 'JSFunction',
+                  type: 'JSExpression',
                   value: 'this.hello',
                 },
               },
@@ -210,7 +211,7 @@
           props: {
             style: { flexDirection: 'row' },
             onClick: {
-              type: 'JSFunction',
+              type: 'JSExpression',
               value: 'function(){ this.utils.recordEvent(`CLICK_ORDER`, this.order.title) }',
             },
           },
@@ -260,7 +261,7 @@
           componentName: 'View',
           props: {
             onClick: {
-              type: 'JSFunction',
+              type: 'JSExpression',
               value: 'function (){ this.setState({ clickCount: this.state.clickCount + 1 }) }',
             },
           },
@@ -312,7 +313,7 @@
       name: 'formatPrice',
       type: 'function',
       content: {
-        type: 'JSFunction',
+        type: 'JSExpression',
         value: 'function formatPrice(price, unit) { return Number(price).toFixed(2) + unit; }',
       },
     },
@@ -321,7 +322,7 @@
       name: 'recordEvent',
       type: 'function',
       content: {
-        type: 'JSFunction',
+        type: 'JSExpression',
         value: 'function recordEvent(eventName, eventDetail) { \n  this.utils.Toast.show(`[EVENT]: ${eventName} ${eventDetail}`);\n  console.log(`[EVENT]: ${eventName} (detail: %o) (user: %o)`, eventDetail, this.state.user); }',
       },
     },

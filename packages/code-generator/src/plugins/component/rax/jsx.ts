@@ -1,7 +1,8 @@
-import { NodeSchema, JSExpression, NpmInfo, CompositeValue } from '@ali/lowcode-types';
+import { NodeSchema, JSExpression, NpmInfo, CompositeValue, isJSExpression } from '@ali/lowcode-types';
 
 import _ from 'lodash';
 import changeCase from 'change-case';
+import { Expression } from '@babel/types';
 import {
   BuilderComponentPlugin,
   BuilderComponentPluginFactory,
@@ -23,7 +24,11 @@ import { createNodeGenerator, generateReactCtrlLine, generateAttr } from '../../
 import { generateCompositeType } from '../../../utils/compositeType';
 
 import { IScopeBindings, ScopeBindings } from '../../../utils/ScopeBindings';
-import { parseExpressionConvertThis2Context, parseExpressionGetGlobalVariables } from '../../../utils/expressionParser';
+import {
+  parseExpression,
+  parseExpressionConvertThis2Context,
+  parseExpressionGetGlobalVariables,
+} from '../../../utils/expressionParser';
 
 type PluginConfig = {
   fileType: string;
@@ -36,23 +41,6 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     fileType: FileType.JSX,
     ...config,
   };
-
-  // 什么都不做的的话，会有 3 个问题：
-  // 1. 小程序出码的时候，循环变量没法拿到
-  // 2. 小程序出码的时候，很容易出现 Uncaught TypeError: Cannot read property 'avatar' of undefined 这样的异常(如下图的 50 行) -- 因为若直接出码，Rax 构建到小程序的时候会立即计算所有在视图中用到的变量
-  // 3. 通过 this.xxx 能拿到的东西太多了，而且自定义的 methods 可能会无意间破坏 Rax 框架或小程序框架在页面 this 上的东东
-  // const transformers = {
-  //   transformThis2Context: (expr: string) => expr,
-  //   transformJsExpr: (expr: string) => expr,
-  //   transformLoopExpr: (expr: string) => expr,
-  // };
-
-  // 不转换 this.xxx 到 __$$context.xxx 的话，依然会有上述的 1 和 3 的问题。
-  // const transformers = {
-  //   transformThis2Context: (expr: string) => expr,
-  //   transformJsExpr: (expr: string) => (isLiteralAtomicExpr(expr) ? expr : `__$$eval(() => (${expr}))`),
-  //   transformLoopExpr: (expr: string) => `__$$evalArray(() => (${expr}))`,
-  // };
 
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     const next: ICodeStruct = {
@@ -70,12 +58,17 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       }
     });
 
+    // 注意：这里其实隐含了一个假设：schema 中的 componentName 应该是一个有效的 JS 标识符，而且是大写字母打头的
     const mapComponentNameToAliasOrKeepIt = (componentName: string) =>
       componentsNameAliasMap.get(componentName) || componentName;
 
     // 然后过滤掉所有的别名 chunks
     next.chunks = next.chunks.filter((chunk) => !isImportAliasDefineChunk(chunk));
 
+    // 如果直接按目前的 React 的方式之间出码 JSX 的话，会有 3 个问题：
+    // 1. 小程序出码的时候，循环变量没法拿到
+    // 2. 小程序出码的时候，很容易出现 Uncaught TypeError: Cannot read property 'avatar' of undefined 这样的异常(如下图的 50 行) -- 因为若直接出码，Rax 构建到小程序的时候会立即计算所有在视图中用到的变量
+    // 3. 通过 this.xxx 能拿到的东西太多了，而且自定义的 methods 可能会无意间破坏 Rax 框架或小程序框架在页面 this 上的东东
     const customHandlers: HandlerSet<string> = {
       expression(this: CustomHandlerSet, input: JSExpression) {
         return transformJsExpr(generateExpression(input), this);
@@ -176,7 +169,49 @@ function transformLoopExpr(expr: string, handlers: CustomHandlerSet) {
 }
 
 function transformJsExpr(expr: string, handlers: CustomHandlerSet) {
-  return isLiteralAtomicExpr(expr) ? expr : `__$$eval(() => (${transformThis2Context(expr, handlers)}))`;
+  if (!expr) {
+    return 'undefined';
+  }
+
+  if (isLiteralAtomicExpr(expr)) {
+    return expr;
+  }
+
+  const exprAst = parseExpression(expr);
+
+  // 对于下面这些比较安全的字面值，可以直接返回对应的表达式，而非包一层
+  if (isSimpleStraightLiteral(exprAst)) {
+    return expr;
+  }
+
+  switch (exprAst.type) {
+    // 对于直接写个函数的，则不用再包下，因为这样不会抛出异常的
+    case 'ArrowFunctionExpression':
+    case 'FunctionExpression':
+      return transformThis2Context(exprAst, handlers);
+
+    default:
+      break;
+  }
+
+  // 其他的都需要包一层
+  return `__$$eval(() => (${transformThis2Context(exprAst, handlers)}))`;
+}
+
+/** 判断是非是一些简单直接的字面值 */
+function isSimpleStraightLiteral(expr: Expression): boolean {
+  switch (expr.type) {
+    case 'BigIntLiteral':
+    case 'BooleanLiteral':
+    case 'DecimalLiteral':
+    case 'NullLiteral':
+    case 'NumericLiteral':
+    case 'RegExpLiteral':
+    case 'StringLiteral':
+      return true;
+    default:
+      return false;
+  }
 }
 
 function isImportAliasDefineChunk(
@@ -201,14 +236,15 @@ function isImportAliasDefineChunk(
  * 判断是否是原子类型的表达式
  */
 function isLiteralAtomicExpr(expr: string): boolean {
-  return expr === 'null' || expr === 'undefined' || expr === 'true' || expr === 'false' || /^\d+$/.test(expr);
+  return expr === 'null' || expr === 'undefined' || expr === 'true' || expr === 'false' || /^-?\d+(\.\d+)?$/.test(expr);
 }
 
 /**
  * 将所有的 this.xxx 替换为 __$$context.xxx
  * @param expr
  */
-function transformThis2Context(expr: string, customHandlers: CustomHandlerSet): string {
+function transformThis2Context(expr: string | Expression, customHandlers: CustomHandlerSet): string {
+  // 下面这种字符串替换的方式虽然简单直接，但是对于复杂场景会误匹配，故后期改成了解析 AST 然后修改 AST 最后再重新生成代码的方式
   // return expr
   //   .replace(/\bthis\.item\./g, () => 'item.')
   //   .replace(/\bthis\.index\./g, () => 'index.')
@@ -224,12 +260,24 @@ function generateNodeAttrForRax(this: CustomHandlerSet, attrName: string, attrVa
       nodeAttr: undefined,
     });
   }
+  // else: onXxx 的都是事件处理函数需要特殊处理下
 
-  // 先出个码
-  const valueExpr = generateCompositeType(attrValue, this);
+  return generateEventHandlerAttrForRax(attrName, attrValue, this);
+}
+
+function generateEventHandlerAttrForRax(
+  attrName: string,
+  attrValue: CompositeValue,
+  handlers: CustomHandlerSet,
+): CodePiece[] {
+  // -- 事件处理函数中 JSExpression 转成 JSFunction 来处理，避免当 JSExpression 处理的时候多包一层 eval 而导致 Rax 转码成小程序的时候出问题
+  const valueExpr = generateCompositeType(
+    isJSExpression(attrValue) ? { type: 'JSFunction', value: attrValue.value } : attrValue,
+    handlers,
+  );
 
   // 查询当前作用域下的变量
-  const currentScopeVariables = this.scopeBindings?.getAllBindings() || [];
+  const currentScopeVariables = handlers.scopeBindings?.getAllBindings() || [];
   if (currentScopeVariables.length <= 0) {
     return [
       {

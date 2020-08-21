@@ -3,13 +3,9 @@
 import { createElement, Component } from 'rax';
 import { withRouter as __$$withRouter } from 'rax-app';
 
-import Card from '@alife/right-design-card';
-
-import View from 'rax-view';
+import Page from 'rax-view';
 
 import Text from 'rax-text';
-
-import Image from 'rax-image';
 
 import { create as __$$createDataSourceEngine } from '@ali/lowcode-datasource-engine';
 
@@ -24,8 +20,6 @@ import __$$projectUtils from '../../utils';
 import './index.css';
 
 class Home$$Page extends Component {
-  state = {};
-
   _methods = this._defineMethods();
 
   _context = this._createContext();
@@ -47,11 +41,15 @@ class Home$$Page extends Component {
     const __$$context = this._context;
 
     return (
-      <View>
-        <Card>
-          <Text>This is a demo card.</Text>
-        </Card>
-      </View>
+      <Page>
+        <Text
+          onClick={function () {
+            __$$context.setLocale(__$$context.getLocale() === 'en-US' ? 'zh-CN' : 'en-US');
+          }}
+        >
+          {__$$eval(() => __$$context.i18n['hello-world'])}
+        </Text>
+      </Page>
     );
   }
 
