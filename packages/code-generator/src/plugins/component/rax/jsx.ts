@@ -36,29 +36,11 @@ type PluginConfig = {
   fileType: string;
 };
 
-// TODO: componentName 若并非大写字符打头，甚至并非是一个有效的 JS 标识符怎么办？？
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
   const cfg: PluginConfig = {
     fileType: FileType.JSX,
     ...config,
   };
-
-  // 什么都不做的的话，会有 3 个问题：
-  // 1. 小程序出码的时候，循环变量没法拿到
-  // 2. 小程序出码的时候，很容易出现 Uncaught TypeError: Cannot read property 'avatar' of undefined 这样的异常(如下图的 50 行) -- 因为若直接出码，Rax 构建到小程序的时候会立即计算所有在视图中用到的变量
-  // 3. 通过 this.xxx 能拿到的东西太多了，而且自定义的 methods 可能会无意间破坏 Rax 框架或小程序框架在页面 this 上的东东
-  // const transformers = {
-  //   transformThis2Context: (expr: string) => expr,
-  //   transformJsExpr: (expr: string) => expr,
-  //   transformLoopExpr: (expr: string) => expr,
-  // };
-
-  // 不转换 this.xxx 到 __$$context.xxx 的话，依然会有上述的 1 和 3 的问题。
-  // const transformers = {
-  //   transformThis2Context: (expr: string) => expr,
-  //   transformJsExpr: (expr: string) => (isLiteralAtomicExpr(expr) ? expr : `__$$eval(() => (${expr}))`),
-  //   transformLoopExpr: (expr: string) => `__$$evalArray(() => (${expr}))`,
-  // };
 
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     const next: ICodeStruct = {
@@ -76,12 +58,17 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       }
     });
 
+    // 注意：这里其实隐含了一个假设：schema 中的 componentName 应该是一个有效的 JS 标识符，而且是大写字母打头的
     const mapComponentNameToAliasOrKeepIt = (componentName: string) =>
       componentsNameAliasMap.get(componentName) || componentName;
 
     // 然后过滤掉所有的别名 chunks
     next.chunks = next.chunks.filter((chunk) => !isImportAliasDefineChunk(chunk));
 
+    // 如果直接按目前的 React 的方式之间出码 JSX 的话，会有 3 个问题：
+    // 1. 小程序出码的时候，循环变量没法拿到
+    // 2. 小程序出码的时候，很容易出现 Uncaught TypeError: Cannot read property 'avatar' of undefined 这样的异常(如下图的 50 行) -- 因为若直接出码，Rax 构建到小程序的时候会立即计算所有在视图中用到的变量
+    // 3. 通过 this.xxx 能拿到的东西太多了，而且自定义的 methods 可能会无意间破坏 Rax 框架或小程序框架在页面 this 上的东东
     const customHandlers: CustomHandlerSet = {
       expression(this: CustomHandlerSet, input: JSExpression) {
         return transformJsExpr(generateExpression(input), this);
