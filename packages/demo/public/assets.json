@@ -11450,42 +11450,26 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "description": "样式的品牌前缀",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "rtl",
-          "propType": "bool",
-          "defaultValue": false
-        },
-        {
           "name": "fold",
           "propType": {
-            "type": "instanceOf",
-            "value": "array"
+            "type": "arrayOf",
+            "value": {
+              "type": "exact",
+              "value": [{
+                "name": "foldArea",
+                "propType": {
+                  "type": "arrayOf",
+                  "value": "number"
+                }
+              }, {
+                "name": "foldShow",
+                "propType": "bool"
+              }]
+
+            }
           },
           "description": "自定义折叠选项 示例`[{foldArea: [startIndex, endIndex], foldShow: boolean}]`",
           "defaultValue": []
-        },
-        {
-          "name": "className",
-          "propType": "string",
-          "description": "自定义类名"
-        },
-        {
-          "name": "children",
-          "propType": "any"
-        },
-        {
-          "name": "locale",
-          "propType": "object"
-        },
-        {
-          "name": "animation",
-          "propType": "bool",
-          "defaultValue": true
         },
         {
           "name": "style",
@@ -11494,7 +11478,10 @@
       ],
       "configure": {
         "component": {
-          "isContainer": true
+          "isContainer": true,
+          "nestingRule": {
+            "childWhitelist": ["TimelineItem"]
+          }
         }
       }
     },
@@ -11512,27 +11499,6 @@
         "subName": "Item"
       },
       "props": [
-        {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "index",
-          "propType": "number"
-        },
-        {
-          "name": "total",
-          "propType": "number"
-        },
-        {
-          "name": "folderIndex",
-          "propType": "number"
-        },
-        {
-          "name": "foldShow",
-          "propType": "bool"
-        },
         {
           "name": "state",
           "propType": {
@@ -11554,55 +11520,34 @@
         },
         {
           "name": "dot",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "node",
           "description": "自定义时间轴节点"
         },
         {
           "name": "time",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "string",
           "description": "格式化后的时间"
         },
         {
           "name": "title",
           "propType": {
-            "type": "instanceOf",
-            "value": "node"
+            "type": "oneOfType",
+            "value": ["string", "node"]
           },
           "description": "标题"
         },
         {
           "name": "timeLeft",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "string",
           "description": "左侧时间"
         },
         {
           "name": "content",
           "propType": {
-            "type": "instanceOf",
-            "value": "node"
+            "type": "oneOfType",
+            "value": ["string", "node"]
           },
           "description": "右侧内容"
-        },
-        {
-          "name": "toggleFold",
-          "propType": "func"
-        },
-        {
-          "name": "className",
-          "propType": "string"
-        },
-        {
-          "name": "locale",
-          "propType": "object"
         },
         {
           "name": "animation",
@@ -11614,7 +11559,15 @@
           "name": "style",
           "propType": "object"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": false,
+          "nestingRule": {
+            "parentWhitelist": ["Timeline"]
+          }
+        }
+      }
     },
     {
       "componentName": "Transfer",
