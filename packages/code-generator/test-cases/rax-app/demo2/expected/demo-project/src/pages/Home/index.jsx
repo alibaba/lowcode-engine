@@ -89,7 +89,7 @@ class Home$$Page extends Component {
               source={{ uri: __$$eval(() => __$$context.state.user.avatar) }}
               style={{ width: '32px', height: '32px' }}
             />
-            <View onClick={__$$eval(() => __$$context.hello)}>
+            <View onClick={__$$context.hello}>
               <Text>{__$$eval(() => __$$context.state.user.name)}</Text>
               <Text>{__$$eval(() => __$$context.state.user.age)}岁</Text>
             </View>

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import changeCase from 'change-case';
-import { Expression, MemberExpression } from '@babel/types';
+import { Expression } from '@babel/types';
 import {
   BuilderComponentPlugin,
   BuilderComponentPluginFactory,
@@ -16,6 +16,7 @@ import {
   NodeSchema,
   NpmInfo,
   PIECE_TYPE,
+  isJSExpression,
 } from '../../../types';
 
 import { RAX_CHUNK_NAME } from './const';
@@ -202,26 +203,6 @@ function transformJsExpr(expr: string, handlers: CustomHandlerSet) {
   return `__$$eval(() => (${transformThis2Context(exprAst, handlers)}))`;
 }
 
-/** this.xxx */
-function isSimpleDirectlyAccessingThis(exprAst: MemberExpression) {
-  return !exprAst.computed && exprAst.object.type === 'ThisExpression';
-}
-
-/** this.state.xxx 和 this.utils.xxx 等安全的肯定应该存在的东东 */
-function isSimpleDirectlyAccessingSafeProperties(exprAst: MemberExpression): boolean {
-  const isPropertySimpleStraight =
-    !exprAst.computed || (exprAst.property.type !== 'PrivateName' && isSimpleStraightLiteral(exprAst.property));
-
-  return (
-    isPropertySimpleStraight &&
-    exprAst.object.type === 'MemberExpression' &&
-    exprAst.object.object.type === 'ThisExpression' &&
-    !exprAst.object.computed &&
-    exprAst.object.property.type === 'Identifier' &&
-    /^(state|utils|constants|i18n)$/.test(exprAst.object.property.name)
-  );
-}
-
 /** 判断是非是一些简单直接的字面值 */
 function isSimpleStraightLiteral(expr: Expression): boolean {
   switch (expr.type) {
@@ -284,12 +265,25 @@ function generateNodeAttrForRax(this: CustomHandlerSet, attrName: string, attrVa
       nodeAttr: undefined,
     });
   }
+  // else: onXxx 的都是事件处理函数需要特殊处理下
 
+  return generateEventHandlerAttrForRax(attrName, attrValue, this);
+}
+
+function generateEventHandlerAttrForRax(
+  attrName: string,
+  attrValue: CompositeValue,
+  handlers: CustomHandlerSet,
+): CodePiece[] {
   // 先出个码
-  const valueExpr = generateUnknownType(attrValue, this);
+  // -- 事件处理函数中 JSExpression 转成 JSFunction 来处理，避免当 JSExpression 处理的时候多包一层 eval 而导致 Rax 转码成小程序的时候出问题
+  const valueExpr = generateUnknownType(
+    isJSExpression(attrValue) ? { type: 'JSFunction', value: attrValue.value } : attrValue,
+    handlers,
+  );
 
   // 查询当前作用域下的变量
-  const currentScopeVariables = this.scopeBindings?.getAllBindings() || [];
+  const currentScopeVariables = handlers.scopeBindings?.getAllBindings() || [];
   if (currentScopeVariables.length <= 0) {
     return [
       {
