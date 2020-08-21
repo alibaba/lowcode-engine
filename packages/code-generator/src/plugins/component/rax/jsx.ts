@@ -274,6 +274,7 @@ function isLiteralAtomicExpr(expr: string): boolean {
  * @param expr
  */
 function transformThis2Context(expr: string | Expression, customHandlers: CustomHandlerSet): string {
+  // 下面这种字符串替换的方式虽然简单直接，但是对于复杂场景会误匹配，故后期改成了解析 AST 然后修改 AST 最后再重新生成代码的方式
   // return expr
   //   .replace(/\bthis\.item\./g, () => 'item.')
   //   .replace(/\bthis\.index\./g, () => 'index.')
