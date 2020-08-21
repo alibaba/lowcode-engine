@@ -7,8 +7,8 @@ import { isIdentifier, Node } from '@babel/types';
 import { OrderedSet } from './OrderedSet';
 
 export class ParseError extends Error {
-  constructor(public readonly expr: string, public readonly detail: unknown) {
-    super(`Failed to parse expression "${expr}"`);
+  constructor(public readonly expr: string | t.Expression, public readonly detail: unknown) {
+    super(`Failed to parse expression "${typeof expr === 'string' ? expr : generate(expr)}"`);
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }
@@ -159,7 +159,7 @@ export function parseExpressionGetGlobalVariables(
 }
 
 export function parseExpressionConvertThis2Context(
-  expr: string,
+  expr: string | t.Expression,
   contextName: string = '__$$context',
   localVariables: string[] = [],
 ): string {
@@ -168,7 +168,7 @@ export function parseExpressionConvertThis2Context(
   }
 
   try {
-    const exprAst = parser.parseExpression(expr);
+    const exprAst = typeof expr === 'string' ? parser.parseExpression(expr) : expr;
     const exprWrapAst = t.expressionStatement(exprAst);
     const fileAst = t.file(t.program([exprWrapAst]));
 
@@ -229,11 +229,14 @@ export function parseExpressionConvertThis2Context(
     const { code } = generate(exprWrapAst.expression, { sourceMaps: false });
     return code;
   } catch (e) {
-    // throw new ParseError(expr, e);
-    throw e;
+    throw new ParseError(expr, e);
   }
 }
 
-function indent(level: number) {
-  return ' '.repeat(level);
+export function parseExpression(expr: string) {
+  try {
+    return parser.parseExpression(expr);
+  } catch (e) {
+    throw new ParseError(expr, e);
+  }
 }

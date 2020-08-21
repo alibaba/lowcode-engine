@@ -79,7 +79,7 @@ class Home$$Page extends Component {
         <View>
           <Text>=== User Info: ===</Text>
         </View>
-        {__$$eval(() => __$$context.state.user) && (
+        {__$$context.state.user && (
           <View style={{ flexDirection: 'row' }}>
             <Image
               source={{ uri: __$$eval(() => __$$context.state.user.avatar) }}
@@ -128,7 +128,7 @@ class Home$$Page extends Component {
             });
           }}
         >
-          <Text>点击次数：{__$$eval(() => __$$context.state.clickCount)}(点击加 1)</Text>
+          <Text>点击次数：{__$$context.state.clickCount}(点击加 1)</Text>
         </View>
         <View>
           <Text>操作提示：</Text>

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import changeCase from 'change-case';
+import { Expression, MemberExpression } from '@babel/types';
 import {
   BuilderComponentPlugin,
   BuilderComponentPluginFactory,
@@ -25,7 +26,11 @@ import { generateExpression } from '../../../utils/jsExpression';
 import { CustomHandlerSet, generateUnknownType } from '../../../utils/compositeType';
 
 import { IScopeBindings, ScopeBindings } from '../../../utils/ScopeBindings';
-import { parseExpressionConvertThis2Context, parseExpressionGetGlobalVariables } from '../../../utils/expressionParser';
+import {
+  parseExpression,
+  parseExpressionConvertThis2Context,
+  parseExpressionGetGlobalVariables,
+} from '../../../utils/expressionParser';
 
 type PluginConfig = {
   fileType: string;
@@ -181,7 +186,62 @@ function transformLoopExpr(expr: string, handlers: CustomHandlerSet) {
 }
 
 function transformJsExpr(expr: string, handlers: CustomHandlerSet) {
-  return isLiteralAtomicExpr(expr) ? expr : `__$$eval(() => (${transformThis2Context(expr, handlers)}))`;
+  if (!expr) {
+    return 'undefined';
+  }
+
+  if (isLiteralAtomicExpr(expr)) {
+    return expr;
+  }
+
+  const exprAst = parseExpression(expr);
+  switch (exprAst.type) {
+    // 对于下面这些比较安全的字面值，可以直接返回对应的表达式，而非包一层
+    case 'BigIntLiteral':
+    case 'BooleanLiteral':
+    case 'DecimalLiteral':
+    case 'NullLiteral':
+    case 'NumericLiteral':
+    case 'RegExpLiteral':
+    case 'StringLiteral':
+      return expr;
+
+    // 对于直接写个函数的，则不用再包下，因为这样不会抛出异常的
+    case 'ArrowFunctionExpression':
+    case 'FunctionExpression':
+      return transformThis2Context(exprAst, handlers);
+
+    // 对于直接访问 this.xxx, this.utils.xxx, this.state.xxx 的也不用再包下
+    case 'MemberExpression':
+      if (isSimpleDirectlyAccessingThis(exprAst) || isSimpleDirectlyAccessingSafeProperties(exprAst)) {
+        return transformThis2Context(exprAst, handlers);
+      }
+
+      break;
+
+    default:
+      break;
+  }
+
+  // 其他的都需要包一层
+  return `__$$eval(() => (${transformThis2Context(exprAst, handlers)}))`;
+}
+
+/** this.xxx */
+function isSimpleDirectlyAccessingThis(exprAst: MemberExpression) {
+  return !exprAst.computed && exprAst.object.type === 'ThisExpression';
+}
+
+/** this.state.xxx 和 this.utils.xxx 等安全的肯定应该存在的东东 */
+function isSimpleDirectlyAccessingSafeProperties(exprAst: MemberExpression): boolean {
+  return (
+    !exprAst.computed &&
+    exprAst.object.type === 'MemberExpression' &&
+    exprAst.object.object.type === 'ThisExpression' &&
+    !exprAst.object.computed &&
+    exprAst.object.property.type === 'Identifier' &&
+    /^(state|utils|constants|i18n)$/.test(exprAst.object.property.name)
+  );
 }
 
 function isImportAliasDefineChunk(
@@ -206,14 +266,14 @@ function isImportAliasDefineChunk(
  * 判断是否是原子类型的表达式
  */
 function isLiteralAtomicExpr(expr: string): boolean {
-  return expr === 'null' || expr === 'undefined' || expr === 'true' || expr === 'false' || /^\d+$/.test(expr);
+  return expr === 'null' || expr === 'undefined' || expr === 'true' || expr === 'false' || /^-?\d+(\.\d+)?$/.test(expr);
 }
 
 /**
  * 将所有的 this.xxx 替换为 __$$context.xxx
  * @param expr
  */
-function transformThis2Context(expr: string, customHandlers: CustomHandlerSet): string {
+function transformThis2Context(expr: string | Expression, customHandlers: CustomHandlerSet): string {
   // return expr
   //   .replace(/\bthis\.item\./g, () => 'item.')
   //   .replace(/\bthis\.index\./g, () => 'index.')
