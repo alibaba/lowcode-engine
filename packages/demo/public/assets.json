@@ -12251,19 +12251,6 @@
       },
       "props": [
         {
-          "name": "_key",
-          "propType": "string"
-        },
-        {
-          "name": "prefix",
-          "propType": "string"
-        },
-        {
-          "name": "rtl",
-          "propType": "bool",
-          "defaultValue": false
-        },
-        {
           "name": "className",
           "propType": "string"
         },
@@ -12278,8 +12265,11 @@
         {
           "name": "label",
           "propType": {
-            "type": "instanceOf",
-            "value": "node"
+            "type": "oneOfType",
+            "value": [
+              "string",
+              "node"
+            ]
           },
           "description": "节点文本内容",
           "defaultValue": "---"
@@ -12319,65 +12309,8 @@
         {
           "name": "isLeaf",
           "propType": "bool",
-          "description": "是否是叶子节点，设置loadData时生效",
+          "description": "是否是叶子节点",
           "defaultValue": false
-        },
-        {
-          "name": "root",
-          "propType": "object"
-        },
-        {
-          "name": "eventKey",
-          "propType": "string"
-        },
-        {
-          "name": "pos",
-          "propType": "string"
-        },
-        {
-          "name": "expanded",
-          "propType": "bool"
-        },
-        {
-          "name": "selected",
-          "propType": "bool"
-        },
-        {
-          "name": "checked",
-          "propType": "bool"
-        },
-        {
-          "name": "indeterminate",
-          "propType": "bool"
-        },
-        {
-          "name": "dragOver",
-          "propType": "bool"
-        },
-        {
-          "name": "dragOverGapTop",
-          "propType": "bool"
-        },
-        {
-          "name": "dragOverGapBottom",
-          "propType": "bool"
-        },
-        {
-          "name": "parentNode",
-          "propType": "object"
-        },
-        {
-          "name": "onKeyDown",
-          "propType": "func"
-        },
-        {
-          "name": "size",
-          "propType": "number",
-          "defaultValue": 1
-        },
-        {
-          "name": "style",
-          "propType": "object"
         }
       ]
     },
@@ -14348,7 +14281,7 @@
               "schema": {
                 "componentName": "TreeNode",
                 "props": {
-                  "prefix": "next-"
+                  "label": "节点内容文本"
                 }
               }
             }
