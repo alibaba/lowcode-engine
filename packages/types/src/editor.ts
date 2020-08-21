@@ -92,7 +92,7 @@ export type HooksConfig = HookConfig[];
 export interface HookConfig {
   message: string;
   type: 'on' | 'once';
-  handler: (editor: IEditor, ...args: any[]) => void;
+  handler: (this: IEditor, editor: IEditor, ...args: any[]) => void;
 }
 
 export type ShortCutsConfig = ShortCutConfig[];
