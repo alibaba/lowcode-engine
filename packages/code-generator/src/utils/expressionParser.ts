@@ -7,7 +7,7 @@ import { isIdentifier, Node } from '@babel/types';
 import { OrderedSet } from './OrderedSet';
 
 export class ParseError extends Error {
-  constructor(public readonly expr: string, public readonly detail: unknown) {
+  constructor(readonly expr: string, readonly detail: unknown) {
     super(`Failed to parse expression "${expr}"`);
     Object.setPrototypeOf(this, new.target.prototype);
   }
@@ -160,7 +160,7 @@ export function parseExpressionGetGlobalVariables(
 
 export function parseExpressionConvertThis2Context(
   expr: string,
-  contextName: string = '__$$context',
+  contextName = '__$$context',
   localVariables: string[] = [],
 ): string {
   if (!expr) {
