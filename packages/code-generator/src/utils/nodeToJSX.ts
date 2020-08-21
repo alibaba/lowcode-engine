@@ -44,7 +44,7 @@ export function generateAttr(
     return customHandlers.nodeAttr(attrName, attrValue);
   }
 
-  // TODO: 这两个为啥要特殊处理？？
+  // 为了规避一个上游 schema 引入的 bug
   if (attrName === 'initValue' || attrName === 'labelCol') {
     return [];
   }
