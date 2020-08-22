@@ -220,6 +220,11 @@ class Prototype {
   readonly isPrototype = true;
   readonly meta: ComponentMeta;
   readonly options: OldPrototypeConfig | ComponentMetadata;
+  view: ComponentType;
+  // componentName: string;
+  get componentName() {
+    return this.getId();
+  }
   get packageName() {
     return this.meta.npm?.package;
   }
@@ -322,6 +327,7 @@ class Prototype {
   }
 
   setView(view: ComponentType<any>) {
+    this.view = view;
     const metadata = this.meta.getMetadata();
     if (!metadata.experimental) {
       metadata.experimental = {

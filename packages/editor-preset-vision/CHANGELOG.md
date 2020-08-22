@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<<<<<<< HEAD
 <a name="1.0.5-0"></a>
 ## [1.0.5-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@1.0.4-0...@ali/lowcode-editor-preset-vision@1.0.5-0) (2020-08-20)
 
@@ -55,6 +56,19 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 # [0.13.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.12.0...@ali/lowcode-editor-preset-vision@0.13.0) (2020-08-17)
 =======
 =======
+=======
+<a name="0.8.50"></a>
+## [0.8.50](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.49...@ali/lowcode-editor-preset-vision@0.8.50) (2020-08-20)
+
+
+### Bug Fixes
+
+* 兼容原来 prototype 的 componentName/view ([d542a40](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d542a40))
+
+
+
+
+>>>>>>> master
 <a name="0.8.49"></a>
 ## [0.8.49](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.48...@ali/lowcode-editor-preset-vision@0.8.49) (2020-08-19)
 

@@ -3,14 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<<<<<<< HEAD
 <a name="1.0.5-0"></a>
 ## [1.0.5-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@1.0.4-0...@ali/lowcode-designer@1.0.5-0) (2020-08-20)
+=======
+<a name="0.9.48"></a>
+## [0.9.48](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.47...@ali/lowcode-designer@0.9.48) (2020-08-20)
+>>>>>>> master
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-designer
 
+<<<<<<< HEAD
 <a name="1.0.4-0"></a>
 ## [1.0.4-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@1.0.3-0...@ali/lowcode-designer@1.0.4-0) (2020-08-20)
 
@@ -65,6 +71,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 <a name="0.13.0"></a>
 # [0.13.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.11.0...@ali/lowcode-designer@0.13.0) (2020-08-17)
 =======
+=======
+>>>>>>> master
 <a name="0.9.47"></a>
 ## [0.9.47](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.46...@ali/lowcode-designer@0.9.47) (2020-08-19)
 
