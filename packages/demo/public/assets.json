@@ -1635,16 +1635,6 @@
           "description": "自定义内敛样式"
         },
         {
-          "name": "children",
-          "propType": "any",
-          "description": "浮层的内容"
-        },
-        {
-          "name": "size",
-          "propType": "string",
-          "defaultValue": "medium"
-        },
-        {
           "name": "type",
           "propType": {
             "type": "oneOf",
@@ -1709,8 +1699,8 @@
         {
           "name": "offset",
           "propType": {
-            "type": "instanceOf",
-            "value": "array"
+            "type": "arrayOf",
+            "value": "number"
           },
           "description": "弹层相对于trigger的定位的微调, 接收数组[hoz, ver], 表示弹层在 left / top 上的增量\ne.g. [100, 100] 表示往右(RTL 模式下是往左) 、下分布偏移100px",
           "defaultValue": [
@@ -1720,19 +1710,17 @@
         },
         {
           "name": "trigger",
-          "propType": "any",
+          "propType": "node",
           "description": "触发元素"
         },
         {
           "name": "triggerType",
+          "title": "触发行为",
           "propType": {
-            "type": "oneOfType",
+            "type": "oneOf",
             "value": [
-              "string",
-              {
-                "type": "instanceOf",
-                "value": "array"
-              }
+              "hover",
+              "click"
             ]
           },
           "description": "触发行为\n鼠标悬浮, 鼠标点击('hover','click')或者它们组成的数组，如 ['hover', 'click'], 强烈不建议使用'focus'，若弹窗内容有复杂交互请使用click",
@@ -1779,73 +1767,14 @@
           "defaultValue": true
         },
         {
-          "name": "safeNode",
-          "propType": "string",
-          "description": "安全节点:对于triggetType为click的浮层,会在点击除了浮层外的其它区域时关闭浮层.safeNode用于添加不触发关闭的节点, 值可以是dom节点的id或者是节点的dom对象"
-        },
-        {
-          "name": "safeId",
-          "propType": "string",
-          "description": "用来指定safeNode节点的id，和safeNode配合使用",
-          "defaultValue": null
-        },
-        {
-          "name": "animation",
-          "propType": {
-            "type": "oneOfType",
-            "value": [
-              "object",
-              "bool"
-            ]
-          },
-          "description": "配置动画的播放方式\n@param {String} in 进场动画\n@param {String} out 出场动画"
-        },
-        {
-          "name": "cache",
-          "propType": "bool",
-          "description": "弹层的dom节点关闭时是否删除",
-          "defaultValue": false
-        },
-        {
-          "name": "popupContainer",
-          "propType": "any",
-          "description": "指定浮层渲染的父节点, 可以为节点id的字符串，也可以返回节点的函数。"
-        },
-        {
-          "name": "container",
-          "propType": "any"
-        },
-        {
-          "name": "popupStyle",
-          "propType": "object",
-          "description": "弹层组件style，透传给Popup"
-        },
-        {
-          "name": "popupClassName",
-          "propType": "string",
-          "description": "弹层组件className，透传给Popup",
-          "defaultValue": ""
-        },
-        {
-          "name": "popupProps",
-          "propType": "object",
-          "description": "弹层组件属性，透传给Popup"
-        },
-        {
           "name": "followTrigger",
           "propType": "bool",
           "description": "是否跟随滚动"
-        },
-        {
-          "name": "id",
-          "propType": "string",
-          "description": "弹层id, 传入值才会支持无障碍"
         }
       ],
       "configure": {
         "component": {
-          "isModel": true,
-          "rootSelector": "div.next-balloon"
+          "isContainer": true
         }
       }
     },
@@ -1881,7 +1810,7 @@
         },
         {
           "name": "children",
-          "propType": "any",
+          "propType": "node",
           "description": "tooltip的内容"
         },
         {
@@ -1908,19 +1837,16 @@
         },
         {
           "name": "trigger",
-          "propType": "any",
+          "propType": "node",
           "description": "触发元素"
         },
         {
           "name": "triggerType",
           "propType": {
-            "type": "oneOfType",
+            "type": "oneOf",
             "value": [
-              "string",
-              {
-                "type": "instanceOf",
-                "value": "array"
-              }
+              "hover",
+              "click"
             ]
           },
           "description": "触发行为\n鼠标悬浮,  鼠标点击('hover', 'click')或者它们组成的数组，如 ['hover', 'click'], 强烈不建议使用'focus'，若有复杂交互，推荐使用triggerType为click的Balloon组件",
@@ -1948,7 +1874,7 @@
         },
         {
           "name": "popupContainer",
-          "propType": "any",
+          "propType": "string",
           "description": "指定浮层渲染的父节点, 可以为节点id的字符串，也可以返回节点的函数。"
         },
         {
@@ -14108,7 +14034,7 @@
               "schema": {
                 "componentName": "Balloon",
                 "props": {
-                  "visible": true,
+                  "defaultVisible": true,
                   "prefix": "next-",
                   "size": "medium",
                   "type": "normal",
@@ -14121,9 +14047,9 @@
                   "triggerType": "hover",
                   "autoFocus": true,
                   "trigger": {
-                    "componentName": "Avatar",
+                    "type": "JSSlot",
                     "props": {
-                      "icon": "success"
+                      "title": "触发元素"
                     }
                   }
                 }
