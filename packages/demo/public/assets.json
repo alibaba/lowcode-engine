@@ -8668,39 +8668,13 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "pure",
-          "propType": "bool",
-          "defaultValue": false
-        },
-        {
           "name": "rtl",
           "propType": "bool",
           "defaultValue": false
         },
         {
-          "name": "device",
-          "propType": {
-            "type": "oneOf",
-            "value": [
-              "desktop",
-              "tablet",
-              "phone"
-            ]
-          }
-        },
-        {
           "name": "className",
           "propType": "string"
-        },
-        {
-          "name": "locale",
-          "propType": "object",
-          "description": "自定义国际化文案对象"
         },
         {
           "name": "type",
@@ -8767,12 +8741,18 @@
         {
           "name": "totalRender",
           "propType": "func",
-          "description": "总数的渲染函数\n@param {Number} total 总数\n@param {Array} range 当前数据在总数中的区间"
+          "title": {
+            "label": "总数渲染函数",
+            "tip": "总数的渲染函数\n@param {Number} total 总数\n@param {Array} range 当前数据在总数中的区间"
+          }
         },
         {
           "name": "pageShowCount",
           "propType": "number",
-          "description": "页码显示的数量，更多的使用...代替",
+          "title": {
+            "label": "页码显示数量",
+            "tip": "页码显示的数量，更多的使用...代替"
+          },
           "defaultValue": 5
         },
         {
@@ -8797,7 +8777,10 @@
         {
           "name": "pageNumberRender",
           "propType": "func",
-          "description": "自定义页码渲染函数，函数作用于页码button以及当前页/总页数的数字渲染\n@param {Number} index 分页的页码，从1开始\n@return {ReactNode} 返回渲染结果"
+          "title": {
+            "label": "自定义页码渲染函数",
+            "tip": "自定义页码渲染函数，函数作用于页码button以及当前页/总页数的数字渲染\n@param {Number} index 分页的页码，从1开始\n@return {ReactNode} 返回渲染结果"
+          }
         },
         {
           "name": "pageSizePosition",
@@ -8812,12 +8795,6 @@
           "defaultValue": "start"
         },
         {
-          "name": "useFloatLayout",
-          "propType": "bool",
-          "description": "存在每页显示选择器时是否使用浮动布局",
-          "defaultValue": false
-        },
-        {
           "name": "onPageSizeChange",
           "propType": "func",
           "description": "每页显示记录数量改变时的回调函数\n@param {Number} pageSize 改变后的每页显示记录数"
@@ -8825,28 +8802,25 @@
         {
           "name": "hideOnlyOnePage",
           "propType": "bool",
-          "description": "当分页数为1时，是否隐藏分页器",
+          "title": {
+            "label": "页数为1隐藏",
+            "tip": "当分页数为1时，是否隐藏分页器"
+          },
           "defaultValue": false
         },
         {
           "name": "showJump",
           "propType": "bool",
-          "description": "type 设置为 normal 时，在页码数超过5页后，会显示跳转输入框与按钮，当设置 showJump 为 false 时，不再显示该跳转区域",
+          "title": {
+            "label": "显示跳转",
+            "tip": "type 设置为 normal 时，在页码数超过5页后，会显示跳转输入框与按钮，当设置 showJump 为 false 时，不再显示该跳转区域"
+          },
           "defaultValue": true
         },
         {
           "name": "link",
           "propType": "string",
           "description": "设置页码按钮的跳转链接，它的值为一个包含 {page} 的模版字符串，如：http://www.taobao.com/{page}"
-        },
-        {
-          "name": "selectPopupContiner",
-          "propType": "any"
-        },
-        {
-          "name": "popupProps",
-          "propType": "object",
-          "description": "弹层组件属性，透传给Popup"
         },
         {
           "name": "style",
