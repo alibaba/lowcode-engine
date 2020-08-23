@@ -20,14 +20,14 @@ export type GetDataType<T, NodeType> = T extends undefined
     : any
   : T;
 
-  export interface ComponentMap {
-    componentName: string;
-    package: string;
-    version?: string;
-    destructuring?: boolean;
-    exportName?: string;
-    subName?: string;
-  }
+export interface ComponentMap {
+  componentName: string;
+  package: string;
+  version?: string;
+  destructuring?: boolean;
+  exportName?: string;
+  subName?: string;
+}
 
 export class DocumentModel {
   /**
@@ -148,7 +148,12 @@ export class DocumentModel {
    * 生成唯一id
    */
   nextId() {
-    return (this.id.slice(-10) + (++this.seqId).toString(36)).toLocaleLowerCase();
+    let id;
+    do {
+      id = 'node_' + (this.id.slice(-10) + (++this.seqId).toString(36)).toLocaleLowerCase();
+    } while (this.nodesMap.get(id))
+
+    return id;
   }
 
   /**

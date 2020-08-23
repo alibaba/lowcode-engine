@@ -148,7 +148,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   constructor(readonly document: DocumentModel, nodeSchema: Schema) {
     const { componentName, id, children, props, ...extras } = nodeSchema;
-    this.id = id || `node_${document.nextId()}`;
+    this.id = id || document.nextId();
     this.componentName = componentName;
     if (this.componentName === 'Leaf') {
       this.props = new Props(this, {
