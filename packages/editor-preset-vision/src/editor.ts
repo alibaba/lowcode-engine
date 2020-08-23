@@ -26,8 +26,9 @@ export const designer = new Designer({ editor: editor });
 editor.set(Designer, designer);
 editor.set('designer', designer);
 
-const nodeCache: any = {};
+let nodeCache: any = {};
 designer.project.onCurrentDocumentChange((doc) => {
+  nodeCache = {};
   doc.nodesMap.forEach((node) => {
     nodeCache[node.id] = node;
   });
@@ -97,6 +98,9 @@ designer.addPropsReducer((props, node) => {
   if (newProps.fieldId) {
     const fieldIds: any = [];
     Object.keys(nodeCache).forEach(nodeId => {
+      if (nodeId === node.id) {
+        return;
+      }
       const fieldId = nodeCache[nodeId].getPropValue('fieldId');
       if (fieldId) {
         fieldIds.push(fieldId);
