@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.56"></a>
+## [0.8.56](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.55...@ali/lowcode-plugin-outline-pane@0.8.56) (2020-08-24)
+
+
+### Bug Fixes
+
+* 修复在切换页面时，没有销毁相应节点导致的一系列bug ([59fac25](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/59fac25))
+
+
+
+
 <a name="0.8.55"></a>
 ## [0.8.55](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.54...@ali/lowcode-plugin-outline-pane@0.8.55) (2020-08-23)
 

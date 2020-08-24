@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.50"></a>
+## [0.9.50](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.49...@ali/lowcode-designer@0.9.50) (2020-08-24)
+
+
+### Bug Fixes
+
+* 修复在切换页面时，没有销毁相应节点导致的一系列bug ([59fac25](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/59fac25))
+* 在设计器里，所有组件都需要展示，不管 condition 为何值 ([0e7e038](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0e7e038))
+* 实现 removeDocument ([c07b447](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c07b447))
+
+
+
+
 <a name="0.9.49"></a>
 ## [0.9.49](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.48...@ali/lowcode-designer@0.9.49) (2020-08-23)
 

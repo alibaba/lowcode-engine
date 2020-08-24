@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-components-pane",
-  "version": "0.8.51",
+  "version": "0.8.52",
   "description": "alibaba lowcode editor component-list plugin",
   "files": [
     "es/",
@@ -20,9 +20,9 @@
   ],
   "author": "xiayang.xy",
   "dependencies": {
-    "@ali/lowcode-designer": "^0.9.49",
-    "@ali/lowcode-editor-core": "^0.8.32",
-    "@ali/lowcode-types": "^0.8.16",
+    "@ali/lowcode-designer": "^0.9.50",
+    "@ali/lowcode-editor-core": "^0.8.33",
+    "@ali/lowcode-types": "^0.8.17",
     "@ali/ve-component-list": "^1.1.1",
     "@alifd/next": "^1.19.19",
     "react": "^16.8.1"

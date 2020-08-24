@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.56"></a>
+## [0.8.56](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.55...@ali/lowcode-editor-skeleton@0.8.56) (2020-08-24)
+
+
+### Bug Fixes
+
+* 多选时设置项异常 ([8cc9d73](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8cc9d73))
+
+
+
+
 <a name="0.8.55"></a>
 ## [0.8.55](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.54...@ali/lowcode-editor-skeleton@0.8.55) (2020-08-23)
 
