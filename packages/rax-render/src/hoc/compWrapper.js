@@ -1,4 +1,4 @@
-import { createElement, Component } from 'rax';
+import { createElement, Component, forwardRef } from 'rax';
 
 export default function (Comp) {
   class compWrapper extends Component {
@@ -7,11 +7,15 @@ export default function (Comp) {
     }
 
     render() {
+      const { forwardRef } = this.props;
       return createElement(Comp, {
         ...this.props,
+        ref: forwardRef,
       });
     }
   }
 
-  return compWrapper;
+  return forwardRef((props, ref) => {
+    return createElement(compWrapper, { ...props, forwardRef: ref });
+  });
 }
