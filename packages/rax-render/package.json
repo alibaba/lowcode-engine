@@ -50,7 +50,8 @@
     "rax-view": "^1.0.0",
     "react-is": "^16.10.1",
     "serialize-javascript": "^1.7.0",
-    "whatwg-fetch": "^3.0.0"
+    "whatwg-fetch": "^3.0.0",
+    "@ali/ui-table": "^1.0.1-beta.6"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.0",
