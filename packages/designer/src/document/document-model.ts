@@ -461,7 +461,7 @@ export class DocumentModel {
    * 从项目中移除
    */
   remove() {
-    // this.project.removeDocument(this);
+    this.project.removeDocument(this);
     // todo: ...
   }
 
