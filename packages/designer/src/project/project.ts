@@ -69,6 +69,14 @@ export class Project {
     this.documents.forEach((doc) => doc.remove());
   }
 
+  removeDocument(doc: DocumentModel) {
+    const index = this.documents.indexOf(doc);
+    if (index < 0) {
+      return;
+    }
+    this.documents.splice(index, 1);
+  }
+
   /**
    * 分字段设置储存数据，不记录操作记录
    */
