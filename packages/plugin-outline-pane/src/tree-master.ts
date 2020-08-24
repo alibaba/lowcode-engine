@@ -54,6 +54,9 @@ export class TreeMaster {
         time: (endTime - startTime).toFixed(2),
       });
     });
+    designer.editor.on('designer.document.remove', ({ id }) => {
+      this.treeMap.delete(id);
+    });
   }
 
   private toVision() {
