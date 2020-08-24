@@ -117,7 +117,7 @@ export class Editor extends EventEmitter implements IEditor {
       const { shortCuts = [], lifeCycles = {} } = this.config;
       // unRegistShortCuts(shortCuts);
 
-      this.unRegisterHooks();
+      this.unregisterHooks();
 
       if (lifeCycles.destroy) {
         lifeCycles.destroy(this);
@@ -145,7 +145,7 @@ export class Editor extends EventEmitter implements IEditor {
     });
   };
 
-  unRegisterHooks = () => {
+  unregisterHooks = () => {
     this.hooks.forEach(({ message, handler }) => {
       this.removeListener(message, handler);
     });
