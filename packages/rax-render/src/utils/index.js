@@ -679,6 +679,7 @@ export function parseData(schema, self) {
 }
 
 /* 全匹配{{开头,}}结尾的变量表达式，或者对象类型JSExpression，且均不支持省略this */
+// todo:
 export function parseExpression(str, self) {
   try {
     const contextArr = ['"use strict";', 'var __self = arguments[0];'];
@@ -697,6 +698,7 @@ export function parseExpression(str, self) {
     if (inSameDomain() && window.parent.__newFunc) {
       return window.parent.__newFunc(tarStr)(self);
     }
+    
     return new Function(tarStr)(self);
   } catch (err) {
     debug('parseExpression.error', err, str, self);

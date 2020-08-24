@@ -4,6 +4,15 @@ import fetchJsonp from 'fetch-jsonp';
 import bzbRequest from '@ali/bzb-request';
 import { serialize, buildUrl, parseUrl } from '@ali/b3-one/lib/url';
 
+import { Table, schema } from '@ali/ui-table';
+
+const webTable = new Table('yida');
+webTable.init(schema);
+window._webTable = webTable;
+// webTable.on('ready', () => {
+//   window._webTable = webTable;
+// });
+
 export function get(dataAPI, params = {}, headers = {}, otherProps = {}) {
   headers = {
     Accept: 'application/json',
@@ -168,4 +177,16 @@ export function bzb(apiCode, params, otherProps = {}) {
     data: params,
     ...otherProps
   });
+}
+
+export async function webTableProxy(req) {
+  const { _webTable } = window;
+  if (!_webTable) {
+    const data = await { success: false, content: 'web table 尚未加载' };
+    return data;
+  }
+  // const { name } = req;
+  // const data = await _webTable.fetch({ id: name });
+  const data = await _webTable.find({ id: 'one' });
+  return data;
 }
