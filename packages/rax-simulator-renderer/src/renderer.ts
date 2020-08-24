@@ -141,6 +141,10 @@ export class DocumentInstance {
     }
   }
 
+  refresh() {
+    this.emitter.emit('rerender', { shouldRemount: true });
+  }
+
   onReRender(fn: () => void) {
     this.emitter.on('rerender', fn);
     return () => {
@@ -232,6 +236,10 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   @obx.ref private _documentInstances: DocumentInstance[] = [];
   get documentInstances() {
     return this._documentInstances;
+  }
+
+  get currentDocumentInstance() {
+    return this._documentInstances.find((item) => item.id === host.project.currentDocument?.id);
   }
 
   constructor() {

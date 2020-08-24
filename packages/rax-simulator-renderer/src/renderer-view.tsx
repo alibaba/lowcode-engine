@@ -5,7 +5,7 @@ import { Component, createElement, Fragment } from 'rax';
 import { useRouter } from './rax-use-router';
 import { DocumentInstance, SimulatorRendererContainer } from './renderer';
 import './renderer.less';
-
+import { uniqueId } from '@ali/lowcode-utils';
 
 // patch cloneElement avoid lost keyProps
 const originCloneElement = (window as any).Rax.cloneElement;
@@ -43,6 +43,7 @@ export default class SimulatorRendererView extends Component<{ rendererContainer
   componentDidMount() {
     const { rendererContainer } = this.props;
     this.unlisten = rendererContainer.onLayoutChange(() => {
+      debugger;
       this.forceUpdate();
     });
   }
@@ -142,10 +143,18 @@ class Renderer extends Component<{
   documentInstance: DocumentInstance;
 }> {
   private unlisten: any;
+  private key: string;
+
+  componentWillMount() {
+    this.key = uniqueId('renderer');
+  }
 
   componentDidMount() {
     const { documentInstance } = this.props;
-    this.unlisten = documentInstance.onReRender(() => {
+    this.unlisten = documentInstance.onReRender((params) => {
+      if (params && params.shouldRemount) {
+        this.key = uniqueId('renderer');
+      }
       this.forceUpdate();
     });
   }
@@ -168,6 +177,7 @@ class Renderer extends Component<{
         components={renderer.components}
         appHelper={renderer.context}
         designMode={renderer.designMode}
+        key={this.key}
         suspended={documentInstance.suspended}
         self={documentInstance.scope}
         onCompGetRef={(schema: any, ref: any) => {
