@@ -65,6 +65,11 @@ export class Prop implements IPropParent {
   export(stage: TransformStage = TransformStage.Save): CompositeValue | UNSET {
     const type = this._type;
 
+    // 在设计器里，所有组件都需要展示
+    if (stage === TransformStage.Render && this.key === '___condition___') {
+      return true;
+    }
+
     if (type === 'unset') {
       // return UNSET; @康为 之后 review 下这块改造
       return undefined;
