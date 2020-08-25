@@ -160,7 +160,6 @@ const router = {
       if (typeof component === 'function') {
         component = component(current.$.params, router.history.location);
       }
-
       if (component instanceof Promise) {
         // Lazy loading component by import('./Foo')
         return component.then((component) => {

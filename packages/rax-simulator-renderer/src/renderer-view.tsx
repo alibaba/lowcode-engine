@@ -43,7 +43,6 @@ export default class SimulatorRendererView extends Component<{ rendererContainer
   componentDidMount() {
     const { rendererContainer } = this.props;
     this.unlisten = rendererContainer.onLayoutChange(() => {
-      debugger;
       this.forceUpdate();
     });
   }
@@ -80,7 +79,6 @@ export const Routes = (props: {
       };
     })
   };
-
   const { component } = useRouter(routes);
   return component;
 }
@@ -170,7 +168,6 @@ class Renderer extends Component<{
     const { container } = documentInstance;
     const { designMode, device } = container;
     const { rendererContainer: renderer } = this.props;
-
     return (
       <RaxEngine
         schema={documentInstance.schema}

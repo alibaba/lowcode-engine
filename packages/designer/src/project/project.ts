@@ -69,8 +69,14 @@ export class Project {
     if (autoOpen) {
       if (autoOpen === true) {
         // auto open first document or open a blank page
-        this.open(this.data.componentsTree[0]);
-        // this.data.componentsTree.map((data) => this.createDocument(data))[0].open();
+        // this.open(this.data.componentsTree[0]);
+        const documentInstances = this.data.componentsTree.map((data) => this.createDocument(data));
+        // TODO: 暂时先读 config tabBar 里的值，后面看整个 layout 结构是否能作为引擎规范
+        if (this.config?.layout?.props?.tabBar?.items?.length > 1) {
+          documentInstances.find((i) => i.fileName === this.config.layout.props.tabBar.items[0].pagePath)?.open();
+        } else {
+          documentInstances[0].open();
+        }
       } else {
         // auto open should be string of fileName
         this.open(autoOpen);

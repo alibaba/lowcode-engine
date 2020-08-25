@@ -110,7 +110,6 @@ export class DocumentInstance {
     this.dispose = host.autorun(() => {
       // sync schema
       this._schema = document.export(1);
-
       this.emitter.emit('rerender');
     });
   }
@@ -274,6 +273,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         }
         return inst;
       });
+
       this.emitter.emit('layoutChange');
       const path = host.project.currentDocument ? documentInstanceMap.get(host.project.currentDocument.id)!.path : '/';
       if (firstRun) {
