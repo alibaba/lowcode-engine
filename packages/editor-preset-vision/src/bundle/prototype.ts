@@ -17,7 +17,6 @@ import {
 } from './upgrade-metadata';
 import { intl } from '@ali/lowcode-editor-core';
 import { designer } from '../editor';
-import { uniqueId } from '@ali/lowcode-utils';
 
 const GlobalPropsConfigure: Array<{
   position: string;
@@ -327,24 +326,14 @@ class Prototype {
   }
 
   setView(view: ComponentType<any>) {
-    let wrappedView = view;
-    if (!view?.prototype?.isReactComponent) {
-      const ViewComponentClass = class extends Component {
-        render() {
-          return (view as FunctionComponent)(this.props);
-        }
-      } as any;
-      ViewComponentClass.displayName = view.displayName;
-      wrappedView = ViewComponentClass;
-    }
-    this.view = wrappedView;
+    this.view = view;
     const metadata = this.meta.getMetadata();
     if (!metadata.experimental) {
       metadata.experimental = {
-        view: wrappedView,
+        view,
       };
     } else {
-      metadata.experimental.view = wrappedView;
+      metadata.experimental.view = view;
     }
   }
 
