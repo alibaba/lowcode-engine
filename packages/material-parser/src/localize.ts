@@ -3,7 +3,7 @@ import { ensureDir, ensureFile, writeFile } from 'fs-extra';
 import { join } from 'path';
 import semver from 'semver';
 import uuid from 'short-uuid';
-import { debug, OtterError } from './otter-core';
+import { debug } from './core';
 import { IMaterializeOptions } from './types';
 
 const log = debug.extend('mat');

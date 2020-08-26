@@ -1,4 +1,4 @@
-import { ComponentMeta } from '../otter-core';
+import { ComponentMeta } from '../core';
 
 /**
  * 接入器接口（用于定义物料化组件的接入渠道）

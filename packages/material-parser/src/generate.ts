@@ -1,9 +1,9 @@
-import { debug, ComponentMeta } from './otter-core';
+import { debug, ComponentMeta } from './core';
 import { IMaterialParsedModel, IMaterialScanModel } from './types';
 
 const log = debug.extend('mat');
 
-export default async function(
+export default async function (
   matScanModel: IMaterialScanModel,
   matParsedModels: IMaterialParsedModel[],
 ): Promise<ComponentMeta[]> {
