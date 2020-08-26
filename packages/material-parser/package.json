@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-material-parser",
-  "version": "1.0.5-0",
+  "version": "1.0.5-1",
   "description": "material parser for Ali lowCode engine",
   "main": "lib/index.js",
   "files": [
@@ -15,6 +15,7 @@
     "@types/fs-extra": "^8.0.1",
     "@types/js-yaml": "^3.12.2",
     "@types/lodash": "^4.14.149",
+    "@types/node": "^14.6.0",
     "@types/prop-types": "^15.7.3",
     "@types/semver": "^7.1.0",
     "ava": "3.8.1",
