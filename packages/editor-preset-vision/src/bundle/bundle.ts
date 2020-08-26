@@ -69,8 +69,6 @@ export default class Bundle {
 
     // invoke prototype mocker while the prototype does not exist
     Object.keys(this.viewsMap).forEach((viewName) => {
-      const test = this;
-      // console.log(test, viewName);
       if (!this.prototypeList.find((proto) => proto.getComponentName() === viewName)) {
         const mockedPrototype = trunk.mockComponentPrototype(this.viewsMap[viewName]);
         if (mockedPrototype) {
