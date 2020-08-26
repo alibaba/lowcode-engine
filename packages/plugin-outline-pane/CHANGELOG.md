@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.57"></a>
+## [0.8.57](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.56...@ali/lowcode-plugin-outline-pane@0.8.57) (2020-08-26)
+
+
+### Bug Fixes
+
+* 处理 function component 无法选中的问题，本质上是没有 ref ([fa94aab](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fa94aab))
+
+
+
+
 <a name="0.8.56"></a>
 ## [0.8.56](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.55...@ali/lowcode-plugin-outline-pane@0.8.56) (2020-08-24)
 

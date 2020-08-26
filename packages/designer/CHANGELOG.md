@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.51"></a>
+## [0.9.51](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.50...@ali/lowcode-designer@0.9.51) (2020-08-26)
+
+
+### Bug Fixes
+
+* 处理 function component 无法选中的问题，本质上是没有 ref ([fa94aab](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fa94aab))
+
+
+
+
 <a name="0.9.50"></a>
 ## [0.9.50](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.49...@ali/lowcode-designer@0.9.50) (2020-08-24)
 

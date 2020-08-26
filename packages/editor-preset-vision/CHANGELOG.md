@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.53"></a>
+## [0.8.53](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.52...@ali/lowcode-editor-preset-vision@0.8.53) (2020-08-26)
+
+
+### Bug Fixes
+
+* 处理 function component 无法选中的问题，本质上是没有 ref ([fa94aab](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fa94aab))
+
+
+
+
 <a name="0.8.52"></a>
 ## [0.8.52](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.51...@ali/lowcode-editor-preset-vision@0.8.52) (2020-08-24)
 
