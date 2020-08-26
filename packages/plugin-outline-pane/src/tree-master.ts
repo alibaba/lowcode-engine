@@ -98,7 +98,6 @@ export class TreeMaster {
         return this.treeMap.get(id)!;
       }
       const tree = new Tree(doc);
-      // TODO: listen purge event to remove
       this.treeMap.set(id, tree);
       return tree;
     }

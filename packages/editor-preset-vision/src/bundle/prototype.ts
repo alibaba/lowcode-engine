@@ -1,4 +1,4 @@
-import { ComponentType, ReactElement } from 'react';
+import { ComponentType, ReactElement, Component, FunctionComponent } from 'react';
 import { ComponentMetadata, FieldConfig, InitialItem, FilterItem, AutorunItem, isI18nData } from '@ali/lowcode-types';
 import {
   ComponentMeta,
@@ -220,14 +220,14 @@ class Prototype {
   readonly isPrototype = true;
   readonly meta: ComponentMeta;
   readonly options: OldPrototypeConfig | ComponentMetadata;
-  view: ComponentType;
-  // componentName: string;
   get componentName() {
     return this.getId();
   }
   get packageName() {
     return this.meta.npm?.package;
   }
+  // 兼容原 vision 用法
+  view: ComponentType | undefined;
 
   constructor(input: OldPrototypeConfig | ComponentMetadata | ComponentMeta, extraConfigs: any = null, lookup: boolean = false) {
     if (lookup) {
@@ -327,19 +327,30 @@ class Prototype {
   }
 
   setView(view: ComponentType<any>) {
-    this.view = view;
+    let wrappedView = view;
+    if (!view?.prototype?.isReactComponent) {
+      const ViewComponentClass = class extends Component {
+        render() {
+          return (view as FunctionComponent)(this.props);
+        }
+      } as any;
+      ViewComponentClass.displayName = view.displayName;
+      wrappedView = ViewComponentClass;
+    }
+    this.view = wrappedView;
     const metadata = this.meta.getMetadata();
     if (!metadata.experimental) {
       metadata.experimental = {
-        view,
+        view: wrappedView,
       };
     } else {
-      metadata.experimental.view = view;
+      metadata.experimental.view = wrappedView;
     }
   }
 
   getView() {
     return (
+      this.view ||
       this.meta.getMetadata().experimental?.view ||
       designer.currentDocument?.simulator?.getComponent(this.getComponentName())
     );

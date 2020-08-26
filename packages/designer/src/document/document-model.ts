@@ -461,9 +461,9 @@ export class DocumentModel {
    * 从项目中移除
    */
   remove() {
+    this.designer.postEvent('document.remove', { id: this.id });
     this.purge();
     this.project.removeDocument(this);
-    this.designer.postEvent('document.remove', { id: this.id });
   }
 
   purge() {
