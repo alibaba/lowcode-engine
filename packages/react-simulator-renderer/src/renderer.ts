@@ -1,4 +1,4 @@
-import React, { createElement, ReactInstance, ComponentType, ReactElement } from 'react';
+import React, { createElement, ReactInstance, ComponentType, ReactElement, FunctionComponent } from 'react';
 import { render as reactRender } from 'react-dom';
 import { host } from './host';
 import SimulatorRendererView from './renderer-view';
@@ -7,7 +7,7 @@ import { Asset, isReactComponent } from '@ali/lowcode-utils';
 import { getClientRects } from './utils/get-client-rects';
 import loader from './utils/loader';
 import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
-import { isESModule, isElement, cursor, setNativeSelection } from '@ali/lowcode-utils';
+import { isESModule, isElement, acceptsRef, wrapReactClass, cursor, setNativeSelection } from '@ali/lowcode-utils';
 import { RootSchema, NpmInfo, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
 // just use types
 import { BuiltinSimulatorRenderer, NodeInstance, Component } from '@ali/lowcode-designer';
@@ -443,6 +443,9 @@ function buildComponents(libraryMap: LibraryMap,
     if (component && (component as ComponentSchema).componentName === 'Component') {
       components[componentName] = createComponent(component as ComponentSchema);
     } else if (isReactComponent(component)) {
+      if (!acceptsRef(component)) {
+        component = wrapReactClass(component as FunctionComponent);
+      }
       components[componentName] = component;
     } else {
       component = findComponent(libraryMap, componentName, component);
@@ -497,7 +500,7 @@ function getClosestNodeInstance(from: ReactInstance, specId?: string): NodeInsta
 }
 
 function getNodeInstance(fiberNode: any, specId?: string): NodeInstance<ReactInstance> | null {
-  const instance = fiberNode.stateNode;
+  const instance = fiberNode?.stateNode;
   if (instance && SYMBOL_VNID in instance) {
     const nodeId = instance[SYMBOL_VNID];
     if (!specId || specId === nodeId) {
@@ -507,7 +510,7 @@ function getNodeInstance(fiberNode: any, specId?: string): NodeInstance<ReactIns
       };
     }
   }
-  return getNodeInstance(fiberNode.return);
+  return getNodeInstance(fiberNode?.return);
 }
 
 function checkInstanceMounted(instance: any): boolean {
