@@ -307,15 +307,7 @@ designer.addPropsReducer((props: any, node: Node) => {
   if (node.isRoot()) {
     if (props.dataSource) {
       const { online } = props.dataSource;
-      // if (online && online.length) {
-      //   online.forEach((item: any) => {
-      //     if (item.dataHandler && item.dataHandler.type && item.dataHandler.type === 'js') {
-      //       item.dataHandler.type = 'JSFunction';
-      //     }
-      //   });
-      // }
       props.dataSource.list = online;
-      console.log(props);
     }
   }
   return props;
