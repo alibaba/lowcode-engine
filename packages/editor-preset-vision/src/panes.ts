@@ -68,7 +68,7 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
     newConfig.type = 'PanelDock';
     newConfig.area = 'left';
     newConfig.props.description = description || title;
-    const { contents, hideTitleBar, tip, width, maxWidth, height, maxHeight, menu, isAction } = config;
+    const { contents, hideTitleBar, tip, width, maxWidth, height, maxHeight, menu, isAction, canSetFixed } = config;
     if (menu) {
       newConfig.props.title = menu;
     }
@@ -83,6 +83,7 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
         maxWidth,
         height,
         maxHeight,
+        canSetFixed,
         onInit: init,
         onDestroy: destroy,
       };

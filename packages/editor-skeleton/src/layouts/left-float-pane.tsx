@@ -91,6 +91,7 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
     if (!current) {
       return;
     }
+
     area.skeleton.leftFloatArea.remove(current);
     area.skeleton.leftFixedArea.add(current);
     area.skeleton.leftFixedArea.container.active(current);
@@ -99,6 +100,12 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
   render() {
     const { area } = this.props;
     const width = area.current?.config.props?.width;
+    // can be set fixed by default
+    let canSetFixed = true;
+    if (area.current?.config.props?.canSetFixed === false) {
+      canSetFixed = false;
+    }
+
     const hideTitleBar = area.current?.config.props?.hideTitleBar;
     const style = width ? {
       width
@@ -114,13 +121,17 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
         {
           !hideTitleBar && (
             <Fragment>
-              <Button
-                text
-                className="lc-pane-icon-fix"
-                onClick={this.setFixed.bind(this)}
-              >
-                <IconFix />
-              </Button>
+              {
+                canSetFixed && (
+                  <Button
+                    text
+                    className="lc-pane-icon-fix"
+                    onClick={this.setFixed.bind(this)}
+                  >
+                    <IconFix />
+                  </Button>
+                )
+              }
               <Button
                 text
                 className="lc-pane-icon-close"
