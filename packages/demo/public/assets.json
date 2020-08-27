@@ -12314,12 +12314,6 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "description": "样式前缀",
-          "defaultValue": "next-"
-        },
-        {
           "name": "action",
           "propType": "string",
           "description": "上传的地址"
@@ -12327,16 +12321,14 @@
         {
           "name": "value",
           "propType": {
-            "type": "instanceOf",
-            "value": "array"
+            "type": "Json"
           },
           "description": "文件列表"
         },
         {
           "name": "defaultValue",
           "propType": {
-            "type": "instanceOf",
-            "value": "array"
+            "type": "Json"
           },
           "description": "默认文件列表"
         },
@@ -12360,11 +12352,7 @@
               "card"
             ]
           },
-          "description": "上传列表的样式\n@enumdesc 文字, 图文, 卡片"
-        },
-        {
-          "name": "list",
-          "propType": "any"
+          "description": "上传列表的样式"
         },
         {
           "name": "name",
@@ -12376,7 +12364,7 @@
           "propType": {
             "type": "oneOfType",
             "value": [
-              "object",
+              "Json",
               "func"
             ]
           },
@@ -12385,7 +12373,10 @@
         {
           "name": "formatter",
           "propType": "func",
-          "description": "数据格式化函数，配合自定义 action 使用，参数为服务器的响应数据，详见 [formatter](#formater)\n@param {Object} response 返回\n@param {File} file 文件对象"
+          "title": {
+            "label": "数据格式化函数",
+            "tip": "数据格式化函数，配合自定义 action 使用，参数为服务器的响应数据，详见 [formatter](#formater)\n@param {Object} response 返回\n@param {File} file 文件对象"
+          }
         },
         {
           "name": "limit",
@@ -12511,7 +12502,12 @@
           "propType": "func",
           "description": "预览态模式下渲染的内容\n@param {number} value 评分值"
         }
-      ]
+      ],
+      "configure": {
+        "component": {
+          "isContainer": true
+        }
+      }
     },
     {
       "componentName": "Upload.Selecter",
