@@ -12394,11 +12394,7 @@
           "propType": "bool",
           "description": "可选参数，是否支持拖拽上传，`ie10+` 支持。"
         },
-        {
-          "name": "closable",
-          "propType": "bool",
-          "defaultValue": true
-        },
+        
         {
           "name": "useDataURL",
           "propType": "bool",
@@ -12447,7 +12443,10 @@
         {
           "name": "beforeUpload",
           "propType": "func",
-          "description": "可选参数, 详见 [beforeUpload](#beforeUpload)\n@param {Object} file 所有文件\n@param {Object} options 参数\n@returns {Boolean|Object|Promise} 返回值作用见demo"
+          "title": {
+            "label": "开始上传时回调",
+            "tip": "可选参数, 详见 [beforeUpload](#beforeUpload)\n@param {Object} file 所有文件\n@param {Object} options 参数\n@returns {Boolean|Object|Promise} 返回值作用见demo"
+          }
         },
         {
           "name": "onDrop",
@@ -12465,14 +12464,6 @@
           "description": "自定义内联样式"
         },
         {
-          "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
-          "description": "子元素"
-        },
-        {
           "name": "autoUpload",
           "propType": "bool",
           "description": "自动上传",
@@ -12485,12 +12476,8 @@
         },
         {
           "name": "progressProps",
-          "propType": "object",
+          "propType": "Json",
           "description": "透传给Progress props"
-        },
-        {
-          "name": "rtl",
-          "propType": "bool"
         },
         {
           "name": "isPreview",
