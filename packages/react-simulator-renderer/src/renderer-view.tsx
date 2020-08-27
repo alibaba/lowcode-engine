@@ -1,5 +1,4 @@
-// import LowCodeRenderer from '@ali/lowcode-react-renderer';
-import LowCodeRenderer from '../../react-renderer/src/index';
+import LowCodeRenderer from '@ali/lowcode-react-renderer';
 import { ReactInstance, Fragment, Component, createElement } from 'react';
 import { observer } from '@recore/obx-react';
 import { SimulatorRendererContainer, DocumentInstance } from './renderer';
