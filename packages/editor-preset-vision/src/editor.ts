@@ -12,6 +12,7 @@ import DesignerPlugin from '@ali/lowcode-plugin-designer';
 import { Skeleton, SettingsPrimaryPane } from '@ali/lowcode-editor-skeleton';
 import { deepValueParser } from './deep-value-parser';
 import { liveEditingRule, liveEditingSaveHander } from './vc-live-editing';
+import { Item } from '@alifd/next/types/breadcrumb';
 
 export const editor = new Editor();
 globalContext.register(editor, Editor);
@@ -307,6 +308,17 @@ designer.addPropsReducer((props: any, node: Node) => {
   if (node.isRoot()) {
     if (props.dataSource) {
       const { online } = props.dataSource;
+      online.forEach((item: any) => {
+        const newParam: any = {};
+        if (item.options && item.options.params && item.options.params.length) {
+          item.options.params.map((element: any) => {
+            if (element.name) {
+              newParam[element.name] = element.value;
+            }
+          });
+          item.options.params = newParam;
+        }
+      });
       props.dataSource.list = online;
     }
   }

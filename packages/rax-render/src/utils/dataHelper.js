@@ -56,6 +56,7 @@ export default class DataHelper {
   generateDataSourceMap() {
     const res = {};
     this.ajaxList.forEach((item) => {
+      item.id = item.id || item.name;
       res[item.id] = {
         status: DS_STATUS.INIT,
         load: (...args) => this.getDataSource(item.id, ...args),
@@ -201,7 +202,6 @@ export default class DataHelper {
                     }
                   });
                 } else {
-                  // debugger;
                   res[id] = await this.dataHandler(id, dataHandler, data, error);
                   this.updateDataSourceMap(id, res[id], error);
                 }
@@ -210,7 +210,7 @@ export default class DataHelper {
               const doFetch = (type, req) => {
                 this.fetchOne(type, req)
                   .then(async (data) => {
-                    console.log(data);
+                    console.log(data)
                     if (afterRequest) {
                       this.appHelper.utils.afterRequest(item, data, undefined, async (data, error) => {
                         await fetchHandler(data, error);
@@ -289,7 +289,7 @@ export default class DataHelper {
       default:
         method = method.toUpperCase();
         if (method === 'GET') {
-          return get(uri, params, headers, otherProps);
+          return get(uri || otherProps.url, params, headers, otherProps);
         }
         if (method === 'POST') {
           return post(uri, params, headers, otherProps);
