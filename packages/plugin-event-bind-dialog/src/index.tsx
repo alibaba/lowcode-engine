@@ -207,9 +207,8 @@ export default class EventBindDialog extends Component<PluginProps> {
 
             <div className="dialog-small-title">参数设置</div>
             <MonacoEditor
-                value={'{}'}
                 {...defaultEditorOption}
-                {...{ language: 'json' }}
+                {...{ language: 'javascript' }}
                 // onChange={(newCode) => this.updateCode(newCode)}
                 // editorDidMount={(editor, monaco) => this.editorDidMount.call(this, editor, monaco, TAB_KEY.JS_TAB)}
               />
