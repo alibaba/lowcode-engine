@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.58"></a>
+## [0.8.58](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.57...@ali/lowcode-editor-skeleton@0.8.58) (2020-08-27)
+
+
+### Bug Fixes
+
+* **editor-skeleton:** add canSetFixed prop to panel config ([1b57d5c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1b57d5c))
+
+
+
+
 <a name="0.8.57"></a>
 ## [0.8.57](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.56...@ali/lowcode-editor-skeleton@0.8.57) (2020-08-26)
 

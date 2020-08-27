@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-utils",
-  "version": "0.8.19",
+  "version": "0.8.20",
   "description": "Utils for Ali lowCode engine",
   "files": [
     "es",
