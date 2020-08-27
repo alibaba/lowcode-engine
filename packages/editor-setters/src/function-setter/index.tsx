@@ -62,10 +62,14 @@ export default class FunctionSetter extends PureComponent<FunctionSetterProps, {
   parseFunctionName = (functionString: String) => {
     // 因为函数格式是固定的，所以可以按照字符换去匹配获取函数名
     let funNameStr = functionString.split('.')[1];
-    let endIndex = funNameStr.indexOf('(');
-    
-    return funNameStr.substr(0, endIndex);
 
+
+    if (funNameStr){
+      let endIndex = funNameStr.indexOf('(');
+      return funNameStr.substr(0, endIndex);
+    }else{
+      return '匿名函数'
+    }
   }
 
   /**

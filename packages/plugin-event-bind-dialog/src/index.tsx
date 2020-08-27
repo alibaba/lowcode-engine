@@ -1,8 +1,34 @@
 import { Component, isValidElement, ReactElement, ReactNode } from 'react';
 import { Dialog, Search, Input } from '@alifd/next';
 import { PluginProps } from '@ali/lowcode-types';
+import MonacoEditor from 'react-monaco-editor';
 import './index.scss';
 
+
+const defaultEditorOption = {
+  width: '100%',
+  height: '319px',
+  options: {
+    readOnly: false,
+    automaticLayout: true,
+    folding: true, //默认开启折叠代码功能
+    lineNumbers: 'on',
+    wordWrap: 'off',
+    formatOnPaste: true,
+    fontSize: 12,
+    tabSize: 2,
+    scrollBeyondLastLine: false,
+    fixedOverflowWidgets: false,
+    snippetSuggestions: 'top',
+    minimap: {
+      enabled: false,
+    },
+    scrollbar: {
+      vertical: 'auto',
+      horizontal: 'auto',
+    },
+  },
+};
 export default class EventBindDialog extends Component<PluginProps> {
   private eventList: any[] = [
     // {
@@ -180,7 +206,13 @@ export default class EventBindDialog extends Component<PluginProps> {
             </div>
 
             <div className="dialog-small-title">参数设置</div>
-            <Input.TextArea style={{ width: '100%', height: '319px' }} />
+            <MonacoEditor
+                value={'{}'}
+                {...defaultEditorOption}
+                {...{ language: 'json' }}
+                // onChange={(newCode) => this.updateCode(newCode)}
+                // editorDidMount={(editor, monaco) => this.editorDidMount.call(this, editor, monaco, TAB_KEY.JS_TAB)}
+              />
           </div>
         </div>
       </Dialog>
