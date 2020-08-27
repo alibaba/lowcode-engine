@@ -165,11 +165,7 @@ function propTypeToSetter(propType: PropType): SetterType {
     case 'func':
       return {
         componentName: 'FunctionSetter',
-        isRequired,
-        initialValue: {
-          type: 'JSFunction',
-          value: 'function(){}',
-        },
+        isRequired
       };
     case 'oneOfType':
       return {
