@@ -53,6 +53,7 @@ export default class EventBindDialog extends Component<PluginProps> {
     setterName:'event-setter',
     selectedEventName: '',
     eventName: '',
+    paramStr:''
   };
 
   openDialog = (bindEventName: String) => {
@@ -73,10 +74,12 @@ export default class EventBindDialog extends Component<PluginProps> {
 
   componentDidMount() {
     const { editor, config } = this.props;
-    editor.on(`${config.pluginKey}.openDialog`, (bindEventName: String,setterName:String) => {
+    editor.on(`${config.pluginKey}.openDialog`, (bindEventName: String,setterName:String,paramStr:String) => {
+      console.log('paramStr:'+paramStr);
       this.openDialog(bindEventName);
       this.setState({
-        setterName
+        setterName,
+        paramStr
       })
 
       let schema = editor.get('designer').project.getSchema();
@@ -131,10 +134,10 @@ export default class EventBindDialog extends Component<PluginProps> {
   onSearchEvent = (searchEventName: String) => {};
 
   onOk = () => {
+    console.log(this);
     const { editor } = this.props;
-    const {setterName,eventName} = this.state;
-
-    editor.emit(`${setterName}.bindEvent`, eventName);
+    const {setterName,eventName,paramStr} = this.state;
+    editor.emit(`${setterName}.bindEvent`, eventName,paramStr);
 
     // 选中的是新建事件
     if (this.state.selectedEventName == '') {
@@ -153,15 +156,23 @@ export default class EventBindDialog extends Component<PluginProps> {
     this.closeDialog();
   };
 
+  onChangeEditor = (paramStr) =>{
+    this.setState({
+      paramStr
+    })
+    // console.log(newCode);
+  }
+
+
   render() {
-    const { selectedEventName, eventName, visiable } = this.state;
+    const { selectedEventName, eventName, visiable,paramStr } = this.state;
     return (
       <Dialog
         visible={visiable}
         title="事件绑定"
         onClose={this.closeDialog}
         onCancel={this.closeDialog}
-        onOk={this.onOk}
+        onOk={()=>this.onOk()}
       >
         <div className="event-dialog-body">
           <div className="dialog-left-container">
@@ -206,12 +217,16 @@ export default class EventBindDialog extends Component<PluginProps> {
             </div>
 
             <div className="dialog-small-title">参数设置</div>
-            <MonacoEditor
-                {...defaultEditorOption}
-                {...{ language: 'javascript' }}
-                // onChange={(newCode) => this.updateCode(newCode)}
-                // editorDidMount={(editor, monaco) => this.editorDidMount.call(this, editor, monaco, TAB_KEY.JS_TAB)}
-              />
+            <div className="editor-container">
+              <MonacoEditor
+                  value = {paramStr}
+                  {...defaultEditorOption}
+                  {...{ language: 'javascript' }}
+                  onChange={(newCode) => this.onChangeEditor(newCode)}
+                  // editorDidMount={(editor, monaco) => this.editorDidMount.call(this, editor, monaco, TAB_KEY.JS_TAB)}
+                />
+            </div>
+
           </div>
         </div>
       </Dialog>

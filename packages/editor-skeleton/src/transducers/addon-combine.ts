@@ -207,6 +207,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
           },
 
           setValue(field: SettingTarget, eventData) {
+            debugger;
             const { eventDataList, eventList } = eventData;
             eventList.map((item) => {
               field.parent.clearPropValue(item.name);
@@ -215,7 +216,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
             eventDataList.map((item) => {
               field.parent.setPropValue(item.name, {
                 type: 'JSFunction',
-                value: `function(){ this.${item.relatedEventName}() }`,
+                value: `function(){ this.${item.relatedEventName}(${item.paramStr?item.paramStr:''}) }`,
               });
               return item;
             });
