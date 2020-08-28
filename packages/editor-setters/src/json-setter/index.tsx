@@ -462,7 +462,7 @@ window.MonacoEnvironment = {
 };
 
 export default class MonacoEditorButtonView extends PureComponent {
-  static displayName = 'MonacoEditorButton';
+  static displayName = 'JsonSetter';
   static propTypes = {
     locale: PropTypes.string,
     messages: PropTypes.object,

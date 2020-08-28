@@ -119,13 +119,11 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
             children = (
               <div
                 style={{
-                  height: '66px',
                   backgroundColor: '#f0f0f0',
                   borderColor: '#a7b1bd',
                   border: '1px dotted',
                   color: '#a7b1bd',
-                  textAlign: 'center',
-                  lineHeight: '66px',
+                  textAlign: 'center'
                 }}
               >
                 {viewProps.placeholder || '拖拽组件或模板到这里'}

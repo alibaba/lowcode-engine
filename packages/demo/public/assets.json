@@ -7974,7 +7974,7 @@
               "line"
             ]
           },
-          "description": "导航类型\n@enumdesc 普通, 主要, 次要, 线形",
+          "description": "导航类型",
           "defaultValue": "normal"
         },
         {
@@ -7986,7 +7986,7 @@
               "ver"
             ]
           },
-          "description": "导航布局\n@enumdesc 水平, 垂直",
+          "description": "导航布局",
           "defaultValue": "ver"
         },
         {
@@ -7998,7 +7998,7 @@
               "right"
             ]
           },
-          "description": "横向导航条 items 和 footer 的对齐方向，在 direction 设置为 'hoz' 并且 header 存在时生效",
+          "description": "对齐方向",
           "defaultValue": "left"
         },
         {
@@ -8013,7 +8013,7 @@
               "right"
             ]
           },
-          "description": "设置组件选中状态的 active 边方向\n@enumdesc 无, 上, 下, 左, 右\n@default 当 direction 为 'hoz' 时，默认值为 'bottom'，当 direction 为 'ver' 时，默认值为 'left'"
+          "description": "选中条方向"
         },
         {
           "name": "mode",
@@ -8024,7 +8024,7 @@
               "popup"
             ]
           },
-          "description": "子导航打开的模式（水平导航只支持弹出）\n@eumdesc 行内, 弹出",
+          "description": "子导航打开的模式",
           "defaultValue": "inline"
         },
         {
@@ -8048,7 +8048,7 @@
         {
           "name": "defaultOpenAll",
           "propType": "bool",
-          "description": "初始展开所有的子导航，只在 mode 设置为 'inline' 以及 openMode 设置为 'multiple' 下生效",
+          "description": "初始展开所有的子导航",
           "defaultValue": false
         },
         {
@@ -8060,7 +8060,7 @@
               "multiple"
             ]
           },
-          "description": "内联子导航的展开模式，同时可以展开一个同级子导航还是多个同级子导航，该属性仅在 mode 为 inline 时生效\n@eumdesc 一个, 多个",
+          "description": "内联子导航的展开模式",
           "defaultValue": "multiple"
         },
         {
@@ -8075,7 +8075,7 @@
               }
             ]
           },
-          "description": "当前选中导航项的 key 值"
+          "description": "当前选中导航key值"
         },
         {
           "name": "defaultSelectedKeys",
@@ -8089,8 +8089,7 @@
               }
             ]
           },
-          "description": "初始选中导航项的 key 值",
-          "defaultValue": []
+          "description": "初始选中导航项的key值"
         },
         {
           "name": "onSelect",
@@ -8122,13 +8121,13 @@
         {
           "name": "hasArrow",
           "propType": "bool",
-          "description": "是否显示右侧的箭头（仅在 iconOnly=true 时生效）",
+          "description": "是否显示右侧的箭头",
           "defaultValue": true
         },
         {
           "name": "hasTooltip",
           "propType": "bool",
-          "description": "是否有 ToolTips （仅在 iconOnly=true 时生效）",
+          "description": "是否有ToolTips",
           "defaultValue": false
         },
         {
@@ -8150,12 +8149,8 @@
         {
           "name": "embeddable",
           "propType": "bool",
-          "description": "是否开启嵌入式模式，一般用于Layout的布局中，开启后没有默认背景、外层border、box-shadow，可以配合`<Nav style={{lineHeight: '100px'}}>` 自定义高度",
+          "description": "开启嵌入式模式",
           "defaultValue": false
-        },
-        {
-          "name": "popupProps",
-          "propType": "object"
         }
       ],
       "configure": {
@@ -8181,34 +8176,17 @@
         {
           "name": "icon",
           "propType": {
-            "type": "oneOfType",
-            "value": [
-              "string",
-              {
-                "type": "instanceOf",
-                "value": "node"
-              }
-            ]
+            "type": "icon"
           },
-          "description": "自定义图标，可以使用 Icon 的 type，也可以使用组件 `<Icon type=\"icon type\" />`"
+          "description": "自定义图标"
         },
         {
           "name": "children",
           "propType": {
-            "type": "instanceOf",
-            "value": "node"
+            "type": "oneOfType",
+            "value": ["string", "node"]
           },
           "description": "导航内容"
-        },
-        {
-          "name": "parentMode",
-          "propType": {
-            "type": "oneOf",
-            "value": [
-              "inline",
-              "popup"
-            ]
-          }
         },
         {
           "name": "style",
@@ -14727,7 +14705,6 @@
                   "triggerType": "click",
                   "inlineIndent": 20,
                   "openMode": "multiple",
-                  "defaultSelectedKeys": [],
                   "popupAlign": "follow",
                   "hasArrow": true
                 }
