@@ -119,6 +119,8 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
             children = (
               <div
                 style={{
+                  height:'44px',
+                  lineHeight:'44px',
                   backgroundColor: '#f0f0f0',
                   borderColor: '#a7b1bd',
                   border: '1px dotted',

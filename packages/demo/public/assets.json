@@ -11900,27 +11900,22 @@
       },
       "props": [
         {
-          "name": "prefix",
-          "propType": "string",
-          "defaultValue": "next-"
-        },
-        {
-          "name": "pure",
-          "propType": "bool",
-          "defaultValue": false
-        },
-        {
           "name": "className",
           "propType": "string"
         },
         {
           "name": "children",
-          "propType": {
-            "type": "instanceOf",
-            "value": "node"
-          },
+          "propType": "node",
           "description": "树节点"
         },
+        {
+          "name": "dataSource",
+          "propType": {
+            "type": "Json"
+          },
+          "description": "数据源"
+        },
+
         {
           "name": "size",
           "propType": {
@@ -11969,12 +11964,12 @@
             "type": "instanceOf",
             "value": "node"
           },
-          "description": "自定义内联 label"
+          "description": "自定义内联label"
         },
         {
           "name": "readOnly",
           "propType": "bool",
-          "description": "是否只读，只读模式下可以展开弹层但不能选择"
+          "description": "是否只读"
         },
         {
           "name": "autoWidth",
@@ -12055,7 +12050,9 @@
         },
         {
           "name": "treeProps",
-          "propType": "object",
+          "propType": {
+            "type": "Json"
+          },
           "description": "透传到 Tree 的属性对象"
         },
         {
@@ -12076,7 +12073,9 @@
         },
         {
           "name": "popupStyle",
-          "propType": "object",
+          "propType": {
+            "type": "Json"
+          },
           "description": "下拉框自定义样式对象"
         },
         {
@@ -12091,7 +12090,9 @@
         },
         {
           "name": "popupProps",
-          "propType": "object",
+          "propType": {
+            "type": "Json"
+          },
           "description": "透传到 Popup 的属性对象"
         },
         {
@@ -12108,6 +12109,11 @@
           "name": "renderPreview",
           "propType": "func",
           "description": "预览态模式下渲染的内容\n@param {Array<data>} value 选择值 { label: , value:}"
+        },
+        {
+          "name": "useVirtual",
+          "propType": "bool",
+          "description": "是否开启虚拟滚动"
         },
         {
           "name": "style",
