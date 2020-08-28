@@ -312,7 +312,7 @@ designer.addPropsReducer((props: any, node: Node) => {
         const newParam: any = {};
         if (item.options && item.options.params && item.options.params.length) {
           item.options.params.map((element: any) => {
-            if (element.name) {
+            if (element.name && element.value) {
               newParam[element.name] = element.value;
             }
           });
