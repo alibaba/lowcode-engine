@@ -118,6 +118,7 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
           ) {
             children = (
               <div
+                className="lc-container-placeholder"
                 style={{
                   height:'44px',
                   lineHeight:'44px',
