@@ -3,20 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-<<<<<<< HEAD
+
 <a name="1.0.5-0"></a>
 ## [1.0.5-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@1.0.4-0...@ali/lowcode-plugin-outline-pane@1.0.5-0) (2020-08-20)
-=======
 <a name="0.8.54"></a>
 ## [0.8.54](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.53...@ali/lowcode-plugin-outline-pane@0.8.54) (2020-08-20)
->>>>>>> master
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
 
-<<<<<<< HEAD
 <a name="1.0.4-0"></a>
 ## [1.0.4-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@1.0.3-0...@ali/lowcode-plugin-outline-pane@1.0.4-0) (2020-08-20)
 
@@ -54,10 +51,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="1.0.0"></a>
 # [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.13.0...@ali/lowcode-plugin-outline-pane@1.0.0) (2020-08-17)
-=======
-=======
-=======
->>>>>>> master
 <a name="0.8.53"></a>
 ## [0.8.53](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.52...@ali/lowcode-plugin-outline-pane@0.8.53) (2020-08-19)
 
@@ -100,7 +93,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
 
-<<<<<<< HEAD
 <a name="0.13.0"></a>
 # [0.13.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.12.0...@ali/lowcode-plugin-outline-pane@0.13.0) (2020-08-17)
 
@@ -111,54 +103,28 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="0.12.0"></a>
 # [0.12.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.10.0...@ali/lowcode-plugin-outline-pane@0.12.0) (2020-08-17)
-=======
-<a name="0.8.48"></a>
-## [0.8.48](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.47...@ali/lowcode-plugin-outline-pane@0.8.48) (2020-08-14)
-
-
-### Bug Fixes
-
-* 卡片内容不可用拖动 ([6a85c43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6a85c43))
-
-
-
-
-<a name="0.8.47"></a>
-## [0.8.47](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.46...@ali/lowcode-plugin-outline-pane@0.8.47) (2020-08-07)
->>>>>>> master
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
 
-<<<<<<< HEAD
 <a name="0.11.0"></a>
 # [0.11.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.10.0...@ali/lowcode-plugin-outline-pane@0.11.0) (2020-08-17)
-=======
-<a name="0.8.46"></a>
-## [0.8.46](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.45...@ali/lowcode-plugin-outline-pane@0.8.46) (2020-08-06)
->>>>>>> master
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
 
-<<<<<<< HEAD
 <a name="0.10.0"></a>
 # [0.10.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.9.0...@ali/lowcode-plugin-outline-pane@0.10.0) (2020-08-16)
-=======
-<a name="0.8.45"></a>
-## [0.8.45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.44...@ali/lowcode-plugin-outline-pane@0.8.45) (2020-08-06)
->>>>>>> master
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
 
-<<<<<<< HEAD
 <a name="0.9.0"></a>
 # [0.9.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.43...@ali/lowcode-plugin-outline-pane@0.9.0) (2020-08-14)
 
@@ -169,15 +135,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-=======
-<a name="0.8.44"></a>
-## [0.8.44](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.43...@ali/lowcode-plugin-outline-pane@0.8.44) (2020-08-06)
-
-
-
-
-**Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
->>>>>>> master
 
 <a name="0.8.43"></a>
 ## [0.8.43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.42...@ali/lowcode-plugin-outline-pane@0.8.43) (2020-08-04)
@@ -538,8 +495,4 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-<<<<<<< HEAD
 * double outline & ZH_EN support ([b379bd7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b379bd7))
-=======
-* double outline & ZH_EN support ([b379bd7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b379bd7c0c488ef24f825760750a13d3fa083c96))
->>>>>>> df955e1db90ff104cd11160def80113cfd6faccc

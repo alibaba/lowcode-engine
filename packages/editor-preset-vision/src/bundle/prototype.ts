@@ -1,4 +1,4 @@
-import { ComponentType, ReactElement } from 'react';
+import { ComponentType, ReactElement, Component, FunctionComponent } from 'react';
 import { ComponentMetadata, FieldConfig, InitialItem, FilterItem, AutorunItem, isI18nData } from '@ali/lowcode-types';
 import {
   ComponentMeta,
@@ -17,7 +17,6 @@ import {
 } from './upgrade-metadata';
 import { intl } from '@ali/lowcode-editor-core';
 import { designer } from '../editor';
-import { uniqueId } from '@ali/lowcode-utils';
 
 const GlobalPropsConfigure: Array<{
   position: string;
@@ -220,14 +219,14 @@ class Prototype {
   readonly isPrototype = true;
   readonly meta: ComponentMeta;
   readonly options: OldPrototypeConfig | ComponentMetadata;
-  view: ComponentType;
-  // componentName: string;
   get componentName() {
     return this.getId();
   }
   get packageName() {
     return this.meta.npm?.package;
   }
+  // 兼容原 vision 用法
+  view: ComponentType | undefined;
 
   constructor(input: OldPrototypeConfig | ComponentMetadata | ComponentMeta, extraConfigs: any = null, lookup: boolean = false) {
     if (lookup) {
@@ -340,6 +339,7 @@ class Prototype {
 
   getView() {
     return (
+      this.view ||
       this.meta.getMetadata().experimental?.view ||
       designer.currentDocument?.simulator?.getComponent(this.getComponentName())
     );

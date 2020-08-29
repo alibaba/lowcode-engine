@@ -1,4 +1,4 @@
-import React, { createElement, ReactInstance, ComponentType, ReactElement } from 'react';
+import React, { createElement, ReactInstance, ComponentType, ReactElement, FunctionComponent } from 'react';
 import { render as reactRender } from 'react-dom';
 import { host } from './host';
 import SimulatorRendererView from './renderer-view';
@@ -15,6 +15,8 @@ import {
   AssetLoader,
 } from '@ali/lowcode-utils';
 import { RootSchema, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
+// import { isESModule, isElement, acceptsRef, wrapReactClass, cursor, setNativeSelection } from '@ali/lowcode-utils';
+// import { RootSchema, NpmInfo, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
 // just use types
 import { BuiltinSimulatorRenderer, NodeInstance, Component } from '@ali/lowcode-designer';
 import Slot from './builtin-components/slot';
@@ -422,7 +424,7 @@ function getClosestNodeInstance(from: ReactInstance, specId?: string): NodeInsta
 }
 
 function getNodeInstance(fiberNode: any, specId?: string): NodeInstance<ReactInstance> | null {
-  const instance = fiberNode.stateNode;
+  const instance = fiberNode?.stateNode;
   if (instance && SYMBOL_VNID in instance) {
     const nodeId = instance[SYMBOL_VNID];
     if (!specId || specId === nodeId) {
@@ -432,7 +434,7 @@ function getNodeInstance(fiberNode: any, specId?: string): NodeInstance<ReactIns
       };
     }
   }
-  return getNodeInstance(fiberNode.return);
+  return getNodeInstance(fiberNode?.return);
 }
 
 function checkInstanceMounted(instance: any): boolean {

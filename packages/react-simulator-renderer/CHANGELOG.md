@@ -3,20 +3,53 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-<<<<<<< HEAD
+
 <a name="1.0.5-0"></a>
 ## [1.0.5-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@1.0.4-0...@ali/lowcode-react-simulator-renderer@1.0.5-0) (2020-08-20)
-=======
-<a name="0.8.54"></a>
-## [0.8.54](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.53...@ali/lowcode-react-simulator-renderer@0.8.54) (2020-08-20)
->>>>>>> master
+
+<a name="0.8.58"></a>
+## [0.8.58](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.57...@ali/lowcode-react-simulator-renderer@0.8.58) (2020-08-27)
+
+
+### Bug Fixes
+
+* 在 renderer 层面做 function component 包装，避免影响 rax 等其他场景 ([1f920dd](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1f920dd))
+
+
+
+
+<a name="0.8.57"></a>
+## [0.8.57](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.56...@ali/lowcode-react-simulator-renderer@0.8.57) (2020-08-26)
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-react-simulator-renderer
 
-<<<<<<< HEAD
+<a name="0.8.56"></a>
+## [0.8.56](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.55...@ali/lowcode-react-simulator-renderer@0.8.56) (2020-08-24)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-react-simulator-renderer
+
+<a name="0.8.55"></a>
+## [0.8.55](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.54...@ali/lowcode-react-simulator-renderer@0.8.55) (2020-08-23)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-react-simulator-renderer
+
+<a name="0.8.54"></a>
+## [0.8.54](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.53...@ali/lowcode-react-simulator-renderer@0.8.54) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-react-simulator-renderer
+
 <a name="1.0.4-0"></a>
 ## [1.0.4-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@1.0.3-0...@ali/lowcode-react-simulator-renderer@1.0.4-0) (2020-08-20)
 
@@ -51,62 +84,32 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="1.0.0"></a>
 # [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.15.0...@ali/lowcode-react-simulator-renderer@1.0.0) (2020-08-17)
-=======
-=======
->>>>>>> master
 <a name="0.8.53"></a>
 ## [0.8.53](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.52...@ali/lowcode-react-simulator-renderer@0.8.53) (2020-08-19)
->>>>>>> master
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-react-simulator-renderer
 
-<<<<<<< HEAD
 <a name="0.15.0"></a>
 # [0.15.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.14.0...@ali/lowcode-react-simulator-renderer@0.15.0) (2020-08-17)
-=======
-<a name="0.8.52"></a>
-## [0.8.52](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.51...@ali/lowcode-react-simulator-renderer@0.8.52) (2020-08-19)
->>>>>>> master
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-react-simulator-renderer
 
-<<<<<<< HEAD
 <a name="0.14.0"></a>
 # [0.14.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.12.0...@ali/lowcode-react-simulator-renderer@0.14.0) (2020-08-17)
-=======
-<a name="0.8.51"></a>
-## [0.8.51](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.50...@ali/lowcode-react-simulator-renderer@0.8.51) (2020-08-19)
->>>>>>> master
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-react-simulator-renderer
 
-<<<<<<< HEAD
 <a name="0.13.0"></a>
 # [0.13.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.12.0...@ali/lowcode-react-simulator-renderer@0.13.0) (2020-08-17)
-=======
-=======
-<a name="0.8.50"></a>
-## [0.8.50](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.49...@ali/lowcode-react-simulator-renderer@0.8.50) (2020-08-17)
-
-
-### Bug Fixes
-
-* 临时解决 lowCodeComponent 性能问题 ([25b4ba2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/25b4ba2))
-* 修复低代码组件内部部分区域无法选中 ([f0adaa5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f0adaa5))
-
-
-
-
->>>>>>> master
 <a name="0.8.49"></a>
 ## [0.8.49](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.48...@ali/lowcode-react-simulator-renderer@0.8.49) (2020-08-14)
 
@@ -133,12 +136,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * createComponent 支持所有 schema ([7f946f5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7f946f5))
->>>>>>> master
 
 
 
 
-<<<<<<< HEAD
 **Note:** Version bump only for package @ali/lowcode-react-simulator-renderer
 
 <a name="0.12.0"></a>
@@ -151,47 +152,22 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="0.11.0"></a>
 # [0.11.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.10.0...@ali/lowcode-react-simulator-renderer@0.11.0) (2020-08-14)
-=======
-<a name="0.8.46"></a>
-## [0.8.46](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.45...@ali/lowcode-react-simulator-renderer@0.8.46) (2020-08-07)
-
-
-### Bug Fixes
-
-* 部分低代码组件渲染报错 ([093015c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/093015c))
-
-
-
-
-<a name="0.8.45"></a>
-## [0.8.45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.44...@ali/lowcode-react-simulator-renderer@0.8.45) (2020-08-06)
->>>>>>> master
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-react-simulator-renderer
 
-<<<<<<< HEAD
 <a name="0.10.0"></a>
 # [0.10.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.9.0...@ali/lowcode-react-simulator-renderer@0.10.0) (2020-08-14)
-=======
-<a name="0.8.44"></a>
-## [0.8.44](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.43...@ali/lowcode-react-simulator-renderer@0.8.44) (2020-08-06)
->>>>>>> master
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-react-simulator-renderer
 
-<<<<<<< HEAD
 <a name="0.9.0"></a>
 # [0.9.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.42...@ali/lowcode-react-simulator-renderer@0.9.0) (2020-08-14)
-=======
-<a name="0.8.43"></a>
-## [0.8.43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.42...@ali/lowcode-react-simulator-renderer@0.8.43) (2020-08-06)
->>>>>>> master
 
 
 

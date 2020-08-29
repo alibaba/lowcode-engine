@@ -61,7 +61,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="0.12.0"></a>
 # [0.12.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.10.0...@ali/lowcode-types@0.12.0) (2020-08-17)
-=======
 <a name="0.8.16"></a>
 ## [0.8.16](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.8.15...@ali/lowcode-types@0.8.16) (2020-08-19)
 
@@ -85,7 +84,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-<<<<<<< HEAD
 **Note:** Version bump only for package @ali/lowcode-types
 
 <a name="0.11.0"></a>
@@ -112,8 +110,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-types
 
-=======
->>>>>>> master
 <a name="0.8.14"></a>
 ## [0.8.14](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.8.13...@ali/lowcode-types@0.8.14) (2020-08-04)
 

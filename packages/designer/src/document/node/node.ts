@@ -148,7 +148,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   constructor(readonly document: DocumentModel, nodeSchema: Schema) {
     const { componentName, id, children, props, ...extras } = nodeSchema;
-    this.id = id || `node_${document.nextId()}`;
+    this.id = id || document.nextId();
     this.componentName = componentName;
     if (this.componentName === 'Leaf') {
       this.props = new Props(this, {
@@ -679,7 +679,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   /**
    * 删除一个节点
-   * @param node 
+   * @param node
    */
   removeChild(node: Node) {
     this.children?.delete(node);
@@ -699,11 +699,11 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     if (this.purged) {
       return;
     }
-    if (this._parent) {
-      // should remove thisNode before purge
-      this.remove(useMutator);
-      return;
-    }
+    // if (this._parent) {
+    //   // should remove thisNode before purge
+    //   this.remove(useMutator);
+    //   return;
+    // }
     this.purged = true;
     if (this.isParental()) {
       this.children.purge(useMutator);
@@ -711,8 +711,8 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     this.autoruns?.forEach((dispose) => dispose());
     this.props.purge();
     this.document.internalRemoveAndPurgeNode(this);
-
     this.document.destroyNode(this);
+    this.remove(useMutator);
   }
 
   /**
@@ -862,7 +862,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     if (this.parent) {
       return this.parent.getSuitablePlace(node, ref);
     }
-    
+
     return null;
   }
   /**

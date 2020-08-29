@@ -48,17 +48,14 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="1.0.0"></a>
 # [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-utils@0.13.0...@ali/lowcode-utils@1.0.0) (2020-08-17)
-=======
 <a name="0.8.18"></a>
 ## [0.8.18](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-utils@0.8.17...@ali/lowcode-utils@0.8.18) (2020-08-19)
->>>>>>> master
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-utils
 
-<<<<<<< HEAD
 <a name="0.13.0"></a>
 # [0.13.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-utils@0.12.0...@ali/lowcode-utils@0.13.0) (2020-08-17)
 
@@ -96,10 +93,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="0.9.0"></a>
 # [0.9.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-utils@0.8.16...@ali/lowcode-utils@0.9.0) (2020-08-14)
-=======
-<a name="0.8.17"></a>
-## [0.8.17](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-utils@0.8.16...@ali/lowcode-utils@0.8.17) (2020-08-17)
->>>>>>> master
 
 
 

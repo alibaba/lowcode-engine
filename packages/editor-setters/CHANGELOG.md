@@ -3,20 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-<<<<<<< HEAD
 <a name="1.0.5-0"></a>
 ## [1.0.5-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@1.0.4-0...@ali/lowcode-editor-setters@1.0.5-0) (2020-08-20)
-=======
-<a name="0.9.17"></a>
-## [0.9.17](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.16...@ali/lowcode-editor-setters@0.9.17) (2020-08-20)
->>>>>>> master
+
+<a name="0.9.19"></a>
+## [0.9.19](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.18...@ali/lowcode-editor-setters@0.9.19) (2020-08-27)
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-editor-setters
 
-<<<<<<< HEAD
+<a name="0.9.18"></a>
+## [0.9.18](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.17...@ali/lowcode-editor-setters@0.9.18) (2020-08-24)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-setters
+
+<a name="0.9.17"></a>
+## [0.9.17](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.16...@ali/lowcode-editor-setters@0.9.17) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-setters
+
 <a name="1.0.4-0"></a>
 ## [1.0.4-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@1.0.3-0...@ali/lowcode-editor-setters@1.0.4-0) (2020-08-20)
 
@@ -62,9 +75,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="1.0.0"></a>
 # [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.14.0...@ali/lowcode-editor-setters@1.0.0) (2020-08-17)
-=======
-=======
->>>>>>> master
 <a name="0.9.16"></a>
 ## [0.9.16](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.15...@ali/lowcode-editor-setters@0.9.16) (2020-08-19)
 >>>>>>> master
@@ -74,20 +84,14 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-editor-setters
 
-<<<<<<< HEAD
 <a name="0.14.0"></a>
 # [0.14.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.13.0...@ali/lowcode-editor-setters@0.14.0) (2020-08-17)
-=======
-<a name="0.9.15"></a>
-## [0.9.15](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.14...@ali/lowcode-editor-setters@0.9.15) (2020-08-17)
->>>>>>> master
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-editor-setters
 
-<<<<<<< HEAD
 <a name="0.13.0"></a>
 # [0.13.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.11.0...@ali/lowcode-editor-setters@0.13.0) (2020-08-17)
 
@@ -123,8 +127,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-=======
->>>>>>> master
 <a name="0.9.14"></a>
 ## [0.9.14](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.13...@ali/lowcode-editor-setters@0.9.14) (2020-08-04)
 
@@ -365,8 +367,4 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
-<<<<<<< HEAD
 * ts type ([1732e7d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1732e7d))
-=======
-* ts type ([1732e7d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1732e7db5fccb6e185cfa12e197ae698932fe127))
->>>>>>> df955e1db90ff104cd11160def80113cfd6faccc

@@ -20,20 +20,20 @@ export type GetDataType<T, NodeType> = T extends undefined
     : any
   : T;
 
-  export interface ComponentMap {
-    componentName: string;
-    package: string;
-    version?: string;
-    destructuring?: boolean;
-    exportName?: string;
-    subName?: string;
-  }
+export interface ComponentMap {
+  componentName: string;
+  package: string;
+  version?: string;
+  destructuring?: boolean;
+  exportName?: string;
+  subName?: string;
+}
 
 export class DocumentModel {
   /**
    * 根节点 类型有：Page/Component/Block
    */
-  readonly rootNode: RootNode;
+  rootNode: RootNode | null;
   /**
    * 文档编号
    */
@@ -148,7 +148,12 @@ export class DocumentModel {
    * 生成唯一id
    */
   nextId() {
-    return (this.id.slice(-10) + (++this.seqId).toString(36)).toLocaleLowerCase();
+    let id;
+    do {
+      id = 'node_' + (this.id.slice(-10) + (++this.seqId).toString(36)).toLocaleLowerCase();
+    } while (this.nodesMap.get(id))
+
+    return id;
   }
 
   /**
@@ -456,12 +461,16 @@ export class DocumentModel {
    * 从项目中移除
    */
   remove() {
-    // this.project.removeDocument(this);
-    // todo: ...
+    this.designer.postEvent('document.remove', { id: this.id });
+    this.purge();
+    this.project.removeDocument(this);
   }
 
   purge() {
-    // todo:
+    this.rootNode?.purge();
+    this.nodes.clear();
+    this._nodesMap.clear();
+    this.rootNode = null;
   }
 
   checkNesting(dropTarget: ParentalNode, dragObject: DragNodeObject | DragNodeDataObject): boolean {
