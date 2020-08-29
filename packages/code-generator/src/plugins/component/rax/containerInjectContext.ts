@@ -59,11 +59,16 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
         _createContext() {
           const self = this;
 
+          // 保存下最新的状态，这样 setState 可以搞成同步一样的了
+          self._latestState = self.state;
+
           const context = {
             get state() {
-              return self.state;
+              // 这里直接获取最新的 state，从而能避免一些 React/Rax 这样的框架因为异步 setState 而导致的一些问题
+              return self._latestState;
             },
             setState(newState) {
+              self._latestState = { ...self._latestState, ...newState };
               self.setState(newState);
             },
             get dataSourceMap() {
@@ -87,12 +92,9 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
             get constants() {
               return __$$constants;
             },
-            get i18n() {
-              return self._i18n;
-            },
-            getLocale() {
-              return __$$i18n.getLocale();
-            },
+            i18n: __$$i18n.i18n,
+            i18nFormat: __$$i18n.i18nFormat,
+            getLocale: __$$i18n.getLocale,
             setLocale(locale) {
               __$$i18n.setLocale(locale);
               self.forceUpdate();
@@ -106,34 +108,6 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       linkAfter: [RAX_CHUNK_NAME.ClassRenderEnd],
     });
 
-    next.chunks.push({
-      type: ChunkType.STRING,
-      fileType: cfg.fileType,
-      name: CLASS_DEFINE_CHUNK_NAME.InsVar,
-      content: `
-        _i18n = this._createI18nDelegate();
-      `,
-      linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start],
-    });
-
-    next.chunks.push({
-      type: ChunkType.STRING,
-      fileType: cfg.fileType,
-      name: CLASS_DEFINE_CHUNK_NAME.InsPrivateMethod,
-      content: `
-        _createI18nDelegate() {
-          return new Proxy(
-            {},
-            {
-              get(target, prop) {
-                return __$$i18n.i18n(prop);
-              },
-            },
-          );
-        }
-      `,
-      linkAfter: [RAX_CHUNK_NAME.ClassRenderEnd],
-    });
     return next;
   };
   return plugin;

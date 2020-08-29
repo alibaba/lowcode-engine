@@ -348,10 +348,9 @@
         main: '/clone',
       },
     },
-    // 支持 TNPM
     {
       name: 'Toast',
-      type: 'tnpm',
+      type: 'npm',
       content: {
         package: 'universal-toast',
         version: '^1.2.0',
