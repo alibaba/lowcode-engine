@@ -51,7 +51,7 @@ class Home$$Page extends Component {
   _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceConfig, this._context, {
     runtimeConfig: true,
     requestHandlersMap: {
-      urlParams: __$$urlParamsRequestHandler({ search: this.props.location.search }),
+      urlParams: __$$urlParamsRequestHandler(this.props.location.search),
       fetch: __$$fetchRequestHandler,
     },
   });

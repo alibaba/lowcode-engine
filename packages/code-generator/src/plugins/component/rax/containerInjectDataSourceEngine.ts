@@ -46,7 +46,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
 
           requestHandlersMap[ds.type] = {
             type: 'JSExpression',
-            value: handlerName + (ds.type === 'urlParams' ? '({ search: this.props.location.search })' : ''),
+            value: handlerName + (ds.type === 'urlParams' ? '(this.props.location.search)' : ''),
           };
 
           next.chunks.push({
