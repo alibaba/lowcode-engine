@@ -1,5 +1,5 @@
 import { isJSBlock, isJSExpression, isJSSlot, isI18nData } from '@ali/lowcode-types';
-import { isPlainObject, hasOwnProperty } from '@ali/lowcode-utils';
+import { isPlainObject, hasOwnProperty, cloneDeep } from '@ali/lowcode-utils';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
 import { Designer, LiveEditing, TransformStage, Node, getConvertedExtraKey } from '@ali/lowcode-designer';
 import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
@@ -306,7 +306,7 @@ designer.addPropsReducer(deepValueParser, TransformStage.Render);
 designer.addPropsReducer((props: any, node: Node) => {
   if (node.isRoot()) {
     if (props.dataSource) {
-      const { online } = props.dataSource;
+      const online = cloneDeep(props.dataSource.online);
       online.forEach((item: any) => {
         const newParam: any = {};
         if (item.options && item.options.params && item.options.params.length) {
