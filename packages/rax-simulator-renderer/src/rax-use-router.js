@@ -243,7 +243,7 @@ export function useRouter(routerConfig) {
       matchLocation(history.location);
     }
 
-    unlisten = history.listen((location) => {
+    unlisten = history.listen(({ location }) => {
       matchLocation(location);
     });
 
