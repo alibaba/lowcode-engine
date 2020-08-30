@@ -181,20 +181,16 @@ export async function webTableProxy(req) {
     const sheetId = OneAPIConfig['x-model'];
     const sheet = await Table.find({ id: sheetId });
     const result = await sheet.instance.fetch({ code }, params);
-    // const result = await Table.find({ id: 'vip_info' });
     return result;
   }
   return new Promise((resolve, reject) => {
     Bus.emitter.on('table.ready', async (table) => {
-      // const { name } = req;
-      // const result = table.fetch({ id: name });
       const { options } = req;
       const { params, OneAPIConfig } = options;
       const { code } = OneAPIConfig;
       const sheetId = OneAPIConfig['x-model'];
       const sheet = await table.find({ id: sheetId });
       const result = await sheet.instance.fetch({ code }, params);
-      // const result = await Table.find({ id: 'vip_info' });
       resolve(result);
     });
   });
