@@ -84,15 +84,15 @@ export default {
         props: {
           align: 'top',
           icon: 'wenjian',
-          description: '资源面板',
+          description: 'JS面板',
           panelProps: {
             floatable: true,
             height: 300,
             help: undefined,
-            hideTitleBar: true,
+            hideTitleBar: false,
             maxHeight: 800,
             maxWidth: 1200,
-            title: '动作面板',
+            title: 'JS面板',
             width: 600,
           },
         },
