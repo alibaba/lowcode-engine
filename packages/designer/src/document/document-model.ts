@@ -484,7 +484,7 @@ export class DocumentModel {
 
   // add toData
   toData(extraComps?: string[]) {
-    const node = this.project?.currentDocument?.export(TransformStage.Save);
+    const node = this.export(TransformStage.Save);
     const data = {
       componentsMap: this.getComponentsMap(extraComps),
       componentsTree: [node],
