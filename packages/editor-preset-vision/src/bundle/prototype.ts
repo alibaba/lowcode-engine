@@ -1,5 +1,5 @@
 import { ComponentType, ReactElement, Component, FunctionComponent } from 'react';
-import { ComponentMetadata, FieldConfig, InitialItem, FilterItem, AutorunItem, isI18nData } from '@ali/lowcode-types';
+import { ComponentMetadata, FieldConfig, InitialItem, FilterItem, AutorunItem } from '@ali/lowcode-types';
 import {
   ComponentMeta,
   addBuiltinComponentAction,
@@ -7,6 +7,8 @@ import {
   registerMetadataTransducer,
   TransformStage,
 } from '@ali/lowcode-designer';
+import { intl } from '@ali/lowcode-editor-core';
+import { isInSimulator } from '@ali/lowcode-utils';
 import {
   OldPropConfig,
   OldPrototypeConfig,
@@ -15,7 +17,7 @@ import {
   upgradePropConfig,
   upgradeConfigure,
 } from './upgrade-metadata';
-import { intl } from '@ali/lowcode-editor-core';
+
 import { designer } from '../editor';
 
 const GlobalPropsConfigure: Array<{
@@ -213,6 +215,10 @@ class Prototype {
   static removeGlobalPropsConfigure = removeGlobalPropsConfigure;
   static overridePropsConfigure = overridePropsConfigure;
   static create(config: OldPrototypeConfig | ComponentMetadata | ComponentMeta, extraConfigs: any = null, lookup: boolean = false) {
+    // 目前 vc-xxx 会在设计器和渲染 simulator iframe 中执行两遍，在 simulator 中不需要重新创建，直接复用外层的
+    if (isInSimulator()) {
+      lookup = true;
+    }
     return new Prototype(config, extraConfigs, lookup);
   }
 

@@ -107,7 +107,7 @@ designer.addPropsReducer((props, node) => {
       }
     });
     // 全局的关闭 uniqueIdChecker 信号，在 ve-utils 中实现
-    if (fieldIds.indexOf(props.fieldId) >= 0 && !window.__disable_unique_id_checker__) {
+    if (fieldIds.indexOf(props.fieldId) >= 0 && !(window as any).__disable_unique_id_checker__) {
       newProps.fieldId = undefined;
     }
   }
