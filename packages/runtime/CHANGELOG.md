@@ -3,6 +3,114 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.6-0"></a>
+## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-runtime@1.0.5-0...@ali/lowcode-runtime@1.0.6-0) (2020-08-31)
+
+
+### Bug Fixes
+
+* 取消Provider的校验 ([a1755f2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a1755f2))
+
+
+### Features
+
+* 兼容通过api更新属性的场景 ([b58d59b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b58d59b))
+* 增加错误边界&pageReady钩子 ([3bb2fc1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3bb2fc1))
+* 增加若干钩子方法 ([eb55712](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/eb55712))
+* 支持多个provider ([642c62e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/642c62e))
+* 支持多个Provider ([e35357f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e35357f))
+
+
+
+
+<a name="1.0.5-0"></a>
+## [1.0.5-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-runtime@1.0.4-0...@ali/lowcode-runtime@1.0.5-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-runtime
+
+<a name="1.0.4-0"></a>
+## [1.0.4-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-runtime@1.0.3-0...@ali/lowcode-runtime@1.0.4-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-runtime
+
+<a name="1.0.3-0"></a>
+## [1.0.3-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-runtime@1.0.2-0...@ali/lowcode-runtime@1.0.3-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-runtime
+
+<a name="1.0.2-0"></a>
+## [1.0.2-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-runtime@1.0.1-0...@ali/lowcode-runtime@1.0.2-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-runtime
+
+<a name="1.0.1-0"></a>
+## [1.0.1-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-runtime@1.0.0...@ali/lowcode-runtime@1.0.1-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-runtime
+
+<a name="1.0.0"></a>
+# [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-runtime@0.13.0...@ali/lowcode-runtime@1.0.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-runtime
+
+<a name="0.13.0"></a>
+# [0.13.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-runtime@0.12.0...@ali/lowcode-runtime@0.13.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-runtime
+
+<a name="0.12.0"></a>
+# [0.12.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-runtime@0.10.0...@ali/lowcode-runtime@0.12.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-runtime
+
+<a name="0.11.0"></a>
+# [0.11.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-runtime@0.10.0...@ali/lowcode-runtime@0.11.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-runtime
+
+<a name="0.10.0"></a>
+# [0.10.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-runtime@0.9.0...@ali/lowcode-runtime@0.10.0) (2020-08-16)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-runtime
+
+<a name="0.9.0"></a>
+# [0.9.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-runtime@0.8.13...@ali/lowcode-runtime@0.9.0) (2020-08-14)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-runtime
+
 <a name="0.8.16"></a>
 ## [0.8.16](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-runtime@0.8.13...@ali/lowcode-runtime@0.8.16) (2020-06-23)
 
