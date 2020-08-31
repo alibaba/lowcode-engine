@@ -7,7 +7,7 @@ import Page from 'rax-view';
 
 import Text from 'rax-text';
 
-import { create as __$$createDataSourceEngine } from '@ali/lowcode-datasource-engine';
+import { create as __$$createDataSourceEngine } from '@ali/lowcode-datasource-engine/runtime';
 
 import { isMiniApp as __$$isMiniApp } from 'universal-env';
 

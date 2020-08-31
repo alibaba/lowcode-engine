@@ -42,19 +42,22 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
 
       dataSourceItems.forEach((ds) => {
         if (!(ds.type in requestHandlersMap) && ds.type !== 'custom') {
-          const handlerName = '__$$' + changeCase.camelCase(ds.type) + 'RequestHandler';
+          const handlerFactoryName = '__$$create' + changeCase.pascal(ds.type) + 'RequestHandler';
 
           requestHandlersMap[ds.type] = {
             type: 'JSExpression',
-            value: handlerName + (ds.type === 'urlParams' ? '(this.props.location.search)' : ''),
+            value: handlerFactoryName + (ds.type === 'urlParams' ? '(this.props.location.search)' : '()'),
           };
+
+          const handlerFactoryExportName = `create${changeCase.pascal(ds.type)}Handler`;
+          const handlerPkgName = `@ali/lowcode-datasource-${changeCase.kebab(ds.type)}-handler`;
 
           next.chunks.push({
             type: ChunkType.STRING,
             fileType: FileType.JSX,
             name: COMMON_CHUNK_NAME.ExternalDepsImport,
             content: `
-              import ${handlerName} from '@ali/lowcode-datasource-engine/handlers/${changeCase.kebabCase(ds.type)}';
+              import { ${handlerFactoryExportName} as ${handlerFactoryName} } from '${handlerPkgName}';
             `,
             linkAfter: [],
           });
@@ -69,7 +72,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       fileType: FileType.JSX,
       name: COMMON_CHUNK_NAME.ExternalDepsImport,
       content: `
-        import { create as __$$createDataSourceEngine } from '@ali/lowcode-datasource-engine';
+        import { create as __$$createDataSourceEngine } from '@ali/lowcode-datasource-engine/runtime';
       `,
       linkAfter: [],
     });

@@ -11,7 +11,7 @@ import Text from 'rax-text';
 
 import Image from 'rax-image';
 
-import { create as __$$createDataSourceEngine } from '@ali/lowcode-datasource-engine';
+import { create as __$$createDataSourceEngine } from '@ali/lowcode-datasource-engine/runtime';
 
 import { isMiniApp as __$$isMiniApp } from 'universal-env';
 
