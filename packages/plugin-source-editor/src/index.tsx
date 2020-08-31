@@ -71,6 +71,14 @@ export default class SourceEditor extends Component<{
       this.callEditorEvent('sourceEditor.focusByFunction', params);
     });
 
+
+    // 插件面板关闭事件,监听规则同上
+    editor.on('skeleton.panel-dock.unactive',(pluginName,dock)=>{
+       if (pluginName == 'sourceEditor'){
+          this.saveSchema();
+       }
+    })
+
     let schema = editor.get('designer').project.getSchema();
     this.initCode(schema);
   }
@@ -231,11 +239,28 @@ export default class SourceEditor extends Component<{
       });
     }
 
-    let functionMap = transfrom.code2Schema(newCode);
-    let schema = editor.get('designer').project.getSchema();
-    let newSchema = transfrom.setFunction2Schema(functionMap, schema);
-    editor.get('designer').project.load(newSchema);
+    // let functionMap = transfrom.code2Schema(newCode);
+    // let schema = editor.get('designer').project.getSchema();
+    // let newSchema = transfrom.setFunction2Schema(functionMap, schema);
+    // if (newSchema!=''){
+    //   editor.get('designer').project.load(newSchema,true);
+    
+
   };
+
+
+  saveSchema = () => {
+    const {jsCode} = this.state;
+    const {editor} = this.props;
+    let functionMap = transfrom.code2Schema(jsCode);
+    let schema = editor.get('designer').project.getSchema();
+    let oldSchemaStr = JSON.stringify(schema);
+    let newSchema = transfrom.setFunction2Schema(functionMap, schema);
+
+    if (newSchema!='' && JSON.stringify(newSchema) != oldSchemaStr){
+      editor.get('designer').project.load(newSchema,true);
+    }
+  }
 
   render() {
     const { selectTab, jsCode, css } = this.state;

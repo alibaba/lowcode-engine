@@ -22,14 +22,21 @@ interface BasicSection {
 
 const Codeout = ({ editor }: PluginProps) => {
   const handleSaveClick = () => {
-    const designer = editor.get(Designer);
-    if (designer) {
-      const schema = designer.schema.componentsTree[designer.schema.componentsTree.length - 1]; // editor.get('schema');
-      const schemaStr = JSON.stringify(schema);
-      window.localStorage.setItem('schema_data', schemaStr);
-      console.info('save schema:', schemaStr);
-      alert('保存成功');
-    }
+
+    debugger;
+
+    let schema = editor.get('designer').project.getSchema();
+    console.log(schema);
+
+
+    // const designer = editor.get(Designer);
+    // if (designer) {
+    //   const schema = designer.schema.componentsTree[designer.schema.componentsTree.length - 1]; // editor.get('schema');
+    //   const schemaStr = JSON.stringify(schema);
+    //   window.localStorage.setItem('schema_data', schemaStr);
+    //   console.info('save schema:', schemaStr);
+    //   alert('保存成功');
+    // }
   };
 
   const handleLoadClick = () => {

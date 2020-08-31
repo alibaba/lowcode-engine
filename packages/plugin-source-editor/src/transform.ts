@@ -17,9 +17,7 @@ const transfrom = {
   },
 
   code2Schema(code: String) {
-
     let newCode = code.replace(/export default class/,'class A');
-
     let A,a;
     try {
       A = eval('('+newCode + ')');
@@ -27,7 +25,6 @@ const transfrom = {
     }catch(e){
       return ''
     }
-
 
     let functionNameList = Object.getOwnPropertyNames(a.__proto__);
 
@@ -42,11 +39,11 @@ const transfrom = {
       }
     })
 
-
     if (a.state){
       functionMap.state = a.state
     }
 
+    console.log(functionMap);
     return functionMap;
 
   },
@@ -56,7 +53,9 @@ const transfrom = {
   },
 
   setFunction2Schema(functionMap,schema){
+
     let pageNode = schema.componentsTree[0];
+    if (!pageNode) return '';
     for (let key in functionMap){
         if (key == 'state'){
            pageNode.state = functionMap[key];
