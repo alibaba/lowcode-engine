@@ -172,10 +172,9 @@ export function bzb(apiCode, params, otherProps = {}) {
 
 export async function webTableProxy(req) {
   console.log(req);
-  const { _table } = window;
-  const { VisualEngine } = window;
-  const { Bus, Table } = VisualEngine;
-  // if (Table) {
+  const { _table } = window.parent;
+  const { VisualEngine } = window.parent;
+  const { Bus } = VisualEngine;
   if (_table) {
     const { options } = req;
     const { params, OneAPIConfig } = options;
