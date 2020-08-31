@@ -172,14 +172,16 @@ export function bzb(apiCode, params, otherProps = {}) {
 
 export async function webTableProxy(req) {
   console.log(req);
+  const { _table } = window;
   const { VisualEngine } = window;
   const { Bus, Table } = VisualEngine;
-  if (Table) {
+  // if (Table) {
+  if (_table) {
     const { options } = req;
     const { params, OneAPIConfig } = options;
     const { code } = OneAPIConfig;
     const sheetId = OneAPIConfig['x-model'];
-    const sheet = await Table.find({ id: sheetId });
+    const sheet = await _table.find({ id: sheetId });
     const result = await sheet.instance.fetch({ code }, params);
     return result;
   }
