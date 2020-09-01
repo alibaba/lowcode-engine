@@ -120,6 +120,12 @@ export default {
     init: async function init(editor) {
       const assets = await editor.utils.get('./assets.json');
       editor.set('assets', assets);
+      const simulatorUrl = [
+        'https://dev.g.alicdn.com/ali-lowcode/ali-lowcode-engine/0.9.50/react-simulator-renderer.css',
+        'https://dev.g.alicdn.com/ali-lowcode/ali-lowcode-engine/0.9.50/react-simulator-renderer.js',
+      ];
+      editor.set('simulatorUrl', simulatorUrl);
+      // editor.set('renderEnv', 'rax');
 
       const schema = await editor.utils.get('./schema.json');
       editor.set('schema', schema);
