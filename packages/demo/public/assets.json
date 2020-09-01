@@ -904,11 +904,7 @@
                       },{
                         "name": "callback",
                         "description": "callback",
-                        "propType": "JsonSetter",
-                        "defaultValue": {
-                          "type": "JSFunction",
-                          "value": "(rowData, action, table) => {\n return table.editRow(rowData).then((row) => {\n console.log(row);\n })}"
-                        }
+                        "setter": "FunctionSetter"
                       }]
                     }
                   },
@@ -916,7 +912,7 @@
                     "title": "Title",
                     "callback": {
                       "type": "JSFunction",
-                      "value": "(rowData, action, table) => {\n return table.editRow(rowData).then((row) => {\n console.log(row);\n })}"
+                      "value": "function(){}"
                     }
                   }
                 }

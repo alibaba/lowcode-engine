@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { registerSetter } from '@ali/lowcode-editor-core';
-import { isJSExpression } from '@ali/lowcode-types';
+import { isJSExpression,isJSFunction } from '@ali/lowcode-types';
 import { DatePicker, TimePicker, Input, Radio, Select, Switch, NumberPicker } from '@alifd/next';
 import ExpressionSetter from './expression-setter';
 import ColorSetter from './color-setter';
@@ -91,6 +91,16 @@ const VariableSetter ={
   recommend: true,
 };
 
+
+const FunctionBindSetter = {
+  component: FunctionSetter,
+  title: '函数绑定',
+  condition: (field: any) => {
+    const v = field.getValue();
+    return v == isJSFunction(v);
+  },
+}
+
 const builtinSetters: any = {
   StringSetter,
   NumberSetter,
@@ -110,7 +120,7 @@ const builtinSetters: any = {
   JsonSetter,
   StyleSetter,
   IconSetter,
-  FunctionSetter
+  FunctionSetter:FunctionBindSetter
 };
 
 registerSetter(builtinSetters);
