@@ -32,17 +32,22 @@ export default class LazyComponent extends Component<IProps, IState> {
         const schema = await getPageData();
         this.setState({ schema });
         context.emitPageReady();
-      } catch (error) {
+      } catch (err) {
         this.setState({ hasError: true });
+        this.exeAfterCatch(err.message, err.stack);
       }
     }
   }
 
-  componentDidCatch(error: any, errorInfo: any) {
+  exeAfterCatch(error: any, errorInfo?: any) {
     const { afterCatch } = app.getErrorBoundary() || {};
     if (typeof afterCatch === 'function') {
       afterCatch.call(this, error, errorInfo);
     }
+  }
+
+  componentDidCatch(error: any, errorInfo: any) {
+    this.exeAfterCatch(error, errorInfo);
   }
 
   render() {

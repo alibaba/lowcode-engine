@@ -36,9 +36,12 @@ export default function runApp() {
       }
       const App = provider.createApp();
       provider.runApp(App, config);
-    }).catch((err) => {
+    }).catch((err: Error) => {
         console.error(err.message);
-        const { fallbackUI } = app.getErrorBoundary() || {};
+        const { fallbackUI, afterCatch } = app.getErrorBoundary() || {};
+        if (typeof afterCatch === 'function') {
+          afterCatch(err.message, err.stack);
+        }
         if (!fallbackUI) {
           return;
         }

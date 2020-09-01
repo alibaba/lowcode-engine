@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-react-provider",
-  "version": "1.0.6-0",
+  "version": "1.0.6-1",
   "description": "React Provider for Runtime",
   "files": [
     "es",
