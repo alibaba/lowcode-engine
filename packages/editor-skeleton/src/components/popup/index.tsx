@@ -125,11 +125,11 @@ export class PopupContent extends PureComponent<{ safeId?: string }> {
         safeNode={id}
         visible={visible}
         style={{ width }}
-        onVisibleChange={(visible) => {
+        onVisibleChange={(visible,type) => {
           if (avoidLaterHidden) {
             return;
           }
-          if (!visible) {
+          if (!visible && type === 'closeClick') {
             this.setState({ visible: false });
           }
         }}
