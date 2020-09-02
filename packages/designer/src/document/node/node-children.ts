@@ -15,7 +15,7 @@ export class NodeChildren {
     });
   }
 
-  interalInitParent() {
+  internalInitParent() {
     this.children.forEach(child => child.internalSetParent(this.owner));
   }
 
@@ -55,7 +55,7 @@ export class NodeChildren {
     }
 
     this.children = children;
-    this.interalInitParent();
+    this.internalInitParent();
     if (!shallowEqual(children, originChildren)) {
       this.emitter.emit('change');
     }
@@ -63,7 +63,7 @@ export class NodeChildren {
 
   /**
    * @deprecated
-   * @param nodes 
+   * @param nodes
    */
   concat(nodes: Node[]) {
     return this.children.concat(nodes);
@@ -91,20 +91,46 @@ export class NodeChildren {
     return this.children.length;
   }
 
+  private purged = false;
+  /**
+   * 回收销毁
+   */
+  purge(useMutator = true) {
+    if (this.purged) {
+      return;
+    }
+    this.purged = true;
+    this.children.forEach((child) => {
+      child.purge(useMutator);
+    });
+  }
+
   /**
    * 删除一个节点
    */
   delete(node: Node, purge = false, useMutator = true): boolean {
+    if (node.isParental()) {
+      node.children.forEach(subNode => {
+        subNode.remove(useMutator, purge);
+      });
+    }
+    if (purge) {
+      // should set parent null
+      node.internalSetParent(null, useMutator);
+      try {
+        node.purge(useMutator);
+      } catch(err) {
+        console.error(err);
+      }
+    }
     const i = this.children.indexOf(node);
     if (i < 0) {
       return false;
     }
-    const deleted = this.children.splice(i, 1)[0];
-    if (purge) {
-      // should set parent null
-      deleted.internalSetParent(null, useMutator);
-      deleted.purge(useMutator);
-    }
+    this.children.splice(i, 1);
+    const document = node.document;
+    document.unlinkNode(node);
+    document.selection.remove(node.id);
     this.emitter.emit('change');
     if (useMutator) {
       this.reportModified(node, this.owner, {type: 'remove', removeIndex: i, removeNode: node});
@@ -290,18 +316,6 @@ export class NodeChildren {
     };
   }
 
-  private purged = false;
-  /**
-   * 回收销毁
-   */
-  purge(useMutator = true) {
-    if (this.purged) {
-      return;
-    }
-    this.purged = true;
-    this.children.forEach((child) => child.purge(useMutator));
-  }
-
   get [Symbol.toStringTag]() {
     // 保证向前兼容性
     return 'Array';
@@ -327,7 +341,7 @@ export class NodeChildren {
       try {
         callbacks?.onSubtreeModified.call(node, owner, options);
       } catch (e) {
-        console.error('error when excute experimental.callbacks.onNodeAdd', e);
+        console.error('error when excute experimental.callbacks.onSubtreeModified', e);
       }
     }
 
