@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.6-0"></a>
+## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-undo-redo@0.8.56...@ali/lowcode-plugin-undo-redo@1.0.6-0) (2020-09-02)
+
+
+### Bug Fixes
+
+* 🐛 Tag assets ([b460dcf](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b460dcf))
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+* remove vision dependency from plugin-undo-redo  ([08b93f9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/08b93f9))
+
+
 
 
 <a name="1.0.5-0"></a>
