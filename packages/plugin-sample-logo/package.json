@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-sample-logo",
-  "version": "0.8.31",
+  "version": "0.8.32",
   "description": "alibaba lowcode editor logo plugin",
   "files": [
     "es/",
@@ -20,7 +20,7 @@
   ],
   "author": "xiayang.xy",
   "dependencies": {
-    "@ali/lowcode-editor-core": "^0.8.34",
+    "@ali/lowcode-editor-core": "^0.8.35",
     "react": "^16.8.1"
   },
   "devDependencies": {
