@@ -123,6 +123,9 @@ export default {
       const simulatorUrl = [
         'https://dev.g.alicdn.com/ali-lowcode/ali-lowcode-engine/0.9.50/react-simulator-renderer.css',
         'https://dev.g.alicdn.com/ali-lowcode/ali-lowcode-engine/0.9.50/react-simulator-renderer.js',
+        //  for debug simulator
+        // 'http://localhost:3333/js/react-simulator-renderer.js', 
+   
       ];
       editor.set('simulatorUrl', simulatorUrl);
       // editor.set('renderEnv', 'rax');

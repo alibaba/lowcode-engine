@@ -48,18 +48,25 @@ export default class EventBindDialog extends Component<PluginProps> {
     // },
   ];
 
+  private bindEventName :''
+
   state: any = {
     visiable: false,
     setterName:'event-setter',
     selectedEventName: '',
     eventName: '',
+    bindEventName:'',
     paramStr:''
   };
 
   openDialog = (bindEventName: String) => {
+    this.bindEventName = bindEventName;
+
+    this.initEventName();
+
     this.setState({
       visiable: true,
-      eventName: bindEventName,
+      selectedEventName:''
     });
   };
 
@@ -68,9 +75,6 @@ export default class EventBindDialog extends Component<PluginProps> {
       visiable: false,
     });
   };
-
-
-
 
   componentDidMount() {
     const { editor, config } = this.props;
@@ -96,8 +100,7 @@ export default class EventBindDialog extends Component<PluginProps> {
   }
 
   initEventName = () => {
-    const { bindEventName } = this.state;
-    let eventName = bindEventName;
+    let eventName = this.bindEventName;
     this.eventList.map((item) => {
       if (item.name === eventName) {
         eventName = `${eventName}_new`;
