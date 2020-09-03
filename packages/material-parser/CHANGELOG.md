@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.7-0"></a>
+## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@1.0.6-0...@ali/lowcode-material-parser@1.0.7-0) (2020-09-02)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-material-parser
+
+<a name="1.0.6-0"></a>
+## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@1.0.5-0...@ali/lowcode-material-parser@1.0.6-0) (2020-09-02)
+
+
+### Features
+
+* add root field to material parser options ([c6724e9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c6724e9))
+
+
+
+
 <a name="1.0.5-0"></a>
 ## [1.0.5-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@1.0.4-0...@ali/lowcode-material-parser@1.0.5-0) (2020-08-20)
 
