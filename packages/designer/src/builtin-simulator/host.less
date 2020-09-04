@@ -30,12 +30,15 @@
   }
 
   &-device-iphonex { // 增加默认的小程序的壳
-    left: 50%;
+    left: calc(~"50% - 189px");
+    top: calc(~"50% - 406px");
     width: 378px;
-    transform: translateX(-50%);
+    max-height: 812px;
     background: url(https://img.alicdn.com/tfs/TB1b4DHilFR4u4jSZFPXXanzFXa-750-1574.png) no-repeat top;
     background-size: 378px 812px;
-    top: 8px;
+    border-radius: 44px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 36px 42px;
+    transform: scale(1);
     .@{scope}-canvas-viewport {
       width: auto;
       top: 50px;
