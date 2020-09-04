@@ -146,7 +146,9 @@ designer.addPropsReducer((props: any, node: Node) => {
       };
       const lifeCycles = props.lifeCycles;
       Object.keys(lifeCycleMap).forEach(key => {
-        lifeCycles[lifeCycleMap[key]] = lifeCycles[key];
+        if (lifeCycles[key]) {
+          lifeCycles[lifeCycleMap[key]] = lifeCycles[key];
+        }
       });
       return props;
     }
