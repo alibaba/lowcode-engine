@@ -10,8 +10,8 @@
   ],
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
-    "start": "../../node_modules/.bin/build-scripts start",
-    "build": "../../node_modules/.bin/build-scripts build",
+    "start": "build-scripts start",
+    "build": "build-scripts build",
     "prepublishOnly": "npm run build"
   },
   "repository": {
