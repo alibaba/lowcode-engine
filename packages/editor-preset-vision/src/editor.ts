@@ -183,19 +183,19 @@ function compatiableReducer(props: any) {
   if (!props || !isPlainObject(props)) {
     return props;
   }
-  if (isJSSlot(props)) {
-    return {
-      type: 'JSBlock',
-      value: {
-        componentName: 'Slot',
-        children: props.value,
-        props: {
-          slotTitle: props.title,
-          slotName: props.name,
-        },
-      },
-    };
-  }
+  // if (isJSSlot(props)) {
+  //   return {
+  //     type: 'JSBlock',
+  //     value: {
+  //       componentName: 'Slot',
+  //       children: props.value,
+  //       props: {
+  //         slotTitle: props.title,
+  //         slotName: props.name,
+  //       },
+  //     },
+  //   };
+  // }
   // 为了能降级到老版本，建议在后期版本去掉以下代码
   // if (isJSExpression(props) && !props.events) {
   //   return {
