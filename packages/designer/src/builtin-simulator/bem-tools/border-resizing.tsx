@@ -23,7 +23,7 @@ export default class BoxResizing extends Component<{ host: BuiltinSimulatorHost 
     if (doc.suspensed) {
       return null;
     }
-    const selection = doc.selection;
+    const { selection } = doc;
     return this.dragging ? selection.getTopNodes() : selection.getNodes();
   }
 
@@ -37,7 +37,7 @@ export default class BoxResizing extends Component<{ host: BuiltinSimulatorHost 
   }
 
   render() {
-    const selecting = this.selecting;
+    const { selecting } = this;
     if (!selecting || selecting.length < 1) {
       // DIRTY FIX, recore has a bug!
       return <Fragment />;
@@ -79,7 +79,7 @@ export class BoxResizingForNode extends Component<{ host: BuiltinSimulatorHost; 
   render() {
     const { instances } = this;
     const { node } = this.props;
-    const designer = this.host.designer;
+    const { designer } = this.host;
 
     if (!instances || instances.length < 1) {
       return null;
@@ -112,8 +112,11 @@ export class BoxResizingInstance extends Component<{
 }> {
   // private outline: any;
   private willUnbind: () => any;
+
   private outlineRight: any;
+
   private outlineLeft: any;
+
   private dragEngine: DragResizeEngine;
 
   constructor(props: any) {

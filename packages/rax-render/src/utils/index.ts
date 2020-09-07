@@ -34,7 +34,7 @@ export const debounce = _debounce;
 export const serialize = _serialize;
 export const jsonuri = _jsonuri;
 export {
- get, post, jsonp, mtop, request
+  get, post, jsonp, mtop, request,
 } from './request';
 
 const ReactIs = require('react-is');
@@ -103,7 +103,7 @@ export function isJSFunction(obj) {
 }
 export function isJSExpression(obj) {
   // 兼容两种写法，有js构造表达式的情况
-  const isJSExpressionObj =    obj && typeof obj === 'object' && EXPRESSION_TYPE.JSEXPRESSION === obj.type && typeof obj.value === 'string';
+  const isJSExpressionObj = obj && typeof obj === 'object' && EXPRESSION_TYPE.JSEXPRESSION === obj.type && typeof obj.value === 'string';
   const isJSExpressionStr = typeof obj === 'string' && EXPRESSION_REG.test(obj.trim());
   return isJSExpressionObj || isJSExpressionStr;
 }
@@ -205,8 +205,8 @@ export function getEnv() {
  */
 export function comboSkeletonConfig(defaultConfig = {}, customConfig) {
   const {
- skeleton, theme, addons, hooks, shortCuts, extensions, constants, utils, i18n
-} = customConfig || {};
+    skeleton, theme, addons, hooks, shortCuts, extensions, constants, utils, i18n,
+  } = customConfig || {};
 
   if (skeleton && skeleton.handler && typeof skeleton.handler === 'function') {
     return skeleton.handler({

@@ -124,7 +124,7 @@ let REVERSE_MAP: CtrlKeyMap;
  * programatically
  */
 for (let i = 1; i < 20; ++i) {
-  MAP[111 + i] = 'f' + i;
+  MAP[111 + i] = `f${ i}`;
 }
 
 /**
@@ -346,22 +346,28 @@ function fireCallback(callback: HotkeyCallback, e: KeyboardEvent, combo?: string
       sequence,
       selected,
     });
-  } catch(err) {
+  } catch (err) {
     console.error(err.message);
   }
 }
 
 export class Hotkey {
   private callBacks: HotkeyCallbacks = {};
+
   private directMap: HotkeyDirectMap = {};
+
   private sequenceLevels: SequenceLevels = {};
+
   private resetTimer = 0;
+
   private ignoreNextKeyup: boolean | string = false;
+
   private ignoreNextKeypress = false;
+
   private nextExpectedAction: boolean | string = false;
 
   mount(window: Window) {
-    const document = window.document;
+    const { document } = window;
     const handleKeyEvent = this.handleKeyEvent.bind(this);
     document.addEventListener('keypress', handleKeyEvent, false);
     document.addEventListener('keydown', handleKeyEvent, false);

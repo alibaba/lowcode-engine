@@ -24,6 +24,7 @@ export default class SlotSetter extends Component<{
       value: null,
     });
   };
+
   render() {
     const { value, onChange, supportParams } = this.props;
     if (!isJSSlot(value)) {

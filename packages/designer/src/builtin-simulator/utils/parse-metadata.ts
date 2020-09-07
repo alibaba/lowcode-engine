@@ -136,7 +136,7 @@ export function parseProps(component: any): PropConfig[] {
   Object.keys(propTypes).forEach(key => {
     const propTypeItem = propTypes[key];
     const defaultValue = defaultProps[key];
-    const lowcodeType = propTypeItem.lowcodeType;
+    const { lowcodeType } = propTypeItem;
     if (lowcodeType) {
       result[key] = {
         name: key,

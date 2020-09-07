@@ -4,7 +4,7 @@ import moment from 'moment';
 export default {
   Message,
   moment,
-  test: function(msg) {
+  test(msg) {
     this.Message.notice(msg);
-  }
+  },
 };

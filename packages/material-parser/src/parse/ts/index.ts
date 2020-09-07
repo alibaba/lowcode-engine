@@ -30,7 +30,7 @@ function getDocgenTypeHelper(
   type: ts.Type,
   skipRequired = false,
   parentIds: number[] = [],
-  isRequired: boolean = false,
+  isRequired = false,
 ): any {
   function isTuple(type: ts.Type) {
     // @ts-ignore use internal methods
@@ -62,14 +62,14 @@ function getDocgenTypeHelper(
   }
 
   function getShapeFromArray(symbolArr: ts.Symbol[], type: ts.Type) {
-    const shape: {
+    const shape: Array<{
       key:
-        | {
-            name: string;
-          }
-        | string;
+      | {
+        name: string;
+      }
+      | string;
       value: any;
-    }[] = symbolArr.map((prop) => {
+    }> = symbolArr.map((prop) => {
       const propType = checker.getTypeOfSymbolAtLocation(
         prop,
         // @ts-ignore
@@ -289,7 +289,7 @@ export default function parseTS(filePathOrPaths: string | string[], parserOpts: 
         const exportName = sym.meta && sym.meta.exportName;
         const meta = {
           subName: exportName ? name : '',
-          exportName: exportName ? exportName : name,
+          exportName: exportName || name,
         };
         if (docs.find((x) => isEqual(x.meta, meta))) {
           continue;

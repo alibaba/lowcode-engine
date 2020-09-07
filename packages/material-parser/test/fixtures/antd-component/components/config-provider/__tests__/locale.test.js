@@ -8,10 +8,9 @@ import TimePicker from '../../time-picker';
 import Modal from '../../modal';
 import Form from '../../form';
 
-const delay = (timeout = 0) =>
-  new Promise(resolve => {
-    setTimeout(resolve, timeout);
-  });
+const delay = (timeout = 0) => new Promise(resolve => {
+  setTimeout(resolve, timeout);
+});
 
 describe('ConfigProvider.Locale', () => {
   function $$(className) {
@@ -112,19 +111,18 @@ describe('ConfigProvider.Locale', () => {
   });
 
   describe('form validateMessages', () => {
-    const wrapperComponent = ({ validateMessages }) =>
-      mount(
-        <ConfigProvider locale={zhCN} form={{ validateMessages }}>
-          <Form initialValues={{ age: 18 }}>
-            <Form.Item name="test" label="姓名" rules={[{ required: true }]}>
-              <input />
-            </Form.Item>
-            <Form.Item name="age" label="年龄" rules={[{ type: 'number', len: 17 }]}>
-              <input />
-            </Form.Item>
-          </Form>
-        </ConfigProvider>,
-      );
+    const wrapperComponent = ({ validateMessages }) => mount(
+      <ConfigProvider locale={zhCN} form={{ validateMessages }}>
+        <Form initialValues={{ age: 18 }}>
+          <Form.Item name="test" label="姓名" rules={[{ required: true }]}>
+            <input />
+          </Form.Item>
+          <Form.Item name="age" label="年龄" rules={[{ type: 'number', len: 17 }]}>
+            <input />
+          </Form.Item>
+        </Form>
+      </ConfigProvider>,
+    );
 
     it('set locale zhCN', async () => {
       const wrapper = wrapperComponent({});

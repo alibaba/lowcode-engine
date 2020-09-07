@@ -22,10 +22,9 @@ interface BasicSection {
 
 const Codeout = ({ editor }: PluginProps) => {
   const handleSaveClick = () => {
-
     debugger;
 
-    let schema = editor.get('designer').project.getSchema();
+    const schema = editor.get('designer').project.getSchema();
     console.log(schema);
 
 

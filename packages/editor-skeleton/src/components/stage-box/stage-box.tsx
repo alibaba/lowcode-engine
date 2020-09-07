@@ -27,7 +27,9 @@ export default class StageBox extends Component<StageBoxProps> {
   static displayName = 'StageBox';
 
   private stageChain: StageChain;
+
   private willDetach: WillDetachMember[] = [];
+
   private shell: HTMLElement | null;
 
   constructor(props: StageBoxProps) {
@@ -45,7 +47,7 @@ export default class StageBox extends Component<StageBoxProps> {
   }
 
   componentDidMount() {
-    const shell = this.shell;
+    const { shell } = this;
 
     /**
      * 向上层递归寻找 target

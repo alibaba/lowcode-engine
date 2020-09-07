@@ -3,6 +3,7 @@ import { Radio, Menu, Table, Icon, Dialog } from '@alifd/next';
 import nativeEvents from './native-events';
 
 import './index.scss';
+
 const { SubMenu, Item, Group, Divider } = Menu;
 const RadioGroup = Radio.Group;
 
@@ -18,7 +19,7 @@ const DEFINITION_EVENT_TYPE = {
   LIFE_CYCLE_EVENT: 'lifeCycleEvent',
 };
 
-const SETTER_NAME = 'event-setter'
+const SETTER_NAME = 'event-setter';
 
 export default class EventsSetter extends Component<{
   value: any[];
@@ -57,19 +58,17 @@ export default class EventsSetter extends Component<{
   //   return null;
   // }
 
-  private bindEventName:String;
+  private bindEventName:string;
 
   componentDidMount() {
-
     console.log(this.state.eventDataList);
 
-    const {editor} = this.props.field;
+    const { editor } = this.props.field;
     this.initEventBtns();
     this.initEventList();
-    editor.on(`${SETTER_NAME}.bindEvent`,(relatedEventName,paramStr)=>{
-      this.bindEvent(relatedEventName,paramStr);
-    })
-
+    editor.on(`${SETTER_NAME}.bindEvent`, (relatedEventName, paramStr) => {
+      this.bindEvent(relatedEventName, paramStr);
+    });
   }
 
   /**
@@ -156,7 +155,7 @@ export default class EventsSetter extends Component<{
     }
   }
 
-  checkEventListStatus = (eventList: Array, eventType: String) => {
+  checkEventListStatus = (eventList: any[], eventType: string) => {
     const { eventDataList } = this.state;
     if (
       eventType === DEFINITION_EVENT_TYPE.EVENTS ||
@@ -205,7 +204,7 @@ export default class EventsSetter extends Component<{
         </div>
         <div className="event-cell" style={{ marginTop: '8px' }}>
           <Icon type="attachment" size="small" className="related-icon" />
-          <span className="related-event-name" onClick={()=>this.onRelatedEventNameClick(record.relatedEventName)}>
+          <span className="related-event-name" onClick={() => this.onRelatedEventNameClick(record.relatedEventName)}>
             {record.relatedEventName || ''}
           </span>
         </div>
@@ -216,7 +215,7 @@ export default class EventsSetter extends Component<{
   /**
    * 渲染事件操作项
    */
-  renderEventOperateCell = (eventName: String) => {
+  renderEventOperateCell = (eventName: string) => {
     return (
       <div>
         <Icon
@@ -234,7 +233,7 @@ export default class EventsSetter extends Component<{
     );
   };
 
-  updateEventListStatus = (eventName: String, unDisabled: boolean) => {
+  updateEventListStatus = (eventName: string, unDisabled: boolean) => {
     const { eventList, nativeEventList, lifeCycleEventList } = this.state;
     eventList.map(item => {
       if (item.name === eventName) {
@@ -264,8 +263,7 @@ export default class EventsSetter extends Component<{
   };
 
 
-
-  onEventMenuClick = (eventName: String) => {
+  onEventMenuClick = (eventName: string) => {
     const { selectType, eventDataList } = this.state;
     eventDataList.push({
       type: selectType,
@@ -281,22 +279,22 @@ export default class EventsSetter extends Component<{
     this.openDialog(eventName);
   };
 
-  onRelatedEventNameClick = (eventName:String) => {
-    const {editor} =  this.props.field;
+  onRelatedEventNameClick = (eventName:string) => {
+    const { editor } = this.props.field;
 
     editor.get('skeleton').getPanel('sourceEditor').show();
 
-    setTimeout(()=>{
-      editor.emit('sourceEditor.focusByFunction',{
-        functionName:eventName
-      })
-    },300)
+    setTimeout(() => {
+      editor.emit('sourceEditor.focusByFunction', {
+        functionName: eventName,
+      });
+    }, 300);
 
 
     // editor.emit('sourceEditor.focusByFunction',{
     //   functionName:eventName
     // })
-  }
+  };
 
   closeEventMenu = () => {
     if (this.state.selectType !== null) {
@@ -306,7 +304,7 @@ export default class EventsSetter extends Component<{
     }
   };
 
-  openDeleteEventDialog = (eventName: String) => {
+  openDeleteEventDialog = (eventName: string) => {
     this.deleteEvent(eventName);
     // Dialog.confirm({
     //   title: '删除事件',
@@ -315,8 +313,8 @@ export default class EventsSetter extends Component<{
     // });
   };
 
-  deleteEvent = (eventName: String) => {
-    const { eventDataList,eventList} = this.state;
+  deleteEvent = (eventName: string) => {
+    const { eventDataList, eventList } = this.state;
     eventDataList.map((item, index) => {
       if (item.name === eventName) {
         eventDataList.splice(index, 1);
@@ -326,43 +324,43 @@ export default class EventsSetter extends Component<{
     this.setState({
       eventDataList,
     });
-    this.props.onChange({eventDataList,eventList});
+    this.props.onChange({ eventDataList, eventList });
     this.updateEventListStatus(eventName, true);
   };
 
-  openDialog = (bindEventName: String) => {
-    const {editor} = this.props.field;
-    const {eventDataList} = this.state;
+  openDialog = (bindEventName: string) => {
+    const { editor } = this.props.field;
+    const { eventDataList } = this.state;
     let paramStr;
-    eventDataList.map((item)=>{
-      if (item.name == bindEventName){
+    eventDataList.map((item) => {
+      if (item.name == bindEventName) {
         paramStr = item.paramStr;
       }
-    })
+    });
     this.bindEventName = bindEventName;
-    editor.emit('eventBindDialog.openDialog',bindEventName,SETTER_NAME,paramStr);
+    editor.emit('eventBindDialog.openDialog', bindEventName, SETTER_NAME, paramStr);
   };
 
 
-  bindEvent = (relatedEventName: String,paramStr:String) => {
-    const {eventDataList,eventList} = this.state;
+  bindEvent = (relatedEventName: string, paramStr:string) => {
+    const { eventDataList, eventList } = this.state;
     eventDataList.map(item => {
       if (item.name === this.bindEventName) {
         item.relatedEventName = relatedEventName;
-        if (paramStr){
-          item.paramStr = paramStr
+        if (paramStr) {
+          item.paramStr = paramStr;
         }
       }
     });
 
     this.setState({
-      eventDataList
-    })
+      eventDataList,
+    });
 
 
-    this.props.onChange({eventDataList,eventList});
+    this.props.onChange({ eventDataList, eventList });
 
-    //this.closeDialog();
+    // this.closeDialog();
   };
 
   render() {
@@ -374,15 +372,15 @@ export default class EventsSetter extends Component<{
       selectType,
       eventDataList,
     } = this.state;
-    const {editor} = this.props.field;
-    let showEventList =
+    const { editor } = this.props.field;
+    const showEventList =
       lifeCycleEventList.length > 0 ? lifeCycleEventList : eventList;
     return (
       <div className="lc-block-setter event-body" onClick={this.closeEventMenu}>
 
         <div className="event-title">
           {
-             eventBtns.length>1 ?<span>点击选择事件类型</span>:<span>点击绑定事件</span>
+             eventBtns.length > 1 ? <span>点击选择事件类型</span> : <span>点击绑定事件</span>
           }
         </div>
 

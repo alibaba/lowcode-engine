@@ -8,7 +8,7 @@ import { hotkey as Hotkey, monitor } from '@ali/lowcode-editor-core';
 import { createElement } from 'react';
 import { VE_EVENTS as EVENTS, VE_HOOKS as HOOKS, VERSION as Version } from './base/const';
 import Bus from './bus';
-import { skeleton } from './editor';
+import { skeleton, designer, editor } from './editor';
 import { Workbench } from '@ali/lowcode-editor-skeleton';
 import Panes from './panes';
 import Exchange from './exchange';
@@ -24,7 +24,7 @@ import Env from './env';
 import DragEngine from './drag-engine';
 import Viewport from './viewport';
 import Project from './project';
-import { designer, editor } from './editor';
+
 import Symbols from './symbols';
 
 import './vision.less';
@@ -162,6 +162,6 @@ const version = '6.0.0(LowcodeEngine 0.9.3)';
 
 console.log(
   `%c VisionEngine %c v${version} `,
-  "padding: 2px 1px; border-radius: 3px 0 0 3px; color: #fff; background: #606060;font-weight:bold;",
-  "padding: 2px 1px; border-radius: 0 3px 3px 0; color: #fff; background: #42c02e;font-weight:bold;"
+  'padding: 2px 1px; border-radius: 3px 0 0 3px; color: #fff; background: #606060;font-weight:bold;',
+  'padding: 2px 1px; border-radius: 0 3px 3px 0; color: #fff; background: #42c02e;font-weight:bold;',
 );

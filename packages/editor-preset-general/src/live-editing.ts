@@ -29,7 +29,7 @@ export function liveEditingRule(target: EditingTarget) {
     return null;
   }
 
-  const innerText = targetElement.innerText;
+  const { innerText } = targetElement;
   const propTarget = ['title', 'label', 'text', 'content', 'children'].find(prop => {
     return equalText(getText(node, prop), innerText);
   });
@@ -48,7 +48,7 @@ function equalText(v: any, innerText: string) {
   if (typeof v !== 'string') {
     return false;
   }
-  return v.trim() === innerText
+  return v.trim() === innerText;
 }
 
 export const liveEditingSaveHander: SaveHandler = {
@@ -72,8 +72,8 @@ export const liveEditingSaveHander: SaveHandler = {
     } else {
       prop.setValue(data);
     }
-  }
-}
+  },
+};
 // TODO:
 // 非文本编辑
 //  国际化数据，改变当前

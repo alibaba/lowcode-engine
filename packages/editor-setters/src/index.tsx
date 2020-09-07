@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { registerSetter } from '@ali/lowcode-editor-core';
-import { isJSExpression,isJSFunction } from '@ali/lowcode-types';
+import { isJSExpression, isJSFunction } from '@ali/lowcode-types';
 import { DatePicker, TimePicker, Input, Radio, Select, Switch, NumberPicker } from '@alifd/next';
 import ExpressionSetter from './expression-setter';
 import ColorSetter from './color-setter';
@@ -80,7 +80,7 @@ class StringTimePicker extends Component {
   }
 }
 
-const VariableSetter ={
+const VariableSetter = {
   component: ExpressionSetter,
   condition: (field: any) => {
     const v = field.getValue();
@@ -99,7 +99,7 @@ const FunctionBindSetter = {
     const v = field.getValue();
     return v == isJSFunction(v);
   },
-}
+};
 
 const builtinSetters: any = {
   StringSetter,
@@ -120,7 +120,7 @@ const builtinSetters: any = {
   JsonSetter,
   StyleSetter,
   IconSetter,
-  FunctionSetter:FunctionBindSetter
+  FunctionSetter: FunctionBindSetter,
 };
 
 registerSetter(builtinSetters);

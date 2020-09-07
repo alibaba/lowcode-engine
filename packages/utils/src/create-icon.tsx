@@ -16,10 +16,10 @@ export function createIcon(icon?: IconType | null, props?: object): ReactNode {
     return <Icon type={icon} {...props} />;
   }
   if (isValidElement(icon)) {
-    return cloneElement(icon, {...props});
+    return cloneElement(icon, { ...props });
   }
   if (isReactComponent(icon)) {
-    return createElement(icon, {...props});
+    return createElement(icon, { ...props });
   }
 
   return <Icon {...icon} {...props} />;

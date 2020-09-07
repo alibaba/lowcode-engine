@@ -9,44 +9,49 @@ const { makeChain } = func;
 // 注意：disable 不会触发事件，请使用resetUIState还原状态
 /* eslint-disable react/prop-types */
 class UIState extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-        ['_onUIFocus', '_onUIBlur'].forEach(item => {
-            this[item] = this[item].bind(this);
-        });
-    }
-    // base 事件绑定的元素
-    getStateElement(base) {
-        const { onFocus, onBlur } = this.props;
-        return React.cloneElement(base, {
-            onFocus: makeChain(this._onUIFocus, onFocus),
-            onBlur: makeChain(this._onUIBlur, onBlur),
-        });
-    }
-    // 获取状态classname
-    getStateClassName() {
-        const { focused } = this.state;
-        return classnames({
-            focused,
-        });
-    }
-    // 复原状态
-    resetUIState() {
-        this.setState({
-            focused: false,
-        });
-    }
-    _onUIFocus() {
-        this.setState({
-            focused: true,
-        });
-    }
-    _onUIBlur() {
-        this.setState({
-            focused: false,
-        });
-    }
+  constructor(props) {
+    super(props);
+    this.state = {};
+    ['_onUIFocus', '_onUIBlur'].forEach(item => {
+      this[item] = this[item].bind(this);
+    });
+  }
+
+  // base 事件绑定的元素
+  getStateElement(base) {
+    const { onFocus, onBlur } = this.props;
+    return React.cloneElement(base, {
+      onFocus: makeChain(this._onUIFocus, onFocus),
+      onBlur: makeChain(this._onUIBlur, onBlur),
+    });
+  }
+
+  // 获取状态classname
+  getStateClassName() {
+    const { focused } = this.state;
+    return classnames({
+      focused,
+    });
+  }
+
+  // 复原状态
+  resetUIState() {
+    this.setState({
+      focused: false,
+    });
+  }
+
+  _onUIFocus() {
+    this.setState({
+      focused: true,
+    });
+  }
+
+  _onUIBlur() {
+    this.setState({
+      focused: false,
+    });
+  }
 }
 
 export default UIState;

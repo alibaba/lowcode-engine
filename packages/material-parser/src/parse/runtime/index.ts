@@ -40,7 +40,7 @@ function isComponent(obj: any) {
   return typeof obj === 'function' && (obj.hasOwnProperty('propTypes') || obj.hasOwnProperty('defaultProps'));
 }
 
-export default function(filePath: string) {
+export default function (filePath: string) {
   // const { filePath } = arg;
   // const modulePath = path.resolve(workDir, 'node_modules', 'parse-prop-types');
   // const parsePropTypes = require(modulePath).default;
@@ -60,15 +60,13 @@ export default function(filePath: string) {
         });
       }
     });
-  } else {
-    if (isComponent(Com)) {
-      components.push({
-        component: Com,
-        meta: {
-          exportName: 'default',
-        },
-      });
-    }
+  } else if (isComponent(Com)) {
+    components.push({
+      component: Com,
+      meta: {
+        exportName: 'default',
+      },
+    });
   }
 
   // dps

@@ -7,6 +7,7 @@ import { EventEmitter } from 'events';
 
 export class NodeChildren {
   @obx.val private children: Node[];
+
   private emitter = new EventEmitter();
 
   constructor(readonly owner: ParentalNode, data: NodeData | NodeData[]) {
@@ -63,7 +64,7 @@ export class NodeChildren {
 
   /**
    * @deprecated
-   * @param nodes 
+   * @param nodes
    */
   concat(nodes: Node[]) {
     return this.children.concat(nodes);
@@ -107,7 +108,7 @@ export class NodeChildren {
     }
     this.emitter.emit('change');
     if (useMutator) {
-      this.reportModified(node, this.owner, {type: 'remove', removeIndex: i, removeNode: node});
+      this.reportModified(node, this.owner, { type: 'remove', removeIndex: i, removeNode: node });
     }
     return false;
   }
@@ -116,7 +117,7 @@ export class NodeChildren {
    * 插入一个节点，返回新长度
    */
   insert(node: Node, at?: number | null, useMutator = true): void {
-    const children = this.children;
+    const { children } = this;
     let index = at == null || at === -1 ? children.length : at;
 
     const i = children.indexOf(node);
@@ -159,7 +160,7 @@ export class NodeChildren {
       }
     }
     if (node.prevSibling && node.nextSibling) {
-      const conditionGroup = node.prevSibling.conditionGroup;
+      const { conditionGroup } = node.prevSibling;
       // insert at condition group
       if (conditionGroup && conditionGroup === node.nextSibling.conditionGroup) {
         node.setConditionGroup(conditionGroup);
@@ -200,7 +201,7 @@ export class NodeChildren {
    */
   [Symbol.iterator](): { next(): { value: Node } } {
     let index = 0;
-    const children = this.children;
+    const { children } = this;
     const length = children.length || 0;
     return {
       next() {
@@ -291,6 +292,7 @@ export class NodeChildren {
   }
 
   private purged = false;
+
   /**
    * 回收销毁
    */

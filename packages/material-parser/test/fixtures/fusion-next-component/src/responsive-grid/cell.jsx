@@ -8,35 +8,36 @@ const { pickOthers } = obj;
  * ResponsiveGrid.Cell
  */
 class Cell extends Component {
-    static _typeMark = 'responsive_grid_cell';
-    static propTypes = {
-        device: PropTypes.oneOf(['phone', 'tablet', 'desktop']),
-        /**
+  static _typeMark = 'responsive_grid_cell';
+
+  static propTypes = {
+    device: PropTypes.oneOf(['phone', 'tablet', 'desktop']),
+    /**
          * 横向，占据几列
          */
-        colSpan: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
-        /**
+    colSpan: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+    /**
          * 纵向，占据几行
          */
-        rowSpan: PropTypes.number,
-        /**
+    rowSpan: PropTypes.number,
+    /**
          * 设置标签类型
          */
-        component: PropTypes.elementType,
-    };
+    component: PropTypes.elementType,
+  };
 
-    static defaultProps = {
-        component: 'div',
-        device: 'desktop',
-    };
+  static defaultProps = {
+    component: 'div',
+    device: 'desktop',
+  };
 
-    render() {
-        const { component: View, children } = this.props;
+  render() {
+    const { component: View, children } = this.props;
 
-        const others = pickOthers(Object.keys(Cell.propTypes), this.props);
+    const others = pickOthers(Object.keys(Cell.propTypes), this.props);
 
-        return <View {...others}>{children}</View>;
-    }
+    return <View {...others}>{children}</View>;
+  }
 }
 
 export default ConfigProvider.config(Cell);

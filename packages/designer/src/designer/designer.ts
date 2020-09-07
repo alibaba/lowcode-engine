@@ -44,9 +44,13 @@ export interface DesignerProps {
 
 export class Designer {
   readonly dragon = new Dragon(this);
+
   readonly activeTracker = new ActiveTracker();
+
   readonly detecting = new Detecting();
+
   readonly project: Project;
+
   readonly editor: IEditor;
 
   get currentDocument() {
@@ -173,7 +177,7 @@ export class Designer {
       }
       this.postEvent('selection.change', this.currentSelection);
       if (this.currentSelection) {
-        const currentSelection = this.currentSelection;
+        const { currentSelection } = this;
         selectionDispose = currentSelection.onSelectionChange(() => {
           this.postEvent('selection.change', currentSelection);
         });
@@ -187,7 +191,7 @@ export class Designer {
       }
       this.postEvent('history.change', this.currentHistory);
       if (this.currentHistory) {
-        const currentHistory = this.currentHistory;
+        const { currentHistory } = this;
         historyDispose = currentHistory.onStateChange(() => {
           this.postEvent('history.change', currentHistory);
         });
@@ -217,6 +221,7 @@ export class Designer {
   get dropLocation() {
     return this._dropLocation;
   }
+
   /**
    * 创建插入位置，考虑放到 dragon 中
    */
@@ -246,6 +251,7 @@ export class Designer {
   }
 
   private oobxList: OffsetObserver[] = [];
+
   createOffsetObserver(nodeInstance: INodeSelector): OffsetObserver | null {
     const oobx = createOffsetObserver(nodeInstance);
     this.clearOobxList();
@@ -302,6 +308,7 @@ export class Designer {
   }
 
   private props?: DesignerProps;
+
   setProps(nextProps: DesignerProps) {
     const props = this.props ? { ...this.props, ...nextProps } : nextProps;
     if (this.props) {
@@ -380,6 +387,7 @@ export class Designer {
   }
 
   @obx.val private _componentMetasMap = new Map<string, ComponentMeta>();
+
   private _lostComponentMetasMap = new Map<string, ComponentMeta>();
 
   private buildComponentMetasMap(metas: ComponentMetadata[]) {
@@ -451,6 +459,7 @@ export class Designer {
   }
 
   private propsReducers = new Map<TransformStage, PropsReducer[]>();
+
   transformProps(props: CompositeObject | PropsList, node: Node, stage: TransformStage) {
     if (Array.isArray(props)) {
       // current not support, make this future
@@ -464,7 +473,7 @@ export class Designer {
 
     return reducers.reduce((xprops, reducer) => {
       try {
-        return reducer(xprops, node)
+        return reducer(xprops, node);
       } catch (e) {
         // todo: add log
         console.warn(e);

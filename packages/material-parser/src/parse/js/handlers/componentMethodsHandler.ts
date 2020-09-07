@@ -8,6 +8,8 @@
  */
 
 import { namedTypes as t } from 'ast-types';
+import getMethodDocumentation from '../utils/getMethodDocumentation';
+
 const {
   getMemberValuePath,
   isReactComponentClass,
@@ -15,7 +17,6 @@ const {
   resolveToValue,
   match,
 } = require('react-docgen').utils;
-import getMethodDocumentation from '../utils/getMethodDocumentation';
 const { traverseShallow } = require('react-docgen/dist/utils/traverse');
 /**
  * The following values/constructs are considered methods:
@@ -40,12 +41,12 @@ function findAssignedMethods(scope: any, idPath: any) {
     return results;
   }
 
-  const name = idPath.node.name;
+  const { name } = idPath.node;
   const idScope = idPath.scope.lookup(idPath.node.name);
 
   traverseShallow(scope.path, {
-    visitAssignmentExpression: function(path: any) {
-      const node = path.node;
+    visitAssignmentExpression(path: any) {
+      const { node } = path;
       if (
         match(node.left, {
           type: 'MemberExpression',

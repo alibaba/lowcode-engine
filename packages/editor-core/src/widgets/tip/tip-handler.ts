@@ -7,8 +7,11 @@ export interface TipOptions extends TipConfig {
 
 class TipHandler {
   tip: TipOptions | null = null;
+
   private showDelay: number | null = null;
+
   private hideDelay: number | null = null;
+
   private emitter = new EventEmitter();
 
   setTarget(target: HTMLElement) {
@@ -107,7 +110,7 @@ function findTip(target: HTMLElement | null): TipOptions | null {
 
     while (child) {
       if (child.dataset && child.dataset.role === 'tip') {
-        const tipId = child.dataset.tipId;
+        const { tipId } = child.dataset;
         if (!tipId) {
           return null;
         }

@@ -105,15 +105,15 @@ export default class Col extends React.Component<ColProps, {}> {
             mergedStyle = {
               ...(gutter[0]! > 0
                 ? {
-                    paddingLeft: gutter[0]! / 2,
-                    paddingRight: gutter[0]! / 2,
-                  }
+                  paddingLeft: gutter[0]! / 2,
+                  paddingRight: gutter[0]! / 2,
+                }
                 : {}),
               ...(gutter[1]! > 0
                 ? {
-                    paddingTop: gutter[1]! / 2,
-                    paddingBottom: gutter[1]! / 2,
-                  }
+                  paddingTop: gutter[1]! / 2,
+                  paddingBottom: gutter[1]! / 2,
+                }
                 : {}),
               ...mergedStyle,
             };

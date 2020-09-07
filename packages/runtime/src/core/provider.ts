@@ -115,17 +115,29 @@ export interface IProvider {
 
 export default class Provider implements IProvider {
   private components: IComponents = {};
+
   private utils: IUtils = {};
+
   private constants: IConstants = {};
+
   private routes: IRouterConfig | null = null;
+
   private layout: ILayoutConfig | null = null;
+
   private componentsMap: IComponentMap[] = [];
+
   private history: HistoryMode = 'hash';
+
   private containerId = '';
+
   private i18n: I18n | null = null;
+
   private homePage = '';
+
   private lazyElementsMap: { [key: string]: any } = {};
+
   private sectionalRender = false;
+
   private emitter: EventEmitter = new EventEmitter();
 
   constructor() {

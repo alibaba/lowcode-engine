@@ -8,6 +8,7 @@ export const PopupContext = createContext<PopupPipe>({} as any);
 
 export class PopupPipe {
   private emitter = new EventEmitter();
+
   private currentId?: string;
 
   create(props?: object): { send: (content: ReactNode, title: ReactNode) => void; show: (target: Element) => void } {
@@ -71,7 +72,7 @@ export default class PopupService extends Component<{ popupPipe?: PopupPipe; act
     return (
       <PopupContext.Provider value={this.popupPipe}>
         {children}
-        <PopupContent key={'pop' + actionKey} safeId={safeId} />
+        <PopupContent key={`pop${ actionKey}`} safeId={safeId} />
       </PopupContext.Provider>
     );
   }
@@ -79,6 +80,7 @@ export default class PopupService extends Component<{ popupPipe?: PopupPipe; act
 
 export class PopupContent extends PureComponent<{ safeId?: string }> {
   static contextType = PopupContext;
+
   state: any = {
     visible: false,
     pos: {},
@@ -125,7 +127,7 @@ export class PopupContent extends PureComponent<{ safeId?: string }> {
         safeNode={id}
         visible={visible}
         style={{ width }}
-        onVisibleChange={(visible,type) => {
+        onVisibleChange={(visible, type) => {
           if (avoidLaterHidden) {
             return;
           }

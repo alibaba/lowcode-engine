@@ -9,10 +9,12 @@ const debug = Debug('renderer:temp');
 
 export default class TempRenderer extends BaseRenderer {
   static dislayName = 'temp-renderer';
+
   static propTypes = {
     __ctx: PropTypes.object,
     __schema: PropTypes.object,
   };
+
   static defaultProps = {
     __ctx: {},
     __schema: {},
@@ -28,7 +30,7 @@ export default class TempRenderer extends BaseRenderer {
   componentDidMount() {
     const ctx = this.props.__ctx;
     if (!ctx) return;
-    const setState = ctx.setState;
+    const { setState } = ctx;
     this.cacheSetState = setState;
     ctx.setState = (...args) => {
       setState.call(ctx, ...args);
@@ -36,9 +38,11 @@ export default class TempRenderer extends BaseRenderer {
     };
     debug(`temp.componentDidMount - ${this.props.__schema.fileName}`);
   }
+
   componentDidUpdate(prevProps, prevState, snapshot) {
     debug(`temp.componentDidUpdate - ${this.props.__schema.fileName}`);
   }
+
   componentWillUnmount() {
     const ctx = this.props.__ctx;
     if (!ctx || !this.cacheSetState) return;
@@ -46,6 +50,7 @@ export default class TempRenderer extends BaseRenderer {
     delete this.cacheSetState;
     debug(`temp.componentWillUnmount - ${this.props.__schema.fileName}`);
   }
+
   componentDidCatch(e) {
     console.warn(e);
     debug(`temp.componentDidCatch - ${this.props.__schema.fileName}`);

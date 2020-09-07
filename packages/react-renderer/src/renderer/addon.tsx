@@ -10,17 +10,19 @@ const debug = Debug('renderer:addon');
 
 export default class AddonRenderer extends BaseRenderer {
   static dislayName = 'addon-renderer';
+
   static propTypes = {
     config: PropTypes.object,
     __schema: PropTypes.object,
   };
+
   static defaultProps = {
     config: {},
     __schema: {},
   };
 
   static getDerivedStateFromProps(props, state) {
-    debug(`comp.getDerivedStateFromProps`);
+    debug('comp.getDerivedStateFromProps');
     const func = props.__schema.lifeCycles && props.__schema.lifeCycles.getDerivedStateFromProps;
     if (func) {
       return func(props, state);
@@ -55,14 +57,17 @@ export default class AddonRenderer extends BaseRenderer {
     super.getSnapshotBeforeUpdate(...arguments);
     debug(`addon.getSnapshotBeforeUpdate - ${this.props.__schema.fileName}`);
   }
+
   async componentDidMount() {
     super.componentDidMount(...arguments);
     debug(`addon.componentDidMount - ${this.props.__schema.fileName}`);
   }
+
   async componentDidUpdate() {
     super.componentDidUpdate(...arguments);
     debug(`addon.componentDidUpdate - ${this.props.__schema.fileName}`);
   }
+
   async componentWillUnmount() {
     super.componentWillUnmount(...arguments);
     // 注销插件
@@ -72,6 +77,7 @@ export default class AddonRenderer extends BaseRenderer {
     }
     debug(`addon.componentWillUnmount - ${this.props.__schema.fileName}`);
   }
+
   async componentDidCatch(e) {
     super.componentDidCatch(...arguments);
     debug(`addon.componentDidCatch - ${this.props.__schema.fileName}`);

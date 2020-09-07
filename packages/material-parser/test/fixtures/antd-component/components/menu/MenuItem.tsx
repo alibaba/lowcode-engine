@@ -9,8 +9,8 @@ import { SiderContext, SiderContextProps } from '../layout/Sider';
 
 export interface MenuItemProps
   extends Omit<
-    React.HTMLAttributes<HTMLLIElement>,
-    'title' | 'onClick' | 'onMouseEnter' | 'onMouseLeave'
+  React.HTMLAttributes<HTMLLIElement>,
+  'title' | 'onClick' | 'onMouseEnter' | 'onMouseLeave'
   > {
   rootPrefixCls?: string;
   disabled?: boolean;

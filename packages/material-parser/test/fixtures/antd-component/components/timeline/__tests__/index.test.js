@@ -6,15 +6,14 @@ import rtlTest from '../../../tests/shared/rtlTest';
 
 const { Item } = TimeLine;
 
-const wrapperFactory = (timeLineProps = {}, labelItems) =>
-  mount(
-    <TimeLine type="editable-card" {...timeLineProps}>
-      <Item key="1">foo</Item>
-      <Item key="2">bar</Item>
-      <Item key="3">baz</Item>
-      {labelItems}
-    </TimeLine>,
-  );
+const wrapperFactory = (timeLineProps = {}, labelItems) => mount(
+  <TimeLine type="editable-card" {...timeLineProps}>
+    <Item key="1">foo</Item>
+    <Item key="2">bar</Item>
+    <Item key="3">baz</Item>
+    {labelItems}
+  </TimeLine>,
+);
 
 describe('TimeLine', () => {
   mountTest(TimeLine);

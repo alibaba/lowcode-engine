@@ -24,8 +24,8 @@ function collectFilterStates<RecordType>(
   columns: ColumnsType<RecordType>,
   init: boolean,
   pos?: string,
-): FilterState<RecordType>[] {
-  let filterStates: FilterState<RecordType>[] = [];
+): Array<FilterState<RecordType>> {
+  let filterStates: Array<FilterState<RecordType>> = [];
 
   (columns || []).forEach((column, index) => {
     const columnPos = getColumnPos(index, pos);
@@ -61,7 +61,7 @@ function injectFilter<RecordType>(
   prefixCls: string,
   dropdownPrefixCls: string,
   columns: ColumnsType<RecordType>,
-  filterStates: FilterState<RecordType>[],
+  filterStates: Array<FilterState<RecordType>>,
   triggerFilter: (filterState: FilterState<RecordType>) => void,
   getPopupContainer: GetPopupContainer | undefined,
   locale: TableLocale,
@@ -115,7 +115,7 @@ function injectFilter<RecordType>(
   });
 }
 
-function generateFilterInfo<RecordType>(filterStates: FilterState<RecordType>[]) {
+function generateFilterInfo<RecordType>(filterStates: Array<FilterState<RecordType>>) {
   const currentFilters: Record<string, Key[] | null> = {};
 
   filterStates.forEach(({ key, filteredKeys }) => {
@@ -126,7 +126,7 @@ function generateFilterInfo<RecordType>(filterStates: FilterState<RecordType>[])
 }
 
 function flattenKeys(filters?: ColumnFilterItem[]) {
-  let keys: (string | number | boolean)[] = [];
+  let keys: Array<string | number | boolean> = [];
   (filters || []).forEach(({ value, children }) => {
     keys.push(value);
     if (children) {
@@ -138,7 +138,7 @@ function flattenKeys(filters?: ColumnFilterItem[]) {
 
 export function getFilterData<RecordType>(
   data: RecordType[],
-  filterStates: FilterState<RecordType>[],
+  filterStates: Array<FilterState<RecordType>>,
 ) {
   return filterStates.reduce((currentData, filterState) => {
     const {
@@ -146,14 +146,12 @@ export function getFilterData<RecordType>(
       filteredKeys,
     } = filterState;
     if (onFilter && filteredKeys && filteredKeys.length) {
-      return currentData.filter(record =>
-        filteredKeys.some(key => {
-          const keys = flattenKeys(filters);
-          const keyIndex = keys.findIndex(k => String(k) === String(key));
-          const realKey = keyIndex !== -1 ? keys[keyIndex] : key;
-          return onFilter(realKey, record);
-        }),
-      );
+      return currentData.filter(record => filteredKeys.some(key => {
+        const keys = flattenKeys(filters);
+        const keyIndex = keys.findIndex(k => String(k) === String(key));
+        const realKey = keyIndex !== -1 ? keys[keyIndex] : key;
+        return onFilter(realKey, record);
+      }));
     }
     return currentData;
   }, data);
@@ -167,7 +165,7 @@ interface FilterConfig<RecordType> {
   locale: TableLocale;
   onFilterChange: (
     filters: Record<string, Key[] | null>,
-    filterStates: FilterState<RecordType>[],
+    filterStates: Array<FilterState<RecordType>>,
   ) => void;
   getPopupContainer?: GetPopupContainer;
 }
@@ -181,15 +179,15 @@ function useFilter<RecordType>({
   getPopupContainer,
   locale: tableLocale,
 }: FilterConfig<RecordType>): [
-  TransformColumns<RecordType>,
-  FilterState<RecordType>[],
-  () => Record<string, Key[] | null>,
-] {
+    TransformColumns<RecordType>,
+    Array<FilterState<RecordType>>,
+    () => Record<string, Key[] | null>,
+  ] {
   const mergedColumns = React.useMemo(() => {
     return columns || convertChildrenToColumns(children);
   }, [children, columns]);
 
-  const [filterStates, setFilterStates] = React.useState<FilterState<RecordType>[]>(
+  const [filterStates, setFilterStates] = React.useState<Array<FilterState<RecordType>>>(
     collectFilterStates(mergedColumns, true),
   );
 
@@ -215,16 +213,15 @@ function useFilter<RecordType>({
     onFilterChange(generateFilterInfo(newFilterStates), newFilterStates);
   };
 
-  const transformColumns = (innerColumns: ColumnsType<RecordType>) =>
-    injectFilter(
-      prefixCls,
-      dropdownPrefixCls,
-      innerColumns,
-      mergedFilterStates,
-      triggerFilter,
-      getPopupContainer,
-      tableLocale,
-    );
+  const transformColumns = (innerColumns: ColumnsType<RecordType>) => injectFilter(
+    prefixCls,
+    dropdownPrefixCls,
+    innerColumns,
+    mergedFilterStates,
+    triggerFilter,
+    getPopupContainer,
+    tableLocale,
+  );
 
   return [transformColumns, mergedFilterStates, getFilters];
 }

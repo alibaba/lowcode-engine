@@ -47,7 +47,7 @@ const SamplePreview = ({ editor }: PluginProps) => {
       });
       setVisible(true);
     }
-  };
+  }
 
   function handleClose() {
     setVisible(false);

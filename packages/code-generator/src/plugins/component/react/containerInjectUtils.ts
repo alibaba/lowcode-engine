@@ -10,7 +10,7 @@ import {
 
 type PluginConfig = {
   fileType: string;
-}
+};
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
   const cfg: PluginConfig = {
@@ -27,7 +27,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       type: ChunkType.STRING,
       fileType: cfg.fileType,
       name: CLASS_DEFINE_CHUNK_NAME.ConstructorContent,
-      content: `this.utils = utils;`,
+      content: 'this.utils = utils;',
       linkAfter: [CLASS_DEFINE_CHUNK_NAME.ConstructorStart],
     });
 

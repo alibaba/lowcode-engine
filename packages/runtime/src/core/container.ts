@@ -7,8 +7,11 @@ export interface ILayoutOptions {
 
 export default class Container {
   private renderer: any = null;
+
   private layouts: { [key: string]: { content: any; props: any } } = {};
+
   private loading: any = null;
+
   private provider: any;
 
   registerRenderer(renderer: any): any {

@@ -73,8 +73,6 @@ export function isJSFunction(data: any): data is JSFunction {
 }
 
 
-
-
 export function isJSSlot(data: any): data is JSSlot {
   return data && data.type === 'JSSlot';
 }

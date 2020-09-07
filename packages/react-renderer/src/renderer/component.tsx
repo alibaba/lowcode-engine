@@ -12,15 +12,17 @@ const debug = Debug('renderer:comp');
 
 export default class CompRenderer extends BaseRenderer {
   static dislayName = 'comp-renderer';
+
   static propTypes = {
     __schema: PropTypes.object,
   };
+
   static defaultProps = {
     __schema: {},
   };
 
   static getDerivedStateFromProps(props, state) {
-    debug(`comp.getDerivedStateFromProps`);
+    debug('comp.getDerivedStateFromProps');
     const func = props.__schema.lifeCycles && props.__schema.lifeCycles.getDerivedStateFromProps;
     if (func) {
       return func(props, state);
@@ -44,18 +46,22 @@ export default class CompRenderer extends BaseRenderer {
     super.getSnapshotBeforeUpdate(...arguments);
     debug(`comp.getSnapshotBeforeUpdate - ${this.props.__schema.fileName}`);
   }
+
   async componentDidMount() {
     super.componentDidMount(...arguments);
     debug(`comp.componentDidMount - ${this.props.__schema.fileName}`);
   }
+
   async componentDidUpdate() {
     super.componentDidUpdate(...arguments);
     debug(`comp.componentDidUpdate - ${this.props.__schema.fileName}`);
   }
+
   async componentWillUnmount() {
     super.componentWillUnmount(...arguments);
     debug(`comp.componentWillUnmount - ${this.props.__schema.fileName}`);
   }
+
   async componentDidCatch(e) {
     super.componentDidCatch(...arguments);
     debug(`comp.componentDidCatch - ${this.props.__schema.fileName}`);

@@ -5,7 +5,7 @@ import { IWidget } from './widget/widget';
 import { IWidgetBaseConfig } from './types';
 
 export default class Area<C extends IWidgetBaseConfig = any, T extends IWidget = IWidget> {
-  @obx private _visible: boolean = true;
+  @obx private _visible = true;
 
   @computed get visible() {
     if (this.exclusive) {
@@ -22,7 +22,8 @@ export default class Area<C extends IWidgetBaseConfig = any, T extends IWidget =
   }
 
   readonly container: WidgetContainer<T, C>;
-  constructor(readonly skeleton: Skeleton, readonly name: string, handle: (item: T | C) => T, private exclusive?: boolean, defaultSetCurrent: boolean = false) {
+
+  constructor(readonly skeleton: Skeleton, readonly name: string, handle: (item: T | C) => T, private exclusive?: boolean, defaultSetCurrent = false) {
     this.container = skeleton.createContainer(name, handle, exclusive, () => this.visible, defaultSetCurrent);
   }
 
@@ -43,11 +44,12 @@ export default class Area<C extends IWidgetBaseConfig = any, T extends IWidget =
   }
 
   private lastCurrent: T | null = null;
+
   setVisible(flag: boolean) {
     if (this.exclusive) {
-      const current = this.container.current;
+      const { current } = this.container;
       if (flag && !current) {
-        this.container.active(this.lastCurrent || this.container.getAt(0))
+        this.container.active(this.lastCurrent || this.container.getAt(0));
       } else if (current) {
         this.lastCurrent = current;
         this.container.unactive(current);

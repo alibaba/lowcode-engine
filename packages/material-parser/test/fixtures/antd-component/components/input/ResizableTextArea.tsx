@@ -19,9 +19,9 @@ export interface TextAreaState {
   textareaStyles?: React.CSSProperties;
   /** We need add process style to disable scroll first and then add back to avoid unexpected scrollbar  */
   resizeStatus?:
-    | typeof RESIZE_STATUS_NONE
-    | typeof RESIZE_STATUS_RESIZING
-    | typeof RESIZE_STATUS_RESIZED;
+  | typeof RESIZE_STATUS_NONE
+  | typeof RESIZE_STATUS_RESIZING
+  | typeof RESIZE_STATUS_RESIZED;
 }
 
 class ResizableTextArea extends React.Component<TextAreaProps, TextAreaState> {
@@ -139,8 +139,8 @@ class ResizableTextArea extends React.Component<TextAreaProps, TextAreaState> {
       ...textareaStyles,
       ...(resizeStatus === RESIZE_STATUS_RESIZING
         ? // React will warning when mix `overflow` & `overflowY`.
-          // We need to define this separately.
-          { overflowX: 'hidden', overflowY: 'hidden' }
+      // We need to define this separately.
+        { overflowX: 'hidden', overflowY: 'hidden' }
         : null),
     };
     return (

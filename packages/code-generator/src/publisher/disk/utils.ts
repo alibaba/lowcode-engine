@@ -61,7 +61,7 @@ const createDirectory = (pathToDir: string): Promise<void> => {
 const writeContentToFile = (
   filePath: string,
   fileContent: string,
-  encoding: string = 'utf8',
+  encoding = 'utf8',
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
     writeFile(filePath, fileContent, encoding, err => {

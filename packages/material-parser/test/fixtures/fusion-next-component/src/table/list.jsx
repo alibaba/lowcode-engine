@@ -10,98 +10,103 @@ import WrapperComponent from './fixed/wrapper';
 import { statics } from './util';
 
 export default function list(BaseComponent) {
-    class ListTable extends React.Component {
-        static ListHeader = ListHeader;
-        static ListFooter = ListFooter;
-        static ListRow = RowComponent;
-        static ListBody = BodyComponent;
-        static propTypes = {
-            ...BaseComponent.propTypes,
-        };
-        static defaultProps = {
-            ...BaseComponent.defaultProps,
-        };
+  class ListTable extends React.Component {
+    static ListHeader = ListHeader;
 
-        static childContextTypes = {
-            listHeader: PropTypes.any,
-            listFooter: PropTypes.any,
-            rowSelection: PropTypes.object,
-        };
+    static ListFooter = ListFooter;
 
-        getChildContext() {
-            return {
-                listHeader: this.listHeader,
-                listFooter: this.listFooter,
-                rowSelection: this.rowSelection,
-            };
-        }
+    static ListRow = RowComponent;
 
-        normalizeDataSource(dataSource) {
-            const ret = [];
-            const loop = function(dataSource, level) {
-                dataSource.forEach(item => {
-                    item.__level = level;
-                    ret.push(item);
-                    if (item.children) {
-                        loop(item.children, level + 1);
-                    }
-                });
-            };
-            loop(dataSource, 0);
-            this.ds = ret;
-            return ret;
-        }
+    static ListBody = BodyComponent;
 
-        render() {
-            /* eslint-disable prefer-const */
-            let {
-                components,
-                children,
-                className,
-                prefix,
-                ...others
-            } = this.props;
-            let isList = false,
-                ret = [];
-            Children.forEach(children, child => {
-                if (child) {
-                    if (typeof child.type === 'function') {
-                        if (child.type._typeMark === 'listHeader') {
-                            this.listHeader = child.props;
-                            isList = true;
-                        } else if (child.type._typeMark === 'listFooter') {
-                            this.listFooter = child.props;
-                        } else {
-                            ret.push(child);
-                        }
-                    } else {
-                        ret.push(child);
-                    }
-                }
-            });
-            this.rowSelection = this.props.rowSelection;
-            if (isList) {
-                components = { ...components };
-                components.Row = components.Row || RowComponent;
-                components.Body = components.Body || BodyComponent;
-                components.Header = components.Header || HeaderComponent;
-                components.Wrapper = components.Wrapper || WrapperComponent;
-                className = classnames({
-                    [`${prefix}table-group`]: true,
-                    [className]: className,
-                });
-            }
-            return (
-                <BaseComponent
-                    {...others}
-                    components={components}
-                    children={ret}
-                    className={className}
-                    prefix={prefix}
-                />
-            );
-        }
+    static propTypes = {
+      ...BaseComponent.propTypes,
+    };
+
+    static defaultProps = {
+      ...BaseComponent.defaultProps,
+    };
+
+    static childContextTypes = {
+      listHeader: PropTypes.any,
+      listFooter: PropTypes.any,
+      rowSelection: PropTypes.object,
+    };
+
+    getChildContext() {
+      return {
+        listHeader: this.listHeader,
+        listFooter: this.listFooter,
+        rowSelection: this.rowSelection,
+      };
     }
-    statics(ListTable, BaseComponent);
-    return ListTable;
+
+    normalizeDataSource(dataSource) {
+      const ret = [];
+      const loop = function (dataSource, level) {
+        dataSource.forEach(item => {
+          item.__level = level;
+          ret.push(item);
+          if (item.children) {
+            loop(item.children, level + 1);
+          }
+        });
+      };
+      loop(dataSource, 0);
+      this.ds = ret;
+      return ret;
+    }
+
+    render() {
+      /* eslint-disable prefer-const */
+      let {
+        components,
+        children,
+        className,
+        prefix,
+        ...others
+      } = this.props;
+      let isList = false;
+      let ret = [];
+      Children.forEach(children, child => {
+        if (child) {
+          if (typeof child.type === 'function') {
+            if (child.type._typeMark === 'listHeader') {
+              this.listHeader = child.props;
+              isList = true;
+            } else if (child.type._typeMark === 'listFooter') {
+              this.listFooter = child.props;
+            } else {
+              ret.push(child);
+            }
+          } else {
+            ret.push(child);
+          }
+        }
+      });
+      this.rowSelection = this.props.rowSelection;
+      if (isList) {
+        components = { ...components };
+        components.Row = components.Row || RowComponent;
+        components.Body = components.Body || BodyComponent;
+        components.Header = components.Header || HeaderComponent;
+        components.Wrapper = components.Wrapper || WrapperComponent;
+        className = classnames({
+          [`${prefix}table-group`]: true,
+          [className]: className,
+        });
+      }
+      return (
+        <BaseComponent
+          {...others}
+          components={components}
+          children={ret}
+          className={className}
+          prefix={prefix}
+        />
+      );
+    }
+  }
+  statics(ListTable, BaseComponent);
+  return ListTable;
 }

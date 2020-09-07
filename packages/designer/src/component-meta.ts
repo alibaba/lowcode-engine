@@ -63,45 +63,62 @@ function buildFilter(rule?: string | string[] | RegExp | NestingFilter) {
 
 export class ComponentMeta {
   readonly isComponentMeta = true;
+
   private _npm?: NpmInfo;
+
   get npm() {
     return this._npm;
   }
+
   private _componentName?: string;
+
   get componentName(): string {
     return this._componentName!;
   }
+
   private _isContainer?: boolean;
+
   get isContainer(): boolean {
     return this._isContainer! || this.isRootComponent();
   }
+
   private _isModal?: boolean;
+
   get isModal(): boolean {
     return this._isModal!;
   }
+
   private _descriptor?: string;
+
   get descriptor(): string | undefined {
     return this._descriptor;
   }
+
   private _rootSelector?: string;
+
   get rootSelector(): string | undefined {
     return this._rootSelector;
   }
+
   private _transformedMetadata?: TransformedComponentMetadata;
+
   get configure() {
     const config = this._transformedMetadata?.configure;
     return config?.combined || config?.props || [];
   }
 
   private _liveTextEditing?: LiveTextEditingConfig[];
+
   get liveTextEditing() {
     return this._liveTextEditing;
   }
 
   private parentWhitelist?: NestingFilter | null;
+
   private childWhitelist?: NestingFilter | null;
 
   private _title?: TitleContent;
+
   get title(): string | I18nData | ReactElement {
     // TODO: 标记下。这块需要康师傅加一下API，页面正常渲染。
     // string | i18nData | ReactElement
@@ -123,6 +140,7 @@ export class ComponentMeta {
   }
 
   private _acceptable?: boolean;
+
   get acceptable(): boolean {
     return this._acceptable!;
   }
@@ -145,7 +163,7 @@ export class ComponentMeta {
     // 额外转换逻辑
     this._transformedMetadata = this.transformMetadata(metadata);
 
-    const title = this._transformedMetadata.title;
+    const { title } = this._transformedMetadata;
     if (title) {
       this._title =
         typeof title === 'string'
@@ -182,8 +200,8 @@ export class ComponentMeta {
 
     const { component } = configure;
     if (component) {
-      this._isContainer = component.isContainer ? true : false;
-      this._isModal = component.isModal ? true : false;
+      this._isContainer = !!component.isContainer;
+      this._isModal = !!component.isModal;
       this._descriptor = component.descriptor;
       this._rootSelector = component.rootSelector;
       if (component.nestingRule) {
@@ -208,7 +226,7 @@ export class ComponentMeta {
     return result as any;
   }
 
-  isRootComponent(includeBlock: boolean = true) {
+  isRootComponent(includeBlock = true) {
     return this.componentName === 'Page' || this.componentName === 'Component' || (includeBlock && this.componentName === 'Block');
   }
 

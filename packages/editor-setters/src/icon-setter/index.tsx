@@ -77,7 +77,7 @@ export default class IconSetter extends PureComponent<IconSetterProps, {}> {
     type: 'string',
     defaultValue: '',
     hasClear: true,
-    icons: icons,
+    icons,
     placeholder: '请点击选择 Icon',
     onChange: (icon: string | object) => undefined,
   };
@@ -149,7 +149,7 @@ export default class IconSetter extends PureComponent<IconSetterProps, {}> {
       <Balloon
         className={'lowcode-icon-content'}
         trigger={triggerNode}
-        needAdjust={true}
+        needAdjust
         triggerType="click"
         closable={false}
         alignEdge

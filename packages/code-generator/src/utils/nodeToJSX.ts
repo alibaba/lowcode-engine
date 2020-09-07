@@ -236,7 +236,7 @@ export function linkPieces(pieces: CodePiece[]): string {
     .map((p) => p.value)
     .join(' ');
 
-  attrsParts = !!attrsParts ? ` ${attrsParts}` : '';
+  attrsParts = attrsParts ? ` ${attrsParts}` : '';
 
   if (childrenParts) {
     return `${beforeParts}<${tagName}${attrsParts}>${childrenParts}</${tagName}>${afterParts}`;

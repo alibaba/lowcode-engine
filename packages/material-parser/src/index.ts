@@ -1,8 +1,4 @@
 import { remove, lstatSync } from 'fs-extra';
-export { default as validate } from './validate';
-export { default as schema } from './validate/schema.json';
-
-export * from './types';
 
 import { IMaterializeOptions } from './types';
 import { ComponentMeta } from './core';
@@ -10,6 +6,11 @@ import scan from './scan';
 import generate from './generate';
 import parse from './parse';
 import localize from './localize';
+
+export { default as validate } from './validate';
+export { default as schema } from './validate/schema.json';
+
+export * from './types';
 
 export default async function (options: IMaterializeOptions): Promise<ComponentMeta[]> {
   const { accesser = 'local', entry = '' } = options;

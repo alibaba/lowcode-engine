@@ -73,9 +73,10 @@ class Layout extends Component<{ renderer: SimulatorRenderer }> {
   shouldComponentUpdate() {
     return false;
   }
+
   render() {
     const { renderer, children } = this.props;
-    const layout = renderer.layout;
+    const { layout } = renderer;
 
     if (layout) {
       const { Component, props } = layout;
@@ -94,9 +95,11 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
       this.forceUpdate();
     });
   }
+
   shouldComponentUpdate() {
     return false;
   }
+
   render() {
     const { renderer } = this.props;
     const { device, designMode } = renderer;

@@ -20,74 +20,74 @@ const timePickerLocale = nextLocale.TimePicker;
  * TimePicker
  */
 class TimePicker extends Component {
-    static propTypes = {
-        ...ConfigProvider.propTypes,
-        prefix: PropTypes.string,
-        rtl: PropTypes.bool,
-        /**
+  static propTypes = {
+    ...ConfigProvider.propTypes,
+    prefix: PropTypes.string,
+    rtl: PropTypes.bool,
+    /**
          * 按钮的文案
          */
-        label: PropTypes.node,
-        /**
+    label: PropTypes.node,
+    /**
          * 输入框状态
          */
-        state: PropTypes.oneOf(['error', 'success']),
-        /**
+    state: PropTypes.oneOf(['error', 'success']),
+    /**
          * 输入框提示
          */
-        placeholder: PropTypes.string,
-        /**
+    placeholder: PropTypes.string,
+    /**
          * 时间值（moment 对象或时间字符串，受控状态使用）
          */
-        value: checkDateValue,
-        /**
+    value: checkDateValue,
+    /**
          * 时间初值（moment 对象或时间字符串，非受控状态使用）
          */
-        defaultValue: checkDateValue,
-        /**
+    defaultValue: checkDateValue,
+    /**
          * 时间选择框的尺寸
          */
-        size: PropTypes.oneOf(['small', 'medium', 'large']),
-        /**
+    size: PropTypes.oneOf(['small', 'medium', 'large']),
+    /**
          * 是否允许清空时间
          */
-        hasClear: PropTypes.bool,
-        /**
+    hasClear: PropTypes.bool,
+    /**
          * 时间的格式
          * https://momentjs.com/docs/#/parsing/string-format/
          */
-        format: PropTypes.string,
-        /**
+    format: PropTypes.string,
+    /**
          * 小时选项步长
          */
-        hourStep: PropTypes.number,
-        /**
+    hourStep: PropTypes.number,
+    /**
          * 分钟选项步长
          */
-        minuteStep: PropTypes.number,
-        /**
+    minuteStep: PropTypes.number,
+    /**
          * 秒钟选项步长
          */
-        secondStep: PropTypes.number,
-        /**
+    secondStep: PropTypes.number,
+    /**
          * 禁用小时函数
          * @param {Number} index 时 0 - 23
          * @return {Boolean} 是否禁用
          */
-        disabledHours: PropTypes.func,
-        /**
+    disabledHours: PropTypes.func,
+    /**
          * 禁用分钟函数
          * @param {Number} index 分 0 - 59
          * @return {Boolean} 是否禁用
          */
-        disabledMinutes: PropTypes.func,
-        /**
+    disabledMinutes: PropTypes.func,
+    /**
          * 禁用秒钟函数
          * @param {Number} index 秒 0 - 59
          * @return {Boolean} 是否禁用
          */
-        disabledSeconds: PropTypes.func,
-        /**
+    disabledSeconds: PropTypes.func,
+    /**
          * 渲染的可选择时间列表
          * [{
          *  label: '01',
@@ -98,404 +98,402 @@ class TimePicker extends Component {
          * @param {moment} value 当前时间，可能为 null
          * @return {Array} 返回需要渲染的数据
          */
-        renderTimeMenuItems: PropTypes.func,
-        /**
+    renderTimeMenuItems: PropTypes.func,
+    /**
          * 弹层是否显示（受控）
          */
-        visible: PropTypes.bool,
-        /**
+    visible: PropTypes.bool,
+    /**
          * 弹层默认是否显示（非受控）
          */
-        defaultVisible: PropTypes.bool,
-        /**
+    defaultVisible: PropTypes.bool,
+    /**
          * 弹层容器
          * @param {Object} target 目标节点
          * @return {ReactNode} 容器节点
          */
-        popupContainer: PropTypes.any,
-        /**
+    popupContainer: PropTypes.any,
+    /**
          * 弹层对齐方式, 详情见Overlay 文档
          */
-        popupAlign: PropTypes.string,
-        /**
+    popupAlign: PropTypes.string,
+    /**
          * 弹层触发方式
          */
-        popupTriggerType: PropTypes.oneOf(['click', 'hover']),
-        /**
+    popupTriggerType: PropTypes.oneOf(['click', 'hover']),
+    /**
          * 弹层展示状态变化时的回调
          * @param {Boolean} visible 弹层是否隐藏和显示
          * @param {String} type 触发弹层显示和隐藏的来源 fromTrigger 表示由trigger的点击触发； docClick 表示由document的点击触发
          */
-        onVisibleChange: PropTypes.func,
-        /**
+    onVisibleChange: PropTypes.func,
+    /**
          * 弹层自定义样式
          */
-        popupStyle: PropTypes.object,
-        /**
+    popupStyle: PropTypes.object,
+    /**
          * 弹层自定义样式类
          */
-        popupClassName: PropTypes.string,
-        /**
+    popupClassName: PropTypes.string,
+    /**
          * 弹层属性
          */
-        popupProps: PropTypes.object,
-        /**
+    popupProps: PropTypes.object,
+    /**
          * 是否跟随滚动
          */
-        followTrigger: PropTypes.bool,
-        /**
+    followTrigger: PropTypes.bool,
+    /**
          * 是否禁用
          */
-        disabled: PropTypes.bool,
-        /**
+    disabled: PropTypes.bool,
+    /**
          * 是否为预览态
          */
-        isPreview: PropTypes.bool,
-        /**
+    isPreview: PropTypes.bool,
+    /**
          * 预览态模式下渲染的内容
          * @param {MomentObject} value 时间
          */
-        renderPreview: PropTypes.func,
-        /**
+    renderPreview: PropTypes.func,
+    /**
          * 时间值改变时的回调
          * @param {Object|String} value 时间对象或时间字符串
          */
-        onChange: PropTypes.func,
-        className: PropTypes.string,
-        name: PropTypes.string,
-        inputProps: PropTypes.object,
-        popupComponent: PropTypes.elementType,
-        popupContent: PropTypes.node,
-    };
+    onChange: PropTypes.func,
+    className: PropTypes.string,
+    name: PropTypes.string,
+    inputProps: PropTypes.object,
+    popupComponent: PropTypes.elementType,
+    popupContent: PropTypes.node,
+  };
 
-    static defaultProps = {
-        prefix: 'next-',
-        rtl: false,
-        locale: timePickerLocale,
-        size: 'medium',
-        format: 'HH:mm:ss',
-        hasClear: true,
-        disabled: false,
-        popupAlign: 'tl tl',
-        popupTriggerType: 'click',
-        onChange: noop,
-        onVisibleChange: noop,
-    };
+  static defaultProps = {
+    prefix: 'next-',
+    rtl: false,
+    locale: timePickerLocale,
+    size: 'medium',
+    format: 'HH:mm:ss',
+    hasClear: true,
+    disabled: false,
+    popupAlign: 'tl tl',
+    popupTriggerType: 'click',
+    onChange: noop,
+    onVisibleChange: noop,
+  };
 
-    constructor(props, context) {
-        super(props, context);
-        const value = formatDateValue(
-            props.value || props.defaultValue,
-            props.format
-        );
-        this.inputAsString =
+  constructor(props, context) {
+    super(props, context);
+    const value = formatDateValue(
+      props.value || props.defaultValue,
+      props.format,
+    );
+    this.inputAsString =
             typeof (props.value || props.defaultValue) === 'string';
-        this.state = {
-            value,
-            inputStr: '',
-            inputing: false,
-            visible: props.visible || props.defaultVisible,
-        };
+    this.state = {
+      value,
+      inputStr: '',
+      inputing: false,
+      visible: props.visible || props.defaultVisible,
+    };
+  }
+
+  static getDerivedStateFromProps(props) {
+    const state = {};
+
+    if ('value' in props) {
+      state.value = formatDateValue(props.value, props.format);
     }
 
-    static getDerivedStateFromProps(props) {
-        const state = {};
-
-        if ('value' in props) {
-            state.value = formatDateValue(props.value, props.format);
-        }
-
-        if ('visible' in props) {
-            state.visible = props.visible;
-        }
-
-        return state;
+    if ('visible' in props) {
+      state.visible = props.visible;
     }
 
-    onValueChange(newValue) {
-        const ret =
+    return state;
+  }
+
+  onValueChange(newValue) {
+    const ret =
             this.inputAsString && newValue
-                ? newValue.format(this.props.format)
-                : newValue;
-        this.props.onChange(ret);
-    }
+              ? newValue.format(this.props.format)
+              : newValue;
+    this.props.onChange(ret);
+  }
 
-    onClearValue = () => {
+  onClearValue = () => {
+    this.setState({
+      value: null,
+    });
+    if (this.state.value) {
+      this.onValueChange(null);
+    }
+  };
+
+  onInputChange = (inputValue, e, eventType) => {
+    if (!('value' in this.props)) {
+      if (eventType === 'clear' || !inputValue) {
+        e.stopPropagation();
+        this.onClearValue();
+      }
+
+      this.setState({
+        inputStr: inputValue,
+        inputing: true,
+      });
+    } else if (eventType === 'clear') {
+      // 受控状态下用户点击 clear
+      e.stopPropagation();
+      this.onValueChange(null);
+    }
+  };
+
+  onInputBlur = () => {
+    const { inputStr } = this.state;
+    if (inputStr) {
+      const { format } = this.props;
+      const parsed = moment(inputStr, format, true);
+      if (parsed.isValid()) {
         this.setState({
-            value: null,
+          value: parsed,
+          inputStr: '',
         });
-        if (this.state.value) {
-            this.onValueChange(null);
-        }
-    };
+        this.onValueChange(parsed);
+      }
+      this.setState({
+        inputing: false,
+      });
+    }
+  };
 
-    onInputChange = (inputValue, e, eventType) => {
-        if (!('value' in this.props)) {
-            if (eventType === 'clear' || !inputValue) {
-                e.stopPropagation();
-                this.onClearValue();
-            }
+  onKeyown = e => {
+    const { value, inputStr } = this.state;
+    const {
+      format,
+      hourStep = 1,
+      minuteStep = 1,
+      secondStep = 1,
+      disabledMinutes,
+      disabledSeconds,
+    } = this.props;
 
-            this.setState({
-                inputStr: inputValue,
-                inputing: true,
-            });
-        } else if (eventType === 'clear') {
-            // 受控状态下用户点击 clear
-            e.stopPropagation();
-            this.onValueChange(null);
-        }
-    };
+    let unit = 'second';
 
-    onInputBlur = () => {
-        const { inputStr } = this.state;
-        if (inputStr) {
-            const { format } = this.props;
-            const parsed = moment(inputStr, format, true);
-            if (parsed.isValid()) {
-                this.setState({
-                    value: parsed,
-                    inputStr: '',
-                });
-                this.onValueChange(parsed);
-            }
-            this.setState({
-                inputing: false,
-            });
-        }
-    };
+    if (disabledSeconds) {
+      unit = disabledMinutes ? 'hour' : 'minute';
+    }
+    const timeStr = onTimeKeydown(
+      e,
+      {
+        format,
+        timeInputStr: inputStr,
+        steps: {
+          hour: hourStep,
+          minute: minuteStep,
+          second: secondStep,
+        },
+        value,
+      },
+      unit,
+    );
 
-    onKeyown = e => {
-        const { value, inputStr } = this.state;
-        const {
-            format,
-            hourStep = 1,
-            minuteStep = 1,
-            secondStep = 1,
-            disabledMinutes,
-            disabledSeconds,
-        } = this.props;
+    if (!timeStr) return;
 
-        let unit = 'second';
+    this.onInputChange(timeStr);
+  };
 
-        if (disabledSeconds) {
-            unit = disabledMinutes ? 'hour' : 'minute';
-        }
-        const timeStr = onTimeKeydown(
-            e,
-            {
-                format,
-                timeInputStr: inputStr,
-                steps: {
-                    hour: hourStep,
-                    minute: minuteStep,
-                    second: secondStep,
-                },
-                value,
-            },
-            unit
-        );
-
-        if (!timeStr) return;
-
-        this.onInputChange(timeStr);
-    };
-
-    onTimePanelSelect = value => {
-        if (!('value' in this.props)) {
-            this.setState({
-                value,
-                inputing: false,
-            });
-        }
-        if (
-            !this.state.value ||
+  onTimePanelSelect = value => {
+    if (!('value' in this.props)) {
+      this.setState({
+        value,
+        inputing: false,
+      });
+    }
+    if (
+      !this.state.value ||
             value.valueOf() !== this.state.value.valueOf()
-        ) {
-            this.onValueChange(value);
-        }
-    };
+    ) {
+      this.onValueChange(value);
+    }
+  };
 
-    onVisibleChange = (visible, type) => {
-        if (!('visible' in this.props)) {
-            this.setState({
-                visible,
-            });
-        }
-        this.props.onVisibleChange(visible, type);
-    };
+  onVisibleChange = (visible, type) => {
+    if (!('visible' in this.props)) {
+      this.setState({
+        visible,
+      });
+    }
+    this.props.onVisibleChange(visible, type);
+  };
 
-    renderPreview(others) {
-        const { prefix, format, className, renderPreview } = this.props;
-        const { value } = this.state;
-        const previewCls = classnames(className, `${prefix}form-preview`);
+  renderPreview(others) {
+    const { prefix, format, className, renderPreview } = this.props;
+    const { value } = this.state;
+    const previewCls = classnames(className, `${prefix}form-preview`);
 
-        const label = value ? value.format(format) : '';
+    const label = value ? value.format(format) : '';
 
-        if (typeof renderPreview === 'function') {
-            return (
-                <div {...others} className={previewCls}>
-                    {renderPreview(value, this.props)}
-                </div>
-            );
-        }
-
-        return (
-            <p {...others} className={previewCls}>
-                {label}
-            </p>
-        );
+    if (typeof renderPreview === 'function') {
+      return (
+        <div {...others} className={previewCls}>
+          {renderPreview(value, this.props)}
+        </div>
+      );
     }
 
-    render() {
-        const {
-            prefix,
-            label,
-            state,
-            placeholder,
-            size,
-            format,
-            hasClear,
-            hourStep,
-            minuteStep,
-            secondStep,
-            disabledHours,
-            disabledMinutes,
-            disabledSeconds,
-            renderTimeMenuItems,
-            inputProps,
-            popupAlign,
-            popupTriggerType,
-            popupContainer,
-            popupStyle,
-            popupClassName,
-            popupProps,
-            popupComponent,
-            popupContent,
-            followTrigger,
-            disabled,
-            className,
-            locale,
-            rtl,
-            isPreview,
-            ...others
-        } = this.props;
+    return (
+      <p {...others} className={previewCls}>
+        {label}
+      </p>
+    );
+  }
 
-        const { value, inputStr, inputing, visible } = this.state;
+  render() {
+    const {
+      prefix,
+      label,
+      state,
+      placeholder,
+      size,
+      format,
+      hasClear,
+      hourStep,
+      minuteStep,
+      secondStep,
+      disabledHours,
+      disabledMinutes,
+      disabledSeconds,
+      renderTimeMenuItems,
+      inputProps,
+      popupAlign,
+      popupTriggerType,
+      popupContainer,
+      popupStyle,
+      popupClassName,
+      popupProps,
+      popupComponent,
+      popupContent,
+      followTrigger,
+      disabled,
+      className,
+      locale,
+      rtl,
+      isPreview,
+      ...others
+    } = this.props;
 
-        const triggerCls = classnames({
-            [`${prefix}time-picker-trigger`]: true,
-        });
+    const { value, inputStr, inputing, visible } = this.state;
 
-        if (rtl) {
-            others.dir = 'rtl';
-        }
+    const triggerCls = classnames({
+      [`${prefix}time-picker-trigger`]: true,
+    });
 
-        if (isPreview) {
-            return this.renderPreview(
-                obj.pickOthers(others, TimePicker.PropTypes)
-            );
-        }
+    if (rtl) {
+      others.dir = 'rtl';
+    }
 
-        const inputValue = inputing
-            ? inputStr
-            : (value && value.format(format)) || '';
-        const sharedInputProps = {
-            ...inputProps,
-            size,
-            disabled,
-            value: inputValue,
-            hasClear: value && hasClear,
-            onChange: this.onInputChange,
-            onBlur: this.onInputBlur,
-            onPressEnter: this.onInputBlur,
-            onKeyDown: this.onKeyown,
-            hint: 'clock',
-        };
+    if (isPreview) {
+      return this.renderPreview(
+        obj.pickOthers(others, TimePicker.PropTypes),
+      );
+    }
 
-        const triggerInput = (
-            <div className={triggerCls}>
-                <Input
-                    {...sharedInputProps}
-                    label={label}
-                    state={state}
-                    placeholder={placeholder || locale.placeholder}
-                    className={`${prefix}time-picker-input`}
-                />
-            </div>
-        );
+    const inputValue = inputing
+      ? inputStr
+      : (value && value.format(format)) || '';
+    const sharedInputProps = {
+      ...inputProps,
+      size,
+      disabled,
+      value: inputValue,
+      hasClear: value && hasClear,
+      onChange: this.onInputChange,
+      onBlur: this.onInputBlur,
+      onPressEnter: this.onInputBlur,
+      onKeyDown: this.onKeyown,
+      hint: 'clock',
+    };
 
-        const panelProps = {
-            prefix,
-            locale,
-            value,
-            disabled,
-            showHour: format.indexOf('H') > -1,
-            showSecond: format.indexOf('s') > -1,
-            showMinute: format.indexOf('m') > -1,
-            hourStep,
-            minuteStep,
-            secondStep,
-            disabledHours,
-            disabledMinutes,
-            disabledSeconds,
-            renderTimeMenuItems,
-            onSelect: this.onTimePanelSelect,
-        };
+    const triggerInput = (
+      <div className={triggerCls}>
+        <Input
+          {...sharedInputProps}
+          label={label}
+          state={state}
+          placeholder={placeholder || locale.placeholder}
+          className={`${prefix}time-picker-input`}
+        />
+      </div>
+    );
 
-        const classNames = classnames(
-            {
-                [`${prefix}time-picker`]: true,
-                [`${prefix}time-picker-${size}`]: size,
-                [`${prefix}disabled`]: disabled,
-            },
-            className
-        );
+    const panelProps = {
+      prefix,
+      locale,
+      value,
+      disabled,
+      showHour: format.indexOf('H') > -1,
+      showSecond: format.indexOf('s') > -1,
+      showMinute: format.indexOf('m') > -1,
+      hourStep,
+      minuteStep,
+      secondStep,
+      disabledHours,
+      disabledMinutes,
+      disabledSeconds,
+      renderTimeMenuItems,
+      onSelect: this.onTimePanelSelect,
+    };
 
-        const PopupComponent = popupComponent ? popupComponent : Popup;
+    const classNames = classnames(
+      {
+        [`${prefix}time-picker`]: true,
+        [`${prefix}time-picker-${size}`]: size,
+        [`${prefix}disabled`]: disabled,
+      },
+      className,
+    );
 
-        return (
+    const PopupComponent = popupComponent || Popup;
+
+    return (
+      <div
+        {...obj.pickOthers(TimePicker.propTypes, others)}
+        className={classNames}
+      >
+        <PopupComponent
+          autoFocus
+          align={popupAlign}
+          {...popupProps}
+          followTrigger={followTrigger}
+          visible={visible}
+          onVisibleChange={this.onVisibleChange}
+          trigger={triggerInput}
+          container={popupContainer}
+          disabled={disabled}
+          triggerType={popupTriggerType}
+          style={popupStyle}
+          className={popupClassName}
+        >
+          {popupContent || (
+          <div
+            dir={others.dir}
+            className={`${prefix}time-picker-body`}
+          >
             <div
-                {...obj.pickOthers(TimePicker.propTypes, others)}
-                className={classNames}
+              className={`${prefix}time-picker-panel-header`}
             >
-                <PopupComponent
-                    autoFocus
-                    align={popupAlign}
-                    {...popupProps}
-                    followTrigger={followTrigger}
-                    visible={visible}
-                    onVisibleChange={this.onVisibleChange}
-                    trigger={triggerInput}
-                    container={popupContainer}
-                    disabled={disabled}
-                    triggerType={popupTriggerType}
-                    style={popupStyle}
-                    className={popupClassName}
-                >
-                    {popupContent ? (
-                        popupContent
-                    ) : (
-                        <div
-                            dir={others.dir}
-                            className={`${prefix}time-picker-body`}
-                        >
-                            <div
-                                className={`${prefix}time-picker-panel-header`}
-                            >
-                                <Input
-                                    {...sharedInputProps}
-                                    placeholder={format}
-                                    className={`${prefix}time-picker-panel-input`}
-                                />
-                            </div>
-                            <TimePickerPanel {...panelProps} />
-                        </div>
-                    )}
-                </PopupComponent>
+              <Input
+                {...sharedInputProps}
+                placeholder={format}
+                className={`${prefix}time-picker-panel-input`}
+              />
             </div>
-        );
-    }
+            <TimePickerPanel {...panelProps} />
+          </div>
+          )}
+        </PopupComponent>
+      </div>
+    );
+  }
 }
 
 export default polyfill(TimePicker);

@@ -38,6 +38,5 @@ export default componentsMap;
     `,
   );
 
-  return [['src','config'], file];
+  return [['src', 'config'], file];
 }
-  

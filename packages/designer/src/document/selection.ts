@@ -5,7 +5,9 @@ import { DocumentModel } from './document-model';
 
 export class Selection {
   private emitter = new EventEmitter();
+
   @obx.val private _selected: string[] = [];
+
   /**
    * 选中的节点 id
    */

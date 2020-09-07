@@ -76,8 +76,8 @@ export default class CompEngine extends BaseEngine {
     debug(`comp.render - ${__schema.fileName}`);
 
     const {
- id, className, style, noContainer
-} = this.__parseData(__schema.props);
+      id, className, style, noContainer,
+    } = this.__parseData(__schema.props);
 
     if (noContainer) {
       return this.__createContextDom(

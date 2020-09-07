@@ -86,29 +86,29 @@ export default class BaseEngine extends Component {
   }
 
   reloadDataSource = () => new Promise((resolve, reject) => {
-      debug('reload data source');
-      if (!this.__dataHelper) {
+    debug('reload data source');
+    if (!this.__dataHelper) {
+      this.__showPlaceholder = false;
+      return resolve();
+    }
+    this.__dataHelper
+      .getInitData()
+      .then((res) => {
         this.__showPlaceholder = false;
-        return resolve();
-      }
-      this.__dataHelper
-        .getInitData()
-        .then((res) => {
+        if (isEmpty(res)) {
+          this.forceUpdate();
+          return resolve();
+        }
+        this.setState(res, resolve);
+      })
+      .catch((err) => {
+        if (this.__showPlaceholder) {
           this.__showPlaceholder = false;
-          if (isEmpty(res)) {
-            this.forceUpdate();
-            return resolve();
-          }
-          this.setState(res, resolve);
-        })
-        .catch((err) => {
-          if (this.__showPlaceholder) {
-            this.__showPlaceholder = false;
-            this.forceUpdate();
-          }
-          reject(err);
-        });
-    });
+          this.forceUpdate();
+        }
+        reject(err);
+      });
+  });
 
   __setLifeCycleMethods = (method, args) => {
     const lifeCycleMethods = getValue(this.props.__schema, 'lifeCycles', {});
@@ -206,7 +206,6 @@ export default class BaseEngine extends Component {
   // parentInfo 父组件的信息，包含schema和Comp
   // idx 若为循环渲染的循环Index
   __createVirtualDom = (schema, self, parentInfo, idx) => {
-
     if (!schema) return null;
     // rax text prop 兼容处理
     if (schema.componentName === 'Text') {
@@ -227,7 +226,7 @@ export default class BaseEngine extends Component {
     }
     if (Array.isArray(schema)) {
       if (schema.length === 1) return this.__createVirtualDom(schema[0], self, parentInfo);
-      return schema.map((item, idx) => this.__createVirtualDom(item, self, parentInfo, item && item.__ctx && item.__ctx.lunaKey ? '' : idx),);
+      return schema.map((item, idx) => this.__createVirtualDom(item, self, parentInfo, item && item.__ctx && item.__ctx.lunaKey ? '' : idx));
     }
 
     // 解析占位组件
@@ -347,10 +346,9 @@ export default class BaseEngine extends Component {
       );
     }
 
-    const renderComp = (props) =>
-      engine.createElement(
+    const renderComp = (props) => engine.createElement(
       Comp,
-        props,
+      props,
       (!isFileSchema(schema) &&
           !!schema.children &&
           this.__createVirtualDom(
@@ -362,7 +360,7 @@ export default class BaseEngine extends Component {
             },
           ))
           || null,
-      );
+    );
     // 设计模式下的特殊处理
     if (engine && [DESIGN_MODE.EXTEND, DESIGN_MODE.BORDER].includes(engine.props.designMode)) {
       // 对于overlay,dialog等组件为了使其在设计模式下显示，外层需要增加一个div容器

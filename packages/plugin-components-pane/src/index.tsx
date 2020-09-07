@@ -1,5 +1,5 @@
 import { Component, ReactNode } from 'react';
-import ComponentList, { AdditiveType } from "@ali/ve-component-list";
+import ComponentList, { AdditiveType } from '@ali/ve-component-list';
 import { PluginProps } from '@ali/lowcode-types';
 import { Designer } from '@ali/lowcode-designer';
 
@@ -103,7 +103,7 @@ export default class ComponentListPlugin extends Component<PluginProps, IState> 
       }
       const snippetId = getSnippetId(e.target, AdditiveType.Clickable);
       if (!snippetId || !this.snippetsMap.get(snippetId)) {
-        return;
+
       }
     };
 

@@ -35,17 +35,25 @@ export interface ComponentViewBundle {
 
 export default class Bundle {
   static createPrototype = Prototype.create;
+
   static addGlobalPropsReducer = Prototype.addGlobalPropsReducer;
+
   static addGlobalPropsConfigure = Prototype.addGlobalPropsConfigure;
+
   static addGlobalExtraActions = Prototype.addGlobalExtraActions;
+
   static removeGlobalPropsConfigure = Prototype.removeGlobalPropsConfigure;
+
   static overridePropsConfigure = Prototype.overridePropsConfigure;
+
   static create(protos: ComponentProtoBundle[], views?: ComponentViewBundle[]) {
     return new Bundle(protos, views);
   }
 
   private viewsMap: { [componentName: string]: ComponentType } = {};
+
   private registry: { [componentName: string]: Prototype } = {};
+
   private prototypeList: Prototype[] = [];
 
   constructor(protos?: ComponentProtoBundle[], views?: ComponentViewBundle[]) {

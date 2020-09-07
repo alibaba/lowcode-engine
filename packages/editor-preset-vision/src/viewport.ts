@@ -1,8 +1,8 @@
 import { EventEmitter } from 'events';
-
-const domReady = require('domready');
 import Flags from './flags';
 import { designer } from './editor';
+
+const domReady = require('domready');
 
 function enterFullscreen() {
   const elem = document.documentElement;
@@ -29,8 +29,11 @@ interface IStyleResourceConfig {
 
 class StyleResource {
   config: IStyleResourceConfig;
+
   styleElement: HTMLStyleElement;
+
   mounted: boolean;
+
   inited: boolean;
 
   constructor(config: IStyleResourceConfig) {
@@ -38,7 +41,7 @@ class StyleResource {
   }
 
   matchDevice(device: string) {
-    const media = this.config.media;
+    const { media } = this.config;
 
     if (!media || media === 'ALL' || media === '*') {
       return true;
@@ -94,11 +97,17 @@ class StyleResource {
 
 export class Viewport {
   preview: boolean;
+
   focused: boolean;
+
   slateFixed: boolean;
+
   emitter: EventEmitter;
+
   device: string;
+
   focusTarget: any;
+
   cssResourceSet: StyleResource[];
 
   constructor() {

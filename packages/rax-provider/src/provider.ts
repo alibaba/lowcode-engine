@@ -18,12 +18,11 @@ export default class RaxProvider extends Provider {
     const { content: Layout, props: extraLayoutProps } = app.getLayout(layoutName) || {};
     const sectionalRender = this.isSectionalRender();
     if (!sectionalRender && Layout) {
-      App = (props) =>
-        createElement(
-          Layout,
-          { ...layoutProps, ...extraLayoutProps },
-          RouterView ? createElement(RouterView, props) : null,
-        );
+      App = (props) => createElement(
+        Layout,
+        { ...layoutProps, ...extraLayoutProps },
+        RouterView ? createElement(RouterView, props) : null,
+      );
     } else {
       App = (props) => (RouterView ? createElement(RouterView, props) : null);
     }
@@ -49,13 +48,12 @@ export default class RaxProvider extends Provider {
       const path = routerConfig[pageId];
       routes.push({
         path,
-        component: (props: any) =>
-          this.getLazyComponent(pageId, {
-            components: this.getComponents(),
-            utils: this.getUtils(),
-            componentsMap: this.getComponentsMapObj(),
-            ...props,
-          }),
+        component: (props: any) => this.getLazyComponent(pageId, {
+          components: this.getComponents(),
+          utils: this.getUtils(),
+          componentsMap: this.getComponentsMapObj(),
+          ...props,
+        }),
       });
       if (homePageId) {
         return;
@@ -67,13 +65,12 @@ export default class RaxProvider extends Provider {
     if (homePageId) {
       routes.push({
         path: '**',
-        component: (props) =>
-          this.getLazyComponent(homePageId, {
-            components: this.getComponents(),
-            utils: this.getUtils(),
-            componentsMap: this.getComponentsMapObj(),
-            ...props,
-          }),
+        component: (props) => this.getLazyComponent(homePageId, {
+          components: this.getComponents(),
+          utils: this.getUtils(),
+          componentsMap: this.getComponentsMapObj(),
+          ...props,
+        }),
       });
     }
     const Router = getRouter({

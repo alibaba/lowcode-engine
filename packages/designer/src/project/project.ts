@@ -6,6 +6,7 @@ import { ProjectSchema, RootSchema } from '@ali/lowcode-types';
 
 export class Project {
   private emitter = new EventEmitter();
+
   @obx.val readonly documents: DocumentModel[] = [];
 
   private data: ProjectSchema = { version: '1.0.0', componentsMap: [], componentsTree: [] };
@@ -82,15 +83,15 @@ export class Project {
    */
   set(
     key:
-      | 'version'
-      | 'componentsTree'
-      | 'componentsMap'
-      | 'utils'
-      | 'constants'
-      | 'i18n'
-      | 'css'
-      | 'dataSource'
-      | string,
+    | 'version'
+    | 'componentsTree'
+    | 'componentsMap'
+    | 'utils'
+    | 'constants'
+    | 'i18n'
+    | 'css'
+    | 'dataSource'
+    | string,
     value: any,
   ): void {}
 
@@ -99,15 +100,15 @@ export class Project {
    */
   get(
     key:
-      | 'version'
-      | 'componentsTree'
-      | 'componentsMap'
-      | 'utils'
-      | 'constants'
-      | 'i18n'
-      | 'css'
-      | 'dataSource'
-      | string,
+    | 'version'
+    | 'componentsTree'
+    | 'componentsMap'
+    | 'utils'
+    | 'constants'
+    | 'i18n'
+    | 'css'
+    | 'dataSource'
+    | string,
   ): any {}
 
   open(doc?: string | DocumentModel | RootSchema): DocumentModel {

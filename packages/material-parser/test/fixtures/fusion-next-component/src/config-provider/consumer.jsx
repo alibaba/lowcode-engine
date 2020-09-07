@@ -9,16 +9,16 @@ import PropTypes from 'prop-types';
  * @return {Object}
  */
 const mapKeys = (obj, fn) => {
-    const result = {};
-    for (const key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            const value = obj[key];
-            const newKey = fn(key, value);
-            result[newKey] = value;
-        }
+  const result = {};
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      const value = obj[key];
+      const newKey = fn(key, value);
+      result[newKey] = value;
     }
+  }
 
-    return result;
+  return result;
 };
 
 /**
@@ -27,8 +27,7 @@ const mapKeys = (obj, fn) => {
  * @param {String} key
  * @return {String}
  */
-const replaceKey = key =>
-    key.replace(/^(next)([A-Z])/, (match, p1, p2) => p2.toLowerCase());
+const replaceKey = key => key.replace(/^(next)([A-Z])/, (match, p1, p2) => p2.toLowerCase());
 
 /**
  * @param {Object} source
@@ -41,8 +40,7 @@ const transformContext = source => mapKeys(source, replaceKey);
  * @param {Object} prop
  * @param {Object} context
  */
-const Consumer = ({ children }, context) =>
-    typeof children === 'function' ? children(transformContext(context)) : null;
+const Consumer = ({ children }, context) => (typeof children === 'function' ? children(transformContext(context)) : null);
 
 /**
  * PropTypes
@@ -50,9 +48,9 @@ const Consumer = ({ children }, context) =>
  * @static
  */
 Consumer.propTypes = {
-    // Render context as function
-    // Function(context: object): ReactElement
-    children: PropTypes.func,
+  // Render context as function
+  // Function(context: object): ReactElement
+  children: PropTypes.func,
 };
 
 /**
@@ -61,13 +59,13 @@ Consumer.propTypes = {
  * @static
  */
 Consumer.contextTypes = {
-    nextPrefix: PropTypes.string,
-    nextLocale: PropTypes.object,
-    nextPure: PropTypes.bool,
-    newRtl: PropTypes.bool,
-    nextWarning: PropTypes.bool,
-    nextDevice: PropTypes.oneOf(['tablet', 'desktop', 'phone']),
-    nextPopupContainer: PropTypes.any,
+  nextPrefix: PropTypes.string,
+  nextLocale: PropTypes.object,
+  nextPure: PropTypes.bool,
+  newRtl: PropTypes.bool,
+  nextWarning: PropTypes.bool,
+  nextDevice: PropTypes.oneOf(['tablet', 'desktop', 'phone']),
+  nextPopupContainer: PropTypes.any,
 };
 
 export default Consumer;

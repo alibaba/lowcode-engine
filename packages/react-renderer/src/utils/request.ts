@@ -4,6 +4,7 @@ import fetchJsonp from 'fetch-jsonp';
 import bzbRequest from '@ali/bzb-request';
 import Debug from 'debug';
 import { serialize, buildUrl, parseUrl } from '@ali/b3-one/lib/url';
+
 const debug = Debug('utils:request');
 export function get(dataAPI, params = {}, headers = {}, otherProps = {}) {
   headers = {

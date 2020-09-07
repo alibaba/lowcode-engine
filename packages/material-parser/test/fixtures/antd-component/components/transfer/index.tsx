@@ -185,15 +185,13 @@ class Transfer extends React.Component<TransferProps, any> {
     }
   };
 
-  onLeftItemSelectAll = (selectedKeys: string[], checkAll: boolean) =>
-    this.onItemSelectAll('left', selectedKeys, checkAll);
+  onLeftItemSelectAll = (selectedKeys: string[], checkAll: boolean) => this.onItemSelectAll('left', selectedKeys, checkAll);
 
-  onRightItemSelectAll = (selectedKeys: string[], checkAll: boolean) =>
-    this.onItemSelectAll('right', selectedKeys, checkAll);
+  onRightItemSelectAll = (selectedKeys: string[], checkAll: boolean) => this.onItemSelectAll('right', selectedKeys, checkAll);
 
   handleFilter = (direction: TransferDirection, e: React.ChangeEvent<HTMLInputElement>) => {
     const { onSearch } = this.props;
-    const value = e.target.value;
+    const { value } = e.target;
     if (onSearch) {
       onSearch(direction, value);
     }
@@ -233,11 +231,9 @@ class Transfer extends React.Component<TransferProps, any> {
     }
   };
 
-  onLeftItemSelect = (selectedKey: string, checked: boolean) =>
-    this.onItemSelect('left', selectedKey, checked);
+  onLeftItemSelect = (selectedKey: string, checked: boolean) => this.onItemSelect('left', selectedKey, checked);
 
-  onRightItemSelect = (selectedKey: string, checked: boolean) =>
-    this.onItemSelect('right', selectedKey, checked);
+  onRightItemSelect = (selectedKey: string, checked: boolean) => this.onItemSelect('right', selectedKey, checked);
 
   handleScroll = (direction: TransferDirection, e: React.SyntheticEvent<HTMLUListElement>) => {
     const { onScroll } = this.props;

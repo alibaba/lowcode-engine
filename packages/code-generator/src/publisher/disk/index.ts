@@ -19,8 +19,8 @@ export interface IDiskPublisher extends IPublisher<IDiskFactoryParams, string> {
 }
 
 export const createDiskPublisher: PublisherFactory<
-  IDiskFactoryParams,
-  IDiskPublisher
+IDiskFactoryParams,
+IDiskPublisher
 > = (params: IDiskFactoryParams = {}): IDiskPublisher => {
   let { project, outputPath = './' } = params;
 

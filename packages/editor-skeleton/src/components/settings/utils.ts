@@ -4,7 +4,7 @@ function getHotterFromSetter(setter) {
 
 function getTransducerFromSetter(setter) {
   return setter && (
-      setter.transducer || setter.Transducer
+    setter.transducer || setter.Transducer
       || (setter.type && (setter.type.transducer || setter.type.Transducer))
     ) || null; // eslint-disable-line
 }

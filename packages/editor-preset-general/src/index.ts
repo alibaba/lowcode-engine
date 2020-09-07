@@ -22,7 +22,7 @@ editor.set(Skeleton, skeleton);
 editor.set('skeleton', skeleton);
 registerDefaults();
 
-export const designer = new Designer({ editor: editor });
+export const designer = new Designer({ editor });
 editor.set(Designer, designer);
 editor.set('designer', designer);
 

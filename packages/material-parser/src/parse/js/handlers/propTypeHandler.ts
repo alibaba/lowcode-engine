@@ -104,7 +104,7 @@ function getDefinePropertyValuePath(nodePath: any, propName: string) {
 }
 
 function getPropTypeHandler(propName: string) {
-  return function(documentation: any, path: any) {
+  return function (documentation: any, path: any) {
     let propTypesPath = getMemberValuePath(path, propName);
     if (!propTypesPath) {
       propTypesPath = getDefinePropertyValuePath(path, propName);

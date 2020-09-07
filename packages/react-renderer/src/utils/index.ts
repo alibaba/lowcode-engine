@@ -1,17 +1,11 @@
 import Debug from 'debug';
 import _keymaster from 'keymaster';
-export const keymaster = _keymaster;
 import { forEach as _forEach, shallowEqual as _shallowEqual } from '@ali/b3-one/lib/obj';
 import { serialize as serializeParams } from '@ali/b3-one/lib/url';
-export const forEach = _forEach;
-export const shallowEqual = _shallowEqual;
-//moment对象配置
+// moment对象配置
 import _moment from 'moment';
 import 'moment/locale/zh-cn';
-export const moment = _moment;
-moment.locale('zh-cn');
 import pkg from '../../package.json';
-window.sdkVersion = pkg.version;
 
 import _pick from 'lodash/pick';
 import _deepEqual from 'lodash/isEqualWith';
@@ -20,24 +14,32 @@ import _isEmpty from 'lodash/isEmpty';
 import _throttle from 'lodash/throttle';
 import _debounce from 'lodash/debounce';
 
+import _serialize from 'serialize-javascript';
+import * as _jsonuri from 'jsonuri';
+
+import IntlMessageFormat from 'intl-messageformat';
+
+export const keymaster = _keymaster;
+export const forEach = _forEach;
+export const shallowEqual = _shallowEqual;
+export const moment = _moment;
+moment.locale('zh-cn');
+window.sdkVersion = pkg.version;
+
 export const pick = _pick;
 export const deepEqual = _deepEqual;
 export const clone = _clone;
 export const isEmpty = _isEmpty;
 export const throttle = _throttle;
 export const debounce = _debounce;
-
-import _serialize from 'serialize-javascript';
 export const serialize = _serialize;
-import * as _jsonuri from 'jsonuri';
 export const jsonuri = _jsonuri;
 export { get, post, jsonp, mtop, request } from './request';
-
-import IntlMessageFormat from 'intl-messageformat';
 
 const ReactIs = require('react-is');
 const ReactPropTypesSecret = require('prop-types/lib/ReactPropTypesSecret');
 const factoryWithTypeCheckers = require('prop-types/factoryWithTypeCheckers');
+
 const PropTypes2 = factoryWithTypeCheckers(ReactIs.isElement, true);
 
 const EXPRESSION_TYPE = {
@@ -46,8 +48,8 @@ const EXPRESSION_TYPE = {
   JSSLOT: 'JSSlot',
 };
 const EXPRESSION_REG = /^\{\{(\{.*\}|.*?)\}\}$/;
-const hasSymbol = typeof Symbol === 'function' && Symbol['for'];
-const REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol['for']('react.forward_ref') : 0xead0;
+const hasSymbol = typeof Symbol === 'function' && Symbol.for;
+const REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
 const debug = Debug('utils:index');
 
 const ENV = {
@@ -85,8 +87,8 @@ export function inSameDomain() {
 
 export function getFileCssName(fileName) {
   if (!fileName) return;
-  let name = fileName.replace(/([A-Z])/g, '-$1').toLowerCase();
-  return ('luna-' + name)
+  const name = fileName.replace(/([A-Z])/g, '-$1').toLowerCase();
+  return (`luna-${ name}`)
     .split('-')
     .filter((p) => !!p)
     .join('-');
@@ -99,7 +101,7 @@ export function isJSFunction(obj) {
   return obj && typeof obj === 'object' && EXPRESSION_TYPE.JSFUNCTION === obj.type;
 }
 export function isJSExpression(obj) {
-  //兼容两种写法，有js构造表达式的情况
+  // 兼容两种写法，有js构造表达式的情况
   const isJSExpressionObj =
     obj && typeof obj === 'object' && EXPRESSION_TYPE.JSEXPRESSION === obj.type && typeof obj.value === 'string';
   const isJSExpressionStr = typeof obj === 'string' && EXPRESSION_REG.test(obj.trim());
@@ -131,7 +133,7 @@ export function getValue(obj, path, defaultValue) {
 
 export function parseObj(schemaStr) {
   if (typeof schemaStr !== 'string') return schemaStr;
-  //默认调用顶层窗口的parseObj,保障new Function的window对象是顶层的window对象
+  // 默认调用顶层窗口的parseObj,保障new Function的window对象是顶层的window对象
   try {
     if (inSameDomain() && window.parent.__newFunc) {
       return window.parent.__newFunc(`"use strict"; return ${schemaStr}`)();
@@ -157,7 +159,7 @@ export function fillObj(receiver = {}, ...suppliers) {
 
 // 中划线转驼峰
 export function toHump(name) {
-  return name.replace(/\-(\w)/g, function(all, letter) {
+  return name.replace(/\-(\w)/g, (all, letter) => {
     return letter.toUpperCase();
   });
 }
@@ -168,7 +170,7 @@ export function toLine(name) {
 
 // 获取当前环境
 export function getEnv() {
-  const userAgent = navigator.userAgent;
+  const { userAgent } = navigator;
   const isVscode = /Electron\//.test(userAgent);
   if (isVscode) return ENV.VSCODE;
   const isTheia = window.is_theia === true;
@@ -260,7 +262,7 @@ export function setClipboardData(str) {
       textArea.focus();
       textArea.select();
       try {
-        let successful = document.execCommand('copy');
+        const successful = document.execCommand('copy');
         if (successful) {
           document.body.removeChild(textArea);
           resolve();
@@ -311,8 +313,7 @@ export function moveArrayItem(arr, sourceIdx, distIdx, direction) {
     sourceIdx >= arr.length ||
     distIdx < 0 ||
     distIdx >= arr.length
-  )
-    return arr;
+  ) return arr;
   const item = arr[sourceIdx];
   if (direction === 'after') {
     arr.splice(distIdx + 1, 0, item);
@@ -448,12 +449,12 @@ export function addCssTag(id, content) {
 // 注册快捷
 export function registShortCuts(config, appHelper) {
   const keyboardFilter = (keymaster.filter = (event) => {
-    let eTarget = event.target || event.srcElement;
-    let tagName = eTarget.tagName;
-    let isInput = !!(tagName == 'INPUT' || tagName == 'SELECT' || tagName == 'TEXTAREA');
-    let isContenteditable = !!eTarget.getAttribute('contenteditable');
+    const eTarget = event.target || event.srcElement;
+    const { tagName } = eTarget;
+    const isInput = !!(tagName == 'INPUT' || tagName == 'SELECT' || tagName == 'TEXTAREA');
+    const isContenteditable = !!eTarget.getAttribute('contenteditable');
     if (isInput || isContenteditable) {
-      if (event.metaKey === true && [70, 83].includes(event.keyCode)) event.preventDefault(); //禁止触发chrome原生的页面保存或查找
+      if (event.metaKey === true && [70, 83].includes(event.keyCode)) event.preventDefault(); // 禁止触发chrome原生的页面保存或查找
       return false;
     } else {
       return true;
@@ -462,7 +463,7 @@ export function registShortCuts(config, appHelper) {
 
   const ideMessage = appHelper.utils && appHelper.utils.ideMessage;
 
-  //复制
+  // 复制
   if (!document.copyListener) {
     document.copyListener = (e) => {
       if (!keyboardFilter(e) || appHelper.isCopying) return;
@@ -489,16 +490,16 @@ export function registShortCuts(config, appHelper) {
     }
   }
 
-  //粘贴
+  // 粘贴
   if (!document.pasteListener) {
     const doPaste = (e, text) => {
       if (!keyboardFilter(e) || appHelper.isPasting) return;
-      const schemaHelper = appHelper.schemaHelper;
+      const { schemaHelper } = appHelper;
       let targetKey = appHelper.activeKey;
       let direction = 'after';
       const topKey = schemaHelper.schema && schemaHelper.schema.__ctx && schemaHelper.schema.__ctx.lunaKey;
       if (!targetKey || topKey === targetKey) {
-        const schemaHelper = appHelper.schemaHelper;
+        const { schemaHelper } = appHelper;
         const topKey = schemaHelper.schema && schemaHelper.schema.__ctx && schemaHelper.schema.__ctx.lunaKey;
         if (!topKey) return;
         targetKey = topKey;
@@ -529,7 +530,7 @@ export function registShortCuts(config, appHelper) {
     document.addEventListener('paste', document.pasteListener);
     if (window.parent.vscode) {
       keymaster('command+v', (e) => {
-        const sendIDEMessage = window.parent.sendIDEMessage;
+        const { sendIDEMessage } = window.parent;
         sendIDEMessage &&
           sendIDEMessage({
             action: 'readClipboard',
@@ -593,13 +594,13 @@ export function parseData(schema, self) {
   return schema;
 }
 
-/*全匹配{{开头,}}结尾的变量表达式，或者对象类型JSExpression，且均不支持省略this */
+/* 全匹配{{开头,}}结尾的变量表达式，或者对象类型JSExpression，且均不支持省略this */
 export function parseExpression(str, self) {
   try {
     const contextArr = ['"use strict";', 'var __self = arguments[0];'];
     contextArr.push('return ');
     let tarStr;
-    //向前兼容，支持标准协议新格式
+    // 向前兼容，支持标准协议新格式
     if (typeof str === 'string') {
       const regRes = str.trim().match(EXPRESSION_REG);
       tarStr = regRes[1];
@@ -608,7 +609,7 @@ export function parseExpression(str, self) {
     }
     tarStr = tarStr.replace(/this(\W|$)/g, (a, b) => `__self${b}`);
     tarStr = contextArr.join('\n') + tarStr;
-    //默认调用顶层窗口的parseObj,保障new Function的window对象是顶层的window对象
+    // 默认调用顶层窗口的parseObj,保障new Function的window对象是顶层的window对象
     if (inSameDomain() && window.parent.__newFunc) {
       return window.parent.__newFunc(tarStr)(self);
     }

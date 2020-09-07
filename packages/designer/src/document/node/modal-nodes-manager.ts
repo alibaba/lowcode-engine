@@ -21,8 +21,11 @@ export class ModalNodesManager {
   public willDestroy: any;
 
   private page: DocumentModel;
+
   private modalNodes: Node[];
+
   private nodeRemoveEvents: any;
+
   private emitter: EventEmitter;
 
   constructor(page: DocumentModel) {
@@ -44,8 +47,8 @@ export class ModalNodesManager {
   public getVisibleModalNode() {
     const visibleNode = this.modalNodes
       ? this.modalNodes.find((node: Node) => {
-          return node.getVisible();
-        })
+        return node.getVisible();
+      })
       : null;
     return visibleNode;
   }

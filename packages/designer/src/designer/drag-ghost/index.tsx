@@ -9,9 +9,13 @@ type offBinding = () => any;
 @observer
 export default class DragGhost extends Component<{ designer: Designer }> {
   private dispose: offBinding[] = [];
+
   @obx.ref private dragObject: DragObject | null = null;
+
   @obx.ref private x = 0;
+
   @obx.ref private y = 0;
+
   private dragon = this.props.designer.dragon;
 
   constructor(props: any) {
@@ -48,7 +52,7 @@ export default class DragGhost extends Component<{ designer: Designer }> {
   }
 
   renderGhostGroup() {
-    const dragObject = this.dragObject;
+    const { dragObject } = this;
     if (isDragNodeObject(dragObject)) {
       return dragObject.nodes.map(node => {
         const ghost = (

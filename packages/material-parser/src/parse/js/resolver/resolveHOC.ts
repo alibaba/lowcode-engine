@@ -13,7 +13,7 @@ const {
  * Else the path itself is returned.
  */
 export default function resolveHOC(path: any): any {
-  const node = path.node;
+  const { node } = path;
   if (
     t.CallExpression.check(node) &&
     !isReactCreateClassCall(path) &&

@@ -13,5 +13,5 @@ export default function (Comp) {
         ...this.props,
       });
     }
-  }
+  };
 }

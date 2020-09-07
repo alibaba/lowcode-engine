@@ -54,7 +54,6 @@ export interface IVariableSettable {
 }
 
 export default class Prop implements IVariableSettable {
-
   /**
    * Setters predefined as default options
    * can by selected by user for every prop
@@ -65,20 +64,27 @@ export default class Prop implements IVariableSettable {
   public static INSET_SETTER = {};
 
   public id: string;
+
   public emitter: EventEmitter;
 
   public inited: boolean;
+
   public i18nLink: any;
+
   public loopLock: boolean;
 
   public props: any;
+
   public parent: any;
 
   public config: IPropConfig;
+
   public initial: any;
+
   public initialData: any;
 
   public expanded: boolean;
+
   public useVariable?: boolean;
 
   /**
@@ -86,18 +92,24 @@ export default class Prop implements IVariableSettable {
    * prototype.js can config Transducer.toNative to generate value
    */
   public value: any;
+
   /**
    * value to be used in VisualDesigner more flexible
    * prototype.js can config Transducer.toHot to generate hotValue
    */
   public hotValue: any;
+
   /**
    * 启用变量之后，变量表达式字符串值
    */
   public variableValue: string;
+
   public hotData: IMMap<string, IHotDataMap>;
+
   public defaultValue: any;
+
   public transducer: any;
+
   public inGroup: boolean;
 
   constructor(parent: any, config: IPropConfig, data?: any) {
@@ -263,7 +275,7 @@ export default class Prop implements IVariableSettable {
   public getValue(disableCache?: boolean, options?: {
     disableAccessor?: boolean;
   }) {
-    const accessor = this.config.accessor;
+    const { accessor } = this.config;
     if (accessor && (!options || !options.disableAccessor)) {
       const value = accessor.call(this as any, this.value);
       if (!disableCache) {
@@ -313,7 +325,7 @@ export default class Prop implements IVariableSettable {
       return;
     }
 
-    const sync = this.config.sync;
+    const { sync } = this.config;
     if (sync) {
       const value = sync.call(this as any, this.getValue(true));
       if (value !== undefined) {
@@ -356,7 +368,7 @@ export default class Prop implements IVariableSettable {
     }
   }
 
-  public setUseVariable(flag: boolean = false) {
+  public setUseVariable(flag = false) {
     if (this.useVariable === flag) { return; }
 
     const state = this.props.chainReach(this);
@@ -412,7 +424,7 @@ export default class Prop implements IVariableSettable {
 
     this.i18nLink = I18nUtil.attach(this, this.value, ((val: any) => this.setValue(val, false, true)) as any);
 
-    const mutator = this.config.mutator;
+    const { mutator } = this.config;
 
     if (!extraOptions) {
       extraOptions = {};
@@ -484,7 +496,7 @@ export default class Prop implements IVariableSettable {
     this.resolveValue();
 
     if (!options || !options.disableMutator) {
-      const mutator = this.config.mutator;
+      const { mutator } = this.config;
       if (mutator) {
         mutator.call(this as any, value);
       }
@@ -511,7 +523,7 @@ export default class Prop implements IVariableSettable {
       return true;
     }
 
-    let hidden = this.config.hidden;
+    let { hidden } = this.config;
     if (typeof hidden === 'function') {
       hidden = hidden.call(this as any, this.getValue());
     }
@@ -519,7 +531,7 @@ export default class Prop implements IVariableSettable {
   }
 
   public isDisabled() {
-    let disabled = this.config.disabled;
+    let { disabled } = this.config;
     if (typeof disabled === 'function') {
       disabled = disabled.call(this as any, this.getValue());
     }
@@ -529,7 +541,7 @@ export default class Prop implements IVariableSettable {
   public isIgnore() {
     if (this.isDisabled()) { return true; }
 
-    let ignore = this.config.ignore;
+    let { ignore } = this.config;
     if (typeof ignore === 'function') {
       ignore = ignore.call(this as any, this.getValue());
     }

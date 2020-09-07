@@ -11,6 +11,7 @@ export class Title extends Component<{ title: TitleContent; className?: string; 
     super(props);
     this.handleClick = this.handleClick.bind(this);
   }
+
   handleClick(e: React.MouseEvent) {
     const { title, onClick } = this.props as any;
     const url = title && (title.docUrl || title.url);
@@ -22,6 +23,7 @@ export class Title extends Component<{ title: TitleContent; className?: string; 
     // TODO: 操作交互冲突，目前 mixedSetter 仅有 2 个 setter 注册时用到了 onClick
     onClick && onClick(e);
   }
+
   render() {
     let { title, className } = this.props;
     if (title == null) {
@@ -53,7 +55,7 @@ export class Title extends Component<{ title: TitleContent; className?: string; 
       <span
         className={classNames('lc-title', className, title.className, {
           'has-tip': !!tip,
-          'only-icon': !title.label
+          'only-icon': !title.label,
         })}
         onClick={this.handleClick}
       >

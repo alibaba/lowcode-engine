@@ -10,6 +10,7 @@ export default class MainArea extends Component<{ area: Area<any, Panel | Widget
   shouldComponentUpdate() {
     return false;
   }
+
   render() {
     const { area } = this.props;
     return (

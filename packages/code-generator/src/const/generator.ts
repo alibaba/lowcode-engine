@@ -109,6 +109,6 @@ export const DEFAULT_LINK_AFTER = {
   [COMMON_CHUNK_NAME.StyleDepsImport]: [],
   [COMMON_CHUNK_NAME.StyleCssContent]: [COMMON_CHUNK_NAME.StyleDepsImport],
   [COMMON_CHUNK_NAME.HtmlContent]: [],
-}
+};
 
 export const COMMON_SUB_MODULE_NAME = 'index';

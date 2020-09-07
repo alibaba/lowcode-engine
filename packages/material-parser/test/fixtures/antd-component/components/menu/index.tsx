@@ -15,15 +15,15 @@ export { MenuItemGroupProps } from 'rc-menu/es/MenuItemGroup';
 
 export interface SelectParam {
   key: string;
-  keyPath: Array<string>;
+  keyPath: string[];
   item: any;
   domEvent: Event;
-  selectedKeys: Array<string>;
+  selectedKeys: string[];
 }
 
 export interface ClickParam {
   key: string;
-  keyPath: Array<string>;
+  keyPath: string[];
   item: any;
   domEvent: Event;
 }
@@ -35,10 +35,10 @@ export interface MenuProps {
   theme?: MenuTheme;
   mode?: MenuMode;
   selectable?: boolean;
-  selectedKeys?: Array<string>;
-  defaultSelectedKeys?: Array<string>;
-  openKeys?: Array<string>;
-  defaultOpenKeys?: Array<string>;
+  selectedKeys?: string[];
+  defaultSelectedKeys?: string[];
+  openKeys?: string[];
+  defaultOpenKeys?: string[];
   onOpenChange?: (openKeys: string[]) => void;
   onSelect?: (param: SelectParam) => void;
   onDeselect?: (param: SelectParam) => void;

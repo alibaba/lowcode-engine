@@ -8,7 +8,7 @@ describe('List Item Layout', () => {
     {
       key: 1,
       href: 'http://ant.design',
-      title: `ant design`,
+      title: 'ant design',
       avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
       description:
         'Ant Design, a design language for background applications, is refined by Ant UED Team.',

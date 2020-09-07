@@ -25,12 +25,12 @@ export interface OldPaneConfig {
   place?: string; // align: left|right|top|center|bottom
   description?: string; // tip?
   tip?:
-    | string
-    | {
-        // as help tip
-        url?: string;
-        content?: string | JSX.Element;
-      }; // help
+  | string
+  | {
+    // as help tip
+    url?: string;
+    content?: string | JSX.Element;
+  }; // help
 
   init?: () => any;
   destroy?: () => any;

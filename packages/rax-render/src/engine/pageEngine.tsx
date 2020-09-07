@@ -79,8 +79,8 @@ export default class PageEngine extends BaseEngine {
     debug(`page.render - ${__schema.fileName}`);
 
     const {
- id, className, style, autoLoading, defaultHeight = 300, loading
-} = this.__parseData(__schema.props);
+      id, className, style, autoLoading, defaultHeight = 300, loading,
+    } = this.__parseData(__schema.props);
 
     const { Page } = __components;
     if (Page) {

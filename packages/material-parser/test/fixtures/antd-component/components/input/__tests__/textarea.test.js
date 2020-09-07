@@ -189,9 +189,7 @@ describe('TextArea allowClear', () => {
   });
 
   it('should not show icon if defaultValue is undefined, null or empty string', () => {
-    const wrappers = [null, undefined, ''].map(val =>
-      mount(<TextArea allowClear defaultValue={val} />),
-    );
+    const wrappers = [null, undefined, ''].map(val => mount(<TextArea allowClear defaultValue={val} />));
     wrappers.forEach(wrapper => {
       expect(wrapper.find('textarea').getDOMNode().value).toEqual('');
       expect(wrapper.find('.ant-textarea-clear-icon').exists()).toEqual(false);

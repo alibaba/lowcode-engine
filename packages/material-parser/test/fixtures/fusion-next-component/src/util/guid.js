@@ -9,8 +9,8 @@ let timestamp = Date.now();
  * guid(); // j7jv509c
  * guid('prefix-'); // prefix-j7jv509d
  */
-export default function(prefix) {
-    prefix = prefix || '';
+export default function (prefix) {
+  prefix = prefix || '';
 
-    return prefix + (timestamp++).toString(36);
+  return prefix + (timestamp++).toString(36);
 }

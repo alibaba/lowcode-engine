@@ -7,9 +7,9 @@ import {
   Rect,
   isLocationChildrenDetail,
   LocationChildrenDetail,
-  isVertical
+  isVertical,
 } from '../../designer';
-import { ISimulatorHost, } from '../../simulator';
+import { ISimulatorHost } from '../../simulator';
 import { ParentalNode } from '../../document';
 import './insertion.less';
 

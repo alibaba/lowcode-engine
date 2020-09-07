@@ -35,6 +35,7 @@ function makeEventsHandler(
 // 拖动缩放
 export default class DragResizeEngine {
   private emitter: EventEmitter;
+
   private dragResizing = false;
 
   constructor(readonly designer: Designer) {

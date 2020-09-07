@@ -11,7 +11,7 @@ function accessLibrary(library: string | object) {
   if (typeof library !== 'string') {
     return library;
   }
-  
+
   return (window as any)[library] || generateHtmlComp(library);
 }
 

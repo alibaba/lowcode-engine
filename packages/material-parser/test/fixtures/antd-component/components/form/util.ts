@@ -4,7 +4,7 @@ import { useForm as useRcForm, FormInstance as RcFormInstance } from 'rc-field-f
 import scrollIntoView from 'scroll-into-view-if-needed';
 import { ScrollOptions } from './interface';
 
-type InternalNamePath = (string | number)[];
+type InternalNamePath = Array<string | number>;
 
 /**
  * Always debounce error to avoid [error -> null -> error] blink
@@ -77,24 +77,23 @@ export function useForm(form?: FormInstance): [FormInstance] {
   const [rcForm] = useRcForm();
 
   const wrapForm: FormInstance = React.useMemo(
-    () =>
-      form || {
-        ...rcForm,
-        __INTERNAL__: {},
-        scrollToField: (name: string, options: ScrollOptions = {}) => {
-          const namePath = toArray(name);
-          const fieldId = getFieldId(namePath, wrapForm.__INTERNAL__.name);
-          const node: HTMLElement | null = fieldId ? document.getElementById(fieldId) : null;
+    () => form || {
+      ...rcForm,
+      __INTERNAL__: {},
+      scrollToField: (name: string, options: ScrollOptions = {}) => {
+        const namePath = toArray(name);
+        const fieldId = getFieldId(namePath, wrapForm.__INTERNAL__.name);
+        const node: HTMLElement | null = fieldId ? document.getElementById(fieldId) : null;
 
-          if (node) {
-            scrollIntoView(node, {
-              scrollMode: 'if-needed',
-              block: 'nearest',
-              ...options,
-            });
-          }
-        },
+        if (node) {
+          scrollIntoView(node, {
+            scrollMode: 'if-needed',
+            block: 'nearest',
+            ...options,
+          });
+        }
       },
+    },
     [form, rcForm],
   );
 
@@ -108,7 +107,7 @@ export function useFrameState<ValueType>(
 ): [ValueType, (updater: Updater<ValueType>) => void] {
   const [value, setValue] = React.useState(defaultValue);
   const frameRef = React.useRef<number | null>(null);
-  const batchRef = React.useRef<Updater<ValueType>[]>([]);
+  const batchRef = React.useRef<Array<Updater<ValueType>>>([]);
   const destroyRef = React.useRef(false);
 
   React.useEffect(

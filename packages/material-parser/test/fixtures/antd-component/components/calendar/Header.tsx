@@ -42,7 +42,7 @@ function YearSelect<DateType>(props: SharedProps<DateType>) {
   }
 
   const suffix = locale && locale.year === '年' ? '年' : '';
-  const options: { label: string; value: number }[] = [];
+  const options: Array<{ label: string; value: number }> = [];
   for (let index = start; index < end; index++) {
     options.push({ label: `${index}${suffix}`, value: index });
   }
@@ -109,7 +109,7 @@ function MonthSelect<DateType>(props: SharedProps<DateType>) {
   }
 
   const months = locale.shortMonths || generateConfig.locale.getShortMonths!(locale.locale);
-  const options: { label: string; value: number }[] = [];
+  const options: Array<{ label: string; value: number }> = [];
   for (let index = start; index < end; index += 1) {
     options.push({
       label: months[index],

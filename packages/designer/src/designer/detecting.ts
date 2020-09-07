@@ -3,18 +3,22 @@ import { Node, DocumentModel } from '../document';
 
 export class Detecting {
   @obx.ref private _enable = true;
+
   get enable() {
     return this._enable;
   }
+
   set enable(flag: boolean) {
     this._enable = flag;
     if (!flag) {
       this._current = null;
     }
   }
+
   @obx.ref xRayMode = false;
 
   @obx.ref private _current: Node | null = null;
+
   get current() {
     return this._current;
   }

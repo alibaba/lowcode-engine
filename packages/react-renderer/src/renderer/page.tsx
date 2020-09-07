@@ -80,8 +80,8 @@ export default class PageRenderer extends BaseRenderer {
     this.__render();
 
     const props = this.__parseData(__schema.props);
-    const { id, className, style, autoLoading, defaultHeight = 300, loading
-} = props;
+    const { id, className, style, autoLoading, defaultHeight = 300, loading,
+    } = props;
 
     const { Page } = __components;
     if (Page) {

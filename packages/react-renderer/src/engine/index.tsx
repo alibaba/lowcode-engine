@@ -31,15 +31,16 @@ class FaultComponent extends PureComponent {
     // FIXME: errorlog
     console.error('render error', this.props);
     const { _componentName: componentName } = this.props;
-    return <Div 
-    style={{
-      backgroundColor: '#DE2710',
-      padding: '15px',
-      fontSize: '18px',
-      textAlign: 'center',
-      color: 'white',
-    }}
-    >组件 {componentName} 渲染错误，请打开控制台排查</Div>;;
+    return (<Div
+      style={{
+        backgroundColor: '#DE2710',
+        padding: '15px',
+        fontSize: '18px',
+        textAlign: 'center',
+        color: 'white',
+      }}
+    >组件 {componentName} 渲染错误，请打开控制台排查
+            </Div>);
   }
 }
 
@@ -47,7 +48,7 @@ class NotFoundComponent extends PureComponent {
   render() {
     console.error('component not found:', this.props);
     const { _componentName: componentName } = this.props;
-    return <Div 
+    return (<Div
       {...this.props}
       style={{
         backgroundColor: '#3E91C9',
@@ -56,7 +57,8 @@ class NotFoundComponent extends PureComponent {
         textAlign: 'center',
         color: 'white',
       }}
-      >组件 {componentName} 无视图，请打开控制台排查</Div>;
+    >组件 {componentName} 无视图，请打开控制台排查
+            </Div>);
   }
 }
 
@@ -140,7 +142,7 @@ export default class Engine extends PureComponent {
     Component.getDerivedStateFromError = (error) => ({ engineRenderError: true, error });
     const engine = this;
     const originRender = Component.prototype.render;
-    Component.prototype.render = function() {
+    Component.prototype.render = function () {
       if (this.state && this.state.engineRenderError) {
         this.state.engineRenderError = false;
         return engine.createElement(engine.getFaultComponent(), {
@@ -151,7 +153,7 @@ export default class Engine extends PureComponent {
       return originRender.call(this);
     };
     const originShouldComponentUpdate = Component.prototype.shouldComponentUpdate;
-    Component.prototype.shouldComponentUpdate = function(nextProps, nextState) {
+    Component.prototype.shouldComponentUpdate = function (nextProps, nextState) {
       if (nextState && nextState.engineRenderError) {
         return true;
       }
@@ -175,8 +177,8 @@ export default class Engine extends PureComponent {
 
   render() {
     const {
- schema, designMode, appHelper, components, customCreateElement
-} = this.props;
+      schema, designMode, appHelper, components, customCreateElement,
+    } = this.props;
     if (isEmpty(schema)) {
       return null;
     }

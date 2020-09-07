@@ -18,12 +18,11 @@ export default class ReactProvider extends Provider {
     const { content: Layout, props: extraLayoutProps } = app.getLayout(layoutName) || {};
     const sectionalRender = this.isSectionalRender();
     if (!sectionalRender && Layout) {
-      App = (props: any) =>
-        createElement(
-          Layout,
-          { ...layoutProps, ...extraLayoutProps },
-          RouterView ? createElement(RouterView, props) : null,
-        );
+      App = (props: any) => createElement(
+        Layout,
+        { ...layoutProps, ...extraLayoutProps },
+        RouterView ? createElement(RouterView, props) : null,
+      );
     } else {
       App = (props: any) => (RouterView ? createElement(RouterView, props) : null);
     }

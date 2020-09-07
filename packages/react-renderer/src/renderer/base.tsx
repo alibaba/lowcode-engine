@@ -82,29 +82,29 @@ export default class BaseRender extends PureComponent {
   }
 
   reloadDataSource = () => new Promise((resolve, reject) => {
-      debug('reload data source');
-      if (!this.__dataHelper) {
+    debug('reload data source');
+    if (!this.__dataHelper) {
+      this.__showPlaceholder = false;
+      return resolve();
+    }
+    this.__dataHelper
+      .getInitData()
+      .then((res) => {
         this.__showPlaceholder = false;
-        return resolve();
-      }
-      this.__dataHelper
-        .getInitData()
-        .then((res) => {
+        if (isEmpty(res)) {
+          this.forceUpdate();
+          return resolve();
+        }
+        this.setState(res, resolve);
+      })
+      .catch((err) => {
+        if (this.__showPlaceholder) {
           this.__showPlaceholder = false;
-          if (isEmpty(res)) {
-            this.forceUpdate();
-            return resolve();
-          }
-          this.setState(res, resolve);
-        })
-        .catch((err) => {
-          if (this.__showPlaceholder) {
-            this.__showPlaceholder = false;
-            this.forceUpdate();
-          }
-          reject(err);
-        });
-    });
+          this.forceUpdate();
+        }
+        reject(err);
+      });
+  });
 
   __setLifeCycleMethods = (method, args) => {
     const lifeCycleMethods = getValue(this.props.__schema, 'lifeCycles', {});
@@ -245,7 +245,7 @@ export default class BaseRender extends PureComponent {
       }
       if (Array.isArray(schema)) {
         if (schema.length === 1) return this.__createVirtualDom(schema[0], self, parentInfo);
-        return schema.map((item, idx) => this.__createVirtualDom(item, self, parentInfo, item && item.__ctx && item.__ctx.lunaKey ? '' : idx),);
+        return schema.map((item, idx) => this.__createVirtualDom(item, self, parentInfo, item && item.__ctx && item.__ctx.lunaKey ? '' : idx));
       }
       // FIXME
       const _children = this.getSchemaChildren(schema);
@@ -324,13 +324,13 @@ export default class BaseRender extends PureComponent {
       const componentInfo = {};
       const props =
         this.__parseProps(schema.props, self, '', {
-        schema,
-        Comp,
-        componentInfo: {
-          ...componentInfo,
-          props: transformArrayToMap(componentInfo.props, 'name'),
-        },
-      }) || {};
+          schema,
+          Comp,
+          componentInfo: {
+            ...componentInfo,
+            props: transformArrayToMap(componentInfo.props, 'name'),
+          },
+        }) || {};
       // 对于可以获取到ref的组件做特殊处理
       if (acceptsRef(Comp)) {
         otherProps.ref = (ref) => {
@@ -453,7 +453,7 @@ export default class BaseRender extends PureComponent {
       if (isEmpty(params)) {
         return checkProps(this.__createVirtualDom(data, self, { schema, Comp }));
       }
-      return checkProps(function() {
+      return checkProps(function () {
         const args = {};
         if (Array.isArray(params) && params.length) {
           params.map((item, idx) => {

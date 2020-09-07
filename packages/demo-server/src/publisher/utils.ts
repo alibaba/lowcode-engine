@@ -38,7 +38,7 @@ export const generateProjectZip = async (project: IResultDir): Promise<Buffer | 
 const writeFolderToZip = (
   folder: IResultDir,
   parentFolder: JSZip,
-  ignoreFolder: boolean = false
+  ignoreFolder = false
 ) => {
   const zipFolder = ignoreFolder ? parentFolder : parentFolder.folder(folder.name)
 

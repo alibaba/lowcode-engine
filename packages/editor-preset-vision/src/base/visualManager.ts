@@ -11,6 +11,7 @@ import VisualDesigner from './visualDesigner';
 
 export default class VisualManager extends BaseManager implements IManagerController, IDesignerController {
   private visualManagerList: VisualManager[] = [];
+
   private visualDesignerList: VisualDesigner[] = [];
 
   getManager(): VisualManager {

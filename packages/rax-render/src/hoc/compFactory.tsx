@@ -13,11 +13,15 @@ export default function compFactory(schema, components = {}, componentsMap = {},
   const appHelper = new AppHelper(config);
   class LNCompView extends Component {
     static dislayName = 'luna-comp-factory';
+
     static version = config.version || '0.0.0';
+
     static contextType = AppContext;
+
     static propTypes = {
-      forwardedRef: PropTypes.func
+      forwardedRef: PropTypes.func,
     };
+
     render() {
       if (!schema || schema.componentName !== 'Component' || !isFileSchema(schema)) {
         console.warn('自定义组件模型结构异常！');
@@ -43,7 +47,7 @@ export default function compFactory(schema, components = {}, componentsMap = {},
         ...localeProps,
         ...otherProps,
         __schema: schema,
-        ref: forwardedRef
+        ref: forwardedRef,
       };
 
       return (

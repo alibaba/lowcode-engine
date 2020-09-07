@@ -3,10 +3,7 @@ import { render as reactRender } from 'react-dom';
 import { host } from './host';
 import SimulatorRendererView from './renderer-view';
 import { computed, obx } from '@recore/obx';
-import { Asset } from '@ali/lowcode-utils';
-import { getClientRects } from './utils/get-client-rects';
-import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
-import {
+import { Asset,
   isElement,
   cursor,
   setNativeSelection,
@@ -14,6 +11,9 @@ import {
   getSubComponent,
   AssetLoader,
 } from '@ali/lowcode-utils';
+import { getClientRects } from './utils/get-client-rects';
+import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
+
 import { RootSchema, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
 // import { isESModule, isElement, acceptsRef, wrapReactClass, cursor, setNativeSelection } from '@ali/lowcode-utils';
 // import { RootSchema, NpmInfo, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
@@ -26,6 +26,7 @@ const loader = new AssetLoader();
 
 export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   readonly isSimulatorRenderer = true;
+
   private dispose?: () => void;
 
   constructor() {
@@ -79,45 +80,61 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   }
 
   @obx.ref private _schema?: RootSchema;
+
   @computed get schema(): any {
     return this._schema;
   }
+
   private _libraryMap: { [key: string]: string } = {};
+
   private buildComponents() {
     this._components = {
       ...builtinComponents,
       ...buildComponents(this._libraryMap, this._componentsMap),
     };
   }
+
   @obx.ref private _components: any = {};
+
   @computed get components(): object {
     // 根据 device 选择不同组件，进行响应式
     // 更好的做法是，根据 device 选择加载不同的组件资源，甚至是 simulatorUrl
     return this._components;
   }
+
   // context from: utils、constants、history、location、match
   @obx.ref private _appContext = {};
+
   @computed get context(): any {
     return this._appContext;
   }
+
   @obx.ref private _designMode = 'design';
+
   @computed get designMode(): any {
     return this._designMode;
   }
+
   @obx.ref private _device = 'default';
+
   @computed get device() {
     return this._device;
   }
+
   @obx.ref private _componentsMap = {};
+
   @computed get componentsMap(): any {
     return this._componentsMap;
   }
+
   @computed get suspended(): any {
     return false;
   }
+
   @computed get scope(): any {
     return null;
   }
+
   /**
    * 加载资源
    */
@@ -126,6 +143,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   }
 
   private instancesMap = new Map<string, ReactInstance[]>();
+
   private unmountIntance(id: string, instance: ReactInstance) {
     const instances = this.instancesMap.get(id);
     if (instances) {
@@ -136,8 +154,9 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
       }
     }
   }
+
   mountInstance(id: string, instance: ReactInstance | null) {
-    const instancesMap = this.instancesMap;
+    const { instancesMap } = this;
     if (instance == null) {
       let instances = this.instancesMap.get(id);
       if (instances) {
@@ -167,7 +186,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
         origUnmount = origUnmount.origUnmount;
       }
       // hack! delete instance from map
-      const newUnmount = function(this: any) {
+      const newUnmount = function (this: any) {
         unmountIntance(id, instance);
         origUnmount && origUnmount.call(this);
       };
@@ -196,6 +215,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   }
 
   private ctxMap = new Map<string, object>();
+
   mountContext(id: string, ctx: object) {
     this.ctxMap.set(id, ctx);
   }
@@ -269,7 +289,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
     };
 
     const renderer = this;
-    const componentsMap = renderer.componentsMap;
+    const { componentsMap } = renderer;
 
     class Ele extends React.Component<{ schema: any; propsMap: any }> {
       private isModal: boolean;
@@ -279,7 +299,6 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
         const componentMeta = host.document.getComponentMeta(props.schema.componentName);
         if (componentMeta?.prototype?.isModal()) {
           this.isModal = true;
-          return;
         }
       }
 
@@ -310,7 +329,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
       }
 
       render() {
-        const componentName = _schema.componentName;
+        const { componentName } = _schema;
         if (componentName === 'Component') {
           let children = [];
           const propsMap = this.props || {};
@@ -342,17 +361,21 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   setNativeSelection(enableFlag: boolean) {
     setNativeSelection(enableFlag);
   }
+
   setDraggingState(state: boolean) {
     cursor.setDragging(state);
   }
+
   setCopyState(state: boolean) {
     cursor.setCopy(state);
   }
+
   clearState() {
     cursor.release();
   }
 
   private _running = false;
+
   run() {
     if (this._running) {
       return;
@@ -409,7 +432,7 @@ function getClosestNodeInstance(from: ReactInstance, specId?: string): NodeInsta
       const nodeId = el[SYMBOL_VNID];
       if (!specId || specId === nodeId) {
         return {
-          nodeId: nodeId,
+          nodeId,
           instance: el,
         };
       }
@@ -429,8 +452,8 @@ function getNodeInstance(fiberNode: any, specId?: string): NodeInstance<ReactIns
     const nodeId = instance[SYMBOL_VNID];
     if (!specId || specId === nodeId) {
       return {
-        nodeId: nodeId,
-        instance: instance,
+        nodeId,
+        instance,
       };
     }
   }

@@ -73,7 +73,7 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
 
   onSort(sortedIds: Array<string | number>) {
     const { itemsMap } = this.state;
-    const { onChange ,itemSetter,field} = this.props;
+    const { onChange, itemSetter, field } = this.props;
     const items = sortedIds.map((id, index) => {
       const item = itemsMap.get(id)!;
       // item.setKey(index);
@@ -85,7 +85,7 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
     });
 
     // 对itemsMap重新生成并刷新当前setter数据
-    let newItems = [],newItemsMap = {}
+    const newItems = []; const newItemsMap = {};
     itemsMap.clear();
     for (let i = 0; i < items.length; i++) {
       const newItem = field.createField({
@@ -101,12 +101,13 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
 
     onChange(values);
     this.setState({
-      items:newItems,
-      itemsMap
+      items: newItems,
+      itemsMap,
     });
   }
 
   private scrollToLast = false;
+
   onAdd() {
     const { items, itemsMap } = this.state;
     const { itemSetter } = this.props;
@@ -127,7 +128,7 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
   }
 
   onRemove(field: SettingField) {
-    const {onChange, itemSetter} = this.props;
+    const { onChange, itemSetter } = this.props;
     const { items, itemsMap } = this.state;
     let i = items.indexOf(field);
     const values = items.map((item) => {
@@ -145,7 +146,7 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
     }
     itemsMap.delete(field.id);
     field.remove();
-    onChange(values)
+    onChange(values);
     this.setState({ items: items.slice() });
   }
 
@@ -171,7 +172,7 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
     }
 
     const { items } = this.state;
-    const scrollToLast = this.scrollToLast;
+    const { scrollToLast } = this;
     this.scrollToLast = false;
     const lastIndex = items.length - 1;
 
@@ -197,12 +198,12 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
 
     return (
       <div className="lc-setter-list lc-block-setter">
-        {/*<div className="lc-block-setter-actions">
+        {/* <div className="lc-block-setter-actions">
           <Button size="medium" onClick={this.onAdd.bind(this)}>
             <Icon type="add" />
             <span>添加</span>
           </Button>
-        </div>*/}
+        </div> */}
         {columns && <div className="lc-setter-list-columns">{columns}</div>}
         {content}
         <Button className="lc-setter-list-add" type="primary" onClick={this.onAdd.bind(this)}>
@@ -222,12 +223,15 @@ class ArrayItem extends Component<{
   shouldComponentUpdate() {
     return false;
   }
+
   private shell?: HTMLDivElement | null;
+
   componentDidMount() {
     if (this.props.scrollIntoView && this.shell) {
       this.shell.parentElement!.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }
+
   render() {
     const { onRemove, field } = this.props;
     return (
@@ -261,7 +265,9 @@ export default class ArraySetter extends Component<{
   multiValue?: boolean;
 }> {
   static contextType = PopupContext;
+
   private pipe: any;
+
   render() {
     const { mode, forceInline, ...props } = this.props;
     const { field, itemSetter } = props;
@@ -277,7 +283,6 @@ export default class ArraySetter extends Component<{
     }
 
     if (mode === 'popup' || forceInline) {
-
       const title = (
         <Fragment>
           编辑：

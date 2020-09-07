@@ -34,7 +34,7 @@ export default class Preview extends ReactProvider {
       containerId,
       components: { ...builtInComps, ...buildComponents({ '@alifd/next': 'Next' }, componentsMap) },
       componentsMap,
-      utils: utils,
+      utils,
       constants,
     };
   }
