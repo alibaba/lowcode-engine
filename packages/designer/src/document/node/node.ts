@@ -261,6 +261,15 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       return;
     }
 
+    // 解除老的父子关系，但不需要真的删除节点
+    if (this._parent) {
+      if (this.isSlot()) {
+        this._parent.unlinkSlot(this);
+      } else {
+        this._parent.children.unlinkChild(this);
+      }
+    }
+    // 建立新的父子关系
     this._parent = parent;
     if (parent) {
       this.document.removeWillPurge(this);
@@ -638,6 +647,14 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    */
   comparePosition(otherNode: Node): PositionNO {
     return comparePosition(this, otherNode);
+  }
+
+  unlinkSlot(slotNode: Node) {
+    const i = this._slots.indexOf(slotNode);
+    if (i < 0) {
+      return false;
+    }
+    this._slots.splice(i, 1);
   }
 
   /**

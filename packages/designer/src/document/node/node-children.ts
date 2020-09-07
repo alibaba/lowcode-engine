@@ -106,6 +106,13 @@ export class NodeChildren {
     });
   }
 
+  unlinkChild(node: Node) {
+    const i = this.children.indexOf(node);
+    if (i < 0) {
+      return false;
+    }
+    this.children.splice(i, 1);
+  }
   /**
    * 删除一个节点
    */
