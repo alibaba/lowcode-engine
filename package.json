@@ -18,8 +18,10 @@
     "start:server": "./scripts/start-server.sh",
     "test": "lerna run test --stream",
     "test:snapshot": "lerna run test:snapshot",
-    "xima-fix": "xima fix",
-    "xima-scan": "xima scan"
+    "xima:fix": "xima fix",
+    "xima:scan": "xima scan",
+    "lint": "eslint ./ --quiet",
+    "lint:fix": "eslint ./ --quiet --fix"
   },
   "husky": {
     "hooks": {
