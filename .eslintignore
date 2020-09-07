@@ -1,7 +1,11 @@
 # 忽略目录
-node_modules/
-build/
-dist/
+node_modules
+build
+dist
+es
+lib
+.*
+~*
 
 # 忽略文件
 **/*.min.js

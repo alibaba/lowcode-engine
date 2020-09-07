@@ -18,8 +18,18 @@
     "start:server": "./scripts/start-server.sh",
     "test": "lerna run test --stream",
     "test:snapshot": "lerna run test:snapshot",
-    "xima-scan": "xima scan",
-    "xima-fix": "xima fix"
+    "xima-fix": "xima fix",
+    "xima-scan": "xima scan"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "xima exec lint-staged",
+      "commit-msg": "xima exec commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "**/*.{css,scss,less}": "xima exec stylelint",
+    "**/*.{js,jsx,ts,tsx}": "xima exec eslint"
   },
   "devDependencies": {
     "ava": "^1.0.1",
@@ -35,15 +45,5 @@
   "tnpm": {
     "mode": "yarn",
     "lockfile": "enable"
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "xima exec commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "xima exec lint-staged"
-    }
-  },
-  "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": "xima exec eslint",
-    "**/*.{css,scss,less}": "xima exec stylelint"
   }
 }
