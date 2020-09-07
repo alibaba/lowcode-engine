@@ -12,7 +12,6 @@
   "scripts": {
     "build": "./scripts/build.sh",
     "clean": "rm -rf ./packages/*/lib ./packages/*/es ./packages/*/dist ./packages/*/build",
-    "commit": "git-cz",
     "pub": "lerna publish --force-publish --cd-version prepatch",
     "setup": "./scripts/setup.sh",
     "start": "./scripts/start.sh",
@@ -20,29 +19,9 @@
     "test": "lerna run test --stream",
     "test:snapshot": "lerna run test:snapshot"
   },
-  "lint-staged": {
-    "*.{tsx,ts}": [
-      "eslint --quiet",
-      "git add"
-    ]
-  },
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-conventional-changelog"
-    }
-  },
   "devDependencies": {
-    "@ali/lowcode-config": "^2.0.5",
     "ava": "^1.0.1",
-    "babel-eslint": "^10.0.3",
-    "commitizen": "^3.0.5",
-    "cz-conventional-changelog": "^2.1.0",
-    "eslint": "^6.5.1",
-    "git-cz": "^4.3.1",
-    "husky": "^4.2.3",
     "lerna": "^2.11.0",
-    "lint-staged": "^8.1.0",
-    "prettier": "^1.15.3",
     "ts-node": "^7.0.1",
     "tslib": "^1.9.3",
     "typescript": "^3.2.2"
