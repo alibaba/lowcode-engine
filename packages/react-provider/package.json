@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-react-provider",
-  "version": "1.0.6-1",
+  "version": "1.0.6",
   "description": "React Provider for Runtime",
   "files": [
     "es",
@@ -26,6 +26,7 @@
   "license": "MIT",
   "dependencies": {
     "@ali/lowcode-runtime": "^1.0.6-0",
+    "@ali/lowcode-utils": "^0.8.22",
     "@recore/router": "^1.0.11",
     "react": "^16",
     "react-dom": "^16"

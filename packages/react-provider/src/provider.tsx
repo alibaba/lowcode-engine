@@ -2,6 +2,7 @@ import { createElement, ReactType, ReactElement } from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from '@recore/router';
 import { app, Provider } from '@ali/lowcode-runtime';
+import { AppHelper } from '@ali/lowcode-utils';
 import LazyComponent from './components/LazyComponent';
 
 export default class ReactProvider extends Provider {
@@ -80,11 +81,15 @@ export default class ReactProvider extends Provider {
         defined: { keepAlive: true },
       });
     }
+    const appHelper = new AppHelper();
+    appHelper.set('utils', this.getUtils());
+    appHelper.set('constants', this.getConstants());
     const RouterView = (props: any) => {
       return createElement(Router as any, {
         routes,
         components: this.getComponents(),
         utils: this.getUtils(),
+        appHelper,
         componentsMap: this.getComponentsMapObj(),
         ...props,
       });
