@@ -13,6 +13,7 @@ export class NodeChildren {
     this.children = (Array.isArray(data) ? data : [data]).map(child => {
       return this.owner.document.createNode(child);
     });
+
   }
 
   internalInitParent() {
@@ -261,7 +262,6 @@ export class NodeChildren {
       return fn(child, index);
     });
   }
-
   every(fn: (item: Node, index: number) => any): boolean {
     return this.children.every((child, index) => fn(child, index));
   }
@@ -272,6 +272,10 @@ export class NodeChildren {
 
   filter(fn: (item: Node, index: number) => any) {
     return this.children.filter(fn);
+  }
+
+  find(fn: (item: Node, index: number) => Node) {
+    return this.children.find(fn);
   }
 
   mergeChildren(remover: () => any, adder: (children: Node[]) => NodeData[] | null, sorter: () => any) {

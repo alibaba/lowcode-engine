@@ -1,5 +1,5 @@
 import { ComponentType, ReactElement, Component, FunctionComponent } from 'react';
-import { ComponentMetadata, FieldConfig, InitialItem, FilterItem, AutorunItem, isI18nData } from '@ali/lowcode-types';
+import { ComponentMetadata, FieldConfig, InitialItem, FilterItem, AutorunItem } from '@ali/lowcode-types';
 import {
   ComponentMeta,
   addBuiltinComponentAction,
@@ -7,6 +7,7 @@ import {
   registerMetadataTransducer,
   TransformStage,
 } from '@ali/lowcode-designer';
+import { intl } from '@ali/lowcode-editor-core';
 import {
   OldPropConfig,
   OldPrototypeConfig,
@@ -15,7 +16,7 @@ import {
   upgradePropConfig,
   upgradeConfigure,
 } from './upgrade-metadata';
-import { intl } from '@ali/lowcode-editor-core';
+
 import { designer } from '../editor';
 
 const GlobalPropsConfigure: Array<{
