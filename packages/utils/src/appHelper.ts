@@ -6,7 +6,7 @@ let instance = null;
 
 EventEmitter.defaultMaxListeners = 100;
 
-export default class AppHelper extends EventEmitter {
+export class AppHelper extends EventEmitter {
   static getInstance = () => {
     if (!instance) {
       instance = new AppHelper();

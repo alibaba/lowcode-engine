@@ -2,7 +2,7 @@
 
 import { Component, createElement, forwardRef } from 'rax';
 import PropTypes from 'prop-types';
-import AppHelper from '../utils/appHelper';
+import { AppHelper } from '@ali/lowcode-utils';
 import { forEach, isFileSchema } from '../utils';
 import CompEngine from '../engine/compEngine';
 import BlockEngine from '../engine/blockEngine';
