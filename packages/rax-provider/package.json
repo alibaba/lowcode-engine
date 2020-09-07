@@ -9,7 +9,8 @@
   "main": "lib/index.js",
   "module": "es/index.js",
   "scripts": {
-    "start": "build-scripts start"
+    "start": "build-scripts start",
+    "build": "build-scripts build"
   },
   "peerDependencies": {
     "prop-types": "^15.7.2",
