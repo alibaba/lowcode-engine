@@ -20,8 +20,8 @@
     "test:snapshot": "lerna run test:snapshot",
     "xima:fix": "xima fix",
     "xima:scan": "xima scan",
-    "lint": "eslint ./ --quiet",
-    "lint:fix": "eslint ./ --quiet --fix"
+    "lint": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet",
+    "lint:fix": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet --fix"
   },
   "husky": {
     "hooks": {
