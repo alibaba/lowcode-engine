@@ -115,6 +115,7 @@ function handleTSTypeLiteral(path, typeParams) {
         value: getTSTypeWithRequirements(param.get('typeAnnotation'), typeParams),
       });
     } else if (t.TSCallSignatureDeclaration.check(param.node)) {
+      // @ts-ignore
       type.signature.constructor = handleTSFunctionType(param, typeParams);
     } else if (t.TSIndexSignature.check(param.node)) {
       type.signature.properties.push({
@@ -195,12 +196,14 @@ function handleTSFunctionType(path, typeParams) {
     };
 
     if (param.node.name === 'this') {
+      // @ts-ignore
       type.signature.this = arg.type;
       return;
     }
 
     if (param.node.type === 'RestElement') {
       arg.name = param.node.argument.name;
+      // @ts-ignore
       arg.rest = true;
     }
 
@@ -288,7 +291,7 @@ function handleTSIndexedAccessType(path, typeParams) {
 
 let visitedTypes = {};
 
-function getTSTypeWithResolvedTypes(path, typeParams) {
+function getTSTypeWithResolvedTypes(path, typeParams?) {
   if (t.TSTypeAnnotation.check(path.node)) {
     path = path.get('typeAnnotation');
   }
@@ -343,7 +346,7 @@ function getTSTypeWithResolvedTypes(path, typeParams) {
  *
  * If there is no match, "unknown" is returned.
  */
-export default function getTSType(path, typeParamMap) {
+export default function getTSType(path, typeParamMap?) {
   // Empty visited types before an after run
   // Before: in case the detection threw and we rerun again
   // After: cleanup memory after we are done here
