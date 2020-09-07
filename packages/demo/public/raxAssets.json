@@ -57,7 +57,7 @@
     { "library": "VisualEngineUtils.NumberSetter", "name": "@ali/vs-number" },
     { "library": "VisualEngineUtils.OptionsSetter", "name": "@ali/vs-options" },
     { "library": "VisualEngineUtils.SelectSetter", "name": "@ali/vs-select" },
-    { "library": "VisualEngineUtils.TextSetter", "name": "@ali/vs-text" },
+    { "library": "VisualEngineUtils.TextSetter", "name": "@ali/vs-text"},
     { "library": "VisualEngineUtils.ValidationSetter", "name": "@ali/vs-validation" },
     { "library": "VisualEngineUtils.ImageSetter", "name": "@ali/vs-image" },
     { "library": "VisualEngineUtils.StyleSetter", "name": "@ali/vs-style" },
@@ -84,6 +84,23 @@
   "appKey": "template_deep_mobile",
   "systemType": "",
   "componentDependencies": [
+    {
+      "packageName": "@alife/service-hall-base-space",
+      "library": "alifeServiceHallBaseSpace",
+      "version": "0.1.0",
+      "components": null,
+      "prototypeViewsUrl": null,
+      "prototypeUrls": {
+        "default": [
+          "https://dev.g.alicdn.com/service-hall-components/base-space/0.1.0/designer.js"
+        ]
+      },
+      "alias": "",
+      "prototypeConfigsUrl": [
+        "https://dev.g.alicdn.com/service-hall-components/base-space/0.1.0/designer.js"
+      ],
+      "urls": ["https://dev.g.alicdn.com/service-hall-components/base-space/0.1.0/view.js"]
+    },
     {
       "prototypeViewsUrl": null,
       "prototypeUrls": {

@@ -51,7 +51,7 @@ export interface FieldExtraProps {
     mode?: 'plaintext' | 'paragraph' | 'article';
     // 从 contentEditable 获取内容并设置到属性
     onSaveContent?: (content: string, prop: any) => any;
-  }
+  };
 }
 
 export interface FieldConfig extends FieldExtraProps {

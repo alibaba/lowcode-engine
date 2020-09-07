@@ -1,31 +1,59 @@
 import { Component, isValidElement, ReactElement, ReactNode } from 'react';
 import { Dialog, Search, Input } from '@alifd/next';
 import { PluginProps } from '@ali/lowcode-types';
+import MonacoEditor from 'react-monaco-editor';
 import './index.scss';
 
+
+const defaultEditorOption = {
+  width: '100%',
+  height: '319px',
+  options: {
+    readOnly: false,
+    automaticLayout: true,
+    folding: true, //默认开启折叠代码功能
+    lineNumbers: 'on',
+    wordWrap: 'off',
+    formatOnPaste: true,
+    fontSize: 12,
+    tabSize: 2,
+    scrollBeyondLastLine: false,
+    fixedOverflowWidgets: false,
+    snippetSuggestions: 'top',
+    minimap: {
+      enabled: false,
+    },
+    scrollbar: {
+      vertical: 'auto',
+      horizontal: 'auto',
+    },
+  },
+};
 export default class EventBindDialog extends Component<PluginProps> {
   private eventList: any[] = [
-    {
-      name: 'getData',
-    },
-    {
-      name: 'deleteData',
-    },
-    {
-      name: 'initData',
-    },
-    {
-      name: 'editData',
-    },
-    {
-      name: 'submitData',
-    },
+    // {
+    //   name: 'getData',
+    // },
+    // {
+    //   name: 'deleteData',
+    // },
+    // {
+    //   name: 'initData',
+    // },
+    // {
+    //   name: 'editData',
+    // },
+    // {
+    //   name: 'submitData',
+    // },
   ];
 
   state: any = {
     visiable: false,
+    setterName:'event-setter',
     selectedEventName: '',
     eventName: '',
+    paramStr:''
   };
 
   openDialog = (bindEventName: String) => {
@@ -41,10 +69,29 @@ export default class EventBindDialog extends Component<PluginProps> {
     });
   };
 
+
+
+
   componentDidMount() {
     const { editor, config } = this.props;
-    editor.on(`${config.pluginKey}.openDialog`, (bindEventName: String) => {
+    editor.on(`${config.pluginKey}.openDialog`, (bindEventName: String,setterName:String,paramStr:String) => {
+      console.log('paramStr:'+paramStr);
       this.openDialog(bindEventName);
+      this.setState({
+        setterName,
+        paramStr
+      })
+
+      let schema = editor.get('designer').project.getSchema();
+      let pageNode = schema.componentsTree[0];
+      if (pageNode.methods){
+        this.eventList = [];
+        for (let key in pageNode.methods){
+          this.eventList.push({
+            name:key
+          })
+        }
+      }
     });
   }
 
@@ -87,27 +134,45 @@ export default class EventBindDialog extends Component<PluginProps> {
   onSearchEvent = (searchEventName: String) => {};
 
   onOk = () => {
+    console.log(this);
     const { editor } = this.props;
-    editor.emit('event-setter.bindEvent', this.state.eventName);
+    const {setterName,eventName,paramStr} = this.state;
+    editor.emit(`${setterName}.bindEvent`, eventName,paramStr);
+
     // 选中的是新建事件
     if (this.state.selectedEventName == '') {
-      editor.emit('sourceEditor.addFunction', {
-        functionName: this.state.eventName,
-      });
+      // 判断面板是否处于激活状态
+      // debugger;
+      editor.get('skeleton').getPanel('sourceEditor').show();
+
+      setTimeout(()=>{
+        editor.emit('sourceEditor.addFunction', {
+          functionName: this.state.eventName,
+        });
+      },300)
+
     }
 
     this.closeDialog();
   };
 
+  onChangeEditor = (paramStr) =>{
+    this.setState({
+      paramStr
+    })
+    // console.log(newCode);
+  }
+
+
   render() {
-    const { selectedEventName, eventName, visiable } = this.state;
+    const { selectedEventName, eventName, visiable,paramStr } = this.state;
     return (
       <Dialog
         visible={visiable}
         title="事件绑定"
         onClose={this.closeDialog}
         onCancel={this.closeDialog}
-        onOk={this.onOk}
+        onOk={()=>this.onOk()}
       >
         <div className="event-dialog-body">
           <div className="dialog-left-container">
@@ -152,7 +217,16 @@ export default class EventBindDialog extends Component<PluginProps> {
             </div>
 
             <div className="dialog-small-title">参数设置</div>
-            <Input.TextArea style={{ width: '100%', height: '319px' }} />
+            <div className="editor-container">
+              <MonacoEditor
+                  value = {paramStr}
+                  {...defaultEditorOption}
+                  {...{ language: 'javascript' }}
+                  onChange={(newCode) => this.onChangeEditor(newCode)}
+                  // editorDidMount={(editor, monaco) => this.editorDidMount.call(this, editor, monaco, TAB_KEY.JS_TAB)}
+                />
+            </div>
+
           </div>
         </div>
       </Dialog>

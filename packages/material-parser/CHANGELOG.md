@@ -3,16 +3,123 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [0.9.3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@0.9.2...@ali/lowcode-material-parser@0.9.3) (2020-05-08)
+<a name="1.0.7-0"></a>
+## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@1.0.6-0...@ali/lowcode-material-parser@1.0.7-0) (2020-09-02)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-material-parser
+
+<a name="1.0.6-0"></a>
+## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@1.0.5-0...@ali/lowcode-material-parser@1.0.6-0) (2020-09-02)
 
 
 ### Features
 
-* 🎸 support parsing sub components ([70f3e32](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/70f3e325c64bafe6a098e7eb872a81308566e811))
+* add root field to material parser options ([c6724e9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c6724e9))
 
 
 
 
+<a name="1.0.5-0"></a>
+## [1.0.5-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@1.0.4-0...@ali/lowcode-material-parser@1.0.5-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-material-parser
+
+<a name="1.0.4-0"></a>
+## [1.0.4-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@1.0.3-0...@ali/lowcode-material-parser@1.0.4-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-material-parser
+
+<a name="1.0.3-0"></a>
+## [1.0.3-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@1.0.2-0...@ali/lowcode-material-parser@1.0.3-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-material-parser
+
+<a name="1.0.2-0"></a>
+## [1.0.2-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@1.0.1-0...@ali/lowcode-material-parser@1.0.2-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-material-parser
+
+<a name="1.0.1-0"></a>
+## [1.0.1-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@1.0.0...@ali/lowcode-material-parser@1.0.1-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-material-parser
+
+<a name="1.0.0"></a>
+# [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@0.15.0...@ali/lowcode-material-parser@1.0.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-material-parser
+
+<a name="0.15.0"></a>
+# [0.15.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@0.14.0...@ali/lowcode-material-parser@0.15.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-material-parser
+
+<a name="0.14.0"></a>
+# [0.14.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@0.12.0...@ali/lowcode-material-parser@0.14.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-material-parser
+
+<a name="0.13.0"></a>
+# [0.13.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@0.12.0...@ali/lowcode-material-parser@0.13.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-material-parser
+
+<a name="0.12.0"></a>
+# [0.12.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@0.11.0...@ali/lowcode-material-parser@0.12.0) (2020-08-16)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-material-parser
+
+<a name="0.11.0"></a>
+# [0.11.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@0.10.0...@ali/lowcode-material-parser@0.11.0) (2020-08-14)
+
+
+### Features
+
+* support typescript & dynamic parsing in material parser ([6168ef5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6168ef5))
+
+
+
+
+<a name="0.10.0"></a>
+# [0.10.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@0.9.3...@ali/lowcode-material-parser@0.10.0) (2020-08-14)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-material-parser
 
 <a name="0.9.2"></a>
 ## [0.9.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-material-parser@0.9.1...@ali/lowcode-material-parser@0.9.2) (2020-05-07)

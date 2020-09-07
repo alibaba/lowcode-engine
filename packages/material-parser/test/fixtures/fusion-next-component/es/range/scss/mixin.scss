@@ -1,0 +1,326 @@
+@charset "UTF-8";
+
+// range mixins
+// --------------------------------------------------
+
+@mixin range-bounding() {
+    width: 100%;
+    font-family: inherit;
+    font-weight: normal;
+    font-size: inherit;
+    line-height: inherit;
+    vertical-align: baseline;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+
+    .#{$css-prefix}range-inner {
+        position: relative;
+    }
+
+    .#{$css-prefix}range-inner:only-child {
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+
+    .#{$css-prefix}range-track {
+        position: absolute;
+        width: 100%;
+        top: 50%;
+        border-radius: $range-size-m-track-radius;
+    }
+
+    .#{$css-prefix}range-selected {
+        position: absolute;
+        width: 0;
+        top: 50%;
+        left: 0;
+        border-radius: $range-size-m-track-radius;
+    }
+
+    .#{$css-prefix}range-scale {
+        position: relative;
+        width: 100%;
+        height: $range-size-m-scale-height;
+
+        .#{$css-prefix}range-scale-item {
+            position: absolute;
+            left: 0;
+            width: 2px;
+            border: $range-size-m-scale-item-border-width solid;
+            border-radius: $range-size-m-scale-radius;
+            &:last-child {
+                margin-left: -$range-size-m-scale-item-border-width * 2;
+            }
+        }
+    }
+
+    .#{$css-prefix}range-slider {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        border-radius: 50%;
+    }
+
+    .#{$css-prefix}range-slider-inner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border-width: $range-size-slider-border-width;
+        border-style: $range-size-slider-border-style;
+        border-color: $range-normal-slider-border-color;
+        border-radius: 50%;
+        transition: transform $motion-duration-immediately $motion-linear, border-color $motion-duration-immediately $motion-linear;
+    }
+
+    .#{$css-prefix}range-slider.#{$css-prefix}range-slider-moving .#{$css-prefix}range-slider-inner {
+        border: $line-2 $line-solid $range-normal-selected-color;
+        box-shadow: $range-size-m-slider-shadow-moving;
+        transform: scale(1.2);
+    }
+
+    .#{$css-prefix}range-frag.#{$css-prefix}range-active {
+        .#{$css-prefix}range-slider .#{$css-prefix}range-slider-inner {
+            border: $line-2 $line-solid $range-normal-selected-color;
+            box-shadow: $range-size-m-slider-shadow-moving;
+            transform: scale(1.2);
+        }
+    }
+
+    .#{$css-prefix}range-mark {
+        position: relative;
+        cursor: auto;
+
+        .#{$css-prefix}range-mark-text {
+            position: absolute;
+            left: 0;
+            transform: translateX(-50%);
+            padding-left: 2px;
+            text-align: center;
+        }
+    }
+
+    .#{$css-prefix}range-frag {
+        position: absolute;
+        top: 0;
+        .#{$css-prefix}range-slider {
+            left: 0;
+            &:nth-child(2) {
+                left: 100%;
+            }
+        }
+        .#{$css-prefix}range-selected {
+            width: 100%;
+        }
+    }
+
+    &.disabled {
+        cursor: not-allowed;
+
+        .#{$css-prefix}range-mark {
+            cursor: auto;
+        }
+    }
+}
+
+@mixin range-state(
+    $unselectedColor,
+    $unselectedColorDisabled,
+    $unselectedColorHover,
+    $selectedColor,
+    $selectedColorDisabled,
+    $selectedColorHover,
+    $sliderBgColor,
+    $sliderBgColorDisabled,
+    $sliderBgColorHover,
+    $sliderBorderColor,
+    $sliderBorderColorDisabled,
+    $sliderBorderColorHover,
+    $markColor,
+    $markColorDisabled,
+    $markColorHover,
+    $markColorActivated,
+    $markColorActivatedDisabled,
+    $markColorActivatedHover
+) {
+    .#{$css-prefix}range-track {
+        background-color: $unselectedColor;
+        &:hover {
+            background-color: $unselectedColorHover;
+        }
+    }
+
+    .#{$css-prefix}range-selected {
+        background-color: $selectedColor;
+        //transition: all .4s cubic-bezier(0.23, 1, 0.32, 1);
+        &:hover {
+            background-color: $selectedColorHover;
+        }
+    }
+
+    .#{$css-prefix}range-scale {
+        .#{$css-prefix}range-scale-item {
+            border-color: $unselectedColor;
+            background-color: $unselectedColor;
+            &:hover {
+                border-color: $unselectedColorHover;
+            }
+
+            &.activated {
+                border-color: $selectedColor;
+                background-color: $selectedColor;
+                &:hover {
+                    border-color: $selectedColorHover;
+                }
+            }
+        }
+    }
+
+    .#{$css-prefix}range-slider-inner {
+        background-color: $sliderBgColor;
+        border-color: $sliderBorderColor;
+        &:hover {
+            background-color: $sliderBgColorHover;
+            box-shadow: $range-size-m-slider-shadow-hover;
+            transform: scale(1.2);
+        }
+    }
+
+    .#{$css-prefix}range-mark {
+
+        .#{$css-prefix}range-mark-text {
+            color: $markColor;
+            &:hover {
+                color: $markColorHover;
+            }
+
+            &.activated {
+                color: $markColorActivated;
+                &:hover {
+                    color: $markColorActivatedHover;
+                }
+            }
+        }
+    }
+
+    &.disabled {
+        .#{$css-prefix}range-track {
+            background-color: $unselectedColorDisabled;
+        }
+
+        .#{$css-prefix}range-selected {
+            background-color: $selectedColorDisabled;
+        }
+
+        .#{$css-prefix}range-scale-item {
+            border-color: $unselectedColorDisabled;
+
+            &.activated {
+                border-color: $selectedColorDisabled;
+            }
+        }
+
+        .#{$css-prefix}range-slider-inner {
+            background-color: $sliderBgColorDisabled;
+            border-color: $sliderBorderColorDisabled;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .#{$css-prefix}range-mark-text {
+            color: $markColorDisabled;
+
+            &.activated {
+                color: $markColorActivatedDisabled;
+            }
+        }
+    }
+}
+
+@mixin range-size(
+    $trackHeight,
+    $scaleHeight,
+    $sliderHW,
+    $sliderShadow,
+    $markFontsize,
+    $markFontweight,
+    $markLineheight
+) {
+    .#{$css-prefix}range-track {
+        height: $trackHeight;
+        margin-top: -$trackHeight/2;
+    }
+
+    .#{$css-prefix}range-selected {
+        height: $trackHeight;
+        margin-top: -$trackHeight/2;
+    }
+
+    .#{$css-prefix}range-frag {
+        margin-top: -$trackHeight/2;
+        height: $sliderHW;
+    }
+
+    .#{$css-prefix}range-slider {
+        height: $sliderHW;
+        width: $sliderHW;
+        margin-top: -$sliderHW/2;
+        margin-left: -$sliderHW/2;
+        box-shadow: $sliderShadow;
+    }
+
+    .#{$css-prefix}range-slider-inner {
+        height: $sliderHW;
+        width: $sliderHW;
+        margin-top: -$sliderHW/2;
+        margin-left: -$sliderHW/2;
+    }
+
+    .#{$css-prefix}range-mark {
+        display: block;
+        .#{$css-prefix}range-mark-text {
+            font-size: $markFontsize;
+            font-weight: $markFontweight;
+            line-height: $markLineheight;
+            height: $markLineheight;
+        }
+
+        &.#{$css-prefix}range-mark-below {
+            height: $range-size-m-mark-top;
+            .#{$css-prefix}range-mark-text {
+                bottom: 0;
+            }
+        }
+
+        &.#{$css-prefix}range-mark-above {
+            height: $range-size-m-mark-top;
+        }
+    }
+    .#{$css-prefix}range-scale {
+        .#{$css-prefix}range-scale-item {
+            height: $scaleHeight;
+        }
+    }
+}
+
+@mixin range-hover (
+    $sliderBgColorHover,
+    $range-size-m-slider-shadow-hover
+) {
+    &.simulation-hover > .#{$css-prefix}range-slider-inner {
+        background-color: $sliderBgColorHover;
+        box-shadow: $range-size-m-slider-shadow-hover;
+        transform: scale(1.2);
+    }
+}
+
+@mixin range-click (
+    $sliderBgColorHover,
+    $range-size-m-slider-shadow-hover
+) {
+    &.simulation-click > .#{$css-prefix}range-slider-inner {
+        border: 2px solid $range-normal-selected-color;
+        box-shadow: $range-size-m-slider-shadow-moving;
+        transform: scale(1.2);
+    }
+}

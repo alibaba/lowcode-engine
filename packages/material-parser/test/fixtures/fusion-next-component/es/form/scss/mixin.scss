@@ -1,0 +1,39 @@
+@charset "UTF-8";
+
+// form mixins
+// --------------------------------------------------
+
+@mixin form-enhance($line-height) {
+    .#{$css-prefix}rating,
+    .#{$css-prefix}checkbox-wrapper,
+    .#{$css-prefix}checkbox-group,
+    .#{$css-prefix}radio-wrapper,
+    .#{$css-prefix}radio-group {
+        line-height: $line-height;
+    }
+}
+
+@mixin form-preview($font-size, $line-height) {
+    .#{$css-prefix}form-preview {
+        font-size: $font-size;
+        line-height: $line-height;
+        &.#{$css-prefix}input-textarea > p {
+            text-align: justify;
+            min-height: $font-size * 1.4;
+            line-height: 1.4;
+            margin-top: ($line-height - (1.4 * $font-size)) / 2;
+        }
+    }
+}
+
+@mixin form-responsive-grid($item-margin-right, $element-height, $font-size) {
+    .#{$css-prefix}responsive-grid {
+        gap: $item-margin-right;
+    }
+
+    #{$form-prefix}-item.#{$css-prefix}left #{$form-prefix}-item-label {
+        line-height: 1.4;
+        margin-top: ($element-height - $font-size) / 2;
+        margin-bottom: ($element-height - $font-size) / 2;
+    }
+}

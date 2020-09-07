@@ -3,17 +3,84 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-<a name="0.8.17"></a>
-## [0.8.17](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.8.16...@ali/lowcode-types@0.8.17) (2020-08-24)
-
-
-### Features
-
-* 编辑器 hooks 能力实现 ([f3ac23b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f3ac23b))
+<a name="1.0.7-0"></a>
+## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@1.0.6-0...@ali/lowcode-types@1.0.7-0) (2020-09-02)
 
 
 
 
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="1.0.6-0"></a>
+## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.8.17...@ali/lowcode-types@1.0.6-0) (2020-09-02)
+
+
+### Bug Fixes
+
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+* fix NextTable callback function ([ce77375](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ce77375))
+
+
+
+
+<a name="1.0.5-0"></a>
+## [1.0.5-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@1.0.4-0...@ali/lowcode-types@1.0.5-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="1.0.4-0"></a>
+## [1.0.4-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@1.0.3-0...@ali/lowcode-types@1.0.4-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="1.0.3-0"></a>
+## [1.0.3-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@1.0.2-0...@ali/lowcode-types@1.0.3-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="1.0.2-0"></a>
+## [1.0.2-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@1.0.1-0...@ali/lowcode-types@1.0.2-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="1.0.1-0"></a>
+## [1.0.1-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.8.16...@ali/lowcode-types@1.0.1-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="1.0.0"></a>
+# [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.13.0...@ali/lowcode-types@1.0.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="0.13.0"></a>
+# [0.13.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.12.0...@ali/lowcode-types@0.13.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="0.12.0"></a>
+# [0.12.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.10.0...@ali/lowcode-types@0.12.0) (2020-08-17)
 <a name="0.8.16"></a>
 ## [0.8.16](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.8.15...@ali/lowcode-types@0.8.16) (2020-08-19)
 
@@ -32,9 +99,36 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * 修复判断动态 setter 的逻辑 ([d195d7f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d195d7f))
+>>>>>>> master
 
 
 
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="0.11.0"></a>
+# [0.11.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.10.0...@ali/lowcode-types@0.11.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="0.10.0"></a>
+# [0.10.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.9.0...@ali/lowcode-types@0.10.0) (2020-08-16)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="0.9.0"></a>
+# [0.9.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.8.14...@ali/lowcode-types@0.9.0) (2020-08-14)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
 
 <a name="0.8.14"></a>
 ## [0.8.14](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.8.13...@ali/lowcode-types@0.8.14) (2020-08-04)

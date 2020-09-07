@@ -1,0 +1,105 @@
+////
+/// @module drawer: 抽屉
+/// @tag Drawer
+/// @category component
+/// @family feedback
+/// @varPrefix $drawer-
+/// @classPrefix {prefix}-drawer
+////
+
+// drawer variables
+// --------------------------------------------------
+
+// unconfigurable
+$drawer-prefix: ".#{$css-prefix}drawer";
+
+// Size
+// ----------------------------------------
+
+/// text
+/// @namespace size/title
+$drawer-title-font-size: $font-size-subhead !default;
+/// padding (t)
+/// @namespace size/title
+$drawer-title-padding-top: $s-3 !default;
+/// padding (b)
+/// @namespace size/title
+$drawer-title-padding-bottom: $s-3 !default;
+/// padding (l, r)
+/// @namespace size/title
+$drawer-title-padding-left-right: $s-5 !default;
+/// divider
+/// @namespace size/title
+$drawer-title-border-width: $line-1 !default;
+
+/// text
+/// @namespace size/content
+$drawer-content-font-size: $font-size-body-1 !default;
+/// padding (t)
+/// @namespace size/content
+$drawer-content-padding-top: $s-5 !default;
+/// padding (b)
+/// @namespace size/content
+$drawer-content-padding-bottom: $s-5 !default;
+/// padding (l, r)
+/// @namespace size/content
+$drawer-content-padding-left-right: $s-5 !default;
+/// position (t)
+/// @namespace size/close
+$drawer-close-top: $s-3 !default;
+/// position (r)
+/// @namespace size/close
+$drawer-close-right: $s-3 !default;
+$drawer-close-width: $s-4 !default;
+/// icon
+/// @namespace size/close
+$drawer-close-size: $icon-xs !default;
+
+
+
+// Statement:Normal
+// ----------------------------------------
+
+/// background
+/// @namespace statement/normal/bounding
+$drawer-bg: $color-white !default;
+/// border width
+/// @namespace size/bounding
+$drawer-border-width: $line-1 !default;
+/// border
+/// @namespace statement/normal/bounding
+$drawer-border-color: $color-line1-2 !default;
+/// border style
+/// @namespace statement/normal/bounding
+$drawer-border-style: $line-solid !default;
+/// corner
+/// @namespace statement/normal/bounding
+$drawer-corner: $corner-1 !default;
+/// shadow
+/// @namespace statement/normal/bounding
+$drawer-shadow: $shadow-2-down !default;
+/// text
+/// @namespace statement/normal/title
+$drawer-title-color: $color-text1-4 !default;
+/// background
+/// @namespace statement/normal/title
+$drawer-title-bg-color: $color-white !default;
+/// divider
+/// @namespace statement/normal/title
+$drawer-title-border-color: $color-line1-2 !default;
+/// text
+/// @namespace statement/normal/content
+$drawer-content-color: $color-text1-3 !default;
+/// icon
+/// @namespace statement/normal/close
+$drawer-close-color: $color-text1-2 !default;
+
+// Statement:Hover
+// ----------------------------------------
+
+/// icon
+/// @namespace statement/hover/close
+$drawer-close-color-hovered: $color-text1-4 !default;
+/// background
+/// @namespace statement/hover/close
+$drawer-close-bg-hovered: $color-transparent !default;

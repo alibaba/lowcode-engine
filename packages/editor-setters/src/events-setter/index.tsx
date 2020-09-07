@@ -18,6 +18,8 @@ const DEFINITION_EVENT_TYPE = {
   LIFE_CYCLE_EVENT: 'lifeCycleEvent',
 };
 
+const SETTER_NAME = 'event-setter'
+
 export default class EventsSetter extends Component<{
   value: any[];
   onChange: (eventList: any[]) => void;
@@ -29,30 +31,43 @@ export default class EventsSetter extends Component<{
     selectType: null,
     nativeEventList: [],
     lifeCycleEventList: [],
-    eventDataList: this.props.value || [],
+    eventDataList: (this.props?.value?.eventDataList ? this.props.value.eventDataList : this.props?.value) || [],
     relatedEventName: '',
   };
 
+  // constructor (){
+  //   super();
+  //   debugger;
+  //   // if (!this.props || !this.props.value){
+  //   //   this.setState({
+  //   //     eventDataList:[]
+  //   //   })
+  //   // }
+  // }
 
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const { value } = nextProps;
-    if (value !== prevState.eventDataList) {
-      return {
-        value,
-      };
-    }
-    return null;
-  }
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   debugger;
+  //   // const { value } = nextProps;
+  //   // debugger;
+  //   // if (value !== prevState.eventDataList) {
+  //   //   return {
+  //   //     value,
+  //   //   };
+  //   // }
+  //   return null;
+  // }
 
   private bindEventName:String;
 
   componentDidMount() {
+
+    console.log(this.state.eventDataList);
+
     const {editor} = this.props.field;
     this.initEventBtns();
     this.initEventList();
-    editor.on('event-setter.bindEvent',(relatedEventName)=>{
-      this.bindEvent(relatedEventName);
+    editor.on(`${SETTER_NAME}.bindEvent`,(relatedEventName,paramStr)=>{
+      this.bindEvent(relatedEventName,paramStr);
     })
 
   }
@@ -268,9 +283,19 @@ export default class EventsSetter extends Component<{
 
   onRelatedEventNameClick = (eventName:String) => {
     const {editor} =  this.props.field;
-    editor.emit('sourceEditor.focusByFunction',{
-      functionName:eventName
-    })
+
+    editor.get('skeleton').getPanel('sourceEditor').show();
+
+    setTimeout(()=>{
+      editor.emit('sourceEditor.focusByFunction',{
+        functionName:eventName
+      })
+    },300)
+
+
+    // editor.emit('sourceEditor.focusByFunction',{
+    //   functionName:eventName
+    // })
   }
 
   closeEventMenu = () => {
@@ -291,7 +316,7 @@ export default class EventsSetter extends Component<{
   };
 
   deleteEvent = (eventName: String) => {
-    const { eventDataList } = this.state;
+    const { eventDataList,eventList} = this.state;
     eventDataList.map((item, index) => {
       if (item.name === eventName) {
         eventDataList.splice(index, 1);
@@ -301,22 +326,32 @@ export default class EventsSetter extends Component<{
     this.setState({
       eventDataList,
     });
-
+    this.props.onChange({eventDataList,eventList});
     this.updateEventListStatus(eventName, true);
   };
 
   openDialog = (bindEventName: String) => {
     const {editor} = this.props.field;
+    const {eventDataList} = this.state;
+    let paramStr;
+    eventDataList.map((item)=>{
+      if (item.name == bindEventName){
+        paramStr = item.paramStr;
+      }
+    })
     this.bindEventName = bindEventName;
-    editor.emit('eventBindDialog.openDialog',bindEventName);
+    editor.emit('eventBindDialog.openDialog',bindEventName,SETTER_NAME,paramStr);
   };
 
 
-  bindEvent = (relatedEventName: String) => {
-    const {eventDataList} = this.state;
+  bindEvent = (relatedEventName: String,paramStr:String) => {
+    const {eventDataList,eventList} = this.state;
     eventDataList.map(item => {
       if (item.name === this.bindEventName) {
         item.relatedEventName = relatedEventName;
+        if (paramStr){
+          item.paramStr = paramStr
+        }
       }
     });
 
@@ -324,7 +359,8 @@ export default class EventsSetter extends Component<{
       eventDataList
     })
 
-    this.props.onChange(eventDataList);
+
+    this.props.onChange({eventDataList,eventList});
 
     //this.closeDialog();
   };

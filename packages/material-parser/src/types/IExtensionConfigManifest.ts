@@ -1,4 +1,4 @@
-import { ComponentMeta } from '../otter-core';
+import { ComponentMeta } from '../core';
 /**
  * 扩展点：配置 manifest
  * （物料化场景）

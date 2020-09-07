@@ -1,0 +1,34 @@
+#{$tree-prefix}[dir='rtl'] {
+    #{$tree-prefix} {
+        &-switcher {
+            margin-left: $tree-switch-margint-right;
+            margin-right: 0;
+        }
+        &-switcher.#{$css-prefix}noop-line-noroot {
+            border-left: none;
+            border-right: $tree-switch-border-width $line-solid $tree-line-color;
+        }
+        &-right-angle {
+            left: auto;
+            right: - ($tree-child-indent-right + $tree-line-width + $tree-switch-border-width);
+            border-left: none;
+            border-right: $tree-line;
+        }
+    }
+
+    &.#{$css-prefix}show-line #{$tree-prefix}-node #{$tree-prefix}-node:not(:last-child) {
+        margin-left: 0;
+        margin-right: $tree-child-indent-left;
+        border-left: none;
+        border-right: $tree-line;
+        padding-left: 0;
+        padding-right: $tree-child-indent-right;
+    }
+
+    &.#{$css-prefix}node-indent {
+        #{$tree-prefix}-node #{$tree-prefix}-node {
+            margin-left: 0;
+            margin-right: $tree-child-indent;
+        }
+    }
+}

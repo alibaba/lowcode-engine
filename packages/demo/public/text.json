@@ -1,0 +1,52 @@
+{
+  {
+    "packageName": "@alife/knowledge-detail",
+    "version": "0.1.0",
+    "library": "ServiceHallKnowledgeDetail",
+    "ext": {
+      "project": "knowledge-detail",
+      "group": "service-hall-components"
+    },
+    "urls": ["https://dev.g.alicdn.com/service-hall-components/knowledge-detail/0.1.0/designer.js"]
+  },
+  {
+    "packageName": "@alife/benefits-list",
+    "version": "0.1.1",
+    "library": "ServiceHallBenefitsList",
+    "ext": {
+      "project": "benefits-list",
+      "group": "service-hall-components"
+    },
+    "urls": ["https://dev.g.alicdn.com/service-hall-components/benefits-list/0.1.1/designer.js"]
+  },
+  {
+    "packageName": "@alife/todo-list",
+    "version": "0.1.1",
+    "library": "ServiceHallTodoList",
+    "ext": {
+      "project": "todo-list",
+      "group": "service-hall-components"
+    },
+    "urls": ["https://dev.g.alicdn.com/service-hall-components/todo-list/0.1.1/designer.js"]
+  },
+  {
+    "packageName": "@alife/todo-list-detail",
+    "version": "0.1.1",
+    "library": "ServiceHallTodoListDetail",
+    "ext": {
+      "project": "todo-list-detail",
+      "group": "service-hall-components"
+    },
+    "urls": ["https://dev.g.alicdn.com/service-hall-components/todo-list-detail/0.1.1/designer.js"]
+  },
+  {
+    "packageName": "@alife/service-hall-tabs",
+    "library": "ServiceHallTabs",
+    "version": "0.1.0",
+    "ext": {
+      "project": "tabs",
+      "group": "service-hall-components"
+    },
+    "urls": ["https://dev.g.alicdn.com/service-hall-components/tabs/0.1.0/designer.js"]
+  }
+}

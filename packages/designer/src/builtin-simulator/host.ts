@@ -225,7 +225,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     const vendors = [
       // required & use once
       assetBundle(
-        this.get('environment') || this.renderEnv === 'rax' ? defaultRaxEnvironment : defaultEnvironment,
+        this.get('environment') || (this.renderEnv === 'rax' ? defaultRaxEnvironment : defaultEnvironment),
         AssetLevel.Environment,
       ),
       // required & use once
@@ -236,7 +236,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       assetBundle(this.theme, AssetLevel.Theme),
       // required & use once
       assetBundle(
-        this.get('simulatorUrl') || this.renderEnv === 'rax' ? defaultRaxSimulatorUrl : defaultSimulatorUrl,
+        this.get('simulatorUrl') || (this.renderEnv === 'rax' ? defaultRaxSimulatorUrl : defaultSimulatorUrl),
         AssetLevel.Runtime,
       ),
     ];
@@ -465,9 +465,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         }
         const node = nodeInst.node || this.document.rootNode;
 
-        const rootElement = this.findDOMNodes(nodeInst.instance, node.componentMeta.rootSelector)?.find((item) =>
-          // 可能是 [null];
-          item && item.contains(targetElement),
+        const rootElement = this.findDOMNodes(nodeInst.instance, node.componentMeta.rootSelector)?.find(
+          (item) =>
+            // 可能是 [null];
+            item && item.contains(targetElement),
         ) as HTMLElement;
         if (!rootElement) {
           return;
@@ -830,7 +831,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
     // fix target : 浏览器事件响应目标
     if (!e.target || notMyEvent) {
-      e.target = this.contentDocument!.elementFromPoint(e.canvasX!, e.canvasY!);
+      e.target = this.contentDocument?.elementFromPoint(e.canvasX!, e.canvasY!);
     }
 
     // documentModel : 目标文档
@@ -877,7 +878,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     if (nodes && (!operationalNodes || operationalNodes.length === 0)) {
       return;
     }
-    
+
     this.sensing = true;
     this.scroller.scrolling(e);
     const dropContainer = this.getDropContainer(e);
@@ -919,7 +920,13 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       event: e,
     };
 
-    if (dragObject.type === 'node' && nodes && operationalNodes[0]?.getPrototype()?.isModal()) {
+    // if (e.dragObject.type === 'node' && e.dragObject.nodes[0]?.getPrototype()?.isModal()) {
+    if (
+      e.dragObject &&
+      e.dragObject.nodes &&
+      e.dragObject.nodes.length &&
+      e.dragObject.nodes[0].getPrototype()?.isModal()
+    ) {
       return this.designer.createLocation({
         target: this.document.rootNode,
         detail: {

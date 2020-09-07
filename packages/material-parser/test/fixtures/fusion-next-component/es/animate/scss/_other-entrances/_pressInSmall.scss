@@ -1,0 +1,14 @@
+@include keyframes(pressInSmall) {
+    100% {
+        @include transform(scale(.5));
+    }
+}
+@mixin pressInSmall($count: $countDefault, $duration: $durationSmallDefault, $delay: $delayDefault, $function: $functionDefault, $fill: $fillDefault, $visibility: $visibilityDefault) {
+    @include animation-name(pressInSmall);
+    @include count($count);
+    @include duration($duration);
+    @include delay($delay);
+    @include function($function);
+    @include fill-mode($fill);
+    @include visibility($visibility);
+}

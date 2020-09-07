@@ -1,0 +1,81 @@
+#{$radio-prefix}-button-large[dir='rtl'] {
+    > label {
+        &:first-child {
+            margin-left: -1px;
+            border-top-right-radius: $radio-button-corner-large;
+            border-bottom-right-radius: $radio-button-corner-large;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        &:last-child {
+            margin-left: 0;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-top-left-radius: $radio-button-corner-large;
+            border-bottom-left-radius: $radio-button-corner-large;
+        }
+    }
+
+    #{$radio-prefix}-label {
+        height: $radio-button-height-large - 2;
+        line-height: $radio-button-height-large - 2;
+        font-size: $radio-button-font-size-large;
+    }
+}
+
+#{$radio-prefix}-button-medium[dir='rtl'] {
+    > label {
+        &:first-child {
+            margin-left: -1px;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            border-top-right-radius: $radio-button-corner-medium;
+            border-bottom-right-radius: $radio-button-corner-medium;
+        }
+        &:last-child {
+            margin-left: 0;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-top-left-radius: $radio-button-corner-medium;
+            border-bottom-left-radius: $radio-button-corner-medium;
+        }
+    }
+}
+
+#{$radio-prefix}-button-small[dir='rtl'] {
+    > label {
+        &:first-child {
+            margin-left: -1px;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            border-top-right-radius: $radio-button-corner-small;
+            border-bottom-right-radius: $radio-button-corner-small;
+        }
+        &:last-child {
+            margin-left: 0;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-top-left-radius: $radio-button-corner-small;
+            border-bottom-left-radius: $radio-button-corner-small;
+        }
+    }
+}
+
+
+#{$radio-prefix}-wrapper[dir='rtl'] {
+    #{$radio-prefix}-label {
+        margin-left: 0;
+        margin-right: 4px;
+    }
+}
+
+
+#{$radio-prefix}-group[dir='rtl'] {
+    #{$radio-prefix}-label {
+        margin-right: 4px;
+        margin-left: 16px;
+    }
+}
+#{$radio-prefix}-button[dir='rtl'] > label #{$radio-prefix}-label {
+    margin: 0;
+}

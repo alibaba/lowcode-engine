@@ -1,0 +1,120 @@
+@charset "UTF-8";
+
+@import "../core/index-noreset.scss";
+@import "scss/function";
+@import "scss/mixin";
+@import "scss/placeholder";
+@import "scss/variable";
+
+.#{$css-prefix} {
+    &badge {
+        @include box-sizing;
+        /* @include global-font; */
+
+        @include badge-bounding();
+
+        .#{$css-prefix}badge-count {
+            @include badge-state(
+                $color: $badge-color,
+                $bgColor: $badge-color-bg,
+                $borderRadius: $badge-size-count-border-radius
+            );
+            @include badge-size(
+                $width: $badge-size-count-width,
+                $minWidth: $badge-size-dot-min-width,
+                $height: $badge-size-count-height,
+                $padding: $badge-size-count-padding,
+                $fontSize: $badge-size-count-font,
+                $lineHeight: $badge-size-count-lineheight
+            );
+            top: -.5em;
+        }
+
+        .#{$css-prefix}badge-dot {
+            @include badge-state(
+                $color: $badge-dot-color,
+                $bgColor: $badge-dot-color-bg,
+                $borderRadius: $badge-size-dot-border-radius
+            );
+            @include badge-size(
+                $width: $badge-size-dot-width,
+                $minWidth: $badge-size-dot-min-width,
+                $height: $badge-size-dot-height,
+                $padding: $badge-size-dot-padding,
+                $fontSize: 1px,
+                $lineHeight: 1
+            );
+            top: -.5em;
+        }
+
+        .#{$css-prefix}badge-custom {
+            line-height: 1.166667;
+            white-space: nowrap;
+            font-size: $font-size-caption;
+            padding-left: $badge-size-custom-padding-lr;
+            padding-right: $badge-size-custom-padding-lr;
+            border-radius: $badge-size-custom-border-radius;
+            transform: translateX(-50%);
+
+            > * {
+                line-height: 1;
+            }
+
+            > i,
+            > .#{$css-prefix}icon {
+                &:before {
+                    font-size: inherit;
+                    width: auto;
+                    vertical-align: top;
+                }
+            }
+        }
+
+        .#{$css-prefix}badge-scroll-number {
+            position: absolute;
+            top: -4px;
+            z-index: 10;
+            overflow: hidden;
+            transform-origin: left center;
+        }
+
+        &-scroll-number-only {
+            position: relative;
+            display: inline-block;
+            transition: transform $motion-duration-immediately $motion-linear, -webkit-transform $motion-duration-immediately $motion-linear;
+            min-width: $badge-size-dot-min-width;
+
+            span {
+                display: block;
+                height: $badge-size-count-height;
+                line-height: $badge-size-count-height;
+                font-size: $badge-size-count-font;
+            }
+        }
+
+        &-not-a-wrapper &-count,
+        &-not-a-wrapper &-custom {
+            position: relative;
+            display: block;
+            top: auto;
+            transform: translateX(0);
+        }
+
+        &-not-a-wrapper &-dot {
+            position: relative;
+            display: block;
+            top: auto;
+            transform: translateX(0);
+        }
+
+        &-list-wrapper {
+            margin-left: 0;
+            li {
+                margin-bottom: $badge-size-list-margin;
+                list-style: none;
+            }
+        }
+    }
+}
+
+@import './rtl.scss';

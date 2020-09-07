@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.7-0"></a>
+## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-logo@1.0.6-0...@ali/lowcode-plugin-sample-logo@1.0.7-0) (2020-09-02)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-sample-logo
+
+<a name="1.0.6-0"></a>
+## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-logo@0.8.31...@ali/lowcode-plugin-sample-logo@1.0.6-0) (2020-09-02)
+
+
+### Bug Fixes
+
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+
+
+
+
+<a name="1.0.5-0"></a>
+## [1.0.5-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-logo@1.0.4-0...@ali/lowcode-plugin-sample-logo@1.0.5-0) (2020-08-20)
+
 <a name="0.8.31"></a>
 ## [0.8.31](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-logo@0.8.30...@ali/lowcode-plugin-sample-logo@0.8.31) (2020-08-27)
 
@@ -27,6 +49,40 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-plugin-sample-logo
 
+<a name="1.0.4-0"></a>
+## [1.0.4-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-logo@1.0.3-0...@ali/lowcode-plugin-sample-logo@1.0.4-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-sample-logo
+
+<a name="1.0.3-0"></a>
+## [1.0.3-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-logo@1.0.2-0...@ali/lowcode-plugin-sample-logo@1.0.3-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-sample-logo
+
+<a name="1.0.2-0"></a>
+## [1.0.2-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-logo@1.0.1-0...@ali/lowcode-plugin-sample-logo@1.0.2-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-sample-logo
+
+<a name="1.0.1-0"></a>
+## [1.0.1-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-logo@0.8.28...@ali/lowcode-plugin-sample-logo@1.0.1-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-sample-logo
+
+<a name="1.0.0"></a>
+# [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-logo@0.13.0...@ali/lowcode-plugin-sample-logo@1.0.0) (2020-08-17)
 <a name="0.8.28"></a>
 ## [0.8.28](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-logo@0.8.27...@ali/lowcode-plugin-sample-logo@0.8.28) (2020-08-19)
 
@@ -35,8 +91,40 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-plugin-sample-logo
 
-<a name="0.8.27"></a>
-## [0.8.27](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-logo@0.8.26...@ali/lowcode-plugin-sample-logo@0.8.27) (2020-08-17)
+<a name="0.13.0"></a>
+# [0.13.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-logo@0.12.0...@ali/lowcode-plugin-sample-logo@0.13.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-sample-logo
+
+<a name="0.12.0"></a>
+# [0.12.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-logo@0.10.0...@ali/lowcode-plugin-sample-logo@0.12.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-sample-logo
+
+<a name="0.11.0"></a>
+# [0.11.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-logo@0.10.0...@ali/lowcode-plugin-sample-logo@0.11.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-sample-logo
+
+<a name="0.10.0"></a>
+# [0.10.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-logo@0.9.0...@ali/lowcode-plugin-sample-logo@0.10.0) (2020-08-16)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-sample-logo
+
+<a name="0.9.0"></a>
+# [0.9.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-logo@0.8.26...@ali/lowcode-plugin-sample-logo@0.9.0) (2020-08-14)
 
 
 

@@ -1,0 +1,318 @@
+@charset "UTF-8";
+
+// balloon mixins
+// --------------------------------------------------
+
+@mixin balloon-bounding($border-style) {
+    position: absolute;
+    max-width: $balloon-size-max-width;
+    border-style: $border-style;
+    border-radius: $balloon-corner;
+}
+
+@mixin balloon-state(
+    $contentColor,
+    $colorBorder,
+    $colorBg,
+    $shadow,
+    $widthBorder
+) {
+    color: $contentColor;
+    border-color: $colorBorder;
+    background-color: $colorBg;
+    box-shadow: $shadow;
+    border-width: $widthBorder;
+}
+
+@mixin balloon-size(
+    $padding-top,
+    $padding-right,
+    $padding-bottom,
+    $padding-left
+) {
+    padding: $padding-top $padding-right $padding-bottom $padding-left;
+}
+
+@mixin balloon-arrow(
+    $width,
+    $height,
+    $colorBorder,
+    $colorBg,
+    $shadow,
+    $widthBorder,
+    $arrorExpose
+) {
+    $shadow-top: $balloon-shadow-top;
+    $shadow-right: $balloon-shadow-right;
+    $shadow-bottom: $balloon-shadow-bottom;
+    $shadow-left: $balloon-shadow-left;
+
+    @if $shadow == $shadow-zero {
+        $shadow-top: null;
+        $shadow-right: null;
+        $shadow-bottom: null;
+        $shadow-left: null;
+    }
+    &:after {
+        position: absolute;
+        width: $height;
+        height: $height;
+        content: '';
+        transform: rotate(45deg);
+        box-sizing: content-box !important;
+        border: $widthBorder $balloon-border-style $colorBorder;
+        background-color: $colorBg;
+        z-index: -1;
+    }
+    &.#{$css-prefix}balloon-top:after {
+        top: $arrorExpose;
+        left: calc(50% + #{$arrorExpose});
+        border-right: none;
+        border-bottom: none;
+        box-shadow: $shadow-top;
+    }
+    &.#{$css-prefix}balloon-right:after {
+        top: calc(50% + #{$arrorExpose});
+        right: $arrorExpose;
+        border-left: none;
+        border-bottom: none;
+        box-shadow: $shadow-right;
+    }
+    &.#{$css-prefix}balloon-bottom:after {
+        bottom: $arrorExpose;
+        left: calc(50% + #{$arrorExpose});
+        border-top: none;
+        border-left: none;
+        box-shadow: $shadow-bottom;
+    }
+    &.#{$css-prefix}balloon-left:after {
+        top: calc(50% + #{$arrorExpose});
+        left: $arrorExpose;
+        border-top: none;
+        border-right: none;
+        box-shadow: $shadow-left;
+    }
+    &.#{$css-prefix}balloon-left-top:after {
+        top: $balloon-size-arrow-margin;
+        left: $arrorExpose;
+        border-top: none;
+        border-right: none;
+        box-shadow: $shadow-left;
+    }
+    &.#{$css-prefix}balloon-left-bottom:after {
+        bottom: $balloon-size-arrow-margin;
+        left: $arrorExpose;
+        border-top: none;
+        border-right: none;
+        box-shadow: $shadow-left;
+    }
+
+    &.#{$css-prefix}balloon-right-top:after {
+        top: $balloon-size-arrow-margin;
+        right: $arrorExpose;
+        border-bottom: none;
+        border-left: none;
+        box-shadow: $shadow-right;
+    }
+
+    &.#{$css-prefix}balloon-right-bottom:after {
+        right: $arrorExpose;
+        bottom: $balloon-size-arrow-margin;
+        border-bottom: none;
+        border-left: none;
+        box-shadow: $shadow-right;
+    }
+
+    &.#{$css-prefix}balloon-top-left:after {
+        top: $arrorExpose;
+        left: $balloon-size-arrow-margin;
+        border-right: none;
+        border-bottom: none;
+        box-shadow: $shadow-top;
+    }
+
+    &.#{$css-prefix}balloon-top-right:after {
+        top: $arrorExpose;
+        right: $balloon-size-arrow-margin;
+        border-right: none;
+        border-bottom: none;
+        box-shadow: $shadow-top;
+    }
+
+    &.#{$css-prefix}balloon-bottom-left:after {
+        bottom: $arrorExpose;
+        left: $balloon-size-arrow-margin;
+        border-top: none;
+        border-left: none;
+        box-shadow: $shadow-bottom;
+    }
+
+    &.#{$css-prefix}balloon-bottom-right:after {
+        right: $balloon-size-arrow-margin;
+        bottom: $arrorExpose;
+        border-top: none;
+        border-left: none;
+        box-shadow: $shadow-bottom;
+    }
+}
+
+@mixin balloon-close(
+    $top,
+    $right,
+    $iconSize,
+    $colorClose,
+    $colorCloseHover
+) {
+    .#{$css-prefix}balloon-close {
+        position: absolute;
+        top: $top;
+        right: $right;
+        font-size: $iconSize;
+        cursor: pointer;
+
+        .#{$css-prefix}icon {
+            @include icon-square-size($iconSize);
+        }
+        color: $colorClose;
+        :hover {
+            color: $colorCloseHover;
+        }
+    }
+}
+
+@mixin show-hidden() {
+    &.visible {
+        display: block;
+    }
+    &.hidden {
+        display: none;
+    }
+}
+
+@mixin tooltip-state(
+    $contentColor,
+    $colorBorder,
+    $colorBg,
+    $shadow,
+    $widthBorder
+) {
+    color: $contentColor;
+    border-color: $colorBorder;
+    background-color: $colorBg;
+    box-shadow: $shadow;
+    border-width: $widthBorder;
+}
+
+@mixin tooltip-arrow(
+    $width,
+    $height,
+    $colorBorder,
+    $colorBg
+) {
+
+    $shadow-top: null;
+    $shadow-right: null;
+    $shadow-bottom: null;
+    $shadow-left: null;
+    &:after {
+        position: absolute;
+        width: $width;
+        height: $height;
+        content: '';
+        transform: rotate(45deg);
+        box-sizing: content-box !important;
+        border: $balloon-tooltip-border-width $balloon-tooltip-border-style $colorBorder;
+        background-color: $colorBg;
+        z-index: -1;
+    }
+    &-top:after {
+        top: $balloon-size-arrow-expose;
+        left: calc(50% + #{$balloon-size-arrow-expose});
+        border-right: none;
+        border-bottom: none;
+        box-shadow: $shadow-top;
+    }
+    &-right:after {
+        top: calc(50% + #{$balloon-size-arrow-expose});
+        right: $balloon-size-arrow-expose;
+        border-left: none;
+        border-bottom: none;
+        box-shadow: $shadow-right;
+    }
+    &-bottom:after {
+        bottom: $balloon-size-arrow-expose;
+        left: calc(50% + #{$balloon-size-arrow-expose});
+        border-top: none;
+        border-left: none;
+        box-shadow: $shadow-bottom;
+    }
+    &-left:after {
+        top: calc(50% + #{$balloon-size-arrow-expose});
+        left: $balloon-size-arrow-expose;
+        border-top: none;
+        border-right: none;
+        box-shadow: $shadow-left;
+    }
+    &-left-top:after {
+        top: $balloon-size-arrow-margin;
+        left: $balloon-size-arrow-expose;
+        border-top: none;
+        border-right: none;
+        box-shadow: $shadow-left;
+    }
+    &-left-bottom:after {
+        bottom: $balloon-size-arrow-margin;
+        left: $balloon-size-arrow-expose;
+        border-top: none;
+        border-right: none;
+        box-shadow: $shadow-left;
+    }
+
+    &-right-top:after {
+        top: $balloon-size-arrow-margin;
+        right: $balloon-size-arrow-expose;
+        border-bottom: none;
+        border-left: none;
+        box-shadow: $shadow-right;
+    }
+
+    &-right-bottom:after {
+        right: $balloon-size-arrow-expose;
+        bottom: $balloon-size-arrow-margin;
+        border-bottom: none;
+        border-left: none;
+        box-shadow: $shadow-right;
+    }
+
+    &-top-left:after {
+        top: $balloon-size-arrow-expose;
+        left: $balloon-size-arrow-margin;
+        border-right: none;
+        border-bottom: none;
+        box-shadow: $shadow-top;
+    }
+
+    &-top-right:after {
+        top: $balloon-size-arrow-expose;
+        right: $balloon-size-arrow-margin;
+        border-right: none;
+        border-bottom: none;
+        box-shadow: $shadow-top;
+    }
+
+    &-bottom-left:after {
+        bottom: $balloon-size-arrow-expose;
+        left: $balloon-size-arrow-margin;
+        border-top: none;
+        border-left: none;
+        box-shadow: $shadow-bottom;
+    }
+
+    &-bottom-right:after {
+        right: $balloon-size-arrow-margin;
+        bottom: $balloon-size-arrow-expose;
+        border-top: none;
+        border-left: none;
+        box-shadow: $shadow-bottom;
+    }
+}

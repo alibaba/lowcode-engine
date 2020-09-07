@@ -63,6 +63,8 @@ const ENV = {
  */
 export function isSchema(schema, ignoreArr) {
   if (isEmpty(schema)) return false;
+  // Leaf 组件也返回 true
+  if (schema.componentName === 'Leaf' || schema.componentName === 'Slot') return true;
   if (!ignoreArr && Array.isArray(schema)) return schema.every((item) => isSchema(item));
   return !!(schema.componentName && schema.props && (typeof schema.props === 'object' || isJSExpression(schema.props)));
 }

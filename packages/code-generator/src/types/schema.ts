@@ -13,18 +13,37 @@ export interface IJSExpression {
   [extConfigName: string]: any;
 }
 
+/**
+ * 搭建基础协议 - 函数定义
+ *
+ * @export
+ * @interface IJSFunction
+ */
+export interface IJSFunction {
+  type: 'JSFunction';
+  value: string;
+  [extConfigName: string]: any;
+}
+
+/**
+ * 搭建基础协议 - 函数定义
+ *
+ * @export
+ * @interface IJSSlot
+ */
+export interface IJSSlot {
+  type: 'JSSlot';
+  value: IComponentNodeItem[];
+  params?: string[];
+  [extConfigName: string]: any;
+}
+
 // JSON 基本类型
 export interface IJSONObject {
   [key: string]: JSONValue;
 }
 
-export type JSONValue =
-  | boolean
-  | string
-  | number
-  | null
-  | JSONArray
-  | IJSONObject;
+export type JSONValue = boolean | string | number | null | JSONArray | IJSONObject;
 export type JSONArray = JSONValue[];
 
 export type CompositeArray = CompositeValue[];
@@ -33,11 +52,7 @@ export interface ICompositeObject {
 }
 
 // 复合类型
-export type CompositeValue =
-  | JSONValue
-  | IJSExpression
-  | CompositeArray
-  | ICompositeObject;
+export type CompositeValue = JSONValue | IJSExpression | IJSFunction | IJSSlot | CompositeArray | ICompositeObject;
 
 /**
  * 搭建基础协议 - 多语言描述
@@ -136,8 +151,8 @@ export interface IContainerNodeItem extends IComponentNodeItem {
    * • componentWillUnmount()
    * • componentDidCatch(error, info)
    */
-  lifeCycles?: Record<string, IJSExpression>; // 生命周期Hook方法
-  methods?: Record<string, IJSExpression>; // 自定义方法设置
+  lifeCycles?: Record<string, IJSExpression | IJSFunction>; // 生命周期Hook方法
+  methods?: Record<string, IJSExpression | IJSFunction>; // 自定义方法设置
   dataSource?: {
     list: IDataSourceConfig[];
   }; // 异步数据源配置
@@ -154,9 +169,9 @@ export interface IDataSourceConfig {
   id: string; // 数据请求ID标识
   isInit: boolean; // 是否为初始数据 支持表达式 值为true时，将在组件初始化渲染时自动发送当前数据请求
   type: string; // 数据请求类型 'fetch' | 'mtop' | 'jsonp' | 'custom'
-  requestHandler?: IJSExpression; // 自定义扩展的外部请求处理器 仅type='custom'时生效
+  requestHandler?: IJSExpression | IJSFunction; // 自定义扩展的外部请求处理器 仅type='custom'时生效
   options?: IFetchOptions; // 请求参数配置 每种请求类型对应不同参数
-  dataHandler?: IJSExpression; // 数据结果处理函数，形如：(data, err) => Object
+  dataHandler?: IJSExpression | IJSFunction; // 数据结果处理函数，形如：(data, err) => Object
 }
 
 /**

@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-editor-setters",
-  "version": "0.9.19",
+  "version": "1.0.7-0",
   "description": "Builtin setters for Ali lowCode engine",
   "files": [
     "es",
@@ -22,11 +22,11 @@
     "@ali/iceluna-comp-react-node": "^1.0.5",
     "@ali/iceluna-sdk": "^1.0.5-beta.24",
     "@ali/lc-style-setter": "^0.0.1",
-    "@ali/lowcode-editor-core": "^0.8.34",
+    "@ali/lowcode-editor-core": "^1.0.7-0",
     "@alifd/next": "^1.19.16",
     "acorn": "^6.4.1",
     "classnames": "^2.2.6",
-    "intl-messageformat": "^8.2.1",
+    "intl-messageformat": "^9.3.1",
     "monaco-editor": "^0.20.0",
     "qs": "^6.9.1",
     "react": "^16",

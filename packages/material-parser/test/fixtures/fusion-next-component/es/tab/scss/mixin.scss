@@ -1,0 +1,181 @@
+@charset "UTF-8";
+
+// tab mixins
+// --------------------------------------------------
+
+@mixin tabs-tab-statement(
+    $tab-color,
+    $tab-color-hover,
+    $tab-color-active,
+    $tab-color-disabled,
+    $tab-bg-color,
+    $tab-bg-color-hover,
+    $tab-bg-color-active,
+    $tab-bg-color-disabled
+) {
+    color: $tab-color;
+    background-color: $tab-bg-color;
+
+    &:hover {
+        cursor: pointer;
+        color: $tab-color-hover;
+        background-color: $tab-bg-color-hover;
+    }
+
+    &.active {
+        z-index: 1;
+        color: $tab-color-active;
+        background-color: $tab-bg-color-active;
+    }
+
+    &.disabled {
+        pointer-events: none;
+        cursor: default;
+        color: $tab-color-disabled;
+        background: $tab-bg-color-disabled;
+    }
+}
+
+@mixin tabs-tab-inkbar($inkbar-width, $inkbar-color, $position-offset, $border-radius, $position: 'bottom') {
+    &:before {
+        border-radius: $border-radius;
+
+        @if $position == 'top' {
+            width: 0;
+            border-top: $inkbar-width solid $inkbar-color;
+            left: 50%;
+            top: $position-offset;
+        } @else if $position == 'bottom' {
+            width: 0;
+            border-bottom: $inkbar-width solid $inkbar-color;
+            left: 50%;
+            bottom: $position-offset;
+        } @else if $position == 'left' {
+            height: 0;
+            border-left: $inkbar-width solid $inkbar-color;
+            top: 50%;
+            left: $position-offset;
+        } @else if $position == 'right' {
+            height: 0;
+            border-right: $inkbar-width solid $inkbar-color;
+            top: 50%;
+            right: $position-offset;
+        }
+    }
+
+    &.active {
+        &:before {
+            @if $position == 'top' or $position == 'bottom' {
+                @if $border-radius == 0 {
+                    width: 100%;
+                } @else {
+                    width: calc(100% - 2 * #{$border-radius});
+                }
+                left: $border-radius;
+            } @else {
+                @if $border-radius == 0 {
+                    height: 100%;
+                } @else {
+                    height: calc(100% - 2 * #{$border-radius});
+                }
+                top: $border-radius;
+            }
+        }
+    }
+}
+
+@mixin tabs-tab-close-icon(
+    $icon-color,
+    $icon-color-hover,
+    $icon-color-active,
+    $icon-color-disabled
+) {
+
+    .#{$css-prefix}tabs-tab-close {
+        color: $icon-color;
+
+        &:hover {
+            color: $icon-color-hover;
+        }
+    }
+
+    &.active {
+        .#{$css-prefix}tabs-tab-close {
+            color: $icon-color-active;
+        }
+    }
+
+    &.disabled {
+        .#{$css-prefix}tabs-tab-close {
+            color: $icon-color-disabled;
+        }
+    }
+}
+
+@mixin tabs-tab-border(
+    $tab-border,
+    $tab-border-active,
+    $tab-border-radius,
+    $tab-border-color-hover,
+    $tab-border-top-color-active,
+    $tab-border-right-color-active,
+    $tab-border-bottom-color-active,
+    $tab-border-left-color-active
+) {
+    border: $tab-border;
+    border-radius: $tab-border-radius;
+
+    &:hover {
+        border-color: $tab-border-color-hover;
+    }
+
+    &.active {
+        border: $tab-border-active;
+        border-color: $tab-border-top-color-active $tab-border-right-color-active $tab-border-bottom-color-active $tab-border-left-color-active;
+    }
+}
+
+@mixin tabs-content-statement(
+    $content-text-color,
+    $content-bg-color
+) {
+    color: $content-text-color;
+    background: $content-bg-color;
+}
+
+@mixin tabs-size(
+    $tab-padding-tb: 0,
+    $tab-padding-lr: 0,
+    $font-size: 0,
+    $tab-icon-size: $s-4,
+    $close-icon-size: $s-4,
+    $close-icon-margin-left: $s-2,
+    $scroll-padding-right: 0
+) {
+    & #{$tab-prefix}-nav-container-scrolling {
+        padding-right: $scroll-padding-right;
+    }
+
+    #{$tab-prefix}-tab-inner {
+        font-size: $font-size;
+        padding: $tab-padding-tb $tab-padding-lr;
+
+        .#{$css-prefix}icon {
+            @include icon-size($tab-icon-size);
+            line-height: 1;
+        }
+
+        .#{$css-prefix}tabs-tab-close {
+            padding-left: $close-icon-margin-left;
+            @include icon-size($close-icon-size);
+        }
+    }
+
+    & #{$tab-prefix}-btn-down,
+    & #{$tab-prefix}-btn-prev,
+    & #{$tab-prefix}-btn-next {
+        .#{$css-prefix}icon {
+            @include icon-size($tab-icon-size);
+        }
+    }
+}

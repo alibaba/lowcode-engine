@@ -46,7 +46,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
   const isRoot: boolean = componentName === 'Page' || componentName === 'Component';
   const eventsDefinition: any[] = [];
   const supportedLifecycles =
-  supports.lifecycles ||
+    supports.lifecycles ||
     (isRoot
       ? /*[
           {
@@ -85,17 +85,26 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
   let propsGroup = props || [];
   const basicInfo: any = {};
   if (componentName === 'Slot') {
+    if (!configure.component) {
+      configure.component = {
+        isContainer: true,
+      };
+    } else if (typeof configure.component === 'object') {
+      configure.component.isContainer = true;
+    }
     basicInfo.icon = IconSlot;
-    propsGroup = [{
-      name: getConvertedExtraKey('title'),
-      title: {
-        type: 'i18n',
-        'en-US': 'Slot Title',
-        'zh-CN': '插槽标题'
+    propsGroup = [
+      {
+        name: getConvertedExtraKey('title'),
+        title: {
+          type: 'i18n',
+          'en-US': 'Slot Title',
+          'zh-CN': '插槽标题',
+        },
+        setter: 'StringSetter',
+        defaultValue: '插槽容器',
       },
-      setter: 'StringSetter',
-      defaultValue: '插槽容器'
-    }]
+    ];
   }
   /*
   propsGroup.push({
@@ -127,7 +136,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
   });
   */
   const stylesGroup: FieldConfig[] = [];
-  let advanceGroup: FieldConfig[] = [];
+  const advanceGroup: FieldConfig[] = [];
   if (propsGroup) {
     let l = propsGroup.length;
     while (l-- > 0) {
@@ -136,7 +145,12 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
       //   advanceGroup = item.items || [];
       //   propsGroup.splice(l, 1);
       // }
-      if (item.name === '__style__' || item.name === 'containerStyle' || item.name === 'pageStyle') {
+      if (
+        item.name === '__style__' ||
+        item.name === 'style' ||
+        item.name === 'containerStyle' ||
+        item.name === 'pageStyle'
+      ) {
         propsGroup.splice(l, 1);
         stylesGroup.push(item);
         if (item.extraProps?.defaultCollapsed && item.name !== 'containerStyle') {
@@ -180,7 +194,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
       title: { type: 'i18n', 'zh-CN': '事件', 'en-US': 'Events' },
       items: [
         {
-          name: '!events',
+          name: '__events',
           title: { type: 'i18n', 'zh-CN': '事件设置', 'en-US': 'Events' },
           setter: {
             componentName: 'EventsSetter',
@@ -189,12 +203,23 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
             },
           },
           getValue(field: SettingTarget, val?: any[]) {
-            // todo:
             return val;
           },
 
-          setValue(field: SettingTarget, eventDataList: any[]) {
-            // todo:
+          setValue(field: SettingTarget, eventData) {
+            debugger;
+            const { eventDataList, eventList } = eventData;
+            eventList.map((item) => {
+              field.parent.clearPropValue(item.name);
+              return item;
+            });
+            eventDataList.map((item) => {
+              field.parent.setPropValue(item.name, {
+                type: 'JSFunction',
+                value: `function(){ this.${item.relatedEventName}(${item.paramStr?item.paramStr:''}) }`,
+              });
+              return item;
+            });
             return;
           },
         },
@@ -208,11 +233,14 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
         name: getConvertedExtraKey('condition'),
         title: { type: 'i18n', 'zh-CN': '是否渲染', 'en-US': 'Condition' },
         defaultValue: true,
-        setter: [{
-          componentName: 'BoolSetter',
-        }, {
-          componentName: 'VariableSetter'
-        }],
+        setter: [
+          {
+            componentName: 'BoolSetter',
+          },
+          {
+            componentName: 'VariableSetter',
+          },
+        ],
         extraProps: {
           display: 'block',
         },
@@ -227,14 +255,17 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
             name: getConvertedExtraKey('loop'),
             title: { type: 'i18n', 'zh-CN': '循环数据', 'en-US': 'Loop Data' },
             defaultValue: [],
-            setter: [{
-              componentName: 'JsonSetter',
-              props: {
-                label: { type: 'i18n', 'zh-CN': '编辑数据', 'en-US': 'Edit Data'},
+            setter: [
+              {
+                componentName: 'JsonSetter',
+                props: {
+                  label: { type: 'i18n', 'zh-CN': '编辑数据', 'en-US': 'Edit Data' },
+                },
               },
-            }, {
-              componentName: 'VariableSetter'
-            }],
+              {
+                componentName: 'VariableSetter',
+              },
+            ],
           },
           {
             name: getConvertedExtraKey('loopArgs.0'),
@@ -243,7 +274,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
               componentName: 'StringSetter',
               props: {
                 placeholder: { type: 'i18n', 'zh-CN': '默认为: item', 'en-US': 'Defaults: item' },
-              }
+              },
             },
           },
           {
@@ -253,17 +284,29 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
               componentName: 'StringSetter',
               props: {
                 placeholder: { type: 'i18n', 'zh-CN': '默认为: index', 'en-US': 'Defaults: index' },
-              }
+              },
             },
+          },
+          {
+            name: 'key',
+            title: '循环 Key',
+            setter: [
+              {
+                componentName: 'StringSetter',
+              },
+              {
+                componentName: 'VariableSetter',
+              },
+            ],
           },
         ],
         extraProps: {
           display: 'accordion',
         },
-      })
+      });
     }
 
-    if(supports.condition !== false || supports.loop !== false) {
+    if (supports.condition !== false || supports.loop !== false) {
       advanceGroup.push({
         name: 'key',
         title: {
@@ -271,17 +314,19 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
           tip: '搭配「条件渲染」或「循环渲染」时使用，和 react 组件中的 key 原理相同，点击查看帮助',
           docUrl: 'https://yuque.antfin-inc.com/legao/help3.0/ca5in7',
         },
-        setter: [{
-          componentName: 'StringSetter',
-        }, {
-          componentName: 'VariableSetter'
-        }],
+        setter: [
+          {
+            componentName: 'StringSetter',
+          },
+          {
+            componentName: 'VariableSetter',
+          },
+        ],
         extraProps: {
           display: 'block',
         },
-      },)
+      });
     }
-
   }
   if (advanceGroup.length > 0) {
     combined.push({

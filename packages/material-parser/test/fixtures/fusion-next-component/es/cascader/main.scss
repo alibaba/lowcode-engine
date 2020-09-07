@@ -1,0 +1,94 @@
+@import "../core/index-noreset.scss";
+
+@import "scss/variable";
+
+$cascader-menu-border: $cascader-menu-border-width $line-solid $cascader-menu-border-color;
+
+#{$cascader-prefix} {
+    @include box-sizing;
+
+    display: inline-block;
+    overflow: auto;
+    border: $cascader-menu-border;
+    border-radius: $cascader-menu-border-radius;
+
+    &-inner {
+        @include clearfix;
+    }
+    &-menu-wrapper {
+        float: left;
+        overflow: auto;
+        width: $cascader-menu-width;
+        height: $cascader-menu-height;
+        overflow-x: hidden;
+        overflow-y: auto;
+        & + & {
+            border-left: $cascader-menu-border;
+        }
+    }
+
+    &-menu {
+        position: relative;
+        padding: 0;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        min-width: auto;
+        min-height: 100%;
+        &.#{$css-prefix}has-right-border {
+            border-right: $cascader-menu-border;
+        }
+
+        &-item.#{$css-prefix}expanded {
+            color: $cascader-menu-item-expanded-color;
+            background-color: $cascader-menu-item-expanded-background-color;
+        }
+
+        &-icon-right {
+            position: absolute;
+            top: 0;
+            right: 10px;
+            color: $cascader-menu-icon-expand-color;
+
+            &:hover {
+                color: $cascader-menu-icon-hover-expand-color;
+            }
+        }
+
+        &-icon-expand.#{$css-prefix}icon {
+            @include icon-size($cascader-menu-icon-expand-size);
+        }
+
+        &-icon-loading.#{$css-prefix}icon {
+            @include icon-size($icon-xs);
+        }
+
+        &-item.#{$css-prefix}expanded &-icon-right {
+            color: $cascader-menu-icon-hover-expand-color;
+        }
+
+        &-item.#{$css-prefix}expanded &-icon-loading {
+            color: $color-brand1-6;
+        }
+    }
+
+    &-filtered-list {
+        height: $s-8 * 6;
+        padding: 0;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        overflow: auto;
+
+        .#{$css-prefix}menu-item-inner {
+            overflow: visible;
+        }
+    }
+
+    &-filtered-item em {
+        color: $color-brand1-6;
+        font-style: normal;
+    }
+}
+
+@import './rtl.scss';

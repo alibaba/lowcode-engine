@@ -1,0 +1,73 @@
+////
+/// @module form: 表单
+/// @tag Form
+/// @category component
+/// @family data-entry
+/// @varPrefix $form-
+/// @classPrefix {prefix}-form
+/// @order {"size/bounding":10,"size/item":11,"size/label":12,"size/help":13,"size/border":14,"statement/help":10,"statement/label":11,"statement/normal":12,"statement/border":13}
+////
+
+@charset "UTF-8";
+
+// form variables
+// --------------------------------------------------
+
+$form-prefix: ".#{$css-prefix}form";
+
+/// label padding (r)
+/// @namespace size/bounding
+$form-label-padding-r: $s-3 !default;
+
+/// margin (b)
+/// @namespace size/item
+$form-item-m-margin-b: $s-4 !default;
+
+/// margin (b)
+/// @namespace size/item
+$form-item-l-margin-b: $s-5 !default;
+
+/// margin (b)
+/// @namespace size/item
+$form-item-s-margin-b: $s-3 !default;
+
+/// margin (r)
+/// @namespace size/item
+$form-inline-l-item-margin-r: $s-6 !default;
+
+/// margin (r)
+/// @namespace size/item
+$form-inline-m-item-margin-r: $s-5 !default;
+
+/// margin (r)
+/// @namespace size/item
+$form-inline-s-item-margin-r: $s-4 !default;
+
+/// margin (t)
+/// @namespace size/help
+$form-help-margin-top: $s-1 !default;
+
+/// text
+/// @namespace size/help
+$form-help-font-size: $font-size-caption !default;
+
+/// text
+/// @namespace statement/help
+$form-help-color: $color-text1-2 !default;
+
+/// error text
+/// @namespace statement/help
+$form-error-color: $color-error-3 !default;
+
+/// warning text
+/// @namespace statement/help
+$form-warning-color: $color-warning-3 !default;
+
+/// margin (b)
+/// @type length
+/// @namespace size/label
+$form-top-label-margin-b: 2px !default;
+
+/// text
+/// @namespace statement/label
+$form-label-color: $color-text1-3 !default;

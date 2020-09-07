@@ -1,0 +1,22 @@
+@include keyframes(zoomOut) {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+        @include transform(scale3d(.3, .3, .3));
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@mixin zoomOut($count: $countDefault, $duration: $durationDefault, $delay: $delayDefault, $function: $ease-in-quint, $fill: $fillDefault, $visibility: $visibilityDefault) {
+    @include animation-name(zoomOut);
+    @include count($count);
+    @include duration($duration);
+    @include delay($delay);
+    @include function($function);
+    @include fill-mode($fill);
+    @include visibility($visibility);
+}

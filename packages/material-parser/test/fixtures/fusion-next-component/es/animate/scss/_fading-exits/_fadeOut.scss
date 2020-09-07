@@ -1,0 +1,18 @@
+@include keyframes(fadeOut) {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@mixin fadeOut($count: $countDefault, $duration: $durationDefault, $delay: $delayDefault, $function: $ease-in-quint, $fill: $fillDefault, $visibility: $visibilityDefault) {
+    @include animation-name(fadeOut);
+    @include count($count);
+    @include duration($duration);
+    @include delay($delay);
+    @include function($function);
+    @include fill-mode($fill);
+    @include visibility($visibility);
+}
