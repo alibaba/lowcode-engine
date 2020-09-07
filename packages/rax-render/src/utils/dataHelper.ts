@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { transformArrayToMap, isJSFunction, transformStringToFunction, clone } from './index';
 import { jsonp, mtop, request, get, post, bzb } from './request';
 

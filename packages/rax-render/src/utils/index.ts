@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import Debug from 'debug';
 import _keymaster from 'keymaster';
 import { forEach as _forEach, shallowEqual as _shallowEqual } from '@ali/b3-one/lib/obj';
@@ -13,9 +15,10 @@ import _debounce from 'lodash/debounce';
 import _serialize from 'serialize-javascript';
 import * as _jsonuri from 'jsonuri';
 import IntlMessageFormat from 'intl-messageformat';
-import pkg from '../../package.json';
+import * as fs from 'fs-extra';
 
-window.sdkVersion = pkg.version;
+const sdkVersion = fs.readJSONSync(path.join(__dirname, '..', '..', 'package.json'));
+window.sdkVersion = sdkVersion;
 
 export const moment = _moment;
 moment.locale('zh-cn');
@@ -281,7 +284,7 @@ export function goldlog(gmKey, params = {}, logKey = 'other') {
   // vscode 黄金令箭API
   const sendIDEMessage = window.sendIDEMessage || getParentWinValue('sendIDEMessage');
   const goKey = serializeParams({
-    sdkVersion: pkg.version,
+    sdkVersion,
     env: getEnv(),
     ...params,
   });
