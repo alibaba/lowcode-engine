@@ -117,7 +117,7 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
             (!viewProps.style || Object.keys(viewProps.style).length === 0)
           ) {
             children = (
-              <div className="lc-container-placeholder">
+              <div className="lc-container-placeholder" style={viewProps.placeholderStyle}>
                 {viewProps.placeholder || '拖拽组件或模板到这里'}
               </div>
             );
