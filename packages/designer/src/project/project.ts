@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import { obx, computed } from '@ali/lowcode-editor-core';
 import { Designer } from '../designer';
-import { DocumentModel, isDocumentModel } from '../document';
+import { DocumentModel, isDocumentModel, isPageSchema } from '../document';
 import { ProjectSchema, RootSchema } from '@ali/lowcode-types';
 
 export class Project {
@@ -138,6 +138,11 @@ export class Project {
 
     if (isDocumentModel(doc)) {
       return doc.open();
+    } else if (isPageSchema(doc)) {
+      const foundDoc = this.documents.find(curDoc => curDoc?.rootNode?.id && curDoc?.rootNode?.id === doc?.id);
+      if (foundDoc) {
+        foundDoc.remove();
+      }
     }
 
     doc = new DocumentModel(this, doc);

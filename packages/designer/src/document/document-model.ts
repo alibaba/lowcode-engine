@@ -1,5 +1,5 @@
 import { computed, obx } from '@ali/lowcode-editor-core';
-import { NodeData, isJSExpression, isDOMText, NodeSchema, isNodeSchema, RootSchema } from '@ali/lowcode-types';
+import { NodeData, isJSExpression, isDOMText, NodeSchema, isNodeSchema, RootSchema, PageSchema } from '@ali/lowcode-types';
 import { EventEmitter } from 'events';
 import { Project } from '../project';
 import { ISimulatorHost } from '../simulator';
@@ -658,4 +658,8 @@ export class DocumentModel {
 
 export function isDocumentModel(obj: any): obj is DocumentModel {
   return obj && obj.rootNode;
+}
+
+export function isPageSchema(obj: any): obj is PageSchema {
+  return obj?.componentName === 'Page';
 }
