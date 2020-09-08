@@ -3,21 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+
 <a name="1.0.7-0"></a>
 ## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-runtime@1.0.6-0...@ali/lowcode-runtime@1.0.7-0) (2020-09-02)
 
 
-
-
 **Note:** Version bump only for package @ali/lowcode-runtime
+
 
 <a name="1.0.6-0"></a>
-## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-runtime@1.0.5-0...@ali/lowcode-runtime@1.0.6-0) (2020-09-02)
+## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-runtime@1.0.5-0...@ali/lowcode-runtime@1.0.6-0) (2020-08-31)
 
 
+### Bug Fixes
+
+* 取消Provider的校验 ([a1755f2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a1755f2))
 
 
-**Note:** Version bump only for package @ali/lowcode-runtime
+### Features
+
+* 兼容通过api更新属性的场景 ([b58d59b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b58d59b))
+* 增加错误边界&pageReady钩子 ([3bb2fc1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3bb2fc1))
+* 增加若干钩子方法 ([eb55712](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/eb55712))
+* 支持多个provider ([642c62e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/642c62e))
+* 支持多个Provider ([e35357f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e35357f))
+
+
 
 <a name="1.0.5-0"></a>
 ## [1.0.5-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-runtime@1.0.4-0...@ali/lowcode-runtime@1.0.5-0) (2020-08-20)

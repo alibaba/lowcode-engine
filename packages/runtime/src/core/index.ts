@@ -1,5 +1,5 @@
-import Container, { ILayoutOptions } from './container';
-import { IProvider } from './provider';
+import Container, { ILayoutOptions, IErrorBoundaryConfig } from './container';
+import Provider from './provider';
 import runApp from './runApp';
 
 class App {
@@ -29,20 +29,28 @@ class App {
     this.container.registerProvider(CustomProvider);
   }
 
+  registerErrorBoundary(config: IErrorBoundaryConfig) {
+    this.container.registerErrorBoundary(config);
+  }
+
   getLayout(componentName: string) {
     return this.container.getLayout(componentName);
   }
 
-  getRenderer(): any | null {
+  getRenderer(): any {
     return this.container.getRenderer();
   }
 
-  getLoading(): any | null {
+  getLoading(): any {
     return this.container.getLoading();
   }
 
-  getProvider(): IProvider {
-    return this.container.getProvider();
+  getErrorBoundary(): IErrorBoundaryConfig {
+    return this.container.getErrorBoundary();
+  }
+
+  getProvider(id?: string): Provider | undefined {
+    return this.container.getProvider(id);
   }
 }
 

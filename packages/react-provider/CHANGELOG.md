@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+
 <a name="1.0.7-0"></a>
 ## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-provider@1.0.6-0...@ali/lowcode-react-provider@1.0.7-0) (2020-09-02)
 
@@ -13,6 +14,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="1.0.6-0"></a>
 ## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-provider@1.0.5-0...@ali/lowcode-react-provider@1.0.6-0) (2020-09-02)
+
+### Features
+
+* 增加错误边界&pageReady钩子 ([3bb2fc1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3bb2fc1))
 
 
 

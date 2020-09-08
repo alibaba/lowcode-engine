@@ -2,13 +2,14 @@ import { createElement, ReactType, ReactElement } from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from '@recore/router';
 import { app, Provider } from '@ali/lowcode-runtime';
-import LazyComponent from './lazy-component';
+import { AppHelper } from '@ali/lowcode-utils';
+import LazyComponent from './components/LazyComponent';
 
 export default class ReactProvider extends Provider {
   // 定制构造根组件的逻辑，如切换路由机制
   createApp() {
-    const RouterView = this.getRouterView();
-    let App;
+    let RouterView = this.getRouterView();
+    let App: any;
     const layoutConfig = this.getLayoutConfig();
     if (!layoutConfig || !layoutConfig.componentName) {
       App = (props: any) => (RouterView ? createElement(RouterView, { ...props }) : null);
@@ -16,7 +17,7 @@ export default class ReactProvider extends Provider {
     }
     const { componentName: layoutName, props: layoutProps } = layoutConfig;
     const { content: Layout, props: extraLayoutProps } = app.getLayout(layoutName) || {};
-    const sectionalRender = this.isSectionalRender();
+    const sectionalRender = this.isSectionalRender;
     if (!sectionalRender && Layout) {
       App = (props: any) =>
         createElement(
@@ -31,14 +32,21 @@ export default class ReactProvider extends Provider {
   }
 
   runApp(App: any, config: any) {
-    ReactDOM.render(<App />, document.getElementById(config?.containerId || 'App'));
+    const containerId = config?.containerId || 'App';
+    let container = document.getElementById(containerId);
+    if (!container) {
+      container = document.createElement('div');
+      document.body.appendChild(container);
+      container.id = containerId;
+    }
+    ReactDOM.render(<App />, container);
   }
 
   // 内置实现 for 动态化渲染
-  getRouterView(): ReactType | null {
+  getRouterView(): ReactType {
     const routerConfig = this.getRouterConfig();
     if (!routerConfig) {
-      return null;
+      return () => null;
     }
     const routes: Array<{
       path: string;
@@ -73,11 +81,15 @@ export default class ReactProvider extends Provider {
         defined: { keepAlive: true },
       });
     }
+    const appHelper = new AppHelper();
+    appHelper.set('utils', this.getUtils());
+    appHelper.set('constants', this.getConstants());
     const RouterView = (props: any) => {
       return createElement(Router as any, {
         routes,
         components: this.getComponents(),
         utils: this.getUtils(),
+        appHelper,
         componentsMap: this.getComponentsMapObj(),
         ...props,
       });
@@ -89,15 +101,16 @@ export default class ReactProvider extends Provider {
     if (!pageId) {
       return null;
     }
-    if (this.getlazyElement(pageId)) {
-      return this.getlazyElement(pageId);
+    if (this.getLazyElement(pageId)) {
+      return this.getLazyElement(pageId);
     } else {
       const lazyElement = createElement(LazyComponent as any, {
         getPageData: async () => await this.getPageData(pageId),
         key: pageId,
+        context: this,
         ...props,
       });
-      this.setlazyElement(pageId, lazyElement);
+      this.setLazyElement(pageId, lazyElement);
       return lazyElement;
     }
   }
