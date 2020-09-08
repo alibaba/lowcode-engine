@@ -7,6 +7,26 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@1.0.6-0...@ali/lowcode-designer@1.0.7-0) (2020-09-02)
 
 
+<a name="0.9.55"></a>
+## [0.9.55](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.54...@ali/lowcode-designer@0.9.55) (2020-09-08)
+
+
+### Bug Fixes
+
+* 拖拽时要解除与原来节点的关系 ([7a6bf2c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7a6bf2c))
+
+
+
+
+<a name="0.9.54"></a>
+## [0.9.54](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.53...@ali/lowcode-designer@0.9.54) (2020-09-03)
+
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+<a name="0.9.53"></a>
+## [0.9.53](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.52...@ali/lowcode-designer@0.9.53) (2020-09-03)
+
 
 
 **Note:** Version bump only for package @ali/lowcode-designer
@@ -29,6 +49,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+**Note:** Version bump only for package @ali/lowcode-designer
 <a name="1.0.5-0"></a>
 ## [1.0.5-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@1.0.4-0...@ali/lowcode-designer@1.0.5-0) (2020-08-20)
 
@@ -80,7 +101,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="0.9.48"></a>
 ## [0.9.48](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.47...@ali/lowcode-designer@0.9.48) (2020-08-20)
->>>>>>> master
 
 
 
@@ -105,7 +125,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * support dropObject is data ([809fda7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/809fda7))
->>>>>>> master
 
 
 
@@ -199,7 +218,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="0.9.38"></a>
 ## [0.9.38](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.37...@ali/lowcode-designer@0.9.38) (2020-08-06)
->>>>>>> master
 
 
 ### Bug Fixes

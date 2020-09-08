@@ -126,7 +126,7 @@ export default class Bundle {
      */
     if (bundles.length >= 2) {
       const prototype = bundles[0];
-      const metadata = upgradeMetadata(prototype.options);
+      const metadata = upgradeMetadata({ ...prototype.options, packageName: prototype.packageName });
       prototype.meta = designer.createComponentMeta(metadata);
       const prototypeView = bundles[1];
       prototype.setView(prototypeView);

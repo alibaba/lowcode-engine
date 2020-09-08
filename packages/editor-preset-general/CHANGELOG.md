@@ -7,12 +7,28 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@1.0.6-0...@ali/lowcode-editor-preset-general@1.0.7-0) (2020-09-02)
 
 
+**Note:** Version bump only for package @ali/lowcode-editor-preset-general
+<a name="1.0.6-0"></a>
+## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.37...@ali/lowcode-editor-preset-general@1.0.6-0) (2020-09-02)
+
+
+<a name="0.9.40"></a>
+## [0.9.40](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.39...@ali/lowcode-editor-preset-general@0.9.40) (2020-09-08)
+
 
 
 **Note:** Version bump only for package @ali/lowcode-editor-preset-general
 
-<a name="1.0.6-0"></a>
-## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.37...@ali/lowcode-editor-preset-general@1.0.6-0) (2020-09-02)
+<a name="0.9.39"></a>
+## [0.9.39](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.38...@ali/lowcode-editor-preset-general@0.9.39) (2020-09-03)
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-general
+
+<a name="0.9.38"></a>
+## [0.9.38](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.37...@ali/lowcode-editor-preset-general@0.9.38) (2020-09-03)
+
+
 
 
 ### Bug Fixes
@@ -57,10 +73,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-editor-preset-general
 
->>>>>>> master
 <a name="0.9.33"></a>
 ## [0.9.33](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.32...@ali/lowcode-editor-preset-general@0.9.33) (2020-08-20)
->>>>>>> master
 
 
 
@@ -136,10 +150,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-editor-preset-general
 
->>>>>>> master
 <a name="0.9.28"></a>
 ## [0.9.28](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.27...@ali/lowcode-editor-preset-general@0.9.28) (2020-08-14)
->>>>>>> master
 
 
 

@@ -6,13 +6,29 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 <a name="1.0.7-0"></a>
 ## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@1.0.6-0...@ali/lowcode-plugin-components-pane@1.0.7-0) (2020-09-02)
 
+**Note:** Version bump only for package @ali/lowcode-plugin-components-pane
+<a name="1.0.6-0"></a>
+## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@0.8.54...@ali/lowcode-plugin-components-pane@1.0.6-0) (2020-09-02)
+
+<a name="0.8.57"></a>
+## [0.8.57](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@0.8.56...@ali/lowcode-plugin-components-pane@0.8.57) (2020-09-08)
+
 
 
 
 **Note:** Version bump only for package @ali/lowcode-plugin-components-pane
 
-<a name="1.0.6-0"></a>
-## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@0.8.54...@ali/lowcode-plugin-components-pane@1.0.6-0) (2020-09-02)
+<a name="0.8.56"></a>
+## [0.8.56](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@0.8.55...@ali/lowcode-plugin-components-pane@0.8.56) (2020-09-03)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-components-pane
+
+<a name="0.8.55"></a>
+## [0.8.55](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@0.8.54...@ali/lowcode-plugin-components-pane@0.8.55) (2020-09-03)
+
 
 
 ### Bug Fixes
@@ -57,10 +73,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-plugin-components-pane
 
->>>>>>> master
 <a name="0.8.50"></a>
 ## [0.8.50](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@0.8.49...@ali/lowcode-plugin-components-pane@0.8.50) (2020-08-20)
->>>>>>> master
 
 
 
@@ -133,10 +147,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-plugin-components-pane
 
->>>>>>> master
 <a name="0.8.45"></a>
 ## [0.8.45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@0.8.44...@ali/lowcode-plugin-components-pane@0.8.45) (2020-08-14)
->>>>>>> master
 
 
 
