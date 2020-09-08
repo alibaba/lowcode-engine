@@ -11,6 +11,7 @@ import { History } from './history';
 import { TransformStage } from './node';
 import { uniqueId } from '@ali/lowcode-utils';
 import { ModalNodesManager } from './node';
+import { foreachReverse } from '../utils/tree';
 
 export type GetDataType<T, NodeType> = T extends undefined
   ? NodeType extends {
@@ -324,10 +325,13 @@ export class DocumentModel {
   }
 
   import(schema: RootSchema, checkId = false) {
+    // TODO: 暂时用饱和式删除，原因是 Slot 节点并不是树节点，无法正常递归删除
     this.nodes.forEach(node => {
       this.internalRemoveAndPurgeNode(node, true);
-      this.destroyNode(node);
     });
+    // foreachReverse(this.rootNode?.children, (node: Node) => {
+    //   this.internalRemoveAndPurgeNode(node, true);
+    // });
     this.rootNode?.import(schema as any, checkId);
     // todo: select added and active track added
   }
