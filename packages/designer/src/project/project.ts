@@ -35,6 +35,15 @@ export class Project {
   }
 
   /**
+   * 替换当前document的schema,并触发渲染器的render
+   * @param schema 
+   */
+  setSchema(schema?: ProjectSchema){
+    let doc = this.documents.find((doc) => doc.actived);
+    doc && doc.import(schema?.componentsTree[0]);
+  }
+
+  /**
    * 整体设置项目 schema
    *
    * @param autoOpen true 自动打开文档 string 指定打开的文件

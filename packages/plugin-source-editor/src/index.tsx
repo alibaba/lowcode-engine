@@ -114,6 +114,8 @@ export default class SourceEditor extends Component<{
       });
     }
 
+    this.showJsEditor();
+
     if (eventName === 'sourceEditor.addFunction') {
       setTimeout(() => {
         this.addFunction(params);
@@ -224,13 +226,21 @@ export default class SourceEditor extends Component<{
     });
 
     if (key === TAB_KEY.JS_TAB) {
-      document.getElementById('cssEditorDom').setAttribute('style', 'display:none');
-      document.getElementById('jsEditorDom').setAttribute('style', 'block');
+      this.showJsEditor();
     } else {
-      document.getElementById('jsEditorDom').setAttribute('style', 'display:none');
-      document.getElementById('cssEditorDom').setAttribute('style', 'block');
+      this.showCssEditor();
     }
   };
+
+  showJsEditor = () => {
+    document.getElementById('cssEditorDom').setAttribute('style', 'display:none');
+    document.getElementById('jsEditorDom').setAttribute('style', 'block');
+  }
+
+  showCssEditor = () => {
+    document.getElementById('jsEditorDom').setAttribute('style', 'display:none');
+    document.getElementById('cssEditorDom').setAttribute('style', 'block');
+  }
 
   updateCode = (newCode) => {
     const { selectTab } = this.state;
@@ -254,15 +264,15 @@ export default class SourceEditor extends Component<{
 
 
   saveSchema = () => {
-    const { jsCode } = this.state;
-    const { editor } = this.props;
-    const functionMap = transfrom.code2Schema(jsCode);
-    const schema = editor.get('designer').project.getSchema();
-    const oldSchemaStr = JSON.stringify(schema);
-    const newSchema = transfrom.setFunction2Schema(functionMap, schema);
+    const {jsCode} = this.state;
+    const {editor} = this.props;
+    let functionMap = transfrom.code2Schema(jsCode);
+    let schema = editor.get('designer').project.getSchema();
+    let oldSchemaStr = JSON.stringify(schema);
+    let newSchema = transfrom.setFunction2Schema(functionMap, schema);
 
-    if (newSchema != '' && JSON.stringify(newSchema) != oldSchemaStr) {
-      editor.get('designer').project.load(newSchema, true);
+    if (newSchema!='' && JSON.stringify(newSchema) != oldSchemaStr){
+      editor.get('designer').project.setSchema(newSchema);
     }
   };
 
