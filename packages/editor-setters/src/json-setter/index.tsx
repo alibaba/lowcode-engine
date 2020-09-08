@@ -30,6 +30,7 @@ class MonacoEditorView extends PureComponent {
 localeConfig('MonacoEditor', MonacoEditorView);
 
 // monaco编辑器存在3种主题：vs、vs-dark、hc-black
+// eslint-disable-next-line rule
 class MonacoEditorDefaultView extends PureComponent {
   static displayName = 'MonacoEditorDefault';
 
@@ -92,7 +93,7 @@ class MonacoEditorDefaultView extends PureComponent {
 
   editorParentNode: any;
 
-  constructor(props: Readonly<{}>) {
+  constructor(props: Readonly) {
     super(props);
     this.strValue = '';
     this.i18n = generateI18n(props.locale, props.messages);
@@ -288,8 +289,12 @@ class MonacoEditorDefaultView extends PureComponent {
       } else if (value && typeof value === 'string') {
         try {
           const ret = this.toJson(value);
-          if (!ret.error) tarValue = JSON.stringify(ret.value, null, 2);
-        } catch (err) {}
+          if (!ret.error) {
+            tarValue = JSON.stringify(ret.value, null, 2);
+          }
+        } catch (err) {
+          // empty
+        }
       }
     } else if (language === 'function') {
       if (typeof value === 'function') {
@@ -305,13 +310,17 @@ class MonacoEditorDefaultView extends PureComponent {
         try {
           tarValue = serialize(value, { unsafe: true });
           tarValue = js_beautify(tarValue, { indent_size: 2, indent_empty_lines: true });
-        } catch (err) {}
+        } catch (err) {
+          // empty
+        }
       } else if (typeof value === 'string') {
         try {
           const ret = this.resultHandler(value, 'object');
           tarValue = ret.error ? ret.value : serialize(ret.value, { unsafe: true });
           tarValue = js_beautify(tarValue, { indent_size: 2, indent_empty_lines: true });
-        } catch (err) {}
+        } catch (err) {
+          // empty
+        }
       }
     }
     return tarValue;
