@@ -71,6 +71,8 @@ export default class SourceEditor extends Component<{
       this.callEditorEvent('sourceEditor.focusByFunction', params);
     });
 
+    
+
 
     // 插件面板关闭事件,监听规则同上
     editor.on('skeleton.panel-dock.unactive',(pluginName,dock)=>{
@@ -79,8 +81,14 @@ export default class SourceEditor extends Component<{
        }
     })
 
-    let schema = editor.get('designer').project.getSchema();
-    this.initCode(schema);
+    // 插件面板打开事件,监听规则同上
+    editor.on('skeleton.panel-dock.active',(pluginName,dock)=>{
+      if (pluginName == 'sourceEditor'){
+          this.initCode();
+      }
+    })
+
+    this.initCode();
   }
 
 
@@ -121,7 +129,9 @@ export default class SourceEditor extends Component<{
     }
   };
 
-  initCode = (schema) => {
+  initCode = () => {
+    const {editor} = this.props;
+    let schema = editor.get('designer').project.getSchema();
     let jsCode = js_beautify(transfrom.schema2Code(schema), { indent_size: 2, indent_empty_lines: true });
     let css;
 
