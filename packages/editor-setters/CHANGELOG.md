@@ -45,7 +45,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="1.0.5-0"></a>
 ## [1.0.5-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@1.0.4-0...@ali/lowcode-editor-setters@1.0.5-0) (2020-08-20)
->>>>>>> release/1.0.0
 
 <a name="0.9.19"></a>
 ## [0.9.19](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.18...@ali/lowcode-editor-setters@0.9.19) (2020-08-27)
@@ -118,7 +117,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 # [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.14.0...@ali/lowcode-editor-setters@1.0.0) (2020-08-17)
 <a name="0.9.16"></a>
 ## [0.9.16](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.15...@ali/lowcode-editor-setters@0.9.16) (2020-08-19)
->>>>>>> master
 
 
 

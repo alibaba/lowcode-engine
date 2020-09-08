@@ -38,9 +38,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="1.0.5-0"></a>
 ## [1.0.5-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-event-bind-dialog@1.0.4-0...@ali/lowcode-plugin-event-bind-dialog@1.0.5-0) (2020-08-20)
-=======
-=======
->>>>>>> release/1.0.0
 <a name="0.8.32"></a>
 ## [0.8.32](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-event-bind-dialog@0.8.31...@ali/lowcode-plugin-event-bind-dialog@0.8.32) (2020-08-27)
 
@@ -104,7 +101,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 # [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-event-bind-dialog@0.13.0...@ali/lowcode-plugin-event-bind-dialog@1.0.0) (2020-08-17)
 <a name="0.8.29"></a>
 ## [0.8.29](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-event-bind-dialog@0.8.28...@ali/lowcode-plugin-event-bind-dialog@0.8.29) (2020-08-19)
->>>>>>> master
 
 
 

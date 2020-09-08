@@ -153,7 +153,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-plugin-undo-redo
 
->>>>>>> master
 <a name="0.8.47"></a>
 ## [0.8.47](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-undo-redo@0.8.46...@ali/lowcode-plugin-undo-redo@0.8.47) (2020-08-14)
 

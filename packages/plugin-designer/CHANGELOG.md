@@ -79,10 +79,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-plugin-designer
 
->>>>>>> master
 <a name="0.9.48"></a>
 ## [0.9.48](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-designer@0.9.47...@ali/lowcode-plugin-designer@0.9.48) (2020-08-20)
->>>>>>> master
 
 
 
@@ -155,10 +153,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-plugin-designer
 
->>>>>>> master
 <a name="0.9.43"></a>
 ## [0.9.43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-designer@0.9.42...@ali/lowcode-plugin-designer@0.9.43) (2020-08-14)
->>>>>>> master
 
 
 

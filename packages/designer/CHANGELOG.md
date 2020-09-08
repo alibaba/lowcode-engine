@@ -45,17 +45,13 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 * 🎸 支持设置模拟器的 viewport 的宽高和缩放级别 ([3a54241](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3a54241))
 * 新增simulatorurl，可以设置cdn使用simulator ([1f45b05](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1f45b05))
->>>>>>> release/1.0.0
 
 
 
 
-<<<<<<< HEAD
 **Note:** Version bump only for package @ali/lowcode-designer
-=======
 <a name="1.0.5-0"></a>
 ## [1.0.5-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@1.0.4-0...@ali/lowcode-designer@1.0.5-0) (2020-08-20)
->>>>>>> release/1.0.0
 
 <a name="0.9.52"></a>
 ## [0.9.52](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.51...@ali/lowcode-designer@0.9.52) (2020-08-27)
@@ -105,7 +101,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="0.9.48"></a>
 ## [0.9.48](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.47...@ali/lowcode-designer@0.9.48) (2020-08-20)
->>>>>>> master
 
 
 
@@ -130,7 +125,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * support dropObject is data ([809fda7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/809fda7))
->>>>>>> master
 
 
 
@@ -224,7 +218,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="0.9.38"></a>
 ## [0.9.38](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.37...@ali/lowcode-designer@0.9.38) (2020-08-06)
->>>>>>> master
 
 
 ### Bug Fixes

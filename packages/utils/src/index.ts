@@ -18,9 +18,5 @@ export * from './set-prototype-of';
 export * from './shallow-equal';
 export * from './svg-icon';
 export * from './unique-id';
-<<<<<<< HEAD
-export * from './env';
-=======
 export * from './build-components';
 export * from './appHelper';
->>>>>>> release/1.0.0

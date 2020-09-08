@@ -128,10 +128,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
 
->>>>>>> master
 <a name="0.8.49"></a>
 ## [0.8.49](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.48...@ali/lowcode-plugin-outline-pane@0.8.49) (2020-08-14)
->>>>>>> master
 
 
 

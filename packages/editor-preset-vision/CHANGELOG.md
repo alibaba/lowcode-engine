@@ -27,19 +27,14 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
-<<<<<<< HEAD
-=======
 * 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
->>>>>>> release/1.0.0
 * 用户在动态修改 prototype 时也需要重新计算 meta ([66c21c0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/66c21c0))
 
 
 
 
-<<<<<<< HEAD
 <a name="0.8.55"></a>
 ## [0.8.55](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.54...@ali/lowcode-editor-preset-vision@0.8.55) (2020-09-03)
-=======
 <a name="1.0.5-0"></a>
 ## [1.0.5-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@1.0.4-0...@ali/lowcode-editor-preset-vision@1.0.5-0) (2020-08-20)
 
@@ -50,19 +45,14 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="1.0.4-0"></a>
 ## [1.0.4-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@1.0.3-0...@ali/lowcode-editor-preset-vision@1.0.4-0) (2020-08-20)
->>>>>>> release/1.0.0
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-editor-preset-vision
 
-<<<<<<< HEAD
-=======
 <a name="1.0.3-0"></a>
 ## [1.0.3-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@1.0.2-0...@ali/lowcode-editor-preset-vision@1.0.3-0) (2020-08-20)
-=======
->>>>>>> release/1.0.0
 <a name="0.8.54"></a>
 ## [0.8.54](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.53...@ali/lowcode-editor-preset-vision@0.8.54) (2020-08-27)
 
@@ -125,7 +115,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
->>>>>>> master
 <a name="0.8.49"></a>
 ## [0.8.49](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.48...@ali/lowcode-editor-preset-vision@0.8.49) (2020-08-19)
 
@@ -191,7 +180,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="0.8.44"></a>
 ## [0.8.44](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.43...@ali/lowcode-editor-preset-vision@0.8.44) (2020-08-14)
->>>>>>> master
 
 
 
