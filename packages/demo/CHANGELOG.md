@@ -7,6 +7,30 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@1.0.6-0...@ali/lowcode-demo@1.0.7-0) (2020-09-02)
 
 
+<a name="0.8.65"></a>
+## [0.8.65](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.64...@ali/lowcode-demo@0.8.65) (2020-09-08)
+
+
+**Note:** Version bump only for package @ali/lowcode-demo
+
+<a name="0.8.64"></a>
+## [0.8.64](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.63...@ali/lowcode-demo@0.8.64) (2020-09-03)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-demo
+
+<a name="0.8.63"></a>
+## [0.8.63](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.62...@ali/lowcode-demo@0.8.63) (2020-09-03)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-demo
+
+<a name="0.8.62"></a>
+## [0.8.62](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.61...@ali/lowcode-demo@0.8.62) (2020-08-27)
 
 
 **Note:** Version bump only for package @ali/lowcode-demo

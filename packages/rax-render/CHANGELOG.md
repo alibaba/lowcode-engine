@@ -119,7 +119,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 <a name="0.1.6"></a>
->>>>>>> master
 ## [0.1.6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-rax-renderer@0.1.5...@ali/lowcode-rax-renderer@0.1.6) (2020-07-22)
 
 
@@ -188,11 +187,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Features
 
 * init rax-render ([7167767](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7167767))
-<<<<<<< HEAD
-
-=======
-
->>>>>>> master
 &&
 &&
 ||

@@ -3,6 +3,8 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.22"></a>
+## [0.8.22](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-utils@0.8.21...@ali/lowcode-utils@0.8.22) (2020-09-03)
 <a name="1.0.7-0"></a>
 ## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-utils@1.0.6-0...@ali/lowcode-utils@1.0.7-0) (2020-09-02)
 
@@ -11,6 +13,16 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-utils
 
+<a name="0.8.21"></a>
+## [0.8.21](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-utils@0.8.20...@ali/lowcode-utils@0.8.21) (2020-09-03)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-utils
+
+<a name="0.8.20"></a>
+## [0.8.20](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-utils@0.8.19...@ali/lowcode-utils@0.8.20) (2020-08-27)
 <a name="1.0.6-0"></a>
 ## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-utils@0.8.20...@ali/lowcode-utils@1.0.6-0) (2020-09-02)
 

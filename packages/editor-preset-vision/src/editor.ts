@@ -26,20 +26,9 @@ export const designer = new Designer({ editor });
 editor.set(Designer, designer);
 editor.set('designer', designer);
 
-let nodeCache: any = {};
 designer.project.onCurrentDocumentChange((doc) => {
-  nodeCache = {};
-  doc.nodesMap.forEach((node) => {
-    nodeCache[node.id] = node;
-  });
   doc.onRendererReady(() => {
     bus.emit(VE_EVENTS.VE_PAGE_PAGE_READY);
-  });
-  doc.onNodeCreate((node) => {
-    nodeCache[node.id] = node;
-  });
-  doc.onNodeDestroy((node) => {
-    delete nodeCache[node.id];
   });
 });
 
@@ -89,6 +78,18 @@ function upgradePropsReducer(props: any) {
 // 升级 Props
 designer.addPropsReducer(upgradePropsReducer, TransformStage.Upgrade);
 
+function getCurrentFieldIds() {
+  const fieldIds: any = [];
+  const nodesMap = designer?.currentDocument?.nodesMap || new Map();
+  nodesMap.forEach((curNode: any) => {
+    const fieldId = nodesMap?.get(curNode.id)?.getPropValue('fieldId');
+    if (fieldId) {
+      fieldIds.push(fieldId);
+    }
+  });
+  return fieldIds;
+}
+
 // 节点 props 初始化
 designer.addPropsReducer((props, node) => {
   // run initials
@@ -96,18 +97,10 @@ designer.addPropsReducer((props, node) => {
     ...props,
   };
   if (newProps.fieldId) {
-    const fieldIds: any = [];
-    Object.keys(nodeCache).forEach(nodeId => {
-      if (nodeId === node.id) {
-        return;
-      }
-      const fieldId = nodeCache[nodeId].getPropValue('fieldId');
-      if (fieldId) {
-        fieldIds.push(fieldId);
-      }
-    });
+    const fieldIds = getCurrentFieldIds();
+
     // 全局的关闭 uniqueIdChecker 信号，在 ve-utils 中实现
-    if (fieldIds.indexOf(props.fieldId) >= 0 && !window.__disable_unique_id_checker__) {
+    if (fieldIds.indexOf(props.fieldId) >= 0 && !(window as any).__disable_unique_id_checker__) {
       newProps.fieldId = undefined;
     }
   }

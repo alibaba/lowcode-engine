@@ -87,7 +87,7 @@ const defaultRaxSimulatorUrl = (() => {
 
 const defaultEnvironment = [
   // https://g.alicdn.com/mylib/??react/16.11.0/umd/react.production.min.js,react-dom/16.8.6/umd/react-dom.production.min.js,prop-types/15.7.2/prop-types.min.js
-  assetItem(AssetType.JSText, 'window.React=parent.React;window.ReactDOM=parent.ReactDOM;', undefined, 'react'),
+  assetItem(AssetType.JSText, 'window.React=parent.React;window.ReactDOM=parent.ReactDOM;window.__is_simulator_env__=true;', undefined, 'react'),
   assetItem(
     AssetType.JSText,
     'window.PropTypes=parent.PropTypes;React.PropTypes=parent.PropTypes; window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;',

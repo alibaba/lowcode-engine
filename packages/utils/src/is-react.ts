@@ -11,8 +11,12 @@ export function acceptsRef(obj: any): boolean {
   return obj?.prototype?.isReactComponent || (obj.$$typeof && obj.$$typeof === REACT_FORWARD_REF_TYPE);
 }
 
+function isForwardRefType(obj: any): boolean {
+  return obj?.$$typeof && obj?.$$typeof === REACT_FORWARD_REF_TYPE;
+}
+
 export function isReactComponent(obj: any): obj is ComponentType<any> {
-  return obj && (isReactClass(obj) || typeof obj === 'function');
+  return obj && (isReactClass(obj) || typeof obj === 'function' || isForwardRefType(obj));
 }
 
 export function wrapReactClass(view: FunctionComponent) {
