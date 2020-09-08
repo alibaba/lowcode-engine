@@ -1,3 +1,4 @@
+/* eslint-disable no-new-func */
 import Debug from 'debug';
 import _keymaster from 'keymaster';
 import { forEach as _forEach, shallowEqual as _shallowEqual } from '@ali/b3-one/lib/obj';
@@ -159,6 +160,7 @@ export function fillObj(receiver = {}, ...suppliers) {
 
 // 中划线转驼峰
 export function toHump(name) {
+  // eslint-disable-next-line no-useless-escape
   return name.replace(/\-(\w)/g, (all, letter) => {
     return letter.toUpperCase();
   });
@@ -448,7 +450,7 @@ export function addCssTag(id, content) {
 
 // 注册快捷
 export function registShortCuts(config, appHelper) {
-  const keyboardFilter = (keymaster.filter = (event) => {
+  const keyboardFilter = (event) => {
     const eTarget = event.target || event.srcElement;
     const { tagName } = eTarget;
     const isInput = !!(tagName == 'INPUT' || tagName == 'SELECT' || tagName == 'TEXTAREA');
@@ -459,7 +461,8 @@ export function registShortCuts(config, appHelper) {
     } else {
       return true;
     }
-  });
+  };
+  keymaster.filter = keyboardFilter;
 
   const ideMessage = appHelper.utils && appHelper.utils.ideMessage;
 

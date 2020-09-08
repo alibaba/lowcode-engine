@@ -31,16 +31,19 @@ class FaultComponent extends PureComponent {
     // FIXME: errorlog
     console.error('render error', this.props);
     const { _componentName: componentName } = this.props;
-    return (<Div
-      style={{
-        backgroundColor: '#DE2710',
-        padding: '15px',
-        fontSize: '18px',
-        textAlign: 'center',
-        color: 'white',
-      }}
-    >组件 {componentName} 渲染错误，请打开控制台排查
-            </Div>);
+    return (
+      <Div
+        style={{
+          backgroundColor: '#DE2710',
+          padding: '15px',
+          fontSize: '18px',
+          textAlign: 'center',
+          color: 'white',
+        }}
+      >
+        组件 {componentName} 渲染错误，请打开控制台排查
+      </Div>
+    );
   }
 }
 
@@ -48,17 +51,20 @@ class NotFoundComponent extends PureComponent {
   render() {
     console.error('component not found:', this.props);
     const { _componentName: componentName } = this.props;
-    return (<Div
-      {...this.props}
-      style={{
-        backgroundColor: '#3E91C9',
-        padding: '15px',
-        fontSize: '18px',
-        textAlign: 'center',
-        color: 'white',
-      }}
-    >组件 {componentName} 无视图，请打开控制台排查
-            </Div>);
+    return (
+      <Div
+        {...this.props}
+        style={{
+          backgroundColor: '#3E91C9',
+          padding: '15px',
+          fontSize: '18px',
+          textAlign: 'center',
+          color: 'white',
+        }}
+      >
+        组件 {componentName} 无视图，请打开控制台排查
+      </Div>
+    );
   }
 }
 
@@ -66,6 +72,7 @@ function isReactClass(obj) {
   return obj && obj.prototype && (obj.prototype.isReactComponent || obj.prototype instanceof Component);
 }
 
+// eslint-disable-next-line react/no-redundant-should-component-update
 export default class Engine extends PureComponent {
   static dislayName = 'engine';
 
@@ -131,18 +138,18 @@ export default class Engine extends PureComponent {
     }
   };
 
-  patchDidCatch(Component) {
-    if (!isReactClass(Component)) {
+  patchDidCatch(SetComponent) {
+    if (!isReactClass(SetComponent)) {
       return;
     }
-    if (Component.patchedCatch) {
+    if (SetComponent.patchedCatch) {
       return;
     }
-    Component.patchedCatch = true;
-    Component.getDerivedStateFromError = (error) => ({ engineRenderError: true, error });
+    SetComponent.patchedCatch = true;
+    SetComponent.getDerivedStateFromError = (error) => ({ engineRenderError: true, error });
     const engine = this;
-    const originRender = Component.prototype.render;
-    Component.prototype.render = function () {
+    const originRender = SetComponent.prototype.render;
+    SetComponent.prototype.render = function () {
       if (this.state && this.state.engineRenderError) {
         this.state.engineRenderError = false;
         return engine.createElement(engine.getFaultComponent(), {
@@ -152,8 +159,8 @@ export default class Engine extends PureComponent {
       }
       return originRender.call(this);
     };
-    const originShouldComponentUpdate = Component.prototype.shouldComponentUpdate;
-    Component.prototype.shouldComponentUpdate = function (nextProps, nextState) {
+    const originShouldComponentUpdate = SetComponent.prototype.shouldComponentUpdate;
+    SetComponent.prototype.shouldComponentUpdate = function (nextProps, nextState) {
       if (nextState && nextState.engineRenderError) {
         return true;
       }
@@ -161,10 +168,10 @@ export default class Engine extends PureComponent {
     };
   }
 
-  createElement(Component, props, children) {
+  createElement(SetComponent, props, children) {
     // TODO: enable in runtime mode?
-    this.patchDidCatch(Component);
-    return (this.props.customCreateElement || reactCreateElement)(Component, props, children);
+    this.patchDidCatch(SetComponent);
+    return (this.props.customCreateElement || reactCreateElement)(SetComponent, props, children);
   }
 
   getNotFoundComponent() {
@@ -177,7 +184,7 @@ export default class Engine extends PureComponent {
 
   render() {
     const {
-      schema, designMode, appHelper, components, customCreateElement,
+      schema, designMode, appHelper, components,
     } = this.props;
     if (isEmpty(schema)) {
       return null;
@@ -191,7 +198,6 @@ export default class Engine extends PureComponent {
     const allComponents = { ...ENGINE_COMPS, ...components };
     let Comp = allComponents[componentName] || ENGINE_COMPS[`${componentName}Engine`];
     if (Comp && Comp.prototype) {
-      const proto = Comp.prototype;
       if (!(Comp.prototype instanceof BaseEngine)) {
         Comp = ENGINE_COMPS[`${componentName}Engine`];
       }

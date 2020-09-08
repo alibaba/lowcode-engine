@@ -30,17 +30,20 @@ class FaultComponent extends PureComponent {
   render() {
     // FIXME: errorlog
     console.error('render error', this.props);
-    return (<Div style={{
-      width: '100%',
-      height: '50px',
-      lineHeight: '50px',
-      textAlign: 'center',
-      fontSize: '15px',
-      color: '#ff0000',
-      border: '2px solid #ff0000',
-    }}
-    >组件渲染异常，请查看控制台日志
-            </Div>);
+    return (
+      <Div style={{
+        width: '100%',
+        height: '50px',
+        lineHeight: '50px',
+        textAlign: 'center',
+        fontSize: '15px',
+        color: '#ff0000',
+        border: '2px solid #ff0000',
+      }}
+      >
+        组件渲染异常，请查看控制台日志
+      </Div>
+    );
   }
 }
 
@@ -120,20 +123,20 @@ export default class Renderer extends Component {
     }
   };
 
-  patchDidCatch(Component) {
-    if (!isReactClass(Component)) {
+  patchDidCatch(SetComponent) {
+    if (!isReactClass(SetComponent)) {
       return;
     }
-    if (Component.patchedCatch) {
+    if (SetComponent.patchedCatch) {
       return;
     }
-    Component.patchedCatch = true;
-    Component.getDerivedStateFromError = (error) => {
+    SetComponent.patchedCatch = true;
+    SetComponent.getDerivedStateFromError = (error) => {
       return { engineRenderError: true, error };
     };
     const engine = this;
-    const originRender = Component.prototype.render;
-    Component.prototype.render = function () {
+    const originRender = SetComponent.prototype.render;
+    SetComponent.prototype.render = function () {
       if (this.state && this.state.engineRenderError) {
         this.state.engineRenderError = false;
         return engine.createElement(engine.getFaultComponent(), {
@@ -143,8 +146,8 @@ export default class Renderer extends Component {
       }
       return originRender.call(this);
     };
-    const originShouldComponentUpdate = Component.prototype.shouldComponentUpdate;
-    Component.prototype.shouldComponentUpdate = function (nextProps, nextState) {
+    const originShouldComponentUpdate = SetComponent.prototype.shouldComponentUpdate;
+    SetComponent.prototype.shouldComponentUpdate = function (nextProps, nextState) {
       if (nextState && nextState.engineRenderError) {
         return true;
       }
@@ -152,10 +155,10 @@ export default class Renderer extends Component {
     };
   }
 
-  createElement(Component, props, children) {
+  createElement(SetComponent, props, children) {
     // TODO: enable in runtime mode?
-    this.patchDidCatch(Component);
-    return (this.props.customCreateElement || reactCreateElement)(Component, props, children);
+    this.patchDidCatch(SetComponent);
+    return (this.props.customCreateElement || reactCreateElement)(SetComponent, props, children);
   }
 
   getNotFoundComponent() {
@@ -167,7 +170,7 @@ export default class Renderer extends Component {
   }
 
   render() {
-    const { schema, designMode, appHelper, components, customCreateElement } = this.props;
+    const { schema, designMode, appHelper, components } = this.props;
     if (isEmpty(schema)) {
       return null;
     }
@@ -180,7 +183,6 @@ export default class Renderer extends Component {
     const allComponents = { ...ENGINE_COMPS, ...components };
     let Comp = allComponents[componentName] || ENGINE_COMPS[`${componentName}Engine`];
     if (Comp && Comp.prototype) {
-      const proto = Comp.prototype;
       if (!(Comp.prototype instanceof BaseEngine)) {
         Comp = ENGINE_COMPS[`${componentName}Engine`];
       }

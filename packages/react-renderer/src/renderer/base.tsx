@@ -1,3 +1,4 @@
+/* eslint-disable no-proto */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
@@ -245,7 +246,7 @@ export default class BaseRender extends PureComponent {
       }
       if (Array.isArray(schema)) {
         if (schema.length === 1) return this.__createVirtualDom(schema[0], self, parentInfo);
-        return schema.map((item, idx) => this.__createVirtualDom(item, self, parentInfo, item && item.__ctx && item.__ctx.lunaKey ? '' : idx));
+        return schema.map((item, idy) => this.__createVirtualDom(item, self, parentInfo, item && item.__ctx && item.__ctx.lunaKey ? '' : idy));
       }
       // FIXME
       const _children = this.getSchemaChildren(schema);
@@ -456,7 +457,7 @@ export default class BaseRender extends PureComponent {
       return checkProps(function () {
         const args = {};
         if (Array.isArray(params) && params.length) {
-          params.map((item, idx) => {
+          params.forEach((item, idx) => {
             if (typeof item === 'string') {
               args[item] = arguments[idx];
             } else if (item && typeof item === 'object') {

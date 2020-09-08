@@ -78,7 +78,7 @@ export default class AddonRenderer extends BaseRenderer {
     debug(`addon.componentWillUnmount - ${this.props.__schema.fileName}`);
   }
 
-  async componentDidCatch(e) {
+  async componentDidCatch() {
     super.componentDidCatch(...arguments);
     debug(`addon.componentDidCatch - ${this.props.__schema.fileName}`);
   }
