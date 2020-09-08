@@ -4,6 +4,7 @@ import { TransformStage } from './transform-stage';
 import { NodeData, isNodeSchema } from '@ali/lowcode-types';
 import { shallowEqual } from '@ali/lowcode-utils';
 import { EventEmitter } from 'events';
+import { foreachReverse } from '../../utils/tree';
 
 export class NodeChildren {
   @obx.val private children: Node[];
@@ -118,7 +119,7 @@ export class NodeChildren {
    */
   delete(node: Node, purge = false, useMutator = true): boolean {
     if (node.isParental()) {
-      node.children.forEach(subNode => {
+      foreachReverse(node.children, (subNode: Node) => {
         subNode.remove(useMutator, purge);
       });
     }
@@ -131,18 +132,19 @@ export class NodeChildren {
         console.error(err);
       }
     }
+    const document = node.document;
+    document.unlinkNode(node);
+    document.selection.remove(node.id);
+    document.destroyNode(node);
+    this.emitter.emit('change');
     const i = this.children.indexOf(node);
+    if (useMutator) {
+      this.reportModified(node, this.owner, {type: 'remove', removeIndex: i, removeNode: node});
+    }
     if (i < 0) {
       return false;
     }
     this.children.splice(i, 1);
-    const document = node.document;
-    document.unlinkNode(node);
-    document.selection.remove(node.id);
-    this.emitter.emit('change');
-    if (useMutator) {
-      this.reportModified(node, this.owner, {type: 'remove', removeIndex: i, removeNode: node});
-    }
     return false;
   }
 

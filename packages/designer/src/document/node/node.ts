@@ -262,7 +262,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
 
     // 解除老的父子关系，但不需要真的删除节点
-    if (this._parent) {
+    if (this._parent && !parent) {
       if (this.isSlot()) {
         this._parent.unlinkSlot(this);
       } else {
@@ -661,17 +661,17 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * 删除一个Slot节点
    */
   removeSlot(slotNode: Node, purge = false): boolean {
+    if (purge) {
+      // should set parent null
+      slotNode?.internalSetParent(null, false);
+      slotNode?.purge();
+    }
+    this.document.unlinkNode(slotNode);
+    this.document.selection.remove(slotNode.id);
     const i = this._slots.indexOf(slotNode);
     if (i < 0) {
       return false;
     }
-    if (purge) {
-      // should set parent null
-      slotNode.internalSetParent(null, false);
-      slotNode.purge();
-    }
-    this.document.unlinkNode(slotNode);
-    this.document.selection.remove(slotNode.id);
     this._slots.splice(i, 1);
     return false;
   }
