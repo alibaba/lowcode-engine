@@ -13,7 +13,6 @@ export default {
           href: '/',
         },
       },
-      /*
       {
         pluginKey: 'undoRedo',
         type: 'Custom',
@@ -22,6 +21,7 @@ export default {
           width: 88,
         },
       },
+      /*
       {
         pluginKey: 'divider',
         type: 'Divider',
@@ -37,8 +37,37 @@ export default {
           width: 64,
         },
       },
+      {
+        pluginKey: 'codeout',
+        type: 'Custom',
+        props: {
+          align: 'right',
+          width: 64,
+        },
+      },
+      {
+        pluginKey: 'saveload',
+        type: 'Custom',
+        props: {
+          align: 'right',
+          width: 128,
+        },
+      },
     ],
     leftArea: [
+      {
+        pluginKey: 'outline',
+        type: 'PanelIcon',
+        props: {
+          align: 'top',
+          icon: 'shuxingkongjian',
+          description: '大纲树',
+          panelProps: {
+            area: 'leftFixedArea',
+          },
+        },
+        pluginProps: {},
+      },
       {
         pluginKey: 'componentsPane',
         type: 'PanelIcon',
@@ -50,30 +79,20 @@ export default {
         pluginProps: {},
       },
       {
-        pluginKey: 'outline',
-        type: 'PanelIcon',
-        props: {
-          align: 'top',
-          icon: 'shuxingkongjian',
-          description: '大纲树',
-        },
-        pluginProps: {},
-      },
-      {
         pluginKey: 'sourceEditor',
         type: 'PanelIcon',
         props: {
           align: 'top',
           icon: 'wenjian',
-          description: '资源面板',
+          description: 'JS面板',
           panelProps: {
             floatable: true,
             height: 300,
             help: undefined,
-            hideTitleBar: true,
+            hideTitleBar: false,
             maxHeight: 800,
             maxWidth: 1200,
-            title: '动作面板',
+            title: 'JS面板',
             width: 600,
           },
         },
@@ -101,6 +120,15 @@ export default {
     init: async function init(editor) {
       const assets = await editor.utils.get('./assets.json');
       editor.set('assets', assets);
+      const simulatorUrl = [
+        'https://dev.g.alicdn.com/ali-lowcode/ali-lowcode-engine/0.9.50/react-simulator-renderer.css',
+        'https://dev.g.alicdn.com/ali-lowcode/ali-lowcode-engine/0.9.50/react-simulator-renderer.js',
+        //  for debug simulator
+        // 'http://localhost:3333/js/react-simulator-renderer.js', 
+   
+      ];
+      editor.set('simulatorUrl', simulatorUrl);
+      // editor.set('renderEnv', 'rax');
 
       const schema = await editor.utils.get('./schema.json');
       editor.set('schema', schema);

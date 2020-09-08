@@ -2,10 +2,11 @@ import { render } from 'react-dom';
 import { createElement } from 'react';
 import { Workbench, Skeleton, SettingsPrimaryPane, registerDefaults } from '@ali/lowcode-editor-skeleton';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
-import { Designer } from '@ali/lowcode-designer';
+import { Designer, LiveEditing, TransformStage, Node } from '@ali/lowcode-designer';
 import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
 import '@ali/lowcode-editor-setters';
+import { liveEditingRule, liveEditingSaveHander } from './live-editing';
 
 export * from '@ali/lowcode-types';
 export * from '@ali/lowcode-utils';
@@ -32,15 +33,6 @@ skeleton.add({
   content: DesignerPlugin,
 });
 skeleton.add({
-  area: 'leftArea',
-  name: 'outlinePane',
-  type: 'PanelDock',
-  content: Outline,
-  panelProps: {
-    area: 'leftFixedArea',
-  },
-});
-skeleton.add({
   area: 'rightArea',
   name: 'settingsPane',
   type: 'Panel',
@@ -53,7 +45,7 @@ skeleton.add({
   props: {
     condition: () => {
       return designer.dragon.dragging && !getTreeMaster(designer).hasVisibleTreeBoard();
-    }
+    },
   },
   content: OutlineBackupPane,
 });
@@ -77,14 +69,10 @@ export function init(container?: Element) {
   }
   container.id = 'lowcodeEditorPresetGeneral';
 
-  render(
-    createElement(GeneralWorkbench),
-    container,
-  );
+  render(createElement(GeneralWorkbench), container);
 }
 
-console.log(
-  `%cLowcodeEngine %cv${version}`,
-  "color:#000;font-weight:bold;",
-  "color:green;font-weight:bold;"
-);
+console.log(`%cLowcodeEngine %cv${version}`, 'color:#000;font-weight:bold;', 'color:green;font-weight:bold;');
+
+LiveEditing.addLiveEditingSpecificRule(liveEditingRule);
+LiveEditing.addLiveEditingSaveHandler(liveEditingSaveHander);

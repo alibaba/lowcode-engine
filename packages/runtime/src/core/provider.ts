@@ -101,32 +101,20 @@ export interface I18n {
 
 type Locale = 'zh-CN' | 'en-US';
 
-export interface IProvider {
-  init(): void;
-  ready(): void;
-  onReady(cb: any): void;
-  async(): Promise<IAppConfig>;
-  getAppData(): Promise<IAppData | undefined>;
-  getPageData(pageId: string): Promise<ComponentModel | undefined>;
-  getLazyComponent(pageId: string, props: any): any;
-  createApp(): void;
-  runApp(App: any, config: IAppConfig): void;
-}
-
-export default class Provider implements IProvider {
-  private components: IComponents = {};
-  private utils: IUtils = {};
-  private constants: IConstants = {};
-  private routes: IRouterConfig | null = null;
-  private layout: ILayoutConfig | null = null;
-  private componentsMap: IComponentMap[] = [];
-  private history: HistoryMode = 'hash';
-  private containerId = '';
-  private i18n: I18n | null = null;
-  private homePage = '';
-  private lazyElementsMap: { [key: string]: any } = {};
-  private sectionalRender = false;
-  private emitter: EventEmitter = new EventEmitter();
+export default class Provider {
+  emitter: EventEmitter = new EventEmitter();
+  components: IComponents = {};
+  utils: IUtils = {};
+  constants: IConstants = {};
+  routes: IRouterConfig | null = null;
+  layout: ILayoutConfig | null = null;
+  componentsMap: IComponentMap[] = [];
+  history: HistoryMode = 'hash';
+  containerId = '';
+  i18n: I18n | null = null;
+  homePage = '';
+  lazyElementsMap: { [key: string]: any } = {};
+  isSectionalRender = false;
 
   constructor() {
     this.init();
@@ -150,19 +138,18 @@ export default class Provider implements IProvider {
         this.registerUtils(utils);
         this.registerContants(constants);
         resolve({
-          history,
-          components,
-          utils,
-          containerId,
+          history: this.getHistory(),
+          components: this.getComponents(),
+          utils: this.getUtils(),
+          containerId: this.getContainerId(),
         });
       } catch (err) {
-        reject(err.message);
+        reject(err);
       }
     });
   }
 
   init() {
-    console.log('init');
     // 默认 ready，当重载了init时需手动触发 this.ready()
     this.ready();
   }
@@ -179,6 +166,50 @@ export default class Provider implements IProvider {
       return;
     }
     this.emitter.on('ready', cb);
+  }
+
+  emitPageReady() {
+    this.emitter.emit('pageReady');
+  }
+
+  emitPageEnter() {
+    this.emitter.emit('pageEnter');
+  }
+
+  emitPageUpdate() {
+    this.emitter.emit('pageUpdate');
+  }
+
+  emitPageLeave() {
+    this.emitter.emit('pageLeave');
+  }
+
+  onPageReady(cb: (params?: any) => void) {
+    this.emitter.on('pageReady', cb);
+    return () => {
+      this.emitter.removeListener('pageReady', cb);
+    };
+  }
+
+  onPageEnter(cb: (params?: any) => void) {
+    this.emitter.on('pageEnter', cb);
+    return () => {
+      this.emitter.removeListener('pageEnter', cb);
+    };
+  }
+
+  onPageUpdate(cb: (params?: any) => void) {
+    this.emitter.on('pageUpdate', cb);
+    return () => {
+      this.emitter.removeListener('pageUpdate', cb);
+    };
+  }
+
+  onPageLeave(cb: (params?: any) => void) {
+    this.emitter.on('pageLeave', cb);
+    return () => {
+      this.emitter.removeListener('pageLeave', cb);
+    };
   }
 
   getAppData(): any {
@@ -244,7 +275,7 @@ export default class Provider implements IProvider {
     this.routes = config;
   }
 
-  setHistory(config: HistoryMode | undefined) {
+  setHistory(config: HistoryMode | undefined): any {
     if (!config) {
       return;
     }
@@ -265,7 +296,7 @@ export default class Provider implements IProvider {
     this.i18n = i18n;
   }
 
-  setlazyElement(pageId: string, cache: any) {
+  setLazyElement(pageId: string, cache: any) {
     if (!pageId || !cache) {
       return;
     }
@@ -276,10 +307,6 @@ export default class Provider implements IProvider {
     if (pageId) {
       this.homePage = pageId;
     }
-  }
-
-  setSectionalRender() {
-    this.sectionalRender = true;
   }
 
   getComponents() {
@@ -333,7 +360,7 @@ export default class Provider implements IProvider {
   }
 
   getContainerId() {
-    return this.containerId;
+    return this.containerId || 'App';
   }
 
   getI18n(locale?: Locale) {
@@ -347,14 +374,10 @@ export default class Provider implements IProvider {
     return this.homePage;
   }
 
-  getlazyElement(pageId: string) {
+  getLazyElement(pageId: string) {
     if (!pageId) {
       return;
     }
     return this.lazyElementsMap[pageId];
-  }
-
-  isSectionalRender() {
-    return this.sectionalRender;
   }
 }

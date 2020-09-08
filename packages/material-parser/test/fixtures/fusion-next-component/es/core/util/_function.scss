@@ -1,0 +1,183 @@
+////
+/// @group utils
+////
+
+// 去除数值单位的方法
+//
+// @param {String} $value
+//   带单位的数值
+//
+// @example scss - SCSS 用法
+//   $dimension: strip-units(10px);
+//
+// @example css - CSS 输出
+//   $dimension: 10;
+//
+// @return {Number}
+@function strip-units($value) {
+    @return ($value / ($value * 0 + 1));
+}
+
+// 检查一个值是否为合法的CSS长度
+//
+// @param {String} $value
+// @return {Number}
+@function is-length($value) {
+    @return type-of($value) != "null" and (str-slice($value + "", 1, 4) == "calc" // 是calc函数来计算的长度
+    or type-of(index(auto inherit initial 0, $value)) == 'number'
+    or (type-of($value) == "number" and not(unitless($value))));
+}
+
+// 将pixel单位转换为em单位
+//
+// @param {Number} $pxval
+//   pixel单位下的数值
+//
+// @param {Number} $base
+//   全局基础pixel单位下的字号
+//
+// @example scss - SCSS 用法
+//   .element {
+//     font-size: em(12, 14);
+//   }
+//
+// @example css - CSS 输出
+//   .element {
+//     font-size: 0.85714em;
+//   }
+// @require {function} strip-units
+// @require {variable} $font-size-body-1
+//
+// @return {String}
+
+@function em($pxval, $base: $font-size-body-1) {
+    @if not unitless($pxval) {
+        $pxval: strip-units($pxval);
+    }
+    @if not unitless($base) {
+        $base: strip-units($base);
+    }
+    @return ($pxval / $base) * 1em;
+}
+
+// 转化为四值属性的方法，该属性可以有 1 到 4 个值，如：margin, padding, position
+//
+// @param {List} $shorthand
+//
+// @example scss - SCSS 用法
+//   .element {
+//     margin: unpack(1em 2em);
+//     padding: unpack(1em 2em 2em);
+//   }
+//
+// @example css - CSS 输出
+//   .element {
+//     margin: 1em 2em 1em 2em;
+//     padding: 1em 2em 2em 2em;
+//   }
+//
+// @return {List}
+@function unpack($shorthand) {
+    @if length($shorthand) == 1 {
+        @return nth($shorthand, 1) nth($shorthand, 1) nth($shorthand, 1) nth($shorthand, 1);
+    } @else if length($shorthand) == 2 {
+        @return nth($shorthand, 1) nth($shorthand, 2) nth($shorthand, 1) nth($shorthand, 2);
+    } @else if length($shorthand) == 3 {
+        @return nth($shorthand, 1) nth($shorthand, 2) nth($shorthand, 3) nth($shorthand, 2);
+    } @else {
+        @return $shorthand;
+    }
+}
+
+// 圆角生成器
+//
+// @access private
+//
+// @param {String} $side [$corner-sides-base] - 需要加圆角的面
+// @param {String} $radius [$corner-radius-base] - 圆角曲率
+//
+// @example scss - SCSS 用法
+//   .element {
+//     border-radius: corner-maker();
+//   }
+//
+// @example css - CSS 输出
+//   .element {
+//     border-radius: 3px 3px 3px 3px;
+//   }
+//
+// @return {List}
+
+@function corner-maker($side: $corner-sides-base, $radius: 3px) {
+
+    $tl: $radius;
+    $tr: $radius;
+    $br: $radius;
+    $bl: $radius;
+
+    @if ($side ==  top) {
+        $br: 0;
+        $bl: 0;
+    } @else if ($side == right) {
+        $tl: 0;
+        $bl: 0;
+    } @else if ($side == down) {
+        $tr: 0;
+        $tl: 0;
+    } @else if ($side == left) {
+        $tr: 0;
+        $br: 0;
+    }
+
+    @return #{$tl} #{$tr} #{$br} #{$bl};
+}
+
+// shadow 生成器
+//
+//
+// @param {String} $direction [$shadow-sides-base] - 阴影方向
+// @param {String} $blur [$shadow-blur-sd1] - 阴影羽化值
+// @param {Color} $shadow-color [$shadow-color-opacity-sd1] - 阴影颜色
+// @param {String} $shadow-x [$shadow-distance-sd1] - 阴影x方向距离
+// @param {String} $shadow-y [$shadow-distance-sd1y] - 阴影y方向距离
+// @param {String} $shadow-spread [$shadow-spread-sd1] - 阴影扩散值
+//
+// @example scss - SCSS 用法
+//   $shadow-1:  shadow-maker();
+//
+// @return {List}
+
+@function shadow-maker(
+    $direction: $shadow-sides-base,
+    $blur: $shadow-blur-sd1,
+    $shadow-color: $shadow-color-opacity-sd1,
+    $shadow-x: $shadow-distance-sd1,
+    $shadow-y: $shadow-distance-sd1y,
+    $shadow-spread: $shadow-spread-sd1
+
+) {
+
+    $x: $shadow-x;
+    $y: $shadow-y;
+    $b: $blur;
+    $c: $shadow-color;
+    $s: $shadow-spread;
+
+    @if ($b == 0) {
+        @return 0 0 0 #FFFFFF;
+    }
+
+    @if ($direction == $shadow-sides-up) {
+        $x: 0;
+        $y: -$shadow-y;
+    } @else if ($direction == $shadow-sides-right) {
+        $y: 0;
+    } @else if ($direction == $shadow-sides-down) {
+        $x: 0;
+    } @else if ($direction == $shadow-sides-left) {
+        $x: -$shadow-x;
+        $y: 0;
+    }
+
+    @return #{$x}px #{$y}px #{$b}px #{$s}px $c;
+}

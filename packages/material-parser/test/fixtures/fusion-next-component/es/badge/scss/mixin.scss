@@ -1,0 +1,44 @@
+@charset "UTF-8";
+
+// badge mixins
+// --------------------------------------------------
+@mixin badge-bounding {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1;
+}
+
+@mixin badge-state(
+    $color,
+    $bgColor,
+    $borderRadius
+) {
+    color: $color;
+    background: $bgColor;
+    text-align: center;
+    white-space: nowrap;
+    border-radius: $borderRadius;
+    a,
+    a:hover {
+        color: $color;
+    }
+}
+
+@mixin badge-size(
+    $width,
+    $minWidth,
+    $height,
+    $padding,
+    $fontSize,
+    $lineHeight
+) {
+    position: absolute;
+    width: $width;
+    height: $height;
+    min-width: $minWidth;
+    padding: $padding;
+    font-size: $fontSize;
+    line-height: $lineHeight;
+    transform: translateX(-50%);
+}

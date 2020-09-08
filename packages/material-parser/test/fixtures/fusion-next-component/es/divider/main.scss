@@ -1,0 +1,125 @@
+@charset "UTF-8";
+
+@import "../core/index-noreset.scss";
+
+@import "scss/mixin";
+@import "scss/variable";
+
+/* put your code here */
+
+#{$divider-prefix} {
+    @include box-sizing;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    list-style: none;
+    font-variant: tabular-nums;
+    font-feature-settings: 'tnum';
+    background: $divider-hoz-color;
+    border-collapse: separate;
+
+    &-dashed {
+        background: none;
+        border-color: $divider-hoz-color;
+        border-style: dashed;
+        border-width: $divider-hoz-size 0 0;
+    }
+
+    &-hoz {
+        display: block;
+        clear: both;
+        width: 100%;
+        min-width: 100%;
+        height: $divider-hoz-size;
+        margin: $divider-hoz-marginTop 0;
+    }
+
+    &-ver {
+        position: relative;
+        top: -.06em;
+        display: inline-block;
+        width: $divider-ver-size;
+        background: $divider-ver-color;
+        height: .9em;
+        margin: 0 $divider-ver-marginLeft;
+        vertical-align: middle;
+    }
+
+
+    &-hoz#{$divider-prefix}-with-text-center,
+    &-hoz#{$divider-prefix}-with-text-left,
+    &-hoz#{$divider-prefix}-with-text-right {
+        display: table;
+        margin: $divider-hoz-text-marginTop 0;
+        color: $divider-hoz-text-color;
+        font-weight: $divider-hoz-text-weight;
+        font-size: $divider-hoz-text-size;
+        white-space: nowrap;
+        text-align: center;
+        background: transparent;
+        &::before,
+        &::after {
+            position: relative;
+            top: 50%;
+            display: table-cell;
+            width: 50%;
+            border-top: $divider-hoz-size solid $divider-hoz-color;
+            transform: translateY(50%);
+            content: '';
+        }
+
+        &#{$divider-prefix}-dashed {
+            border-top: 0;
+            &::before,
+            &::after {
+                border-style: dashed none none;
+            }
+        }
+    }
+
+    &-hoz#{$divider-prefix}-with-text-left,
+    &-hoz#{$divider-prefix}-with-text-right {
+        #{$divider-prefix}-inner-text {
+            display: inline-block;
+            padding: 0 $divider-hoz-text-left-paddingLeft;
+        }
+    }
+
+    &-hoz#{$divider-prefix}-with-text-left {
+        &::before {
+            top: 50%;
+            width: 5%;
+        }
+        &::after {
+            top: 50%;
+            width: 95%;
+        }
+    }
+
+    &-hoz#{$divider-prefix}-with-text-right {
+        &::before {
+            top: 50%;
+            width: 95%;
+        }
+        &::after {
+            top: 50%;
+            width: 5%;
+        }
+    }
+
+    &-inner-text {
+        display: inline-block;
+        padding: 0 $divider-hoz-text-center-paddingLeft;
+    }
+
+    &-dashed {
+        background: none;
+        border-color: $divider-hoz-color;
+        border-style: dashed;
+        border-width: $divider-hoz-size 0 0;
+        &#{$divider-prefix}-ver {
+            border-width: 0 0 0 $divider-ver-size;
+        }
+    }
+}

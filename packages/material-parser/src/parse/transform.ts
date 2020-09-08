@@ -1,3 +1,5 @@
+import { omit, pick } from 'lodash';
+
 export function transformType(itemType: any) {
   if (typeof itemType === 'string') return itemType;
   const { name, elements, value = elements, computed, required, type } = itemType;
@@ -27,10 +29,12 @@ export function transformType(itemType: any) {
       return eval(value);
     case 'enum':
     case 'tuple':
+    case 'oneOf':
       result.type = 'oneOf';
       result.value = value.map(transformType);
       break;
     case 'union':
+    case 'oneOfType':
       result.type = 'oneOfType';
       result.value = value.map(transformType);
       break;
@@ -46,8 +50,12 @@ export function transformType(itemType: any) {
     case 'Array':
     case 'arrayOf': {
       result.type = 'arrayOf';
-      const v = transformType(value[0]);
-      if (typeof v.type === 'string') result.value = v.type;
+      const v = omit(transformType(value[0]), ['isRequired']);
+      if (Object.keys(v).length === 1 && v.type) {
+        result.value = v.type;
+      } else {
+        result.value = v;
+      }
       break;
     }
     case 'signature': {
@@ -56,15 +64,15 @@ export function transformType(itemType: any) {
         break;
       }
       result.type = 'shape';
-      const {
-        signature: { properties },
-      } = type;
+      const properties = type?.signature?.properties || [];
       if (properties.length === 0) {
         result.type = 'object';
       } else if (properties.length === 1 && typeof properties[0].key === 'object') {
         result.type = 'objectOf';
         const v = transformType(properties[0].value);
         if (typeof v.type === 'string') result.value = v.type;
+      } else if (properties.length === 1 && properties[0].key === '__call') {
+        result.type = 'func';
       } else {
         result.value = properties
           .filter((item: any) => typeof item.key !== 'object')
@@ -75,9 +83,7 @@ export function transformType(itemType: any) {
             } = prop;
             return transformItem(key, {
               ...others,
-              type: {
-                name,
-              },
+              type: pick(prop.value, ['name', 'value']),
             });
           });
       }
@@ -122,7 +128,7 @@ export function transformType(itemType: any) {
 }
 
 export function transformItem(name: string, item: any) {
-  const { description, flowType, tsType, type = tsType || flowType, required, defaultValue } = item;
+  const { description, flowType, tsType, type = tsType || flowType, required, defaultValue, ...others } = item;
   const result: any = {
     name,
   };
@@ -130,11 +136,16 @@ export function transformItem(name: string, item: any) {
   if (type) {
     result.propType = transformType({
       ...type,
+      ...omit(others, ['name']),
       required: !!required,
     });
   }
   if (description) {
-    result.description = description;
+    if (description.includes('\n')) {
+      result.description = description.split('\n')[0];
+    } else {
+      result.description = description;
+    }
   }
   if (defaultValue !== undefined) {
     try {

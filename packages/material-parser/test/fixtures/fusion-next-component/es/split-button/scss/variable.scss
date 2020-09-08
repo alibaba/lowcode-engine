@@ -1,0 +1,18 @@
+////
+/// @module split-button: 分隔按钮
+/// @tag SplitButton
+/// @category component
+/// @family general
+/// @varPrefix $split-btn-
+/// @classPrefix {prefix}-split-btn
+////
+
+// split-button variables
+// --------------------------------------------------
+
+// component prefix
+$split-btn-prefix: ".#{$css-prefix}split-btn";
+
+/// icon
+/// @namespace statement/normal
+$split-btn-trigger-normal-icon-color: $color-text1-2 !default;

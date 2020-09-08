@@ -1,0 +1,325 @@
+// 箭头
+// ----------------------------------------
+
+
+
+@mixin step-item-state-rtl(
+    $shape: 'circle',
+    $background: $color-white
+) {
+    #{$step-prefix}-item-node-dot {
+        right: 50%;
+        left: auto;
+    }
+
+    @if ($shape == 'arrow') {
+        background: $background;
+
+        &:before {
+            border: $step-arrow-item-border-width solid $background;
+            border-right-color: transparent;
+        }
+
+        &:after {
+            border-right-color: $background;
+            border-left-color: transparent;
+        }
+    }
+}
+
+@mixin state-node-size-rtl($type: 'hor', $shape: 'circle', $node-size: $s-8) {
+    @if ($type == 'hor') {
+        @if ($shape == 'circle') {
+            & > #{$step-prefix}-item-body {
+                right: - ($step-circle-item-body-width - $node-size - $step-circle-item-node-padding * 2) / 2;
+                left: auto;
+            }
+        }
+        @if ($shape == 'dot') {
+            & > #{$step-prefix}-item-body {
+                right: - ($step-dot-item-body-width - $node-size - $step-dot-item-dot-padding * 2) / 2;
+                left: auto;
+            }
+        }
+    }
+
+    @if ($type == 'ver') {
+        @if ($shape == 'circle') {
+
+            & > #{$step-prefix}-item-body {
+                right: $node-size / 2;
+                left: auto;
+                margin-right: $step-circle-item-node-padding;
+                margin-left: 0;
+                & > #{$step-prefix}-item-title {
+                    text-align: right;
+                    @include reset-font;
+                }
+                & > #{$step-prefix}-item-content {
+                    text-align: right;
+                }
+            }
+        }
+
+        @if ($shape == 'dot') {
+            & > #{$step-prefix}-item-body {
+                right: $node-size / 2;
+                left: auto;
+                margin-right: $step-dot-item-dot-padding;
+                margin-left: 0;
+                & > #{$step-prefix}-item-title {
+                    text-align: right;
+                    @include reset-font;
+                }
+                & > #{$step-prefix}-item-content {
+                    text-align: right;
+                }
+            }
+        }
+    }
+}
+
+
+@mixin label-placement-rtl($node-size: $s-8) {
+
+    #{$step-prefix}-item-body {
+        left: auto;
+        right: 0;
+        text-align: right;
+        #{$step-prefix}-item-title {
+            padding-left: $step-circle-item-node-padding;
+            padding-right: 0;
+        }
+    }
+
+    #{$step-prefix}-item-tail {
+        left: 0;
+        right: auto;
+    }
+}
+
+
+#{$step-prefix}-horizontal[dir="rtl"] {
+    & > #{$step-prefix}-item {
+        text-align: right;
+    }
+}
+
+#{$step-prefix}-arrow[dir="rtl"] {
+    #{$step-prefix}-item {
+        @include step-item-size(
+            $step-arrow-item-height,
+            auto,
+            $step-arrow-item-height/8,
+            $step-arrow-item-height/2
+        );
+
+        &:before {
+            right: -$step-arrow-item-border-width;
+            left: auto;
+            border: $step-arrow-item-border-width solid transparent;
+            border-right-color: transparent;
+        }
+
+        &:after {
+            left: -$step-arrow-item-border-width * 2;
+            right: auto;
+            border-top: $step-arrow-item-border-width solid transparent;
+            border-bottom: $step-arrow-item-border-width solid transparent;
+            border-right: $step-arrow-item-border-width solid transparent;
+        }
+    }
+
+    & > #{$step-prefix}-item-wait {
+        @include step-item-state-rtl(
+            'arrow',
+            $step-arrow-item-wait-background
+        );
+    }
+
+    & > #{$step-prefix}-item-process {
+        @include step-item-state-rtl(
+            'arrow',
+            $step-arrow-item-process-background
+        );
+    }
+
+    & > #{$step-prefix}-item-finish {
+        @include step-item-state-rtl(
+            'arrow',
+            $step-arrow-item-finish-background
+        );
+    }
+
+    #{$step-prefix}-item-disabled {
+        @include step-item-state-rtl(
+            'arrow',
+            $step-arrow-item-disabled-background
+        );
+    }
+
+    #{$step-prefix}-item-first {
+        margin-right: 0;
+    }
+
+    #{$step-prefix}-item-last {
+        margin-left: 0;
+    }
+}
+
+
+// 圆形
+// ----------------------------------------
+
+#{$step-prefix}-circle[dir="rtl"] {
+
+    & > #{$step-prefix}-item-wait {
+        @include step-item-state-rtl(
+            'circle',
+            $step-circle-item-node-wait-background
+        );
+    }
+
+    & > #{$step-prefix}-item-process {
+        @include step-item-state-rtl(
+            'circle',
+            $step-circle-item-node-process-background
+        );
+    }
+
+    & > #{$step-prefix}-item-finish {
+        @include step-item-state-rtl(
+            'circle',
+            $step-circle-item-node-finish-background
+        );
+    }
+
+    #{$step-prefix}-item-disabled {
+        @include step-item-state-rtl(
+            'circle',
+            $step-circle-item-node-disabled-background
+        );
+    }
+
+
+    // 圆形 水平
+    // ----------------------------------------
+    &#{$step-prefix}-horizontal {
+
+        & > #{$step-prefix}-item-wait {
+            @include state-node-size-rtl('hor', 'circle');
+        }
+        & > #{$step-prefix}-item-process {
+            @include state-node-size-rtl('hor', 'circle', $step-circle-item-node-process-size);
+        }
+        & > #{$step-prefix}-item-finish {
+            @include state-node-size-rtl('hor', 'circle');
+        }
+        & > #{$step-prefix}-item-disabled {
+            @include state-node-size-rtl('hor', 'circle');
+        }
+    }
+
+    &#{$step-prefix}-horizontal#{$step-prefix}-label-horizontal {
+        & > #{$step-prefix}-item-wait {
+            @include label-placement-rtl();
+        }
+        & > #{$step-prefix}-item-process {
+            @include label-placement-rtl($step-circle-item-node-process-size);
+        }
+        & > #{$step-prefix}-item-finish {
+            @include label-placement-rtl();
+        }
+        & > #{$step-prefix}-item-disabled {
+            @include label-placement-rtl();
+        }
+    }
+
+    // 圆形 垂直
+    // ----------------------------------------
+    &#{$step-prefix}-vertical {
+
+        & > #{$step-prefix}-item-wait {
+            @include state-node-size-rtl('ver', 'circle');
+        }
+        & > #{$step-prefix}-item-process {
+            @include state-node-size-rtl('ver', 'circle', $step-circle-item-node-process-size);
+        }
+        & > #{$step-prefix}-item-finish {
+            @include state-node-size-rtl('ver', 'circle');
+        }
+        & > #{$step-prefix}-item-disabled {
+            @include state-node-size-rtl('ver', 'circle');
+        }
+    }
+}
+
+
+// 点型
+// ----------------------------------------
+
+
+#{$step-prefix}-dot[dir="rtl"] {
+    & > #{$step-prefix}-item-wait {
+        @include step-item-state-rtl(
+            'dot',
+            $step-dot-item-node-wait-background
+        );
+    }
+
+    & > #{$step-prefix}-item-process {
+        @include step-item-state-rtl(
+            'dot',
+            $step-dot-item-node-process-background
+        );
+    }
+
+    & > #{$step-prefix}-item-finish {
+        @include step-item-state-rtl(
+            'dot',
+            $step-dot-item-node-finish-background
+        );
+    }
+
+    #{$step-prefix}-item-disabled {
+        @include step-item-state-rtl(
+            'dot',
+            $step-dot-item-node-disabled-background
+        );
+    }
+
+    // 点型 水平
+    // ----------------------------------------
+    &#{$step-prefix}-horizontal {
+        & > #{$step-prefix}-item-wait {
+            @include state-node-size-rtl('hor', 'dot', $s-3);
+        }
+        & > #{$step-prefix}-item-process {
+            @include state-node-size-rtl('hor', 'dot', $step-dot-item-dot-process-size);
+        }
+        & > #{$step-prefix}-item-finish {
+            @include state-node-size-rtl('hor', 'dot', $s-3);
+        }
+        & > #{$step-prefix}-item-disabled {
+            @include state-node-size-rtl('hor', 'dot', $s-3);
+        }
+    }
+
+    // 点型 垂直
+    // ----------------------------------------
+    &#{$step-prefix}-vertical {
+        padding: 0 4px 0 0;
+        & > #{$step-prefix}-item-wait {
+            @include state-node-size-rtl('ver', 'dot', $s-3);
+        }
+        & > #{$step-prefix}-item-process {
+            @include state-node-size-rtl('ver', 'dot', $step-dot-item-dot-process-size);
+        }
+        & > #{$step-prefix}-item-finish {
+            @include state-node-size-rtl('ver', 'dot', $s-3);
+        }
+        & > #{$step-prefix}-item-disabled {
+            @include state-node-size-rtl('ver', 'dot', $s-3);
+        }
+    }
+}

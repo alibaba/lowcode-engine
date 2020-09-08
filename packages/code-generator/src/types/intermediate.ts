@@ -5,6 +5,7 @@ import {
   IDependency,
   II18nMap,
   IInternalDependency,
+  INpmPackage,
   IUtilItem,
 } from './index';
 
@@ -42,6 +43,7 @@ export interface IProjectInfo {
   css?: string;
   constants?: Record<string, string>;
   i18n?: II18nMap;
+  packages: INpmPackage[];
 }
 
 /**

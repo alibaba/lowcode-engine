@@ -36,11 +36,11 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
   }
   readonly id = uniqueId('outline');
 
-  @obx.ref _visible: boolean = false;
+  @obx.ref _visible = false;
   get visible() {
     return this._visible;
   }
-  constructor(readonly editor: IEditor, readonly at: string | Symbol) {
+  constructor(readonly editor: IEditor, readonly at: string | symbol) {
     let inited = false;
     const setup = async () => {
       if (inited) {
@@ -147,7 +147,8 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
     const irect = this.getInsertionRect();
     const originLoc = document.dropLocation;
 
-    if (dragObject.type === 'node' && operationalNodes[0].getPrototype().isModal()) {
+    const prop = e.dragObject.nodes ? e.dragObject.nodes[0].getPrototype() : null;
+    if (e.dragObject.type === 'node' && prop && prop.isModal()) {
       return designer.createLocation({
         target: document.rootNode,
         detail: {

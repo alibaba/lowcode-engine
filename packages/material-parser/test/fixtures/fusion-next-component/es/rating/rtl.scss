@@ -1,0 +1,18 @@
+
+#{$rating-prefix}[dir="rtl"] {
+    #{$rating-prefix}-overlay {
+        right: 0;
+        left: auto;
+    }
+    #{$rating-prefix}-underlay,
+    #{$rating-prefix}-overlay {
+        #{$rating-prefix}-icon {
+            margin-right: $s-1;
+            margin-left: 0;
+        }
+        #{$rating-prefix}-icon:last-child {
+            /* icon 放大会产生边缘溢出，这里使用 margin 为放大扩展一部分空间 */
+            margin-left: $s-1;
+        }
+    }
+}

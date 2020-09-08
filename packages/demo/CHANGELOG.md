@@ -3,10 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.7-0"></a>
+## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@1.0.6-0...@ali/lowcode-demo@1.0.7-0) (2020-09-02)
+
+
 <a name="0.8.65"></a>
 ## [0.8.65](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.64...@ali/lowcode-demo@0.8.65) (2020-09-08)
-
-
 
 
 **Note:** Version bump only for package @ali/lowcode-demo
@@ -31,124 +33,205 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ## [0.8.62](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.61...@ali/lowcode-demo@0.8.62) (2020-08-27)
 
 
-
-
 **Note:** Version bump only for package @ali/lowcode-demo
 
-<a name="0.8.61"></a>
-## [0.8.61](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.60...@ali/lowcode-demo@0.8.61) (2020-08-26)
-
-
-
-
-**Note:** Version bump only for package @ali/lowcode-demo
-
-<a name="0.8.60"></a>
-## [0.8.60](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.59...@ali/lowcode-demo@0.8.60) (2020-08-24)
-
-
-
-
-**Note:** Version bump only for package @ali/lowcode-demo
-
-<a name="0.8.59"></a>
-## [0.8.59](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.58...@ali/lowcode-demo@0.8.59) (2020-08-23)
-
-
-
-
-**Note:** Version bump only for package @ali/lowcode-demo
-
-<a name="0.8.58"></a>
-## [0.8.58](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.57...@ali/lowcode-demo@0.8.58) (2020-08-20)
-
-
-
-
-**Note:** Version bump only for package @ali/lowcode-demo
-
-<a name="0.8.57"></a>
-## [0.8.57](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.56...@ali/lowcode-demo@0.8.57) (2020-08-19)
-
-
-
-
-**Note:** Version bump only for package @ali/lowcode-demo
-
-<a name="0.8.56"></a>
-## [0.8.56](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.55...@ali/lowcode-demo@0.8.56) (2020-08-19)
-
-
-
-
-**Note:** Version bump only for package @ali/lowcode-demo
-
-<a name="0.8.55"></a>
-## [0.8.55](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.54...@ali/lowcode-demo@0.8.55) (2020-08-19)
-
-
-
-
-**Note:** Version bump only for package @ali/lowcode-demo
-
-<a name="0.8.54"></a>
-## [0.8.54](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.53...@ali/lowcode-demo@0.8.54) (2020-08-17)
-
-
-
-
-**Note:** Version bump only for package @ali/lowcode-demo
-
-<a name="0.8.53"></a>
-## [0.8.53](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.52...@ali/lowcode-demo@0.8.53) (2020-08-14)
+<a name="1.0.6-0"></a>
+## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.62...@ali/lowcode-demo@1.0.6-0) (2020-09-02)
 
 
 ### Bug Fixes
 
-* 修改移动端设备宽度 ([cd7b1e6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/cd7b1e6))
+* 🐛 更改复杂类型生成工具的接口形式，减少调用复杂度 ([ce616b5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ce616b5))
+* 🐛 after event name & TabItem parent limitation ([76fb0b3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/76fb0b3))
+* 🐛 Card component's settings ([f44e7ab](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f44e7ab))
+* 🐛 Cascader init status ([e4a28c4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e4a28c4))
+* 🐛 codeout btn fix ([afda7d4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/afda7d4))
+* 🐛 Collapse render error ([6fed968](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6fed968))
+* 🐛 fix Menu & MenuButton assets cfg ([3d40aa2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3d40aa2))
+* 🐛 Menu Items ([5ecacef](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5ecacef))
+* 🐛 save and generator last page ([3e4254c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3e4254c))
+* 🐛 Tab & TabItem assets config ([0cc08fb](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0cc08fb))
+* 🐛 Tag assets ([b460dcf](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b460dcf))
+* 🐛 Tag components setting ([de941da](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/de941da))
+* 🐛 Timeline asset config ([436dadd](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/436dadd))
+* 🐛 use JsonSetter as dataSource Setter ([553f924](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/553f924))
+* 😈 table 无法选中问题 ([34825f8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/34825f8))
+* 适配Nav组件 ([7e9829f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7e9829f))
+* 修改插件面板配置 ([f9ceda5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f9ceda5))
+* 修改js面板的保存schema问题 ([0ee8892](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0ee8892))
+* dropdown and menu schema ([ae1d125](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ae1d125))
+* fix mixsetter style ([0ecce83](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0ecce83))
+* fix NextTable callback function ([ce77375](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ce77375))
+* fix source edit bug ([047247c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/047247c))
+
+
+### Features
+
+* 🎸 add demo-server ([df35c6a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/df35c6a))
+* 🎸 Box config edit ([49b49ee](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/49b49ee))
+* 🎸 Button update ([7969273](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7969273))
+* 🎸 Collapse component update ([c682cc5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c682cc5))
+* 🎸 Collapse.panel has drop in Collapse ([d4d41e4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d4d41e4))
+* 🎸 pagination update ([f13b3ab](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f13b3ab))
+* 🎸 saveload btn for demo ([f91da66](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f91da66))
+* 🎸 update upload component ([10abef5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/10abef5))
+* 🎸 upload update ([f81932b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f81932b))
+* 适配TreeNode节点 ([8c36928](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8c36928))
+* 新增分隔符物料配置 ([af39c17](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/af39c17))
+* 新增simulatorurl，可以设置cdn使用simulator ([1f45b05](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1f45b05))
+* 增加出码按钮 ([6f7b066](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6f7b066))
+* 主设置面板里深层次界面通过 stagebox 进行过渡 ([783e945](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/783e945))
+* demo 构造 componentsMap ([f445ffe](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f445ffe))
+* tree 组件修改 ([7efa52f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7efa52f))
 
 
 
 
-<a name="0.8.52"></a>
-## [0.8.52](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.51...@ali/lowcode-demo@0.8.52) (2020-08-14)
+<a name="1.0.3-0"></a>
+## [1.0.3-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@1.0.2-0...@ali/lowcode-demo@1.0.3-0) (2020-08-20)
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-demo
 
-<a name="0.8.51"></a>
-## [0.8.51](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.50...@ali/lowcode-demo@0.8.51) (2020-08-07)
+<a name="1.0.2-0"></a>
+## [1.0.2-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@1.0.1-0...@ali/lowcode-demo@1.0.2-0) (2020-08-20)
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-demo
 
-<a name="0.8.50"></a>
-## [0.8.50](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.49...@ali/lowcode-demo@0.8.50) (2020-08-06)
+<a name="1.0.1-0"></a>
+## [1.0.1-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.57...@ali/lowcode-demo@1.0.1-0) (2020-08-20)
+
+
+### Bug Fixes
+
+* 🐛 Card component's settings ([f44e7ab](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f44e7ab))
+* 🐛 Cascader init status ([e4a28c4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e4a28c4))
+* 🐛 codeout btn fix ([afda7d4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/afda7d4))
+* 🐛 Collapse render error ([6fed968](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6fed968))
+* 🐛 save and generator last page ([3e4254c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3e4254c))
+* 🐛 Tab & TabItem assets config ([0cc08fb](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0cc08fb))
+* 🐛 Tag assets ([b460dcf](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b460dcf))
+* 🐛 Tag components setting ([de941da](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/de941da))
+* 🐛 use JsonSetter as dataSource Setter ([553f924](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/553f924))
+* 🐛 更改复杂类型生成工具的接口形式，减少调用复杂度 ([ce616b5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ce616b5))
+* 😈 table 无法选中问题 ([34825f8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/34825f8))
+* dropdown and menu schema ([ae1d125](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ae1d125))
+* fix source edit bug ([047247c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/047247c))
+
+
+### Features
+
+* 🎸 add demo-server ([df35c6a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/df35c6a))
+* 🎸 Box config edit ([49b49ee](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/49b49ee))
+* 🎸 Button update ([7969273](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7969273))
+* 🎸 Collapse component update ([c682cc5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c682cc5))
+* 🎸 Collapse.panel has drop in Collapse ([d4d41e4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d4d41e4))
+* 🎸 saveload btn for demo ([f91da66](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f91da66))
+* demo 构造 componentsMap ([f445ffe](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f445ffe))
+* 主设置面板里深层次界面通过 stagebox 进行过渡 ([783e945](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/783e945))
+* 增加出码按钮 ([6f7b066](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6f7b066))
+* 新增分隔符物料配置 ([af39c17](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/af39c17))
+
+
+
+
+<a name="1.0.0"></a>
+# [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.15.0...@ali/lowcode-demo@1.0.0) (2020-08-17)
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-demo
 
-<a name="0.8.49"></a>
-## [0.8.49](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.48...@ali/lowcode-demo@0.8.49) (2020-08-06)
+<a name="0.15.0"></a>
+# [0.15.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.14.0...@ali/lowcode-demo@0.15.0) (2020-08-17)
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-demo
 
-<a name="0.8.48"></a>
-## [0.8.48](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.47...@ali/lowcode-demo@0.8.48) (2020-08-06)
+<a name="0.14.0"></a>
+# [0.14.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.12.0...@ali/lowcode-demo@0.14.0) (2020-08-17)
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-demo
+
+<a name="0.13.0"></a>
+# [0.13.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.12.0...@ali/lowcode-demo@0.13.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-demo
+
+<a name="0.12.0"></a>
+# [0.12.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.11.0...@ali/lowcode-demo@0.12.0) (2020-08-16)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-demo
+
+<a name="0.11.0"></a>
+# [0.11.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.10.0...@ali/lowcode-demo@0.11.0) (2020-08-14)
+
+
+### Bug Fixes
+
+* 🐛 Tab & TabItem assets config ([0cc08fb](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0cc08fb))
+
+
+
+
+<a name="0.10.0"></a>
+# [0.10.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.9.0...@ali/lowcode-demo@0.10.0) (2020-08-14)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-demo
+
+<a name="0.9.0"></a>
+# [0.9.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.47...@ali/lowcode-demo@0.9.0) (2020-08-14)
+
+
+### Bug Fixes
+
+* 🐛 Card component's settings ([f44e7ab](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f44e7ab))
+* 🐛 Cascader init status ([e4a28c4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e4a28c4))
+* 🐛 codeout btn fix ([afda7d4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/afda7d4))
+* 🐛 Collapse render error ([6fed968](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6fed968))
+* 🐛 save and generator last page ([3e4254c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3e4254c))
+* 🐛 Tag assets ([b460dcf](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b460dcf))
+* 🐛 Tag components setting ([de941da](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/de941da))
+* 🐛 use JsonSetter as dataSource Setter ([553f924](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/553f924))
+* 🐛 更改复杂类型生成工具的接口形式，减少调用复杂度 ([ce616b5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ce616b5))
+* 😈 table 无法选中问题 ([34825f8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/34825f8))
+* dropdown and menu schema ([ae1d125](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ae1d125))
+* fix source edit bug ([047247c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/047247c))
+
+
+### Features
+
+* 🎸 add demo-server ([df35c6a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/df35c6a))
+* 🎸 Box config edit ([49b49ee](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/49b49ee))
+* 🎸 Button update ([7969273](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7969273))
+* 🎸 saveload btn for demo ([f91da66](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f91da66))
+* demo 构造 componentsMap ([f445ffe](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f445ffe))
+* 主设置面板里深层次界面通过 stagebox 进行过渡 ([783e945](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/783e945))
+* 增加出码按钮 ([6f7b066](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6f7b066))
+* 新增分隔符物料配置 ([af39c17](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/af39c17))
+
+
+
 
 <a name="0.8.47"></a>
 ## [0.8.47](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.46...@ali/lowcode-demo@0.8.47) (2020-08-04)
@@ -547,10 +630,5 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-<<<<<<< HEAD
 * complet preview ([56c16ff](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/56c16ff))
 * double outline & ZH_EN support ([b379bd7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b379bd7))
-=======
-* complet preview ([56c16ff](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/56c16ffa5c39c2d01abd9cfa90fea49a4539da1d))
-* double outline & ZH_EN support ([b379bd7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b379bd7c0c488ef24f825760750a13d3fa083c96))
->>>>>>> df955e1db90ff104cd11160def80113cfd6faccc

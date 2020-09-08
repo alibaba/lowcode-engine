@@ -1,0 +1,200 @@
+@charset "UTF-8";
+@import "./mixin.scss";
+@import "./variable.scss";
+
+// tag placeholders
+// --------------------------------------------------
+
+%ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+// 标签的 5 种形态：纯文字、灰底、品牌色底、纯边框、品牌色边框
+%tag-statement-text {
+    @include tag-statement(
+        $tag-normal-text-color,
+        $color-transparent,
+        $color-transparent,
+        $tag-normal-text-color-hover
+    );
+}
+
+%tag-statement-primary {
+    @include tag-statement(
+        $tag-fill-text-color,
+        $tag-fill-border-color,
+        $tag-fill-bg-color,
+        $tag-fill-text-color-hover,
+        $tag-fill-border-color-hover,
+        $tag-fill-bg-color-hover,
+        $tag-fill-tail-color,
+        $tag-fill-tail-color-hover,
+        $tag-fill-tail-color-disabled,
+        $tag-fill-text-color-disabled,
+        $tag-fill-border-color-disabled,
+        $tag-fill-bg-color-disabled
+    );
+}
+
+%tag-statement-closable-primary {
+    @include tag-statement(
+        $tag-closable-primary-fill-text-color,
+        $tag-closable-primary-fill-border-color,
+        $tag-closable-primary-fill-bg-color,
+        $tag-closable-primary-fill-text-color-hover,
+        $tag-closable-primary-fill-border-color-hover,
+        $tag-closable-primary-fill-bg-color-hover,
+        $tag-fill-tail-color,
+        $tag-fill-tail-color-hover,
+        $tag-fill-tail-color-disabled,
+        $tag-closable-primary-fill-text-color-disabled,
+        $tag-closable-primary-fill-border-color-disabled,
+        $tag-closable-primary-fill-bg-color-disabled
+    );
+}
+
+%tag-statement-checkable-fill {
+    @include tag-statement(
+        $tag-checkable-fill-text-color,
+        $tag-checkable-fill-border-color,
+        $tag-checkable-fill-bg-color,
+        $tag-checkable-fill-text-color-hover,
+        $tag-checkable-fill-border-color-hover,
+        $tag-checkable-fill-bg-color-hover,
+        $tag-checkable-fill-tail-color,
+        $tag-checkable-fill-tail-color-hover,
+        $tag-checkable-fill-tail-color-disabled,
+        $tag-checkable-fill-text-color-disabled,
+        $tag-checkable-fill-border-color-disabled,
+        $tag-checkable-fill-bg-color-disabled
+    );
+}
+
+%tag-statement-checkable-fill-checked {
+    @include tag-statement(
+        $tag-checkable-primary-text-color,
+        $tag-checkable-primary-border-color,
+        $tag-checkable-primary-bg-color,
+        $tag-checkable-primary-text-color-hover,
+        $tag-checkable-primary-border-color-hover,
+        $tag-checkable-primary-bg-color-hover,
+        $tag-checkable-primary-tail-color,
+        $tag-checkable-primary-tail-color-hover,
+        $tag-checkable-primary-tail-color,
+        $tag-checkable-primary-text-color-disabled,
+        $tag-checkable-primary-border-color-disabled,
+        $tag-checkable-primary-bg-color-disabled
+    );
+}
+
+%tag-statement-bordered {
+    @include tag-statement(
+        $tag-bordered-text-color,
+        $tag-bordered-border-color,
+        $tag-bordered-bg,
+        $tag-bordered-text-color-hover,
+        $tag-bordered-border-color-hover,
+        $tag-bordered-bg-hover,
+        $tag-bordered-tail-color,
+        $tag-bordered-tail-color-hover,
+        $tag-bordered-tail-color-disabled,
+        $tag-bordered-text-color-disabled,
+        $tag-bordered-border-color-disabled,
+        $tag-bordered-bg-disabled
+    );
+}
+
+// 提供一份给 closable tag 配置
+%tag-statement-closable-bordered {
+    @include tag-statement(
+        $tag-closable-bordered-text-color, // $tag-bordered-text-color,
+        $tag-closable-bordered-border-color, // $tag-bordered-border-color
+        $tag-closable-bordered-bg, // $tag-bordered-bg,
+        $tag-closable-bordered-text-color-hover, // $tag-bordered-text-color-hover,
+        $tag-closable-bordered-border-color-hover, // $tag-bordered-border-color-hover,
+        $tag-closable-bordered-bg-hover, // $tag-bordered-bg-hover,
+        $tag-closable-bordered-tail-color, // $tag-bordered-tail-color,
+        $tag-closable-bordered-tail-color-hover, // $tag-bordered-tail-color-hover,
+        $tag-closable-bordered-tail-color-disabled, // $tag-bordered-tail-color-disabled,
+        $tag-closable-bordered-text-color-disabled, // $tag-bordered-text-color-disabled,
+        $tag-closable-bordered-border-color-disabled, // $tag-bordered-border-color-disabled,
+        $tag-closable-bordered-bg-disabled // $tag-bordered-bg-disabled
+    );
+}
+
+%tag-statement-normal {
+    @include tag-statement(
+        $tag-secondary-text-color,
+        $tag-secondary-border-color,
+        $tag-secondary-bg,
+        $tag-secondary-text-color-hover,
+        $tag-secondary-border-color-hover,
+        $tag-secondary-bg-hover
+    );
+}
+
+%tag-statement-secondary {
+    @include tag-statement(
+        $tag-secondary-text-color,
+        $tag-secondary-border-color,
+        $tag-secondary-bg,
+        $tag-secondary-text-color-hover,
+        $tag-secondary-border-color-hover,
+        $tag-secondary-bg-hover
+    );
+}
+
+%tag-checkable-secondary-tick {
+    @include tag-checked-tick(
+        $tag-checkable-icon-selected,
+        $tag-checkable-secondary-icon-color-selected,
+        $tag-checkable-secondary-icon-color-selected-hover,
+        $tag-checkable-secondary-icon-color-selected-disabled,
+        $tag-checkable-secondary-bg-selected,
+        $tag-checkable-secondary-bg-selected-hover,
+        $tag-checkable-secondary-bg-selected-disabled
+    );
+}
+
+%tag-selectable-normal {
+    @include tag-statement(
+        $tag-checkable-normal-text-color,
+        $tag-checkable-normal-border-color,
+        $tag-checkable-normal-bg,
+        $tag-checkable-normal-text-color-hover,
+        $tag-checkable-normal-border-color-hover,
+        $tag-checkable-normal-bg-hover,
+        '',
+        '',
+        '',
+        $tag-checkable-normal-text-selected-disabled,
+        $tag-checkable-normal-border-selected-disabled,
+        $tag-checkable-normal-bg-selected-disabled
+    );
+}
+
+%tag-checkable-normal-tick {
+    @include tag-checked-tick(
+        $tag-checkable-icon-selected,
+        $tag-checkable-normal-icon-color-selected,
+        $tag-checkable-normal-icon-color-selected-hover,
+        $tag-checkable-normal-icon-color-selected-disabled,
+        $tag-checkable-normal-bg-selected,
+        $tag-checkable-normal-bg-selected-hover,
+        $tag-checkable-normal-tick-bg-selected-disabled
+    );
+}
+
+%tag-closable-normal-tick {
+    @include tag-checked-tick(
+        $tag-closable-normal-icon,
+        $tag-closable-normal-icon-color,
+        $tag-closable-normal-icon-color-hover,
+        $tag-closable-normal-icon-color-disabled,
+        $tag-closable-normal-bg,
+        $tag-closable-normal-bg-hover,
+        $tag-closable-normal-bg-disabled
+    );
+}
+

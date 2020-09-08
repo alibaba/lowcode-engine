@@ -1,0 +1,26 @@
+#{$card-prefix}[dir="rtl"] {
+    #{$card-prefix}-extra {
+        left: 0;
+        right: auto;
+    }
+
+    #{$card-prefix}-title {
+        &:before {
+            right: 0;
+            left: auto;
+        }
+    }
+
+    #{$card-prefix}-subtitle {
+        float: left;
+        padding-right: $card-sub-title-padding-left;
+        padding-left: 0;
+    }
+
+    #{$card-prefix}-head-show-bullet {
+        #{$card-prefix}-title {
+            padding-left: 0;
+            padding-right: $card-title-padding-left;
+        }
+    }
+}

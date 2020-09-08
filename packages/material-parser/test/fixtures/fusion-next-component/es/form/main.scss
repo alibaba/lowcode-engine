@@ -1,0 +1,254 @@
+@charset "UTF-8";
+
+@import "../core/index-noreset.scss";
+@import "scss/mixin";
+@import "scss/variable";
+
+#{$form-prefix} {
+    @include box-sizing;
+
+    &-responsive-grid {
+        #{$form-prefix}-item-control {
+            flex: 1;
+        }
+
+        #{$form-prefix}-item {
+            margin-bottom: 0;
+        }
+
+        #{$form-prefix}-item.#{$css-prefix}left {
+            display: flex;
+        }
+
+        &.#{$css-prefix}small {
+            @include form-responsive-grid(
+                $form-inline-s-item-margin-r,
+                $form-element-small-height,
+                $form-element-small-font-size
+            );
+        }
+
+        &.#{$css-prefix}medium {
+            @include form-responsive-grid(
+                $form-inline-m-item-margin-r,
+                $form-element-medium-height,
+                $form-element-medium-font-size
+            );
+        }
+
+        &.#{$css-prefix}large {
+            @include form-responsive-grid(
+                $form-inline-l-item-margin-r,
+                $form-element-large-height,
+                $form-element-large-font-size
+            );
+        }
+
+        // #{$form-prefix}-item.#{$css-prefix}left {
+        //     display: flex;
+        //     &:not(:last-child) {
+        //         #{$form-prefix}-item-label {
+        //             line-height: 1.4;
+        //             margin-top: ($form-element-medium-height - $form-element-medium-font-size) / 2;
+        //             margin-bottom: ($form-element-medium-height - $form-element-medium-font-size) / 2;
+        //         }
+        //     }
+        //     &.#{$css-prefix}large:not(:last-child) {
+        //         #{$form-prefix}-item-label {
+        //             line-height: 1.4;
+        //             margin-top: ($form-element-large-height - $form-element-large-font-size) / 2;
+        //             margin-bottom: ($form-element-large-height - $form-element-large-font-size) / 2;
+        //         }
+        //     }
+        //     &.#{$css-prefix}small:not(:last-child) {
+        //         #{$form-prefix}-item-label {
+        //             line-height: 1.4;
+        //             margin-top: ($form-element-small-height - $form-element-small-font-size) / 2;
+        //             margin-bottom: ($form-element-small-height - $form-element-small-font-size) / 2;
+        //         }
+        //     }
+        // }
+    }
+
+    &-item {
+        &.has-error {
+            #{$form-prefix}-item-help {
+                color: $form-error-color;
+            }
+        }
+        &.has-warning {
+            #{$form-prefix}-item-help {
+                color: $form-warning-color;
+            }
+        }
+
+        /* medium */
+        // TODO: REMOVE the lastchild's margin-bottom in 2.x version
+        margin-bottom: $form-item-m-margin-b;
+        #{$form-prefix}-item-label, #{$form-prefix}-text-align, p {
+            line-height: $form-element-medium-height;
+        }
+        #{$form-prefix}-text-align, p {
+            margin: 0;
+        }
+
+        @include form-enhance($form-element-medium-height - 4);
+        @include form-preview($form-element-medium-preview-font-size, $form-element-medium-preview-height);
+
+        #{$form-prefix}-item-label {
+            font-size: $form-element-medium-font-size;
+        }
+
+        &.#{$css-prefix}large {
+            margin-bottom: $form-item-l-margin-b;
+            #{$form-prefix}-item-label, #{$form-prefix}-text-align, p {
+                line-height: $form-element-large-height;
+            }
+
+            @include form-enhance($form-element-large-height - 1);
+            @include form-preview($form-element-large-preview-font-size, $form-element-large-preview-height);
+
+            .#{$css-prefix}switch {
+                margin-top: ($form-element-large-height - 26)/2;
+            }
+
+            #{$form-prefix}-item-label {
+                font-size: $form-element-large-font-size;
+            }
+        }
+        &.#{$css-prefix}small {
+            margin-bottom: $form-item-s-margin-b;
+
+            #{$form-prefix}-item-label, #{$form-prefix}-text-align, p {
+                line-height: $form-element-small-height;
+            }
+
+            @include form-enhance($form-element-small-height);
+            @include form-preview($form-element-small-preview-font-size, $form-element-small-preview-height);
+
+            #{$form-prefix}-item-label {
+                font-size: $form-element-small-font-size;
+            }
+        }
+        &.#{$css-prefix}top > #{$form-prefix}-item-label {
+            margin-bottom: $form-top-label-margin-b;
+        }
+        &.#{$css-prefix}inset #{$form-prefix}-item-label {
+            padding-right: 0;
+            padding-left: 0;
+            line-height: inherit;
+        }
+    }
+    &-item-control {
+        #{$form-prefix}-text-align {
+            margin: 0;
+        }
+        > .#{$css-prefix}input-group, > .#{$css-prefix}input {
+            width: 100%;
+        }
+    }
+
+    &-item-fullwidth &-item-control {
+        > .#{$css-prefix}input-group,
+        > .#{$css-prefix}input,
+        > .#{$css-prefix}select,
+        > .#{$css-prefix}date-picker,
+        > .#{$css-prefix}month-picker,
+        > .#{$css-prefix}year-picker,
+        > .#{$css-prefix}range-picker,
+        > .#{$css-prefix}time-picker {
+            width: 100%;
+        }
+    }
+
+    &-item-label {
+        display: inline-block;
+        vertical-align: top;
+        color: $form-label-color;
+        text-align: right;
+        padding-right: $form-label-padding-r;
+
+        label[required]:before {
+            margin-right: 4px;
+            content: "*";
+            color: $form-error-color;
+        }
+
+        &.#{$css-prefix}left {
+            text-align: left;
+
+            > label[required]::before {
+                display: none;
+            }
+            > label[required]::after {
+                margin-left: 4px;
+                content: "*";
+                color: $form-error-color;
+            }
+        }
+    }
+
+    &-item-help {
+        margin-top: $form-help-margin-top;
+        font-size: $form-help-font-size;
+        line-height: $font-lineheight-2;
+        color: $form-help-color;
+    }
+
+    &.#{$css-prefix}inline {
+        #{$form-prefix}-item {
+            display: inline-block;
+            vertical-align: top;
+
+            /* label on left */
+            &.#{$css-prefix}left #{$form-prefix}-item-control {
+                display: inline-block;
+                vertical-align: top;
+                line-height: 0;
+            }
+
+            &:not(:last-child) {
+                margin-right: $form-inline-m-item-margin-r;
+            }
+            &.#{$css-prefix}large:not(:last-child) {
+                margin-right: $form-inline-l-item-margin-r;
+            }
+            &.#{$css-prefix}small:not(:last-child) {
+                margin-right: $form-inline-s-item-margin-r;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 0\0) and (min-resolution: .001dpcm) {
+    #{$form-prefix}-item.#{$css-prefix}left > #{$form-prefix}-item-label {
+        display: table-cell;
+    }
+    #{$form-prefix}.#{$css-prefix}inline #{$form-prefix}-item.#{$css-prefix}left #{$form-prefix}-item-control {
+        display: table-cell;
+    }
+}
+
+#{$form-prefix}[dir="rtl"] {
+    #{$form-prefix}-item-label {
+        text-align: left;
+        padding-left: $form-label-padding-r;
+        padding-right: 0;
+    }
+    &.#{$css-prefix}inline {
+        #{$form-prefix}-item {
+            &:not(:last-child) {
+                margin-left: $form-inline-m-item-margin-r;
+                margin-right: 0;
+            }
+            &.#{$css-prefix}large:not(:last-child) {
+                margin-left: $form-inline-l-item-margin-r;
+                margin-right: 0;
+            }
+            &.#{$css-prefix}small:not(:last-child) {
+                margin-left: $form-inline-s-item-margin-r;
+                margin-right: 0;
+            }
+        }
+    }
+}

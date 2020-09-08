@@ -1,0 +1,45 @@
+@keyframes cellZoomIn {
+    0% {
+        transform: scale(.5);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes cellHover {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes enterToLeft {
+    0% {
+        transform: translate(-40%);
+        opacity: 0;
+    }
+    50% {
+        opacity: .6;
+    }
+    100% {
+        opacity: 1;
+        transform: translate(0%);
+    }
+}
+
+@keyframes enterToRight {
+    0% {
+        transform: translate(40%);
+        opacity: 0;
+    }
+    50% {
+        opacity: .6;
+    }
+    100% {
+        opacity: 1;
+        transform: translate(0%);
+    }
+}

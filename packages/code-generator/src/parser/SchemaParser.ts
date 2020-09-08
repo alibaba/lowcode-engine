@@ -5,7 +5,8 @@
 
 import { SUPPORT_SCHEMA_VERSION_LIST } from '../const';
 
-import { handleChildren } from '../utils/nodeToJSX';
+import { handleSubNodes } from '../utils/nodeToJSX';
+import { uniqueArray } from '../utils/common';
 
 import {
   ChildNodeType,
@@ -24,6 +25,7 @@ import {
   IProjectSchema,
   ISchemaParser,
   IUtilItem,
+  INpmPackage,
 } from '../types';
 
 const defaultContainer: IContainerInfo = {
@@ -36,17 +38,15 @@ const defaultContainer: IContainerInfo = {
 };
 
 class SchemaParser implements ISchemaParser {
-  public validate(schema: IBasicSchema): boolean {
+  validate(schema: IBasicSchema): boolean {
     if (SUPPORT_SCHEMA_VERSION_LIST.indexOf(schema.version) < 0) {
-      throw new CompatibilityError(
-        `Not support schema with version [${schema.version}]`,
-      );
+      throw new CompatibilityError(`Not support schema with version [${schema.version}]`);
     }
 
     return true;
   }
 
-  public parse(schemaSrc: IProjectSchema | string): IParseResult {
+  parse(schemaSrc: IProjectSchema | string): IParseResult {
     // TODO: collect utils depends in JSExpression
     const compDeps: Record<string, IExternalDependency> = {};
     const internalDeps: Record<string, IInternalDependency> = {};
@@ -64,7 +64,7 @@ class SchemaParser implements ISchemaParser {
     }
 
     // 解析三方组件依赖
-    schema.componentsMap.forEach(info => {
+    schema.componentsMap.forEach((info) => {
       info.dependencyType = DependencyType.External;
       info.importName = info.componentName;
       compDeps[info.componentName] = info;
@@ -73,8 +73,7 @@ class SchemaParser implements ISchemaParser {
     let containers: IContainerInfo[];
     // Test if this is a lowcode component without container
     if (schema.componentsTree.length > 0) {
-      const firstRoot: IContainerNodeItem = schema
-        .componentsTree[0] as IContainerNodeItem;
+      const firstRoot: IContainerNodeItem = schema.componentsTree[0] as IContainerNodeItem;
 
       if (!firstRoot.fileName) {
         // 整个 schema 描述一个容器，且无根节点定义
@@ -85,7 +84,7 @@ class SchemaParser implements ISchemaParser {
         containers = [container];
       } else {
         // 普通带 1 到多个容器的 schema
-        containers = schema.componentsTree.map(n => {
+        containers = schema.componentsTree.map((n) => {
           const subRoot = n as IContainerNodeItem;
           const container: IContainerInfo = {
             ...subRoot,
@@ -100,7 +99,7 @@ class SchemaParser implements ISchemaParser {
     }
 
     // 建立所有容器的内部依赖索引
-    containers.forEach(container => {
+    containers.forEach((container) => {
       let type;
       switch (container.containerType) {
         case 'Page':
@@ -125,23 +124,42 @@ class SchemaParser implements ISchemaParser {
       internalDeps[dep.moduleName] = dep;
     });
 
-    // 分析容器内部组件依赖
-    containers.forEach(container => {
+    // TODO: 不应该在出码部分解决？
+    // 处理 children 写在了 props 里的情况
+    containers.forEach((container) => {
       if (container.children) {
-        // const depNames = this.getComponentNames(container.children);
-        // container.deps = uniqueArray<string>(depNames)
-        //   .map(depName => internalDeps[depName] || compDeps[depName])
-        //   .filter(dep => !!dep);
-        container.deps = Object.keys(compDeps).map(
-          depName => compDeps[depName],
+        handleSubNodes<string>(
+          container.children,
+          {
+            node: (i: IComponentNodeItem) => {
+              if (i.props && i.props.children && !i.children) {
+                i.children = i.props.children as ChildNodeType;
+              }
+              return [''];
+            },
+          },
+          {
+            rerun: true,
+          },
         );
+      }
+    });
+
+    // 分析容器内部组件依赖
+    containers.forEach((container) => {
+      if (container.children) {
+        const depNames = this.getComponentNames(container.children);
+        container.deps = uniqueArray<string>(depNames, (i: string) => i)
+          .map((depName) => internalDeps[depName] || compDeps[depName])
+          .filter((dep) => !!dep);
+        // container.deps = Object.keys(compDeps).map((depName) => compDeps[depName]);
       }
     });
 
     // 分析路由配置
     const routes = containers
-      .filter(container => container.containerType === 'Page')
-      .map(page => {
+      .filter((container) => container.containerType === 'Page')
+      .map((page) => {
         const meta = page.meta as IPageMeta;
         if (meta) {
           return {
@@ -156,19 +174,27 @@ class SchemaParser implements ISchemaParser {
       });
 
     const routerDeps = routes
-      .map(r => internalDeps[r.componentName] || compDeps[r.componentName])
-      .filter(dep => !!dep);
+      .map((r) => internalDeps[r.componentName] || compDeps[r.componentName])
+      .filter((dep) => !!dep);
 
     // 分析 Utils 依赖
     let utils: IUtilItem[];
     if (schema.utils) {
       utils = schema.utils;
-      utilsDeps = schema.utils
-        .filter(u => u.type !== 'function')
-        .map(u => u.content as IExternalDependency);
+      utilsDeps = schema.utils.filter((u) => u.type !== 'function').map((u) => u.content as IExternalDependency);
     } else {
       utils = [];
     }
+
+    // 分析项目 npm 依赖
+    let npms: INpmPackage[] = [];
+    containers.forEach((con) => {
+      const p = (con.deps || [])
+        .map((dep) => (dep.dependencyType === DependencyType.External ? dep : null))
+        .filter((dep) => dep !== null);
+      npms.push(...((p as unknown) as INpmPackage[]));
+    });
+    npms = uniqueArray<INpmPackage>(npms, (i) => i.package);
 
     return {
       containers,
@@ -187,14 +213,21 @@ class SchemaParser implements ISchemaParser {
         css: schema.css,
         constants: schema.constants,
         i18n: schema.i18n,
+        packages: npms,
       },
     };
   }
 
-  public getComponentNames(children: ChildNodeType): string[] {
-    return handleChildren<string>(children, {
-      node: (i: IComponentNodeItem) => [i.componentName],
-    });
+  getComponentNames(children: ChildNodeType): string[] {
+    return handleSubNodes<string>(
+      children,
+      {
+        node: (i: IComponentNodeItem) => [i.componentName],
+      },
+      {
+        rerun: true,
+      },
+    );
   }
 }
 

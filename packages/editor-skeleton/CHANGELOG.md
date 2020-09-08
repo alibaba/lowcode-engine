@@ -3,11 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.7-0"></a>
+## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@1.0.6-0...@ali/lowcode-editor-skeleton@1.0.7-0) (2020-09-02)
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+<a name="1.0.6-0"></a>
+## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.58...@ali/lowcode-editor-skeleton@1.0.6-0) (2020-09-02)
+
+
 <a name="0.8.61"></a>
 ## [0.8.61](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.60...@ali/lowcode-editor-skeleton@0.8.61) (2020-09-08)
-
-
-
 
 **Note:** Version bump only for package @ali/lowcode-editor-skeleton
 
@@ -24,8 +29,28 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+### Bug Fixes
 
-**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+* 🐛 修复主设置面板下 stagebox 的样式问题 ([d5a98c0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d5a98c0))
+* 😈 table 无法选中问题 ([34825f8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/34825f8))
+* 😊修复arraysetter删除不更新问题 ([9d8a730](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9d8a730))
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+* 兼容modal模式 ([1092ee9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1092ee9))
+* fix mixsetter style ([0ecce83](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0ecce83))
+
+
+### Features
+
+* 新增事件入参功能 ([0614fa7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0614fa7))
+* 主设置面板里深层次界面通过 stagebox 进行过渡 ([783e945](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/783e945))
+* setting-pane 新增removeProp 函数 ([b97c807](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b97c807))
+
+
+
+
+<a name="1.0.5-0"></a>
+## [1.0.5-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@1.0.4-0...@ali/lowcode-editor-skeleton@1.0.5-0) (2020-08-20)
+>>>>>>> release/1.0.0
 
 <a name="0.8.58"></a>
 ## [0.8.58](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.57...@ali/lowcode-editor-skeleton@0.8.58) (2020-08-27)
@@ -65,14 +90,62 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-editor-skeleton
 
+>>>>>>> master
 <a name="0.8.54"></a>
 ## [0.8.54](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.53...@ali/lowcode-editor-skeleton@0.8.54) (2020-08-20)
+>>>>>>> master
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-editor-skeleton
 
+<a name="1.0.4-0"></a>
+## [1.0.4-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@1.0.3-0...@ali/lowcode-editor-skeleton@1.0.4-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+
+<a name="1.0.3-0"></a>
+## [1.0.3-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@1.0.2-0...@ali/lowcode-editor-skeleton@1.0.3-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+
+<a name="1.0.2-0"></a>
+## [1.0.2-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@1.0.1-0...@ali/lowcode-editor-skeleton@1.0.2-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+
+<a name="1.0.1-0"></a>
+## [1.0.1-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.53...@ali/lowcode-editor-skeleton@1.0.1-0) (2020-08-20)
+
+
+### Bug Fixes
+
+* 🐛 修复主设置面板下 stagebox 的样式问题 ([d5a98c0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d5a98c0))
+* 😈 table 无法选中问题 ([34825f8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/34825f8))
+* 😊修复arraysetter删除不更新问题 ([9d8a730](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9d8a730))
+* 兼容modal模式 ([1092ee9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1092ee9))
+
+
+### Features
+
+* setting-pane 新增removeProp 函数 ([b97c807](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b97c807))
+* 主设置面板里深层次界面通过 stagebox 进行过渡 ([783e945](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/783e945))
+
+
+
+
+<a name="1.0.0"></a>
+# [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.13.0...@ali/lowcode-editor-skeleton@1.0.0) (2020-08-17)
 <a name="0.8.53"></a>
 ## [0.8.53](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.52...@ali/lowcode-editor-skeleton@0.8.53) (2020-08-19)
 
@@ -120,51 +193,56 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-editor-skeleton
 
-<a name="0.8.48"></a>
-## [0.8.48](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.47...@ali/lowcode-editor-skeleton@0.8.48) (2020-08-14)
+<a name="0.13.0"></a>
+# [0.13.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.12.0...@ali/lowcode-editor-skeleton@0.13.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+
+<a name="0.12.0"></a>
+# [0.12.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.10.0...@ali/lowcode-editor-skeleton@0.12.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+
+<a name="0.11.0"></a>
+# [0.11.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.10.0...@ali/lowcode-editor-skeleton@0.11.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+
+<a name="0.10.0"></a>
+# [0.10.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.9.0...@ali/lowcode-editor-skeleton@0.10.0) (2020-08-16)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-skeleton
+
+<a name="0.9.0"></a>
+# [0.9.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.43...@ali/lowcode-editor-skeleton@0.9.0) (2020-08-14)
 
 
 ### Bug Fixes
 
-* remove console ([6889123](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6889123))
-* setter 报错不影响页面渲染 ([c0a6022](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c0a6022))
-* vision 大包 window 指向问题 ([aa1b526](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/aa1b526))
-* 钉住行为调整 ([91a390e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/91a390e))
+* 🐛 修复主设置面板下 stagebox 的样式问题 ([d5a98c0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d5a98c0))
+* 😈 table 无法选中问题 ([34825f8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/34825f8))
+* 😊修复arraysetter删除不更新问题 ([9d8a730](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9d8a730))
+* 兼容modal模式 ([1092ee9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1092ee9))
+
+
+### Features
+
+* 主设置面板里深层次界面通过 stagebox 进行过渡 ([783e945](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/783e945))
 
 
 
-
-<a name="0.8.47"></a>
-## [0.8.47](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.46...@ali/lowcode-editor-skeleton@0.8.47) (2020-08-07)
-
-
-
-
-**Note:** Version bump only for package @ali/lowcode-editor-skeleton
-
-<a name="0.8.46"></a>
-## [0.8.46](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.45...@ali/lowcode-editor-skeleton@0.8.46) (2020-08-06)
-
-
-
-
-**Note:** Version bump only for package @ali/lowcode-editor-skeleton
-
-<a name="0.8.45"></a>
-## [0.8.45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.44...@ali/lowcode-editor-skeleton@0.8.45) (2020-08-06)
-
-
-
-
-**Note:** Version bump only for package @ali/lowcode-editor-skeleton
-
-<a name="0.8.44"></a>
-## [0.8.44](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.43...@ali/lowcode-editor-skeleton@0.8.44) (2020-08-06)
-
-
-
-
-**Note:** Version bump only for package @ali/lowcode-editor-skeleton
 
 <a name="0.8.43"></a>
 ## [0.8.43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@0.8.42...@ali/lowcode-editor-skeleton@0.8.43) (2020-08-04)
@@ -591,8 +669,4 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-<<<<<<< HEAD
 * 🎸 merge material-parser ([b40c286](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b40c286))
-=======
-* 🎸 merge material-parser ([b40c286](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b40c2869a0bc901d855279735fe86b84dabaa04d))
->>>>>>> df955e1db90ff104cd11160def80113cfd6faccc

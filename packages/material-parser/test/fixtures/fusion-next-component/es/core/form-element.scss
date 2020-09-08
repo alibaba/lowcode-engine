@@ -1,0 +1,48 @@
+@import "./index-noreset.scss";
+@import "../input/scss/variable.scss";
+@import "../input/scss/mixin.scss";
+@import "../form/scss/mixin.scss";
+
+.demo-body table {
+    width: 100%;
+}
+
+.next-form-element.next-input,
+.next-form-element.next-select .next-input,
+.next-form-element.next-time-picker .next-input {
+    &.next-small {
+        @include input-size($form-element-small-height, $input-s-padding, $form-element-small-font-size, $input-s-label-padding-left, $input-s-icon-padding-right);
+        @include input-icon-size($form-element-small-icon-size);
+        @include input-border-radius($form-element-small-corner);
+    }
+
+    &.next-medium {
+        @include input-size($form-element-medium-height, $input-m-padding, $form-element-medium-font-size, $input-m-label-padding-left, $input-m-icon-padding-right);
+        @include input-icon-size($form-element-medium-icon-size);
+        @include input-border-radius($form-element-medium-corner);
+    }
+
+    &.next-large {
+        @include input-size($form-element-large-height, $input-l-padding, $form-element-large-font-size, $input-l-label-padding-left, $input-l-icon-padding-right);
+        @include input-icon-size($form-element-large-icon-size);
+        @include input-border-radius($form-element-large-corner);
+    }
+
+    // stylelint-disable-next-line
+    .next-select-values input {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+.next-form-element {
+    &.next-small {
+        @include form-preview($form-element-small-preview-font-size, $form-element-small-preview-height);
+    }
+    &.next-medium {
+        @include form-preview($form-element-medium-preview-font-size, $form-element-medium-preview-height);
+    }
+    &.next-large {
+        @include form-preview($form-element-large-preview-font-size, $form-element-large-preview-height);
+    }
+}

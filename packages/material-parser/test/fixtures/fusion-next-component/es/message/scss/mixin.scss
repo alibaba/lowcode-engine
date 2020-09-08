@@ -1,0 +1,103 @@
+@charset "UTF-8";
+
+// message mixins
+// --------------------------------------------------
+
+@mixin message-bounding() {
+    @include clearfix();
+    position: relative;
+    display: block;
+    vertical-align: baseline;
+}
+
+@mixin message-size(
+    $borderWidth,
+    $padding,
+    $titlePadding,
+    $titleFontSize,
+    $contentPadding,
+    $contentMarginTop,
+    $contentFontSize,
+    $iconSize
+) {
+    border-width: $borderWidth;
+    padding: $padding;
+
+    .#{$css-prefix}message-symbol {
+        float: left;
+        @include icon-size($iconSize);
+        line-height: $iconSize;
+    }
+    .#{$css-prefix}message-title {
+        padding: $titlePadding;
+        font-size: $titleFontSize;
+        line-height: $titleFontSize;
+    }
+    .#{$css-prefix}message-content {
+        margin-top: $contentMarginTop;
+        padding: $contentPadding;
+        font-size: $contentFontSize;
+        line-height: $contentFontSize;
+    }
+
+    .#{$css-prefix}message-symbol + .#{$css-prefix}message-content {
+        margin-top: 0;
+    }
+}
+
+@mixin message-shape(
+    $shape,
+    $titleColor,
+    $contentColor,
+    $iconColor,
+    $bgColor,
+    $borderColor,
+    $shadow,
+    $icon
+) {
+    background-color: $bgColor;
+    border-color: $borderColor;
+    box-shadow: $shadow;
+
+    .#{$css-prefix}message-title {
+        color: $titleColor;
+    }
+    .#{$css-prefix}message-content {
+        color: $contentColor;
+    }
+    .#{$css-prefix}message-symbol {
+        color: $iconColor;
+    }
+    .#{$css-prefix}message-symbol-icon::before {
+        content: $icon;
+        @if ($icon == $message-loading-icon-content) {
+            animation: loadingCircle 1s infinite linear;
+        }
+    }
+
+    @if ($shape == 'inline') {
+        border-style: $message-border-style;
+    }
+
+    @if ($shape == 'toast') {
+        border-style: $message-border-style-toast;
+    }
+}
+
+@mixin vertial-align-middle(
+    $fontSize,
+    $iconSize,
+    $className
+) {
+    @if ($fontSize > $iconSize) {
+        .#{$css-prefix}message-symbol {
+            line-height: $fontSize;
+        }
+    }
+
+    @if ($fontSize < $iconSize) {
+        .#{$css-prefix}message-#{$className} {
+            line-height: $iconSize;
+        }
+    }
+}

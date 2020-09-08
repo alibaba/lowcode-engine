@@ -1,0 +1,67 @@
+@charset "UTF-8";
+
+// badge variables
+// --------------------------------------------------
+
+////
+/// @module badge: 徽标数
+/// @tag  badge
+/// @category component
+/// @family data-display
+/// @varPrefix $badge-
+/// @classPrefix {prefix}-badge
+/// @order {"size/bounding":10,"size/list":11,"size/text":12,"statement/normal":10}
+////
+
+// Size
+// ----------------------------------------
+
+/// size
+/// @namespace size/bounding
+$badge-size-dot-width: $s-2 !default;
+/// margin (b)
+/// @namespace size/list
+$badge-size-list-margin: $s-zero !default;
+/// height
+/// @namespace size/bounding
+$badge-size-count-config-height: $s-4 !default;
+/// padding (lr)
+/// @namespace size/bounding
+$badge-size-count-padding-lr: $s-1 !default;
+/// padding (lr)
+/// @namespace size/bounding
+$badge-size-custom-padding-lr: $s-1 !default;
+/// size
+/// @namespace size/text
+$badge-size-count-font: $font-size-caption !default;
+
+// unconfigurable
+$badge-size-count-width: auto !default;
+$badge-size-count-height: $badge-size-count-config-height !default;
+$badge-size-count-padding: 0 $badge-size-count-padding-lr 0 $badge-size-count-padding-lr !default;
+$badge-size-count-lineheight: $badge-size-count-config-height !default;
+$badge-size-dot-min-width: $badge-size-dot-width !default;
+$badge-size-dot-height: $badge-size-dot-width !default;
+$badge-size-dot-padding: $s-zero !default;
+
+// Statement
+// ----------------------------------------
+
+/// background
+/// @namespace statement/normal
+$badge-color-bg: $color-error-3 !default;
+/// corner
+/// @namespace statement/normal
+$badge-size-count-border-radius: $s-2 !default;
+/// background
+/// @namespace statement/normal
+$badge-dot-color-bg: $color-error-3 !default;
+/// corner
+/// @namespace statement/normal
+$badge-size-dot-border-radius: $s-2 !default;
+/// corner
+/// @namespace statement/normal
+$badge-size-custom-border-radius: $corner-1 !default;
+// unconfigurable
+$badge-color: $color-white !default;
+$badge-dot-color: $color-white !default;

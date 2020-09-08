@@ -1,0 +1,21 @@
+@import "./index-noreset.scss";
+
+.demo-body table {
+    width: 100%;
+}
+
+// stylelint-disable-next-line
+.demo.pc .demo-group > .wrap > div.demo-item {
+    display: block;
+}
+
+.next-overlay-wrapper .next-overlay-backdrop,
+.next-dialog-container {
+    position: absolute;
+}
+
+// stylelint-disable-next-line
+.next-overlay-wrapper.opened .next-overlay-backdrop.next-mask {
+    background: $mask-background;
+    opacity: $mask-opacity;
+}

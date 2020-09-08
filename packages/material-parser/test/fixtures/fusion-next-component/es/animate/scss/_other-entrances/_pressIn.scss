@@ -1,0 +1,14 @@
+@include keyframes(pressIn) {
+    100% {
+        @include transform(scale(.7));
+    }
+}
+@mixin pressIn($count: $countDefault, $duration: $durationSmallDefault, $delay: $delayDefault, $function: $functionDefault, $fill: $fillDefault, $visibility: $visibilityDefault) {
+    @include animation-name(pressIn);
+    @include count($count);
+    @include duration($duration);
+    @include delay($delay);
+    @include function($function);
+    @include fill-mode($fill);
+    @include visibility($visibility);
+}

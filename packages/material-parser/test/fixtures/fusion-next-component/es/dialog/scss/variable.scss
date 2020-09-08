@@ -1,0 +1,138 @@
+////
+/// @module dialog: 对话框
+/// @tag Dialog
+/// @category component
+/// @family feedback
+/// @varPrefix $dialog-
+/// @classPrefix {prefix}-dialog
+/// @order {"size/bounding":10,"size/title":11,"size/content":12,"size/footer":13,"size/close":14,"statement/normal":10,"statement/normal/bounding":100,"statement/normal/title":101,"statement/normal/content":102,"statement/normal/footer":103,"statement/normal/close":104,"statement/hover":11,"statement/hover/close":110}
+////
+
+// dialog variables
+// --------------------------------------------------
+
+$dialog-prefix: ".#{$css-prefix}dialog";
+
+// Size
+// ----------------------------------------
+
+/// border width
+/// @namespace size/bounding
+$dialog-border-width: $line-1 !default;
+/// text
+/// @namespace size/title
+$dialog-title-font-size: $font-size-subhead !default;
+/// padding (t)
+/// @namespace size/title
+$dialog-title-padding-top: $s-3 !default;
+/// padding (b)
+/// @namespace size/title
+$dialog-title-padding-bottom: $s-3 !default;
+/// padding (l, r)
+/// @namespace size/title
+$dialog-title-padding-left-right: $s-5 !default;
+/// divider
+/// @namespace size/title
+$dialog-title-border-width: $line-zero !default;
+/// padding (t)
+/// @namespace size/content
+$dialog-message-content-padding-top: $s-5 !default;
+
+/// padding (b)
+/// @namespace size/content
+$dialog-message-content-padding-bottom: $s-5 !default;
+
+/// padding (l, r)
+/// @namespace size/content
+$dialog-message-content-padding-left-right: $s-5 !default;
+/// text
+/// @namespace size/content
+$dialog-content-font-size: $font-size-body-1 !default;
+/// padding (t)
+/// @namespace size/content
+$dialog-content-padding-top: $s-5 !default;
+/// padding (b)
+/// @namespace size/content
+$dialog-content-padding-bottom: $s-5 !default;
+/// padding (l, r)
+/// @namespace size/content
+$dialog-content-padding-left-right: $s-5 !default;
+/// divider
+/// @namespace size/footer
+$dialog-footer-border-width: $line-zero !default;
+/// padding (t)
+/// @namespace size/footer
+$dialog-footer-padding-top: $s-3 !default;
+/// padding (b)
+/// @namespace size/footer
+$dialog-footer-padding-bottom: $s-3 !default;
+/// padding (l, r)
+/// @namespace size/footer
+$dialog-footer-padding-left-right: $s-5 !default;
+/// button spacing
+/// @namespace size/footer
+$dialog-footer-button-spacing: $s-1 !default;
+/// position (t)
+/// @namespace size/close
+$dialog-close-top: $s-3 !default;
+/// position (r)
+/// @namespace size/close
+$dialog-close-right: $s-3 !default;
+/// size
+/// @namespace size/close
+$dialog-close-width: $s-4 !default;
+/// icon
+/// @namespace size/close
+$dialog-close-size: $icon-xs !default;
+
+$dialog-part-padding-right-closeable: $dialog-close-width + $dialog-close-right + ($dialog-close-width - $dialog-close-size) / 2;
+
+// Statement:Normal
+// ----------------------------------------
+
+/// background
+/// @namespace statement/normal/bounding
+$dialog-bg: $color-white !default;
+/// border
+/// @namespace statement/normal/bounding
+$dialog-border-color: $color-line1-2 !default;
+/// border style
+/// @namespace statement/normal/bounding
+$dialog-border-style: $line-solid !default;
+/// corner
+/// @namespace statement/normal/bounding
+$dialog-corner: $corner-1 !default;
+/// shadow
+/// @namespace statement/normal/bounding
+$dialog-shadow: $shadow-2-down !default;
+/// text
+/// @namespace statement/normal/title
+$dialog-title-color: $color-text1-4 !default;
+/// background
+/// @namespace statement/normal/title
+$dialog-title-bg-color: $color-transparent !default;
+/// divider
+/// @namespace statement/normal/title
+$dialog-title-border-color: $color-transparent !default;
+/// text
+/// @namespace statement/normal/content
+$dialog-content-color: $color-text1-3 !default;
+/// background
+/// @namespace statement/normal/footer
+$dialog-footer-bg-color: $color-transparent !default;
+/// divider
+/// @namespace statement/normal/footer
+$dialog-footer-border-color: $color-transparent !default;
+/// icon
+/// @namespace statement/normal/close
+$dialog-close-color: $color-text1-2 !default;
+
+// Statement:Hover
+// ----------------------------------------
+
+/// icon
+/// @namespace statement/hover/close
+$dialog-close-color-hovered: $color-text1-4 !default;
+/// background
+/// @namespace statement/hover/close
+$dialog-close-bg-hovered: $color-transparent !default;

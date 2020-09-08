@@ -1,0 +1,18 @@
+@charset "UTF-8";
+
+// box variables
+// --------------------------------------------------
+
+////
+/// @module box: 弹性布局
+/// @tag Box
+/// @category component
+/// @family general
+/// @varPrefix $box-
+/// @classPrefix {prefix}-box
+/// @order {}
+////
+
+// Unconfigurable
+// ----------------------------------------
+$box-prefix: ".#{$css-prefix}box";

@@ -1,0 +1,159 @@
+@import "../core/index-noreset";
+@import "scss/variable";
+@import "scss/mixin";
+@import "./rtl.scss";
+
+#{$rating-prefix} {
+    vertical-align: top;
+
+    & {
+        display: inline-block;
+        position: relative;
+    }
+
+    &:after {
+        visibility: hidden;
+        display: block;
+        height: 0;
+        font-size: 0;
+        content: '\0020';
+        clear: both;
+    }
+
+    &-base {
+        float: left;
+    }
+
+    &-text {
+        float: left;
+    }
+
+    &-base-disabled {
+        cursor: not-allowed;
+    }
+
+    &-underlay {
+        white-space: nowrap;
+        overflow: hidden;
+
+        @include rating-state($rating-normal-underlay-color);
+    }
+
+    &-stroke-mode &-underlay {
+        #{$rating-icon-prefix} {
+            color: $color-transparent;
+            -webkit-text-stroke: 1px $rating-normal-overlay-color;
+        }
+    }
+
+    &-overlay {
+        white-space: nowrap;
+        overflow: hidden;
+        position: absolute;
+        width: 0;
+        top: 0;
+        left: 0;
+
+        @include rating-state($rating-normal-overlay-color);
+    }
+
+    &-underlay,
+    &-overlay {
+        #{$rating-prefix}-icon {
+            cursor: pointer;
+            margin-left: $s-1;
+        }
+
+        #{$rating-prefix}-icon:last-child {
+            /* icon 放大会产生边缘溢出，这里使用 margin 为放大扩展一部分空间 */
+            margin-right: $s-1;
+        }
+
+        #{$rating-icon-prefix} {
+            transition: all $motion-duration-immediately $motion-linear;
+
+            &.hover {
+                transform: scale3d(1.1, 1.1, 1.1);
+            }
+
+            &.clicked {
+                transform: scale3d(.9, .9, .9);
+            }
+        }
+    }
+
+    &-info {
+        position: absolute;
+        top: calc(100% + #{$s-1});
+        left: 0;
+        border: 1px solid $color-fill1-4;
+        background: $color-white;
+        padding: 4px 8px 3px;
+        font-size: 12px;
+        white-space: nowrap;
+
+        &:after {
+            position: absolute;
+            content: '';
+            width: 4px;
+            height: 4px;
+            transform: rotate(45deg);
+            border: 1px solid $color-fill1-4;
+            background: $color-white;
+            border-bottom-color: transparent;
+            border-right-color: transparent;
+            top: -3px;
+            left: 4px;
+        }
+    }
+
+    &:focus,
+    &.hover {
+        outline: none;
+        #{$rating-prefix}-overlay {
+            @include rating-state($rating-normal-overlay-hover-color);
+        }
+    }
+}
+
+/* 状态 */
+/* ======================================== */
+
+#{$rating-prefix}-grade-low {
+    #{$rating-prefix}-overlay {
+        @include rating-state($rating-grade-low-overlay-color);
+    }
+
+    &.hover {
+        #{$rating-prefix}-overlay {
+            @include rating-state($rating-grade-low-overlay-color);
+        }
+    }
+}
+
+#{$rating-prefix}-grade-high {
+    #{$rating-prefix}-overlay {
+        @include rating-state($rating-grade-high-overlay-color);
+    }
+
+    &.hover {
+        #{$rating-prefix}-overlay {
+            @include rating-state($rating-grade-high-overlay-hover-color);
+        }
+    }
+}
+
+/* 尺寸 */
+/* ======================================== */
+
+#{$rating-prefix}-small {
+    @include rating-size($rating-small-icon-size, $rating-small-font-size, $rating-small-text-margin-left);
+}
+
+#{$rating-prefix}-medium {
+    @include rating-size($rating-medium-icon-size, $rating-medium-font-size, $rating-medium-text-margin-left);
+}
+
+#{$rating-prefix}-large {
+    @include rating-size($rating-large-icon-size, $rating-large-font-size, $rating-large-text-margin-left);
+}

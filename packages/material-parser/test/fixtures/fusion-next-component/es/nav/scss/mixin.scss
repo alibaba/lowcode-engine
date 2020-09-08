@@ -1,0 +1,193 @@
+// nav mixins
+// --------------------------------------------------
+
+@mixin nav-size(
+    $direction,
+    $height,
+    $fontSize,
+    $padding,
+    $marginTB,
+    $marginLR,
+    $itemCorner
+) {
+    line-height: $height;
+    font-size: $fontSize;
+
+    #{$menu-prefix}-item {
+        margin-left: $marginLR;
+        margin-right: $marginLR;
+        padding: 0 $padding;
+        border-radius: $itemCorner;
+    }
+
+    @if $direction == 'ver' {
+        #{$menu-prefix}-item:not(:first-child),
+        #{$menu-prefix}-sub-menu-wrapper:not(:first-child) > #{$menu-prefix}-item {
+            margin-top: $marginTB;
+        }
+
+        #{$menu-prefix}-item:not(:last-child),
+        #{$menu-prefix}-sub-menu-wrapper:not(:last-child) > #{$menu-prefix}-item {
+            margin-bottom: $marginTB;
+        }
+    } @else {
+        #{$menu-prefix}-item,
+        #{$menu-prefix}-sub-menu-wrapper > #{$menu-prefix}-item {
+            margin-top: $marginTB;
+            margin-bottom: $marginTB;
+        }
+    }
+
+    #{$menu-prefix}-item-inner {
+        height: $height;
+        font-size: $fontSize;
+    }
+}
+
+@mixin nav-border-fix($height, $border-width) {
+    $real-height: $height - $border-width * 2;
+
+    border-width: $border-width;
+    &.#{$css-prefix}hoz {
+        line-height: $real-height;
+
+        #{$menu-prefix}-header {
+            height: $real-height;
+        }
+
+        #{$menu-prefix}-footer {
+            height: $real-height;
+        }
+
+        #{$menu-prefix}-item-inner {
+            height: $real-height;
+        }
+
+        &.#{$css-prefix}top #{$nav-prefix}-item:before {
+            top: - $border-width;
+        }
+
+        &.#{$css-prefix}bottom #{$nav-prefix}-item:before {
+            bottom: - $border-width;
+        }
+    }
+    &.#{$css-prefix}ver {
+        &.#{$css-prefix}left #{$nav-prefix}-item:before {
+            left: - $border-width;
+        }
+
+        &.#{$css-prefix}right #{$nav-prefix}-item:before {
+            right: - $border-width;
+        }
+    }
+}
+
+@mixin nav-statement(
+    $bgColor,
+    $borderColor,
+    $textColor,
+    $textWeight,
+    $shadow,
+    $hoverBgColor,
+    $hoverColor,
+    $hoverWeight,
+    $selectedBgColor,
+    $selectedColor,
+    $selectedWeight,
+    $activeColor,
+    $hoverLineColor,
+    $openedBgColor,
+    $openedColor,
+    $groupColor,
+    $groupWeight
+) {
+    background-color: $bgColor;
+    border-color: $borderColor;
+    color: $textColor;
+    font-weight: $textWeight;
+    box-shadow: $shadow;
+
+    #{$nav-prefix}-item#{$menu-prefix}-item {
+        background-color: $bgColor;
+        color: $textColor;
+
+        &.#{$css-prefix}focused,
+        &:hover {
+            background-color: $hoverBgColor;
+            color: $hoverColor;
+            font-weight: $hoverWeight;
+        }
+
+        &.#{$css-prefix}selected {
+            background-color: $selectedBgColor;
+            color: $selectedColor;
+            font-weight: $selectedWeight;
+        }
+
+        &.#{$css-prefix}opened {
+            background-color: $openedBgColor;
+            color: $openedColor;
+        }
+        &.#{$css-prefix}child-selected {
+            background-color: $openedBgColor;
+            color: $openedColor;
+        }
+
+        &:before {
+            background-color: $activeColor;
+        }
+        &:hover:before {
+            background-color: $hoverLineColor;
+        }
+    }
+
+    #{$menu-prefix}-sub-menu #{$menu-prefix}-item.#{$css-prefix}opened {
+        background-color: $openedBgColor;
+        color: $openedColor;
+    }
+
+    #{$nav-prefix}-group-label {
+        color: $groupColor;
+        font-weight: $groupWeight;
+    }
+}
+
+@mixin sub-nav-statement(
+    $textColor,
+    $textWeight,
+    $bgColor,
+    $hoverBgColor,
+    $hoverColor,
+    $selectedBgColor,
+    $selectedColor,
+    $activeColor
+) {
+    #{$menu-prefix}-sub-menu #{$menu-prefix}-item {
+        background-color: $bgColor;
+        color: $textColor;
+        font-weight: $textWeight;
+
+        &.#{$css-prefix}focused,
+        &:hover {
+            background-color: $hoverBgColor;
+            color: $hoverColor;
+        }
+
+        &.#{$css-prefix}selected {
+            background-color: $selectedBgColor;
+            color: $selectedColor;
+        }
+    }
+}
+
+@mixin icon-only-size(
+    $border-width
+) {
+    #{$nav-prefix}-icon.#{$css-prefix}icon {
+        @include icon-size(
+            $size: $nav-icon-only-font-size,
+            $marginLeft: ($nav-icononly-width - $nav-icon-only-font-size) / 2 - $nav-ver-item-padding-lr - $border-width,
+            $marginRight: ($nav-icononly-width - $nav-icon-only-font-size) / 2 - $nav-ver-item-padding-lr - $border-width
+        );
+    }
+}

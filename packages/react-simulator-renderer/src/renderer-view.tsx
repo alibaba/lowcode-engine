@@ -100,6 +100,7 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
         appHelper={renderer.context}
         // context={renderer.context}
         designMode={designMode}
+        device={device}
         suspended={renderer.suspended}
         self={renderer.scope}
         customCreateElement={(Component: any, props: any, children: any) => {
@@ -108,7 +109,23 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
           const leaf = host.document.getNode(__id);
           viewProps._leaf = leaf;
           viewProps._componentName = leaf?.componentName;
-
+          // 如果是容器 && 无children && 高宽为空 增加一个占位容器，方便拖动
+          if (
+            !viewProps.dataSource &&
+            leaf?.isContainer() &&
+            (children == null || (Array.isArray(children) && !children.length)) &&
+            (!viewProps.style || Object.keys(viewProps.style).length === 0)
+          ) {
+            children = (
+              <div className="lc-container-placeholder" style={viewProps.placeholderStyle}>
+                {viewProps.placeholder || '拖拽组件或模板到这里'}
+              </div>
+            );
+          }
+          if(viewProps._componentName === 'a') {
+            delete viewProps.href;
+          }
+          // FIXME: 渲染仍有问题
           if (viewProps._componentName === 'Menu') {
             Object.assign(viewProps, {
               _componentName: 'Menu',
@@ -132,7 +149,7 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
           return createElement(
             getDeviceView(Component, device, designMode),
             viewProps,
-            leaf?.isContainer() ? (children == null ? [] : Array.isArray(children) ? children : [children]) : null,
+            children,
           );
         }}
         onCompGetRef={(schema: any, ref: ReactInstance | null) => {

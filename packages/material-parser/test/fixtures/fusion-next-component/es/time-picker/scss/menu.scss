@@ -1,0 +1,55 @@
+#{$time-picker-prefix}-menu {
+    float: left;
+    text-align: center;
+
+    &:not(:last-child) {
+        border-right: $time-picker-menu-border-width $line-solid $time-picker-menu-border-color;
+    }
+
+    &-title {
+        cursor: default;
+        height: $time-picker-menu-title-height;
+        line-height: $time-picker-menu-title-height;
+        font-size: $time-picker-menu-title-font-size;
+        font-weight: $time-pikcer-menu-title-font-weight;
+        color: $time-picker-menu-title-color;
+        background: $time-picker-menu-title-background;
+    }
+
+    ul {
+        position: relative;
+        overflow-y: auto;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        font-size: $time-picker-menu-item-font-size;
+        height: $time-picker-menu-item-height * 7;
+    }
+
+    &-item {
+        cursor: pointer;
+        height: $time-picker-menu-item-height;
+        line-height: $time-picker-menu-item-height;
+        transition: background $motion-duration-immediately $motion-linear;
+        color: $time-picker-menu-item-color;
+        background: $time-picker-menu-item-background;
+        outline: none;
+
+        &:hover {
+            color: $time-picker-menu-item-color-hover;
+            background: $time-picker-menu-item-background-hover;
+        }
+
+        &.#{$css-prefix}selected {
+            font-weight: $time-picker-menu-item-font-weight-selected;
+            color: $time-picker-menu-item-color-selected;
+            background: $time-picker-menu-item-background-selected;
+        }
+
+        &.#{$css-prefix}disabled {
+            cursor: not-allowed;
+            color: $time-picker-menu-item-color-disabled;
+            background: $time-picker-menu-item-background-disabled;
+        }
+    }
+}

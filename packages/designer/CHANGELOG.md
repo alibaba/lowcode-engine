@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.7-0"></a>
+## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@1.0.6-0...@ali/lowcode-designer@1.0.7-0) (2020-09-02)
+
+
 <a name="0.9.55"></a>
 ## [0.9.55](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.54...@ali/lowcode-designer@0.9.55) (2020-09-08)
 
@@ -18,8 +22,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ## [0.9.54](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.53...@ali/lowcode-designer@0.9.54) (2020-09-03)
 
 
-
-
 **Note:** Version bump only for package @ali/lowcode-designer
 
 <a name="0.9.53"></a>
@@ -27,8 +29,33 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
 **Note:** Version bump only for package @ali/lowcode-designer
+
+<a name="1.0.6-0"></a>
+## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.52...@ali/lowcode-designer@1.0.6-0) (2020-09-02)
+
+
+### Bug Fixes
+
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+* 兼容modal模式 ([1092ee9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1092ee9))
+
+
+### Features
+
+* 🎸 支持设置模拟器的 viewport 的宽高和缩放级别 ([3a54241](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3a54241))
+* 新增simulatorurl，可以设置cdn使用simulator ([1f45b05](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1f45b05))
+>>>>>>> release/1.0.0
+
+
+
+
+<<<<<<< HEAD
+**Note:** Version bump only for package @ali/lowcode-designer
+=======
+<a name="1.0.5-0"></a>
+## [1.0.5-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@1.0.4-0...@ali/lowcode-designer@1.0.5-0) (2020-08-20)
+>>>>>>> release/1.0.0
 
 <a name="0.9.52"></a>
 ## [0.9.52](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.51...@ali/lowcode-designer@0.9.52) (2020-08-27)
@@ -78,6 +105,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="0.9.48"></a>
 ## [0.9.48](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.47...@ali/lowcode-designer@0.9.48) (2020-08-20)
+>>>>>>> master
 
 
 
@@ -102,38 +130,31 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * support dropObject is data ([809fda7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/809fda7))
+>>>>>>> master
 
 
 
 
-<a name="0.9.45"></a>
-## [0.9.45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.44...@ali/lowcode-designer@0.9.45) (2020-08-19)
+**Note:** Version bump only for package @ali/lowcode-designer
 
-
-### Bug Fixes
-
-* **designer/node.ts:** fix hasLoop logic ([99a7288](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/99a7288))
-* currentPage.id 返回 formUuid ([775725d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/775725d))
-* 优化画布中点击事件屏蔽，增加富文本组件的部分屏蔽 ([ec08c6c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ec08c6c))
-* 优化画布中点击事件屏蔽，增加富文本组件的部分屏蔽 ([a5b6557](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a5b6557))
-* 区块组件无法删除 ([d936d2b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d936d2b))
+<a name="0.12.0"></a>
+# [0.12.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.11.0...@ali/lowcode-designer@0.12.0) (2020-08-17)
 
 
 
 
-<a name="0.9.44"></a>
-## [0.9.44](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.43...@ali/lowcode-designer@0.9.44) (2020-08-17)
+**Note:** Version bump only for package @ali/lowcode-designer
 
-
-### Bug Fixes
-
-* fieldId 重复 ([5d64312](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5d64312))
-* 去掉根据 componentName 判断 isModal 的逻辑 ([28f0213](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/28f0213))
-* 页面加载之后就被标记位 isModified ([2840d27](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2840d27))
+<a name="0.11.0"></a>
+# [0.11.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.10.0...@ali/lowcode-designer@0.11.0) (2020-08-16)
 
 
 
 
+**Note:** Version bump only for package @ali/lowcode-designer
+
+<a name="0.10.0"></a>
+# [0.10.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.37...@ali/lowcode-designer@0.10.0) (2020-08-14)
 <a name="0.9.43"></a>
 ## [0.9.43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.42...@ali/lowcode-designer@0.9.43) (2020-08-14)
 
@@ -203,11 +224,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="0.9.38"></a>
 ## [0.9.38](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.37...@ali/lowcode-designer@0.9.38) (2020-08-06)
+>>>>>>> master
 
 
 ### Bug Fixes
 
-* 修复 preset-vision 版本 lifeCycles 丢失以及 slot 初始化问题 ([7cf6d24](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7cf6d24))
+* 兼容modal模式 ([1092ee9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1092ee9))
 
 
 
@@ -696,12 +718,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-<<<<<<< HEAD
 * 🎸 merge material-parser ([b40c286](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b40c286))
 * history log ([fbb3577](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fbb3577))
 * import react-docgen to parse propTypes ([6e66168](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6e66168))
-=======
-* 🎸 merge material-parser ([b40c286](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b40c2869a0bc901d855279735fe86b84dabaa04d))
-* history log ([fbb3577](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fbb3577bd434c0ac77cc907abc36e3efe110fe8c))
-* import react-docgen to parse propTypes ([6e66168](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6e661686e4693e69279c496f3be1dd173703c55e))
->>>>>>> df955e1db90ff104cd11160def80113cfd6faccc

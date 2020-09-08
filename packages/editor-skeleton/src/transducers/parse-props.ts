@@ -23,7 +23,8 @@ function propConfigToFieldConfig(propConfig: PropConfig): FieldConfig {
   return {
     title,
     ...propConfig,
-    setter: propTypeToSetter(propConfig.propType),
+    // TODO 这边直接用propConfig，将setter丢在propconfig里，需要确认是否在PropConfig扩展还是换实现
+    setter: propConfig.setter ? propConfig.setter : propTypeToSetter(propConfig.propType),
   };
 }
 
@@ -32,9 +33,11 @@ function propTypeToSetter(propType: PropType): SetterType {
   let isRequired: boolean | undefined = false;
   if (typeof propType === 'string') {
     typeName = propType;
-  } else {
+  } else if (typeof propType === 'object') {
     typeName = propType.type;
     isRequired = propType.isRequired;
+  } else {
+    typeName = 'string';
   }
   // TODO: use mixinSetter wrapper
   switch (typeName) {
@@ -44,7 +47,25 @@ function propTypeToSetter(propType: PropType): SetterType {
         isRequired,
         initialValue: '',
       };
+    case 'Json':
+      return {
+        componentName: 'JsonSetter',
+        isRequired,
+        initialValue: '',
+      };
+    case 'color':
+      return {
+        componentName: 'ColorSetter',
+        isRequired,
+        initialValue: '',
+      };
 
+    case 'icon':
+      return {
+        componentName: 'IconSetter',
+        isRequired,
+        initialValue: '',
+      };
     case 'number':
       return {
         componentName: 'NumberSetter',
@@ -57,6 +78,14 @@ function propTypeToSetter(propType: PropType): SetterType {
         isRequired,
         initialValue: false,
       };
+    case 'JSExpression':
+      return {
+        componentName: 'ExpressionSetter',
+        initialValue: {
+          type: 'JSExpression',
+          value: '',
+        },
+      };
     case 'oneOf':
       const dataSource = ((propType as OneOf).value || []).map((value, index) => {
         const t = typeof value;
@@ -65,7 +94,7 @@ function propTypeToSetter(propType: PropType): SetterType {
           value,
         };
       });
-      const componentName = dataSource.length > 4 ? 'SelectSetter' : 'RadioGroupSetter';
+      const componentName = dataSource.length >= 4 ? 'SelectSetter' : 'RadioGroupSetter';
       return {
         componentName,
         props: { dataSource },
@@ -77,19 +106,19 @@ function propTypeToSetter(propType: PropType): SetterType {
     case 'node': // TODO: use Mixin
       return {
         // slotSetter
-        componentName: 'NodeSetter',
+        componentName: 'SlotSetter',
         props: {
           mode: typeName,
         },
         isRequired,
         initialValue: {
           type: 'JSSlot',
-          value: '',
+          value: [],
         },
       };
     case 'shape':
     case 'exact':
-      const items = (propType as Shape).value.map((item) => propConfigToFieldConfig(item));
+      const items = ((propType as any).value || []).map((item: any) => propConfigToFieldConfig(item));
       return {
         componentName: 'ObjectSetter',
         props: {
@@ -121,6 +150,7 @@ function propTypeToSetter(propType: PropType): SetterType {
           },
         },
         isRequired,
+        initialValue: {},
       };
     case 'array':
     case 'arrayOf':
@@ -135,23 +165,18 @@ function propTypeToSetter(propType: PropType): SetterType {
     case 'func':
       return {
         componentName: 'FunctionSetter',
-        isRequired,
-        initialValue: {
-          type: 'JSFunction',
-          value: 'function(){}',
-        },
+        isRequired
       };
     case 'oneOfType':
       return {
         componentName: 'MixedSetter',
         props: {
           // TODO:
-          // setters: (propType as OneOfType).value.map(item => propTypeToSetter(item)),
+          setters: (propType as OneOfType).value.map((item) => propTypeToSetter(item)),
         },
         isRequired,
       };
   }
-
   return {
     componentName: 'MixedSetter',
     isRequired,
@@ -159,12 +184,32 @@ function propTypeToSetter(propType: PropType): SetterType {
   };
 }
 
-const EVENT_RE = /^on[A-Z][\w]*$/;
+const EVENT_RE = /^on|after|before[A-Z][\w]*$/;
 
 export default function(metadata: TransformedComponentMetadata): TransformedComponentMetadata {
-  const { configure } = metadata;
+  const { configure = {} } = metadata;
+  // TODO types后续补充
+  let extendsProps: any = null;
   if (configure.props) {
-    return metadata;
+    if (Array.isArray(configure.props)) {
+      return metadata;
+    }
+    const { isExtends, override = [] } = configure.props;
+    // 不开启继承时，直接返回configure配置
+    if (!isExtends) {
+      return {
+        ...metadata,
+        configure: {
+          props: [...override],
+        },
+      };
+    }
+
+    extendsProps = {};
+    // 开启继承后，缓存重写内容的配置
+    override.forEach((prop: any) => {
+      extendsProps[prop.name] = prop;
+    });
   }
 
   if (!metadata.props) {
@@ -188,6 +233,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
     ) {
       if (component.isContainer !== false) {
         component.isContainer = true;
+        props.push(propConfigToFieldConfig(prop));
         return;
       }
     }
@@ -215,6 +261,13 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
         (supports as any).style = true;
       }
       return;
+    }
+
+    // 存在覆盖配置时
+    if (extendsProps) {
+      if (name in extendsProps) {
+        prop = extendsProps[name];
+      }
     }
 
     props.push(propConfigToFieldConfig(prop));

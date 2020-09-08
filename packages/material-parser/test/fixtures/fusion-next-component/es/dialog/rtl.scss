@@ -1,0 +1,27 @@
+#{$dialog-prefix}[dir=rtl] {
+    text-align: right;
+
+    #{$dialog-prefix}-footer {
+        &.#{$css-prefix}align-left {
+            text-align: right;
+        }
+
+        &.#{$css-prefix}align-center {
+            text-align: center;
+        }
+
+        &.#{$css-prefix}align-right {
+            text-align: left;
+        }
+    }
+
+    #{$dialog-prefix}-btn + #{$dialog-prefix}-btn {
+        margin-right: $s-1;
+        margin-left: 0;
+    }
+
+    #{$dialog-prefix}-close {
+        left: $dialog-close-right;
+        right: auto; // 重置 right 放置被覆盖
+    }
+}

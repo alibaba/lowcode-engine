@@ -160,8 +160,8 @@ export class ComponentMeta {
     const liveTextEditing = this._transformedMetadata.experimental?.liveTextEditing || [];
 
     function collectLiveTextEditing(items: FieldConfig[]) {
-      items.forEach(config => {
-        if (config.items) {
+      items.forEach((config) => {
+        if (config?.items) {
           collectLiveTextEditing(config.items);
         } else {
           const liveConfig = config.liveTextEditing || config.extraProps?.liveTextEditing;
@@ -277,7 +277,6 @@ function preprocessMetadata(metadata: ComponentMetadata): TransformedComponentMe
   };
 }
 
-
 export interface MetadataTransducer {
   (prev: TransformedComponentMetadata): TransformedComponentMetadata;
   /**
@@ -293,7 +292,7 @@ export interface MetadataTransducer {
 }
 const metadataTransducers: MetadataTransducer[] = [];
 
-export function registerMetadataTransducer(transducer: MetadataTransducer, level: number = 100, id?: string) {
+export function registerMetadataTransducer(transducer: MetadataTransducer, level = 100, id?: string) {
   transducer.level = level;
   transducer.id = id;
   const i = metadataTransducers.findIndex((item) => item.level != null && item.level > level);
@@ -307,7 +306,6 @@ export function registerMetadataTransducer(transducer: MetadataTransducer, level
 export function getRegisteredMetadataTransducers(): MetadataTransducer[] {
   return metadataTransducers;
 }
-
 
 registerMetadataTransducer((metadata) => {
   const { configure, componentName } = metadata;

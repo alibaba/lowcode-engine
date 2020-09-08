@@ -9,10 +9,13 @@ function getHotterFromSetter(setter) {
 }
 
 function getTransducerFromSetter(setter) {
-  return setter && (
-    setter.transducer || setter.Transducer
-    || (setter.type && (setter.type.transducer || setter.type.Transducer))
-  ) || null; // eslint-disable-line
+  return (
+    (setter &&
+      (setter.transducer ||
+        setter.Transducer ||
+        (setter.type && (setter.type.transducer || setter.type.Transducer)))) ||
+    null
+  ); // eslint-disable-line
 }
 
 function combineTransducer(transducer, arr, context) {
@@ -39,7 +42,7 @@ export class Transducer {
     } else if (isValidElement(setter) && setter.type.displayName === 'MixedSetter') {
       setter = setter.props?.setters?.[0];
     } else if (typeof setter === 'object' && setter.componentName === 'MixedSetter') {
-      setter = setter.props?.setters?.[0];
+      setter = setter && setter.props && setter.props.setters && Array.isArray(setter.props.setters) && setter.props.setters[0];
     }
 
     if (isSetterConfig(setter)) {
@@ -49,11 +52,7 @@ export class Transducer {
       setter = getSetter(setter)?.component;
     }
 
-    this.setterTransducer = combineTransducer(
-      getTransducerFromSetter(setter),
-      getHotterFromSetter(setter),
-      context,
-    );
+    this.setterTransducer = combineTransducer(getTransducerFromSetter(setter), getHotterFromSetter(setter), context);
     this.context = context;
   }
 

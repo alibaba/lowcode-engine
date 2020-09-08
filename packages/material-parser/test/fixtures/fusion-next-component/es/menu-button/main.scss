@@ -1,0 +1,63 @@
+@import "../core/index-noreset.scss";
+@import "../button/scss/variable.scss";
+@import "scss/mixin";
+@import "scss/variable";
+
+#{$menu-btn-prefix} {
+    display: inline-block;
+    box-shadow: none;
+
+    .#{$css-prefix}icon {
+        transition: transform $motion-duration-immediately $motion-linear;
+    }
+
+    &.#{$css-prefix}expand .#{$css-prefix}menu-btn-arrow {
+        transform: rotate(180deg);
+    }
+
+    &.#{$css-prefix}btn-normal .#{$css-prefix}menu-btn-arrow {
+        color: $menu-btn-pure-text-normal-icon-color;
+    }
+
+    &.#{$css-prefix}btn-secondary .#{$css-prefix}menu-btn-arrow {
+        color: $menu-btn-pure-text-secondary-icon-color;
+    }
+
+    &.#{$css-prefix}btn-primary .#{$css-prefix}menu-btn-arrow {
+        color: $menu-btn-pure-text-primary-icon-color;
+    }
+
+    &.#{$css-prefix}btn-text.#{$css-prefix}btn-normal .#{$css-prefix}menu-btn-arrow {
+        color: $menu-btn-text-text-normal-icon-color;
+    }
+
+    &.#{$css-prefix}btn-text.#{$css-prefix}btn-primary .#{$css-prefix}menu-btn-arrow {
+        color: $menu-btn-text-text-primary-icon-color;
+    }
+
+    &.#{$css-prefix}btn-ghost.#{$css-prefix}btn-light .#{$css-prefix}menu-btn-arrow {
+        color: $menu-btn-ghost-light-icon-color;
+    }
+
+    &.#{$css-prefix}btn-ghost.#{$css-prefix}btn-dark .#{$css-prefix}menu-btn-arrow {
+        color: $menu-btn-ghost-dark-icon-color;
+    }
+
+    &.disabled .#{$css-prefix}menu-btn-arrow,
+    &[disabled] .#{$css-prefix}menu-btn-arrow {
+        color: $menu-btn-disabled-icon-color;
+    }
+
+    &.#{$css-prefix}btn-text.disabled .#{$css-prefix}menu-btn-arrow,
+    &.#{$css-prefix}btn-text[disabled] .#{$css-prefix}menu-btn-arrow {
+        color: $menu-btn-disabled-icon-color;
+    }
+
+    &[disabled].#{$css-prefix}btn-ghost.#{$css-prefix}btn-dark .#{$css-prefix}menu-btn-arrow {
+        color: $menu-btn-ghost-dark-disabled-icon-color;
+    }
+
+    &[disabled].#{$css-prefix}btn-ghost.#{$css-prefix}btn-light .#{$css-prefix}menu-btn-arrow {
+        color: $menu-btn-ghost-light-disabled-icon-color;
+    }
+}

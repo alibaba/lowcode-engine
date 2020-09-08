@@ -1,0 +1,570 @@
+////
+/// @group utils
+////
+
+/// 清除浮动
+///
+/// @example scss
+///   .wrapper {
+///      @include clearfix;
+///   }
+///
+@mixin clearfix {
+    &:after {
+        visibility: hidden;
+        display: block;
+        height: 0;
+        font-size: 0;
+        content: '\0020';
+        clear: both;
+    }
+}
+
+
+
+/// 单行截取文字，添加『...』结尾
+///
+/// @param {Number | String} $width [100%] - 最大宽度，CSS长度，包括calc方法定义的表达式
+///
+/// @example scss - 使用
+///   .element {
+///     @include ellipsis;
+///   }
+///
+/// @example css - 输出
+///   .element {
+///     display: inline-block;
+///     max-width: 100%;
+///     overflow: hidden;
+///     text-overflow: ellipsis;
+///    white-space: nowrap;
+///     word-wrap: normal;
+///   }
+///
+@mixin ellipsis($width: 100%) {
+    display: inline-block;
+    max-width: $width;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+}
+
+/// 多行截取文字，添加『...』结尾
+///
+/// @param {Number | String} $line-height [1.2em] - 行高
+/// @param {Number} $line-count [2] - 行数, 超出行数开始截取
+/// @param {Color} $bg-color [#fff] - 文本背景色
+///
+/// @example scss - 使用
+///   .element {
+///     @include multi-line-ellipsis(1.2em, 3, #fff);
+///   }
+///
+/// @example css - 输出
+///   .element {
+///     overflow: hidden;
+///     position: relative;
+///     line-height: 1.2em;
+///     max-height: 3.6em;
+///     text-align: justify;
+///     padding-right: 0em;
+///   }
+///
+///   .element:before {
+///     content: '...';
+///     position: absolute;
+///     right: 0;
+///     bottom: 0;
+///     background: #fff;
+///   }
+///
+///   .element:after {
+///     content: '';
+///     position: absolute;
+///     right: 0;
+///     width: 1em;
+///     height: 1em;
+///     margin-top: 0.2em;
+///     background: #fff;
+///   }
+///
+@mixin multi-line-ellipsis(
+    $line-height: 1.2em,
+    $line-count: 2,
+    $bg-color: #fff
+) {
+    overflow: hidden;
+    position: relative;
+    line-height: $line-height;
+    max-height: $line-height * $line-count;
+    text-align: justify;
+    padding-right: 0;
+
+    &:before {
+        content: '...';
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        background: $bg-color;
+    }
+
+    &:after {
+        content: '';
+        position: absolute;
+        right: 0;
+        width: 1em;
+        height: 1em;
+        margin-top: .2em;
+        background: $bg-color;
+    }
+}
+
+/// 隐藏文字
+///
+/// 『text-indent: -9999px』Hack 的替代版本
+///
+/// @link http://nicolasgallagher.com/another-css-image-replacement-technique
+///
+/// @example scss
+///   .element {
+///      @include hide-text;
+///      background: url(logo.png);
+///   }
+///
+@mixin hide-text {
+    font: 0/0 a;
+    text-shadow: none;
+    color: transparent;
+}
+
+/// 将元素垂直(水平)居中 (transform 版本)
+///
+/// @param {String} $inner-selector ['.inner'] - 直接子选择器名称
+/// @param {Bool} $horizontal [true] - 是否水平居中
+///
+/// @example scss - 使用
+///   .element {
+///      @include center-tl;
+///   }
+///
+/// @example css - 输出
+///   .element {
+///       position: relative;
+///   }
+///
+///   .element > .inner {
+///       position: absolute;
+///       top: 50%;
+///       left: 50%;
+///       transform: translate(-50%, -50%);
+///   }
+///
+@mixin center-tl(
+    $inner-selector: '.inner',
+    $horizontal: true
+) {
+
+    position: relative;
+
+    & > #{$inner-selector} {
+        position: absolute;
+        top: 50%;
+        $translate-val: translateY(-50%);
+
+        @if $horizontal {
+            left: 50%;
+            $translate-val: translate(-50%, -50%);
+        }
+
+        transform: $translate-val;
+    }
+}
+
+/// 将元素垂直(水平)居中 (table 版本)
+///
+/// @param {String} $inner-selector ['.inner'] - 直接子选择器名称
+/// @param {Bool} $horizontal [true] - 是否水平居中
+///
+/// @example scss - 使用
+///   .element {
+///     @include center-td;
+///   }
+///
+/// @example css - 输出
+///   .element {
+///       text-align: center;
+///       display: table;
+///   }
+///
+///   .element > .inner {
+///       display: table-cell;
+///       vertical-align: middle;
+///   }
+///
+@mixin center-td(
+    $inner-selector: '.inner',
+    $horizontal: true
+) {
+
+    @if $horizontal {
+        text-align: center;
+    }
+
+    display: table;
+
+    & > #{$inner-selector} {
+        display: table-cell;
+        vertical-align: middle;
+    }
+}
+
+/// 快捷设置元素width,height的方法
+///
+/// @param {String | List} $size - CSS尺寸长度
+///
+/// @example scss - 使用
+///   .element {
+///     @include size(2em 4em);
+///   }
+///
+/// @example css - 输出
+///   .element {
+///     width: 2em;
+///     height: 4em;
+///   }
+///
+@mixin size($size) {
+
+    @if length($size) == 1 {
+        width: $size;
+        height: $size;
+    } @else if length($size) == 2 {
+        width: nth($size, 1);
+        height: nth($size, 2);
+    }
+}
+
+// 快捷设置元素postion的方法 (传入null参数可略过一个方位)
+//
+// @param {String} $position [relative]
+//   CSS position属性值
+//
+// @param {List} $coordinates [null null null null]
+//   上、右、下、左 四个边值，可以传入1 ~ 4个值
+//
+// @example scss - 使用
+//   .element {
+//     @include position(absolute, 0 null null 10px);
+//   }
+//
+// @example css - 输出
+//   .element {
+//     position: absolute;
+//     left: 10px;
+//     top: 0;
+//   }
+//
+// @require {function} is-length
+// @require {function} unpack
+@mixin position($position: relative, $coordinates: null null null null) {
+
+    // 如果参数是数组
+    @if type-of($position) == list {
+        $coordinates: $position;
+        $position: relative;
+    }
+
+    $coordinates: unpack($coordinates);
+
+    $offsets: (
+        top: nth($coordinates, 1),
+        right: nth($coordinates, 2),
+        bottom: nth($coordinates, 3),
+        left: nth($coordinates, 4)
+    );
+
+    position: $position;
+
+    @each $offset, $value in $offsets {
+
+        // 如果是合法长度
+        @if is-length($value) {
+            #{$offset}: $value;
+        }
+    }
+}
+
+// 三角型生成器(8种形态)
+//
+// @param {Number | List} $size
+//   三角形尺寸
+//   传入一个参数，生成等宽高三角形；传入数组且长度为2，第一个设置宽度，第二个设置高度
+//
+// @param {String | List} $color
+//   传入一个参数，设置三角形颜色；传入数组且长度为2，第一个设置三角形颜色，第二个设置背景色
+//
+// @param {String} $direction
+//   三角形朝向，可传参数：up | down | right | left | up-right | up-left | down-right | down-left | inset-up | inset-down | inset-left | inset-right
+//
+// @example scss - 使用
+//   .element {
+//     &:before {
+//       content: " ";
+//       @include triangle(100px 200px, blue, up);
+//     }
+//   }
+//
+// @example css - 输出
+//   .example:before {
+//     content: " ";
+//     height: 0;
+//     width: 0;
+//     border-bottom: 200px solid blue;
+//     border-left: 50px solid transparent;
+//     border-right: 50px solid transparent;
+//   }
+//
+@mixin triangle($size, $color, $direction) {
+    $width: nth($size, 1);
+    $height: nth($size, length($size));
+    $foreground-color: nth($color, 1);
+    $background-color: if(length($color) == 2, nth($color, 2), transparent);
+    height: 0;
+    width: 0;
+
+    @if ($direction == up) or ($direction == down) or ($direction == right) or ($direction == left) {
+        $width: $width / 2;
+        $height: if(length($size) > 1, $height, $height/2);
+
+        @if $direction == up {
+            border-bottom: $height solid $foreground-color;
+            border-left: $width solid $background-color;
+            border-right: $width solid $background-color;
+        } @else if $direction == right {
+            border-bottom: $width solid $background-color;
+            border-left: $height solid $foreground-color;
+            border-top: $width solid $background-color;
+        } @else if $direction == down {
+            border-left: $width solid $background-color;
+            border-right: $width solid $background-color;
+            border-top: $height solid $foreground-color;
+        } @else if $direction == left {
+            border-bottom: $width solid $background-color;
+            border-right: $height solid $foreground-color;
+            border-top: $width solid $background-color;
+        }
+    } @else if ($direction == up-right) or ($direction == up-left) {
+        border-top: $height solid $foreground-color;
+
+        @if $direction == up-right {
+            border-left: $width solid $background-color;
+        } @else if $direction == up-left {
+            border-right: $width solid $background-color;
+        }
+    } @else if ($direction == down-right) or ($direction == down-left) {
+        border-bottom: $height solid $foreground-color;
+
+        @if $direction == down-right {
+            border-left: $width solid $background-color;
+        } @else if $direction == down-left {
+            border-right: $width solid $background-color;
+        }
+    } @else if ($direction == inset-up) {
+        border-color: $background-color $background-color $foreground-color;
+        border-style: solid;
+        border-width: $height $width;
+    } @else if ($direction == inset-down) {
+        border-color: $foreground-color $background-color $background-color;
+        border-style: solid;
+        border-width: $height $width;
+    } @else if ($direction == inset-right) {
+        border-color: $background-color $background-color $background-color $foreground-color;
+        border-style: solid;
+        border-width: $width $height;
+    } @else if ($direction == inset-left) {
+        border-color: $background-color $foreground-color $background-color $background-color;
+        border-style: solid;
+        border-width: $width $height;
+    }
+}
+
+@mixin box-sizing {
+    box-sizing: border-box;
+    *,
+    *:before,
+    *:after {
+        box-sizing: border-box;
+    }
+}
+
+@mixin icon-size($size, $marginLeft: false, $marginRight: false, $transform: false) {
+    @if ($transform) {
+        transform: $transform;
+    }
+    @if ($marginLeft) {
+        margin-left: $marginLeft;
+    }
+    @if ($marginRight) {
+        margin-right: $marginRight;
+    }
+
+    &:before,
+    & .#{$css-prefix}icon-remote {
+        width: $size;
+        font-size: $size;
+        line-height: inherit;
+    }
+
+    // Chrome不支持小于12px的字体，故采用缩放的方式缩小字体
+    @if (type-of($size) == 'number') {
+        @if ($size < 12) {
+            @media all and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: .001dpcm) {
+                @if ($transform) {
+                    transform: scale($size / $icon-s) $transform;
+                } @else {
+                    transform: scale($size / $icon-s);
+                }
+                @if ($marginLeft) {
+                    margin-left: $marginLeft - ($icon-s - $size) / 2;
+                } @else {
+                    margin-left: -($icon-s - $size) / 2;
+                }
+                @if ($marginRight) {
+                    margin-right: $marginRight - ($icon-s - $size) / 2;
+                } @else {
+                    margin-right: -($icon-s - $size) / 2;
+                }
+
+                &:before {
+                    width: $icon-s;
+                    font-size: $icon-s;
+                }
+            }
+        }
+    }
+}
+
+@mixin icon-square-size($size, $marginTop: false, $marginRight: false, $marginBottom: false, $marginLeft: false, $transform: false) {
+    @if ($transform) {
+        transform: $transform;
+    }
+    @if ($marginTop) {
+        margin-top: $marginTop;
+    }
+    @if ($marginRight) {
+        margin-right: $marginRight;
+    }
+    @if ($marginBottom) {
+        margin-bottom: $marginBottom;
+    }
+    @if ($marginLeft) {
+        margin-left: $marginLeft;
+    }
+
+    width: $size;
+    height: $size;
+    line-height: $size;
+
+    &:before {
+        width: $size;
+        height: $size;
+        font-size: $size;
+        line-height: $size;
+    }
+
+    // Chrome不支持小于12px的字体，故采用缩放的方式缩小字体
+    @if ($size < 12) {
+        @media all and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: .001dpcm) {
+            @if ($transform) {
+                transform: scale($size / $icon-s) $transform;
+            } @else {
+                transform: scale($size / $icon-s);
+            }
+            @if ($marginTop) {
+                margin-top: $marginTop - ($icon-s - $size) / 2;
+            } @else {
+                margin-top: -($icon-s - $size) / 2;
+            }
+            @if ($marginRight) {
+                margin-right: $marginRight - ($icon-s - $size) / 2;
+            } @else {
+                margin-right: -($icon-s - $size) / 2;
+            }
+            @if ($marginBottom) {
+                margin-bottom: $marginBottom - ($icon-s - $size) / 2;
+            } @else {
+                margin-bottom: -($icon-s - $size) / 2;
+            }
+            @if ($marginLeft) {
+                margin-left: $marginLeft - ($icon-s - $size) / 2;
+            } @else {
+                margin-left: -($icon-s - $size) / 2;
+            }
+
+            width: $icon-s;
+            height: $icon-s;
+            line-height: $icon-s;
+
+            &:before {
+                width: $icon-s;
+                height: $icon-s;
+                font-size: $icon-s;
+                line-height: $icon-s;
+            }
+        }
+    }
+}
+
+@mixin font-face-handler($name, $url) {
+    @if ($name != Roboto) and ($name != "") {
+        @font-face {
+            font-family: "#{$name}";
+            src: url("#{$url}");
+        }
+    }
+}
+
+/// 设置 button 外观颜色
+///
+/// @param {String} $color 字体色
+/// @param {String} $color-hover 鼠标悬浮时的字体色
+/// @param {String} $bg-color 背景色
+/// @param {String} $bg-color-hover 鼠标悬浮时的背景色
+/// @param {String} $border-color 边框色
+/// @param {String} $border-color-hover 鼠标悬浮时的边框色
+@mixin button-color($color, $color-hover, $bg-color: transparent, $bg-color-hover: transparent, $border-color: transparent, $border-color-hover: transparent) {
+    background-color: $bg-color;
+    border-color: $border-color;
+
+    &,
+    &:link,
+    &:visited,
+    &.visited {
+        color: $color;
+    }
+
+    &:focus,
+    &:hover,
+    &.hover,
+    &:active,
+    &.active {
+        color: $color-hover;
+        background-color: $bg-color-hover;
+        border-color: $border-color-hover;
+        text-decoration: none;
+    }
+}
+
+/// 设置 button 大小
+///
+/// @param {Number} $padding 内边距
+/// @param {Number} $height 高度
+/// @param {Number} $font-size 字体大小
+/// @param {Number} $border-width 边框宽度
+@mixin button-size($padding, $height, $font-size, $border-width) {
+    padding: 0 $padding;
+    height: $height;
+    font-size: $font-size;
+    border-width: $border-width;
+}

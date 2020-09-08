@@ -73,6 +73,8 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       originTemplate: '@alifd/scaffold-lite-js',
     };
 
+    ir.packages.forEach((packageInfo) => (packageJson.dependencies[packageInfo.package] = packageInfo.version));
+
     next.chunks.push({
       type: ChunkType.JSON,
       fileType: FileType.JSON,

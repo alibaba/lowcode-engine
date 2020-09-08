@@ -190,13 +190,13 @@ function compatiableReducer(props: any) {
     };
   }
   // 为了能降级到老版本，建议在后期版本去掉以下代码
-  if (isJSExpression(props) && !props.events) {
-    return {
-      type: 'variable',
-      value: props.mock,
-      variable: props.value,
-    }
-  }
+  // if (isJSExpression(props) && !props.events) {
+  //   return {
+  //     type: 'variable',
+  //     value: props.mock,
+  //     variable: props.value,
+  //   }
+  // }
   const newProps: any = {};
   Object.entries<any>(props).forEach(([key, val]) => {
     newProps[key] = compatiableReducer(val);

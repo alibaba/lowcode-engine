@@ -1,0 +1,145 @@
+@import "scss/mixin";
+@import "scss/variable";
+@import "scss/_fading-entrances/_fadeIn.scss";
+@import "scss/_fading-entrances/_fadeInDown.scss";
+@import "scss/_fading-entrances/_fadeInLeft.scss";
+@import "scss/_fading-entrances/_fadeInRight.scss";
+@import "scss/_fading-entrances/_fadeInUp.scss";
+@import "scss/_fading-exits/_fadeOut.scss";
+@import "scss/_fading-exits/_fadeOutDown.scss";
+@import "scss/_fading-exits/_fadeOutLeft.scss";
+@import "scss/_fading-exits/_fadeOutRight.scss";
+@import "scss/_fading-exits/_fadeOutUp.scss";
+@import "scss/_sliding-exits/sliding-exits.scss";
+@import "scss/_sliding-entrances/sliding-entrances.scss";
+@import "scss/_zooming-entrances/_zoomIn.scss";
+@import "scss/_zooming-exits/_zoomOut.scss";
+@import "scss/_expand-entrances/_expandInDown.scss";
+@import "scss/_expand-entrances/_expandInUp.scss";
+@import "scss/_expand-entrances/_withFade.scss";
+@import "scss/_expand-exits/_expandOutUp.scss";
+@import "scss/_expand-exits/_expandOutDown.scss";
+@import "scss/_expand-exits/_withFade.scss";
+@import "scss/_attention-seekers/_pulse.scss";
+
+.fadeIn {
+    @include fadeIn();
+}
+
+.fadeInDown {
+    @include fadeInDown();
+}
+
+.fadeInLeft {
+    @include fadeInLeft();
+}
+
+.fadeInRight {
+    @include fadeInRight();
+}
+
+.fadeInUp {
+    @include fadeInUp();
+}
+
+.fadeOut {
+    @include fadeOut();
+}
+
+.fadeOutDown {
+    @include fadeOutDown();
+}
+
+.fadeOutLeft {
+    @include fadeOutLeft();
+}
+
+.fadeOutRight {
+    @include fadeOutRight();
+}
+
+.fadeOutUp {
+    @include fadeOutUp();
+}
+
+.slideInUp {
+    @include slideInUp();
+}
+
+.slideInDown {
+    @include slideInDown();
+}
+
+.slideInLeft {
+    @include slideInLeft();
+}
+
+.slideInRight {
+    @include slideInRight();
+}
+
+.slideOutUp {
+    @include slideOutUp();
+}
+
+.slideOutRight {
+    @include slideOutRight();
+}
+
+.slideOutLeft {
+    @include slideOutLeft();
+}
+
+.slideOutDown {
+    @include slideOutDown();
+}
+
+.zoomIn {
+    @include zoomIn();
+}
+
+.zoomOut {
+    @include zoomOut();
+}
+
+.expandInDown {
+    @include expandInDown();
+}
+
+.expandOutUp {
+    @include expandOutUp();
+}
+
+.expandInUp {
+    @include expandInUp();
+}
+
+.expandOutDown {
+    @include expandOutDown();
+}
+
+.pulse {
+    @include pulse();
+}
+
+.expand-enter {
+    overflow: hidden;
+}
+
+.expand-enter-active {
+    transition: all .3s ease-out;
+    & > * {
+        @include expandInWithFade();
+    }
+}
+
+.expand-leave {
+    overflow: hidden;
+}
+
+.expand-leave-active {
+    transition: all .2s ease-out;
+    & > * {
+        @include expandOutWithFade();
+    }
+}

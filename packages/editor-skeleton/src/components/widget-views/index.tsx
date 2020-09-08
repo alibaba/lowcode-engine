@@ -264,6 +264,9 @@ export class WidgetView extends Component<{ widget: IWidget }> {
   }
   render() {
     const { widget } = this.props;
-    return <div className={classNames('lc-widget-view-container', { hidden: !widget.visible })}>{widget.body}</div>;
+    if (!widget.visible) {
+      return null;
+    }
+    return widget.body;
   }
 }

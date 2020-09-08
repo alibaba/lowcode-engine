@@ -1,0 +1,26 @@
+@import "../core/index-noreset";
+
+@import "scss/variable";
+@import './scss/menu.scss';
+@import './scss/panel.scss';
+@import './rtl.scss';
+
+#{$time-picker-prefix} {
+    @include box-sizing;
+
+    display: inline-block;
+    width: $s-50;
+
+    &-trigger .#{$css-prefix}input {
+        width: 100%;
+    }
+
+    &-body {
+        overflow: hidden;
+        width: $time-picker-panel-width;
+        border: $popup-local-border-width $popup-local-border-style $time-picker-panel-border-color;
+        border-radius: $time-picker-panel-corner;
+        background: $time-picker-panel-background;
+        box-shadow: $time-picker-panel-shadow;
+    }
+}

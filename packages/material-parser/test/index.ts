@@ -5,10 +5,6 @@ import { getFromFixtures } from './helpers';
 
 const multiExportedComptPath = getFromFixtures('multiple-exported-component');
 const singleExportedComptPath = getFromFixtures('single-exported-component');
-const fusionComptPath = getFromFixtures('fusion-next-component');
-const antdComptPath = getFromFixtures('antd-component');
-const singleExportedComponent = '@ali/demo-biz-test090702@0.0.2';
-const multipleExportedComponent = '@ali/aimake-basic@0.1.0';
 const tsComponent = getFromFixtures('ts-component');
 
 test('materialize single exported component by local', async t => {
@@ -33,28 +29,6 @@ test('materialize multiple exported component by local', async t => {
   t.snapshot(actual);
 });
 
-test.skip('materialize single exported component by online', async t => {
-  const options: IMaterializeOptions = {
-    entry: singleExportedComponent,
-    accesser: 'online',
-  };
-
-  const actual = await parse(options);
-
-  t.snapshot(actual);
-});
-
-test.skip('materialize multiple exported component by online', async t => {
-  const options: IMaterializeOptions = {
-    entry: multipleExportedComponent,
-    accesser: 'online',
-  };
-
-  const actual = await parse(options);
-
-  t.snapshot(actual);
-});
-
 test('ts component by local', async t => {
   const options: IMaterializeOptions = {
     entry: tsComponent,
@@ -66,24 +40,3 @@ test('ts component by local', async t => {
   t.snapshot(actual);
 });
 
-test('fusion next component by local', async t => {
-  const options: IMaterializeOptions = {
-    entry: fusionComptPath,
-    accesser: 'local',
-  };
-
-  const actual = await parse(options);
-
-  t.snapshot(actual);
-});
-
-test('antd component by local', async t => {
-  const options: IMaterializeOptions = {
-    entry: antdComptPath,
-    accesser: 'local',
-  };
-
-  const actual = await parse(options);
-
-  t.snapshot(actual);
-});

@@ -13,7 +13,7 @@ import {
 
 type PluginConfig = {
   fileType: string;
-}
+};
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
   const cfg: PluginConfig = {
@@ -30,9 +30,9 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
 
     if (ir.state) {
       const state = ir.state;
-      const fields = Object.keys(state).map<string>(stateName => {
-        const [isString, value] = generateCompositeType(state[stateName]);
-        return `${stateName}: ${isString ? `'${value}'` : value},`;
+      const fields = Object.keys(state).map<string>((stateName) => {
+        const value = generateCompositeType(state[stateName]);
+        return `${stateName}: ${value},`;
       });
 
       next.chunks.push({

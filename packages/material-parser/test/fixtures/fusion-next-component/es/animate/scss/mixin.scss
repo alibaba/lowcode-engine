@@ -1,0 +1,105 @@
+@charset "UTF-8";
+
+// animate mixins
+// --------------------------------------------------
+
+@mixin count($count: 1) {
+    -webkit-animation-iteration-count: $count;
+    -moz-animation-iteration-count: $count;
+    -ms-animation-iteration-count: $count;
+    -o-animation-iteration-count: $count;
+    animation-iteration-count: $count;
+}
+
+@mixin duration($duration: 1s) {
+    -webkit-animation-duration: $duration;
+    -moz-animation-duration: $duration;
+    -ms-animation-duration: $duration;
+    -o-animation-duration: $duration;
+    animation-duration: $duration;
+}
+
+@mixin delay($delay: .2s) {
+    -webkit-animation-delay: $delay;
+    -moz-animation-delay: $delay;
+    -ms-animation-delay: $delay;
+    -o-animation-delay: $delay;
+    animation-delay: $delay;
+}
+
+@mixin function($function: ease) {
+    -webkit-animation-timing-function: $function;
+    -moz-animation-timing-function: $function;
+    -ms-animation-timing-function: $function;
+    -o-animation-timing-function: $function;
+    animation-timing-function: $function;
+}
+
+@mixin fill-mode($fill: both) {
+    -webkit-animation-fill-mode: $fill;
+    -moz-animation-fill-mode: $fill;
+    -ms-animation-fill-mode: $fill;
+    -o-animation-fill-mode: $fill;
+    animation-fill-mode: $fill;
+}
+
+@mixin visibility($visibility: hidden) {
+    -webkit-backface-visibility: $visibility;
+    -moz-backface-visibility: $visibility;
+    -ms-backface-visibility: $visibility;
+    -o-backface-visibility: $visibility;
+    backface-visibility: $visibility;
+}
+
+@mixin transform($property) {
+    -webkit-transform: $property;
+    -moz-transform: $property;
+    -ms-transform: $property;
+    -o-transform: $property;
+    transform: $property;
+}
+
+@mixin transform-origin($transform-origin: center center) {
+    -webkit-transform-origin: $transform-origin;
+    -moz-transform-origin: $transform-origin;
+    -ms-transform-origin: $transform-origin;
+    -o-transform-origin: $transform-origin;
+    transform-origin: $transform-origin;
+}
+
+@mixin transform-style($transform-style: flat) {
+    -webkit-transform-style: $transform-style;
+    -moz-transform-style: $transform-style;
+    -o-transform-style: $transform-style;
+    transform-style: $transform-style;
+}
+
+@mixin animation-name($animation-name) {
+    -webkit-animation-name: $animation-name;
+    -moz-animation-name: $animation-name;
+    -ms-animation-name: $animation-name;
+    -o-animation-name: $animation-name;
+    animation-name: $animation-name;
+}
+
+@mixin keyframes($animation-name) {
+    @-webkit-keyframes #{$animation-name} {
+        @content;
+    }
+
+    @-moz-keyframes #{$animation-name} {
+        @content;
+    }
+
+    @-ms-keyframes #{$animation-name} {
+        @content;
+    }
+
+    @-o-keyframes #{$animation-name} {
+        @content;
+    }
+
+    @keyframes #{$animation-name} {
+        @content;
+    }
+}

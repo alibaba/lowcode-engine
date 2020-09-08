@@ -1,0 +1,12 @@
+#{$progress-prefix}-circle[dir=rtl] {
+    #{$progress-prefix}-circle-container {
+        transform: scaleX(-1);
+    }
+}
+
+#{$progress-prefix}-line[dir=rtl] {
+    #{$progress-prefix}-line-overlay {
+        left: auto;
+        right: 0;
+    }
+}

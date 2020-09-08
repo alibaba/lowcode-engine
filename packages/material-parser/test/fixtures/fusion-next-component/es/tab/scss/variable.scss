@@ -1,0 +1,397 @@
+@charset "UTF-8";
+
+////
+/// @module tab: 选项卡
+/// @tag Tab
+/// @category component
+/// @family navigation
+/// @varPrefix $tab-
+/// @classPrefix {prefix}-tab
+/// @order {"size/nav scroll":10,"size/nav":11,"size/tab":12,"size/content":13,"statement/normal":10,"statement/normal/nav":100,"statement/normal/tab":101,"statement/normal/content":102,"statement/hover":11,"statement/hover/nav":110,"statement/hover/tab":111,"statement/selected":12,"statement/selected/nav":120,"statement/selected/tab":121,"statement/disabled":13,"statement/disabled/nav":130,"statement/disabled/tab":131}
+////
+
+// tab variables
+// --------------------------------------------------
+
+$tab-prefix: '.' + $css-prefix + 'tabs';
+
+// animation timing function
+$ease-out-quint: cubic-bezier(.23, 1, .32, 1);
+
+// Size
+
+/// padding (r)
+/// @namespace size/nav scroll
+$tab-nav-scroll-padding-right-m: $s-15 !default;
+
+/// padding (r)
+/// @namespace size/nav scroll
+$tab-nav-scroll-padding-right-s: $s-14 !default;
+
+/// icon
+/// @namespace size/tab
+$tab-nav-tab-icon-size-m: $icon-s !default;
+
+/// icon
+/// @namespace size/tab
+$tab-nav-tab-icon-size-s: $icon-xs !default;
+
+/// icon
+/// @namespace size/close icon
+$tab-nav-close-icon-size-m: $icon-xs !default;
+
+/// icon
+/// @namespace size/close cion
+$tab-nav-close-icon-size-s: $icon-xxs !default;
+
+/// padding (l)
+/// @namespace size/close icon
+$tab-nav-close-icon-padding-l-size-m: $s-2 !default;
+
+/// padding (l)
+/// @namespace size/close icon
+$tab-nav-close-icon-padding-l-size-s: $s-2 !default;
+
+/// arrow left offset (r)
+/// @namespace size/nav
+$tab-nav-arrow-left-positon-right: $s-8 !default;
+
+/// arrow right offset (r)
+/// @namespace size/nav
+$tab-nav-arrow-right-positon-right: $s-2 !default;
+
+/// arrow down offset (r)
+/// @namespace size/nav
+$tab-nav-arrow-down-positon-right: $s-2 !default;
+
+/// padding (t, b)
+/// @namespace size/tab
+$tab-item-padding-tb-size-m: $s-3 !default;
+
+/// padding (t, b)
+/// @namespace size/tab
+$tab-item-padding-tb-size-s: $s-2 !default;
+
+/// padding (l, r)
+/// @namespace size/tab
+$tab-item-padding-lr-size-m: $s-4 !default;
+
+/// padding (l, r)
+/// @namespace size/tab
+$tab-item-padding-lr-size-s: $s-3 !default;
+
+/// text
+/// @namespace size/tab
+$tab-item-text-size-m: $font-size-body-1 !default;
+
+/// text
+/// @namespace size/tab
+$tab-item-text-size-s: $font-size-caption !default;
+
+/// icon
+/// @namespace statement/normal/close icon
+$tab-close-icon-color: $color-text1-3 !default;
+
+/// icon
+/// @namespace statement/hover/close icon
+$tab-close-icon-color-hover: $color-text1-4 !default;
+
+/// icon
+/// @namespace statement/selected/close icon
+$tab-close-icon-color-selected: $color-brand1-6 !default;
+
+/// icon
+/// @namespace statement/disabled/close icon
+$tab-close-icon-color-disabled: $color-line1-2 !default;
+
+/// font weight
+/// @namespace statement/selected/tab
+$tab-item-font-weight-selected: $font-weight-2 !default;
+
+// Common
+// ----------
+
+/// nav icon
+/// @namespace statement/normal/nav
+$tab-nav-arrow-color-normal: $color-text1-3 !default;
+
+/// nav icon
+/// @namespace statement/hover/nav
+$tab-nav-arrow-color-hover: $color-text1-4 !default;
+
+/// nav icon
+/// @namespace statement/disabled/nav
+$tab-nav-arrow-color-disabled: $color-line1-2 !default;
+
+// Shape: Pure
+// -----------------
+
+// Size
+
+/// divider
+/// @namespace size/nav
+$tab-pure-divider-line-width: $line-1 !default;
+
+/// active line
+/// @namespace size/tab
+$tab-pure-ink-bar-width: $line-2 !default;
+
+// Statement
+
+/// text
+/// @namespace statement/normal/tab
+$tab-pure-text-color-normal: $color-text1-3 !default;
+
+/// background
+/// @namespace statement/normal/tab
+$tab-pure-bg-color: $color-transparent !default;
+
+/// text
+/// @namespace statement/hover/tab
+$tab-pure-text-color-hover: $color-text1-4 !default;
+
+/// text
+/// @namespace statement/selected/tab
+$tab-pure-text-color-selected: $color-brand1-6 !default;
+
+/// text
+/// @namespace statement/disabled/tab
+$tab-pure-text-color-disabled: $color-line1-2 !default;
+
+/// active line
+/// @namespace statement/selected/tab
+$tab-pure-ink-bar-color: $color-brand1-6 !default;
+
+/// divider color
+/// @namespace statement/normal/nav
+$tab-pure-divider-border-color: $color-line1-2 !default;
+
+$tab-pure-divider-border-style: $line-solid !default;
+
+/// divider shadow
+/// @namespace statement/normal/nav
+$tab-pure-divider-shadow: $shadow-zero !default;
+
+// unconfigurable
+// divider line
+$tab-pure-divider-line: $tab-pure-divider-border-style $tab-pure-divider-line-width $tab-pure-divider-border-color;
+
+// Shape: Wrapped
+// -----------------
+
+/// border style
+/// @namespace size/tab
+$tab-wrapped-border-line-style: $line-solid !default;
+
+/// border width (active)
+/// @namespace size/tab
+$tab-wrapped-border-line-width: $line-1 !default;
+
+/// border width (normal)
+/// @namespace size/tab
+$tab-wrapped-border-side-width: $line-1 !default;
+
+/// corner
+/// @namespace size/tab
+$tab-wrapped-tab-corner-radius: $corner-1 !default;
+
+// unconfigurable
+$tab-wrapped-tab-top-border-radius: $tab-wrapped-tab-corner-radius $tab-wrapped-tab-corner-radius 0 0;
+
+// unconfigurable
+$tab-wrapped-tab-bottom-border-radius: 0 0 $tab-wrapped-tab-corner-radius $tab-wrapped-tab-corner-radius;
+
+// unconfigurable
+$tab-wrapped-tab-left-border-radius: $tab-wrapped-tab-corner-radius 0 0 $tab-wrapped-tab-corner-radius;
+
+// unconfigurable
+$tab-wrapped-tab-right-border-radius: 0 $tab-wrapped-tab-corner-radius $tab-wrapped-tab-corner-radius 0;
+
+/// margin (r)
+/// @namespace size/tab
+$tab-wrapped-tab-margin-right: $s-1 !default;
+
+/// margin (b)
+/// @namespace size/tab
+$tab-wrapped-tab-margin-bottom: $s-1 !default;
+
+/// active line
+/// @namespace size/tab
+$tab-wrapped-ink-bar-width: $line-2 !default;
+
+/// background
+/// @namespace statement/normal/nav
+$tab-wrapped-bar-bg-color: $color-transparent !default;
+
+/// active line
+/// @namespace statement/selected/tab
+$tab-wrapped-ink-bar-color: $color-brand1-6 !default;
+
+/// border
+/// @namespace statement/selected/tab
+$tab-wrapped-nav-item-border-color-active: $color-brand1-6 !default;
+
+/// border
+/// @namespace statement/normal/tab
+$tab-wrapped-border-line-color: $color-line1-2 !default;
+
+// unconfigurable
+$tab-wrapped-bar-border: $tab-wrapped-border-line-style $tab-wrapped-border-line-width $tab-wrapped-border-line-color;
+
+/// border width
+/// @namespace size/content
+$tab-wrapped-content-border-line-width: $line-1 !default;
+
+/// border style
+/// @namespace statement/normal/content
+$tab-wrapped-content-border-line-style: $line-solid !default;
+
+/// border
+/// @namespace statement/normal/content
+$tab-wrapped-content-border-line-color: $color-line1-2 !default;
+
+// content border - unconfigurable
+$tab-wrapped-content-border: $tab-wrapped-content-border-line-width $tab-wrapped-content-border-line-style $tab-wrapped-border-line-color;
+
+/// text
+/// @namespace statement/normal/tab
+$tab-wrapped-text-color: $color-text1-3 !default;
+
+/// text
+/// @namespace statement/hover/tab
+$tab-wrapped-text-color-hover: $color-text1-4 !default;
+
+/// background
+/// @namespace statement/normal/tab
+$tab-wrapped-bg-color: $color-fill1-2 !default;
+
+/// background
+/// @namespace statement/hover/tab
+$tab-wrapped-bg-color-hover: $color-fill1-3 !default;
+
+/// border
+/// @namespace statement/hover/tab
+$tab-wrapped-border-line-color-hover: $color-line1-3 !default;
+
+/// border
+/// @namespace statement/normal/tab
+$tab-wrapped-border-line-color: $color-line1-2 !default;
+
+/// text
+/// @namespace statement/selected/tab
+$tab-wrapped-text-color-selected: $color-brand1-6 !default;
+
+/// text
+/// @namespace statement/disabled/tab
+$tab-wrapped-text-color-disabled: $color-text1-1 !default;
+
+/// background
+/// @namespace statement/selected/tab
+$tab-wrapped-bg-color-selected: $color-white !default;
+
+/// background
+/// @namespace statement/disabled/tab
+$tab-wrapped-bg-color-disabled: $color-fill1-1 !default;
+
+// unconfigurable
+$tab-wrapped-content-position-top: $tab-wrapped-border-line-width;
+
+// unconfigurable
+$tab-wrapped-content-position-right: $tab-wrapped-border-line-width;
+
+// Shape: Capsule
+// -----------------
+
+/// text
+/// @namespace statement/normal/tab
+$tab-capsule-text-color: $color-text1-4 !default;
+
+/// text
+/// @namespace statement/hover/tab
+$tab-capsule-text-color-hover: $color-text1-4 !default;
+
+/// text
+/// @namespace statement/selected/tab
+$tab-capsule-text-color-selected: $color-white !default;
+
+/// text
+/// @namespace statement/disabled/tab
+$tab-capsule-text-color-disabled: $color-text1-1 !default;
+
+/// background
+/// @namespace statement/normal/tab
+$tab-capsule-bg-color: $color-fill1-2 !default;
+
+/// background
+/// @namespace statement/hover/tab
+$tab-capsule-bg-color-hover: $color-fill1-3 !default;
+
+/// background
+/// @namespace statement/selected/tab
+$tab-capsule-bg-color-selected: $color-brand1-6 !default;
+
+/// background
+/// @namespace statement/disabled/tab
+$tab-capsule-bg-color-disabled: $color-fill1-1 !default;
+
+/// border
+/// @namespace statement/normal/tab
+$tab-capsule-tab-border-line-color: $color-line1-3 !default;
+
+/// border
+/// @namespace statement/hover/tab
+$tab-capsule-tab-border-line-color-hover: $color-line1-3 !default;
+
+/// border
+/// @namespace statement/selected/tab
+$tab-capsule-tab-border-line-color-active: $color-brand1-6 !default;
+
+/// border
+/// @namespace statement/disabled/tab
+$tab-capsule-tab-border-line-color-disabled: $color-line1-1 !default;
+
+/// corner radius
+/// @namespace size/nav
+$tab-capsule-corner-radius: $corner-1 !default;
+
+/// border
+/// @namespace size/nav
+$tab-capsule-tab-border-line-width: $line-1 !default;
+
+/// border style
+/// @namespace statement/normal/tab
+$tab-capsule-tab-border-line-style: $line-solid !default;
+
+// unconfigurable
+$tab-capsule-tab-border: $tab-capsule-tab-border-line-width $tab-capsule-tab-border-line-style $tab-capsule-tab-border-line-color;
+
+// Shape: Text
+// -----------------
+
+/// separator width
+/// @namespace size/tab
+$tab-text-item-sep-width: $line-1 !default;
+
+/// separator height
+/// @namespace size/tab
+$tab-text-item-sep-height: $s-2 !default;
+
+/// separator
+/// @namespace statement/normal/tab
+$tab-text-item-sep-color: $color-line1-2 !default;
+
+/// text
+/// @namespace statement/normal/tab
+$tab-text-text-color-normal: $color-text1-3 !default;
+
+/// text
+/// @namespace statement/hover/tab
+$tab-text-text-color-hover: $color-text1-4 !default;
+
+/// text
+/// @namespace statement/selected/tab
+$tab-text-text-color-selected: $color-brand1-6 !default;
+
+/// text
+/// @namespace statement/disabled/tab
+$tab-text-text-color-disabled: $color-text1-1 !default;

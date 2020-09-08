@@ -1,0 +1,17 @@
+@charset "UTF-8";
+
+// tab placeholders
+// --------------------------------------------------
+
+// why placeholders? please read:
+// http://krasimirtsonev.com/blog/article/SASS-mixins-extends-and-placeholders-differences-use-cases
+
+%motion-common {
+    animation-duration: .4s;
+    animation-fill-mode: both;
+}
+
+%motion-common-leave {
+    animation-duration: .4s;
+    animation-fill-mode: both;
+}

@@ -1,0 +1,63 @@
+@charset "UTF-8";
+
+// loading mixins
+// --------------------------------------------------
+
+@mixin loading-fusion(
+    $name: top,
+    $oldsize: 10px,
+    $val: 19px,
+    $newsize: 12px
+) {
+
+    25% {
+        @if $name == top {
+            top: 0;
+        } @else if $name == left {
+            left: 0;
+        } @else if $name == bottom {
+            bottom: 0;
+        } @else if $name == right {
+            right: 0;
+        }
+    }
+    45%,
+    50% {
+        @if $name == top {
+            top: $val;
+            height: $newsize;
+            width: $newsize;
+        } @else if $name == left {
+            left: $val;
+            width: $newsize;
+            height: $newsize;
+        } @else if $name == bottom {
+            bottom: $val;
+            height: $newsize;
+            width: $newsize;
+        } @else if $name == right {
+            right: $val;
+            width: $newsize;
+            height: $newsize;
+        }
+    }
+    90% {
+        @if $name == top {
+            top: 0;
+            height: $oldsize;
+            width: $oldsize;
+        } @else if $name == left {
+            left: 0;
+            height: $oldsize;
+            width: $oldsize;
+        } @else if $name == bottom {
+            bottom: 0;
+            height: $oldsize;
+            width: $oldsize;
+        } @else if $name == right {
+            right: 0;
+            height: $oldsize;
+            width: $oldsize;
+        }
+    }
+}
