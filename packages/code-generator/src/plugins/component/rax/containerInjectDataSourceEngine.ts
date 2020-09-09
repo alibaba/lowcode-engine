@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 import changeCase from 'change-case';
 import { CLASS_DEFINE_CHUNK_NAME, COMMON_CHUNK_NAME } from '../../../const/generator';
 
