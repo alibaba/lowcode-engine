@@ -1,5 +1,7 @@
 import { Component, ReactNode } from 'react';
-import ComponentList, { AdditiveType } from "@ali/ve-component-list";
+import { Tab } from '@alifd/next';
+import ComponentList from "./components/component-list";
+import { AdditiveType } from "./components/base"
 import { PluginProps } from '@ali/lowcode-types';
 import { Designer } from '@ali/lowcode-designer';
 
@@ -7,6 +9,7 @@ import './index.scss';
 
 export interface IState {
   metaData: object[];
+  bizComponents: object[];
 }
 
 export default class ComponentListPlugin extends Component<PluginProps, IState> {
@@ -18,6 +21,7 @@ export default class ComponentListPlugin extends Component<PluginProps, IState> 
     super(props);
     this.state = {
       metaData: [],
+      bizComponents: [],
     };
   }
 
@@ -61,9 +65,11 @@ export default class ComponentListPlugin extends Component<PluginProps, IState> 
     const { editor } = this.props;
     const assets = editor.get('assets') || {};
     const metaData = this.transformMetaData(assets.componentList);
+    const bizComponents = this.transformMetaData(assets.bizComponentList);
 
     this.setState({
       metaData,
+      bizComponents,
     });
   };
 
@@ -126,15 +132,27 @@ export default class ComponentListPlugin extends Component<PluginProps, IState> 
   }
 
   render(): ReactNode {
-    const { metaData } = this.state;
+    const { metaData, bizComponents } = this.state;
     return (
       <div className="lowcode-component-list">
-        <ComponentList
-          key="component-pane"
-          metaData={metaData}
-          registerAdditive={(shell: Element | null) => this.registerAdditive(shell)}
-          enableSearch
-        />
+        <Tab>
+            <Tab.Item title="基础组件" key="base-components">
+                <ComponentList
+                  key="component-pane"
+                  metaData={metaData}
+                  registerAdditive={(shell: Element | null) => this.registerAdditive(shell)}
+                  enableSearch
+                />
+            </Tab.Item>
+            <Tab.Item title="业务组件" key="biz-components">
+              <ComponentList
+                key="component-pane"
+                metaData={bizComponents}
+                registerAdditive={(shell: Element | null) => this.registerAdditive(shell)}
+                enableSearch
+              />
+            </Tab.Item>
+        </Tab>
       </div>
     );
   }

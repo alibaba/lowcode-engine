@@ -1,0 +1,130 @@
+@import "~@ali/ve-less-variables/index.less";
+
+.ve-card-wrapper {
+  width: 320px;
+  max-height: 360px;
+  overflow: auto;
+  justify-content: center;
+
+  &.ve-card-wrapper-loading {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .ve-card-top {
+    height: 186px;
+    background: rgba(31, 56, 88, 0.1);
+    padding: 16px;
+
+    .ve-card-title {
+      display: flex;
+      align-items: center;
+      padding-bottom: 12px;
+      position: relative;
+      height: 31px;
+      color: rgba(0, 0, 0, 0.8);
+
+      .title {
+        line-height: 22px;
+        font-size: 16px;
+      }
+
+      .version {
+        margin-left: 8px;
+        font-size: 12px;
+        line-height: 22px;
+        color: rgba(31, 56, 88, 0.4);
+      }
+    }
+
+    .ve-card-image-wrapper {
+      background-color: #fff;
+      .ve-card-image {
+        max-width: 100%;
+        height: 120px;
+        margin: 0 auto;
+        display: block;
+        padding: 10px;
+      }
+    }
+  }
+
+  .ve-card-bottom {
+    padding: 8px 16px 16px 16px;
+    .ve-card-description {
+      user-select: text;
+      text-align: left;
+      line-height: 18px;
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.6);
+      letter-spacing: 0;
+      line-height: 18px;
+      width: 280px;
+
+      p {
+        margin-bottom: 8px;
+      }
+
+      p:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .ve-operation-container {
+      margin-top: 12px;
+      position: relative;
+      .actions {
+        margin-top: 16px;
+      }
+    }
+  }
+
+  .ve-operation-item {
+    color: @brand-color-1;
+    cursor: pointer;
+    margin-right: 8px;
+  }
+
+  .ve-operation-delete {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  .ve-card-more-operation {
+    display: flex;
+    justify-content: space-between;
+    > a {
+      cursor: pointer;
+    }
+  }
+
+  .ve-loading-icon {
+    animation: spining 0.9s infinite linear;
+  }
+  .ve-loading-content {
+    padding: 10px;
+    text-align: center;
+  }
+
+  .ve-card-action {
+    padding: 0 8px !important;
+    margin-right: 8px;
+  }
+}
+
+.ve-component-list {
+  .vu-layer {
+    border-radius: 4px !important;
+    .vu-layer-content {
+      padding-top: 0 !important;
+    }
+  }
+
+  .vu-layer .vu-layer-close {
+    right: 9px !important;
+    top: 9px !important;
+  }
+}
