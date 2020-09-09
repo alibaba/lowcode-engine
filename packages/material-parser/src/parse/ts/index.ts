@@ -72,6 +72,7 @@ function getDocgenTypeHelper(
     }[] = symbolArr.map((prop) => {
       const propType = checker.getTypeOfSymbolAtLocation(
         prop,
+        // @ts-ignore
         prop.valueDeclaration || (prop.declarations && prop.declarations[0]) || {},
       );
       return {

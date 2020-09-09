@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Component, createElement, forwardRef } from 'rax';
 import PropTypes from 'prop-types';
 import { AppHelper } from '@ali/lowcode-utils';

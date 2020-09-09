@@ -4,7 +4,8 @@
     "target": "es6",
     "module": "commonjs",
     "rootDir": "src",
-    "outDir": "lib"
+    "outDir": "lib",
+    "strict": false
   },
   "include": ["src/**/*"],
   "exclude": ["schemas"]

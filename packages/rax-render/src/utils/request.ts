@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import 'whatwg-fetch';
 import fetchMtop from '@ali/lib-mtop';
 import fetchJsonp from 'fetch-jsonp';

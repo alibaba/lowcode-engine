@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable */
 import { Component, createElement } from 'rax';
 import PropTypes from 'prop-types';

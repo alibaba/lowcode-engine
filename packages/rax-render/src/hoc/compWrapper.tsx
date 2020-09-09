@@ -1,7 +1,9 @@
+// @ts-nocheck
+
 import { createElement, Component } from 'rax';
 
 export default function (Comp) {
-  class compWrapper extends Component {
+  return class CompWrapper extends Component {
     constructor(props, context) {
       super(props, context);
     }
@@ -12,6 +14,4 @@ export default function (Comp) {
       });
     }
   }
-
-  return compWrapper;
 }

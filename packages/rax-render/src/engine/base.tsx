@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Component, createElement } from 'rax';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
