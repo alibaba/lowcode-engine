@@ -41,16 +41,17 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       const requestHandlersMap = {} as Record<string, JSExpression>;
 
       dataSourceItems.forEach((ds) => {
-        if (!(ds.type in requestHandlersMap) && ds.type !== 'custom') {
-          const handlerFactoryName = '__$$create' + changeCase.pascal(ds.type) + 'RequestHandler';
+        const dsType = ds.type || 'fetch';
+        if (!(dsType in requestHandlersMap) && dsType !== 'custom') {
+          const handlerFactoryName = '__$$create' + changeCase.pascal(dsType) + 'RequestHandler';
 
-          requestHandlersMap[ds.type] = {
+          requestHandlersMap[dsType] = {
             type: 'JSExpression',
-            value: handlerFactoryName + (ds.type === 'urlParams' ? '(this.props.location.search)' : '()'),
+            value: handlerFactoryName + (dsType === 'urlParams' ? '(this.props.location.search)' : '()'),
           };
 
-          const handlerFactoryExportName = `create${changeCase.pascal(ds.type)}Handler`;
-          const handlerPkgName = `@ali/lowcode-datasource-${changeCase.kebab(ds.type)}-handler`;
+          const handlerFactoryExportName = `create${changeCase.pascal(dsType)}Handler`;
+          const handlerPkgName = `@ali/lowcode-datasource-${changeCase.kebab(dsType)}-handler`;
 
           next.chunks.push({
             type: ChunkType.STRING,
