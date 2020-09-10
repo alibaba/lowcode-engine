@@ -22,8 +22,6 @@ interface BasicSection {
 
 const Codeout = ({ editor }: PluginProps) => {
   const handleSaveClick = () => {
-    debugger;
-
     const schema = editor.get('designer').project.getSchema();
     console.log(schema);
 
