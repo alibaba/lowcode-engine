@@ -167,7 +167,6 @@ class Renderer extends Component<{
     const { container } = documentInstance;
     const { designMode, device } = container;
     const { rendererContainer: renderer } = this.props;
-    debugger;
     return (
       <RaxEngine
         schema={documentInstance.schema}

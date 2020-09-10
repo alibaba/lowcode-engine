@@ -74,7 +74,6 @@ export class Project {
       ...schema,
     };
     this.config = schema?.config;
-    debugger;
 
     if (autoOpen) {
       if (autoOpen === true) {
