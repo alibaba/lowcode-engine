@@ -21,7 +21,7 @@ function getText(node: DocNode, prop: string) {
 
 export function liveEditingRule(target: EditingTarget) {
   // for vision components specific
-  const { node, rootElement, event } = target;
+  const { node, event } = target;
 
   const targetElement = event.target as HTMLElement;
 
@@ -53,7 +53,7 @@ function equalText(v: any, innerText: string) {
 
 export const liveEditingSaveHander: SaveHandler = {
   condition: (prop) => {
-    const v = prop.getValue();
+    // const v = prop.getValue();
     return prop.type === 'expression'; // || isI18nData(v);
   },
   onSaveContent: (content, prop) => {
