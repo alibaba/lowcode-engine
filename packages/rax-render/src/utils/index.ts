@@ -15,9 +15,8 @@ import _debounce from 'lodash/debounce';
 import _serialize from 'serialize-javascript';
 import * as _jsonuri from 'jsonuri';
 import IntlMessageFormat from 'intl-messageformat';
-import * as fs from 'fs-extra';
 
-const sdkVersion = fs.readJSONSync(path.join(__dirname, '..', '..', 'package.json'));
+const sdkVersion = (require('../../package.json')).version;
 window.sdkVersion = sdkVersion;
 
 export const moment = _moment;
