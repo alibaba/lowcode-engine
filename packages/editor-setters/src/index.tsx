@@ -55,7 +55,7 @@ export const DateRangeSetter = DatePicker.RangePicker;
 
 export { ExpressionSetter, EventsSetter, JsonSetter, IconSetter };
 
-// eslint-disable-next-line rule
+// eslint-disable-next-line react/no-multi-comp
 class StringDateSetter extends Component {
   render() {
     const { onChange } = this.props;
@@ -69,7 +69,7 @@ class StringDateSetter extends Component {
   }
 }
 
-// eslint-disable-next-line rule
+// eslint-disable-next-line react/no-multi-comp
 class StringTimePicker extends Component {
   render() {
     const { onChange } = this.props;

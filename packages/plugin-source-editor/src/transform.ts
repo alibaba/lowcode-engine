@@ -4,10 +4,10 @@ const LIFECYCLES_FUNCTION_MAP = {
 
 
 const transfrom = {
-  schema2Code(schema: Object) {
+  schema2Code(schema) {
     const componentSchema = schema.componentsTree[0];
     const code =
-`export default class {
+      `export default class {
   ${initStateCode(componentSchema)}
   ${initLifeCycleCode(componentSchema)}
   ${initMethodsCode(componentSchema)}
@@ -20,12 +20,14 @@ const transfrom = {
     const newCode = code.replace(/export default class/, 'class A');
     let A; let a;
     try {
-      A = eval(`(${newCode })`);
+      // eslint-disable-next-line no-eval
+      A = eval(`(${newCode})`);
       a = new A();
     } catch (e) {
       return '';
     }
 
+    // eslint-disable-next-line no-proto
     const functionNameList = Object.getOwnPropertyNames(a.__proto__);
 
     const functionMap = {};
@@ -37,6 +39,7 @@ const transfrom = {
           functionMap[functionName] = functionCode;
         }
       }
+      return functionName;
     });
 
     if (a.state) {
@@ -47,7 +50,7 @@ const transfrom = {
     return functionMap;
   },
 
-  getNewFunctionCode(functionName:string) {
+  getNewFunctionCode(functionName: string) {
     return `\n\t${functionName}(){\n\t}\n`;
   },
 
@@ -57,29 +60,34 @@ const transfrom = {
     for (const key in functionMap) {
       if (key == 'state') {
         pageNode.state = functionMap[key];
-      } else {
-        // 判断是否属于lifeCycles节点
-        if (LIFECYCLES_FUNCTION_MAP.react.indexOf(key) >= 0) {
-          // 判断有没有lifecycles节点
-          if (!pageNode.lifeCycles) {
-            pageNode.lifeCycles = {};
-          } else {
-            pageNode.lifeCycles[key] = {
-              type: 'JSFunction',
-              value: functionMap[key],
-            };
-          }
+      } else if (LIFECYCLES_FUNCTION_MAP.react.indexOf(key) >= 0) {
+        // // 判断是否属于lifeCycles节点
+        // if (LIFECYCLES_FUNCTION_MAP.react.indexOf(key) >= 0) {
+        // 判断有没有lifecycles节点
+        if (!pageNode.lifeCycles) {
+          pageNode.lifeCycles = {};
         } else {
-          // methods节点
-          if (!pageNode.methods) {
-            pageNode.methods = {};
-          } else {
-            pageNode.methods[key] = {
-              type: 'JSFunction',
-              value: functionMap[key],
-            };
-          }
+          pageNode.lifeCycles[key] = {
+            type: 'JSFunction',
+            value: functionMap[key],
+          };
         }
+      } else if (!pageNode.methods) {
+        // methods节点
+        pageNode.methods = {};
+        // if (!pageNode.methods) {
+        //   pageNode.methods = {};
+        // } else {
+        //   pageNode.methods[key] = {
+        //     type: 'JSFunction',
+        //     value: functionMap[key],
+        //   };
+        // }
+      } else {
+        pageNode.methods[key] = {
+          type: 'JSFunction',
+          value: functionMap[key],
+        };
       }
     }
 
@@ -88,7 +96,7 @@ const transfrom = {
 };
 
 
-function initStateCode(componentSchema:Object) {
+function initStateCode(componentSchema) {
   if (componentSchema.state) {
     return `state = ${JSON.stringify(componentSchema.state)}`;
   }
@@ -96,7 +104,7 @@ function initStateCode(componentSchema:Object) {
   return '';
 }
 
-function initLifeCycleCode(componentSchema: Object) {
+function initLifeCycleCode(componentSchema) {
   if (componentSchema.lifeCycles) {
     const { lifeCycles } = componentSchema;
     const codeList = [];
@@ -111,7 +119,7 @@ function initLifeCycleCode(componentSchema: Object) {
   }
 }
 
-function initMethodsCode(componentSchema: Object) {
+function initMethodsCode(componentSchema) {
   if (componentSchema.methods) {
     const { methods } = componentSchema;
     const codeList = [];
@@ -126,7 +134,7 @@ function initMethodsCode(componentSchema: Object) {
   }
 }
 
-function createFunctionCode(functionName: string, functionNode: Object) {
+function createFunctionCode(functionName: string, functionNode) {
   if (functionNode.type === 'JSExpression' || functionNode.type === 'JSFunction') {
     let functionCode = functionNode.value;
     functionCode = functionCode.replace(/function/, functionName);
