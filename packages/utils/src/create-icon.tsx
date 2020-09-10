@@ -5,7 +5,7 @@ import { isReactComponent } from './is-react';
 
 const URL_RE = /^(https?:)\/\//i;
 
-export function createIcon(icon?: IconType | null, props?: object): ReactNode {
+export function createIcon(icon?: IconType | null, props?: Record<string, unknown>): ReactNode {
   if (!icon) {
     return null;
   }

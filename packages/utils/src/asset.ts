@@ -100,7 +100,11 @@ export class StylePoint {
 
   private placeholder: Element | Text;
 
-  constructor(readonly level: number, readonly id?: string) {
+  readonly level: number;
+
+  readonly id: string;
+
+  constructor(level: number, id?: string) {
     let placeholder: any;
     if (id) {
       placeholder = document.head.querySelector(`style[data-id="${id}"]`);
