@@ -37,14 +37,13 @@ export default class Mixed extends PureComponent {
 
   typeMap: any;
 
-  i18n: (key: any, values?: {}) => string | void | Array<string | void>;
+  i18n: (key: any, values) => string | void | Array<string | void>;
 
-  constructor(props: Readonly<{}>) {
+  constructor(props: Readonly) {
     super(props);
     const type = props.defaultType; // judgeTypeHandler(props, {});
     this.i18n = generateI18n(props.locale, props.messages);
     this.state = {
-      preType: type,
       type,
     };
   }
@@ -115,6 +114,7 @@ export default class Mixed extends PureComponent {
       if (isTwoType) {
         moreBtnNode = triggerNode;
       } else {
+        // eslint-disable-next-line @typescript-eslint/ban-types
         const MenuItems: {} | null | undefined = [];
         realTypes.map((type) => {
           if (this.typeMap[type]) {
@@ -126,6 +126,7 @@ export default class Mixed extends PureComponent {
               }),
             );
           }
+          return type;
         });
         const MenuNode = (
           <Menu

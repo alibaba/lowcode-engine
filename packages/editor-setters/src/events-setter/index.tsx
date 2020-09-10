@@ -1,10 +1,10 @@
-import { Component, isValidElement, ReactElement, ReactNode } from 'react';
-import { Radio, Menu, Table, Icon, Dialog } from '@alifd/next';
+import { Component } from 'react';
+import { Radio, Menu, Table, Icon } from '@alifd/next';
 import nativeEvents from './native-events';
 
 import './index.scss';
 
-const { SubMenu, Item, Group, Divider } = Menu;
+const { Item, Group } = Menu;
 const RadioGroup = Radio.Group;
 
 const EVENT_CONTENTS = {
@@ -26,14 +26,12 @@ export default class EventsSetter extends Component<{
   onChange: (eventList: any[]) => void;
 }> {
   state = {
-    showEventList: false,
     eventBtns: [],
     eventList: [],
     selectType: null,
     nativeEventList: [],
     lifeCycleEventList: [],
     eventDataList: (this.props?.value?.eventDataList ? this.props.value.eventDataList : this.props?.value) || [],
-    relatedEventName: '',
   };
 
   // constructor (){
@@ -58,7 +56,7 @@ export default class EventsSetter extends Component<{
   //   return null;
   // }
 
-  private bindEventName:string;
+  private bindEventName: string;
 
   componentDidMount() {
     console.log(this.state.eventDataList);
@@ -87,6 +85,8 @@ export default class EventsSetter extends Component<{
       if (item.type === DEFINITION_EVENT_TYPE.EVENTS) {
         isCustom = true;
       }
+
+      return item;
     });
 
     if (isRoot) {
@@ -145,6 +145,8 @@ export default class EventsSetter extends Component<{
           lifeCycleEventList: item.list,
         });
       }
+
+      return item;
     });
 
     if (nativeEventList.length == 0) {
@@ -167,7 +169,11 @@ export default class EventsSetter extends Component<{
           if (item.name === eventDataItem.name) {
             item.disabled = true;
           }
+
+          return eventDataItem;
         });
+
+        return item;
       });
     } else if (eventType === DEFINITION_EVENT_TYPE.NATIVE_EVENTS) {
       eventDataList.map(eventDataItem => {
@@ -178,8 +184,12 @@ export default class EventsSetter extends Component<{
             } else {
               item.disabled = false;
             }
+            return eventItem;
           });
+          return item;
         });
+
+        return eventDataItem;
       });
     }
   };
@@ -239,12 +249,14 @@ export default class EventsSetter extends Component<{
       if (item.name === eventName) {
         item.disabled = !unDisabled;
       }
+      return item;
     });
 
     lifeCycleEventList.map(item => {
       if (item.name === eventName) {
         item.disabled = !unDisabled;
       }
+      return item;
     });
 
     nativeEventList.map(item => {
@@ -252,7 +264,10 @@ export default class EventsSetter extends Component<{
         if (itemData.name === eventName) {
           itemData.disabled = !unDisabled;
         }
+        return itemData;
       });
+
+      return item;
     });
   };
 
@@ -279,7 +294,7 @@ export default class EventsSetter extends Component<{
     this.openDialog(eventName);
   };
 
-  onRelatedEventNameClick = (eventName:string) => {
+  onRelatedEventNameClick = (eventName: string) => {
     const { editor } = this.props.field;
 
     editor.get('skeleton').getPanel('sourceEditor').show();
@@ -319,6 +334,8 @@ export default class EventsSetter extends Component<{
       if (item.name === eventName) {
         eventDataList.splice(index, 1);
       }
+
+      return item;
     });
 
     this.setState({
@@ -336,13 +353,14 @@ export default class EventsSetter extends Component<{
       if (item.name == bindEventName) {
         paramStr = item.paramStr;
       }
+      return item;
     });
     this.bindEventName = bindEventName;
     editor.emit('eventBindDialog.openDialog', bindEventName, SETTER_NAME, paramStr);
   };
 
 
-  bindEvent = (relatedEventName: string, paramStr:string) => {
+  bindEvent = (relatedEventName: string, paramStr: string) => {
     const { eventDataList, eventList } = this.state;
     eventDataList.map(item => {
       if (item.name === this.bindEventName) {
@@ -351,6 +369,8 @@ export default class EventsSetter extends Component<{
           item.paramStr = paramStr;
         }
       }
+
+      return item;
     });
 
     this.setState({
@@ -372,7 +392,6 @@ export default class EventsSetter extends Component<{
       selectType,
       eventDataList,
     } = this.state;
-    const { editor } = this.props.field;
     const showEventList =
       lifeCycleEventList.length > 0 ? lifeCycleEventList : eventList;
     return (
@@ -380,7 +399,7 @@ export default class EventsSetter extends Component<{
 
         <div className="event-title">
           {
-             eventBtns.length > 1 ? <span>点击选择事件类型</span> : <span>点击绑定事件</span>
+            eventBtns.length > 1 ? <span>点击选择事件类型</span> : <span>点击绑定事件</span>
           }
         </div>
 
@@ -398,7 +417,7 @@ export default class EventsSetter extends Component<{
             className="event-menu"
             onItemClick={this.onEventMenuClick}
           >
-            {showEventList.map((item, index) => (
+            {showEventList.map((item) => (
               <Item
                 key={item.name}
                 helper={item.description}
@@ -418,9 +437,9 @@ export default class EventsSetter extends Component<{
           >
             {nativeEventList.map((item, index) => (
               <Group label={item.name} key={index}>
-                {item.eventList.map(item => (
-                  <Item key={item.name} disabled={item.disabled}>
-                    {item.name}
+                {item.eventList.map(groupItem => (
+                  <Item key={groupItem.name} disabled={groupItem.disabled}>
+                    {groupItem.name}
                   </Item>
                 ))}
               </Group>

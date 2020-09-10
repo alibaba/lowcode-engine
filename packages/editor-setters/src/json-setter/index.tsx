@@ -30,6 +30,7 @@ class MonacoEditorView extends PureComponent {
 localeConfig('MonacoEditor', MonacoEditorView);
 
 // monaco编辑器存在3种主题：vs、vs-dark、hc-black
+// eslint-disable-next-line react/no-multi-comp
 class MonacoEditorDefaultView extends PureComponent {
   static displayName = 'MonacoEditorDefault';
 
@@ -92,7 +93,7 @@ class MonacoEditorDefaultView extends PureComponent {
 
   editorParentNode: any;
 
-  constructor(props: Readonly<{}>) {
+  constructor(props: Readonly) {
     super(props);
     this.strValue = '';
     this.i18n = generateI18n(props.locale, props.messages);
@@ -288,8 +289,12 @@ class MonacoEditorDefaultView extends PureComponent {
       } else if (value && typeof value === 'string') {
         try {
           const ret = this.toJson(value);
-          if (!ret.error) tarValue = JSON.stringify(ret.value, null, 2);
-        } catch (err) {}
+          if (!ret.error) {
+            tarValue = JSON.stringify(ret.value, null, 2);
+          }
+        } catch (err) {
+          // empty
+        }
       }
     } else if (language === 'function') {
       if (typeof value === 'function') {
@@ -305,13 +310,17 @@ class MonacoEditorDefaultView extends PureComponent {
         try {
           tarValue = serialize(value, { unsafe: true });
           tarValue = js_beautify(tarValue, { indent_size: 2, indent_empty_lines: true });
-        } catch (err) {}
+        } catch (err) {
+          // empty
+        }
       } else if (typeof value === 'string') {
         try {
           const ret = this.resultHandler(value, 'object');
           tarValue = ret.error ? ret.value : serialize(ret.value, { unsafe: true });
           tarValue = js_beautify(tarValue, { indent_size: 2, indent_empty_lines: true });
-        } catch (err) {}
+        } catch (err) {
+          // empty
+        }
       }
     }
     return tarValue;
@@ -346,6 +355,7 @@ class MonacoEditorDefaultView extends PureComponent {
     } else {
       document.body.appendChild(this.editorNode);
     }
+    // eslint-disable-next-line react/no-access-state-in-setstate
     const nextFs = !this.state.isFullScreen;
     this.isFullScreenAction = true; // 记录是全屏幕操作
     this.setState(
@@ -360,7 +370,6 @@ class MonacoEditorDefaultView extends PureComponent {
 
   // 美化代码
   format() {
-    const { language } = this.props;
     if (!this.editor) return;
     if (/^\$_obj?\{.*?\}$/m.test(this.editor.getValue())) return;
     if (this.props.language === 'json' || this.props.language === 'object' || this.props.language === 'function') {
@@ -377,8 +386,10 @@ class MonacoEditorDefaultView extends PureComponent {
   // 校验是否是json
   toJson(value) {
     try {
+      // eslint-disable-next-line no-new-func
       const obj = new Function(`'use strict'; return ${value.replace(/[\r\n\t]/g, '')}`)();
       if (typeof obj === 'object' && obj) {
+        // eslint-disable-next-line no-new-func
         const tarValue = new Function(`'use strict'; return ${value}`)();
         return { value: JSON.parse(JSON.stringify(tarValue)) };
       }
@@ -391,6 +402,7 @@ class MonacoEditorDefaultView extends PureComponent {
   // 校验是否为object对象
   toObject(value) {
     try {
+      // eslint-disable-next-line no-new-func
       const obj = new Function(`'use strict';return ${value}`)();
       if (obj && typeof obj === 'object') {
         if (jsonuri.isCircular(obj)) return { error: this.i18n('circularRef'), value };
@@ -406,6 +418,7 @@ class MonacoEditorDefaultView extends PureComponent {
   // 校验是否为function
   toFunction(value) {
     try {
+      // eslint-disable-next-line no-new-func
       const fun = new Function(`'use strict';return ${value}`)();
       if (fun && typeof fun === 'function') {
         return { value: fun };
@@ -432,6 +445,7 @@ class MonacoEditorDefaultView extends PureComponent {
       });
       if (item.insertTextRules) tarItem.insertTextRules = monaco.languages.CompletionItemInsertTextRule[item.insertTextRules];
       thisSuggestions.push(tarItem);
+      return item;
     });
     monaco.languages.registerCompletionItemProvider('javascript', {
       provideCompletionItems: (model, position) => {
@@ -474,6 +488,7 @@ window.MonacoEnvironment = {
   },
 };
 
+// eslint-disable-next-line react/no-multi-comp
 export default class MonacoEditorButtonView extends PureComponent {
   static displayName = 'JsonSetter';
 
@@ -491,7 +506,7 @@ export default class MonacoEditorButtonView extends PureComponent {
 
   objectButtonRef: React.RefObject<unknown>;
 
-  constructor(props: Readonly<{}>) {
+  constructor(props: Readonly) {
     super(props);
     this.i18n = generateI18n(props.locale, props.messages);
     this.objectButtonRef = React.createRef();
@@ -542,7 +557,7 @@ export default class MonacoEditorButtonView extends PureComponent {
     tarRestProps.autoFocus = true;
     const tarOnSubmit = tarRestProps.onSubmit;
     // 确保monaco快捷键保存，能出发最外层的保存
-    tarRestProps.onSubmit = (value, error) => {
+    tarRestProps.onSubmit = (editorValue, error) => {
       const msgDom = document.querySelector('.object-button-overlay .next-dialog-body');
       if (error) return this.message('error', this.i18n('formatError'), msgDom);
       this.objectButtonRef &&
@@ -566,8 +581,8 @@ export default class MonacoEditorButtonView extends PureComponent {
     if (tarRestProps.language && ['json', 'function', 'object'].includes(tarRestProps.language)) {
       if (['json', 'object'].includes(tarRestProps.language)) {
         tarRule.push({
-          validator(value: any, callback: (arg0: undefined) => void) {
-            if (typeof value !== 'object') {
+          validator(validatorValue: any, callback: (arg0: undefined) => void) {
+            if (typeof validatorValue !== 'object') {
               callback(self.i18n('formatError'));
             } else {
               callback();
@@ -576,8 +591,8 @@ export default class MonacoEditorButtonView extends PureComponent {
         });
       } else {
         tarRule.push({
-          validator(value: any, callback: (arg0: undefined) => void) {
-            if (typeof value !== 'function') {
+          validator(validatorValue: any, callback: (arg0: undefined) => void) {
+            if (typeof validatorValue !== 'function') {
               callback(self.i18n('formatError'));
             } else {
               callback();

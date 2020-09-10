@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Select, Balloon, Icon } from '@alife/next';
+import { Select, Balloon } from '@alife/next';
 import * as acorn from 'acorn';
 
 import { isJSExpression, generateI18n } from './locale/utils';
@@ -68,13 +68,12 @@ export default class ExpressionView extends PureComponent {
     return val;
   }
 
-  constructor(props: Readonly<{}>) {
+  constructor(props: Readonly) {
     super(props);
     this.expression = React.createRef();
     this.i18n = generateI18n(props.locale, props.messages);
     this.state = {
       value: ExpressionView.getInitValue(props.value),
-      context: props.context || {},
       dataSource: props.dataSource || [],
     };
   }
@@ -127,6 +126,7 @@ export default class ExpressionView extends PureComponent {
    * @return {Array}
    */
   getDataSource(tempStr: string): any[] {
+    // eslint-disable-next-line no-useless-escape
     if (/[^\w\.]$/.test(tempStr)) {
       return [];
     } else if (tempStr === null || tempStr === '') {
@@ -273,12 +273,11 @@ export default class ExpressionView extends PureComponent {
                   innerBefore={<span style={{ color: '#999', marginLeft: 4 }}>{'{{'}</span>}
                   innerAfter={<span style={{ color: '#999', marginRight: 4 }}>{'}}'}</span>}
                   popupClassName="expression-setter-item-inner"
-                  itemRender={({ value }) => {
-                    console.log(value);
+                  itemRender={({ itemValue }) => {
                     return (
-                      <Option key={value} text={value} value={value}>
-                        <div className="code-input-value">{value}</div>
-                        <div className="code-input-help">{helpMap[value]}</div>
+                      <Option key={itemValue} text={itemValue} value={itemValue}>
+                        <div className="code-input-value">{itemValue}</div>
+                        <div className="code-input-help">{helpMap[itemValue]}</div>
                       </Option>
                     );
                   }}
@@ -302,6 +301,7 @@ export default class ExpressionView extends PureComponent {
         const isMoveKey = !!(event.type == 'keyup' && ~[37, 38, 39, 91].indexOf(event.keyCode));
         const isMouseup = event.type == 'mouseup';
         if (isMoveKey || isMouseup) {
+          // eslint-disable-next-line react/no-access-state-in-setstate
           const dataSource = this.getDataSource(this.state.value) || [];
           this.setState({
             dataSource,
