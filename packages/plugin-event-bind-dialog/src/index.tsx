@@ -1,4 +1,4 @@
-import { Component, isValidElement, ReactElement, ReactNode } from 'react';
+import { Component } from 'react';
 import { Dialog, Search, Input } from '@alifd/next';
 import { PluginProps } from '@ali/lowcode-types';
 import MonacoEditor from 'react-monaco-editor';
@@ -48,25 +48,24 @@ export default class EventBindDialog extends Component<PluginProps> {
     // },
   ];
 
-  private bindEventName :''
+  private bindEventName :'';
 
   state: any = {
     visiable: false,
     setterName: 'event-setter',
     selectedEventName: '',
     eventName: '',
-    bindEventName:'',
-    paramStr:''
+    paramStr: '',
   };
 
-  openDialog = (bindEventName: String) => {
+  openDialog = (bindEventName: string) => {
     this.bindEventName = bindEventName;
 
     this.initEventName();
 
     this.setState({
       visiable: true,
-      selectedEventName:''
+      selectedEventName: '',
     });
   };
 
@@ -101,7 +100,7 @@ export default class EventBindDialog extends Component<PluginProps> {
 
   initEventName = () => {
     let eventName = this.bindEventName;
-    this.eventList.map((item) => {
+    this.eventList.forEach((item) => {
       if (item.name === eventName) {
         eventName = `${eventName}_new`;
       }
@@ -134,7 +133,7 @@ export default class EventBindDialog extends Component<PluginProps> {
     }
   };
 
-  onSearchEvent = (searchEventName: string) => {};
+  onSearchEvent = () => {};
 
   onOk = () => {
     console.log(this);
