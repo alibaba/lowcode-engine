@@ -1,9 +1,9 @@
-import React from "react";
-import Layer from "@ali/vu-layer";
-import { Icon } from "@alifd/next";
-import $i18n from "../../i18n/index";
-import Button from "../button";
-import "./index.less";
+import React from 'react';
+import Layer from '@ali/vu-layer';
+import { Icon } from '@alifd/next';
+import $i18n from '../../i18n/index';
+import Button from '../button';
+import './index.less';
 
 export default class Card extends React.Component {
   static propTypes = {};
@@ -23,7 +23,7 @@ export default class Card extends React.Component {
     this.loadComponentInfo(this.props.componentPrototype);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.componentPrototype !== this.props.componentPrototype) {
       // 延迟执行数据加载和渲染，等 props 更新之后
       this.loadComponentInfo(nextProps.componentPrototype);
@@ -44,12 +44,6 @@ export default class Card extends React.Component {
       .catch((e) => {
         this.setState({ errorMsg: e.message });
         console.error(e);
-        if (VisualEngine) {
-          VisualEngine.ui.Popup.error({
-            content: e.message,
-            duration: 2000,
-          });
-        }
       });
   }
 
@@ -65,7 +59,7 @@ export default class Card extends React.Component {
       <div>
         <Icon type="loading" className="ve-loading-icon" size="large" />
         <div className="ve-loading-content">
-          {$i18n.get({ id: "trunkPaneLoading", dm: "加载中..." })}
+          {$i18n.get({ id: 'trunkPaneLoading', dm: '加载中...' })}
         </div>
       </div>
     );
@@ -73,7 +67,7 @@ export default class Card extends React.Component {
     const {
       title,
       version,
-      image = "https://img.alicdn.com/tfs/TB1XHG6ehrI8KJjy0FpXXb5hVXa-740-608.png",
+      image = 'https://img.alicdn.com/tfs/TB1XHG6ehrI8KJjy0FpXXb5hVXa-740-608.png',
       desc,
       detailUrl,
       actions,
@@ -113,24 +107,24 @@ export default class Card extends React.Component {
                   className="ve-operation-item"
                 >
                   {$i18n.get({
-                    id: "trunkPaneDetailedDocumentation",
-                    dm: "详细文档",
+                    id: 'trunkPaneDetailedDocumentation',
+                    dm: '详细文档',
                   })}
                 </a>
               ) : null}
               <div className="actions">
-                {actions
-                  ? actions.map((action, idx) => {
-                      return (
-                        <Button
-                          key={idx}
-                          className="ve-card-action"
-                          action={action}
-                          componentPrototype={componentPrototype}
-                        />
-                      );
-                    })
-                  : null}
+                {
+                  actions ? actions.map((action, idx) => {
+                    return (
+                      <Button
+                        key={idx}
+                        className="ve-card-action"
+                        action={action}
+                        componentPrototype={componentPrototype}
+                      />
+                    );
+                  }) : null
+                }
               </div>
             </div>
           </div>

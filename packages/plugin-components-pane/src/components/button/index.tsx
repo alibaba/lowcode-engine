@@ -1,4 +1,4 @@
-import { Button } from "@ali/vu-uxcore-legao-design";
+import { Button } from '@ali/vu-uxcore-legao-design';
 import './index.less';
 
 const MyButton = (props) => {
@@ -6,10 +6,10 @@ const MyButton = (props) => {
   return (
     <Button
       className={className}
-      type={type || action.type || "outline"}
+      type={type || action.type || 'outline'}
       danger={action.danger || false}
       onClick={() => {
-        if (action.fn && typeof action.fn === "function") {
+        if (action.fn && typeof action.fn === 'function') {
           action.fn(componentPrototype);
         }
       }}

@@ -1,23 +1,23 @@
-import Base, { AdditiveType } from "../base/index.js";
-import Snippet from "../snippet";
-import "./index.less";
+import Base, { AdditiveType } from '../base/index';
+import Snippet from '../snippet';
+import './index.less';
 
 // 滚动事件触发灵敏度
 const OFFSET_ACCURCY = 25;
 
 const categoryMap = {
-  General: "常用",
-  Navigation: "导航",
-  DataEntry: "输入",
-  DataDisplay: "展示",
-  Feedback: "反馈",
-  Util: "工具",
-  Chart: "图表",
-  Others: "其他",
+  General: '常用',
+  Navigation: '导航',
+  DataEntry: '输入',
+  DataDisplay: '展示',
+  Feedback: '反馈',
+  Util: '工具',
+  Chart: '图表',
+  Others: '其他',
 };
 
 export default class ComponentList extends Base {
-  static displayName = "ComponentList";
+  static displayName = 'ComponentList';
 
   descRefList = new Map();
   navRefList = new Map();
@@ -28,10 +28,10 @@ export default class ComponentList extends Base {
   scroll;
   scrollTimer;
   state = {
-    selected: "",
-    searchText: "",
+    selected: '',
+    searchText: '',
     currentCard: null,
-    currentCardImage: ''
+    currentCardImage: '',
   };
 
   componentDidMount() {
@@ -40,7 +40,7 @@ export default class ComponentList extends Base {
 
       // mock 滚动结束事件
       if (this.scroll) {
-        this.scroll.addEventListener("scroll", this.handleScrollEnd);
+        this.scroll.addEventListener('scroll', this.handleScrollEnd);
       }
     }, 20);
     const bundle = this.normalizeBundle();
@@ -60,7 +60,7 @@ export default class ComponentList extends Base {
 
   componentWillUnmount() {
     if (this.scroll) {
-      this.scroll.removeEventListener("scroll", this.handleScrollEnd);
+      this.scroll.removeEventListener('scroll', this.handleScrollEnd);
     }
   }
 
@@ -127,7 +127,7 @@ export default class ComponentList extends Base {
   fixSideBarView(selected) {
     const nav = this.navRefList.get(selected);
     if (nav) {
-      nav.scrollIntoView({ block: "center" });
+      nav.scrollIntoView({ block: 'center' });
     }
   }
 
@@ -167,11 +167,11 @@ export default class ComponentList extends Base {
         {metaData.map((comp) => (
           <div
             className={`navigator-group-item ${AdditiveType.Draggable} ${
-              selected === comp.id ? "active" : ""
+              selected === comp.id ? 'active' : ''
             }`}
             key={comp.id}
             data-id={
-              (comp.snippets && comp.snippets[0] && comp.snippets[0].id) || ""
+              (comp.snippets && comp.snippets[0] && comp.snippets[0].id) || ''
             }
             ref={(item) => {
               this.navRefList.set(comp.id, item);
@@ -186,7 +186,7 @@ export default class ComponentList extends Base {
   }
 
   renderComponentDescriptionList(bundle) {
-    const { renderCustomSnippet = "", enableCard = true } = this.props;
+    const { renderCustomSnippet = '', enableCard = true } = this.props;
     return (
       <div className="component-description-list">
         {Object.keys(bundle).map((cat) => {
@@ -208,8 +208,7 @@ export default class ComponentList extends Base {
                     {comp.title}
                   </div>
                 ) : null}
-                <div className="component-description-item-icon-group">
-                </div>
+                <div className="component-description-item-icon-group" />
               </div>
               <div className="component-description-item-snippets">
                 {comp.snippets &&
@@ -227,7 +226,7 @@ export default class ComponentList extends Base {
                           this.setState({
                             currentCard: comp,
                             target: this.snippetMap.get(`${comp.id}-${idx}`),
-                            currentCardImage: snippet.thumbnail
+                            currentCardImage: snippet.thumbnail,
                           });
                           this.timer = null;
                         }, 1000);
@@ -242,7 +241,7 @@ export default class ComponentList extends Base {
                           if (this.isMouseEnterCard) {
                             return;
                           }
-                          this.setState({currentCard: null});
+                          this.setState({ currentCard: null });
                         }, 200);
                       }}
                     >
@@ -270,7 +269,7 @@ export default class ComponentList extends Base {
         key="content"
         className="ve-component-list-content"
         onScroll={(e) => this.handleScroll(e)}
-        ref={(scroll) => (this.scroll = scroll)}
+        ref={(scroll) => { this.scroll = scroll; }}
       >
         {this.renderComponentDescriptionList(bundle)}
       </div>,

@@ -1,10 +1,11 @@
-import React from "react";
-import { Search, Box } from "@alifd/next";
-import Button from "../button/index.js";
-import Card from "../card";
-import $i18n from "../../i18n/index.js";
-import { searchComponent, builtinSearchMap } from "../../utils";
-import "./index.less";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Search, Box } from '@alifd/next';
+import Button from '../button';
+import Card from '../card';
+import $i18n from '../../i18n/index';
+import { searchComponent, builtinSearchMap } from '../../utils';
+import './index.less';
 
 /**
  * 配置元素的操作类型
@@ -13,9 +14,9 @@ import "./index.less";
  * All：可拖拽也可点击
  */
 export const AdditiveType = {
-  Draggable: "additive-drag",
-  Clickable: "additive-click",
-  All: "additive",
+  Draggable: 'additive-drag',
+  Clickable: 'additive-click',
+  All: 'additive',
 };
 
 class Base extends React.Component {
@@ -23,33 +24,27 @@ class Base extends React.Component {
     metaData: PropTypes.array,
     className: PropTypes.string,
     registerAdditive: PropTypes.func,
-    renderCustomSnippet: PropTypes.func,
     actions: PropTypes.array,
     getComponentInfo: PropTypes.func,
     enableSearch: PropTypes.bool,
-    enableCard: PropTypes.bool,
-    enableReport: PropTypes.bool,
     placeholder: PropTypes.string,
   };
 
   static defaultProps = {
     metaData: [],
-    registerAdditive: () => {
-      return;
-    },
-    className: "",
+    registerAdditive: () => {},
+    className: '',
     renderCustomSnippet: null,
     actions: [],
     getComponentInfo: null,
     enableSearch: false,
     enableCard: true,
     enableReport: true,
-    placeholder: "",
+    placeholder: '',
   };
 
   state = {
-    selected: "",
-    searchText: "",
+    searchText: '',
     currentCard: null,
     target: null,
     currentCardImage: '',
@@ -63,7 +58,7 @@ class Base extends React.Component {
   isMouseEnterCard = false;
 
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     // TODO get remote search map
     this.searchMap = builtinSearchMap;
   }
@@ -85,9 +80,9 @@ class Base extends React.Component {
 
   normalizeBundle(mode) {
     const { metaData } = this.props;
-    const { searchText = "" } = this.state;
+    const { searchText = '' } = this.state;
     const groupList = metaData.filter((comp, index) => {
-      const { title = "", componentName = "", id = "" } = comp;
+      const { title = '', componentName = '', id = '' } = comp;
       if (!id) {
         comp.id = `${comp.componentName}_${index}`;
       }
@@ -103,10 +98,10 @@ class Base extends React.Component {
       return groupList;
     }
 
-    let bundle = {};
+    const bundle = {};
     // 按一定顺序排列
     groupList.forEach((m) => {
-      const c = m.category || "Others";
+      const c = m.category || 'Others';
       if (!bundle[c]) {
         bundle[c] = [];
       }
@@ -119,7 +114,7 @@ class Base extends React.Component {
     this.isEmpty = true;
     return (
       <Box direction="column" justify="center" align="center" className="ve-component-list-empty">
-        <img src='//g.alicdn.com/uxcore/pic/empty.png' style={{ height: 100, width: 100 }} />
+        <img src="//g.alicdn.com/uxcore/pic/empty.png" style={{ height: 100, width: 100 }} />
         <div style={{ lineHeight: 2 }}>
           <div>暂无组件，请在物料站点添加</div>
         </div>
@@ -131,14 +126,8 @@ class Base extends React.Component {
     const { placeholder } = this.props;
     return (
       <Search
-        placeholder={
-          placeholder
-            ? placeholder
-            : $i18n.get({
-                id: "trunkPaneSearchComponent",
-                dm: "搜索组件",
-              })
-        }
+        style={{ width: '100%' }}
+        placeholder={placeholder || $i18n.get({ id: 'trunkPaneSearchComponent', dm: '搜索组件' })}
         shape="simple"
         size="medium"
         hasClear
@@ -154,7 +143,7 @@ class Base extends React.Component {
     if (!this.hasActions()) {
       return null;
     }
-    const len = actions.length;
+    // const len = actions.length;
     // TODO:len = 1：只有一个主按钮；len = 2：一个主按钮、一个次按钮；len >=3：一个主按钮、一个次按钮、其余放在按钮组里；
     return actions.map((action, idx) => {
       return (
@@ -162,7 +151,7 @@ class Base extends React.Component {
           key={idx}
           action={action}
           className="btn"
-          type={idx === 0 ? "primary" : "outline"}
+          type={idx === 0 ? 'primary' : 'outline'}
         >
           {action.title}
         </Button>
@@ -194,7 +183,7 @@ class Base extends React.Component {
         componentPrototype={currentCard}
         target={target}
         customImage={currentCardImage}
-        subTitle={target && target.innerText || ''}
+        subTitle={target ? target.innerText : ''}
         position="right top"
         visible={!!currentCard}
         showClose
@@ -219,18 +208,18 @@ class Base extends React.Component {
       enableSearch,
       className,
       registerAdditive = () => {
-        return;
+
       },
     } = this.props;
-    let bodyExtraClass = "";
+    let bodyExtraClass = '';
     if (this.hasActions() && enableSearch) {
-      bodyExtraClass = "small";
+      bodyExtraClass = 'small';
     } else if (!this.hasActions() && enableSearch) {
-      bodyExtraClass = "medium";
+      bodyExtraClass = 'medium';
     } else if (this.hasActions() && !enableSearch) {
-      bodyExtraClass = "large";
+      bodyExtraClass = 'large';
     } else {
-      bodyExtraClass = "";
+      bodyExtraClass = '';
     }
 
     return (
@@ -256,7 +245,7 @@ class Base extends React.Component {
         </div>
         <div
           className={`ve-component-list-foot ${
-            this.hasActions() ? "exist" : ""
+            this.hasActions() ? 'exist' : ''
           }`}
         >
           {this.renderActions()}

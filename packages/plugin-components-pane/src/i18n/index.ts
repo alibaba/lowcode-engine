@@ -39,7 +39,7 @@ if (PSEUDO_LANGUAGE_TAG === CURRENT_LANGUAGE) {
   update(CURRENT_LANGUAGE);
 }
 
-module.exports = {
+export default {
   get,
   update,
 };
