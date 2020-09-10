@@ -2,7 +2,7 @@ import { BuiltinSimulatorRenderer, NodeInstance, Component } from '@ali/lowcode-
 import { shared, render as raxRender, createElement } from 'rax';
 import DriverUniversal from 'driver-universal';
 import { computed, obx } from '@recore/obx';
-import { RootSchema, NpmInfo, ComponentSchema } from '@ali/lowcode-types';
+import { RootSchema, NpmInfo } from '@ali/lowcode-types';
 import { Asset, isReactComponent, isESModule, setNativeSelection, cursor, isElement } from '@ali/lowcode-utils';
 
 import SimulatorRendererView from './renderer-view';
@@ -135,7 +135,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
         this.buildComponents();
       }
     });
-    host.injectionConsumer.consume((data) => {
+    host.injectionConsumer.consume(() => {
       // sync utils, i18n, contants,... config
       this._appContext = {
         utils: {},
@@ -183,7 +183,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
     // return null;
   }
 
-  createComponent(schema: ComponentSchema): Component | null {
+  createComponent(/* schema: ComponentSchema */): Component | null {
     return null;
   }
 
@@ -404,7 +404,7 @@ function buildComponents(libraryMap: LibraryMap, componentsMap: { [componentName
   return components;
 }
 
-function getClosestNodeInstance(from: any, specId?: string): NodeInstance<any> | null {
+function getClosestNodeInstance(from: any): NodeInstance<any> | null {
   const el: any = from;
   if (el) {
     // if (isElement(el)) {

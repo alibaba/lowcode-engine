@@ -35,6 +35,7 @@ export class Field extends Component<FieldProps> {
 
   private toggleExpand = () => {
     const { onExpandChange } = this.props;
+    // eslint-disable-next-line react/no-access-state-in-setstate
     const collapsed = !this.state.collapsed;
     this.setState({
       collapsed,
@@ -130,7 +131,7 @@ export class Field extends Component<FieldProps> {
       return null;
     }
 
-    const { className, children, meta, title, valueState, onClear, name: propName, tip } = this.props;
+    const { className, children, meta, title, valueState, name: propName, tip } = this.props;
     const { display, collapsed } = this.state;
     const isAccordion = display === 'accordion';
     let hostName = '';
@@ -160,7 +161,7 @@ export class Field extends Component<FieldProps> {
             </div>
           )
         }
-        <div key="body" ref={(shell) => (this.body = shell)} className="lc-field-body">
+        <div key="body" ref={(shell) => { this.body = shell; }} className="lc-field-body">
           {children}
         </div>
       </div>
@@ -179,7 +180,7 @@ export class Field extends Component<FieldProps> {
  *
  * TODO: turn number to enum
  */
-function createValueState(valueState?: number, onClear?: (e: React.MouseEvent) => void) {
+function createValueState(/* valueState?: number, onClear?: (e: React.MouseEvent) => void */) {
   return null;
   /*
   let tip: any = null;

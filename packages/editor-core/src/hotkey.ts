@@ -588,7 +588,6 @@ export class Hotkey {
     combination = combination.replace(/\s+/g, ' ');
 
     const sequence: string[] = combination.split(' ');
-    let info: KeyInfo;
 
     // if this pattern is a sequence of keys then run through this method
     // to reprocess each pattern one key at a time
@@ -597,7 +596,7 @@ export class Hotkey {
       return;
     }
 
-    info = getKeyInfo(combination, action);
+    const info: KeyInfo = getKeyInfo(combination, action);
 
     // make sure to initialize array if this is the first time
     // a callback is added for this key

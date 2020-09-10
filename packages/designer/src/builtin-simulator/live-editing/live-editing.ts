@@ -81,15 +81,15 @@ export class LiveEditing {
       }
     }
 
-    if (!propTarget) {
-      // 自动纯文本编辑满足一下情况：
-      //  1. children 内容都是 Leaf 且都是文本（一期）
-      //  2. DOM 节点是单层容器，子集都是文本节点 (已满足)
-      const isAllText = node.children?.every(item => {
-        return item.isLeaf() && item.getProp('children')?.type === 'literal';
-      });
-      // TODO:
-    }
+    // if (!propTarget) {
+    //   // 自动纯文本编辑满足一下情况：
+    //   //  1. children 内容都是 Leaf 且都是文本（一期）
+    //   //  2. DOM 节点是单层容器，子集都是文本节点 (已满足)
+    //   const isAllText = node.children?.every(item => {
+    //     return item.isLeaf() && item.getProp('children')?.type === 'literal';
+    //   });
+    //   // TODO:
+    // }
 
     if (propTarget && setterPropElement) {
       const prop = node.getProp(propTarget, true)!;
@@ -121,8 +121,10 @@ export class LiveEditing {
         console.info(e.code);
         switch (e.code) {
           case 'Enter':
+            break;
             // TODO: check is richtext?
           case 'Escape':
+            break;
           case 'Tab':
             setterPropElement?.blur();
         }
@@ -130,7 +132,7 @@ export class LiveEditing {
         // enter
         // tab
       };
-      const focusout = (e: FocusEvent) => {
+      const focusout = (/* e: FocusEvent */) => {
         this.saveAndDispose();
       };
       setterPropElement.addEventListener('focusout', focusout);

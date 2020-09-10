@@ -8,14 +8,14 @@ export class Selection {
 
   @obx.val private _selected: string[] = [];
 
+  constructor(readonly doc: DocumentModel) {}
+
   /**
    * 选中的节点 id
    */
   get selected(): string[] {
     return this._selected;
   }
-
-  constructor(readonly doc: DocumentModel) {}
 
   /**
    * 选中

@@ -20,7 +20,9 @@ const originCloneElement = (window as any).Rax.cloneElement;
         } else {
           try {
             cRef.current = x;
-          } catch (e) {}
+          } catch (e) {
+            console.error(e);
+          }
         }
       }
       if (dRef) {
@@ -29,7 +31,9 @@ const originCloneElement = (window as any).Rax.cloneElement;
         } else {
           try {
             dRef.current = x;
-          } catch (e) {}
+          } catch (e) {
+            console.error(e);
+          }
         }
       }
     };

@@ -52,6 +52,7 @@ export default class PanelDock implements IWidget {
   }
 
   getDOMNode() {
+    // eslint-disable-next-line react/no-find-dom-node
     return this._shell ? findDOMNode(this._shell) : null;
   }
 

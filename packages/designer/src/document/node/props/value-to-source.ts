@@ -4,6 +4,7 @@ function propertyNameRequiresQuotes(propertyName: string) {
       worksWithoutQuotes: false,
     };
 
+    // eslint-disable-next-line no-new-func
     new Function('ctx', `ctx.worksWithoutQuotes = {${propertyName}: true}['${propertyName}']`)();
 
     return !context.worksWithoutQuotes;
@@ -225,7 +226,9 @@ export function getSource(value: any): string {
   if (value) {
     try {
       value.__source = source;
-    } catch (ex) {}
+    } catch (ex) {
+      console.error(ex);
+    }
   }
   return source;
 }

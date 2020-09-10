@@ -129,7 +129,7 @@ export class NodeChildren {
       node.internalSetParent(null, useMutator);
       try {
         node.purge(useMutator);
-      } catch(err) {
+      } catch (err) {
         console.error(err);
       }
     }

@@ -71,7 +71,7 @@ export default class InstanceNodeSelector extends React.Component<IProps, IState
     }
   };
 
-  renderNodes = (node: Node) => {
+  renderNodes = (/* node: Node */) => {
     const nodes = this.state.parentNodes || [];
     const children = nodes.map((node, key) => {
       return (

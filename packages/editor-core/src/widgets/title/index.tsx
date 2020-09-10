@@ -25,6 +25,7 @@ export class Title extends Component<{ title: TitleContent; className?: string; 
   }
 
   render() {
+    // eslint-disable-next-line prefer-const
     let { title, className } = this.props;
     if (title == null) {
       return null;
