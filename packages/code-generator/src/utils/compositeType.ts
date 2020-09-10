@@ -3,10 +3,18 @@ import {
   CompositeValue,
   ICompositeObject,
   CompositeValueGeneratorOptions,
+  CompositeTypeContainerHandlerSet,
   CodeGeneratorError,
 } from '../types';
 import { generateExpression, generateFunction, isJsExpression, isJsFunction } from './jsExpression';
 import { isJsSlot, generateJsSlot } from './jsSlot';
+import { isValidIdentifier } from './validate';
+import { camelize } from './common';
+
+const defaultContainerHandlers: CompositeTypeContainerHandlerSet = {
+  default: (v) => v,
+  string: (v) => `'${v}'`,
+};
 
 function generateArray(value: CompositeArray, options: CompositeValueGeneratorOptions = {}): string {
   const body = value.map((v) => generateUnknownType(v, options)).join(',');
@@ -34,8 +42,25 @@ function generateObject(value: ICompositeObject, options: CompositeValueGenerato
 
   const body = Object.keys(value)
     .map((key) => {
+      let propName = key;
+
+      // TODO: 可以增加更多智能修复的方法
+      const fixMethods: Array<(v: string) => string> = [camelize];
+      // Try to fix propName
+      while (!isValidIdentifier(propName)) {
+        const fixMethod = fixMethods.pop();
+        if (fixMethod) {
+          try {
+            propName = fixMethod(propName);
+          } catch (error) {
+            throw new CodeGeneratorError(error.message);
+          }
+        } else {
+          throw new CodeGeneratorError(`Propname: ${key} is not a valid identifier.`);
+        }
+      }
       const v = generateUnknownType(value[key], options);
-      return `${key}: ${v}`;
+      return `${propName}: ${v}`;
     })
     .join(',\n');
 
@@ -66,22 +91,16 @@ export function generateUnknownType(value: CompositeValue, options: CompositeVal
   return `${value}`;
 }
 
-export function generateCompositeType(
-  value: CompositeValue,
-  options: CompositeValueGeneratorOptions = {},
-): [boolean, string] {
+export function generateCompositeType(value: CompositeValue, options: CompositeValueGeneratorOptions = {}): string {
   const result = generateUnknownType(value, options);
+  const containerHandlers = {
+    ...defaultContainerHandlers,
+    ...(options.containerHandlers || {}),
+  };
 
-  if (result.substr(0, 1) === "'" && result.substr(-1, 1) === "'") {
-    return [true, result.substring(1, result.length - 1)];
+  const isStringType = result.substr(0, 1) === "'" && result.substr(-1, 1) === "'";
+  if (isStringType) {
+    return (containerHandlers.string && containerHandlers.string(result.substring(1, result.length - 1))) || '';
   }
-
-  return [false, result];
-}
-
-export function handleStringValueDefault([isString, result]: [boolean, string]) {
-  if (isString) {
-    return `'${result}'`;
-  }
-  return result;
+  return (containerHandlers.default && containerHandlers.default(result)) || '';
 }

@@ -1,0 +1,145 @@
+@import "../core/index-noreset.scss";
+@import "./rtl.scss";
+
+@font-face {
+    font-family: $icon-font-family;
+    src: url('#{$icon-font-path}.eot');
+    src:
+        url('#{$icon-font-path}.eot?#iefix') format('embedded-opentype'),
+        url('#{$icon-font-path}.woff2') format('woff2'),
+        url('#{$icon-font-path}.woff') format('woff'),
+        url('#{$icon-font-path}.ttf') format('truetype'),
+        url('#{$icon-font-path}.svg#NextIcon') format('svg');
+}
+
+.#{$icon-prefix} {
+    display: inline-block;
+    font-family: $icon-font-family;
+    font-style: normal;
+    font-weight: normal;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    &:before {
+        display: inline-block;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    &-smile:before { content: $icon-content-smile; }
+    &-cry:before { content: $icon-content-cry; }
+    &-success:before { content: $icon-content-success; }
+    &-warning:before { content: $icon-content-warning; }
+    &-prompt:before { content: $icon-content-prompt; }
+    &-error:before { content: $icon-content-error; }
+    &-help:before { content: $icon-content-help; }
+    &-clock:before { content: $icon-content-clock; }
+    &-success-filling:before { content: $icon-content-success-filling; }
+    &-delete-filling:before { content: $icon-content-delete-filling; }
+    &-favorites-filling:before { content: $icon-content-favorites-filling; }
+    &-add:before { content: $icon-content-add; }
+    &-minus:before { content: $icon-content-minus; }
+    &-arrow-up:before { content: $icon-content-arrow-up; }
+    &-arrow-down:before { content: $icon-content-arrow-down; }
+    &-arrow-left:before { content: $icon-content-arrow-left; }
+    &-arrow-right:before { content: $icon-content-arrow-right; }
+    &-arrow-double-left:before { content: $icon-content-arrow-double-left; }
+    &-arrow-double-right:before { content: $icon-content-arrow-double-right; }
+    &-switch:before { content: $icon-content-switch; }
+    &-sorting:before { content: $icon-content-sorting; }
+    &-descending:before { content: $icon-content-descending; }
+    &-ascending:before { content: $icon-content-ascending; }
+    &-select:before { content: $icon-content-select; }
+    &-semi-select:before { content: $icon-content-semi-select; }
+    &-search:before { content: $icon-content-search; }
+    &-close:before { content: $icon-content-close; }
+    &-ellipsis:before { content: $icon-content-ellipsis; }
+    &-picture:before { content: $icon-content-picture; }
+    &-calendar:before { content: $icon-content-calendar; }
+    &-ashbin:before { content: $icon-content-ashbin; }
+    &-upload:before { content: $icon-content-upload; }
+    &-download:before { content: $icon-content-download; }
+    &-set:before { content: $icon-content-set; }
+    &-edit:before { content: $icon-content-edit; }
+    &-refresh:before { content: $icon-content-refresh; }
+    &-filter:before { content: $icon-content-filter; }
+    &-attachment:before { content: $icon-content-attachment; }
+    &-account:before { content: $icon-content-account; }
+    &-email:before { content: $icon-content-email; }
+    &-atm:before { content: $icon-content-atm; }
+    &-loading:before {
+        content: $icon-content-loading;
+        animation: loadingCircle 1s infinite linear;
+    }
+    &-eye:before { content: $icon-content-eye; }
+    &-copy:before { content: $icon-content-copy; }
+    &-toggle-left:before { content: $icon-content-toggle-left; }
+    &-toggle-right:before { content: $icon-content-toggle-right; }
+    &-eye-close:before { content: $icon-content-eye-close; }
+    &-unlock:before { content: $icon-content-unlock; }
+    &-lock:before { content: $icon-content-lock; }
+    &-exit:before { content: $icon-content-exit; }
+    &-chart-bar:before { content: $icon-content-chart-bar; }
+    &-chart-pie:before { content: $icon-content-chart-pie; }
+}
+
+@keyframes loadingCircle {
+    0% {
+        transform-origin: 50% 50%;
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform-origin: 50% 50%;
+        transform: rotate(360deg);
+    }
+}
+
+.#{$icon-prefix}.#{$css-prefix} {
+    &xxs {
+        @include icon-size($icon-xxs);
+    }
+
+    &xs {
+        @include icon-size($icon-xs);
+    }
+
+    &small {
+        @include icon-size($icon-s);
+    }
+
+    &medium {
+        @include icon-size($icon-m);
+    }
+
+    &large {
+        @include icon-size($icon-l);
+    }
+
+    &xl {
+        @include icon-size($icon-xl);
+    }
+
+    &xxl {
+        @include icon-size($icon-xxl);
+    }
+
+    &xxxl {
+        @include icon-size($icon-xxxl);
+    }
+
+    &inherit {
+        @include icon-size(inherit);
+    }
+}
+
+.#{$icon-prefix} {
+    &.#{$css-prefix}inherit .#{$css-prefix}icon-remote,
+    .#{$css-prefix}icon-remote {
+        width: 1em;
+        height: 1em;
+        vertical-align: -.15em;
+        fill: currentColor;
+    }
+}

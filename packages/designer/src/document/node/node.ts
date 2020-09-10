@@ -6,7 +6,6 @@ import {
   PropsMap,
   PropsList,
   NodeData,
-  TitleContent,
   I18nData,
   SlotSchema,
   PageSchema,
@@ -149,16 +148,19 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   constructor(readonly document: DocumentModel, nodeSchema: Schema) {
     const { componentName, id, children, props, ...extras } = nodeSchema;
-    this.id = id || `node_${document.nextId()}`;
+    this.id = id || document.nextId();
     this.componentName = componentName;
     if (this.componentName === 'Leaf') {
       this.props = new Props(this, {
         children: isDOMText(children) || isJSExpression(children) ? children : '',
       });
     } else {
+      // 这里 props 被初始化两次，一次 new，一次 import，new 的实例需要给 propsReducer 的钩子去使用，
+      // import 是为了使用钩子返回的值，并非完全幂等的操作，部分行为执行两次会有 bug，
+      // 所以在 props 里会对 new / import 做一些区别化的解析
       this.props = new Props(this, props, extras);
       this._children = new NodeChildren(this as ParentalNode, this.initialChildren(children));
-      this._children.interalInitParent();
+      this._children.internalInitParent();
       this.props.import(this.upgradeProps(this.initProps(props || {})), this.upgradeProps(extras || {}));
       this.setupAutoruns();
     }
@@ -259,14 +261,15 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       return;
     }
 
+    // 解除老的父子关系，但不需要真的删除节点
     if (this._parent) {
       if (this.isSlot()) {
-        this._parent.removeSlot(this, false);
+        this._parent.unlinkSlot(this);
       } else {
-        this._parent.children.delete(this, false, useMutator);
+        this._parent.children.unlinkChild(this);
       }
     }
-
+    // 建立新的父子关系
     this._parent = parent;
     if (parent) {
       this.document.removeWillPurge(this);
@@ -299,12 +302,12 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 移除当前节点
    */
-  remove(useMutator = true) {
+  remove(useMutator = true, purge = true) {
     if (this.parent) {
       if (this.isSlot()) {
-        this.parent.removeSlot(this, true);
+        this.parent.removeSlot(this, purge);
       } else {
-        this.parent.children.delete(this, true, useMutator);
+        this.parent.children.delete(this, purge, useMutator);
       }
     }
   }
@@ -396,9 +399,23 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return v != null && v !== '' && v !== true;
   }
 
+  /**
+   * has loop when 1. loop is validArray with length > 1 ; OR  2. loop is variable object
+   * @return boolean, has loop config or not
+   */
   @computed hasLoop() {
-    const v = this.getExtraProp('loop', false)?.getValue();
-    return v != null && v !== '';
+    const value = this.getExtraProp('loop', false)?.getValue();
+    if (value === undefined || value === null) {
+      return false;
+    }
+
+    if (Array.isArray(value) && value.length > 0) {
+      return true;
+    }
+    if (isJSExpression(value)) {
+      return true;
+    }
+    return false;
   }
 
   wrapWith(schema: Schema) {
@@ -635,20 +652,30 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return comparePosition(this, otherNode);
   }
 
-  /**
-   * 删除一个Slot节点
-   */
-  removeSlot(slotNode: Node, purge = false): boolean {
+  unlinkSlot(slotNode: Node) {
     const i = this._slots.indexOf(slotNode);
     if (i < 0) {
       return false;
     }
-    const deleted = this._slots.splice(i, 1)[0];
+    this._slots.splice(i, 1);
+  }
+
+  /**
+   * 删除一个Slot节点
+   */
+  removeSlot(slotNode: Node, purge = false): boolean {
     if (purge) {
       // should set parent null
-      deleted.internalSetParent(null);
-      deleted.purge();
+      slotNode?.internalSetParent(null, false);
+      slotNode?.purge();
     }
+    this.document.unlinkNode(slotNode);
+    this.document.selection.remove(slotNode.id);
+    const i = this._slots.indexOf(slotNode);
+    if (i < 0) {
+      return false;
+    }
+    this._slots.splice(i, 1);
     return false;
   }
 
@@ -669,7 +696,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   /**
    * 删除一个节点
-   * @param node 
+   * @param node
    */
   removeChild(node: Node) {
     this.children?.delete(node);
@@ -689,19 +716,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     if (this.purged) {
       return;
     }
-    if (this._parent) {
-      // should remove thisNode before purge
-      this.remove(useMutator);
-      return;
-    }
     this.purged = true;
-    if (this.isParental()) {
-      this.children.purge(useMutator);
-    }
     this.autoruns?.forEach((dispose) => dispose());
     this.props.purge();
-    this.document.internalRemoveAndPurgeNode(this);
-
     this.document.destroyNode(this);
   }
 
@@ -724,6 +741,12 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.componentName;
   }
 
+  /**
+   * @deprecated
+   */
+  insert(node: Node, ref?: Node, useMutator = true) {
+    this.insertAfter(node, ref, useMutator);
+  }
   insertBefore(node: Node, ref?: Node, useMutator = true) {
     this.children?.insert(node, ref ? ref.index : null, useMutator);
   }
@@ -846,7 +869,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     if (this.parent) {
       return this.parent.getSuitablePlace(node, ref);
     }
-    
+
     return null;
   }
   /**

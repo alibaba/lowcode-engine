@@ -1,0 +1,20 @@
+@include keyframes(fadeInLeftBig) {
+    0% {
+        opacity: 0;
+        @include transform(translateX(-2000px));
+    }
+    100% {
+        opacity: 1;
+        @include transform(translateX(0));
+    }
+}
+
+@mixin fadeInLeftBig($count: $countDefault, $duration: $durationDefault, $delay: $delayDefault, $function: $ease-out-quint, $fill: $fillDefault, $visibility: $visibilityDefault) {
+    @include animation-name(fadeInLeftBig);
+    @include count($count);
+    @include duration($duration);
+    @include delay($delay);
+    @include function($function);
+    @include fill-mode($fill);
+    @include visibility($visibility);
+}

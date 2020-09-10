@@ -1,0 +1,110 @@
+@charset "UTF-8";
+#{$search-prefix} {
+    &-simple[dir=rtl] {
+        &.#{$css-prefix}large {
+            #{$search-prefix}-icon {
+                margin-left: $search-simple-l-icon-margin-right;
+                margin-right: 0;
+            }
+        }
+        &.#{$css-prefix}medium {
+            #{$search-prefix}-icon {
+                margin-left: $search-simple-m-icon-margin-right;
+                margin-right: 0;
+            }
+        }
+        &.#{$css-prefix}normal {
+            @include search-simple-color-rtl(
+                $search-simple-normal-color,
+                $search-simple-normal-hover-color,
+                $search-simple-normal-icon-text-color,
+                $search-simple-normal-icon-hover-text-color,
+                $search-simple-normal-split-color);
+        }
+        &.#{$css-prefix}dark {
+            @include search-simple-color(
+                $search-simple-dark-color,
+                $search-simple-dark-hover-color,
+                $search-simple-dark-icon-text-color,
+                $search-simple-dark-icon-hover-text-color,
+                $search-simple-dark-split-color);
+        }
+    }
+    &-normal[dir=rtl] {
+        #{$search-prefix}-left {
+            border-left: none;
+            border-top-right-radius: $search-normal-corner;
+            border-bottom-right-radius: $search-normal-corner;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        #{$search-prefix}-btn.#{$css-prefix}btn {
+            border-radius: $search-normal-corner 0 0 $search-normal-corner !important;
+        }
+        .#{$css-prefix}input {
+            border-radius: 0 $search-normal-corner $search-normal-corner 0;
+        }
+        &.#{$css-prefix}primary {
+            .#{$css-prefix}input {
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+                border-top-right-radius: $search-normal-corner - $search-normal-primary-border-width;
+                border-bottom-right-radius: $search-normal-corner - $search-normal-primary-border-width;
+            }
+            @include search-type-color-rtl(
+                $search-normal-primary-color,
+                $search-normal-primary-hover-color,
+                $search-normal-primary-color,
+                $search-normal-primary-btn-text-color,
+                $search-normal-primary-color,
+                $search-normal-primary-btn-hover-bg-color,
+                $search-normal-primary-btn-hover-text-color,
+                $search-normal-primary-split-color);
+        }
+        &.#{$css-prefix}secondary {
+            .#{$css-prefix}input {
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+                border-top-right-radius: $search-normal-corner - $search-normal-primary-border-width;
+                border-bottom-right-radius: $search-normal-corner - $search-normal-primary-border-width;
+            }
+            @include search-type-color-rtl(
+                $search-normal-secondary-color,
+                $search-normal-secondary-hover-color,
+                $search-normal-secondary-btn-bg-color,
+                $search-normal-secondary-btn-text-color,
+                $search-normal-secondary-btn-bg-color,
+                $search-normal-secondary-btn-hover-bg-color,
+                $search-normal-secondary-btn-hover-text-color,
+                $search-normal-secondary-split-color);
+        }
+        &.#{$css-prefix}normal {
+            .#{$css-prefix}input {
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+                border-top-right-radius: $search-normal-corner - $search-normal-primary-border-width;
+                border-bottom-right-radius: $search-normal-corner - $search-normal-primary-border-width;
+            }
+            @include search-type-color-rtl(
+                $search-normal-normal-color,
+                $search-normal-normal-hover-color,
+                $search-normal-normal-btn-bg-color,
+                $search-normal-normal-btn-text-color,
+                $search-normal-normal-color,
+                $search-normal-normal-btn-hover-bg-color,
+                $search-normal-normal-btn-hover-text-color,
+                $search-normal-normal-split-color);
+        }
+        &.#{$css-prefix}dark {
+            @include search-type-color-rtl(
+                $search-normal-dark-color,
+                $search-normal-dark-hover-color,
+                $search-normal-dark-color,
+                $search-normal-dark-btn-text-color,
+                $search-normal-dark-color,
+                $search-normal-dark-btn-hover-bg-color,
+                $search-normal-dark-btn-hover-text-color,
+                $search-normal-dark-color);
+        }
+    }
+}

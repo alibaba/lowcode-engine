@@ -1,6 +1,6 @@
-import { designer } from './editor';
 import { RootSchema } from '@ali/lowcode-types';
 import { DocumentModel } from '@ali/lowcode-designer';
+import { designer } from './editor';
 import NodeCacheVisitor from './rootNodeVisitor';
 
 const { project } = designer;
@@ -33,14 +33,31 @@ const pages = Object.assign(project, {
       throw new Error('pages schema 不合法');
     }
     // todo: miniapp
-    const componentsTree: any = [];
-    pages.forEach((item: any) => {
-      if (isPageDataV1(item)) {
-        componentsTree.push(item.layout);
+    let componentsTree: any = [];
+    if (window.pageConfig?.isNoCodeMiniApp) {
+      // 小程序多页面
+      pages.forEach((item: any) => {
+        if (isPageDataV1(item)) {
+          componentsTree.push(item.layout);
+        } else {
+          componentsTree.push(item.componentsTree[0]);
+        }
+      });
+    } else {
+      if (isPageDataV1(pages[0])) {
+        componentsTree = [pages[0].layout];
       } else {
-        componentsTree.push(item.componentsTree[0]);
+        componentsTree = pages[0].componentsTree;
+        if (componentsTree[0]) {
+          componentsTree[0].componentName = componentsTree[0].componentName || 'Page';
+          // FIXME
+          if (componentsTree[0].componentName === 'Page' || componentsTree[0].componentName === 'Component') {
+            componentsTree[0].methods = {};
+          }
+        }
       }
-    });
+    }
+
     componentsTree.forEach((item: any) => {
       item.componentName = item.componentName || 'Page';
       if (item.componentName === 'Page' || item.componentName === 'Component') {
@@ -48,16 +65,21 @@ const pages = Object.assign(project, {
       }
     });
     console.log(pages, componentsTree);
-
     project.load(
       {
         version: '1.0.0',
         componentsMap: [],
         componentsTree,
+        id: pages[0].id,
         config: project.config,
       },
       true,
     );
+
+    // FIXME: 根本原因应该是 propStash 导致的，这样可以避免页面加载之后就被标记为 isModified
+    setTimeout(() => {
+      project.currentDocument?.history.savePoint();
+    }, 0);
   },
   addPage(data: OldPageData | RootSchema) {
     if (isPageDataV1(data)) {
@@ -94,18 +116,20 @@ const pages = Object.assign(project, {
     return project.onCurrentDocumentChange(fn);
   },
   toData() {
-    return project.documents.map(doc => doc.toData());
-  }
+    return project.documents.map((doc) => doc.toData());
+  },
 });
 
 Object.defineProperty(pages, 'currentPage', {
   get() {
     return project.currentDocument;
-  }
-})
+  },
+});
 
 pages.onCurrentPageChange((page: DocumentModel) => {
-  if (!page) { return; }
+  if (!page) {
+    return;
+  }
   page.acceptRootNodeVisitor('NodeCache', (rootNode) => {
     const visitor: NodeCacheVisitor = page.getRootNodeVisitor('NodeCache');
     if (visitor) {

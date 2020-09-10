@@ -1,0 +1,42 @@
+@charset "UTF-8";
+
+// avatar variables
+// --------------------------------------------------
+
+////
+/// @module avatar: 头像
+/// @tag Avatar
+/// @category component
+/// @family data-display
+/// @varPrefix $avatar-
+/// @classPrefix {prefix}-avatar
+/// @order {}
+////
+
+// Unconfigurable
+// ----------------------------------------
+$avatar-prefix: ".#{$css-prefix}avatar";
+
+// Size
+// ----------------------------------------
+
+/// size
+/// @namespace size/bounding
+$avatar-size-large: $s-13 !default;
+/// size
+/// @namespace size/bounding
+$avatar-size-medium: $s-10 !default;
+/// size
+/// @namespace size/bounding
+$avatar-size-small: $s-7 !default;
+
+
+// Statement
+// ----------------------------------------
+
+/// corner
+/// @namespace statement/normal
+$avatar-border-radius: $corner-1 !default;
+
+$avatar-color: $color-white !default;
+$avatar-default-bg: $color-fill1-4 !default;

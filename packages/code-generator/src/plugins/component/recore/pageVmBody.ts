@@ -13,7 +13,7 @@ import { COMMON_CHUNK_NAME } from '../../../const/generator';
 
 import { createNodeGenerator, generateString } from '../../../utils/nodeToJSX';
 import { generateExpression } from '../../../utils/jsExpression';
-import { generateCompositeType, handleStringValueDefault } from '../../../utils/compositeType';
+import { generateCompositeType } from '../../../utils/compositeType';
 
 const generateGlobalProps = (ctx: INodeGeneratorContext, nodeItem: IComponentNodeItem): CodePiece[] => {
   return [
@@ -28,7 +28,7 @@ const generateCtrlLine = (ctx: INodeGeneratorContext, nodeItem: IComponentNodeIt
   const pieces: CodePiece[] = [];
 
   if (nodeItem.loop && nodeItem.loopArgs) {
-    const loopDataExp = handleStringValueDefault(generateCompositeType(nodeItem.loop));
+    const loopDataExp = generateCompositeType(nodeItem.loop);
     pieces.push({
       type: PIECE_TYPE.ATTR,
       value: `x-for={${loopDataExp}}`,
@@ -41,7 +41,7 @@ const generateCtrlLine = (ctx: INodeGeneratorContext, nodeItem: IComponentNodeIt
   }
 
   if (nodeItem.condition) {
-    const conditionExp = handleStringValueDefault(generateCompositeType(nodeItem.condition));
+    const conditionExp = generateCompositeType(nodeItem.condition);
     pieces.push({
       type: PIECE_TYPE.ATTR,
       value: `x-if={${conditionExp}}`,

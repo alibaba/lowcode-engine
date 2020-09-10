@@ -15,7 +15,7 @@ import transfrom from './transform';
 
 const defaultEditorOption = {
   width: '100%',
-  height: '96%',
+  height: '100%',
   options: {
     readOnly: false,
     automaticLayout: true,
@@ -54,7 +54,7 @@ export default class SourceEditor extends Component<{
   private editorParentNode: Object;
 
   state = {
-    isShow: true,
+    isFullScreen:false,
     tabKey: TAB_KEY.JS_TAB,
   };
 
@@ -71,8 +71,31 @@ export default class SourceEditor extends Component<{
       this.callEditorEvent('sourceEditor.focusByFunction', params);
     });
 
-    let schema = editor.get('designer').project.getSchema();
-    this.initCode(schema);
+    
+
+
+    // 插件面板关闭事件,监听规则同上
+    editor.on('skeleton.panel-dock.unactive',(pluginName,dock)=>{
+       if (pluginName == 'sourceEditor'){
+          this.saveSchema();
+       }
+    })
+
+    // 插件面板打开事件,监听规则同上
+    editor.on('skeleton.panel-dock.active',(pluginName,dock)=>{
+      if (pluginName == 'sourceEditor'){
+          this.initCode();
+      }
+    })
+
+    this.initCode();
+  }
+
+
+  componentDidMount () {
+    this.editorNode = this.editorJsRef.current; //记录当前dom节点；
+    this.editorParentNode = this.editorNode.parentNode; //记录父节点;
+
   }
 
   /**
@@ -93,6 +116,8 @@ export default class SourceEditor extends Component<{
       });
     }
 
+    this.showJsEditor();
+
     if (eventName === 'sourceEditor.addFunction') {
       setTimeout(() => {
         this.addFunction(params);
@@ -104,7 +129,9 @@ export default class SourceEditor extends Component<{
     }
   };
 
-  initCode = (schema) => {
+  initCode = () => {
+    const {editor} = this.props;
+    let schema = editor.get('designer').project.getSchema();
     let jsCode = js_beautify(transfrom.schema2Code(schema), { indent_size: 2, indent_empty_lines: true });
     let css;
 
@@ -170,7 +197,28 @@ export default class SourceEditor extends Component<{
     }
   };
 
-  fullScreen = () => {};
+  fullScreen = () => {
+    document.body.appendChild(this.editorNode)
+
+    const fullScreenOption = {
+      ...defaultEditorOption,
+      lineNumbers: 'on',
+      folding: true,
+      scrollBeyondLastLine: true,
+      minimap: {
+        enabled: true
+      }
+    }
+
+    this.monocoEditor.updateOptions(fullScreenOption);
+    // if (this.editorParentNode) {
+    //   if (this.editorParentNode.firstChild) {
+    //     this.editorParentNode.insertBefore(this.editorNode, this.editorParentNode.firstChild);
+    //   } else {
+    //     this.editorParentNode.appendChild(this.editorNode);
+    //   }
+    // }
+  };
 
   onTabChange = (key) => {
     const { editor } = this.props;
@@ -182,13 +230,21 @@ export default class SourceEditor extends Component<{
     });
 
     if (key === TAB_KEY.JS_TAB) {
-      document.getElementById('cssEditorDom').setAttribute('style', 'display:none');
-      document.getElementById('jsEditorDom').setAttribute('style', 'block');
+      this.showJsEditor();
     } else {
-      document.getElementById('jsEditorDom').setAttribute('style', 'display:none');
-      document.getElementById('cssEditorDom').setAttribute('style', 'block');
+      this.showCssEditor();
     }
   };
+
+  showJsEditor = () => {
+    document.getElementById('cssEditorDom').setAttribute('style', 'display:none');
+    document.getElementById('jsEditorDom').setAttribute('style', 'block');
+  }
+
+  showCssEditor = () => {
+    document.getElementById('jsEditorDom').setAttribute('style', 'display:none');
+    document.getElementById('cssEditorDom').setAttribute('style', 'block');
+  }
 
   updateCode = (newCode) => {
     const { selectTab } = this.state;
@@ -203,14 +259,31 @@ export default class SourceEditor extends Component<{
       });
     }
 
-    let functionMap = transfrom.code2Schema(newCode);
-    let schema = editor.get('designer').project.getSchema();
-    let newSchema = transfrom.setFunction2Schema(functionMap, schema);
-    editor.get('designer').project.load(newSchema);
+    // let functionMap = transfrom.code2Schema(newCode);
+    // let schema = editor.get('designer').project.getSchema();
+    // let newSchema = transfrom.setFunction2Schema(functionMap, schema);
+    // if (newSchema!=''){
+    //   editor.get('designer').project.load(newSchema,true);
+    
+
   };
 
+
+  saveSchema = () => {
+    const {jsCode} = this.state;
+    const {editor} = this.props;
+    let functionMap = transfrom.code2Schema(jsCode);
+    let schema = editor.get('designer').project.getSchema();
+    let oldSchemaStr = JSON.stringify(schema);
+    let newSchema = transfrom.setFunction2Schema(functionMap, schema);
+
+    if (newSchema!='' && JSON.stringify(newSchema) != oldSchemaStr){
+      editor.get('designer').project.setSchema(newSchema);
+    }
+  }
+
   render() {
-    const { isShow, selectTab, jsCode, css } = this.state;
+    const { selectTab, jsCode, css } = this.state;
     const tabs = [
       { tab: 'index.js', key: TAB_KEY.JS_TAB },
       { tab: 'style.css', key: TAB_KEY.CSS_TAB },
@@ -224,9 +297,9 @@ export default class SourceEditor extends Component<{
           ))}
         </Tab>
 
-        {isShow && (
+
           <div style={{ height: '100%' }} className="editor-context-container">
-            <div id="jsEditorDom" className="editor-context">
+            <div id="jsEditorDom" className="editor-context" ref={this.editorJsRef}>
               <MonacoEditor
                 value={jsCode}
                 {...defaultEditorOption}
@@ -235,7 +308,7 @@ export default class SourceEditor extends Component<{
                 editorDidMount={(editor, monaco) => this.editorDidMount.call(this, editor, monaco, TAB_KEY.JS_TAB)}
               />
             </div>
-            <div className="editor-context" id="cssEditorDom">
+            <div className="editor-context" id="cssEditorDom" ref={this.editorCssRef}>
               <MonacoEditor
                 value={css}
                 {...defaultEditorOption}
@@ -245,11 +318,11 @@ export default class SourceEditor extends Component<{
               />
             </div>
           </div>
-        )}
 
-        <div className="full-screen-container" onClick={this.fullScreen}>
+
+        {/* <div className="full-screen-container" onClick={this.fullScreen}>
           <img src="https://gw.alicdn.com/tfs/TB1d7XqE1T2gK0jSZFvXXXnFXXa-200-200.png"></img>
-        </div>
+        </div> */}
       </div>
     );
   }

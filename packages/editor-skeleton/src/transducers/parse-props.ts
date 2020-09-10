@@ -47,7 +47,25 @@ function propTypeToSetter(propType: PropType): SetterType {
         isRequired,
         initialValue: '',
       };
+    case 'Json':
+      return {
+        componentName: 'JsonSetter',
+        isRequired,
+        initialValue: '',
+      };
+    case 'color':
+      return {
+        componentName: 'ColorSetter',
+        isRequired,
+        initialValue: '',
+      };
 
+    case 'icon':
+      return {
+        componentName: 'IconSetter',
+        isRequired,
+        initialValue: '',
+      };
     case 'number':
       return {
         componentName: 'NumberSetter',
@@ -60,6 +78,14 @@ function propTypeToSetter(propType: PropType): SetterType {
         isRequired,
         initialValue: false,
       };
+    case 'JSExpression':
+      return {
+        componentName: 'ExpressionSetter',
+        initialValue: {
+          type: 'JSExpression',
+          value: '',
+        },
+      };
     case 'oneOf':
       const dataSource = ((propType as OneOf).value || []).map((value, index) => {
         const t = typeof value;
@@ -68,7 +94,7 @@ function propTypeToSetter(propType: PropType): SetterType {
           value,
         };
       });
-      const componentName = dataSource.length > 4 ? 'SelectSetter' : 'RadioGroupSetter';
+      const componentName = dataSource.length >= 4 ? 'SelectSetter' : 'RadioGroupSetter';
       return {
         componentName,
         props: { dataSource },
@@ -80,14 +106,14 @@ function propTypeToSetter(propType: PropType): SetterType {
     case 'node': // TODO: use Mixin
       return {
         // slotSetter
-        componentName: 'NodeSetter',
+        componentName: 'SlotSetter',
         props: {
           mode: typeName,
         },
         isRequired,
         initialValue: {
           type: 'JSSlot',
-          value: '',
+          value: [],
         },
       };
     case 'shape':
@@ -139,23 +165,18 @@ function propTypeToSetter(propType: PropType): SetterType {
     case 'func':
       return {
         componentName: 'FunctionSetter',
-        isRequired,
-        initialValue: {
-          type: 'JSFunction',
-          value: 'function(){}',
-        },
+        isRequired
       };
     case 'oneOfType':
       return {
         componentName: 'MixedSetter',
         props: {
           // TODO:
-          // setters: (propType as OneOfType).value.map(item => propTypeToSetter(item)),
+          setters: (propType as OneOfType).value.map((item) => propTypeToSetter(item)),
         },
         isRequired,
       };
   }
-
   return {
     componentName: 'MixedSetter',
     isRequired,
@@ -163,7 +184,7 @@ function propTypeToSetter(propType: PropType): SetterType {
   };
 }
 
-const EVENT_RE = /^on[A-Z][\w]*$/;
+const EVENT_RE = /^on|after|before[A-Z][\w]*$/;
 
 export default function(metadata: TransformedComponentMetadata): TransformedComponentMetadata {
   const { configure = {} } = metadata;

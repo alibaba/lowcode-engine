@@ -45,6 +45,7 @@ function buildComponents(
   componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> | ComponentSchema },
   createComponent: (schema: ComponentSchema) => Component | null,
 ) {
+  debugger;
   const components: any = {
     ...builtinComponents,
   };
@@ -242,11 +243,13 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   }
 
   constructor() {
+    debugger;
     this.dispose = host.connect(this, () => {
       // sync layout config
       // debugger;
       this._layout = host.project.get('config').layout;
-
+      console.log("haha");
+      debugger;
       // todo: split with others, not all should recompute
       if (this._libraryMap !== host.libraryMap || this._componentsMap !== host.designer.componentsMap) {
         this._libraryMap = host.libraryMap || {};

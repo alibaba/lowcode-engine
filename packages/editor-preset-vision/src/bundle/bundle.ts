@@ -2,6 +2,7 @@ import lg from '@ali/vu-logger';
 import { ComponentClass, ComponentType } from 'react';
 import Prototype, { isPrototype } from './prototype';
 import { designer } from '../editor';
+import { upgradeMetadata } from './upgrade-metadata';
 import trunk from './trunk';
 
 function basename(name: string) {
@@ -69,8 +70,6 @@ export default class Bundle {
 
     // invoke prototype mocker while the prototype does not exist
     Object.keys(this.viewsMap).forEach((viewName) => {
-      const test = this;
-      // console.log(test, viewName);
       if (!this.prototypeList.find((proto) => proto.getComponentName() === viewName)) {
         const mockedPrototype = trunk.mockComponentPrototype(this.viewsMap[viewName]);
         if (mockedPrototype) {
@@ -127,6 +126,8 @@ export default class Bundle {
      */
     if (bundles.length >= 2) {
       const prototype = bundles[0];
+      const metadata = upgradeMetadata({ ...prototype.options, packageName: prototype.packageName });
+      prototype.meta = designer.createComponentMeta(metadata);
       const prototypeView = bundles[1];
       prototype.setView(prototypeView);
       this.registerPrototype(prototype);

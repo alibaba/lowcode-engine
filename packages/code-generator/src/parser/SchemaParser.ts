@@ -124,17 +124,6 @@ class SchemaParser implements ISchemaParser {
       internalDeps[dep.moduleName] = dep;
     });
 
-    // 分析容器内部组件依赖
-    containers.forEach((container) => {
-      if (container.children) {
-        const depNames = this.getComponentNames(container.children);
-        container.deps = uniqueArray<string>(depNames, (i: string) => i)
-          .map((depName) => internalDeps[depName] || compDeps[depName])
-          .filter((dep) => !!dep);
-        // container.deps = Object.keys(compDeps).map((depName) => compDeps[depName]);
-      }
-    });
-
     // TODO: 不应该在出码部分解决？
     // 处理 children 写在了 props 里的情况
     containers.forEach((container) => {
@@ -153,6 +142,17 @@ class SchemaParser implements ISchemaParser {
             rerun: true,
           },
         );
+      }
+    });
+
+    // 分析容器内部组件依赖
+    containers.forEach((container) => {
+      if (container.children) {
+        const depNames = this.getComponentNames(container.children);
+        container.deps = uniqueArray<string>(depNames, (i: string) => i)
+          .map((depName) => internalDeps[depName] || compDeps[depName])
+          .filter((dep) => !!dep);
+        // container.deps = Object.keys(compDeps).map((depName) => compDeps[depName]);
       }
     });
 

@@ -1,15 +1,24 @@
-import React, { createElement, ReactInstance, ComponentType, ReactElement } from 'react';
+import React, { createElement, ReactInstance, ComponentType, ReactElement, FunctionComponent } from 'react';
 import { render as reactRender } from 'react-dom';
 import { host } from './host';
 import SimulatorRendererView from './renderer-view';
 import { computed, obx } from '@recore/obx';
-import { Asset, isReactComponent } from '@ali/lowcode-utils';
+import { Asset } from '@ali/lowcode-utils';
 import { getClientRects } from './utils/get-client-rects';
-import loader from './utils/loader';
 import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
-import { isESModule, isElement, cursor, setNativeSelection } from '@ali/lowcode-utils';
-import { RootSchema, NpmInfo, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
-import { BuiltinSimulatorRenderer, NodeInstance, Component, DocumentModel, Node } from '@ali/lowcode-designer';
+import {
+  isElement,
+  cursor,
+  setNativeSelection,
+  buildComponents,
+  getSubComponent,
+  AssetLoader,
+} from '@ali/lowcode-utils';
+import { RootSchema, ComponentSchema, TransformStage, NodeSchem } from '@ali/lowcode-types';
+// import { isESModule, isElement, acceptsRef, wrapReactClass, cursor, setNativeSelection } from '@ali/lowcode-utils';
+// import { RootSchema, NpmInfo, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
+// just use types
+import { BuiltinSimulatorRenderer, NodeInstance, Component } from '@ali/lowcode-designer';
 import { createMemoryHistory, MemoryHistory } from 'history';
 import Slot from './builtin-components/slot';
 import Leaf from './builtin-components/leaf';
@@ -32,6 +41,40 @@ export class DocumentInstance {
     });
   }
 
+  @obx.ref private _schema?: RootSchema;
+  @computed get schema(): any {
+    return this._schema;
+  }
+  private _libraryMap: { [key: string]: string } = {};
+  private buildComponents() {
+    this._components = {
+      ...builtinComponents,
+      ...buildComponents(this._libraryMap, this._componentsMap),
+    };
+  }
+  @obx.ref private _components: any = {};
+  @computed get components(): object {
+    // 根据 device 选择不同组件，进行响应式
+    // 更好的做法是，根据 device 选择加载不同的组件资源，甚至是 simulatorUrl
+    return this._components;
+  }
+  // context from: utils、constants、history、location、match
+  @obx.ref private _appContext = {};
+  @computed get context(): any {
+    return this._appContext;
+  }
+  @obx.ref private _designMode = 'design';
+  @computed get designMode(): any {
+    return this._designMode;
+  }
+  @obx.ref private _device = 'default';
+  @computed get device() {
+    return this._device;
+  }
+  @obx.ref private _componentsMap = {};
+  @computed get componentsMap(): any {
+    return this._componentsMap;
+  }
   @computed get suspended(): any {
     return false;
   }
@@ -315,6 +358,15 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     _schema.methods = {};
     _schema.lifeCycles = {};
 
+    if (schema.componentName === 'Component' && (schema as ComponentSchema).css) {
+      const doc = window.document;
+      const s = doc.createElement('style');
+      s.setAttribute('type', 'text/css');
+      s.setAttribute('id', `Component-${schema.id || ''}`);
+      s.appendChild(doc.createTextNode((schema as ComponentSchema).css || ''));
+      doc.getElementsByTagName('head')[0].appendChild(s);
+    }
+
     const node = host.document.createNode(_schema);
     _schema = node.export(TransformStage.Render);
 
@@ -335,7 +387,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
           }
         } else if (result[key]?.type === 'JSSlot') {
           const schema = result[key].value;
-          result[key] = createElement(Ele, {schema, propsMap: {}});
+          result[key] = createElement(Ele, { schema, propsMap: {} });
         }
       });
 
@@ -345,10 +397,10 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     const renderer = this;
     const componentsMap = renderer.componentsMap;
 
-    class Ele extends React.Component<{ schema: any, propsMap: any }> {
+    class Ele extends React.Component<{ schema: any; propsMap: any }> {
       private isModal: boolean;
 
-      constructor(props: any){
+      constructor(props: any) {
         super(props);
         const componentMeta = host.document.getComponentMeta(props.schema.componentName);
         if (componentMeta?.prototype?.isModal()) {
@@ -368,12 +420,12 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         }
         let children = null;
         if (schema.children && schema.children.length > 0) {
-          children = schema.children.map((item: any) => createElement(Ele, {schema: item, propsMap}));
+          children = schema.children.map((item: any) => createElement(Ele, { schema: item, propsMap }));
         }
         const props = processPropsSchema(schema.props, propsMap);
         const _leaf = host.document.createNode(schema);
 
-        return createElement(Com, {...props, _leaf}, children);
+        return createElement(Com, { ...props, _leaf }, children);
       }
       const _leaf = this.document.designer.currentDocument?.createNode(schema);
       const node = this.document.createNode(schema);
@@ -385,11 +437,22 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
 
     const container = this;
     class Com extends React.Component {
+      // TODO: 暂时解决性能问题
+      shouldComponentUpdate() {
+        return false;
+      }
+
       render() {
-        const componentsMap = container.componentsMap;
-        let children = null;
-        if (_schema.children && Array.isArray(_schema.children)) {
-          children = _schema.children?.map((item: any) => getElement(componentsMap, item, this.props));
+        const componentName = _schema.componentName;
+        if (componentName === 'Component') {
+          let children = [];
+          const propsMap = this.props || {};
+          if (_schema.children && Array.isArray(_schema.children)) {
+            children = _schema.children.map((item: any) => createElement(Ele, { schema: item, propsMap }));
+          }
+          return createElement('div', {}, children);
+        } else {
+          return createElement(Ele, { schema: _schema, propsMap: {} });
         }
       }
     }
@@ -421,98 +484,12 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   }
 }
 
-function accessLibrary(library: string | object) {
-  if (typeof library !== 'string') {
-    return library;
-  }
-
-  return (window as any)[library];
-}
-
-function getSubComponent(library: any, paths: string[]) {
-  const l = paths.length;
-  if (l < 1 || !library) {
-    return library;
-  }
-  let i = 0;
-  let component: any;
-  while (i < l) {
-    const key = paths[i]!;
-    let ex: any;
-    try {
-      component = library[key];
-    } catch (e) {
-      ex = e;
-      component = null;
-    }
-    if (i === 0 && component == null && key === 'default') {
-      if (ex) {
-        return l === 1 ? library : null;
-      }
-      component = library;
-    } else if (component == null) {
-      return null;
-    }
-    library = component;
-    i++;
-  }
-  return component;
-}
-
-function findComponent(libraryMap: LibraryMap, componentName: string, npm?: NpmInfo) {
-  if (!npm) {
-    return accessLibrary(componentName);
-  }
-  // libraryName the key access to global
-  // export { exportName } from xxx exportName === global.libraryName.exportName
-  // export exportName from xxx   exportName === global.libraryName.default || global.libraryName
-  // export { exportName as componentName } from package
-  // if exportName == null exportName === componentName;
-  // const componentName = exportName.subName, if exportName empty subName donot use
-  const exportName = npm.exportName || npm.componentName || componentName;
-  const libraryName = libraryMap[npm.package] || exportName;
-  const library = accessLibrary(libraryName);
-  const paths = npm.exportName && npm.subName ? npm.subName.split('.') : [];
-  if (npm.destructuring) {
-    paths.unshift(exportName);
-  } else if (isESModule(library)) {
-    paths.unshift('default');
-  }
-  return getSubComponent(library, paths);
-}
-
-export interface LibraryMap {
-  [key: string]: string;
-}
-
 // Slot/Leaf and Fragment|FunctionComponent polyfill(ref)
 
 const builtinComponents = {
   Slot,
   Leaf,
 };
-
-function buildComponents(libraryMap: LibraryMap,
-  componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> | ComponentSchema },
-  createComponent: (schema: ComponentSchema) => Component | null) {
-  const components: any = {
-    ...builtinComponents,
-  };
-  Object.keys(componentsMap).forEach((componentName) => {
-    let component = componentsMap[componentName];
-    if (component && (component as ComponentSchema).componentName === 'Component') {
-      components[componentName] = createComponent(component as ComponentSchema);
-    } else if (isReactComponent(component)) {
-      components[componentName] = component;
-    } else {
-      component = findComponent(libraryMap, componentName, component as NpmInfo);
-      if (component) {
-        components[componentName] = component;
-      }
-    }
-  });
-  return components;
-}
 
 let REACT_KEY = '';
 function cacheReactKey(el: Element): Element {
@@ -560,7 +537,7 @@ function getClosestNodeInstance(from: ReactInstance, specId?: string): NodeInsta
 }
 
 function getNodeInstance(fiberNode: any, specId?: string): NodeInstance<ReactInstance> | null {
-  const instance = fiberNode.stateNode;
+  const instance = fiberNode?.stateNode;
   if (instance && SYMBOL_VNID in instance) {
     const nodeId = instance[SYMBOL_VNID];
     const docId = instance[SYMBOL_VDID];
@@ -572,7 +549,7 @@ function getNodeInstance(fiberNode: any, specId?: string): NodeInstance<ReactIns
       };
     }
   }
-  return getNodeInstance(fiberNode.return);
+  return getNodeInstance(fiberNode?.return);
 }
 
 function checkInstanceMounted(instance: any): boolean {

@@ -160,8 +160,8 @@ export class ComponentMeta {
     const liveTextEditing = this._transformedMetadata.experimental?.liveTextEditing || [];
 
     function collectLiveTextEditing(items: FieldConfig[]) {
-      items.forEach(config => {
-        if (config.items) {
+      items.forEach((config) => {
+        if (config?.items) {
           collectLiveTextEditing(config.items);
         } else {
           const liveConfig = config.liveTextEditing || config.extraProps?.liveTextEditing;
@@ -208,13 +208,13 @@ export class ComponentMeta {
     return result as any;
   }
 
-  isRootComponent() {
-    return this.componentName === 'Page' || this.componentName === 'Block' || this.componentName === 'Component';
+  isRootComponent(includeBlock: boolean = true) {
+    return this.componentName === 'Page' || this.componentName === 'Component' || (includeBlock && this.componentName === 'Block');
   }
 
   @computed get availableActions() {
     let { disableBehaviors, actions } = this._transformedMetadata?.configure.component || {};
-    const disabled = ensureAList(disableBehaviors) || (this.isRootComponent() ? ['copy', 'remove'] : null);
+    const disabled = ensureAList(disableBehaviors) || (this.isRootComponent(false) ? ['copy', 'remove'] : null);
     actions = builtinComponentActions.concat(this.designer.getGlobalComponentActions() || [], actions || []);
 
     if (disabled) {
@@ -277,7 +277,6 @@ function preprocessMetadata(metadata: ComponentMetadata): TransformedComponentMe
   };
 }
 
-
 export interface MetadataTransducer {
   (prev: TransformedComponentMetadata): TransformedComponentMetadata;
   /**
@@ -293,7 +292,7 @@ export interface MetadataTransducer {
 }
 const metadataTransducers: MetadataTransducer[] = [];
 
-export function registerMetadataTransducer(transducer: MetadataTransducer, level: number = 100, id?: string) {
+export function registerMetadataTransducer(transducer: MetadataTransducer, level = 100, id?: string) {
   transducer.level = level;
   transducer.id = id;
   const i = metadataTransducers.findIndex((item) => item.level != null && item.level > level);
@@ -307,7 +306,6 @@ export function registerMetadataTransducer(transducer: MetadataTransducer, level
 export function getRegisteredMetadataTransducers(): MetadataTransducer[] {
   return metadataTransducers;
 }
-
 
 registerMetadataTransducer((metadata) => {
   const { configure, componentName } = metadata;
@@ -337,9 +335,9 @@ registerMetadataTransducer((metadata) => {
       };
     }
   }
-  if (component.isModal == null && /Dialog/.test(componentName)) {
-    component.isModal = true;
-  }
+  // if (component.isModal == null && /Dialog/.test(componentName)) {
+  //   component.isModal = true;
+  // }
   return {
     ...metadata,
     configure: {

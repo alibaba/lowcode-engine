@@ -1,0 +1,87 @@
+@charset "UTF-8";
+
+// slider mixins
+// --------------------------------------------------
+
+@mixin slick-arrow-size($arrow-width, $arrow-height, $icon-size) {
+    width: $arrow-width;
+    height: $arrow-height;
+    line-height: $arrow-height;
+
+    .#{$css-prefix}icon {
+        @include icon-size($icon-size);
+    }
+}
+
+@mixin slick-arrow-statement(
+    $icon-color,
+    $icon-color-hover,
+    $icon-color-disabled,
+    $icon-bg-color,
+    $icon-bg-color-hover,
+    $icon-bg-color-disabled,
+    $icon-bg-opacity,
+    $icon-bg-opacity-hover,
+    $icon-bg-opacity-disabled
+) {
+    color: $icon-color;
+    background: $icon-bg-color;
+    opacity: $icon-bg-opacity;
+    padding: 0;
+    border: none;
+
+    &:focus,
+    &:hover {
+        color: $icon-color-hover;
+        background: $icon-bg-color-hover;
+        opacity: $icon-bg-opacity-hover;
+    }
+
+    &.disabled {
+        color: $icon-color-disabled;
+        background: $icon-bg-color-disabled;
+        opacity: $icon-bg-opacity-disabled;
+    }
+}
+
+@mixin slick-arrow-position-hoz($top, $right, $bottom, $left) {
+    top: $top;
+    bottom: $bottom;
+
+    &#{$slick-prefix}-prev {
+        left: $left;
+    }
+
+    &#{$slick-prefix}-next {
+        right: $right;
+    }
+}
+
+@mixin slick-arrow-position-ver($top, $right, $bottom, $left) {
+    right: $right;
+    left: $left;
+
+    &#{$slick-prefix}-prev {
+        top: $top;
+    }
+
+    &#{$slick-prefix}-next {
+        bottom: $bottom;
+    }
+}
+
+@mixin slick-dots-position(
+    $dots-width,
+    $dots-offset,
+    $dots-direction: 'hoz'
+) {
+    width: $dots-width;
+    @if $dots-direction == 'ver' {
+        top: 0;
+        right: $dots-offset;
+        bottom: 0;
+    } @else {
+        bottom: $dots-offset;
+        left: 0;
+    }
+}

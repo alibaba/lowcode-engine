@@ -1,10 +1,9 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 
-export default function SubModule({ name }) {
-  return <div>hello, {name}</div>;
+interface Props {
+  name: string;
 }
 
-SubModule.propTypes = {
-  name: PropTypes.string,
-};
+export default function SubModule({ name }: Props) {
+  return <div>hello, {name}</div>;
+}

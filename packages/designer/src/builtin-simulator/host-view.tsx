@@ -58,7 +58,7 @@ class Canvas extends Component<{ host: BuiltinSimulatorHost }> {
 
     return (
       <div className={className}>
-        <div ref={elmt => sim.mountViewport(elmt)} className="lc-simulator-canvas-viewport">
+        <div ref={(elmt) => sim.mountViewport(elmt)} className="lc-simulator-canvas-viewport">
           <BemTools host={sim} />
           <Content host={sim} />
         </div>
@@ -72,18 +72,19 @@ class Content extends Component<{ host: BuiltinSimulatorHost }> {
   render() {
     const sim = this.props.host;
     const viewport = sim.viewport;
-    let frameStyle = {};
-    if (viewport.scale < 1) {
-      frameStyle = {
-        transform: `scale(${viewport.scale})`,
-        height: viewport.contentHeight,
-        width: viewport.contentWidth,
-      };
-    }
+    const frameStyle = {
+      transform: `scale(${viewport.scale})`,
+      height: viewport.contentHeight,
+      width: viewport.contentWidth,
+    };
 
     return (
       <div className="lc-simulator-content">
-        <iframe className="lc-simulator-content-frame" style={frameStyle} ref={frame => sim.mountContentFrame(frame)} />
+        <iframe
+          className="lc-simulator-content-frame"
+          style={frameStyle}
+          ref={(frame) => sim.mountContentFrame(frame)}
+        />
       </div>
     );
   }

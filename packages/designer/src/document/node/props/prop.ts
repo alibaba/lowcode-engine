@@ -22,6 +22,37 @@ export class Prop implements IPropParent {
   readonly isProp = true;
   readonly owner: Node;
 
+  private stash: PropStash | undefined;
+
+  /**
+   * 键值
+   */
+  @obx key: string | number | undefined;
+  /**
+   * 扩展值
+   */
+  @obx spread: boolean;
+
+  readonly props: Props;
+  readonly options: any;
+
+  constructor(
+    public parent: IPropParent,
+    value: CompositeValue | UNSET = UNSET,
+    key?: string | number,
+    spread = false,
+    options = {},
+  ) {
+    this.owner = parent.owner;
+    this.props = parent.props;
+    this.key = key;
+    this.spread = spread;
+    this.options = options;
+    if (value !== UNSET) {
+      this.setValue(value);
+    }
+  }
+
   /**
    * @see SettingTarget
    */
@@ -64,6 +95,11 @@ export class Prop implements IPropParent {
 
   export(stage: TransformStage = TransformStage.Save): CompositeValue | UNSET {
     const type = this._type;
+
+    // 在设计器里，所有组件都需要展示
+    if (stage === TransformStage.Render && this.key === '___condition___') {
+      return true;
+    }
 
     if (type === 'unset') {
       // return UNSET; @康为 之后 review 下这块改造
@@ -192,7 +228,7 @@ export class Prop implements IPropParent {
     } else if (Array.isArray(val)) {
       this._type = 'list';
     } else if (isPlainObject(val)) {
-      if (isJSSlot(val)) {
+      if (isJSSlot(val) && this.options.propsMode !== 'init') {
         this.setAsSlot(val);
         return;
       }
@@ -340,34 +376,6 @@ export class Prop implements IPropParent {
       return null;
     }
     return this._maps;
-  }
-
-  private stash: PropStash | undefined;
-
-  /**
-   * 键值
-   */
-  @obx key: string | number | undefined;
-  /**
-   * 扩展值
-   */
-  @obx spread: boolean;
-
-  readonly props: Props;
-
-  constructor(
-    public parent: IPropParent,
-    value: CompositeValue | UNSET = UNSET,
-    key?: string | number,
-    spread = false,
-  ) {
-    this.owner = parent.owner;
-    this.props = parent.props;
-    if (value !== UNSET) {
-      this.setValue(value);
-    }
-    this.key = key;
-    this.spread = spread;
   }
 
   /**

@@ -132,54 +132,32 @@ class Renderer extends Component<{ documentInstance: DocumentInstance }> {
         components={container.components}
         appHelper={container.context}
         designMode={designMode}
-        suspended={documentInstance.suspended}
-        self={documentInstance.scope}
+        device={device}
+        suspended={renderer.suspended}
+        self={renderer.scope}
         customCreateElement={(Component: any, props: any, children: any) => {
           const { __id, __desingMode, ...viewProps } = props;
           viewProps.componentId = __id;
           const leaf = documentInstance.getNode(__id);
           viewProps._leaf = leaf;
           viewProps._componentName = leaf?.componentName;
-          let _children = leaf?.isContainer()
-            ? children == null
-              ? []
-              : Array.isArray(children)
-              ? children
-              : [children]
-            : children;
-          if (props.children && props.children.length) {
-            if (Array.isArray(props.children)) {
-              _children = Array.isArray(_children)
-                ? _children.concat(props.children)
-                : props.children.unshift(_children);
-            } else {
-              (Array.isArray(_children) && _children.push(props.children)) ||
-                (_children = [_children].push(props.children));
-            }
-          }
           // 如果是容器 && 无children && 高宽为空 增加一个占位容器，方便拖动
           if (
+            !viewProps.dataSource &&
             leaf?.isContainer() &&
-            (_children == null || !_children.length) &&
-            (!viewProps.style || Object.keys(viewProps.style).length == 0)
+            (children == null || (Array.isArray(children) && !children.length)) &&
+            (!viewProps.style || Object.keys(viewProps.style).length === 0)
           ) {
-            _children = (
-              <div
-                style={{
-                  height: '66px',
-                  backgroundColor: '#f0f0f0',
-                  borderColor: '#a7b1bd',
-                  border: '1px dotted',
-                  color: '#a7b1bd',
-                  textAlign: 'center',
-                  lineHeight: '66px',
-                }}
-              >
-                拖拽组件或模板到这里
+            children = (
+              <div className="lc-container-placeholder" style={viewProps.placeholderStyle}>
+                {viewProps.placeholder || '拖拽组件或模板到这里'}
               </div>
             );
           }
-
+          if(viewProps._componentName === 'a') {
+            delete viewProps.href;
+          }
+          // FIXME: 渲染仍有问题
           if (viewProps._componentName === 'Menu') {
             Object.assign(viewProps, {
               _componentName: 'Menu',
@@ -199,7 +177,11 @@ class Renderer extends Component<{ documentInstance: DocumentInstance }> {
             });
           }
 
-          return createElement(getDeviceView(Component, device, designMode), viewProps, _children);
+          return createElement(
+            getDeviceView(Component, device, designMode),
+            viewProps,
+            children,
+          );
         }}
         onCompGetRef={(schema: any, ref: ReactInstance | null) => {
           documentInstance.mountInstance(schema.id, ref);

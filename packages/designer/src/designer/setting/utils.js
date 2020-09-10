@@ -9,10 +9,13 @@ function getHotterFromSetter(setter) {
 }
 
 function getTransducerFromSetter(setter) {
-  return setter && (
-    setter.transducer || setter.Transducer
-    || (setter.type && (setter.type.transducer || setter.type.Transducer))
-  ) || null; // eslint-disable-line
+  return (
+    (setter &&
+      (setter.transducer ||
+        setter.Transducer ||
+        (setter.type && (setter.type.transducer || setter.type.Transducer)))) ||
+    null
+  ); // eslint-disable-line
 }
 
 function combineTransducer(transducer, arr, context) {
@@ -49,11 +52,7 @@ export class Transducer {
       setter = getSetter(setter)?.component;
     }
 
-    this.setterTransducer = combineTransducer(
-      getTransducerFromSetter(setter),
-      getHotterFromSetter(setter),
-      context,
-    );
+    this.setterTransducer = combineTransducer(getTransducerFromSetter(setter), getHotterFromSetter(setter), context);
     this.context = context;
   }
 

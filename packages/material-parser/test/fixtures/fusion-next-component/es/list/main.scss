@@ -1,0 +1,123 @@
+@charset "UTF-8";
+
+@import "../core/index-noreset.scss";
+
+@import "scss/mixin";
+@import "scss/variable";
+
+/* put your code here */
+
+#{$list-prefix} {
+    &-header {
+        padding: $list-size-m-item-padding-tb $list-size-m-item-padding-lr;
+        border-bottom: $line-1 solid $list-divider-color;
+        font-size: $list-size-m-title-font-size;
+        font-weight: $list-size-m-title-font-weight;
+        color: $list-title-color;
+    }
+
+    &-footer {
+        padding: $list-size-m-item-padding-tb $list-size-m-item-padding-lr;
+        border-top: $line-1 solid $list-divider-color;
+        color: $list-content-color;
+    }
+
+    &-items {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    &-item {
+        display: table; /* 兼容ie9 */
+        display: flex;
+        width: 100%;
+        font-size: $list-size-m-item-content-font-size;
+        color: $list-content-color;
+        line-height: $list-size-m-item-content-line-height;
+        padding: $list-size-m-item-padding-tb $list-size-m-item-padding-lr;
+    }
+
+    &-item-media {
+        display: table-cell; /* 兼容ie9 */
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        min-width: 1px;
+        flex-shrink: 0;
+        vertical-align: top;
+        padding-right: $list-size-m-item-media-margin;
+    }
+
+    &-item-extra {
+        display: table-cell; /* 兼容ie9 */
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        min-width: 1px;
+        flex-shrink: 0;
+        vertical-align: top;
+        padding-left: $list-size-m-item-media-margin;
+        color: $list-extra-color;
+    }
+
+    &-item-content {
+        display: table-cell; /* 兼容ie9 */
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        flex: 1;
+        width: 100%;
+        vertical-align: middle;
+    }
+
+    &-item-title {
+        font-size: $list-size-m-item-title-font-size;
+        font-weight: $list-size-m-item-title-font-weight;
+        color: $list-title-color;
+        line-height: $list-size-m-item-title-line-height;
+    }
+
+    &-small {
+        #{$list-prefix}-header {
+            padding: $list-size-s-item-padding-tb $list-size-s-item-padding-lr;
+            font-size: $list-size-s-title-font-size;
+            font-weight: $list-size-s-title-font-weight;
+        }
+
+        #{$list-prefix}-footer {
+            padding: $list-size-s-item-padding-tb $list-size-s-item-padding-lr;
+        }
+
+        #{$list-prefix}-item-media {
+            padding-right: $list-size-s-item-media-margin;
+        }
+        #{$list-prefix}-item-extra {
+            padding-left: $list-size-s-item-media-margin;
+        }
+
+        #{$list-prefix}-item {
+            font-size: $list-size-s-item-content-font-size;
+            font-weight: $list-size-s-item-title-font-weight;
+            line-height: $list-size-s-item-content-line-height;
+            padding: $list-size-s-item-padding-tb $list-size-s-item-padding-lr;
+        }
+        & #{$list-prefix}-item-title {
+            font-size: $list-size-s-item-title-font-size;
+            line-height: $list-size-s-item-title-line-height;
+        }
+    }
+
+    &-divider {
+        #{$list-prefix}-item {
+            border-bottom: $line-1 solid $list-divider-color;
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+    }
+}
+
+@import './rtl.scss';

@@ -14,14 +14,13 @@ import ActionPane from '@ali/ve-action-pane';
 import SourceEditor from '@ali/lowcode-plugin-source-editor';
 import fetchContext from '@ali/vu-legao-design-fetch-context';
 import EventBindDialog from '@ali/lowcode-plugin-event-bind-dialog';
-import loadUrls from './loader';
-import { upgradeAssetsBundle } from './upgrade-assets';
 import { isCSSUrl } from '@ali/lowcode-utils';
 import VariableSetter from '@ali/vs-variable-setter';
 import _isArray from "lodash/isArray";
 import _isObject from "lodash/isObject";
 import _get from 'lodash/get';
 import funcParser from '@ali/vu-function-parser';
+
 import {
   NumberSetter,
   BoolSetter,
@@ -38,6 +37,13 @@ import {
   ValidationSetter,
   ActionSetter,
 } from '@ali/visualengine-utils';
+
+import PropType from 'prop-types';
+
+import loadUrls from './loader';
+import { upgradeAssetsBundle } from './upgrade-assets';
+
+console.log(PropType);
 
 const { editor, skeleton, context, HOOKS, Trunk } = Engine;
 
@@ -102,8 +108,8 @@ context.use(HOOKS.VE_SETTING_FIELD_VARIABLE_SETTER, VariableSetter);
 const externals = ['react', 'react-dom', 'prop-types', 'react-router', 'react-router-dom', '@ali/recore'];
 
 async function loadAssets() {
-  const legaoAssets = await editor.utils.get('./raxAssets.json');
-  // const legaoAssets = await editor.utils.get('./legao-assets.json');
+  // const legaoAssets = await editor.utils.get('./raxAssets.json');
+  const legaoAssets = await editor.utils.get('./legao-assets.json');
 
   const assets = upgradeAssetsBundle(legaoAssets);
 
@@ -145,11 +151,12 @@ async function loadAssets() {
 }
 
 async function loadSchema() {
-  const schema = await editor.utils.get('./rax.json');
-  // const schema = await editor.utils.get('./schema.json');
+  // const schema = await editor.utils.get('./rax.json');
+  const schema = await editor.utils.get('./vision-schema.json');
   editor.set('schema', schema);
-  editor.set('renderEnv', 'rax');
-  editor.set('clientTypes', ['mobile']);
+  // editor.set('renderEnv', 'rax');
+  // editor.set('clientTypes', ['mobile']);
+
 }
 
 // demo

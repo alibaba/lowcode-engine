@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Editor } from '@ali/lowcode-editor-core';
 import { DesignerView, Designer } from '@ali/lowcode-designer';
+import { Asset } from '@ali/lowcode-utils';
 import './index.scss';
 
 export interface PluginProps {
@@ -15,6 +16,7 @@ interface DesignerPluginState {
   device?: string;
   designMode?: string;
   deviceClassName?: string;
+  simulatorUrl: Asset | null;
 }
 
 export default class DesignerPlugin extends PureComponent<PluginProps, DesignerPluginState> {
@@ -28,6 +30,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
     device: 'default',
     designMode: 'live',
     deviceClassName: '',
+    simulatorUrl: null,
   };
 
   private _mounted = true;
@@ -45,6 +48,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
       const device = await editor.get('device');
       const designMode = await editor.get('designMode');
       const deviceClassName = await editor.get('deviceClassName');
+      const simulatorUrl = await editor.get('simulatorUrl');
       if (!this._mounted) {
         return;
       }
@@ -57,6 +61,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
         device,
         designMode,
         deviceClassName,
+        simulatorUrl,
       };
       this.setState(state);
     } catch (e) {
@@ -87,6 +92,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
       device,
       designMode,
       deviceClassName,
+      simulatorUrl,
     } = this.state;
 
     if (!library || !componentMetadatas) {
@@ -108,6 +114,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
           device,
           designMode,
           deviceClassName,
+          simulatorUrl,
         }}
       />
     );

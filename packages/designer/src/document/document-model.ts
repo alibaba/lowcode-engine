@@ -1,5 +1,5 @@
 import { computed, obx } from '@ali/lowcode-editor-core';
-import { NodeData, isJSExpression, isDOMText, NodeSchema, isNodeSchema, RootSchema } from '@ali/lowcode-types';
+import { NodeData, isJSExpression, isDOMText, NodeSchema, isNodeSchema, RootSchema, PageSchema } from '@ali/lowcode-types';
 import { EventEmitter } from 'events';
 import { Project } from '../project';
 import { ISimulatorHost } from '../simulator';
@@ -11,6 +11,7 @@ import { History } from './history';
 import { TransformStage } from './node';
 import { uniqueId } from '@ali/lowcode-utils';
 import { ModalNodesManager } from './node';
+import { foreachReverse } from '../utils/tree';
 
 export type GetDataType<T, NodeType> = T extends undefined
   ? NodeType extends {
@@ -20,20 +21,20 @@ export type GetDataType<T, NodeType> = T extends undefined
     : any
   : T;
 
-  export interface ComponentMap {
-    componentName: string;
-    package: string;
-    version?: string;
-    destructuring?: boolean;
-    exportName?: string;
-    subName?: string;
-  }
+export interface ComponentMap {
+  componentName: string;
+  package: string;
+  version?: string;
+  destructuring?: boolean;
+  exportName?: string;
+  subName?: string;
+}
 
 export class DocumentModel {
   /**
    * 根节点 类型有：Page/Component/Block
    */
-  readonly rootNode: RootNode;
+  rootNode: RootNode | null;
   /**
    * 文档编号
    */
@@ -51,7 +52,7 @@ export class DocumentModel {
    */
   readonly modalNodesManager: ModalNodesManager;
 
-  private nodesMap = new Map<string, Node>();
+  private _nodesMap = new Map<string, Node>();
   @obx.val private nodes = new Set<Node>();
   private seqId = 0;
   private emitter: EventEmitter;
@@ -67,6 +68,10 @@ export class DocumentModel {
    */
   get simulator(): ISimulatorHost | null {
     return this.project.simulator;
+  }
+
+  get nodesMap(): Map<string, Node> {
+    return this._nodesMap;
   }
 
   get fileName(): string {
@@ -101,6 +106,9 @@ export class DocumentModel {
     if (!schema) {
       this._blank = true;
     }
+
+    // 兼容 vision
+    this.id = project.getSchema()?.id || this.id;
 
     this.rootNode = this.createNode<RootNode>(
       schema || {
@@ -140,14 +148,19 @@ export class DocumentModel {
    * 生成唯一id
    */
   nextId() {
-    return this.id + (++this.seqId).toString(36).toLocaleLowerCase();
+    let id;
+    do {
+      id = 'node_' + (this.id.slice(-10) + (++this.seqId).toString(36)).toLocaleLowerCase();
+    } while (this.nodesMap.get(id))
+
+    return id;
   }
 
   /**
    * 根据 id 获取节点
    */
   getNode(id: string): Node | null {
-    return this.nodesMap.get(id) || null;
+    return this._nodesMap.get(id) || null;
   }
 
   /**
@@ -201,13 +214,13 @@ export class DocumentModel {
       // todo: this.activeNodes?.push(node);
     }
 
-    const origin = this.nodesMap.get(node.id);
+    const origin = this._nodesMap.get(node.id);
     if (origin && origin !== node) {
       // almost will not go here, ensure the id is unique
       origin.internalSetWillPurge();
     }
 
-    this.nodesMap.set(node.id, node);
+    this._nodesMap.set(node.id, node);
     this.nodes.add(node);
 
     this.emitter.emit('nodecreate', node);
@@ -254,14 +267,16 @@ export class DocumentModel {
   /**
    * 内部方法，请勿调用
    */
-  internalRemoveAndPurgeNode(node: Node) {
+  internalRemoveAndPurgeNode(node: Node, useMutator = false) {
     if (!this.nodes.has(node)) {
       return;
     }
-    this.nodesMap.delete(node.id);
+    node.remove(useMutator);
+  }
+
+  unlinkNode(node: Node) {
     this.nodes.delete(node);
-    this.selection.remove(node.id);
-    node.remove();
+    this._nodesMap.delete(node.id);
   }
 
   @obx.ref private _dropLocation: DropLocation | null = null;
@@ -305,20 +320,23 @@ export class DocumentModel {
    * 导出 schema 数据
    */
   get schema(): RootSchema {
-    return this.rootNode.schema as any;
+    return this.rootNode?.schema as any;
   }
 
   import(schema: RootSchema, checkId = false) {
-    // TODO: do purge
+    // TODO: 暂时用饱和式删除，原因是 Slot 节点并不是树节点，无法正常递归删除
     this.nodes.forEach(node => {
-      this.destroyNode(node);
+      this.internalRemoveAndPurgeNode(node, true);
     });
-    this.rootNode.import(schema as any, checkId);
+    // foreachReverse(this.rootNode?.children, (node: Node) => {
+    //   this.internalRemoveAndPurgeNode(node, true);
+    // });
+    this.rootNode?.import(schema as any, checkId);
     // todo: select added and active track added
   }
 
   export(stage: TransformStage = TransformStage.Serilize) {
-    return this.rootNode.export(stage);
+    return this.rootNode?.export(stage);
   }
 
   /**
@@ -427,12 +445,16 @@ export class DocumentModel {
    * 从项目中移除
    */
   remove() {
-    // this.project.removeDocument(this);
-    // todo: ...
+    this.designer.postEvent('document.remove', { id: this.id });
+    this.purge();
+    this.project.removeDocument(this);
   }
 
   purge() {
-    // todo:
+    this.rootNode?.purge();
+    this.nodes.clear();
+    this._nodesMap.clear();
+    this.rootNode = null;
   }
 
   checkNesting(dropTarget: ParentalNode, dragObject: DragNodeObject | DragNodeDataObject): boolean {
@@ -551,7 +573,7 @@ export class DocumentModel {
     const componentsMap: ComponentMap[] = [];
     // 组件去重
     const map: any = {};
-    for (let node of this.nodesMap.values()) {
+    for (let node of this._nodesMap.values()) {
       const { componentName } = node || {};
       if (!map[componentName] && node?.componentMeta?.npm?.package) {
         map[componentName] = true;
@@ -609,4 +631,8 @@ export class DocumentModel {
 
 export function isDocumentModel(obj: any): obj is DocumentModel {
   return obj && obj.rootNode;
+}
+
+export function isPageSchema(obj: any): obj is PageSchema {
+  return obj?.componentName === 'Page';
 }

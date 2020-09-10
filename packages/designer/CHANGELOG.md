@@ -3,6 +3,184 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.8-0"></a>
+## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.55...@ali/lowcode-designer@1.0.8-0) (2020-09-09)
+
+
+### Bug Fixes
+
+* 不应该限定 parent 才做解绑操作 ([2e616e3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2e616e3))
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+* 兼容modal模式 ([1092ee9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1092ee9))
+* 解决 set('schema') 后 componentsTree 越来越多的 bug ([a171d3e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a171d3e))
+* 优化树子节点删除逻辑 ([47e814f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/47e814f))
+
+
+### Features
+
+* 🎸 支持设置模拟器的 viewport 的宽高和缩放级别 ([3a54241](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3a54241))
+* 新增simulatorurl，可以设置cdn使用simulator ([1f45b05](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1f45b05))
+
+
+
+
+<a name="1.0.7-0"></a>
+## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@1.0.6-0...@ali/lowcode-designer@1.0.7-0) (2020-09-02)
+
+
+<a name="0.9.55"></a>
+## [0.9.55](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.54...@ali/lowcode-designer@0.9.55) (2020-09-08)
+
+
+### Bug Fixes
+
+* 拖拽时要解除与原来节点的关系 ([7a6bf2c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7a6bf2c))
+
+
+
+
+<a name="0.9.54"></a>
+## [0.9.54](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.53...@ali/lowcode-designer@0.9.54) (2020-09-03)
+
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+<a name="0.9.53"></a>
+## [0.9.53](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.52...@ali/lowcode-designer@0.9.53) (2020-09-03)
+
+
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+<a name="1.0.6-0"></a>
+## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.52...@ali/lowcode-designer@1.0.6-0) (2020-09-02)
+
+
+### Bug Fixes
+
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+* 兼容modal模式 ([1092ee9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1092ee9))
+
+
+### Features
+
+* 🎸 支持设置模拟器的 viewport 的宽高和缩放级别 ([3a54241](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3a54241))
+* 新增simulatorurl，可以设置cdn使用simulator ([1f45b05](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1f45b05))
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-designer
+<a name="1.0.5-0"></a>
+## [1.0.5-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@1.0.4-0...@ali/lowcode-designer@1.0.5-0) (2020-08-20)
+
+<a name="0.9.52"></a>
+## [0.9.52](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.51...@ali/lowcode-designer@0.9.52) (2020-08-27)
+
+
+### Bug Fixes
+
+* 在 renderer 层面做 function component 包装，避免影响 rax 等其他场景 ([1f920dd](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1f920dd))
+
+
+
+
+<a name="0.9.51"></a>
+## [0.9.51](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.50...@ali/lowcode-designer@0.9.51) (2020-08-26)
+
+
+### Bug Fixes
+
+* 处理 function component 无法选中的问题，本质上是没有 ref ([fa94aab](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fa94aab))
+
+
+
+
+<a name="0.9.50"></a>
+## [0.9.50](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.49...@ali/lowcode-designer@0.9.50) (2020-08-24)
+
+
+### Bug Fixes
+
+* 修复在切换页面时，没有销毁相应节点导致的一系列bug ([59fac25](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/59fac25))
+* 在设计器里，所有组件都需要展示，不管 condition 为何值 ([0e7e038](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0e7e038))
+* 实现 removeDocument ([c07b447](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c07b447))
+
+
+
+
+<a name="0.9.49"></a>
+## [0.9.49](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.48...@ali/lowcode-designer@0.9.49) (2020-08-23)
+
+
+### Bug Fixes
+
+* nextId() 逻辑调整 ([488a5d8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/488a5d8))
+
+
+
+
+<a name="0.9.48"></a>
+## [0.9.48](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.47...@ali/lowcode-designer@0.9.48) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+<a name="0.9.47"></a>
+## [0.9.47](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.46...@ali/lowcode-designer@0.9.47) (2020-08-19)
+
+
+### Bug Fixes
+
+* 修复获取 currentPage 的逻辑 ([d8221db](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d8221db))
+
+
+
+
+<a name="0.9.46"></a>
+## [0.9.46](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.45...@ali/lowcode-designer@0.9.46) (2020-08-19)
+
+
+### Bug Fixes
+
+* support dropObject is data ([809fda7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/809fda7))
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+<a name="0.12.0"></a>
+# [0.12.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.11.0...@ali/lowcode-designer@0.12.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+<a name="0.11.0"></a>
+# [0.11.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.10.0...@ali/lowcode-designer@0.11.0) (2020-08-16)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+<a name="0.10.0"></a>
+# [0.10.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.37...@ali/lowcode-designer@0.10.0) (2020-08-14)
+<a name="0.9.43"></a>
+## [0.9.43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.42...@ali/lowcode-designer@0.9.43) (2020-08-14)
+
+
+### Bug Fixes
+
+* 修改移动端设备宽度 ([cd7b1e6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/cd7b1e6))
+
+
+
+
 <a name="0.9.42"></a>
 ## [0.9.42](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.41...@ali/lowcode-designer@0.9.42) (2020-08-14)
 
@@ -65,7 +243,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
-* 修复 preset-vision 版本 lifeCycles 丢失以及 slot 初始化问题 ([7cf6d24](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7cf6d24))
+* 兼容modal模式 ([1092ee9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1092ee9))
 
 
 
@@ -554,12 +732,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-<<<<<<< HEAD
 * 🎸 merge material-parser ([b40c286](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b40c286))
 * history log ([fbb3577](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fbb3577))
 * import react-docgen to parse propTypes ([6e66168](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6e66168))
-=======
-* 🎸 merge material-parser ([b40c286](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b40c2869a0bc901d855279735fe86b84dabaa04d))
-* history log ([fbb3577](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fbb3577bd434c0ac77cc907abc36e3efe110fe8c))
-* import react-docgen to parse propTypes ([6e66168](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6e661686e4693e69279c496f3be1dd173703c55e))
->>>>>>> df955e1db90ff104cd11160def80113cfd6faccc

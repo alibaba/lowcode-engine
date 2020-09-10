@@ -3,6 +3,134 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.8-0"></a>
+## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@1.0.7-0...@ali/lowcode-code-generator@1.0.8-0) (2020-09-09)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-code-generator
+
+<a name="1.0.7-0"></a>
+## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@1.0.6-0...@ali/lowcode-code-generator@1.0.7-0) (2020-09-02)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-code-generator
+
+<a name="1.0.6-0"></a>
+## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@1.0.5-0...@ali/lowcode-code-generator@1.0.6-0) (2020-09-02)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-code-generator
+
+<a name="1.0.5-0"></a>
+## [1.0.5-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@1.0.4-0...@ali/lowcode-code-generator@1.0.5-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-code-generator
+
+<a name="1.0.4-0"></a>
+## [1.0.4-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@1.0.3-0...@ali/lowcode-code-generator@1.0.4-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-code-generator
+
+<a name="1.0.3-0"></a>
+## [1.0.3-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@1.0.2-0...@ali/lowcode-code-generator@1.0.3-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-code-generator
+
+<a name="1.0.2-0"></a>
+## [1.0.2-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@1.0.1-0...@ali/lowcode-code-generator@1.0.2-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-code-generator
+
+<a name="1.0.1-0"></a>
+## [1.0.1-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@1.0.0...@ali/lowcode-code-generator@1.0.1-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-code-generator
+
+<a name="1.0.0"></a>
+# [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@0.13.0...@ali/lowcode-code-generator@1.0.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-code-generator
+
+<a name="0.13.0"></a>
+# [0.13.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@0.12.0...@ali/lowcode-code-generator@0.13.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-code-generator
+
+<a name="0.12.0"></a>
+# [0.12.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@0.10.0...@ali/lowcode-code-generator@0.12.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-code-generator
+
+<a name="0.11.0"></a>
+# [0.11.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@0.10.0...@ali/lowcode-code-generator@0.11.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-code-generator
+
+<a name="0.10.0"></a>
+# [0.10.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@0.9.0...@ali/lowcode-code-generator@0.10.0) (2020-08-16)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-code-generator
+
+<a name="0.9.0"></a>
+# [0.9.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@0.8.10...@ali/lowcode-code-generator@0.9.0) (2020-08-14)
+
+
+### Bug Fixes
+
+* 🐛 bugs about deps ([1eabd50](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1eabd50))
+* 🐛 children in props ([fe0ace8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fe0ace8))
+* 🐛 get deps info from slot ([6c3ae36](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6c3ae36))
+* 🐛 group chunks by filetype family ([db144a9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/db144a9))
+* 🐛 loop bug ([8f53910](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8f53910))
+* 🐛 repair children before deps analyze ([737d06e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/737d06e))
+* 🐛 support JSFunction type ([9061e4b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9061e4b))
+* 🐛 更改复杂类型生成工具的接口形式，减少调用复杂度 ([ce616b5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ce616b5))
+
+
+### Features
+
+* 🎸 add node type mapping config for jsx plugin ([19a51b8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/19a51b8))
+* 🎸 code generator fix slot support ([e51b9cb](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e51b9cb))
+
+
+
+
 <a name="0.8.10"></a>
 ## [0.8.10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@0.8.9...@ali/lowcode-code-generator@0.8.10) (2020-07-21)
 
@@ -118,14 +246,11 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-<<<<<<< HEAD
 * code generator main process ([021d6e0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/021d6e0))
 * demo schema & complex children type ([a5ee6bd](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a5ee6bd))
 * fix gaps ([32af3d3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/32af3d3))
 * project builder fix & publish demo to disk ([26983b3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/26983b3))
-=======
 * code generator main process ([021d6e0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/021d6e0fe9fb29a8b6c1c5d5f4d06ec71896faa5))
 * demo schema & complex children type ([a5ee6bd](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a5ee6bd55806fc9aea695096ccd4c7f50b8e31c4))
 * fix gaps ([32af3d3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/32af3d3a3ca4d5aca15be25e05c840c8ea0cb6ae))
 * project builder fix & publish demo to disk ([26983b3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/26983b38c2b0f1d39d79964eb54d8ce60250dd82))
->>>>>>> df955e1db90ff104cd11160def80113cfd6faccc

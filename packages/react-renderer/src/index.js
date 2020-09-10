@@ -30,14 +30,23 @@ class FaultComponent extends PureComponent {
   render() {
     // FIXME: errorlog
     console.error('render error', this.props);
-    return <Div>RenderError</Div>;
+    return <Div style={{
+      width:'100%',
+      height:'50px',
+      lineHeight: '50px',
+      textAlign: 'center',
+      fontSize: '15px',
+      color: '#ff0000',
+      border: '2px solid #ff0000'
+    }}>组件渲染异常，请查看控制台日志</Div>;
+
   }
 }
 
 class NotFoundComponent extends PureComponent {
   render() {
     console.error('component not found', this.props);
-    return <Div {...this.props} />;
+  return <Div {...this.props} >{this.props.children || 'Component Not Found'}</Div>;
   }
 }
 
@@ -45,7 +54,7 @@ function isReactClass(obj) {
   return obj && obj.prototype && (obj.prototype.isReactComponent || obj.prototype instanceof Component);
 }
 
-export default class Renderer extends PureComponent {
+export default class Renderer extends Component {
   static dislayName = 'renderer';
   static propTypes = {
     appHelper: PropTypes.object,

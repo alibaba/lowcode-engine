@@ -13,9 +13,10 @@
     "build": "./scripts/build.sh",
     "clean": "rm -rf ./packages/*/lib ./packages/*/es ./packages/*/dist ./packages/*/build",
     "commit": "git-cz",
-    "pub": "lerna publish --cd-version patch",
+    "pub": "lerna publish --force-publish --cd-version prepatch",
     "setup": "./scripts/setup.sh",
     "start": "./scripts/start.sh",
+    "start:server": "./scripts/start-server.sh",
     "test": "lerna run test --stream",
     "test:snapshot": "lerna run test:snapshot"
   },

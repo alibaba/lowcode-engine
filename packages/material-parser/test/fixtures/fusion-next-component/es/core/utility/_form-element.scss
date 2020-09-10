@@ -1,0 +1,82 @@
+////
+/// @group form-element
+/// @module form-element: 表单通用
+/// @type String
+/// @tag form-element
+/// @category utility
+/// @family form-element
+/// @varPrefix $form-element-
+/// @classPrefix {prefix}-form-element
+////
+
+/// height
+/// @semantic 小号组件高度
+$form-element-small-height: $s-5 !default;
+
+/// height
+/// @semantic 中号组件高度
+$form-element-medium-height: $s-7 !default;
+
+/// height
+/// @semantic 大号组件高度
+$form-element-large-height: $s-10 !default;
+
+/// text
+/// @semantic 小号组件字体
+$form-element-small-font-size: $font-size-caption !default;
+
+/// text
+/// @semantic 中号组件字体
+$form-element-medium-font-size: $font-size-body-1 !default;
+
+/// text
+/// @semantic 大号组件字体
+$form-element-large-font-size: $font-size-subhead !default;
+
+/// preview height
+/// @semantic 小号组件预览态高度
+$form-element-small-preview-height: $s-5 !default;
+
+/// preview height
+/// @semantic 中号组件预览态高度
+$form-element-medium-preview-height: $s-7 !default;
+
+/// preview height
+/// @semantic 大号组件预览态高度
+$form-element-large-preview-height: $s-10 !default;
+
+/// preview text
+/// @semantic 小号组件预览态字体
+$form-element-small-preview-font-size: $font-size-caption !default;
+
+/// preview text
+/// @semantic 中号组件预览态字体
+$form-element-medium-preview-font-size: $font-size-body-1 !default;
+
+/// preview text
+/// @semantic 大号组件预览态字体
+$form-element-large-preview-font-size: $font-size-subhead !default;
+
+/// icon
+/// @semantic 小号组件 icon
+$form-element-small-icon-size: $icon-xs !default;
+
+/// icon
+/// @semantic 中号组件 icon
+$form-element-medium-icon-size: $icon-xs !default;
+
+/// icon
+/// @semantic 大号组件 icon
+$form-element-large-icon-size: $icon-s !default;
+
+/// corner
+/// @semantic 小号组件圆角
+$form-element-small-corner: $corner-1 !default;
+
+/// corner
+/// @semantic 中号组件圆角
+$form-element-medium-corner: $corner-1 !default;
+
+/// corner
+/// @semantic 大号组件圆角
+$form-element-large-corner: $corner-1 !default;

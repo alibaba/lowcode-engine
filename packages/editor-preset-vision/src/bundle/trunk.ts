@@ -1,8 +1,9 @@
 import { ReactElement, ComponentType } from 'react';
 import { EventEmitter } from 'events';
 import { registerSetter, RegisteredSetter, getSetter } from '@ali/lowcode-editor-core';
-import Bundle from './bundle';
+import lg from '@ali/vu-logger';
 import { CustomView } from '@ali/lowcode-types';
+import Bundle from './bundle';
 import Prototype from './prototype';
 
 export class Trunk {

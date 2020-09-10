@@ -89,7 +89,7 @@ const defaultRaxSimulatorUrl = (() => {
 
 const defaultEnvironment = [
   // https://g.alicdn.com/mylib/??react/16.11.0/umd/react.production.min.js,react-dom/16.8.6/umd/react-dom.production.min.js,prop-types/15.7.2/prop-types.min.js
-  assetItem(AssetType.JSText, 'window.React=parent.React;window.ReactDOM=parent.ReactDOM;', undefined, 'react'),
+  assetItem(AssetType.JSText, 'window.React=parent.React;window.ReactDOM=parent.ReactDOM;window.__is_simulator_env__=true;', undefined, 'react'),
   assetItem(
     AssetType.JSText,
     'window.PropTypes=parent.PropTypes;React.PropTypes=parent.PropTypes; window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;',
@@ -235,7 +235,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     const vendors = [
       // required & use once
       assetBundle(
-        this.get('environment') || this.renderEnv === 'rax' ? defaultRaxEnvironment : defaultEnvironment,
+        this.get('environment') || (this.renderEnv === 'rax' ? defaultRaxEnvironment : defaultEnvironment),
         AssetLevel.Environment,
       ),
       // required & use once
@@ -246,7 +246,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       assetBundle(this.theme, AssetLevel.Theme),
       // required & use once
       assetBundle(
-        this.get('simulatorUrl') || this.renderEnv === 'rax' ? defaultRaxSimulatorUrl : defaultSimulatorUrl,
+        this.get('simulatorUrl') || (this.renderEnv === 'rax' ? defaultRaxSimulatorUrl : defaultSimulatorUrl),
         AssetLevel.Runtime,
       ),
     ];
@@ -401,12 +401,31 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         x.initEvent('click', true);
         this._iframe?.dispatchEvent(x);
         const target = e.target as HTMLElement;
-        if (
-          isFormEvent(e) ||
-          target?.closest(
-            '.next-input-group,.next-checkbox-group,.next-date-picker,.next-input,.next-month-picker,.next-number-picker,.next-radio-group,.next-range,.next-range-picker,.next-rating,.next-select,.next-switch,.next-time-picker,.next-upload,.next-year-picker,.next-breadcrumb-item,.next-calendar-header,.next-calendar-table',
-          )
-        ) {
+
+        // TODO: need more elegant solution to ignore click events of compoents in designer
+        const ignoreSelectors: any = [
+          '.next-input-group',
+          '.next-checkbox-group',
+          '.next-date-picker',
+          '.next-input',
+          '.next-month-picker',
+          '.next-number-picker',
+          '.next-radio-group',
+          '.next-range',
+          '.next-range-picker',
+          '.next-rating',
+          '.next-select',
+          '.next-switch',
+          '.next-time-picker',
+          '.next-upload',
+          '.next-year-picker',
+          '.next-breadcrumb-item',
+          '.next-calendar-header',
+          '.next-calendar-table',
+          '.editor-container', // 富文本组件
+        ];
+        const ignoreSelectorsString = ignoreSelectors.join(',');
+        if (isFormEvent(e) || target?.closest(ignoreSelectorsString)) {
           e.preventDefault();
           e.stopPropagation();
         }
@@ -475,9 +494,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           return;
         }
 
-        const rootElement = this.findDOMNodes(nodeInst.instance, node.componentMeta.rootSelector)?.find((item) =>
-          // 可能是 [null];
-          item && item.contains(targetElement),
+        const rootElement = this.findDOMNodes(nodeInst.instance, node.componentMeta.rootSelector)?.find(
+          (item) =>
+            // 可能是 [null];
+            item && item.contains(targetElement),
         ) as HTMLElement;
         if (!rootElement) {
           return;
@@ -857,7 +877,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
     // fix target : 浏览器事件响应目标
     if (!e.target || notMyEvent) {
-      e.target = this.contentDocument!.elementFromPoint(e.canvasX!, e.canvasY!);
+      e.target = this.contentDocument?.elementFromPoint(e.canvasX!, e.canvasY!);
     }
 
     // 事件已订正
@@ -898,9 +918,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       return canMove;
     });
 
-    if (!operationalNodes || operationalNodes.length === 0) {
+    if (nodes && (!operationalNodes || operationalNodes.length === 0)) {
       return;
     }
+
     this.sensing = true;
     this.scroller.scrolling(e);
     const document = this.project.currentDocument;
@@ -914,7 +935,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       !dropContainer ||
       canDropIn === false ||
       // too dirty
-      (typeof canDropIn === 'function' && !canDropIn(operationalNodes[0]))
+      (nodes && typeof canDropIn === 'function' && !canDropIn(operationalNodes[0]))
     ) {
       return null;
     }
@@ -946,7 +967,13 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       event: e,
     };
 
-    if (dragObject.type === 'node' && operationalNodes[0]?.getPrototype()?.isModal()) {
+    // if (e.dragObject.type === 'node' && e.dragObject.nodes[0]?.getPrototype()?.isModal()) {
+    if (
+      e.dragObject &&
+      e.dragObject.nodes &&
+      e.dragObject.nodes.length &&
+      e.dragObject.nodes[0].getPrototype()?.isModal()
+    ) {
       return this.designer.createLocation({
         target: document.rootNode,
         detail,

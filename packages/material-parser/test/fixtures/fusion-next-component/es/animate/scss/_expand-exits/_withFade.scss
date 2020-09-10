@@ -1,0 +1,21 @@
+@include keyframes(expandOutWithFade) {
+    0% {
+        opacity: 1;
+    }
+    70% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@mixin expandOutWithFade($count: $countDefault, $duration: .2s, $delay: $delayDefault, $function: $functionDefault, $fill: 'forwards', $visibility: $visibilityDefault) {
+    @include animation-name(expandOutWithFade);
+    @include count($count);
+    @include duration($duration);
+    @include delay($delay);
+    @include function($function);
+    @include fill-mode($fill);
+    @include visibility($visibility);
+}

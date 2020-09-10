@@ -59,9 +59,7 @@ function main() {
 
   builder.generateProject(schemaJson).then((result) => {
     displayResultInConsole(result);
-    writeResultToDisk(result, 'output/lowcodeDemo').then((response) =>
-      console.log('Write to disk: ', JSON.stringify(response)),
-    );
+    writeResultToDisk(result, 'output/lowcodeDemo').then((response) => console.log('Write to disk: ', JSON.stringify(response)),);
     return result;
   });
 }
@@ -162,111 +160,12 @@ function exportProject() {
 
   builder.generateProject(schemaJson).then((result) => {
     displayResultInConsole(result);
-    writeResultToDisk(result, 'output/lowcodeDemo').then((response) =>
-      console.log('Write to disk: ', JSON.stringify(response)),
-    );
-    return result;
-  });
-}
-
-function exportModule() {
-  const schemaJson = fs.readFileSync('./demo/shenmaSample.json', { encoding: 'utf8' });
-  const moduleBuilder = CodeGenerator.createModuleBuilder({
-    plugins: [
-      CodeGenerator.plugins.react.reactCommonDeps(),
-      CodeGenerator.plugins.common.esmodule({
-        fileType: 'jsx',
-      }),
-      CodeGenerator.plugins.react.containerClass(),
-      CodeGenerator.plugins.react.containerInitState(),
-      CodeGenerator.plugins.react.containerLifeCycle(),
-      CodeGenerator.plugins.react.containerMethod(),
-      CodeGenerator.plugins.react.jsx(),
-      CodeGenerator.plugins.style.css(),
-    ],
-    postProcessors: [
-      CodeGenerator.postprocessor.prettier(),
-    ],
-    mainFileName: 'index',
-  });
-
-  moduleBuilder.generateModuleCode(schemaJson).then(result => {
-    displayResultInConsole(result);
-    return result;
-  });
-}
-
-function exportProject() {
-  const schemaJson = fs.readFileSync('./demo/sampleSchema.json', { encoding: 'utf8' });
-
-  const builder =  CodeGenerator.createProjectBuilder({
-    template: CodeGenerator.solutionParts.icejs.template,
-    plugins: {
-      components: [
-        CodeGenerator.plugins.react.reactCommonDeps(),
-        CodeGenerator.plugins.common.esmodule({
-          fileType: 'jsx',
-        }),
-        CodeGenerator.plugins.react.containerClass(),
-        CodeGenerator.plugins.react.containerInitState(),
-        CodeGenerator.plugins.react.containerLifeCycle(),
-        CodeGenerator.plugins.react.containerMethod(),
-        CodeGenerator.plugins.react.jsx(),
-        CodeGenerator.plugins.style.css(),
-      ],
-      pages: [
-        CodeGenerator.plugins.react.reactCommonDeps(),
-        CodeGenerator.plugins.common.esmodule({
-          fileType: 'jsx',
-        }),
-        CodeGenerator.plugins.react.containerClass(),
-        CodeGenerator.plugins.react.containerInitState(),
-        CodeGenerator.plugins.react.containerLifeCycle(),
-        CodeGenerator.plugins.react.containerMethod(),
-        CodeGenerator.plugins.react.jsx(),
-        CodeGenerator.plugins.style.css(),
-      ],
-      router: [
-        CodeGenerator.plugins.common.esmodule(),
-        CodeGenerator.solutionParts.icejs.plugins.router(),
-      ],
-      entry: [
-        CodeGenerator.solutionParts.icejs.plugins.entry(),
-      ],
-      constants: [
-        CodeGenerator.plugins.project.constants(),
-      ],
-      utils: [
-        CodeGenerator.plugins.common.esmodule(),
-        CodeGenerator.plugins.project.utils(),
-      ],
-      i18n: [
-        CodeGenerator.plugins.project.i18n(),
-      ],
-      globalStyle: [
-        CodeGenerator.solutionParts.icejs.plugins.globalStyle(),
-      ],
-      htmlEntry: [
-        CodeGenerator.solutionParts.icejs.plugins.entryHtml(),
-      ],
-      packageJSON: [
-        CodeGenerator.solutionParts.icejs.plugins.packageJSON(),
-      ],
-    },
-    postProcessors: [
-      CodeGenerator.postprocessor.prettier(),
-    ],
-  });
-
-  builder.generateProject(schemaJson).then(result => {
-    displayResultInConsole(result);
-    writeResultToDisk(result, 'output/lowcodeDemo').then(response =>
-      console.log('Write to disk: ', JSON.stringify(response)),
-    );
+    writeResultToDisk(result, 'output/lowcodeDemo').then((response) => console.log('Write to disk: ', JSON.stringify(response)),);
     return result;
   });
 }
 
 // main();
 // exportModule();
-exportProject();
+// exportProject();
+demo();

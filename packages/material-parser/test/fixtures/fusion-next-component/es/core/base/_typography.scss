@@ -1,0 +1,143 @@
+@if $font-custom-name != "" {
+    @font-face {
+        font-family: "#{$font-custom-name}";
+        src: url("#{$font-custom-path}#{$font-name-thin}.eot");
+        src:
+            url("#{$font-custom-path}#{$font-name-thin}.eot?#iefix") format("embedded-opentype"),
+            url("#{$font-custom-path}#{$font-name-thin}.woff2") format("woff2"),
+            url("#{$font-custom-path}#{$font-name-thin}.woff") format("woff"),
+            url("#{$font-custom-path}#{$font-name-thin}.ttf") format("truetype");
+        font-weight: 200;
+    }
+
+    @font-face {
+        font-family: "#{$font-custom-name}";
+        src: url("#{$font-custom-path}#{$font-name-light}.eot");
+        src:
+            url("#{$font-custom-path}#{$font-name-light}.eot?#iefix") format("embedded-opentype"),
+            url("#{$font-custom-path}#{$font-name-light}.woff2") format("woff2"),
+            url("#{$font-custom-path}#{$font-name-light}.woff") format("woff"),
+            url("#{$font-custom-path}#{$font-name-light}.ttf") format("truetype");
+        font-weight: 300;
+    }
+
+    @font-face {
+        font-family: "#{$font-custom-name}";
+        src: url("#{$font-custom-path}#{$font-name-regular}.eot");
+        src:
+            url("#{$font-custom-path}#{$font-name-regular}.eot?#iefix") format("embedded-opentype"),
+            url("#{$font-custom-path}#{$font-name-regular}.woff2") format("woff2"),
+            url("#{$font-custom-path}#{$font-name-regular}.woff") format("woff"),
+            url("#{$font-custom-path}#{$font-name-regular}.ttf") format("truetype");
+        font-weight: 400;
+    }
+
+    @font-face {
+        font-family: "#{$font-custom-name}";
+        src: url("#{$font-custom-path}#{$font-name-medium}.eot");
+        src:
+            url("#{$font-custom-path}#{$font-name-medium}.eot?#iefix") format("embedded-opentype"),
+            url("#{$font-custom-path}#{$font-name-medium}.woff2") format("woff2"),
+            url("#{$font-custom-path}#{$font-name-medium}.woff") format("woff"),
+            url("#{$font-custom-path}#{$font-name-medium}.ttf") format("truetype");
+        font-weight: 500;
+    }
+
+    @font-face {
+        font-family: "#{$font-custom-name}";
+        src: url("#{$font-custom-path}#{$font-name-bold}.eot");
+        src:
+            url("#{$font-custom-path}#{$font-name-bold}.eot?#iefix") format("embedded-opentype"),
+            url("#{$font-custom-path}#{$font-name-bold}.woff2") format("woff2"),
+            url("#{$font-custom-path}#{$font-name-bold}.woff") format("woff"),
+            url("#{$font-custom-path}#{$font-name-bold}.ttf") format("truetype");
+        font-weight: 700;
+    }
+}
+
+html {
+    font-size: 100%;
+    // font-smooth has been removed from this specification, Works only on Mac OS X platform.
+    // -webkit-font-smoothing: antialiased;
+}
+
+body {
+    font-family: $font-family-base;
+    font-size: $font-size-body-1;
+    line-height: $font-lineheight-base;
+    color: $color-text1-4;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+    font-family: inherit;
+}
+
+h1 a,
+h2 a,
+h3 a,
+h4 a,
+h5 a,
+h6 a {
+    font-weight: inherit;
+}
+
+h1 {
+    margin-bottom: $font-size-headline * $typo-margin-bottom;
+    font-size: $font-size-headline;
+    font-weight: $font-weight-medium;
+    line-height: 36px;
+}
+
+h2 {
+    margin-bottom: $font-size-title * $typo-margin-bottom;
+    font-size: $font-size-title;
+    font-weight: $font-weight-medium;
+    line-height: 30px;
+}
+
+h3 {
+    margin-bottom: $font-size-subhead * $typo-margin-bottom;
+    font-size: $font-size-subhead;
+    font-weight: $font-weight-2;
+    line-height: 24px;
+}
+
+h4 {
+    margin-bottom: $font-size-subhead * $typo-margin-bottom;
+    font-size: $font-size-subhead;
+    font-weight: $font-weight-2;
+    line-height: 24px;
+}
+
+h5 {
+    margin-bottom: $font-size-body-1 * $typo-margin-bottom;
+    font-size: $font-size-body-2;
+    font-weight: $font-weight-2;
+    line-height: 24px;
+}
+
+h6 {
+    margin-bottom: $font-size-body-2 * $typo-margin-bottom;
+    font-size: $font-size-body-1;
+    font-weight: $font-weight-medium;
+    line-height: 20px;
+}
+
+p {
+    margin-bottom: $font-size-body-1 * $typo-margin-bottom;
+    font-size: $font-size-body-1;
+    font-weight: $font-weight-2;
+    line-height: 20px;
+}
+
+strong {
+    font-weight: 500;
+}
+
+small {
+    font-size: 75%;
+}

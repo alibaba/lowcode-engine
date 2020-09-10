@@ -1,0 +1,206 @@
+@import "../core/index-noreset.scss";
+
+@mixin tooltip-arrow-rtl() {
+
+    &.#{$css-prefix}balloon-tooltip-right:after {
+        left: $balloon-size-arrow-expose;
+        right: auto;
+        border-top: none;
+        border-right: none;
+        border-left: inherit;
+        border-bottom: inherit;
+    }
+
+    &.#{$css-prefix}balloon-tooltip-left:after {
+        right: $balloon-size-arrow-expose;
+        left: auto;
+        border-top: inherit;
+        border-right: inherit;
+        border-left: none;
+        border-bottom: none;
+    }
+    &.#{$css-prefix}balloon-tooltip-left-top:after {
+        right: $balloon-size-arrow-expose;
+        left: auto;
+        border-top: inherit;
+        border-right: inherit;
+        border-left: none;
+        border-bottom: none;
+    }
+    &.#{$css-prefix}balloon-tooltip-left-bottom:after {
+        right: $balloon-size-arrow-expose;
+        left: auto;
+        border-top: inherit;
+        border-right: inherit;
+        border-left: none;
+        border-bottom: none;
+    }
+
+    &.#{$css-prefix}balloon-tooltip-right-top:after {
+        left: $balloon-size-arrow-expose;
+        right: auto;
+        border-top: none;
+        border-right: none;
+        border-left: inherit;
+        border-bottom: inherit;
+    }
+
+    &.#{$css-prefix}balloon-tooltip-right-bottom:after {
+        left: $balloon-size-arrow-expose;
+        right: auto;
+        border-top: none;
+        border-right: none;
+        border-left: inherit;
+        border-bottom: inherit;
+    }
+
+    &.#{$css-prefix}balloon-tooltip-top-left:after {
+        right: $balloon-size-arrow-margin;
+        left: auto;
+    }
+
+    &.#{$css-prefix}balloon-tooltip-top-right:after {
+        left: $balloon-size-arrow-margin;
+        right: auto;
+    }
+
+    &.#{$css-prefix}balloon-tooltip-bottom-left:after {
+        right: $balloon-size-arrow-margin;
+        left: auto;
+    }
+
+    &.#{$css-prefix}balloon-tooltip-bottom-right:after {
+        left: $balloon-size-arrow-margin;
+        right: auto;
+    }
+}
+
+@mixin balloon-close-rtl(
+    $left
+) {
+    .#{$css-prefix}balloon-close {
+        left: $left;
+        right: auto;
+    }
+}
+
+@mixin balloon-arrow-rtl(
+    $arrorExpose
+) {
+    $shadow-top: $balloon-shadow-top;
+    $shadow-right: $balloon-shadow-right;
+    $shadow-bottom: $balloon-shadow-bottom;
+    $shadow-left: $balloon-shadow-left;
+
+    &.#{$css-prefix}balloon-right:after {
+        left: $arrorExpose;
+        right: auto;
+        border-right: none;
+        border-top: none;
+        border-left: inherit;
+        border-bottom: inherit;
+        box-shadow: $shadow-left;
+    }
+    &.#{$css-prefix}balloon-left:after {
+        right: $arrorExpose;
+        left: auto;
+        border-left: none;
+        border-bottom: none;
+        border-right: inherit;
+        border-top: inherit;
+        box-shadow: $shadow-right;
+    }
+    &.#{$css-prefix}balloon-left-top:after {
+        right: $arrorExpose;
+        left: auto;
+        border-left: none;
+        border-bottom: none;
+        border-top: inherit;
+        border-right: inherit;
+        box-shadow: $shadow-right;
+    }
+    &.#{$css-prefix}balloon-left-bottom:after {
+        right: $arrorExpose;
+        left: auto;
+        border-left: none;
+        border-bottom: none;
+        border-top: inherit;
+        border-right: inherit;
+        box-shadow: $shadow-right;
+    }
+
+    &.#{$css-prefix}balloon-right-top:after {
+        left: $arrorExpose;
+        right: auto;
+        border-right: none;
+        border-top: none;
+        border-bottom: inherit;
+        border-left: inherit;
+        box-shadow: $shadow-left;
+    }
+
+    &.#{$css-prefix}balloon-right-bottom:after {
+        left: $arrorExpose;
+        right: auto;
+        border-right: none;
+        border-top: none;
+        border-bottom: inherit;
+        border-left: inherit;
+        box-shadow: $shadow-left;
+    }
+
+    &.#{$css-prefix}balloon-top-left:after {
+        right: $balloon-size-arrow-margin;
+        left: auto;
+    }
+
+    &.#{$css-prefix}balloon-top-right:after {
+        right: auto;
+        left: $balloon-size-arrow-margin;
+    }
+
+    &.#{$css-prefix}balloon-bottom-left:after {
+        right: $balloon-size-arrow-margin;
+        left: auto;
+    }
+
+    &.#{$css-prefix}balloon-bottom-right:after {
+        left: $balloon-size-arrow-margin;
+        right: auto;
+    }
+}
+
+.#{$css-prefix}balloon[dir="rtl"] {
+    &.#{$css-prefix}balloon-primary {
+        @include balloon-close-rtl(
+            $balloon-size-close-margin-right
+        );
+        @include balloon-arrow-rtl(
+            $balloon-size-arrow-expose-primary
+        );
+    }
+
+    &.#{$css-prefix}balloon-normal {
+        @include balloon-close-rtl(
+            $balloon-size-close-margin-right
+        );
+        @include balloon-arrow-rtl(
+            $balloon-size-arrow-expose
+        );
+    }
+
+    /* 带关闭按钮的右侧padding变大 */
+    &.#{$css-prefix}balloon-closable {
+        @include balloon-size($balloon-size-padding-top, $balloon-size-padding-right, $balloon-size-padding-top, $balloon-size-padding-closable-right);
+    }
+}
+
+.#{$css-prefix}balloon-tooltip[dir="rtl"] {
+
+    @include tooltip-arrow-rtl();
+
+    /* size */
+    &.#{$css-prefix}balloon-tooltip-medium {
+        @include balloon-size($balloon-tooltip-size-padding-top, $balloon-tooltip-size-padding-left, $balloon-tooltip-size-padding-bottom, $balloon-tooltip-size-padding-right);
+    }
+}

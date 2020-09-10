@@ -1,0 +1,35 @@
+@import "../core/index-noreset.scss";
+@import "scss/variable";
+
+#{$cascader-select-prefix} {
+    @include box-sizing;
+
+    &-dropdown {
+        @include box-sizing;
+
+        border: $popup-local-border-width $popup-local-border-style $popup-local-border-color;
+        border-radius: $popup-local-corner;
+        box-shadow: $popup-local-shadow;
+
+        .#{$css-prefix}cascader {
+            display: block;
+            border: none;
+            box-shadow: none;
+        }
+    }
+
+    &-not-found {
+        padding: 0;
+        border: none;
+        box-shadow: none;
+        overflow: auto;
+        color: $color-text1-2;
+
+        .#{$css-prefix}menu-item:hover {
+            color: $color-text1-2;
+            /* TODO */
+            background: $color-white;
+            cursor: default;
+        }
+    }
+}

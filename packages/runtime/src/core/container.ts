@@ -5,11 +5,17 @@ export interface ILayoutOptions {
   props?: any;
 }
 
+export interface IErrorBoundaryConfig {
+  fallbackUI: any;
+  afterCatch?: (...rest: any) => any
+}
+
 export default class Container {
   private renderer: any = null;
   private layouts: { [key: string]: { content: any; props: any } } = {};
   private loading: any = null;
-  private provider: any;
+  private errorBoundary: IErrorBoundaryConfig = { fallbackUI: () => '', afterCatch: () => {} };
+  private providers: { [key: string]: Provider; } = {};
 
   registerRenderer(renderer: any): any {
     this.renderer = renderer;
@@ -33,12 +39,19 @@ export default class Container {
     this.loading = component;
   }
 
+  registerErrorBoundary(config: IErrorBoundaryConfig) {
+    if (!config) {
+      return;
+    }
+    this.errorBoundary = config;
+  }
+
   registerProvider(CustomProvider: any) {
-    if (Provider.isPrototypeOf(CustomProvider)) {
-      this.provider = new CustomProvider();
-    } else {
-      const identifier = (CustomProvider && CustomProvider.name) || 'registered Provider';
-      throw new Error(`${identifier} is not a child class of Provider`);
+    try {
+      const p = new CustomProvider();
+      this.providers[p.getContainerId()] = p;
+    } catch (error) {
+      console.error(error.message);
     }
   }
 
@@ -57,7 +70,19 @@ export default class Container {
     return this.loading;
   }
 
-  getProvider() {
-    return this.provider;
+  getErrorBoundary(): any {
+    return this.errorBoundary;
+  }
+
+  getProvider(id?: string) {
+    if (!id) {
+      for (const key in this.providers) {
+        if (Object.prototype.hasOwnProperty.call(this.providers, key)) {
+          return this.providers[key];
+        }
+      }
+    } else {
+      return this.providers[id];
+    }
   }
 }

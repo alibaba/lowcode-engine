@@ -34,6 +34,7 @@ let scopeIdx = 0;
 
 export default class BaseRender extends PureComponent {
   static dislayName = 'base-renderer';
+
   static propTypes = {
     locale: PropTypes.string,
     messages: PropTypes.object,
@@ -42,9 +43,11 @@ export default class BaseRender extends PureComponent {
     __ctx: PropTypes.object,
     __schema: PropTypes.object,
   };
+
   static defaultProps = {
     __schema: {},
   };
+
   static contextType = AppContext;
 
   constructor(props, context) {
@@ -78,8 +81,7 @@ export default class BaseRender extends PureComponent {
     console.warn(e);
   }
 
-  reloadDataSource = () => {
-    return new Promise((resolve, reject) => {
+  reloadDataSource = () => new Promise((resolve, reject) => {
       debug('reload data source');
       if (!this.__dataHelper) {
         this.__showPlaceholder = false;
@@ -103,7 +105,6 @@ export default class BaseRender extends PureComponent {
           reject(err);
         });
     });
-  };
 
   __setLifeCycleMethods = (method, args) => {
     const lifeCycleMethods = getValue(this.props.__schema, 'lifeCycles', {});
@@ -128,8 +129,8 @@ export default class BaseRender extends PureComponent {
   __bindCustomMethods = (props = this.props) => {
     const { __schema } = props;
     const customMethodsList = Object.keys(__schema.methods || {}) || [];
-    this.__customMethodsList &&
-      this.__customMethodsList.forEach((item) => {
+    this.__customMethodsList
+      && this.__customMethodsList.forEach((item) => {
         if (!customMethodsList.includes(item)) {
           delete this[item];
         }
@@ -171,16 +172,16 @@ export default class BaseRender extends PureComponent {
     this.__dataHelper = new DataHelper(this, dataSource, appHelper, (config) => this.__parseData(config));
     this.dataSourceMap = this.__dataHelper.dataSourceMap;
     // 设置容器组件占位，若设置占位则在初始异步请求完成之前用loading占位且不渲染容器组件内部内容
-    this.__showPlaceholder =
-      this.__parseData(schema.props && schema.props.autoLoading) &&
-      (dataSource.list || []).some((item) => !!this.__parseData(item.isInit));
+    this.__showPlaceholder = this.__parseData(schema.props && schema.props.autoLoading) && (dataSource.list || []).some(
+      (item) => !!this.__parseData(item.isInit),
+    );
   };
 
   __render = () => {
     const schema = this.props.__schema;
     this.__setLifeCycleMethods('render');
 
-    const engine = this.context.engine;
+    const { engine } = this.context;
     if (engine) {
       engine.props.onCompGetCtx(schema, this);
       // 画布场景才需要每次渲染bind自定义方法
@@ -195,11 +196,27 @@ export default class BaseRender extends PureComponent {
     this.__ref = ref;
   };
 
+  getSchemaChildren = (schema) => {
+    if (!schema || !schema.props) {
+      return schema?.children;
+    }
+    if (!schema.children) return schema.props.children;
+    if (!schema.props.children) return schema.children;
+    let _children = [].concat(schema.children);
+    if (Array.isArray(schema.props.children)) {
+      _children = _children.concat(schema.props.children);
+    } else {
+      _children.push(schema.props.children);
+    }
+    return _children;
+  };
+
   __createDom = () => {
     const { __schema, __ctx, __components = {} } = this.props;
     const self = {};
     self.__proto__ = __ctx || this;
-    return this.__createVirtualDom(__schema.children, self, {
+    const _children = this.getSchemaChildren(__schema);
+    return this.__createVirtualDom(_children, self, {
       schema: __schema,
       Comp: __components[__schema.componentName],
     });
@@ -214,10 +231,13 @@ export default class BaseRender extends PureComponent {
     const { engine } = this.context || {};
     try {
       if (!schema) return null;
-      const { __appHelper: appHelper, __components: components = {} } =
-        this.props || {};
+      const { __appHelper: appHelper, __components: components = {} } = this.props || {};
+
       if (isJSExpression(schema)) {
         return parseExpression(schema, self);
+      }
+      if (isJSSlot(schema)) {
+        return this.__createVirtualDom(schema.value, self, parentInfo);
       }
       if (typeof schema === 'string') return schema;
       if (typeof schema === 'number' || typeof schema === 'boolean') {
@@ -225,14 +245,13 @@ export default class BaseRender extends PureComponent {
       }
       if (Array.isArray(schema)) {
         if (schema.length === 1) return this.__createVirtualDom(schema[0], self, parentInfo);
-        return schema.map((item, idx) =>
-          this.__createVirtualDom(item, self, parentInfo, item && item.__ctx && item.__ctx.lunaKey ? '' : idx),
-        );
+        return schema.map((item, idx) => this.__createVirtualDom(item, self, parentInfo, item && item.__ctx && item.__ctx.lunaKey ? '' : idx),);
       }
-
-      //解析占位组件
-      if (schema.componentName === 'Flagment' && schema.children) {
-        let tarChildren = isJSExpression(schema.children) ? parseExpression(schema.children, self) : schema.children;
+      // FIXME
+      const _children = this.getSchemaChildren(schema);
+      // 解析占位组件
+      if (schema.componentName === 'Flagment' && _children) {
+        const tarChildren = isJSExpression(_children) ? parseExpression(_children, self) : _children;
         return this.__createVirtualDom(tarChildren, self, parentInfo);
       }
 
@@ -240,7 +259,6 @@ export default class BaseRender extends PureComponent {
         return schema;
       }
       if (!isSchema(schema)) return null;
-
       let Comp = components[schema.componentName] || engine.getNotFoundComponent();
 
       if (schema.hidden) {
@@ -248,15 +266,18 @@ export default class BaseRender extends PureComponent {
       }
 
       if (schema.loop != null) {
-        return this.__createLoopVirtualDom(
-          {
-            ...schema,
-            loop: parseData(schema.loop, self),
-          },
-          self,
-          parentInfo,
-          idx,
-        );
+        const loop = parseData(schema.loop, self);
+        if ((Array.isArray(loop) && loop.length > 0) || isJSExpression(loop)) {
+          return this.__createLoopVirtualDom(
+            {
+              ...schema,
+              loop,
+            },
+            self,
+            parentInfo,
+            idx,
+          );
+        }
       }
       const condition = schema.condition == null ? true : parseData(schema.condition, self);
       if (!condition) return null;
@@ -292,16 +313,17 @@ export default class BaseRender extends PureComponent {
       // 容器类组件的上下文通过props传递，避免context传递带来的嵌套问题
       const otherProps = isFileSchema(schema)
         ? {
-            __schema: schema,
-            __appHelper: appHelper,
-            __components: components,
-          }
+          __schema: schema,
+          __appHelper: appHelper,
+          __components: components,
+        }
         : {};
       if (engine && engine.props.designMode) {
         otherProps.__designMode = engine.props.designMode;
       }
       const componentInfo = {};
-      const props = this.__parseProps(schema.props, self, '', {
+      const props =
+        this.__parseProps(schema.props, self, '', {
         schema,
         Comp,
         componentInfo: {
@@ -335,26 +357,25 @@ export default class BaseRender extends PureComponent {
       }
 
       props.__id = schema.id;
-      const renderComp = (props) => {
-        return engine.createElement(
-          Comp,
-          props,
-          (!isFileSchema(schema) &&
-            !!schema.children &&
-            this.__createVirtualDom(
-              isJSExpression(schema.children) ? parseExpression(schema.children, self) : schema.children,
-              self,
-              {
-                schema,
-                Comp,
-              },
-            )) ||
-            null,
+      if (!props.key) {
+        props.key = props.__id;
+      }
+
+      let child = null;
+      if (!isFileSchema(schema) && !!_children) {
+        child = this.__createVirtualDom(
+          isJSExpression(_children) ? parseExpression(_children, self) : _children,
+          self,
+          {
+            schema,
+            Comp,
+          },
         );
-      };
-      //设计模式下的特殊处理
+      }
+      const renderComp = (props) => engine.createElement(Comp, props, child);
+      // 设计模式下的特殊处理
       if (engine && [DESIGN_MODE.EXTEND, DESIGN_MODE.BORDER].includes(engine.props.designMode)) {
-        //对于overlay,dialog等组件为了使其在设计模式下显示，外层需要增加一个div容器
+        // 对于overlay,dialog等组件为了使其在设计模式下显示，外层需要增加一个div容器
         if (OVERLAY_LIST.includes(schema.componentName)) {
           const { ref, ...overlayProps } = otherProps;
           return (
@@ -367,7 +388,10 @@ export default class BaseRender extends PureComponent {
         if (componentInfo && componentInfo.parentRule) {
           const parentList = componentInfo.parentRule.split(',');
           const { schema: parentSchema, Comp: parentComp } = parentInfo;
-          if (!parentList.includes(parentSchema.componentName) || parentComp !== components[parentSchema.componentName]) {
+          if (
+            !parentList.includes(parentSchema.componentName) ||
+            parentComp !== components[parentSchema.componentName]
+          ) {
             props.__componentName = schema.componentName;
             Comp = VisualDom;
           } else {
@@ -428,22 +452,21 @@ export default class BaseRender extends PureComponent {
     const parseReactNode = (data, params) => {
       if (isEmpty(params)) {
         return checkProps(this.__createVirtualDom(data, self, { schema, Comp }));
-      } else {
-        return checkProps(function() {
-          const args = {};
-          if (Array.isArray(params) && params.length) {
-            params.map((item, idx) => {
-              if (typeof item === 'string') {
-                args[item] = arguments[idx];
-              } else if (item && typeof item === 'object') {
-                args[item.name] = arguments[idx];
-              }
-            });
-          }
-          args.__proto__ = self;
-          return self.__createVirtualDom(data, args, { schema, Comp });
-        });
       }
+      return checkProps(function() {
+        const args = {};
+        if (Array.isArray(params) && params.length) {
+          params.map((item, idx) => {
+            if (typeof item === 'string') {
+              args[item] = arguments[idx];
+            } else if (item && typeof item === 'object') {
+              args[item.name] = arguments[idx];
+            }
+          });
+        }
+        args.__proto__ = self;
+        return self.__createVirtualDom(data, args, { schema, Comp });
+      });
     };
 
     // 判断是否需要解析变量
@@ -474,34 +497,37 @@ export default class BaseRender extends PureComponent {
     // 兼容通过componentInfo判断的情况
     if (isSchema(props)) {
       const isReactNodeFunction = !!(
-        propInfo &&
-        propInfo.type === 'ReactNode' &&
-        propInfo.props &&
-        propInfo.props.type === 'function'
+        propInfo
+        && propInfo.type === 'ReactNode'
+        && propInfo.props
+        && propInfo.props.type === 'function'
       );
 
       const isMixinReactNodeFunction = !!(
-        propInfo &&
-        propInfo.type === 'Mixin' &&
-        propInfo.props &&
-        propInfo.props.types &&
-        propInfo.props.types.indexOf('ReactNode') > -1 &&
-        propInfo.props.reactNodeProps &&
-        propInfo.props.reactNodeProps.type === 'function'
+        propInfo
+        && propInfo.type === 'Mixin'
+        && propInfo.props
+        && propInfo.props.types
+        && propInfo.props.types.indexOf('ReactNode') > -1
+        && propInfo.props.reactNodeProps
+        && propInfo.props.reactNodeProps.type === 'function'
       );
       return parseReactNode(
         props,
         isReactNodeFunction
           ? propInfo.props.params
           : isMixinReactNodeFunction
-          ? propInfo.props.reactNodeProps.params
-          : null,
+            ? propInfo.props.reactNodeProps.params
+            : null,
       );
-    } else if (Array.isArray(props)) {
+    }
+    if (Array.isArray(props)) {
       return checkProps(props.map((item, idx) => this.__parseProps(item, self, path ? `${path}.${idx}` : idx, info)));
-    } else if (typeof props === 'function') {
+    }
+    if (typeof props === 'function') {
       return checkProps(props.bind(self));
-    } else if (props && typeof props === 'object') {
+    }
+    if (props && typeof props === 'object') {
       if (props.$$typeof) return checkProps(props);
       const res = {};
       forEach(props, (val, key) => {
@@ -512,7 +538,8 @@ export default class BaseRender extends PureComponent {
         res[key] = this.__parseProps(val, self, path ? `${path}.${key}` : key, info);
       });
       return checkProps(res);
-    } else if (typeof props === 'string') {
+    }
+    if (typeof props === 'string') {
       return checkProps(props.trim());
     }
     return checkProps(props);
@@ -521,18 +548,23 @@ export default class BaseRender extends PureComponent {
   get utils() {
     return this.appHelper && this.appHelper.utils;
   }
+
   get constants() {
     return this.appHelper && this.appHelper.constants;
   }
+
   get history() {
     return this.appHelper && this.appHelper.history;
   }
+
   get location() {
     return this.appHelper && this.appHelper.location;
   }
+
   get match() {
     return this.appHelper && this.appHelper.match;
   }
+
   render() {
     return null;
   }

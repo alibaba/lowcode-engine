@@ -1,0 +1,23 @@
+@mixin rating-state(
+    $color
+) {
+    #{$rating-icon-prefix} {
+        color: $color;
+    }
+}
+
+@mixin rating-size(
+    $icon-size,
+    $text-size,
+    $text-margin-left
+) {
+    font-size: $text-size;
+
+    #{$rating-icon-prefix} {
+        @include icon-size($icon-size);
+    }
+
+    #{$rating-prefix}-text {
+        margin-left: $text-margin-left;
+    }
+}

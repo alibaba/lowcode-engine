@@ -1,0 +1,44 @@
+@charset "UTF-8";
+
+////
+/// @module loading: 加载
+/// @tag loading
+/// @category component
+/// @family feedback
+/// @varPrefix $loading-
+/// @classPrefix {prefix}-loading
+/// @order {"size/bounding":10,"size/icon":11,"statement/normal":10}
+////
+
+$loading-prefix: '.#{$css-prefix}loading';
+
+// loading variables
+// --------------------------------------------------
+
+/// icon
+/// @namespace size/bounding
+$loading-icon-size: $icon-xl !default;
+/// icon
+/// @namespace statement/normal
+$loading-dot-color: $color-brand1-6 !default;
+
+$loading-fusion-vector-seconds: 5.6s;
+$loading-fusion-vector-dot-seconds: 1.4s;
+$loading-fusion-vector-rotation-step: 90deg;
+$loading-fusion-vector-rotation-step-rtl: $loading-fusion-vector-rotation-step * -1;
+
+/// width
+/// @namespace size/bounding
+$loading-large-size: $s-12 !default;
+
+/// size
+/// @namespace size/icon
+$loading-large-dot-size: $icon-xs !default;
+
+/// width
+/// @namespace size/bounding
+$loading-medium-size: $s-8 !default;
+
+/// size
+/// @namespace size/icon
+$loading-medium-dot-size: $icon-xxs !default;

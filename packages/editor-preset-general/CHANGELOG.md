@@ -3,40 +3,206 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-<a name="0.9.27"></a>
-## [0.9.27](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.26...@ali/lowcode-editor-preset-general@0.9.27) (2020-08-14)
+<a name="1.0.8-0"></a>
+## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.40...@ali/lowcode-editor-preset-general@1.0.8-0) (2020-09-09)
+
+
+### Bug Fixes
+
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+
+
+
+
+<a name="1.0.7-0"></a>
+## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@1.0.6-0...@ali/lowcode-editor-preset-general@1.0.7-0) (2020-09-02)
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-general
+<a name="1.0.6-0"></a>
+## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.37...@ali/lowcode-editor-preset-general@1.0.6-0) (2020-09-02)
+
+
+<a name="0.9.40"></a>
+## [0.9.40](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.39...@ali/lowcode-editor-preset-general@0.9.40) (2020-09-08)
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-general
+
+<a name="0.9.39"></a>
+## [0.9.39](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.38...@ali/lowcode-editor-preset-general@0.9.39) (2020-09-03)
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-general
+
+<a name="0.9.38"></a>
+## [0.9.38](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.37...@ali/lowcode-editor-preset-general@0.9.38) (2020-09-03)
+
+
+
+
+### Bug Fixes
+
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+
+
+
+
+<a name="1.0.5-0"></a>
+## [1.0.5-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@1.0.4-0...@ali/lowcode-editor-preset-general@1.0.5-0) (2020-08-20)
+
+<a name="0.9.37"></a>
+## [0.9.37](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.36...@ali/lowcode-editor-preset-general@0.9.37) (2020-08-27)
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-editor-preset-general
 
-<a name="0.9.26"></a>
-## [0.9.26](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.25...@ali/lowcode-editor-preset-general@0.9.26) (2020-08-07)
+<a name="0.9.36"></a>
+## [0.9.36](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.35...@ali/lowcode-editor-preset-general@0.9.36) (2020-08-26)
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-editor-preset-general
 
-<a name="0.9.25"></a>
-## [0.9.25](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.24...@ali/lowcode-editor-preset-general@0.9.25) (2020-08-06)
+<a name="0.9.35"></a>
+## [0.9.35](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.34...@ali/lowcode-editor-preset-general@0.9.35) (2020-08-24)
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-editor-preset-general
 
-<a name="0.9.24"></a>
-## [0.9.24](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.23...@ali/lowcode-editor-preset-general@0.9.24) (2020-08-06)
+<a name="0.9.34"></a>
+## [0.9.34](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.33...@ali/lowcode-editor-preset-general@0.9.34) (2020-08-23)
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-editor-preset-general
 
-<a name="0.9.23"></a>
-## [0.9.23](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.22...@ali/lowcode-editor-preset-general@0.9.23) (2020-08-06)
+<a name="0.9.33"></a>
+## [0.9.33](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.32...@ali/lowcode-editor-preset-general@0.9.33) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-general
+
+<a name="1.0.4-0"></a>
+## [1.0.4-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@1.0.3-0...@ali/lowcode-editor-preset-general@1.0.4-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-general
+
+<a name="1.0.3-0"></a>
+## [1.0.3-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@1.0.2-0...@ali/lowcode-editor-preset-general@1.0.3-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-general
+
+<a name="1.0.2-0"></a>
+## [1.0.2-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@1.0.1-0...@ali/lowcode-editor-preset-general@1.0.2-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-general
+
+<a name="1.0.1-0"></a>
+## [1.0.1-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.32...@ali/lowcode-editor-preset-general@1.0.1-0) (2020-08-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-general
+
+<a name="1.0.0"></a>
+# [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general-beta@0.14.0...@ali/lowcode-editor-preset-general-beta@1.0.0) (2020-08-17)
+<a name="0.9.32"></a>
+## [0.9.32](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.31...@ali/lowcode-editor-preset-general@0.9.32) (2020-08-19)
+
+
+### Features
+
+* register-defaults 改为可选项 ([2195797](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2195797))
+
+
+
+
+<a name="0.9.31"></a>
+## [0.9.31](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.30...@ali/lowcode-editor-preset-general@0.9.31) (2020-08-19)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-general
+
+<a name="0.9.30"></a>
+## [0.9.30](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.29...@ali/lowcode-editor-preset-general@0.9.30) (2020-08-19)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-general
+
+<a name="0.9.29"></a>
+## [0.9.29](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.28...@ali/lowcode-editor-preset-general@0.9.29) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-general
+
+<a name="0.9.28"></a>
+## [0.9.28](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.27...@ali/lowcode-editor-preset-general@0.9.28) (2020-08-14)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-general-beta
+
+<a name="0.14.0"></a>
+# [0.14.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general-beta@0.13.0...@ali/lowcode-editor-preset-general-beta@0.14.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-general-beta
+
+<a name="0.13.0"></a>
+# [0.13.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general-beta@0.11.0...@ali/lowcode-editor-preset-general-beta@0.13.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-general-beta
+
+<a name="0.12.0"></a>
+# [0.12.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general-beta@0.11.0...@ali/lowcode-editor-preset-general-beta@0.12.0) (2020-08-17)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-general-beta
+
+<a name="0.11.0"></a>
+# 0.11.0 (2020-08-16)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-general-beta
+
+<a name="0.10.0"></a>
+# [0.10.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@0.9.22...@ali/lowcode-editor-preset-general@0.10.0) (2020-08-14)
 
 
 

@@ -1,0 +1,89 @@
+@charset "UTF-8";
+@import "../core/index-noreset.scss";
+@import "./scss/mixin.scss";
+@import "./scss/variable.scss";
+
+@import "./rtl.scss";
+
+#{$drawer-prefix} {
+    @include box-sizing;
+    position: fixed;
+    z-index: 1001;
+    background: $drawer-bg;
+    border: $drawer-border-width $drawer-border-style $drawer-border-color;
+    box-shadow: $drawer-shadow;
+    overflow: auto;
+    animation-duration: $motion-duration-standard;
+    animation-timing-function: $motion-ease-in-out;
+
+    &-right {
+        height: 100%;
+        max-width: 80%;
+        width: 240px;
+    }
+
+    &-left {
+        height: 100%;
+        max-width: 80%;
+        width: 240px;
+    }
+
+    &-top {
+        width: 100%;
+    }
+
+    &-bottom {
+        width: 100%;
+    }
+
+    &-header {
+        padding: $drawer-title-padding-top $drawer-title-padding-left-right $drawer-title-padding-bottom $drawer-title-padding-left-right;
+        border-bottom: $drawer-title-border-width $line-solid $drawer-title-border-color;
+        font-size: $drawer-title-font-size;
+        background: $drawer-title-bg-color;
+        color: $drawer-title-color;
+    }
+
+    &-no-title {
+        padding: 0;
+        border-bottom: 0;
+    }
+
+    &-body {
+        padding: $drawer-content-padding-top $drawer-content-padding-left-right $drawer-content-padding-bottom $drawer-content-padding-left-right;
+        font-size: $drawer-content-font-size;
+        color: $drawer-content-color;
+    }
+
+    &-close {
+        position: absolute;
+        top: $drawer-close-top;
+        right: $drawer-close-right;
+        width: $drawer-close-width;
+        height: $drawer-close-width;
+        color: $drawer-close-color;
+        cursor: pointer;
+
+        &:link,
+        &:visited {
+            height: $drawer-close-width;
+            color: $drawer-close-color;
+        }
+
+        &:hover {
+            background: $drawer-close-bg-hovered;
+            color: $drawer-close-color-hovered;
+        }
+
+        & &-icon.#{$css-prefix}icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            @include icon-square-size(
+                $size: $drawer-close-size,
+                $marginTop: -($drawer-close-size / 2),
+                $marginLeft: -($drawer-close-size / 2)
+            );
+        }
+    }
+}

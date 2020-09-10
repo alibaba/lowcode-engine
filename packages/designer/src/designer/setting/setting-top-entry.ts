@@ -228,6 +228,9 @@ export class SettingTopEntry implements SettingEntry {
   /**
    * @deprecated
    */
+  get node() {
+    return this.getNode();
+  }
   getNode() {
     return this.nodes[0];
   }

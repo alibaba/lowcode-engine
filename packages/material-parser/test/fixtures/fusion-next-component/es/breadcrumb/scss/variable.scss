@@ -1,0 +1,82 @@
+@charset "UTF-8";
+
+// breadcrumb variables
+// --------------------------------------------------
+
+////
+/// @module breadcrumb: 面包屑
+/// @tag Breadcrumb
+/// @category component
+/// @family navigation
+/// @varPrefix $breadcrumb-
+/// @classPrefix {prefix}-breadcrumb
+/// @order {"size/item":10,"size/ellipsis":11,"size/number":12,"size/keyword":13,"size/seperator":14,"statement/normal":10,"statement/normal/item":100,"statement/normal/item current":101,"statement/normal/ellipsis":102,"statement/normal/number":103,"statement/normal/keyword":104,"statement/normal/seperator":105,"statement/hover":11,"statement/hover/item":110,"statement/hover/item current":111,"statement/hover/number":112,"statement/hover/keyword":113}
+////
+
+// Unconfigurable
+// ----------------------------------------
+
+// 整体高度，不可配
+$breadcrumb-height: $s-4 !default;
+// text 最小宽度，不可配
+$breadcrumb-text-min-width: $s-4 !default;
+
+// Size
+// ----------------------------------------
+
+/// text
+/// @namespace size/item
+$breadcrumb-size-m-font-size: $font-size-caption !default;
+
+/// text
+/// @namespace size/ellipsis
+$breadcrumb-size-ellipsis-font-size: $font-size-caption !default;
+
+/// size
+/// @namespace size/seperator
+$breadcrumb-size-m-icon-size: $icon-xxs !default;
+
+/// margin (l, r)
+/// @namespace size/seperator
+$breadcrumb-size-m-icon-margin: $s-2 !default;
+
+// Statement:Normal
+// ----------------------------------------
+
+/// text
+/// @namespace statement/normal/item
+$breadcrumb-text-color: $color-text1-3 !default;
+
+/// text
+/// @namespace statement/normal/item current
+$breadcrumb-text-current-color: $color-text1-4 !default;
+/// weight
+/// @namespace statement/normal/item current
+$breadcrumb-text-current-weight: $font-weight-2 !default;
+
+/// text
+/// @namespace statement/normal/ellipsis
+$breadcrumb-text-ellipsis-color: $color-text1-3 !default;
+
+/// text
+/// @namespace statement/normal/keyword
+$breadcrumb-text-keyword-color: $color-brand1-6 !default;
+
+/// text
+/// @namespace statement/normal/seperator
+$breadcrumb-icon-color: $color-line1-4 !default;
+
+// Statement:Hover
+// ----------------------------------------
+
+/// text
+/// @namespace statement/hover/item
+$breadcrumb-text-color-hover: $color-brand1-6 !default;
+
+/// text
+/// @namespace statement/hover/item current
+$breadcrumb-text-current-color-hover: $color-brand1-6 !default;
+
+/// text
+/// @namespace statement/hover/keyword
+$breadcrumb-text-keyword-color-hover: $color-brand1-6 !default;

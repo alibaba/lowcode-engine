@@ -1,6 +1,6 @@
 import { render } from 'react-dom';
 import { createElement } from 'react';
-import { Workbench, Skeleton, SettingsPrimaryPane } from '@ali/lowcode-editor-skeleton';
+import { Workbench, Skeleton, SettingsPrimaryPane, registerDefaults } from '@ali/lowcode-editor-skeleton';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
 import { Designer, LiveEditing, TransformStage, Node } from '@ali/lowcode-designer';
 import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
@@ -20,6 +20,7 @@ globalContext.register(editor, Editor);
 export const skeleton = new Skeleton(editor);
 editor.set(Skeleton, skeleton);
 editor.set('skeleton', skeleton);
+registerDefaults();
 
 export const designer = new Designer({ editor: editor });
 editor.set(Designer, designer);

@@ -1,19 +1,42 @@
+import test from 'ava';
 import parse from '../src';
-import fs from 'fs';
 import { IMaterializeOptions } from '../src/types';
 import { getFromFixtures } from './helpers';
 
-const fusionComptPath = getFromFixtures('fusion-next-component');
+const multiExportedComptPath = getFromFixtures('multiple-exported-component');
+const singleExportedComptPath = getFromFixtures('single-exported-component');
+const tsComponent = getFromFixtures('ts-component');
 
-async function generate() {
+test('materialize single exported component by local', async t => {
   const options: IMaterializeOptions = {
-    entry: fusionComptPath,
+    entry: singleExportedComptPath,
     accesser: 'local',
   };
 
   const actual = await parse(options);
-  fs.writeFileSync('configure.json', JSON.stringify(actual, null, 2));
-  console.log(actual);
-}
 
-generate();
+  t.snapshot(actual);
+});
+
+test('materialize multiple exported component by local', async t => {
+  const options: IMaterializeOptions = {
+    entry: multiExportedComptPath,
+    accesser: 'local',
+  };
+
+  const actual = await parse(options);
+
+  t.snapshot(actual);
+});
+
+test('ts component by local', async t => {
+  const options: IMaterializeOptions = {
+    entry: tsComponent,
+    accesser: 'local',
+  };
+
+  const actual = await parse(options);
+
+  t.snapshot(actual);
+});
+

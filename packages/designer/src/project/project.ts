@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import { obx, computed } from '@ali/lowcode-editor-core';
 import { Designer } from '../designer';
-import { DocumentModel, isDocumentModel } from '../document';
+import { DocumentModel, isDocumentModel, isPageSchema } from '../document';
 import { ProjectSchema, RootSchema } from '@ali/lowcode-types';
 import { ISimulatorHost } from '../simulator';
 
@@ -51,6 +51,15 @@ export class Project {
   }
 
   /**
+   * 替换当前document的schema,并触发渲染器的render
+   * @param schema 
+   */
+  setSchema(schema?: ProjectSchema){
+    let doc = this.documents.find((doc) => doc.actived);
+    doc && doc.import(schema?.componentsTree[0]);
+  }
+
+  /**
    * 整体设置项目 schema
    *
    * @param autoOpen true 自动打开文档 string 指定打开的文件
@@ -65,6 +74,7 @@ export class Project {
       ...schema,
     };
     this.config = schema?.config;
+    debugger;
 
     if (autoOpen) {
       if (autoOpen === true) {
@@ -92,6 +102,14 @@ export class Project {
       return;
     }
     this.documents.forEach((doc) => doc.remove());
+  }
+
+  removeDocument(doc: DocumentModel) {
+    const index = this.documents.indexOf(doc);
+    if (index < 0) {
+      return;
+    }
+    this.documents.splice(index, 1);
   }
 
   /**
@@ -176,6 +194,11 @@ export class Project {
 
     if (isDocumentModel(doc)) {
       return doc.open();
+    } else if (isPageSchema(doc)) {
+      const foundDoc = this.documents.find(curDoc => curDoc?.rootNode?.id && curDoc?.rootNode?.id === doc?.id);
+      if (foundDoc) {
+        foundDoc.remove();
+      }
     }
 
     doc = this.createDocument(doc);

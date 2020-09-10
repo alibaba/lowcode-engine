@@ -85,6 +85,7 @@ export interface ProjectSchema {
   css?: string;
   dataSource?: DataSource;
   config?: AppConfig;
+  id?: string;
 }
 
 export function isNodeSchema(data: any): data is NodeSchema {

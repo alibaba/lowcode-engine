@@ -73,14 +73,20 @@ export default class PageRenderer extends BaseRenderer {
       return '页面schema结构异常！';
     }
     debug(`page.render - ${__schema.fileName}`);
+
+    this.state = this.__parseData(__schema.state || {});
+    this.__bindCustomMethods(this.props);
+    this.__initDataSource(this.props);
+    
+    // this.__setLifeCycleMethods('constructor', arguments);
+
     this.__generateCtx({
       page: this,
     });
     this.__render();
 
     const props = this.__parseData(__schema.props);
-    const {
- id, className, style, autoLoading, defaultHeight = 300, loading
+    const { id, className, style, autoLoading, defaultHeight = 300, loading
 } = props;
 
     const { Page } = __components;
