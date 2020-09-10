@@ -11,7 +11,6 @@ import { History } from './history';
 import { TransformStage, ModalNodesManager } from './node';
 import { uniqueId } from '@ali/lowcode-utils';
 
-
 export type GetDataType<T, NodeType> = T extends undefined
   ? NodeType extends {
     schema: infer R;
@@ -281,14 +280,16 @@ export class DocumentModel {
   /**
    * 内部方法，请勿调用
    */
-  internalRemoveAndPurgeNode(node: Node) {
+  internalRemoveAndPurgeNode(node: Node, useMutator = false) {
     if (!this.nodes.has(node)) {
       return;
     }
-    this._nodesMap.delete(node.id);
+    node.remove(useMutator);
+  }
+
+  unlinkNode(node: Node) {
     this.nodes.delete(node);
-    this.selection.remove(node.id);
-    node.remove();
+    this._nodesMap.delete(node.id);
   }
 
   @obx.ref private _dropLocation: DropLocation | null = null;
@@ -333,20 +334,23 @@ export class DocumentModel {
    * 导出 schema 数据
    */
   get schema(): RootSchema {
-    return this.rootNode.schema as any;
+    return this.rootNode?.schema as any;
   }
 
   import(schema: RootSchema, checkId = false) {
-    // TODO: do purge
+    // TODO: 暂时用饱和式删除，原因是 Slot 节点并不是树节点，无法正常递归删除
     this.nodes.forEach(node => {
-      this.destroyNode(node);
+      this.internalRemoveAndPurgeNode(node, true);
     });
-    this.rootNode.import(schema as any, checkId);
+    // foreachReverse(this.rootNode?.children, (node: Node) => {
+    //   this.internalRemoveAndPurgeNode(node, true);
+    // });
+    this.rootNode?.import(schema as any, checkId);
     // todo: select added and active track added
   }
 
   export(stage: TransformStage = TransformStage.Serilize) {
-    return this.rootNode.export(stage);
+    return this.rootNode?.export(stage);
   }
 
   /**

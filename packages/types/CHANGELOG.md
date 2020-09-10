@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.19"></a>
+## [0.8.19](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.8.18...@ali/lowcode-types@0.8.19) (2020-09-03)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="0.8.18"></a>
+## [0.8.18](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.8.17...@ali/lowcode-types@0.8.18) (2020-09-03)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="0.8.17"></a>
+## [0.8.17](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.8.16...@ali/lowcode-types@0.8.17) (2020-08-24)
 <a name="1.0.7-0"></a>
 ## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@1.0.6-0...@ali/lowcode-types@1.0.7-0) (2020-09-02)
 
@@ -99,7 +117,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * 修复判断动态 setter 的逻辑 ([d195d7f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d195d7f))
->>>>>>> master
 
 
 

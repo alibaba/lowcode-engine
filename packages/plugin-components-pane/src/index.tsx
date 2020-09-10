@@ -1,12 +1,15 @@
 import { Component, ReactNode } from 'react';
-import ComponentList, { AdditiveType } from '@ali/ve-component-list';
+import { Tab } from '@alifd/next';
+import ComponentList from './components/component-list';
+import { AdditiveType } from './components/base';
 import { PluginProps } from '@ali/lowcode-types';
 import { Designer } from '@ali/lowcode-designer';
 
 import './index.scss';
 
 export interface IState {
-  metaData: object[];
+  metaData: Record<string, unknown>[];
+  bizComponents: Record<string, unknown>[];
 }
 
 export default class ComponentListPlugin extends Component<PluginProps, IState> {
@@ -18,6 +21,7 @@ export default class ComponentListPlugin extends Component<PluginProps, IState> 
     super(props);
     this.state = {
       metaData: [],
+      bizComponents: [],
     };
   }
 
@@ -31,7 +35,7 @@ export default class ComponentListPlugin extends Component<PluginProps, IState> 
   }
 
   transformMetaData(componentList: any): any {
-    const metaData: object[] = [];
+    const metaData: Record<string, unknown>[] = [];
     componentList.forEach((category: any, categoryId: number) => {
       if (Array.isArray(category?.children)) {
         category.children.forEach((comp: any, compId: number) => {
@@ -61,9 +65,11 @@ export default class ComponentListPlugin extends Component<PluginProps, IState> 
     const { editor } = this.props;
     const assets = editor.get('assets') || {};
     const metaData = this.transformMetaData(assets.componentList);
+    const bizComponents = this.transformMetaData(assets.bizComponentList);
 
     this.setState({
       metaData,
+      bizComponents,
     });
   };
 
@@ -92,20 +98,7 @@ export default class ComponentListPlugin extends Component<PluginProps, IState> 
       return;
     }
 
-    const click = (e: Event) => {
-      if (
-        (e.target.tagName === 'ICON'
-          && e.target.parentNode
-          && e.target.parentNode.classList.contains('engine-additive-helper'))
-        || e.target.classList.contains('engine-additive-helper')
-      ) {
-        return;
-      }
-      const snippetId = getSnippetId(e.target, AdditiveType.Clickable);
-      if (!snippetId || !this.snippetsMap.get(snippetId)) {
-
-      }
-    };
+    const click = (e: Event) => { console.log(e); };
 
     shell.addEventListener('click', click);
 
@@ -126,15 +119,27 @@ export default class ComponentListPlugin extends Component<PluginProps, IState> 
   }
 
   render(): ReactNode {
-    const { metaData } = this.state;
+    const { metaData, bizComponents } = this.state;
     return (
       <div className="lowcode-component-list">
-        <ComponentList
-          key="component-pane"
-          metaData={metaData}
-          registerAdditive={(shell: Element | null) => this.registerAdditive(shell)}
-          enableSearch
-        />
+        <Tab>
+          <Tab.Item title="基础组件" key="base-components">
+            <ComponentList
+              key="component-pane"
+              metaData={metaData}
+              registerAdditive={(shell: Element | null) => this.registerAdditive(shell)}
+              enableSearch
+            />
+          </Tab.Item>
+          <Tab.Item title="业务组件" key="biz-components">
+            <ComponentList
+              key="component-pane"
+              metaData={bizComponents}
+              registerAdditive={(shell: Element | null) => this.registerAdditive(shell)}
+              enableSearch
+            />
+          </Tab.Item>
+        </Tab>
       </div>
     );
   }

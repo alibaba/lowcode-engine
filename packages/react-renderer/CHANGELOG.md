@@ -110,12 +110,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * 修复判断动态 setter 的逻辑 ([d195d7f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d195d7f))
->>>>>>> master
 
 
 
 
-<<<<<<< HEAD
 **Note:** Version bump only for package @ali/lowcode-react-renderer
 
 <a name="0.13.0"></a>
@@ -152,17 +150,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="0.9.0"></a>
 # [0.9.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@0.8.17...@ali/lowcode-react-renderer@0.9.0) (2020-08-14)
-=======
-=======
->>>>>>> master
 <a name="0.8.18"></a>
 ## [0.8.18](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@0.8.17...@ali/lowcode-react-renderer@0.8.18) (2020-08-14)
->>>>>>> master
 
 
 ### Bug Fixes
 
-<<<<<<< HEAD
 * dropdown and menu schema ([ae1d125](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ae1d125))
 * parse custom methods function ([87d8b86](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/87d8b86))
 
@@ -170,11 +163,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Features
 
 * 🎸 add demo-server ([df35c6a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/df35c6a))
-=======
 * remove debugger ([a835dc6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a835dc6))
 * render error样式 ([d601d5e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d601d5e))
 * 组件缺失占位 ([aff2f34](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/aff2f34))
->>>>>>> master
 
 
 

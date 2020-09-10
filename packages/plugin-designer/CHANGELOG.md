@@ -3,6 +3,8 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.9.55"></a>
+## [0.9.55](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-designer@0.9.54...@ali/lowcode-plugin-designer@0.9.55) (2020-09-08)
 <a name="1.0.7-0"></a>
 ## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-designer@1.0.6-0...@ali/lowcode-plugin-designer@1.0.7-0) (2020-09-02)
 
@@ -11,6 +13,21 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-plugin-designer
 
+<a name="0.9.54"></a>
+## [0.9.54](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-designer@0.9.53...@ali/lowcode-plugin-designer@0.9.54) (2020-09-03)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-designer
+
+<a name="0.9.53"></a>
+## [0.9.53](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-designer@0.9.52...@ali/lowcode-plugin-designer@0.9.53) (2020-09-03)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-designer
 <a name="1.0.6-0"></a>
 ## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-designer@0.9.52...@ali/lowcode-plugin-designer@1.0.6-0) (2020-09-02)
 
@@ -62,10 +79,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-plugin-designer
 
->>>>>>> master
 <a name="0.9.48"></a>
 ## [0.9.48](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-designer@0.9.47...@ali/lowcode-plugin-designer@0.9.48) (2020-08-20)
->>>>>>> master
 
 
 
@@ -138,10 +153,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-plugin-designer
 
->>>>>>> master
 <a name="0.9.43"></a>
 ## [0.9.43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-designer@0.9.42...@ali/lowcode-plugin-designer@0.9.43) (2020-08-14)
->>>>>>> master
 
 
 
