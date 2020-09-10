@@ -27,7 +27,6 @@ export default class VariableBindDialog extends Component<PluginProps> {
 
   state = {
     visiable: false,
-    selectedVariableName: '',
     variableContext: '',
   };
 
@@ -54,7 +53,7 @@ export default class VariableBindDialog extends Component<PluginProps> {
   initEventName = () => {
     const { bindEventName } = this.state;
     let eventName = bindEventName;
-    this.eventList.map((item) => {
+    this.eventList.forEach((item) => {
       if (item.name === eventName) {
         eventName = `${eventName}_new`;
       }
@@ -73,7 +72,6 @@ export default class VariableBindDialog extends Component<PluginProps> {
 
   onSelectItem = (variableName: string) => {
     this.setState({
-      selectedVariableName: variableName,
       variableContext: variableName,
     });
 
@@ -111,7 +109,7 @@ export default class VariableBindDialog extends Component<PluginProps> {
   };
 
   render() {
-    const { selectedEventName, eventName, visiable, variableContext } = this.state;
+    const { visiable, variableContext } = this.state;
     return (
       <Dialog
         visible={visiable}
