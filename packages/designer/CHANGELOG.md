@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.8-0"></a>
+## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.55...@ali/lowcode-designer@1.0.8-0) (2020-09-09)
+
+
+### Bug Fixes
+
+* 不应该限定 parent 才做解绑操作 ([2e616e3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2e616e3))
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+* 兼容modal模式 ([1092ee9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1092ee9))
+* 解决 set('schema') 后 componentsTree 越来越多的 bug ([a171d3e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a171d3e))
+* 优化树子节点删除逻辑 ([47e814f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/47e814f))
+
+
+### Features
+
+* 🎸 支持设置模拟器的 viewport 的宽高和缩放级别 ([3a54241](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3a54241))
+* 新增simulatorurl，可以设置cdn使用simulator ([1f45b05](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1f45b05))
+
+
+
+
 <a name="1.0.7-0"></a>
 ## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@1.0.6-0...@ali/lowcode-designer@1.0.7-0) (2020-09-02)
 

@@ -272,7 +272,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
 
     // 解除老的父子关系，但不需要真的删除节点
-    if (this._parent && !parent) {
+    if (this._parent) {
       if (this.isSlot()) {
         this._parent.unlinkSlot(this);
       } else {

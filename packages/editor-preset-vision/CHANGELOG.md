@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.8-0"></a>
+## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.57...@ali/lowcode-editor-preset-vision@1.0.8-0) (2020-09-09)
+
+
+### Bug Fixes
+
+* 不应该限定 parent 才做解绑操作 ([2e616e3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2e616e3))
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+
+
+
+
 <a name="1.0.7-0"></a>
 ## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@1.0.6-0...@ali/lowcode-editor-preset-vision@1.0.7-0) (2020-09-02)
 
