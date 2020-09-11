@@ -1,4 +1,4 @@
-import React, { createElement, ReactInstance, ComponentType, ReactElement, FunctionComponent } from 'react';
+import React, { createElement, ReactInstance } from 'react';
 import { render as reactRender } from 'react-dom';
 import { host } from './host';
 import SimulatorRendererView from './renderer-view';
@@ -63,7 +63,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
         this.buildComponents();
       }
     });
-    host.injectionConsumer.consume((data) => {
+    host.injectionConsumer.consume(() => {
       // sync utils, i18n, contants,... config
       this._appContext = {
         utils: {},
@@ -237,8 +237,6 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
       subs.unshift(sub);
       componentName = paths.join('.');
     }
-
-    return null;
   }
 
   getComponentInstances(id: string): ReactInstance[] | null {

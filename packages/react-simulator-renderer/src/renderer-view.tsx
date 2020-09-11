@@ -19,7 +19,9 @@ const originCloneElement = window.React.cloneElement;
         } else {
           try {
             cRef.current = x;
-          } catch (e) {}
+          } catch (e) {
+            console.error(e);
+          }
         }
       }
       if (dRef) {
@@ -28,7 +30,9 @@ const originCloneElement = window.React.cloneElement;
         } else {
           try {
             dRef.current = x;
-          } catch (e) {}
+          } catch (e) {
+            console.error(e);
+          }
         }
       }
     };

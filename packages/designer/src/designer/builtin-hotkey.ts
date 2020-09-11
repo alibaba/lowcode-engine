@@ -245,7 +245,7 @@ hotkey.bind(['option+left', 'option+right'], (e, action) => {
   }
 });
 
-hotkey.bind(['option+up'], (e, action) => {
+hotkey.bind(['option+up'], (e) => {
   const designer = focusing.focusDesigner;
   const doc = designer?.currentDocument;
   if (isFormEvent(e) || !doc) {
@@ -283,7 +283,7 @@ hotkey.bind(['option+up'], (e, action) => {
   }
 });
 
-hotkey.bind(['option+down'], (e, action) => {
+hotkey.bind(['option+down'], (e) => {
   const designer = focusing.focusDesigner;
   const doc = designer?.currentDocument;
   if (isFormEvent(e) || !doc) {

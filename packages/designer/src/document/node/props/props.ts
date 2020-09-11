@@ -153,41 +153,41 @@ export class Props implements IPropParent {
   query(path: string, stash = true): Prop | null {
     return this.get(path, stash);
     // todo: future support list search
-    let matchedLength = 0;
-    let firstMatched = null;
-    if (this.items) {
-      // target: a.b.c
-      // trys: a.b.c, a.b, a
-      let i = this.items.length;
-      while (i-- > 0) {
-        const expr = this.items[i];
-        if (!expr.key) {
-          continue;
-        }
-        const name = String(expr.key);
-        if (name === path) {
-          // completely match
-          return expr;
-        }
+    // let matchedLength = 0;
+    // let firstMatched = null;
+    // if (this.items) {
+    //   // target: a.b.c
+    //   // trys: a.b.c, a.b, a
+    //   let i = this.items.length;
+    //   while (i-- > 0) {
+    //     const expr = this.items[i];
+    //     if (!expr.key) {
+    //       continue;
+    //     }
+    //     const name = String(expr.key);
+    //     if (name === path) {
+    //       // completely match
+    //       return expr;
+    //     }
 
-        // fisrt match
-        const l = name.length;
-        if (path.slice(0, l + 1) === `${name}.`) {
-          matchedLength = l;
-          firstMatched = expr;
-        }
-      }
-    }
+    //     // fisrt match
+    //     const l = name.length;
+    //     if (path.slice(0, l + 1) === `${name}.`) {
+    //       matchedLength = l;
+    //       firstMatched = expr;
+    //     }
+    //   }
+    // }
 
-    let ret = null;
-    if (firstMatched) {
-      ret = firstMatched.get(path.slice(matchedLength + 1), true);
-    }
-    if (!ret && stash) {
-      return this.stash.get(path);
-    }
+    // let ret = null;
+    // if (firstMatched) {
+    //   ret = firstMatched.get(path.slice(matchedLength + 1), true);
+    // }
+    // if (!ret && stash) {
+    //   return this.stash.get(path);
+    // }
 
-    return ret;
+    // return ret;
   }
 
   /**

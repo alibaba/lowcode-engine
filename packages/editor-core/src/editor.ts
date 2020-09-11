@@ -11,7 +11,7 @@ import {
 import { IocContext, RegisterOptions } from './di';
 import { globalLocale } from './intl';
 import * as utils from './utils';
-import { tipHandler } from './widgets/tip/tip-handler';
+// import { tipHandler } from './widgets/tip/tip-handler';
 
 EventEmitter.defaultMaxListeners = 100;
 
@@ -22,7 +22,7 @@ export class Editor extends EventEmitter implements IEditor {
    * Ioc Container
    */
   private context = new IocContext({
-    notFoundHandler: (type: KeyType) => NOT_FOUND,
+    notFoundHandler: (/* type: KeyType */) => NOT_FOUND,
   });
 
   get locale() {
@@ -92,7 +92,7 @@ export class Editor extends EventEmitter implements IEditor {
   async init(config?: EditorConfig, components?: PluginClassSet): Promise<any> {
     this.config = config || {};
     this.components = components || {};
-    const { shortCuts = [], hooks = [], lifeCycles } = this.config;
+    const { hooks = [], lifeCycles } = this.config;
 
     this.emit('editor.beforeInit');
     const init = (lifeCycles && lifeCycles.init) || ((): void => {});
@@ -116,7 +116,7 @@ export class Editor extends EventEmitter implements IEditor {
       return;
     }
     try {
-      const { shortCuts = [], lifeCycles = {} } = this.config;
+      const { lifeCycles = {} } = this.config;
       // unRegistShortCuts(shortCuts);
 
       this.unregisterHooks();

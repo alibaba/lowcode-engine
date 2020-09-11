@@ -146,7 +146,7 @@ export default class MixedSetter extends Component<{
   private hasVariableSetter = this.setters.some((item) => item.name === 'VariableSetter');
 
   private useSetter = (name: string) => {
-    const { field, onChange } = this.props;
+    const { field } = this.props;
     if (name === 'VariableSetter') {
       const setterComponent = getSetter('VariableSetter')?.component as any;
       if (setterComponent && setterComponent.isPopup) {
@@ -350,7 +350,7 @@ export default class MixedSetter extends Component<{
     }
 
     return (
-      <div ref={(shell) => (this.shell = shell)} className={classNames('lc-setter-mixed', className)}>
+      <div ref={(shell) => { this.shell = shell; }} className={classNames('lc-setter-mixed', className)}>
         {contents.setterContent}
         <div className="lc-setter-actions">{contents.actions}</div>
       </div>

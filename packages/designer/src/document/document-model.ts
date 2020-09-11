@@ -672,7 +672,7 @@ export class DocumentModel {
   /**
    * @deprecated
    */
-  onRefresh(func: () => void) {
+  onRefresh(/* func: () => void */) {
     console.warn('onRefresh method is deprecated');
   }
 }

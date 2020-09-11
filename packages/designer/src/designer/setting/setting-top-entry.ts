@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 import { CustomView, isCustomView, IEditor } from '@ali/lowcode-types';
 import { computed } from '@ali/lowcode-editor-core';
 import { SettingEntry } from './setting-entry';
-import { SettingField, isSettingField } from './setting-field';
+import { SettingField } from './setting-field';
 import { SettingPropEntry } from './setting-prop-entry';
 import { Node } from '../../document';
 import { ComponentMeta } from '../../component-meta';

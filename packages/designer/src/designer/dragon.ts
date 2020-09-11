@@ -77,6 +77,7 @@ export interface ISensor {
 export type DragObject = DragNodeObject | DragNodeDataObject | DragAnyObject;
 
 export enum DragObjectType {
+  // eslint-disable-next-line no-shadow
   Node = 'node',
   NodeData = 'nodedata',
 }
@@ -204,8 +205,7 @@ export class Dragon {
 
   private emitter = new EventEmitter();
 
-  constructor(readonly designer: Designer) {
-  }
+  constructor(readonly designer: Designer) {}
 
   /**
    * Quick listen a shell(container element) drag behavior

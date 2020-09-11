@@ -1,4 +1,4 @@
-import { obx, computed, autorun } from '@ali/lowcode-editor-core';
+import { obx, computed } from '@ali/lowcode-editor-core';
 import { IEditor, isJSExpression } from '@ali/lowcode-types';
 import { uniqueId } from '@ali/lowcode-utils';
 import { SettingEntry } from './setting-entry';
