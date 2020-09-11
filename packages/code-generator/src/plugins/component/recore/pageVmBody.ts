@@ -6,7 +6,7 @@ import {
   ChunkType,
   ICodeStruct,
   IContainerInfo,
-  INodeGeneratorContext,
+  IScope,
   CodePiece,
   PIECE_TYPE,
 } from '../../../types';
@@ -14,8 +14,9 @@ import { COMMON_CHUNK_NAME } from '../../../const/generator';
 
 import { createNodeGenerator } from '../../../utils/nodeToJSX';
 import { generateCompositeType } from '../../../utils/compositeType';
+import Scope from '../../../utils/Scope';
 
-const generateGlobalProps = (ctx: INodeGeneratorContext, nodeItem: NodeSchema): CodePiece[] => {
+const generateGlobalProps = (nodeItem: NodeSchema): CodePiece[] => {
   return [
     {
       value: `{...globalProps.${nodeItem.componentName}}`,
@@ -24,11 +25,11 @@ const generateGlobalProps = (ctx: INodeGeneratorContext, nodeItem: NodeSchema): 
   ];
 };
 
-const generateCtrlLine = (ctx: INodeGeneratorContext, nodeItem: NodeSchema): CodePiece[] => {
+const generateCtrlLine = (nodeItem: NodeSchema, scope: IScope): CodePiece[] => {
   const pieces: CodePiece[] = [];
 
   if (nodeItem.loop && nodeItem.loopArgs) {
-    const loopDataExp = generateCompositeType(nodeItem.loop);
+    const loopDataExp = generateCompositeType(nodeItem.loop, scope);
     pieces.push({
       type: PIECE_TYPE.ATTR,
       value: `x-for={${loopDataExp}}`,
@@ -41,7 +42,7 @@ const generateCtrlLine = (ctx: INodeGeneratorContext, nodeItem: NodeSchema): Cod
   }
 
   if (nodeItem.condition) {
-    const conditionExp = generateCompositeType(nodeItem.condition);
+    const conditionExp = generateCompositeType(nodeItem.condition, scope);
     pieces.push({
       type: PIECE_TYPE.ATTR,
       value: `x-if={${conditionExp}}`,
@@ -53,7 +54,7 @@ const generateCtrlLine = (ctx: INodeGeneratorContext, nodeItem: NodeSchema): Cod
 
 const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
   const generator = createNodeGenerator({
-    plugins: [generateGlobalProps, generateCtrlLine],
+    nodePlugins: [generateGlobalProps, generateCtrlLine],
   });
 
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
@@ -62,8 +63,9 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
     };
 
     const ir = next.ir as IContainerInfo;
+    const scope = Scope.createRootScope();
 
-    const vxContent = generator(ir);
+    const vxContent = generator(ir, scope);
 
     next.chunks.push({
       type: ChunkType.STRING,

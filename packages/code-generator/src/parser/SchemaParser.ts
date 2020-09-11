@@ -8,7 +8,7 @@ import { IPageMeta } from '../types';
 
 import { SUPPORT_SCHEMA_VERSION_LIST } from '../const';
 
-import { handleSubNodes } from '../utils/nodeToJSX';
+import { handleSubNodes } from '../utils/schema';
 import { uniqueArray } from '../utils/common';
 
 import {

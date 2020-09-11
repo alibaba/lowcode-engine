@@ -2,24 +2,27 @@ import {
   CompositeArray,
   CompositeValue,
   CompositeObject,
+  JSFunction,
   isJSExpression,
   isJSFunction,
   isJSSlot,
+  JSSlot,
 } from '@ali/lowcode-types';
 import _ from 'lodash';
 
-import { CompositeValueGeneratorOptions, CodeGeneratorError } from '../types';
+import { IScope, CompositeValueGeneratorOptions, CodeGeneratorError } from '../types';
 import { generateExpression, generateFunction } from './jsExpression';
 import { generateJsSlot } from './jsSlot';
 import { isValidIdentifier } from './validate';
 import { camelize } from './common';
+import { executeFunctionStack } from './aopHelper';
 
-function generateArray(value: CompositeArray, options: CompositeValueGeneratorOptions = {}): string {
-  const body = value.map((v) => generateUnknownType(v, options)).join(',');
+function generateArray(value: CompositeArray, scope: IScope, options: CompositeValueGeneratorOptions = {}): string {
+  const body = value.map((v) => generateUnknownType(v, scope, options)).join(',');
   return `[${body}]`;
 }
 
-function generateObject(value: CompositeObject, options: CompositeValueGeneratorOptions = {}): string {
+function generateObject(value: CompositeObject, scope: IScope, options: CompositeValueGeneratorOptions = {}): string {
   const body = Object.keys(value)
     .map((key) => {
       let propName = key;
@@ -39,7 +42,7 @@ function generateObject(value: CompositeObject, options: CompositeValueGenerator
           throw new CodeGeneratorError(`Propname: ${key} is not a valid identifier.`);
         }
       }
-      const v = generateUnknownType(value[key], options);
+      const v = generateUnknownType(value[key], scope, options);
       return `${propName}: ${v}`;
     })
     .join(',\n');
@@ -47,7 +50,34 @@ function generateObject(value: CompositeObject, options: CompositeValueGenerator
   return `{${body}}`;
 }
 
-function generateUnknownType(value: CompositeValue, options: CompositeValueGeneratorOptions = {}): string {
+function generateString(value: string): string {
+  return `'${value}'`;
+}
+
+function generateNumber(value: number): string {
+  return String(value);
+}
+
+function generateBool(value: boolean): string {
+  return value ? 'true' : 'false';
+}
+
+function genFunction(value: JSFunction): string {
+  return generateFunction(value, { isArrow: true });
+}
+
+function genJsSlot(value: JSSlot, scope: IScope, options: CompositeValueGeneratorOptions = {}) {
+  if (options.nodeGenerator) {
+    return generateJsSlot(value, scope, options.nodeGenerator);
+  }
+  return '';
+}
+
+function generateUnknownType(
+  value: CompositeValue,
+  scope: IScope,
+  options: CompositeValueGeneratorOptions = {},
+): string {
   if (_.isUndefined(value)) {
     return 'undefined';
   }
@@ -58,67 +88,70 @@ function generateUnknownType(value: CompositeValue, options: CompositeValueGener
 
   if (_.isArray(value)) {
     if (options.handlers?.array) {
-      return options.handlers.array(value);
+      return executeFunctionStack(value, scope, options.handlers.array, generateArray, options);
     }
-    return generateArray(value, options);
+    return generateArray(value, scope, options);
   }
 
   if (isJSExpression(value)) {
     if (options.handlers?.expression) {
-      return options.handlers.expression(value);
+      return executeFunctionStack(value, scope, options.handlers.expression, generateExpression, options);
     }
     return generateExpression(value);
   }
 
   if (isJSFunction(value)) {
     if (options.handlers?.function) {
-      return options.handlers.function(value);
+      return executeFunctionStack(value, scope, options.handlers.function, genFunction, options);
     }
-    return generateFunction(value, { isArrow: true });
+    return genFunction(value);
   }
 
   if (isJSSlot(value)) {
-    if (options.nodeGenerator) {
-      return generateJsSlot(value, options.nodeGenerator);
+    if (options.handlers?.slot) {
+      return executeFunctionStack(value, scope, options.handlers.slot, genJsSlot, options);
     }
-    throw new CodeGeneratorError("Can't find Node Generator");
+    return genJsSlot(value, scope, options);
   }
 
   if (_.isObject(value)) {
     if (options.handlers?.object) {
-      return options.handlers.object(value);
+      return executeFunctionStack(value, scope, options.handlers.object, generateObject, options);
     }
-    return generateObject(value as CompositeObject, options);
+    return generateObject(value as CompositeObject, scope, options);
   }
 
   if (_.isString(value)) {
     if (options.handlers?.string) {
-      return options.handlers.string(value);
+      return executeFunctionStack(value, scope, options.handlers.string, generateString, options);
     }
-    return `'${value}'`;
+    return generateString(value);
   }
 
-  if (_.isNumber(value) && options.handlers?.number) {
-    return options.handlers.number(value);
+  if (_.isNumber(value)) {
+    if (options.handlers?.number) {
+      return executeFunctionStack(value, scope, options.handlers.number, generateNumber, options);
+    }
+    return generateNumber(value);
   }
 
-  if (_.isBoolean(value) && options.handlers?.boolean) {
-    return options.handlers.boolean(value);
+  if (_.isBoolean(value)) {
+    if (options.handlers?.boolean) {
+      return executeFunctionStack(value, scope, options.handlers.boolean, generateBool, options);
+    }
+    return generateBool(value);
   }
 
-  return JSON.stringify(value);
+  throw new CodeGeneratorError('Meet unknown composite value type');
 }
 
-const defaultContainer = (v: string) => v;
-
-export function generateCompositeType(value: CompositeValue, options: CompositeValueGeneratorOptions = {}): string {
-  const isStringType = _.isString(value);
-  const result = generateUnknownType(value, options);
-  const handler = options.containerHandler || defaultContainer;
-
-  if (isStringType && result.length >= 2) {
-    return handler(result, true, result.substring(1, result.length - 1));
-  }
-
-  return handler(result, false, result);
+// 这一层曾经是对产出做最外层包装的，但其实包装逻辑不应该属于这一层
+// 这一层先不去掉，做冗余，方便后续重构
+export function generateCompositeType(
+  value: CompositeValue,
+  scope: IScope,
+  options: CompositeValueGeneratorOptions = {},
+): string {
+  const result = generateUnknownType(value, scope, options);
+  return result;
 }

@@ -1,13 +1,11 @@
 import {
   JSONArray,
   JSONObject,
-  CompositeValue,
   CompositeArray,
   CompositeObject,
   ResultDir,
   ResultFile,
   NodeDataType,
-  NodeSchema,
   ProjectSchema,
   JSExpression,
   JSFunction,
@@ -15,6 +13,7 @@ import {
 } from '@ali/lowcode-types';
 
 import { IParseResult } from './intermediate';
+import { IScopeBindings } from '../utils/ScopeBindings';
 
 export enum FileType {
   CSS = 'css',
@@ -137,59 +136,35 @@ export interface IPluginOptions {
   fileDirDepth: number;
 }
 
-export enum PIECE_TYPE {
-  BEFORE = 'NodeCodePieceBefore',
-  TAG = 'NodeCodePieceTag',
-  ATTR = 'NodeCodePieceAttr',
-  CHILDREN = 'NodeCodePieceChildren',
-  AFTER = 'NodeCodePieceAfter',
-}
+export type BaseGenerator<I, T, C> = (input: I, scope: IScope, config?: C, next?: BaseGenerator<I, T, C>) => T;
+type CompositeTypeGenerator<I, T> =
+  | BaseGenerator<I, T, CompositeValueGeneratorOptions>
+  | Array<BaseGenerator<I, T, CompositeValueGeneratorOptions>>;
 
-export interface CodePiece {
-  value: string;
-  type: PIECE_TYPE;
-}
+export type NodeGenerator<T> = (nodeItem: NodeDataType, scope: IScope) => T;
 
 // FIXME: 在新的实现中，添加了第一参数 this: CustomHandlerSet 作为上下文。究其本质
 // scopeBindings?: IScopeBindings;
+// 这个组合只用来用来处理 CompositeValue 类型，不是这个类型的不要放在这里
 export interface HandlerSet<T> {
-  string?: (input: string) => T;
-  boolean?: (input: boolean) => T;
-  number?: (input: number) => T;
-  expression?: (input: JSExpression) => T;
-  function?: (input: JSFunction) => T;
-  slot?: (input: JSSlot) => T;
-  node?: (input: NodeSchema) => T;
-  array?: (input: JSONArray | CompositeArray) => T;
-  children?: (input: T[]) => T;
-  object?: (input: JSONObject | CompositeObject) => T;
-  common?: (input: unknown) => T;
-  tagName?: (input: string) => T;
-  loopDataExpr?: (input: string) => T;
-  conditionExpr?: (input: string) => T;
-  nodeAttrs?(node: NodeSchema): CodePiece[];
-  nodeAttr?(attrName: string, attrValue: CompositeValue): CodePiece[];
+  string?: CompositeTypeGenerator<string, T>;
+  boolean?: CompositeTypeGenerator<boolean, T>;
+  number?: CompositeTypeGenerator<number, T>;
+  expression?: CompositeTypeGenerator<JSExpression, T>;
+  function?: CompositeTypeGenerator<JSFunction, T>;
+  slot?: CompositeTypeGenerator<JSSlot, T>;
+  array?: CompositeTypeGenerator<JSONArray | CompositeArray, T>;
+  object?: CompositeTypeGenerator<JSONObject | CompositeObject, T>;
 }
-
-export type ExtGeneratorPlugin = (ctx: INodeGeneratorContext, nodeItem: NodeSchema) => CodePiece[];
-
-export type NodeGeneratorConfig = {
-  handlers?: HandlerSet<string>;
-  plugins?: ExtGeneratorPlugin[];
-};
-
-export type NodeGenerator = (nodeItem: NodeDataType) => string;
-
-export interface INodeGeneratorContext {
-  handlers: HandlerSet<string>;
-  plugins: ExtGeneratorPlugin[];
-  generator: NodeGenerator;
-}
-
-export type CompositeValueCustomHandler = (data: unknown) => string;
 
 export type CompositeValueGeneratorOptions = {
   handlers?: HandlerSet<string>;
-  containerHandler?: (value: string, isString: boolean, valStr: string) => string;
-  nodeGenerator?: NodeGenerator;
+  nodeGenerator?: NodeGenerator<string>;
 };
+
+export interface IScope {
+  // 作用域内定义
+  bindings?: IScopeBindings;
+  // TODO: 需要有上下文信息吗？ 描述什么内容
+  createSubScope: (ownIndentifiers: string[]) => IScope;
+}

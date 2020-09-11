@@ -2,6 +2,7 @@ import { CompositeValue, JSExpression, DataSourceConfig, isJSExpression, isJSFun
 import changeCase from 'change-case';
 
 import { CLASS_DEFINE_CHUNK_NAME, COMMON_CHUNK_NAME } from '../../../const/generator';
+import Scope from '../../../utils/Scope';
 
 import {
   BuilderComponentPlugin,
@@ -9,6 +10,7 @@ import {
   ChunkType,
   FileType,
   ICodeStruct,
+  IScope,
 } from '../../../types';
 
 import { generateCompositeType } from '../../../utils/compositeType';
@@ -31,6 +33,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       ...pre,
     };
 
+    const scope = Scope.createRootScope();
     const dataSourceConfig = isContainerSchema(pre.ir) ? pre.ir.dataSource : null;
     const dataSourceItems: DataSourceConfig[] = (dataSourceConfig && dataSourceConfig.list) || [];
     const dataSourceEngineOptions = { runtimeConfig: true };
@@ -80,7 +83,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
         _dataSourceEngine = __$$createDataSourceEngine(
           this._dataSourceConfig,
           this._context,
-          ${generateCompositeType(dataSourceEngineOptions)}
+          ${generateCompositeType(dataSourceEngineOptions, scope)}
         );`,
       linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start],
     });
@@ -108,11 +111,12 @@ _defineDataSourceConfig() {
       list: [
         ...dataSourceItems.map((item) => ({
           ...item,
-          isInit: wrapAsFunction(item.isInit),
-          options: wrapAsFunction(item.options),
+          isInit: wrapAsFunction(item.isInit, scope),
+          options: wrapAsFunction(item.options, scope),
         })),
       ],
     },
+    scope,
     {
       handlers: {
         function: (jsFunc) => parseExpressionConvertThis2Context(jsFunc.value, '__$$context'),
@@ -132,7 +136,7 @@ _defineDataSourceConfig() {
 
 export default pluginFactory;
 
-function wrapAsFunction(value: CompositeValue): CompositeValue {
+function wrapAsFunction(value: CompositeValue, scope: IScope): CompositeValue {
   if (isJSExpression(value) || isJSFunction(value)) {
     return {
       type: 'JSExpression',
@@ -142,6 +146,6 @@ function wrapAsFunction(value: CompositeValue): CompositeValue {
 
   return {
     type: 'JSExpression',
-    value: `function(){return((${generateCompositeType(value)}))}`,
+    value: `function(){return((${generateCompositeType(value, scope)}))}`,
   };
 }

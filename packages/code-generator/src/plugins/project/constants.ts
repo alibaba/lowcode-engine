@@ -8,6 +8,7 @@ import {
   ICodeStruct,
   IProjectInfo,
 } from '../../types';
+import Scope from '../../utils/Scope';
 
 const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
@@ -16,7 +17,8 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
     };
 
     const ir = next.ir as IProjectInfo;
-    const constantStr = generateCompositeType(ir.constants || {});
+    const scope = Scope.createRootScope();
+    const constantStr = generateCompositeType(ir.constants || {}, scope);
 
     next.chunks.push({
       type: ChunkType.STRING,

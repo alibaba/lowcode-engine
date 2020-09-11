@@ -14,16 +14,19 @@ import {
   IContainerInfo,
   PIECE_TYPE,
   HandlerSet,
+  IScope,
+  NodeGeneratorConfig,
+  NodePlugin,
+  AttrPlugin,
 } from '../../../types';
 
 import { RAX_CHUNK_NAME } from './const';
 import { COMMON_CHUNK_NAME } from '../../../const/generator';
 
 import { generateExpression } from '../../../utils/jsExpression';
-import { createNodeGenerator, generateReactCtrlLine, generateAttr } from '../../../utils/nodeToJSX';
+import { createNodeGenerator, generateConditionReactCtrl, generateReactExprInJS } from '../../../utils/nodeToJSX';
 import { generateCompositeType } from '../../../utils/compositeType';
-
-import { IScopeBindings, ScopeBindings } from '../../../utils/ScopeBindings';
+import Scope from '../../../utils/Scope';
 import {
   parseExpression,
   parseExpressionConvertThis2Context,
@@ -48,6 +51,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     };
 
     const ir = next.ir as IContainerInfo;
+    const rootScope = Scope.createRootScope();
 
     // Rax 构建到小程序的时候，不能给组件起起别名，得直接引用，故这里将所有的别名替换掉
     // 先收集下所有的 alias 的映射
@@ -70,44 +74,24 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     // 2. 小程序出码的时候，很容易出现 Uncaught TypeError: Cannot read property 'avatar' of undefined 这样的异常(如下图的 50 行) -- 因为若直接出码，Rax 构建到小程序的时候会立即计算所有在视图中用到的变量
     // 3. 通过 this.xxx 能拿到的东西太多了，而且自定义的 methods 可能会无意间破坏 Rax 框架或小程序框架在页面 this 上的东东
     const customHandlers: HandlerSet<string> = {
-      expression(this: CustomHandlerSet, input: JSExpression) {
-        return transformJsExpr(generateExpression(input), this);
+      expression(input: JSExpression, scope: IScope) {
+        return transformJsExpr(generateExpression(input), scope);
       },
-      function(input) {
-        return transformThis2Context(input.value || 'null', this);
+      function(input, scope: IScope) {
+        return transformThis2Context(input.value || 'null', scope);
       },
-      loopDataExpr(input) {
-        return typeof input === 'string' ? transformLoopExpr(input, this) : '';
-      },
-      tagName: mapComponentNameToAliasOrKeepIt,
-      nodeAttr: generateNodeAttrForRax,
     };
 
     // 创建代码生成器
     const commonNodeGenerator = createNodeGenerator({
       handlers: customHandlers,
-      plugins: [generateReactCtrlLine],
+      tagMapping: mapComponentNameToAliasOrKeepIt,
+      nodePlugins: [generateReactExprInJS, generateConditionReactCtrl, generateRaxLoopCtrl],
+      attrPlugins: [generateNodeAttrForRax],
     });
 
-    const raxCodeGenerator = (node: NodeSchema): string => {
-      if (node.loop) {
-        const loopItemName = node.loopArgs?.[0] || 'item';
-        const loopIndexName = node.loopArgs?.[1] || 'index';
-
-        return runInNewScope({
-          scopeHost: customHandlers,
-          newScopeOwnVariables: [loopItemName, loopIndexName],
-          run: () => commonNodeGenerator(node),
-        });
-      }
-
-      return commonNodeGenerator(node);
-    };
-
-    customHandlers.node = raxCodeGenerator;
-
     // 生成 JSX 代码
-    const jsxContent = raxCodeGenerator(ir);
+    const jsxContent = commonNodeGenerator(ir, rootScope);
 
     next.chunks.push({
       type: ChunkType.STRING,
@@ -164,11 +148,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
 
 export default pluginFactory;
 
-function transformLoopExpr(expr: string, handlers: CustomHandlerSet) {
-  return `__$$evalArray(() => (${transformThis2Context(expr, handlers)}))`;
-}
-
-function transformJsExpr(expr: string, handlers: CustomHandlerSet) {
+function transformJsExpr(expr: string, scope: IScope) {
   if (!expr) {
     return 'undefined';
   }
@@ -188,14 +168,14 @@ function transformJsExpr(expr: string, handlers: CustomHandlerSet) {
     // 对于直接写个函数的，则不用再包下，因为这样不会抛出异常的
     case 'ArrowFunctionExpression':
     case 'FunctionExpression':
-      return transformThis2Context(exprAst, handlers);
+      return transformThis2Context(exprAst, scope);
 
     default:
       break;
   }
 
   // 其他的都需要包一层
-  return `__$$eval(() => (${transformThis2Context(exprAst, handlers)}))`;
+  return `__$$eval(() => (${transformThis2Context(exprAst, scope)}))`;
 }
 
 /** 判断是非是一些简单直接的字面值 */
@@ -243,41 +223,79 @@ function isLiteralAtomicExpr(expr: string): boolean {
  * 将所有的 this.xxx 替换为 __$$context.xxx
  * @param expr
  */
-function transformThis2Context(expr: string | Expression, customHandlers: CustomHandlerSet): string {
+function transformThis2Context(expr: string | Expression, scope: IScope): string {
   // 下面这种字符串替换的方式虽然简单直接，但是对于复杂场景会误匹配，故后期改成了解析 AST 然后修改 AST 最后再重新生成代码的方式
   // return expr
   //   .replace(/\bthis\.item\./g, () => 'item.')
   //   .replace(/\bthis\.index\./g, () => 'index.')
   //   .replace(/\bthis\./g, () => '__$$context.');
 
-  return parseExpressionConvertThis2Context(expr, '__$$context', customHandlers.scopeBindings?.getAllBindings() || []);
+  return parseExpressionConvertThis2Context(expr, '__$$context', scope.bindings?.getAllBindings() || []);
 }
 
-function generateNodeAttrForRax(this: CustomHandlerSet, attrName: string, attrValue: CompositeValue): CodePiece[] {
-  if (!/^on/.test(attrName)) {
-    return generateAttr(attrName, attrValue, {
-      ...this,
-      nodeAttr: undefined,
+function generateRaxLoopCtrl(
+  nodeItem: NodeSchema,
+  scope: IScope,
+  config?: NodeGeneratorConfig,
+  next?: NodePlugin,
+): CodePiece[] {
+  if (nodeItem.loop) {
+    const loopItemName = nodeItem.loopArgs?.[0] || 'item';
+    const loopIndexName = nodeItem.loopArgs?.[1] || 'index';
+    const subScope = scope.createSubScope([loopItemName, loopIndexName]);
+    const pieces: CodePiece[] = next ? next(nodeItem, subScope, config) : [];
+
+    const loopDataExpr = `__$$evalArray(() => (${transformThis2Context(
+      generateCompositeType(nodeItem.loop, scope, { handlers: config?.handlers }),
+      scope,
+    )}))`;
+
+    pieces.unshift({
+      value: `${loopDataExpr}.map((${loopItemName}, ${loopIndexName}) => (`,
+      type: PIECE_TYPE.BEFORE,
     });
+
+    pieces.push({
+      value: '))',
+      type: PIECE_TYPE.AFTER,
+    });
+
+    return pieces;
+  }
+
+  return next ? next(nodeItem, scope, config) : [];
+}
+
+function generateNodeAttrForRax(
+  attrData: { attrName: string; attrValue: CompositeValue },
+  scope: IScope,
+  config?: NodeGeneratorConfig,
+  next?: AttrPlugin,
+): CodePiece[] {
+  if (!/^on/.test(attrData.attrName)) {
+    return next ? next(attrData, scope, config) : [];
   }
   // else: onXxx 的都是事件处理函数需要特殊处理下
-
-  return generateEventHandlerAttrForRax(attrName, attrValue, this);
+  return generateEventHandlerAttrForRax(attrData.attrName, attrData.attrValue, scope, config);
 }
 
 function generateEventHandlerAttrForRax(
   attrName: string,
   attrValue: CompositeValue,
-  handlers: CustomHandlerSet,
+  scope: IScope,
+  config?: NodeGeneratorConfig,
 ): CodePiece[] {
   // -- 事件处理函数中 JSExpression 转成 JSFunction 来处理，避免当 JSExpression 处理的时候多包一层 eval 而导致 Rax 转码成小程序的时候出问题
   const valueExpr = generateCompositeType(
     isJSExpression(attrValue) ? { type: 'JSFunction', value: attrValue.value } : attrValue,
-    handlers,
+    scope,
+    {
+      handlers: config?.handlers,
+    },
   );
 
   // 查询当前作用域下的变量
-  const currentScopeVariables = handlers.scopeBindings?.getAllBindings() || [];
+  const currentScopeVariables = scope.bindings?.getAllBindings() || [];
   if (currentScopeVariables.length <= 0) {
     return [
       {
@@ -321,32 +339,4 @@ function generateEventHandlerAttrForRax(
       value: `${attrName}={${wrappedAttrValueExpr}}`,
     },
   ];
-}
-
-function runInNewScope<T>({
-  scopeHost,
-  newScopeOwnVariables,
-  run,
-}: {
-  scopeHost: {
-    scopeBindings?: IScopeBindings;
-  };
-  newScopeOwnVariables: string[];
-  run: () => T;
-}): T {
-  const originalScopeBindings = scopeHost.scopeBindings;
-
-  try {
-    const newScope = new ScopeBindings(originalScopeBindings);
-
-    newScopeOwnVariables.forEach((varName) => {
-      newScope.addBinding(varName);
-    });
-
-    scopeHost.scopeBindings = newScope;
-
-    return run();
-  } finally {
-    scopeHost.scopeBindings = originalScopeBindings;
-  }
 }

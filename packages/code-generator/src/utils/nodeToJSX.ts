@@ -1,113 +1,105 @@
 import _ from 'lodash';
-import {
-  JSSlot,
-  JSExpression,
-  NodeData,
-  NodeSchema,
-  isNodeSchema,
-  PropsMap,
-  isJSExpression,
-  isJSSlot,
-  isDOMText,
-  NodeDataType,
-} from '@ali/lowcode-types';
+import { NodeSchema, isNodeSchema, NodeDataType, CompositeValue } from '@ali/lowcode-types';
 
 import {
+  IScope,
   CodeGeneratorError,
   PIECE_TYPE,
   CodePiece,
-  HandlerSet,
   NodeGenerator,
-  INodeGeneratorContext,
   NodeGeneratorConfig,
+  NodePlugin,
+  AttrData,
 } from '../types';
 
 import { generateCompositeType } from './compositeType';
+import { executeFunctionStack } from './aopHelper';
 
-// tslint:disable-next-line: no-empty
-const noop = () => undefined;
-
-const handleChildrenDefaultOptions = {
-  rerun: false,
-};
-
-export function handleSubNodes<T>(
-  children: unknown,
-  handlers: HandlerSet<T>,
-  options?: {
-    rerun?: boolean;
-  },
-): T[] {
-  const opt = {
-    ...handleChildrenDefaultOptions,
-    ...(options || {}),
-  };
-
-  if (Array.isArray(children)) {
-    const list: NodeData[] = children as NodeData[];
-    return list.map((child) => handleSubNodes(child, handlers, opt)).reduce((p, c) => p.concat(c), []);
+function mergeNodeGeneratorConfig(cfg1: NodeGeneratorConfig, cfg2: NodeGeneratorConfig = {}): NodeGeneratorConfig {
+  const resCfg: NodeGeneratorConfig = {};
+  if (cfg1.handlers || cfg2.handlers) {
+    resCfg.handlers = {
+      ...(cfg1.handlers || {}),
+      ...(cfg2.handlers || {}),
+    };
   }
 
-  let result: T | undefined = undefined;
-  const childrenRes: T[] = [];
-  if (isDOMText(children)) {
-    const handler = handlers.string || handlers.common || noop;
-    result = handler(children as string);
-  } else if (isJSExpression(children)) {
-    const handler = handlers.expression || handlers.common || noop;
-    result = handler(children as JSExpression);
-  } else {
-    const handler = handlers.node || handlers.common || noop;
-    const child = children as NodeSchema;
-    result = handler(child);
-
-    if (opt.rerun && child.children) {
-      const childRes = handleSubNodes(child.children, handlers, opt);
-      childrenRes.push(...childRes);
-    }
-    if (child.props) {
-      // FIXME: currently only support PropsMap
-      const childProps = child.props as PropsMap;
-      Object.keys(childProps)
-        .filter((propName) => isJSSlot(childProps[propName]))
-        .forEach((propName) => {
-          const soltVals = (childProps[propName] as JSSlot).value;
-          const childRes = handleSubNodes(soltVals, handlers, opt);
-          childrenRes.push(...childRes);
-        });
-    }
+  if (cfg1.tagMapping || cfg2.tagMapping) {
+    resCfg.tagMapping = cfg2.tagMapping || cfg1.tagMapping;
   }
 
-  if (result !== undefined) {
-    childrenRes.unshift(result);
+  if (cfg1.attrPlugins || cfg2.attrPlugins) {
+    resCfg.attrPlugins = [];
+    resCfg.attrPlugins.push(...(cfg2.attrPlugins || []));
+    resCfg.attrPlugins.push(...(cfg1.attrPlugins || []));
   }
 
-  return childrenRes;
+  if (cfg1.nodePlugins || cfg2.nodePlugins) {
+    resCfg.nodePlugins = [];
+    resCfg.nodePlugins.push(...(cfg2.nodePlugins || []));
+    resCfg.nodePlugins.push(...(cfg1.nodePlugins || []));
+  }
+
+  return resCfg;
 }
 
-export function generateAttr(ctx: INodeGeneratorContext, attrName: string, attrValue: any): CodePiece[] {
-  if (ctx.handlers.nodeAttr) {
-    return ctx.handlers.nodeAttr(attrName, attrValue);
-  }
-
-  const valueStr = generateCompositeType(attrValue, {
-    containerHandler: (v, isStr, vStr) => (isStr ? `"${vStr}"` : `{${v}}`),
-    nodeGenerator: ctx.generator,
+function generateAttrValue(
+  attrData: { attrName: string; attrValue: CompositeValue },
+  scope: IScope,
+  config?: NodeGeneratorConfig,
+): CodePiece[] {
+  const valueStr = generateCompositeType(attrData.attrValue, scope, {
+    handlers: config?.handlers,
+    nodeGenerator: config?.self,
   });
-
   return [
     {
-      value: `${attrName}=${valueStr}`,
       type: PIECE_TYPE.ATTR,
+      name: attrData.attrName,
+      value: valueStr,
     },
   ];
 }
 
-export function generateAttrs(ctx: INodeGeneratorContext, nodeItem: NodeSchema): CodePiece[] {
-  if (ctx.handlers.nodeAttrs) {
-    return ctx.handlers.nodeAttrs(nodeItem);
+function generateAttr(
+  attrName: string,
+  attrValue: CompositeValue,
+  scope: IScope,
+  config?: NodeGeneratorConfig,
+): CodePiece[] {
+  let pieces: CodePiece[];
+  if (config?.attrPlugins) {
+    pieces = executeFunctionStack<AttrData, CodePiece[], NodeGeneratorConfig>(
+      { attrName, attrValue },
+      scope,
+      config.attrPlugins,
+      generateAttrValue,
+      config,
+    );
+  } else {
+    pieces = generateAttrValue({ attrName, attrValue }, scope, config);
   }
 
+  pieces = pieces.map((p) => {
+    // FIXME: 在经过 generateCompositeType 处理过之后，其实已经无法通过传入值的类型判断传出值是否为纯字面值字符串了（可能包裹了加工函数之类的）
+    //        因此这个处理最好的方式是对传出值做语法分析，判断以哪种模版产出 Attr 值
+    let newValue: string;
+    if (p.value && p.value[0] === "'" && p.value[p.value.length - 1] === "'") {
+      newValue = `"${p.value.substring(1, p.value.length - 1)}"`;
+    } else {
+      newValue = `{${p.value}}`;
+    }
+
+    return {
+      value: `${p.name}=${newValue}`,
+      type: PIECE_TYPE.ATTR,
+    };
+  });
+
+  return pieces;
+}
+
+function generateAttrs(nodeItem: NodeSchema, scope: IScope, config?: NodeGeneratorConfig): CodePiece[] {
   const { props } = nodeItem;
 
   let pieces: CodePiece[] = [];
@@ -115,12 +107,12 @@ export function generateAttrs(ctx: INodeGeneratorContext, nodeItem: NodeSchema):
   if (props) {
     if (!Array.isArray(props)) {
       Object.keys(props).forEach((propName: string) => {
-        pieces = pieces.concat(generateAttr(ctx, propName, props[propName]));
+        pieces = pieces.concat(generateAttr(propName, props[propName], scope, config));
       });
     } else {
       props.forEach((prop) => {
         if (prop.name && !prop.spread) {
-          pieces = pieces.concat(generateAttr(ctx, prop.name, prop.value));
+          pieces = pieces.concat(generateAttr(prop.name, prop.value, scope, config));
         }
 
         // TODO: 处理 spread 场景（<Xxx {...(something)}/>)
@@ -132,9 +124,9 @@ export function generateAttrs(ctx: INodeGeneratorContext, nodeItem: NodeSchema):
   return pieces;
 }
 
-export function generateBasicNode(ctx: INodeGeneratorContext, nodeItem: NodeSchema): CodePiece[] {
+function generateBasicNode(nodeItem: NodeSchema, scope: IScope, config?: NodeGeneratorConfig): CodePiece[] {
   const pieces: CodePiece[] = [];
-  const tagName = (ctx.handlers.tagName || _.identity)(nodeItem.componentName);
+  const tagName = (config?.tagMapping || _.identity)(nodeItem.componentName);
 
   pieces.push({
     value: tagName || '', // FIXME: type detection error
@@ -144,7 +136,14 @@ export function generateBasicNode(ctx: INodeGeneratorContext, nodeItem: NodeSche
   return pieces;
 }
 
-export function linkPieces(pieces: CodePiece[]): string {
+function generateSimpleNode(nodeItem: NodeSchema, scope: IScope, config?: NodeGeneratorConfig): CodePiece[] {
+  const basicParts = generateBasicNode(nodeItem, scope, config) || [];
+  const attrParts = generateAttrs(nodeItem, scope, config) || [];
+
+  return [...basicParts, ...attrParts];
+}
+
+function linkPieces(pieces: CodePiece[]): string {
   const tagsPieces = pieces.filter((p) => p.type === PIECE_TYPE.TAG);
   if (tagsPieces.length !== 1) {
     throw new CodeGeneratorError('One node only need one tag define');
@@ -180,17 +179,23 @@ export function linkPieces(pieces: CodePiece[]): string {
   return `${beforeParts}<${tagName}${attrsParts} />${afterParts}`;
 }
 
-export function generateNodeSchema(nodeItem: NodeSchema, ctx: INodeGeneratorContext): string {
-  let pieces: CodePiece[] = [];
+function generateNodeSchema(nodeItem: NodeSchema, scope: IScope, config?: NodeGeneratorConfig): string {
+  const pieces: CodePiece[] = [];
+  if (config?.nodePlugins) {
+    const res = executeFunctionStack<NodeSchema, CodePiece[], NodeGeneratorConfig>(
+      nodeItem,
+      scope,
+      config.nodePlugins,
+      generateSimpleNode,
+      config,
+    );
+    pieces.push(...res);
+  } else {
+    pieces.push(...generateSimpleNode(nodeItem, scope, config));
+  }
 
-  ctx.plugins.forEach((p) => {
-    pieces = pieces.concat(p(ctx, nodeItem));
-  });
-  pieces = pieces.concat(generateBasicNode(ctx, nodeItem));
-  pieces = pieces.concat(generateAttrs(ctx, nodeItem));
-
-  if (nodeItem.children) {
-    const childrenStr = ctx.generator(nodeItem.children);
+  if (nodeItem.children && config?.self) {
+    const childrenStr = config.self(nodeItem.children, scope);
 
     pieces.push({
       type: PIECE_TYPE.CHILDREN,
@@ -207,25 +212,28 @@ export function generateNodeSchema(nodeItem: NodeSchema, ctx: INodeGeneratorCont
 // export function createSubContext() {}
 
 /**
- * JSX 生成逻辑插件。在 React 代码模式下生成 loop 与 condition 相关的逻辑代码
- * @type ExtGeneratorPlugin
+ * JSX 生成逻辑插件。在 React 代码模式下生成 loop 相关的逻辑代码
+ * @type NodePlugin Extended
  *
  * @export
  * @param {NodeSchema} nodeItem 当前 UI 节点
  * @returns {CodePiece[]} 实现功能的相关代码片段
  */
-export function generateReactCtrlLine(ctx: INodeGeneratorContext, nodeItem: NodeSchema): CodePiece[] {
-  const pieces: CodePiece[] = [];
+export function generateReactLoopCtrl(
+  nodeItem: NodeSchema,
+  scope: IScope,
+  config?: NodeGeneratorConfig,
+  next?: NodePlugin,
+): CodePiece[] {
+  const pieces: CodePiece[] = next ? next(nodeItem, scope, config) : [];
 
   if (nodeItem.loop) {
     const loopItemName = nodeItem.loopArgs?.[0] || 'item';
     const loopIndexName = nodeItem.loopArgs?.[1] || 'index';
 
-    const rawLoopDataExpr = isJSExpression(nodeItem.loop)
-      ? `(${nodeItem.loop.value})`
-      : `(${JSON.stringify(nodeItem.loop)})`;
-
-    const loopDataExpr = ctx.handlers.loopDataExpr ? ctx.handlers.loopDataExpr(rawLoopDataExpr) : rawLoopDataExpr;
+    const loopDataExpr = generateCompositeType(nodeItem.loop, scope, {
+      handlers: config?.handlers,
+    });
 
     pieces.unshift({
       value: `${loopDataExpr}.map((${loopItemName}, ${loopIndexName}) => (`,
@@ -238,15 +246,32 @@ export function generateReactCtrlLine(ctx: INodeGeneratorContext, nodeItem: Node
     });
   }
 
+  return pieces;
+}
+
+/**
+ * JSX 生成逻辑插件。在 React 代码模式下生成 condition 相关的逻辑代码
+ * @type NodePlugin
+ *
+ * @export
+ * @param {NodeSchema} nodeItem 当前 UI 节点
+ * @returns {CodePiece[]} 实现功能的相关代码片段
+ */
+export function generateConditionReactCtrl(
+  nodeItem: NodeSchema,
+  scope: IScope,
+  config?: NodeGeneratorConfig,
+  next?: NodePlugin,
+): CodePiece[] {
+  const pieces: CodePiece[] = next ? next(nodeItem, scope, config) : [];
+
   if (nodeItem.condition) {
-    const value = generateCompositeType(nodeItem.condition, {
-      nodeGenerator: ctx.generator,
+    const value = generateCompositeType(nodeItem.condition, scope, {
+      handlers: config?.handlers,
     });
 
-    const conditionExpr = (ctx.handlers.conditionExpr || _.identity)(value);
-
     pieces.unshift({
-      value: `(${conditionExpr}) && (`,
+      value: `(${value}) && (`,
       type: PIECE_TYPE.BEFORE,
     });
 
@@ -255,6 +280,25 @@ export function generateReactCtrlLine(ctx: INodeGeneratorContext, nodeItem: Node
       type: PIECE_TYPE.AFTER,
     });
   }
+
+  return pieces;
+}
+
+/**
+ * JSX 生成逻辑插件。在 React 代码模式下，如果 Node 生成结果是一个表达式，则对其进行 { Expression } 包装
+ * @type NodePlugin
+ *
+ * @export
+ * @param {NodeSchema} nodeItem 当前 UI 节点
+ * @returns {CodePiece[]} 实现功能的相关代码片段
+ */
+export function generateReactExprInJS(
+  nodeItem: NodeSchema,
+  scope: IScope,
+  config?: NodeGeneratorConfig,
+  next?: NodePlugin,
+): CodePiece[] {
+  const pieces: CodePiece[] = next ? next(nodeItem, scope, config) : [];
 
   if (nodeItem.condition || nodeItem.loop) {
     pieces.unshift({
@@ -273,45 +317,35 @@ export function generateReactCtrlLine(ctx: INodeGeneratorContext, nodeItem: Node
 
 const handleChildren = (v: string[]) => v.join('');
 
-export function createNodeGenerator(cfg: NodeGeneratorConfig = {}): NodeGenerator {
-  let ctx: INodeGeneratorContext = { handlers: {}, plugins: [], generator: () => '' };
-
-  const generateNode = (nodeItem: NodeDataType): string => {
+export function createNodeGenerator(cfg: NodeGeneratorConfig = {}): NodeGenerator<string> {
+  const generateNode = (nodeItem: NodeDataType, scope: IScope): string => {
     if (_.isArray(nodeItem)) {
-      const resList = nodeItem.map((n) => generateNode(n));
-      return (cfg?.handlers?.children || handleChildren)(resList);
+      const resList = nodeItem.map((n) => generateNode(n, scope));
+      return handleChildren(resList);
     }
 
     if (isNodeSchema(nodeItem)) {
-      if (cfg?.handlers?.node) {
-        // TODO: children 的处理是否拆出来作为公用
-        return cfg.handlers.node(nodeItem);
-      }
-
-      return generateNodeSchema(nodeItem, ctx);
+      return generateNodeSchema(nodeItem, scope, {
+        ...cfg,
+        self: generateNode,
+      });
     }
 
-    return generateCompositeType(nodeItem, {
+    return generateCompositeType(nodeItem, scope, {
       handlers: cfg.handlers,
-      // FIXME: 这里和 children 类型的嵌套逻辑需要再思考一下
-      // containerHandler: (value: string, isString: boolean, valStr: string) => (isString ? valStr : value),
       nodeGenerator: generateNode,
     });
-  };
-
-  ctx = {
-    handlers: cfg?.handlers || {},
-    plugins: cfg.plugins || [],
-    generator: generateNode,
   };
 
   return generateNode;
 }
 
-// TODO: 需要一个 merge config 的方法。
-export function createReactNodeGenerator(cfg?: NodeGeneratorConfig): NodeGenerator {
-  return createNodeGenerator({
-    plugins: [generateReactCtrlLine],
-    ...cfg,
-  });
+const defaultReactGeneratorConfig: NodeGeneratorConfig = {
+  nodePlugins: [generateReactExprInJS, generateConditionReactCtrl, generateReactLoopCtrl],
+};
+
+export function createReactNodeGenerator(cfg?: NodeGeneratorConfig): NodeGenerator<string> {
+  const newCfg = mergeNodeGeneratorConfig(defaultReactGeneratorConfig, cfg);
+
+  return createNodeGenerator(newCfg);
 }
