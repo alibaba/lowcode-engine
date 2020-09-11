@@ -55,6 +55,10 @@ const transfrom = {
   setFunction2Schema(functionMap,schema){
 
     let pageNode = schema.componentsTree[0];
+    // 先清除原有的schema的值
+    delete pageNode.state;
+    pageNode.lifeCycles = {};
+    pageNode.methods = {};
     if (!pageNode) return '';
     for (let key in functionMap){
         if (key == 'state'){

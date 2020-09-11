@@ -1,5 +1,5 @@
 import { Component, isValidElement, ReactElement, ReactNode } from 'react';
-import { Tab, Search, Input, Button } from '@alifd/next';
+import { Tab, Search, Input, Button,Message } from '@alifd/next';
 import { Editor } from '@ali/lowcode-editor-core';
 import { js_beautify, css_beautify } from 'js-beautify';
 import MonacoEditor from 'react-monaco-editor';
@@ -15,7 +15,7 @@ import transfrom from './transform';
 
 const defaultEditorOption = {
   width: '100%',
-  height: '100%',
+  height: '95%',
   options: {
     readOnly: false,
     automaticLayout: true,
@@ -56,10 +56,12 @@ export default class SourceEditor extends Component<{
   state = {
     isFullScreen:false,
     tabKey: TAB_KEY.JS_TAB,
+    isShowSaveBtn:true
   };
 
   componentWillMount() {
     const { editor } = this.props;
+
 
     // 添加函数
     editor.on('sourceEditor.addFunction', (params: FunctionEventParam) => {
@@ -71,16 +73,13 @@ export default class SourceEditor extends Component<{
       this.callEditorEvent('sourceEditor.focusByFunction', params);
     });
 
-    
-
-
     // 插件面板关闭事件,监听规则同上
     editor.on('skeleton.panel-dock.unactive',(pluginName,dock)=>{
-       if (pluginName == 'sourceEditor'){
-          this.saveSchema();
-       }
+      if (pluginName == 'sourceEditor'){
+         this.saveSchema();
+      }
     })
-
+    
     // 插件面板打开事件,监听规则同上
     editor.on('skeleton.panel-dock.active',(pluginName,dock)=>{
       if (pluginName == 'sourceEditor'){
@@ -269,21 +268,22 @@ export default class SourceEditor extends Component<{
   };
 
 
-  saveSchema = () => {
+  saveSchema = (successFlag) => {
     const {jsCode} = this.state;
     const {editor} = this.props;
     let functionMap = transfrom.code2Schema(jsCode);
     let schema = editor.get('designer').project.getSchema();
-    let oldSchemaStr = JSON.stringify(schema);
+    //let oldSchemaStr = JSON.stringify(schema);
     let newSchema = transfrom.setFunction2Schema(functionMap, schema);
 
-    if (newSchema!='' && JSON.stringify(newSchema) != oldSchemaStr){
+    if (newSchema!=''){
       editor.get('designer').project.setSchema(newSchema);
+      successFlag && Message.success('保存成功')
     }
   }
 
   render() {
-    const { selectTab, jsCode, css } = this.state;
+    const { selectTab, jsCode, css ,isShowSaveBtn} = this.state;
     const tabs = [
       { tab: 'index.js', key: TAB_KEY.JS_TAB },
       { tab: 'style.css', key: TAB_KEY.CSS_TAB },
@@ -291,12 +291,13 @@ export default class SourceEditor extends Component<{
 
     return (
       <div className="source-editor-container">
+
         <Tab size="small" shape="wrapped" onChange={this.onTabChange} activeKey={selectTab}>
           {tabs.map((item) => (
             <Tab.Item key={item.key} title={item.tab} />
           ))}
         </Tab>
-
+        { isShowSaveBtn && <div className="button-container"><Button type="primary" onClick={()=>this.saveSchema(successFlag)}>保存代码</Button></div>}
 
           <div style={{ height: '100%' }} className="editor-context-container">
             <div id="jsEditorDom" className="editor-context" ref={this.editorJsRef}>
