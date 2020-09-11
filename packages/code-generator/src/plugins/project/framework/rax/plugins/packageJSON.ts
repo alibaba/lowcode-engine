@@ -32,8 +32,14 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
         lint: 'eslint --ext .js --ext .jsx ./',
       },
       dependencies: {
-        '@ali/lowcode-datasource-engine': '^0.1.0',
+        '@ali/lowcode-datasource-engine': '*',
+        // TODO: 如何动态获取下面这些依赖？
+        '@ali/lowcode-datasource-url-params-handler': '*',
+        '@ali/lowcode-datasource-fetch-handler': '*',
+        '@ali/lowcode-datasource-mtop-handler': '*',
+        '@ali/lowcode-datasource-mopen-handler': '*',
         'universal-env': '^3.2.0',
+        'intl-messageformat': '^9.3.6',
         rax: '^1.1.0',
         'rax-app': '^2.0.0',
         'rax-document': '^0.1.0',

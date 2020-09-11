@@ -17,8 +17,7 @@ export class DataSourceEngine implements IDataSourceEngine {
   ) {
     _dataSourceConfig.list?.forEach((ds) => {
       // 确保数据源都有处理器
-      const requestHandler =
-        ds.requestHandler || _options?.requestHandlersMap?.[ds.type];
+      const requestHandler = ds.requestHandler || _options?.requestHandlersMap?.[ds.type];
       if (!requestHandler) {
         throw new Error(`No request handler for "${ds.type}" data source`);
       }
@@ -51,12 +50,8 @@ export class DataSourceEngine implements IDataSourceEngine {
         }
       }
 
-      await sleep(0); // TODO: 如何优雅地解决 setState 的异步问题？
-
       // 然后是所有其他的
-      const remainDataSourceConfigList = allDataSourceConfigList.filter(
-        (x) => x.type !== 'urlParams',
-      );
+      const remainDataSourceConfigList = allDataSourceConfigList.filter((x) => x.type !== 'urlParams');
 
       // 先发起异步的
       const asyncLoadings: Array<Promise<unknown>> = [];
@@ -65,9 +60,7 @@ export class DataSourceEngine implements IDataSourceEngine {
           const options = getValue(ds.options);
           if (options && !options.isSync) {
             this._dataSourceMap[ds.id].setOptions(options);
-            asyncLoadings.push(
-              this._dataSourceMap[ds.id].load(options?.params).catch(() => {}),
-            );
+            asyncLoadings.push(this._dataSourceMap[ds.id].load(options?.params).catch(() => {}));
           }
         }
       }
@@ -106,18 +99,12 @@ export class DataSourceEngine implements IDataSourceEngine {
   }
 }
 
-export const create: IDataSourceEngineFactory['create'] = (
-  dataSourceConfig,
-  runtimeContext,
-  options,
-) => {
+export const create: IDataSourceEngineFactory['create'] = (dataSourceConfig, runtimeContext, options) => {
   return new DataSourceEngine(dataSourceConfig, runtimeContext, options);
 };
 
 function getValue<T>(valueOrValueGetter: T | (() => T)): T;
-function getValue<T extends boolean>(
-  valueOrValueGetter: T | (() => T),
-): T | undefined {
+function getValue<T extends boolean>(valueOrValueGetter: T | (() => T)): T | undefined {
   if (typeof valueOrValueGetter === 'function') {
     try {
       return valueOrValueGetter();

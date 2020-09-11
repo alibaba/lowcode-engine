@@ -1,9 +1,5 @@
-import {
-  DataSourceOptions,
-  IRuntimeDataSource,
-  RequestHandler,
-  RuntimeDataSourceStatus,
-} from '../types';
+import { DataSourceOptions, IRuntimeDataSource, RequestHandler, RuntimeDataSourceStatus } from '../types';
+import { DataSourceResponse } from '../types/DataSourceResponse';
 
 export class RuntimeDataSource<
   TParams extends Record<string, unknown> = Record<string, unknown>,
@@ -19,13 +15,10 @@ export class RuntimeDataSource<
     private _id: string,
     private _type: string,
     private _initialOptions: DataSourceOptions<TParams>,
-    private _requestHandler: RequestHandler<
-      DataSourceOptions<TParams>,
-      TRequestResult
-    >,
+    private _requestHandler: RequestHandler<DataSourceOptions<TParams>, DataSourceResponse<TRequestResult>>,
     private _dataHandler:
       | ((
-          data: TRequestResult | undefined,
+          data: DataSourceResponse<TRequestResult> | undefined,
           error: unknown | undefined,
         ) => TResultData | Promise<TResultData>)
       | undefined,
@@ -79,11 +72,11 @@ export class RuntimeDataSource<
 
   private async _request(options: DataSourceOptions<TParams>) {
     try {
-      const reqResult = await this._requestHandler(options);
+      const response = await this._requestHandler(options);
 
       const data = this._dataHandler
-        ? await this._dataHandler(reqResult, undefined)
-        : ((reqResult as unknown) as TResultData);
+        ? await this._dataHandler(response, undefined)
+        : ((response.data as unknown) as TResultData);
 
       return data;
     } catch (err) {

@@ -11,7 +11,7 @@ import Link from 'rax-link';
 
 import Image from 'rax-image';
 
-import { create as __$$createDataSourceEngine } from '@ali/lowcode-datasource-engine';
+import { create as __$$createDataSourceEngine } from '@ali/lowcode-datasource-engine/runtime';
 
 import { isMiniApp as __$$isMiniApp } from 'universal-env';
 
@@ -30,8 +30,6 @@ class Home$$Page extends Component {
 
   _context = this._createContext();
 
-  _i18n = this._createI18nDelegate();
-
   _dataSourceConfig = this._defineDataSourceConfig();
   _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceConfig, this._context, { runtimeConfig: true });
 
@@ -45,6 +43,18 @@ class Home$$Page extends Component {
 
   render() {
     const __$$context = this._context;
+    const {
+      state,
+      setState,
+      dataSourceMap,
+      reloadDataSource,
+      utils,
+      constants,
+      i18n,
+      i18nFormat,
+      getLocale,
+      setLocale,
+    } = __$$context;
 
     return (
       <View>
@@ -61,11 +71,16 @@ class Home$$Page extends Component {
   _createContext() {
     const self = this;
 
+    // 保存下最新的状态，这样 setState 可以搞成同步一样的了
+    self._latestState = self.state;
+
     const context = {
       get state() {
-        return self.state;
+        // 这里直接获取最新的 state，从而能避免一些 React/Rax 这样的框架因为异步 setState 而导致的一些问题
+        return self._latestState;
       },
       setState(newState) {
+        self._latestState = { ...self._latestState, ...newState };
         self.setState(newState);
       },
       get dataSourceMap() {
@@ -89,12 +104,9 @@ class Home$$Page extends Component {
       get constants() {
         return __$$constants;
       },
-      get i18n() {
-        return self._i18n;
-      },
-      getLocale() {
-        return __$$i18n.getLocale();
-      },
+      i18n: __$$i18n.i18n,
+      i18nFormat: __$$i18n.i18nFormat,
+      getLocale: __$$i18n.getLocale,
       setLocale(locale) {
         __$$i18n.setLocale(locale);
         self.forceUpdate();
@@ -103,17 +115,6 @@ class Home$$Page extends Component {
     };
 
     return context;
-  }
-
-  _createI18nDelegate() {
-    return new Proxy(
-      {},
-      {
-        get(target, prop) {
-          return __$$i18n.i18n(prop);
-        },
-      },
-    );
   }
 
   _defineDataSourceConfig() {

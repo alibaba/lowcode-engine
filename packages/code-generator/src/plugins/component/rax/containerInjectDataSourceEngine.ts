@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/indent */
+
 import { CompositeValue, JSExpression, DataSourceConfig, isJSExpression, isJSFunction } from '@ali/lowcode-types';
 import changeCase from 'change-case';
 
@@ -41,20 +43,24 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       const requestHandlersMap = {} as Record<string, JSExpression>;
 
       dataSourceItems.forEach((ds) => {
-        if (!(ds.type in requestHandlersMap) && ds.type !== 'custom') {
-          const handlerName = '__$$' + changeCase.camelCase(ds.type) + 'RequestHandler';
+        const dsType = ds.type || 'fetch';
+        if (!(dsType in requestHandlersMap) && dsType !== 'custom') {
+          const handlerFactoryName = '__$$create' + changeCase.pascal(dsType) + 'RequestHandler';
 
-          requestHandlersMap[ds.type] = {
+          requestHandlersMap[dsType] = {
             type: 'JSExpression',
-            value: handlerName + (ds.type === 'urlParams' ? '({ search: this.props.location.search })' : ''),
+            value: handlerFactoryName + (dsType === 'urlParams' ? '(this.props.location.search)' : '()'),
           };
+
+          const handlerFactoryExportName = `create${changeCase.pascal(dsType)}Handler`;
+          const handlerPkgName = `@ali/lowcode-datasource-${changeCase.kebab(dsType)}-handler`;
 
           next.chunks.push({
             type: ChunkType.STRING,
             fileType: FileType.JSX,
             name: COMMON_CHUNK_NAME.ExternalDepsImport,
             content: `
-              import ${handlerName} from '@ali/lowcode-datasource-engine/handlers/${changeCase.kebabCase(ds.type)}';
+              import { ${handlerFactoryExportName} as ${handlerFactoryName} } from '${handlerPkgName}';
             `,
             linkAfter: [],
           });
@@ -69,7 +75,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       fileType: FileType.JSX,
       name: COMMON_CHUNK_NAME.ExternalDepsImport,
       content: `
-        import { create as __$$createDataSourceEngine } from '@ali/lowcode-datasource-engine';
+        import { create as __$$createDataSourceEngine } from '@ali/lowcode-datasource-engine/runtime';
       `,
       linkAfter: [],
     });

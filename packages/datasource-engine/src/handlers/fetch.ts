@@ -18,7 +18,7 @@ const fetchHandler: RequestHandler = async ({
 
   const res = await request(reqOptions as RequestOptions);
 
-  return res.data;
+  return res;
 };
 
 export default fetchHandler;

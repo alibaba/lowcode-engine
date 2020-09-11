@@ -6,8 +6,8 @@ import { CompositeValue, JSExpression, JSFunction, JSONObject } from './value-ty
  */
 export interface DataSourceConfig {
   id: string;
-  isInit: boolean | JSExpression;
-  type: string;
+  isInit?: boolean | JSExpression;
+  type?: string;
   requestHandler?: JSFunction;
   dataHandler?: JSFunction;
   options?: {

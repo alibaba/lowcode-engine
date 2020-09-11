@@ -105,7 +105,11 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       type: ChunkType.STRING,
       fileType: cfg.fileType,
       name: RAX_CHUNK_NAME.ClassRenderPre,
-      content: `const __$$context = this._context;`,
+      // TODO: setState, dataSourceMap, reloadDataSource, utils, i18n, i18nFormat, getLocale, setLocale 这些在 Rax 的编译模式下不能在视图中直接访问，需要转化成 this.xxx
+      content: `
+        const __$$context = this._context;
+        const { state, setState, dataSourceMap, reloadDataSource, utils, constants, i18n, i18nFormat, getLocale, setLocale } = __$$context;
+      `,
       linkAfter: [RAX_CHUNK_NAME.ClassRenderBegin],
     });
 
