@@ -1,4 +1,4 @@
-import { DropLocation, ParentalNode, isLocationChildrenDetail, Node } from '@ali/lowcode-designer';
+import { DropLocation, ParentalNode, isLocationChildrenDetail } from '@ali/lowcode-designer';
 
 const IndentSensitive = 15;
 export class IndentTrack {
