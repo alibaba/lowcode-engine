@@ -53,6 +53,8 @@ export interface IScrollable {
 export class Scroller {
   private pid: number | undefined;
 
+  constructor(private scrollable: IScrollable) {}
+
   get scrollTarget(): ScrollTarget | null {
     let target = this.scrollable.scrollTarget;
     if (!target) {
@@ -64,8 +66,6 @@ export class Scroller {
     }
     return target;
   }
-
-  constructor(private scrollable: IScrollable) {}
 
   scrollTo(options: { left?: number; top?: number }) {
     this.cancel();
@@ -109,13 +109,15 @@ export class Scroller {
       scrollTarget.scrollTo(opt);
 
       if (time < 1) {
-        this.pid = pid = requestAnimationFrame(animate);
+        this.pid = requestAnimationFrame(animate);
+        pid = this.pid;
       } else {
         end();
       }
     };
 
-    this.pid = pid = requestAnimationFrame(animate);
+    this.pid = requestAnimationFrame(animate);
+    pid = this.pid;
   }
 
   scrolling(point: { globalX: number; globalY: number }) {

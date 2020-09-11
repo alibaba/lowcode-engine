@@ -82,7 +82,7 @@ export default class Panel implements IWidget {
 
   constructor(readonly skeleton: Skeleton, readonly config: PanelConfig) {
     const { name, content, props = {} } = config;
-    const { hideTitleBar, title, icon, description, help, shortcut } = props;
+    const { hideTitleBar, title, icon, description, help } = props;
     this.name = name;
     this.id = uniqueId(`pane:${name}$`);
     this.title = composeTitle(title || name, icon, description);
@@ -207,7 +207,7 @@ export default class Panel implements IWidget {
   /**
    * @deprecated
    */
-  setPosition(position: string) {
+  setPosition(/* position: string */) {
     // noop
   }
 

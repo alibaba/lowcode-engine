@@ -13,7 +13,7 @@ import {
   FieldConfig,
 } from '@ali/lowcode-types';
 import { computed } from '@ali/lowcode-editor-core';
-import { Node, ParentalNode, TransformStage } from './document';
+import { Node, ParentalNode } from './document';
 import { Designer } from './designer';
 import { intlNode } from './locale';
 import { IconContainer } from './icons/container';
@@ -231,6 +231,7 @@ export class ComponentMeta {
   }
 
   @computed get availableActions() {
+    // eslint-disable-next-line prefer-const
     let { disableBehaviors, actions } = this._transformedMetadata?.configure.component || {};
     const disabled = ensureAList(disableBehaviors) || (this.isRootComponent(false) ? ['copy', 'remove'] : null);
     actions = builtinComponentActions.concat(this.designer.getGlobalComponentActions() || [], actions || []);
@@ -331,6 +332,7 @@ registerMetadataTransducer((metadata) => {
   if (!component.nestingRule) {
     let m;
     // uri match xx.Group set subcontrolling: true, childWhiteList
+    // eslint-disable-next-line no-cond-assign
     if ((m = /^(.+)\.Group$/.exec(componentName))) {
       // component.subControlling = true;
       if (!component.nestingRule) {
@@ -338,16 +340,16 @@ registerMetadataTransducer((metadata) => {
           childWhitelist: [`${m[1]}`],
         };
       }
-    }
-    // uri match xx.Node set selfControlled: false, parentWhiteList
-    else if ((m = /^(.+)\.Node$/.exec(componentName))) {
+    // eslint-disable-next-line no-cond-assign
+    } else if ((m = /^(.+)\.Node$/.exec(componentName))) {
+      // uri match xx.Node set selfControlled: false, parentWhiteList
       // component.selfControlled = false;
       component.nestingRule = {
         parentWhitelist: [`${m[1]}`, componentName],
       };
-    }
-    // uri match .Item .Node .Option set parentWhiteList
-    else if ((m = /^(.+)\.(Item|Node|Option)$/.exec(componentName))) {
+    // eslint-disable-next-line no-cond-assign
+    } else if ((m = /^(.+)\.(Item|Node|Option)$/.exec(componentName))) {
+      // uri match .Item .Node .Option set parentWhiteList
       component.nestingRule = {
         parentWhitelist: [`${m[1]}`],
       };

@@ -112,7 +112,7 @@ export class ModalNodesManager {
 
   private addNodeEvent(node: Node) {
     this.nodeRemoveEvents[node.getId()] =
-      node.onVisibleChange((flag) => {
+      node.onVisibleChange(() => {
         this.emitter.emit('visibleChange');
       });
   }

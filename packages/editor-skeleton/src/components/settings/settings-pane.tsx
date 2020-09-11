@@ -1,5 +1,5 @@
 import { Component, MouseEvent, Fragment } from 'react';
-import { shallowIntl, createSetterContent, observer, obx, Title } from '@ali/lowcode-editor-core';
+import { shallowIntl, createSetterContent, observer, obx } from '@ali/lowcode-editor-core';
 import { createContent } from '@ali/lowcode-utils';
 import { createField } from '../field';
 import PopupService, { PopupPipe } from '../popup';
@@ -12,6 +12,7 @@ import { Skeleton } from 'editor-skeleton/src/skeleton';
 
 function transformStringToFunction(str) {
   if (typeof str !== 'string') return str;
+  // eslint-disable-next-line no-new-func
   return new Function(`"use strict"; return ${str}`)();
 }
 
@@ -128,6 +129,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
           value, // reaction point
           onChange: (value: any) => {
             this.setState({
+              // eslint-disable-next-line react/no-unused-state
               value,
             });
             field.setValue(value);
@@ -139,6 +141,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
             }
             const value = typeof initialValue === 'function' ? initialValue(field) : initialValue;
             this.setState({
+              // eslint-disable-next-line react/no-unused-state
               value,
             });
             field.setValue(value);

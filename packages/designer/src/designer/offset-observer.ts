@@ -134,7 +134,8 @@ export class OffsetObserver {
         this._bottom = rect.bottom;
         this.hasOffset = true;
       }
-      this.pid = pid = (window as any).requestIdleCallback(compute);
+      this.pid = (window as any).requestIdleCallback(compute);
+      pid = this.pid;
     };
 
     this.compute = compute;
@@ -142,7 +143,8 @@ export class OffsetObserver {
     // try first
     compute();
     // try second, ensure the dom mounted
-    this.pid = pid = (window as any).requestIdleCallback(compute);
+    this.pid = (window as any).requestIdleCallback(compute);
+    pid = this.pid;
   }
 
   purge() {

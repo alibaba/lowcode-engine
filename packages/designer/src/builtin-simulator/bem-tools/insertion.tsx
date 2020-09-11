@@ -1,6 +1,5 @@
 import { Component } from 'react';
-import { computed, observer } from '@ali/lowcode-editor-core';
-import { SimulatorContext } from '../context';
+import { observer } from '@ali/lowcode-editor-core';
 import { BuiltinSimulatorHost } from '../host';
 import {
   DropLocation,

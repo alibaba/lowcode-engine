@@ -44,7 +44,7 @@ export class DesignerView extends Component<DesignerProps & {
     this.designer.postEvent('mount', this.designer);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.designer.purge();
   }
 

@@ -152,6 +152,7 @@ const supportedEvents = [
   },
 ];
 
+// eslint-disable-next-line func-call-spacing
 const builtinComponents = new Map<string, (props: any) => ReactElement>();
 function getBlockElement(tag: string): (props: any) => ReactElement {
   if (builtinComponents.has(tag)) {

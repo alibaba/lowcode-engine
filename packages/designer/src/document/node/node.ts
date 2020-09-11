@@ -431,7 +431,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return false;
   }
 
-  wrapWith(schema: Schema) {
+  wrapWith(/* schema: Schema */) {
     // todo
   }
 
@@ -725,7 +725,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 销毁
    */
-  purge(useMutator = true) {
+  purge() {
     if (this.purged) {
       return;
     }
@@ -1066,7 +1066,7 @@ export function insertChildren(
   let index = at;
   let node: any;
   const results: Node[] = [];
-  // tslint:disable-next-line
+  // eslint-disable-next-line no-cond-assign
   while ((node = nodes.pop())) {
     node = insertChild(container, node, index, copy);
     results.push(node);

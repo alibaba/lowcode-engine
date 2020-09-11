@@ -4,7 +4,6 @@ import {
   PropType,
   SetterType,
   OneOf,
-  Shape,
   ObjectOf,
   ArrayOf,
   TransformedComponentMetadata,

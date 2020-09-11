@@ -136,6 +136,7 @@ export class Designer {
               [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
               parent?.componentMeta?.componentName ||
               '';
+            // eslint-disable-next-line no-unused-expressions
             this.editor?.emit('designer.drag', {
               time: (endTime - startTime).toFixed(2),
               selected: nodes
@@ -143,6 +144,7 @@ export class Designer {
                   if (!n) {
                     return;
                   }
+                  // eslint-disable-next-line no-shadow
                   const npm = n?.componentMeta?.npm;
                   return (
                     [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||

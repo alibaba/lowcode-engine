@@ -25,12 +25,14 @@ export default class WidgetContainer<T extends WidgetItem = any, G extends Widge
     return this._current;
   }
 
+  // eslint-disable-next-line no-useless-constructor
   constructor(
     readonly name: string,
     private handle: (item: T | G) => T,
     private exclusive: boolean = false,
     private checkVisible: () => boolean = () => true,
     private defaultSetCurrent: boolean = false,
+  // eslint-disable-next-line no-empty-function
   ) {}
 
   @computed get visible() {

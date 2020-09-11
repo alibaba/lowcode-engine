@@ -2,7 +2,6 @@ import { Component } from 'react';
 import { observer } from '@ali/lowcode-editor-core';
 import { BuiltinSimulatorHost, BuiltinSimulatorProps } from './host';
 import { DocumentModel } from '../document';
-import { SimulatorContext } from './context';
 import { BemTools } from './bem-tools';
 import './host.less';
 
@@ -51,6 +50,7 @@ export class BuiltinSimulatorHostView extends Component<SimulatorHostProps> {
   }
 }
 
+// eslint-disable-next-line react/no-multi-comp
 @observer
 class Canvas extends Component<{ host: BuiltinSimulatorHost }> {
   render() {
@@ -73,6 +73,7 @@ class Canvas extends Component<{ host: BuiltinSimulatorHost }> {
   }
 }
 
+// eslint-disable-next-line react/no-multi-comp
 @observer
 class Content extends Component<{ host: BuiltinSimulatorHost }> {
   render() {

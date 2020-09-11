@@ -1,4 +1,4 @@
-import { uniqueId } from '@ali/lowcode-utils';
+// import { uniqueId } from '@ali/lowcode-utils';
 import Widget from './widget';
 import { Skeleton } from '../skeleton';
 import { WidgetConfig } from '../types';

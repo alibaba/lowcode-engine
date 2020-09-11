@@ -60,6 +60,7 @@ export interface BuiltinSimulatorProps {
 const defaultSimulatorUrl = (() => {
   const publicPath = getPublicPath();
   let urls;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, prefix = '', dev] = /^(.+?)(\/js)?\/?$/.exec(publicPath) || [];
   if (dev) {
     urls = [`${prefix}/css/react-simulator-renderer.css`, `${prefix}/js/react-simulator-renderer.js`];
@@ -74,6 +75,7 @@ const defaultSimulatorUrl = (() => {
 const defaultRaxSimulatorUrl = (() => {
   const publicPath = getPublicPath();
   let urls;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, prefix = '', dev] = /^(.+?)(\/js)?\/?$/.exec(publicPath) || [];
   if (dev) {
     urls = [`${prefix}/css/rax-simulator-renderer.css`, `${prefix}/js/rax-simulator-renderer.js`];
@@ -503,11 +505,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         this.disableHovering();
       }
       // sleep some autorun reaction
-    } else {
+    } else if (!this.disableHovering) {
       // weekup some autorun reaction
-      if (!this.disableHovering) {
-        this.setupDetecting();
-      }
+      this.setupDetecting();
     }
   }
 
@@ -596,14 +596,14 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   /**
    * @see ISimulator
    */
-  getComponentInstanceId(instance: ComponentInstance) {
+  getComponentInstanceId(/* instance: ComponentInstance */) {
     throw new Error('Method not implemented.');
   }
 
   /**
    * @see ISimulator
    */
-  getComponentContext(node: Node): object {
+  getComponentContext(/* node: Node */): any {
     throw new Error('Method not implemented.');
   }
 
@@ -638,7 +638,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     const elems = elements.slice();
     let rects: DOMRect[] | undefined;
     let last: { x: number; y: number; r: number; b: number } | undefined;
-    let computed = false;
+    let _computed = false;
     while (true) {
       if (!rects || rects.length < 1) {
         const elem = elems.pop();
@@ -665,26 +665,26 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       }
       if (rect.left < last.x) {
         last.x = rect.left;
-        computed = true;
+        _computed = true;
       }
       if (rect.top < last.y) {
         last.y = rect.top;
-        computed = true;
+        _computed = true;
       }
       if (rect.right > last.r) {
         last.r = rect.right;
-        computed = true;
+        _computed = true;
       }
       if (rect.bottom > last.b) {
         last.b = rect.bottom;
-        computed = true;
+        _computed = true;
       }
     }
 
     if (last) {
       const r: any = new DOMRect(last.x, last.y, last.r - last.x, last.b - last.y);
       r.elements = elements;
-      r.computed = computed;
+      r.computed = _computed;
       return r;
     }
 
@@ -734,7 +734,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   /**
    * @see ISimulator
    */
-  scrollToNode(node: Node, detail?: any, tryTimes = 0) {
+  scrollToNode(node: Node, detail?: any/* , tryTimes = 0 */) {
     this.tryScrollAgain = null;
     if (this.sensing) {
       // actived sensor
@@ -973,7 +973,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       const instances = this.getComponentInstances(node);
       const inst = instances
         ? instances.length > 1
-          ? instances.find((inst) => this.getClosestNodeInstance(inst, container.id)?.instance === containerInstance)
+          ? instances.find((_inst) => this.getClosestNodeInstance(_inst, container.id)?.instance === containerInstance)
           : instances[0]
         : null;
       const rect = inst ? this.computeComponentInstanceRect(inst, node.componentMeta.rootSelector) : null;
@@ -1164,7 +1164,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     return null;
   }
 
-  isAcceptable(container: ParentalNode): boolean {
+  isAcceptable(/* container: ParentalNode */): boolean {
     return false;
     /*
     const meta = container.componentMeta;
@@ -1179,7 +1179,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   /**
    * 控制接受
    */
-  handleAccept({ container, instance }: DropContainer, e: LocateEvent) {
+  handleAccept({ container/* , instance */ }: DropContainer, e: LocateEvent) {
     const { dragObject } = e;
     if (isRootNode(container)) {
       return this.document.checkDropTarget(container, dragObject as any);
@@ -1227,7 +1227,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   /**
    * 查找邻近容器
    */
-  getNearByContainer(container: ParentalNode, e: LocateEvent) {
+  getNearByContainer(/* container: ParentalNode, e: LocateEvent */) {
     /*
     const children = container.children;
     if (!children || children.length < 1) {

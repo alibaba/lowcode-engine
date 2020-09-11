@@ -74,7 +74,7 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
   onSort(sortedIds: Array<string | number>) {
     const { itemsMap } = this.state;
     const { onChange, itemSetter, field } = this.props;
-    const items = sortedIds.map((id, index) => {
+    const items = sortedIds.map((id) => {
       const item = itemsMap.get(id)!;
       // item.setKey(index);
       return item;
@@ -85,7 +85,8 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
     });
 
     // 对itemsMap重新生成并刷新当前setter数据
-    const newItems = []; const newItemsMap = {};
+    const newItems = [];
+    // const newItemsMap = {};
     itemsMap.clear();
     for (let i = 0; i < items.length; i++) {
       const newItem = field.createField({
@@ -128,7 +129,7 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
   }
 
   onRemove(field: SettingField) {
-    const { onChange, itemSetter } = this.props;
+    const { onChange } = this.props;
     const { items, itemsMap } = this.state;
     let i = items.indexOf(field);
     const values = items.map((item) => {
@@ -235,7 +236,7 @@ class ArrayItem extends Component<{
   render() {
     const { onRemove, field } = this.props;
     return (
-      <div className="lc-listitem" ref={(ref) => (this.shell = ref)}>
+      <div className="lc-listitem" ref={(ref) => { this.shell = ref; }}>
         <div draggable className="lc-listitem-handler">
           <Icon type="ellipsis" size="small" />
         </div>
