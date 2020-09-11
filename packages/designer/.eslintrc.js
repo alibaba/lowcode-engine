@@ -1,7 +1,7 @@
 module.exports = {
   extends: 'eslint-config-ali/typescript/react',
   rules: {
-    'react/no-multi-comp': 1,
+    'react/no-multi-comp': 0,
     'no-unused-expressions': 1,
     'implicit-arrow-linebreak': 1,
     'no-nested-ternary': 1,

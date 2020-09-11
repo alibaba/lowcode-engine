@@ -50,7 +50,6 @@ export class BuiltinSimulatorHostView extends Component<SimulatorHostProps> {
   }
 }
 
-// eslint-disable-next-line react/no-multi-comp
 @observer
 class Canvas extends Component<{ host: BuiltinSimulatorHost }> {
   render() {
@@ -73,7 +72,6 @@ class Canvas extends Component<{ host: BuiltinSimulatorHost }> {
   }
 }
 
-// eslint-disable-next-line react/no-multi-comp
 @observer
 class Content extends Component<{ host: BuiltinSimulatorHost }> {
   render() {
