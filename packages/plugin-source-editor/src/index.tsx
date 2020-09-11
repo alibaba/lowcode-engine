@@ -14,7 +14,7 @@ const TAB_KEY = {
 
 const defaultEditorOption = {
   width: '100%',
-  height: '100%',
+  height: '95%',
   options: {
     readOnly: false,
     automaticLayout: true,
@@ -46,8 +46,6 @@ export default class SourceEditor extends Component<{
 }> {
   private monocoEditor;
 
-  private monocoEditorCss;
-
   private editorCmd;
 
   private editorJsRef = React.createRef();
@@ -56,11 +54,16 @@ export default class SourceEditor extends Component<{
 
   private editorNode;
 
-  private editorParentNode;
+  state = {
+    isFullScreen:false,
+    tabKey: TAB_KEY.JS_TAB,
+    isShowSaveBtn:true
+  };
 
   // eslint-disable-next-line react/no-deprecated
   componentWillMount() {
     const { editor } = this.props;
+
 
     // 添加函数
     editor.on('sourceEditor.addFunction', (params: FunctionEventParam) => {
@@ -71,7 +74,6 @@ export default class SourceEditor extends Component<{
     editor.on('sourceEditor.focusByFunction', (params: FunctionEventParam) => {
       this.callEditorEvent('sourceEditor.focusByFunction', params);
     });
-
 
     // 插件面板关闭事件,监听规则同上
     editor.on('skeleton.panel-dock.unactive', (pluginName) => {
@@ -93,7 +95,6 @@ export default class SourceEditor extends Component<{
 
   componentDidMount() {
     this.editorNode = this.editorJsRef.current; // 记录当前dom节点；
-    this.editorParentNode = this.editorNode.parentNode; // 记录父节点;
   }
 
   /**
@@ -268,11 +269,12 @@ export default class SourceEditor extends Component<{
 
     if (newSchema != '' && JSON.stringify(newSchema) != oldSchemaStr) {
       editor.get('designer').project.setSchema(newSchema);
+      successFlag && Message.success('保存成功')
     }
   };
 
   render() {
-    const { selectTab, jsCode, css } = this.state;
+    const { selectTab, jsCode, css ,isShowSaveBtn} = this.state;
     const tabs = [
       { tab: 'index.js', key: TAB_KEY.JS_TAB },
       { tab: 'style.css', key: TAB_KEY.CSS_TAB },
@@ -280,12 +282,13 @@ export default class SourceEditor extends Component<{
 
     return (
       <div className="source-editor-container">
+
         <Tab size="small" shape="wrapped" onChange={this.onTabChange} activeKey={selectTab}>
           {tabs.map((item) => (
             <Tab.Item key={item.key} title={item.tab} />
           ))}
         </Tab>
-
+        { isShowSaveBtn && <div className="button-container"><Button type="primary" onClick={()=>this.saveSchema(successFlag)}>保存代码</Button></div>}
 
         <div style={{ height: '100%' }} className="editor-context-container">
           <div id="jsEditorDom" className="editor-context" ref={this.editorJsRef}>
