@@ -8,7 +8,7 @@ interface IProps {
 }
 
 interface IState {
-  schema: object | null;
+  schema: Record<string, unknown> | null;
   hasError: boolean;
 }
 
@@ -76,6 +76,6 @@ export default class LazyComponent extends Component<IProps, IState> {
         loading={Loading ? <Loading /> : null}
         {...restProps}
       />
-    )
+    );
   }
 }
