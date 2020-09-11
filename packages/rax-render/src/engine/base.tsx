@@ -43,6 +43,7 @@ export default class BaseEngine extends Component {
     messages: PropTypes.object,
     __appHelper: PropTypes.object,
     __components: PropTypes.object,
+    // eslint-disable-next-line react/no-unused-prop-types
     __componentsMap: PropTypes.object,
     __ctx: PropTypes.object,
     __schema: PropTypes.object,
@@ -293,7 +294,6 @@ export default class BaseEngine extends Component {
         __schema: schema,
         __appHelper: appHelper,
         __components: components,
-        // __componentsMap: componentsMap,
       }
       : {};
     if (engine && engine.props.designMode) {
@@ -334,9 +334,8 @@ export default class BaseEngine extends Component {
     }
     props.__id = schema.id;
 
-    let Child = null;
     if (!isFileSchema(schema) && schema.children) {
-      Child = this.__createVirtualDom(
+      this.__createVirtualDom(
         isJSExpression(schema.children) ? parseExpression(schema.children, self) : schema.children,
         self,
         {
@@ -460,7 +459,7 @@ export default class BaseEngine extends Component {
       return checkProps(function () {
         const args = {};
         if (Array.isArray(params) && params.length) {
-          params.map((item, idx) => {
+          params.forEach((item, idx) => {
             if (typeof item === 'string') {
               args[item] = arguments[idx];
             } else if (item && typeof item === 'object') {
