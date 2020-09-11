@@ -20,7 +20,7 @@ export default class ObjectSetter extends Component<{
     if (forceInline || mode === 'popup') {
       if (forceInline > 2 || mode === 'popup') {
         // popup
-        return <RowSetter {...props} primaryButton={forceInline ? false : true} />;
+        return <RowSetter {...props} primaryButton={!forceInline} />;
       } else {
         return <RowSetter columns={forceInline > 1 ? 2 : 4} {...props} />;
       }
@@ -52,6 +52,7 @@ class RowSetter extends Component<RowSetterProps> {
   };
 
   private items?: SettingField[];
+
   constructor(props: RowSetterProps) {
     super(props);
     const { config, descriptor, field, columns } = props;
@@ -75,9 +76,9 @@ class RowSetter extends Component<RowSetterProps> {
       this.items = items;
     }
 
-    let firstRun: boolean = true;
+    let firstRun = true;
     field.onEffect(() => {
-      let state: any = {};
+      const state: any = {};
       if (descriptor) {
         if (typeof descriptor === 'function') {
           state.descriptor = descriptor(field);
@@ -105,8 +106,9 @@ class RowSetter extends Component<RowSetterProps> {
   }
 
   private pipe: any;
+
   render() {
-    const items = this.items;
+    const { items } = this;
     const { field, primaryButton, config } = this.props;
 
     if (!this.pipe) {
@@ -158,6 +160,7 @@ interface FormSetterProps {
 }
 class FormSetter extends Component<FormSetterProps> {
   private items: SettingField[];
+
   constructor(props: RowSetterProps) {
     super(props);
     const { config, field } = props;

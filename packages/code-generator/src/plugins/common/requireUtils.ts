@@ -19,7 +19,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       type: ChunkType.STRING,
       fileType: FileType.JSX,
       name: COMMON_CHUNK_NAME.InternalDepsImport,
-      content: `import * from 'react';`,
+      content: 'import * from \'react\';',
       linkAfter: [],
     });
 

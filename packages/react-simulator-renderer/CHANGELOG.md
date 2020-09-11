@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.8-0"></a>
+## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.61...@ali/lowcode-react-simulator-renderer@1.0.8-0) (2020-09-09)
+
+
+### Bug Fixes
+
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+* 适配Nav组件 ([7e9829f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7e9829f))
+
+
+### Features
+
+* 🎸 容器占位原生的样式从内联改成写在 CSS 文件里,方便被覆盖样式 ([a616e18](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a616e18))
+* 🎸 为了能更好地在设计态模拟, 将 device 透传到组件树根组件上 ([7ab7def](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7ab7def))
+* 🎸 为容器的占位元素增加一个特定的 class 方便在设计器里定制样式 ([5077141](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5077141))
+* 容器组件支持传入 placeholder 和对应样式 ([0c4de43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0c4de43))
+
+
+
+
 <a name="0.8.61"></a>
 ## [0.8.61](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.60...@ali/lowcode-react-simulator-renderer@0.8.61) (2020-09-08)
 <a name="1.0.7-0"></a>

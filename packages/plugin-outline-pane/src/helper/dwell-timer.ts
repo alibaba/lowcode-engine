@@ -5,7 +5,9 @@ import { ParentalNode, DropLocation, isLocationChildrenDetail, LocateEvent } fro
  */
 export default class DwellTimer {
   private timer: number | undefined;
+
   private previous?: ParentalNode;
+
   private event?: LocateEvent;
 
   constructor(private decide: (node: ParentalNode, event: LocateEvent) => void, private timeout: number = 500) {}

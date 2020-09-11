@@ -28,7 +28,7 @@ const Codeout = ({ editor }: PluginProps) => {
     const designer = editor.get(Designer);
     if (designer) {
       const assets = editor.get('assets') as { components: BasicSection[] };
-      const components = assets.components;
+      const { components } = assets;
 
       const componentsMap = components
         .filter((c) => !!c.npm)

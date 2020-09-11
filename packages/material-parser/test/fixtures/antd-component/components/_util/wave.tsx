@@ -34,9 +34,9 @@ export default class Wave extends React.Component<{ insertExtraNode?: boolean }>
 
   private animationStartId: number;
 
-  private animationStart: boolean = false;
+  private animationStart = false;
 
-  private destroyed: boolean = false;
+  private destroyed = false;
 
   private csp?: CSPConfig;
 

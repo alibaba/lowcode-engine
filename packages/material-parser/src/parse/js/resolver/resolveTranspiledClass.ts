@@ -11,6 +11,7 @@ export default function resolveTranspiledClass(path: any) {
     visitFunctionDeclaration(arg) {
       classPath = new NodePath(
         builders.functionDeclaration(
+          // @ts-ignore
           arg.node.id || 'Default',
           [],
           builders.blockStatement([

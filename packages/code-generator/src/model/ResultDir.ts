@@ -2,7 +2,9 @@ import { CodeGeneratorError, IResultDir, IResultFile } from '../types';
 
 export default class ResultDir implements IResultDir {
   public name: string;
+
   public dirs: IResultDir[];
+
   public files: IResultFile[];
 
   constructor(name: string) {

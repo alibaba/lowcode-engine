@@ -127,9 +127,13 @@ export function getWindow(elem: Element | Document): Window {
 
 export class DropLocation {
   readonly target: ParentalNode;
+
   readonly detail: LocationDetail;
+
   readonly event: LocateEvent;
+
   readonly source: string;
+
   get document(): DocumentModel {
     return this.target.document;
   }

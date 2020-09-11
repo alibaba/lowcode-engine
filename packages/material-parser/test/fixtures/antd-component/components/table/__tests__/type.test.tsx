@@ -32,7 +32,7 @@ describe('Table.typescript types', () => {
       name: string;
     }
 
-    const columns: ColumnProps<User>[] = [
+    const columns: Array<ColumnProps<User>> = [
       {
         title: 'Name',
         dataIndex: 'name',

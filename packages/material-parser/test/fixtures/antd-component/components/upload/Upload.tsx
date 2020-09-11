@@ -208,7 +208,7 @@ class Upload extends React.Component<UploadProps, UploadState> {
     const result = beforeUpload(file, fileList);
     if (result === false) {
       // Get unique file list
-      const uniqueList: UploadFile<any>[] = [];
+      const uniqueList: Array<UploadFile<any>> = [];
       stateFileList.concat(fileList.map(fileToObject)).forEach(f => {
         if (uniqueList.every(uf => uf.uid !== f.uid)) {
           uniqueList.push(f);

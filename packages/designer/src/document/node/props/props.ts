@@ -23,7 +23,9 @@ export function getOriginalExtraKey(key: string): string {
 
 export class Props implements IPropParent {
   readonly id = uniqueId('props');
+
   @obx.val private items: Prop[] = [];
+
   @computed private get maps(): Map<string, Prop> {
     const maps = new Map();
     if (this.items.length > 0) {
@@ -257,7 +259,7 @@ export class Props implements IPropParent {
    */
   [Symbol.iterator](): { next(): { value: Prop } } {
     let index = 0;
-    const items = this.items;
+    const { items } = this;
     const length = items.length || 0;
     return {
       next() {
@@ -300,6 +302,7 @@ export class Props implements IPropParent {
   }
 
   private purged = false;
+
   /**
    * 回收销毁
    */

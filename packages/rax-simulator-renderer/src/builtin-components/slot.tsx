@@ -2,6 +2,7 @@ import { Component } from 'rax';
 
 class Slot extends Component {
   static displayName = 'Slot';
+
   static componentMetadata = {
     componentName: 'Slot',
     configure: {
@@ -10,16 +11,16 @@ class Slot extends Component {
         title: {
           type: 'i18n',
           'en-US': 'Slot Title',
-          'zh-CN': '插槽标题'
+          'zh-CN': '插槽标题',
         },
         setter: 'StringSetter',
-        defaultValue: '插槽容器'
+        defaultValue: '插槽容器',
       }, {
         name: '___params',
         title: {
           type: 'i18n',
           'en-US': 'Slot Params',
-          'zh-CN': '插槽入参'
+          'zh-CN': '插槽入参',
         },
         setter: {
           componentName: 'ArraySetter',
@@ -30,16 +31,16 @@ class Slot extends Component {
                 placeholder: {
                   type: 'i18n',
                   'zh-CN': '参数名称',
-                  'en-US': 'Argument Name'
-                }
-              }
-            }
-          }
-        }
+                  'en-US': 'Argument Name',
+                },
+              },
+            },
+          },
+        },
       }],
       // events/className/style/general/directives
       supports: false,
-    }
+    },
   };
 
   render() {

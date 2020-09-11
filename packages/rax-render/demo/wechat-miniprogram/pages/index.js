@@ -1,4 +1,4 @@
 Page({
   onLoad() {},
-  onShow() {}
+  onShow() {},
 });

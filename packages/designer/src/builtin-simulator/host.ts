@@ -144,18 +144,21 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   }
 
   @obx.ref _props: BuiltinSimulatorProps = {};
+
   /**
    * @see ISimulator
    */
   setProps(props: BuiltinSimulatorProps) {
     this._props = props;
   }
+
   set(key: string, value: any) {
     this._props = {
       ...this._props,
       [key]: value,
     };
   }
+
   get(key: string): any {
     return this._props[key];
   }
@@ -173,6 +176,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   }
 
   readonly viewport = new Viewport();
+
   readonly scroller = this.designer.createScroller(this.viewport);
 
   mountViewport(viewport: Element | null) {
@@ -180,16 +184,19 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   }
 
   @obx.ref private _contentWindow?: Window;
+
   get contentWindow() {
     return this._contentWindow;
   }
 
   @obx.ref private _contentDocument?: Document;
+
   get contentDocument() {
     return this._contentDocument;
   }
 
   private _renderer?: BuiltinSimulatorRenderer;
+
   get renderer() {
     return this._renderer;
   }
@@ -203,6 +210,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   readonly libraryMap: { [key: string]: string } = {};
 
   private _iframe?: HTMLIFrameElement;
+
   async mountContentFrame(iframe: HTMLIFrameElement | null) {
     if (!iframe || this._iframe === iframe) {
       return;
@@ -279,8 +287,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   setupDragAndClick() {
     const documentModel = this.document;
-    const selection = documentModel.selection;
-    const designer = documentModel.designer;
+    const { selection } = documentModel;
+    const { designer } = documentModel;
     const doc = this.contentDocument!;
 
     // TODO: think of lock when edit a node
@@ -312,7 +320,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         const checkSelect = (e: MouseEvent) => {
           doc.removeEventListener('mouseup', checkSelect, true);
           if (!isShaken(downEvent, e)) {
-            const id = node.id;
+            const { id } = node;
             designer.activeTracker.track({ node, instance: nodeInst?.instance });
             if (isMulti && !isRootNode(node) && selection.has(id)) {
               selection.remove(id);
@@ -411,12 +419,13 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   }
 
   private disableHovering?: () => void;
+
   /**
    * 设置悬停处理
    */
   setupDetecting() {
     const doc = this.contentDocument!;
-    const detecting = this.document.designer.detecting;
+    const { detecting } = this.document.designer;
     const hover = (e: MouseEvent) => {
       if (!detecting.enable) {
         return;
@@ -448,6 +457,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   }
 
   readonly liveEditing = new LiveEditing();
+
   setupLiveEditing() {
     const doc = this.contentDocument!;
     // cause edit
@@ -567,6 +577,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   }
 
   @obx.val private instancesMap = new Map<string, ComponentInstance[]>();
+
   setInstance(id: string, instances: ComponentInstance[] | null) {
     if (instances == null) {
       this.instancesMap.delete(id);
@@ -719,6 +730,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   }
 
   private tryScrollAgain: number | null = null;
+
   /**
    * @see ISimulator
    */
@@ -744,7 +756,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         if (y < bounds.top || y > bounds.bottom) {
           scroll = true;
         }
-      }*/
+      } */
     } else {
       /*
       const rect = this.document.computeRect(node);
@@ -768,7 +780,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       if (rect.width > width ? rect.left > right || rect.right < left : rect.left < left || rect.right > right) {
         opt.left = Math.min(rect.left + rect.width / 2 + sl - left - width / 2, scrollWidth - width);
         scroll = true;
-      }*/
+      } */
     }
 
     if (scroll && this.scroller) {
@@ -783,18 +795,21 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   setNativeSelection(enableFlag: boolean) {
     this.renderer?.setNativeSelection(enableFlag);
   }
+
   /**
    * @see ISimulator
    */
   setDraggingState(state: boolean) {
     this.renderer?.setDraggingState(state);
   }
+
   /**
    * @see ISimulator
    */
   setCopyState(state: boolean) {
     this.renderer?.setCopyState(state);
   }
+
   /**
    * @see ISimulator
    */
@@ -803,6 +818,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   }
 
   private _sensorAvailable = true;
+
   /**
    * @see ISensor
    */
@@ -851,6 +867,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   }
 
   private sensing = false;
+
   /**
    * @see ISensor
    */
@@ -905,7 +922,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       return null;
     }
 
-    const children = container.children;
+    const { children } = container;
 
     const detail: LocationChildrenDetail = {
       type: LocationDetailType.Children,
@@ -916,7 +933,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     const locationData = {
       target: container,
       detail,
-      source: 'simulator' + this.document.id,
+      source: `simulator${ this.document.id}`,
       event: e,
     };
 
@@ -934,7 +951,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           index: 0,
           valid: true,
         },
-        source: 'simulator' + this.document.id,
+        source: `simulator${ this.document.id}`,
         event: e,
       });
     }
@@ -1014,7 +1031,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       if (!row && nearDistance !== 0) {
         const edgeDistance = distanceToEdge(e as any, edge);
         if (edgeDistance.distance < nearDistance!) {
-          const nearAfter = edgeDistance.nearAfter;
+          const { nearAfter } = edgeDistance;
           if (minTop == null) {
             minTop = edge.top;
           }
@@ -1077,7 +1094,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     // TODO: renderengine support pointerEvents: none for acceleration
     const drillDownExcludes = new Set<Node>();
     if (isDragNodeObject(dragObject)) {
-      const nodes = dragObject.nodes;
+      const { nodes } = dragObject;
       let i = nodes.length;
       let p: any = container;
       while (i-- > 0) {
@@ -1139,7 +1156,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           container = upward;
           upward = null;
         }
-      }*/
+      } */
         container = res;
         upward = null;
       }

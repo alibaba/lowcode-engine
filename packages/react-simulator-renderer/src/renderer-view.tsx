@@ -72,9 +72,10 @@ class Layout extends Component<{ renderer: SimulatorRenderer }> {
   shouldComponentUpdate() {
     return false;
   }
+
   render() {
     const { renderer, children } = this.props;
-    const layout = renderer.layout;
+    const { layout } = renderer;
 
     if (layout) {
       const { Component, props } = layout;
@@ -90,6 +91,7 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
   shouldComponentUpdate() {
     return false;
   }
+
   render() {
     const { renderer } = this.props;
     const { device, designMode } = renderer;
@@ -122,7 +124,7 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
               </div>
             );
           }
-          if(viewProps._componentName === 'a') {
+          if (viewProps._componentName === 'a') {
             delete viewProps.href;
           }
           // FIXME: 渲染仍有问题
@@ -155,9 +157,9 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
         onCompGetRef={(schema: any, ref: ReactInstance | null) => {
           renderer.mountInstance(schema.id, ref);
         }}
-        //onCompGetCtx={(schema: any, ctx: object) => {
+        // onCompGetCtx={(schema: any, ctx: object) => {
         // renderer.mountContext(schema.id, ctx);
-        //}}
+        // }}
       />
     );
   }

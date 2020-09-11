@@ -9,6 +9,7 @@ import { SettingField, isSettingField, SettingTopEntry, SettingEntry } from '@al
 import { isSetterConfig, CustomView } from '@ali/lowcode-types';
 import { intl } from '../../locale';
 import { Skeleton } from 'editor-skeleton/src/skeleton';
+
 function transformStringToFunction(str) {
   if (typeof str !== 'string') return str;
   return new Function(`"use strict"; return ${str}`)();
@@ -93,7 +94,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     if (display === 'entry') {
       const stage = stages.add({
         type: 'Widget',
-        name: field.getNode().id + '_' + field.name.toString(),
+        name: `${field.getNode().id }_${ field.name.toString()}`,
         content: <Fragment>{field.items.map((item, index) => createSettingFieldView(item, field, index))}</Fragment>,
         props: {
           title: field.title,
@@ -143,9 +144,9 @@ class SettingFieldView extends Component<{ field: SettingField }> {
             field.setValue(value);
           },
 
-          removeProp:()=>{
+          removeProp: () => {
             field.parent.clearPropValue(field.name);
-          }
+          },
         }),
       extraProps.forceInline ? 'plain' : extraProps.display,
     );
@@ -177,7 +178,7 @@ class SettingGroupView extends Component<{ field: SettingField }> {
     if (display === 'entry') {
       const stage = stages.add({
         type: 'Widget',
-        name: field.getNode().id + '_' + field.name.toString(),
+        name: `${field.getNode().id }_${ field.name.toString()}`,
         content: <Fragment>{field.items.map((item, index) => createSettingFieldView(item, field, index))}</Fragment>,
         props: {
           title: field.title,
@@ -223,6 +224,7 @@ export type SettingsPaneProps = {
 @observer
 export class SettingsPane extends Component<SettingsPaneProps> {
   static contextType = SkeletonContext;
+
   @obx
   private currentStage?: Stage;
 
@@ -231,6 +233,7 @@ export class SettingsPane extends Component<SettingsPaneProps> {
   }
 
   private popupPipe = new PopupPipe();
+
   private pipe = this.popupPipe.create();
 
   private handleClick = (e: MouseEvent) => {
@@ -274,7 +277,7 @@ export class SettingsPane extends Component<SettingsPaneProps> {
 
   render() {
     const { target } = this.props;
-    const items = target.items;
+    const { items } = target;
 
     return (
       <div className="lc-settings-pane" onClick={this.handleClick}>

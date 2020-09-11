@@ -7,17 +7,17 @@ import PropTypes from 'prop-types';
  * Select.OptionGroup
  */
 export default class OptionGroup extends React.Component {
-    static propTypes = {
-        /**
+  static propTypes = {
+    /**
          * 设置分组的文案
          */
-        label: PropTypes.node,
-        children: PropTypes.any,
-    };
+    label: PropTypes.node,
+    children: PropTypes.any,
+  };
 
-    static _typeMark = 'next_select_option_group';
+  static _typeMark = 'next_select_option_group';
 
-    render() {
-        return this.props.children;
-    }
+  render() {
+    return this.props.children;
+  }
 }

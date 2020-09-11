@@ -35,7 +35,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       type: ChunkType.STRING,
       fileType: FileType.JSX,
       name: CLASS_DEFINE_CHUNK_NAME.End,
-      content: `}`,
+      content: '}',
       linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start, REACT_CHUNK_NAME.ClassRenderEnd],
     });
 

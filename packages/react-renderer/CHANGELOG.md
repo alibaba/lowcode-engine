@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.8-0"></a>
+## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@1.0.7-0...@ali/lowcode-react-renderer@1.0.8-0) (2020-09-09)
+
+
+### Bug Fixes
+
+* demo 中引入locode-editor-general ([1f03857](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1f03857))
+
+
+
+
 <a name="1.0.7-0"></a>
 ## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@1.0.6-0...@ali/lowcode-react-renderer@1.0.7-0) (2020-09-02)
 

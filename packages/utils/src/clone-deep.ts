@@ -11,6 +11,7 @@ export function cloneDeep(src: any): any {
   } else if (type === 'object' && isPlainObject(src)) {
     data = {};
     for (const key in src) {
+      // eslint-disable-next-line no-prototype-builtins
       if (src.hasOwnProperty(key)) {
         data[key] = cloneDeep(src[key]);
       }

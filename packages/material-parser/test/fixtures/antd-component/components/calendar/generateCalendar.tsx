@@ -15,8 +15,8 @@ import { ConfigContext } from '../config-provider';
 import CalendarHeader from './Header';
 
 type InjectDefaultProps<Props> = Omit<
-  Props,
-  'locale' | 'generateConfig' | 'prevIcon' | 'nextIcon' | 'superPrevIcon' | 'superNextIcon'
+Props,
+'locale' | 'generateConfig' | 'prevIcon' | 'nextIcon' | 'superPrevIcon' | 'superNextIcon'
 > & {
   locale?: typeof enUS;
   size?: 'large' | 'default' | 'small';

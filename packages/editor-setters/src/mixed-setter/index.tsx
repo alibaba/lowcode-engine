@@ -10,6 +10,7 @@ import './index.scss';
 
 export default class Mixed extends PureComponent {
   static displayName = 'Mixed';
+
   static propTypes = {
     locale: PropTypes.string,
     messages: PropTypes.object,
@@ -22,6 +23,7 @@ export default class Mixed extends PureComponent {
     selectProps: PropTypes.object,
     radioGroupProps: PropTypes.object,
   };
+
   static defaultProps = {
     locale: 'zh-CN',
     messages: zhCN,
@@ -32,22 +34,25 @@ export default class Mixed extends PureComponent {
       },
     ],
   };
+
   typeMap: any;
-  i18n: (key: any, values?: {}) => string | void | Array<string | void>;
-  constructor(props: Readonly<{}>) {
+
+  i18n: (key: any, values) => string | void | Array<string | void>;
+
+  constructor(props: Readonly) {
     super(props);
     const type = props.defaultType; // judgeTypeHandler(props, {});
     this.i18n = generateI18n(props.locale, props.messages);
     this.state = {
-      preType: type,
       type,
     };
   }
+
   changeType(type: string) {
     if (typeof type === 'object' || type === this.state.type) return;
     const { onChange } = this.props;
-    let newValue = undefined;
-    const setterProps = this.typeMap[type]['props'];
+    let newValue;
+    const setterProps = this.typeMap[type].props;
     if (setterProps) {
       if (setterProps.value !== undefined) {
         newValue = setterProps.value;
@@ -56,11 +61,12 @@ export default class Mixed extends PureComponent {
       }
     }
     if (type === 'BoolSetter' && newValue === undefined) {
-      newValue = false; //给切换到switch默认值为false
+      newValue = false; // 给切换到switch默认值为false
     }
     this.setState({ type });
     onChange && onChange(newValue);
   }
+
   render() {
     const { style = {}, className, locale, messages, types = [], defaultType, ...restProps } = this.props;
     this.typeMap = {};
@@ -78,7 +84,7 @@ export default class Mixed extends PureComponent {
       realTypes.push(name);
     });
     let moreBtnNode = null;
-    //如果只有2种，且有变量表达式，则直接展示变量按钮
+    // 如果只有2种，且有变量表达式，则直接展示变量按钮
     if (realTypes.length > 1) {
       const isTwoType = !!(realTypes.length === 2 && ~realTypes.indexOf('ExpressionSetter'));
       const btnProps = {
@@ -108,10 +114,11 @@ export default class Mixed extends PureComponent {
       if (isTwoType) {
         moreBtnNode = triggerNode;
       } else {
+        // eslint-disable-next-line @typescript-eslint/ban-types
         const MenuItems: {} | null | undefined = [];
         realTypes.map((type) => {
           if (this.typeMap[type]) {
-            MenuItems.push(<Menu.Item key={type}>{this.typeMap[type]['label']}</Menu.Item>);
+            MenuItems.push(<Menu.Item key={type}>{this.typeMap[type].label}</Menu.Item>);
           } else {
             console.error(
               this.i18n('typeError', {
@@ -119,6 +126,7 @@ export default class Mixed extends PureComponent {
               }),
             );
           }
+          return type;
         });
         const MenuNode = (
           <Menu

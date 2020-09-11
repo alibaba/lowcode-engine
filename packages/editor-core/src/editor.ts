@@ -86,7 +86,9 @@ export class Editor extends EventEmitter implements IEditor {
   }
 
   config?: EditorConfig;
+
   components?: PluginClassSet;
+
   async init(config?: EditorConfig, components?: PluginClassSet): Promise<any> {
     this.config = config || {};
     this.components = components || {};
@@ -152,12 +154,13 @@ export class Editor extends EventEmitter implements IEditor {
   };
 
   private waits = new Map<
-    KeyType,
-    Array<{
-      once?: boolean;
-      resolve: (data: any) => void;
-    }>
+  KeyType,
+  Array<{
+    once?: boolean;
+    resolve:(data: any) => void;
+  }>
   >();
+
   private notifyGot(key: KeyType) {
     let waits = this.waits.get(key);
     if (!waits) {

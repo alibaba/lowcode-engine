@@ -34,13 +34,15 @@ function addLiveEditingSpecificRule(rule: SpecificRule) {
 
 export class LiveEditing {
   static addLiveEditingSpecificRule = addLiveEditingSpecificRule;
+
   static addLiveEditingSaveHandler = addLiveEditingSaveHandler;
 
   @obx.ref private _editing: Prop | null = null;
+
   apply(target: EditingTarget) {
     const { node, event, rootElement } = target;
     const targetElement = event.target as HTMLElement;
-    const liveTextEditing = node.componentMeta.liveTextEditing;
+    const { liveTextEditing } = node.componentMeta;
 
     const editor = globalContext.get(Editor);
     const npm = node?.componentMeta?.npm;
@@ -64,14 +66,14 @@ export class LiveEditing {
             return false;
           }
           setterPropElement = queryPropElement(rootElement, targetElement, config.selector);
-          return setterPropElement ? true : false;
+          return !!setterPropElement;
         });
         propTarget = matched?.propTarget;
       }
     } else {
       specificRules.some((rule) => {
         matched = rule(target);
-        return matched ? true : false;
+        return !!matched;
       });
       if (matched) {
         propTarget = matched.propTarget;
@@ -147,8 +149,6 @@ export class LiveEditing {
     // TODO: process enter | esc events & joint the FocusTracker
 
     // TODO: upward testing for b/i/a html elements
-
-    
   }
 
   get editing() {
@@ -156,7 +156,9 @@ export class LiveEditing {
   }
 
   private _dispose?: () => void;
+
   private _save?: () => void;
+
   saveAndDispose() {
     if (this._save) {
       this._save();

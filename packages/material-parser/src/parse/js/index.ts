@@ -1,9 +1,10 @@
-const reactDocs = require('react-docgen');
 import { transformItem } from '../transform';
 import { IMaterialParsedModel } from '../../types';
 import { loadFile } from '../../utils';
 import resolver from './resolver';
 import handlers from './handlers';
+
+const reactDocs = require('react-docgen');
 
 export default function parse(filePath: string): IMaterialParsedModel[] {
   const fileContent = loadFile(filePath);

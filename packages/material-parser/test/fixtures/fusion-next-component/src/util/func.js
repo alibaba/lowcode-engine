@@ -19,17 +19,17 @@ export const prevent = () => false;
  * func.makeChain(this.handleChange, this.props.onChange);
  */
 export function makeChain(...fns) {
-    if (fns.length === 1) {
-        return fns[0];
-    }
+  if (fns.length === 1) {
+    return fns[0];
+  }
 
-    return function chainedFunction(...args) {
-        for (let i = 0, j = fns.length; i < j; i++) {
-            if (fns[i] && fns[i].apply) {
-                fns[i].apply(this, args);
-            }
-        }
-    };
+  return function chainedFunction(...args) {
+    for (let i = 0, j = fns.length; i < j; i++) {
+      if (fns[i] && fns[i].apply) {
+        fns[i].apply(this, args);
+      }
+    }
+  };
 }
 
 /**
@@ -43,17 +43,17 @@ export function makeChain(...fns) {
  * func.bindCtx(this, ['handleClick', 'handleChange']);
  */
 export function bindCtx(ctx, fns, ns) {
-    if (typeof fns === 'string') {
-        fns = [fns];
-    }
+  if (typeof fns === 'string') {
+    fns = [fns];
+  }
 
-    // 方法的挂载空间，如果不传，默认与ctx相同
-    ns = ns || ctx;
+  // 方法的挂载空间，如果不传，默认与ctx相同
+  ns = ns || ctx;
 
-    fns.forEach(fnName => {
-        // 这里不要添加空方法判断，由调用者保证正确性，否则出了问题无法排查
-        ns[fnName] = ns[fnName].bind(ctx);
-    });
+  fns.forEach(fnName => {
+    // 这里不要添加空方法判断，由调用者保证正确性，否则出了问题无法排查
+    ns[fnName] = ns[fnName].bind(ctx);
+  });
 }
 
 /**
@@ -63,17 +63,17 @@ export function bindCtx(ctx, fns, ns) {
  * @param  {Function} [failure=noop] 执行结果返回false的回调
  */
 export function promiseCall(ret, success, failure = noop) {
-    if (isPromise(ret)) {
-        return ret
-            .then(result => {
-                success(result);
-                return result;
-            })
-            .catch(e => {
-                failure(e);
-                // throw e;
-            });
-    }
+  if (isPromise(ret)) {
+    return ret
+      .then(result => {
+        success(result);
+        return result;
+      })
+      .catch(e => {
+        failure(e);
+        // throw e;
+      });
+  }
 
-    return ret !== false ? success(ret) : failure(ret);
+  return ret !== false ? success(ret) : failure(ret);
 }

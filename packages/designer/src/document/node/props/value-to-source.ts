@@ -57,15 +57,15 @@ export function valueToSource(
       if (value instanceof Map) {
         return value.size
           ? `${indentString.repeat(indentLevel)}new Map(${valueToSource([...value], {
-              circularReferenceToken,
-              doubleQuote,
-              includeFunctions,
-              includeUndefinedProperties,
-              indentLevel,
-              indentString,
-              lineEnding,
-              visitedObjects: new Set([value, ...visitedObjects]),
-            }).substr(indentLevel * indentString.length)})`
+            circularReferenceToken,
+            doubleQuote,
+            includeFunctions,
+            includeUndefinedProperties,
+            indentLevel,
+            indentString,
+            lineEnding,
+            visitedObjects: new Set([value, ...visitedObjects]),
+          }).substr(indentLevel * indentString.length)})`
           : `${indentString.repeat(indentLevel)}new Map()`;
       }
 
@@ -76,15 +76,15 @@ export function valueToSource(
       if (value instanceof Set) {
         return value.size
           ? `${indentString.repeat(indentLevel)}new Set(${valueToSource([...value], {
-              circularReferenceToken,
-              doubleQuote,
-              includeFunctions,
-              includeUndefinedProperties,
-              indentLevel,
-              indentString,
-              lineEnding,
-              visitedObjects: new Set([value, ...visitedObjects]),
-            }).substr(indentLevel * indentString.length)})`
+            circularReferenceToken,
+            doubleQuote,
+            includeFunctions,
+            includeUndefinedProperties,
+            indentLevel,
+            indentString,
+            lineEnding,
+            visitedObjects: new Set([value, ...visitedObjects]),
+          }).substr(indentLevel * indentString.length)})`
           : `${indentString.repeat(indentLevel)}new Set()`;
       }
 
@@ -94,8 +94,7 @@ export function valueToSource(
         }
 
         const itemsStayOnTheSameLine = value.every(
-          item =>
-            typeof item === 'object' &&
+          item => typeof item === 'object' &&
             item &&
             !(item instanceof Date) &&
             !(item instanceof Map) &&
@@ -140,33 +139,33 @@ export function valueToSource(
         return itemsStayOnTheSameLine
           ? `${indentString.repeat(indentLevel)}[${value.join(', ')}]`
           : `${indentString.repeat(indentLevel)}[${lineEnding}${value.join(
-              `,${lineEnding}`,
-            )}${lineEnding}${indentString.repeat(indentLevel)}]`;
+            `,${lineEnding}`,
+          )}${lineEnding}${indentString.repeat(indentLevel)}]`;
       }
 
       value = Object.keys(value).reduce<string[]>((entries, propertyName) => {
-        const propertyValue = value[propertyName],
-          propertyValueString =
+        const propertyValue = value[propertyName];
+        const propertyValueString =
             typeof propertyValue !== 'undefined' || includeUndefinedProperties
               ? valueToSource(value[propertyName], {
-                  circularReferenceToken,
-                  doubleQuote,
-                  includeFunctions,
-                  includeUndefinedProperties,
-                  indentLevel: indentLevel + 1,
-                  indentString,
-                  lineEnding,
-                  visitedObjects: new Set([value, ...visitedObjects]),
-                })
+                circularReferenceToken,
+                doubleQuote,
+                includeFunctions,
+                includeUndefinedProperties,
+                indentLevel: indentLevel + 1,
+                indentString,
+                lineEnding,
+                visitedObjects: new Set([value, ...visitedObjects]),
+              })
               : null;
 
         if (propertyValueString) {
           const quotedPropertyName = propertyNameRequiresQuotes(propertyName)
-              ? quoteString(propertyName, {
-                  doubleQuote,
-                })
-              : propertyName,
-            trimmedPropertyValueString = propertyValueString.substr((indentLevel + 1) * indentString.length);
+            ? quoteString(propertyName, {
+              doubleQuote,
+            })
+            : propertyName;
+          const trimmedPropertyValueString = propertyValueString.substr((indentLevel + 1) * indentString.length);
 
           if (typeof propertyValue === 'function' && trimmedPropertyValueString.startsWith(`${propertyName}()`)) {
             entries.push(
@@ -184,8 +183,8 @@ export function valueToSource(
 
       return value.length
         ? `${indentString.repeat(indentLevel)}{${lineEnding}${value.join(
-            `,${lineEnding}`,
-          )}${lineEnding}${indentString.repeat(indentLevel)}}`
+          `,${lineEnding}`,
+        )}${lineEnding}${indentString.repeat(indentLevel)}}`
         : `${indentString.repeat(indentLevel)}{}`;
     case 'string':
       return `${indentString.repeat(indentLevel)}${quoteString(value, {

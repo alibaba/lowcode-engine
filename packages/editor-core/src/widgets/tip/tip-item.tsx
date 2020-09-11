@@ -7,6 +7,7 @@ import { tipHandler } from './tip-handler';
 
 export class TipItem extends Component {
   private dispose?: () => void;
+
   constructor(props: any) {
     super(props);
     this.dispose = tipHandler.onChange(() => this.forceUpdate());
@@ -32,6 +33,7 @@ export class TipItem extends Component {
   }
 
   private timer: number | null = null;
+
   clearTimer() {
     if (this.timer) {
       clearTimeout(this.timer);
@@ -40,13 +42,14 @@ export class TipItem extends Component {
   }
 
   private shell: HTMLDivElement | null = null;
-  private originClassName: string = '';
+
+  private originClassName = '';
 
   updateTip() {
     if (!this.shell) {
       return;
     }
-    const shell = this.shell;
+    const { shell } = this;
     const arrow = shell.querySelector('.lc-arrow') as HTMLElement;
 
     // reset
@@ -55,7 +58,7 @@ export class TipItem extends Component {
     arrow.style.cssText = '';
     this.clearTimer();
 
-    const tip = tipHandler.tip;
+    const { tip } = tipHandler;
     if (!tip) {
       return;
     }

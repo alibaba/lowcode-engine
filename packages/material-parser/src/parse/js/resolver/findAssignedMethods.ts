@@ -1,7 +1,8 @@
 import { namedTypes as t } from 'ast-types';
+import isReactComponentStaticMember from './isReactComponentStaticMember';
+
 const { match } = require('react-docgen').utils;
 const { traverseShallow } = require('react-docgen/dist/utils/traverse');
-import isReactComponentStaticMember from './isReactComponentStaticMember';
 
 function findAssignedMethods(scope: any, idPath: any) {
   const results: any[] = [];
@@ -10,12 +11,12 @@ function findAssignedMethods(scope: any, idPath: any) {
     return results;
   }
 
-  const name = idPath.node.name;
+  const { name } = idPath.node;
   // const idScope = idPath.scope.lookup(idPath.node.name);
 
   traverseShallow(scope.path, {
-    visitAssignmentExpression: function(path: any) {
-      const node = path.node;
+    visitAssignmentExpression(path: any) {
+      const { node } = path;
       if (
         match(node.left, {
           type: 'MemberExpression',

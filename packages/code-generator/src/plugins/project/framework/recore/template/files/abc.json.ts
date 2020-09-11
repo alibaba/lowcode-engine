@@ -25,4 +25,3 @@ export default function getFile(): [string[], IResultFile] {
 
   return [[], file];
 }
-  

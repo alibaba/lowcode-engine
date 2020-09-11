@@ -10,10 +10,9 @@ import { sleep } from '../../../tests/utils';
 
 jest.mock('scroll-into-view-if-needed');
 
-const delay = (timeout = 0) =>
-  new Promise(resolve => {
-    setTimeout(resolve, timeout);
-  });
+const delay = (timeout = 0) => new Promise(resolve => {
+  setTimeout(resolve, timeout);
+});
 
 describe('Form', () => {
   mountTest(Form);

@@ -68,14 +68,14 @@ export default class Badge extends React.Component<BadgeProps, any> {
     const { offset, style } = this.props;
     return offset
       ? {
-          right: -parseInt(offset[0] as string, 10),
-          marginTop: offset[1],
-          ...style,
-        }
+        right: -parseInt(offset[0] as string, 10),
+        marginTop: offset[1],
+        ...style,
+      }
       : style;
   }
 
-  getBadgeClassName(prefixCls: string, direction: string = 'ltr') {
+  getBadgeClassName(prefixCls: string, direction = 'ltr') {
     const { className, children } = this.props;
     return classNames(className, prefixCls, {
       [`${prefixCls}-status`]: this.hasStatus(),

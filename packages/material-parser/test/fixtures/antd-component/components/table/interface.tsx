@@ -48,7 +48,7 @@ export interface ColumnTitleProps<RecordType> {
   sortOrder?: SortOrder;
   /** @deprecated Please use `sorterColumns` instead. */
   sortColumn?: ColumnType<RecordType>;
-  sortColumns?: { column: ColumnType<RecordType>; order: SortOrder }[];
+  sortColumns?: Array<{ column: ColumnType<RecordType>; order: SortOrder }>;
 
   filters?: Record<string, string[]>;
 }
@@ -72,13 +72,13 @@ export interface ColumnType<RecordType> extends RcColumnType<RecordType> {
 
   // Sorter
   sorter?:
-    | boolean
-    | CompareFn<RecordType>
-    | {
-        compare: CompareFn<RecordType>;
-        /** Config multiple sorter order priority */
-        multiple: number;
-      };
+  | boolean
+  | CompareFn<RecordType>
+  | {
+    compare: CompareFn<RecordType>;
+    /** Config multiple sorter order priority */
+    multiple: number;
+  };
   sortOrder?: SortOrder;
   defaultSortOrder?: SortOrder;
   sortDirections?: SortOrder[];
@@ -101,10 +101,10 @@ export interface ColumnGroupType<RecordType> extends Omit<ColumnType<RecordType>
   children: ColumnsType<RecordType>;
 }
 
-export type ColumnsType<RecordType = unknown> = (
-  | ColumnGroupType<RecordType>
-  | ColumnType<RecordType>
-)[];
+export type ColumnsType<RecordType = unknown> = Array<
+| ColumnGroupType<RecordType>
+| ColumnType<RecordType>
+>;
 
 export interface SelectionItem {
   key: string;
@@ -160,6 +160,4 @@ export interface SorterResult<RecordType> {
 
 export type GetPopupContainer = (triggerNode: HTMLElement) => HTMLElement;
 
-export interface TablePaginationConfig extends PaginationConfig {
-  // position?: 'top' | 'bottom' | 'both';
-}
+export type TablePaginationConfig = PaginationConfig;

@@ -12,155 +12,156 @@ import Upload from './upload';
  * @description 继承 Upload 的 API，除非特别说明
  */
 class Card extends Base {
-    static displayName = 'Card';
+  static displayName = 'Card';
 
-    static propTypes = {
-        prefix: PropTypes.string,
-        locale: PropTypes.object,
-        children: PropTypes.object,
-        value: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-        defaultValue: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-        /**
+  static propTypes = {
+    prefix: PropTypes.string,
+    locale: PropTypes.object,
+    children: PropTypes.object,
+    value: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    defaultValue: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    /**
          * 点击图片回调
          */
-        onPreview: PropTypes.func,
-        /**
+    onPreview: PropTypes.func,
+    /**
          * 改变时候的回调
          */
-        onChange: PropTypes.func,
-        /**
+    onChange: PropTypes.func,
+    /**
          * 点击移除的回调
          */
-        onRemove: PropTypes.func,
-        /**
+    onRemove: PropTypes.func,
+    /**
          * 取消上传的回调
          */
-        onCancel: PropTypes.func,
-    };
+    onCancel: PropTypes.func,
+  };
 
-    static defaultProps = {
-        prefix: 'next-',
-        locale: zhCN.Upload,
-        onChange: func.noop,
-        onPreview: func.noop,
-    };
+  static defaultProps = {
+    prefix: 'next-',
+    locale: zhCN.Upload,
+    onChange: func.noop,
+    onPreview: func.noop,
+  };
 
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        let value;
-        /* istanbul ignore else */
-        if ('value' in props) {
-            value = props.value;
-        } else {
-            value = props.defaultValue;
-        }
+    let value;
+    /* istanbul ignore else */
+    if ('value' in props) {
+      value = props.value;
+    } else {
+      value = props.defaultValue;
+    }
 
-        this.state = {
-            value:
+    this.state = {
+      value:
                 typeof value === 'undefined'
-                    ? /* istanbul ignore next */ []
-                    : value,
-            uploaderRef: this.uploaderRef,
-        };
-    }
-    /* eslint react/no-did-mount-set-state: [0] */
-    componentDidMount() {
-        this.setState({ uploaderRef: this.uploaderRef });
-    }
+                  ? /* istanbul ignore next */ []
+                  : value,
+      uploaderRef: this.uploaderRef,
+    };
+  }
 
-    componentWillReceiveProps(nextProps) {
-        /* istanbul ignore if */
-        if ('value' in nextProps) {
-            this.setState({
-                value:
+  /* eslint react/no-did-mount-set-state: [0] */
+  componentDidMount() {
+    this.setState({ uploaderRef: this.uploaderRef });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    /* istanbul ignore if */
+    if ('value' in nextProps) {
+      this.setState({
+        value:
                     typeof nextProps.value === 'undefined'
-                        ? []
-                        : nextProps.value,
-            });
-        }
+                      ? []
+                      : nextProps.value,
+      });
     }
+  }
 
-    onProgress = value => {
-        this.setState({
-            value,
-        });
-    };
+  onProgress = value => {
+    this.setState({
+      value,
+    });
+  };
 
-    onChange = (value, file) => {
-        if (!('value' in this.props)) {
-            this.setState({
-                value,
-            });
-        }
-        this.props.onChange(value, file);
-    };
-
-    isUploading() {
-        return this.state.uploaderRef.isUploading();
+  onChange = (value, file) => {
+    if (!('value' in this.props)) {
+      this.setState({
+        value,
+      });
     }
+    this.props.onChange(value, file);
+  };
 
-    saveRef(ref) {
-        this.saveUploaderRef(ref);
-    }
+  isUploading() {
+    return this.state.uploaderRef.isUploading();
+  }
 
-    render() {
-        const {
-            action,
-            disabled,
-            prefix,
-            locale,
-            className,
-            style,
-            limit,
-            onPreview,
-            onRemove,
-            onCancel,
-            timeout,
-        } = this.props;
+  saveRef(ref) {
+    this.saveUploaderRef(ref);
+  }
 
-        const isExceedLimit = this.state.value.length >= limit;
-        const uploadButtonCls = classNames({
-            [`${prefix}upload-list-item`]: true,
-            [`${prefix}hidden`]: isExceedLimit,
-        });
+  render() {
+    const {
+      action,
+      disabled,
+      prefix,
+      locale,
+      className,
+      style,
+      limit,
+      onPreview,
+      onRemove,
+      onCancel,
+      timeout,
+    } = this.props;
 
-        const children = this.props.children || locale.card.addPhoto;
+    const isExceedLimit = this.state.value.length >= limit;
+    const uploadButtonCls = classNames({
+      [`${prefix}upload-list-item`]: true,
+      [`${prefix}hidden`]: isExceedLimit,
+    });
 
-        const onRemoveFunc = disabled ? func.prevent : onRemove;
-        const othersForList = obj.pickOthers(Card.propTypes, this.props);
-        const othersForUpload = obj.pickOthers(List.propTypes, othersForList);
-        return (
-            <List
-                className={className}
-                style={style}
-                listType="card"
-                closable
-                locale={locale}
-                value={this.state.value}
-                onRemove={onRemoveFunc}
-                onCancel={onCancel}
-                onPreview={onPreview}
-                uploader={this.state.uploaderRef}
-                {...othersForList}
-            >
-                <Upload
-                    {...othersForUpload}
-                    shape="card"
-                    disabled={disabled}
-                    action={action}
-                    timeout={timeout}
-                    value={this.state.value}
-                    onProgress={this.onProgress}
-                    onChange={this.onChange}
-                    ref={ref => this.saveRef(ref)}
-                    className={uploadButtonCls}
-                >
-                    {children}
-                </Upload>
-            </List>
-        );
-    }
+    const children = this.props.children || locale.card.addPhoto;
+
+    const onRemoveFunc = disabled ? func.prevent : onRemove;
+    const othersForList = obj.pickOthers(Card.propTypes, this.props);
+    const othersForUpload = obj.pickOthers(List.propTypes, othersForList);
+    return (
+      <List
+        className={className}
+        style={style}
+        listType="card"
+        closable
+        locale={locale}
+        value={this.state.value}
+        onRemove={onRemoveFunc}
+        onCancel={onCancel}
+        onPreview={onPreview}
+        uploader={this.state.uploaderRef}
+        {...othersForList}
+      >
+        <Upload
+          {...othersForUpload}
+          shape="card"
+          disabled={disabled}
+          action={action}
+          timeout={timeout}
+          value={this.state.value}
+          onProgress={this.onProgress}
+          onChange={this.onChange}
+          ref={ref => this.saveRef(ref)}
+          className={uploadButtonCls}
+        >
+          {children}
+        </Upload>
+      </List>
+    );
+  }
 }
 
 export default Card;

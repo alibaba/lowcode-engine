@@ -26,7 +26,7 @@ export async function createFakePackage(params: {
   npmClient?: string;
 }): Promise<void> {
   // 创建临时组件包
-  const workDir = params.workDir;
+  const { workDir } = params;
   const pkgJsonFilePath = join(workDir, 'package.json');
   await ensureFile(pkgJsonFilePath);
   await writeFile(
@@ -94,9 +94,9 @@ export function getPkgNameAndVersion(pkgNameWithVersion: string): { [key: string
 export default async function localize(
   options: IMaterializeOptions,
 ): Promise<{
-  workDir: string;
-  moduleDir: string;
-}> {
+    workDir: string;
+    moduleDir: string;
+  }> {
   // 创建临时目录
   const workDir = await createworkDir();
   // 创建组件包

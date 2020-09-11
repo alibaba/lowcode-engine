@@ -18,7 +18,9 @@ export default class Stage extends Component<StageProps> {
   static defaultProps = StageDefaultProps;
 
   private timer: number;
+
   private additionClassName: string | null;
+
   private shell: any;
 
   componentDidMount() {

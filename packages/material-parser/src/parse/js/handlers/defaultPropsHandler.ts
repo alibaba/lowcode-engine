@@ -1,4 +1,5 @@
 const { namedTypes: t, NodePath } = require('ast-types');
+
 type NodePathType = typeof NodePath;
 const {
   getPropertyName,
@@ -12,7 +13,7 @@ const {
 const resolveFunctionDefinitionToReturnValue = require('react-docgen/dist/utils/resolveFunctionDefinitionToReturnValue');
 
 function getDefaultValue(path: NodePathType) {
-  let node = path.node;
+  let { node } = path;
   let defaultValue;
   if (t.Literal.check(node)) {
     defaultValue = node.raw;
@@ -88,8 +89,7 @@ function getDefaultValuesFromProps(
   properties
     // Don't evaluate property if component is functional and the node is not an AssignmentPattern
     .filter(
-      propertyPath =>
-        !isStateless ||
+      propertyPath => !isStateless ||
         t.AssignmentPattern.check(propertyPath.get('value').node),
     )
     .forEach(propertyPath => {

@@ -68,6 +68,7 @@ export default class TreeTitle extends Component<{
   };
 
   private lastInput?: HTMLInputElement;
+
   private setCaret = (input: HTMLInputElement | null) => {
     if (!input || this.lastInput === input) {
       return;
@@ -86,7 +87,7 @@ export default class TreeTitle extends Component<{
     const isNodeParent = node.isParental();
     let style: any;
     if (isCNode) {
-      const depth = treeNode.depth;
+      const { depth } = treeNode;
       const indent = depth * 12;
       style = {
         paddingLeft: indent + (isModal ? 12 : 0),
@@ -108,22 +109,23 @@ export default class TreeTitle extends Component<{
           }
           if (node.conditionGroup) {
             node.setConditionalVisible();
-            return;
           }
         }}
       >
         {isModal && node.getVisible() && (
           <div onClick={() => {
             node.document.modalNodesManager.setInvisible(node);
-          }}>
-            <IconRadioActive className="tree-node-modal-radio-active"/>
+          }}
+          >
+            <IconRadioActive className="tree-node-modal-radio-active" />
           </div>
         )}
         {isModal && !node.getVisible() && (
           <div onClick={() => {
             node.document.modalNodesManager.setVisible(node);
-          }}>
-            <IconRadio className="tree-node-modal-radio"/>
+          }}
+          >
+            <IconRadio className="tree-node-modal-radio" />
           </div>
         )}
         {isCNode && <ExpandBtn treeNode={treeNode} />}
@@ -164,7 +166,7 @@ export default class TreeTitle extends Component<{
           )}
         </div>
         {isCNode && isNodeParent && !isModal && <HideBtn treeNode={treeNode} />}
-        {/*isCNode && isNodeParent && <LockBtn treeNode={treeNode} />*/}
+        {/* isCNode && isNodeParent && <LockBtn treeNode={treeNode} /> */}
       </div>
     );
   }
@@ -175,6 +177,7 @@ class LockBtn extends Component<{ treeNode: TreeNode }> {
   shouldComponentUpdate() {
     return false;
   }
+
   render() {
     const { treeNode } = this.props;
     return (
@@ -197,6 +200,7 @@ class HideBtn extends Component<{ treeNode: TreeNode }> {
   shouldComponentUpdate() {
     return false;
   }
+
   render() {
     const { treeNode } = this.props;
     return (
@@ -220,6 +224,7 @@ class ExpandBtn extends Component<{ treeNode: TreeNode }> {
   shouldComponentUpdate() {
     return false;
   }
+
   render() {
     const { treeNode } = this.props;
     if (!treeNode.expandable) {

@@ -25,9 +25,9 @@ export interface AbstractCheckboxGroupProps {
 
 export interface CheckboxGroupProps extends AbstractCheckboxGroupProps {
   name?: string;
-  defaultValue?: Array<CheckboxValueType>;
-  value?: Array<CheckboxValueType>;
-  onChange?: (checkedValue: Array<CheckboxValueType>) => void;
+  defaultValue?: CheckboxValueType[];
+  value?: CheckboxValueType[];
+  onChange?: (checkedValue: CheckboxValueType[]) => void;
 }
 
 export interface CheckboxGroupState {
@@ -75,7 +75,7 @@ class CheckboxGroup extends React.PureComponent<CheckboxGroupProps, CheckboxGrou
   getOptions() {
     const { options } = this.props;
     // https://github.com/Microsoft/TypeScript/issues/7960
-    return (options as Array<CheckboxOptionType>).map(option => {
+    return (options as CheckboxOptionType[]).map(option => {
       if (typeof option === 'string') {
         return {
           label: option,

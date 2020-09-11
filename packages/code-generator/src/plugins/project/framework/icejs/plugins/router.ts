@@ -38,15 +38,15 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
             component: BasicLayout,
             children: [
               ${ir.routes
-                .map(
-                  route => `
+    .map(
+      route => `
                     {
                       path: '${route.path}',
                       component: ${route.componentName},
                     }
                   `,
-                )
-                .join(',')}
+    )
+    .join(',')}
             ],
           },
         ];

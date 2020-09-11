@@ -4,9 +4,11 @@ export class ScrollTarget {
   get left() {
     return 'scrollX' in this.target ? this.target.scrollX : this.target.scrollLeft;
   }
+
   get top() {
     return 'scrollY' in this.target ? this.target.scrollY : this.target.scrollTop;
   }
+
   scrollTo(options: { left?: number; top?: number }) {
     this.target.scrollTo(options);
   }
@@ -24,6 +26,7 @@ export class ScrollTarget {
   }
 
   private doe?: HTMLElement;
+
   constructor(private target: Window | Element) {
     if (isWindow(target)) {
       this.doe = target.document.documentElement;
@@ -67,14 +70,14 @@ export class Scroller {
   scrollTo(options: { left?: number; top?: number }) {
     this.cancel();
 
-    const scrollTarget = this.scrollTarget;
+    const { scrollTarget } = this;
     if (!scrollTarget) {
       return;
     }
 
     let pid: number;
-    const left = scrollTarget.left;
-    const top = scrollTarget.top;
+    const { left } = scrollTarget;
+    const { top } = scrollTarget;
     const end = () => {
       this.cancel();
     };
@@ -119,7 +122,7 @@ export class Scroller {
     this.cancel();
 
     const { bounds, scale = 1 } = this.scrollable;
-    const scrollTarget = this.scrollTarget;
+    const { scrollTarget } = this;
     if (!scrollTarget || !bounds) {
       return;
     }

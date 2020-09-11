@@ -22,25 +22,29 @@ type SimulatorHostProps = BuiltinSimulatorProps & {
 
 export class BuiltinSimulatorHostView extends Component<SimulatorHostProps> {
   readonly host: BuiltinSimulatorHost;
+
   constructor(props: any) {
     super(props);
     const { documentContext } = this.props;
     this.host = (documentContext.simulator as BuiltinSimulatorHost) || new BuiltinSimulatorHost(documentContext);
     this.host.setProps(this.props);
   }
+
   shouldComponentUpdate(nextProps: BuiltinSimulatorProps) {
     this.host.setProps(nextProps);
     return false;
   }
+
   componentDidMount() {
     if (this.props.onMount) {
       this.props.onMount(this.host);
     }
   }
+
   render() {
     return (
       <div className="lc-simulator">
-        {/*progressing.visible ? <PreLoaderView /> : null*/}
+        {/* progressing.visible ? <PreLoaderView /> : null */}
         <Canvas host={this.host} />
       </div>
     );
@@ -73,7 +77,7 @@ class Canvas extends Component<{ host: BuiltinSimulatorHost }> {
 class Content extends Component<{ host: BuiltinSimulatorHost }> {
   render() {
     const sim = this.props.host;
-    const viewport = sim.viewport;
+    const { viewport } = sim;
     const frameStyle = {
       transform: `scale(${viewport.scale})`,
       height: viewport.contentHeight,

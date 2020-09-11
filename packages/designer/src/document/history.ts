@@ -24,10 +24,15 @@ export function setSerialization(serializion: Serialization) {
 
 export class History {
   private session: Session;
+
   private records: Session[];
+
   private point = 0;
+
   private emitter = new EventEmitter();
+
   private obx: Reaction;
+
   private justWokeup = false;
 
   constructor(logger: () => any, private redoer: (data: NodeSchema) => void, private timeGap: number = 1000) {
@@ -147,7 +152,7 @@ export class History {
    *  | modified | redoable | undoable |
    */
   getState(): number {
-    const cursor = this.session.cursor;
+    const { cursor } = this.session;
     let state = 7;
     // undoable ?
     if (cursor <= 0) {
@@ -190,6 +195,7 @@ export class History {
 
 class Session {
   private _data: any;
+
   private activedTimer: any;
 
   get data() {

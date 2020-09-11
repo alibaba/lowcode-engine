@@ -9,11 +9,11 @@ import { ConfigConsumer, ConfigConsumerProps } from '../config-provider';
 
 export interface SliderMarks {
   [key: number]:
-    | React.ReactNode
-    | {
-        style: React.CSSProperties;
-        label: React.ReactNode;
-      };
+  | React.ReactNode
+  | {
+    style: React.CSSProperties;
+    label: React.ReactNode;
+  };
 }
 
 export type SliderValue = number | [number, number];
@@ -157,12 +157,11 @@ export default class Slider extends React.Component<SliderProps, SliderState> {
           {...restProps}
           className={cls}
           ref={this.saveSlider}
-          handle={(info: HandleGeneratorInfo) =>
-            this.handleWithTooltip({
-              tooltipPrefixCls,
-              prefixCls,
-              info,
-            })
+          handle={(info: HandleGeneratorInfo) => this.handleWithTooltip({
+            tooltipPrefixCls,
+            prefixCls,
+            info,
+          })
           }
           prefixCls={prefixCls}
           tooltipPrefixCls={tooltipPrefixCls}
@@ -174,12 +173,11 @@ export default class Slider extends React.Component<SliderProps, SliderState> {
         {...restProps}
         className={cls}
         ref={this.saveSlider}
-        handle={(info: HandleGeneratorInfo) =>
-          this.handleWithTooltip({
-            tooltipPrefixCls,
-            prefixCls,
-            info,
-          })
+        handle={(info: HandleGeneratorInfo) => this.handleWithTooltip({
+          tooltipPrefixCls,
+          prefixCls,
+          info,
+        })
         }
         prefixCls={prefixCls}
         tooltipPrefixCls={tooltipPrefixCls}

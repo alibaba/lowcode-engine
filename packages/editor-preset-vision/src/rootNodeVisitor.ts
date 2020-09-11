@@ -9,11 +9,15 @@ import { DocumentModel, Node, Root } from '@ali/lowcode-designer';
  */
 export default class RootNodeVisitor {
   public nodeIdMap: {[id: string]: Node} = {};
+
   public nodeFieldIdMap: {[fieldId: string]: Node} = {};
+
   public nodeList: Node[] = [];
 
   private page: DocumentModel;
+
   private root: RootNode;
+
   private cancelers: Function[] = [];
 
   constructor(page: DocumentModel, rootNode: RootNode) {

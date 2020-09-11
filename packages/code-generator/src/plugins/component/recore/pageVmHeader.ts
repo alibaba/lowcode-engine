@@ -17,7 +17,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       type: ChunkType.STRING,
       fileType: 'vx',
       name: COMMON_CHUNK_NAME.CustomContent,
-      content: `<div {...globalProps.div} className="recore-loading" x-if={this.__loading} />`,
+      content: '<div {...globalProps.div} className="recore-loading" x-if={this.__loading} />',
       linkAfter: [],
     });
 

@@ -47,7 +47,7 @@ export interface UploadFile<T = any> {
 export interface UploadChangeParam<T extends object = UploadFile> {
   // https://github.com/ant-design/ant-design/issues/14420
   file: T;
-  fileList: Array<UploadFile>;
+  fileList: UploadFile[];
   event?: { percent: number };
 }
 
@@ -108,7 +108,7 @@ export interface UploadProps<T = any> {
 }
 
 export interface UploadState<T = any> {
-  fileList: UploadFile<T>[];
+  fileList: Array<UploadFile<T>>;
   dragState: string;
 }
 

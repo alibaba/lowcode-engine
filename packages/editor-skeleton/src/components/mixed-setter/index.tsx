@@ -115,9 +115,12 @@ export default class MixedSetter extends Component<{
   className?: string;
 }> {
   private setters = nomalizeSetters(this.props.setters);
+
   // set name ,used in setting Transducer
   static displayName = 'MixedSetter';
+
   @obx.ref private used?: string;
+
   @computed private getCurrentSetter() {
     const { field } = this.props;
     let firstMatched: SetterItem | undefined;
@@ -171,6 +174,7 @@ export default class MixedSetter extends Component<{
   }
 
   private shell: HTMLDivElement | null = null;
+
   private checkIsBlockField() {
     if (this.shell) {
       const setter = this.shell.firstElementChild;
@@ -181,9 +185,11 @@ export default class MixedSetter extends Component<{
       }
     }
   }
+
   componentDidUpdate() {
     this.checkIsBlockField();
   }
+
   componentDidMount() {
     this.checkIsBlockField();
   }
@@ -220,7 +226,7 @@ export default class MixedSetter extends Component<{
       ...extraProps,
       onInitial: () => {
         this.handleInitial(currentSetter);
-      }
+      },
     });
   }
 
@@ -307,7 +313,7 @@ export default class MixedSetter extends Component<{
     );
     return (
       <Dropdown trigger={triggerNode} triggerType="click" align="tr br">
-        <Menu selectMode="single" hasSelectedIcon={true} selectedKeys={usedName} onItemClick={this.useSetter}>
+        <Menu selectMode="single" hasSelectedIcon selectedKeys={usedName} onItemClick={this.useSetter}>
           {this.setters
             .filter((setter) => setter.list || setter.name === usedName)
             .map((setter) => {

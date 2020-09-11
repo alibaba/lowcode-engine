@@ -25,17 +25,23 @@ export interface IWidget {
 
 export default class Widget implements IWidget {
   readonly isWidget = true;
+
   readonly id = uniqueId('widget');
+
   readonly name: string;
+
   readonly align?: string;
 
-  @obx.ref private _visible: boolean = true;
+  @obx.ref private _visible = true;
+
   get visible(): boolean {
     return this._visible;
   }
 
-  @obx.ref inited: boolean = false;
+  @obx.ref inited = false;
+
   private _body: ReactNode;
+
   get body() {
     if (this.inited) {
       return this._body;
@@ -108,5 +114,4 @@ export default class Widget implements IWidget {
 export function isWidget(obj: any): obj is IWidget {
   return obj && obj.isWidget;
 }
-
 

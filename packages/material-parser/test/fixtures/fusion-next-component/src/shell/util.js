@@ -4,39 +4,39 @@
  * @return {bool}     例： false / false / false / true / false / false
  */
 export function isBoolean(val) {
-    return typeof val === 'boolean';
+  return typeof val === 'boolean';
 }
 
 export function getCollapseMap(device) {
-    // by default all of them are collapsed
-    const origin = {
-        Navigation: true,
-        LocalNavigation: true,
-        Ancillary: true,
-        ToolDock: true,
-    };
+  // by default all of them are collapsed
+  const origin = {
+    Navigation: true,
+    LocalNavigation: true,
+    Ancillary: true,
+    ToolDock: true,
+  };
 
-    let map = [];
+  let map = [];
 
-    switch (device) {
-        case 'phone':
-            break;
-        case 'pad':
-        case 'tablet':
-            map = ['ToolDock'];
-            break;
-        case 'desktop':
-            map = ['Navigation', 'LocalNavigation', 'Ancillary', 'ToolDock'];
-            break;
-        default:
-            break;
+  switch (device) {
+    case 'phone':
+      break;
+    case 'pad':
+    case 'tablet':
+      map = ['ToolDock'];
+      break;
+    case 'desktop':
+      map = ['Navigation', 'LocalNavigation', 'Ancillary', 'ToolDock'];
+      break;
+    default:
+      break;
+  }
+
+  Object.keys(origin).forEach(key => {
+    if (map.indexOf(key) > -1) {
+      origin[key] = false;
     }
+  });
 
-    Object.keys(origin).forEach(key => {
-        if (map.indexOf(key) > -1) {
-            origin[key] = false;
-        }
-    });
-
-    return origin;
+  return origin;
 }

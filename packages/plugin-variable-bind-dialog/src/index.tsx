@@ -27,11 +27,10 @@ export default class VariableBindDialog extends Component<PluginProps> {
 
   state = {
     visiable: false,
-    selectedVariableName: '',
     variableContext: '',
   };
 
-  openDialog = (bindEventName: String) => {
+  openDialog = (bindEventName: string) => {
     this.setState({
       visiable: true,
       eventName: bindEventName,
@@ -46,7 +45,7 @@ export default class VariableBindDialog extends Component<PluginProps> {
 
   componentDidMount() {
     const { editor, config } = this.props;
-    editor.on(`${config.pluginKey}.openDialog`, (bindEventName: String) => {
+    editor.on(`${config.pluginKey}.openDialog`, (bindEventName: string) => {
       this.openDialog(bindEventName);
     });
   }
@@ -54,7 +53,7 @@ export default class VariableBindDialog extends Component<PluginProps> {
   initEventName = () => {
     const { bindEventName } = this.state;
     let eventName = bindEventName;
-    this.eventList.map((item) => {
+    this.eventList.forEach((item) => {
       if (item.name === eventName) {
         eventName = `${eventName}_new`;
       }
@@ -65,16 +64,15 @@ export default class VariableBindDialog extends Component<PluginProps> {
     });
   };
 
-  onInputChange = (eventName: String) => {
+  onInputChange = (eventName: string) => {
     this.setState({
       eventName,
     });
   };
 
-  onSelectItem = (variableName: String) => {
+  onSelectItem = (variableName: string) => {
     this.setState({
-      selectedVariableName:variableName,
-      variableContext:variableName
+      variableContext: variableName,
     });
 
     // // 为空是新建事件
@@ -96,22 +94,22 @@ export default class VariableBindDialog extends Component<PluginProps> {
   };
 
   renderBottom = () => {
-      return (
-        <div className="variable-bind-dialog-bottom">
-            <div className="bottom-left-container">
-              <Button type="normal" warning>移除绑定</Button>
-            </div>
-
-            <div className="bottom-right-container">
-              <Button type="primary" onClick={this.onOk}>确定</Button>&nbsp;&nbsp;
-              <Button type="normal" onClick={this.closeDialog}>取消</Button>
-            </div>
+    return (
+      <div className="variable-bind-dialog-bottom">
+        <div className="bottom-left-container">
+          <Button type="normal" warning>移除绑定</Button>
         </div>
-      )
-  }
+
+        <div className="bottom-right-container">
+          <Button type="primary" onClick={this.onOk}>确定</Button>&nbsp;&nbsp;
+          <Button type="normal" onClick={this.closeDialog}>取消</Button>
+        </div>
+      </div>
+    );
+  };
 
   render() {
-    const { selectedEventName, eventName, visiable ,variableContext} = this.state;
+    const { visiable, variableContext } = this.state;
     return (
       <Dialog
         visible={visiable}
@@ -131,7 +129,7 @@ export default class VariableBindDialog extends Component<PluginProps> {
                   <div className="select-item select-item-active">当前上下文</div>
                   <div className="variable-list">
                     {this.loopVariableList.map((item) => (
-                      <div className="variable-item" onClick={()=>this.onSelectItem(item.name)}>
+                      <div className="variable-item" onClick={() => this.onSelectItem(item.name)}>
                         <span>{item.name}</span>
                       </div>
                     ))}
@@ -141,7 +139,7 @@ export default class VariableBindDialog extends Component<PluginProps> {
                 <div className="select-item select-item-active">State属性</div>
                 <div className="variable-list">
                   {this.stateVaroableList.map((item) => (
-                    <div className="variable-item" onClick={()=>this.onSelectItem(item.name)}>
+                    <div className="variable-item" onClick={() => this.onSelectItem(item.name)}>
                       <span>{item.name}</span>
                     </div>
                   ))}
@@ -152,9 +150,9 @@ export default class VariableBindDialog extends Component<PluginProps> {
 
           <div className="dialog-right-container">
             <div className="dialog-small-title">绑定</div>
-            <Input.TextArea style={{ width: '100%', height: '219px' }} value={variableContext}/>
+            <Input.TextArea style={{ width: '100%', height: '219px' }} value={variableContext} />
 
-            <div className="dialog-small-title" style={{marginTop:'13px'}}>帮助</div>
+            <div className="dialog-small-title" style={{ marginTop: '13px' }}>帮助</div>
             <Input.TextArea style={{ width: '100%', height: '137px' }} />
           </div>
         </div>

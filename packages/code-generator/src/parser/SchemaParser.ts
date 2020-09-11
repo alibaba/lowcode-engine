@@ -95,7 +95,7 @@ class SchemaParser implements ISchemaParser {
         });
       }
     } else {
-      throw new CodeGeneratorError(`Can't find anything to generate.`);
+      throw new CodeGeneratorError('Can\'t find anything to generate.');
     }
 
     // 建立所有容器的内部依赖索引

@@ -49,7 +49,7 @@ export const registerDefaults = () => {
       }
       return {
         type: 'JSSlot',
-        value: value,
+        value,
       };
     },
     recommend: true,
