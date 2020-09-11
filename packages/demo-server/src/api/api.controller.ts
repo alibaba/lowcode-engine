@@ -7,6 +7,10 @@ import { GenerateProjectDto } from '../dto/generate-project.dto';
 export class ApiController {
   private readonly apiService: ApiService;
 
+  constructor(apiService: ApiService) {
+    this.apiService = apiService;
+  }
+
   @Get('generate/test')
   generateTest() {
     return 'generate test';
