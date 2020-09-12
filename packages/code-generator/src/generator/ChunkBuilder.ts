@@ -21,6 +21,7 @@ export const groupChunks = (chunks: ICodeChunk[]): ICodeChunk[][] => {
   const col = chunks.reduce((chunksSet: Record<string, ChunkGroupInfo[]>, chunk) => {
     const fileKey = chunk.subModule || COMMON_SUB_MODULE_NAME;
     if (!chunksSet[fileKey]) {
+      // eslint-disable-next-line no-param-reassign
       chunksSet[fileKey] = [];
     }
     const res = whichFamily(chunk.fileType as FileType);
@@ -56,6 +57,7 @@ export const groupChunks = (chunks: ICodeChunk[]): ICodeChunk[][] => {
       let t: string = info.chunk.fileType;
       if (info.familyIdx !== undefined) {
         t = FILE_TYPE_FAMILY[info.familyIdx][tmp[key][info.familyIdx]];
+        // eslint-disable-next-line no-param-reassign
         info.chunk.fileType = t;
       }
       if (!byType[t]) {

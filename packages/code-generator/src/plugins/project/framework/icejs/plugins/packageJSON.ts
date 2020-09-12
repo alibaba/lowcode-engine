@@ -1,3 +1,5 @@
+import { PackageJSON } from '@ali/lowcode-types';
+
 import { COMMON_CHUNK_NAME } from '../../../../../const/generator';
 
 import {
@@ -6,11 +8,10 @@ import {
   ChunkType,
   FileType,
   ICodeStruct,
-  IPackageJSON,
   IProjectInfo,
 } from '../../../../../types';
 
-interface IIceJsPackageJSON extends IPackageJSON {
+interface IIceJsPackageJSON extends PackageJSON {
   ideMode: {
     name: string;
   };
@@ -73,7 +74,9 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       originTemplate: '@alifd/scaffold-lite-js',
     };
 
-    ir.packages.forEach((packageInfo) => (packageJson.dependencies[packageInfo.package] = packageInfo.version));
+    ir.packages.forEach((packageInfo) => {
+      packageJson.dependencies[packageInfo.package] = packageInfo.version;
+    });
 
     next.chunks.push({
       type: ChunkType.JSON,

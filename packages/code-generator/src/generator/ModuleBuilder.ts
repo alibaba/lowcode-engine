@@ -1,13 +1,12 @@
+import { ProjectSchema, ResultFile, ResultDir } from '@ali/lowcode-types';
+
 import {
   BuilderComponentPlugin,
   CodeGeneratorError,
-  IBasicSchema,
   ICodeChunk,
   ICompiledModule,
   IModuleBuilder,
   IParseResult,
-  IResultDir,
-  IResultFile,
   ISchemaParser,
   PostProcessor,
 } from '../types';
@@ -17,9 +16,7 @@ import { COMMON_SUB_MODULE_NAME } from '../const/generator';
 import SchemaParser from '../parser/SchemaParser';
 import ChunkBuilder from './ChunkBuilder';
 import CodeBuilder from './CodeBuilder';
-
-import ResultDir from '../model/ResultDir';
-import ResultFile from '../model/ResultFile';
+import { createResultFile, createResultDir, addFile } from '../utils/resultHelper';
 
 export function createModuleBuilder(
   options: {
@@ -40,24 +37,24 @@ export function createModuleBuilder(
       throw new CodeGeneratorError('No plugins found. Component generation cannot work without any plugins!');
     }
 
-    let files: IResultFile[] = [];
+    let files: ResultFile[] = [];
 
     const { chunks } = await chunkGenerator.run(input);
     chunks.forEach((fileChunkList) => {
       const content = linker.link(fileChunkList);
-      const file = new ResultFile(fileChunkList[0].subModule || moduleMainName, fileChunkList[0].fileType, content);
+      const file = createResultFile(fileChunkList[0].subModule || moduleMainName, fileChunkList[0].fileType, content);
       files.push(file);
     });
 
     if (options.postProcessors.length > 0) {
       files = files.map((file) => {
-        let { content } = file;
+        let content = file.content;
         const type = file.ext;
         options.postProcessors.forEach((processer) => {
           content = processer(content, type);
         });
 
-        return new ResultFile(file.name, type, content);
+        return createResultFile(file.name, type, content);
       });
     }
 
@@ -66,7 +63,7 @@ export function createModuleBuilder(
     };
   };
 
-  const generateModuleCode = async (schema: IBasicSchema | string): Promise<IResultDir> => {
+  const generateModuleCode = async (schema: ProjectSchema | string): Promise<ResultDir> => {
     // Init
     const schemaParser: ISchemaParser = new SchemaParser();
     const parseResult: IParseResult = schemaParser.parse(schema);
@@ -74,19 +71,19 @@ export function createModuleBuilder(
     const containerInfo = parseResult.containers[0];
     const { files } = await generateModule(containerInfo);
 
-    const dir = new ResultDir(containerInfo.moduleName);
-    files.forEach((file) => dir.addFile(file));
+    const dir = createResultDir(containerInfo.moduleName);
+    files.forEach((file) => addFile(dir, file));
 
     return dir;
   };
 
   const linkCodeChunks = (chunks: Record<string, ICodeChunk[]>, fileName: string) => {
-    const files: IResultFile[] = [];
+    const files: ResultFile[] = [];
 
     Object.keys(chunks).forEach((fileKey) => {
       const fileChunkList = chunks[fileKey];
       const content = linker.link(fileChunkList);
-      const file = new ResultFile(fileChunkList[0].subModule || fileName, fileChunkList[0].fileType, content);
+      const file = createResultFile(fileChunkList[0].subModule || fileName, fileChunkList[0].fileType, content);
       files.push(file);
     });
 

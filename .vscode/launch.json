@@ -9,7 +9,16 @@
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "${workspaceFolder}/packages/material-parser/node_modules/.bin/ava",
-      "runtimeArgs": ["debug", "--break", "${workspaceFolder}/packages/material-parser/test/antd.ts"]
+      "runtimeArgs": ["debug", "--break", "${file}"]
+    },
+    {
+      "name": "ava code-gen",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["${workspaceFolder}/node_modules/.bin/ava", "--serial", "${file}"],
+      "cwd": "${workspaceFolder}/packages/code-generator",
+      "outputCapture": "std"
     }
   ]
 }

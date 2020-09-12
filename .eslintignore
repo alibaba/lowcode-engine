@@ -1,5 +1,7 @@
 # 忽略目录
 node_modules
+test-cases
+output
 build
 dist
 demo
