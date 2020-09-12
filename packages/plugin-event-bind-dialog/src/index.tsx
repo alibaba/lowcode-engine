@@ -80,7 +80,6 @@ export default class EventBindDialog extends Component<PluginProps> {
     const { editor, config } = this.props;
     editor.on(`${config.pluginKey}.openDialog`, (bindEventName: String,setterName:String,paramStr:String) => {
       console.log('paramStr:'+paramStr);
-      this.openDialog(bindEventName);
       this.setState({
         setterName,
         paramStr
@@ -96,6 +95,8 @@ export default class EventBindDialog extends Component<PluginProps> {
           })
         }
       }
+
+      this.openDialog(bindEventName);
     });
   }
 

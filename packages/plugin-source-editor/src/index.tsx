@@ -56,7 +56,8 @@ export default class SourceEditor extends Component<{
   state = {
     isFullScreen:false,
     tabKey: TAB_KEY.JS_TAB,
-    isShowSaveBtn:true
+    isShowSaveBtn:true,
+    visiable:false
   };
 
   componentWillMount() {
@@ -77,6 +78,9 @@ export default class SourceEditor extends Component<{
     editor.on('skeleton.panel-dock.unactive',(pluginName,dock)=>{
       if (pluginName == 'sourceEditor'){
          this.saveSchema();
+         this.setState({
+           visiable:false
+         })
       }
     })
     
@@ -142,6 +146,7 @@ export default class SourceEditor extends Component<{
       jsCode,
       css,
       selectTab: TAB_KEY.JS_TAB,
+      visiable:true
     });
   };
 
@@ -272,18 +277,21 @@ export default class SourceEditor extends Component<{
     const {jsCode} = this.state;
     const {editor} = this.props;
     let functionMap = transfrom.code2Schema(jsCode);
-    let schema = editor.get('designer').project.getSchema();
-    //let oldSchemaStr = JSON.stringify(schema);
-    let newSchema = transfrom.setFunction2Schema(functionMap, schema);
 
-    if (newSchema!=''){
-      editor.get('designer').project.setSchema(newSchema);
-      successFlag && Message.success('保存成功')
-    }
+    if (functionMap!=null){
+      let schema = editor.get('designer').project.getSchema();
+      //let oldSchemaStr = JSON.stringify(schema);
+      let newSchema = transfrom.setFunction2Schema(functionMap, schema);
+
+      if (newSchema!=''){
+        editor.get('designer').project.setSchema(newSchema);
+        successFlag && Message.success('保存成功')
+      }
+    }    
   }
 
   render() {
-    const { selectTab, jsCode, css ,isShowSaveBtn} = this.state;
+    const { selectTab, jsCode, css ,isShowSaveBtn,visiable} = this.state;
     const tabs = [
       { tab: 'index.js', key: TAB_KEY.JS_TAB },
       { tab: 'style.css', key: TAB_KEY.CSS_TAB },
@@ -298,7 +306,7 @@ export default class SourceEditor extends Component<{
           ))}
         </Tab>
         { isShowSaveBtn && <div className="button-container"><Button type="primary" onClick={()=>this.saveSchema(successFlag)}>保存代码</Button></div>}
-
+        { visiable && 
           <div style={{ height: '100%' }} className="editor-context-container">
             <div id="jsEditorDom" className="editor-context" ref={this.editorJsRef}>
               <MonacoEditor
@@ -319,8 +327,7 @@ export default class SourceEditor extends Component<{
               />
             </div>
           </div>
-
-
+        }
         {/* <div className="full-screen-container" onClick={this.fullScreen}>
           <img src="https://gw.alicdn.com/tfs/TB1d7XqE1T2gK0jSZFvXXXnFXXa-200-200.png"></img>
         </div> */}

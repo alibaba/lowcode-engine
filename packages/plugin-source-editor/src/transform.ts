@@ -23,7 +23,8 @@ const transfrom = {
       A = eval('('+newCode + ')');
       a = new A();
     }catch(e){
-      return ''
+      console.log(e.message);
+      return null
     }
 
     let functionNameList = Object.getOwnPropertyNames(a.__proto__);
