@@ -42,13 +42,13 @@ export interface Npm {
   [k: string]: any;
 }
 export interface PropsSection {
-  props: Array<{
+  props: {
     name: string;
     propType: PropType;
     description?: string;
     defaultValue?: any;
     [k: string]: any;
-  }>;
+  }[];
   [k: string]: any;
 }
 export interface RequiredType {
@@ -57,7 +57,7 @@ export interface RequiredType {
 }
 export interface OneOf {
   type: 'oneOf';
-  value: Array<string | number | boolean>;
+  value: (string | number | boolean)[];
   isRequired?: boolean;
   [k: string]: any;
 }
@@ -81,19 +81,19 @@ export interface ObjectOf {
 }
 export interface Shape {
   type: 'shape';
-  value: Array<{
+  value: {
     name?: string;
     propType?: PropType;
-  }>;
+  }[];
   isRequired?: boolean;
   [k: string]: any;
 }
 export interface Exact {
   type: 'exact';
-  value: Array<{
+  value: {
     name?: string;
     propType?: PropType;
-  }>;
+  }[];
   isRequired?: boolean;
   [k: string]: any;
 }

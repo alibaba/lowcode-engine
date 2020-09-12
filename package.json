@@ -12,6 +12,8 @@
   "scripts": {
     "build": "./scripts/build.sh",
     "clean": "rm -rf ./packages/*/lib ./packages/*/es ./packages/*/dist ./packages/*/build",
+    "lint": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet",
+    "lint:fix": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet --fix",
     "pub": "lerna publish --force-publish --cd-version prepatch",
     "setup": "./scripts/setup.sh",
     "start": "./scripts/start.sh",
@@ -19,9 +21,7 @@
     "test": "lerna run test --stream",
     "test:snapshot": "lerna run test:snapshot",
     "xima:fix": "xima fix",
-    "xima:scan": "xima scan",
-    "lint": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet",
-    "lint:fix": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet --fix"
+    "xima:scan": "xima scan"
   },
   "husky": {
     "hooks": {

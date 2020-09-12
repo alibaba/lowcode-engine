@@ -1,7 +1,7 @@
 /**
  * 语法生态
  */
-enum EcologyType {
+export enum EcologyType {
   /** react 生态 */
   REACT = 'react',
   /** vue 生态 */
@@ -11,5 +11,3 @@ enum EcologyType {
   /** angular 生态 */
   ANGULAR = 'angular',
 }
-
-export default EcologyType;
