@@ -16,6 +16,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
     };
 
     const ir = next.ir as IParseResult;
+    // TODO: miniAppBuildType 这个东西是不是不应该在 schema 里面，而是应该由 plugin 的构造参数传入
     const miniAppBuildType = ir.project?.config.miniAppBuildType;
 
     const buildCfg = {

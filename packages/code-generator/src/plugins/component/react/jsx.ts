@@ -5,11 +5,13 @@ import {
   FileType,
   ICodeStruct,
   IContainerInfo,
+  IScope,
 } from '../../../types';
 
 import { REACT_CHUNK_NAME } from './const';
 
 import { createReactNodeGenerator } from '../../../utils/nodeToJSX';
+import Scope from '../../../utils/Scope';
 
 type PluginConfig = {
   fileType?: string;
@@ -26,9 +28,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
   const { nodeTypeMapping } = cfg;
 
   const generator = createReactNodeGenerator({
-    handlers: {
-      tagName: (v) => nodeTypeMapping[v] || v,
-    },
+    tagMapping: (v) => nodeTypeMapping[v] || v,
   });
 
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
@@ -37,7 +37,8 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     };
 
     const ir = next.ir as IContainerInfo;
-    const jsxContent = generator(ir);
+    const scope: IScope = Scope.createRootScope();
+    const jsxContent = generator(ir, scope);
 
     next.chunks.push({
       type: ChunkType.STRING,

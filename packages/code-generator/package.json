@@ -13,6 +13,7 @@
   "scripts": {
     "start": "ava --watch",
     "build": "rimraf lib && build-scripts build --skip-demo",
+    "build:tsc": "rimraf lib && tsc",
     "demo": "node ./demo/demo.js",
     "test": "ava",
     "template": "node ./tools/createTemplate.js"
