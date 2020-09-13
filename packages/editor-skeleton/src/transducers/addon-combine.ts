@@ -215,7 +215,8 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
             eventDataList.map((item) => {
               field.parent.setPropValue(item.name, {
                 type: 'JSFunction',
-                value: `function(){ this.${item.relatedEventName}(${item.paramStr?item.paramStr:''}) }`,
+                // 需要传下入参
+                value: `function(){this.${item.relatedEventName}.apply(this,Array.prototype.slice.call(arguments).concat([${item.paramStr?item.paramStr:''}])) }`,
               });
               return item;
             });
