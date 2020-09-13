@@ -38,10 +38,7 @@ export interface IProjectInfo {
   constants?: JSONObject;
   i18n?: I18nMap;
   packages: INpmPackage[];
-  meta?: {
-    name?: string;
-    title?: string;
-  };
+  meta?: { name?: string; title?: string } | Record<string, any>;
   config?: Record<string, any>;
 }
 

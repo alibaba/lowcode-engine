@@ -99,6 +99,7 @@ export interface ProjectSchema {
   css?: string;
   dataSource?: DataSource;
   config?: Record<string, any>;
+  meta?: Record<string, any>;
 }
 
 export function isNodeSchema(data: any): data is NodeSchema {

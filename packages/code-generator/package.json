@@ -12,7 +12,8 @@
   ],
   "scripts": {
     "start": "ava --watch",
-    "build": "rimraf lib && build-scripts build --skip-demo",
+    "build": "npm run build:tsc",
+    "build:bs": "rimraf lib && rimraf es && build-scripts build --skip-demo",
     "build:tsc": "rimraf lib && tsc",
     "demo": "node ./demo/demo.js",
     "test": "ava",

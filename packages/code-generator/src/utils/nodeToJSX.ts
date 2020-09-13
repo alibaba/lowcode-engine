@@ -43,6 +43,14 @@ function mergeNodeGeneratorConfig(cfg1: NodeGeneratorConfig, cfg2: NodeGenerator
   return resCfg;
 }
 
+export function isPureString(v: string) {
+  return v[0] === "'" && v[v.length - 1] === "'";
+}
+
+export function getPureStringContent(v: string) {
+  return v.substring(1, v.length - 1);
+}
+
 function generateAttrValue(
   attrData: { attrName: string; attrValue: CompositeValue },
   scope: IScope,
@@ -84,8 +92,9 @@ function generateAttr(
     // FIXME: 在经过 generateCompositeType 处理过之后，其实已经无法通过传入值的类型判断传出值是否为纯字面值字符串了（可能包裹了加工函数之类的）
     //        因此这个处理最好的方式是对传出值做语法分析，判断以哪种模版产出 Attr 值
     let newValue: string;
-    if (p.value && p.value[0] === "'" && p.value[p.value.length - 1] === "'") {
-      newValue = `"${p.value.substring(1, p.value.length - 1)}"`;
+    if (p.value && isPureString(p.value)) {
+      const content = getPureStringContent(p.value);
+      newValue = `"${content}"`;
     } else {
       newValue = `{${p.value}}`;
     }
@@ -139,8 +148,17 @@ function generateBasicNode(nodeItem: NodeSchema, scope: IScope, config?: NodeGen
 function generateSimpleNode(nodeItem: NodeSchema, scope: IScope, config?: NodeGeneratorConfig): CodePiece[] {
   const basicParts = generateBasicNode(nodeItem, scope, config) || [];
   const attrParts = generateAttrs(nodeItem, scope, config) || [];
+  const childrenParts: CodePiece[] = [];
+  if (nodeItem.children && config?.self) {
+    const childrenStr = config.self(nodeItem.children, scope);
 
-  return [...basicParts, ...attrParts];
+    childrenParts.push({
+      type: PIECE_TYPE.CHILDREN,
+      value: childrenStr,
+    });
+  }
+
+  return [...basicParts, ...attrParts, ...childrenParts];
 }
 
 function linkPieces(pieces: CodePiece[]): string {
@@ -192,15 +210,6 @@ function generateNodeSchema(nodeItem: NodeSchema, scope: IScope, config?: NodeGe
     pieces.push(...res);
   } else {
     pieces.push(...generateSimpleNode(nodeItem, scope, config));
-  }
-
-  if (nodeItem.children && config?.self) {
-    const childrenStr = config.self(nodeItem.children, scope);
-
-    pieces.push({
-      type: PIECE_TYPE.CHILDREN,
-      value: childrenStr,
-    });
   }
 
   return linkPieces(pieces);
@@ -331,10 +340,16 @@ export function createNodeGenerator(cfg: NodeGeneratorConfig = {}): NodeGenerato
       });
     }
 
-    return generateCompositeType(nodeItem, scope, {
+    const valueStr = generateCompositeType(nodeItem, scope, {
       handlers: cfg.handlers,
       nodeGenerator: generateNode,
     });
+
+    if (isPureString(valueStr)) {
+      return getPureStringContent(valueStr);
+    }
+
+    return `{${valueStr}}`;
   };
 
   return generateNode;

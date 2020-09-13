@@ -28,22 +28,17 @@ function groupDepsByPack(deps: IDependency[]): Record<string, IDependency[]> {
   };
 
   // TODO: main 这个信息到底怎么用，是不是外部包不需要使用？
-  // deps.forEach(dep => {
-  //   if (dep.dependencyType === DependencyType.Internal) {
-  //     addDep(
-  //       `${(dep as IInternalDependency).moduleName}${`/${dep.main}` || ''}`,
-  //       dep,
-  //     );
-  //   } else {
-  //     addDep(`${(dep as IExternalDependency).package}${`/${dep.main}` || ''}`, dep);
-  //   }
-  // });
-
+  const depMainBlackList = ['lib', 'lib/index', 'es', 'es/index', 'main'];
   deps.forEach((dep) => {
     if (dep.dependencyType === DependencyType.Internal) {
-      addDep(`${(dep as IInternalDependency).moduleName}`, dep);
+      addDep(`${(dep as IInternalDependency).moduleName}${dep.main ? `/${dep.main}` : ''}`, dep);
     } else {
-      addDep(`${(dep as IExternalDependency).package}`, dep);
+      let depMain = '';
+      // TODO: 部分类型的 main 暂时认为没用
+      if (dep.main && depMainBlackList.indexOf(dep.main) < 0) {
+        depMain = dep.main;
+      }
+      addDep(`${(dep as IExternalDependency).package}${depMain ? `/${depMain}` : ''}`, dep);
     }
   });
 

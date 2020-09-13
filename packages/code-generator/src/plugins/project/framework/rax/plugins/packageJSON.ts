@@ -85,7 +85,7 @@ function getNpmDependencies(project: IProjectInfo): NpmInfo[] {
   const npmDeps: NpmInfo[] = [];
   const npmNameToPkgMap = new Map<string, NpmInfo>();
 
-  const allDeps = [...(project.containersDeps || []), ...(project.utilsDeps || [])];
+  const allDeps = project.packages;
 
   allDeps.forEach((dep) => {
     if (!isNpmInfo(dep)) {

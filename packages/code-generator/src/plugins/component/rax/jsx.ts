@@ -304,7 +304,8 @@ function generateEventHandlerAttrForRax(
     return [
       {
         type: PIECE_TYPE.ATTR,
-        value: `${attrName}={${valueExpr}}`,
+        name: attrName,
+        value: valueExpr,
       },
     ];
   }
@@ -316,7 +317,8 @@ function generateEventHandlerAttrForRax(
     return [
       {
         type: PIECE_TYPE.ATTR,
-        value: `${attrName}={${valueExpr}}`,
+        name: attrName,
+        value: valueExpr,
       },
     ];
   }
@@ -336,11 +338,13 @@ function generateEventHandlerAttrForRax(
   return [
     ...referencedLocalVariables.map((localVar) => ({
       type: PIECE_TYPE.ATTR,
-      value: `data-${changeCase.snake(localVar)}={${localVar}}`,
+      name: `data-${changeCase.snake(localVar)}`,
+      value: localVar,
     })),
     {
       type: PIECE_TYPE.ATTR,
-      value: `${attrName}={${wrappedAttrValueExpr}}`,
+      name: attrName,
+      value: wrappedAttrValueExpr,
     },
   ];
 }

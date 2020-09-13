@@ -208,7 +208,13 @@ class SchemaParser implements ISchemaParser {
       const p = (con.deps || [])
         .map((dep) => (dep.dependencyType === DependencyType.External ? dep : null))
         .filter((dep) => dep !== null);
-      npms.push(...((p as unknown) as INpmPackage[]));
+      const npmInfos: INpmPackage[] = p
+        .filter((i) => Boolean(i))
+        .map((i) => ({
+          package: (i as IExternalDependency).package,
+          version: (i as IExternalDependency).version,
+        }));
+      npms.push(...npmInfos);
     });
     npms = uniqueArray<INpmPackage>(npms, (i) => i.package);
 
@@ -227,6 +233,7 @@ class SchemaParser implements ISchemaParser {
         css: schema.css,
         constants: schema.constants,
         config: schema.config || {},
+        meta: schema.meta || {},
         i18n: schema.i18n,
         containersDeps,
         utilsDeps,
