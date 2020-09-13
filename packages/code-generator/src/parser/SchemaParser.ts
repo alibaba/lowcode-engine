@@ -226,6 +226,7 @@ class SchemaParser implements ISchemaParser {
       project: {
         css: schema.css,
         constants: schema.constants,
+        config: schema.config || {},
         i18n: schema.i18n,
         containersDeps,
         utilsDeps,

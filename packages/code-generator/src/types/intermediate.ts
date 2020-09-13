@@ -42,6 +42,7 @@ export interface IProjectInfo {
     name?: string;
     title?: string;
   };
+  config?: Record<string, any>;
 }
 
 export interface IPageMeta {
