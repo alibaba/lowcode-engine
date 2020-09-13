@@ -1,8 +1,9 @@
-import { ResultFile } from '@ali/lowcode-types';
-import { createResultFile } from '../../../../../../utils/resultHelper';
 
-export default function getFile(): [string[], ResultFile] {
-  const file = createResultFile(
+import ResultFile from '../../../../../../model/ResultFile';
+import { IResultFile } from '../../../../../../types';
+
+export default function getFile(): [string[], IResultFile] {
+  const file = new ResultFile(
     '.prettierrc',
     '',
     `
@@ -18,3 +19,4 @@ export default function getFile(): [string[], ResultFile] {
 
   return [[], file];
 }
+  

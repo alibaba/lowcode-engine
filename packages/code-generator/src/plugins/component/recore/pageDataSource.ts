@@ -1,7 +1,4 @@
-import { JSExpression, CompositeValue } from '@ali/lowcode-types';
-
 import { CLASS_DEFINE_CHUNK_NAME, DEFAULT_LINK_AFTER } from '../../../const/generator';
-import Scope from '../../../utils/Scope';
 
 import {
   BuilderComponentPlugin,
@@ -10,13 +7,15 @@ import {
   FileType,
   ICodeStruct,
   IContainerInfo,
+  IJSExpression,
+  CompositeValue,
 } from '../../../types';
 
 import { generateCompositeType } from '../../../utils/compositeType';
 import { generateExpression } from '../../../utils/jsExpression';
 
 function packJsExpression(exp: unknown): string {
-  const expression = exp as JSExpression;
+  const expression = exp as IJSExpression;
   const funcStr = generateExpression(expression);
   return `function() { return (${funcStr}); }`;
 }
@@ -28,8 +27,6 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
     };
 
     const ir = next.ir as IContainerInfo;
-    const scope = Scope.createRootScope();
-
     if (ir.dataSource) {
       const { dataSource } = ir;
       const { list, ...rest } = dataSource;
@@ -38,13 +35,13 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
 
       const extConfigs = Object.keys(rest).map((extConfigName) => {
         const value = (rest as Record<string, CompositeValue>)[extConfigName];
-        const valueStr = generateCompositeType(value, scope);
+        const valueStr = generateCompositeType(value);
         return `${extConfigName}: ${valueStr}`;
       });
 
       attrs = [...attrs, ...extConfigs];
 
-      const listProp = generateCompositeType((list as unknown) as CompositeValue, scope, {
+      const listProp = generateCompositeType((list as unknown) as CompositeValue, {
         handlers: {
           expression: packJsExpression,
         },

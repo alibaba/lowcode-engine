@@ -1,7 +1,0 @@
-{
-  "type": "rax",
-  "builder": "@ali/builder-rax-v1",
-  "info": {
-    "raxVersion": "1.x"
-  }
-}

@@ -24,9 +24,7 @@ export function upperCaseFirst(inputValue: string): string {
 
 export function uniqueArray<T>(arr: T[], by: (i: T) => string) {
   const map: Record<string, T> = {};
-  arr.forEach((item) => {
-    map[by(item)] = item;
-  });
+  arr.forEach((item) => (map[by(item)] = item));
   const uniqueKeys = [...new Set<string>(Object.keys(map))];
   const uniqueItems = uniqueKeys.map((key) => map[key]);
   return uniqueItems;

@@ -1,51 +1,49 @@
-import { I18nMap, UtilsMap, ContainerSchema, JSONObject } from '@ali/lowcode-types';
-
-import { IDependency, INpmPackage } from './deps';
+import {
+  IAppConfig,
+  IAppMeta,
+  IContainerNodeItem,
+  IDependency,
+  II18nMap,
+  IInternalDependency,
+  INpmPackage,
+  IUtilItem,
+} from './index';
 
 export interface IParseResult {
   containers: IContainerInfo[];
   globalUtils?: IUtilInfo;
-  globalI18n?: I18nMap;
+  globalI18n?: II18nMap;
   globalRouter?: IRouterInfo;
   project?: IProjectInfo;
+}
+
+export interface IContainerInfo extends IContainerNodeItem, IWithDependency {
+  containerType: string;
+  moduleName: string;
 }
 
 export interface IWithDependency {
   deps?: IDependency[];
 }
 
-export interface IContainerInfo extends ContainerSchema, IWithDependency {
-  containerType: string;
-  moduleName: string;
-}
-
 export interface IUtilInfo extends IWithDependency {
-  utils: UtilsMap;
+  utils: IUtilItem[];
 }
 
 export interface IRouterInfo extends IWithDependency {
   routes: Array<{
     path: string;
-    fileName: string;
     componentName: string;
   }>;
 }
 
 export interface IProjectInfo {
+  config: IAppConfig;
+  meta: IAppMeta;
   css?: string;
-  containersDeps?: IDependency[];
-  utilsDeps?: IDependency[];
-  constants?: JSONObject;
-  i18n?: I18nMap;
+  constants?: Record<string, string>;
+  i18n?: II18nMap;
   packages: INpmPackage[];
-  meta?: {
-    name?: string;
-    title?: string;
-  };
-}
-
-export interface IPageMeta {
-  router?: string;
 }
 
 /**

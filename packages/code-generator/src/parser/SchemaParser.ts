@@ -2,28 +2,30 @@
  * 解析器是对输入的固定格式数据做拆解，使其符合引擎后续步骤预期，完成统一处理逻辑的步骤。
  * 本解析器面向的是标准 schema 协议。
  */
-import changeCase from 'change-case';
-import { UtilItem, NodeDataType, NodeSchema, ContainerSchema, ProjectSchema, PropsMap } from '@ali/lowcode-types';
 
 import { SUPPORT_SCHEMA_VERSION_LIST } from '../const';
 
-import { handleSubNodes } from '../utils/schema';
+import { handleSubNodes } from '../utils/nodeToJSX';
 import { uniqueArray } from '../utils/common';
 
 import {
+  ChildNodeType,
   CodeGeneratorError,
   CompatibilityError,
   DependencyType,
+  IBasicSchema,
+  IComponentNodeItem,
   IContainerInfo,
-  IDependency,
+  IContainerNodeItem,
   IExternalDependency,
   IInternalDependency,
   InternalDependencyType,
-  IParseResult,
-  ISchemaParser,
-  INpmPackage,
-  IRouterInfo,
   IPageMeta,
+  IParseResult,
+  IProjectSchema,
+  ISchemaParser,
+  IUtilItem,
+  INpmPackage,
 } from '../types';
 
 const defaultContainer: IContainerInfo = {
@@ -36,7 +38,7 @@ const defaultContainer: IContainerInfo = {
 };
 
 class SchemaParser implements ISchemaParser {
-  validate(schema: ProjectSchema): boolean {
+  validate(schema: IBasicSchema): boolean {
     if (SUPPORT_SCHEMA_VERSION_LIST.indexOf(schema.version) < 0) {
       throw new CompatibilityError(`Not support schema with version [${schema.version}]`);
     }
@@ -44,13 +46,13 @@ class SchemaParser implements ISchemaParser {
     return true;
   }
 
-  parse(schemaSrc: ProjectSchema | string): IParseResult {
+  parse(schemaSrc: IProjectSchema | string): IParseResult {
     // TODO: collect utils depends in JSExpression
     const compDeps: Record<string, IExternalDependency> = {};
     const internalDeps: Record<string, IInternalDependency> = {};
     let utilsDeps: IExternalDependency[] = [];
 
-    let schema: ProjectSchema;
+    let schema: IProjectSchema;
     if (typeof schemaSrc === 'string') {
       try {
         schema = JSON.parse(schemaSrc);
@@ -63,38 +65,31 @@ class SchemaParser implements ISchemaParser {
 
     // 解析三方组件依赖
     schema.componentsMap.forEach((info) => {
-      if (info.componentName) {
-        compDeps[info.componentName] = {
-          ...info,
-          dependencyType: DependencyType.External,
-          componentName: info.componentName,
-          exportName: info.exportName ?? info.componentName,
-          version: info.version || '*',
-          destructuring: info.destructuring ?? false,
-        };
-      }
+      info.dependencyType = DependencyType.External;
+      info.importName = info.componentName;
+      compDeps[info.componentName] = info;
     });
 
     let containers: IContainerInfo[];
     // Test if this is a lowcode component without container
     if (schema.componentsTree.length > 0) {
-      const firstRoot: ContainerSchema = schema.componentsTree[0] as ContainerSchema;
+      const firstRoot: IContainerNodeItem = schema.componentsTree[0] as IContainerNodeItem;
 
-      if (!('fileName' in firstRoot) || !firstRoot.fileName) {
+      if (!firstRoot.fileName) {
         // 整个 schema 描述一个容器，且无根节点定义
         const container: IContainerInfo = {
           ...defaultContainer,
-          children: schema.componentsTree as NodeSchema[],
+          children: schema.componentsTree as IComponentNodeItem[],
         };
         containers = [container];
       } else {
         // 普通带 1 到多个容器的 schema
         containers = schema.componentsTree.map((n) => {
-          const subRoot = n as ContainerSchema;
+          const subRoot = n as IContainerNodeItem;
           const container: IContainerInfo = {
             ...subRoot,
             containerType: subRoot.componentName,
-            moduleName: changeCase.pascalCase(subRoot.fileName),
+            moduleName: subRoot.fileName, // TODO: 驼峰化名称
           };
           return container;
         });
@@ -129,7 +124,6 @@ class SchemaParser implements ISchemaParser {
       internalDeps[dep.moduleName] = dep;
     });
 
-    const containersDeps = ([] as IDependency[]).concat(...containers.map((c) => c.deps || []));
     // TODO: 不应该在出码部分解决？
     // 处理 children 写在了 props 里的情况
     containers.forEach((container) => {
@@ -137,18 +131,11 @@ class SchemaParser implements ISchemaParser {
         handleSubNodes<string>(
           container.children,
           {
-            node: (i: NodeSchema) => {
-              if (i.props) {
-                if (Array.isArray(i.props)) {
-                  // FIXME: is array type props description
-                } else {
-                  const nodeProps = i.props as PropsMap;
-                  if (nodeProps.children && !i.children) {
-                    i.children = nodeProps.children as NodeDataType;
-                  }
-                }
+            node: (i: IComponentNodeItem) => {
+              if (i.props && i.props.children && !i.children) {
+                i.children = i.props.children as ChildNodeType;
               }
-              return '';
+              return [''];
             },
           },
           {
@@ -170,21 +157,18 @@ class SchemaParser implements ISchemaParser {
     });
 
     // 分析路由配置
-    const routes: IRouterInfo['routes'] = containers
+    const routes = containers
       .filter((container) => container.containerType === 'Page')
       .map((page) => {
-        const meta = page.meta;
+        const meta = page.meta as IPageMeta;
         if (meta) {
           return {
-            path: (meta as IPageMeta).router || `/${page.fileName}`, // 如果无法找到页面路由信息，则用 fileName 做兜底
-            fileName: page.fileName,
+            path: meta.router,
             componentName: page.moduleName,
           };
         }
-
         return {
           path: '',
-          fileName: page.fileName,
           componentName: page.moduleName,
         };
       });
@@ -194,7 +178,7 @@ class SchemaParser implements ISchemaParser {
       .filter((dep) => !!dep);
 
     // 分析 Utils 依赖
-    let utils: UtilItem[];
+    let utils: IUtilItem[];
     if (schema.utils) {
       utils = schema.utils;
       utilsDeps = schema.utils.filter((u) => u.type !== 'function').map((u) => u.content as IExternalDependency);
@@ -206,7 +190,7 @@ class SchemaParser implements ISchemaParser {
     let npms: INpmPackage[] = [];
     containers.forEach((con) => {
       const p = (con.deps || [])
-        .map((dep) => { return (dep.dependencyType === DependencyType.External) ? dep : null; })
+        .map((dep) => (dep.dependencyType === DependencyType.External ? dep : null))
         .filter((dep) => dep !== null);
       npms.push(...((p as unknown) as INpmPackage[]));
     });
@@ -224,21 +208,21 @@ class SchemaParser implements ISchemaParser {
         deps: routerDeps,
       },
       project: {
+        meta: schema.meta,
+        config: schema.config,
         css: schema.css,
         constants: schema.constants,
         i18n: schema.i18n,
-        containersDeps,
-        utilsDeps,
         packages: npms,
       },
     };
   }
 
-  getComponentNames(children: NodeDataType): string[] {
+  getComponentNames(children: ChildNodeType): string[] {
     return handleSubNodes<string>(
       children,
       {
-        node: (i: NodeSchema) => i.componentName,
+        node: (i: IComponentNodeItem) => [i.componentName],
       },
       {
         rerun: true,

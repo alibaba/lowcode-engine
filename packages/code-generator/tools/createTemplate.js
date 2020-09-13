@@ -2,13 +2,13 @@ const fs = require('fs');
 const path = require('path');
 
 console.log(process.argv);
-let rootPath = '';
+let root = '';
 const pathArgIndex = process.argv.indexOf('--path');
 if (pathArgIndex >= 0) {
-  rootPath = process.argv[pathArgIndex + 1];
+  root = process.argv[pathArgIndex + 1];
 }
 
-if (!rootPath) {
+if (!root) {
   throw new Error('Can\'t find path argument');
 }
 
@@ -35,7 +35,7 @@ function createTemplateFile(root, internalPath, fileName) {
     encoding: 'utf8',
   });
   const pathList = (internalPath.split(path.sep) || []).filter(p => !!p);
-  const modulePathStr = JSON.stringify(pathList).replace(/"/g, '\'');
+  const modulePathStr = JSON.stringify(pathList).replace(/\"/g, '\'');
 
   const templateContent = `
 import ResultFile from '${depPrefix}model/ResultFile';
@@ -80,6 +80,6 @@ function fileDisplay(root, internalPath) {
 
 // 调用函数遍历根目录，同时传递 文件夹路径和对应的数组
 // 请使用同步读取
-fileDisplay(rootPath, '');
+fileDisplay(root, '');
 // 读取完毕则写入到txt文件中
 // fs.writeFileSync('./data.txt', JSON.stringify(arr));

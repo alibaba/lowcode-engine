@@ -1,5 +1,4 @@
-import { JSExpression, JSFunction, isJSExpression, isJSFunction } from '@ali/lowcode-types';
-import { CodeGeneratorError } from '../types';
+import { CodeGeneratorError, IJSExpression, IJSFunction } from '../types';
 
 export function transformFuncExpr2MethodMember(methodName: string, functionBody: string): string {
   const args = getFuncExprArguments(functionBody);
@@ -24,6 +23,8 @@ export function getFuncExprBody(functionBody: string) {
   const start = functionBody.indexOf('{');
   const end = functionBody.lastIndexOf('}');
 
+  // test(functionBody);
+
   if (start < 0 || end < 0 || end < start) {
     throw new CodeGeneratorError('JSExpression has no valid body.');
   }
@@ -39,13 +40,21 @@ export function getArrowFunction(functionBody: string) {
   return `(${args}) => { ${body} }`;
 }
 
+export function isJsExpression(value: unknown): boolean {
+  return value && typeof value === 'object' && (value as IJSExpression).type === 'JSExpression';
+}
+
+export function isJsFunction(value: unknown): boolean {
+  return value && typeof value === 'object' && (value as IJSFunction).type === 'JSFunction';
+}
+
 export function isJsCode(value: unknown): boolean {
-  return isJSExpression(value) || isJSFunction(value);
+  return isJsExpression(value) || isJsFunction(value);
 }
 
 export function generateExpression(value: any): string {
-  if (isJSExpression(value)) {
-    return (value as JSExpression).value || 'null';
+  if (isJsExpression(value)) {
+    return (value as IJSExpression).value || 'null';
   }
 
   throw new CodeGeneratorError('Not a JSExpression');
@@ -66,7 +75,7 @@ export function generateFunction(
   },
 ) {
   if (isJsCode(value)) {
-    const functionCfg = value as JSFunction;
+    const functionCfg = value as IJSFunction;
     if (config.isMember) {
       return transformFuncExpr2MethodMember(config.name || '', functionCfg.value);
     }

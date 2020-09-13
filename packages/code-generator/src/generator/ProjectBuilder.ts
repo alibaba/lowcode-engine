@@ -1,35 +1,36 @@
-import { ResultDir, ResultFile, ProjectSchema } from '@ali/lowcode-types';
-
 import {
   IModuleBuilder,
   IParseResult,
   IProjectBuilder,
   IProjectPlugins,
+  IProjectSchema,
   IProjectTemplate,
+  IResultDir,
+  IResultFile,
   ISchemaParser,
   PostProcessor,
 } from '../types';
 
+import ResultDir from '../model/ResultDir';
 import SchemaParser from '../parser/SchemaParser';
-import { createResultDir, addDirectory, addFile } from '../utils/resultHelper';
 
 import { createModuleBuilder } from '../generator/ModuleBuilder';
 
 interface IModuleInfo {
   moduleName?: string;
   path: string[];
-  files: ResultFile[];
+  files: IResultFile[];
 }
 
-function getDirFromRoot(root: ResultDir, path: string[]): ResultDir {
-  let current: ResultDir = root;
+function getDirFromRoot(root: IResultDir, path: string[]): IResultDir {
+  let current: IResultDir = root;
   path.forEach((p) => {
     const exist = current.dirs.find((d) => d.name === p);
     if (exist) {
       current = exist;
     } else {
-      const newDir = createResultDir(p);
-      addDirectory(current, newDir);
+      const newDir = new ResultDir(p);
+      current.addDirectory(newDir);
       current = newDir;
     }
   });
@@ -58,7 +59,7 @@ export class ProjectBuilder implements IProjectBuilder {
     this.postProcessors = postProcessors;
   }
 
-  async generateProject(schema: ProjectSchema | string): Promise<ResultDir> {
+  async generateProject(schema: IProjectSchema | string): Promise<IResultDir> {
     // Init
     const schemaParser: ISchemaParser = new SchemaParser();
     const builders = this.createModuleBuilders();
@@ -118,27 +119,6 @@ export class ProjectBuilder implements IProjectBuilder {
         files,
       });
     }
-
-    // appConfig
-    if (builders.appConfig) {
-      const { files } = await builders.appConfig.generateModule(parseResult);
-
-      buildResult.push({
-        path: this.template.slots.appConfig.path,
-        files,
-      });
-    }
-
-    // buildConfig
-    if (builders.buildConfig) {
-      const { files } = await builders.buildConfig.generateModule(parseResult);
-
-      buildResult.push({
-        path: this.template.slots.buildConfig.path,
-        files,
-      });
-    }
-
     // constants?
     if (parseResult.project && builders.constants && this.template.slots.constants) {
       const { files } = await builders.constants.generateModule(parseResult.project);
@@ -148,7 +128,6 @@ export class ProjectBuilder implements IProjectBuilder {
         files,
       });
     }
-
     // utils?
     if (parseResult.globalUtils && builders.utils && this.template.slots.utils) {
       const { files } = await builders.utils.generateModule(parseResult.globalUtils);
@@ -158,17 +137,15 @@ export class ProjectBuilder implements IProjectBuilder {
         files,
       });
     }
-
     // i18n?
-    if (builders.i18n && this.template.slots.i18n) {
-      const { files } = await builders.i18n.generateModule(parseResult.project);
+    if (parseResult.globalI18n && builders.i18n && this.template.slots.i18n) {
+      const { files } = await builders.i18n.generateModule(parseResult.globalI18n);
 
       buildResult.push({
         path: this.template.slots.i18n.path,
         files,
       });
     }
-
     // globalStyle
     if (parseResult.project && builders.globalStyle) {
       const { files } = await builders.globalStyle.generateModule(parseResult.project);
@@ -178,7 +155,6 @@ export class ProjectBuilder implements IProjectBuilder {
         files,
       });
     }
-
     // htmlEntry
     if (parseResult.project && builders.htmlEntry) {
       const { files } = await builders.htmlEntry.generateModule(parseResult.project);
@@ -188,7 +164,6 @@ export class ProjectBuilder implements IProjectBuilder {
         files,
       });
     }
-
     // packageJSON
     if (parseResult.project && builders.packageJSON) {
       const { files } = await builders.packageJSON.generateModule(parseResult.project);
@@ -199,19 +174,17 @@ export class ProjectBuilder implements IProjectBuilder {
       });
     }
 
-    // TODO: 更多 slots 的处理？？是不是可以考虑把 template 中所有的 slots 都处理下？
-
     // Post Process
 
     // Combine Modules
     buildResult.forEach((moduleInfo) => {
       let targetDir = getDirFromRoot(projectRoot, moduleInfo.path);
       if (moduleInfo.moduleName) {
-        const dir = createResultDir(moduleInfo.moduleName);
-        addDirectory(targetDir, dir);
+        const dir = new ResultDir(moduleInfo.moduleName);
+        targetDir.addDirectory(dir);
         targetDir = dir;
       }
-      moduleInfo.files.forEach((file) => addFile(targetDir, file));
+      moduleInfo.files.forEach((file) => targetDir.addFile(file));
     });
 
     return projectRoot;

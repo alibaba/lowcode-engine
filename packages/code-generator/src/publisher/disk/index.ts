@@ -1,14 +1,16 @@
-import * as defaultFs from 'fs';
-
-import { ResultDir } from '@ali/lowcode-types';
-import { PublisherFactory, IPublisher, IPublisherFactoryParams, PublisherError } from '../../types';
-import { writeFolder, IFileSystem } from './utils';
+import {
+  IResultDir,
+  PublisherFactory,
+  IPublisher,
+  IPublisherFactoryParams,
+  PublisherError,
+} from '../../types';
+import { writeFolder } from './utils';
 
 export interface IDiskFactoryParams extends IPublisherFactoryParams {
   outputPath?: string;
   projectSlug?: string;
   createProjectFolder?: boolean;
-  fs?: IFileSystem;
 }
 
 export interface IDiskPublisher extends IPublisher<IDiskFactoryParams, string> {
@@ -16,19 +18,19 @@ export interface IDiskPublisher extends IPublisher<IDiskFactoryParams, string> {
   setOutputPath: (path: string) => void;
 }
 
-export const createDiskPublisher: PublisherFactory<IDiskFactoryParams, IDiskPublisher> = (
-  params: IDiskFactoryParams = {},
-): IDiskPublisher => {
+export const createDiskPublisher: PublisherFactory<
+IDiskFactoryParams,
+IDiskPublisher
+> = (params: IDiskFactoryParams = {}): IDiskPublisher => {
   let { project, outputPath = './' } = params;
-  const { fs = defaultFs } = params;
 
-  const getProject = (): ResultDir => {
+  const getProject = (): IResultDir => {
     if (!project) {
       throw new PublisherError('Missing Project');
     }
     return project;
   };
-  const setProject = (projectToSet: ResultDir): void => {
+  const setProject = (projectToSet: IResultDir): void => {
     project = projectToSet;
   };
 
@@ -47,14 +49,19 @@ export const createDiskPublisher: PublisherFactory<IDiskFactoryParams, IDiskPubl
 
     const projectOutputPath = options.outputPath || outputPath;
     const overrideProjectSlug = options.projectSlug || params.projectSlug;
-    const createProjectFolder = options.createProjectFolder || params.createProjectFolder;
+    const createProjectFolder =
+      options.createProjectFolder || params.createProjectFolder;
 
     if (overrideProjectSlug) {
       projectToPublish.name = overrideProjectSlug;
     }
 
     try {
-      await writeFolder(projectToPublish, projectOutputPath, createProjectFolder, fs);
+      await writeFolder(
+        projectToPublish,
+        projectOutputPath,
+        createProjectFolder,
+      );
       return { success: true, payload: projectOutputPath };
     } catch (error) {
       throw new PublisherError(error);

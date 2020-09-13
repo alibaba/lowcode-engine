@@ -6,6 +6,7 @@ import {
   ChunkType,
   FileType,
   ICodeStruct,
+  IContainerInfo,
 } from '../../../types';
 
 const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {

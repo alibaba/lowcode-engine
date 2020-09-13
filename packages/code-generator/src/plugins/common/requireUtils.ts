@@ -1,6 +1,12 @@
 import { COMMON_CHUNK_NAME } from '../../const/generator';
 
-import { BuilderComponentPlugin, BuilderComponentPluginFactory, ChunkType, FileType, ICodeStruct } from '../../types';
+import {
+  BuilderComponentPlugin,
+  BuilderComponentPluginFactory,
+  ChunkType,
+  FileType,
+  ICodeStruct,
+} from '../../types';
 
 // TODO: How to merge this logic to common deps
 const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {

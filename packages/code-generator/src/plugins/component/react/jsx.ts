@@ -10,7 +10,6 @@ import {
 import { REACT_CHUNK_NAME } from './const';
 
 import { createReactNodeGenerator } from '../../../utils/nodeToJSX';
-import Scope from '../../../utils/Scope';
 
 type PluginConfig = {
   fileType?: string;
@@ -24,11 +23,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     ...config,
   };
 
-  const { nodeTypeMapping } = cfg;
-
-  const generator = createReactNodeGenerator({
-    tagMapping: (v) => nodeTypeMapping[v] || v,
-  });
+  const generator = createReactNodeGenerator({ nodeTypeMapping: cfg.nodeTypeMapping });
 
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     const next: ICodeStruct = {
@@ -36,15 +31,17 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     };
 
     const ir = next.ir as IContainerInfo;
-    const scope = Scope.createRootScope();
-    const jsxContent = generator(ir, scope);
+    const jsxContent = generator(ir);
 
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: cfg.fileType,
       name: REACT_CHUNK_NAME.ClassRenderJSX,
       content: `return ${jsxContent};`,
-      linkAfter: [REACT_CHUNK_NAME.ClassRenderStart, REACT_CHUNK_NAME.ClassRenderPre],
+      linkAfter: [
+        REACT_CHUNK_NAME.ClassRenderStart,
+        REACT_CHUNK_NAME.ClassRenderPre,
+      ],
     });
 
     return next;

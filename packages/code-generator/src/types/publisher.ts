@@ -1,15 +1,17 @@
-import { ResultDir } from '@ali/lowcode-types';
+import {
+  IResultDir,
+} from './index';
 
 export type PublisherFactory<T, U> = (configuration?: Partial<T>) => U;
 
 export interface IPublisher<T, U> {
   publish: (options?: T) => Promise<IPublisherResponse<U>>;
-  getProject: () => ResultDir | void;
-  setProject: (project: ResultDir) => void;
+  getProject: () => IResultDir | void;
+  setProject: (project: IResultDir) => void;
 }
 
 export interface IPublisherFactoryParams {
-  project?: ResultDir;
+  project?: IResultDir;
 }
 export interface IPublisherResponse<T> {
   success: boolean;

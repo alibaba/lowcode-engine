@@ -1,17 +1,17 @@
-import { ResultFile } from '@ali/lowcode-types';
+import ResultFile from '../../../../../../model/ResultFile';
+import { IResultFile } from '../../../../../../types';
 
-export default function getFile(): [string[], ResultFile] {
-  return [
-    [],
-    {
-      name: 'abc',
-      ext: 'json',
-      content: `
+export default function getFile(): [string[], IResultFile] {
+  const file = new ResultFile(
+    'abc',
+    'json',
+    `
 {
   "type": "ice-app",
   "builder": "@ali/builder-ice-app"
 }
     `,
-    },
-  ];
+  );
+
+  return [[], file];
 }

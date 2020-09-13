@@ -15,5 +15,3 @@ export * from './setter-config';
 export * from './setting-target';
 export * from './node';
 export * from './transform-stage';
-export * from './code-intermediate';
-export * from './code-result';

@@ -11,31 +11,10 @@ export interface JSExpression {
    * 模拟值
    */
   mock?: any;
-}
-
-// 函数
-export interface JSFunction {
-  type: 'JSFunction';
   /**
-   * 表达式字符串
+   * 额外扩展属性，如 extType、events
    */
-  value: string;
-}
-
-/**
- * 事件函数类型
- * @see https://yuque.antfin-inc.com/mo/spec/spec-low-code-building-schema#feHTW
- */
-export interface JSFunction {
-  type: 'JSFunction';
-
-  /**
-   * 函数定义，或直接函数表达式
-   */
-  value: string;
-
-  /** 源码 */
-  compiled?: string;
+  [key: string]: any;
 }
 
 // 函数
@@ -56,6 +35,7 @@ export interface JSFunction{
 }
 
 export interface JSSlot {
+  name?: string;
   type: 'JSSlot';
   title?: string;
   // 函数的入参
@@ -76,19 +56,22 @@ export interface JSONObject {
 }
 
 // 复合类型
-export type CompositeValue = JSONValue | JSExpression | JSFunction | JSSlot | CompositeArray | CompositeObject;
+export type CompositeValue = JSONValue | JSExpression | JSSlot | CompositeArray | CompositeObject | JSFunction;
 export type CompositeArray = CompositeValue[];
 export interface CompositeObject {
   [key: string]: CompositeValue;
 }
 
+
 export function isJSExpression(data: any): data is JSExpression {
   return data && data.type === 'JSExpression';
 }
 
-export function isJSFunction(x: any): x is JSFunction {
-  return typeof x === 'object' && x && x.type === 'JSFunction';
+
+export function isJSFunction(data: any): data is JSFunction {
+  return data && data.type === 'JSFunction';
 }
+
 
 export function isJSSlot(data: any): data is JSSlot {
   return data && data.type === 'JSSlot';

@@ -1,6 +1,11 @@
 import { COMMON_CHUNK_NAME } from '../../../const/generator';
 
-import { BuilderComponentPlugin, BuilderComponentPluginFactory, ChunkType, ICodeStruct } from '../../../types';
+import {
+  BuilderComponentPlugin,
+  BuilderComponentPluginFactory,
+  ChunkType,
+  ICodeStruct,
+} from '../../../types';
 
 const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
