@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.9-0"></a>
+## 1.0.9-0 (2020-09-14)
+
+
+### Bug Fixes
+
+* add extraEnv ([9058ac8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9058ac8))
+* plugin-desiger 支持从 editor 获取 device 参数 ([43bc29b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/43bc29b))
+* plugin-designer ([2dfbcd4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2dfbcd4))
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+
+
+### Features
+
+* **designer:** add blank page logic ([aeeb9ba](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/aeeb9ba))
+* extend deviceClassName ([0e96074](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0e96074))
+* merge live mode ([92c3039](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/92c3039))
+* 新增simulatorurl，可以设置cdn使用simulator ([1f45b05](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1f45b05))
+
+
+
+
 <a name="1.0.8-0"></a>
 ## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-designer@0.9.55...@ali/lowcode-plugin-designer@1.0.8-0) (2020-09-09)
 

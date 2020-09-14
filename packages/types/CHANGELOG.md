@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.9-0"></a>
+## 1.0.9-0 (2020-09-14)
+
+
+### Bug Fixes
+
+* currentPage.id 返回 formUuid ([775725d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/775725d))
+* fix NextTable callback function ([ce77375](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ce77375))
+* panel visible time ([18ac1fa](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/18ac1fa))
+* supports ([371b84c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/371b84c))
+* 低代码组件 props 显示 object 问题 ([116498e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/116498e))
+* 修复 slot 获取初始值异常的 bug ([63b19f1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/63b19f1))
+* 修复判断动态 setter 的逻辑 ([d195d7f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d195d7f))
+* 兼容事件绑定 ([f4c07af](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f4c07af))
+* 可以降级到历史的 JSBlock 格式 ([af1746b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/af1746b))
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+
+
+### Features
+
+* 🎸 增加icon相关的判断函数 ([89064f5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/89064f5))
+* add filter reducer ([17c6ed3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/17c6ed3))
+* merge live mode ([92c3039](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/92c3039))
+* show value state ([bd49e50](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd49e50))
+* support plaintext liveediting ([ea62f12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ea62f12))
+* support prop.autorun ([c0a5235](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c0a5235))
+* 修复状态切换失效 ([2e3f60d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2e3f60d))
+* 编辑器 hooks 能力实现 ([f3ac23b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f3ac23b))
+
+
+
+
 <a name="1.0.8-0"></a>
 ## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.8.19...@ali/lowcode-types@1.0.8-0) (2020-09-09)
 

@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.9-0"></a>
+## 1.0.9-0 (2020-09-14)
+
+
+### Bug Fixes
+
+* remove abstract identifer ([2e45266](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2e45266))
+
+
+### Features
+
+* add init and ready lifecycles ([fd100c9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fd100c9))
+* complet preview ([56c16ff](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/56c16ff))
+* 支持编译渲染 ([0a42151](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0a42151))
+* 支持配置layouts属性 ([8464235](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8464235))
+* 透出loading ([e96934a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e96934a))
+* 透出错误边界捕捉不到的错误 ([f224abf](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f224abf))
+
+
+
+
 <a name="1.0.8-0"></a>
 ## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-runtime@1.0.7-0...@ali/lowcode-runtime@1.0.8-0) (2020-09-09)
 

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.9-0"></a>
+## 1.0.9-0 (2020-09-14)
+
+
+### Features
+
+* **rax-provider:** init ([cb0f382](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/cb0f382))
+* rax render ([95bf331](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/95bf331))
+
+
+
+
 <a name="1.0.8-0"></a>
 ## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-rax-provider@1.0.7-0...@ali/lowcode-rax-provider@1.0.8-0) (2020-09-09)
 

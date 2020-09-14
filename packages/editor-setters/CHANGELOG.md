@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.9-0"></a>
+## 1.0.9-0 (2020-09-14)
+
+
+### Bug Fixes
+
+* fix function-setter bug ([dced647](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/dced647))
+* fix function-setter bug ([8fd77df](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8fd77df))
+* fix NextTable callback function ([ce77375](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ce77375))
+* rename MixinSetter to MixedSetter ([0e9a740](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0e9a740))
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+* 清理代码依赖及版本 ([0b15d30](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0b15d30))
+* 适配Nav组件 ([7e9829f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7e9829f))
+
+
+### Features
+
+* add function setter ([114b6b0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/114b6b0))
+* add style-setters ([99b1d84](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/99b1d84))
+* setting-pane 新增removeProp 函数 ([b97c807](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b97c807))
+* tree 组件修改 ([7efa52f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7efa52f))
+* 新增functionSetter ([9359ac6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9359ac6))
+* 新增事件入参功能 ([0614fa7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0614fa7))
+
+
+
+
 <a name="1.0.8-0"></a>
 ## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.21...@ali/lowcode-editor-setters@1.0.8-0) (2020-09-09)
 

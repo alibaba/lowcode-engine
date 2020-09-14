@@ -3,7 +3,43 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-  <a name="1.0.8-0"></a>
+      <a name="1.0.9-0"></a>
+## 1.0.9-0 (2020-09-14)
+
+
+### Bug Fixes
+
+* div 不显示问题 ([1b6533c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1b6533c))
+* **rax-render:** hidden无效 ([08a3e36](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/08a3e36))
+* get pakcage.json ([8b99a51](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8b99a51))
+* miniapp compwrapper ref ([5ae08f5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5ae08f5))
+* VisualEngine 仍使用 ifframe 中 window 对象 ([9d19731](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9d19731))
+* window.parent ([7e1b8ff](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7e1b8ff))
+* 修复低代码组件设计器、区块设计器根节点为 Page 的问题，修复 topArea 样式 ([e85b542](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e85b542))
+* 清理代码依赖及版本 ([0b15d30](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0b15d30))
+
+
+### Features
+
+* $ method ([cf50292](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/cf50292))
+* init rax-render ([7167767](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7167767))
+* JSexpression props ([26f4fb1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/26f4fb1))
+* live mode lifeCycles ([66f0c79](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/66f0c79))
+* rax render ([95bf331](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/95bf331))
+* rax render ([038d74e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/038d74e))
+* rax simulator ([05b262d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/05b262d))
+* rax-render 兼容 ([877d3fc](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/877d3fc))
+* rax-render 拦截逻辑 & request 调用 webtable（mock） ([42108f6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/42108f6))
+* window._table ([e6cce31](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e6cce31))
+* 抽离AppHelper ([1f6d131](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1f6d131))
+* 新增用于小程序跳过 variable 检测设置 hotvalue 的方法 ([ef799eb](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ef799eb))
+* 适配 webtable ([91f1702](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/91f1702))
+* 适配乐高 OneApi 数据源，将 options.params 从 Array 改为 Object ([aa135c0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/aa135c0))
+
+
+
+
+      <a name="1.0.8-0"></a>
 ## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-rax-renderer@1.0.7-0...@ali/lowcode-rax-renderer@1.0.8-0) (2020-09-09)
 
 
@@ -14,7 +50,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-  <a name="1.0.7-0"></a>
+<a name="1.0.7-0"></a>
 ## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-rax-renderer@1.0.6-0...@ali/lowcode-rax-renderer@1.0.7-0) (2020-09-02)
 
 

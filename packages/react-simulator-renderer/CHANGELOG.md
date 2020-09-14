@@ -3,6 +3,51 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.9-0"></a>
+## 1.0.9-0 (2020-09-14)
+
+
+### Bug Fixes
+
+* 🐛 style setter not working ([c88ea6b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c88ea6b))
+* 🐛 增加传入组件children的默认值[], 对之前的非健壮组件做兼容 ([af0f2df](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/af0f2df))
+* cloneElement bug ([d5c5614](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d5c5614))
+* createComponent 支持所有 schema ([7f946f5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7f946f5))
+* layout tabbar number ([3975571](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3975571))
+* live editing outline colore ([791771c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/791771c))
+* merge ([ac55847](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ac55847))
+* modify layout props ([9baba75](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9baba75))
+* react simulator rendererContainer props ([6e1eac0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6e1eac0))
+* render children ([487f257](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/487f257))
+* 临时解决 lowCodeComponent 性能问题 ([25b4ba2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/25b4ba2))
+* 低代码组件 props 显示 object 问题 ([116498e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/116498e))
+* 低代码组件修改之后渲染为空 ([ef71632](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ef71632))
+* 修复低代码组件内部部分区域无法选中 ([f0adaa5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f0adaa5))
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+* 在 renderer 层面做 function component 包装，避免影响 rax 等其他场景 ([1f920dd](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1f920dd))
+* 处理 schema id 重复的问题 ([d2316be](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d2316be))
+* 支持事件 VE_EVENTS.VE_PAGE_PAGE_READY ([935ffad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/935ffad))
+* 支持低代码组件样式 ([6e64be1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6e64be1))
+* 简化 onPageReady 实现逻辑 ([a36e5f2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a36e5f2))
+* 调整 upgrade 和 init 的流程 ([09fc1a0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/09fc1a0))
+* 适配Nav组件 ([7e9829f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7e9829f))
+* 部分低代码组件渲染报错 ([093015c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/093015c))
+
+
+### Features
+
+* 🎸 为了能更好地在设计态模拟, 将 device 透传到组件树根组件上 ([7ab7def](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7ab7def))
+* 🎸 为容器的占位元素增加一个特定的 class 方便在设计器里定制样式 ([5077141](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5077141))
+* 🎸 容器占位原生的样式从内联改成写在 CSS 文件里,方便被覆盖样式 ([a616e18](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a616e18))
+* get layout config from legao-design ([b9103a2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b9103a2))
+* support plaintext liveediting ([ea62f12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ea62f12))
+* 在 editor-preset-vision 中对 legao schema 进行向前兼容 ([7867917](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7867917))
+* 容器组件支持传入 placeholder 和对应样式 ([0c4de43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0c4de43))
+* 支持低代码组件设计态实时改变 ([c5a817b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c5a817b))
+
+
+
+
 <a name="1.0.8-0"></a>
 ## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.61...@ali/lowcode-react-simulator-renderer@1.0.8-0) (2020-09-09)
 

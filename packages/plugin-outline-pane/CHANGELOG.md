@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.9-0"></a>
+## 1.0.9-0 (2020-09-14)
+
+
+### Bug Fixes
+
+* 🐛 getPrototype is undefined ([95b3409](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/95b3409))
+* intl ([8a061ab](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8a061ab))
+* modal node locate ([9a72dd7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9a72dd7))
+* plugin-designer ([2dfbcd4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2dfbcd4))
+* 修复在切换页面时，没有销毁相应节点导致的一系列bug ([59fac25](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/59fac25))
+* 修复导入的组件拖入画布报错 ([caf9915](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/caf9915))
+* 兼容modal模式 ([1092ee9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1092ee9))
+* 卡片内容不可用拖动 ([6a85c43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6a85c43))
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+* 处理 function component 无法选中的问题，本质上是没有 ref ([fa94aab](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fa94aab))
+* 大纲树节点显示隐藏埋点 ([e91ab1f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e91ab1f))
+* 没有 modal node 时不显示模态视图 ([555824c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/555824c))
+
+
+### Features
+
+* double outline & ZH_EN support ([b379bd7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b379bd7))
+* show value state ([bd49e50](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd49e50))
+* support plaintext liveediting ([ea62f12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ea62f12))
+* 大纲树埋点 ([fa24821](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fa24821))
+* 大纲树展开折叠埋点 ([d9828f2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d9828f2))
+* 大纲树支持模态视图 ([3785e1c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3785e1c))
+
+
+
+
 <a name="1.0.8-0"></a>
 ## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-outline-pane@0.8.61...@ali/lowcode-plugin-outline-pane@1.0.8-0) (2020-09-09)
 

@@ -3,6 +3,53 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.9-0"></a>
+## 1.0.9-0 (2020-09-14)
+
+
+### Bug Fixes
+
+* 🐛 bugs about deps ([1eabd50](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1eabd50))
+* 🐛 children in props ([fe0ace8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fe0ace8))
+* 🐛 get deps info from slot ([6c3ae36](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6c3ae36))
+* 🐛 group chunks by filetype family ([db144a9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/db144a9))
+* 🐛 loop bug ([8f53910](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8f53910))
+* 🐛 repair children before deps analyze ([737d06e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/737d06e))
+* 🐛 support JSFunction type ([9061e4b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9061e4b))
+* 🐛 更改复杂类型生成工具的接口形式，减少调用复杂度 ([ce616b5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ce616b5))
+* demo data ([b4a27fc](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b4a27fc))
+* enhance compile config ([2899149](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2899149))
+* factory api ([237b866](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/237b866))
+* path resolve problem ([b12c0f8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b12c0f8))
+* post process file error ([389eaf7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/389eaf7))
+* rm demo in lib ([55630d6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/55630d6))
+* same name chunk case ([d6855e2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d6855e2))
+* use webpack for package ([b350a88](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b350a88))
+* 修复 condition 代码导出错误 ([57b30cf](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/57b30cf))
+* 新增自定义模式 demo & 导出自定义需要的信息 ([07e2759](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/07e2759))
+* 更改生成 id 的规则, 否则命中 recore 解析 id 的一个限制 ([5adff44](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5adff44))
+
+
+### Features
+
+* 🎸 add node type mapping config for jsx plugin ([19a51b8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/19a51b8))
+* 🎸 code generator fix slot support ([e51b9cb](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e51b9cb))
+* add prettier post processor ([49ac9a3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/49ac9a3))
+* add recore project template ([267953b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/267953b))
+* add template create tool ([e906683](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e906683))
+* add zip publisher ([31156ed](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/31156ed))
+* code generator main process ([021d6e0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/021d6e0))
+* demo schema & complex children type ([a5ee6bd](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a5ee6bd))
+* export publisher ([4a53faa](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/4a53faa))
+* fix gaps ([32af3d3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/32af3d3))
+* prepare publish for code-generator ([93ff5c2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/93ff5c2))
+* project builder fix & publish demo to disk ([26983b3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/26983b3))
+* recore solution ([3bfe758](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3bfe758))
+* rewrite demo & export plugins and utils ([6cf7c3d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6cf7c3d))
+
+
+
+
 <a name="1.0.8-0"></a>
 ## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@1.0.7-0...@ali/lowcode-code-generator@1.0.8-0) (2020-09-09)
 

@@ -3,6 +3,59 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.9-0"></a>
+## 1.0.9-0 (2020-09-14)
+
+
+### Bug Fixes
+
+* (location) => ({location}) ([0e75b8e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0e75b8e))
+* 🐛 解决点击组件时无法聚焦到点中的组件上的问题 ([852d882](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/852d882))
+* add component ([995785d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/995785d))
+* call consumer ([70a1472](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/70a1472))
+* findDOMNodes ([7abf606](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7abf606))
+* findDOMNodes error ([6f5342d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6f5342d))
+* getDocId ([34341d6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/34341d6))
+* getSuitablePlace ([03e7c57](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/03e7c57))
+* history API ([e411687](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e411687))
+* history.listen({location}) => history.listen(location) ([25a6390](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/25a6390))
+* layout tabbar number ([3975571](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3975571))
+* modify docId ([dc95033](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/dc95033))
+* modify layout props ([9baba75](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9baba75))
+* onDocumentChange ([eb60d1f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/eb60d1f))
+* onReRender ([29ea5f7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/29ea5f7))
+* rax finddom 方法重写 ([1d90928](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1d90928))
+* raxFindDOMNodes ([90430f3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/90430f3))
+* rendererContainer ([486713a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/486713a))
+* router change ([920e584](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/920e584))
+* router rerender ([d886abc](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d886abc))
+* update package.json ([f1ec59c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f1ec59c))
+* 不应该限定 parent 才做解绑操作 ([2e616e3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2e616e3))
+* 优化simulator样式 ([25ba893](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/25ba893))
+* 修复 preset-vision 版本 lifeCycles 丢失以及 slot 初始化问题 ([7cf6d24](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7cf6d24))
+* 修复无法拖动的问题 ([2b2de74](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2b2de74))
+* 初始就create 所有documentInstance, 否则路由跳转有问题 ([fdd6978](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fdd6978))
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+
+
+### Features
+
+* 🎸 为了能更好地在设计态模拟, 将 device 透传到组件树根组件上 ([2a253fb](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2a253fb))
+* current DocuemntInstance add refresh method ([b18a0d2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b18a0d2))
+* get layout config from legao-design ([b9103a2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b9103a2))
+* JSexpression props ([26f4fb1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/26f4fb1))
+* merge live mode ([92c3039](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/92c3039))
+* rax render ([6ce0093](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6ce0093))
+* rax render ([95bf331](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/95bf331))
+* rax render ([038d74e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/038d74e))
+* rax simulator ([05b262d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/05b262d))
+* rax-render 兼容 ([877d3fc](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/877d3fc))
+* 修改rax-render ([14ad77c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/14ad77c))
+* 新增simulatorurl，可以设置cdn使用simulator ([1f45b05](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1f45b05))
+
+
+
+
 <a name="1.0.8-0"></a>
 ## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-rax-simulator-renderer@0.8.60...@ali/lowcode-rax-simulator-renderer@1.0.8-0) (2020-09-09)
 

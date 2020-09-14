@@ -3,6 +3,51 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.9-0"></a>
+## 1.0.9-0 (2020-09-14)
+
+
+### Bug Fixes
+
+* (location) => ({location}) ([0e75b8e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0e75b8e))
+* add FaultComponent style ([77b0b2c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/77b0b2c))
+* demo 中引入locode-editor-general ([1f03857](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1f03857))
+* div 不显示问题 ([1b6533c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1b6533c))
+* dropdown and menu schema ([ae1d125](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ae1d125))
+* handling the undefined variable ([0efe8b4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0efe8b4))
+* modify docId ([dc95033](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/dc95033))
+* onDocumentChange ([eb60d1f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/eb60d1f))
+* parse custom methods function ([87d8b86](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/87d8b86))
+* remove debugger ([a835dc6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a835dc6))
+* render error样式 ([d601d5e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d601d5e))
+* slot 兼容问题 + loop key bug fix ([bc64017](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bc64017))
+* supports ([371b84c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/371b84c))
+* 修复低代码组件设计器、区块设计器根节点为 Page 的问题，修复 topArea 样式 ([e85b542](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e85b542))
+* 修复判断动态 setter 的逻辑 ([d195d7f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d195d7f))
+* **react-renderer:** fix hasLoop logic ([577e0eb](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/577e0eb))
+* 区块模板根节点支持 Div ([c3b796e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c3b796e))
+* 合并后bugfix ([c3e6b4b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c3e6b4b))
+* 支持自定义 Block 容器 ([1c0b508](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1c0b508))
+* 清理代码依赖及版本 ([0b15d30](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0b15d30))
+* 组件缺失占位 ([aff2f34](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/aff2f34))
+
+
+### Features
+
+* 🎸 add demo-server ([df35c6a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/df35c6a))
+* extend deviceClassName ([0e96074](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0e96074))
+* rax render ([95bf331](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/95bf331))
+* rax-render 拦截逻辑 & request 调用 webtable（mock） ([42108f6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/42108f6))
+* 在 editor-preset-vision 中对 legao schema 进行向前兼容 ([7867917](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7867917))
+
+
+### Reverts
+
+* 去掉多余注释 ([2495afa](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2495afa))
+
+
+
+
 <a name="1.0.8-0"></a>
 ## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@1.0.7-0...@ali/lowcode-react-renderer@1.0.8-0) (2020-09-09)
 

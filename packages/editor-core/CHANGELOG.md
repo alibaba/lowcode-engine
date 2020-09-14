@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.9-0"></a>
+## 1.0.9-0 (2020-09-14)
+
+
+### Bug Fixes
+
+* editor ([ccd9162](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ccd9162))
+* intl ([8a061ab](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8a061ab))
+* supports ([371b84c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/371b84c))
+* tip direction ([f51d496](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f51d496))
+* 修复删除时，当前组件信息丢失问题 ([3bd1248](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3bd1248))
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+* 增加try catch ([6f5d11c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6f5d11c))
+* 清理代码依赖及版本 ([0b15d30](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0b15d30))
+
+
+### Features
+
+* add Monitor ([f915d19](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f915d19))
+* add URL link for setter titles ([4678408](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/4678408))
+* export Monitor ([51025f0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/51025f0))
+* ve事件埋点 ([700e5b0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/700e5b0))
+* 引擎层埋点 ([69de533](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/69de533))
+* 编辑器 hooks 能力实现 ([f3ac23b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f3ac23b))
+
+
+
+
 <a name="1.0.8-0"></a>
 ## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-core@0.8.36...@ali/lowcode-editor-core@1.0.8-0) (2020-09-09)
 

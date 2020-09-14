@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.9-0"></a>
+## 1.0.9-0 (2020-09-14)
+
+
+### Bug Fixes
+
+* 优化树子节点删除逻辑 ([47e814f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/47e814f))
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+* 在 renderer 层面做 function component 包装，避免影响 rax 等其他场景 ([1f920dd](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1f920dd))
+
+
+### Features
+
+* load assets for preview ([5376469](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5376469))
+* rax render ([95bf331](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/95bf331))
+* 抽离AppHelper ([1f6d131](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1f6d131))
+
+
+
+
 <a name="1.0.8-0"></a>
 ## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-utils@0.8.22...@ali/lowcode-utils@1.0.8-0) (2020-09-09)
 
