@@ -13,7 +13,6 @@ import { Skeleton, SettingsPrimaryPane, registerDefaults } from '@ali/lowcode-ed
 
 import { deepValueParser } from './deep-value-parser';
 import { liveEditingRule, liveEditingSaveHander } from './vc-live-editing';
-import { Item } from '@alifd/next/types/breadcrumb';
 
 export const editor = new Editor();
 globalContext.register(editor, Editor);
