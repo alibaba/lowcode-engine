@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-code-generator",
-  "version": "1.0.9-1",
+  "version": "1.0.9-2",
   "description": "出码引擎 for LowCode Engine",
   "main": "lib/index.js",
   "files": [
