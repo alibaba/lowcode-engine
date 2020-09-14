@@ -332,9 +332,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
             if (isMulti && !isRootNode(node) && selection.has(id)) {
               selection.remove(id);
             } else {
-              // TODO: 加个开关控制（yiyi）
-              // 如果选中的为 Page 节点，则默认选中第一个子节点
-              if (node.isPage() && node.getChildren()?.notEmpty()) {
+              // TODO: 避免选中 Page 组件，默认选中第一个子节点；新增规则 或 判断 Live 模式
+              if (node.isPage() && node.getChildren()?.notEmpty() && this.designMode === 'live') {
                 const firstChildId = node
                   .getChildren()
                   ?.get(0)

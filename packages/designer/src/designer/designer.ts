@@ -178,8 +178,8 @@ export class Designer {
         selectionDispose = undefined;
       }
       const currentSelection = this.currentSelection;
-      // TODO: yiyi 加开关控制，避免选中 Page 组件，默认选中第一个子节点
-      if (currentSelection && currentSelection.selected.length === 0) {
+      // TODO: 避免选中 Page 组件，默认选中第一个子节点；新增规则 或 判断 Live 模式
+      if (currentSelection && currentSelection.selected.length === 0 && this.simulatorProps?.designMode === 'live') {
         const rootNodeChildrens = this.currentDocument.getRoot().getChildren().children;
         if (rootNodeChildrens.length > 0) {
           currentSelection.select(rootNodeChildrens[0].id);
