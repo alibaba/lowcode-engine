@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-event-bind-dialog",
-  "version": "1.0.9-0",
+  "version": "1.0.9-1",
   "description": "alibaba lowcode editor event bind dialog plugin",
   "files": [
     "es",
@@ -19,8 +19,8 @@
   ],
   "author": "zude.hzd",
   "dependencies": {
-    "@ali/lowcode-editor-core": "^1.0.9-0",
-    "@ali/lowcode-types": "^1.0.9-0",
+    "@ali/lowcode-editor-core": "^1.0.9-1",
+    "@ali/lowcode-types": "^1.0.9-1",
     "@alifd/next": "^1.19.16",
     "react": "^16.8.1",
     "react-dom": "^16.8.1"
