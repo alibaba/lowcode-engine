@@ -123,7 +123,7 @@ class Layout extends Component<{ rendererContainer: SimulatorRendererContainer }
 }
 
 @observer
-class Renderer extends Component<{ 
+class Renderer extends Component<{
   rendererContainer: SimulatorRendererContainer;
   documentInstance: DocumentInstance }
   > {
@@ -132,10 +132,9 @@ class Renderer extends Component<{
   }
 
   render() {
-    const { documentInstance } = this.props;
+    const { documentInstance, rendererContainer: renderer } = this.props;
     const { container } = documentInstance;
     const { designMode, device } = container;
-    const { rendererContainer: renderer } = this.props;
     return (
       <LowCodeRenderer
         schema={documentInstance.schema}
@@ -190,7 +189,7 @@ class Renderer extends Component<{
           return createElement(
             getDeviceView(Component, device, designMode),
             viewProps,
-            children,
+            leaf?.isContainer() ? (children == null ? [] : Array.isArray(children) ? children : [children]) : null,
           );
         }}
         onCompGetRef={(schema: any, ref: ReactInstance | null) => {

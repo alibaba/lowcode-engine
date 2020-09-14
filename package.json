@@ -15,6 +15,7 @@
     "lint": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet",
     "lint:fix": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet --fix",
     "pub": "lerna publish --force-publish --cd-version prepatch",
+    "pubbeta": "lerna publish --force-publish --cd-version prerelease --npm-tag beta",
     "setup": "./scripts/setup.sh",
     "start": "./scripts/start.sh",
     "start:server": "./scripts/start-server.sh",
