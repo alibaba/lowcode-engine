@@ -63,7 +63,7 @@ export class Routes extends Component<{ rendererContainer: SimulatorRendererCont
             <Route
               path={instance.path}
               key={instance.id}
-              render={(routeProps) => <Renderer documentInstance={instance} {...routeProps} />}
+              render={(routeProps) => <Renderer documentInstance={instance} rendererContainer={rendererContainer} {...routeProps} />}
             />
           );
         })}
@@ -123,7 +123,10 @@ class Layout extends Component<{ rendererContainer: SimulatorRendererContainer }
 }
 
 @observer
-class Renderer extends Component<{ documentInstance: DocumentInstance }> {
+class Renderer extends Component<{ 
+  rendererContainer: SimulatorRendererContainer;
+  documentInstance: DocumentInstance }
+  > {
   shouldComponentUpdate() {
     return false;
   }
@@ -132,6 +135,7 @@ class Renderer extends Component<{ documentInstance: DocumentInstance }> {
     const { documentInstance } = this.props;
     const { container } = documentInstance;
     const { designMode, device } = container;
+    const { rendererContainer: renderer } = this.props;
     return (
       <LowCodeRenderer
         schema={documentInstance.schema}
