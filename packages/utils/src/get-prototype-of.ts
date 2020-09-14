@@ -3,5 +3,6 @@ export function getPrototypeOf(target: any) {
     return Object.getPrototypeOf(target);
   }
 
+  // eslint-disable-next-line no-proto
   return target.__proto__;
 }

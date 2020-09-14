@@ -80,7 +80,7 @@ function FilterDropdown<RecordType>(props: FilterDropdownProps<RecordType>) {
   const { filterDropdownVisible, onFilterDropdownVisibleChange } = column;
   const [visible, setVisible] = React.useState(false);
 
-  const filtered: boolean = !!(
+  const filtered = !!(
     filterState &&
     (filterState.filteredKeys || filterState.forceFiltered)
   );

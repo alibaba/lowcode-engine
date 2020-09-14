@@ -1,13 +1,13 @@
 const LIFECYCLES_FUNCTION_MAP = {
-    react:['constructor','render','componentDidMount','componentDidUpdate','componentWillUnmount','componentDidCatch']
-}
+  react: ['constructor', 'render', 'componentDidMount', 'componentDidUpdate', 'componentWillUnmount', 'componentDidCatch'],
+};
 
 
 const transfrom = {
-  schema2Code(schema: Object) {
-    let componentSchema = schema.componentsTree[0];
-    let code =
-`export default class {
+  schema2Code(schema) {
+    const componentSchema = schema.componentsTree[0];
+    const code =
+      `export default class {
   ${initStateCode(componentSchema)}
   ${initLifeCycleCode(componentSchema)}
   ${initMethodsCode(componentSchema)}
@@ -16,95 +16,100 @@ const transfrom = {
     return code;
   },
 
-  code2Schema(code: String) {
-    let newCode = code.replace(/export default class/,'class A');
-    let A,a;
+  code2Schema(code: string) {
+    const newCode = code.replace(/export default class/, 'class A');
+    let A; let a;
     try {
-      A = eval('('+newCode + ')');
+      // eslint-disable-next-line no-eval
+      A = eval(`(${newCode})`);
       a = new A();
-    }catch(e){
-      return ''
+    } catch (e) {
+      return '';
     }
 
-    let functionNameList = Object.getOwnPropertyNames(a.__proto__);
+    // eslint-disable-next-line no-proto
+    const functionNameList = Object.getOwnPropertyNames(a.__proto__);
 
-    let functionMap = {};
+    const functionMap = {};
 
-    functionNameList.map((functionName)=>{
-      if (functionName != 'constructor'){
-          if (a[functionName]){
-            let functionCode = a[functionName].toString().replace(new RegExp(functionName),'function');
-            functionMap[functionName] = functionCode;
-          }
+    functionNameList.map((functionName) => {
+      if (functionName != 'constructor') {
+        if (a[functionName]) {
+          const functionCode = a[functionName].toString().replace(new RegExp(functionName), 'function');
+          functionMap[functionName] = functionCode;
+        }
       }
-    })
+      return functionName;
+    });
 
-    if (a.state){
-      functionMap.state = a.state
+    if (a.state) {
+      functionMap.state = a.state;
     }
 
     console.log(functionMap);
     return functionMap;
-
   },
 
-  getNewFunctionCode(functionName:String){
-    return `\n\t${functionName}(){\n\t}\n`
+  getNewFunctionCode(functionName: string) {
+    return `\n\t${functionName}(){\n\t}\n`;
   },
 
-  setFunction2Schema(functionMap,schema){
-
-    let pageNode = schema.componentsTree[0];
+  setFunction2Schema(functionMap, schema) {
+    const pageNode = schema.componentsTree[0];
     if (!pageNode) return '';
-    for (let key in functionMap){
-        if (key == 'state'){
-           pageNode.state = functionMap[key];
-        }else{
-          // 判断是否属于lifeCycles节点
-          if (LIFECYCLES_FUNCTION_MAP.react.indexOf(key)>=0){
-            // 判断有没有lifecycles节点
-            if (!pageNode.lifeCycles){
-              pageNode.lifeCycles = {}
-            }else{
-              pageNode.lifeCycles[key] = {
-                "type": "JSFunction",
-                "value": functionMap[key],
-              }
-            }
-          }else{
-            // methods节点
-            if (!pageNode.methods){
-              pageNode.methods = {}
-            }else{
-              pageNode.methods[key] = {
-                "type": "JSFunction",
-                "value": functionMap[key],
-              }
-            }
-          }
+    for (const key in functionMap) {
+      if (key == 'state') {
+        pageNode.state = functionMap[key];
+      } else if (LIFECYCLES_FUNCTION_MAP.react.indexOf(key) >= 0) {
+        // // 判断是否属于lifeCycles节点
+        // if (LIFECYCLES_FUNCTION_MAP.react.indexOf(key) >= 0) {
+        // 判断有没有lifecycles节点
+        if (!pageNode.lifeCycles) {
+          pageNode.lifeCycles = {};
+        } else {
+          pageNode.lifeCycles[key] = {
+            type: 'JSFunction',
+            value: functionMap[key],
+          };
         }
+      } else if (!pageNode.methods) {
+        // methods节点
+        pageNode.methods = {};
+        // if (!pageNode.methods) {
+        //   pageNode.methods = {};
+        // } else {
+        //   pageNode.methods[key] = {
+        //     type: 'JSFunction',
+        //     value: functionMap[key],
+        //   };
+        // }
+      } else {
+        pageNode.methods[key] = {
+          type: 'JSFunction',
+          value: functionMap[key],
+        };
+      }
     }
 
     return schema;
-
-  }
+  },
 };
 
 
-function initStateCode(componentSchema:Object) {
-  if (componentSchema.state){
-     return `state = ${JSON.stringify(componentSchema.state)}`
+function initStateCode(componentSchema) {
+  if (componentSchema.state) {
+    return `state = ${JSON.stringify(componentSchema.state)}`;
   }
 
   return '';
 }
 
-function initLifeCycleCode(componentSchema: Object) {
+function initLifeCycleCode(componentSchema) {
   if (componentSchema.lifeCycles) {
-    let lifeCycles = componentSchema.lifeCycles;
-    let codeList = [];
+    const { lifeCycles } = componentSchema;
+    const codeList = [];
 
-    for (let key in lifeCycles) {
+    for (const key in lifeCycles) {
       codeList.push(createFunctionCode(key, lifeCycles[key]));
     }
 
@@ -114,12 +119,12 @@ function initLifeCycleCode(componentSchema: Object) {
   }
 }
 
-function initMethodsCode(componentSchema: Object) {
+function initMethodsCode(componentSchema) {
   if (componentSchema.methods) {
-    let methods = componentSchema.methods;
-    let codeList = [];
+    const { methods } = componentSchema;
+    const codeList = [];
 
-    for (let key in methods) {
+    for (const key in methods) {
       codeList.push(createFunctionCode(key, methods[key]));
     }
 
@@ -129,14 +134,13 @@ function initMethodsCode(componentSchema: Object) {
   }
 }
 
-function createFunctionCode(functionName: String, functionNode: Object) {
+function createFunctionCode(functionName: string, functionNode) {
   if (functionNode.type === 'JSExpression' || functionNode.type === 'JSFunction') {
     let functionCode = functionNode.value;
     functionCode = functionCode.replace(/function/, functionName);
     return functionCode;
   }
 }
-
 
 
 export default transfrom;

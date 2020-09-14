@@ -1,6 +1,7 @@
 import { obx, computed } from '@ali/lowcode-editor-core';
 import { isPanel } from './panel';
 import { hasOwnProperty } from '@ali/lowcode-utils';
+
 export interface WidgetItem {
   name: string;
 }
@@ -15,19 +16,23 @@ function isActiveable(obj: any): obj is Activeable {
 
 export default class WidgetContainer<T extends WidgetItem = any, G extends WidgetItem = any> {
   @obx.val items: T[] = [];
+
   private maps: { [name: string]: T } = {};
+
   @obx.ref private _current: T & Activeable | null = null;
 
   get current() {
     return this._current;
   }
 
+  // eslint-disable-next-line no-useless-constructor
   constructor(
     readonly name: string,
     private handle: (item: T | G) => T,
     private exclusive: boolean = false,
     private checkVisible: () => boolean = () => true,
     private defaultSetCurrent: boolean = false,
+  // eslint-disable-next-line no-empty-function
   ) {}
 
   @computed get visible() {

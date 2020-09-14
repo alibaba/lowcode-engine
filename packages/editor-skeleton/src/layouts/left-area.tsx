@@ -8,9 +8,10 @@ export default class LeftArea extends Component<{ area: Area }> {
   render() {
     const { area } = this.props;
     return (
-      <div className={classNames("lc-left-area", {
-        'lc-area-visible': area.visible
-      })}>
+      <div className={classNames('lc-left-area', {
+        'lc-area-visible': area.visible,
+      })}
+      >
         <Contents area={area} />
       </div>
     );

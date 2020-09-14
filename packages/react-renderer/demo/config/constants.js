@@ -1,3 +1,3 @@
 export default {
-  name: 'renderer-demo'
+  name: 'renderer-demo',
 };

@@ -4,7 +4,9 @@ import { AutoFit, IViewport } from '../simulator';
 
 export default class Viewport implements IViewport {
   @obx.ref private rect?: DOMRect;
+
   private _bounds?: DOMRect;
+
   get bounds(): DOMRect {
     if (this._bounds) {
       return this._bounds;
@@ -17,12 +19,13 @@ export default class Viewport implements IViewport {
   }
 
   get contentBounds(): DOMRect {
-    const bounds = this.bounds;
-    const scale = this.scale;
+    const { bounds } = this;
+    const { scale } = this;
     return new DOMRect(0, 0, bounds.width / scale, bounds.height / scale);
   }
 
   private viewportElement?: HTMLElement;
+
   mount(viewportElement: HTMLElement | null) {
     if (!viewportElement || this.viewportElement === viewportElement) {
       return;
@@ -67,7 +70,7 @@ export default class Viewport implements IViewport {
     }
   }
 
-  @obx.ref private _scale: number = 1;
+  @obx.ref private _scale = 1;
 
   /**
    * 缩放比例
@@ -87,6 +90,7 @@ export default class Viewport implements IViewport {
   }
 
   @obx.ref private _contentWidth: number | AutoFit = AutoFit;
+
   @obx.ref private _contentHeight: number | AutoFit = AutoFit;
 
   @computed get contentHeight(): number | AutoFit {
@@ -106,15 +110,19 @@ export default class Viewport implements IViewport {
   }
 
   @obx.ref private _scrollX = 0;
+
   @obx.ref private _scrollY = 0;
+
   get scrollX() {
     return this._scrollX;
   }
+
   get scrollY() {
     return this._scrollY;
   }
 
   private _scrollTarget?: ScrollTarget;
+
   /**
    * 滚动对象
    */
@@ -123,6 +131,7 @@ export default class Viewport implements IViewport {
   }
 
   @obx private _scrolling = false;
+
   get scrolling(): boolean {
     return this._scrolling;
   }

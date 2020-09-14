@@ -14,7 +14,7 @@ import {
   getSubComponent,
   AssetLoader,
 } from '@ali/lowcode-utils';
-import { RootSchema, ComponentSchema, TransformStage, NodeSchem } from '@ali/lowcode-types';
+import { RootSchema, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
 // import { isESModule, isElement, acceptsRef, wrapReactClass, cursor, setNativeSelection } from '@ali/lowcode-utils';
 // import { RootSchema, NpmInfo, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
 // just use types

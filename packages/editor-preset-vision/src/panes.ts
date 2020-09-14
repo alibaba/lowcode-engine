@@ -25,12 +25,12 @@ export interface OldPaneConfig {
   place?: string; // align: left|right|top|center|bottom
   description?: string; // tip?
   tip?:
-    | string
-    | {
-        // as help tip
-        url?: string;
-        content?: string | JSX.Element;
-      }; // help
+  | string
+  | {
+    // as help tip
+    url?: string;
+    content?: string | JSX.Element;
+  }; // help
 
   init?: () => any;
   destroy?: () => any;
@@ -47,6 +47,8 @@ export interface OldPaneConfig {
   index?: number; // todo
   isAction?: boolean; // as normal dock
   fullScreen?: boolean; // todo
+  canSetFixed?: boolean; // 是否可以设置固定模式
+  defaultFixed?: boolean; // 是否默认固定
 }
 
 function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: string } {
@@ -68,7 +70,19 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
     newConfig.type = 'PanelDock';
     newConfig.area = 'left';
     newConfig.props.description = description || title;
-    const { contents, hideTitleBar, tip, width, maxWidth, height, maxHeight, menu, isAction, canSetFixed } = config;
+    const {
+      contents,
+      hideTitleBar,
+      tip,
+      width,
+      maxWidth,
+      height,
+      maxHeight,
+      menu,
+      isAction,
+      canSetFixed,
+      defaultFixed,
+    } = config;
     if (menu) {
       newConfig.props.title = menu;
     }
@@ -87,6 +101,10 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
         onInit: init,
         onDestroy: destroy,
       };
+
+      if (defaultFixed) {
+        newConfig.panelProps.area = 'leftFixedArea';
+      }
 
       if (contents && Array.isArray(contents)) {
         newConfig.content = contents.map(({ title, content, tip }, index) => {

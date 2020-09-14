@@ -7,9 +7,9 @@ import TreeBranches from './tree-branches';
 
 @observer
 export default class TreeNodeView extends Component<{
-    treeNode: TreeNode;
-    isModal?: boolean;
-  }> {
+  treeNode: TreeNode;
+  isModal?: boolean;
+}> {
   shouldComponentUpdate() {
     return false;
   }
@@ -38,8 +38,8 @@ export default class TreeNodeView extends Component<{
 
     return (
       <div className={className} data-id={treeNode.id}>
-        <TreeTitle treeNode={treeNode} isModal={isModal}/>
-        <TreeBranches treeNode={treeNode} isModal={false}/>
+        <TreeTitle treeNode={treeNode} isModal={isModal} />
+        <TreeBranches treeNode={treeNode} isModal={false} />
       </div>
     );
   }

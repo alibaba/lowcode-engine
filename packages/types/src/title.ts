@@ -13,7 +13,7 @@ export interface TitleConfig {
 
 export type TitleContent = string | I18nData | ReactElement | TitleConfig;
 
-function isPlainObject(value: any): value is object {
+function isPlainObject(value: any): value is Record<string, unknown> {
   if (typeof value !== 'object') {
     return false;
   }

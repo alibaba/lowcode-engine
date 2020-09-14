@@ -19,29 +19,37 @@ function getSettingFieldCollectorKey(parent: SettingEntry, config: FieldConfig) 
 
 export class SettingField extends SettingPropEntry implements SettingEntry {
   readonly isSettingField = true;
+
   readonly isRequired: boolean;
+
   readonly transducer: Transducer;
+
   private _config: FieldConfig;
+
   extraProps: FieldExtraProps;
 
   // ==== dynamic properties ====
   private _title?: TitleContent;
+
   get title() {
     // FIXME! intl
     return this._title || (typeof this.name === 'number' ? `项目 ${this.name}` : this.name);
   }
+
   private _setter?: SetterType | DynamicSetter;
+
   @computed get setter(): SetterType | null {
     if (!this._setter) {
       return null;
     }
     if (isDynamicSetter(this._setter)) {
-      return this._setter.call(this,this);
+      return this._setter.call(this, this);
     }
     return this._setter;
   }
 
   @obx.ref private _expanded = true;
+
   get expanded(): boolean {
     return this._expanded;
   }
@@ -62,7 +70,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
       ...extraProps,
     };
     this.isRequired = config.isRequired || (setter as any)?.isRequired;
-    this._expanded = extraProps?.defaultCollapsed ? false : true;
+    this._expanded = !extraProps?.defaultCollapsed;
 
     // initial items
     if (items && items.length > 0) {

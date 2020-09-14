@@ -35,7 +35,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     const ir = next.ir as IContainerInfo;
 
     if (ir.lifeCycles) {
-      const lifeCycles = ir.lifeCycles;
+      const { lifeCycles } = ir;
       const chunks = Object.keys(lifeCycles).map<ICodeChunk>((lifeCycleName) => {
         const normalizeName = cfg.normalizeNameMapping[lifeCycleName] || lifeCycleName;
         const exportName = cfg.exportNameMapping[lifeCycleName] || lifeCycleName;

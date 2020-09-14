@@ -6,7 +6,7 @@ import { Backup } from './views/backup-pane';
 
 export interface ITreeBoard {
   readonly visible: boolean;
-  readonly at: string | Symbol;
+  readonly at: string | symbol;
   scrollToNode(treeNode: TreeNode, detail?: any): void;
 }
 
@@ -69,9 +69,11 @@ export class TreeMaster {
   }
 
   @obx.val private boards = new Set<ITreeBoard>();
+
   addBoard(board: ITreeBoard) {
     this.boards.add(board);
   }
+
   removeBoard(board: ITreeBoard) {
     this.boards.delete(board);
   }
@@ -90,10 +92,11 @@ export class TreeMaster {
   }
 
   private treeMap = new Map<string, Tree>();
+
   @computed get currentTree(): Tree | null {
     const doc = this.designer?.currentDocument;
     if (doc) {
-      const id = doc.id;
+      const { id } = doc;
       if (this.treeMap.has(id)) {
         return this.treeMap.get(id)!;
       }

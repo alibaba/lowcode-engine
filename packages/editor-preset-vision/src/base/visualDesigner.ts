@@ -22,16 +22,22 @@ interface IDesignerProps {
 
 export default class VisualDesigner extends Component implements IManagerController, IObservable, INameable {
   static NAME = 'VisualDesigner';
+
   static EVENTS: IEventNameMap = {};
+
   props: IDesignerProps = {};
+
   defaultProps: IDesignerProps = {
     name: 'defaultDesigner',
     visualManagers: [],
   };
 
   private visualManagerList: VisualManager[] = [];
+
   private name = '';
+
   private id = '';
+
   private emitter: IEmitter;
 
   constructor(props: IDesignerProps) {

@@ -41,7 +41,7 @@ export type DOMText = string;
 export interface ContainerSchema extends NodeSchema {
   componentName: string; // 'Block' | 'Page' | 'Component';
   fileName: string;
-  meta?: object;
+  meta?: Record<string, unknown>;
   state?: {
     [key: string]: CompositeValue;
   };

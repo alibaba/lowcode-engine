@@ -77,6 +77,7 @@ export interface ISensor {
 export type DragObject = DragNodeObject | DragNodeDataObject | DragAnyObject;
 
 export enum DragObjectType {
+  // eslint-disable-next-line no-shadow
   Node = 'node',
   NodeData = 'nodedata',
 }
@@ -191,11 +192,13 @@ export class Dragon {
    * current actived sensor, 可用于感应区高亮
    */
   @obx.ref private _activeSensor: ISensor | undefined;
+
   get activeSensor(): ISensor | undefined {
     return this._activeSensor;
   }
 
   @obx.ref private _dragging = false;
+
   get dragging(): boolean {
     return this._dragging;
   }
@@ -237,7 +240,7 @@ export class Dragon {
    * @param boostEvent 拖拽初始时事件
    */
   boost(dragObject: DragObject, boostEvent: MouseEvent | DragEvent) {
-    const designer = this.designer;
+    const { designer } = this;
     const masterSensors = this.getMasterSensors();
     const handleEvents = makeEventsHandler(boostEvent, masterSensors);
     const newBie = !isDragNodeObject(dragObject);

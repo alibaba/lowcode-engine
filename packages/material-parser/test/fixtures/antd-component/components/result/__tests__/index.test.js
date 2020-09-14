@@ -64,7 +64,7 @@ describe('Result', () => {
     expect(warnSpy).not.toHaveBeenCalled();
     mount(<Result title="404" icon="smile" />);
     expect(warnSpy).toHaveBeenCalledWith(
-      `Warning: [antd: Result] \`icon\` is using ReactNode instead of string naming in v4. Please check \`smile\` at https://ant.design/components/icon`,
+      'Warning: [antd: Result] `icon` is using ReactNode instead of string naming in v4. Please check `smile` at https://ant.design/components/icon',
     );
     warnSpy.mockRestore();
   });

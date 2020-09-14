@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { registerSetter } from '@ali/lowcode-editor-core';
-import { isJSExpression,isJSFunction } from '@ali/lowcode-types';
+import { isJSExpression, isJSFunction } from '@ali/lowcode-types';
 import { DatePicker, TimePicker, Input, Radio, Select, Switch, NumberPicker } from '@alifd/next';
 import ExpressionSetter from './expression-setter';
 import ColorSetter from './color-setter';
@@ -55,9 +55,10 @@ export const DateRangeSetter = DatePicker.RangePicker;
 
 export { ExpressionSetter, EventsSetter, JsonSetter, IconSetter };
 
+// eslint-disable-next-line react/no-multi-comp
 class StringDateSetter extends Component {
   render() {
-    const { onChange, editor } = this.props;
+    const { onChange } = this.props;
     return (
       <DatePicker
         onChange={(val) => {
@@ -67,9 +68,11 @@ class StringDateSetter extends Component {
     );
   }
 }
+
+// eslint-disable-next-line react/no-multi-comp
 class StringTimePicker extends Component {
   render() {
-    const { onChange, editor } = this.props;
+    const { onChange } = this.props;
     return (
       <TimePicker
         onChange={(val) => {
@@ -80,7 +83,7 @@ class StringTimePicker extends Component {
   }
 }
 
-const VariableSetter ={
+const VariableSetter = {
   component: ExpressionSetter,
   condition: (field: any) => {
     const v = field.getValue();
@@ -99,7 +102,7 @@ const FunctionBindSetter = {
     const v = field.getValue();
     return v == isJSFunction(v);
   },
-}
+};
 
 const builtinSetters: any = {
   StringSetter,
@@ -120,7 +123,7 @@ const builtinSetters: any = {
   JsonSetter,
   StyleSetter,
   IconSetter,
-  FunctionSetter:FunctionBindSetter
+  FunctionSetter: FunctionBindSetter,
 };
 
 registerSetter(builtinSetters);

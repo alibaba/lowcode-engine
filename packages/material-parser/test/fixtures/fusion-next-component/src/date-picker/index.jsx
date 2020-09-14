@@ -7,73 +7,73 @@ import WeekPicker from './week-picker';
 
 /* istanbul ignore next */
 const transform = (props, deprecated) => {
-    const { open, defaultOpen, onOpenChange, ...others } = props;
-    const newProps = others;
+  const { open, defaultOpen, onOpenChange, ...others } = props;
+  const newProps = others;
 
-    delete newProps.formater;
+  delete newProps.formater;
 
-    if ('open' in props) {
-        deprecated('open', 'visible', 'DatePicker');
+  if ('open' in props) {
+    deprecated('open', 'visible', 'DatePicker');
 
-        newProps.visible = open;
+    newProps.visible = open;
 
-        if ('visible' in props) {
-            newProps.visible = props.visible;
-        }
+    if ('visible' in props) {
+      newProps.visible = props.visible;
     }
+  }
 
-    if ('defaultOpen' in props) {
-        deprecated('defaultOpen', 'defaultVisible', 'DatePicker');
+  if ('defaultOpen' in props) {
+    deprecated('defaultOpen', 'defaultVisible', 'DatePicker');
 
-        newProps.defaultVisible = defaultOpen;
+    newProps.defaultVisible = defaultOpen;
 
-        if ('defaultVisible' in props) {
-            newProps.defaultVisible = props.defaultVisible;
-        }
+    if ('defaultVisible' in props) {
+      newProps.defaultVisible = props.defaultVisible;
     }
+  }
 
-    if ('onOpenChange' in props && typeof onOpenChange === 'function') {
-        deprecated('onOpenChange', 'onVisibleChange', 'DatePicker');
+  if ('onOpenChange' in props && typeof onOpenChange === 'function') {
+    deprecated('onOpenChange', 'onVisibleChange', 'DatePicker');
 
-        newProps.onVisibleChange = onOpenChange;
+    newProps.onVisibleChange = onOpenChange;
 
-        if ('onVisibleChange' in props) {
-            newProps.onVisibleChange = props.onVisibleChange;
-        }
+    if ('onVisibleChange' in props) {
+      newProps.onVisibleChange = props.onVisibleChange;
     }
+  }
 
-    if ('formater' in props) {
-        deprecated('formater', 'format showTime.format', 'DatePicker');
-    }
+  if ('formater' in props) {
+    deprecated('formater', 'format showTime.format', 'DatePicker');
+  }
 
-    if ('format' in props && typeof props.format !== 'string') {
-        deprecated('format', 'format: PropTypes.string,', 'DatePicker');
-    }
+  if ('format' in props && typeof props.format !== 'string') {
+    deprecated('format', 'format: PropTypes.string,', 'DatePicker');
+  }
 
-    if ('ranges' in props) {
-        deprecated('ranges', 'footerRender: PropTypes.func', 'RangePicker');
-    }
+  if ('ranges' in props) {
+    deprecated('ranges', 'footerRender: PropTypes.func', 'RangePicker');
+  }
 
-    return newProps;
+  return newProps;
 };
 
 DatePicker.RangePicker = ConfigProvider.config(RangePicker, {
-    componentName: 'DatePicker',
-    transform,
+  componentName: 'DatePicker',
+  transform,
 });
 DatePicker.MonthPicker = ConfigProvider.config(MonthPicker, {
-    componentName: 'DatePicker',
-    transform,
+  componentName: 'DatePicker',
+  transform,
 });
 DatePicker.YearPicker = ConfigProvider.config(YearPicker, {
-    componentName: 'DatePicker',
-    transform,
+  componentName: 'DatePicker',
+  transform,
 });
 
 DatePicker.WeekPicker = ConfigProvider.config(WeekPicker, {
-    componentName: 'DatePicker',
+  componentName: 'DatePicker',
 });
 
 export default ConfigProvider.config(DatePicker, {
-    transform,
+  transform,
 });

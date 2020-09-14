@@ -19,7 +19,9 @@ const originCloneElement = (window as any).Rax.cloneElement;
         } else {
           try {
             cRef.current = x;
-          } catch (e) {}
+          } catch (e) {
+            console.error(e);
+          }
         }
       }
       if (dRef) {
@@ -28,7 +30,9 @@ const originCloneElement = (window as any).Rax.cloneElement;
         } else {
           try {
             dRef.current = x;
-          } catch (e) {}
+          } catch (e) {
+            console.error(e);
+          }
         }
       }
     };
@@ -161,7 +165,10 @@ class Renderer extends Component<{
       this.unlisten();
     }
   }
-
+  shouldComponentUpdate() {
+    return false;
+  }
+  
   render() {
     const { documentInstance } = this.props;
     const { container } = documentInstance;

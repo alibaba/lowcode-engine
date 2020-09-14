@@ -8,9 +8,10 @@ export default class TopArea extends Component<{ area: Area, itemClassName?: str
   render() {
     const { area, itemClassName } = this.props;
     return (
-      <div className={classNames("lc-top-area engine-actionpane", {
-        'lc-area-visible': area.visible
-      })}>
+      <div className={classNames('lc-top-area engine-actionpane', {
+        'lc-area-visible': area.visible,
+      })}
+      >
         <Contents area={area} itemClassName={itemClassName} />
       </div>
     );
@@ -24,7 +25,7 @@ class Contents extends Component<{ area: Area, itemClassName?: string }> {
     const left: any[] = [];
     const center: any[] = [];
     const right: any[] = [];
-    area.container.items.sort((a,b) => {
+    area.container.items.sort((a, b) => {
       const index1 = a.config?.index || 0;
       const index2 = b.config?.index || 0;
       return index1 === index2 ? 0 : (index1 > index2 ? 1 : -1);

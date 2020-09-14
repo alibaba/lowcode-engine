@@ -13,7 +13,7 @@ function getAction(actions: React.ReactNode[]) {
 
 export interface CommentProps {
   /** List of action items rendered below the comment content */
-  actions?: Array<React.ReactNode>;
+  actions?: React.ReactNode[];
   /** The element to display as the comment author. */
   author?: React.ReactNode;
   /** The element to display as the comment avatar - generally an antd Avatar */

@@ -4,7 +4,6 @@ import {
   PropType,
   SetterType,
   OneOf,
-  Shape,
   ObjectOf,
   ArrayOf,
   TransformedComponentMetadata,
@@ -165,7 +164,7 @@ function propTypeToSetter(propType: PropType): SetterType {
     case 'func':
       return {
         componentName: 'FunctionSetter',
-        isRequired
+        isRequired,
       };
     case 'oneOfType':
       return {
@@ -186,7 +185,7 @@ function propTypeToSetter(propType: PropType): SetterType {
 
 const EVENT_RE = /^on|after|before[A-Z][\w]*$/;
 
-export default function(metadata: TransformedComponentMetadata): TransformedComponentMetadata {
+export default function (metadata: TransformedComponentMetadata): TransformedComponentMetadata {
   const { configure = {} } = metadata;
   // TODO types后续补充
   let extendsProps: any = null;

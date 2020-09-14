@@ -18,7 +18,9 @@ const originCloneElement = window.React.cloneElement;
         } else {
           try {
             cRef.current = x;
-          } catch (e) {}
+          } catch (e) {
+            console.error(e);
+          }
         }
       }
       if (dRef) {
@@ -27,7 +29,9 @@ const originCloneElement = window.React.cloneElement;
         } else {
           try {
             dRef.current = x;
-          } catch (e) {}
+          } catch (e) {
+            console.error(e);
+          }
         }
       }
     };
@@ -92,6 +96,7 @@ class Layout extends Component<{ rendererContainer: SimulatorRendererContainer }
   shouldComponentUpdate() {
     return false;
   }
+
   render() {
     const { rendererContainer, children } = this.props;
     const layout = rendererContainer.layout;
@@ -122,6 +127,7 @@ class Renderer extends Component<{ documentInstance: DocumentInstance }> {
   shouldComponentUpdate() {
     return false;
   }
+
   render() {
     const { documentInstance } = this.props;
     const { container } = documentInstance;
@@ -154,7 +160,7 @@ class Renderer extends Component<{ documentInstance: DocumentInstance }> {
               </div>
             );
           }
-          if(viewProps._componentName === 'a') {
+          if (viewProps._componentName === 'a') {
             delete viewProps.href;
           }
           // FIXME: 渲染仍有问题

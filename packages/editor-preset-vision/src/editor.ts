@@ -23,7 +23,7 @@ editor.set(Skeleton, skeleton);
 editor.set('skeleton', skeleton);
 registerDefaults();
 
-export const designer = new Designer({ editor: editor });
+export const designer = new Designer({ editor });
 editor.set(Designer, designer);
 editor.set('designer', designer);
 
@@ -260,8 +260,8 @@ designer.addPropsReducer((props: any, node: Node) => {
 // 设计器组件样式处理
 function stylePropsReducer(props: any, node: any) {
   if (props && typeof props === 'object' && props.__style__) {
-    const cssId = '_style_pesudo_' + node.id.replace(/\$/g, '_');
-    const cssClass = '_css_pesudo_' + node.id.replace(/\$/g, '_');
+    const cssId = `_style_pesudo_${ node.id.replace(/\$/g, '_')}`;
+    const cssClass = `_css_pesudo_${ node.id.replace(/\$/g, '_')}`;
     const styleProp = props.__style__;
     appendStyleNode(props, styleProp, cssClass, cssId);
   }
@@ -272,8 +272,8 @@ function stylePropsReducer(props: any, node: any) {
     appendStyleNode(props, styleProp, cssClass, cssId);
   }
   if (props && typeof props === 'object' && props.containerStyle) {
-    const cssId = '_style_pesudo_' + node.id;
-    const cssClass = '_css_pesudo_' + node.id.replace(/\$/g, '_');
+    const cssId = `_style_pesudo_${ node.id}`;
+    const cssClass = `_css_pesudo_${ node.id.replace(/\$/g, '_')}`;
     const styleProp = props.containerStyle;
     appendStyleNode(props, styleProp, cssClass, cssId);
   }
@@ -301,7 +301,7 @@ function appendStyleNode(props: any, styleProp: any, cssClass: string, cssId: st
 
     s.appendChild(doc.createTextNode(styleProp.replace(/(\d+)rpx/g, (a, b) => {
       return `${b / 2}px`;
-    }).replace(/:root/g, '.' + cssClass)));
+    }).replace(/:root/g, `.${ cssClass}`)));
   }
 }
 designer.addPropsReducer(stylePropsReducer, TransformStage.Render);

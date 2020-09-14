@@ -1,4 +1,5 @@
 import Debug from 'debug';
+
 const debug = Debug('request');
 
 export function serialize(obj?: object): string {
@@ -49,7 +50,7 @@ export function post(dataAPI: string, params?: object, headers?: object, otherPr
 
 export function request(
   dataAPI: string,
-  method: string = 'GET',
+  method = 'GET',
   data?: object | string,
   headers?: object,
   otherProps?: any,

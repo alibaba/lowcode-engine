@@ -3,9 +3,11 @@ import { DropLocation, ParentalNode, isLocationChildrenDetail, Node } from '@ali
 const IndentSensitive = 15;
 export class IndentTrack {
   private indentStart: number | null = null;
+
   reset() {
     this.indentStart = null;
   }
+
   getIndentParent(lastLoc: DropLocation, loc: DropLocation): [ParentalNode, number] | null {
     if (
       lastLoc.target !== loc.target ||
@@ -30,7 +32,7 @@ export class IndentTrack {
     const direction = delta < 0 ? 'left' : 'right';
 
     let parent = loc.target;
-    const index = loc.detail.index;
+    const { index } = loc.detail;
 
     if (direction === 'left') {
       if (!parent.parent || index < parent.children.size || parent.isSlot()) {

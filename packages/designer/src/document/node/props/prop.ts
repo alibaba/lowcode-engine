@@ -20,6 +20,7 @@ export type ValueTypes = 'unset' | 'literal' | 'map' | 'list' | 'expression' | '
 
 export class Prop implements IPropParent {
   readonly isProp = true;
+
   readonly owner: Node;
 
   private stash: PropStash | undefined;
@@ -77,6 +78,7 @@ export class Prop implements IPropParent {
   readonly id = uniqueId('prop$');
 
   @obx.ref private _type: ValueTypes = 'unset';
+
   /**
    * 属性类型
    */
@@ -162,6 +164,7 @@ export class Prop implements IPropParent {
   }
 
   private _code: string | null = null;
+
   /**
    * 获得表达式值
    */
@@ -272,9 +275,11 @@ export class Prop implements IPropParent {
   }
 
   private _slotNode?: SlotNode;
+
   get slotNode() {
     return this._slotNode;
   }
+
   setAsSlot(data: JSSlot) {
     this._type = 'slot';
     const slotSchema: SlotSchema = {
@@ -287,7 +292,7 @@ export class Prop implements IPropParent {
     if (this._slotNode) {
       this._slotNode.import(slotSchema);
     } else {
-      const owner = this.props.owner;
+      const { owner } = this.props;
       this._slotNode = owner.document.createNode<SlotNode>(slotSchema);
       owner.addSlot(this._slotNode);
       this._slotNode.internalSetSlotFor(this);
@@ -336,7 +341,9 @@ export class Prop implements IPropParent {
   }
 
   @obx.val private _items: Prop[] | null = null;
+
   @obx.val private _maps: Map<string | number, Prop> | null = null;
+
   @computed private get items(): Prop[] | null {
     let _items: any;
     untracked(() => {
@@ -371,6 +378,7 @@ export class Prop implements IPropParent {
     }
     return _items;
   }
+
   @computed private get maps(): Map<string | number, Prop> | null {
     if (!this.items) {
       return null;
@@ -382,7 +390,7 @@ export class Prop implements IPropParent {
    * 获取某个属性
    * @param stash 如果不存在，临时获取一个待写入
    */
-  get(path: string | number, stash: boolean = true): Prop | null {
+  get(path: string | number, stash = true): Prop | null {
     const type = this._type;
     if (type !== 'map' && type !== 'list' && type !== 'unset' && !stash) {
       return null;
@@ -524,7 +532,7 @@ export class Prop implements IPropParent {
       }
       items[key] = prop;
     } else if (this.maps) {
-      const maps = this.maps;
+      const { maps } = this;
       const orig = maps.get(key);
       if (orig) {
         // replace
@@ -559,6 +567,7 @@ export class Prop implements IPropParent {
   }
 
   private purged = false;
+
   /**
    * 回收销毁
    */
@@ -584,7 +593,7 @@ export class Prop implements IPropParent {
    */
   [Symbol.iterator](): { next(): { value: Prop } } {
     let index = 0;
-    const items = this.items;
+    const { items } = this;
     const length = items?.length || 0;
     return {
       next() {
@@ -606,7 +615,7 @@ export class Prop implements IPropParent {
    * 遍历
    */
   forEach(fn: (item: Prop, key: number | string | undefined) => void): void {
-    const items = this.items;
+    const { items } = this;
     if (!items) {
       return;
     }
@@ -620,7 +629,7 @@ export class Prop implements IPropParent {
    * 遍历
    */
   map<T>(fn: (item: Prop, key: number | string | undefined) => T): T[] | null {
-    const items = this.items;
+    const { items } = this;
     if (!items) {
       return null;
     }

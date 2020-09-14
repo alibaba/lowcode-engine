@@ -1,1 +1,1 @@
-declare module "js-beautify";
+declare module 'js-beautify';

@@ -1,4 +1,4 @@
-import { obx, computed, autorun } from '@ali/lowcode-editor-core';
+import { obx, computed } from '@ali/lowcode-editor-core';
 import { IEditor, isJSExpression } from '@ali/lowcode-types';
 import { uniqueId } from '@ali/lowcode-utils';
 import { SettingEntry } from './setting-entry';
@@ -10,24 +10,36 @@ import { EventEmitter } from 'events';
 export class SettingPropEntry implements SettingEntry {
   // === static properties ===
   readonly editor: IEditor;
+
   readonly isSameComponent: boolean;
+
   readonly isMultiple: boolean;
+
   readonly isSingle: boolean;
+
   readonly nodes: Node[];
+
   readonly componentMeta: ComponentMeta | null;
+
   readonly designer: Designer;
+
   readonly top: SettingEntry;
+
   readonly isGroup: boolean;
+
   readonly type: 'field' | 'group';
+
   readonly id = uniqueId('entry');
 
   readonly emitter = new EventEmitter();
 
   // ==== dynamic properties ====
   @obx.ref private _name: string | number;
+
   get name() {
     return this._name;
   }
+
   @computed get path() {
     const path = this.parent.path.slice();
     if (this.type === 'field') {
@@ -133,7 +145,7 @@ export class SettingPropEntry implements SettingEntry {
    * 获取当前属性值
    */
   @computed getValue(): any {
-    let val: any = undefined;
+    let val: any;
     if (this.type === 'field') {
       val = this.parent.getPropValue(this.name);
     }
@@ -271,6 +283,7 @@ export class SettingPropEntry implements SettingEntry {
   isIgnore() {
     return false;
   }
+
   /*
   getConfig<K extends keyof IPropConfig>(configName?: K): IPropConfig[K] | IPropConfig {
     if (configName) {
@@ -287,6 +300,7 @@ export class SettingPropEntry implements SettingEntry {
     }
     return '';
   }
+
   setVariableValue(value: string) {
     const v = this.getValue();
     this.setValue({
@@ -295,6 +309,7 @@ export class SettingPropEntry implements SettingEntry {
       mock: isJSExpression(v) ? v.mock : v,
     });
   }
+
   setUseVariable(flag: boolean) {
     if (this.isUseVariable() === flag) {
       return;
@@ -310,12 +325,15 @@ export class SettingPropEntry implements SettingEntry {
       });
     }
   }
+
   isUseVariable() {
     return isJSExpression(this.getValue());
   }
+
   get useVariable() {
     return this.isUseVariable();
   }
+
   getMockOrValue() {
     const v = this.getValue();
     if (isJSExpression(v)) {

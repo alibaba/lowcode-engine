@@ -12,7 +12,7 @@ import { Omit } from '../_util/type';
 export interface Route {
   path: string;
   breadcrumbName: string;
-  children?: Omit<Route, 'children'>[];
+  children?: Array<Omit<Route, 'children'>>;
 }
 
 export interface BreadcrumbProps {
@@ -23,8 +23,8 @@ export interface BreadcrumbProps {
   itemRender?: (
     route: Route,
     params: any,
-    routes: Array<Route>,
-    paths: Array<string>,
+    routes: Route[],
+    paths: string[],
   ) => React.ReactNode;
   style?: React.CSSProperties;
   className?: string;
@@ -65,7 +65,7 @@ export default class Breadcrumb extends React.Component<BreadcrumbProps, any> {
     return path;
   };
 
-  addChildPath = (paths: string[], childPath: string = '', params: any) => {
+  addChildPath = (paths: string[], childPath = '', params: any) => {
     const originalPaths = [...paths];
     const path = this.getPath(childPath, params);
     if (path) {

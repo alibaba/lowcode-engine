@@ -1,0 +1,116 @@
+@import "~@ali/ve-less-variables/index.less";
+
+.ve-component-list {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  .ve-component-list-head {
+    height: 56px;
+    padding: 12px;
+    border-bottom: 1px solid var(--color-line-normal, rgba(31, 56, 88, 0.1));
+    .ve-search-control {
+      width: 256px;
+      height: 32px;
+      margin: 0;
+    }
+  }
+  .ve-component-list-body {
+    display: flex;
+    height: 100%;
+    overflow: auto;
+    .ve-component-list-empty {
+      width: 100%;
+      padding: 20px;
+      text-align: center;
+      &.kuma-empty-data.normal .kuma-empty-data-icon {
+        width: 50px;
+        height: 50px;
+        background-size: 100% 100%;
+        display: inline-block;
+      }
+    }
+    .component-description-item-icon-group {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      .component-description-item-icon {
+        margin-left: 4px;
+        &.tag {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background: rgba(249, 189, 15, 0.1);
+          color: #ff6f00;
+          font-size: 12px;
+          width: 48px;
+          height: 24px;
+        }
+      }
+      icon {
+        position: relative;
+        font-size: 14px;
+        cursor: pointer;
+        color: rgba(31, 56, 88, 0.4);
+        transition: color @transition-duration @transition-ease;
+        &:hover {
+          color: rgba(31, 56, 88, 0.6);
+        }
+        a {
+          position: absolute;
+          left: 0;
+          top: 0;
+          display: inline-block;
+          width: 14px;
+          height: 14px;
+        }
+      }
+    }
+    &.small {
+      height: calc(100% - 56px - 48px);
+    }
+    &.medium {
+      height: calc(100% - 56px);
+    }
+    &.large {
+      height: calc(100% - 48px);
+    }
+  }
+  .ve-component-list-foot {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    .btn {
+      margin-right: 8px;
+      flex: 1;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+    .kuma-button-primary {
+      background-color: var(--color-brand, @brand-color-1);
+      border-color: var(--color-brand, @brand-color-1);
+      border-radius: @global-border-radius;
+      color: var(--color-text-reverse, @white-alpha-2);
+      transition: background-color @transition-duration @transition-ease;
+      &:hover {
+        background-color: var(--color-brand-dark, @brand-color-3);
+        border-color: var(--color-brand-dark, @brand-color-3);
+        transition: background-color @transition-duration @transition-ease;
+      }
+    }
+    &.exist {
+      width: 100%;
+      height: 48px;
+      border-top: 1px solid var(--color-line-normal, rgba(31, 56, 88, 0.1));
+      background: #fff;
+      padding: 0 12px;
+    }
+  }
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}

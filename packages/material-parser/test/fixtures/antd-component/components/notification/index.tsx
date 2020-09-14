@@ -215,11 +215,9 @@ const api: any = {
     });
   },
   close(key: string) {
-    Object.keys(notificationInstance).forEach(cacheKey =>
-      Promise.resolve(notificationInstance[cacheKey]).then(instance => {
-        instance.removeNotice(key);
-      }),
-    );
+    Object.keys(notificationInstance).forEach(cacheKey => Promise.resolve(notificationInstance[cacheKey]).then(instance => {
+      instance.removeNotice(key);
+    }));
   },
   config: setNotificationConfig,
   destroy() {
@@ -233,11 +231,10 @@ const api: any = {
 };
 
 ['success', 'info', 'warning', 'error'].forEach(type => {
-  api[type] = (args: ArgsProps) =>
-    api.open({
-      ...args,
-      type,
-    });
+  api[type] = (args: ArgsProps) => api.open({
+    ...args,
+    type,
+  });
 });
 
 api.warn = api.warning;

@@ -8,8 +8,8 @@ import {
   isAssetItem,
   AssetType,
   assetItem,
-} from '@ali/lowcode-utils';
-import { isCSSUrl } from '@ali/lowcode-utils';
+  isCSSUrl } from '@ali/lowcode-utils';
+
 import { BuiltinSimulatorRenderer } from './renderer';
 
 export function createSimulator(
@@ -65,7 +65,7 @@ export function createSimulator(
 
   const styleFrags = Object.keys(styles)
     .map((key) => {
-      return styles[key].join('\n') + `<meta level="${key}" />`;
+      return `${styles[key].join('\n') }<meta level="${key}" />`;
     })
     .join('');
   const scriptFrags = Object.keys(scripts)

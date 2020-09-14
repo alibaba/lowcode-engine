@@ -34,7 +34,7 @@ export default class Preview extends ReactProvider {
       containerId,
       components: { ...builtInComps, ...buildComponents({ '@alifd/next': 'Next' }, componentsMap) },
       componentsMap,
-      utils: utils,
+      utils,
       constants,
     };
   }
@@ -44,7 +44,7 @@ export default class Preview extends ReactProvider {
     const appSchemaStr = localStorage.getItem('lce-dev-store');
     const appSchema = JSON.parse(appSchemaStr || '');
     const idx = appSchema.componentsTree.findIndex(
-      (page: any, idx: number) => (page.fileName || `page${idx}`) === pageId,
+      (page: any, index: number) => (page.fileName || `page${index}`) === pageId,
     );
     const schema = appSchema.componentsTree[idx];
     return schema;

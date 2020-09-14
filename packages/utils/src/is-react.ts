@@ -1,6 +1,7 @@
 import { ComponentClass, Component, FunctionComponent, ComponentType } from 'react';
-const hasSymbol = typeof Symbol === 'function' && Symbol['for'];
-const REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol['for']('react.forward_ref') : 0xead0;
+
+const hasSymbol = typeof Symbol === 'function' && Symbol.for;
+const REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
 
 export function isReactClass(obj: any): obj is ComponentClass<any> {
   return obj && obj.prototype && (obj.prototype.isReactComponent || obj.prototype instanceof Component);

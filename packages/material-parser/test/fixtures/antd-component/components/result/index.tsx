@@ -20,9 +20,9 @@ export const IconMap = {
 };
 
 export const ExceptionMap = {
-  '404': noFound,
-  '500': serverError,
-  '403': unauthorized,
+  404: noFound,
+  500: serverError,
+  403: unauthorized,
 };
 
 export type ExceptionStatusType = 403 | 404 | 500 | '403' | '404' | '500';
@@ -74,8 +74,7 @@ const renderIcon = (prefixCls: string, { status, icon }: ResultProps) => {
   return <div className={className}>{icon || iconNode}</div>;
 };
 
-const renderExtra = (prefixCls: string, { extra }: ResultProps) =>
-  extra && <div className={`${prefixCls}-extra`}>{extra}</div>;
+const renderExtra = (prefixCls: string, { extra }: ResultProps) => extra && <div className={`${prefixCls}-extra`}>{extra}</div>;
 
 export interface ResultType extends React.FC<ResultProps> {
   PRESENTED_IMAGE_404: React.ReactNode;

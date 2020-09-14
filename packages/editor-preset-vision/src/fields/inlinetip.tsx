@@ -19,7 +19,7 @@ export default class InlineTip extends Component<InlineTipProps> {
     return (
       <div
         style={{ display: 'none' }}
-        data-role='tip'
+        data-role="tip"
         data-position={position}
         data-theme={theme}
       >

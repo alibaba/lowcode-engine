@@ -13,8 +13,7 @@ test('materialize react-color by online', async t => {
 
   const actual = await parse(options);
   t.snapshot(actual);
-
-})
+});
 
 test('materialize custom breadcrumb by online', async t => {
   const options: IMaterializeOptions = {
@@ -24,5 +23,4 @@ test('materialize custom breadcrumb by online', async t => {
 
   const actual = await parse(options);
   t.snapshot(actual);
-
-})
+});

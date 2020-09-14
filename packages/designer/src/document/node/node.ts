@@ -73,6 +73,7 @@ import { EventEmitter } from 'events';
  */
 export class Node<Schema extends NodeSchema = NodeSchema> {
   private emitter: EventEmitter;
+
   /**
    * 是节点实例
    */
@@ -94,28 +95,35 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    *  * Slot 插槽节点，无 props，正常 children，有 slotArgs，有指令
    */
   readonly componentName: string;
+
   /**
    * 属性抽象
    */
   props: Props;
+
   protected _children?: NodeChildren;
+
   /**
    * @deprecated
    */
   private _addons: { [key: string]: { exportData: () => any; isProp: boolean; } } = {};
+
   @obx.ref private _parent: ParentalNode | null = null;
+
   /**
    * 父级节点
    */
   get parent(): ParentalNode | null {
     return this._parent;
   }
+
   /**
    * 当前节点子集
    */
   get children(): NodeChildren | null {
     return this._children || null;
   }
+
   /**
    * 当前节点深度
    */
@@ -165,18 +173,20 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       this.setupAutoruns();
     }
 
-    this.settingEntry = this.document.designer.createSettingEntry([ this ]);
+    this.settingEntry = this.document.designer.createSettingEntry([this]);
     this.emitter = new EventEmitter();
   }
 
   private initProps(props: any): any {
     return this.document.designer.transformProps(props, this, TransformStage.Init);
   }
+
   private upgradeProps(props: any): any {
     return this.document.designer.transformProps(props, this, TransformStage.Upgrade);
   }
 
   private autoruns?: Array<() => void>;
+
   private setupAutoruns() {
     const autoruns = this.componentMeta.getMetadata().experimental?.autoruns;
     if (!autoruns || autoruns.length < 1) {
@@ -288,6 +298,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   private _slotFor?: Prop | null = null;
+
   internalSetSlotFor(slotFor: Prop | null | undefined) {
     this._slotFor = slotFor;
   }
@@ -345,6 +356,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   @obx.val _slots: Node[] = [];
+
   @computed hasSlots() {
     return this._slots.length > 0;
   }
@@ -354,6 +366,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   @obx.ref private _conditionGroup: ExclusiveGroup | null = null;
+
   get conditionGroup(): ExclusiveGroup | null {
     return this._conditionGroup;
   }
@@ -418,7 +431,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return false;
   }
 
-  wrapWith(schema: Schema) {
+  wrapWith(/* schema: Schema */) {
     // todo
   }
 
@@ -507,7 +520,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * 设置多个属性值，替换原有值
    */
   setProps(props?: PropsMap | PropsList | Props | null) {
-    if(props instanceof Props) {
+    if (props instanceof Props) {
       this.props = props;
       return;
     }
@@ -531,7 +544,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     if (!this.parent) {
       return null;
     }
-    const index = this.index;
+    const { index } = this;
     if (index < 0) {
       return null;
     }
@@ -545,7 +558,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     if (!this.parent) {
       return null;
     }
-    const index = this.index;
+    const { index } = this;
     if (index < 1) {
       return null;
     }
@@ -683,6 +696,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     slotNode.internalSetParent(this as ParentalNode, true);
     this._slots.push(slotNode);
   }
+
   /**
    * 当前node对应组件是否已注册可用
    */
@@ -703,16 +717,18 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   private purged = false;
+
   /**
    * 是否已销毁
    */
   get isPurged() {
     return this.purged;
   }
+
   /**
    * 销毁
    */
-  purge(useMutator = true) {
+  purge() {
     if (this.purged) {
       return;
     }
@@ -734,9 +750,11 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   isEmpty(): boolean {
     return this.children ? this.children.isEmpty() : true;
   }
+
   getChildren() {
     return this.children;
   }
+
   getComponentName() {
     return this.componentName;
   }
@@ -747,9 +765,11 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   insert(node: Node, ref?: Node, useMutator = true) {
     this.insertAfter(node, ref, useMutator);
   }
+
   insertBefore(node: Node, ref?: Node, useMutator = true) {
     this.children?.insert(node, ref ? ref.index : null, useMutator);
   }
+
   insertAfter(node: any, ref?: Node, useMutator = true) {
     if (!isNode(node)) {
       if (node.getComponentName) {
@@ -762,21 +782,27 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
     this.children?.insert(node, ref ? ref.index + 1 : null, useMutator);
   }
+
   getParent() {
     return this.parent;
   }
+
   getId() {
     return this.id;
   }
+
   getIndex() {
     return this.index;
   }
+
   getNode() {
     return this;
   }
+
   getRoot() {
     return this.document.rootNode;
   }
+
   getProps() {
     return this.props;
   }
@@ -805,6 +831,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
     return this.status;
   }
+
   /**
    * @deprecated
    */
@@ -817,6 +844,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       this.status[field] = flag;
     }
   }
+
   /**
    * @deprecated
    */
@@ -827,6 +855,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
     return this.document.simulator?.findDOMNodes(instance)?.[0];
   }
+
   /**
    * @deprecated
    */
@@ -834,6 +863,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     console.warn('getPage is deprecated, use document instead');
     return this.document;
   }
+
   /**
    * @deprecated
    */
@@ -846,7 +876,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
         const canDropIn = c.componentMeta?.prototype?.options?.canDropIn;
         if (typeof canDropIn === 'function') {
           return canDropIn(node);
-        } else if (typeof canDropIn === 'boolean'){
+        } else if (typeof canDropIn === 'boolean') {
           return canDropIn;
         }
         return true;
@@ -861,7 +891,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     if (this.isContainer()) {
       if (canDropIn === undefined ||
         (typeof canDropIn === 'boolean' && canDropIn) ||
-      (typeof canDropIn === 'function' && canDropIn(node))){
+      (typeof canDropIn === 'function' && canDropIn(node))) {
         return { container: this, ref };
       }
     }
@@ -872,6 +902,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
     return null;
   }
+
   /**
    * @deprecated
    */
@@ -882,10 +913,11 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
     return this.getExtraProp(key)?.getValue();
   }
+
   /**
    * @deprecated
    */
-  registerAddon(key: string, exportData: () => any, isProp: boolean = false) {
+  registerAddon(key: string, exportData: () => any, isProp = false) {
     // if (this._addons[key]) {
     //   throw new Error(`node addon ${key} exist`);
     // }
@@ -1037,7 +1069,7 @@ export function insertChildren(
   let index = at;
   let node: any;
   const results: Node[] = [];
-  // tslint:disable-next-line
+  // eslint-disable-next-line no-cond-assign
   while ((node = nodes.pop())) {
     node = insertChild(container, node, index, copy);
     results.push(node);

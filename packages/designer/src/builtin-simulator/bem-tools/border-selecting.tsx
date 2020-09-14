@@ -55,10 +55,12 @@ export class BorderSelectingInstance extends Component<{
 }
 
 @observer
+// eslint-disable-next-line react/no-multi-comp
 class Toolbar extends Component<{ observed: OffsetObserver }> {
   shouldComponentUpdate() {
     return false;
   }
+
   render() {
     const { observed } = this.props;
     const { height, width } = observed.viewport;
@@ -149,6 +151,7 @@ function createAction(content: ReactNode | ComponentType<any> | ActionContentObj
 }
 
 @observer
+// eslint-disable-next-line react/no-multi-comp
 export class BorderSelectingForNode extends Component<{ host: BuiltinSimulatorHost; node: Node }> {
   get host(): BuiltinSimulatorHost {
     return this.props.host;
@@ -169,7 +172,7 @@ export class BorderSelectingForNode extends Component<{ host: BuiltinSimulatorHo
   render() {
     const { instances } = this;
     const { node } = this.props;
-    const designer = this.host.designer;
+    const { designer } = this.host;
 
     if (!instances || instances.length < 1) {
       return null;
@@ -192,6 +195,7 @@ export class BorderSelectingForNode extends Component<{ host: BuiltinSimulatorHo
 }
 
 @observer
+// eslint-disable-next-line react/no-multi-comp
 export class BorderSelecting extends Component<{ host: BuiltinSimulatorHost }> {
   get host(): BuiltinSimulatorHost {
     return this.props.host;
@@ -206,7 +210,7 @@ export class BorderSelecting extends Component<{ host: BuiltinSimulatorHost }> {
     if (!doc || doc.suspensed || this.host.liveEditing.editing) {
       return null;
     }
-    const selection = doc.selection;
+    const { selection } = doc;
     return this.dragging ? selection.getTopNodes() : selection.getNodes();
   }
 
@@ -215,7 +219,7 @@ export class BorderSelecting extends Component<{ host: BuiltinSimulatorHost }> {
   }
 
   render() {
-    const selecting = this.selecting;
+    const { selecting } = this;
     if (!selecting || selecting.length < 1) {
       return null;
     }

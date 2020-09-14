@@ -29,8 +29,8 @@ export function createNodeStyleSheet(props: any) {
 
     if (typeof styleProp === 'string') {
       const s = document.createElement('style');
-      const cssId = '_style_pesudo_' + props.fieldId;
-      const cssClass = '_css_pesudo_' + props.fieldId;
+      const cssId = `_style_pesudo_${ props.fieldId}`;
+      const cssClass = `_css_pesudo_${ props.fieldId}`;
 
       props.className = cssClass;
       s.setAttribute('type', 'text/css');
@@ -43,7 +43,7 @@ export function createNodeStyleSheet(props: any) {
             .replace(/(\d+)rpx/g, (a, b) => {
               return `${b / 2}px`;
             })
-            .replace(/:root/g, '.' + cssClass),
+            .replace(/:root/g, `.${ cssClass}`),
         ),
       );
       return s;

@@ -16,10 +16,10 @@ export interface CarouselProps extends Omit<Settings, 'dots' | 'dotsClass'> {
   dotPosition?: DotPosition;
   children?: React.ReactNode;
   dots?:
-    | boolean
-    | {
-        className?: string;
-      };
+  | boolean
+  | {
+    className?: string;
+  };
 }
 
 export default class Carousel extends React.Component<CarouselProps, {}> {

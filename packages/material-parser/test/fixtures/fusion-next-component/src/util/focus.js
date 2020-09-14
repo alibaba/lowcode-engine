@@ -12,19 +12,19 @@ import { each } from './object';
  * @return  {Boolean}
  */
 function _isVisible(node) {
-    while (node) {
-        if (node === document.body || node === document.documentElement) {
-            break;
-        }
-        if (
-            node.style.display === 'none' ||
-            node.style.visibility === 'hidden'
-        ) {
-            return false;
-        }
-        node = node.parentNode;
+  while (node) {
+    if (node === document.body || node === document.documentElement) {
+      break;
     }
-    return true;
+    if (
+      node.style.display === 'none' ||
+            node.style.visibility === 'hidden'
+    ) {
+      return false;
+    }
+    node = node.parentNode;
+  }
+  return true;
 }
 
 /**
@@ -34,22 +34,22 @@ function _isVisible(node) {
  * @return  {Boolean}
  */
 function _isFocusable(node) {
-    const nodeName = node.nodeName.toLowerCase();
-    const tabIndex = parseInt(node.getAttribute('tabindex'), 10);
-    const hasTabIndex = !isNaN(tabIndex) && tabIndex > -1;
+  const nodeName = node.nodeName.toLowerCase();
+  const tabIndex = parseInt(node.getAttribute('tabindex'), 10);
+  const hasTabIndex = !isNaN(tabIndex) && tabIndex > -1;
 
-    if (_isVisible(node)) {
-        if (nodeName === 'input') {
-            return !node.disabled && node.type !== 'hidden';
-        } else if (['select', 'textarea', 'button'].indexOf(nodeName) > -1) {
-            return !node.disabled;
-        } else if (nodeName === 'a') {
-            return node.getAttribute('href') || hasTabIndex;
-        } else {
-            return hasTabIndex;
-        }
+  if (_isVisible(node)) {
+    if (nodeName === 'input') {
+      return !node.disabled && node.type !== 'hidden';
+    } else if (['select', 'textarea', 'button'].indexOf(nodeName) > -1) {
+      return !node.disabled;
+    } else if (nodeName === 'a') {
+      return node.getAttribute('href') || hasTabIndex;
+    } else {
+      return hasTabIndex;
     }
-    return false;
+  }
+  return false;
 }
 
 /**
@@ -58,23 +58,23 @@ function _isFocusable(node) {
  * @return {Array<Element>}
  */
 export function getFocusNodeList(node) {
-    const res = [];
-    const nodeList = node.querySelectorAll('*');
+  const res = [];
+  const nodeList = node.querySelectorAll('*');
 
-    each(nodeList, item => {
-        if (_isFocusable(item)) {
-            const method = item.getAttribute('data-auto-focus')
-                ? 'unshift'
-                : 'push';
-            res[method](item);
-        }
-    });
-
-    if (_isFocusable(node)) {
-        res.unshift(node);
+  each(nodeList, item => {
+    if (_isFocusable(item)) {
+      const method = item.getAttribute('data-auto-focus')
+        ? 'unshift'
+        : 'push';
+      res[method](item);
     }
+  });
 
-    return res;
+  if (_isFocusable(node)) {
+    res.unshift(node);
+  }
+
+  return res;
 }
 
 // 用于记录上一次获得焦点的无素
@@ -84,28 +84,28 @@ let lastFocusElement = null;
  * 保存最近一次获得焦点的无素
  */
 export function saveLastFocusNode() {
-    lastFocusElement = document.activeElement;
+  lastFocusElement = document.activeElement;
 }
 
 /**
  * 清除焦点记录
  */
 export function clearLastFocusNode() {
-    lastFocusElement = null;
+  lastFocusElement = null;
 }
 
 /**
  * 尝试将焦点切换到上一个元素
  */
 export function backLastFocusNode() {
-    if (lastFocusElement) {
-        try {
-            // 元素可能已经被移动了
-            lastFocusElement.focus();
-        } catch (e) {
-            // ignore ...
-        }
+  if (lastFocusElement) {
+    try {
+      // 元素可能已经被移动了
+      lastFocusElement.focus();
+    } catch (e) {
+      // ignore ...
     }
+  }
 }
 
 /**
@@ -114,17 +114,17 @@ export function backLastFocusNode() {
  * @param  {Event} e      键盘事件
  */
 export function limitTabRange(node, e) {
-    if (e.keyCode === KEYCODE.TAB) {
-        const tabNodeList = getFocusNodeList(node);
-        const maxIndex = tabNodeList.length - 1;
-        const index = tabNodeList.indexOf(document.activeElement);
+  if (e.keyCode === KEYCODE.TAB) {
+    const tabNodeList = getFocusNodeList(node);
+    const maxIndex = tabNodeList.length - 1;
+    const index = tabNodeList.indexOf(document.activeElement);
 
-        if (index > -1) {
-            let targetIndex = index + (e.shiftKey ? -1 : 1);
-            targetIndex < 0 && (targetIndex = maxIndex);
-            targetIndex > maxIndex && (targetIndex = 0);
-            tabNodeList[targetIndex].focus();
-            e.preventDefault();
-        }
+    if (index > -1) {
+      let targetIndex = index + (e.shiftKey ? -1 : 1);
+      targetIndex < 0 && (targetIndex = maxIndex);
+      targetIndex > maxIndex && (targetIndex = 0);
+      tabNodeList[targetIndex].focus();
+      e.preventDefault();
     }
+  }
 }

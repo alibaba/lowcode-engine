@@ -20,7 +20,7 @@ class DocItem {
       type: 'i18n',
       ...strings,
     });
-    this.emitter = new EventEmitter;
+    this.emitter = new EventEmitter();
     this.inited = unInitial !== true;
   }
 
@@ -69,7 +69,7 @@ class DocItem {
 
 class I18nUtil {
   constructor() {
-    this.emitter = new EventEmitter;
+    this.emitter = new EventEmitter();
     // original data source from remote
     this.i18nData = {};
     // current i18n records on the left pane

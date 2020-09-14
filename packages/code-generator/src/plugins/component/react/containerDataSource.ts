@@ -29,7 +29,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     const ir = next.ir as IContainerInfo;
 
     if (ir.state) {
-      const state = ir.state;
+      const { state } = ir;
       const fields = Object.keys(state).map<string>((stateName) => {
         const value = generateCompositeType(state[stateName]);
         return `${stateName}: ${value},`;

@@ -4,7 +4,7 @@ export class FocusTracker {
       if (this.checkModalDown(e)) {
         return;
       }
-      const first = this.first;
+      const { first } = this;
       if (first && !first.internalCheckInRange(e)) {
         this.internalSuspenseItem(first);
         first.internalTriggerBlur();
@@ -15,23 +15,30 @@ export class FocusTracker {
       win.document.removeEventListener('click', checkDown, true);
     };
   }
+
   private actives: Focusable[] = [];
+
   get first() {
     return this.actives[0];
   }
+
   private modals: Array<{ checkDown: (e: MouseEvent) => boolean; checkOpen: () => boolean }> = [];
+
   addModal(checkDown: (e: MouseEvent) => boolean, checkOpen: () => boolean) {
     this.modals.push({
       checkDown,
       checkOpen,
     });
   }
+
   private checkModalOpen(): boolean {
     return this.modals.some(item => item.checkOpen());
   }
+
   private checkModalDown(e: MouseEvent): boolean {
     return this.modals.some(item => item.checkDown(e));
   }
+
   execSave() {
     // has Modal return;
     if (this.checkModalOpen()) {
@@ -42,16 +49,19 @@ export class FocusTracker {
       this.first.internalTriggerSave();
     }
   }
+
   execEsc() {
-    const first = this.first;
+    const { first } = this;
     if (first) {
       this.internalSuspenseItem(first);
       first.internalTriggerEsc();
     }
   }
+
   create(config: FocusableConfig) {
     return new Focusable(this, config);
   }
+
   internalActiveItem(item: Focusable) {
     const first = this.actives[0];
     if (first === item) {
@@ -69,6 +79,7 @@ export class FocusTracker {
     // trigger onActive
     item.internalTriggerActive();
   }
+
   internalSuspenseItem(item: Focusable) {
     const i = this.actives.indexOf(item);
     if (i > -1) {
@@ -89,18 +100,23 @@ export interface FocusableConfig {
 
 export class Focusable {
   readonly isModal: boolean;
+
   constructor(private tracker: FocusTracker, private config: FocusableConfig) {
     this.isModal = config.modal == null ? false : config.modal;
   }
+
   active() {
     this.tracker.internalActiveItem(this);
   }
+
   suspense() {
     this.tracker.internalSuspenseItem(this);
   }
+
   purge() {
     this.tracker.internalSuspenseItem(this);
   }
+
   internalCheckInRange(e: MouseEvent) {
     const { range } = this.config;
     if (!range) {
@@ -111,11 +127,13 @@ export class Focusable {
     }
     return range.contains(e.target as HTMLElement);
   }
+
   internalTriggerBlur() {
     if (this.config.onBlur) {
       this.config.onBlur();
     }
   }
+
   internalTriggerSave() {
     if (this.config.onSave) {
       this.config.onSave();
@@ -123,11 +141,13 @@ export class Focusable {
     }
     return false;
   }
+
   internalTriggerEsc() {
     if (this.config.onEsc) {
       this.config.onEsc();
     }
   }
+
   internalTriggerActive() {
     if (this.config.onActive) {
       this.config.onActive();

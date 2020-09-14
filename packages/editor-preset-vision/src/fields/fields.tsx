@@ -50,7 +50,7 @@ export class PlainField extends VEField {
     headDIY: true,
   };
 
-  public static displayName: string = 'PlainField';
+  public static displayName = 'PlainField';
 
   public renderHead(): null {
     return null;
@@ -59,6 +59,7 @@ export class PlainField extends VEField {
 
 export class InlineField extends VEField {
   public static displayName = 'InlineField';
+
   constructor(props: any) {
     super(props);
     this.classNames = ['engine-setting-field', 'engine-inline-field'];
@@ -194,15 +195,14 @@ export class PopupField extends VEField {
     return (
       <div
         className={classNameList}
-        onClick={(e) =>
-          popups.popup({
-            cancelOnBlur: true,
-            content: this.props.children,
-            position: 'left bottom',
-            showClose: true,
-            sizeFixed: true,
-            target: e.currentTarget,
-          })
+        onClick={(e) => popups.popup({
+          cancelOnBlur: true,
+          content: this.props.children,
+          position: 'left bottom',
+          showClose: true,
+          sizeFixed: true,
+          target: e.currentTarget,
+        })
         }
       >
         <span className="engine-field-title">{title}</span>
@@ -240,8 +240,11 @@ export class Stage extends Component {
   };
 
   public stage: any;
+
   public additionClassName: string;
+
   public shell: Element | null = null;
+
   private willDetach: () => any;
 
   public componentWillMount() {
@@ -294,7 +297,7 @@ export class Stage extends Component {
   }
 
   public render() {
-    const stage = this.stage;
+    const { stage } = this;
     let content = null;
     let tabs = null;
 

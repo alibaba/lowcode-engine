@@ -26,9 +26,9 @@ export default class TreeBranches extends Component<{
     return (
       <div className="tree-node-branches">
         {
-          !isModal && <TreeNodeSlots treeNode={treeNode}/>
+          !isModal && <TreeNodeSlots treeNode={treeNode} />
         }
-        <TreeNodeChildren treeNode={treeNode} isModal={isModal || false}/>
+        <TreeNodeChildren treeNode={treeNode} isModal={isModal || false} />
       </div>
     );
   }
@@ -36,15 +36,16 @@ export default class TreeBranches extends Component<{
 
 @observer
 class TreeNodeChildren extends Component<{
-  treeNode: TreeNode;
-  isModal?: boolean;
-}> {
+    treeNode: TreeNode;
+    isModal?: boolean;
+  }> {
   shouldComponentUpdate() {
     return false;
   }
+
   render() {
     const { treeNode, isModal } = this.props;
-    let children: any = [];
+    const children: any = [];
     let groupContents: any[] = [];
     let currentGrp: ExclusiveGroup;
     const endGroup = () => {
@@ -60,7 +61,7 @@ class TreeNodeChildren extends Component<{
         groupContents = [];
       }
     };
-    const dropDetail = treeNode.dropDetail;
+    const { dropDetail } = treeNode;
     const dropIndex = dropDetail?.index;
     const insertion = (
       <div
@@ -89,12 +90,12 @@ class TreeNodeChildren extends Component<{
             children.push(insertion);
           }
         }
-        groupContents.push(<TreeNodeView key={child.id} treeNode={child} isModal={isModal}/>);
+        groupContents.push(<TreeNodeView key={child.id} treeNode={child} isModal={isModal} />);
       } else {
         if (index === dropIndex) {
           children.push(insertion);
         }
-        children.push(<TreeNodeView key={child.id} treeNode={child} isModal={isModal}/>);
+        children.push(<TreeNodeView key={child.id} treeNode={child} isModal={isModal} />);
       }
     });
     endGroup();
@@ -109,11 +110,12 @@ class TreeNodeChildren extends Component<{
 
 @observer
 class TreeNodeSlots extends Component<{
-  treeNode: TreeNode;
-}> {
+    treeNode: TreeNode;
+  }> {
   shouldComponentUpdate() {
     return false;
   }
+
   render() {
     const { treeNode } = this.props;
     if (!treeNode.hasSlots()) {

@@ -57,6 +57,7 @@ export default class TreeNode {
    * 在初始化根节点时，设置为展开状态
    */
   @obx.ref private _expanded = false;
+
   get expanded(): boolean {
     return this.isRoot() || (this.expandable && this._expanded);
   }
@@ -98,7 +99,7 @@ export default class TreeNode {
 
   @computed get selected(): boolean {
     // TODO: check is dragging
-    const selection = this.document.selection;
+    const { selection } = this.document;
     return selection.has(this.node.id);
   }
 
@@ -107,7 +108,7 @@ export default class TreeNode {
   }
 
   @computed get titleLabel() {
-    let title = this.title;
+    let { title } = this;
     if (!title) {
       return '';
     }
@@ -140,7 +141,7 @@ export default class TreeNode {
   }
 
   @computed get parent() {
-    const parent = this.node.parent;
+    const { parent } = this.node;
     if (parent) {
       return this.tree.getTreeNode(parent);
     }
@@ -171,13 +172,13 @@ export default class TreeNode {
   }
 
   hasChildren(): boolean {
-    return this.isContainer() && this.node.children?.notEmpty() ? true : false;
+    return !!(this.isContainer() && this.node.children?.notEmpty());
   }
 
   select(isMulti: boolean) {
-    const node = this.node;
+    const { node } = this;
 
-    const selection = node.document.selection;
+    const { selection } = node.document;
     if (isMulti) {
       selection.add(node.id);
     } else {
@@ -188,7 +189,7 @@ export default class TreeNode {
   /**
    * 展开节点，支持依次展开父节点
    */
-  expand(tryExpandParents: boolean = false) {
+  expand(tryExpandParents = false) {
     // 这边不能直接使用 expanded，需要额外判断是否可以展开
     // 如果只使用 expanded，会漏掉不可以展开的情况，即在不可以展开的情况下，会触发展开
     if (this.expandable && !this._expanded) {
@@ -208,11 +209,15 @@ export default class TreeNode {
   }
 
   readonly designer: Designer;
+
   readonly document: DocumentModel;
+
   @obx.ref private _node: Node;
+
   get node() {
     return this._node;
   }
+
   constructor(readonly tree: Tree, node: Node) {
     this.document = node.document;
     this.designer = this.document.designer;

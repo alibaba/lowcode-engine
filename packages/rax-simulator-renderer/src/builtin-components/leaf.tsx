@@ -2,6 +2,7 @@ import { Component } from 'rax';
 
 class Leaf extends Component {
   static displayName = 'Leaf';
+
   static componentMetadata = {
     componentName: 'Leaf',
     configure: {
@@ -11,7 +12,7 @@ class Leaf extends Component {
       }],
       // events/className/style/general/directives
       supports: false,
-    }
+    },
   };
 
   render() {

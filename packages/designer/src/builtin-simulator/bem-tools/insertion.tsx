@@ -1,15 +1,14 @@
 import { Component } from 'react';
-import { computed, observer } from '@ali/lowcode-editor-core';
-import { SimulatorContext } from '../context';
+import { observer } from '@ali/lowcode-editor-core';
 import { BuiltinSimulatorHost } from '../host';
 import {
   DropLocation,
   Rect,
   isLocationChildrenDetail,
   LocationChildrenDetail,
-  isVertical
+  isVertical,
 } from '../../designer';
-import { ISimulatorHost, } from '../../simulator';
+import { ISimulatorHost } from '../../simulator';
 import { ParentalNode } from '../../document';
 import './insertion.less';
 

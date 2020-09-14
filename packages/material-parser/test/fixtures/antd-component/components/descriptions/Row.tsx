@@ -10,7 +10,7 @@ interface CellConfig {
 }
 
 function renderCells(
-  items: React.ReactElement<DescriptionsItemProps>[],
+  items: Array<React.ReactElement<DescriptionsItemProps>>,
   { colon, prefixCls, bordered }: RowProps,
   { component, type, showLabel, showContent }: CellConfig,
 ) {
@@ -76,7 +76,7 @@ function renderCells(
 export interface RowProps {
   prefixCls: string;
   vertical: boolean;
-  row: React.ReactElement<DescriptionsItemProps>[];
+  row: Array<React.ReactElement<DescriptionsItemProps>>;
   bordered?: boolean;
   colon: boolean;
   index: number;
