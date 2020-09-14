@@ -11,7 +11,10 @@ export interface ITreeBoard {
 }
 
 export class TreeMaster {
-  constructor(readonly designer: Designer) {
+  readonly designer: Designer;
+
+  constructor(designer: Designer) {
+    this.designer = designer;
     let startTime: any;
     designer.dragon.onDragstart(() => {
       startTime = Date.now() / 1000;

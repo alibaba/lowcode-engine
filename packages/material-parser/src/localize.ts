@@ -1,12 +1,11 @@
 import spawn from 'cross-spawn-promise';
 import { ensureDir, ensureFile, writeFile } from 'fs-extra';
 import { join } from 'path';
-import semver from 'semver';
 import uuid from 'short-uuid';
 import { debug } from './core';
 import { IMaterializeOptions } from './types';
 
-const log = debug.extend('mat');
+const log = debug.extend('localize');
 
 /**
  * 创建组件包

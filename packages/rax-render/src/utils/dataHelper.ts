@@ -157,7 +157,7 @@ export default class DataHelper {
       const afterRequest = this.appHelper && this.appHelper.utils && this.appHelper.utils.afterRequest;
       const csrfInput = document.getElementById('_csrf_token');
       const _tb_token_ = csrfInput && csrfInput.value;
-      asyncDataList.map(req => {
+      asyncDataList.forEach(req => {
         const { id, type, options } = req;
         if (!id || !type) return;
         if (type === 'doServer') {
@@ -271,6 +271,7 @@ export default class DataHelper {
 
   fetchOne(type, req) {
     const { options } = req;
+    // eslint-disable-next-line prefer-const
     let { uri, method = 'GET', headers, params, ...otherProps } = options;
     otherProps = otherProps || {};
     switch (type) {

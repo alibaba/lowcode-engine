@@ -1,7 +1,7 @@
 import { debug, ComponentMeta } from './core';
 import { IMaterialParsedModel, IMaterialScanModel } from './types';
 
-const log = debug.extend('mat');
+const log = debug.extend('gen');
 
 export default async function (
   matScanModel: IMaterialScanModel,
@@ -41,6 +41,7 @@ export async function genManifest(
     title: matScanModel.pkgName,
     docUrl: '',
     screenshot: '',
+    devMode: 'proCode', // 需要入料的组件都是源码模式，低代码组件在平台上即可直接生成描述
     npm: {
       package: matScanModel.pkgName,
       version: matScanModel.pkgVersion,

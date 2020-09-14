@@ -26,9 +26,9 @@ export default function parse(filePath: string): IMaterialParsedModel[] {
         const item: any = transformItem(name, info.props[name]);
         acc.push(item);
       } catch (e) {
-      } finally {
-        return acc;
+        // TODO
       }
+      return acc;
     }, []);
     res.push({
       componentName: info.displayName,

@@ -50,8 +50,6 @@ const EXPRESSION_TYPE = {
   JSSLOT: 'JSSlot',
 };
 const EXPRESSION_REG = /^\{\{(\{.*\}|.*?)\}\}$/;
-const hasSymbol = typeof Symbol === 'function' && Symbol.for;
-const REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
 const debug = Debug('utils:index');
 
 const ENV = {
@@ -180,6 +178,7 @@ export function fillObj(receiver = {}, ...suppliers) {
 
 // 中划线转驼峰
 export function toHump(name) {
+  // eslint-disable-next-line no-useless-escape
   return name.replace(/\-(\w)/g, (all, letter) => letter.toUpperCase());
 }
 // 驼峰转中划线
@@ -525,7 +524,7 @@ export function addCssTag(id, content) {
 
 // 注册快捷
 export function registShortCuts(config, appHelper) {
-  const keyboardFilter = (keymaster.filter = (event) => {
+  keymaster.filter = (event) => {
     const eTarget = event.target || event.srcElement;
     const { tagName } = eTarget;
     const isInput = !!(tagName == 'INPUT' || tagName == 'SELECT' || tagName == 'TEXTAREA');
@@ -541,7 +540,8 @@ export function registShortCuts(config, appHelper) {
       return false;
     }
     return true;
-  });
+  };
+  const keyboardFilter = keymaster.filter;
 
   const ideMessage = appHelper.utils && appHelper.utils.ideMessage;
 

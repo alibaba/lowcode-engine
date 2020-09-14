@@ -40,7 +40,7 @@ export default class TempEngine extends BaseEngine {
     debug(`temp.componentDidMount - ${this.props.__schema.fileName}`);
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate() {
     debug(`temp.componentDidUpdate - ${this.props.__schema.fileName}`);
   }
 

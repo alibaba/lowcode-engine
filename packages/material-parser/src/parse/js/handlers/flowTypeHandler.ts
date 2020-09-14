@@ -7,9 +7,9 @@
 
 import { namedTypes as t } from 'ast-types';
 import getTSType from '../utils/getTSType';
-import getRoot from '../utils/getRoot';
-import parseTS from '../../ts';
-import getFlowTypeFromReactComponent, { applyToFlowTypeProperties } from '../utils/getFlowTypeFromReactComponent';
+import getFlowTypeFromReactComponent, {
+  applyToFlowTypeProperties,
+} from '../utils/getFlowTypeFromReactComponent';
 
 const { unwrapUtilityType } = require('react-docgen/dist/utils/flowUtilityTypes');
 const { getFlowType, getPropertyName, resolveToValue } = require('react-docgen').utils;

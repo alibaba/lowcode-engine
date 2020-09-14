@@ -58,7 +58,6 @@ export default class BoxResizing extends Component<{ host: BuiltinSimulatorHost 
 }
 
 @observer
-// eslint-disable-next-line react/no-multi-comp
 export class BoxResizingForNode extends Component<{ host: BuiltinSimulatorHost; node: Node }> {
   static contextType = SimulatorContext;
 
@@ -106,7 +105,6 @@ export class BoxResizingForNode extends Component<{ host: BuiltinSimulatorHost; 
 }
 
 @observer
-// eslint-disable-next-line react/no-multi-comp
 export class BoxResizingInstance extends Component<{
   observed: OffsetObserver;
   highlight?: boolean;

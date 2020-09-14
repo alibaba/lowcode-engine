@@ -46,7 +46,13 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
     return this._visible;
   }
 
-  constructor(readonly editor: IEditor, readonly at: string | symbol) {
+  readonly editor: IEditor;
+
+  readonly at: string | symbol;
+
+  constructor(editor: IEditor, at: string | symbol) {
+    this.editor = editor;
+    this.at = at;
     let inited = false;
     const setup = async () => {
       if (inited) {
@@ -195,12 +201,10 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
         } else {
           this.dwell.reset();
         }
-      } else {
-        // FIXME: recreate new location
-        if ((originLoc.detail as LocationChildrenDetail).near) {
-          (originLoc.detail as LocationChildrenDetail).near = undefined;
-          this.dwell.reset();
-        }
+      // FIXME: recreate new location
+      } else if ((originLoc.detail as LocationChildrenDetail).near) {
+        (originLoc.detail as LocationChildrenDetail).near = undefined;
+        this.dwell.reset();
       }
       return;
     }
@@ -213,12 +217,12 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
         let { focusSlots } = pos;
         let { node } = treeNode;
         if (isDragNodeObject(dragObject)) {
-          const nodes = operationalNodes;
-          let i = nodes.length;
+          const newNodes = operationalNodes;
+          let i = newNodes.length;
           let p: any = node;
           while (i-- > 0) {
-            if (contains(nodes[i], p)) {
-              p = nodes[i].parent;
+            if (contains(newNodes[i], p)) {
+              p = newNodes[i].parent;
             }
           }
           if (p !== node) {

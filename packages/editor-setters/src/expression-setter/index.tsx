@@ -68,12 +68,13 @@ export default class ExpressionView extends PureComponent {
     return val;
   }
 
-  constructor(props: Readonly) {
+  constructor(props: Readonly<{}>) {
     super(props);
     this.expression = React.createRef();
     this.i18n = generateI18n(props.locale, props.messages);
     this.state = {
       value: ExpressionView.getInitValue(props.value),
+      context: props.context || {},
       dataSource: props.dataSource || [],
     };
   }
@@ -126,23 +127,32 @@ export default class ExpressionView extends PureComponent {
    * @return {Array}
    */
   getDataSource(tempStr: string): any[] {
-    // eslint-disable-next-line no-useless-escape
-    if (/[^\w\.]$/.test(tempStr)) {
-      return [];
-    } else if (tempStr === null || tempStr === '') {
-      return this.getContextKeys([]);
-    } else if (/\w\.$/.test(tempStr)) {
-      const currentField = this.getCurrentFiled(tempStr);
-      if (!currentField) return null;
-      let tempKeys = this.getObjectKeys(currentField.str);
-      tempKeys = this.getContextKeys(tempKeys);
-      if (!tempKeys) return null;
-      return tempKeys;
-    } else if (/\.$/.test(tempStr)) {
-      return [];
-    } else {
-      return null;
+    const {editor} = this.props.field;
+    const schema = editor.get('designer').project.getSchema();
+    const stateMap = schema.componentsTree[0].state;
+    let dataSource = [];
+
+    for (let key in stateMap){
+      dataSource.push(`this.state.${key}`);
     }
+    // if (/[^\w\.]$/.test(tempStr)) {
+    //   return [];
+    // } else if (tempStr === null || tempStr === '') {
+    //   return this.getContextKeys([]);
+    // } else if (/\w\.$/.test(tempStr)) {
+    //   const currentField = this.getCurrentFiled(tempStr);
+    //   if (!currentField) return null;
+    //   let tempKeys = this.getObjectKeys(currentField.str);
+    //   tempKeys = this.getContextKeys(tempKeys);
+    //   if (!tempKeys) return null;
+    //   return tempKeys;
+    // } else if (/\.$/.test(tempStr)) {
+    //   return [];
+    // } else {
+    //   return null;
+    // }
+
+    return dataSource;
   }
 
   /**

@@ -29,7 +29,6 @@ interface Props {
   node?: React.ReactNode;
   // element?: JSX.Element;
   // elementType?: React.ElementType;
-  // instance: Props;
 }
 
 const App = (props: Props) => {

@@ -3,8 +3,6 @@ import classNames from 'classnames';
 import { observer, Title, Tip, globalContext, Editor } from '@ali/lowcode-editor-core';
 import { IconArrowRight } from '../icons/arrow-right';
 import { IconEyeClose } from '../icons/eye-close';
-import { IconLock } from '../icons/lock';
-import { IconUnlock } from '../icons/unlock';
 import { intl, intlNode } from '../locale';
 import TreeNode from '../tree-node';
 import { IconEye } from '../icons/eye';
@@ -14,7 +12,7 @@ import { IconRadioActive } from '../icons/radio-active';
 import { IconRadio } from '../icons/radio';
 import { createIcon } from '@ali/lowcode-utils';
 
-function emitOutlineEvent(type: string, treeNode: TreeNode, rest?: object) {
+function emitOutlineEvent(type: string, treeNode: TreeNode, rest?: Record<string, unknown>) {
   const editor = globalContext.get(Editor);
   const node = treeNode?.node;
   const npm = node?.componentMeta?.npm;
@@ -172,28 +170,28 @@ export default class TreeTitle extends Component<{
   }
 }
 
-@observer
-class LockBtn extends Component<{ treeNode: TreeNode }> {
-  shouldComponentUpdate() {
-    return false;
-  }
+// @observer
+// class LockBtn extends Component<{ treeNode: TreeNode }> {
+//   shouldComponentUpdate() {
+//     return false;
+//   }
 
-  render() {
-    const { treeNode } = this.props;
-    return (
-      <div
-        className="tree-node-lock-btn"
-        onClick={(e) => {
-          e.stopPropagation();
-          treeNode.setLocked(!treeNode.locked);
-        }}
-      >
-        {treeNode.locked ? <IconLock /> : <IconUnlock />}
-        <Tip>{treeNode.locked ? intl('Unlock') : intl('Lock')}</Tip>
-      </div>
-    );
-  }
-}
+//   render() {
+//     const { treeNode } = this.props;
+//     return (
+//       <div
+//         className="tree-node-lock-btn"
+//         onClick={(e) => {
+//           e.stopPropagation();
+//           treeNode.setLocked(!treeNode.locked);
+//         }}
+//       >
+//         {treeNode.locked ? <IconLock /> : <IconUnlock />}
+//         <Tip>{treeNode.locked ? intl('Unlock') : intl('Lock')}</Tip>
+//       </div>
+//     );
+//   }
+// }
 
 @observer
 class HideBtn extends Component<{ treeNode: TreeNode }> {

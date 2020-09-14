@@ -218,7 +218,10 @@ export default class TreeNode {
     return this._node;
   }
 
-  constructor(readonly tree: Tree, node: Node) {
+  readonly tree: Tree;
+
+  constructor(tree: Tree, node: Node) {
+    this.tree = tree;
     this.document = node.document;
     this.designer = this.document.designer;
     this._node = node;

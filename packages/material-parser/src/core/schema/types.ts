@@ -80,7 +80,7 @@ export interface ObjectOf {
   [k: string]: any;
 }
 export interface Shape {
-  type: "shape";
+  type: 'shape';
   value: {
     name?: string;
     propType?: PropType;
@@ -89,7 +89,7 @@ export interface Shape {
   [k: string]: any;
 }
 export interface Exact {
-  type: "exact";
+  type: 'exact';
   value: {
     name?: string;
     propType?: PropType;

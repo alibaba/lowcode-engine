@@ -38,7 +38,6 @@ export class BorderDetectingInstance extends PureComponent<{
 }
 
 @observer
-// eslint-disable-next-line react/no-multi-comp
 export class BorderDetecting extends Component<{ host: BuiltinSimulatorHost }> {
   shouldComponentUpdate() {
     return false;

@@ -12,7 +12,9 @@ export default class RaxProvider extends Provider {
     let App;
     const layoutConfig = this.getLayoutConfig();
     if (!layoutConfig || !layoutConfig.componentName) {
-      App = (props) => (RouterView ? createElement(RouterView, { ...props }) : null);
+      App = (props) => {
+        return RouterView ? createElement(RouterView, { ...props }) : null;
+      };
       return App;
     }
     const { componentName: layoutName, props: layoutProps } = layoutConfig;
@@ -25,7 +27,9 @@ export default class RaxProvider extends Provider {
         RouterView ? createElement(RouterView, props) : null,
       );
     } else {
-      App = (props) => (RouterView ? createElement(RouterView, props) : null);
+      App = (props) => {
+        return RouterView ? createElement(RouterView, props) : null;
+      };
     }
     return App;
   }

@@ -10,7 +10,14 @@ export default class DwellTimer {
 
   private event?: LocateEvent;
 
-  constructor(private decide: (node: ParentalNode, event: LocateEvent) => void, private timeout: number = 500) {}
+  private decide: (node: ParentalNode, event: LocateEvent) => void;
+
+  private timeout: number = 500;
+
+  constructor(decide: (node: ParentalNode, event: LocateEvent) => void, timeout: number = 500) {
+    this.decide = decide;
+    this.timeout = timeout;
+  }
 
   focus(node: ParentalNode, event: LocateEvent) {
     this.event = event;

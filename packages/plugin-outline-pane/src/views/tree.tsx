@@ -152,7 +152,7 @@ export default class TreeView extends Component<{ tree: Tree }> {
     return (
       <div
         className="lc-outline-tree"
-        ref={(shell) => (this.shell = shell)}
+        ref={(shell) => { this.shell = shell; }}
         onMouseDownCapture={this.onMouseDown}
         onMouseOver={this.onMouseOver}
         onClick={this.onClick}

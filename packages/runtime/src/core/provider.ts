@@ -56,7 +56,7 @@ export interface DataSourceItem {
   type: string;
   options: {
     uri: string;
-    params: object;
+    params: Record<string, unknown>;
     method: string;
     shouldFetch?: string;
     willFetch?: string;
@@ -121,6 +121,7 @@ export default class Provider {
   }
 
   async(): Promise<IAppConfig> {
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
       try {
         const appData: IAppData = await this.getAppData();
@@ -216,11 +217,11 @@ export default class Provider {
     throw new Error('Method called "getAppData" not implemented.');
   }
 
-  getPageData(pageId?: string): any {
+  getPageData(): any {
     throw new Error('Method called "getPageData" not implemented.');
   }
 
-  getLazyComponent(pageId: string, props: any): any {
+  getLazyComponent(): any {
     throw new Error('Method called "getLazyComponent" not implemented.');
   }
 
@@ -229,7 +230,7 @@ export default class Provider {
     throw new Error('Method called "createApp" not implemented.');
   }
 
-  runApp(App: any, config: IAppConfig) {
+  runApp() {
     throw new Error('Method called "runApp" not implemented.');
   }
 

@@ -3,7 +3,7 @@ import { uniqBy } from 'lodash';
 import checkIsIIFE from './checkIsIIFE';
 import resolveHOC from './resolveHOC';
 import resolveIIFE from './resolveIIFE';
-import resolveImport, { isImportLike } from './resolveImport';
+import resolveImport from './resolveImport';
 import resolveTranspiledClass from './resolveTranspiledClass';
 import isStaticMethod from './isStaticMethod';
 import findAssignedMethods from './findAssignedMethods';
@@ -253,14 +253,16 @@ function getSubComponents(path: any, scope: any, cache: ICache) {
           value: def.flatMap((x: any) => x).filter((x: any) => isComponentDefinition(x)),
         };
       })
-      .map(({ subName, localName, value }: IMethodsPath) => value.map((x: any) => ({
-        subName,
-        localName,
-        value: x,
-      })))
+      .map(({ subName, localName, value }: IMethodsPath) => {
+        return value.map((x: any) => ({
+          subName,
+          localName,
+          value: x,
+        }));
+      })
       // @ts-ignore
       .flatMap((x: any) => x)
-      .map(({ subName, localName, value }: IMethodsPath) => {
+      .map(({ subName, value }: IMethodsPath) => {
         const __meta = {
           subName,
           exportName: path.__meta && path.__meta.exportName,
