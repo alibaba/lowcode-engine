@@ -454,7 +454,7 @@ export class Designer {
     designer._componentMetasMap.forEach((config, key) => {
       const metaData = config.getMetadata();
       if (metaData.devMode === 'lowcode') {
-        maps[key] = this.currentDocument?.simulator?.createComponent(metaData.schema!);
+        maps[key] = metaData.schema;
       } else {
         const view = metaData.experimental?.view;
         if (view) {

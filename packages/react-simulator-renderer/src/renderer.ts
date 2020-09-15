@@ -18,7 +18,7 @@ import { RootSchema, ComponentSchema, TransformStage, NodeSchema } from '@ali/lo
 // import { isESModule, isElement, acceptsRef, wrapReactClass, cursor, setNativeSelection } from '@ali/lowcode-utils';
 // import { RootSchema, NpmInfo, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
 // just use types
-import { BuiltinSimulatorRenderer, NodeInstance, Component } from '@ali/lowcode-designer';
+import { BuiltinSimulatorRenderer, NodeInstance, Component, DocumentModel } from '@ali/lowcode-designer';
 import { createMemoryHistory, MemoryHistory } from 'history';
 import Slot from './builtin-components/slot';
 import Leaf from './builtin-components/leaf';
@@ -41,17 +41,13 @@ export class DocumentInstance {
     });
   }
 
-  @obx.ref private _schema?: RootSchema;
-  @computed get schema(): any {
-    return this._schema;
-  }
-  private _libraryMap: { [key: string]: string } = {};
-  private buildComponents() {
-    this._components = {
-      ...builtinComponents,
-      ...buildComponents(this._libraryMap, this._componentsMap),
-    };
-  }
+  // private _libraryMap: { [key: string]: string } = {};
+  // private buildComponents() {
+  //   this._components = {
+  //     ...builtinComponents,
+  //     ...buildComponents(this._libraryMap, this._componentsMap),
+  //   };
+  // }
   @obx.ref private _components: any = {};
   @computed get components(): object {
     // 根据 device 选择不同组件，进行响应式
@@ -271,6 +267,10 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   private buildComponents() {
     // TODO: remove this.createComponent
     this._components = buildComponents(this._libraryMap, this._componentsMap, this.createComponent.bind(this));
+    this._components = {
+      ...builtinComponents,
+      ...this._components,
+    }
   }
   @obx.ref private _components: any = {};
   @computed get components(): object {
@@ -348,11 +348,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     cursor.release();
   }
 
-  createComponent(schema: ComponentSchema): Component | null {
-    return null;
-    // TODO: use ComponentEngine refactor
-    /*
-    const _schema = {
+  createComponent(schema: NodeSchema): Component | null {
+    let _schema: any = {
       ...schema,
     };
     _schema.methods = {};
@@ -367,8 +364,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       doc.getElementsByTagName('head')[0].appendChild(s);
     }
 
-    const node = host.document.createNode(_schema);
-    _schema = node.export(TransformStage.Render);
+    const node = host.currentDocument?.createNode(_schema);
+    _schema = node?.export(TransformStage.Render);
 
     const processPropsSchema = (propsSchema: any, propsMap: any): any => {
       if (!propsSchema) {
@@ -395,17 +392,16 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     };
 
     const renderer = this;
-    const componentsMap = renderer.componentsMap;
+    const { componentsMap } = renderer;
 
     class Ele extends React.Component<{ schema: any; propsMap: any }> {
       private isModal: boolean;
 
       constructor(props: any) {
         super(props);
-        const componentMeta = host.document.getComponentMeta(props.schema.componentName);
+        const componentMeta = host.currentDocument?.getComponentMeta(props.schema.componentName);
         if (componentMeta?.prototype?.isModal()) {
           this.isModal = true;
-          return;
         }
       }
 
@@ -423,19 +419,12 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
           children = schema.children.map((item: any) => createElement(Ele, { schema: item, propsMap }));
         }
         const props = processPropsSchema(schema.props, propsMap);
-        const _leaf = host.document.createNode(schema);
+        const _leaf = host.currentDocument?.createNode(schema);
 
         return createElement(Com, { ...props, _leaf }, children);
       }
-      const _leaf = this.document.designer.currentDocument?.createNode(schema);
-      const node = this.document.createNode(schema);
-      let props = processPropsSchema(schema.props, propsMap);
-      props = this.document.designer.transformProps(props, node, TransformStage.Init);
-      props = this.document.designer.transformProps(props, node, TransformStage.Render);
-      return createElement(Com, { ...props, _leaf }, children);
-    };
+    }
 
-    const container = this;
     class Com extends React.Component {
       // TODO: 暂时解决性能问题
       shouldComponentUpdate() {
@@ -443,7 +432,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       }
 
       render() {
-        const componentName = _schema.componentName;
+        const { componentName } = _schema;
         if (componentName === 'Component') {
           let children = [];
           const propsMap = this.props || {};
@@ -458,7 +447,6 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     }
 
     return Com;
-    */
   }
 
   private _running = false;
