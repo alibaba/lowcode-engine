@@ -11,6 +11,7 @@ interface IState {
 
 export default class VariableSwitcher extends Component<IVEFieldProps, IState> {
   private ref: HTMLElement | null = null;
+
   private VariableSetter: any;
 
   constructor(props: IVEFieldProps) {
@@ -34,9 +35,9 @@ export default class VariableSwitcher extends Component<IVEFieldProps, IState> {
     return (
       <div>
         <Icons.Tip
-          name='var'
-          size='24px'
-          position='bottom center'
+          name="var"
+          size="24px"
+          position="bottom center"
           className={`engine-field-variable-switcher ${isUseVariable ? 'engine-active' : ''}`}
           data-tip={tip}
           onClick={(e: Event) => {
@@ -48,7 +49,8 @@ export default class VariableSwitcher extends Component<IVEFieldProps, IState> {
             } else {
               prop.setUseVariable(!isUseVariable);
             }
-          }}>
+          }}
+        >
           绑定变量
         </Icons.Tip>
       </div>

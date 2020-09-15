@@ -1,4 +1,5 @@
 import { namedTypes as t } from 'ast-types';
+
 const { getPropertyName } = require('react-docgen').utils;
 
 const reactStaticMembers = ['propTypes', 'defaultProps', 'contextTypes'];

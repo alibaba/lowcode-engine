@@ -1,11 +1,11 @@
 import IntlMessageFormat from 'intl-messageformat';
 
 export const isJSExpression = (obj = '') => {
-  if(obj && typeof obj === 'object' && obj.type === 'JSExpression') {
+  if (obj && typeof obj === 'object' && obj.type === 'JSExpression') {
     return true;
   }
   return false;
-}
+};
 
 /**
  * 用于构造国际化字符串处理函数
@@ -18,4 +18,4 @@ export const generateI18n = (locale = 'zh-CN', messages = {}) => {
     const formater = new IntlMessageFormat(messages[key], locale);
     return formater.format(values);
   };
-}
+};

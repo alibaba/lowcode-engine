@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
-import { ISimulatorHost, isSimulatorHost } from '../../simulator';
+import { ISimulatorHost } from '../../simulator';
 import { Designer, Point } from '../../designer';
-import { setNativeSelection, cursor } from '@ali/lowcode-utils';
+import { cursor } from '@ali/lowcode-utils';
 // import Cursor from './cursor';
 // import Pages from './pages';
 
@@ -19,7 +19,7 @@ function makeEventsHandler(
   // }
   docs.add(sourceDoc);
   // if (sourceDoc !== topDoc || isDragEvent(boostEvent)) {
-  sensors.forEach((sim) => {
+  sensors.forEach(sim => {
     const sdoc = sim.contentDocument;
     if (sdoc) {
       docs.add(sdoc);
@@ -28,30 +28,19 @@ function makeEventsHandler(
   // }
 
   return (handle: (sdoc: Document) => void) => {
-    docs.forEach((doc) => handle(doc));
+    docs.forEach(doc => handle(doc));
   };
 }
 
 // 拖动缩放
 export default class DragResizeEngine {
   private emitter: EventEmitter;
+
   private dragResizing = false;
 
-  constructor(readonly designer: Designer) {
+  constructor(designer: Designer) {
     this.designer = designer;
     this.emitter = new EventEmitter();
-  }
-
-  private getMasterSensors(): ISimulatorHost[] {
-    return this.designer.project.documents
-      .map((doc) => {
-        // TODO: not use actived,
-        if (doc.actived && doc.simulator?.sensorAvailable) {
-          return doc.simulator;
-        }
-        return null;
-      })
-      .filter(Boolean) as any;
   }
 
   isDragResizing() {
@@ -83,14 +72,12 @@ export default class DragResizeEngine {
     const masterSensors = this.getMasterSensors();
 
     const createResizeEvent = (e: MouseEvent | DragEvent): Point => {
-      const evt: any = {};
-
       const sourceDocument = e.view?.document;
 
       if (!sourceDocument || sourceDocument === document) {
         return e;
       }
-      const srcSim = masterSensors.find((sim) => sim.contentDocument === sourceDocument);
+      const srcSim = masterSensors.find(sim => sim.contentDocument === sourceDocument);
       if (srcSim) {
         return srcSim.viewport.toGlobalPoint(e);
       }
@@ -99,7 +86,7 @@ export default class DragResizeEngine {
 
     const over = (e: MouseEvent) => {
       const handleEvents = makeEventsHandler(e, masterSensors);
-      handleEvents((doc) => {
+      handleEvents(doc => {
         doc.removeEventListener('mousemove', move, true);
         doc.removeEventListener('mouseup', over, true);
       });
@@ -114,7 +101,7 @@ export default class DragResizeEngine {
       node = boost(e);
       startEvent = createResizeEvent(e);
       const handleEvents = makeEventsHandler(e, masterSensors);
-      handleEvents((doc) => {
+      handleEvents(doc => {
         doc.addEventListener('mousemove', move, true);
         doc.addEventListener('mouseup', over, true);
       });
@@ -136,7 +123,9 @@ export default class DragResizeEngine {
     };
   }
 
-  onResize(func: (e: MouseEvent, direction: string, node: any, moveX: number, moveY: number) => any) {
+  onResize(
+    func: (e: MouseEvent, direction: string, node: any, moveX: number, moveY: number) => any,
+  ) {
     this.emitter.on('resize', func);
     return () => {
       this.emitter.removeListener('resize', func);
@@ -148,6 +137,18 @@ export default class DragResizeEngine {
     return () => {
       this.emitter.removeListener('resizeEnd', func);
     };
+  }
+
+  private getMasterSensors(): ISimulatorHost[] {
+    return this.designer.project.documents
+      .map(doc => {
+        // TODO: not use actived,
+        if (doc.actived && doc.simulator?.sensorAvailable) {
+          return doc.simulator;
+        }
+        return null;
+      })
+      .filter(Boolean) as any;
   }
 }
 

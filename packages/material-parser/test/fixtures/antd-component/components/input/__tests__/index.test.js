@@ -138,9 +138,7 @@ describe('Input allowClear', () => {
   });
 
   it('should not show icon if defaultValue is undefined, null or empty string', () => {
-    const wrappers = [null, undefined, ''].map(val =>
-      mount(<Input allowClear defaultValue={val} />),
-    );
+    const wrappers = [null, undefined, ''].map(val => mount(<Input allowClear defaultValue={val} />));
     wrappers.forEach(wrapper => {
       expect(wrapper.find('input').getDOMNode().value).toEqual('');
       expect(wrapper.find('.ant-input-clear-icon-hidden').exists()).toBeTruthy();

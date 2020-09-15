@@ -62,9 +62,9 @@ const Space: React.FC<SpaceProps> = props => {
             i === len - 1
               ? {}
               : {
-                  [direction === 'vertical' ? 'marginBottom' : marginDirection]:
+                [direction === 'vertical' ? 'marginBottom' : marginDirection]:
                     typeof size === 'string' ? spaceSize[size] : size,
-                }
+              }
           }
         >
           {child}

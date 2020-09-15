@@ -15,7 +15,9 @@ export type SetterProvider = (prop: any, componentPrototype: Prototype) => Compo
 
 export class VisualEngineContext {
   private managerMap: { [name: string]: VisualManager } = {};
+
   private moduleMap: { [name: string]: any } = {};
+
   private pluginsMap: { [name: string]: any } = {};
 
   use(pluginName: string, plugin: any) {
@@ -43,7 +45,9 @@ export class VisualEngineContext {
   }
 
   registerManager(managerMap?: { [name: string]: VisualManager }): this;
+
   registerManager(name: string, manager: VisualManager): this;
+
   registerManager(name?: any, manager?: VisualManager): this {
     if (name && typeof name === 'object') {
       this.managerMap = assign(this.managerMap, name);
@@ -54,7 +58,9 @@ export class VisualEngineContext {
   }
 
   registerModule(moduleMap: { [name: string]: any }): this;
+
   registerModule(name: string, module: any): this;
+
   registerModule(name?: any, module?: any): this {
     if (typeof name === 'object') {
       this.moduleMap = Object.assign({}, this.moduleMap, name);

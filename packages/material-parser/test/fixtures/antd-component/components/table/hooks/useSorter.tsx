@@ -59,8 +59,8 @@ function collectSortStates<RecordType>(
   columns: ColumnsType<RecordType>,
   init: boolean,
   pos?: string,
-): SortState<RecordType>[] {
-  let sortStates: SortState<RecordType>[] = [];
+): Array<SortState<RecordType>> {
+  let sortStates: Array<SortState<RecordType>> = [];
 
   function pushState(column: ColumnsType<RecordType>[number], columnPos: string) {
     sortStates.push({
@@ -105,7 +105,7 @@ function collectSortStates<RecordType>(
 function injectSorter<RecordType>(
   prefixCls: string,
   columns: ColumnsType<RecordType>,
-  sorterSates: SortState<RecordType>[],
+  sorterSates: Array<SortState<RecordType>>,
   triggerSorter: (sorterSates: SortState<RecordType>) => void,
   defaultSortDirections: SortOrder[],
   tableLocale?: TableLocale,
@@ -224,8 +224,8 @@ function stateToInfo<RecordType>(sorterStates: SortState<RecordType>) {
 }
 
 function generateSorterInfo<RecordType>(
-  sorterStates: SortState<RecordType>[],
-): SorterResult<RecordType> | SorterResult<RecordType>[] {
+  sorterStates: Array<SortState<RecordType>>,
+): SorterResult<RecordType> | Array<SorterResult<RecordType>> {
   const list = sorterStates.filter(({ sortOrder }) => sortOrder).map(stateToInfo);
 
   // =========== Legacy compatible support ===========
@@ -246,7 +246,7 @@ function generateSorterInfo<RecordType>(
 
 export function getSortData<RecordType>(
   data: RecordType[],
-  sortStates: SortState<RecordType>[],
+  sortStates: Array<SortState<RecordType>>,
   childrenColumnName: string,
 ): RecordType[] {
   const innerSorterStates = sortStates
@@ -287,15 +287,15 @@ export function getSortData<RecordType>(
       return 0;
     })
     .map<RecordType>(record => {
-      const subRecords = (record as any)[childrenColumnName];
-      if (subRecords) {
-        return {
-          ...record,
-          [childrenColumnName]: getSortData(subRecords, sortStates, childrenColumnName),
-        };
-      }
-      return record;
-    });
+    const subRecords = (record as any)[childrenColumnName];
+    if (subRecords) {
+      return {
+        ...record,
+        [childrenColumnName]: getSortData(subRecords, sortStates, childrenColumnName),
+      };
+    }
+    return record;
+  });
 }
 
 interface SorterConfig<RecordType> {
@@ -303,8 +303,8 @@ interface SorterConfig<RecordType> {
   columns?: ColumnsType<RecordType>;
   children?: React.ReactNode;
   onSorterChange: (
-    sorterResult: SorterResult<RecordType> | SorterResult<RecordType>[],
-    sortStates: SortState<RecordType>[],
+    sorterResult: SorterResult<RecordType> | Array<SorterResult<RecordType>>,
+    sortStates: Array<SortState<RecordType>>,
   ) => void;
   sortDirections: SortOrder[];
   tableLocale?: TableLocale;
@@ -320,16 +320,16 @@ export default function useFilterSorter<RecordType>({
   tableLocale,
   showSorterTooltip,
 }: SorterConfig<RecordType>): [
-  TransformColumns<RecordType>,
-  SortState<RecordType>[],
-  ColumnTitleProps<RecordType>,
-  () => SorterResult<RecordType> | SorterResult<RecordType>[],
-] {
+    TransformColumns<RecordType>,
+    Array<SortState<RecordType>>,
+    ColumnTitleProps<RecordType>,
+    () => SorterResult<RecordType> | Array<SorterResult<RecordType>>,
+  ] {
   const mergedColumns = React.useMemo(() => {
     return columns || convertChildrenToColumns(children);
   }, [children, columns]);
 
-  const [sortStates, setSortStates] = React.useState<SortState<RecordType>[]>(
+  const [sortStates, setSortStates] = React.useState<Array<SortState<RecordType>>>(
     collectSortStates(mergedColumns, true),
   );
 
@@ -342,7 +342,7 @@ export default function useFilterSorter<RecordType>({
       return sortStates;
     }
 
-    const validateStates: SortState<RecordType>[] = [];
+    const validateStates: Array<SortState<RecordType>> = [];
 
     function patchStates(state: SortState<RecordType>) {
       if (validate) {
@@ -413,16 +413,15 @@ export default function useFilterSorter<RecordType>({
     onSorterChange(generateSorterInfo(newSorterStates), newSorterStates);
   }
 
-  const transformColumns = (innerColumns: ColumnsType<RecordType>) =>
-    injectSorter(
-      prefixCls,
-      innerColumns,
-      mergedSorterStates,
-      triggerSorter,
-      sortDirections,
-      tableLocale,
-      showSorterTooltip,
-    );
+  const transformColumns = (innerColumns: ColumnsType<RecordType>) => injectSorter(
+    prefixCls,
+    innerColumns,
+    mergedSorterStates,
+    triggerSorter,
+    sortDirections,
+    tableLocale,
+    showSorterTooltip,
+  );
 
   const getSorters = () => {
     return generateSorterInfo(mergedSorterStates);

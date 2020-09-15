@@ -12,7 +12,7 @@ import {
 type PluginConfig = {
   fileType: string;
   moduleFileType: string;
-}
+};
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
   const cfg: PluginConfig = {

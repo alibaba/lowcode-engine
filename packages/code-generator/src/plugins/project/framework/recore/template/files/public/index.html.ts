@@ -48,4 +48,3 @@ export default function getFile(): [string[], IResultFile] {
 
   return [['public'], file];
 }
-  

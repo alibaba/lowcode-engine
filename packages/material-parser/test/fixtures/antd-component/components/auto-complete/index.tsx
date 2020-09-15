@@ -29,7 +29,7 @@ export interface AutoCompleteProps
   dataSource?: DataSourceItemType[];
 }
 
-function isSelectOptionOrSelectOptGroup(child: any): Boolean {
+function isSelectOptionOrSelectOptGroup(child: any): boolean {
   return child && child.type && (child.type.isSelectOption || child.type.isSelectOptGroup);
 }
 
@@ -63,28 +63,28 @@ const AutoComplete: React.RefForwardingComponent<Select, AutoCompleteProps> = (p
   } else {
     optionChildren = dataSource
       ? dataSource.map((item) => {
-          if (React.isValidElement(item)) {
-            return item;
+        if (React.isValidElement(item)) {
+          return item;
+        }
+        switch (typeof item) {
+          case 'string':
+            return (
+              <Option key={item} value={item}>
+                {item}
+              </Option>
+            );
+          case 'object': {
+            const { value: optionValue } = item as DataSourceItemObject;
+            return (
+              <Option key={optionValue} value={optionValue}>
+                {(item as DataSourceItemObject).text}
+              </Option>
+            );
           }
-          switch (typeof item) {
-            case 'string':
-              return (
-                <Option key={item} value={item}>
-                  {item}
-                </Option>
-              );
-            case 'object': {
-              const { value: optionValue } = item as DataSourceItemObject;
-              return (
-                <Option key={optionValue} value={optionValue}>
-                  {(item as DataSourceItemObject).text}
-                </Option>
-              );
-            }
-            default:
-              throw new Error('AutoComplete[dataSource] only supports type `string[] | Object[]`.');
-          }
-        })
+          default:
+            throw new Error('AutoComplete[dataSource] only supports type `string[] | Object[]`.');
+        }
+      })
       : [];
   }
 

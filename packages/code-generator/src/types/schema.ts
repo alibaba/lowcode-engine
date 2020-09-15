@@ -227,7 +227,7 @@ export interface IAppConfig {
   historyMode: 'brower' | 'hash'; // 浏览器路由：brower  哈希路由：hash
   targetRootID: string; // 渲染根节点 ID
   layout: IComponentNodeItem;
-  theme: object; // 主题配置，根据接入的主题模块不同
+  theme: Record<string, unknown>; // 主题配置，根据接入的主题模块不同
 }
 
 export interface IAppMeta {

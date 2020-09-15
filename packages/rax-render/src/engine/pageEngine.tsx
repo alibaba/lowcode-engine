@@ -79,8 +79,8 @@ export default class PageEngine extends BaseEngine {
     debug(`page.render - ${__schema.fileName}`);
 
     const {
- id, className, style, autoLoading, defaultHeight = 300, loading
-} = this.__parseData(__schema.props);
+      id, className, style,
+    } = this.__parseData(__schema.props);
 
     const { Page } = __components;
     if (Page) {
@@ -89,9 +89,6 @@ export default class PageEngine extends BaseEngine {
         <AppContext.Consumer>
           {(context) => {
             this.context = context;
-            {
-              /* this.__generateCtx(currCtx); */
-            }
             this.__render();
             return (
               <AppContext.Provider

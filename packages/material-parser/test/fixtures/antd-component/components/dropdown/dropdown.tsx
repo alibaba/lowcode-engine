@@ -34,7 +34,7 @@ type Align = {
 };
 
 export interface DropDownProps {
-  trigger?: ('click' | 'hover' | 'contextMenu')[];
+  trigger?: Array<'click' | 'hover' | 'contextMenu'>;
   overlay: React.ReactElement | OverlayFunc;
   onVisibleChange?: (visible: boolean) => void;
   visible?: boolean;
@@ -108,16 +108,16 @@ export default class Dropdown extends React.Component<DropDownProps, any> {
       typeof overlayNode.type === 'string'
         ? overlay
         : React.cloneElement(overlayNode, {
-            mode: 'vertical',
-            selectable,
-            focusable,
-            expandIcon,
-          });
+          mode: 'vertical',
+          selectable,
+          focusable,
+          expandIcon,
+        });
 
     return fixedModeOverlay as React.ReactElement;
   };
 
-  getPlacement(direction: string = 'ltr') {
+  getPlacement(direction = 'ltr') {
     const { placement } = this.props;
     if (placement !== undefined) {
       return placement;

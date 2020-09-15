@@ -7,11 +7,11 @@ interface LibraryMap {
   [key: string]: string;
 }
 
-function accessLibrary(library: string | object) {
+function accessLibrary(library: string | Record<string, unknown>) {
   if (typeof library !== 'string') {
     return library;
   }
-  
+
   return (window as any)[library] || generateHtmlComp(library);
 }
 

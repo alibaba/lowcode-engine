@@ -7,6 +7,7 @@
  */
 
 import { namedTypes as t } from 'ast-types';
+
 const { resolveToValue } = require('react-docgen').utils;
 const { unwrapUtilityType } = require('./flowUtilityTypes');
 const isUnreachableFlowType = require('react-docgen/dist/utils/isUnreachableFlowType').default;

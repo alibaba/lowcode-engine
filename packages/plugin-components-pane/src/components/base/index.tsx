@@ -51,10 +51,15 @@ class Base extends React.Component {
   };
 
   shell = null;
+
   isEmpty = false;
+
   mode = 'advance';
+
   searchMap = {};
+
   timer = null;
+
   isMouseEnterCard = false;
 
 
@@ -89,7 +94,7 @@ class Base extends React.Component {
       const query = searchText.toLowerCase();
       return (
         !![title, componentName].find(
-          (it) => it.toLowerCase().indexOf(query) > -1
+          (it) => it.toLowerCase().indexOf(query) > -1,
         ) || !!searchComponent(title, query, this.searchMap)
       );
     });

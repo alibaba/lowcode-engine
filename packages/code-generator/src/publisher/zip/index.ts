@@ -5,7 +5,7 @@ import {
   IPublisherFactoryParams,
   PublisherError,
 } from '../../types';
-import { isNodeProcess, writeZipToDisk, generateProjectZip } from './utils'
+import { isNodeProcess, writeZipToDisk, generateProjectZip } from './utils';
 
 // export type ZipBuffer = Buffer | Blob;
 export type ZipBuffer = Buffer;
@@ -30,12 +30,12 @@ export const createZipPublisher: PublisherFactory<ZipFactoryParams, ZipPublisher
   const getProject = () => project;
   const setProject = (projectToSet: IResultDir) => {
     project = projectToSet;
-  }
+  };
 
   const getOutputPath = () => outputPath;
   const setOutputPath = (path: string) => {
     outputPath = path;
-  }
+  };
 
   const publish = async (options: ZipFactoryParams = {}) => {
     const projectToPublish = options.project || project;
@@ -57,7 +57,7 @@ export const createZipPublisher: PublisherFactory<ZipFactoryParams, ZipPublisher
     } catch (error) {
       throw new PublisherError(error);
     }
-  }
+  };
 
   return {
     publish,
@@ -66,4 +66,4 @@ export const createZipPublisher: PublisherFactory<ZipFactoryParams, ZipPublisher
     getOutputPath,
     setOutputPath,
   };
-}
+};

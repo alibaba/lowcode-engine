@@ -8,8 +8,8 @@ import { Designer } from '@ali/lowcode-designer';
 import './index.scss';
 
 export interface IState {
-  metaData: Record<string, unknown>[];
-  bizComponents: Record<string, unknown>[];
+  metaData: Array<Record<string, unknown>>;
+  bizComponents: Array<Record<string, unknown>>;
 }
 
 export default class ComponentListPlugin extends Component<PluginProps, IState> {
@@ -35,7 +35,7 @@ export default class ComponentListPlugin extends Component<PluginProps, IState> 
   }
 
   transformMetaData(componentList: any): any {
-    const metaData: Record<string, unknown>[] = [];
+    const metaData: Array<Record<string, unknown>> = [];
     if (!componentList || !Array.isArray(componentList) || !componentList.length) {
       return metaData;
     }

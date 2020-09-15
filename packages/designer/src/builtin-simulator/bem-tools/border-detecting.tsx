@@ -56,10 +56,10 @@ export class BorderDetecting extends Component<{ host: BuiltinSimulatorHost }> {
   }
 
   @computed get current() {
-    const host = this.props.host;
+    const { host } = this.props;
     const doc = host.document;
-    const selection = doc.selection;
-    const current = host.designer.detecting.current;
+    const { selection } = doc;
+    const { current } = host.designer.detecting;
     if (!current || current.document !== doc || selection.has(current.id)) {
       return null;
     }
@@ -67,8 +67,8 @@ export class BorderDetecting extends Component<{ host: BuiltinSimulatorHost }> {
   }
 
   render() {
-    const host = this.props.host;
-    const current = this.current;
+    const { host } = this.props;
+    const { current } = this;
     if (!current || host.viewport.scrolling || host.liveEditing.editing) {
       return null;
     }

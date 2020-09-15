@@ -8,20 +8,20 @@ import Text from './text';
  * @order 0
  */
 class Typography extends Component {
-    static propTypes = {
-        /**
+  static propTypes = {
+    /**
          * 设置标签类型
          */
-        component: PropTypes.elementType,
-    };
+    component: PropTypes.elementType,
+  };
 
-    static defaultProps = {
-        component: 'article',
-    };
+  static defaultProps = {
+    component: 'article',
+  };
 
-    render() {
-        return <Text {...this.props} />;
-    }
+  render() {
+    return <Text {...this.props} />;
+  }
 }
 
 export default Typography;

@@ -27,20 +27,32 @@ import { ITreeBoard, TreeMaster, getTreeMaster } from './tree-master';
 
 export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
   private _designer?: Designer;
+
   @obx.ref private _master?: TreeMaster;
+
   get master() {
     return this._master;
   }
+
   @computed get currentTree() {
     return this._master?.currentTree;
   }
+
   readonly id = uniqueId('outline');
 
   @obx.ref _visible = false;
+
   get visible() {
     return this._visible;
   }
-  constructor(readonly editor: IEditor, readonly at: string | symbol) {
+
+  readonly editor: IEditor;
+
+  readonly at: string | symbol;
+
+  constructor(editor: IEditor, at: string | symbol) {
+    this.editor = editor;
+    this.at = at;
     let inited = false;
     const setup = async () => {
       if (inited) {
@@ -91,9 +103,10 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
   }
 
   private indentTrack = new IndentTrack();
+
   private dwell = new DwellTimer((target, event) => {
-    const document = target.document;
-    const designer = document.designer;
+    const { document } = target;
+    const { designer } = document;
     let index: any;
     let focus: any;
     let valid = true;
@@ -116,6 +129,7 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
       },
     });
   });
+
   /**
    * @see ISensor
    */
@@ -141,8 +155,8 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
       return;
     }
 
-    const document = tree.document;
-    const designer = document.designer;
+    const { document } = tree;
+    const { designer } = document;
     const pos = getPosFromEvent(e, this._shell);
     const irect = this.getInsertionRect();
     const originLoc = document.dropLocation;
@@ -190,12 +204,10 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
         } else {
           this.dwell.reset();
         }
-      } else {
-        // FIXME: recreate new location
-        if ((originLoc.detail as LocationChildrenDetail).near) {
-          (originLoc.detail as LocationChildrenDetail).near = undefined;
-          this.dwell.reset();
-        }
+      // FIXME: recreate new location
+      } else if ((originLoc.detail as LocationChildrenDetail).near) {
+        (originLoc.detail as LocationChildrenDetail).near = undefined;
+        this.dwell.reset();
       }
       return;
     }
@@ -205,15 +217,15 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
     if (pos && pos !== 'unchanged') {
       let treeNode = tree.getTreeNodeById(pos.nodeId);
       if (treeNode) {
-        let focusSlots = pos.focusSlots;
+        let { focusSlots } = pos;
         let { node } = treeNode;
         if (isDragNodeObject(dragObject)) {
-          const nodes = operationalNodes;
-          let i = nodes.length;
+          const newNodes = operationalNodes;
+          let i = newNodes.length;
           let p: any = node;
           while (i-- > 0) {
-            if (contains(nodes[i], p)) {
-              p = nodes[i].parent;
+            if (contains(newNodes[i], p)) {
+              p = newNodes[i].parent;
             }
           }
           if (p !== node) {
@@ -252,8 +264,8 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
   }
 
   private getNear(treeNode: TreeNode, e: LocateEvent, index?: number, rect?: DOMRect) {
-    const document = treeNode.tree.document;
-    const designer = document.designer;
+    const { document } = treeNode.tree;
+    const { designer } = document;
     const { globalY, dragObject } = e;
     // TODO: check dragObject is anyData
     const { node, expanded } = treeNode;
@@ -351,8 +363,8 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
   }
 
   private drillLocate(treeNode: TreeNode, e: LocateEvent): DropLocation | null {
-    const document = treeNode.tree.document;
-    const designer = document.designer;
+    const { document } = treeNode.tree;
+    const { designer } = document;
     const { dragObject, globalY } = e;
 
     if (!checkRecursion(treeNode.node, dragObject)) {
@@ -475,6 +487,7 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
   }
 
   private tryScrollAgain: number | null = null;
+
   /**
    * @see IScrollBoard
    */
@@ -497,9 +510,7 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
 
     if (!rect) {
       if (tryTimes < 3) {
-        this.tryScrollAgain = (window as any).requestIdleCallback(() =>
-          this.scrollToNode(treeNode, detail, tryTimes + 1),
-        );
+        this.tryScrollAgain = (window as any).requestIdleCallback(() => this.scrollToNode(treeNode, detail, tryTimes + 1));
       }
       return;
     }
@@ -520,6 +531,7 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
   }
 
   private sensing = false;
+
   /**
    * @see ISensor
    */
@@ -541,12 +553,14 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
   }
 
   private _scrollTarget?: ScrollTarget;
+
   /**
    * @see IScrollable
    */
   get scrollTarget() {
     return this._scrollTarget;
   }
+
   private scroller?: Scroller;
 
   private setupDesigner(designer: Designer) {
@@ -564,6 +578,7 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
   }
 
   private _sensorAvailable = false;
+
   /**
    * @see ISensor
    */
@@ -572,6 +587,7 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
   }
 
   private _shell: HTMLDivElement | null = null;
+
   mount(shell: HTMLDivElement | null) {
     if (this._shell === shell) {
       return;
@@ -620,7 +636,7 @@ function checkRecursion(parent: Node | undefined | null, dragObject: DragObject)
     return false;
   }
   if (isDragNodeObject(dragObject)) {
-    const nodes = dragObject.nodes;
+    const { nodes } = dragObject;
     if (nodes.some((node) => node.contains(parent))) {
       return false;
     }

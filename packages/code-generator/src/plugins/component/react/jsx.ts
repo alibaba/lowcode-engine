@@ -14,7 +14,7 @@ import { createReactNodeGenerator } from '../../../utils/nodeToJSX';
 type PluginConfig = {
   fileType?: string;
   nodeTypeMapping?: Record<string, string>;
-}
+};
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
   const cfg = {

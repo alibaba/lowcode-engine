@@ -1,14 +1,18 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import './VisualDom.scss';
+
 export default class VisualDom extends PureComponent {
   static displayName = 'VisualDom';
+
   static propTypes = {
     children: PropTypes.oneOfType([PropTypes.element, PropTypes.arrayOf(PropTypes.element)]),
   };
+
   static defaultProps = {
     children: null,
   };
+
   render() {
     const { children, cell, title, label, text, __componentName } = this.props;
     let mainContent = children;

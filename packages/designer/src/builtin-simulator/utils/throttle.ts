@@ -1,5 +1,6 @@
 const useRAF = typeof requestAnimationFrame === 'function';
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function throttle(func: Function, delay: number) {
   let lastArgs: any;
   let lastThis: any;

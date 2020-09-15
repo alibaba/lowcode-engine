@@ -1,4 +1,4 @@
-export const NATIVE_ELE_PKG: string = 'native';
+export const NATIVE_ELE_PKG = 'native';
 
 export const CONTAINER_TYPE = {
   COMPONENT: 'Component',

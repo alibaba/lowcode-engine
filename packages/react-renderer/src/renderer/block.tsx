@@ -12,15 +12,17 @@ const debug = Debug('renderer:block');
 
 export default class BlockRenderer extends BaseRenderer {
   static dislayName = 'block-renderer';
+
   static propTypes = {
     __schema: PropTypes.object,
   };
+
   static defaultProps = {
     __schema: {},
   };
 
   static getDerivedStateFromProps(props, state) {
-    debug(`block.getDerivedStateFromProps`);
+    debug('block.getDerivedStateFromProps');
     const func = props.__schema.lifeCycles && props.__schema.lifeCycles.getDerivedStateFromProps;
     if (func) {
       return func(props, state);
@@ -42,18 +44,22 @@ export default class BlockRenderer extends BaseRenderer {
     super.getSnapshotBeforeUpdate(...arguments);
     debug(`block.getSnapshotBeforeUpdate - ${this.props.__schema.fileName}`);
   }
+
   async componentDidMount() {
     super.componentDidMount(...arguments);
     debug(`block.componentDidMount - ${this.props.__schema.fileName}`);
   }
+
   async componentDidUpdate() {
     super.componentDidUpdate(...arguments);
     debug(`block.componentDidUpdate - ${this.props.__schema.fileName}`);
   }
+
   async componentWillUnmount() {
     super.componentWillUnmount(...arguments);
     debug(`block.componentWillUnmount - ${this.props.__schema.fileName}`);
   }
+
   async componentDidCatch() {
     await super.componentDidCatch(...arguments);
     debug(`block.componentDidCatch - ${this.props.__schema.fileName}`);
@@ -96,7 +102,7 @@ export default class BlockRenderer extends BaseRenderer {
         </AppContext.Provider>
       );
     }
-    
+
     const renderContent = () => (
       <AppContext.Provider
         value={{

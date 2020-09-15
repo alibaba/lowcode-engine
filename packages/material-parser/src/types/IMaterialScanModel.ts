@@ -1,7 +1,7 @@
 /**
  * 对应扫描阶段的产物
  */
-interface IMaterialScanModel {
+export interface IMaterialScanModel {
   /** 当前包名 */
   pkgName: string;
   /** 当前包版本 */
@@ -19,5 +19,3 @@ interface IMaterialScanModel {
   /** typings文件绝对路径 */
   typingsFileAbsolutePath?: string;
 }
-
-export default IMaterialScanModel;

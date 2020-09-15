@@ -1,12 +1,11 @@
 import spawn from 'cross-spawn-promise';
 import { ensureDir, ensureFile, writeFile } from 'fs-extra';
 import { join } from 'path';
-import semver from 'semver';
 import uuid from 'short-uuid';
 import { debug } from './core';
 import { IMaterializeOptions } from './types';
 
-const log = debug.extend('mat');
+const log = debug.extend('localize');
 
 /**
  * 创建组件包
@@ -26,7 +25,7 @@ export async function createFakePackage(params: {
   npmClient?: string;
 }): Promise<void> {
   // 创建临时组件包
-  const workDir = params.workDir;
+  const { workDir } = params;
   const pkgJsonFilePath = join(workDir, 'package.json');
   await ensureFile(pkgJsonFilePath);
   await writeFile(
@@ -94,9 +93,9 @@ export function getPkgNameAndVersion(pkgNameWithVersion: string): { [key: string
 export default async function localize(
   options: IMaterializeOptions,
 ): Promise<{
-  workDir: string;
-  moduleDir: string;
-}> {
+    workDir: string;
+    moduleDir: string;
+  }> {
   // 创建临时目录
   const workDir = await createworkDir();
   // 创建组件包

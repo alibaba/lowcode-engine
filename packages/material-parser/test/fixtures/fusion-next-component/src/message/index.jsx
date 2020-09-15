@@ -12,5 +12,5 @@ Message.loading = toast.loading;
 Message.hide = toast.hide;
 
 export default ConfigProvider.config(Message, {
-    componentName: 'Message',
+  componentName: 'Message',
 });

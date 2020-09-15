@@ -20,7 +20,6 @@ import {
   IExternalDependency,
   IInternalDependency,
   InternalDependencyType,
-  IPageMeta,
   IParseResult,
   IProjectSchema,
   ISchemaParser,
@@ -95,7 +94,7 @@ class SchemaParser implements ISchemaParser {
         });
       }
     } else {
-      throw new CodeGeneratorError(`Can't find anything to generate.`);
+      throw new CodeGeneratorError('Can\'t find anything to generate.');
     }
 
     // 建立所有容器的内部依赖索引
@@ -160,7 +159,7 @@ class SchemaParser implements ISchemaParser {
     const routes = containers
       .filter((container) => container.containerType === 'Page')
       .map((page) => {
-        const meta = page.meta as IPageMeta;
+        const { meta } = page;
         if (meta) {
           return {
             path: meta.router,
@@ -190,7 +189,9 @@ class SchemaParser implements ISchemaParser {
     let npms: INpmPackage[] = [];
     containers.forEach((con) => {
       const p = (con.deps || [])
-        .map((dep) => (dep.dependencyType === DependencyType.External ? dep : null))
+        .map((dep) => {
+          return dep.dependencyType === DependencyType.External ? dep : null;
+        })
         .filter((dep) => dep !== null);
       npms.push(...((p as unknown) as INpmPackage[]));
     });

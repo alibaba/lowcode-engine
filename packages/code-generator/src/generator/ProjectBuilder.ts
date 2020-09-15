@@ -40,7 +40,9 @@ function getDirFromRoot(root: IResultDir, path: string[]): IResultDir {
 
 export class ProjectBuilder implements IProjectBuilder {
   private template: IProjectTemplate;
+
   private plugins: IProjectPlugins;
+
   private postProcessors: PostProcessor[];
 
   constructor({

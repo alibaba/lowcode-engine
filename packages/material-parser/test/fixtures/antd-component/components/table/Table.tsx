@@ -45,18 +45,18 @@ interface ChangeEventInfo<RecordType> {
     total?: number;
   };
   filters: Record<string, Key[] | null>;
-  sorter: SorterResult<RecordType> | SorterResult<RecordType>[];
+  sorter: SorterResult<RecordType> | Array<SorterResult<RecordType>>;
 
-  filterStates: FilterState<RecordType>[];
-  sorterStates: SortState<RecordType>[];
+  filterStates: Array<FilterState<RecordType>>;
+  sorterStates: Array<SortState<RecordType>>;
 
   resetPagination: Function;
 }
 
 export interface TableProps<RecordType>
   extends Omit<
-    RcTableProps<RecordType>,
-    'transformColumns' | 'internalHooks' | 'internalRefs' | 'data' | 'columns' | 'scroll'
+  RcTableProps<RecordType>,
+  'transformColumns' | 'internalHooks' | 'internalRefs' | 'data' | 'columns' | 'scroll'
   > {
   dropdownPrefixCls?: string;
   dataSource?: RcTableProps<RecordType>['data'];
@@ -70,7 +70,7 @@ export interface TableProps<RecordType>
   onChange?: (
     pagination: PaginationConfig,
     filters: Record<string, Key[] | null>,
-    sorter: SorterResult<RecordType> | SorterResult<RecordType>[],
+    sorter: SorterResult<RecordType> | Array<SorterResult<RecordType>>,
     extra: TableCurrentDataSource<RecordType>,
   ) => void;
   rowSelection?: TableRowSelection<RecordType>;
@@ -164,7 +164,7 @@ function Table<RecordType extends object = any>(props: TableProps<RecordType>) {
   // ============================ Events =============================
   const changeEventInfo: Partial<ChangeEventInfo<RecordType>> = {};
 
-  const triggerOnChange = (info: Partial<ChangeEventInfo<RecordType>>, reset: boolean = false) => {
+  const triggerOnChange = (info: Partial<ChangeEventInfo<RecordType>>, reset = false) => {
     const changeInfo = {
       ...changeEventInfo,
       ...info,
@@ -209,8 +209,8 @@ function Table<RecordType extends object = any>(props: TableProps<RecordType>) {
 
   // ============================ Sorter =============================
   const onSorterChange = (
-    sorter: SorterResult<RecordType> | SorterResult<RecordType>[],
-    sorterStates: SortState<RecordType>[],
+    sorter: SorterResult<RecordType> | Array<SorterResult<RecordType>>,
+    sorterStates: Array<SortState<RecordType>>,
   ) => {
     triggerOnChange(
       {
@@ -240,7 +240,7 @@ function Table<RecordType extends object = any>(props: TableProps<RecordType>) {
   // ============================ Filter ============================
   const onFilterChange = (
     filters: Record<string, Key[]>,
-    filterStates: FilterState<RecordType>[],
+    filterStates: Array<FilterState<RecordType>>,
   ) => {
     triggerOnChange(
       {
@@ -392,7 +392,7 @@ function Table<RecordType extends object = any>(props: TableProps<RecordType>) {
       paginationSize = mergedSize === 'small' || mergedSize === 'middle' ? 'small' : undefined;
     }
 
-    const renderPagination = (position: string = 'right') => (
+    const renderPagination = (position = 'right') => (
       <Pagination
         className={`${prefixCls}-pagination ${prefixCls}-pagination-${position}`}
         {...mergedPagination}

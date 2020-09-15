@@ -23,7 +23,7 @@ export interface CascaderOptionType {
   disabled?: boolean;
   isLeaf?: boolean;
   loading?: boolean;
-  children?: Array<CascaderOptionType>;
+  children?: CascaderOptionType[];
   [key: string]: any;
 }
 
@@ -123,16 +123,14 @@ interface CascaderLocale {
 const defaultLimit = 50;
 
 function highlightKeyword(str: string, keyword: string, prefixCls: string | undefined) {
-  return str.split(keyword).map((node: string, index: number) =>
-    index === 0
-      ? node
-      : [
-          <span className={`${prefixCls}-menu-item-keyword`} key="seperator">
-            {keyword}
-          </span>,
-          node,
-        ],
-  );
+  return str.split(keyword).map((node: string, index: number) => (index === 0
+    ? node
+    : [
+      <span className={`${prefixCls}-menu-item-keyword`} key="seperator">
+        {keyword}
+      </span>,
+      node,
+    ]));
 }
 
 function defaultFilterOption(
@@ -369,7 +367,7 @@ class Cascader extends React.Component<CascaderProps, CascaderState> {
     const { flattenOptions = [], inputValue } = this.state;
 
     // Limit the filter if needed
-    let filtered: Array<CascaderOptionType[]>;
+    let filtered: CascaderOptionType[][];
     if (limit > 0) {
       filtered = [];
       let matchCount = 0;
@@ -424,7 +422,7 @@ class Cascader extends React.Component<CascaderProps, CascaderState> {
     this.input.blur();
   }
 
-  getPopupPlacement(direction: string = 'ltr') {
+  getPopupPlacement(direction = 'ltr') {
     const { popupPlacement } = this.props;
     if (popupPlacement !== undefined) {
       return popupPlacement;
@@ -522,8 +520,8 @@ class Cascader extends React.Component<CascaderProps, CascaderState> {
         const names: FilledFieldNamesType = getFilledFieldNames(this.props);
         if (options && options.length > 0) {
           if (state.inputValue) {
-             const filteredOptions = this.generateFilteredOptions(prefixCls, renderEmpty);
-             options = isEqual(filteredOptions, this.cachedOptions) ? this.cachedOptions : filteredOptions;
+            const filteredOptions = this.generateFilteredOptions(prefixCls, renderEmpty);
+            options = isEqual(filteredOptions, this.cachedOptions) ? this.cachedOptions : filteredOptions;
           }
         } else {
           options = [

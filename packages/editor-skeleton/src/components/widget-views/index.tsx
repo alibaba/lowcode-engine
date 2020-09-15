@@ -48,10 +48,13 @@ export class PanelDockView extends Component<DockProps & { dock: PanelDock }> {
   componentDidMount() {
     this.checkActived();
   }
+
   componentDidUpdate() {
     this.checkActived();
   }
+
   private lastActived = false;
+
   checkActived() {
     const { dock } = this.props;
     if (dock.actived !== this.lastActived) {
@@ -86,13 +89,17 @@ export class TitledPanelView extends Component<{ panel: Panel; area?: string }> 
   shouldComponentUpdate() {
     return false;
   }
+
   componentDidMount() {
     this.checkVisible();
   }
+
   componentDidUpdate() {
     this.checkVisible();
   }
+
   private lastVisible = false;
+
   checkVisible() {
     const { panel } = this.props;
     const currentVisible = panel.inited && panel.visible;
@@ -105,6 +112,7 @@ export class TitledPanelView extends Component<{ panel: Panel; area?: string }> 
       }
     }
   }
+
   render() {
     const { panel, area } = this.props;
     if (!panel.inited) {
@@ -135,13 +143,17 @@ export class PanelView extends Component<{ panel: Panel; area?: string }> {
   shouldComponentUpdate() {
     return false;
   }
+
   componentDidMount() {
     this.checkVisible();
   }
+
   componentDidUpdate() {
     this.checkVisible();
   }
+
   private lastVisible = false;
+
   checkVisible() {
     const { panel } = this.props;
     const currentVisible = panel.inited && panel.visible;
@@ -158,6 +170,7 @@ export class PanelView extends Component<{ panel: Panel; area?: string }> {
       }
     }
   }
+
   render() {
     const { panel, area } = this.props;
     if (!panel.inited) {
@@ -243,13 +256,17 @@ export class WidgetView extends Component<{ widget: IWidget }> {
   shouldComponentUpdate() {
     return false;
   }
+
   componentDidMount() {
     this.checkVisible();
   }
+
   componentDidUpdate() {
     this.checkVisible();
   }
+
   private lastVisible = false;
+
   checkVisible() {
     const { widget } = this.props;
     const currentVisible = widget.visible;
@@ -262,6 +279,7 @@ export class WidgetView extends Component<{ widget: IWidget }> {
       }
     }
   }
+
   render() {
     const { widget } = this.props;
     if (!widget.visible) {

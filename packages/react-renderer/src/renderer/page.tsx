@@ -78,7 +78,7 @@ export default class PageRenderer extends BaseRenderer {
     this.state = this.__parseData(__schema.state || {});
     this.__bindCustomMethods(this.props);
     this.__initDataSource(this.props);
-    
+
     // this.__setLifeCycleMethods('constructor', arguments);
 
     this.__generateCtx({
@@ -87,8 +87,8 @@ export default class PageRenderer extends BaseRenderer {
     this.__render();
 
     const props = this.__parseData(__schema.props);
-    const { id, className, style, autoLoading, defaultHeight = 300, loading
-} = props;
+    const { id, className, style, autoLoading, defaultHeight = 300, loading,
+    } = props;
 
     const { Page } = __components;
     if (Page) {

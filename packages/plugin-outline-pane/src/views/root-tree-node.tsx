@@ -40,13 +40,15 @@ class ModalTreeNodeView extends Component<{ treeNode: TreeNode }> {
       <div className="tree-node-modal">
         <div className="tree-node-modal-title">
           <span>模态视图层</span>
-          <div className="tree-node-modal-title-visible-icon"
-            onClick={this.hideAllNodes.bind(this)}>
+          <div
+            className="tree-node-modal-title-visible-icon"
+            onClick={this.hideAllNodes.bind(this)}
+          >
             {hasVisibleModalNode ? <IconEyeClose /> : null}
           </div>
         </div>
         <div className="tree-pane-modal-content">
-          <TreeBranches treeNode={treeNode} isModal={true}/>
+          <TreeBranches treeNode={treeNode} isModal />
         </div>
       </div>
     );
@@ -85,7 +87,7 @@ export default class RootTreeNodeView extends Component<{ treeNode: TreeNode }> 
       <div className={className} data-id={treeNode.id}>
         <TreeTitle treeNode={treeNode} />
         <ModalTreeNodeView treeNode={treeNode} />
-        <TreeBranches treeNode={treeNode}/>
+        <TreeBranches treeNode={treeNode} />
       </div>
     );
   }

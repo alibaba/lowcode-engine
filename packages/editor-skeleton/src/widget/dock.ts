@@ -11,11 +11,15 @@ import { IWidget } from './widget';
  */
 export default class Dock implements IWidget {
   readonly isWidget = true;
+
   readonly id = uniqueId('dock');
+
   readonly name: string;
+
   readonly align?: string;
 
-  @obx.ref private _visible: boolean = true;
+  @obx.ref private _visible = true;
+
   get visible(): boolean {
     return this._visible;
   }
@@ -27,8 +31,10 @@ export default class Dock implements IWidget {
     });
   }
 
-  private inited: boolean = false;
+  private inited = false;
+
   private _body: ReactNode;
+
   get body() {
     if (this.inited) {
       return this._body;

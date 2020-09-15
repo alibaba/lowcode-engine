@@ -39,4 +39,3 @@ test('ts component by local', async t => {
 
   t.snapshot(actual);
 });
-

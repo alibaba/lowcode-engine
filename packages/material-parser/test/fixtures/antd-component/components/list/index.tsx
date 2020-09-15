@@ -251,7 +251,7 @@ export default class List<T> extends React.Component<ListProps<T>, ListState> {
     if (splitDataSource.length > 0) {
       const items = splitDataSource.map((item: any, index: number) => this.renderItem(item, index));
 
-      const childrenList: Array<React.ReactNode> = [];
+      const childrenList: React.ReactNode[] = [];
       React.Children.forEach(items, (child: any, index) => {
         childrenList.push(
           React.cloneElement(child, {

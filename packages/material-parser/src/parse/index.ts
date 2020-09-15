@@ -3,6 +3,9 @@ import parseJS from './js';
 import parseTS from './ts';
 import { install, installPeerDeps, installTypeModules } from '../utils';
 import { IMaterialScanModel } from '../types';
+import { debug } from '../core';
+
+const log = debug.extend('parse');
 
 export interface IParseArgs extends IMaterialScanModel {
   accesser?: 'online' | 'local';
@@ -15,7 +18,11 @@ export interface IParseArgs extends IMaterialScanModel {
 }
 
 export default async (args: IParseArgs) => {
-  const { typingsFileAbsolutePath, mainFileAbsolutePath, moduleFileAbsolutePath = mainFileAbsolutePath } = args;
+  const {
+    typingsFileAbsolutePath,
+    mainFileAbsolutePath,
+    moduleFileAbsolutePath = mainFileAbsolutePath,
+  } = args;
   if (args.accesser === 'local') {
     if (moduleFileAbsolutePath.endsWith('ts') || moduleFileAbsolutePath.endsWith('tsx')) {
       await install(args);
@@ -48,7 +55,7 @@ export default async (args: IParseArgs) => {
       }
       return info;
     } catch (e) {
-      console.error(e);
+      log(e);
       // if error, use static js parsing instead
       return parseJS(moduleFileAbsolutePath);
     }

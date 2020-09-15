@@ -17,6 +17,7 @@ import * as _jsonuri from 'jsonuri';
 import IntlMessageFormat from 'intl-messageformat';
 
 const sdkVersion = (require('../../package.json')).version;
+
 window.sdkVersion = sdkVersion;
 
 export const moment = _moment;
@@ -33,7 +34,7 @@ export const debounce = _debounce;
 export const serialize = _serialize;
 export const jsonuri = _jsonuri;
 export {
- get, post, jsonp, mtop, request
+  get, post, jsonp, mtop, request,
 } from './request';
 
 const ReactIs = require('react-is');
@@ -50,8 +51,6 @@ const EXPRESSION_TYPE = {
   JSSLOT: 'JSSlot',
 };
 const EXPRESSION_REG = /^\{\{(\{.*\}|.*?)\}\}$/;
-const hasSymbol = typeof Symbol === 'function' && Symbol.for;
-const REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
 const debug = Debug('utils:index');
 
 const ENV = {
@@ -102,7 +101,7 @@ export function isJSFunction(obj) {
 }
 export function isJSExpression(obj) {
   // 兼容两种写法，有js构造表达式的情况
-  const isJSExpressionObj =    obj && typeof obj === 'object' && EXPRESSION_TYPE.JSEXPRESSION === obj.type && typeof obj.value === 'string';
+  const isJSExpressionObj = obj && typeof obj === 'object' && EXPRESSION_TYPE.JSEXPRESSION === obj.type && typeof obj.value === 'string';
   const isJSExpressionStr = typeof obj === 'string' && EXPRESSION_REG.test(obj.trim());
   return isJSExpressionObj || isJSExpressionStr;
 }
@@ -180,6 +179,7 @@ export function fillObj(receiver = {}, ...suppliers) {
 
 // 中划线转驼峰
 export function toHump(name) {
+  // eslint-disable-next-line no-useless-escape
   return name.replace(/\-(\w)/g, (all, letter) => letter.toUpperCase());
 }
 // 驼峰转中划线
@@ -204,8 +204,8 @@ export function getEnv() {
  */
 export function comboSkeletonConfig(defaultConfig = {}, customConfig) {
   const {
- skeleton, theme, addons, hooks, shortCuts, extensions, constants, utils, i18n
-} = customConfig || {};
+    skeleton, theme, addons, hooks, shortCuts, extensions, constants, utils, i18n,
+  } = customConfig || {};
 
   if (skeleton && skeleton.handler && typeof skeleton.handler === 'function') {
     return skeleton.handler({
@@ -525,7 +525,7 @@ export function addCssTag(id, content) {
 
 // 注册快捷
 export function registShortCuts(config, appHelper) {
-  const keyboardFilter = (keymaster.filter = (event) => {
+  keymaster.filter = (event) => {
     const eTarget = event.target || event.srcElement;
     const { tagName } = eTarget;
     const isInput = !!(tagName == 'INPUT' || tagName == 'SELECT' || tagName == 'TEXTAREA');
@@ -541,7 +541,8 @@ export function registShortCuts(config, appHelper) {
       return false;
     }
     return true;
-  });
+  };
+  const keyboardFilter = keymaster.filter;
 
   const ideMessage = appHelper.utils && appHelper.utils.ideMessage;
 

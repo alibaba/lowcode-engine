@@ -8,7 +8,7 @@ export const isNodeProcess = (): boolean => {
     typeof process.versions === 'object' &&
     typeof process.versions.node !== 'undefined'
   );
-}
+};
 
 export const writeZipToDisk = (
   zipFolderPath: string,
@@ -27,7 +27,7 @@ export const writeZipToDisk = (
   const writeStream = fs.createWriteStream(zipPath);
   writeStream.write(content);
   writeStream.end();
-}
+};
 
 export const generateProjectZip = async (project: IResultDir): Promise<ZipBuffer> => {
   let zip = new JSZip();
@@ -35,12 +35,12 @@ export const generateProjectZip = async (project: IResultDir): Promise<ZipBuffer
   // const zipType = isNodeProcess() ? 'nodebuffer' : 'blob';
   const zipType = 'nodebuffer'; // 目前先只支持 node 调用
   return zip.generateAsync({ type: zipType });
-}
+};
 
 const writeFolderToZip = (
   folder: IResultDir,
   parentFolder: JSZip,
-  ignoreFolder: boolean = false,
+  ignoreFolder = false,
 ) => {
   const zipFolder = ignoreFolder ? parentFolder : parentFolder.folder(folder.name);
   if (zipFolder !== null) {
@@ -57,4 +57,4 @@ const writeFolderToZip = (
   }
 
   return parentFolder;
-}
+};

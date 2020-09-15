@@ -8,10 +8,8 @@ import { isDragNodeDataObject, DragNodeObject, DragNodeDataObject, DropLocation 
 import { Node, insertChildren, insertChild, isNode, RootNode, ParentalNode } from './node/node';
 import { Selection } from './selection';
 import { History } from './history';
-import { TransformStage } from './node';
+import { TransformStage, ModalNodesManager } from './node';
 import { uniqueId } from '@ali/lowcode-utils';
-import { ModalNodesManager } from './node';
-import { foreachReverse } from '../utils/tree';
 
 export type GetDataType<T, NodeType> = T extends undefined
   ? NodeType extends {
@@ -35,28 +33,37 @@ export class DocumentModel {
    * 根节点 类型有：Page/Component/Block
    */
   rootNode: RootNode | null;
+
   /**
    * 文档编号
    */
   id: string = uniqueId('doc');
+
   /**
    * 选区控制
    */
   readonly selection: Selection = new Selection(this);
+
   /**
    * 操作记录控制
    */
   readonly history: History;
+
   /**
    * 模态节点管理
    */
   readonly modalNodesManager: ModalNodesManager;
 
   private _nodesMap = new Map<string, Node>();
+
   @obx.val private nodes = new Set<Node>();
+
   private seqId = 0;
+
   private _simulator?: ISimulatorHost;
+
   private emitter: EventEmitter;
+
   private rootNodeVisitorMap: { [visitorName: string]: any } = {};
 
   /**
@@ -84,7 +91,9 @@ export class DocumentModel {
   }
 
   private _modalNode?: ParentalNode;
+
   private _blank?: boolean;
+
   get modalNode() {
     return this._modalNode;
   }
@@ -94,6 +103,7 @@ export class DocumentModel {
   }
 
   private inited = false;
+
   constructor(readonly project: Project, schema?: RootSchema) {
     /*
     // TODO
@@ -129,9 +139,11 @@ export class DocumentModel {
   }
 
   @obx.val private willPurgeSpace: Node[] = [];
+
   addWillPurge(node: Node) {
     this.willPurgeSpace.push(node);
   }
+
   removeWillPurge(node: Node) {
     const i = this.willPurgeSpace.indexOf(node);
     if (i > -1) {
@@ -151,8 +163,8 @@ export class DocumentModel {
   nextId() {
     let id;
     do {
-      id = 'node_' + (this.id.slice(-10) + (++this.seqId).toString(36)).toLocaleLowerCase();
-    } while (this.nodesMap.get(id))
+      id = `node_${ (this.id.slice(-10) + (++this.seqId).toString(36)).toLocaleLowerCase()}`;
+    } while (this.nodesMap.get(id));
 
     return id;
   }
@@ -281,6 +293,7 @@ export class DocumentModel {
   }
 
   @obx.ref private _dropLocation: DropLocation | null = null;
+
   /**
    * 内部方法，请勿调用
    */
@@ -362,7 +375,7 @@ export class DocumentModel {
    * 提供给模拟器的参数
    */
   @computed get simulatorProps(): object {
-    let simulatorProps = this.designer.simulatorProps;
+    let { simulatorProps } = this.designer;
     if (typeof simulatorProps === 'function') {
       simulatorProps = simulatorProps(this);
     }
@@ -392,6 +405,7 @@ export class DocumentModel {
   }
 
   @obx.ref private _opened = false;
+
   @obx.ref private _suspensed = false;
 
   /**
@@ -532,8 +546,8 @@ export class DocumentModel {
     const data = {
       componentsMap: this.getComponentsMap(extraComps),
       componentsTree: [node],
-   };
-   return data;
+    };
+    return data;
   }
 
   getHistory(): History {
@@ -582,20 +596,21 @@ export class DocumentModel {
 
 
   acceptRootNodeVisitor(
-    visitorName: string = 'default',
-    visitorFn: (node: RootNode) => any ) {
-      let visitorResult = {};
-      if (!visitorName) {
-        /* tslint:disable no-console */
-        console.warn('Invalid or empty RootNodeVisitor name.');
-      }
-      try {
-        visitorResult = visitorFn.call(this, this.rootNode);
-        this.rootNodeVisitorMap[visitorName] = visitorResult;
-      } catch (e) {
-        console.error('RootNodeVisitor is not valid.');
-      }
-      return visitorResult;
+    visitorName = 'default',
+    visitorFn: (node: RootNode) => any,
+  ) {
+    let visitorResult = {};
+    if (!visitorName) {
+      /* tslint:disable no-console */
+      console.warn('Invalid or empty RootNodeVisitor name.');
+    }
+    try {
+      visitorResult = visitorFn.call(this, this.rootNode);
+      this.rootNodeVisitorMap[visitorName] = visitorResult;
+    } catch (e) {
+      console.error('RootNodeVisitor is not valid.');
+    }
+    return visitorResult;
   }
 
   getRootNodeVisitor(name: string) {
@@ -606,7 +621,7 @@ export class DocumentModel {
     const componentsMap: ComponentMap[] = [];
     // 组件去重
     const map: any = {};
-    for (let node of this._nodesMap.values()) {
+    for (const node of this._nodesMap.values()) {
       const { componentName } = node || {};
       if (!map[componentName] && node?.componentMeta?.npm?.package) {
         map[componentName] = true;
@@ -657,7 +672,7 @@ export class DocumentModel {
   /**
    * @deprecated
    */
-  onRefresh(func: () => void) {
+  onRefresh(/* func: () => void */) {
     console.warn('onRefresh method is deprecated');
   }
 }

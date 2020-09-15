@@ -22,13 +22,14 @@ class Input extends Component {
   }
 
   private domRef: HTMLTextAreaElement | null = null;
+
   public adjustTextAreaHeight() {
     if (!this.domRef) {
       return;
     }
     this.domRef.style.height = '1px';
     const calculatedHeight = this.domRef.scrollHeight;
-    this.domRef.style.height = calculatedHeight >= 200 ? '200px' : calculatedHeight + 'px';
+    this.domRef.style.height = calculatedHeight >= 200 ? '200px' : `${calculatedHeight }px`;
   }
 
   public render() {
@@ -50,7 +51,7 @@ class Input extends Component {
           onBlur={() => this.setState({ focused: false })}
           onFocus={() => this.setState({ focused: true })}
           onKeyUp={this.adjustTextAreaHeight.bind(this)}
-        ></textarea>
+        />
       </div>
     );
   }
@@ -73,7 +74,7 @@ export default class VariableSetter extends Component<{
   }
 
   public render() {
-    const prop = this.props.prop;
+    const { prop } = this.props;
     return (
       <Input
         value={prop.getVariableValue()}

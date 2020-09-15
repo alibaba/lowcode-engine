@@ -47,7 +47,7 @@ export interface AntTreeNodeProps {
   [customProp: string]: any;
 }
 
-export interface AntTreeNode extends React.Component<AntTreeNodeProps, {}> {}
+export type AntTreeNode = React.Component<AntTreeNodeProps, {}>;
 
 export interface AntTreeNodeBaseEvent {
   node: AntTreeNode;
@@ -181,8 +181,7 @@ export default class Tree extends React.Component<TreeProps, any> {
           [`${prefixCls}-rtl`]: direction === 'rtl',
         })}
         checkable={checkable ? <span className={`${prefixCls}-checkbox-inner`} /> : checkable}
-        switcherIcon={(nodeProps: AntTreeNodeProps) =>
-          renderSwitcherIcon(prefixCls, switcherIcon, showLine, nodeProps)
+        switcherIcon={(nodeProps: AntTreeNodeProps) => renderSwitcherIcon(prefixCls, switcherIcon, showLine, nodeProps)
         }
       >
         {children}

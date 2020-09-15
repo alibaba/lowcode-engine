@@ -41,7 +41,7 @@ interface MentionsEntity {
 class Mentions extends React.Component<MentionProps, MentionState> {
   static Option = Option;
 
-  static getMentions = (value: string = '', config?: MentionsConfig): MentionsEntity[] => {
+  static getMentions = (value = '', config?: MentionsConfig): MentionsEntity[] => {
     const { prefix = '@', split = ' ' } = config || {};
     const prefixList: string[] = Array.isArray(prefix) ? prefix : [prefix];
 

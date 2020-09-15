@@ -3,15 +3,16 @@ import { uniqBy } from 'lodash';
 import checkIsIIFE from './checkIsIIFE';
 import resolveHOC from './resolveHOC';
 import resolveIIFE from './resolveIIFE';
-import resolveImport, { isImportLike } from './resolveImport';
+import resolveImport from './resolveImport';
 import resolveTranspiledClass from './resolveTranspiledClass';
 import isStaticMethod from './isStaticMethod';
 import findAssignedMethods from './findAssignedMethods';
 import resolveExportDeclaration from './resolveExportDeclaration';
 import makeProxy from '../utils/makeProxy';
-const expressionTo = require('react-docgen/dist/utils/expressionTo');
 import { get, set, has, ICache } from '../utils/cache';
 import getName from '../utils/getName';
+
+const expressionTo = require('react-docgen/dist/utils/expressionTo');
 
 const {
   isExportsOrModuleAssignment,
@@ -76,10 +77,10 @@ function getDefinition(definition: any, cache: ICache = {}): any {
     } else if (t.SequenceExpression.check(definition.node)) {
       const classNameNode = definition.parent.get('id').node;
       const localNames: string[] = [];
-      let node = definition.get('expressions', 0).node;
+      let { node } = definition.get('expressions', 0);
       while (t.AssignmentExpression.check(node)) {
         // @ts-ignore
-        const name = node.left.name;
+        const { name } = node.left;
         if (name) {
           localNames.push(name);
         }
@@ -121,9 +122,9 @@ function getDefinition(definition: any, cache: ICache = {}): any {
         const exportList: any[] = [];
         const importList: any[] = [];
         result = result.forEach((def: any) => {
-          let { __meta: meta = {} } = def;
-          let exportName = meta.exportName;
-          for (let item of importMeta) {
+          const { __meta: meta = {} } = def;
+          let { exportName } = meta;
+          for (const item of importMeta) {
             if (exportName === item.importedName) {
               exportName = item.localName;
               break;
@@ -252,18 +253,18 @@ function getSubComponents(path: any, scope: any, cache: ICache) {
           value: def.flatMap((x: any) => x).filter((x: any) => isComponentDefinition(x)),
         };
       })
-      .map(({ subName, localName, value }: IMethodsPath) =>
-        value.map((x: any) => ({
+      .map(({ subName, localName, value }: IMethodsPath) => {
+        return value.map((x: any) => ({
           subName,
           localName,
           value: x,
-        })),
-      )
+        }));
+      })
       // @ts-ignore
       .flatMap((x: any) => x)
-      .map(({ subName, localName, value }: IMethodsPath) => {
+      .map(({ subName, value }: IMethodsPath) => {
         const __meta = {
-          subName: subName,
+          subName,
           exportName: path.__meta && path.__meta.exportName,
         };
         return makeProxy(value, { __meta });
@@ -327,7 +328,7 @@ export default function findAllExportedComponentDefinition(ast: any) {
   }
 
   visit(ast, {
-    visitProgram: function(path) {
+    visitProgram(path) {
       programScope = path.scope;
       return this.traverse(path);
     },
@@ -347,7 +348,7 @@ export default function findAllExportedComponentDefinition(ast: any) {
 
     visitExportNamedDeclaration: exportDeclaration,
     visitExportDefaultDeclaration: exportDeclaration,
-    visitExportAllDeclaration: function(path) {
+    visitExportAllDeclaration(path) {
       components.push(...resolveImport(path, findAllExportedComponentDefinition));
       return false;
     },

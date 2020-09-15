@@ -124,7 +124,9 @@ export function generateAttrs(ctx: INodeGeneratorContext, nodeItem: IComponentNo
   let pieces: CodePiece[] = [];
 
   Object.keys(props).forEach(
-    (propName: string) => (pieces = pieces.concat(generateAttr(ctx, propName, props[propName]))),
+    (propName: string) => {
+      pieces = pieces.concat(generateAttr(ctx, propName, props[propName]));
+    },
   );
 
   return pieces;
@@ -236,7 +238,7 @@ export function linkPieces(pieces: CodePiece[]): string {
     .map((p) => p.value)
     .join(' ');
 
-  attrsParts = !!attrsParts ? ` ${attrsParts}` : '';
+  attrsParts = attrsParts ? ` ${attrsParts}` : '';
 
   if (childrenParts) {
     return `${beforeParts}<${tagName}${attrsParts}>${childrenParts}</${tagName}>${afterParts}`;

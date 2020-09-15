@@ -85,6 +85,7 @@ export class AssetLoader {
   }
 
   private stylePoints = new Map<string, StylePoint>();
+
   private loadStyle(content: string | undefined | null, level: AssetLevel, isUrl?: boolean, id?: string) {
     if (!content) {
       return;

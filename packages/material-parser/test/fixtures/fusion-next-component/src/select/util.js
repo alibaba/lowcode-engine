@@ -10,7 +10,7 @@ import { Children } from 'react';
  * @return {boolean} is single mode
  */
 export function isSingle(mode) {
-    return !mode || mode === 'single';
+  return !mode || mode === 'single';
 }
 
 /**
@@ -19,7 +19,7 @@ export function isSingle(mode) {
  * @return {boolean}
  */
 export function isNull(n) {
-    return n === null || n === undefined;
+  return n === null || n === undefined;
 }
 
 /**
@@ -28,7 +28,7 @@ export function isNull(n) {
  * @return {string}
  */
 export function escapeForReg(str) {
-    return str.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+  return str.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
 }
 
 /**
@@ -38,10 +38,10 @@ export function escapeForReg(str) {
  * @return {boolean} it's filtered
  */
 export function filter(key, item) {
-    const _key = escapeForReg(`${key}`);
-    const regExp = new RegExp(`(${_key})`, 'ig');
+  const _key = escapeForReg(`${key}`);
+  const regExp = new RegExp(`(${_key})`, 'ig');
 
-    return regExp.test(`${item.value}`) || regExp.test(`${item.label}`);
+  return regExp.test(`${item.value}`) || regExp.test(`${item.label}`);
 }
 
 /**
@@ -54,23 +54,23 @@ export function filter(key, item) {
  * @param {object} option
  */
 export function loopMap(dataSource, callback) {
-    const result = [];
-    dataSource.forEach(option => {
-        if (option.children) {
-            const children = loopMap(option.children, callback);
-            children.length &&
+  const result = [];
+  dataSource.forEach(option => {
+    if (option.children) {
+      const children = loopMap(option.children, callback);
+      children.length &&
                 result.push({
-                    ...option,
-                    children,
+                  ...option,
+                  children,
                 });
-        } else {
-            // eslint-disable-next-line callback-return
-            const tmp = callback(option);
-            tmp && result.push(tmp);
-        }
-    });
+    } else {
+      // eslint-disable-next-line callback-return
+      const tmp = callback(option);
+      tmp && result.push(tmp);
+    }
+  });
 
-    return result;
+  return result;
 }
 
 /**
@@ -80,71 +80,71 @@ export function loopMap(dataSource, callback) {
  * @param {number} [deep=0] recursion deep level
  */
 export function parseDataSourceFromChildren(children, deep = 0) {
-    const source = [];
+  const source = [];
 
-    Children.forEach(children, (child, index) => {
-        if (!child) {
-            return;
-        }
-        const { type, props: childProps } = child;
-        const item2 = { deep };
+  Children.forEach(children, (child, index) => {
+    if (!child) {
+      return;
+    }
+    const { type, props: childProps } = child;
+    const item2 = { deep };
 
-        let isOption = false;
-        let isOptionGroup = false;
+    let isOption = false;
+    let isOptionGroup = false;
 
-        if (
-            (typeof type === 'function' &&
+    if (
+      (typeof type === 'function' &&
                 type._typeMark === 'next_select_option') ||
             type === 'option'
-        ) {
-            isOption = true;
-        }
-        if (
-            (typeof type === 'function' &&
+    ) {
+      isOption = true;
+    }
+    if (
+      (typeof type === 'function' &&
                 type._typeMark === 'next_select_option_group') ||
             type === 'optgroup'
-        ) {
-            isOptionGroup = true;
-        }
+    ) {
+      isOptionGroup = true;
+    }
 
-        if (!isOption && !isOptionGroup) {
-            return;
-        }
+    if (!isOption && !isOptionGroup) {
+      return;
+    }
 
-        if (isOption) {
-            // option
-            // If children is a string, it can be used as value
-            const isStrChild = typeof childProps.children === 'string';
-            // value > key > string children > index
-            item2.value =
+    if (isOption) {
+      // option
+      // If children is a string, it can be used as value
+      const isStrChild = typeof childProps.children === 'string';
+      // value > key > string children > index
+      item2.value =
                 'value' in childProps
-                    ? childProps.value
-                    : 'key' in childProps
+                  ? childProps.value
+                  : 'key' in childProps
                     ? childProps.key
                     : isStrChild
-                    ? childProps.children
-                    : `${index}`;
+                      ? childProps.children
+                      : `${index}`;
 
-            item2.label =
+      item2.label =
                 childProps.label || childProps.children || `${item2.value}`;
-            item2.title = childProps.title;
-            childProps.disabled === true && (item2.disabled = true);
-            // You can put your extra data here, and use it in `itemRender` or `labelRender`
-            Object.assign(item2, childProps['data-extra'] || {});
-        } else if (isOptionGroup && deep < 1) {
-            // option group
-            item2.label = childProps.label || 'Group';
-            // parse children nodes
-            item2.children = parseDataSourceFromChildren(
-                childProps.children,
-                deep + 1
-            );
-        }
+      item2.title = childProps.title;
+      childProps.disabled === true && (item2.disabled = true);
+      // You can put your extra data here, and use it in `itemRender` or `labelRender`
+      Object.assign(item2, childProps['data-extra'] || {});
+    } else if (isOptionGroup && deep < 1) {
+      // option group
+      item2.label = childProps.label || 'Group';
+      // parse children nodes
+      item2.children = parseDataSourceFromChildren(
+        childProps.children,
+        deep + 1,
+      );
+    }
 
-        source.push(item2);
-    });
+    source.push(item2);
+  });
 
-    return source;
+  return source;
 }
 
 /**
@@ -158,40 +158,40 @@ export function parseDataSourceFromChildren(children, deep = 0) {
  * disabled: disabled === true
  */
 export function normalizeDataSource(dataSource, deep = 0) {
-    const source = [];
+  const source = [];
 
-    dataSource.forEach((item, index) => {
-        // enable array of basic type
-        if (/string|boolean|number/.test(typeof item)) {
-            item = { label: `${item}`, value: item };
-        }
+  dataSource.forEach((item, index) => {
+    // enable array of basic type
+    if (/string|boolean|number/.test(typeof item)) {
+      item = { label: `${item}`, value: item };
+    }
 
-        // filter off addon item
-        if (item.__isAddon) {
-            return;
-        }
+    // filter off addon item
+    if (item.__isAddon) {
+      return;
+    }
 
-        const item2 = { deep };
-        // deep < 1: only 2 level allowed
-        if (Array.isArray(item.children) && deep < 1) {
-            // handle group
-            item2.label = item.label || item.value || `Group ${index}`;
-            // parse children
-            item2.children = normalizeDataSource(item.children, deep + 1);
-        } else {
-            const { value, label, title, disabled, ...others } = item;
-            item2.value = !isNull(value) ? value : `${index}`;
-            item2.label = label || `${item2.value}`;
-            item2.title = title;
-            disabled === true && (item2.disabled = true);
+    const item2 = { deep };
+    // deep < 1: only 2 level allowed
+    if (Array.isArray(item.children) && deep < 1) {
+      // handle group
+      item2.label = item.label || item.value || `Group ${index}`;
+      // parse children
+      item2.children = normalizeDataSource(item.children, deep + 1);
+    } else {
+      const { value, label, title, disabled, ...others } = item;
+      item2.value = !isNull(value) ? value : `${index}`;
+      item2.label = label || `${item2.value}`;
+      item2.title = title;
+      disabled === true && (item2.disabled = true);
 
-            Object.assign(item2, others);
-        }
+      Object.assign(item2, others);
+    }
 
-        source.push(item2);
-    });
+    source.push(item2);
+  });
 
-    return source;
+  return source;
 }
 
 /**
@@ -201,61 +201,61 @@ export function normalizeDataSource(dataSource, deep = 0) {
  * @return {Array}
  */
 export function flattingDataSource(dataSource) {
-    const source = [];
+  const source = [];
 
-    dataSource.forEach(item => {
-        if (Array.isArray(item.children)) {
-            source.push(...flattingDataSource(item.children));
-        } else {
-            source.push(item);
-        }
-    });
+  dataSource.forEach(item => {
+    if (Array.isArray(item.children)) {
+      source.push(...flattingDataSource(item.children));
+    } else {
+      source.push(item);
+    }
+  });
 
-    return source;
+  return source;
 }
 
 export function filterDataSource(dataSource, key, filter, addonKey) {
-    if (!Array.isArray(dataSource)) {
-        return [];
-    }
-    if (typeof key === 'undefined' || key === null) {
-        return [].concat(dataSource);
-    }
+  if (!Array.isArray(dataSource)) {
+    return [];
+  }
+  if (typeof key === 'undefined' || key === null) {
+    return [].concat(dataSource);
+  }
 
-    let addKey = true;
-    const menuDataSource = loopMap(dataSource, option => {
-        if (key === `${option.value}`) {
-            addKey = false;
-        }
-        return filter(key, option) && !option.__isAddon && option;
+  let addKey = true;
+  const menuDataSource = loopMap(dataSource, option => {
+    if (key === `${option.value}`) {
+      addKey = false;
+    }
+    return filter(key, option) && !option.__isAddon && option;
+  });
+
+  // if key not in menuDataSource, add key to dataSource
+  if (addonKey && key && addKey) {
+    menuDataSource.unshift({
+      value: key,
+      label: key,
+      title: key,
+      __isAddon: true,
     });
+  }
 
-    // if key not in menuDataSource, add key to dataSource
-    if (addonKey && key && addKey) {
-        menuDataSource.unshift({
-            value: key,
-            label: key,
-            title: key,
-            __isAddon: true,
-        });
-    }
-
-    return menuDataSource;
+  return menuDataSource;
 }
 
 function getKeyItemByValue(value, valueMap) {
-    let item;
+  let item;
 
-    if (typeof value === 'object' && value.hasOwnProperty('value')) {
-        item = value;
-    } else {
-        item = valueMap[`${value}`] || {
-            value,
-            label: value,
-        };
-    }
+  if (typeof value === 'object' && value.hasOwnProperty('value')) {
+    item = value;
+  } else {
+    item = valueMap[`${value}`] || {
+      value,
+      label: value,
+    };
+  }
 
-    return item;
+  return item;
 }
 
 /**
@@ -266,40 +266,40 @@ function getKeyItemByValue(value, valueMap) {
  * @returns {Object} value: [value]; valueDS: [{value,label}]; mapValueDS: {value: {value,label}}
  */
 export function getValueDataSource(value, mapValueDS, mapMenuDS) {
-    if (isNull(value)) {
-        return {};
-    }
+  if (isNull(value)) {
+    return {};
+  }
 
-    const newValue = [];
-    const newValueDS = [];
-    const newMapValueDS = {};
-    const _newMapDS = Object.assign({}, mapValueDS, mapMenuDS);
+  const newValue = [];
+  const newValueDS = [];
+  const newMapValueDS = {};
+  const _newMapDS = Object.assign({}, mapValueDS, mapMenuDS);
 
-    if (Array.isArray(value)) {
-        value.forEach(v => {
-            const item = getKeyItemByValue(v, _newMapDS);
+  if (Array.isArray(value)) {
+    value.forEach(v => {
+      const item = getKeyItemByValue(v, _newMapDS);
 
-            newValueDS.push(item);
-            newMapValueDS[`${item.value}`] = item;
-            newValue.push(item.value);
-        });
+      newValueDS.push(item);
+      newMapValueDS[`${item.value}`] = item;
+      newValue.push(item.value);
+    });
 
-        return {
-            value: newValue, // [value]
-            valueDS: newValueDS, // [{value,label}]
-            mapValueDS: newMapValueDS, // {value: {value,label}}
-        };
-    } else {
-        const item = getKeyItemByValue(value, _newMapDS);
+    return {
+      value: newValue, // [value]
+      valueDS: newValueDS, // [{value,label}]
+      mapValueDS: newMapValueDS, // {value: {value,label}}
+    };
+  } else {
+    const item = getKeyItemByValue(value, _newMapDS);
 
-        return {
-            value: item.value,
-            valueDS: item,
-            mapValueDS: {
-                [`${item.value}`]: item,
-            },
-        };
-    }
+    return {
+      value: item.value,
+      valueDS: item,
+      mapValueDS: {
+        [`${item.value}`]: item,
+      },
+    };
+  }
 }
 
 /**
@@ -309,13 +309,13 @@ export function getValueDataSource(value, mapValueDS, mapMenuDS) {
  * @return {String}
  */
 export function valueToSelectKey(value) {
-    let val;
-    if (typeof value === 'object' && value.hasOwnProperty('value')) {
-        val = value.value;
-    } else {
-        val = value;
-    }
-    return `${val}`;
+  let val;
+  if (typeof value === 'object' && value.hasOwnProperty('value')) {
+    val = value.value;
+  } else {
+    val = value;
+  }
+  return `${val}`;
 }
 
 /**

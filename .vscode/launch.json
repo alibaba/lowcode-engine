@@ -9,7 +9,7 @@
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "${workspaceFolder}/packages/material-parser/node_modules/.bin/ava",
-      "runtimeArgs": ["debug", "--break", "${file}"]
+      "runtimeArgs": ["debug", "--break", "${workspaceFolder}/packages/material-parser/test/antd.ts"]
     }
   ]
 }

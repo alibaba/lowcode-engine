@@ -56,7 +56,7 @@ export default function usePagination(
     }
   }
 
-  const refreshPagination = (current: number = 1) => {
+  const refreshPagination = (current = 1) => {
     setInnerPagination({
       ...mergedPagination,
       current,

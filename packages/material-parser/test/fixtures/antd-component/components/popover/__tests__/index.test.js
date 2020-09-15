@@ -73,7 +73,7 @@ describe('Popover', () => {
     expect(overlay).not.toHaveBeenCalled();
   });
 
-  it(`should be rendered correctly in RTL direction`, () => {
+  it('should be rendered correctly in RTL direction', () => {
     const wrapper = mount(
       <ConfigProvider direction="rtl">
         <Popover title="RTL" visible>

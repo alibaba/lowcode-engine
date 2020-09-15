@@ -8,46 +8,46 @@ import CheckableItem from './checkable-item';
  * @description 该子组件选中情况不受 defaultSelectedKeys/selectedKeys 控制，请自行控制选中逻辑
  */
 export default class RadioItem extends Component {
-    static menuChildType = 'item';
+  static menuChildType = 'item';
 
-    static propTypes = {
-        /**
+  static propTypes = {
+    /**
          * 是否选中
          */
-        checked: PropTypes.bool,
-        /**
+    checked: PropTypes.bool,
+    /**
          * 是否禁用
          */
-        disabled: PropTypes.bool,
-        /**
+    disabled: PropTypes.bool,
+    /**
          * 选中或取消选中触发的回调函数
          * @param {Boolean} checked 是否选中
          * @param {Object} event 选中事件对象
          */
-        onChange: PropTypes.func,
-        /**
+    onChange: PropTypes.func,
+    /**
          * 帮助文本
          */
-        helper: PropTypes.node,
-        /**
+    helper: PropTypes.node,
+    /**
          * 标签内容
          */
-        children: PropTypes.node,
-    };
+    children: PropTypes.node,
+  };
 
-    static defaultProps = {
-        checked: false,
-        disabled: false,
-        onChange: () => {},
-    };
+  static defaultProps = {
+    checked: false,
+    disabled: false,
+    onChange: () => {},
+  };
 
-    render() {
-        return (
-            <CheckableItem
-                role="menuitemradio"
-                checkType="radio"
-                {...this.props}
-            />
-        );
-    }
+  render() {
+    return (
+      <CheckableItem
+        role="menuitemradio"
+        checkType="radio"
+        {...this.props}
+      />
+    );
+  }
 }

@@ -4,9 +4,11 @@ import './index.css';
 
 export default class VisualDom extends Component {
   static displayName = 'VisualDom';
+
   static defaultProps = {
-    children: null
+    children: null,
   };
+
   render() {
     const { children, title, label, text, __componentName } = this.props;
 

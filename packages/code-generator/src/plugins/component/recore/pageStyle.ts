@@ -22,7 +22,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
         type: ChunkType.STRING,
         fileType: FileType.TS,
         name: CLASS_DEFINE_CHUNK_NAME.StaticVar,
-        content: `static cssText = '${ir.css.replace(/\'/g, '\\\'')}';`,
+        content: `static cssText = '${ir.css.replace(/'/g, '\\\'')}';`,
         linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.StaticVar]],
       });
     }

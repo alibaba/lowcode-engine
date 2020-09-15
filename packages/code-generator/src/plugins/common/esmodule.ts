@@ -88,7 +88,9 @@ function buildPackageImport(pkg: string, deps: IDependency[], targetFileType: st
     }
   });
 
-  const items = Object.keys(imports).map((src) => (src === imports[src] ? src : `${src} as ${imports[src]}`));
+  const items = Object.keys(imports).map((src) => {
+    return src === imports[src] ? src : `${src} as ${imports[src]}`;
+  });
 
   const statementL = ['import'];
   if (defaultImport) {

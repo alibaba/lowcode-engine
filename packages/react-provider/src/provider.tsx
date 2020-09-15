@@ -8,25 +8,28 @@ import LazyComponent from './components/LazyComponent';
 export default class ReactProvider extends Provider {
   // 定制构造根组件的逻辑，如切换路由机制
   createApp() {
-    let RouterView = this.getRouterView();
+    const RouterView = this.getRouterView();
     let App: any;
     const layoutConfig = this.getLayoutConfig();
     if (!layoutConfig || !layoutConfig.componentName) {
-      App = (props: any) => (RouterView ? createElement(RouterView, { ...props }) : null);
+      App = (props: any) => {
+        return (RouterView ? createElement(RouterView, { ...props }) : null);
+      };
       return App;
     }
     const { componentName: layoutName, props: layoutProps } = layoutConfig;
     const { content: Layout, props: extraLayoutProps } = app.getLayout(layoutName) || {};
     const sectionalRender = this.isSectionalRender;
     if (!sectionalRender && Layout) {
-      App = (props: any) =>
-        createElement(
-          Layout,
-          { ...layoutProps, ...extraLayoutProps },
-          RouterView ? createElement(RouterView, props) : null,
-        );
+      App = (props: any) => createElement(
+        Layout,
+        { ...layoutProps, ...extraLayoutProps },
+        RouterView ? createElement(RouterView, props) : null,
+      );
     } else {
-      App = (props: any) => (RouterView ? createElement(RouterView, props) : null);
+      App = (props: any) => {
+        return (RouterView ? createElement(RouterView, props) : null);
+      };
     }
     return App;
   }
@@ -84,13 +87,14 @@ export default class ReactProvider extends Provider {
     const appHelper = new AppHelper();
     appHelper.set('utils', this.getUtils());
     appHelper.set('constants', this.getConstants());
+    const self = this;
     const RouterView = (props: any) => {
       return createElement(Router as any, {
         routes,
-        components: this.getComponents(),
-        utils: this.getUtils(),
+        components: self.getComponents(),
+        utils: self.getUtils(),
         appHelper,
-        componentsMap: this.getComponentsMapObj(),
+        componentsMap: self.getComponentsMapObj(),
         ...props,
       });
     };
@@ -105,7 +109,10 @@ export default class ReactProvider extends Provider {
       return this.getLazyElement(pageId);
     } else {
       const lazyElement = createElement(LazyComponent as any, {
-        getPageData: async () => await this.getPageData(pageId),
+        getPageData: async () => {
+          const pageData = await this.getPageData(pageId);
+          return pageData;
+        },
         key: pageId,
         context: this,
         ...props,

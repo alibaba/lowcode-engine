@@ -11,7 +11,7 @@ export default class SlotSetter extends Component<{
   supportParams?: boolean;
 }> {
   private handleInitial = () => {
-    const { value, onChange, onInitial } = this.props;
+    const { onChange, onInitial } = this.props;
     if (onInitial) {
       onInitial();
       return;
@@ -24,6 +24,7 @@ export default class SlotSetter extends Component<{
       value: null,
     });
   };
+
   render() {
     const { value, onChange, supportParams } = this.props;
     if (!isJSSlot(value)) {

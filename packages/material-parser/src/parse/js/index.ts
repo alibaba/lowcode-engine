@@ -1,9 +1,10 @@
-const reactDocs = require('react-docgen');
 import { transformItem } from '../transform';
 import { IMaterialParsedModel } from '../../types';
 import { loadFile } from '../../utils';
 import resolver from './resolver';
 import handlers from './handlers';
+
+const reactDocs = require('react-docgen');
 
 export default function parse(filePath: string): IMaterialParsedModel[] {
   const fileContent = loadFile(filePath);
@@ -25,9 +26,9 @@ export default function parse(filePath: string): IMaterialParsedModel[] {
         const item: any = transformItem(name, info.props[name]);
         acc.push(item);
       } catch (e) {
-      } finally {
-        return acc;
+        // TODO
       }
+      return acc;
     }, []);
     res.push({
       componentName: info.displayName,

@@ -6,18 +6,18 @@ import { ConfigConsumer, ConfigConsumerProps } from '../config-provider';
 function getNumberArray(num: string | number | undefined | null) {
   return num
     ? num
-        .toString()
-        .split('')
-        .reverse()
-        .map(i => {
-          const current = Number(i);
-          return isNaN(current) ? i : current;
-        })
+      .toString()
+      .split('')
+      .reverse()
+      .map(i => {
+        const current = Number(i);
+        return isNaN(current) ? i : current;
+      })
     : [];
 }
 
 function renderNumberList(position: number, className: string) {
-  const childrenToReturn: React.ReactElement<any>[] = [];
+  const childrenToReturn: Array<React.ReactElement<any>> = [];
   for (let i = 0; i < 30; i++) {
     childrenToReturn.push(
       <p

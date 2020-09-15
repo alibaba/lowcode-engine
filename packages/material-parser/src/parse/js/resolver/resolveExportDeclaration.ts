@@ -42,8 +42,8 @@ export default function resolveExportDeclaration(path: any) {
       definitions.push(
         makeProxy(def, {
           __meta: {
-            exportName: exportName,
-            localName: localName,
+            exportName,
+            localName,
           },
         }),
       );

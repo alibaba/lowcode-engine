@@ -167,13 +167,13 @@ export default (
         if (inRange() || !currentStepText) {
           return step === fullText.length
             ? {
-                finished: false,
-                reactNode: fullText,
-              }
+              finished: false,
+              reactNode: fullText,
+            }
             : {
-                finished: true,
-                reactNode: currentStepText,
-              };
+              finished: true,
+              reactNode: currentStepText,
+            };
         }
       }
     }

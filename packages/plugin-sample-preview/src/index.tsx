@@ -1,6 +1,6 @@
-import React, { useState, ComponentType } from 'react';
+import React, { useState } from 'react';
 import { Button, Dialog } from '@alifd/next';
-import { PluginProps, NpmInfo } from '@ali/lowcode-types';
+import { PluginProps } from '@ali/lowcode-types';
 import { Designer } from '@ali/lowcode-designer';
 import { buildComponents, assetBundle, AssetList, AssetLevel, AssetLoader } from '@ali/lowcode-utils';
 import ReactRenderer from '@ali/lowcode-react-renderer';
@@ -47,7 +47,7 @@ const SamplePreview = ({ editor }: PluginProps) => {
       });
       setVisible(true);
     }
-  };
+  }
 
   function handleClose() {
     setVisible(false);

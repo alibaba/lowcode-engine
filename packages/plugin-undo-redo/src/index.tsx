@@ -68,11 +68,11 @@ export default class UndoRedo extends PureComponent<IProps, IState> {
   };
 
   handleUndoClick = (): void => {
-    this.history?.back();
+    this.history.back();
   };
 
   handleRedoClick = (): void => {
-    this.history?.forward();
+    this.history.forward();
   };
 
   render(): React.ReactNode {

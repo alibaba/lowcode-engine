@@ -18,115 +18,115 @@ Upload.ErrorCode = errorCode;
 
 // compatible with 0.x version
 Upload.ImageUpload = ConfigProvider.config(Card, {
-    componentName: 'Upload',
-    transform: /* istanbul ignore next */ (props, deprecated) => {
-        deprecated('Upload.ImageUpload', 'Upload.Card', 'Upload');
-        const newprops = transform(props, () => {});
-        if (newprops.locale && newprops.locale.image) {
-            newprops.locale.card = newprops.locale.image;
-        }
+  componentName: 'Upload',
+  transform: /* istanbul ignore next */ (props, deprecated) => {
+    deprecated('Upload.ImageUpload', 'Upload.Card', 'Upload');
+    const newprops = transform(props, () => {});
+    if (newprops.locale && newprops.locale.image) {
+      newprops.locale.card = newprops.locale.image;
+    }
 
-        return newprops;
-    },
+    return newprops;
+  },
 });
 
 // compatible with 0.x version
 Upload.DragUpload = ConfigProvider.config(Dragger, {
-    componentName: 'Upload',
-    transform: /* istanbul ignore next */ (props, deprecated) => {
-        deprecated('Upload.DragUpload', 'Upload.Dragger', 'Upload');
-        const newprops = transform(props, () => {});
-        if (!newprops.listType) {
-            newprops.listType = 'card';
-        }
+  componentName: 'Upload',
+  transform: /* istanbul ignore next */ (props, deprecated) => {
+    deprecated('Upload.DragUpload', 'Upload.Dragger', 'Upload');
+    const newprops = transform(props, () => {});
+    if (!newprops.listType) {
+      newprops.listType = 'card';
+    }
 
-        return newprops;
-    },
+    return newprops;
+  },
 });
 
 // compatible with 0.x version
 /* istanbul ignore next */
 Upload.Core = class Core extends React.Component {
-    constructor(props) {
-        super(props);
-        // eslint-disable-next-line
+  constructor(props) {
+    super(props);
+    // eslint-disable-next-line
         const {
-            action,
-            name,
-            method,
-            beforeUpload,
-            onProgress,
-            onError,
-            withCredentials,
-            headers,
-            data,
-            onSuccess,
-        } = this.props;
+      action,
+      name,
+      method,
+      beforeUpload,
+      onProgress,
+      onError,
+      withCredentials,
+      headers,
+      data,
+      onSuccess,
+    } = this.props;
 
-        this.uploader = new Uploader({
-            action,
-            name,
-            method,
-            beforeUpload,
-            onProgress,
-            onError,
-            withCredentials,
-            headers,
-            data,
-            onSuccess,
-        });
-    }
+    this.uploader = new Uploader({
+      action,
+      name,
+      method,
+      beforeUpload,
+      onProgress,
+      onError,
+      withCredentials,
+      headers,
+      data,
+      onSuccess,
+    });
+  }
 
-    abort() {
-        this.uploader.abort();
-    }
+  abort() {
+    this.uploader.abort();
+  }
 
-    handleSelect = files => {
-        this.uploader.startUpload(files);
-    };
+  handleSelect = files => {
+    this.uploader.startUpload(files);
+  };
 
-    render() {
-        log.deprecated(
-            'Upload.Core',
-            'Upload.Selecter and Upload.Uploader',
-            'Upload'
-        );
+  render() {
+    log.deprecated(
+      'Upload.Core',
+      'Upload.Selecter and Upload.Uploader',
+      'Upload',
+    );
 
-        // eslint-disable-next-line
+    // eslint-disable-next-line
         const {
-            action,
-            name,
-            method,
-            beforeUpload,
-            onProgress,
-            onError,
-            withCredentials,
-            headers,
-            data,
-            onSuccess,
-            ...others
-        } = this.props;
+      action,
+      name,
+      method,
+      beforeUpload,
+      onProgress,
+      onError,
+      withCredentials,
+      headers,
+      data,
+      onSuccess,
+      ...others
+    } = this.props;
 
-        const props = others;
+    const props = others;
 
-        return (
-            <Selecter
-                {...transform(props, () => {})}
-                onSelect={this.handleSelect}
-            />
-        );
-    }
+    return (
+      <Selecter
+        {...transform(props, () => {})}
+        onSelect={this.handleSelect}
+      />
+    );
+  }
 };
 
 Upload.List = List;
 
 // compatible with 0.x version
 /* istanbul ignore next */
-Upload.CropUpload = function() {
-    log.deprecated('Upload.CropUpload', '@alife/bc-next-crop-upload', 'Upload');
-    return null;
+Upload.CropUpload = function () {
+  log.deprecated('Upload.CropUpload', '@alife/bc-next-crop-upload', 'Upload');
+  return null;
 };
 
 export default ConfigProvider.config(Upload, {
-    transform,
+  transform,
 });

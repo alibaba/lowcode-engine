@@ -12,7 +12,7 @@ export default class Builder implements ICodeBuilder {
 
   private generators: { [key: string]: CodeGeneratorFunction<ChunkContent> } = {
     [ChunkType.STRING]: (str: string) => str, // no-op for string chunks
-    [ChunkType.JSON]: (json: object) => JSON.stringify(json), // stringify json to string
+    [ChunkType.JSON]: (json: Record<string, unknown>) => JSON.stringify(json), // stringify json to string
   };
 
   constructor(chunkDefinitions: ICodeChunk[] = []) {
@@ -58,14 +58,15 @@ export default class Builder implements ICodeBuilder {
       const { type, content, name } = unprocessedChunks[indexToRemove];
       const compiledContent = this.generateByType(type, content);
       if (compiledContent) {
-        resultingString.push(compiledContent + '\n');
+        resultingString.push(`${compiledContent }\n`);
       }
 
       unprocessedChunks.splice(indexToRemove, 1);
       if (!unprocessedChunks.some(ch => ch.name === name)) {
         unprocessedChunks.forEach(
           // remove the processed chunk from all the linkAfter arrays from the remaining chunks
-          ch => (ch.linkAfter = ch.linkAfter.filter(after => after !== name)),
+          // eslint-disable-next-line no-param-reassign
+          ch => { ch.linkAfter = ch.linkAfter.filter(after => after !== name); },
         );
       }
     }
@@ -95,8 +96,6 @@ export default class Builder implements ICodeBuilder {
   // remove invalid chunks (which did not end up being created) from the linkAfter fields
   // one use-case is when you want to remove the import plugin
   private cleanupInvalidChunks(linkAfter: string[], chunks: ICodeChunk[]) {
-    return linkAfter.filter(chunkName =>
-      chunks.some(chunk => chunk.name === chunkName),
-    );
+    return linkAfter.filter(chunkName => chunks.some(chunk => chunk.name === chunkName));
   }
 }

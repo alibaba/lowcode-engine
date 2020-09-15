@@ -4,7 +4,6 @@ import {
   IContainerNodeItem,
   IDependency,
   II18nMap,
-  IInternalDependency,
   INpmPackage,
   IUtilItem,
 } from './index';

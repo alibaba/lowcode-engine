@@ -24,6 +24,5 @@ export default {
     `,
   );
 
-  return [['src','config'], file];
+  return [['src', 'config'], file];
 }
-  

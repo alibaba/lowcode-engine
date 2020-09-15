@@ -8,7 +8,7 @@ export function fillRef<T>(ref: React.Ref<T>, node: T) {
   }
 }
 
-export function composeRef<T>(...refs: React.Ref<T>[]): React.Ref<T> {
+export function composeRef<T>(...refs: Array<React.Ref<T>>): React.Ref<T> {
   return (node: T) => {
     refs.forEach(ref => {
       fillRef(ref, node);

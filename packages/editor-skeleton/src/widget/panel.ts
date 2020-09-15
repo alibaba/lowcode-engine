@@ -13,11 +13,17 @@ import PanelDock, { isPanelDock } from './panel-dock';
 
 export default class Panel implements IWidget {
   readonly isWidget = true;
+
   readonly name: string;
+
   readonly id: string;
+
   @obx.ref inited = false;
-  @obx.ref private _actived: boolean = false;
+
+  @obx.ref private _actived = false;
+
   private emitter = new EventEmitter();
+
   get actived(): boolean {
     return this._actived;
   }
@@ -65,15 +71,18 @@ export default class Panel implements IWidget {
   }
 
   readonly title: TitleContent;
+
   readonly help?: HelpTipConfig;
+
   private plain = false;
 
   private container?: WidgetContainer<Panel, PanelConfig>;
+
   private parent?: WidgetContainer;
 
   constructor(readonly skeleton: Skeleton, readonly config: PanelConfig) {
     const { name, content, props = {} } = config;
-    const { hideTitleBar, title, icon, description, help, shortcut } = props;
+    const { hideTitleBar, title, icon, description, help } = props;
     this.name = name;
     this.id = uniqueId(`pane:${name}$`);
     this.title = composeTitle(title || name, icon, description);
@@ -198,9 +207,10 @@ export default class Panel implements IWidget {
   /**
    * @deprecated
    */
-  setPosition(position: string) {
+  setPosition(/* position: string */) {
     // noop
   }
+
   /**
    * @deprecated
    */

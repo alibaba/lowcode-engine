@@ -1,112 +1,112 @@
 function getCfgFromProps(props, type) {
-    if (type in props) {
-        return props[type];
-    }
+  if (type in props) {
+    return props[type];
+  }
 
-    return undefined;
+  return undefined;
 }
 
 function getRule(ruleName, props) {
-    return {
-        [ruleName]: props[ruleName],
-        message: getCfgFromProps(props, `${ruleName}Message`),
-        trigger: getCfgFromProps(props, `${ruleName}Trigger`),
-    };
+  return {
+    [ruleName]: props[ruleName],
+    message: getCfgFromProps(props, `${ruleName}Message`),
+    trigger: getCfgFromProps(props, `${ruleName}Trigger`),
+  };
 }
 
 function getValueName(props, displayName) {
-    if (props.valueName) {
-        return props.valueName;
-    }
+  if (props.valueName) {
+    return props.valueName;
+  }
 
-    if (typeof displayName === 'string') {
-        // Next Components are all wrappered by configProvider
-        const componentName = displayName
-            .replace(/Config\(/, '')
-            .replace(')', '');
-        if (['Switch', 'Checkbox', 'Radio'].indexOf(componentName) !== -1) {
-            return 'checked';
-        }
+  if (typeof displayName === 'string') {
+    // Next Components are all wrappered by configProvider
+    const componentName = displayName
+      .replace(/Config\(/, '')
+      .replace(')', '');
+    if (['Switch', 'Checkbox', 'Radio'].indexOf(componentName) !== -1) {
+      return 'checked';
     }
+  }
 
-    return 'value';
+  return 'value';
 }
 
 export function getRules(props) {
-    const result = [];
+  const result = [];
 
-    // required
-    if (props.required) {
-        result.push(getRule('required', props));
-    }
+  // required
+  if (props.required) {
+    result.push(getRule('required', props));
+  }
 
-    const maxLength = Number(props.maxLength);
-    const minLength = Number(props.minLength);
-    if (minLength || maxLength) {
-        result.push({
-            minLength,
-            maxLength,
-            // minLengthMessage maxLengthMessage had been deprected, please use minmaxLength. TODO: removed in 2.0
-            message:
+  const maxLength = Number(props.maxLength);
+  const minLength = Number(props.minLength);
+  if (minLength || maxLength) {
+    result.push({
+      minLength,
+      maxLength,
+      // minLengthMessage maxLengthMessage had been deprected, please use minmaxLength. TODO: removed in 2.0
+      message:
                 getCfgFromProps(props, 'minmaxLengthMessage') ||
                 getCfgFromProps(props, 'minLengthMessage') ||
                 getCfgFromProps(props, 'maxLengthMessage'),
-            trigger:
+      trigger:
                 getCfgFromProps(props, 'minmaxLengthTrigger') ||
                 getCfgFromProps(props, 'minLengthTrigger') ||
                 getCfgFromProps(props, 'maxLengthTrigger'),
-        });
-    }
+    });
+  }
 
-    // length
-    if (props.length) {
-        result.push(getRule('length', props));
-    }
+  // length
+  if (props.length) {
+    result.push(getRule('length', props));
+  }
 
-    // pattern
-    if (props.pattern) {
-        result.push(getRule('pattern', props));
-    }
+  // pattern
+  if (props.pattern) {
+    result.push(getRule('pattern', props));
+  }
 
-    // format
-    if (['number', 'tel', 'url', 'email'].indexOf(props.format) > -1) {
-        result.push(getRule('format', props));
-    }
+  // format
+  if (['number', 'tel', 'url', 'email'].indexOf(props.format) > -1) {
+    result.push(getRule('format', props));
+  }
 
-    const max = Number(props.max);
-    const min = Number(props.min);
-    // max min
-    if (max || min) {
-        result.push({
-            min,
-            max,
-            // minMessage maxMessage had been deprected, please use minmaxLength. TODO: removed in 2.0
-            message:
+  const max = Number(props.max);
+  const min = Number(props.min);
+  // max min
+  if (max || min) {
+    result.push({
+      min,
+      max,
+      // minMessage maxMessage had been deprected, please use minmaxLength. TODO: removed in 2.0
+      message:
                 getCfgFromProps(props, 'minmaxMessage') ||
                 getCfgFromProps(props, 'minMessage') ||
                 getCfgFromProps(props, 'maxMessage'),
-            trigger:
+      trigger:
                 getCfgFromProps(props, 'minmaxTrigger') ||
                 getCfgFromProps(props, 'minTrigger') ||
                 getCfgFromProps(props, 'maxTrigger'),
-        });
-    }
+    });
+  }
 
-    if (props.validator && typeof props.validator === 'function') {
-        result.push({
-            validator: props.validator,
-            trigger: getCfgFromProps(props, 'validatorTrigger'),
-        });
-    }
+  if (props.validator && typeof props.validator === 'function') {
+    result.push({
+      validator: props.validator,
+      trigger: getCfgFromProps(props, 'validatorTrigger'),
+    });
+  }
 
-    return result;
+  return result;
 }
 
 export function getFieldInitCfg(props, displayName) {
-    return {
-        valueName: getValueName(props, displayName),
-        trigger: props.trigger ? props.trigger : 'onChange',
-        autoValidate: props.autoValidate,
-        rules: getRules(props),
-    };
+  return {
+    valueName: getValueName(props, displayName),
+    trigger: props.trigger ? props.trigger : 'onChange',
+    autoValidate: props.autoValidate,
+    rules: getRules(props),
+  };
 }
