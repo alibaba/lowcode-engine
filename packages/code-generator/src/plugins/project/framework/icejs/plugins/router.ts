@@ -39,7 +39,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
             children: [
               ${ir.routes
                 .map(
-                  route => `
+                  (route) => `
                     {
                       path: '${route.path}',
                       component: ${route.componentName},
@@ -54,6 +54,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       linkAfter: [
         COMMON_CHUNK_NAME.ExternalDepsImport,
         COMMON_CHUNK_NAME.InternalDepsImport,
+        COMMON_CHUNK_NAME.ImportAliasDefine,
         COMMON_CHUNK_NAME.FileUtilDefine,
       ],
     });
@@ -69,6 +70,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
         COMMON_CHUNK_NAME.ExternalDepsImport,
         COMMON_CHUNK_NAME.InternalDepsImport,
         COMMON_CHUNK_NAME.FileUtilDefine,
+        COMMON_CHUNK_NAME.ImportAliasDefine,
         COMMON_CHUNK_NAME.FileVarDefine,
         COMMON_CHUNK_NAME.FileMainContent,
       ],

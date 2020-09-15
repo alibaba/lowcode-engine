@@ -91,6 +91,33 @@ function demo() {
   });
 }
 
+function demo() {
+  const schemaJson = fs.readFileSync('./demo/schema.json', { encoding: 'utf8' });
+  const createIceJsProjectBuilder = CodeGenerator.solutions.icejs;
+  const builder = createIceJsProjectBuilder();
+
+  const componentsMap = getComponentsMap();
+  const root = JSON.parse(schemaJson);
+
+  const fullSchema = {
+    version: '1.0.0',
+    config: {
+      historyMode: 'hash',
+      targetRootID: 'J_Container',
+    },
+    meta: {
+      name: 'demoproject',
+    },
+    componentsTree: [root],
+    componentsMap,
+  };
+
+  builder.generateProject(fullSchema).then((result) => {
+    displayResultInConsole(result);
+    return result;
+  });
+}
+
 function exportModule() {
   const schemaJson = fs.readFileSync('./demo/shenmaSample.json', { encoding: 'utf8' });
   const moduleBuilder = CodeGenerator.createModuleBuilder({

@@ -1,20 +1,34 @@
-import { CodeGeneratorError, NodeGenerator, IJSSlot } from '../types';
+import { JSSlot, isJSSlot } from '@ali/lowcode-types';
+import { CodeGeneratorError, NodeGenerator, IScope } from '../types';
 
-export function isJsSlot(value: unknown): boolean {
-  return value && typeof value === 'object' && (value as IJSSlot).type === 'JSSlot';
+function generateSingleLineComment(commentText: string): string {
+  return (
+    '/* ' +
+    commentText
+      .split('\n')
+      .join(' ')
+      .replace(/\*\//g, '*-/') +
+    '*/'
+  );
 }
 
-export function generateJsSlot(value: any, generator: NodeGenerator): string {
-  if (isJsSlot(value)) {
-    const slotCfg = value as IJSSlot;
-    if (!slotCfg.value) {
-      return 'null';
+export function generateJsSlot(slot: any, scope: IScope, generator: NodeGenerator<string>): string {
+  if (isJSSlot(slot)) {
+    const { title, params, value } = slot as JSSlot;
+    if (params) {
+      return [
+        title && generateSingleLineComment(title),
+        `(`,
+        ...(params || []),
+        `) => (`,
+        !value ? 'null' : generator(value, scope),
+        `)`,
+      ]
+        .filter(Boolean)
+        .join('');
     }
-    const results = slotCfg.value.map((n) => generator(n));
-    if (results.length === 1) {
-      return results[0];
-    }
-    return `[${results.join(',')}]`;
+
+    return !value ? 'null' : generator(value, scope);
   }
 
   throw new CodeGeneratorError('Not a JSSlot');

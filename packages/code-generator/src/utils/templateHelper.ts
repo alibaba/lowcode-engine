@@ -1,25 +1,25 @@
-import { IResultFile, IResultDir } from '../types';
-import ResultDir from '../model/ResultDir';
+import { ResultDir, ResultFile } from '@ali/lowcode-types';
+import { createResultDir, addDirectory, addFile } from '../utils/resultHelper';
 
-type FuncFileGenerator = () => [string[], IResultFile];
+type FuncFileGenerator = () => [string[], ResultFile];
 
-export function insertFile(root: IResultDir, path: string[], file: IResultFile) {
-  let current: IResultDir = root;
-  path.forEach(pathNode => {
-    const dir = current.dirs.find(d => d.name === pathNode);
+export function insertFile(root: ResultDir, path: string[], file: ResultFile) {
+  let current: ResultDir = root;
+  path.forEach((pathNode) => {
+    const dir = current.dirs.find((d) => d.name === pathNode);
     if (dir) {
       current = dir;
     } else {
-      const newDir = new ResultDir(pathNode);
-      current.addDirectory(newDir);
+      const newDir = createResultDir(pathNode);
+      addDirectory(current, newDir);
       current = newDir;
     }
   });
 
-  current.addFile(file);
+  addFile(current, file);
 }
 
-export function runFileGenerator(root: IResultDir, fun: FuncFileGenerator) {
+export function runFileGenerator(root: ResultDir, fun: FuncFileGenerator) {
   const [path, file] = fun();
   insertFile(root, path, file);
 }

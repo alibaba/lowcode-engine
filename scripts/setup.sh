@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-tnpm i -g lerna @ali/tyarn
+tnpm i -g lerna @ali/tyarn tsc
 
 rm -rf node_modules package-lock.json yarn.lock
 lerna clean -y

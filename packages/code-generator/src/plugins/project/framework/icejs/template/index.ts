@@ -1,8 +1,7 @@
-import ResultDir from '../../../../../model/ResultDir';
-import {
-  IProjectTemplate,
-  IResultDir,
-} from '../../../../../types';
+import { ResultDir } from '@ali/lowcode-types';
+import { IProjectTemplate } from '../../../../../types';
+
+import { createResultDir } from '../../../../../utils/resultHelper';
 import { runFileGenerator } from '../../../../../utils/templateHelper';
 
 import file12 from './files/abc.json';
@@ -68,8 +67,8 @@ const icejsTemplate: IProjectTemplate = {
     },
   },
 
-  generateTemplate(): IResultDir {
-    const root = new ResultDir('.');
+  generateTemplate(): ResultDir {
+    const root = createResultDir('.');
 
     runFileGenerator(root, file1);
     runFileGenerator(root, file2);
