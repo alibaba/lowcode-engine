@@ -1,0 +1,18 @@
+.lowcode-plugin-datasource-pane {
+  margin: 0 8px;
+  >.next-tabs {
+    >.next-tabs-bar {
+      .next-tabs-nav-extra {
+        .next-btn {
+          margin-left: 4px;
+        }
+      }
+    }
+  }
+}
+
+.lowcode-plugin-datasource-pane-list {
+  .next-virtual-list-wrapper {
+    min-height: 400px;
+  }
+}

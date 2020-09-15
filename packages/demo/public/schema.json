@@ -10,7 +10,21 @@
     },
     "fileName": "test",
     "dataSource": {
-      "list": []
+      "list": [
+        {
+          "type": "http",
+          "id": "http1",
+          "isInit": true,
+          "options": {
+            "uri": "https://www.taobao.com",
+            "params": {
+              "a": 1,
+              "b": true,
+              "c": "3"
+            }
+          }
+        }
+      ]
     },
     "state": {
       "text": "outter",

@@ -1,3 +1,5 @@
+import { DataSourceImportPluginCode } from '@ali/lowcode-plugin-datasource-pane';
+
 export default {
   plugins: {
     topArea: [
@@ -93,6 +95,60 @@ export default {
             maxHeight: 800,
             maxWidth: 1200,
             title: 'JS面板',
+            width: 600,
+          },
+        },
+      },
+      {
+        pluginKey: 'dataSourcePane',
+        pluginProps: {
+          importPlugins: [
+            {
+              name: 'code2',
+              title: '源码2',
+              content: DataSourceImportPluginCode,
+            },
+          ],
+          dataSourceTypes: [
+            {
+              type: 'mopen',
+              schema: {
+                type: 'object',
+                properties: {
+                  options: {
+                    type: 'object',
+                    properties: {
+                      uri: {
+                        title: 'api',
+                      },
+                      v: {
+                        title: 'v',
+                        type: 'string',
+                      },
+                      appKey: {
+                        title: 'appKey',
+                        type: 'string',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          ],
+        },
+        type: 'PanelIcon',
+        props: {
+          align: 'top',
+          icon: 'wenjian',
+          description: '数据源面板',
+          panelProps: {
+            floatable: true,
+            height: 300,
+            help: undefined,
+            hideTitleBar: false,
+            maxHeight: 800,
+            maxWidth: 1200,
+            title: '数据源面板',
             width: 600,
           },
         },
