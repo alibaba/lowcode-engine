@@ -267,14 +267,16 @@ export class DocumentModel {
   /**
    * 内部方法，请勿调用
    */
-  internalRemoveAndPurgeNode(node: Node) {
+  internalRemoveAndPurgeNode(node: Node, useMutator = false) {
     if (!this.nodes.has(node)) {
       return;
     }
-    this._nodesMap.delete(node.id);
+    node.remove(useMutator);
+  }
+
+  unlinkNode(node: Node) {
     this.nodes.delete(node);
-    this.selection.remove(node.id);
-    node.remove();
+    this._nodesMap.delete(node.id);
   }
 
   @obx.ref private _dropLocation: DropLocation | null = null;
@@ -318,20 +320,20 @@ export class DocumentModel {
    * 导出 schema 数据
    */
   get schema(): RootSchema {
-    return this.rootNode.schema as any;
+    return this.rootNode?.schema as any;
   }
 
   import(schema: RootSchema, checkId = false) {
-    // TODO: do purge
     this.nodes.forEach(node => {
+      this.internalRemoveAndPurgeNode(node, true);
       this.destroyNode(node);
     });
-    this.rootNode.import(schema as any, checkId);
+    this.rootNode?.import(schema as any, checkId);
     // todo: select added and active track added
   }
 
   export(stage: TransformStage = TransformStage.Serilize) {
-    return this.rootNode.export(stage);
+    return this.rootNode?.export(stage);
   }
 
   /**

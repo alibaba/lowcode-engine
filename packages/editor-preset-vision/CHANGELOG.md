@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.8.57"></a>
+## [0.8.57](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.56...@ali/lowcode-editor-preset-vision@0.8.57) (2020-09-08)
+
+
+### Bug Fixes
+
+* 移除 isInSimulator 函数 ([6370889](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6370889))
+* 补全 packageName, 否则在组件面板会被隐藏 ([88e5008](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/88e5008))
+
+
+
+
 <a name="0.8.56"></a>
 ## [0.8.56](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-vision@0.8.55...@ali/lowcode-editor-preset-vision@0.8.56) (2020-09-03)
 
