@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.9-5"></a>
+## [1.0.9-5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.9-2...v1.0.9-5) (2020-09-17)
+
+
+### Bug Fixes
+
+* 1.修复 rax 路由问题 2.切换 designMode 重新 setupSelection 3.settingpane add state shouldIgnoreRoot ([890ec76](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/890ec76))
+
+
+### Features
+
+* 补充一些 vision API ([933cef1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/933cef1))
+
+
+
+
 <a name="1.0.9-2"></a>
 ## [1.0.9-2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.9-1...v1.0.9-2) (2020-09-14)
 
