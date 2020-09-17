@@ -14,6 +14,7 @@ import Panes from './panes';
 import Exchange from './exchange';
 import context from './context';
 import VisualManager from './base/visualManager';
+import VisualDesigner from './base/visualDesigner';
 import Trunk from './bundle/trunk';
 import Prototype from './bundle/prototype';
 import Bundle from './bundle/bundle';
@@ -22,6 +23,7 @@ import * as Field from './fields';
 import Prop from './prop';
 import Env from './env';
 import DragEngine from './drag-engine';
+import Flags from './base/flags';
 import Viewport from './viewport';
 import Project from './project';
 
@@ -60,6 +62,7 @@ const ui = {
 
 const modules = {
   VisualManager,
+  VisualDesigner,
   I18nUtil,
   Prop,
 };
@@ -107,6 +110,7 @@ const VisualEngine = {
   Project,
   logger,
   Symbols,
+  Flags,
 };
 
 (window as any).VisualEngine = VisualEngine;

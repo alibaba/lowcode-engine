@@ -4,7 +4,7 @@ import { EventEmitter } from 'events';
 import { Project } from '../project';
 import { ISimulatorHost } from '../simulator';
 import { ComponentMeta } from '../component-meta';
-import { isDragNodeDataObject, DragNodeObject, DragNodeDataObject, DropLocation } from '../designer';
+import { isDragNodeDataObject, DragNodeObject, DragNodeDataObject, DropLocation, Designer } from '../designer';
 import { Node, insertChildren, insertChild, isNode, RootNode, ParentalNode } from './node/node';
 import { Selection } from './selection';
 import { History } from './history';
@@ -56,6 +56,10 @@ export class DocumentModel {
 
   private _nodesMap = new Map<string, Node>();
 
+  readonly project: Project;
+
+  readonly designer: Designer;
+
   @obx.val private nodes = new Set<Node>();
 
   private seqId = 0;
@@ -83,28 +87,20 @@ export class DocumentModel {
   }
 
   get fileName(): string {
-    return this.rootNode.getExtraProp('fileName')?.getAsString() || this.id;
+    return this.rootNode?.getExtraProp('fileName')?.getAsString() || this.id;
   }
 
   set fileName(fileName: string) {
-    this.rootNode.getExtraProp('fileName', true)?.setValue(fileName);
+    this.rootNode?.getExtraProp('fileName', true)?.setValue(fileName);
   }
 
   private _modalNode?: ParentalNode;
 
   private _blank?: boolean;
 
-  get modalNode() {
-    return this._modalNode;
-  }
-
-  get currentRoot() {
-    return this.modalNode || this.rootNode;
-  }
-
   private inited = false;
 
-  constructor(readonly project: Project, schema?: RootSchema) {
+  constructor(project: Project, schema?: RootSchema) {
     /*
     // TODO
     // use special purge process
@@ -112,6 +108,8 @@ export class DocumentModel {
       console.info(this.willPurgeSpace);
     }, true);
     */
+    this.project = project;
+    this.designer = this.project?.designer;
     this.emitter = new EventEmitter();
 
     if (!schema) {
@@ -140,6 +138,14 @@ export class DocumentModel {
 
   @obx.val private willPurgeSpace: Node[] = [];
 
+  get modalNode() {
+    return this._modalNode;
+  }
+
+  get currentRoot() {
+    return this.modalNode || this.rootNode;
+  }
+
   addWillPurge(node: Node) {
     this.willPurgeSpace.push(node);
   }
@@ -154,8 +160,6 @@ export class DocumentModel {
   @computed isBlank() {
     return this._blank && !this.isModified();
   }
-
-  readonly designer = this.project.designer;
 
   /**
    * 生成唯一id
@@ -185,10 +189,6 @@ export class DocumentModel {
   }
 
   @obx.val private activeNodes?: Node[];
-
-  private setupListenActiveNodes() {
-    // todo:
-  }
 
   /**
    * 根据 schema 创建一个节点
@@ -663,6 +663,17 @@ export class DocumentModel {
    */
   onRefresh(/* func: () => void */) {
     console.warn('onRefresh method is deprecated');
+  }
+
+  onReady(fn: Function) {
+    this.designer.editor.on('document-open', fn);
+    return () => {
+      this.designer.editor.removeListener('document-open', fn);
+    };
+  }
+
+  private setupListenActiveNodes() {
+    // todo:
   }
 }
 

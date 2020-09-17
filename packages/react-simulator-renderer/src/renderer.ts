@@ -3,16 +3,15 @@ import { render as reactRender } from 'react-dom';
 import { host } from './host';
 import SimulatorRendererView from './renderer-view';
 import { computed, obx } from '@recore/obx';
-import { Asset } from '@ali/lowcode-utils';
 import { getClientRects } from './utils/get-client-rects';
 import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
 import {
+  Asset,
   isElement,
   cursor,
   setNativeSelection,
   buildComponents,
   getSubComponent,
-  AssetLoader,
 } from '@ali/lowcode-utils';
 import { RootSchema, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
 // import { isESModule, isElement, acceptsRef, wrapReactClass, cursor, setNativeSelection } from '@ali/lowcode-utils';
@@ -270,7 +269,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     this._components = {
       ...builtinComponents,
       ...this._components,
-    }
+    };
   }
   @obx.ref private _components: any = {};
   @computed get components(): object {
@@ -365,7 +364,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     }
 
     const node = host.currentDocument?.createNode(_schema);
-    _schema = node?.export(TransformStage.Render);
+    _schema = node?.export(TransformStage.Render) || {};
 
     const processPropsSchema = (propsSchema: any, propsMap: any): any => {
       if (!propsSchema) {

@@ -30,13 +30,15 @@ import {
   getRectTarget,
   Rect,
   CanvasPoint,
+  Designer,
 } from '../designer';
 import { parseMetadata } from './utils/parse-metadata';
-import { ComponentMetadata, NodeSchema, ComponentSchema } from '@ali/lowcode-types';
+import { ComponentMetadata, ComponentSchema } from '@ali/lowcode-types';
 import { BuiltinSimulatorRenderer } from './renderer';
 import clipboard from '../designer/clipboard';
 import { LiveEditing } from './live-editing/live-editing';
 import { Project } from '../project';
+import { Scroller } from '../designer/scroller';
 
 export interface LibraryItem {
   package: string;
@@ -110,9 +112,19 @@ const defaultRaxEnvironment = [
 export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProps> {
   readonly isSimulator = true;
 
-  constructor(readonly project: Project) {}
+  readonly project: Project;
 
-  readonly designer = this.project.designer;
+  readonly designer: Designer;
+
+  readonly viewport = new Viewport();
+
+  readonly scroller: Scroller;
+
+  constructor(project: Project) {
+    this.project = project;
+    this.designer = project?.designer;
+    this.scroller = this.designer.createScroller(this.viewport);
+  }
 
   get currentDocument() {
     return this.project.currentDocument;
@@ -181,9 +193,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   purge(): void {
     // todo
   }
-
-  readonly viewport = new Viewport();
-  readonly scroller = this.designer.createScroller(this.viewport);
 
   mountViewport(viewport: Element | null) {
     this.viewport.mount(viewport);

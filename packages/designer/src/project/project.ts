@@ -261,7 +261,4 @@ export class Project {
       this.emitter.removeListener('current-document.change', fn);
     };
   }
-  // 通知标记删除，需要告知服务端
-  // 项目角度编辑不是全量打开所有文档，是按需加载，哪个更新就通知更新谁，
-  // 哪个删除就
 }

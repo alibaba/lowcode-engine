@@ -160,7 +160,7 @@ export default class DataHelper {
       const _tb_token_ = csrfInput && csrfInput.value;
       asyncDataList.forEach((req) => {
         const { id, type, options } = req;
-        if (!id || !type) return;
+        if (!id || !type || type === 'legao') return;
         if (type === 'doServer') {
           const { uri, params } = options || {};
           if (!uri) return;

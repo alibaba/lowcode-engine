@@ -124,6 +124,9 @@ Object.defineProperty(pages, 'currentPage', {
   get() {
     return project.currentDocument;
   },
+  set(_currentPage) {
+    // do nothing
+  },
 });
 
 pages.onCurrentPageChange((page: DocumentModel) => {

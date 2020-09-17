@@ -38,7 +38,9 @@ export function composeTitle(title?: TitleContent, icon?: IconType, tip?: TipCon
     }
   }
   if (isTitleConfig(title) && noIcon) {
-    title.icon = undefined;
+    if (!isValidElement(title)) {
+      title.icon = undefined;
+    }
   }
   return title;
 }
