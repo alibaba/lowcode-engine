@@ -171,27 +171,6 @@ export class Designer {
       node.document.simulator?.scrollToNode(node, detail);
     });
 
-    let selectionDispose: undefined | (() => void);
-    const setupSelection = () => {
-      if (selectionDispose) {
-        selectionDispose();
-        selectionDispose = undefined;
-      }
-      const currentSelection = this.currentSelection;
-      // TODO: 避免选中 Page 组件，默认选中第一个子节点；新增规则 或 判断 Live 模式
-      if (currentSelection && currentSelection.selected.length === 0 && this.simulatorProps?.designMode === 'live') {
-        const rootNodeChildrens = this.currentDocument.getRoot().getChildren().children;
-        if (rootNodeChildrens.length > 0) {
-          currentSelection.select(rootNodeChildrens[0].id);
-        }
-      }
-      this.postEvent('selection.change', currentSelection);
-      if (currentSelection) {
-        selectionDispose = currentSelection.onSelectionChange(() => {
-          this.postEvent('selection.change', currentSelection);
-        });
-      }
-    };
     let historyDispose: undefined | (() => void);
     const setupHistory = () => {
       if (historyDispose) {
@@ -210,16 +189,38 @@ export class Designer {
       this.postEvent('current-document.change', this.currentDocument);
       this.postEvent('selection.change', this.currentSelection);
       this.postEvent('history.change', this.currentHistory);
-      setupSelection();
+      this.setupSelection();
       setupHistory();
     });
     this.postEvent('designer.init', this);
-    setupSelection();
+    this.setupSelection();
     setupHistory();
 
     // TODO: 先简单实现，后期通过焦点赋值
     focusing.focusDesigner = this;
   }
+
+  setupSelection = () => {
+    let selectionDispose: undefined | (() => void);
+    if (selectionDispose) {
+      selectionDispose();
+      selectionDispose = undefined;
+    }
+    const currentSelection = this.currentSelection;
+    // TODO: 避免选中 Page 组件，默认选中第一个子节点；新增规则 或 判断 Live 模式
+    if (currentSelection && currentSelection.selected.length === 0 && this.simulatorProps?.designMode === 'live') {
+      const rootNodeChildrens = this.currentDocument.getRoot().getChildren().children;
+      if (rootNodeChildrens.length > 0) {
+        currentSelection.select(rootNodeChildrens[0].id);
+      }
+    }
+    this.postEvent('selection.change', currentSelection);
+    if (currentSelection) {
+      selectionDispose = currentSelection.onSelectionChange(() => {
+        this.postEvent('selection.change', currentSelection);
+      });
+    }
+  };
 
   postEvent(event: string, ...args: any[]) {
     this.editor.emit(`designer.${event}`, ...args);
@@ -329,6 +330,10 @@ export class Designer {
       }
       if (props.simulatorProps !== this.props.simulatorProps) {
         this._simulatorProps = props.simulatorProps;
+        // 重新 setupSelection
+        if (props.simulatorProps?.designMode !== this.props.simulatorProps?.designMode) {
+          this.setupSelection();
+        }
       }
       if (props.suspensed !== this.props.suspensed && props.suspensed != null) {
         this.suspensed = props.suspensed;

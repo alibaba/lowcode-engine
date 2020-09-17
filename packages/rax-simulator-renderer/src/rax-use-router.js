@@ -209,15 +209,28 @@ function getInitialComponent(routerConfig) {
 
 let unlisten = null;
 let handleId = null;
+let pathes = '';
 export function useRouter(routerConfig) {
   const [component, setComponent] = useState(getInitialComponent(routerConfig));
 
+  let newPathes = '';
   if (routerConfig) {
     _routerConfig = routerConfig;
     const routes = _routerConfig.routes;
     router.root = Array.isArray(routes) ? { routes } : routes;
+    if (Array.isArray(routes)) {
+      newPathes = routes.map(it => it.path).join(',');
+    } else {
+      newPathes = routes.path;
+    }
   }
-
+  if (_initialized && _routerConfig.history) {
+    if (newPathes !== pathes) {
+      matchLocation(_routerConfig.history.location);
+      pathes = newPathes;
+    }
+  }
+  
   useLayoutEffect(() => {
     if (unlisten) {
       unlisten();
@@ -241,15 +254,18 @@ export function useRouter(routerConfig) {
     // Init path match
     if (_initialized || !_routerConfig.InitialComponent) {
       matchLocation(history.location);
+      pathes = newPathes;
     }
 
     unlisten = history.listen(({ location }) => {
       matchLocation(location);
+      pathes = newPathes;
     });
 
     _initialized = true;
 
     return () => {
+      pathes = '';
       router.removeHandle(handleId);
       handleId = null;
       unlisten();
