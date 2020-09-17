@@ -9,13 +9,27 @@ import { SkeletonContext } from '../../context';
 import { createIcon } from '@ali/lowcode-utils';
 
 @observer
-export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any }> {
+export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any }, { shouldIgnoreRoot: boolean }> {
+  state = {
+    shouldIgnoreRoot: false, 
+  };
   private main = new SettingsMain(this.props.editor);
 
   @obx.ref private _activeKey?: any;
 
   shouldComponentUpdate() {
     return false;
+  }
+
+  componentDidMount() {
+    this.setShouldIgnoreRoot();
+  }
+    
+  async setShouldIgnoreRoot() {
+    let designMode = await this.props.editor.get('designMode');
+    this.setState({
+      shouldIgnoreRoot: designMode === 'live',
+    })
   }
 
   componentWillUnmount() {
@@ -25,7 +39,8 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
   renderBreadcrumb() {
     const { settings } = this.main;
     const { config } = this.props;
-    const shouldIgnoreRoot = config.props?.ignoreRoot;
+    // const shouldIgnoreRoot = config.props?.ignoreRoot;
+    const { shouldIgnoreRoot } = this.state;
     if (!settings) {
       return null;
     }

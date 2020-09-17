@@ -273,7 +273,6 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         return inst;
       });
 
-      this.emitter.emit('layoutChange');
       const path = host.project.currentDocument ? documentInstanceMap.get(host.project.currentDocument.id)!.path : '/';
       if (firstRun) {
         initialEntry = path;
@@ -281,6 +280,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         if (this.history.location.pathname !== path) {
           this.history.replace(path);
         }
+        this.emitter.emit('layoutChange');
       }
     });
     const history = createMemoryHistory({
@@ -305,6 +305,9 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
           replace(path: string, params?: object) {
             history.replace(withQueryParams(path, params));
           },
+          back() {
+            history.back();
+          }
         },
         legaoBuiltins: {
           getUrlParams() {
