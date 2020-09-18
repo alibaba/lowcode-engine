@@ -6,7 +6,7 @@ import Loading from '@alifd/next/lib/loading';
 import '@alifd/next/lib/loading/style';
 import AppContext from '../context/appContext';
 import BaseRenderer from './base';
-import { isSchema, getFileCssName } from '../utils';
+import { isSchema, getFileCssName,parseData } from '../utils';
 
 const debug = Debug('renderer:page');
 
@@ -24,6 +24,7 @@ export default class PageRenderer extends BaseRenderer {
   static getDerivedStateFromProps(props, state) {
     debug('page.getDerivedStateFromProps');
     const func = props.__schema.lifeCycles && props.__schema.lifeCycles.getDerivedStateFromProps;
+
     if (func) {
       return func(props, state);
     }
@@ -53,7 +54,15 @@ export default class PageRenderer extends BaseRenderer {
     debug(`page.componentDidMount - ${this.props.__schema.fileName}`);
   }
 
-  async componentDidUpdate() {
+  async componentDidUpdate(prevProps) {
+    const {__ctx} = this.props;
+    let prevState = parseData(prevProps.__schema.state, __ctx );
+    let newState = parseData(this.props.__schema.state, __ctx );
+    // 当编排的时候修改schema.state值，需要将最新schema.state值setState
+    if (JSON.stringify(newState)!=JSON.stringify(prevState)){
+      this.setState(newState)
+    }
+
     super.componentDidUpdate(...arguments);
     debug(`page.componentDidUpdate - ${this.props.__schema.fileName}`);
   }
@@ -75,7 +84,6 @@ export default class PageRenderer extends BaseRenderer {
     }
     debug(`page.render - ${__schema.fileName}`);
 
-    this.state = this.__parseData(__schema.state || {});
     this.__bindCustomMethods(this.props);
     this.__initDataSource(this.props);
 
