@@ -1309,6 +1309,26 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
     return nearBy;
   }
+
+  _innerWaitForCurrentDocument(): Promise<any> {
+    const timeGap = 200;
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        if (this.project.currentDocument) {
+          resolve();
+        }
+      }, timeGap);
+    }).catch(() => {
+      return this.waitForCurrentDocument();
+    });
+  }
+
+  waitForCurrentDocument(): Promise<any> {
+    if (this.project.currentDocument) {
+      return Promise.resolve();
+    }
+    return this._innerWaitForCurrentDocument();
+  }
   // #endregion
 }
 

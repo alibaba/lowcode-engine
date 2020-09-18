@@ -177,7 +177,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   }
 
   constructor() {
-    this.dispose = host.connect(this, () => {
+    this.dispose = host.connect(this, async () => {
+      await host.waitForCurrentDocument();
       // sync layout config
       this._layout = host.project.get('config').layout;
 
