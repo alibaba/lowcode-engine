@@ -32,7 +32,7 @@ const pluginFactory: BuilderComponentPluginFactory<GlobalStylePluginConfig> = (
       type: ChunkType.STRING,
       fileType: cfg.fileType,
       name: COMMON_CHUNK_NAME.StyleDepsImport,
-      content: ``,
+      content: '',
       linkAfter: [],
     });
 

@@ -1,11 +1,15 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+
 export default class TextView extends PureComponent {
   static displayName = 'Text';
+
   static version = '0.0.0';
+
   static propTypes = {
     text: PropTypes.string,
   };
+
   render() {
     const { text, ...restProps } = this.props;
     let textNode = text;

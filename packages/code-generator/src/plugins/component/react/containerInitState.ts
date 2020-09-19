@@ -33,7 +33,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     const scope = Scope.createRootScope();
 
     if (ir.state) {
-      const state = ir.state;
+      const { state } = ir;
       const fields = Object.keys(state).map<string>((stateName) => {
         const value = generateCompositeType(state[stateName], scope);
         return `${stateName}: ${value},`;

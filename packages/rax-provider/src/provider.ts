@@ -11,21 +11,24 @@ export default class RaxProvider extends Provider {
     let App;
     const layoutConfig = this.getLayoutConfig();
     if (!layoutConfig || !layoutConfig.componentName) {
-      App = (props) => (RouterView ? createElement(RouterView, { ...props }) : null);
+      App = (props) => {
+        return RouterView ? createElement(RouterView, { ...props }) : null;
+      };
       return App;
     }
     const { componentName: layoutName, props: layoutProps } = layoutConfig;
     const { content: Layout, props: extraLayoutProps } = app.getLayout(layoutName) || {};
     const sectionalRender = this.isSectionalRender();
     if (!sectionalRender && Layout) {
-      App = (props) =>
-        createElement(
-          Layout,
-          { ...layoutProps, ...extraLayoutProps },
-          RouterView ? createElement(RouterView, props) : null,
-        );
+      App = (props) => createElement(
+        Layout,
+        { ...layoutProps, ...extraLayoutProps },
+        RouterView ? createElement(RouterView, props) : null,
+      );
     } else {
-      App = (props) => (RouterView ? createElement(RouterView, props) : null);
+      App = (props) => {
+        return RouterView ? createElement(RouterView, props) : null;
+      };
     }
     return App;
   }
@@ -49,13 +52,12 @@ export default class RaxProvider extends Provider {
       const path = routerConfig[pageId];
       routes.push({
         path,
-        component: (props: any) =>
-          this.getLazyComponent(pageId, {
-            components: this.getComponents(),
-            utils: this.getUtils(),
-            componentsMap: this.getComponentsMapObj(),
-            ...props,
-          }),
+        component: (props: any) => this.getLazyComponent(pageId, {
+          components: this.getComponents(),
+          utils: this.getUtils(),
+          componentsMap: this.getComponentsMapObj(),
+          ...props,
+        }),
       });
       if (homePageId) {
         return;
@@ -67,13 +69,12 @@ export default class RaxProvider extends Provider {
     if (homePageId) {
       routes.push({
         path: '**',
-        component: (props) =>
-          this.getLazyComponent(homePageId, {
-            components: this.getComponents(),
-            utils: this.getUtils(),
-            componentsMap: this.getComponentsMapObj(),
-            ...props,
-          }),
+        component: (props) => this.getLazyComponent(homePageId, {
+          components: this.getComponents(),
+          utils: this.getUtils(),
+          componentsMap: this.getComponentsMapObj(),
+          ...props,
+        }),
       });
     }
     const Router = getRouter({

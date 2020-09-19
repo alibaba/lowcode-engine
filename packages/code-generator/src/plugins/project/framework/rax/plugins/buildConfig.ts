@@ -28,8 +28,8 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
             targets: ['web', 'miniapp'],
             miniapp: miniAppBuildType
               ? {
-                  buildType: miniAppBuildType,
-                }
+                buildType: miniAppBuildType,
+              }
               : undefined,
           },
         ],

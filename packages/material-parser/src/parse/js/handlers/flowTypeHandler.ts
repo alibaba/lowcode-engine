@@ -7,13 +7,13 @@
 
 import { namedTypes as t } from 'ast-types';
 import getTSType from '../utils/getTSType';
-import getRoot from '../utils/getRoot';
-import parseTS from '../../ts';
+import getFlowTypeFromReactComponent, {
+  applyToFlowTypeProperties,
+} from '../utils/getFlowTypeFromReactComponent';
+
 const { unwrapUtilityType } = require('react-docgen/dist/utils/flowUtilityTypes');
 const { getFlowType, getPropertyName, resolveToValue } = require('react-docgen').utils;
 const setPropDescription = require('react-docgen/dist/utils/setPropDescription').default;
-import getFlowTypeFromReactComponent from '../utils/getFlowTypeFromReactComponent';
-import { applyToFlowTypeProperties } from '../utils/getFlowTypeFromReactComponent';
 
 function setPropDescriptor(documentation: any, path: any, typeParams: any) {
   if (t.ObjectTypeSpreadProperty.check(path.node)) {

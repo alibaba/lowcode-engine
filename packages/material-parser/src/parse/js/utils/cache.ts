@@ -14,5 +14,5 @@ export function get(scope: string, name: string) {
 }
 
 export function has(scope: string, name: string) {
-  return cache[scope] && cache[scope].hasOwnProperty(name);
+  return cache[scope] && Object.prototype.hasOwnProperty.call(cache[scope], name);
 }

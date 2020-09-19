@@ -6,7 +6,6 @@ import {
   ChunkType,
   FileType,
   ICodeStruct,
-  IProjectInfo,
 } from '../../../../../types';
 
 const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
@@ -14,8 +13,6 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
     const next: ICodeStruct = {
       ...pre,
     };
-
-    const ir = next.ir as IProjectInfo;
 
     next.chunks.push({
       type: ChunkType.STRING,

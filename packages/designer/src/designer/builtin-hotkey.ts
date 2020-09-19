@@ -107,7 +107,7 @@ hotkey.bind(['command+c', 'ctrl+c', 'command+x', 'ctrl+x'], (e, action) => {
   let selected = doc.selection.getTopNodes(true);
   selected = selected.filter((node) => {
     return node.canPerformAction('copy');
-  })
+  });
   if (!selected || selected.length < 1) {
     return;
   }
@@ -242,11 +242,10 @@ hotkey.bind(['option+left', 'option+right'], (e, action) => {
       parent.insertAfter(firstNode, silbing);
     }
     firstNode?.select();
-    return;
   }
 });
 
-hotkey.bind(['option+up'], (e, action) => {
+hotkey.bind(['option+up'], (e) => {
   const designer = focusing.focusDesigner;
   const doc = designer?.currentDocument;
   if (isFormEvent(e) || !doc) {
@@ -275,7 +274,6 @@ hotkey.bind(['option+up'], (e, action) => {
       parent.insertBefore(firstNode, silbing);
     }
     firstNode?.select();
-    return;
   } else {
     const place = parent.getSuitablePlace(firstNode, null); // upwards
     if (place) {
@@ -285,7 +283,7 @@ hotkey.bind(['option+up'], (e, action) => {
   }
 });
 
-hotkey.bind(['option+down'], (e, action) => {
+hotkey.bind(['option+down'], (e) => {
   const designer = focusing.focusDesigner;
   const doc = designer?.currentDocument;
   if (isFormEvent(e) || !doc) {
@@ -315,7 +313,6 @@ hotkey.bind(['option+down'], (e, action) => {
       parent.insertAfter(firstNode, silbing);
     }
     firstNode?.select();
-    return;
   } else {
     const place = parent.getSuitablePlace(firstNode, null); // upwards
     if (place) {

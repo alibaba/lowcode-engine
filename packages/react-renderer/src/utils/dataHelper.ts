@@ -1,13 +1,12 @@
 import { transformArrayToMap, isJSFunction, transformStringToFunction, clone } from './index';
 import { jsonp, mtop, request, get, post, bzb } from './request';
-import Debug from 'debug';
+
 const DS_STATUS = {
   INIT: 'init',
   LOADING: 'loading',
   LOADED: 'loaded',
   ERROR: 'error',
 };
-const debug = Debug('utils:dataHelper');
 export default class DataHelper {
   constructor(comp, config = {}, appHelper, parser) {
     this.host = comp;
@@ -68,7 +67,7 @@ export default class DataHelper {
   }
 
   updateDataSourceMap(id, data, error) {
-    this.dataSourceMap[id].error = error ? error : undefined;
+    this.dataSourceMap[id].error = error || undefined;
     this.dataSourceMap[id].data = data;
     this.dataSourceMap[id].status = error ? DS_STATUS.ERROR : DS_STATUS.LOADED;
   }
@@ -82,7 +81,7 @@ export default class DataHelper {
       return false;
     });
     return this.asyncDataHandler(initSyncData).then((res) => {
-      let dataHandler = this.config.dataHandler;
+      let { dataHandler } = this.config;
       if (isJSFunction(dataHandler)) {
         dataHandler = transformStringToFunction(dataHandler.value);
       }
@@ -91,7 +90,6 @@ export default class DataHelper {
         return dataHandler.call(this.host, res);
       } catch (e) {
         console.error('请求数据处理函数运行出错', e);
-        return;
       }
     });
   }
@@ -118,9 +116,9 @@ export default class DataHelper {
             Array.isArray(options.params) || Array.isArray(params)
               ? params || options.params
               : {
-                  ...options.params,
-                  ...params,
-                },
+                ...options.params,
+                ...params,
+              },
           headers: {
             ...options.headers,
             ...headers,
@@ -158,7 +156,7 @@ export default class DataHelper {
       const afterRequest = this.appHelper && this.appHelper.utils && this.appHelper.utils.afterRequest;
       const csrfInput = document.getElementById('_csrf_token');
       const _tb_token_ = csrfInput && csrfInput.value;
-      asyncDataList.map((req) => {
+      asyncDataList.forEach((req) => {
         const { id, type, options } = req;
         if (!id || !type) return;
         if (type === 'doServer') {
@@ -266,12 +264,12 @@ export default class DataHelper {
     try {
       return dataHandler.call(this.host, data, error);
     } catch (e) {
-      console.error('[' + id + ']单个请求数据处理函数运行出错', e);
-      return;
+      console.error(`[${ id }]单个请求数据处理函数运行出错`, e);
     }
   }
 
   fetchOne(type, options) {
+    // eslint-disable-next-line prefer-const
     let { uri, method = 'GET', headers, params, ...otherProps } = options;
     otherProps = otherProps || {};
     switch (type) {

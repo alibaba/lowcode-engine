@@ -7,8 +7,14 @@ import { isIdentifier, Node } from '@babel/types';
 import { OrderedSet } from './OrderedSet';
 
 export class ParseError extends Error {
-  constructor(readonly expr: string | t.Expression, readonly detail: unknown) {
+  readonly expr: string | t.Expression;
+
+  readonly detail: unknown;
+
+  constructor(expr: string | t.Expression, detail: unknown) {
     super(`Failed to parse expression "${typeof expr === 'string' ? expr : generate(expr)}"`);
+    this.expr = expr;
+    this.detail = detail;
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }
@@ -31,14 +37,20 @@ const MAYBE_EXPRESSIONS: {
   IfStatement: { fields: ['test'] },
   LogicalExpression: { fields: ['left', 'right'] },
   MemberExpression: {
-    fields: (node) => (node.type === 'MemberExpression' && node.computed ? ['object', 'property'] : ['object']),
+    fields: (node) => {
+      return node.type === 'MemberExpression' && node.computed ? ['object', 'property'] : ['object'];
+    },
   },
   NewExpression: { fields: ['callee', 'arguments'] },
   ObjectMethod: {
-    fields: (node) => (node.type === 'ObjectMethod' && node.computed ? ['key'] : []),
+    fields: (node) => {
+      return node.type === 'ObjectMethod' && node.computed ? ['key'] : [];
+    },
   },
   ObjectProperty: {
-    fields: (node) => (node.type === 'ObjectProperty' && node.computed ? ['key', 'value'] : ['value']),
+    fields: (node) => {
+      return node.type === 'ObjectProperty' && node.computed ? ['key', 'value'] : ['value'];
+    },
   },
   ReturnStatement: { fields: ['argument'] },
   SequenceExpression: { fields: ['expressions'] },
@@ -57,31 +69,43 @@ const MAYBE_EXPRESSIONS: {
   ClassDeclaration: { fields: ['superClass'] },
   ExportDefaultDeclaration: { fields: ['declaration'] },
   ForOfStatement: { fields: ['right'] },
-  ClassMethod: { fields: (node) => (node.type === 'ClassMethod' && node.computed ? ['key'] : []) },
+  ClassMethod: { fields: (node) => {
+    return node.type === 'ClassMethod' && node.computed ? ['key'] : [];
+  } },
   SpreadElement: { fields: ['argument'] },
   TaggedTemplateExpression: { fields: ['tag'] },
   TemplateLiteral: { fields: ['expressions'] },
   YieldExpression: { fields: ['argument'] },
   AwaitExpression: { fields: ['argument'] },
   OptionalMemberExpression: {
-    fields: (node) => (node.type === 'OptionalMemberExpression' && node.computed ? ['object', 'property'] : ['object']),
+    fields: (node) => {
+      return node.type === 'OptionalMemberExpression' && node.computed ? ['object', 'property'] : ['object'];
+    },
   },
   OptionalCallExpression: { fields: ['callee', 'arguments'] },
   JSXSpreadAttribute: { fields: ['argument'] },
   BindExpression: { fields: ['object', 'callee'] },
-  ClassProperty: { fields: (node) => (node.type === 'ClassProperty' && node.computed ? ['key', 'value'] : ['value']) },
+  ClassProperty: { fields: (node) => {
+    return node.type === 'ClassProperty' && node.computed ? ['key', 'value'] : ['value'];
+  } },
   PipelineTopicExpression: { fields: ['expression'] },
   PipelineBareFunction: { fields: ['callee'] },
   ClassPrivateProperty: { fields: ['value'] },
   Decorator: { fields: ['expression'] },
   TupleExpression: { fields: ['elements'] },
-  TSDeclareMethod: { fields: (node) => (node.type === 'TSDeclareMethod' && node.computed ? ['key'] : []) },
+  TSDeclareMethod: { fields: (node) => {
+    return node.type === 'TSDeclareMethod' && node.computed ? ['key'] : [];
+  } },
   TSPropertySignature: {
-    fields: (node) => (node.type === 'TSPropertySignature' && node.computed ? ['key', 'initializer'] : ['initializer']),
+    fields: (node) => {
+      return node.type === 'TSPropertySignature' && node.computed ? ['key', 'initializer'] : ['initializer'];
+    },
   },
 
   TSMethodSignature: {
-    fields: (node) => (node.type === 'TSMethodSignature' && node.computed ? ['key'] : []),
+    fields: (node) => {
+      return node.type === 'TSMethodSignature' && node.computed ? ['key'] : [];
+    },
   },
   TSAsExpression: { fields: ['expression'] },
   TSTypeAssertion: { fields: ['expression'] },
@@ -114,7 +138,7 @@ const CROSS_THIS_SCOPE_TYPE_NODE: {
 
 export function parseExpressionGetGlobalVariables(
   expr: string | null | undefined,
-  { filter = (x) => true }: ParseExpressionGetGlobalVariablesOptions = {},
+  { filter = () => true }: ParseExpressionGetGlobalVariablesOptions = {},
 ): string[] {
   if (!expr) {
     return [];
@@ -125,7 +149,7 @@ export function parseExpressionGetGlobalVariables(
 
     const ast = parser.parse(`!(${expr});`);
 
-    const addUndeclaredIdentifierIfNeeded = (x: object | null | undefined, path: NodePath<Node>) => {
+    const addUndeclaredIdentifierIfNeeded = (x: Record<string, unknown> | null | undefined, path: NodePath<Node>) => {
       if (isIdentifier(x) && !path.scope.hasBinding(x.name)) {
         undeclaredVars.add(x.name);
       }

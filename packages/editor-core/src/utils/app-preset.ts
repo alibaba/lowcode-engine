@@ -28,7 +28,7 @@ window.__newFunc = (funContext: string): ((...args: any[]) => any) => {
 };
 
 // 关闭浏览器前提醒,只有产生过交互才会生效
-window.onbeforeunload = function(e: Event): string | void {
+window.onbeforeunload = function (e: Event): string | void {
   const ev = e || window.event;
   // 本地调试不生效
   if (location.href.indexOf('localhost') > 0) {

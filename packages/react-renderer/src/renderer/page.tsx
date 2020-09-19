@@ -6,7 +6,7 @@ import Loading from '@alifd/next/lib/loading';
 import '@alifd/next/lib/loading/style';
 import AppContext from '../context/appContext';
 import BaseRenderer from './base';
-import { isSchema, getFileCssName } from '../utils';
+import { isSchema, getFileCssName, parseData } from '../utils';
 
 const debug = Debug('renderer:page');
 
@@ -24,6 +24,7 @@ export default class PageRenderer extends BaseRenderer {
   static getDerivedStateFromProps(props, state) {
     debug('page.getDerivedStateFromProps');
     const func = props.__schema.lifeCycles && props.__schema.lifeCycles.getDerivedStateFromProps;
+
     if (func) {
       return func(props, state);
     }
@@ -53,7 +54,15 @@ export default class PageRenderer extends BaseRenderer {
     debug(`page.componentDidMount - ${this.props.__schema.fileName}`);
   }
 
-  async componentDidUpdate() {
+  async componentDidUpdate(prevProps) {
+    const { __ctx } = this.props;
+    const prevState = parseData(prevProps.__schema.state, __ctx);
+    const newState = parseData(this.props.__schema.state, __ctx);
+    // 当编排的时候修改schema.state值，需要将最新schema.state值setState
+    if (JSON.stringify(newState) != JSON.stringify(prevState)) {
+      this.setState(newState);
+    }
+
     super.componentDidUpdate(...arguments);
     debug(`page.componentDidUpdate - ${this.props.__schema.fileName}`);
   }
@@ -75,10 +84,9 @@ export default class PageRenderer extends BaseRenderer {
     }
     debug(`page.render - ${__schema.fileName}`);
 
-    this.state = this.__parseData(__schema.state || {});
     this.__bindCustomMethods(this.props);
     this.__initDataSource(this.props);
-    
+
     // this.__setLifeCycleMethods('constructor', arguments);
 
     this.__generateCtx({
@@ -87,8 +95,8 @@ export default class PageRenderer extends BaseRenderer {
     this.__render();
 
     const props = this.__parseData(__schema.props);
-    const { id, className, style, autoLoading, defaultHeight = 300, loading
-} = props;
+    const { id, className, style, autoLoading, defaultHeight = 300, loading,
+    } = props;
 
     const { Page } = __components;
     if (Page) {

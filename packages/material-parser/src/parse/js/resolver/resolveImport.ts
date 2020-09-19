@@ -14,7 +14,7 @@ function getPath(path: any, name: any) {
   __path = p.dirname(__path);
   // is directory
   if (fs.existsSync(p.resolve(__path, name))) {
-    name = name + '/index';
+    name += '/index';
   }
   const suffix = suffixes.find((suf) => {
     return fs.existsSync(p.resolve(__path, name + suf));
@@ -24,6 +24,7 @@ function getPath(path: any, name: any) {
 }
 
 const buildParser = require('react-docgen/dist/babelParser').default;
+
 const suffixes = ['.js', '.jsx', '.ts', '.tsx'];
 
 const cache: {

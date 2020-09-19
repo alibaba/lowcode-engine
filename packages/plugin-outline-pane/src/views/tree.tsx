@@ -21,11 +21,12 @@ function getTreeNodeIdByEvent(e: ReactMouseEvent, stop: Element): null | string 
 @observer
 export default class TreeView extends Component<{ tree: Tree }> {
   private shell: HTMLDivElement | null = null;
+
   private hover(e: ReactMouseEvent) {
     const { tree } = this.props;
 
     const doc = tree.document;
-    const detecting = doc.designer.detecting;
+    const { detecting } = doc.designer;
     if (!detecting.enable) {
       return;
     }
@@ -48,10 +49,10 @@ export default class TreeView extends Component<{ tree: Tree }> {
       return;
     }
     const { node } = treeNode;
-    const designer = treeNode.designer;
+    const { designer } = treeNode;
     const doc = node.document;
-    const selection = doc.selection;
-    const id = node.id;
+    const { selection } = doc;
+    const { id } = node;
     const isMulti = e.metaKey || e.ctrlKey || e.shiftKey;
     designer.activeTracker.track(node);
     if (isMulti && !isRootNode(node) && selection.has(id)) {
@@ -91,7 +92,9 @@ export default class TreeView extends Component<{ tree: Tree }> {
   }
 
   private ignoreUpSelected = false;
+
   private boostEvent?: MouseEvent;
+
   private onMouseDown = (e: ReactMouseEvent) => {
     if (isFormEvent(e.nativeEvent)) {
       return;
@@ -102,9 +105,9 @@ export default class TreeView extends Component<{ tree: Tree }> {
     }
 
     const { node } = treeNode;
-    const designer = treeNode.designer;
+    const { designer } = treeNode;
     const doc = node.document;
-    const selection = doc.selection;
+    const { selection } = doc;
 
     // TODO: shift selection
     const isMulti = e.metaKey || e.ctrlKey || e.shiftKey;
@@ -145,11 +148,11 @@ export default class TreeView extends Component<{ tree: Tree }> {
 
   render() {
     const { tree } = this.props;
-    const root = tree.root;
+    const { root } = tree;
     return (
       <div
         className="lc-outline-tree"
-        ref={(shell) => (this.shell = shell)}
+        ref={(shell) => { this.shell = shell; }}
         onMouseDownCapture={this.onMouseDown}
         onMouseOver={this.onMouseOver}
         onClick={this.onClick}

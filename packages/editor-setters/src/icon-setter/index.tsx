@@ -68,18 +68,18 @@ interface IconSetterProps {
   defaultValue: string;
   placeholder: string;
   hasClear: boolean;
-  onChange: (icon: string | object) => undefined;
+  onChange: (icon: string) => undefined;
   icons: string[];
 }
-export default class IconSetter extends PureComponent<IconSetterProps, {}> {
+export default class IconSetter extends PureComponent<IconSetterProps> {
   static defaultProps = {
     value: undefined,
     type: 'string',
     defaultValue: '',
     hasClear: true,
-    icons: icons,
+    icons,
     placeholder: '请点击选择 Icon',
-    onChange: (icon: string | object) => undefined,
+    onChange: () => undefined,
   };
 
   state = {
@@ -109,7 +109,7 @@ export default class IconSetter extends PureComponent<IconSetterProps, {}> {
   };
 
   render() {
-    const { icons, value, defaultValue, onChange, placeholder, hasClear, type } = this.props;
+    const { value, defaultValue, onChange, placeholder, hasClear } = this.props;
     const { firstLoad } = this.state;
     const _value = typeof value === 'object' ? value?.props?.type : value;
     if (firstLoad && defaultValue && typeof value === 'undefined') {
@@ -149,7 +149,7 @@ export default class IconSetter extends PureComponent<IconSetterProps, {}> {
       <Balloon
         className={'lowcode-icon-content'}
         trigger={triggerNode}
-        needAdjust={true}
+        needAdjust
         triggerType="click"
         closable={false}
         alignEdge

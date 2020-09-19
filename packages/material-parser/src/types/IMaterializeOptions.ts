@@ -1,11 +1,8 @@
-import ExtensionName from './ExtensionName';
-import IExtensionConfigManifest from './IExtensionConfigManifest';
-
 /**
  * 物料化配置项
  * @interface IMaterializeOptions
  */
-interface IMaterializeOptions {
+export interface IMaterializeOptions {
   /**
    * 组件文件(夹)路径或包名
    * 形如：
@@ -35,5 +32,3 @@ interface IMaterializeOptions {
    */
   npmClient?: string;
 }
-
-export default IMaterializeOptions;

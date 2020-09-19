@@ -14,9 +14,13 @@ export interface IScopeBindings {
 }
 
 export class ScopeBindings implements IScopeBindings {
+  readonly parent: IScopeBindings | null;
+
   private _bindings = new OrderedSet<string>();
 
-  constructor(readonly parent: IScopeBindings | null = null) {}
+  constructor(p: IScopeBindings | null = null) {
+    this.parent = p;
+  }
 
   hasBinding(varName: string): boolean {
     return this._bindings.has(varName) || !!this.parent?.hasBinding(varName);
@@ -37,7 +41,7 @@ export class ScopeBindings implements IScopeBindings {
   getAllBindings(): string[] {
     const allBindings = new OrderedSet(this._bindings.toArray());
 
-    for (let parent = this.parent; parent; parent = parent?.parent) {
+    for (let { parent } = this; parent; parent = parent?.parent) {
       parent.getAllOwnedBindings().forEach((varName) => {
         allBindings.add(varName);
       });

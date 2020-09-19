@@ -1,4 +1,8 @@
-import { omit, pick } from 'lodash';
+import { omit, pick, isNil } from 'lodash';
+import { safeEval, isEvaluable } from '../utils';
+import { debug } from '../core';
+
+const log = debug.extend('parse:transform');
 
 export function transformType(itemType: any) {
   if (typeof itemType === 'string') return itemType;
@@ -7,7 +11,7 @@ export function transformType(itemType: any) {
   //   return name;
   // }
   if (computed !== undefined && value) {
-    return eval(value);
+    return safeEval(value);
   }
   const result: any = {
     type: name,
@@ -24,16 +28,31 @@ export function transformType(itemType: any) {
     case 'symbol':
     case 'object':
     case 'null':
+    case 'array':
+    case 'element':
+    case 'node':
       break;
     case 'literal':
-      return eval(value);
+      return safeEval(value);
     case 'enum':
     case 'tuple':
     case 'oneOf':
       result.type = 'oneOf';
       result.value = value.map(transformType);
       break;
-    case 'union':
+    case 'union': {
+      const { raw } = itemType;
+      if (raw) {
+        if (raw.match(/ReactNode$/)) {
+          result.type = 'node';
+          break;
+        } else if (raw.match(/Element$/)) {
+          result.type = 'element';
+          break;
+        }
+      }
+    }
+    // eslint-disable-next-line no-fallthrough
     case 'oneOfType':
       result.type = 'oneOfType';
       result.value = value.map(transformType);
@@ -77,12 +96,9 @@ export function transformType(itemType: any) {
         result.value = properties
           .filter((item: any) => typeof item.key !== 'object')
           .map((prop: any) => {
-            const {
-              key,
-              value: { name, ...others },
-            } = prop;
+            const { key } = prop;
             return transformItem(key, {
-              ...others,
+              ...omit(prop.value, 'name'),
               type: pick(prop.value, ['name', 'value']),
             });
           });
@@ -90,7 +106,6 @@ export function transformType(itemType: any) {
       break;
     }
     case 'objectOf':
-    case 'arrayOf':
     case 'instanceOf':
       result.value = transformType(value);
       break;
@@ -107,18 +122,19 @@ export function transformType(itemType: any) {
         });
       });
       break;
-    case (name.match('ReactNode$') || {}).input:
+    case (name.match(/ReactNode$/) || {}).input:
       result.type = 'node';
       break;
-    case (name.match('Element$') || {}).input:
+    case (name.match(/Element$/) || {}).input:
       result.type = 'element';
       break;
-    case (name.match('ElementType$') || {}).input:
-      result.type = 'elementType';
-      break;
+    // case (name.match(/ElementType$/) || {}).input:
+    //   result.type = 'elementType';
+    //   break;
     default:
-      result.type = 'instanceOf';
-      result.value = name;
+      // result.type = 'instanceOf';
+      // result.value = name;
+      result.type = 'any';
       break;
   }
   if (Object.keys(result).length === 1) {
@@ -128,7 +144,15 @@ export function transformType(itemType: any) {
 }
 
 export function transformItem(name: string, item: any) {
-  const { description, flowType, tsType, type = tsType || flowType, required, defaultValue, ...others } = item;
+  const {
+    description,
+    flowType,
+    tsType,
+    type = tsType || flowType,
+    required,
+    defaultValue,
+    ...others
+  } = item;
   const result: any = {
     name,
   };
@@ -147,11 +171,19 @@ export function transformItem(name: string, item: any) {
       result.description = description;
     }
   }
-  if (defaultValue !== undefined) {
-    try {
-      const value = eval(defaultValue.value);
-      result.defaultValue = value;
-    } catch (e) {}
+  if (!isNil(defaultValue) && typeof defaultValue === 'object' && isEvaluable(defaultValue)) {
+    if (defaultValue === null) {
+      result.defaultValue = defaultValue;
+    } else {
+      try {
+        const value = safeEval(defaultValue.value);
+        if (isEvaluable(value)) {
+          result.defaultValue = value;
+        }
+      } catch (e) {
+        log(e);
+      }
+    }
   }
   if (result.propType === undefined) {
     delete result.propType;

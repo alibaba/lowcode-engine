@@ -63,7 +63,7 @@ interface TransferListState {
 
 function renderListNode(renderList: RenderListFunction | undefined, props: TransferListBodyProps) {
   let bodyContent: React.ReactNode = renderList ? renderList(props) : null;
-  const customize: boolean = !!bodyContent;
+  const customize = !!bodyContent;
   if (!customize) {
     bodyContent = defaultRenderList(props);
   }
@@ -74,8 +74,8 @@ function renderListNode(renderList: RenderListFunction | undefined, props: Trans
 }
 
 export default class TransferList extends React.PureComponent<
-  TransferListProps,
-  TransferListState
+TransferListProps,
+TransferListState
 > {
   static defaultProps = {
     dataSource: [],

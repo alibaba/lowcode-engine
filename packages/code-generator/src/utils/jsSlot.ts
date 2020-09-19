@@ -18,11 +18,11 @@ export function generateJsSlot(slot: any, scope: IScope, generator: NodeGenerato
     if (params) {
       return [
         title && generateSingleLineComment(title),
-        `(`,
+        '(',
         ...(params || []),
-        `) => (`,
+        ') => (',
         !value ? 'null' : generator(value, scope),
-        `)`,
+        ')',
       ]
         .filter(Boolean)
         .join('');

@@ -9,8 +9,7 @@ import SkeletonButton from './Button';
 import SkeletonInput from './Input';
 
 /* This only for skeleton internal. */
-interface SkeletonAvatarProps extends Omit<AvatarProps, 'active'> {
-}
+type SkeletonAvatarProps = Omit<AvatarProps, 'active'>;
 
 export interface SkeletonProps {
   active?: boolean;

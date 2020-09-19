@@ -1,5 +1,5 @@
 import { Component, MouseEvent, Fragment } from 'react';
-import { shallowIntl, createSetterContent, observer, obx, Title } from '@ali/lowcode-editor-core';
+import { shallowIntl, createSetterContent, observer, obx } from '@ali/lowcode-editor-core';
 import { createContent } from '@ali/lowcode-utils';
 import { createField } from '../field';
 import PopupService, { PopupPipe } from '../popup';
@@ -9,8 +9,10 @@ import { SettingField, isSettingField, SettingTopEntry, SettingEntry } from '@al
 import { isSetterConfig, CustomView } from '@ali/lowcode-types';
 import { intl } from '../../locale';
 import { Skeleton } from 'editor-skeleton/src/skeleton';
+
 function transformStringToFunction(str) {
   if (typeof str !== 'string') return str;
+  // eslint-disable-next-line no-new-func
   return new Function(`"use strict"; return ${str}`)();
 }
 
@@ -93,7 +95,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     if (display === 'entry') {
       const stage = stages.add({
         type: 'Widget',
-        name: field.getNode().id + '_' + field.name.toString(),
+        name: `${field.getNode().id }_${ field.name.toString()}`,
         content: <Fragment>{field.items.map((item, index) => createSettingFieldView(item, field, index))}</Fragment>,
         props: {
           title: field.title,
@@ -127,6 +129,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
           value, // reaction point
           onChange: (value: any) => {
             this.setState({
+              // eslint-disable-next-line react/no-unused-state
               value,
             });
             field.setValue(value);
@@ -138,14 +141,15 @@ class SettingFieldView extends Component<{ field: SettingField }> {
             }
             const value = typeof initialValue === 'function' ? initialValue(field) : initialValue;
             this.setState({
+              // eslint-disable-next-line react/no-unused-state
               value,
             });
             field.setValue(value);
           },
 
-          removeProp:()=>{
+          removeProp: () => {
             field.parent.clearPropValue(field.name);
-          }
+          },
         }),
       extraProps.forceInline ? 'plain' : extraProps.display,
     );
@@ -177,7 +181,7 @@ class SettingGroupView extends Component<{ field: SettingField }> {
     if (display === 'entry') {
       const stage = stages.add({
         type: 'Widget',
-        name: field.getNode().id + '_' + field.name.toString(),
+        name: `${field.getNode().id }_${ field.name.toString()}`,
         content: <Fragment>{field.items.map((item, index) => createSettingFieldView(item, field, index))}</Fragment>,
         props: {
           title: field.title,
@@ -223,6 +227,7 @@ export type SettingsPaneProps = {
 @observer
 export class SettingsPane extends Component<SettingsPaneProps> {
   static contextType = SkeletonContext;
+
   @obx
   private currentStage?: Stage;
 
@@ -231,6 +236,7 @@ export class SettingsPane extends Component<SettingsPaneProps> {
   }
 
   private popupPipe = new PopupPipe();
+
   private pipe = this.popupPipe.create();
 
   private handleClick = (e: MouseEvent) => {
@@ -274,7 +280,7 @@ export class SettingsPane extends Component<SettingsPaneProps> {
 
   render() {
     const { target } = this.props;
-    const items = target.items;
+    const { items } = target;
 
     return (
       <div className="lc-settings-pane" onClick={this.handleClick}>

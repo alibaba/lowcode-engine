@@ -47,7 +47,7 @@ export function handleSubNodes<T>(
     return list.map((child) => handleSubNodes(child, handlers, opt)).reduce((p, c) => p.concat(c), []);
   }
 
-  let result: T | undefined = undefined;
+  let result: T | undefined;
   const childrenRes: T[] = [];
   if (isDOMText(children)) {
     const handler = handlers.string || noop;

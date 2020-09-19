@@ -2,7 +2,7 @@ import { designer } from './editor';
 import { DragObjectType, isNode, isDragNodeDataObject } from '@ali/lowcode-designer';
 import { isPrototype } from './bundle/prototype';
 
-const dragon = designer.dragon;
+const { dragon } = designer;
 const DragEngine = {
   from(shell: Element, boost: (e: MouseEvent) => any): any {
     return dragon.from(shell, (e) => {

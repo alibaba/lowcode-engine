@@ -4,14 +4,7 @@
  */
 import changeCase from 'change-case';
 import { UtilItem, NodeDataType, NodeSchema, ContainerSchema, ProjectSchema, PropsMap } from '@ali/lowcode-types';
-import { IPageMeta } from '../types';
-
-import { SUPPORT_SCHEMA_VERSION_LIST } from '../const';
-
-import { handleSubNodes } from '../utils/schema';
-import { uniqueArray } from '../utils/common';
-
-import {
+import { IPageMeta,
   CodeGeneratorError,
   CompatibilityError,
   DependencyType,
@@ -25,6 +18,12 @@ import {
   INpmPackage,
   IRouterInfo,
 } from '../types';
+
+import { SUPPORT_SCHEMA_VERSION_LIST } from '../const';
+
+import { handleSubNodes } from '../utils/schema';
+import { uniqueArray } from '../utils/common';
+
 
 const defaultContainer: IContainerInfo = {
   containerType: 'Component',
@@ -100,7 +99,7 @@ class SchemaParser implements ISchemaParser {
         });
       }
     } else {
-      throw new CodeGeneratorError(`Can't find anything to generate.`);
+      throw new CodeGeneratorError('Can\'t find anything to generate.');
     }
 
     // 建立所有容器的内部依赖索引
@@ -206,7 +205,9 @@ class SchemaParser implements ISchemaParser {
     let npms: INpmPackage[] = [];
     containers.forEach((con) => {
       const p = (con.deps || [])
-        .map((dep) => (dep.dependencyType === DependencyType.External ? dep : null))
+        .map((dep) => {
+          return dep.dependencyType === DependencyType.External ? dep : null;
+        })
         .filter((dep) => dep !== null);
       const npmInfos: INpmPackage[] = p
         .filter((i) => Boolean(i))

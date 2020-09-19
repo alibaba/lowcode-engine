@@ -198,7 +198,7 @@ export default class UploadList extends React.Component<UploadListProps, any> {
               locale.removeFile,
             )) || (
             <DeleteOutlined title={locale.removeFile} onClick={() => this.handleClose(file)} />
-          )
+        )
         : null;
 
       const downloadIcon =
@@ -213,7 +213,7 @@ export default class UploadList extends React.Component<UploadListProps, any> {
                 title={locale.downloadFile}
                 onClick={() => this.handleDownload(file)}
               />
-            )
+          )
           : null;
       const downloadOrDelete = listType !== 'picture-card' && (
         <span
@@ -234,31 +234,31 @@ export default class UploadList extends React.Component<UploadListProps, any> {
       });
       const preview = file.url
         ? [
-            <a
-              key="view"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={listItemNameClass}
-              title={file.name}
-              {...linkProps}
-              href={file.url}
-              onClick={e => this.handlePreview(file, e)}
-            >
-              {file.name}
-            </a>,
-            downloadOrDelete,
-          ]
+          <a
+            key="view"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={listItemNameClass}
+            title={file.name}
+            {...linkProps}
+            href={file.url}
+            onClick={e => this.handlePreview(file, e)}
+          >
+            {file.name}
+          </a>,
+          downloadOrDelete,
+        ]
         : [
-            <span
-              key="view"
-              className={listItemNameClass}
-              onClick={e => this.handlePreview(file, e)}
-              title={file.name}
-            >
-              {file.name}
-            </span>,
-            downloadOrDelete,
-          ];
+          <span
+            key="view"
+            className={listItemNameClass}
+            onClick={e => this.handlePreview(file, e)}
+            title={file.name}
+          >
+            {file.name}
+          </span>,
+          downloadOrDelete,
+        ];
       const style: React.CSSProperties = {
         pointerEvents: 'none',
         opacity: 0.5,

@@ -81,10 +81,13 @@ export function connectGeneralManagerList(managerList: any[], sourceManagerList:
 
 export class BaseManager implements INameable, IObservable {
   static EVENTS: IEventNameMap = {};
+
   static NAME = 'BaseManager';
 
   private name: string;
+
   private id: string;
+
   private emitter: any;
 
   constructor(managerConfigs: IManagerConfigs = {}) {

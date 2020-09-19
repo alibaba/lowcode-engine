@@ -63,8 +63,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     });
 
     // 注意：这里其实隐含了一个假设：schema 中的 componentName 应该是一个有效的 JS 标识符，而且是大写字母打头的
-    const mapComponentNameToAliasOrKeepIt = (componentName: string) =>
-      componentsNameAliasMap.get(componentName) || componentName;
+    const mapComponentNameToAliasOrKeepIt = (componentName: string) => componentsNameAliasMap.get(componentName) || componentName;
 
     // 然后过滤掉所有的别名 chunks
     next.chunks = next.chunks.filter((chunk) => !isImportAliasDefineChunk(chunk));
@@ -97,7 +96,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       type: ChunkType.STRING,
       fileType: cfg.fileType,
       name: COMMON_CHUNK_NAME.ExternalDepsImport,
-      content: `import { isMiniApp as __$$isMiniApp } from 'universal-env';`,
+      content: 'import { isMiniApp as __$$isMiniApp } from \'universal-env\';',
       linkAfter: [],
     });
 
@@ -324,15 +323,15 @@ function generateEventHandlerAttrForRax(
   }
 
   const wrappedAttrValueExpr = [
-    `(...__$$args) => {`,
-    `  if (__$$isMiniApp) {`,
-    `    const __$$event = __$$args[0];`,
+    '(...__$$args) => {',
+    '  if (__$$isMiniApp) {',
+    '    const __$$event = __$$args[0];',
     ...referencedLocalVariables.map((localVar) => `const ${localVar} = __$$event.target.dataset.${localVar};`),
     `    return (${valueExpr}).apply(this, __$$args);`,
-    `  } else {`,
+    '  } else {',
     `    return (${valueExpr}).apply(this, __$$args);`,
-    `  }`,
-    `}`,
+    '  }',
+    '}',
   ].join('\n');
 
   return [

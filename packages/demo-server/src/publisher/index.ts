@@ -1,5 +1,5 @@
 import { IResultDir } from '@ali/lowcode-code-generator';
-import { isNodeProcess, writeZipToDisk, generateProjectZip } from './utils'
+import { isNodeProcess, writeZipToDisk, generateProjectZip } from './utils';
 
 export type PublisherFactory<T, U> = (configuration?: Partial<T>) => U;
 
@@ -17,7 +17,7 @@ export interface IPublisherResponse<T> {
   payload?: T;
 }
 
-declare type ZipPublisherResponse = string | Buffer | Blob
+declare type ZipPublisherResponse = string | Buffer | Blob;
 
 export interface ZipFactoryParams extends IPublisherFactoryParams {
   outputPath?: string
@@ -30,41 +30,41 @@ export interface ZipPublisher extends IPublisher<ZipFactoryParams, ZipPublisherR
 }
 
 export const createZipPublisher: PublisherFactory<ZipFactoryParams, ZipPublisher> = (
-  params: ZipFactoryParams = {}
+  params: ZipFactoryParams = {},
 ): ZipPublisher => {
-  let { project, outputPath } = params
+  let { project, outputPath } = params;
 
-  const getProject = () => project
+  const getProject = () => project;
   const setProject = (projectToSet: IResultDir) => {
-    project = projectToSet
-  }
+    project = projectToSet;
+  };
 
-  const getOutputPath = () => outputPath
+  const getOutputPath = () => outputPath;
   const setOutputPath = (path: string) => {
-    outputPath = path
-  }
+    outputPath = path;
+  };
 
   const publish = async (options: ZipFactoryParams = {}) => {
-    const projectToPublish = options.project || project
+    const projectToPublish = options.project || project;
     if (!projectToPublish) {
       throw new Error('MissingProject');
     }
 
-    const zipName = options.projectSlug || params.projectSlug || projectToPublish.name
+    const zipName = options.projectSlug || params.projectSlug || projectToPublish.name;
 
     try {
-      const zipContent = await generateProjectZip(projectToPublish)
+      const zipContent = await generateProjectZip(projectToPublish);
 
       // If not output path is provided, zip is not written to disk
-      const projectOutputPath = options.outputPath || outputPath
+      const projectOutputPath = options.outputPath || outputPath;
       if (projectOutputPath && isNodeProcess()) {
-        await writeZipToDisk(projectOutputPath, zipContent, zipName)
+        await writeZipToDisk(projectOutputPath, zipContent, zipName);
       }
-      return { success: true, payload: zipContent }
+      return { success: true, payload: zipContent };
     } catch (error) {
       throw new Error('ZipUnexpected');
     }
-  }
+  };
 
   return {
     publish,
@@ -72,5 +72,5 @@ export const createZipPublisher: PublisherFactory<ZipFactoryParams, ZipPublisher
     setProject,
     getOutputPath,
     setOutputPath,
-  }
-}
+  };
+};

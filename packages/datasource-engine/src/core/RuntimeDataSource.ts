@@ -7,8 +7,11 @@ export class RuntimeDataSource<
   TResultData = unknown
 > implements IRuntimeDataSource<TParams, TResultData> {
   private _status: RuntimeDataSourceStatus = RuntimeDataSourceStatus.Initial;
+
   private _data?: TResultData;
+
   private _error?: Error;
+
   private _latestOptions: DataSourceOptions<TParams>;
 
   constructor(
@@ -17,11 +20,11 @@ export class RuntimeDataSource<
     private _initialOptions: DataSourceOptions<TParams>,
     private _requestHandler: RequestHandler<DataSourceOptions<TParams>, DataSourceResponse<TRequestResult>>,
     private _dataHandler:
-      | ((
-          data: DataSourceResponse<TRequestResult> | undefined,
-          error: unknown | undefined,
-        ) => TResultData | Promise<TResultData>)
-      | undefined,
+    | ((
+      data: DataSourceResponse<TRequestResult> | undefined,
+      error: unknown | undefined,
+    ) => TResultData | Promise<TResultData>)
+    | undefined,
     private _onLoaded: (data: TResultData) => void,
   ) {
     this._latestOptions = _initialOptions;

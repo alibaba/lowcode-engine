@@ -308,7 +308,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
         autorun: (field: Field) => {
           let fieldValue = untracked(() => field.getValue());
           if (accessor) {
-            fieldValue = accessor.call(field, fieldValue)
+            fieldValue = accessor.call(field, fieldValue);
           }
           if (sync) {
             fieldValue = sync.call(field, fieldValue);
@@ -318,7 +318,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
           } else {
             field.setValue(fieldValue);
           }
-        }
+        },
       });
     }
 
@@ -366,8 +366,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
         let disabledValue: boolean;
         if (typeof disabled === 'function') {
           disabledValue = disabled.call(field, currentValue) === true;
-        }
-        else {
+        } else {
           disabledValue = disabled === true;
         }
         if (disabledValue) {
@@ -377,7 +376,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
           return ignore.call(field, currentValue) !== true;
         }
         return ignore !== true;
-      }
+      },
     });
   }
 
@@ -437,8 +436,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
               autorun: item.autorun,
             });
           },
-        },
-      )
+        })
       : [];
     newConfig.items = objItems;
 
@@ -475,8 +473,8 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
           componentName: setter,
           condition: condition
             ? (field: Field) => {
-                return condition.call(field, field.getValue());
-              }
+              return condition.call(field, field.getValue());
+            }
             : null,
         };
       });
@@ -520,11 +518,11 @@ type ConfigCollector = {
   addInitial: AddInitial;
   addFilter: AddFilter;
   addAutorun: AddAutorun;
-}
+};
 
 function getInitialFromSetter(setter: any) {
   return setter && (
-      setter.initial || setter.Initial
+    setter.initial || setter.Initial
       || (setter.type && (setter.type.initial || setter.type.Initial))
     ) || null; // eslint-disable-line
 }
@@ -719,8 +717,8 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     experimental.initialChildren =
       typeof initialChildren === 'function'
         ? (node: any) => {
-            return initialChildren.call(node, node.settingEntry);
-          }
+          return initialChildren.call(node, node.settingEntry);
+        }
         : initialChildren;
   }
   if (view) {
@@ -796,9 +794,8 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
       },
       addAutorun: (item) => {
         autoruns.push(item);
-      }
-    }
-  );
+      },
+    });
   experimental.initials = initials;
   experimental.filters = filters;
   experimental.autoruns = autoruns;

@@ -3,6 +3,7 @@ import { pathExists, lstatSync } from 'fs-extra';
 import { join, isAbsolute, resolve } from 'path';
 import { debug } from './core';
 import { resolvePkgJson } from './utils';
+
 const log = debug.extend('mat');
 
 export default async function scan(options: IMaterializeOptions & { root: string }): Promise<IMaterialScanModel> {
@@ -14,7 +15,7 @@ export default async function scan(options: IMaterializeOptions & { root: string
   };
   log('options', options);
   // 入口文件路径
-  let entryFilePath = options.entry;
+  const entryFilePath = options.entry;
   const stats = lstatSync(entryFilePath);
   if (options.accesser === 'local' && stats.isFile()) {
     if (isAbsolute(entryFilePath)) {
@@ -27,7 +28,7 @@ export default async function scan(options: IMaterializeOptions & { root: string
   }
   const pkgJsonPath = join(options.root, 'package.json');
   if (await pathExists(pkgJsonPath)) {
-    let pkgJson = await resolvePkgJson(pkgJsonPath);
+    const pkgJson = await resolvePkgJson(pkgJsonPath);
     model.pkgName = pkgJson.name;
     model.pkgVersion = pkgJson.version;
     if (pkgJson.module) {

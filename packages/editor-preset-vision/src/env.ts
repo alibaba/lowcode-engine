@@ -10,6 +10,7 @@ export class Env {
   @obx.val envs: ILiteralObject = {};
 
   private emitter: EventEmitter;
+
   private featureMap: ILiteralObject;
 
   constructor() {

@@ -48,7 +48,7 @@ export function createModuleBuilder(
 
     if (options.postProcessors.length > 0) {
       files = files.map((file) => {
-        let content = file.content;
+        let { content } = file;
         const type = file.ext;
         options.postProcessors.forEach((processer) => {
           content = processer(content, type);

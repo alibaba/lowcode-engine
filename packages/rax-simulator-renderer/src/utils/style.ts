@@ -2,7 +2,9 @@ import { createDefer } from './create-defer';
 
 export default class StylePoint {
   private lastContent: string | undefined;
+
   private lastUrl: string | undefined;
+
   private placeholder: Element | Text;
 
   constructor(readonly level: number, readonly id?: string) {

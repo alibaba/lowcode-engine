@@ -7,7 +7,7 @@ import { isPlainObject } from '@ali/lowcode-utils';
 import parseProps from './transducers/parse-props';
 import addonCombine from './transducers/addon-combine';
 import SlotSetter from './components/slot-setter';
-import { isJSSlot, isJSExpression } from '@ali/lowcode-types';
+import { isJSSlot } from '@ali/lowcode-types';
 
 export const registerDefaults = () => {
   registerSetter('ArraySetter', {
@@ -49,7 +49,7 @@ export const registerDefaults = () => {
       }
       return {
         type: 'JSSlot',
-        value: value,
+        value,
       };
     },
     recommend: true,

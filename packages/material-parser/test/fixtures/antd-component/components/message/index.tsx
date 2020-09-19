@@ -107,8 +107,7 @@ function notice(args: ArgsProps): MessageType {
       messageInstance.removeNotice(target);
     }
   };
-  result.then = (filled: ThenableArgument, rejected: ThenableArgument) =>
-    closePromise.then(filled, rejected);
+  result.then = (filled: ThenableArgument, rejected: ThenableArgument) => closePromise.then(filled, rejected);
   result.promise = closePromise;
   return result;
 }

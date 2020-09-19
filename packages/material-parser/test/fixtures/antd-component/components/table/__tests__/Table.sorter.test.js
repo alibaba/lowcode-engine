@@ -268,14 +268,12 @@ describe('Table.sorter', () => {
 
     const getNameColumn = () => wrapper.find('.ant-table-column-has-sorters').at(0);
     const getAgeColumn = () => wrapper.find('.ant-table-column-has-sorters').at(1);
-    const getNameIcon = name =>
-      getNameColumn()
-        .find(`.ant-table-column-sorter-${name}`)
-        .first();
-    const getAgeIcon = name =>
-      getAgeColumn()
-        .find(`.ant-table-column-sorter-${name}`)
-        .first();
+    const getNameIcon = name => getNameColumn()
+      .find(`.ant-table-column-sorter-${name}`)
+      .first();
+    const getAgeIcon = name => getAgeColumn()
+      .find(`.ant-table-column-sorter-${name}`)
+      .first();
 
     // sort name
     getNameColumn().simulate('click');
@@ -328,10 +326,9 @@ describe('Table.sorter', () => {
     const wrapper = mount(<TableTest />);
 
     const getNameColumn = () => wrapper.find('.ant-table-column-has-sorters').at(0);
-    const getIcon = name =>
-      getNameColumn()
-        .find(`.ant-table-column-sorter-${name}`)
-        .first();
+    const getIcon = name => getNameColumn()
+      .find(`.ant-table-column-sorter-${name}`)
+      .first();
 
     expect(getIcon('up').hasClass('active')).toBeFalsy();
     expect(getIcon('down').hasClass('active')).toBeFalsy();
@@ -395,10 +392,9 @@ describe('Table.sorter', () => {
     const wrapper = mount(<TableTest />);
 
     const getNameColumn = () => wrapper.find('.ant-table-column-has-sorters').at(0);
-    const getIcon = name =>
-      getNameColumn()
-        .find(`.ant-table-column-sorter-${name}`)
-        .first();
+    const getIcon = name => getNameColumn()
+      .find(`.ant-table-column-sorter-${name}`)
+      .first();
 
     expect(getIcon('up').hasClass('active')).toBeFalsy();
     expect(getIcon('down').hasClass('active')).toBeFalsy();

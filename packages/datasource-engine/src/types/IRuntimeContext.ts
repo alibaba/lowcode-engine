@@ -2,7 +2,7 @@ import { IRuntimeDataSource } from './IRuntimeDataSource';
 
 /** 运行时上下文 */
 export interface IRuntimeContext<
-  TState extends object = Record<string, unknown>
+  TState = Record<string, unknown>
 > {
   /** 当前容器的状态 */
   readonly state: TState;

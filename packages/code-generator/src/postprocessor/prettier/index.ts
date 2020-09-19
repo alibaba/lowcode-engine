@@ -7,7 +7,7 @@ const PARSERS = ['css', 'scss', 'less', 'json', 'html', 'vue'];
 
 type ProcessorConfig = {
   customFileTypeParser: Record<string, string>;
-}
+};
 
 const factory: PostProcessorFactory<ProcessorConfig> = (config?: ProcessorConfig) => {
   const cfg: ProcessorConfig = {
@@ -25,7 +25,7 @@ const factory: PostProcessorFactory<ProcessorConfig> = (config?: ProcessorConfig
       parser = 'json';
     } else if (PARSERS.indexOf(fileType) >= 0) {
       parser = fileType as prettier.BuiltInParserName;
-    } else if (cfg.customFileTypeParser[fileType]){
+    } else if (cfg.customFileTypeParser[fileType]) {
       parser = cfg.customFileTypeParser[fileType] as prettier.BuiltInParserName;
     } else if (fileType === 'vx') {
       return mypretter(content, fileType);

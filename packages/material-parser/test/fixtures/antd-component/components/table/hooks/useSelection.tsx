@@ -350,8 +350,8 @@ export default function useSelection<RecordType>(
                 onChange={({ nativeEvent }) => {
                   const { shiftKey } = nativeEvent;
 
-                  let startIndex: number = -1;
-                  let endIndex: number = -1;
+                  let startIndex = -1;
+                  let endIndex = -1;
 
                   // Get range of this
                   if (shiftKey) {

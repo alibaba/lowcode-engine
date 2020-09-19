@@ -39,7 +39,9 @@ function getDirFromRoot(root: ResultDir, path: string[]): ResultDir {
 
 export class ProjectBuilder implements IProjectBuilder {
   private template: IProjectTemplate;
+
   private plugins: IProjectPlugins;
+
   private postProcessors: PostProcessor[];
 
   constructor({

@@ -17,7 +17,7 @@ export interface PageHeaderProps {
   subTitle?: React.ReactNode;
   style?: React.CSSProperties;
   breadcrumb?: BreadcrumbProps;
-  tags?: React.ReactElement<Tag> | React.ReactElement<Tag>[];
+  tags?: React.ReactElement<Tag> | Array<React.ReactElement<Tag>>;
   footer?: React.ReactNode;
   extra?: React.ReactNode;
   avatar?: AvatarProps;
@@ -59,14 +59,14 @@ const renderBreadcrumb = (breadcrumb: BreadcrumbProps) => {
   return <Breadcrumb {...breadcrumb} />;
 };
 
-const getBackIcon = (props: PageHeaderProps, direction: string = 'ltr') => {
+const getBackIcon = (props: PageHeaderProps, direction = 'ltr') => {
   if (props.backIcon !== undefined) {
     return props.backIcon;
   }
   return direction === 'rtl' ? <ArrowRightOutlined /> : <ArrowLeftOutlined />;
 };
 
-const renderTitle = (prefixCls: string, props: PageHeaderProps, direction: string = 'ltr') => {
+const renderTitle = (prefixCls: string, props: PageHeaderProps, direction = 'ltr') => {
   const { title, avatar, subTitle, tags, extra, onBack } = props;
   const headingPrefixCls = `${prefixCls}-heading`;
   if (title || subTitle || tags || extra) {

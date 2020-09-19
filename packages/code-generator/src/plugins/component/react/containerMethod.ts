@@ -30,7 +30,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     const ir = next.ir as IContainerInfo;
 
     if (ir.methods) {
-      const methods = ir.methods;
+      const { methods } = ir;
       const chunks = Object.keys(methods).map<ICodeChunk>((methodName) => ({
         type: ChunkType.STRING,
         fileType: cfg.fileType,

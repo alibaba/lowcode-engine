@@ -12,9 +12,13 @@ export interface IErrorBoundaryConfig {
 
 export default class Container {
   private renderer: any = null;
+
   private layouts: { [key: string]: { content: any; props: any } } = {};
+
   private loading: any = null;
+
   private errorBoundary: IErrorBoundaryConfig = { fallbackUI: () => '', afterCatch: () => {} };
+
   private providers: { [key: string]: Provider; } = {};
 
   registerRenderer(renderer: any): any {

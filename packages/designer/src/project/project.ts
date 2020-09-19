@@ -6,6 +6,7 @@ import { ProjectSchema, RootSchema } from '@ali/lowcode-types';
 
 export class Project {
   private emitter = new EventEmitter();
+
   @obx.val readonly documents: DocumentModel[] = [];
 
   private data: ProjectSchema = { version: '1.0.0', componentsMap: [], componentsTree: [] };
@@ -35,10 +36,10 @@ export class Project {
 
   /**
    * 替换当前document的schema,并触发渲染器的render
-   * @param schema 
+   * @param schema
    */
-  setSchema(schema?: ProjectSchema){
-    let doc = this.documents.find((doc) => doc.actived);
+  setSchema(schema?: ProjectSchema) {
+    const doc = this.documents.find((doc) => doc.actived);
     doc && doc.import(schema?.componentsTree[0]);
   }
 
@@ -90,16 +91,18 @@ export class Project {
    * 分字段设置储存数据，不记录操作记录
    */
   set(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     key:
-      | 'version'
-      | 'componentsTree'
-      | 'componentsMap'
-      | 'utils'
-      | 'constants'
-      | 'i18n'
-      | 'css'
-      | 'dataSource'
-      | string,
+    | 'version'
+    | 'componentsTree'
+    | 'componentsMap'
+    | 'utils'
+    | 'constants'
+    | 'i18n'
+    | 'css'
+    | 'dataSource'
+    | string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     value: any,
   ): void {}
 
@@ -107,16 +110,17 @@ export class Project {
    * 分字段设置储存数据
    */
   get(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     key:
-      | 'version'
-      | 'componentsTree'
-      | 'componentsMap'
-      | 'utils'
-      | 'constants'
-      | 'i18n'
-      | 'css'
-      | 'dataSource'
-      | string,
+    | 'version'
+    | 'componentsTree'
+    | 'componentsMap'
+    | 'utils'
+    | 'constants'
+    | 'i18n'
+    | 'css'
+    | 'dataSource'
+    | string,
   ): any {}
 
   open(doc?: string | DocumentModel | RootSchema): DocumentModel {

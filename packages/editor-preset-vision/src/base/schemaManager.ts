@@ -11,7 +11,9 @@ import VisualManager from './visualManager';
 
 export default class SchemaManager extends BaseManager implements IManagerController, ISchemaController {
   private schemaData: object = {};
+
   private visualManagerList: VisualManager[] = [];
+
   private schemaManagerList: SchemaManager[] = [];
 
   getManager(): VisualManager {

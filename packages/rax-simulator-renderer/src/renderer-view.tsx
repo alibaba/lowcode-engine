@@ -20,7 +20,9 @@ const originCloneElement = (window as any).Rax.cloneElement;
         } else {
           try {
             cRef.current = x;
-          } catch (e) {}
+          } catch (e) {
+            console.error(e);
+          }
         }
       }
       if (dRef) {
@@ -29,7 +31,9 @@ const originCloneElement = (window as any).Rax.cloneElement;
         } else {
           try {
             dRef.current = x;
-          } catch (e) {}
+          } catch (e) {
+            console.error(e);
+          }
         }
       }
     };
@@ -73,9 +77,10 @@ class Layout extends Component<{ renderer: SimulatorRenderer }> {
   shouldComponentUpdate() {
     return false;
   }
+
   render() {
     const { renderer, children } = this.props;
-    const layout = renderer.layout;
+    const { layout } = renderer;
 
     if (layout) {
       const { Component, props } = layout;
@@ -94,9 +99,11 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
       this.forceUpdate();
     });
   }
+
   shouldComponentUpdate() {
     return false;
   }
+
   render() {
     const { renderer } = this.props;
     const { device, designMode } = renderer;

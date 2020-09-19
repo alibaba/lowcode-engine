@@ -40,7 +40,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       type: ChunkType.STRING,
       fileType: FileType.JSX,
       name: CLASS_DEFINE_CHUNK_NAME.End,
-      content: `}`,
+      content: '}',
       linkAfter: [
         CLASS_DEFINE_CHUNK_NAME.Start,
         CLASS_DEFINE_CHUNK_NAME.InsPrivateMethod,
@@ -72,7 +72,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       type: ChunkType.STRING,
       fileType: FileType.JSX,
       name: RAX_CHUNK_NAME.ClassDidMountBegin,
-      content: `componentDidMount() {`,
+      content: 'componentDidMount() {',
       linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start, CLASS_DEFINE_CHUNK_NAME.InsVar, CLASS_DEFINE_CHUNK_NAME.InsMethod],
     });
 
@@ -80,7 +80,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       type: ChunkType.STRING,
       fileType: FileType.JSX,
       name: RAX_CHUNK_NAME.ClassDidMountEnd,
-      content: `}`,
+      content: '}',
       linkAfter: [RAX_CHUNK_NAME.ClassDidMountBegin, RAX_CHUNK_NAME.ClassDidMountContent],
     });
 
@@ -88,7 +88,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       type: ChunkType.STRING,
       fileType: FileType.JSX,
       name: RAX_CHUNK_NAME.ClassWillUnmountBegin,
-      content: `componentWillUnmount() {`,
+      content: 'componentWillUnmount() {',
       linkAfter: [
         CLASS_DEFINE_CHUNK_NAME.Start,
         CLASS_DEFINE_CHUNK_NAME.InsVar,
@@ -101,7 +101,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       type: ChunkType.STRING,
       fileType: FileType.JSX,
       name: RAX_CHUNK_NAME.ClassWillUnmountEnd,
-      content: `}`,
+      content: '}',
       linkAfter: [RAX_CHUNK_NAME.ClassWillUnmountBegin, RAX_CHUNK_NAME.ClassWillUnmountContent],
     });
 

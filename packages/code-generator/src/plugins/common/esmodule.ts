@@ -109,9 +109,9 @@ function buildPackageImport(
     }
   });
 
-  const items = Object.keys(imports).map((src) =>
-    src === imports[src] || !useAliasName ? src : `${src} as ${imports[src]}`,
-  );
+  const items = Object.keys(imports).map((src) => {
+    return src === imports[src] || !useAliasName ? src : `${src} as ${imports[src]}`;
+  });
 
   const statementL = ['import'];
   if (defaultImport) {

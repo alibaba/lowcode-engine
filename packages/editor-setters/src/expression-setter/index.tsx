@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Select, Balloon, Icon } from '@alife/next';
+import { Select, Balloon } from '@alife/next';
 import * as acorn from 'acorn';
 
 import { isJSExpression, generateI18n } from './locale/utils';
@@ -12,15 +12,15 @@ const { Option, AutoComplete } = Select;
 const { Tooltip } = Balloon;
 const helpMap = {
   this: '容器上下文对象',
-  'state': '容器的state',
-  'props': '容器的props',
-  'context': '容器的context',
-  'schema': '页面上下文对象',
-  'component': '组件上下文对象',
-  'constants': '应用常量对象',
-  'utils': '应用工具对象',
-  'dataSourceMap': '容器数据源Map',
-  'field': '表单Field对象'
+  state: '容器的state',
+  props: '容器的props',
+  context: '容器的context',
+  schema: '页面上下文对象',
+  component: '组件上下文对象',
+  constants: '应用常量对象',
+  utils: '应用工具对象',
+  dataSourceMap: '容器数据源Map',
+  field: '表单Field对象',
 };
 
 export default class ExpressionView extends PureComponent {
@@ -68,13 +68,12 @@ export default class ExpressionView extends PureComponent {
     return val;
   }
 
-  constructor(props: Readonly<{}>) {
+  constructor(props: any) {
     super(props);
     this.expression = React.createRef();
     this.i18n = generateI18n(props.locale, props.messages);
     this.state = {
       value: ExpressionView.getInitValue(props.value),
-      context: props.context || {},
       dataSource: props.dataSource || [],
     };
   }
@@ -126,31 +125,15 @@ export default class ExpressionView extends PureComponent {
    * @param  {String}
    * @return {Array}
    */
-  getDataSource(tempStr: string): any[] {
-    const {editor} = this.props.field;
+  getDataSource(): any[] {
+    const { editor } = this.props.field;
     const schema = editor.get('designer').project.getSchema();
     const stateMap = schema.componentsTree[0].state;
-    let dataSource = [];
+    const dataSource = [];
 
-    for (let key in stateMap){
+    for (const key in stateMap) {
       dataSource.push(`this.state.${key}`);
     }
-    // if (/[^\w\.]$/.test(tempStr)) {
-    //   return [];
-    // } else if (tempStr === null || tempStr === '') {
-    //   return this.getContextKeys([]);
-    // } else if (/\w\.$/.test(tempStr)) {
-    //   const currentField = this.getCurrentFiled(tempStr);
-    //   if (!currentField) return null;
-    //   let tempKeys = this.getObjectKeys(currentField.str);
-    //   tempKeys = this.getContextKeys(tempKeys);
-    //   if (!tempKeys) return null;
-    //   return tempKeys;
-    // } else if (/\.$/.test(tempStr)) {
-    //   return [];
-    // } else {
-    //   return null;
-    // }
 
     return dataSource;
   }
@@ -283,12 +266,11 @@ export default class ExpressionView extends PureComponent {
                   innerBefore={<span style={{ color: '#999', marginLeft: 4 }}>{'{{'}</span>}
                   innerAfter={<span style={{ color: '#999', marginRight: 4 }}>{'}}'}</span>}
                   popupClassName="expression-setter-item-inner"
-                  itemRender={({ value }) => {
-                    console.log('111:'+value);
+                  itemRender={({ itemValue }) => {
                     return (
-                      <Option key={value} text={value} value={value}>
-                        <div className="code-input-value">{value}</div>
-                        <div className="code-input-help">{helpMap[value]}</div>
+                      <Option key={itemValue} text={itemValue} value={itemValue}>
+                        <div className="code-input-value">{itemValue}</div>
+                        <div className="code-input-help">{helpMap[itemValue]}</div>
                       </Option>
                     );
                   }}
@@ -312,6 +294,7 @@ export default class ExpressionView extends PureComponent {
         const isMoveKey = !!(event.type == 'keyup' && ~[37, 38, 39, 91].indexOf(event.keyCode));
         const isMouseup = event.type == 'mouseup';
         if (isMoveKey || isMouseup) {
+          // eslint-disable-next-line react/no-access-state-in-setstate
           const dataSource = this.getDataSource(this.state.value) || [];
           this.setState({
             dataSource,

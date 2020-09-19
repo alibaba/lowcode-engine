@@ -171,7 +171,7 @@ export default class Anchor extends React.Component<AnchorProps, AnchorState> {
       return activeLink;
     }
 
-    const linkSections: Array<Section> = [];
+    const linkSections: Section[] = [];
     const { getContainer } = this.props as AnchorDefaultProps;
     const container = getContainer();
     this.links.forEach((link) => {

@@ -11,7 +11,9 @@ function generateSessionId(nodes: Node[]) {
 
 export class SettingsMain {
   private emitter = new EventEmitter();
+
   private _sessionId = '';
+
   @obx.ref private _settings?: SettingTopEntry;
 
   @computed get length(): number | undefined {

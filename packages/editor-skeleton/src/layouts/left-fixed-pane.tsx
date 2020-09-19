@@ -79,6 +79,7 @@ class Contents extends Component<{ area: Area<PanelConfig, Panel> }> {
   shouldComponentUpdate() {
     return false;
   }
+
   render() {
     const { area } = this.props;
     return <Fragment>{area.container.items.map((panel) => panel.content)}</Fragment>;

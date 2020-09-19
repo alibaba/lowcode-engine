@@ -8,22 +8,29 @@ import { intl } from '../../locale';
 // if-else-if assoc conditionGroup value, should be the same level, and siblings, need renderEngine support
 export class ExclusiveGroup {
   readonly isExclusiveGroup = true;
+
   readonly id = uniqueId('exclusive');
+
   @obx.val readonly children: Node[] = [];
 
   @obx private visibleIndex = 0;
+
   @computed get document() {
     return this.visibleNode.document;
   }
+
   @computed get zLevel() {
     return this.visibleNode.zLevel;
   }
+
   @computed get length() {
     return this.children.length;
   }
+
   @computed get visibleNode(): Node {
     return this.children[this.visibleIndex];
   }
+
   @computed get firstNode(): Node {
     return this.children[0]!;
   }

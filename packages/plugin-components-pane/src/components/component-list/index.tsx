@@ -20,13 +20,21 @@ export default class ComponentList extends Base {
   static displayName = 'ComponentList';
 
   descRefList = new Map();
+
   navRefList = new Map();
+
   descHeightList = new Map();
+
   snippetMap = new Map();
+
   currentScrollHeight = 0;
+
   scrollFlag = true;
+
   scroll;
+
   scrollTimer;
+
   state = {
     selected: '',
     searchText: '',

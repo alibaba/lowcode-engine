@@ -28,7 +28,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       type: ChunkType.STRING,
       fileType: cfg.fileType,
       name: COMMON_CHUNK_NAME.InternalDepsImport,
-      content: `import __$$constants from '../../constants';`,
+      content: 'import __$$constants from \'../../constants\';',
       linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport],
     });
 
@@ -37,7 +37,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       type: ChunkType.STRING,
       fileType: cfg.fileType,
       name: COMMON_CHUNK_NAME.InternalDepsImport,
-      content: `import * as __$$i18n from '../../i18n';`,
+      content: 'import * as __$$i18n from \'../../i18n\';',
       linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport],
     });
 

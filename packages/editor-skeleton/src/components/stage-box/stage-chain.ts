@@ -3,6 +3,7 @@ import { Stage as StageWidget } from '../../widget/stage';
 
 export default class StageChain {
   private emitter: EventEmitter;
+
   private stage: StageWidget;
 
   constructor(stage: StageWidget) {

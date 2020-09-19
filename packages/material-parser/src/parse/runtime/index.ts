@@ -4,7 +4,6 @@ import { isEmpty } from 'lodash';
 import parsePropTypes from 'parse-prop-types';
 import PropTypes from 'prop-types';
 import { transformItem } from '../transform';
-import { IParseArgs } from '../index';
 import requireInSandbox from './requireInSandbox';
 
 export interface IComponentInfo {
@@ -29,7 +28,7 @@ const reservedKeys = [
 ];
 
 function getKeys(com: any) {
-  const keys = Object.keys(com).filter((x) => {
+  const keys = Object.keys(com).filter(x => {
     return !reservedKeys.includes(x) && !x.startsWith('_');
   });
 
@@ -37,10 +36,14 @@ function getKeys(com: any) {
 }
 
 function isComponent(obj: any) {
-  return typeof obj === 'function' && (obj.hasOwnProperty('propTypes') || obj.hasOwnProperty('defaultProps'));
+  return (
+    typeof obj === 'function' &&
+    (Object.prototype.hasOwnProperty.call(obj, 'propTypes') ||
+      Object.prototype.hasOwnProperty.call(obj, 'defaultProps'))
+  );
 }
 
-export default function(filePath: string) {
+export default function (filePath: string) {
   // const { filePath } = arg;
   // const modulePath = path.resolve(workDir, 'node_modules', 'parse-prop-types');
   // const parsePropTypes = require(modulePath).default;
@@ -50,7 +53,7 @@ export default function(filePath: string) {
 
   if (Com.__esModule) {
     const keys = getKeys(Com);
-    keys.forEach((k) => {
+    keys.forEach(k => {
       if (isComponent(Com[k])) {
         components.push({
           component: Com[k],
@@ -60,15 +63,13 @@ export default function(filePath: string) {
         });
       }
     });
-  } else {
-    if (isComponent(Com)) {
-      components.push({
-        component: Com,
-        meta: {
-          exportName: 'default',
-        },
-      });
-    }
+  } else if (isComponent(Com)) {
+    components.push({
+      component: Com,
+      meta: {
+        exportName: 'default',
+      },
+    });
   }
 
   // dps
@@ -77,8 +78,8 @@ export default function(filePath: string) {
 
     const keys = getKeys(item.component);
     const subs = keys
-      .filter((k) => isComponent(item.component[k]))
-      .map((k) => ({
+      .filter(k => isComponent(item.component[k]))
+      .map(k => ({
         component: item.component[k],
         meta: {
           ...item.meta,
@@ -93,14 +94,14 @@ export default function(filePath: string) {
   const result = components.reduce((acc: any, { meta, component }) => {
     const componentInfo = parsePropTypes(component);
     if (!isEmpty(componentInfo)) {
-      const props = Object.keys(componentInfo).reduce((acc: any[], name) => {
+      const props = Object.keys(componentInfo).reduce((acc2: any[], name) => {
         try {
           const item: any = transformItem(name, componentInfo[name]);
-          acc.push(item);
+          acc2.push(item);
         } catch (e) {
-        } finally {
-          return acc;
+          // TODO
         }
+        return acc2;
       }, []);
 
       return [

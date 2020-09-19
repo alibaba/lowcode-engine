@@ -9,10 +9,15 @@ function makeProxy(target: { [name: string]: any }, meta: any = {}): any {
       if (prop === '__isProxy') return true;
       if (prop === '__getRaw') return () => target;
       if (prop === '__getMeta') return () => meta;
-      return meta.hasOwnProperty(prop) ? meta[prop] : obj[prop];
+      return Object.prototype.hasOwnProperty.call(meta, prop) ? meta[prop] : obj[prop];
       // return obj[prop];
     },
-    has: (obj, prop) => obj.hasOwnProperty(prop) || meta.hasOwnProperty(prop),
+    has: (obj, prop) => {
+      return (
+        Object.prototype.hasOwnProperty.call(obj, prop) ||
+        Object.prototype.hasOwnProperty.call(meta, prop)
+      );
+    },
   });
 }
 

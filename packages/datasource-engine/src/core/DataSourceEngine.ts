@@ -15,6 +15,7 @@ export class DataSourceEngine implements IDataSourceEngine {
     private _runtimeContext: IRuntimeContext,
     private _options?: DataSourceEngineOptions,
   ) {
+    // eslint-disable-next-line no-unused-expressions
     _dataSourceConfig.list?.forEach((ds) => {
       // 确保数据源都有处理器
       const requestHandler = ds.requestHandler || _options?.requestHandlersMap?.[ds.type];
@@ -77,7 +78,9 @@ export class DataSourceEngine implements IDataSourceEngine {
             }
           }
         }
-      } catch (e) {}
+      } catch (e) {
+        // ignore error
+      }
 
       await Promise.all(asyncLoadings);
     } finally {
@@ -116,6 +119,6 @@ function getValue<T extends boolean>(valueOrValueGetter: T | (() => T)): T | und
   }
 }
 
-function sleep(ms: number = 0) {
+function sleep(ms = 0) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }

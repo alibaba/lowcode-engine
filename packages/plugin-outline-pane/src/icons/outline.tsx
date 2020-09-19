@@ -10,5 +10,3 @@ export function IconOutline(props: IconProps) {
 
 IconOutline.displayName = 'IconOutline';
 
-
-

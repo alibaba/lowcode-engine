@@ -74,7 +74,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
         type: ChunkType.STRING,
         fileType: cfg.fileType,
         name: CLASS_DEFINE_CHUNK_NAME.InsVar,
-        content: `_lifeCycles = this._defineLifeCycles();`,
+        content: '_lifeCycles = this._defineLifeCycles();',
         linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start],
       });
 

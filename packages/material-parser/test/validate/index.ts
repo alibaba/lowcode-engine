@@ -4,8 +4,9 @@ import test from 'ava';
 import fs = require('fs');
 import yaml = require('js-yaml');
 import path = require('path');
+
 const schema = yaml.load(fs.readFileSync(path.resolve(__dirname, '../../schemas/schema.yml'), 'utf8'));
-const ajv = new Ajv({jsonPointers: true});
+const ajv = new Ajv({ jsonPointers: true });
 const validate = ajv.compile(schema);
 
 let fixtures = fs.readdirSync(path.join(__dirname, 'fixtures'));

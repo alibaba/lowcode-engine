@@ -18,7 +18,7 @@ export function executeFunctionStack<I, T, C>(
   while (funcList.length > 0) {
     const func = funcList.pop();
     if (func) {
-      const warppedFunc = ((nextFunc) => (input: I, scope: IScope, cfg?: C) => func(input, scope, cfg, nextFunc))(next);
+      const warppedFunc = ((nextFunc) => (i: I, s: IScope, cfg?: C) => func(i, s, cfg, nextFunc))(next);
       next = warppedFunc;
     }
   }

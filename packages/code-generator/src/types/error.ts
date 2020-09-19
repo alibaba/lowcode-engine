@@ -7,19 +7,10 @@ export class CodeGeneratorError extends Error {
 }
 
 export class ComponentValidationError extends CodeGeneratorError {
-  constructor(errorString: string) {
-    super(errorString);
-  }
 }
 
 export class CompatibilityError extends CodeGeneratorError {
-  constructor(errorString: string) {
-    super(errorString);
-  }
 }
 
 export class PublisherError extends CodeGeneratorError {
-  constructor(errorString: string) {
-    super(errorString);
-  }
 }

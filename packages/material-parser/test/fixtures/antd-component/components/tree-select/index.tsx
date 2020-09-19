@@ -27,8 +27,8 @@ export type SelectValue = RawValue | RawValue[] | LabeledValue | LabeledValue[];
 
 export interface TreeSelectProps<T>
   extends Omit<
-    RcTreeSelectProps<T>,
-    'showTreeIcon' | 'treeMotion' | 'inputIcon' | 'mode' | 'getInputElement' | 'backfill'
+  RcTreeSelectProps<T>,
+  'showTreeIcon' | 'treeMotion' | 'inputIcon' | 'mode' | 'getInputElement' | 'backfill'
   > {
   suffixIcon?: React.ReactNode;
   size?: SizeType;
@@ -171,8 +171,7 @@ class TreeSelect<T> extends React.Component<TreeSelectProps<T>, {}> {
               menuItemSelectedIcon={itemIcon}
               removeIcon={removeIcon}
               clearIcon={clearIcon}
-              switcherIcon={(nodeProps: AntTreeNodeProps) =>
-                renderSwitcherIcon(treePrefixCls, switcherIcon, treeLine, nodeProps)
+              switcherIcon={(nodeProps: AntTreeNodeProps) => renderSwitcherIcon(treePrefixCls, switcherIcon, treeLine, nodeProps)
               }
               showTreeIcon={treeIcon}
               notFoundContent={mergedNotFound}

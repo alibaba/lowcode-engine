@@ -13,7 +13,7 @@ export interface IconProps {
   fill?: string;
   size?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge' | number;
   children?: ReactNode;
-  style?: object;
+  style?: Record<string, unknown>;
 }
 
 export function SVGIcon({
@@ -26,6 +26,7 @@ export function SVGIcon({
 }: IconProps & {
   viewBox: string;
 }) {
+  // eslint-disable-next-line no-prototype-builtins
   if (SizePresets.hasOwnProperty(size)) {
     size = SizePresets[size];
   }

@@ -50,11 +50,10 @@ export default function createUseNotification(
       open: notify,
     };
     ['success', 'info', 'warning', 'error'].forEach(type => {
-      hookAPI[type] = (args: ArgsProps) =>
-        hookAPI.open({
-          ...args,
-          type,
-        });
+      hookAPI[type] = (args: ArgsProps) => hookAPI.open({
+        ...args,
+        type,
+      });
     });
 
     return [

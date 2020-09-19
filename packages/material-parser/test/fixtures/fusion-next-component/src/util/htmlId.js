@@ -6,9 +6,9 @@
  * @returns {String}
  */
 export function randomId(prefix, max = 1000000) {
-    const rand = Math.ceil(Math.random() * max);
+  const rand = Math.ceil(Math.random() * max);
 
-    return prefix ? `${escapeForId(prefix)}-${rand}` : rand.toString(10);
+  return prefix ? `${escapeForId(prefix)}-${rand}` : rand.toString(10);
 }
 
 /**
@@ -18,15 +18,15 @@ export function randomId(prefix, max = 1000000) {
  * @returns {String}
  */
 export function escapeForId(text) {
-    if (!text) {
-        return '';
-    }
+  if (!text) {
+    return '';
+  }
 
-    if (typeof text === 'object') {
-        text = JSON.stringify(text);
-    } else if (typeof text !== 'string') {
-        text = String(text);
-    }
+  if (typeof text === 'object') {
+    text = JSON.stringify(text);
+  } else if (typeof text !== 'string') {
+    text = String(text);
+  }
 
-    return text.replace(/['"]/gm, '').replace(/[\s'"]/gm, '-');
+  return text.replace(/['"]/gm, '').replace(/[\s'"]/gm, '-');
 }

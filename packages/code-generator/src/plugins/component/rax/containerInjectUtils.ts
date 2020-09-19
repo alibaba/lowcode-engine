@@ -39,7 +39,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       type: ChunkType.STRING,
       fileType: cfg.fileType,
       name: CLASS_DEFINE_CHUNK_NAME.InsVar,
-      content: `_utils = this._defineUtils();`,
+      content: '_utils = this._defineUtils();',
       linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start],
     });
 

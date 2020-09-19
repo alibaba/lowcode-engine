@@ -49,7 +49,7 @@ export interface FormItemProps extends FormItemLabelProps, FormItemInputProps, R
   fieldKey?: number;
 }
 
-function hasValidName(name?: NamePath): Boolean {
+function hasValidName(name?: NamePath): boolean {
   if (name === null) {
     warning(false, 'Form.Item', '`null` is passed as `name` property');
   }
@@ -94,7 +94,7 @@ function FormItem(props: FormItemProps): React.ReactElement {
   const hasName = hasValidName(name);
 
   // Cache Field NamePath
-  const nameRef = React.useRef<(string | number)[]>([]);
+  const nameRef = React.useRef<Array<string | number>>([]);
 
   // Should clean up if Field removed
   React.useEffect(() => {
@@ -111,13 +111,13 @@ function FormItem(props: FormItemProps): React.ReactElement {
   const updateChildItemErrors = noStyle
     ? updateItemErrors
     : (subName: string, subErrors: string[]) => {
-        if (!isEqual(inlineErrors[subName], subErrors)) {
-          setInlineErrors(prevInlineErrors => ({
-            ...prevInlineErrors,
-            [subName]: subErrors,
-          }));
-        }
-      };
+      if (!isEqual(inlineErrors[subName], subErrors)) {
+        setInlineErrors(prevInlineErrors => ({
+          ...prevInlineErrors,
+          [subName]: subErrors,
+        }));
+      }
+    };
 
   function renderLayout(
     baseChildren: React.ReactNode,
@@ -257,7 +257,7 @@ function FormItem(props: FormItemProps): React.ReactElement {
           required !== undefined
             ? required
             : !!(
-                rules &&
+              rules &&
                 rules.some(rule => {
                   if (rule && typeof rule === 'object' && rule.required) {
                     return true;
@@ -268,7 +268,7 @@ function FormItem(props: FormItemProps): React.ReactElement {
                   }
                   return false;
                 })
-              );
+            );
 
         // ======================= Children =======================
         const mergedControl: typeof control = {

@@ -5,12 +5,11 @@ import mountTest from '../../../tests/shared/mountTest';
 import rtlTest from '../../../tests/shared/rtlTest';
 
 describe('Skeleton', () => {
-  const genSkeleton = props =>
-    mount(
-      <Skeleton loading {...props}>
-        Bamboo
-      </Skeleton>,
-    );
+  const genSkeleton = props => mount(
+    <Skeleton loading {...props}>
+      Bamboo
+    </Skeleton>,
+  );
   const genSkeletonButton = props => mount(<Skeleton.Button {...props} />);
   const genSkeletonAvatar = props => mount(<Skeleton.Avatar {...props} />);
   const genSkeletonInput = props => mount(<Skeleton.Input {...props} />);

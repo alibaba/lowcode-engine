@@ -21,6 +21,7 @@ export class Workbench extends Component<{ skeleton: Skeleton; config?: EditorCo
     const { config, components, skeleton } = this.props;
     skeleton.buildFromConfig(config, components);
   }
+
   shouldComponentUpdate() {
     return false;
   }
