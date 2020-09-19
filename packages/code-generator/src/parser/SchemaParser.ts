@@ -34,6 +34,18 @@ const defaultContainer: IContainerInfo = {
   props: {},
 };
 
+function getRootComponentName(typeName: string, maps: Record<string, IExternalDependency>): string {
+  if (maps[typeName]) {
+    const rec = maps[typeName];
+    const peerName = Object.keys(maps).find((depName: string) => {
+      const depInfo = maps[depName];
+      return depName !== typeName && depInfo.package === rec.package && depInfo.version === rec.version;
+    });
+    return peerName || typeName;
+  }
+  return typeName;
+}
+
 class SchemaParser implements ISchemaParser {
   validate(schema: ProjectSchema): boolean {
     if (SUPPORT_SCHEMA_VERSION_LIST.indexOf(schema.version) < 0) {
@@ -92,6 +104,7 @@ class SchemaParser implements ISchemaParser {
           const subRoot = n as ContainerSchema;
           const container: IContainerInfo = {
             ...subRoot,
+            componentName: getRootComponentName(subRoot.componentName, compDeps),
             containerType: subRoot.componentName,
             moduleName: changeCase.pascalCase(subRoot.fileName),
           };
@@ -159,13 +172,12 @@ class SchemaParser implements ISchemaParser {
 
     // 分析容器内部组件依赖
     containers.forEach((container) => {
-      if (container.children) {
-        const depNames = this.getComponentNames(container.children);
-        container.deps = uniqueArray<string>(depNames, (i: string) => i)
-          .map((depName) => internalDeps[depName] || compDeps[depName])
-          .filter((dep) => !!dep);
-        // container.deps = Object.keys(compDeps).map((depName) => compDeps[depName]);
-      }
+      const depNames = this.getComponentNames(container);
+      // eslint-disable-next-line no-param-reassign
+      container.deps = uniqueArray<string>(depNames, (i: string) => i)
+        .map((depName) => internalDeps[depName] || compDeps[depName])
+        .filter(Boolean);
+      // container.deps = Object.keys(compDeps).map((depName) => compDeps[depName]);
     });
 
     // 分析路由配置
@@ -210,14 +222,20 @@ class SchemaParser implements ISchemaParser {
         })
         .filter((dep) => dep !== null);
       const npmInfos: INpmPackage[] = p
-        .filter((i) => Boolean(i))
+        .filter(Boolean)
         .map((i) => ({
           package: (i as IExternalDependency).package,
           version: (i as IExternalDependency).version,
         }));
       npms.push(...npmInfos);
     });
-    npms = uniqueArray<INpmPackage>(npms, (i) => i.package);
+
+    npms.push(...(utilsDeps.map(utilsDep => ({
+      package: utilsDep.package,
+      version: utilsDep.version,
+    }))));
+
+    npms = uniqueArray<INpmPackage>(npms, (i) => i.package).filter(Boolean);
 
     return {
       containers,
@@ -238,7 +256,7 @@ class SchemaParser implements ISchemaParser {
         i18n: schema.i18n,
         containersDeps,
         utilsDeps,
-        packages: npms,
+        packages: npms || [],
       },
     };
   }

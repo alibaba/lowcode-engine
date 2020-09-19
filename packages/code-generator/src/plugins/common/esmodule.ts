@@ -38,6 +38,9 @@ function groupDepsByPack(deps: IDependency[]): Record<string, IDependency[]> {
       if (dep.main && depMainBlackList.indexOf(dep.main) < 0) {
         depMain = dep.main;
       }
+      if (depMain.substring(0, 1) === '/') {
+        depMain = depMain.substring(1);
+      }
       addDep(`${(dep as IExternalDependency).package}${depMain ? `/${depMain}` : ''}`, dep);
     }
   });

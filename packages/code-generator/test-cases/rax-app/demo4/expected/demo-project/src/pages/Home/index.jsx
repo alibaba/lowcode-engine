@@ -3,13 +3,11 @@
 import { createElement, Component } from 'rax';
 import { withRouter as __$$withRouter } from 'rax-app';
 
-import Card from '@alife/right-design-card';
-
 import View from 'rax-view';
 
-import Text from 'rax-text';
+import Card from '@alife/right-design-card';
 
-import Image from 'rax-image';
+import Text from 'rax-text';
 
 import { create as __$$createDataSourceEngine } from '@ali/lowcode-datasource-engine/runtime';
 
@@ -31,7 +29,9 @@ class Home$$Page extends Component {
   _context = this._createContext();
 
   _dataSourceConfig = this._defineDataSourceConfig();
-  _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceConfig, this._context, { runtimeConfig: true });
+  _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceConfig, this._context, {
+    runtimeConfig: true,
+  });
 
   _utils = this._defineUtils();
 

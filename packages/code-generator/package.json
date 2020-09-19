@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "start": "ava --watch",
-    "build": "npm run build:tsc",
+    "build": "npm run build:bs",
     "build:bs": "rimraf lib && rimraf es && build-scripts build --skip-demo",
     "build:tsc": "rimraf lib && tsc",
     "demo": "node ./demo/demo.js",
@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@ali/am-eslint-config": "*",
-    "@ali/lowcode-types": "^0.8.14",
+    "@ali/lowcode-types": "^1.0.0",
     "@ali/my-prettier": "^1.0.0",
     "@babel/generator": "^7.9.5",
     "@babel/parser": "^7.9.4",

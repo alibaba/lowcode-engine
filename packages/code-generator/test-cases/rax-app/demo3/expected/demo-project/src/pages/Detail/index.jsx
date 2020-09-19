@@ -9,8 +9,6 @@ import Text from 'rax-text';
 
 import Link from 'rax-link';
 
-import Image from 'rax-image';
-
 import { create as __$$createDataSourceEngine } from '@ali/lowcode-datasource-engine/runtime';
 
 import { isMiniApp as __$$isMiniApp } from 'universal-env';
@@ -31,7 +29,9 @@ class Detail$$Page extends Component {
   _context = this._createContext();
 
   _dataSourceConfig = this._defineDataSourceConfig();
-  _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceConfig, this._context, { runtimeConfig: true });
+  _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceConfig, this._context, {
+    runtimeConfig: true,
+  });
 
   _utils = this._defineUtils();
 

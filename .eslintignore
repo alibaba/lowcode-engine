@@ -10,7 +10,6 @@ es
 lib
 .*
 ~*
-test-cases
 
 # 忽略文件
 **/*.min.js

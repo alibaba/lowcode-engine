@@ -1,3 +1,1 @@
-module.exports = {
-  extends: ['rax'],
-};
+module.exports = {};

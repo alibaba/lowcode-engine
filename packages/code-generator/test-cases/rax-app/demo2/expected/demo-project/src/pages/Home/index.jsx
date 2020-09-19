@@ -28,7 +28,11 @@ import './index.css';
 class Home$$Page extends Component {
   state = {
     clickCount: 0,
-    user: { name: '张三', age: 18, avatar: 'https://gw.alicdn.com/tfs/TB1Ui9BMkY2gK0jSZFgXXc5OFXa-50-50.png' },
+    user: {
+      name: '张三',
+      age: 18,
+      avatar: 'https://gw.alicdn.com/tfs/TB1Ui9BMkY2gK0jSZFgXXc5OFXa-50-50.png',
+    },
     orders: [
       {
         title: '【小米智能生活】米家扫地机器人家用全自动扫拖一体机拖地吸尘器',
@@ -108,7 +112,7 @@ class Home$$Page extends Component {
         <View>
           <Text>=== Orders: ===</Text>
         </View>
-        {__$$evalArray(() => __$$context.state.orders).map((order, index) => (
+        {__$$evalArray(() => __$$eval(() => __$$context.state.orders)).map((order, index) => (
           <View
             style={{ flexDirection: 'row' }}
             data-order={order}
@@ -127,7 +131,10 @@ class Home$$Page extends Component {
             }}
           >
             <View>
-              <Image source={{ uri: __$$eval(() => order.coverUrl) }} style={{ width: '80px', height: '60px' }} />
+              <Image
+                source={{ uri: __$$eval(() => order.coverUrl) }}
+                style={{ width: '80px', height: '60px' }}
+              />
             </View>
             <View>
               <Text>{__$$eval(() => order.title)}</Text>

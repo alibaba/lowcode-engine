@@ -74,6 +74,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       originTemplate: '@alifd/scaffold-lite-js',
     };
 
+    console.log(ir.packages);
     ir.packages.forEach((packageInfo) => {
       packageJson.dependencies[packageInfo.package] = packageInfo.version;
     });

@@ -49,7 +49,9 @@ export function handleSubNodes<T>(
 
   let result: T | undefined;
   const childrenRes: T[] = [];
-  if (isDOMText(children)) {
+  if (children === null || children === undefined) {
+    return [];
+  } else if (isDOMText(children)) {
     const handler = handlers.string || noop;
     result = handler(children as string);
   } else if (isJSExpression(children)) {
