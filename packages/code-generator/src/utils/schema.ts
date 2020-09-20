@@ -44,14 +44,14 @@ export function handleSubNodes<T>(
 
   if (Array.isArray(children)) {
     const list: NodeData[] = children as NodeData[];
-    return list.map(
-      (child) => handleSubNodes(child, handlers, opt),
-    ).reduce((p, c) => p.concat(c), []);
+    return list.map((child) => handleSubNodes(child, handlers, opt)).reduce((p, c) => p.concat(c), []);
   }
 
   let result: T | undefined;
   const childrenRes: T[] = [];
-  if (isDOMText(children)) {
+  if (children === null || children === undefined) {
+    return [];
+  } else if (isDOMText(children)) {
     const handler = handlers.string || noop;
     result = handler(children as string);
   } else if (isJSExpression(children)) {

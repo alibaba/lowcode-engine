@@ -1,6 +1,5 @@
 export class OrderedSet<T> {
   private _set = new Set<T>();
-
   private _arr: T[] = [];
 
   constructor(items?: T[]) {

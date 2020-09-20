@@ -1,0 +1,12 @@
+{
+  "inlineStyle": false,
+  "plugins": [
+    [
+      "build-plugin-rax-app",
+      {
+        "targets": ["web", "miniapp"]
+      }
+    ],
+    "@ali/build-plugin-rax-app-def"
+  ]
+}

@@ -6,7 +6,7 @@ import Loading from '@alifd/next/lib/loading';
 import '@alifd/next/lib/loading/style';
 import AppContext from '../context/appContext';
 import BaseRenderer from './base';
-import { isSchema, getFileCssName,parseData } from '../utils';
+import { isSchema, getFileCssName, parseData } from '../utils';
 
 const debug = Debug('renderer:page');
 
@@ -55,12 +55,12 @@ export default class PageRenderer extends BaseRenderer {
   }
 
   async componentDidUpdate(prevProps) {
-    const {__ctx} = this.props;
-    let prevState = parseData(prevProps.__schema.state, __ctx );
-    let newState = parseData(this.props.__schema.state, __ctx );
+    const { __ctx } = this.props;
+    const prevState = parseData(prevProps.__schema.state, __ctx);
+    const newState = parseData(this.props.__schema.state, __ctx);
     // 当编排的时候修改schema.state值，需要将最新schema.state值setState
-    if (JSON.stringify(newState)!=JSON.stringify(prevState)){
-      this.setState(newState)
+    if (JSON.stringify(newState) != JSON.stringify(prevState)) {
+      this.setState(newState);
     }
 
     super.componentDidUpdate(...arguments);

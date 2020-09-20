@@ -1,222 +1,172 @@
+import _ from 'lodash';
+import { NodeSchema, isNodeSchema, NodeDataType, CompositeValue } from '@ali/lowcode-types';
+
 import {
-  ChildNodeType,
-  IComponentNodeItem,
-  IJSExpression,
-  ChildNodeItem,
+  IScope,
   CodeGeneratorError,
   PIECE_TYPE,
   CodePiece,
-  HandlerSet,
-  ExtGeneratorPlugin,
-  IJSSlot,
-  INodeGeneratorConfig,
-  INodeGeneratorContext,
   NodeGenerator,
+  NodeGeneratorConfig,
+  NodePlugin,
+  AttrData,
 } from '../types';
+
 import { generateCompositeType } from './compositeType';
-import { generateExpression, isJsExpression } from './jsExpression';
-import { isJsSlot } from './jsSlot';
+import { executeFunctionStack } from './aopHelper';
 
-// tslint:disable-next-line: no-empty
-const noop = () => [];
-
-const handleChildrenDefaultOptions = {
-  rerun: false,
-};
-
-export function handleSubNodes<T>(
-  children: ChildNodeType,
-  handlers: HandlerSet<T>,
-  options?: {
-    rerun?: boolean;
-  },
-): T[] {
-  const opt = {
-    ...handleChildrenDefaultOptions,
-    ...(options || {}),
-  };
-
-  if (Array.isArray(children)) {
-    const list: ChildNodeItem[] = children as ChildNodeItem[];
-    return list.map((child) => handleSubNodes(child, handlers, opt)).reduce((p, c) => p.concat(c), []);
-  } else if (typeof children === 'string') {
-    const handler = handlers.string || handlers.common || noop;
-    return handler(children as string);
-  } else if (isJsExpression(children)) {
-    const handler = handlers.expression || handlers.common || noop;
-    return handler(children as IJSExpression);
-  } else {
-    const handler = handlers.node || handlers.common || noop;
-    let curRes = handler(children as IComponentNodeItem);
-    if (opt.rerun && children.children) {
-      const childRes = handleSubNodes(children.children, handlers, opt);
-      curRes = curRes.concat(childRes || []);
-    }
-    if (children.props) {
-      Object.keys(children.props)
-        .filter((propName) => isJsSlot(children.props[propName]))
-        .forEach((propName) => {
-          const soltVals = (children.props[propName] as IJSSlot).value;
-          (soltVals || []).forEach((soltVal) => {
-            const childRes = handleSubNodes(soltVal, handlers, opt);
-            curRes = curRes.concat(childRes || []);
-          });
-        });
-    }
-    return curRes;
+function mergeNodeGeneratorConfig(cfg1: NodeGeneratorConfig, cfg2: NodeGeneratorConfig = {}): NodeGeneratorConfig {
+  const resCfg: NodeGeneratorConfig = {};
+  if (cfg1.handlers || cfg2.handlers) {
+    resCfg.handlers = {
+      ...(cfg1.handlers || {}),
+      ...(cfg2.handlers || {}),
+    };
   }
+
+  if (cfg1.tagMapping || cfg2.tagMapping) {
+    resCfg.tagMapping = cfg2.tagMapping || cfg1.tagMapping;
+  }
+
+  if (cfg1.attrPlugins || cfg2.attrPlugins) {
+    resCfg.attrPlugins = [];
+    resCfg.attrPlugins.push(...(cfg2.attrPlugins || []));
+    resCfg.attrPlugins.push(...(cfg1.attrPlugins || []));
+  }
+
+  if (cfg1.nodePlugins || cfg2.nodePlugins) {
+    resCfg.nodePlugins = [];
+    resCfg.nodePlugins.push(...(cfg2.nodePlugins || []));
+    resCfg.nodePlugins.push(...(cfg1.nodePlugins || []));
+  }
+
+  return resCfg;
 }
 
-export function handleChildren<T>(
-  ctx: INodeGeneratorContext,
-  children: ChildNodeType,
-  handlers: HandlerSet<T>,
-  options?: {
-    rerun?: boolean;
-  },
-): T[] {
-  const opt = {
-    ...handleChildrenDefaultOptions,
-    ...(options || {}),
-  };
-
-  if (Array.isArray(children)) {
-    const list: ChildNodeItem[] = children as ChildNodeItem[];
-    return list.map((child) => handleChildren(ctx, child, handlers, opt)).reduce((p, c) => p.concat(c), []);
-  } else if (typeof children === 'string') {
-    const handler = handlers.string || handlers.common || noop;
-    return handler(children as string);
-  } else if (isJsExpression(children)) {
-    const handler = handlers.expression || handlers.common || noop;
-    return handler(children as IJSExpression);
-  } else {
-    const handler = handlers.node || handlers.common || noop;
-    let curRes = handler(children as IComponentNodeItem);
-    if (opt.rerun && children.children) {
-      const childRes = handleChildren(ctx, children.children, handlers, opt);
-      curRes = curRes.concat(childRes || []);
-    }
-    return curRes;
-  }
+export function isPureString(v: string) {
+  return v[0] === "'" && v[v.length - 1] === "'";
 }
 
-export function generateAttr(ctx: INodeGeneratorContext, attrName: string, attrValue: any): CodePiece[] {
-  if (attrName === 'initValue') {
-    return [];
-  }
-  const valueStr = generateCompositeType(attrValue, {
-    containerHandlers: {
-      default: (v) => `{${v}}`,
-      string: (v) => `"${v}"`,
-    },
-    nodeGenerator: ctx.generator,
+export function getPureStringContent(v: string) {
+  return v.substring(1, v.length - 1);
+}
+
+function generateAttrValue(
+  attrData: { attrName: string; attrValue: CompositeValue },
+  scope: IScope,
+  config?: NodeGeneratorConfig,
+): CodePiece[] {
+  const valueStr = generateCompositeType(attrData.attrValue, scope, {
+    handlers: config?.handlers,
+    nodeGenerator: config?.self,
   });
   return [
     {
-      value: `${attrName}=${valueStr}`,
       type: PIECE_TYPE.ATTR,
+      name: attrData.attrName,
+      value: valueStr,
     },
   ];
 }
 
-export function generateAttrs(ctx: INodeGeneratorContext, nodeItem: IComponentNodeItem): CodePiece[] {
-  const { props } = nodeItem;
-  let pieces: CodePiece[] = [];
+function generateAttr(
+  attrName: string,
+  attrValue: CompositeValue,
+  scope: IScope,
+  config?: NodeGeneratorConfig,
+): CodePiece[] {
+  let pieces: CodePiece[];
+  if (config?.attrPlugins) {
+    pieces = executeFunctionStack<AttrData, CodePiece[], NodeGeneratorConfig>(
+      { attrName, attrValue },
+      scope,
+      config.attrPlugins,
+      generateAttrValue,
+      config,
+    );
+  } else {
+    pieces = generateAttrValue({ attrName, attrValue }, scope, config);
+  }
 
-  Object.keys(props).forEach(
-    (propName: string) => {
-      pieces = pieces.concat(generateAttr(ctx, propName, props[propName]));
-    },
-  );
+  pieces = pieces.map((p) => {
+    // FIXME: 在经过 generateCompositeType 处理过之后，其实已经无法通过传入值的类型判断传出值是否为纯字面值字符串了（可能包裹了加工函数之类的）
+    //        因此这个处理最好的方式是对传出值做语法分析，判断以哪种模版产出 Attr 值
+    let newValue: string;
+    if (p.value && isPureString(p.value)) {
+      const content = getPureStringContent(p.value);
+      newValue = `"${content}"`;
+    } else {
+      newValue = `{${p.value}}`;
+    }
+
+    return {
+      value: `${p.name}=${newValue}`,
+      type: PIECE_TYPE.ATTR,
+    };
+  });
 
   return pieces;
 }
 
-function mapNodeName(src: string, mapping: Record<string, string>): string {
-  if (mapping[src]) {
-    return mapping[src];
+function generateAttrs(nodeItem: NodeSchema, scope: IScope, config?: NodeGeneratorConfig): CodePiece[] {
+  const { props } = nodeItem;
+
+  let pieces: CodePiece[] = [];
+
+  if (props) {
+    if (!Array.isArray(props)) {
+      Object.keys(props).forEach((propName: string) => {
+        pieces = pieces.concat(generateAttr(propName, props[propName], scope, config));
+      });
+    } else {
+      props.forEach((prop) => {
+        if (prop.name && !prop.spread) {
+          pieces = pieces.concat(generateAttr(prop.name, prop.value, scope, config));
+        }
+
+        // TODO: 处理 spread 场景（<Xxx {...(something)}/>)
+        // 这种在 schema 里面怎么描述
+      });
+    }
   }
-  return src;
+
+  return pieces;
 }
 
-export function generateBasicNode(
-  ctx: INodeGeneratorContext,
-  nodeItem: IComponentNodeItem,
-  mapping: Record<string, string>,
-): CodePiece[] {
+function generateBasicNode(nodeItem: NodeSchema, scope: IScope, config?: NodeGeneratorConfig): CodePiece[] {
   const pieces: CodePiece[] = [];
+  const tagName = (config?.tagMapping || _.identity)(nodeItem.componentName);
+
   pieces.push({
-    value: mapNodeName(nodeItem.componentName, mapping),
+    value: tagName || '', // FIXME: type detection error
     type: PIECE_TYPE.TAG,
   });
 
   return pieces;
 }
 
-// TODO: 生成文档
-// 为包裹的代码片段生成子上下文，集成父级上下文，并传入子级上下文新增内容。（如果存在多级上下文怎么处理？）
-// 创建新的上下文，并从作用域中取对应同名变量塞到作用域里面？
-// export function createSubContext() {}
+function generateSimpleNode(nodeItem: NodeSchema, scope: IScope, config?: NodeGeneratorConfig): CodePiece[] {
+  const basicParts = generateBasicNode(nodeItem, scope, config) || [];
+  const attrParts = generateAttrs(nodeItem, scope, config) || [];
+  const childrenParts: CodePiece[] = [];
+  if (nodeItem.children && config?.self) {
+    const childrenStr = config.self(nodeItem.children, scope);
 
-/**
- * JSX 生成逻辑插件。在 React 代码模式下生成 loop 与 condition 相关的逻辑代码
- *
- * @export
- * @param {IComponentNodeItem} nodeItem 当前 UI 节点
- * @returns {CodePiece[]} 实现功能的相关代码片段
- */
-export function generateReactCtrlLine(ctx: INodeGeneratorContext, nodeItem: IComponentNodeItem): CodePiece[] {
-  const pieces: CodePiece[] = [];
-
-  if (nodeItem.loop) {
-    const args: [string, string] = nodeItem.loopArgs || ['item', 'index'];
-    const loopData = generateCompositeType(nodeItem.loop, {
-      nodeGenerator: ctx.generator,
-    });
-    pieces.unshift({
-      value: `(${loopData}).map((${args[0]}, ${args[1]}) => (`,
-      type: PIECE_TYPE.BEFORE,
-    });
-    pieces.push({
-      value: '))',
-      type: PIECE_TYPE.AFTER,
+    childrenParts.push({
+      type: PIECE_TYPE.CHILDREN,
+      value: childrenStr,
     });
   }
 
-  if (nodeItem.condition) {
-    const value = generateCompositeType(nodeItem.condition, {
-      nodeGenerator: ctx.generator,
-    });
-
-    pieces.unshift({
-      value: `(${value}) && (`,
-      type: PIECE_TYPE.BEFORE,
-    });
-    pieces.push({
-      value: ')',
-      type: PIECE_TYPE.AFTER,
-    });
-  }
-
-  if (nodeItem.condition || nodeItem.loop) {
-    pieces.unshift({
-      value: '{',
-      type: PIECE_TYPE.BEFORE,
-    });
-    pieces.push({
-      value: '}',
-      type: PIECE_TYPE.AFTER,
-    });
-  }
-
-  return pieces;
+  return [...basicParts, ...attrParts, ...childrenParts];
 }
 
-export function linkPieces(pieces: CodePiece[]): string {
-  if (pieces.filter((p) => p.type === PIECE_TYPE.TAG).length !== 1) {
+function linkPieces(pieces: CodePiece[]): string {
+  const tagsPieces = pieces.filter((p) => p.type === PIECE_TYPE.TAG);
+  if (tagsPieces.length !== 1) {
     throw new CodeGeneratorError('One node only need one tag define');
   }
-  const tagName = pieces.filter((p) => p.type === PIECE_TYPE.TAG)[0].value;
+  const tagName = tagsPieces[0].value;
 
   const beforeParts = pieces
     .filter((p) => p.type === PIECE_TYPE.BEFORE)
@@ -247,53 +197,170 @@ export function linkPieces(pieces: CodePiece[]): string {
   return `${beforeParts}<${tagName}${attrsParts} />${afterParts}`;
 }
 
-export function createNodeGenerator(
-  handlers: HandlerSet<string>,
-  plugins: ExtGeneratorPlugin[],
-  cfg?: INodeGeneratorConfig,
-): NodeGenerator {
-  let nodeTypeMapping: Record<string, string> = {};
-  if (cfg && cfg.nodeTypeMapping) {
-    nodeTypeMapping = cfg.nodeTypeMapping;
+function generateNodeSchema(nodeItem: NodeSchema, scope: IScope, config?: NodeGeneratorConfig): string {
+  const pieces: CodePiece[] = [];
+  if (config?.nodePlugins) {
+    const res = executeFunctionStack<NodeSchema, CodePiece[], NodeGeneratorConfig>(
+      nodeItem,
+      scope,
+      config.nodePlugins,
+      generateSimpleNode,
+      config,
+    );
+    pieces.push(...res);
+  } else {
+    pieces.push(...generateSimpleNode(nodeItem, scope, config));
   }
 
-  const generateNode = (nodeItem: IComponentNodeItem): string => {
-    let pieces: CodePiece[] = [];
-    const ctx: INodeGeneratorContext = {
-      generator: generateNode,
-    };
+  return linkPieces(pieces);
+}
 
-    plugins.forEach((p) => {
-      pieces = pieces.concat(p(ctx, nodeItem));
+// TODO: 生成文档
+// 为包裹的代码片段生成子上下文，集成父级上下文，并传入子级上下文新增内容。（如果存在多级上下文怎么处理？）
+// 创建新的上下文，并从作用域中取对应同名变量塞到作用域里面？
+// export function createSubContext() {}
+
+/**
+ * JSX 生成逻辑插件。在 React 代码模式下生成 loop 相关的逻辑代码
+ * @type NodePlugin Extended
+ *
+ * @export
+ * @param {NodeSchema} nodeItem 当前 UI 节点
+ * @returns {CodePiece[]} 实现功能的相关代码片段
+ */
+export function generateReactLoopCtrl(
+  nodeItem: NodeSchema,
+  scope: IScope,
+  config?: NodeGeneratorConfig,
+  next?: NodePlugin,
+): CodePiece[] {
+  const pieces: CodePiece[] = next ? next(nodeItem, scope, config) : [];
+
+  if (nodeItem.loop) {
+    const loopItemName = nodeItem.loopArgs?.[0] || 'item';
+    const loopIndexName = nodeItem.loopArgs?.[1] || 'index';
+
+    const loopDataExpr = generateCompositeType(nodeItem.loop, scope, {
+      handlers: config?.handlers,
     });
-    pieces = pieces.concat(generateBasicNode(ctx, nodeItem, nodeTypeMapping));
-    pieces = pieces.concat(generateAttrs(ctx, nodeItem));
-    if (nodeItem.children && (nodeItem.children as unknown[]).length > 0) {
-      pieces = pieces.concat(
-        handleChildren<string>(ctx, nodeItem.children, handlers).map((l) => ({
-          type: PIECE_TYPE.CHILDREN,
-          value: l,
-        })),
-      );
+
+    pieces.unshift({
+      value: `${loopDataExpr}.map((${loopItemName}, ${loopIndexName}) => (`,
+      type: PIECE_TYPE.BEFORE,
+    });
+
+    pieces.push({
+      value: '))',
+      type: PIECE_TYPE.AFTER,
+    });
+  }
+
+  return pieces;
+}
+
+/**
+ * JSX 生成逻辑插件。在 React 代码模式下生成 condition 相关的逻辑代码
+ * @type NodePlugin
+ *
+ * @export
+ * @param {NodeSchema} nodeItem 当前 UI 节点
+ * @returns {CodePiece[]} 实现功能的相关代码片段
+ */
+export function generateConditionReactCtrl(
+  nodeItem: NodeSchema,
+  scope: IScope,
+  config?: NodeGeneratorConfig,
+  next?: NodePlugin,
+): CodePiece[] {
+  const pieces: CodePiece[] = next ? next(nodeItem, scope, config) : [];
+
+  if (nodeItem.condition) {
+    const value = generateCompositeType(nodeItem.condition, scope, {
+      handlers: config?.handlers,
+    });
+
+    pieces.unshift({
+      value: `(${value}) && (`,
+      type: PIECE_TYPE.BEFORE,
+    });
+
+    pieces.push({
+      value: ')',
+      type: PIECE_TYPE.AFTER,
+    });
+  }
+
+  return pieces;
+}
+
+/**
+ * JSX 生成逻辑插件。在 React 代码模式下，如果 Node 生成结果是一个表达式，则对其进行 { Expression } 包装
+ * @type NodePlugin
+ *
+ * @export
+ * @param {NodeSchema} nodeItem 当前 UI 节点
+ * @returns {CodePiece[]} 实现功能的相关代码片段
+ */
+export function generateReactExprInJS(
+  nodeItem: NodeSchema,
+  scope: IScope,
+  config?: NodeGeneratorConfig,
+  next?: NodePlugin,
+): CodePiece[] {
+  const pieces: CodePiece[] = next ? next(nodeItem, scope, config) : [];
+
+  if (nodeItem.condition || nodeItem.loop) {
+    pieces.unshift({
+      value: '{',
+      type: PIECE_TYPE.BEFORE,
+    });
+
+    pieces.push({
+      value: '}',
+      type: PIECE_TYPE.AFTER,
+    });
+  }
+
+  return pieces;
+}
+
+const handleChildren = (v: string[]) => v.join('');
+
+export function createNodeGenerator(cfg: NodeGeneratorConfig = {}): NodeGenerator<string> {
+  const generateNode = (nodeItem: NodeDataType, scope: IScope): string => {
+    if (_.isArray(nodeItem)) {
+      const resList = nodeItem.map((n) => generateNode(n, scope));
+      return handleChildren(resList);
     }
 
-    return linkPieces(pieces);
-  };
+    if (isNodeSchema(nodeItem)) {
+      return generateNodeSchema(nodeItem, scope, {
+        ...cfg,
+        self: generateNode,
+      });
+    }
 
-  handlers.node = (input: IComponentNodeItem) => [generateNode(input)];
+    const valueStr = generateCompositeType(nodeItem, scope, {
+      handlers: cfg.handlers,
+      nodeGenerator: generateNode,
+    });
+
+    if (isPureString(valueStr)) {
+      return getPureStringContent(valueStr);
+    }
+
+    return `{${valueStr}}`;
+  };
 
   return generateNode;
 }
 
-export const generateString = (input: string) => [input];
+const defaultReactGeneratorConfig: NodeGeneratorConfig = {
+  nodePlugins: [generateReactExprInJS, generateConditionReactCtrl, generateReactLoopCtrl],
+};
 
-export function createReactNodeGenerator(cfg?: INodeGeneratorConfig): NodeGenerator {
-  return createNodeGenerator(
-    {
-      string: generateString,
-      expression: (input) => [generateExpression(input)],
-    },
-    [generateReactCtrlLine],
-    cfg,
-  );
+export function createReactNodeGenerator(cfg?: NodeGeneratorConfig): NodeGenerator<string> {
+  const newCfg = mergeNodeGeneratorConfig(defaultReactGeneratorConfig, cfg);
+
+  return createNodeGenerator(newCfg);
 }

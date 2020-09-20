@@ -34,7 +34,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     // Rax 先只支持 didMount 和 willUnmount 吧
 
     const ir = next.ir as IContainerInfo;
-    const { lifeCycles } = ir;
+    const lifeCycles = ir.lifeCycles;
 
     if (lifeCycles && !_.isEmpty(lifeCycles)) {
       Object.entries(lifeCycles).forEach(([lifeCycleName, lifeCycleMethodExpr]) => {

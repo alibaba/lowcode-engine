@@ -25,13 +25,13 @@
   },
   "husky": {
     "hooks": {
-      "commit-msg": "xima exec commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "xima exec lint-staged"
+      "pre-commit": "xima exec lint-staged",
+      "commit-msg": "xima exec commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": "xima exec eslint",
-    "**/*.{css,scss,less}": "xima exec stylelint"
+    "**/*.{css,scss,less}": "xima exec stylelint",
+    "**/*.{js,jsx,ts,tsx}": "xima exec eslint"
   },
   "devDependencies": {
     "ava": "^1.0.1",

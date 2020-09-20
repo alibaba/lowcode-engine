@@ -45,7 +45,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       dataSourceItems.forEach((ds) => {
         const dsType = ds.type || 'fetch';
         if (!(dsType in requestHandlersMap) && dsType !== 'custom') {
-          const handlerFactoryName = `__$$create${ changeCase.pascal(dsType) }RequestHandler`;
+          const handlerFactoryName = '__$$create' + changeCase.pascal(dsType) + 'RequestHandler';
 
           requestHandlersMap[dsType] = {
             type: 'JSExpression',
