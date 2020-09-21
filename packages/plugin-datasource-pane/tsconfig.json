@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.json",
-  "lib": ["es6", "dom"],
+  "lib": ["esnext", "dom"],
   "compilerOptions": {
     "outDir": "lib"
   },

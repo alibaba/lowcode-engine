@@ -1,0 +1,15 @@
+.lowcode-plugin-datasource-import-plugin-code {
+  height: unquote("calc(100vh - 48px - 48px - 42px)");
+  overflow: auto;
+  .error-msg {
+    line-height: 24px;
+    color: #f60;
+    font-size: 12px;
+  }
+  .btns {
+    margin-top: 8px;
+  }
+  .next-btn {
+    margin-right: 4px;
+  }
+}

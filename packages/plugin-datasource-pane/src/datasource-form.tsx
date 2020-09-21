@@ -1,5 +1,6 @@
 // @todo schema default
 import React, { PureComponent, ReactElement, FC } from 'react';
+import { Button } from '@alifd/next';
 import { SchemaForm, FormButtonGroup, Submit } from '@formily/next';
 import { ArrayTable, Input, Switch, NumberPicker } from '@formily/next-components';
 import _isPlainObject from 'lodash/isPlainObject';
@@ -164,8 +165,6 @@ export class DataSourceForm extends PureComponent<DataSourceFormProps, DataSourc
       }
     });
 
-    debugger;
-
     if (_get(formSchema, 'properties.options.properties.params')) {
       formSchema.properties.options.properties.params = {
         ...formSchema.properties.options.properties.params,
@@ -247,7 +246,7 @@ export class DataSourceForm extends PureComponent<DataSourceFormProps, DataSourc
     const { dataSource } = this.props;
 
     return (
-      <div className="lowcode-plugin-datasource-pane-datasource">
+      <div className="lowcode-plugin-datasource-form">
         <SchemaForm
           onSubmit={this.handleFormSubmit}
           components={{
@@ -258,13 +257,14 @@ export class DataSourceForm extends PureComponent<DataSourceFormProps, DataSourc
             Switch,
             JSFunction,
           }}
-          labelCol={3}
-          wrapperCol={21}
+          labelCol={4}
+          wrapperCol={19}
           schema={this.deriveSchema()}
           initialValues={this.deriveInitialData(dataSource)}
         >
-          <FormButtonGroup offset={7}>
+          <FormButtonGroup offset={4}>
             <Submit>提交</Submit>
+            <Button onClick={this.handleCancel}>取消</Button>
           </FormButtonGroup>
         </SchemaForm>
       </div>

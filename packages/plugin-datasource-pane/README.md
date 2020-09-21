@@ -1,26 +1,10 @@
-TODO
----
+## 低代码引擎 - 数据源面板插件
 
-* 多语言
-* [later]表达式和其他类型的切换
-* 现有场景代码的兼容
-* class publich method bind issue
-* ICON
-* 支持变量
-
-## 数据源面板
-
-数据源管理
-
-* 新建
-* 编辑
-* 导入
-* 指定数据源类型
-* 定制数据源导入插件
+对页面的数据源进行管理（新建，编辑，导入）。
 
 ## 数据源类型定义
 
-内置变量，http 和 mtop 类型，支持传入自定义类型。
+内置 fetch 和 mtop 类型，支持传入自定义类型。
 
 ```
 type DataSourceType = {
@@ -29,9 +13,7 @@ type DataSourceType = {
 };
 ```
 
-数据源类型需要在集团规范约束下扩展。
-
-目前只允许在 options 下添加扩展字段。
+数据源类型需要在集团规范约束下扩展。目前只允许在 options 下添加扩展字段。
 
 比如 mtop 类型，需要添加 options.v （版本）字段。
 
@@ -56,16 +38,8 @@ interface DataSourcePaneImportPluginComponentProps extends DataSourcePaneImportP
 }
 ```
 
-## 问题
-
-* 变量，上下文放数据源里管理是否合适
-* mockUrl 和 mockData
-* 设计器的设计语言无法统一
-
 ## 插件开发
 
-<https://yuque.antfin-inc.com/ali-lowcode/docs/ip4awq>
+[https://yuque.antfin-inc.com/ali-lowcode/docs/ip4awq](插件开发文档)。
 
-## node 版本
-
-v14.4.0
+本地开发需要在 v14.4.0 的 node 环境下进行。

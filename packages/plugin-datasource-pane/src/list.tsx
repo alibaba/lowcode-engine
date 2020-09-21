@@ -64,57 +64,77 @@ export default class DataSourceList extends PureComponent<DataSourceListProps, D
         ?.filter((item) => (keyword ? item.id.indexOf(keyword) !== -1 : true))
         ?.map((item) => (
           <li key={item.id}>
-            <Balloon
-              trigger={
-                <div>
-                  <Tag size="small">{item.type}</Tag>
-                  <Tag size="small">{item.isInit ? '自动' : '手动'}</Tag>
+            <div className="datasource-item">
+              <div className="datasource-item-title">
+                <div className="datasource-item-id" title={item.id}>
                   {item.id}
-                  <Button onClick={this.handleEditDataSource.bind(this, item.id)}>编辑</Button>
-                  <Button onClick={this.handleDuplicateDataSource.bind(this, item.id)}>复制</Button>
-                  <Button onClick={this.handleRemoveDataSource.bind(this, item.id)}>删除</Button>
                 </div>
-              }
-              align="r"
-              alignEdge
-              triggerType="hover"
-              style={{ width: 300 }}
-            >
-              <Table
-                dataSource={_tap(Object.keys(item.options || {}).reduce<TableRow[]>((acc, cur) => {
-                  // @todo 这里的 ts 处理得不好
-                  if (_isPlainObject(item.options[cur])) {
-                    Object.keys(item?.options?.[cur] || {}).forEach((curInOption) => {
-                      acc.push({
-                        label: `${cur}.${curInOption}`,
-                        value: (item?.options?.[cur] as any)?.[curInOption],
-                      });
-                    });
-                  } else if (!_isNil(item.options[cur])) {
-                    // @todo 排除 null
-                    acc.push({
-                      label: cur,
-                      value: item.options[cur],
-                    });
-                  }
-                  return acc;
-                }, []), console.log)}
-              >
-                <TableCol title="" dataIndex="label" />
-                <TableCol
-                  title=""
-                  dataIndex="value"
-                  cell={(val: any) => (
-                    <div>
-                      <Tag>
-                        {_isBoolean(val) ? 'bool' : _isNumber(val) ? 'number' : _isPlainObject(val) ? 'obj' : 'string'}
-                      </Tag>
-                      {val.toString()}
-                    </div>
-                  )}
-                />
-              </Table>
-            </Balloon>
+                <Balloon
+                  trigger={<Button size="small">详情</Button>}
+                  align="b"
+                  alignEdge
+                  triggerType="hover"
+                  style={{ width: 300 }}
+                >
+                  <Table
+                    dataSource={_tap(
+                      Object.keys(item.options || {}).reduce<TableRow[]>((acc, cur) => {
+                        // @todo 这里的 ts 处理得不好
+                        if (_isPlainObject(item.options[cur])) {
+                          Object.keys(item?.options?.[cur] || {}).forEach((curInOption) => {
+                            acc.push({
+                              label: `${cur}.${curInOption}`,
+                              value: (item?.options?.[cur] as any)?.[curInOption],
+                            });
+                          });
+                        } else if (!_isNil(item.options[cur])) {
+                          // @todo 排除 null
+                          acc.push({
+                            label: cur,
+                            value: item.options[cur],
+                          });
+                        }
+                        return acc;
+                      }, []),
+                      console.log,
+                    )}
+                  >
+                    <TableCol title="" dataIndex="label" />
+                    <TableCol
+                      title=""
+                      dataIndex="value"
+                      cell={(val: any) => (
+                        <div>
+                          <Tag>
+                            {_isBoolean(val)
+                              ? 'bool'
+                              : _isNumber(val)
+                                ? 'number'
+                                : _isPlainObject(val)
+                                  ? 'obj'
+                                  : 'string'}
+                          </Tag>
+                          {val.toString()}
+                        </div>
+                      )}
+                    />
+                  </Table>
+                </Balloon>
+                <Button size="small" onClick={this.handleEditDataSource.bind(this, item.id)}>
+                  编辑
+                </Button>
+                <Button size="small" onClick={this.handleDuplicateDataSource.bind(this, item.id)}>
+                  复制
+                </Button>
+                <Button size="small" onClick={this.handleRemoveDataSource.bind(this, item.id)}>
+                  删除
+                </Button>
+              </div>
+              <div className="datasource-item-desc">
+                <Tag size="small">{item.type}</Tag>
+                <Tag size="small">{item.isInit ? '自动' : '手动'}</Tag>
+              </div>
+            </div>
           </li>
         )) || []
     );
@@ -136,7 +156,9 @@ export default class DataSourceList extends PureComponent<DataSourceListProps, D
           }))}
           onFilterChange={this.handleSearchFilterChange}
         />
-        <VirtualList>{this.deriveListDataSource()}</VirtualList>
+        <div className="datasource-list">
+          <VirtualList>{this.deriveListDataSource()}</VirtualList>
+        </div>
       </div>
     );
   }

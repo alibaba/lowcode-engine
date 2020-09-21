@@ -4,6 +4,8 @@ import { DataSourcePane } from './pane';
 import { DataSourcePaneImportPlugin, DataSourceType } from './types';
 import { DataSourceImportPluginCode } from './import-plugins';
 
+import './index.scss';
+
 export { DataSourceImportPluginCode };
 
 const PLUGIN_NAME = 'dataSourcePane';

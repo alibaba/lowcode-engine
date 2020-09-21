@@ -14,6 +14,8 @@ import { DataSourceConfig } from '@ali/lowcode-types';
 import Ajv from 'ajv';
 import { DataSourcePaneImportPluginComponentProps } from '../types';
 
+import './code.scss';
+
 export interface DataSourceImportPluginCodeProps extends DataSourcePaneImportPluginComponentProps {
   defaultValue?: DataSourceConfig[];
 }
@@ -115,11 +117,11 @@ export class DataSourceImportPluginCode extends PureComponent<
     const { code, isCodeValid } = this.state;
 
     return (
-      <div>
+      <div className="lowcode-plugin-datasource-import-plugin-code">
         <MonacoEditor
           theme="vs-dark"
           width={800}
-          height={600}
+          height={400}
           defaultValue={code}
           language="json"
           onChange={this.handleEditorChange}
@@ -127,10 +129,10 @@ export class DataSourceImportPluginCode extends PureComponent<
           formatOnType
           formatOnPaste
         />
-        {!isCodeValid && <p>格式有误</p>}
-        <p>
+        {!isCodeValid && <p className="error-msg">格式有误</p>}
+        <p className="btns">
           <Button onClick={onCancel}>取消</Button>
-          <Button onClick={this.handleComplete}>确认</Button>
+          <Button type="primary" onClick={this.handleComplete}>确认</Button>
         </p>
       </div>
     );
