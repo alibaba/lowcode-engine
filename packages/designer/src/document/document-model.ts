@@ -193,7 +193,7 @@ export class DocumentModel {
   /**
    * 根据 schema 创建一个节点
    */
-  createNode<T extends Node = Node, C = undefined>(data: GetDataType<C, T>): T {
+  createNode<T extends Node = Node, C = undefined>(data: GetDataType<C, T>, checkId: boolean = true): T {
     let schema: any;
     if (isDOMText(data) || isJSExpression(data)) {
       schema = {
@@ -205,7 +205,7 @@ export class DocumentModel {
     }
 
     let node: Node | null = null;
-    if (this.inited) {
+    if (this.inited && checkId) {
       schema.id = null;
     }
     if (schema.id) {
