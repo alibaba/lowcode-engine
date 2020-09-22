@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
-import { PluginProps } from '@ali/lowcode-types';
+import { PluginProps, DataSource } from '@ali/lowcode-types';
+import _get from 'lodash/get';
+import _set from 'lodash/set';
 import { DataSourcePane } from './pane';
 import { DataSourcePaneImportPlugin, DataSourceType } from './types';
 import { DataSourceImportPluginCode } from './import-plugins';
@@ -113,6 +115,18 @@ export default class DataSourcePanePlugin extends PureComponent<DataSourcePanePr
     });
   }
 
+  handleSchemaChange = (schema: DataSource) => {
+    const { editor } = this.props;
+
+    if (editor.get('designer')) {
+      const docSchema = editor.get('designer').project.currentDocument.schema;
+      _set(docSchema, 'componentsTree[0].dataSource', schema);
+      debugger;
+      editor.get('designer').project.currentDocument.import(docSchema);
+      console.log('editor schema', editor.get('designer').schema);
+    }
+  };
+
   render() {
     const { importPlugins, dataSourceTypes = [], editor } = this.props;
     const { active } = this.state;
@@ -126,6 +140,7 @@ export default class DataSourcePanePlugin extends PureComponent<DataSourcePanePr
         importPlugins={BUILTIN_IMPORT_PLUGINS.concat(importPlugins)}
         dataSourceTypes={BUILTIN_DATASOURCE_TYPES.concat(dataSourceTypes)}
         defaultSchema={defaultSchema}
+        onSchemaChange={this.handleSchemaChange}
       />
     );
   }
