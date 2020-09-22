@@ -1,5 +1,5 @@
-import { isJSBlock, isJSExpression, isJSSlot, isI18nData } from '@ali/lowcode-types';
-import { isPlainObject, hasOwnProperty, cloneDeep } from '@ali/lowcode-utils';
+import { isJSBlock, isJSExpression, isJSSlot } from '@ali/lowcode-types';
+import { isPlainObject, hasOwnProperty, cloneDeep, isI18NObject, isUseI18NSetter, convertToI18NObject } from '@ali/lowcode-utils';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
 import { Designer, LiveEditing, TransformStage, Node, getConvertedExtraKey } from '@ali/lowcode-designer';
 import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
@@ -121,6 +121,10 @@ designer.addPropsReducer((props, node) => {
         const ov = newProps[item.name];
         const v = item.initial(node as any, getRealValue(ov));
         if (ov === undefined && v !== undefined) {
+          newProps[item.name] = v;
+        }
+        // 兼容 props 中的属性为 i18n 类型，但是仅提供了一个值
+        if (isUseI18NSetter(node.componentMeta.prototype, item.name) && !isI18NObject(ov)) {
           newProps[item.name] = v;
         }
       } catch (e) {
