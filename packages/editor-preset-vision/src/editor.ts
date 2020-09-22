@@ -138,7 +138,7 @@ designer.addPropsReducer((props, node) => {
     });
   }
   return newProps;
-}, TransformStage.Init);
+}, TransformStage.Render);
 
 designer.addPropsReducer((props: any, node: Node) => {
   // live 模式下解析 lifeCycles
@@ -311,26 +311,29 @@ designer.addPropsReducer(stylePropsReducer, TransformStage.Render);
 // 国际化 & Expression 渲染时处理
 designer.addPropsReducer(deepValueParser, TransformStage.Render);
 
-designer.addPropsReducer((props: any, node: Node) => {
-  if (node.isRoot()) {
-    if (props.dataSource) {
-      const online = cloneDeep(props.dataSource.online);
-      online.forEach((item: any) => {
-        const newParam: any = {};
-        if (item.options && item.options.params && item.options.params.length) {
-          item.options.params.map((element: any) => {
-            if (element.name && element.value) {
-              newParam[element.name] = element.value;
-            }
-          });
-          item.options.params = newParam;
-        }
-      });
-      props.dataSource.list = online;
-    }
+// 清除空的 props value
+function removeEmptyProps(props: any, node: Node) {
+  if (props.dataSource) {
+    const online = cloneDeep(props.dataSource.online);
+    online.forEach((item: any) => {
+      const newParam: any = {};
+      if (item.options && item.options.params && item.options.params.length) {
+        item.options.params.map((element: any) => {
+          if (element.name) {
+            newParam[element.name] = element.value;
+          }
+        });
+        item.options.params = newParam;
+      }
+    });
+    props.dataSource.list = online;
   }
   return props;
-}, TransformStage.Render);
+}
+
+// Init 的时候没有拿到 dataSource, 只能在 Render 和 Save 的时候都调用一次，理论上执行时机在 Init
+designer.addPropsReducer(removeEmptyProps, TransformStage.Render);
+designer.addPropsReducer(removeEmptyProps, TransformStage.Save);
 
 skeleton.add({
   area: 'mainArea',
