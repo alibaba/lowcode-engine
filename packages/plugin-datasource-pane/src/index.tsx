@@ -118,10 +118,10 @@ export default class DataSourcePanePlugin extends PureComponent<DataSourcePanePr
   handleSchemaChange = (schema: DataSource) => {
     const { editor } = this.props;
 
+    // @TODO 姿势是否最优？
     if (editor.get('designer')) {
       const docSchema = editor.get('designer').project.currentDocument.schema;
       _set(docSchema, 'componentsTree[0].dataSource', schema);
-      debugger;
       editor.get('designer').project.currentDocument.import(docSchema);
       console.log('editor schema', editor.get('designer').schema);
     }
