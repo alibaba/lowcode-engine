@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.9-8"></a>
+## [1.0.9-8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.9-7...v1.0.9-8) (2020-09-22)
+
+
+### Bug Fixes
+
+* JSSlot 格式也需要转换成 JSBlock ([e591aba](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e591aba))
+* revert 一段错误修改的代码 & 优化代码 ([614dbf2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/614dbf2))
+* save 的时候删除空的 props ([69cda3e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/69cda3e))
+* vision兼容标准api ([394db8d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/394db8d))
+* 修复修改 勾选框、富文本编辑器、下拉选择 等组件标题报错 ([8ba26ee](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8ba26ee))
+* 去除乐高vision兼容影响 ([9e47561](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9e47561))
+
+
+
+
 <a name="1.0.9-7"></a>
 ## [1.0.9-7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.9-5...v1.0.9-7) (2020-09-18)
 

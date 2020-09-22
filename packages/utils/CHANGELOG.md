@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.9-8"></a>
+## [1.0.9-8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.9-7...v1.0.9-8) (2020-09-22)
+
+
+### Bug Fixes
+
+* 修复修改 勾选框、富文本编辑器、下拉选择 等组件标题报错 ([8ba26ee](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8ba26ee))
+
+
+
+
 <a name="1.0.9-7"></a>
 ## [1.0.9-7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.9-5...v1.0.9-7) (2020-09-18)
 
