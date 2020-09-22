@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.12.1-1"></a>
+## [0.12.1-1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.9-9...v0.12.1-1) (2020-09-22)
+
+
+### Bug Fixes
+
+* path with / ([2470363](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2470363))
+
+
+
+
 <a name="1.0.9-9"></a>
 ## [1.0.9-9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.9-8...v1.0.9-9) (2020-09-22)
 
