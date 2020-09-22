@@ -19,9 +19,9 @@ export interface DataSourcePaneState {
   active: boolean;
 }
 
-const BUILTIN_DATASOURCE_TYPES = [
+const BUILTIN_DATASOURCE_TYPES: DataSourceType[] = [
   {
-    type: 'http',
+    type: 'fetch',
     schema: {
       type: 'object',
       properties: {
@@ -56,9 +56,25 @@ const BUILTIN_DATASOURCE_TYPES = [
       },
     },
   },
+  {
+    type: 'jsonp',
+    schema: {
+      type: 'object',
+      properties: {
+        options: {
+          type: 'object',
+          properties: {
+            method: {
+              enum: ['GET'],
+            },
+          },
+        },
+      },
+    },
+  },
 ];
 
-const BUILTIN_IMPORT_PLUGINS = [
+const BUILTIN_IMPORT_PLUGINS: DataSourcePaneImportPlugin[] = [
   {
     name: 'default',
     title: '源码',
@@ -98,7 +114,7 @@ export default class DataSourcePanePlugin extends PureComponent<DataSourcePanePr
   }
 
   render() {
-    const { importPlugins, dataSourceTypes, editor } = this.props;
+    const { importPlugins, dataSourceTypes = [], editor } = this.props;
     const { active } = this.state;
 
     if (!active) return null;
@@ -114,3 +130,5 @@ export default class DataSourcePanePlugin extends PureComponent<DataSourcePanePr
     );
   }
 }
+
+export * from './types';

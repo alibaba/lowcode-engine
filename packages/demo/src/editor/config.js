@@ -139,7 +139,7 @@ export default {
         type: 'PanelIcon',
         props: {
           align: 'top',
-          icon: 'wenjian',
+          icon: 'shujuyuan',
           description: '数据源面板',
           panelProps: {
             floatable: true,

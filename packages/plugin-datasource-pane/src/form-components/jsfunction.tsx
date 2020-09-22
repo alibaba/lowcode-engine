@@ -1,60 +1,46 @@
-import React, { PureComponent, createRef } from 'react';
-import { Button, Input, Radio, NumberPicker, Switch } from '@alifd/next';
+import React, { PureComponent } from 'react';
 import { connect } from '@formily/react-schema-renderer';
-import _isPlainObject from 'lodash/isPlainObject';
-import _isArray from 'lodash/isArray';
-import _isNumber from 'lodash/isNumber';
-import _isString from 'lodash/isString';
-import _isBoolean from 'lodash/isBoolean';
-import _get from 'lodash/get';
-import _tap from 'lodash/tap';
 import MonacoEditor, { EditorWillMount } from 'react-monaco-editor';
-
-const { Group: RadioGroup } = Radio;
+import _noop from 'lodash/noop';
+import { editor } from 'monaco-editor';
 
 export interface JSFunctionProps {
   className: string;
   value: any;
-  onChange?: () => void;
+  onChange?: (val: any) => void;
 }
 
-export interface JSFunctionState {
-}
+export type JSFunctionState = {};
 
 class JSFunctionComp extends PureComponent<JSFunctionProps, JSFunctionState> {
   static isFieldComponent = true;
 
-  private monacoRef = createRef<editor.IStandaloneCodeEditor>();
+  static defaultProps = {
+    onChange: _noop,
+  };
 
-  constructor(props) {
-    super(props);
-    this.handleEditorChange = this.handleEditorChange.bind(this);
-  }
+  private monacoRef: any = null;
 
   handleEditorChange = () => {
-    if (this.monacoRef.current) {
-      if (
-        !(this.monacoRef.current as editor.IStandaloneCodeEditor)
-          .getModelMarkers()
-          .find((marker: editor.IMarker) => marker.owner === 'json')
-      ) {
-        this.props?.onChange(this.monacoRef.current?.getModels()?.[0]?.getValue());
+    if (this.monacoRef) {
+      if (!(this.monacoRef as any).getModelMarkers().find((marker: editor.IMarker) => marker.owner === 'json')) {
+        this.props.onChange?.((this.monacoRef as any)?.getModels()?.[0]?.getValue());
       }
     }
   };
 
   handleEditorWillMount: EditorWillMount = (editor) => {
-    (this.monacoRef as MutableRefObject<editor.IStandaloneCodeEditor>).current = editor?.editor;
+    this.monacoRef = editor?.editor;
   };
 
   render() {
-    const { value, onChange } = this.props;
+    const { value } = this.props;
     return (
       <MonacoEditor
         theme="vs-dark"
         width={400}
         height={150}
-        defaulvValue={value}
+        defaultValue={value}
         language="js"
         onChange={this.handleEditorChange}
         editorWillMount={this.handleEditorWillMount}

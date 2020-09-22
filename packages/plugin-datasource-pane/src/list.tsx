@@ -10,6 +10,13 @@ import { DataSourceType } from './types';
 
 const { Column: TableCol } = Table;
 
+function deriveTypeFromValue(val: any) {
+  if (_isBoolean(val)) return 'bool';
+  if (_isNumber(val)) return 'number';
+  if (_isPlainObject(val)) return 'obj';
+  return 'string';
+}
+
 export interface DataSourceListProps {
   dataSourceTypes: DataSourceType[];
   dataSource: DataSourceConfig[];
@@ -56,7 +63,7 @@ export default class DataSourceList extends PureComponent<DataSourceListProps, D
 
   deriveListDataSource = () => {
     const { filteredType, keyword } = this.state;
-    const { dataSource } = this.props;
+    const { dataSource, dataSourceTypes } = this.props;
 
     return (
       dataSource
@@ -69,63 +76,61 @@ export default class DataSourceList extends PureComponent<DataSourceListProps, D
                 <div className="datasource-item-id" title={item.id}>
                   {item.id}
                 </div>
-                <Balloon
-                  trigger={<Button size="small">详情</Button>}
-                  align="b"
-                  alignEdge
-                  triggerType="hover"
-                  style={{ width: 300 }}
-                >
-                  <Table
-                    dataSource={_tap(
-                      Object.keys(item.options || {}).reduce<TableRow[]>((acc, cur) => {
-                        // @todo 这里的 ts 处理得不好
-                        if (_isPlainObject(item.options[cur])) {
-                          Object.keys(item?.options?.[cur] || {}).forEach((curInOption) => {
-                            acc.push({
-                              label: `${cur}.${curInOption}`,
-                              value: (item?.options?.[cur] as any)?.[curInOption],
-                            });
-                          });
-                        } else if (!_isNil(item.options[cur])) {
-                          // @todo 排除 null
-                          acc.push({
-                            label: cur,
-                            value: item.options[cur],
-                          });
-                        }
-                        return acc;
-                      }, []),
-                      console.log,
-                    )}
+                {!!dataSourceTypes.find((ds) => ds.type === item.type) && (
+                  <Balloon
+                    trigger={<Button size="small">详情</Button>}
+                    align="b"
+                    alignEdge
+                    triggerType="hover"
+                    style={{ width: 300 }}
                   >
-                    <TableCol title="" dataIndex="label" />
-                    <TableCol
-                      title=""
-                      dataIndex="value"
-                      cell={(val: any) => (
-                        <div>
-                          <Tag>
-                            {_isBoolean(val)
-                              ? 'bool'
-                              : _isNumber(val)
-                                ? 'number'
-                                : _isPlainObject(val)
-                                  ? 'obj'
-                                  : 'string'}
-                          </Tag>
-                          {val.toString()}
-                        </div>
+                    <Table
+                      dataSource={_tap(
+                        Object.keys(item.options || {}).reduce<TableRow[]>((acc, cur) => {
+                          // @todo 这里的 ts 处理得不好
+                          if (_isPlainObject(item.options[cur])) {
+                            Object.keys(item?.options?.[cur] || {}).forEach((curInOption) => {
+                              acc.push({
+                                label: `${cur}.${curInOption}`,
+                                value: (item?.options?.[cur] as any)?.[curInOption],
+                              });
+                            });
+                          } else if (!_isNil(item.options[cur])) {
+                            // @todo 排除 null
+                            acc.push({
+                              label: cur,
+                              value: item.options[cur],
+                            });
+                          }
+                          return acc;
+                        }, []),
+                        console.log,
                       )}
-                    />
-                  </Table>
-                </Balloon>
-                <Button size="small" onClick={this.handleEditDataSource.bind(this, item.id)}>
-                  编辑
-                </Button>
-                <Button size="small" onClick={this.handleDuplicateDataSource.bind(this, item.id)}>
-                  复制
-                </Button>
+                    >
+                      <TableCol title="" dataIndex="label" />
+                      <TableCol
+                        title=""
+                        dataIndex="value"
+                        cell={(val: any) => (
+                          <div>
+                            <Tag>{deriveTypeFromValue(val)}</Tag>
+                            {val.toString()}
+                          </div>
+                        )}
+                      />
+                    </Table>
+                  </Balloon>
+                )}
+                {!!dataSourceTypes.find((ds) => ds.type === item.type) && (
+                  <Button size="small" onClick={this.handleEditDataSource.bind(this, item.id)}>
+                    编辑
+                  </Button>
+                )}
+                {!!dataSourceTypes.find((ds) => ds.type === item.type) && (
+                  <Button size="small" onClick={this.handleDuplicateDataSource.bind(this, item.id)}>
+                    复制
+                  </Button>
+                )}
                 <Button size="small" onClick={this.handleRemoveDataSource.bind(this, item.id)}>
                   删除
                 </Button>
@@ -142,6 +147,7 @@ export default class DataSourceList extends PureComponent<DataSourceListProps, D
 
   render() {
     const { dataSourceTypes } = this.props;
+    const { filteredType } = this.state;
 
     return (
       <div className="lowcode-plugin-datasource-pane-list">
@@ -149,11 +155,18 @@ export default class DataSourceList extends PureComponent<DataSourceListProps, D
           hasClear
           onSearch={this.handleSearch}
           filterProps={{}}
-          defaultFilterValue={dataSourceTypes?.[0]?.type}
-          filter={dataSourceTypes.map((type) => ({
-            label: type?.type,
-            value: type?.type,
-          }))}
+          defaultFilterValue={filteredType}
+          filter={[
+            {
+              label: '全部',
+              value: '',
+            },
+          ].concat(
+            dataSourceTypes.map((type) => ({
+              label: type?.type,
+              value: type?.type,
+            })),
+          )}
           onFilterChange={this.handleSearchFilterChange}
         />
         <div className="datasource-list">

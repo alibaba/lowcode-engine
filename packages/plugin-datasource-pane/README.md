@@ -2,9 +2,49 @@
 
 对页面的数据源进行管理（新建，编辑，导入）。
 
+一个 pluginProps 的例子
+
+```
+{
+  importPlugins: [
+    {
+      name: 'code',
+      title: '源码',
+      content: DataSourceImportPluginCode,
+    },
+  ],
+  dataSourceTypes: [
+    {
+      type: 'mopen',
+      schema: {
+        type: 'object',
+        properties: {
+          options: {
+            type: 'object',
+            properties: {
+              uri: {
+                title: 'api',
+              },
+              v: {
+                title: 'v',
+                type: 'string',
+              },
+              appKey: {
+                title: 'appKey',
+                type: 'string',
+              },
+            },
+          },
+        },
+      },
+    },
+  ],
+}
+```
+
 ## 数据源类型定义
 
-内置 fetch 和 mtop 类型，支持传入自定义类型。
+内置 fetch，mtop，jsonp 类型，支持传入自定义类型。
 
 ```
 type DataSourceType = {
@@ -29,17 +69,15 @@ interface DataSourcePaneImportPlugin {
   componentProps?: DataSourcePaneImportPluginCustomProps;
 }
 
-interface DataSourcePaneImportPluginCustomProps {
-  [customPropName: string]: any;
+interface DataSourcePaneImportPluginComponentProps {
+  onImport?: (dataSourceList: DataSourceConfig[]) => void;
+  onCancel?: () => void;
+  dataSourceTypes?: DataSourceType[];
 }
 
-interface DataSourcePaneImportPluginComponentProps extends DataSourcePaneImportPluginCustomProps {
-  onChange: (dataSourceList: DataSourceConfig[]) => void;
+interface DataSourcePaneImportPluginCustomProps extends DataSourcePaneImportPluginComponentProps {
+  [customPropName: string]: any;
 }
 ```
 
-## 插件开发
 
-[https://yuque.antfin-inc.com/ali-lowcode/docs/ip4awq](插件开发文档)。
-
-本地开发需要在 v14.4.0 的 node 环境下进行。

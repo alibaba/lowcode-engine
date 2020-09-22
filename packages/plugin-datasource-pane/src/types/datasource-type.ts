@@ -1,6 +1,6 @@
-import { JSONSchema4 } from '@types/json-schema';
+import { JSONSchema6 } from 'json-schema';
 
 export type DataSourceType = {
   type: string;
-  schema: JSONSchema4
+  schema: JSONSchema6;
 };

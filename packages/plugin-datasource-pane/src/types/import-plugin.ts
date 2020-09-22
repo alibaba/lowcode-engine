@@ -9,11 +9,11 @@ export interface DataSourcePaneImportPlugin {
   componentProps?: DataSourcePaneImportPluginCustomProps;
 }
 
-export interface DataSourcePaneImportPluginCustomProps {
+export interface DataSourcePaneImportPluginCustomProps extends DataSourcePaneImportPluginComponentProps {
   [customPropName: string]: any;
 }
 
-export interface DataSourcePaneImportPluginComponentProps extends DataSourcePaneImportPluginCustomProps {
+export interface DataSourcePaneImportPluginComponentProps {
   dataSourceTypes: DataSourceType[];
   onImport?: (dataSourceList: DataSourceConfig[]) => void;
   onCancel?: () => void;

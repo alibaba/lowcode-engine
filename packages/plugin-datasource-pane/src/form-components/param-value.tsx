@@ -19,12 +19,12 @@ type ParamValueType = 'string' | 'number' | 'boolean' | 'expression';
 export interface ParamValueProps {
   className: string;
   value: any;
-  onChange?: () => void;
+  onChange?: (value: any) => void;
   types: ParamValueType[];
 }
 
 export interface ParamValueState {
-  type: 'string' | 'number' | 'boolean' | '';
+  type: ParamValueType;
 }
 
 const TYPE_LABEL_MAP = {
@@ -41,16 +41,17 @@ class ParamValueComp extends PureComponent<ParamValueProps, ParamValueState> {
     types: ['string', 'boolean', 'number', 'expression'],
   };
 
-  state = {
-    type: '',
+  state: ParamValueState = {
+    type: 'string',
   };
 
-  constructor(props) {
+  constructor(props: ParamValueProps) {
     super(props);
     this.state.type = this.getTypeFromValue(this.props.value);
   }
 
-  getTypeFromValue = (value) => {
+  // @todo
+  getTypeFromValue = (value: any) => {
     if (_isBoolean(value)) {
       return 'boolean';
     } else if (_isNumber(value)) {
@@ -62,36 +63,38 @@ class ParamValueComp extends PureComponent<ParamValueProps, ParamValueState> {
   };
 
   // @todo 需要再 bind 一次？
-  handleChange = (value) => {
-    this.props?.onChange(value);
+  handleChange = (value: any) => {
+    this.props?.onChange?.(value);
   };
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: ParamValueProps) {
     if (this.props.value !== prevProps.value) {
       this.setState({
-        value: this.props.value,
         type: this.getTypeFromValue(this.props.value),
       });
     }
   }
 
-  handleTypeChange = (type) => {
-    this.setState(({ value }) => {
-      let nextValue = value || '';
-      if (type === 'string') {
-        nextValue = nextValue.toString();
-      } else if (type === 'number') {
-        nextValue = nextValue * 1;
-      } else if (type === 'boolean') {
-        nextValue = nextValue === 'true' || nextValue;
-      } else if (type === 'expression') {
-        nextValue = '';
-      }
-      return {
-        value: nextValue,
-        type,
-      };
-    });
+  handleTypeChange = (type: string) => {
+    this.setState(
+      {
+        type: type as ParamValueType,
+      },
+      () => {
+        let nextValue = this.props.value || '';
+        const { type } = this.state;
+        if (type === 'string') {
+          nextValue = nextValue.toString();
+        } else if (type === 'number') {
+          nextValue = nextValue * 1;
+        } else if (type === 'boolean') {
+          nextValue = nextValue === 'true' || nextValue;
+        } else if (type === 'expression') {
+          nextValue = '';
+        }
+        this.props.onChange?.(nextValue);
+      },
+    );
   };
 
   renderTypeSelect = () => {
@@ -107,6 +110,7 @@ class ParamValueComp extends PureComponent<ParamValueProps, ParamValueState> {
             value: item,
           }))}
           value={type}
+          onChange={this.handleTypeChange}
         />
       );
     }
@@ -134,10 +138,10 @@ class ParamValueComp extends PureComponent<ParamValueProps, ParamValueState> {
     return (
       <div className="param-value">
         {this.renderTypeSelect()}
-        {type === 'string' && <Input onChange={this.handleChange.bind(this)} value={value} />}
-        {type === 'boolean' && <Switch onChange={this.handleChange.bind(this)} checked={value} />}
-        {type === 'number' && <NumberPicker onChange={this.handleChange.bind(this)} value={value} />}
-        {type === 'expression' && <ExpressionSetter onChange={this.handleChange.bind(this)} value={value} />}
+        {type === 'string' && <Input onChange={this.handleChange} value={value} />}
+        {type === 'boolean' && <Switch onChange={this.handleChange} checked={value} />}
+        {type === 'number' && <NumberPicker onChange={this.handleChange} value={value} />}
+        {type === 'expression' && <ExpressionSetter onChange={this.handleChange} value={value} />}
       </div>
     );
   }

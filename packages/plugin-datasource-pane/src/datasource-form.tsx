@@ -1,20 +1,17 @@
 // @todo schema default
-import React, { PureComponent, ReactElement, FC } from 'react';
+import React, { PureComponent } from 'react';
 import { Button } from '@alifd/next';
 import { SchemaForm, FormButtonGroup, Submit } from '@formily/next';
 import { ArrayTable, Input, Switch, NumberPicker } from '@formily/next-components';
 import _isPlainObject from 'lodash/isPlainObject';
 import _isArray from 'lodash/isArray';
-import _isNumber from 'lodash/isNumber';
-import _isString from 'lodash/isString';
-import _isBoolean from 'lodash/isBoolean';
 import _cloneDeep from 'lodash/cloneDeep';
 import _mergeWith from 'lodash/mergeWith';
 import _get from 'lodash/get';
-import _tap from 'lodash/tap';
 import traverse from 'traverse';
+import { DataSourceConfig } from '@ali/lowcode-types';
 import { ParamValue, JSFunction } from './form-components';
-import { DataSourceType, DataSourceConfig } from './types';
+import { DataSourceType } from './types';
 
 // @todo $ref
 
@@ -89,11 +86,11 @@ const SCHEMA = {
 export interface DataSourceFormProps {
   dataSourceType: DataSourceType;
   dataSource?: DataSourceConfig;
-  omComplete?: (dataSource: DataSourceConfig) => void;
+  onComplete?: (dataSource: DataSourceConfig) => void;
+  onCancel?: () => void;
 }
 
-export interface DataSourceFormState {
-}
+export type DataSourceFormState = {};
 
 /**
  * 通过是否存在 ID 来决定读写状态
@@ -101,65 +98,63 @@ export interface DataSourceFormState {
 export class DataSourceForm extends PureComponent<DataSourceFormProps, DataSourceFormState> {
   state = {};
 
-  handleFormSubmit = (formData) => {
+  handleFormSubmit = (formData: any) => {
     // @todo mutable?
     if (_isArray(_get(formData, 'options.params'))) {
-      formData.options.params = formData.options.params.reduce((acc, cur) => {
-        if (!cur.name) return;
+      formData.options.params = formData.options.params.reduce((acc: any, cur: any) => {
+        if (!cur.name) return acc;
         acc[cur.name] = cur.value;
         return acc;
       }, {});
     }
     if (_isArray(_get(formData, 'options.headers'))) {
-      formData.options.headers = formData.options.headers.reduce((acc, cur) => {
-        if (!cur.name) return;
+      formData.options.headers = formData.options.headers.reduce((acc: any, cur: any) => {
+        if (!cur.name) return acc;
         acc[cur.name] = cur.value;
         return acc;
       }, {});
     }
-    console.log('submit', formData);
-    this.props?.onComplete(formData);
+    // console.log('submit', formData);
+    this.props.onComplete?.(formData);
   };
 
-  deriveInitialData = (dataSource = {}) => {
+  handleCancel = () => {
+    this.props.onCancel?.();
+  };
+
+  deriveInitialData = (dataSource: object = {}) => {
     const { dataSourceType } = this.props;
-    const result = _cloneDeep(dataSource);
+    const result: any = _cloneDeep(dataSource);
 
     if (_isPlainObject(_get(result, 'options.params'))) {
-      result.options.params = Object.keys(result.options.params).reduce(
-        (acc, cur) => {
-          acc.push({
-            name: cur,
-            value: result.options.params[cur]
-          });
-          return acc;
-        },
-        []
-      );
+      result.options.params = Object.keys(result.options.params).reduce((acc: any, cur: any) => {
+        acc.push({
+          name: cur,
+          value: result.options.params[cur],
+        });
+        return acc;
+      }, []);
     }
     if (_isPlainObject(_get(result, 'options.headers'))) {
-      result.options.headers = Object.keys(result.options.headers).reduce(
-        (acc, cur) => {
-          acc.push({
-            name: cur,
-            value: result.options.headers[cur]
-          });
-          return acc;
-        },
-        []
-      );
+      result.options.headers = Object.keys(result.options.headers).reduce((acc: any, cur: any) => {
+        acc.push({
+          name: cur,
+          value: result.options.headers[cur],
+        });
+        return acc;
+      }, []);
     }
 
     result.type = dataSourceType.type;
 
     return result;
-  }
+  };
 
   deriveSchema = () => {
     const { dataSourceType } = this.props;
 
     // @todo 减小覆盖的风险
-    const formSchema = _mergeWith({}, SCHEMA, dataSourceType.schema, (objValue, srcValue) => {
+    const formSchema: any = _mergeWith({}, SCHEMA, dataSourceType.schema, (objValue, srcValue) => {
       if (_isArray(objValue)) {
         return srcValue;
       }
@@ -185,16 +180,11 @@ export class DataSourceForm extends PureComponent<DataSourceFormProps, DataSourc
               type: 'string',
               'x-component': 'ParamValue',
               'x-component-props': {
-                types: [
-                  'string',
-                  'boolean',
-                  'expression',
-                  'number'
-                ],
+                types: ['string', 'boolean', 'expression', 'number'],
               },
             },
           },
-        }
+        },
       };
       delete formSchema.properties.options.properties.params.properties;
     }
@@ -218,9 +208,7 @@ export class DataSourceForm extends PureComponent<DataSourceFormProps, DataSourc
               type: 'string',
               'x-component': 'ParamValue',
               'x-component-props': {
-                types: [
-                  'string'
-                ],
+                types: ['string'],
               },
             },
           },
@@ -257,8 +245,12 @@ export class DataSourceForm extends PureComponent<DataSourceFormProps, DataSourc
             Switch,
             JSFunction,
           }}
-          labelCol={4}
-          wrapperCol={19}
+          labelCol={{
+            span: 4,
+          }}
+          wrapperCol={{
+            span: 19,
+          }}
           schema={this.deriveSchema()}
           initialValues={this.deriveInitialData(dataSource)}
         >

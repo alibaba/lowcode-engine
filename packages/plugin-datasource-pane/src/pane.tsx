@@ -6,7 +6,6 @@ import { DataSource, DataSourceConfig } from '@ali/lowcode-types';
 import { Tab, Button, MenuButton, Message, Dialog } from '@alifd/next';
 import _cloneDeep from 'lodash/cloneDeep';
 import _uniqueId from 'lodash/uniqueId';
-import _startsWith from 'lodash/startsWith';
 import _isArray from 'lodash/isArray';
 import _get from 'lodash/get';
 import List from './list';
@@ -29,15 +28,12 @@ export interface DataSourcePaneProps {
   onSchemaChange?: (schema: DataSource) => void;
 }
 
-export interface TabItemProps {
+export interface TabItem {
   key: string;
   title: string;
   closeable: boolean;
-  data: any;
-}
-
-export interface TabItem {
-  tabItemProps: TabItemProps;
+  data?: any;
+  content?: any;
 }
 
 export interface DataSourcePaneState {
@@ -47,31 +43,17 @@ export interface DataSourcePaneState {
 }
 
 export class DataSourcePane extends PureComponent<DataSourcePaneProps, DataSourcePaneState> {
-  state = {
+  state: DataSourcePaneState = {
     dataSourceList: [...(this.props.defaultSchema?.list || [])],
     tabItems: [
       {
-        tabItemProps: {
-          key: TAB_ITEM_LIST,
-          title: '数据源列表',
-          closeable: false,
-        },
+        key: TAB_ITEM_LIST,
+        title: '数据源列表',
+        closeable: false,
       },
     ],
     activeTabKey: TAB_ITEM_LIST,
   };
-
-  constructor(props) {
-    super(props);
-    // this.handleDataSourceListChange = this.handleDataSourceListChange.bind(this);
-    // this.handleImportDataSourceList = this.handleImportDataSourceList.bind(this);
-    // this.handleCreateDataSource = this.handleCreateDataSource.bind(this);
-    // this.handleUpdateDataSource = this.handleUpdateDataSource.bind(this);
-    // this.handleRemoveDataSource = this.handleRemoveDataSource.bind(this);
-    // this.handleDuplicateDataSource = this.handleDuplicateDataSource.bind(this);
-    // this.handleEditDataSource = this.handleEditDataSource.bind(this);
-    // this.handleTabChange = this.handleTabChange.bind(this);
-  }
 
   handleDataSourceListChange = (dataSourceList?: DataSourceConfig[]) => {
     if (dataSourceList) {
@@ -99,16 +81,16 @@ export class DataSourcePane extends PureComponent<DataSourcePaneProps, DataSourc
       return;
     }
     const repeatedDataSourceList = toImport.filter(
-      item => !!this.state.dataSourceList.find(
-        dataSource => dataSource.id === item.id
-      )
+      (item) => !!this.state.dataSourceList.find((dataSource) => dataSource.id === item.id),
     );
     if (repeatedDataSourceList.length > 0) {
       Dialog.confirm({
-        content: `数据源（${repeatedDataSourceList.map(item => item.id).join('，')}）已存在，如果导入会替换原数据源，是否继续？`,
+        content: `数据源（${repeatedDataSourceList
+          .map((item) => item.id)
+          .join('，')}）已存在，如果导入会替换原数据源，是否继续？`,
         onOk: () => {
           importDataSourceList();
-        }
+        },
       });
       return;
     }
@@ -131,14 +113,12 @@ export class DataSourcePane extends PureComponent<DataSourcePaneProps, DataSourc
         },
       );
     };
-    if (this.state.dataSourceList.find(
-      dataSource => dataSource.id === toCreate.id
-    )) {
+    if (this.state.dataSourceList.find((dataSource) => dataSource.id === toCreate.id)) {
       Dialog.confirm({
         content: `数据源（${toCreate.id}）已存在，如果导入会替换原数据源，是否继续？`,
         onOk: () => {
           create();
-        }
+        },
       });
       return;
     }
@@ -179,12 +159,13 @@ export class DataSourcePane extends PureComponent<DataSourcePaneProps, DataSourc
       content: `确定要删除吗？`,
       onOk: () => {
         remove();
-      }
+      },
     });
   };
 
   handleDuplicateDataSource = (dataSourceId: string) => {
     const target = this.state.dataSourceList.find((item) => item.id === dataSourceId);
+    if (!target) return;
     const cloned = _cloneDeep(target);
 
     this.openCreateDataSourceTab({
@@ -195,6 +176,7 @@ export class DataSourcePane extends PureComponent<DataSourcePaneProps, DataSourc
 
   handleEditDataSource = (dataSourceId: string) => {
     const target = this.state.dataSourceList.find((item) => item.id === dataSourceId);
+    if (!target) return;
     const cloned = _cloneDeep(target);
 
     this.openEditDataSourceTab({
@@ -207,22 +189,18 @@ export class DataSourcePane extends PureComponent<DataSourcePaneProps, DataSourc
     this.setState({ activeTabKey });
   };
 
-  openCreateDataSourceTab = (dataSourceTypeName: string) => {
+  openCreateDataSourceTab = (dataSource: DataSourceConfig) => {
     const { tabItems } = this.state;
-    const { dataSourceTypes } = this.props;
+    const { dataSourceTypes = [] } = this.props;
 
-    if (!tabItems.find((item) => item.tabItemProps.key === TAB_ITEM_CREATE)) {
+    if (!tabItems.find((item) => item.key === TAB_ITEM_CREATE)) {
       this.setState(({ tabItems }) => ({
         tabItems: tabItems.concat({
-          tabItemProps: {
-            key: TAB_ITEM_CREATE,
-            title: `添加数据源`,
-            closeable: true,
-            data: {
-              dataSourceType: dataSourceTypes?.find(
-                type => type.type === dataSourceTypeName
-              ),
-            },
+          key: TAB_ITEM_CREATE,
+          title: `添加数据源`,
+          closeable: true,
+          data: {
+            dataSourceType: dataSourceTypes?.find((type) => type.type === dataSource.type),
           },
         }),
       }));
@@ -232,23 +210,31 @@ export class DataSourcePane extends PureComponent<DataSourcePaneProps, DataSourc
     }
   };
 
+  handleCreateDataSourceBtnClick = (dataSourceType: string) => {
+    this.openCreateDataSourceTab({
+      type: dataSourceType,
+    } as DataSourceConfig);
+  };
+
+  handleCreateDataSourceMenuBtnClick = (dataSourceType: string) => {
+    this.openCreateDataSourceTab({
+      type: dataSourceType,
+    } as DataSourceConfig);
+  };
+
   openEditDataSourceTab = (dataSource: DataSourceConfig) => {
     const { tabItems } = this.state;
-    const { dataSourceTypes } = this.props;
+    const { dataSourceTypes = [] } = this.props;
 
-    if (!tabItems.find((item) => item.tabItemProps.key === TAB_ITEM_EDIT)) {
+    if (!tabItems.find((item) => item.key === TAB_ITEM_EDIT)) {
       this.setState(({ tabItems }) => ({
         tabItems: tabItems.concat({
-          tabItemProps: {
-            key: TAB_ITEM_EDIT,
-            title: '修改数据源',
-            closeable: true,
-            data: {
-              dataSource,
-              dataSourceType: dataSourceTypes?.find(
-                type => type.type === dataSource.type
-              ),
-            },
+          key: TAB_ITEM_EDIT,
+          title: '修改数据源',
+          closeable: true,
+          data: {
+            dataSource,
+            dataSourceType: dataSourceTypes?.find((type) => type.type === dataSource.type),
           },
         }),
       }));
@@ -256,22 +242,20 @@ export class DataSourcePane extends PureComponent<DataSourcePaneProps, DataSourc
     this.setState({ activeTabKey: TAB_ITEM_EDIT });
   };
 
-  openImportDataSourceTab = (selectedImportPluginName) => {
+  openImportDataSourceTab = (selectedImportPluginName: string) => {
     const { tabItems } = this.state;
     const { importPlugins } = this.props;
 
-    if (!tabItems.find((item) => item.tabItemProps.key === `${TAB_ITEM_IMPORT}_${selectedImportPluginName}`)) {
+    if (!tabItems.find((item) => item.key === `${TAB_ITEM_IMPORT}_${selectedImportPluginName}`)) {
       this.setState(({ tabItems }) => ({
         tabItems: tabItems.concat({
-          tabItemProps: {
-            key: TAB_ITEM_IMPORT,
-            title: `导入数据源-${selectedImportPluginName}`,
-            closeable: true,
-            content: _get(
-              importPlugins?.find((plugin) => selectedImportPluginName === plugin.name),
-              'component',
-            ),
-          },
+          key: TAB_ITEM_IMPORT,
+          title: `导入数据源-${selectedImportPluginName}`,
+          closeable: true,
+          content: _get(
+            importPlugins?.find((plugin) => selectedImportPluginName === plugin.name),
+            'component',
+          ),
         }),
       }));
       this.setState({ activeTabKey: TAB_ITEM_IMPORT });
@@ -283,11 +267,11 @@ export class DataSourcePane extends PureComponent<DataSourcePaneProps, DataSourc
   closeTab = (tabKey: any) => {
     this.setState(
       ({ tabItems }) => ({
-        tabItems: tabItems.filter((item) => item.tabItemProps.key !== tabKey),
+        tabItems: tabItems.filter((item) => item.key !== tabKey),
       }),
       () => {
         this.setState(({ tabItems }) => ({
-          activeTabKey: _get(tabItems, '[0].tabItemProps.key')
+          activeTabKey: _get(tabItems, '[0].key'),
         }));
       },
     );
@@ -298,14 +282,14 @@ export class DataSourcePane extends PureComponent<DataSourcePaneProps, DataSourc
 
     // @todo onSelect 不行？
     return [
-      _isArray(dataSourceTypes) && dataSourceTypes.length > 1 ? (
-        <MenuButton label="新建" onItemClick={this.openCreateDataSourceTab}>
+      _isArray(dataSourceTypes) && dataSourceTypes.length > 0 ? (
+        <MenuButton label="新建" onItemClick={this.handleCreateDataSourceMenuBtnClick}>
           {dataSourceTypes.map((type) => (
             <MenuButtonItem key={type.type}>{type.type}</MenuButtonItem>
           ))}
         </MenuButton>
       ) : _isArray(dataSourceTypes) && dataSourceTypes.length === 1 ? (
-        <Button onClick={this.openCreateDataSourceTab.bind(this, dataSourceTypes[0].type)}>新建</Button>
+        <Button onClick={this.handleCreateDataSourceBtnClick.bind(this, dataSourceTypes[0].type)}>新建</Button>
       ) : null,
       _isArray(importPlugins) && importPlugins.length > 1 ? (
         <MenuButton label="导入" onItemClick={this.openImportDataSourceTab}>
@@ -322,7 +306,7 @@ export class DataSourcePane extends PureComponent<DataSourcePaneProps, DataSourc
   // 更通用的处理
   renderTabItemContentByKey = (tabItemKey: any, data: any) => {
     const { dataSourceList, tabItems } = this.state;
-    const { dataSourceTypes } = this.props;
+    const { dataSourceTypes = [] } = this.props;
 
     if (tabItemKey === TAB_ITEM_LIST) {
       return (
@@ -336,16 +320,17 @@ export class DataSourcePane extends PureComponent<DataSourcePaneProps, DataSourc
       );
     } else if (tabItemKey === TAB_ITEM_EDIT) {
       const dataSourceType = dataSourceTypes.find((type) => type.type === data?.dataSource.type);
-      return (
-        <DataSourceForm
-          dataSourceType={dataSourceType}
-          dataSource={data?.dataSource}
-          onComplete={this.handleUpdateDataSource}
-          onCancel={this.closeTab.bind(this, TAB_ITEM_EDIT)}
-        />
-      );
+      if (dataSourceType) {
+        return (
+          <DataSourceForm
+            dataSourceType={dataSourceType}
+            dataSource={data?.dataSource}
+            onComplete={this.handleUpdateDataSource}
+            onCancel={this.closeTab.bind(this, TAB_ITEM_EDIT)}
+          />
+        );
+      }
     } else if (tabItemKey === TAB_ITEM_CREATE) {
-      const tabItemData = tabItems.find((tabItem) => tabItem.tabItemProps.key === tabItemKey);
       return (
         <DataSourceForm
           dataSourceType={data?.dataSourceType}
@@ -354,18 +339,23 @@ export class DataSourcePane extends PureComponent<DataSourcePaneProps, DataSourc
         />
       );
     } else if (tabItemKey === TAB_ITEM_IMPORT) {
-      const tabItemData = tabItems.find((tabItem) => tabItem.tabItemProps.key === tabItemKey);
+      const tabItemData = tabItems.find((tabItem) => tabItem.key === tabItemKey);
       if (tabItemData) {
-        const Content = tabItemData.tabItemProps.content;
-        return <Content dataSourceTypes={dataSourceTypes} onCancel={this.closeTab.bind(this, tabItemKey)} onImport={this.handleImportDataSourceList} />;
+        const Content = tabItemData.content;
+        return (
+          <Content
+            dataSourceTypes={dataSourceTypes}
+            onCancel={this.closeTab.bind(this, tabItemKey)}
+            onImport={this.handleImportDataSourceList}
+          />
+        );
       }
     }
     return null;
   };
 
   render() {
-    const { dataSourceList, activeTabKey, tabItems } = this.state;
-    const { importPlugins, dataSourceTypes } = this.props;
+    const { activeTabKey, tabItems } = this.state;
 
     return (
       <div className="lowcode-plugin-datasource-pane">
@@ -375,10 +365,8 @@ export class DataSourcePane extends PureComponent<DataSourcePaneProps, DataSourc
           onChange={this.handleTabChange}
           onClose={this.closeTab}
         >
-          {tabItems.map((item) => (
-            <TabItem {...item.tabItemProps}>
-              {this.renderTabItemContentByKey(item.tabItemProps.key, item.tabItemProps.data)}
-            </TabItem>
+          {tabItems.map((item: TabItem) => (
+            <TabItem {...item}>{this.renderTabItemContentByKey(item.key, item.data)}</TabItem>
           ))}
         </Tab>
       </div>

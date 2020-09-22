@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/indent */
+// @todo 缩进问题
 /**
  * 源码导入插件
  * @todo editor 关联 types，并提供详细的出错信息
  */
-import React, { PureComponent, createRef, MutableRefObject } from 'react';
+import React, { PureComponent } from 'react';
 import { Button } from '@alifd/next';
 import _noop from 'lodash/noop';
 import _isArray from 'lodash/isArray';
@@ -35,7 +37,7 @@ export class DataSourceImportPluginCode extends PureComponent<
         type: 'http',
         id: 'test',
       },
-    ]
+    ],
   };
 
   state = {
@@ -43,7 +45,7 @@ export class DataSourceImportPluginCode extends PureComponent<
     isCodeValid: true,
   };
 
-  private monacoRef = createRef<editor.IStandaloneCodeEditor>();
+  private monacoRef: any;
 
   constructor(props: DataSourceImportPluginCodeProps) {
     super(props);
@@ -77,14 +79,12 @@ export class DataSourceImportPluginCode extends PureComponent<
   };
 
   handleComplete = () => {
-    if (this.monacoRef.current) {
-      if (
-        !(this.monacoRef.current as editor.IStandaloneCodeEditor)
-          .getModelMarkers()
-          .find((marker: editor.IMarker) => marker.owner === 'json')
-      ) {
+    if (this.monacoRef) {
+      if (!this.monacoRef.getModelMarkers().find((marker: editor.IMarker) => marker.owner === 'json')) {
         this.setState({ isCodeValid: true });
-        this.props?.onImport(this.deriveValue(JSON.parse(_last(this.monacoRef.current.getModels()).getValue())));
+        const model: any = _last(this.monacoRef.getModels());
+        if (!model) return;
+        this.props.onImport?.(this.deriveValue(JSON.parse(model.getValue())));
         return;
       }
     }
@@ -92,30 +92,28 @@ export class DataSourceImportPluginCode extends PureComponent<
   };
 
   handleEditorChange = () => {
-    if (this.monacoRef.current) {
-      if (
-        !(this.monacoRef.current as editor.IStandaloneCodeEditor)
-          .getModelMarkers()
-          .find((marker: editor.IMarker) => marker.owner === 'json')
-      ) {
+    if (this.monacoRef) {
+      if (!this.monacoRef.getModelMarkers().find((marker: editor.IMarker) => marker.owner === 'json')) {
         this.setState({ isCodeValid: true });
       }
     }
   };
 
   handleEditorWillMount: EditorWillMount = (editor) => {
-    (this.monacoRef as MutableRefObject<editor.IStandaloneCodeEditor>).current = editor?.editor;
+    this.monacoRef = editor?.editor;
     // @todo 格式化一次
   };
 
-  handleCodeChagne = (code) => {
+  handleCodeChagne = (code: string) => {
     this.setState({ code });
-  }
+  };
 
   render() {
     const { onCancel = _noop } = this.props;
     const { code, isCodeValid } = this.state;
 
+    // @todo
+    // formatOnType formatOnPaste
     return (
       <div className="lowcode-plugin-datasource-import-plugin-code">
         <MonacoEditor
@@ -126,13 +124,13 @@ export class DataSourceImportPluginCode extends PureComponent<
           language="json"
           onChange={this.handleEditorChange}
           editorWillMount={this.handleEditorWillMount}
-          formatOnType
-          formatOnPaste
         />
         {!isCodeValid && <p className="error-msg">格式有误</p>}
         <p className="btns">
           <Button onClick={onCancel}>取消</Button>
-          <Button type="primary" onClick={this.handleComplete}>确认</Button>
+          <Button type="primary" onClick={this.handleComplete}>
+            确认
+          </Button>
         </p>
       </div>
     );
