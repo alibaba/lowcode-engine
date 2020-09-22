@@ -138,7 +138,7 @@ designer.addPropsReducer((props, node) => {
     });
   }
   return newProps;
-}, TransformStage.Render);
+}, TransformStage.Init);
 
 designer.addPropsReducer((props: any, node: Node) => {
   // live 模式下解析 lifeCycles
@@ -313,12 +313,12 @@ designer.addPropsReducer(deepValueParser, TransformStage.Render);
 
 // 清除空的 props value
 function removeEmptyProps(props: any, node: Node) {
-  if (props.dataSource) {
+  if (node.isRoot() && props.dataSource) {
     const online = cloneDeep(props.dataSource.online);
     online.forEach((item: any) => {
       const newParam: any = {};
-      if (item.options && item.options.params && item.options.params.length) {
-        item.options.params.map((element: any) => {
+      if (Array.isArray(item?.options?.params)) {
+        item.options.params.forEach((element: any) => {
           if (element.name) {
             newParam[element.name] = element.value;
           }
@@ -332,6 +332,7 @@ function removeEmptyProps(props: any, node: Node) {
 }
 
 // Init 的时候没有拿到 dataSource, 只能在 Render 和 Save 的时候都调用一次，理论上执行时机在 Init
+// Render 和 Save 都要各调用一次，感觉也是有问题的，是不是应该在 Render 执行一次就行了？见上 filterReducer 也是一样的处理方式。
 designer.addPropsReducer(removeEmptyProps, TransformStage.Render);
 designer.addPropsReducer(removeEmptyProps, TransformStage.Save);
 
