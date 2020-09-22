@@ -700,7 +700,6 @@ export function parseExpression(str, self) {
     if (inSameDomain() && window.parent.__newFunc) {
       return window.parent.__newFunc(tarStr)(self);
     }
-    console.log('aaaaaaaa')
     return new Function(tarStr)(self);
   } catch (err) {
     debug('parseExpression.error', err, str, self);
