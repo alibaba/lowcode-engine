@@ -20,6 +20,7 @@
     "@ali/lowcode-editor-skeleton": "^1.0.9-6",
     "@ali/lowcode-plugin-designer": "^1.0.9-6",
     "@ali/lowcode-plugin-outline-pane": "^1.0.9-6",
+    "@ali/lowcode-utils": "^1.0.9-7",
     "@ali/ve-i18n-util": "^2.0.0",
     "@ali/ve-icons": "^4.1.9",
     "@ali/ve-less-variables": "2.0.3",
