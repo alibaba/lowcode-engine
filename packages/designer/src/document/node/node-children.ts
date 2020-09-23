@@ -51,7 +51,7 @@ export class NodeChildren {
         node = child;
         node.import(item);
       } else {
-        node = this.owner.document.createNode(item);
+        node = this.owner.document.createNode(item, checkId);
       }
       children[i] = node;
     }

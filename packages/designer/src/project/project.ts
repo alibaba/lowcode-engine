@@ -40,7 +40,7 @@ export class Project {
    */
   setSchema(schema?: ProjectSchema) {
     const doc = this.documents.find((doc) => doc.actived);
-    doc && doc.import(schema?.componentsTree[0]);
+    doc && doc.import(schema?.componentsTree[0], false);
   }
 
   /**
