@@ -124,7 +124,8 @@ designer.addPropsReducer((props, node) => {
           newProps[item.name] = v;
         }
         // 兼容 props 中的属性为 i18n 类型，但是仅提供了一个值
-        if (isUseI18NSetter(node.componentMeta.prototype, item.name) && !isI18NObject(ov)) {
+        if (isUseI18NSetter(node.componentMeta.prototype, item.name) &&
+          !isI18NObject(ov) && !isVariable(ov)) {
           newProps[item.name] = v;
         }
       } catch (e) {
