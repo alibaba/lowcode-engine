@@ -84,6 +84,16 @@ export default {
         pluginProps: {},
       },
       {
+        pluginKey: 'utilsPane',
+        type: 'PanelIcon',
+        props: {
+          align: 'top',
+          icon: 'util',
+          description: '工具类',
+        },
+        pluginProps: {},
+      },
+      {
         pluginKey: 'sourceEditor',
         type: 'PanelIcon',
         props: {

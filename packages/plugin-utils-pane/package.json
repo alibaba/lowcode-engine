@@ -1,0 +1,43 @@
+{
+  "name": "@ali/lowcode-plugin-utils-pane",
+  "version": "1.0.8-0",
+  "description": "alibaba lowcode editor utils pane plugin",
+  "files": [
+    "es/",
+    "lib/"
+  ],
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "stylePath": "style.js",
+  "scripts": {
+    "build": "build-scripts build --skip-demo",
+    "test": "ava",
+    "test:snapshot": "ava --update-snapshots"
+  },
+  "keywords": [
+    "lowcode",
+    "editor"
+  ],
+  "author": "changyun.pcy",
+  "dependencies": {
+    "@alifd/next": "1.x"
+  },
+  "peerDependencies": {
+    "@ali/lowcode-editor-core": "^1.0.8-0",
+    "prop-types": "^15.5.8",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
+    "react-router-dom": "^5.1.2"
+  },
+  "devDependencies": {
+    "@alib/build-scripts": "^0.1.3",
+    "@types/react": "^16.9.13",
+    "@types/react-dom": "^16.9.4",
+    "build-plugin-component": "^0.2.7-1",
+    "build-plugin-fusion": "^0.1.0",
+    "build-plugin-moment-locales": "^0.1.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
+  }
+}

@@ -1,0 +1,12 @@
+.lowcode-plugin-utils-pane {
+  position: relative;
+  font-size: 100%;
+  width: 100%;
+  transform: scale(1); // 这是为了让下面的弹层能正确地计算宽度
+
+  .lc-popup-placeholder {
+    position: fixed;
+    width: 100%;
+    transform: translateY(-100px);
+  }
+}
