@@ -23,7 +23,7 @@ import * as Field from './fields';
 import Prop from './prop';
 import Env from './env';
 import DragEngine from './drag-engine';
-import Flags from './base/flags';
+// import Flags from './base/flags';
 import Viewport from './viewport';
 import Project from './project';
 
@@ -110,7 +110,7 @@ const VisualEngine = {
   Project,
   logger,
   Symbols,
-  Flags,
+  // Flags,
 };
 
 (window as any).VisualEngine = VisualEngine;

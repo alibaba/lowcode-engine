@@ -363,7 +363,7 @@ export default class BaseRender extends PureComponent {
       }
 
       let child = null;
-      if (!isFileSchema(schema) && !!_children) {
+      if (/*!isFileSchema(schema) && */!!_children) {
         child = this.__createVirtualDom(
           isJSExpression(_children) ? parseExpression(_children, self) : _children,
           self,
