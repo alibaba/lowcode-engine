@@ -16,6 +16,7 @@ module.exports = ({ onGetWebpackConfig }) => {
       .use(
         new MonacoWebpackPlugin({
           languages: ['typescript', 'css', 'json'],
+          features: ['!gotoSymbol'],
         }),
         [],
       );
