@@ -27,11 +27,10 @@
     "acorn": "^6.4.1",
     "classnames": "^2.2.6",
     "intl-messageformat": "^9.3.1",
-    "monaco-editor": "^0.20.0",
     "qs": "^6.9.1",
     "react": "^16",
     "react-dom": "^16.7.0",
-    "react-monaco-editor": "^0.34.0"
+    "react-monaco-editor": "0.40.0"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",
