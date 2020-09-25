@@ -9,6 +9,7 @@ import EventsSetter from './events-setter';
 import StyleSetter from './style-setter';
 import IconSetter from './icon-setter';
 import FunctionSetter from './function-setter';
+import ClassNameSetter from './classname-setter';
 // import MixedSetter from './mixed-setter';
 
 export const StringSetter = {
@@ -87,7 +88,7 @@ const VariableSetter = {
   component: ExpressionSetter,
   condition: (field: any) => {
     const v = field.getValue();
-    return v == null || isJSExpression(v);
+    return isJSExpression(v);
   },
   defaultProps: { placeholder: '请输入表达式' },
   title: '表达式输入',
@@ -123,6 +124,7 @@ const builtinSetters: any = {
   JsonSetter,
   StyleSetter,
   IconSetter,
+  ClassNameSetter,
   FunctionSetter: FunctionBindSetter,
 };
 

@@ -266,11 +266,12 @@ export default class ExpressionView extends PureComponent {
                   innerBefore={<span style={{ color: '#999', marginLeft: 4 }}>{'{{'}</span>}
                   innerAfter={<span style={{ color: '#999', marginRight: 4 }}>{'}}'}</span>}
                   popupClassName="expression-setter-item-inner"
-                  itemRender={({ itemValue }) => {
+                  // eslint-disable-next-line no-shadow
+                  itemRender={({ value }) => {
                     return (
-                      <Option key={itemValue} text={itemValue} value={itemValue}>
-                        <div className="code-input-value">{itemValue}</div>
-                        <div className="code-input-help">{helpMap[itemValue]}</div>
+                      <Option key={value} text={value} value={value}>
+                        <div className="code-input-value">{value}</div>
+                        <div className="code-input-help">{helpMap[value]}</div>
                       </Option>
                     );
                   }}

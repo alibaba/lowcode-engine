@@ -39,6 +39,7 @@
     "@alife/theme-lowcode-light": "^0.1.0",
     "compare-versions": "^3.0.1",
     "react": "^16.8.1",
+    "monaco-editor": "0.21.0",
     "react-dom": "^16.8.1",
     "streamsaver": "^2.0.4",
     "web-streams-polyfill": "^2.1.1"
@@ -52,7 +53,7 @@
     "build-plugin-fusion": "^0.1.0",
     "build-plugin-moment-locales": "^0.1.0",
     "build-plugin-react-app": "^1.1.2",
-    "monaco-editor-webpack-plugin": "^1.9.0",
+    "monaco-editor-webpack-plugin": "2.0.0",
     "tsconfig-paths-webpack-plugin": "^3.2.0"
   }
 }

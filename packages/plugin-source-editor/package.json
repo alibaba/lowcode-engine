@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-source-editor",
-  "version": "1.0.8-beta-1",
+  "version": "1.0.8-beta-4",
   "description": "alibaba lowcode editor source-editor plugin",
   "files": [
     "es",
@@ -25,7 +25,7 @@
     "prettier": "^1.18.2",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
-    "react-monaco-editor": "^0.36.0"
+    "react-monaco-editor": "0.40.0"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.3",
