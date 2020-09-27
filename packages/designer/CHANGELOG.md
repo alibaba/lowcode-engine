@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.12.1-3"></a>
+## [0.12.1-3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-2...v0.12.1-3) (2020-09-27)
+
+
+### Bug Fixes
+
+* designer.componentsMap ([d8d32a2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d8d32a2))
+* 使用 componentMeta.isModal 代替 protoType.isModal() ([b787dc4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b787dc4))
+
+
+
+
 <a name="0.12.1-2"></a>
 ## [0.12.1-2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-1...v0.12.1-2) (2020-09-23)
 

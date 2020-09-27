@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.12.1-3"></a>
+## [0.12.1-3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-2...v0.12.1-3) (2020-09-27)
+
+
+### Bug Fixes
+
+* preset-vision 引入默认 setter，支持物料中心组件 ([0513318](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0513318))
+* 去掉 flags ([75fc3c6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/75fc3c6))
+
+
+### Features
+
+* skeleton 增加全局 catch ([58b8200](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/58b8200))
+
+
+
+
 <a name="0.12.1-2"></a>
 ## [0.12.1-2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-1...v0.12.1-2) (2020-09-23)
 

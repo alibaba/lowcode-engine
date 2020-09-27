@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.12.1-3"></a>
+## [0.12.1-3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-2...v0.12.1-3) (2020-09-27)
+
+
+### Bug Fixes
+
+* build 配置文件修改 ([91cfb56](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/91cfb56))
+* designer.componentsMap ([d8d32a2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d8d32a2))
+* preset-vision 引入默认 setter，支持物料中心组件 ([0513318](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0513318))
+* 使用 componentMeta.isModal 代替 protoType.isModal() ([b787dc4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b787dc4))
+* 使用引擎标准的 lc-container-placeholder，支持 children 属性 ([b262665](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b262665))
+* 去掉 flags ([75fc3c6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/75fc3c6))
+
+
+### Features
+
+* skeleton 增加全局 catch ([58b8200](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/58b8200))
+
+
+
+
 <a name="0.12.1-2"></a>
 ## [0.12.1-2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-1...v0.12.1-2) (2020-09-23)
 
