@@ -26,8 +26,8 @@ import DragEngine from './drag-engine';
 // import Flags from './base/flags';
 import Viewport from './viewport';
 import Project from './project';
-
 import Symbols from './symbols';
+import '@ali/lowcode-editor-setters';
 
 import './vision.less';
 
