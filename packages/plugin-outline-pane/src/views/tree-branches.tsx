@@ -72,7 +72,7 @@ class TreeNodeChildren extends Component<{
       />
     );
     treeNode.children?.forEach((child, index) => {
-      const childIsModal = child.node.getPrototype()?.isModal() || false;
+      const childIsModal = child.node.componentMeta.isModal || false;
       if (isModal != childIsModal) {
         return;
       }

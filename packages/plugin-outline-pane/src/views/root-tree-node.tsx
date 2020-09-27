@@ -29,7 +29,7 @@ class ModalTreeNodeView extends Component<{ treeNode: TreeNode }> {
   render() {
     const { treeNode } = this.props;
     const modalNodes = treeNode.children?.filter((item) => {
-      return item.node.getPrototype()?.isModal();
+      return item.node.componentMeta.isModal;
     });
     if (!modalNodes || modalNodes.length === 0) {
       return null;

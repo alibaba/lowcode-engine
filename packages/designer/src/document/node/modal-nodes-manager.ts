@@ -4,8 +4,7 @@ import { DocumentModel } from '../document-model';
 
 function getModalNodes(node: Node) {
   let nodes: any = [];
-  const prototype = node.getPrototype();
-  if (prototype && prototype.isModal()) {
+  if (node.componentMeta.isModal) {
     nodes.push(node);
   }
   const children = node.getChildren();
@@ -85,8 +84,7 @@ export class ModalNodesManager {
   }
 
   private addNode(node: Node) {
-    const prototype = node.getPrototype();
-    if (prototype && prototype.isModal()) {
+    if (node.componentMeta.isModal) {
       this.hideModalNodes();
       this.modalNodes.push(node);
       this.addNodeEvent(node);
@@ -96,8 +94,7 @@ export class ModalNodesManager {
   }
 
   private removeNode(node: Node) {
-    const prototype = node.getPrototype();
-    if (prototype && prototype.isModal()) {
+    if (node.componentMeta.isModal) {
       const index = this.modalNodes.indexOf(node);
       if (index >= 0) {
         this.modalNodes.splice(index, 1);
