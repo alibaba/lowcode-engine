@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-source-editor",
-  "version": "0.12.1-9",
+  "version": "0.12.1-10",
   "description": "alibaba lowcode editor source-editor plugin",
   "files": [
     "es",
@@ -19,7 +19,7 @@
   ],
   "author": "zude.hzd",
   "dependencies": {
-    "@ali/lowcode-editor-core": "^0.12.1-9",
+    "@ali/lowcode-editor-core": "^0.12.1-10",
     "@alifd/next": "^1.19.16",
     "js-beautify": "^1.10.1",
     "prettier": "^1.18.2",
