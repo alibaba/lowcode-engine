@@ -464,7 +464,7 @@ export class Designer {
         const view = metaData.experimental?.view;
         if (view) {
           maps[key] = view;
-        } else if (config.npm) {
+        } else {
           maps[key] = config.npm;
         }
       }
