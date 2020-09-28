@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-utils",
-  "version": "0.12.1-12",
+  "version": "0.12.1-13",
   "description": "Utils for Ali lowCode engine",
   "files": [
     "es",
@@ -14,7 +14,7 @@
     "test:snapshot": "ava --update-snapshots"
   },
   "dependencies": {
-    "@ali/lowcode-types": "^0.12.1-12",
+    "@ali/lowcode-types": "^0.12.1-13",
     "@alifd/next": "^1.19.16",
     "react": "^16"
   },
