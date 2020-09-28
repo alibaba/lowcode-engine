@@ -3,7 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-  <a name="1.0.8-0"></a>
+      <a name="1.0.8"></a>
+## [1.0.8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-rax-renderer@1.0.8-0...@ali/lowcode-rax-renderer@1.0.8) (2020-09-28)
+
+
+### Bug Fixes
+
+* get pakcage.json ([8b99a51](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8b99a51))
+
+
+
+
+      <a name="1.0.8-0"></a>
 ## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-rax-renderer@1.0.7-0...@ali/lowcode-rax-renderer@1.0.8-0) (2020-09-09)
 
 
@@ -14,7 +25,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-  <a name="1.0.7-0"></a>
+<a name="1.0.7-0"></a>
 ## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-rax-renderer@1.0.6-0...@ali/lowcode-rax-renderer@1.0.7-0) (2020-09-02)
 
 

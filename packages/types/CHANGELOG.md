@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.8"></a>
+## [1.0.8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@1.0.8-0...@ali/lowcode-types@1.0.8) (2020-09-28)
+
+
+### Bug Fixes
+
+* 🐛 根据低代码规范,数据源的配置中isInit和 type 都是有默认值的,所以应该是可选的 ([4baf0b4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/4baf0b4))
+* 🐛 use lowcode types ([b11425b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b11425b))
+* fix test result ([7f6fbe8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7f6fbe8))
+* miniAppBuildType config(temp) ([584b4c2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/584b4c2))
+
+
+### Features
+
+* 🎸 按照中后台搭建协议规范文档补充 JSFunction 的定义和数据源定义中一些字段 ([8b1d0c7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8b1d0c7))
+* 🎸 补充规范中定义的 JSFunction 类型 ([9e32525](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9e32525))
+* 🎸 根据低代码协议文档, 将 BlockSchema 也改成继承自 ContainerSchema ([7901c8e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7901c8e))
+* 🎸 根据低代码协议文档, 完善UtilsMap的定义 ([7fe4bc0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7fe4bc0))
+* 🎸 urlParams 类型的数据源不需要 options, 所以 options 改成可选为好 ([8114c6f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8114c6f))
+
+
+
+
 <a name="1.0.8-0"></a>
 ## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@0.8.19...@ali/lowcode-types@1.0.8-0) (2020-09-09)
 

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.8"></a>
+## [1.0.8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@1.0.8-0...@ali/lowcode-demo@1.0.8) (2020-09-28)
+
+
+### Features
+
+* 新增class-name setter ([a9f1131](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a9f1131))
+* 组件面板支持业务组件独立展示 ([e9d8d3d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e9d8d3d))
+
+
+
+
 <a name="1.0.8-0"></a>
 ## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@0.8.65...@ali/lowcode-demo@1.0.8-0) (2020-09-09)
 

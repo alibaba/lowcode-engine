@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.8"></a>
+## [1.0.8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@1.0.8-0...@ali/lowcode-plugin-components-pane@1.0.8) (2020-09-28)
+
+
+### Bug Fixes
+
+* 修复 asset 中 componentList 为空时报错的 bug ([49517a6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/49517a6))
+
+
+### Features
+
+* 组件面板支持业务组件独立展示 ([e9d8d3d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e9d8d3d))
+
+
+
+
 <a name="1.0.8-0"></a>
 ## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-components-pane@0.8.57...@ali/lowcode-plugin-components-pane@1.0.8-0) (2020-09-09)
 
