@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-react-renderer",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "react renderer for ali lowcode engine",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -53,5 +53,5 @@
   "publishConfig": {
     "registry": "http://registry.npm.alibaba-inc.com"
   },
-  "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-react-renderer@1.0.8-0/build/index.html"
+  "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-react-renderer@1.0.8/build/index.html"
 }
