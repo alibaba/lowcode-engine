@@ -1,56 +1,98 @@
-import Container, { ILayoutOptions, IErrorBoundaryConfig } from './container';
 import Provider from './provider';
 import runApp from './runApp';
 
-class App {
-  private container: Container;
+export interface ILayoutOptions {
+  componentName?: string;
+  props?: any;
+}
 
-  constructor() {
-    this.container = new Container();
-  }
+export interface IErrorBoundaryConfig {
+  fallbackUI: any;
+  afterCatch?: (...rest: any) => any
+}
+
+class App {
+  private renderer: any = null;
+
+  private layouts: { [key: string]: { content: any; props: any } } = {};
+
+  private loading: any = null;
+
+  private errorBoundary: IErrorBoundaryConfig = { fallbackUI: () => '', afterCatch: () => {} };
+
+  private providers: { [key: string]: Provider; } = {};
 
   run() {
     runApp();
   }
 
   registerRenderer(renderer: any): any {
-    this.container.registerRenderer(renderer);
+    this.renderer = renderer;
   }
 
   registerLayout(Layout: any, options: ILayoutOptions): any {
-    this.container.registerLayout(Layout, options);
+    if (!options) {
+      return;
+    }
+    const { componentName, props = {} } = options;
+    if (!componentName || !Layout) {
+      return;
+    }
+    this.layouts[componentName] = { content: Layout, props };
   }
 
   registerLoading(component: any) {
-    this.container.registerLoading(component);
-  }
-
-  registerProvider(CustomProvider: any) {
-    this.container.registerProvider(CustomProvider);
+    if (!component) {
+      return;
+    }
+    this.loading = component;
   }
 
   registerErrorBoundary(config: IErrorBoundaryConfig) {
-    this.container.registerErrorBoundary(config);
+    if (!config) {
+      return;
+    }
+    this.errorBoundary = config;
+  }
+
+  registerProvider(CustomProvider: any) {
+    try {
+      const p = new CustomProvider();
+      this.providers[p.getContainerId()] = p;
+    } catch (error) {
+      console.error(error.message);
+    }
   }
 
   getLayout(componentName: string) {
-    return this.container.getLayout(componentName);
+    if (!componentName) {
+      return;
+    }
+    return this.layouts[componentName];
   }
 
   getRenderer(): any {
-    return this.container.getRenderer();
+    return this.renderer;
   }
 
   getLoading(): any {
-    return this.container.getLoading();
+    return this.loading;
   }
 
-  getErrorBoundary(): IErrorBoundaryConfig {
-    return this.container.getErrorBoundary();
+  getErrorBoundary(): any {
+    return this.errorBoundary;
   }
 
-  getProvider(id?: string): Provider | undefined {
-    return this.container.getProvider(id);
+  getProvider(id?: string) {
+    if (!id) {
+      for (const key in this.providers) {
+        if (Object.prototype.hasOwnProperty.call(this.providers, key)) {
+          return this.providers[key];
+        }
+      }
+    } else {
+      return this.providers[id];
+    }
   }
 }
 

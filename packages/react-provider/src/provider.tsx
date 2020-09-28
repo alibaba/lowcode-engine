@@ -1,4 +1,4 @@
-import { createElement, ReactType, ReactElement } from 'react';
+import { createElement, ComponentType, ReactElement } from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from '@recore/router';
 import { app, Provider } from '@ali/lowcode-runtime';
@@ -46,7 +46,7 @@ export default class ReactProvider extends Provider {
   }
 
   // 内置实现 for 动态化渲染
-  getRouterView(): ReactType {
+  getRouterView(): ComponentType {
     const routerConfig = this.getRouterConfig();
     if (!routerConfig) {
       return () => null;
@@ -84,7 +84,7 @@ export default class ReactProvider extends Provider {
         defined: { keepAlive: true },
       });
     }
-    const appHelper = new AppHelper();
+    const appHelper = new AppHelper({});
     appHelper.set('utils', this.getUtils());
     appHelper.set('constants', this.getConstants());
     const self = this;
