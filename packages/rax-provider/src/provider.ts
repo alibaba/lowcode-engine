@@ -18,8 +18,7 @@ export default class RaxProvider extends Provider {
     }
     const { componentName: layoutName, props: layoutProps } = layoutConfig;
     const { content: Layout, props: extraLayoutProps } = app.getLayout(layoutName) || {};
-    const sectionalRender = this.isSectionalRender();
-    if (!sectionalRender && Layout) {
+    if (!this.isSectionalRender && Layout) {
       App = (props) => createElement(
         Layout,
         { ...layoutProps, ...extraLayoutProps },
@@ -89,8 +88,8 @@ export default class RaxProvider extends Provider {
     if (!pageId) {
       return null;
     }
-    if (this.getlazyElement(pageId)) {
-      return this.getlazyElement(pageId);
+    if (this.getLazyElement(pageId)) {
+      return this.getLazyElement(pageId);
     }
     const lazyElement = createElement(LazyComponent, {
       // eslint-disable-next-line no-return-await
@@ -98,7 +97,7 @@ export default class RaxProvider extends Provider {
       key: pageId,
       ...props,
     });
-    this.setlazyElement(pageId, lazyElement);
+    this.setLazyElement(pageId, lazyElement);
     return lazyElement;
   }
 }
