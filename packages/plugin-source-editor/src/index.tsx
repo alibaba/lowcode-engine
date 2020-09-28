@@ -257,20 +257,22 @@ export default class SourceEditor extends Component<{
 
 
   saveSchema = (successFlag?: boolean) => {
-    const { jsCode } = this.state;
+    const { jsCode, css } = this.state;
     const { editor } = this.props;
     const functionMap = transfrom.code2Schema(jsCode);
 
     if (functionMap != null) {
       const schema = editor.get('designer').project.getSchema();
       // let oldSchemaStr = JSON.stringify(schema);
-      const newSchema = transfrom.setFunction2Schema(functionMap, schema);
+      const newSchema = transfrom.setFunction2Schema(functionMap, css, schema);
 
       if (newSchema != '') {
         editor.get('designer').project.setSchema(newSchema);
         successFlag && Message.success('保存成功');
       }
     }
+
+
   };
 
   render() {
@@ -279,6 +281,7 @@ export default class SourceEditor extends Component<{
       { tab: 'index.js', key: TAB_KEY.JS_TAB },
       { tab: 'style.css', key: TAB_KEY.CSS_TAB },
     ];
+
 
     return (
       <div className="source-editor-container">

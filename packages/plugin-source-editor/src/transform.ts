@@ -55,7 +55,7 @@ const transfrom = {
     return `\n\t${functionName}(){\n\t}\n`;
   },
 
-  setFunction2Schema(functionMap, schema) {
+  setFunction2Schema(functionMap, css, schema) {
     const pageNode = schema.componentsTree[0];
     // 先清除原有的schema的值
     delete pageNode.state;
@@ -95,6 +95,8 @@ const transfrom = {
         };
       }
     }
+
+    pageNode.css = css;
 
     return schema;
   },
