@@ -207,8 +207,14 @@ export default class MixedSetter extends Component<{
     const { setter, props } = currentSetter;
     let setterProps: any = {};
     let setterType: any;
+    let dynamicProps: any = {};
     if (isDynamicSetter(setter)) {
       setterType = setter.call(field, field);
+      // { componentName: string; props: object }
+      if (typeof setterType === 'object' && typeof setterType.componentName === 'string') {
+        dynamicProps = setterType.props || {};
+        setterType = setterType.componentName;
+      }
     } else {
       setterType = setter;
     }
@@ -224,6 +230,7 @@ export default class MixedSetter extends Component<{
       field,
       ...restProps,
       ...extraProps,
+      ...dynamicProps,
       onInitial: () => {
         this.handleInitial(currentSetter);
       },
