@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-sample-preview",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "alibaba lowcode editor sample preview plugin",
   "files": [
     "es",
@@ -19,11 +19,11 @@
     "editor"
   ],
   "dependencies": {
-    "@ali/lowcode-designer": "^1.0.9",
-    "@ali/lowcode-editor-core": "^1.0.9",
-    "@ali/lowcode-react-renderer": "^1.0.9",
-    "@ali/lowcode-types": "^1.0.9",
-    "@ali/lowcode-utils": "^1.0.9",
+    "@ali/lowcode-designer": "^1.0.10",
+    "@ali/lowcode-editor-core": "^1.0.10",
+    "@ali/lowcode-react-renderer": "^1.0.10",
+    "@ali/lowcode-types": "^1.0.10",
+    "@ali/lowcode-utils": "^1.0.10",
     "@alifd/next": "^1.x",
     "react": "^16.8.1"
   },

@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-code-generator",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "出码引擎 for LowCode Engine",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@ali/am-eslint-config": "*",
-    "@ali/lowcode-types": "^1.0.9",
+    "@ali/lowcode-types": "^1.0.10",
     "@ali/my-prettier": "^1.0.0",
     "@babel/generator": "^7.9.5",
     "@babel/parser": "^7.9.4",
