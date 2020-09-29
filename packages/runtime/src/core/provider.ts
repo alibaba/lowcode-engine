@@ -140,7 +140,17 @@ export default class Provider {
         if (!appData) {
           return;
         }
-        const { history, layout, routes, containerId, components, componentsMap, utils, constants, i18n } = appData;
+        const {
+          history,
+          layout,
+          routes,
+          containerId,
+          components,
+          componentsMap,
+          utils,
+          constants,
+          i18n,
+        } = appData;
         this.setHistory(history);
         this.setLayoutConfig(layout);
         this.setRouterConfig(routes);
@@ -181,20 +191,20 @@ export default class Provider {
     this.emitter.on('ready', cb);
   }
 
-  emitPageReady() {
-    this.emitter.emit('pageReady');
+  emitPageReady(data?: any) {
+    this.emitter.emit('pageReady', data || '');
   }
 
-  emitPageEnter() {
-    this.emitter.emit('pageEnter');
+  emitPageEnter(data?: any) {
+    this.emitter.emit('pageEnter', data || '');
   }
 
-  emitPageUpdate() {
-    this.emitter.emit('pageUpdate');
+  emitPageUpdate(data?: any) {
+    this.emitter.emit('pageUpdate', data || '');
   }
 
-  emitPageLeave() {
-    this.emitter.emit('pageLeave');
+  emitPageLeave(data?: any) {
+    this.emitter.emit('pageLeave', data || '');
   }
 
   onPageReady(cb: (params?: any) => void) {
@@ -229,11 +239,13 @@ export default class Provider {
     throw new Error('Method called "getAppData" not implemented.');
   }
 
-  getPageData(): any {
+  // eslint-disable-next-line
+  getPageData(pageId: string): any {
     throw new Error('Method called "getPageData" not implemented.');
   }
 
-  getLazyComponent(): any {
+  // eslint-disable-next-line
+  getLazyComponent(pageId: string, props: any): any {
     throw new Error('Method called "getLazyComponent" not implemented.');
   }
 
@@ -242,7 +254,8 @@ export default class Provider {
     throw new Error('Method called "createApp" not implemented.');
   }
 
-  runApp() {
+  // eslint-disable-next-line
+  runApp(App: any, config: IAppConfig) {
     throw new Error('Method called "runApp" not implemented.');
   }
 

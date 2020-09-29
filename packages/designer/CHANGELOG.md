@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.9"></a>
+## [1.0.9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@1.0.8...@ali/lowcode-designer@1.0.9) (2020-09-28)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+<a name="1.0.8"></a>
+## [1.0.8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@1.0.8-0...@ali/lowcode-designer@1.0.8) (2020-09-28)
+
+
+### Bug Fixes
+
+* 支持 checkId 开关功能, 在 setSchema 时关闭, 避免 id 被不断重置 ([44bdda1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/44bdda1))
+
+
+
+
 <a name="1.0.8-0"></a>
 ## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.55...@ali/lowcode-designer@1.0.8-0) (2020-09-09)
 
