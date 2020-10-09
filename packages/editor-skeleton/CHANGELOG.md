@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.10"></a>
+## [1.0.10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@1.0.9...@ali/lowcode-editor-skeleton@1.0.10) (2020-09-29)
+
+
+### Bug Fixes
+
+* **editor-skeleton:** fix dynamic setter support in mixed-setter ([1726354](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1726354))
+
+
+
+
 <a name="1.0.9"></a>
 ## [1.0.9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@1.0.8...@ali/lowcode-editor-skeleton@1.0.9) (2020-09-28)
 

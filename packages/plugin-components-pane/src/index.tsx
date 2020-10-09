@@ -34,7 +34,7 @@ export default class ComponentListPlugin extends Component<PluginProps, IState> 
     }
   }
 
-  transformMetaData(componentList: any): any {
+  transformMetaData(componentList: any, scope: string): any {
     const metaData: Array<Record<string, unknown>> = [];
     if (!componentList || !Array.isArray(componentList) || !componentList.length) {
       return metaData;
@@ -43,13 +43,13 @@ export default class ComponentListPlugin extends Component<PluginProps, IState> 
       if (Array.isArray(category?.children)) {
         category.children.forEach((comp: any, compId: number) => {
           metaData.push({
-            id: `${categoryId}-${compId}`,
+            id: `${scope}-${categoryId}-${compId}`,
             componentName: comp.componentName,
             title: comp.title,
             category: category.title,
             snippets: comp.snippets.map((snippet: any, snippetId: number) => {
               const item = {
-                id: `${categoryId}-${compId}-${snippetId}`,
+                id: `${scope}-${categoryId}-${compId}-${snippetId}`,
                 description: snippet.title,
                 thumbnail: snippet.screenshot,
                 schema: snippet.schema,
@@ -67,8 +67,8 @@ export default class ComponentListPlugin extends Component<PluginProps, IState> 
   initComponentList = (): void => {
     const { editor } = this.props;
     const assets = editor.get('assets') || {};
-    const metaData = this.transformMetaData(assets.componentList);
-    const bizComponents = this.transformMetaData(assets.bizComponentList);
+    const metaData = this.transformMetaData(assets.componentList, 'basic');
+    const bizComponents = this.transformMetaData(assets.bizComponentList, 'biz');
 
     this.setState({
       metaData,
