@@ -9,6 +9,7 @@ import {
   CompositeObject,
   PropsList,
   isNodeSchema,
+  NodeSchema,
 } from '@ali/lowcode-types';
 import { Project } from '../project';
 import { Node, DocumentModel, insertChildren, isRootNode, ParentalNode, TransformStage } from '../document';
@@ -294,7 +295,7 @@ export class Designer {
   /**
    * 获得合适的插入位置
    */
-  getSuitableInsertion(): { target: ParentalNode; index?: number } | null {
+  getSuitableInsertion(insertNode?: Node | NodeSchema): { target: ParentalNode; index?: number } | null {
     const activedDoc = this.project.currentDocument;
     if (!activedDoc) {
       return null;
@@ -306,7 +307,7 @@ export class Designer {
       target = activedDoc.rootNode;
     } else {
       const node = nodes[0];
-      if (isRootNode(node)) {
+      if (isRootNode(node) || node.componentMeta.isContainer) {
         target = node;
       } else {
         // FIXME!!, parent maybe null
@@ -314,6 +315,11 @@ export class Designer {
         index = node.index + 1;
       }
     }
+
+    if (target && insertNode && !target.componentMeta.checkNestingDown(target, insertNode)) {
+      return null;
+    }
+
     return { target, index };
   }
 
