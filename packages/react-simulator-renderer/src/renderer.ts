@@ -517,8 +517,7 @@ class ComponentCreator extends React.Component<{ schema: any; propsMap: any, com
     if (this.isModal) {
       return null;
     }
-    const { schema, propsMap } = this.props;
-    const componentsMap = this.props.componentsMap;
+    const { schema, propsMap, componentsMap } = this.props;
     const ComponentClass = componentsMap[schema.componentName];
     if (!ComponentClass) {
       return null;
