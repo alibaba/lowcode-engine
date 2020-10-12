@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.12.1-15"></a>
+## [0.12.1-15](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-14...v0.12.1-15) (2020-10-12)
+
+
+### Features
+
+* 使用 release/1.0.0 的 editor-setters ([80d74d6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/80d74d6))
+
+
+
+
 <a name="0.12.1-14"></a>
 ## [0.12.1-14](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-13...v0.12.1-14) (2020-10-10)
 

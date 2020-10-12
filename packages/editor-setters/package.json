@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-editor-setters",
-  "version": "0.12.1-14",
+  "version": "0.12.1-15",
   "description": "Builtin setters for Ali lowCode engine",
   "files": [
     "es",
