@@ -5,6 +5,7 @@ import { SettingTopEntry, SettingField } from '@ali/lowcode-designer';
 import StageChain from './stage-chain';
 import Stage from './stage';
 import { Skeleton } from '../../skeleton';
+import PopupService, { PopupPipe } from '../popup';
 import { Stage as StageWidget } from '../../widget/stage';
 
 export const StageBoxDefaultProps = {};
@@ -22,6 +23,8 @@ type WillDetachMember = () => void;
 
 @observer
 export default class StageBox extends Component<StageBoxProps> {
+
+
   static defaultProps = StageBoxDefaultProps;
 
   static displayName = 'StageBox';
@@ -31,6 +34,10 @@ export default class StageBox extends Component<StageBoxProps> {
   private willDetach: WillDetachMember[] = [];
 
   private shell: HTMLElement | null;
+
+  private popupPipe = new PopupPipe();
+
+  private pipe = this.popupPipe.create();
 
   constructor(props: StageBoxProps) {
     super(props);
@@ -114,8 +121,13 @@ export default class StageBox extends Component<StageBoxProps> {
         }}
         className={className}
       >
-        {contentRefer}
-        {contentCurrent}
+
+        <PopupService popupPipe={this.popupPipe}>
+
+          {contentRefer}
+          {contentCurrent}
+
+        </PopupService>
       </div>
     );
   }

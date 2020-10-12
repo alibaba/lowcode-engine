@@ -13,6 +13,9 @@ const SamplePreview = ({ editor }: PluginProps) => {
     if (!editor) {
       return;
     }
+    // 由于monaco editor的cdn加载形式会占用define字段，导致预览的时候部分next组件加载异常，所以预览弹框的时候需要对define做一个临时的替换
+    window.__define = window.define;
+    window.define = null;
     const designer = editor.get(Designer);
     if (designer) {
       const assets = await editor.get('assets');
@@ -46,11 +49,16 @@ const SamplePreview = ({ editor }: PluginProps) => {
         components,
       });
       setVisible(true);
+
+
     }
   }
 
   function handleClose() {
+    window.define = window.__define;
     setVisible(false);
+
+
   }
 
   const { schema, components } = data;

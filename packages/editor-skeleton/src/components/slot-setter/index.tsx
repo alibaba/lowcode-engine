@@ -34,9 +34,11 @@ export default class SlotSetter extends Component<{
         </Button>
       );
     }
+
+
     const hasParams = value.params && Array.isArray(value.params);
     return (
-      <div className="lc-setter-slot">
+      <div className="lc-setter-slot lc-setter-slot-column">
         <Button
           onClick={() => {
             // TODO: use slot first child literal value pad
@@ -59,7 +61,7 @@ export default class SlotSetter extends Component<{
               onChange &&
                 onChange({
                   ...value,
-                  params,
+                  params: params.length == 0 ? [''] : params,
                 });
             }}
             addonAfter={
@@ -67,10 +69,10 @@ export default class SlotSetter extends Component<{
                 type="secondary"
                 onClick={() => {
                   onChange &&
-                    onChange({
-                      type: 'JSSlot',
-                      value: value.value,
-                    });
+                  onChange({
+                    ...value,
+                    params: [''],
+                  });
                 }}
               >
                 <Icon type="close" />
