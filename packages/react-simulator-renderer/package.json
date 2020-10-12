@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-react-simulator-renderer",
-  "version": "0.12.1-3",
+  "version": "0.13.1-1",
   "description": "react simulator renderer for alibaba lowcode designer",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -16,10 +16,10 @@
     "build": "build-scripts build --skip-demo"
   },
   "dependencies": {
-    "@ali/lowcode-designer": "^0.12.1-3",
-    "@ali/lowcode-react-renderer": "^0.12.1-3",
-    "@ali/lowcode-types": "^0.12.1-3",
-    "@ali/lowcode-utils": "^0.12.1-3",
+    "@ali/lowcode-designer": "^0.13.1-1",
+    "@ali/lowcode-react-renderer": "^0.13.1-1",
+    "@ali/lowcode-types": "^0.13.1-1",
+    "@ali/lowcode-utils": "^0.13.1-1",
     "@ali/vu-css-style": "^1.0.2",
     "@recore/obx": "^1.0.8",
     "@recore/obx-react": "^1.0.7",
