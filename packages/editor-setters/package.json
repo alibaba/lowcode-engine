@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-editor-setters",
-  "version": "0.12.1-15",
+  "version": "0.12.1-16",
   "description": "Builtin setters for Ali lowCode engine",
   "files": [
     "es",
@@ -26,6 +26,7 @@
     "acorn": "^6.4.1",
     "classnames": "^2.2.6",
     "intl-messageformat": "^9.3.1",
+    "js-beautify": "^1.13.0",
     "qs": "^6.9.1",
     "react": "^16",
     "react-dom": "^16.7.0",

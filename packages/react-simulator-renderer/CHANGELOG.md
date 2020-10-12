@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.12.1-16"></a>
+## [0.12.1-16](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-15...v0.12.1-16) (2020-10-12)
+
+
+
+<a name="0.13.1-1"></a>
+## [0.13.1-1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-14...v0.13.1-1) (2020-10-12)
+
+
+### Bug Fixes
+
+* 处理 JSExpreesion 的 i18n 场景 ([9b87407](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9b87407))
+
+
+
+
 <a name="0.12.1-15"></a>
 ## [0.12.1-15](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-14...v0.12.1-15) (2020-10-12)
 
