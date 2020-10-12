@@ -13,6 +13,7 @@ import { Skeleton, SettingsPrimaryPane, registerDefaults } from '@ali/lowcode-ed
 
 import { deepValueParser } from './deep-value-parser';
 import { liveEditingRule, liveEditingSaveHander } from './vc-live-editing';
+import { isVariable } from './utils';
 
 export const editor = new Editor();
 globalContext.register(editor, Editor);
@@ -34,10 +35,6 @@ interface Variable {
   type: 'variable';
   variable: string;
   value: any;
-}
-
-function isVariable(obj: any): obj is Variable {
-  return obj && obj.type === 'variable';
 }
 
 function upgradePropsReducer(props: any) {
@@ -123,9 +120,11 @@ designer.addPropsReducer((props, node) => {
         if (ov === undefined && v !== undefined) {
           newProps[item.name] = v;
         }
-        // 兼容 props 中的属性为 i18n 类型，但是仅提供了一个值
+        // 兼容 props 中的属性为 i18n 类型，但是仅提供了一个字符串值，非变量绑定
         if (isUseI18NSetter(node.componentMeta.prototype, item.name) &&
-          !isI18NObject(ov) && !isVariable(ov)) {
+          !isI18NObject(ov) &&
+          !isJSExpression(ov) &&
+          !isVariable(ov)) {
           newProps[item.name] = v;
         }
       } catch (e) {
