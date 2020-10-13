@@ -40,8 +40,8 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
           .contentWindow.document.documentElement.contains(target)) {
           return false;
         }
-        // 点击非编辑区域的 popup / dialog 等，不触发失焦
-        if (!document.querySelector('.lc-workbench')?.contains(target)) {
+        // 点击非编辑区域的popup/dialog,插件栏左侧等不触发失焦
+        if (!document.querySelector('.lc-workbench')?.contains(target) || document.querySelector('.lc-left-area')?.contains(target)) {
           return true;
         }
         const docks = area.current?.getAssocDocks();
