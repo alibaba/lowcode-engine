@@ -222,7 +222,7 @@ export class DocumentModel {
       }
     }
     if (!node) {
-      node = new Node(this, schema);
+      node = new Node(this, schema, { checkId });
       // will add
       // todo: this.activeNodes?.push(node);
     }

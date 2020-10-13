@@ -154,7 +154,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   readonly settingEntry: SettingTopEntry;
 
-  constructor(readonly document: DocumentModel, nodeSchema: Schema) {
+  constructor(readonly document: DocumentModel, nodeSchema: Schema, options: any = {}) {
     const { componentName, id, children, props, ...extras } = nodeSchema;
     this.id = id || document.nextId();
     this.componentName = componentName;
@@ -167,7 +167,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       // import 是为了使用钩子返回的值，并非完全幂等的操作，部分行为执行两次会有 bug，
       // 所以在 props 里会对 new / import 做一些区别化的解析
       this.props = new Props(this, props, extras);
-      this._children = new NodeChildren(this as ParentalNode, this.initialChildren(children));
+      this._children = new NodeChildren(this as ParentalNode, this.initialChildren(children), options);
       this._children.internalInitParent();
       this.props.import(this.upgradeProps(this.initProps(props || {})), this.upgradeProps(extras || {}));
       this.setupAutoruns();

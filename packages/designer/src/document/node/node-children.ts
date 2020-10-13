@@ -11,9 +11,9 @@ export class NodeChildren {
 
   private emitter = new EventEmitter();
 
-  constructor(readonly owner: ParentalNode, data: NodeData | NodeData[]) {
+  constructor(readonly owner: ParentalNode, data: NodeData | NodeData[], options: any = {}) {
     this.children = (Array.isArray(data) ? data : [data]).map(child => {
-      return this.owner.document.createNode(child);
+      return this.owner.document.createNode(child, options.checkId);
     });
   }
 
