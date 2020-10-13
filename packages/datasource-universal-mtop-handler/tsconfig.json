@@ -62,9 +62,7 @@
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
     /* Advanced Options */
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */,
-    "skipLibCheck": true,
-    "include": [
-      "src/**/*"
-    ]
-  }
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"]
 }
