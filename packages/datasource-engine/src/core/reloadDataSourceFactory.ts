@@ -1,8 +1,8 @@
 import {
-  RuntimeDataSource,
   DataSourceMap,
+  RuntimeDataSource,
   RuntimeDataSourceConfig,
-} from '@ali/build-success-types';
+} from '@ali/lowcode-types';
 
 export const reloadDataSourceFactory = (
   dataSource: RuntimeDataSource,
@@ -14,7 +14,8 @@ export const reloadDataSourceFactory = (
   // 单独处理 urlParams 类型的
   dataSource.list
     .filter(
-      (el: RuntimeDataSourceConfig) => el.type === 'urlParams' &&
+      (el: RuntimeDataSourceConfig) =>
+        el.type === 'urlParams' &&
         (typeof el.isInit === 'boolean' ? el.isInit : true),
     )
     .forEach((el: RuntimeDataSourceConfig) => {
@@ -50,13 +51,8 @@ export const reloadDataSourceFactory = (
       ds.isInit &&
       ds.isSync
     ) {
-      // TODO: 我理解这个异常也应该吃掉的，待确认
-      try {
-        // eslint-disable-next-line no-await-in-loop
-        await dataSourceMap[ds.id].load();
-      } catch (e) {
-        console.error(e);
-      }
+      // eslint-disable-next-line no-await-in-loop
+      await dataSourceMap[ds.id].load();
     }
   }
 

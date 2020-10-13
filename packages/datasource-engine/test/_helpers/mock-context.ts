@@ -1,13 +1,16 @@
-import { IDataSourceEngine, IRuntimeContext } from '@ali/build-success-types';
+import {
+  IDataSourceRuntimeContext,
+  IDataSourceEngine
+} from '@ali/lowcode-types';
 
-export class MockContext<TState extends object = Record<string, unknown>>
-  implements IRuntimeContext<TState> {
+export class MockContext<TState extends Record<string, unknown> = Record<string, unknown>>
+  implements IDataSourceRuntimeContext<TState> {
   private _dataSourceEngine: IDataSourceEngine;
 
   public constructor(
     private _state: TState,
     private _createDataSourceEngine: (
-      context: IRuntimeContext<TState>
+      context: IDataSourceRuntimeContext<TState>
     ) => IDataSourceEngine,
     private _customMethods: Record<string, () => any> = {}
   ) {

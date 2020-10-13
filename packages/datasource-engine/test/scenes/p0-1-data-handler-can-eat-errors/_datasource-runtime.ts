@@ -1,4 +1,4 @@
-import { RuntimeDataSource } from '@ali/build-success-types';
+import { RuntimeDataSource } from '@ali/lowcode-types';
 
 export const DEFAULT_USER_DATA = { id: 0, name: 'guest' }; // 返回一个兜底的数据
 

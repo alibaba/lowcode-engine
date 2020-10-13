@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable no-nested-ternary */
 import {
-  IRuntimeContext,
   IRuntimeDataSource,
+  IDataSourceRuntimeContext,
+  RequestHandlersMap,
   RuntimeDataSourceConfig,
   RuntimeDataSource,
-  RequestHandlersMap,
-} from '@ali/build-success-types';
+} from '@ali/lowcode-types';
 
 import { RuntimeDataSourceItem } from '../core';
 import { reloadDataSourceFactory } from '../core/reloadDataSourceFactory';
@@ -22,24 +23,22 @@ import {
  */
 export default (
   dataSource: RuntimeDataSource,
-  context: IRuntimeContext,
+  context: IDataSourceRuntimeContext,
   extraConfig: {
     requestHandlersMap: RequestHandlersMap<{ data: unknown }>;
-  } = {
-    requestHandlersMap: {},
-  },
+  } = { requestHandlersMap: {} },
 ) => {
   const { requestHandlersMap } = extraConfig;
 
   // TODO: 对于出码类型，需要做一层数据兼容，给一些必要的值设置默认值,先兜底几个必要的
-  dataSource.list.forEach((ds) => {
+  dataSource.list.forEach(ds => {
     ds.isInit = ds.isInit || true;
     ds.isSync = ds.isSync || false;
     ds.shouldFetch = !ds.shouldFetch
       ? defaultShouldFetch
       : typeof ds.shouldFetch === 'function'
-        ? ds.shouldFetch.bind(context)
-        : ds.shouldFetch;
+      ? ds.shouldFetch.bind(context)
+      : ds.shouldFetch;
     ds.willFetch = ds.willFetch ? ds.willFetch.bind(context) : defaultWillFetch;
     ds.dataHandler = ds.dataHandler
       ? ds.dataHandler.bind(context)

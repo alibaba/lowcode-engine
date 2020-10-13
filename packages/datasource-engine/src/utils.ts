@@ -1,16 +1,20 @@
 /* eslint-disable no-new-func */
+
 import {
-  JSExpression,
-  IRuntimeContext,
   CompositeValue,
+  IDataSourceRuntimeContext,
+  InterpretDataSourceConfig,
+  isJSExpression,
+  isJSFunction,
+  JSExpression,
   JSFunction,
   JSONObject,
-  isJSExpression,
-  DataSourceConfig,
-  isJSFunction,
-} from '@ali/build-success-types';
+} from '@ali/lowcode-types';
 
-export const transformExpression = (code: string, context: IRuntimeContext) => {
+export const transformExpression = (
+  code: string,
+  context: IDataSourceRuntimeContext,
+) => {
   try {
     return new Function(`return (${code})`).call(context);
   } catch (error) {
@@ -20,7 +24,10 @@ export const transformExpression = (code: string, context: IRuntimeContext) => {
   }
 };
 
-export const transformFunction = (code: string, context: IRuntimeContext) => {
+export const transformFunction = (
+  code: string,
+  context: IDataSourceRuntimeContext,
+) => {
   try {
     return new Function(`return (${code})`).call(context).bind(context);
   } catch (error) {
@@ -36,12 +43,13 @@ export const transformBoolStr = (str: string) => {
 
 export const getRuntimeJsValue = (
   value: JSExpression | JSFunction,
-  context: IRuntimeContext,
+  context: IDataSourceRuntimeContext,
 ) => {
   if (!['JSExpression', 'JSFunction'].includes(value.type)) {
     console.error(`translate error, value is ${JSON.stringify(value)}`);
     return '';
   }
+  // TODO: 类型修复
   const code = value.compiled || value.value;
   return value.type === 'JSFunction'
     ? transformFunction(code, context)
@@ -66,7 +74,7 @@ export const getRuntimeBaseValue = (type: string, value: any) => {
 export const getRuntimeValueFromConfig = (
   type: string,
   value: CompositeValue,
-  context: IRuntimeContext,
+  context: IDataSourceRuntimeContext,
 ) => {
   if (!value) return undefined;
   if (isJSExpression(value) || isJSFunction(value)) {
@@ -77,7 +85,7 @@ export const getRuntimeValueFromConfig = (
 
 export const buildJsonObj = (
   params: JSONObject | JSExpression,
-  context: IRuntimeContext,
+  context: IDataSourceRuntimeContext,
 ) => {
   const result: Record<string, any> = {};
   if (isJSExpression(params)) {
@@ -96,8 +104,8 @@ export const buildJsonObj = (
 };
 
 export const buildShouldFetch = (
-  ds: DataSourceConfig,
-  context: IRuntimeContext,
+  ds: InterpretDataSourceConfig,
+  context: IDataSourceRuntimeContext,
 ) => {
   if (!ds.options || !ds.shouldFetch) {
     return true; // 默认为 true
@@ -110,12 +118,12 @@ export const buildShouldFetch = (
 };
 
 export const buildOptions = (
-  ds: DataSourceConfig,
-  context: IRuntimeContext,
+  ds: InterpretDataSourceConfig,
+  context: IDataSourceRuntimeContext,
 ) => {
   const { options } = ds;
   if (!options) return undefined;
-  return function () {
+  return function() {
     return {
       uri: getRuntimeValueFromConfig('string', options.uri, context),
       params: options.params ? buildJsonObj(options.params, context) : {},

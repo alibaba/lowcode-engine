@@ -1,15 +1,14 @@
-import {
-  IRuntimeContext,
-  IRuntimeDataSource,
-  DataSource,
-  RuntimeDataSourceConfig,
-  RuntimeDataSource,
-  RequestHandlersMap,
-} from '@ali/build-success-types';
-
 import { adapt2Runtime } from '../core/adapter';
 import { RuntimeDataSourceItem } from '../core/RuntimeDataSourceItem';
 import { reloadDataSourceFactory } from '../core/reloadDataSourceFactory';
+import {
+  IDataSourceRuntimeContext,
+  InterpretDataSource,
+  IRuntimeDataSource,
+  RequestHandlersMap,
+  RuntimeDataSource,
+  RuntimeDataSourceConfig,
+} from '@ali/lowcode-types';
 
 // TODO: requestConfig mtop 默认的请求 config 怎么处理？
 /**
@@ -18,13 +17,11 @@ import { reloadDataSourceFactory } from '../core/reloadDataSourceFactory';
  */
 
 export default (
-  dataSource: DataSource,
-  context: IRuntimeContext,
+  dataSource: InterpretDataSource,
+  context: IDataSourceRuntimeContext,
   extraConfig: {
     requestHandlersMap: RequestHandlersMap<{ data: unknown }>;
-  } = {
-    requestHandlersMap: {},
-  },
+  } = { requestHandlersMap: {} },
 ) => {
   const { requestHandlersMap } = extraConfig;
 

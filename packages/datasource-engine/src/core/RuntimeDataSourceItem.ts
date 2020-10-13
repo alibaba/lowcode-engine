@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/indent */
 import {
+  IDataSourceRuntimeContext,
   IRuntimeDataSource,
+  RequestHandler,
   RuntimeDataSourceConfig,
   RuntimeDataSourceStatus,
-  IRuntimeContext,
-  RequestHandler,
   RuntimeOptionsConfig,
   UrlParamsHandler,
-} from '@ali/build-success-types';
+} from '@ali/lowcode-types';
 
 class RuntimeDataSourceItem<
   TParams extends Record<string, unknown> = Record<string, unknown>,
@@ -21,19 +22,19 @@ class RuntimeDataSourceItem<
   private _dataSourceConfig: RuntimeDataSourceConfig;
 
   private _request:
-  | RequestHandler<{ data: TResultData }>
-  | UrlParamsHandler<TResultData>;
+    | RequestHandler<{ data: TResultData }>
+    | UrlParamsHandler<TResultData>;
 
-  private _context: IRuntimeContext;
+  private _context: IDataSourceRuntimeContext;
 
   private _options?: RuntimeOptionsConfig;
 
   constructor(
     dataSourceConfig: RuntimeDataSourceConfig,
     request:
-    | RequestHandler<{ data: TResultData }>
-    | UrlParamsHandler<TResultData>,
-    context: IRuntimeContext,
+      | RequestHandler<{ data: TResultData }>
+      | UrlParamsHandler<TResultData>,
+    context: IDataSourceRuntimeContext,
   ) {
     this._dataSourceConfig = dataSourceConfig;
     this._request = request;
@@ -52,7 +53,7 @@ class RuntimeDataSourceItem<
     return this._status;
   }
 
-  public async load(params?: TParams) {
+  async load(params?: TParams) {
     if (!this._dataSourceConfig) return;
     // 考虑没有绑定对应的 handler 的情况
     if (!this._request) {

@@ -1,10 +1,10 @@
 import {
-  DataSource,
+  InterpretDataSource,
   IDataSourceEngine,
-  IRuntimeContext,
+  IDataSourceRuntimeContext,
   RuntimeDataSource,
   RuntimeDataSourceStatus,
-} from '@ali/build-success-types';
+} from '@ali/lowcode-types';
 import sinon from 'sinon';
 
 import { delay, MockContext } from '../../_helpers';
@@ -17,56 +17,56 @@ export const abnormalScene: Macro<[
   {
     create: (
       dataSource: any,
-      ctx: IRuntimeContext,
+      ctx: IDataSourceRuntimeContext,
       options: any
     ) => IDataSourceEngine;
-    dataSource: RuntimeDataSource | DataSource;
+    dataSource: RuntimeDataSource | InterpretDataSource;
   }
 ]> = async (
   t: ExecutionContext<{ clock: SinonFakeTimers }>,
   { create, dataSource },
-) => {
-  const { clock } = t.context;
-  const ERROR_MSG = 'test error';
-  const fetchHandler = sinon.fake(async () => {
-    await delay(100);
-    throw new Error(ERROR_MSG);
-  });
+  ) => {
+    const { clock } = t.context;
+    const ERROR_MSG = 'test error';
+    const fetchHandler = sinon.fake(async () => {
+      await delay(100);
+      throw new Error(ERROR_MSG);
+    });
 
-  const context = new MockContext<Record<string, unknown>>({}, (ctx) => create(dataSource, ctx, {
-    requestHandlersMap: {
-      fetch: fetchHandler,
-    },
-  }));
+    const context = new MockContext<Record<string, unknown>>({}, (ctx) => create(dataSource, ctx, {
+      requestHandlersMap: {
+        fetch: fetchHandler,
+      },
+    }));
 
-  const setState = sinon.spy(context, 'setState');
+    const setState = sinon.spy(context, 'setState');
 
-  // 一开始应该是初始状态
-  t.is(context.dataSourceMap.user.status, RuntimeDataSourceStatus.Initial);
+    // 一开始应该是初始状态
+    t.is(context.dataSourceMap.user.status, RuntimeDataSourceStatus.Initial);
 
-  const loading = context.reloadDataSource();
+    const loading = context.reloadDataSource();
 
-  await clock.tickAsync(50);
+    await clock.tickAsync(50);
 
-  // 中间应该有 loading 态
-  t.is(context.dataSourceMap.user.status, RuntimeDataSourceStatus.Loading);
+    // 中间应该有 loading 态
+    t.is(context.dataSourceMap.user.status, RuntimeDataSourceStatus.Loading);
 
-  await Promise.all([clock.runAllAsync(), loading]);
+    await Promise.all([clock.runAllAsync(), loading]);
 
-  // 最后应该失败了，error 状态
-  t.is(context.dataSourceMap.user.status, RuntimeDataSourceStatus.Error);
+    // 最后应该失败了，error 状态
+    t.is(context.dataSourceMap.user.status, RuntimeDataSourceStatus.Error);
 
-  // 检查数据源的数据
-  t.deepEqual(context.dataSourceMap.user.data, undefined);
-  t.not(context.dataSourceMap.user.error, undefined);
-  t.regex(context.dataSourceMap.user.error!.message, new RegExp(ERROR_MSG));
+    // 检查数据源的数据
+    t.deepEqual(context.dataSourceMap.user.data, undefined);
+    t.not(context.dataSourceMap.user.error, undefined);
+    t.regex(context.dataSourceMap.user.error!.message, new RegExp(ERROR_MSG));
 
-  // 检查状态数据
-  t.assert(setState.notCalled);
-  t.deepEqual(context.state.user, undefined);
+    // 检查状态数据
+    t.assert(setState.notCalled);
+    t.deepEqual(context.state.user, undefined);
 
-  // fetchHandler 不应该被调
-  t.assert(fetchHandler.calledOnce);
-};
+    // fetchHandler 不应该被调
+    t.assert(fetchHandler.calledOnce);
+  };
 
 abnormalScene.title = (providedTitle) => providedTitle || 'abnormal scene';

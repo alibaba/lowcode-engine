@@ -15,15 +15,10 @@
   },
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@ali/build-success-types": "^0.1.2-alpha.35",
+    "@ali/lowcode-types": "^0.8.13",
     "typescript": "^3.9.7"
   },
   "devDependencies": {
-    "@ali/datasource-engine-universal-mtop-handler": "1.0.0-alpha.2",
-    "@ali/datasource-engine-url-params-handler": "^1.0.0-alpha.3",
-    "@ali/lowcode-datasource-http-handler": "^1.0.0-alpha.1",
-    "@ali/lowcode-datasource-url-params-handler": "^1.0.0-alpha.3",
-    "@ali/ng-lc-types": "^1.0.0-r2009222d5o6k8r8",
     "@ava/babel": "^1.0.1",
     "@types/sinon": "^9.0.5",
     "ava": "3.11.1",

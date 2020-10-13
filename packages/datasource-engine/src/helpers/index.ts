@@ -1,5 +1,6 @@
-import { DataHandler } from '@ali/build-success-types';
+import { DataHandler } from '@ali/lowcode-types';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 function noop() {}
 
 // 默认的 dataSourceItem 的 dataHandler

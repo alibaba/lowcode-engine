@@ -7,16 +7,19 @@ import {
 } from './../utils';
 // 将不同渠道给的 schema 转为 runtime 需要的类型
 
-import {
-  DataSource,
-  IPageContext,
-  DataSourceConfig,
-  RuntimeDataSourceConfig,
-  DataSourceMap,
-} from '@ali/build-success-types';
 import { defaultDataHandler, defaultWillFetch } from '../helpers';
+import {
+  DataSourceMap,
+  IDataSourceRuntimeContext,
+  InterpretDataSource,
+  InterpretDataSourceConfig,
+  RuntimeDataSourceConfig,
+} from '@ali/lowcode-types';
 
-const adapt2Runtime = (dataSource: DataSource, context: IPageContext) => {
+const adapt2Runtime = (
+  dataSource: InterpretDataSource,
+  context: IDataSourceRuntimeContext,
+) => {
   const {
     list: interpretConfigList,
     dataHandler: interpretDataHandler,
@@ -34,7 +37,7 @@ const adapt2Runtime = (dataSource: DataSource, context: IPageContext) => {
     };
   }
   const list: RuntimeDataSourceConfig[] = interpretConfigList.map(
-    (el: DataSourceConfig) => {
+    (el: InterpretDataSourceConfig) => {
       return {
         id: el.id,
         isInit:
