@@ -4,6 +4,19 @@ interface Props {
   name: string;
 }
 
-export default function SubModule({ name }: Props) {
-  return <div>hello, {name}</div>;
+class SubModule extends React.Component<Props> {
+  static defaultProps = {
+    name: 'abc',
+  };
+
+  render() {
+    const { name } = this.props;
+    return <div>hello, {name}</div>;
+  }
 }
+
+SubModule.defaultProps = {
+  name: 'abc',
+};
+
+export default SubModule;
