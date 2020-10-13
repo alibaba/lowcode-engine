@@ -9,9 +9,11 @@ export type DataType = 'jsonp' | 'json' | 'originaljsonp';
 // 考虑一下 mtop 类型的问题，官方没有提供 ts 文件
 export function createMtopHandler<T = unknown>(config?: MTopConfig) {
   if (config && Object.keys(config).length > 0) {
-    Object.keys(config).forEach((key: string) => mtopRequest.config(key, config[key]));
+    Object.keys(config).forEach((key: string) =>
+      mtopRequest.config(key, config[key]),
+    );
   }
-  return async function (options: RuntimeOptionsConfig): Promise<{ data: T }> {
+  return async function(options: RuntimeOptionsConfig): Promise<{ data: T }> {
     const response = await mtopRequest.request<T>({
       api: options.uri,
       v: (options.v as string) || '1.0',

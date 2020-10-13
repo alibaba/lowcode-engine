@@ -16,7 +16,7 @@ export function createMopenHandler<T = unknown>(
     appKey: MOPEN_APPKEY_XSPACE_PRE_ONLINE,
   },
 ) {
-  return async function (options: RuntimeOptionsConfig): Promise<{ data: T }> {
+  return async function(options: RuntimeOptionsConfig): Promise<{ data: T }> {
     const { data, response } = await MopenClient.request<T>({
       config,
       ...options,
