@@ -14,6 +14,11 @@ class Demo extends React.Component {
 Demo.propTypes = {
   optionalArray: PropTypes.array,
   optionalBool: PropTypes.bool,
+  /**
+   * desc
+   * @param {{ok:String}} userName
+   * @returns {any}
+   */
   optionalFunc: PropTypes.func,
   optionalNumber: PropTypes.number,
   optionalObject: PropTypes.object,

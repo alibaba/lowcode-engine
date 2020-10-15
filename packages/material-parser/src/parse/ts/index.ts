@@ -321,7 +321,7 @@ function getDocgenTypeHelper(
     } else if (type?.symbol?.valueDeclaration?.parameters?.length) {
       return makeResult({
         name: 'func',
-        value: getFunctionParams(
+        params: getFunctionParams(
           // @ts-ignore
           type?.symbol?.valueDeclaration?.parameters,
           checker,
@@ -335,7 +335,7 @@ function getDocgenTypeHelper(
     ) {
       return makeResult({
         name: 'func',
-        value: getFunctionParams(
+        params: getFunctionParams(
           // @ts-ignore
           type?.members?.get('__call')?.declarations[0]?.symbol?.declarations[0]?.parameters,
           checker,
