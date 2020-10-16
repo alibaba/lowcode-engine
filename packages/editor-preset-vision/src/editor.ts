@@ -125,7 +125,7 @@ designer.addPropsReducer((props, node) => {
           !isI18NObject(ov) &&
           !isJSExpression(ov) &&
           !isVariable(ov)) {
-          newProps[item.name] = v;
+          newProps[item.name] = convertToI18NObject(v);
         }
       } catch (e) {
         if (hasOwnProperty(props, item.name)) {
@@ -133,7 +133,7 @@ designer.addPropsReducer((props, node) => {
         }
       }
       if (newProps[item.name] && !node.props.has(item.name)) {
-        node.props.add(newProps[item.name], item.name);
+        node.props.add(newProps[item.name], item.name, false, { skipSetSlot: true });
       }
     });
   }

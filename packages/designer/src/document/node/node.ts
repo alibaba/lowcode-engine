@@ -162,18 +162,19 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       this.props = new Props(this, {
         children: isDOMText(children) || isJSExpression(children) ? children : '',
       });
+      this.settingEntry = this.document.designer.createSettingEntry([this]);
     } else {
       // 这里 props 被初始化两次，一次 new，一次 import，new 的实例需要给 propsReducer 的钩子去使用，
       // import 是为了使用钩子返回的值，并非完全幂等的操作，部分行为执行两次会有 bug，
       // 所以在 props 里会对 new / import 做一些区别化的解析
       this.props = new Props(this, props, extras);
+      this.settingEntry = this.document.designer.createSettingEntry([this]);
       this._children = new NodeChildren(this as ParentalNode, this.initialChildren(children));
       this._children.internalInitParent();
       this.props.import(this.upgradeProps(this.initProps(props || {})), this.upgradeProps(extras || {}));
       this.setupAutoruns();
     }
 
-    this.settingEntry = this.document.designer.createSettingEntry([this]);
     this.emitter = new EventEmitter();
   }
 
@@ -317,6 +318,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     if (this.parent) {
       if (this.isSlot()) {
         this.parent.removeSlot(this, purge);
+        this.parent.children.delete(this, purge, useMutator);
       } else {
         this.parent.children.delete(this, purge, useMutator);
       }
@@ -677,13 +679,13 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * 删除一个Slot节点
    */
   removeSlot(slotNode: Node, purge = false): boolean {
-    if (purge) {
-      // should set parent null
-      slotNode?.internalSetParent(null, false);
-      slotNode?.purge();
-    }
-    this.document.unlinkNode(slotNode);
-    this.document.selection.remove(slotNode.id);
+    // if (purge) {
+    //   // should set parent null
+    //   slotNode?.internalSetParent(null, false);
+    //   slotNode?.purge();
+    // }
+    // this.document.unlinkNode(slotNode);
+    // this.document.selection.remove(slotNode.id);
     const i = this._slots.indexOf(slotNode);
     if (i < 0) {
       return false;

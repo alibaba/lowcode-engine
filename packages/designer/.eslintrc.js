@@ -12,5 +12,6 @@ module.exports = {
     'no-prototype-builtins': 1,
     'no-useless-constructor': 1,
     'no-empty-function': 1,
+    '@typescript-eslint/member-ordering': 0,
   }
 }

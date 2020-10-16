@@ -115,6 +115,7 @@ export class NodeChildren {
     }
     this.children.splice(i, 1);
   }
+
   /**
    * 删除一个节点
    */
@@ -122,18 +123,21 @@ export class NodeChildren {
     if (node.isParental()) {
       foreachReverse(node.children, (subNode: Node) => {
         subNode.remove(useMutator, purge);
-      });
+      }, (iterable, idx) => (iterable as NodeChildren).get(idx));
+      foreachReverse(node.slots, (slotNode: Node) => {
+        slotNode.remove(useMutator, purge);
+      }, (iterable, idx) => (iterable as [])[idx]);
     }
     if (purge) {
       // should set parent null
       node.internalSetParent(null, useMutator);
       try {
-        node.purge(useMutator);
+        node.purge();
       } catch (err) {
         console.error(err);
       }
     }
-    const document = node.document;
+    const { document } = node;
     document.unlinkNode(node);
     document.selection.remove(node.id);
     document.destroyNode(node);

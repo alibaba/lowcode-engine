@@ -1,4 +1,5 @@
 
+import { isI18NObject } from './is-object';
 
 export function isUseI18NSetter(prototype: any, propName: string) {
   const configure = prototype?.options?.configure;
@@ -10,6 +11,7 @@ export function isUseI18NSetter(prototype: any, propName: string) {
   return false;
 }
 
-export function convertToI18NObject(v: string, locale: string = 'zh_CN') {
+export function convertToI18NObject(v: string | object, locale: string = 'zh_CN') {
+  if (isI18NObject(v)) return v;
   return { type: 'i18n', use: locale, [locale]: v };
 }

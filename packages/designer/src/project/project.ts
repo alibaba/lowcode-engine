@@ -164,7 +164,7 @@ export class Project {
   }
 
   createDocument(data?: RootSchema): DocumentModel {
-    const doc = new DocumentModel(this, data);
+    const doc = new DocumentModel(this, data || this?.data?.componentsTree?.[0]);
     this.documents.push(doc);
     this.documentsMap.set(doc.id, doc);
     return doc;

@@ -59,9 +59,9 @@ export class Props implements IPropParent {
   constructor(readonly owner: Node, value?: PropsMap | PropsList | null, extras?: object) {
     if (Array.isArray(value)) {
       this.type = 'list';
-      this.items = value.map(item => new Prop(this, item.value, item.name, item.spread, { propsMode: 'init' }));
+      this.items = value.map(item => new Prop(this, item.value, item.name, item.spread, { skipSetSlot: true }));
     } else if (value != null) {
-      this.items = Object.keys(value).map(key => new Prop(this, value[key], key, false, { propsMode: 'init' }));
+      this.items = Object.keys(value).map(key => new Prop(this, value[key], key, false, { skipSetSlot: true }));
     }
     if (extras) {
       Object.keys(extras).forEach(key => {
@@ -241,8 +241,8 @@ export class Props implements IPropParent {
   /**
    * 添加值
    */
-  add(value: CompositeValue | null, key?: string | number, spread = false): Prop {
-    const prop = new Prop(this, value, key, spread);
+  add(value: CompositeValue | null, key?: string | number, spread = false, options: any = {}): Prop {
+    const prop = new Prop(this, value, key, spread, options);
     this.items.push(prop);
     return prop;
   }

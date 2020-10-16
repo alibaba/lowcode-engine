@@ -6,6 +6,7 @@ import { valueToSource } from './value-to-source';
 import { Props } from './props';
 import { SlotNode, Node } from '../node';
 import { TransformStage } from '../transform-stage';
+import { includesSlot } from '../../../utils/slot';
 
 export const UNSET = Symbol.for('unset');
 export type UNSET = typeof UNSET;
@@ -231,7 +232,7 @@ export class Prop implements IPropParent {
     } else if (Array.isArray(val)) {
       this._type = 'list';
     } else if (isPlainObject(val)) {
-      if (isJSSlot(val) && this.options.propsMode !== 'init') {
+      if (isJSSlot(val) && this.options.skipSetSlot !== true) {
         this.setAsSlot(val);
         return;
       }
@@ -293,9 +294,11 @@ export class Prop implements IPropParent {
       this._slotNode.import(slotSchema);
     } else {
       const { owner } = this.props;
-      this._slotNode = owner.document.createNode<SlotNode>(slotSchema);
-      owner.addSlot(this._slotNode);
-      this._slotNode.internalSetSlotFor(this);
+      if (!includesSlot(owner, data.name)) {
+        this._slotNode = owner.document.createNode<SlotNode>(slotSchema);
+        owner.addSlot(this._slotNode);
+        this._slotNode.internalSetSlotFor(this);
+      }
     }
     this.dispose();
   }

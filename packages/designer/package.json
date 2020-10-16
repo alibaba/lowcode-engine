@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "build": "build-scripts build --skip-demo",
-    "test": "jest -c jest.config.js"
+    "test": "build-scripts test"
   },
   "license": "MIT",
   "dependencies": {
