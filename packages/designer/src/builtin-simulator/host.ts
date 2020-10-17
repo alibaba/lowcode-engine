@@ -1,5 +1,5 @@
 import { obx, autorun, computed, getPublicPath, hotkey, focusTracker } from '@ali/lowcode-editor-core';
-import { ISimulatorHost, Component, NodeInstance, ComponentInstance } from '../simulator';
+import { ISimulatorHost, Component, NodeInstance, ComponentInstance, DropContainer } from '../simulator';
 import Viewport from './viewport';
 import { createSimulator } from './create-simulator';
 import { Node, ParentalNode, isNode, contains, isRootNode } from '../document';
@@ -1085,7 +1085,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   /**
    * 查找合适的投放容器
    */
-  getDropContainer(e: LocateEvent): DropContainer | LocationData | null {
+  getDropContainer(e: LocateEvent): DropContainer | null {
     const { target, dragObject } = e;
     const isAny = isDragAnyObject(dragObject);
     const document = this.project.currentDocument!;
@@ -1156,9 +1156,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     let upward: DropContainer | null = null;
     while (container) {
       res = this.handleAccept(dropContainer, e);
-      if (isLocationData(res)) {
-        return res;
-      }
+      // if (isLocationData(res)) {
+      //   return res;
+      // }
       if (res === true) {
         return dropContainer;
       }
@@ -1214,7 +1214,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   /**
    * 控制接受
    */
-  handleAccept({ container, instance }: DropContainer, e: LocateEvent) {
+  handleAccept({ container, instance }: DropContainer, e: LocateEvent): boolean {
     const { dragObject } = e;
     const document = this.currentDocument!;
     if (isRootNode(container)) {
@@ -1391,9 +1391,4 @@ function getMatched(elements: Array<Element | Text>, selector: string): Element 
     }
   }
   return firstQueried;
-}
-
-interface DropContainer {
-  container: ParentalNode;
-  instance: ComponentInstance;
 }
