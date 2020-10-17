@@ -122,6 +122,11 @@ export class InsertionView extends Component<{ host: BuiltinSimulatorHost }> {
     if (!loc) {
       return null;
     }
+    
+    // 如果是个绝对定位容器，不需要渲染插入标记
+    if (loc.target.componentMeta.getMetadata().experimental?.isAbsoluteLayoutContainer) {
+      return null;
+    }
 
     const { scale, scrollX, scrollY } = host.viewport;
     const { edge, insertType, coverRect, nearRect, vertical } = processDetail(loc);
