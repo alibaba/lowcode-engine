@@ -16,7 +16,8 @@ Demo.propTypes = {
   optionalBool: PropTypes.bool,
   /**
    * desc
-   * @param {{ok:String}} userName
+   * @param {string} title - The title of the book.
+   * @param {string} author - The author of the book.
    * @returns {any}
    */
   optionalFunc: PropTypes.func,

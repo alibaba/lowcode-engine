@@ -1,5 +1,5 @@
 import { Parser, ComponentDoc } from 'react-docgen-typescript';
-import ts, { SymbolFlags, TypeFlags } from 'typescript';
+import ts, { SymbolFlags, TypeFlags, SyntaxKind } from 'typescript';
 import { isEmpty, isEqual } from 'lodash';
 import { debug } from '../../core';
 import { Json } from '../../types';
@@ -43,20 +43,12 @@ function getFunctionParams(parameters: any[] = [], checker, parentIds, type) {
   });
 }
 
-/**
- * Indicates that a symbol is an alias that does not merge with a local declaration.
- * OR Is a JSContainer which may merge an alias with a local declaration
- */
-// function isNonLocalAlias(
-//   symbol: ts.Symbol | undefined,
-//   excludes = SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace,
-// ): symbol is ts.Symbol {
-//   if (!symbol) return false;
-//   return (
-//     (symbol.flags & (SymbolFlags.Alias | excludes)) === SymbolFlags.Alias ||
-//     !!(symbol.flags & SymbolFlags.Alias && symbol.flags & SymbolFlags.Assignment)
-//   );
-// }
+function getFunctionReturns(node: any, checker, parentIds, type) {
+  const propType = getDocgenTypeHelper(checker, node.type, false, getNextParentIds(parentIds, type));
+  return {
+    propType,
+  };
+}
 
 const blacklistNames = [
   'prototype',
@@ -138,10 +130,10 @@ function getDocgenTypeHelper(
   function getShapeFromArray(symbolArr: ts.Symbol[], _type: ts.Type) {
     const shape: Array<{
       key:
-        | {
-            name: string;
-          }
-        | string;
+      | {
+        name: string;
+      }
+      | string;
       value: any;
     }> = symbolArr.map(prop => {
       const propType = checker.getTypeOfSymbolAtLocation(
@@ -230,6 +222,14 @@ function getDocgenTypeHelper(
     }
   }
 
+  // @ts-ignore
+  if (type?.kind === SyntaxKind.VoidExpression) {
+    return makeResult({
+      name: 'void',
+      raw: 'void',
+    });
+  }
+
   const pattern = /^__global\.(.+)$/;
   // @ts-ignore
   if (parentIds.includes(type?.symbol?.id)) {
@@ -281,9 +281,7 @@ function getDocgenTypeHelper(
     return makeResult({
       name: 'union',
       // @ts-ignore
-      value: type.types.map(t =>
-        getDocgenTypeHelper(checker, t, true, getNextParentIds(parentIds, type)),
-      ),
+      value: type.types.map(t => getDocgenTypeHelper(checker, t, true, getNextParentIds(parentIds, type))),
     });
   } else if (isComplexType(type)) {
     return makeResult({
@@ -324,6 +322,12 @@ function getDocgenTypeHelper(
         params: getFunctionParams(
           // @ts-ignore
           type?.symbol?.valueDeclaration?.parameters,
+          checker,
+          parentIds,
+          type,
+        ),
+        returns: getFunctionReturns(
+          checker.typeToTypeNode(type, type?.symbol?.valueDeclaration),
           checker,
           parentIds,
           type,

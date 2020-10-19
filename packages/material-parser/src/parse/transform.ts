@@ -37,19 +37,25 @@ export function transformType(itemType: any) {
     case 'array':
     case 'element':
     case 'node':
+    case 'void':
       break;
     case 'func':
       if (params) {
-        result.params = params.map(x => ({
-          ...x,
-          propType: transformType(x.propType),
-        }));
+        result.params = params.map(x => {
+          const res: any = {
+            name: x.name,
+            propType: transformType(x.type || x.propType),
+          };
+          if (x.description) {
+            res.description = x.description;
+          }
+          return res;
+        });
       }
       if (returns) {
-        result.returns = returns.map(x => ({
-          ...x,
-          propType: transformType(x.propType),
-        }));
+        result.returns = {
+          propType: transformType(returns.type || returns.propType),
+        };
       }
       if (raw) {
         result.raw = raw;
@@ -243,7 +249,8 @@ export function transformItem(name: string, item: any) {
     flowType,
     tsType,
     type = tsType || flowType,
-    required,
+    optional,
+    required = optional,
     defaultValue,
     ...others
   } = item;
