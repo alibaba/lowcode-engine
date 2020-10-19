@@ -1,4 +1,4 @@
-import { ComponentClass, Component, FunctionComponent, ComponentType } from 'react';
+import { ComponentClass, Component, FunctionComponent, ComponentType, createElement } from 'react';
 
 const hasSymbol = typeof Symbol === 'function' && Symbol.for;
 const REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
@@ -22,7 +22,7 @@ export function isReactComponent(obj: any): obj is ComponentType<any> {
 export function wrapReactClass(view: FunctionComponent) {
   const ViewComponentClass = class extends Component {
     render() {
-      return view(this.props);
+      return createElement(view, this.props);
     }
   } as any;
   ViewComponentClass.displayName = view.displayName;
