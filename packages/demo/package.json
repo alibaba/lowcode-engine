@@ -5,7 +5,8 @@
   "description": "低代码引擎 DEMO",
   "scripts": {
     "cloud-build": "build-scripts build --config cloud-build.json",
-    "start": "build-scripts start"
+    "start": "build-scripts start",
+    "build": "build-scripts build"
   },
   "config": {},
   "dependencies": {
