@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.11"></a>
+## [1.0.11](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@1.0.10...@ali/lowcode-demo@1.0.11) (2020-10-19)
+
+
+### Bug Fixes
+
+* 将monaco基础包全部移除，采用cdn形式注入 ([510f1c0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/510f1c0))
+
+
+
+
 <a name="1.0.10"></a>
 ## [1.0.10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo@1.0.9...@ali/lowcode-demo@1.0.10) (2020-09-29)
 

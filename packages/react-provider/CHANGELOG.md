@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.13"></a>
+## [1.0.13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-provider@1.0.12...@ali/lowcode-react-provider@1.0.13) (2020-10-19)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-react-provider
+
 <a name="1.0.12"></a>
 ## [1.0.12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-provider@1.0.11...@ali/lowcode-react-provider@1.0.12) (2020-09-29)
 
