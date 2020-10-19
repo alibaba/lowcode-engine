@@ -46,25 +46,6 @@ function propTypeToSetter(propType: PropType): SetterType {
         isRequired,
         initialValue: '',
       };
-    case 'Json':
-      return {
-        componentName: 'JsonSetter',
-        isRequired,
-        initialValue: '',
-      };
-    case 'color':
-      return {
-        componentName: 'ColorSetter',
-        isRequired,
-        initialValue: '',
-      };
-
-    case 'icon':
-      return {
-        componentName: 'IconSetter',
-        isRequired,
-        initialValue: '',
-      };
     case 'number':
       return {
         componentName: 'NumberSetter',
@@ -76,14 +57,6 @@ function propTypeToSetter(propType: PropType): SetterType {
         componentName: 'BoolSetter',
         isRequired,
         initialValue: false,
-      };
-    case 'JSExpression':
-      return {
-        componentName: 'ExpressionSetter',
-        initialValue: {
-          type: 'JSExpression',
-          value: '',
-        },
       };
     case 'oneOf':
       const dataSource = ((propType as OneOf).value || []).map((value, index) => {
