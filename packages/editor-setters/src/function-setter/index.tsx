@@ -181,7 +181,7 @@ export default class FunctionSetter extends PureComponent<FunctionSetterProps> {
     const { onChange } = this.props;
     onChange({
       type: 'JSFunction',
-      value: `function(){ this.${eventName}() }`,
+      value: `function(){ return this.${eventName}() }`,
     });
   };
 
