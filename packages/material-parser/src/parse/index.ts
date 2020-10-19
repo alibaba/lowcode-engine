@@ -1,4 +1,4 @@
-import parseDynamic from './runtime';
+import parseDynamic from './dynamic';
 import parseJS from './js';
 import parseTS from './ts';
 import { install, installPeerDeps, installTypeModules } from '../utils';
@@ -24,9 +24,9 @@ export default async (args: IParseArgs) => {
     moduleFileAbsolutePath = mainFileAbsolutePath,
   } = args;
   if (args.accesser === 'local') {
-    if (moduleFileAbsolutePath.endsWith('ts') || moduleFileAbsolutePath.endsWith('tsx')) {
+    if (mainFileAbsolutePath.endsWith('ts') || mainFileAbsolutePath.endsWith('tsx')) {
       await install(args);
-      return parseTS(moduleFileAbsolutePath);
+      return parseTS(mainFileAbsolutePath);
     } else {
       try {
         return parseJS(moduleFileAbsolutePath);

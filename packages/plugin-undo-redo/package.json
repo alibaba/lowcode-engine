@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-undo-redo",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "alibaba lowcode editor undo redo plugin",
   "files": [
     "es",
@@ -19,11 +19,11 @@
   ],
   "author": "xiayang.xy",
   "dependencies": {
-    "@ali/lowcode-designer": "^1.0.10",
-    "@ali/lowcode-editor-core": "^1.0.10",
-    "@ali/lowcode-editor-skeleton": "^1.0.10",
-    "@ali/lowcode-types": "^1.0.10",
-    "@ali/lowcode-utils": "^1.0.10",
+    "@ali/lowcode-designer": "^1.0.11",
+    "@ali/lowcode-editor-core": "^1.0.11",
+    "@ali/lowcode-editor-skeleton": "^1.0.11",
+    "@ali/lowcode-types": "^1.0.11",
+    "@ali/lowcode-utils": "^1.0.11",
     "react": "^16.8.1",
     "react-dom": "^16.8.1"
   },
