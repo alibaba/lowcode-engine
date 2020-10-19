@@ -468,6 +468,7 @@ function getNodeInstance(fiberNode: any, specId?: string): NodeInstance<ReactIns
       };
     }
   }
+  if (!instance && !fiberNode?.return) return null;
   return getNodeInstance(fiberNode?.return);
 }
 

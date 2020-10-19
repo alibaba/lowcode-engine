@@ -124,6 +124,8 @@ designer.addPropsReducer((props, node) => {
         if (isUseI18NSetter(node.componentMeta.prototype, item.name) &&
           !isI18NObject(ov) &&
           !isJSExpression(ov) &&
+          !isJSBlock(ov) &&
+          !isJSSlot(ov) &&
           !isVariable(ov)) {
           newProps[item.name] = convertToI18NObject(v);
         }
