@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-datasource-engine",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "DataSource Engine for lowcode",
   "main": "lib/index.js",
   "module": "es/index.js",
