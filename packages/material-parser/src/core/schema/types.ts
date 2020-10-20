@@ -42,13 +42,13 @@ export interface Npm {
   [k: string]: any;
 }
 export interface PropsSection {
-  props: {
+  props: Array<{
     name: string;
     propType: PropType;
     description?: string;
     defaultValue?: any;
     [k: string]: any;
-  }[];
+  }>;
   [k: string]: any;
 }
 export interface RequiredType {
@@ -57,7 +57,7 @@ export interface RequiredType {
 }
 export interface OneOf {
   type: 'oneOf';
-  value: (string | number | boolean)[];
+  value: Array<string | number | boolean>;
   isRequired?: boolean;
   [k: string]: any;
 }
@@ -81,19 +81,19 @@ export interface ObjectOf {
 }
 export interface Shape {
   type: 'shape';
-  value: {
+  value: Array<{
     name?: string;
     propType?: PropType;
-  }[];
+  }>;
   isRequired?: boolean;
   [k: string]: any;
 }
 export interface Exact {
   type: 'exact';
-  value: {
+  value: Array<{
     name?: string;
     propType?: PropType;
-  }[];
+  }>;
   isRequired?: boolean;
   [k: string]: any;
 }
@@ -119,24 +119,24 @@ export interface ConfigureFieldProp {
 }
 export interface ConfigureFieldSetter {
   componentName:
-    | 'List'
-    | 'Object'
-    | 'Function'
-    | 'Node'
-    | 'Mixin'
-    | 'Expression'
-    | 'Switch'
-    | 'Number'
-    | 'Input'
-    | 'TextArea'
-    | 'Date'
-    | 'DateYear'
-    | 'DateMonth'
-    | 'DateRange'
-    | 'ColorPicker'
-    | 'CodeEditor'
-    | 'Select'
-    | 'RadioGroup';
+  | 'List'
+  | 'Object'
+  | 'Function'
+  | 'Node'
+  | 'Mixin'
+  | 'Expression'
+  | 'Switch'
+  | 'Number'
+  | 'Input'
+  | 'TextArea'
+  | 'Date'
+  | 'DateYear'
+  | 'DateMonth'
+  | 'DateRange'
+  | 'ColorPicker'
+  | 'CodeEditor'
+  | 'Select'
+  | 'RadioGroup';
   props?: {
     [k: string]: any;
   };
