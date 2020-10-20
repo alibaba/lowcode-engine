@@ -200,10 +200,11 @@ export class Project {
     if (isDocumentModel(doc)) {
       return doc.open();
     } else if (isPageSchema(doc)) {
-      const foundDoc = this.documents.find(curDoc => curDoc?.rootNode?.id && curDoc?.rootNode?.id === doc?.id);
-      if (foundDoc) {
-        foundDoc.remove();
-      }
+      // 暂时注释掉，影响了 diff 功能
+      // const foundDoc = this.documents.find(curDoc => curDoc?.rootNode?.id && curDoc?.rootNode?.id === doc?.id);
+      // if (foundDoc) {
+      //   foundDoc.remove();
+      // }
     }
 
     doc = this.createDocument(doc);
