@@ -167,7 +167,7 @@ export class DocumentModel {
   nextId(possibleId: string | undefined) {
     let id = possibleId;
     while (!id || this.nodesMap.get(id)) {
-      id = `node_${(this.id.slice(-10) + (++this.seqId).toString(36)).toLocaleLowerCase()}`;
+      id = `node_${(String(this.id).slice(-10) + (++this.seqId).toString(36)).toLocaleLowerCase()}`;
     }
 
     return id;
