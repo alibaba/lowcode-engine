@@ -274,7 +274,7 @@ export class DocumentModel {
     if (!node) {
       return;
     }
-    this.internalRemoveAndPurgeNode(node);
+    this.internalRemoveAndPurgeNode(node, true);
   }
 
   /**

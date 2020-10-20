@@ -15,3 +15,7 @@ export function convertToI18NObject(v: string | object, locale: string = 'zh_CN'
   if (isI18NObject(v)) return v;
   return { type: 'i18n', use: locale, [locale]: v };
 }
+
+export function isString(v: any): v is string {
+  return typeof v === 'string';
+}

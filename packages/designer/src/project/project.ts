@@ -110,6 +110,7 @@ export class Project {
       return;
     }
     this.documents.splice(index, 1);
+    this.documentsMap.delete(doc.id);
   }
 
   /**
@@ -159,8 +160,10 @@ export class Project {
 
 
   private documentsMap = new Map<string, DocumentModel>();
+
   getDocument(id: string): DocumentModel | null {
-    return this.documentsMap.get(id) || null;
+    // 此处不能使用 this.documentsMap.get(id)，因为在乐高 rollback 场景，document.id 会被改成其他值
+    return this.documents.find(doc => doc.id === id) || null;
   }
 
   createDocument(data?: RootSchema): DocumentModel {

@@ -1,5 +1,5 @@
 import { isJSBlock, isJSExpression, isJSSlot } from '@ali/lowcode-types';
-import { isPlainObject, hasOwnProperty, cloneDeep, isI18NObject, isUseI18NSetter, convertToI18NObject } from '@ali/lowcode-utils';
+import { isPlainObject, hasOwnProperty, cloneDeep, isI18NObject, isUseI18NSetter, convertToI18NObject, isString } from '@ali/lowcode-utils';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
 import { Designer, LiveEditing, TransformStage, Node, getConvertedExtraKey } from '@ali/lowcode-designer';
 import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
@@ -126,7 +126,8 @@ designer.addPropsReducer((props, node) => {
           !isJSExpression(ov) &&
           !isJSBlock(ov) &&
           !isJSSlot(ov) &&
-          !isVariable(ov)) {
+          !isVariable(ov) &&
+          isString(v)) {
           newProps[item.name] = convertToI18NObject(v);
         }
       } catch (e) {
