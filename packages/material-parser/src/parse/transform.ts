@@ -6,7 +6,17 @@ const log = debug.extend('parse:transform');
 
 export function transformType(itemType: any) {
   if (typeof itemType === 'string') return itemType;
-  const { name, elements, value = elements, computed, required, type, raw } = itemType;
+  const {
+    name,
+    elements,
+    value = elements,
+    computed,
+    required,
+    type,
+    raw,
+    params,
+    returns,
+  } = itemType;
   if (computed !== undefined && value) {
     return safeEval(value);
   }
@@ -27,13 +37,27 @@ export function transformType(itemType: any) {
     case 'array':
     case 'element':
     case 'node':
+    case 'void':
       break;
     case 'func':
-      if (value) {
-        result.value = value.map(x => ({
-          ...x,
-          propType: transformType(x.propType),
-        }));
+      if (params) {
+        result.params = params.map(x => {
+          const res: any = {
+            name: x.name,
+            propType: transformType(x.type || x.propType),
+          };
+          if (x.description) {
+            res.description = x.description;
+          }
+          return res;
+        });
+      }
+      if (returns) {
+        result.returns = {
+          propType: transformType(returns.type || returns.propType),
+        };
+      }
+      if (raw) {
         result.raw = raw;
       }
       break;
@@ -225,7 +249,8 @@ export function transformItem(name: string, item: any) {
     flowType,
     tsType,
     type = tsType || flowType,
-    required,
+    optional,
+    required = optional,
     defaultValue,
     ...others
   } = item;

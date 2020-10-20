@@ -24,6 +24,8 @@ type Union =
     };
 
 interface Props {
+  error(a: string): number;
+  void: void;
   object: Object;
   trigger?: Array<'click' | 'hover' | 'contextMenu'>;
   str?: string;
@@ -75,7 +77,6 @@ interface Props {
   elementType?: React.ElementType;
   union: Union;
   // eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures
-  func(a: string): JSX.Element;
   func2: Func;
   html: HTMLBaseElement;
   loading?: boolean | { delay?: number };
@@ -93,8 +94,8 @@ App.defaultProps = {
     a: '1',
     b: '2',
   },
-  func(a) {
-    return a;
+  func(a: string) {
+    return 123;
   },
   str: 'str',
 };

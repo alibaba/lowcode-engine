@@ -3,6 +3,7 @@ import defaultPropsHandler from './defaultPropsHandler';
 import flowTypeHandler from './flowTypeHandler';
 import componentMethodsHandler from './componentMethodsHandler';
 import preProcessHandler from './preProcessHandler';
+import propTypeJsDocHandler from './propTypeJsDocHandler';
 
 const { handlers } = require('react-docgen');
 
@@ -13,6 +14,7 @@ const defaultHandlers = [
   childContextTypeHandler,
   handlers.propTypeCompositionHandler,
   handlers.propDocBlockHandler,
+  propTypeJsDocHandler,
   flowTypeHandler,
   defaultPropsHandler,
   handlers.componentDocblockHandler,

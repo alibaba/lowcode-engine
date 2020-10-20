@@ -31,6 +31,7 @@ export default async (args: IParseArgs) => {
       try {
         return parseJS(moduleFileAbsolutePath);
       } catch (e) {
+        log(e);
         await install(args);
         const info = parseDynamic(mainFileAbsolutePath);
         if (!info || !info.length) {
