@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.13.1-6"></a>
+## [0.13.1-6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-5...v0.13.1-6) (2020-10-22)
+
+
+### Bug Fixes
+
+* 修复修改 componentsMap 后无法刷新视图的 bug ([a1e7f21](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a1e7f21))
+
+
+
+
 <a name="0.13.1-5"></a>
 ## [0.13.1-5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-4...v0.13.1-5) (2020-10-20)
 
