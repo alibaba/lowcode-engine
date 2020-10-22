@@ -27,7 +27,7 @@ jest.mock('../../src/designer/designer', () => {
 
 let designer = null;
 beforeAll(() => {
-  designer = new Designer({});
+  designer = new Designer({} as any);
 });
 
 describe('schema 渲染测试', () => {
@@ -47,7 +47,7 @@ describe('schema 渲染测试', () => {
           },
         }],
       }],
-    });
+    } as any);
     project.open();
     expect(project).toBeTruthy();
     const { currentDocument } = project;

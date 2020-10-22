@@ -263,6 +263,16 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
   }
 
+  private didDropOut(dragment: Node) {
+    const callbacks = this.componentMeta.getMetadata().experimental?.callbacks;
+    if (callbacks?.onNodeRemove) {
+      callbacks?.onNodeRemove.call(this, dragment, this);
+    }
+    if (this._parent) {
+      this._parent.didDropOut(dragment);
+    }
+  }
+
   /**
    * 内部方法，请勿使用
    * @param useMutator 是否触发联动逻辑
@@ -280,6 +290,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
         this._parent.children.unlinkChild(this);
       }
     }
+    // if (useMutator) {
+    //   this._parent?.didDropOut(this);
+    // }
     // 建立新的父子关系
     this._parent = parent;
     if (parent) {

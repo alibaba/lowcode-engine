@@ -178,7 +178,6 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
 
   constructor() {
     this.dispose = host.connect(this, async () => {
-      await host.waitForCurrentDocument();
       // sync layout config
       this._layout = host.project.get('config').layout;
 
@@ -186,6 +185,9 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       if (this._libraryMap !== host.libraryMap || this._componentsMap !== host.designer.componentsMap) {
         this._libraryMap = host.libraryMap || {};
         this._componentsMap = host.designer.componentsMap;
+        // 需要注意的是，autorun 依赖收集的是同步执行的代码，所以 await / promise / callback 里的变量不会被收集依赖
+        // 此例中，host.designer.componentsMap 是需要被收集依赖的，否则无法响应式
+        await host.waitForCurrentDocument();
         this.buildComponents();
       }
 
@@ -211,10 +213,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         : '/';
       if (firstRun) {
         initialEntry = path;
-      } else {
-        if (this.history.location.pathname !== path) {
-          this.history.replace(path);
-        }
+      } else if (this.history.location.pathname !== path) {
+        this.history.replace(path);
       }
     });
     const history = createMemoryHistory({
