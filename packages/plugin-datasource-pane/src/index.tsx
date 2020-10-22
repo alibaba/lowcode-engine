@@ -120,10 +120,10 @@ export default class DataSourcePanePlugin extends PureComponent<DataSourcePanePr
 
     // @TODO 姿势是否最优？
     if (editor.get('designer')) {
-      const docSchema = editor.get('designer').project.currentDocument.schema;
+      const docSchema = editor.get('designer').project.getSchema();
       _set(docSchema, 'componentsTree[0].dataSource', schema);
-      editor.get('designer').project.currentDocument.import(docSchema);
-      console.log('editor schema', editor.get('designer').schema);
+      editor.get('designer').project.load(docSchema, true);
+      // console.log('check datasorce save result', editor.get('designer').project.getSchema());
     }
   };
 
@@ -133,13 +133,13 @@ export default class DataSourcePanePlugin extends PureComponent<DataSourcePanePr
 
     if (!active) return null;
 
-    const defaultSchema = editor.get('designer').project?.currentDocument?.schema?.dataSource ?? {};
+    const projectSchema = editor.get('designer').project.getSchema() ?? {};
 
     return (
       <DataSourcePane
         importPlugins={BUILTIN_IMPORT_PLUGINS.concat(importPlugins)}
         dataSourceTypes={BUILTIN_DATASOURCE_TYPES.concat(dataSourceTypes)}
-        defaultSchema={defaultSchema}
+        defaultSchema={_get(projectSchema, 'componentsTree[0].dataSource')}
         onSchemaChange={this.handleSchemaChange}
       />
     );
