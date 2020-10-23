@@ -1,21 +1,32 @@
-import React, { createElement, ReactInstance, ComponentType, ReactElement } from 'react';
+import React, { createElement, ReactInstance } from 'react';
 import { render as reactRender } from 'react-dom';
 import { host } from './host';
 import SimulatorRendererView from './renderer-view';
 import { computed, obx } from '@recore/obx';
-import { Asset, isReactComponent } from '@ali/lowcode-utils';
+import { Asset,
+  isElement,
+  cursor,
+  setNativeSelection,
+  buildComponents,
+  getSubComponent,
+  AssetLoader,
+} from '@ali/lowcode-utils';
 import { getClientRects } from './utils/get-client-rects';
-import loader from './utils/loader';
 import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
-import { isESModule, isElement, cursor, setNativeSelection } from '@ali/lowcode-utils';
-import { RootSchema, NpmInfo, ComponentSchema, TransformStage } from '@ali/lowcode-types';
+
+import { RootSchema, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
+// import { isESModule, isElement, acceptsRef, wrapReactClass, cursor, setNativeSelection } from '@ali/lowcode-utils';
+// import { RootSchema, NpmInfo, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
 // just use types
 import { BuiltinSimulatorRenderer, NodeInstance, Component } from '@ali/lowcode-designer';
 import Slot from './builtin-components/slot';
 import Leaf from './builtin-components/leaf';
 
+const loader = new AssetLoader();
+
 export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   readonly isSimulatorRenderer = true;
+
   private dispose?: () => void;
 
   constructor() {
@@ -52,7 +63,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
         this.buildComponents();
       }
     });
-    host.injectionConsumer.consume((data) => {
+    host.injectionConsumer.consume(() => {
       // sync utils, i18n, contants,... config
       this._appContext = {
         utils: {},
@@ -69,42 +80,61 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   }
 
   @obx.ref private _schema?: RootSchema;
+
   @computed get schema(): any {
     return this._schema;
   }
+
   private _libraryMap: { [key: string]: string } = {};
+
   private buildComponents() {
-    this._components = buildComponents(this._libraryMap, this._componentsMap, this.createComponent.bind(this));
+    this._components = {
+      ...builtinComponents,
+      ...buildComponents(this._libraryMap, this._componentsMap),
+    };
   }
+
   @obx.ref private _components: any = {};
+
   @computed get components(): object {
     // 根据 device 选择不同组件，进行响应式
     // 更好的做法是，根据 device 选择加载不同的组件资源，甚至是 simulatorUrl
     return this._components;
   }
+
   // context from: utils、constants、history、location、match
   @obx.ref private _appContext = {};
+
   @computed get context(): any {
     return this._appContext;
   }
+
   @obx.ref private _designMode = 'design';
+
   @computed get designMode(): any {
     return this._designMode;
   }
+
   @obx.ref private _device = 'default';
+
   @computed get device() {
     return this._device;
   }
+
   @obx.ref private _componentsMap = {};
+
   @computed get componentsMap(): any {
     return this._componentsMap;
   }
+
   @computed get suspended(): any {
     return false;
   }
+
   @computed get scope(): any {
     return null;
   }
+
   /**
    * 加载资源
    */
@@ -113,6 +143,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   }
 
   private instancesMap = new Map<string, ReactInstance[]>();
+
   private unmountIntance(id: string, instance: ReactInstance) {
     const instances = this.instancesMap.get(id);
     if (instances) {
@@ -123,8 +154,9 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
       }
     }
   }
+
   mountInstance(id: string, instance: ReactInstance | null) {
-    const instancesMap = this.instancesMap;
+    const { instancesMap } = this;
     if (instance == null) {
       let instances = this.instancesMap.get(id);
       if (instances) {
@@ -154,7 +186,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
         origUnmount = origUnmount.origUnmount;
       }
       // hack! delete instance from map
-      const newUnmount = function(this: any) {
+      const newUnmount = function (this: any) {
         unmountIntance(id, instance);
         origUnmount && origUnmount.call(this);
       };
@@ -183,6 +215,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   }
 
   private ctxMap = new Map<string, object>();
+
   mountContext(id: string, ctx: object) {
     this.ctxMap.set(id, ctx);
   }
@@ -204,20 +237,27 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
       subs.unshift(sub);
       componentName = paths.join('.');
     }
-
-    return null;
   }
 
   getComponentInstances(id: string): ReactInstance[] | null {
     return this.instancesMap.get(id) || null;
   }
 
-  createComponent(schema: ComponentSchema): Component | null {
+  createComponent(schema: NodeSchema): Component | null {
     let _schema: any = {
       ...schema,
     };
     _schema.methods = {};
     _schema.lifeCycles = {};
+
+    if (schema.componentName === 'Component' && (schema as ComponentSchema).css) {
+      const doc = window.document;
+      const s = doc.createElement('style');
+      s.setAttribute('type', 'text/css');
+      s.setAttribute('id', `Component-${schema.id || ''}`);
+      s.appendChild(doc.createTextNode((schema as ComponentSchema).css || ''));
+      doc.getElementsByTagName('head')[0].appendChild(s);
+    }
 
     const node = host.document.createNode(_schema);
     _schema = node.export(TransformStage.Render);
@@ -227,19 +267,19 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
         return {};
       }
 
-      let result = { ...propsSchema };
+      const result = { ...propsSchema };
       const reg = /^(?:this\.props|props)\.(\S+)$/;
       Object.keys(result).map((key: string) => {
-        if (result[key].type === 'JSExpression') {
+        if (result[key]?.type === 'JSExpression') {
           const { value } = result[key];
           const matched = reg.exec(value);
           if (matched) {
             const propName = matched[1];
             result[key] = propsMap[propName];
           }
-        } else if (result[key].type === 'JSSlot') {
+        } else if (result[key]?.type === 'JSSlot') {
           const schema = result[key].value;
-          result[key] = createElement(Ele, {schema, propsMap: {}});
+          result[key] = createElement(Ele, { schema, propsMap: {} });
         }
       });
 
@@ -247,17 +287,16 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
     };
 
     const renderer = this;
-    const componentsMap = renderer.componentsMap;
+    const { componentsMap } = renderer;
 
-    class Ele extends React.Component<{ schema: any, propsMap: any }> {
+    class Ele extends React.Component<{ schema: any; propsMap: any }> {
       private isModal: boolean;
 
-      constructor(props: any){
+      constructor(props: any) {
         super(props);
         const componentMeta = host.document.getComponentMeta(props.schema.componentName);
         if (componentMeta?.prototype?.isModal()) {
           this.isModal = true;
-          return;
         }
       }
 
@@ -267,25 +306,38 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
         }
         const { schema, propsMap } = this.props;
         const Com = componentsMap[schema.componentName];
+        if (!Com) {
+          return null;
+        }
         let children = null;
         if (schema.children && schema.children.length > 0) {
-          children = schema.children.map((item: any) => createElement(Ele, {schema: item, propsMap}));
+          children = schema.children.map((item: any) => createElement(Ele, { schema: item, propsMap }));
         }
         const props = processPropsSchema(schema.props, propsMap);
         const _leaf = host.document.createNode(schema);
 
-        return createElement(Com, {...props, _leaf}, children);
+        return createElement(Com, { ...props, _leaf }, children);
       }
     }
 
     class Com extends React.Component {
+      // TODO: 暂时解决性能问题
+      shouldComponentUpdate() {
+        return false;
+      }
+
       render() {
-        let children = [];
-        const propsMap = this.props;
-        if (_schema.children && Array.isArray(_schema.children)) {
-          children = _schema.children.map((item: any) => createElement(Ele, {schema: item, propsMap}));
+        const { componentName } = _schema;
+        if (componentName === 'Component') {
+          let children = [];
+          const propsMap = this.props || {};
+          if (_schema.children && Array.isArray(_schema.children)) {
+            children = _schema.children.map((item: any) => createElement(Ele, { schema: item, propsMap }));
+          }
+          return createElement('div', {}, children);
+        } else {
+          return createElement(Ele, { schema: _schema, propsMap: {} });
         }
-        return createElement(React.Fragment, {}, children);
       }
     }
 
@@ -307,17 +359,21 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   setNativeSelection(enableFlag: boolean) {
     setNativeSelection(enableFlag);
   }
+
   setDraggingState(state: boolean) {
     cursor.setDragging(state);
   }
+
   setCopyState(state: boolean) {
     cursor.setCopy(state);
   }
+
   clearState() {
     cursor.release();
   }
 
   private _running = false;
+
   run() {
     if (this._running) {
       return;
@@ -339,98 +395,12 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   }
 }
 
-function accessLibrary(library: string | object) {
-  if (typeof library !== 'string') {
-    return library;
-  }
-
-  return (window as any)[library];
-}
-
-function getSubComponent(library: any, paths: string[]) {
-  const l = paths.length;
-  if (l < 1 || !library) {
-    return library;
-  }
-  let i = 0;
-  let component: any;
-  while (i < l) {
-    const key = paths[i]!;
-    let ex: any;
-    try {
-      component = library[key];
-    } catch (e) {
-      ex = e;
-      component = null;
-    }
-    if (i === 0 && component == null && key === 'default') {
-      if (ex) {
-        return l === 1 ? library : null;
-      }
-      component = library;
-    } else if (component == null) {
-      return null;
-    }
-    library = component;
-    i++;
-  }
-  return component;
-}
-
-function findComponent(libraryMap: LibraryMap, componentName: string, npm?: NpmInfo) {
-  if (!npm) {
-    return accessLibrary(componentName);
-  }
-  // libraryName the key access to global
-  // export { exportName } from xxx exportName === global.libraryName.exportName
-  // export exportName from xxx   exportName === global.libraryName.default || global.libraryName
-  // export { exportName as componentName } from package
-  // if exportName == null exportName === componentName;
-  // const componentName = exportName.subName, if exportName empty subName donot use
-  const exportName = npm.exportName || npm.componentName || componentName;
-  const libraryName = libraryMap[npm.package] || exportName;
-  const library = accessLibrary(libraryName);
-  const paths = npm.exportName && npm.subName ? npm.subName.split('.') : [];
-  if (npm.destructuring) {
-    paths.unshift(exportName);
-  } else if (isESModule(library)) {
-    paths.unshift('default');
-  }
-  return getSubComponent(library, paths);
-}
-
-export interface LibraryMap {
-  [key: string]: string;
-}
-
 // Slot/Leaf and Fragment|FunctionComponent polyfill(ref)
 
 const builtinComponents = {
   Slot,
   Leaf,
 };
-
-function buildComponents(libraryMap: LibraryMap,
-  componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> | ComponentSchema },
-  createComponent: (schema: ComponentSchema) => Component | null) {
-  const components: any = {
-    ...builtinComponents,
-  };
-  Object.keys(componentsMap).forEach((componentName) => {
-    let component = componentsMap[componentName];
-    if (component && (component as ComponentSchema).componentName === 'Component') {
-      components[componentName] = createComponent(component as ComponentSchema);
-    } else if (isReactComponent(component)) {
-      components[componentName] = component;
-    } else {
-      component = findComponent(libraryMap, componentName, component);
-      if (component) {
-        components[componentName] = component;
-      }
-    }
-  });
-  return components;
-}
 
 let REACT_KEY = '';
 function cacheReactKey(el: Element): Element {
@@ -460,7 +430,7 @@ function getClosestNodeInstance(from: ReactInstance, specId?: string): NodeInsta
       const nodeId = el[SYMBOL_VNID];
       if (!specId || specId === nodeId) {
         return {
-          nodeId: nodeId,
+          nodeId,
           instance: el,
         };
       }
@@ -475,17 +445,17 @@ function getClosestNodeInstance(from: ReactInstance, specId?: string): NodeInsta
 }
 
 function getNodeInstance(fiberNode: any, specId?: string): NodeInstance<ReactInstance> | null {
-  const instance = fiberNode.stateNode;
+  const instance = fiberNode?.stateNode;
   if (instance && SYMBOL_VNID in instance) {
     const nodeId = instance[SYMBOL_VNID];
     if (!specId || specId === nodeId) {
       return {
-        nodeId: nodeId,
-        instance: instance,
+        nodeId,
+        instance,
       };
     }
   }
-  return getNodeInstance(fiberNode.return);
+  return getNodeInstance(fiberNode?.return);
 }
 
 function checkInstanceMounted(instance: any): boolean {

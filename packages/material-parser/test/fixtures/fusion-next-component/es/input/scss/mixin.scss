@@ -1,0 +1,135 @@
+@charset "UTF-8";
+
+// input
+// --------------------------------------------------
+
+@mixin input-size(
+    $height,
+    $padding,
+    $fontSize,
+    $labelPadding,
+    $iconPadding
+) {
+    height: $height;
+    #{$input-prefix}-label {
+        padding-left: $labelPadding;
+        font-size: $fontSize;
+    }
+    #{$input-prefix}-inner {
+        font-size: $fontSize;
+    }
+    #{$input-prefix}-control {
+        padding-right: $iconPadding;
+    }
+    input {
+        height: $height - $input-border-width*2;
+        line-height: ($height - $input-border-width*2)\0; // ie9 support
+        padding: 0 $padding;
+        font-size: $fontSize;
+        &::placeholder {
+            font-size: $fontSize;
+        }
+    }
+
+    // for select
+    #{$input-prefix}-text-field {
+        padding: 0 $padding;
+        font-size: $fontSize;
+        height: $height - $input-border-width*2;
+        line-height: ($height - $input-border-width*2); // ie9 support
+    }
+}
+
+
+@mixin input-size-rtl(
+    $labelPadding,
+    $iconPadding
+) {
+    #{$input-prefix}-label {
+        padding-left: 0;
+        padding-right: $labelPadding;
+    }
+    #{$input-prefix}-control {
+        padding-right: 0;
+        padding-left: $iconPadding;
+    }
+}
+
+@mixin input-border-radius($size) {
+    border-radius: $size;
+    #{$input-prefix}-control {
+        border-radius: 0 $size $size 0;
+    }
+}
+
+@mixin input-icon-size($size) {
+    .#{$css-prefix}icon {
+        @include icon-size($size);
+    }
+}
+
+@mixin input-addon-size(
+    $fontSize
+) {
+    font-size: $fontSize;
+}
+
+// Placeholder text
+@mixin input-placeholder($color) {
+    // Firefox
+    &::-moz-placeholder {
+        color: $color;
+        opacity: 1; // Override Firefox's unusual default opacity; see https://github.com/twbs/bootstrap/pull/11526
+    }
+    // Internet Explorer 10+
+    &:-ms-input-placeholder {
+        color: $color;
+    }
+    // Safari and Chrome
+    &::-webkit-input-placeholder {
+        color: $color;
+    }
+}
+
+@mixin input-disabled() {
+    color: $input-disabled-color;
+    border-color: $input-disabled-border-color;
+    background-color: $input-disabled-bg-color;
+    cursor: not-allowed;
+
+    &:hover {
+        border-color: $input-disabled-border-color;
+        background-color: $input-disabled-bg-color;
+    }
+}
+
+@mixin input-focus-style() {
+    border-color: $input-focus-border-color;
+    background-color: $input-focus-bg-color;
+}
+
+@mixin input-style() {
+    border: $input-border-width solid $input-border-color;
+    background-color: $input-bg-color;
+    border-radius: $form-element-medium-corner;
+
+    &:hover {
+        border-color: $input-hover-border-color;
+        background-color: $input-hover-bg-color;
+    }
+
+    &:focus {
+        @include input-focus-style();
+    }
+}
+
+@mixin input-height(
+    $height,
+    $borderWidth
+) {
+    height: $height;
+    input {
+        height: $height - $borderWidth*2;
+        line-height: ($height - $borderWidth*2)\0; // ie9 support
+    }
+}

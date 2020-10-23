@@ -4,18 +4,20 @@ import { TransformStage } from './transform-stage';
 import { NodeData, isNodeSchema } from '@ali/lowcode-types';
 import { shallowEqual } from '@ali/lowcode-utils';
 import { EventEmitter } from 'events';
+import { foreachReverse } from '../../utils/tree';
 
 export class NodeChildren {
   @obx.val private children: Node[];
+
   private emitter = new EventEmitter();
 
-  constructor(readonly owner: ParentalNode, data: NodeData | NodeData[]) {
+  constructor(readonly owner: ParentalNode, data: NodeData | NodeData[], options: any = {}) {
     this.children = (Array.isArray(data) ? data : [data]).map(child => {
-      return this.owner.document.createNode(child);
+      return this.owner.document.createNode(child, options.checkId);
     });
   }
 
-  interalInitParent() {
+  internalInitParent() {
     this.children.forEach(child => child.internalSetParent(this.owner));
   }
 
@@ -49,13 +51,13 @@ export class NodeChildren {
         node = child;
         node.import(item);
       } else {
-        node = this.owner.document.createNode(item);
+        node = this.owner.document.createNode(item, checkId);
       }
       children[i] = node;
     }
 
     this.children = children;
-    this.interalInitParent();
+    this.internalInitParent();
     if (!shallowEqual(children, originChildren)) {
       this.emitter.emit('change');
     }
@@ -63,7 +65,7 @@ export class NodeChildren {
 
   /**
    * @deprecated
-   * @param nodes 
+   * @param nodes
    */
   concat(nodes: Node[]) {
     return this.children.concat(nodes);
@@ -87,28 +89,64 @@ export class NodeChildren {
     return this.size > 0;
   }
 
-  @computed length() {
+  @computed get length(): number {
     return this.children.length;
+  }
+
+  private purged = false;
+
+  /**
+   * 回收销毁
+   */
+  purge(useMutator = true) {
+    if (this.purged) {
+      return;
+    }
+    this.purged = true;
+    this.children.forEach((child) => {
+      child.purge(useMutator);
+    });
+  }
+
+  unlinkChild(node: Node) {
+    const i = this.children.indexOf(node);
+    if (i < 0) {
+      return false;
+    }
+    this.children.splice(i, 1);
   }
 
   /**
    * 删除一个节点
    */
   delete(node: Node, purge = false, useMutator = true): boolean {
+    if (node.isParental()) {
+      foreachReverse(node.children, (subNode: Node) => {
+        subNode.remove(useMutator, purge);
+      });
+    }
+    if (purge) {
+      // should set parent null
+      node.internalSetParent(null, useMutator);
+      try {
+        node.purge(useMutator);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    const { document } = node;
+    document.unlinkNode(node);
+    document.selection.remove(node.id);
+    document.destroyNode(node);
+    this.emitter.emit('change');
     const i = this.children.indexOf(node);
+    if (useMutator) {
+      this.reportModified(node, this.owner, { type: 'remove', removeIndex: i, removeNode: node });
+    }
     if (i < 0) {
       return false;
     }
-    const deleted = this.children.splice(i, 1)[0];
-    if (purge) {
-      // should set parent null
-      deleted.internalSetParent(null, useMutator);
-      deleted.purge(useMutator);
-    }
-    this.emitter.emit('change');
-    if (useMutator) {
-      this.reportModified(node, this.owner, {type: 'remove', removeIndex: i, removeNode: node});
-    }
+    this.children.splice(i, 1);
     return false;
   }
 
@@ -116,7 +154,7 @@ export class NodeChildren {
    * 插入一个节点，返回新长度
    */
   insert(node: Node, at?: number | null, useMutator = true): void {
-    const children = this.children;
+    const { children } = this;
     let index = at == null || at === -1 ? children.length : at;
 
     const i = children.indexOf(node);
@@ -159,7 +197,7 @@ export class NodeChildren {
       }
     }
     if (node.prevSibling && node.nextSibling) {
-      const conditionGroup = node.prevSibling.conditionGroup;
+      const { conditionGroup } = node.prevSibling;
       // insert at condition group
       if (conditionGroup && conditionGroup === node.nextSibling.conditionGroup) {
         node.setConditionGroup(conditionGroup);
@@ -200,7 +238,7 @@ export class NodeChildren {
    */
   [Symbol.iterator](): { next(): { value: Node } } {
     let index = 0;
-    const children = this.children;
+    const { children } = this;
     const length = children.length || 0;
     return {
       next() {
@@ -248,6 +286,10 @@ export class NodeChildren {
     return this.children.filter(fn);
   }
 
+  find(fn: (item: Node, index: number) => Node) {
+    return this.children.find(fn);
+  }
+
   mergeChildren(remover: () => any, adder: (children: Node[]) => NodeData[] | null, sorter: () => any) {
     let changed = false;
     if (remover) {
@@ -290,18 +332,6 @@ export class NodeChildren {
     };
   }
 
-  private purged = false;
-  /**
-   * 回收销毁
-   */
-  purge(useMutator = true) {
-    if (this.purged) {
-      return;
-    }
-    this.purged = true;
-    this.children.forEach((child) => child.purge(useMutator));
-  }
-
   get [Symbol.toStringTag]() {
     // 保证向前兼容性
     return 'Array';
@@ -327,7 +357,7 @@ export class NodeChildren {
       try {
         callbacks?.onSubtreeModified.call(node, owner, options);
       } catch (e) {
-        console.error('error when excute experimental.callbacks.onNodeAdd', e);
+        console.error('error when excute experimental.callbacks.onSubtreeModified', e);
       }
     }
 

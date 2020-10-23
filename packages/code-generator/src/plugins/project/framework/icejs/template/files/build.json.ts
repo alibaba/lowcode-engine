@@ -1,11 +1,12 @@
-import ResultFile from '../../../../../../model/ResultFile';
-import { IResultFile } from '../../../../../../types';
+import { ResultFile } from '@ali/lowcode-types';
 
-export default function getFile(): [string[], IResultFile] {
-  const file = new ResultFile(
-    'build',
-    'json',
-    `
+export default function getFile(): [string[], ResultFile] {
+  return [
+    [],
+    {
+      name: 'build',
+      ext: 'json',
+      content: `
 {
   "entry": "src/app.js",
   "plugins": [
@@ -26,8 +27,7 @@ export default function getFile(): [string[], IResultFile] {
     "@ali/build-plugin-ice-def"
   ]
 }
-    `,
-  );
-
-  return [[], file];
+      `,
+    },
+  ];
 }

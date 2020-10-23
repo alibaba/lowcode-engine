@@ -103,5 +103,5 @@ describe('Drawer', () => {
       </Drawer>,
     );
     expect(wrapper2.find('button.forceRender').length).toBe(1);
-  })
+  });
 });

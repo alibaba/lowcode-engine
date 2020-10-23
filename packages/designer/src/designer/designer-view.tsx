@@ -24,7 +24,7 @@ export class DesignerView extends Component<DesignerProps & {
 
   shouldComponentUpdate(nextProps: DesignerProps) {
     this.designer.setProps(nextProps);
-    const props = this.props;
+    const { props } = this;
     if (
       nextProps.className !== props.className ||
       nextProps.style !== props.style ||
@@ -40,11 +40,11 @@ export class DesignerView extends Component<DesignerProps & {
     if (onMount) {
       onMount(this.designer);
     }
-    clipboard.injectCopyPaster(document)
+    clipboard.injectCopyPaster(document);
     this.designer.postEvent('mount', this.designer);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.designer.purge();
   }
 

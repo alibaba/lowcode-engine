@@ -71,13 +71,13 @@ export interface Experimental {
   getResizingHandlers?: (
     currentNode: any,
   ) =>
-    | Array<{
-        type: 'N' | 'W' | 'S' | 'E' | 'NW' | 'NE' | 'SE' | 'SW';
-        content?: ReactElement;
-        propTarget?: string;
-        appearOn?: 'mouse-enter' | 'mouse-hover' | 'selected' | 'always';
-      }>
-    | ReactElement[];
+  | Array<{
+    type: 'N' | 'W' | 'S' | 'E' | 'NW' | 'NE' | 'SE' | 'SW';
+    content?: ReactElement;
+    propTarget?: string;
+    appearOn?: 'mouse-enter' | 'mouse-hover' | 'selected' | 'always';
+  }>
+  | ReactElement[];
   // hover时 控制柄高亮
   // mousedown 时请求独占
   // dragstart 请求 通用 resizing 控制

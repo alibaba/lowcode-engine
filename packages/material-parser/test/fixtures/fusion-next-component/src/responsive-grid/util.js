@@ -8,21 +8,21 @@ const { isPlainObject } = obj;
  * @return {Object}
  */
 export function filterUndefinedValue(object) {
-    if (!isPlainObject(object)) {
-        return object;
+  if (!isPlainObject(object)) {
+    return object;
+  }
+
+  const obj = {};
+
+  Object.keys(object).forEach(key => {
+    const value = object[key];
+
+    if (value !== undefined) {
+      obj[key] = value;
     }
+  });
 
-    const obj = {};
-
-    Object.keys(object).forEach(key => {
-        const value = object[key];
-
-        if (value !== undefined) {
-            obj[key] = value;
-        }
-    });
-
-    return obj;
+  return obj;
 }
 
 /**
@@ -32,12 +32,12 @@ export function filterUndefinedValue(object) {
  * @return {Object}
  */
 export function stripObject(obj, subObj) {
-    const newObject = {};
+  const newObject = {};
 
-    Object.keys(obj).forEach(key => {
-        if (!(key in subObj)) {
-            newObject[key] = obj[key];
-        }
-    });
-    return newObject;
+  Object.keys(obj).forEach(key => {
+    if (!(key in subObj)) {
+      newObject[key] = obj[key];
+    }
+  });
+  return newObject;
 }

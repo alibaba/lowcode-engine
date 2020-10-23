@@ -1,15 +1,14 @@
+import { ResultFile } from '@ali/lowcode-types';
+import { createResultFile } from '../../../../../../../../utils/resultHelper';
 
-import ResultFile from '../../../../../../../../model/ResultFile';
-import { IResultFile } from '../../../../../../../../types';
-
-export default function getFile(): [string[], IResultFile] {
-  const file = new ResultFile(
+export default function getFile(): [string[], ResultFile] {
+  const file = createResultFile(
     'components',
     'ts',
     `
 /**
  * 乐高组件
- */ 
+ */
 import Div from '@ali/vc-div/build/view';
 import Text from '@ali/vc-text/build/view';
 import Slot from '@ali/vc-slot/build/view';
@@ -38,6 +37,5 @@ export default componentsMap;
     `,
   );
 
-  return [['src','config'], file];
+  return [['src', 'config'], file];
 }
-  

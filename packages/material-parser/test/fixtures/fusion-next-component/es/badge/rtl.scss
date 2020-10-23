@@ -1,0 +1,12 @@
+
+.#{$css-prefix}badge[dir="rtl"] {
+    .#{$css-prefix}badge-custom {
+        padding-right: $badge-size-custom-padding-lr;
+        padding-left: $badge-size-custom-padding-lr;
+    }
+
+    .#{$css-prefix}badge-scroll-number {
+        left: 0;
+        transform-origin: right center;
+    }
+}

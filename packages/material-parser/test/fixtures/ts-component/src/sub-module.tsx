@@ -1,10 +1,22 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 
-export default function SubModule({ name }) {
-  return <div>hello, {name}</div>;
+interface Props {
+  name: string;
 }
 
-SubModule.propTypes = {
-  name: PropTypes.string,
+class SubModule extends React.Component<Props> {
+  static defaultProps = {
+    name: 'abc',
+  };
+
+  render() {
+    const { name } = this.props;
+    return <div>hello, {name}</div>;
+  }
+}
+
+SubModule.defaultProps = {
+  name: 'abc',
 };
+
+export default SubModule;

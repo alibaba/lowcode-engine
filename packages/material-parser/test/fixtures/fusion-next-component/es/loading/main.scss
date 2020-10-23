@@ -1,0 +1,222 @@
+@charset "UTF-8";
+
+@import "../core/index-noreset.scss";
+@import "../animate/scss/mixin.scss";
+@import "scss/mixin";
+@import "scss/variable";
+@import "./rtl.scss";
+
+/* put your code here */
+
+#{$loading-prefix} {
+    position: relative;
+
+    &.#{$css-prefix}open {
+        pointer-events: none;
+    }
+
+    /* 遮罩层 */
+    #{$loading-prefix}-component {
+        opacity: .7;
+        -webkit-filter: blur(1px);
+        filter: blur(1px);
+        filter: "progid\:DXImageTransform\.Microsoft\.Blur(PixelRadius\=1, MakeShadow\=false)"; /* IE6~IE9 */
+        position: relative;
+        pointer-events: none;
+    }
+    /* for IE9,10 */
+    &-masker {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 99;
+        opacity: .2;
+        background: #FFF;
+    }
+
+    &-inline {
+        display: inline-block;
+    }
+
+    &-tip {
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 4;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+
+    &-tip-fullscreen {
+        top: inherit;
+        left: inherit;
+        transform: inherit;
+    }
+
+    &-tip-placeholder {
+        display: none;
+    }
+
+    /* text on the right side of */
+    &-right-tip {
+        #{$loading-prefix}-indicator {
+            display: inline-block;
+        }
+        #{$loading-prefix}-tip-content {
+            position: absolute;
+            display: block;
+            top: 50%;
+            right: 0;
+            transform: translate(0, -50%);
+        }
+        #{$loading-prefix}-tip-placeholder {
+            display: inline-block;
+            visibility: hidden;
+            margin-left: 1em;
+        }
+    }
+    /* 动效 */
+    &-fusion-reactor {
+        display: inline-block;
+        width: $loading-large-size;
+        height: $loading-large-size;
+        position: relative;
+        margin: 0;
+
+        @include duration($loading-fusion-vector-seconds);
+        @include count(infinite);
+        @include function(linear);
+
+        @include animation-name(nextVectorRoute);
+
+        #{$loading-prefix}-dot {
+            position: absolute;
+            margin: auto;
+            width: $loading-large-dot-size;
+            height: $loading-large-dot-size;
+            border-radius: 50%;
+            background: $loading-dot-color;
+
+            @include function(ease-in-out);
+            @include count(infinite);
+            @include duration($loading-fusion-vector-dot-seconds);
+
+            &:nth-child(1) {
+                top: 0;
+                bottom: 0;
+                left: 0;
+                @include animation-name(nextVectorDotsX);
+            }
+            &:nth-child(2) {
+                left: 0;
+                right: 0;
+                top: 0;
+                opacity: .8;
+                @include animation-name(nextVectorDotsY);
+            }
+            &:nth-child(3) {
+                top: 0;
+                bottom: 0;
+                right: 0;
+                opacity: .6;
+                @include animation-name(nextVectorDotsXR);
+            }
+            &:nth-child(4) {
+                left: 0;
+                right: 0;
+                bottom: 0;
+                opacity: .2;
+                @include animation-name( nextVectorDotsYR);
+            }
+        }
+    }
+
+    &-medium-fusion-reactor {
+
+        width: $loading-medium-size;
+        height: $loading-medium-size;
+
+        #{$loading-prefix}-dot {
+            width: $loading-medium-dot-size;
+            height: $loading-medium-dot-size;
+            &:nth-child(1) {
+                @include animation-name(nextVectorDotsX-medium);
+            }
+            &:nth-child(2) {
+                @include animation-name(nextVectorDotsY-medium);
+            }
+            &:nth-child(3) {
+                @include animation-name(nextVectorDotsXR-medium);
+            }
+            &:nth-child(4) {
+                @include animation-name(nextVectorDotsYR-medium);
+            }
+        }
+    }
+}
+
+@include keyframes(nextVectorRoute) {
+    0% {
+        @include transform(rotate($loading-fusion-vector-rotation-step * 0));
+    }
+    5% {
+        @include transform(rotate($loading-fusion-vector-rotation-step * 1));
+    }
+    25% {
+        @include transform(rotate($loading-fusion-vector-rotation-step * 1));
+    }
+    30% {
+        @include transform(rotate($loading-fusion-vector-rotation-step * 2));
+    }
+    50% {
+        @include transform(rotate($loading-fusion-vector-rotation-step * 2));
+    }
+    55% {
+        @include transform(rotate($loading-fusion-vector-rotation-step * 3));
+    }
+    75% {
+        @include transform(rotate($loading-fusion-vector-rotation-step * 3));
+    }
+    80% {
+        @include transform(rotate($loading-fusion-vector-rotation-step * 4));
+    }
+    100% {
+        @include transform(rotate($loading-fusion-vector-rotation-step * 4));
+    }
+}
+
+/* 20% 的时间在旋转 */
+@include keyframes(nextVectorDotsYR) {
+    @include loading-fusion(bottom, $loading-large-dot-size ,$loading-large-size / 2 - $loading-large-dot-size * 1.2 / 2, $loading-large-dot-size * 1.2);
+}
+
+@include keyframes(nextVectorDotsY) {
+    @include loading-fusion(top, $loading-large-dot-size, $loading-large-size / 2 - $loading-large-dot-size * 1.2 / 2, $loading-large-dot-size * 1.2);
+}
+
+@include keyframes(nextVectorDotsX) {
+    @include loading-fusion(left, $loading-large-dot-size, $loading-large-size / 2 - $loading-large-dot-size * 1.2 / 2, $loading-large-dot-size * 1.2);
+}
+
+@include keyframes(nextVectorDotsXR) {
+    @include loading-fusion(right, $loading-large-dot-size, $loading-large-size / 2 - $loading-large-dot-size * 1.2 / 2, $loading-large-dot-size * 1.2);
+}
+
+@include keyframes(nextVectorDotsYR-medium) {
+    @include loading-fusion(bottom, $loading-medium-dot-size ,$loading-medium-size / 2 - $loading-medium-dot-size * 1.2 / 2, $loading-medium-dot-size * 1.2);
+}
+
+@include keyframes(nextVectorDotsY-medium) {
+    @include loading-fusion(top, $loading-medium-dot-size ,$loading-medium-size / 2 - $loading-medium-dot-size * 1.2 / 2, $loading-medium-dot-size * 1.2);
+}
+
+@include keyframes(nextVectorDotsX-medium) {
+    @include loading-fusion(left, $loading-medium-dot-size ,$loading-medium-size / 2 - $loading-medium-dot-size * 1.2 / 2, $loading-medium-dot-size * 1.2);
+}
+
+@include keyframes(nextVectorDotsXR-medium) {
+    @include loading-fusion(right, $loading-medium-dot-size ,$loading-medium-size / 2 - $loading-medium-dot-size * 1.2 / 2, $loading-medium-dot-size * 1.2);
+}

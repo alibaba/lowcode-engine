@@ -1,0 +1,163 @@
+////
+/// @module card: 卡片
+/// @tag Card
+/// @category component
+/// @family data-display
+/// @varPrefix $card-
+/// @classPrefix {prefix}-card
+/// @order {"size/bounding":10,"size/divider":11,"size/header":12,"size/content":13,"size/footer":14,"statement/normal":10,"statement/normal/bounding":100,"statement/normal/header":101,"statement/normal/footer":102}
+////
+
+$card-prefix: '.' + $css-prefix + 'card';
+
+// animation
+$ease-out: cubic-bezier(.23, 1, .32, 1);
+$ease-in: cubic-bezier(.755, .05, .855, .06);
+
+/// corner
+/// @namespace size/bounding
+$card-corner: $corner-1 !default;
+
+/// padding (l, r)
+/// @namespace size/bounding
+$card-padding-lr: $s-4 !default;
+
+/// border width
+/// @namespace size/bounding
+$card-border-width: $line-1 !default;
+
+/// padding (t)
+/// @namespace size/divider
+$card-head-padding-bottom: $s-3 !default;
+
+/// border width (b)
+/// @namespace size/divider
+$card-head-bottom-border-width: $line-1 !default;
+
+/// height
+/// @namespace size/header
+$card-head-main-height: $s-10 !default;
+
+/// margin (t)
+/// @namespace size/header
+$card-head-main-margin-top: $s-2 !default;
+
+/// margin (b)
+/// @namespace size/header
+$card-head-main-margin-bottom: $s-zero !default;
+
+/// title text
+/// @namespace size/header
+$card-title-font-size: $font-size-subhead !default;
+
+/// title text weight
+/// @namespace size/header
+$card-title-font-weight: $font-weight-2 !default;
+
+/// sub title text
+/// @namespace size/header
+$card-sub-title-font-size: $font-size-caption !default;
+
+/// extra text
+/// @namespace size/header
+$card-title-extra-font-size: $font-size-body-1 !default;
+
+/// line width
+/// @namespace size/header
+$card-title-bullet-width: $line-3 !default;
+
+/// line height
+/// @namespace size/header
+$card-title-bullet-height: $s-4 !default;
+
+/// title padding (l)
+/// @namespace size/header
+$card-title-padding-left: $s-2 !default;
+
+/// sub title padding (l)
+/// @namespace size/header
+$card-sub-title-padding-left: $s-2 !default;
+
+/// padding (t)
+/// @namespace size/content
+$card-body-show-divider-padding-top: $s-3 !default;
+
+/// padding (t)
+/// @namespace size/content
+$card-body-hide-divider-padding-top: $s-zero !default;
+
+/// font size
+/// @namespace size/content
+$card-content-font-size: $font-size-body-1 !default;
+
+/// line height
+/// @namespace size/content
+$card-content-line-height: $font-lineheight-2 !default;
+
+/// padding (b)
+/// @namespace size/content
+$card-body-padding-bottom: $s-3 !default;
+
+/// more button height
+/// @namespace size/footer
+$card-more-btn-height: $s-4 !default;
+
+/// padding (t)
+/// @namespace size/footer
+$card-more-btn-padding-top: $s-2 !default;
+
+/// expand button size
+/// @namespace size/footer
+$card-more-btn-font-size: $font-size-body-1 !default;
+
+/// shadow
+/// @namespace statement/normal/bounding
+$card-shadow: $shadow-zero !default;
+
+/// border style
+/// @namespace statement/normal/bounding
+$card-border-style: $line-solid !default;
+
+/// border color
+/// @namespace statement/normal/bounding
+$card-border-color: $color-line1-2 !default;
+
+/// background
+/// @namespace statement/normal/bounding
+$card-background: $color-white !default;
+
+/// background
+/// @namespace statement/normal/header
+$card-header-background: $color-white !default;
+
+/// title color
+/// @namespace statement/normal/header
+$card-title-color: $color-text1-4 !default;
+
+/// sub title color
+/// @namespace statement/normal/header
+$card-sub-title-color: $color-text1-3 !default;
+
+/// extra color
+/// @namespace statement/normal/header
+$card-title-extra-color: $color-link-1 !default;
+
+/// line color
+/// @namespace statement/normal/header
+$card-title-bullet-color: $color-brand1-6 !default;
+
+/// color
+/// @namespace statement/normal/content
+$card-content-color: $color-text1-3 !default;
+
+/// divider color
+/// @namespace statement/normal/header
+$card-head-bottom-border-color: $color-line1-1 !default;
+
+/// expand button color
+/// @namespace statement/normal/footer
+$card-more-btn-color: $color-link-1 !default;
+
+/// background
+/// @namespace statement/normal/footer
+$card-more-btn-background: $color-white !default;

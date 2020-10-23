@@ -2,7 +2,7 @@ import { BuiltinSimulatorRenderer, NodeInstance, Component } from '@ali/lowcode-
 import { shared, render as raxRender, createElement } from 'rax';
 import DriverUniversal from 'driver-universal';
 import { computed, obx } from '@recore/obx';
-import { RootSchema, NpmInfo, ComponentSchema } from '@ali/lowcode-types';
+import { RootSchema, NpmInfo } from '@ali/lowcode-types';
 import { Asset, isReactComponent, isESModule, setNativeSelection, cursor, isElement } from '@ali/lowcode-utils';
 
 import SimulatorRendererView from './renderer-view';
@@ -34,18 +34,25 @@ function accessLibrary(library: string | object) {
 
 export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   readonly isSimulatorRenderer = true;
+
   private dispose?: () => void;
 
   private instancesMap = new Map<string, any[]>();
+
   @obx.ref private _schema?: RootSchema;
+
   @computed get schema(): any {
     return this._schema;
   }
+
   private _libraryMap: { [key: string]: string } = {};
+
   private buildComponents() {
     this._components = buildComponents(this._libraryMap, this._componentsMap);
   }
+
   @obx.ref private _components: any = {};
+
   @computed get components(): object {
     // 根据 device 选择不同组件，进行响应式
     // 更好的做法是，根据 device 选择加载不同的组件资源，甚至是 simulatorUrl
@@ -53,22 +60,26 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   }
 
   @obx.ref private _designMode = 'design';
+
   @computed get designMode(): any {
     return this._designMode;
   }
 
   @obx.ref private _componentsMap = {};
+
   @computed get componentsMap(): any {
     return this._componentsMap;
   }
 
   @obx.ref private _device = 'default';
+
   @computed get device() {
     return this._device;
   }
 
   // context from: utils、constants、history、location、match
   @obx.ref private _appContext = {};
+
   @computed get context(): any {
     return this._appContext;
   }
@@ -76,6 +87,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   @computed get suspended(): any {
     return false;
   }
+
   @computed get scope(): any {
     return null;
   }
@@ -84,6 +96,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
     // TODO: parse layout Component
     return null;
   }
+
   private emitter = new EventEmitter();
 
   constructor() {
@@ -122,7 +135,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
         this.buildComponents();
       }
     });
-    host.injectionConsumer.consume((data) => {
+    host.injectionConsumer.consume(() => {
       // sync utils, i18n, contants,... config
       this._appContext = {
         utils: {},
@@ -170,13 +183,14 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
     // return null;
   }
 
-  createComponent(schema: ComponentSchema): Component | null {
+  createComponent(/* schema: ComponentSchema */): Component | null {
     return null;
   }
 
   setNativeSelection(enableFlag: boolean) {
     setNativeSelection(enableFlag);
   }
+
   setDraggingState(state: boolean) {
     cursor.setDragging(state);
   }
@@ -184,12 +198,28 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
   setCopyState(state: boolean) {
     cursor.setCopy(state);
   }
+
   clearState() {
     cursor.release();
   }
 
-  findDOMNodes(instance: any): Array<Element | Text> | null {
-    return [raxFindDOMNodes(instance)];
+  findDOMNodes(instance: any, selector?: string): Array<Element | Text> | null {
+    let el = instance;
+    if (selector) {
+      el = document.querySelector(selector);
+    }
+    try {
+      return raxFindDOMNodes(el);
+    } catch (e) {
+      // ignore
+    }
+    if (el && el.type && el.props && el.props.componentId) {
+      el = document.querySelector(`${el.type}[componentid=${el.props.componentId}]`);
+    } else {
+      console.error(instance);
+      throw new Error('This instance may not a valid element');
+    }
+    return raxFindDOMNodes(el);
   }
 
   /**
@@ -210,8 +240,9 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
       }
     }
   }
+
   mountInstance(id: string, instance: any | null) {
-    const instancesMap = this.instancesMap;
+    const { instancesMap } = this;
     if (instance == null) {
       let instances = this.instancesMap.get(id);
       if (instances) {
@@ -241,7 +272,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
         origUnmount = origUnmount.origUnmount;
       }
       // hack! delete instance from map
-      const newUnmount = function(this: any) {
+      const newUnmount = function (this: any) {
         unmountIntance(id, instance);
         origUnmount && origUnmount.call(this);
       };
@@ -373,7 +404,7 @@ function buildComponents(libraryMap: LibraryMap, componentsMap: { [componentName
   return components;
 }
 
-function getClosestNodeInstance(from: any, specId?: string): NodeInstance<any> | null {
+function getClosestNodeInstance(from: any): NodeInstance<any> | null {
   const el: any = from;
   if (el) {
     // if (isElement(el)) {
@@ -405,7 +436,7 @@ function getNodeInstance(dom: HTMLElement): NodeInstance<any> | null {
     if (isValidDesignModeRaxComponentInstance(instance)) {
       return {
         nodeId: instance.props._leaf.getId(),
-        instance: instance,
+        instance,
         node: instance.props._leaf,
       };
     }

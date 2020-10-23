@@ -1,5 +1,5 @@
 import { computed, obx } from '@ali/lowcode-editor-core';
-import { NodeData, isJSExpression, isDOMText, NodeSchema, isNodeSchema, RootSchema } from '@ali/lowcode-types';
+import { NodeData, isJSExpression, isDOMText, NodeSchema, isNodeSchema, RootSchema, PageSchema } from '@ali/lowcode-types';
 import { EventEmitter } from 'events';
 import { Project } from '../project';
 import { ISimulatorHost } from '../simulator';
@@ -8,9 +8,8 @@ import { isDragNodeDataObject, DragNodeObject, DragNodeDataObject, DropLocation 
 import { Node, insertChildren, insertChild, isNode, RootNode, ParentalNode } from './node/node';
 import { Selection } from './selection';
 import { History } from './history';
-import { TransformStage } from './node';
+import { TransformStage, ModalNodesManager } from './node';
 import { uniqueId } from '@ali/lowcode-utils';
-import { ModalNodesManager } from './node';
 
 export type GetDataType<T, NodeType> = T extends undefined
   ? NodeType extends {
@@ -20,33 +19,51 @@ export type GetDataType<T, NodeType> = T extends undefined
     : any
   : T;
 
+export interface ComponentMap {
+  componentName: string;
+  package: string;
+  version?: string;
+  destructuring?: boolean;
+  exportName?: string;
+  subName?: string;
+}
+
 export class DocumentModel {
   /**
    * 根节点 类型有：Page/Component/Block
    */
-  readonly rootNode: RootNode;
+  rootNode: RootNode | null;
+
   /**
    * 文档编号
    */
   id: string = uniqueId('doc');
+
   /**
    * 选区控制
    */
   readonly selection: Selection = new Selection(this);
+
   /**
    * 操作记录控制
    */
   readonly history: History;
+
   /**
    * 模态节点管理
    */
   readonly modalNodesManager: ModalNodesManager;
 
-  private nodesMap = new Map<string, Node>();
+  private _nodesMap = new Map<string, Node>();
+
   @obx.val private nodes = new Set<Node>();
+
   private seqId = 0;
+
   private _simulator?: ISimulatorHost;
+
   private emitter: EventEmitter;
+
   private rootNodeVisitorMap: { [visitorName: string]: any } = {};
 
   /**
@@ -61,6 +78,10 @@ export class DocumentModel {
     return this._simulator || null;
   }
 
+  get nodesMap(): Map<string, Node> {
+    return this._nodesMap;
+  }
+
   get fileName(): string {
     return this.rootNode.getExtraProp('fileName')?.getAsString() || this.id;
   }
@@ -70,7 +91,9 @@ export class DocumentModel {
   }
 
   private _modalNode?: ParentalNode;
+
   private _blank?: boolean;
+
   get modalNode() {
     return this._modalNode;
   }
@@ -80,6 +103,7 @@ export class DocumentModel {
   }
 
   private inited = false;
+
   constructor(readonly project: Project, schema?: RootSchema) {
     /*
     // TODO
@@ -93,6 +117,9 @@ export class DocumentModel {
     if (!schema) {
       this._blank = true;
     }
+
+    // 兼容 vision
+    this.id = project.getSchema()?.id || this.id;
 
     this.rootNode = this.createNode<RootNode>(
       schema || {
@@ -112,9 +139,11 @@ export class DocumentModel {
   }
 
   @obx.val private willPurgeSpace: Node[] = [];
+
   addWillPurge(node: Node) {
     this.willPurgeSpace.push(node);
   }
+
   removeWillPurge(node: Node) {
     const i = this.willPurgeSpace.indexOf(node);
     if (i > -1) {
@@ -132,14 +161,19 @@ export class DocumentModel {
    * 生成唯一id
    */
   nextId() {
-    return this.id + (++this.seqId).toString(36).toLocaleLowerCase();
+    let id;
+    do {
+      id = `node_${ (this.id.slice(-10) + (++this.seqId).toString(36)).toLocaleLowerCase()}`;
+    } while (this.nodesMap.get(id));
+
+    return id;
   }
 
   /**
    * 根据 id 获取节点
    */
   getNode(id: string): Node | null {
-    return this.nodesMap.get(id) || null;
+    return this._nodesMap.get(id) || null;
   }
 
   /**
@@ -159,7 +193,7 @@ export class DocumentModel {
   /**
    * 根据 schema 创建一个节点
    */
-  createNode<T extends Node = Node, C = undefined>(data: GetDataType<C, T>): T {
+  createNode<T extends Node = Node, C = undefined>(data: GetDataType<C, T>, checkId: boolean = true): T {
     let schema: any;
     if (isDOMText(data) || isJSExpression(data)) {
       schema = {
@@ -171,7 +205,7 @@ export class DocumentModel {
     }
 
     let node: Node | null = null;
-    if (this.inited) {
+    if (this.inited && checkId) {
       schema.id = null;
     }
     if (schema.id) {
@@ -188,18 +222,18 @@ export class DocumentModel {
       }
     }
     if (!node) {
-      node = new Node(this, schema);
+      node = new Node(this, schema, { checkId });
       // will add
       // todo: this.activeNodes?.push(node);
     }
 
-    const origin = this.nodesMap.get(node.id);
+    const origin = this._nodesMap.get(node.id);
     if (origin && origin !== node) {
       // almost will not go here, ensure the id is unique
       origin.internalSetWillPurge();
     }
 
-    this.nodesMap.set(node.id, node);
+    this._nodesMap.set(node.id, node);
     this.nodes.add(node);
 
     this.emitter.emit('nodecreate', node);
@@ -246,17 +280,20 @@ export class DocumentModel {
   /**
    * 内部方法，请勿调用
    */
-  internalRemoveAndPurgeNode(node: Node) {
+  internalRemoveAndPurgeNode(node: Node, useMutator = false) {
     if (!this.nodes.has(node)) {
       return;
     }
-    this.nodesMap.delete(node.id);
+    node.remove(useMutator);
+  }
+
+  unlinkNode(node: Node) {
     this.nodes.delete(node);
-    this.selection.remove(node.id);
-    node.remove();
+    this._nodesMap.delete(node.id);
   }
 
   @obx.ref private _dropLocation: DropLocation | null = null;
+
   /**
    * 内部方法，请勿调用
    */
@@ -297,17 +334,23 @@ export class DocumentModel {
    * 导出 schema 数据
    */
   get schema(): RootSchema {
-    return this.rootNode.schema as any;
+    return this.rootNode?.schema as any;
   }
 
   import(schema: RootSchema, checkId = false) {
-    this.rootNode.import(schema as any, checkId);
-    // todo: purge something
+    // TODO: 暂时用饱和式删除，原因是 Slot 节点并不是树节点，无法正常递归删除
+    this.nodes.forEach(node => {
+      this.internalRemoveAndPurgeNode(node, true);
+    });
+    // foreachReverse(this.rootNode?.children, (node: Node) => {
+    //   this.internalRemoveAndPurgeNode(node, true);
+    // });
+    this.rootNode?.import(schema as any, checkId);
     // todo: select added and active track added
   }
 
   export(stage: TransformStage = TransformStage.Serilize) {
-    return this.rootNode.export(stage);
+    return this.rootNode?.export(stage);
   }
 
   /**
@@ -332,7 +375,7 @@ export class DocumentModel {
    * 提供给模拟器的参数
    */
   @computed get simulatorProps(): object {
-    let simulatorProps = this.designer.simulatorProps;
+    let { simulatorProps } = this.designer;
     if (typeof simulatorProps === 'function') {
       simulatorProps = simulatorProps(this);
     }
@@ -362,6 +405,7 @@ export class DocumentModel {
   }
 
   @obx.ref private _opened = false;
+
   @obx.ref private _suspensed = false;
 
   /**
@@ -437,12 +481,16 @@ export class DocumentModel {
    * 从项目中移除
    */
   remove() {
-    // this.project.removeDocument(this);
-    // todo: ...
+    this.designer.postEvent('document.remove', { id: this.id });
+    this.purge();
+    this.project.removeDocument(this);
   }
 
   purge() {
-    // todo:
+    this.rootNode?.purge();
+    this.nodes.clear();
+    this._nodesMap.clear();
+    this.rootNode = null;
   }
 
   checkNesting(dropTarget: ParentalNode, dragObject: DragNodeObject | DragNodeDataObject): boolean {
@@ -493,9 +541,13 @@ export class DocumentModel {
   }
 
   // add toData
-  toData() {
+  toData(extraComps?: string[]) {
     const node = this.project?.currentDocument?.export(TransformStage.Save);
-    return { componentsTree: [node] };
+    const data = {
+      componentsMap: this.getComponentsMap(extraComps),
+      componentsTree: [node],
+    };
+    return data;
   }
 
   getHistory(): History {
@@ -544,24 +596,56 @@ export class DocumentModel {
 
 
   acceptRootNodeVisitor(
-    visitorName: string = 'default',
-    visitorFn: (node: RootNode) => any ) {
-      let visitorResult = {};
-      if (!visitorName) {
-        /* tslint:disable no-console */
-        console.warn('Invalid or empty RootNodeVisitor name.');
-      }
-      try {
-        visitorResult = visitorFn.call(this, this.rootNode);
-        this.rootNodeVisitorMap[visitorName] = visitorResult;
-      } catch (e) {
-        console.error('RootNodeVisitor is not valid.');
-      }
-      return visitorResult;
+    visitorName = 'default',
+    visitorFn: (node: RootNode) => any,
+  ) {
+    let visitorResult = {};
+    if (!visitorName) {
+      /* tslint:disable no-console */
+      console.warn('Invalid or empty RootNodeVisitor name.');
+    }
+    try {
+      visitorResult = visitorFn.call(this, this.rootNode);
+      this.rootNodeVisitorMap[visitorName] = visitorResult;
+    } catch (e) {
+      console.error('RootNodeVisitor is not valid.');
+    }
+    return visitorResult;
   }
 
   getRootNodeVisitor(name: string) {
     return this.rootNodeVisitorMap[name];
+  }
+
+  getComponentsMap(extraComps?: string[]) {
+    const componentsMap: ComponentMap[] = [];
+    // 组件去重
+    const map: any = {};
+    for (const node of this._nodesMap.values()) {
+      const { componentName } = node || {};
+      if (!map[componentName] && node?.componentMeta?.npm?.package) {
+        map[componentName] = true;
+        componentsMap.push({
+          componentName,
+          package: node?.componentMeta?.npm?.package,
+        });
+      }
+    }
+    // 合并外界传入的自定义渲染的组件
+    if (Array.isArray(extraComps)) {
+      extraComps.forEach(c => {
+        if (c && !map[c]) {
+          const m = this.getComponentMeta(c);
+          if (m && m.npm?.package) {
+            componentsMap.push({
+              componentName: c,
+              package: m.npm?.package,
+            });
+          }
+        }
+      });
+    }
+    return componentsMap;
   }
 
   onNodeCreate(func: (node: Node) => void) {
@@ -584,8 +668,19 @@ export class DocumentModel {
   refresh() {
     console.warn('refresh method is deprecated');
   }
+
+  /**
+   * @deprecated
+   */
+  onRefresh(/* func: () => void */) {
+    console.warn('onRefresh method is deprecated');
+  }
 }
 
 export function isDocumentModel(obj: any): obj is DocumentModel {
   return obj && obj.rootNode;
+}
+
+export function isPageSchema(obj: any): obj is PageSchema {
+  return obj?.componentName === 'Page';
 }

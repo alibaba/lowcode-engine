@@ -1,4 +1,5 @@
-import { ReactProvider, Utils } from '@ali/lowcode-runtime';
+import { ReactProvider } from '@ali/lowcode-runtime';
+import { buildComponents } from '@ali/lowcode-utils';
 import appConfig from '../config/app';
 import builtInComps from '../config/components';
 import componentsMap from '../config/componentsMap';
@@ -31,9 +32,9 @@ export default class Preview extends ReactProvider {
       layout,
       routes,
       containerId,
-      components: { ...builtInComps, ...Utils.buildComponents({ '@alifd/next': 'Next' }, componentsMap) },
+      components: { ...builtInComps, ...buildComponents({ '@alifd/next': 'Next' }, componentsMap) },
       componentsMap,
-      utils: utils,
+      utils,
       constants,
     };
   }
@@ -43,7 +44,7 @@ export default class Preview extends ReactProvider {
     const appSchemaStr = localStorage.getItem('lce-dev-store');
     const appSchema = JSON.parse(appSchemaStr || '');
     const idx = appSchema.componentsTree.findIndex(
-      (page: any, idx: number) => (page.fileName || `page${idx}`) === pageId,
+      (page: any, index: number) => (page.fileName || `page${index}`) === pageId,
     );
     const schema = appSchema.componentsTree[idx];
     return schema;

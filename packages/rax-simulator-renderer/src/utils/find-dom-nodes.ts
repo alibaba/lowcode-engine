@@ -9,5 +9,10 @@ export function raxFindDOMNodes(instance: any): Array<Element | Text> | null {
   if (isElement(instance)) {
     return [instance];
   }
-  return findDOMNode(instance);
+  // eslint-disable-next-line react/no-find-dom-node
+  const result = findDOMNode(instance);
+  if (Array.isArray(result)) {
+    return result;
+  }
+  return [result];
 }

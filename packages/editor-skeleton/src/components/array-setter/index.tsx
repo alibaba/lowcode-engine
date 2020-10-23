@@ -39,7 +39,7 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
     }
 
     const itemsMap = state ? state.itemsMap : new Map<string | number, SettingField>();
-    let items = state ? state.items.slice() : [];
+    const items = state ? state.items.slice() : [];
     if (newLength > originLength) {
       for (let i = originLength; i < newLength; i++) {
         const item = field.createField({
@@ -57,6 +57,7 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
         itemsMap.delete(item.id);
       });
     }
+
     return {
       items,
       itemsMap,
@@ -72,17 +73,42 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
 
   onSort(sortedIds: Array<string | number>) {
     const { itemsMap } = this.state;
-    const items = sortedIds.map((id, index) => {
+    const { onChange, itemSetter, field } = this.props;
+    const items = sortedIds.map((id) => {
       const item = itemsMap.get(id)!;
-      item.setKey(index);
+      // item.setKey(index);
       return item;
     });
+
+    const values = items.map((item) => {
+      return item.getValue();
+    });
+
+    // 对itemsMap重新生成并刷新当前setter数据
+    const newItems = [];
+    // const newItemsMap = {};
+    itemsMap.clear();
+    for (let i = 0; i < items.length; i++) {
+      const newItem = field.createField({
+        name: i,
+        setter: itemSetter,
+        // FIXME:
+        forceInline: 1,
+      });
+      newItems[i] = newItem;
+
+      itemsMap.set(newItem.id, newItem);
+    }
+
+    onChange(values);
     this.setState({
-      items,
+      items: newItems,
+      itemsMap,
     });
   }
 
-  private scrollToLast: boolean = false;
+  private scrollToLast = false;
+
   onAdd() {
     const { items, itemsMap } = this.state;
     const { itemSetter } = this.props;
@@ -103,18 +129,25 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
   }
 
   onRemove(field: SettingField) {
-    const { items } = this.state;
+    const { onChange } = this.props;
+    const { items, itemsMap } = this.state;
     let i = items.indexOf(field);
+    const values = items.map((item) => {
+      return item.getValue();
+    });
     if (i < 0) {
       return;
     }
     items.splice(i, 1);
+    values.splice(i, 1);
     const l = items.length;
     while (i < l) {
       items[i].setKey(i);
       i++;
     }
+    itemsMap.delete(field.id);
     field.remove();
+    onChange(values);
     this.setState({ items: items.slice() });
   }
 
@@ -134,11 +167,13 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
   render() {
     let columns: any = null;
     if (this.props.columns) {
-      columns = this.props.columns.map((column) => <Title key={column.name} title={column.title || (column.name as string)} />);
+      columns = this.props.columns.map((column) => (
+        <Title key={column.name} title={column.title || (column.name as string)} />
+      ));
     }
 
     const { items } = this.state;
-    const scrollToLast = this.scrollToLast;
+    const { scrollToLast } = this;
     this.scrollToLast = false;
     const lastIndex = items.length - 1;
 
@@ -164,12 +199,12 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
 
     return (
       <div className="lc-setter-list lc-block-setter">
-        {/*<div className="lc-block-setter-actions">
+        {/* <div className="lc-block-setter-actions">
           <Button size="medium" onClick={this.onAdd.bind(this)}>
             <Icon type="add" />
             <span>添加</span>
           </Button>
-        </div>*/}
+        </div> */}
         {columns && <div className="lc-setter-list-columns">{columns}</div>}
         {content}
         <Button className="lc-setter-list-add" type="primary" onClick={this.onAdd.bind(this)}>
@@ -189,16 +224,19 @@ class ArrayItem extends Component<{
   shouldComponentUpdate() {
     return false;
   }
+
   private shell?: HTMLDivElement | null;
+
   componentDidMount() {
     if (this.props.scrollIntoView && this.shell) {
       this.shell.parentElement!.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }
+
   render() {
     const { onRemove, field } = this.props;
     return (
-      <div className="lc-listitem" ref={(ref) => (this.shell = ref)}>
+      <div className="lc-listitem" ref={(ref) => { this.shell = ref; }}>
         <div draggable className="lc-listitem-handler">
           <Icon type="ellipsis" size="small" />
         </div>
@@ -228,7 +266,9 @@ export default class ArraySetter extends Component<{
   multiValue?: boolean;
 }> {
   static contextType = PopupContext;
+
   private pipe: any;
+
   render() {
     const { mode, forceInline, ...props } = this.props;
     const { field, itemSetter } = props;
@@ -261,6 +301,7 @@ export default class ArraySetter extends Component<{
         }
         this.pipe = (this.context as PopupPipe).create({ width });
       }
+
       this.pipe.send(<TableSetter key={field.id} {...props} columns={columns} />, title);
       return (
         <Button

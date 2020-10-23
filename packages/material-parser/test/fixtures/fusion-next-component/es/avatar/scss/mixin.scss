@@ -1,0 +1,17 @@
+@charset "UTF-8";
+
+// avatar mixins
+// --------------------------------------------------
+
+@mixin avatar-size($size) {
+    width: $size;
+    height: $size;
+    line-height: $size;
+    border-radius: 50%;
+
+    &-string {
+        position: absolute;
+        left: 50%;
+        transform-origin: 0 center;
+    }
+}

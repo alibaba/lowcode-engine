@@ -34,7 +34,7 @@ export interface SelectProps<VT>
 
 // We still use class here since `forwardRef` not support generic in typescript
 class Select<ValueType extends SelectValue = SelectValue> extends React.Component<
-  SelectProps<ValueType>
+SelectProps<ValueType>
 > {
   static Option = Option;
 

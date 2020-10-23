@@ -1,0 +1,18 @@
+
+%input-separator {
+    cursor: default;
+    display: inline-block;
+    text-align: center;
+    color: $color-text1-1;
+    width: $date-picker-input-separator-width;
+    font-size: $font-size-caption;
+    vertical-align: middle;
+}
+
+@mixin range-picker-input-corner($corner) {
+    #{$range-picker-prefix} {
+        &-trigger, &-panel-input {
+            border-radius: $corner;
+        }
+    }
+}

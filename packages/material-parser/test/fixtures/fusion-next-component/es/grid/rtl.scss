@@ -1,0 +1,43 @@
+
+// 响应列的水平位置偏移
+@mixin make-offset-rtl() {
+    @for $i from 1 through $grid-columns {
+        .#{$css-prefix}col-offset-#{$i}[dir="rtl"] {
+            margin-right: percentage($i / $grid-columns);
+            margin-left: auto;
+        }
+    }
+    @each $breakpoint in $breakpoints {
+        $name: #{nth($breakpoint, 1)};
+        @include breakpoint($name) {
+            @for $j from 1 through $grid-columns {
+                .#{$css-prefix}col-#{$name}-offset-#{$j}[dir="rtl"] {
+                    margin-right: percentage($j / $grid-columns);
+                    margin-left: auto;
+                }
+            }
+        }
+    }
+}
+
+// 固定列的水平位置偏移
+@mixin make-offset-fixed-rtl() {
+    @for $i from 1 through $grid-columns-fixed {
+        .#{$css-prefix}col-offset-fixed-#{$i}[dir="rtl"] {
+            margin-right: $i * $grid-col-fixed-width;
+            margin-left: auto;
+        }
+    }
+    @each $breakpoint in $breakpoints {
+        $name: #{nth($breakpoint, 1)};
+        @for $j from 1 through $grid-columns-fixed {
+            .#{$css-prefix}col-offset-fixed-#{$name}-#{$j}[dir="rtl"] {
+                margin-right: $j * $grid-col-fixed-width;
+                margin-left: auto;
+            }
+        }
+    }
+}
+
+@include make-offset-rtl();
+@include make-offset-fixed-rtl();

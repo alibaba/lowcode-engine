@@ -2,6 +2,8 @@ import lg from '@ali/vu-logger';
 import { ComponentClass, ComponentType } from 'react';
 import Prototype, { isPrototype } from './prototype';
 import { designer } from '../editor';
+import { upgradeMetadata } from './upgrade-metadata';
+import trunk from './trunk';
 
 function basename(name: string) {
   return name ? (/[^\/]+$/.exec(name) || [''])[0] : '';
@@ -33,17 +35,25 @@ export interface ComponentViewBundle {
 
 export default class Bundle {
   static createPrototype = Prototype.create;
+
   static addGlobalPropsReducer = Prototype.addGlobalPropsReducer;
+
   static addGlobalPropsConfigure = Prototype.addGlobalPropsConfigure;
+
   static addGlobalExtraActions = Prototype.addGlobalExtraActions;
+
   static removeGlobalPropsConfigure = Prototype.removeGlobalPropsConfigure;
+
   static overridePropsConfigure = Prototype.overridePropsConfigure;
+
   static create(protos: ComponentProtoBundle[], views?: ComponentViewBundle[]) {
     return new Bundle(protos, views);
   }
 
   private viewsMap: { [componentName: string]: ComponentType } = {};
+
   private registry: { [componentName: string]: Prototype } = {};
+
   private prototypeList: Prototype[] = [];
 
   constructor(protos?: ComponentProtoBundle[], views?: ComponentViewBundle[]) {
@@ -63,6 +73,20 @@ export default class Bundle {
         this.registerPrototype(prototype);
       } else if (Array.isArray(prototype)) {
         this.recursivelyRegisterPrototypes(prototype, item);
+      }
+    });
+
+    // invoke prototype mocker while the prototype does not exist
+    Object.keys(this.viewsMap).forEach((viewName) => {
+      if (!this.prototypeList.find((proto) => proto.getComponentName() === viewName)) {
+        const mockedPrototype = trunk.mockComponentPrototype(this.viewsMap[viewName]);
+        if (mockedPrototype) {
+          mockedPrototype.setView(this.viewsMap[viewName]);
+          this.registerPrototype(mockedPrototype);
+          if (!mockedPrototype.getPackageName()) {
+            mockedPrototype.setPackageName((this.viewsMap[viewName] as any)._packageName_);
+          }
+        }
       }
     });
   }
@@ -110,6 +134,8 @@ export default class Bundle {
      */
     if (bundles.length >= 2) {
       const prototype = bundles[0];
+      const metadata = upgradeMetadata({ ...prototype.options, packageName: prototype.packageName });
+      prototype.meta = designer.createComponentMeta(metadata);
       const prototypeView = bundles[1];
       prototype.setView(prototypeView);
       this.registerPrototype(prototype);
@@ -148,7 +174,7 @@ export default class Bundle {
       }
       if (isPrototype(proto)) {
         const componentName = proto.getComponentName()!;
-        if (!proto.getView() && this.viewsMap[componentName]) {
+        if (this.viewsMap[componentName]) {
           proto.setView(this.viewsMap[componentName]);
         }
         if (cp.name && !proto.getPackageName()) {

@@ -1,40 +1,65 @@
-const reactDocs = require('react-docgen');
-import { transformItem } from './transform';
-import { debug } from '../otter-core';
-import { IMaterialParsedModel, IMaterialScanModel } from '../types';
-import resolver from './resolver';
-import handlers from './handlers';
+import parseDynamic from './dynamic';
+import parseJS from './js';
+import parseTS from './ts';
+import { install, installPeerDeps, installTypeModules } from '../utils';
+import { IMaterialScanModel } from '../types';
+import { debug } from '../core';
 
-export default function parse(params: { fileContent: string; filePath: string }): Promise<IMaterialParsedModel[]> {
-  const { fileContent, filePath } = params;
-  const result = reactDocs.parse(
-    fileContent,
-    (ast: any) => {
-      ast.__path = filePath;
-      return resolver(ast);
-    },
-    handlers,
-    {
-      filename: filePath,
-    },
-  );
-  const coms = result.reduce((res: any[], info: any) => {
-    if (!info || !info.props) return res;
-    const props = Object.keys(info.props).reduce((acc: any[], name) => {
-      try {
-        const item: any = transformItem(name, info.props[name]);
-        acc.push(item);
-      } catch (e) {
-      } finally {
-        return acc;
-      }
-    }, []);
-    res.push({
-      componentName: info.displayName,
-      props,
-      meta: info.meta || {},
-    });
-    return res;
-  }, []);
-  return coms;
+const log = debug.extend('parse');
+
+export interface IParseArgs extends IMaterialScanModel {
+  accesser?: 'online' | 'local';
+  npmClient?: string;
+  workDir: string;
+  moduleDir: string;
+  typingsFileAbsolutePath?: string;
+  mainFileAbsolutePath: string;
+  moduleFileAbsolutePath?: string;
 }
+
+export default async (args: IParseArgs) => {
+  const {
+    typingsFileAbsolutePath,
+    mainFileAbsolutePath,
+    moduleFileAbsolutePath = mainFileAbsolutePath,
+  } = args;
+  if (args.accesser === 'local') {
+    if (mainFileAbsolutePath.endsWith('ts') || mainFileAbsolutePath.endsWith('tsx')) {
+      await install(args);
+      return parseTS(mainFileAbsolutePath);
+    } else {
+      try {
+        return parseJS(moduleFileAbsolutePath);
+      } catch (e) {
+        log(e);
+        await install(args);
+        const info = parseDynamic(mainFileAbsolutePath);
+        if (!info || !info.length) {
+          throw Error();
+        }
+        return info;
+      }
+    }
+  } else if (args.accesser === 'online') {
+    // ts
+    if (typingsFileAbsolutePath) {
+      await installTypeModules(args);
+      return parseTS(typingsFileAbsolutePath);
+    }
+    // js
+    try {
+      // try dynamic parsing first
+      await installPeerDeps(args);
+      const info = parseDynamic(mainFileAbsolutePath);
+      if (!info || !info.length) {
+        throw Error();
+      }
+      return info;
+    } catch (e) {
+      log(e);
+      // if error, use static js parsing instead
+      return parseJS(moduleFileAbsolutePath);
+    }
+  }
+  return parseJS(moduleFileAbsolutePath);
+};

@@ -1,5 +1,5 @@
 function getDataFromPasteEvent(event: ClipboardEvent) {
-  const clipboardData = event.clipboardData;
+  const { clipboardData } = event;
   if (!clipboardData) {
     return null;
   }
@@ -14,7 +14,7 @@ function getDataFromPasteEvent(event: ClipboardEvent) {
       return data;
     } else if (data.componentName) {
       return {
-        componentsTree: [ data ]
+        componentsTree: [data],
       };
     }
   } catch (error) {
@@ -34,12 +34,13 @@ function getDataFromPasteEvent(event: ClipboardEvent) {
     return {
       code: clipboardData.getData('text/plain'),
       maps: {},
-    };*/
+    }; */
   }
 }
 
 class Clipboard {
   private copyPasters: HTMLTextAreaElement[] = [];
+
   private waitFn?: (data: any, e: ClipboardEvent) => void;
 
   isCopyPasteEvent(e: Event) {

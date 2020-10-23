@@ -51,7 +51,7 @@ export interface IRuntimeDataSourceEngineFactory {
     extraConfig?: {
       requestHandlersMap: RequestHandlersMap;
       [key: string]: any;
-    }
+    },
   ): IDataSourceEngine;
 }
 

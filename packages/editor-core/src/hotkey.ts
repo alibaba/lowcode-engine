@@ -124,7 +124,7 @@ let REVERSE_MAP: CtrlKeyMap;
  * programatically
  */
 for (let i = 1; i < 20; ++i) {
-  MAP[111 + i] = 'f' + i;
+  MAP[111 + i] = `f${ i}`;
 }
 
 /**
@@ -346,22 +346,28 @@ function fireCallback(callback: HotkeyCallback, e: KeyboardEvent, combo?: string
       sequence,
       selected,
     });
-  } catch(err) {
+  } catch (err) {
     console.error(err.message);
   }
 }
 
 export class Hotkey {
   private callBacks: HotkeyCallbacks = {};
+
   private directMap: HotkeyDirectMap = {};
+
   private sequenceLevels: SequenceLevels = {};
+
   private resetTimer = 0;
+
   private ignoreNextKeyup: boolean | string = false;
+
   private ignoreNextKeypress = false;
+
   private nextExpectedAction: boolean | string = false;
 
   mount(window: Window) {
-    const document = window.document;
+    const { document } = window;
     const handleKeyEvent = this.handleKeyEvent.bind(this);
     document.addEventListener('keypress', handleKeyEvent, false);
     document.addEventListener('keydown', handleKeyEvent, false);
@@ -582,7 +588,6 @@ export class Hotkey {
     combination = combination.replace(/\s+/g, ' ');
 
     const sequence: string[] = combination.split(' ');
-    let info: KeyInfo;
 
     // if this pattern is a sequence of keys then run through this method
     // to reprocess each pattern one key at a time
@@ -591,7 +596,7 @@ export class Hotkey {
       return;
     }
 
-    info = getKeyInfo(combination, action);
+    const info: KeyInfo = getKeyInfo(combination, action);
 
     // make sure to initialize array if this is the first time
     // a callback is added for this key

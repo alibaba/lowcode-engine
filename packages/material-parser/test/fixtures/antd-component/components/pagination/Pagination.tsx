@@ -65,7 +65,7 @@ export type PaginationLocale = any;
 export default class Pagination extends React.Component<PaginationProps, {}> {
   private token: string;
 
-  private inferredSmall: boolean = false;
+  private inferredSmall = false;
 
   componentDidMount() {
     this.token = ResponsiveObserve.subscribe((screens) => {

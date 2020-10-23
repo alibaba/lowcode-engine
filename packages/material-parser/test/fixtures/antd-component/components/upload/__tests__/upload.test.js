@@ -91,14 +91,11 @@ describe('Upload', () => {
     const data = jest.fn();
     const props = {
       action: 'http://upload.com',
-      beforeUpload: file =>
-        new Promise(resolve =>
-          setTimeout(() => {
-            const result = file;
-            result.name = 'test.png';
-            resolve(result);
-          }, 100),
-        ),
+      beforeUpload: file => new Promise(resolve => setTimeout(() => {
+        const result = file;
+        result.name = 'test.png';
+        resolve(result);
+      }, 100)),
       data,
       onChange: ({ file }) => {
         if (file.status !== 'uploading') {
@@ -383,17 +380,15 @@ describe('Upload', () => {
     let wrapper;
 
     const props = {
-      onRemove: () =>
-        new Promise(
-          resolve =>
-            setTimeout(() => {
-              wrapper.update();
-              expect(props.fileList).toHaveLength(1);
-              expect(props.fileList[0].status).toBe('uploading');
-              resolve(true);
-            }),
-          100,
-        ),
+      onRemove: () => new Promise(
+        resolve => setTimeout(() => {
+          wrapper.update();
+          expect(props.fileList).toHaveLength(1);
+          expect(props.fileList[0].status).toBe('uploading');
+          resolve(true);
+        }),
+        100,
+      ),
       fileList: [
         {
           uid: '-1',

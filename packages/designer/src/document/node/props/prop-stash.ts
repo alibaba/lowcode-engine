@@ -6,6 +6,7 @@ import { Node } from '../node';
 export type PendingItem = Prop[];
 export class PropStash implements IPropParent {
   @obx.val private space: Set<Prop> = new Set();
+
   @computed private get maps(): Map<string | number, Prop> {
     const maps = new Map();
     if (this.space.size > 0) {
@@ -15,7 +16,9 @@ export class PropStash implements IPropParent {
     }
     return maps;
   }
+
   private willPurge: () => void;
+
   readonly owner: Node;
 
   constructor(readonly props: Props, write: (item: Prop) => void) {

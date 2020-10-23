@@ -4,9 +4,11 @@ export class ScrollTarget {
   get left() {
     return 'scrollX' in this.target ? this.target.scrollX : this.target.scrollLeft;
   }
+
   get top() {
     return 'scrollY' in this.target ? this.target.scrollY : this.target.scrollTop;
   }
+
   scrollTo(options: { left?: number; top?: number }) {
     this.target.scrollTo(options);
   }
@@ -24,6 +26,7 @@ export class ScrollTarget {
   }
 
   private doe?: HTMLElement;
+
   constructor(private target: Window | Element) {
     if (isWindow(target)) {
       this.doe = target.document.documentElement;
@@ -50,6 +53,8 @@ export interface IScrollable {
 export class Scroller {
   private pid: number | undefined;
 
+  constructor(private scrollable: IScrollable) {}
+
   get scrollTarget(): ScrollTarget | null {
     let target = this.scrollable.scrollTarget;
     if (!target) {
@@ -62,19 +67,17 @@ export class Scroller {
     return target;
   }
 
-  constructor(private scrollable: IScrollable) {}
-
   scrollTo(options: { left?: number; top?: number }) {
     this.cancel();
 
-    const scrollTarget = this.scrollTarget;
+    const { scrollTarget } = this;
     if (!scrollTarget) {
       return;
     }
 
     let pid: number;
-    const left = scrollTarget.left;
-    const top = scrollTarget.top;
+    const { left } = scrollTarget;
+    const { top } = scrollTarget;
     const end = () => {
       this.cancel();
     };
@@ -106,20 +109,22 @@ export class Scroller {
       scrollTarget.scrollTo(opt);
 
       if (time < 1) {
-        this.pid = pid = requestAnimationFrame(animate);
+        this.pid = requestAnimationFrame(animate);
+        pid = this.pid;
       } else {
         end();
       }
     };
 
-    this.pid = pid = requestAnimationFrame(animate);
+    this.pid = requestAnimationFrame(animate);
+    pid = this.pid;
   }
 
   scrolling(point: { globalX: number; globalY: number }) {
     this.cancel();
 
     const { bounds, scale = 1 } = this.scrollable;
-    const scrollTarget = this.scrollTarget;
+    const { scrollTarget } = this;
     if (!scrollTarget || !bounds) {
       return;
     }

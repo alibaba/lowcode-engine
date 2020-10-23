@@ -1,0 +1,373 @@
+////
+/// @module icon: 图标
+/// @type String
+/// @category style
+////
+
+// Icon
+// 根据 Alibaba Base DPL 设计实现
+
+/// icon font path 字体路径
+$icon-font-path: "//at.alicdn.com/t/font_515771_7u6frotlpa6" !default;
+
+/// icon font name 自定义的icon font 名称
+$icon-font-name: "icon" !default;
+
+$icon-font-family: #{to-upper-case(str-slice($css-prefix, 1, 1))}#{str-slice($css-prefix, 2, str-length($css-prefix) - 1)}Icon !default;
+
+$icon-prefix: #{$css-prefix}icon !default;
+
+// ------------------- 图标尺寸 ---------------------- //
+
+/// icon-xxs
+/// @group size
+/// @export size
+$icon-xxs: $s-2 !default;
+
+/// icon-xs
+/// @group size
+/// @export size
+$icon-xs: $s-3 !default;
+
+/// icon-s
+/// @group size
+/// @export size
+$icon-s: $s-4 !default;
+
+/// icon-m
+/// @group size
+/// @export size
+$icon-m: $s-5 !default;
+
+/// icon-l
+/// @group size
+/// @export size
+$icon-l: $s-6 !default;
+
+/// icon-xl
+/// @group size
+/// @export size
+$icon-xl: $s-8 !default;
+
+/// icon-xxl
+/// @group size
+/// @export size
+$icon-xxl: $s-12 !default;
+
+/// icon-xxxl
+/// @group size
+/// @export size
+$icon-xxxl: $s-16 !default;
+
+// ------------------- 图标 unicode 值 ---------------------- //
+/// icon-content-smile
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-smile: "\e65f" !default;
+
+/// icon-content-cry
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-cry: "\e65d" !default;
+
+/// icon-content-success
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-success: "\e60a" !default;
+
+/// icon-content-warning
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-warning: "\e60b" !default;
+
+/// icon-content-prompt
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-prompt: "\e60c" !default;
+
+/// icon-content-error
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-error: "\e60d" !default;
+
+/// icon-content-help
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-help: "\e673" !default;
+
+/// icon-content-clock
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-clock: "\e621" !default;
+
+/// icon-content-success-filling
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-success-filling: "\e63a" !default;
+
+/// icon-content-delete-filling
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-delete-filling: "\e623" !default;
+
+/// icon-content-favorites-filling
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-favorites-filling: "\e60e" !default;
+
+/// icon-content-add
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-add: "\e655" !default;
+
+/// icon-content-minus
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-minus: "\e601" !default;
+
+/// icon-content-arrow-up
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-arrow-up: "\e625" !default;
+
+/// icon-content-arrow-down
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-arrow-down: "\e63d" !default;
+
+/// icon-content-arrow-left
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-arrow-left: "\e61d" !default;
+
+/// icon-content-arrow-right
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-arrow-right: "\e619" !default;
+
+/// icon-content-arrow-double-left
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-arrow-double-left: "\e659" !default;
+
+/// icon-content-arrow-double-right
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-arrow-double-right: "\e65e" !default;
+
+/// icon-content-switch
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-switch: "\e6b3" !default;
+
+/// icon-content-sorting
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-sorting: "\e634" !default;
+
+/// icon-content-descending
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-descending: "\e61f" !default;
+
+/// icon-content-ascending
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-ascending: "\e61e" !default;
+
+/// icon-content-select
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-select: "\e632" !default;
+
+/// icon-content-semi-select
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-semi-select: "\e633" !default;
+
+/// icon-content-loading
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-loading: "\e646" !default;
+
+/// icon-content-search
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-search: "\e656" !default;
+
+/// icon-content-close
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-close: "\e626" !default;
+
+/// icon-content-ellipsis
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-ellipsis: "\e654" !default;
+
+/// icon-content-picture
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-picture: "\e631" !default;
+
+/// icon-content-calendar
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-calendar: "\e607" !default;
+
+/// icon-content-ashbin
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-ashbin: "\e639" !default;
+
+/// icon-content-upload
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-upload: "\e7ee" !default;
+
+/// icon-content-download
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-download: "\e628" !default;
+
+/// icon-content-set
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-set: "\e683" !default;
+
+/// icon-content-edit
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-edit: "\e63b" !default;
+
+/// icon-content-refresh
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-refresh: "\e677" !default;
+
+/// icon-content-filter
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-filter: "\e627" !default;
+
+/// icon-content-attachment
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-attachment: "\e665" !default;
+
+/// icon-content-account
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-account: "\e608" !default;
+
+/// icon-content-email
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-email: "\e605" !default;
+
+/// icon-content-atm
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-atm: "\e606" !default;
+
+/// icon-content-copy
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-copy: "\e60f" !default;
+
+/// icon-content-toggle-left
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-toggle-left: "\e602" !default;
+
+/// icon-content-toggle-right
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-toggle-right: "\e603" !default;
+
+/// icon-content-eye
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-eye: "\e611" !default;
+
+/// icon-content-eye-close
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-eye-close: "\e600" !default;
+
+/// icon-content-unlock
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-unlock: "\e615" !default;
+
+/// icon-content-lock
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-lock: "\e617" !default;
+
+/// icon-content-exit
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-exit: "\e616" !default;
+
+/// icon-content-chart-bar
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-chart-bar: "\e612" !default;
+
+/// icon-content-chart-pie
+/// @group type
+/// @export type
+/// @unconfigurable
+$icon-content-chart-pie: "\e613" !default;

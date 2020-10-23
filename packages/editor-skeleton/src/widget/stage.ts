@@ -1,4 +1,4 @@
-import { uniqueId } from '@ali/lowcode-utils';
+// import { uniqueId } from '@ali/lowcode-utils';
 import Widget from './widget';
 import { Skeleton } from '../skeleton';
 import { WidgetConfig } from '../types';
@@ -9,7 +9,9 @@ export interface StageConfig extends WidgetConfig {
 
 export class Stage extends Widget {
   readonly isRoot: boolean;
+
   private previous?: Stage;
+
   private refer?: {
     stage?: Stage;
     direction?: 'right' | 'left';
@@ -29,7 +31,7 @@ export class Stage extends Widget {
   }
 
   hasBack(): boolean {
-    return this.previous && !this.isRoot ? true : false;
+    return !!(this.previous && !this.isRoot);
   }
 
   setRefer(stage: Stage, direction: 'right' | 'left') {
@@ -45,7 +47,7 @@ export class Stage extends Widget {
   }
 
   getRefer() {
-    const refer = this.refer;
+    const { refer } = this;
     this.refer = undefined;
     return refer;
   }

@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 import { obx, computed } from '../utils/obx';
+
 const languageMap: { [key: string]: string } = {
   en: 'en-US',
   zh: 'zh-CN',
@@ -30,7 +31,9 @@ const LowcodeConfigKey = 'ali-lowcode-config';
 
 class AliGlobalLocale {
   private emitter = new EventEmitter();
+
   @obx.ref private _locale?: string;
+
   @computed get locale() {
     if (this._locale != null) {
       return this._locale;
@@ -67,7 +70,7 @@ class AliGlobalLocale {
       const it = navigator.browserLanguage.split('-');
       locale = it[0];
       if (it[1]) {
-        locale += '-' + it[1].toUpperCase();
+        locale += `-${ it[1].toUpperCase()}`;
       }
     }
 

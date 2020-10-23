@@ -1,16 +1,24 @@
 import {
-  IBasicSchema,
-  IParseResult,
-  IProjectSchema,
-  IResultDir,
-  IResultFile,
-  IComponentNodeItem,
-  IJSExpression,
-} from './index';
+  JSONArray,
+  JSONObject,
+  CompositeArray,
+  CompositeObject,
+  ResultDir,
+  ResultFile,
+  NodeDataType,
+  ProjectSchema,
+  JSExpression,
+  JSFunction,
+  JSSlot,
+} from '@ali/lowcode-types';
+
+import { IParseResult } from './intermediate';
+import { IScopeBindings } from '../utils/ScopeBindings';
 
 export enum FileType {
   CSS = 'css',
   SCSS = 'scss',
+  LESS = 'less',
   HTML = 'html',
   JS = 'js',
   JSX = 'jsx',
@@ -41,6 +49,7 @@ export interface ICodeChunk {
   subModule?: string;
   content: ChunkContent;
   linkAfter: string[];
+  ext?: Record<string, unknown>;
 }
 
 export interface IBaseCodeStruct {
@@ -53,17 +62,12 @@ export interface ICodeStruct extends IBaseCodeStruct {
   chunks: ICodeChunk[];
 }
 
-export type BuilderComponentPlugin = (
-  initStruct: ICodeStruct,
-) => Promise<ICodeStruct>;
+export type BuilderComponentPlugin = (initStruct: ICodeStruct) => Promise<ICodeStruct>;
 
 export type BuilderComponentPluginFactory<T> = (config?: T) => BuilderComponentPlugin;
 
 export interface IChunkBuilder {
-  run(
-    ir: any,
-    initialStructure?: ICodeStruct,
-  ): Promise<{ chunks: ICodeChunk[][] }>;
+  run(ir: any, initialStructure?: ICodeStruct): Promise<{ chunks: ICodeChunk[][] }>;
   getPlugins(): BuilderComponentPlugin[];
   addPlugin(plugin: BuilderComponentPlugin): void;
 }
@@ -74,16 +78,13 @@ export interface ICodeBuilder {
 }
 
 export interface ICompiledModule {
-  files: IResultFile[];
+  files: ResultFile[];
 }
 
 export interface IModuleBuilder {
   generateModule(input: unknown): Promise<ICompiledModule>;
-  generateModuleCode(schema: IBasicSchema | string): Promise<IResultDir>;
-  linkCodeChunks(
-    chunks: Record<string, ICodeChunk[]>,
-    fileName: string,
-  ): IResultFile[];
+  generateModuleCode(schema: ProjectSchema | string): Promise<ResultDir>;
+  linkCodeChunks(chunks: Record<string, ICodeChunk[]>, fileName: string): ResultFile[];
   addPlugin(plugin: BuilderComponentPlugin): void;
 }
 
@@ -97,21 +98,21 @@ export interface ICodeGenerator {
   /**
    * 出码接口，把 Schema 转换成代码文件系统描述
    *
-   * @param {(IBasicSchema)} schema 传入的 Schema
-   * @returns {IResultDir}
+   * @param {(ProjectSchema)} schema 传入的 Schema
+   * @returns {ResultDir}
    * @memberof ICodeGenerator
    */
-  toCode(schema: IBasicSchema): Promise<IResultDir>;
+  toCode(schema: ProjectSchema): Promise<ResultDir>;
 }
 
 export interface ISchemaParser {
-  validate(schema: IBasicSchema): boolean;
-  parse(schema: IBasicSchema | string): IParseResult;
+  validate(schema: ProjectSchema): boolean;
+  parse(schema: ProjectSchema | string): IParseResult;
 }
 
 export interface IProjectTemplate {
   slots: Record<string, IProjectSlot>;
-  generateTemplate(): IResultDir;
+  generateTemplate(): ResultDir;
 }
 
 export interface IProjectSlot {
@@ -119,25 +120,12 @@ export interface IProjectSlot {
   fileName?: string;
 }
 
-// export interface IProjectSlots {
-//   components: IProjectSlot;
-//   pages: IProjectSlot;
-//   router: IProjectSlot;
-//   entry: IProjectSlot;
-//   constants?: IProjectSlot;
-//   utils?: IProjectSlot;
-//   i18n?: IProjectSlot;
-//   globalStyle: IProjectSlot;
-//   htmlEntry: IProjectSlot;
-//   packageJSON: IProjectSlot;
-// }
-
 export interface IProjectPlugins {
   [slotName: string]: BuilderComponentPlugin[];
 }
 
 export interface IProjectBuilder {
-  generateProject(schema: IProjectSchema | string): Promise<IResultDir>;
+  generateProject(schema: ProjectSchema | string): Promise<ResultDir>;
 }
 
 export type PostProcessorFactory<T> = (config?: T) => PostProcessor;
@@ -148,30 +136,35 @@ export interface IPluginOptions {
   fileDirDepth: number;
 }
 
-export enum PIECE_TYPE {
-  BEFORE = 'NodeCodePieceBefore',
-  TAG = 'NodeCodePieceTag',
-  ATTR = 'NodeCodePieceAttr',
-  CHILDREN = 'NodeCodePieceChildren',
-  AFTER = 'NodeCodePieceAfter',
+export type BaseGenerator<I, T, C> = (input: I, scope: IScope, config?: C, next?: BaseGenerator<I, T, C>) => T;
+type CompositeTypeGenerator<I, T> =
+  | BaseGenerator<I, T, CompositeValueGeneratorOptions>
+  | Array<BaseGenerator<I, T, CompositeValueGeneratorOptions>>;
+
+export type NodeGenerator<T> = (nodeItem: NodeDataType, scope: IScope) => T;
+
+// FIXME: 在新的实现中，添加了第一参数 this: CustomHandlerSet 作为上下文。究其本质
+// scopeBindings?: IScopeBindings;
+// 这个组合只用来用来处理 CompositeValue 类型，不是这个类型的不要放在这里
+export interface HandlerSet<T> {
+  string?: CompositeTypeGenerator<string, T>;
+  boolean?: CompositeTypeGenerator<boolean, T>;
+  number?: CompositeTypeGenerator<number, T>;
+  expression?: CompositeTypeGenerator<JSExpression, T>;
+  function?: CompositeTypeGenerator<JSFunction, T>;
+  slot?: CompositeTypeGenerator<JSSlot, T>;
+  array?: CompositeTypeGenerator<JSONArray | CompositeArray, T>;
+  object?: CompositeTypeGenerator<JSONObject | CompositeObject, T>;
+}
+
+export type CompositeValueGeneratorOptions = {
+  handlers?: HandlerSet<string>;
+  nodeGenerator?: NodeGenerator<string>;
 };
 
-export interface CodePiece {
-  value: string;
-  type: PIECE_TYPE;
+export interface IScope {
+  // 作用域内定义
+  bindings?: IScopeBindings;
+  // TODO: 需要有上下文信息吗？ 描述什么内容
+  createSubScope: (ownIndentifiers: string[]) => IScope;
 }
-
-export interface HandlerSet<T> {
-  string?: (input: string) => T[];
-  expression?: (input: IJSExpression) => T[];
-  node?: (input: IComponentNodeItem) => T[];
-  common?: (input: unknown) => T[];
-}
-
-export type ExtGeneratorPlugin = (nodeItem: IComponentNodeItem) => CodePiece[];
-
-// export interface InteratorScope {
-//   [$item: string]: string;           // $item 默认取值 "item"
-//   [$index: string]: string | number; // $index 默认取值 "index"
-//   __proto__: BlockInstance;
-// }

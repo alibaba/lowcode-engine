@@ -245,7 +245,7 @@ describe('Button', () => {
     expect(warnSpy).not.toHaveBeenCalled();
     mount(<Button type="primary" icon="search" />);
     expect(warnSpy).toHaveBeenCalledWith(
-      `Warning: [antd: Button] \`icon\` is using ReactNode instead of string naming in v4. Please check \`search\` at https://ant.design/components/icon`,
+      'Warning: [antd: Button] `icon` is using ReactNode instead of string naming in v4. Please check `search` at https://ant.design/components/icon',
     );
     warnSpy.mockRestore();
   });

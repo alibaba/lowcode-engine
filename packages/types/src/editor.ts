@@ -1,18 +1,18 @@
 import { EventEmitter } from 'events';
-import { ReactNode, ReactElement, RefObject, ComponentType } from 'react';
+import { ReactNode, ComponentType } from 'react';
 import { NpmInfo } from './npm';
 import { RegisterOptions } from 'power-di';
 
-export type KeyType = Function | Symbol | string;
-export type ClassType = Function | (new (...args: any[]) => any);
+export type KeyType = new (...args: any[]) => any | symbol | string;
+export type ClassType = new (...args: any[]) => any;
 export interface GetOptions {
   forceNew?: boolean;
   sourceCls?: ClassType;
 }
 export type GetReturnType<T, ClsType> = T extends undefined
   ? ClsType extends {
-      prototype: infer R;
-    }
+    prototype: infer R;
+  }
     ? R
     : any
   : T;
@@ -48,7 +48,7 @@ export interface EditorConfig {
 
 export interface SkeletonConfig {
   config: NpmInfo;
-  props?: object;
+  props?: Record<string, unknown>;
   handler?: (config: EditorConfig) => EditorConfig;
 }
 
@@ -78,13 +78,13 @@ export interface PluginConfig {
     marked?: boolean;
     align?: 'left' | 'right' | 'top' | 'bottom';
     onClick?: () => void;
-    dialogProps?: object;
-    balloonProps?: object;
-    panelProps?: object;
-    linkProps?: object;
+    dialogProps?: Record<string, unknown>;
+    balloonProps?: Record<string, unknown>;
+    panelProps?: Record<string, unknown>;
+    linkProps?: Record<string, unknown>;
   };
   config?: NpmInfo;
-  pluginProps?: object;
+  pluginProps?: Record<string, unknown>;
 }
 
 export type HooksConfig = HookConfig[];
@@ -92,7 +92,7 @@ export type HooksConfig = HookConfig[];
 export interface HookConfig {
   message: string;
   type: 'on' | 'once';
-  handler: (editor: IEditor, ...args: any[]) => void;
+  handler: (this: IEditor, editor: IEditor, ...args: any[]) => void;
 }
 
 export type ShortCutsConfig = ShortCutConfig[];
@@ -110,7 +110,7 @@ export interface UtilConfig {
   content: NpmInfo | ((...args: []) => any);
 }
 
-export type ConstantsConfig = object;
+export type ConstantsConfig = Record<string, unknown>;
 
 export interface LifeCyclesConfig {
   init?: (editor: IEditor) => any;

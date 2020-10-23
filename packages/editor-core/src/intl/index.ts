@@ -34,7 +34,7 @@ function injectVars(msg: string, params: any, locale: string): string {
       return params[key];
     }
     return $1;
-  });*/
+  }); */
 }
 
 export function intl(data: any, params?: object): ReactNode {
@@ -92,11 +92,11 @@ class IntlElement extends Component<{ data: any; params?: object }> {
 export function createIntl(
   instance: string | object,
 ): {
-  intlNode(id: string, params?: object): ReactNode;
-  intl(id: string, params?: object): string;
-  getLocale(): string;
-  setLocale(locale: string): void;
-} {
+    intlNode(id: string, params?: object): ReactNode;
+    intl(id: string, params?: object): string;
+    getLocale(): string;
+    setLocale(locale: string): void;
+  } {
   const data = computed(() => {
     const locale = globalLocale.getLocale();
     if (typeof instance === 'string') {

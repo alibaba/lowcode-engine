@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Editor } from '@ali/lowcode-editor-core';
 import { DesignerView, Designer } from '@ali/lowcode-designer';
+import { Asset } from '@ali/lowcode-utils';
 import './index.scss';
 
 export interface PluginProps {
@@ -12,6 +13,8 @@ interface DesignerPluginState {
   library?: any[] | null;
   extraEnvironment?: any[] | null;
   renderEnv?: string;
+  device?: string;
+  simulatorUrl: Asset | null;
 }
 
 export default class DesignerPlugin extends PureComponent<PluginProps, DesignerPluginState> {
@@ -22,6 +25,8 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
     library: null,
     extraEnvironment: null,
     renderEnv: 'default',
+    device: 'default',
+    simulatorUrl: null,
   };
 
   private _mounted = true;
@@ -36,6 +41,8 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
     try {
       const assets = await editor.onceGot('assets');
       const renderEnv = await editor.get('renderEnv');
+      const device = await editor.get('device');
+      const simulatorUrl = await editor.get('simulatorUrl');
       if (!this._mounted) {
         return;
       }
@@ -45,6 +52,8 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
         library: packages || [],
         extraEnvironment,
         renderEnv,
+        device,
+        simulatorUrl,
       };
       this.setState(state);
     } catch (e) {
@@ -67,8 +76,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
 
   render(): React.ReactNode {
     const { editor } = this.props;
-    const { componentMetadatas, library, extraEnvironment, renderEnv } = this.state;
-
+    const { componentMetadatas, library, extraEnvironment, renderEnv, device, simulatorUrl } = this.state;
     if (!library || !componentMetadatas) {
       // TODO: use a Loading
       return null;
@@ -85,6 +93,8 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
           library,
           extraEnvironment,
           renderEnv,
+          device,
+          simulatorUrl,
         }}
       />
     );

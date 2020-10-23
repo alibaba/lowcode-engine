@@ -1,6 +1,6 @@
 import { CLASS_DEFINE_CHUNK_NAME, DEFAULT_LINK_AFTER } from '../../../const/generator';
 
-import { transformFuncExpr2MethodMember } from '../../../utils/jsExpression';
+import { generateFunction } from '../../../utils/jsExpression';
 
 import {
   BuilderComponentPlugin,
@@ -10,12 +10,11 @@ import {
   ICodeChunk,
   ICodeStruct,
   IContainerInfo,
-  IJSExpression,
 } from '../../../types';
 
 type PluginConfig = {
   fileType: string;
-}
+};
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
   const cfg: PluginConfig = {
@@ -31,19 +30,16 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     const ir = next.ir as IContainerInfo;
 
     if (ir.methods) {
-      const methods = ir.methods;
-      const chunks = Object.keys(methods).map<ICodeChunk>(methodName => ({
+      const { methods } = ir;
+      const chunks = Object.keys(methods).map<ICodeChunk>((methodName) => ({
         type: ChunkType.STRING,
         fileType: cfg.fileType,
         name: CLASS_DEFINE_CHUNK_NAME.InsMethod,
-        content: transformFuncExpr2MethodMember(
-          methodName,
-          (methods[methodName] as IJSExpression).value,
-        ),
+        content: generateFunction(methods[methodName], { name: methodName, isMember: true }),
         linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.InsMethod]],
       }));
 
-      next.chunks.push.apply(next.chunks, chunks);
+      next.chunks.push(...chunks);
     }
 
     return next;

@@ -11,30 +11,30 @@ export const ieVersion =
  * @type {Boolean}
  */
 export const isProduction = () => {
-    const PRODUCTION_ENV = 'production';
-    let result = false;
+  const PRODUCTION_ENV = 'production';
+  let result = false;
+  try {
+    if (process.env.NODE_ENV === PRODUCTION_ENV) {
+      result = true;
+    }
+  } catch (err) {
+    //
+  }
+
+  if (!result) {
     try {
-        if (process.env.NODE_ENV === PRODUCTION_ENV) {
-            result = true;
-        }
+      if (window.process.env.NODE_ENV === PRODUCTION_ENV) {
+        result = true;
+      }
     } catch (err) {
-        //
+      //
     }
+  }
 
-    if (!result) {
-        try {
-            if (window.process.env.NODE_ENV === PRODUCTION_ENV) {
-                result = true;
-            }
-        } catch (err) {
-            //
-        }
-    }
-
-    return result;
+  return result;
 };
 
 export default {
-    ieVersion,
-    isProduction,
+  ieVersion,
+  isProduction,
 };

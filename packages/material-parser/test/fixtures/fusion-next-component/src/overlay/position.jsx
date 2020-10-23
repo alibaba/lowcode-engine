@@ -7,143 +7,143 @@ import findNode from './utils/find-node';
 
 const { noop, bindCtx } = func;
 const { getStyle } = dom;
-const place = position.place;
+const { place } = position;
 
 export default class Position extends Component {
-    static VIEWPORT = position.VIEWPORT;
+  static VIEWPORT = position.VIEWPORT;
 
-    static propTypes = {
-        children: PropTypes.node,
-        target: PropTypes.any,
-        container: PropTypes.any,
-        align: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-        offset: PropTypes.array,
-        beforePosition: PropTypes.func,
-        onPosition: PropTypes.func,
-        needAdjust: PropTypes.bool,
-        autoFit: PropTypes.bool,
-        needListenResize: PropTypes.bool,
-        shouldUpdatePosition: PropTypes.bool,
-        rtl: PropTypes.bool,
-    };
+  static propTypes = {
+    children: PropTypes.node,
+    target: PropTypes.any,
+    container: PropTypes.any,
+    align: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+    offset: PropTypes.array,
+    beforePosition: PropTypes.func,
+    onPosition: PropTypes.func,
+    needAdjust: PropTypes.bool,
+    autoFit: PropTypes.bool,
+    needListenResize: PropTypes.bool,
+    shouldUpdatePosition: PropTypes.bool,
+    rtl: PropTypes.bool,
+  };
 
-    static defaultProps = {
-        align: 'tl bl',
-        offset: [0, 0],
-        beforePosition: noop,
-        onPosition: noop,
-        needAdjust: true,
-        autoFit: false,
-        needListenResize: true,
-        shouldUpdatePosition: false,
-        rtl: false,
-    };
+  static defaultProps = {
+    align: 'tl bl',
+    offset: [0, 0],
+    beforePosition: noop,
+    onPosition: noop,
+    needAdjust: true,
+    autoFit: false,
+    needListenResize: true,
+    shouldUpdatePosition: false,
+    rtl: false,
+  };
 
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        bindCtx(this, ['handleResize']);
+    bindCtx(this, ['handleResize']);
+  }
+
+  componentDidMount() {
+    this.setPosition();
+
+    if (this.props.needListenResize) {
+      events.on(window, 'resize', this.handleResize);
     }
+  }
 
-    componentDidMount() {
-        this.setPosition();
-
-        if (this.props.needListenResize) {
-            events.on(window, 'resize', this.handleResize);
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (
-            ('align' in nextProps && nextProps.align !== this.props.align) ||
+  componentWillReceiveProps(nextProps) {
+    if (
+      ('align' in nextProps && nextProps.align !== this.props.align) ||
             nextProps.shouldUpdatePosition
-        ) {
-            this.shouldUpdatePosition = true;
-        }
+    ) {
+      this.shouldUpdatePosition = true;
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.shouldUpdatePosition) {
+      this.setPosition();
+      this.shouldUpdatePosition = false;
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.props.needListenResize) {
+      events.off(window, 'resize', this.handleResize);
     }
 
-    componentDidUpdate() {
-        if (this.shouldUpdatePosition) {
-            this.setPosition();
-            this.shouldUpdatePosition = false;
-        }
+    clearTimeout(this.resizeTimeout);
+  }
+
+  setPosition() {
+    const {
+      align,
+      offset,
+      beforePosition,
+      onPosition,
+      needAdjust,
+      container,
+      rtl,
+      autoFit,
+    } = this.props;
+
+    beforePosition();
+
+    const contentNode = this.getContentNode();
+    const targetNode = this.getTargetNode();
+
+    if (contentNode && targetNode) {
+      const resultAlign = place({
+        pinElement: contentNode,
+        baseElement: targetNode,
+        align,
+        offset,
+        autoFit,
+        container,
+        needAdjust,
+        isRtl: rtl,
+      });
+      const top = getStyle(contentNode, 'top');
+      const left = getStyle(contentNode, 'left');
+
+      onPosition(
+        {
+          align: resultAlign.split(' '),
+          top,
+          left,
+        },
+        contentNode,
+      );
     }
+  }
 
-    componentWillUnmount() {
-        if (this.props.needListenResize) {
-            events.off(window, 'resize', this.handleResize);
-        }
-
-        clearTimeout(this.resizeTimeout);
+  getContentNode() {
+    try {
+      return findDOMNode(this);
+    } catch (err) {
+      return null;
     }
+  }
 
-    setPosition() {
-        const {
-            align,
-            offset,
-            beforePosition,
-            onPosition,
-            needAdjust,
-            container,
-            rtl,
-            autoFit,
-        } = this.props;
+  getTargetNode() {
+    const { target } = this.props;
 
-        beforePosition();
+    return target === position.VIEWPORT
+      ? position.VIEWPORT
+      : findNode(target, this.props);
+  }
 
-        const contentNode = this.getContentNode();
-        const targetNode = this.getTargetNode();
+  handleResize() {
+    clearTimeout(this.resizeTimeout);
 
-        if (contentNode && targetNode) {
-            const resultAlign = place({
-                pinElement: contentNode,
-                baseElement: targetNode,
-                align,
-                offset,
-                autoFit,
-                container,
-                needAdjust,
-                isRtl: rtl,
-            });
-            const top = getStyle(contentNode, 'top');
-            const left = getStyle(contentNode, 'left');
+    this.resizeTimeout = setTimeout(() => {
+      this.setPosition();
+    }, 200);
+  }
 
-            onPosition(
-                {
-                    align: resultAlign.split(' '),
-                    top,
-                    left,
-                },
-                contentNode
-            );
-        }
-    }
-
-    getContentNode() {
-        try {
-            return findDOMNode(this);
-        } catch (err) {
-            return null;
-        }
-    }
-
-    getTargetNode() {
-        const { target } = this.props;
-
-        return target === position.VIEWPORT
-            ? position.VIEWPORT
-            : findNode(target, this.props);
-    }
-
-    handleResize() {
-        clearTimeout(this.resizeTimeout);
-
-        this.resizeTimeout = setTimeout(() => {
-            this.setPosition();
-        }, 200);
-    }
-
-    render() {
-        return Children.only(this.props.children);
-    }
+  render() {
+    return Children.only(this.props.children);
+  }
 }

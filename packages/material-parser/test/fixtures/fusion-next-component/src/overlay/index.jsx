@@ -7,9 +7,9 @@ import Popup from './popup';
 Overlay.Gateway = Gateway;
 Overlay.Position = Position;
 Overlay.Popup = ConfigProvider.config(Popup, {
-    exportNames: ['overlay'],
+  exportNames: ['overlay'],
 });
 
 export default ConfigProvider.config(Overlay, {
-    exportNames: ['getContent', 'getContentNode'],
+  exportNames: ['getContent', 'getContentNode'],
 });

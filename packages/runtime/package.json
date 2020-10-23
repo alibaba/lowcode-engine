@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-runtime",
-  "version": "0.8.16",
+  "version": "1.0.14",
   "description": "Runtime for Ali lowCode engine",
   "files": [
     "es",

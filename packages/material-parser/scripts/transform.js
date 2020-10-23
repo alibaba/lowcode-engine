@@ -8,10 +8,10 @@ const ajv = new Ajv();
 
 const YamlPath = path.resolve(__dirname, '../schemas/schema.yml');
 const JsonPath = path.resolve(__dirname, '../src/validate/schema.json');
-const tsPath = path.resolve(__dirname, '../src/otter-core/schema/types.ts');
+const tsPath = path.resolve(__dirname, '../src/core/schema/types.ts');
 // Get document, or throw exception on error
 
-(async function() {
+(async function () {
   try {
     const schema = yaml.load(fs.readFileSync(YamlPath, 'utf8'));
     ajv.compile(schema);

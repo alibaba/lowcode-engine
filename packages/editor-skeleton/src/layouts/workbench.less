@@ -13,7 +13,7 @@
   --popup-border-radius: @popup-border-radius;
 
   --left-area-width: 48px;
-  --right-area-width: 280px;
+  --right-area-width: 300px;
   --top-area-height: 48px;
   --toolbar-height: 36px;
   --dock-pane-width: 280px;
@@ -81,7 +81,7 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    overflow: auto;
+    overflow: visible;
     /*
     .my-tabs {
       width: 100%;
@@ -239,7 +239,7 @@ body {
       top: 0;
       bottom: 0;
       width: var(--dock-pane-width);
-      min-width: var(--dock-fixed-pane-width);
+      // min-width: var(--dock-fixed-pane-width);
       left: calc(var(--left-area-width) + 1px);
       background-color: var(--color-pane-background);
       box-shadow: 4px 6px 6px 0 rgba(31,50,88,0.08);

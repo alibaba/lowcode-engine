@@ -1,40 +1,48 @@
-import _classCallCheck from "@babel/runtime/helpers/classCallCheck";
-import _createClass from "@babel/runtime/helpers/createClass";
-import _possibleConstructorReturn from "@babel/runtime/helpers/possibleConstructorReturn";
-import _getPrototypeOf from "@babel/runtime/helpers/getPrototypeOf";
-import _inherits from "@babel/runtime/helpers/inherits";
+import _classCallCheck from '@babel/runtime/helpers/classCallCheck';
+import _createClass from '@babel/runtime/helpers/createClass';
+import _possibleConstructorReturn from '@babel/runtime/helpers/possibleConstructorReturn';
+import _getPrototypeOf from '@babel/runtime/helpers/getPrototypeOf';
+import _inherits from '@babel/runtime/helpers/inherits';
 
 /* eslint-disable react/no-unused-prop-types */
 
 /* eslint-disable react/require-default-props */
 import React from 'react';
 import PropTypes from 'prop-types';
-import "./main.css";
+import './main.css';
 
 const Demo =
-/* #__PURE__ */
-function (_React$Component) {
-  _inherits(Demo, _React$Component);
+  /* #__PURE__ */
+  (function(_React$Component) {
+    _inherits(Demo, _React$Component);
 
-  function Demo() {
-    _classCallCheck(this, Demo);
+    function Demo() {
+      _classCallCheck(this, Demo);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(Demo).apply(this, arguments));
-  }
+      return _possibleConstructorReturn(this, _getPrototypeOf(Demo).apply(this, arguments));
+    }
 
-  _createClass(Demo, [{
-    key: "render",
-    value: function render() {
-      return React.createElement("div", null, " Test ");
-    },
-  }]);
+    _createClass(Demo, [
+      {
+        key: 'render',
+        value: function render() {
+          return React.createElement('div', null, ' Test ');
+        },
+      },
+    ]);
 
-  return Demo;
-}(React.Component);
+    return Demo;
+  })(React.Component);
 
 Demo.propTypes = {
   optionalArray: PropTypes.array,
   optionalBool: PropTypes.bool,
+  /**
+   * desc
+   * @param {string} title - The title of the book.
+   * @param {string} author - The author of the book.
+   * @returns {any}
+   */
   optionalFunc: PropTypes.func,
   optionalNumber: PropTypes.number,
   optionalObject: PropTypes.object,
@@ -54,7 +62,11 @@ Demo.propTypes = {
   // it as an enum.
   optionalEnum: PropTypes.oneOf(['News', 'Photos']),
   // An object that could be one of many types
-  optionalUnion: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Demo)]),
+  optionalUnion: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.instanceOf(Demo),
+  ]),
   // An array of a certain type
   optionalArrayOf: PropTypes.arrayOf(PropTypes.number),
   // An object with property values of a certain type

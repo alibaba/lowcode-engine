@@ -7,15 +7,12 @@ import { createModuleBuilder } from './generator/ModuleBuilder';
 import { createDiskPublisher } from './publisher/disk';
 import { createZipPublisher } from './publisher/zip';
 import createIceJsProjectBuilder from './solutions/icejs';
-import createRecoreProjectBuilder from './solutions/recore';
+// import createRecoreProjectBuilder from './solutions/recore';
+import createRaxAppProjectBuilder from './solutions/rax-app';
 
 // 引入说明
 import { REACT_CHUNK_NAME } from './plugins/component/react/const';
-import {
-  COMMON_CHUNK_NAME,
-  CLASS_DEFINE_CHUNK_NAME,
-  DEFAULT_LINK_AFTER,
-} from './const/generator';
+import { COMMON_CHUNK_NAME, CLASS_DEFINE_CHUNK_NAME, DEFAULT_LINK_AFTER } from './const/generator';
 
 // 引入通用插件组
 import esmodule from './plugins/common/esmodule';
@@ -38,11 +35,15 @@ import prettier from './postprocessor/prettier';
 import * as utilsCommon from './utils/common';
 import * as utilsCompositeType from './utils/compositeType';
 import * as utilsJsExpression from './utils/jsExpression';
+import * as utilsJsSlot from './utils/jsSlot';
 import * as utilsNodeToJSX from './utils/nodeToJSX';
+import * as utilsResultHelper from './utils/resultHelper';
 import * as utilsTemplateHelper from './utils/templateHelper';
+import * as utilsValidate from './utils/validate';
 
 // 引入内置解决方案模块
 import icejs from './plugins/project/framework/icejs';
+import rax from './plugins/project/framework/rax';
 
 export * from './types';
 
@@ -51,10 +52,12 @@ export default {
   createModuleBuilder,
   solutions: {
     icejs: createIceJsProjectBuilder,
-    recore: createRecoreProjectBuilder,
+    // recore: createRecoreProjectBuilder,
+    rax: createRaxAppProjectBuilder,
   },
   solutionParts: {
     icejs,
+    rax,
   },
   publishers: {
     disk: createDiskPublisher,
@@ -91,8 +94,11 @@ export default {
     common: utilsCommon,
     compositeType: utilsCompositeType,
     jsExpression: utilsJsExpression,
+    jsSlot: utilsJsSlot,
     nodeToJSX: utilsNodeToJSX,
+    resultHelper: utilsResultHelper,
     templateHelper: utilsTemplateHelper,
+    validate: utilsValidate,
   },
   chunkNames: {
     COMMON_CHUNK_NAME,

@@ -13,15 +13,18 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
   }
 
   private dispose?: () => void;
+
   private focusing?: Focusable;
+
   private shell: HTMLElement | null = null;
+
   componentDidMount() {
     const { area } = this.props;
     const triggerClose = () => area.setVisible(false);
     area.skeleton.editor.on('designer.dragstart', triggerClose);
     this.dispose = () => {
       area.skeleton.editor.removeListener('designer.dragstart', triggerClose);
-    }
+    };
 
     this.focusing = focusTracker.create({
       range: (e) => {
@@ -34,11 +37,11 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
         }
         // 点击了 iframe 内容，算失焦
         if (document.querySelector('.lc-simulator-content-frame')
-            .contentWindow.document.documentElement.contains(target)) {
+          .contentWindow.document.documentElement.contains(target)) {
           return false;
         }
-        // 点击非编辑区域的 popup / dialog 等，不触发失焦
-        if (!document.querySelector('.lc-workbench')?.contains(target)) {
+        // 点击非编辑区域的popup/dialog,插件栏左侧等不触发失焦
+        if (!document.querySelector('.lc-workbench')?.contains(target) || document.querySelector('.lc-left-area')?.contains(target)) {
           return true;
         }
         const docks = area.current?.getAssocDocks();
@@ -63,6 +66,13 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
     const { area } = this.props;
     if (area.visible) {
       this.focusing?.active();
+      // 关闭当前fixed区域的面板
+      // TODO: 看看有没有更合适的地方
+      const fixedContainer = area?.skeleton?.leftFixedArea?.container;
+      const currentFixed = fixedContainer?.current;
+      if (currentFixed) {
+        fixedContainer.unactive(currentFixed);
+      }
     } else {
       this.focusing?.suspense();
     }
@@ -84,6 +94,7 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
     if (!current) {
       return;
     }
+
     area.skeleton.leftFloatArea.remove(current);
     area.skeleton.leftFixedArea.add(current);
     area.skeleton.leftFixedArea.container.active(current);
@@ -92,13 +103,19 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
   render() {
     const { area } = this.props;
     const width = area.current?.config.props?.width;
+    // can be set fixed by default
+    let canSetFixed = true;
+    if (area.current?.config.props?.canSetFixed === false) {
+      canSetFixed = false;
+    }
+
     const hideTitleBar = area.current?.config.props?.hideTitleBar;
     const style = width ? {
-      width
+      width,
     } : undefined;
     return (
       <div
-        ref={(ref) => { this.shell = ref }}
+        ref={(ref) => { this.shell = ref; }}
         className={classNames('lc-left-float-pane', {
           'lc-area-visible': area.visible,
         })}
@@ -107,13 +124,17 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
         {
           !hideTitleBar && (
             <Fragment>
-              <Button
-                text
-                className="lc-pane-icon-fix"
-                onClick={this.setFixed.bind(this)}
-              >
-                <IconFix />
-              </Button>
+              {
+                canSetFixed && (
+                  <Button
+                    text
+                    className="lc-pane-icon-fix"
+                    onClick={this.setFixed.bind(this)}
+                  >
+                    <IconFix />
+                  </Button>
+                )
+              }
               <Button
                 text
                 className="lc-pane-icon-close"
@@ -137,6 +158,7 @@ class Contents extends Component<{ area: Area<any, Panel> }> {
   shouldComponentUpdate() {
     return false;
   }
+
   render() {
     const { area } = this.props;
     return (

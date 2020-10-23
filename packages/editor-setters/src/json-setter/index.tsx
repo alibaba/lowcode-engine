@@ -14,43 +14,48 @@ import Snippets from './locale/snippets';
 import zhCN from './locale/zh-CN';
 import './index.scss';
 
-let registerApiAndSnippetStatus = false; //判断注册api机制
+let registerApiAndSnippetStatus = false; // 判断注册api机制
 
 window.bt = js_beautify;
 class MonacoEditorView extends PureComponent {
   static displayName = 'MonacoEditor';
+
   render() {
     const { type, ...restProps } = this.props;
-    let Node = type == 'button' ? MonacoEditorButtonView : MonacoEditorDefaultView;
-    return <Node {...restProps} registerApi={apis => Object.assign(this, apis)} />;
+    const Node = type == 'button' ? MonacoEditorButtonView : MonacoEditorDefaultView;
+    return <Node {...restProps} registerApi={(apis) => Object.assign(this, apis)} />;
   }
 }
 
 localeConfig('MonacoEditor', MonacoEditorView);
 
-//monaco编辑器存在3种主题：vs、vs-dark、hc-black
+// monaco编辑器存在3种主题：vs、vs-dark、hc-black
+// eslint-disable-next-line react/no-multi-comp
 class MonacoEditorDefaultView extends PureComponent {
   static displayName = 'MonacoEditorDefault';
+
   static propTypes = {
     locale: PropTypes.string,
-    messages: PropTypes.object
+    messages: PropTypes.object,
+    language: PropTypes.string,
   };
+
   static defaultProps = {
     locale: 'zh-CN',
     messages: zhCN,
     width: '100%',
     height: '300px',
-    language: 'javascript',
-    autoFocus: false, //自动获得焦点
-    autoSubmit: true, //自动提交
-    placeholder: '', //默认占位内容
+    language: 'json',
+    autoFocus: false, // 自动获得焦点
+    autoSubmit: true, // 自动提交
+    placeholder: '', // 默认占位内容
     btnText: '提交',
     btnSize: 'small',
-    rules: [], //校验规则
+    rules: [], // 校验规则
     options: {
       readOnly: false,
       automaticLayout: true,
-      folding: true, //默认开启折叠代码功能
+      folding: true, // 默认开启折叠代码功能
       lineNumbers: 'on',
       wordWrap: 'off',
       formatOnPaste: true,
@@ -60,25 +65,35 @@ class MonacoEditorDefaultView extends PureComponent {
       fixedOverflowWidgets: false,
       snippetSuggestions: 'top',
       minimap: {
-        enabled: true
+        enabled: true,
       },
       scrollbar: {
         vertical: 'hidden',
         horizontal: 'hidden',
-        verticalScrollbarSize: 0
-      }
-    }
+        verticalScrollbarSize: 0,
+      },
+    },
   };
+
   strValue: string;
+
   i18n: any;
+
   editorRef: React.RefObject<unknown>;
+
   options: any;
+
   fullScreenOptions: any;
+
   position: any;
+
   editor: any;
+
   editorNode: unknown;
+
   editorParentNode: any;
-  constructor(props: Readonly<{}>) {
+
+  constructor(props: Readonly) {
     super(props);
     this.strValue = '';
     this.i18n = generateI18n(props.locale, props.messages);
@@ -90,11 +105,11 @@ class MonacoEditorDefaultView extends PureComponent {
       folding: true,
       scrollBeyondLastLine: true,
       minimap: {
-        enabled: true
-      }
+        enabled: true,
+      },
     };
     this.state = {
-      isFullScreen: false
+      isFullScreen: false,
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -103,61 +118,62 @@ class MonacoEditorDefaultView extends PureComponent {
   }
 
   componentDidUpdate() {
-    //如果是全屏操作，获得焦点，光标保留在原来位置;
+    // 如果是全屏操作，获得焦点，光标保留在原来位置;
     if (this.position) {
       this.editor.focus();
       this.editor.setPosition(this.position);
       delete this.position;
     }
   }
+
   componentDidMount() {
-    this.editorNode = this.editorRef.current; //记录当前dom节点；
-    this.editorParentNode = this.editorNode.parentNode; //记录父节点;
-    //自动获得焦点, 格式化需要时间
+    this.editorNode = this.editorRef.current; // 记录当前dom节点；
+    this.editorParentNode = this.editorNode.parentNode; // 记录父节点;
+    // 自动获得焦点, 格式化需要时间
     if (this.props.autoFocus) {
       setTimeout(() => {
         this.editor.setPosition({
           column: 4,
-          lineNumber: 2
+          lineNumber: 2,
         });
         this.editor.focus();
       }, 100);
     }
-    //快捷键编码
-    let CtrlCmd = 2048;
-    let KEY_S = 49;
-    let Shift = 1024;
-    let KEY_F = 36;
-    let KEY_B = 32;
-    let Escape = 9;
+    // 快捷键编码
+    const CtrlCmd = 2048;
+    const KEY_S = 49;
+    const Shift = 1024;
+    const KEY_F = 36;
+    const KEY_B = 32;
+    const Escape = 9;
 
     this.editor.addCommand(CtrlCmd | KEY_S, () => {
-      this.onSubmit(); //保存快捷键
+      this.onSubmit(); // 保存快捷键
     });
     this.editor.addCommand(CtrlCmd | Shift | KEY_F, () => {
-      this.fullScreen(); //全屏快捷键
+      this.fullScreen(); // 全屏快捷键
     });
     this.editor.addCommand(CtrlCmd | KEY_B, () => {
-      this.format(); //美化快捷键
+      this.format(); // 美化快捷键
     });
     this.editor.addCommand(Escape, () => {
       this.props.onEscape && this.props.onEscape();
     });
-    //注册api
+    // 注册api
     this.editor.submit = this.onSubmit;
     this.editor.format = this.format;
     this.editor.fullScreen = this.fullScreen;
     this.editor.toJson = this.toJson;
     this.editor.toObject = this.toObject;
     this.editor.toFunction = this.toFunction;
-    //针对object情况，改写setValue和getValue api
+    // 针对object情况，改写setValue和getValue api
     if (this.props.language === 'object') {
-      let getValue = this.editor.getValue;
-      let setValue = this.editor.setValue;
+      const { getValue } = this.editor;
+      const { setValue } = this.editor;
       this.editor.getValue = () => {
         return getValue.call(this.editor).substring(this.valuePrefix.length);
       };
-      this.editor.setValue = value => {
+      this.editor.setValue = (value) => {
         return setValue.call(this.editor, [this.valuePrefix + value]);
       };
     }
@@ -175,40 +191,48 @@ class MonacoEditorDefaultView extends PureComponent {
       theme,
       editorWillMount,
       editorDidMount,
-      registerApi
+      registerApi,
     } = this.props;
 
     const { isFullScreen } = this.state;
-    this.valuePrefix = ''; //值前缀
+    this.valuePrefix = ''; // 值前缀
     if (language === 'object') this.valuePrefix = 'export default ';
     if (!this.isFullScreenAction) {
-      //将值转换成目标值
-      let nowValue = this.valueHandler(value || placeholder, language);
-      let curValue = this.valueHandler(this.strValue, language);
+      // 将值转换成目标值
+      const nowValue = this.valueHandler(value || placeholder, language);
+      const curValue = this.valueHandler(this.strValue, language);
       if (nowValue !== curValue) this.strValue = nowValue;
-      if (language === 'object') this.strValue = this.strValue || placeholder || '{\n\t\n}'; //设置初始化值
+      if (language === 'object') this.strValue = this.strValue || placeholder || '{\n\t\n}'; // 设置初始化值
       if (language === 'json' && this.strValue === '{}') this.strValue = '{\n\t\n}';
     }
     this.isFullScreenAction = false;
-    //真实高亮语言
+    // 真实高亮语言
     let tarLanguage = language;
     if (language === 'object' || language === 'function') {
       tarLanguage = 'javascript';
     }
-    let classes = classNames('monaco-editor-wrap', {
-      ['monaco-fullscreen']: !!isFullScreen,
-      ['monaco-nofullscreen']: !isFullScreen
+    const classes = classNames('monaco-editor-wrap', {
+      'monaco-fullscreen': !!isFullScreen,
+      'monaco-nofullscreen': !isFullScreen,
     });
-    let tarStyle = Object.assign({ minHeight: 60, width, height }, style);
+    const tarStyle = Object.assign({ minHeight: 60, width, height }, style);
+    let tempValue = this.valuePrefix + this.strValue;
+    if (tarLanguage === 'json') {
+      try {
+        tempValue = JSON.stringify(JSON.parse(tempValue || '{}'), null, 2);
+      } catch (err) {
+        console.log(err);
+      }
+    }
     return (
       <div className={className} style={tarStyle}>
         <div ref={this.editorRef} style={{ height: '100%' }} className={classes}>
           <MonacoEditor
-            value={this.valuePrefix + this.strValue}
+            value={tempValue}
             width="100%"
             height="300"
             language={tarLanguage}
-            theme={theme || window.__monacoTheme || 'vs-dark'}
+            theme={theme || window.__monacoTheme}
             options={isFullScreen ? this.fullScreenOptions : this.options}
             onChange={this.onChange}
             editorWillMount={editorWillMount}
@@ -233,30 +257,30 @@ class MonacoEditorDefaultView extends PureComponent {
     );
   }
 
-  //值变化
+  // 值变化
   onChange(curValue) {
     if (curValue === this.valuePrefix + this.strValue) return;
     const { onAfterChange, language, autoSubmit, onChange } = this.props;
-    this.strValue = curValue; //记录当前格式
+    this.strValue = curValue; // 记录当前格式
     if (this.ct) clearTimeout(this.ct);
     this.ct = setTimeout(() => {
       this.position = this.editor.getPosition();
-      let ret = this.resultHandler(curValue, language);
+      const ret = this.resultHandler(curValue, language);
       if (autoSubmit) onChange && onChange(ret.value);
       onAfterChange && onAfterChange(ret.value, ret.error, this.editor);
     }, 300);
   }
 
-  //提交动作
+  // 提交动作
   onSubmit() {
     const { onSubmit, onChange, language } = this.props;
-    let curValue = this.editor.getValue();
-    let ret = this.resultHandler(curValue, language);
+    const curValue = this.editor.getValue();
+    const ret = this.resultHandler(curValue, language);
     if (!ret.error) onChange && onChange(ret.value);
     onSubmit && onSubmit(ret.value, ret.error, this.editor);
   }
 
-  //值类型转换处理
+  // 值类型转换处理
   valueHandler(value, language) {
     let tarValue = value || '';
     if (language === 'json') {
@@ -264,9 +288,13 @@ class MonacoEditorDefaultView extends PureComponent {
         tarValue = JSON.stringify(value, null, 2);
       } else if (value && typeof value === 'string') {
         try {
-          let ret = this.toJson(value);
-          if (!ret.error) tarValue = JSON.stringify(ret.value, null, 2);
-        } catch (err) {}
+          const ret = this.toJson(value);
+          if (!ret.error) {
+            tarValue = JSON.stringify(ret.value, null, 2);
+          }
+        } catch (err) {
+          // empty
+        }
       }
     } else if (language === 'function') {
       if (typeof value === 'function') {
@@ -276,25 +304,29 @@ class MonacoEditorDefaultView extends PureComponent {
         tarValue = js_beautify(tarValue, { indent_size: 2, indent_empty_lines: true });
       }
     } else if (language === 'object') {
-      //先转成对象，在进行序列化和格式化；
+      // 先转成对象，在进行序列化和格式化；
       value = value || {};
       if (value && typeof value === 'object') {
         try {
           tarValue = serialize(value, { unsafe: true });
           tarValue = js_beautify(tarValue, { indent_size: 2, indent_empty_lines: true });
-        } catch (err) {}
+        } catch (err) {
+          // empty
+        }
       } else if (typeof value === 'string') {
         try {
-          let ret = this.resultHandler(value, 'object');
+          const ret = this.resultHandler(value, 'object');
           tarValue = ret.error ? ret.value : serialize(ret.value, { unsafe: true });
           tarValue = js_beautify(tarValue, { indent_size: 2, indent_empty_lines: true });
-        } catch (err) {}
+        } catch (err) {
+          // empty
+        }
       }
     }
     return tarValue;
   }
 
-  //结果处理
+  // 结果处理
   resultHandler(value, language) {
     let ret = { value };
     if (language === 'json') {
@@ -307,10 +339,10 @@ class MonacoEditorDefaultView extends PureComponent {
     return ret;
   }
 
-  //设置全屏时的动作
+  // 设置全屏时的动作
   fullScreen() {
     if (!this.editorRef) return;
-    //还原到原来位置；
+    // 还原到原来位置；
     this.position = this.editor.getPosition();
     if (this.state.isFullScreen) {
       if (this.editorParentNode) {
@@ -323,39 +355,42 @@ class MonacoEditorDefaultView extends PureComponent {
     } else {
       document.body.appendChild(this.editorNode);
     }
-    let nextFs = !this.state.isFullScreen;
-    this.isFullScreenAction = true; //记录是全屏幕操作
+    // eslint-disable-next-line react/no-access-state-in-setstate
+    const nextFs = !this.state.isFullScreen;
+    this.isFullScreenAction = true; // 记录是全屏幕操作
     this.setState(
       {
-        isFullScreen: nextFs
+        isFullScreen: nextFs,
       },
       () => {
         this.editor.updateOptions(nextFs ? this.fullScreenOptions : this.options);
-      }
+      },
     );
   }
 
-  //美化代码
+  // 美化代码
   format() {
     if (!this.editor) return;
     if (/^\$_obj?\{.*?\}$/m.test(this.editor.getValue())) return;
     if (this.props.language === 'json' || this.props.language === 'object' || this.props.language === 'function') {
-      let tarValue = js_beautify(this.editor.getValue(), { indent_size: 2 });
+      const tarValue = js_beautify(this.editor.getValue(), { indent_size: 2 });
       this.editor.setValue(tarValue);
     } else if (this.props.language === 'less' || this.props.language === 'css' || this.props.language === 'scss') {
-      let tarValue = css_beautify(this.editor.getValue(), { indent_size: 2 });
+      const tarValue = css_beautify(this.editor.getValue(), { indent_size: 2 });
       this.editor.setValue(tarValue);
     } else {
       this.editor.getAction('editor.action.formatDocument').run();
     }
   }
 
-  //校验是否是json
+  // 校验是否是json
   toJson(value) {
     try {
-      let obj = new Function(`'use strict'; return ${value.replace(/[\r\n\t]/g, '')}`)();
+      // eslint-disable-next-line no-new-func
+      const obj = new Function(`'use strict'; return ${value.replace(/[\r\n\t]/g, '')}`)();
       if (typeof obj === 'object' && obj) {
-        let tarValue = new Function(`'use strict'; return ${value}`)();
+        // eslint-disable-next-line no-new-func
+        const tarValue = new Function(`'use strict'; return ${value}`)();
         return { value: JSON.parse(JSON.stringify(tarValue)) };
       }
       return { error: this.i18n('jsonIllegal'), value };
@@ -364,10 +399,11 @@ class MonacoEditorDefaultView extends PureComponent {
     }
   }
 
-  //校验是否为object对象
+  // 校验是否为object对象
   toObject(value) {
     try {
-      let obj = new Function(`'use strict';return ${value}`)();
+      // eslint-disable-next-line no-new-func
+      const obj = new Function(`'use strict';return ${value}`)();
       if (obj && typeof obj === 'object') {
         if (jsonuri.isCircular(obj)) return { error: this.i18n('circularRef'), value };
         return { value: obj };
@@ -379,10 +415,11 @@ class MonacoEditorDefaultView extends PureComponent {
     }
   }
 
-  //校验是否为function
+  // 校验是否为function
   toFunction(value) {
     try {
-      let fun = new Function(`'use strict';return ${value}`)();
+      // eslint-disable-next-line no-new-func
+      const fun = new Function(`'use strict';return ${value}`)();
       if (fun && typeof fun === 'function') {
         return { value: fun };
       } else {
@@ -393,91 +430,100 @@ class MonacoEditorDefaultView extends PureComponent {
     }
   }
 
-  //注册api和代码片段
+  // 注册api和代码片段
   registerApiAndSnippet(monaco) {
     if (registerApiAndSnippetStatus) return;
     registerApiAndSnippetStatus = true;
-    //注册this.提示的方法;
-    let thisSuggestions = [];
-    Snippets.map(item => {
+    // 注册this.提示的方法;
+    const thisSuggestions = [];
+    Snippets.map((item) => {
       if (!item.label || !item.kind || !item.insertText) return;
-      let tarItem = Object.assign(item, {
+      const tarItem = Object.assign(item, {
         label: item.label,
         kind: monaco.languages.CompletionItemKind[item.kind],
-        insertText: item.insertText
+        insertText: item.insertText,
       });
-      if (item.insertTextRules)
-        tarItem.insertTextRules = monaco.languages.CompletionItemInsertTextRule[item.insertTextRules];
+      if (item.insertTextRules) tarItem.insertTextRules = monaco.languages.CompletionItemInsertTextRule[item.insertTextRules];
       thisSuggestions.push(tarItem);
+      return item;
     });
     monaco.languages.registerCompletionItemProvider('javascript', {
       provideCompletionItems: (model, position) => {
-        let textUntilPosition = model.getValueInRange({
+        const textUntilPosition = model.getValueInRange({
           startLineNumber: position.lineNumber,
           startColumn: 1,
           endLineNumber: position.lineNumber,
-          endColumn: position.column
+          endColumn: position.column,
         });
-        let match = textUntilPosition.match(/(^this\.)|(\sthis\.)/);
-        let suggestions = match ? thisSuggestions : [];
-        return { suggestions: suggestions };
+        const match = textUntilPosition.match(/(^this\.)|(\sthis\.)/);
+        const suggestions = match ? thisSuggestions : [];
+        return { suggestions };
       },
-      triggerCharacters: ['.']
+      triggerCharacters: ['.'],
     });
   }
 }
-const prefix = 'data:text/javascript;charset=utf-8,';
-const baseUrl = 'https://g.alicdn.com/iceluna/iceluna-vendor/0.0.1/';
-window.MonacoEnvironment = {
-  getWorkerUrl: function(label: string) {
-    if (label === 'json') {
-      return `${prefix}${encodeURIComponent(`
-        importScripts('${baseUrl}json.worker.js');`)}`;
-    }
-    if (['css', 'less', 'scss'].includes(label)) {
-      return `${prefix}${encodeURIComponent(`
-        importScripts('${baseUrl}css.worker.js');`)}`;
-    }
-    if (label === 'html') {
-      return `${prefix}${encodeURIComponent(`
-        importScripts('${baseUrl}html.worker.js');`)}`;
-    }
-    if (['typescript', 'javascript'].includes(label)) {
-      return `${prefix}${encodeURIComponent(`
-        importScripts('${baseUrl}typescript.worker.js');`)}`;
-    }
-    return `${prefix}${encodeURIComponent(`
-      importScripts('${baseUrl}editor.worker.js');`)}`;
-  }
-};
+// const prefix = 'data:text/javascript;charset=utf-8,';
+// const baseUrl = 'https://g.alicdn.com/iceluna/iceluna-vendor/0.0.1/';
+// window.MonacoEnvironment = {
+//   getWorkerUrl(label: string) {
+//     if (label === 'json') {
+//       return `${prefix}${encodeURIComponent(`
+//         importScripts('${baseUrl}json.worker.js');`)}`;
+//     }
+//     if (['css', 'less', 'scss'].includes(label)) {
+//       return `${prefix}${encodeURIComponent(`
+//         importScripts('${baseUrl}css.worker.js');`)}`;
+//     }
+//     if (label === 'html') {
+//       return `${prefix}${encodeURIComponent(`
+//         importScripts('${baseUrl}html.worker.js');`)}`;
+//     }
+//     if (['typescript', 'javascript'].includes(label)) {
+//       return `${prefix}${encodeURIComponent(`
+//         importScripts('${baseUrl}typescript.worker.js');`)}`;
+//     }
+//     return `${prefix}${encodeURIComponent(`
+//       importScripts('${baseUrl}editor.worker.js');`)}`;
+//   },
+// };
 
+// eslint-disable-next-line react/no-multi-comp
 export default class MonacoEditorButtonView extends PureComponent {
-  static displayName = 'MonacoEditorButton';
+  static displayName = 'JsonSetter';
+
   static propTypes = {
     locale: PropTypes.string,
-    messages: PropTypes.object
+    messages: PropTypes.object,
   };
+
   static defaultProps = {
     locale: 'zh-CN',
-    messages: zhCN
+    messages: zhCN,
   };
+
   i18n: any;
+
   objectButtonRef: React.RefObject<unknown>;
-  constructor(props: Readonly<{}>) {
+
+  constructor(props: Readonly) {
     super(props);
     this.i18n = generateI18n(props.locale, props.messages);
     this.objectButtonRef = React.createRef();
     // 兼容代码，待去除
     window.__ctx.appHelper.constants = window.__ctx.appHelper.constants || {};
   }
-  afterHandler(value: { nrs_temp_field: any; }) {
+
+  afterHandler(value: { nrs_temp_field: any }) {
     if (!value) return;
     return value.nrs_temp_field;
   }
+
   beforeHandler(value: any) {
     if (!value) return;
     return { nrs_temp_field: value };
   }
+
   message(type: string, title: any, dom: Element | null) {
     Message.show({
       type,
@@ -485,32 +531,34 @@ export default class MonacoEditorButtonView extends PureComponent {
       duration: 1000,
       align: 'cc cc',
       overlayProps: {
-        target: dom
-      }
+        target: dom,
+      },
     });
   }
+
   componentDidMount() {
     const { registerApi } = this.props;
-    let objectButtonThis = this.objectButtonRef;
+    const objectButtonThis = this.objectButtonRef;
     registerApi &&
       registerApi({
         show: objectButtonThis.showModal,
         hide: objectButtonThis.hideModal,
         submit: objectButtonThis.submitHandler,
-        setValues: objectButtonThis.setValues
+        setValues: objectButtonThis.setValues,
       });
   }
+
   render() {
     const self = this;
-    const { locale, messages, value, onChange, field, ...restProps } = this.props;
+    const { locale, messages, value, onChange, field, languages, ...restProps } = this.props;
     const { id } = field;
-    let tarRestProps = { ...restProps };
+    const tarRestProps = { ...restProps };
     tarRestProps.autoSubmit = true;
     tarRestProps.autoFocus = true;
-    let tarOnSubmit = tarRestProps.onSubmit;
-    //确保monaco快捷键保存，能出发最外层的保存
-    tarRestProps.onSubmit = (value, error) => {
-      let msgDom = document.querySelector('.object-button-overlay .next-dialog-body');
+    const tarOnSubmit = tarRestProps.onSubmit;
+    // 确保monaco快捷键保存，能出发最外层的保存
+    tarRestProps.onSubmit = (editorValue, error) => {
+      const msgDom = document.querySelector('.object-button-overlay .next-dialog-body');
       if (error) return this.message('error', this.i18n('formatError'), msgDom);
       this.objectButtonRef &&
         this.objectButtonRef.current &&
@@ -518,37 +566,38 @@ export default class MonacoEditorButtonView extends PureComponent {
           this.message('success', this.i18n('saved'), msgDom);
         });
     };
-    let tarObjProps = { };
+    const tarObjProps = {};
     tarObjProps.className = 'luna-monaco-button';
     if (tarRestProps['data-meta']) {
       delete tarRestProps['data-meta'];
       tarObjProps['data-meta'] = 'Field';
     }
+
     tarObjProps.id = id;
     tarObjProps.value = value || '';
     tarObjProps.onChange = onChange;
-    let tarRule = [];
-    //判断，如果是json，function, object等类型，自动追加校验规则；
+    const tarRule = [];
+    // 判断，如果是json，function, object等类型，自动追加校验规则；
     if (tarRestProps.language && ['json', 'function', 'object'].includes(tarRestProps.language)) {
       if (['json', 'object'].includes(tarRestProps.language)) {
         tarRule.push({
-          validator: function(value: any, callback: (arg0: undefined) => void) {
-            if (typeof value !== 'object') {
+          validator(validatorValue: any, callback: (arg0: undefined) => void) {
+            if (typeof validatorValue !== 'object') {
               callback(self.i18n('formatError'));
             } else {
               callback();
             }
-          }
+          },
         });
       } else {
         tarRule.push({
-          validator: function(value: any, callback: (arg0: undefined) => void) {
-            if (typeof value !== 'function') {
+          validator(validatorValue: any, callback: (arg0: undefined) => void) {
+            if (typeof validatorValue !== 'function') {
               callback(self.i18n('formatError'));
             } else {
               callback();
             }
-          }
+          },
         });
       }
     }
@@ -564,7 +613,7 @@ export default class MonacoEditorButtonView extends PureComponent {
           onSubmit={tarOnSubmit}
         >
           <FormItem name="nrs_temp_field" rules={tarRule}>
-            <MonacoEditorDefaultView {...tarRestProps} registerApi={(apis: any) => Object.assign(this, apis)}  />
+            <MonacoEditorDefaultView {...tarRestProps} registerApi={(apis: any) => Object.assign(this, apis)} />
           </FormItem>
         </ObjectButton>
       </div>

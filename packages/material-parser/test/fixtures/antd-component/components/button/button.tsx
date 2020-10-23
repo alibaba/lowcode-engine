@@ -44,7 +44,7 @@ function insertSpace(child: React.ReactChild, needInserted: boolean) {
 }
 
 function spaceChildren(children: React.ReactNode, needInserted: boolean) {
-  let isPrevChildPure: boolean = false;
+  let isPrevChildPure = false;
   const childList: React.ReactNode[] = [];
   React.Children.forEach(children, (child) => {
     const type = typeof child;
@@ -93,13 +93,13 @@ export type AnchorButtonProps = {
   target?: string;
   onClick?: React.MouseEventHandler<HTMLElement>;
 } & BaseButtonProps &
-  Omit<React.AnchorHTMLAttributes<any>, 'type' | 'onClick'>;
+Omit<React.AnchorHTMLAttributes<any>, 'type' | 'onClick'>;
 
 export type NativeButtonProps = {
   htmlType?: ButtonHTMLType;
   onClick?: React.MouseEventHandler<HTMLElement>;
 } & BaseButtonProps &
-  Omit<React.ButtonHTMLAttributes<any>, 'type' | 'onClick'>;
+Omit<React.ButtonHTMLAttributes<any>, 'type' | 'onClick'>;
 
 export type ButtonProps = Partial<AnchorButtonProps & NativeButtonProps>;
 

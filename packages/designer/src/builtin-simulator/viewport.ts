@@ -4,7 +4,9 @@ import { AutoFit, IViewport } from '../simulator';
 
 export default class Viewport implements IViewport {
   @obx.ref private rect?: DOMRect;
+
   private _bounds?: DOMRect;
+
   get bounds(): DOMRect {
     if (this._bounds) {
       return this._bounds;
@@ -17,13 +19,14 @@ export default class Viewport implements IViewport {
   }
 
   get contentBounds(): DOMRect {
-    const bounds = this.bounds;
-    const scale = this.scale;
+    const { bounds } = this;
+    const { scale } = this;
     return new DOMRect(0, 0, bounds.width / scale, bounds.height / scale);
   }
 
-  private viewportElement?: Element;
-  mount(viewportElement: Element | null) {
+  private viewportElement?: HTMLElement;
+
+  mount(viewportElement: HTMLElement | null) {
     if (!viewportElement || this.viewportElement === viewportElement) {
       return;
     }
@@ -43,6 +46,15 @@ export default class Viewport implements IViewport {
     }
     return this.rect.height;
   }
+
+  set height(newHeight: number) {
+    this._contentHeight = newHeight / this.scale;
+    if (this.viewportElement) {
+      this.viewportElement.style.height = `${newHeight}px`;
+      this.touch();
+    }
+  }
+
   @computed get width(): number {
     if (!this.rect) {
       return 1000;
@@ -50,29 +62,46 @@ export default class Viewport implements IViewport {
     return this.rect.width;
   }
 
+  set width(newWidth: number) {
+    this._contentWidth = newWidth / this.scale;
+    if (this.viewportElement) {
+      this.viewportElement.style.width = `${newWidth}px`;
+      this.touch();
+    }
+  }
+
+  @obx.ref private _scale = 1;
+
   /**
    * 缩放比例
    */
   @computed get scale(): number {
-    if (!this.rect || this.contentWidth === AutoFit) {
-      return 1;
+    return this._scale;
+  }
+
+  set scale(newScale: number) {
+    if (isNaN(newScale) || newScale <= 0) {
+      throw new Error(`invalid new scale "${newScale}"`);
     }
-    return this.width / this.contentWidth;
+
+    this._scale = newScale;
+    this._contentWidth = this.width / this.scale;
+    this._contentHeight = this.height / this.scale;
   }
 
   @obx.ref private _contentWidth: number | AutoFit = AutoFit;
 
+  @obx.ref private _contentHeight: number | AutoFit = AutoFit;
+
   @computed get contentHeight(): number | AutoFit {
-    if (!this.rect || this.scale === 1) {
-      return AutoFit;
-    }
-    return this.height / this.scale;
+    return this._contentHeight;
+  }
+
+  set contentHeight(newContentHeight: number | AutoFit) {
+    this._contentHeight = newContentHeight;
   }
 
   @computed get contentWidth(): number | AutoFit {
-    if (!this.rect || (this._contentWidth !== AutoFit && this._contentWidth <= this.width)) {
-      return AutoFit;
-    }
     return this._contentWidth;
   }
 
@@ -81,15 +110,19 @@ export default class Viewport implements IViewport {
   }
 
   @obx.ref private _scrollX = 0;
+
   @obx.ref private _scrollY = 0;
+
   get scrollX() {
     return this._scrollX;
   }
+
   get scrollY() {
     return this._scrollY;
   }
 
   private _scrollTarget?: ScrollTarget;
+
   /**
    * 滚动对象
    */
@@ -98,6 +131,7 @@ export default class Viewport implements IViewport {
   }
 
   @obx private _scrolling = false;
+
   get scrolling(): boolean {
     return this._scrolling;
   }

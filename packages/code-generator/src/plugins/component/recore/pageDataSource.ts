@@ -1,4 +1,7 @@
+import { JSExpression, CompositeValue } from '@ali/lowcode-types';
+
 import { CLASS_DEFINE_CHUNK_NAME, DEFAULT_LINK_AFTER } from '../../../const/generator';
+import Scope from '../../../utils/Scope';
 
 import {
   BuilderComponentPlugin,
@@ -7,15 +10,13 @@ import {
   FileType,
   ICodeStruct,
   IContainerInfo,
-  IJSExpression,
-  CompositeValue,
 } from '../../../types';
 
-import { generateCompositeType, handleStringValueDefault } from '../../../utils/compositeType';
+import { generateCompositeType } from '../../../utils/compositeType';
 import { generateExpression } from '../../../utils/jsExpression';
 
 function packJsExpression(exp: unknown): string {
-  const expression = exp as IJSExpression;
+  const expression = exp as JSExpression;
   const funcStr = generateExpression(expression);
   return `function() { return (${funcStr}); }`;
 }
@@ -27,26 +28,27 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
     };
 
     const ir = next.ir as IContainerInfo;
+    const scope = Scope.createRootScope();
+
     if (ir.dataSource) {
       const { dataSource } = ir;
-      const {
-        list,
-        ...rest
-      } = dataSource;
+      const { list, ...rest } = dataSource;
 
       let attrs: string[] = [];
 
-      const extConfigs = Object.keys(rest).map(extConfigName => {
+      const extConfigs = Object.keys(rest).map((extConfigName) => {
         const value = (rest as Record<string, CompositeValue>)[extConfigName];
-        const [isString, valueStr] = generateCompositeType(value);
-        return `${extConfigName}: ${isString ? `'${valueStr}'` : valueStr}`;
+        const valueStr = generateCompositeType(value, scope);
+        return `${extConfigName}: ${valueStr}`;
       });
 
       attrs = [...attrs, ...extConfigs];
 
-      const listProp = handleStringValueDefault(generateCompositeType(list as unknown as CompositeValue, {
-        expression: packJsExpression,
-      }));
+      const listProp = generateCompositeType((list as unknown) as CompositeValue, scope, {
+        handlers: {
+          expression: packJsExpression,
+        },
+      });
 
       attrs.push(`list: ${listProp}`);
 

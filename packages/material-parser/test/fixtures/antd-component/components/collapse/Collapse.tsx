@@ -53,8 +53,8 @@ export default class Collapse extends React.Component<CollapseProps, any> {
 
     return React.isValidElement(icon)
       ? React.cloneElement(icon as any, {
-          className: classNames(icon.props.className, `${prefixCls}-arrow`),
-        })
+        className: classNames(icon.props.className, `${prefixCls}-arrow`),
+      })
       : icon;
   };
 

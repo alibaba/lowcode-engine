@@ -7,14 +7,23 @@ export class OffsetObserver {
   readonly id = uniqueId('oobx');
 
   private lastOffsetLeft?: number;
+
   private lastOffsetTop?: number;
+
   private lastOffsetHeight?: number;
+
   private lastOffsetWidth?: number;
+
   @obx private _height = 0;
+
   @obx private _width = 0;
+
   @obx private _left = 0;
+
   @obx private _top = 0;
+
   @obx private _right = 0;
+
   @obx private _bottom = 0;
 
   @computed get height() {
@@ -42,6 +51,7 @@ export class OffsetObserver {
   }
 
   @obx hasOffset = false;
+
   @computed get offsetLeft() {
     if (this.isRoot) {
       return this.viewport.scrollX * this.scale;
@@ -51,6 +61,7 @@ export class OffsetObserver {
     }
     return this.lastOffsetLeft;
   }
+
   @computed get offsetTop() {
     if (this.isRoot) {
       return this.viewport.scrollY * this.scale;
@@ -60,12 +71,14 @@ export class OffsetObserver {
     }
     return this.lastOffsetTop;
   }
+
   @computed get offsetHeight() {
     if (!this.viewport.scrolling || this.lastOffsetHeight == null) {
       this.lastOffsetHeight = this.isRoot ? this.viewport.height : this.height;
     }
     return this.lastOffsetHeight;
   }
+
   @computed get offsetWidth() {
     if (!this.viewport.scrolling || this.lastOffsetWidth == null) {
       this.lastOffsetWidth = this.isRoot ? this.viewport.width : this.width;
@@ -78,8 +91,11 @@ export class OffsetObserver {
   }
 
   private pid: number | undefined;
+
   readonly viewport: IViewport;
+
   private isRoot: boolean;
+
   readonly node: Node;
 
   readonly compute: () => void;
@@ -109,18 +125,17 @@ export class OffsetObserver {
 
       if (!rect) {
         this.hasOffset = false;
-      } else {
-        if (!this.viewport.scrolling || !this.hasOffset) {
-          this._height = rect.height;
-          this._width = rect.width;
-          this._left = rect.left;
-          this._top = rect.top;
-          this._right = rect.right;
-          this._bottom = rect.bottom;
-          this.hasOffset = true;
-        }
+      } else if (!this.viewport.scrolling || !this.hasOffset) {
+        this._height = rect.height;
+        this._width = rect.width;
+        this._left = rect.left;
+        this._top = rect.top;
+        this._right = rect.right;
+        this._bottom = rect.bottom;
+        this.hasOffset = true;
       }
-      this.pid = pid = (window as any).requestIdleCallback(compute);
+      this.pid = (window as any).requestIdleCallback(compute);
+      pid = this.pid;
     };
 
     this.compute = compute;
@@ -128,7 +143,8 @@ export class OffsetObserver {
     // try first
     compute();
     // try second, ensure the dom mounted
-    this.pid = pid = (window as any).requestIdleCallback(compute);
+    this.pid = (window as any).requestIdleCallback(compute);
+    pid = this.pid;
   }
 
   purge() {

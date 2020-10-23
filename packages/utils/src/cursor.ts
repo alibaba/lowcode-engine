@@ -1,4 +1,5 @@
 import './cursor.less';
+
 export class Cursor {
   private states = new Set<string>();
 
@@ -9,6 +10,7 @@ export class Cursor {
       this.removeState('dragging');
     }
   }
+
   setXResizing(flag: boolean) {
     if (flag) {
       this.addState('x-resizing');
@@ -16,6 +18,7 @@ export class Cursor {
       this.removeState('x-resizing');
     }
   }
+
   setYResizing(flag: boolean) {
     if (flag) {
       this.addState('y-resizing');

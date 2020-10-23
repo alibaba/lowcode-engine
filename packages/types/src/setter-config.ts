@@ -12,7 +12,7 @@ function isReactComponent(obj: any): obj is ComponentType<any> {
 
 export type CustomView = ReactElement | ComponentType<any>;
 
-export type DynamicProps = (target: SettingTarget) => object;
+export type DynamicProps = (target: SettingTarget) => Record<string, unknown>;
 export type DynamicSetter = (target: SettingTarget) => string | SetterConfig | CustomView;
 
 export interface SetterConfig {
@@ -23,7 +23,7 @@ export interface SetterConfig {
   /**
    * the props pass to Setter Component
    */
-  props?: object | DynamicProps;
+  props?: Record<string, unknown> | DynamicProps;
   children?: any;
   isRequired?: boolean;
   initialValue?: any | ((target: SettingTarget) => any);
@@ -47,5 +47,5 @@ export function isCustomView(obj: any): obj is CustomView {
 }
 
 export function isDynamicSetter(obj: any): obj is DynamicSetter {
-  return obj && typeof obj === 'function' && !obj.displayName;
+  return obj && typeof obj === 'function' && !isReactClass(obj);
 }

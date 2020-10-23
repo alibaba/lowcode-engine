@@ -46,21 +46,24 @@ export type AnchorContainer = HTMLElement | Window;
 
 interface AnchorProps {
   prefixCls?: string;
-  // className?: string;
-  // style?: React.CSSProperties;
-  // children?: React.ReactNode;
-  // offsetTop?: number;
-  // bounds?: number;
-  // affix?: boolean;
-  // showInkInFixed?: boolean;
-  // getContainer?: () => AnchorContainer;
-  // /** Return customize highlight anchor */
-  // getCurrentAnchor?: () => string;
-  // onClick?: (e: React.MouseEvent<HTMLElement>, link: { title: React.ReactNode; href: string }) => void;
-  // /** Scroll to target offset value, if none, it's offsetTop prop value or 0. */
-  // targetOffset?: number;
-  // /** Listening event when scrolling change active link */
-  // onChange?: (currentActiveLink: string) => void;
+  className?: string;
+  style?: React.CSSProperties;
+  children?: React.ReactNode;
+  offsetTop?: number;
+  bounds?: number;
+  affix?: boolean;
+  showInkInFixed?: boolean;
+  getContainer?: () => AnchorContainer;
+  /** Return customize highlight anchor */
+  getCurrentAnchor?: () => string;
+  onClick?: (
+    e: React.MouseEvent<HTMLElement>,
+    link: { title: React.ReactNode; href: string },
+  ) => void;
+  /** Scroll to target offset value, if none, it's offsetTop prop value or 0. */
+  targetOffset?: number;
+  /** Listening event when scrolling change active link */
+  onChange?: (currentActiveLink: string) => void;
 }
 
 interface AnchorState {
@@ -79,7 +82,10 @@ interface AntAnchor {
   unregisterLink: (link: string) => void;
   activeLink: string | null;
   scrollTo: (link: string) => void;
-  onClick?: (e: React.MouseEvent<HTMLElement>, link: { title: React.ReactNode; href: string }) => void;
+  onClick?: (
+    e: React.MouseEvent<HTMLElement>,
+    link: { title: React.ReactNode; href: string },
+  ) => void;
 }
 
 export default class Anchor extends React.Component<AnchorProps, AnchorState> {
@@ -171,7 +177,7 @@ export default class Anchor extends React.Component<AnchorProps, AnchorState> {
       return activeLink;
     }
 
-    const linkSections: Array<Section> = [];
+    const linkSections: Section[] = [];
     const { getContainer } = this.props as AnchorDefaultProps;
     const container = getContainer();
     this.links.forEach((link) => {
@@ -249,7 +255,10 @@ export default class Anchor extends React.Component<AnchorProps, AnchorState> {
       return;
     }
     const { offsetTop, bounds, targetOffset } = this.props;
-    const currentActiveLink = this.getCurrentAnchor(targetOffset !== undefined ? targetOffset : offsetTop || 0, bounds);
+    const currentActiveLink = this.getCurrentAnchor(
+      targetOffset !== undefined ? targetOffset : offsetTop || 0,
+      bounds,
+    );
     this.setCurrentActiveLink(currentActiveLink);
   };
 

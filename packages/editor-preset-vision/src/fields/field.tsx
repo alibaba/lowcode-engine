@@ -10,7 +10,7 @@ interface IHelpTip {
 }
 
 function splitWord(title: string): JSX.Element[] {
-  return (title || '').split('').map((w, i) => <b key={`word${i}`} className='engine-word'>{w}</b>);
+  return (title || '').split('').map((w, i) => <b key={`word${i}`} className="engine-word">{w}</b>);
 }
 
 function getFieldTitle(title: string, tip: IHelpTip, compact?: boolean, propName?: string): JSX.Element {
@@ -49,12 +49,12 @@ function getFieldTitle(title: string, tip: IHelpTip, compact?: boolean, propName
   return (
     <a
       className={className}
-      target='_blank'
-      rel='noopener noreferrer'
+      target="_blank"
+      rel="noopener noreferrer"
       href={tipUrl!}
     >
       {titleContent || (typeof title === 'object' ? '' : title)}
-      <InlineTip position='top'>{tipContent}</InlineTip>
+      <InlineTip position="top">{tipContent}</InlineTip>
     </a>
   );
 }
@@ -92,6 +92,7 @@ export default class VEField extends Component<IVEFieldProps, IVEFieldState> {
   public static displayName = 'VEField';
 
   public readonly props: IVEFieldProps;
+
   public classNames: string[] = [];
 
   public state: IVEFieldState = {
@@ -133,15 +134,15 @@ export default class VEField extends Component<IVEFieldProps, IVEFieldState> {
     }
 
     const headContent = headDIY ? this.renderHead()
-      : <div className='engine-field-head'>{this.renderHead()}</div>;
+      : <div className="engine-field-head">{this.renderHead()}</div>;
 
     return (
-      <div className={classNameList} { ...fieldProps }>
+      <div className={classNameList} {...fieldProps}>
         {headContent}
-        <div className='engine-field-body'>
+        <div className="engine-field-body">
           {this.renderBody()}
         </div>
-        <div className='engine-field-foot'>
+        <div className="engine-field-foot">
           {this.renderFoot()}
         </div>
       </div>

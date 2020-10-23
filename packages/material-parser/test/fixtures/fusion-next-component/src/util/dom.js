@@ -20,16 +20,16 @@ export const hasDOM =
  * dom.hasClass(document.body, 'foo');
  */
 export function hasClass(node, className) {
-    /* istanbul ignore if */
-    if (!hasDOM || !node) {
-        return false;
-    }
+  /* istanbul ignore if */
+  if (!hasDOM || !node) {
+    return false;
+  }
 
-    if (node.classList) {
-        return node.classList.contains(className);
-    } else {
-        return node.className.indexOf(className) > -1;
-    }
+  if (node.classList) {
+    return node.classList.contains(className);
+  } else {
+    return node.className.indexOf(className) > -1;
+  }
 }
 
 /**
@@ -41,16 +41,16 @@ export function hasClass(node, className) {
  * dom.addClass(document.body, 'foo');
  */
 export function addClass(node, className, _force) {
-    /* istanbul ignore if */
-    if (!hasDOM || !node) {
-        return;
-    }
+  /* istanbul ignore if */
+  if (!hasDOM || !node) {
+    return;
+  }
 
-    if (node.classList) {
-        node.classList.add(className);
-    } else if (_force === true || !hasClass(node, className)) {
-        node.className += ` ${className}`;
-    }
+  if (node.classList) {
+    node.classList.add(className);
+  } else if (_force === true || !hasClass(node, className)) {
+    node.className += ` ${className}`;
+  }
 }
 
 /**
@@ -62,19 +62,19 @@ export function addClass(node, className, _force) {
  * dom.removeClass(document.body, 'foo');
  */
 export function removeClass(node, className, _force) {
-    /* istanbul ignore if */
-    if (!hasDOM || !node) {
-        return;
-    }
+  /* istanbul ignore if */
+  if (!hasDOM || !node) {
+    return;
+  }
 
-    if (node.classList) {
-        node.classList.remove(className);
-    } else if (_force === true || hasClass(node, className)) {
-        node.className = node.className
-            .replace(className, '')
-            .replace(/\s+/g, ' ')
-            .trim();
-    }
+  if (node.classList) {
+    node.classList.remove(className);
+  } else if (_force === true || hasClass(node, className)) {
+    node.className = node.className
+      .replace(className, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
 }
 
 /**
@@ -87,21 +87,21 @@ export function removeClass(node, className, _force) {
  * dom.toggleClass(document.body, 'foo');
  */
 export function toggleClass(node, className) {
-    /* istanbul ignore if */
-    if (!hasDOM || !node) {
-        return false;
-    }
+  /* istanbul ignore if */
+  if (!hasDOM || !node) {
+    return false;
+  }
 
-    if (node.classList) {
-        return node.classList.toggle(className);
-    } else {
-        const flag = hasClass(node, className);
-        flag
-            ? removeClass(node, className, true)
-            : addClass(node, className, true);
+  if (node.classList) {
+    return node.classList.toggle(className);
+  } else {
+    const flag = hasClass(node, className);
+    flag
+      ? removeClass(node, className, true)
+      : addClass(node, className, true);
 
-        return !flag;
-    }
+    return !flag;
+  }
 }
 
 /**
@@ -113,29 +113,29 @@ export function toggleClass(node, className) {
  * @example
  * dom.matches(mountNode, '.container'); // boolean
  */
-export const matches = (function() {
-    let matchesFn = null;
-    /* istanbul ignore else */
-    if (hasDOM) {
-        const _body = document.body || document.head;
-        matchesFn = _body.matches
-            ? 'matches'
-            : _body.webkitMatchesSelector
-            ? 'webkitMatchesSelector'
-            : _body.msMatchesSelector
-            ? 'msMatchesSelector'
-            : _body.mozMatchesSelector
+export const matches = (function () {
+  let matchesFn = null;
+  /* istanbul ignore else */
+  if (hasDOM) {
+    const _body = document.body || document.head;
+    matchesFn = _body.matches
+      ? 'matches'
+      : _body.webkitMatchesSelector
+        ? 'webkitMatchesSelector'
+        : _body.msMatchesSelector
+          ? 'msMatchesSelector'
+          : _body.mozMatchesSelector
             ? 'mozMatchesSelector'
             : null;
+  }
+
+  return function (node, selector) {
+    if (!hasDOM || !node) {
+      return false;
     }
 
-    return function(node, selector) {
-        if (!hasDOM || !node) {
-            return false;
-        }
-
-        return matchesFn ? node[matchesFn](selector) : false;
-    };
+    return matchesFn ? node[matchesFn](selector) : false;
+  };
 })();
 
 /**
@@ -145,9 +145,9 @@ export const matches = (function() {
  * @return {Object}
  */
 function _getComputedStyle(node) {
-    return node && node.nodeType === 1
-        ? window.getComputedStyle(node, null)
-        : {};
+  return node && node.nodeType === 1
+    ? window.getComputedStyle(node, null)
+    : {};
 }
 
 const PIXEL_PATTERN = /margin|padding|width|height|max|min|offset|size/i;
@@ -161,23 +161,23 @@ const removePixel = { left: 1, top: 1, right: 1, bottom: 1 };
  * @param  {Number} value
  */
 function _getStyleValue(node, type, value) {
-    type = type.toLowerCase();
+  type = type.toLowerCase();
 
-    if (value === 'auto') {
-        if (type === 'height') {
-            return node.offsetHeight || 0;
-        }
-        if (type === 'width') {
-            return node.offsetWidth || 0;
-        }
+  if (value === 'auto') {
+    if (type === 'height') {
+      return node.offsetHeight || 0;
     }
-
-    if (!(type in removePixel)) {
-        // 属性值是否需要去掉 px 单位，这里假定此类的属性值都是 px 为单位的
-        removePixel[type] = PIXEL_PATTERN.test(type);
+    if (type === 'width') {
+      return node.offsetWidth || 0;
     }
+  }
 
-    return removePixel[type] ? parseFloat(value) || 0 : value;
+  if (!(type in removePixel)) {
+    // 属性值是否需要去掉 px 单位，这里假定此类的属性值都是 px 为单位的
+    removePixel[type] = PIXEL_PATTERN.test(type);
+  }
+
+  return removePixel[type] ? parseFloat(value) || 0 : value;
 }
 
 const floatMap = { cssFloat: 1, styleFloat: 1, float: 1 };
@@ -189,29 +189,29 @@ const floatMap = { cssFloat: 1, styleFloat: 1, float: 1 };
  * @return {Number|Object}
  */
 export function getStyle(node, name) {
-    /* istanbul ignore if */
-    if (!hasDOM || !node) {
-        return null;
-    }
+  /* istanbul ignore if */
+  if (!hasDOM || !node) {
+    return null;
+  }
 
-    const style = _getComputedStyle(node);
+  const style = _getComputedStyle(node);
 
-    // 如果不指定属性名，则返回全部值
-    if (arguments.length === 1) {
-        return style;
-    }
+  // 如果不指定属性名，则返回全部值
+  if (arguments.length === 1) {
+    return style;
+  }
 
-    name = floatMap[name]
-        ? 'cssFloat' in node.style
-            ? 'cssFloat'
-            : 'styleFloat'
-        : name;
+  name = floatMap[name]
+    ? 'cssFloat' in node.style
+      ? 'cssFloat'
+      : 'styleFloat'
+    : name;
 
-    return _getStyleValue(
-        node,
-        name,
-        style.getPropertyValue(hyphenate(name)) || node.style[camelcase(name)]
-    );
+  return _getStyleValue(
+    node,
+    name,
+    style.getPropertyValue(hyphenate(name)) || node.style[camelcase(name)],
+  );
 }
 
 /**
@@ -230,25 +230,25 @@ export function getStyle(node, name) {
  * });
  */
 export function setStyle(node, name, value) {
-    /* istanbul ignore if */
-    if (!hasDOM || !node) {
-        return false;
-    }
+  /* istanbul ignore if */
+  if (!hasDOM || !node) {
+    return false;
+  }
 
-    // 批量设置多个值
-    if (typeof name === 'object' && arguments.length === 2) {
-        each(name, (val, key) => setStyle(node, key, val));
-    } else {
-        name = floatMap[name]
-            ? 'cssFloat' in node.style
-                ? 'cssFloat'
-                : 'styleFloat'
-            : name;
-        if (typeof value === 'number' && PIXEL_PATTERN.test(name)) {
-            value = `${value}px`;
-        }
-        node.style[camelcase(name)] = value; // IE8 support
+  // 批量设置多个值
+  if (typeof name === 'object' && arguments.length === 2) {
+    each(name, (val, key) => setStyle(node, key, val));
+  } else {
+    name = floatMap[name]
+      ? 'cssFloat' in node.style
+        ? 'cssFloat'
+        : 'styleFloat'
+      : name;
+    if (typeof value === 'number' && PIXEL_PATTERN.test(name)) {
+      value = `${value}px`;
     }
+    node.style[camelcase(name)] = value; // IE8 support
+  }
 }
 
 /**
@@ -256,24 +256,24 @@ export function setStyle(node, name, value) {
  * @return {Object} width, height
  */
 export function scrollbar() {
-    const scrollDiv = document.createElement('div');
+  const scrollDiv = document.createElement('div');
 
-    setStyle(scrollDiv, {
-        position: 'absolute',
-        width: '100px',
-        height: '100px',
-        overflow: 'scroll',
-        top: '-9999px',
-    });
-    document.body.appendChild(scrollDiv);
-    const scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
-    const scrollbarHeight = scrollDiv.offsetHeight - scrollDiv.clientHeight;
-    document.body.removeChild(scrollDiv);
+  setStyle(scrollDiv, {
+    position: 'absolute',
+    width: '100px',
+    height: '100px',
+    overflow: 'scroll',
+    top: '-9999px',
+  });
+  document.body.appendChild(scrollDiv);
+  const scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+  const scrollbarHeight = scrollDiv.offsetHeight - scrollDiv.clientHeight;
+  document.body.removeChild(scrollDiv);
 
-    return {
-        width: scrollbarWidth,
-        height: scrollbarHeight,
-    };
+  return {
+    width: scrollbarWidth,
+    height: scrollbarHeight,
+  };
 }
 
 /**
@@ -281,12 +281,12 @@ export function scrollbar() {
  * @return {Object} top, left
  */
 export function getOffset(node) {
-    const rect = node.getBoundingClientRect();
-    const win = node.ownerDocument.defaultView;
-    return {
-        top: rect.top + win.pageYOffset,
-        left: rect.left + win.pageXOffset,
-    };
+  const rect = node.getBoundingClientRect();
+  const win = node.ownerDocument.defaultView;
+  return {
+    top: rect.top + win.pageYOffset,
+    left: rect.left + win.pageXOffset,
+  };
 }
 
 /**
@@ -295,25 +295,25 @@ export function getOffset(node) {
  * @return {number} pixels
  */
 export function getPixels(len) {
-    const win = document.defaultView;
-    if (typeof +len === 'number' && !isNaN(+len)) {
-        return +len;
+  const win = document.defaultView;
+  if (typeof +len === 'number' && !isNaN(+len)) {
+    return +len;
+  }
+
+  if (typeof len === 'string') {
+    const PX_REG = /(\d+)px/;
+    const VH_REG = /(\d+)vh/;
+    if (Array.isArray(len.match(PX_REG))) {
+      return +len.match(PX_REG)[1] || 0;
     }
 
-    if (typeof len === 'string') {
-        const PX_REG = /(\d+)px/;
-        const VH_REG = /(\d+)vh/;
-        if (Array.isArray(len.match(PX_REG))) {
-            return +len.match(PX_REG)[1] || 0;
-        }
-
-        if (Array.isArray(len.match(VH_REG))) {
-            const _1vh = win.innerHeight / 100;
-            return +(len.match(VH_REG)[1] * _1vh) || 0;
-        }
+    if (Array.isArray(len.match(VH_REG))) {
+      const _1vh = win.innerHeight / 100;
+      return +(len.match(VH_REG)[1] * _1vh) || 0;
     }
+  }
 
-    return 0;
+  return 0;
 }
 
 /**
@@ -323,23 +323,23 @@ export function getPixels(len) {
  * @return {element} parent
  */
 export function getClosest(dom, selector) {
-    /* istanbul ignore if */
-    if (!hasDOM || !dom) {
-        return null;
-    }
-
-    // ie9
-    /* istanbul ignore if */
-    if (!Element.prototype.closest) {
-        if (!document.documentElement.contains(dom)) return null;
-        do {
-            if (getMatches(dom, selector)) return dom;
-            dom = dom.parentElement;
-        } while (dom !== null);
-    } else {
-        return dom.closest(selector);
-    }
+  /* istanbul ignore if */
+  if (!hasDOM || !dom) {
     return null;
+  }
+
+  // ie9
+  /* istanbul ignore if */
+  if (!Element.prototype.closest) {
+    if (!document.documentElement.contains(dom)) return null;
+    do {
+      if (getMatches(dom, selector)) return dom;
+      dom = dom.parentElement;
+    } while (dom !== null);
+  } else {
+    return dom.closest(selector);
+  }
+  return null;
 }
 
 /**
@@ -349,19 +349,19 @@ export function getClosest(dom, selector) {
  * @return {element} parent
  */
 export function getMatches(dom, selector) {
-    /* istanbul ignore if */
-    if (!hasDOM || !dom) {
-        return null;
-    }
-
-    /* istanbul ignore if */
-    if (Element.prototype.matches) {
-        return dom.matches(selector);
-    } else if (Element.prototype.msMatchesSelector) {
-        return dom.msMatchesSelector(selector);
-    } else if (Element.prototype.webkitMatchesSelector) {
-        return dom.webkitMatchesSelector(selector);
-    }
-
+  /* istanbul ignore if */
+  if (!hasDOM || !dom) {
     return null;
+  }
+
+  /* istanbul ignore if */
+  if (Element.prototype.matches) {
+    return dom.matches(selector);
+  } else if (Element.prototype.msMatchesSelector) {
+    return dom.msMatchesSelector(selector);
+  } else if (Element.prototype.webkitMatchesSelector) {
+    return dom.webkitMatchesSelector(selector);
+  }
+
+  return null;
 }

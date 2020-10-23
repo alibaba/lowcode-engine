@@ -1,5 +1,5 @@
-import { ComponentType, ReactElement } from 'react';
-import { ComponentMetadata, FieldConfig, InitialItem, FilterItem, AutorunItem, isI18nData } from '@ali/lowcode-types';
+import { ComponentType, ReactElement, Component, FunctionComponent } from 'react';
+import { ComponentMetadata, FieldConfig, InitialItem, FilterItem, AutorunItem } from '@ali/lowcode-types';
 import {
   ComponentMeta,
   addBuiltinComponentAction,
@@ -7,6 +7,7 @@ import {
   registerMetadataTransducer,
   TransformStage,
 } from '@ali/lowcode-designer';
+import { intl } from '@ali/lowcode-editor-core';
 import {
   OldPropConfig,
   OldPrototypeConfig,
@@ -15,9 +16,8 @@ import {
   upgradePropConfig,
   upgradeConfigure,
 } from './upgrade-metadata';
-import { intl } from '@ali/lowcode-editor-core';
+
 import { designer } from '../editor';
-import { uniqueId } from '@ali/lowcode-utils';
 
 const GlobalPropsConfigure: Array<{
   position: string;
@@ -209,22 +209,37 @@ function isNewSpec(options: any): options is ComponentMetadata {
 
 class Prototype {
   static addGlobalPropsReducer = addGlobalPropsReducer;
+
   static addGlobalPropsConfigure = addGlobalPropsConfigure;
+
   static addGlobalExtraActions = addGlobalExtraActions;
+
   static removeGlobalPropsConfigure = removeGlobalPropsConfigure;
+
   static overridePropsConfigure = overridePropsConfigure;
-  static create(config: OldPrototypeConfig | ComponentMetadata | ComponentMeta, lookup: boolean = false) {
-    return new Prototype(config, lookup);
+
+  static create(config: OldPrototypeConfig | ComponentMetadata | ComponentMeta, extraConfigs: any = null, lookup = false) {
+    return new Prototype(config, extraConfigs, lookup);
   }
 
   readonly isPrototype = true;
+
   readonly meta: ComponentMeta;
+
   readonly options: OldPrototypeConfig | ComponentMetadata;
+
+  get componentName() {
+    return this.getId();
+  }
+
   get packageName() {
     return this.meta.npm?.package;
   }
 
-  constructor(input: OldPrototypeConfig | ComponentMetadata | ComponentMeta, lookup: boolean = false) {
+  // 兼容原 vision 用法
+  view: ComponentType | undefined;
+
+  constructor(input: OldPrototypeConfig | ComponentMetadata | ComponentMeta, extraConfigs: any = null, lookup = false) {
     if (lookup) {
       this.meta = designer.getComponentMeta(input.componentName);
       this.options = this.meta.getMetadata();
@@ -278,16 +293,17 @@ class Prototype {
   }
 
   private category?: string;
+
   getCategory() {
-    if (this.category != null) {
-      return this.category;
+    if (this.options.category != null) {
+      return this.options.category;
     }
 
     return this.meta.getMetadata().tags?.[0] || '*';
   }
 
   setCategory(category: string) {
-    this.category = category;
+    this.options.category = category;
   }
 
   getIcon() {
@@ -322,6 +338,7 @@ class Prototype {
   }
 
   setView(view: ComponentType<any>) {
+    this.view = view;
     const metadata = this.meta.getMetadata();
     if (!metadata.experimental) {
       metadata.experimental = {
@@ -334,6 +351,7 @@ class Prototype {
 
   getView() {
     return (
+      this.view ||
       this.meta.getMetadata().experimental?.view ||
       designer.currentDocument?.simulator?.getComponent(this.getComponentName())
     );

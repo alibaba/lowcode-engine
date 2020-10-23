@@ -59,6 +59,7 @@ class Toolbar extends Component<{ observed: OffsetObserver }> {
   shouldComponentUpdate() {
     return false;
   }
+
   render() {
     const { observed } = this.props;
     const { height, width } = observed.viewport;
@@ -66,7 +67,9 @@ class Toolbar extends Component<{ observed: OffsetObserver }> {
     const MARGIN = 1;
     const BORDER = 2;
     const SPACE_HEIGHT = BAR_HEIGHT + MARGIN + BORDER;
+    const SPACE_MINIMUM_WIDTH = 140; // magic number
     let style: any;
+    // 计算 toolbar 的上/下位置
     if (observed.top > SPACE_HEIGHT) {
       style = {
         top: -SPACE_HEIGHT,
@@ -83,10 +86,12 @@ class Toolbar extends Component<{ observed: OffsetObserver }> {
         top: Math.max(MARGIN, MARGIN - observed.top),
       };
     }
-    if (observed.width < 140) {
+    // 计算 toolbar 的左/右位置
+    if (SPACE_MINIMUM_WIDTH > observed.left + observed.width) {
       style.left = Math.max(-BORDER, observed.left - width - BORDER);
     } else {
       style.right = Math.max(-BORDER, observed.right - width - BORDER);
+      style.justifyContent = 'flex-start';
     }
     const { node } = observed;
     const actions: ReactNodeArray = [];
@@ -165,7 +170,7 @@ export class BorderSelectingForNode extends Component<{ host: BuiltinSimulatorHo
   render() {
     const { instances } = this;
     const { node } = this.props;
-    const designer = this.host.designer;
+    const { designer } = this.host;
 
     if (!instances || instances.length < 1) {
       return null;
@@ -202,7 +207,7 @@ export class BorderSelecting extends Component<{ host: BuiltinSimulatorHost }> {
     if (doc.suspensed || this.host.liveEditing.editing) {
       return null;
     }
-    const selection = doc.selection;
+    const { selection } = doc;
     return this.dragging ? selection.getTopNodes() : selection.getNodes();
   }
 
@@ -211,7 +216,7 @@ export class BorderSelecting extends Component<{ host: BuiltinSimulatorHost }> {
   }
 
   render() {
-    const selecting = this.selecting;
+    const { selecting } = this;
     if (!selecting || selecting.length < 1) {
       return null;
     }

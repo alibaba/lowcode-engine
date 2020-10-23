@@ -5,18 +5,21 @@ import { EventEmitter } from 'events';
 const Shells = ['iphone6'];
 
 export class Flags {
-
   public emitter: EventEmitter;
+
   public flags: string[];
+
   public ready: boolean;
+
   public lastFlags: string[];
+
   public lastShell: string;
 
   private lastSimulatorDevice: string;
 
   constructor() {
     this.emitter = new EventEmitter();
-    this.flags = ['design-mode'];
+    this.flags = [];
 
     domReady(() => {
       this.ready = true;

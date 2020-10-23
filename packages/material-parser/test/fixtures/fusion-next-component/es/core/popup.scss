@@ -1,0 +1,13 @@
+@import "./index-noreset.scss";
+
+.demo-body table {
+    width: 100%;
+}
+
+.next-popup.next-menu,
+.next-popup.next-time-picker-body,
+.next-popup .next-tree-select-dropdown {
+    border: $popup-local-border-width $popup-local-border-style $popup-local-border-color;
+    border-radius: $popup-local-corner;
+    box-shadow: $popup-local-shadow;
+}

@@ -1,0 +1,106 @@
+#{$pagination-prefix}[dir="rtl"] {
+
+    #{$pagination-prefix} {
+        &-total {
+            margin-right: 0;
+            margin-left: $s-4;
+        }
+
+        &-jump {
+            &-go {
+                margin-left: 0;
+                margin-right: $s-1;
+            }
+        }
+
+        &-size-selector {
+
+            &-title {
+                margin-right: 0;
+                margin-left: $pagination-size-selector-title-margin-right;
+            }
+
+            &-btn.#{$css-prefix}btn-text {
+                & + #{$pagination-prefix}-size-selector-btn {
+                    border-left: none;
+                    border-right: $line-1 solid $color-line1-2;
+                }
+            }
+        }
+
+        &-pages + #{$pagination-prefix}-size-selector,
+        &-size-selector + #{$pagination-prefix}-pages {
+            margin-left: 0;
+            margin-right: $s-10;
+        }
+    }
+
+    &.#{$css-prefix}start {
+        #{$pagination-prefix}-pages {
+            float: left;
+        }
+        #{$pagination-prefix}-size-selector {
+            float: right;
+        }
+    }
+
+    &.#{$css-prefix}end {
+        #{$pagination-prefix}-pages {
+            float: right;
+        }
+        #{$pagination-prefix}-size-selector {
+            float: left;
+        }
+    }
+
+    &.#{$css-prefix}small {
+        @include pagination-size(
+            'rtl',
+            $itemSplit: $pagination-small-item-split,
+            $itemPaddingLeftRight: $s-2 - 2px,
+            $itemBorderWidth: $pagination-small-item-border-width,
+            $itemCorner: $pagination-small-item-corner,
+            $ellipsisSize: $pagination-small-ellipsis-size,
+            $totalFontSize: $pagination-small-total-font-size,
+            $currentFontSize: $pagination-small-current-font-size,
+            $otherFontSize: $pagination-small-jump-font-size,
+            $pageHeihgt: $form-element-small-height,
+            $numberPaddingLeftRight: $pagination-small-size-selector-number-padding,
+            $inputWidth: $pagination-small-input-width
+        );
+    }
+
+    &.#{$css-prefix}medium {
+        @include pagination-size(
+            'rtl',
+            $itemSplit: $pagination-item-split,
+            $itemPaddingLeftRight: $s-3 - 2px,
+            $itemBorderWidth: $pagination-item-border-width,
+            $itemCorner: $pagination-item-corner,
+            $ellipsisSize: $pagination-ellipsis-size,
+            $totalFontSize: $pagination-total-font-size,
+            $currentFontSize: $pagination-current-font-size,
+            $otherFontSize: $pagination-jump-font-size,
+            $pageHeihgt: $form-element-medium-height,
+            $numberPaddingLeftRight: $pagination-size-selector-number-padding,
+            $inputWidth: $pagination-input-width
+        );
+    }
+
+    &.#{$css-prefix}large {
+        @include pagination-size(
+            'rtl',
+            $itemSplit: $pagination-large-item-split,
+            $itemPaddingLeftRight: $s-4 - 1px,
+            $itemBorderWidth: $pagination-large-item-border-width,
+            $itemCorner: $pagination-large-item-corner,
+            $ellipsisSize: $pagination-large-ellipsis-size,
+            $totalFontSize: $pagination-large-total-font-size,
+            $currentFontSize: $pagination-large-current-font-size,
+            $otherFontSize: $pagination-large-jump-font-size,
+            $pageHeihgt: $form-element-large-height,
+            $numberPaddingLeftRight: $pagination-large-size-selector-number-padding,
+            $inputWidth: $pagination-large-input-width
+        );
+    }
+}

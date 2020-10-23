@@ -9,9 +9,10 @@ export class DocumentView extends Component<{ document: DocumentModel }> {
   shouldComponentUpdate() {
     return false;
   }
+
   render() {
     const { document } = this.props;
-    const simulatorProps = document.simulatorProps;
+    const { simulatorProps } = document;
     const Simulator = document.designer.simulatorComponent || BuiltinSimulatorHostView;
     return (
       <div

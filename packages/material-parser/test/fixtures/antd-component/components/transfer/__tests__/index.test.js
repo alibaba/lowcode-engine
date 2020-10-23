@@ -220,15 +220,14 @@ describe('Transfer', () => {
     ).toHaveLength(1);
   });
 
-  const headerText = wrapper =>
-    wrapper
-      .find(TransferList)
-      .at(0)
-      .find('.ant-transfer-list-header-selected > span')
-      .at(0)
-      .first()
-      .text()
-      .trim();
+  const headerText = wrapper => wrapper
+    .find(TransferList)
+    .at(0)
+    .find('.ant-transfer-list-header-selected > span')
+    .at(0)
+    .first()
+    .text()
+    .trim();
 
   it('should display the correct count of items when filter by input', () => {
     const filterOption = (inputValue, option) => option.description.indexOf(inputValue) > -1;

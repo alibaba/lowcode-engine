@@ -1,19 +1,28 @@
 import { EventEmitter } from 'events';
-import { IEditor, EditorConfig, PluginClassSet, KeyType, GetOptions, GetReturnType } from '@ali/lowcode-types';
+import {
+  IEditor,
+  EditorConfig,
+  PluginClassSet,
+  KeyType,
+  GetOptions,
+  GetReturnType,
+  HookConfig,
+} from '@ali/lowcode-types';
 import { IocContext, RegisterOptions } from './di';
 import { globalLocale } from './intl';
+import * as utils from './utils';
+// import { tipHandler } from './widgets/tip/tip-handler';
+
 EventEmitter.defaultMaxListeners = 100;
 
 const NOT_FOUND = Symbol.for('not_found');
-
-import * as utils from './utils';
 
 export class Editor extends EventEmitter implements IEditor {
   /**
    * Ioc Container
    */
   private context = new IocContext({
-    notFoundHandler: (type: KeyType) => NOT_FOUND,
+    notFoundHandler: (/* type: KeyType */) => NOT_FOUND,
   });
 
   get locale() {
@@ -21,6 +30,8 @@ export class Editor extends EventEmitter implements IEditor {
   }
 
   readonly utils = utils;
+
+  private hooks: HookConfig[] = [];
 
   get<T = undefined, KeyOrType = any>(keyOrType: KeyOrType, opt?: GetOptions): GetReturnType<T, KeyOrType> | undefined {
     const x = this.context.get<T, KeyOrType>(keyOrType, opt);
@@ -75,19 +86,25 @@ export class Editor extends EventEmitter implements IEditor {
   }
 
   config?: EditorConfig;
+
   components?: PluginClassSet;
+
   async init(config?: EditorConfig, components?: PluginClassSet): Promise<any> {
     this.config = config || {};
     this.components = components || {};
-    const { shortCuts = [], lifeCycles } = this.config;
+    const { hooks = [], lifeCycles } = this.config;
 
     this.emit('editor.beforeInit');
     const init = (lifeCycles && lifeCycles.init) || ((): void => {});
+
     try {
       await init(this);
       // 注册快捷键
       // registShortCuts(shortCuts, this);
+      // 注册 hooks
+      this.registerHooks(hooks);
       this.emit('editor.afterInit');
+
       return true;
     } catch (err) {
       console.error(err);
@@ -99,8 +116,11 @@ export class Editor extends EventEmitter implements IEditor {
       return;
     }
     try {
-      const { shortCuts = [], lifeCycles = {} } = this.config;
+      const { lifeCycles = {} } = this.config;
       // unRegistShortCuts(shortCuts);
+
+      this.unregisterHooks();
+
       if (lifeCycles.destroy) {
         lifeCycles.destroy(this);
       }
@@ -109,13 +129,38 @@ export class Editor extends EventEmitter implements IEditor {
     }
   }
 
+  initHooks = (hooks: HookConfig[]) => {
+    this.hooks = hooks.map((hook) => ({
+      ...hook,
+      // 指定第一个参数为 editor
+      handler: hook.handler.bind(this, this),
+    }));
+
+    return this.hooks;
+  };
+
+  registerHooks = (hooks: HookConfig[]) => {
+    this.initHooks(hooks).forEach(({ message, type, handler }) => {
+      if (['on', 'once'].indexOf(type) !== -1) {
+        this[type](message, handler);
+      }
+    });
+  };
+
+  unregisterHooks = () => {
+    this.hooks.forEach(({ message, handler }) => {
+      this.removeListener(message, handler);
+    });
+  };
+
   private waits = new Map<
-    KeyType,
-    Array<{
-      once?: boolean;
-      resolve: (data: any) => void;
-    }>
+  KeyType,
+  Array<{
+    once?: boolean;
+    resolve:(data: any) => void;
+  }>
   >();
+
   private notifyGot(key: KeyType) {
     let waits = this.waits.get(key);
     if (!waits) {

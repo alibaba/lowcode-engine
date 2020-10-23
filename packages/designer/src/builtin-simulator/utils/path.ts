@@ -158,7 +158,7 @@ export function joinPath(...segments: string[]) {
       if (path === '') {
         path += seg;
       } else {
-        path += '/' + seg;
+        path += `/${ seg}`;
       }
     }
   }

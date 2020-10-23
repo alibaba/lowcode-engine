@@ -9,6 +9,7 @@ export default class BottomArea extends Component<{ area: Area<any, Panel> }> {
   shouldComponentUpdate() {
     return false;
   }
+
   render() {
     const { area } = this.props;
     if (area.isEmpty()) {
@@ -17,7 +18,8 @@ export default class BottomArea extends Component<{ area: Area<any, Panel> }> {
     return (
       <div className={classNames('lc-bottom-area', {
         'lc-area-visible': area.visible,
-      })}>
+      })}
+      >
         <Contents area={area} />
       </div>
     );

@@ -13,7 +13,7 @@ export interface IUtils {
   [key: string]: any;
 }
 
-export type HistoryMode = 'browser' | 'hash';
+export type HistoryMode = 'browser' | 'hash' | 'BROWSER' | 'HASH';
 
 export interface IAppConfig {
   history?: HistoryMode;
@@ -36,6 +36,16 @@ export default function runApp() {
       }
       const App = provider.createApp();
       provider.runApp(App, config);
+    }).catch((err: Error) => {
+      console.error(err.message);
+      const { fallbackUI, afterCatch } = app.getErrorBoundary() || {};
+      if (typeof afterCatch === 'function') {
+        afterCatch(err.message, err.stack);
+      }
+      if (!fallbackUI) {
+        return;
+      }
+      provider.runApp(fallbackUI, {});
     });
   });
 }

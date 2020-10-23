@@ -1,0 +1,52 @@
+////
+/// @module menu-button: 菜单按钮
+/// @tag MenuButton
+/// @category component
+/// @family general
+/// @varPrefix $menu-btn-
+/// @classPrefix {prefix}-menu-btn
+////
+
+// menu-button variables
+// --------------------------------------------------
+
+// prefix
+$menu-btn-prefix: ".#{$css-prefix}menu-btn";
+
+/// icon
+/// @namespace statement/disabled
+$menu-btn-disabled-icon-color: $color-text1-1 !default;
+
+/// ghost icon
+$menu-btn-ghost-light-disabled-icon-color: $btn-ghost-light-color-disabled;
+
+/// ghost icon
+$menu-btn-ghost-dark-disabled-icon-color: $btn-ghost-dark-color-disabled;
+
+/// icon
+/// @namespace statement/normal
+$menu-btn-pure-text-normal-icon-color: $color-text1-2 !default;
+
+/// icon
+/// @namespace statement/normal
+$menu-btn-pure-text-primary-icon-color: $color-white !default;
+
+/// icon
+/// @namespace statement/normal
+$menu-btn-pure-text-secondary-icon-color: $color-brand1-6 !default;
+
+/// icon
+/// @namespace statement/normal
+$menu-btn-text-text-normal-icon-color: $color-text1-4 !default;
+
+/// icon
+/// @namespace statement/primary
+$menu-btn-text-text-primary-icon-color: $color-link-1 !default;
+
+/// icon
+/// @namespace statement/light
+$menu-btn-ghost-light-icon-color: $color-text1-4 !default;
+
+/// icon
+/// @namespace statement/dark
+$menu-btn-ghost-dark-icon-color: $color-white !default;

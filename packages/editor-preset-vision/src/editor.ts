@@ -1,7 +1,7 @@
 import { isJSBlock, isJSExpression, isJSSlot, isI18nData } from '@ali/lowcode-types';
 import { isPlainObject, hasOwnProperty } from '@ali/lowcode-utils';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
-import { Designer, LiveEditing, TransformStage, Node } from '@ali/lowcode-designer';
+import { Designer, LiveEditing, TransformStage, Node, getConvertedExtraKey } from '@ali/lowcode-designer';
 import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import { toCss } from '@ali/vu-css-style';
 import logger from '@ali/vu-logger';
@@ -9,7 +9,7 @@ import bus from './bus';
 import { VE_EVENTS } from './base/const';
 
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
-import { Skeleton, SettingsPrimaryPane } from '@ali/lowcode-editor-skeleton';
+import { Skeleton, SettingsPrimaryPane, registerDefaults } from '@ali/lowcode-editor-skeleton';
 
 import { deepValueParser } from './deep-value-parser';
 import { liveEditingRule, liveEditingSaveHander } from './vc-live-editing';
@@ -20,8 +20,9 @@ globalContext.register(editor, Editor);
 export const skeleton = new Skeleton(editor);
 editor.set(Skeleton, skeleton);
 editor.set('skeleton', skeleton);
+registerDefaults();
 
-export const designer = new Designer({ editor: editor });
+export const designer = new Designer({ editor });
 editor.set(Designer, designer);
 editor.set('designer', designer);
 
@@ -42,49 +43,69 @@ function isVariable(obj: any): obj is Variable {
 }
 
 function upgradePropsReducer(props: any) {
-  if (!isPlainObject(props)) {
+  if (!props || !isPlainObject(props)) {
     return props;
   }
+  if (isJSBlock(props)) {
+    if (props.value.componentName === 'Slot') {
+      return {
+        type: 'JSSlot',
+        title: (props.value.props as any)?.slotTitle,
+        name: (props.value.props as any)?.slotName,
+        value: props.value.children,
+      };
+    } else {
+      return props.value;
+    }
+  }
+  if (isVariable(props)) {
+    return {
+      type: 'JSExpression',
+      value: props.variable,
+      mock: props.value,
+    };
+  }
   const newProps: any = {};
-  Object.entries<any>(props).forEach(([key, val]) => {
-    if (/^__slot__/.test(key) && val === true) {
+  Object.keys(props).forEach(key => {
+    if (/^__slot__/.test(key) && props[key] === true) {
       return;
     }
-    if (isJSBlock(val)) {
-      if (val.value.componentName === 'Slot') {
-        val = {
-          type: 'JSSlot',
-          title: (val.value.props as any)?.slotTitle,
-          name: (val.value.props as any)?.slotName,
-          value: val.value.children,
-        };
-      } else {
-        val = val.value;
-      }
-    }
-    // todo: deep find
-    if (isVariable(val)) {
-      val = {
-        type: 'JSExpression',
-        value: val.variable,
-        mock: val.value,
-      };
-    }
-    newProps[key] = val;
+    newProps[key] = upgradePropsReducer(props[key]);
   });
   return newProps;
 }
+
 // 升级 Props
 designer.addPropsReducer(upgradePropsReducer, TransformStage.Upgrade);
+
+function getCurrentFieldIds() {
+  const fieldIds: any = [];
+  const nodesMap = designer?.currentDocument?.nodesMap || new Map();
+  nodesMap.forEach((curNode: any) => {
+    const fieldId = nodesMap?.get(curNode.id)?.getPropValue('fieldId');
+    if (fieldId) {
+      fieldIds.push(fieldId);
+    }
+  });
+  return fieldIds;
+}
 
 // 节点 props 初始化
 designer.addPropsReducer((props, node) => {
   // run initials
+  const newProps: any = {
+    ...props,
+  };
+  if (newProps.fieldId) {
+    const fieldIds = getCurrentFieldIds();
+
+    // 全局的关闭 uniqueIdChecker 信号，在 ve-utils 中实现
+    if (fieldIds.indexOf(props.fieldId) >= 0 && !(window as any).__disable_unique_id_checker__) {
+      newProps.fieldId = undefined;
+    }
+  }
   const initials = node.componentMeta.getMetadata().experimental?.initials;
   if (initials) {
-    const newProps: any = {
-      ...props,
-    };
     const getRealValue = (propValue: any) => {
       if (isVariable(propValue)) {
         return propValue.value;
@@ -98,22 +119,10 @@ designer.addPropsReducer((props, node) => {
       // FIXME! this implements SettingTarget
       try {
         // FIXME! item.name could be 'xxx.xxx'
-        const ov = props[item.name];
+        const ov = newProps[item.name];
         const v = item.initial(node as any, getRealValue(ov));
-        if (v !== undefined) {
-          if (isVariable(ov)) {
-            newProps[item.name] = {
-              ...ov,
-              value: v,
-            };
-          } else if (isJSExpression(ov)) {
-            newProps[item.name] = {
-              ...ov,
-              mock: v,
-            };
-          } else {
-            newProps[item.name] = v;
-          }
+        if (ov === undefined && v !== undefined) {
+          newProps[item.name] = v;
         }
       } catch (e) {
         if (hasOwnProperty(props, item.name)) {
@@ -124,11 +133,19 @@ designer.addPropsReducer((props, node) => {
         node.props.add(newProps[item.name], item.name);
       }
     });
+  }
+  return newProps;
+}, TransformStage.Init);
 
-    return newProps;
+designer.addPropsReducer((props: any, node: Node) => {
+  if (node.isRoot() && props && props.lifeCycles) {
+    return {
+      ...props,
+      lifeCycles: {},
+    };
   }
   return props;
-}, TransformStage.Init);
+}, TransformStage.Render);
 
 function filterReducer(props: any, node: Node): any {
   const filters = node.componentMeta.getMetadata().experimental?.filters;
@@ -156,44 +173,58 @@ designer.addPropsReducer(filterReducer, TransformStage.Save);
 designer.addPropsReducer(filterReducer, TransformStage.Render);
 
 function compatiableReducer(props: any) {
-  if (!isPlainObject(props)) {
+  if (!props || !isPlainObject(props)) {
     return props;
   }
+  if (isJSSlot(props)) {
+    return {
+      type: 'JSBlock',
+      value: {
+        componentName: 'Slot',
+        children: props.value,
+        props: {
+          slotTitle: props.title,
+          slotName: props.name,
+        },
+      },
+    };
+  }
+  // 为了能降级到老版本，建议在后期版本去掉以下代码
+  // if (isJSExpression(props) && !props.events) {
+  //   return {
+  //     type: 'variable',
+  //     value: props.mock,
+  //     variable: props.value,
+  //   }
+  // }
   const newProps: any = {};
   Object.entries<any>(props).forEach(([key, val]) => {
-    if (isJSSlot(val)) {
-      val = {
-        type: 'JSBlock',
-        value: {
-          componentName: 'Slot',
-          children: val.value,
-          props: {
-            slotTitle: val.title,
-            slotName: val.name,
-          },
-        },
-      };
-    }
-    // 为了能降级到老版本，建议在后期版本去掉以下代码
-    // if (isJSExpression(val) && !val.events) {
-    //   val = {
-    //     type: 'variable',
-    //     value: val.mock,
-    //     variable: val.value,
-    //   }
-    // }
-    newProps[key] = val;
+    newProps[key] = compatiableReducer(val);
   });
   return newProps;
 }
 // FIXME: Dirty fix, will remove this reducer
 designer.addPropsReducer(compatiableReducer, TransformStage.Save);
+// 兼容历史版本的 Page 组件
+designer.addPropsReducer((props: any, node: Node) => {
+  const lifeCycleNames = ['didMount', 'willUnmount'];
+  if (node.isRoot()) {
+    lifeCycleNames.forEach(key => {
+      if (props[key]) {
+        const lifeCycles = node.props.getPropValue(getConvertedExtraKey('lifeCycles')) || {};
+        lifeCycles[key] = props[key];
+        node.props.setPropValue(getConvertedExtraKey('lifeCycles'), lifeCycles);
+      }
+    });
+  }
+  return props;
+}, TransformStage.Save);
 
 // 设计器组件样式处理
 function stylePropsReducer(props: any, node: any) {
   if (props && typeof props === 'object' && props.__style__) {
-    const cssId = '_style_pesudo_' + node.id.replace(/\$/g, '_');
-    const cssClass = '_css_pesudo_' + node.id.replace(/\$/g, '_');
+    const cssId = `_style_pesudo_${ node.id.replace(/\$/g, '_')}`;
+    const cssClass = `_css_pesudo_${ node.id.replace(/\$/g, '_')}`;
     const styleProp = props.__style__;
     appendStyleNode(props, styleProp, cssClass, cssId);
   }
@@ -204,8 +235,8 @@ function stylePropsReducer(props: any, node: any) {
     appendStyleNode(props, styleProp, cssClass, cssId);
   }
   if (props && typeof props === 'object' && props.containerStyle) {
-    const cssId = '_style_pesudo_' + node.id;
-    const cssClass = '_css_pesudo_' + node.id.replace(/\$/g, '_');
+    const cssId = `_style_pesudo_${ node.id}`;
+    const cssClass = `_css_pesudo_${ node.id.replace(/\$/g, '_')}`;
     const styleProp = props.containerStyle;
     appendStyleNode(props, styleProp, cssClass, cssId);
   }
@@ -231,7 +262,9 @@ function appendStyleNode(props: any, styleProp: any, cssClass: string, cssId: st
     s.setAttribute('id', cssId);
     doc.getElementsByTagName('head')[0].appendChild(s);
 
-    s.appendChild(doc.createTextNode(styleProp.replace(/:root/g, '.' + cssClass)));
+    s.appendChild(doc.createTextNode(styleProp.replace(/(\d+)rpx/g, (a, b) => {
+      return `${b / 2}px`;
+    }).replace(/:root/g, `.${ cssClass}`)));
   }
 }
 designer.addPropsReducer(stylePropsReducer, TransformStage.Render);

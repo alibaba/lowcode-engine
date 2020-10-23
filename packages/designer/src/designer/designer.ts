@@ -8,6 +8,7 @@ import {
   IEditor,
   CompositeObject,
   PropsList,
+  isNodeSchema,
 } from '@ali/lowcode-types';
 import { Project } from '../project';
 import { Node, DocumentModel, insertChildren, isRootNode, ParentalNode, TransformStage } from '../document';
@@ -43,9 +44,13 @@ export interface DesignerProps {
 
 export class Designer {
   readonly dragon = new Dragon(this);
+
   readonly activeTracker = new ActiveTracker();
+
   readonly detecting = new Detecting();
+
   readonly project: Project;
+
   readonly editor: IEditor;
 
   get currentDocument() {
@@ -111,10 +116,14 @@ export class Designer {
         if (isLocationChildrenDetail(loc.detail) && loc.detail.valid !== false) {
           let nodes: Node[] | undefined;
           if (isDragNodeObject(dragObject)) {
-            nodes = insertChildren(loc.target, dragObject.nodes, loc.detail.index, copy);
+            nodes = insertChildren(loc.target, [...dragObject.nodes], loc.detail.index, copy);
           } else if (isDragNodeDataObject(dragObject)) {
             // process nodeData
             const nodeData = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
+            const isNotNodeSchema = nodeData.find(item => !isNodeSchema(item));
+            if (isNotNodeSchema) {
+              return;
+            }
             nodes = insertChildren(loc.target, nodeData, loc.detail.index);
           }
           if (nodes) {
@@ -127,6 +136,7 @@ export class Designer {
               [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
               parent?.componentMeta?.componentName ||
               '';
+            // eslint-disable-next-line no-unused-expressions
             this.editor?.emit('designer.drag', {
               time: (endTime - startTime).toFixed(2),
               selected: nodes
@@ -134,6 +144,7 @@ export class Designer {
                   if (!n) {
                     return;
                   }
+                  // eslint-disable-next-line no-shadow
                   const npm = n?.componentMeta?.npm;
                   return (
                     [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
@@ -168,7 +179,7 @@ export class Designer {
       }
       this.postEvent('selection.change', this.currentSelection);
       if (this.currentSelection) {
-        const currentSelection = this.currentSelection;
+        const { currentSelection } = this;
         selectionDispose = currentSelection.onSelectionChange(() => {
           this.postEvent('selection.change', currentSelection);
         });
@@ -182,7 +193,7 @@ export class Designer {
       }
       this.postEvent('history.change', this.currentHistory);
       if (this.currentHistory) {
-        const currentHistory = this.currentHistory;
+        const { currentHistory } = this;
         historyDispose = currentHistory.onStateChange(() => {
           this.postEvent('history.change', currentHistory);
         });
@@ -212,6 +223,7 @@ export class Designer {
   get dropLocation() {
     return this._dropLocation;
   }
+
   /**
    * 创建插入位置，考虑放到 dragon 中
    */
@@ -241,6 +253,7 @@ export class Designer {
   }
 
   private oobxList: OffsetObserver[] = [];
+
   createOffsetObserver(nodeInstance: INodeSelector): OffsetObserver | null {
     const oobx = createOffsetObserver(nodeInstance);
     this.clearOobxList();
@@ -297,6 +310,7 @@ export class Designer {
   }
 
   private props?: DesignerProps;
+
   setProps(nextProps: DesignerProps) {
     const props = this.props ? { ...this.props, ...nextProps } : nextProps;
     if (this.props) {
@@ -375,6 +389,7 @@ export class Designer {
   }
 
   @obx.val private _componentMetasMap = new Map<string, ComponentMeta>();
+
   private _lostComponentMetasMap = new Map<string, ComponentMeta>();
 
   private buildComponentMetasMap(metas: ComponentMetadata[]) {
@@ -432,7 +447,7 @@ export class Designer {
     designer._componentMetasMap.forEach((config, key) => {
       const metaData = config.getMetadata();
       if (metaData.devMode === 'lowcode') {
-        maps[key] = metaData.schema;
+        maps[key] = this.currentDocument?.simulator?.createComponent(metaData.schema!);
       } else {
         const view = metaData.experimental?.view;
         if (view) {
@@ -446,6 +461,7 @@ export class Designer {
   }
 
   private propsReducers = new Map<TransformStage, PropsReducer[]>();
+
   transformProps(props: CompositeObject | PropsList, node: Node, stage: TransformStage) {
     if (Array.isArray(props)) {
       // current not support, make this future
@@ -459,7 +475,7 @@ export class Designer {
 
     return reducers.reduce((xprops, reducer) => {
       try {
-        return reducer(xprops, node)
+        return reducer(xprops, node);
       } catch (e) {
         // todo: add log
         console.warn(e);

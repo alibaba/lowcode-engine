@@ -8,7 +8,10 @@ export class Tree {
 
   readonly id: string;
 
-  constructor(readonly document: DocumentModel) {
+  readonly document: DocumentModel;
+
+  constructor(document: DocumentModel) {
+    this.document = document;
     this.root = this.getTreeNode(document.rootNode);
     this.id = document.id;
   }

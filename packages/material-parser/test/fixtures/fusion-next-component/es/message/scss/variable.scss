@@ -1,0 +1,422 @@
+@charset "UTF-8";
+
+// message variables
+// --------------------------------------------------
+
+////
+/// @module message: 信息反馈
+/// @tag  message
+/// @category component
+/// @family feedback
+/// @varPrefix $message-
+/// @classPrefix {prefix}-message
+/// @order {"size/bounding":10,"size/title & content":11,"size/title":12,"size/content":13,"size/close":14,"statement/normal":10,"statement/normal/bounding":100,"statement/normal/title":101,"statement/normal/content":102,"statement/normal/close":103,"statement/hover":11,"statement/hover/close":110}
+////
+
+// Size:Large
+// ----------------------------------------
+
+/// padding
+/// @namespace size/bounding
+$message-size-l-padding: $s-4 !default;
+/// border width
+/// @namespace size/bounding
+$message-size-l-border-width: $line-2 !default;
+/// padding (l)
+/// @namespace size/title & content
+$message-size-l-title-content-padding-left: $s-3 !default;
+/// padding (r)
+/// @namespace size/title & content
+$message-size-l-title-content-padding-right: $s-5 !default;
+/// text
+/// @namespace size/title
+$message-size-l-title-font: $font-size-title !default;
+/// margin (t)
+/// @namespace size/content
+$message-size-l-content-margin-top: $s-2 !default;
+/// text
+/// @namespace size/content
+$message-size-l-content-font: $font-size-body-1 !default;
+/// margin (t)
+/// @namespace size/close
+$message-size-l-close-top: $s-4 !default;
+/// margin (l)
+/// @namespace size/close
+$message-size-l-close-right: $s-4 !default;
+/// icon
+/// @namespace size/content
+$message-size-l-icon: $icon-l !default;
+// unconfigurable
+$message-size-l-title-content-padding: 0 $message-size-l-title-content-padding-right 0 $message-size-l-title-content-padding-left + $message-size-l-icon !default;
+
+// Size:Medium
+// ----------------------------------------
+
+/// padding
+/// @namespace size/bounding
+$message-size-m-padding: $s-3 !default;
+/// border width
+/// @namespace size/bounding
+$message-size-m-border-width: $line-1 !default;
+/// padding (l)
+/// @namespace size/title & content
+$message-size-m-title-content-padding-left: $s-2 !default;
+/// padding (r)
+/// @namespace size/title & content
+$message-size-m-title-content-padding-right: $s-5 !default;
+/// text
+/// @namespace size/title
+$message-size-m-title-font: $font-size-subhead !default;
+/// margin (t)
+/// @namespace size/content
+$message-size-m-content-margin-top: $s-2 !default;
+/// text
+/// @namespace size/content
+$message-size-m-content-font: $font-size-body-1 !default;
+/// margin (t)
+/// @namespace size/close
+$message-size-m-close-top: $s-3 !default;
+/// margin (r)
+/// @namespace size/close
+$message-size-m-close-right: $s-3 !default;
+/// icon
+/// @namespace size/content
+$message-size-m-icon: $icon-s !default;
+// unconfigurable
+$message-size-m-title-content-padding: 0 $message-size-m-title-content-padding-right 0 $message-size-m-title-content-padding-left + $message-size-m-icon !default;
+
+/// icon
+/// @namespace size/close
+$message-close-icon-size: $icon-xs;
+
+// Statement:Common
+// ----------------------------------------
+
+/// corner
+/// @namespace size/bounding
+$message-size-l-border-radius: $corner-1 !default;
+/// corner
+/// @namespace size/bounding
+$message-size-m-border-radius: $corner-1 !default;
+/// corner
+/// @namespace size/bounding
+$message-size-l-border-radius-toast: $corner-1 !default;
+/// corner
+/// @namespace size/bounding
+$message-size-m-border-radius-toast: $corner-1 !default;
+/// border style
+/// @namespace statement/normal/bounding
+$message-border-style: $line-solid !default;
+/// border style
+/// @namespace statement/normal/bounding
+$message-border-style-toast: $line-solid !default;
+/// shadow
+/// @namespace statement/normal/bounding
+$message-shadow-toast: $shadow-2-down !default;
+
+// Statement:Success
+// ----------------------------------------
+
+/// background
+/// @namespace statement/normal/bounding
+$message-success-color-bg-inline: $color-success-1 !default;
+/// background
+/// @namespace statement/normal/bounding
+$message-success-color-bg-addon: $color-transparent !default;
+/// background
+/// @namespace statement/normal/bounding
+$message-success-color-bg-toast: $color-white !default;
+/// border color
+/// @namespace statement/normal/bounding
+$message-success-color-border-inline: $color-success-1 !default;
+/// border color
+/// @namespace statement/normal/bounding
+$message-success-color-border-toast: $color-white !default;
+/// text
+/// @namespace statement/normal/title
+$message-success-color-title-inline: $color-text1-4 !default;
+/// text
+/// @namespace statement/normal/title
+$message-success-color-title-addon: $color-text1-4 !default;
+/// text
+/// @namespace statement/normal/title
+$message-success-color-title-toast: $color-text1-4 !default;
+/// text
+/// @namespace statement/normal/content
+$message-success-color-content-inline: $color-text1-3 !default;
+/// text
+/// @namespace statement/normal/content
+$message-success-color-content-addon: $color-text1-3 !default;
+/// text
+/// @namespace statement/normal/content
+$message-success-color-content-toast: $color-text1-3 !default;
+/// icon
+/// @namespace statement/normal/content
+$message-success-color-icon-inline: $color-success-3 !default;
+/// icon
+/// @namespace statement/normal/content
+$message-success-color-icon-addon: $color-success-3 !default;
+/// icon
+/// @namespace statement/normal/content
+$message-success-color-icon-toast: $color-success-3 !default;
+
+// Statement:Error
+// ----------------------------------------
+
+/// background
+/// @namespace statement/normal/bounding
+$message-error-color-bg-inline: $color-error-1 !default;
+/// background
+/// @namespace statement/normal/bounding
+$message-error-color-bg-addon: $color-transparent !default;
+/// background
+/// @namespace statement/normal/bounding
+$message-error-color-bg-toast: $color-white !default;
+/// border color
+/// @namespace statement/normal/bounding
+$message-error-color-border-inline: $color-error-1 !default;
+/// border color
+/// @namespace statement/normal/bounding
+$message-error-color-border-toast: $color-white !default;
+/// text
+/// @namespace statement/normal/title
+$message-error-color-title-inline: $color-text1-4 !default;
+/// text
+/// @namespace statement/normal/title
+$message-error-color-title-addon: $color-text1-4 !default;
+/// text
+/// @namespace statement/normal/title
+$message-error-color-title-toast: $color-text1-4 !default;
+/// text
+/// @namespace statement/normal/content
+$message-error-color-content-inline: $color-text1-3 !default;
+/// text
+/// @namespace statement/normal/content
+$message-error-color-content-addon: $color-text1-3 !default;
+/// text
+/// @namespace statement/normal/content
+$message-error-color-content-toast: $color-text1-3 !default;
+/// icon
+/// @namespace statement/normal/content
+$message-error-color-icon-inline: $color-error-3 !default;
+/// icon
+/// @namespace statement/normal/content
+$message-error-color-icon-addon: $color-error-3 !default;
+/// icon
+/// @namespace statement/normal/content
+$message-error-color-icon-toast: $color-error-3 !default;
+
+// Statement:Warning
+// ----------------------------------------
+
+/// background
+/// @namespace statement/normal/bounding
+$message-warning-color-bg-inline: $color-warning-1 !default;
+/// background
+/// @namespace statement/normal/bounding
+$message-warning-color-bg-addon: $color-transparent !default;
+/// background
+/// @namespace statement/normal/bounding
+$message-warning-color-bg-toast: $color-white !default;
+/// border color
+/// @namespace statement/normal/bounding
+$message-warning-color-border-inline: $color-warning-1 !default;
+/// border color
+/// @namespace statement/normal/bounding
+$message-warning-color-border-toast: $color-white !default;
+/// text
+/// @namespace statement/normal/title
+$message-warning-color-title-inline: $color-text1-4 !default;
+/// text
+/// @namespace statement/normal/title
+$message-warning-color-title-addon: $color-text1-4 !default;
+/// text
+/// @namespace statement/normal/title
+$message-warning-color-title-toast: $color-text1-4 !default;
+/// text
+/// @namespace statement/normal/content
+$message-warning-color-content-inline: $color-text1-3 !default;
+/// text
+/// @namespace statement/normal/content
+$message-warning-color-content-addon: $color-text1-3 !default;
+/// text
+/// @namespace statement/normal/content
+$message-warning-color-content-toast: $color-text1-3 !default;
+/// icon
+/// @namespace statement/normal/content
+$message-warning-color-icon-inline: $color-warning-3 !default;
+/// icon
+/// @namespace statement/normal/content
+$message-warning-color-icon-addon: $color-warning-3 !default;
+/// icon
+/// @namespace statement/normal/content
+$message-warning-color-icon-toast: $color-warning-3 !default;
+
+// Statement:Notice
+// ----------------------------------------
+
+/// background
+/// @namespace statement/normal/bounding
+$message-notice-color-bg-inline: $color-notice-1 !default;
+/// background
+/// @namespace statement/normal/bounding
+$message-notice-color-bg-addon: $color-transparent !default;
+/// background
+/// @namespace statement/normal/bounding
+$message-notice-color-bg-toast: $color-white !default;
+/// border color
+/// @namespace statement/normal/bounding
+$message-notice-color-border-inline: $color-notice-1 !default;
+/// border color
+/// @namespace statement/normal/bounding
+$message-notice-color-border-toast: $color-white !default;
+/// text
+/// @namespace statement/normal/title
+$message-notice-color-title-inline: $color-text1-4 !default;
+/// text
+/// @namespace statement/normal/title
+$message-notice-color-title-addon: $color-text1-4 !default;
+/// text
+/// @namespace statement/normal/title
+$message-notice-color-title-toast: $color-text1-4 !default;
+/// text
+/// @namespace statement/normal/content
+$message-notice-color-content-inline: $color-text1-3 !default;
+/// text
+/// @namespace statement/normal/content
+$message-notice-color-content-addon: $color-text1-3 !default;
+/// text
+/// @namespace statement/normal/content
+$message-notice-color-content-toast: $color-text1-3 !default;
+/// icon
+/// @namespace statement/normal/content
+$message-notice-color-icon-inline: $color-notice-3 !default;
+/// icon
+/// @namespace statement/normal/content
+$message-notice-color-icon-addon: $color-notice-3 !default;
+/// icon
+/// @namespace statement/normal/content
+$message-notice-color-icon-toast: $color-notice-3 !default;
+
+// Statement:Help
+// ----------------------------------------
+
+/// background
+/// @namespace statement/normal/bounding
+$message-help-color-bg-inline: $color-help-1 !default;
+/// background
+/// @namespace statement/normal/bounding
+$message-help-color-bg-addon: $color-transparent !default;
+/// background
+/// @namespace statement/normal/bounding
+$message-help-color-bg-toast: $color-white !default;
+/// border color
+/// @namespace statement/normal/bounding
+$message-help-color-border-inline: $color-help-1 !default;
+/// border color
+/// @namespace statement/normal/bounding
+$message-help-color-border-toast: $color-white !default;
+/// text
+/// @namespace statement/normal/title
+$message-help-color-title-inline: $color-text1-4 !default;
+/// text
+/// @namespace statement/normal/title
+$message-help-color-title-addon: $color-text1-4 !default;
+/// text
+/// @namespace statement/normal/title
+$message-help-color-title-toast: $color-text1-4 !default;
+/// text
+/// @namespace statement/normal/content
+$message-help-color-content-inline: $color-text1-3 !default;
+/// text
+/// @namespace statement/normal/content
+$message-help-color-content-addon: $color-text1-3 !default;
+/// text
+/// @namespace statement/normal/content
+$message-help-color-content-toast: $color-text1-3 !default;
+/// icon
+/// @namespace statement/normal/content
+$message-help-color-icon-inline: $color-help-3 !default;
+/// icon
+/// @namespace statement/normal/content
+$message-help-color-icon-addon: $color-help-3 !default;
+/// icon
+/// @namespace statement/normal/content
+$message-help-color-icon-toast: $color-help-3 !default;
+
+// Statement:Loading
+// ----------------------------------------
+
+/// background
+/// @namespace statement/normal/bounding
+$message-loading-color-bg-inline: $color-white !default;
+/// background
+/// @namespace statement/normal/bounding
+$message-loading-color-bg-addon: $color-transparent !default;
+/// background
+/// @namespace statement/normal/bounding
+$message-loading-color-bg-toast: $color-white !default;
+/// border color
+/// @namespace statement/normal/bounding
+$message-loading-color-border-inline: $color-white !default;
+/// border color
+/// @namespace statement/normal/bounding
+$message-loading-color-border-toast: $color-white !default;
+/// text
+/// @namespace statement/normal/title
+$message-loading-color-title-inline: $color-text1-4 !default;
+/// text
+/// @namespace statement/normal/title
+$message-loading-color-title-addon: $color-text1-4 !default;
+/// text
+/// @namespace statement/normal/title
+$message-loading-color-title-toast: $color-text1-4 !default;
+/// text
+/// @namespace statement/normal/content
+$message-loading-color-content-inline: $color-text1-3 !default;
+/// text
+/// @namespace statement/normal/content
+$message-loading-color-content-addon: $color-text1-3 !default;
+/// text
+/// @namespace statement/normal/content
+$message-loading-color-content-toast: $color-text1-3 !default;
+/// icon
+/// @namespace statement/normal/content
+$message-loading-color-icon-inline: $color-brand1-6 !default;
+/// icon
+/// @namespace statement/normal/content
+$message-loading-color-icon-addon: $color-brand1-6 !default;
+/// icon
+/// @namespace statement/normal/content
+$message-loading-color-icon-toast: $color-brand1-6 !default;
+
+/// icon
+/// @namespace statement/normal/close
+$message-close-icon-color: $color-text1-2 !default;
+/// icon
+/// @namespace statement/hover/close
+$message-hover-close-icon-color: $color-text1-3 !default;
+/// success icon
+/// @namespace statement/normal
+/// @type icon
+$message-success-icon-content: $icon-content-success !default;
+/// warning icon
+/// @namespace statement/normal
+/// @type icon
+$message-warning-icon-content: $icon-content-warning !default;
+/// error icon
+/// @namespace statement/normal
+/// @type icon
+$message-error-icon-content: $icon-content-error !default;
+/// notice icon
+/// @namespace statement/normal
+/// @type icon
+$message-notice-icon-content: $icon-content-prompt !default;
+/// help icon
+/// @namespace statement/normal
+/// @type icon
+$message-help-icon-content: $icon-content-help !default;
+/// help icon
+/// @namespace statement/normal
+/// @type icon
+$message-loading-icon-content: $icon-content-loading !default;

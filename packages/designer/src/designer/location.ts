@@ -127,9 +127,13 @@ export function getWindow(elem: Element | Document): Window {
 
 export class DropLocation {
   readonly target: ParentalNode;
+
   readonly detail: LocationDetail;
+
   readonly event: LocateEvent;
+
   readonly source: string;
+
   get document(): DocumentModel {
     return this.target.document;
   }
@@ -148,5 +152,30 @@ export class DropLocation {
       source: this.source,
       event,
     });
+  }
+
+  /**
+   * @deprecated
+   * 兼容 vision
+   */
+  getContainer() {
+    return this.target;
+  }
+
+  /**
+   * @deprecated
+   * 兼容 vision
+   */
+  getInsertion() {
+    if (!this.detail) {
+      return null;
+    }
+    if (this.detail.type === 'Children') {
+      if (this.detail.index <= 0) {
+        return null;
+      }
+      return this.target.children.get(this.detail.index - 1);
+    }
+    return (this.detail as any)?.near?.node;
   }
 }

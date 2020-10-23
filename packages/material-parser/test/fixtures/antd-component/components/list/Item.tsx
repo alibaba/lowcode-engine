@@ -124,14 +124,14 @@ export default class Item extends React.Component<ListItemProps, any> {
       >
         {itemLayout === 'vertical' && extra
           ? [
-              <div className={`${prefixCls}-item-main`} key="content">
-                {children}
-                {actionsContent}
-              </div>,
-              <div className={`${prefixCls}-item-extra`} key="extra">
-                {extra}
-              </div>,
-            ]
+            <div className={`${prefixCls}-item-main`} key="content">
+              {children}
+              {actionsContent}
+            </div>,
+            <div className={`${prefixCls}-item-extra`} key="extra">
+              {extra}
+            </div>,
+          ]
           : [children, actionsContent, cloneElement(extra, { key: 'extra' })]}
       </Tag>
     );

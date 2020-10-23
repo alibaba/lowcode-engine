@@ -25,12 +25,12 @@ export interface OldPaneConfig {
   place?: string; // align: left|right|top|center|bottom
   description?: string; // tip?
   tip?:
-    | string
-    | {
-        // as help tip
-        url?: string;
-        content?: string | JSX.Element;
-      }; // help
+  | string
+  | {
+    // as help tip
+    url?: string;
+    content?: string | JSX.Element;
+  }; // help
 
   init?: () => any;
   destroy?: () => any;
@@ -68,7 +68,7 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
     newConfig.type = 'PanelDock';
     newConfig.area = 'left';
     newConfig.props.description = description || title;
-    const { contents, hideTitleBar, tip, width, maxWidth, height, maxHeight, menu, isAction } = config;
+    const { contents, hideTitleBar, tip, width, maxWidth, height, maxHeight, menu, isAction, canSetFixed } = config;
     if (menu) {
       newConfig.props.title = menu;
     }
@@ -83,6 +83,7 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
         maxWidth,
         height,
         maxHeight,
+        canSetFixed,
         onInit: init,
         onDestroy: destroy,
       };
@@ -161,6 +162,9 @@ const actionPane = Object.assign(skeleton.topArea, {
   setActions() {
     // empty
   },
+  get actions() {
+    return skeleton.topArea.container.items;
+  },
 });
 const dockPane = Object.assign(skeleton.leftArea, {
   /**
@@ -209,6 +213,9 @@ const dockPane = Object.assign(skeleton.leftArea, {
    */
   setFixed(flag: boolean) {
     // todo:
+  },
+  getDocks() {
+    return skeleton.leftFloatArea?.container.items;
   },
 });
 const tabPane = Object.assign(skeleton.rightArea, {

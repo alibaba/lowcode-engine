@@ -1,6 +1,7 @@
 import { CLASS_DEFINE_CHUNK_NAME, DEFAULT_LINK_AFTER } from '../../../const/generator';
 
 import { generateCompositeType } from '../../../utils/compositeType';
+import Scope from '../../../utils/Scope';
 
 import {
   BuilderComponentPlugin,
@@ -14,7 +15,7 @@ import {
 type PluginConfig = {
   fileType: string;
   implementType: 'inConstructor' | 'insMember' | 'hooks';
-}
+};
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
   const cfg: PluginConfig = {
@@ -29,12 +30,13 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     };
 
     const ir = next.ir as IContainerInfo;
+    const scope = Scope.createRootScope();
 
     if (ir.state) {
-      const state = ir.state;
-      const fields = Object.keys(state).map<string>(stateName => {
-        const [isString, value] = generateCompositeType(state[stateName]);
-        return `${stateName}: ${isString ? `'${value}'` : value},`;
+      const { state } = ir;
+      const fields = Object.keys(state).map<string>((stateName) => {
+        const value = generateCompositeType(state[stateName], scope);
+        return `${stateName}: ${value},`;
       });
 
       if (cfg.implementType === 'inConstructor') {

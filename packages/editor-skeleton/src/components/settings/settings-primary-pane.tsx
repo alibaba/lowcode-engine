@@ -168,7 +168,6 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
           animation={false}
           excessMode="dropdown"
           contentClassName="lc-settings-tabs-content"
-          disableKeyboard={true}
           extra={this.renderBreadcrumb()}
         >
           {tabs}
@@ -182,5 +181,5 @@ function hoverNode(node: Node, flag: boolean) {
   node.hover(flag);
 }
 function selectNode(node: Node) {
-  node.select();
+  node?.select();
 }

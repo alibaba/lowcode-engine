@@ -1,0 +1,173 @@
+@import "../core/index-noreset";
+@import "scss/variable";
+@import "scss/mixin";
+@import "./rtl.scss";
+
+#{$progress-prefix}-line {
+    @include box-sizing;
+
+    & {
+        width: 100%;
+        display: inline-block;
+        position: relative;
+
+        &-container {
+            display: inline-block;
+            width: 100%;
+            vertical-align: middle;
+        }
+
+        &-underlay {
+            position: relative;
+            width: 100%;
+            background-color: $progress-line-underlay-color;
+        }
+
+        &-overlay {
+            position: absolute;
+            left: 0;
+            top: 0;
+            transition: all $motion-duration-standard $motion-ease;
+
+            &-normal {
+                background-color: $progress-line-normal-color;
+            }
+
+            &-success {
+                background-color: $progress-line-success-color;
+            }
+
+            &-error {
+                background-color: $progress-line-error-color;
+            }
+
+            &-started {
+                background-color: $progress-line-started-color;
+            }
+
+            &-middle {
+                background-color: $progress-line-middle-color;
+            }
+
+            &-finishing {
+                background-color: $progress-line-finishing-color;
+            }
+        }
+    }
+
+    &.#{$css-prefix}small {
+        @include progress-bar-size($progress-line-height-size-s, $progress-line-height-size-s, $progress-line-font-s, $progress-line-radius-s);
+    }
+
+    &.#{$css-prefix}medium {
+        @include progress-bar-size($progress-line-height-size-m, $progress-line-height-size-m, $progress-line-font-m, $progress-line-radius-m);
+    }
+
+    &.#{$css-prefix}large {
+        @include progress-bar-size($progress-line-height-size-l, $progress-line-height-size-l, $progress-line-font-l, $progress-line-radius-l);
+    }
+
+    &-show-info {
+        #{$progress-prefix}-line-container {
+            padding-right: 60px;
+            margin-right: -60px;
+        }
+
+        #{$progress-prefix}-line-text {
+            width: 50px;
+            text-align: left;
+            margin-left: 10px;
+            vertical-align: middle;
+            display: inline-block;
+            color: $progress-line-font-color;
+        }
+    }
+
+    &-show-border {
+        #{$progress-prefix}-line-underlay {
+            border: $progress-line-underlay-border-width solid $progress-line-underlay-border-color;
+        }
+
+        &.#{$css-prefix}small {
+            @include progress-bar-size($progress-line-height-size-s + 2 * $progress-line-underlay-border-width, $progress-line-height-size-s, $progress-line-font-s, $progress-line-radius-s);
+        }
+
+        &.#{$css-prefix}medium {
+            @include progress-bar-size($progress-line-height-size-m + 2 * $progress-line-underlay-border-width, $progress-line-height-size-m, $progress-line-font-m, $progress-line-radius-m);
+        }
+
+        &.#{$css-prefix}large {
+            @include progress-bar-size($progress-line-height-size-l + 2 * $progress-line-underlay-border-width, $progress-line-height-size-l, $progress-line-font-l, $progress-line-radius-l);
+        }
+    }
+}
+
+#{$progress-prefix}-circle {
+    @include box-sizing();
+
+    & {
+        position: relative;
+        display: inline-block;
+
+        &-underlay {
+            stroke-width: $progress-circle-underlay-width;
+            stroke: $progress-circle-underlay-color;
+        }
+
+        &-overlay {
+            transition: all $motion-duration-standard $motion-ease;
+            stroke-linecap: $progress-circle-corner;
+            stroke-width: $progress-circle-overlay-width;
+
+            &-normal {
+                stroke: $progress-circle-normal-color;
+            }
+
+            &-success {
+                stroke: $progress-circle-success-color;
+            }
+
+            &-error {
+                stroke: $progress-circle-error-color;
+            }
+
+            &-started {
+                stroke: $progress-circle-started-color;
+            }
+
+            &-middle {
+                stroke: $progress-circle-middle-color;
+            }
+
+            &-finishing {
+                stroke: $progress-circle-finishing-color;
+            }
+        }
+    }
+
+    &.#{$css-prefix}small {
+        @include progress-circle-size($progress-circle-size-s, $progress-circle-font-s);
+    }
+
+    &.#{$css-prefix}medium {
+        @include progress-circle-size($progress-circle-size-m, $progress-circle-font-m);
+    }
+
+    &.#{$css-prefix}large {
+        @include progress-circle-size($progress-circle-size-l, $progress-circle-font-l);
+    }
+
+    &-text {
+        display: block;
+        position: absolute;
+        width: 100%;
+        top: 50%;
+        left: 0;
+        text-align: center;
+        line-height: 1;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%);
+        transition: transform $motion-duration-standard $motion-ease;
+        color: $progress-circle-text-color;
+    }
+}

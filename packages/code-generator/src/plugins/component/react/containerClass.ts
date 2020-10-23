@@ -1,3 +1,4 @@
+import changeCase from 'change-case';
 import { COMMON_CHUNK_NAME, CLASS_DEFINE_CHUNK_NAME } from '../../../const/generator';
 import { REACT_CHUNK_NAME } from './const';
 
@@ -18,14 +19,18 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
 
     const ir = next.ir as IContainerInfo;
 
+    // 将模块名转换成 PascalCase 的格式，并添加特定后缀，防止命名冲突
+    const componentClassName = `${changeCase.pascalCase(ir.moduleName)}$$Page`;
+
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: FileType.JSX,
       name: CLASS_DEFINE_CHUNK_NAME.Start,
-      content: `class ${ir.moduleName} extends React.Component {`,
+      content: `class ${componentClassName} extends React.Component {`,
       linkAfter: [
         COMMON_CHUNK_NAME.ExternalDepsImport,
         COMMON_CHUNK_NAME.InternalDepsImport,
+        COMMON_CHUNK_NAME.ImportAliasDefine,
         COMMON_CHUNK_NAME.FileVarDefine,
         COMMON_CHUNK_NAME.FileUtilDefine,
       ],
@@ -35,8 +40,11 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       type: ChunkType.STRING,
       fileType: FileType.JSX,
       name: CLASS_DEFINE_CHUNK_NAME.End,
-      content: `}`,
-      linkAfter: [CLASS_DEFINE_CHUNK_NAME.Start, REACT_CHUNK_NAME.ClassRenderEnd],
+      content: '}',
+      linkAfter: [
+        CLASS_DEFINE_CHUNK_NAME.Start,
+        REACT_CHUNK_NAME.ClassRenderEnd,
+      ],
     });
 
     next.chunks.push({
@@ -52,10 +60,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       fileType: FileType.JSX,
       name: CLASS_DEFINE_CHUNK_NAME.ConstructorEnd,
       content: '}',
-      linkAfter: [
-        CLASS_DEFINE_CHUNK_NAME.ConstructorStart,
-        CLASS_DEFINE_CHUNK_NAME.ConstructorContent,
-      ],
+      linkAfter: [CLASS_DEFINE_CHUNK_NAME.ConstructorStart, CLASS_DEFINE_CHUNK_NAME.ConstructorContent],
     });
 
     next.chunks.push({
@@ -75,21 +80,18 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       fileType: FileType.JSX,
       name: REACT_CHUNK_NAME.ClassRenderEnd,
       content: '}',
-      linkAfter: [
-        REACT_CHUNK_NAME.ClassRenderStart,
-        REACT_CHUNK_NAME.ClassRenderPre,
-        REACT_CHUNK_NAME.ClassRenderJSX,
-      ],
+      linkAfter: [REACT_CHUNK_NAME.ClassRenderStart, REACT_CHUNK_NAME.ClassRenderPre, REACT_CHUNK_NAME.ClassRenderJSX],
     });
 
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: FileType.JSX,
       name: COMMON_CHUNK_NAME.FileExport,
-      content: `export default ${ir.moduleName};`,
+      content: `export default ${componentClassName};`,
       linkAfter: [
         COMMON_CHUNK_NAME.ExternalDepsImport,
         COMMON_CHUNK_NAME.InternalDepsImport,
+        COMMON_CHUNK_NAME.ImportAliasDefine,
         COMMON_CHUNK_NAME.FileVarDefine,
         COMMON_CHUNK_NAME.FileUtilDefine,
         CLASS_DEFINE_CHUNK_NAME.End,

@@ -25,6 +25,7 @@ export class Field extends Component<FieldProps> {
   state = {
     collapsed: this.props.collapsed,
     display: this.props.defaultDisplay || 'inline',
+    hasError: false,
   };
 
   constructor(props: any) {
@@ -34,19 +35,23 @@ export class Field extends Component<FieldProps> {
 
   private toggleExpand = () => {
     const { onExpandChange } = this.props;
+    // eslint-disable-next-line react/no-access-state-in-setstate
     const collapsed = !this.state.collapsed;
     this.setState({
       collapsed,
     });
     onExpandChange && onExpandChange(!collapsed);
   };
+
   private body: HTMLDivElement | null = null;
+
   private dispose?: () => void;
+
   private deployBlockTesting() {
     if (this.dispose) {
       this.dispose();
     }
-    const body = this.body;
+    const { body } = this;
     if (!body) {
       return;
     }
@@ -72,20 +77,27 @@ export class Field extends Component<FieldProps> {
     });
     this.dispose = () => observer.disconnect();
   }
+
   private handleClear(e: React.MouseEvent) {
     e.stopPropagation();
     this.props.onClear && this.props.onClear();
   }
+
   componentDidMount() {
     const { defaultDisplay } = this.props;
     if (!defaultDisplay || defaultDisplay === 'inline') {
       this.deployBlockTesting();
     }
   }
+
   componentWillUnmount() {
     if (this.dispose) {
       this.dispose();
     }
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
   }
 
   getTipContent(propName: string, tip?: any): any {
@@ -114,7 +126,12 @@ export class Field extends Component<FieldProps> {
   }
 
   render() {
-    const { className, children, meta, title, valueState, onClear, name: propName, tip } = this.props;
+    const { hasError } = this.state;
+    if (hasError) {
+      return null;
+    }
+
+    const { className, children, meta, title, valueState, name: propName, tip } = this.props;
     const { display, collapsed } = this.state;
     const isAccordion = display === 'accordion';
     let hostName = '';
@@ -144,7 +161,7 @@ export class Field extends Component<FieldProps> {
             </div>
           )
         }
-        <div key="body" ref={(shell) => (this.body = shell)} className="lc-field-body">
+        <div key="body" ref={(shell) => { this.body = shell; }} className="lc-field-body">
           {children}
         </div>
       </div>
@@ -163,7 +180,7 @@ export class Field extends Component<FieldProps> {
  *
  * TODO: turn number to enum
  */
-function createValueState(valueState?: number, onClear?: (e: React.MouseEvent) => void) {
+function createValueState(/* valueState?: number, onClear?: (e: React.MouseEvent) => void */) {
   return null;
   /*
   let tip: any = null;
@@ -206,6 +223,7 @@ export interface PopupFieldProps extends FieldProps {
 
 export class PopupField extends Component<PopupFieldProps> {
   static contextType = PopupContext;
+
   private pipe: any;
 
   static defaultProps: PopupFieldProps = {
@@ -272,7 +290,7 @@ export class PlainField extends Component<FieldProps> {
   render() {
     const { className, children } = this.props;
     return (
-      <div className={classNames(`lc-field lc-plain-field`, className)}>
+      <div className={classNames('lc-field lc-plain-field', className)}>
         <div className="lc-field-body">{children}</div>
       </div>
     );

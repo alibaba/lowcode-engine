@@ -1,15 +1,14 @@
-import { debug, ComponentMeta } from './otter-core';
+import { debug, ComponentMeta } from './core';
 import { IMaterialParsedModel, IMaterialScanModel } from './types';
 
-const log = debug.extend('mat');
+const log = debug.extend('gen');
 
-export default async function(
+export default async function (
   matScanModel: IMaterialScanModel,
   matParsedModels: IMaterialParsedModel[],
 ): Promise<ComponentMeta[]> {
   const containerList = [];
   for (const matParsedModel of matParsedModels) {
-    // TODO 可以开放扩展点让上层使用者指定导出哪些组件或者不导出哪些组件
     // 默认排除掉 defaultExportName 为空的组件
     if (!matParsedModel.componentName) {
       log('skip');
@@ -42,6 +41,7 @@ export async function genManifest(
     title: matScanModel.pkgName,
     docUrl: '',
     screenshot: '',
+    devMode: 'proCode', // 需要入料的组件都是源码模式，低代码组件在平台上即可直接生成描述
     npm: {
       package: matScanModel.pkgName,
       version: matScanModel.pkgVersion,

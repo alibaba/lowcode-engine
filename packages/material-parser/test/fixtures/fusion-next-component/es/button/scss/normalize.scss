@@ -1,0 +1,15 @@
+#{$btn-prefix} {
+    @include box-sizing;
+
+    &::-moz-focus-inner {
+        border: 0;
+        padding: 0;
+    }
+
+    &,
+    &:active,
+    &:focus,
+    &:hover {
+        outline: 0;
+    }
+}

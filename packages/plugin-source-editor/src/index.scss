@@ -13,16 +13,23 @@
     height: 100%;
   }
 
+  .button-container{
+    position: absolute;
+    top: 0px;
+    right: 10px;
+  }
+
   .editor-context-container{
     height: 100%;
     width: 100%;
     position: absolute;
-    top: 35px;
+    top: 38px;
 
   }
 
   .editor-context{
     height: 100%;
+    width: 100%;
   }
 
   .next-tabs-tabpane.active {

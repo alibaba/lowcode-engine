@@ -1,6 +1,6 @@
 import { ComponentType, ReactElement, isValidElement, ComponentClass } from 'react';
 import { isPlainObject, uniqueId } from '@ali/lowcode-utils';
-import { isI18nData, SettingTarget, InitialItem, FilterItem, isJSSlot, ProjectSchema, AutorunItem } from '@ali/lowcode-types';
+import { isI18nData, SettingTarget, InitialItem, FilterItem, isJSSlot, ProjectSchema, AutorunItem, isJSBlock } from '@ali/lowcode-types';
 import { untracked } from '@ali/lowcode-editor-core';
 import { editor, designer } from '../editor';
 import { SettingField } from '@ali/lowcode-designer';
@@ -281,24 +281,19 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
   }
 
   let initialFn = (slotName ? null : initial) || initialValue;
-  // 在 upgrade reducer 做了 JSBlock ——> JSSlot
-  // if (slotName && initialValue === true) {
-  //   initialFn = (value: any, defaultValue: any) => {
-  //     if (isJSSlot(value)) {
-  //       return {
-  //         title: slotTitle || title,
-  //         name: slotName,
-  //         ...value,
-  //       };
-  //     }
-  //     return {
-  //       type: 'JSSlot',
-  //       title: slotTitle || title,
-  //       name: slotName,
-  //       value: initialChildren,
-  //     };
-  //   };
-  // }
+  if (slotName && initialValue === true) {
+    initialFn = (value: any, defaultValue: any) => {
+      if (isJSBlock(value)) {
+        return value;
+      }
+      return {
+        type: 'JSSlot',
+        title: slotTitle || title,
+        name: slotName,
+        value: initialChildren,
+      };
+    };
+  }
 
   if (!slotName) {
     if (accessor) {
@@ -313,7 +308,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
         autorun: (field: Field) => {
           let fieldValue = untracked(() => field.getValue());
           if (accessor) {
-            fieldValue = accessor.call(field, fieldValue)
+            fieldValue = accessor.call(field, fieldValue);
           }
           if (sync) {
             fieldValue = sync.call(field, fieldValue);
@@ -323,7 +318,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
           } else {
             field.setValue(fieldValue);
           }
-        }
+        },
       });
     }
 
@@ -347,22 +342,22 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
       initial: (field: Field, currentValue: any) => {
         // FIXME! read from prototype.defaultProps
         const defaults = extraProps.defaultValue;
-  
+
         if (typeof initialFn !== 'function') {
           initialFn = defaultInitial;
         }
-  
+
         const v = initialFn.call(field, currentValue, defaults);
-  
+
         if (setterInitial) {
           return setterInitial.call(field, v, defaults);
         }
-  
+
         return v;
       },
     });
   }
-  
+
   if (ignore != null || disabled != null) {
     collector.addFilter({
       // FIXME! name should be "xxx.xxx"
@@ -371,8 +366,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
         let disabledValue: boolean;
         if (typeof disabled === 'function') {
           disabledValue = disabled.call(field, currentValue) === true;
-        }
-        else {
+        } else {
           disabledValue = disabled === true;
         }
         if (disabledValue) {
@@ -382,7 +376,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
           return ignore.call(field, currentValue) !== true;
         }
         return ignore !== true;
-      }
+      },
     });
   }
 
@@ -442,8 +436,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
               autorun: item.autorun,
             });
           },
-        },
-      )
+        })
       : [];
     newConfig.items = objItems;
 
@@ -480,8 +473,8 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
           componentName: setter,
           condition: condition
             ? (field: Field) => {
-                return condition.call(field, field.getValue());
-              }
+              return condition.call(field, field.getValue());
+            }
             : null,
         };
       });
@@ -525,11 +518,11 @@ type ConfigCollector = {
   addInitial: AddInitial;
   addFilter: AddFilter;
   addAutorun: AddAutorun;
-}
+};
 
 function getInitialFromSetter(setter: any) {
   return setter && (
-      setter.initial || setter.Initial
+    setter.initial || setter.Initial
       || (setter.type && (setter.type.initial || setter.type.Initial))
     ) || null; // eslint-disable-line
 }
@@ -569,7 +562,7 @@ export function upgradeActions(actions?: Array<ComponentType<any> | ReactElement
     if (typeof content === 'function') {
       const fn = content as () => ReactElement;
       content = (({ node }: any) => {
-        fn.call(node);
+        return fn.call(node);
       }) as any;
     }
     return {
@@ -724,8 +717,8 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     experimental.initialChildren =
       typeof initialChildren === 'function'
         ? (node: any) => {
-            return initialChildren.call(node, node.settingEntry);
-          }
+          return initialChildren.call(node, node.settingEntry);
+        }
         : initialChildren;
   }
   if (view) {
@@ -801,9 +794,8 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
       },
       addAutorun: (item) => {
         autoruns.push(item);
-      }
-    }
-  );
+      },
+    });
   experimental.initials = initials;
   experimental.filters = filters;
   experimental.autoruns = autoruns;

@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 import { CustomView, isCustomView, IEditor } from '@ali/lowcode-types';
 import { computed } from '@ali/lowcode-editor-core';
 import { SettingEntry } from './setting-entry';
-import { SettingField, isSettingField } from './setting-field';
+import { SettingField } from './setting-field';
 import { SettingPropEntry } from './setting-prop-entry';
 import { Node } from '../../document';
 import { ComponentMeta } from '../../component-meta';
@@ -17,12 +17,19 @@ function generateSessionId(nodes: Node[]) {
 
 export class SettingTopEntry implements SettingEntry {
   private emitter = new EventEmitter();
+
   private _items: Array<SettingField | CustomView> = [];
+
   private _componentMeta: ComponentMeta | null = null;
-  private _isSame: boolean = true;
+
+  private _isSame = true;
+
   private _settingFieldMap: { [prop: string]: SettingField } = {};
+
   readonly path = [];
+
   readonly top = this;
+
   readonly parent = this;
 
   get componentMeta() {
@@ -55,7 +62,9 @@ export class SettingTopEntry implements SettingEntry {
   }
 
   readonly id: string;
+
   readonly first: Node;
+
   readonly designer: Designer;
 
   constructor(readonly editor: IEditor, readonly nodes: Node[]) {
@@ -75,7 +84,7 @@ export class SettingTopEntry implements SettingEntry {
 
   private setupComponentMeta() {
     // todo: enhance compile a temp configure.compiled
-    const first = this.first;
+    const { first } = this;
     const meta = first.componentMeta;
     const l = this.nodes.length;
     let theSame = true;
@@ -100,7 +109,7 @@ export class SettingTopEntry implements SettingEntry {
       const settingFieldMap: { [prop: string]: SettingField } = {};
       const settingFieldCollector = (name: string | number, field: SettingField) => {
         settingFieldMap[name] = field;
-      }
+      };
       this._items = this.componentMeta.configure.map((item) => {
         if (isCustomView(item)) {
           return item;
@@ -209,18 +218,23 @@ export class SettingTopEntry implements SettingEntry {
   getStatus() {
 
   }
+
   setStatus() {
 
   }
+
   getChildren() {
     // this.nodes.map()
   }
+
   getDOMNode() {
 
   }
+
   getId() {
     return this.id;
   }
+
   getPage() {
     return this.first.document;
   }
@@ -228,6 +242,10 @@ export class SettingTopEntry implements SettingEntry {
   /**
    * @deprecated
    */
+  get node() {
+    return this.getNode();
+  }
+
   getNode() {
     return this.nodes[0];
   }

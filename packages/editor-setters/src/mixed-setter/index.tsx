@@ -10,6 +10,7 @@ import './index.scss';
 
 export default class Mixed extends PureComponent {
   static displayName = 'Mixed';
+
   static propTypes = {
     locale: PropTypes.string,
     messages: PropTypes.object,
@@ -22,30 +23,36 @@ export default class Mixed extends PureComponent {
     selectProps: PropTypes.object,
     radioGroupProps: PropTypes.object,
   };
+
   static defaultProps = {
     locale: 'zh-CN',
     messages: zhCN,
-    types: [{
-      "name": "StringSetter",
-      "props": {}
-    }],
+    types: [
+      {
+        name: 'StringSetter',
+        props: {},
+      },
+    ],
   };
+
   typeMap: any;
-  i18n: (key: any, values?: {}) => string | void | (string | void)[];
-  constructor(props: Readonly<{}>) {
+
+  i18n: (key: any, values) => string | void | Array<string | void>;
+
+  constructor(props: Readonly) {
     super(props);
-    let type = props.defaultType;// judgeTypeHandler(props, {});
+    const type = props.defaultType; // judgeTypeHandler(props, {});
     this.i18n = generateI18n(props.locale, props.messages);
     this.state = {
-      preType: type,
-      type
+      type,
     };
   }
+
   changeType(type: string) {
     if (typeof type === 'object' || type === this.state.type) return;
-    let { onChange } = this.props;
-    let newValue = undefined;
-    const setterProps = this.typeMap[type]['props'];
+    const { onChange } = this.props;
+    let newValue;
+    const setterProps = this.typeMap[type].props;
     if (setterProps) {
       if (setterProps.value !== undefined) {
         newValue = setterProps.value;
@@ -54,24 +61,17 @@ export default class Mixed extends PureComponent {
       }
     }
     if (type === 'BoolSetter' && newValue === undefined) {
-      newValue = false; //给切换到switch默认值为false
+      newValue = false; // 给切换到switch默认值为false
     }
     this.setState({ type });
     onChange && onChange(newValue);
   }
+
   render() {
-    const {
-      style = {},
-      className,
-      locale,
-      messages,
-      types = [],
-      defaultType,
-      ...restProps
-    } = this.props;
+    const { style = {}, className, locale, messages, types = [], defaultType, ...restProps } = this.props;
     this.typeMap = {};
-    let realTypes: any[] = [];
-    types.forEach( (el: { name: any; props: any; }) => {
+    const realTypes: any[] = [];
+    types.forEach((el: { name: any; props: any }) => {
       const { name, props } = el;
       const Setter = getSetter(name);
       if (Setter) {
@@ -79,15 +79,15 @@ export default class Mixed extends PureComponent {
           label: name,
           component: Setter.component,
           props,
-        }
+        };
       }
       realTypes.push(name);
-    })
+    });
     let moreBtnNode = null;
-    //如果只有2种，且有变量表达式，则直接展示变量按钮
+    // 如果只有2种，且有变量表达式，则直接展示变量按钮
     if (realTypes.length > 1) {
-      let isTwoType = !!(realTypes.length === 2 && ~realTypes.indexOf('ExpressionSetter'));
-      let btnProps = {
+      const isTwoType = !!(realTypes.length === 2 && ~realTypes.indexOf('ExpressionSetter'));
+      const btnProps = {
         size: 'small',
         text: true,
         style: {
@@ -100,13 +100,13 @@ export default class Mixed extends PureComponent {
           width: 16,
           height: 16,
           lineHeight: '16px',
-          textAlign: 'center'
-        }
+          textAlign: 'center',
+        },
       };
       if (isTwoType) {
         btnProps.onClick = this.changeType.bind(this, realTypes.indexOf(this.state.type) ? realTypes[0] : realTypes[1]);
       }
-      let triggerNode = (
+      const triggerNode = (
         <Button {...btnProps} size={isTwoType ? 'large' : 'small'}>
           <Icon type={isTwoType ? 'edit' : 'ellipsis'} />
         </Button>
@@ -114,19 +114,21 @@ export default class Mixed extends PureComponent {
       if (isTwoType) {
         moreBtnNode = triggerNode;
       } else {
-        let MenuItems: {} | null | undefined = [];
-        realTypes.map(type => {
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        const MenuItems: {} | null | undefined = [];
+        realTypes.map((type) => {
           if (this.typeMap[type]) {
-            MenuItems.push(<Menu.Item key={type}>{this.typeMap[type]['label']}</Menu.Item>);
+            MenuItems.push(<Menu.Item key={type}>{this.typeMap[type].label}</Menu.Item>);
           } else {
             console.error(
               this.i18n('typeError', {
-                type
-              })
+                type,
+              }),
             );
           }
+          return type;
         });
-        let MenuNode = (
+        const MenuNode = (
           <Menu
             selectMode="single"
             hasSelectedIcon={false}
@@ -144,13 +146,13 @@ export default class Mixed extends PureComponent {
         );
       }
     }
-    let TargetNode = this.typeMap[this.state.type]?.component || 'div';
-    let targetProps = this.typeMap[this.state.type]?.props || {};
-    let tarStyle = { position: 'relative', ...style };
-    let classes = classNames(className, 'lowcode-setter-mixed');
+    const TargetNode = this.typeMap[this.state.type]?.component || 'div';
+    const targetProps = this.typeMap[this.state.type]?.props || {};
+    const tarStyle = { position: 'relative', ...style };
+    const classes = classNames(className, 'lowcode-setter-mixin');
 
     return (
-      <div style={tarStyle} className={classes} >
+      <div style={tarStyle} className={classes}>
         <TargetNode {...restProps} {...targetProps} />
         {moreBtnNode}
       </div>

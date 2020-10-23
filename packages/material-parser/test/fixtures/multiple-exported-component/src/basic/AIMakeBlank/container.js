@@ -1,6 +1,5 @@
 
-      import AIMakeBlank from "../../../es/basic/AIMakeBlank/index.js";
-      import manifest from './manifest.js';
+import AIMakeBlank from '../../../es/basic/AIMakeBlank/index.js';
+import manifest from './manifest.js';
 
-      export default { origin: AIMakeBlank, manifest };
-    
+export default { origin: AIMakeBlank, manifest };

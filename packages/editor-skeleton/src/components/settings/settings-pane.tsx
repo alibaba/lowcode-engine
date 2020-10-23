@@ -1,14 +1,20 @@
 import { Component, MouseEvent, Fragment } from 'react';
-import { shallowIntl, createSetterContent, observer, obx, Title } from '@ali/lowcode-editor-core';
+import { shallowIntl, createSetterContent, observer, obx } from '@ali/lowcode-editor-core';
 import { createContent } from '@ali/lowcode-utils';
 import { createField } from '../field';
+import PopupService, { PopupPipe } from '../popup';
 import { SkeletonContext } from '../../context';
 import { SettingField, isSettingField, SettingTopEntry, SettingEntry } from '@ali/lowcode-designer';
-import { Icon } from '@alifd/next';
+// import { Icon } from '@alifd/next';
 import { isSetterConfig, CustomView } from '@ali/lowcode-types';
 import { intl } from '../../locale';
-import { Skeleton } from '../../skeleton';
-import { Stage } from '../../widget/stage';
+import { Skeleton } from 'editor-skeleton/src/skeleton';
+
+function transformStringToFunction(str) {
+  if (typeof str !== 'string') return str;
+  // eslint-disable-next-line no-new-func
+  return new Function(`"use strict"; return ${str}`)();
+}
 
 @observer
 class SettingFieldView extends Component<{ field: SettingField }> {
@@ -16,11 +22,12 @@ class SettingFieldView extends Component<{ field: SettingField }> {
 
   render() {
     const { field } = this.props;
-    const { extraProps } = field;
+    const { extraProps, componentMeta } = field;
     const { condition, defaultValue, display } = extraProps;
+    const { prototype } = componentMeta;
     let visible;
     try {
-      visible = field.isSingle && typeof condition === 'function' ? condition(field) !== false : true;
+      visible = typeof condition === 'function' ? condition(field) !== false : true;
     } catch (error) {
       console.error('exception when condition (hidden) is excuted', error);
     }
@@ -33,6 +40,8 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     let setterProps: any = {};
     let setterType: any;
     let initialValue: any = null;
+    const isReactComponent = prototype === null || prototype === undefined;
+
     if (Array.isArray(setter)) {
       setterType = 'MixedSetter';
       setterProps = {
@@ -49,9 +58,15 @@ class SettingFieldView extends Component<{ field: SettingField }> {
       if (setter.initialValue != null) {
         initialValue = setter.initialValue;
       }
+    } else if (isReactComponent) {
+      setterType = 'MixedSetter';
+      setterProps = {
+        setters: [setter, 'VariableSetter'],
+      };
     } else if (setter) {
       setterType = setter;
     }
+
     let value = null;
     if (defaultValue != null && !('defaultValue' in setterProps)) {
       setterProps.defaultValue = defaultValue;
@@ -72,16 +87,16 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     const { stages } = skeleton;
 
     // todo: error handling
+    let _onChange = extraProps?.onChange?.value;
+    if (extraProps && extraProps.onChange && extraProps.onChange.type === 'JSFunction') {
+      _onChange = transformStringToFunction(extraProps.onChange.value);
+    }
     let stageName;
     if (display === 'entry') {
       const stage = stages.add({
         type: 'Widget',
-        name: field.getNode().id + '_' + field.name.toString(),
-        content: (
-          <Fragment>
-            {field.items.map((item, index) => createSettingFieldView(item, field, index))}
-          </Fragment>
-        ),
+        name: `${field.getNode().id }_${ field.name.toString()}`,
+        content: <Fragment>{field.items.map((item, index) => createSettingFieldView(item, field, index))}</Fragment>,
         props: {
           title: field.title,
         },
@@ -102,32 +117,40 @@ class SettingFieldView extends Component<{ field: SettingField }> {
         stageName,
         ...extraProps,
       },
-      !stageName && createSetterContent(setterType, {
-        ...shallowIntl(setterProps),
-        forceInline: extraProps.forceInline,
-        key: field.id,
-        // === injection
-        prop: field, // for compatible vision
-        field,
-        // === IO
-        value, // reaction point
-        onChange: (value: any) => {
-          this.setState({
-            value,
-          });
-          field.setValue(value);
-        },
-        onInitial: () => {
-          if (initialValue == null) {
-            return;
-          }
-          const value = typeof initialValue === 'function' ? initialValue(field) : initialValue;
-          this.setState({
-            value,
-          });
-          field.setValue(value);
-        },
-      }),
+      !stageName &&
+        createSetterContent(setterType, {
+          ...shallowIntl(setterProps),
+          forceInline: extraProps.forceInline,
+          key: field.id,
+          // === injection
+          prop: field, // for compatible vision
+          field,
+          // === IO
+          value, // reaction point
+          onChange: (value: any) => {
+            this.setState({
+              // eslint-disable-next-line react/no-unused-state
+              value,
+            });
+            field.setValue(value);
+            if (_onChange) _onChange(value, field);
+          },
+          onInitial: () => {
+            if (initialValue == null) {
+              return;
+            }
+            const value = typeof initialValue === 'function' ? initialValue(field) : initialValue;
+            this.setState({
+              // eslint-disable-next-line react/no-unused-state
+              value,
+            });
+            field.setValue(value);
+          },
+
+          removeProp: () => {
+            field.parent.clearPropValue(field.name);
+          },
+        }),
       extraProps.forceInline ? 'plain' : extraProps.display,
     );
   }
@@ -158,12 +181,8 @@ class SettingGroupView extends Component<{ field: SettingField }> {
     if (display === 'entry') {
       const stage = stages.add({
         type: 'Widget',
-        name: field.getNode().id + '_' + field.name.toString(),
-        content: (
-          <Fragment>
-            {field.items.map((item, index) => createSettingFieldView(item, field, index))}
-          </Fragment>
-        ),
+        name: `${field.getNode().id }_${ field.name.toString()}`,
+        content: <Fragment>{field.items.map((item, index) => createSettingFieldView(item, field, index))}</Fragment>,
         props: {
           title: field.title,
         },
@@ -172,7 +191,8 @@ class SettingGroupView extends Component<{ field: SettingField }> {
     }
 
     // todo: split collapsed state | field.items for optimize
-    return createField({
+    return createField(
+      {
         meta: field.componentMeta?.npm || field.componentMeta?.componentName || '',
         title: field.title,
         collapsed: !field.expanded,
@@ -180,18 +200,19 @@ class SettingGroupView extends Component<{ field: SettingField }> {
         // field: field,
         // stages,
         stageName,
-      }, 
+      },
       field.items.map((item, index) => createSettingFieldView(item, field, index)),
-      display);
+      display,
+    );
   }
 }
 
 export function createSettingFieldView(item: SettingField | CustomView, field: SettingEntry, index?: number) {
   if (isSettingField(item)) {
     if (item.isGroup) {
-      return <SettingGroupView field={item} key={item.id}/>;
+      return <SettingGroupView field={item} key={item.id} />;
     } else {
-      return <SettingFieldView field={item} key={item.id}/>;
+      return <SettingFieldView field={item} key={item.id} />;
     }
   } else {
     return createContent(item, { key: index, field });
@@ -206,12 +227,17 @@ export type SettingsPaneProps = {
 @observer
 export class SettingsPane extends Component<SettingsPaneProps> {
   static contextType = SkeletonContext;
+
   @obx
   private currentStage?: Stage;
 
   shouldComponentUpdate() {
     return false;
   }
+
+  private popupPipe = new PopupPipe();
+
+  private pipe = this.popupPipe.create();
 
   private handleClick = (e: MouseEvent) => {
     // compatiable vision stageBox
@@ -253,28 +279,17 @@ export class SettingsPane extends Component<SettingsPaneProps> {
   }
 
   render() {
-    let { target } = this.props;
+    const { target } = this.props;
+    const { items } = target;
 
     return (
       <div className="lc-settings-pane" onClick={this.handleClick}>
-        {
-          this.currentStage && (
-            <div className="lc-setting-stage-back">
-              <Icon
-                className="lc-setting-stage-back-icon" 
-                type="arrow-left"
-                size="xs"
-                onClick={this.popStage.bind(this)}
-              />
-              <Title title={this.currentStage.title}/>
-            </div>
-          )
-        }
-        <div className="lc-settings-content">
-          {
-            this.currentStage ? this.currentStage.content : target.items.map((item, index) => createSettingFieldView(item, target, index))
-          }
-        </div>
+        {/* todo: add head for single use */}
+        <PopupService popupPipe={this.popupPipe}>
+          <div className="lc-settings-content">
+            {items.map((item, index) => createSettingFieldView(item, target, index))}
+          </div>
+        </PopupService>
       </div>
     );
   }
