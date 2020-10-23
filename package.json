@@ -25,7 +25,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "xima exec lint-staged",
+      "pre-commit": "",
       "commit-msg": "xima exec commitlint -E HUSKY_GIT_PARAMS"
     }
   },

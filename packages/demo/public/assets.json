@@ -26,6 +26,13 @@
       "version": "1.0.0",
       "urls": ["https://unpkg.alibaba-inc.com/mc-breadcrumb@1.0.0/dist/MCBreadcrumb.js", "https://unpkg.alibaba-inc.com/mc-breadcrumb@1.0.0/dist/MCBreadcrumb.css"],
       "library": "MCBreadcrumb"
+    },
+    {
+      "title": "krumpDemo",
+      "package": "krumpDemo",
+      "version": "1.0.0",
+      "urls": ["http://30.37.82.74:8000/lc-engine.js"],
+      "library": "krump-test-module"
     }
   ],
   "components": [
