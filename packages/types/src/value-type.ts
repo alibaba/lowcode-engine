@@ -11,6 +11,8 @@ export interface JSExpression {
    * 模拟值
    */
   mock?: any;
+  /** 源码 */
+  compiled?: string;
 }
 
 // 函数
