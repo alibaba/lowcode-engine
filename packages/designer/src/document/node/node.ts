@@ -290,9 +290,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
         this._parent.children.unlinkChild(this);
       }
     }
-    // if (useMutator) {
-    //   this._parent?.didDropOut(this);
-    // }
+    if (useMutator) {
+      this._parent?.didDropOut(this);
+    }
     // 建立新的父子关系
     this._parent = parent;
     if (parent) {
