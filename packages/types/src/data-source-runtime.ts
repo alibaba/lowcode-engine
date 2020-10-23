@@ -14,7 +14,7 @@ export interface RuntimeDataSourceConfig {
   isInit?: boolean;
   isSync?: boolean;
   type?: string;
-  willFetch?: () => void;
+  willFetch?: WillFetch;
   shouldFetch?: () => boolean;
   requestHandler?: () => void; // TODO: 待定
   dataHandler?: DataHandler;
@@ -22,6 +22,10 @@ export interface RuntimeDataSourceConfig {
   options?: RuntimeOptions;
   [otherKey: string]: unknown;
 }
+
+export type WillFetch = (
+  options: RuntimeOptionsConfig,
+) => Promise<RuntimeOptionsConfig> | RuntimeOptionsConfig;
 
 export type DataHandler = <T>(response: {
   data: T;
@@ -45,7 +49,7 @@ export interface RuntimeOptionsConfig {
 // 可以采用 react 的 state，但是需要注意必须提供同步的 setState 功能
 export interface IDataSourceRuntimeContext<
   TState extends Record<string, unknown> = Record<string, unknown>
-  > {
+> {
   /** 当前数据源的内容 */
   state: TState;
   /** 设置状态(浅合并) */

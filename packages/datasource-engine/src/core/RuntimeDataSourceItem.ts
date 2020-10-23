@@ -106,12 +106,18 @@ class RuntimeDataSourceItem<
       return;
     }
 
+    let fetchOptions = this._options;
+
     // willFetch
-    this._dataSourceConfig.willFetch!();
+    try {
+      fetchOptions = await this._dataSourceConfig.willFetch!(this._options);
+    } catch (error) {
+      console.error(error);
+    }
 
     // 约定如果 params 有内容，直接做替换，如果没有就用默认的 options 的
-    if (params && this._options) {
-      this._options.params = params;
+    if (params && fetchOptions) {
+      fetchOptions.params = params;
     }
 
     const dataHandler = this._dataSourceConfig.dataHandler!;
@@ -124,7 +130,7 @@ class RuntimeDataSourceItem<
       // _context 会给传，但是用不用由 handler 说了算
       const result = await (this._request as RequestHandler<{
         data: TResultData;
-      }>)(this._options, this._context).then(dataHandler, errorHandler);
+      }>)(fetchOptions, this._context).then(dataHandler, errorHandler);
 
       // setState
       this._context.setState({
