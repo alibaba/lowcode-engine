@@ -3,7 +3,6 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { Injectable } from '@nestjs/common';
 import CodeGenerator from '@ali/lowcode-code-generator';
-import { createZipPublisher } from '../publisher';
 
 @Injectable()
 export class ApiService {
@@ -11,7 +10,7 @@ export class ApiService {
     const tmpDir = os.tmpdir();
     const createIceJsProjectBuilder = CodeGenerator.solutions.icejs;
     const builder = createIceJsProjectBuilder();
-    const publisher = createZipPublisher({
+    const publisher = CodeGenerator.publishers.zip({
       outputPath: tmpDir,
       projectSlug: 'demo-project',
     });
