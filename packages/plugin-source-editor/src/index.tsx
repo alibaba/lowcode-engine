@@ -55,9 +55,15 @@ export default class SourceEditor extends Component<{
 
   private editorNode: any;
 
+  private originSize: {
+    width: '',
+    height: ''
+  };
+
   state = {
     isShowSaveBtn: true,
     visiable: false,
+    fullScreenStatus: false,
   };
 
   // eslint-disable-next-line react/no-deprecated
@@ -97,7 +103,7 @@ export default class SourceEditor extends Component<{
 
 
   componentDidMount() {
-    this.editorNode = this.editorJsRef.current; // 记录当前dom节点；
+    // this.editorNode = this.editorJsRef.current; // 记录当前dom节点；
   }
 
   /**
@@ -146,6 +152,7 @@ export default class SourceEditor extends Component<{
       css,
       selectTab: TAB_KEY.JS_TAB,
       visiable: true,
+      fullScreenStatus: false,
     });
   };
 
@@ -198,11 +205,19 @@ export default class SourceEditor extends Component<{
     if (this.editorCmd) {
       this.callEditorEvent(this.editorCmd.eventName, this.editorCmd.params);
     }
+
+    setTimeout(() => {
+      this.editorNode = this.editorJsRef.current; // 记录当前dom节点；
+    }, 0);
   };
 
   fullScreen = () => {
+    console.log(this.editorNode);
     document.body.appendChild(this.editorNode);
-
+    // this.originSize = {
+    //   width: this.editorNode.clientWidth,
+    //   height: this.editorNode.clientHeight
+    // }
     const fullScreenOption = {
       ...defaultEditorOption,
       lineNumbers: 'on',
@@ -213,7 +228,35 @@ export default class SourceEditor extends Component<{
       },
     };
 
+    this.monocoEditor.layout({
+      height: document.body.clientHeight,
+      width: document.body.clientWidth,
+    });
+
     this.monocoEditor.updateOptions(fullScreenOption);
+    this.setState({
+      fullScreenStatus: true,
+    });
+  };
+
+
+  minScreen = () => {
+    const listNode = document.getElementById('editor-context-container');
+    listNode.insertBefore(this.editorNode, listNode.childNodes[0]);
+
+    const minScreenOption = {
+      ...defaultEditorOption,
+      minimap: {
+        enabled: false,
+      },
+    };
+
+
+    this.monocoEditor.updateOptions(minScreenOption);
+    this.setState({
+      fullScreenStatus: false,
+    });
+
   };
 
   onTabChange = (key) => {
@@ -276,7 +319,7 @@ export default class SourceEditor extends Component<{
   };
 
   render() {
-    const { selectTab, jsCode, css, isShowSaveBtn, visiable } = this.state;
+    const { selectTab, jsCode, css, isShowSaveBtn, visiable, fullScreenStatus } = this.state;
     const tabs = [
       { tab: 'index.js', key: TAB_KEY.JS_TAB },
       { tab: 'style.css', key: TAB_KEY.CSS_TAB },
@@ -293,8 +336,9 @@ export default class SourceEditor extends Component<{
         </Tab>
         { isShowSaveBtn && <div className="button-container"><Button type="primary" onClick={() => this.saveSchema(true)}>保存代码</Button></div>}
         { visiable &&
-          <div style={{ height: '100%' }} className="editor-context-container">
+          <div style={{ height: '100%' }} className="editor-context-container" id="editor-context-container">
             <div id="jsEditorDom" className="editor-context" ref={this.editorJsRef}>
+
               <MonacoEditor
                 value={jsCode}
                 {...defaultEditorOption}
@@ -302,6 +346,17 @@ export default class SourceEditor extends Component<{
                 onChange={(newCode) => this.updateCode(newCode)}
                 editorDidMount={(editor, useMonaco) => this.editorDidMount.call(this, editor, useMonaco, TAB_KEY.JS_TAB)}
               />
+
+              {
+                 !fullScreenStatus ?
+                   <div className="full-screen-container" onClick={this.fullScreen}>
+                     <img src="https://gw.alicdn.com/tfs/TB1d7XqE1T2gK0jSZFvXXXnFXXa-200-200.png" />
+                   </div> :
+                   <div className="min-screen-container" onClick={this.minScreen}>
+                     <img src="https://gw.alicdn.com/tfs/TB1IIonZHY1gK0jSZTEXXXDQVXa-200-200.png" />
+                   </div>
+              }
+
             </div>
             <div className="editor-context" id="cssEditorDom" ref={this.editorCssRef}>
               <MonacoEditor
@@ -314,9 +369,7 @@ export default class SourceEditor extends Component<{
             </div>
           </div>
         }
-        {/* <div className="full-screen-container" onClick={this.fullScreen}>
-          <img src="https://gw.alicdn.com/tfs/TB1d7XqE1T2gK0jSZFvXXXnFXXa-200-200.png"></img>
-        </div> */}
+
       </div>
     );
   }

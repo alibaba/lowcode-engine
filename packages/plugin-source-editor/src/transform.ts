@@ -29,7 +29,6 @@ const transfrom = {
       functionMap.state = stateData;
     }
 
-
     while (true) {
       const functionNameStr = this.pickupFunctionName(codeNew);
       if (functionNameStr != null) {
@@ -83,8 +82,10 @@ const transfrom = {
   pickupFunctionName(codeStr) {
     // 函数名的正则表达式
     // eslint-disable-next-line no-useless-escape
-    const reg = /\w+\s?\((\w|\,|\s)*\)\s?\{/;
+    const reg = /\w+\s?\((\w|\,|\s|\{|\}|\=|\'|\")*\)\s?\{/;
     const result = codeStr.match(reg);
+
+
     if (result && result[0]) {
       const functionNameStr = result[0];
       return functionNameStr;

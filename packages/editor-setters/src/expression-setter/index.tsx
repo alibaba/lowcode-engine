@@ -89,17 +89,17 @@ export default class ExpressionView extends PureComponent {
     return null;
   }
 
-  onChange(value: string, actionType: string) {
-    let realInputValue = value;
+  onChange(value: string) {
+    const realInputValue = value;
     const realDataSource = null;
     let nextCursorIndex: number;
     // 更新值
-    if (actionType === 'itemClick' || actionType === 'enter') {
-      const curValue = this.state.value;
-      if (curValue) {
-        realInputValue = curValue + realInputValue;
-      }
-    }
+    // if (actionType === 'itemClick' || actionType === 'enter') {
+    //   // const curValue = this.state.value;
+    //   // if (curValue) {
+    //   //   realInputValue = curValue + realInputValue;
+    //   // }
+    // }
     // 更新数据源
     const newState = {
       value: realInputValue,

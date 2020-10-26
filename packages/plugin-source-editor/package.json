@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-source-editor",
-  "version": "1.0.12",
+  "version": "1.0.12-beta0",
   "description": "alibaba lowcode editor source-editor plugin",
   "files": [
     "es",
