@@ -15,6 +15,7 @@ export const reloadDataSourceFactory = (
   dataSource.list
     .filter(
       (el: RuntimeDataSourceConfig) =>
+        // eslint-disable-next-line implicit-arrow-linebreak
         el.type === 'urlParams' &&
         (typeof el.isInit === 'boolean' ? el.isInit : true),
     )
@@ -51,8 +52,13 @@ export const reloadDataSourceFactory = (
       ds.isInit &&
       ds.isSync
     ) {
-      // eslint-disable-next-line no-await-in-loop
-      await dataSourceMap[ds.id].load();
+      try {
+        // eslint-disable-next-line no-await-in-loop
+        await dataSourceMap[ds.id].load();
+      } catch (e) {
+        // TODO: 这个错误直接吃掉？
+        console.error(e);
+      }
     }
   }
 

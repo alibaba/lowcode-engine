@@ -9,6 +9,7 @@ import {
   JSExpression,
   JSFunction,
   JSONObject,
+  RuntimeOptionsConfig,
 } from '@ali/lowcode-types';
 
 export const transformExpression = (
@@ -123,25 +124,70 @@ export const buildOptions = (
 ) => {
   const { options } = ds;
   if (!options) return undefined;
+  // eslint-disable-next-line space-before-function-paren
   return function() {
-    return {
-      uri: getRuntimeValueFromConfig('string', options.uri, context),
-      params: options.params ? buildJsonObj(options.params, context) : {},
-      method: options.method
-        ? getRuntimeValueFromConfig('string', options.method, context)
-        : 'GET',
-      isCors: options.isCors
-        ? getRuntimeValueFromConfig('boolean', options.isCors, context)
-        : true,
-      timeout: options.timeout
-        ? getRuntimeValueFromConfig('number', options.timeout, context)
-        : 5000,
-      headers: options.headers
-        ? buildJsonObj(options.headers, context)
-        : undefined,
-      v: options.v
-        ? getRuntimeValueFromConfig('string', options.v, context)
-        : '1.0',
+    // 默认值
+    const fetchOptions: RuntimeOptionsConfig = {
+      uri: '',
+      params: {},
+      method: 'GET',
+      isCors: true,
+      timeout: 5000,
+      headers: undefined,
+      v: '1.0',
     };
+    Object.keys(options).forEach((key: string) => {
+      switch (key) {
+        case 'uri':
+          fetchOptions.uri = getRuntimeValueFromConfig(
+            'string',
+            options.uri,
+            context,
+          );
+          break;
+        case 'params':
+          fetchOptions.params = buildJsonObj(options.params!, context);
+          break;
+        case 'method':
+          fetchOptions.method = getRuntimeValueFromConfig(
+            'string',
+            options.method,
+            context,
+          );
+          break;
+        case 'isCors':
+          fetchOptions.isCors = getRuntimeValueFromConfig(
+            'boolean',
+            options.isCors,
+            context,
+          );
+          break;
+        case 'timeout':
+          fetchOptions.timeout = getRuntimeValueFromConfig(
+            'number',
+            options.timeout,
+            context,
+          );
+          break;
+        case 'headers':
+          fetchOptions.headers = buildJsonObj(options.headers!, context);
+          break;
+        case 'v':
+          fetchOptions.v = getRuntimeValueFromConfig(
+            'string',
+            options.v,
+            context,
+          );
+          break;
+        default:
+          // 其余的除了做表达式或者 function 的转换，直接透传
+          fetchOptions[key] = getRuntimeValueFromConfig(
+            'unknown',
+            options[key],
+            context,
+          );
+      }
+    });
+    return fetchOptions;
   };
 };
