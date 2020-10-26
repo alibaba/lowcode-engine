@@ -1,0 +1,5 @@
+{
+  "plugins": [
+    "@ali/lowcode-test-mate/plugin/index.ts"
+  ]
+}

@@ -6,7 +6,6 @@ import { valueToSource } from './value-to-source';
 import { Props } from './props';
 import { SlotNode, Node } from '../node';
 import { TransformStage } from '../transform-stage';
-import { includesSlot } from '../../../utils/slot';
 
 export const UNSET = Symbol.for('unset');
 export type UNSET = typeof UNSET;
@@ -118,7 +117,7 @@ export class Prop implements IPropParent {
     }
 
     if (type === 'slot') {
-      const schema = this._slotNode!.export(stage);
+      const schema = this._slotNode?.export(stage) || {};
       if (stage === TransformStage.Render) {
         return {
           type: 'JSSlot',
@@ -294,11 +293,9 @@ export class Prop implements IPropParent {
       this._slotNode.import(slotSchema);
     } else {
       const { owner } = this.props;
-      if (!includesSlot(owner, data.name)) {
-        this._slotNode = owner.document.createNode<SlotNode>(slotSchema);
-        owner.addSlot(this._slotNode);
-        this._slotNode.internalSetSlotFor(this);
-      }
+      this._slotNode = owner.document.createNode<SlotNode>(slotSchema);
+      owner.addSlot(this._slotNode);
+      this._slotNode.internalSetSlotFor(this);
     }
     this.dispose();
   }

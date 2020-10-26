@@ -29,7 +29,7 @@ jest.mock('../../src/designer/designer', () => {
 
 let designer = null;
 beforeAll(() => {
-  designer = new Designer({} as any);
+  designer = new Designer({});
 });
 
 describe('schema 生成节点模型测试', () => {
