@@ -84,7 +84,7 @@ const transfrom = {
     // eslint-disable-next-line no-useless-escape
     const reg = /\w+\s?\((\w|\,|\s|\{|\}|\=|\'|\")*\)\s?\{/;
     const result = codeStr.match(reg);
-    
+
 
     if (result && result[0]) {
       const functionNameStr = result[0];

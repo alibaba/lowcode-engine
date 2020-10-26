@@ -58,12 +58,12 @@ export default class SourceEditor extends Component<{
   private originSize: {
     width: '',
     height: ''
-  }
+  };
 
   state = {
     isShowSaveBtn: true,
     visiable: false,
-    fullScreenStatus:false
+    fullScreenStatus: false,
   };
 
   // eslint-disable-next-line react/no-deprecated
@@ -103,7 +103,7 @@ export default class SourceEditor extends Component<{
 
 
   componentDidMount() {
-    this.editorNode = this.editorJsRef.current; // 记录当前dom节点；
+    // this.editorNode = this.editorJsRef.current; // 记录当前dom节点；
   }
 
   /**
@@ -152,6 +152,7 @@ export default class SourceEditor extends Component<{
       css,
       selectTab: TAB_KEY.JS_TAB,
       visiable: true,
+      fullScreenStatus: false,
     });
   };
 
@@ -204,9 +205,14 @@ export default class SourceEditor extends Component<{
     if (this.editorCmd) {
       this.callEditorEvent(this.editorCmd.eventName, this.editorCmd.params);
     }
+
+    setTimeout(() => {
+      this.editorNode = this.editorJsRef.current; // 记录当前dom节点；
+    }, 0);
   };
 
   fullScreen = () => {
+    console.log(this.editorNode);
     document.body.appendChild(this.editorNode);
     // this.originSize = {
     //   width: this.editorNode.clientWidth,
@@ -224,33 +230,34 @@ export default class SourceEditor extends Component<{
 
     this.monocoEditor.layout({
       height: document.body.clientHeight,
-      width: document.body.clientWidth
-    })
+      width: document.body.clientWidth,
+    });
 
     this.monocoEditor.updateOptions(fullScreenOption);
     this.setState({
-      fullScreenStatus:true
-    })
+      fullScreenStatus: true,
+    });
   };
 
 
   minScreen = () => {
-
-    // document.body.removeChild(this.editorNode);
-    let  node=document.getElementById("editor-context-container").lastChild;
-    document.getElementById('editor-context-container')?.insertBefore(node,this.editorNode);
+    const listNode = document.getElementById('editor-context-container');
+    listNode.insertBefore(this.editorNode, listNode.childNodes[0]);
 
     const minScreenOption = {
-      ...defaultEditorOption
+      ...defaultEditorOption,
+      minimap: {
+        enabled: false,
+      },
     };
 
 
     this.monocoEditor.updateOptions(minScreenOption);
     this.setState({
-      fullScreenStatus:false
-    })
+      fullScreenStatus: false,
+    });
 
-  }
+  };
 
   onTabChange = (key) => {
     const { editor } = this.props;
@@ -312,7 +319,7 @@ export default class SourceEditor extends Component<{
   };
 
   render() {
-    const { selectTab, jsCode, css, isShowSaveBtn, visiable,fullScreenStatus } = this.state;
+    const { selectTab, jsCode, css, isShowSaveBtn, visiable, fullScreenStatus } = this.state;
     const tabs = [
       { tab: 'index.js', key: TAB_KEY.JS_TAB },
       { tab: 'style.css', key: TAB_KEY.CSS_TAB },
@@ -331,7 +338,7 @@ export default class SourceEditor extends Component<{
         { visiable &&
           <div style={{ height: '100%' }} className="editor-context-container" id="editor-context-container">
             <div id="jsEditorDom" className="editor-context" ref={this.editorJsRef}>
-      
+
               <MonacoEditor
                 value={jsCode}
                 {...defaultEditorOption}
@@ -341,13 +348,13 @@ export default class SourceEditor extends Component<{
               />
 
               {
-                 !fullScreenStatus?
-                 <div className="full-screen-container" onClick={this.fullScreen}>
-                  <img src="https://gw.alicdn.com/tfs/TB1d7XqE1T2gK0jSZFvXXXnFXXa-200-200.png"></img>
-                </div>:
-                <div className="min-screen-container" onClick={this.minScreen}>
-                  <img src="https://gw.alicdn.com/tfs/TB1IIonZHY1gK0jSZTEXXXDQVXa-200-200.png"></img>
-                </div>
+                 !fullScreenStatus ?
+                   <div className="full-screen-container" onClick={this.fullScreen}>
+                     <img src="https://gw.alicdn.com/tfs/TB1d7XqE1T2gK0jSZFvXXXnFXXa-200-200.png" />
+                   </div> :
+                   <div className="min-screen-container" onClick={this.minScreen}>
+                     <img src="https://gw.alicdn.com/tfs/TB1IIonZHY1gK0jSZTEXXXDQVXa-200-200.png" />
+                   </div>
               }
 
             </div>
