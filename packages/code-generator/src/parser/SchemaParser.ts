@@ -3,7 +3,7 @@
  * 本解析器面向的是标准 schema 协议。
  */
 import changeCase from 'change-case';
-import { UtilItem, NodeDataType, NodeSchema, ContainerSchema, ProjectSchema, PropsMap } from '@ali/lowcode-types';
+import { UtilItem, NodeDataType, NodeSchema, ContainerSchema, ProjectSchema, PropsMap, NodeData } from '@ali/lowcode-types';
 import { IPageMeta,
   CodeGeneratorError,
   CompatibilityError,
@@ -44,6 +44,38 @@ function getRootComponentName(typeName: string, maps: Record<string, IExternalDe
     return peerName || typeName;
   }
   return typeName;
+}
+
+function processChildren(schema: NodeSchema): void {
+  if (schema.props) {
+    if (Array.isArray(schema.props)) {
+      // FIXME: is array type props description
+    } else {
+      const nodeProps = schema.props as PropsMap;
+      if (nodeProps.children) {
+        if (!schema.children) {
+          schema.children = nodeProps.children as NodeDataType;
+        } else {
+          let _children: NodeData[] = [];
+
+          if (Array.isArray(schema.children)) {
+            _children = _children.concat(schema.children);
+          } else {
+            _children.push(schema.children);
+          }
+
+          if (Array.isArray(nodeProps.children)) {
+            _children = _children.concat(nodeProps.children as NodeData[]);
+          } else {
+            _children.push(nodeProps.children as NodeData);
+          }
+
+          schema.children = _children;
+        }
+        delete nodeProps.children;
+      }
+    }
+  }
 }
 
 class SchemaParser implements ISchemaParser {
@@ -146,22 +178,10 @@ class SchemaParser implements ISchemaParser {
     // 处理 children 写在了 props 里的情况
     containers.forEach((container) => {
       if (container.children) {
-        handleSubNodes<string>(
+        handleSubNodes<void>(
           container.children,
           {
-            node: (i: NodeSchema) => {
-              if (i.props) {
-                if (Array.isArray(i.props)) {
-                  // FIXME: is array type props description
-                } else {
-                  const nodeProps = i.props as PropsMap;
-                  if (nodeProps.children && !i.children) {
-                    i.children = nodeProps.children as NodeDataType;
-                  }
-                }
-              }
-              return '';
-            },
+            node: (i: NodeSchema) => processChildren(i),
           },
           {
             rerun: true,

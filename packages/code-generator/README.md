@@ -1,6 +1,9 @@
 # 出码模块
 
-详细介绍看这里：<https://yuque.antfin-inc.com/docs/share/2b342641-6e01-4c77-b8e0-30421f55f69b>
+**重要！！！ 本模块是 Node 端运行的！本模块是 Node 端运行的！本模块是 Node 端运行的！暂不支持 Web 端直接跑。**
+如果有业务诉求需要在 Web 端运行，可以联系 @春希(armslave.yy)，会在架构组讨论优先度。
+
+详细介绍看这里：[出码模块 语雀文档](https://yuque.antfin.com/docs/share/2b342641-6e01-4c77-b8e0-30421f55f69b)
 
 ## 安装接入
 
