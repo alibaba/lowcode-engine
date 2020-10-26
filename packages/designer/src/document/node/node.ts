@@ -22,6 +22,7 @@ import { TransformStage } from './transform-stage';
 import { ReactElement } from 'react';
 import { SettingTopEntry } from 'designer/src/designer';
 import { EventEmitter } from 'events';
+import { includeSlot, removeSlot } from '../../utils/slot';
 
 /**
  * 基础节点
@@ -709,6 +710,11 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   addSlot(slotNode: Node) {
     slotNode.internalSetParent(this as ParentalNode, true);
+    const slotName = slotNode?.getExtraProp('name')?.getAsString();
+    // 一个组件下的所有 slot，相同 slotName 的 slot 应该是唯一的
+    if (includeSlot(this, slotName)) {
+      removeSlot(this, slotName);
+    }
     this._slots.push(slotNode);
   }
 
