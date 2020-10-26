@@ -1,8 +1,5 @@
 {
   "plugins": [
-    [
-      "build-plugin-component"
-    ],
-    "./build.plugin.js"
+    "build-plugin-component"
   ]
 }
