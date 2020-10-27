@@ -136,6 +136,7 @@ export interface OldPrototypeConfig {
   };
 
   isContainer?: boolean; // => configure.component.isContainer
+  isAbsoluteLayoutContainer?: boolean; // => meta.experimental.isAbsoluteLayoutContainer 是否是绝对定位容器
   isModal?: boolean; // => configure.component.isModal
   isFloating?: boolean; // => configure.component.isFloating
   descriptor?: string; // => configure.component.descriptor
@@ -592,6 +593,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     configure,
     transducers,
     isContainer,
+    isAbsoluteLayoutContainer,
     rectSelector,
     isModal,
     isFloating,
@@ -678,7 +680,9 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   component.nestingRule = nestingRule;
 
   // 未考虑清楚的，放在实验性段落
-  const experimental: any = {};
+  const experimental: any = {
+    isAbsoluteLayoutContainer,
+  };
   if (context) {
     // for prototype.getContextInfo
     experimental.context = context;

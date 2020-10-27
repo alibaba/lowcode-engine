@@ -1,12 +1,13 @@
 import logger from '@ali/vu-logger';
 import { EventEmitter } from 'events';
 import { editor } from './editor';
+import { AppHelper } from '@ali/lowcode-utils';
 
 /**
  * Bus class as an EventEmitter
  */
 export class Bus {
-  private emitter = new EventEmitter();
+  private emitter = AppHelper.getInstance();
 
   getEmitter() {
     return this.emitter;

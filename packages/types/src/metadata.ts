@@ -65,6 +65,7 @@ export interface Experimental {
   autoruns?: AutorunItem[];
   callbacks?: Callbacks;
   initialChildren?: NodeData[] | ((target: SettingTarget) => NodeData[]);
+  isAbsoluteLayoutContainer: boolean;
 
   // 样式 及 位置，handle上必须有明确的标识以便事件路由判断，或者主动设置事件独占模式
   // NWSE 是交给引擎计算放置位置，ReactElement 必须自己控制初始位置

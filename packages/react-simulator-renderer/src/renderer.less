@@ -54,35 +54,16 @@ html.engine-cursor-ew-resize, html.engine-cursor-ew-resize * {
 }
 
 .lc-container-placeholder {
-  height: 44px;
-  line-height: 44px;
-  background-color: #f0f0f0;
-  border-color: #a7b1bd;
+  min-height: 60px;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(240, 240, 240);
   border: 1px dotted;
-  color: #a7b1bd;
-  text-align: center;
-}
-
-.engine-empty {
-  background: #f2f3f5;
-  color: #a7b1bd;
-  outline: 1px dashed rgba(31, 56, 88, 0.2);
-  outline-offset: -1px !important;
-  height: 66px;
-  max-height: 100%;
-  min-width: 140px;
-  text-align: center;
-  overflow: hidden;
+  color: rgb(167, 177, 189);
   display: flex;
   align-items: center;
-}
-
-.engine-empty:before {
-  content: '\62D6\62FD\7EC4\4EF6\6216\6A21\677F\5230\8FD9\91CC';
+  justify-content: center;
   font-size: 14px;
-  z-index: 1;
-  width: 100%;
-  white-space: nowrap;
 }
 
 body.engine-document {
@@ -93,16 +74,6 @@ body.engine-document {
   &:after {
     clear: both;
   }
-
-  /*
-  .next-input-group,
-  .next-checkbox-group,.next-date-picker,.next-input,.next-month-picker,
-  .next-number-picker,.next-radio-group,.next-range,.next-range-picker,
-  .next-rating,.next-select,.next-switch,.next-time-picker,.next-upload,
-  .next-year-picker,
-  .next-breadcrumb-item,.next-calendar-header,.next-calendar-table {
-    pointer-events: none !important;
-  }*/
 }
 
 .engine-live-editing {

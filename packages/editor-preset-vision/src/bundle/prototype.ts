@@ -16,6 +16,7 @@ import {
   upgradePropConfig,
   upgradeConfigure,
 } from './upgrade-metadata';
+import { accessLibrary } from '@ali/lowcode-utils';
 
 import { designer } from '../editor';
 
@@ -165,15 +166,6 @@ export interface OldGlobalPropConfig extends OldPropConfig {
 }
 
 const packageMaps: any = {};
-
-function accessLibrary(library: string | object) {
-  if (typeof library !== 'string') {
-    return library;
-  }
-
-  // TODO: enhance logic
-  return (window as any)[library];
-}
 
 export function setPackages(packages: Array<{ package: string; library: object | string }>) {
   packages.forEach((item) => {

@@ -13,6 +13,7 @@ import RightArea from './right-area';
 import './workbench.less';
 import { SkeletonContext } from '../context';
 import { EditorConfig, PluginClassSet } from '@ali/lowcode-types';
+import { AppHelper } from '@ali/lowcode-utils';
 
 @observer
 export class Workbench extends Component<{ skeleton: Skeleton; config?: EditorConfig; components?: PluginClassSet; className?: string; topAreaItemClassName?: string }> {
@@ -24,6 +25,11 @@ export class Workbench extends Component<{ skeleton: Skeleton; config?: EditorCo
 
   shouldComponentUpdate() {
     return false;
+  }
+
+  componentDidCatch(error: any) {
+    const helper = AppHelper.getInstance();
+    helper.emit('editor.skeleton.workbench.error', error);
   }
 
   render() {
