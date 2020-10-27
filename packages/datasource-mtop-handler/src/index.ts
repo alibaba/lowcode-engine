@@ -9,10 +9,11 @@ export type DataType = 'jsonp' | 'json' | 'originaljsonp';
 // 考虑一下 mtop 类型的问题，官方没有提供 ts 文件
 export function createMtopHandler<T = unknown>(config?: MTopConfig) {
   if (config && Object.keys(config).length > 0) {
-    Object.keys(config).forEach((key: string) =>
-      mtopRequest.config(key, config[key]),
-    );
+    Object.keys(config).forEach((key: string) => {
+      mtopRequest.config(key, config[key]);
+    });
   }
+  // eslint-disable-next-line space-before-function-paren
   return async function(options: RuntimeOptionsConfig): Promise<{ data: T }> {
     const response = await mtopRequest.request<T>({
       api: options.uri,
@@ -23,6 +24,15 @@ export function createMtopHandler<T = unknown>(config?: MTopConfig) {
       timeout: options.timeout,
       headers: options.headers,
     });
-    return response;
+    if (response.ret && response.ret[0].indexOf('SUCCESS::') > -1) {
+      // 校验成功
+      return response;
+    }
+    // 默认异常
+    let errorMsg = '未知异常';
+    if (response.ret && response.ret[0]) {
+      errorMsg = response.ret[0];
+    }
+    throw new Error(errorMsg);
   };
 }

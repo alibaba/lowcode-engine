@@ -6,6 +6,6 @@ declare interface MTopConfig {
 }
 
 declare module '@ali/universal-mtop' {
-  const request: <T>(config: any) => Promise<{ data: T }>;
+  const request: <T>(config: any) => Promise<{ data: T; ret: string[] }>;
   const config: (key: string, value: unknown) => void;
 }
