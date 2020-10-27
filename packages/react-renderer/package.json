@@ -54,5 +54,5 @@
   "publishConfig": {
     "registry": "http://registry.npm.alibaba-inc.com"
   },
-  "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-react-renderer@0.13.1-9/build/index.html"
+  "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-react-renderer@0.13.1-10/build/index.html"
 }
