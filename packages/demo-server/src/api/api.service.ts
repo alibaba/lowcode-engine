@@ -23,7 +23,5 @@ export class ApiService {
       throw new Error('generateProject failed');
     }
     return fs.createReadStream(filePath);
-
-    // return filePath;
   }
 }
