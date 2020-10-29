@@ -1,10 +1,10 @@
 import { IRuntimeDataSource } from './data-source';
+import { CustomRequestHandler } from './data-source-handlers';
 
 // 先定义运行模式的类型
 export interface RuntimeDataSource {
   list: RuntimeDataSourceConfig[];
-  // TODO: dataMap 格式不对要处理
-  dataHandler?: (dataMap: DataSourceMap) => void;
+  dataHandler?: (dataSourceMap: DataSourceMap) => void;
 }
 
 export type DataSourceMap = Record<string, IRuntimeDataSource>;
@@ -16,7 +16,7 @@ export interface RuntimeDataSourceConfig {
   type?: string;
   willFetch?: WillFetch;
   shouldFetch?: () => boolean;
-  requestHandler?: () => void; // TODO: 待定
+  requestHandler?: CustomRequestHandler;
   dataHandler?: DataHandler;
   errorHandler?: ErrorHandler;
   options?: RuntimeOptions;

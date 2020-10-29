@@ -9,11 +9,12 @@ import {
   RuntimeDataSource,
   RuntimeDataSourceConfig,
 } from '@ali/lowcode-types';
+import { getRequestHandler } from '../helpers';
 
-// TODO: requestConfig mtop 默认的请求 config 怎么处理？
 /**
  * @param dataSource
  * @param context
+ * @param extraConfig: { requestHandlersMap }
  */
 
 export default (
@@ -25,22 +26,11 @@ export default (
 ) => {
   const { requestHandlersMap } = extraConfig;
 
-  const runtimeDataSource: RuntimeDataSource = adapt2Runtime(
-    dataSource,
-    context,
-  );
+  const runtimeDataSource: RuntimeDataSource = adapt2Runtime(dataSource, context);
 
   const dataSourceMap = runtimeDataSource.list.reduce(
-    (
-      prev: Record<string, IRuntimeDataSource>,
-      current: RuntimeDataSourceConfig,
-    ) => {
-      prev[current.id] = new RuntimeDataSourceItem(
-        current,
-        // type 协议默认值 fetch
-        requestHandlersMap[current.type || 'fetch'],
-        context,
-      );
+    (prev: Record<string, IRuntimeDataSource>, current: RuntimeDataSourceConfig) => {
+      prev[current.id] = new RuntimeDataSourceItem(current, getRequestHandler(current, requestHandlersMap), context);
       return prev;
     },
     {},
@@ -48,6 +38,6 @@ export default (
 
   return {
     dataSourceMap,
-    reloadDataSource: reloadDataSourceFactory(runtimeDataSource, dataSourceMap),
+    reloadDataSource: reloadDataSourceFactory(runtimeDataSource, dataSourceMap, runtimeDataSource.dataHandler),
   };
 };

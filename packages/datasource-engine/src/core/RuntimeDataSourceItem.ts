@@ -9,10 +9,8 @@ import {
   UrlParamsHandler,
 } from '@ali/lowcode-types';
 
-class RuntimeDataSourceItem<
-  TParams extends Record<string, unknown> = Record<string, unknown>,
-  TResultData = unknown
-> implements IRuntimeDataSource<TParams, TResultData> {
+class RuntimeDataSourceItem<TParams extends Record<string, unknown> = Record<string, unknown>, TResultData = unknown>
+  implements IRuntimeDataSource<TParams, TResultData> {
   private _data?: TResultData;
 
   private _error?: Error;
@@ -21,9 +19,7 @@ class RuntimeDataSourceItem<
 
   private _dataSourceConfig: RuntimeDataSourceConfig;
 
-  private _request:
-    | RequestHandler<{ data: TResultData }>
-    | UrlParamsHandler<TResultData>;
+  private _request: RequestHandler<{ data: TResultData }> | UrlParamsHandler<TResultData>;
 
   private _context: IDataSourceRuntimeContext;
 
@@ -31,9 +27,7 @@ class RuntimeDataSourceItem<
 
   constructor(
     dataSourceConfig: RuntimeDataSourceConfig,
-    request:
-      | RequestHandler<{ data: TResultData }>
-      | UrlParamsHandler<TResultData>,
+    request: RequestHandler<{ data: TResultData }> | UrlParamsHandler<TResultData>,
     context: IDataSourceRuntimeContext,
   ) {
     this._dataSourceConfig = dataSourceConfig;
@@ -57,14 +51,14 @@ class RuntimeDataSourceItem<
     if (!this._dataSourceConfig) return;
     // 考虑没有绑定对应的 handler 的情况
     if (!this._request) {
-      throw new Error(`no ${this._dataSourceConfig.type} handler provide`);
+      this._error = new Error(`no ${this._dataSourceConfig.type} handler provide`);
+      this._status = RuntimeDataSourceStatus.Error;
+      throw this._error;
     }
 
     // TODO: urlParams  有没有更好的处理方式
     if (this._dataSourceConfig.type === 'urlParams') {
-      const response = await (this._request as UrlParamsHandler<TResultData>)(
-        this._context,
-      );
+      const response = await (this._request as UrlParamsHandler<TResultData>)(this._context);
       this._context.setState({
         [this._dataSourceConfig.id]: response,
       });
@@ -100,10 +94,8 @@ class RuntimeDataSourceItem<
 
     if (!shouldFetch) {
       this._status = RuntimeDataSourceStatus.Error;
-      this._error = new Error(
-        `the ${this._dataSourceConfig.id} request should not fetch, please check the condition`,
-      );
-      return;
+      this._error = new Error(`the ${this._dataSourceConfig.id} request should not fetch, please check the condition`);
+      throw this._error;
     }
 
     let fetchOptions = this._options;

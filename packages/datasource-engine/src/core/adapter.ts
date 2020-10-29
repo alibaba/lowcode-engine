@@ -1,10 +1,4 @@
-import {
-  transformFunction,
-  getRuntimeValueFromConfig,
-  getRuntimeJsValue,
-  buildOptions,
-  buildShouldFetch,
-} from './../utils';
+import { getRuntimeValueFromConfig, getRuntimeJsValue, buildOptions, buildShouldFetch } from './../utils';
 // 将不同渠道给的 schema 转为 runtime 需要的类型
 
 import { defaultDataHandler, defaultWillFetch } from '../helpers';
@@ -16,18 +10,11 @@ import {
   RuntimeDataSourceConfig,
 } from '@ali/lowcode-types';
 
-const adapt2Runtime = (
-  dataSource: InterpretDataSource,
-  context: IDataSourceRuntimeContext,
-) => {
-  const {
-    list: interpretConfigList,
-    dataHandler: interpretDataHandler,
-  } = dataSource;
-  const dataHandler: (dataMap?: DataSourceMap) => void =
-    interpretDataHandler &&
-    interpretDataHandler.compiled &&
-    transformFunction(interpretDataHandler.compiled, context);
+const adapt2Runtime = (dataSource: InterpretDataSource, context: IDataSourceRuntimeContext) => {
+  const { list: interpretConfigList, dataHandler: interpretDataHandler } = dataSource;
+  const dataHandler: (dataMap?: DataSourceMap) => void = interpretDataHandler
+    ? getRuntimeJsValue(interpretDataHandler, context)
+    : undefined;
 
   // 为空判断
   if (!interpretConfigList || !interpretConfigList.length) {
@@ -36,29 +23,20 @@ const adapt2Runtime = (
       dataHandler,
     };
   }
-  const list: RuntimeDataSourceConfig[] = interpretConfigList.map(
-    (el: InterpretDataSourceConfig) => {
-      return {
-        id: el.id,
-        isInit:
-          getRuntimeValueFromConfig('boolean', el.isInit, context) || true, // 默认 true
-        isSync:
-          getRuntimeValueFromConfig('boolean', el.isSync, context) || false, // 默认 false
-        type: el.type || 'fetch',
-        willFetch: el.willFetch
-          ? getRuntimeJsValue(el.willFetch, context)
-          : defaultWillFetch,
-        shouldFetch: buildShouldFetch(el, context),
-        dataHandler: el.dataHandler
-          ? getRuntimeJsValue(el.dataHandler, context)
-          : defaultDataHandler,
-        errorHandler: el.errorHandler
-          ? getRuntimeJsValue(el.errorHandler, context)
-          : undefined,
-        options: buildOptions(el, context),
-      };
-    },
-  );
+  const list: RuntimeDataSourceConfig[] = interpretConfigList.map((el: InterpretDataSourceConfig) => {
+    return {
+      id: el.id,
+      isInit: getRuntimeValueFromConfig('boolean', el.isInit, context) || true, // 默认 true
+      isSync: getRuntimeValueFromConfig('boolean', el.isSync, context) || false, // 默认 false
+      type: el.type || 'fetch',
+      willFetch: el.willFetch ? getRuntimeJsValue(el.willFetch, context) : defaultWillFetch,
+      shouldFetch: buildShouldFetch(el, context),
+      dataHandler: el.dataHandler ? getRuntimeJsValue(el.dataHandler, context) : defaultDataHandler,
+      errorHandler: el.errorHandler ? getRuntimeJsValue(el.errorHandler, context) : undefined,
+      requestHandler: el.requestHandler ? getRuntimeJsValue(el.requestHandler, context) : undefined,
+      options: buildOptions(el, context),
+    };
+  });
 
   return {
     list,

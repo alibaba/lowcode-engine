@@ -1,12 +1,9 @@
-import {
-  DataSourceMap,
-  RuntimeDataSource,
-  RuntimeDataSourceConfig,
-} from '@ali/lowcode-types';
+import { DataSourceMap, RuntimeDataSource, RuntimeDataSourceConfig } from '@ali/lowcode-types';
 
 export const reloadDataSourceFactory = (
   dataSource: RuntimeDataSource,
   dataSourceMap: DataSourceMap,
+  dataHandler?: (dataSourceMap: DataSourceMap) => void,
 ) => async () => {
   const allAsyncLoadings: Array<Promise<any>> = [];
 
@@ -16,16 +13,13 @@ export const reloadDataSourceFactory = (
     .filter(
       (el: RuntimeDataSourceConfig) =>
         // eslint-disable-next-line implicit-arrow-linebreak
-        el.type === 'urlParams' &&
-        (typeof el.isInit === 'boolean' ? el.isInit : true),
+        el.type === 'urlParams' && (typeof el.isInit === 'boolean' ? el.isInit : true),
     )
     .forEach((el: RuntimeDataSourceConfig) => {
       dataSourceMap[el.id].load();
     });
 
-  const remainRuntimeDataSourceList = dataSource.list.filter(
-    (el: RuntimeDataSourceConfig) => el.type !== 'urlParams',
-  );
+  const remainRuntimeDataSourceList = dataSource.list.filter((el: RuntimeDataSourceConfig) => el.type !== 'urlParams');
 
   // 处理并行
   for (const ds of remainRuntimeDataSourceList) {
@@ -63,4 +57,10 @@ export const reloadDataSourceFactory = (
   }
 
   await Promise.allSettled(allAsyncLoadings);
+
+  // 所有的初始化请求都结束之后，调用钩子函数
+
+  if (dataHandler) {
+    dataHandler(dataSourceMap);
+  }
 };
