@@ -209,11 +209,14 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     return {};
   });
 
+  readonly asycnLibraryMap: { [key: string]: {} } = {};
+
   readonly libraryMap: { [key: string]: string } = {};
 
   private _iframe?: HTMLIFrameElement;
 
   async mountContentFrame(iframe: HTMLIFrameElement | null) {
+
     if (!iframe || this._iframe === iframe) {
       return;
     }
@@ -226,6 +229,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     if (library) {
       library.forEach((item) => {
         this.libraryMap[item.package] = item.library;
+        if (item.async) {
+          this.asycnLibraryMap[item.package] = item;
+        }
         if (item.urls) {
           libraryAsset.push(item.urls);
         }
@@ -254,7 +260,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     // wait 准备 iframe 内容、依赖库注入
     const renderer = await createSimulator(this, iframe, vendors);
 
-    // TODO: !!! thinkof reload onload
+    // 加载异步Library
+    await renderer.loadAsyncLibrary(this.asycnLibraryMap);
+    // TODO: !!! thinkof reload onloa
 
     // wait 业务组件被第一次消费，否则会渲染出错
     await this.componentsConsumer.waitFirstConsume();
@@ -274,6 +282,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     hotkey.mount(this._contentWindow);
     focusTracker.mount(this._contentWindow);
     clipboard.injectCopyPaster(this._contentDocument);
+
+
     // TODO: dispose the bindings
   }
 
