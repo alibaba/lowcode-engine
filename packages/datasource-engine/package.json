@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-datasource-engine",
-  "version": "1.0.2-alpha.2",
+  "version": "1.0.2-alpha.3",
   "main": "dist/index.js",
   "files": [
     "dist",
@@ -15,7 +15,7 @@
   },
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@ali/lowcode-types": "1.0.13-alpha.1",
+    "@ali/lowcode-types": "1.0.13-alpha.2",
     "typescript": "^3.9.7"
   },
   "devDependencies": {
