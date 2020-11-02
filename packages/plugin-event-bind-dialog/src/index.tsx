@@ -58,15 +58,11 @@ export default class EventBindDialog extends Component<PluginProps> {
     paramStr: '',
   };
 
-  openDialog = (bindEventName: string) => {
+  openDialog = (bindEventName: string, isEdit:boolean) => {
     this.bindEventName = bindEventName;
 
-    this.initEventName();
+    this.initEventName(isEdit);
 
-    this.setState({
-      visiable: true,
-      selectedEventName: '',
-    });
   };
 
   closeDialog = () => {
@@ -77,7 +73,7 @@ export default class EventBindDialog extends Component<PluginProps> {
 
   componentDidMount() {
     const { editor, config } = this.props;
-    editor.on(`${config.pluginKey}.openDialog`, (bindEventName: string, setterName:string, paramStr:string) => {
+    editor.on(`${config.pluginKey}.openDialog`, (bindEventName: string, setterName:string, paramStr:string, isEdit:boolean) => {
       console.log(`paramStr:${ paramStr}`);
       this.setState({
         setterName,
@@ -95,20 +91,25 @@ export default class EventBindDialog extends Component<PluginProps> {
         }
       }
 
-      this.openDialog(bindEventName);
+      this.openDialog(bindEventName, isEdit);
     });
   }
 
-  initEventName = () => {
+  initEventName = (isEdit:boolean) => {
     let eventName = this.bindEventName;
-    this.eventList.forEach((item) => {
-      if (item.name === eventName) {
-        eventName = `${eventName}_new`;
-      }
-    });
+
+    if (!isEdit) {
+      this.eventList.forEach((item) => {
+        if (item.name === eventName) {
+          eventName = `${eventName}_new`;
+        }
+      });
+    }
 
     this.setState({
       eventName,
+      selectedEventName: (isEdit ? eventName : ''),
+      visiable: true,
     });
   };
 
@@ -168,6 +169,7 @@ export default class EventBindDialog extends Component<PluginProps> {
 
   render() {
     const { selectedEventName, eventName, visiable, paramStr } = this.state;
+    console.log('selectedEventName:' + selectedEventName);
     return (
       <Dialog
         visible={visiable}

@@ -1,3 +1,4 @@
+
 import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
 import { Button, Icon, Dialog } from '@alifd/next';
@@ -64,8 +65,8 @@ export default class FunctionSetter extends PureComponent<FunctionSetterProps> {
     editor.on(`${this.emitEventName}.bindEvent`, this.bindEvent);
   }
 
-  bindEvent = (eventName) => {
-    this.bindEventCallback(eventName);
+  bindEvent = (eventName, paramStr) => {
+    this.bindEventCallback(eventName, paramStr);
   };
 
 
@@ -75,9 +76,17 @@ export default class FunctionSetter extends PureComponent<FunctionSetterProps> {
   }
 
 
-  bindFunction = () => {
-    const { field } = this.props;
-    field.editor.emit('eventBindDialog.openDialog', field.name, this.emitEventName);
+  bindFunction = (isEdit) => {
+    const { field, value } = this.props;
+
+    let paramStr;
+
+    if (value) {
+      paramStr = this.parseFunctionParam(value.value);
+    }
+
+
+    field.editor.emit('eventBindDialog.openDialog', field.name, this.emitEventName, paramStr, isEdit);
   };
 
   openDialog = () => {
@@ -102,14 +111,16 @@ export default class FunctionSetter extends PureComponent<FunctionSetterProps> {
 
   parseFunctionName = (functionString: string) => {
     // 因为函数格式是固定的，所以可以按照字符换去匹配获取函数名
-    const funNameStr = functionString.split('this.')[1];
+    const funNameStr = functionString.split('this.')[1].split('.')[0];
 
+    return funNameStr;
+  };
 
-    if (funNameStr) {
-      const endIndex = funNameStr.indexOf('(');
-      return funNameStr.substr(0, endIndex);
-    } else {
-      return '';
+  parseFunctionParam = (functionString:string) => {
+    // eslint-disable-next-line no-useless-escape
+    const matchList = functionString.match(/\[(\w|\s|\,|")*\]/);
+    if (matchList?.length) {
+      return matchList[0].substring(1, matchList[0].length - 1);
     }
   };
 
@@ -158,7 +169,7 @@ export default class FunctionSetter extends PureComponent<FunctionSetterProps> {
       <div className="function-container">
         <img className="funtion-icon" src="https://gw.alicdn.com/tfs/TB1NXNhk639YK4jSZPcXXXrUFXa-200-200.png" />
         <span className="function-name" onClick={() => this.focusFunctionName(functionName)}>{functionName}</span>
-        <Icon type="set" size="medium" className="funtion-operate-icon" onClick={this.bindFunction} />
+        <Icon type="set" size="medium" className="funtion-operate-icon" onClick={() => this.bindFunction(true)} />
         <Icon type="ashbin" size="medium" className="funtion-operate-icon" onClick={this.removeFunctionBind} />
       </div>
     );
@@ -177,13 +188,15 @@ export default class FunctionSetter extends PureComponent<FunctionSetterProps> {
   };
 
 
-  bindEventCallback = (eventName: string) => {
+  bindEventCallback = (eventName: string, paramStr:string) => {
     const { onChange } = this.props;
+
     onChange({
       type: 'JSFunction',
-      value: `function(){ return this.${eventName}() }`,
+      value: `function(){ return this.${eventName}.apply(this,Array.prototype.slice.call(arguments).concat([${paramStr || ''}])) }`,
     });
   };
+
 
   render() {
     const { value } = this.props;
