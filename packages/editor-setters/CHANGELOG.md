@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.13"></a>
+## [1.0.13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@1.0.12...@ali/lowcode-editor-setters@1.0.13) (2020-11-02)
+
+
+### Bug Fixes
+
+* 修复编辑器转化bug,增加窗口最大最小化功能 ([05666af](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/05666af))
+
+
+### Features
+
+* style 迁移 ([6ce97da](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6ce97da))
+
+
+
+
 <a name="1.0.12"></a>
 ## [1.0.12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@1.0.11...@ali/lowcode-editor-setters@1.0.12) (2020-10-20)
 

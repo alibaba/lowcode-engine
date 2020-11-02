@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.13"></a>
+## [1.0.13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo-server@1.0.12...@ali/lowcode-demo-server@1.0.13) (2020-11-02)
+
+
+### Bug Fixes
+
+* build error ([d06d944](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d06d944))
+* update demo-server deps ([23ded02](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/23ded02))
+
+
+
+
 <a name="1.0.12"></a>
 ## [1.0.12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-demo-server@1.0.11...@ali/lowcode-demo-server@1.0.12) (2020-10-20)
 

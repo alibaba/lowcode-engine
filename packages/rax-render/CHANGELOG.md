@@ -3,7 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-      <a name="1.0.12"></a>
+  <a name="1.0.13"></a>
+## [1.0.13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-rax-renderer@1.0.12...@ali/lowcode-rax-renderer@1.0.13) (2020-11-02)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-rax-renderer
+
+  <a name="1.0.12"></a>
 ## [1.0.12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-rax-renderer@1.0.11...@ali/lowcode-rax-renderer@1.0.12) (2020-10-20)
 
 
@@ -11,7 +19,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-rax-renderer
 
-      <a name="1.0.11"></a>
+<a name="1.0.11"></a>
 ## [1.0.11](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-rax-renderer@1.0.10...@ali/lowcode-rax-renderer@1.0.11) (2020-10-19)
 
 

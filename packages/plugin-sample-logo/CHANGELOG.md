@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.13"></a>
+## [1.0.13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-logo@1.0.12...@ali/lowcode-plugin-sample-logo@1.0.13) (2020-11-02)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-sample-logo
+
 <a name="1.0.12"></a>
 ## [1.0.12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-logo@1.0.11...@ali/lowcode-plugin-sample-logo@1.0.12) (2020-10-20)
 
