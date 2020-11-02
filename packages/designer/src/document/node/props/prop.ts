@@ -269,7 +269,7 @@ export class Prop implements IPropParent {
       this.stash.clear();
     }
     if (this._type !== 'slot' && this._slotNode) {
-      this._slotNode.purge();
+      this._slotNode.remove();
       this._slotNode = undefined;
     }
   }

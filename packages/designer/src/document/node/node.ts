@@ -23,6 +23,7 @@ import { ReactElement } from 'react';
 import { SettingTopEntry } from 'designer/src/designer';
 import { EventEmitter } from 'events';
 import { includeSlot, removeSlot } from '../../utils/slot';
+import { foreachReverse } from '../../utils/tree';
 
 /**
  * 基础节点
@@ -594,7 +595,11 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   import(data: Schema, checkId = false) {
     const { componentName, id, children, props, ...extras } = data;
-
+    if (this.isSlot()) {
+      foreachReverse(this.children, (subNode: Node) => {
+        subNode.remove(true, true);
+      }, (iterable, idx) => (iterable as NodeChildren).get(idx));
+    }
     if (this.isParental()) {
       this.props.import(props, extras);
       (this._children as NodeChildren).import(children, checkId);
@@ -709,12 +714,12 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   addSlot(slotNode: Node) {
-    slotNode.internalSetParent(this as ParentalNode, true);
     const slotName = slotNode?.getExtraProp('name')?.getAsString();
     // 一个组件下的所有 slot，相同 slotName 的 slot 应该是唯一的
     if (includeSlot(this, slotName)) {
       removeSlot(this, slotName);
     }
+    slotNode.internalSetParent(this as ParentalNode, true);
     this._slots.push(slotNode);
   }
 
@@ -756,7 +761,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     this.purged = true;
     this.autoruns?.forEach((dispose) => dispose());
     this.props.purge();
-    this.document.destroyNode(this);
+    // this.document.destroyNode(this);
   }
 
   /**

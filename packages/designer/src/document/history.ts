@@ -222,7 +222,7 @@ class Session {
   end() {
     if (this.isActive()) {
       this.clearTimer();
-      console.info('session end');
+      // console.info('session end');
     }
   }
 

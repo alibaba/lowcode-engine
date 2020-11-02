@@ -1,7 +1,7 @@
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
-module.exports = ({ onGetWebpackConfig }) => {
+module.exports = ({ context, onGetWebpackConfig }) => {
   onGetWebpackConfig((config) => {
     config.resolve.plugin('tsconfigpaths').use(TsconfigPathsPlugin, [
       {
@@ -23,5 +23,8 @@ module.exports = ({ onGetWebpackConfig }) => {
 
     config.plugins.delete('hot');
     config.devServer.hot(false);
+    if (context.command === 'start') {
+      config.devtool('inline-source-map');
+    }
   });
 };

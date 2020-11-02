@@ -127,7 +127,7 @@ designer.addPropsReducer((props, node) => {
           !isJSBlock(ov) &&
           !isJSSlot(ov) &&
           !isVariable(ov) &&
-          isString(v)) {
+          (isString(v) || isI18NObject(v))) {
           newProps[item.name] = convertToI18NObject(v);
         }
       } catch (e) {
