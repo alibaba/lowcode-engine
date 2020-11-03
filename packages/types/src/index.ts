@@ -1,4 +1,7 @@
 export * from './data-source';
+export * from './data-source-handlers';
+export * from './data-source-interpret';
+export * from './data-source-runtime';
 export * from './editor';
 export * from './field-config';
 export * from './i18n';
