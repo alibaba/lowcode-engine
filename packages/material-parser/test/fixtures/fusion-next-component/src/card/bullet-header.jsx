@@ -8,63 +8,63 @@ import ConfigProvider from '../config-provider';
  * @order 2
  */
 class CardBulletHeader extends Component {
-    static propTypes = {
-        prefix: PropTypes.string,
-        /**
+  static propTypes = {
+    prefix: PropTypes.string,
+    /**
          * 卡片的标题
          */
-        title: PropTypes.node,
-        /**
+    title: PropTypes.node,
+    /**
          * 卡片的副标题
          */
-        subTitle: PropTypes.node,
-        /**
+    subTitle: PropTypes.node,
+    /**
          * 是否显示标题的项目符号
          */
-        showTitleBullet: PropTypes.bool,
-        /**
+    showTitleBullet: PropTypes.bool,
+    /**
          * 标题区域的用户自定义内容
          */
-        extra: PropTypes.node,
-    };
+    extra: PropTypes.node,
+  };
 
-    static defaultProps = {
-        prefix: 'next-',
-        showTitleBullet: true,
-    };
+  static defaultProps = {
+    prefix: 'next-',
+    showTitleBullet: true,
+  };
 
-    render() {
-        const { prefix, title, subTitle, extra, showTitleBullet } = this.props;
+  render() {
+    const { prefix, title, subTitle, extra, showTitleBullet } = this.props;
 
-        if (!title) return null;
+    if (!title) return null;
 
-        const headCls = classNames({
-            [`${prefix}card-head`]: true,
-            [`${prefix}card-head-show-bullet`]: showTitleBullet,
-        });
+    const headCls = classNames({
+      [`${prefix}card-head`]: true,
+      [`${prefix}card-head-show-bullet`]: showTitleBullet,
+    });
 
-        const headExtra = extra ? (
-            <div className={`${prefix}card-extra`}>{extra}</div>
-        ) : null;
+    const headExtra = extra ? (
+      <div className={`${prefix}card-extra`}>{extra}</div>
+    ) : null;
 
-        return (
-            <div className={headCls}>
-                <div className={`${prefix}card-head-main`}>
-                    <div className={`${prefix}card-title`}>
-                        {title}
-                        {subTitle ? (
-                            <span className={`${prefix}card-subtitle`}>
-                                {subTitle}
-                            </span>
-                        ) : null}
-                    </div>
-                    {headExtra}
-                </div>
-            </div>
-        );
-    }
+    return (
+      <div className={headCls}>
+        <div className={`${prefix}card-head-main`}>
+          <div className={`${prefix}card-title`}>
+            {title}
+            {subTitle ? (
+              <span className={`${prefix}card-subtitle`}>
+                {subTitle}
+              </span>
+            ) : null}
+          </div>
+          {headExtra}
+        </div>
+      </div>
+    );
+  }
 }
 
 export default ConfigProvider.config(CardBulletHeader, {
-    componentName: 'Card',
+  componentName: 'Card',
 });

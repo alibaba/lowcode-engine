@@ -6,49 +6,50 @@ import Input from './input';
 import Icon from '../icon/index';
 
 function preventDefault(e) {
-    e.preventDefault();
+  e.preventDefault();
 }
 export default class Password extends Input {
-    state = {
-        hint: 'eye',
-        htmlType: 'password',
-    };
+  state = {
+    hint: 'eye',
+    htmlType: 'password',
+  };
 
-    static propTypes = {
-        ...Input.propTypes,
-        /**
+  static propTypes = {
+    ...Input.propTypes,
+    /**
          * 是否展示切换按钮
          */
-        showToggle: PropTypes.bool,
-    };
-    static defaultProps = {
-        ...Input.defaultProps,
-        showToggle: true,
-    };
+    showToggle: PropTypes.bool,
+  };
 
-    toggleEye = e => {
-        e.preventDefault();
+  static defaultProps = {
+    ...Input.defaultProps,
+    showToggle: true,
+  };
 
-        const eyeClose = this.state.hint === 'eye-close';
+  toggleEye = e => {
+    e.preventDefault();
 
-        this.setState({
-            hint: eyeClose ? 'eye' : 'eye-close',
-            htmlType: eyeClose || !this.props.showToggle ? 'password' : 'text',
-        });
-    };
+    const eyeClose = this.state.hint === 'eye-close';
 
-    render() {
-        const { showToggle, ...others } = this.props;
-        const { hint, htmlType } = this.state;
+    this.setState({
+      hint: eyeClose ? 'eye' : 'eye-close',
+      htmlType: eyeClose || !this.props.showToggle ? 'password' : 'text',
+    });
+  };
 
-        const extra = showToggle ? (
-            <Icon
-                type={hint}
-                onClick={this.toggleEye}
-                onMouseDown={preventDefault}
-            />
-        ) : null;
+  render() {
+    const { showToggle, ...others } = this.props;
+    const { hint, htmlType } = this.state;
 
-        return <Input {...others} extra={extra} htmlType={htmlType} />;
-    }
+    const extra = showToggle ? (
+      <Icon
+        type={hint}
+        onClick={this.toggleEye}
+        onMouseDown={preventDefault}
+      />
+    ) : null;
+
+    return <Input {...others} extra={extra} htmlType={htmlType} />;
+  }
 }

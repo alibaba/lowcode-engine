@@ -21,16 +21,19 @@ export type RendererConsumer<T> = (renderer: BuiltinSimulatorRenderer, data: T) 
 
 export default class ResourceConsumer<T = any> {
   private emitter = new EventEmitter();
+
   @obx.ref private _data: T | typeof UNSET = UNSET;
 
   private _providing?: () => void;
+
+  private _consuming?: () => void;
+
   constructor(provider: () => T, private consumer?: RendererConsumer<T>) {
     this._providing = autorun(() => {
       this._data = provider();
     });
   }
 
-  private _consuming?: () => void;
   consume(consumerOrRenderer: BuiltinSimulatorRenderer | ((data: T) => any)) {
     if (this._consuming) {
       return;
@@ -72,6 +75,7 @@ export default class ResourceConsumer<T = any> {
   }
 
   private _firstConsumed = false;
+
   private resovleFirst?: () => void;
 
   waitFirstConsume(): Promise<any> {

@@ -58,7 +58,7 @@ export function spyElementPrototypes<P extends {}>(Element: ElementType<P>, prop
 type FunctionPropertyNames<T> = {
   [K in keyof T]: T[K] extends (...args: any[]) => any ? K : never;
 }[keyof T] &
-  string;
+string;
 
 export function spyElementPrototype<P extends {}, K extends FunctionPropertyNames<P>>(
   Element: ElementType<P>,

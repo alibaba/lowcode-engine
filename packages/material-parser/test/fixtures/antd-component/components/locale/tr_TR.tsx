@@ -38,9 +38,9 @@ const localeValues: Locale = {
   },
   Upload: {
     uploading: 'Yükleniyor...',
-    removeFile: `Dosyayı kaldır`,
+    removeFile: 'Dosyayı kaldır',
     uploadError: 'Yükleme Hatası',
-    previewFile: `Dosyayı Önizle`,
+    previewFile: 'Dosyayı Önizle',
     downloadFile: 'Dosyayı indir',
   },
   Empty: {

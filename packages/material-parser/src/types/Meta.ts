@@ -1,4 +1,4 @@
-import { NodePath, Path } from 'ast-types';
+import { Path } from 'ast-types';
 
 export interface IFileMeta {
   src: string;

@@ -12,9 +12,9 @@ export interface SearchProps extends InputProps {
   onSearch?: (
     value: string,
     event?:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.MouseEvent<HTMLElement>
-      | React.KeyboardEvent<HTMLInputElement>,
+    | React.ChangeEvent<HTMLInputElement>
+    | React.MouseEvent<HTMLElement>
+    | React.KeyboardEvent<HTMLInputElement>,
   ) => void;
   enterButton?: React.ReactNode;
   loading?: boolean;
@@ -104,8 +104,8 @@ export default class Search extends React.Component<SearchProps, any> {
       return [
         React.isValidElement(suffix)
           ? React.cloneElement(suffix, {
-              key: 'suffix',
-            })
+            key: 'suffix',
+          })
           : null,
         icon,
       ];
@@ -136,9 +136,9 @@ export default class Search extends React.Component<SearchProps, any> {
         key: 'enterButton',
         ...(isAntdButton
           ? {
-              className: btnClassName,
-              size,
-            }
+            className: btnClassName,
+            size,
+          }
           : {}),
       });
     } else {
@@ -162,8 +162,8 @@ export default class Search extends React.Component<SearchProps, any> {
         button,
         React.isValidElement(addonAfter)
           ? React.cloneElement(addonAfter, {
-              key: 'addonAfter',
-            })
+            key: 'addonAfter',
+          })
           : null,
       ];
     }

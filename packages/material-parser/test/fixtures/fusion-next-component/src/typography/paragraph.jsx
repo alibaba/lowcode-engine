@@ -10,28 +10,28 @@ import Text from './text';
  * @order 2
  */
 class Paragraph extends React.Component {
-    static propTypes = {
-        prefix: PropTypes.string,
-        /**
+  static propTypes = {
+    prefix: PropTypes.string,
+    /**
          * 设置标签类型
          */
-        component: PropTypes.elementType,
-    };
+    component: PropTypes.elementType,
+  };
 
-    static defaultProps = {
-        prefix: 'next-',
-        type: 'long',
-        size: 'medium',
-        component: 'p',
-    };
+  static defaultProps = {
+    prefix: 'next-',
+    type: 'long',
+    size: 'medium',
+    component: 'p',
+  };
 
-    render() {
-        const { prefix, className, component, ...others } = this.props;
+  render() {
+    const { prefix, className, component, ...others } = this.props;
 
-        const cls = classNames(`${prefix}typography-paragraph`, className);
+    const cls = classNames(`${prefix}typography-paragraph`, className);
 
-        return <Text {...others} className={cls} component={component} />;
-    }
+    return <Text {...others} className={cls} component={component} />;
+  }
 }
 
 export default ConfigProvider.config(Paragraph);

@@ -6,7 +6,6 @@ import {
   ChunkType,
   FileType,
   ICodeStruct,
-  IContainerInfo,
 } from '../../../types';
 
 const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
@@ -19,7 +18,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       type: ChunkType.STRING,
       fileType: FileType.JSX,
       name: COMMON_CHUNK_NAME.ExternalDepsImport,
-      content: `import React from 'react';`,
+      content: 'import React from \'react\';',
       linkAfter: [],
     });
 

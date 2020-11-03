@@ -10,12 +10,15 @@ class Sortable extends Component<{
   children: ReactElement[];
 }> {
   private shell?: HTMLDivElement | null;
+
   private items?: Array<string | number>;
+
   private willDetach?: () => void;
+
   componentDidMount() {
     const box = this.shell!;
 
-    let isDragEnd: boolean = false;
+    let isDragEnd = false;
 
     /**
      * target node to be dragged

@@ -1,20 +1,27 @@
 {
   "name": "@ali/lowcode-code-generator",
-  "version": "1.0.7-0",
+  "version": "1.0.12",
   "description": "出码引擎 for LowCode Engine",
   "main": "lib/index.js",
+  "module": "es/index.js",
+  "typings": "es/index.d.ts",
   "files": [
     "lib",
+    "es",
     "demo"
   ],
   "scripts": {
-    "build": "rimraf lib && tsc",
+    "start": "ava --watch",
+    "build": "npm run build:bs",
+    "build:bs": "rimraf lib && rimraf es && build-scripts build --skip-demo",
+    "build:tsc": "rimraf lib && tsc",
     "demo": "node ./demo/demo.js",
     "test": "ava",
     "template": "node ./tools/createTemplate.js"
   },
   "dependencies": {
     "@ali/am-eslint-config": "*",
+    "@ali/lowcode-types": "^1.0.12",
     "@ali/my-prettier": "^1.0.0",
     "@babel/generator": "^7.9.5",
     "@babel/parser": "^7.9.4",
@@ -24,24 +31,34 @@
     "change-case": "^3.1.0",
     "jszip": "^3.5.0",
     "prettier": "^2.0.2",
+    "semver": "^7.3.2",
     "short-uuid": "^3.1.1"
   },
   "devDependencies": {
+    "@alib/build-scripts": "^0.1.18",
     "@types/babel__traverse": "^7.0.10",
     "ava": "^1.0.1",
     "rimraf": "^3.0.2",
     "ts-loader": "^6.2.2",
-    "ts-node": "^7.0.1",
+    "ts-node": "^8.10.2",
     "tsconfig-paths": "^3.9.0"
   },
   "ava": {
     "compileEnhancements": false,
     "snapshotDir": "test/fixtures/__snapshots__",
+    "files": [
+      "test/**/*.test.ts"
+    ],
     "extensions": [
       "ts"
     ],
     "require": [
-      "ts-node/register"
+      "ts-node/register/transpile-only"
+    ],
+    "sources": [
+      "src/**/*",
+      "test/**/*",
+      "test-cases/**/expected/**/*"
     ]
   },
   "publishConfig": {

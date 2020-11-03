@@ -1,4 +1,4 @@
-import { builders, namedTypes as t, NodePath, visit } from 'ast-types';
+import { builders, NodePath, visit } from 'ast-types';
 /**
  * If the path is a call expression, it recursively resolves to the
  * rightmost argument, stopping if it finds a React.createClass call expression
@@ -11,16 +11,13 @@ export default function resolveTranspiledClass(path: any) {
     visitFunctionDeclaration(arg) {
       classPath = new NodePath(
         builders.functionDeclaration(
+          // @ts-ignore
           arg.node.id || 'Default',
           [],
           builders.blockStatement([
             builders.returnStatement(
               builders.jsxElement(
-                builders.jsxOpeningElement(
-                  builders.jsxIdentifier('div'),
-                  [],
-                  true,
-                ),
+                builders.jsxOpeningElement(builders.jsxIdentifier('div'), [], true),
               ),
             ),
           ]),

@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { LocationDetail } from './location';
-import { Node,  isNode } from '../document/node/node';
+import { Node, isNode } from '../document/node/node';
 import { ComponentInstance } from '../simulator';
 import { obx } from '@ali/lowcode-editor-core';
 

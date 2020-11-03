@@ -1137,11 +1137,7 @@
                       },{
                         "name": "callback",
                         "description": "callback",
-                        "propType": "JsonSetter",
-                        "defaultValue": {
-                          "type": "JSFunction",
-                          "value": "(rowData, action, table) => {\n return table.editRow(rowData).then((row) => {\n console.log(row);\n })}"
-                        }
+                        "setter": "FunctionSetter"
                       }]
                     }
                   },
@@ -1149,7 +1145,7 @@
                     "title": "Title",
                     "callback": {
                       "type": "JSFunction",
-                      "value": "(rowData, action, table) => {\n return table.editRow(rowData).then((row) => {\n console.log(row);\n })}"
+                      "value": "function(){}"
                     }
                   }
                 }
@@ -13112,30 +13108,6 @@
   ],
   "componentList": [
     {
-      "title": "Util",
-      "children": [
-        {
-          "componentName": "Dropdown",
-          "title": "下拉菜单",
-          "icon": "",
-          "package": "@alifd/next",
-          "library": "Next",
-          "snippets": [
-            {
-              "title": "下拉菜单",
-              "screenshot": "",
-              "schema": {
-                "componentName": "Dropdown",
-                "props": {  "trigger": [{    "componentName": "Button",    "props": {      "type": "primary"    },    "children": "确定"  }],  "triggerType": "click"},
-                "children": [{  "componentName": "Menu",  "props": {    "style": {      "width": 200    }  },  "children": [{    "componentName": "Menu.Item",    "props": {},    "children": "Option 1"  }, {    "componentName": "Menu.Item",    "props": {      "disabled": false    },    "children": "option 2"  }, {    "componentName": "Menu.Item",    "props": {      "disabled": false    },    "children": "option 3"  }]}]
-              }
-            }
-          ]
-        }
-      ],
-      "icon": ""
-    },
-    {
       "title": "DataDisplay",
       "children": [
         {
@@ -15385,6 +15357,32 @@
                   "closable": true,
                   "autoUpload": true
                 }
+              }
+            }
+          ]
+        }
+      ],
+      "icon": ""
+    }
+  ],
+  "bizComponentList": [
+    {
+      "title": "Util",
+      "children": [
+        {
+          "componentName": "Dropdown",
+          "title": "下拉菜单",
+          "icon": "",
+          "package": "@alifd/next",
+          "library": "Next",
+          "snippets": [
+            {
+              "title": "下拉菜单",
+              "screenshot": "",
+              "schema": {
+                "componentName": "Dropdown",
+                "props": {  "trigger": [{    "componentName": "Button",    "props": {      "type": "primary"    },    "children": "确定"  }],  "triggerType": "click"},
+                "children": [{  "componentName": "Menu",  "props": {    "style": {      "width": 200    }  },  "children": [{    "componentName": "Menu.Item",    "props": {},    "children": "Option 1"  }, {    "componentName": "Menu.Item",    "props": {      "disabled": false    },    "children": "option 2"  }, {    "componentName": "Menu.Item",    "props": {      "disabled": false    },    "children": "option 3"  }]}]
               }
             }
           ]

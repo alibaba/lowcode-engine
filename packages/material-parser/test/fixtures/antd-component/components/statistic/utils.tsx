@@ -23,7 +23,7 @@ export interface CountdownFormatConfig extends FormatConfig {
 }
 
 // Countdown
-const timeUnits: [string, number][] = [
+const timeUnits: Array<[string, number]> = [
   ['Y', 1000 * 60 * 60 * 24 * 365], // years
   ['M', 1000 * 60 * 60 * 24 * 30], // months
   ['D', 1000 * 60 * 60 * 24], // days

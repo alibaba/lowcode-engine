@@ -23,7 +23,9 @@ export function getOriginalExtraKey(key: string): string {
 
 export class Props implements IPropParent {
   readonly id = uniqueId('props');
+
   @obx.val private items: Prop[] = [];
+
   @computed private get maps(): Map<string, Prop> {
     const maps = new Map();
     if (this.items.length > 0) {
@@ -57,9 +59,9 @@ export class Props implements IPropParent {
   constructor(readonly owner: Node, value?: PropsMap | PropsList | null, extras?: object) {
     if (Array.isArray(value)) {
       this.type = 'list';
-      this.items = value.map(item => new Prop(this, item.value, item.name, item.spread));
+      this.items = value.map(item => new Prop(this, item.value, item.name, item.spread, { propsMode: 'init' }));
     } else if (value != null) {
-      this.items = Object.keys(value).map(key => new Prop(this, value[key], key));
+      this.items = Object.keys(value).map(key => new Prop(this, value[key], key, false, { propsMode: 'init' }));
     }
     if (extras) {
       Object.keys(extras).forEach(key => {
@@ -151,41 +153,41 @@ export class Props implements IPropParent {
   query(path: string, stash = true): Prop | null {
     return this.get(path, stash);
     // todo: future support list search
-    let matchedLength = 0;
-    let firstMatched = null;
-    if (this.items) {
-      // target: a.b.c
-      // trys: a.b.c, a.b, a
-      let i = this.items.length;
-      while (i-- > 0) {
-        const expr = this.items[i];
-        if (!expr.key) {
-          continue;
-        }
-        const name = String(expr.key);
-        if (name === path) {
-          // completely match
-          return expr;
-        }
+    // let matchedLength = 0;
+    // let firstMatched = null;
+    // if (this.items) {
+    //   // target: a.b.c
+    //   // trys: a.b.c, a.b, a
+    //   let i = this.items.length;
+    //   while (i-- > 0) {
+    //     const expr = this.items[i];
+    //     if (!expr.key) {
+    //       continue;
+    //     }
+    //     const name = String(expr.key);
+    //     if (name === path) {
+    //       // completely match
+    //       return expr;
+    //     }
 
-        // fisrt match
-        const l = name.length;
-        if (path.slice(0, l + 1) === `${name}.`) {
-          matchedLength = l;
-          firstMatched = expr;
-        }
-      }
-    }
+    //     // fisrt match
+    //     const l = name.length;
+    //     if (path.slice(0, l + 1) === `${name}.`) {
+    //       matchedLength = l;
+    //       firstMatched = expr;
+    //     }
+    //   }
+    // }
 
-    let ret = null;
-    if (firstMatched) {
-      ret = firstMatched.get(path.slice(matchedLength + 1), true);
-    }
-    if (!ret && stash) {
-      return this.stash.get(path);
-    }
+    // let ret = null;
+    // if (firstMatched) {
+    //   ret = firstMatched.get(path.slice(matchedLength + 1), true);
+    // }
+    // if (!ret && stash) {
+    //   return this.stash.get(path);
+    // }
 
-    return ret;
+    // return ret;
   }
 
   /**
@@ -257,7 +259,7 @@ export class Props implements IPropParent {
    */
   [Symbol.iterator](): { next(): { value: Prop } } {
     let index = 0;
-    const items = this.items;
+    const { items } = this;
     const length = items.length || 0;
     return {
       next() {
@@ -300,6 +302,7 @@ export class Props implements IPropParent {
   }
 
   private purged = false;
+
   /**
    * 回收销毁
    */

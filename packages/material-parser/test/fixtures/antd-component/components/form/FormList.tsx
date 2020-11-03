@@ -16,7 +16,7 @@ interface Operation {
 }
 
 interface FormListProps {
-  name: string | number | (string | number)[];
+  name: string | number | Array<string | number>;
   children: (fields: FieldData[], operation: Operation) => React.ReactNode;
 }
 

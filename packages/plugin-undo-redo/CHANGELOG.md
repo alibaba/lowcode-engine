@@ -3,6 +3,61 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.12"></a>
+## [1.0.12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-undo-redo@1.0.11...@ali/lowcode-plugin-undo-redo@1.0.12) (2020-10-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-undo-redo
+
+<a name="1.0.11"></a>
+## [1.0.11](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-undo-redo@1.0.10...@ali/lowcode-plugin-undo-redo@1.0.11) (2020-10-19)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-undo-redo
+
+<a name="1.0.10"></a>
+## [1.0.10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-undo-redo@1.0.9...@ali/lowcode-plugin-undo-redo@1.0.10) (2020-09-29)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-undo-redo
+
+<a name="1.0.9"></a>
+## [1.0.9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-undo-redo@1.0.8...@ali/lowcode-plugin-undo-redo@1.0.9) (2020-09-28)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-undo-redo
+
+<a name="1.0.8"></a>
+## [1.0.8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-undo-redo@1.0.8-0...@ali/lowcode-plugin-undo-redo@1.0.8) (2020-09-28)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-undo-redo
+
+<a name="1.0.8-0"></a>
+## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-undo-redo@0.8.59...@ali/lowcode-plugin-undo-redo@1.0.8-0) (2020-09-09)
+
+
+### Bug Fixes
+
+* 🐛 Tag assets ([b460dcf](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b460dcf))
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+* remove vision dependency from plugin-undo-redo  ([08b93f9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/08b93f9))
+
+
+
+
+<a name="0.8.59"></a>
+## [0.8.59](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-undo-redo@0.8.58...@ali/lowcode-plugin-undo-redo@0.8.59) (2020-09-08)
 <a name="1.0.7-0"></a>
 ## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-undo-redo@1.0.6-0...@ali/lowcode-plugin-undo-redo@1.0.7-0) (2020-09-02)
 
@@ -11,6 +66,21 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-plugin-undo-redo
 
+<a name="0.8.58"></a>
+## [0.8.58](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-undo-redo@0.8.57...@ali/lowcode-plugin-undo-redo@0.8.58) (2020-09-03)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-undo-redo
+
+<a name="0.8.57"></a>
+## [0.8.57](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-undo-redo@0.8.56...@ali/lowcode-plugin-undo-redo@0.8.57) (2020-09-03)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-undo-redo
 <a name="1.0.6-0"></a>
 ## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-undo-redo@0.8.56...@ali/lowcode-plugin-undo-redo@1.0.6-0) (2020-09-02)
 
@@ -136,7 +206,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-plugin-undo-redo
 
->>>>>>> master
 <a name="0.8.47"></a>
 ## [0.8.47](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-undo-redo@0.8.46...@ali/lowcode-plugin-undo-redo@0.8.47) (2020-08-14)
 

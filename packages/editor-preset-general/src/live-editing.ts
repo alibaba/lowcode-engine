@@ -21,7 +21,7 @@ function getText(node: DocNode, prop: string) {
 
 export function liveEditingRule(target: EditingTarget) {
   // for vision components specific
-  const { node, rootElement, event } = target;
+  const { node, event } = target;
 
   const targetElement = event.target as HTMLElement;
 
@@ -29,7 +29,7 @@ export function liveEditingRule(target: EditingTarget) {
     return null;
   }
 
-  const innerText = targetElement.innerText;
+  const { innerText } = targetElement;
   const propTarget = ['title', 'label', 'text', 'content', 'children'].find(prop => {
     return equalText(getText(node, prop), innerText);
   });
@@ -48,12 +48,12 @@ function equalText(v: any, innerText: string) {
   if (typeof v !== 'string') {
     return false;
   }
-  return v.trim() === innerText
+  return v.trim() === innerText;
 }
 
 export const liveEditingSaveHander: SaveHandler = {
   condition: (prop) => {
-    const v = prop.getValue();
+    // const v = prop.getValue();
     return prop.type === 'expression'; // || isI18nData(v);
   },
   onSaveContent: (content, prop) => {
@@ -72,8 +72,8 @@ export const liveEditingSaveHander: SaveHandler = {
     } else {
       prop.setValue(data);
     }
-  }
-}
+  },
+};
 // TODO:
 // 非文本编辑
 //  国际化数据，改变当前

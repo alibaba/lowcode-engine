@@ -1,5 +1,5 @@
 import { ComponentType, ReactElement, Component, FunctionComponent } from 'react';
-import { ComponentMetadata, FieldConfig, InitialItem, FilterItem, AutorunItem, isI18nData } from '@ali/lowcode-types';
+import { ComponentMetadata, FieldConfig, InitialItem, FilterItem, AutorunItem } from '@ali/lowcode-types';
 import {
   ComponentMeta,
   addBuiltinComponentAction,
@@ -7,6 +7,7 @@ import {
   registerMetadataTransducer,
   TransformStage,
 } from '@ali/lowcode-designer';
+import { intl } from '@ali/lowcode-editor-core';
 import {
   OldPropConfig,
   OldPrototypeConfig,
@@ -15,7 +16,7 @@ import {
   upgradePropConfig,
   upgradeConfigure,
 } from './upgrade-metadata';
-import { intl } from '@ali/lowcode-editor-core';
+
 import { designer } from '../editor';
 
 const GlobalPropsConfigure: Array<{
@@ -208,27 +209,37 @@ function isNewSpec(options: any): options is ComponentMetadata {
 
 class Prototype {
   static addGlobalPropsReducer = addGlobalPropsReducer;
+
   static addGlobalPropsConfigure = addGlobalPropsConfigure;
+
   static addGlobalExtraActions = addGlobalExtraActions;
+
   static removeGlobalPropsConfigure = removeGlobalPropsConfigure;
+
   static overridePropsConfigure = overridePropsConfigure;
-  static create(config: OldPrototypeConfig | ComponentMetadata | ComponentMeta, extraConfigs: any = null, lookup: boolean = false) {
+
+  static create(config: OldPrototypeConfig | ComponentMetadata | ComponentMeta, extraConfigs: any = null, lookup = false) {
     return new Prototype(config, extraConfigs, lookup);
   }
 
   readonly isPrototype = true;
+
   readonly meta: ComponentMeta;
+
   readonly options: OldPrototypeConfig | ComponentMetadata;
+
   get componentName() {
     return this.getId();
   }
+
   get packageName() {
     return this.meta.npm?.package;
   }
+
   // 兼容原 vision 用法
   view: ComponentType | undefined;
 
-  constructor(input: OldPrototypeConfig | ComponentMetadata | ComponentMeta, extraConfigs: any = null, lookup: boolean = false) {
+  constructor(input: OldPrototypeConfig | ComponentMetadata | ComponentMeta, extraConfigs: any = null, lookup = false) {
     if (lookup) {
       this.meta = designer.getComponentMeta(input.componentName);
       this.options = this.meta.getMetadata();
@@ -282,6 +293,7 @@ class Prototype {
   }
 
   private category?: string;
+
   getCategory() {
     if (this.options.category != null) {
       return this.options.category;

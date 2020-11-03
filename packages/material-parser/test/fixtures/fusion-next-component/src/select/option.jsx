@@ -7,21 +7,21 @@ import PropTypes from 'prop-types';
  * Select.Option
  */
 export default class Option extends React.Component {
-    static propTypes = {
-        /**
+  static propTypes = {
+    /**
          * 选项值
          */
-        value: PropTypes.any.isRequired,
-        /**
+    value: PropTypes.any.isRequired,
+    /**
          * 是否禁用
          */
-        disabled: PropTypes.bool,
-        children: PropTypes.any,
-    };
+    disabled: PropTypes.bool,
+    children: PropTypes.any,
+  };
 
-    static _typeMark = 'next_select_option';
+  static _typeMark = 'next_select_option';
 
-    render() {
-        return this.props.children;
-    }
+  render() {
+    return this.props.children;
+  }
 }

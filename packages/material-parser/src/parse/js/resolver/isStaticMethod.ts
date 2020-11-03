@@ -1,5 +1,6 @@
 import { namedTypes as t } from 'ast-types';
 import isReactComponentStaticMember from './isReactComponentStaticMember';
+
 const { isReactComponentMethod } = require('react-docgen').utils;
 
 /**

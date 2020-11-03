@@ -1,11 +1,13 @@
 import { render } from 'react-dom';
 import { createElement } from 'react';
-import { Workbench, Skeleton, SettingsPrimaryPane, registerDefaults } from '@ali/lowcode-editor-skeleton';
-import { globalContext, Editor } from '@ali/lowcode-editor-core';
-import { Designer, LiveEditing, TransformStage, Node } from '@ali/lowcode-designer';
-import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
-import DesignerPlugin from '@ali/lowcode-plugin-designer';
 import '@ali/lowcode-editor-setters';
+import DesignerPlugin from '@ali/lowcode-plugin-designer';
+import { Designer, LiveEditing } from '@ali/lowcode-designer';
+import { globalContext, Editor } from '@ali/lowcode-editor-core';
+import { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
+import { Workbench, Skeleton, SettingsPrimaryPane, registerDefaults } from '@ali/lowcode-editor-skeleton';
+
+import { version } from '../package.json';
 import { liveEditingRule, liveEditingSaveHander } from './live-editing';
 
 export * from '@ali/lowcode-types';
@@ -22,7 +24,7 @@ editor.set(Skeleton, skeleton);
 editor.set('skeleton', skeleton);
 registerDefaults();
 
-export const designer = new Designer({ editor: editor });
+export const designer = new Designer({ editor });
 editor.set(Designer, designer);
 editor.set('designer', designer);
 
@@ -49,8 +51,6 @@ skeleton.add({
   },
   content: OutlineBackupPane,
 });
-
-const version = '0.9.0-beta';
 
 export default function GeneralWorkbench(props: any) {
   return createElement(Workbench, {

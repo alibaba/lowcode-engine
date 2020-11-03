@@ -133,11 +133,11 @@ export default class Avatar extends React.Component<AvatarProps, AvatarState> {
     const sizeStyle: React.CSSProperties =
       typeof size === 'number'
         ? {
-            width: size,
-            height: size,
-            lineHeight: `${size}px`,
-            fontSize: icon ? size / 2 : 18,
-          }
+          width: size,
+          height: size,
+          lineHeight: `${size}px`,
+          fontSize: icon ? size / 2 : 18,
+        }
         : {};
 
     let { children } = this.props;
@@ -158,8 +158,8 @@ export default class Avatar extends React.Component<AvatarProps, AvatarState> {
         const sizeChildrenStyle: React.CSSProperties =
           typeof size === 'number'
             ? {
-                lineHeight: `${size}px`,
-              }
+              lineHeight: `${size}px`,
+            }
             : {};
         children = (
           <span

@@ -22,24 +22,13 @@ editor.set(Skeleton, skeleton);
 editor.set('skeleton', skeleton);
 registerDefaults();
 
-export const designer = new Designer({ editor: editor });
+export const designer = new Designer({ editor });
 editor.set(Designer, designer);
 editor.set('designer', designer);
 
-let nodeCache: any = {};
 designer.project.onCurrentDocumentChange((doc) => {
-  nodeCache = {};
-  doc.nodesMap.forEach((node) => {
-    nodeCache[node.id] = node;
-  });
   doc.onRendererReady(() => {
     bus.emit(VE_EVENTS.VE_PAGE_PAGE_READY);
-  });
-  doc.onNodeCreate((node) => {
-    nodeCache[node.id] = node;
-  });
-  doc.onNodeDestroy((node) => {
-    delete nodeCache[node.id];
   });
 });
 
@@ -89,6 +78,18 @@ function upgradePropsReducer(props: any) {
 // 升级 Props
 designer.addPropsReducer(upgradePropsReducer, TransformStage.Upgrade);
 
+function getCurrentFieldIds() {
+  const fieldIds: any = [];
+  const nodesMap = designer?.currentDocument?.nodesMap || new Map();
+  nodesMap.forEach((curNode: any) => {
+    const fieldId = nodesMap?.get(curNode.id)?.getPropValue('fieldId');
+    if (fieldId) {
+      fieldIds.push(fieldId);
+    }
+  });
+  return fieldIds;
+}
+
 // 节点 props 初始化
 designer.addPropsReducer((props, node) => {
   // run initials
@@ -96,18 +97,10 @@ designer.addPropsReducer((props, node) => {
     ...props,
   };
   if (newProps.fieldId) {
-    const fieldIds: any = [];
-    Object.keys(nodeCache).forEach(nodeId => {
-      if (nodeId === node.id) {
-        return;
-      }
-      const fieldId = nodeCache[nodeId].getPropValue('fieldId');
-      if (fieldId) {
-        fieldIds.push(fieldId);
-      }
-    });
+    const fieldIds = getCurrentFieldIds();
+
     // 全局的关闭 uniqueIdChecker 信号，在 ve-utils 中实现
-    if (fieldIds.indexOf(props.fieldId) >= 0 && !window.__disable_unique_id_checker__) {
+    if (fieldIds.indexOf(props.fieldId) >= 0 && !(window as any).__disable_unique_id_checker__) {
       newProps.fieldId = undefined;
     }
   }
@@ -149,7 +142,7 @@ designer.addPropsReducer((props: any, node: Node) => {
     return {
       ...props,
       lifeCycles: {},
-    }
+    };
   }
   return props;
 }, TransformStage.Render);
@@ -230,8 +223,8 @@ designer.addPropsReducer((props: any, node: Node) => {
 // 设计器组件样式处理
 function stylePropsReducer(props: any, node: any) {
   if (props && typeof props === 'object' && props.__style__) {
-    const cssId = '_style_pesudo_' + node.id.replace(/\$/g, '_');
-    const cssClass = '_css_pesudo_' + node.id.replace(/\$/g, '_');
+    const cssId = `_style_pesudo_${ node.id.replace(/\$/g, '_')}`;
+    const cssClass = `_css_pesudo_${ node.id.replace(/\$/g, '_')}`;
     const styleProp = props.__style__;
     appendStyleNode(props, styleProp, cssClass, cssId);
   }
@@ -242,8 +235,8 @@ function stylePropsReducer(props: any, node: any) {
     appendStyleNode(props, styleProp, cssClass, cssId);
   }
   if (props && typeof props === 'object' && props.containerStyle) {
-    const cssId = '_style_pesudo_' + node.id;
-    const cssClass = '_css_pesudo_' + node.id.replace(/\$/g, '_');
+    const cssId = `_style_pesudo_${ node.id}`;
+    const cssClass = `_css_pesudo_${ node.id.replace(/\$/g, '_')}`;
     const styleProp = props.containerStyle;
     appendStyleNode(props, styleProp, cssClass, cssId);
   }
@@ -271,7 +264,7 @@ function appendStyleNode(props: any, styleProp: any, cssClass: string, cssId: st
 
     s.appendChild(doc.createTextNode(styleProp.replace(/(\d+)rpx/g, (a, b) => {
       return `${b / 2}px`;
-    }).replace(/:root/g, '.' + cssClass)));
+    }).replace(/:root/g, `.${ cssClass}`)));
   }
 }
 designer.addPropsReducer(stylePropsReducer, TransformStage.Render);

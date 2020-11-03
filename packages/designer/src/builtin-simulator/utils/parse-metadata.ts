@@ -16,6 +16,7 @@ export const primitiveTypes = [
   'any',
 ];
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 function makeRequired(propType: any, lowcodeType: string | object) {
   function lowcodeCheckTypeIsRequired(...rest: any[]) {
     return propType.isRequired(...rest);
@@ -32,6 +33,7 @@ function makeRequired(propType: any, lowcodeType: string | object) {
   return lowcodeCheckTypeIsRequired;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 function define(propType: any = PropTypes.any, lowcodeType: string | object = {}) {
   if (!propType._inner && propType.name !== 'lowcodeCheckType') {
     propType.lowcodeType = lowcodeType;
@@ -136,7 +138,7 @@ export function parseProps(component: any): PropConfig[] {
   Object.keys(propTypes).forEach(key => {
     const propTypeItem = propTypes[key];
     const defaultValue = defaultProps[key];
-    const lowcodeType = propTypeItem.lowcodeType;
+    const { lowcodeType } = propTypeItem;
     if (lowcodeType) {
       result[key] = {
         name: key,

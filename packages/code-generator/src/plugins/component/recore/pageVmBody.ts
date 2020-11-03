@@ -1,21 +1,22 @@
+import { NodeSchema } from '@ali/lowcode-types';
+
 import {
   BuilderComponentPlugin,
   BuilderComponentPluginFactory,
   ChunkType,
   ICodeStruct,
   IContainerInfo,
-  IComponentNodeItem,
-  INodeGeneratorContext,
+  IScope,
   CodePiece,
   PIECE_TYPE,
 } from '../../../types';
 import { COMMON_CHUNK_NAME } from '../../../const/generator';
 
-import { createNodeGenerator, generateString } from '../../../utils/nodeToJSX';
-import { generateExpression } from '../../../utils/jsExpression';
+import { createNodeGenerator } from '../../../utils/nodeToJSX';
 import { generateCompositeType } from '../../../utils/compositeType';
+import Scope from '../../../utils/Scope';
 
-const generateGlobalProps = (ctx: INodeGeneratorContext, nodeItem: IComponentNodeItem): CodePiece[] => {
+const generateGlobalProps = (nodeItem: NodeSchema): CodePiece[] => {
   return [
     {
       value: `{...globalProps.${nodeItem.componentName}}`,
@@ -24,11 +25,11 @@ const generateGlobalProps = (ctx: INodeGeneratorContext, nodeItem: IComponentNod
   ];
 };
 
-const generateCtrlLine = (ctx: INodeGeneratorContext, nodeItem: IComponentNodeItem): CodePiece[] => {
+const generateCtrlLine = (nodeItem: NodeSchema, scope: IScope): CodePiece[] => {
   const pieces: CodePiece[] = [];
 
   if (nodeItem.loop && nodeItem.loopArgs) {
-    const loopDataExp = generateCompositeType(nodeItem.loop);
+    const loopDataExp = generateCompositeType(nodeItem.loop, scope);
     pieces.push({
       type: PIECE_TYPE.ATTR,
       value: `x-for={${loopDataExp}}`,
@@ -41,7 +42,7 @@ const generateCtrlLine = (ctx: INodeGeneratorContext, nodeItem: IComponentNodeIt
   }
 
   if (nodeItem.condition) {
-    const conditionExp = generateCompositeType(nodeItem.condition);
+    const conditionExp = generateCompositeType(nodeItem.condition, scope);
     pieces.push({
       type: PIECE_TYPE.ATTR,
       value: `x-if={${conditionExp}}`,
@@ -52,13 +53,9 @@ const generateCtrlLine = (ctx: INodeGeneratorContext, nodeItem: IComponentNodeIt
 };
 
 const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
-  const generator = createNodeGenerator(
-    {
-      string: generateString,
-      expression: (input) => [generateExpression(input)],
-    },
-    [generateGlobalProps, generateCtrlLine],
-  );
+  const generator = createNodeGenerator({
+    nodePlugins: [generateGlobalProps, generateCtrlLine],
+  });
 
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     const next: ICodeStruct = {
@@ -66,8 +63,9 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
     };
 
     const ir = next.ir as IContainerInfo;
+    const scope = Scope.createRootScope();
 
-    const vxContent = generator(ir);
+    const vxContent = generator(ir, scope);
 
     next.chunks.push({
       type: ChunkType.STRING,

@@ -1,4 +1,6 @@
 import { namedTypes as t } from 'ast-types';
+import resolveGenericTypeAnnotation from './resolveGenericTypeAnnotation';
+
 const {
   isReactComponentClass,
   isReactForwardRefCall,
@@ -6,7 +8,6 @@ const {
   resolveToValue,
   getMemberValuePath,
 } = require('react-docgen').utils;
-import resolveGenericTypeAnnotation from './resolveGenericTypeAnnotation';
 const getTypeParameters = require('react-docgen/dist/utils/getTypeParameters').default;
 
 function getStatelessPropsPath(componentDefinition: any) {

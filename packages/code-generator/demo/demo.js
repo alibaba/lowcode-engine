@@ -59,7 +59,34 @@ function main() {
 
   builder.generateProject(schemaJson).then((result) => {
     displayResultInConsole(result);
-    writeResultToDisk(result, 'output/lowcodeDemo').then((response) => console.log('Write to disk: ', JSON.stringify(response)),);
+    writeResultToDisk(result, 'output/lowcodeDemo').then((response) => console.log('Write to disk: ', JSON.stringify(response)));
+    return result;
+  });
+}
+
+function demo() {
+  const schemaJson = fs.readFileSync('./demo/schema.json', { encoding: 'utf8' });
+  const createIceJsProjectBuilder = CodeGenerator.solutions.icejs;
+  const builder = createIceJsProjectBuilder();
+
+  const componentsMap = getComponentsMap();
+  const root = JSON.parse(schemaJson);
+
+  const fullSchema = {
+    version: '1.0.0',
+    config: {
+      historyMode: 'hash',
+      targetRootID: 'J_Container',
+    },
+    meta: {
+      name: 'demoproject',
+    },
+    componentsTree: [root],
+    componentsMap,
+  };
+
+  builder.generateProject(fullSchema).then((result) => {
+    displayResultInConsole(result);
     return result;
   });
 }
@@ -160,7 +187,7 @@ function exportProject() {
 
   builder.generateProject(schemaJson).then((result) => {
     displayResultInConsole(result);
-    writeResultToDisk(result, 'output/lowcodeDemo').then((response) => console.log('Write to disk: ', JSON.stringify(response)),);
+    writeResultToDisk(result, 'output/lowcodeDemo').then((response) => console.log('Write to disk: ', JSON.stringify(response)));
     return result;
   });
 }

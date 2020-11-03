@@ -15,7 +15,7 @@ export class BemTools extends Component<{ host: BuiltinSimulatorHost }> {
   }
 
   render() {
-    const host = this.props.host;
+    const { host } = this.props;
     const { scrollX, scrollY, scale } = host.viewport;
     return (
       <div className="lc-bem-tools" style={{ transform: `translate(${-scrollX * scale}px,${-scrollY * scale}px)` }}>

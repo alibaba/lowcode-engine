@@ -14,9 +14,9 @@ export interface IWidgetBaseConfig {
 }
 
 export interface WidgetConfig extends IWidgetBaseConfig {
-  type: "Widget";
+  type: 'Widget';
   props?: {
-    align?: "left" | "right" | "bottom" | "center" | "top";
+    align?: 'left' | 'right' | 'bottom' | 'center' | 'top';
     onInit?: (widget: IWidget) => void;
     title?: TitleContent;
   };
@@ -24,7 +24,7 @@ export interface WidgetConfig extends IWidgetBaseConfig {
 }
 
 export function isWidgetConfig(obj: any): obj is WidgetConfig {
-  return obj && obj.type === "Widget";
+  return obj && obj.type === 'Widget';
 }
 
 export interface DockProps {
@@ -37,25 +37,25 @@ export interface DockProps {
 }
 
 export interface DividerConfig extends IWidgetBaseConfig {
-  type: "Divider";
+  type: 'Divider';
   props?: {
-    align?: "left" | "right" | "center";
+    align?: 'left' | 'right' | 'center';
   };
 }
 
 export function isDividerConfig(obj: any): obj is DividerConfig {
-  return obj && obj.type === "Divider";
+  return obj && obj.type === 'Divider';
 }
 
 export interface IDockBaseConfig extends IWidgetBaseConfig {
   props?: DockProps & {
-    align?: "left" | "right" | "bottom" | "center" | "top";
+    align?: 'left' | 'right' | 'bottom' | 'center' | 'top';
     onInit?: (widget: IWidget) => void;
   };
 }
 
 export interface DockConfig extends IDockBaseConfig {
-  type: "Dock";
+  type: 'Dock';
   content?: string | ReactElement | ComponentType<any>;
 }
 
@@ -65,7 +65,7 @@ export function isDockConfig(obj: any): obj is DockConfig {
 
 // 按钮弹窗扩展
 export interface DialogDockConfig extends IDockBaseConfig {
-  type: "DialogDock";
+  type: 'DialogDock';
   dialogProps?: {
     title?: TitleContent;
     [key: string]: any;
@@ -78,7 +78,7 @@ export function isDialogDockConfig(obj: any): obj is DialogDockConfig {
 
 // 窗格扩展
 export interface PanelConfig extends IWidgetBaseConfig {
-  type: "Panel";
+  type: 'Panel';
   content?: string | ReactElement | ComponentType<any> | PanelConfig[]; // as children
   props?: PanelProps;
 }
@@ -106,7 +106,7 @@ export interface PanelProps {
 }
 
 export interface PanelDockConfig extends IDockBaseConfig {
-  type: "PanelDock";
+  type: 'PanelDock';
   panelName?: string;
   panelProps?: PanelProps & {
     area?: string;

@@ -11,13 +11,19 @@ import { findDOMNode } from 'react-dom';
 
 export default class PanelDock implements IWidget {
   readonly isWidget = true;
+
   readonly isPanelDock = true;
+
   readonly id: string;
+
   readonly name: string;
+
   readonly align?: string;
 
-  private inited: boolean = false;
+  private inited = false;
+
   private _body: ReactNode;
+
   get body() {
     if (this.inited) {
       return this._body;
@@ -34,6 +40,7 @@ export default class PanelDock implements IWidget {
   }
 
   private _shell: ReactInstance | null = null;
+
   get content(): ReactNode {
     return createElement(WidgetView, {
       widget: this,
@@ -45,10 +52,12 @@ export default class PanelDock implements IWidget {
   }
 
   getDOMNode() {
+    // eslint-disable-next-line react/no-find-dom-node
     return this._shell ? findDOMNode(this._shell) : null;
   }
 
-  @obx.ref private _visible: boolean = true;
+  @obx.ref private _visible = true;
+
   get visible() {
     return this._visible;
   }
@@ -58,7 +67,9 @@ export default class PanelDock implements IWidget {
   }
 
   readonly panelName: string;
+
   private _panel?: Panel;
+
   @computed get panel() {
     return this._panel || this.skeleton.getPanel(this.panelName);
   }

@@ -2,6 +2,7 @@ import { Component } from 'react';
 
 class Slot extends Component {
   static displayName = 'Slot';
+
   static componentMetadata = {
     componentName: 'Slot',
     configure: {

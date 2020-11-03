@@ -1,25 +1,25 @@
-import { Component, isValidElement, ReactElement, ReactNode } from 'react';
-import { Tab, Search, Input, Button } from '@alifd/next';
+import React, { Component } from 'react';
+import { Tab, Button, Message } from '@alifd/next';
 import { Editor } from '@ali/lowcode-editor-core';
 import { js_beautify, css_beautify } from 'js-beautify';
 import MonacoEditor from 'react-monaco-editor';
-import { Designer } from '@ali/lowcode-designer';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.main.js';
+
+import './index.scss';
+import transfrom from './transform';
+
 const TAB_KEY = {
   JS_TAB: 'js_tab',
   CSS_TAB: 'css_tab',
 };
 
-import './index.scss';
-import transfrom from './transform';
-
 const defaultEditorOption = {
   width: '100%',
-  height: '100%',
+  height: '95%',
   options: {
     readOnly: false,
     automaticLayout: true,
-    folding: true, //默认开启折叠代码功能
+    folding: true, // 默认开启折叠代码功能
     lineNumbers: 'on',
     wordWrap: 'off',
     formatOnPaste: true,
@@ -39,27 +39,37 @@ const defaultEditorOption = {
 };
 
 interface FunctionEventParam {
-  functionName: String;
+  functionName: string;
 }
 
 export default class SourceEditor extends Component<{
   editor: Editor;
 }> {
-  private monocoEditor: Object;
-  private monocoEditorCss: Object;
-  private editorCmd: Object;
-  private editorJsRef = React.createRef();
-  private editorCssRef = React.createRef();
-  private editorNode: Object;
-  private editorParentNode: Object;
+  private monocoEditor: any;
 
-  state = {
-    isFullScreen:false,
-    tabKey: TAB_KEY.JS_TAB,
+  private editorCmd: any;
+
+  private editorJsRef = React.createRef();
+
+  private editorCssRef = React.createRef();
+
+  private editorNode: any;
+
+  private originSize: {
+    width: '',
+    height: ''
   };
 
+  state = {
+    isShowSaveBtn: true,
+    visiable: false,
+    fullScreenStatus: false,
+  };
+
+  // eslint-disable-next-line react/no-deprecated
   componentWillMount() {
     const { editor } = this.props;
+
 
     // 添加函数
     editor.on('sourceEditor.addFunction', (params: FunctionEventParam) => {
@@ -71,24 +81,26 @@ export default class SourceEditor extends Component<{
       this.callEditorEvent('sourceEditor.focusByFunction', params);
     });
 
-
     // 插件面板关闭事件,监听规则同上
-    editor.on('skeleton.panel-dock.unactive',(pluginName,dock)=>{
-       if (pluginName == 'sourceEditor'){
-          this.saveSchema();
-       }
-    })
+    editor.on('skeleton.panel-dock.unactive', (pluginName) => {
+      if (pluginName == 'sourceEditor') {
+        this.saveSchema();
+        this.setState({
+          visiable: false,
+        });
+      }
+    });
 
-    let schema = editor.get('designer').project.getSchema();
-    this.initCode(schema);
+    // 插件面板打开事件,监听规则同上
+    editor.on('skeleton.panel-dock.active', (pluginName) => {
+      if (pluginName == 'sourceEditor') {
+        this.initCode();
+      }
+    });
+
+    this.initCode();
   }
 
-
-  componentDidMount () {
-    this.editorNode = this.editorJsRef.current; //记录当前dom节点；
-    this.editorParentNode = this.editorNode.parentNode; //记录父节点;
-
-  }
 
   /**
    * 执行编辑器事件
@@ -108,6 +120,8 @@ export default class SourceEditor extends Component<{
       });
     }
 
+    this.showJsEditor();
+
     if (eventName === 'sourceEditor.addFunction') {
       setTimeout(() => {
         this.addFunction(params);
@@ -119,8 +133,10 @@ export default class SourceEditor extends Component<{
     }
   };
 
-  initCode = (schema) => {
-    let jsCode = js_beautify(transfrom.schema2Code(schema), { indent_size: 2, indent_empty_lines: true });
+  initCode = () => {
+    const { editor } = this.props;
+    const schema = editor.get('designer').project.getSchema();
+    const jsCode = js_beautify(transfrom.schema2Code(schema), { indent_size: 2, indent_empty_lines: true });
     let css;
 
     if (schema.componentsTree[0].css) {
@@ -131,6 +147,8 @@ export default class SourceEditor extends Component<{
       jsCode,
       css,
       selectTab: TAB_KEY.JS_TAB,
+      visiable: true,
+      fullScreenStatus: false,
     });
   };
 
@@ -143,11 +161,11 @@ export default class SourceEditor extends Component<{
     const range = new monaco.Range(count, 1, count, 1);
     const functionCode = transfrom.getNewFunctionCode(params.functionName);
     this.monocoEditor.executeEdits('log-source', [
-      { identifier: 'event_id', range: range, text: functionCode, forceMoveMarkers: true },
+      { identifier: 'event_id', range, text: functionCode, forceMoveMarkers: true },
     ]);
 
     setTimeout(() => {
-      let newPosition = new monaco.Position(count + 1, 2);
+      const newPosition = new monaco.Position(count + 1, 2);
       this.monocoEditor.setPosition(newPosition);
       this.monocoEditor.focus();
     }, 100);
@@ -160,12 +178,12 @@ export default class SourceEditor extends Component<{
    * @param functionName
    */
   focusByFunctionName(params: FunctionEventParam) {
-    const functionName = params.functionName;
+    const { functionName } = params;
     const matchedResult = this.monocoEditor
       .getModel()
       .findMatches(`${functionName}\\s*\\([\\s\\S]*\\)[\\s\\S]*\\{`, false, true)[0];
     if (matchedResult) {
-      let monocoEditor = this.monocoEditor;
+      const { monocoEditor } = this;
       setTimeout(() => {
         monocoEditor.revealLineInCenter(matchedResult.range.startLineNumber);
         monocoEditor.setPosition({
@@ -177,40 +195,69 @@ export default class SourceEditor extends Component<{
     }
   }
 
-  editorDidMount = (editor, monaco, tab) => {
+  editorDidMount = (editor) => {
     this.monocoEditor = editor;
 
     if (this.editorCmd) {
       this.callEditorEvent(this.editorCmd.eventName, this.editorCmd.params);
     }
+
+    setTimeout(() => {
+      this.editorNode = this.editorJsRef.current; // 记录当前dom节点；
+    }, 0);
   };
 
   fullScreen = () => {
-    document.body.appendChild(this.editorNode)
-
+    console.log(this.editorNode);
+    document.body.appendChild(this.editorNode);
+    // this.originSize = {
+    //   width: this.editorNode.clientWidth,
+    //   height: this.editorNode.clientHeight
+    // }
     const fullScreenOption = {
       ...defaultEditorOption,
       lineNumbers: 'on',
       folding: true,
       scrollBeyondLastLine: true,
       minimap: {
-        enabled: true
-      }
-    }
+        enabled: true,
+      },
+    };
+
+    this.monocoEditor.layout({
+      height: document.body.clientHeight,
+      width: document.body.clientWidth,
+    });
 
     this.monocoEditor.updateOptions(fullScreenOption);
-    // if (this.editorParentNode) {
-    //   if (this.editorParentNode.firstChild) {
-    //     this.editorParentNode.insertBefore(this.editorNode, this.editorParentNode.firstChild);
-    //   } else {
-    //     this.editorParentNode.appendChild(this.editorNode);
-    //   }
-    // }
+    this.setState({
+      fullScreenStatus: true,
+    });
+  };
+
+
+  minScreen = () => {
+    const listNode = document.getElementById('editor-context-container');
+    listNode.insertBefore(this.editorNode, listNode.childNodes[0]);
+
+    const minScreenOption = {
+      ...defaultEditorOption,
+      minimap: {
+        enabled: false,
+      },
+    };
+
+
+    this.monocoEditor.updateOptions(minScreenOption);
+    this.setState({
+      fullScreenStatus: false,
+    });
+
   };
 
   onTabChange = (key) => {
     const { editor } = this.props;
-    let schema = editor.get('designer').project.getSchema();
+    const schema = editor.get('designer').project.getSchema();
     console.log(schema);
 
     this.setState({
@@ -218,17 +265,24 @@ export default class SourceEditor extends Component<{
     });
 
     if (key === TAB_KEY.JS_TAB) {
-      document.getElementById('cssEditorDom').setAttribute('style', 'display:none');
-      document.getElementById('jsEditorDom').setAttribute('style', 'block');
+      this.showJsEditor();
     } else {
-      document.getElementById('jsEditorDom').setAttribute('style', 'display:none');
-      document.getElementById('cssEditorDom').setAttribute('style', 'block');
+      this.showCssEditor();
     }
+  };
+
+  showJsEditor = () => {
+    document.getElementById('cssEditorDom').setAttribute('style', 'display:none');
+    document.getElementById('jsEditorDom').setAttribute('style', 'block');
+  };
+
+  showCssEditor = () => {
+    document.getElementById('jsEditorDom').setAttribute('style', 'display:none');
+    document.getElementById('cssEditorDom').setAttribute('style', 'block');
   };
 
   updateCode = (newCode) => {
     const { selectTab } = this.state;
-    const { editor } = this.props;
     if (selectTab === TAB_KEY.JS_TAB) {
       this.setState({
         jsCode: newCode,
@@ -238,55 +292,67 @@ export default class SourceEditor extends Component<{
         css: newCode,
       });
     }
-
-    // let functionMap = transfrom.code2Schema(newCode);
-    // let schema = editor.get('designer').project.getSchema();
-    // let newSchema = transfrom.setFunction2Schema(functionMap, schema);
-    // if (newSchema!=''){
-    //   editor.get('designer').project.load(newSchema,true);
-    
-
   };
 
 
-  saveSchema = () => {
-    const {jsCode} = this.state;
-    const {editor} = this.props;
-    let functionMap = transfrom.code2Schema(jsCode);
-    let schema = editor.get('designer').project.getSchema();
-    let oldSchemaStr = JSON.stringify(schema);
-    let newSchema = transfrom.setFunction2Schema(functionMap, schema);
+  saveSchema = (successFlag?: boolean) => {
+    const { jsCode, css } = this.state;
+    const { editor } = this.props;
+    const functionMap = transfrom.code2Schema(jsCode);
 
-    if (newSchema!='' && JSON.stringify(newSchema) != oldSchemaStr){
-      editor.get('designer').project.load(newSchema,true);
+    if (functionMap != null) {
+      const schema = editor.get('designer').project.getSchema();
+      // let oldSchemaStr = JSON.stringify(schema);
+      const newSchema = transfrom.setFunction2Schema(functionMap, css, schema);
+
+      if (newSchema != '') {
+        editor.get('designer').project.setSchema(newSchema);
+        successFlag && Message.success('保存成功');
+      }
     }
-  }
+
+
+  };
 
   render() {
-    const { selectTab, jsCode, css } = this.state;
+    const { selectTab, jsCode, css, isShowSaveBtn, visiable, fullScreenStatus } = this.state;
     const tabs = [
       { tab: 'index.js', key: TAB_KEY.JS_TAB },
       { tab: 'style.css', key: TAB_KEY.CSS_TAB },
     ];
 
+
     return (
       <div className="source-editor-container">
+
         <Tab size="small" shape="wrapped" onChange={this.onTabChange} activeKey={selectTab}>
           {tabs.map((item) => (
             <Tab.Item key={item.key} title={item.tab} />
           ))}
         </Tab>
-
-
-          <div style={{ height: '100%' }} className="editor-context-container">
+        { isShowSaveBtn && <div className="button-container"><Button type="primary" onClick={() => this.saveSchema(true)}>保存代码</Button></div>}
+        { visiable &&
+          <div style={{ height: '100%' }} className="editor-context-container" id="editor-context-container">
             <div id="jsEditorDom" className="editor-context" ref={this.editorJsRef}>
+
               <MonacoEditor
                 value={jsCode}
                 {...defaultEditorOption}
                 {...{ language: 'javascript' }}
                 onChange={(newCode) => this.updateCode(newCode)}
-                editorDidMount={(editor, monaco) => this.editorDidMount.call(this, editor, monaco, TAB_KEY.JS_TAB)}
+                editorDidMount={(editor, useMonaco) => this.editorDidMount.call(this, editor, useMonaco, TAB_KEY.JS_TAB)}
               />
+
+              {
+                 !fullScreenStatus ?
+                   <div className="full-screen-container" onClick={this.fullScreen}>
+                     <img src="https://gw.alicdn.com/tfs/TB1d7XqE1T2gK0jSZFvXXXnFXXa-200-200.png" />
+                   </div> :
+                   <div className="min-screen-container" onClick={this.minScreen}>
+                     <img src="https://gw.alicdn.com/tfs/TB1IIonZHY1gK0jSZTEXXXDQVXa-200-200.png" />
+                   </div>
+              }
+
             </div>
             <div className="editor-context" id="cssEditorDom" ref={this.editorCssRef}>
               <MonacoEditor
@@ -294,15 +360,12 @@ export default class SourceEditor extends Component<{
                 {...defaultEditorOption}
                 {...{ language: 'css' }}
                 onChange={(newCode) => this.updateCode(newCode)}
-                //editorDidMount={(editor, monaco) => this.editorDidMount.call(this, editor, monaco,TAB_KEY.CSS_TAB)}
+                // editorDidMount={(editor, monaco) => this.editorDidMount.call(this, editor, monaco,TAB_KEY.CSS_TAB)}
               />
             </div>
           </div>
+        }
 
-
-        {/* <div className="full-screen-container" onClick={this.fullScreen}>
-          <img src="https://gw.alicdn.com/tfs/TB1d7XqE1T2gK0jSZFvXXXnFXXa-200-200.png"></img>
-        </div> */}
       </div>
     );
   }

@@ -34,5 +34,5 @@ export interface IDependency {
   subName?: string; // 下标子组件名称
   main?: string; // 包导出组件入口文件路径 /lib/input
   dependencyType?: DependencyType; // 依赖类型 内/外
-  importName?: string; // 导入后名称
+  componentName?: string; // 导入后名称
 }

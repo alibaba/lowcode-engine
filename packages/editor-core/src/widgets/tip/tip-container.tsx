@@ -20,7 +20,7 @@ export class TipContainer extends Component {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (this.dispose) {
       this.dispose();
     }

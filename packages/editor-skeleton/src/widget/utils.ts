@@ -33,7 +33,7 @@ export function composeTitle(title?: TitleContent, icon?: IconType, tip?: TipCon
       title = {
         ...title,
         icon,
-        tip
+        tip,
       };
     }
   }

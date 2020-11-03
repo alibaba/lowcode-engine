@@ -1,6 +1,6 @@
 import { createContext, ReactNode, Component, PureComponent } from 'react';
 import { EventEmitter } from 'events';
-import { Balloon } from '@alifd/next';
+import { Drawer } from '@alifd/next';
 import { uniqueId } from '@ali/lowcode-utils';
 import './style.less';
 
@@ -8,6 +8,7 @@ export const PopupContext = createContext<PopupPipe>({} as any);
 
 export class PopupPipe {
   private emitter = new EventEmitter();
+
   private currentId?: string;
 
   create(props?: object): { send: (content: ReactNode, title: ReactNode) => void; show: (target: Element) => void } {
@@ -66,12 +67,13 @@ export default class PopupService extends Component<{ popupPipe?: PopupPipe; act
     this.popupPipe.purge();
   }
 
+
   render() {
     const { children, actionKey, safeId } = this.props;
     return (
       <PopupContext.Provider value={this.popupPipe}>
         {children}
-        <PopupContent key={'pop' + actionKey} safeId={safeId} />
+        <PopupContent key={`pop${ actionKey}`} safeId={safeId} />
       </PopupContext.Provider>
     );
   }
@@ -79,9 +81,10 @@ export default class PopupService extends Component<{ popupPipe?: PopupPipe; act
 
 export class PopupContent extends PureComponent<{ safeId?: string }> {
   static contextType = PopupContext;
+
   state: any = {
     visible: false,
-    pos: {},
+    offsetX: -300,
   };
 
   private dispose = (this.context as PopupPipe).onPopupChange((props, target) => {
@@ -100,44 +103,47 @@ export class PopupContent extends PureComponent<{ safeId?: string }> {
     this.setState(state);
   });
 
+  componentDidMount() {
+    const clientWidth = document.documentElement.clientWidth || document.body.clientWidth;
+    if (clientWidth >= 1860) {
+      this.setState({
+        offsetX: -400,
+      });
+    }
+  }
+
   componentWillUnmount() {
     this.dispose();
   }
 
+  onClose = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+
   render() {
-    const { content, visible, width, title, pos, actionKey } = this.state;
+    const { content, visible, title, actionKey, offsetX } = this.state;
     if (!visible) {
       return null;
     }
-    let avoidLaterHidden = true;
-    setTimeout(() => {
-      avoidLaterHidden = false;
-    }, 10);
+
 
     const id = uniqueId('ball');
 
     return (
-      <Balloon
-        className="lc-ballon"
-        align="l"
-        id={this.props.safeId}
-        alignEdge
-        safeNode={id}
+      <Drawer
+        width={360}
         visible={visible}
-        style={{ width }}
-        onVisibleChange={(visible) => {
-          if (avoidLaterHidden) {
-            return;
-          }
-          if (!visible) {
-            this.setState({ visible: false });
-          }
-        }}
-        trigger={<div className="lc-popup-placeholder" style={pos} />}
+        offset={[offsetX, 0]}
+        hasMask={false}
         triggerType="click"
+        canCloseByOutSideClick={false}
         animation={false}
-        needAdjust
-        shouldUpdatePosition
+        onClose={this.onClose}
+        id={this.props.safeId}
+        safeNode={id}
+        closeable
       >
         <div className="lc-ballon-title">{title}</div>
         <div className="lc-ballon-content">
@@ -145,7 +151,7 @@ export class PopupContent extends PureComponent<{ safeId?: string }> {
             {content}
           </PopupService>
         </div>
-      </Balloon>
+      </Drawer>
     );
   }
 }

@@ -3,6 +3,73 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.12"></a>
+## [1.0.12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-source-editor@1.0.11...@ali/lowcode-plugin-source-editor@1.0.12) (2020-10-20)
+
+
+### Bug Fixes
+
+* 合并分支 ([add2f23](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/add2f23))
+* fix array and sourceeditor bugs ([26b8b2c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/26b8b2c))
+
+
+
+
+<a name="1.0.11"></a>
+## [1.0.11](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-source-editor@1.0.10...@ali/lowcode-plugin-source-editor@1.0.11) (2020-10-19)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-source-editor
+
+<a name="1.0.10"></a>
+## [1.0.10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-source-editor@1.0.9...@ali/lowcode-plugin-source-editor@1.0.10) (2020-09-29)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-source-editor
+
+<a name="1.0.9"></a>
+## [1.0.9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-source-editor@1.0.8...@ali/lowcode-plugin-source-editor@1.0.9) (2020-09-28)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-source-editor
+
+<a name="1.0.8"></a>
+## [1.0.8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-source-editor@1.0.8-0...@ali/lowcode-plugin-source-editor@1.0.8) (2020-09-28)
+
+
+### Bug Fixes
+
+* source-editor bug & exp-setter bug ([5cd88d4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5cd88d4))
+
+
+### Features
+
+* 新增class-name setter ([a9f1131](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a9f1131))
+
+
+
+
+<a name="1.0.8-0"></a>
+## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-source-editor@0.8.31...@ali/lowcode-plugin-source-editor@1.0.8-0) (2020-09-09)
+
+
+### Bug Fixes
+
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+* 修改js面板的保存schema问题 ([0ee8892](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0ee8892))
+* fix source edit bug ([047247c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/047247c))
+
+
+
+
+<a name="0.8.31"></a>
+## [0.8.31](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-source-editor@0.8.30...@ali/lowcode-plugin-source-editor@0.8.31) (2020-09-03)
 <a name="1.0.7-0"></a>
 ## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-source-editor@1.0.6-0...@ali/lowcode-plugin-source-editor@1.0.7-0) (2020-09-02)
 
@@ -11,6 +78,13 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-plugin-source-editor
 
+<a name="0.8.30"></a>
+## [0.8.30](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-source-editor@0.8.29...@ali/lowcode-plugin-source-editor@0.8.30) (2020-09-03)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-source-editor
 <a name="1.0.6-0"></a>
 ## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-source-editor@0.8.29...@ali/lowcode-plugin-source-editor@1.0.6-0) (2020-09-02)
 

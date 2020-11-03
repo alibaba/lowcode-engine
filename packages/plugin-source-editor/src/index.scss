@@ -13,11 +13,17 @@
     height: 100%;
   }
 
+  .button-container{
+    position: absolute;
+    top: 0px;
+    right: 10px;
+  }
+
   .editor-context-container{
     height: 100%;
     width: 100%;
     position: absolute;
-    top: 35px;
+    top: 38px;
 
   }
 
@@ -31,17 +37,30 @@
     opacity: 1;
     height: 100%;
   }
+}
 
-  .full-screen-container{
-    position: absolute;
-    top: 40px;
-    right: 20px;
-    cursor: pointer;
-    img{
-      width: 20px;
-      height: 20px;
-    }
+
+.full-screen-container{
+  position: absolute;
+  top: 0px;
+  right: 20px;
+  z-index: 100;
+  cursor: pointer;
+  img{
+    width: 20px;
+    height: 20px;
   }
+}
 
+.min-screen-container{
+  position: absolute;
+  top: 10px;
+  right: 150px;
+  z-index: 100;
+  cursor: pointer;
+  img{
+    width: 20px;
+    height: 20px;
+  }
 }
 

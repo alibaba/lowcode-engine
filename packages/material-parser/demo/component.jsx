@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types,react/no-unused-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -37,7 +38,11 @@ Demo.propTypes = {
   optionalEnum: PropTypes.oneOf(['News', 'Photos']),
 
   // An object that could be one of many types
-  optionalUnion: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Demo)]),
+  optionalUnion: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.instanceOf(Demo),
+  ]),
 
   // An array of a certain type
   optionalArrayOf: PropTypes.arrayOf(PropTypes.number),

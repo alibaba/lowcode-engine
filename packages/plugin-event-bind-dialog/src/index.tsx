@@ -1,4 +1,4 @@
-import { Component, isValidElement, ReactElement, ReactNode } from 'react';
+import { Component } from 'react';
 import { Dialog, Search, Input } from '@alifd/next';
 import { PluginProps } from '@ali/lowcode-types';
 import MonacoEditor from 'react-monaco-editor';
@@ -11,7 +11,7 @@ const defaultEditorOption = {
   options: {
     readOnly: false,
     automaticLayout: true,
-    folding: true, //默认开启折叠代码功能
+    folding: true, // 默认开启折叠代码功能
     lineNumbers: 'on',
     wordWrap: 'off',
     formatOnPaste: true,
@@ -48,19 +48,21 @@ export default class EventBindDialog extends Component<PluginProps> {
     // },
   ];
 
+  private bindEventName :'';
+
   state: any = {
     visiable: false,
-    setterName:'event-setter',
+    setterName: 'event-setter',
     selectedEventName: '',
     eventName: '',
-    paramStr:''
+    paramStr: '',
   };
 
-  openDialog = (bindEventName: String) => {
-    this.setState({
-      visiable: true,
-      eventName: bindEventName,
-    });
+  openDialog = (bindEventName: string, isEdit:boolean) => {
+    this.bindEventName = bindEventName;
+
+    this.initEventName(isEdit);
+
   };
 
   closeDialog = () => {
@@ -69,53 +71,55 @@ export default class EventBindDialog extends Component<PluginProps> {
     });
   };
 
-
-
-
   componentDidMount() {
     const { editor, config } = this.props;
-    editor.on(`${config.pluginKey}.openDialog`, (bindEventName: String,setterName:String,paramStr:String) => {
-      console.log('paramStr:'+paramStr);
-      this.openDialog(bindEventName);
+    editor.on(`${config.pluginKey}.openDialog`, (bindEventName: string, setterName:string, paramStr:string, isEdit:boolean) => {
+      console.log(`paramStr:${ paramStr}`);
       this.setState({
         setterName,
-        paramStr
-      })
+        paramStr,
+      });
 
-      let schema = editor.get('designer').project.getSchema();
-      let pageNode = schema.componentsTree[0];
-      if (pageNode.methods){
+      const schema = editor.get('designer').project.getSchema();
+      const pageNode = schema.componentsTree[0];
+      if (pageNode.methods) {
         this.eventList = [];
-        for (let key in pageNode.methods){
+        for (const key in pageNode.methods) {
           this.eventList.push({
-            name:key
-          })
+            name: key,
+          });
         }
       }
+
+      this.openDialog(bindEventName, isEdit);
     });
   }
 
-  initEventName = () => {
-    const { bindEventName } = this.state;
-    let eventName = bindEventName;
-    this.eventList.map((item) => {
-      if (item.name === eventName) {
-        eventName = `${eventName}_new`;
-      }
-    });
+  initEventName = (isEdit:boolean) => {
+    let eventName = this.bindEventName;
 
+    if (!isEdit) {
+      this.eventList.forEach((item) => {
+        if (item.name === eventName) {
+          eventName = `${eventName}_new`;
+        }
+      });
+    }
+
+    this.setState({
+      eventName,
+      selectedEventName: (isEdit ? eventName : ''),
+      visiable: true,
+    });
+  };
+
+  onInputChange = (eventName: string) => {
     this.setState({
       eventName,
     });
   };
 
-  onInputChange = (eventName: String) => {
-    this.setState({
-      eventName,
-    });
-  };
-
-  onSelectItem = (eventName: String) => {
+  onSelectItem = (eventName: string) => {
     this.setState({
       selectedEventName: eventName,
     });
@@ -131,13 +135,13 @@ export default class EventBindDialog extends Component<PluginProps> {
     }
   };
 
-  onSearchEvent = (searchEventName: String) => {};
+  onSearchEvent = () => {};
 
   onOk = () => {
     console.log(this);
     const { editor } = this.props;
-    const {setterName,eventName,paramStr} = this.state;
-    editor.emit(`${setterName}.bindEvent`, eventName,paramStr);
+    const { setterName, eventName, paramStr } = this.state;
+    editor.emit(`${setterName}.bindEvent`, eventName, paramStr);
 
     // 选中的是新建事件
     if (this.state.selectedEventName == '') {
@@ -145,34 +149,34 @@ export default class EventBindDialog extends Component<PluginProps> {
       // debugger;
       editor.get('skeleton').getPanel('sourceEditor').show();
 
-      setTimeout(()=>{
+      setTimeout(() => {
         editor.emit('sourceEditor.addFunction', {
           functionName: this.state.eventName,
         });
-      },300)
-
+      }, 300);
     }
 
     this.closeDialog();
   };
 
-  onChangeEditor = (paramStr) =>{
+  onChangeEditor = (paramStr) => {
     this.setState({
-      paramStr
-    })
+      paramStr,
+    });
     // console.log(newCode);
-  }
+  };
 
 
   render() {
-    const { selectedEventName, eventName, visiable,paramStr } = this.state;
+    const { selectedEventName, eventName, visiable, paramStr } = this.state;
+    console.log('selectedEventName:' + selectedEventName);
     return (
       <Dialog
         visible={visiable}
         title="事件绑定"
         onClose={this.closeDialog}
         onCancel={this.closeDialog}
-        onOk={()=>this.onOk()}
+        onOk={() => this.onOk()}
       >
         <div className="event-dialog-body">
           <div className="dialog-left-container">
@@ -219,12 +223,11 @@ export default class EventBindDialog extends Component<PluginProps> {
             <div className="dialog-small-title">参数设置</div>
             <div className="editor-container">
               <MonacoEditor
-                  value = {paramStr}
-                  {...defaultEditorOption}
-                  {...{ language: 'javascript' }}
-                  onChange={(newCode) => this.onChangeEditor(newCode)}
-                  // editorDidMount={(editor, monaco) => this.editorDidMount.call(this, editor, monaco, TAB_KEY.JS_TAB)}
-                />
+                value={paramStr}
+                {...defaultEditorOption}
+                {...{ language: 'javascript' }}
+                onChange={(newCode) => this.onChangeEditor(newCode)}
+              />
             </div>
 
           </div>

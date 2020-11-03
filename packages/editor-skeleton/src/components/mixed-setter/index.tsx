@@ -115,9 +115,12 @@ export default class MixedSetter extends Component<{
   className?: string;
 }> {
   private setters = nomalizeSetters(this.props.setters);
+
   // set name ,used in setting Transducer
   static displayName = 'MixedSetter';
+
   @obx.ref private used?: string;
+
   @computed private getCurrentSetter() {
     const { field } = this.props;
     let firstMatched: SetterItem | undefined;
@@ -143,7 +146,7 @@ export default class MixedSetter extends Component<{
   private hasVariableSetter = this.setters.some((item) => item.name === 'VariableSetter');
 
   private useSetter = (name: string) => {
-    const { field, onChange } = this.props;
+    const { field } = this.props;
     if (name === 'VariableSetter') {
       const setterComponent = getSetter('VariableSetter')?.component as any;
       if (setterComponent && setterComponent.isPopup) {
@@ -171,6 +174,7 @@ export default class MixedSetter extends Component<{
   }
 
   private shell: HTMLDivElement | null = null;
+
   private checkIsBlockField() {
     if (this.shell) {
       const setter = this.shell.firstElementChild;
@@ -181,9 +185,11 @@ export default class MixedSetter extends Component<{
       }
     }
   }
+
   componentDidUpdate() {
     this.checkIsBlockField();
   }
+
   componentDidMount() {
     this.checkIsBlockField();
   }
@@ -201,8 +207,14 @@ export default class MixedSetter extends Component<{
     const { setter, props } = currentSetter;
     let setterProps: any = {};
     let setterType: any;
+    let dynamicProps: any = {};
     if (isDynamicSetter(setter)) {
       setterType = setter.call(field, field);
+      // { componentName: string; props: object }
+      if (typeof setterType === 'object' && typeof setterType.componentName === 'string') {
+        dynamicProps = setterType.props || {};
+        setterType = setterType.componentName;
+      }
     } else {
       setterType = setter;
     }
@@ -218,9 +230,10 @@ export default class MixedSetter extends Component<{
       field,
       ...restProps,
       ...extraProps,
+      ...dynamicProps,
       onInitial: () => {
         this.handleInitial(currentSetter);
-      }
+      },
     });
   }
 
@@ -307,7 +320,7 @@ export default class MixedSetter extends Component<{
     );
     return (
       <Dropdown trigger={triggerNode} triggerType="click" align="tr br">
-        <Menu selectMode="single" hasSelectedIcon={true} selectedKeys={usedName} onItemClick={this.useSetter}>
+        <Menu selectMode="single" hasSelectedIcon selectedKeys={usedName} onItemClick={this.useSetter}>
           {this.setters
             .filter((setter) => setter.list || setter.name === usedName)
             .map((setter) => {
@@ -344,7 +357,7 @@ export default class MixedSetter extends Component<{
     }
 
     return (
-      <div ref={(shell) => (this.shell = shell)} className={classNames('lc-setter-mixed', className)}>
+      <div ref={(shell) => { this.shell = shell; }} className={classNames('lc-setter-mixed', className)}>
         {contents.setterContent}
         <div className="lc-setter-actions">{contents.actions}</div>
       </div>

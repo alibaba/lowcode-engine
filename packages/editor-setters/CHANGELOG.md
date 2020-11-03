@@ -3,16 +3,102 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-<a name="1.0.7-0"></a>
-## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@1.0.6-0...@ali/lowcode-editor-setters@1.0.7-0) (2020-09-02)
+<a name="1.0.12"></a>
+## [1.0.12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@1.0.11...@ali/lowcode-editor-setters@1.0.12) (2020-10-20)
+
+
+### Bug Fixes
+
+* 合并分支 ([add2f23](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/add2f23))
+* fix function bug ([ab151df](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ab151df))
+
+
+
+
+<a name="1.0.11"></a>
+## [1.0.11](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@1.0.10...@ali/lowcode-editor-setters@1.0.11) (2020-10-19)
+
+
+### Bug Fixes
+
+* 将monaco基础包全部移除，采用cdn形式注入 ([510f1c0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/510f1c0))
+
+
+
+
+<a name="1.0.10"></a>
+## [1.0.10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@1.0.9...@ali/lowcode-editor-setters@1.0.10) (2020-09-29)
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-editor-setters
 
+<a name="1.0.9"></a>
+## [1.0.9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@1.0.8...@ali/lowcode-editor-setters@1.0.9) (2020-09-28)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-setters
+
+<a name="1.0.8"></a>
+## [1.0.8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@1.0.8-0...@ali/lowcode-editor-setters@1.0.8) (2020-09-28)
+
+
+### Bug Fixes
+
+* source-editor bug & exp-setter bug ([5cd88d4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5cd88d4))
+
+
+### Features
+
+* 新增class-name setter ([a9f1131](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a9f1131))
+
+
+
+
+<a name="1.0.8-0"></a>
+## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.21...@ali/lowcode-editor-setters@1.0.8-0) (2020-09-09)
+
+
+### Bug Fixes
+
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+* 清理代码依赖及版本 ([0b15d30](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0b15d30))
+* 适配Nav组件 ([7e9829f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7e9829f))
+* fix function-setter bug ([dced647](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/dced647))
+* fix function-setter bug ([8fd77df](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8fd77df))
+* fix NextTable callback function ([ce77375](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ce77375))
+
+
+### Features
+
+* 新增事件入参功能 ([0614fa7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0614fa7))
+* 新增functionSetter ([9359ac6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9359ac6))
+* add function setter ([114b6b0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/114b6b0))
+* add style-setters ([99b1d84](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/99b1d84))
+* setting-pane 新增removeProp 函数 ([b97c807](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b97c807))
+* tree 组件修改 ([7efa52f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7efa52f))
+
+
+
+
+<a name="1.0.7-0"></a>
+## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@1.0.6-0...@ali/lowcode-editor-setters@1.0.7-0) (2020-09-02)
+
+**Note:** Version bump only for package @ali/lowcode-editor-setters
 <a name="1.0.6-0"></a>
 ## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.19...@ali/lowcode-editor-setters@1.0.6-0) (2020-09-02)
+
+<a name="0.9.21"></a>
+## [0.9.21](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.20...@ali/lowcode-editor-setters@0.9.21) (2020-09-03)
+
+**Note:** Version bump only for package @ali/lowcode-editor-setters
+
+<a name="0.9.20"></a>
+## [0.9.20](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.19...@ali/lowcode-editor-setters@0.9.20) (2020-09-03)
+
 
 
 ### Bug Fixes
@@ -111,7 +197,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 # [1.0.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.14.0...@ali/lowcode-editor-setters@1.0.0) (2020-08-17)
 <a name="0.9.16"></a>
 ## [0.9.16](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-setters@0.9.15...@ali/lowcode-editor-setters@0.9.16) (2020-08-19)
->>>>>>> master
 
 
 

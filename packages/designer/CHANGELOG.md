@@ -3,9 +3,96 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.12"></a>
+## [1.0.12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@1.0.11...@ali/lowcode-designer@1.0.12) (2020-10-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+<a name="1.0.11"></a>
+## [1.0.11](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@1.0.10...@ali/lowcode-designer@1.0.11) (2020-10-19)
+
+
+### Bug Fixes
+
+* checkId 需要传递 ([bdff2b1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bdff2b1))
+
+
+
+
+<a name="1.0.10"></a>
+## [1.0.10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@1.0.9...@ali/lowcode-designer@1.0.10) (2020-09-29)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+<a name="1.0.9"></a>
+## [1.0.9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@1.0.8...@ali/lowcode-designer@1.0.9) (2020-09-28)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+<a name="1.0.8"></a>
+## [1.0.8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@1.0.8-0...@ali/lowcode-designer@1.0.8) (2020-09-28)
+
+
+### Bug Fixes
+
+* 支持 checkId 开关功能, 在 setSchema 时关闭, 避免 id 被不断重置 ([44bdda1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/44bdda1))
+
+
+
+
+<a name="1.0.8-0"></a>
+## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.55...@ali/lowcode-designer@1.0.8-0) (2020-09-09)
+
+
+### Bug Fixes
+
+* 不应该限定 parent 才做解绑操作 ([2e616e3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2e616e3))
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+* 兼容modal模式 ([1092ee9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1092ee9))
+* 解决 set('schema') 后 componentsTree 越来越多的 bug ([a171d3e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a171d3e))
+* 优化树子节点删除逻辑 ([47e814f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/47e814f))
+
+
+### Features
+
+* 🎸 支持设置模拟器的 viewport 的宽高和缩放级别 ([3a54241](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3a54241))
+* 新增simulatorurl，可以设置cdn使用simulator ([1f45b05](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1f45b05))
+
+
+
+
 <a name="1.0.7-0"></a>
 ## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@1.0.6-0...@ali/lowcode-designer@1.0.7-0) (2020-09-02)
 
+
+<a name="0.9.55"></a>
+## [0.9.55](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.54...@ali/lowcode-designer@0.9.55) (2020-09-08)
+
+
+### Bug Fixes
+
+* 拖拽时要解除与原来节点的关系 ([7a6bf2c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7a6bf2c))
+
+
+
+
+<a name="0.9.54"></a>
+## [0.9.54](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.53...@ali/lowcode-designer@0.9.54) (2020-09-03)
+
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+<a name="0.9.53"></a>
+## [0.9.53](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.52...@ali/lowcode-designer@0.9.53) (2020-09-03)
 
 
 
@@ -29,6 +116,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+**Note:** Version bump only for package @ali/lowcode-designer
 <a name="1.0.5-0"></a>
 ## [1.0.5-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@1.0.4-0...@ali/lowcode-designer@1.0.5-0) (2020-08-20)
 
@@ -80,7 +168,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="0.9.48"></a>
 ## [0.9.48](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.47...@ali/lowcode-designer@0.9.48) (2020-08-20)
->>>>>>> master
 
 
 
@@ -105,7 +192,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * support dropObject is data ([809fda7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/809fda7))
->>>>>>> master
 
 
 
@@ -199,7 +285,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="0.9.38"></a>
 ## [0.9.38](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@0.9.37...@ali/lowcode-designer@0.9.38) (2020-08-06)
->>>>>>> master
 
 
 ### Bug Fixes

@@ -12,40 +12,34 @@
   "scripts": {
     "build": "./scripts/build.sh",
     "clean": "rm -rf ./packages/*/lib ./packages/*/es ./packages/*/dist ./packages/*/build",
-    "commit": "git-cz",
-    "pub": "lerna publish --force-publish --cd-version prepatch",
+    "lint": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet",
+    "lint:fix": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet --fix",
+    "pub": "lerna publish --force-publish --cd-version patch",
     "setup": "./scripts/setup.sh",
     "start": "./scripts/start.sh",
     "start:server": "./scripts/start-server.sh",
     "test": "lerna run test --stream",
-    "test:snapshot": "lerna run test:snapshot"
+    "test:snapshot": "lerna run test:snapshot",
+    "xima:fix": "xima fix",
+    "xima:scan": "xima scan"
   },
-  "lint-staged": {
-    "*.{tsx,ts}": [
-      "eslint --quiet",
-      "git add"
-    ]
-  },
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-conventional-changelog"
+  "husky": {
+    "hooks": {
+      "pre-commit": "xima exec lint-staged",
+      "commit-msg": "xima exec commitlint -E HUSKY_GIT_PARAMS"
     }
   },
+  "lint-staged": {
+    "**/*.{css,scss,less}": "xima exec stylelint",
+    "**/*.{js,jsx,ts,tsx}": "xima exec eslint"
+  },
   "devDependencies": {
-    "@ali/lowcode-config": "^2.0.5",
     "ava": "^1.0.1",
-    "babel-eslint": "^10.0.3",
-    "commitizen": "^3.0.5",
-    "cz-conventional-changelog": "^2.1.0",
-    "eslint": "^6.5.1",
-    "git-cz": "^4.3.1",
-    "husky": "^4.2.3",
     "lerna": "^2.11.0",
-    "lint-staged": "^8.1.0",
-    "prettier": "^1.15.3",
     "ts-node": "^7.0.1",
     "tslib": "^1.9.3",
-    "typescript": "^3.2.2"
+    "typescript": "^3.2.2",
+    "xima": "^0.2.15"
   },
   "engines": {
     "node": ">=10.0.0"

@@ -80,7 +80,7 @@ urls: [
   "view.js *",
   "view1.js mobile|pc",
   "view2.js <device selector>"
-]*/
+] */
 export function assetItem(type: AssetType, content?: string | null, level?: AssetLevel, id?: string): AssetItem | null {
   if (!content) {
     return null;
@@ -95,10 +95,20 @@ export function assetItem(type: AssetType, content?: string | null, level?: Asse
 
 export class StylePoint {
   private lastContent: string | undefined;
+
   private lastUrl: string | undefined;
+
   private placeholder: Element | Text;
 
-  constructor(readonly level: number, readonly id?: string) {
+  readonly level: number;
+
+  readonly id: string;
+
+  constructor(level: number, id?: string) {
+    this.level = level;
+    if (id) {
+      this.id = id;
+    }
     let placeholder: any;
     if (id) {
       placeholder = document.head.querySelector(`style[data-id="${id}"]`);
@@ -237,6 +247,7 @@ export class AssetLoader {
   }
 
   private stylePoints = new Map<string, StylePoint>();
+
   private loadStyle(content: string | undefined | null, level: AssetLevel, isUrl?: boolean, id?: string) {
     if (!content) {
       return;
@@ -259,5 +270,24 @@ export class AssetLoader {
       return;
     }
     return isUrl ? load(content) : evaluate(content);
+  }
+
+  private async loadAsyncLibrary(asyncLibraryMap) {
+    const promiseList = []; const libraryKeyList = [];
+    for (const key in asyncLibraryMap) {
+      // 需要异步加载
+      if (asyncLibraryMap[key].async) {
+        promiseList.push(window[asyncLibraryMap[key].library]);
+        libraryKeyList.push(asyncLibraryMap[key].library);
+      }
+    }
+    await Promise.all(promiseList).then((mods) => {
+      if (mods.length > 0) {
+        mods.map((item, index) => {
+          window[libraryKeyList[index]] = item;
+          return item;
+        });
+      }
+    });
   }
 }

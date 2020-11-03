@@ -58,17 +58,20 @@ export default class InstanceNodeSelector extends React.Component<IProps, IState
       });
     }
   };
+
   onMouseOver = (node: Node) => (_: any, flag = true) => {
     if (node && typeof node.hover === 'function') {
       node.hover(flag);
     }
   };
+
   onMouseOut = (node: Node) => (_: any, flag = false) => {
     if (node && typeof node.hover === 'function') {
       node.hover(flag);
     }
   };
-  renderNodes = (node: Node) => {
+
+  renderNodes = (/* node: Node */) => {
     const nodes = this.state.parentNodes || [];
     const children = nodes.map((node, key) => {
       return (

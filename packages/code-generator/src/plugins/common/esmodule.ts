@@ -28,29 +28,32 @@ function groupDepsByPack(deps: IDependency[]): Record<string, IDependency[]> {
   };
 
   // TODO: main 这个信息到底怎么用，是不是外部包不需要使用？
-  // deps.forEach(dep => {
-  //   if (dep.dependencyType === DependencyType.Internal) {
-  //     addDep(
-  //       `${(dep as IInternalDependency).moduleName}${`/${dep.main}` || ''}`,
-  //       dep,
-  //     );
-  //   } else {
-  //     addDep(`${(dep as IExternalDependency).package}${`/${dep.main}` || ''}`, dep);
-  //   }
-  // });
-
+  const depMainBlackList = ['lib', 'lib/index', 'es', 'es/index', 'main'];
   deps.forEach((dep) => {
     if (dep.dependencyType === DependencyType.Internal) {
-      addDep(`${(dep as IInternalDependency).moduleName}`, dep);
+      addDep(`${(dep as IInternalDependency).moduleName}${dep.main ? `/${dep.main}` : ''}`, dep);
     } else {
-      addDep(`${(dep as IExternalDependency).package}`, dep);
+      let depMain = '';
+      // TODO: 部分类型的 main 暂时认为没用
+      if (dep.main && depMainBlackList.indexOf(dep.main) < 0) {
+        depMain = dep.main;
+      }
+      if (depMain.substring(0, 1) === '/') {
+        depMain = depMain.substring(1);
+      }
+      addDep(`${(dep as IExternalDependency).package}${depMain ? `/${depMain}` : ''}`, dep);
     }
   });
 
   return depMap;
 }
 
-function buildPackageImport(pkg: string, deps: IDependency[], targetFileType: string): ICodeChunk[] {
+function buildPackageImport(
+  pkg: string,
+  deps: IDependency[],
+  targetFileType: string,
+  useAliasName: boolean,
+): ICodeChunk[] {
   const chunks: ICodeChunk[] = [];
   let defaultImport = '';
   let defaultImportAs = '';
@@ -58,8 +61,9 @@ function buildPackageImport(pkg: string, deps: IDependency[], targetFileType: st
 
   deps.forEach((dep) => {
     const srcName = dep.exportName;
-    let targetName = dep.importName || dep.exportName;
+    let targetName = dep.componentName || dep.exportName;
 
+    // 如果是自组件，则导出父组件，并且根据自组件命名规则，判断是否需要定义标识符
     if (dep.subName) {
       if (targetName !== `${srcName}.${dep.subName}`) {
         if (!isValidIdentifier(targetName)) {
@@ -69,9 +73,14 @@ function buildPackageImport(pkg: string, deps: IDependency[], targetFileType: st
         chunks.push({
           type: ChunkType.STRING,
           fileType: targetFileType,
-          name: COMMON_CHUNK_NAME.FileVarDefine,
+          name: COMMON_CHUNK_NAME.ImportAliasDefine,
           content: `const ${targetName} = ${srcName}.${dep.subName};`,
           linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport, COMMON_CHUNK_NAME.InternalDepsImport],
+          ext: {
+            originalName: `${srcName}.${dep.subName}`,
+            aliasName: targetName,
+            dependency: dep,
+          },
         });
       }
 
@@ -86,13 +95,30 @@ function buildPackageImport(pkg: string, deps: IDependency[], targetFileType: st
       defaultImport = srcName;
       defaultImportAs = targetName;
     }
+
+    if (targetName !== srcName) {
+      chunks.push({
+        type: ChunkType.STRING,
+        fileType: targetFileType,
+        name: COMMON_CHUNK_NAME.ImportAliasDefine,
+        content: '',
+        linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport, COMMON_CHUNK_NAME.InternalDepsImport],
+        ext: {
+          originalName: srcName,
+          aliasName: targetName,
+          dependency: dep,
+        },
+      });
+    }
   });
 
-  const items = Object.keys(imports).map((src) => (src === imports[src] ? src : `${src} as ${imports[src]}`));
+  const items = Object.keys(imports).map((src) => {
+    return src === imports[src] || !useAliasName ? src : `${src} as ${imports[src]}`;
+  });
 
   const statementL = ['import'];
   if (defaultImport) {
-    statementL.push(defaultImportAs);
+    statementL.push(useAliasName ? defaultImportAs : defaultImport);
     if (items.length > 0) {
       statementL.push(',');
     }
@@ -127,13 +153,15 @@ function buildPackageImport(pkg: string, deps: IDependency[], targetFileType: st
 }
 
 type PluginConfig = {
-  fileType: string;
+  fileType?: string; // 导出的文件类型
+  useAliasName?: boolean; // 是否使用 componentName 重命名组件 identifier
 };
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?: PluginConfig) => {
-  const cfg: PluginConfig = {
+  const cfg = {
     fileType: FileType.JS,
-    ...config,
+    useAliasName: true,
+    ...(config || {}),
   };
 
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
@@ -147,7 +175,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?: Plu
       const packs = groupDepsByPack(ir.deps);
 
       Object.keys(packs).forEach((pkg) => {
-        const chunks = buildPackageImport(pkg, packs[pkg], cfg.fileType);
+        const chunks = buildPackageImport(pkg, packs[pkg], cfg.fileType, cfg.useAliasName);
         next.chunks.push(...chunks);
       });
     }

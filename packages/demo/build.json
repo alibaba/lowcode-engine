@@ -17,6 +17,8 @@
     "@alifd/next": "var window.Next",
     "@ali/visualengine": "var window.VisualEngine",
     "@ali/visualengine-utils": "var window.VisualEngineUtils",
+    "monaco-editor/esm/vs/editor/editor.api":"var window.monaco",
+    "monaco-editor/esm/vs/editor/editor.main.js":"var window.monaco",
     "rax": "var window.Rax"
   },
   "plugins": [

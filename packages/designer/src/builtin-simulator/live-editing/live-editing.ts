@@ -34,13 +34,15 @@ function addLiveEditingSpecificRule(rule: SpecificRule) {
 
 export class LiveEditing {
   static addLiveEditingSpecificRule = addLiveEditingSpecificRule;
+
   static addLiveEditingSaveHandler = addLiveEditingSaveHandler;
 
   @obx.ref private _editing: Prop | null = null;
+
   apply(target: EditingTarget) {
     const { node, event, rootElement } = target;
     const targetElement = event.target as HTMLElement;
-    const liveTextEditing = node.componentMeta.liveTextEditing;
+    const { liveTextEditing } = node.componentMeta;
 
     const editor = globalContext.get(Editor);
     const npm = node?.componentMeta?.npm;
@@ -64,14 +66,14 @@ export class LiveEditing {
             return false;
           }
           setterPropElement = queryPropElement(rootElement, targetElement, config.selector);
-          return setterPropElement ? true : false;
+          return !!setterPropElement;
         });
         propTarget = matched?.propTarget;
       }
     } else {
       specificRules.some((rule) => {
         matched = rule(target);
-        return matched ? true : false;
+        return !!matched;
       });
       if (matched) {
         propTarget = matched.propTarget;
@@ -79,15 +81,15 @@ export class LiveEditing {
       }
     }
 
-    if (!propTarget) {
-      // 自动纯文本编辑满足一下情况：
-      //  1. children 内容都是 Leaf 且都是文本（一期）
-      //  2. DOM 节点是单层容器，子集都是文本节点 (已满足)
-      const isAllText = node.children?.every(item => {
-        return item.isLeaf() && item.getProp('children')?.type === 'literal';
-      });
-      // TODO:
-    }
+    // if (!propTarget) {
+    //   // 自动纯文本编辑满足一下情况：
+    //   //  1. children 内容都是 Leaf 且都是文本（一期）
+    //   //  2. DOM 节点是单层容器，子集都是文本节点 (已满足)
+    //   const isAllText = node.children?.every(item => {
+    //     return item.isLeaf() && item.getProp('children')?.type === 'literal';
+    //   });
+    //   // TODO:
+    // }
 
     if (propTarget && setterPropElement) {
       const prop = node.getProp(propTarget, true)!;
@@ -119,8 +121,10 @@ export class LiveEditing {
         console.info(e.code);
         switch (e.code) {
           case 'Enter':
+            break;
             // TODO: check is richtext?
           case 'Escape':
+            break;
           case 'Tab':
             setterPropElement?.blur();
         }
@@ -128,7 +132,7 @@ export class LiveEditing {
         // enter
         // tab
       };
-      const focusout = (e: FocusEvent) => {
+      const focusout = (/* e: FocusEvent */) => {
         this.saveAndDispose();
       };
       setterPropElement.addEventListener('focusout', focusout);
@@ -147,8 +151,6 @@ export class LiveEditing {
     // TODO: process enter | esc events & joint the FocusTracker
 
     // TODO: upward testing for b/i/a html elements
-
-    
   }
 
   get editing() {
@@ -156,7 +158,9 @@ export class LiveEditing {
   }
 
   private _dispose?: () => void;
+
   private _save?: () => void;
+
   saveAndDispose() {
     if (this._save) {
       this._save();

@@ -1,0 +1,117 @@
+@import "~@ali/ve-less-variables/index.less";
+
+@text-color-active: #0079f2;
+
+.ve-component-list {
+  .ve-component-list-body {
+    .ve-component-list-sidebar {
+      flex: 0 0 110px;
+      width: 110px;
+      // height: 100%;
+      padding-top: 11px;
+      border-right: 1px solid var(--color-line-normal, rgba(31, 56, 88, 0.1));
+      overflow: auto;
+      .ve-component-list-navigator {
+        .navigator-group {
+          margin-bottom: 8px;
+          & > div {
+            display: flex;
+            align-items: center;
+            width: 100%;
+          }
+          .navigator-group-head {
+            padding: 0px 12px;
+            color: @dark-alpha-2;
+            .navigator-group-title {
+              padding: 4px 0;
+              width: 100%;
+              line-height: 16px;
+              font-size: @fontSize-5;
+              font-weight: 700;
+              border-bottom: 1px solid
+                var(--color-line-normal, rgba(31, 56, 88, 0.1));
+            }
+          }
+          .navigator-group-item {
+            height: 32px;
+            padding: 8px 12px;
+            color: #666666;
+            cursor: pointer;
+            .navigator-group-item-title {
+              font-size: @fontSize-5;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              text-align: left;
+            }
+            &:hover {
+              color: @text-color-active;
+            }
+            &.active {
+              background: rgba(0, 121, 242, 0.1);
+              color: @text-color-active;
+              border-right: 2px solid @text-color-active;
+            }
+          }
+        }
+      }
+    }
+    .ve-component-list-content {
+      flex: 1;
+      width: 250px;
+      // height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      .component-description-list {
+        padding: 10px 4px;
+        .component-description-item {
+          padding-bottom: 24px;
+          .component-description-item-header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            .component-description-item-title {
+              font-family: @font-family;
+              font-size: @fontSize-5;
+              font-weight: 700;
+              color: @text-color;
+              line-height: 20px;
+              padding-left: 8px;
+            }
+            .component-description-item-icon-group {
+              display: flex;
+              justify-content: flex-start;
+              align-items: center;
+              .component-description-item-icon {
+                margin-left: 4px;
+              }
+              icon {
+                position: relative;
+                font-size: 14px;
+                cursor: pointer;
+                color: rgba(31, 56, 88, 0.4);
+                transition: color @transition-duration @transition-ease;
+                &:hover {
+                  color: rgba(31, 56, 88, 0.6);
+                }
+                a {
+                  position: absolute;
+                  left: 0;
+                  top: 0;
+                  display: inline-block;
+                  width: 14px;
+                  height: 14px;
+                }
+              }
+            }
+          }
+          .component-description-item-snippets {
+            display: flex;
+            justify-content: flex-start;
+            flex-flow: row wrap;
+          }
+        }
+      }
+    }
+  }
+}

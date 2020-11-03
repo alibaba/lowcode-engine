@@ -6,7 +6,6 @@ import {
   ChunkType,
   FileType,
   ICodeStruct,
-  IProjectInfo,
 } from '../../../../../types';
 
 const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
@@ -14,8 +13,6 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
     const next: ICodeStruct = {
       ...pre,
     };
-
-    const ir = next.ir as IProjectInfo;
 
     next.chunks.push({
       type: ChunkType.STRING,
@@ -34,10 +31,10 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       content: `
         const appConfig = {
           app: {
-            rootId: '${ir.config.targetRootID}',
+            rootId: 'app',
           },
           router: {
-            type: '${ir.config.historyMode}',
+            type: 'hash',
           },
         };
         createApp(appConfig);
@@ -45,6 +42,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       linkAfter: [
         COMMON_CHUNK_NAME.ExternalDepsImport,
         COMMON_CHUNK_NAME.InternalDepsImport,
+        COMMON_CHUNK_NAME.ImportAliasDefine,
         COMMON_CHUNK_NAME.FileVarDefine,
         COMMON_CHUNK_NAME.FileUtilDefine,
       ],

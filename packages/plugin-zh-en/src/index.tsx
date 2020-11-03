@@ -8,13 +8,14 @@ import './index.less';
 
 export default class ZhEn extends PureComponent<PluginProps> {
   static displayName = 'LowcodeZhEn';
+
   state = {
     locale: globalLocale.getLocale(),
   };
 
   private dispose = globalLocale.onLocaleChange((locale) => {
     this.setState({
-      locale
+      locale,
     });
   });
 
@@ -25,9 +26,12 @@ export default class ZhEn extends PureComponent<PluginProps> {
   render() {
     const isZh = this.state.locale === 'zh-CN';
     return (
-      <div className="lowcode-plugin-zh-en" onClick={() => {
-        globalLocale.setLocale(isZh ? 'en-US' : 'zh-CN');
-      }}>
+      <div
+        className="lowcode-plugin-zh-en"
+        onClick={() => {
+          globalLocale.setLocale(isZh ? 'en-US' : 'zh-CN');
+        }}
+      >
         {isZh ? <IconZh size={20} /> : <IconEn size={20} />}
         <Tip direction="right">{intl('To Locale')}</Tip>
       </div>

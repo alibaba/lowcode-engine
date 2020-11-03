@@ -3,16 +3,93 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-<a name="1.0.7-0"></a>
-## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-preview@1.0.6-0...@ali/lowcode-plugin-sample-preview@1.0.7-0) (2020-09-02)
+<a name="1.0.12"></a>
+## [1.0.12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-preview@1.0.11...@ali/lowcode-plugin-sample-preview@1.0.12) (2020-10-20)
+
+
+### Bug Fixes
+
+* 合并分支 ([add2f23](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/add2f23))
+* fix array and sourceeditor bugs ([26b8b2c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/26b8b2c))
+
+
+
+
+<a name="1.0.11"></a>
+## [1.0.11](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-preview@1.0.10...@ali/lowcode-plugin-sample-preview@1.0.11) (2020-10-19)
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-plugin-sample-preview
 
+<a name="1.0.10"></a>
+## [1.0.10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-preview@1.0.9...@ali/lowcode-plugin-sample-preview@1.0.10) (2020-09-29)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-sample-preview
+
+<a name="1.0.9"></a>
+## [1.0.9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-preview@1.0.8...@ali/lowcode-plugin-sample-preview@1.0.9) (2020-09-28)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-sample-preview
+
+<a name="1.0.8"></a>
+## [1.0.8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-preview@1.0.8-0...@ali/lowcode-plugin-sample-preview@1.0.8) (2020-09-28)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-sample-preview
+
+<a name="1.0.8-0"></a>
+## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-preview@0.8.59...@ali/lowcode-plugin-sample-preview@1.0.8-0) (2020-09-09)
+
+
+### Bug Fixes
+
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+* schema should be componentsTree ([69a2a89](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/69a2a89))
+
+
+### Features
+
+* load assets for preview ([5376469](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5376469))
+* plugin preview ([18f149e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/18f149e))
+* support components ([d72c0d1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d72c0d1))
+
+
+
+
+<a name="1.0.7-0"></a>
+## [1.0.7-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-preview@1.0.6-0...@ali/lowcode-plugin-sample-preview@1.0.7-0) (2020-09-02)
+
+**Note:** Version bump only for package @ali/lowcode-plugin-sample-preview
 <a name="1.0.6-0"></a>
 ## [1.0.6-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-preview@0.8.56...@ali/lowcode-plugin-sample-preview@1.0.6-0) (2020-09-02)
+
+<a name="0.8.59"></a>
+## [0.8.59](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-preview@0.8.58...@ali/lowcode-plugin-sample-preview@0.8.59) (2020-09-08)
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-sample-preview
+
+<a name="0.8.58"></a>
+## [0.8.58](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-preview@0.8.57...@ali/lowcode-plugin-sample-preview@0.8.58) (2020-09-03)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-sample-preview
+
+<a name="0.8.57"></a>
+## [0.8.57](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-sample-preview@0.8.56...@ali/lowcode-plugin-sample-preview@0.8.57) (2020-09-03)
+
 
 
 ### Bug Fixes

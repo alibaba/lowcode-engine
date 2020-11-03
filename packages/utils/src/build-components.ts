@@ -1,17 +1,17 @@
-import { ComponentType, forwardRef, createElement } from 'react';
+import { ComponentType, forwardRef, createElement, FunctionComponent } from 'react';
 import { NpmInfo } from '@ali/lowcode-types';
-import { isReactComponent } from './is-react';
+import { isReactComponent, acceptsRef, wrapReactClass } from './is-react';
 import { isESModule } from './is-es-module';
 
 interface LibraryMap {
   [key: string]: string;
 }
 
-function accessLibrary(library: string | object) {
+function accessLibrary(library: string | Record<string, unknown>) {
   if (typeof library !== 'string') {
     return library;
   }
-  
+
   return (window as any)[library] || generateHtmlComp(library);
 }
 
@@ -80,13 +80,14 @@ export function buildComponents(libraryMap: LibraryMap, componentsMap: { [compon
   };
   Object.keys(componentsMap).forEach((componentName) => {
     let component = componentsMap[componentName];
-    if (isReactComponent(component)) {
-      components[componentName] = component;
-    } else {
+    if (!isReactComponent(component)) {
       component = findComponent(libraryMap, componentName, component);
-      if (component) {
-        components[componentName] = component;
+    }
+    if (component) {
+      if (!acceptsRef(component)) {
+        component = wrapReactClass(component as FunctionComponent);
       }
+      components[componentName] = component;
     }
   });
   return components;

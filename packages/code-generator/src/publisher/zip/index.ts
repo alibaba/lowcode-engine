@@ -1,11 +1,6 @@
-import {
-  IResultDir,
-  PublisherFactory,
-  IPublisher,
-  IPublisherFactoryParams,
-  PublisherError,
-} from '../../types';
-import { isNodeProcess, writeZipToDisk, generateProjectZip } from './utils'
+import { ResultDir } from '@ali/lowcode-types';
+import { PublisherFactory, IPublisher, IPublisherFactoryParams, PublisherError } from '../../types';
+import { isNodeProcess, writeZipToDisk, generateProjectZip } from './utils';
 
 // export type ZipBuffer = Buffer | Blob;
 export type ZipBuffer = Buffer;
@@ -28,14 +23,14 @@ export const createZipPublisher: PublisherFactory<ZipFactoryParams, ZipPublisher
   let { project, outputPath } = params;
 
   const getProject = () => project;
-  const setProject = (projectToSet: IResultDir) => {
+  const setProject = (projectToSet: ResultDir) => {
     project = projectToSet;
-  }
+  };
 
   const getOutputPath = () => outputPath;
   const setOutputPath = (path: string) => {
     outputPath = path;
-  }
+  };
 
   const publish = async (options: ZipFactoryParams = {}) => {
     const projectToPublish = options.project || project;
@@ -57,7 +52,7 @@ export const createZipPublisher: PublisherFactory<ZipFactoryParams, ZipPublisher
     } catch (error) {
       throw new PublisherError(error);
     }
-  }
+  };
 
   return {
     publish,
@@ -66,4 +61,4 @@ export const createZipPublisher: PublisherFactory<ZipFactoryParams, ZipPublisher
     getOutputPath,
     setOutputPath,
   };
-}
+};

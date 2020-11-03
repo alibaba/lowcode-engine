@@ -2,7 +2,7 @@ import { TransformedComponentMetadata, FieldConfig, SettingTarget } from '@ali/l
 import { IconSlot } from '../icons/slot';
 import { getConvertedExtraKey } from '@ali/lowcode-designer';
 
-export default function(metadata: TransformedComponentMetadata): TransformedComponentMetadata {
+export default function (metadata: TransformedComponentMetadata): TransformedComponentMetadata {
   const { componentName, configure = {} } = metadata;
   if (componentName === 'Leaf') {
     return {
@@ -48,7 +48,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
   const supportedLifecycles =
     supports.lifecycles ||
     (isRoot
-      ? /*[
+      ? /* [
           {
             description: '初始化时',
             name: 'constructor',
@@ -65,7 +65,7 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
             description: '卸载时',
             name: 'componentWillUnmount',
           },
-        ]*/ null
+        ] */ null
       : null);
   if (supportedLifecycles) {
     eventsDefinition.push({
@@ -207,7 +207,6 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
           },
 
           setValue(field: SettingTarget, eventData) {
-            debugger;
             const { eventDataList, eventList } = eventData;
             eventList.map((item) => {
               field.parent.clearPropValue(item.name);
@@ -216,11 +215,11 @@ export default function(metadata: TransformedComponentMetadata): TransformedComp
             eventDataList.map((item) => {
               field.parent.setPropValue(item.name, {
                 type: 'JSFunction',
-                value: `function(){ this.${item.relatedEventName}(${item.paramStr?item.paramStr:''}) }`,
+                // 需要传下入参
+                value: `function(){this.${item.relatedEventName}.apply(this,Array.prototype.slice.call(arguments).concat([${item.paramStr ? item.paramStr : ''}])) }`,
               });
               return item;
             });
-            return;
           },
         },
       ],

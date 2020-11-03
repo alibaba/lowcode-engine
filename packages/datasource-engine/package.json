@@ -1,0 +1,34 @@
+{
+  "name": "@ali/lowcode-datasource-engine",
+  "version": "0.1.16",
+  "description": "DataSource Engine for lowcode",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "typings": "es/index.d.ts",
+  "files": [
+    "handlers",
+    "src",
+    "lib",
+    "es"
+  ],
+  "scripts": {
+    "start": "tsc --watch",
+    "clean": "rm -rf es lib",
+    "build": "rm -rf es lib && tsc --module esnext --target es6 && mv lib es && tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "author": "",
+  "license": "ISC",
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
+  },
+  "devDependencies": {
+    "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "@ali/universal-mtop": "^5.1.9",
+    "query-string": "^6.13.1",
+    "tslib": "^2.0.1",
+    "universal-request": "^2.2.0"
+  }
+}

@@ -142,7 +142,7 @@ describe('Avatar Render', () => {
     expect(warnSpy).not.toHaveBeenCalled();
     mount(<Avatar size={64} icon="user" />);
     expect(warnSpy).toHaveBeenCalledWith(
-      `Warning: [antd: Avatar] \`icon\` is using ReactNode instead of string naming in v4. Please check \`user\` at https://ant.design/components/icon`,
+      'Warning: [antd: Avatar] `icon` is using ReactNode instead of string naming in v4. Please check `user` at https://ant.design/components/icon',
     );
     warnSpy.mockRestore();
   });

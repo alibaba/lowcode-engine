@@ -8,8 +8,11 @@ import Prototype from './prototype';
 
 export class Trunk {
   private trunk: any[] = [];
+
   private emitter: EventEmitter = new EventEmitter();
+
   private metaBundle = new Bundle();
+
   private componentPrototypeMocker: any;
 
   isReady() {
@@ -123,7 +126,7 @@ export class Trunk {
     console.warn('Trunk.setPackages is deprecated');
   }
 
-  getSetter(type: string): any{
+  getSetter(type: string): any {
     const setter = getSetter(type);
     if (setter?.component) {
       return setter.component;

@@ -2,14 +2,14 @@ import moment from 'moment';
 import { KEYCODE } from '../../util';
 
 export const PANEL = {
-    TIME: 'time-panel',
-    DATE: 'date-panel',
+  TIME: 'time-panel',
+  DATE: 'date-panel',
 };
 
 export const DEFAULT_TIME_FORMAT = 'HH:mm:ss';
 
 export function isFunction(obj) {
-    return !!(obj && obj.constructor && obj.call && obj.apply);
+  return !!(obj && obj.constructor && obj.call && obj.apply);
 }
 
 /**
@@ -18,64 +18,64 @@ export function isFunction(obj) {
  * @param {Object} target 目标值
  */
 export function resetValueTime(source, target) {
-    if (!moment.isMoment(source) || !moment.isMoment(target)) {
-        return source;
-    }
-    return source
-        .clone()
-        .hour(target.hour())
-        .minute(target.minute())
-        .second(target.second());
+  if (!moment.isMoment(source) || !moment.isMoment(target)) {
+    return source;
+  }
+  return source
+    .clone()
+    .hour(target.hour())
+    .minute(target.minute())
+    .second(target.second());
 }
 
 export function formatDateValue(value, format) {
-    const val =
+  const val =
         typeof value === 'string' ? moment(value, format, false) : value;
-    if (val && moment.isMoment(val) && val.isValid()) {
-        return val;
-    }
+  if (val && moment.isMoment(val) && val.isValid()) {
+    return val;
+  }
 
-    return null;
+  return null;
 }
 
 export function checkDateValue(props, propName, componentName) {
-    // 支持传入 moment 对象或字符串，字符串不检测是否为日期字符串
-    if (
-        props[propName] &&
+  // 支持传入 moment 对象或字符串，字符串不检测是否为日期字符串
+  if (
+    props[propName] &&
         !moment.isMoment(props[propName]) &&
         typeof props[propName] !== 'string'
-    ) {
-        return new Error(
-            `Invalid prop ${propName} supplied to ${componentName}. Required a moment object or format date string!`
-        );
-    }
+  ) {
+    return new Error(
+      `Invalid prop ${propName} supplied to ${componentName}. Required a moment object or format date string!`,
+    );
+  }
 }
 
 export function getDateTimeFormat(format, showTime, type) {
-    if (!format && type) {
-        format = {
-            date: 'YYYY-MM-DD',
-            month: 'YYYY-MM',
-            year: 'YYYY',
-            time: '',
-        }[type];
-    }
-    const timeFormat = showTime ? showTime.format || DEFAULT_TIME_FORMAT : '';
-    const dateTimeFormat = timeFormat ? `${format} ${timeFormat}` : format;
-    return {
-        format,
-        timeFormat,
-        dateTimeFormat,
-    };
+  if (!format && type) {
+    format = {
+      date: 'YYYY-MM-DD',
+      month: 'YYYY-MM',
+      year: 'YYYY',
+      time: '',
+    }[type];
+  }
+  const timeFormat = showTime ? showTime.format || DEFAULT_TIME_FORMAT : '';
+  const dateTimeFormat = timeFormat ? `${format} ${timeFormat}` : format;
+  return {
+    format,
+    timeFormat,
+    dateTimeFormat,
+  };
 }
 
 export function extend(source, target) {
-    for (const key in source) {
-        if (source.hasOwnProperty(key)) {
-            target[key] = source[key];
-        }
+  for (const key in source) {
+    if (source.hasOwnProperty(key)) {
+      target[key] = source[key];
     }
-    return target;
+  }
+  return target;
 }
 
 /**
@@ -85,49 +85,49 @@ export function extend(source, target) {
  * @param {String} type 类型 year month day
  */
 export function onDateKeydown(e, { format, dateInputStr, value }, type) {
-    if (
-        [KEYCODE.UP, KEYCODE.DOWN, KEYCODE.PAGE_UP, KEYCODE.PAGE_DOWN].indexOf(
-            e.keyCode
-        ) === -1
-    ) {
-        return;
-    }
+  if (
+    [KEYCODE.UP, KEYCODE.DOWN, KEYCODE.PAGE_UP, KEYCODE.PAGE_DOWN].indexOf(
+      e.keyCode,
+    ) === -1
+  ) {
+    return;
+  }
 
-    if (
-        (e.altKey &&
+  if (
+    (e.altKey &&
             [KEYCODE.PAGE_UP, KEYCODE.PAGE_DOWN].indexOf(e.keyCode) === -1) ||
         e.controlKey ||
         e.shiftKey
-    ) {
-        return;
+  ) {
+    return;
+  }
+
+  let date = moment(dateInputStr, format, true);
+
+  if (date.isValid()) {
+    const stepUnit = e.altKey ? 'year' : 'month';
+    switch (e.keyCode) {
+      case KEYCODE.UP:
+        date.subtract(1, type);
+        break;
+      case KEYCODE.DOWN:
+        date.add(1, type);
+        break;
+      case KEYCODE.PAGE_UP:
+        date.subtract(1, stepUnit);
+        break;
+      case KEYCODE.PAGE_DOWN:
+        date.add(1, stepUnit);
+        break;
     }
+  } else if (value) {
+    date = value.clone();
+  } else {
+    date = moment();
+  }
 
-    let date = moment(dateInputStr, format, true);
-
-    if (date.isValid()) {
-        const stepUnit = e.altKey ? 'year' : 'month';
-        switch (e.keyCode) {
-            case KEYCODE.UP:
-                date.subtract(1, type);
-                break;
-            case KEYCODE.DOWN:
-                date.add(1, type);
-                break;
-            case KEYCODE.PAGE_UP:
-                date.subtract(1, stepUnit);
-                break;
-            case KEYCODE.PAGE_DOWN:
-                date.add(1, stepUnit);
-                break;
-        }
-    } else if (value) {
-        date = value.clone();
-    } else {
-        date = moment();
-    }
-
-    e.preventDefault();
-    return date.format(format);
+  e.preventDefault();
+  return date.format(format);
 }
 
 /**
@@ -137,47 +137,45 @@ export function onDateKeydown(e, { format, dateInputStr, value }, type) {
  * @param {String} type second hour minute
  */
 export function onTimeKeydown(e, { format, timeInputStr, steps, value }, type) {
-    if (
-        [KEYCODE.UP, KEYCODE.DOWN, KEYCODE.PAGE_UP, KEYCODE.PAGE_DOWN].indexOf(
-            e.keyCode
-        ) === -1
-    )
-        return;
-    if (
-        (e.altKey &&
+  if (
+    [KEYCODE.UP, KEYCODE.DOWN, KEYCODE.PAGE_UP, KEYCODE.PAGE_DOWN].indexOf(
+      e.keyCode,
+    ) === -1
+  ) return;
+  if (
+    (e.altKey &&
             [KEYCODE.PAGE_UP, KEYCODE.PAGE_DOWN].indexOf(e.keyCode) === -1) ||
         e.controlKey ||
         e.shiftKey
-    )
-        return;
+  ) return;
 
-    let time = moment(timeInputStr, format, true);
+  let time = moment(timeInputStr, format, true);
 
-    if (time.isValid()) {
-        const stepUnit = e.altKey ? 'hour' : 'minute';
-        switch (e.keyCode) {
-            case KEYCODE.UP:
-                time.subtract(steps[type], type);
-                break;
-            case KEYCODE.DOWN:
-                time.add(steps[type], type);
-                break;
-            case KEYCODE.PAGE_UP:
-                time.subtract(steps[stepUnit], stepUnit);
-                break;
-            case KEYCODE.PAGE_DOWN:
-                time.add(steps[stepUnit], stepUnit);
-                break;
-        }
-    } else if (value) {
-        time = value.clone();
-    } else {
-        time = moment()
-            .hours(0)
-            .minutes(0)
-            .seconds(0);
+  if (time.isValid()) {
+    const stepUnit = e.altKey ? 'hour' : 'minute';
+    switch (e.keyCode) {
+      case KEYCODE.UP:
+        time.subtract(steps[type], type);
+        break;
+      case KEYCODE.DOWN:
+        time.add(steps[type], type);
+        break;
+      case KEYCODE.PAGE_UP:
+        time.subtract(steps[stepUnit], stepUnit);
+        break;
+      case KEYCODE.PAGE_DOWN:
+        time.add(steps[stepUnit], stepUnit);
+        break;
     }
+  } else if (value) {
+    time = value.clone();
+  } else {
+    time = moment()
+      .hours(0)
+      .minutes(0)
+      .seconds(0);
+  }
 
-    e.preventDefault();
-    return time.format(format);
+  e.preventDefault();
+  return time.format(format);
 }

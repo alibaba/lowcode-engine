@@ -7,8 +7,8 @@ import {
   EntryField,
   InlineField,
   PlainField,
-  PopupField
-} from "./fields";
+  PopupField,
+} from './fields';
 
 import { ComponentClass, Component, isValidElement, createElement } from 'react';
 import { createSetterContent, getSetter } from '@ali/lowcode-editor-core';
@@ -37,7 +37,7 @@ const FIELD_TYPE_MAP: any = {
   inline: InlineField,
   plain: PlainField,
   popup: PopupField,
-  tab: AccordionField
+  tab: AccordionField,
 };
 
 export class SettingField extends Component {
@@ -67,7 +67,7 @@ export class SettingField extends Component {
     const { prop, selected, addonProps } = this.props;
     const display = this.props.forceDisplay || prop.getDisplay();
 
-    if (display === "none") {
+    if (display === 'none') {
       return null;
     }
 
@@ -82,7 +82,7 @@ export class SettingField extends Component {
       prop,
       setUseVariable: () => prop.setUseVariable(!prop.isUseVariable()),
       tip: prop.getTip(),
-      title: prop.getTitle()
+      title: prop.getTitle(),
     };
 
     // 部分 Field 所需要的额外 fieldProps
@@ -90,7 +90,7 @@ export class SettingField extends Component {
     const ctx = context;
     const plugin = ctx.getPlugin(VE_HOOKS.VE_SETTING_FIELD_PROVIDER);
     let Field;
-    if (typeof plugin === "function") {
+    if (typeof plugin === 'function') {
       Field = plugin(display, FIELD_TYPE_MAP, prop);
     }
     if (!Field) {
@@ -98,7 +98,7 @@ export class SettingField extends Component {
     }
     this._prepareProps(display, extraProps);
 
-    if (display === "entry") {
+    if (display === 'entry') {
       return <Field {...{ ...standardProps, ...extraProps }} />;
     }
 
@@ -110,7 +110,7 @@ export class SettingField extends Component {
     const fieldProps = { ...standardProps, ...extraProps };
 
     if (prop.isUseVariable() && !this.variableSetter.isPopup) {
-      props.placeholder = "请输入表达式: ${var}";
+      props.placeholder = '请输入表达式: ${var}';
       props.key = `${prop.getId()}-variable`;
       setter = createElement(this.variableSetter, props);
       return <Field {...fieldProps}>{setter}</Field>;
@@ -128,20 +128,20 @@ export class SettingField extends Component {
 
     setter = prop.getSetter();
     if (
-      typeof setter === "object" &&
-      "componentName" in setter &&
+      typeof setter === 'object' &&
+      'componentName' in setter &&
       !(isValidElement(setter) || isReactClass(setter))
     ) {
       const { componentName: setterType, props: setterProps } = setter as any;
       setter = createSetterContent(setterType, {
         ...addonProps,
         ...setterProps,
-        ...props
+        ...props,
       });
     } else {
       setter = createSetterContent(setter, {
         ...addonProps,
-        ...props
+        ...props,
       });
     }
 
@@ -150,22 +150,22 @@ export class SettingField extends Component {
 
   private supportMultiSetter() {
     const { prop } = this.props;
-    const setter = prop && prop.getConfig && prop.getConfig("setter");
+    const setter = prop && prop.getConfig && prop.getConfig('setter');
     return prop.isSupportVariable() || Array.isArray(setter);
   }
 
   private _prepareProps(displayType: string, extraProps: IExtraProps): void {
     const { prop } = this.props;
     extraProps.propName = prop.isGroup()
-      ? "组合属性，无属性名称"
+      ? '组合属性，无属性名称'
       : prop.getName();
     switch (displayType) {
-      case "title":
+      case 'title':
         break;
-      case "block":
+      case 'block':
         Object.assign(extraProps, { isGroup: prop.isGroup() });
         break;
-      case "accordion":
+      case 'accordion':
         Object.assign(extraProps, {
           headDIY: true,
           isExpand: prop.isExpand(),
@@ -173,10 +173,10 @@ export class SettingField extends Component {
           onExpandChange: () => prop.onExpandChange(() => this.forceUpdate()),
           toggleExpand: () => {
             prop.toggleExpand();
-          }
+          },
         });
         break;
-      case "entry":
+      case 'entry':
         Object.assign(extraProps, { stageName: prop.getName() });
         break;
       default:

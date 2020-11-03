@@ -21,7 +21,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       type: ChunkType.STRING,
       fileType: FileType.TS,
       name: COMMON_CHUNK_NAME.ExternalDepsImport,
-      content: `import { BaseController } from '@ali/recore-renderer';`,
+      content: 'import { BaseController } from \'@ali/recore-renderer\';',
       linkAfter: [],
     });
 
@@ -37,7 +37,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       type: ChunkType.STRING,
       fileType: FileType.TS,
       name: CLASS_DEFINE_CHUNK_NAME.End,
-      content: `}`,
+      content: '}',
       linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.End]],
     });
 
