@@ -209,7 +209,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     return {};
   });
 
-  readonly asycnLibraryMap: { [key: string]: {} } = {};
+  readonly asyncLibraryMap: { [key: string]: {} } = {};
 
   readonly libraryMap: { [key: string]: string } = {};
 
@@ -230,7 +230,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       library.forEach((item) => {
         this.libraryMap[item.package] = item.library;
         if (item.async) {
-          this.asycnLibraryMap[item.package] = item;
+          this.asyncLibraryMap[item.package] = item;
         }
         if (item.urls) {
           libraryAsset.push(item.urls);
@@ -270,7 +270,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     await this.injectionConsumer.waitFirstConsume();
 
     // 加载异步Library
-    await renderer.loadAsyncLibrary(this.asycnLibraryMap);
+    await renderer.loadAsyncLibrary(this.asyncLibraryMap);
 
     // step 5 ready & render
     renderer.run();
