@@ -19,13 +19,19 @@ import { create } from '@ali/lowcode-datasource-engine/interpret';
 // 面向出码，需要给处理过后的内容
 import { create } from '@ali/lowcode-datasource-engine/runtime'; 
 
+import { createFetchHandler } from '@ali/lowcode-datasource-fetch-handler';
+
+import { createMtopHandler } from '@ali/lowcode-datasource-mtop-handler';
+
 // dataSource 可以是 schema 协议内容 或者是运行时的转化后的配置内容 （出码专用）
 
+
 // context 上下文(setState 为必选)
-const dsf = create(dataSource, context, {
+const dataSourceEngine = create(dataSource, context, {
   requestHandlersMap: { // 可选参数，以下内容为当前默认的内容
     urlParams: handlersMap.urlParams('?bar=1&test=2'),
-    mtop: mtophandlers,
+    fetch: createFetchHandler,
+    mtop: createMtopHandler
   },
 });
 
