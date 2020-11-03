@@ -42,7 +42,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
       if (this._libraryMap !== host.libraryMap || this._componentsMap !== host.designer.componentsMap) {
         this._libraryMap = host.libraryMap || {};
         this._componentsMap = host.designer.componentsMap;
-        // this.buildComponents();
+        this.buildComponents();
       }
 
       // sync designMode
@@ -141,10 +141,9 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
     return loader.load(asset);
   }
 
-  async loadAsyncLibrary(asycnLibraryMap) {
-    const promise = await loader.loadAsyncLibrary(asycnLibraryMap);
+  async loadAsyncLibrary(asyncLibraryMap) {
+    await loader.loadAsyncLibrary(asyncLibraryMap);
     this.buildComponents();
-    return promise;
   }
 
   private instancesMap = new Map<string, ReactInstance[]>();
