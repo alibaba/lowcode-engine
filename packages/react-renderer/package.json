@@ -28,6 +28,7 @@
     "@ali/bzb-request": "^2.6.0-beta.13",
     "@ali/lib-mtop": "^2.5.1",
     "@alifd/next": "^1.19.17",
+    "@ali/lowcode-datasource-engine": "1.0.7-0",
     "debug": "^4.1.1",
     "events": "^3.0.0",
     "fetch-jsonp": "^1.1.3",

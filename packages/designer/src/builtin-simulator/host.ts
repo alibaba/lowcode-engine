@@ -49,6 +49,9 @@ export interface BuiltinSimulatorProps {
   device?: 'mobile' | 'iphone' | string;
   deviceClassName?: string;
   environment?: Asset;
+  // @TODO 补充类型
+  /** @property 请求处理器配置 */
+  requestHandlersMap?: any;
   extraEnvironment?: Asset;
   library?: LibraryItem[];
   simulatorUrl?: Asset;
