@@ -2,6 +2,7 @@ import { Component, createElement } from 'rax';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
 import classnames from 'classnames';
+import { createInterpret } from '@ali/lowcode-datasource-engine';
 import DataHelper from '../utils/dataHelper';
 import {
   forEach,
@@ -84,31 +85,6 @@ export default class BaseEngine extends Component {
     console.warn(e);
   }
 
-  reloadDataSource = () => new Promise((resolve, reject) => {
-      debug('reload data source');
-      if (!this.__dataHelper) {
-        this.__showPlaceholder = false;
-        return resolve();
-      }
-      this.__dataHelper
-        .getInitData()
-        .then((res) => {
-          this.__showPlaceholder = false;
-          if (isEmpty(res)) {
-            this.forceUpdate();
-            return resolve();
-          }
-          this.setState(res, resolve);
-        })
-        .catch((err) => {
-          if (this.__showPlaceholder) {
-            this.__showPlaceholder = false;
-            this.forceUpdate();
-          }
-          reject(err);
-        });
-    });
-
   __setLifeCycleMethods = (method, args) => {
     const lifeCycleMethods = getValue(this.props.__schema, 'lifeCycles', {});
     if (lifeCycleMethods[method]) {
@@ -154,17 +130,58 @@ export default class BaseEngine extends Component {
 
   __initDataSource = (props = this.props) => {
     const schema = props.__schema || {};
-    const appHelper = props.__appHelper;
     const dataSource = (schema && schema.dataSource) || {};
-    this.__dataHelper = new DataHelper(this, dataSource, appHelper, (config) => this.__parseData(config));
-    this.dataSourceMap = this.__dataHelper.dataSourceMap;
+    // requestHandlersMap 存在才走数据源引擎方案
+    if (props.requestHandlersMap) {
+      const { dataSourceMap, reloadDataSource } = createInterpret(dataSource, this, {
+        requestHandlersMap: {
+          mtop: createMtopHandler(),
+          fetch: createFetchHandler(),
+        }
+      });
+      this.dataSourceMap = dataSourceMap;
+      this.reloadDataSource = () => new Promise((resolve, reject) => {
+        debug('reload data source');
+        this.__showPlaceholder = true;
+        reloadDataSource().then(() => {
+          this.__showPlaceholder = false;
+          // @TODO 是否需要 forceUpate
+          resolve();
+        })
+      });
+    } else {
+      const appHelper = props.__appHelper;
+      this.__dataHelper = new DataHelper(this, dataSource, appHelper, (config) => this.__parseData(config));
+      this.dataSourceMap = this.__dataHelper.dataSourceMap;
+      this.reloadDataSource = () => new Promise((resolve, reject) => {
+        debug('reload data source');
+        if (!this.__dataHelper) {
+          this.__showPlaceholder = false;
+          return resolve();
+        }
+        this.__dataHelper
+          .getInitData()
+          .then((res) => {
+            this.__showPlaceholder = false;
+            if (isEmpty(res)) {
+              this.forceUpdate();
+              return resolve();
+            }
+            this.setState(res, resolve);
+          })
+          .catch((err) => {
+            if (this.__showPlaceholder) {
+              this.__showPlaceholder = false;
+              this.forceUpdate();
+            }
+            reject(err);
+          });
+      });
+    }
     // 设置容器组件占位，若设置占位则在初始异步请求完成之前用loading占位且不渲染容器组件内部内容
     if (this.__parseData(schema.props && schema.props.autoLoading)) {
       this.__showPlaceholder = (dataSource.list || []).some((item) => !!this.__parseData(item.isInit));
     }
-    // this.__showPlaceholder = this.__parseData(schema.props && schema.props.autoLoading) && (dataSource.list || []).some(
-    //   (item) => !!this.__parseData(item.isInit),
-    // );
   };
 
   __render = () => {
