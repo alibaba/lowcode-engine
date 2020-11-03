@@ -180,16 +180,11 @@ export default {
       const assets = await editor.utils.get('./assets.json');
       editor.set('assets', assets);
       const simulatorUrl = [
-<<<<<<< HEAD:packages/demo/src/editor/config.js
         'https://dev.g.alicdn.com/ali-lowcode/ali-lowcode-engine/1.0.0/react-simulator-renderer.css',
-        'https://dev.g.alicdn.com/ali-lowcode/ali-lowcode-engine/1.0.0/react-simulator-renderer.js',
-=======
-        'https://dev.g.alicdn.com/ali-lowcode/ali-lowcode-engine/0.9.50/react-simulator-renderer.css',
-        //'https://dev.g.alicdn.com/ali-lowcode/ali-lowcode-engine/0.9.50/react-simulator-renderer.js',
+        //'https://dev.g.alicdn.com/ali-lowcode/ali-lowcode-engine/1.0.0/react-simulator-renderer.js',
         // for debug
          'http://localhost:3333/js/react-simulator-renderer.js',
         // 'http://localhost:3333/js/react-simulator-renderer.css',
->>>>>>> origin/release/1.0.0:packages/demo/src/editor/config.ts
       ];
       editor.set('simulatorUrl', simulatorUrl);
       editor.set('requestHandlersMap', {

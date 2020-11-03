@@ -1,12 +1,7 @@
 {
   "name": "@ali/lowcode-plugin-components-pane",
-<<<<<<< HEAD
-  "version": "0.1.0-beta.0",
-  "description": "低代码引擎数据源配置面板",
-=======
   "version": "1.0.12",
   "description": "alibaba lowcode editor component-list plugin",
->>>>>>> origin/release/1.0.0
   "files": [
     "es/",
     "lib/"

@@ -2,12 +2,8 @@ import logo from '@ali/lowcode-plugin-sample-logo';
 import samplePreview from '@ali/lowcode-plugin-sample-preview';
 import undoRedo from '@ali/lowcode-plugin-undo-redo';
 import componentsPane from '@ali/lowcode-plugin-components-pane';
-<<<<<<< HEAD
 import outline, { OutlinePane } from '@ali/lowcode-plugin-outline-pane';
 import dataSourcePane from '@ali/lowcode-plugin-datasource-pane';
-=======
-import outline from '@ali/lowcode-plugin-outline-pane';
->>>>>>> origin/release/1.0.0
 import zhEn from '@ali/lowcode-plugin-zh-en';
 import eventBindDialog from '@ali/lowcode-plugin-event-bind-dialog';
 import variableBindDialog from '@ali/lowcode-plugin-variable-bind-dialog';

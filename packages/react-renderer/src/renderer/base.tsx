@@ -83,34 +83,6 @@ export default class BaseRender extends PureComponent {
     console.warn(e);
   }
 
-<<<<<<< HEAD:packages/react-renderer/src/renderer/base.jsx
-=======
-  reloadDataSource = () => new Promise((resolve, reject) => {
-    debug('reload data source');
-    if (!this.__dataHelper) {
-      this.__showPlaceholder = false;
-      return resolve();
-    }
-    this.__dataHelper
-      .getInitData()
-      .then((res) => {
-        this.__showPlaceholder = false;
-        if (isEmpty(res)) {
-          this.forceUpdate();
-          return resolve();
-        }
-        this.setState(res, resolve);
-      })
-      .catch((err) => {
-        if (this.__showPlaceholder) {
-          this.__showPlaceholder = false;
-          this.forceUpdate();
-        }
-        reject(err);
-      });
-  });
-
->>>>>>> origin/release/1.0.0:packages/react-renderer/src/renderer/base.tsx
   __setLifeCycleMethods = (method, args) => {
     const lifeCycleMethods = getValue(this.props.__schema, 'lifeCycles', {});
     let fn = lifeCycleMethods[method];

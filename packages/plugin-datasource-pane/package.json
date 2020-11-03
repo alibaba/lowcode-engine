@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-datasource-pane",
-  "version": "0.1.0-beta.6",
+  "version": "1.0.12",
   "description": "低代码引擎数据源面板",
   "main": "lib/index.js",
   "files": [
