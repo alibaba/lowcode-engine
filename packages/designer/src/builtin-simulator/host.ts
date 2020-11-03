@@ -209,7 +209,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     return {};
   });
 
-  readonly asycnLibraryMap: { [key: string]: {} } = {};
+  readonly asyncLibraryMap: { [key: string]: {} } = {};
 
   readonly libraryMap: { [key: string]: string } = {};
 
@@ -230,7 +230,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       library.forEach((item) => {
         this.libraryMap[item.package] = item.library;
         if (item.async) {
-          this.asycnLibraryMap[item.package] = item;
+          this.asyncLibraryMap[item.package] = item;
         }
         if (item.urls) {
           libraryAsset.push(item.urls);
@@ -260,8 +260,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     // wait 准备 iframe 内容、依赖库注入
     const renderer = await createSimulator(this, iframe, vendors);
 
-    // 加载异步Library
-    await renderer.loadAsyncLibrary(this.asycnLibraryMap);
+
     // TODO: !!! thinkof reload onloa
 
     // wait 业务组件被第一次消费，否则会渲染出错
@@ -269,6 +268,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
     // wait 运行时上下文
     await this.injectionConsumer.waitFirstConsume();
+
+    // 加载异步Library
+    await renderer.loadAsyncLibrary(this.asyncLibraryMap);
 
     // step 5 ready & render
     renderer.run();
