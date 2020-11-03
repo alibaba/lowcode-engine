@@ -102,10 +102,6 @@ export default class SourceEditor extends Component<{
   }
 
 
-  componentDidMount() {
-    // this.editorNode = this.editorJsRef.current; // 记录当前dom节点；
-  }
-
   /**
    * 执行编辑器事件
    */
