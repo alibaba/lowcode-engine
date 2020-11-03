@@ -1,4 +1,7 @@
 import { DataSourceImportPluginCode } from '@ali/lowcode-plugin-datasource-pane';
+import { createMtopHandler } from '@ali/lowcode-datasource-mtop-handler';
+import { createFetchHandler } from '@ali/lowcode-datasource-fetch-handler';
+import { createJsonpHandler } from '@ali/lowcode-datasource-jsonp-handler';
 
 export default {
   plugins: {
@@ -177,10 +180,15 @@ export default {
       const assets = await editor.utils.get('./assets.json');
       editor.set('assets', assets);
       const simulatorUrl = [
-        'https://dev.g.alicdn.com/ali-lowcode/ali-lowcode-engine/0.9.50/react-simulator-renderer.css',
-        'https://dev.g.alicdn.com/ali-lowcode/ali-lowcode-engine/0.9.50/react-simulator-renderer.js',
+        'https://dev.g.alicdn.com/ali-lowcode/ali-lowcode-engine/1.0.0/react-simulator-renderer.css',
+        'https://dev.g.alicdn.com/ali-lowcode/ali-lowcode-engine/1.0.0/react-simulator-renderer.js',
       ];
       editor.set('simulatorUrl', simulatorUrl);
+      editor.set('requestHandlersMap', {
+        mtop: createMtopHandler(),
+        fetch: createFetchHandler(),
+        jsonp: createJsonpHandler()
+      });
       // editor.set('renderEnv', 'rax');
 
       const schema = await editor.utils.get('./schema.json');

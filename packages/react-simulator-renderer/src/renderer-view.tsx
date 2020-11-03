@@ -99,6 +99,7 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
         components={renderer.components}
         appHelper={renderer.context}
         // context={renderer.context}
+        requestHandlersMap={host.requestHandlersMap}
         designMode={designMode}
         device={device}
         suspended={renderer.suspended}
