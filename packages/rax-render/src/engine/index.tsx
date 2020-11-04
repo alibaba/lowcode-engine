@@ -46,6 +46,8 @@ export default class Engine extends Component {
     appHelper: PropTypes.object,
     components: PropTypes.object,
     componentsMap: PropTypes.object,
+    // 数据源请求处理
+    requestHandlersMap: PropTypes.object,
     designMode: PropTypes.string,
     suspended: PropTypes.bool,
     schema: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
@@ -60,6 +62,8 @@ export default class Engine extends Component {
     appHelper: null,
     components: {},
     componentsMap: {},
+    // 数据源请求处理
+    requestHandlersMap: null,
     designMode: '',
     suspended: false,
     schema: {},

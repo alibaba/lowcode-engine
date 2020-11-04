@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-demo-server",
-  "version": "1.0.13",
+  "version": "1.0.15",
   "private": true,
   "description": "低代码引擎 DEMO Server 端",
   "scripts": {
@@ -30,7 +30,7 @@
     }
   },
   "dependencies": {
-    "@ali/lowcode-code-generator": "^1.0.13",
+    "@ali/lowcode-code-generator": "^1.0.15",
     "@ali/lowcode-types": "^1.0.13",
     "@nestjs/common": "^7.0.0",
     "@nestjs/core": "^7.0.0",

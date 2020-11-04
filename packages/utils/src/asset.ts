@@ -271,4 +271,23 @@ export class AssetLoader {
     }
     return isUrl ? load(content) : evaluate(content);
   }
+
+  private async loadAsyncLibrary(asyncLibraryMap) {
+    const promiseList = []; const libraryKeyList = [];
+    for (const key in asyncLibraryMap) {
+      // 需要异步加载
+      if (asyncLibraryMap[key].async) {
+        promiseList.push(window[asyncLibraryMap[key].library]);
+        libraryKeyList.push(asyncLibraryMap[key].library);
+      }
+    }
+    await Promise.all(promiseList).then((mods) => {
+      if (mods.length > 0) {
+        mods.map((item, index) => {
+          window[libraryKeyList[index]] = item;
+          return item;
+        });
+      }
+    });
+  }
 }

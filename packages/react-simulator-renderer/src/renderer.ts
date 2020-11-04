@@ -36,10 +36,8 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
 
     this.dispose = host.connect(this, () => {
       // sync layout config
-
       // sync schema
       this._schema = host.document.export(1);
-
       // todo: split with others, not all should recompute
       if (this._libraryMap !== host.libraryMap || this._componentsMap !== host.designer.componentsMap) {
         this._libraryMap = host.libraryMap || {};
@@ -57,6 +55,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
       // sync device
       this._device = host.device;
     });
+
     host.componentsConsumer.consume(async (componentsAsset) => {
       if (componentsAsset) {
         await this.load(componentsAsset);
@@ -140,6 +139,11 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
    */
   load(asset: Asset): Promise<any> {
     return loader.load(asset);
+  }
+
+  async loadAsyncLibrary(asyncLibraryMap) {
+    await loader.loadAsyncLibrary(asyncLibraryMap);
+    this.buildComponents();
   }
 
   private instancesMap = new Map<string, ReactInstance[]>();

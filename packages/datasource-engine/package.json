@@ -1,34 +1,36 @@
 {
   "name": "@ali/lowcode-datasource-engine",
-  "version": "0.1.17",
+  "version": "1.0.14",
   "description": "DataSource Engine for lowcode",
   "main": "lib/index.js",
   "module": "es/index.js",
-  "typings": "es/index.d.ts",
+  "typings": "dist/index.d.ts",
   "files": [
-    "handlers",
+    "dist",
     "src",
-    "lib",
-    "es"
+    "interpret*",
+    "runtime*"
   ],
   "scripts": {
-    "start": "tsc --watch",
-    "clean": "rm -rf es lib",
-    "build": "rm -rf es lib && tsc --module esnext --target es6 && mv lib es && tsc",
+    "build": "rm -rf dist && tsc --outDir ./dist --module esnext",
+    "test": "ava",
     "prepublishOnly": "npm run build"
   },
-  "author": "",
-  "license": "ISC",
-  "publishConfig": {
-    "registry": "https://registry.npm.alibaba-inc.com"
-  },
-  "devDependencies": {
+  "dependencies": {
+    "@ali/lowcode-types": "^1.0.13",
     "typescript": "^3.9.7"
   },
-  "dependencies": {
-    "@ali/universal-mtop": "^5.1.9",
-    "query-string": "^6.13.1",
-    "tslib": "^2.0.1",
-    "universal-request": "^2.2.0"
+  "devDependencies": {
+    "@ava/babel": "^1.0.1",
+    "@types/sinon": "^9.0.5",
+    "ava": "3.11.1",
+    "get-port": "^5.1.1",
+    "json5": "^2.1.3",
+    "sinon": "^9.0.3",
+    "ts-node": "^8.10.2",
+    "tslib": "^2.0.1"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
   }
 }

@@ -250,7 +250,8 @@ export default class Provider {
   }
 
   // 定制构造根组件的逻辑，如切换路由机制
-  createApp() {
+  // eslint-disable-next-line
+  createApp(params?: any) {
     throw new Error('Method called "createApp" not implemented.');
   }
 

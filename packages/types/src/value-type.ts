@@ -11,6 +11,8 @@ export interface JSExpression {
    * 模拟值
    */
   mock?: any;
+  /** 源码 */
+  compiled?: string;
 }
 
 // 函数
@@ -39,7 +41,7 @@ export interface JSFunction {
 }
 
 // 函数
-export interface JSFunction{
+export interface JSFunction {
   type: 'JSFunction';
   /**
    * 函数字符串
@@ -69,14 +71,27 @@ export interface JSBlock {
 }
 
 // JSON 基本类型
-export type JSONValue = boolean | string | number | null | undefined | JSONArray | JSONObject;
+export type JSONValue =
+  | boolean
+  | string
+  | number
+  | null
+  | undefined
+  | JSONArray
+  | JSONObject;
 export type JSONArray = JSONValue[];
 export interface JSONObject {
   [key: string]: JSONValue;
 }
 
 // 复合类型
-export type CompositeValue = JSONValue | JSExpression | JSFunction | JSSlot | CompositeArray | CompositeObject;
+export type CompositeValue =
+  | JSONValue
+  | JSExpression
+  | JSFunction
+  | JSSlot
+  | CompositeArray
+  | CompositeObject;
 export type CompositeArray = CompositeValue[];
 export interface CompositeObject {
   [key: string]: CompositeValue;
