@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-zh-en",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "alibaba lowcode editor zhong english plugin",
   "files": [
     "es",
@@ -14,9 +14,9 @@
     "test:snapshot": "ava --update-snapshots"
   },
   "dependencies": {
-    "@ali/lowcode-editor-core": "^1.0.15",
-    "@ali/lowcode-types": "^1.0.13",
-    "@ali/lowcode-utils": "^1.0.14",
+    "@ali/lowcode-editor-core": "^1.0.16",
+    "@ali/lowcode-types": "^1.0.14",
+    "@ali/lowcode-utils": "^1.0.15",
     "react": "^16.8.1",
     "react-dom": "^16.8.1"
   },

@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-datasource-mopen-handler",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "lib/index.js",
   "module": "es/index.js",
   "typings": "es/index.d.ts",
@@ -16,7 +16,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@ali/lowcode-types": "^1.0.13",
+    "@ali/lowcode-types": "^1.0.14",
     "@ali/mirror-io-client-mopen": "1.0.0-beta.16",
     "typescript": "^3.9.7"
   },

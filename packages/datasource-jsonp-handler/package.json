@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-datasource-jsonp-handler",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "lib/index.js",
   "module": "es/index.js",
   "typings": "es/index.d.ts",
