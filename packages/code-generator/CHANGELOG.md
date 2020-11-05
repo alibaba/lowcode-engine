@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.19"></a>
+## [1.0.19](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@1.0.18...@ali/lowcode-code-generator@1.0.19) (2020-11-05)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-code-generator
+
 <a name="1.0.18"></a>
 ## [1.0.18](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@1.0.17...@ali/lowcode-code-generator@1.0.18) (2020-11-05)
 

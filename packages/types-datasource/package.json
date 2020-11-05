@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-datasource-types",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "lib/index.js",
   "module": "es/index.js",
   "typings": "es/index.d.ts",
@@ -15,7 +15,6 @@
     "build": "npm run clean && tsc && tsc --outDir ./lib --module commonjs ",
     "prepublishOnly": "npm run build"
   },
-  "dependencies": {},
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"
   }

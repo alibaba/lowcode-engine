@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-datasource-universal-mtop-handler",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "main": "lib/index.js",
   "module": "es/index.js",
   "typings": "es/index.d.ts",
@@ -16,7 +16,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@ali/lowcode-datasource-types": "^1.0.0",
+    "@ali/lowcode-datasource-types": "^1.0.1",
     "@ali/mirror-io-client-universal-mtop": "1.0.0-beta.16",
     "typescript": "^3.9.7"
   },
