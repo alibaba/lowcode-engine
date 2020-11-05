@@ -148,20 +148,17 @@ export default class BaseRender extends PureComponent {
     // requestHandlersMap 存在才走数据源引擎方案
     if (props.requestHandlersMap) {
       const { dataSourceMap, reloadDataSource } = createInterpret(dataSource, this, {
-        requestHandlersMap: {
-          mtop: createMtopHandler(),
-          fetch: createFetchHandler(),
-        }
+        requestHandlersMap: props.requestHandlersMap,
       });
       this.dataSourceMap = dataSourceMap;
-      this.reloadDataSource = () => new Promise((resolve, reject) => {
+      this.reloadDataSource = () => new Promise((resolve) => {
         debug('reload data source');
         this.__showPlaceholder = true;
         reloadDataSource().then(() => {
           this.__showPlaceholder = false;
           // @TODO 是否需要 forceUpate
           resolve();
-        })
+        });
       });
     } else {
       const appHelper = props.__appHelper;
