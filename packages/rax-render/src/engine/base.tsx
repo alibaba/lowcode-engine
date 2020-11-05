@@ -136,10 +136,7 @@ export default class BaseEngine extends Component {
     // requestHandlersMap 存在才走数据源引擎方案
     if (props.requestHandlersMap) {
       const { dataSourceMap, reloadDataSource } = createInterpret(dataSource, this, {
-        requestHandlersMap: {
-          mtop: createMtopHandler(),
-          fetch: createFetchHandler(),
-        }
+        requestHandlersMap: props.requestHandlersMap,
       });
       this.dataSourceMap = dataSourceMap;
       this.reloadDataSource = () => new Promise((resolve, reject) => {
@@ -149,7 +146,7 @@ export default class BaseEngine extends Component {
           this.__showPlaceholder = false;
           // @TODO 是否需要 forceUpate
           resolve();
-        })
+        });
       });
     } else {
       const appHelper = props.__appHelper;
