@@ -50,6 +50,7 @@
     "qs": "^6.9.1",
     "react": "^16",
     "react-dom": "^16.7.0",
+    "@ali/lc-style-setter":"0.0.2",
     "react-monaco-editor": "0.40.0"
   },
   "devDependencies": {
