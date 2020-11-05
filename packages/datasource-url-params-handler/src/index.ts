@@ -1,5 +1,5 @@
 import qs from 'query-string';
-import { UrlParamsHandler } from '@ali/lowcode-types';
+import { UrlParamsHandler } from '@ali/lowcode-datasource-types';
 
 export function createUrlParamsHandler<T = unknown>(
   searchString: string | T = '',

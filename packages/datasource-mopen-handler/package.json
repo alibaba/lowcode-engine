@@ -16,7 +16,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@ali/lowcode-types": "^1.0.16",
+    "@ali/lowcode-datasource-types": "^1.0.0",
     "@ali/mirror-io-client-mopen": "1.0.0-beta.16",
     "typescript": "^3.9.7"
   },

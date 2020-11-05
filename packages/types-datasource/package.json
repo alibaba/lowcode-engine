@@ -1,6 +1,6 @@
 {
-  "name": "@ali/lowcode-datasource-mtop-handler",
-  "version": "1.0.6",
+  "name": "@ali/lowcode-datasource-types",
+  "version": "1.0.0",
   "main": "lib/index.js",
   "module": "es/index.js",
   "typings": "es/index.d.ts",
@@ -15,13 +15,8 @@
     "build": "npm run clean && tsc && tsc --outDir ./lib --module commonjs ",
     "prepublishOnly": "npm run build"
   },
-  "dependencies": {
-    "@ali/lowcode-datasource-types": "^1.0.0",
-    "@ali/universal-mtop": "^5.1.9",
-    "typescript": "^3.9.7"
-  },
+  "dependencies": {},
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"
-  },
-  "gitHead": "829e504c52a294fc28966ab0e491f4d2de1d4c90"
+  }
 }

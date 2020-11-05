@@ -1,6 +1,12 @@
+import { InterpretDataSource as DataSource } from '@ali/lowcode-datasource-types';
 import { ComponentsMap } from './npm';
-import { CompositeValue, JSExpression, JSFunction, CompositeObject, JSONObject } from './value-type';
-import { InterpretDataSource as DataSource } from './data-source-interpret';
+import {
+  CompositeValue,
+  JSExpression,
+  JSFunction,
+  CompositeObject,
+  JSONObject,
+} from './value-type';
 import { I18nMap } from './i18n';
 import { UtilsMap } from './utils';
 

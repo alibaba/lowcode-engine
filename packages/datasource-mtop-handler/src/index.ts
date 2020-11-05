@@ -1,6 +1,6 @@
 import mtopRequest from '@ali/universal-mtop';
 
-import { RuntimeOptionsConfig } from '@ali/lowcode-types';
+import { RuntimeOptionsConfig } from '@ali/lowcode-datasource-types';
 
 export type Method = 'get' | 'post' | 'GET' | 'POST';
 

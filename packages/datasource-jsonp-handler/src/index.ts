@@ -1,4 +1,4 @@
-import { RuntimeOptionsConfig } from '@ali/lowcode-types';
+import { RuntimeOptionsConfig } from '@ali/lowcode-datasource-types';
 import jsonp from 'jsonp';
 
 const handleJsonpFetch = (url: string, param: string, name: string) => {
