@@ -316,7 +316,7 @@ designer.addPropsReducer(deepValueParser, TransformStage.Render);
 
 // 清除空的 props value
 function removeEmptyProps(props: any, node: Node) {
-  if (node.isRoot() && props.dataSource) {
+  if (node.isRoot() && props.dataSource && Array.isArray(props.dataSource.online)) {
     const online = cloneDeep(props.dataSource.online);
     online.forEach((item: any) => {
       const newParam: any = {};
