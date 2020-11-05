@@ -14,6 +14,7 @@
     "test:snapshot": "ava --update-snapshots"
   },
   "dependencies": {
+    "@ali/lowcode-datasource-types": "^1.0.0",
     "power-di": "^2.2.4",
     "react": "^16"
   },

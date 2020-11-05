@@ -4,7 +4,7 @@ import {
   MOPEN_APPKEY_XSPACE_PRE_ONLINE,
   MOPEN_DOMAIN_TAOBAO_PRE_ONLINE,
 } from '@ali/mirror-io-client-mopen';
-import { RuntimeOptionsConfig } from '@ali/lowcode-types';
+import { RuntimeOptionsConfig } from '@ali/lowcode-datasource-types';
 
 type Method = 'get' | 'post' | 'GET' | 'POST';
 
@@ -16,6 +16,7 @@ export function createMopenHandler<T = unknown>(
     appKey: MOPEN_APPKEY_XSPACE_PRE_ONLINE,
   },
 ) {
+  // eslint-disable-next-line space-before-function-paren
   return async function(options: RuntimeOptionsConfig): Promise<{ data: T }> {
     const { data, response } = await MopenClient.request<T>({
       config,
