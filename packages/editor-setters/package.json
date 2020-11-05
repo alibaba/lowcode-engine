@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-editor-setters",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "Builtin setters for Ali lowCode engine",
   "files": [
     "es",
@@ -21,7 +21,7 @@
     "@ali/iceluna-comp-react-node": "^1.0.5",
     "@ali/iceluna-sdk": "^1.0.5-beta.24",
     "@ali/intl-universal": "^0.4.9",
-    "@ali/lowcode-editor-core": "^1.0.16",
+    "@ali/lowcode-editor-core": "^1.0.17",
     "@ali/ve-choice-control": "^4.0.0",
     "@ali/ve-code-control": "^4.0.0",
     "@ali/ve-color-control": "^4.0.0",
