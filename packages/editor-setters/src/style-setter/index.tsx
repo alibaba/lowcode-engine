@@ -1,7 +1,7 @@
 import './style.less';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import LowStyleSetter from './lc-style-setter';
+import LowStyleSetter from '@ali/lc-style-setter';
 import { globalLocale } from '@ali/lowcode-editor-core';
 
 export default class StyleSetter extends Component {
