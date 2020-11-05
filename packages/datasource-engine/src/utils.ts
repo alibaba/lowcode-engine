@@ -64,7 +64,7 @@ export const getRuntimeBaseValue = (type: string, value: any) => {
     case 'boolean':
       return typeof value === 'string'
         ? transformBoolStr(value as string)
-        : value;
+        : !!value;
     case 'number':
       return Number(value);
     default:

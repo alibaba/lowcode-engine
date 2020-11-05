@@ -26,8 +26,8 @@ const adapt2Runtime = (dataSource: InterpretDataSource, context: IDataSourceRunt
   const list: RuntimeDataSourceConfig[] = interpretConfigList.map((el: InterpretDataSourceConfig) => {
     return {
       id: el.id,
-      isInit: getRuntimeValueFromConfig('boolean', el.isInit, context) || true, // 默认 true
-      isSync: getRuntimeValueFromConfig('boolean', el.isSync, context) || false, // 默认 false
+      isInit: getRuntimeValueFromConfig('boolean', el.isInit, context), // 默认 true
+      isSync: getRuntimeValueFromConfig('boolean', el.isSync, context), // 默认 false
       type: el.type || 'fetch',
       willFetch: el.willFetch ? getRuntimeJsValue(el.willFetch, context) : defaultWillFetch,
       shouldFetch: buildShouldFetch(el, context),

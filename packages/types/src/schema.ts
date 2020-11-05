@@ -1,6 +1,6 @@
 import { ComponentsMap } from './npm';
 import { CompositeValue, JSExpression, JSFunction, CompositeObject, JSONObject } from './value-type';
-import { DataSource } from './data-source';
+import { InterpretDataSource as DataSource } from './data-source-interpret';
 import { I18nMap } from './i18n';
 import { UtilsMap } from './utils';
 
