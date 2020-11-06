@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-datasource-engine",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "DataSource Engine for lowcode",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -9,7 +9,8 @@
     "dist",
     "src",
     "interpret*",
-    "runtime*"
+    "runtime*",
+    "lib"
   ],
   "scripts": {
     "build": "rm -rf dist && tsc --outDir ./dist --module esnext",
