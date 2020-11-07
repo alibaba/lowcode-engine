@@ -30,7 +30,7 @@ export interface ComponentConfigure {
   nestingRule?: NestingRule;
 
   rootSelector?: string;
-  // copy,move,delete | *
+  // copy, move, remove | *
   disableBehaviors?: string[] | string;
   actions?: ComponentAction[];
 }
