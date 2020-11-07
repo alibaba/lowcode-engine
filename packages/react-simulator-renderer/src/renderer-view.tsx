@@ -98,14 +98,14 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
 
   render() {
     const { renderer } = this.props;
-    const { device, designMode } = renderer;
+    const { device, designMode, requestHandlersMap } = renderer;
     return (
       <LowCodeRenderer
         schema={renderer.schema}
         components={renderer.components}
         appHelper={renderer.context}
         // context={renderer.context}
-        requestHandlersMap={host.requestHandlersMap}
+        requestHandlersMap={requestHandlersMap}
         designMode={designMode}
         device={device}
         suspended={renderer.suspended}

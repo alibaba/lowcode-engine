@@ -48,6 +48,8 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
       // sync designMode
       this._designMode = host.designMode;
 
+      this._requestHandlersMap = host.requestHandlersMap;
+
       // sync suspended
 
       // sync scope
@@ -112,6 +114,12 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
 
   @computed get designMode(): any {
     return this._designMode;
+  }
+
+  @obx.ref private _requestHandlersMap = null;
+
+  @computed get requestHandlersMap(): any {
+    return this._requestHandlersMap;
   }
 
   @obx.ref private _device = 'default';

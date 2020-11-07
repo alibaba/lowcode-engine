@@ -178,9 +178,10 @@ export default class BaseEngine extends Component {
       });
     }
     // 设置容器组件占位，若设置占位则在初始异步请求完成之前用loading占位且不渲染容器组件内部内容
-    if (this.__parseData(schema.props && schema.props.autoLoading)) {
+    // @TODO __showPlaceholder 的逻辑一旦开启就关不掉，先注释掉了
+    /* if (this.__parseData(schema.props && schema.props.autoLoading)) {
       this.__showPlaceholder = (dataSource.list || []).some((item) => !!this.__parseData(item.isInit));
-    }
+    } */
   };
 
   __render = () => {

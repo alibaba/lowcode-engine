@@ -156,6 +156,7 @@ export default class BaseRender extends PureComponent {
         this.__showPlaceholder = true;
         reloadDataSource().then(() => {
           this.__showPlaceholder = false;
+          // this.forceUpdate();
           // @TODO 是否需要 forceUpate
           resolve();
         });
@@ -190,9 +191,10 @@ export default class BaseRender extends PureComponent {
       });
     }
     // 设置容器组件占位，若设置占位则在初始异步请求完成之前用loading占位且不渲染容器组件内部内容
-    this.__showPlaceholder = this.__parseData(schema.props && schema.props.autoLoading) && (dataSource.list || []).some(
+    // @TODO __showPlaceholder 的逻辑一旦开启就关不掉，先注释掉了
+    /* this.__showPlaceholder = this.__parseData(schema.props && schema.props.autoLoading) && (dataSource.list || []).some(
       (item) => !!this.__parseData(item.isInit),
-    );
+    ); */
   };
 
   __render = () => {
