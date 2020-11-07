@@ -162,7 +162,7 @@ export {
   Symbols,
 };
 
-const version = '6.0.0(LowcodeEngine 0.9.3)';
+const version = '6.0.0 (LowcodeEngine 0.9.32)';
 
 console.log(
   `%c VisionEngine %c v${version} `,

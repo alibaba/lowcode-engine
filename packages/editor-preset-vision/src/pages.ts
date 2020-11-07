@@ -64,7 +64,6 @@ const pages = Object.assign(project, {
         item.methods = {};
       }
     });
-    console.log(pages, componentsTree);
     project.load(
       {
         version: '1.0.0',

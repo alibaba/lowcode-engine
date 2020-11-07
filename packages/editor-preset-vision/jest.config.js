@@ -1,6 +1,6 @@
 const esModules = [
   '@recore/obx-react',
-  '@ali/lowcode-editor-core',
+  // '@ali/lowcode-editor-core',
 ].join('|');
 
 module.exports = {
