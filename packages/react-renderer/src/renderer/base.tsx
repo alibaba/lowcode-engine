@@ -3,6 +3,9 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
 import { createInterpret } from '@ali/lowcode-datasource-engine';
+import { createMtopHandler } from '@ali/lowcode-datasource-mtop-handler';
+import { createFetchHandler } from '@ali/lowcode-datasource-fetch-handler';
+import { createJsonpHandler } from '@ali/lowcode-datasource-jsonp-handler';
 import Div from '../components/Div';
 import VisualDom from '../components/VisualDom';
 import AppContext from '../context/appContext';
@@ -146,9 +149,15 @@ export default class BaseRender extends PureComponent {
     const schema = props.__schema || {};
     const dataSource = (schema && schema.dataSource) || {};
     // requestHandlersMap 存在才走数据源引擎方案
-    if (props.requestHandlersMap) {
+    // if (props.requestHandlersMap) {
+    if (true) {
       const { dataSourceMap, reloadDataSource } = createInterpret(dataSource, this, {
-        requestHandlersMap: props.requestHandlersMap,
+        // requestHandlersMap: props.requestHandlersMap,
+        requestHandlersMap: {
+          mtop: createMtopHandler(),
+          fetch: createFetchHandler(),
+          jsonp: createJsonpHandler(),
+        },
       });
       this.dataSourceMap = dataSourceMap;
       this.reloadDataSource = () => new Promise((resolve) => {

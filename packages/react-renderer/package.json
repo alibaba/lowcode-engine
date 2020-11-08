@@ -24,6 +24,9 @@
     "react"
   ],
   "dependencies": {
+    "@ali/lowcode-datasource-jsonp-handler": "^1.0.5",
+    "@ali/lowcode-datasource-fetch-handler": "^1.0.5",
+    "@ali/lowcode-datasource-mtop-handler": "^1.0.5",
     "@ali/b3-one": "^0.0.17",
     "@ali/bzb-request": "^2.6.0-beta.13",
     "@ali/lib-mtop": "^2.5.1",
