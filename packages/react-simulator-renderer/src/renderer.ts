@@ -540,7 +540,6 @@ function getComponentController(schema: NodeSchema, componentsMap: any) {
 
     constructor(props: any) {
       super(props);
-      console.log('>>> current');
       const node = host.currentDocument?.createNode(schema);
       this.renderSchema = node?.export(TransformStage.Render) || {};
     }
