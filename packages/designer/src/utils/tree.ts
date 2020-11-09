@@ -1,7 +1,14 @@
 import { NodeChildren } from '../document/node/node-children';
 
-export function foreachReverse(arr: NodeChildren, fn: Function, context: any = {}) {
+type IterableArray = NodeChildren | any[];
+
+export function foreachReverse(
+  arr: IterableArray,
+  action: (item: any) => void,
+  getter: (arr: IterableArray, index: number) => any,
+  context: any = {},
+) {
   for (let i = arr.length - 1; i >= 0; i--) {
-    fn.call(context, arr.get(i));
+    action.call(context, getter(arr, i));
   }
 }
