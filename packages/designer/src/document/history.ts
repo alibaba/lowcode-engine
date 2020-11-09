@@ -9,7 +9,7 @@ export interface Serialization<T = any> {
   unserialize(data: T): NodeSchema;
 }
 
-let currentSerializion: Serialization<any> = {
+let currentSerialization: Serialization<any> = {
   serialize(data: NodeSchema): string {
     return JSON.stringify(data);
   },
@@ -18,8 +18,8 @@ let currentSerializion: Serialization<any> = {
   },
 };
 
-export function setSerialization(serializion: Serialization) {
-  currentSerializion = serializion;
+export function setSerialization(serialization: Serialization) {
+  currentSerialization = serialization;
 }
 
 export class History {
@@ -46,7 +46,7 @@ export class History {
         return;
       }
       untracked(() => {
-        const log = currentSerializion.serialize(data);
+        const log = currentSerialization.serialize(data);
         if (this.session.cursor === 0 && this.session.isActive()) {
           // first log
           this.session.log(log);
@@ -98,7 +98,7 @@ export class History {
 
     this.obx.sleep();
     try {
-      this.redoer(currentSerializion.unserialize(hotData));
+      this.redoer(currentSerialization.unserialize(hotData));
       this.emitter.emit('cursor', hotData);
     } catch (e) {
       //

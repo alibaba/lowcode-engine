@@ -101,7 +101,9 @@ export class Project {
     if (this.documents.length < 1) {
       return;
     }
-    this.documents.forEach((doc) => doc.remove());
+    for (let i = this.documents.length - 1; i >= 0; i--) {
+      this.documents[i].remove();
+    }
   }
 
   removeDocument(doc: DocumentModel) {

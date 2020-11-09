@@ -14,5 +14,6 @@ module.exports = {
     'no-useless-constructor': 1,
     'no-empty-function': 1,
     '@typescript-eslint/member-ordering': 0,
+    'lines-between-class-members': 0
   }
 }
