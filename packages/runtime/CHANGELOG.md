@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.22"></a>
+## [1.0.22](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-runtime@1.0.21...@ali/lowcode-runtime@1.0.22) (2020-11-10)
+
+
+### Bug Fixes
+
+* 设计和预览两种场景下 requestHandlersMap 的接入 ([707de45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/707de45))
+
+
+
+
 <a name="1.0.21"></a>
 ## [1.0.21](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-runtime@1.0.20...@ali/lowcode-runtime@1.0.21) (2020-11-10)
 

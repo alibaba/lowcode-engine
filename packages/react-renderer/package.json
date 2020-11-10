@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-react-renderer",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "react renderer for ali lowcode engine",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -27,7 +27,7 @@
     "@ali/b3-one": "^0.0.17",
     "@ali/bzb-request": "^2.6.0-beta.13",
     "@ali/lib-mtop": "^2.5.1",
-    "@ali/lowcode-datasource-engine": "^1.0.20",
+    "@ali/lowcode-datasource-engine": "^1.0.21",
     "@alifd/next": "^1.19.17",
     "debug": "^4.1.1",
     "events": "^3.0.0",
@@ -54,5 +54,5 @@
   "publishConfig": {
     "registry": "http://registry.npm.alibaba-inc.com"
   },
-  "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-react-renderer@1.0.18/build/index.html"
+  "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-react-renderer@1.0.19/build/index.html"
 }

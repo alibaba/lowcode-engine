@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-datasource-types",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "main": "lib/index.js",
   "module": "es/index.js",
   "typings": "es/index.d.ts",

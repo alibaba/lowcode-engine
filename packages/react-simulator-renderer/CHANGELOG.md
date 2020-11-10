@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.20"></a>
+## [1.0.20](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@1.0.19...@ali/lowcode-react-simulator-renderer@1.0.20) (2020-11-10)
+
+
+### Bug Fixes
+
+* 设计和预览两种场景下 requestHandlersMap 的接入 ([707de45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/707de45))
+* 修复数据源的接入问题 ([98ae1ed](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/98ae1ed))
+
+
+
+
 <a name="1.0.19"></a>
 ## [1.0.19](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@1.0.18...@ali/lowcode-react-simulator-renderer@1.0.19) (2020-11-10)
 

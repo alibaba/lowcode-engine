@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.21"></a>
+## [1.0.21](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-datasource-engine@1.0.20...@ali/lowcode-datasource-engine@1.0.21) (2020-11-10)
+
+
+### Bug Fixes
+
+* 合并数据源引擎修复代码 ([53f3554](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/53f3554))
+
+
+
+
 <a name="1.0.20"></a>
 ## [1.0.20](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-datasource-engine@1.0.18...@ali/lowcode-datasource-engine@1.0.20) (2020-11-10)
 
