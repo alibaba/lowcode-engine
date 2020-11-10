@@ -168,7 +168,7 @@ export function parseExpressionGetGlobalVariables(
                   addUndeclaredIdentifierIfNeeded(item, path);
                 });
               } else {
-                addUndeclaredIdentifierIfNeeded(fieldValue, path);
+                addUndeclaredIdentifierIfNeeded(fieldValue as Record<string, unknown> | null, path);
               }
             }
           });

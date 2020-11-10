@@ -63,7 +63,7 @@ function buildPackageImport(
     const srcName = dep.exportName;
     let targetName = dep.componentName || dep.exportName;
 
-    // 如果是自组件，则导出父组件，并且根据自组件命名规则，判断是否需要定义标识符
+    // 如果是子组件，则导出父组件，并且根据自组件命名规则，判断是否需要定义标识符
     if (dep.subName) {
       if (targetName !== `${srcName}.${dep.subName}`) {
         if (!isValidIdentifier(targetName)) {

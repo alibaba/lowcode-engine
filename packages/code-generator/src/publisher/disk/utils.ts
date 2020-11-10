@@ -37,9 +37,9 @@ const writeFilesToFolder = async (folderPath: string, files: ResultFile[], fs: I
   await Promise.all(promises);
 };
 
-const writeSubFoldersToFolder = async (folderPath: string, subFolders: ResultDir[]): Promise<void> => {
+const writeSubFoldersToFolder = async (folderPath: string, subFolders: ResultDir[], fs: IFileSystem): Promise<void> => {
   const promises = subFolders.map((subFolder) => {
-    return writeFolder(subFolder, folderPath);
+    return writeFolder(subFolder, folderPath, false, fs);
   });
 
   await Promise.all(promises);
