@@ -1,1 +1,1 @@
-module.exports = require('./dist/interpret');
+module.exports = require('./dist/interpret/index');
