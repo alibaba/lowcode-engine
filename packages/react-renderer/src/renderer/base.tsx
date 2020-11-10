@@ -148,7 +148,7 @@ export default class BaseRender extends PureComponent {
     // requestHandlersMap 存在才走数据源引擎方案
     if (props?.__appHelper?.requestHandlersMap) {
       const { dataSourceMap, reloadDataSource } = createDataSourceEngine(dataSource, this, {
-        requestHandlersMap: props?.__appHelper?.requestHandlersMap,
+        requestHandlersMap: props.__appHelper.requestHandlersMap,
       });
       this.dataSourceMap = dataSourceMap;
       this.reloadDataSource = () => new Promise((resolve) => {

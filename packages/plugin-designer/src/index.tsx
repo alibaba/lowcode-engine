@@ -15,6 +15,7 @@ interface DesignerPluginState {
   renderEnv?: string;
   device?: string;
   simulatorUrl: Asset | null;
+  // @TODO 类型定义
   requestHandlersMap: any;
 }
 

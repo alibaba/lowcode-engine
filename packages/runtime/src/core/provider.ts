@@ -117,6 +117,9 @@ export default class Provider {
 
   componentsMap: IComponentMap[] = [];
 
+  // @TODO 类型定义
+  requestHandlersMap: any = null;
+
   history: HistoryMode = 'hash';
 
   containerId = '';
