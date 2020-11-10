@@ -1,23 +1,23 @@
 {
   "name": "@ali/lowcode-datasource-engine",
-  "version": "1.0.19",
+  "version": "1.0.20-alpha.2",
   "description": "DataSource Engine for lowcode",
-  "main": "lib/index.js",
-  "module": "es/index.js",
+  "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist",
     "src",
     "interpret*",
-    "runtime*",
-    "lib"
+    "runtime*"
   ],
   "scripts": {
-    "build": "rm -rf dist && tsc --outDir ./dist --module esnext",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc ",
     "test": "ava",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
+    "@ali/lowcode-datasource-types": "^1.0.1",
     "@ali/lowcode-types": "^1.0.17",
     "typescript": "^3.9.7"
   },
