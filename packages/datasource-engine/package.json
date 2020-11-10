@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-datasource-engine",
-  "version": "1.0.19",
+  "version": "1.0.20-alpha.2",
   "description": "DataSource Engine for lowcode",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
