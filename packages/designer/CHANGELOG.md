@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.20"></a>
+## [1.0.20](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@1.0.19...@ali/lowcode-designer@1.0.20) (2020-11-10)
+
+
+### Bug Fixes
+
+* typo of onResizeEnd and remove ([8df5f05](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8df5f05))
+
+
+
+
 <a name="1.0.19"></a>
 ## [1.0.19](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@1.0.18...@ali/lowcode-designer@1.0.19) (2020-11-05)
 

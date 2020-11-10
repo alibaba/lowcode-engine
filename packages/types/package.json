@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-types",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "Types for Ali lowCode engine",
   "files": [
     "es",
@@ -14,7 +14,7 @@
     "test:snapshot": "ava --update-snapshots"
   },
   "dependencies": {
-    "@ali/lowcode-datasource-types": "^1.0.1",
+    "@ali/lowcode-datasource-types": "^1.0.2",
     "power-di": "^2.2.4",
     "react": "^16"
   },

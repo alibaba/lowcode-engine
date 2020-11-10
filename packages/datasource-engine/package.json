@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-datasource-engine",
-  "version": "1.0.20-alpha.2",
+  "version": "1.0.20",
   "description": "DataSource Engine for lowcode",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -17,8 +17,8 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@ali/lowcode-datasource-types": "^1.0.1",
-    "@ali/lowcode-types": "^1.0.17",
+    "@ali/lowcode-datasource-types": "^1.0.2",
+    "@ali/lowcode-types": "^1.0.18",
     "typescript": "^3.9.7"
   },
   "devDependencies": {

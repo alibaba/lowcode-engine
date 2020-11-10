@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.6"></a>
+## [1.0.6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-datasource-jsonp-handler@1.0.5...@ali/lowcode-datasource-jsonp-handler@1.0.6) (2020-11-10)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-datasource-jsonp-handler
+
 <a name="1.0.5"></a>
 ## [1.0.5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-datasource-jsonp-handler@1.0.4...@ali/lowcode-datasource-jsonp-handler@1.0.5) (2020-11-05)
 
