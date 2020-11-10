@@ -35,6 +35,7 @@ export interface IAppData {
   containerId?: string;
   components?: IComponents;
   componentsMap?: IComponentMap[];
+  requestHandlersMap?: any;
   utils?: IUtils;
   constants?: IConstants;
   i18n?: I18n;
@@ -147,6 +148,7 @@ export default class Provider {
           containerId,
           components,
           componentsMap,
+          requestHandlersMap,
           utils,
           constants,
           i18n,
@@ -160,11 +162,13 @@ export default class Provider {
         this.registerComponentsMap(componentsMap);
         this.registerUtils(utils);
         this.registerContants(constants);
+        this.registerRequestHandlersMap(requestHandlersMap);
         resolve({
           history: this.getHistory(),
           components: this.getComponents(),
           utils: this.getUtils(),
           containerId: this.getContainerId(),
+          requestHandlersMap: this.getRequestHandlersMap(),
         });
       } catch (err) {
         reject(err);
@@ -288,6 +292,13 @@ export default class Provider {
     this.constants = constants;
   }
 
+  registerRequestHandlersMap(requestHandlersMap: any) {
+    if (!requestHandlersMap) {
+      return;
+    }
+    this.requestHandlersMap = requestHandlersMap;
+  }
+
   setLayoutConfig(config: ILayoutConfig | undefined) {
     if (!config) {
       return;
@@ -353,6 +364,10 @@ export default class Provider {
 
   getConstants() {
     return this.constants;
+  }
+
+  getRequestHandlersMap() {
+    return this.requestHandlersMap;
   }
 
   getComponentsMap() {

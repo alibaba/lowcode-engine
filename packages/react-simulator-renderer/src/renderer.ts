@@ -48,6 +48,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
       // sync designMode
       this._designMode = host.designMode;
 
+      // sync requestHandlersMap
       this._requestHandlersMap = host.requestHandlersMap;
 
       // sync suspended
@@ -71,6 +72,7 @@ export class SimulatorRenderer implements BuiltinSimulatorRenderer {
         constants: {
           name: 'demo',
         },
+        requestHandlersMap: this._requestHandlersMap,
       };
     });
   }
