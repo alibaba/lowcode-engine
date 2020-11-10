@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-datasource-url-params-handler",
-  "version": "1.0.8",
+  "version": "1.0.19",
   "main": "lib/index.js",
   "module": "es/index.js",
   "typings": "es/index.d.ts",
@@ -16,7 +16,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@ali/lowcode-datasource-types": "^1.0.2",
+    "@ali/lowcode-datasource-types": "^1.0.19",
     "query-string": "^6.13.1",
     "typescript": "^3.9.7"
   },

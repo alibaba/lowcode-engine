@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-datasource-fetch-handler",
-  "version": "1.0.9",
+  "version": "1.0.19",
   "main": "lib/index.js",
   "module": "es/index.js",
   "typings": "es/index.d.ts",
