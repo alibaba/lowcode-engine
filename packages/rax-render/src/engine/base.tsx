@@ -3,7 +3,7 @@ import { Component, createElement } from 'rax';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
 import classnames from 'classnames';
-import { createInterpret } from '@ali/lowcode-datasource-engine';
+import { create as createDataSourceEngine } from '@ali/lowcode-datasource-engine/interpret';
 import DataHelper from '../utils/dataHelper';
 import {
   forEach,
@@ -134,16 +134,16 @@ export default class BaseEngine extends Component {
     const schema = props.__schema || {};
     const dataSource = (schema && schema.dataSource) || {};
     // requestHandlersMap 存在才走数据源引擎方案
-    if (props.requestHandlersMap) {
-      const { dataSourceMap, reloadDataSource } = createInterpret(dataSource, this, {
-        requestHandlersMap: props.requestHandlersMap,
+    if (props?.__appHelper?.requestHandlersMap) {
+      const { dataSourceMap, reloadDataSource } = createDataSourceEngine(dataSource, this, {
+        requestHandlersMap: props.__appHelper.requestHandlersMap,
       });
       this.dataSourceMap = dataSourceMap;
       this.reloadDataSource = () => new Promise((resolve, reject) => {
         debug('reload data source');
-        this.__showPlaceholder = true;
+        // this.__showPlaceholder = true;
         reloadDataSource().then(() => {
-          this.__showPlaceholder = false;
+          // this.__showPlaceholder = false;
           // @TODO 是否需要 forceUpate
           resolve();
         });
@@ -155,13 +155,13 @@ export default class BaseEngine extends Component {
       this.reloadDataSource = () => new Promise((resolve, reject) => {
         debug('reload data source');
         if (!this.__dataHelper) {
-          this.__showPlaceholder = false;
+          // this.__showPlaceholder = false;
           return resolve();
         }
         this.__dataHelper
           .getInitData()
           .then((res) => {
-            this.__showPlaceholder = false;
+            // this.__showPlaceholder = false;
             if (isEmpty(res)) {
               this.forceUpdate();
               return resolve();
@@ -178,9 +178,10 @@ export default class BaseEngine extends Component {
       });
     }
     // 设置容器组件占位，若设置占位则在初始异步请求完成之前用loading占位且不渲染容器组件内部内容
-    if (this.__parseData(schema.props && schema.props.autoLoading)) {
+    // @TODO __showPlaceholder 的逻辑一旦开启就关不掉，先注释掉了
+    /* if (this.__parseData(schema.props && schema.props.autoLoading)) {
       this.__showPlaceholder = (dataSource.list || []).some((item) => !!this.__parseData(item.isInit));
-    }
+    } */
   };
 
   __render = () => {

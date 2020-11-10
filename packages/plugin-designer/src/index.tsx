@@ -15,6 +15,8 @@ interface DesignerPluginState {
   renderEnv?: string;
   device?: string;
   simulatorUrl: Asset | null;
+  // @TODO 类型定义
+  requestHandlersMap: any;
 }
 
 export default class DesignerPlugin extends PureComponent<PluginProps, DesignerPluginState> {
@@ -27,6 +29,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
     renderEnv: 'default',
     device: 'default',
     simulatorUrl: null,
+    requestHandlersMap: null,
   };
 
   private _mounted = true;
@@ -43,6 +46,8 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
       const renderEnv = await editor.get('renderEnv');
       const device = await editor.get('device');
       const simulatorUrl = await editor.get('simulatorUrl');
+      // @TODO setupAssets 里设置 requestHandlersMap 不太合适
+      const requestHandlersMap = await editor.get('requestHandlersMap');
       if (!this._mounted) {
         return;
       }
@@ -54,6 +59,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
         renderEnv,
         device,
         simulatorUrl,
+        requestHandlersMap,
       };
       this.setState(state);
     } catch (e) {
@@ -76,7 +82,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
 
   render(): React.ReactNode {
     const { editor } = this.props;
-    const { componentMetadatas, library, extraEnvironment, renderEnv, device, simulatorUrl } = this.state;
+    const { componentMetadatas, library, extraEnvironment, renderEnv, device, simulatorUrl, requestHandlersMap } = this.state;
     if (!library || !componentMetadatas) {
       // TODO: use a Loading
       return null;
@@ -95,6 +101,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
           renderEnv,
           device,
           simulatorUrl,
+          requestHandlersMap,
         }}
       />
     );

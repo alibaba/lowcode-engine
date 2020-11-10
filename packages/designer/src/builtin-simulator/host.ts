@@ -135,6 +135,12 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     return this.get('designMode') || 'design';
   }
 
+  @computed get requestHandlersMap(): any {
+    // renderer 依赖
+    // TODO: 需要根据 design mode 不同切换鼠标响应情况
+    return this.get('requestHandlersMap') || null;
+  }
+
   @computed get componentsAsset(): Asset | undefined {
     return this.get('componentsAsset');
   }

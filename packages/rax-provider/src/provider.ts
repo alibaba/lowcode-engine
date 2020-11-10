@@ -1,6 +1,7 @@
 import { createElement, render } from 'rax';
 import UniversalDriver from 'driver-universal';
 import { app, Provider } from '@ali/lowcode-runtime';
+import { AppHelper } from '@ali/lowcode-utils';
 import LazyComponent from './lazy-component';
 import getRouter from './router';
 
@@ -80,7 +81,12 @@ export default class RaxProvider extends Provider {
       history: this.getHistory(),
       routes,
     });
-    const RouterView = (props) => createElement(Router, props);
+    const appHelper = new AppHelper({});
+    appHelper.set('requestHandlersMap', this.getRequestHandlersMap());
+    const RouterView = (props) => createElement(Router, {
+      appHelper,
+      ...props,
+    });
     return RouterView;
   }
 

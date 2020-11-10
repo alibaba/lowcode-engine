@@ -17,7 +17,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@ali/lowcode-datasource-types": "^1.0.1",
+    "@ali/lowcode-datasource-types": "^1.0.19",
     "@ali/lowcode-types": "^1.0.17",
     "typescript": "^3.9.7"
   },

@@ -2,7 +2,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
-import { createInterpret } from '@ali/lowcode-datasource-engine';
+import { create as createDataSourceEngine } from '@ali/lowcode-datasource-engine/interpret';
 import Div from '../components/Div';
 import VisualDom from '../components/VisualDom';
 import AppContext from '../context/appContext';
@@ -146,17 +146,18 @@ export default class BaseRender extends PureComponent {
     const schema = props.__schema || {};
     const dataSource = (schema && schema.dataSource) || {};
     // requestHandlersMap 存在才走数据源引擎方案
-    if (props.requestHandlersMap) {
-      const { dataSourceMap, reloadDataSource } = createInterpret(dataSource, this, {
-        requestHandlersMap: props.requestHandlersMap,
+    if (props?.__appHelper?.requestHandlersMap) {
+      const { dataSourceMap, reloadDataSource } = createDataSourceEngine(dataSource, this, {
+        requestHandlersMap: props.__appHelper.requestHandlersMap,
       });
       this.dataSourceMap = dataSourceMap;
       this.reloadDataSource = () => new Promise((resolve) => {
         debug('reload data source');
-        this.__showPlaceholder = true;
+        // this.__showPlaceholder = true;
         reloadDataSource().then(() => {
-          this.__showPlaceholder = false;
+          // this.__showPlaceholder = false;
           // @TODO 是否需要 forceUpate
+          // this.forceUpdate();
           resolve();
         });
       });
@@ -167,13 +168,13 @@ export default class BaseRender extends PureComponent {
       this.reloadDataSource = () => new Promise((resolve, reject) => {
         debug('reload data source');
         if (!this.__dataHelper) {
-          this.__showPlaceholder = false;
+          // this.__showPlaceholder = false;
           return resolve();
         }
         this.__dataHelper
           .getInitData()
           .then((res) => {
-            this.__showPlaceholder = false;
+            // this.__showPlaceholder = false;
             if (isEmpty(res)) {
               this.forceUpdate();
               return resolve();
@@ -190,9 +191,10 @@ export default class BaseRender extends PureComponent {
       });
     }
     // 设置容器组件占位，若设置占位则在初始异步请求完成之前用loading占位且不渲染容器组件内部内容
-    this.__showPlaceholder = this.__parseData(schema.props && schema.props.autoLoading) && (dataSource.list || []).some(
+    // @TODO __showPlaceholder 的逻辑一旦开启就关不掉，先注释掉了
+    /* this.__showPlaceholder = this.__parseData(schema.props && schema.props.autoLoading) && (dataSource.list || []).some(
       (item) => !!this.__parseData(item.isInit),
-    );
+    ); */
   };
 
   __render = () => {
@@ -562,6 +564,10 @@ export default class BaseRender extends PureComponent {
     }
     return checkProps(props);
   };
+
+  get requestHandlersMap() {
+    return this.appHelper && this.appHelper.requestHandlersMap;
+  }
 
   get utils() {
     return this.appHelper && this.appHelper.utils;

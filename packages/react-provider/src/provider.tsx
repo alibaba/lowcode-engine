@@ -87,6 +87,7 @@ export default class ReactProvider extends Provider {
     const appHelper = new AppHelper({});
     appHelper.set('utils', this.getUtils());
     appHelper.set('constants', this.getConstants());
+    appHelper.set('requestHandlersMap', this.getRequestHandlersMap());
     const self = this;
     const RouterView = (props: any) => {
       return createElement(Router as any, {

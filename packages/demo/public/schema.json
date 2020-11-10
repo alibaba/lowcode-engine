@@ -11,6 +11,19 @@
     "fileName": "test",
     "dataSource": {
       "list": [
+        {
+          "type": "fetch",
+          "id": "请求商家数据，是一个 HTTP 请求，是一个 HTTP 请求，是一个 HTTP 请求",
+          "isInit": true,
+          "options": {
+            "uri": "https://www.taobao.com",
+            "params": {
+              "a": 1,
+              "b": true,
+              "c": "3"
+            }
+          }
+        }
       ]
     },
     "state": {
