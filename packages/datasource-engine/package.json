@@ -2,16 +2,16 @@
   "name": "@ali/lowcode-datasource-engine",
   "version": "1.0.20-alpha.1",
   "description": "DataSource Engine for lowcode",
-  "main": "lib/index.js",
-  "module": "es/index.js",
+  "main": "dist/index.js",
   "files": [
+    "dist",
     "src",
-    "lib",
-    "es"
+    "interpret*",
+    "runtime*"
   ],
   "scripts": {
-    "clean": "rm -rf es lib",
-    "build": "npm run clean && tsc && tsc --outDir ./lib --module commonjs ",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc ",
     "test": "ava",
     "prepublishOnly": "npm run build"
   },
