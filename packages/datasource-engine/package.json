@@ -3,6 +3,7 @@
   "version": "1.0.20-alpha.1",
   "description": "DataSource Engine for lowcode",
   "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "files": [
     "dist",
     "src",
