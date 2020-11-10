@@ -295,9 +295,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     if (useMutator) {
       this._parent?.didDropOut(this);
     }
-    // 建立新的父子关系
-    this._parent = parent;
     if (parent) {
+      // 建立新的父子关系，尤其注意：对于 parent 为 null 的场景，不会赋值，因为 subtreeModified 等事件可能需要知道该 node 被删除前的父子关系
+      this._parent = parent;
       this.document.removeWillPurge(this);
       if (!this.conditionGroup) {
         // initial conditionGroup
