@@ -329,7 +329,7 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
   if (advanceGroup.length > 0) {
     combined.push({
       name: '#advanced',
-      title: { type: 'i18n', 'zh-CN': '高级', 'en-US': 'Advance' },
+      title: { type: 'i18n', 'zh-CN': '高级', 'en-US': 'Advanced' },
       items: advanceGroup,
     });
   }
