@@ -27,7 +27,9 @@ export function uniqueArray<T>(arr: T[], by: (i: T) => string) {
   arr.forEach((item) => {
     map[by(item)] = item;
   });
-  const uniqueKeys = [...new Set<string>(Object.keys(map))];
+  // FIXME: Babel 编译存在问题，暂时替换实现
+  // const uniqueKeys = [...new Set<string>(Object.keys(map))];
+  const uniqueKeys = Array.from(new Set<string>(Object.keys(map)));
   const uniqueItems = uniqueKeys.map((key) => map[key]);
   return uniqueItems;
 }

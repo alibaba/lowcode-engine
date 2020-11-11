@@ -162,6 +162,9 @@ export type CompositeValueGeneratorOptions = {
   nodeGenerator?: NodeGenerator<string>;
 };
 
+/**
+ * 作用域定义，维护作用域内定义，支持作用域链上溯
+ */
 export interface IScope {
   // 作用域内定义
   bindings?: IScopeBindings;
