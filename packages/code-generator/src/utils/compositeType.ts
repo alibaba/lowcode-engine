@@ -34,7 +34,8 @@ function generateObject(value: CompositeObject, scope: IScope, options: Composit
 }
 
 function generateString(value: string): string {
-  return `'${value}'`;
+  // 有的字符串里面会有特殊字符，比如换行或引号之类的，这里我们借助 JSON 的字符串转义功能来做下转义并加上双引号
+  return JSON.stringify(value);
 }
 
 function generateNumber(value: number): string {
