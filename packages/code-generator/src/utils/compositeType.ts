@@ -13,8 +13,7 @@ import _ from 'lodash';
 import { IScope, CompositeValueGeneratorOptions, CodeGeneratorError } from '../types';
 import { generateExpression, generateFunction } from './jsExpression';
 import { generateJsSlot } from './jsSlot';
-import { isValidIdentifier } from './validate';
-import { camelize } from './common';
+import { isVaildMemberName } from './validate';
 import { executeFunctionStack } from './aopHelper';
 
 function generateArray(value: CompositeArray, scope: IScope, options: CompositeValueGeneratorOptions = {}): string {
@@ -25,23 +24,7 @@ function generateArray(value: CompositeArray, scope: IScope, options: CompositeV
 function generateObject(value: CompositeObject, scope: IScope, options: CompositeValueGeneratorOptions = {}): string {
   const body = Object.keys(value)
     .map((key) => {
-      let propName = key;
-
-      // TODO: 可以增加更多智能修复的方法
-      const fixMethods: Array<(v: string) => string> = [camelize];
-      // Try to fix propName
-      while (!isValidIdentifier(propName)) {
-        const fixMethod = fixMethods.pop();
-        if (fixMethod) {
-          try {
-            propName = fixMethod(propName);
-          } catch (error) {
-            throw new CodeGeneratorError(error.message);
-          }
-        } else {
-          throw new CodeGeneratorError(`Propname: ${key} is not a valid identifier.`);
-        }
-      }
+      const propName = isVaildMemberName(key) ? key : `'${key}'`;
       const v = generateUnknownType(value[key], scope, options);
       return `${propName}: ${v}`;
     })
