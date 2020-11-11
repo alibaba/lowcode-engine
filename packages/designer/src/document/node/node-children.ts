@@ -123,13 +123,16 @@ export class NodeChildren {
     if (node.isParental()) {
       foreachReverse(node.children, (subNode: Node) => {
         subNode.remove(useMutator, purge);
-      });
+      }, (iterable, idx) => (iterable as NodeChildren).get(idx));
+      foreachReverse(node.slots, (slotNode: Node) => {
+        slotNode.remove(useMutator, purge);
+      }, (iterable, idx) => (iterable as [])[idx]);
     }
     if (purge) {
       // should set parent null
       node.internalSetParent(null, useMutator);
       try {
-        node.purge(useMutator);
+        node.purge();
       } catch (err) {
         console.error(err);
       }
