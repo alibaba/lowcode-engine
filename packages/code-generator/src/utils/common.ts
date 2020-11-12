@@ -33,3 +33,9 @@ export function uniqueArray<T>(arr: T[], by: (i: T) => string) {
   const uniqueItems = uniqueKeys.map((key) => map[key]);
   return uniqueItems;
 }
+
+export function getStaticExprValue<T>(expr: string): T {
+  // TODO: 需要安全性检查
+  // eslint-disable-next-line no-new-func
+  return Function(`"use strict";return (${expr})`)();
+}

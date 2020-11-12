@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { NodeSchema, isNodeSchema, NodeDataType, CompositeValue } from '@ali/lowcode-types';
+import { AllHtmlEntities } from 'html-entities';
 
 import {
   IScope,
@@ -13,9 +14,15 @@ import {
 } from '../types';
 
 import { generateCompositeType } from './compositeType';
+import { getStaticExprValue } from './common';
 import { executeFunctionStack } from './aopHelper';
 
-function mergeNodeGeneratorConfig(cfg1: NodeGeneratorConfig, cfg2: NodeGeneratorConfig = {}): NodeGeneratorConfig {
+const entities = new AllHtmlEntities();
+
+function mergeNodeGeneratorConfig(
+  cfg1: NodeGeneratorConfig,
+  cfg2: NodeGeneratorConfig = {},
+): NodeGeneratorConfig {
   const resCfg: NodeGeneratorConfig = {};
   if (cfg1.handlers || cfg2.handlers) {
     resCfg.handlers = {
@@ -44,11 +51,12 @@ function mergeNodeGeneratorConfig(cfg1: NodeGeneratorConfig, cfg2: NodeGenerator
 }
 
 export function isPureString(v: string) {
-  return v[0] === "'" && v[v.length - 1] === "'";
+  // FIXME: 目前的方式不够严谨
+  return (v[0] === "'" && v[v.length - 1] === "'") || (v[0] === '"' && v[v.length - 1] === '"');
 }
 
-export function getPureStringContent(v: string) {
-  return v.substring(1, v.length - 1);
+export function encodeJsxStringNode(v: string) {
+  return entities.encode(v);
 }
 
 function generateAttrValue(
@@ -93,8 +101,9 @@ function generateAttr(
     //        因此这个处理最好的方式是对传出值做语法分析，判断以哪种模版产出 Attr 值
     let newValue: string;
     if (p.value && isPureString(p.value)) {
-      const content = getPureStringContent(p.value);
-      newValue = `"${content}"`;
+      // 似乎多次一举，目前的诉求是处理多种引号类型字符串的 case，正确处理转义
+      const content = getStaticExprValue<string>(p.value);
+      newValue = JSON.stringify(content);
     } else {
       newValue = `{${p.value}}`;
     }
@@ -108,7 +117,11 @@ function generateAttr(
   return pieces;
 }
 
-function generateAttrs(nodeItem: NodeSchema, scope: IScope, config?: NodeGeneratorConfig): CodePiece[] {
+function generateAttrs(
+  nodeItem: NodeSchema,
+  scope: IScope,
+  config?: NodeGeneratorConfig,
+): CodePiece[] {
   const { props } = nodeItem;
 
   let pieces: CodePiece[] = [];
@@ -133,7 +146,11 @@ function generateAttrs(nodeItem: NodeSchema, scope: IScope, config?: NodeGenerat
   return pieces;
 }
 
-function generateBasicNode(nodeItem: NodeSchema, scope: IScope, config?: NodeGeneratorConfig): CodePiece[] {
+function generateBasicNode(
+  nodeItem: NodeSchema,
+  scope: IScope,
+  config?: NodeGeneratorConfig,
+): CodePiece[] {
   const pieces: CodePiece[] = [];
   const tagName = (config?.tagMapping || _.identity)(nodeItem.componentName);
 
@@ -145,7 +162,11 @@ function generateBasicNode(nodeItem: NodeSchema, scope: IScope, config?: NodeGen
   return pieces;
 }
 
-function generateSimpleNode(nodeItem: NodeSchema, scope: IScope, config?: NodeGeneratorConfig): CodePiece[] {
+function generateSimpleNode(
+  nodeItem: NodeSchema,
+  scope: IScope,
+  config?: NodeGeneratorConfig,
+): CodePiece[] {
   const basicParts = generateBasicNode(nodeItem, scope, config) || [];
   const attrParts = generateAttrs(nodeItem, scope, config) || [];
   const childrenParts: CodePiece[] = [];
@@ -197,7 +218,11 @@ function linkPieces(pieces: CodePiece[]): string {
   return `${beforeParts}<${tagName}${attrsParts} />${afterParts}`;
 }
 
-function generateNodeSchema(nodeItem: NodeSchema, scope: IScope, config?: NodeGeneratorConfig): string {
+function generateNodeSchema(
+  nodeItem: NodeSchema,
+  scope: IScope,
+  config?: NodeGeneratorConfig,
+): string {
   const pieces: CodePiece[] = [];
   if (config?.nodePlugins) {
     const res = executeFunctionStack<NodeSchema, CodePiece[], NodeGeneratorConfig>(
@@ -346,7 +371,7 @@ export function createNodeGenerator(cfg: NodeGeneratorConfig = {}): NodeGenerato
     });
 
     if (isPureString(valueStr)) {
-      return getPureStringContent(valueStr);
+      return encodeJsxStringNode(getStaticExprValue<string>(valueStr));
     }
 
     return `{${valueStr}}`;
