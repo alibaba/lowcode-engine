@@ -24,7 +24,8 @@ const transfrom = {
     const stateStartStr = this.pickupStateStartStr(codeNew);
     if (stateStartStr != null) {
       startIndex = codeNew.indexOf(stateStartStr) + stateStartStr.length;
-      const stateBodyStr = this.pickupFunctionBody(codeNew, startIndex);
+      let stateBodyStr = this.pickupFunctionBody(codeNew, startIndex);
+      stateBodyStr = this.filterEndComma(stateBodyStr);
       const stateData = JSON.parse('{' + stateBodyStr);
       functionMap.state = stateData;
     }
@@ -78,6 +79,30 @@ const transfrom = {
     return functionMap;
   },
 
+  /**
+   * 过滤掉尾逗号
+   */
+  filterEndComma(str) {
+    let commaIndex = -1;
+    for (let i = str.length - 1; i > 0; i--) {
+      if (str[i] == ',') {
+        commaIndex = i;
+        break;
+      } else if (/^[a-zA-Z]+$/.test(str[i])) {
+        break;
+      }
+    }
+
+
+    if (commaIndex > 0) {
+      const newStr = str.substr(0, commaIndex) + str.substr(commaIndex + 1, str.length - 1);
+      return newStr;
+    }
+
+    return str;
+
+
+  },
 
   pickupFunctionName(codeStr) {
     // 函数名的正则表达式
