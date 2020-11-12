@@ -32,33 +32,31 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     const ir = next.ir as IContainerInfo;
     const scope = Scope.createRootScope();
 
-    if (ir.state) {
-      const state = ir.state;
-      const fields = Object.keys(state).map<string>((stateName) => {
-        // TODO: 这里用什么 handlers?
-        const value = generateCompositeType(state[stateName], scope);
-        return `${stateName}: ${value}`;
-      });
+    const state = ir.state || {};
+    const fields = Object.keys(state).map<string>((stateName) => {
+      // TODO: 这里用什么 handlers?
+      const value = generateCompositeType(state[stateName], scope);
+      return `${stateName}: ${value}`;
+    });
 
-      if (cfg.implementType === 'inConstructor') {
-        next.chunks.push({
-          type: ChunkType.STRING,
-          fileType: cfg.fileType,
-          name: CLASS_DEFINE_CHUNK_NAME.ConstructorContent,
-          content: `this.state = { ${fields.join(',')} };`,
-          linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.ConstructorContent]],
-        });
-      } else if (cfg.implementType === 'insMember') {
-        next.chunks.push({
-          type: ChunkType.STRING,
-          fileType: cfg.fileType,
-          name: CLASS_DEFINE_CHUNK_NAME.InsVar,
-          content: `state = { ${fields.join(',')} };`,
-          linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.InsVar]],
-        });
-      }
-      // TODO: hooks state??
+    if (cfg.implementType === 'inConstructor') {
+      next.chunks.push({
+        type: ChunkType.STRING,
+        fileType: cfg.fileType,
+        name: CLASS_DEFINE_CHUNK_NAME.ConstructorContent,
+        content: `this.state = { ${fields.join(',')} };`,
+        linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.ConstructorContent]],
+      });
+    } else if (cfg.implementType === 'insMember') {
+      next.chunks.push({
+        type: ChunkType.STRING,
+        fileType: cfg.fileType,
+        name: CLASS_DEFINE_CHUNK_NAME.InsVar,
+        content: `state = { ${fields.join(',')} };`,
+        linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.InsVar]],
+      });
     }
+    // TODO: hooks state??
 
     return next;
   };
