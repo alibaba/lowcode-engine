@@ -20,6 +20,8 @@ import __$$projectUtils from '../../utils';
 import './index.css';
 
 class Home$$Page extends Component {
+  state = {};
+
   _methods = this._defineMethods();
 
   _context = this._createContext();
