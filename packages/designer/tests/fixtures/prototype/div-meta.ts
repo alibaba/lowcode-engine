@@ -65,7 +65,7 @@ export default {
       },
       {
         type: 'group',
-        name: 'groupkgzzeo41',
+        name: 'groupkh97h5kc',
         title: '高级',
         extraProps: {
           display: 'accordion',
@@ -218,10 +218,7 @@ export default {
     ],
     component: {
       isContainer: true,
-      nestingRule: {
-        parentWhitelist: 'Div',
-        childWhitelist: 'Div',
-      },
+      nestingRule: {},
     },
     supports: {},
   },
@@ -256,20 +253,7 @@ export default {
         name: 'onMouseLeave',
       },
     ],
-    filters: [
-      {
-        name: 'events',
-      },
-      {
-        name: 'onClick',
-      },
-      {
-        name: 'onMouseEnter',
-      },
-      {
-        name: 'onMouseLeave',
-      },
-    ],
+    filters: [],
     autoruns: [],
   },
 };

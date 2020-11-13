@@ -89,7 +89,7 @@ export default {
       children: [
         {
           componentName: 'Form',
-          id: 'node_k1ow3cbq',
+          id: 'form',
           props: {
             size: 'medium',
             labelAlign: 'top',

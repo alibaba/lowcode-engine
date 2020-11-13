@@ -5,6 +5,7 @@ import logger from '@ali/vu-logger';
 import { render } from 'react-dom';
 import I18nUtil from './i18n-util';
 import { hotkey as Hotkey, monitor } from '@ali/lowcode-editor-core';
+import { registerMetadataTransducer } from '@ali/lowcode-designer';
 import { createElement } from 'react';
 import { VE_EVENTS as EVENTS, VE_HOOKS as HOOKS, VERSION as Version } from './base/const';
 import Bus from './bus';
@@ -110,6 +111,7 @@ const VisualEngine = {
   Project,
   logger,
   Symbols,
+  registerMetadataTransducer,
   // Flags,
 };
 
@@ -160,6 +162,7 @@ export {
   Project,
   logger,
   Symbols,
+  registerMetadataTransducer,
 };
 
 const version = '6.0.0 (LowcodeEngine 0.9.32)';

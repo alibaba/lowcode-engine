@@ -11,7 +11,7 @@ import { createIcon } from '@ali/lowcode-utils';
 @observer
 export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any }, { shouldIgnoreRoot: boolean }> {
   state = {
-    shouldIgnoreRoot: false, 
+    shouldIgnoreRoot: false,
   };
   private main = new SettingsMain(this.props.editor);
 
@@ -24,12 +24,12 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
   componentDidMount() {
     this.setShouldIgnoreRoot();
   }
-    
+
   async setShouldIgnoreRoot() {
-    let designMode = await this.props.editor.get('designMode');
+    const designMode = await this.props.editor.get('designMode');
     this.setState({
       shouldIgnoreRoot: designMode === 'live',
-    })
+    });
   }
 
   componentWillUnmount() {

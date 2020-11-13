@@ -9,7 +9,6 @@ import { isJSExpression, isJSBlock, isJSSlot } from '@ali/lowcode-types';
 import { isVariable, getCurrentFieldIds } from '../utils';
 
 export function initNodeReducer(props, node) {
-  // debugger;
   // run initials
   const newProps: any = {
     ...props,
@@ -23,6 +22,7 @@ export function initNodeReducer(props, node) {
     }
   }
   const initials = node.componentMeta.getMetadata().experimental?.initials;
+
   if (initials) {
     const getRealValue = (propValue: any) => {
       if (isVariable(propValue)) {

@@ -2,9 +2,10 @@ import set from 'lodash/set';
 import cloneDeep from 'lodash/clonedeep';
 import '../fixtures/window';
 import formSchema from '../fixtures/schema/form';
-import VisualEngine from '../../src';
+import VisualEngine, { Prototype } from '../../src';
 import { Editor } from '@ali/lowcode-editor-core';
 import { getIdsFromSchema, getNodeFromSchemaById } from '../utils';
+import divPrototypeConfig from '../fixtures/prototype/div-vision';
 
 const pageSchema = { componentsTree: [formSchema] };
 
@@ -61,6 +62,14 @@ describe('VisualEngine.Pages 相关 API 测试', () => {
       const expectedNodeCnt = ids.length;
       // slot 会多出（1 + N）个节点
       expect(doc.nodesMap.size).toBe(expectedNodeCnt + 2);
+    });
+    it.only('基本的节点模型初始化，初始化传入 schema，构造 prototype', () => {
+      const proto = new Prototype(divPrototypeConfig);
+      const doc = VisualEngine.Pages.addPage(pageSchema)!;
+      expect(doc).toBeTruthy();
+      const ids = getIdsFromSchema(formSchema);
+      const expectedNodeCnt = ids.length;
+      expect(doc.nodesMap.size).toBe(expectedNodeCnt);
     });
     it('导出 schema', () => {
       const doc = VisualEngine.Pages.addPage(pageSchema)!;

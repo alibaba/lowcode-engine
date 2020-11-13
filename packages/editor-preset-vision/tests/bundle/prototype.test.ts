@@ -6,6 +6,7 @@ import '../fixtures/window';
 // import { Node } from '../../src/document/node/node';
 // import { Designer } from '../../src/designer/designer';
 import divPrototypeConfig from '../fixtures/prototype/div-vision';
+import divFullPrototypeConfig from '../fixtures/prototype/div-vision-full';
 import divPrototypeMeta from '../fixtures/prototype/div-meta';
 // import VisualEngine from '../../src';
 import { designer } from '../../src/editor';
@@ -16,6 +17,21 @@ import { Editor } from '@ali/lowcode-editor-core';
 describe('Prototype', () => {
   it('构造函数 - OldPrototypeConfig', () => {
     const proto = new Prototype(divPrototypeConfig);
+    expect(isPrototype(proto)).toBeTruthy;
+    expect(proto.getComponentName()).toBe('Div');
+    expect(proto.getId()).toBe('Div');
+    expect(proto.getCategory()).toBe('布局');
+    expect(proto.getDocUrl()).toBe(
+      'http://gitlab.alibaba-inc.com/vision-components/vc-block/blob/master/README.md',
+    );
+    expect(proto.getIcon()).toBeUndefined;
+    expect(proto.getTitle()).toBe('Div');
+    expect(proto.isPrototype).toBeTruthy;
+    expect(proto.isContainer()).toBeTruthy;
+    expect(proto.isModal()).toBeFalsy;
+  });
+  it('构造函数 - 全量 OldPrototypeConfig', () => {
+    const proto = new Prototype(divFullPrototypeConfig);
     expect(isPrototype(proto)).toBeTruthy;
     expect(proto.getComponentName()).toBe('Div');
     expect(proto.getId()).toBe('Div');
