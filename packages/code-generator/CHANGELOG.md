@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.22"></a>
+## [1.0.22](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@1.0.21...@ali/lowcode-code-generator@1.0.22) (2020-11-16)
+
+
+### Bug Fixes
+
+* 🐛 解决出码的 disk publisher 不能正确地创建子目录的问题 ([fb5ba93](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fb5ba93))
+* 🐛 解决多行文本在出码的时候生成的字符串是无效代码的问题 ([fa68857](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fa68857))
+* 🐛 schema 中没有 state 的定义, 出码后的 Rax/React 组件应有个默认的空的 state ([7e37f8d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7e37f8d))
+* babel build bug & add some comment ([1511e2c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1511e2c))
+* object property name fix logic ([dd69113](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/dd69113))
+* pure string export in jsx ([1a9e953](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1a9e953))
+
+
+
+
 <a name="1.0.21"></a>
 ## [1.0.21](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-code-generator@1.0.20...@ali/lowcode-code-generator@1.0.21) (2020-11-10)
 
