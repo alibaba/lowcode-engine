@@ -205,7 +205,7 @@ export class DocumentModel {
     }
 
     let node: Node | null = null;
-    if (this.inited) {
+    if (this.hasNode(schema?.id)) {
       schema.id = null;
     }
     if (schema.id) {

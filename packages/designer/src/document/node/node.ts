@@ -23,6 +23,7 @@ import { ReactElement } from 'react';
 import { SettingTopEntry } from 'designer/src/designer';
 import { EventEmitter } from 'events';
 import { includeSlot, removeSlot } from '../../utils/slot';
+import { foreachReverse } from '../../utils/tree';
 
 /**
  * 基础节点
@@ -294,9 +295,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     if (useMutator) {
       this._parent?.didDropOut(this);
     }
-    // 建立新的父子关系
-    this._parent = parent;
     if (parent) {
+      // 建立新的父子关系，尤其注意：对于 parent 为 null 的场景，不会赋值，因为 subtreeModified 等事件可能需要知道该 node 被删除前的父子关系
+      this._parent = parent;
       this.document.removeWillPurge(this);
       if (!this.conditionGroup) {
         // initial conditionGroup
@@ -594,7 +595,11 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   import(data: Schema, checkId = false) {
     const { componentName, id, children, props, ...extras } = data;
-
+    if (this.isSlot()) {
+      foreachReverse(this.children, (subNode: Node) => {
+        subNode.remove(true, true);
+      }, (iterable, idx) => (iterable as NodeChildren).get(idx));
+    }
     if (this.isParental()) {
       this.props.import(props, extras);
       (this._children as NodeChildren).import(children, checkId);
@@ -709,12 +714,12 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   addSlot(slotNode: Node) {
-    slotNode.internalSetParent(this as ParentalNode, true);
     const slotName = slotNode?.getExtraProp('name')?.getAsString();
     // 一个组件下的所有 slot，相同 slotName 的 slot 应该是唯一的
     if (includeSlot(this, slotName)) {
       removeSlot(this, slotName);
     }
+    slotNode.internalSetParent(this as ParentalNode, true);
     this._slots.push(slotNode);
   }
 
@@ -756,7 +761,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     this.purged = true;
     this.autoruns?.forEach((dispose) => dispose());
     this.props.purge();
-    this.document.destroyNode(this);
+    // this.document.destroyNode(this);
   }
 
   /**

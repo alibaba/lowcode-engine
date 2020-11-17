@@ -17,7 +17,7 @@ jest.mock('../../../src/document/document-model', () => {
   };
 });
 
-describe('basic utility', () => {
+describe.skip('basic utility', () => {
   test('delegateMethod - useOriginMethodName', () => {
     const dm = new DocumentModel({} as any, {} as any);
     console.log(dm.nextId);

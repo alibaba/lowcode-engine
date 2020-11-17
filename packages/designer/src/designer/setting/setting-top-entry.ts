@@ -68,7 +68,7 @@ export class SettingTopEntry implements SettingEntry {
   readonly designer: Designer;
 
   constructor(readonly editor: IEditor, readonly nodes: Node[]) {
-    if (nodes.length < 1) {
+    if (!Array.isArray(nodes) || nodes.length < 1) {
       throw new ReferenceError('nodes should not be empty');
     }
     this.id = generateSessionId(nodes);

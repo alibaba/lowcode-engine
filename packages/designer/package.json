@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-designer",
-  "version": "0.13.1-10",
+  "version": "0.13.1-11",
   "description": "Designer for Ali LowCode Engine",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -10,13 +10,13 @@
   ],
   "scripts": {
     "build": "build-scripts build --skip-demo",
-    "test": "build-scripts --config build.test.json test"
+    "test": "build-scripts test --config build.test.json"
   },
   "license": "MIT",
   "dependencies": {
-    "@ali/lowcode-editor-core": "^0.13.1-10",
-    "@ali/lowcode-types": "^0.13.1-10",
-    "@ali/lowcode-utils": "^0.13.1-10",
+    "@ali/lowcode-editor-core": "^0.13.1-11",
+    "@ali/lowcode-types": "^0.13.1-11",
+    "@ali/lowcode-utils": "^0.13.1-11",
     "classnames": "^2.2.6",
     "event": "^1.0.0",
     "react": "^16",
@@ -33,8 +33,7 @@
     "build-plugin-component": "^0.2.10",
     "build-scripts-config": "^0.1.8",
     "jest": "^26.5.2",
-    "lodash.clonedeep": "^4.5.0",
-    "lodash.set": "^4.3.2",
+    "lodash": "^4.17.20",
     "ts-jest": "^26.4.1",
     "typescript": "^4.0.3"
   },

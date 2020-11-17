@@ -1,6 +1,7 @@
 export default {
   componentName: 'Page',
   id: 'node_k1ow3cb9',
+  title: 'hey, i\' a page!',
   props: {
     extensions: {
       启用页头: true,
@@ -111,7 +112,8 @@ export default {
       children: [
         {
           componentName: 'Form',
-          id: 'node_k1ow3cbq',
+          id: 'form',
+          extraPropA: 'extraPropA',
           props: {
             size: 'medium',
             labelAlign: 'top',
@@ -123,9 +125,15 @@ export default {
               type: 'variable',
               variable: 'state.formData',
             },
+            obj: {
+              a: 1,
+              b: false,
+              c: 'string',
+            },
             __style__: {},
             fieldId: 'form',
             fieldOptions: {},
+            slotA: '',
           },
           condition: true,
           children: [
@@ -949,6 +957,13 @@ export default {
                     },
                     __style__: ':root {\n  width: 80px;\n}',
                     fieldId: 'button_k1ow3h1p',
+                    greeting: {
+                      // type: 'JSSlot',
+                      value: [{
+                        componentName: 'Text',
+                        props: {},
+                      }]
+                    }
                   },
                   condition: true,
                 },

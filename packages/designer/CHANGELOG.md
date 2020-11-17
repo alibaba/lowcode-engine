@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.13.1-11"></a>
+## [0.13.1-11](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-10...v0.13.1-11) (2020-11-02)
+
+
+### Bug Fixes
+
+* 解决 slot 在关闭时没有正常回收节点 ([642a404](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/642a404))
+
+
+
+
 <a name="0.13.1-10"></a>
 ## [0.13.1-10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-9...v0.13.1-10) (2020-10-26)
 

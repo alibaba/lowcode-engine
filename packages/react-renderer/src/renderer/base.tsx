@@ -339,7 +339,7 @@ export default class BaseRender extends PureComponent {
           if (refProps && typeof refProps === 'string') {
             this[refProps] = ref;
           }
-          engine && engine.props.onCompGetRef(schema, ref);
+          ref && engine && engine.props.onCompGetRef(schema, ref);
         };
       }
       // scope需要传入到组件上

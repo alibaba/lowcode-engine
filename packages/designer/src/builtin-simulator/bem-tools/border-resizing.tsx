@@ -179,7 +179,7 @@ export class BoxResizingInstance extends Component<{
         typeof metaData.experimental.callbacks.onResizeEnd === 'function'
       ) {
         (e as any).trigger = direction;
-        metaData.experimental.callbacks.onResizeStart(e, node);
+        metaData.experimental.callbacks.onResizeEnd(e, node);
       }
 
       const editor = globalContext.get(Editor);

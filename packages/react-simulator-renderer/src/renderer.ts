@@ -187,7 +187,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         this._componentsMap = host.designer.componentsMap;
         // 需要注意的是，autorun 依赖收集的是同步执行的代码，所以 await / promise / callback 里的变量不会被收集依赖
         // 此例中，host.designer.componentsMap 是需要被收集依赖的，否则无法响应式
-        await host.waitForCurrentDocument();
+        // await host.waitForCurrentDocument();
         this.buildComponents();
       }
 

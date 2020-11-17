@@ -12,5 +12,6 @@ module.exports = {
     'no-prototype-builtins': 1,
     'no-confusing-arrow': 1,
     'no-case-declarations': 1,
+    'lines-between-class-members': 0,
   }
 }
