@@ -97,7 +97,7 @@ class Home$$Page extends Component {
         <View>
           <Text>=== User Info: ===</Text>
         </View>
-        {__$$eval(() => __$$context.state.user) && (
+        {!!__$$eval(() => __$$context.state.user) && (
           <View style={{ flexDirection: 'row' }}>
             <Image
               source={{ uri: __$$eval(() => __$$context.state.user.avatar) }}
@@ -153,7 +153,7 @@ class Home$$Page extends Component {
         </View>
         <View>
           <Text>操作提示：</Text>
-          <Text>1. 点击会员名，可以弹出 Toast "Hello xxx!"</Text>
+          <Text>1. 点击会员名，可以弹出 Toast &quot;Hello xxx!&quot;</Text>
           <Text>2. 点击订单，会记录点击的订单信息，并弹出 Toast 提示</Text>
           <Text>3. 最下面的【点击次数】，点一次应该加 1</Text>
         </View>
