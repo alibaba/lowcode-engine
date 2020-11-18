@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-datasource-mtop-handler",
-  "version": "1.0.21",
+  "version": "1.0.22-alpha.1",
   "main": "lib/index.js",
   "module": "es/index.js",
   "typings": "es/index.d.ts",
@@ -16,7 +16,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@ali/lowcode-datasource-types": "^1.0.21",
+    "@ali/lowcode-datasource-types": "^1.0.22-alpha.2",
     "@ali/universal-mtop": "^5.1.9",
     "typescript": "^3.9.7"
   },
