@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.13.1-15"></a>
+## [0.13.1-15](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-11...v0.13.1-15) (2020-11-18)
+
+
+### Bug Fixes
+
+* 解决 device 变化后不刷新视图的 bug ([11e8e02](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/11e8e02))
+
+
+
+
 <a name="0.13.1-12"></a>
 ## [0.13.1-12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-11...v0.13.1-12) (2020-11-18)
 
