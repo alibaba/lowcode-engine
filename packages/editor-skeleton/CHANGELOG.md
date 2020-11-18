@@ -3,6 +3,109 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.13.1-12"></a>
+## [0.13.1-12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-11...v0.13.1-12) (2020-11-18)
+
+
+### Bug Fixes
+
+* 去掉 AppHelper ([da9bb7f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/da9bb7f))
+
+
+### Features
+
+* 暴露 registerMetadataTransducer 接口 ([cd12677](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/cd12677))
+
+
+
+<a name="0.12.1-19"></a>
+## [0.12.1-19](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-18...v0.12.1-19) (2020-10-17)
+
+
+
+<a name="0.12.1-18"></a>
+## [0.12.1-18](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-17...v0.12.1-18) (2020-10-17)
+
+
+
+<a name="0.12.1-17"></a>
+## [0.12.1-17](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-16...v0.12.1-17) (2020-10-14)
+
+
+
+<a name="0.12.1-16"></a>
+## [0.12.1-16](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-15...v0.12.1-16) (2020-10-12)
+
+
+
+<a name="0.12.1-15"></a>
+## [0.12.1-15](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-1...v0.12.1-15) (2020-10-12)
+
+
+### Bug Fixes
+
+* stage-box 样式优化 ([de4074a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/de4074a))
+* 样式兼容 ([0f2dea4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0f2dea4))
+* 样式微调 ([9816859](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9816859))
+
+
+
+<a name="0.12.1-14"></a>
+## [0.12.1-14](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-13...v0.12.1-14) (2020-10-10)
+
+
+### Bug Fixes
+
+* pane 宽度统一设置为 300 ([ff576b9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ff576b9))
+
+
+
+<a name="0.12.1-13"></a>
+## [0.12.1-13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-12...v0.12.1-13) (2020-09-28)
+
+
+### Bug Fixes
+
+* remove engine-tabpane css className ([d2fe75d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d2fe75d))
+
+
+
+<a name="0.12.1-12"></a>
+## [0.12.1-12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-11...v0.12.1-12) (2020-09-28)
+
+
+
+<a name="0.12.1-11"></a>
+## [0.12.1-11](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-10...v0.12.1-11) (2020-09-27)
+
+
+
+<a name="0.12.1-10"></a>
+## [0.12.1-10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-9...v0.12.1-10) (2020-09-27)
+
+
+
+<a name="0.12.1-9"></a>
+## [0.12.1-9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-8...v0.12.1-9) (2020-09-27)
+
+
+
+<a name="0.12.1-8"></a>
+## [0.12.1-8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-7...v0.12.1-8) (2020-09-27)
+
+
+
+<a name="0.12.1-7"></a>
+## [0.12.1-7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-2...v0.12.1-7) (2020-09-27)
+
+
+### Features
+
+* skeleton 增加全局 catch ([58b8200](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/58b8200))
+
+
+
+
 <a name="0.13.1-11"></a>
 ## [0.13.1-11](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-10...v0.13.1-11) (2020-11-02)
 

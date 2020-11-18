@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.13.1-12"></a>
+## [0.13.1-12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-11...v0.13.1-12) (2020-11-18)
+
+
+### Bug Fixes
+
+* 修复 project.unload 无法正常删除 document 的 bug ([5e6e91b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5e6e91b))
+
+
+
+
 <a name="0.13.1-11"></a>
 ## [0.13.1-11](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-10...v0.13.1-11) (2020-11-02)
 
