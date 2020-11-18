@@ -30,6 +30,7 @@ export interface InterpretDataSourceConfig {
   shouldFetch?: JSFunction;
   options?: {
     uri: string | JSExpression;
+    api?: string | JSExpression; // 兼容
     params?: JSONObject | JSExpression;
     method?: string | JSExpression;
     isCors?: boolean | JSExpression;

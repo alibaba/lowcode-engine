@@ -38,6 +38,7 @@ export type RuntimeOptions = () => RuntimeOptionsConfig;
 
 export interface RuntimeOptionsConfig {
   uri: string;
+  api?: string;
   params?: Record<string, unknown>;
   method?: string;
   isCors?: boolean;
