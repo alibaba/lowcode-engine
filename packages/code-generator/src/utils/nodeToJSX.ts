@@ -305,7 +305,7 @@ export function generateConditionReactCtrl(
     });
 
     pieces.unshift({
-      value: `(${value}) && (`,
+      value: `!!(${value}) && (`,
       type: PIECE_TYPE.BEFORE,
     });
 
