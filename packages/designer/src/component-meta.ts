@@ -13,7 +13,7 @@ import {
   FieldConfig,
 } from '@ali/lowcode-types';
 import { computed } from '@ali/lowcode-editor-core';
-import { Node, ParentalNode } from './document';
+import { isNode, Node, ParentalNode } from './document';
 import { Designer } from './designer';
 import { intlNode } from './locale';
 import { IconContainer } from './icons/container';
@@ -264,6 +264,9 @@ export class ComponentMeta {
   checkNestingDown(my: Node, target: Node | NodeSchema) {
     // 检查父子关系，直接约束型，在画布中拖拽直接掠过目标容器
     if (this.childWhitelist) {
+      if (!isNode(target)) {
+        target = new Node(my.document, target);
+      }
       return this.childWhitelist(target, my);
     }
     return true;

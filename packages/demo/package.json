@@ -53,7 +53,6 @@
     "build-plugin-fusion": "^0.1.0",
     "build-plugin-moment-locales": "^0.1.0",
     "build-plugin-react-app": "^1.1.2",
-    "monaco-editor-webpack-plugin": "^1.9.0",
     "tsconfig-paths-webpack-plugin": "^3.2.0"
   }
 }

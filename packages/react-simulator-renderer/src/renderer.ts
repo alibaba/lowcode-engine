@@ -509,7 +509,7 @@ class ComponentCreator extends React.Component<{ schema: any; propsMap: any, com
   constructor(props: any) {
     super(props);
     const componentMeta = host.currentDocument?.getComponentMeta(props.schema.componentName);
-    if (componentMeta?.prototype?.isModal()) {
+    if (componentMeta?.isModal) {
       this.isModal = true;
     }
   }

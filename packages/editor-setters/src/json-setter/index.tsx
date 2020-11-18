@@ -463,30 +463,30 @@ class MonacoEditorDefaultView extends PureComponent {
     });
   }
 }
-const prefix = 'data:text/javascript;charset=utf-8,';
-const baseUrl = 'https://g.alicdn.com/iceluna/iceluna-vendor/0.0.1/';
-window.MonacoEnvironment = {
-  getWorkerUrl(label: string) {
-    if (label === 'json') {
-      return `${prefix}${encodeURIComponent(`
-        importScripts('${baseUrl}json.worker.js');`)}`;
-    }
-    if (['css', 'less', 'scss'].includes(label)) {
-      return `${prefix}${encodeURIComponent(`
-        importScripts('${baseUrl}css.worker.js');`)}`;
-    }
-    if (label === 'html') {
-      return `${prefix}${encodeURIComponent(`
-        importScripts('${baseUrl}html.worker.js');`)}`;
-    }
-    if (['typescript', 'javascript'].includes(label)) {
-      return `${prefix}${encodeURIComponent(`
-        importScripts('${baseUrl}typescript.worker.js');`)}`;
-    }
-    return `${prefix}${encodeURIComponent(`
-      importScripts('${baseUrl}editor.worker.js');`)}`;
-  },
-};
+// const prefix = 'data:text/javascript;charset=utf-8,';
+// const baseUrl = 'https://g.alicdn.com/iceluna/iceluna-vendor/0.0.1/';
+// window.MonacoEnvironment = {
+//   getWorkerUrl(label: string) {
+//     if (label === 'json') {
+//       return `${prefix}${encodeURIComponent(`
+//         importScripts('${baseUrl}json.worker.js');`)}`;
+//     }
+//     if (['css', 'less', 'scss'].includes(label)) {
+//       return `${prefix}${encodeURIComponent(`
+//         importScripts('${baseUrl}css.worker.js');`)}`;
+//     }
+//     if (label === 'html') {
+//       return `${prefix}${encodeURIComponent(`
+//         importScripts('${baseUrl}html.worker.js');`)}`;
+//     }
+//     if (['typescript', 'javascript'].includes(label)) {
+//       return `${prefix}${encodeURIComponent(`
+//         importScripts('${baseUrl}typescript.worker.js');`)}`;
+//     }
+//     return `${prefix}${encodeURIComponent(`
+//       importScripts('${baseUrl}editor.worker.js');`)}`;
+//   },
+// };
 
 // eslint-disable-next-line react/no-multi-comp
 export default class MonacoEditorButtonView extends PureComponent {

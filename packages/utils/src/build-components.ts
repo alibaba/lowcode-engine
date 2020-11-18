@@ -9,7 +9,7 @@ interface LibraryMap {
   [key: string]: string;
 }
 
-function accessLibrary(library: string | Record<string, unknown>) {
+export function accessLibrary(library: string | Record<string, unknown>) {
   if (typeof library !== 'string') {
     return library;
   }

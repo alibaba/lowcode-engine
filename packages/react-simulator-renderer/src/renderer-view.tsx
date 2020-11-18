@@ -151,18 +151,18 @@ class Renderer extends Component<{
           viewProps._leaf = leaf;
           viewProps._componentName = leaf?.componentName;
           // 如果是容器 && 无children && 高宽为空 增加一个占位容器，方便拖动
-          // if (
-          //   !viewProps.dataSource &&
-          //   leaf?.isContainer() &&
-          //   (children == null || (Array.isArray(children) && !children.length)) &&
-          //   (!viewProps.style || Object.keys(viewProps.style).length === 0)
-          // ) {
-          //   children = (
-          //     <div className="lc-container-placeholder" style={viewProps.placeholderStyle}>
-          //       {viewProps.placeholder || '拖拽组件或模板到这里'}
-          //     </div>
-          //   );
-          // }
+          if (
+            !viewProps.dataSource &&
+            leaf?.isContainer() &&
+            (children == null || (Array.isArray(children) && !children.length)) &&
+            (!viewProps.style || Object.keys(viewProps.style).length === 0)
+          ) {
+            children = (
+              <div className="lc-container-placeholder" style={viewProps.placeholderStyle}>
+                {viewProps.placeholder || '拖拽组件或模板到这里'}
+              </div>
+            );
+          }
           if (viewProps._componentName === 'a') {
             delete viewProps.href;
           }
@@ -189,7 +189,7 @@ class Renderer extends Component<{
           return createElement(
             getDeviceView(Component, device, designMode),
             viewProps,
-            leaf?.isContainer() ? (children == null ? [] : Array.isArray(children) ? children : [children]) : null,
+            leaf?.isContainer() ? (children == null ? [] : Array.isArray(children) ? children : [children]) : children,
           );
         }}
         onCompGetRef={(schema: any, ref: ReactInstance | null) => {

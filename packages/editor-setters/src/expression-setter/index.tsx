@@ -68,13 +68,12 @@ export default class ExpressionView extends PureComponent {
     return val;
   }
 
-  constructor(props: Readonly<{}>) {
+  constructor(props: any) {
     super(props);
     this.expression = React.createRef();
     this.i18n = generateI18n(props.locale, props.messages);
     this.state = {
       value: ExpressionView.getInitValue(props.value),
-      context: props.context || {},
       dataSource: props.dataSource || [],
     };
   }
@@ -126,31 +125,15 @@ export default class ExpressionView extends PureComponent {
    * @param  {String}
    * @return {Array}
    */
-  getDataSource(tempStr: string): any[] {
-    const {editor} = this.props.field;
+  getDataSource(): any[] {
+    const { editor } = this.props.field;
     const schema = editor.get('designer').project.getSchema();
     const stateMap = schema.componentsTree[0].state;
-    let dataSource = [];
+    const dataSource = [];
 
-    for (let key in stateMap){
+    for (const key in stateMap) {
       dataSource.push(`this.state.${key}`);
     }
-    // if (/[^\w\.]$/.test(tempStr)) {
-    //   return [];
-    // } else if (tempStr === null || tempStr === '') {
-    //   return this.getContextKeys([]);
-    // } else if (/\w\.$/.test(tempStr)) {
-    //   const currentField = this.getCurrentFiled(tempStr);
-    //   if (!currentField) return null;
-    //   let tempKeys = this.getObjectKeys(currentField.str);
-    //   tempKeys = this.getContextKeys(tempKeys);
-    //   if (!tempKeys) return null;
-    //   return tempKeys;
-    // } else if (/\.$/.test(tempStr)) {
-    //   return [];
-    // } else {
-    //   return null;
-    // }
 
     return dataSource;
   }
@@ -283,11 +266,12 @@ export default class ExpressionView extends PureComponent {
                   innerBefore={<span style={{ color: '#999', marginLeft: 4 }}>{'{{'}</span>}
                   innerAfter={<span style={{ color: '#999', marginRight: 4 }}>{'}}'}</span>}
                   popupClassName="expression-setter-item-inner"
-                  itemRender={({ itemValue }) => {
+                  // eslint-disable-next-line no-shadow
+                  itemRender={({ value }) => {
                     return (
-                      <Option key={itemValue} text={itemValue} value={itemValue}>
-                        <div className="code-input-value">{itemValue}</div>
-                        <div className="code-input-help">{helpMap[itemValue]}</div>
+                      <Option key={value} text={value} value={value}>
+                        <div className="code-input-value">{value}</div>
+                        <div className="code-input-help">{helpMap[value]}</div>
                       </Option>
                     );
                   }}

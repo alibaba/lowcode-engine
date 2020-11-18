@@ -22,7 +22,7 @@
       fill: var(--color-icon-white, @title-bgcolor);
     }
   }
-  &-current {
+  .instance-node-selector-current {
     background: var(--color-brand, @brand-color-1);
     padding: 0 6px;
     display: flex;
@@ -37,14 +37,14 @@
       color: var(--color-icon-white, @title-bgcolor);
     }
   }
-  &-list {
+  .instance-node-selector-list {
     position: absolute;
     left: 0;
     right: 0;
     opacity: 0;
     visibility: hidden;
   }
-  &-node {
+  .instance-node-selector-node {
     margin: 2px 0;
     &-content {
       padding-left: 6px;
@@ -68,15 +68,15 @@
       opacity: 0.8;
     }
   }
-}
 
-&:hover {
-  .instance-node-selector-current {
-    color: ar(--color-text-reverse, @white-alpha-2);
-  }
-  .instance-node-selector-popup {
-    visibility: visible;
-    opacity: 1;
-    transition: 0.2s all ease-in;
+  &:hover {
+    .instance-node-selector-current {
+      color: ar(--color-text-reverse, @white-alpha-2);
+    }
+    .instance-node-selector-popup {
+      visibility: visible;
+      opacity: 1;
+      transition: 0.2s all ease-in;
+    }
   }
 }
