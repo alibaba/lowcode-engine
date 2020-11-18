@@ -16,7 +16,7 @@ export function createMtopHandler<T = unknown>(config?: MTopConfig) {
   // eslint-disable-next-line space-before-function-paren
   return async function(options: RuntimeOptionsConfig): Promise<{ data: T }> {
     const response = await mtopRequest.request<T>({
-      api: options.uri,
+      api: options.uri || options.api, // 兼容老的结构
       v: (options.v as string) || '1.0',
       data: options.params,
       type: (options.method as Method) || 'get',
