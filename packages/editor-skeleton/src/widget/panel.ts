@@ -109,6 +109,10 @@ export default class Panel implements IWidget {
     if (props.onInit) {
       props.onInit.call(this, this);
     }
+
+    if (content.onInit) {
+      content.onInit.call(this, this);
+    }
     // todo: process shortcut
   }
 
