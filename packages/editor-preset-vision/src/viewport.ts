@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import Flags from './flags';
-import { designer } from './editor';
+import { editor } from './editor';
 
 const domReady = require('domready');
 
@@ -192,10 +192,11 @@ export class Viewport {
     return this.preview;
   }
 
-  setDevice(device = 'pc') {
+  async setDevice(device = 'pc') {
     if (this.getDevice() !== device) {
       this.device = device;
-      designer.currentDocument?.simulator?.set('device', device === 'mobile' ? 'mobile' : 'default');
+      const currentDocument = await editor.onceGot('currentDocuemnt');
+      currentDocument?.simulator?.set('device', device === 'mobile' ? 'mobile' : 'default');
       // Flags.setSimulator(device);
       // this.applyMediaCSS();
       this.emitter.emit('devicechange', device);

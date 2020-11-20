@@ -2,6 +2,7 @@ import React, { Component, PureComponent, createElement as reactCreateElement } 
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
+import { ConfigProvider } from '@alifd/next';
 import { isEmpty } from '@ali/b3-one/lib/obj';
 import AppContext from './context/appContext';
 import { isFileSchema, goldlog } from './utils';
@@ -196,15 +197,17 @@ export default class Renderer extends Component {
             engine: this,
           }}
         >
-          <Comp
-            key={schema.__ctx && `${schema.__ctx.lunaKey}_${schema.__ctx.idx || '0'}`}
-            ref={this.__getRef}
-            __appHelper={appHelper}
-            __components={allComponents}
-            __schema={schema}
-            __designMode={designMode}
-            {...this.props}
-          />
+          <ConfigProvider device={this.props.device}>
+            <Comp
+              key={schema.__ctx && `${schema.__ctx.lunaKey}_${schema.__ctx.idx || '0'}`}
+              ref={this.__getRef}
+              __appHelper={appHelper}
+              __components={allComponents}
+              __schema={schema}
+              __designMode={designMode}
+              {...this.props}
+            />
+          </ConfigProvider>
         </AppContext.Provider>
       );
     }

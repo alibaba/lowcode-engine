@@ -36,6 +36,7 @@ editor.set('designer', designer);
 
 designer.project.onCurrentDocumentChange((doc) => {
   bus.emit(VE_EVENTS.VE_PAGE_PAGE_READY);
+  editor.set('currentDocuemnt', doc);
 });
 
 // 升级 Props

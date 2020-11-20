@@ -16,6 +16,7 @@
   "dependencies": {
     "@ali/lowcode-types": "^0.13.1-15",
     "@alifd/next": "^1.19.16",
+    "lodash.get": "^4.4.2",
     "react": "^16"
   },
   "devDependencies": {
