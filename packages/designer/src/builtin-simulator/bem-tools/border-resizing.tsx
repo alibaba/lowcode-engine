@@ -1,4 +1,4 @@
-import { Component, Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import DragResizeEngine from './drag-resize-engine';
 import { observer, computed, globalContext, Editor } from '@ali/lowcode-editor-core';
 import classNames from 'classnames';

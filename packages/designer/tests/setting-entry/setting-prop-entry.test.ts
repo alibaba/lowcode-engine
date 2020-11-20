@@ -23,7 +23,7 @@ describe('setting-prop-entry 测试', () => {
   });
 
   describe('node 构造函数生成 settingEntry', () => {
-    it.only('常规方法测试', () => {
+    it('常规方法测试', () => {
       designer.createComponentMeta(divMeta);
       designer.project.open(settingSchema);
       const { currentDocument } = designer.project;

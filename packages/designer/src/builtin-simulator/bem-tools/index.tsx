@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import { observer } from '@ali/lowcode-editor-core';
 import { BorderDetecting } from './border-detecting';
 import { BuiltinSimulatorHost } from '../host';

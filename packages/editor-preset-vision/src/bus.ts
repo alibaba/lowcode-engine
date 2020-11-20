@@ -76,4 +76,8 @@ editor?.on('history.forward', (data) => {
   bus.emit('ve.history.forward', data);
 });
 
+editor?.on('node.prop.change', (data) => {
+  bus.emit('node.prop.change', data);
+});
+
 export default bus;
