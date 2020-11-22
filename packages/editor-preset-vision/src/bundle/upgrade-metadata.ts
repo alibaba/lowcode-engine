@@ -172,6 +172,7 @@ export interface OldPrototypeConfig {
   onResizeEnd?: (e: MouseEvent, triggerDirection: string, dragment: Node) => void;
   devMode?: string;
   schema?: ProjectSchema;
+  isTopFixed?: boolean;
 }
 
 export interface ISetterConfig {
@@ -622,6 +623,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     onResizeEnd, // onResizeEnd
     devMode,
     schema,
+    isTopFixed,
   } = oldConfig;
 
   const meta: any = {
@@ -727,6 +729,9 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   }
   if (view) {
     experimental.view = view;
+  }
+  if (isTopFixed) {
+    experimental.isTopFixed = isTopFixed;
   }
   if (transducers) {
     // Array<{ toStatic, toNative }>

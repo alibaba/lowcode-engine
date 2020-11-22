@@ -20,6 +20,7 @@ import {
   removeEmptyPropsReducer,
   initNodeReducer,
   liveLifecycleReducer,
+  nodeTopFixedReducer,
 } from './props-reducers';
 
 export const editor = new Editor();
@@ -64,6 +65,9 @@ designer.addPropsReducer(deepValueParser, TransformStage.Render);
 // Render 和 Save 都要各调用一次，感觉也是有问题的，是不是应该在 Render 执行一次就行了？见上 filterReducer 也是一样的处理方式。
 designer.addPropsReducer(removeEmptyPropsReducer, TransformStage.Render);
 designer.addPropsReducer(removeEmptyPropsReducer, TransformStage.Save);
+
+designer.addPropsReducer(nodeTopFixedReducer, TransformStage.Render);
+designer.addPropsReducer(nodeTopFixedReducer, TransformStage.Save);
 
 skeleton.add({
   area: 'mainArea',

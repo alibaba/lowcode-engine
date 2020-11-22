@@ -21,6 +21,7 @@ export interface NodeSchema {
   ignore?: boolean;
   locked?: boolean;
   hidden?: boolean;
+  isTopFixed?: boolean;
 }
 
 export type PropsMap = CompositeObject;

@@ -89,6 +89,7 @@ export interface Experimental {
   // 纯文本编辑：如果 children 内容是
   // 文本编辑：配置
   liveTextEditing?: LiveTextEditingConfig[];
+  isTopFixed?: boolean;
 }
 
 // thinkof Array

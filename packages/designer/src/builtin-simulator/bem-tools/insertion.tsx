@@ -11,6 +11,7 @@ import {
 import { ISimulatorHost } from '../../simulator';
 import { ParentalNode } from '../../document';
 import './insertion.less';
+import { NodeData, NodeSchema } from '@ali/lowcode-types';
 
 interface InsertionData {
   edge?: DOMRect;
@@ -18,6 +19,7 @@ interface InsertionData {
   vertical?: boolean;
   nearRect?: Rect;
   coverRect?: DOMRect;
+  nearNode?: NodeData;
 }
 
 /**
@@ -41,6 +43,7 @@ function processChildrenDetail(sim: ISimulatorHost, container: ParentalNode, det
   if (detail.near) {
     const { node, pos, rect, align } = detail.near;
     ret.nearRect = rect || sim.computeRect(node);
+    ret.nearNode = node;
     if (pos === 'replace') {
       // FIXME: ret.nearRect mybe null
       ret.coverRect = ret.nearRect;
@@ -82,6 +85,7 @@ function processChildrenDetail(sim: ISimulatorHost, container: ParentalNode, det
       ret.insertType = 'after';
     }
     ret.vertical = isVertical(ret.nearRect);
+    ret.nearNode = nearNode;
   } else {
     ret.insertType = 'cover';
     ret.coverRect = edge;
@@ -122,14 +126,13 @@ export class InsertionView extends Component<{ host: BuiltinSimulatorHost }> {
     if (!loc) {
       return null;
     }
-    
     // 如果是个绝对定位容器，不需要渲染插入标记
     if (loc.target.componentMeta.getMetadata().experimental?.isAbsoluteLayoutContainer) {
       return null;
     }
 
     const { scale, scrollX, scrollY } = host.viewport;
-    const { edge, insertType, coverRect, nearRect, vertical } = processDetail(loc);
+    const { edge, insertType, coverRect, nearRect, vertical, nearNode } = processDetail(loc);
 
     if (!edge) {
       return null;
@@ -161,6 +164,9 @@ export class InsertionView extends Component<{ host: BuiltinSimulatorHost }> {
         x = (nearRect.left + scrollX) * scale;
         y = ((insertType === 'before' ? nearRect.top : nearRect.bottom) + scrollY) * scale;
         style.width = nearRect.width * scale;
+      }
+      if (y === 0 && (nearNode as NodeSchema)?.componentMeta?.isTopFixed) {
+        return null;
       }
     }
     style.transform = `translate3d(${x}px, ${y}px, 0)`;

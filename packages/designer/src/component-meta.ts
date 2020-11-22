@@ -113,6 +113,12 @@ export class ComponentMeta {
     return this._liveTextEditing;
   }
 
+  private _isTopFixed?: boolean;
+
+  get isTopFixed() {
+    return this._isTopFixed;
+  }
+
   private parentWhitelist?: NestingFilter | null;
 
   private childWhitelist?: NestingFilter | null;
@@ -194,6 +200,12 @@ export class ComponentMeta {
     }
     collectLiveTextEditing(this.configure);
     this._liveTextEditing = liveTextEditing.length > 0 ? liveTextEditing : undefined;
+
+    const isTopFiexd = this._transformedMetadata.experimental?.isTopFixed;
+
+    if (isTopFiexd) {
+      this._isTopFixed = isTopFiexd;
+    }
 
     const { configure = {} } = this._transformedMetadata;
     this._acceptable = false;
