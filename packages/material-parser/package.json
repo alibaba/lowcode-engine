@@ -61,7 +61,7 @@
     "lodash": "^4.17.15",
     "parse-prop-types": "^0.3.0",
     "prop-types": "^15.7.2",
-    "react-docgen": "^5.3.0",
+    "react-docgen": "5.3.0",
     "react-docgen-typescript": "^1.16.5",
     "safe-eval": "^0.4.1",
     "semver": "^7.1.3",
