@@ -473,12 +473,12 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       true,
     );
 
-    this.disableDetecting = () => {
-      detecting.leave(this.project.currentDocument);
-      doc.removeEventListener('mouseover', hover, true);
-      doc.removeEventListener('mouseleave', leave, false);
-      this.disableDetecting = undefined;
-    };
+    // this.disableDetecting = () => {
+    //   detecting.leave(this.project.currentDocument);
+    //   doc.removeEventListener('mouseover', hover, true);
+    //   doc.removeEventListener('mouseleave', leave, false);
+    //   this.disableDetecting = undefined;
+    // };
   }
 
   readonly liveEditing = new LiveEditing();
@@ -525,21 +525,22 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
    * @see ISimulator
    */
   setSuspense(suspended: boolean) {
-    if (suspended) {
-      /*
-      if (this.disableDetecting) {
-        this.disableDetecting();
-      }
-      */
-      // sleep some autorun reaction
-    } else {
-      // weekup some autorun reaction
-      /*
-      if (!this.disableDetecting) {
-        this.setupDetecting();
-      }
-      */
-    }
+    return false;
+    // if (suspended) {
+    //   /*
+    //   if (this.disableDetecting) {
+    //     this.disableDetecting();
+    //   }
+    //   */
+    //   // sleep some autorun reaction
+    // } else {
+    //   // weekup some autorun reaction
+    //   /*
+    //   if (!this.disableDetecting) {
+    //     this.setupDetecting();
+    //   }
+    //   */
+    // }
   }
 
   setupContextMenu() {

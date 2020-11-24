@@ -11,6 +11,7 @@ module.exports = {
   transformIgnorePatterns: [
     `/node_modules/(?!${esModules})/`,
   ],
+  setupFiles: ['./tests/fixtures/unhandled-rejection.ts'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
   collectCoverage: false,
   collectCoverageFrom: [

@@ -1,14 +1,14 @@
 import set from 'lodash/set';
 import cloneDeep from 'lodash/clonedeep';
-import '../fixtures/window';
+import '../../fixtures/window';
 import { Editor } from '@ali/lowcode-editor-core';
-import { Project } from '../../src/project/project';
-import { Node } from '../../src/document/node/node';
-import { Designer } from '../../src/designer/designer';
-import formSchema from '../fixtures/schema/form';
-import settingSchema from '../fixtures/schema/setting';
-import divMeta from '../fixtures/prototype/div-meta';
-import { getIdsFromSchema, getNodeFromSchemaById } from '../utils';
+import { Project } from '../../../src/project/project';
+import { Node } from '../../../src/document/node/node';
+import { Designer } from '../../../src/designer/designer';
+import formSchema from '../../../fixtures/schema/form';
+import settingSchema from '../../fixtures/schema/setting';
+import divMeta from '../../fixtures/prototype/div-meta';
+import { getIdsFromSchema, getNodeFromSchemaById } from '../../utils';
 
 const editor = new Editor();
 

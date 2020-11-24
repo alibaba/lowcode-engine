@@ -6,7 +6,7 @@ import { Editor } from '@ali/lowcode-editor-core';
 import { Project } from '../../src/project/project';
 import { Node } from '../../src/document/node/node';
 import TestRenderer from 'react-test-renderer';
-import { configure, render } from 'enzyme';
+import { configure, render, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { Designer } from '../../src/designer/designer';
 import formSchema from '../fixtures/schema/form';
@@ -16,7 +16,7 @@ import { BuiltinSimulatorHostView } from '../../src/builtin-simulator/host-view'
 configure({ adapter: new Adapter() });
 const editor = new Editor();
 
-describe('setting-prop-entry 测试', () => {
+describe('host-view 测试', () => {
   let designer: Designer;
   beforeEach(() => {
     designer = new Designer({ editor });
@@ -26,9 +26,7 @@ describe('setting-prop-entry 测试', () => {
     designer = null;
   });
 
-  it('xxx', () => {
-    // console.log(JSON.stringify(TestRenderer.create(<BuiltinSimulatorHostView project={designer.project} />).toJSON()));
-
-    console.log(render(<BuiltinSimulatorHostView project={designer.project} ref={(xxx) => { console.log('xxx', xxx)}}/>))
+  it('host-view', () => {
+    const hostView = render(<BuiltinSimulatorHostView project={designer.project} />);
   })
 });

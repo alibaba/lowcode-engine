@@ -3,7 +3,7 @@ module.exports = {
   ignorePatterns: [ 'tests/* '],
   rules: {
     'react/no-multi-comp': 0,
-    'no-unused-expressions': 1,
+    'no-unused-expressions': 0,
     'implicit-arrow-linebreak': 1,
     'no-nested-ternary': 1,
     'no-mixed-operators': 1,

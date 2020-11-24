@@ -247,8 +247,9 @@ export class Prop implements IPropParent {
         value: valueToSource(val),
       };
     }
-    const editor = globalContext.get(Editor);
-    editor.emit('node.prop.change', { prop: this, node: this.owner });
+    if (globalContext.has(Editor)) {
+      globalContext.get(Editor).emit('node.prop.change', { prop: this, node: this.owner });
+    }
     this.dispose();
   }
 
