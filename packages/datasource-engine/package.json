@@ -19,10 +19,12 @@
   "dependencies": {
     "@ali/lowcode-datasource-types": "^1.0.21",
     "@ali/lowcode-types": "^1.0.20",
+    "promise.allsettled": "^1.0.2",
     "typescript": "^3.9.7"
   },
   "devDependencies": {
     "@ava/babel": "^1.0.1",
+    "@types/promise.allsettled": "^1.0.3",
     "@types/sinon": "^9.0.5",
     "ava": "3.11.1",
     "get-port": "^5.1.1",
