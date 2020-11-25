@@ -4,7 +4,7 @@ import '../fixtures/window';
 import formSchema from '../fixtures/schema/form';
 import { Project } from '../../src';
 
-describe.skip('VisualEngine.Project 相关 API 测试', () => {
+describe('VisualEngine.Project 相关 API 测试', () => {
   it('getSchema / setSchema 系列', () => {
     Project.setSchema({
       componentsMap: {},

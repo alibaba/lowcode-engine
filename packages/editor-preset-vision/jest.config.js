@@ -19,6 +19,7 @@ module.exports = {
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',
     '!src/base/**',
+    '!src/fields/**',
     '!src/prop.ts',
     '!**/node_modules/**',
     '!**/vendor/**',

@@ -40,7 +40,7 @@
     "react-dom": "^16.8.1"
   },
   "devDependencies": {
-    "@ali/lowcode-test-mate": "^1.0.0",
+    "@ali/lowcode-test-mate": "^1.0.1",
     "@alib/build-scripts": "^0.1.18",
     "@types/domready": "^1.0.0",
     "@types/events": "^3.0.0",

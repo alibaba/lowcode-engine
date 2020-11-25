@@ -104,8 +104,8 @@ registerMetadataTransducer(
     let top: FieldConfig[];
     let bottom: FieldConfig[];
     if (combined) {
-      top = combined?.[0].items || combined;
-      bottom = combined?.[combined.length - 1].items || combined;
+      top = combined?.[0]?.items || combined;
+      bottom = combined?.[combined.length - 1]?.items || combined;
     } else if (props) {
       top = props;
       bottom = props;

@@ -10,9 +10,14 @@ describe('VisualEngine.Exchange 相关 API 测试', () => {
     VisualEngine.Exchange.select(doc?.getNode('form'));
     expect(VisualEngine.Exchange.getSelected()?.componentName).toBe('Form');
     expect(VisualEngine.Exchange.getSelected()?.id).toBe('form');
+
+    // clear selection
+    VisualEngine.Exchange.select();
+    expect(VisualEngine.Exchange.getSelected()).toBeUndefined;
   });
 
   it('onIntoView', () => {
     expect(typeof VisualEngine.Exchange.onIntoView).toBe('function');
+    VisualEngine.Exchange.onIntoView();
   });
 });

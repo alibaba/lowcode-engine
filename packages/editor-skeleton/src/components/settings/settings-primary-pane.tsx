@@ -120,6 +120,16 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
       );
     }
 
+    if (Array.isArray(settings.items) && settings.items.length === 0) {
+      return (
+        <div className="lc-settings-main">
+          <div className="lc-settings-notice">
+            <p>该组件暂无配置</p>
+          </div>
+        </div>
+      );
+    }
+
     if (!settings.isSameComponent) {
       // todo: future support 获取设置项交集编辑
       return (
