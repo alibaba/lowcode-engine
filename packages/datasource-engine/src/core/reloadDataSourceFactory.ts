@@ -1,4 +1,8 @@
 import { DataSourceMap, RuntimeDataSource, RuntimeDataSourceConfig } from '@ali/lowcode-types';
+import allSettled from 'promise.allsettled';
+
+// 兼容低版本的浏览器
+const promiseSettled = typeof Promise.allSettled === 'function' ? Promise.allSettled : allSettled;
 
 export const reloadDataSourceFactory = (
   dataSource: RuntimeDataSource,
@@ -56,7 +60,7 @@ export const reloadDataSourceFactory = (
     }
   }
 
-  await Promise.allSettled(allAsyncLoadings);
+  await promiseSettled(allAsyncLoadings);
 
   // 所有的初始化请求都结束之后，调用钩子函数
 
