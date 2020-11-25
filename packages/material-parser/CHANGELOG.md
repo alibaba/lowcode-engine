@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.13.1-23"></a>
+## [0.13.1-23](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-22...v0.13.1-23) (2020-11-25)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-material-parser
+
 <a name="0.13.1-22"></a>
 ## [0.13.1-22](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-19...v0.13.1-22) (2020-11-25)
 
