@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.13.1-22"></a>
+## [0.13.1-22](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-19...v0.13.1-22) (2020-11-25)
+
+
+### Features
+
+* 支持无组件配置的设置面板形态 ([46c5bf9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/46c5bf9))
+
+
+
+
 <a name="0.13.1-19"></a>
 ## [0.13.1-19](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-18...v0.13.1-19) (2020-11-24)
 
