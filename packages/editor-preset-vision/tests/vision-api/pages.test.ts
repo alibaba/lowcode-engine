@@ -63,7 +63,7 @@ describe('VisualEngine.Pages 相关 API 测试', () => {
       // slot 会多出（1 + N）个节点
       expect(doc.nodesMap.size).toBe(expectedNodeCnt + 2);
     });
-    it.only('基本的节点模型初始化，初始化传入 schema，构造 prototype', () => {
+    it('基本的节点模型初始化，初始化传入 schema，构造 prototype', () => {
       const proto = new Prototype(divPrototypeConfig);
       const doc = VisualEngine.Pages.addPage(pageSchema)!;
       expect(doc).toBeTruthy();

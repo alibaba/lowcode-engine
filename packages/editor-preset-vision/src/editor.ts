@@ -13,7 +13,7 @@ import { deepValueParser } from './deep-value-parser';
 import { liveEditingRule, liveEditingSaveHander } from './vc-live-editing';
 import {
   compatibleReducer,
-  compatiblePageReducer,
+  upgradePageLifeCyclesReducer,
   stylePropsReducer,
   upgradePropsReducer,
   filterReducer,
@@ -54,7 +54,7 @@ designer.addPropsReducer(filterReducer, TransformStage.Render);
 // FIXME: Dirty fix, will remove this reducer
 designer.addPropsReducer(compatibleReducer, TransformStage.Save);
 // 兼容历史版本的 Page 组件
-designer.addPropsReducer(compatiblePageReducer, TransformStage.Save);
+designer.addPropsReducer(upgradePageLifeCyclesReducer, TransformStage.Save);
 
 // 设计器组件样式处理
 designer.addPropsReducer(stylePropsReducer, TransformStage.Render);

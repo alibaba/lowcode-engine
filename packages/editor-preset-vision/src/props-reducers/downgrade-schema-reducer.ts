@@ -1,4 +1,3 @@
-import { getConvertedExtraKey } from '@ali/lowcode-designer';
 import {
   isPlainObject,
 } from '@ali/lowcode-utils';
@@ -34,18 +33,4 @@ export function compatibleReducer(props: any) {
     newProps[key] = compatibleReducer(val);
   });
   return newProps;
-}
-
-export function compatiblePageReducer(props: any, node: Node) {
-  const lifeCycleNames = ['didMount', 'willUnmount'];
-  if (node.isRoot()) {
-    lifeCycleNames.forEach(key => {
-      if (props[key]) {
-        const lifeCycles = node.props.getPropValue(getConvertedExtraKey('lifeCycles')) || {};
-        lifeCycles[key] = props[key];
-        node.props.setPropValue(getConvertedExtraKey('lifeCycles'), lifeCycles);
-      }
-    });
-  }
-  return props;
 }
