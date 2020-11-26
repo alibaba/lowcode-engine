@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.13.1-24"></a>
+## [0.13.1-24](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-23...v0.13.1-24) (2020-11-26)
+
+
+### Bug Fixes
+
+* 优化选中页面根节点时, 直接点击组件面板插入位置 ([c1ca2c6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c1ca2c6))
+
+
+
+
 <a name="0.13.1-23"></a>
 ## [0.13.1-23](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-22...v0.13.1-23) (2020-11-25)
 
