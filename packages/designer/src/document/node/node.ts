@@ -910,7 +910,8 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       if (dropElement) {
         return { container: dropElement, ref };
       }
-      return { container: this, ref };
+      // 假如最后找不到合适位置，返回 undefined 阻止继续插入节点
+      return undefined;
     }
 
     const canDropIn = this.componentMeta?.prototype?.options?.canDropIn;
