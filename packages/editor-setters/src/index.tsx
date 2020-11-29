@@ -23,10 +23,18 @@ export const StringSetter = {
   },
 };
 export const NumberSetter = NumberPicker;
-export class BoolSetter extends Component {
+export class BoolSetter extends Component<any> {
   render() {
     const { onChange, value, defaultValue } = this.props;
-    return <Switch checked={value} defaultChecked={defaultValue} onChange={onChange} />;
+    const props: Record<string, any> = {
+      defaultChecked: defaultValue,
+      onChange,
+    };
+    // Switch是通过 'checke' in props 来判断是否使用 defaultChecked
+    if (typeof value !== 'undefined') {
+      props.checked = value;
+    }
+    return <Switch {...props} />;
   }
 }
 export const SelectSetter = Select;
