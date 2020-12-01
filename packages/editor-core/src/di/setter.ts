@@ -64,7 +64,7 @@ export function getSettersMap() {
   return settersMap;
 }
 
-export function createSetterContent(setter: any, props: object): ReactNode {
+export function createSetterContent(setter: any, props: Record<string, any>): ReactNode {
   if (typeof setter === 'string') {
     setter = getSetter(setter);
     if (!setter) {
@@ -77,6 +77,11 @@ export function createSetterContent(setter: any, props: object): ReactNode {
       };
     }
     setter = setter.component;
+  }
+
+  // Fusion的表单组件都是通过 'value' in props 来判断是否使用 defaultValue
+  if ('value' in props && typeof props.value === 'undefined') {
+    delete props.value;
   }
 
   return createContent(setter, props);
