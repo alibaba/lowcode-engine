@@ -90,6 +90,16 @@ export default {
           align: 'top',
           icon: 'util',
           description: '工具类',
+          panelProps: {
+            floatable: true,
+            height: 300,
+            help: undefined,
+            hideTitleBar: false,
+            maxHeight: 800,
+            maxWidth: 1200,
+            title: '工具类扩展面板',
+            width: 430,
+          },
         },
         pluginProps: {},
       },
@@ -193,14 +203,14 @@ export default {
         'https://dev.g.alicdn.com/ali-lowcode/ali-lowcode-engine/1.0.0/react-simulator-renderer.css',
         //'https://dev.g.alicdn.com/ali-lowcode/ali-lowcode-engine/1.0.0/react-simulator-renderer.js',
         // for debug
-         'http://localhost:3333/js/react-simulator-renderer.js',
+        'http://localhost:3333/js/react-simulator-renderer.js',
         // 'http://localhost:3333/js/react-simulator-renderer.css',
       ];
       editor.set('simulatorUrl', simulatorUrl);
       editor.set('requestHandlersMap', {
         mtop: createMtopHandler(),
         fetch: createFetchHandler(),
-        jsonp: createJsonpHandler()
+        jsonp: createJsonpHandler(),
       });
       // editor.set('renderEnv', 'rax');
 
