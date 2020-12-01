@@ -58,7 +58,6 @@ class StyleResource {
     this.inited = true;
 
     const { type, content } = this.config;
-
     let styleElement: any;
     if (type === 'URL') {
       styleElement = document.createElement('link');
@@ -195,7 +194,7 @@ export class Viewport {
   async setDevice(device = 'pc') {
     if (this.getDevice() !== device) {
       this.device = device;
-      const currentDocument = await editor.onceGot('currentDocuemnt');
+      const currentDocument = await editor.onceGot('currentDocument');
       currentDocument?.simulator?.set('device', device === 'mobile' ? 'mobile' : 'default');
       // Flags.setSimulator(device);
       // this.applyMediaCSS();

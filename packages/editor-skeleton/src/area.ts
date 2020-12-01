@@ -66,4 +66,12 @@ export default class Area<C extends IWidgetBaseConfig = any, T extends IWidget =
   show() {
     this.setVisible(true);
   }
+
+  // ========== compatible for vision ========
+  /**
+   * @deprecated
+   */
+  removeAction(config: string): number {
+    return this.remove(config);
+  }
 }

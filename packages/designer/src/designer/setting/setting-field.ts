@@ -166,6 +166,8 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
       this.setValue(v, false, false, options);
     }
 
+    this.notifyValueChange();
+
     // dirty fix list setter
     if (Array.isArray(data) && data[0] && data[0].__sid__) {
       return;

@@ -70,6 +70,10 @@ export class ComponentMeta {
     return this._npm;
   }
 
+  set npm(_npm) {
+    this._npm = _npm;
+  }
+
   private _componentName?: string;
 
   get componentName(): string {

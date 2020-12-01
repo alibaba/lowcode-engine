@@ -47,6 +47,7 @@ const pages = Object.assign(project, {
       if (isPageDataV1(pages[0])) {
         componentsTree = [pages[0].layout];
       } else {
+        // if (!pages[0].componentsTree) return;
         componentsTree = pages[0].componentsTree;
         if (componentsTree[0]) {
           componentsTree[0].componentName = componentsTree[0].componentName || 'Page';

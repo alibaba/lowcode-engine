@@ -43,9 +43,8 @@ function appendStyleNode(props: any, styleProp: any, cssClass: string, cssId: st
     s.setAttribute('type', 'text/css');
     s.setAttribute('id', cssId);
     doc.getElementsByTagName('head')[0].appendChild(s);
-
     s.appendChild(doc.createTextNode(styleProp.replace(/(\d+)rpx/g, (a, b) => {
       return `${b / 2}px`;
-    }).replace(/:root/g, `.${ cssClass}`)));
+    }).replace(/:root/g, `.${cssClass}`)));
   }
 }

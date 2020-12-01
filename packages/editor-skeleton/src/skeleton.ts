@@ -350,6 +350,8 @@ export class Skeleton {
         return this.leftFloatArea.add(parsedConfig);
       case 'stages':
         return this.stages.add(parsedConfig);
+      default:
+        // do nothing
     }
   }
 }

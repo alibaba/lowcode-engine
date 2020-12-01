@@ -228,6 +228,14 @@ class Prototype {
     return this.meta.npm?.package;
   }
 
+  set packageName(pkgName) {
+    if (this.meta.npm) {
+      this.meta.npm.package = pkgName;
+    } else {
+      this.meta.npm = { package: pkgName };
+    }
+  }
+
   // 兼容原 vision 用法
   view: ComponentType | undefined;
 

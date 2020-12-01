@@ -1,4 +1,4 @@
-import { untracked, computed, obx, globalContext, Editor } from '@ali/lowcode-editor-core';
+import { untracked, computed, obx } from '@ali/lowcode-editor-core';
 import { CompositeValue, isJSExpression, isJSSlot, JSSlot, SlotSchema } from '@ali/lowcode-types';
 import { uniqueId, isPlainObject, hasOwnProperty } from '@ali/lowcode-utils';
 import { PropStash } from './prop-stash';
@@ -246,9 +246,6 @@ export class Prop implements IPropParent {
         type: 'JSExpression',
         value: valueToSource(val),
       };
-    }
-    if (globalContext.has(Editor)) {
-      globalContext.get(Editor).emit('node.prop.change', { prop: this, node: this.owner });
     }
     this.dispose();
   }

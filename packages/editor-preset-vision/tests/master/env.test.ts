@@ -1,11 +1,8 @@
-import set from 'lodash/set';
-import cloneDeep from 'lodash/clonedeep';
 import '../fixtures/window';
 // import { Project } from '../../src/project/project';
 // import { Node } from '../../src/document/node/node';
 // import { Designer } from '../../src/designer/designer';
 import env from '../../src/env';
-import bus from 'editor-preset-vision/src/bus';
 import { autorun } from '@ali/lowcode-editor-core';
 
 describe('env 测试', () => {

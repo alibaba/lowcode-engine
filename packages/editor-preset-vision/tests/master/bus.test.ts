@@ -1,10 +1,4 @@
-import set from 'lodash/set';
-import cloneDeep from 'lodash/clonedeep';
 import '../fixtures/window';
-// import { Project } from '../../src/project/project';
-// import { Node } from '../../src/document/node/node';
-// import { Designer } from '../../src/designer/designer';
-import formSchema from '../fixtures/schema/form';
 import bus from '../../src/bus';
 import { editor } from '../../src/editor';
 
