@@ -390,15 +390,23 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
 
   getNodeInstance(dom: HTMLElement): NodeInstance<any> | null {
     const INTERNAL = '_internal';
-
-    let instance = Instance.get(dom);
+    let instance: any = dom;
+    if (!isElement(instance)) {
+      return {
+        docId: instance.props._leaf.document.id,
+        nodeId: instance.props._leaf.getId(),
+        instance,
+        node: instance.props._leaf,
+      };
+    }
+    instance = Instance.get(dom);
     while (instance && instance[INTERNAL]) {
       if (isValidDesignModeRaxComponentInstance(instance)) {
         // const docId = (instance.props as any).schema.docId;
         return {
           docId: instance.props._leaf.document.id,
           nodeId: instance.props._leaf.getId(),
-          instance: instance,
+          instance,
           node: instance.props._leaf,
         };
       }
