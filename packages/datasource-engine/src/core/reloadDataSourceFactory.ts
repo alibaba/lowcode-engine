@@ -2,7 +2,7 @@ import { DataSourceMap, RuntimeDataSource, RuntimeDataSourceConfig } from '@ali/
 import allSettled from 'promise.allsettled';
 
 // 兼容低版本的浏览器
-const promiseSettled = typeof Promise.allSettled === 'function' ? Promise.allSettled : allSettled;
+const promiseSettled = typeof Promise.allSettled === 'function' ? Promise.allSettled.bind(Promise) : allSettled;
 
 export const reloadDataSourceFactory = (
   dataSource: RuntimeDataSource,
