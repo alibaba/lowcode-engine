@@ -584,14 +584,10 @@ export class DocumentModel {
     if (['id', 'params', 'layout'].indexOf(name) > -1) {
       throw new Error('addon name cannot be id, params, layout');
     }
-    const i = this._addons?.findIndex((item) => item.name === name);
-    if (i > -1) {
-      this._addons?.splice(i, 1);
+    if (this._addons[name]) {
+      throw new Error(`node addon ${name} exists`);
     }
-    this._addons?.push({
-      exportData,
-      name,
-    });
+    this._addons[name] = exportData;
   }
 
 
