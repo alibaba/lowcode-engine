@@ -104,7 +104,9 @@ export class Project {
     | string,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     value: any,
-  ): void {}
+  ): void {
+    Object.assign(this.data, { [key]: value });
+  }
 
   /**
    * 分字段设置储存数据
@@ -121,7 +123,9 @@ export class Project {
     | 'css'
     | 'dataSource'
     | string,
-  ): any {}
+  ): any {
+    return Reflect.get(this.data, key);
+  }
 
   open(doc?: string | DocumentModel | RootSchema): DocumentModel {
     if (!doc) {
@@ -152,7 +156,9 @@ export class Project {
     if (isDocumentModel(doc)) {
       return doc.open();
     } else if (isPageSchema(doc)) {
-      const foundDoc = this.documents.find(curDoc => curDoc?.rootNode?.id && curDoc?.rootNode?.id === doc?.id);
+      const foundDoc = this.documents.find(
+        (curDoc) => curDoc?.rootNode?.id && curDoc?.rootNode?.id === doc?.id,
+      );
       if (foundDoc) {
         foundDoc.remove();
       }
