@@ -13,7 +13,7 @@ export interface UtilsPaneProps extends PluginProps {
   /**
    * 支持的 Util 的类型
    */
-  utilsTypes: UtilTypeInfo[];
+  utilsTypes?: UtilTypeInfo[];
 
   /**
    * 初始的 Utils (若 schema 中尚未定义 utils)

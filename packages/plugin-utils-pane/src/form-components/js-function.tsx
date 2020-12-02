@@ -6,6 +6,7 @@ import noop from 'lodash/noop';
 export interface JSFunctionProps {
   className: string;
   value: string;
+  defaultValue: string;
   onChange?: (val: string) => void;
 }
 
@@ -21,6 +22,29 @@ class InternalJSFunction extends PureComponent<JSFunctionProps, unknown> {
 
   private monacoRef: MonacoRef | null = null;
 
+  componentDidMount() {
+    const { value, defaultValue, onChange } = this.props;
+
+    if (!value && defaultValue && onChange) {
+      onChange(defaultValue);
+    }
+  }
+
+  render() {
+    const { value, defaultValue } = this.props;
+    return (
+      <MonacoEditor
+        theme="vs-dark"
+        width={400}
+        height={150}
+        defaultValue={value || defaultValue}
+        language="js"
+        onChange={this.handleEditorChange}
+        editorWillMount={this.handleEditorWillMount}
+      />
+    );
+  }
+
   private handleEditorChange = () => {
     if (
       this.monacoRef &&
@@ -35,21 +59,6 @@ class InternalJSFunction extends PureComponent<JSFunctionProps, unknown> {
   private handleEditorWillMount: EditorWillMount = (monaco) => {
     this.monacoRef = monaco;
   };
-
-  render() {
-    const { value } = this.props;
-    return (
-      <MonacoEditor
-        theme="vs-dark"
-        width={400}
-        height={150}
-        defaultValue={value}
-        language="js"
-        onChange={this.handleEditorChange}
-        editorWillMount={this.handleEditorWillMount}
-      />
-    );
-  }
 }
 
 export const JSFunction = connect()(InternalJSFunction);

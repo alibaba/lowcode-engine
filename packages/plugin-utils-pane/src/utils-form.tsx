@@ -9,8 +9,8 @@ import React, { PureComponent } from 'react';
 import { JSFunction } from './form-components';
 
 registerValidationFormats({
-  util_npm_version_format: /^\d+\.\d+\.\d+(-[a-z0-9-]+(\.[a-z0-9]+))?$/i,
-  util_name_js_identifier: /[a-z$_][a-z$_0-9]+/i,
+  util_npm_version_format: /^\d+\.\d+\.\d+(-[a-z0-9-]+(\.[a-z0-9]+))?$/i, // 版本号的规范
+  util_name_js_identifier: /^[a-z$_][a-z$_0-9]*$/i, // JS 标识符的规范
 });
 
 type FlatUtilItem = {
@@ -160,7 +160,7 @@ export class UtilsForm extends PureComponent<UtilsFormProps, unknown> {
     const { item } = this.props;
 
     return (
-      <div className="lowcode-plugin-datasource-form">
+      <div className="lowcode-plugin-utils-form">
         <SchemaForm
           onSubmit={this.handleFormSubmit}
           components={this.formComponents}
