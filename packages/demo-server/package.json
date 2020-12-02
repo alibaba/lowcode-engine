@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-demo-server",
-  "version": "0.13.1-26",
+  "version": "0.13.1-27",
   "private": true,
   "description": "低代码引擎 DEMO Server 端",
   "scripts": {
