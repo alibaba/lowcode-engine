@@ -51,7 +51,7 @@ export class UtilList extends PureComponent<UtilsListProps, State> {
     }
   };
 
-  private handleRemoveDataSource = (id: any) => {
+  private handleRemoveUtilItem = (id: any) => {
     if (this.props.onRemoveUtil) {
       this.props.onRemoveUtil(id);
     }
@@ -103,7 +103,7 @@ export class UtilList extends PureComponent<UtilsListProps, State> {
                     复制
                   </Button>
                 )}
-                <Button size="small" onClick={this.handleRemoveDataSource.bind(this, item.name)}>
+                <Button size="small" onClick={this.handleRemoveUtilItem.bind(this, item.name)}>
                   删除
                 </Button>
               </div>

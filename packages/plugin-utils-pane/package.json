@@ -24,6 +24,11 @@
   },
   "peerDependencies": {
     "@ali/lowcode-editor-core": "^1.0.8-0",
+    "@formily/next": "^1.3.2",
+    "@formily/next-components": "^1.3.2",
+    "@formily/react-schema-renderer": "^1.3.2",
+    "react-monaco-editor": "^0.40.0",
+    "styled-components": "^5.2.0",
     "prop-types": "^15.5.8",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",

@@ -136,7 +136,7 @@ export class UtilsPane extends PureComponent<UtilsPaneProps, State> {
       return;
     }
 
-    this.openEditDataSourceTab(cloneDeep(targetUtil));
+    this.openEditItemTab(cloneDeep(targetUtil));
   };
 
   private handleTabChange = (activeTabKey: string | number) => {
@@ -165,19 +165,19 @@ export class UtilsPane extends PureComponent<UtilsPaneProps, State> {
     }
   };
 
-  private handleCreateItemBtnClick = (dataSourceType: string) => {
+  private handleCreateItemBtnClick = (utilType: string) => {
     this.openCreateItemTab({
-      type: dataSourceType as UtilItem['type'],
+      type: utilType as UtilItem['type'],
     });
   };
 
-  private handleCreateItemMenuBtnClick = (dataSourceType: string) => {
+  private handleCreateItemMenuBtnClick = (utilType: string) => {
     this.openCreateItemTab({
-      type: dataSourceType as UtilItem['type'],
+      type: utilType as UtilItem['type'],
     });
   };
 
-  private openEditDataSourceTab = (utilItem: UtilItem) => {
+  private openEditItemTab = (utilItem: UtilItem) => {
     const { tabItems } = this.state;
 
     if (!tabItems.find((item) => item.key === PaneTabKey.Edit)) {
@@ -287,7 +287,7 @@ export class UtilsPane extends PureComponent<UtilsPaneProps, State> {
     const { activeTabKey, tabItems } = this.state;
 
     return (
-      <div className="lowcode-plugin-datasource-pane">
+      <div className="lowcode-plugin-utils-pane">
         <Tab
           activeKey={activeTabKey}
           extra={this.renderTabExtraContent()}
