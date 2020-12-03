@@ -195,8 +195,8 @@ export class Viewport {
   async setDevice(device = 'pc') {
     if (this.getDevice() !== device) {
       this.device = device;
-      const currentDocument = await editor.onceGot('currentDocuemnt');
-      currentDocument?.simulator?.set('device', device === 'mobile' ? 'mobile' : 'default');
+      const simulator = await editor.onceGot('simulator');
+      simulator?.set('device', device === 'mobile' ? 'mobile' : 'default');
       // Flags.setSimulator(device);
       // this.applyMediaCSS();
       this.emitter.emit('devicechange', device);
