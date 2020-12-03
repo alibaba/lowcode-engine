@@ -49,7 +49,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
         <div className="lc-settings-navigator">
           {createIcon(settings.componentMeta?.icon, { className: 'lc-settings-navigator-icon' })}
           <Title title={settings.componentMeta!.title} />
-          <span>x {settings.nodes.length}</span>
+          <span> x {settings.nodes.length}</span>
         </div>
       );
     }

@@ -73,7 +73,7 @@ export class DocumentModel {
   /**
    * @deprecated
    */
-  private _addons: { [key: string]: { exportData: () => any; isProp: boolean;} } = {};
+  private _addons: Array<{ name: string, exportData: any }> = [];
 
   /**
    * 模拟器
@@ -573,8 +573,26 @@ export class DocumentModel {
    * @deprecated
    */
   getAddonData(name: string) {
-    const addon = this._addons[name];
-    return addon?.exportData();
+    const addon = this._addons.find((item) => item.name === name);
+    if (addon) {
+      return addon.exportData();
+    }
+  }
+
+  /**
+   * @deprecated
+  */
+  exportAddonData() {
+    const addons = {};
+    this._addons.forEach((addon) => {
+      const data = addon.exportData();
+      if (data === null) {
+        delete addons[addon.name];
+      } else {
+        addons[addon.name] = data;
+      }
+    });
+    return addons;
   }
 
   /**
@@ -584,12 +602,15 @@ export class DocumentModel {
     if (['id', 'params', 'layout'].indexOf(name) > -1) {
       throw new Error('addon name cannot be id, params, layout');
     }
-    if (this._addons[name]) {
-      throw new Error(`node addon ${name} exists`);
+    const i = this._addons.findIndex((item) => item.name === name);
+    if (i > -1) {
+      this._addons.splice(i, 1);
     }
-    this._addons[name] = exportData;
+    this._addons.push({
+      exportData,
+      name,
+    });
   }
-
 
   acceptRootNodeVisitor(
     visitorName = 'default',
