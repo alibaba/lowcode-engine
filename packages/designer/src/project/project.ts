@@ -248,6 +248,7 @@ export class Project {
   private mountSimulator(simulator: ISimulatorHost) {
     // TODO: 多设备 simulator 支持
     this._simulator = simulator;
+    this.designer.editor.set('simulator', simulator);
   }
 
   setRendererReady(renderer: any) {
