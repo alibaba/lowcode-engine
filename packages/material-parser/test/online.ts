@@ -2,7 +2,7 @@ import test from 'ava';
 import parse from '../src';
 import { IMaterializeOptions } from '../src/types';
 
-const reactColorComponent = 'react-color';
+const reactColorComponent = 'react-color@2.18.1';
 const customComponent = 'mc-hello@1.0.1';
 
 test('materialize react-color by online', async t => {
