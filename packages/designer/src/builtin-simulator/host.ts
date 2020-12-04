@@ -210,8 +210,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   readonly viewport = new Viewport();
 
-  readonly scroller = this.designer.createScroller(this.viewport);
-
   mountViewport(viewport: Element | null) {
     this.viewport.mount(viewport);
   }

@@ -91,12 +91,12 @@ export function buildComponents(libraryMap: LibraryMap,
       components[componentName] = component;
     } else {
       component = findComponent(libraryMap, componentName, component);
-    }
-    if (component) {
-      if (!acceptsRef(component)) {
-        component = wrapReactClass(component as FunctionComponent);
+      if (component) {
+        if (!acceptsRef(component)) {
+          component = wrapReactClass(component as FunctionComponent);
+        }
+        components[componentName] = component;
       }
-      components[componentName] = component;
     }
   });
   return components;

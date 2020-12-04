@@ -12,6 +12,6 @@ module.exports = {
     'no-prototype-builtins': 0,
     'array-callback-return': 0,
     '@typescript-eslint/member-ordering': 0,
-    'react/no-find-dom-node', 0
+    'react/no-find-dom-node': 0,
   }
 }

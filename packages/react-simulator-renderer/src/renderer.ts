@@ -394,11 +394,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     // const node = host.currentDocument?.createNode(_schema);
     // _schema = node?.export(TransformStage.Render) || {};
 
-
-
     const renderer = this;
     const { componentsMap } = renderer;
-
     return getComponentController(schema, componentsMap);
   }
 
@@ -552,7 +549,6 @@ class ComponentCreator extends React.Component<{ schema: any; propsMap: any, com
     }
     const props = processPropsSchema(schema.props, propsMap, componentsMap);
     const _leaf = host.currentDocument?.createNode(schema);
-
     return createElement(ComponentClass, { ...props, _leaf }, children);
   }
 }
