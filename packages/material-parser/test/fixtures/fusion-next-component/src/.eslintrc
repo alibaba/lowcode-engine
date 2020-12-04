@@ -1,5 +1,0 @@
-{
-    "rules": {
-        "react/prefer-stateless-function": "off"
-    }
-}

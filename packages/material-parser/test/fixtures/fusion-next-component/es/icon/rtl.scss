@@ -1,8 +1,0 @@
-
-@import "../core/index-noreset.scss";
-
-.#{$icon-prefix}[dir="rtl"] {
-    &::before {
-        transform: rotateY(180deg);
-    }
-}

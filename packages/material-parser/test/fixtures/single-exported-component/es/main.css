@@ -1,6 +1,0 @@
-@charset "UTF-8";
-/* 不引入依赖组件的样式，比如组件 import { Button } from '@alife/next'; */
-/* 不需要在main.scss中引入 @import '~@alife/next/lib/button/index.scss'; */
-/* 但是在lib/index.scss中需要引入 @import '~@alife/next/lib/button/index.scss'; */
-/* 如果需要引入主题变量引入此段 */
-/* 组件自身样式 */
