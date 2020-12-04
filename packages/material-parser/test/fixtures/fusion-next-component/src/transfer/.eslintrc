@@ -1,5 +1,0 @@
-{
-    "rules": {
-        "react/no-did-mount-set-state": 1
-    }
-}

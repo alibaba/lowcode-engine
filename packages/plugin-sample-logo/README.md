@@ -1,3 +1,0 @@
-## todo
-
-Sample logo plugin

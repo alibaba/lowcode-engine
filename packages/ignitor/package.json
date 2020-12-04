@@ -1,7 +1,7 @@
 {
-  "name": "@ali/lowcode-editor-preset-vision",
-  "version": "0.13.1-29",
-  "description": "Vision Polyfill for Ali lowCode engine",
+  "name": "@ali/lowcode-ignitor",
+  "version": "1.0.0",
+  "description": "点火器，bootstrap lce project",
   "main": "lib/index.js",
   "private": true,
   "files": [
@@ -10,10 +10,8 @@
     "lib"
   ],
   "scripts": {
-    "start": "build-scripts start",
-    "build": "build-scripts build --skip-demo",
-    "cloud-build": "build-scripts build --skip-demo",
-    "test": "build-scripts test --config build.test.json"
+    "start": "build-scripts start --disable-open",
+    "build": "build-scripts build"
   },
   "license": "MIT",
   "dependencies": {
@@ -41,19 +39,14 @@
     "react-dom": "^16.8.1"
   },
   "devDependencies": {
-    "@ali/lowcode-test-mate": "^1.0.1",
     "@alib/build-scripts": "^0.1.18",
-    "@types/domready": "^1.0.0",
     "@types/events": "^3.0.0",
     "@types/react": "^16.8.3",
     "@types/react-dom": "^16.8.2",
+    "@types/streamsaver": "^2.0.0",
     "build-plugin-fusion": "^0.1.0",
     "build-plugin-moment-locales": "^0.1.0",
     "build-plugin-react-app": "^1.1.2",
-    "prop-types": "^15.7.2",
     "tsconfig-paths-webpack-plugin": "^3.2.0"
-  },
-  "publishConfig": {
-    "registry": "https://registry.npm.alibaba-inc.com"
   }
 }

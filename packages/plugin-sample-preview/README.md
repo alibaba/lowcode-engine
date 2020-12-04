@@ -1,3 +1,0 @@
-## todo
-
-Sample preview plugin
