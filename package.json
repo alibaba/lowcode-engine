@@ -14,7 +14,8 @@
     "clean": "rm -rf ./packages/*/lib ./packages/*/es ./packages/*/dist ./packages/*/build",
     "lint": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet",
     "lint:fix": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet --fix",
-    "pub": "lerna publish --force-publish --cd-version patch",
+    "pub": "lerna publish --force-publish --cd-version prepatch",
+    "pubbeta": "lerna publish --force-publish --cd-version prerelease --npm-tag beta",
     "setup": "./scripts/setup.sh",
     "start": "./scripts/start.sh",
     "start:server": "./scripts/start-server.sh",
@@ -42,7 +43,7 @@
     "xima": "^0.2.15"
   },
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=14.0.0"
   },
   "tnpm": {
     "mode": "yarn",

@@ -16,6 +16,7 @@ import {
   upgradePropConfig,
   upgradeConfigure,
 } from './upgrade-metadata';
+import { accessLibrary } from '@ali/lowcode-utils';
 
 import { designer } from '../editor';
 
@@ -103,8 +104,8 @@ registerMetadataTransducer(
     let top: FieldConfig[];
     let bottom: FieldConfig[];
     if (combined) {
-      top = combined?.[0].items || combined;
-      bottom = combined?.[combined.length - 1].items || combined;
+      top = combined?.[0]?.items || combined;
+      bottom = combined?.[combined.length - 1]?.items || combined;
     } else if (props) {
       top = props;
       bottom = props;
@@ -166,15 +167,6 @@ export interface OldGlobalPropConfig extends OldPropConfig {
 
 const packageMaps: any = {};
 
-function accessLibrary(library: string | object) {
-  if (typeof library !== 'string') {
-    return library;
-  }
-
-  // TODO: enhance logic
-  return (window as any)[library];
-}
-
 export function setPackages(packages: Array<{ package: string; library: object | string }>) {
   packages.forEach((item) => {
     let lib: any;
@@ -234,6 +226,14 @@ class Prototype {
 
   get packageName() {
     return this.meta.npm?.package;
+  }
+
+  set packageName(pkgName) {
+    if (this.meta.npm) {
+      this.meta.npm.package = pkgName;
+    } else {
+      this.meta.npm = { package: pkgName };
+    }
   }
 
   // 兼容原 vision 用法

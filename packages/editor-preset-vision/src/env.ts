@@ -80,6 +80,11 @@ export class Env {
     };
   }
 
+  clear() {
+    this.envs = {};
+    this.featureMap = {};
+  }
+
   getAliSchemaVersion() {
     return ALI_SCHEMA_VERSION;
   }

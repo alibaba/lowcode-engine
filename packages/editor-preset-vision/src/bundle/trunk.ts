@@ -30,7 +30,7 @@ export class Trunk {
   }
 
   getList(): any[] {
-    const list = this.trunk.reduceRight((prev, cur) => prev.concat(cur.getList()), []);
+    const list = this.trunk.filter(o => o).reduceRight((prev, cur) => prev.concat(cur.getList()), []);
     const result: Prototype[] = [];
     list.forEach((item: Prototype) => {
       if (!result.find(r => r.options.componentName === item.options.componentName)) {
@@ -98,7 +98,6 @@ export class Trunk {
   }
 
   registerSetter(type: string, setter: CustomView | RegisteredSetter) {
-    // console.warn('Trunk.registerSetter is deprecated');
     registerSetter(type, setter);
   }
 

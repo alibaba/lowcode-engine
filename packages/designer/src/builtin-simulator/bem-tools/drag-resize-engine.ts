@@ -38,6 +38,8 @@ export default class DragResizeEngine {
 
   private dragResizing = false;
 
+  private designer: Designer;
+
   constructor(designer: Designer) {
     this.designer = designer;
     this.emitter = new EventEmitter();

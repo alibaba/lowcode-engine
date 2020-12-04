@@ -1,7 +1,5 @@
 {
   "plugins": [
-    [
-      "build-plugin-component"
-    ]
+    "build-plugin-component"
   ]
 }

@@ -48,6 +48,161 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="1.0.16"></a>
 ## [1.0.16](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-types@1.0.15...@ali/lowcode-types@1.0.16) (2020-11-05)
+* 低成本方案支持绝对布局容器 ([a6067e8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a6067e8))
+
+
+
+<a name="0.12.1-18"></a>
+## [0.12.1-18](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-17...v0.12.1-18) (2020-10-17)
+
+
+
+<a name="0.12.1-17"></a>
+## [0.12.1-17](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-16...v0.12.1-17) (2020-10-14)
+
+
+
+<a name="0.12.1-16"></a>
+## [0.12.1-16](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-15...v0.12.1-16) (2020-10-12)
+
+
+
+<a name="0.12.1-15"></a>
+## [0.12.1-15](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-1...v0.12.1-15) (2020-10-12)
+
+
+
+<a name="0.12.1-14"></a>
+## [0.12.1-14](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-13...v0.12.1-14) (2020-10-10)
+
+
+
+<a name="0.12.1-13"></a>
+## [0.12.1-13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-12...v0.12.1-13) (2020-09-28)
+
+
+
+<a name="0.12.1-12"></a>
+## [0.12.1-12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-11...v0.12.1-12) (2020-09-28)
+
+
+
+<a name="0.12.1-11"></a>
+## [0.12.1-11](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-10...v0.12.1-11) (2020-09-27)
+
+
+
+<a name="0.12.1-10"></a>
+## [0.12.1-10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-9...v0.12.1-10) (2020-09-27)
+
+
+
+<a name="0.12.1-9"></a>
+## [0.12.1-9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-8...v0.12.1-9) (2020-09-27)
+
+
+
+<a name="0.12.1-8"></a>
+## [0.12.1-8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-7...v0.12.1-8) (2020-09-27)
+
+
+
+<a name="0.12.1-7"></a>
+## [0.12.1-7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-2...v0.12.1-7) (2020-09-27)
+
+
+
+
+<a name="0.13.1-11"></a>
+## [0.13.1-11](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-10...v0.13.1-11) (2020-11-02)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="0.13.1-10"></a>
+## [0.13.1-10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-9...v0.13.1-10) (2020-10-26)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="0.13.1-9"></a>
+## [0.13.1-9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-7...v0.13.1-9) (2020-10-26)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="0.13.1-8"></a>
+## [0.13.1-8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-7...v0.13.1-8) (2020-10-26)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="0.13.1-7"></a>
+## [0.13.1-7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-6...v0.13.1-7) (2020-10-23)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="0.13.1-6"></a>
+## [0.13.1-6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-5...v0.13.1-6) (2020-10-22)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="0.13.1-5"></a>
+## [0.13.1-5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-4...v0.13.1-5) (2020-10-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="0.13.1-4"></a>
+## [0.13.1-4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-3...v0.13.1-4) (2020-10-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="0.13.1-3"></a>
+## [0.13.1-3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-2...v0.13.1-3) (2020-10-19)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="0.13.1-2"></a>
+## [0.13.1-2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-1...v0.13.1-2) (2020-10-19)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="0.13.1-1"></a>
+## [0.13.1-1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-3...v0.13.1-1) (2020-10-12)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+<a name="0.12.1-3"></a>
+## [0.12.1-3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-2...v0.12.1-3) (2020-10-12)
 
 
 
@@ -128,6 +283,16 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * 🐛 use lowcode types ([b11425b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b11425b))
 * fix test result ([7f6fbe8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7f6fbe8))
 * miniAppBuildType config(temp) ([584b4c2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/584b4c2))
+* currentPage.id 返回 formUuid ([775725d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/775725d))
+* fix NextTable callback function ([ce77375](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ce77375))
+* panel visible time ([18ac1fa](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/18ac1fa))
+* supports ([371b84c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/371b84c))
+* 低代码组件 props 显示 object 问题 ([116498e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/116498e))
+* 修复 slot 获取初始值异常的 bug ([63b19f1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/63b19f1))
+* 修复判断动态 setter 的逻辑 ([d195d7f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d195d7f))
+* 兼容事件绑定 ([f4c07af](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f4c07af))
+* 可以降级到历史的 JSBlock 格式 ([af1746b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/af1746b))
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
 
 
 ### Features
@@ -137,6 +302,14 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * 🎸 根据低代码协议文档, 将 BlockSchema 也改成继承自 ContainerSchema ([7901c8e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7901c8e))
 * 🎸 根据低代码协议文档, 完善UtilsMap的定义 ([7fe4bc0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7fe4bc0))
 * 🎸 urlParams 类型的数据源不需要 options, 所以 options 改成可选为好 ([8114c6f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8114c6f))
+* 🎸 增加icon相关的判断函数 ([89064f5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/89064f5))
+* add filter reducer ([17c6ed3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/17c6ed3))
+* merge live mode ([92c3039](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/92c3039))
+* show value state ([bd49e50](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd49e50))
+* support plaintext liveediting ([ea62f12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ea62f12))
+* support prop.autorun ([c0a5235](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c0a5235))
+* 修复状态切换失效 ([2e3f60d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2e3f60d))
+* 编辑器 hooks 能力实现 ([f3ac23b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f3ac23b))
 
 
 

@@ -140,6 +140,18 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     return this.transducer.toHot(v);
   }
 
+  setMiniAppDataSourceValue(data: any, options?: any) {
+    this.hotValue = data;
+    const v = this.transducer.toNative(data);
+    this.setValue(v, false, false, options);
+    // dirty fix list setter
+    if (Array.isArray(data) && data[0] && data[0].__sid__) {
+      return;
+    }
+
+    this.valueChange();
+  }
+
   setHotValue(data: any, options?: any) {
     this.hotValue = data;
     const v = this.transducer.toNative(data);
@@ -153,6 +165,8 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     } else {
       this.setValue(v, false, false, options);
     }
+
+    this.notifyValueChange();
 
     // dirty fix list setter
     if (Array.isArray(data) && data[0] && data[0].__sid__) {

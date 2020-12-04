@@ -119,7 +119,7 @@ export class Prop implements IPropParent {
     }
 
     if (type === 'slot') {
-      const schema = this._slotNode!.export(stage);
+      const schema = this._slotNode?.export(stage) || {};
       if (stage === TransformStage.Render) {
         return {
           type: 'JSSlot',
@@ -233,7 +233,7 @@ export class Prop implements IPropParent {
     } else if (Array.isArray(val)) {
       this._type = 'list';
     } else if (isPlainObject(val)) {
-      if (isJSSlot(val) && this.options.propsMode !== 'init') {
+      if (isJSSlot(val) && this.options.skipSetSlot !== true) {
         this.setAsSlot(val);
         return;
       }

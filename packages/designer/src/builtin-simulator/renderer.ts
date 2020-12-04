@@ -5,7 +5,6 @@ export interface BuiltinSimulatorRenderer {
   readonly isSimulatorRenderer: true;
   createComponent(schema: NodeSchema): Component | null;
   getComponent(componentName: string): Component;
-  getComponentInstances(id: string): ComponentInstance[] | null;
   getClosestNodeInstance(from: ComponentInstance, nodeId?: string): NodeInstance<ComponentInstance> | null;
   findDOMNodes(instance: ComponentInstance): Array<Element | Text> | null;
   getClientRects(element: Element | Text): DOMRect[];

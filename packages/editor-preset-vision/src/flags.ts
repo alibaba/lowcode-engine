@@ -108,14 +108,14 @@ export class Flags {
       return;
     }
 
-    const doe = document.documentElement;
+    const doc = document.documentElement;
     if (this.lastFlags) {
       this.lastFlags.filter((flag: string) => this.flags.indexOf(flag) < 0).forEach((flag) => {
-        doe.classList.remove(`engine-${flag}`);
+        doc.classList.remove(`engine-${flag}`);
       });
     }
     this.flags.forEach((flag) => {
-      doe.classList.add(`engine-${flag}`);
+      doc.classList.add(`engine-${flag}`);
     });
 
     this.lastFlags = this.flags.slice(0);

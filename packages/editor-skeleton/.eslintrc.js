@@ -1,7 +1,7 @@
 module.exports = {
-  extends: '../../.eslintrc.js',
+  extends: 'eslint-config-ali/typescript/react',
   rules: {
-    'react/no-multi-comp': 1,
+    'react/no-multi-comp': 0,
     'no-unused-expressions': 1,
     'implicit-arrow-linebreak': 1,
     'no-nested-ternary': 1,
@@ -12,5 +12,7 @@ module.exports = {
     'no-prototype-builtins': 1,
     'no-confusing-arrow': 1,
     'no-case-declarations': 1,
+    'lines-between-class-members': 0,
+    '@typescript-eslint/member-ordering': 0,
   }
 }

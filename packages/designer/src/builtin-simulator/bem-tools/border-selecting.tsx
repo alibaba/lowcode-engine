@@ -203,8 +203,8 @@ export class BorderSelecting extends Component<{ host: BuiltinSimulatorHost }> {
   }
 
   @computed get selecting() {
-    const doc = this.host.document;
-    if (doc.suspensed || this.host.liveEditing.editing) {
+    const doc = this.host.currentDocument;
+    if (!doc || doc.suspensed || this.host.liveEditing.editing) {
       return null;
     }
     const { selection } = doc;

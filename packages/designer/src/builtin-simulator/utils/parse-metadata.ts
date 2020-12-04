@@ -54,7 +54,7 @@ const LowcodeTypes: any = {
 (window as any).PropTypes = LowcodeTypes;
 (window as any).React.PropTypes = LowcodeTypes;
 
-// override primitive type chechers
+// override primitive type checkers
 primitiveTypes.forEach(type => {
   const propType = (PropTypes as any)[type];
   if (!propType) {

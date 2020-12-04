@@ -57,9 +57,13 @@ export class BorderDetecting extends Component<{ host: BuiltinSimulatorHost }> {
 
   @computed get current() {
     const { host } = this.props;
-    const doc = host.document;
+    const doc = host.currentDocument;
+    if (!doc) {
+      return null;
+    }
     const { selection } = doc;
     const { current } = host.designer.detecting;
+
     if (!current || current.document !== doc || selection.has(current.id)) {
       return null;
     }

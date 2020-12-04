@@ -47,6 +47,8 @@ export interface OldPaneConfig {
   index?: number; // todo
   isAction?: boolean; // as normal dock
   fullScreen?: boolean; // todo
+  canSetFixed?: boolean; // 是否可以设置固定模式
+  defaultFixed?: boolean; // 是否默认固定
 }
 
 function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: string } {
@@ -64,11 +66,24 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
     contentProps: props,
     index: index || props?.index,
   };
+
   if (type === 'dock') {
     newConfig.type = 'PanelDock';
     newConfig.area = 'left';
     newConfig.props.description = description || title;
-    const { contents, hideTitleBar, tip, width, maxWidth, height, maxHeight, menu, isAction, canSetFixed } = config;
+    const {
+      contents,
+      hideTitleBar,
+      tip,
+      width,
+      maxWidth,
+      height,
+      maxHeight,
+      menu,
+      isAction,
+      canSetFixed,
+      defaultFixed,
+    } = config;
     if (menu) {
       newConfig.props.title = menu;
     }
@@ -84,9 +99,11 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
         height,
         maxHeight,
         canSetFixed,
-        onInit: init,
-        onDestroy: destroy,
       };
+
+      if (defaultFixed) {
+        newConfig.panelProps.area = 'leftFixedArea';
+      }
 
       if (contents && Array.isArray(contents)) {
         newConfig.content = contents.map(({ title, content, tip }, index) => {
@@ -103,23 +120,21 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
         });
       }
     }
+  } else if (type === 'action') {
+    newConfig.area = 'top';
+    newConfig.type = 'Dock';
+  } else if (type === 'tab') {
+    newConfig.area = 'right';
+    newConfig.type = 'Panel';
+  } else if (type === 'stage') {
+    newConfig.area = 'stages';
+    newConfig.type = 'Widget';
   } else {
-    newConfig.props.onInit = init;
-    newConfig.props.onDestroy = destroy;
-    if (type === 'action') {
-      newConfig.area = 'top';
-      newConfig.type = 'Dock';
-    } else if (type === 'tab') {
-      newConfig.area = 'right';
-      newConfig.type = 'Panel';
-    } else if (type === 'stage') {
-      newConfig.area = 'stages';
-      newConfig.type = 'Widget';
-    } else {
-      newConfig.area = 'main';
-      newConfig.type = 'Widget';
-    }
+    newConfig.area = 'main';
+    newConfig.type = 'Widget';
   }
+  newConfig.props.onInit = init;
+  newConfig.props.onDestroy = destroy;
 
   return newConfig;
 }

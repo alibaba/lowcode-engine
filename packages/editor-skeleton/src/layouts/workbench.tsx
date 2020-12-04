@@ -26,6 +26,10 @@ export class Workbench extends Component<{ skeleton: Skeleton; config?: EditorCo
     return false;
   }
 
+  // componentDidCatch(error: any) {
+  //   globalContext.get(Editor).emit('editor.skeleton.workbench.error', error);
+  // }
+
   render() {
     const { skeleton, className, topAreaItemClassName } = this.props;
     return (

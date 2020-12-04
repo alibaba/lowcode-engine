@@ -1,11 +1,10 @@
-import { Fragment, Component, createElement } from 'rax';
-// import { observer } from './obx-rax/observer';
 import RaxEngine from '@ali/lowcode-rax-renderer/lib/index';
-// import RaxEngine from '../../rax-render/lib/index';
-import { SimulatorRenderer } from './renderer';
-import { host } from './host';
-
+import { History } from 'history';
+import { Component, createElement, Fragment } from 'rax';
+import { useRouter } from './rax-use-router';
+import { DocumentInstance, SimulatorRendererContainer } from './renderer';
 import './renderer.less';
+import { uniqueId } from '@ali/lowcode-utils';
 
 // patch cloneElement avoid lost keyProps
 const originCloneElement = (window as any).Rax.cloneElement;
@@ -41,15 +40,50 @@ const originCloneElement = (window as any).Rax.cloneElement;
   return originCloneElement(child, props, ...rest);
 };
 
-export default class SimulatorRendererView extends Component<{ renderer: SimulatorRenderer }> {
+export default class SimulatorRendererView extends Component<{ rendererContainer: SimulatorRendererContainer }> {
+  private unlisten: any;
+
+  componentDidMount() {
+    const { rendererContainer } = this.props;
+    this.unlisten = rendererContainer.onLayoutChange(() => {
+      this.forceUpdate();
+    });
+  }
+
+  componentWillUnmount() {
+    if (this.unlisten) {
+      this.unlisten();
+    }
+  }
+
   render() {
-    const { renderer } = this.props;
+    const { rendererContainer } = this.props;
     return (
-      <Layout renderer={renderer}>
-        <Renderer renderer={renderer} />
+      <Layout rendererContainer={rendererContainer}>
+        <Routes rendererContainer={rendererContainer} history={rendererContainer.history} />
       </Layout>
     );
   }
+}
+
+export const Routes = (props: {
+  rendererContainer: SimulatorRendererContainer,
+  history: History
+}) => {
+  const { rendererContainer, history } = props;
+  const { documentInstances } = rendererContainer;
+
+  const routes = {
+    history,
+    routes: documentInstances.map(instance => {
+      return {
+        path: instance.path,
+        component: (props: any) => <Renderer key={instance.id} rendererContainer={rendererContainer} documentInstance={instance} {...props} />
+      };
+    })
+  };
+  const { component } = useRouter(routes);
+  return component;
 }
 
 function ucfirst(s: string) {
@@ -72,59 +106,93 @@ function getDeviceView(view: any, device: string, mode: string) {
   return view;
 }
 
-// @observer
-class Layout extends Component<{ renderer: SimulatorRenderer }> {
-  shouldComponentUpdate() {
-    return false;
+class Layout extends Component<{ rendererContainer: SimulatorRendererContainer }> {
+  constructor(props: any) {
+    super(props);
+    this.props.rendererContainer.onReRender(() => {
+      this.forceUpdate();
+    });
   }
 
   render() {
-    const { renderer, children } = this.props;
-    const { layout } = renderer;
+    const { rendererContainer, children } = this.props;
+    const layout = rendererContainer.layout;
 
     if (layout) {
-      const { Component, props } = layout;
-      return <Component props={props}>{children}</Component>;
+      const { Component, props, componentName } = layout;
+      if (Component) {
+        return <Component props={props}>{children}</Component>;
+      }
+      if (componentName && rendererContainer.getComponent(componentName)) {
+        return createElement(
+          rendererContainer.getComponent(componentName),
+          {
+            ...props,
+            rendererContainer,
+          },
+          [children],
+        );
+      }
     }
 
     return <Fragment>{children}</Fragment>;
   }
 }
 
-// @observer
-class Renderer extends Component<{ renderer: SimulatorRenderer }> {
-  constructor(props: any) {
-    super(props);
-    this.props.renderer.onReRender(() => {
+class Renderer extends Component<{
+  rendererContainer: SimulatorRendererContainer;
+  documentInstance: DocumentInstance;
+}> {
+  private unlisten: any;
+  private key: string;
+
+  componentWillMount() {
+    this.key = uniqueId('renderer');
+  }
+
+  componentDidMount() {
+    const { documentInstance } = this.props;
+    this.unlisten = documentInstance.onReRender((params) => {
+      if (params && params.shouldRemount) {
+        this.key = uniqueId('renderer');
+      }
       this.forceUpdate();
     });
   }
 
+  componentWillUnmount() {
+    if (this.unlisten) {
+      this.unlisten();
+    }
+  }
   shouldComponentUpdate() {
     return false;
   }
 
   render() {
-    const { renderer } = this.props;
-    const { device, designMode } = renderer;
-
+    const { documentInstance } = this.props;
+    const { container } = documentInstance;
+    const { designMode, device } = container;
+    const { rendererContainer: renderer } = this.props;
     return (
       <RaxEngine
-        schema={renderer.schema}
+        schema={documentInstance.schema}
         components={renderer.components}
+        appHelper={renderer.context}
         context={renderer.context}
         appHelper={renderer.context}
         device={device}
         designMode={renderer.designMode}
-        suspended={renderer.suspended}
-        self={renderer.scope}
+        key={this.key}
+        suspended={documentInstance.suspended}
+        self={documentInstance.scope}
         onCompGetRef={(schema: any, ref: any) => {
-          renderer.mountInstance(schema.id, ref);
+          documentInstance.mountInstance(schema.id, ref);
         }}
         customCreateElement={(Component: any, props: any, children: any) => {
           const { __id, __desingMode, ...viewProps } = props;
           viewProps.componentId = __id;
-          const leaf = host.document.getNode(__id);
+          const leaf = documentInstance.getNode(__id);
           viewProps._leaf = leaf;
           viewProps._componentName = leaf?.componentName;
 

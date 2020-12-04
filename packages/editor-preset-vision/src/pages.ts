@@ -32,27 +32,46 @@ const pages = Object.assign(project, {
     if (!pages || !Array.isArray(pages) || pages.length === 0) {
       throw new Error('pages schema 不合法');
     }
-
-    let componentsTree: any;
-    if (isPageDataV1(pages[0])) {
-      componentsTree = [pages[0].layout];
+    // todo: miniapp
+    let componentsTree: any = [];
+    if (window.pageConfig?.isNoCodeMiniApp) {
+      // 小程序多页面
+      pages.forEach((item: any) => {
+        if (isPageDataV1(item)) {
+          componentsTree.push(item.layout);
+        } else {
+          componentsTree.push(item.componentsTree[0]);
+        }
+      });
     } else {
-      componentsTree = pages[0].componentsTree;
-      if (componentsTree[0]) {
-        componentsTree[0].componentName = componentsTree[0].componentName || 'Page';
-        // FIXME
-        if (componentsTree[0].componentName === 'Page' || componentsTree[0].componentName === 'Component') {
-          componentsTree[0].methods = {};
+      if (isPageDataV1(pages[0])) {
+        componentsTree = [pages[0].layout];
+      } else {
+        // if (!pages[0].componentsTree) return;
+        componentsTree = pages[0].componentsTree;
+        if (componentsTree[0]) {
+          componentsTree[0].componentName = componentsTree[0].componentName || 'Page';
+          // FIXME
+          if (componentsTree[0].componentName === 'Page' || componentsTree[0].componentName === 'Component') {
+            componentsTree[0].methods = {};
+          }
         }
       }
     }
 
+    componentsTree.forEach((item: any) => {
+      item.componentName = item.componentName || 'Page';
+      if (item.componentName === 'Page' || item.componentName === 'Component') {
+        item.methods = {};
+      }
+    });
     project.load(
       {
         version: '1.0.0',
         componentsMap: [],
         componentsTree,
         id: pages[0].id,
+        config: project.config,
       },
       true,
     );
@@ -104,6 +123,9 @@ const pages = Object.assign(project, {
 Object.defineProperty(pages, 'currentPage', {
   get() {
     return project.currentDocument;
+  },
+  set(_currentPage) {
+    // do nothing
   },
 });
 

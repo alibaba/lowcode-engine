@@ -25,6 +25,117 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="1.0.19"></a>
 ## [1.0.19](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@1.0.18...@ali/lowcode-react-simulator-renderer@1.0.19) (2020-11-10)
+* 使用 componentMeta.isModal 代替 protoType.isModal() ([b787dc4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b787dc4))
+* 使用引擎标准的 lc-container-placeholder，支持 children 属性 ([b262665](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b262665))
+
+
+
+
+<a name="0.13.1-12"></a>
+## [0.13.1-12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-11...v0.13.1-12) (2020-11-18)
+
+
+### Bug Fixes
+
+* 解决 device 变化后不刷新视图的 bug ([11e8e02](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/11e8e02))
+
+
+
+<a name="0.12.1-19"></a>
+## [0.12.1-19](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-18...v0.12.1-19) (2020-10-17)
+
+
+
+<a name="0.12.1-18"></a>
+## [0.12.1-18](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-17...v0.12.1-18) (2020-10-17)
+
+
+
+<a name="0.12.1-17"></a>
+## [0.12.1-17](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-16...v0.12.1-17) (2020-10-14)
+
+
+
+<a name="0.12.1-16"></a>
+## [0.12.1-16](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-15...v0.12.1-16) (2020-10-12)
+
+
+
+<a name="0.12.1-15"></a>
+## [0.12.1-15](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-1...v0.12.1-15) (2020-10-12)
+
+
+### Bug Fixes
+
+* 样式微调 ([9816859](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9816859))
+
+
+
+<a name="0.12.1-14"></a>
+## [0.12.1-14](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-13...v0.12.1-14) (2020-10-10)
+
+
+### Bug Fixes
+
+* lc-container-placeholder 样式修改 ([d939285](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d939285))
+
+
+
+<a name="0.12.1-13"></a>
+## [0.12.1-13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-12...v0.12.1-13) (2020-09-28)
+
+
+
+<a name="0.12.1-12"></a>
+## [0.12.1-12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-11...v0.12.1-12) (2020-09-28)
+
+
+
+<a name="0.12.1-11"></a>
+## [0.12.1-11](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-10...v0.12.1-11) (2020-09-27)
+
+
+
+<a name="0.12.1-10"></a>
+## [0.12.1-10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-9...v0.12.1-10) (2020-09-27)
+
+
+
+<a name="0.12.1-9"></a>
+## [0.12.1-9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-8...v0.12.1-9) (2020-09-27)
+
+
+
+<a name="0.12.1-8"></a>
+## [0.12.1-8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-7...v0.12.1-8) (2020-09-27)
+
+
+
+<a name="0.12.1-7"></a>
+## [0.12.1-7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-2...v0.12.1-7) (2020-09-27)
+
+
+### Bug Fixes
+
+* 使用 componentMeta.isModal 代替 protoType.isModal() ([b787dc4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b787dc4))
+* 使用引擎标准的 lc-container-placeholder，支持 children 属性 ([b262665](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b262665))
+
+
+
+
+<a name="0.13.1-11"></a>
+## [0.13.1-11](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-10...v0.13.1-11) (2020-11-02)
+
+
+### Bug Fixes
+
+* 解决 slot 在关闭时没有正常回收节点 ([642a404](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/642a404))
+
+
+
+
+<a name="0.13.1-10"></a>
+## [0.13.1-10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-9...v0.13.1-10) (2020-10-26)
 
 
 
@@ -118,6 +229,59 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 **Note:** Version bump only for package @ali/lowcode-react-simulator-renderer
+
+<a name="1.0.9-1"></a>
+## [1.0.9-1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.9-0...v1.0.9-1) (2020-09-14)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-react-simulator-renderer
+
+<a name="1.0.9-0"></a>
+## 1.0.9-0 (2020-09-14)
+
+
+### Bug Fixes
+
+* 🐛 style setter not working ([c88ea6b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c88ea6b))
+* 🐛 增加传入组件children的默认值[], 对之前的非健壮组件做兼容 ([af0f2df](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/af0f2df))
+* cloneElement bug ([d5c5614](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d5c5614))
+* createComponent 支持所有 schema ([7f946f5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7f946f5))
+* layout tabbar number ([3975571](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3975571))
+* live editing outline colore ([791771c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/791771c))
+* merge ([ac55847](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ac55847))
+* modify layout props ([9baba75](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9baba75))
+* react simulator rendererContainer props ([6e1eac0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6e1eac0))
+* render children ([487f257](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/487f257))
+* 临时解决 lowCodeComponent 性能问题 ([25b4ba2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/25b4ba2))
+* 低代码组件 props 显示 object 问题 ([116498e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/116498e))
+* 低代码组件修改之后渲染为空 ([ef71632](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ef71632))
+* 修复低代码组件内部部分区域无法选中 ([f0adaa5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f0adaa5))
+* 合并master分支 ([bd2c6ad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bd2c6ad))
+* 在 renderer 层面做 function component 包装，避免影响 rax 等其他场景 ([1f920dd](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1f920dd))
+* 处理 schema id 重复的问题 ([d2316be](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d2316be))
+* 支持事件 VE_EVENTS.VE_PAGE_PAGE_READY ([935ffad](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/935ffad))
+* 支持低代码组件样式 ([6e64be1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6e64be1))
+* 简化 onPageReady 实现逻辑 ([a36e5f2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a36e5f2))
+* 调整 upgrade 和 init 的流程 ([09fc1a0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/09fc1a0))
+* 适配Nav组件 ([7e9829f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7e9829f))
+* 部分低代码组件渲染报错 ([093015c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/093015c))
+
+
+### Features
+
+* 🎸 为了能更好地在设计态模拟, 将 device 透传到组件树根组件上 ([7ab7def](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7ab7def))
+* 🎸 为容器的占位元素增加一个特定的 class 方便在设计器里定制样式 ([5077141](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5077141))
+* 🎸 容器占位原生的样式从内联改成写在 CSS 文件里,方便被覆盖样式 ([a616e18](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a616e18))
+* get layout config from legao-design ([b9103a2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b9103a2))
+* support plaintext liveediting ([ea62f12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ea62f12))
+* 在 editor-preset-vision 中对 legao schema 进行向前兼容 ([7867917](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7867917))
+* 容器组件支持传入 placeholder 和对应样式 ([0c4de43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0c4de43))
+* 支持低代码组件设计态实时改变 ([c5a817b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c5a817b))
+
+
+
 
 <a name="1.0.8-0"></a>
 ## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-simulator-renderer@0.8.61...@ali/lowcode-react-simulator-renderer@1.0.8-0) (2020-09-09)

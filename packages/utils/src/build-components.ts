@@ -1,13 +1,14 @@
 import { ComponentType, forwardRef, createElement, FunctionComponent } from 'react';
-import { NpmInfo } from '@ali/lowcode-types';
-import { isReactComponent, acceptsRef, wrapReactClass } from './is-react';
+import { NpmInfo, ComponentSchema } from '@ali/lowcode-types';
+import { Component } from '@ali/lowcode-designer';
 import { isESModule } from './is-es-module';
+import { isReactComponent, acceptsRef, wrapReactClass } from './is-react';
 
 interface LibraryMap {
   [key: string]: string;
 }
 
-function accessLibrary(library: string | Record<string, unknown>) {
+export function accessLibrary(library: string | Record<string, unknown>) {
   if (typeof library !== 'string') {
     return library;
   }
@@ -75,12 +76,20 @@ function findComponent(libraryMap: LibraryMap, componentName: string, npm?: NpmI
   return getSubComponent(library, paths);
 }
 
-export function buildComponents(libraryMap: LibraryMap, componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> }) {
-  const components: any = {
-  };
+export function buildComponents(libraryMap: LibraryMap,
+  componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> | ComponentSchema },
+  createComponent: (schema: ComponentSchema) => Component | null) {
+  const components: any = {};
   Object.keys(componentsMap).forEach((componentName) => {
     let component = componentsMap[componentName];
-    if (!isReactComponent(component)) {
+    if (component && (component as ComponentSchema).componentName === 'Component') {
+      components[componentName] = createComponent(component as ComponentSchema);
+    } else if (isReactComponent(component)) {
+      if (!acceptsRef(component)) {
+        component = wrapReactClass(component as FunctionComponent);
+      }
+      components[componentName] = component;
+    } else {
       component = findComponent(libraryMap, componentName, component);
     }
     if (component) {

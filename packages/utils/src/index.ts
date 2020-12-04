@@ -20,3 +20,4 @@ export * from './svg-icon';
 export * from './unique-id';
 export * from './build-components';
 export * from './appHelper';
+export * from './misc';

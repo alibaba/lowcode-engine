@@ -12,7 +12,6 @@ const debug = Debug('renderer:page');
 
 export default class PageRenderer extends BaseRenderer {
   static dislayName = 'page-renderer';
-
   static propTypes = {
     __schema: PropTypes.object,
   };

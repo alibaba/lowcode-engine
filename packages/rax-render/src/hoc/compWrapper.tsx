@@ -1,13 +1,23 @@
 // @ts-nocheck
-
-import { createElement, Component } from 'rax';
+import { createElement, Component, forwardRef } from 'rax';
 
 export default function (Comp) {
-  return class CompWrapper extends Component {
+  class compWrapper extends Component {
+    // eslint-disable-next-line no-useless-constructor
+    constructor(props, context) {
+      super(props, context);
+    }
+
     render() {
+      const { forwardRef } = this.props;
       return createElement(Comp, {
         ...this.props,
+        ref: forwardRef,
       });
     }
-  };
+  }
+
+  return forwardRef((props, ref) => {
+    return createElement(compWrapper, { ...props, forwardRef: ref });
+  });
 }

@@ -171,3 +171,29 @@ export function bzb(apiCode, params, otherProps = {}) {
     ...otherProps,
   });
 }
+
+export async function webTableProxy(req) {
+  const { _table } = window.parent;
+  const { VisualEngine } = window;
+  const { Bus } = VisualEngine;
+  if (_table) {
+    const { options } = req;
+    const { params, oneAPIConfig } = options;
+    const { code } = oneAPIConfig;
+    const sheetId = oneAPIConfig['x-model'];
+    const sheet = await _table.find({ id: sheetId });
+    const result = await sheet.instance.fetch({ code }, params);
+    return result;
+  }
+  return new Promise((resolve, reject) => {
+    Bus.emitter.on('table.ready', async (table) => {
+      const { options } = req;
+      const { params, oneAPIConfig } = options;
+      const { code } = oneAPIConfig;
+      const sheetId = oneAPIConfig['x-model'];
+      const sheet = await table.find({ id: sheetId });
+      const result = await sheet.instance.fetch({ code }, params);
+      resolve(result);
+    });
+  });
+}

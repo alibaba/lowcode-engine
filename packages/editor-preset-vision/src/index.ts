@@ -5,6 +5,7 @@ import logger from '@ali/vu-logger';
 import { render } from 'react-dom';
 import I18nUtil from './i18n-util';
 import { hotkey as Hotkey, monitor } from '@ali/lowcode-editor-core';
+import { registerMetadataTransducer } from '@ali/lowcode-designer';
 import { createElement } from 'react';
 import { VE_EVENTS as EVENTS, VE_HOOKS as HOOKS, VERSION as Version } from './base/const';
 import Bus from './bus';
@@ -14,6 +15,7 @@ import Panes from './panes';
 import Exchange from './exchange';
 import context from './context';
 import VisualManager from './base/visualManager';
+import VisualDesigner from './base/visualDesigner';
 import Trunk from './bundle/trunk';
 import Prototype from './bundle/prototype';
 import Bundle from './bundle/bundle';
@@ -22,10 +24,11 @@ import * as Field from './fields';
 import Prop from './prop';
 import Env from './env';
 import DragEngine from './drag-engine';
+// import Flags from './base/flags';
 import Viewport from './viewport';
 import Project from './project';
-
 import Symbols from './symbols';
+import '@ali/lowcode-editor-setters';
 
 import './vision.less';
 
@@ -60,6 +63,7 @@ const ui = {
 
 const modules = {
   VisualManager,
+  VisualDesigner,
   I18nUtil,
   Prop,
 };
@@ -107,6 +111,8 @@ const VisualEngine = {
   Project,
   logger,
   Symbols,
+  registerMetadataTransducer,
+  // Flags,
 };
 
 (window as any).VisualEngine = VisualEngine;
@@ -156,12 +162,18 @@ export {
   Project,
   logger,
   Symbols,
+  registerMetadataTransducer,
 };
 
-const version = '6.0.0(LowcodeEngine 0.9.3)';
+const version = '6.0.0 (LowcodeEngine 0.9.32)';
 
 console.log(
   `%c VisionEngine %c v${version} `,
+<<<<<<< HEAD
   'padding: 2px 1px; border-radius: 3px 0 0 3px; color: #fff; background: #606060;font-weight:bold;',
   'padding: 2px 1px; border-radius: 0 3px 3px 0; color: #fff; background: #42c02e;font-weight:bold;',
+=======
+  'padding: 2px 1px; border-radius: 3px 0 0 3px; color: #fff; background: #606060; font-weight: bold;',
+  'padding: 2px 1px; border-radius: 0 3px 3px 0; color: #fff; background: #42c02e; font-weight: bold;',
+>>>>>>> origin/refactor/vision-code-split
 );

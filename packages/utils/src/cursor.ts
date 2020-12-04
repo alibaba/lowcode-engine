@@ -45,7 +45,7 @@ export class Cursor {
     }
   }
 
-  private addState(state: string) {
+  addState(state: string) {
     if (!this.states.has(state)) {
       this.states.add(state);
       document.documentElement.classList.add(`lc-cursor-${state}`);

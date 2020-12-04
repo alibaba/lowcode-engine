@@ -183,6 +183,7 @@ export class NodeChildren {
     }
 
     this.emitter.emit('change');
+    this.emitter.emit('insert', node);
     // this.reportModified(node, this.owner, { type: 'insert' });
 
     // check condition group
@@ -332,6 +333,13 @@ export class NodeChildren {
     this.emitter.on('change', fn);
     return () => {
       this.emitter.removeListener('change', fn);
+    };
+  }
+
+  onInsert(fn: (node: Node) => void) {
+    this.emitter.on('insert', fn);
+    return () => {
+      this.emitter.removeListener('insert', fn);
     };
   }
 

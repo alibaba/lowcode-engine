@@ -1,8 +1,15 @@
-import { hotkey } from '@ali/lowcode-editor-core';
+import { hotkey, Editor, globalContext } from '@ali/lowcode-editor-core';
 import { isFormEvent } from '@ali/lowcode-utils';
 import { focusing } from './focusing';
 import { insertChildren, TransformStage } from '../document';
 import clipboard from './clipboard';
+
+function isInLiveEditing() {
+  if (globalContext.has(Editor)) {
+    return Boolean(globalContext.get(Editor).get('designer')?.project?.simulator?.liveEditing?.editing);
+  }
+  return false;
+}
 
 function getNextForSelect(next: any, head?: any, parent?: any): any {
   if (next) {
@@ -66,6 +73,7 @@ function getPrevForSelect(prev: any, head?: any, parent?: any): any {
 
 // hotkey binding
 hotkey.bind(['backspace', 'del'], (e: KeyboardEvent) => {
+  if (isInLiveEditing()) return;
   // TODO: use focus-tracker
   const doc = focusing.focusDesigner?.currentDocument;
   if (isFormEvent(e) || !doc) {
@@ -86,6 +94,7 @@ hotkey.bind(['backspace', 'del'], (e: KeyboardEvent) => {
 
 hotkey.bind('escape', (e: KeyboardEvent) => {
   // const currentFocus = focusing.current;
+  if (isInLiveEditing()) return;
   const sel = focusing.focusDesigner?.currentDocument?.selection;
   if (isFormEvent(e) || !sel) {
     return;
@@ -98,6 +107,7 @@ hotkey.bind('escape', (e: KeyboardEvent) => {
 
 // command + c copy  command + x cut
 hotkey.bind(['command+c', 'ctrl+c', 'command+x', 'ctrl+x'], (e, action) => {
+  if (isInLiveEditing()) return;
   const doc = focusing.focusDesigner?.currentDocument;
   if (isFormEvent(e) || !doc) {
     return;
@@ -133,6 +143,7 @@ hotkey.bind(['command+c', 'ctrl+c', 'command+x', 'ctrl+x'], (e, action) => {
 
 // command + v paste
 hotkey.bind(['command+v', 'ctrl+v'], (e) => {
+  if (isInLiveEditing()) return;
   const designer = focusing.focusDesigner;
   const doc = designer?.currentDocument;
   if (isFormEvent(e) || !designer || !doc) {
@@ -155,6 +166,7 @@ hotkey.bind(['command+v', 'ctrl+v'], (e) => {
 
 // command + z undo
 hotkey.bind(['command+z', 'ctrl+z'], (e) => {
+  if (isInLiveEditing()) return;
   const his = focusing.focusDesigner?.currentHistory;
   if (isFormEvent(e) || !his) {
     return;
@@ -166,6 +178,7 @@ hotkey.bind(['command+z', 'ctrl+z'], (e) => {
 
 // command + shift + z redo
 hotkey.bind(['command+y', 'ctrl+y', 'command+shift+z'], (e) => {
+  if (isInLiveEditing()) return;
   const his = focusing.focusDesigner?.currentHistory;
   if (isFormEvent(e) || !his) {
     return;
@@ -177,6 +190,7 @@ hotkey.bind(['command+y', 'ctrl+y', 'command+shift+z'], (e) => {
 
 // sibling selection
 hotkey.bind(['left', 'right'], (e, action) => {
+  if (isInLiveEditing()) return;
   const designer = focusing.focusDesigner;
   const doc = designer?.currentDocument;
   if (isFormEvent(e) || !doc) {
@@ -193,6 +207,7 @@ hotkey.bind(['left', 'right'], (e, action) => {
 });
 
 hotkey.bind(['up', 'down'], (e, action) => {
+  if (isInLiveEditing()) return;
   const designer = focusing.focusDesigner;
   const doc = designer?.currentDocument;
   if (isFormEvent(e) || !doc) {
@@ -215,6 +230,7 @@ hotkey.bind(['up', 'down'], (e, action) => {
 });
 
 hotkey.bind(['option+left', 'option+right'], (e, action) => {
+  if (isInLiveEditing()) return;
   const designer = focusing.focusDesigner;
   const doc = designer?.currentDocument;
   if (isFormEvent(e) || !doc) {
@@ -246,6 +262,7 @@ hotkey.bind(['option+left', 'option+right'], (e, action) => {
 });
 
 hotkey.bind(['option+up'], (e) => {
+  if (isInLiveEditing()) return;
   const designer = focusing.focusDesigner;
   const doc = designer?.currentDocument;
   if (isFormEvent(e) || !doc) {
@@ -284,6 +301,7 @@ hotkey.bind(['option+up'], (e) => {
 });
 
 hotkey.bind(['option+down'], (e) => {
+  if (isInLiveEditing()) return;
   const designer = focusing.focusDesigner;
   const doc = designer?.currentDocument;
   if (isFormEvent(e) || !doc) {

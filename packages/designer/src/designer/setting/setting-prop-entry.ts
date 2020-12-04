@@ -276,6 +276,10 @@ export class SettingPropEntry implements SettingEntry {
     this.emitter.emit('valuechange');
   }
 
+  notifyValueChange() {
+    this.editor.emit('node.prop.change', { node: this.getNode(), prop: this });
+  }
+
   getDefaultValue() {
     return this.extraProps.defaultValue;
   }

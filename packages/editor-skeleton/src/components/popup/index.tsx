@@ -123,11 +123,15 @@ export class PopupContent extends PureComponent<{ safeId?: string }> {
   };
 
   render() {
-    const { content, visible, title, actionKey, offsetX } = this.state;
+    const { content, visible, title, actionKey, pos, offsetX } = this.state;
     if (!visible) {
       return null;
     }
 
+    let avoidLaterHidden = true;
+    setTimeout(() => {
+      avoidLaterHidden = false;
+    }, 10);
 
     const id = uniqueId('ball');
 
@@ -137,6 +141,15 @@ export class PopupContent extends PureComponent<{ safeId?: string }> {
         visible={visible}
         offset={[offsetX, 0]}
         hasMask={false}
+        onVisibleChange={(visible, type) => {
+          if (avoidLaterHidden) {
+            return;
+          }
+          if (!visible && type === 'closeClick') {
+            this.setState({ visible: false });
+          }
+        }}
+        trigger={<div className="lc-popup-placeholder" style={pos} />}
         triggerType="click"
         canCloseByOutSideClick={false}
         animation={false}

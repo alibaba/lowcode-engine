@@ -83,6 +83,31 @@ export default class BaseRender extends PureComponent {
     console.warn(e);
   }
 
+  reloadDataSource = () => new Promise((resolve, reject) => {
+    debug('reload data source');
+    if (!this.__dataHelper) {
+      this.__showPlaceholder = false;
+      return resolve();
+    }
+    this.__dataHelper
+      .getInitData()
+      .then((res) => {
+        this.__showPlaceholder = false;
+        if (isEmpty(res)) {
+          this.forceUpdate();
+          return resolve();
+        }
+        this.setState(res, resolve);
+      })
+      .catch((err) => {
+        if (this.__showPlaceholder) {
+          this.__showPlaceholder = false;
+          this.forceUpdate();
+        }
+        reject(err);
+      });
+  });
+
   __setLifeCycleMethods = (method, args) => {
     const lifeCycleMethods = getValue(this.props.__schema, 'lifeCycles', {});
     let fn = lifeCycleMethods[method];
@@ -358,7 +383,7 @@ export default class BaseRender extends PureComponent {
           if (refProps && typeof refProps === 'string') {
             this[refProps] = ref;
           }
-          engine && engine.props.onCompGetRef(schema, ref);
+          ref && engine && engine.props.onCompGetRef(schema, ref);
         };
       }
       // scope需要传入到组件上
@@ -382,7 +407,7 @@ export default class BaseRender extends PureComponent {
       }
 
       let child = null;
-      if (!isFileSchema(schema) && !!_children) {
+      if (/*!isFileSchema(schema) && */!!_children) {
         child = this.__createVirtualDom(
           isJSExpression(_children) ? parseExpression(_children, self) : _children,
           self,

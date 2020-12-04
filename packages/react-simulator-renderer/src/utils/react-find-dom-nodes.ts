@@ -1,4 +1,5 @@
 import { ReactInstance } from 'react';
+import { findDOMNode } from 'react-dom';
 import { isElement } from '@ali/lowcode-utils';
 import { isDOMNode } from './is-dom-node';
 
@@ -29,5 +30,5 @@ export function reactFindDOMNodes(elem: ReactInstance | null): Array<Element | T
   const elements: Array<Element | Text> = [];
   const fiberNode = (elem as any)[FIBER_KEY];
   elementsFromFiber(fiberNode.child, elements);
-  return elements.length > 0 ? elements : null;
+  return elements.length > 0 ? elements : [findDOMNode(elem)];
 }

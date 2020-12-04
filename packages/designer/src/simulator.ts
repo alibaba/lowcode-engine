@@ -1,7 +1,7 @@
 import { Component as ReactComponent, ComponentType } from 'react';
 import { ComponentMetadata, NodeSchema } from '@ali/lowcode-types';
-import { ISensor, Point, ScrollTarget, IScrollable } from './designer';
-import { Node } from './document';
+import { ISensor, Point, ScrollTarget, IScrollable, LocateEvent, LocationData } from './designer';
+import { Node, ParentalNode } from './document';
 
 export type AutoFit = '100%';
 export const AutoFit = '100%';
@@ -58,6 +58,11 @@ export interface IViewport extends IScrollable {
    * 本地坐标系转化为全局坐标系
    */
   toGlobalPoint(point: Point): Point;
+}
+
+export interface DropContainer {
+  container: ParentalNode;
+  instance: ComponentInstance;
 }
 
 /**
@@ -143,6 +148,8 @@ export interface ISimulatorHost<P = object> extends ISensor {
 
   findDOMNodes(instance: ComponentInstance, selector?: string): Array<Element | Text> | null;
 
+  getDropContainer(e: LocateEvent): DropContainer | null;
+  
   /**
    * 销毁
    */
@@ -154,6 +161,7 @@ export function isSimulatorHost(obj: any): obj is ISimulatorHost {
 }
 
 export interface NodeInstance<T = ComponentInstance> {
+  docId: string;
   nodeId: string;
   instance: T;
   node?: Node | null;

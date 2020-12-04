@@ -103,9 +103,9 @@ html.engine-blur #engine {
   height: 16px!important;
 }
 
-.lc-left-float-pane {
-  font-size: 14px;
-}
+// .lc-left-float-pane {
+//   font-size: 14px;
+// }
 
 html.engine-preview-mode  {
   .lc-left-area, .lc-right-area {
@@ -114,7 +114,7 @@ html.engine-preview-mode  {
 }
 
 .ve-popups .ve-message {
-  right: 290px;
+  right: calc(var(--right-area-width, 300px) + 10px);
 
   .ve-message-content {
     display: flex;

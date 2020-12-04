@@ -13,7 +13,7 @@ import {
   FieldConfig,
 } from '@ali/lowcode-types';
 import { computed } from '@ali/lowcode-editor-core';
-import { Node, ParentalNode } from './document';
+import { isNode, Node, ParentalNode } from './document';
 import { Designer } from './designer';
 import { intlNode } from './locale';
 import { IconContainer } from './icons/container';
@@ -70,6 +70,10 @@ export class ComponentMeta {
     return this._npm;
   }
 
+  set npm(_npm) {
+    this._npm = _npm;
+  }
+
   private _componentName?: string;
 
   get componentName(): string {
@@ -111,6 +115,12 @@ export class ComponentMeta {
 
   get liveTextEditing() {
     return this._liveTextEditing;
+  }
+
+  private _isTopFixed?: boolean;
+
+  get isTopFixed() {
+    return this._isTopFixed;
   }
 
   private parentWhitelist?: NestingFilter | null;
@@ -195,6 +205,12 @@ export class ComponentMeta {
     collectLiveTextEditing(this.configure);
     this._liveTextEditing = liveTextEditing.length > 0 ? liveTextEditing : undefined;
 
+    const isTopFiexd = this._transformedMetadata.experimental?.isTopFixed;
+
+    if (isTopFiexd) {
+      this._isTopFixed = isTopFiexd;
+    }
+
     const { configure = {} } = this._transformedMetadata;
     this._acceptable = false;
 
@@ -264,6 +280,9 @@ export class ComponentMeta {
   checkNestingDown(my: Node, target: Node | NodeSchema) {
     // 检查父子关系，直接约束型，在画布中拖拽直接掠过目标容器
     if (this.childWhitelist) {
+      if (!isNode(target)) {
+        target = new Node(my.document, target);
+      }
       return this.childWhitelist(target, my);
     }
     return true;

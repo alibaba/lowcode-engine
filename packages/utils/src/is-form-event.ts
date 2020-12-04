@@ -7,7 +7,7 @@ export function isFormEvent(e: KeyboardEvent | MouseEvent) {
   if (t.form || /^(INPUT|SELECT|TEXTAREA)$/.test(t.tagName)) {
     return true;
   }
-  if (/write/.test(window.getComputedStyle(t).getPropertyValue('-webkit-user-modify'))) {
+  if (t instanceof HTMLElement && /write/.test(window.getComputedStyle(t).getPropertyValue('-webkit-user-modify'))) {
     return true;
   }
   return false;

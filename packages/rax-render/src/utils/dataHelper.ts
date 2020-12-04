@@ -1,7 +1,7 @@
+/* eslint-disable object-curly-newline */
 // @ts-nocheck
-
-import { transformArrayToMap, isJSFunction, transformStringToFunction, clone } from './index';
-import { jsonp, mtop, request, get, post, bzb } from './request';
+import { transformArrayToMap, isJSFunction, transformStringToFunction, clone, comboSkeletonConfig } from './index';
+import { jsonp, mtop, request, get, post, bzb, webTableProxy } from './request';
 
 const DS_STATUS = {
   INIT: 'init',
@@ -36,20 +36,18 @@ export default class DataHelper {
     this.ajaxList = (config && config.list) || [];
     const ajaxMap = transformArrayToMap(this.ajaxList, 'id');
     // 删除已经移除的接口
-    Object.keys(this.ajaxMap).forEach(key => {
+    Object.keys(this.ajaxMap).forEach((key) => {
       if (!ajaxMap[key]) {
         delete this.dataSourceMap[key];
       }
     });
     this.ajaxMap = ajaxMap;
     // 添加未加入到dataSourceMap中的接口
-    this.ajaxList.forEach(item => {
+    this.ajaxList.forEach((item) => {
       if (!this.dataSourceMap[item.id]) {
         this.dataSourceMap[item.id] = {
           status: DS_STATUS.INIT,
-          load: (...args) => {
-            return this.getDataSource(item.id, ...args);
-          },
+          load: (...args) => this.getDataSource(item.id, ...args),
         };
       }
     });
@@ -58,12 +56,11 @@ export default class DataHelper {
 
   generateDataSourceMap() {
     const res = {};
-    this.ajaxList.forEach(item => {
+    this.ajaxList.forEach((item) => {
+      item.id = item.id || item.name;
       res[item.id] = {
         status: DS_STATUS.INIT,
-        load: (...args) => {
-          return this.getDataSource(item.id, ...args);
-        },
+        load: (...args) => this.getDataSource(item.id, ...args),
       };
     });
     return res;
@@ -76,14 +73,14 @@ export default class DataHelper {
   }
 
   getInitData() {
-    const initSyncData = this.parser(this.ajaxList).filter(item => {
+    const initSyncData = this.parser(this.ajaxList).filter((item) => {
       if (item.isInit) {
         this.dataSourceMap[item.id].status = DS_STATUS.LOADING;
         return true;
       }
       return false;
     });
-    return this.asyncDataHandler(initSyncData).then(res => {
+    return this.asyncDataHandler(initSyncData).then((res) => {
       let { dataHandler } = this.config;
       if (isJSFunction(dataHandler)) {
         dataHandler = transformStringToFunction(dataHandler.value);
@@ -98,6 +95,7 @@ export default class DataHelper {
   }
 
   getDataSource(id, params, otherOptions, callback) {
+    console.log('load',id);
     const req = this.parser(this.ajaxMap[id]);
     const options = req.options || {};
     if (typeof otherOptions === 'function') {
@@ -119,9 +117,9 @@ export default class DataHelper {
             Array.isArray(options.params) || Array.isArray(params)
               ? params || options.params
               : {
-                ...options.params,
-                ...params,
-              },
+                  ...options.params,
+                  ...params,
+                },
           headers: {
             ...options.headers,
             ...headers,
@@ -189,73 +187,73 @@ export default class DataHelper {
       if (allReq.length === 0) resolve({});
       const res = {};
       Promise.all(
-        allReq.map(item => {
-          return new Promise(resolve => {
-            const { type, id, dataHandler, options } = item;
-            const doFetch = (type, options) => {
-              this.fetchOne(type, options)
-                .then(async data => {
-                  if (afterRequest) {
-                    this.appHelper.utils.afterRequest(item, data, undefined, async (data, error) => {
-                      await fetchHandler(data, error);
-                    });
-                  } else {
-                    await fetchHandler(data, undefined);
+        allReq.map(
+          (item) =>
+            new Promise((resolve) => {
+              const { type, id, dataHandler, options } = item;
+              const fetchHandler = async (data, error) => {
+                if (type === 'doServer') {
+                  if (!Array.isArray(data)) {
+                    data = [data];
                   }
-                })
-                .catch(async err => {
-                  if (afterRequest) {
-                    // 必须要这么调用，否则beforeRequest中的this会丢失
-                    this.appHelper.utils.afterRequest(item, undefined, err, async (data, error) => {
-                      await fetchHandler(data, error);
-                    });
-                  } else {
-                    await fetchHandler(undefined, err);
-                  }
-                });
-            };
-            const fetchHandler = async (data, error) => {
-              if (type === 'doServer') {
-                if (!Array.isArray(data)) {
-                  data = [data];
+                  doserList.forEach(async (id, idx) => {
+                    const req = this.ajaxMap[id];
+                    if (req) {
+                      res[id] = await this.dataHandler(id, req.dataHandler, data && data[idx], error);
+                      this.updateDataSourceMap(id, res[id], error);
+                    }
+                  });
+                } else {
+                  res[id] = await this.dataHandler(id, dataHandler, data, error);
+                  this.updateDataSourceMap(id, res[id], error);
                 }
-                doserList.forEach(async (id, idx) => {
-                  const req = this.ajaxMap[id];
-                  if (req) {
-                    res[id] = await this.dataHandler(id, req.dataHandler, data && data[idx], error);
-                    this.updateDataSourceMap(id, res[id], error);
-                  }
+                resolve();
+              };
+              const doFetch = (type, req) => {
+                this.fetchOne(type, req)
+                  .then(async (data) => {
+                    console.log(data)
+                    if (afterRequest) {
+                      this.appHelper.utils.afterRequest(item, data, undefined, async (data, error) => {
+                        await fetchHandler(data, error);
+                      });
+                    } else {
+                      await fetchHandler(data, undefined);
+                    }
+                  })
+                  .catch(async (err) => {
+                    if (afterRequest) {
+                      // 必须要这么调用，否则beforeRequest中的this会丢失
+                      this.appHelper.utils.afterRequest(item, undefined, err, async (data, error) => {
+                        await fetchHandler(data, error);
+                      });
+                    } else {
+                      await fetchHandler(undefined, err);
+                    }
+                  });
+              };
+              if (type === 'doServer') {
+                doserList.forEach(item => {
+                  this.dataSourceMap[item].status = DS_STATUS.LOADING;
                 });
               } else {
-                res[id] = await this.dataHandler(id, dataHandler, data, error);
-                this.updateDataSourceMap(id, res[id], error);
+                this.dataSourceMap[id].status = DS_STATUS.LOADING;
               }
-              resolve();
-            };
-
-            if (type === 'doServer') {
-              doserList.forEach(item => {
-                this.dataSourceMap[item].status = DS_STATUS.LOADING;
-              });
-            } else {
-              this.dataSourceMap[id].status = DS_STATUS.LOADING;
-            }
-            // 请求切片
-            if (beforeRequest) {
-              // 必须要这么调用，否则beforeRequest中的this会丢失
-              this.appHelper.utils.beforeRequest(item, clone(options), options => doFetch(type, options));
-            } else {
-              doFetch(type, options);
-            }
-          });
-        }),
-      )
-        .then(() => {
-          resolve(res);
-        })
-        .catch(e => {
-          reject(e);
-        });
+              // 请求切片
+              if (beforeRequest) {
+                // 必须要这么调用，否则beforeRequest中的this会丢失
+                this.appHelper.utils.beforeRequest(item, clone(options), () => doFetch(type, item));
+              } else {
+                doFetch(type, item);
+              }
+            })
+        ),
+      ).then(() => {
+        resolve(res);
+      })
+      .catch((e) => {
+        reject(e);
+      });
     });
   }
 
@@ -267,11 +265,12 @@ export default class DataHelper {
     try {
       return await dataHandler.call(this.host, data, error);
     } catch (e) {
-      console.error(`[${ id }]单个请求数据处理函数运行出错`, e);
+      console.error(`[${id}]单个请求数据处理函数运行出错`, e);
     }
   }
 
-  fetchOne(type, options) {
+  fetchOne(type, req) {
+    const { options } = req;
     // eslint-disable-next-line prefer-const
     let { uri, method = 'GET', headers, params, ...otherProps } = options;
     otherProps = otherProps || {};
@@ -287,11 +286,14 @@ export default class DataHelper {
           headers,
           ...otherProps,
         });
+      case 'legao':
+        return webTableProxy(req);
       default:
         method = method.toUpperCase();
         if (method === 'GET') {
-          return get(uri, params, headers, otherProps);
-        } else if (method === 'POST') {
+          return get(uri || otherProps.url, params, headers, otherProps);
+        }
+        if (method === 'POST') {
           return post(uri, params, headers, otherProps);
         }
         return request(uri, method, params, headers, otherProps);

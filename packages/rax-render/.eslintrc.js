@@ -1,5 +1,5 @@
 module.exports = {
-  extends: '../../.eslintrc.js',
+  extends: 'eslint-config-ali/typescript/react',
   rules: {
     'no-proto': 1,
     'no-new-func': 1,

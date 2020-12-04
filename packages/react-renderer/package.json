@@ -11,7 +11,7 @@
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
     "start": "build-scripts start",
-    "build": "build-scripts build",
+    "build": "build-scripts build --skip-demo",
     "prepublishOnly": "npm run build"
   },
   "repository": {

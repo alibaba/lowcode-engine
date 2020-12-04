@@ -40,6 +40,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * datasource版本错误问题 ([a247878](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a247878))
+* 解决 device 变化后不刷新视图的 bug ([11e8e02](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/11e8e02))
 
 
 
@@ -51,6 +52,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * 去除 handler 依赖 ([806ca62](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/806ca62))
+* 解决 slot 在关闭时没有正常回收节点 ([642a404](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/642a404))
 
 
 
@@ -76,21 +78,54 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="1.0.14"></a>
 ## [1.0.14](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@1.0.12...@ali/lowcode-react-renderer@1.0.14) (2020-11-04)
+* 修复修改 componentsMap 后无法刷新视图的 bug ([a1e7f21](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a1e7f21))
+
+
+
+
+<a name="0.13.1-5"></a>
+## [0.13.1-5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-4...v0.13.1-5) (2020-10-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-react-renderer
+
+<a name="0.13.1-4"></a>
+## [0.13.1-4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-3...v0.13.1-4) (2020-10-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-react-renderer
+
+<a name="0.13.1-3"></a>
+## [0.13.1-3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-2...v0.13.1-3) (2020-10-19)
 
 
 ### Bug Fixes
 
+<<<<<<< HEAD
 * children 在 schema 和 props 中并存的情况处理 ([7b639eb](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7b639eb))
+=======
+* 修复 JSSlot 被转成 i18n 结构 ([f2c3292](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f2c3292))
+>>>>>>> origin/refactor/vision-code-split
 
 
 
 
+<<<<<<< HEAD
 <a name="1.0.13"></a>
 ## [1.0.13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@1.0.12...@ali/lowcode-react-renderer@1.0.13) (2020-11-02)
+=======
+<a name="0.13.1-2"></a>
+## [0.13.1-2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-1...v0.13.1-2) (2020-10-19)
+>>>>>>> origin/refactor/vision-code-split
 
 
 ### Bug Fixes
 
+<<<<<<< HEAD
 * children 在 schema 和 props 中并存的情况处理 ([7b639eb](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7b639eb))
 
 
@@ -98,15 +133,37 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 <a name="1.0.12"></a>
 ## [1.0.12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@1.0.11...@ali/lowcode-react-renderer@1.0.12) (2020-10-20)
+=======
+* convertI18nObject ([66d43f2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/66d43f2))
+
+
+
+
+<a name="0.13.1-1"></a>
+## [0.13.1-1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-3...v0.13.1-1) (2020-10-12)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-react-renderer
+
+<a name="0.12.1-3"></a>
+## [0.12.1-3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-2...v0.12.1-3) (2020-10-12)
+>>>>>>> origin/refactor/vision-code-split
 
 
 ### Bug Fixes
 
+<<<<<<< HEAD
 * monaco cdn url update ([7b2fe13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7b2fe13))
+=======
+* 去掉 flags ([75fc3c6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/75fc3c6))
+>>>>>>> origin/refactor/vision-code-split
 
 
 
 
+<<<<<<< HEAD
 <a name="1.0.11"></a>
 ## [1.0.11](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@1.0.10...@ali/lowcode-react-renderer@1.0.11) (2020-10-19)
 
@@ -114,34 +171,144 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Features
 
 * **version:** 发布版本1.0.9 ([eb00490](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/eb00490))
+=======
+<a name="0.12.1-2"></a>
+## [0.12.1-2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.12.1-1...v0.12.1-2) (2020-09-23)
+
+
+### Bug Fixes
+
+* i18n 绑定变量后消失 ([0aafafe](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0aafafe))
+>>>>>>> origin/refactor/vision-code-split
 
 
 
 
+<<<<<<< HEAD
 <a name="1.0.10"></a>
 ## [1.0.10](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@1.0.9...@ali/lowcode-react-renderer@1.0.10) (2020-09-29)
+=======
+<a name="0.12.1-1"></a>
+## [0.12.1-1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.9-9...v0.12.1-1) (2020-09-22)
+>>>>>>> origin/refactor/vision-code-split
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-react-renderer
 
+<<<<<<< HEAD
 <a name="1.0.9"></a>
 ## [1.0.9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@1.0.8...@ali/lowcode-react-renderer@1.0.9) (2020-09-28)
+=======
+<a name="1.0.9-9"></a>
+## [1.0.9-9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.9-8...v1.0.9-9) (2020-09-22)
+>>>>>>> origin/refactor/vision-code-split
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-react-renderer
 
+<<<<<<< HEAD
 <a name="1.0.8"></a>
 ## [1.0.8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@1.0.8-0...@ali/lowcode-react-renderer@1.0.8) (2020-09-28)
+=======
+<a name="1.0.9-8"></a>
+## [1.0.9-8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.9-7...v1.0.9-8) (2020-09-22)
+>>>>>>> origin/refactor/vision-code-split
 
 
 
 
 **Note:** Version bump only for package @ali/lowcode-react-renderer
 
+<<<<<<< HEAD
+=======
+<a name="1.0.9-7"></a>
+## [1.0.9-7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.9-5...v1.0.9-7) (2020-09-18)
+
+
+### Bug Fixes
+
+* 修改 renderer 需等待 document 才开始渲染 ([e7cc9bc](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e7cc9bc))
+
+
+
+
+<a name="1.0.9-5"></a>
+## [1.0.9-5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.9-2...v1.0.9-5) (2020-09-17)
+
+
+### Features
+
+* 补充一些 vision API ([933cef1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/933cef1))
+
+
+
+
+<a name="1.0.9-2"></a>
+## [1.0.9-2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.9-1...v1.0.9-2) (2020-09-14)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-react-renderer
+
+<a name="1.0.9-1"></a>
+## [1.0.9-1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.9-0...v1.0.9-1) (2020-09-14)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-react-renderer
+
+<a name="1.0.9-0"></a>
+## 1.0.9-0 (2020-09-14)
+
+
+### Bug Fixes
+
+* (location) => ({location}) ([0e75b8e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0e75b8e))
+* add FaultComponent style ([77b0b2c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/77b0b2c))
+* demo 中引入locode-editor-general ([1f03857](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1f03857))
+* div 不显示问题 ([1b6533c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1b6533c))
+* dropdown and menu schema ([ae1d125](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ae1d125))
+* handling the undefined variable ([0efe8b4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0efe8b4))
+* modify docId ([dc95033](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/dc95033))
+* onDocumentChange ([eb60d1f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/eb60d1f))
+* parse custom methods function ([87d8b86](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/87d8b86))
+* remove debugger ([a835dc6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a835dc6))
+* render error样式 ([d601d5e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d601d5e))
+* slot 兼容问题 + loop key bug fix ([bc64017](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bc64017))
+* supports ([371b84c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/371b84c))
+* 修复低代码组件设计器、区块设计器根节点为 Page 的问题，修复 topArea 样式 ([e85b542](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e85b542))
+* 修复判断动态 setter 的逻辑 ([d195d7f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d195d7f))
+* **react-renderer:** fix hasLoop logic ([577e0eb](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/577e0eb))
+* 区块模板根节点支持 Div ([c3b796e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c3b796e))
+* 合并后bugfix ([c3e6b4b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c3e6b4b))
+* 支持自定义 Block 容器 ([1c0b508](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1c0b508))
+* 清理代码依赖及版本 ([0b15d30](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0b15d30))
+* 组件缺失占位 ([aff2f34](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/aff2f34))
+
+
+### Features
+
+* 🎸 add demo-server ([df35c6a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/df35c6a))
+* extend deviceClassName ([0e96074](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0e96074))
+* rax render ([95bf331](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/95bf331))
+* rax-render 拦截逻辑 & request 调用 webtable（mock） ([42108f6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/42108f6))
+* 在 editor-preset-vision 中对 legao schema 进行向前兼容 ([7867917](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7867917))
+
+
+### Reverts
+
+* 去掉多余注释 ([2495afa](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2495afa))
+
+
+
+
+>>>>>>> origin/refactor/vision-code-split
 <a name="1.0.8-0"></a>
 ## [1.0.8-0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@1.0.7-0...@ali/lowcode-react-renderer@1.0.8-0) (2020-09-09)
 

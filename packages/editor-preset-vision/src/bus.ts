@@ -64,16 +64,20 @@ export class Bus {
 
 const bus = new Bus();
 
-editor.on('hotkey.callback.call', (data) => {
+editor?.on('hotkey.callback.call', (data) => {
   bus.emit('ve.hotkey.callback.call', data);
 });
 
-editor.on('history.back', (data) => {
+editor?.on('history.back', (data) => {
   bus.emit('ve.history.back', data);
 });
 
-editor.on('history.forward', (data) => {
+editor?.on('history.forward', (data) => {
   bus.emit('ve.history.forward', data);
+});
+
+editor?.on('node.prop.change', (data) => {
+  bus.emit('node.prop.change', data);
 });
 
 export default bus;

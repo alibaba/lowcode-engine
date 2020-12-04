@@ -1,9 +1,8 @@
 import LowCodeRenderer from '@ali/lowcode-react-renderer';
-// import { isObject } from 'lodash';
 import { ReactInstance, Fragment, Component, createElement } from 'react';
 import { observer } from '@recore/obx-react';
-import { SimulatorRenderer } from './renderer';
-import { host } from './host';
+import { SimulatorRendererContainer, DocumentInstance } from './renderer';
+import { Router, Route, Switch } from 'react-router';
 import './renderer.less';
 
 // patch cloneElement avoid lost keyProps
@@ -40,17 +39,38 @@ const originCloneElement = window.React.cloneElement;
   return originCloneElement(child, props, ...rest);
 };
 
-export default class SimulatorRendererView extends Component<{ renderer: SimulatorRenderer }> {
+export default class SimulatorRendererView extends Component<{ rendererContainer: SimulatorRendererContainer }> {
   render() {
-    const { renderer } = this.props;
+    const { rendererContainer } = this.props;
     return (
-      <Layout renderer={renderer}>
-        <Renderer renderer={renderer} />
-      </Layout>
+      <Router history={rendererContainer.history}>
+        <Layout rendererContainer={rendererContainer}>
+          <Routes rendererContainer={rendererContainer} />
+        </Layout>
+      </Router>
     );
   }
 }
 
+@observer
+export class Routes extends Component<{ rendererContainer: SimulatorRendererContainer }> {
+  render() {
+    const { rendererContainer } = this.props;
+    return (
+      <Switch>
+        {rendererContainer.documentInstances.map((instance) => {
+          return (
+            <Route
+              path={instance.path}
+              key={instance.id}
+              render={(routeProps) => <Renderer documentInstance={instance} rendererContainer={rendererContainer} {...routeProps} />}
+            />
+          );
+        })}
+      </Switch>
+    );
+  }
+}
 function ucfirst(s: string) {
   return s.charAt(0).toUpperCase() + s.substring(1);
 }
@@ -72,18 +92,30 @@ function getDeviceView(view: any, device: string, mode: string) {
 }
 
 @observer
-class Layout extends Component<{ renderer: SimulatorRenderer }> {
+class Layout extends Component<{ rendererContainer: SimulatorRendererContainer }> {
   shouldComponentUpdate() {
     return false;
   }
 
   render() {
-    const { renderer, children } = this.props;
-    const { layout } = renderer;
-
+    const { rendererContainer, children } = this.props;
+    const layout = rendererContainer.layout;
     if (layout) {
-      const { Component, props } = layout;
-      return <Component props={props}>{children}</Component>;
+      const { Component, props, componentName } = layout;
+      if (Component) {
+        return <Component key='layout' props={props}>{children}</Component>;
+      }
+      if (componentName && rendererContainer.getComponent(componentName)) {
+        return createElement(
+          rendererContainer.getComponent(componentName),
+          {
+            ...props,
+            rendererContainer,
+            key: 'layout',
+          },
+          [children],
+        );
+      }
     }
 
     return <Fragment>{children}</Fragment>;
@@ -91,20 +123,23 @@ class Layout extends Component<{ renderer: SimulatorRenderer }> {
 }
 
 @observer
-class Renderer extends Component<{ renderer: SimulatorRenderer }> {
+class Renderer extends Component<{
+  rendererContainer: SimulatorRendererContainer;
+  documentInstance: DocumentInstance }
+  > {
   shouldComponentUpdate() {
     return false;
   }
 
   render() {
-    const { renderer } = this.props;
-    const { device, designMode } = renderer;
+    const { documentInstance, rendererContainer: renderer } = this.props;
+    const { container } = documentInstance;
+    const { designMode, device } = container;
     return (
       <LowCodeRenderer
-        schema={renderer.schema}
-        components={renderer.components}
-        appHelper={renderer.context}
-        // context={renderer.context}
+        schema={documentInstance.schema}
+        components={container.components}
+        appHelper={container.context}
         designMode={designMode}
         device={device}
         suspended={renderer.suspended}
@@ -112,7 +147,7 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
         customCreateElement={(Component: any, props: any, children: any) => {
           const { __id, __desingMode, ...viewProps } = props;
           viewProps.componentId = __id;
-          const leaf = host.document.getNode(__id);
+          const leaf = documentInstance.getNode(__id);
           viewProps._leaf = leaf;
           viewProps._componentName = leaf?.componentName;
           // 如果是容器 && 无children && 高宽为空 增加一个占位容器，方便拖动
@@ -149,21 +184,20 @@ class Renderer extends Component<{ renderer: SimulatorRenderer }> {
               selectMode: false,
               triggerType: 'click',
             });
-            console.info('menuprops', viewProps);
           }
 
           return createElement(
             getDeviceView(Component, device, designMode),
             viewProps,
-            children,
+            leaf?.isContainer() ? (children == null ? [] : Array.isArray(children) ? children : [children]) : children,
           );
         }}
         onCompGetRef={(schema: any, ref: ReactInstance | null) => {
-          renderer.mountInstance(schema.id, ref);
+          documentInstance.mountInstance(schema.id, ref);
         }}
-        // onCompGetCtx={(schema: any, ctx: object) => {
-        // renderer.mountContext(schema.id, ctx);
-        // }}
+        //onCompGetCtx={(schema: any, ctx: object) => {
+        // documentInstance.mountContext(schema.id, ctx);
+        //}}
       />
     );
   }

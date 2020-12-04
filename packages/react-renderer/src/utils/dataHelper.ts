@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 import { transformArrayToMap, isJSFunction, transformStringToFunction, clone } from './index';
 import { jsonp, mtop, request, get, post, bzb } from './request';
 
@@ -80,6 +81,7 @@ export default class DataHelper {
       }
       return false;
     });
+    // 所有 datasource 的 datahandler
     return this.asyncDataHandler(initSyncData).then((res) => {
       let { dataHandler } = this.config;
       if (isJSFunction(dataHandler)) {
@@ -158,7 +160,7 @@ export default class DataHelper {
       const _tb_token_ = csrfInput && csrfInput.value;
       asyncDataList.forEach((req) => {
         const { id, type, options } = req;
-        if (!id || !type) return;
+        if (!id || !type || type === 'legao') return;
         if (type === 'doServer') {
           const { uri, params } = options || {};
           if (!uri) return;
@@ -185,6 +187,7 @@ export default class DataHelper {
       }
       if (allReq.length === 0) resolve({});
       const res = {};
+      // todo:
       Promise.all(
         allReq.map((item) => {
           return new Promise((resolve) => {
@@ -256,6 +259,7 @@ export default class DataHelper {
     });
   }
 
+  // dataHandler todo:
   dataHandler(id, dataHandler, data, error) {
     if (isJSFunction(dataHandler)) {
       dataHandler = transformStringToFunction(dataHandler.value);
@@ -270,7 +274,7 @@ export default class DataHelper {
 
   fetchOne(type, options) {
     // eslint-disable-next-line prefer-const
-    let { uri, method = 'GET', headers, params, ...otherProps } = options;
+    let { uri, url, method = 'GET', headers, params, ...otherProps } = options;
     otherProps = otherProps || {};
     switch (type) {
       case 'mtop':
@@ -284,11 +288,19 @@ export default class DataHelper {
           headers,
           ...otherProps,
         });
+      // todo:
+      case 'legao':
+        if (method === 'JSONP') {
+          return jsonp(url, params, otherProps);
+        }
+        // return webTable(uri, params, otherProps);
+        break;
       default:
         method = method.toUpperCase();
         if (method === 'GET') {
           return get(uri, params, headers, otherProps);
-        } else if (method === 'POST') {
+        }
+        if (method === 'POST') {
           return post(uri, params, headers, otherProps);
         }
         return request(uri, method, params, headers, otherProps);

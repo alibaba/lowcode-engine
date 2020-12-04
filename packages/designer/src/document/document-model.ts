@@ -4,12 +4,12 @@ import { EventEmitter } from 'events';
 import { Project } from '../project';
 import { ISimulatorHost } from '../simulator';
 import { ComponentMeta } from '../component-meta';
-import { isDragNodeDataObject, DragNodeObject, DragNodeDataObject, DropLocation } from '../designer';
+import { isDragNodeDataObject, DragNodeObject, DragNodeDataObject, DropLocation, Designer } from '../designer';
 import { Node, insertChildren, insertChild, isNode, RootNode, ParentalNode } from './node/node';
 import { Selection } from './selection';
 import { History } from './history';
 import { TransformStage, ModalNodesManager } from './node';
-import { uniqueId } from '@ali/lowcode-utils';
+import { uniqueId, isPlainObject } from '@ali/lowcode-utils';
 
 export type GetDataType<T, NodeType> = T extends undefined
   ? NodeType extends {
@@ -56,6 +56,10 @@ export class DocumentModel {
 
   private _nodesMap = new Map<string, Node>();
 
+  readonly project: Project;
+
+  readonly designer: Designer;
+
   @obx.val private nodes = new Set<Node>();
 
   private seqId = 0;
@@ -69,13 +73,13 @@ export class DocumentModel {
   /**
    * @deprecated
    */
-  private _addons: { [key: string]: { exportData: () => any; isProp: boolean;} } = {};
+  private _addons: Array<{ name: string, exportData: any }> = [];
 
   /**
    * 模拟器
    */
   get simulator(): ISimulatorHost | null {
-    return this._simulator || null;
+    return this.project.simulator;
   }
 
   get nodesMap(): Map<string, Node> {
@@ -83,28 +87,20 @@ export class DocumentModel {
   }
 
   get fileName(): string {
-    return this.rootNode.getExtraProp('fileName')?.getAsString() || this.id;
+    return this.rootNode?.getExtraProp('fileName')?.getAsString() || this.id;
   }
 
   set fileName(fileName: string) {
-    this.rootNode.getExtraProp('fileName', true)?.setValue(fileName);
+    this.rootNode?.getExtraProp('fileName', true)?.setValue(fileName);
   }
 
   private _modalNode?: ParentalNode;
 
   private _blank?: boolean;
 
-  get modalNode() {
-    return this._modalNode;
-  }
-
-  get currentRoot() {
-    return this.modalNode || this.rootNode;
-  }
-
   private inited = false;
 
-  constructor(readonly project: Project, schema?: RootSchema) {
+  constructor(project: Project, schema?: RootSchema) {
     /*
     // TODO
     // use special purge process
@@ -112,6 +108,8 @@ export class DocumentModel {
       console.info(this.willPurgeSpace);
     }, true);
     */
+    this.project = project;
+    this.designer = this.project?.designer;
     this.emitter = new EventEmitter();
 
     if (!schema) {
@@ -140,6 +138,14 @@ export class DocumentModel {
 
   @obx.val private willPurgeSpace: Node[] = [];
 
+  get modalNode() {
+    return this._modalNode;
+  }
+
+  get currentRoot() {
+    return this.modalNode || this.rootNode;
+  }
+
   addWillPurge(node: Node) {
     this.willPurgeSpace.push(node);
   }
@@ -155,16 +161,14 @@ export class DocumentModel {
     return this._blank && !this.isModified();
   }
 
-  readonly designer = this.project.designer;
-
   /**
    * 生成唯一id
    */
-  nextId() {
-    let id;
-    do {
-      id = `node_${ (this.id.slice(-10) + (++this.seqId).toString(36)).toLocaleLowerCase()}`;
-    } while (this.nodesMap.get(id));
+  nextId(possibleId: string | undefined) {
+    let id = possibleId;
+    while (!id || this.nodesMap.get(id)) {
+      id = `node_${(String(this.id).slice(-10) + (++this.seqId).toString(36)).toLocaleLowerCase()}`;
+    }
 
     return id;
   }
@@ -186,10 +190,6 @@ export class DocumentModel {
 
   @obx.val private activeNodes?: Node[];
 
-  private setupListenActiveNodes() {
-    // todo:
-  }
-
   /**
    * 根据 schema 创建一个节点
    */
@@ -205,7 +205,7 @@ export class DocumentModel {
     }
 
     let node: Node | null = null;
-    if (this.inited && checkId) {
+    if (this.hasNode(schema?.id)) {
       schema.id = null;
     }
     if (schema.id) {
@@ -274,7 +274,7 @@ export class DocumentModel {
     if (!node) {
       return;
     }
-    this.internalRemoveAndPurgeNode(node);
+    this.internalRemoveAndPurgeNode(node, true);
   }
 
   /**
@@ -350,7 +350,18 @@ export class DocumentModel {
   }
 
   export(stage: TransformStage = TransformStage.Serilize) {
-    return this.rootNode?.export(stage);
+    // 置顶只作用于 Page 的第一级子节点，目前还用不到里层的置顶；如果后面有需要可以考虑将这段写到 node-children 中的 export
+    const currentSchema = this.rootNode?.export(stage);
+    if (Array.isArray(currentSchema?.children) && currentSchema?.children.length > 0) {
+      const FixedTopNodeIndex = currentSchema.children
+        .filter(i => isPlainObject(i))
+        .findIndex((i => (i as NodeSchema).props?.__isTopFixed__));
+      if (FixedTopNodeIndex > 0) {
+        const FixedTopNode = currentSchema.children.splice(FixedTopNodeIndex, 1);
+        currentSchema.children.unshift(FixedTopNode[0]);
+      }
+    }
+    return currentSchema;
   }
 
   /**
@@ -542,7 +553,7 @@ export class DocumentModel {
 
   // add toData
   toData(extraComps?: string[]) {
-    const node = this.project?.currentDocument?.export(TransformStage.Save);
+    const node = this.export(TransformStage.Save);
     const data = {
       componentsMap: this.getComponentsMap(extraComps),
       componentsTree: [node],
@@ -558,23 +569,30 @@ export class DocumentModel {
     return this.rootNode;
   }
 
-  onRendererReady(fn: (args: any) => void): () => void {
-    this.emitter.on('lowcode_engine_renderer_ready', fn);
-    return () => {
-      this.emitter.removeListener('lowcode_engine_renderer_ready', fn);
-    };
-  }
-
-  setRendererReady(renderer: any) {
-    this.emitter.emit('lowcode_engine_renderer_ready', renderer);
-  }
-
   /**
    * @deprecated
    */
   getAddonData(name: string) {
-    const addon = this._addons[name];
-    return addon?.exportData();
+    const addon = this._addons.find((item) => item.name === name);
+    if (addon) {
+      return addon.exportData();
+    }
+  }
+
+  /**
+   * @deprecated
+  */
+  exportAddonData() {
+    const addons = {};
+    this._addons.forEach((addon) => {
+      const data = addon.exportData();
+      if (data === null) {
+        delete addons[addon.name];
+      } else {
+        addons[addon.name] = data;
+      }
+    });
+    return addons;
   }
 
   /**
@@ -584,16 +602,15 @@ export class DocumentModel {
     if (['id', 'params', 'layout'].indexOf(name) > -1) {
       throw new Error('addon name cannot be id, params, layout');
     }
-    const i = this._addons?.findIndex((item) => item.name === name);
+    const i = this._addons.findIndex((item) => item.name === name);
     if (i > -1) {
-      this._addons?.splice(i, 1);
+      this._addons.splice(i, 1);
     }
-    this._addons?.push({
+    this._addons.push({
       exportData,
       name,
     });
   }
-
 
   acceptRootNodeVisitor(
     visitorName = 'default',
@@ -674,6 +691,17 @@ export class DocumentModel {
    */
   onRefresh(/* func: () => void */) {
     console.warn('onRefresh method is deprecated');
+  }
+
+  onReady(fn: Function) {
+    this.designer.editor.on('document-open', fn);
+    return () => {
+      this.designer.editor.removeListener('document-open', fn);
+    };
+  }
+
+  private setupListenActiveNodes() {
+    // todo:
   }
 }
 

@@ -10,8 +10,7 @@
   ],
   "scripts": {
     "build": "build-scripts build --skip-demo",
-    "test": "ava",
-    "test:snapshot": "ava --update-snapshots"
+    "test": "build-scripts test --config build.test.json"
   },
   "license": "MIT",
   "dependencies": {
@@ -24,23 +23,19 @@
     "react-dom": "^16.7.0"
   },
   "devDependencies": {
-    "@alib/build-scripts": "^0.1.18",
+    "@ali/lowcode-test-mate": "^1.0.1",
+    "@alib/build-scripts": "^0.1.29",
     "@types/classnames": "^2.2.7",
     "@types/medium-editor": "^5.0.3",
     "@types/node": "^13.7.1",
     "@types/react": "^16",
     "@types/react-dom": "^16",
-    "build-plugin-component": "^0.2.10"
-  },
-  "ava": {
-    "compileEnhancements": false,
-    "snapshotDir": "test/fixtures/__snapshots__",
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "ts-node/register"
-    ]
+    "babel-jest": "^26.5.2",
+    "build-plugin-component": "^0.2.10",
+    "build-scripts-config": "^0.1.8",
+    "jest": "^26.5.2",
+    "lodash": "^4.17.20",
+    "typescript": "^4.0.3"
   },
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"

@@ -9,6 +9,7 @@ import {
   CompositeObject,
   PropsList,
   isNodeSchema,
+  NodeSchema,
 } from '@ali/lowcode-types';
 import { Project } from '../project';
 import { Node, DocumentModel, insertChildren, isRootNode, ParentalNode, TransformStage } from '../document';
@@ -171,20 +172,6 @@ export class Designer {
       node.document.simulator?.scrollToNode(node, detail);
     });
 
-    let selectionDispose: undefined | (() => void);
-    const setupSelection = () => {
-      if (selectionDispose) {
-        selectionDispose();
-        selectionDispose = undefined;
-      }
-      this.postEvent('selection.change', this.currentSelection);
-      if (this.currentSelection) {
-        const { currentSelection } = this;
-        selectionDispose = currentSelection.onSelectionChange(() => {
-          this.postEvent('selection.change', currentSelection);
-        });
-      }
-    };
     let historyDispose: undefined | (() => void);
     const setupHistory = () => {
       if (historyDispose) {
@@ -203,16 +190,38 @@ export class Designer {
       this.postEvent('current-document.change', this.currentDocument);
       this.postEvent('selection.change', this.currentSelection);
       this.postEvent('history.change', this.currentHistory);
-      setupSelection();
+      this.setupSelection();
       setupHistory();
     });
     this.postEvent('designer.init', this);
-    setupSelection();
+    this.setupSelection();
     setupHistory();
 
     // TODO: 先简单实现，后期通过焦点赋值
     focusing.focusDesigner = this;
   }
+
+  setupSelection = () => {
+    let selectionDispose: undefined | (() => void);
+    if (selectionDispose) {
+      selectionDispose();
+      selectionDispose = undefined;
+    }
+    const currentSelection = this.currentSelection;
+    // TODO: 避免选中 Page 组件，默认选中第一个子节点；新增规则 或 判断 Live 模式
+    if (currentSelection && currentSelection.selected.length === 0 && this.simulatorProps?.designMode === 'live') {
+      const rootNodeChildrens = this.currentDocument.getRoot().getChildren().children;
+      if (rootNodeChildrens.length > 0) {
+        currentSelection.select(rootNodeChildrens[0].id);
+      }
+    }
+    this.postEvent('selection.change', currentSelection);
+    if (currentSelection) {
+      selectionDispose = currentSelection.onSelectionChange(() => {
+        this.postEvent('selection.change', currentSelection);
+      });
+    }
+  };
 
   postEvent(event: string, ...args: any[]) {
     this.editor.emit(`designer.${event}`, ...args);
@@ -286,7 +295,7 @@ export class Designer {
   /**
    * 获得合适的插入位置
    */
-  getSuitableInsertion(): { target: ParentalNode; index?: number } | null {
+  getSuitableInsertion(insertNode?: Node | NodeSchema): { target: ParentalNode; index?: number } | null {
     const activedDoc = this.project.currentDocument;
     if (!activedDoc) {
       return null;
@@ -298,7 +307,7 @@ export class Designer {
       target = activedDoc.rootNode;
     } else {
       const node = nodes[0];
-      if (isRootNode(node)) {
+      if (isRootNode(node) || node.componentMeta.isContainer) {
         target = node;
       } else {
         // FIXME!!, parent maybe null
@@ -306,6 +315,11 @@ export class Designer {
         index = node.index + 1;
       }
     }
+
+    if (target && insertNode && !target.componentMeta.checkNestingDown(target, insertNode)) {
+      return null;
+    }
+
     return { target, index };
   }
 
@@ -322,6 +336,10 @@ export class Designer {
       }
       if (props.simulatorProps !== this.props.simulatorProps) {
         this._simulatorProps = props.simulatorProps;
+        // 重新 setupSelection
+        if (props.simulatorProps?.designMode !== this.props.simulatorProps?.designMode) {
+          this.setupSelection();
+        }
       }
       if (props.suspensed !== this.props.suspensed && props.suspensed != null) {
         this.suspensed = props.suspensed;
@@ -362,7 +380,7 @@ export class Designer {
 
   @obx.ref private _simulatorProps?: object | ((document: DocumentModel) => object);
 
-  @computed get simulatorProps(): object | ((document: DocumentModel) => object) {
+  @computed get simulatorProps(): object | ((project: Project) => object) {
     return this._simulatorProps || {};
   }
 
@@ -447,12 +465,12 @@ export class Designer {
     designer._componentMetasMap.forEach((config, key) => {
       const metaData = config.getMetadata();
       if (metaData.devMode === 'lowcode') {
-        maps[key] = this.currentDocument?.simulator?.createComponent(metaData.schema!);
+        maps[key] = metaData.schema;
       } else {
         const view = metaData.experimental?.view;
         if (view) {
           maps[key] = view;
-        } else if (config.npm) {
+        } else {
           maps[key] = config.npm;
         }
       }

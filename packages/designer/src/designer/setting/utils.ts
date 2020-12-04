@@ -31,6 +31,10 @@ function combineTransducer(transducer, arr, context) {
 }
 
 export class Transducer {
+  setterTransducer: any;
+
+  context: any;
+
   constructor(context, config) {
     let { setter } = config;
 

@@ -418,7 +418,8 @@ export class Dragon {
       if (!sourceDocument || sourceDocument === document) {
         evt.globalX = e.clientX;
         evt.globalY = e.clientY;
-      } else { // event from simulator sandbox
+      } else {
+        // event from simulator sandbox
         let srcSim: ISimulatorHost | undefined;
         const lastSim = lastSensor && isSimulatorHost(lastSensor) ? lastSensor : null;
         // check source simulator
@@ -519,22 +520,30 @@ export class Dragon {
   }
 
   private getMasterSensors(): ISimulatorHost[] {
-    return this.designer.project.documents
-      .map((doc) => {
-        // TODO: not use actived,
-        if (doc.actived && doc.simulator?.sensorAvailable) {
-          return doc.simulator;
-        }
-        return null;
-      })
-      .filter(Boolean) as any;
+    return Array.from(
+      new Set(
+        this.designer.project.documents
+          .map((doc) => {
+            // TODO: not use actived,
+            if (doc.actived && doc.simulator?.sensorAvailable) {
+              return doc.simulator;
+            }
+            return null;
+          })
+          .filter(Boolean) as any,
+      ),
+    );
+  }
+
+  private getSimulators() {
+    return new Set(this.designer.project.documents.map(doc => doc.simulator));
   }
 
   // #region ======== drag and drop helpers ============
   private setNativeSelection(enableFlag: boolean) {
     setNativeSelection(enableFlag);
-    this.designer.project.documents.forEach((doc) => {
-      doc.simulator?.setNativeSelection(enableFlag);
+    this.getSimulators().forEach((sim) => {
+      sim?.setNativeSelection(enableFlag);
     });
   }
 
@@ -543,8 +552,8 @@ export class Dragon {
    */
   private setDraggingState(state: boolean) {
     cursor.setDragging(state);
-    this.designer.project.documents.forEach((doc) => {
-      doc.simulator?.setDraggingState(state);
+    this.getSimulators().forEach((sim) => {
+      sim?.setDraggingState(state);
     });
   }
 
@@ -553,8 +562,8 @@ export class Dragon {
    */
   private setCopyState(state: boolean) {
     cursor.setCopy(state);
-    this.designer.project.documents.forEach((doc) => {
-      doc.simulator?.setCopyState(state);
+    this.getSimulators().forEach((sim) => {
+      sim?.setCopyState(state);
     });
   }
 
@@ -563,8 +572,8 @@ export class Dragon {
    */
   private clearState() {
     cursor.release();
-    this.designer.project.documents.forEach((doc) => {
-      doc.simulator?.clearState();
+    this.getSimulators().forEach((sim) => {
+      sim?.clearState();
     });
   }
   // #endregion

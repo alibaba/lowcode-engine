@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import Flags from './flags';
-import { designer } from './editor';
+import { editor } from './editor';
 
 const domReady = require('domready');
 
@@ -58,7 +58,6 @@ class StyleResource {
     this.inited = true;
 
     const { type, content } = this.config;
-
     let styleElement: any;
     if (type === 'URL') {
       styleElement = document.createElement('link');
@@ -192,10 +191,11 @@ export class Viewport {
     return this.preview;
   }
 
-  setDevice(device = 'pc') {
+  async setDevice(device = 'pc') {
     if (this.getDevice() !== device) {
       this.device = device;
-      designer.currentDocument?.simulator?.set('device', device === 'mobile' ? 'mobile' : 'default');
+      const simulator = await editor.onceGot('simulator');
+      simulator?.set('device', device === 'mobile' ? 'mobile' : 'default');
       // Flags.setSimulator(device);
       // this.applyMediaCSS();
       this.emitter.emit('devicechange', device);

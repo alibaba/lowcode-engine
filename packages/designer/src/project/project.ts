@@ -3,6 +3,7 @@ import { obx, computed } from '@ali/lowcode-editor-core';
 import { Designer } from '../designer';
 import { DocumentModel, isDocumentModel, isPageSchema } from '../document';
 import { ProjectSchema, RootSchema } from '@ali/lowcode-types';
+import { ISimulatorHost } from '../simulator';
 
 export class Project {
   private emitter = new EventEmitter();
@@ -11,7 +12,14 @@ export class Project {
 
   private data: ProjectSchema = { version: '1.0.0', componentsMap: [], componentsTree: [] };
 
-  @obx.ref canvasDisplayMode: 'exclusive' | 'overview' = 'exclusive';
+  private _simulator?: ISimulatorHost;
+
+  /**
+   * 模拟器
+   */
+  get simulator(): ISimulatorHost | null {
+    return this._simulator || null;
+  }
 
   // TODO: 考虑项目级别 History
 
@@ -21,6 +29,15 @@ export class Project {
 
   @computed get currentDocument() {
     return this.documents.find((doc) => doc.actived);
+  }
+
+  @obx private _config: any = {};
+  @computed get config(): any {
+    // TODO: parse layout Component
+    return this._config;
+  }
+  set config(value: any) {
+    this._config = value;
   }
 
   /**
@@ -40,7 +57,7 @@ export class Project {
    */
   setSchema(schema?: ProjectSchema) {
     const doc = this.documents.find((doc) => doc.actived);
-    doc && doc.import(schema?.componentsTree[0], false);
+    doc && doc.import(schema?.componentsTree[0]);
   }
 
   /**
@@ -57,11 +74,19 @@ export class Project {
       componentsTree: [],
       ...schema,
     };
+    this.config = schema?.config;
 
     if (autoOpen) {
       if (autoOpen === true) {
         // auto open first document or open a blank page
-        this.open(this.data.componentsTree[0]);
+        // this.open(this.data.componentsTree[0]);
+        const documentInstances = this.data.componentsTree.map((data) => this.createDocument(data));
+        // TODO: 暂时先读 config tabBar 里的值，后面看整个 layout 结构是否能作为引擎规范
+        if (this.config?.layout?.props?.tabBar?.items?.length > 0) {
+          documentInstances.find((i) => i.fileName === this.config.layout.props.tabBar.items[0].path?.slice(1))?.open();
+        } else {
+          documentInstances[0].open();
+        }
       } else {
         // auto open should be string of fileName
         this.open(autoOpen);
@@ -76,7 +101,9 @@ export class Project {
     if (this.documents.length < 1) {
       return;
     }
-    this.documents.forEach((doc) => doc.remove());
+    for (let i = this.documents.length - 1; i >= 0; i--) {
+      this.documents[i].remove();
+    }
   }
 
   removeDocument(doc: DocumentModel) {
@@ -85,6 +112,7 @@ export class Project {
       return;
     }
     this.documents.splice(index, 1);
+    this.documentsMap.delete(doc.id);
   }
 
   /**
@@ -105,6 +133,9 @@ export class Project {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     value: any,
   ): void {
+    if (key === 'config') {
+      this.config = value;
+    }
     Object.assign(this.data, { [key]: value });
   }
 
@@ -114,27 +145,44 @@ export class Project {
   get(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     key:
-    | 'version'
-    | 'componentsTree'
-    | 'componentsMap'
-    | 'utils'
-    | 'constants'
-    | 'i18n'
-    | 'css'
-    | 'dataSource'
-    | string,
+      | 'version'
+      | 'componentsTree'
+      | 'componentsMap'
+      | 'utils'
+      | 'constants'
+      | 'i18n'
+      | 'css'
+      | 'dataSource'
+      | 'config'
+      | string,
   ): any {
+    if (key === 'config') {
+      return this.config;
+    }
     return Reflect.get(this.data, key);
   }
 
-  open(doc?: string | DocumentModel | RootSchema): DocumentModel {
+  private documentsMap = new Map<string, DocumentModel>();
+
+  getDocument(id: string): DocumentModel | null {
+    // 此处不能使用 this.documentsMap.get(id)，因为在乐高 rollback 场景，document.id 会被改成其他值
+    return this.documents.find(doc => doc.id === id) || null;
+  }
+
+  createDocument(data?: RootSchema): DocumentModel {
+    const doc = new DocumentModel(this, data || this?.data?.componentsTree?.[0]);
+    this.documents.push(doc);
+    this.documentsMap.set(doc.id, doc);
+    return doc;
+  }
+
+  open(doc?: string | DocumentModel | RootSchema): DocumentModel | null {
     if (!doc) {
       const got = this.documents.find((item) => item.isBlank());
       if (got) {
         return got.open();
       }
-      doc = new DocumentModel(this);
-      this.documents.push(doc);
+      doc = this.createDocument();
       return doc.open();
     }
     if (typeof doc === 'string') {
@@ -145,27 +193,24 @@ export class Project {
 
       const data = this.data.componentsTree.find((data) => data.fileName === doc);
       if (data) {
-        doc = new DocumentModel(this, data);
-        this.documents.push(doc);
+        doc = this.createDocument(data);
         return doc.open();
       }
 
-      return;
+      return null;
     }
 
     if (isDocumentModel(doc)) {
       return doc.open();
     } else if (isPageSchema(doc)) {
-      const foundDoc = this.documents.find(
-        (curDoc) => curDoc?.rootNode?.id && curDoc?.rootNode?.id === doc?.id,
-      );
-      if (foundDoc) {
-        foundDoc.remove();
-      }
+      // 暂时注释掉，影响了 diff 功能
+      // const foundDoc = this.documents.find(curDoc => curDoc?.rootNode?.id && curDoc?.rootNode?.id === doc?.id);
+      // if (foundDoc) {
+      //   foundDoc.remove();
+      // }
     }
 
-    doc = new DocumentModel(this, doc);
-    this.documents.push(doc);
+    doc = this.createDocument(doc);
     return doc.open();
   }
 
@@ -186,13 +231,42 @@ export class Project {
     });
   }
 
+  /**
+   * 提供给模拟器的参数
+   */
+  @computed get simulatorProps(): object {
+    let simulatorProps = this.designer.simulatorProps;
+    if (typeof simulatorProps === 'function') {
+      simulatorProps = simulatorProps(this);
+    }
+    return {
+      ...simulatorProps,
+      project: this,
+      onMount: this.mountSimulator.bind(this),
+    };
+  }
+
+  private mountSimulator(simulator: ISimulatorHost) {
+    // TODO: 多设备 simulator 支持
+    this._simulator = simulator;
+    this.designer.editor.set('simulator', simulator);
+  }
+
+  setRendererReady(renderer: any) {
+    this.emitter.emit('lowcode_engine_renderer_ready', renderer);
+  }
+
+  onRendererReady(fn: (args: any) => void): () => void {
+    this.emitter.on('lowcode_engine_renderer_ready', fn);
+    return () => {
+      this.emitter.removeListener('lowcode_engine_renderer_ready', fn);
+    };
+  }
+
   onCurrentDocumentChange(fn: (doc: DocumentModel) => void): () => void {
     this.emitter.on('current-document.change', fn);
     return () => {
       this.emitter.removeListener('current-document.change', fn);
     };
   }
-  // 通知标记删除，需要告知服务端
-  // 项目角度编辑不是全量打开所有文档，是按需加载，哪个更新就通知更新谁，
-  // 哪个删除就
 }

@@ -158,24 +158,25 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   constructor(readonly document: DocumentModel, nodeSchema: Schema, options: any = {}) {
     const { componentName, id, children, props, ...extras } = nodeSchema;
-    this.id = id || document.nextId();
+    this.id = document.nextId(id);
     this.componentName = componentName;
     if (this.componentName === 'Leaf') {
       this.props = new Props(this, {
         children: isDOMText(children) || isJSExpression(children) ? children : '',
       });
+      this.settingEntry = this.document.designer.createSettingEntry([this]);
     } else {
       // 这里 props 被初始化两次，一次 new，一次 import，new 的实例需要给 propsReducer 的钩子去使用，
       // import 是为了使用钩子返回的值，并非完全幂等的操作，部分行为执行两次会有 bug，
       // 所以在 props 里会对 new / import 做一些区别化的解析
       this.props = new Props(this, props, extras);
-      this._children = new NodeChildren(this as ParentalNode, this.initialChildren(children), options);
+      this.settingEntry = this.document.designer.createSettingEntry([this]);
+      this._children = new NodeChildren(this as ParentalNode, this.initialChildren(children));
       this._children.internalInitParent();
       this.props.import(this.upgradeProps(this.initProps(props || {})), this.upgradeProps(extras || {}));
       this.setupAutoruns();
     }
 
-    this.settingEntry = this.document.designer.createSettingEntry([this]);
     this.emitter = new EventEmitter();
   }
 
@@ -264,6 +265,16 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
   }
 
+  private didDropOut(dragment: Node) {
+    const callbacks = this.componentMeta.getMetadata().experimental?.callbacks;
+    if (callbacks?.onNodeRemove) {
+      callbacks?.onNodeRemove.call(this, dragment, this);
+    }
+    if (this._parent) {
+      this._parent.didDropOut(dragment);
+    }
+  }
+
   /**
    * 内部方法，请勿使用
    * @param useMutator 是否触发联动逻辑
@@ -281,9 +292,12 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
         this._parent.children.unlinkChild(this);
       }
     }
-    // 建立新的父子关系
-    this._parent = parent;
+    if (useMutator) {
+      this._parent?.didDropOut(this);
+    }
     if (parent) {
+      // 建立新的父子关系，尤其注意：对于 parent 为 null 的场景，不会赋值，因为 subtreeModified 等事件可能需要知道该 node 被删除前的父子关系
+      this._parent = parent;
       this.document.removeWillPurge(this);
       if (!this.conditionGroup) {
         // initial conditionGroup
@@ -609,6 +623,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     if (stage !== TransformStage.Clone) {
       baseSchema.id = this.id;
     }
+    if (stage === TransformStage.Render) {
+      baseSchema.docId = this.document.id;
+    }
 
     if (this.isLeaf()) {
       baseSchema.children = this.props.get('children')?.export(stage);
@@ -893,7 +910,14 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       if (dropElement) {
         return { container: dropElement, ref };
       }
-      return { container: this, ref };
+      const rootCanDropIn = this.componentMeta?.prototype?.options?.canDropIn;
+      if (rootCanDropIn === undefined
+          || rootCanDropIn === true
+          || (typeof rootCanDropIn === 'function' && rootCanDropIn(node))) {
+        return { container: this, ref };
+      }
+      // 假如最后找不到合适位置，返回 undefined 阻止继续插入节点
+      return undefined;
     }
 
     const canDropIn = this.componentMeta?.prototype?.options?.canDropIn;

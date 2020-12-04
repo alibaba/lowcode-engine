@@ -9,6 +9,7 @@ import {
 } from './value-type';
 import { I18nMap } from './i18n';
 import { UtilsMap } from './utils';
+import { AppConfig } from './app-config';
 
 // 搭建基础协议 - 单个组件树节点描述
 // 转换成一个 .jsx 文件内 React Class 类 render 函数返回的 jsx 代码
@@ -28,6 +29,7 @@ export interface NodeSchema {
   ignore?: boolean;
   locked?: boolean;
   hidden?: boolean;
+  isTopFixed?: boolean;
 }
 
 export type PropsMap = CompositeObject;
@@ -104,6 +106,7 @@ export interface ProjectSchema {
   constants?: JSONObject;
   css?: string;
   dataSource?: DataSource;
+  config?: AppConfig;
   id?: string;
   config?: Record<string, any>;
   meta?: Record<string, any>;

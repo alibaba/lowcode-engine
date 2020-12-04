@@ -9,7 +9,10 @@ import { SkeletonContext } from '../../context';
 import { createIcon } from '@ali/lowcode-utils';
 
 @observer
-export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
+export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any }, { shouldIgnoreRoot: boolean }> {
+  state = {
+    shouldIgnoreRoot: false,
+  };
   private main = new SettingsMain(this.props.editor);
 
   @obx.ref private _activeKey?: any;
@@ -18,12 +21,26 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
     return false;
   }
 
+  componentDidMount() {
+    this.setShouldIgnoreRoot();
+  }
+
+  async setShouldIgnoreRoot() {
+    const designMode = await this.props.editor.get('designMode');
+    this.setState({
+      shouldIgnoreRoot: designMode === 'live',
+    });
+  }
+
   componentWillUnmount() {
     this.main.purge();
   }
 
   renderBreadcrumb() {
     const { settings } = this.main;
+    const { config } = this.props;
+    // const shouldIgnoreRoot = config.props?.ignoreRoot;
+    const { shouldIgnoreRoot } = this.state;
     if (!settings) {
       return null;
     }
@@ -32,7 +49,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
         <div className="lc-settings-navigator">
           {createIcon(settings.componentMeta?.icon, { className: 'lc-settings-navigator-icon' })}
           <Title title={settings.componentMeta!.title} />
-          <span>x {settings.nodes.length}</span>
+          <span> x {settings.nodes.length}</span>
         </div>
       );
     }
@@ -45,6 +62,10 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
     let l = 3;
     while (l-- > 0 && node) {
       const _node = node;
+      if (shouldIgnoreRoot && node.isRoot()) {
+        node = null;
+        continue;
+      }
       const props =
         l === 2
           ? {}
@@ -94,6 +115,16 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor }> {
         <div className="lc-settings-main">
           <div className="lc-settings-notice">
             <p>请在左侧画布选中节点</p>
+          </div>
+        </div>
+      );
+    }
+
+    if (Array.isArray(settings.items) && settings.items.length === 0) {
+      return (
+        <div className="lc-settings-main">
+          <div className="lc-settings-notice">
+            <p>该组件暂无配置</p>
           </div>
         </div>
       );

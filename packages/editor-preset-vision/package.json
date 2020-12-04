@@ -10,8 +10,10 @@
     "lib"
   ],
   "scripts": {
+    "start": "build-scripts start",
     "build": "build-scripts build --skip-demo",
-    "cloud-build": "build-scripts build --skip-demo"
+    "cloud-build": "build-scripts build --skip-demo",
+    "test": "build-scripts test --config build.test.json"
   },
   "license": "MIT",
   "dependencies": {
@@ -20,6 +22,7 @@
     "@ali/lowcode-editor-skeleton": "^1.0.22",
     "@ali/lowcode-plugin-designer": "^1.0.22",
     "@ali/lowcode-plugin-outline-pane": "^1.0.21",
+    "@ali/lowcode-utils": "^1.0.21",
     "@ali/ve-i18n-util": "^2.0.0",
     "@ali/ve-icons": "^4.1.9",
     "@ali/ve-less-variables": "2.0.3",
@@ -37,6 +40,7 @@
     "react-dom": "^16.8.1"
   },
   "devDependencies": {
+    "@ali/lowcode-test-mate": "^1.0.1",
     "@alib/build-scripts": "^0.1.18",
     "@types/domready": "^1.0.0",
     "@types/events": "^3.0.0",
@@ -45,6 +49,7 @@
     "build-plugin-fusion": "^0.1.0",
     "build-plugin-moment-locales": "^0.1.0",
     "build-plugin-react-app": "^1.1.2",
+    "prop-types": "^15.7.2",
     "tsconfig-paths-webpack-plugin": "^3.2.0"
   },
   "publishConfig": {

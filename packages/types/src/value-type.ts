@@ -105,6 +105,10 @@ export function isJSFunction(x: any): x is JSFunction {
   return typeof x === 'object' && x && x.type === 'JSFunction';
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/refactor/vision-code-split
 export function isJSSlot(data: any): data is JSSlot {
   return data && data.type === 'JSSlot';
 }
