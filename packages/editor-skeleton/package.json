@@ -20,7 +20,7 @@
   ],
   "dependencies": {
     "@ali/lowcode-designer": "^1.0.23-beta.1",
-    "@ali/lowcode-editor-core": "^1.0.23-beta.1",
+    "@ali/lowcode-editor-core": "^1.0.23",
     "@ali/lowcode-types": "^1.0.23-beta.1",
     "@ali/lowcode-utils": "^1.0.23-beta.1",
     "@ali/ve-icons": "latest",
