@@ -13,9 +13,6 @@ import {
   buildComponents,
   getSubComponent,
 } from '@ali/lowcode-utils';
-import { getClientRects } from './utils/get-client-rects';
-import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
-
 import { RootSchema, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
 // import { isESModule, isElement, acceptsRef, wrapReactClass, cursor, setNativeSelection } from '@ali/lowcode-utils';
 // import { RootSchema, NpmInfo, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
