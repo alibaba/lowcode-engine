@@ -5,8 +5,7 @@
   "registry": "http://registry.npm.alibaba-inc.com",
   "useWorkspaces": true,
   "packages": [
-    "packages/*",
-    "!packages/demo"
+    "packages/*"
   ],
   "command": {
     "bootstrap": {
