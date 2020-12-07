@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.23-beta.1"></a>
+## [1.0.23-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-29...v1.0.23-beta.1) (2020-12-07)
+
+
+### Bug Fixes
+
+* 函数签名及方法名拼写问题 ([e05790b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e05790b))
+* 设计和预览两种场景下 requestHandlersMap 的接入 ([707de45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/707de45))
+
+
+### Features
+
+* renderer 层透传 requestHandlersMap ([e12e031](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e12e031))
+* 合入 trunk-vision 代码 ([ea6bc7a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ea6bc7a))
+
+
+
+
+<a name="1.0.23-beta.0"></a>
+## [1.0.23-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-29...v1.0.23-beta.0) (2020-12-07)
+
+
+### Bug Fixes
+
+* 函数签名及方法名拼写问题 ([e05790b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e05790b))
+* 设计和预览两种场景下 requestHandlersMap 的接入 ([707de45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/707de45))
+
+
+### Features
+
+* renderer 层透传 requestHandlersMap ([e12e031](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e12e031))
+* 合入 trunk-vision 代码 ([ea6bc7a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ea6bc7a))
+
+
+
+
 <a name="1.0.21"></a>
 ## [1.0.21](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-rax-simulator-renderer@1.0.20...@ali/lowcode-rax-simulator-renderer@1.0.21) (2020-11-16)
 

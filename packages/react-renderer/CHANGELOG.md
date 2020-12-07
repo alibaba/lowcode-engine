@@ -3,6 +3,60 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.23-beta.1"></a>
+## [1.0.23-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-29...v1.0.23-beta.1) (2020-12-07)
+
+
+### Bug Fixes
+
+* children 在 schema 和 props 中并存的情况处理 ([7b639eb](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7b639eb))
+* datasource版本错误问题 ([a247878](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a247878))
+* monaco cdn url update ([7b2fe13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7b2fe13))
+* 修复数据源的接入问题 ([98ae1ed](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/98ae1ed))
+* 删除测试代码 ([f08a067](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f08a067))
+* 去除 handler 依赖 ([806ca62](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/806ca62))
+* 合并数据源引擎修复代码 ([53f3554](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/53f3554))
+* 设计和预览两种场景下 requestHandlersMap 的接入 ([f9e5397](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f9e5397))
+* 设计和预览两种场景下 requestHandlersMap 的接入 ([707de45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/707de45))
+
+
+### Features
+
+* renderer 接入数据源引擎 ([a155920](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a155920))
+* 合入 trunk-vision 代码 ([ea6bc7a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ea6bc7a))
+* 完成 utils 面板的基本功能 ([425c24d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/425c24d))
+* **version:** 发布版本1.0.9 ([eb00490](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/eb00490))
+
+
+
+
+<a name="1.0.23-beta.0"></a>
+## [1.0.23-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-29...v1.0.23-beta.0) (2020-12-07)
+
+
+### Bug Fixes
+
+* children 在 schema 和 props 中并存的情况处理 ([7b639eb](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7b639eb))
+* datasource版本错误问题 ([a247878](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a247878))
+* monaco cdn url update ([7b2fe13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7b2fe13))
+* 修复数据源的接入问题 ([98ae1ed](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/98ae1ed))
+* 删除测试代码 ([f08a067](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f08a067))
+* 去除 handler 依赖 ([806ca62](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/806ca62))
+* 合并数据源引擎修复代码 ([53f3554](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/53f3554))
+* 设计和预览两种场景下 requestHandlersMap 的接入 ([f9e5397](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f9e5397))
+* 设计和预览两种场景下 requestHandlersMap 的接入 ([707de45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/707de45))
+
+
+### Features
+
+* renderer 接入数据源引擎 ([a155920](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a155920))
+* 合入 trunk-vision 代码 ([ea6bc7a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ea6bc7a))
+* 完成 utils 面板的基本功能 ([425c24d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/425c24d))
+* **version:** 发布版本1.0.9 ([eb00490](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/eb00490))
+
+
+
+
 <a name="1.0.21"></a>
 ## [1.0.21](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-react-renderer@1.0.20...@ali/lowcode-react-renderer@1.0.21) (2020-11-16)
 

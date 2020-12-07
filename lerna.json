@@ -1,11 +1,12 @@
 {
   "lerna": "2.11.0",
-  "version": "0.13.1-29",
+  "version": "1.0.23-beta.1",
   "npmClient": "tyarn",
   "registry": "http://registry.npm.alibaba-inc.com",
   "useWorkspaces": true,
   "packages": [
-    "packages/*"
+    "packages/*",
+    "!packages/demo"
   ],
   "command": {
     "bootstrap": {

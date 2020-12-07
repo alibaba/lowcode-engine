@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.23-beta.1"></a>
+## [1.0.23-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-29...v1.0.23-beta.1) (2020-12-07)
+
+
+### Bug Fixes
+
+* fix bug ([113e409](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/113e409))
+
+
+
+
+<a name="1.0.23-beta.0"></a>
+## [1.0.23-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-29...v1.0.23-beta.0) (2020-12-07)
+
+
+### Bug Fixes
+
+* fix bug ([113e409](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/113e409))
+
+
+
+
 <a name="1.0.22"></a>
 ## [1.0.22](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-preset-general@1.0.21...@ali/lowcode-editor-preset-general@1.0.22) (2020-11-16)
 

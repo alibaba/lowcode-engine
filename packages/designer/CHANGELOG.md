@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.23-beta.1"></a>
+## [1.0.23-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-29...v1.0.23-beta.1) (2020-12-07)
+
+
+### Bug Fixes
+
+* checkId 需要传递 ([bdff2b1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bdff2b1))
+* loadAsyncLibrary之后buildComponents ([aaec683](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/aaec683))
+* typo of onResizeEnd and remove ([8df5f05](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8df5f05))
+* 修复 slot 以及子节点不销毁 ([8ef62c8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8ef62c8))
+* 修复数据源的接入问题 ([98ae1ed](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/98ae1ed))
+* 修改 asyncLibraryMap 拼写错误 ([8b2f045](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8b2f045))
+* 修改style-setter报错,loadAsyncLib 判断 ([7fe793a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7fe793a))
+* 支持 checkId 开关功能, 在 setSchema 时关闭, 避免 id 被不断重置 ([44bdda1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/44bdda1))
+
+
+### Features
+
+* renderer 层透传 requestHandlersMap ([e12e031](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e12e031))
+* 合入 trunk-vision 代码 ([ea6bc7a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ea6bc7a))
+* 完成 utils 面板的基本功能 ([425c24d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/425c24d))
+* 新增支持异步类型library ([2a491ae](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2a491ae))
+
+
+
+
+<a name="1.0.23-beta.0"></a>
+## [1.0.23-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-29...v1.0.23-beta.0) (2020-12-07)
+
+
+### Bug Fixes
+
+* checkId 需要传递 ([bdff2b1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bdff2b1))
+* loadAsyncLibrary之后buildComponents ([aaec683](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/aaec683))
+* typo of onResizeEnd and remove ([8df5f05](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8df5f05))
+* 修复 slot 以及子节点不销毁 ([8ef62c8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8ef62c8))
+* 修复数据源的接入问题 ([98ae1ed](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/98ae1ed))
+* 修改 asyncLibraryMap 拼写错误 ([8b2f045](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8b2f045))
+* 修改style-setter报错,loadAsyncLib 判断 ([7fe793a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7fe793a))
+* 支持 checkId 开关功能, 在 setSchema 时关闭, 避免 id 被不断重置 ([44bdda1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/44bdda1))
+
+
+### Features
+
+* renderer 层透传 requestHandlersMap ([e12e031](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e12e031))
+* 合入 trunk-vision 代码 ([ea6bc7a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ea6bc7a))
+* 完成 utils 面板的基本功能 ([425c24d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/425c24d))
+* 新增支持异步类型library ([2a491ae](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2a491ae))
+
+
+
+
 <a name="1.0.22"></a>
 ## [1.0.22](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-designer@1.0.21...@ali/lowcode-designer@1.0.22) (2020-11-16)
 

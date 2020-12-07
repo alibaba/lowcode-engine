@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.23-beta.1"></a>
+## [1.0.23-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-29...v1.0.23-beta.1) (2020-12-07)
+
+
+### Bug Fixes
+
+* fix array and sourceeditor bugs ([26b8b2c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/26b8b2c))
+* fix bug ([113e409](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/113e409))
+* remove wrong propType match ([73e69fa](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/73e69fa))
+* **editor-skeleton:** fix dynamic setter support in mixed-setter ([1726354](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1726354))
+
+
+### Features
+
+* 合入 trunk-vision 代码 ([ea6bc7a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ea6bc7a))
+* 新增插件的静态函数onInit,每次插件安装的时候会执行 ([fb943c5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fb943c5))
+
+
+
+
+<a name="1.0.23-beta.0"></a>
+## [1.0.23-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-29...v1.0.23-beta.0) (2020-12-07)
+
+
+### Bug Fixes
+
+* fix array and sourceeditor bugs ([26b8b2c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/26b8b2c))
+* fix bug ([113e409](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/113e409))
+* remove wrong propType match ([73e69fa](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/73e69fa))
+* **editor-skeleton:** fix dynamic setter support in mixed-setter ([1726354](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1726354))
+
+
+### Features
+
+* 合入 trunk-vision 代码 ([ea6bc7a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ea6bc7a))
+* 新增插件的静态函数onInit,每次插件安装的时候会执行 ([fb943c5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/fb943c5))
+
+
+
+
 <a name="1.0.22"></a>
 ## [1.0.22](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-editor-skeleton@1.0.21...@ali/lowcode-editor-skeleton@1.0.22) (2020-11-16)
 

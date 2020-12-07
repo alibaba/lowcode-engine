@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.23-beta.1"></a>
+## [1.0.23-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-29...v1.0.23-beta.1) (2020-12-07)
+
+
+### Features
+
+* 合入 trunk-vision 代码 ([ea6bc7a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ea6bc7a))
+* 支持 FunctionComponent 选中 ([d2d44e6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d2d44e6))
+* 新增支持异步类型library ([2a491ae](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2a491ae))
+
+
+
+
+<a name="1.0.23-beta.0"></a>
+## [1.0.23-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.1-29...v1.0.23-beta.0) (2020-12-07)
+
+
+### Features
+
+* 合入 trunk-vision 代码 ([ea6bc7a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ea6bc7a))
+* 支持 FunctionComponent 选中 ([d2d44e6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/d2d44e6))
+* 新增支持异步类型library ([2a491ae](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2a491ae))
+
+
+
+
 <a name="1.0.21"></a>
 ## [1.0.21](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-utils@1.0.20...@ali/lowcode-utils@1.0.21) (2020-11-16)
 
