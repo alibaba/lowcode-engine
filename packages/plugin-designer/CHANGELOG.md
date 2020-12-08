@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.23-beta.2"></a>
+## [1.0.23-beta.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.23-beta.1...v1.0.23-beta.2) (2020-12-08)
+
+
+### Features
+
+* 增加 plugin-designer ([8bff207](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8bff207))
+
+
+
+
 <a name="1.0.22"></a>
 ## [1.0.22](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/@ali/lowcode-plugin-designer@1.0.21...@ali/lowcode-plugin-designer@1.0.22) (2020-11-16)
 
