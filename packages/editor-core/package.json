@@ -3,6 +3,7 @@
   "version": "1.0.23",
   "description": "Core Api for Ali lowCode engine",
   "license": "MIT",
+  "private": true,
   "main": "lib/index.js",
   "module": "es/index.js",
   "files": [
