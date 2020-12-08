@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.23"></a>
+## [1.0.23](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.23-beta.2...v1.0.23) (2020-12-08)
+
+
+### Features
+
+* 加上 plugin-outline-pane ([83c0772](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/83c0772))
+
+
+
+
 <a name="1.0.23-beta.5"></a>
 ## [1.0.23-beta.5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.23-beta.4...v1.0.23-beta.5) (2020-12-08)
 
