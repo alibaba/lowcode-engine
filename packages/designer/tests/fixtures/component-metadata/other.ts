@@ -1,8 +1,7 @@
 export default {
-  componentName: 'Div',
+  componentName: 'Other',
   npm: {
-    package: '@ali/vc-div',
-    componentName: 'Div',
+    package: '@ali/vc-other',
   },
   title: '容器',
   docUrl: 'http://gitlab.alibaba-inc.com/vision-components/vc-block/blob/master/README.md',

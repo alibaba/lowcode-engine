@@ -1,5 +1,8 @@
 export default {
-  componentName: 'Div',
+  componentName: 'Page',
+  npm: {
+    package: '@ali/vc-page',
+  },
   title: '容器',
   docUrl: 'http://gitlab.alibaba-inc.com/vision-components/vc-block/blob/master/README.md',
   devMode: 'procode',
@@ -65,7 +68,7 @@ export default {
       },
       {
         type: 'group',
-        name: 'groupkh97h5kc',
+        name: 'groupkgzzeo41',
         title: '高级',
         extraProps: {
           display: 'accordion',
@@ -218,7 +221,10 @@ export default {
     ],
     component: {
       isContainer: true,
-      nestingRule: {},
+      nestingRule: {
+        // parentWhitelist: 'Div',
+        // childWhitelist: 'Div',
+      },
     },
     supports: {},
   },
@@ -253,7 +259,20 @@ export default {
         name: 'onMouseLeave',
       },
     ],
-    filters: [],
+    filters: [
+      {
+        name: 'events',
+      },
+      {
+        name: 'onClick',
+      },
+      {
+        name: 'onMouseEnter',
+      },
+      {
+        name: 'onMouseLeave',
+      },
+    ],
     autoruns: [],
   },
 };

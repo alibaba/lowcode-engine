@@ -1,5 +1,5 @@
 import set from 'lodash/set';
-import cloneDeep from 'lodash/clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import '../fixtures/window';
 import { Project } from '../../src/project/project';
 import { Node } from '../../src/document/node/node';

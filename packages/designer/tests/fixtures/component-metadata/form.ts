@@ -1,10 +1,9 @@
 export default {
-  componentName: 'Div',
+  componentName: 'Form',
   npm: {
-    package: '@ali/vc-div',
-    componentName: 'Div',
+    package: '@ali/vc-form',
   },
-  title: '容器',
+  title: '表单',
   docUrl: 'http://gitlab.alibaba-inc.com/vision-components/vc-block/blob/master/README.md',
   devMode: 'procode',
   tags: ['布局'],
@@ -223,8 +222,8 @@ export default {
     component: {
       isContainer: true,
       nestingRule: {
-        parentWhitelist: 'Div',
-        childWhitelist: 'Div',
+        parentWhitelist: 'Div,Page',
+        // childWhitelist: 'Div',
       },
     },
     supports: {},

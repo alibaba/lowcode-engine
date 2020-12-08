@@ -1,6 +1,6 @@
 import React from 'react';
 import set from 'lodash/set';
-import cloneDeep from 'lodash/clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import '../fixtures/window';
 import { Editor } from '@ali/lowcode-editor-core';
 import { Project } from '../../src/project/project';

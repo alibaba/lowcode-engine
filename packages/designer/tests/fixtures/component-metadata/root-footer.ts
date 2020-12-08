@@ -1,8 +1,7 @@
 export default {
-  componentName: 'Div',
+  componentName: 'RootFooter',
   npm: {
-    package: '@ali/vc-div',
-    componentName: 'Div',
+    package: '@ali/vc-page',
   },
   title: '容器',
   docUrl: 'http://gitlab.alibaba-inc.com/vision-components/vc-block/blob/master/README.md',
@@ -223,8 +222,8 @@ export default {
     component: {
       isContainer: true,
       nestingRule: {
-        parentWhitelist: 'Div',
-        childWhitelist: 'Div',
+        // parentWhitelist: 'Div',
+        // childWhitelist: 'Div',
       },
     },
     supports: {},

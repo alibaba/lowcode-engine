@@ -71,7 +71,7 @@ export class ComponentMeta {
   }
 
   set npm(_npm) {
-    this._npm = _npm;
+    this.setNpm(_npm);
   }
 
   private _componentName?: string;

@@ -184,7 +184,7 @@ describe('选择区测试', () => {
     expect(selection.has('form')).toBe(true);
     expect(selection.containsNode(currentDocument?.getNode('form'))).toBe(true);
     expect(selection.containsNode(currentDocument?.getNode('node_k1ow3cbj'))).toBe(true);
-    expect(selection.containsNode(currentDocument?.getNode('node_k1ow3cb9'))).toBe(false);
+    expect(selection.containsNode(currentDocument?.getNode('page'))).toBe(false);
     expect(selection.getNodes()).toEqual([currentDocument?.getNode('form')]);
     selectionChangeHandler.mockClear();
 
@@ -207,11 +207,11 @@ describe('选择区测试', () => {
     const selectionChangeHandler = jest.fn();
     selection.onSelectionChange(selectionChangeHandler);
 
-    selection.select('node_k1ow3cb9');
+    selection.select('page');
     expect(selectionChangeHandler).toHaveBeenCalledTimes(1);
-    expect(selectionChangeHandler.mock.calls[0][0]).toEqual(['node_k1ow3cb9']);
-    expect(selection.selected).toEqual(['node_k1ow3cb9']);
-    expect(selection.has('node_k1ow3cb9')).toBe(true);
+    expect(selectionChangeHandler.mock.calls[0][0]).toEqual(['page']);
+    expect(selection.selected).toEqual(['page']);
+    expect(selection.has('page')).toBe(true);
     expect(selection.containsNode(currentDocument?.getNode('form'))).toBe(true);
     expect(selection.containsNode(currentDocument?.getNode('form'), true)).toBe(false);
     selectionChangeHandler.mockClear();
@@ -237,9 +237,9 @@ describe('选择区测试', () => {
 
     // dispose 后，selected 会被赋值，但是变更事件不会被触发
     dispose();
-    selection.select('node_k1ow3cb9');
+    selection.select('page');
     expect(selectionChangeHandler).toHaveBeenCalledTimes(0);
-    expect(selection.selected).toEqual(['node_k1ow3cb9']);
+    expect(selection.selected).toEqual(['page']);
     selectionChangeHandler.mockClear();
   });
 });

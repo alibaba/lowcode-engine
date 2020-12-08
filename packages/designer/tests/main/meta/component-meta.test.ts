@@ -1,13 +1,13 @@
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
-import '../fixtures/window';
-import { Node } from '../../src/document/node/node';
-import { Designer } from '../../src/designer/designer';
-import divMeta from '../fixtures/component-metadata/div';
-import { ComponentMeta, isComponentMeta, removeBuiltinComponentAction, addBuiltinComponentAction } from '../../src/component-meta';
+import '../../fixtures/window';
+import { Node } from '../../../src/document/node/node';
+import { Designer } from '../../../src/designer/designer';
+import divMeta from '../../fixtures/component-metadata/div';
+import { ComponentMeta, isComponentMeta, removeBuiltinComponentAction, addBuiltinComponentAction } from '../../../src/component-meta';
 
 const mockCreateSettingEntry = jest.fn();
-jest.mock('../../src/designer/designer', () => {
+jest.mock('../../../src/designer/designer', () => {
   return {
     Designer: jest.fn().mockImplementation(() => {
       return {

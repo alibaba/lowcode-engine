@@ -1,0 +1,1040 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`document-model 测试 各种方法测试 1`] = `
+Object {
+  "componentsMap": Array [],
+  "componentsTree": Array [
+    Object {
+      "children": Array [
+        Object {
+          "children": Array [
+            Object {
+              "componentName": "PageHeader",
+              "condition": true,
+              "id": "node_k1ow3cbd",
+              "props": Object {
+                "__slot__action": false,
+                "__slot__content": false,
+                "__slot__crumb": false,
+                "__slot__extraContent": false,
+                "__slot__logo": false,
+                "__slot__tab": false,
+                "__style__": Object {},
+                "action": "",
+                "content": "",
+                "crumb": "",
+                "extraContent": "",
+                "fieldId": "pageHeader_k1ow3h1i",
+                "logo": "",
+                "subTitle": false,
+                "tab": "",
+                "title": Object {
+                  "value": Array [
+                    Object {
+                      "componentName": "Text",
+                      "condition": true,
+                      "id": "node_k1ow3cbf",
+                      "props": Object {
+                        "__style__": Object {},
+                        "behavior": "NORMAL",
+                        "content": Object {
+                          "en_US": "Title",
+                          "type": "i18n",
+                          "use": "zh_CN",
+                          "zh_CN": "个人信息",
+                        },
+                        "fieldId": "text_k1ow3h1j",
+                        "maxLine": 0,
+                        "showTitle": false,
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+          "componentName": "RootHeader",
+          "condition": true,
+          "id": "node_k1ow3cba",
+          "props": Object {},
+        },
+        Object {
+          "children": Array [
+            Object {
+              "children": Array [
+                Object {
+                  "children": Array [
+                    Object {
+                      "children": Array [
+                        Object {
+                          "children": Array [
+                            Object {
+                              "children": Array [
+                                Object {
+                                  "componentName": "TextField",
+                                  "condition": true,
+                                  "id": "node_k1ow3cbz",
+                                  "props": Object {
+                                    "__category__": "form",
+                                    "__style__": Object {},
+                                    "__useMediator": "value",
+                                    "addonAfter": Object {
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "addonBefore": Object {
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "autoFocus": false,
+                                    "autoHeight": false,
+                                    "behavior": "NORMAL",
+                                    "cutString": false,
+                                    "fieldId": "textField_k1ow3h1w",
+                                    "fieldName": "name",
+                                    "hasClear": false,
+                                    "hasLimitHint": false,
+                                    "htmlType": "input",
+                                    "label": Object {
+                                      "en_US": "TextField",
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "姓名",
+                                    },
+                                    "labelAlign": "top",
+                                    "labelColOffset": 0,
+                                    "labelColSpan": 4,
+                                    "labelTextAlign": "right",
+                                    "labelTipsIcon": "",
+                                    "labelTipsText": Object {
+                                      "en_US": null,
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "labelTipsTypes": "none",
+                                    "placeholder": Object {
+                                      "en_US": "please input",
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "请输入",
+                                    },
+                                    "rows": 4,
+                                    "size": "medium",
+                                    "state": "",
+                                    "tips": Object {
+                                      "en_US": "",
+                                      "type": "i18n",
+                                      "zh_CN": "",
+                                    },
+                                    "trim": false,
+                                    "validation": Array [
+                                      Object {
+                                        "type": "required",
+                                      },
+                                    ],
+                                    "value": Object {
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "wrapperColOffset": 0,
+                                    "wrapperColSpan": 0,
+                                  },
+                                },
+                                Object {
+                                  "componentName": "TextField",
+                                  "condition": true,
+                                  "id": "node_k1ow3cc1",
+                                  "props": Object {
+                                    "__category__": "form",
+                                    "__style__": Object {},
+                                    "__useMediator": "value",
+                                    "addonAfter": Object {
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "addonBefore": Object {
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "autoFocus": false,
+                                    "autoHeight": false,
+                                    "behavior": "NORMAL",
+                                    "cutString": false,
+                                    "fieldId": "textField_k1ow3h1y",
+                                    "fieldName": "englishName",
+                                    "hasClear": false,
+                                    "hasLimitHint": false,
+                                    "htmlType": "input",
+                                    "label": Object {
+                                      "en_US": "TextField",
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "英文名",
+                                    },
+                                    "labelAlign": "top",
+                                    "labelColOffset": 0,
+                                    "labelColSpan": 4,
+                                    "labelTextAlign": "right",
+                                    "labelTipsIcon": "",
+                                    "labelTipsText": Object {
+                                      "en_US": null,
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "labelTipsTypes": "none",
+                                    "placeholder": Object {
+                                      "en_US": "please input",
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "请输入",
+                                    },
+                                    "rows": 4,
+                                    "size": "medium",
+                                    "state": "",
+                                    "tips": Object {
+                                      "en_US": "",
+                                      "type": "i18n",
+                                      "zh_CN": "",
+                                    },
+                                    "trim": false,
+                                    "validation": Array [],
+                                    "value": Object {
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "wrapperColOffset": 0,
+                                    "wrapperColSpan": 0,
+                                  },
+                                },
+                                Object {
+                                  "componentName": "TextField",
+                                  "condition": true,
+                                  "id": "node_k1ow3cc3",
+                                  "props": Object {
+                                    "__category__": "form",
+                                    "__style__": Object {},
+                                    "__useMediator": "value",
+                                    "addonAfter": Object {
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "addonBefore": Object {
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "autoFocus": false,
+                                    "autoHeight": false,
+                                    "behavior": "NORMAL",
+                                    "cutString": false,
+                                    "fieldId": "textField_k1ow3h20",
+                                    "fieldName": "jobTitle",
+                                    "hasClear": false,
+                                    "hasLimitHint": false,
+                                    "htmlType": "input",
+                                    "label": Object {
+                                      "en_US": "TextField",
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "职位",
+                                    },
+                                    "labelAlign": "top",
+                                    "labelColOffset": 0,
+                                    "labelColSpan": 4,
+                                    "labelTextAlign": "right",
+                                    "labelTipsIcon": "",
+                                    "labelTipsText": Object {
+                                      "en_US": null,
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "labelTipsTypes": "none",
+                                    "placeholder": Object {
+                                      "en_US": "please input",
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "请输入",
+                                    },
+                                    "rows": 4,
+                                    "size": "medium",
+                                    "state": "",
+                                    "tips": Object {
+                                      "en_US": "",
+                                      "type": "i18n",
+                                      "zh_CN": "",
+                                    },
+                                    "trim": false,
+                                    "validation": Array [],
+                                    "value": Object {
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "wrapperColOffset": 0,
+                                    "wrapperColSpan": 0,
+                                  },
+                                },
+                              ],
+                              "componentName": "Column",
+                              "condition": true,
+                              "id": "node_k1ow3cbx",
+                              "props": Object {
+                                "__style__": Object {},
+                                "colSpan": "",
+                                "fieldId": "column_k1p1bnjm",
+                              },
+                            },
+                            Object {
+                              "children": Array [
+                                Object {
+                                  "componentName": "TextField",
+                                  "condition": true,
+                                  "id": "node_k1ow3cc2",
+                                  "props": Object {
+                                    "__category__": "form",
+                                    "__style__": Object {},
+                                    "__useMediator": "value",
+                                    "addonAfter": Object {
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "addonBefore": Object {
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "autoFocus": false,
+                                    "autoHeight": false,
+                                    "behavior": "NORMAL",
+                                    "cutString": false,
+                                    "fieldId": "textField_k1ow3h1z",
+                                    "fieldName": "nickName",
+                                    "hasClear": false,
+                                    "hasLimitHint": false,
+                                    "htmlType": "input",
+                                    "label": Object {
+                                      "en_US": "TextField",
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "花名",
+                                    },
+                                    "labelAlign": "top",
+                                    "labelColOffset": 0,
+                                    "labelColSpan": 4,
+                                    "labelTextAlign": "right",
+                                    "labelTipsIcon": "",
+                                    "labelTipsText": Object {
+                                      "en_US": null,
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "labelTipsTypes": "none",
+                                    "placeholder": Object {
+                                      "en_US": "please input",
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "请输入",
+                                    },
+                                    "rows": 4,
+                                    "size": "medium",
+                                    "state": "",
+                                    "tips": Object {
+                                      "en_US": "",
+                                      "type": "i18n",
+                                      "zh_CN": "",
+                                    },
+                                    "trim": false,
+                                    "validation": Array [],
+                                    "value": Object {
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "wrapperColOffset": 0,
+                                    "wrapperColSpan": 0,
+                                  },
+                                },
+                                Object {
+                                  "componentName": "SelectField",
+                                  "condition": true,
+                                  "id": "node_k1ow3cc0",
+                                  "props": Object {
+                                    "__category__": "form",
+                                    "__style__": Object {},
+                                    "__useMediator": "value",
+                                    "autoWidth": true,
+                                    "behavior": "NORMAL",
+                                    "dataSource": Array [
+                                      Object {
+                                        "__sid__": "serial_k1owc4t1",
+                                        "defaultChecked": false,
+                                        "sid": "opt_k1owc4t2",
+                                        "text": Object {
+                                          "__sid__": "param_k1owc4tb",
+                                          "en_US": "Option 1",
+                                          "type": "i18n",
+                                          "zh_CN": "男",
+                                        },
+                                        "value": "M",
+                                      },
+                                      Object {
+                                        "__sid__": "serial_k1owc4t2",
+                                        "defaultChecked": false,
+                                        "sid": "opt_k1owc4t3",
+                                        "text": Object {
+                                          "__sid__": "param_k1owc4tf",
+                                          "en_US": "Option 2",
+                                          "type": "i18n",
+                                          "zh_CN": "女",
+                                        },
+                                        "value": "F",
+                                      },
+                                    ],
+                                    "fieldId": "select_k1ow3h1x",
+                                    "fieldName": "gender",
+                                    "filterLocal": true,
+                                    "hasArrow": true,
+                                    "hasBorder": true,
+                                    "hasClear": false,
+                                    "hasSelectAll": false,
+                                    "label": Object {
+                                      "en_US": "SelectField",
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "性别",
+                                    },
+                                    "labelAlign": "top",
+                                    "labelColOffset": 0,
+                                    "labelColSpan": 4,
+                                    "labelTextAlign": "right",
+                                    "labelTipsIcon": "",
+                                    "labelTipsText": Object {
+                                      "en_US": null,
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "labelTipsTypes": "none",
+                                    "mode": "single",
+                                    "notFoundContent": Object {
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                    },
+                                    "placeholder": Object {
+                                      "en_US": "please select",
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "请选择",
+                                    },
+                                    "searchDelay": 300,
+                                    "showSearch": false,
+                                    "size": "medium",
+                                    "tips": Object {
+                                      "en_US": "",
+                                      "type": "i18n",
+                                      "zh_CN": "",
+                                    },
+                                    "validation": Array [
+                                      Object {
+                                        "type": "required",
+                                      },
+                                    ],
+                                    "value": "",
+                                    "wrapperColOffset": 0,
+                                    "wrapperColSpan": 0,
+                                  },
+                                },
+                              ],
+                              "componentName": "Column",
+                              "condition": true,
+                              "id": "node_k1ow3cby",
+                              "props": Object {
+                                "__style__": Object {},
+                                "colSpan": "",
+                                "fieldId": "column_k1p1bnjn",
+                              },
+                            },
+                          ],
+                          "componentName": "ColumnsLayout",
+                          "condition": true,
+                          "id": "node_k1ow3cbw",
+                          "props": Object {
+                            "__style__": Object {},
+                            "columnGap": "20",
+                            "fieldId": "columns_k1ow3h1v",
+                            "layout": "6:6",
+                            "rowGap": 0,
+                          },
+                        },
+                      ],
+                      "componentName": "CardContent",
+                      "condition": true,
+                      "id": "node_k1ow3cbk",
+                      "props": Object {},
+                    },
+                  ],
+                  "componentName": "Card",
+                  "condition": true,
+                  "id": "node_k1ow3cbj",
+                  "props": Object {
+                    "__slot__extra": false,
+                    "__slot__subTitle": false,
+                    "__slot__title": false,
+                    "__style__": ":root {
+  margin-bottom: 12px;
+}",
+                    "className": "card_kgaqfbm5",
+                    "contentHeight": "",
+                    "dividerNoInset": false,
+                    "extra": Object {
+                      "type": "i18n",
+                      "use": "zh_CN",
+                      "zh_CN": "",
+                    },
+                    "fieldId": "card_k1ow3h1l",
+                    "showHeadDivider": true,
+                    "showTitleBullet": true,
+                    "subTitle": Object {
+                      "en_US": "",
+                      "type": "i18n",
+                      "use": "zh_CN",
+                      "zh_CN": "",
+                    },
+                    "title": Object {
+                      "en_US": "Title",
+                      "type": "i18n",
+                      "use": "zh_CN",
+                      "zh_CN": "基本信息",
+                    },
+                  },
+                },
+                Object {
+                  "children": Array [
+                    Object {
+                      "children": Array [
+                        Object {
+                          "componentName": "TextField",
+                          "condition": true,
+                          "id": "node_k1ow3cc4",
+                          "props": Object {
+                            "__category__": "form",
+                            "__style__": Object {},
+                            "__useMediator": "value",
+                            "addonAfter": Object {
+                              "type": "i18n",
+                              "use": "zh_CN",
+                              "zh_CN": "",
+                            },
+                            "addonBefore": Object {
+                              "type": "i18n",
+                              "use": "zh_CN",
+                              "zh_CN": "",
+                            },
+                            "autoFocus": false,
+                            "autoHeight": false,
+                            "behavior": "NORMAL",
+                            "cutString": false,
+                            "fieldId": "textField_k1ow3h21",
+                            "fieldName": "department",
+                            "hasClear": false,
+                            "hasLimitHint": false,
+                            "htmlType": "input",
+                            "label": Object {
+                              "en_US": "TextField",
+                              "type": "i18n",
+                              "use": "zh_CN",
+                              "zh_CN": "所属部门",
+                            },
+                            "labelAlign": "top",
+                            "labelColOffset": 0,
+                            "labelColSpan": 4,
+                            "labelTextAlign": "right",
+                            "labelTipsIcon": "",
+                            "labelTipsText": Object {
+                              "en_US": null,
+                              "type": "i18n",
+                              "use": "zh_CN",
+                              "zh_CN": "",
+                            },
+                            "labelTipsTypes": "none",
+                            "placeholder": Object {
+                              "en_US": "please input",
+                              "type": "i18n",
+                              "use": "zh_CN",
+                              "zh_CN": "请输入",
+                            },
+                            "rows": 4,
+                            "size": "medium",
+                            "state": "",
+                            "tips": Object {
+                              "en_US": "",
+                              "type": "i18n",
+                              "zh_CN": "",
+                            },
+                            "trim": false,
+                            "validation": Array [],
+                            "value": Object {
+                              "type": "i18n",
+                              "use": "zh_CN",
+                              "zh_CN": "",
+                            },
+                            "wrapperColOffset": 0,
+                            "wrapperColSpan": 0,
+                          },
+                        },
+                        Object {
+                          "children": Array [
+                            Object {
+                              "children": Array [
+                                Object {
+                                  "componentName": "TextField",
+                                  "condition": true,
+                                  "id": "node_k1ow3cc8",
+                                  "props": Object {
+                                    "__category__": "form",
+                                    "__style__": Object {},
+                                    "__useMediator": "value",
+                                    "addonAfter": Object {
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "addonBefore": Object {
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "autoFocus": false,
+                                    "autoHeight": false,
+                                    "behavior": "NORMAL",
+                                    "cutString": false,
+                                    "fieldId": "textField_k1ow3h23",
+                                    "fieldName": "leader",
+                                    "hasClear": false,
+                                    "hasLimitHint": false,
+                                    "htmlType": "input",
+                                    "label": Object {
+                                      "en_US": "TextField",
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "主管",
+                                    },
+                                    "labelAlign": "top",
+                                    "labelColOffset": 0,
+                                    "labelColSpan": 4,
+                                    "labelTextAlign": "right",
+                                    "labelTipsIcon": "",
+                                    "labelTipsText": Object {
+                                      "en_US": null,
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "labelTipsTypes": "none",
+                                    "placeholder": Object {
+                                      "en_US": "please input",
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "请输入",
+                                    },
+                                    "rows": 4,
+                                    "size": "medium",
+                                    "state": "",
+                                    "tips": Object {
+                                      "en_US": "",
+                                      "type": "i18n",
+                                      "zh_CN": "",
+                                    },
+                                    "trim": false,
+                                    "validation": Array [],
+                                    "value": Object {
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "wrapperColOffset": 0,
+                                    "wrapperColSpan": 0,
+                                  },
+                                },
+                              ],
+                              "componentName": "Column",
+                              "condition": true,
+                              "id": "node_k1ow3cc6",
+                              "props": Object {
+                                "__style__": Object {},
+                                "colSpan": "",
+                                "fieldId": "column_k1p1bnjo",
+                              },
+                            },
+                            Object {
+                              "children": Array [
+                                Object {
+                                  "componentName": "TextField",
+                                  "condition": true,
+                                  "id": "node_k1ow3cc9",
+                                  "props": Object {
+                                    "__category__": "form",
+                                    "__style__": Object {},
+                                    "__useMediator": "value",
+                                    "addonAfter": Object {
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "addonBefore": Object {
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "autoFocus": false,
+                                    "autoHeight": false,
+                                    "behavior": "NORMAL",
+                                    "cutString": false,
+                                    "fieldId": "textField_k1ow3h24",
+                                    "fieldName": "hrg",
+                                    "hasClear": false,
+                                    "hasLimitHint": false,
+                                    "htmlType": "input",
+                                    "label": Object {
+                                      "en_US": "TextField",
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "HRG",
+                                    },
+                                    "labelAlign": "top",
+                                    "labelColOffset": 0,
+                                    "labelColSpan": 4,
+                                    "labelTextAlign": "right",
+                                    "labelTipsIcon": "",
+                                    "labelTipsText": Object {
+                                      "en_US": null,
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "labelTipsTypes": "none",
+                                    "placeholder": Object {
+                                      "en_US": "please input",
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "请输入",
+                                    },
+                                    "rows": 4,
+                                    "size": "medium",
+                                    "state": "",
+                                    "tips": Object {
+                                      "en_US": "",
+                                      "type": "i18n",
+                                      "zh_CN": "",
+                                    },
+                                    "trim": false,
+                                    "validation": Array [],
+                                    "value": Object {
+                                      "type": "i18n",
+                                      "use": "zh_CN",
+                                      "zh_CN": "",
+                                    },
+                                    "wrapperColOffset": 0,
+                                    "wrapperColSpan": 0,
+                                  },
+                                },
+                              ],
+                              "componentName": "Column",
+                              "condition": true,
+                              "id": "node_k1ow3cc7",
+                              "props": Object {
+                                "__style__": Object {},
+                                "colSpan": "",
+                                "fieldId": "column_k1p1bnjp",
+                              },
+                            },
+                          ],
+                          "componentName": "ColumnsLayout",
+                          "condition": true,
+                          "id": "node_k1ow3cc5",
+                          "props": Object {
+                            "__style__": Object {},
+                            "columnGap": "20",
+                            "fieldId": "columns_k1ow3h22",
+                            "layout": "6:6",
+                            "rowGap": 0,
+                          },
+                        },
+                      ],
+                      "componentName": "CardContent",
+                      "condition": true,
+                      "id": "node_k1ow3cbm",
+                      "props": Object {},
+                    },
+                  ],
+                  "componentName": "Card",
+                  "condition": true,
+                  "id": "node_k1ow3cbl",
+                  "props": Object {
+                    "__slot__extra": false,
+                    "__slot__subTitle": false,
+                    "__slot__title": false,
+                    "__style__": ":root {
+  margin-bottom: 12px;
+}",
+                    "className": "card_kgaqfbm6",
+                    "contentHeight": "",
+                    "dividerNoInset": false,
+                    "extra": Object {
+                      "type": "i18n",
+                      "use": "zh_CN",
+                      "zh_CN": "",
+                    },
+                    "fieldId": "card_k1ow3h1m",
+                    "showHeadDivider": true,
+                    "showTitleBullet": true,
+                    "subTitle": Object {
+                      "en_US": "",
+                      "type": "i18n",
+                      "use": "zh_CN",
+                      "zh_CN": "",
+                    },
+                    "title": Object {
+                      "en_US": "Title",
+                      "type": "i18n",
+                      "use": "zh_CN",
+                      "zh_CN": "部门信息",
+                    },
+                  },
+                },
+                Object {
+                  "children": Array [
+                    Object {
+                      "componentName": "Button",
+                      "condition": true,
+                      "id": "node_k1ow3cbn",
+                      "props": Object {
+                        "__style__": ":root {
+  margin-right: 16px;
+  width: 80px
+}",
+                        "baseIcon": "",
+                        "behavior": "NORMAL",
+                        "className": "button_kgaqfbm7",
+                        "content": Object {
+                          "en_US": "Button",
+                          "type": "i18n",
+                          "use": "zh_CN",
+                          "zh_CN": "提交",
+                        },
+                        "fieldId": "button_k1ow3h1n",
+                        "loading": false,
+                        "onClick": Object {
+                          "events": Array [
+                            Object {
+                              "id": "submit",
+                              "name": "submit",
+                              "params": Object {},
+                              "type": "actionRef",
+                              "uuid": "1570966253282_0",
+                            },
+                          ],
+                          "rawType": "events",
+                          "type": "JSExpression",
+                          "value": "this.utils.legaoBuiltin.execEventFlow.bind(this, [this.submit])",
+                        },
+                        "otherIcon": "",
+                        "size": "medium",
+                        "triggerEventsWhenLoading": false,
+                        "type": "primary",
+                      },
+                    },
+                    Object {
+                      "componentName": "Button",
+                      "condition": true,
+                      "id": "node_k1ow3cbp",
+                      "props": Object {
+                        "__style__": ":root {
+  width: 80px;
+}",
+                        "baseIcon": "",
+                        "behavior": "NORMAL",
+                        "className": "button_kgaqfbm8",
+                        "content": Object {
+                          "en_US": "Button",
+                          "type": "i18n",
+                          "use": "zh_CN",
+                          "zh_CN": "取消",
+                        },
+                        "fieldId": "button_k1ow3h1p",
+                        "greeting": Object {
+                          "value": Array [
+                            Object {
+                              "componentName": "Text",
+                              "props": Object {},
+                            },
+                          ],
+                        },
+                        "loading": false,
+                        "otherIcon": "",
+                        "size": "medium",
+                        "triggerEventsWhenLoading": false,
+                        "type": "normal",
+                      },
+                    },
+                  ],
+                  "componentName": "Div",
+                  "condition": true,
+                  "id": "node_k1ow3cbo",
+                  "props": Object {
+                    "__style__": ":root {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: #fff;
+  padding: 20px 0;
+}",
+                    "behavior": "NORMAL",
+                    "className": "div_kgaqfbm9",
+                    "customClassName": "",
+                    "events": Object {},
+                    "fieldId": "div_k1ow3h1o",
+                    "useFieldIdAsDomId": false,
+                  },
+                },
+              ],
+              "componentName": "Form",
+              "condition": true,
+              "extraPropA": "extraPropA",
+              "id": "form",
+              "props": Object {
+                "__style__": Object {},
+                "autoUnmount": true,
+                "autoValidate": true,
+                "behavior": "NORMAL",
+                "dataSource": Object {
+                  "type": "variable",
+                  "variable": "state.formData",
+                },
+                "fieldId": "form",
+                "fieldOptions": Object {},
+                "labelAlign": "top",
+                "obj": Object {
+                  "a": 1,
+                  "b": false,
+                  "c": "string",
+                },
+                "scrollToFirstError": true,
+                "size": "medium",
+                "slotA": "",
+              },
+            },
+          ],
+          "componentName": "RootContent",
+          "condition": true,
+          "id": "node_k1ow3cbb",
+          "props": Object {
+            "contentBgColor": "transparent",
+            "contentMargin": "20",
+            "contentPadding": "0",
+          },
+        },
+        Object {
+          "componentName": "RootFooter",
+          "condition": true,
+          "id": "node_k1ow3cbc",
+          "props": Object {},
+        },
+      ],
+      "componentName": "Page",
+      "condition": true,
+      "css": "body{background-color:#f2f3f5}.card_kgaqfbm5 {
+  margin-bottom: 12px;
+}.card_kgaqfbm6 {
+  margin-bottom: 12px;
+}.button_kgaqfbm7 {
+  margin-right: 16px;
+  width: 80px
+}.button_kgaqfbm8 {
+  width: 80px;
+}.div_kgaqfbm9 {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: #fff;
+  padding: 20px 0;
+}",
+      "dataSource": Object {
+        "globalConfig": Object {
+          "fit": Object {
+            "compiled": "",
+            "error": Object {},
+            "source": "",
+            "type": "js",
+          },
+        },
+        "list": Array [],
+        "offline": Array [],
+        "online": Array [],
+        "sync": true,
+      },
+      "id": "page",
+      "lifeCycles": Object {
+        "constructor": Object {
+          "compiled": "function constructor() {
+var module = { exports: {} };
+var _this = this;
+this.__initMethods__(module.exports, module);
+Object.keys(module.exports).forEach(function(item) {
+  if(typeof module.exports[item] === 'function'){
+    _this[item] = module.exports[item];
+  }
+});
+
+}",
+          "source": "function constructor() {
+var module = { exports: {} };
+var _this = this;
+this.__initMethods__(module.exports, module);
+Object.keys(module.exports).forEach(function(item) {
+  if(typeof module.exports[item] === 'function'){
+    _this[item] = module.exports[item];
+  }
+});
+
+}",
+          "type": "js",
+        },
+      },
+      "methods": Object {
+        "__initMethods__": Object {
+          "compiled": "function (exports, module) { /*set actions code here*/ }",
+          "source": "function (exports, module) { /*set actions code here*/ }",
+          "type": "js",
+        },
+      },
+      "props": Object {
+        "className": "page_kgaqfbm4",
+        "containerStyle": Object {},
+        "extensions": Object {
+          "启用页头": true,
+        },
+        "pageStyle": Object {
+          "backgroundColor": "#f2f3f5",
+        },
+        "templateVersion": "1.0.0",
+      },
+      "title": "hey, i' a page!",
+    },
+  ],
+}
+`;
+
+exports[`document-model 测试 各种方法测试 2`] = `null`;

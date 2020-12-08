@@ -916,8 +916,8 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
           || (typeof rootCanDropIn === 'function' && rootCanDropIn(node))) {
         return { container: this, ref };
       }
-      // 假如最后找不到合适位置，返回 undefined 阻止继续插入节点
-      return undefined;
+      // 假如最后找不到合适位置，返回 null 阻止继续插入节点
+      return null;
     }
 
     const canDropIn = this.componentMeta?.prototype?.options?.canDropIn;

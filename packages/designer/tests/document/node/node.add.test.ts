@@ -1,15 +1,15 @@
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
-import '../fixtures/window';
-import { Project } from '../../src/project/project';
-import { Node } from '../../src/document/node/node';
-import { Designer } from '../../src/designer/designer';
-import formSchema from '../fixtures/schema/form';
-import { getIdsFromSchema, getNodeFromSchemaById } from '../utils';
+import '../../fixtures/window';
+import { Project } from '../../../src/project/project';
+import { Node } from '../../../src/document/node/node';
+import { Designer } from '../../../src/designer/designer';
+import formSchema from '../../fixtures/schema/form';
+import { getIdsFromSchema, getNodeFromSchemaById } from '../../utils';
 import { EBADF } from 'constants';
 
 const mockCreateSettingEntry = jest.fn();
-jest.mock('../../src/designer/designer', () => {
+jest.mock('../../../src/designer/designer', () => {
   return {
     Designer: jest.fn().mockImplementation(() => {
       return {
@@ -58,7 +58,7 @@ describe('schema 生成节点模型测试', () => {
         expect(nodesMap.get(id).componentName).toBe(getNodeFromSchemaById(formSchema, id).componentName);
       });
 
-      const pageNode = currentDocument?.getNode('node_k1ow3cb9');
+      const pageNode = currentDocument?.getNode('page');
       expect(pageNode?.getComponentName()).toBe('Page');
       expect(pageNode?.getIcon()).toBeUndefined;
 
@@ -72,7 +72,7 @@ describe('schema 生成节点模型测试', () => {
       const { currentDocument } = project;
       const getNode = currentDocument.getNode.bind(currentDocument);
 
-      const pageNode = getNode('node_k1ow3cb9');
+      const pageNode = getNode('page');
       const rootHeaderNode = getNode('node_k1ow3cba');
       const rootContentNode = getNode('node_k1ow3cbb');
       const rootFooterNode = getNode('node_k1ow3cbc');
@@ -113,7 +113,7 @@ describe('schema 生成节点模型测试', () => {
       const { currentDocument } = project;
       const getNode = currentDocument.getNode.bind(currentDocument);
 
-      const pageNode = getNode('node_k1ow3cb9');
+      const pageNode = getNode('page');
       const rootHeaderNode = getNode('node_k1ow3cba');
       const rootContentNode = getNode('node_k1ow3cbb');
       const rootFooterNode = getNode('node_k1ow3cbc');
@@ -159,9 +159,9 @@ describe('schema 生成节点模型测试', () => {
       const getNode = currentDocument.getNode.bind(currentDocument);
       const createNode = currentDocument.createNode.bind(currentDocument);
 
-      const pageNode = getNode('node_k1ow3cb9');
+      const pageNode = getNode('page');
       const nodeCreateHandler = jest.fn();
-      currentDocument?.onNodeCreate(nodeCreateHandler);
+      const offCreate = currentDocument?.onNodeCreate(nodeCreateHandler);
 
       const node = createNode({
         componentName: 'TextInput',
@@ -177,12 +177,15 @@ describe('schema 生成节点模型测试', () => {
       expect(nodeCreateHandler.mock.calls[0][0].getPropValue('propA')).toBe('haha');
 
       const nodeDestroyHandler = jest.fn();
-      currentDocument?.onNodeDestroy(nodeDestroyHandler);
+      const offDestroy = currentDocument?.onNodeDestroy(nodeDestroyHandler);
       node.remove();
       expect(nodeDestroyHandler).toHaveBeenCalledTimes(1);
       expect(nodeDestroyHandler.mock.calls[0][0]).toBe(node);
       expect(nodeDestroyHandler.mock.calls[0][0].componentName).toBe('TextInput');
       expect(nodeDestroyHandler.mock.calls[0][0].getPropValue('propA')).toBe('haha');
+
+      offCreate();
+      offDestroy();
     });
 
     it.skip('基本的节点模型初始化，节点插入等方法', () => {
@@ -232,7 +235,7 @@ describe('schema 生成节点模型测试', () => {
       const { currentDocument } = project;
       const getNode = currentDocument.getNode.bind(currentDocument);
 
-      const pageNode = getNode('node_k1ow3cb9');
+      const pageNode = getNode('page');
       expect(pageNode?.isPage()).toBe(true);
       expect(pageNode?.isComponent()).toBe(false);
       expect(pageNode?.isSlot()).toBe(false);

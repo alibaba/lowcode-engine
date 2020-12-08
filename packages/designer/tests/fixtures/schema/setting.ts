@@ -1,6 +1,6 @@
 export default {
   componentName: 'Page',
-  id: 'node_k1ow3cb9',
+  id: 'page',
   title: 'hey, i\' a page!',
   props: {
     extensions: {

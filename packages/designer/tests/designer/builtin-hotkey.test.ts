@@ -1,5 +1,5 @@
 import set from 'lodash/set';
-import cloneDeep from 'lodash/clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import '../fixtures/window';
 import { Editor, globalContext } from '@ali/lowcode-editor-core';
 import { Designer } from '../../src/designer/designer';
