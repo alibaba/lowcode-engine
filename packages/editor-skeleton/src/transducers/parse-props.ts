@@ -172,6 +172,7 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
       return {
         ...metadata,
         configure: {
+          ...configure,
           props: [...override],
         },
       };
