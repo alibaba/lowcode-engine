@@ -1,0 +1,50 @@
+{
+  "name": "@ali/lowcode-plugin-outline-pane",
+  "version": "1.0.21",
+  "description": "Outline pane for Ali lowCode engine",
+  "files": [
+    "es",
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "scripts": {
+    "build": "build-scripts build --skip-demo",
+    "test": "ava",
+    "test:snapshot": "ava --update-snapshots"
+  },
+  "dependencies": {
+    "@ali/lowcode-designer": "^1.0.22",
+    "@ali/lowcode-editor-core": "^1.0.22",
+    "@ali/lowcode-types": "^1.0.20",
+    "@ali/lowcode-utils": "^1.0.21",
+    "@alifd/next": "^1.19.16",
+    "classnames": "^2.2.6",
+    "react": "^16",
+    "react-dom": "^16.7.0"
+  },
+  "devDependencies": {
+    "@alib/build-scripts": "^0.1.18",
+    "@types/classnames": "^2.2.7",
+    "@types/node": "^13.7.1",
+    "@types/react": "^16",
+    "@types/react-dom": "^16",
+    "build-plugin-component": "^0.2.10",
+    "build-plugin-fusion": "^0.1.1",
+    "build-plugin-moment-locales": "^0.1.0"
+  },
+  "ava": {
+    "compileEnhancements": false,
+    "snapshotDir": "test/fixtures/__snapshots__",
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
+  }
+}
