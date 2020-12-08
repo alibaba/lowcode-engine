@@ -170,7 +170,7 @@ export class InsertionView extends Component<{ host: BuiltinSimulatorHost }> {
       }
     }
     style.transform = `translate3d(${x}px, ${y}px, 0)`;
-    style.transition = 'all 0.2s ease-in-out';
+    // style.transition = 'all 0.2s ease-in-out';
 
     return <div className={className} style={style} />;
   }
