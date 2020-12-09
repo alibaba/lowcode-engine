@@ -151,7 +151,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
               {(skeleton) => {
                 if (skeleton) {
                   return (
-                    <StageBox skeleton={skeleton} target={settings}>
+                    <StageBox skeleton={skeleton} target={settings} key={settings.id}>
                       <SettingsPane target={settings} usePopup={false} />
                     </StageBox>
                   );
