@@ -299,6 +299,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       // 建立新的父子关系，尤其注意：对于 parent 为 null 的场景，不会赋值，因为 subtreeModified 等事件可能需要知道该 node 被删除前的父子关系
       this._parent = parent;
       this.document.removeWillPurge(this);
+      /* istanbul ignore next */
       if (!this.conditionGroup) {
         // initial conditionGroup
         const grp = this.getExtraProp('conditionGroup', false)?.getAsString();
@@ -382,12 +383,15 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this._slots;
   }
 
+  /* istanbul ignore next */
   @obx.ref private _conditionGroup: ExclusiveGroup | null = null;
 
+  /* istanbul ignore next */
   get conditionGroup(): ExclusiveGroup | null {
     return this._conditionGroup;
   }
 
+  /* istanbul ignore next */
   setConditionGroup(grp: ExclusiveGroup | string | null) {
     if (!grp) {
       this.getExtraProp('conditionGroup', false)?.remove();
@@ -416,10 +420,12 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
   }
 
+  /* istanbul ignore next */
   @computed isConditionalVisible(): boolean | undefined {
     return this._conditionGroup?.isVisible(this);
   }
 
+  /* istanbul ignore next */
   setConditionalVisible() {
     this._conditionGroup?.setVisible(this);
   }
@@ -448,6 +454,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return false;
   }
 
+  /* istanbul ignore next */
   wrapWith(/* schema: Schema */) {
     // todo
   }

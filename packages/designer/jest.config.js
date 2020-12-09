@@ -18,6 +18,8 @@ module.exports = {
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',
     '!src/icons/**',
+    '!src/locale/**',
+    '!src/document/node/exclusive-group.ts',
     '!**/node_modules/**',
     '!**/vendor/**',
   ],

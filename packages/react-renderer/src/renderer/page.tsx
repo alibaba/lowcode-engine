@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
 import classnames from 'classnames';
-import Loading from '@alifd/next/lib/loading';
-import '@alifd/next/lib/loading/style';
+// import Loading from '@alifd/next/lib/loading';
+// import '@alifd/next/lib/loading/style';
 import AppContext from '../context/appContext';
 import BaseRenderer from './base';
 import { isSchema, getFileCssName, parseData } from '../utils';
@@ -134,23 +134,23 @@ export default class PageRenderer extends BaseRenderer {
       </AppContext.Provider>
     );
 
-    if (autoLoading || loading !== undefined) {
-      return (
-        <Loading
-          size="medium"
-          visible={!!(this.__showPlaceholder || loading)}
-          style={{
-            height: this.__showPlaceholder ? defaultHeight : 'auto',
-            display: 'block',
-            ...style,
-          }}
-          className={classnames('luna-page', getFileCssName(__schema.fileName), className, this.props.className)}
-          id={id}
-        >
-          {!this.__showPlaceholder && renderContent()}
-        </Loading>
-      );
-    }
+    // if (autoLoading || loading !== undefined) {
+    //   return (
+    //     <Loading
+    //       size="medium"
+    //       visible={!!(this.__showPlaceholder || loading)}
+    //       style={{
+    //         height: this.__showPlaceholder ? defaultHeight : 'auto',
+    //         display: 'block',
+    //         ...style,
+    //       }}
+    //       className={classnames('luna-page', getFileCssName(__schema.fileName), className, this.props.className)}
+    //       id={id}
+    //     >
+    //       {!this.__showPlaceholder && renderContent()}
+    //     </Loading>
+    //   );
+    // }
 
     return (
       <div

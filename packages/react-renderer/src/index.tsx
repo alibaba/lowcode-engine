@@ -2,7 +2,7 @@ import React, { Component, PureComponent, createElement as reactCreateElement } 
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
-import { ConfigProvider } from '@alifd/next';
+import ConfigProvider from '@alifd/next/lib/config-provider';
 import { isEmpty } from '@ali/b3-one/lib/obj';
 import AppContext from './context/appContext';
 import { isFileSchema, goldlog } from './utils';
