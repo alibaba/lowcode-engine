@@ -114,23 +114,23 @@ export default class BlockRenderer extends BaseRenderer {
       </AppContext.Provider>
     );
 
-    if (autoLoading || loading !== undefined) {
-      return (
-        <Loading
-          size="medium"
-          visible={!!(this.__showPlaceholder || loading)}
-          style={{
-            height: this.__showPlaceholder ? defaultHeight : 'auto',
-            display: 'block',
-            ...style,
-          }}
-          className={classnames('luna-block', getFileCssName(__schema.fileName), className, this.props.className)}
-          id={id}
-        >
-          {!this.__showPlaceholder && renderContent()}
-        </Loading>
-      );
-    }
+    // if (autoLoading || loading !== undefined) {
+    //   return (
+    //     <Loading
+    //       size="medium"
+    //       visible={!!(this.__showPlaceholder || loading)}
+    //       style={{
+    //         height: this.__showPlaceholder ? defaultHeight : 'auto',
+    //         display: 'block',
+    //         ...style,
+    //       }}
+    //       className={classnames('luna-block', getFileCssName(__schema.fileName), className, this.props.className)}
+    //       id={id}
+    //     >
+    //       {!this.__showPlaceholder && renderContent()}
+    //     </Loading>
+    //   );
+    // }
 
     return (
       <div

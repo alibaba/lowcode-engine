@@ -106,9 +106,8 @@ export interface ProjectSchema {
   constants?: JSONObject;
   css?: string;
   dataSource?: DataSource;
-  config?: AppConfig;
+  config?: AppConfig | Record<string, any>;
   id?: string;
-  config?: Record<string, any>;
   meta?: Record<string, any>;
 }
 
