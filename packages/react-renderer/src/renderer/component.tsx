@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Debug from 'debug';
 import classnames from 'classnames';
-import Loading from '@alifd/next/lib/loading';
-import '@alifd/next/lib/loading/style';
+// import Loading from '@alifd/next/lib/loading';
+// import '@alifd/next/lib/loading/style';
 import AppContext from '../context/appContext';
 import BaseRenderer from './base';
 import { isSchema, getFileCssName } from '../utils';
@@ -98,23 +98,23 @@ export default class CompRenderer extends BaseRenderer {
     if (noContainer) {
       return renderContent();
     }
-    if (autoLoading || loading !== undefined) {
-      return (
-        <Loading
-          size="medium"
-          visible={!!(this.__showPlaceholder || loading)}
-          style={{
-            height: this.__showPlaceholder ? defaultHeight : 'auto',
-            display: 'block',
-            ...style,
-          }}
-          className={classnames('luna-comp', getFileCssName(__schema.fileName), className, this.props.className)}
-          id={this.props.id || id}
-        >
-          {!this.__showPlaceholder && renderContent()}
-        </Loading>
-      );
-    }
+    // if (autoLoading || loading !== undefined) {
+    //   return (
+    //     <Loading
+    //       size="medium"
+    //       visible={!!(this.__showPlaceholder || loading)}
+    //       style={{
+    //         height: this.__showPlaceholder ? defaultHeight : 'auto',
+    //         display: 'block',
+    //         ...style,
+    //       }}
+    //       className={classnames('luna-comp', getFileCssName(__schema.fileName), className, this.props.className)}
+    //       id={this.props.id || id}
+    //     >
+    //       {!this.__showPlaceholder && renderContent()}
+    //     </Loading>
+    //   );
+    // }
     return (
       <div
         ref={this.__getRef}
