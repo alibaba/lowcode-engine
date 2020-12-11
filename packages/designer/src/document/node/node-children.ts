@@ -219,8 +219,11 @@ export class NodeChildren {
   /**
    *
    */
-  splice(start: number, deleteCount: number, node: Node): Node[] {
-    return this.children.splice(start, deleteCount, node);
+  splice(start: number, deleteCount: number, node?: Node): Node[] {
+    if (node) {
+      return this.children.splice(start, deleteCount, node);
+    }
+    return this.children.splice(start, deleteCount);
   }
 
   /**

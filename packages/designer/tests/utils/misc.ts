@@ -15,3 +15,11 @@ export function set(obj: any, path: any, val: any) {
   }
   return lodashSet(obj, path, val);
 }
+
+export function delay(ms) {
+  return new Promise(resove => setTimeout(resove, ms));
+}
+
+export function delayObxTick() {
+  return delay(100);
+}

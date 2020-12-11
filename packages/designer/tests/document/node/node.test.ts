@@ -22,7 +22,7 @@ import pageMetadata from '../../fixtures/component-metadata/page';
 import rootHeaderMetadata from '../../fixtures/component-metadata/root-header';
 import rootContentMetadata from '../../fixtures/component-metadata/root-content';
 import rootFooterMetadata from '../../fixtures/component-metadata/root-footer';
-import { nodeTopFixedReducer } from 'editor-preset-vision/src/props-reducers';
+import { delayObxTick, delay } from '../../utils';
 
 describe('Node 方法测试', () => {
   let editor: Editor;
@@ -189,7 +189,7 @@ describe('Node 方法测试', () => {
     });
   });
 
-  it('removeChild / replaceWith / replaceChild / insert / insertBefore / insertAfter / onChildrenChange / mergeChildren', () => {
+  it('removeChild / replaceWith / replaceChild / onChildrenChange / mergeChildren', () => {
     const firstBtn = doc.getNode('node_k1ow3cbn')!;
 
     firstBtn.select();
@@ -204,7 +204,56 @@ describe('Node 方法测试', () => {
     expect(firstBtn.parent?.getChildren()?.get(1)?.getPropValue('y')).toBe(1);
   });
 
-  it.only('setVisible / getVisible / onVisibleChange', () => {
+  describe('插入相关方法', () => {
+    it('insertBefore / onChildrenChange', () => {
+      const firstBtn = doc.getNode('node_k1ow3cbn')!;
+      const secondBtn = doc.getNode('node_k1ow3cbp')!;
+      const btnParent = firstBtn.parent!;
+      const mockFn = jest.fn();
+      const off = btnParent.onChildrenChange(mockFn);
+
+      // Node 实例
+      btnParent.insertBefore(new Node(doc, { componentName: 'Button', props: { a: 1 } }), firstBtn);
+      expect(btnParent.children.get(0)?.getProps().export().props).toEqual({ a: 1 });
+      expect(mockFn).toHaveBeenCalledTimes(1);
+
+      // TODO: 暂时不支持，后面补上
+      // // NodeSchema
+      // btnParent.insertBefore({ componentName: 'Button', props: { b: 1 } }, firstBtn);
+      // expect(btnParent.children.get(0)?.getProps().export().props).toEqual({ b: 1 });
+      // expect(mockFn).toHaveBeenCalledTimes(2);
+
+      // // getComponentName
+      // btnParent.insertBefore({ getComponentName: () => 'Button', props: { c: 1 } }, firstBtn);
+      // expect(btnParent.children.get(0)?.getProps().export().props).toEqual({ c: 1 });
+      // expect(mockFn).toHaveBeenCalledTimes(3);
+    });
+
+    it('insertAfter / onChildrenChange', () => {
+      const firstBtn = doc.getNode('node_k1ow3cbn')!;
+      const secondBtn = doc.getNode('node_k1ow3cbp')!;
+      const btnParent = firstBtn.parent!;
+      const mockFn = jest.fn();
+      const off = btnParent.onChildrenChange(mockFn);
+
+      // Node 实例
+      btnParent.insertAfter(new Node(doc, { componentName: 'Button', props: { a: 1 } }), firstBtn);
+      expect(btnParent.children.get(1)?.getProps().export().props).toEqual({ a: 1 });
+      expect(mockFn).toHaveBeenCalledTimes(1);
+
+      // NodeSchema
+      btnParent.insertAfter({ componentName: 'Button', props: { b: 1 } }, firstBtn);
+      expect(btnParent.children.get(1)?.getProps().export().props).toEqual({ b: 1 });
+      expect(mockFn).toHaveBeenCalledTimes(2);
+
+      // getComponentName
+      btnParent.insertAfter({ getComponentName: () => 'Button' }, firstBtn);
+      expect(btnParent.children.get(1)?.getProps().export().props).toBeUndefined();
+      expect(mockFn).toHaveBeenCalledTimes(3);
+    });
+  });
+
+  it('setVisible / getVisible / onVisibleChange', async () => {
     const mockFn = jest.fn();
     const firstBtn = doc.getNode('node_k1ow3cbn')!;
     const off = firstBtn.onVisibleChange(mockFn);
@@ -213,20 +262,17 @@ describe('Node 方法测试', () => {
     expect(mockFn).toHaveBeenCalledTimes(1);
     expect(mockFn).toHaveBeenCalledWith(true);
 
-    // TODO: 此处 stash 转成了非 stash，需要再研究下
     firstBtn.setVisible(false);
-    console.log(firstBtn.getExtraProp('hidden'));
-    console.log(firstBtn.getExtraProp('hidden', false));
 
-    // console.log(firstBtn.getExtraProp('hidden', false)?.getValue());
-    // console.log(firstBtn.getVisible());
-    // expect(firstBtn.getVisible()).toBeFalsy();
-    // expect(mockFn).toHaveBeenCalledTimes(2);
-    // expect(mockFn).toHaveBeenCalledWith(false);
+    await delayObxTick();
+    expect(firstBtn.getVisible()).toBeFalsy();
+    expect(mockFn).toHaveBeenCalledTimes(2);
+    expect(mockFn).toHaveBeenCalledWith(false);
 
     off();
     mockFn.mockClear();
     firstBtn.setVisible(true);
+    await delayObxTick();
     expect(mockFn).not.toHaveBeenCalled();
   });
 
@@ -363,6 +409,10 @@ describe('Node 方法测试', () => {
   });
 
   it('getZLevelTop', () => {});
+  it('propsData', () => {
+    expect(new Node(doc, { componentName: 'Leaf' }).propsData).toBeNull();
+    expect(new Node(doc, { componentName: 'Fragment' }).propsData).toBeNull();
+  });
 
   describe('deprecated methods', () => {
     it('setStatus / getStatus', () => {
