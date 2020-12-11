@@ -1,10 +1,10 @@
 import { render } from 'react-dom';
 import { createElement } from 'react';
-import '@ali/lowcode-editor-setters';
+import builtinSetters from '@ali/lowcode-editor-setters';
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
 import { Designer, LiveEditing } from '@ali/lowcode-designer';
-import { globalContext, Editor } from '@ali/lowcode-editor-core';
-import { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
+import { globalContext, Editor, registerSetter } from '@ali/lowcode-editor-core';
+import { OutlinePane, OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import { Workbench, Skeleton, SettingsPrimaryPane, registerDefaults } from '@ali/lowcode-editor-skeleton';
 
 import { version } from '../package.json';
@@ -15,6 +15,8 @@ export * from '@ali/lowcode-utils';
 export * from '@ali/lowcode-editor-core';
 export * from '@ali/lowcode-editor-skeleton';
 export * from '@ali/lowcode-designer';
+
+registerSetter(builtinSetters);
 
 export const editor = new Editor();
 globalContext.register(editor, Editor);
@@ -28,6 +30,21 @@ export const designer = new Designer({ editor });
 editor.set(Designer, designer);
 editor.set('designer', designer);
 
+skeleton.add({
+  area: 'leftArea',
+  name: 'outline',
+  type: 'PanelDock',
+  props: {
+    align: 'top',
+    icon: 'shuxingkongjian',
+    description: '大纲树',
+  },
+  panelProps: {
+    area: 'leftFixedArea',
+  },
+  contentProps: {},
+  content: OutlinePane,
+});
 skeleton.add({
   area: 'mainArea',
   name: 'designer',
@@ -52,12 +69,15 @@ skeleton.add({
   content: OutlineBackupPane,
 });
 
-export default function GeneralWorkbench(props: any) {
+export function GeneralWorkbench(props: any) {
   return createElement(Workbench, {
     skeleton,
     ...props,
   });
 }
+
+export default GeneralWorkbench;
+
 window.__ctx = {
   editor,
   appHelper: editor,
