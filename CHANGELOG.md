@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.24-beta.3"></a>
+## [1.0.24-beta.3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.24-beta.2...v1.0.24-beta.3) (2020-12-11)
+
+
+### Bug Fixes
+
+* registSetters in preset general ([ebe5d04](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ebe5d04))
+* svg-icon 默认改为 large ([21d92ff](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/21d92ff))
+* 粘贴时判断 canDropIn ([07dab6d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/07dab6d))
+
+
+### Features
+
+* remove preset-general from cdn ([e126f24](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e126f24))
+
+
+
+
 <a name="1.0.24-beta.2"></a>
 ## [1.0.24-beta.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.24-beta.1...v1.0.24-beta.2) (2020-12-10)
 
