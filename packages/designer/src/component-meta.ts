@@ -277,13 +277,14 @@ export class ComponentMeta {
     return true;
   }
 
-  checkNestingDown(my: Node, target: Node | NodeSchema) {
+  checkNestingDown(my: Node, target: Node | NodeSchema | NodeSchema[]) {
     // 检查父子关系，直接约束型，在画布中拖拽直接掠过目标容器
     if (this.childWhitelist) {
-      if (!isNode(target)) {
-        target = new Node(my.document, target);
-      }
-      return this.childWhitelist(target, my);
+      const _target: any = !Array.isArray(target) ? [target] : target;
+      return _target.every((item: Node | NodeSchema) => {
+        const _item = !isNode(item) ? new Node(my.document, item) : item;
+        return this.childWhitelist && this.childWhitelist(_item, my);
+      });
     }
     return true;
   }

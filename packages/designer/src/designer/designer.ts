@@ -295,7 +295,7 @@ export class Designer {
   /**
    * 获得合适的插入位置
    */
-  getSuitableInsertion(insertNode?: Node | NodeSchema): { target: ParentalNode; index?: number } | null {
+  getSuitableInsertion(insertNode?: Node | NodeSchema | NodeSchema[]): { target: ParentalNode; index?: number } | null {
     const activedDoc = this.project.currentDocument;
     if (!activedDoc) {
       return null;

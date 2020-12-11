@@ -151,7 +151,7 @@ hotkey.bind(['command+v', 'ctrl+v'], (e) => {
   }
   clipboard.waitPasteData(e, ({ componentsTree }) => {
     if (componentsTree) {
-      const { target, index } = designer.getSuitableInsertion() || {};
+      const { target, index } = designer.getSuitableInsertion(componentsTree) || {};
       if (!target) {
         return;
       }
