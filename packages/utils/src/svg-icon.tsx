@@ -18,7 +18,7 @@ export interface IconProps {
 
 export function SVGIcon({
   fill,
-  size = 'medium',
+  size = 'large',
   viewBox,
   style,
   children,

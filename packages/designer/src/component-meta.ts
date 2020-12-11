@@ -280,17 +280,10 @@ export class ComponentMeta {
   checkNestingDown(my: Node, target: Node | NodeSchema | NodeSchema[]) {
     // 检查父子关系，直接约束型，在画布中拖拽直接掠过目标容器
     if (this.childWhitelist) {
-      let _target: any = target;
-      if (!Array.isArray(_target)) {
-        _target = [_target];
-      }
-
-      return !_target.some((item: Node | NodeSchema) => {
-        let _item = item;
-        if (!isNode(_item)) {
-          _item = new Node(my.document, _item);
-        }
-        return this.childWhitelist && !this.childWhitelist(_item, my);
+      const _target: any = !Array.isArray(target) ? [target] : target;
+      return _target.every((item: Node | NodeSchema) => {
+        const _item = !isNode(item) ? new Node(my.document, item) : item;
+        return this.childWhitelist && this.childWhitelist(_item, my);
       });
     }
     return true;
