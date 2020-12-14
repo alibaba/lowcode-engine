@@ -38,7 +38,7 @@ describe('setting-top-entry 测试', () => {
       settingEntry.getProp('behavior').setValue('SMALL');
       expect(settingEntry.getPropValue('behavior')).toBe('SMALL');
       settingEntry.clearPropValue('behavior');
-      expect(settingEntry.getPropValue('behavior')).toBeUndefined;
+      expect(settingEntry.getPropValue('behavior')).toBeUndefined();
 
       expect(settingEntry.getPropValue('fieldId')).toBe('div_k1ow3h1o');
       settingEntry.setPropValue('fieldId', 'div_k1ow3h1o_new');
@@ -67,9 +67,9 @@ describe('setting-top-entry 测试', () => {
       expect(settingEntry.getId()).toBe('div');
       expect(settingEntry.first).toBe(divNode);
       expect(settingEntry.designer).toBe(designer);
-      expect(settingEntry.isSingle).toBeTruthy;
-      expect(settingEntry.isMultiple).toBeFalsy;
-      expect(settingEntry.isSameComponent).toBeTruthy;
+      expect(settingEntry.isSingle).toBeTruthy();
+      expect(settingEntry.isMultiple).toBeFalsy();
+      expect(settingEntry.isSameComponent).toBeTruthy();
 
       expect(typeof settingEntry.getValue).toBe('function');
       settingEntry.getValue();
@@ -122,9 +122,9 @@ describe('setting-top-entry 测试', () => {
       const divNode2 = currentDocument?.getNode('div2');
       const settingEntry = designer.createSettingEntry([divNode, divNode2]);
 
-      expect(settingEntry.isMultiple).toBeTruthy;
-      expect(settingEntry.isSameComponent).toBeTruthy;
-      expect(settingEntry.isSingle).toBeFalsy;
+      expect(settingEntry.isMultiple).toBeTruthy();
+      expect(settingEntry.isSameComponent).toBeTruthy();
+      expect(settingEntry.isSingle).toBeFalsy();
 
       expect(settingEntry.getPropValue('behavior')).toBe('NORMAL');
       expect(settingEntry.getProp('behavior').getValue()).toBe('NORMAL');
@@ -142,10 +142,10 @@ describe('setting-top-entry 测试', () => {
       expect(divNode2?.getPropValue('behavior')).toBe('SMALL');
 
       settingEntry.clearPropValue('behavior');
-      expect(settingEntry.getPropValue('behavior')).toBeUndefined;
+      expect(settingEntry.getPropValue('behavior')).toBeUndefined();
       // 多个 node 都被成功设值
-      expect(divNode?.getPropValue('behavior')).toBeUndefined;
-      expect(divNode2?.getPropValue('behavior')).toBeUndefined;
+      expect(divNode?.getPropValue('behavior')).toBeUndefined();
+      expect(divNode2?.getPropValue('behavior')).toBeUndefined();
 
       expect(settingEntry.getPropValue('fieldId')).toBe('div_k1ow3h1o');
       settingEntry.setPropValue('fieldId', 'div_k1ow3h1o_new');
@@ -163,9 +163,9 @@ describe('setting-top-entry 测试', () => {
       const testNode = currentDocument?.getNode('test');
       const settingEntry = designer.createSettingEntry([divNode, testNode]);
 
-      expect(settingEntry.isMultiple).toBeTruthy;
-      expect(settingEntry.isSameComponent).toBeFalsy;
-      expect(settingEntry.isSingle).toBeFalsy;
+      expect(settingEntry.isMultiple).toBeTruthy();
+      expect(settingEntry.isSameComponent).toBeFalsy();
+      expect(settingEntry.isSingle).toBeFalsy();
 
       // 不同类型的 node 场景下，理论上从页面上已没有修改属性的方法调用，所以此处不再断言各设值方法
       // 思考：假如以后面向其他场景，比如用户用 API 强行调用，是否需要做健壮性保护？

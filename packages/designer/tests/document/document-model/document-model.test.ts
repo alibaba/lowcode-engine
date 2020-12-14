@@ -28,8 +28,8 @@ describe('document-model 测试', () => {
     expect(doc.rootNode.id).toBe('root');
     expect(doc.currentRoot).toBe(doc.rootNode);
     expect(doc.root).toBe(doc.rootNode);
-    expect(doc.modalNode).toBeUndefined;
-    expect(doc.isBlank()).toBeTruthy;
+    expect(doc.modalNode).toBeUndefined();
+    expect(doc.isBlank()).toBeFalsy();
     expect(doc.schema).toEqual({
       componentName: 'Page',
       id: 'root',
@@ -65,10 +65,10 @@ describe('document-model 测试', () => {
     doc.selection.select('form');
     doc.wrapWith({ componentName: 'Wrap' });
     expect(doc.getNode('form').parent.componentName).toBe('Wrap');
-    expect(doc.wrapWith({ componentName: 'Leaf' })).toBeNull;
+    expect(doc.wrapWith({ componentName: 'Leaf' })).toBeNull();
 
     // fileName
-    expect(doc.fileName).toBeUndefined;
+    expect(doc.fileName).toBeTruthy();
     doc.fileName = 'fileName';
     expect(doc.fileName).toBe('fileName');
 

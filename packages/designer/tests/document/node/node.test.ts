@@ -363,7 +363,7 @@ describe('Node 方法测试', () => {
     firstBtn.hover(true);
     expect(doc.designer.detecting.current).toBe(firstBtn);
     firstBtn.hover(false);
-    expect(doc.designer.detecting.current).toBeNull;
+    expect(doc.designer.detecting.current).toBeNull();
   });
 
   it('getRect', () => {

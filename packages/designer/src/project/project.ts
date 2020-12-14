@@ -198,9 +198,7 @@ export class Project {
       }
 
       return null;
-    }
-
-    if (isDocumentModel(doc)) {
+    } else if (isDocumentModel(doc)) {
       return doc.open();
     } else if (isPageSchema(doc)) {
       // 暂时注释掉，影响了 diff 功能

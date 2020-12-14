@@ -1,7 +1,9 @@
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
 import '../fixtures/window';
+import { Editor } from '@ali/lowcode-editor-core';
 import { Project } from '../../src/project/project';
+import { DocumentModel } from '../../src/document/document-model';
 import { Node } from '../../src/document/node/node';
 import { Designer } from '../../src/designer/designer';
 import formSchema from '../fixtures/schema/form';

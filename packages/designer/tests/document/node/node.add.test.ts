@@ -60,7 +60,7 @@ describe('schema 生成节点模型测试', () => {
 
       const pageNode = currentDocument?.getNode('page');
       expect(pageNode?.getComponentName()).toBe('Page');
-      expect(pageNode?.getIcon()).toBeUndefined;
+      expect(pageNode?.getIcon()).toBeUndefined();
 
       const exportSchema = currentDocument?.export(1);
       expect(getIdsFromSchema(exportSchema).length).toBe(expectedNodeCnt);
@@ -104,8 +104,8 @@ describe('schema 生成节点模型测试', () => {
       expect(textFieldNode?.getZLevelTop(0)).toEqual(pageNode);
 
       // 异常情况
-      expect(textFieldNode?.getZLevelTop(8)).toBeNull;
-      expect(textFieldNode?.getZLevelTop(-1)).toBeNull;
+      expect(textFieldNode?.getZLevelTop(8)).toBeNull();
+      expect(textFieldNode?.getZLevelTop(-1)).toBeNull();
     });
 
     it('基本的节点模型初始化，节点父子、兄弟相关方法', () => {

@@ -36,7 +36,7 @@ describe('host 测试', () => {
     expect(host.currentDocument).toBe(designer.project.currentDocument);
     expect(host.renderEnv).toBe('default');
     expect(host.device).toBe('default');
-    expect(host.deviceClassName).toBeUndefined;
+    expect(host.deviceClassName).toBeUndefined();
     host.setProps({
       renderEnv: 'rax',
       device: 'mobile',

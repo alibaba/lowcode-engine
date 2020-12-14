@@ -9,25 +9,28 @@ import formSchema from '../../../fixtures/schema/form';
 import settingSchema from '../../fixtures/schema/setting';
 import divMeta from '../../fixtures/component-metadata/div';
 import { getIdsFromSchema, getNodeFromSchemaById } from '../../utils';
+import { DocumentModel } from 'designer/src/document';
 
 const editor = new Editor();
 
 describe('setting-prop-entry 测试', () => {
   let designer: Designer;
+  let doc: DocumentModel;
   beforeEach(() => {
     designer = new Designer({ editor });
+    designer.createComponentMeta(divMeta);
+    doc = designer.project.open(settingSchema);
   });
   afterEach(() => {
     designer._componentMetasMap.clear();
     designer = null;
+    doc.purge();
+    doc = null;
   });
 
   describe('node 构造函数生成 settingEntry', () => {
     it('常规方法测试', () => {
-      designer.createComponentMeta(divMeta);
-      designer.project.open(settingSchema);
-      const { currentDocument } = designer.project;
-      const divNode = currentDocument?.getNode('div');
+      const divNode = doc?.getNode('div');
 
       const { settingEntry } = divNode!;
       const behaviorProp = settingEntry.getProp('behavior');
@@ -35,10 +38,30 @@ describe('setting-prop-entry 测试', () => {
       expect(behaviorProp.props).toBe(settingEntry);
       expect(behaviorProp.getName()).toBe('behavior');
       expect(behaviorProp.getKey()).toBe('behavior');
-      expect(behaviorProp.isIgnore()).toBeFalsy;
+      expect(behaviorProp.isIgnore()).toBeFalsy();
       behaviorProp.setKey('behavior2');
       expect(behaviorProp.getKey()).toBe('behavior2');
       behaviorProp.setKey('behavior');
+
+      expect(behaviorProp.getNode()).toBe(divNode);
+      expect(behaviorProp.getId().startsWith('entry')).toBeTruthy();
+      expect(behaviorProp.designer).toBe(designer);
+      expect(behaviorProp.isSingle).toBeTruthy();
+      expect(behaviorProp.isMultiple).toBeFalsy();
+      expect(behaviorProp.isGroup).toBeFalsy();
+      expect(behaviorProp.isSameComponent).toBeTruthy();
+      expect(typeof settingEntry.getValue).toBe('function');
+      settingEntry.getValue();
+
+      behaviorProp.setExtraPropValue('extraPropA', 'heihei');
+      expect(behaviorProp.getExtraPropValue('extraPropA', 'heihei'));
+    });
+
+    it('setValue / getValue', () => {
+      const divNode = doc?.getNode('div');
+
+      const { settingEntry } = divNode!;
+      const behaviorProp = settingEntry.getProp('behavior');
       expect(behaviorProp.getValue()).toBe('NORMAL');
       expect(behaviorProp.getMockOrValue()).toBe('NORMAL');
 
@@ -50,25 +73,12 @@ describe('setting-prop-entry 测试', () => {
       expect(behaviorProp.getValue()).toBe('NORMAL');
       behaviorProp.clearValue();
       behaviorProp.clearPropValue();
-      expect(settingEntry.getProp('behavior').getValue()).toBeUndefined;
+      expect(behaviorProp.getValue()).toBeUndefined();
 
       behaviorProp.setValue('LARGE');
       expect(behaviorProp.getValue()).toBe('LARGE');
       behaviorProp.remove();
-      expect(settingEntry.getProp('behavior').getValue()).toBeUndefined;
-
-      expect(behaviorProp.getNode()).toBe(divNode);
-      expect(behaviorProp.getId().startsWith('entry')).toBeTruthy;
-      expect(behaviorProp.designer).toBe(designer);
-      expect(behaviorProp.isSingle).toBeTruthy;
-      expect(behaviorProp.isMultiple).toBeFalsy;
-      expect(behaviorProp.isGroup).toBeFalsy;
-      expect(behaviorProp.isSameComponent).toBeTruthy;
-      expect(typeof settingEntry.getValue).toBe('function');
-      settingEntry.getValue();
-
-      behaviorProp.setExtraPropValue('extraPropA', 'heihei');
-      expect(behaviorProp.getExtraPropValue('extraPropA', 'heihei'));
+      expect(divNode?.getProp('behavior').getValue()).toBeUndefined();
     });
 
     it.skip('type: group 场景测试', () => {
@@ -83,14 +93,14 @@ describe('setting-prop-entry 测试', () => {
 
       const { settingEntry } = divNode!;
       const customClassNameProp = settingEntry.getProp('customClassName');
-      expect(customClassNameProp.isUseVariable()).toBeTruthy;
-      expect(customClassNameProp.useVariable).toBeTruthy;
+      expect(customClassNameProp.isUseVariable()).toBeTruthy();
+      expect(customClassNameProp.useVariable).toBeTruthy();
 
       expect(customClassNameProp.getValue()).toEqual({
         type: 'JSExpression',
         value: 'getFromSomewhere()'
       });
-      expect(customClassNameProp.getMockOrValue()).toBeUndefined;
+      expect(customClassNameProp.getMockOrValue()).toBeUndefined();
       expect(customClassNameProp.getVariableValue()).toBe('getFromSomewhere()');
       customClassNameProp.setVariableValue('xxx');
       expect(customClassNameProp.getVariableValue()).toBe('xxx');

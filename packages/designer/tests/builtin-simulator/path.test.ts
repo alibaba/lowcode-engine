@@ -11,13 +11,13 @@ import {
 
 describe('builtin-simulator/utils/path 测试', () => {
   it('isPackagePath', () => {
-    expect(isPackagePath('a')).toBeTruthy;
-    expect(isPackagePath('@ali/a')).toBeTruthy;
-    expect(isPackagePath('@alife/a')).toBeTruthy;
-    expect(isPackagePath('a.b')).toBeTruthy;
-    expect(isPackagePath('./a')).toBeFalsy;
-    expect(isPackagePath('../a')).toBeFalsy;
-    expect(isPackagePath('/a')).toBeFalsy;
+    expect(isPackagePath('a')).toBeTruthy();
+    expect(isPackagePath('@ali/a')).toBeTruthy();
+    expect(isPackagePath('@alife/a')).toBeTruthy();
+    expect(isPackagePath('a.b')).toBeTruthy();
+    expect(isPackagePath('./a')).toBeFalsy();
+    expect(isPackagePath('../a')).toBeFalsy();
+    expect(isPackagePath('/a')).toBeFalsy();
   });
 
   it('toTitleCase', () => {

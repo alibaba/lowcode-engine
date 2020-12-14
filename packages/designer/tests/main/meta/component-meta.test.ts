@@ -25,15 +25,15 @@ beforeAll(() => {
 describe('组件元数据处理', () => {
   it('构造函数', () => {
     const meta = new ComponentMeta(designer, divMeta);
-    expect(meta.isContainer).toBeTruthy;
-    expect(isComponentMeta(meta)).toBeTruthy;
-    expect(meta.acceptable).toBeTruthy;
-    expect(meta.isRootComponent()).toBeTruthy;
-    expect(meta.isModal).toBeFalsy;
-    expect(meta.rootSelector).toBeUndefined;
-    expect(meta.liveTextEditing).toBeUndefined;
-    expect(meta.descriptor).toBeUndefined;
-    expect(meta.icon).toBeUndefined;
+    expect(meta.isContainer).toBeTruthy();
+    expect(isComponentMeta(meta)).toBeTruthy();
+    expect(meta.acceptable).toBeFalsy();
+    expect(meta.isRootComponent()).toBeFalsy();
+    expect(meta.isModal).toBeFalsy();
+    expect(meta.rootSelector).toBeUndefined();
+    expect(meta.liveTextEditing).toBeUndefined();
+    expect(meta.descriptor).toBeUndefined();
+    expect(typeof meta.icon).toBe('function');
     expect(meta.getMetadata().title).toBe('容器');
     expect(meta.title).toEqual({ type: 'i18n', 'en-US': 'Div', 'zh-CN': '容器' });
 

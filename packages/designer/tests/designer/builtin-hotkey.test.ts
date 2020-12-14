@@ -31,7 +31,7 @@ describe('快捷键测试', () => {
     let event = new KeyboardEvent('keydown', { keyCode: 39 });
     document.dispatchEvent(event);
 
-    expect(designer.currentSelection?.selected.includes('node_k1ow3cbl')).toBeTruthy;
+    expect(designer.currentSelection?.selected.includes('node_k1ow3cbl')).toBeTruthy();
   });
 
   it('left', () => {
@@ -41,7 +41,7 @@ describe('快捷键测试', () => {
     let event = new KeyboardEvent('keydown', { keyCode: 37 });
     document.dispatchEvent(event);
 
-    expect(designer.currentSelection?.selected.includes('node_k1ow3cbj')).toBeTruthy;
+    expect(designer.currentSelection?.selected.includes('node_k1ow3cbj')).toBeTruthy();
   });
 
   it('down', () => {
@@ -51,7 +51,7 @@ describe('快捷键测试', () => {
     let event = new KeyboardEvent('keydown', { keyCode: 40 });
     document.dispatchEvent(event);
 
-    expect(designer.currentSelection?.selected.includes('node_k1ow3cbm')).toBeTruthy;
+    expect(designer.currentSelection?.selected.includes('node_k1ow3cbo')).toBeTruthy();
   });
 
   it('up', () => {
@@ -61,7 +61,7 @@ describe('快捷键测试', () => {
     let event = new KeyboardEvent('keydown', { keyCode: 38 });
     document.dispatchEvent(event);
 
-    expect(designer.currentSelection?.selected.includes('node_k1ow3cbl')).toBeTruthy;
+    expect(designer.currentSelection?.selected.includes('node_k1ow3cbl')).toBeTruthy();
   });
 
   // 跟右侧节点调换位置
@@ -178,7 +178,7 @@ describe('快捷键测试', () => {
     const firstCardNode = designer.currentDocument?.getNode('node_k1ow3cbp')!;
     firstCardNode.select();
 
-    expect(designer.currentSelection!.selected.includes('node_k1ow3cbp')).toBeTruthy;
+    expect(designer.currentSelection!.selected.includes('node_k1ow3cbp')).toBeTruthy();
 
     let event = new KeyboardEvent('keydown', { keyCode: 27 });
     document.dispatchEvent(event);
@@ -197,6 +197,6 @@ describe('快捷键测试', () => {
     let event = new KeyboardEvent('keydown', { keyCode: 46 });
     document.dispatchEvent(event);
 
-    expect(secondButtonNode.prevSibling).toBeNull;
+    expect(secondButtonNode.prevSibling).toBeNull();
   });
 });
