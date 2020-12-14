@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.24-beta.4"></a>
+## [1.0.24-beta.4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.24-beta.3...v1.0.24-beta.4) (2020-12-14)
+
+
+### Bug Fixes
+
+* 修复 prop.remove 在只有一个属性时无法删除的 bug ([037ecfd](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/037ecfd))
+
+
+
+
 <a name="1.0.24-beta.3"></a>
 ## [1.0.24-beta.3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.24-beta.2...v1.0.24-beta.3) (2020-12-11)
 
