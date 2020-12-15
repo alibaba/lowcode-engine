@@ -5,7 +5,12 @@ import logger from '@ali/vu-logger';
 import { render } from 'react-dom';
 import I18nUtil from './i18n-util';
 import { hotkey as Hotkey, monitor } from '@ali/lowcode-editor-core';
-import { registerMetadataTransducer } from '@ali/lowcode-designer';
+import {
+  registerMetadataTransducer,
+  addBuiltinComponentAction,
+  removeBuiltinComponentAction,
+  modifyBuiltinComponentAction,
+} from '@ali/lowcode-designer';
 import { createElement } from 'react';
 import { VE_EVENTS as EVENTS, VE_HOOKS as HOOKS, VERSION as Version } from './base/const';
 import Bus from './bus';
@@ -68,8 +73,16 @@ const modules = {
   Prop,
 };
 
+const designerHelper = {
+  registerMetadataTransducer,
+  addBuiltinComponentAction,
+  removeBuiltinComponentAction,
+  modifyBuiltinComponentAction,
+};
+
 const VisualEngine = {
   designer,
+  designerHelper,
   editor,
   skeleton,
   /**
@@ -121,6 +134,7 @@ export default VisualEngine;
 
 export {
   designer,
+  designerHelper,
   editor,
   skeleton,
   /**
