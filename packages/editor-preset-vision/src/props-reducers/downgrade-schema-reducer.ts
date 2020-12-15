@@ -21,13 +21,13 @@ export function compatibleReducer(props: any) {
       },
     };
   }
-  if (isJSExpression(props) && !props.events) {
-    return {
-      type: 'variable',
-      value: props.mock,
-      variable: props.value,
-    };
-  }
+  // if (isJSExpression(props) && !props.events) {
+  //   return {
+  //     type: 'variable',
+  //     value: props.mock,
+  //     variable: props.value,
+  //   };
+  // }
   const newProps: any = {};
   Object.entries<any>(props).forEach(([key, val]) => {
     newProps[key] = compatibleReducer(val);
