@@ -174,10 +174,10 @@ export class ComponentMeta {
       this._title =
         typeof title === 'string'
           ? {
-            type: 'i18n',
-            'en-US': this.componentName,
-            'zh-CN': title,
-          }
+              type: 'i18n',
+              'en-US': this.componentName,
+              'zh-CN': title,
+            }
           : title;
     }
 
@@ -239,14 +239,22 @@ export class ComponentMeta {
   }
 
   isRootComponent(includeBlock = true) {
-    return this.componentName === 'Page' || this.componentName === 'Component' || (includeBlock && this.componentName === 'Block');
+    return (
+      this.componentName === 'Page' ||
+      this.componentName === 'Component' ||
+      (includeBlock && this.componentName === 'Block')
+    );
   }
 
   @computed get availableActions() {
     // eslint-disable-next-line prefer-const
     let { disableBehaviors, actions } = this._transformedMetadata?.configure.component || {};
-    const disabled = ensureAList(disableBehaviors) || (this.isRootComponent(false) ? ['copy', 'remove'] : null);
-    actions = builtinComponentActions.concat(this.designer.getGlobalComponentActions() || [], actions || []);
+    const disabled =
+      ensureAList(disableBehaviors) || (this.isRootComponent(false) ? ['copy', 'remove'] : null);
+    actions = builtinComponentActions.concat(
+      this.designer.getGlobalComponentActions() || [],
+      actions || [],
+    );
 
     if (disabled) {
       if (disabled.includes('*')) {
@@ -326,7 +334,11 @@ export interface MetadataTransducer {
 }
 const metadataTransducers: MetadataTransducer[] = [];
 
-export function registerMetadataTransducer(transducer: MetadataTransducer, level = 100, id?: string) {
+export function registerMetadataTransducer(
+  transducer: MetadataTransducer,
+  level = 100,
+  id?: string,
+) {
   transducer.level = level;
   transducer.id = id;
   const i = metadataTransducers.findIndex((item) => item.level != null && item.level > level);
@@ -355,14 +367,14 @@ registerMetadataTransducer((metadata) => {
           childWhitelist: [`${m[1]}`],
         };
       }
-    // eslint-disable-next-line no-cond-assign
+      // eslint-disable-next-line no-cond-assign
     } else if ((m = /^(.+)\.Node$/.exec(componentName))) {
       // uri match xx.Node set selfControlled: false, parentWhiteList
       // component.selfControlled = false;
       component.nestingRule = {
         parentWhitelist: [`${m[1]}`, componentName],
       };
-    // eslint-disable-next-line no-cond-assign
+      // eslint-disable-next-line no-cond-assign
     } else if ((m = /^(.+)\.(Item|Node|Option)$/.exec(componentName))) {
       // uri match .Item .Node .Option set parentWhiteList
       component.nestingRule = {
@@ -434,4 +446,14 @@ export function removeBuiltinComponentAction(name: string) {
 }
 export function addBuiltinComponentAction(action: ComponentAction) {
   builtinComponentActions.push(action);
+}
+
+export function modifyBuiltinComponentAction(
+  actionName,
+  handle: (action: ComponentAction) => void,
+) {
+  const builtinAction = builtinComponentActions.find((action) => action.name === actionName);
+  if (builtinAction) {
+    handle(builtinAction);
+  }
 }
