@@ -209,9 +209,9 @@ const dockPane = Object.assign(skeleton.leftArea, {
     const f = (_: any, dock: any) => {
       fn(dock);
     };
-    editor.on('skeleton.panel-dock.show', f);
+    editor.on('skeleton.panel-dock.active', f);
     return () => {
-      editor.removeListener('skeleton.panel-dock.show', f);
+      editor.removeListener('skeleton.panel-dock.active', f);
     };
   },
   /**
@@ -221,9 +221,9 @@ const dockPane = Object.assign(skeleton.leftArea, {
     const f = (_: any, dock: any) => {
       fn(dock);
     };
-    editor.on('skeleton.panel-dock.hide', f);
+    editor.on('skeleton.panel-dock.unactive', f);
     return () => {
-      editor.removeListener('skeleton.panel-dock.hide', f);
+      editor.removeListener('skeleton.panel-dock.unactive', f);
     };
   },
   /**

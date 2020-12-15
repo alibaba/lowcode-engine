@@ -79,6 +79,10 @@ export default class WidgetContainer<T extends WidgetItem = any, G extends Widge
     }
   }
 
+  unactiveAll() {
+    Object.keys(this.maps).forEach(name => this.unactive(name));
+  }
+
   add(item: T | G): T {
     item = this.handle(item);
     const origin = this.get(item.name);
