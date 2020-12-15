@@ -1,6 +1,7 @@
 
 import { isI18NObject } from './is-object';
 import get from 'lodash.get';
+import { ComponentMeta } from '@ali/lowcode-designer';
 
 export function isUseI18NSetter(prototype: any, propName: string) {
   const configure = prototype?.options?.configure;
@@ -42,4 +43,12 @@ export function waitForThing(obj: any, path: string): Promise<any> {
     return Promise.resolve(thing);
   }
   return _innerWaitForThing(obj, path);
+}
+
+/**
+ * 判断当前 meta 是否从 vc prototype 转换而来
+ * @param meta
+ */
+export function isFromVC(meta: ComponentMeta) {
+  return !!meta?.getMetadata()?.experimental;
 }
