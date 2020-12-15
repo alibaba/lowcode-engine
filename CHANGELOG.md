@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.25-beta.1"></a>
+## [1.0.25-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.24-beta.4...v1.0.25-beta.1) (2020-12-15)
+
+
+### Bug Fixes
+
+* 修复 prop 无法删除最后一个 item ([e18a386](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e18a386))
+* 修复大纲树和组件面板来回点击异常 ([8b9a6ec](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8b9a6ec))
+
+
+
+
 <a name="1.0.24-beta.4"></a>
 ## [1.0.24-beta.4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.24-beta.3...v1.0.24-beta.4) (2020-12-14)
 

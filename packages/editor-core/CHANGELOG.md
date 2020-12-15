@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.25-beta.1"></a>
+## [1.0.25-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.24-beta.4...v1.0.25-beta.1) (2020-12-15)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-core
+
 <a name="1.0.24-beta.4"></a>
 ## [1.0.24-beta.4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.24-beta.3...v1.0.24-beta.4) (2020-12-14)
 
