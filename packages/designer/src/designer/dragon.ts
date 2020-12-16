@@ -179,7 +179,7 @@ function makeEventsHandler(
 }
 
 function isDragEvent(e: any): e is DragEvent {
-  return e?.type?.substr(0, 4) === 'drag';
+  return e?.type?.startsWith('drag');
 }
 
 /**
@@ -245,7 +245,7 @@ export class Dragon {
     const handleEvents = makeEventsHandler(boostEvent, masterSensors);
     const newBie = !isDragNodeObject(dragObject);
     const forceCopyState = isDragNodeObject(dragObject) && dragObject.nodes.some((node) => node.isSlot());
-    const isBoostFromDragAPI = boostEvent.type.substr(0, 4) === 'drag';
+    const isBoostFromDragAPI = isDragEvent(boostEvent);
     let lastSensor: ISensor | undefined;
 
     this._dragging = false;
@@ -259,6 +259,7 @@ export class Dragon {
 
     let copy = false;
     const checkcopy = (e: MouseEvent | DragEvent | KeyboardEvent) => {
+      /* istanbul ignore next */
       if (isDragEvent(e) && e.dataTransfer) {
         if (newBie || forceCopyState) {
           e.dataTransfer.dropEffect = 'copy';
@@ -272,6 +273,7 @@ export class Dragon {
       if (e.altKey || e.ctrlKey) {
         copy = true;
         this.setCopyState(true);
+        /* istanbul ignore next */
         if (isDragEvent(e) && e.dataTransfer) {
           e.dataTransfer.dropEffect = 'copy';
         }
@@ -279,6 +281,7 @@ export class Dragon {
         copy = false;
         if (!forceCopyState) {
           this.setCopyState(false);
+          /* istanbul ignore next */
           if (isDragEvent(e) && e.dataTransfer) {
             e.dataTransfer.dropEffect = 'move';
           }
@@ -332,6 +335,7 @@ export class Dragon {
 
     // route: drag-move
     const move = (e: MouseEvent | DragEvent) => {
+      /* istanbul ignore next */
       if (isBoostFromDragAPI) {
         e.preventDefault();
       }
@@ -350,6 +354,7 @@ export class Dragon {
     };
 
     let didDrop = true;
+    /* istanbul ignore next */
     const drop = (e: DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
@@ -358,12 +363,14 @@ export class Dragon {
 
     // end-tail drag process
     const over = (e?: any) => {
+      /* istanbul ignore next */
       if (e && isDragEvent(e)) {
         e.preventDefault();
       }
       if (lastSensor) {
         lastSensor.deactiveSensor();
       }
+      /* istanbul ignore next */
       if (isBoostFromDragAPI) {
         if (!didDrop) {
           designer.clearLocation();
@@ -385,6 +392,7 @@ export class Dragon {
       designer.clearLocation();
 
       handleEvents((doc) => {
+        /* istanbul ignore next */
         if (isBoostFromDragAPI) {
           doc.removeEventListener('dragover', move, true);
           doc.removeEventListener('dragend', over, true);
@@ -418,7 +426,7 @@ export class Dragon {
       if (!sourceDocument || sourceDocument === document) {
         evt.globalX = e.clientX;
         evt.globalY = e.clientY;
-      } else {
+      } /* istanbul ignore next */ else {
         // event from simulator sandbox
         let srcSim: ISimulatorHost | undefined;
         const lastSim = lastSensor && isSimulatorHost(lastSensor) ? lastSensor : null;
@@ -449,6 +457,7 @@ export class Dragon {
     };
 
     const sourceSensor = getSourceSensor(dragObject);
+    /* istanbul ignore next */
     const chooseSensor = (e: LocateEvent) => {
       // this.sensors will change on dragstart
       const sensors: ISensor[] = (masterSensors as ISensor[]).concat(this.sensors);
@@ -477,6 +486,7 @@ export class Dragon {
       return sensor;
     };
 
+    /* istanbul ignore next */
     if (isDragEvent(boostEvent)) {
       const { dataTransfer } = boostEvent;
 
@@ -496,6 +506,7 @@ export class Dragon {
     }
 
     handleEvents((doc) => {
+      /* istanbul ignore next */
       if (isBoostFromDragAPI) {
         doc.addEventListener('dragover', move, true);
         // dragexit
