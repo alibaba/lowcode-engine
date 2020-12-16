@@ -257,6 +257,9 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       // sync designMode
       this._designMode = host.designMode;
 
+      // sync requestHandlersMap
+      this._requestHandlersMap = host.requestHandlersMap;
+
       // sync device
       this._device = host.device;
 
