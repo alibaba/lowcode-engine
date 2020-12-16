@@ -261,10 +261,11 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
           getUrlParams() {
             const search = history.location.search;
             return parseQuery(search);
-          }
-        }
+          },
+        },
       },
       constants: {},
+      requestHandlersMap: this._requestHandlersMap,
     };
     host.injectionConsumer.consume((data) => {
       // sync utils, i18n, contants,... config
