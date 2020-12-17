@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.13.2-3"></a>
+## [0.13.2-3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.2-2...v0.13.2-3) (2020-12-17)
+
+
+### Bug Fixes
+
+* 修复 setDevice 的时机，从 currentDocument -> simualtor ([4bc4dde](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/4bc4dde))
+
+
+
+
 <a name="0.13.2-2"></a>
 ## [0.13.2-2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.2-1...v0.13.2-2) (2020-12-15)
 
