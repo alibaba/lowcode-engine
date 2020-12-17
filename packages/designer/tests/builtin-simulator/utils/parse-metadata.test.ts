@@ -1,5 +1,5 @@
-import '../fixtures/window';
-import { parseMetadata } from '../../src/builtin-simulator/utils/parse-metadata';
+import '../../fixtures/window';
+import { parseMetadata } from '../../../src/builtin-simulator/utils/parse-metadata';
 
 describe('parseMetadata', () => {
   it('parseMetadata', async () => {

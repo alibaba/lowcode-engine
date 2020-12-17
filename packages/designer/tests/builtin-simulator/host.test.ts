@@ -2,7 +2,7 @@ import React from 'react';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
 import '../fixtures/window';
-import { Editor } from '@ali/lowcode-editor-core';
+import { Editor, globalContext } from '@ali/lowcode-editor-core';
 import {
   AssetLevel,
   Asset,
@@ -14,65 +14,100 @@ import {
 import { Project } from '../../src/project/project';
 import { Node } from '../../src/document/node/node';
 import { Designer } from '../../src/designer/designer';
+import { DocumentModel } from '../../src/document/document-model';
 import formSchema from '../fixtures/schema/form';
 import { getMockDocument, getMockWindow, getMockEvent } from '../utils';
 import { BuiltinSimulatorHost } from '../../src/builtin-simulator/host';
-import { eq } from 'lodash';
+import { fireEvent } from '@testing-library/react';
 
 const editor = new Editor();
 
 describe('host 测试', () => {
+  let editor: Editor;
   let designer: Designer;
-  beforeEach(() => {
-    designer = new Designer({ editor });
-  });
-  afterEach(() => {
-    designer._componentMetasMap.clear();
-    designer = null;
+  let project: Project;
+  let doc: DocumentModel;
+
+  beforeAll(() => {
+    editor = new Editor();
+    !globalContext.has(Editor) && globalContext.register(editor, Editor);
   });
 
-  it('基础方法测试', async () => {
-    const host = new BuiltinSimulatorHost(designer.project);
-    expect(host.currentDocument).toBe(designer.project.currentDocument);
-    expect(host.renderEnv).toBe('default');
-    expect(host.device).toBe('default');
-    expect(host.deviceClassName).toBeUndefined();
-    host.setProps({
-      renderEnv: 'rax',
-      device: 'mobile',
-      deviceClassName: 'mobile-rocks',
-      componentsAsset: [{
+  beforeEach(() => {
+    designer = new Designer({ editor });
+    project = designer.project;
+    doc = project.createDocument(formSchema);
+  });
+
+  afterEach(() => {
+    project.unload();
+    project.mountSimulator(undefined);
+    designer._componentMetasMap.clear();
+    designer.purge();
+    designer = null;
+    project = null;
+  });
+
+  describe('基础方法测试', () => {
+    it('setProps / get / set', async () => {
+      const host = new BuiltinSimulatorHost(designer.project);
+      expect(host.currentDocument).toBe(designer.project.currentDocument);
+      expect(host.renderEnv).toBe('default');
+      expect(host.device).toBe('default');
+      expect(host.deviceClassName).toBeUndefined();
+      expect(host.requestHandlersMap).toBeNull();
+      host.setProps({
+        renderEnv: 'rax',
+        device: 'mobile',
+        deviceClassName: 'mobile-rocks',
+        componentsAsset: [{
+          type: AssetType.JSText,
+          content: 'console.log(1)',
+        }, {
+          type: AssetType.JSUrl,
+          content: '//path/to/js',
+        }],
+        theme: {
+          type: AssetType.CSSText,
+          content: '.theme {font-size: 50px;}',
+        },
+        requestHandlersMap: {},
+      });
+      expect(host.renderEnv).toBe('rax');
+      expect(host.device).toBe('mobile');
+      expect(host.deviceClassName).toBe('mobile-rocks');
+      expect(host.componentsAsset).toEqual([{
         type: AssetType.JSText,
         content: 'console.log(1)',
       }, {
         type: AssetType.JSUrl,
         content: '//path/to/js',
-      }],
-      theme: {
+      }]);
+      expect(host.theme).toEqual({
         type: AssetType.CSSText,
         content: '.theme {font-size: 50px;}',
-      }
-    });
-    expect(host.renderEnv).toBe('rax');
-    expect(host.device).toBe('mobile');
-    expect(host.deviceClassName).toBe('mobile-rocks');
-    expect(host.componentsAsset).toEqual([{
-      type: AssetType.JSText,
-      content: 'console.log(1)',
-    }, {
-      type: AssetType.JSUrl,
-      content: '//path/to/js',
-    }]);
-    expect(host.theme).toEqual({
-      type: AssetType.CSSText,
-      content: '.theme {font-size: 50px;}',
-    });
-    expect(host.componentsMap).toBe(designer.componentsMap);
+      });
+      expect(host.componentsMap).toBe(designer.componentsMap);
+      expect(host.requestHandlersMap).toEqual({});
 
-    host.set('renderEnv', 'vue');
-    expect(host.renderEnv).toBe('vue');
+      host.set('renderEnv', 'vue');
+      expect(host.renderEnv).toBe('vue');
 
-    expect(host.getComponentContext).toThrow('Method not implemented.');
+      expect(host.getComponentContext).toThrow('Method not implemented.');
+    });
+
+    it('connect', () => {});
+    it('mountViewport', () => {});
+    it('mountContentFrame', () => {});
+    it('autorun', () => {});
+    it('purge', () => {});
+
+  });
+
+  describe('事件测试', () => {
+    it('setupDragAndClick', () => {
+
+    });
   });
 
   it('事件测试', async () => {

@@ -14,6 +14,7 @@ interface MockDocument extends Document {
 
 
 const eventsMap : Map<string, Set<Function>> = new Map<string, Set<Function>>();
+const mockRemoveAttribute = jest.fn();
 const mockAddEventListener = jest.fn((eventName: string, cb) => {
   if (!eventsMap.has(eventName)) {
     eventsMap.set(eventName, new Set([cb]));
@@ -45,6 +46,7 @@ const mockCreateElement = jest.fn((tagName) => {
     addEventListener: mockAddEventListener,
     removeEventListener: mockRemoveEventListener,
     triggerEventListener: mockTriggerEventListener,
+    removeAttribute: mockRemoveAttribute,
   }
 })
 

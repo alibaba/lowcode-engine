@@ -30,7 +30,6 @@ import formMetadata from '../fixtures/component-metadata/form';
 import otherMeta from '../fixtures/component-metadata/other';
 import pageMetadata from '../fixtures/component-metadata/page';
 import { fireEvent } from '@testing-library/react';
-import { clearScreenDown } from 'readline';
 
 describe('Dragon 测试', () => {
   let editor: Editor;

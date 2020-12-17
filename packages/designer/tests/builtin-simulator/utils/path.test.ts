@@ -7,7 +7,7 @@ import {
   removeVersion,
   resolveAbsoluatePath,
   joinPath,
-} from '../../src/builtin-simulator/utils/path';
+} from '../../../src/builtin-simulator/utils/path';
 
 describe('builtin-simulator/utils/path 测试', () => {
   it('isPackagePath', () => {

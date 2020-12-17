@@ -103,7 +103,7 @@ LowcodeTypes.exact = (typesMap: any) => {
   const configs = Object.keys(typesMap).map(key => {
     return {
       name: key,
-      propType: typesMap[key].lowcodeType || 'any',
+      propType: typesMap[key]?.lowcodeType || 'any',
     };
   });
   return define(PropTypes.exact(typesMap), {
@@ -117,7 +117,7 @@ LowcodeTypes.shape = (typesMap: any) => {
   const configs = Object.keys(typesMap).map(key => {
     return {
       name: key,
-      propType: typesMap[key].lowcodeType || 'any',
+      propType: typesMap[key]?.lowcodeType || 'any',
     };
   });
   return define(PropTypes.shape(typesMap), {

@@ -1,5 +1,5 @@
-import '../fixtures/disable-raf';
-import { throttle } from '../../src/builtin-simulator/utils/throttle';
+import '../../fixtures/disable-raf';
+import { throttle } from '../../../src/builtin-simulator/utils/throttle';
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
