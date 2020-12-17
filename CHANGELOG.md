@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.13.2-5"></a>
+## [0.13.2-5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.2-4...v0.13.2-5) (2020-12-17)
+
+
+### Bug Fixes
+
+* 修复大纲树和组件面板来回点击异常 ([6443998](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6443998))
+* 修复组件不会插入到选中节点之内或者之后的逻辑 ([25f089b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/25f089b))
+
+
+
+
 <a name="0.13.2-4"></a>
 ## [0.13.2-4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.2-3...v0.13.2-4) (2020-12-17)
 
