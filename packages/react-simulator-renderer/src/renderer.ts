@@ -211,6 +211,9 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       // sync designMode
       this._designMode = host.designMode;
 
+      // sync requestHandlersMap
+      this._requestHandlersMap = host.requestHandlersMap;
+
       // sync device
       this._device = host.device;
     });
@@ -261,10 +264,11 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
           getUrlParams() {
             const search = history.location.search;
             return parseQuery(search);
-          }
-        }
+          },
+        },
       },
       constants: {},
+      requestHandlersMap: this._requestHandlersMap,
     };
     host.injectionConsumer.consume((data) => {
       // sync utils, i18n, contants,... config
