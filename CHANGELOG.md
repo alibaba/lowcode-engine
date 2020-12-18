@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.13.2-6"></a>
+## [0.13.2-6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.2-5...v0.13.2-6) (2020-12-18)
+
+
+### Bug Fixes
+
+* 原地编辑功能异常, 编辑时需要禁掉快捷键 ([0a2cf99](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0a2cf99))
+
+
+
+
 <a name="0.13.2-5"></a>
 ## [0.13.2-5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.2-4...v0.13.2-5) (2020-12-17)
 
