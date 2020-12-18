@@ -23,6 +23,7 @@ import {
   getFileCssName,
 } from '../utils';
 import VisualDom from '../comp/visualDom';
+import Div from '../comp/Div';
 import AppContext from '../context/appContext';
 
 import compWrapper from '../hoc/compWrapper';
@@ -248,185 +249,214 @@ export default class BaseEngine extends Component {
   // parentInfo 父组件的信息，包含schema和Comp
   // idx 若为循环渲染的循环Index
   __createVirtualDom = (schema, self, parentInfo, idx) => {
-    if (!schema) return null;
-    // rax text prop 兼容处理
-    if (schema.componentName === 'Text') {
-      if (typeof schema.props.text === 'string') {
-        schema = { ...schema };
-        schema.children = [schema.props.text];
-      }
-    }
-
-    const { __appHelper: appHelper, __components: components = {}, __componentsMap: componentsMap = {} } = this.props || {};
     const { engine } = this.context || {};
-    if (isJSExpression(schema)) {
-      return parseExpression(schema, self);
-    }
-    if (typeof schema === 'string') return schema;
-    if (typeof schema === 'number' || typeof schema === 'boolean') {
-      return schema.toString();
-    }
-    if (Array.isArray(schema)) {
-      if (schema.length === 1) return this.__createVirtualDom(schema[0], self, parentInfo);
-      return schema.map((item, idx) => this.__createVirtualDom(item, self, parentInfo, item && item.__ctx && item.__ctx.lunaKey ? '' : idx));
-    }
+    try {
+      if (!schema) return null;
+      if (schema.componentName === 'Text') { // 这个是不是不应该在这里处理
+        if (typeof schema.props.text === 'string') {
+          schema = { ...schema };
+          schema.children = [schema.props.text];
+        }
+      }
 
-    // 解析占位组件
-    if (schema.componentName === 'Flagment' && schema.children) {
-      const tarChildren = isJSExpression(schema.children) ? parseExpression(schema.children, self) : schema.children;
-      return this.__createVirtualDom(tarChildren, self, parentInfo);
-    }
+      const { __appHelper: appHelper, __components: components = {} } = this.props || {};
 
-    if (schema.$$typeof) {
-      return schema;
-    }
-    if (!isSchema(schema)) return null;
-    let Comp = components[schema.componentName] || engine.getNotFoundComponent();
+      if (isJSExpression(schema)) {
+        return parseExpression(schema, self);
+      }
+      if (isJSSlot(schema)) {
+        return this.__createVirtualDom(schema.value, self, parentInfo);
+      }
+      if (typeof schema === 'string') return schema;
+      if (typeof schema === 'number' || typeof schema === 'boolean') {
+        return schema.toString();
+      }
+      if (Array.isArray(schema)) {
+        if (schema.length === 1) return this.__createVirtualDom(schema[0], self, parentInfo);
+        return schema.map((item, idy) => this.__createVirtualDom(item, self, parentInfo, item && item.__ctx && item.__ctx.lunaKey ? '' : idy));
+      }
+      // FIXME
+      const _children = this.getSchemaChildren(schema);
+      // 解析占位组件
+      if (schema.componentName === 'Flagment' && _children) {
+        const tarChildren = isJSExpression(_children) ? parseExpression(_children, self) : _children;
+        return this.__createVirtualDom(tarChildren, self, parentInfo);
+      }
 
-    if (schema.hidden) {
-      return null;
-    }
+      if (schema.$$typeof) {
+        return schema;
+      }
+      if (!isSchema(schema)) return null;
+      let Comp = components[schema.componentName] || engine.getNotFoundComponent();
 
-    if (schema.loop !== undefined) {
-      return this.__createLoopVirtualDom(
-        {
-          ...schema,
-          loop: parseData(schema.loop, self),
-        },
+      if (schema.hidden) {
+        return null;
+      }
+
+      if (schema.loop != null) {
+        const loop = parseData(schema.loop, self);
+        if ((Array.isArray(loop) && loop.length > 0) || isJSExpression(loop)) {
+          return this.__createLoopVirtualDom(
+            {
+              ...schema,
+              loop,
+            },
+            self,
+            parentInfo,
+            idx,
+          );
+        }
+      }
+      const condition = schema.condition == null ? true : parseData(schema.condition, self);
+      if (!condition) return null;
+
+      let scopeKey = '';
+      // 判断组件是否需要生成scope，且只生成一次，挂在this.__compScopes上
+      if (Comp.generateScope) {
+        const key = parseExpression(schema.props.key, self);
+        if (key) {
+          // 如果组件自己设置key则使用组件自己的key
+          scopeKey = key;
+        } else if (!schema.__ctx) {
+          // 在生产环境schema没有__ctx上下文，需要手动生成一个lunaKey
+          schema.__ctx = {
+            lunaKey: `luna${++scopeIdx}`,
+          };
+          scopeKey = schema.__ctx.lunaKey;
+        } else {
+          // 需要判断循环的情况
+          scopeKey = schema.__ctx.lunaKey + (idx !== undefined ? `_${idx}` : '');
+        }
+        if (!this.__compScopes[scopeKey]) {
+          this.__compScopes[scopeKey] = Comp.generateScope(this, schema);
+        }
+      }
+      // 如果组件有设置scope，需要为组件生成一个新的scope上下文
+      if (scopeKey && this.__compScopes[scopeKey]) {
+        const compSelf = { ...this.__compScopes[scopeKey] };
+        compSelf.__proto__ = self;
+        self = compSelf;
+      }
+
+      // 容器类组件的上下文通过props传递，避免context传递带来的嵌套问题
+      const otherProps = isFileSchema(schema)
+        ? {
+          __schema: schema,
+          __appHelper: appHelper,
+          __components: components,
+        }
+        : {};
+      if (engine && engine.props.designMode) {
+        otherProps.__designMode = engine.props.designMode;
+      }
+      const componentInfo = {};
+      const props =
+        this.__parseProps(schema.props, self, '', {
+          schema,
+          Comp,
+          componentInfo: {
+            ...componentInfo,
+            props: transformArrayToMap(componentInfo.props, 'name'),
+          },
+        }) || {};
+      // 对于可以获取到ref的组件做特殊处理
+      if (!acceptsRef(Comp)) {
+        Comp = compWrapper(Comp);
+      }
+      // if (acceptsRef(Comp)) {
+      otherProps.ref = (ref) => {
+        this.$(props.fieldId, ref); // 收集ref
+        const refProps = props.ref;
+        if (refProps && typeof refProps === 'string') {
+          this[refProps] = ref;
+        }
+        ref && engine && engine.props.onCompGetRef(schema, ref);
+      };
+      // }
+      // scope需要传入到组件上
+      if (scopeKey && this.__compScopes[scopeKey]) {
+        props.__scope = this.__compScopes[scopeKey];
+      }
+      // FIXME 这里清除 key 是为了避免循环渲染中更改 key 导致的渲染重复
+      props.key = '';
+      if (schema.__ctx && schema.__ctx.lunaKey) {
+        if (!isFileSchema(schema)) {
+          engine && engine.props.onCompGetCtx(schema, self);
+        }
+        props.key = props.key || `${schema.__ctx.lunaKey}_${schema.__ctx.idx || 0}_${idx !== undefined ? idx : ''}`;
+      } else if (typeof idx === 'number' && !props.key) {
+        props.key = idx;
+      }
+
+      props.__id = schema.id;
+      if (!props.key) {
+        props.key = props.__id;
+      }
+
+      let child = null;
+      if (/*!isFileSchema(schema) && */!!_children) {
+        child = this.__createVirtualDom(
+          isJSExpression(_children) ? parseExpression(_children, self) : _children,
+          self,
+          {
+            schema,
+            Comp,
+          },
+        );
+      }
+      const renderComp = (props) => engine.createElement(Comp, props, child);
+      // 设计模式下的特殊处理
+      if (engine && [DESIGN_MODE.EXTEND, DESIGN_MODE.BORDER].includes(engine.props.designMode)) {
+        // 对于overlay,dialog等组件为了使其在设计模式下显示，外层需要增加一个div容器
+        if (OVERLAY_LIST.includes(schema.componentName)) {
+          const { ref, ...overlayProps } = otherProps;
+          return (
+            <Div ref={ref} __designMode={engine.props.designMode}>
+              {renderComp({ ...props, ...overlayProps })}
+            </Div>
+          );
+        }
+        // 虚拟dom显示
+        if (componentInfo && componentInfo.parentRule) {
+          const parentList = componentInfo.parentRule.split(',');
+          const { schema: parentSchema, Comp: parentComp } = parentInfo;
+          if (
+            !parentList.includes(parentSchema.componentName) ||
+            parentComp !== components[parentSchema.componentName]
+          ) {
+            props.__componentName = schema.componentName;
+            Comp = VisualDom;
+          } else {
+            // 若虚拟dom在正常的渲染上下文中，就不显示设计模式了
+            props.__disableDesignMode = true;
+          }
+        }
+      }
+      return renderComp({ ...props, ...otherProps });
+    } catch (e) {
+      return engine.createElement(engine.getFaultComponent(), {
+        error: e,
+        schema,
         self,
         parentInfo,
         idx,
-      );
+      });
     }
-    const condition = schema.condition === undefined ? true : parseData(schema.condition, self);
-    if (!condition) return null;
+  };
 
-    let scopeKey = '';
-    // 判断组件是否需要生成scope，且只生成一次，挂在this.__compScopes上
-    if (Comp.generateScope) {
-      const key = parseExpression(schema.props.key, self);
-      if (key) {
-        // 如果组件自己设置key则使用组件自己的key
-        scopeKey = key;
-      } else if (!schema.__ctx) {
-        // 在生产环境schema没有__ctx上下文，需要手动生成一个lunaKey
-        schema.__ctx = {
-          lunaKey: `luna${++scopeIdx}`,
-        };
-        scopeKey = schema.__ctx.lunaKey;
-      } else {
-        // 需要判断循环的情况
-        scopeKey = schema.__ctx.lunaKey + (idx !== undefined ? `_${idx}` : '');
-      }
-      if (!this.__compScopes[scopeKey]) {
-        this.__compScopes[scopeKey] = Comp.generateScope(this, schema);
-      }
+  getSchemaChildren = (schema) => {
+    if (!schema || !schema.props) {
+      return schema?.children;
     }
-    // 如果组件有设置scope，需要为组件生成一个新的scope上下文
-    if (scopeKey && this.__compScopes[scopeKey]) {
-      const compSelf = { ...this.__compScopes[scopeKey] };
-      compSelf.__proto__ = self;
-      self = compSelf;
+    if (!schema.children) return schema.props.children;
+    if (!schema.props.children) return schema.children;
+    let _children = [].concat(schema.children);
+    if (Array.isArray(schema.props.children)) {
+      _children = _children.concat(schema.props.children);
+    } else {
+      _children.push(schema.props.children);
     }
-
-    // 容器类组件的上下文通过props传递，避免context传递带来的嵌套问题
-    const otherProps = isFileSchema(schema)
-      ? {
-        __schema: schema,
-        __appHelper: appHelper,
-        __components: components,
-      }
-      : {};
-    if (engine && engine.props.designMode) {
-      otherProps.__designMode = engine.props.designMode;
-    }
-    const componentInfo = componentsMap[schema.componentName] || {};
-    const props = this.__parseProps(schema.props, self, '', {
-      schema,
-      Comp,
-      componentInfo: {
-        ...componentInfo,
-        props: transformArrayToMap(componentInfo.props, 'name'),
-      },
-    });
-    // 对于可以获取到ref的组件做特殊处理
-    if (!acceptsRef(Comp)) {
-      Comp = compWrapper(Comp);
-    }
-    otherProps.ref = (ref) => {
-      this.$(props.fieldId, ref); // 收集ref
-      const refProps = props.ref;
-      if (refProps && typeof refProps === 'string') {
-        this[refProps] = ref;
-      }
-      engine && engine.props.onCompGetRef(schema, ref);
-    };
-
-    // scope需要传入到组件上
-    if (scopeKey && this.__compScopes[scopeKey]) {
-      props.__scope = this.__compScopes[scopeKey];
-    }
-    if (schema.__ctx && schema.__ctx.lunaKey) {
-      if (!isFileSchema(schema)) {
-        engine && engine.props.onCompGetCtx(schema, self);
-      }
-      props.key = props.key || `${schema.__ctx.lunaKey}_${schema.__ctx.idx || 0}_${idx !== undefined ? idx : ''}`;
-    } else if (typeof idx === 'number' && !props.key) {
-      props.key = idx;
-    }
-    props.__id = schema.id;
-
-    if (!isFileSchema(schema) && schema.children) {
-      this.__createVirtualDom(
-        isJSExpression(schema.children) ? parseExpression(schema.children, self) : schema.children,
-        self,
-        {
-          schema,
-          Comp,
-        },
-      );
-    }
-
-    const renderComp = (props) => engine.createElement(
-      Comp,
-      props,
-      (!isFileSchema(schema) &&
-          !!schema.children &&
-          this.__createVirtualDom(
-            isJSExpression(schema.children) ? parseExpression(schema.children, self) : schema.children,
-            self,
-            {
-              schema,
-              Comp,
-            },
-          ))
-          || null,
-    );
-    // 设计模式下的特殊处理
-    if (engine && [DESIGN_MODE.EXTEND, DESIGN_MODE.BORDER].includes(engine.props.designMode)) {
-      // 对于overlay,dialog等组件为了使其在设计模式下显示，外层需要增加一个div容器
-      if (OVERLAY_LIST.includes(schema.componentName)) {
-        const { ref, ...overlayProps } = otherProps;
-        return (
-          <div ref={ref} __designMode={engine.props.designMode}>
-            {renderComp({ ...props, ...overlayProps })}
-          </div>
-        );
-      }
-      // 虚拟dom显示
-      if (componentInfo && componentInfo.parentRule) {
-        const parentList = componentInfo.parentRule.split(',');
-        const { schema: parentSchema, Comp: parentComp } = parentInfo;
-        if (!parentList.includes(parentSchema.componentName) || parentComp !== components[parentSchema.componentName]) {
-          props.__componentName = schema.componentName;
-          Comp = VisualDom;
-        } else {
-          // 若虚拟dom在正常的渲染上下文中，就不显示设计模式了
-          props.__disableDesignMode = true;
-        }
-      }
-    }
-    return renderComp({ ...props, ...otherProps });
+    return _children;
   };
 
   __createLoopVirtualDom = (schema, self, parentInfo, idx) => {
