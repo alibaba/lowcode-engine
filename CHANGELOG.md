@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.13.2-7"></a>
+## [0.13.2-7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.2-6...v0.13.2-7) (2020-12-19)
+
+
+### Bug Fixes
+
+* 传递正确的 removeIndex 给到 subtreeModified 钩子 ([95115e3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/95115e3))
+
+
+
+
 <a name="0.13.2-6"></a>
 ## [0.13.2-6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.2-5...v0.13.2-6) (2020-12-18)
 
