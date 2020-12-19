@@ -128,6 +128,8 @@ export class NodeChildren {
         slotNode.remove(useMutator, purge);
       }, (iterable, idx) => (iterable as [])[idx]);
     }
+    // 需要在从 children 中删除 node 前记录下 index，internalSetParent 中会执行删除(unlink)操作
+    const i = this.children.indexOf(node);
     if (purge) {
       // should set parent null
       node.internalSetParent(null, useMutator);
@@ -142,14 +144,13 @@ export class NodeChildren {
     document.selection.remove(node.id);
     document.destroyNode(node);
     this.emitter.emit('change');
-    const i = this.children.indexOf(node);
     if (useMutator) {
       this.reportModified(node, this.owner, { type: 'remove', removeIndex: i, removeNode: node });
     }
-    if (i < 0) {
-      return false;
+    // purge 为 true 时，已在 internalSetParent 中删除了子节点
+    if (i > -1 && !purge) {
+      this.children.splice(i, 1);
     }
-    this.children.splice(i, 1);
     return false;
   }
 
