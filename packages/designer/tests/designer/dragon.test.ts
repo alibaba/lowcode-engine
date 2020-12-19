@@ -38,9 +38,12 @@ describe('Dragon 测试', () => {
   let doc: DocumentModel;
   let dragon: Dragon;
 
-  beforeEach(() => {
+  beforeAll(() => {
     editor = new Editor();
     !globalContext.has(Editor) && globalContext.register(editor, Editor);
+  });
+
+  beforeEach(() => {
     designer = new Designer({ editor });
     project = designer.project;
     doc = project.createDocument(formSchema);
@@ -51,16 +54,15 @@ describe('Dragon 测试', () => {
     project.unload();
     project.mountSimulator(undefined);
     designer.purge();
-    editor = null;
     designer = null;
     project = null;
     dragon = null;
   });
 
   it.skip('drag NodeData', () => {
-    const dragStartMockedFn = jest.fn();
-    const dragMockedFn = jest.fn();
-    const dragEndMockedFn = jest.fn();
+    const dragStartMockFn = jest.fn();
+    const dragMockFn = jest.fn();
+    const dragEndMockFn = jest.fn();
 
     dragon.onDragstart((e) => {
       console.log('start', e, e.originalEvent, e.originalEvent.clientX);
@@ -95,15 +97,15 @@ describe('Dragon 测试', () => {
   });
 
   it('mouse NodeData', () => {
-    const dragStartMockedFn = jest.fn();
-    const dragMockedFn = jest.fn();
-    const dragEndMockedFn = jest.fn();
+    const dragStartMockFn = jest.fn();
+    const dragMockFn = jest.fn();
+    const dragEndMockFn = jest.fn();
 
-    const offDragStart = dragon.onDragstart(dragStartMockedFn);
+    const offDragStart = dragon.onDragstart(dragStartMockFn);
 
-    const offDrag = dragon.onDrag(dragMockedFn);
+    const offDrag = dragon.onDrag(dragMockFn);
 
-    const offDragEnd = dragon.onDragend(dragEndMockedFn);
+    const offDragEnd = dragon.onDragend(dragEndMockFn);
 
     dragon.boost(
       {
@@ -117,19 +119,19 @@ describe('Dragon 测试', () => {
     fireEvent.mouseMove(document, { clientX: 110, clientY: 110 });
     fireEvent.mouseUp(document, { clientX: 118, clientY: 118 });
 
-    expect(dragStartMockedFn).toHaveBeenCalledTimes(1);
-    expect(dragMockedFn).toHaveBeenCalledTimes(2);
-    expect(dragEndMockedFn).toHaveBeenCalledTimes(1);
+    expect(dragStartMockFn).toHaveBeenCalledTimes(1);
+    expect(dragMockFn).toHaveBeenCalledTimes(2);
+    expect(dragEndMockFn).toHaveBeenCalledTimes(1);
   });
 
   it('mouse Node', () => {
-    const dragStartMockedFn = jest.fn();
-    const dragMockedFn = jest.fn();
-    const dragEndMockedFn = jest.fn();
+    const dragStartMockFn = jest.fn();
+    const dragMockFn = jest.fn();
+    const dragEndMockFn = jest.fn();
 
-    const offDragStart = dragon.onDragstart(dragStartMockedFn);
-    const offDrag = dragon.onDrag(dragMockedFn);
-    const offDragEnd = dragon.onDragend(dragEndMockedFn);
+    const offDragStart = dragon.onDragstart(dragStartMockFn);
+    const offDrag = dragon.onDrag(dragMockFn);
+    const offDragEnd = dragon.onDragend(dragEndMockFn);
 
     dragon.boost(
       {
@@ -140,23 +142,23 @@ describe('Dragon 测试', () => {
     );
 
     // mouseDown 模式正常不会触发 dragStart 事件，除非 shaken 型
-    expect(dragStartMockedFn).not.toHaveBeenCalled();
+    expect(dragStartMockFn).not.toHaveBeenCalled();
 
     fireEvent.mouseMove(document, { clientX: 108, clientY: 108 });
-    expect(dragStartMockedFn).toHaveBeenCalledTimes(1);
-    expect(dragMockedFn).toHaveBeenCalledTimes(1);
+    expect(dragStartMockFn).toHaveBeenCalledTimes(1);
+    expect(dragMockFn).toHaveBeenCalledTimes(1);
     fireEvent.mouseMove(document, { clientX: 110, clientY: 110 });
-    expect(dragMockedFn).toHaveBeenCalledTimes(2);
+    expect(dragMockFn).toHaveBeenCalledTimes(2);
     expect(dragon.dragging).toBeTruthy();
 
     fireEvent.mouseUp(document, { clientX: 118, clientY: 118 });
 
-    expect(dragEndMockedFn).toHaveBeenCalledTimes(1);
+    expect(dragEndMockFn).toHaveBeenCalledTimes(1);
 
     offDragStart();
     offDrag();
     offDragEnd();
-    dragMockedFn.mockClear();
+    dragMockFn.mockClear();
 
     dragon.boost(
       {
@@ -168,17 +170,17 @@ describe('Dragon 测试', () => {
 
     fireEvent.mouseMove(document, { clientX: 108, clientY: 108 });
 
-    expect(dragMockedFn).not.toHaveBeenCalled();
+    expect(dragMockFn).not.toHaveBeenCalled();
   });
 
   it('mouse Node & esc', () => {
-    const dragStartMockedFn = jest.fn();
-    const dragMockedFn = jest.fn();
-    const dragEndMockedFn = jest.fn();
+    const dragStartMockFn = jest.fn();
+    const dragMockFn = jest.fn();
+    const dragEndMockFn = jest.fn();
 
-    const offDragStart = dragon.onDragstart(dragStartMockedFn);
-    const offDrag = dragon.onDrag(dragMockedFn);
-    const offDragEnd = dragon.onDragend(dragEndMockedFn);
+    const offDragStart = dragon.onDragstart(dragStartMockFn);
+    const offDrag = dragon.onDrag(dragMockFn);
+    const offDragEnd = dragon.onDragend(dragEndMockFn);
 
     dragon.boost(
       {
@@ -193,13 +195,13 @@ describe('Dragon 测试', () => {
   });
 
   it('mouse Node & copy', () => {
-    const dragStartMockedFn = jest.fn();
-    const dragMockedFn = jest.fn();
-    const dragEndMockedFn = jest.fn();
+    const dragStartMockFn = jest.fn();
+    const dragMockFn = jest.fn();
+    const dragEndMockFn = jest.fn();
 
-    const offDragStart = dragon.onDragstart(dragStartMockedFn);
-    const offDrag = dragon.onDrag(dragMockedFn);
-    const offDragEnd = dragon.onDragend(dragEndMockedFn);
+    const offDragStart = dragon.onDragstart(dragStartMockFn);
+    const offDrag = dragon.onDrag(dragMockFn);
+    const offDragEnd = dragon.onDragend(dragEndMockFn);
 
     dragon.boost(
       {
@@ -217,13 +219,13 @@ describe('Dragon 测试', () => {
   });
 
   it('from', () => {
-    const dragStartMockedFn = jest.fn();
-    const dragMockedFn = jest.fn();
-    const dragEndMockedFn = jest.fn();
+    const dragStartMockFn = jest.fn();
+    const dragMockFn = jest.fn();
+    const dragEndMockFn = jest.fn();
 
-    const offDragStart = dragon.onDragstart(dragStartMockedFn);
-    const offDrag = dragon.onDrag(dragMockedFn);
-    const offDragEnd = dragon.onDragend(dragEndMockedFn);
+    const offDragStart = dragon.onDragstart(dragStartMockFn);
+    const offDrag = dragon.onDrag(dragMockFn);
+    const offDragEnd = dragon.onDragend(dragEndMockFn);
     const mockedBoostFn = jest
       .fn((e) => {
         return {
@@ -237,37 +239,37 @@ describe('Dragon 测试', () => {
 
     // 无用 mouseDown，无效的按钮
     fireEvent.mouseDown(document, { button: 2 });
-    expect(dragStartMockedFn).not.toHaveBeenCalled();
+    expect(dragStartMockFn).not.toHaveBeenCalled();
 
     // 无用 mouseDown，无效的 dragObject
     fireEvent.mouseDown(document, { clientX: 100, clientY: 100 });
-    expect(dragStartMockedFn).not.toHaveBeenCalled();
+    expect(dragStartMockFn).not.toHaveBeenCalled();
 
     fireEvent.mouseDown(document, { clientX: 100, clientY: 100 });
-    expect(dragStartMockedFn).not.toHaveBeenCalled();
+    expect(dragStartMockFn).not.toHaveBeenCalled();
 
     fireEvent.mouseMove(document, { clientX: 108, clientY: 108 });
-    expect(dragStartMockedFn).toHaveBeenCalledTimes(1);
-    expect(dragMockedFn).toHaveBeenCalledTimes(1);
+    expect(dragStartMockFn).toHaveBeenCalledTimes(1);
+    expect(dragMockFn).toHaveBeenCalledTimes(1);
     fireEvent.mouseMove(document, { clientX: 110, clientY: 110 });
-    expect(dragMockedFn).toHaveBeenCalledTimes(2);
+    expect(dragMockFn).toHaveBeenCalledTimes(2);
     expect(dragon.dragging).toBeTruthy();
 
     fireEvent.mouseUp(document, { clientX: 118, clientY: 118 });
 
-    expect(dragEndMockedFn).toHaveBeenCalledTimes(1);
+    expect(dragEndMockFn).toHaveBeenCalledTimes(1);
 
     offDragStart();
     offDrag();
     offDragEnd();
-    dragMockedFn.mockClear();
+    dragMockFn.mockClear();
 
     fireEvent.mouseMove(document, { clientX: 100, clientY: 100 });
-    expect(dragMockedFn).not.toHaveBeenCalled();
+    expect(dragMockFn).not.toHaveBeenCalled();
 
     offFrom();
     fireEvent.mouseMove(document, { clientX: 100, clientY: 100 });
-    expect(dragMockedFn).not.toHaveBeenCalled();
+    expect(dragMockFn).not.toHaveBeenCalled();
   });
 
   it('addSensor / removeSensor', () => {

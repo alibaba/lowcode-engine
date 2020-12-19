@@ -31,7 +31,15 @@ export class ActiveTracker {
     return this._target?.detail;
   }
 
+  /**
+   * @deprecated
+   */
+  /* istanbul ignore next */
   get intance() {
+    return this.instance;
+  }
+
+  get instance() {
     return this._target?.instance;
   }
 

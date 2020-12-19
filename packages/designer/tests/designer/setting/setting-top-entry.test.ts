@@ -93,7 +93,7 @@ describe('setting-top-entry 测试', () => {
       const { currentDocument } = designer.project;
       const divNode = currentDocument?.getNode('div');
 
-      console.log(divNode?.getPropValue('behavior'));
+      // console.log(divNode?.getPropValue('behavior'));
       const { settingEntry } = divNode!;
 
       expect(typeof settingEntry.getChildren).toBe('function');

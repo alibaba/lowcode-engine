@@ -27,6 +27,7 @@
   "devDependencies": {
     "@ali/lowcode-test-mate": "^1.0.1",
     "@alib/build-scripts": "^0.1.29",
+    "@testing-library/react": "^11.2.2",
     "@types/classnames": "^2.2.7",
     "@types/jest": "^26.0.16",
     "@types/lodash": "^4.14.165",

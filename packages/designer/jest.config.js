@@ -19,6 +19,7 @@ module.exports = {
     '!src/**/*.d.ts',
     '!src/icons/**',
     '!src/locale/**',
+    '!src/builtin-simulator/utils/**',
     '!src/document/node/exclusive-group.ts',
     '!**/node_modules/**',
     '!**/vendor/**',

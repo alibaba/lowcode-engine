@@ -1,4 +1,3 @@
-jest.mock('@ali/lowcode-utils');
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
 import '../fixtures/window';
@@ -8,7 +7,6 @@ import { Project } from '../../src/project/project';
 import formSchema from '../fixtures/schema/form';
 import '../../src/designer/builtin-hotkey';
 import { fireEvent } from '@testing-library/react';
-import { isFormEvent } from '@ali/lowcode-utils';
 
 const editor = new Editor();
 
@@ -243,7 +241,6 @@ describe('快捷键测试', () => {
     it('isFormEvent: true', () => {
       designer.currentDocument?.selection.select('page');
       // nothing happened
-      isFormEvent.mockReturnValue(true);
 
       fireEvent.keyDown(document, { keyCode: 39 });
       expect(designer.currentDocument?.selection.selected[0]).toBe('page');

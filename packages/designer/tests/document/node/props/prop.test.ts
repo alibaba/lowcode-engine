@@ -370,7 +370,7 @@ describe('Prop 类测试', () => {
     // TODO: id 总是变，不好断言
     expect(slotProp.code.includes('Button')).toBeTruthy();
 
-    console.log(slotProp.export());
+    slotProp.export();
 
     expect(slotProp.export().value[0].componentName).toBe('Button');
     expect(slotProp.export(TransformStage.Serilize).value[0].componentName).toBe('Button');

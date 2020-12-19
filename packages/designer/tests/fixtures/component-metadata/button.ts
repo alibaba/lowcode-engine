@@ -221,10 +221,9 @@ export default {
       },
     ],
     component: {
-      isContainer: true,
       nestingRule: {
-        parentWhitelist: 'Div',
-        childWhitelist: 'Div',
+        // parentWhitelist: 'Div',
+        // childWhitelist: 'Div',
       },
     },
     supports: {},

@@ -160,10 +160,10 @@ describe('Node 方法测试', () => {
       const pageMeta = designer.getComponentMeta('Page');
       set(pageMeta, 'prototype.options.canDropIn', () => true);
 
-      const o = doc.getNode('form')!.getSuitablePlace(doc.getNode('node_k1ow3cbj'), 1);
+      const o = doc.getNode('form')!.getSuitablePlace(doc.getNode('node_k1ow3cbj'), { index: 1 });
       expect(o).toEqual({
         container: doc.rootNode,
-        ref: 1,
+        ref: { index: 1 },
       });
     });
 

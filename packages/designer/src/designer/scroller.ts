@@ -18,18 +18,18 @@ export class ScrollTarget {
   }
 
   get scrollHeight(): number {
-    return ((this.doe || this.target) as any).scrollHeight;
+    return ((this.doc || this.target) as any).scrollHeight;
   }
 
   get scrollWidth(): number {
-    return ((this.doe || this.target) as any).scrollWidth;
+    return ((this.doc || this.target) as any).scrollWidth;
   }
 
-  private doe?: HTMLElement;
+  private doc?: HTMLElement;
 
   constructor(private target: Window | Element) {
     if (isWindow(target)) {
-      this.doe = target.document.documentElement;
+      this.doc = target.document.documentElement;
     }
   }
 }
