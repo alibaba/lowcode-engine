@@ -141,6 +141,13 @@ export default class PanelDock implements IWidget {
   showPanel() {
     this.panel?.setActive(true);
   }
+
+  /**
+   * @deprecated
+   */
+  onActiveChange(func: () => any) {
+    return this.panel?.onActiveChange(func);
+  }
 }
 
 
