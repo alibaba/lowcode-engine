@@ -138,7 +138,7 @@ export class Designer {
               parent?.componentMeta?.componentName ||
               '';
             // eslint-disable-next-line no-unused-expressions
-            this.editor?.emit('designer.drag', {
+            this.postEvent('drag', {
               time: (endTime - startTime).toFixed(2),
               selected: nodes
                 ?.map((n) => {
@@ -193,7 +193,7 @@ export class Designer {
       this.setupSelection();
       setupHistory();
     });
-    this.postEvent('designer.init', this);
+    this.postEvent('init', this);
     this.setupSelection();
     setupHistory();
 

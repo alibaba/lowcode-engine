@@ -1,6 +1,6 @@
 {
   "lerna": "2.11.0",
-  "version": "1.0.24-beta.4",
+  "version": "1.0.26-beta.0",
   "npmClient": "tyarn",
   "registry": "http://registry.npm.alibaba-inc.com",
   "useWorkspaces": true,
@@ -11,6 +11,14 @@
     "bootstrap": {
       "npmClientArgs": [
         "--no-package-lock"
+      ]
+    },
+    "version": {
+      "allowBranch": [
+        "master",
+        "main",
+        "release/*",
+        "daily/*"
       ]
     },
     "publish": {

@@ -19,8 +19,7 @@ export default class Viewport implements IViewport {
   }
 
   get contentBounds(): DOMRect {
-    const { bounds } = this;
-    const { scale } = this;
+    const { bounds, scale } = this;
     return new DOMRect(0, 0, bounds.width / scale, bounds.height / scale);
   }
 

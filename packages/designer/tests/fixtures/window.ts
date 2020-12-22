@@ -16,3 +16,5 @@ Object.defineProperty(window, 'React', {
   writable: true,
   value: {},
 });
+
+window.scrollTo = () => {};

@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.26-beta.0"></a>
+## [1.0.26-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.25-beta.1...v1.0.26-beta.0) (2020-12-22)
+
+
+### Bug Fixes
+
+* requestHandlersMap 没有加到 appContext 里 ([a8d43c3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a8d43c3))
+* simulator-renderer 补充丢失代码 ([67dd7e2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/67dd7e2))
+
+
+### Features
+
+* 支持 build sourceMap, 方便用户调试 ([6bf75cd](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6bf75cd))
+
+
+
+
+<a name="1.0.25-beta.1"></a>
+## [1.0.25-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.24-beta.4...v1.0.25-beta.1) (2020-12-15)
+
+
+### Bug Fixes
+
+* 修复 prop 无法删除最后一个 item ([e18a386](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e18a386))
+
+
+
+
 <a name="1.0.24-beta.4"></a>
 ## [1.0.24-beta.4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.24-beta.3...v1.0.24-beta.4) (2020-12-14)
 

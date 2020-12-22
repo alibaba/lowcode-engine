@@ -937,7 +937,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
 
     if (this.parent) {
-      return this.parent.getSuitablePlace(node, ref);
+      return this.parent.getSuitablePlace(node, { index: this.index });
     }
 
     return null;

@@ -14,6 +14,7 @@ interface MockDocument extends Document {
 
 
 const eventsMap : Map<string, Set<Function>> = new Map<string, Set<Function>>();
+const mockRemoveAttribute = jest.fn();
 const mockAddEventListener = jest.fn((eventName: string, cb) => {
   if (!eventsMap.has(eventName)) {
     eventsMap.set(eventName, new Set([cb]));
@@ -45,6 +46,7 @@ const mockCreateElement = jest.fn((tagName) => {
     addEventListener: mockAddEventListener,
     removeEventListener: mockRemoveEventListener,
     triggerEventListener: mockTriggerEventListener,
+    removeAttribute: mockRemoveAttribute,
   }
 })
 
@@ -74,4 +76,36 @@ export function getMockWindow(doc?: MockDocument) {
 
 export function clearEventsMap() {
   eventsMap.clear();
+}
+
+export function getMockElement(tagName, options = {}) {
+  const elem = document.createElement(tagName);
+  let {
+    width = 0,
+    height = 0,
+    top = 0,
+    bottom = 0,
+    left = 0,
+    right = 0,
+  } = options;
+  elem.getBoundingClientRect = () => {
+    return {
+      width,
+      height,
+      top,
+      bottom,
+      left,
+      right,
+    };
+  };
+  elem.setWidth = (newWidth) => {
+    width = newWidth;
+  };
+  elem.setHeight = (newHeight) => {
+    height = newHeight;
+  };
+  // console.log(elem.ownerDocument);
+  // elem.ownerDocument = document;
+  // elem.ownerDocument.defaultView = window;
+  return elem;
 }

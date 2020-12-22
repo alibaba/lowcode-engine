@@ -602,7 +602,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
         node?.componentMeta?.componentName ||
         '';
-      editor?.emit('desiger.builtinSimulator.contextmenu', {
+      editor?.emit('designer.builtinSimulator.contextmenu', {
         selected,
       });
     });
@@ -817,6 +817,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   /**
    * @see ISimulator
    */
+  /* istanbul ignore next */
   scrollToNode(node: Node, detail?: any/* , tryTimes = 0 */) {
     this.tryScrollAgain = null;
     if (this.sensing) {

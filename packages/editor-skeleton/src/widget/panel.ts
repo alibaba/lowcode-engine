@@ -162,6 +162,11 @@ export default class Panel implements IWidget {
     if (flag) {
       this._actived = true;
       this.parent?.active(this);
+      if (this.parent.name === 'leftFloatArea') {
+        this.skeleton.leftFixedArea.container.unactiveAll();
+      } else if (this.parent.name === 'leftFixedArea') {
+        this.skeleton.leftFloatArea.container.unactiveAll();
+      }
       if (!this.inited) {
         this.inited = true;
       }

@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.26-beta.0"></a>
+## [1.0.26-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.25-beta.1...v1.0.26-beta.0) (2020-12-22)
+
+
+### Bug Fixes
+
+* 传递正确的 removeIndex 给到 subtreeModified 钩子 ([822b2fd](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/822b2fd))
+* 修复 overridePropsConfigure 参数为数组时的逻辑 ([4e58e09](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/4e58e09))
+* 修复组件不会插入到选中节点之内或者之后的逻辑 ([93b005b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/93b005b))
+
+
+### Features
+
+* 支持 build sourceMap, 方便用户调试 ([6bf75cd](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6bf75cd))
+* 支持用户修改 builtinComponentActions ([bc183d1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/bc183d1))
+
+
+
+
+<a name="1.0.25-beta.1"></a>
+## [1.0.25-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.24-beta.4...v1.0.25-beta.1) (2020-12-15)
+
+
+### Bug Fixes
+
+* 修复 prop 无法删除最后一个 item ([e18a386](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e18a386))
+
+
+
+
 <a name="1.0.24-beta.4"></a>
 ## [1.0.24-beta.4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.24-beta.3...v1.0.24-beta.4) (2020-12-14)
 

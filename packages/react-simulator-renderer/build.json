@@ -1,4 +1,5 @@
 {
+  "sourceMap": true,
   "plugins": [
     [
       "build-plugin-component",

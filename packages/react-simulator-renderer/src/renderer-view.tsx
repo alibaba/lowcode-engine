@@ -1,6 +1,8 @@
+import { Node } from '@ali/lowcode-designer';
 import LowCodeRenderer from '@ali/lowcode-react-renderer';
 import { ReactInstance, Fragment, Component, createElement } from 'react';
 import { observer } from '@recore/obx-react';
+import { isFromVC } from '@ali/lowcode-utils';
 import { SimulatorRendererContainer, DocumentInstance } from './renderer';
 import { Router, Route, Switch } from 'react-router';
 import './renderer.less';
@@ -103,7 +105,7 @@ class Layout extends Component<{ rendererContainer: SimulatorRendererContainer }
     if (layout) {
       const { Component, props, componentName } = layout;
       if (Component) {
-        return <Component key='layout' props={props}>{children}</Component>;
+        return <Component key="layout" props={props}>{children}</Component>;
       }
       if (componentName && rendererContainer.getComponent(componentName)) {
         return createElement(
@@ -147,8 +149,10 @@ class Renderer extends Component<{
         customCreateElement={(Component: any, props: any, children: any) => {
           const { __id, __desingMode, ...viewProps } = props;
           viewProps.componentId = __id;
-          const leaf = documentInstance.getNode(__id);
-          viewProps._leaf = leaf;
+          const leaf = documentInstance.getNode(__id) as Node;
+          if (isFromVC(leaf?.componentMeta)) {
+            viewProps._leaf = leaf;
+          }
           viewProps._componentName = leaf?.componentName;
           // 如果是容器 && 无children && 高宽为空 增加一个占位容器，方便拖动
           if (

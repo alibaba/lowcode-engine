@@ -86,7 +86,7 @@ export class SettingPropEntry implements SettingEntry {
     }
     const propName = this.path.join('.');
     let l = this.nodes.length;
-    while (l-- > 1) {
+    while (l-- > 0) {
       this.nodes[l].getProp(propName, true)!.key = key;
     }
     this._name = key;

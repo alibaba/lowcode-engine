@@ -257,6 +257,9 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       // sync designMode
       this._designMode = host.designMode;
 
+      // sync requestHandlersMap
+      this._requestHandlersMap = host.requestHandlersMap;
+
       // sync device
       this._device = host.device;
 
@@ -318,6 +321,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         },
       },
       constants: {},
+      requestHandlersMap: this._requestHandlersMap,
     };
     host.injectionConsumer.consume((data) => {
       // sync utils, i18n, contants,... config
@@ -356,6 +360,10 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   @obx.ref private _device: string = 'default';
   @computed get device() {
     return this._device;
+  }
+  @obx.ref private _requestHandlersMap = null;
+  @computed get requestHandlersMap(): any {
+    return this._requestHandlersMap;
   }
   @obx.ref private _componentsMap = {};
   @computed get componentsMap(): any {

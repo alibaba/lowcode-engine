@@ -6,6 +6,7 @@ import { Designer } from '../../src/designer/designer';
 import { Project } from '../../src/project/project';
 import formSchema from '../fixtures/schema/form';
 import '../../src/designer/builtin-hotkey';
+import { fireEvent } from '@testing-library/react';
 
 const editor = new Editor();
 
@@ -28,8 +29,7 @@ describe('快捷键测试', () => {
     const firstCardNode = designer.currentDocument?.getNode('node_k1ow3cbj')!;
     firstCardNode.select();
 
-    let event = new KeyboardEvent('keydown', { keyCode: 39 });
-    document.dispatchEvent(event);
+    fireEvent.keyDown(document, { keyCode: 39 });
 
     expect(designer.currentSelection?.selected.includes('node_k1ow3cbl')).toBeTruthy();
   });
@@ -38,8 +38,7 @@ describe('快捷键测试', () => {
     const firstCardNode = designer.currentDocument?.getNode('node_k1ow3cbl')!;
     firstCardNode.select();
 
-    let event = new KeyboardEvent('keydown', { keyCode: 37 });
-    document.dispatchEvent(event);
+    fireEvent.keyDown(document, { keyCode: 37 });
 
     expect(designer.currentSelection?.selected.includes('node_k1ow3cbj')).toBeTruthy();
   });
@@ -48,8 +47,7 @@ describe('快捷键测试', () => {
     const firstCardNode = designer.currentDocument?.getNode('node_k1ow3cbl')!;
     firstCardNode.select();
 
-    let event = new KeyboardEvent('keydown', { keyCode: 40 });
-    document.dispatchEvent(event);
+    fireEvent.keyDown(document, { keyCode: 40 });
 
     expect(designer.currentSelection?.selected.includes('node_k1ow3cbo')).toBeTruthy();
   });
@@ -58,8 +56,7 @@ describe('快捷键测试', () => {
     const secondCardNode = designer.currentDocument?.getNode('node_k1ow3cbm')!;
     secondCardNode.select();
 
-    let event = new KeyboardEvent('keydown', { keyCode: 38 });
-    document.dispatchEvent(event);
+    fireEvent.keyDown(document, { keyCode: 38 });
 
     expect(designer.currentSelection?.selected.includes('node_k1ow3cbl')).toBeTruthy();
   });
@@ -69,8 +66,7 @@ describe('快捷键测试', () => {
     const firstButtonNode = designer.currentDocument?.getNode('node_k1ow3cbn')!;
     firstButtonNode.select();
 
-    let event = new KeyboardEvent('keydown', { keyCode: 39, altKey: true });
-    document.dispatchEvent(event);
+    fireEvent.keyDown(document, { keyCode: 39, altKey: true });
 
     expect(firstButtonNode.prevSibling?.getId()).toBe('node_k1ow3cbp');
   });
@@ -80,8 +76,7 @@ describe('快捷键测试', () => {
     const secondButtonNode = designer.currentDocument?.getNode('node_k1ow3cbp')!;
     secondButtonNode.select();
 
-    let event = new KeyboardEvent('keydown', { keyCode: 37, altKey: true });
-    document.dispatchEvent(event);
+    fireEvent.keyDown(document, { keyCode: 37, altKey: true });
 
     expect(secondButtonNode.nextSibling?.getId()).toBe('node_k1ow3cbn');
   });
@@ -91,8 +86,7 @@ describe('快捷键测试', () => {
     const firstCardNode = designer.currentDocument?.getNode('node_k1ow3cbp')!;
     firstCardNode.select();
 
-    let event = new KeyboardEvent('keydown', { keyCode: 38, altKey: true });
-    document.dispatchEvent(event);
+    fireEvent.keyDown(document, { keyCode: 38, altKey: true });
   });
 
   // 将节点移入到兄弟节点中
@@ -100,8 +94,7 @@ describe('快捷键测试', () => {
     const firstCardNode = designer.currentDocument?.getNode('node_k1ow3cbp')!;
     firstCardNode.select();
 
-    let event = new KeyboardEvent('keydown', { keyCode: 40, altKey: true });
-    document.dispatchEvent(event);
+    fireEvent.keyDown(document, { keyCode: 40, altKey: true });
   });
 
   // 撤销
@@ -114,8 +107,7 @@ describe('快捷键测试', () => {
 
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    let event = new KeyboardEvent('keydown', { keyCode: 90, metaKey: true });
-    document.dispatchEvent(event);
+    fireEvent.keyDown(document, { keyCode: 90, metaKey: true });
 
     // 重新获取一次节点，因为 documentModel.import 是全画布刷新
     secondButtonNode = designer.currentDocument?.getNode('node_k1ow3cbp')!;
@@ -132,8 +124,7 @@ describe('快捷键测试', () => {
 
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    let event = new KeyboardEvent('keydown', { keyCode: 90, metaKey: true });
-    document.dispatchEvent(event);
+    fireEvent.keyDown(document, { keyCode: 90, metaKey: true });
 
     // 重新获取一次节点，因为 documentModel.import 是全画布刷新
     secondButtonNode = designer.currentDocument?.getNode('node_k1ow3cbp')!;
@@ -141,8 +132,7 @@ describe('快捷键测试', () => {
 
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    event = new KeyboardEvent('keydown', { keyCode: 89, metaKey: true });
-    document.dispatchEvent(event);
+    fireEvent.keyDown(document, { keyCode: 89, metaKey: true });
 
     // 重新获取一次节点，因为 documentModel.import 是全画布刷新
     secondButtonNode = designer.currentDocument?.getNode('node_k1ow3cbp')!;
@@ -153,19 +143,16 @@ describe('快捷键测试', () => {
     const firstCardNode = designer.currentDocument?.getNode('node_k1ow3cbp')!;
     firstCardNode.select();
 
-    let event = new KeyboardEvent('keydown', { keyCode: 67, metaKey: true });
-    document.dispatchEvent(event);
+    fireEvent.keyDown(document, { keyCode: 67, metaKey: true });
   });
 
   it('command + v', async () => {
     const secondButtonNode = designer.currentDocument?.getNode('node_k1ow3cbp')!;
     secondButtonNode.select();
 
-    let event = new KeyboardEvent('keydown', { keyCode: 67, metaKey: true });
-    document.dispatchEvent(event);
+    fireEvent.keyDown(document, { keyCode: 67, metaKey: true });
 
-    event = new KeyboardEvent('keydown', { keyCode: 86, metaKey: true });
-    document.dispatchEvent(event);
+    fireEvent.keyDown(document, { keyCode: 86, metaKey: true });
 
     await new Promise(resolve => setTimeout(resolve, 1000));
 
@@ -180,8 +167,7 @@ describe('快捷键测试', () => {
 
     expect(designer.currentSelection!.selected.includes('node_k1ow3cbp')).toBeTruthy();
 
-    let event = new KeyboardEvent('keydown', { keyCode: 27 });
-    document.dispatchEvent(event);
+    fireEvent.keyDown(document, { keyCode: 27 });
 
     expect(designer.currentSelection!.selected.length).toBe(0);
   });
@@ -194,9 +180,109 @@ describe('快捷键测试', () => {
 
     expect(secondButtonNode.prevSibling.id).toBe('node_k1ow3cbn');
 
-    let event = new KeyboardEvent('keydown', { keyCode: 46 });
-    document.dispatchEvent(event);
+    fireEvent.keyDown(document, { keyCode: 46 });
 
     expect(secondButtonNode.prevSibling).toBeNull();
+  });
+
+
+  describe('非正常分支', () => {
+    it('liveEditing mode', () => {
+      designer.project.mountSimulator({
+        liveEditing: {
+          editing: {},
+        },
+      });
+      editor.set('designer', designer);
+      designer.currentDocument?.selection.select('page');
+      // nothing happened
+      fireEvent.keyDown(document, { keyCode: 39 });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 37 });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 40 });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 38 });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 39, altKey: true });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 37, altKey: true });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 40, altKey: true });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 38, altKey: true });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 90, metaKey: true });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 89, metaKey: true });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 67, metaKey: true });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 86, metaKey: true });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 27 });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 46 });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+    });
+    it('isFormEvent: true', () => {
+      designer.currentDocument?.selection.select('page');
+      // nothing happened
+
+      fireEvent.keyDown(document, { keyCode: 39 });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 37 });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 40 });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 38 });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 39, altKey: true });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 37, altKey: true });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 40, altKey: true });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 38, altKey: true });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 90, metaKey: true });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 89, metaKey: true });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 67, metaKey: true });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 86, metaKey: true });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 27 });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+
+      fireEvent.keyDown(document, { keyCode: 46 });
+      expect(designer.currentDocument?.selection.selected[0]).toBe('page');
+    });
   });
 });

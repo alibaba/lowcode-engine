@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-types",
-  "version": "1.0.24-beta.4",
+  "version": "1.0.26-beta.0",
   "description": "Types for Ali lowCode engine",
   "files": [
     "es",

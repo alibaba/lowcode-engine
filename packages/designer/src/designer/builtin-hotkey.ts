@@ -8,7 +8,6 @@ function isInLiveEditing() {
   if (globalContext.has(Editor)) {
     return Boolean(globalContext.get(Editor).get('designer')?.project?.simulator?.liveEditing?.editing);
   }
-  return false;
 }
 
 function getNextForSelect(next: any, head?: any, parent?: any): any {
