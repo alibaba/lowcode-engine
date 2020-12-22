@@ -5,7 +5,7 @@ export default class DivView extends PureComponent {
 
   static version = '0.0.0';
 
-  render() {
+  render(): any {
     return createElement('div', this.props);
   }
 }
