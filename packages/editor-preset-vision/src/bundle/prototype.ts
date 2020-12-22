@@ -127,7 +127,11 @@ registerMetadataTransducer(
     const override = Overrides[componentName]?.override;
     if (override) {
       if (Array.isArray(override)) {
-        metadata.configure.combined = override;
+        // 替换 #props，其他暂时忽略
+        const idx = metadata.configure.combined?.findIndex(item => item.name === '#props');
+        if (idx > -1) {
+          metadata.configure.combined[idx].items = override;
+        }
       } else {
         let l = top.length;
         let item;

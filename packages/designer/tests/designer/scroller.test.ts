@@ -95,7 +95,6 @@ describe('Scroller 测试', () => {
       target.scrollTo({ left: 100, top: 100 });
       expect(target.left).toBe(100);
       expect(target.top).toBe(100);
-      console.log(target.left, target.top, target.scrollHeight, target.scrollWidth);
     });
 
   });

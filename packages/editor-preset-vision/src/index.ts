@@ -77,7 +77,7 @@ const designerHelper = {
   registerMetadataTransducer,
   addBuiltinComponentAction,
   removeBuiltinComponentAction,
-  modifyBuiltinComponentAction,
+  // modifyBuiltinComponentAction,
 };
 
 const VisualEngine = {
