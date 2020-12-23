@@ -161,7 +161,7 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
     const componentMeta = e.dragObject.nodes ? e.dragObject.nodes[0].componentMeta : null;
     if (e.dragObject.type === 'node' && componentMeta && componentMeta.isModal) {
       return designer.createLocation({
-        target: document.rootNode,
+        target: document.focusNode,
         detail: {
           type: LocationDetailType.Children,
           index: 0,
@@ -226,7 +226,7 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
             }
           }
           if (p !== node) {
-            node = p || document.rootNode;
+            node = p || document.focusNode;
             treeNode = tree.getTreeNode(node);
             focusSlots = false;
           }

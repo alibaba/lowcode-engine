@@ -12,7 +12,7 @@ import {
   NodeSchema,
 } from '@ali/lowcode-types';
 import { Project } from '../project';
-import { Node, DocumentModel, insertChildren, isRootNode, ParentalNode, TransformStage } from '../document';
+import { Node, DocumentModel, insertChildren, ParentalNode, TransformStage } from '../document';
 import { ComponentMeta } from '../component-meta';
 import { INodeSelector, Component } from '../simulator';
 import { Scroller, IScrollable } from './scroller';
@@ -36,6 +36,7 @@ export interface DesignerProps {
   suspensed?: boolean;
   componentMetadatas?: ComponentMetadata[];
   globalComponentActions?: ComponentAction[];
+  focusNodeSelector?: (rootNode: Node) => Node;
   onMount?: (designer: Designer) => void;
   onDragstart?: (e: LocateEvent) => void;
   onDrag?: (e: LocateEvent) => void;
@@ -209,6 +210,7 @@ export class Designer {
     }
     const currentSelection = this.currentSelection;
     // TODO: 避免选中 Page 组件，默认选中第一个子节点；新增规则 或 判断 Live 模式
+    // dirty code, should remove
     if (currentSelection && currentSelection.selected.length === 0 && this.simulatorProps?.designMode === 'live') {
       const rootNodeChildrens = this.currentDocument.getRoot().getChildren().children;
       if (rootNodeChildrens.length > 0) {
@@ -300,19 +302,20 @@ export class Designer {
     if (!activedDoc) {
       return null;
     }
+    const focusNode = activedDoc.focusNode;
     const nodes = activedDoc.selection.getNodes();
+    const refNode = nodes.find(item => focusNode.contains(item));
     let target;
     let index: number | undefined;
-    if (!nodes || nodes.length < 1) {
-      target = activedDoc.rootNode;
+    if (!refNode || refNode === focusNode) {
+      target = focusNode;
     } else {
-      const node = nodes[0];
-      if (isRootNode(node) || node.componentMeta.isContainer) {
-        target = node;
+      if (refNode.componentMeta.isContainer) {
+        target = refNode;
       } else {
         // FIXME!!, parent maybe null
-        target = node.parent!;
-        index = node.index + 1;
+        target = refNode.parent!;
+        index = refNode.index + 1;
       }
     }
 

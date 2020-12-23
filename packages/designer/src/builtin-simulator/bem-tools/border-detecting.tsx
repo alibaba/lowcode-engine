@@ -76,6 +76,26 @@ export class BorderDetecting extends Component<{ host: BuiltinSimulatorHost }> {
     if (!current || host.viewport.scrolling || host.liveEditing.editing) {
       return null;
     }
+
+    // rootNode, hover whole viewport
+    const focusNode = current.document.focusNode;
+
+    if (current.contains(focusNode)) {
+      const bounds = host.viewport.bounds;
+      return (
+        <BorderDetectingInstance
+          key="line-root"
+          title={current.title}
+          scale={this.scale}
+          scrollX={host.viewport.scrollX}
+          scrollY={host.viewport.scrollY}
+          rect={new DOMRect(0, 0, bounds.width, bounds.height)}
+        />
+      );
+    } else if (!focusNode.contains(current)) {
+      return null;
+    }
+
     const instances = host.getComponentInstances(current);
     if (!instances || instances.length < 1) {
       return null;

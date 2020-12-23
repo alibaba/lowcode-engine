@@ -58,13 +58,18 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
     const designer = editor.get(Designer);
     const current = designer?.currentSelection?.getNodes()?.[0];
     let node: Node | null = settings.first;
+    const focusNode = node.document.focusNode;
+
     const items = [];
     let l = 3;
     while (l-- > 0 && node) {
       const _node = node;
+      // dirty code: should remove
       if (shouldIgnoreRoot && node.isRoot()) {
-        node = null;
-        continue;
+        break;
+      }
+      if (node.contains(focusNode)) {
+        l = 0;
       }
       const props =
         l === 2

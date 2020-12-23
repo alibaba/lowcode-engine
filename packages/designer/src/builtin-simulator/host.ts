@@ -326,7 +326,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         (downEvent.target as HTMLElement).removeAttribute('for');
 
         const nodeInst = this.getNodeInstanceFromElement(downEvent.target as Element);
-        const node = nodeInst?.node || documentModel?.rootNode;
+        const focusNode = documentModel.focusNode;
+        const node = nodeInst?.node || focusNode;
         // if (!node?.isValidComponent()) {
         //   // 对于未注册组件直接返回
         //   return;
@@ -338,7 +339,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           if (!isShaken(downEvent, e)) {
             let id = node.id;
             designer.activeTracker.track({ node, instance: nodeInst?.instance });
-            if (isMulti && !isRootNode(node) && selection.has(id)) {
+            if (isMulti && !node.contains(focusNode) && selection.has(id)) {
               selection.remove(id);
             } else {
               // TODO: 避免选中 Page 组件，默认选中第一个子节点；新增规则 或 判断 Live 模式
@@ -349,7 +350,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
                   ?.getId();
                 if (firstChildId) id = firstChildId;
               }
-              selection.select(id);
+              selection.select(node.contains(focusNode) ? focusNode.id : id);
 
               // dirty code should refector
               const editor = this.designer?.editor;
@@ -365,7 +366,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           }
         };
 
-        if (isLeftButton && !isRootNode(node)) {
+        if (isLeftButton && !node.contains(focusNode)) {
           let nodes: Node[] = [node];
           let ignoreUpSelected = false;
           if (isMulti) {
@@ -375,7 +376,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
               selection.add(node.id);
               ignoreUpSelected = true;
             }
-            selection.remove(documentModel.rootNode.id);
+            selection.remove(focusNode.id);
             // 获得顶层 nodes
             nodes = selection.getTopNodes();
           } else if (selection.containsNode(node, true)) {
@@ -456,7 +457,16 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         return;
       }
       const nodeInst = this.getNodeInstanceFromElement(e.target as Element);
-      detecting.capture(nodeInst?.node || null);
+      if (nodeInst?.node) {
+        let node = nodeInst.node;
+        const focusNode = node.document.focusNode;
+        if (node.contains(focusNode)) {
+          node = focusNode;
+        }
+        detecting.capture(node);
+      } else {
+        detecting.capture(null);
+      }
       e.stopPropagation();
     };
     const leave = () => detecting.leave(this.project.currentDocument);
@@ -497,7 +507,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         if (!nodeInst) {
           return;
         }
-        const node = nodeInst.node || this.project.currentDocument?.rootNode;
+        const focusNode = this.project.currentDocument!.focusNode;
+        const node = nodeInst.node || focusNode;
         if (!node) {
           return;
         }
@@ -551,7 +562,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       if (!nodeInst) {
         return;
       }
-      const node = nodeInst.node || this.project.currentDocument?.rootNode;
+      const node = nodeInst.node || this.project.currentDocument?.focusNode;
       if (!node) {
         return;
       }
@@ -983,7 +994,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       e.dragObject.nodes[0].componentMeta.isModal
     ) {
       return this.designer.createLocation({
-        target: document.rootNode,
+        target: document.focusNode,
         detail,
         source: 'simulator' + document.id,
         event: e,
@@ -1132,7 +1143,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         }
       }
       if (p !== container) {
-        container = p || document.rootNode;
+        container = p || document.focusNode;
         drillDownExcludes.add(container);
       }
     }
@@ -1218,8 +1229,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   handleAccept({ container, instance }: DropContainer, e: LocateEvent): boolean {
     const { dragObject } = e;
     const document = this.currentDocument!;
-    if (isRootNode(container)) {
-      return document.checkDropTarget(container, dragObject as any);
+    const focusNode = document.focusNode;
+    if (isRootNode(container) || container.contains(focusNode)) {
+      return document.checkDropTarget(focusNode, dragObject as any);
     }
 
     const meta = (container as Node).componentMeta;

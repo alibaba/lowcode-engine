@@ -31,13 +31,22 @@ export default class InstanceNodeSelector extends React.Component<IProps, IState
 
   // 获取节点的父级节点（最多获取5层）
   getParentNodes = (node: Node) => {
-    const parentNodes = [];
+    const parentNodes: any[] = [];
+    const focusNode = node.document.focusNode;
+
+    if (node.contains(focusNode) || !focusNode.contains(node)) {
+      return parentNodes;
+    }
+
     let currentNode: UnionNode = node;
 
     while (currentNode && parentNodes.length < 5) {
       currentNode = currentNode.getParent();
       if (currentNode) {
         parentNodes.push(currentNode);
+      }
+      if (currentNode === focusNode) {
+        break;
       }
     }
     return parentNodes;
@@ -72,7 +81,10 @@ export default class InstanceNodeSelector extends React.Component<IProps, IState
   };
 
   renderNodes = (/* node: Node */) => {
-    const nodes = this.state.parentNodes || [];
+    const nodes = this.state.parentNodes;
+    if (!nodes || nodes.length < 1) {
+      return null;
+    }
     const children = nodes.map((node, key) => {
       return (
         <div
