@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-rax-renderer",
-  "version": "1.0.27-beta.1",
+  "version": "1.0.27-beta.2",
   "description": "Rax renderer for Ali lowCode engine",
   "main": "lib/index.js",
   "module": "lib/index.js",
@@ -37,7 +37,7 @@
     "@ali/bzb-request": "2.6.1",
     "@ali/lib-mtop": "^2.5.1",
     "@ali/lowcode-datasource-engine": "^1.0.22",
-    "@ali/lowcode-utils": "^1.0.27-beta.1",
+    "@ali/lowcode-utils": "^1.0.27-beta.2",
     "@ali/ui-table": "^1.0.1-beta.6",
     "classnames": "^2.2.6",
     "debug": "^4.1.1",
