@@ -36,7 +36,6 @@ export interface DesignerProps {
   suspensed?: boolean;
   componentMetadatas?: ComponentMetadata[];
   globalComponentActions?: ComponentAction[];
-  focusNodeSelector?: (rootNode: Node) => Node;
   onMount?: (designer: Designer) => void;
   onDragstart?: (e: LocateEvent) => void;
   onDrag?: (e: LocateEvent) => void;

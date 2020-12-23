@@ -4,26 +4,21 @@ import {
   EditorConfig,
   PluginClassSet,
   KeyType,
-  GetOptions,
   GetReturnType,
-  HookConfig,
+  HookConfig
 } from '@ali/lowcode-types';
-import { IocContext, RegisterOptions } from './di';
 import { globalLocale } from './intl';
 import * as utils from './utils';
+import { obx } from './utils';
 // import { tipHandler } from './widgets/tip/tip-handler';
 
 EventEmitter.defaultMaxListeners = 100;
-
-const NOT_FOUND = Symbol.for('not_found');
 
 export class Editor extends EventEmitter implements IEditor {
   /**
    * Ioc Container
    */
-  private context = new IocContext({
-    notFoundHandler: (/* type: KeyType */) => NOT_FOUND,
-  });
+  @obx.val private context = new Map<KeyType, any>();
 
   get locale() {
     return globalLocale.getLocale();
@@ -33,12 +28,8 @@ export class Editor extends EventEmitter implements IEditor {
 
   private hooks: HookConfig[] = [];
 
-  get<T = undefined, KeyOrType = any>(keyOrType: KeyOrType, opt?: GetOptions): GetReturnType<T, KeyOrType> | undefined {
-    const x = this.context.get<T, KeyOrType>(keyOrType, opt);
-    if (x === NOT_FOUND) {
-      return undefined;
-    }
-    return x;
+  get<T = undefined, KeyOrType = any>(keyOrType: KeyOrType): GetReturnType<T, KeyOrType> | undefined {
+    return this.context.get(keyOrType as any);
   }
 
   has(keyOrType: KeyType): boolean {
@@ -46,17 +37,13 @@ export class Editor extends EventEmitter implements IEditor {
   }
 
   set(key: KeyType, data: any): void {
-    if (this.context.has(key)) {
-      this.context.replace(key, data, undefined, true);
-    } else {
-      this.context.register(data, key);
-    }
+    this.context.set(key, data);
     this.notifyGot(key);
   }
 
   onceGot<T = undefined, KeyOrType extends KeyType = any>(keyOrType: KeyOrType): Promise<GetReturnType<T, KeyOrType>> {
-    const x = this.context.get<T, KeyOrType>(keyOrType);
-    if (x !== NOT_FOUND) {
+    const x = this.context.get(keyOrType);
+    if (x !== undefined) {
       return Promise.resolve(x);
     }
     return new Promise((resolve) => {
@@ -68,8 +55,8 @@ export class Editor extends EventEmitter implements IEditor {
     keyOrType: KeyOrType,
     fn: (data: GetReturnType<T, KeyOrType>) => void,
   ): () => void {
-    const x = this.context.get<T, KeyOrType>(keyOrType);
-    if (x !== NOT_FOUND) {
+    const x = this.context.get(keyOrType);
+    if (x !== undefined) {
       fn(x);
       return () => {};
     } else {
@@ -80,8 +67,8 @@ export class Editor extends EventEmitter implements IEditor {
     }
   }
 
-  register(data: any, key?: KeyType, options?: RegisterOptions): void {
-    this.context.register(data, key, options);
+  register(data: any, key?: KeyType): void {
+    this.context.set(key || data, data);
     this.notifyGot(key || data);
   }
 
