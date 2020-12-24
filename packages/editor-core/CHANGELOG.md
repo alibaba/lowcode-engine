@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.13.2-9"></a>
+## [0.13.2-9](http://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.2-8...v0.13.2-9) (2020-12-24)
+
+
+### Features
+
+* enhance focusSelector logic ([8ae23d0](http://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8ae23d0))
+
+
+
+
 <a name="0.13.2-8"></a>
 ## [0.13.2-8](http://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.2-7...v0.13.2-8) (2020-12-22)
 

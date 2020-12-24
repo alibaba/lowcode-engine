@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.13.2-9"></a>
+## [0.13.2-9](http://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.2-8...v0.13.2-9) (2020-12-24)
+
+
+### Features
+
+* support drill down logic ([f9d4ff6](http://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f9d4ff6))
+* update pane init function ([74a75c9](http://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/74a75c9))
+
+
+
+
 <a name="0.13.2-8"></a>
 ## [0.13.2-8](http://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.2-7...v0.13.2-8) (2020-12-22)
 
