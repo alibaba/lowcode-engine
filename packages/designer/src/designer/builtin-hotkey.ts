@@ -3,6 +3,7 @@ import { isFormEvent } from '@ali/lowcode-utils';
 import { focusing } from './focusing';
 import { insertChildren, TransformStage } from '../document';
 import clipboard from './clipboard';
+import { NodeSchema } from '@ali/lowcode-types';
 
 function isInLiveEditing() {
   if (globalContext.has(Editor)) {
@@ -155,7 +156,11 @@ hotkey.bind(['command+v', 'ctrl+v'], (e) => {
       if (!target) {
         return;
       }
-      const nodes = insertChildren(target, componentsTree, index);
+      let canAddComponentsTree = componentsTree.filter((i) => {
+        return doc.checkNestingUp(target, i);
+      })
+      if (canAddComponentsTree.length === 0) return;
+      const nodes = insertChildren(target, canAddComponentsTree, index);
       if (nodes) {
         doc.selection.selectAll(nodes.map((o) => o.id));
         setTimeout(() => designer.activeTracker.track(nodes[0]), 10);

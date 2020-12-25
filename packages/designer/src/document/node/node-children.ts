@@ -157,7 +157,7 @@ export class NodeChildren {
   /**
    * 插入一个节点，返回新长度
    */
-  insert(node: Node, at?: number | null, useMutator = true): void {
+  insert(node: Node, at?: number | null, useMutator = true, copy?: boolean): void {
     const { children } = this;
     let index = at == null || at === -1 ? children.length : at;
 
@@ -185,7 +185,11 @@ export class NodeChildren {
 
     this.emitter.emit('change');
     this.emitter.emit('insert', node);
-    // this.reportModified(node, this.owner, { type: 'insert' });
+    // if (useMutator && copy) {
+    //   this.reportModified(node, this.owner, {type: 'copy', copyIndex: index, copyNode: node })
+    // }
+    // this.reportModified(node, this.owner,)
+    this.reportModified(node, this.owner, { type: 'insert' });
 
     // check condition group
     if (node.conditionGroup) {
