@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.13.2-11"></a>
+## [0.13.2-11](http://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.2-10...v0.13.2-11) (2020-12-25)
+
+
+### Features
+
+* 1. reportModified when insert 2. handle canDropTo in hotkey ([9124aac](http://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9124aac))
+
+
+
+
 <a name="0.13.2-10"></a>
 ## [0.13.2-10](http://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.2-9...v0.13.2-10) (2020-12-24)
 
