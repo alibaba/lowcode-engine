@@ -1,7 +1,7 @@
 import { isJSBlock, isJSExpression, isJSSlot } from '@ali/lowcode-types';
 import { isPlainObject, hasOwnProperty, cloneDeep, isI18NObject, isUseI18NSetter, convertToI18NObject, isString } from '@ali/lowcode-utils';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
-import { Designer, LiveEditing, TransformStage, Node, getConvertedExtraKey } from '@ali/lowcode-designer';
+import { Designer, LiveEditing, TransformStage, Node, getConvertedExtraKey, LowCodePluginManager } from '@ali/lowcode-designer';
 import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import bus from './bus';
 import { VE_EVENTS } from './base/const';
@@ -34,6 +34,9 @@ registerDefaults();
 export const designer = new Designer({ editor });
 editor.set(Designer, designer);
 editor.set('designer', designer);
+
+export const plugins = (new LowCodePluginManager(editor)).toProxy();
+editor.set('plugins', plugins);
 
 designer.project.onCurrentDocumentChange((doc) => {
   bus.emit(VE_EVENTS.VE_PAGE_PAGE_READY);

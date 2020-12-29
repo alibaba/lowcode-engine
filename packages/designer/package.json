@@ -22,7 +22,8 @@
     "enzyme-adapter-react-16": "^1.15.5",
     "event": "^1.0.0",
     "react": "^16",
-    "react-dom": "^16.7.0"
+    "react-dom": "^16.7.0",
+    "zen-logger": "^1.1.0"
   },
   "devDependencies": {
     "@ali/lowcode-test-mate": "^1.0.1",
