@@ -5,6 +5,7 @@ packages/*/lib/
 packages/*/es/
 packages/*/dist/
 packages/*/output/
+packages/demo/
 package-lock.json
 yarn.lock
 deploy-space/packages
