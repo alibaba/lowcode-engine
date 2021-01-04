@@ -6,6 +6,7 @@ import Debug from 'debug';
 import classnames from 'classnames';
 import { isSchema, getFileCssName } from '../utils';
 import BaseEngine from './base';
+import AppContext from '../context/appContext';
 
 const debug = Debug('engine:comp');
 
@@ -66,6 +67,35 @@ export default class CompEngine extends BaseEngine {
     debug(`comp.componentDidCatch - ${this.props.__schema.fileName}`);
   }
 
+  __createContextDom = (childCtx, currCtx, props) => (
+    <AppContext.Consumer>
+      {(context) => {
+        this.context = context;
+        this.__generateCtx(currCtx);
+        this.__render();
+        return (
+          <AppContext.Provider
+            value={{
+              ...this.context,
+              ...childCtx,
+            }}
+          >
+            {context.engine.createElement(
+              props.__components.Component,
+              {
+                ...props,
+                ref: this.__getRef,
+                className: classnames(getFileCssName(props.__schema.fileName), props.className),
+                __id: props.__schema.id,
+              },
+              this.__createDom(),
+            )}
+          </AppContext.Provider>
+        );
+      }}
+    </AppContext.Consumer>
+  );
+
   render() {
     const { __schema } = this.props;
 
@@ -106,6 +136,7 @@ export default class CompEngine extends BaseEngine {
           {
             component: this,
           },
+          this.props,
         )}
       </div>
     );

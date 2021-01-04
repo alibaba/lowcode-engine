@@ -14,14 +14,4 @@ export type ExternalUtils = {
 };
 
 export type UtilItem = InternalUtils | ExternalUtils;
-export type UtilsMap = Array<
-| {
-  name: string;
-  type: 'npm';
-  content: NpmInfo;
-}
-| {
-  name: string;
-  type: '';
-}
->;
+export type UtilsMap = UtilItem[];

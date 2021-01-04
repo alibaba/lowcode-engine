@@ -9,12 +9,12 @@ import {
   registerMetadataTransducer,
   addBuiltinComponentAction,
   removeBuiltinComponentAction,
-  modifyBuiltinComponentAction,
+  // modifyBuiltinComponentAction,
 } from '@ali/lowcode-designer';
 import { createElement } from 'react';
 import { VE_EVENTS as EVENTS, VE_HOOKS as HOOKS, VERSION as Version } from './base/const';
 import Bus from './bus';
-import { skeleton, designer, editor } from './editor';
+import { skeleton, designer, editor, plugins } from './editor';
 import { Workbench } from '@ali/lowcode-editor-skeleton';
 import Panes from './panes';
 import Exchange from './exchange';
@@ -37,13 +37,14 @@ import '@ali/lowcode-editor-setters';
 
 import './vision.less';
 
-function init(container?: Element) {
+async function init(container?: Element) {
   if (!container) {
     container = document.createElement('div');
     document.body.appendChild(container);
   }
   container.id = 'engine';
 
+  await plugins.init();
   render(
     createElement(Workbench, {
       skeleton,
@@ -125,6 +126,7 @@ const VisualEngine = {
   logger,
   Symbols,
   registerMetadataTransducer,
+  plugins,
   // Flags,
 };
 
@@ -177,12 +179,12 @@ export {
   logger,
   Symbols,
   registerMetadataTransducer,
+  plugins,
 };
 
-const version = '6.0.0 (LowcodeEngine 0.9.32)';
 
 console.log(
-  `%c VisionEngine %c v${version} `,
+  '%c AliLowCodeEngine %c v1.0.28 ',
   'padding: 2px 1px; border-radius: 3px 0 0 3px; color: #fff; background: #606060; font-weight: bold;',
   'padding: 2px 1px; border-radius: 0 3px 3px 0; color: #fff; background: #42c02e; font-weight: bold;',
 );

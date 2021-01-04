@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
-lerna exec --scope @ali/lowcode-react-renderer -- npm build
-lerna exec --scope @ali/lowcode-rax-renderer -- npm build
-lerna exec --scope @ali/lowcode-ignitor -- npm start
+pkgName="@ali/lowcode-ignitor"
+
+if [ "$1" ]; then
+  pkgName="$1"
+fi
+
+lerna exec --scope $pkgName -- npm start

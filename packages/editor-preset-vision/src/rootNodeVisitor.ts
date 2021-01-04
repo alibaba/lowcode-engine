@@ -1,5 +1,5 @@
 import { findIndex } from 'lodash';
-import { DocumentModel, Node, Root } from '@ali/lowcode-designer';
+import { DocumentModel, Node, RootNode } from '@ali/lowcode-designer';
 
 /**
  * RootNodeVisitor for VisualEngine Page

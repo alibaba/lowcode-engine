@@ -178,6 +178,9 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
       name: 'style',
       title: { type: 'i18n', 'zh-CN': '行内样式', 'en-US': 'Style' },
       setter: 'StyleSetter',
+      extraProps: {
+        display: 'block',
+      },
     });
   }
   if (stylesGroup.length > 0) {

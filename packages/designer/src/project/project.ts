@@ -47,6 +47,7 @@ export class Project {
     return {
       ...this.data,
       // todo: future change this filter
+      componentsMap: this.currentDocument?.getComponentsMap(),
       componentsTree: this.documents.filter((doc) => !doc.isBlank()).map((doc) => doc.schema),
     };
   }

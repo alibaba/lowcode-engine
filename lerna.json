@@ -1,6 +1,6 @@
 {
   "lerna": "2.11.0",
-  "version": "1.0.26-beta.0",
+  "version": "1.0.27",
   "npmClient": "tyarn",
   "registry": "http://registry.npm.alibaba-inc.com",
   "useWorkspaces": true,
@@ -29,6 +29,7 @@
         "**/*.md",
         "**/test/**"
       ],
+      "message": "chore(release): publish %v",
       "conventionalCommits": true
     }
   }
