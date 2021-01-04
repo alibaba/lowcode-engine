@@ -8,5 +8,7 @@ find ./packages -type f -name "package-lock.json" -exec rm -f {} \;
 
 lerna bootstrap
 
+lerna exec --scope @ali/lowcode-types -- npm run build
+lerna exec --scope @ali/lowcode-utils -- npm run build
 lerna exec --scope @ali/lowcode-react-renderer -- npm run build
 lerna exec --scope @ali/lowcode-rax-renderer -- npm run build
