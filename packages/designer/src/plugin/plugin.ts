@@ -16,7 +16,7 @@ export class LowCodePlugin implements ILowCodePlugin {
 
   private options?: CompositeObject;
 
-  private emiter: EventEmitter;
+  private emitter: EventEmitter;
 
   private _inited: boolean;
 
@@ -27,14 +27,14 @@ export class LowCodePlugin implements ILowCodePlugin {
 
   constructor(
     manager: ILowCodePluginManager,
-    config: ILowCodePluginConfig = {},
+    config: ILowCodePluginConfig,
     options: CompositeObject = {},
   ) {
     this.manager = manager;
     this.config = config;
     this.options = options;
-    this.emiter = new EventEmitter();
-    this.logger = getLogger({ level: 'log', bizName: `designer:plugin:${config.name}` });
+    this.emitter = new EventEmitter();
+    this.logger = getLogger({ level: 'warn', bizName: `designer:plugin:${config.name}` });
   }
 
   get name() {
@@ -49,26 +49,34 @@ export class LowCodePlugin implements ILowCodePlugin {
     return this._disabled;
   }
 
-  on(...args) {
-    return this.emiter.on(...args);
+  on(event: string | symbol, listener: (...args: any[]) => void): any {
+    return this.emitter.on(event, listener);
   }
 
-  emit(...args) {
-    return this.emiter.emit(...args);
+  emit(event: string | symbol, ...args: any[]) {
+    return this.emitter.emit(event, ...args);
+  }
+
+  off(event: string | symbol, listener: (...args: any[]) => void): any {
+    return this.emitter.off(event, listener);
+  }
+
+  removeAllListeners(event: string | symbol): any {
+    return this.emitter.removeAllListeners(event);
   }
 
   async init() {
     this.logger.log('method init called');
-    await this.config.init?.call();
+    await this.config.init?.call(undefined);
     this._inited = true;
   }
 
   async destroy() {
     this.logger.log('method destroy called');
-    await this.config.destroy?.call();
+    await this.config?.destroy?.call(undefined);
   }
 
-  private setDisabled(flag = true) {
+  setDisabled(flag = true) {
     this._disabled = flag;
   }
 
@@ -77,8 +85,8 @@ export class LowCodePlugin implements ILowCodePlugin {
     const exports = this.config.exports?.();
     return new Proxy(this, {
       get(target, prop, receiver) {
-        if (hasOwnProperty.call(exports, prop)) {
-          return exports[prop];
+        if ({}.hasOwnProperty.call(exports, prop)) {
+          return exports?.[prop as string];
         }
         return Reflect.get(target, prop, receiver);
       },
