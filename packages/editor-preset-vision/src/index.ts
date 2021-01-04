@@ -11,7 +11,6 @@ import {
   removeBuiltinComponentAction,
   // modifyBuiltinComponentAction,
 } from '@ali/lowcode-designer';
-import { ILowCodePluginContext, ILowCodePluginConfig } from '@ali/lowcode-types';
 import { createElement } from 'react';
 import { VE_EVENTS as EVENTS, VE_HOOKS as HOOKS, VERSION as Version } from './base/const';
 import Bus from './bus';
@@ -183,10 +182,9 @@ export {
   plugins,
 };
 
-const version = '1.0.28';
 
 console.log(
-  `%c AliLowCodeEngine %c v${version} `,
+  '%c AliLowCodeEngine %c v1.0.28 ',
   'padding: 2px 1px; border-radius: 3px 0 0 3px; color: #fff; background: #606060; font-weight: bold;',
   'padding: 2px 1px; border-radius: 0 3px 3px 0; color: #fff; background: #42c02e; font-weight: bold;',
 );

@@ -11,7 +11,8 @@
   ],
   "scripts": {
     "start": "build-scripts start",
-    "build": "build-scripts build --skip-demo",
+    "version:update": "node ./scripts/version.js",
+    "build": "tnpm run version:update && build-scripts build --skip-demo",
     "cloud-build": "build-scripts build --skip-demo",
     "test": "build-scripts test --config build.test.json"
   },
@@ -50,6 +51,7 @@
     "build-plugin-fusion": "^0.1.0",
     "build-plugin-moment-locales": "^0.1.0",
     "build-plugin-react-app": "^1.1.2",
+    "fs-extra": "^9.0.1",
     "prop-types": "^15.7.2",
     "tsconfig-paths-webpack-plugin": "^3.2.0"
   },
