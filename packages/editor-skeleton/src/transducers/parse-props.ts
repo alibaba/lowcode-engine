@@ -69,7 +69,7 @@ function propTypeToSetter(propType: PropType): SetterType {
       const componentName = dataSource.length >= 4 ? 'SelectSetter' : 'RadioGroupSetter';
       return {
         componentName,
-        props: { dataSource },
+        props: { dataSource, options: dataSource },
         isRequired,
         initialValue: dataSource[0] ? dataSource[0].value : null,
       };
@@ -148,6 +148,8 @@ function propTypeToSetter(propType: PropType): SetterType {
         },
         isRequired,
       };
+    default:
+      // do nothing
   }
   return {
     componentName: 'MixedSetter',

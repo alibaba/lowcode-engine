@@ -17,3 +17,4 @@ export * from './node';
 export * from './transform-stage';
 export * from './code-intermediate';
 export * from './code-result';
+export * from './plugin';

@@ -640,11 +640,11 @@ export class DocumentModel {
     const map: any = {};
     for (const node of this._nodesMap.values()) {
       const { componentName } = node || {};
-      if (!map[componentName] && node?.componentMeta?.npm?.package) {
+      if (!map[componentName] && node.componentMeta?.npm?.package) {
         map[componentName] = true;
         componentsMap.push({
+          ...node.componentMeta.npm,
           componentName,
-          package: node?.componentMeta?.npm?.package,
         });
       }
     }

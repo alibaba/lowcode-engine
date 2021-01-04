@@ -29,6 +29,7 @@
         "**/*.md",
         "**/test/**"
       ],
+      "message": "chore(release): publish %v",
       "conventionalCommits": true
     }
   }
