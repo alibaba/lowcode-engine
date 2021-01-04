@@ -9,9 +9,9 @@ import {
   registerMetadataTransducer,
   addBuiltinComponentAction,
   removeBuiltinComponentAction,
-  ILowCodePluginContext,
   // modifyBuiltinComponentAction,
 } from '@ali/lowcode-designer';
+import { ILowCodePluginContext, ILowCodePluginConfig } from '@ali/lowcode-types';
 import { createElement } from 'react';
 import { VE_EVENTS as EVENTS, VE_HOOKS as HOOKS, VERSION as Version } from './base/const';
 import Bus from './bus';

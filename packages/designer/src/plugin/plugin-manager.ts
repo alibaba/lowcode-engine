@@ -1,5 +1,5 @@
 import { Editor } from '@ali/lowcode-editor-core';
-import { CompositeObject, ILowCodePlugin, ILowCodePluginConfig, ILowCodePluginManager } from '@ali/lowcode-types';
+import { CompositeObject, ILowCodePlugin, ILowCodePluginConfig, ILowCodePluginManager, ILowCodePluginContext } from '@ali/lowcode-types';
 import { LowCodePlugin } from './plugin';
 import LowCodePluginContext from './plugin-context';
 import { getLogger, invariant } from '../utils';
@@ -37,7 +37,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     logger.log('plugin registered with config:', config, ', options:', options);
   }
 
-  get(pluginName: string): ILowCodePlugin {
+  get(pluginName: string): ILowCodePlugin | undefined {
     return this.pluginsMap.get(pluginName);
   }
 
@@ -49,9 +49,9 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     return this.pluginsMap.has(pluginName);
   }
 
-  async delete(pluginName: string): boolean {
+  async delete(pluginName: string): Promise<boolean> {
     const idx = this.plugins.findIndex(plugin => plugin.name === pluginName);
-    if (idx < -1) return;
+    if (idx < -1) return false;
     const plugin = this.plugins[idx];
     await plugin.destroy();
 
@@ -60,8 +60,8 @@ export class LowCodePluginManager implements ILowCodePluginManager {
   }
 
   async init() {
-    const pluginNames = [];
-    const pluginObj = {};
+    const pluginNames: string[] = [];
+    const pluginObj: { [name: string]: ILowCodePlugin } = {};
     this.plugins.forEach(plugin => {
       pluginNames.push(plugin.name);
       pluginObj[plugin.name] = plugin;
@@ -71,7 +71,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     logger.log('load plugin sequence:', sequence);
 
     for (const pluginName of sequence) {
-      await this.pluginsMap.get(pluginName).init();
+      await this.pluginsMap.get(pluginName)!.init();
     }
   }
 
@@ -88,12 +88,12 @@ export class LowCodePluginManager implements ILowCodePluginManager {
   toProxy() {
     return new Proxy(this, {
       get(target, prop, receiver) {
-        if (target.pluginsMap.has(prop)) {
+        if (target.pluginsMap.has(prop as string)) {
           // 禁用态的插件，直接返回 undefined
-          if (target.pluginsMap.get(prop).disabled) {
+          if (target.pluginsMap.get(prop as string)!.disabled) {
             return undefined;
           }
-          return target.pluginsMap.get(prop)?.toProxy();
+          return target.pluginsMap.get(prop as string)?.toProxy();
         }
         return Reflect.get(target, prop, receiver);
       },
