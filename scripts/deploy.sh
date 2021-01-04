@@ -7,7 +7,7 @@ echo "Deploy ${PWD} -> ${BUILD_DEST} ..."
 
 cd deploy-space
 # basic environment preparing
-tnpm install @ali/tyarn lerna --install-node=14
+tnpm install @ali/tyarn lerna
 mv node_modules .env
 export PATH=$WORK_DIR/deploy-space/.env/.bin:$PATH
 
