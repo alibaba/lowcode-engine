@@ -139,6 +139,11 @@ function propTypeToSetter(propType: PropType): SetterType {
         componentName: 'FunctionSetter',
         isRequired,
       };
+    case 'color':
+      return {
+        componentName: 'ColorSetter',
+        isRequired,
+      };
     case 'oneOfType':
       return {
         componentName: 'MixedSetter',
