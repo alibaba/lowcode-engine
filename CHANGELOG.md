@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.28-beta.1"></a>
+## [1.0.28-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.27...v1.0.28-beta.1) (2021-01-04)
+
+
+### Bug Fixes
+
+* 补全 componentsMap 的信息 ([eebd4a2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/eebd4a2))
+* 适配vs-style,vs-select ([a69c1e4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a69c1e4))
+
+
+### Features
+
+* 🎸 utils 的定义中增加对于 function 类型的支持 ([29b1daf](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/29b1daf))
+* 支持新版的 plugin 机制 ([1e8fc63](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1e8fc63))
+
+
+
+
+<a name="1.0.28-beta.0"></a>
+## [1.0.28-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.27...v1.0.28-beta.0) (2021-01-04)
+
+
+### Bug Fixes
+
+* 补全 componentsMap 的信息 ([eebd4a2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/eebd4a2))
+* 适配vs-style,vs-select ([a69c1e4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a69c1e4))
+
+
+### Features
+
+* 🎸 utils 的定义中增加对于 function 类型的支持 ([29b1daf](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/29b1daf))
+* 支持新版的 plugin 机制 ([1e8fc63](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1e8fc63))
+
+
+
+
 <a name="1.0.27"></a>
 ## [1.0.27](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.27-beta.2...v1.0.27) (2020-12-24)
 
