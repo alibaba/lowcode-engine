@@ -9,7 +9,8 @@ const reBranchVersion = /^(?:[a-z]+\/)(\d+\.\d+\.\d+)$/im;
 
 const match = reBranchVersion.exec(gitBranchName);
 if (!match) {
-  throw new Error(`[checkversion] gitBranchName: ${gitBranchName}`);
+  console.warn(`[checkversion] gitBranchName: ${gitBranchName}`);
+  return;
 }
 
 const releaseVersion = match[1];
