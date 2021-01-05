@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-editor-preset-general",
-  "version": "1.0.28-beta.2",
+  "version": "1.0.29",
   "description": "Ali General Editor Preset",
   "main": "lib/index.js",
   "files": [
@@ -14,12 +14,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@ali/lowcode-editor-core": "^1.0.28-beta.2",
-    "@ali/lowcode-editor-skeleton": "^1.0.28-beta.2",
-    "@ali/lowcode-plugin-designer": "^1.0.28-beta.2",
-    "@ali/lowcode-plugin-outline-pane": "^1.0.28-beta.2",
-    "@ali/lowcode-types": "^1.0.28-beta.2",
-    "@ali/lowcode-utils": "^1.0.28-beta.2",
+    "@ali/lowcode-editor-core": "^1.0.29",
+    "@ali/lowcode-editor-skeleton": "^1.0.29",
+    "@ali/lowcode-plugin-designer": "^1.0.29",
+    "@ali/lowcode-plugin-outline-pane": "^1.0.29",
+    "@ali/lowcode-types": "^1.0.29",
+    "@ali/lowcode-utils": "^1.0.29",
     "@alifd/next": "^1.19.12",
     "@alife/theme-lowcode-dark": "^0.1.0",
     "@alife/theme-lowcode-light": "^0.1.0",
