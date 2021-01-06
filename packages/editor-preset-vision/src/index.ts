@@ -182,9 +182,10 @@ export {
   plugins,
 };
 
+const version = '1.0.29';
 
 console.log(
-  '%c AliLowCodeEngine %c v1.0.28 ',
+  `%c AliLowCodeEngine %c v${version} `,
   'padding: 2px 1px; border-radius: 3px 0 0 3px; color: #fff; background: #606060; font-weight: bold;',
   'padding: 2px 1px; border-radius: 0 3px 3px 0; color: #fff; background: #42c02e; font-weight: bold;',
 );
