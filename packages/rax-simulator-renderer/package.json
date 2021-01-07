@@ -57,5 +57,5 @@
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"
   },
-  "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-rax-simulator-renderer@1.0.27/build/index.html"
+  "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-rax-simulator-renderer@1.0.28-beta.1/build/index.html"
 }
