@@ -120,6 +120,7 @@ export class NodeChildren {
    * 删除一个节点
    */
   delete(node: Node, purge = false, useMutator = true): boolean {
+    node.internalPurgeStart();
     if (node.isParental()) {
       foreachReverse(node.children, (subNode: Node) => {
         subNode.remove(useMutator, purge);
@@ -145,7 +146,7 @@ export class NodeChildren {
     document.destroyNode(node);
     this.emitter.emit('change');
     if (useMutator) {
-      this.reportModified(node, this.owner, { type: 'remove', removeIndex: i, removeNode: node });
+      this.reportModified(node, this.owner, { type: 'remove', propagated: false, isSubDeleting: this.owner.inPurging, removeIndex: i, removeNode: node });
     }
     // purge 为 true 时，已在 internalSetParent 中删除了子节点
     if (i > -1 && !purge) {

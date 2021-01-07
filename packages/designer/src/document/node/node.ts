@@ -773,6 +773,18 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     // this.document.destroyNode(this);
   }
 
+  private purging: boolean = false;
+  internalPurgeStart() {
+    this.purging = true;
+  }
+
+  /**
+   * 是否已销毁
+   */
+  get inPurging() {
+    return this.purging;
+  }
+
   /**
    * 是否可执行某action
    */
