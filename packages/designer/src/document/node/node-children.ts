@@ -353,14 +353,6 @@ export class NodeChildren {
     return 'Array';
   }
 
-  // /**
-  //  * @deprecated
-  //  * 为了兼容vision体系存量api
-  //  */
-  // getChildrenArray() {
-  //   return this.children;
-  // }
-
   private reportModified(node: Node, owner: Node, options = {}) {
     if (!node) {
       return;
@@ -378,7 +370,7 @@ export class NodeChildren {
     }
 
     if (owner.parent && !owner.parent.isRoot()) {
-      this.reportModified(node, owner.parent, options);
+      this.reportModified(node, owner.parent, { ...options, propagated: true, });
     }
   }
 }
