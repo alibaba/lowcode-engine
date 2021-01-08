@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`deepValueParser 测试 designMode: design 1`] = `
+Object {
+  "a": "111",
+  "arr": Array [
+    "111",
+    "111",
+  ],
+  "b": "222",
+  "c": "中文",
+  "slot": Object {
+    "type": "JSSlot",
+    "value": Array [
+      Object {
+        "componentName": "Div",
+        "props": Object {},
+      },
+    ],
+  },
+}
+`;
+
+exports[`deepValueParser 测试 designMode: live 1`] = `
+Object {
+  "a": Object {
+    "mock": "111",
+    "type": "JSExpression",
+    "value": "state.a",
+  },
+  "arr": Array [
+    Object {
+      "mock": "111",
+      "type": "JSExpression",
+      "value": "state.a",
+    },
+    Object {
+      "mock": "111",
+      "type": "JSExpression",
+      "value": "state.b",
+    },
+  ],
+  "b": Object {
+    "mock": "222",
+    "type": "JSExpression",
+    "value": "state.b",
+  },
+  "c": "中文",
+}
+`;
