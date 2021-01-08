@@ -70,6 +70,8 @@ export default class PanelDock implements IWidget {
 
   private _panel?: Panel;
 
+  @obx.ref private _disabled = false;
+
   @computed get panel() {
     return this._panel || this.skeleton.getPanel(this.panelName);
   }
@@ -122,8 +124,26 @@ export default class PanelDock implements IWidget {
     this.setVisible(!this._visible);
   }
 
+  private setDisabled(flag: boolean) {
+    this._disabled = flag;
+  }
+
+  disable() {
+    this.setDisabled(true);
+  }
+
+  enable() {
+    this.setDisabled(false);
+  }
+
+  get disabled(): boolean {
+    return this._disabled;
+  }
+
   togglePanel() {
-    this.panel?.toggle();
+    if (!this._disabled) {
+      this.panel?.toggle();
+    }
   }
 
   getName() {

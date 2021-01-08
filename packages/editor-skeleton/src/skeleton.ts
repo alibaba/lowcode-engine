@@ -247,6 +247,10 @@ export class Skeleton {
     return widget;
   }
 
+  getWidget(name: string): IWidget | undefined {
+    return this.widgets.find(widget => widget.name === name);
+  }
+
   createPanel(config: PanelConfig) {
     config = this.parseConfig(config);
     const panel = new Panel(this, config);

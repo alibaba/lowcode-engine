@@ -73,6 +73,7 @@ export class PanelDockView extends Component<DockProps & { dock: PanelDock }> {
       ...props,
       className: classNames(className, {
         actived: dock.actived,
+        disabled: dock.disabled,
       }),
       onClick: () => {
         onClick && onClick();
