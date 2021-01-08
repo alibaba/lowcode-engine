@@ -4,7 +4,7 @@ import Icons from '@ali/ve-icons';
 import logger from '@ali/vu-logger';
 import { render } from 'react-dom';
 import I18nUtil from './i18n-util';
-import { hotkey as Hotkey, monitor } from '@ali/lowcode-editor-core';
+import { hotkey as Hotkey, monitor, registerSetter } from '@ali/lowcode-editor-core';
 import {
   registerMetadataTransducer,
   addBuiltinComponentAction,
@@ -33,7 +33,8 @@ import DragEngine from './drag-engine';
 import Viewport from './viewport';
 import Project from './project';
 import Symbols from './symbols';
-import '@ali/lowcode-editor-setters';
+import builtinSetters from '@ali/lowcode-editor-setters';
+registerSetter(builtinSetters);
 
 import './vision.less';
 
