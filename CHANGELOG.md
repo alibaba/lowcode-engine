@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.30-beta.6"></a>
+## [1.0.30-beta.6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.29...v1.0.30-beta.6) (2021-01-09)
+
+
+### Bug Fixes
+
+* regist builtinSetters ([87f5f01](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/87f5f01))
+* 修复 preset-vision 版本号自动生成 ([1cfbe45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1cfbe45))
+
+
+### Features
+
+* 支持 PanelDock 的 disable / enable 方法, 可用于初始化前后的开闭操作 ([60b12a4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/60b12a4))
+
+
+
+
 <a name="1.0.29"></a>
 ## [1.0.29](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.28-beta.2...v1.0.29) (2021-01-05)
 
