@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.30-beta.7"></a>
+## [1.0.30-beta.7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.30-beta.6...v1.0.30-beta.7) (2021-01-11)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-editor-preset-vision
+
 <a name="1.0.30-beta.6"></a>
 ## [1.0.30-beta.6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.29...v1.0.30-beta.6) (2021-01-09)
 
