@@ -125,6 +125,7 @@ export default class PanelDock implements IWidget {
   }
 
   private setDisabled(flag: boolean) {
+    if (this._disabled === flag) return;
     this._disabled = flag;
   }
 
@@ -141,9 +142,7 @@ export default class PanelDock implements IWidget {
   }
 
   togglePanel() {
-    if (!this._disabled) {
-      this.panel?.toggle();
-    }
+    this.panel?.toggle();
   }
 
   getName() {

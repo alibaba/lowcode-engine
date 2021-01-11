@@ -24,6 +24,8 @@ export default class Dock implements IWidget {
     return this._visible;
   }
 
+  @obx.ref private _disabled = false;
+
   get content(): ReactNode {
     return createElement(WidgetView, {
       widget: this,
@@ -74,6 +76,23 @@ export default class Dock implements IWidget {
     } else if (this.inited) {
       this._visible = false;
     }
+  }
+
+  private setDisabled(flag: boolean) {
+    if (this._disabled === flag) return;
+    this._disabled = flag;
+  }
+
+  disable() {
+    this.setDisabled(true);
+  }
+
+  enable() {
+    this.setDisabled(false);
+  }
+
+  get disabled(): boolean {
+    return this._disabled;
   }
 
   getContent() {

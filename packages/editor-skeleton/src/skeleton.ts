@@ -31,6 +31,8 @@ export enum SkeletonEvents {
   PANEL_HIDE = 'skeleton.panel.hide',
   WIDGET_SHOW = 'skeleton.widget.show',
   WIDGET_HIDE = 'skeleton.widget.hide',
+  WIDGET_DISABLE = 'skeleton.widget.disable',
+  WIDGET_ENABLE = 'skeleton.widget.enable',
 }
 
 export class Skeleton {

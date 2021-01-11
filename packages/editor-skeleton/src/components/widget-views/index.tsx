@@ -73,7 +73,6 @@ export class PanelDockView extends Component<DockProps & { dock: PanelDock }> {
       ...props,
       className: classNames(className, {
         actived: dock.actived,
-        disabled: dock.disabled,
       }),
       onClick: () => {
         onClick && onClick();
@@ -260,13 +259,16 @@ export class WidgetView extends Component<{ widget: IWidget }> {
 
   componentDidMount() {
     this.checkVisible();
+    this.checkDisabled();
   }
 
   componentDidUpdate() {
     this.checkVisible();
+    this.checkDisabled();
   }
 
   private lastVisible = false;
+  private lastDisabled = false;
 
   checkVisible() {
     const { widget } = this.props;
@@ -281,10 +283,30 @@ export class WidgetView extends Component<{ widget: IWidget }> {
     }
   }
 
+  checkDisabled() {
+    const { widget } = this.props;
+    const currentDisabled = widget.disabled;
+    if (currentDisabled !== this.lastDisabled) {
+      this.lastDisabled = currentDisabled;
+      if (this.lastDisabled) {
+        widget.skeleton.postEvent(SkeletonEvents.WIDGET_DISABLE, widget.name, widget);
+      } else {
+        widget.skeleton.postEvent(SkeletonEvents.WIDGET_ENABLE, widget.name, widget);
+      }
+    }
+  }
+
   render() {
     const { widget } = this.props;
     if (!widget.visible) {
       return null;
+    }
+    if (widget.disabled) {
+      return (
+        <div className="lc-widget-disabled">
+          {widget.body}
+        </div>
+      );
     }
     return widget.body;
   }

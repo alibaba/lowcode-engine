@@ -12,6 +12,7 @@ export interface IWidget {
   readonly align?: string;
   readonly isWidget: true;
   readonly visible: boolean;
+  readonly disabled: boolean;
   readonly body: ReactNode;
   readonly skeleton: Skeleton;
   readonly config: IWidgetBaseConfig;
@@ -21,6 +22,8 @@ export interface IWidget {
   show(): void;
   hide(): void;
   toggle(): void;
+  enable?(): void;
+  disable?(): void;
 }
 
 export default class Widget implements IWidget {
@@ -39,6 +42,8 @@ export default class Widget implements IWidget {
   }
 
   @obx.ref inited = false;
+
+  @obx.ref private _disabled = false;
 
   private _body: ReactNode;
 
@@ -108,6 +113,23 @@ export default class Widget implements IWidget {
 
   toggle() {
     this.setVisible(!this._visible);
+  }
+
+  private setDisabled(flag: boolean) {
+    if (this._disabled === flag) return;
+    this._disabled = flag;
+  }
+
+  disable() {
+    this.setDisabled(true);
+  }
+
+  enable() {
+    this.setDisabled(false);
+  }
+
+  get disabled(): boolean {
+    return this._disabled;
   }
 }
 
