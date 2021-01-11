@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-engine",
-  "version": "1.0.29",
+  "version": "1.0.30-beta.8",
   "description": "Universal API for AliLowCode engine",
   "main": "lib/index.js",
   "private": true,
