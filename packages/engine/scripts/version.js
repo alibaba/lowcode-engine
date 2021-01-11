@@ -15,8 +15,15 @@ if (!match) {
 
 const releaseVersion = match[1];
 
-const indexFile = join(__dirname, '../src/index.ts');
+const distDir = join(__dirname, '../dist');
 
-const indexContent = fse.readFileSync(indexFile, 'utf-8');
+const distFile = join(distDir, 'engine.js');
 
-fse.writeFileSync(indexFile, indexContent.replace('{VERSION}', releaseVersion));
+if (!fse.existsSync(distFile)) {
+  console.warn('dist dir doesn\'t exists');
+  return;
+}
+
+const indexContent = fse.readFileSync(distFile, 'utf-8');
+
+fse.writeFileSync(distFile, indexContent.replace('{{VERSION_PLACEHOLDER}}', releaseVersion));

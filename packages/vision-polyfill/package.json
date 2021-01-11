@@ -1,5 +1,5 @@
 {
-  "name": "@ali/lowcode-editor-preset-vision",
+  "name": "@ali/lowcode-vision-polyfill",
   "version": "1.0.29",
   "description": "Vision Polyfill for Ali lowCode engine",
   "main": "lib/index.js",

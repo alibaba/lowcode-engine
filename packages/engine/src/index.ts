@@ -80,7 +80,7 @@ export async function init(container?: Element) {
   );
 }
 
-const version = '{VERSION}';
+const version = '{{VERSION_PLACEHOLDER}}';
 
 console.log(
   `%c AliLowCodeEngine %c v${version} `,

@@ -183,7 +183,7 @@ export {
   plugins,
 };
 
-const version = '1.0.29';
+const version = '{{VERSION_PLACEHOLDER}}';
 
 console.log(
   `%c AliLowCodeEngine %c v${version} `,
