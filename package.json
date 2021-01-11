@@ -14,7 +14,6 @@
     "clean": "rm -rf ./packages/*/lib ./packages/*/es ./packages/*/dist ./packages/*/build",
     "lint": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet",
     "lint:fix": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet --fix",
-    "watchdog:build": "node ./scripts/watchdog.js",
     "pub": "tnpm run watchdog:build && lerna publish --force-publish --cd-version patch",
     "pub:prepatch": "tnpm run watchdog:build && lerna publish --force-publish --cd-version prepatch --npm-tag beta --preid beta",
     "pub:prerelease": "tnpm run watchdog:build && lerna publish --force-publish --cd-version prerelease --npm-tag beta --preid beta",
@@ -24,6 +23,7 @@
     "start:server": "./scripts/start-server.sh",
     "test": "lerna run test --stream",
     "test:snapshot": "lerna run test:snapshot",
+    "watchdog:build": "node ./scripts/watchdog.js",
     "xima:fix": "xima fix",
     "xima:scan": "xima scan"
   },

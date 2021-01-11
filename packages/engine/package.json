@@ -3,6 +3,7 @@
   "version": "1.0.30-beta.8",
   "description": "Universal API for AliLowCode engine",
   "main": "lib/index.js",
+  "module": "es/index.js",
   "private": true,
   "files": [
     "dist",

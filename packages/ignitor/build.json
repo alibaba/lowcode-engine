@@ -1,7 +1,7 @@
 {
   "entry": {
     "editor-preset-vision": "../editor-preset-vision/src/index.ts",
-    "engine": "../engine/src/index.ts",
+    "engine": "../engine/src/port.ts",
     "vision-polyfill": "../vision-polyfill/src/index.ts",
     "react-simulator-renderer": "../react-simulator-renderer/src/index.ts",
     "rax-simulator-renderer": "../rax-simulator-renderer/src/index.ts"
