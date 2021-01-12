@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-engine",
-  "version": "1.0.30-beta.9",
+  "version": "1.0.30-beta.10",
   "description": "Universal API for AliLowCode engine",
   "main": "lib/engine.js",
   "module": "es/engine.js",
