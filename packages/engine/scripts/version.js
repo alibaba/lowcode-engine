@@ -4,7 +4,7 @@ const { execSync } = require('child_process');
 const { join } = require('path');
 const fse = require('fs-extra');
 
-const gitBranchName = execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf-8' });
+const gitBranchName = process.env.BUILD_GIT_BRANCH || execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf-8' });
 const reBranchVersion = /^(?:[a-z]+\/)(\d+\.\d+\.\d+)$/im;
 
 const match = reBranchVersion.exec(gitBranchName);
