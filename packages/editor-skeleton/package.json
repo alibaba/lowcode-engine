@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-editor-skeleton",
-  "version": "1.0.28-beta.1",
+  "version": "1.0.28-beta.10",
   "description": "alibaba lowcode editor skeleton",
   "main": "lib/index.js",
   "module": "es/index.js",
