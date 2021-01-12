@@ -4,7 +4,6 @@
   "description": "Universal API for AliLowCode engine",
   "main": "lib/engine.js",
   "module": "es/engine.js",
-  "private": true,
   "files": [
     "dist",
     "es",

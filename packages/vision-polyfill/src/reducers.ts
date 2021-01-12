@@ -5,7 +5,7 @@ import bus from './bus';
 import { VE_EVENTS } from './base/const';
 
 import { deepValueParser } from './deep-value-parser';
-import { liveEditingRule, liveEditingSaveHander } from './vc-live-editing';
+// import { liveEditingRule, liveEditingSaveHander } from './vc-live-editing';
 import {
   compatibleReducer,
   upgradePageLifeCyclesReducer,
@@ -20,8 +20,8 @@ import {
 
 const { LiveEditing, TransformStage } = designerHelper;
 
-LiveEditing.addLiveEditingSpecificRule(liveEditingRule);
-LiveEditing.addLiveEditingSaveHandler(liveEditingSaveHander);
+// LiveEditing.addLiveEditingSpecificRule(liveEditingRule);
+// LiveEditing.addLiveEditingSaveHandler(liveEditingSaveHander);
 
 designer.project.onCurrentDocumentChange((doc) => {
   bus.emit(VE_EVENTS.VE_PAGE_PAGE_READY);

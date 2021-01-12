@@ -33,24 +33,6 @@ import './vision.less';
 
 invariant((window as any).AliLowCodeEngine, 'AliLowCodeEngine is required, since vision polyfill is totally based on AliLowCodeEngine');
 
-// async function init(container?: Element) {
-//   if (!container) {
-//     container = document.createElement('div');
-//     document.body.appendChild(container);
-//   }
-//   container.id = 'engine';
-
-//   await plugins.init();
-//   render(
-//     createElement(Workbench, {
-//       skeleton,
-//       className: 'engine-main',
-//       topAreaItemClassName: 'engine-actionitem',
-//     }),
-//     container,
-//   );
-// }
-
 /**
  * VE.ui.xxx
  *

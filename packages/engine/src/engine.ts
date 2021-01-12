@@ -1,6 +1,7 @@
 import { createElement } from 'react';
 import { render } from 'react-dom';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
+import builtinSetters from '@ali/lowcode-editor-setters';
 import { Designer, LiveEditing, TransformStage, Node, getConvertedExtraKey, LowCodePluginManager } from '@ali/lowcode-designer';
 import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import * as editorHelper from '@ali/lowcode-editor-core';
@@ -8,6 +9,9 @@ import * as designerHelper from '@ali/lowcode-designer';
 import * as skeletonHelper from '@ali/lowcode-editor-skeleton';
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
 import { Skeleton, SettingsPrimaryPane, registerDefaults } from '@ali/lowcode-editor-skeleton';
+import { liveEditingRule, liveEditingSaveHander } from './live-editing';
+
+editorHelper.registerSetter(builtinSetters);
 
 const editor = new Editor();
 globalContext.register(editor, Editor);
@@ -113,6 +117,7 @@ export {
   // store,
   hotkey,
   monitor,
+  init,
 };
 
 export async function init(container?: Element) {
@@ -133,3 +138,6 @@ export async function init(container?: Element) {
     engineContainer,
   );
 }
+
+LiveEditing.addLiveEditingSpecificRule(liveEditingRule);
+LiveEditing.addLiveEditingSaveHandler(liveEditingSaveHander);
