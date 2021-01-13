@@ -3,7 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-  <a name="1.0.30-beta.13"></a>
+      <a name="1.0.30-beta.14"></a>
+## [1.0.30-beta.14](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.30-beta.13...v1.0.30-beta.14) (2021-01-13)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-rax-renderer
+
+      <a name="1.0.30-beta.13"></a>
 ## [1.0.30-beta.13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.30-beta.12...v1.0.30-beta.13) (2021-01-13)
 
 
@@ -11,7 +19,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @ali/lowcode-rax-renderer
 
-  <a name="1.0.30-beta.12"></a>
+<a name="1.0.30-beta.12"></a>
 ## [1.0.30-beta.12](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.30-beta.11...v1.0.30-beta.12) (2021-01-13)
 
 
