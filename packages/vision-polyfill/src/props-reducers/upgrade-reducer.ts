@@ -3,9 +3,9 @@ import {
 } from '@ali/lowcode-utils';
 import { isJSBlock } from '@ali/lowcode-types';
 import { isVariable } from '../utils';
-import { designerHelper } from '@ali/lowcode-engine';
+import { designerCabin } from '@ali/lowcode-engine';
 
-const { getConvertedExtraKey } = designerHelper;
+const { getConvertedExtraKey } = designerCabin;
 
 export function upgradePropsReducer(props: any) {
   if (!props || !isPlainObject(props)) {

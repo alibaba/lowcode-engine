@@ -1,6 +1,6 @@
 import { Editor, Hotkey, hotkey } from '@ali/lowcode-editor-core';
 import { Skeleton } from '@ali/lowcode-editor-skeleton';
-import { ILowCodePluginConfig, ILowCodePluginManager, ILowCodePluginContext, IDesignerHelper } from '@ali/lowcode-types';
+import { ILowCodePluginConfig, ILowCodePluginManager, ILowCodePluginContext, IDesignerCabin, ILowCodePlugin } from '@ali/lowcode-types';
 import { getLogger, Logger } from '../utils';
 import {
   registerMetadataTransducer,
@@ -16,7 +16,7 @@ export default class PluginContext implements ILowCodePluginContext {
   hotkey: Hotkey;
   logger: Logger;
   plugins: ILowCodePluginManager;
-  designerHelper: IDesignerHelper;
+  designerCabin: IDesignerCabin;
 
   constructor(editor: Editor, plugins: ILowCodePluginManager) {
     this.editor = editor;
@@ -24,10 +24,10 @@ export default class PluginContext implements ILowCodePluginContext {
     this.skeleton = editor.get('skeleton')!;
     this.hotkey = hotkey;
     this.plugins = plugins;
-    this.designerHelper = this.createDesignerHelper();
+    this.designerCabin = this.createDesignerCabin();
   }
 
-  private createDesignerHelper(): IDesignerHelper {
+  private createDesignerCabin(): IDesignerCabin {
     return {
       registerMetadataTransducer,
       addBuiltinComponentAction,

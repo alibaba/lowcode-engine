@@ -1,8 +1,8 @@
 import { EventEmitter } from 'events';
 
-import { editorHelper } from '@ali/lowcode-engine';
+import { editorCabin } from '@ali/lowcode-engine';
 
-const { obx } = editorHelper;
+const { obx } = editorCabin;
 
 let keybase = Date.now();
 function keygen(maps) {

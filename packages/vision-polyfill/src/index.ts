@@ -7,7 +7,7 @@ import logger from '@ali/vu-logger';
 import I18nUtil from './i18n-util';
 import { VE_EVENTS as EVENTS, VE_HOOKS as HOOKS, VERSION as Version } from './base/const';
 import Bus from './bus';
-import { skeleton, designer, editor, plugins, init, hotkey as Hotkey, monitor, designerHelper } from '@ali/lowcode-engine';
+import { skeleton, designer, editor, plugins, init, hotkey as Hotkey, monitor, designerCabin } from '@ali/lowcode-engine';
 import Panes from './panes';
 import Exchange from './exchange';
 import context from './context';
@@ -26,7 +26,6 @@ import Viewport from './viewport';
 import Project from './project';
 import Symbols from './symbols';
 import { invariant } from './utils';
-import '@ali/lowcode-editor-setters';
 import './reducers';
 
 import './vision.less';
@@ -52,17 +51,11 @@ const modules = {
   Prop,
 };
 
-// const designerHelper = {
-//   registerMetadataTransducer,
-//   addBuiltinComponentAction,
-//   removeBuiltinComponentAction,
-//   // modifyBuiltinComponentAction,
-// };
-const { registerMetadataTransducer } = designerHelper;
+const { registerMetadataTransducer } = designerCabin;
 
 const VisualEngine = {
   designer,
-  designerHelper,
+  designerCabin,
   editor,
   skeleton,
   /**
@@ -115,7 +108,7 @@ export default VisualEngine;
 
 export {
   designer,
-  designerHelper,
+  designerCabin,
   editor,
   skeleton,
   /**

@@ -1,7 +1,7 @@
-import { designer, designerHelper } from '@ali/lowcode-engine';
+import { designer, designerCabin } from '@ali/lowcode-engine';
 import { isPrototype } from './bundle/prototype';
 
-const { DragObjectType, isNode, isDragNodeDataObject } = designerHelper;
+const { DragObjectType, isNode, isDragNodeDataObject } = designerCabin;
 const { dragon } = designer;
 const DragEngine = {
   from(shell: Element, boost: (e: MouseEvent) => any): any {

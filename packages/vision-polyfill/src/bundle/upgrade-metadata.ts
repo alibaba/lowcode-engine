@@ -1,10 +1,10 @@
 import { ComponentType, ReactElement, isValidElement, ComponentClass } from 'react';
 import { isPlainObject, uniqueId } from '@ali/lowcode-utils';
 import { isI18nData, SettingTarget, InitialItem, FilterItem, isJSSlot, ProjectSchema, AutorunItem, isJSBlock } from '@ali/lowcode-types';
-import { editorHelper, designerHelper } from '@ali/lowcode-engine';
+import { editorCabin, designerCabin } from '@ali/lowcode-engine';
 
-const { SettingField } = designerHelper;
-const { untracked } = editorHelper;
+const { SettingField } = designerCabin;
+const { untracked } = editorCabin;
 
 type Field = SettingTarget;
 

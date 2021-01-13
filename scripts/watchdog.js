@@ -15,7 +15,7 @@ dirs
     files.forEach(file => {
       const fileDir = join(pkgDir, file);
       if (!fs.existsSync(fileDir)) {
-        throw new Error(`${fileDir} not exists, plz run build`);
+        throw new Error(`${fileDir} does not exist, plz run build`);
       }
     });
   });

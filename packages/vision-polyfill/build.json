@@ -15,6 +15,7 @@
           "@ali/lowcode-engine": "var window.AliLowCodeEngine",
           "@ali/visualengine-utils": "var window.VisualEngineUtils",
           "rax": "var window.Rax",
+          "moment": "var window.moment",
           "monaco-editor/esm/vs/editor/editor.api": "var window.monaco",
           "monaco-editor/esm/vs/editor/editor.main.js": "var window.monaco"
         }

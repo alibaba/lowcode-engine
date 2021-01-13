@@ -1,4 +1,4 @@
-import { EditingTarget, Node as DocNode, SaveHandler } from '@ali/lowcode-designer';
+import { EditingTarget, Node as DocNode, SaveHandler, LiveEditing } from '@ali/lowcode-designer';
 import { isJSExpression } from '@ali/lowcode-types';
 
 function getText(node: DocNode, prop: string) {
@@ -78,3 +78,6 @@ export const liveEditingSaveHander: SaveHandler = {
 // 非文本编辑
 //  国际化数据，改变当前
 //  JSExpression, 改变 mock 或 弹出绑定变量
+
+LiveEditing.addLiveEditingSpecificRule(liveEditingRule);
+LiveEditing.addLiveEditingSaveHandler(liveEditingSaveHander);

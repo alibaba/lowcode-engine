@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.30-beta.15"></a>
+## [1.0.30-beta.15](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.30-beta.14...v1.0.30-beta.15) (2021-01-13)
+
+
+### Features
+
+* 将 typings 在顶层导出 ([9d9b6f4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9d9b6f4))
+
+
+
+
 <a name="1.0.30-beta.14"></a>
 ## [1.0.30-beta.14](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.30-beta.13...v1.0.30-beta.14) (2021-01-13)
 

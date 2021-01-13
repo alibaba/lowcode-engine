@@ -1,6 +1,6 @@
 import { isJSBlock, isJSExpression, isJSSlot } from '@ali/lowcode-types';
 import { isPlainObject, hasOwnProperty, cloneDeep, isI18NObject, isUseI18NSetter, convertToI18NObject, isString } from '@ali/lowcode-utils';
-import { editor, designer, designerHelper } from '@ali/lowcode-engine';
+import { editor, designer, designerCabin } from '@ali/lowcode-engine';
 import bus from './bus';
 import { VE_EVENTS } from './base/const';
 
@@ -18,7 +18,7 @@ import {
   nodeTopFixedReducer,
 } from './props-reducers';
 
-const { LiveEditing, TransformStage } = designerHelper;
+const { LiveEditing, TransformStage } = designerCabin;
 
 // LiveEditing.addLiveEditingSpecificRule(liveEditingRule);
 // LiveEditing.addLiveEditingSaveHandler(liveEditingSaveHander);

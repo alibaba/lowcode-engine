@@ -12,15 +12,15 @@ import {
   upgradeConfigure,
 } from './upgrade-metadata';
 import { accessLibrary } from '@ali/lowcode-utils';
-import { designer, designerHelper, editorHelper } from '@ali/lowcode-engine';
+import { designer, designerCabin, editorCabin } from '@ali/lowcode-engine';
 
 const {
   addBuiltinComponentAction,
   isComponentMeta,
   registerMetadataTransducer,
   TransformStage,
-} = designerHelper;
-const { intl } = editorHelper;
+} = designerCabin;
+const { intl } = editorCabin;
 
 const GlobalPropsConfigure: Array<{
   position: string;

@@ -1,11 +1,11 @@
 import { Overlay } from '@alifd/next';
 import React from 'react';
 import { Node, ParentalNode } from '@ali/lowcode-designer';
-import { editorHelper } from '@ali/lowcode-engine';
+import { editorCabin } from '@ali/lowcode-engine';
 import './index.less';
 
 const { Popup } = Overlay;
-const { Title } = editorHelper;
+const { Title } = editorCabin;
 
 export interface IProps {
   node: Node;

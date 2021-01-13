@@ -1,32 +1,41 @@
 import { createElement } from 'react';
 import { render } from 'react-dom';
 import { globalContext, Editor } from '@ali/lowcode-editor-core';
-import builtinSetters from '@ali/lowcode-editor-setters';
-import { Designer, LiveEditing, TransformStage, Node, getConvertedExtraKey, LowCodePluginManager } from '@ali/lowcode-designer';
-import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
-import * as editorHelper from '@ali/lowcode-editor-core';
-import * as designerHelper from '@ali/lowcode-designer';
-import * as skeletonHelper from '@ali/lowcode-editor-skeleton';
-import DesignerPlugin from '@ali/lowcode-plugin-designer';
+import * as editorCabin from '@ali/lowcode-editor-core';
+import {
+  Designer,
+  LowCodePluginManager,
+} from '@ali/lowcode-designer';
+import * as designerCabin from '@ali/lowcode-designer';
 import { Skeleton, SettingsPrimaryPane, registerDefaults } from '@ali/lowcode-editor-skeleton';
-import { liveEditingRule, liveEditingSaveHander } from './live-editing';
+import * as skeletonCabin from '@ali/lowcode-editor-skeleton';
+import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
+import DesignerPlugin from '@ali/lowcode-plugin-designer';
+import builtinSetters from '@ali/lowcode-editor-setters';
+import './modules/live-editing';
 
-editorHelper.registerSetter(builtinSetters);
+export * from './modules/editor-types';
+export * from './modules/skeleton-types';
+export * from './modules/designer-types';
+export * from './modules/lowcode-types';
+
+const { hotkey, monitor, getSetter, registerSetter } = editorCabin;
+registerSetter(builtinSetters as any);
+registerDefaults();
 
 const editor = new Editor();
 globalContext.register(editor, Editor);
 
 const skeleton = new Skeleton(editor);
 editor.set(Skeleton, skeleton);
-editor.set('skeleton', skeleton);
-registerDefaults();
+editor.set('skeleton' as any, skeleton);
 
 const designer = new Designer({ editor });
 editor.set(Designer, designer);
-editor.set('designer', designer);
+editor.set('designer' as any, designer);
 
-const plugins = (new LowCodePluginManager(editor)).toProxy();
-editor.set('plugins', plugins);
+const plugins = new LowCodePluginManager(editor).toProxy();
+editor.set('plugins' as any, plugins);
 
 skeleton.add({
   area: 'mainArea',
@@ -65,8 +74,7 @@ skeleton.add({
 });
 
 const { project, currentSelection: selection } = designer;
-const { hotkey, monitor, getSetter, registerSetter } = editorHelper;
-const { Workbench } = skeletonHelper;
+const { Workbench } = skeletonCabin;
 const setters = {
   getSetter,
   registerSetter,
@@ -74,11 +82,11 @@ const setters = {
 
 export {
   editor,
-  editorHelper,
+  editorCabin,
   skeleton,
-  skeletonHelper,
+  skeletonCabin,
   designer,
-  designerHelper,
+  designerCabin,
   plugins,
   setters,
   project,
@@ -95,18 +103,21 @@ export {
   monitor,
 };
 
+const getSelection = () => designer.currentDocument?.selection;
 // TODO: build-plugin-component 的 umd 开发态没有导出 AliLowCodeEngine，这里先简单绕过
 (window as any).AliLowCodeEngine = {
   editor,
-  editorHelper,
+  editorCabin,
   skeleton,
-  skeletonHelper,
+  skeletonCabin,
   designer,
-  designerHelper,
+  designerCabin,
   plugins,
   setters,
   project,
-  selection,
+  get selection() {
+    return getSelection();
+  },
   /**
    * 注册一些全局的切面
    */
@@ -138,6 +149,3 @@ export async function init(container?: Element) {
     engineContainer,
   );
 }
-
-LiveEditing.addLiveEditingSpecificRule(liveEditingRule);
-LiveEditing.addLiveEditingSaveHandler(liveEditingSaveHander);

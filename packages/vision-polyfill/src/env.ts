@@ -1,8 +1,8 @@
 import { EventEmitter } from 'events';
 import { ALI_SCHEMA_VERSION } from './base/const';
-import { editorHelper } from '@ali/lowcode-engine';
+import { editorCabin } from '@ali/lowcode-engine';
 
-const { obx } = editorHelper;
+const { obx } = editorCabin;
 
 interface ILiteralObject {
   [key: string]: any;

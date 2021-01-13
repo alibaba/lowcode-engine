@@ -31,7 +31,7 @@ export interface ILowCodePlugin {
   setDisabled(flag: boolean): void;
 }
 
-export interface IDesignerHelper {
+export interface IDesignerCabin {
   registerMetadataTransducer: (transducer: MetadataTransducer, level: number, id?: string) => void;
   addBuiltinComponentAction: (action: ComponentAction) => void;
   removeBuiltinComponentAction: (actionName: string) => void;
@@ -44,7 +44,7 @@ export interface ILowCodePluginContext {
   hotkey: Hotkey;
   logger: Logger;
   plugins: ILowCodePluginManager;
-  designerHelper: IDesignerHelper;
+  designerCabin: IDesignerCabin;
   /**
     其他暂不增加，按需增加
   */

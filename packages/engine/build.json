@@ -5,7 +5,7 @@
       "build-plugin-component",
       {
         "filename": "engine",
-        "library": "AliLowCodeEngine",
+        "library": "___AliLowCodeEngine___",
         "libraryTarget": "umd",
         "externals": {
           "react": "var window.React",

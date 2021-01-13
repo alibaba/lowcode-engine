@@ -11,10 +11,10 @@ import {
 } from './fields';
 
 import { ComponentClass, Component, isValidElement, createElement } from 'react';
-import { editorHelper, setters } from '@ali/lowcode-engine';
+import { editorCabin, setters } from '@ali/lowcode-engine';
 
 const { getSetter } = setters;
-const { createSetterContent } = editorHelper;
+const { createSetterContent } = editorCabin;
 
 function isReactClass(obj: any): obj is ComponentClass<any> {
   return (
