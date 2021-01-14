@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.30-beta.17"></a>
+## [1.0.30-beta.17](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.30-beta.16...v1.0.30-beta.17) (2021-01-14)
+
+
+### Bug Fixes
+
+* 变量绑定时未触发事件, http://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/issues/100851 ([cc72fe8](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/cc72fe8))
+* 调整 editor-setters 的加载时机 ([8e66793](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8e66793))
+
+
+
+
 <a name="1.0.30-beta.16"></a>
 ## [1.0.30-beta.16](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.30-beta.14...v1.0.30-beta.16) (2021-01-14)
 
