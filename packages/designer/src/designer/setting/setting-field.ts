@@ -154,19 +154,17 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
   setHotValue(data: any, options?: any) {
     this.hotValue = data;
-    const v = this.transducer.toNative(data);
+    const value = this.transducer.toNative(data);
     if (this.isUseVariable()) {
-      const ov = this.getValue();
+      const oldValue = this.getValue();
       this.setValue({
         type: 'JSExpression',
-        value: ov.value,
-        mock: v,
+        value: oldValue.value,
+        mock: value,
       }, false, false, options);
     } else {
-      this.setValue(v, false, false, options);
+      this.setValue(value, false, false, options);
     }
-
-    this.notifyValueChange();
 
     // dirty fix list setter
     if (Array.isArray(data) && data[0] && data[0].__sid__) {
