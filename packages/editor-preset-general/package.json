@@ -15,7 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "@ali/lowcode-editor-core": "^1.0.28-beta.1",
-    "@ali/lowcode-editor-skeleton": "^1.0.28-beta.1",
+    "@ali/lowcode-editor-skeleton": "1.0.28-beta.11",
     "@ali/lowcode-plugin-designer": "^1.0.28-beta.1",
     "@ali/lowcode-plugin-outline-pane": "^1.0.28-beta.1",
     "@ali/lowcode-types": "^1.0.28-beta.1",
