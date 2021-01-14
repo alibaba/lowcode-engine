@@ -163,14 +163,13 @@ export class SettingPropEntry implements SettingEntry {
    * 设置当前属性值
    */
   setValue(val: any, isHotValue?: boolean, force?: boolean, extraOptions?: any) {
+    const oldValue = this.getValue();
     if (this.type === 'field') {
       this.parent.setPropValue(this.name, val);
     }
-    if (!extraOptions) {
-      extraOptions = {};
-    }
+
     const { setValue } = this.extraProps;
-    if (setValue && !extraOptions.disableMutator) {
+    if (setValue && !extraOptions?.disableMutator) {
       try {
         setValue(this, val);
       } catch (e) {
@@ -178,6 +177,7 @@ export class SettingPropEntry implements SettingEntry {
         console.warn(e);
       }
     }
+    this.notifyValueChange(oldValue, val);
   }
 
   /**
@@ -276,8 +276,8 @@ export class SettingPropEntry implements SettingEntry {
     this.emitter.emit('valuechange');
   }
 
-  notifyValueChange() {
-    this.editor.emit('node.prop.change', { node: this.getNode(), prop: this });
+  notifyValueChange(oldValue: any, newValue:any) {
+    this.editor.emit('node.prop.change', { node: this.getNode(), prop: this, oldValue, newValue });
   }
 
   getDefaultValue() {
