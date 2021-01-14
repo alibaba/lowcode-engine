@@ -2,7 +2,8 @@ import { designer } from '@ali/lowcode-engine';
 
 const { project } = designer;
 
-Object.assign(project, {
+const visionProject = {};
+Object.assign(visionProject, project, {
   getSchema(): any {
     return this.schema || {};
   },
@@ -16,4 +17,4 @@ Object.assign(project, {
   },
 });
 
-export default project;
+export default visionProject;

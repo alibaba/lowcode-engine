@@ -24,7 +24,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
 
   register(
     pluginConfig: (ctx: ILowCodePluginContext, options: CompositeObject) => ILowCodePluginConfig,
-    options: CompositeObject,
+    options: CompositeObject = {},
   ): void {
     const ctx = this._getLowCodePluginContext();
     const config = pluginConfig(ctx, options);

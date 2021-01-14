@@ -11,7 +11,6 @@ import { Skeleton, SettingsPrimaryPane, registerDefaults } from '@ali/lowcode-ed
 import * as skeletonCabin from '@ali/lowcode-editor-skeleton';
 import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
-import builtinSetters from '@ali/lowcode-editor-setters';
 import './modules/live-editing';
 
 export * from './modules/editor-types';
@@ -20,7 +19,6 @@ export * from './modules/designer-types';
 export * from './modules/lowcode-types';
 
 const { hotkey, monitor, getSetter, registerSetter } = editorCabin;
-registerSetter(builtinSetters as any);
 registerDefaults();
 
 const editor = new Editor();
@@ -132,6 +130,9 @@ const getSelection = () => designer.currentDocument?.selection;
 };
 
 export async function init(container?: Element) {
+  // 因为这里的 setter 可能已经用到了 VisualEngine 的 API，所以延迟到此加载，而不是一开始就加载
+  const builtinSetters = require('@ali/lowcode-editor-setters').default;
+  registerSetter(builtinSetters as any);
   let engineContainer = container;
   if (!engineContainer) {
     engineContainer = document.createElement('div');
