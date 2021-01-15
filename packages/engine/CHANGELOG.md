@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.31-beta.0"></a>
+## [1.0.31-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.30...v1.0.31-beta.0) (2021-01-15)
+
+
+### Features
+
+* setters 下增加 getSettersMap 方法 ([7e020a1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7e020a1))
+
+
+
+
 <a name="1.0.30"></a>
 ## [1.0.30](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.30-beta.17...v1.0.30) (2021-01-14)
 

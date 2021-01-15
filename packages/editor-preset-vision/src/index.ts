@@ -33,12 +33,13 @@ import DragEngine from './drag-engine';
 import Viewport from './viewport';
 import Project from './project';
 import Symbols from './symbols';
-import builtinSetters from '@ali/lowcode-editor-setters';
-registerSetter(builtinSetters);
 
 import './vision.less';
 
 async function init(container?: Element) {
+  // 因为这里的 setter 可能已经用到了 VisualEngine 的 API，所以延迟到此加载，而不是一开始就加载
+  const builtinSetters = require('@ali/lowcode-editor-setters').default;
+  registerSetter(builtinSetters as any);
   if (!container) {
     container = document.createElement('div');
     document.body.appendChild(container);
