@@ -33,7 +33,7 @@ import DragEngine from './drag-engine';
 import Viewport from './viewport';
 import Project from './project';
 import Symbols from './symbols';
-import '@ali/lowcode-editor-setters';
+// import '@ali/lowcode-editor-setters';
 
 import './vision.less';
 
