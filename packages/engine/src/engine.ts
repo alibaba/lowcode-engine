@@ -18,7 +18,7 @@ export * from './modules/skeleton-types';
 export * from './modules/designer-types';
 export * from './modules/lowcode-types';
 
-const { hotkey, monitor, getSetter, registerSetter } = editorCabin;
+const { hotkey, monitor, getSetter, registerSetter, getSettersMap } = editorCabin;
 registerDefaults();
 
 const editor = new Editor();
@@ -76,6 +76,7 @@ const { Workbench } = skeletonCabin;
 const setters = {
   getSetter,
   registerSetter,
+  getSettersMap,
 };
 
 export {
