@@ -1,6 +1,6 @@
 import { Editor, Hotkey, hotkey } from '@ali/lowcode-editor-core';
 import { Skeleton } from '@ali/lowcode-editor-skeleton';
-import { ILowCodePluginConfig, ILowCodePluginManager, ILowCodePluginContext, IDesignerCabin } from '@ali/lowcode-types';
+import { ILowCodePluginConfig, ILowCodePluginManager, ILowCodePluginContext, IDesignerCabin } from './plugin-types';
 import { getLogger, Logger } from '../utils';
 import {
   registerMetadataTransducer,

@@ -15,7 +15,7 @@ export interface ILowCodePluginConfig {
   exports?(): CompositeObject;
 }
 
-export interface ILowCodePlugin {
+export interface ILowCodePluginCore {
   name: string;
   dep: string[];
   disabled: boolean;
@@ -30,6 +30,12 @@ export interface ILowCodePlugin {
   toProxy(): any;
   setDisabled(flag: boolean): void;
 }
+
+interface ILowCodePluginExportsAccessor {
+  [propName: string]: any;
+}
+
+export type ILowCodePlugin = ILowCodePluginCore & ILowCodePluginExportsAccessor;
 
 export interface IDesignerCabin {
   registerMetadataTransducer: (transducer: MetadataTransducer, level: number, id?: string) => void;
@@ -50,10 +56,14 @@ export interface ILowCodePluginContext {
   */
 }
 
-export interface ILowCodePluginManager {
+interface ILowCodePluginManagerPluginAccessor {
+  [pluginName: string]: ILowCodePlugin | any;
+}
+
+export interface ILowCodePluginManagerCore {
   register(
-    pluginConfig: (ctx: ILowCodePluginContext, options: CompositeObject) => ILowCodePluginConfig,
-    options: CompositeObject,
+    pluginConfig: (ctx: ILowCodePluginContext, options?: CompositeObject) => ILowCodePluginConfig,
+    options?: CompositeObject,
   ): void;
   get(pluginName: string): ILowCodePlugin | undefined;
   getAll(): ILowCodePlugin[];
@@ -62,3 +72,5 @@ export interface ILowCodePluginManager {
   setDisabled(pluginName: string, flag: boolean): void;
   dispose(): void;
 }
+
+export type ILowCodePluginManager = ILowCodePluginManagerCore & ILowCodePluginManagerPluginAccessor;
