@@ -16,7 +16,7 @@ import './modules/live-editing';
 export * from './modules/editor-types';
 export * from './modules/skeleton-types';
 export * from './modules/designer-types';
-export * from './modules/lowcode-types';
+// export * from './modules/lowcode-types';
 
 const { hotkey, monitor, getSetter, registerSetter, getSettersMap } = editorCabin;
 registerDefaults();

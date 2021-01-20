@@ -1,5 +1,5 @@
 import { Editor } from '@ali/lowcode-editor-core';
-import { CompositeObject, ILowCodePlugin, ILowCodePluginConfig, ILowCodePluginManager, ILowCodePluginContext } from '@ali/lowcode-types';
+import { CompositeObject, ILowCodePlugin, ILowCodePluginConfig, ILowCodePluginManager, ILowCodePluginContext } from './plugin-types';
 import { LowCodePlugin } from './plugin';
 import LowCodePluginContext from './plugin-context';
 import { getLogger, invariant } from '../utils';
@@ -23,8 +23,8 @@ export class LowCodePluginManager implements ILowCodePluginManager {
   }
 
   register(
-    pluginConfig: (ctx: ILowCodePluginContext, options: CompositeObject) => ILowCodePluginConfig,
-    options: CompositeObject = {},
+    pluginConfig: (ctx: ILowCodePluginContext, options?: CompositeObject) => ILowCodePluginConfig,
+    options?: CompositeObject,
   ): void {
     const ctx = this._getLowCodePluginContext();
     const config = pluginConfig(ctx, options);
