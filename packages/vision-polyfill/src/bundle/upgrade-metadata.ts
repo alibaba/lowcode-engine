@@ -146,6 +146,7 @@ export interface OldPrototypeConfig {
   canDraging?: boolean; // => onDrag
   canDragging?: boolean; // => ?
 
+  canSelecting?: boolean; // => onClickHook
   canOperating?: boolean; // => disabledActions
   canUseCondition?: boolean;
   canLoop?: boolean;
@@ -613,6 +614,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     // hooks
     canDraging,
     canDragging, // handleDragging
+    canSelecting, // onClickHook
     // events
     didDropOut, // onNodeRemove
     didDropIn, // onNodeAdd
@@ -757,6 +759,13 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
       v = false;
     }
     callbacks.onMoveHook = () => v;
+  }
+  if (canSelecting != null) {
+    let v = true;
+    if (canSelecting === false) {
+      v = false;
+    }
+    callbacks.onClickHook = () => v;
   }
   if (didDropIn) {
     callbacks.onNodeAdd = didDropIn;

@@ -33,6 +33,7 @@ import {
   Designer,
 } from '../designer';
 import { parseMetadata } from './utils/parse-metadata';
+import { getClosestClickableNode } from './utils/clickable';
 import { ComponentMetadata, ComponentSchema } from '@ali/lowcode-types';
 import { BuiltinSimulatorRenderer } from './renderer';
 import clipboard from '../designer/clipboard';
@@ -362,7 +363,12 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         (downEvent.target as HTMLElement).removeAttribute('for');
 
         const nodeInst = this.getNodeInstanceFromElement(downEvent.target as Element);
-        const node = nodeInst?.node || documentModel?.rootNode;
+        const node = getClosestClickableNode(nodeInst?.node || documentModel?.rootNode, downEvent);
+        // 如果找不到可点击的节点, 直接返回
+        if (!node) {
+          return;
+        }
+
         // if (!node?.isValidComponent()) {
         //   // 对于未注册组件直接返回
         //   return;
@@ -968,7 +974,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
     const operationalNodes = nodes?.filter((node: any) => {
       const onMoveHook = node.componentMeta?.getMetadata()?.experimental?.callbacks?.onMoveHook;
-      const canMove = onMoveHook && typeof onMoveHook === 'function' ? onMoveHook() : true;
+      const canMove = onMoveHook && typeof onMoveHook === 'function' ? onMoveHook(node) : true;
 
       return canMove;
     });
