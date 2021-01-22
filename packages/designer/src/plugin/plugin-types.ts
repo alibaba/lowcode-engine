@@ -10,9 +10,9 @@ import {
 export interface ILowCodePluginConfig {
   name: string;
   dep?: string[]; // 依赖插件名
-  init(): void;
+  init?(): void;
   destroy?(): void;
-  exports?(): CompositeObject;
+  exports?(): any;
 }
 
 export interface ILowCodePluginCore {
@@ -22,10 +22,10 @@ export interface ILowCodePluginCore {
   config: ILowCodePluginConfig;
   logger: Logger;
   on(event: string | symbol, listener: (...args: any[]) => void): any;
-  off(event: string | symbol, listener: (...args: any[]) => void): any;
   emit(event: string | symbol, ...args: any[]): boolean;
   removeAllListeners(event?: string | symbol): this;
-  init(): void;
+  init(forceInit?: boolean): void;
+  isInited(): boolean;
   destroy(): void;
   toProxy(): any;
   setDisabled(flag: boolean): void;
@@ -62,9 +62,10 @@ interface ILowCodePluginManagerPluginAccessor {
 
 export interface ILowCodePluginManagerCore {
   register(
-    pluginConfig: (ctx: ILowCodePluginContext, options?: CompositeObject) => ILowCodePluginConfig,
+    pluginConfigCreator: (ctx: ILowCodePluginContext, pluginOptions?: any) => ILowCodePluginConfig,
+    pluginOptions?: any,
     options?: CompositeObject,
-  ): void;
+  ): Promise<void>;
   get(pluginName: string): ILowCodePlugin | undefined;
   getAll(): ILowCodePlugin[];
   has(pluginName: string): boolean;
@@ -74,3 +75,7 @@ export interface ILowCodePluginManagerCore {
 }
 
 export type ILowCodePluginManager = ILowCodePluginManagerCore & ILowCodePluginManagerPluginAccessor;
+
+export type LowCodeRegisterOptions = {
+  autoInit?: boolean;
+};

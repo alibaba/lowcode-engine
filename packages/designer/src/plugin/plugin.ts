@@ -2,8 +2,8 @@ import {
   ILowCodePlugin,
   ILowCodePluginConfig,
   ILowCodePluginManager,
-  CompositeObject,
-} from '@ali/lowcode-types';
+} from './plugin-types';
+import { CompositeObject } from '@ali/lowcode-types';
 import { EventEmitter } from 'events';
 import { getLogger, Logger, invariant } from '../utils';
 
@@ -50,30 +50,36 @@ export class LowCodePlugin implements ILowCodePlugin {
   }
 
   on(event: string | symbol, listener: (...args: any[]) => void): any {
-    return this.emitter.on(event, listener);
+    this.emitter.on(event, listener);
+    return () => {
+      this.emitter.off(event, listener);
+    };
   }
 
   emit(event: string | symbol, ...args: any[]) {
     return this.emitter.emit(event, ...args);
   }
 
-  off(event: string | symbol, listener: (...args: any[]) => void): any {
-    return this.emitter.off(event, listener);
-  }
-
   removeAllListeners(event: string | symbol): any {
     return this.emitter.removeAllListeners(event);
   }
 
-  async init() {
+  isInited() {
+    return this._inited;
+  }
+
+  async init(forceInit?: boolean) {
+    if (this._inited && !forceInit) return;
     this.logger.log('method init called');
     await this.config.init?.call(undefined);
     this._inited = true;
   }
 
   async destroy() {
+    if (!this._inited) return;
     this.logger.log('method destroy called');
     await this.config?.destroy?.call(undefined);
+    this._inited = false;
   }
 
   setDisabled(flag = true) {
@@ -93,7 +99,7 @@ export class LowCodePlugin implements ILowCodePlugin {
     });
   }
 
-  dispose() {
-    return this.manager.delete(this.name);
+  async dispose() {
+    await this.manager.delete(this.name);
   }
 }

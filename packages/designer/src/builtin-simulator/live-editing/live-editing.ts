@@ -48,7 +48,7 @@ export class LiveEditing {
     const npm = node?.componentMeta?.npm;
     const selected =
       [npm?.package, npm?.componentName].filter((item) => !!item).join('-') || node?.componentMeta?.componentName || '';
-    editor?.emit('designer.builinSimulator.LiveEditing', {
+    editor?.emit('designer.builtinSimulator.liveEditing', {
       selected,
     });
 

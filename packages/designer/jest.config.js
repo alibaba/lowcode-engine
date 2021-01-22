@@ -20,6 +20,7 @@ module.exports = {
     '!src/icons/**',
     '!src/locale/**',
     '!src/builtin-simulator/utils/**',
+    '!src/plugin/sequencify.ts',
     '!src/document/node/exclusive-group.ts',
     '!**/node_modules/**',
     '!**/vendor/**',

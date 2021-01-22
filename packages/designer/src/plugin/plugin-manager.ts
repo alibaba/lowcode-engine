@@ -1,5 +1,5 @@
 import { Editor } from '@ali/lowcode-editor-core';
-import { CompositeObject, ILowCodePlugin, ILowCodePluginConfig, ILowCodePluginManager, ILowCodePluginContext } from './plugin-types';
+import { ILowCodePlugin, ILowCodePluginConfig, ILowCodePluginManager, ILowCodePluginContext, LowCodeRegisterOptions } from './plugin-types';
 import { LowCodePlugin } from './plugin';
 import LowCodePluginContext from './plugin-context';
 import { getLogger, invariant } from '../utils';
@@ -22,19 +22,23 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     return new LowCodePluginContext(this.editor, this);
   }
 
-  register(
-    pluginConfig: (ctx: ILowCodePluginContext, options?: CompositeObject) => ILowCodePluginConfig,
-    options?: CompositeObject,
-  ): void {
+  async register(
+    pluginConfigCreator: (ctx: ILowCodePluginContext, pluginOptions?: any) => ILowCodePluginConfig,
+    pluginOptions?: any,
+    options?: LowCodeRegisterOptions,
+  ): Promise<void> {
     const ctx = this._getLowCodePluginContext();
-    const config = pluginConfig(ctx, options);
+    const config = pluginConfigCreator(ctx, pluginOptions);
     invariant(config.name, `${config.name} required`, config);
     ctx.setLogger(config);
     invariant(!this.pluginsMap.has(config.name), `${config.name} already exists`, this.pluginsMap.get(config.name));
-    const plugin = new LowCodePlugin(this, config, options);
+    const plugin = new LowCodePlugin(this, config, pluginOptions);
+    if (options?.autoInit) {
+      await plugin.init();
+    }
     this.plugins.push(plugin);
     this.pluginsMap.set(plugin.name, plugin);
-    logger.log('plugin registered with config:', config, ', options:', options);
+    logger.log('plugin registered with config:', config, ', options:', pluginOptions);
   }
 
   get(pluginName: string): ILowCodePlugin | undefined {
@@ -51,7 +55,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
 
   async delete(pluginName: string): Promise<boolean> {
     const idx = this.plugins.findIndex(plugin => plugin.name === pluginName);
-    if (idx < -1) return false;
+    if (idx === -1) return false;
     const plugin = this.plugins[idx];
     await plugin.destroy();
 

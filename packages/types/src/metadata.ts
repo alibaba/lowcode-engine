@@ -180,8 +180,8 @@ export interface Callbacks {
   onMouseDownHook?: (e: MouseEvent, currentNode: any) => any;
   onDblClickHook?: (e: MouseEvent, currentNode: any) => any;
   onClickHook?: (e: MouseEvent, currentNode: any) => any;
-  onLocateHook?: (e: any, currentNode: any) => any;
-  onAcceptHook?: (currentNode: any, locationData: any) => any;
+  // onLocateHook?: (e: any, currentNode: any) => any;
+  // onAcceptHook?: (currentNode: any, locationData: any) => any;
   onMoveHook?: (currentNode: any) => boolean; // thinkof 限制性拖拽
   onChildMoveHook?: (childNode: any, currentNode: any) => boolean;
 
