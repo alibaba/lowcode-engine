@@ -46,6 +46,12 @@ export class BorderSelectingInstance extends Component<{
       dragging,
     });
 
+    const hideSelectTools = observed.node.componentMeta.getMetadata().experimental?.hideSelectTools;
+
+    if (hideSelectTools) {
+      return null;
+    }
+
     return (
       <div className={className} style={style}>
         {!dragging && <Toolbar observed={observed} />}

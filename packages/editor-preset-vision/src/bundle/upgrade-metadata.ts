@@ -137,6 +137,7 @@ export interface OldPrototypeConfig {
 
   isContainer?: boolean; // => configure.component.isContainer
   isAbsoluteLayoutContainer?: boolean; // => meta.experimental.isAbsoluteLayoutContainer 是否是绝对定位容器
+  hideSelectTools?: boolean; // => meta.experimental.hideSelectTools
   isModal?: boolean; // => configure.component.isModal
   isFloating?: boolean; // => configure.component.isFloating
   descriptor?: string; // => configure.component.descriptor
@@ -595,6 +596,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     transducers,
     isContainer,
     isAbsoluteLayoutContainer,
+    hideSelectTools,
     rectSelector,
     isModal,
     isFloating,
@@ -684,6 +686,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   // 未考虑清楚的，放在实验性段落
   const experimental: any = {
     isAbsoluteLayoutContainer,
+    hideSelectTools,
   };
   if (context) {
     // for prototype.getContextInfo
