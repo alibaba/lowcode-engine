@@ -741,7 +741,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   if (canResizing) {
     // TODO: enhance
     experimental.getResizingHandlers = (currentNode: any) => {
-      const directs = ['n', 'w', 's', 'e'];
+      const directs = ['n', 'e', 's', 'w', 'ne', 'nw', 'se', 'sw'];
       if (canResizing === true) {
         return directs;
       }
