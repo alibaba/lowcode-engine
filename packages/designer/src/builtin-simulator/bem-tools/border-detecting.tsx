@@ -73,6 +73,14 @@ export class BorderDetecting extends Component<{ host: BuiltinSimulatorHost }> {
   render() {
     const { host } = this.props;
     const { current } = this;
+    
+    const canHoverHook = current?.componentMeta.getMetadata()?.experimental?.callbacks?.onHoverHook;
+    const canHover = (canHoverHook && typeof canHoverHook === 'function') ? canHoverHook(current) : true;
+
+    if (!canHover) {
+      return null;
+    }
+
     if (!current || host.viewport.scrolling || host.liveEditing.editing) {
       return null;
     }

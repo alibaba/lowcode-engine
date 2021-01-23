@@ -184,6 +184,7 @@ export interface Callbacks {
   onLocateHook?: (e: any, currentNode: any) => any;
   onAcceptHook?: (currentNode: any, locationData: any) => any;
   onMoveHook?: (currentNode: any) => boolean; // thinkof 限制性拖拽
+  onHoverHook?: (currentNode: any) => boolean;
   onChildMoveHook?: (childNode: any, currentNode: any) => boolean;
 
   // events

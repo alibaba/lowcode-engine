@@ -145,6 +145,7 @@ export interface OldPrototypeConfig {
   // alias to canDragging
   canDraging?: boolean; // => onDrag
   canDragging?: boolean; // => ?
+  canHovering?: ((dragment: Node) => boolean) | boolean;
 
   canOperating?: boolean; // => disabledActions
   canUseCondition?: boolean;
@@ -614,6 +615,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     // hooks
     canDraging,
     canDragging, // handleDragging
+    canHovering,
     // events
     didDropOut, // onNodeRemove
     didDropIn, // onNodeAdd
@@ -759,6 +761,9 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
       v = false;
     }
     callbacks.onMoveHook = () => v;
+  }
+  if (canHovering != null) {
+    callbacks.onHoverHook = typeof canHovering === 'boolean' ? () => canHovering : canHovering;
   }
   if (didDropIn) {
     callbacks.onNodeAdd = didDropIn;
