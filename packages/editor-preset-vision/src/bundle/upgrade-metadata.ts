@@ -137,6 +137,7 @@ export interface OldPrototypeConfig {
 
   isContainer?: boolean; // => configure.component.isContainer
   isAbsoluteLayoutContainer?: boolean; // => meta.experimental.isAbsoluteLayoutContainer 是否是绝对定位容器
+  hideSelectTools?: boolean; // => meta.experimental.hideSelectTools
   isModal?: boolean; // => configure.component.isModal
   isFloating?: boolean; // => configure.component.isFloating
   descriptor?: string; // => configure.component.descriptor
@@ -144,6 +145,7 @@ export interface OldPrototypeConfig {
   // alias to canDragging
   canDraging?: boolean; // => onDrag
   canDragging?: boolean; // => ?
+  canHovering?: ((dragment: Node) => boolean) | boolean;
 
   canSelecting?: boolean; // => onClickHook
   canOperating?: boolean; // => disabledActions
@@ -596,6 +598,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     transducers,
     isContainer,
     isAbsoluteLayoutContainer,
+    hideSelectTools,
     rectSelector,
     isModal,
     isFloating,
@@ -614,6 +617,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     canDraging,
     canDragging, // handleDragging
     canSelecting, // onClickHook
+    canHovering,
     // events
     didDropOut, // onNodeRemove
     didDropIn, // onNodeAdd
@@ -686,6 +690,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   // 未考虑清楚的，放在实验性段落
   const experimental: any = {
     isAbsoluteLayoutContainer,
+    hideSelectTools,
   };
   if (context) {
     // for prototype.getContextInfo
@@ -743,7 +748,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   if (canResizing) {
     // TODO: enhance
     experimental.getResizingHandlers = (currentNode: any) => {
-      const directs = ['n', 'w', 's', 'e'];
+      const directs = ['n', 'e', 's', 'w', 'ne', 'nw', 'se', 'sw'];
       if (canResizing === true) {
         return directs;
       }
@@ -765,6 +770,9 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
       v = false;
     }
     callbacks.onClickHook = () => v;
+  }
+  if (canHovering != null) {
+    callbacks.onHoverHook = typeof canHovering === 'boolean' ? () => canHovering : canHovering;
   }
   if (didDropIn) {
     callbacks.onNodeAdd = didDropIn;

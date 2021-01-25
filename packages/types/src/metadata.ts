@@ -66,6 +66,7 @@ export interface Experimental {
   callbacks?: Callbacks;
   initialChildren?: NodeData[] | ((target: SettingTarget) => NodeData[]);
   isAbsoluteLayoutContainer: boolean;
+  hideSelectTools?: boolean;
 
   // 样式 及 位置，handle上必须有明确的标识以便事件路由判断，或者主动设置事件独占模式
   // NWSE 是交给引擎计算放置位置，ReactElement 必须自己控制初始位置
@@ -183,6 +184,7 @@ export interface Callbacks {
   // onLocateHook?: (e: any, currentNode: any) => any;
   // onAcceptHook?: (currentNode: any, locationData: any) => any;
   onMoveHook?: (currentNode: any) => boolean; // thinkof 限制性拖拽
+  onHoverHook?: (currentNode: any) => boolean;
   onChildMoveHook?: (childNode: any, currentNode: any) => boolean;
 
   // events

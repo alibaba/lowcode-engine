@@ -82,7 +82,7 @@ export class BoxResizingForNode extends Component<{ host: BuiltinSimulatorHost; 
     const { node } = this.props;
     const { designer } = this.host;
 
-    if (!instances || instances.length < 1) {
+    if (!instances || instances.length < 1 || this.dragging) {
       return null;
     }
     return (
@@ -114,9 +114,15 @@ export class BoxResizingInstance extends Component<{
   // private outline: any;
   private willUnbind: () => any;
 
-  private outlineRight: any;
-
-  private outlineLeft: any;
+  // outline of eight direction
+  private outlineN: any;
+  private outlineE: any;
+  private outlineS: any;
+  private outlineW: any;
+  private outlineNE: any;
+  private outlineNW: any;
+  private outlineSE: any;
+  private outlineSW: any;
 
   private dragEngine: DragResizeEngine;
 
@@ -204,29 +210,33 @@ export class BoxResizingInstance extends Component<{
       this.willUnbind();
     }
 
-    if (!this.outlineRight && !this.outlineLeft) {
+    if (
+      !this.outlineN &&
+      !this.outlineE &&
+      !this.outlineS &&
+      !this.outlineW &&
+      !this.outlineNE &&
+      !this.outlineNW &&
+      !this.outlineSE &&
+      !this.outlineSW
+    ) {
       return;
     }
 
     const unBind: any[] = [];
+    const node = this.props.observed.node;
 
     unBind.push(
-      this.dragEngine.from(this.outlineRight, 'e', () => {
-        // if (!this.hoveringLine.hasOutline()) {
-        //   return null;
-        // }
-        // return this.hoveringLine.getCurrentNode();
-        return this.props.observed.node;
-      }),
-    );
-    unBind.push(
-      this.dragEngine.from(this.outlineLeft, 'w', () => {
-        return this.props.observed.node;
-        // if (!this.hoveringLine.hasOutline()) {
-        //   return null;
-        // }
-        // return this.hoveringLine.getCurrentNode();
-      }),
+      ...[
+        this.dragEngine.from(this.outlineN, 'n', () => node),
+        this.dragEngine.from(this.outlineE, 'e', () => node),
+        this.dragEngine.from(this.outlineS, 's', () => node),
+        this.dragEngine.from(this.outlineW, 'w', () => node),
+        this.dragEngine.from(this.outlineNE, 'ne', () => node),
+        this.dragEngine.from(this.outlineNW, 'nw', () => node),
+        this.dragEngine.from(this.outlineSE, 'se', () => node),
+        this.dragEngine.from(this.outlineSW, 'sw', () => node),
+      ],
     );
 
     this.willUnbind = () => {
@@ -252,16 +262,78 @@ export class BoxResizingInstance extends Component<{
       triggerVisible = metaData.experimental.getResizingHandlers(node);
     }
 
-    const className = classNames('lc-borders lc-resize-box');
+    const baseSideClass = 'lc-borders lc-resize-side';
+    const baseCornerClass = 'lc-borders lc-resize-corner';
 
     return (
       <div>
+        {triggerVisible.includes('n') && (
+          <div
+            ref={(ref) => { this.outlineN = ref; }}
+            className={classNames(baseSideClass, 'n')}
+            style={{
+              height: 20,
+              transform: `translate(${offsetLeft}px, ${offsetTop - 10}px)`,
+              width: offsetWidth,
+            }}
+          />
+        )}
+        {triggerVisible.includes('ne') && (
+          <div
+            ref={(ref) => { this.outlineNE = ref; }}
+            className={classNames(baseCornerClass, 'ne')}
+            style={{
+              transform: `translate(${offsetLeft + offsetWidth - 5}px, ${offsetTop - 3}px)`,
+              cursor: 'nesw-resize',
+            }}
+          />
+        )}
+        {triggerVisible.includes('e') && (
+          <div
+            className={classNames(baseSideClass, 'e')}
+            ref={(ref) => { this.outlineE = ref; }}
+            style={{
+              height: offsetHeight,
+              transform: `translate(${offsetLeft + offsetWidth - 10}px, ${offsetTop}px)`,
+              width: 20,
+            }}
+          />
+        )}
+        {triggerVisible.includes('se') && (
+          <div
+            ref={(ref) => { this.outlineSE = ref; }}
+            className={classNames(baseCornerClass, 'se')}
+            style={{
+              transform: `translate(${offsetLeft + offsetWidth - 5}px, ${offsetTop + offsetHeight - 5}px)`,
+              cursor: 'nwse-resize',
+            }}
+          />
+        )}
+        {triggerVisible.includes('s') && (
+          <div
+            ref={(ref) => { this.outlineS = ref; }}
+            className={classNames(baseSideClass, 's')}
+            style={{
+              height: 20,
+              transform: `translate(${offsetLeft}px, ${offsetTop + offsetHeight - 10}px)`,
+              width: offsetWidth,
+            }}
+          />
+        )}
+        {triggerVisible.includes('sw') && (
+          <div
+            ref={(ref) => { this.outlineSW = ref; }}
+            className={classNames(baseCornerClass, 'sw')}
+            style={{
+              transform: `translate(${offsetLeft - 3}px, ${offsetTop + offsetHeight - 5}px)`,
+              cursor: 'nesw-resize',
+            }}
+          />
+        )}
         {triggerVisible.includes('w') && (
           <div
-            ref={(ref) => {
-              this.outlineLeft = ref;
-            }}
-            className={className}
+            ref={(ref) => { this.outlineW = ref; }}
+            className={classNames(baseSideClass, 'w')}
             style={{
               height: offsetHeight,
               transform: `translate(${offsetLeft - 10}px, ${offsetTop}px)`,
@@ -269,16 +341,13 @@ export class BoxResizingInstance extends Component<{
             }}
           />
         )}
-        {triggerVisible.includes('e') && (
+        {triggerVisible.includes('nw') && (
           <div
-            className={className}
-            ref={(ref) => {
-              this.outlineRight = ref;
-            }}
+            ref={(ref) => { this.outlineNW = ref; }}
+            className={classNames(baseCornerClass, 'nw')}
             style={{
-              height: offsetHeight,
-              transform: `translate(${offsetLeft + offsetWidth - 10}px, ${offsetTop}px)`,
-              width: 20,
+              transform: `translate(${offsetLeft - 3}px, ${offsetTop - 3}px)`,
+              cursor: 'nwse-resize',
             }}
           />
         )}
