@@ -18,6 +18,7 @@
     "pub:prepatch": "tnpm run watchdog:build && lerna publish --force-publish --cd-version prepatch --npm-tag beta --preid beta",
     "pub:prerelease": "tnpm run watchdog:build && lerna publish --force-publish --cd-version prerelease --npm-tag beta --preid beta",
     "setup": "./scripts/setup.sh",
+    "setup:skip-build": "./scripts/setup-skip-build.sh",
     "start": "./scripts/start.sh",
     "start:demo": "./scripts/start.sh @ali/lowcode-demo",
     "start:server": "./scripts/start-server.sh",
