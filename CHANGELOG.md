@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.32-beta.0"></a>
+## [1.0.32-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.31...v1.0.32-beta.0) (2021-01-25)
+
+
+### Bug Fixes
+
+* 修复鼠标从 left-float 面板滑出后, 面板关闭的问题 ([835ad4b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/835ad4b))
+* 考虑兼容原来只处理4向的场景 ([e3fc9b4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e3fc9b4))
+
+
+### Features
+
+* meta 增加 hideSelectTools ([e7287d4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e7287d4))
+* metadata 增加 canHovering 配置 ([88e128e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/88e128e))
+* 增加 plugin 的 autoInit 注册方式 ([4f9be73](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/4f9be73))
+* 增加 setup:skip-build 脚本 ([1b142cd](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1b142cd))
+* 增强 bem resize (ws, wn, es, en) ([ac05124](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ac05124))
+* 支持canSelecting & moMoveHook添加node参数 ([baf2d30](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/baf2d30))
+
+
+
+
 <a name="1.0.31"></a>
 ## [1.0.31](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.31-beta.1...v1.0.31) (2021-01-15)
 

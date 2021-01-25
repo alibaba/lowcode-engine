@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.32-beta.0"></a>
+## [1.0.32-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.31...v1.0.32-beta.0) (2021-01-25)
+
+
+### Features
+
+* 增加 plugin 的 autoInit 注册方式 ([4f9be73](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/4f9be73))
+* 增加 setup:skip-build 脚本 ([1b142cd](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1b142cd))
+
+
+
+
 <a name="1.0.31"></a>
 ## [1.0.31](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.31-beta.1...v1.0.31) (2021-01-15)
 
