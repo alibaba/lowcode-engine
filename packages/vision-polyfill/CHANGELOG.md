@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.32"></a>
+## [1.0.32](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.32-beta.2...v1.0.32) (2021-01-26)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-vision-polyfill
+
 <a name="1.0.32-beta.2"></a>
 ## [1.0.32-beta.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.32-beta.0...v1.0.32-beta.2) (2021-01-26)
 
