@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.32-beta.2"></a>
+## [1.0.32-beta.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.32-beta.0...v1.0.32-beta.2) (2021-01-26)
+
+
+### Bug Fixes
+
+* 同步 vision-polyfill 中对 resize 方向的控制逻辑 ([2aa5968](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2aa5968))
+
+
+
+
 <a name="1.0.32-beta.0"></a>
 ## [1.0.32-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.31...v1.0.32-beta.0) (2021-01-25)
 
