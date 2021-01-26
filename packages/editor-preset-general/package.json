@@ -3,6 +3,7 @@
   "version": "1.0.32-beta.0",
   "description": "Ali General Editor Preset",
   "main": "lib/index.js",
+  "private": true,
   "files": [
     "dist",
     "es",

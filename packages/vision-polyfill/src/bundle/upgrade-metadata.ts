@@ -99,11 +99,25 @@ export interface OldPropConfig {
   liveTextEditing?: any;
 }
 
+type ResizeHandler = (dragment: any, triggerDirection: string) => boolean;
+type ResizeCompositeHandler = { handle: ResizeHandler, availableDirects: string[] | undefined };
+type CanResize =
+  | boolean
+  | ResizeHandler
+  | ResizeCompositeHandler;
+
+function isResizeCompositeHandler(resize: CanResize): resize is ResizeCompositeHandler {
+  if ((resize as any).handle) {
+    return true;
+  }
+  return false;
+}
+
 // from vision 5.4
 export interface OldPrototypeConfig {
   packageName: string; // => npm.package
   /**
-   * category display in the component pane
+   * category display in the component pane·
    * component will be hidden while the value is: null
    */
   category: string; // => tags
@@ -138,6 +152,7 @@ export interface OldPrototypeConfig {
 
   isContainer?: boolean; // => configure.component.isContainer
   isAbsoluteLayoutContainer?: boolean; // => meta.experimental.isAbsoluteLayoutContainer 是否是绝对定位容器
+  hideSelectTools?: boolean; // => meta.experimental.hideSelectTools
   isModal?: boolean; // => configure.component.isModal
   isFloating?: boolean; // => configure.component.isFloating
   descriptor?: string; // => configure.component.descriptor
@@ -145,7 +160,7 @@ export interface OldPrototypeConfig {
   // alias to canDragging
   canDraging?: boolean; // => onDrag
   canDragging?: boolean; // => ?
-
+  canHovering?: ((dragment: Node) => boolean) | boolean;
   canSelecting?: boolean; // => onClickHook
   canOperating?: boolean; // => disabledActions
   canUseCondition?: boolean;
@@ -168,7 +183,7 @@ export interface OldPrototypeConfig {
   subtreeModified?(this: Node): any; // => ? hooks
 
   // => ?
-  canResizing?: ((dragment: any, triggerDirection: string) => boolean) | boolean;
+  canResizing?: CanResize;
   onResizeStart?: (e: MouseEvent, triggerDirection: string, dragment: Node) => void;
   onResize?: (e: MouseEvent, triggerDirection: string, dragment: Node, moveX: number, moveY: number) => void;
   onResizeEnd?: (e: MouseEvent, triggerDirection: string, dragment: Node) => void;
@@ -597,6 +612,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     transducers,
     isContainer,
     isAbsoluteLayoutContainer,
+    hideSelectTools,
     rectSelector,
     isModal,
     isFloating,
@@ -615,18 +631,21 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     canDraging,
     canDragging, // handleDragging
     canSelecting, // onClickHook
+    canHovering,
     // events
     didDropOut, // onNodeRemove
     didDropIn, // onNodeAdd
     subtreeModified, // onSubtreeModified
 
-    canResizing, // resizing
     onResizeStart, // onResizeStart
     onResize, // onResize
     onResizeEnd, // onResizeEnd
     devMode,
     schema,
     isTopFixed,
+  } = oldConfig;
+  let {
+    canResizing, // resizing
   } = oldConfig;
 
   const meta: any = {
@@ -687,6 +706,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   // 未考虑清楚的，放在实验性段落
   const experimental: any = {
     isAbsoluteLayoutContainer,
+    hideSelectTools,
   };
   if (context) {
     // for prototype.getContextInfo
@@ -742,13 +762,16 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     experimental.transducers = transducers;
   }
   if (canResizing) {
-    // TODO: enhance
+    let availableDirects = ['n', 'e', 's', 'w'];
+    if (isResizeCompositeHandler(canResizing)) {
+      availableDirects = canResizing.availableDirects || availableDirects;
+      canResizing = canResizing.handle;
+    }
     experimental.getResizingHandlers = (currentNode: any) => {
-      const directs = ['n', 'w', 's', 'e'];
       if (canResizing === true) {
-        return directs;
+        return availableDirects;
       }
-      return directs.filter((d) => canResizing(currentNode, d));
+      return availableDirects.filter((d) => (canResizing as ResizeHandler)(currentNode, d));
     };
   }
 
@@ -766,6 +789,9 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
       v = false;
     }
     callbacks.onClickHook = () => v;
+  }
+  if (canHovering != null) {
+    callbacks.onHoverHook = typeof canHovering === 'boolean' ? () => canHovering : canHovering;
   }
   if (didDropIn) {
     callbacks.onNodeAdd = didDropIn;

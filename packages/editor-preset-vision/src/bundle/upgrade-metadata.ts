@@ -160,7 +160,6 @@ export interface OldPrototypeConfig {
   canDraging?: boolean; // => onDrag
   canDragging?: boolean; // => ?
   canHovering?: ((dragment: Node) => boolean) | boolean;
-
   canSelecting?: boolean; // => onClickHook
   canOperating?: boolean; // => disabledActions
   canUseCondition?: boolean;
@@ -771,7 +770,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
       if (canResizing === true) {
         return availableDirects;
       }
-      return availableDirects.filter((d) => (canResizing as any)(currentNode, d));
+      return availableDirects.filter((d) => (canResizing as ResizeHandler)(currentNode, d));
     };
   }
 
