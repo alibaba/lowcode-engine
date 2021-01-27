@@ -9,7 +9,7 @@ function makeEventsHandler(
   boostEvent: MouseEvent | DragEvent,
   sensors: ISimulatorHost[],
 ): (fn: (sdoc: Document) => void) => void {
-  const topDoc = window.top.document;
+  const topDoc = window.document;
   const sourceDoc = boostEvent.view?.document || topDoc;
   // TODO: optimize this logic, reduce listener
   // const boostPrevented = boostEvent.defaultPrevented;
