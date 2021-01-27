@@ -2,8 +2,13 @@ import {
   isPlainObject,
 } from '@ali/lowcode-utils';
 import { isJSExpression, isJSSlot } from '@ali/lowcode-types';
+import { Node } from '@ali/lowcode-designer';
 
-export function compatibleReducer(props: any) {
+export function compatibleReducer(props: any, node: Node) {
+  // 如果不是 vc 体系，不做这个兼容处理
+  if (!node.componentMeta.prototype) {
+    return props;
+  }
   if (!props || !isPlainObject(props)) {
     return props;
   }
@@ -30,7 +35,7 @@ export function compatibleReducer(props: any) {
   }
   const newProps: any = {};
   Object.entries<any>(props).forEach(([key, val]) => {
-    newProps[key] = compatibleReducer(val);
+    newProps[key] = compatibleReducer(val, node);
   });
   return newProps;
 }

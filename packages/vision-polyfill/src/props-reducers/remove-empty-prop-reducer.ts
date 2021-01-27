@@ -1,6 +1,7 @@
 import {
   cloneDeep,
 } from '@ali/lowcode-utils';
+import { Node } from '@ali/lowcode-designer';
 
 // 清除空的 props value
 export function removeEmptyPropsReducer(props: any, node: Node) {

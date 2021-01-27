@@ -300,6 +300,11 @@ export class Designer {
     if (!activedDoc) {
       return null;
     }
+    if (Array.isArray(insertNode) && isNodeSchema(insertNode[0]) && this.getComponentMeta(insertNode[0].componentName).isModal) {
+      return {
+        target: activedDoc.rootNode as ParentalNode,
+      };
+    }
     const nodes = activedDoc.selection.getNodes();
     let target;
     let index: number | undefined;

@@ -1,5 +1,6 @@
 import logger from '@ali/vu-logger';
 import { hasOwnProperty } from '@ali/lowcode-utils';
+import { Node } from '@ali/lowcode-designer';
 
 export function filterReducer(props: any, node: Node): any {
   const filters = node.componentMeta.getMetadata().experimental?.filters;

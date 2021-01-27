@@ -75,7 +75,7 @@ export class Project {
       componentsTree: [],
       ...schema,
     };
-    this.config = schema?.config;
+    this.config = schema?.config || this.config;
 
     if (autoOpen) {
       if (autoOpen === true) {
@@ -146,16 +146,16 @@ export class Project {
   get(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     key:
-      | 'version'
-      | 'componentsTree'
-      | 'componentsMap'
-      | 'utils'
-      | 'constants'
-      | 'i18n'
-      | 'css'
-      | 'dataSource'
-      | 'config'
-      | string,
+    | 'version'
+    | 'componentsTree'
+    | 'componentsMap'
+    | 'utils'
+    | 'constants'
+    | 'i18n'
+    | 'css'
+    | 'dataSource'
+    | 'config'
+    | string,
   ): any {
     if (key === 'config') {
       return this.config;

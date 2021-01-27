@@ -1,6 +1,7 @@
 import {
   isPlainObject,
 } from '@ali/lowcode-utils';
+import { Node } from '@ali/lowcode-designer';
 import { isJSBlock } from '@ali/lowcode-types';
 import { isVariable } from '../utils';
 import { designerCabin } from '@ali/lowcode-engine';
