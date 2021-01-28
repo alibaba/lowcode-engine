@@ -4,7 +4,7 @@ import { editor, designer, designerCabin } from '@ali/lowcode-engine';
 import bus from './bus';
 import { VE_EVENTS } from './base/const';
 
-import { deepValueParser } from './deep-value-parser';
+import { deepValueParser } from './props-reducers/deep-value-reducer';
 import { liveEditingRule, liveEditingSaveHander } from './vc-live-editing';
 import {
   compatibleReducer,

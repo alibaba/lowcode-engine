@@ -1,5 +1,5 @@
 import '../fixtures/window';
-import { deepValueParser } from '../../src/deep-value-parser';
+import { deepValueParser } from '../../src/props-reducers/deep-value-reducer';
 import { editor } from '../../src/reducers';
 
 describe('deepValueParser 测试', () => {

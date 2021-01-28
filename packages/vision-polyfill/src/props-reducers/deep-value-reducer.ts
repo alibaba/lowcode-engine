@@ -1,13 +1,18 @@
-import Env from './env';
+import Env from '../env';
+import { Node } from '@ali/lowcode-designer';
 import { isJSSlot, isI18nData, isJSExpression } from '@ali/lowcode-types';
 import { isPlainObject } from '@ali/lowcode-utils';
-import i18nUtil from './i18n-util';
+import i18nUtil from '../i18n-util';
 import { editor } from '@ali/lowcode-engine';
-import { isVariable } from './utils';
+import { isVariable } from '../utils';
 
 // FIXME: 表达式使用 mock 值，未来live 模式直接使用原始值
 // TODO: designType
-export function deepValueParser(obj?: any): any {
+export function deepValueParser(obj: any, node: Node): any {
+  // 如果不是 vc 体系，不做这个兼容处理
+  if (!node.componentMeta.prototype) {
+    return obj;
+  }
   if (isJSExpression(obj)) {
     if (editor.get('designMode') === 'live') {
       return obj;
@@ -29,7 +34,7 @@ export function deepValueParser(obj?: any): any {
     return obj;
   }
   if (Array.isArray(obj)) {
-    return obj.map((item) => deepValueParser(item));
+    return obj.map((item) => deepValueParser(item, node));
   }
   if (isPlainObject(obj)) {
     if (isI18nData(obj)) {
@@ -50,7 +55,7 @@ export function deepValueParser(obj?: any): any {
     }
     const out: any = {};
     Object.keys(obj).forEach((key) => {
-      out[key] = deepValueParser(obj[key]);
+      out[key] = deepValueParser(obj[key], node);
     });
     return out;
   }
