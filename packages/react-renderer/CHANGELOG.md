@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.33-beta.0"></a>
+## [1.0.33-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.32...v1.0.33-beta.0) (2021-01-28)
+
+
+### Bug Fixes
+
+* 修复从其他页面粘贴过来的 modal 位置不对 ([158b6a6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/158b6a6))
+
+
+
+
 <a name="1.0.32"></a>
 ## [1.0.32](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.32-beta.2...v1.0.32) (2021-01-26)
 
