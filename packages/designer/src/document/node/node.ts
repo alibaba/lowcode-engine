@@ -455,8 +455,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   /* istanbul ignore next */
-  wrapWith(/* schema: Schema */) {
-    // todo
+  wrapWith(schema: Schema) {
+    // this.replaceWith({ ...schema, children: [this.export()] });
+    // this.children!.get(0)!.select();
   }
 
   replaceWith(schema: Schema, migrate = false): any {

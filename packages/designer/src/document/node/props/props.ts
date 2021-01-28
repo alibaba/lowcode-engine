@@ -15,16 +15,11 @@ export function getConvertedExtraKey(key: string): string {
   if (key.indexOf('.') > 0) {
     _key = key.split('.')[0];
   }
-  return EXTRA_KEY_PREFIX + _key + EXTRA_KEY_PREFIX + key.substr(_key.length + 1);
+  return EXTRA_KEY_PREFIX + _key + EXTRA_KEY_PREFIX + key.substr(_key.length);
 }
 export function getOriginalExtraKey(key: string): string {
-  // 移除串首、串尾的 EXTRA_KEY_PREFIX，将剩下的转成 .
-  return key
-    .replace(new RegExp(`^${EXTRA_KEY_PREFIX}`), '')
-    .replace(new RegExp(`${EXTRA_KEY_PREFIX}$`), '')
-    .replace(new RegExp(`${EXTRA_KEY_PREFIX}`, 'g'), '.');
+  return key.replace(new RegExp(`${EXTRA_KEY_PREFIX}`, 'g'), '');
 }
-
 export class Props implements IPropParent {
   readonly id = uniqueId('props');
 

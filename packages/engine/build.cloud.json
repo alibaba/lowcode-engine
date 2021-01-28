@@ -1,0 +1,34 @@
+{
+  "entry": {
+    "engine": "src/index",
+    "engine-core": "src/index-core"
+  },
+  "library": "___AliLowCodeEngine___",
+  "libraryTarget": "umd",
+  "externals": {
+    "react": "var window.React",
+    "react-dom": "var window.ReactDOM",
+    "prop-types": "var window.PropTypes",
+    "@ali/visualengine": "var window.VisualEngine",
+    "@ali/visualengine-utils": "var window.VisualEngineUtils",
+    "rax": "var window.Rax",
+    "monaco-editor/esm/vs/editor/editor.api": "var window.monaco",
+    "monaco-editor/esm/vs/editor/editor.main.js": "var window.monaco",
+    "@ali/lowcode-engine-ext": "var window.AliLowCodeEngineExt"
+  },
+  "browserslist": {
+    "chrome": 80
+  },
+  "outputDir": "dist",
+  "vendor": false,
+  "ignoreHtmlTemplate": false,
+  "sourceMap": true,
+  "plugins": [
+    "build-plugin-react-app",
+    "build-plugin-fusion",
+    ["build-plugin-moment-locales", {
+      "locales": ["zh-cn"]
+    }],
+    "./build.plugin.js"
+  ]
+}

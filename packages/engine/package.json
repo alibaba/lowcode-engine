@@ -13,7 +13,7 @@
     "start": "build-scripts start",
     "version:update": "node ./scripts/version.js",
     "build": "build-scripts build --skip-demo",
-    "cloud-build": "build-scripts build --skip-demo && tnpm run version:update",
+    "cloud-build": "build-scripts build --skip-demo",
     "test": "build-scripts test --config build.test.json"
   },
   "license": "MIT",
@@ -50,7 +50,7 @@
     "@types/react-dom": "^16.8.2",
     "build-plugin-fusion": "^0.1.0",
     "build-plugin-moment-locales": "^0.1.0",
-    "build-plugin-react-app": "^1.1.2",
+    "build-plugin-react-app": "^1.8.0",
     "fs-extra": "^9.0.1",
     "prop-types": "^15.7.2",
     "tsconfig-paths-webpack-plugin": "^3.2.0"

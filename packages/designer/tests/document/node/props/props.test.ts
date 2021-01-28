@@ -234,11 +234,12 @@ describe('其他函数', () => {
   it('getConvertedExtraKey', () => {
     expect(getConvertedExtraKey()).toBe('');
     expect(getConvertedExtraKey('a')).toBe('___a___');
-    expect(getConvertedExtraKey('a.b')).toBe('___a___b');
+    expect(getConvertedExtraKey('a.b')).toBe('___a___.b');
+    expect(getConvertedExtraKey('a.0')).toBe('___a___.0');
   });
 
   it('getOriginalExtraKey', () => {
     expect(getOriginalExtraKey('___a___')).toBe('a');
-    expect(getOriginalExtraKey('___a___b')).toBe('a.b');
+    expect(getOriginalExtraKey('___a___.b')).toBe('a.b');
   });
 });
