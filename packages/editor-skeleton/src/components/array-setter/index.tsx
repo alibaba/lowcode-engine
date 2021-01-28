@@ -125,7 +125,7 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
       setter: itemSetter,
       // FIXME:
       forceInline: 1,
-      setValue: () => ListSetter.onItemChange(onChange, items),
+      // setValue: () => ListSetter.onItemChange(onChange, items),
     });
     items.push(item);
     itemsMap.set(item.id, item);
