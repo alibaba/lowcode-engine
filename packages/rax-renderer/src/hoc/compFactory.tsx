@@ -1,18 +1,23 @@
 // @ts-nocheck
 
-import { Component, createElement, forwardRef } from 'rax';
+import { Component, forwardRef } from 'rax';
 import PropTypes from 'prop-types';
 import { AppHelper } from '@ali/lowcode-utils';
-import { forEach, isFileSchema } from '../utils';
-import CompEngine from '../engine/compEngine';
-import BlockEngine from '../engine/blockEngine';
-import AppContext from '../context/appContext';
+import { utils, contextFactory } from '@ali/lowcode-renderer-core';
+import componentRendererFactory from '../renderer/component';
+import blockRendererFactory from '../renderer/block';
+
+const { forEach, isFileSchema } = utils;
 
 export default function compFactory(schema, components = {}, componentsMap = {}, config = {}) {
   // 自定义组件需要有自己独立的appHelper
   const appHelper = new AppHelper(config);
+  const CompRenderer = componentRendererFactory();
+  const BlockRenderer = blockRendererFactory();
+  const AppContext = contextFactory();
+
   class LNCompView extends Component {
-    static dislayName = 'luna-comp-factory';
+    static dislayName = 'lce-comp-factory';
 
     static version = config.version || '0.0.0';
 
@@ -31,7 +36,7 @@ export default function compFactory(schema, components = {}, componentsMap = {},
       // 低代码组件透传应用上下文
       const ctx = ['utils', 'constants', 'history', 'location', 'match'];
       ctx.forEach(key => {
-        if (!appHelper[key] && this.context && this.context.appHelper && this.context.appHelper[key]) {
+        if (!appHelper[key] && this.context?.appHelper && this.context?.appHelper[key]) {
           appHelper.set(key, this.context.appHelper[key]);
         }
       });
@@ -55,10 +60,10 @@ export default function compFactory(schema, components = {}, componentsMap = {},
           {context => {
             this.context = context;
             return (
-              <CompEngine
+              <CompRenderer
                 {...props}
                 __appHelper={appHelper}
-                __components={{ ...components, Component: CompEngine, Block: BlockEngine }}
+                __components={{ ...components, Component: CompRenderer, Block: BlockRenderer }}
                 __componentsMap={componentsMap}
               />
             );
