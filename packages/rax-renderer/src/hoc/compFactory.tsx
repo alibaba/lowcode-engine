@@ -3,16 +3,18 @@
 import { Component, createElement, forwardRef } from 'rax';
 import PropTypes from 'prop-types';
 import { AppHelper } from '@ali/lowcode-utils';
-import { forEach, isFileSchema } from '../utils';
+import { utils } from '@ali/lowcode-renderer-core';
 import CompEngine from '../engine/compEngine';
 import BlockEngine from '../engine/blockEngine';
 import AppContext from '../context/appContext';
+
+const { forEach, isFileSchema } = utils;
 
 export default function compFactory(schema, components = {}, componentsMap = {}, config = {}) {
   // 自定义组件需要有自己独立的appHelper
   const appHelper = new AppHelper(config);
   class LNCompView extends Component {
-    static dislayName = 'luna-comp-factory';
+    static dislayName = 'lce-comp-factory';
 
     static version = config.version || '0.0.0';
 

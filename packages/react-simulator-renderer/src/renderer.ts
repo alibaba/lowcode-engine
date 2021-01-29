@@ -18,6 +18,7 @@ import { RootSchema, ComponentSchema, TransformStage, NodeSchema } from '@ali/lo
 // import { RootSchema, NpmInfo, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
 // just use types
 import { BuiltinSimulatorRenderer, NodeInstance, Component, DocumentModel } from '@ali/lowcode-designer';
+import LowCodeRenderer from '@ali/lowcode-react-renderer';
 import { createMemoryHistory, MemoryHistory } from 'history';
 import Slot from './builtin-components/slot';
 import Leaf from './builtin-components/leaf';
@@ -392,12 +393,37 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       doc.getElementsByTagName('head')[0].appendChild(s);
     }
 
-    // const node = host.currentDocument?.createNode(_schema);
-    // _schema = node?.export(TransformStage.Render) || {};
-
     const renderer = this;
-    const { componentsMap } = renderer;
-    return getComponentController(schema, componentsMap);
+    const { componentsMap: components } = renderer;
+
+    class LowCodeComp extends React.Component {
+      render() {
+        // @ts-ignore
+        return createElement(LowCodeRenderer, {
+          schema: _schema,
+          components,
+          designMode: renderer.designMode,
+          device: renderer.device,
+          appHelper: renderer.context,
+          customCreateElement: (Comp: any, props: any, children: any) => {
+            const componentMeta = host.currentDocument?.getComponentMeta(Comp.displayName);
+            if (componentMeta?.isModal) {
+              return null;
+            }
+
+            const { __id, __designMode, ...viewProps } = props;
+            // mock _leaf，减少性能开销
+            const _leaf = {
+              isEmpty: () => false,
+            };
+            viewProps._leaf = _leaf;
+            return createElement(Comp, viewProps, children);
+          }
+        });
+      }
+    }
+
+    return LowCodeComp;
   }
 
   private _running = false;
@@ -498,93 +524,6 @@ function checkInstanceMounted(instance: any): boolean {
     return instance.parentElement != null;
   }
   return true;
-}
-
-const processPropsSchema = (propsSchema: any, propsMap: any, componentsMap: any): any => {
-  if (!propsSchema) {
-    return {};
-  }
-
-  const result = { ...propsSchema };
-  const reg = /^(?:this\.props|props)\.(\S+)$/;
-  Object.keys(result).map((key: string) => {
-    if (result[key]?.type === 'JSExpression') {
-      const { value } = result[key];
-      const matched = reg.exec(value);
-      if (matched) {
-        const propName = matched[1];
-        result[key] = propsMap[propName];
-      }
-    } else if (result[key]?.type === 'JSSlot') {
-      const schema = result[key].value;
-      result[key] = createElement(ComponentCreator, { schema, propsMap: {}, componentsMap });
-    }
-  });
-
-  return result;
-};
-
-class ComponentCreator extends React.Component<{ schema: any; propsMap: any, componentsMap: any }> {
-  private isModal: boolean;
-
-  constructor(props: any) {
-    super(props);
-    const componentMeta = host.currentDocument?.getComponentMeta(props.schema.componentName);
-    if (componentMeta?.isModal) {
-      this.isModal = true;
-    }
-  }
-
-  render() {
-    if (this.isModal) {
-      return null;
-    }
-    const { schema, propsMap, componentsMap } = this.props;
-    const ComponentClass = componentsMap[schema.componentName];
-    if (!ComponentClass) {
-      return null;
-    }
-    let children = null;
-    if (schema.children && schema.children.length > 0) {
-      children = schema.children.map((item: any) => createElement(ComponentCreator, { schema: item, propsMap, componentsMap }));
-    }
-    const props = processPropsSchema(schema.props, propsMap, componentsMap);
-    const _leaf = host.currentDocument?.createNode(schema);
-    return createElement(ComponentClass, { ...props, _leaf }, children);
-  }
-}
-
-function getComponentController(schema: NodeSchema, componentsMap: any) {
-  class ComponentController extends React.Component<{ schema: any }> {
-    renderSchema: any;
-
-    constructor(props: any) {
-      super(props);
-      const node = host.currentDocument?.createNode(schema);
-      this.renderSchema = node?.export(TransformStage.Render) || {};
-    }
-
-    // TODO: 暂时解决性能问题
-    shouldComponentUpdate() {
-      return false;
-    }
-
-    render() {
-      const { renderSchema } = this;
-      const { componentName } = renderSchema;
-      if (componentName === 'Component') {
-        let children = [] as any;
-        const propsMap = this.props || {};
-        if (renderSchema.children && Array.isArray(renderSchema.children)) {
-          children = renderSchema.children.map((item: any) => createElement(ComponentCreator, { schema: item, propsMap, componentsMap }));
-        }
-        return createElement('div', {}, children);
-      } else {
-        return createElement(ComponentCreator, { schema, propsMap: {}, componentsMap });
-      }
-    }
-  }
-  return ComponentController;
 }
 
 export default new SimulatorRendererContainer();
