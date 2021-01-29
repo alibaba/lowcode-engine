@@ -1,6 +1,7 @@
 import { BuiltinSimulatorRenderer, Component, DocumentModel, Node, NodeInstance } from '@ali/lowcode-designer';
 import { ComponentSchema, NodeSchema, NpmInfo, RootSchema, TransformStage } from '@ali/lowcode-types';
 import { Asset, cursor, isElement, isESModule, isReactComponent, setNativeSelection } from '@ali/lowcode-utils';
+import LowCodeRenderer from '@ali/lowcode-rax-renderer';
 import { computed, obx } from '@recore/obx';
 import DriverUniversal from 'driver-universal';
 import { EventEmitter } from 'events';
@@ -412,8 +413,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     }
     instance = Instance.get(dom);
     while (instance && instance[INTERNAL]) {
-      // 剔除低代码组件的内部组件
-      if (isValidDesignModeRaxComponentInstance(instance) && !findComponentCreator(instance)) {
+      if (isValidDesignModeRaxComponentInstance(instance)) {
       // if (instance && SYMBOL_VNID in instance) {
         // const docId = (instance.props as any).schema.docId;
         return {
@@ -509,15 +509,38 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       doc.getElementsByTagName('head')[0].appendChild(s);
     }
 
-    // const node = host.currentDocument?.createNode(_schema);
-    // _schema = node?.export(TransformStage.Render) || {};
-
-
 
     const renderer = this;
-    const { componentsMap } = renderer;
+    const { componentsMap: components } = renderer;
 
-    return getComponentController(schema, componentsMap);
+    class LowCodeComp extends Rax.Component {
+      render() {
+        // @ts-ignore
+        return createElement(LowCodeRenderer, {
+          schema: _schema,
+          components,
+          designMode: renderer.designMode,
+          device: renderer.device,
+          appHelper: renderer.context,
+          customCreateElement: (Comp: any, props: any, children: any) => {
+            const componentMeta = host.currentDocument?.getComponentMeta(Comp.displayName);
+            if (componentMeta?.isModal) {
+              return null;
+            }
+
+            const { __id, __designMode, ...viewProps } = props;
+            // mock _leaf，减少性能开销
+            const _leaf = {
+              isEmpty: () => false,
+            };
+            viewProps._leaf = _leaf;
+            return createElement(Comp, viewProps, children);
+          }
+        });
+      }
+    }
+
+    return LowCodeComp;
   }
 
   private _running = false;
@@ -597,103 +620,6 @@ function findComponent(libraryMap: LibraryMap, componentName: string, npm?: NpmI
     paths.unshift('default');
   }
   return getSubComponent(library, paths);
-}
-
-const processPropsSchema = (propsSchema: any, propsMap: any, componentsMap: any): any => {
-  if (!propsSchema) {
-    return {};
-  }
-
-  const result = { ...propsSchema };
-  const reg = /^(?:this\.props|props)\.(\S+)$/;
-  Object.keys(result).map((key: string) => {
-    if (result[key]?.type === 'JSExpression') {
-      const { value } = result[key];
-      const matched = reg.exec(value);
-      if (matched) {
-        const propName = matched[1];
-        result[key] = propsMap[propName];
-      }
-    } else if (result[key]?.type === 'JSSlot') {
-      const schema = result[key].value;
-      result[key] = createElement(ComponentCreator, { schema, propsMap: {}, componentsMap });
-    }
-  });
-
-  return result;
-};
-
-function findComponentCreator(instance: any) {
-  let isComponentCreator = false;
-  while (instance && !isComponentCreator) {
-    instance = instance[INTERNAL]?.__parentInstance;
-    isComponentCreator = instance instanceof ComponentCreator;
-  }
-  return isComponentCreator;
-}
-
-class ComponentCreator extends Rax.Component<{ schema: any; propsMap: any, componentsMap: any }> {
-  private isModal: boolean;
-
-  constructor(props: any) {
-    super(props);
-    const componentMeta = host.currentDocument?.getComponentMeta(props.schema.componentName);
-    if (componentMeta?.prototype?.isModal()) {
-      this.isModal = true;
-    }
-  }
-
-  render() {
-    if (this.isModal) {
-      return null;
-    }
-    const { schema, propsMap, componentsMap } = this.props;
-    const ComponentClass = componentsMap[schema.componentName];
-    if (!ComponentClass) {
-      return null;
-    }
-    let children = null;
-    if (schema.children && schema.children.length > 0) {
-      children = schema.children.map((item: any, index: number) => createElement(ComponentCreator, { schema: item, propsMap, componentsMap, key: item?.id || index }));
-    }
-    const props = processPropsSchema(schema.props, propsMap, componentsMap);
-    const _leaf = host.currentDocument?.createNode(schema);
-
-    return createElement(ComponentClass, { ...props, _leaf }, children);
-  }
-}
-
-function getComponentController(schema: NodeSchema, componentsMap: any) {
-  class ComponentController extends Rax.Component<{ schema: any }> {
-    renderSchema: any;
-
-    constructor(props: any) {
-      super(props);
-      const node = host.currentDocument?.createNode(schema);
-      this.renderSchema = node?.export(TransformStage.Render) || {};
-    }
-
-    // TODO: 暂时解决性能问题
-    shouldComponentUpdate() {
-      return false;
-    }
-
-    render() {
-      const { renderSchema } = this;
-      const { componentName } = renderSchema;
-      if (componentName === 'Component') {
-        let children = [] as any;
-        const propsMap = this.props || {};
-        if (renderSchema.children && Array.isArray(renderSchema.children)) {
-          children = renderSchema.children.map((item: any, index: number) => createElement(ComponentCreator, { schema: item, propsMap, componentsMap, key: item?.id || index }));
-        }
-        return createElement('div', {}, children);
-      } else {
-        return createElement(ComponentCreator, { schema, propsMap: {}, componentsMap });
-      }
-    }
-  }
-  return ComponentController;
 }
 
 export default new SimulatorRendererContainer();

@@ -9,7 +9,7 @@
     "es"
   ],
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1",
+    "test": "build-scripts test --config build.test.json",
     "start": "build-scripts start",
     "build": "build-scripts build --skip-demo",
     "prepublishOnly": "npm run build"
@@ -24,32 +24,19 @@
     "react"
   ],
   "dependencies": {
-    "@ali/b3-one": "^0.0.17",
-    "@ali/bzb-request": "^2.6.0-beta.13",
-    "@ali/lib-mtop": "^2.5.1",
-    "@ali/lowcode-datasource-engine": "^1.0.22",
-    "@alifd/next": "^1.19.17",
-    "debug": "^4.1.1",
-    "events": "^3.0.0",
-    "fetch-jsonp": "^1.1.3",
-    "intl-messageformat": "^9.3.1",
-    "jsonuri": "^2.1.2",
-    "keymaster": "^1.6.2",
-    "lodash": "^4.17.11",
-    "moment": "^2.24.0",
-    "react-is": "^16.10.1",
-    "serialize-javascript": "^1.7.0",
-    "socket.io-client": "^2.2.0",
-    "whatwg-fetch": "^3.0.0"
+    "@ali/lowcode-renderer-core": "^1.0.33",
+    "@alifd/next": "^1.21.16"
   },
   "devDependencies": {
+    "@alifd/next": "^1.19.17",
+    "@ali/lowcode-test-mate": "^1.0.1",
     "@alib/build-scripts": "^0.1.18",
     "build-plugin-component": "^0.2.10",
     "build-plugin-fusion": "^0.1.0",
     "build-plugin-moment-locales": "^0.1.0",
-    "moment": "^2.24.0",
     "react": "^16.4.1",
-    "react-dom": "^16.4.1"
+    "react-dom": "^16.4.1",
+    "react-test-renderer": "^16"
   },
   "publishConfig": {
     "registry": "http://registry.npm.alibaba-inc.com"

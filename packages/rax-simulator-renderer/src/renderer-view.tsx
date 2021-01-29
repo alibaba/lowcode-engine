@@ -1,4 +1,4 @@
-import RaxEngine from '@ali/lowcode-rax-renderer/lib/index';
+import RaxRenderer from '@ali/lowcode-rax-renderer';
 import { History } from 'history';
 import { Component, createElement, Fragment } from 'rax';
 import { useRouter } from './rax-use-router';
@@ -175,7 +175,7 @@ class Renderer extends Component<{
     const { designMode, device } = container;
     const { rendererContainer: renderer } = this.props;
     return (
-      <RaxEngine
+      <RaxRenderer
         schema={documentInstance.schema}
         components={renderer.components}
         appHelper={renderer.context}
