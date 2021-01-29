@@ -1,6 +1,7 @@
 import adapter from './adapter';
+import contextFactory from './context';
 
-export { adapter };
+export { adapter, contextFactory };
 
 export * from './renderer';
 export * as types from './types';

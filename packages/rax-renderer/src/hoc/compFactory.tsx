@@ -3,16 +3,19 @@
 import { Component, createElement, forwardRef } from 'rax';
 import PropTypes from 'prop-types';
 import { AppHelper } from '@ali/lowcode-utils';
-import { utils } from '@ali/lowcode-renderer-core';
-import CompEngine from '../engine/compEngine';
-import BlockEngine from '../engine/blockEngine';
-import AppContext from '../context/appContext';
+import { utils, contextFactory } from '@ali/lowcode-renderer-core';
+import componentRendererFactory from '../renderer/component';
+import blockRendererFactory from '../renderer/block';
 
 const { forEach, isFileSchema } = utils;
 
 export default function compFactory(schema, components = {}, componentsMap = {}, config = {}) {
   // 自定义组件需要有自己独立的appHelper
   const appHelper = new AppHelper(config);
+  const CompRenderer = componentRendererFactory();
+  const BlockRenderer = blockRendererFactory();
+  const AppContext = contextFactory();
+
   class LNCompView extends Component {
     static dislayName = 'lce-comp-factory';
 
@@ -60,7 +63,7 @@ export default function compFactory(schema, components = {}, componentsMap = {},
               <CompEngine
                 {...props}
                 __appHelper={appHelper}
-                __components={{ ...components, Component: CompEngine, Block: BlockEngine }}
+                __components={{ ...components, Component: CompRenderer, Block: BlockRenderer }}
                 __componentsMap={componentsMap}
               />
             );
