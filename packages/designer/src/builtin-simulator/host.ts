@@ -236,7 +236,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   readonly componentsConsumer = new ResourceConsumer<Asset | undefined>(() => this.componentsAsset);
 
   readonly injectionConsumer = new ResourceConsumer(() => {
-    return {};
+    return {
+      i18n: this.project.i18n,
+    };
   });
 
   readonly asyncLibraryMap: { [key: string]: {} } = {};

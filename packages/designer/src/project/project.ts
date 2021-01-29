@@ -10,7 +10,7 @@ export class Project {
 
   @obx.val readonly documents: DocumentModel[] = [];
 
-  private data: ProjectSchema = { version: '1.0.0', componentsMap: [], componentsTree: [] };
+  private data: ProjectSchema = { version: '1.0.0', componentsMap: [], componentsTree: [], i18n: {} };
 
   private _simulator?: ISimulatorHost;
 
@@ -40,15 +40,24 @@ export class Project {
     this._config = value;
   }
 
+  @obx.ref private _i18n: any = {};
+  get i18n(): any {
+    return this._i18n;
+  }
+  set i18n(value: any) {
+    this._i18n = value || {};
+  }
+
   /**
    * 获取项目整体 schema
    */
   getSchema(): ProjectSchema {
     return {
       ...this.data,
-      // todo: future change this filter
+      // TODO: future change this filter
       componentsMap: this.currentDocument?.getComponentsMap(),
       componentsTree: this.documents.filter((doc) => !doc.isBlank()).map((doc) => doc.schema),
+      i18n: this._i18n || {},
     };
   }
 
@@ -57,6 +66,7 @@ export class Project {
    * @param schema
    */
   setSchema(schema?: ProjectSchema) {
+    // FIXME: 这里的行为和 getSchema 并不对等，感觉不太对
     const doc = this.documents.find((doc) => doc.actived);
     doc && doc.import(schema?.componentsTree[0]);
   }
@@ -73,9 +83,11 @@ export class Project {
       version: '1.0.0',
       componentsMap: [],
       componentsTree: [],
+      i18n: {},
       ...schema,
     };
     this.config = schema?.config || this.config;
+    this.i18n = schema?.i18n || this.i18n;
 
     if (autoOpen) {
       if (autoOpen === true) {
@@ -137,6 +149,9 @@ export class Project {
     if (key === 'config') {
       this.config = value;
     }
+    if (key === 'i18n') {
+      this.i18n = value;
+    }
     Object.assign(this.data, { [key]: value });
   }
 
@@ -159,6 +174,9 @@ export class Project {
   ): any {
     if (key === 'config') {
       return this.config;
+    }
+    if (key === 'i18n') {
+      return this.i18n;
     }
     return Reflect.get(this.data, key);
   }
