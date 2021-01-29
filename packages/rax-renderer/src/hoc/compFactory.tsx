@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { Component, createElement, forwardRef } from 'rax';
+import { Component, forwardRef } from 'rax';
 import PropTypes from 'prop-types';
 import { AppHelper } from '@ali/lowcode-utils';
 import { utils, contextFactory } from '@ali/lowcode-renderer-core';
@@ -36,7 +36,7 @@ export default function compFactory(schema, components = {}, componentsMap = {},
       // 低代码组件透传应用上下文
       const ctx = ['utils', 'constants', 'history', 'location', 'match'];
       ctx.forEach(key => {
-        if (!appHelper[key] && this.context && this.context.appHelper && this.context.appHelper[key]) {
+        if (!appHelper[key] && this.context?.appHelper && this.context?.appHelper[key]) {
           appHelper.set(key, this.context.appHelper[key]);
         }
       });
@@ -60,7 +60,7 @@ export default function compFactory(schema, components = {}, componentsMap = {},
           {context => {
             this.context = context;
             return (
-              <CompEngine
+              <CompRenderer
                 {...props}
                 __appHelper={appHelper}
                 __components={{ ...components, Component: CompRenderer, Block: BlockRenderer }}
