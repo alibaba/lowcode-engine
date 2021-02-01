@@ -34,12 +34,12 @@ lerna run cloud-build --stream
 cd $WORK_DIR
 # mv deploy-space/packages/demo/build $BUILD_DEST
 mv deploy-space/packages/react-simulator-renderer/dist $BUILD_DEST
-mv deploy-space/packages/rax-simulator-renderer/dist $BUILD_DEST
+mv deploy-space/packages/rax-simulator-renderer/dist/* $BUILD_DEST
 #mv deploy-space/packages/editor-preset-vision/dist/* $BUILD_DEST
-mv deploy-space/packages/engine/dist/js $BUILD_DEST
-mv deploy-space/packages/engine/dist/css $BUILD_DEST
-mv deploy-space/packages/vision-polyfill/dist/js $BUILD_DEST
-mv deploy-space/packages/vision-polyfill/dist/css $BUILD_DEST
+mv deploy-space/packages/engine/dist/js/* $BUILD_DEST
+mv deploy-space/packages/engine/dist/css/* $BUILD_DEST
+mv deploy-space/packages/vision-polyfill/dist/js/* $BUILD_DEST
+mv deploy-space/packages/vision-polyfill/dist/css/* $BUILD_DEST
 # mv deploy-space/packages/editor-preset-general/dist/* $BUILD_DEST
 # cp deploy-space/static/* $BUILD_DEST
 
