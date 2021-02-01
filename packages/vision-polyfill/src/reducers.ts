@@ -1,5 +1,3 @@
-import { isJSBlock, isJSExpression, isJSSlot } from '@ali/lowcode-types';
-import { isPlainObject, hasOwnProperty, cloneDeep, isI18NObject, isUseI18NSetter, convertToI18NObject, isString } from '@ali/lowcode-utils';
 import { editor, designer, designerCabin } from '@ali/lowcode-engine';
 import bus from './bus';
 import { VE_EVENTS } from './base/const';
@@ -20,6 +18,9 @@ import {
 
 const { LiveEditing, TransformStage } = designerCabin;
 
+// 清理引擎自带的规则和保存函数，会影响 vc i18n 的保存
+LiveEditing.clearLiveEditingSpecificRule();
+LiveEditing.clearLiveEditingSaveHandler();
 LiveEditing.addLiveEditingSpecificRule(liveEditingRule);
 LiveEditing.addLiveEditingSaveHandler(liveEditingSaveHander);
 

@@ -22,20 +22,28 @@ export interface EditingTarget {
   event: MouseEvent;
 }
 
-const saveHandlers: SaveHandler[] = [];
+let saveHandlers: SaveHandler[] = [];
 function addLiveEditingSaveHandler(handler: SaveHandler) {
   saveHandlers.push(handler);
 }
+function clearLiveEditingSaveHandler() {
+  saveHandlers = [];
+}
 
-const specificRules: SpecificRule[] = [];
+let specificRules: SpecificRule[] = [];
 function addLiveEditingSpecificRule(rule: SpecificRule) {
   specificRules.push(rule);
+}
+function clearLiveEditingSpecificRule() {
+  specificRules = [];
 }
 
 export class LiveEditing {
   static addLiveEditingSpecificRule = addLiveEditingSpecificRule;
+  static clearLiveEditingSpecificRule = clearLiveEditingSpecificRule;
 
   static addLiveEditingSaveHandler = addLiveEditingSaveHandler;
+  static clearLiveEditingSaveHandler = clearLiveEditingSaveHandler;
 
   @obx.ref private _editing: Prop | null = null;
 
