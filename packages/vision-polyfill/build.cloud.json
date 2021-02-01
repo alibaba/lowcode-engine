@@ -1,9 +1,8 @@
 {
   "entry": {
-    "engine": "src/index",
-    "engine-core": "src/index-core"
+    "vision-polyfill": "src/index"
   },
-  "library": "___AliLowCodeEngine___",
+  "library": "___VisionPolyfill___",
   "libraryTarget": "umd",
   "externals": {
     "react": "var window.React",
@@ -14,6 +13,7 @@
     "rax": "var window.Rax",
     "monaco-editor/esm/vs/editor/editor.api": "var window.monaco",
     "monaco-editor/esm/vs/editor/editor.main.js": "var window.monaco",
+    "@ali/lowcode-engine": "var window.AliLowCodeEngine",
     "@ali/lowcode-engine-ext": "var window.AliLowCodeEngineExt",
     "moment": "var moment",
     "lodash": "var _"

@@ -1,4 +1,4 @@
-export * from './engine';
+export * from './engine-core';
 
 const version = '{{VERSION_PLACEHOLDER}}';
 

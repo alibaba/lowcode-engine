@@ -2,6 +2,7 @@
   "entry": {
     "editor-preset-vision": "../editor-preset-vision/src/index.ts",
     "engine": "../engine/src/index.ts",
+    "engine-core": "../engine/src/index-core.ts",
     "vision-polyfill": "../vision-polyfill/src/index.ts",
     "react-simulator-renderer": "../react-simulator-renderer/src/index.ts",
     "rax-simulator-renderer": "../rax-simulator-renderer/src/index.ts"
@@ -20,7 +21,11 @@
     "@ali/visualengine-utils": "var window.VisualEngineUtils",
     "rax": "var window.Rax",
     "monaco-editor/esm/vs/editor/editor.api": "var window.monaco",
-    "monaco-editor/esm/vs/editor/editor.main.js": "var window.monaco"
+    "monaco-editor/esm/vs/editor/editor.main.js": "var window.monaco",
+    "@ali/lowcode-engine": "var window.AliLowCodeEngine",
+    "@ali/lowcode-engine-ext": "var window.AliLowCodeEngineExt",
+    "moment": "var moment",
+    "lodash": "var _"
   },
   "plugins": [
     [

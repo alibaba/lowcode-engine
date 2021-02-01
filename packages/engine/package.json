@@ -13,7 +13,7 @@
     "start": "build-scripts start",
     "version:update": "node ./scripts/version.js",
     "build": "build-scripts build --skip-demo",
-    "cloud-build": "build-scripts build --skip-demo",
+    "cloud-build": "build-scripts build --config build.cloud.json",
     "test": "build-scripts test --config build.test.json"
   },
   "license": "MIT",
@@ -24,6 +24,7 @@
     "@ali/lowcode-editor-skeleton": "^1.0.33",
     "@ali/lowcode-plugin-designer": "^1.0.33",
     "@ali/lowcode-plugin-outline-pane": "^1.0.33",
+    "@ali/lowcode-engine-ext": "^1.0.0",
     "@ali/lowcode-utils": "^1.0.33",
     "@ali/ve-i18n-util": "^2.0.0",
     "@ali/ve-icons": "^4.1.9",
