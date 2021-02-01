@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.35-beta.0"></a>
+## [1.0.35-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.33...v1.0.35-beta.0) (2021-02-01)
+
+
+### Features
+
+* 分离 engine.js 为 engine-core.js + engine-ext.js ([361a68b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/361a68b))
+
+
+
+
 <a name="1.0.33"></a>
 ## [1.0.33](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.33-beta.1...v1.0.33) (2021-01-29)
 
