@@ -7,6 +7,8 @@ import { SimulatorRendererContainer, DocumentInstance } from './renderer';
 import { Router, Route, Switch } from 'react-router';
 import './renderer.less';
 
+const DEFAULT_SIMULATOR_LOCALE = 'zh-CN';
+
 // patch cloneElement avoid lost keyProps
 const originCloneElement = window.React.cloneElement;
 (window as any).React.cloneElement = (child: any, { _leaf, ...props }: any = {}, ...rest: any[]) => {
@@ -137,8 +139,13 @@ class Renderer extends Component<{
     const { documentInstance, rendererContainer: renderer } = this.props;
     const { container } = documentInstance;
     const { designMode, device } = container;
+    const messages = container.context?.utils?.i18n?.messages || {};
+    const locale = container.context?.utils?.i18n?.currentLocale || Object.keys(messages)[0] || DEFAULT_SIMULATOR_LOCALE;
+
     return (
       <LowCodeRenderer
+        locale={locale}
+        messages={messages}
         schema={documentInstance.schema}
         components={container.components}
         appHelper={container.context}

@@ -46,7 +46,8 @@ const EXPRESSION_TYPE = {
   JSEXPRESSION: 'JSExpression',
   JSFUNCTION: 'JSFunction',
   JSSLOT: 'JSSlot',
-  JSBLOCK: 'JSBlock'
+  JSBLOCK: 'JSBlock',
+  I18N: 'i18n',
 };
 const EXPRESSION_REG = /^\{\{(\{.*\}|.*?)\}\}$/;
 const hasSymbol = typeof Symbol === 'function' && Symbol.for;
@@ -110,6 +111,10 @@ export function isJSExpression(obj: any) {
     obj && typeof obj === 'object' && EXPRESSION_TYPE.JSEXPRESSION === obj.type && typeof obj.value === 'string';
   const isJSExpressionStr = typeof obj === 'string' && EXPRESSION_REG.test(obj.trim());
   return isJSExpressionObj || isJSExpressionStr;
+}
+
+export function isI18n(obj) {
+  return obj && typeof obj === 'object' && EXPRESSION_TYPE.I18N === obj.type;
 }
 
 /**
@@ -178,6 +183,19 @@ export function generateI18n(locale = 'zh-CN', messages: any = {}) {
     const formater = new IntlMessageFormat(messages[key], locale);
     return formater.format(values);
   };
+}
+
+/**
+ * 用于处理国际化字符串
+ * @param {*} key 语料标识
+ * @param {*} values 字符串模版变量
+ * @param {*} locale 国际化标识，例如 zh-CN、en-US
+ * @param {*} messages 国际化语言包
+ */
+export function getI18n(key: string, values = {}, locale = 'zh-CN', messages = {}) {
+  if (!messages || !messages[locale] || !messages[locale][key]) return '';
+  const formater = new IntlMessageFormat(messages[locale][key], locale);
+  return formater.format(values);
 }
 
 /**
@@ -373,6 +391,8 @@ export function transformStringToFunction(str: string) {
 export function parseData(schema: any, self: any): any {
   if (isJSExpression(schema)) {
     return parseExpression(schema, self);
+  } else if (isI18n(schema)) {
+    return parseI18n(schema, self);
   } else if (typeof schema === 'string') {
     return schema.trim();
   } else if (Array.isArray(schema)) {
@@ -423,10 +443,14 @@ export function capitalizeFirstLetter(word: string) {
   return word[0].toUpperCase() + word.slice(1);
 }
 
-export function isI18n(obj: any) {
-  return obj && typeof obj === 'object' && obj?.type === 'i18n';
-}
-
 export function isVariable(obj: any) {
   return obj && typeof obj === 'object' && obj?.type === 'variable';
+}
+
+/* 将 i18n 结构，降级解释为对 i18n 接口的调用 */
+export function parseI18n(i18nInfo: any, self: any) {
+  return parseExpression({
+    type: EXPRESSION_TYPE.JSEXPRESSION,
+    value: `this.i18n('${i18nInfo.key}')`,
+  }, self);
 }
