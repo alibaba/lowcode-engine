@@ -267,12 +267,28 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
             return parseQuery(search);
           },
         },
+        i18n: {
+          setLocale: (loc: string) => {
+            const newCtx = {
+              ...this._appContext,
+            };
+            newCtx.utils.i18n.currentLocale = loc;
+            this._appContext = newCtx;
+          },
+          currentLocale: undefined,
+          messages: {},
+        },
       },
       constants: {},
       requestHandlersMap: this._requestHandlersMap,
     };
     host.injectionConsumer.consume((data) => {
-      // sync utils, i18n, contants,... config
+      // TODO: sync utils, i18n, contants,... config
+      const newCtx = {
+        ...this._appContext,
+      };
+      newCtx.utils.i18n.messages = data.i18n || {};
+      this._appContext = newCtx;
     });
   }
 

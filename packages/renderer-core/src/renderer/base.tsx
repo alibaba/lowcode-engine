@@ -10,6 +10,7 @@ import {
   getValue,
   parseData,
   parseExpression,
+  parseI18n,
   isEmpty,
   isSchema,
   isFileSchema,
@@ -19,11 +20,11 @@ import {
   transformArrayToMap,
   transformStringToFunction,
   checkPropTypes,
-  generateI18n,
+  getI18n,
   acceptsRef,
   getFileCssName,
   capitalizeFirstLetter,
-  DataHelper, 
+  DataHelper,
   isI18n,
   isVariable
 } from '../utils';
@@ -77,9 +78,8 @@ export default function baseRenererFactory() {
       this.appHelper = props.__appHelper;
       this.__compScopes = {};
       this.__instanceMap = {};
-      const { locale, messages } = props;
-      this.i18n = generateI18n(locale, messages);
       this.__bindCustomMethods(props);
+      this.__initI18nAPIs(props);
     }
 
     __afterInit(props: IRendererProps) { }
@@ -259,6 +259,15 @@ export default function baseRenererFactory() {
       ); */
     };
 
+    __initI18nAPIs = () => {
+      this.i18n = (key: string, values = {}) => {
+        const { locale, messages } = this.props;
+        return getI18n(key, values, locale, messages);
+      };
+      this.getLocale = () => this.props.locale;
+      this.setLocale = (loc: string) => this.appHelper?.utils?.i18n?.setLocale && this.appHelper?.utils?.i18n?.setLocale(loc);
+    };
+
     __render = () => {
       const schema = this.props.__schema;
       this.__setLifeCycleMethods('render');
@@ -327,6 +336,9 @@ export default function baseRenererFactory() {
 
         if (isJSExpression(schema)) {
           return parseExpression(schema, self);
+        }
+        if (isI18n(schema)) {
+          return parseI18n(schema, self);
         }
         if (isJSSlot(schema)) {
           return this.__createVirtualDom(schema.value, self, parentInfo);
@@ -581,11 +593,16 @@ export default function baseRenererFactory() {
         if (!isSchema(props) && !isJSSlot(props)) return checkProps(props);
       }
 
-      const handleI18n = (props: any) => props[props.use || 'zh_CN'];
+      const handleLegaoI18n = (props: any) => props[props.use || 'zh_CN'];
 
       // 兼容乐高设计态 i18n 数据
       if (isI18n(props)) {
-        props = handleI18n(props);
+        const i18nProp = handleLegaoI18n(props);
+        if (i18nProp) {
+          props = i18nProp;
+        } else {
+          return parseI18n(props, self);
+        }
       }
 
       // 兼容乐高设计态的变量绑定
