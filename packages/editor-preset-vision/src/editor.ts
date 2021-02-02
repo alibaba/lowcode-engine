@@ -12,7 +12,7 @@ import { Skeleton, SettingsPrimaryPane, registerDefaults } from '@ali/lowcode-ed
 import { deepValueParser } from './deep-value-parser';
 import { liveEditingRule, liveEditingSaveHander } from './vc-live-editing';
 import {
-  compatibleReducer,
+  // compatibleReducer,
   upgradePageLifeCyclesReducer,
   stylePropsReducer,
   upgradePropsReducer,
@@ -55,7 +55,8 @@ designer.addPropsReducer(filterReducer, TransformStage.Save);
 designer.addPropsReducer(filterReducer, TransformStage.Render);
 
 // FIXME: Dirty fix, will remove this reducer
-designer.addPropsReducer(compatibleReducer, TransformStage.Save);
+// designer.addPropsReducer(compatibleReducer, TransformStage.Save);
+
 // 兼容历史版本的 Page 组件
 designer.addPropsReducer(upgradePageLifeCyclesReducer, TransformStage.Save);
 
