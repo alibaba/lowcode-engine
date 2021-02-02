@@ -138,9 +138,8 @@ class Renderer extends Component<{
   render() {
     const { documentInstance, rendererContainer: renderer } = this.props;
     const { container } = documentInstance;
-    const { designMode, device } = container;
+    const { designMode, device, locale } = container;
     const messages = container.context?.utils?.i18n?.messages || {};
-    const locale = container.context?.utils?.i18n?.currentLocale || Object.keys(messages)[0] || DEFAULT_SIMULATOR_LOCALE;
 
     return (
       <LowCodeRenderer

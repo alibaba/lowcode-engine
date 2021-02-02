@@ -15,19 +15,19 @@
     "monaco-editor/esm/vs/editor/editor.main.js": "var window.monaco",
     "@ali/lowcode-engine": "var window.AliLowCodeEngine",
     "@ali/lowcode-engine-ext": "var window.AliLowCodeEngineExt",
+    "@alifd/next": "var Next",
     "moment": "var moment",
     "lodash": "var _"
   },
-  "browserslist": {
-    "chrome": 80
-  },
+  "polyfill": false,
   "outputDir": "dist",
   "vendor": false,
   "ignoreHtmlTemplate": true,
   "sourceMap": true,
   "plugins": [
     "build-plugin-react-app",
-    "build-plugin-fusion",
+    ["build-plugin-fusion", {
+    }],
     ["build-plugin-moment-locales", {
       "locales": ["zh-cn"]
     }],

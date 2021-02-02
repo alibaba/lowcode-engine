@@ -212,6 +212,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       // sync designMode
       this._designMode = host.designMode;
 
+      this._locale = host.locale;
+
       // sync requestHandlersMap
       this._requestHandlersMap = host.requestHandlersMap;
 
@@ -269,13 +271,10 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         },
         i18n: {
           setLocale: (loc: string) => {
-            const newCtx = {
-              ...this._appContext,
-            };
-            newCtx.utils.i18n.currentLocale = loc;
-            this._appContext = newCtx;
+            this._appContext.utils.i18n.currentLocale = loc;
+            this._locale = loc;
           },
-          currentLocale: undefined,
+          currentLocale: this.locale,
           messages: {},
         },
       },
@@ -321,7 +320,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     return this._components;
   }
   // context from: utils、constants、history、location、match
-  @obx.ref private _appContext = {};
+  @obx.ref private _appContext: any = {};
   @computed get context(): any {
     return this._appContext;
   }
@@ -332,6 +331,10 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   @obx.ref private _device: string = 'default';
   @computed get device() {
     return this._device;
+  }
+  @obx.ref private _locale: string = '';
+  @computed get locale() {
+    return this._locale;
   }
   @obx.ref private _componentsMap = {};
   @computed get componentsMap(): any {

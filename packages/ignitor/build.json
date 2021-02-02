@@ -9,6 +9,7 @@
   },
   "vendor": false,
   "devServer": {
+    "useLocalIp": true,
     "hot": false
   },
   "publicPath": "/",

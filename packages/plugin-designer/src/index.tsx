@@ -14,6 +14,7 @@ interface DesignerPluginState {
   extraEnvironment?: any[] | null;
   renderEnv?: string;
   device?: string;
+  locale?: string;
   designMode?: string;
   deviceClassName?: string;
   simulatorUrl: Asset | null;
@@ -30,6 +31,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
     extraEnvironment: null,
     renderEnv: 'default',
     device: 'default',
+    locale: '',
     designMode: 'live',
     deviceClassName: '',
     simulatorUrl: null,
@@ -49,6 +51,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
       const assets = await editor.onceGot('assets');
       const renderEnv = await editor.get('renderEnv');
       const device = await editor.get('device');
+      const locale = await editor.get('locale');
       const designMode = await editor.get('designMode');
       const deviceClassName = await editor.get('deviceClassName');
       const simulatorUrl = await editor.get('simulatorUrl');
@@ -68,6 +71,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
         deviceClassName,
         simulatorUrl,
         requestHandlersMap,
+        locale,
       };
       this.setState(state);
     } catch (e) {
@@ -100,6 +104,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
       deviceClassName,
       simulatorUrl,
       requestHandlersMap,
+      locale,
     } = this.state;
 
     if (!library || !componentMetadatas) {
@@ -119,6 +124,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
           extraEnvironment,
           renderEnv,
           device,
+          locale,
           designMode,
           deviceClassName,
           simulatorUrl,

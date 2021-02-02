@@ -14,20 +14,20 @@
     "rax": "var window.Rax",
     "monaco-editor/esm/vs/editor/editor.api": "var window.monaco",
     "monaco-editor/esm/vs/editor/editor.main.js": "var window.monaco",
+    "@alifd/next": "var Next",
     "@ali/lowcode-engine-ext": "var window.AliLowCodeEngineExt",
     "moment": "var moment",
     "lodash": "var _"
   },
-  "browserslist": {
-    "chrome": 80
-  },
+  "polyfill": false,
   "outputDir": "dist",
   "vendor": false,
   "ignoreHtmlTemplate": true,
   "sourceMap": true,
   "plugins": [
     "build-plugin-react-app",
-    "build-plugin-fusion",
+    ["build-plugin-fusion", {
+    }],
     ["build-plugin-moment-locales", {
       "locales": ["zh-cn"]
     }],

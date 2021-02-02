@@ -144,6 +144,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     return this.get('device') || 'default';
   }
 
+  @computed get locale(): string {
+    return this.get('locale') || '';
+  }
+
   @computed get deviceClassName(): string | undefined {
     return this.get('deviceClassName');
   }
