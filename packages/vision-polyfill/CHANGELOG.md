@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.35-beta.1"></a>
+## [1.0.35-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.35-beta.0...v1.0.35-beta.1) (2021-02-03)
+
+
+### Features
+
+* 支持 Node#wrapWith API ([265a84f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/265a84f))
+
+
+
+
 <a name="1.0.35-beta.0"></a>
 ## [1.0.35-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.33...v1.0.35-beta.0) (2021-02-01)
 
