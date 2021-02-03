@@ -53,7 +53,7 @@ export function liveEditingRule(target: EditingTarget) {
   }
 
   const { innerText } = targetElement;
-  const propTarget = ['title', 'label', 'text', 'content'].find(prop => {
+  const propTarget = ['title', 'label', 'text', 'content', 'children'].find(prop => {
     return equalText(getText(node, prop), innerText);
   });
 

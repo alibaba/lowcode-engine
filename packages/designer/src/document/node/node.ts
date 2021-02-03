@@ -456,8 +456,8 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   /* istanbul ignore next */
   wrapWith(schema: Schema) {
-    // this.replaceWith({ ...schema, children: [this.export()] });
-    // this.children!.get(0)!.select();
+    const wrappedNode = this.replaceWith({ ...schema, children: [this.export()] });
+    return wrappedNode.children!.get(0);
   }
 
   replaceWith(schema: Schema, migrate = false): any {
@@ -485,6 +485,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       if (selected) {
         this.document.selection.select(newNode.id);
       }
+      return newNode;
     }
     return node;
   }

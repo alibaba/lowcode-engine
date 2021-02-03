@@ -332,7 +332,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   @computed get device() {
     return this._device;
   }
-  @obx.ref private _locale: string = '';
+  @obx.ref private _locale: string | undefined = undefined;
   @computed get locale() {
     return this._locale;
   }
