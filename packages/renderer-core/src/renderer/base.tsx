@@ -79,7 +79,7 @@ export default function baseRenererFactory() {
       this.__compScopes = {};
       this.__instanceMap = {};
       this.__bindCustomMethods(props);
-      this.__initI18nAPIs(props);
+      this.__initI18nAPIs();
     }
 
     __afterInit(props: IRendererProps) { }
@@ -609,7 +609,7 @@ export default function baseRenererFactory() {
       if (isVariable(props)) {
         props = props.value;
         if (isI18n(props)) {
-          props = handleI18n(props);
+          props = handleLegaoI18n(props);
         }
       }
 
