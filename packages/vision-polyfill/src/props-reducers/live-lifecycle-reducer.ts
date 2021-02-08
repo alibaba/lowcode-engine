@@ -13,7 +13,7 @@ export function liveLifecycleReducer(props: any, node: Node) {
         didMount: 'componentDidMount',
         willUnmount: 'componentWillUnMount',
       };
-      const lifeCycles = props.lifeCycles;
+      const { lifeCycles } = props;
       Object.keys(lifeCycleMap).forEach(key => {
         if (lifeCycles[key]) {
           lifeCycles[lifeCycleMap[key]] = lifeCycles[key];

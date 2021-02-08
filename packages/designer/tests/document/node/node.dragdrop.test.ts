@@ -55,7 +55,5 @@ describe.skip('节点拖拽测试', () => {
       expect(getIdsFromSchema(exportSchema).length).toBe(expectedNodeCnt);
       expect(mockCreateSettingEntry).toBeCalledTimes(expectedNodeCnt);
     });
-
-
   });
 });

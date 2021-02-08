@@ -43,18 +43,16 @@ const pages = Object.assign(project, {
           componentsTree.push(item.componentsTree[0]);
         }
       });
+    } else if (isPageDataV1(pages[0])) {
+      componentsTree = [pages[0].layout];
     } else {
-      if (isPageDataV1(pages[0])) {
-        componentsTree = [pages[0].layout];
-      } else {
-        // if (!pages[0].componentsTree) return;
-        componentsTree = pages[0].componentsTree;
-        if (componentsTree[0]) {
-          componentsTree[0].componentName = componentsTree[0].componentName || 'Page';
-          // FIXME
-          if (componentsTree[0].componentName === 'Page' || componentsTree[0].componentName === 'Component') {
-            componentsTree[0].methods = {};
-          }
+      // if (!pages[0].componentsTree) return;
+      componentsTree = pages[0].componentsTree;
+      if (componentsTree[0]) {
+        componentsTree[0].componentName = componentsTree[0].componentName || 'Page';
+        // FIXME
+        if (componentsTree[0].componentName === 'Page' || componentsTree[0].componentName === 'Component') {
+          componentsTree[0].methods = {};
         }
       }
     }

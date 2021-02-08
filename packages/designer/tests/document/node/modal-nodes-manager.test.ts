@@ -1,5 +1,5 @@
 import '../../fixtures/window';
-import { set } from '../../utils';
+import { set, delayObxTick, delay } from '../../utils';
 import { Editor } from '@ali/lowcode-editor-core';
 import { Project } from '../../../src/project/project';
 import { DocumentModel } from '../../../src/document/document-model';
@@ -24,7 +24,7 @@ import pageMetadata from '../../fixtures/component-metadata/page';
 import rootHeaderMetadata from '../../fixtures/component-metadata/root-header';
 import rootContentMetadata from '../../fixtures/component-metadata/root-content';
 import rootFooterMetadata from '../../fixtures/component-metadata/root-footer';
-import { delayObxTick, delay } from '../../utils';
+
 
 describe('ModalNodesManager 方法测试', () => {
   let editor: Editor;
@@ -81,7 +81,7 @@ describe('ModalNodesManager 方法测试', () => {
     const off = mgr.onModalNodesChange(nodesMockFn);
     const offVisible = mgr.onVisibleChange(visibleMockFn);
 
-    const newNode = new Node(doc, { componentName: 'Dialog' })
+    const newNode = new Node(doc, { componentName: 'Dialog' });
     mgr.addNode(newNode);
     expect(visibleMockFn).toHaveBeenCalledTimes(2);
     expect(nodesMockFn).toHaveBeenCalledTimes(1);

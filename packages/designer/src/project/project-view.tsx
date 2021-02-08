@@ -8,8 +8,8 @@ import './project.less';
 export class ProjectView extends Component<{ designer: Designer }> {
   render() {
     const { designer } = this.props;
-    const project = designer.project;
-    const simulatorProps = project.simulatorProps;
+    const { project } = designer;
+    const { simulatorProps } = project;
     const Simulator = designer.simulatorComponent || BuiltinSimulatorHostView;
 
     return (

@@ -5,6 +5,7 @@ export default function tempRendererFactory() {
 
   return class TempRenderer extends BaseRenderer {
     static dislayName = 'temp-renderer';
+
     __namespace = 'temp';
 
     __init() {

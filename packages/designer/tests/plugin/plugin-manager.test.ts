@@ -44,8 +44,8 @@ describe('plugin 测试', () => {
           return {
             x: 1,
             y: 2,
-          }
-        }
+          };
+        },
       };
     }, { test: 1 });
     await pluginManager.init();
@@ -168,5 +168,5 @@ describe('plugin 测试', () => {
     await plugin.dispose();
 
     expect(pluginManager.has('demo1')).toBeFalsy();
-  })
+  });
 });

@@ -1,5 +1,5 @@
 import '../../../fixtures/window';
-import { set } from '../../../utils';
+import { set, delayObxTick } from '../../../utils';
 import { Editor } from '@ali/lowcode-editor-core';
 import { Props } from '../../../../src/document/node/props/props';
 import { Designer } from '../../../../src/designer/designer';
@@ -7,7 +7,7 @@ import { Project } from '../../../../src/project/project';
 import { DocumentModel } from '../../../../src/document/document-model';
 import { Prop, isProp, isValidArrayIndex } from '../../../../src/document/node/props/prop';
 import { TransformStage } from '@ali/lowcode-types';
-import { delayObxTick } from '../../../utils';
+
 
 const mockedOwner = {
   componentName: 'Div',
@@ -147,7 +147,7 @@ describe('Prop 类测试', () => {
 
     it('迭代器 / map / forEach', () => {
       const mockedFn = jest.fn();
-      for (let item of strProp) {
+      for (const item of strProp) {
         mockedFn();
       }
       expect(mockedFn).not.toHaveBeenCalled();
@@ -160,7 +160,7 @@ describe('Prop 类测试', () => {
       mockedFn.mockClear();
 
       strProp.map(item => {
-        mockedFn();
+        return mockedFn();
       });
       expect(mockedFn).not.toHaveBeenCalled();
       mockedFn.mockClear();
@@ -214,7 +214,7 @@ describe('Prop 类测试', () => {
         const fromStashProp = prop.get('l');
         const fromStashNestedProp = prop.get('m.m1');
         fromStashProp.setValue('fromStashProp');
-        fromStashNestedProp?.setValue('fromStashNestedProp')
+        fromStashNestedProp?.setValue('fromStashNestedProp');
 
         await delayObxTick();
         expect(prop.get('l').getValue()).toBe('fromStashProp');
@@ -277,7 +277,7 @@ describe('Prop 类测试', () => {
 
       it('迭代器 / map / forEach', () => {
         const mockedFn = jest.fn();
-        for (let item of prop) {
+        for (const item of prop) {
           mockedFn();
         }
         expect(mockedFn).toHaveBeenCalledTimes(5);
@@ -290,7 +290,7 @@ describe('Prop 类测试', () => {
         mockedFn.mockClear();
 
         prop.map(item => {
-          mockedFn();
+          return mockedFn();
         });
         expect(mockedFn).toHaveBeenCalledTimes(5);
         mockedFn.mockClear();
@@ -361,7 +361,7 @@ describe('Prop 类测试', () => {
     const slotProp = new Prop(div?.getProps(), {
       type: 'JSSlot',
       value: [{
-        componentName: 'Button'
+        componentName: 'Button',
       }],
     });
 

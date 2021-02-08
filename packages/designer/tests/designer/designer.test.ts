@@ -58,7 +58,7 @@ describe('Designer 测试', () => {
       editor.on('designer.dragstart', dragStartMockFn2);
       editor.on('designer.drag', dragMockFn2);
       editor.on('designer.dragend', dragEndMockFn2);
-      const dragon = designer.dragon;
+      const { dragon } = designer;
 
       dragon.boost(
         {
@@ -124,7 +124,7 @@ describe('Designer 测试', () => {
       editor.on('designer.dragstart', dragStartMockFn2);
       editor.on('designer.drag', dragMockFn2);
       editor.on('designer.dragend', dragEndMockFn2);
-      const dragon = designer.dragon;
+      const { dragon } = designer;
 
       dragon.boost(
         {
@@ -183,37 +183,37 @@ describe('Designer 测试', () => {
     expect(designer.transformProps([{ num: 1 }], TransformStage.Init)).toEqual([{ num: 1 }]);
 
     designer.addPropsReducer((props, node) => {
-      props.num = props.num + 1;
+      props.num += 1;
       return props;
     }, TransformStage.Init);
 
     designer.addPropsReducer((props, node) => {
-      props.num = props.num + 1;
+      props.num += 1;
       return props;
     }, TransformStage.Init);
 
     designer.addPropsReducer((props, node) => {
-      props.num = props.num + 1;
+      props.num += 1;
       return props;
     }, TransformStage.Clone);
 
     designer.addPropsReducer((props, node) => {
-      props.num = props.num + 1;
+      props.num += 1;
       return props;
     }, TransformStage.Serilize);
 
     designer.addPropsReducer((props, node) => {
-      props.num = props.num + 1;
+      props.num += 1;
       return props;
     }, TransformStage.Render);
 
     designer.addPropsReducer((props, node) => {
-      props.num = props.num + 1;
+      props.num += 1;
       return props;
     }, TransformStage.Save);
 
     designer.addPropsReducer((props, node) => {
-      props.num = props.num + 1;
+      props.num += 1;
       return props;
     }, TransformStage.Upgrade);
 

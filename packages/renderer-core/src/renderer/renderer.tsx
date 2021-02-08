@@ -173,7 +173,7 @@ export default function rendererFactory() {
           appHelper,
           components: allComponents,
           engine: this,
-        }}, createElement(ConfigProvider, {device: this.props.device}, createElement(Comp, {
+        } }, createElement(ConfigProvider, { device: this.props.device }, createElement(Comp, {
           key: schema.__ctx && `${schema.__ctx.lceKey}_${schema.__ctx.idx || '0'}`,
           ref: this.__getRef,
           __appHelper: appHelper,

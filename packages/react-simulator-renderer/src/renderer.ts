@@ -96,7 +96,7 @@ export class DocumentInstance {
   }
 
   get path(): string {
-    return '/' + this.document.fileName;
+    return `/${ this.document.fileName}`;
   }
 
   get id() {
@@ -116,7 +116,7 @@ export class DocumentInstance {
 
   mountInstance(id: string, instance: ReactInstance | null) {
     const docId = this.document.id;
-    const instancesMap = this.instancesMap;
+    const { instancesMap } = this;
     if (instance == null) {
       let instances = this.instancesMap.get(id);
       if (instances) {
@@ -265,7 +265,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         },
         legaoBuiltins: {
           getUrlParams() {
-            const search = history.location.search;
+            const { search } = history.location;
             return parseQuery(search);
           },
         },
@@ -343,9 +343,9 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   /**
    * 加载资源
    */
-  load(asset: Asset): Promise<any> {
-    return loader.load(asset);
-  }
+  // load(asset: Asset): Promise<any> {
+  //   return loader.load(asset);
+  // }
 
   getComponent(componentName: string) {
     const paths = componentName.split('.');
@@ -364,8 +364,6 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       subs.unshift(sub);
       componentName = paths.join('.');
     }
-
-    return null;
   }
 
   getClosestNodeInstance(from: ReactInstance, nodeId?: string): NodeInstance<ReactInstance> | null {
@@ -437,7 +435,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
             };
             viewProps._leaf = _leaf;
             return createElement(Comp, viewProps, children);
-          }
+          },
         });
       }
     }

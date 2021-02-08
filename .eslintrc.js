@@ -1,6 +1,6 @@
 module.exports = {
   extends: 'eslint-config-ali/typescript/react',
-  ignorePatterns: [ 'tests/* '],
+  ignorePatterns: [ 'tests/** '],
   rules: {
     'react/no-multi-comp': 0,
     'no-unused-expressions': 0,
@@ -24,5 +24,7 @@ module.exports = {
     'no-useless-escape': 1,
     'brace-style': 1,
     '@typescript-eslint/no-inferrable-types': 0,
+    'no-proto': 0,
+    'prefer-const': 0,
   }
 };

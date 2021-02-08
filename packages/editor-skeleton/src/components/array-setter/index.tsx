@@ -75,7 +75,7 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
   };
 
 
-  static onItemChange(onChange: Function|undefined, items: Array<SettingField>) {
+  static onItemChange(onChange: Function|undefined, items: SettingField[]) {
     onChange && onChange(items.map(item => {
       return item && item.getValue();
     }));
@@ -91,7 +91,7 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
     });
 
     // 对itemsMap重新生成并刷新当前setter数据
-    const newItems: Array<SettingField> = [];
+    const newItems: SettingField[] = [];
     // const newItemsMap = {};
     itemsMap.clear();
     for (let i = 0; i < items.length; i++) {

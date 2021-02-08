@@ -252,7 +252,7 @@ export class Project {
    * 提供给模拟器的参数
    */
   @computed get simulatorProps(): object {
-    let simulatorProps = this.designer.simulatorProps;
+    let { simulatorProps } = this.designer;
     if (typeof simulatorProps === 'function') {
       simulatorProps = simulatorProps(this);
     }

@@ -29,8 +29,8 @@ export default function raxComponentRendererFactory() {
       if (noContainer) {
         return content;
       }
-  
+
       return that.__renderContent(content);
     }
-  }
+  };
 }

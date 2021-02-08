@@ -59,8 +59,8 @@ describe('组件元数据处理', () => {
     addBuiltinComponentAction({
       name: 'new',
       content: {
-        action() {}
-      }
+        action() {},
+      },
     });
     // availableActions 有 computed 缓存
     expect(meta.availableActions).toHaveLength(3);

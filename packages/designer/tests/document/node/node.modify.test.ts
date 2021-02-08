@@ -143,7 +143,7 @@ describe('schema 生成节点模型测试', () => {
       formNode?.setPropValue('obj', {
         a: 2,
         b: true,
-        c: 'another string'
+        c: 'another string',
       });
       const objProp = formNode?.getProp('obj');
       expect(objProp?.getValue()).toEqual({
@@ -211,7 +211,7 @@ describe('schema 生成节点模型测试', () => {
       props?.setPropValue('obj', {
         a: 2,
         b: true,
-        c: 'another string'
+        c: 'another string',
       });
       const objProp = formNode?.getProp('obj');
       expect(objProp?.getValue()).toEqual({
@@ -266,7 +266,7 @@ describe('schema 生成节点模型测试', () => {
         id: 'form',
         condition: true,
       */
-     const sizeProp = formNode?.getProp('size');
+      const sizeProp = formNode?.getProp('size');
      sizeProp?.setValue('large');
      expect(sizeProp?.getAsString()).toBe('large');
      expect(sizeProp?.getValue()).toBe('large');
@@ -278,10 +278,10 @@ describe('schema 生成节点模型测试', () => {
 
      const objProp = formNode?.getProp('obj');
      objProp?.setValue({
-      a: 2,
-      b: true,
-      c: 'another string'
-    });
+       a: 2,
+       b: true,
+       c: 'another string',
+     });
      expect(objProp?.getValue()).toEqual({
        a: 2,
        b: true,
@@ -329,16 +329,16 @@ describe('schema 生成节点模型测试', () => {
           props: {
             txt: 'haha',
             num: 1,
-            bool: true
-          }
+            bool: true,
+          },
         }, {
           componentName: 'TextInput2',
           props: {
             txt: 'heihei',
             num: 2,
-            bool: false
-          }
-        }]
+            bool: false,
+          },
+        }],
       });
 
       expect(nodesMap.size).toBe(ids.length + 3);
@@ -371,16 +371,16 @@ describe('schema 生成节点模型测试', () => {
           props: {
             txt: 'haha',
             num: 1,
-            bool: true
-          }
+            bool: true,
+          },
         }, {
           componentName: 'TextInput2',
           props: {
             txt: 'heihei',
             num: 2,
-            bool: false
-          }
-        }]
+            bool: false,
+          },
+        }],
       });
 
       expect(nodesMap.size).toBe(ids.length + 3);
@@ -408,16 +408,16 @@ describe('schema 生成节点模型测试', () => {
           props: {
             txt: 'haha',
             num: 1,
-            bool: true
-          }
+            bool: true,
+          },
         }, {
           componentName: 'TextInput2',
           props: {
             txt: 'heihei',
             num: 2,
-            bool: false
-          }
-        }]
+            bool: false,
+          },
+        }],
       });
 
       expect(nodesMap.size).toBe(ids.length + 3);
@@ -438,9 +438,9 @@ describe('schema 生成节点模型测试', () => {
           props: {
             txt: 'xixi',
             num: 3,
-            bool: false
-          }
-        }]
+            bool: false,
+          },
+        }],
       });
 
       expect(nodesMap.size).toBe(ids.length + 2);

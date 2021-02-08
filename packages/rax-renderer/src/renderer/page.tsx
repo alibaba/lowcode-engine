@@ -16,7 +16,7 @@ export default function raxPageRendererFactory() {
         return '页面 schema 结构异常！';
       }
       that.__debug(`render - ${__schema?.fileName}`);
-  
+
       const { Page } = __components as any;
       if (Page) {
         const children = ((context) => {
@@ -26,8 +26,8 @@ export default function raxPageRendererFactory() {
         });
         return that.__renderContextConsumer(children);
       }
-  
+
       return that.__renderContent(that.__renderContextProvider({ pageContext: that }));
     }
-  }
+  };
 }

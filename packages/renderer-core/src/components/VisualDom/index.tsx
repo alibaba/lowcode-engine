@@ -26,9 +26,7 @@ export default function visualDomFactory() {
           [
             createElement('span', { className: 'title' }, title || label || text || __componentName),
             createElement('div', { className: 'content' }, mainContent),
-          ]
-        )
-      );
+          ]));
     }
   };
 }

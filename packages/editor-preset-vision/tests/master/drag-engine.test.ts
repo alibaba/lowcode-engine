@@ -62,7 +62,7 @@ describe('drag-engine 测试', () => {
 
     designer.dragon.emitter.emit('drag', {
       dragObject: {
-        nodes: [designer.currentDocument?.getNode('node_k1ow3cbo')]
+        nodes: [designer.currentDocument?.getNode('node_k1ow3cbo')],
       },
       originalEvent: mousedownEvt,
     });
@@ -72,7 +72,7 @@ describe('drag-engine 测试', () => {
 
     designer.dragon.emitter.emit('dragend', {
       dragObject: {
-        nodes: [designer.currentDocument?.getNode('node_k1ow3cbo')]
+        nodes: [designer.currentDocument?.getNode('node_k1ow3cbo')],
       },
       originalEvent: mousedownEvt,
     });
@@ -102,7 +102,7 @@ describe('drag-engine 测试', () => {
 
     designer.dragon.emitter.emit('drag', {
       dragObject: {
-        nodes: [designer.currentDocument?.getNode('node_k1ow3cbo')]
+        nodes: [designer.currentDocument?.getNode('node_k1ow3cbo')],
       },
       originalEvent: mousedownEvt,
     });
@@ -111,7 +111,7 @@ describe('drag-engine 测试', () => {
 
     designer.dragon.emitter.emit('dragend', {
       dragObject: {
-        nodes: [designer.currentDocument?.getNode('node_k1ow3cbo')]
+        nodes: [designer.currentDocument?.getNode('node_k1ow3cbo')],
       },
       originalEvent: mousedownEvt,
     });
@@ -141,7 +141,7 @@ describe('drag-engine 测试', () => {
 
     designer.dragon.emitter.emit('drag', {
       dragObject: {
-        nodes: [designer.currentDocument?.getNode('node_k1ow3cbo')]
+        nodes: [designer.currentDocument?.getNode('node_k1ow3cbo')],
       },
       originalEvent: mousedownEvt,
     });

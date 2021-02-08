@@ -1,14 +1,14 @@
 
 import '../../../fixtures/window';
-import { set } from '../../../utils';
+import { set, delayObxTick } from '../../../utils';
 import { Editor } from '@ali/lowcode-editor-core';
-import { Props, getConvertedExtraKey, getOriginalExtraKey } from '../../../../src/document/node/props/props';
+import { Props, getConvertedExtraKey, getOriginalExtraKey, Prop, isProp, isValidArrayIndex } from '../../../../src/document/node/props/props';
 import { Designer } from '../../../../src/designer/designer';
 import { Project } from '../../../../src/project/project';
 import { DocumentModel } from '../../../../src/document/document-model';
-import { Prop, isProp, isValidArrayIndex } from '../../../../src/document/node/props/props';
+
 import { TransformStage } from '@ali/lowcode-types';
-import { delayObxTick } from '../../../utils';
+
 
 const mockedOwner = { componentName: 'Page' };
 
@@ -62,7 +62,7 @@ describe('Props 类测试', () => {
     const fromStashProp = props.get('l', true);
     const fromStashNestedProp = props.get('m.m1', true);
     fromStashProp.setValue('fromStashProp');
-    fromStashNestedProp?.setValue('fromStashNestedProp')
+    fromStashNestedProp?.setValue('fromStashNestedProp');
 
     await delayObxTick();
     expect(props.get('l').getValue()).toBe('fromStashProp');
@@ -122,7 +122,7 @@ describe('Props 类测试', () => {
   it('import', () => {
     props.import({
       x: 1,
-      y: true
+      y: true,
     }, { loop: false });
     expect(props.export()).toEqual({
       props: {
@@ -131,7 +131,7 @@ describe('Props 类测试', () => {
       },
       extras: {
         loop: false,
-      }
+      },
     });
 
     props.import();
@@ -167,7 +167,7 @@ describe('Props 类测试', () => {
 
   it('迭代器 / map / forEach', () => {
     const mockedFn = jest.fn();
-    for (let item of props) {
+    for (const item of props) {
       mockedFn();
     }
     expect(mockedFn).toHaveBeenCalledTimes(6);
@@ -180,13 +180,13 @@ describe('Props 类测试', () => {
     mockedFn.mockClear();
 
     props.map(item => {
-      mockedFn();
+      return mockedFn();
     });
     expect(mockedFn).toHaveBeenCalledTimes(6);
     mockedFn.mockClear();
 
     props.filter(item => {
-      mockedFn();
+      return mockedFn();
     });
     expect(mockedFn).toHaveBeenCalledTimes(6);
     mockedFn.mockClear();
@@ -213,14 +213,14 @@ describe('Props 类测试', () => {
 
     it('export', () => {
       expect(props.export().extras).toEqual({
-        condition: true
-      })
+        condition: true,
+      });
     });
 
     it('import', () => {
       props.import([1], { loop: true });
       expect(props.export().extras).toEqual({
-        loop: true
+        loop: true,
       });
 
       props.items[0]?.unset();

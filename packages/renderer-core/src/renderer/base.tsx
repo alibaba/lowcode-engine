@@ -26,7 +26,7 @@ import {
   capitalizeFirstLetter,
   DataHelper,
   isI18n,
-  isVariable
+  isVariable,
 } from '../utils';
 import { IRendererProps, ISchema, IInfo, ComponentModel, IRenderer } from '../types';
 import { compWrapper } from '../hoc';
@@ -72,7 +72,7 @@ export default function baseRenererFactory() {
       this.__debug(`constructor - ${props?.__schema?.fileName}`);
     }
 
-    __beforeInit(props: IRendererProps) { }
+    __beforeInit(/* props: IRendererProps */) { }
 
     __init(props: IRendererProps) {
       this.appHelper = props.__appHelper;
@@ -82,7 +82,7 @@ export default function baseRenererFactory() {
       this.__initI18nAPIs();
     }
 
-    __afterInit(props: IRendererProps) { }
+    __afterInit(/* props: IRendererProps */) { }
 
     static getDerivedStateFromProps(props: IRendererProps, state: any) {
       debug('getDerivedStateFromProps');
@@ -470,7 +470,7 @@ export default function baseRenererFactory() {
         }
 
         let child: any = null;
-        if (/*!isFileSchema(schema) && */!!_children) {
+        if (/*! isFileSchema(schema) && */_children) {
           child = this.__createVirtualDom(
             isJSExpression(_children) ? parseExpression(_children, self) : _children,
             self,
@@ -527,7 +527,7 @@ export default function baseRenererFactory() {
       if (!Array.isArray(schema.loop)) return null;
       const itemArg = (schema.loopArgs && schema.loopArgs[0]) || 'item';
       const indexArg = (schema.loopArgs && schema.loopArgs[1]) || 'index';
-      return schema.loop.map((item: Array<string>, i: number) => {
+      return schema.loop.map((item: string[], i: number) => {
         const loopSelf: any = {
           [itemArg]: item,
           [indexArg]: i,
@@ -679,13 +679,13 @@ export default function baseRenererFactory() {
 
     __initDebug = () => {
       this.__logger = Debug(`renderer:${this.__namespace || 'base'}`);
-    }
+    };
 
-    __debug = (msg: string = '') => {
+    __debug = (msg = '') => {
       if (this.__logger) {
         this.__logger(`${this.__namespace}.${msg}`);
       }
-    }
+    };
 
     __renderContextProvider = (customProps?: object, children?: any) => {
       customProps = customProps || {};
@@ -695,13 +695,14 @@ export default function baseRenererFactory() {
           ...this.context,
           blockContext: this,
           ...customProps,
-        }, children
+        },
+        children,
       });
-    }
+    };
 
     __renderContextConsumer = (children: any) => {
       return createElement(AppContext.Consumer, {}, children);
-    }
+    };
 
     __renderComp(Comp: any, ctxProps: object) {
       const { __schema } = this.props;
@@ -744,8 +745,8 @@ export default function baseRenererFactory() {
 
       const buitin = capitalizeFirstLetter(this.__namespace);
       const componentNames = [buitin, ...extraComponents];
-      return !isSchema(schema, true) || !componentNames.includes(schema.componentName)
-    }
+      return !isSchema(schema, true) || !componentNames.includes(schema.componentName);
+    };
 
     get requestHandlersMap() {
       return this.appHelper?.requestHandlersMap;

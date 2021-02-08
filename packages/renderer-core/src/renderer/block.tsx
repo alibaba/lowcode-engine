@@ -1,12 +1,11 @@
-import classnames from 'classnames';
 import baseRendererFactory from './base';
 import { IRendererProps } from '../types';
-import { getFileCssName } from '../utils';
 
 export default function blockRendererFactory() {
   const BaseRenderer = baseRendererFactory();
   return class BlockRenderer extends BaseRenderer {
     static dislayName = 'block-renderer';
+
     __namespace = 'block';
 
     __afterInit(props: IRendererProps) {

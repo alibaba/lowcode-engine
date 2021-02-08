@@ -3,6 +3,6 @@ export function getMockRenderer() {
     isSimulatorRenderer: true,
     run() {
       // console.log('renderer run');
-    }
-  }
+    },
+  };
 }

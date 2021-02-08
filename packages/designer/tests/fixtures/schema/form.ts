@@ -962,8 +962,8 @@ export default {
                       value: [{
                         componentName: 'Text',
                         props: {},
-                      }]
-                    }
+                      }],
+                    },
                   },
                   condition: true,
                 },

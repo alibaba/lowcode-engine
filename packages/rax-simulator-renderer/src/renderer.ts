@@ -126,7 +126,7 @@ export class DocumentInstance {
   }
 
   get path(): string {
-    return '/' + this.document.fileName;
+    return `/${ this.document.fileName}`;
   }
 
   get id() {
@@ -157,7 +157,7 @@ export class DocumentInstance {
 
   mountInstance(id: string, instance: any) {
     const docId = this.document.id;
-    const instancesMap = this.instancesMap;
+    const { instancesMap } = this;
     if (instance == null) {
       let instances = this.instancesMap.get(id);
       if (instances) {
@@ -187,7 +187,7 @@ export class DocumentInstance {
         origUnmount = origUnmount.origUnmount;
       }
       // hack! delete instance from map
-      const newUnmount = function(this: any) {
+      const newUnmount = function (this: any) {
         unmountIntance(id, instance);
         origUnmount && origUnmount.call(this);
       };
@@ -314,11 +314,11 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
           },
           back() {
             history.back();
-          }
+          },
         },
         legaoBuiltins: {
           getUrlParams() {
-            const search = history.location.search;
+            const { search } = history.location;
             return parseQuery(search);
           },
         },
@@ -396,8 +396,6 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       subs.unshift(sub);
       componentName = paths.join('.');
     }
-
-    return null;
   }
 
   getNodeInstance(dom: HTMLElement): NodeInstance<any> | null {
@@ -535,7 +533,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
             };
             viewProps._leaf = _leaf;
             return createElement(Comp, viewProps, children);
-          }
+          },
         });
       }
     }
@@ -562,7 +560,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     document.body.classList.add('engine-document'); // important! Stylesheet.invoke depends
 
     raxRender(createElement(SimulatorRendererView, {
-      rendererContainer: this
+      rendererContainer: this,
     }), container, {
       driver: DriverUniversal,
     });

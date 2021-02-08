@@ -103,7 +103,7 @@ class Layout extends Component<{ rendererContainer: SimulatorRendererContainer }
 
   render() {
     const { rendererContainer, children } = this.props;
-    const layout = rendererContainer.layout;
+    const { layout } = rendererContainer;
     if (layout) {
       const { Component, props, componentName } = layout;
       if (Component) {
@@ -128,8 +128,8 @@ class Layout extends Component<{ rendererContainer: SimulatorRendererContainer }
 
 @observer
 class Renderer extends Component<{
-  rendererContainer: SimulatorRendererContainer;
-  documentInstance: DocumentInstance }
+    rendererContainer: SimulatorRendererContainer;
+    documentInstance: DocumentInstance }
   > {
   shouldComponentUpdate() {
     return false;
@@ -205,9 +205,9 @@ class Renderer extends Component<{
         onCompGetRef={(schema: any, ref: ReactInstance | null) => {
           documentInstance.mountInstance(schema.id, ref);
         }}
-        //onCompGetCtx={(schema: any, ctx: object) => {
+        // onCompGetCtx={(schema: any, ctx: object) => {
         // documentInstance.mountContext(schema.id, ctx);
-        //}}
+        // }}
       />
     );
   }

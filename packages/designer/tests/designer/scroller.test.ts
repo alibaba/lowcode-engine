@@ -78,7 +78,7 @@ describe('Scroller 测试', () => {
       scrollWidth: 500,
       document: {},
       nodeType: Node.ELEMENT_NODE,
-    }
+    };
     return mockWindow;
   }
 
@@ -96,7 +96,6 @@ describe('Scroller 测试', () => {
       expect(target.left).toBe(100);
       expect(target.top).toBe(100);
     });
-
   });
 
   function mockRAF() {
@@ -119,7 +118,7 @@ describe('Scroller 测试', () => {
 
       mockRAF();
       scroller.scrolling({ globalX: 100, globalY: 100 });
-    })
+    });
 
     it('scrollTarget: ScrollTarget, same left / top', () => {
       const win = getMockWindow();
@@ -131,7 +130,7 @@ describe('Scroller 测试', () => {
 
       mockRAF();
       scroller.scrolling({ globalX: 100, globalY: 100 });
-    })
+    });
 
     it('scrollTarget: Element', () => {
       const win = getMockWindow();
@@ -142,7 +141,7 @@ describe('Scroller 测试', () => {
 
       mockRAF();
       scroller.scrolling({ globalX: 100, globalY: 100 });
-    })
+    });
 
     it('scrollTarget: null', () => {
       const win = getMockWindow();
@@ -153,6 +152,6 @@ describe('Scroller 测试', () => {
 
       mockRAF();
       scroller.scrolling({ globalX: 100, globalY: 100 });
-    })
+    });
   });
 });

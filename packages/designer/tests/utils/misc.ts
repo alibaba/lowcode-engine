@@ -11,7 +11,7 @@ export function set(obj: any, path: any, val: any) {
       } else {
         acc[seg] = val;
       }
-    })
+    });
   }
   return lodashSet(obj, path, val);
 }

@@ -7,6 +7,7 @@ export default function addonRendererFactory() {
   const BaseRenderer = baseRendererFactory();
   return class AddonRenderer extends BaseRenderer {
     static dislayName = 'addon-renderer';
+
     __namespace = 'addon';
 
     static propTypes = {

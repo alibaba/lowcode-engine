@@ -28,5 +28,5 @@ describe('host-view 测试', () => {
 
   it('host-view', () => {
     const hostView = render(<BuiltinSimulatorHostView project={designer.project} />);
-  })
+  });
 });

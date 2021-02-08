@@ -22,16 +22,16 @@ function matchPath(route, pathname, parentParams) {
   path = path || '';
 
   const regexpCacheKey = `${path}|${end}|${strict}|${sensitive}`;
-  const keysCacheKey = regexpCacheKey + '|';
+  const keysCacheKey = `${regexpCacheKey }|`;
 
   let regexp = cache[regexpCacheKey];
-  let keys = cache[keysCacheKey] || [];
+  const keys = cache[keysCacheKey] || [];
 
   if (!regexp) {
     regexp = pathToRegexp(path, keys, {
       end,
       strict,
-      sensitive
+      sensitive,
     });
     cache[regexpCacheKey] = regexp;
     cache[keysCacheKey] = keys;
@@ -132,7 +132,7 @@ const router = {
     router.handles[handleId - 1] = null;
   },
   triggerHandles(component) {
-    router.handles.map((handle) => {
+    router.handles.forEach((handle) => {
       handle && handle(component);
     });
   },
@@ -145,7 +145,7 @@ const router = {
     const matched = matchRoute(
       parent,
       parent.path,
-      fullpath
+      fullpath,
     );
 
     function next(parent) {
@@ -156,7 +156,7 @@ const router = {
         return router.errorHandler(error, router.history.location);
       }
 
-      let component = current.$.route.component;
+      let { component } = current.$.route;
       if (typeof component === 'function') {
         component = component(current.$.params, router.history.location);
       }
@@ -177,7 +177,7 @@ const router = {
     }
 
     return next(parent);
-  }
+  },
 };
 
 function matchLocation({ pathname }) {
@@ -216,7 +216,7 @@ export function useRouter(routerConfig) {
   let newPathes = '';
   if (routerConfig) {
     _routerConfig = routerConfig;
-    const routes = _routerConfig.routes;
+    const { routes } = _routerConfig;
     router.root = Array.isArray(routes) ? { routes } : routes;
     if (Array.isArray(routes)) {
       newPathes = routes.map(it => it.path).join(',');
@@ -230,7 +230,7 @@ export function useRouter(routerConfig) {
       pathes = newPathes;
     }
   }
-  
+
   useLayoutEffect(() => {
     if (unlisten) {
       unlisten();
@@ -242,8 +242,8 @@ export function useRouter(routerConfig) {
       handleId = null;
     }
 
-    const history = _routerConfig.history;
-    const routes = _routerConfig.routes;
+    const { history } = _routerConfig;
+    const { routes } = _routerConfig;
 
     router.root = Array.isArray(routes) ? { routes } : routes;
 
@@ -278,11 +278,11 @@ export function useRouter(routerConfig) {
 
 export function withRouter(Component) {
   function Wrapper(props) {
-    const history = router.history;
+    const { history } = router;
     return createElement(Component, { ...props, history, location: history.location });
-  };
+  }
 
-  Wrapper.displayName = 'withRouter(' + (Component.displayName || Component.name) + ')';
+  Wrapper.displayName = `withRouter(${ Component.displayName || Component.name })`;
   Wrapper.WrappedComponent = Component;
   return Wrapper;
 }

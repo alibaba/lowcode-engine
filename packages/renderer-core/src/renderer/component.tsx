@@ -5,6 +5,7 @@ export default function componentRendererFactory() {
   const BaseRenderer = baseRendererFactory();
   return class CompRenderer extends BaseRenderer {
     static dislayName = 'comp-renderer';
+
     __namespace = 'component';
 
     __afterInit(props: IRendererProps) {

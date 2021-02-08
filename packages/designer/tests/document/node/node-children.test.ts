@@ -1,5 +1,5 @@
 import '../../fixtures/window';
-import { set } from '../../utils';
+import { set, delayObxTick, delay } from '../../utils';
 import { Editor } from '@ali/lowcode-editor-core';
 import { Project } from '../../../src/project/project';
 import { DocumentModel } from '../../../src/document/document-model';
@@ -23,7 +23,7 @@ import pageMetadata from '../../fixtures/component-metadata/page';
 import rootHeaderMetadata from '../../fixtures/component-metadata/root-header';
 import rootContentMetadata from '../../fixtures/component-metadata/root-content';
 import rootFooterMetadata from '../../fixtures/component-metadata/root-footer';
-import { delayObxTick, delay } from '../../utils';
+
 
 describe('NodeChildren 方法测试', () => {
   let editor: Editor;
@@ -105,7 +105,7 @@ describe('NodeChildren 方法测试', () => {
     const { children } = firstBtn.parent!;
 
     children.some((item) => {
-      expect(item.componentName).toBe('Button');
+      return expect(item.componentName).toBe('Button');
     });
   });
 
@@ -114,7 +114,7 @@ describe('NodeChildren 方法测试', () => {
     const { children } = firstBtn.parent!;
 
     children.every((item) => {
-      expect(item.componentName).toBe('Button');
+      return expect(item.componentName).toBe('Button');
     });
   });
 

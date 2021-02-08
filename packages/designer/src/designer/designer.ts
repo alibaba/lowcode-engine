@@ -207,7 +207,7 @@ export class Designer {
       selectionDispose();
       selectionDispose = undefined;
     }
-    const currentSelection = this.currentSelection;
+    const { currentSelection } = this;
     // TODO: 避免选中 Page 组件，默认选中第一个子节点；新增规则 或 判断 Live 模式
     if (currentSelection && currentSelection.selected.length === 0 && this.simulatorProps?.designMode === 'live') {
       const rootNodeChildrens = this.currentDocument.getRoot().getChildren().children;

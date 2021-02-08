@@ -98,7 +98,7 @@ describe('setting-prop-entry 测试', () => {
 
       expect(customClassNameProp.getValue()).toEqual({
         type: 'JSExpression',
-        value: 'getFromSomewhere()'
+        value: 'getFromSomewhere()',
       });
       expect(customClassNameProp.getMockOrValue()).toBeUndefined();
       expect(customClassNameProp.getVariableValue()).toBe('getFromSomewhere()');

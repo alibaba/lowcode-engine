@@ -47,8 +47,8 @@ const mockCreateElement = jest.fn((tagName) => {
     removeEventListener: mockRemoveEventListener,
     triggerEventListener: mockTriggerEventListener,
     removeAttribute: mockRemoveAttribute,
-  }
-})
+  };
+});
 
 export function getMockDocument(): MockDocument {
   return {

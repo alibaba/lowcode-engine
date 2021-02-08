@@ -129,15 +129,15 @@ it('isRowContainer', () => {
       return {
         getPropertyValue: (pName) => {
           return pName === 'display' ? 'flex' : 'row';
-        }
-      }
+        },
+      };
     })
     .mockImplementationOnce(() => {
       return {
         getPropertyValue: (pName) => {
           return pName === 'display' ? 'flex' : 'column';
-        }
-      }
+        },
+      };
     });
   expect(isRowContainer(getMockElement('div'))).toBeFalsy();
   expect(isRowContainer(getMockElement('div'))).toBeTruthy();
@@ -149,8 +149,8 @@ it('isChildInline', () => {
       return {
         getPropertyValue: (pName) => {
           return pName === 'display' ? 'inline' : 'float';
-        }
-      }
+        },
+      };
     });
 
   expect(isChildInline({ nodeType: Node.TEXT_NODE })).toBeTruthy();
@@ -169,11 +169,11 @@ it('isVerticalContainer', () => {
       return {
         getPropertyValue: (pName) => {
           return pName === 'display' ? 'flex' : 'row';
-        }
-      }
+        },
+      };
     });
   expect(isVerticalContainer()).toBeFalsy();
-  expect(isVerticalContainer({ elements: [getMockElement('div')] })).toBeTruthy()
+  expect(isVerticalContainer({ elements: [getMockElement('div')] })).toBeTruthy();
 });
 
 it('isVertical', () => {
@@ -184,8 +184,8 @@ it('isVertical', () => {
       return {
         getPropertyValue: (pName) => {
           return pName === 'display' ? 'inline' : 'float';
-        }
-      }
+        },
+      };
     });
   expect(isVertical({ elements: [getMockElement('div')] })).toBeTruthy();
 });

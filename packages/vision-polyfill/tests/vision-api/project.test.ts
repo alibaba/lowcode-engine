@@ -14,7 +14,6 @@ describe('VisualEngine.Project 相关 API 测试', () => {
       componentsMap: {},
       componentsTree: [formSchema],
     });
-
   });
 
   it('setConfig', () => {

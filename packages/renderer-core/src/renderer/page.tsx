@@ -6,6 +6,7 @@ export default function pageRendererFactory() {
   const BaseRenderer = baseRendererFactory();
   return class PageRenderer extends BaseRenderer {
     static dislayName = 'page-renderer';
+
     __namespace = 'page';
 
     __afterInit(props: IRendererProps) {

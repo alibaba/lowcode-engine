@@ -8,7 +8,7 @@ it('valueToSource', () => {
   expect(valueToSource([{ a: 1 }])).toMatchSnapshot();
   expect(valueToSource({ a: 1 })).toMatchSnapshot();
   expect(valueToSource(null)).toMatchSnapshot();
-  expect(valueToSource(function haha() {})).toMatchSnapshot();
+  expect(valueToSource(() => {})).toMatchSnapshot();
   expect(valueToSource(new Map())).toMatchSnapshot();
   expect(valueToSource(new Set())).toMatchSnapshot();
   expect(valueToSource(/haha/)).toMatchSnapshot();
@@ -19,7 +19,7 @@ it('valueToSource', () => {
 });
 
 it('getSource', () => {
-  expect(getSource({ __source: { a: 1 }})).toEqual({ a: 1 });
+  expect(getSource({ __source: { a: 1 } })).toEqual({ a: 1 });
   expect(getSource()).toBe('');
   const value = { abc: 1 };
   getSource(value);

@@ -167,7 +167,7 @@ describe('schema 生成节点模型测试', () => {
         componentName: 'TextInput',
         props: {
           propA: 'haha',
-        }
+        },
       });
       currentDocument?.insertNode(pageNode, node);
 
@@ -198,25 +198,25 @@ describe('schema 生成节点模型测试', () => {
         componentName: 'TextInput',
         props: {
           propA: 'haha',
-        }
+        },
       });
       const node2 = currentDocument.createNode({
         componentName: 'TextInput',
         props: {
           propA: 'heihei',
-        }
+        },
       });
       const node3 = currentDocument.createNode({
         componentName: 'TextInput',
         props: {
           propA: 'heihei2',
-        }
+        },
       });
       const node4 = currentDocument.createNode({
         componentName: 'TextInput',
         props: {
           propA: 'heihei3',
-        }
+        },
       });
 
       formNode?.insertBefore(node2);
@@ -265,8 +265,8 @@ describe('schema 生成节点模型测试', () => {
           id: 'nodeschema-id1',
           props: {
             propA: 'haha',
-            propB: 3
-          }
+            propB: 3,
+          },
         });
         expect(nodesMap.size).toBe(ids.length + 1);
         expect(formNode.children?.length).toBe(4);
@@ -274,7 +274,7 @@ describe('schema 生成节点模型测试', () => {
         expect(insertedNode.componentName).toBe('TextInput');
         expect(insertedNode.propsData).toEqual({
           propA: 'haha',
-          propB: 3
+          propB: 3,
         });
         // TODO: 把 checkId 的 commit pick 过来
         // expect(nodesMap.get('nodeschema-id1').componentName).toBe('TextInput');
@@ -284,15 +284,15 @@ describe('schema 生成节点模型测试', () => {
         expect(project).toBeTruthy();
         const ids = getIdsFromSchema(formSchema);
         const { currentDocument } = project;
-        const nodesMap = currentDocument.nodesMap;
+        const { nodesMap } = currentDocument;
         const formNode = nodesMap.get('form');
         currentDocument?.insertNode(formNode, {
           componentName: 'TextInput',
           id: 'nodeschema-id1',
           props: {
             propA: 'haha',
-            propB: 3
-          }
+            propB: 3,
+          },
         }, 0);
         expect(nodesMap.size).toBe(ids.length + 1);
         expect(formNode.children.length).toBe(4);
@@ -300,7 +300,7 @@ describe('schema 生成节点模型测试', () => {
         expect(insertedNode.componentName).toBe('TextInput');
         expect(insertedNode.propsData).toEqual({
           propA: 'haha',
-          propB: 3
+          propB: 3,
         });
         // TODO: 把 checkId 的 commit pick 过来
         // expect(nodesMap.get('nodeschema-id1').componentName).toBe('TextInput');
@@ -317,8 +317,8 @@ describe('schema 生成节点模型测试', () => {
           id: 'nodeschema-id1',
           props: {
             propA: 'haha',
-            propB: 3
-          }
+            propB: 3,
+          },
         }, 1);
         expect(nodesMap.size).toBe(ids.length + 1);
         expect(formNode.children.length).toBe(4);
@@ -326,7 +326,7 @@ describe('schema 生成节点模型测试', () => {
         expect(insertedNode.componentName).toBe('TextInput');
         expect(insertedNode.propsData).toEqual({
           propA: 'haha',
-          propB: 3
+          propB: 3,
         });
         // TODO: 把 checkId 的 commit pick 过来
         // expect(nodesMap.get('nodeschema-id1').componentName).toBe('TextInput');
@@ -342,24 +342,24 @@ describe('schema 生成节点模型测试', () => {
           componentName: 'ParentNode',
           props: {
             propA: 'haha',
-            propB: 3
+            propB: 3,
           },
           children: [
             {
               componentName: 'SubNode',
               props: {
                 propA: 'haha',
-                propB: 3
-              }
+                propB: 3,
+              },
             },
             {
               componentName: 'SubNode2',
               props: {
                 propA: 'haha',
-                propB: 3
-              }
-            }
-          ]
+                propB: 3,
+              },
+            },
+          ],
         });
         expect(nodesMap.size).toBe(ids.length + 3);
         expect(formNode.children.length).toBe(4);
@@ -379,8 +379,8 @@ describe('schema 生成节点模型测试', () => {
           id: 'nodeschema-id1',
           props: {
             propA: 'haha',
-            propB: 3
-          }
+            propB: 3,
+          },
         });
         expect(nodesMap.get('nodeschema-id1').componentName).toBe('TextInput');
         expect(nodesMap.size).toBe(ids.length + 1);
@@ -397,8 +397,8 @@ describe('schema 生成节点模型测试', () => {
           id: 'nodeschema-id1',
           props: {
             propA: 'haha',
-            propB: 3
-          }
+            propB: 3,
+          },
         });
         expect(nodesMap.get('nodeschema-id1').componentName).toBe('TextInput');
         expect(nodesMap.size).toBe(ids.length + 1);
@@ -415,8 +415,8 @@ describe('schema 生成节点模型测试', () => {
           id: 'nodeschema-id2',
           props: {
             propA: 'haha',
-            propB: 3
-          }
+            propB: 3,
+          },
         });
         currentDocument?.insertNode(formNode, inputNode);
         expect(formNode.children?.get(3)?.componentName).toBe('TextInput');
@@ -431,7 +431,7 @@ describe('schema 生成节点模型测试', () => {
         const formNode = nodesMap.get('form') as Node;
         currentDocument?.insertNode(formNode, {
           type: 'JSExpression',
-          value: 'just a expression'
+          value: 'just a expression',
         });
         expect(nodesMap.size).toBe(ids.length + 1);
         expect(formNode.children?.get(3)?.componentName).toBe('Leaf');
@@ -476,16 +476,16 @@ describe('schema 生成节点模型测试', () => {
             componentName: 'TextInput',
             props: {
               propA: 'haha2',
-              propB: 3
-            }
+              propB: 3,
+            },
           },
           {
             componentName: 'TextInput2',
             props: {
               propA: 'haha',
-              propB: 3
-            }
-          }
+              propB: 3,
+            },
+          },
         ], 1);
         expect(nodesMap.size).toBe(ids.length + 2);
         expect(formNode.children?.length).toBe(5);
@@ -494,12 +494,12 @@ describe('schema 生成节点模型测试', () => {
         expect(insertedNode1.componentName).toBe('TextInput');
         expect(insertedNode1.propsData).toEqual({
           propA: 'haha2',
-          propB: 3
+          propB: 3,
         });
         expect(insertedNode2.componentName).toBe('TextInput2');
         expect(insertedNode2.propsData).toEqual({
           propA: 'haha',
-          propB: 3
+          propB: 3,
         });
       });
 
@@ -515,17 +515,17 @@ describe('schema 生成节点模型测试', () => {
           componentName: 'TextInput',
           props: {
             propA: 'haha2',
-            propB: 3
-          }
+            propB: 3,
+          },
         });
         const createdNode2 = currentDocument?.createNode({
           componentName: 'TextInput2',
           props: {
             propA: 'haha',
-            propB: 3
-          }
+            propB: 3,
+          },
         });
-        currentDocument?.insertNodes(formNode, [ createdNode1, createdNode2 ], 1);
+        currentDocument?.insertNodes(formNode, [createdNode1, createdNode2], 1);
         expect(nodesMap.size).toBe(ids.length + 2);
         expect(formNode.children?.length).toBe(5);
         const insertedNode1 = formNode.children.get(1);
@@ -533,16 +533,16 @@ describe('schema 生成节点模型测试', () => {
         expect(insertedNode1.componentName).toBe('TextInput');
         expect(insertedNode1.propsData).toEqual({
           propA: 'haha2',
-          propB: 3
+          propB: 3,
         });
         expect(insertedNode2.componentName).toBe('TextInput2');
         expect(insertedNode2.propsData).toEqual({
           propA: 'haha',
-          propB: 3
+          propB: 3,
         });
       });
     });
-  })
+  });
 
   describe('block ❌ | component ❌ | slot ✅', () => {
     it('基本的 slot 创建', () => {

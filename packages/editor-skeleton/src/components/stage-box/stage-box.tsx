@@ -23,8 +23,6 @@ type WillDetachMember = () => void;
 
 @observer
 export default class StageBox extends Component<StageBoxProps> {
-
-
   static defaultProps = StageBoxDefaultProps;
 
   static displayName = 'StageBox';

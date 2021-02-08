@@ -1,12 +1,12 @@
 import '../fixtures/window';
-import { getMockWindow, set } from '../utils';
+import { getMockWindow, set, getMockElement, delay } from '../utils';
 import { Editor, globalContext } from '@ali/lowcode-editor-core';
 import { Project } from '../../src/project/project';
 import { DocumentModel } from '../../src/document/document-model';
 import Viewport from '../../src/builtin-simulator/viewport';
 import { Designer } from '../../src/designer/designer';
 import { fireEvent } from '@testing-library/react';
-import { getMockElement, delay } from '../utils';
+
 
 describe('Viewport 测试', () => {
   let editor: Editor;
@@ -24,7 +24,7 @@ describe('Viewport 测试', () => {
       constructor(top, left, width, height) {
         return { top, left, width, height };
       }
-    }
+    };
   });
 
   beforeEach(() => {
@@ -117,8 +117,8 @@ describe('Viewport 测试', () => {
     viewportElem.setHeight(300);
     expect(viewport.contentHeight).toBe(300 / 2);
 
-    expect(() => viewport.scale = NaN).toThrow();
-    expect(() => viewport.scale = -1).toThrow();
+    expect(() => { viewport.scale = NaN; }).toThrow();
+    expect(() => { viewport.scale = -1; }).toThrow();
   });
 
   it('setScrollTarget / scrollTarget / scrolling', async () => {

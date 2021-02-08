@@ -7,9 +7,13 @@ export enum Env {
 
 class Adapter {
   runtime: IRuntime;
+
   builtinModules = ['Component', 'PureComponent', 'createElement', 'createContext', 'forwardRef', 'findDOMNode'];
+
   env: Env;
+
   renderers: IRendererModules;
+
   configProvider: any;
 
   constructor() {

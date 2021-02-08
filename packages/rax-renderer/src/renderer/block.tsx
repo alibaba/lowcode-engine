@@ -11,7 +11,7 @@ export default function raxBlockRendererFactory() {
         return '区块 schema 结构异常！';
       }
       that.__debug(`render - ${__schema.fileName}`);
-  
+
       const children = ((context) => {
         that.context = context;
         that.__generateCtx({});
@@ -20,5 +20,5 @@ export default function raxBlockRendererFactory() {
       });
       return that.__renderContextConsumer(children);
     }
-  }
+  };
 }

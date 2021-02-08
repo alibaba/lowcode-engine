@@ -1,5 +1,5 @@
 import '../../fixtures/window';
-import { set } from '../../utils';
+import { set, delayObxTick, delay } from '../../utils';
 import { Editor } from '@ali/lowcode-editor-core';
 import { Project } from '../../../src/project/project';
 import { DocumentModel } from '../../../src/document/document-model';
@@ -22,7 +22,7 @@ import pageMetadata from '../../fixtures/component-metadata/page';
 import rootHeaderMetadata from '../../fixtures/component-metadata/root-header';
 import rootContentMetadata from '../../fixtures/component-metadata/root-content';
 import rootFooterMetadata from '../../fixtures/component-metadata/root-footer';
-import { delayObxTick, delay } from '../../utils';
+
 
 describe('Node 方法测试', () => {
   let editor: Editor;
@@ -375,8 +375,8 @@ describe('Node 方法测试', () => {
     doc.project.mountSimulator({
       computeRect: () => ({ x: 2, y: 2 }),
       viewport: {
-        contentBounds: { x: 1, y: 1 }
-      }
+        contentBounds: { x: 1, y: 1 },
+      },
     });
 
     expect(root.getRect()).toEqual({ x: 1, y: 1 });
@@ -448,7 +448,7 @@ describe('Node 方法测试', () => {
             return [];
           }
           return [{}];
-        }
+        },
       });
 
       expect(root.getDOMNode()).toBeUndefined();

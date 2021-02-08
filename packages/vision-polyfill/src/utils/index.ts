@@ -24,7 +24,7 @@ export function getCurrentFieldIds() {
 
 export function invariant(check: any, message: string, thing?: any) {
   if (!check) {
-    throw new Error('Invariant failed: ' + message + (thing ? ` in '${thing}'` : ''));
+    throw new Error(`Invariant failed: ${ message }${thing ? ` in '${thing}'` : ''}`);
   }
 }
 

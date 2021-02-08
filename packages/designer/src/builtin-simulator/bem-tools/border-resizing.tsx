@@ -224,7 +224,7 @@ export class BoxResizingInstance extends Component<{
     }
 
     const unBind: any[] = [];
-    const node = this.props.observed.node;
+    const { node } = this.props.observed;
 
     unBind.push(
       ...[

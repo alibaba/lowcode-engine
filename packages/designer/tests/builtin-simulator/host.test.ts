@@ -200,22 +200,21 @@ describe('Host 测试', () => {
 
     it('fixEvent', () => {
       expect(host.fixEvent({ fixed: true, clientX: 1 })).toEqual({ fixed: true, clientX: 1 });
-
     });
 
     it('findDOMNodes', () => {
       host.connect({
         findDOMNodes: () => {
           return null;
-        }
+        },
       }, () => {});
       expect(host.findDOMNodes()).toBeNull();
 
-      const mockElems = [document.createElement('div')]
+      const mockElems = [document.createElement('div')];
       host.connect({
         findDOMNodes: () => {
           return mockElems;
-        }
+        },
       }, () => {});
       expect(host.findDOMNodes({})).toBe(mockElems);
       expect(host.findDOMNodes({}, 'xxx')).toBeNull();
@@ -231,7 +230,7 @@ describe('Host 测试', () => {
         };
       });
       host.connect({
-        getClosestNodeInstance: mockFn
+        getClosestNodeInstance: mockFn,
       }, () => {});
       expect(host.getClosestNodeInstance()).toEqual({
         node: {},
@@ -244,14 +243,14 @@ describe('Host 测试', () => {
       expect(host.getNodeInstanceFromElement()).toBeNull();
       host.getClosestNodeInstance = () => {
         return null;
-      }
+      };
       expect(host.getNodeInstanceFromElement({})).toBeNull();
       host.getClosestNodeInstance = () => {
         return {
           docId: project.currentDocument.id,
-          nodeId: 'xxx'
+          nodeId: 'xxx',
         };
-      }
+      };
       expect(host.getNodeInstanceFromElement({})).toBeTruthy();
     });
 
@@ -259,28 +258,28 @@ describe('Host 测试', () => {
       host.getNodeInstanceFromElement = () => {
         return {
           node: doc.rootNode,
-        }
-      }
+        };
+      };
       host.getDropContainer({
         target: {},
         dragObject: {
           type: DragObjectType.Node,
           nodes: [doc.getNode('page')],
-        }
-      })
+        },
+      });
     });
 
     it('getComponentInstances', () => {
       const mockNode = {
-        document: { id: 'docId' }
+        document: { id: 'docId' },
       };
       host.instancesMap = {
-        'docId': {
+        docId: {
           get() {
             return [{ comp: true }, { comp2: true }];
-          }
-        }
-      }
+          },
+        },
+      };
       expect(host.getComponentInstances(mockNode))
         .toEqual([{ comp: true }, { comp2: true }]);
 
@@ -288,8 +287,8 @@ describe('Host 测试', () => {
       host.getClosestNodeInstance = () => {
         return {
           instance: mockInst,
-        }
-      }
+        };
+      };
       expect(host.getComponentInstances(mockNode, { instance: mockInst }))
         .toEqual([{ comp: true }, { comp2: true }]);
     });
@@ -319,13 +318,13 @@ describe('Host 测试', () => {
       expect(host.sensorAvailable).toBeTruthy();
       host.deactiveSensor();
       expect(host.sensing).toBeFalsy();
-    })
+    });
 
     it('getComponent', () => {
       host.connect({
         getComponent: () => {
           return {};
-        }
+        },
       }, () => {});
       expect(host.getComponent()).toEqual({});
       expect(host.createComponent()).toBeNull();
@@ -335,10 +334,10 @@ describe('Host 测试', () => {
     it('setInstance', () => {
       host.instancesMap = {};
       host.setInstance('docId1', 'id1', [{}]);
-      expect(host.instancesMap['docId1'].get('id1')).toEqual([{}]);
+      expect(host.instancesMap.docId1.get('id1')).toEqual([{}]);
 
       host.setInstance('docId1', 'id1', null);
-      expect(host.instancesMap['docId1'].get('id1')).toBeUndefined();
+      expect(host.instancesMap.docId1.get('id1')).toBeUndefined();
     });
   });
 
@@ -379,7 +378,7 @@ describe('Host 测试', () => {
           type: DragObjectType.Node,
           nodes: [doc.getNode('page')],
         },
-      })
+      });
     });
   });
 
@@ -409,9 +408,9 @@ describe('Host 测试', () => {
       host.setupContextMenu();
       host.getNodeInstanceFromElement = () => {
         return {
-          node: { componentMeta: { componentName: 'Button' }},
+          node: { componentMeta: { componentName: 'Button' } },
         };
-      }
+      };
       const mockFn = jest.fn();
       host.designer.editor.on('designer.builtinSimulator.contextmenu', mockFn);
       fireEvent.contextMenu(document, {});

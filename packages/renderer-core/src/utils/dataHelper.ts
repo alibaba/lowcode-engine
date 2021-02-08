@@ -12,11 +12,17 @@ const DS_STATUS = {
 
 export class DataHelper {
   host: any;
+
   config: DataSource;
+
   parser: any;
+
   ajaxList: any[];
+
   ajaxMap: any;
+
   dataSourceMap: any;
+
   appHelper: any;
 
   constructor(comp: any, config: DataSource, appHelper: any, parser: any) {
@@ -164,7 +170,7 @@ export class DataHelper {
   asyncDataHandler(asyncDataList: any[]) {
     return new Promise((resolve, reject) => {
       const allReq = [];
-      const doserReq: {name: string; package: string; params: any }[] = [];
+      const doserReq: Array<{name: string; package: string; params: any }> = [];
       const doserList: string[] = [];
       const beforeRequest = this.appHelper && this.appHelper.utils && this.appHelper.utils.beforeRequest;
       const afterRequest = this.appHelper && this.appHelper.utils && this.appHelper.utils.afterRequest;

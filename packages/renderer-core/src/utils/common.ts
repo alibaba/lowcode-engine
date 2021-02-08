@@ -234,7 +234,7 @@ export function goldlog(gmKey: string, params = {}, logKey = 'other') {
 }
 
 // utils为编辑器打包生成的utils文件内容，utilsConfig为数据库存放的utils配置
-export function generateUtils(utils: any, utilsConfig: { name: string; type: string; content: any }[]) {
+export function generateUtils(utils: any, utilsConfig: Array<{ name: string; type: string; content: any }>) {
   if (!Array.isArray(utilsConfig)) return { ...utils };
   const res: any = {};
   utilsConfig.forEach((item) => {

@@ -7,7 +7,7 @@ import {
   blockRendererFactory,
   addonRendererFactory,
   tempRendererFactory,
-  rendererFactory
+  rendererFactory,
 } from '@ali/lowcode-renderer-core';
 import ConfigProvider from '@alifd/next/lib/config-provider';
 
@@ -40,11 +40,11 @@ function factory() {
     constructor(props: any, context: any) {
       super(props, context);
     }
-  
+
     isValidComponent(obj: any) {
       return obj?.prototype?.isReactComponent || obj?.prototype instanceof Component;
     }
-  }
+  };
 }
 
 export default factory();

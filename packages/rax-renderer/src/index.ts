@@ -4,7 +4,7 @@ import {
   adapter,
   addonRendererFactory,
   tempRendererFactory,
-  rendererFactory
+  rendererFactory,
 } from '@ali/lowcode-renderer-core';
 import pageRendererFactory from './renderer/page';
 import componentRendererFactory from './renderer/component';
@@ -38,7 +38,7 @@ function factory() {
     isValidComponent(obj: any) {
       return obj?.prototype?.setState || obj?.prototype instanceof Component;
     }
-  }
+  };
 }
 
 const RaxRenderer = factory();
@@ -47,6 +47,6 @@ const Engine = RaxRenderer;
 export {
   Engine,
   CompFactory,
-}
+};
 
 export default RaxRenderer;

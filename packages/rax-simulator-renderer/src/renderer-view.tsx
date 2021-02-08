@@ -78,13 +78,13 @@ export const Routes = (props: {
     routes: documentInstances.map(instance => {
       return {
         path: instance.path,
-        component: (props: any) => <Renderer key={instance.id} rendererContainer={rendererContainer} documentInstance={instance} {...props} />
+        component: (props: any) => <Renderer key={instance.id} rendererContainer={rendererContainer} documentInstance={instance} {...props} />,
       };
-    })
+    }),
   };
   const { component } = useRouter(routes);
   return component;
-}
+};
 
 function ucfirst(s: string) {
   return s.charAt(0).toUpperCase() + s.substring(1);
@@ -116,7 +116,7 @@ class Layout extends Component<{ rendererContainer: SimulatorRendererContainer }
 
   render() {
     const { rendererContainer, children } = this.props;
-    const layout = rendererContainer.layout;
+    const { layout } = rendererContainer;
 
     if (layout) {
       const { Component, props, componentName } = layout;
@@ -180,7 +180,6 @@ class Renderer extends Component<{
         components={renderer.components}
         appHelper={renderer.context}
         context={renderer.context}
-        appHelper={renderer.context}
         device={device}
         designMode={renderer.designMode}
         key={this.key}

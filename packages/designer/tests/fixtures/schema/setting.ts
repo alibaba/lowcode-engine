@@ -46,12 +46,12 @@ export default {
         useFieldIdAsDomId: false,
         customClassName: {
           type: 'JSExpression',
-          value: 'getFromSomewhere()'
+          value: 'getFromSomewhere()',
         },
         customClassName2: {
           type: 'JSExpression',
           mock: { hi: 'mock' },
-          value: 'getFromSomewhere()'
+          value: 'getFromSomewhere()',
         },
       },
       extraPropA: 'haha',
@@ -85,6 +85,6 @@ export default {
         customClassName: '',
       },
       extraPropA: 'haha',
-    }
+    },
   ],
 };

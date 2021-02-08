@@ -53,7 +53,7 @@ describe.only('Project 方法测试', () => {
       componentsTree: [{
         componentName: 'Page',
         fileName: 'f1',
-      }]
+      }],
     }, 'f1');
     expect(project.currentDocument?.fileName).toBe('f1');
   });
@@ -63,13 +63,13 @@ describe.only('Project 方法测试', () => {
       componentsTree: [{
         componentName: 'Page',
         fileName: 'f1',
-      }]
+      }],
     }, true);
     project.setSchema({
       componentsTree: [{
         componentName: 'Page',
         props: { a: 1 },
-      }]
+      }],
     });
     expect(project.currentDocument?.rootNode?.propsData).toEqual({ a: 1 });
   });
@@ -79,7 +79,7 @@ describe.only('Project 方法测试', () => {
       componentsTree: [{
         componentName: 'Page',
         fileName: 'f1',
-      }]
+      }],
     });
     const doc1 = project.createDocument({
       componentName: 'Page',

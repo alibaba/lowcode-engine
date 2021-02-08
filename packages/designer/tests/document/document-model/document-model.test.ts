@@ -171,7 +171,7 @@ describe('document-model 测试', () => {
     designer.createComponentMeta(divMeta);
     designer.createComponentMeta(otherMeta);
     const doc = new DocumentModel(project, formSchema);
-    const ret = doc.acceptRootNodeVisitor('getPageId', function(root) {
+    const ret = doc.acceptRootNodeVisitor('getPageId', (root) => {
       return 'page';
     });
     expect(ret).toBe('page');
