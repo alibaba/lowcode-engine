@@ -5,6 +5,8 @@ import * as editorCabin from '@ali/lowcode-editor-core';
 import {
   Designer,
   LowCodePluginManager,
+  ILowCodePluginContext,
+  Setters,
 } from '@ali/lowcode-designer';
 import * as designerCabin from '@ali/lowcode-designer';
 import { Skeleton, SettingsPrimaryPane, registerDefaults } from '@ali/lowcode-editor-skeleton';
@@ -35,45 +37,9 @@ editor.set('designer' as any, designer);
 const plugins = new LowCodePluginManager(editor).toProxy();
 editor.set('plugins' as any, plugins);
 
-skeleton.add({
-  area: 'mainArea',
-  name: 'designer',
-  type: 'Widget',
-  content: DesignerPlugin,
-});
-skeleton.add({
-  area: 'rightArea',
-  name: 'settingsPane',
-  type: 'Panel',
-  content: SettingsPrimaryPane,
-  props: {
-    ignoreRoot: true,
-  },
-});
-skeleton.add({
-  area: 'leftArea',
-  name: 'outlinePane',
-  type: 'PanelDock',
-  content: Outline,
-  panelProps: {
-    area: 'leftFixedArea',
-  },
-});
-skeleton.add({
-  area: 'rightArea',
-  name: 'backupOutline',
-  type: 'Panel',
-  props: {
-    condition: () => {
-      return designer.dragon.dragging && !getTreeMaster(designer).hasVisibleTreeBoard();
-    },
-  },
-  content: OutlineBackupPane,
-});
-
 const { project, currentSelection: selection } = designer;
 const { Workbench } = skeletonCabin;
-const setters = {
+const setters: Setters = {
   getSetter,
   registerSetter,
   getSettersMap,
@@ -130,11 +96,64 @@ const getSelection = () => designer.currentDocument?.selection;
   init,
 };
 
+// 注册默认的 setters
+plugins.register((ctx: ILowCodePluginContext) => {
+  return {
+    name: '___setter_registry___',
+    init() {
+      const builtinSetters = require('@ali/lowcode-engine-ext').setters;
+      if (builtinSetters) {
+        ctx.setters.registerSetter(builtinSetters);
+      }
+    },
+  };
+});
+
+// 注册默认的面板
+plugins.register((ctx: ILowCodePluginContext) => {
+  return {
+    name: '___default_panel___',
+    init() {
+      skeleton.add({
+        area: 'mainArea',
+        name: 'designer',
+        type: 'Widget',
+        content: DesignerPlugin,
+      });
+      skeleton.add({
+        area: 'rightArea',
+        name: 'settingsPane',
+        type: 'Panel',
+        content: SettingsPrimaryPane,
+        props: {
+          ignoreRoot: true,
+        },
+      });
+      skeleton.add({
+        area: 'leftArea',
+        name: 'outlinePane',
+        type: 'PanelDock',
+        content: Outline,
+        panelProps: {
+          area: 'leftFixedArea',
+        },
+      });
+      skeleton.add({
+        area: 'rightArea',
+        name: 'backupOutline',
+        type: 'Panel',
+        props: {
+          condition: () => {
+            return designer.dragon.dragging && !getTreeMaster(designer).hasVisibleTreeBoard();
+          },
+        },
+        content: OutlineBackupPane,
+      });
+    },
+  };
+});
+
 export async function init(container?: Element) {
-  const builtinSetters = require('@ali/lowcode-engine-ext').setters;
-  if (builtinSetters) {
-    registerSetter(builtinSetters as any);
-  }
   let engineContainer = container;
   if (!engineContainer) {
     engineContainer = document.createElement('div');

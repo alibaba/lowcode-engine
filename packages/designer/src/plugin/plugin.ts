@@ -42,6 +42,7 @@ export class LowCodePlugin implements ILowCodePlugin {
   }
 
   get dep() {
+    if (typeof this.config.dep === 'string') return [this.config.dep];
     return this.config.dep || [];
   }
 

@@ -6,6 +6,7 @@ import {
   MetadataTransducer,
   Designer,
 } from '@ali/lowcode-designer';
+import { Setters } from '../types';
 
 export interface ILowCodePluginConfig {
   name: string;
@@ -51,6 +52,7 @@ export interface ILowCodePluginContext {
   logger: Logger;
   plugins: ILowCodePluginManager;
   designerCabin: IDesignerCabin;
+  setters: Setters;
   /**
     其他暂不增加，按需增加
   */

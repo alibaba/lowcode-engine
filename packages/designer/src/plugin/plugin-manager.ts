@@ -75,7 +75,12 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     logger.log('load plugin sequence:', sequence);
 
     for (const pluginName of sequence) {
-      await this.pluginsMap.get(pluginName)!.init();
+      try {
+        await this.pluginsMap.get(pluginName)!.init();
+      } catch (e) {
+        logger.error(`Failed to init plugin:${pluginName}, it maybe affect those plugins which depend on this.`);
+        logger.error(e);
+      }
     }
   }
 
