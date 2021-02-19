@@ -124,7 +124,7 @@ export class SettingTopEntry implements SettingEntry {
    * 获取当前属性值
    */
   @computed getValue(): any {
-    this.first.propsData;
+    return this.first?.propsData;
   }
 
   /**

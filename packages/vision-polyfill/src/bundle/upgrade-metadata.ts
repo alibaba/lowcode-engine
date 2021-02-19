@@ -688,16 +688,14 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   if (canDropTo != null || canDropto != null) {
     if (canDropTo === false || canDropto === false) {
       nestingRule.parentWhitelist = () => false;
-    }
-    if (canDropTo !== true && canDropto !== true) {
+    } else if (canDropTo !== true && canDropto !== true) {
       nestingRule.parentWhitelist = canDropTo || canDropto;
     }
   }
   if (canDropIn != null || canDroping != null) {
     if (canDropIn === false || canDroping === false) {
       nestingRule.childWhitelist = () => false;
-    }
-    if (canDropIn !== true && canDroping !== true) {
+    } else if (canDropIn !== true && canDroping !== true) {
       nestingRule.childWhitelist = canDropIn || canDroping;
     }
   }

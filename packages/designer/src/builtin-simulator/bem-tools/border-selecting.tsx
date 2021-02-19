@@ -73,7 +73,7 @@ class Toolbar extends Component<{ observed: OffsetObserver }> {
     const MARGIN = 1;
     const BORDER = 2;
     const SPACE_HEIGHT = BAR_HEIGHT + MARGIN + BORDER;
-    const SPACE_MINIMUM_WIDTH = 140; // magic number
+    const SPACE_MINIMUM_WIDTH = 160; // magic number，大致是 toolbar 的宽度
     let style: any;
     // 计算 toolbar 的上/下位置
     if (observed.top > SPACE_HEIGHT) {

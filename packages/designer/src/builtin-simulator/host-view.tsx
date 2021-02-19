@@ -85,6 +85,7 @@ class Content extends Component<{ host: BuiltinSimulatorHost }> {
     return (
       <div className="lc-simulator-content">
         <iframe
+          name="SimulatorRenderer"
           className="lc-simulator-content-frame"
           style={frameStyle}
           ref={(frame) => sim.mountContentFrame(frame)}
