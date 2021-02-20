@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.13.2-13"></a>
+## [0.13.2-13](http://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.2-12...v0.13.2-13) (2021-02-20)
+
+
+
+
+**Note:** Version bump only for package @ali/lowcode-plugin-event-bind-dialog
+
 <a name="0.13.2-12"></a>
 ## [0.13.2-12](http://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v0.13.2-11...v0.13.2-12) (2021-01-07)
 
