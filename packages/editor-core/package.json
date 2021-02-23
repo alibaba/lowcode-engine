@@ -7,8 +7,7 @@
   "module": "es/index.js",
   "files": [
     "lib",
-    "es",
-    "dist"
+    "es"
   ],
   "scripts": {
     "build": "build-scripts build --skip-demo",
