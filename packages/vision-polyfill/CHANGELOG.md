@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.37-beta.1"></a>
+## [1.0.37-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.36...v1.0.37-beta.1) (2021-02-23)
+
+
+### Bug Fixes
+
+* lifecycle reducer 跳过非 vc 的组件 ([b295da1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b295da1))
+* 修复 canDropIn / canDropTo 转成 nestingRule 异常 ([6406417](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6406417))
+
+
+
+
 <a name="1.0.36"></a>
 ## [1.0.36](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.36-beta.0...v1.0.36) (2021-02-04)
 

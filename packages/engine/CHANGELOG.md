@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.0.37-beta.1"></a>
+## [1.0.37-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.36...v1.0.37-beta.1) (2021-02-23)
+
+
+### Features
+
+* 隔离运行插件 ([298c810](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/298c810))
+
+
+
+
 <a name="1.0.36"></a>
 ## [1.0.36](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.36-beta.0...v1.0.36) (2021-02-04)
 
