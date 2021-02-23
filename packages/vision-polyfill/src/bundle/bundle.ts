@@ -33,6 +33,37 @@ export interface ComponentViewBundle {
   module: ComponentType<any>;
 }
 
+const prototypeViewWrapperList: any[] = [];
+
+function registerPrototypeViewWrapper(name: string, prototypeViewWrapper: Function) {
+  if (!prototypeViewWrapperList.find(p => p.name === name) && typeof prototypeViewWrapper === 'function') {
+    prototypeViewWrapperList.push({
+      name,
+      prototypeViewWrapper,
+    });
+  }
+}
+
+function wrapperPrototypeView(view: ComponentClass) {
+  const newView = prototypeViewWrapperList.reduce((acc, { prototypeViewWrapper }) => {
+    return prototypeViewWrapper(acc.displayName, acc) || acc;
+  }, view);
+  if (!newView.displayName && view.displayName) {
+    newView.displayName = view.displayName;
+  }
+  if (!newView.propTypes && view.propTypes) {
+    newView.propTypes = view.propTypes;
+  }
+  if (!newView.defaultProps && view.defaultProps) {
+    newView.defaultProps = view.defaultProps;
+  }
+  return newView;
+}
+
+function getPrototypeViewWrapperList() {
+  return prototypeViewWrapperList;
+}
+
 export default class Bundle {
   static createPrototype = Prototype.create;
 
@@ -45,6 +76,14 @@ export default class Bundle {
   static removeGlobalPropsConfigure = Prototype.removeGlobalPropsConfigure;
 
   static overridePropsConfigure = Prototype.overridePropsConfigure;
+
+  static registerPrototypeConfigPreprocessor = Prototype.registerPrototypeConfigPreprocessor;
+
+  static getPrototypeConfigPreprocessorList = Prototype.getPrototypeConfigPreprocessorList;
+
+  static registerPrototypeViewWrapper = registerPrototypeViewWrapper;
+
+  static getPrototypeViewWrapperList = getPrototypeViewWrapperList;
 
   static create(protos: ComponentProtoBundle[], views?: ComponentViewBundle[]) {
     return new Bundle(protos, views);
@@ -161,7 +200,7 @@ export default class Bundle {
         viewDetail.displayName = getCamelName(viewName || item.name);
       }
       (viewDetail as any)._packageName_ = viewName || item.name;
-      this.viewsMap[viewDetail.displayName] = viewDetail;
+      this.viewsMap[viewDetail.displayName] = wrapperPrototypeView(viewDetail);
     });
   }
 

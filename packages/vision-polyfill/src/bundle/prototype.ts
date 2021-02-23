@@ -205,6 +205,27 @@ function isNewSpec(options: any): options is ComponentMetadata {
   );
 }
 
+const prototypeConfigPreprocessorList: any[] = [];
+
+function registerPrototypeConfigPreprocessor(name: String, preprocessor: Function) {
+  if (!prototypeConfigPreprocessorList.find(p => p.name === name) && typeof preprocessor === 'function') {
+    prototypeConfigPreprocessorList.push({
+      name,
+      preprocessor,
+    });
+  }
+}
+
+function modifyPrototypeConfig(config: any) {
+  const { componentName } = config;
+  return prototypeConfigPreprocessorList.reduce((acc, { preprocessor }) => {
+    return preprocessor(componentName, acc) || acc;
+  }, config);
+}
+
+function getPrototypeConfigPreprocessorList() {
+  return prototypeConfigPreprocessorList;
+}
 class Prototype {
   static addGlobalPropsReducer = addGlobalPropsReducer;
 
@@ -216,8 +237,13 @@ class Prototype {
 
   static overridePropsConfigure = overridePropsConfigure;
 
+  static registerPrototypeConfigPreprocessor = registerPrototypeConfigPreprocessor;
+
+  static getPrototypeConfigPreprocessorList = getPrototypeConfigPreprocessorList;
+
   static create(config: OldPrototypeConfig | ComponentMetadata | ComponentMeta, extraConfigs: any = null, lookup = false) {
-    return new Prototype(config, extraConfigs, lookup);
+    const modifiedConfig = modifyPrototypeConfig(config);
+    return new Prototype(modifiedConfig, extraConfigs, lookup);
   }
 
   readonly isPrototype = true;
