@@ -40,6 +40,7 @@ import clipboard from '../designer/clipboard';
 import { LiveEditing } from './live-editing/live-editing';
 import { Project } from '../project';
 import { Scroller } from '../designer/scroller';
+import { isDOMNodeVisible } from '../utils/misc';
 
 export interface LibraryItem {
   package: string;
@@ -837,46 +838,42 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     }
 
     const opt: any = {};
-    const scroll = false;
+    let scroll = false;
 
-    if (detail) {
-      // TODO:
-      /*
-      const rect = insertion ? insertion.getNearRect() : node.getRect();
-      let y;
-      let scroll = false;
-      if (insertion && rect) {
-        y = insertion.isNearAfter() ? rect.bottom : rect.top;
-
-        if (y < bounds.top || y > bounds.bottom) {
-          scroll = true;
-        }
-      } */
-    } else {
-      /*
-      const rect = this.document.computeRect(node);
-      if (!rect || rect.width === 0 || rect.height === 0) {
-        if (!this.tryScrollAgain && tryTimes < 3) {
-          this.tryScrollAgain = requestAnimationFrame(() => this.scrollToNode(node, null, tryTimes + 1));
-        }
-        return;
-      }
-      const scrollTarget = this.viewport.scrollTarget!;
-      const st = scrollTarget.top;
-      const sl = scrollTarget.left;
-      const { scrollHeight, scrollWidth } = scrollTarget;
-      const { height, width, top, bottom, left, right } = this.viewport.contentBounds;
-
-      if (rect.height > height ? rect.top > bottom || rect.bottom < top : rect.top < top || rect.bottom > bottom) {
-        opt.top = Math.min(rect.top + rect.height / 2 + st - top - height / 2, scrollHeight - height);
-        scroll = true;
-      }
-
-      if (rect.width > width ? rect.left > right || rect.right < left : rect.left < left || rect.right > right) {
-        opt.left = Math.min(rect.left + rect.width / 2 + sl - left - width / 2, scrollWidth - width);
-        scroll = true;
-      } */
+    const componentInstance = this.getComponentInstances(detail?.near?.node || node)?.[0];
+    if (!componentInstance) return;
+    const domNode = this.findDOMNodes(componentInstance)?.[0] as Element;
+    if (!domNode) return;
+    if (!isDOMNodeVisible(domNode, this.viewport)) {
+      const { left, top } = domNode.getBoundingClientRect();
+      const { scrollTop = 0, scrollLeft = 0 } = this.contentDocument?.documentElement!;
+      opt.left = left + scrollLeft;
+      opt.top = top + scrollTop;
+      scroll = true;
     }
+    /*
+    const rect = this.document.computeRect(node);
+    if (!rect || rect.width === 0 || rect.height === 0) {
+      if (!this.tryScrollAgain && tryTimes < 3) {
+        this.tryScrollAgain = requestAnimationFrame(() => this.scrollToNode(node, null, tryTimes + 1));
+      }
+      return;
+    }
+    const scrollTarget = this.viewport.scrollTarget!;
+    const st = scrollTarget.top;
+    const sl = scrollTarget.left;
+    const { scrollHeight, scrollWidth } = scrollTarget;
+    const { height, width, top, bottom, left, right } = this.viewport.contentBounds;
+
+    if (rect.height > height ? rect.top > bottom || rect.bottom < top : rect.top < top || rect.bottom > bottom) {
+      opt.top = Math.min(rect.top + rect.height / 2 + st - top - height / 2, scrollHeight - height);
+      scroll = true;
+    }
+
+    if (rect.width > width ? rect.left > right || rect.right < left : rect.left < left || rect.right > right) {
+      opt.left = Math.min(rect.left + rect.width / 2 + sl - left - width / 2, scrollWidth - width);
+      scroll = true;
+    } */
 
     if (scroll && this.scroller) {
       this.scroller.scrollTo(opt);
