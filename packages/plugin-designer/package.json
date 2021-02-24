@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-designer",
-  "version": "1.0.37-beta.3",
+  "version": "1.0.37-beta.5",
   "description": "alibaba lowcode editor designer plugin",
   "files": [
     "es",
@@ -20,8 +20,7 @@
   ],
   "author": "xiayang.xy",
   "dependencies": {
-    "@ali/lowcode-designer": "^1.0.36",
-    "@ali/lowcode-editor-core": "^1.0.36",
+    "@ali/lowcode-editor-core": "^1.0.37-beta.5",
     "react": "^16.8.1",
     "react-dom": "^16.8.1"
   },
@@ -33,5 +32,6 @@
   },
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"
-  }
+  },
+  "gitHead": "231e43c0be5e9c65fbcd87c362ced2eaed975a84"
 }

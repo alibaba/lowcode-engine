@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-vision-polyfill",
-  "version": "1.0.37-beta.3",
+  "version": "1.0.37-beta.5",
   "description": "Vision Polyfill for Ali lowCode engine",
   "main": "lib/index.js",
   "files": [
@@ -17,10 +17,10 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@ali/lowcode-designer": "^1.0.36",
-    "@ali/lowcode-editor-core": "^1.0.36",
-    "@ali/lowcode-editor-skeleton": "^1.0.36",
-    "@ali/lowcode-utils": "^1.0.37-beta.3",
+    "@ali/lowcode-designer": "^1.0.37-beta.5",
+    "@ali/lowcode-editor-core": "^1.0.37-beta.5",
+    "@ali/lowcode-editor-skeleton": "^1.0.37-beta.5",
+    "@ali/lowcode-utils": "^1.0.37-beta.5",
     "@ali/ve-i18n-util": "^2.0.0",
     "@ali/ve-icons": "^4.1.9",
     "@ali/ve-less-variables": "2.0.3",
@@ -53,5 +53,6 @@
   },
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"
-  }
+  },
+  "gitHead": "231e43c0be5e9c65fbcd87c362ced2eaed975a84"
 }
