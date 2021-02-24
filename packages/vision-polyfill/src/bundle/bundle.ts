@@ -44,7 +44,7 @@ function registerPrototypeViewWrapper(name: string, prototypeViewWrapper: Functi
   }
 }
 
-function wrapperPrototypeView(view: ComponentClass) {
+function wrapPrototypeView(view: ComponentClass) {
   const newView = prototypeViewWrapperList.reduce((acc, { prototypeViewWrapper }) => {
     return prototypeViewWrapper(acc.displayName, acc) || acc;
   }, view);
@@ -200,7 +200,7 @@ export default class Bundle {
         viewDetail.displayName = getCamelName(viewName || item.name);
       }
       (viewDetail as any)._packageName_ = viewName || item.name;
-      this.viewsMap[viewDetail.displayName] = wrapperPrototypeView(viewDetail);
+      this.viewsMap[viewDetail.displayName] = wrapPrototypeView(viewDetail);
     });
   }
 
