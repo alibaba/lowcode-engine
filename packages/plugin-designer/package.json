@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-designer",
-  "version": "1.0.37-beta.2",
+  "version": "1.0.37-beta.3",
   "description": "alibaba lowcode editor designer plugin",
   "files": [
     "es",
