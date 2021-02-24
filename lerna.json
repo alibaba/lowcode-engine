@@ -18,7 +18,8 @@
         "master",
         "main",
         "release/*",
-        "daily/*"
+        "daily/*",
+        "refactor/*"
       ]
     },
     "publish": {
