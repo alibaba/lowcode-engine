@@ -103,6 +103,7 @@ export interface PanelProps {
   onInit?: (widget: IWidget) => any;
   onDestroy?: () => any;
   shortcut?: string; // 只有在特定位置，可触发 toggle show
+  enableDrag?: boolean; // 是否开启通过 drag 调整 宽度
 }
 
 export interface PanelDockConfig extends IDockBaseConfig {

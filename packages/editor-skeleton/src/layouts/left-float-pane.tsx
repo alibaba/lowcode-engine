@@ -1,13 +1,12 @@
 import { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import { observer, Focusable, focusTracker } from '@ali/lowcode-editor-core';
-import { Button, Icon } from '@alifd/next';
-import { IconFix } from '../icons/fix';
 import Area from '../area';
 import Panel from '../widget/panel';
 
 @observer
 export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }> {
+
   shouldComponentUpdate() {
     return false;
   }
@@ -22,6 +21,7 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
     const { area } = this.props;
     const triggerClose = () => area.setVisible(false);
     area.skeleton.editor.on('designer.dragstart', triggerClose);
+
     this.dispose = () => {
       area.skeleton.editor.removeListener('designer.dragstart', triggerClose);
     };
@@ -95,29 +95,10 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
     this.dispose?.();
   }
 
-  // 固定
-  setFixed() {
-    const { area } = this.props;
-    const { current } = area;
-    if (!current) {
-      return;
-    }
-
-    area.skeleton.leftFloatArea.remove(current);
-    area.skeleton.leftFixedArea.add(current);
-    area.skeleton.leftFixedArea.container.active(current);
-  }
-
   render() {
     const { area } = this.props;
     const width = area.current?.config.props?.width;
-    // can be set fixed by default
-    let canSetFixed = true;
-    if (area.current?.config.props?.canSetFixed === false) {
-      canSetFixed = false;
-    }
 
-    const hideTitleBar = area.current?.config.props?.hideTitleBar;
     const style = width ? {
       width,
     } : undefined;
@@ -129,32 +110,6 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
         })}
         style={style}
       >
-        {
-          !hideTitleBar && (
-            <Fragment>
-              {
-                canSetFixed && (
-                  <Button
-                    text
-                    className="lc-pane-icon-fix"
-                    onClick={this.setFixed.bind(this)}
-                  >
-                    <IconFix />
-                  </Button>
-                )
-              }
-              <Button
-                text
-                className="lc-pane-icon-close"
-                onClick={() => {
-                  area.setVisible(false);
-                }}
-              >
-                <Icon type="close" />
-              </Button>
-            </Fragment>
-          )
-        }
         <Contents area={area} />
       </div>
     );

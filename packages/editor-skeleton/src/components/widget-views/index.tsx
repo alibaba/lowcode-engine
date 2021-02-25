@@ -9,6 +9,8 @@ import WidgetContainer from '../../widget/widget-container';
 import Panel from '../../widget/panel';
 import { IWidget } from '../../widget/widget';
 import { SkeletonEvents } from '../../skeleton';
+import DraggableLine from '../draggable-line';
+import PanelOperationRow from './panel-operation-row';
 
 import './index.less';
 
@@ -84,6 +86,75 @@ export class PanelDockView extends Component<DockProps & { dock: PanelDock }> {
 
 export class DialogDockView extends Component {}
 
+export class DraggableLineView extends Component<{ panel: Panel }> {
+  private shell: any;
+  private defaultWidth: number;
+
+  private getDefaultWidth() {
+    const configWidth = this.props.panel?.config.props?.width;
+    if (configWidth) {
+      return configWidth;
+    }
+    if (this.defaultWidth) {
+      return this.defaultWidth;
+    }
+    const containerRef = this.shell?.getParent();
+    if (containerRef) {
+      this.defaultWidth = containerRef.offsetWidth;
+      return this.defaultWidth;
+    }
+    return 300;
+  }
+
+  onDrag(value: number) {
+    const defaultWidth = this.getDefaultWidth();
+    const width = defaultWidth + value;
+
+    const containerRef = this.shell?.getParent();
+    if (containerRef) {
+      containerRef.style.width = `${width}px`;
+    }
+
+    // 抛出事件，对于有些需要 panel 插件随着 度变化进行再次渲染的，由panel插件内部监听事件实现
+    const editor = globalContext.get(Editor);
+    editor?.emit('dockpane.drag', width);
+  }
+
+  onDragChange(type: 'start' | 'end') {
+    const editor = globalContext.get(Editor);
+    editor?.emit('dockpane.dragchange', type);
+    // builtinSimulator 屏蔽掉 鼠标事件
+    editor?.emit('designer.builtinSimulator.disabledEvents', type === 'start');
+  }
+
+  render() {
+    // left fixed 下不允许改变宽度
+    // 默认 关闭，通过配置开启
+    const enableDrag = this.props.panel.config.props?.enableDrag;
+    const isRightArea = this.props.panel.config?.area === 'rightArea';
+    if (isRightArea || !enableDrag || this.props.panel?.parent.name === 'leftFixedArea') {
+      return null;
+    }
+    return (
+      <DraggableLine
+        ref={(ref) => {
+          this.shell = ref;
+        }}
+        position="right"
+        className="lc-engine-slate-draggable-line-right"
+        onDrag={(e) => this.onDrag(e)}
+        onDragStart={() => this.onDragChange('start')}
+        onDragEnd={() => this.onDragChange('end')}
+        maxIncrement={500}
+        maxDecrement={0}
+        // TODO: 优化
+        // maxIncrement={dock.getMaxWidth() - this.cachedSize.width}
+        // maxDecrement={this.cachedSize.width - dock.getWidth()}
+      />
+    );
+  }
+}
+
 @observer
 export class TitledPanelView extends Component<{ panel: Panel; area?: string }> {
   shouldComponentUpdate() {
@@ -131,15 +202,22 @@ export class TitledPanelView extends Component<{ panel: Panel; area?: string }> 
         })}
         id={panelName}
       >
+        <PanelOperationRow panel={panel} />
         <PanelTitle panel={panel} />
         <div className="lc-panel-body">{panel.body}</div>
+        <DraggableLineView panel={panel} />
       </div>
     );
   }
 }
 
 @observer
-export class PanelView extends Component<{ panel: Panel; area?: string }> {
+export class PanelView extends Component<{
+  panel: Panel;
+  area?: string;
+  hideOperationRow?: boolean;
+  hideDragLine?: boolean;
+}> {
   shouldComponentUpdate() {
     return false;
   }
@@ -172,7 +250,7 @@ export class PanelView extends Component<{ panel: Panel; area?: string }> {
   }
 
   render() {
-    const { panel, area } = this.props;
+    const { panel, area, hideOperationRow, hideDragLine } = this.props;
     if (!panel.inited) {
       return null;
     }
@@ -189,7 +267,9 @@ export class PanelView extends Component<{ panel: Panel; area?: string }> {
         })}
         id={panelName}
       >
+        {!hideOperationRow && <PanelOperationRow panel={panel} />}
         {panel.body}
+        {!hideDragLine && <DraggableLineView panel={panel} />}
       </div>
     );
   }
@@ -203,7 +283,7 @@ export class TabsPanelView extends Component<{ container: WidgetContainer<Panel>
     const contents: ReactElement[] = [];
     container.items.forEach((item: any) => {
       titles.push(<PanelTitle key={item.id} panel={item} className="lc-tab-title" />);
-      contents.push(<PanelView key={item.id} panel={item} />);
+      contents.push(<PanelView key={item.id} panel={item} hideOperationRow hideDragLine />);
     });
 
     return (
@@ -302,11 +382,7 @@ export class WidgetView extends Component<{ widget: IWidget }> {
       return null;
     }
     if (widget.disabled) {
-      return (
-        <div className="lc-widget-disabled">
-          {widget.body}
-        </div>
-      );
+      return <div className="lc-widget-disabled">{widget.body}</div>;
     }
     return widget.body;
   }
