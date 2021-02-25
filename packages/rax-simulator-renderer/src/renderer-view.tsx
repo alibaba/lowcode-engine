@@ -194,6 +194,19 @@ class Renderer extends Component<{
           const leaf = documentInstance.getNode(__id);
           viewProps._leaf = leaf;
           viewProps._componentName = leaf?.componentName;
+          // 如果是容器 && 无children && 高宽为空 增加一个占位容器，方便拖动
+          if (
+            !viewProps.dataSource &&
+            leaf?.isContainer() &&
+            (children == null || (Array.isArray(children) && !children.length)) &&
+            (!viewProps.style || Object.keys(viewProps.style).length === 0)
+          ) {
+            children = (
+              <div className="lc-container-placeholder" style={viewProps.placeholderStyle}>
+                {viewProps.placeholder || '拖拽组件或模板到这里'}
+              </div>
+            );
+          }
 
           // if (viewProps._componentName === 'Menu') {
           //   Object.assign(viewProps, {
