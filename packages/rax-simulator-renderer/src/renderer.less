@@ -83,6 +83,19 @@ html.engine-cursor-ew-resize, html.engine-cursor-ew-resize * {
   justify-content: center;
 }
 
+.lc-container-placeholder {
+  min-height: 60px;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(240, 240, 240);
+  border: 1px dotted;
+  color: rgb(167, 177, 189);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
 body.engine-document {
   &:after, &:before {
     content: "";
@@ -110,9 +123,11 @@ body.engine-document {
   user-select: text;
 }
 
+/* stylelint-disable-next-line selector-max-id */
 #app {
   height: 100vh;
 }
+
 
 .luna-page {
   height: 100%;
