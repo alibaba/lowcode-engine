@@ -158,6 +158,8 @@ export default class MixedSetter extends Component<{
       return;
     }
     const setter = this.setters.find((item) => item.name === name);
+    // reset hotValue
+    field.setHotValue(undefined);
     this.used = name;
     if (setter) {
       this.handleInitial(setter);
