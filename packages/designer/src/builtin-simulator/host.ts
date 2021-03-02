@@ -195,6 +195,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   }
 
   get(key: string): any {
+    if (key === 'device') {
+      return this.designer?.editor?.get('deviceMapper')?.transform?.(this._props.device) || this._props.device
+    }
     return this._props[key];
   }
 
