@@ -49,6 +49,7 @@ export interface OldPaneConfig {
   fullScreen?: boolean; // todo
   canSetFixed?: boolean; // 是否可以设置固定模式
   defaultFixed?: boolean; // 是否默认固定
+  enableDrag?: boolean;
 }
 
 function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: string } {
@@ -83,6 +84,7 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
       isAction,
       canSetFixed,
       defaultFixed,
+      enableDrag,
     } = config;
     if (menu) {
       newConfig.props.title = menu;
@@ -99,6 +101,7 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
         height,
         maxHeight,
         canSetFixed,
+        enableDrag,
       };
 
       if (defaultFixed) {
@@ -135,7 +138,6 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
   }
   newConfig.props.onInit = init;
   newConfig.props.onDestroy = destroy;
-
   return newConfig;
 }
 

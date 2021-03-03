@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { observer } from '@ali/lowcode-editor-core';
+import { observer, globalContext } from '@ali/lowcode-editor-core';
 import { BuiltinSimulatorHost, BuiltinSimulatorProps } from './host';
 import { BemTools } from './bem-tools';
 import { Project } from '../project';
@@ -73,14 +73,43 @@ class Canvas extends Component<{ host: BuiltinSimulatorHost }> {
 
 @observer
 class Content extends Component<{ host: BuiltinSimulatorHost }> {
+  state = {
+    disabledEvents: false,
+  };
+
+  private dispose?: () => void;
+
+  componentDidMount() {
+    const editor = globalContext.get('editor');
+    const onEnableEvents = (type: boolean) => {
+      this.setState({
+        disabledEvents: type,
+      });
+    };
+
+    editor.on('designer.builtinSimulator.disabledEvents', onEnableEvents);
+
+    this.dispose = () => {
+      editor.removeListener('designer.builtinSimulator.disabledEvents', onEnableEvents);
+    };
+  }
+
+  componentWillUnmount() {
+    this.dispose?.();
+  }
+
   render() {
     const sim = this.props.host;
+    const { disabledEvents } = this.state;
     const { viewport } = sim;
-    const frameStyle = {
+    const frameStyle: any = {
       transform: `scale(${viewport.scale})`,
       height: viewport.contentHeight,
       width: viewport.contentWidth,
     };
+    if (disabledEvents) {
+      frameStyle.pointerEvents = 'none';
+    }
 
     return (
       <div className="lc-simulator-content">
