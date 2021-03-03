@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.37-beta.6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.37-beta.3...v1.0.37-beta.6) (2021-03-03)
+
+
+### Bug Fixes
+
+* 在切换 setter 时清空 hotvalue ([5f3c4e9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/5f3c4e91d36ffd3289bd336586de48b0492340d6))
+
+
+### Features
+
+* add pane drag, use config "enableDrag:true" ([2cb24a4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2cb24a41c06d72435974f349e27da8f8d5474676))
+
+
+
+
+
 ## [1.0.37-beta.5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.37-beta.4...v1.0.37-beta.5) (2021-02-24)
 
 **Note:** Version bump only for package @ali/lowcode-editor-skeleton

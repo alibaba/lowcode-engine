@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.37-beta.6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.37-beta.3...v1.0.37-beta.6) (2021-03-03)
+
+
+### Bug Fixes
+
+* rax渲染添加容器占位显示 ([a60c580](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a60c580e7709b4b83fdfdcc365bc7ca54e4a57bc))
+
+
+
+
+
 ## [1.0.37-beta.5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.37-beta.4...v1.0.37-beta.5) (2021-02-24)
 
 **Note:** Version bump only for package @ali/lowcode-rax-simulator-renderer
