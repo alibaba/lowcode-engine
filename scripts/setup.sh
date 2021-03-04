@@ -10,5 +10,6 @@ lerna bootstrap
 
 lerna exec --scope @ali/lowcode-types -- npm run build
 lerna exec --scope @ali/lowcode-utils -- npm run build
+lerna exec --scope @ali/lowcode-renderer-core -- npm run build
 lerna exec --scope @ali/lowcode-react-renderer -- npm run build
 lerna exec --scope @ali/lowcode-rax-renderer -- npm run build
