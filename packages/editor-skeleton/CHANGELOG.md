@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.38-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.37...v1.0.38-beta.0) (2021-03-08)
+
+
+### Bug Fixes
+
+* 修复 Dialog 错误地添加到非 Page 节点下 ([28d7960](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/28d7960c52f8ada1501f2a3d903973ca2a3d7729))
+
+
+
+
+
 ## [1.0.37](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.37-beta.6...v1.0.37) (2021-03-05)
 
 **Note:** Version bump only for package @ali/lowcode-editor-skeleton
