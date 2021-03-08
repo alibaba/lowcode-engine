@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import Icons from '@ali/ve-icons';
 import { Stage as StageWidget } from '../../widget/stage';
+import { isTitleConfig } from '@ali/lowcode-types';
 
 export const StageDefaultProps = {
   current: false,
@@ -55,6 +56,8 @@ export default class Stage extends Component<StageProps> {
   render() {
     const { stage, current, direction } = this.props;
     const content = stage?.getContent();
+    const { title } = stage!;
+    const newTitle = isTitleConfig(title) ? title.label : title;
 
     if (current) {
       if (direction) {
@@ -75,7 +78,7 @@ export default class Stage extends Component<StageProps> {
     const stageBacker = stage?.hasBack() ? (
       <div className="skeleton-stagebox-stagebacker">
         <Icons name="arrow" className="skeleton-stagebox-stage-arrow" size="medium" data-stage-target="stageback" />
-        <span className="skeleton-stagebox-stage-title">{stage.title}</span>
+        <span className="skeleton-stagebox-stage-title">{newTitle}</span>
         <Icons name="exit" className="skeleton-stagebox-stage-exit" size="medium" data-stage-target="stageexit" />
       </div>
     ) : null;

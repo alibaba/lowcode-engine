@@ -40,7 +40,7 @@ import clipboard from '../designer/clipboard';
 import { LiveEditing } from './live-editing/live-editing';
 import { Project } from '../project';
 import { Scroller } from '../designer/scroller';
-import { isDOMNodeVisible } from '../utils/misc';
+import { isElementNode, isDOMNodeVisible } from '../utils/misc';
 
 export interface LibraryItem {
   package: string;
@@ -196,7 +196,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   get(key: string): any {
     if (key === 'device') {
-      return this.designer?.editor?.get('deviceMapper')?.transform?.(this._props.device) || this._props.device
+      return this.designer?.editor?.get('deviceMapper')?.transform?.(this._props.device) || this._props.device;
     }
     return this._props[key];
   }
@@ -847,7 +847,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     if (!componentInstance) return;
     const domNode = this.findDOMNodes(componentInstance)?.[0] as Element;
     if (!domNode) return;
-    if (!isDOMNodeVisible(domNode, this.viewport)) {
+    if (isElementNode(domNode) && !isDOMNodeVisible(domNode, this.viewport)) {
       const { left, top } = domNode.getBoundingClientRect();
       const { scrollTop = 0, scrollLeft = 0 } = this.contentDocument?.documentElement!;
       opt.left = left + scrollLeft;

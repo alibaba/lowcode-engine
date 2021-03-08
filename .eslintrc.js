@@ -26,5 +26,6 @@ module.exports = {
     '@typescript-eslint/no-inferrable-types': 0,
     'no-proto': 0,
     'prefer-const': 0,
+    'eol-last': 0,
   }
 };
