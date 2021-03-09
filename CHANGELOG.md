@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.38-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.38-beta.0...v1.0.38-beta.1) (2021-03-09)
+
+
+### Bug Fixes
+
+* 修复 vc 组件里 icon svg 写 class 时样式异常 ([c6b4b2c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c6b4b2cfd03dbb56f0283cc78a800f48f15b28fc))
+
+
+
+
+
 ## [1.0.38-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.37...v1.0.38-beta.0) (2021-03-08)
 
 
