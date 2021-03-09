@@ -47,7 +47,10 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
     if (settings.isMultiple) {
       return (
         <div className="lc-settings-navigator">
-          {createIcon(settings.componentMeta?.icon, { className: 'lc-settings-navigator-icon' })}
+          {createIcon(settings.componentMeta?.icon, {
+            className: 'lc-settings-navigator-icon',
+            class: 'lc-settings-navigator-icon',
+          })}
           <Title title={settings.componentMeta!.title} />
           <span> x {settings.nodes.length}</span>
         </div>
@@ -101,7 +104,10 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
 
     return (
       <div className="lc-settings-navigator">
-        {createIcon(this.main.componentMeta?.icon, { className: 'lc-settings-navigator-icon' })}
+        {createIcon(this.main.componentMeta?.icon, {
+          className: 'lc-settings-navigator-icon',
+          class: 'lc-settings-navigator-icon',
+        })}
         <Breadcrumb className="lc-settings-node-breadcrumb">{items}</Breadcrumb>
       </div>
     );
