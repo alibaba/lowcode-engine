@@ -96,6 +96,9 @@ function overridePropsConfigure(componentName: string, config: { [name: string]:
     autoruns,
     override,
   };
+
+  // refresh metadata
+  window.VisualEngine.designer.getComponentMeta(componentName).parseMetadata(window.VisualEngine.designer.getComponentMeta(componentName).getMetadata());
 }
 registerMetadataTransducer(
   (metadata) => {
@@ -148,9 +151,12 @@ registerMetadataTransducer(
           }
         }
       }
-      // TODO: replace autoruns,initials,filters
+      if (metadata.experimental) {
+        metadata.experimental.initials = Overrides[componentName]?.initials;
+        metadata.experimental.autoruns = Overrides[componentName]?.autoruns;
+        metadata.experimental.filters = Overrides[componentName]?.filters;
+      }
     }
-
     return metadata;
   },
   100,
