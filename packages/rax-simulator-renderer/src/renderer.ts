@@ -1,6 +1,6 @@
 import { BuiltinSimulatorRenderer, Component, DocumentModel, Node, NodeInstance } from '@ali/lowcode-designer';
 import { ComponentSchema, NodeSchema, NpmInfo, RootSchema, TransformStage } from '@ali/lowcode-types';
-import { Asset, cursor, isElement, isESModule, isReactComponent, setNativeSelection } from '@ali/lowcode-utils';
+import { Asset, compatibleLegaoSchema, cursor, isElement, isESModule, isPlainObject, isReactComponent, setNativeSelection } from '@ali/lowcode-utils';
 import LowCodeRenderer from '@ali/lowcode-rax-renderer';
 import { computed, obx } from '@recore/obx';
 import DriverUniversal from 'driver-universal';
@@ -493,7 +493,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
 
   createComponent(schema: NodeSchema): Component | null {
     const _schema: any = {
-      ...schema,
+      ...compatibleLegaoSchema(schema),
     };
     _schema.methods = {};
     _schema.lifeCycles = {};
@@ -513,8 +513,10 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
 
     class LowCodeComp extends Rax.Component {
       render() {
+        const extraProps = getLowCodeComponentProps(this.props);
         // @ts-ignore
         return createElement(LowCodeRenderer, {
+          ...extraProps,
           schema: _schema,
           components,
           designMode: renderer.designMode,
@@ -618,6 +620,20 @@ function findComponent(libraryMap: LibraryMap, componentName: string, npm?: NpmI
     paths.unshift('default');
   }
   return getSubComponent(library, paths);
+}
+
+function getLowCodeComponentProps(props: any) {
+  if (!props || !isPlainObject(props)) {
+    return props;
+  }
+  const newProps: any = {};
+  Object.keys(props).forEach(k => {
+    if (['children', 'componentId', '__designMode', '_componentName', '_leaf'].includes(k)) {
+      return;
+    }
+    newProps[k] = props[k];
+  });
+  return newProps;
 }
 
 export default new SimulatorRendererContainer();

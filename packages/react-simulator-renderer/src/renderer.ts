@@ -12,6 +12,8 @@ import {
   setNativeSelection,
   buildComponents,
   getSubComponent,
+  compatibleLegaoSchema,
+  isPlainObject,
 } from '@ali/lowcode-utils';
 import { RootSchema, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
 // import { isESModule, isElement, acceptsRef, wrapReactClass, cursor, setNativeSelection } from '@ali/lowcode-utils';
@@ -396,7 +398,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
 
   createComponent(schema: NodeSchema): Component | null {
     const _schema: any = {
-      ...schema,
+      ...compatibleLegaoSchema(schema),
     };
     _schema.methods = {};
     _schema.lifeCycles = {};
@@ -415,8 +417,10 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
 
     class LowCodeComp extends React.Component {
       render() {
+        const extraProps = getLowCodeComponentProps(this.props);
         // @ts-ignore
         return createElement(LowCodeRenderer, {
+          ...extraProps, // 防止覆盖下面内置属性
           schema: _schema,
           components,
           designMode: renderer.designMode,
@@ -541,6 +545,20 @@ function checkInstanceMounted(instance: any): boolean {
     return instance.parentElement != null;
   }
   return true;
+}
+
+function getLowCodeComponentProps(props: any) {
+  if (!props || !isPlainObject(props)) {
+    return props;
+  }
+  const newProps: any = {};
+  Object.keys(props).forEach(k => {
+    if (['children', 'componentId', '__designMode', '_componentName', '_leaf'].includes(k)) {
+      return;
+    }
+    newProps[k] = props[k];
+  });
+  return newProps;
 }
 
 export default new SimulatorRendererContainer();

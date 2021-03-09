@@ -2,6 +2,15 @@
 import { isI18NObject } from './is-object';
 import get from 'lodash.get';
 import { ComponentMeta } from '@ali/lowcode-designer';
+interface Variable {
+  type: 'variable';
+  variable: string;
+  value: any;
+}
+
+export function isVariable(obj: any): obj is Variable {
+  return obj && obj.type === 'variable';
+}
 
 export function isUseI18NSetter(prototype: any, propName: string) {
   const configure = prototype?.options?.configure;

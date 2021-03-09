@@ -412,7 +412,7 @@ export function parseData(schema: any, self: any): any {
   return schema;
 }
 
-/* 全匹配{{开头,}}结尾的变量表达式，或者对象类型JSExpression，且均不支持省略this */
+/* 全匹配{{开头,}}结尾的变量表达式，或者对象类型JSExpression，支持省略this */
 export function parseExpression(str: any, self: any) {
   try {
     const contextArr = ['"use strict";', 'var __self = arguments[0];'];
@@ -431,7 +431,8 @@ export function parseExpression(str: any, self: any) {
     if (inSameDomain() && (window.parent as any).__newFunc) {
       return (window.parent as any).__newFunc(tarStr)(self);
     }
-    return new Function(tarStr)(self);
+    const code = `with($scope || {}) { ${tarStr} }`;
+    return new Function('$scope', code)(self);
   } catch (err) {
     debug('parseExpression.error', err, str, self);
     return undefined;

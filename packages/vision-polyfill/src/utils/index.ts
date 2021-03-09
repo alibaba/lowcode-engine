@@ -1,14 +1,5 @@
 import { designer } from '@ali/lowcode-engine';
-
-interface Variable {
-  type: 'variable';
-  variable: string;
-  value: any;
-}
-
-export function isVariable(obj: any): obj is Variable {
-  return obj && obj.type === 'variable';
-}
+export { isVariable } from '@ali/lowcode-utils';
 
 export function getCurrentFieldIds() {
   const fieldIds: any = [];
