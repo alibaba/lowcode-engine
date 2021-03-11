@@ -30,8 +30,8 @@
     "build": "build-scripts build"
   },
   "dependencies": {
-    "@ali/lowcode-renderer-core": "^1.0.38-beta.1",
-    "@ali/lowcode-utils": "^1.0.38-beta.1",
+    "@ali/lowcode-renderer-core": "1.0.38-beta.1",
+    "@ali/lowcode-utils": "1.0.38-beta.1",
     "rax-find-dom-node": "^1.0.1"
   },
   "devDependencies": {
