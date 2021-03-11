@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.38-beta.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.38-beta.1...v1.0.38-beta.2) (2021-03-11)
+
+
+### Bug Fixes
+
+* 修复 overridePropsConfigure 失效的 bug ([7168a90](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7168a903ce8b4d5346b751dc812828199ae1b3b6))
+
+
+### Features
+
+* 低代码组件支持实时修改属性 ([e7b4e2c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e7b4e2cc9cf80bcc073c142d7b06a8e2be5895a5))
+
+
+
+
+
 ## [1.0.38-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.38-beta.0...v1.0.38-beta.1) (2021-03-09)
 
 
