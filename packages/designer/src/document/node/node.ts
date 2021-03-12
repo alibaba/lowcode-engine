@@ -929,7 +929,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       return null;
     }
 
-    if (node.componentMeta?.getMetadata().configure.component?.isModal) {
+    if (node?.componentMeta?.getMetadata().configure.component?.isModal) {
       return { container: this.document.rootNode, ref };
     }
 

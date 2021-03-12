@@ -26,7 +26,7 @@
     "test:snapshot": "lerna run test:snapshot",
     "watchdog:build": "node ./scripts/watchdog.js",
     "xima:fix": "xima fix",
-    "xima:scan": "xima scan"
+    "xima:scan": "xima scan --quiet"
   },
   "husky": {
     "hooks": {
@@ -39,12 +39,9 @@
     "**/*.{js,jsx,ts,tsx}": "xima exec eslint"
   },
   "devDependencies": {
-    "ava": "^1.0.1",
     "@ali/lerna": "^1",
-    "ts-node": "^7.0.1",
-    "tslib": "^1.9.3",
     "typescript": "^3.2.2",
-    "xima": "^0.2.15"
+    "xima": "^0.3.0"
   },
   "engines": {
     "node": ">=14.0.0"
