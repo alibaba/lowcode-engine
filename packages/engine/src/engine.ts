@@ -23,6 +23,7 @@ registerDefaults();
 
 const editor = new Editor();
 globalContext.register(editor, Editor);
+globalContext.register(editor, 'editor');
 
 const skeleton = new Skeleton(editor);
 editor.set(Skeleton, skeleton);
