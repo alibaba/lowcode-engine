@@ -1,6 +1,6 @@
 {
   "lerna": "2.11.0",
-  "version": "1.0.38-beta.3",
+  "version": "1.0.39-beta.0",
   "npmClient": "tnpm",
   "registry": "http://registry.npm.alibaba-inc.com",
   "useWorkspaces": true,
