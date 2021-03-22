@@ -49,7 +49,7 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
           // FIXME:
           forceInline: 1,
           // setValue: () => setTimeout(() => ListSetter.onItemChange(onChange, items)),
-          setValue: () => props.prop?.extraProps?.setValue,
+          setValue: props.prop?.extraProps?.setValue,
         });
         item.setValue(value[i]);
         items[i] = item;
