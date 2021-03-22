@@ -11,6 +11,7 @@ import {
   isNodeSchema,
   NodeSchema,
 } from '@ali/lowcode-types';
+import { megreAssets, AssetsJson } from '@ali/lowcode-utils';
 import { Project } from '../project';
 import { Node, DocumentModel, insertChildren, isRootNode, ParentalNode, TransformStage } from '../document';
 import { ComponentMeta } from '../component-meta';
@@ -373,6 +374,25 @@ export class Designer {
     this.props = props;
   }
 
+  async loadIncrementalAssets(incrementalAssets: AssetsJson): void {
+    const { components, packages } = incrementalAssets;
+    components && this.buildComponentMetasMap(components);
+    // 部分异步组件会在外层加载components，这里需要进行强制刷新
+    this.forceUpdateComponentsMap();
+    await this.project.simulator.setupComponents(packages);
+
+    if (components) {
+      // 合并assets
+      let assets = this.editor.get('assets');
+      let newAssets = megreAssets(assets, incrementalAssets);
+      this.editor.set('assets', newAssets);
+    }
+    // 完成加载增量资源后发送事件，方便插件监听并处理相关逻辑
+    this.editor.emit('designer.incrementalAssetsReady');
+
+  }
+
+
   get(key: string): any {
     return this.props ? this.props[key] : null;
   }
@@ -481,6 +501,13 @@ export class Designer {
       }
     });
     return maps;
+  }
+
+  /**
+   * 强制刷新 componentsMap，使画布能拿到最新的组件
+   */
+  private forceUpdateComponentsMap() {
+    this._componentMetasMap = new Map(this._componentMetasMap);
   }
 
   private propsReducers = new Map<TransformStage, PropsReducer[]>();
