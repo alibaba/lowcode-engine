@@ -63,6 +63,7 @@ export interface JSSlot {
   // 函数的入参
   params?: string[];
   value?: NodeData[] | NodeData;
+  name?: string;
 }
 
 export interface JSBlock {
