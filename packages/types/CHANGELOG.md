@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.39-beta.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.39-beta.1...v1.0.39-beta.2) (2021-03-22)
+
+
+### Bug Fixes
+
+* renderer-core 在非设计渲染态时, 不应处理 hidden 属性 ([7857096](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7857096c0f56308195cc9e27de4f549eee72a10e))
+
+
+
+
+
 ## [1.0.39-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.38-beta.3...v1.0.39-beta.1) (2021-03-12)
 
 **Note:** Version bump only for package @ali/lowcode-types

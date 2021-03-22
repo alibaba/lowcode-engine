@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.39-beta.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.39-beta.1...v1.0.39-beta.2) (2021-03-22)
+
+
+### Bug Fixes
+
+* 修复array-setter 初始化重复多次执行onChange ([e8f83fc](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e8f83fc4b39d8591eb662e53f95619743b6da5eb))
+* 修复arraysetter 初始化重复执行onChange问题 ([0486dbb](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0486dbb320f63c6ebf9448c97c20cc37feb1d9dd))
+
+
+
+
+
 ## [1.0.39-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.38-beta.3...v1.0.39-beta.1) (2021-03-12)
 
 **Note:** Version bump only for package @ali/lowcode-editor-skeleton

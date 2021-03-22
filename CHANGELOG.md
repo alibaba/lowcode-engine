@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.39-beta.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.39-beta.1...v1.0.39-beta.2) (2021-03-22)
+
+
+### Bug Fixes
+
+* renderer-core 在非设计渲染态时, 不应处理 hidden 属性 ([7857096](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7857096c0f56308195cc9e27de4f549eee72a10e))
+* 以字符串注册 editor 实例 ([b9c5b3a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b9c5b3a0fdbc11ee287befae1eb3864ed761831b))
+* 修复array-setter 初始化重复多次执行onChange ([e8f83fc](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e8f83fc4b39d8591eb662e53f95619743b6da5eb))
+* 修复arraysetter 初始化重复执行onChange问题 ([0486dbb](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/0486dbb320f63c6ebf9448c97c20cc37feb1d9dd))
+
+
+### Features
+
+* 异步加载asset ([a5ca12a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a5ca12ab691f611dd706ac295ee3cc4965701ca3))
+
+
+
+
+
 ## [1.0.39-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.38-beta.3...v1.0.39-beta.1) (2021-03-12)
 
 **Note:** Version bump only for package ali-lowcode-engine
