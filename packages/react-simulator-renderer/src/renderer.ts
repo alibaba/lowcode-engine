@@ -14,7 +14,10 @@ import {
   getSubComponent,
   compatibleLegaoSchema,
   isPlainObject,
+  AssetLoader,
+
 } from '@ali/lowcode-utils';
+
 import { RootSchema, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
 // import { isESModule, isElement, acceptsRef, wrapReactClass, cursor, setNativeSelection } from '@ali/lowcode-utils';
 // import { RootSchema, NpmInfo, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
@@ -25,7 +28,7 @@ import { createMemoryHistory, MemoryHistory } from 'history';
 import Slot from './builtin-components/slot';
 import Leaf from './builtin-components/leaf';
 import { withQueryParams, parseQuery } from './utils/url';
-
+const loader = new AssetLoader();
 export class DocumentInstance {
   private instancesMap = new Map<string, ReactInstance[]>();
 
@@ -98,7 +101,7 @@ export class DocumentInstance {
   }
 
   get path(): string {
-    return `/${ this.document.fileName}`;
+    return `/${this.document.fileName}`;
   }
 
   get id() {
@@ -348,6 +351,16 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   // load(asset: Asset): Promise<any> {
   //   return loader.load(asset);
   // }
+
+  async loadAsyncLibrary(asyncLibraryMap) {
+    await loader.loadAsyncLibrary(asyncLibraryMap);
+    this.buildComponents();
+  }
+
+  async setupComponents(asset: Asset) {
+    await loader.load(asset);
+    this.buildComponents();
+  }
 
   getComponent(componentName: string) {
     const paths = componentName.split('.');

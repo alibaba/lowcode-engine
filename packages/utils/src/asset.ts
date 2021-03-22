@@ -54,6 +54,13 @@ export type Asset = AssetList | AssetBundle | AssetItem | URL;
 
 export type AssetList = Array<Asset | undefined | null>;
 
+export interface AssetsJson {
+  packages: Array;
+  components: Array;
+  componentList?: Array;
+  bizComponentList?: Array
+}
+
 export function isAssetItem(obj: any): obj is AssetItem {
   return obj && obj.type;
 }
@@ -91,6 +98,46 @@ export function assetItem(type: AssetType, content?: string | null, level?: Asse
     level,
     id,
   };
+}
+
+export function megreAssets(assets: AssetsJson, increaseAssets: AssetsJson): AssetsJson {
+  if (!increaseAssets.packages) {
+    console.error('assets must have packages');
+  }
+
+  if (!increaseAssets.components) {
+    console.error('assets must have components');
+  }
+
+  assets.packages = [...assets.packages, ...increaseAssets.packages];
+  assets.components = [...assets.components, ...increaseAssets.components];
+
+  megreAssetsComponentList(assets, increaseAssets, 'componentList');
+  megreAssetsComponentList(assets, increaseAssets, 'bizComponentList');
+
+  return assets;
+}
+
+function megreAssetsComponentList(assets: AssetsJson, increaseAssets: AssetsJson, listName: String): void {
+  if (increaseAssets[listName]) {
+    if (assets[listName]) {
+      // 根据title进行合并
+      increaseAssets[listName].map((item) => {
+        let matchFlag = false;
+        assets[listName].map((assetItem) => {
+          if (assetItem.title === item.title) {
+            assetItem.children = assetItem.children.concat(item.children);
+            matchFlag = true;
+          }
+
+          return assetItem;
+        });
+
+        !matchFlag && assets[listName].push(item);
+        return item;
+      });
+    }
+  }
 }
 
 export class StylePoint {
