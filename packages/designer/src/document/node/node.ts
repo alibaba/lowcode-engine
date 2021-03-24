@@ -166,6 +166,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       });
       this.settingEntry = this.document.designer.createSettingEntry([this]);
     } else {
+      if (this.componentMeta.isModal) {
+        extras.hidden = true;
+      }
       // 这里 props 被初始化两次，一次 new，一次 import，new 的实例需要给 propsReducer 的钩子去使用，
       // import 是为了使用钩子返回的值，并非完全幂等的操作，部分行为执行两次会有 bug，
       // 所以在 props 里会对 new / import 做一些区别化的解析
@@ -802,20 +805,13 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   insertBefore(node: Node, ref?: Node, useMutator = true) {
-    this.children?.insert(node, ref ? ref.index : null, useMutator);
+    const nodeInstance = ensureNode(node, this.document);
+    this.children?.insert(nodeInstance, ref ? ref.index : null, useMutator);
   }
 
   insertAfter(node: any, ref?: Node, useMutator = true) {
-    if (!isNode(node)) {
-      if (node.getComponentName) {
-        node = this.document.createNode({
-          componentName: node.getComponentName(),
-        });
-      } else {
-        node = this.document.createNode(node);
-      }
-    }
-    this.children?.insert(node, ref ? ref.index + 1 : null, useMutator);
+    const nodeInstance = ensureNode(node, this.document);
+    this.children?.insert(nodeInstance, ref ? ref.index + 1 : null, useMutator);
   }
 
   getParent() {
@@ -999,6 +995,20 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   toString() {
     return this.id;
   }
+}
+
+function ensureNode(node: any, document: DocumentModel): Node {
+  let nodeInstance = node;
+  if (!isNode(node)) {
+    if (node.getComponentName) {
+      nodeInstance = document.createNode({
+        componentName: node.getComponentName(),
+      });
+    } else {
+      nodeInstance = document.createNode(node);
+    }
+  }
+  return nodeInstance;
 }
 
 export interface ParentalNode<T extends NodeSchema = NodeSchema> extends Node<T> {

@@ -32,7 +32,7 @@ export class ModalNodesManager {
     this.emitter = new EventEmitter();
     this.nodeRemoveEvents = {};
     this.setNodes();
-    this.hideModalNodes();
+    // this.hideModalNodes();
     this.willDestroy = [
       page.onNodeCreate((node) => this.addNode(node)),
       page.onNodeDestroy((node) => this.removeNode(node)),
