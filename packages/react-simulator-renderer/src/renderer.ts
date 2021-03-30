@@ -348,17 +348,12 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   /**
    * 加载资源
    */
-  // load(asset: Asset): Promise<any> {
-  //   return loader.load(asset);
-  // }
+  load(asset: Asset): Promise<any> {
+    return loader.load(asset);
+  }
 
   async loadAsyncLibrary(asyncLibraryMap) {
     await loader.loadAsyncLibrary(asyncLibraryMap);
-    this.buildComponents();
-  }
-
-  async setupComponents(asset: Asset) {
-    await loader.load(asset);
     this.buildComponents();
   }
 

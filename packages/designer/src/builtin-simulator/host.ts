@@ -261,6 +261,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     const libraryAsset: AssetList = [];
     if (library) {
       library.forEach((item) => {
+        this.libraryMap[item.package] = item.library;
         if (item.async) {
           this.asyncLibraryMap[item.package] = item;
         }
@@ -342,7 +343,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   async setupComponents(library) {
     const libraryAsset: AssetList = this.buildLibrary(library);
-    await this.renderer.setupComponents(libraryAsset);
+    await this.renderer.load(libraryAsset);
+    await this.renderer.buildComponents();
   }
 
   setupEvents() {
