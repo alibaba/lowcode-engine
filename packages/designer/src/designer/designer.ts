@@ -374,12 +374,12 @@ export class Designer {
     this.props = props;
   }
 
-  async loadIncrementalAssets(incrementalAssets: AssetsJson): void {
+  async loadIncrementalAssets(incrementalAssets: AssetsJson): Promise<void> {
     const { components, packages } = incrementalAssets;
     components && this.buildComponentMetasMap(components);
-    // 部分异步组件会在外层加载components，这里需要进行强制刷新
-    this.forceUpdateComponentsMap();
-    await this.project.simulator.setupComponents(packages);
+    if (packages) {
+      await this.project.simulator!.setupComponents(packages);
+    }
 
     if (components) {
       // 合并assets
@@ -387,6 +387,8 @@ export class Designer {
       let newAssets = megreAssets(assets, incrementalAssets);
       this.editor.set('assets', newAssets);
     }
+    // TODO: 因为涉及修改 prototype.view，之后在 renderer 里修改了 vc 的 view 获取逻辑后，可删除
+    this._componentMetasMap = new Map(this._componentMetasMap);
     // 完成加载增量资源后发送事件，方便插件监听并处理相关逻辑
     this.editor.emit('designer.incrementalAssetsReady');
 
@@ -501,13 +503,6 @@ export class Designer {
       }
     });
     return maps;
-  }
-
-  /**
-   * 强制刷新 componentsMap，使画布能拿到最新的组件
-   */
-  private forceUpdateComponentsMap() {
-    this._componentMetasMap = new Map(this._componentMetasMap);
   }
 
   private propsReducers = new Map<TransformStage, PropsReducer[]>();
