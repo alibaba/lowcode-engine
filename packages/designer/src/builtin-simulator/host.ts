@@ -48,6 +48,11 @@ export interface LibraryItem {
   urls?: Asset;
 }
 
+export interface DeviceStyleProps {
+  canvas?: object;
+  viewport?: object;
+}
+
 export interface BuiltinSimulatorProps {
   // 从 documentModel 上获取
   // suspended?: boolean;
@@ -176,6 +181,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   @computed get componentsMap() {
     // renderer 依赖
     return this.designer.componentsMap;
+  }
+
+  @computed get deviceStyle(): DeviceStyleProps | undefined {
+    return this.get('deviceStyle');
   }
 
   @obx.ref _props: BuiltinSimulatorProps = {};
