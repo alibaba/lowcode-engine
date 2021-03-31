@@ -14,7 +14,7 @@
     "clean": "rm -rf ./packages/*/lib ./packages/*/es ./packages/*/dist ./packages/*/build",
     "lint": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet",
     "lint:fix": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet --fix",
-    "pub": "tnpm run watchdog:build && lerna publish patch --force-publish --cd-version --exact",
+    "pub": "tnpm run watchdog:build && lerna publish patch --force-publish --exact",
     "pub:prepatch": "tnpm run watchdog:build && lerna publish prepatch --force-publish --exact --dist-tag beta --preid beta",
     "pub:prerelease": "tnpm run watchdog:build && lerna publish prerelease --force-publish --exact --dist-tag beta --preid beta",
     "setup": "./scripts/setup.sh",
