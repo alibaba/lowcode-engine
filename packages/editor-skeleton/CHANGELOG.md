@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.39-beta.5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.39-beta.4...v1.0.39-beta.5) (2021-03-31)
+
+
+### Features
+
+* 增加 getConfig / getItems / selected 等兼容 vision 的 API ([9a3352b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9a3352b05411b23a831bcbea056642413c19c36e))
+
+
+
+
+
 ## [1.0.39-beta.4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.39-beta.3...v1.0.39-beta.4) (2021-03-30)
 
 **Note:** Version bump only for package @ali/lowcode-editor-skeleton
