@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.40-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.39-beta.5...v1.0.40-beta.0) (2021-03-31)
+
+
+### Bug Fixes
+
+* 对齐 getConfig 的实现 ([7b551fb](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7b551fb5b8392640f55cd79f41ee06a2afdac202))
+
+
+
+
+
 ## [1.0.39-beta.5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.39-beta.4...v1.0.39-beta.5) (2021-03-31)
 
 
