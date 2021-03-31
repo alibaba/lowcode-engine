@@ -117,9 +117,23 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     this.disposeItems();
   }
 
+  // ======= compatibles for vision ======
+
+  getConfig(): FieldConfig {
+    return this._config;
+  }
+
+  getItems(filter?: (item: SettingField | CustomView) => boolean): Array<SettingField | CustomView> {
+    return this._items.filter(item => {
+      if (filter) {
+        return filter(item);
+      }
+      return true;
+    });
+  }
+
   private hotValue: any;
 
-  // ======= compatibles for vision ======
   setValue(val: any, isHotValue?: boolean, force?: boolean, extraOptions?: any) {
     if (isHotValue) {
       this.setHotValue(val, extraOptions);
