@@ -119,7 +119,10 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
   // ======= compatibles for vision ======
 
-  getConfig(): FieldConfig {
+  getConfig<K extends keyof FieldConfig>(configName?: K): FieldConfig[K] | FieldConfig {
+    if (configName) {
+      return this.config[configName];
+    }
     return this._config;
   }
 
