@@ -54,6 +54,7 @@ class Canvas extends Component<{ host: BuiltinSimulatorHost }> {
   render() {
     const sim = this.props.host;
     let className = 'lc-simulator-canvas';
+    const { canvas = {}, viewport = {} } = sim.deviceStyle || {};
     if (sim.deviceClassName) {
       className += ` ${sim.deviceClassName}`;
     } else if (sim.device) {
@@ -61,8 +62,8 @@ class Canvas extends Component<{ host: BuiltinSimulatorHost }> {
     }
 
     return (
-      <div className={className}>
-        <div ref={(elmt) => sim.mountViewport(elmt)} className="lc-simulator-canvas-viewport">
+      <div className={className} style={canvas}>
+        <div ref={(elmt) => sim.mountViewport(elmt)} className="lc-simulator-canvas-viewport" style={viewport}>
           <BemTools host={sim} />
           <Content host={sim} />
         </div>
