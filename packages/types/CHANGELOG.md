@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.41-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.40...v1.0.41-beta.0) (2021-04-02)
+
+**Note:** Version bump only for package @ali/lowcode-types
+
+
+
+
+
 ## [1.0.40](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.40-beta.1...v1.0.40) (2021-03-31)
 
 **Note:** Version bump only for package @ali/lowcode-types
