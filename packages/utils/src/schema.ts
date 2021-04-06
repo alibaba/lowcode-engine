@@ -2,7 +2,7 @@ import { isJSBlock } from '@ali/lowcode-types';
 import { isVariable } from './misc';
 import { isPlainObject } from './is-plain-object';
 
-export function compatibleLegaoSchema(props: any) {
+export function compatibleLegaoSchema(props: any): any {
   if (!props) {
     return props;
   }
@@ -37,6 +37,11 @@ export function compatibleLegaoSchema(props: any) {
   const newProps: any = {};
   Object.keys(props).forEach((key) => {
     if (/^__slot__/.test(key) && props[key] === true) {
+      return;
+    }
+    // TODO: 目前 dataSource 面板里既用到了 JSExpression，又用到了 variable，这里先都不处理，后面再重构
+    if (key === 'dataSource') {
+      newProps[key] = props[key];
       return;
     }
     newProps[key] = compatibleLegaoSchema(props[key]);
