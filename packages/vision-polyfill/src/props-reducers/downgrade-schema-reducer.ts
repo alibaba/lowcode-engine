@@ -9,11 +9,8 @@ export function compatibleReducer(props: any, node: Node): any {
   if (!node.componentMeta.prototype) {
     return props;
   }
-  if (!props || !(isPlainObject(props) || Array.isArray(props))) {
+  if (!props || !isPlainObject(props)) {
     return props;
-  }
-  if (Array.isArray(props)) {
-    return props.map(k => compatibleReducer(k, node));
   }
   // 为了能降级到老版本，建议在后期版本去掉以下代码
   if (isJSSlot(props)) {
