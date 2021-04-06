@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.42-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.41...v1.0.42-beta.0) (2021-04-06)
+
+
+### Bug Fixes
+
+* 升级和降级 schema 的操作都跳过数组, 因为 dataSource 和 ListSetter 都依赖了乐高的 schema 结构 ([1c430a2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1c430a2e66343a8e433075fe7b472d8a06b02d98))
+
+
+
+
+
 ## [1.0.41](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.41-beta.1...v1.0.41) (2021-04-06)
 
 
