@@ -166,9 +166,6 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       });
       this.settingEntry = this.document.designer.createSettingEntry([this]);
     } else {
-      if (this.componentMeta.isModal) {
-        extras.hidden = true;
-      }
       // 这里 props 被初始化两次，一次 new，一次 import，new 的实例需要给 propsReducer 的钩子去使用，
       // import 是为了使用钩子返回的值，并非完全幂等的操作，部分行为执行两次会有 bug，
       // 所以在 props 里会对 new / import 做一些区别化的解析
