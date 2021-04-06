@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-renderer-core",
-  "version": "1.0.42-beta.0",
+  "version": "1.0.42-beta.1",
   "description": "renderer core",
   "license": "MIT",
   "main": "lib/index.js",
@@ -45,5 +45,5 @@
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"
   },
-  "gitHead": "d4611b664b52603fab377608a60dc6d8c8aa9cac"
+  "gitHead": "3bfd7df92985ec6c9d2ccb8ba95d7b0829fa2b1d"
 }
