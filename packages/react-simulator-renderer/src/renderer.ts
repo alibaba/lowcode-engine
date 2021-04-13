@@ -46,13 +46,6 @@ export class DocumentInstance {
     });
   }
 
-  // private _libraryMap: { [key: string]: string } = {};
-  // private buildComponents() {
-  //   this._components = {
-  //     ...builtinComponents,
-  //     ...buildComponents(this._libraryMap, this._componentsMap),
-  //   };
-  // }
   @obx.ref private _components: any = {};
 
   @computed get components(): object {
@@ -310,16 +303,15 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   private _libraryMap: { [key: string]: string } = {};
 
   private buildComponents() {
-    // TODO: remove this.createComponent
     this._components = buildComponents(this._libraryMap, this._componentsMap, this.createComponent.bind(this));
     this._components = {
       ...builtinComponents,
       ...this._components,
     };
   }
-  @obx.ref private _components: any = {};
+  private _components: any = {};
 
-  @computed get components(): object {
+  get components(): object {
     // 根据 device 选择不同组件，进行响应式
     // 更好的做法是，根据 device 选择加载不同的组件资源，甚至是 simulatorUrl
     return this._components;
