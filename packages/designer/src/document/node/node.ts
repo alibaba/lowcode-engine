@@ -896,6 +896,11 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * @deprecated
    */
   getSuitablePlace(node: Node, ref: any): any {
+    // 如果节点是模态框，插入到根节点下
+    if (node?.componentMeta?.isModal) {
+      return { container: this.document.rootNode, ref };
+    }
+
     if (this.isRoot() && this.children) {
       const dropElement = this.children.filter((c: Node) => {
         if (!c.isContainer()) {
@@ -920,10 +925,6 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       }
       // 假如最后找不到合适位置，返回 null 阻止继续插入节点
       return null;
-    }
-
-    if (node?.componentMeta?.getMetadata().configure.component?.isModal) {
-      return { container: this.document.rootNode, ref };
     }
 
     const canDropIn = this.componentMeta?.prototype?.options?.canDropIn;
