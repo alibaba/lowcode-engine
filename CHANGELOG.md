@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.44-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.43...v1.0.44-beta.0) (2021-04-13)
+
+
+### Bug Fixes
+
+* componentsMap 中加入低代码组件信息 ([b7c1183](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b7c11834602d8e4ea84d2dea035a3abf97b33d5c))
+
+
+
+
+
 ## [1.0.43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.43-beta.0...v1.0.43) (2021-04-13)
 
 **Note:** Version bump only for package ali-lowcode-engine
