@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.43-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.42...v1.0.43-beta.0) (2021-04-13)
+
+
+### Bug Fixes
+
+* 修复在没有选中任何画布节点时, 添加模态框异常的 bug ([34e8105](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/34e8105c104e7fe98d9446d96d44206c069d8d4b))
+* 移除 renderer 内 components 的响应式逻辑 ([c02f0ec](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c02f0ec8374406e2d916fcc2a23c7f88b52ab80d))
+
+
+
+
+
 ## [1.0.42](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.42-beta.1...v1.0.42) (2021-04-06)
 
 **Note:** Version bump only for package @ali/lowcode-designer
