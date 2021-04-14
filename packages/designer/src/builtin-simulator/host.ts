@@ -484,10 +484,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         this._iframe?.dispatchEvent(x);
         const target = e.target as HTMLElement;
 
-        // TODO: need more elegant solution to ignore click events of compoents in designer
+        // TODO: need more elegant solution to ignore click events of components in designer
         const ignoreSelectors: any = [
           '.next-input-group',
           '.next-checkbox-group',
+          '.next-checkbox-wrapper',
           '.next-date-picker',
           '.next-input',
           '.next-month-picker',
