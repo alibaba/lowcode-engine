@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-rax-simulator-renderer",
-  "version": "1.0.44-beta.0",
+  "version": "1.0.44-beta.1",
   "description": "rax simulator renderer for alibaba lowcode designer",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -13,10 +13,10 @@
     "test:snapshot": "ava --update-snapshots"
   },
   "dependencies": {
-    "@ali/lowcode-designer": "1.0.44-beta.0",
-    "@ali/lowcode-rax-renderer": "1.0.44-beta.0",
-    "@ali/lowcode-types": "1.0.44-beta.0",
-    "@ali/lowcode-utils": "1.0.44-beta.0",
+    "@ali/lowcode-designer": "1.0.44-beta.1",
+    "@ali/lowcode-rax-renderer": "1.0.44-beta.1",
+    "@ali/lowcode-types": "1.0.44-beta.1",
+    "@ali/lowcode-utils": "1.0.44-beta.1",
     "@ali/recore-rax": "^1.2.4",
     "@ali/vu-css-style": "^1.0.2",
     "@recore/obx": "^1.0.8",
@@ -57,6 +57,6 @@
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"
   },
-  "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-rax-simulator-renderer@1.0.43/build/index.html",
+  "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-rax-simulator-renderer@1.0.44-beta.0/build/index.html",
   "gitHead": "3bfd7df92985ec6c9d2ccb8ba95d7b0829fa2b1d"
 }
