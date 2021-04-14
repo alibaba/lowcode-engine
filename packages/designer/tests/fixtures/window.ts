@@ -18,3 +18,5 @@ Object.defineProperty(window, 'React', {
 });
 
 window.scrollTo = () => {};
+
+window.console.warn = () => {};

@@ -388,7 +388,7 @@ export class Designer {
       this.editor.set('assets', newAssets);
     }
     // TODO: 因为涉及修改 prototype.view，之后在 renderer 里修改了 vc 的 view 获取逻辑后，可删除
-    // this._componentMetasMap = new Map(this._componentMetasMap);
+    this._componentMetasMap = new Map(this._componentMetasMap);
     // 完成加载增量资源后发送事件，方便插件监听并处理相关逻辑
     this.editor.emit('designer.incrementalAssetsReady');
 
