@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.44-beta.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.44-beta.1...v1.0.44-beta.2) (2021-04-14)
+
+
+### Bug Fixes
+
+* 解决 radio 组件无法删除, 且影响其他组件也无法删除的问题 ([f2ce27c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f2ce27c811667d7bd41cbdb41cfbc9d7c7330f8f))
+
+
+
+
+
 ## [1.0.44-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.44-beta.0...v1.0.44-beta.1) (2021-04-14)
 
 
