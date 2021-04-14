@@ -161,10 +161,16 @@ describe('document-model 测试', () => {
     designer.createComponentMeta(divMeta);
     designer.createComponentMeta(otherMeta);
     const doc = new DocumentModel(project, formSchema);
-    expect(doc.getComponentsMap(['Other'])).toEqual([
-      { componentName: 'Div', package: '@ali/vc-div' },
-      { componentName: 'Other', package: '@ali/vc-other' },
-    ]);
+    const comps = doc.getComponentsMap(['Other']);
+    expect(comps.find(comp => comp.componentName === 'Div')).toEqual(
+      { componentName: 'Div', package: '@ali/vc-div' }
+    );
+    expect(comps.find(comp => comp.componentName === 'Other')).toEqual(
+      { componentName: 'Other', package: '@ali/vc-other' }
+    );
+    expect(comps.find(comp => comp.componentName === 'Page')).toEqual(
+      { componentName: 'Page', devMode: 'lowcode' }
+    );
   });
 
   it('acceptRootNodeVisitor / getRootNodeVisitor', () => {
