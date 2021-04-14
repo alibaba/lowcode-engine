@@ -353,7 +353,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   async setupComponents(library) {
     const libraryAsset: AssetList = this.buildLibrary(library);
     await this.renderer.load(libraryAsset);
-    await this.renderer.buildComponents();
   }
 
   setupEvents() {

@@ -309,9 +309,9 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       ...this._components,
     };
   }
-  private _components: any = {};
+  @obx.ref private _components: any = {};
 
-  get components(): object {
+  @computed get components(): object {
     // 根据 device 选择不同组件，进行响应式
     // 更好的做法是，根据 device 选择加载不同的组件资源，甚至是 simulatorUrl
     return this._components;
