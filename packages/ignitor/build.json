@@ -9,7 +9,7 @@
   },
   "vendor": false,
   "devServer": {
-    "useLocalIp": true,
+    "liveReload": false,
     "hot": false
   },
   "publicPath": "/",

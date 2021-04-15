@@ -21,3 +21,4 @@ export * from './unique-id';
 export * from './build-components';
 export * from './appHelper';
 export * from './misc';
+export * from './schema';

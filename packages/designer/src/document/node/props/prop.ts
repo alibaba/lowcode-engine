@@ -119,7 +119,7 @@ export class Prop implements IPropParent {
     }
 
     if (type === 'slot') {
-      const schema = this._slotNode?.export(stage) || {};
+      const schema = this._slotNode?.export(stage) || {} as any;
       if (stage === TransformStage.Render) {
         return {
           type: 'JSSlot',

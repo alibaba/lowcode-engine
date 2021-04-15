@@ -3,6 +3,229 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.44](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.44-beta.2...v1.0.44) (2021-04-14)
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+
+
+
+
+## [1.0.44-beta.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.44-beta.1...v1.0.44-beta.2) (2021-04-14)
+
+
+### Bug Fixes
+
+* 解决 radio 组件无法删除, 且影响其他组件也无法删除的问题 ([f2ce27c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f2ce27c811667d7bd41cbdb41cfbc9d7c7330f8f))
+
+
+
+
+
+## [1.0.44-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.44-beta.0...v1.0.44-beta.1) (2021-04-14)
+
+
+### Bug Fixes
+
+* 调整 components 触发视图刷新的机制, designer _componentMetasMap 引用更新才触发 renderer components 更新 ([a9cead0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a9cead0339e253752c7bbd33c069286335a4a671))
+
+
+
+
+
+## [1.0.44-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.43...v1.0.44-beta.0) (2021-04-13)
+
+
+### Bug Fixes
+
+* componentsMap 中加入低代码组件信息 ([b7c1183](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b7c11834602d8e4ea84d2dea035a3abf97b33d5c))
+
+
+
+
+
+## [1.0.43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.43-beta.0...v1.0.43) (2021-04-13)
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+
+
+
+
+## [1.0.43-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.42...v1.0.43-beta.0) (2021-04-13)
+
+
+### Bug Fixes
+
+* 修复在没有选中任何画布节点时, 添加模态框异常的 bug ([34e8105](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/34e8105c104e7fe98d9446d96d44206c069d8d4b))
+* 移除 renderer 内 components 的响应式逻辑 ([c02f0ec](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c02f0ec8374406e2d916fcc2a23c7f88b52ab80d))
+
+
+
+
+
+## [1.0.42](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.42-beta.1...v1.0.42) (2021-04-06)
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+
+
+
+
+## [1.0.42-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.42-beta.0...v1.0.42-beta.1) (2021-04-06)
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+
+
+
+
+## [1.0.42-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.41...v1.0.42-beta.0) (2021-04-06)
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+
+
+
+
+## [1.0.41](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.41-beta.1...v1.0.41) (2021-04-06)
+
+
+### Bug Fixes
+
+* bypass dataSource ([3cb331d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3cb331dcbeee62959ef0b1614c6c3cb2bd3c1a3e))
+
+
+
+
+
+## [1.0.41-beta.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.41-beta.1...v1.0.41-beta.2) (2021-04-06)
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+
+
+
+
+## [1.0.41-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.41-beta.0...v1.0.41-beta.1) (2021-04-06)
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+
+
+
+
+## [1.0.41-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.40...v1.0.41-beta.0) (2021-04-02)
+
+
+### Features
+
+* add deviceStyle props ([1a09282](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1a09282bfae8bbbd3a2af32a68cd28276b03129f))
+
+
+
+
+
+## [1.0.40](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.40-beta.1...v1.0.40) (2021-03-31)
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+
+
+
+
+## [1.0.40-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.40-beta.0...v1.0.40-beta.1) (2021-03-31)
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+
+
+
+
+## [1.0.40-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.39-beta.5...v1.0.40-beta.0) (2021-03-31)
+
+
+### Bug Fixes
+
+* 对齐 getConfig 的实现 ([7b551fb](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7b551fb5b8392640f55cd79f41ee06a2afdac202))
+
+
+
+
+
+## [1.0.39-beta.5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.39-beta.4...v1.0.39-beta.5) (2021-03-31)
+
+
+### Features
+
+* 增加 getConfig / getItems / selected 等兼容 vision 的 API ([9a3352b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9a3352b05411b23a831bcbea056642413c19c36e))
+
+
+
+
+
+## [1.0.39-beta.4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.39-beta.3...v1.0.39-beta.4) (2021-03-30)
+
+
+### Bug Fixes
+
+* 修复无法获取 libraryMap ([393d9ce](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/393d9cebf82026f1501fc653377e949c2b703584))
+
+
+
+
+
+## [1.0.39-beta.3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.39-beta.2...v1.0.39-beta.3) (2021-03-22)
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+
+
+
+
+## [1.0.39-beta.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.39-beta.1...v1.0.39-beta.2) (2021-03-22)
+
+
+### Features
+
+* 异步加载asset ([a5ca12a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a5ca12ab691f611dd706ac295ee3cc4965701ca3))
+
+
+
+
+
+## [1.0.39-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.38-beta.3...v1.0.39-beta.1) (2021-03-12)
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+
+
+
+
+## [1.0.39-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.38-beta.3...v1.0.39-beta.0) (2021-03-12)
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+
+
+
+
+## [1.0.38-beta.3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.38-beta.1...v1.0.38-beta.3) (2021-03-11)
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+
+
+
+
+## [1.0.38-beta.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.38-beta.1...v1.0.38-beta.2) (2021-03-11)
+
+**Note:** Version bump only for package @ali/lowcode-designer
+
+
+
+
+
 ## [1.0.38-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.38-beta.0...v1.0.38-beta.1) (2021-03-09)
 
 **Note:** Version bump only for package @ali/lowcode-designer

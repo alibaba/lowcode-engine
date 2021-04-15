@@ -264,6 +264,26 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   private _iframe?: HTMLIFrameElement;
 
+
+  buildLibrary(library) {
+    library = library || this.get('library') as LibraryItem[];
+    const libraryAsset: AssetList = [];
+    if (library) {
+      library.forEach((item) => {
+        this.libraryMap[item.package] = item.library;
+        if (item.async) {
+          this.asyncLibraryMap[item.package] = item;
+        }
+        if (item.urls) {
+
+          libraryAsset.push(item.urls);
+        }
+      });
+    }
+
+    return libraryAsset;
+  }
+
   async mountContentFrame(iframe: HTMLIFrameElement | null) {
     if (!iframe || this._iframe === iframe) {
       return;
@@ -273,18 +293,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this._contentWindow = iframe.contentWindow!;
 
     const library = this.get('library') as LibraryItem[];
-    const libraryAsset: AssetList = [];
-    if (library) {
-      library.forEach((item) => {
-        this.libraryMap[item.package] = item.library;
-        if (item.async) {
-          this.asyncLibraryMap[item.package] = item;
-        }
-        if (item.urls) {
-          libraryAsset.push(item.urls);
-        }
-      });
-    }
+    const libraryAsset: AssetList = this.buildLibrary();
 
     const vendors = [
       // required & use once
@@ -339,6 +348,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
 
     // TODO: dispose the bindings
+  }
+
+  async setupComponents(library) {
+    const libraryAsset: AssetList = this.buildLibrary(library);
+    await this.renderer.load(libraryAsset);
   }
 
   setupEvents() {
@@ -470,10 +484,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         this._iframe?.dispatchEvent(x);
         const target = e.target as HTMLElement;
 
-        // TODO: need more elegant solution to ignore click events of compoents in designer
+        // TODO: need more elegant solution to ignore click events of components in designer
         const ignoreSelectors: any = [
           '.next-input-group',
           '.next-checkbox-group',
+          '.next-checkbox-wrapper',
           '.next-date-picker',
           '.next-input',
           '.next-month-picker',
@@ -1038,7 +1053,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     const locationData = {
       target: container as ParentalNode,
       detail,
-      source: `simulator${ document.id}`,
+      source: `simulator${document.id}`,
       event: e,
     };
 
@@ -1051,7 +1066,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       return this.designer.createLocation({
         target: document.rootNode,
         detail,
-        source: `simulator${ document.id}`,
+        source: `simulator${document.id}`,
         event: e,
       });
     }

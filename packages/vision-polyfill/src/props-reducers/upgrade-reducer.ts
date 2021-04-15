@@ -1,17 +1,15 @@
-import {
-  isPlainObject,
-} from '@ali/lowcode-utils';
 import { Node } from '@ali/lowcode-designer';
+import { isPlainObject, isVariable } from '@ali/lowcode-utils';
 import { isJSBlock } from '@ali/lowcode-types';
-import { isVariable } from '../utils';
 import { designerCabin } from '@ali/lowcode-engine';
 
 const { getConvertedExtraKey } = designerCabin;
 
-export function upgradePropsReducer(props: any) {
+export function upgradePropsReducer(props: any): any {
   if (!props || !isPlainObject(props)) {
     return props;
   }
+
   if (isJSBlock(props)) {
     if (props.value.componentName === 'Slot') {
       return {

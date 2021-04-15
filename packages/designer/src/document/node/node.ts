@@ -802,20 +802,13 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   insertBefore(node: Node, ref?: Node, useMutator = true) {
-    this.children?.insert(node, ref ? ref.index : null, useMutator);
+    const nodeInstance = ensureNode(node, this.document);
+    this.children?.insert(nodeInstance, ref ? ref.index : null, useMutator);
   }
 
   insertAfter(node: any, ref?: Node, useMutator = true) {
-    if (!isNode(node)) {
-      if (node.getComponentName) {
-        node = this.document.createNode({
-          componentName: node.getComponentName(),
-        });
-      } else {
-        node = this.document.createNode(node);
-      }
-    }
-    this.children?.insert(node, ref ? ref.index + 1 : null, useMutator);
+    const nodeInstance = ensureNode(node, this.document);
+    this.children?.insert(nodeInstance, ref ? ref.index + 1 : null, useMutator);
   }
 
   getParent() {
@@ -903,6 +896,11 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * @deprecated
    */
   getSuitablePlace(node: Node, ref: any): any {
+    // 如果节点是模态框，插入到根节点下
+    if (node?.componentMeta?.isModal) {
+      return { container: this.document.rootNode, ref };
+    }
+
     if (this.isRoot() && this.children) {
       const dropElement = this.children.filter((c: Node) => {
         if (!c.isContainer()) {
@@ -927,10 +925,6 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       }
       // 假如最后找不到合适位置，返回 null 阻止继续插入节点
       return null;
-    }
-
-    if (node.componentMeta?.getMetadata().configure.component?.isModal) {
-      return { container: this.document.rootNode, ref };
     }
 
     const canDropIn = this.componentMeta?.prototype?.options?.canDropIn;
@@ -999,6 +993,20 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   toString() {
     return this.id;
   }
+}
+
+function ensureNode(node: any, document: DocumentModel): Node {
+  let nodeInstance = node;
+  if (!isNode(node)) {
+    if (node.getComponentName) {
+      nodeInstance = document.createNode({
+        componentName: node.getComponentName(),
+      });
+    } else {
+      nodeInstance = document.createNode(node);
+    }
+  }
+  return nodeInstance;
 }
 
 export interface ParentalNode<T extends NodeSchema = NodeSchema> extends Node<T> {

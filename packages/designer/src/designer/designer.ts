@@ -11,6 +11,7 @@ import {
   isNodeSchema,
   NodeSchema,
 } from '@ali/lowcode-types';
+import { megreAssets, AssetsJson } from '@ali/lowcode-utils';
 import { Project } from '../project';
 import { Node, DocumentModel, insertChildren, isRootNode, ParentalNode, TransformStage } from '../document';
 import { ComponentMeta } from '../component-meta';
@@ -373,6 +374,27 @@ export class Designer {
     this.props = props;
   }
 
+  async loadIncrementalAssets(incrementalAssets: AssetsJson): Promise<void> {
+    const { components, packages } = incrementalAssets;
+    components && this.buildComponentMetasMap(components);
+    if (packages) {
+      await this.project.simulator!.setupComponents(packages);
+    }
+
+    if (components) {
+      // 合并assets
+      let assets = this.editor.get('assets');
+      let newAssets = megreAssets(assets, incrementalAssets);
+      this.editor.set('assets', newAssets);
+    }
+    // TODO: 因为涉及修改 prototype.view，之后在 renderer 里修改了 vc 的 view 获取逻辑后，可删除
+    this._componentMetasMap = new Map(this._componentMetasMap);
+    // 完成加载增量资源后发送事件，方便插件监听并处理相关逻辑
+    this.editor.emit('designer.incrementalAssetsReady');
+
+  }
+
+
   get(key: string): any {
     return this.props ? this.props[key] : null;
   }
@@ -411,7 +433,7 @@ export class Designer {
     this.project.load(schema);
   }
 
-  @obx.val private _componentMetasMap = new Map<string, ComponentMeta>();
+  @obx.ref private _componentMetasMap = new Map<string, ComponentMeta>();
 
   private _lostComponentMetasMap = new Map<string, ComponentMeta>();
 

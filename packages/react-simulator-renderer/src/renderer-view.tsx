@@ -142,6 +142,7 @@ class Renderer extends Component<{
     const messages = container.context?.utils?.i18n?.messages || {};
 
     return (
+      // @ts-ignore
       <LowCodeRenderer
         locale={locale}
         messages={messages}

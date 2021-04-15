@@ -3,6 +3,216 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.44](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.44-beta.2...v1.0.44) (2021-04-14)
+
+**Note:** Version bump only for package @ali/lowcode-rax-simulator-renderer
+
+
+
+
+
+## [1.0.44-beta.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.44-beta.1...v1.0.44-beta.2) (2021-04-14)
+
+
+### Bug Fixes
+
+* 解决 radio 组件无法删除, 且影响其他组件也无法删除的问题 ([f2ce27c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f2ce27c811667d7bd41cbdb41cfbc9d7c7330f8f))
+
+
+
+
+
+## [1.0.44-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.44-beta.0...v1.0.44-beta.1) (2021-04-14)
+
+**Note:** Version bump only for package @ali/lowcode-rax-simulator-renderer
+
+
+
+
+
+## [1.0.44-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.43...v1.0.44-beta.0) (2021-04-13)
+
+**Note:** Version bump only for package @ali/lowcode-rax-simulator-renderer
+
+
+
+
+
+## [1.0.43](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.43-beta.0...v1.0.43) (2021-04-13)
+
+**Note:** Version bump only for package @ali/lowcode-rax-simulator-renderer
+
+
+
+
+
+## [1.0.43-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.42...v1.0.43-beta.0) (2021-04-13)
+
+**Note:** Version bump only for package @ali/lowcode-rax-simulator-renderer
+
+
+
+
+
+## [1.0.42](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.42-beta.1...v1.0.42) (2021-04-06)
+
+**Note:** Version bump only for package @ali/lowcode-rax-simulator-renderer
+
+
+
+
+
+## [1.0.42-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.42-beta.0...v1.0.42-beta.1) (2021-04-06)
+
+**Note:** Version bump only for package @ali/lowcode-rax-simulator-renderer
+
+
+
+
+
+## [1.0.42-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.41...v1.0.42-beta.0) (2021-04-06)
+
+**Note:** Version bump only for package @ali/lowcode-rax-simulator-renderer
+
+
+
+
+
+## [1.0.41](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.41-beta.1...v1.0.41) (2021-04-06)
+
+
+### Bug Fixes
+
+* bypass dataSource ([3cb331d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/3cb331dcbeee62959ef0b1614c6c3cb2bd3c1a3e))
+
+
+
+
+
+## [1.0.41-beta.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.41-beta.1...v1.0.41-beta.2) (2021-04-06)
+
+
+### Bug Fixes
+
+* bypass dataSource ([f6fd095](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f6fd095db2ff01454257a1322ad695d89c139f1a))
+
+
+
+
+
+## [1.0.41-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.41-beta.0...v1.0.41-beta.1) (2021-04-06)
+
+**Note:** Version bump only for package @ali/lowcode-rax-simulator-renderer
+
+
+
+
+
+## [1.0.41-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.40...v1.0.41-beta.0) (2021-04-02)
+
+
+### Features
+
+* add deviceStyle props ([1a09282](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1a09282bfae8bbbd3a2af32a68cd28276b03129f))
+
+
+
+
+
+## [1.0.40](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.40-beta.1...v1.0.40) (2021-03-31)
+
+**Note:** Version bump only for package @ali/lowcode-rax-simulator-renderer
+
+
+
+
+
+## [1.0.40-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.40-beta.0...v1.0.40-beta.1) (2021-03-31)
+
+**Note:** Version bump only for package @ali/lowcode-rax-simulator-renderer
+
+
+
+
+
+## [1.0.40-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.39-beta.5...v1.0.40-beta.0) (2021-03-31)
+
+**Note:** Version bump only for package @ali/lowcode-rax-simulator-renderer
+
+
+
+
+
+## [1.0.39-beta.5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.39-beta.4...v1.0.39-beta.5) (2021-03-31)
+
+**Note:** Version bump only for package @ali/lowcode-rax-simulator-renderer
+
+
+
+
+
+## [1.0.39-beta.4](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.39-beta.3...v1.0.39-beta.4) (2021-03-30)
+
+**Note:** Version bump only for package @ali/lowcode-rax-simulator-renderer
+
+
+
+
+
+## [1.0.39-beta.3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.39-beta.2...v1.0.39-beta.3) (2021-03-22)
+
+**Note:** Version bump only for package @ali/lowcode-rax-simulator-renderer
+
+
+
+
+
+## [1.0.39-beta.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.39-beta.1...v1.0.39-beta.2) (2021-03-22)
+
+**Note:** Version bump only for package @ali/lowcode-rax-simulator-renderer
+
+
+
+
+
+## [1.0.39-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.38-beta.3...v1.0.39-beta.1) (2021-03-12)
+
+**Note:** Version bump only for package @ali/lowcode-rax-simulator-renderer
+
+
+
+
+
+## [1.0.39-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.38-beta.3...v1.0.39-beta.0) (2021-03-12)
+
+**Note:** Version bump only for package @ali/lowcode-rax-simulator-renderer
+
+
+
+
+
+## [1.0.38-beta.3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.38-beta.1...v1.0.38-beta.3) (2021-03-11)
+
+
+### Features
+
+* 低代码组件支持实时修改属性 ([e7b4e2c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e7b4e2cc9cf80bcc073c142d7b06a8e2be5895a5))
+
+
+
+
+
+## [1.0.38-beta.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.38-beta.1...v1.0.38-beta.2) (2021-03-11)
+
+
+### Features
+
+* 低代码组件支持实时修改属性 ([e7b4e2c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e7b4e2cc9cf80bcc073c142d7b06a8e2be5895a5))
+
+
+
+
+
 ## [1.0.38-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.38-beta.0...v1.0.38-beta.1) (2021-03-09)
 
 **Note:** Version bump only for package @ali/lowcode-rax-simulator-renderer

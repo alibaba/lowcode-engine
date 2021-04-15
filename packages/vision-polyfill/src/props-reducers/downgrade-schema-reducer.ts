@@ -4,7 +4,7 @@ import {
 import { isJSExpression, isJSSlot } from '@ali/lowcode-types';
 import { Node } from '@ali/lowcode-designer';
 
-export function compatibleReducer(props: any, node: Node) {
+export function compatibleReducer(props: any, node: Node): any {
   // 如果不是 vc 体系，不做这个兼容处理
   if (!node.componentMeta.prototype) {
     return props;
@@ -35,6 +35,11 @@ export function compatibleReducer(props: any, node: Node) {
   }
   const newProps: any = {};
   Object.entries<any>(props).forEach(([key, val]) => {
+    // TODO: 目前 dataSource 面板里既用到了 JSExpression，又用到了 variable，这里先都不处理，后面再重构
+    if (key === 'dataSource') {
+      newProps[key] = props[key];
+      return;
+    }
     newProps[key] = compatibleReducer(val, node);
   });
   return newProps;

@@ -70,7 +70,7 @@ export class ComponentMeta {
     return this._npm;
   }
 
-  set npm(_npm) {
+  set npm(_npm: any) {
     this.setNpm(_npm);
   }
 
@@ -167,7 +167,7 @@ export class ComponentMeta {
 
   private parseMetadata(metadata: ComponentMetadata) {
     const { componentName, npm } = metadata;
-    this._npm = npm;
+    this._npm = npm || this._npm;
     this._componentName = componentName;
 
     // 额外转换逻辑

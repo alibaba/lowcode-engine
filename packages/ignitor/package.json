@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-ignitor",
-  "version": "1.0.38-beta.1",
+  "version": "1.0.44",
   "description": "点火器，bootstrap lce project",
   "main": "lib/index.js",
   "private": true,
@@ -10,8 +10,7 @@
     "lib"
   ],
   "scripts": {
-    "start": "build-scripts start --disable-open",
-    "build": "build-scripts build"
+    "start": "build-scripts start --disable-open"
   },
   "license": "MIT",
   "dependencies": {

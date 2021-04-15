@@ -21,11 +21,12 @@ export type GetDataType<T, NodeType> = T extends undefined
 
 export interface ComponentMap {
   componentName: string;
-  package: string;
+  package?: string;
   version?: string;
   destructuring?: boolean;
   exportName?: string;
   subName?: string;
+  devMode?: 'lowcode' | 'procode';
 }
 
 export class DocumentModel {
@@ -637,26 +638,33 @@ export class DocumentModel {
   getComponentsMap(extraComps?: string[]) {
     const componentsMap: ComponentMap[] = [];
     // 组件去重
-    const map: any = {};
+    const exsitingMap: { [componentName: string]: boolean } = {};
     for (const node of this._nodesMap.values()) {
       const { componentName } = node || {};
-      if (!map[componentName] && node.componentMeta?.npm?.package) {
-        map[componentName] = true;
-        componentsMap.push({
-          ...node.componentMeta.npm,
-          componentName,
-        });
+      if (!exsitingMap[componentName]) {
+        exsitingMap[componentName] = true;
+        if (node.componentMeta?.npm?.package) {
+          componentsMap.push({
+            ...node.componentMeta.npm,
+            componentName,
+          });
+        } else {
+          componentsMap.push({
+            devMode: 'lowcode',
+            componentName,
+          });
+        }
       }
     }
     // 合并外界传入的自定义渲染的组件
     if (Array.isArray(extraComps)) {
       extraComps.forEach(c => {
-        if (c && !map[c]) {
+        if (c && !exsitingMap[c]) {
           const m = this.getComponentMeta(c);
           if (m && m.npm?.package) {
             componentsMap.push({
+              ...m?.npm,
               componentName: c,
-              package: m.npm?.package,
             });
           }
         }

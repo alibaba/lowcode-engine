@@ -20,7 +20,7 @@ exports[`valueToSource 5`] = `
 
 exports[`valueToSource 6`] = `"null"`;
 
-exports[`valueToSource 7`] = `"function haha() {}"`;
+exports[`valueToSource 7`] = `"() => {}"`;
 
 exports[`valueToSource 8`] = `"new Map()"`;
 

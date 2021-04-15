@@ -365,7 +365,7 @@ export default function baseRenererFactory() {
         if (!isSchema(schema)) return null;
         let Comp = components[schema.componentName] || engine.getNotFoundComponent();
 
-        if (schema.hidden) {
+        if (schema.hidden && engine?.props?.designMode) {
           return null;
         }
 

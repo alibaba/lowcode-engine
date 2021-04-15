@@ -124,6 +124,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
           key: field.id,
           // === injection
           prop: field, // for compatible vision
+          selected: field.top?.getNode(),
           field,
           // === IO
           value, // reaction point

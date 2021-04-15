@@ -12,7 +12,12 @@ import {
   setNativeSelection,
   buildComponents,
   getSubComponent,
+  compatibleLegaoSchema,
+  isPlainObject,
+  AssetLoader,
+
 } from '@ali/lowcode-utils';
+
 import { RootSchema, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
 // import { isESModule, isElement, acceptsRef, wrapReactClass, cursor, setNativeSelection } from '@ali/lowcode-utils';
 // import { RootSchema, NpmInfo, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
@@ -23,7 +28,7 @@ import { createMemoryHistory, MemoryHistory } from 'history';
 import Slot from './builtin-components/slot';
 import Leaf from './builtin-components/leaf';
 import { withQueryParams, parseQuery } from './utils/url';
-
+const loader = new AssetLoader();
 export class DocumentInstance {
   private instancesMap = new Map<string, ReactInstance[]>();
 
@@ -41,13 +46,6 @@ export class DocumentInstance {
     });
   }
 
-  // private _libraryMap: { [key: string]: string } = {};
-  // private buildComponents() {
-  //   this._components = {
-  //     ...builtinComponents,
-  //     ...buildComponents(this._libraryMap, this._componentsMap),
-  //   };
-  // }
   @obx.ref private _components: any = {};
 
   @computed get components(): object {
@@ -96,7 +94,7 @@ export class DocumentInstance {
   }
 
   get path(): string {
-    return `/${ this.document.fileName}`;
+    return `/${this.document.fileName}`;
   }
 
   get id() {
@@ -305,16 +303,15 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   private _libraryMap: { [key: string]: string } = {};
 
   private buildComponents() {
-    // TODO: remove this.createComponent
     this._components = buildComponents(this._libraryMap, this._componentsMap, this.createComponent.bind(this));
     this._components = {
       ...builtinComponents,
       ...this._components,
     };
   }
-  @obx.ref private _components: any = {};
+  private _components: any = {};
 
-  @computed get components(): object {
+  get components(): object {
     // 根据 device 选择不同组件，进行响应式
     // 更好的做法是，根据 device 选择加载不同的组件资源，甚至是 simulatorUrl
     return this._components;
@@ -343,9 +340,14 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   /**
    * 加载资源
    */
-  // load(asset: Asset): Promise<any> {
-  //   return loader.load(asset);
-  // }
+  load(asset: Asset): Promise<any> {
+    return loader.load(asset);
+  }
+
+  async loadAsyncLibrary(asyncLibraryMap) {
+    await loader.loadAsyncLibrary(asyncLibraryMap);
+    this.buildComponents();
+  }
 
   getComponent(componentName: string) {
     const paths = componentName.split('.');
@@ -396,7 +398,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
 
   createComponent(schema: NodeSchema): Component | null {
     const _schema: any = {
-      ...schema,
+      ...compatibleLegaoSchema(schema),
     };
     _schema.methods = {};
     _schema.lifeCycles = {};
@@ -415,8 +417,10 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
 
     class LowCodeComp extends React.Component {
       render() {
+        const extraProps = getLowCodeComponentProps(this.props);
         // @ts-ignore
         return createElement(LowCodeRenderer, {
+          ...extraProps, // 防止覆盖下面内置属性
           schema: _schema,
           components,
           designMode: renderer.designMode,
@@ -541,6 +545,20 @@ function checkInstanceMounted(instance: any): boolean {
     return instance.parentElement != null;
   }
   return true;
+}
+
+function getLowCodeComponentProps(props: any) {
+  if (!props || !isPlainObject(props)) {
+    return props;
+  }
+  const newProps: any = {};
+  Object.keys(props).forEach(k => {
+    if (['children', 'componentId', '__designMode', '_componentName', '_leaf'].includes(k)) {
+      return;
+    }
+    newProps[k] = props[k];
+  });
+  return newProps;
 }
 
 export default new SimulatorRendererContainer();
