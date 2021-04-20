@@ -243,7 +243,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     });
     this.history = history;
     history.listen((location, action) => {
-      host.project.open(location.pathname.substr(1));
+      const docId = location.pathname.substr(1);
+      docId && host.project.open(docId);
     });
     host.componentsConsumer.consume(async (componentsAsset) => {
       if (componentsAsset) {
