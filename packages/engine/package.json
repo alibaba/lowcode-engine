@@ -13,7 +13,7 @@
     "start": "build-scripts start",
     "version:update": "node ./scripts/version.js",
     "build": "build-scripts build --skip-demo",
-    "cloud-build": "build-scripts build --config build.cloud.json && tnpm run version:update",
+    "cloud-build": "build-scripts build --config build.cloud.json && tnpm run version:update && node ./scripts/add-blank-line.js",
     "test": "build-scripts test --config build.test.json"
   },
   "license": "MIT",
