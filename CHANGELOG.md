@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.45-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.44...v1.0.45-beta.0) (2021-04-21)
+
+
+### Bug Fixes
+
+* rax模拟器去掉滚动条（小程序IDE和一般小程序真正显示都是没有的），也解决滚动条占用页面总宽度的问题 ([e9bea62](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e9bea627ef2f4b4237a289e873e0e08b2e97d973))
+* 使用 cdn combo 服务时, 最后一行的 //# sourceMappingURL=engine-core.js.map 导致后面内容都被注释 ([8da27d9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8da27d973f7ac4b8c4fb42b1617a248a8c712219))
+* 修复无法 remove currentDocument ([4157aa0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/4157aa0443f718ac5bc95ebcae0de50971856af5))
+* 修复设备切换时设备尺寸超过页面bug;iphonex/6默认尺寸 ([b7c1876](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b7c187623d385a460402343d1db10fea45d95e8b))
+
+
+
+
+
 ## [1.0.44](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.44-beta.2...v1.0.44) (2021-04-14)
 
 **Note:** Version bump only for package ali-lowcode-engine

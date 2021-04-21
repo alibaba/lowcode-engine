@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.45-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.44...v1.0.45-beta.0) (2021-04-21)
+
+
+### Bug Fixes
+
+* 使用 cdn combo 服务时, 最后一行的 //# sourceMappingURL=engine-core.js.map 导致后面内容都被注释 ([8da27d9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8da27d973f7ac4b8c4fb42b1617a248a8c712219))
+
+
+
+
+
 ## [1.0.44](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.44-beta.2...v1.0.44) (2021-04-14)
 
 **Note:** Version bump only for package @ali/lowcode-engine
