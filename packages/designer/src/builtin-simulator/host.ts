@@ -291,6 +291,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this._iframe = iframe;
 
     this._contentWindow = iframe.contentWindow!;
+    this._contentDocument = this._contentWindow.document;
 
     const library = this.get('library') as LibraryItem[];
     const libraryAsset: AssetList = this.buildLibrary();
@@ -337,7 +338,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     renderer.run();
 
     // init events, overlays
-    this._contentDocument = this._contentWindow.document;
     this.viewport.setScrollTarget(this._contentWindow);
     this.setupEvents();
 

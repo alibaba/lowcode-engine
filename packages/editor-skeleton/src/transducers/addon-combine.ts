@@ -59,7 +59,7 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
           },
           {
             description: '更新时',
-            name: 'componentDidMount',
+            name: 'componentDidUpdate',
           },
           {
             description: '卸载时',

@@ -463,7 +463,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       container.id = containerId;
     }
 
-    // ==== compatiable vision
+    // ==== compatible vision
     document.documentElement.classList.add('engine-page');
     document.body.classList.add('engine-document'); // important! Stylesheet.invoke depends
 
