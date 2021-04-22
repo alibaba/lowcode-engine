@@ -268,9 +268,32 @@ export default function baseRenererFactory() {
       this.setLocale = (loc: string) => this.appHelper?.utils?.i18n?.setLocale && this.appHelper?.utils?.i18n?.setLocale(loc);
     };
 
+    __writeCss = () => {
+      const css = getValue(this.props.__schema, 'css', '');
+      let style = this.styleElement;
+      if (!this.styleElement) {
+        style = document.createElement('style');
+        style.type = 'text/css';
+        style.setAttribute('from', 'style-sheet');
+        if (style.firstChild) {
+          style.removeChild(style.firstChild);
+        }
+        const head = document.head || document.getElementsByTagName('head')[0];
+        head.appendChild(style);
+        this.styleElement = style;
+      }
+
+      if (style.innerHTML === css) {
+        return;
+      }
+
+      style.innerHTML = css;
+    };
+
     __render = () => {
       const schema = this.props.__schema;
       this.__setLifeCycleMethods('render');
+      this.__writeCss();
 
       const { engine } = this.context;
       if (engine) {
@@ -441,7 +464,7 @@ export default function baseRenererFactory() {
           Comp = compWrapper(Comp);
         }
         otherProps.ref = (ref: any) => {
-          this.$(props.fieldId, ref); // 收集ref
+          this.$(props.fieldId || props.ref, ref); // 收集ref
           const refProps = props.ref;
           if (refProps && typeof refProps === 'string') {
             this[refProps] = ref;
@@ -668,7 +691,7 @@ export default function baseRenererFactory() {
 
     $(filedId: string, instance?: any) {
       this.__instanceMap = this.__instanceMap || {};
-      if (!filedId) {
+      if (!filedId || typeof filedId !== 'string') {
         return this.__instanceMap;
       }
       if (instance) {

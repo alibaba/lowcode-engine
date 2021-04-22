@@ -90,7 +90,7 @@ export function inSameDomain() {
 export function getFileCssName(fileName: string) {
   if (!fileName) return;
   const name = fileName.replace(/([A-Z])/g, '-$1').toLowerCase();
-  return (`luna-${name}`)
+  return (`lce-${name}`)
     .split('-')
     .filter((p) => !!p)
     .join('-');

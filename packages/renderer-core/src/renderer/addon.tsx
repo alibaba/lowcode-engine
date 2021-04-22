@@ -27,7 +27,7 @@ export default function addonRendererFactory() {
       const schema = props.__schema || {};
       this.state = this.__parseData(schema.state || {});
       if (isEmpty(props.config) || !props.config.addonKey) {
-        console.warn('luna addon has wrong config');
+        console.warn('lce addon has wrong config');
         this.state.__hasError = true;
         return;
       }

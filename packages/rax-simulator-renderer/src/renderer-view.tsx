@@ -231,7 +231,7 @@ class Renderer extends Component<{
           return createElement(
             getDeviceView(Component, device, designMode),
             viewProps,
-            leaf?.isContainer() ? (children == null ? [] : Array.isArray(children) ? children : [children]) : null,
+            leaf?.isContainer() ? (children == null ? [] : Array.isArray(children) ? children : [children]) : children,
           );
         }}
       />
