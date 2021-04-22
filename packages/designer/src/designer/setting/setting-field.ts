@@ -58,10 +58,13 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     this._expanded = value;
   }
 
-  constructor(readonly parent: SettingEntry, config: FieldConfig, settingFieldCollector?: (name: string | number, field: SettingField) => void) {
+  parent: SettingEntry;
+
+  constructor(parent: SettingEntry, config: FieldConfig, settingFieldCollector?: (name: string | number, field: SettingField) => void) {
     super(parent, config.name, config.type);
 
     const { title, items, setter, extraProps, ...rest } = config;
+    this.parent = parent;
     this._config = config;
     this._title = title;
     this._setter = setter;
@@ -115,6 +118,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
   purge() {
     this.disposeItems();
+    this.parent = null as any;
   }
 
   // ======= compatibles for vision ======
