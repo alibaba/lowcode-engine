@@ -23,7 +23,6 @@
   "outputDir": "dist",
   "vendor": false,
   "ignoreHtmlTemplate": true,
-  "sourceMap": true,
   "plugins": [
     "build-plugin-react-app",
     ["build-plugin-fusion", {
