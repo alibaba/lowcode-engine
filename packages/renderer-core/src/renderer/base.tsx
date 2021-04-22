@@ -464,7 +464,7 @@ export default function baseRenererFactory() {
           Comp = compWrapper(Comp);
         }
         otherProps.ref = (ref: any) => {
-          this.$(props.fieldId, ref); // 收集ref
+          this.$(props.fieldId || props.ref, ref); // 收集ref
           const refProps = props.ref;
           if (refProps && typeof refProps === 'string') {
             this[refProps] = ref;
@@ -691,7 +691,7 @@ export default function baseRenererFactory() {
 
     $(filedId: string, instance?: any) {
       this.__instanceMap = this.__instanceMap || {};
-      if (!filedId) {
+      if (!filedId || typeof filedId !== 'string') {
         return this.__instanceMap;
       }
       if (instance) {
