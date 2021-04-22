@@ -108,6 +108,7 @@ const defaultEnvironment = [
     AssetType.JSText,
     'window.PropTypes=parent.PropTypes;React.PropTypes=parent.PropTypes; window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;',
   ),
+
 ];
 
 const defaultRaxEnvironment = [
@@ -265,21 +266,43 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   private _iframe?: HTMLIFrameElement;
 
 
+  /**
+   * {
+   *   "title":"BizCharts",
+   *   "package":"bizcharts",
+   *   "exportName":"bizcharts",
+   *   "version":"4.0.14",
+   *   "urls":[
+   *      "https://g.alicdn.com/code/lib/bizcharts/4.0.14/BizCharts.js"
+   *   ],
+   *   "library":"BizCharts"
+   * }
+   * package：String 资源npm包名
+   * exportName：String umd包导出名字，用于适配部分物料包define name不一致的问题，例如把BizCharts改成bizcharts，用来兼容物料用define声明的bizcharts
+   * version：String 版本号
+   * urls：Array 资源cdn地址，必须是umd类型，可以是.js或者.css
+   * library：String umd包直接导出的name
+   */
   buildLibrary(library) {
     library = library || this.get('library') as LibraryItem[];
     const libraryAsset: AssetList = [];
+    const libraryExportList = [];
+
     if (library) {
       library.forEach((item) => {
         this.libraryMap[item.package] = item.library;
         if (item.async) {
           this.asyncLibraryMap[item.package] = item;
         }
+        if (item.exportName && item.library) {
+          libraryExportList.push(`Object.defineProperty(window,'${item.exportName}',{get:()=>window.${item.library}});`);
+        }
         if (item.urls) {
-
           libraryAsset.push(item.urls);
         }
       });
     }
+    libraryAsset.unshift(assetItem(AssetType.JSText, libraryExportList.join('')));
 
     return libraryAsset;
   }
@@ -304,6 +327,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       ),
       // required & use once
       assetBundle(this.get('extraEnvironment'), AssetLevel.Environment),
+
       // required & use once
       assetBundle(libraryAsset, AssetLevel.Library),
       // required & TODO: think of update
