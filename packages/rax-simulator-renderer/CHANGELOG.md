@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.45-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.45-beta.0...v1.0.45-beta.1) (2021-04-22)
+
+
+### Bug Fixes
+
+* 支持children属性，对齐react-simulator ([8d05f30](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8d05f3017784af58e90a989c3de955d6f010f8d0))
+
+
+
+
+
 ## [1.0.45-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.44...v1.0.45-beta.0) (2021-04-21)
 
 

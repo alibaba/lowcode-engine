@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.45-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.45-beta.0...v1.0.45-beta.1) (2021-04-22)
+
+
+### Features
+
+* 支持全局css ([e371092](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e3710929529a5faa274795223417511b0319a43f))
+* 支持获取组件引用的提案 ([f0d2d56](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f0d2d569108629b3ad1054f4e92e91a0b84f6104))
+
+
+
+
+
 ## [1.0.45-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.44...v1.0.45-beta.0) (2021-04-21)
 
 **Note:** Version bump only for package @ali/lowcode-renderer-core
