@@ -1,4 +1,4 @@
-import { editor, designer } from '@ali/lowcode-engine';
+import { project } from '@ali/lowcode-engine';
 import { toCss } from '@ali/vu-css-style';
 
 export function stylePropsReducer(props: any, node: any) {
@@ -28,7 +28,8 @@ export function stylePropsReducer(props: any, node: any) {
 }
 
 function appendStyleNode(props: any, styleProp: any, cssClass: string, cssId: string) {
-  const doc = designer.currentDocument?.simulator?.contentDocument;
+  const doc = project.simulator?.contentDocument;
+
   if (!doc) {
     return;
   }
