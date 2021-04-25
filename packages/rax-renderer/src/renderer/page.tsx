@@ -27,7 +27,10 @@ export default function raxPageRendererFactory() {
         return that.__renderContextConsumer(children);
       }
 
-      return that.__renderContent(that.__renderContextProvider({ pageContext: that }));
+      return that.__renderContent(that.__renderContextConsumer((context) => {
+        that.context = context;
+        return that.__renderContextProvider({ pageContext: that });
+      }));
     }
   };
 }
