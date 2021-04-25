@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.46-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.45...v1.0.46-beta.0) (2021-04-25)
+
+
+### Bug Fixes
+
+* 优化获取 simulator 的逻辑, 解决偶现 style 没被注入的问题 ([f84ec7e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f84ec7e72ef6a0fc2f9a62faf0067e49948d9786))
+
+
+
+
+
 ## [1.0.45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.45-beta.1...v1.0.45) (2021-04-23)
 
 **Note:** Version bump only for package @ali/lowcode-vision-polyfill

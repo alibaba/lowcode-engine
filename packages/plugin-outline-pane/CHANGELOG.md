@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.46-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.45...v1.0.46-beta.0) (2021-04-25)
+
+**Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
+
+
+
+
+
 ## [1.0.45](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.45-beta.1...v1.0.45) (2021-04-23)
 
 **Note:** Version bump only for package @ali/lowcode-plugin-outline-pane
