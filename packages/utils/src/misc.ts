@@ -61,3 +61,13 @@ export function waitForThing(obj: any, path: string): Promise<any> {
 export function isFromVC(meta: ComponentMeta) {
   return !!meta?.getMetadata()?.experimental;
 }
+
+export function arrShallowEquals(arr1: any[], arr2: any[]): boolean {
+  if (!Array.isArray(arr1) || !Array.isArray(arr2)) return false;
+  if (arr1.length !== arr2.length) return false;
+  return arr1.every(item => arr2.includes(item));
+}
+
+export function executePendingFn(fn: () => void, timeout: number = 2000) {
+  return setTimeout(fn, timeout);
+}

@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 import { Node, Designer, Selection, SettingTopEntry } from '@ali/lowcode-designer';
 import { Editor, obx, computed } from '@ali/lowcode-editor-core';
+import { executePendingFn } from '@ali/lowcode-utils';
 
 function generateSessionId(nodes: Node[]) {
   return nodes
@@ -69,7 +70,11 @@ export class SettingsMain {
       this.designer = nodes[0].document.designer;
     }
 
-    this._settings?.purge();
+    let lastSettings = this._settings;
+    // obx 的一些响应式计算会延迟到下一个时钟周期，导致 prop.parent 获取不到，这里也做一个延迟
+    executePendingFn(() => {
+      lastSettings?.purge();
+    }, 2000);
     this._settings = this.designer.createSettingEntry(nodes);
   }
 
