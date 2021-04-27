@@ -102,7 +102,7 @@ plugins.register((ctx: ILowCodePluginContext) => {
   return {
     name: '___setter_registry___',
     init() {
-      const builtinSetters = require('@ali/lowcode-engine-ext').setters;
+      const builtinSetters = require('@ali/lowcode-engine-ext')?.setters;
       if (builtinSetters) {
         ctx.setters.registerSetter(builtinSetters);
       }
