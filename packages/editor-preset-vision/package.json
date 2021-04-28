@@ -11,9 +11,6 @@
   ],
   "scripts": {
     "start": "build-scripts start",
-    "version:update": "node ./scripts/version.js",
-    "build": "build-scripts build --skip-demo",
-    "cloud-build": "build-scripts build --skip-demo && tnpm run version:update",
     "test": "build-scripts test --config build.test.json"
   },
   "license": "MIT",

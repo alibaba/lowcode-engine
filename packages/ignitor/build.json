@@ -1,6 +1,5 @@
 {
   "entry": {
-    "editor-preset-vision": "../editor-preset-vision/src/index.ts",
     "engine": "../engine/src/index.ts",
     "engine-core": "../engine/src/index-core.ts",
     "vision-polyfill": "../vision-polyfill/src/index.ts",
