@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.47-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.46...v1.0.47-beta.0) (2021-04-28)
+
+
+### Bug Fixes
+
+* 修复第一次切换页面就提示有数据修改未保存的行为 ([ca4222a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ca4222a98ede60f43c717b3dd303c6c2985f3191))
+
+
+
+
+
 ## [1.0.46](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.46-beta.0...v1.0.46) (2021-04-27)
 
 **Note:** Version bump only for package @ali/lowcode-vision-polyfill
