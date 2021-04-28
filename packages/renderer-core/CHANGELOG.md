@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.47](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.47-beta.1...v1.0.47) (2021-04-28)
+
+**Note:** Version bump only for package @ali/lowcode-renderer-core
+
+
+
+
+
 ## [1.0.47-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.47-beta.0...v1.0.47-beta.1) (2021-04-28)
 
 **Note:** Version bump only for package @ali/lowcode-renderer-core
