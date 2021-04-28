@@ -770,6 +770,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     this.purged = true;
     this.autoruns?.forEach((dispose) => dispose());
     this.props.purge();
+    this.settingEntry.purge();
     // this.document.destroyNode(this);
   }
 

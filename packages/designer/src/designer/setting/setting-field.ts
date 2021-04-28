@@ -118,7 +118,6 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
   purge() {
     this.disposeItems();
-    this.parent = null as any;
   }
 
   // ======= compatibles for vision ======

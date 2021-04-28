@@ -204,6 +204,7 @@ export class SettingTopEntry implements SettingEntry {
 
   purge() {
     this.disposeItems();
+    this._settingFieldMap = {};
     this.emitter.removeAllListeners();
   }
 
