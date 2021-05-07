@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Editor } from '@ali/lowcode-editor-core';
+import { Editor, engineConfig } from '@ali/lowcode-editor-core';
 import { DesignerView, Designer } from '@ali/lowcode-designer';
 import { Asset } from '@ali/lowcode-utils';
 import './index.scss';
@@ -49,14 +49,14 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
     const { editor } = this.props;
     try {
       const assets = await editor.onceGot('assets');
-      const renderEnv = await editor.get('renderEnv');
-      const device = await editor.get('device');
-      const locale = await editor.get('locale');
-      const designMode = await editor.get('designMode');
-      const deviceClassName = await editor.get('deviceClassName');
-      const simulatorUrl = await editor.get('simulatorUrl');
+      const renderEnv = engineConfig.get('renderEnv') || editor.get('renderEnv');
+      const device = engineConfig.get('device') || editor.get('device');
+      const locale = engineConfig.get('locale') || editor.get('locale');
+      const designMode = engineConfig.get('designMode') || editor.get('designMode');
+      const deviceClassName = engineConfig.get('deviceClassName') || editor.get('deviceClassName');
+      const simulatorUrl = engineConfig.get('simulatorUrl') || editor.get('simulatorUrl');
       // @TODO setupAssets 里设置 requestHandlersMap 不太合适
-      const requestHandlersMap = await editor.get('requestHandlersMap');
+      const requestHandlersMap = engineConfig.get('requestHandlersMap') || editor.get('requestHandlersMap');
       if (!this._mounted) {
         return;
       }

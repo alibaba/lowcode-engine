@@ -357,7 +357,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       await renderer.loadAsyncLibrary(this.asyncLibraryMap);
     }
 
-
     // step 5 ready & render
     renderer.run();
 

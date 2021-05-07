@@ -1,6 +1,6 @@
 import { createElement } from 'react';
 import { render } from 'react-dom';
-import { globalContext, Editor } from '@ali/lowcode-editor-core';
+import { globalContext, Editor, engineConfig } from '@ali/lowcode-editor-core';
 import * as editorCabin from '@ali/lowcode-editor-core';
 import {
   Designer,
@@ -14,6 +14,7 @@ import * as skeletonCabin from '@ali/lowcode-editor-skeleton';
 import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
 import './modules/live-editing';
+import { isPlainObject } from '@ali/lowcode-utils';
 
 export * from './modules/editor-types';
 export * from './modules/skeleton-types';
@@ -67,6 +68,7 @@ export {
   // store,
   hotkey,
   monitor,
+  engineConfig,
 };
 
 const getSelection = () => designer.currentDocument?.selection;
@@ -95,6 +97,7 @@ const getSelection = () => designer.currentDocument?.selection;
   hotkey,
   monitor,
   init,
+  engineConfig,
 };
 
 // 注册默认的 setters
@@ -154,15 +157,55 @@ plugins.register((ctx: ILowCodePluginContext) => {
   };
 });
 
-export async function init(container?: Element) {
-  let engineContainer = container;
-  if (!engineContainer) {
+interface EngineOptions {
+  /**
+   * 是否开启 condition 的能力，默认在设计器中不管 condition 是啥都正常展示
+   */
+  enableCondition?: boolean;
+  /**
+   * 设计模式，live 模式将会实时展示变量值
+   */
+  designMode?: 'design' | 'live';
+  /**
+   * 设备类型
+   */
+  device?: 'default' | 'mobile' | string;
+  /**
+   * 语言
+   */
+  locale?: string;
+  /**
+   * 渲染器类型
+   */
+  renderEnv?: 'react' | 'rax' | string;
+  /**
+   * 设备类型映射器，处理设计器与渲染器中 device 的映射
+   */
+  deviceMapper?: {
+    transform: (originalDevice: string) => string;
+  };
+  [key: string]: any;
+}
+
+export async function init(container?: Element, options?: EngineOptions) {
+  let engineOptions = null;
+  let engineContainer = null;
+  if (isPlainObject(container)) {
+    engineOptions = container;
     engineContainer = document.createElement('div');
     document.body.appendChild(engineContainer);
+  } else {
+    engineOptions = options;
+    engineContainer = container;
+    if (!container) {
+      engineContainer = document.createElement('div');
+      document.body.appendChild(engineContainer);
+    }
   }
   engineContainer.id = 'engine';
 
   await plugins.init();
+  engineConfig.setConfig(engineOptions as any);
   render(
     createElement(Workbench, {
       skeleton,
