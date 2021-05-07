@@ -1,4 +1,4 @@
-import { untracked, computed, obx } from '@ali/lowcode-editor-core';
+import { untracked, computed, obx, engineConfig } from '@ali/lowcode-editor-core';
 import { CompositeValue, isJSExpression, isJSSlot, JSSlot, SlotSchema } from '@ali/lowcode-types';
 import { uniqueId, isPlainObject, hasOwnProperty } from '@ali/lowcode-utils';
 import { PropStash } from './prop-stash';
@@ -99,10 +99,12 @@ export class Prop implements IPropParent {
 
   export(stage: TransformStage = TransformStage.Save): CompositeValue | UNSET {
     const type = this._type;
-
-    // 在设计器里，所有组件都需要展示
     if (stage === TransformStage.Render && this.key === '___condition___') {
-      return true;
+      // 在设计器里，所有组件默认需要展示，除非开启了 enableCondition 配置
+      if (engineConfig.get('enableCondition') !== true) {
+        return true;
+      }
+      return this._value;
     }
 
     if (type === 'unset') {
