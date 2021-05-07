@@ -101,7 +101,7 @@ export class Prop implements IPropParent {
     const type = this._type;
     if (stage === TransformStage.Render && this.key === '___condition___') {
       // 在设计器里，所有组件默认需要展示，除非开启了 enableCondition 配置
-      if (engineConfig.get('enableCondition') !== true) {
+      if (engineConfig?.get('enableCondition') !== true) {
         return true;
       }
       return this._value;
