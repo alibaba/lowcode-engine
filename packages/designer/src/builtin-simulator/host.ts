@@ -14,6 +14,7 @@ import {
   isElement,
   isFormEvent,
   hasOwnProperty,
+  UtilsMetadata,
 } from '@ali/lowcode-utils';
 import {
   DragObjectType,
@@ -65,6 +66,7 @@ export interface BuiltinSimulatorProps {
   requestHandlersMap?: any;
   extraEnvironment?: Asset;
   library?: LibraryItem[];
+  utilsMetadata?: UtilsMetadata;
   simulatorUrl?: Asset;
   theme?: Asset;
   componentsAsset?: Asset;

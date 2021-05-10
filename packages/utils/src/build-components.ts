@@ -101,3 +101,39 @@ export function buildComponents(libraryMap: LibraryMap,
   });
   return components;
 }
+
+export interface UtilsMetadata {
+  name: string;
+  npm: {
+    package: string;
+    version?: string;
+    exportName: string;
+    subName?: string;
+    destructuring?: boolean;
+    main?: string;
+  }
+}
+
+interface LibrayMap {
+  [key: string]: string;
+}
+
+export function getProjectUtils(librayMap: LibrayMap, utilsMetadata: UtilsMetadata[]) {
+  const projectUtils: { [packageName: string]: any } = {};
+  if (utilsMetadata) {
+    utilsMetadata.forEach(meta => {
+      if (librayMap[meta?.npm?.package]) {
+        const lib = accessLibrary(librayMap[meta?.npm.package]);
+        if (lib.destructuring) {
+          Object.keys(lib).forEach(name => {
+            if (name === 'destructuring') return;
+            projectUtils[name] = lib[name];
+          });
+        } else {
+          projectUtils[meta?.npm?.exportName] = lib;
+        }
+      }
+    });
+  }
+  return projectUtils;
+}

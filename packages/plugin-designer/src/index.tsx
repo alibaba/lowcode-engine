@@ -60,10 +60,11 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
       if (!this._mounted) {
         return;
       }
-      const { components, packages, extraEnvironment } = assets;
+      const { components, packages, extraEnvironment, utils } = assets;
       const state = {
         componentMetadatas: components || [],
         library: packages || [],
+        utilsMetadata: utils || [],
         extraEnvironment,
         renderEnv,
         device,
@@ -96,6 +97,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
     const { editor } = this.props;
     const {
       componentMetadatas,
+      utilsMetadata,
       library,
       extraEnvironment,
       renderEnv,
@@ -121,6 +123,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
         componentMetadatas={componentMetadatas}
         simulatorProps={{
           library,
+          utilsMetadata,
           extraEnvironment,
           renderEnv,
           device,
