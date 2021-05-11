@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.48-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.47...v1.0.48-beta.0) (2021-05-11)
+
+
+### Features
+
+* 物料描述中的钩子函数等支持 JSFunction 形式 ([9bcb1b7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9bcb1b7dd53fef2d0227cd7c400e3dcbb7472cb5))
+
+
+
+
+
 ## [1.0.47](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.47-beta.1...v1.0.47) (2021-04-28)
 
 **Note:** Version bump only for package @ali/lowcode-editor-skeleton
