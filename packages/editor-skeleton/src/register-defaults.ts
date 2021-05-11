@@ -4,6 +4,7 @@ import ArraySetter from './components/array-setter';
 import ObjectSetter from './components/object-setter';
 import MixedSetter from './components/mixed-setter';
 import { isPlainObject } from '@ali/lowcode-utils';
+import parseJSFunc from './transducers/parse-func';
 import parseProps from './transducers/parse-props';
 import addonCombine from './transducers/addon-combine';
 import SlotSetter from './components/slot-setter';
@@ -55,6 +56,9 @@ export const registerDefaults = () => {
     recommend: true,
   });
   registerSetter('MixedSetter', MixedSetter);
+
+  // parseFunc
+  registerMetadataTransducer(parseJSFunc, 9, 'parse-func');
 
   // parseProps
   registerMetadataTransducer(parseProps, 10, 'parse-props');
