@@ -1,6 +1,7 @@
 import logger from '@ali/vu-logger';
 import { EventEmitter } from 'events';
 import { editor } from '@ali/lowcode-engine';
+import { isJSExpression } from '@ali/lowcode-types';
 
 /**
  * Bus class as an EventEmitter
@@ -76,8 +77,20 @@ editor?.on('history.forward', (data) => {
   bus.emit('ve.history.forward', data);
 });
 
+function triggerUseVariableChange(data: any) {
+  const { node, prop, oldValue, newValue } = data;
+  const propConfig = node.componentMeta.prototype.options.configure.find((o: any) => o.name === prop.getKey());
+  if (!propConfig?.useVariableChange) return;
+  if (isJSExpression(oldValue) && !isJSExpression(newValue)) {
+    propConfig.useVariableChange.call(prop, { isUseVariable: false });
+  } else if (isJSExpression(newValue) && !isJSExpression(oldValue)) {
+    propConfig.useVariableChange.call(prop, { isUseVariable: true });
+  }
+}
 editor?.on('node.prop.change', (data) => {
   bus.emit('node.prop.change', data);
+
+  triggerUseVariableChange(data);
 });
 
 export default bus;
