@@ -557,6 +557,7 @@ export class DocumentModel {
     const node = this.export(TransformStage.Save);
     const data = {
       componentsMap: this.getComponentsMap(extraComps),
+      utils: this.getUtilsMap(),
       componentsTree: [node],
     };
     return data;
@@ -671,6 +672,19 @@ export class DocumentModel {
       });
     }
     return componentsMap;
+  }
+
+  /**
+   * 获取 schema 中的 utils 节点，当前版本不判断页面中使用了哪些 utils，直接返回资产包中所有的 utils
+   * @returns 
+   */
+  getUtilsMap() {
+    return this.designer?.editor?.get('assets')?.utils?.map((item: any) => ({
+      name: item.name,
+      type: item.type || 'npm',
+      // TODO 当前只有 npm 类型，content 直接设置为 item.npm，有 function 类型之后需要处理
+      content: item.npm
+    }));
   }
 
   onNodeCreate(func: (node: Node) => void) {
