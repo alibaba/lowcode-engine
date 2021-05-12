@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.48-beta.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.48-beta.1...v1.0.48-beta.2) (2021-05-12)
+
+
+### Features
+
+* 完善 schema 中的 componentsMap 和 utils 信息 ([f335223](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f3352231a0ce0d31c9bf63fa0872a2e11de276a3))
+
+
+
+
+
 ## [1.0.48-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.48-beta.0...v1.0.48-beta.1) (2021-05-12)
 
 **Note:** Version bump only for package @ali/lowcode-vision-polyfill

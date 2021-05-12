@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-renderer-core",
-  "version": "1.0.48-beta.1",
+  "version": "1.0.48-beta.2",
   "description": "renderer core",
   "license": "MIT",
   "main": "lib/index.js",
