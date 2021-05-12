@@ -1091,6 +1091,7 @@ Object.keys(module.exports).forEach(function(item) {
       "title": "hey, i' a page!",
     },
   ],
+  "utils": undefined,
 }
 `;
 
