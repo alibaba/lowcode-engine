@@ -118,19 +118,22 @@ interface LibrayMap {
   [key: string]: string;
 }
 
-export function getProjectUtils(librayMap: LibrayMap, utilsMetadata: UtilsMetadata[]) {
-  const projectUtils: { [packageName: string]: any } = {};
+interface ProjectUtils {
+  [packageName: string]: any;
+}
+export function getProjectUtils(librayMap: LibrayMap, utilsMetadata: UtilsMetadata[]): ProjectUtils {
+  const projectUtils: ProjectUtils = {};
   if (utilsMetadata) {
     utilsMetadata.forEach(meta => {
       if (librayMap[meta?.npm?.package]) {
         const lib = accessLibrary(librayMap[meta?.npm.package]);
-        if (lib.destructuring) {
+        if (lib?.destructuring) {
           Object.keys(lib).forEach(name => {
             if (name === 'destructuring') return;
             projectUtils[name] = lib[name];
           });
-        } else {
-          projectUtils[meta?.npm?.exportName] = lib;
+        } else if (meta.name) {
+          projectUtils[meta.name] = lib;
         }
       }
     });
