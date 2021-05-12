@@ -3,6 +3,7 @@
   "version": "1.0.48-beta.0",
   "description": "Vision Polyfill for Ali lowCode engine",
   "main": "lib/index.js",
+  "private": true,
   "files": [
     "dist",
     "es",
