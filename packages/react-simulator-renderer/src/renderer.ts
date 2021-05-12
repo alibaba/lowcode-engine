@@ -2,7 +2,7 @@ import React, { createElement, ReactInstance } from 'react';
 import { render as reactRender } from 'react-dom';
 import { host } from './host';
 import SimulatorRendererView from './renderer-view';
-import { computed, obx } from '@recore/obx';
+import { computed, obx, untracked } from '@recore/obx';
 import { getClientRects } from './utils/get-client-rects';
 import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
 import {
@@ -37,13 +37,13 @@ export class DocumentInstance {
     return this._schema;
   }
 
-  private dispose?: () => void;
+  private disposeFunctions: Array<() => void> = [];
 
   constructor(readonly container: SimulatorRendererContainer, readonly document: DocumentModel) {
-    this.dispose = host.autorun(() => {
+    this.disposeFunctions.push(host.autorun(() => {
       // sync schema
       this._schema = document.export(1);
-    });
+    }));
   }
 
   @obx.ref private _components: any = {};
@@ -180,11 +180,16 @@ export class DocumentInstance {
   getNode(id: string): Node | null {
     return this.document.getNode(id);
   }
+
+  dispose() {
+    this.disposeFunctions.forEach(fn => fn());
+    this.instancesMap = new Map();
+  }
 }
 
 export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   readonly isSimulatorRenderer = true;
-  private dispose?: () => void;
+  private disposeFunctions: Array<() => void> = [];
   readonly history: MemoryHistory;
 
   @obx.ref private _documentInstances: DocumentInstance[] = [];
@@ -193,7 +198,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   }
 
   constructor() {
-    this.dispose = host.connect(this, () => {
+    this.disposeFunctions.push(host.connect(this, () => {
       // sync layout config
       this._layout = host.project.get('config').layout;
 
@@ -214,10 +219,10 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
 
       // sync device
       this._device = host.device;
-    });
+    }));
     const documentInstanceMap = new Map<string, DocumentInstance>();
     let initialEntry = '/';
-    host.autorun(({ firstRun }) => {
+    this.disposeFunctions.push(host.autorun(({ firstRun }) => {
       this._documentInstances = host.project.documents.map((doc) => {
         let inst = documentInstanceMap.get(doc.id);
         if (!inst) {
@@ -234,7 +239,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       } else if (this.history.location.pathname !== path) {
         this.history.replace(path);
       }
-    });
+    }));
     const history = createMemoryHistory({
       initialEntries: [initialEntry],
     });
@@ -467,6 +472,16 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
 
     reactRender(createElement(SimulatorRendererView, { rendererContainer: this }), container);
     host.project.setRendererReady(this);
+  }
+
+  dispose() {
+    this.disposeFunctions.forEach(fn => fn());
+    this.documentInstances.forEach(docInst => docInst.dispose());
+    untracked(() => {
+      this._componentsMap = {};
+      this._components = null;
+      this._appContext = null;
+    });
   }
 }
 
