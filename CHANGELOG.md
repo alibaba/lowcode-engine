@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.48-beta.1](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.48-beta.0...v1.0.48-beta.1) (2021-05-12)
+
+
+### Bug Fixes
+
+* 使用 utils 中声明的 name 字段当 key ([b5f93a2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/b5f93a2b6e132d4a606750a33a28f60aeabf3de4))
+
+
+
+
+
 ## [1.0.48-beta.0](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.47...v1.0.48-beta.0) (2021-05-11)
 
 
