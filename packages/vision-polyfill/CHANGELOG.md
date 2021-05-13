@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.48-beta.3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.48-beta.2...v1.0.48-beta.3) (2021-05-13)
+
+
+### Features
+
+* prototype.setPackageName增加第二个入参 ([8f2ffed](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8f2ffed45150392bed076d5d459f7eb3bfbe7ca3))
+
+
+
+
+
 ## [1.0.48-beta.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.48-beta.1...v1.0.48-beta.2) (2021-05-12)
 
 

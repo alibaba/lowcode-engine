@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.48-beta.3](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.48-beta.2...v1.0.48-beta.3) (2021-05-13)
+
+
+### Features
+
+* 支持在 host 里刷新渲染器 ([ccbbf74](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ccbbf743ad596b0ce1c569569e6e663868e575c4))
+
+
+
+
+
 ## [1.0.48-beta.2](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.48-beta.1...v1.0.48-beta.2) (2021-05-12)
 
 
