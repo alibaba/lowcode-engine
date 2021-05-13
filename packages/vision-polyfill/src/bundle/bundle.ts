@@ -19,6 +19,7 @@ function getCamelName(name: string) {
 export interface ComponentProtoBundle {
   // @ali/vc-xxx
   name: string;
+  version?: string;
   componentName?: string;
   category?: string;
   module: Prototype | Prototype[];
@@ -217,7 +218,7 @@ export default class Bundle {
           proto.setView(this.viewsMap[componentName]);
         }
         if (cp.name && !proto.getPackageName()) {
-          proto.setPackageName(cp.name);
+          proto.setPackageName(cp.name, cp.version);
         }
         this.registerPrototype(proto);
       }
@@ -229,7 +230,7 @@ export default class Bundle {
       prototype.setCategory(item.category);
     }
     if (item.name && !prototype.getPackageName()) {
-      prototype.setPackageName(item.name);
+      prototype.setPackageName(item.name, item.version);
     }
   }
 
