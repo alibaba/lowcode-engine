@@ -368,12 +368,10 @@ class Prototype {
     return false;
   }
 
-  setPackageName(name: string) {
-    // 从资产包中获取包的更多信息
-    const packageInfo = designer?.editor?.get('assets')?.packages?.find((item: any) => item.package === name);
+  setPackageName(name: string, version?: string) {
     this.meta.setNpm({
       package: name,
-      version: packageInfo?.version,
+      version,
       componentName: this.getComponentName(),
     });
   }
