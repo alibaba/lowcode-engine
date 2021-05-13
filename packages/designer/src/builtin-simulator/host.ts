@@ -309,6 +309,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     return libraryAsset;
   }
 
+  rerender() {
+    this.designer.refreshComponentMetasMap();
+    this.renderer?.rerender?.();
+  }
+
   async mountContentFrame(iframe: HTMLIFrameElement | null) {
     if (!iframe || this._iframe === iframe) {
       return;

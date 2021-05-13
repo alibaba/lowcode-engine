@@ -388,12 +388,18 @@ export class Designer {
       this.editor.set('assets', newAssets);
     }
     // TODO: 因为涉及修改 prototype.view，之后在 renderer 里修改了 vc 的 view 获取逻辑后，可删除
-    this._componentMetasMap = new Map(this._componentMetasMap);
+    this.refreshComponentMetasMap();
     // 完成加载增量资源后发送事件，方便插件监听并处理相关逻辑
     this.editor.emit('designer.incrementalAssetsReady');
 
   }
 
+  /**
+   * 刷新 componentMetasMap，可间接触发模拟器里的 buildComponents
+   */
+  refreshComponentMetasMap() {
+    this._componentMetasMap = new Map(this._componentMetasMap);
+  }
 
   get(key: string): any {
     return this.props ? this.props[key] : null;

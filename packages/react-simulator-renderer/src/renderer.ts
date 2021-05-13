@@ -474,6 +474,14 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     host.project.setRendererReady(this);
   }
 
+  /**
+   * 刷新渲染器
+   */
+  rerender() {
+    // TODO: 不太优雅
+    this._appContext = { ...this._appContext };
+  }
+
   dispose() {
     this.disposeFunctions.forEach(fn => fn());
     this.documentInstances.forEach(docInst => docInst.dispose());
