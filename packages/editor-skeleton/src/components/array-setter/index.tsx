@@ -48,8 +48,8 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
           setter: props.itemSetter,
           // FIXME:
           forceInline: 1,
-          // setValue: () => setTimeout(() => ListSetter.onItemChange(onChange, items)),
-          setValue: props.prop?.extraProps?.setValue,
+          setValue: () => setTimeout(() => ListSetter.onItemChange(onChange, items)),
+          // setValue: props.prop?.extraProps?.setValue,
         });
         item.setValue(value[i]);
         items[i] = item;
@@ -60,8 +60,9 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
       deletes.forEach((item) => {
         itemsMap.delete(item.id);
       });
+
+      ListSetter.onItemChange(onChange, items);
     }
-    ListSetter.onItemChange(onChange, items);
     return {
       items,
       itemsMap,
