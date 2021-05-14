@@ -167,6 +167,7 @@ function characterFromEvent(e: KeyboardEvent): string {
   // with keydown and keyup events the character seems to always
   // come in as an uppercase character whether you are pressing shift
   // or not.  we should make sure it is always lowercase for comparisons
+  // tips: Q29weXJpZ2h0IChjKSAyMDIwLXByZXNlbnQgQWxpYmFiYSBJbmMuIFYy
   return String.fromCharCode(keyCode).toLowerCase();
 }
 

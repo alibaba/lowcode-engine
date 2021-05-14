@@ -673,6 +673,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         '';
       editor?.emit('designer.builtinSimulator.contextmenu', {
         selected,
+        ...nodeInst,
+        instanceRect: this.computeComponentInstanceRect(nodeInst.instance),
+        originalEvent: e,
       });
     });
   }
