@@ -55,10 +55,10 @@ export type Asset = AssetList | AssetBundle | AssetItem | URL;
 export type AssetList = Array<Asset | undefined | null>;
 
 export interface AssetsJson {
-  packages: Array;
-  components: Array;
-  componentList?: Array;
-  bizComponentList?: Array
+  packages: Array<any>;
+  components?: Array<any>;
+  componentList?: Array<any>;
+  bizComponentList?: Array<any>;
 }
 
 export function isAssetItem(obj: any): obj is AssetItem {
@@ -100,29 +100,27 @@ export function assetItem(type: AssetType, content?: string | null, level?: Asse
   };
 }
 
-export function megreAssets(assets: AssetsJson, increaseAssets: AssetsJson): AssetsJson {
-  if (!increaseAssets.packages) {
-    console.error('assets must have packages');
+export function megreAssets(assets: AssetsJson, incrementalAssets: AssetsJson): AssetsJson {
+  if (incrementalAssets.packages) {
+    assets.packages = [...assets.packages, ...incrementalAssets.packages];
   }
 
-  if (!increaseAssets.components) {
-    console.error('assets must have components');
+  if (incrementalAssets.components) {
+    assets.components = [...assets.components, ...incrementalAssets.components];
   }
 
-  assets.packages = [...assets.packages, ...increaseAssets.packages];
-  assets.components = [...assets.components, ...increaseAssets.components];
 
-  megreAssetsComponentList(assets, increaseAssets, 'componentList');
-  megreAssetsComponentList(assets, increaseAssets, 'bizComponentList');
+  megreAssetsComponentList(assets, incrementalAssets, 'componentList');
+  megreAssetsComponentList(assets, incrementalAssets, 'bizComponentList');
 
   return assets;
 }
 
-function megreAssetsComponentList(assets: AssetsJson, increaseAssets: AssetsJson, listName: String): void {
-  if (increaseAssets[listName]) {
+function megreAssetsComponentList(assets: AssetsJson, incrementalAssets: AssetsJson, listName: keyof AssetsJson): void {
+  if (incrementalAssets[listName]) {
     if (assets[listName]) {
       // 根据title进行合并
-      increaseAssets[listName].map((item) => {
+      incrementalAssets[listName].map((item) => {
         let matchFlag = false;
         assets[listName].map((assetItem) => {
           if (assetItem.title === item.title) {
