@@ -10,8 +10,7 @@
     "es"
   ],
   "scripts": {
-    "build": "build-scripts build --skip-demo",
-    "cloud-build": "build-scripts build --skip-demo"
+    "build": "build-scripts build --skip-demo"
   },
   "dependencies": {
     "@ali/b3-one": "^0.0.17",

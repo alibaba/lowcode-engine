@@ -10,8 +10,7 @@
     "lib"
   ],
   "scripts": {
-    "build": "build-scripts build --skip-demo",
-    "cloud-build": "build-scripts build --skip-demo"
+    "build": "build-scripts build --skip-demo"
   },
   "license": "MIT",
   "dependencies": {
