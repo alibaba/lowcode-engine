@@ -14,7 +14,6 @@ import * as utils from './utils';
 // import { tipHandler } from './widgets/tip/tip-handler';
 
 EventEmitter.defaultMaxListeners = 100;
-
 const NOT_FOUND = Symbol.for('not_found');
 
 export class Editor extends EventEmitter implements IEditor {

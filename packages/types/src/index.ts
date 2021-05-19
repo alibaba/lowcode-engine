@@ -7,6 +7,7 @@ export * from './metadata';
 export * from './npm';
 export * from './prop-config';
 export * from './schema';
+export * from './activity';
 export * from './tip';
 export * from './title';
 export * from './utils';

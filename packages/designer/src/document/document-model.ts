@@ -65,8 +65,6 @@ export class DocumentModel {
 
   private seqId = 0;
 
-  private _simulator?: ISimulatorHost;
-
   private emitter: EventEmitter;
 
   private rootNodeVisitorMap: { [visitorName: string]: any } = {};
@@ -130,8 +128,17 @@ export class DocumentModel {
 
     this.history = new History(
       () => this.export(TransformStage.Serilize),
-      (schema) => this.import(schema as RootSchema, true),
+      (schema) => {
+        if (this.simulator) {
+          this.simulator.runWithoutActivity(() => {
+            this.import(schema as RootSchema, true);
+          });
+        } else {
+          this.import(schema as RootSchema, true);
+        }
+      },
     );
+
     this.setupListenActiveNodes();
     this.modalNodesManager = new ModalNodesManager(this);
     this.inited = true;
@@ -341,12 +348,20 @@ export class DocumentModel {
   import(schema: RootSchema, checkId = false) {
     // TODO: 暂时用饱和式删除，原因是 Slot 节点并不是树节点，无法正常递归删除
     this.nodes.forEach(node => {
+      if (node.isRoot()) return;
       this.internalRemoveAndPurgeNode(node, true);
     });
     // foreachReverse(this.rootNode?.children, (node: Node) => {
     //   this.internalRemoveAndPurgeNode(node, true);
     // });
-    this.rootNode?.import(schema as any, checkId);
+    if (this.designer.project.simulator) {
+      this.designer.project.simulator.runWithoutActivity(() => {
+        this.rootNode?.import(schema as any, checkId);
+      });
+    } else {
+      this.rootNode?.import(schema as any, checkId);
+    }
+
     // todo: select added and active track added
   }
 
@@ -381,27 +396,6 @@ export class DocumentModel {
    */
   isModified() {
     return !this.history.isSavePoint();
-  }
-
-  /**
-   * 提供给模拟器的参数
-   */
-  @computed get simulatorProps(): object {
-    let { simulatorProps } = this.designer;
-    if (typeof simulatorProps === 'function') {
-      simulatorProps = simulatorProps(this);
-    }
-    return {
-      ...simulatorProps,
-      documentContext: this,
-      onMount: this.mountSimulator.bind(this),
-    };
-  }
-
-  private mountSimulator(simulator: ISimulatorHost) {
-    // TODO: 多设备 simulator 支持
-    this._simulator = simulator;
-    // TODO: emit simulator mounted
   }
 
   // FIXME: does needed?

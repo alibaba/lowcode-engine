@@ -1,7 +1,12 @@
-import { isJSBlock } from '@ali/lowcode-types';
+import { isJSBlock, isJSSlot, ActivityType, NodeSchema, PageSchema, RootSchema } from '@ali/lowcode-types';
 import { isVariable } from './misc';
 import { isPlainObject } from './is-plain-object';
 
+/**
+ * 将 JSExpression / JSSlot 等标准协议的结构，降级成乐高版本
+ * @param props
+ * @returns
+ */
 export function compatibleLegaoSchema(props: any): any {
   if (!props) {
     return props;
@@ -47,4 +52,81 @@ export function compatibleLegaoSchema(props: any): any {
     newProps[key] = compatibleLegaoSchema(props[key]);
   });
   return newProps;
+}
+
+function getNodeSchemaById(schema: NodeSchema, nodeId: string): NodeSchema | undefined {
+  let found: NodeSchema | undefined;
+  if (schema.id === nodeId) {
+    return schema;
+  }
+  const { children, props } = schema;
+  // 查找 children
+  if (Array.isArray(children)) {
+    for (const child of children) {
+      found = getNodeSchemaById(child as NodeSchema, nodeId);
+      if (found) return found;
+    }
+  }
+  if (isPlainObject(props)) {
+    // 查找 props，主要是 slot 类型
+    found = getNodeSchemaFromPropsById(props, nodeId);
+    if (found) return found;
+  }
+}
+
+function getNodeSchemaFromPropsById(props: any, nodeId: string): NodeSchema | undefined {
+  let found: NodeSchema | undefined;
+  for (const [key, value] of Object.entries(props)) {
+    if (isJSSlot(value)) {
+      // value 是数组类型 { type: 'JSSlot', value: NodeSchema[] }
+      if (Array.isArray(value.value)) {
+        for (const child of value.value) {
+          found = getNodeSchemaById(child as NodeSchema, nodeId);
+          if (found) return found;
+        }
+      }
+      // value 是对象类型 { type: 'JSSlot', value: NodeSchema }
+      found = getNodeSchemaById(value.value as NodeSchema, nodeId);
+      if (found) return found;
+    } else if (isPlainObject(value)) {
+      found = getNodeSchemaFromPropsById(value, nodeId);
+      if (found) return found;
+    }
+  }
+}
+
+export function applyActivities(pivotSchema: RootSchema, activities: any, options?: any): RootSchema {
+  let schema = { ...pivotSchema };
+  if (!Array.isArray(activities)) {
+    activities = [activities];
+  }
+  return activities.reduce((accSchema: RootSchema, activity: any) => {
+    if (activity.type === ActivityType.MODIFIED) {
+      const found = getNodeSchemaById(accSchema, activity.payload.schema.id);
+      if (!found) return accSchema;
+      Object.assign(found, activity.payload.schema);
+    } else if (activity.type === ActivityType.ADDED) {
+      const { payload } = activity;
+      const { location, schema } = payload;
+      const { parent } = location;
+      const found = getNodeSchemaById(accSchema, parent.nodeId);
+      if (found) {
+        if (Array.isArray(found.children)) {
+          found.children.splice(parent.index, 0, schema);
+        } else if (!found.children) {
+          found.children = [schema];
+        }
+        // TODO: 是 JSExpression / DOMText
+      }
+    } else if (activity.type === ActivityType.DELETED) {
+      const { payload } = activity;
+      const { location } = payload;
+      const { parent } = location;
+      const found = getNodeSchemaById(accSchema, parent.nodeId);
+      if (found && Array.isArray(found.children)) {
+        found.children.splice(parent.index, 1);
+      }
+    }
+    return accSchema;
+  }, schema);
 }

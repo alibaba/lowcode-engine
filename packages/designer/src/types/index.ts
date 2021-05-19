@@ -5,3 +5,7 @@ export type Setters = {
   registerSetter: typeof registerSetter;
   getSettersMap: typeof getSettersMap;
 };
+
+export type NodeRemoveOptions = {
+  suppressRemoveEvent?: boolean;
+};

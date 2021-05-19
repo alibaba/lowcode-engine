@@ -7,7 +7,6 @@ import { SettingsPane } from './settings-pane';
 import { StageBox } from '../stage-box';
 import { SkeletonContext } from '../../context';
 import { createIcon } from '@ali/lowcode-utils';
-
 @observer
 export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any }, { shouldIgnoreRoot: boolean }> {
   state = {

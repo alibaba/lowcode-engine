@@ -1,10 +1,11 @@
-import { obx, computed } from '@ali/lowcode-editor-core';
+import { obx, computed, globalContext } from '@ali/lowcode-editor-core';
 import { Node, ParentalNode } from './node';
 import { TransformStage } from './transform-stage';
 import { NodeData, isNodeSchema } from '@ali/lowcode-types';
 import { shallowEqual } from '@ali/lowcode-utils';
 import { EventEmitter } from 'events';
 import { foreachReverse } from '../../utils/tree';
+import { NodeRemoveOptions } from '../../types';
 
 export class NodeChildren {
   @obx.val private children: Node[];
@@ -119,10 +120,10 @@ export class NodeChildren {
   /**
    * 删除一个节点
    */
-  delete(node: Node, purge = false, useMutator = true): boolean {
+  delete(node: Node, purge = false, useMutator = true, options: NodeRemoveOptions = {}): boolean {
     if (node.isParental()) {
       foreachReverse(node.children, (subNode: Node) => {
-        subNode.remove(useMutator, purge);
+        subNode.remove(useMutator, purge, options);
       }, (iterable, idx) => (iterable as NodeChildren).get(idx));
       foreachReverse(node.slots, (slotNode: Node) => {
         slotNode.remove(useMutator, purge);
@@ -140,6 +141,9 @@ export class NodeChildren {
       }
     }
     const { document } = node;
+    if (globalContext.has('editor')) {
+      globalContext.get('editor').emit('node.remove', { node, index: i });
+    }
     document.unlinkNode(node);
     document.selection.remove(node.id);
     document.destroyNode(node);
@@ -163,6 +167,13 @@ export class NodeChildren {
 
     const i = children.indexOf(node);
 
+    if (node.parent) {
+      globalContext.has('editor') && globalContext.get('editor').emit('node.remove.topLevel', {
+        node,
+        index: node.index,
+      });
+    }
+
     if (i < 0) {
       if (index < children.length) {
         children.splice(index, 0, node);
@@ -185,6 +196,9 @@ export class NodeChildren {
 
     this.emitter.emit('change');
     this.emitter.emit('insert', node);
+    if (globalContext.has('editor')) {
+      globalContext.get('editor').emit('node.add', { node });
+    }
     // this.reportModified(node, this.owner, { type: 'insert' });
 
     // check condition group

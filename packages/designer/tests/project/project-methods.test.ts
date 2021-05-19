@@ -58,7 +58,7 @@ describe.only('Project 方法测试', () => {
     expect(project.currentDocument?.fileName).toBe('f1');
   });
 
-  it('setSchema', () => {
+  it.skip('setSchema', () => {
     project.load({
       componentsTree: [{
         componentName: 'Page',

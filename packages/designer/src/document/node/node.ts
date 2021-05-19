@@ -24,6 +24,7 @@ import { SettingTopEntry } from 'designer/src/designer';
 import { EventEmitter } from 'events';
 import { includeSlot, removeSlot } from '../../utils/slot';
 import { foreachReverse } from '../../utils/tree';
+import { NodeRemoveOptions } from '../../types';
 
 /**
  * 基础节点
@@ -156,6 +157,8 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   readonly settingEntry: SettingTopEntry;
 
+  private isInited = false;
+
   constructor(readonly document: DocumentModel, nodeSchema: Schema, options: any = {}) {
     const { componentName, id, children, props, ...extras } = nodeSchema;
     this.id = document.nextId(id);
@@ -177,6 +180,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       this.setupAutoruns();
     }
 
+    this.isInited = true;
     this.emitter = new EventEmitter();
   }
 
@@ -330,13 +334,19 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 移除当前节点
    */
-  remove(useMutator = true, purge = true) {
+  remove(useMutator = true, purge = true, options: NodeRemoveOptions = { suppressRemoveEvent: false }) {
     if (this.parent) {
+      if (!options.suppressRemoveEvent) {
+        this.document.designer.editor?.emit('node.remove.topLevel', {
+          node: this,
+          index: this.parent?.children?.indexOf(this),
+        });
+      }
       if (this.isSlot()) {
         this.parent.removeSlot(this, purge);
-        this.parent.children.delete(this, purge, useMutator);
+        this.parent.children.delete(this, purge, useMutator, { suppressRemoveEvent: true });
       } else {
-        this.parent.children.delete(this, purge, useMutator);
+        this.parent.children.delete(this, purge, useMutator, { suppressRemoveEvent: true });
       }
     }
   }
@@ -624,7 +634,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 导出 schema
    */
-  export(stage: TransformStage = TransformStage.Save): Schema {
+  export(stage: TransformStage = TransformStage.Save, options: any = {}): Schema {
     const baseSchema: any = {
       componentName: this.componentName,
     };
@@ -637,7 +647,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     }
 
     if (this.isLeaf()) {
-      baseSchema.children = this.props.get('children')?.export(stage);
+      if (!options.bypassChildren) {
+        baseSchema.children = this.props.get('children')?.export(stage);
+      }
       return baseSchema;
     }
 
@@ -662,7 +674,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       ...this.document.designer.transformProps(_extras_, this, stage),
     };
 
-    if (this.isParental() && this.children.size > 0) {
+    if (this.isParental() && this.children.size > 0 && !options.bypassChildren) {
       schema.children = this.children.export(stage);
     }
 

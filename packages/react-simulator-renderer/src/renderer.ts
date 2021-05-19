@@ -16,11 +16,10 @@ import {
   isPlainObject,
   AssetLoader,
   getProjectUtils,
+  applyActivities,
 } from '@ali/lowcode-utils';
 
-import { RootSchema, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
-// import { isESModule, isElement, acceptsRef, wrapReactClass, cursor, setNativeSelection } from '@ali/lowcode-utils';
-// import { RootSchema, NpmInfo, ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
+import { RootSchema, ComponentSchema, TransformStage, NodeSchema, ActivityData } from '@ali/lowcode-types';
 // just use types
 import { BuiltinSimulatorRenderer, NodeInstance, Component, DocumentModel } from '@ali/lowcode-designer';
 import LowCodeRenderer from '@ali/lowcode-react-renderer';
@@ -41,8 +40,14 @@ export class DocumentInstance {
 
   constructor(readonly container: SimulatorRendererContainer, readonly document: DocumentModel) {
     this.disposeFunctions.push(host.autorun(() => {
-      // sync schema
-      this._schema = document.export(1);
+      this._schema = document.export(TransformStage.Render);
+    }));
+    this.disposeFunctions.push(host.onActivityEvent((data: ActivityData) => {
+      if (host.mutedActivityEvent) return;
+      this._schema = applyActivities(this._schema!, data);
+      // TODO: 调试增量模式，打开以下代码
+      // this._deltaData = data;
+      // this._deltaMode = true;
     }));
   }
 
@@ -52,6 +57,24 @@ export class DocumentInstance {
     // 根据 device 选择不同组件，进行响应式
     // 更好的做法是，根据 device 选择加载不同的组件资源，甚至是 simulatorUrl
     return this._components;
+  }
+
+  /**
+   * 本次的变更数据
+   */
+  @obx.ref private _deltaData: any = {};
+
+  @computed get deltaData(): any {
+    return this._deltaData;
+  }
+
+  /**
+   * 是否使用增量模式
+   */
+  @obx.ref private _deltaMode: boolean = false;
+
+  @computed get deltaMode(): boolean {
+    return this._deltaMode;
   }
 
   // context from: utils、constants、history、location、match

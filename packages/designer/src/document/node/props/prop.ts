@@ -224,6 +224,8 @@ export class Prop implements IPropParent {
    * set value, val should be JSON Object
    */
   setValue(val: CompositeValue) {
+    const editor = this.owner.document?.designer.editor;
+    const oldValue = this._value;
     this._value = val;
     this._code = null;
     const t = typeof val;
@@ -237,9 +239,7 @@ export class Prop implements IPropParent {
     } else if (isPlainObject(val)) {
       if (isJSSlot(val) && this.options.skipSetSlot !== true) {
         this.setAsSlot(val);
-        return;
-      }
-      if (isJSExpression(val)) {
+      } else if (isJSExpression(val)) {
         this._type = 'expression';
       } else {
         this._type = 'map';
@@ -250,6 +250,15 @@ export class Prop implements IPropParent {
         type: 'JSExpression',
         value: valueToSource(val),
       };
+    }
+
+    if (oldValue !== this._value) {
+      editor?.emit('node.innerProp.change', {
+        node: this.owner,
+        prop: this,
+        oldValue,
+        newValue: this._value,
+      });
     }
     this.dispose();
   }

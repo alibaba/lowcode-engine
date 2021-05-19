@@ -196,7 +196,7 @@ export class History {
 class Session {
   private _data: any;
 
-  private activedTimer: any;
+  private activeTimer: any;
 
   get data() {
     return this._data;
@@ -216,25 +216,24 @@ class Session {
   }
 
   isActive() {
-    return this.activedTimer != null;
+    return this.activeTimer != null;
   }
 
   end() {
     if (this.isActive()) {
       this.clearTimer();
-      // console.info('session end');
     }
   }
 
   private setTimer() {
     this.clearTimer();
-    this.activedTimer = setTimeout(() => this.end(), this.timeGap);
+    this.activeTimer = setTimeout(() => this.end(), this.timeGap);
   }
 
   private clearTimer() {
-    if (this.activedTimer) {
-      clearTimeout(this.activedTimer);
+    if (this.activeTimer) {
+      clearTimeout(this.activeTimer);
     }
-    this.activedTimer = null;
+    this.activeTimer = null;
   }
 }

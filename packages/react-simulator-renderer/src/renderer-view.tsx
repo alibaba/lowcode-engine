@@ -128,9 +128,9 @@ class Layout extends Component<{ rendererContainer: SimulatorRendererContainer }
 
 @observer
 class Renderer extends Component<{
-    rendererContainer: SimulatorRendererContainer;
-    documentInstance: DocumentInstance }
-  > {
+    rendererContainer: SimulatorRendererContainer,
+    documentInstance: DocumentInstance,
+  }> {
   shouldComponentUpdate() {
     return false;
   }
@@ -147,6 +147,8 @@ class Renderer extends Component<{
         locale={locale}
         messages={messages}
         schema={documentInstance.schema}
+        deltaData={documentInstance.deltaData}
+        deltaMode={documentInstance.deltaMode}
         components={container.components}
         appHelper={container.context}
         designMode={designMode}
