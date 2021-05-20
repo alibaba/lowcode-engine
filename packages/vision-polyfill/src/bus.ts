@@ -79,7 +79,7 @@ editor?.on('history.forward', (data) => {
 
 function triggerUseVariableChange(data: any) {
   const { node, prop, oldValue, newValue } = data;
-  const propConfig = node.componentMeta.prototype.options.configure.find((o: any) => o.name === prop.getKey());
+  const propConfig = node.componentMeta.prototype?.options.configure.find((o: any) => o.name === prop.getKey());
   if (!propConfig?.useVariableChange) return;
   if (isJSExpression(oldValue) && !isJSExpression(newValue)) {
     propConfig.useVariableChange.call(prop, { isUseVariable: false });
