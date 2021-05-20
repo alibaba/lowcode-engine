@@ -94,6 +94,7 @@ export default class DragResizeEngine {
       });
 
       this.dragResizing = false;
+      this.designer.detecting.enable = true;
       cursor.release();
 
       this.emitter.emit('resizeEnd', e, direction, node);
@@ -110,6 +111,7 @@ export default class DragResizeEngine {
 
       this.emitter.emit('resizestart', e, direction, node);
       this.dragResizing = true;
+      this.designer.detecting.enable = false;
       cursor.addState('ew-resize');
     };
     shell.addEventListener('mousedown', mousedown);

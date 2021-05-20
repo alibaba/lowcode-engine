@@ -415,14 +415,14 @@ export class DocumentModel {
   @obx.ref private _suspensed = false;
 
   /**
-   * 是否不是激活的
+   * 是否为非激活状态
    */
   get suspensed(): boolean {
     return this._suspensed || !this._opened;
   }
 
   /**
-   * 与 suspensed 相反，是否是激活的，这个函数可能用的更多一点
+   * 与 suspensed 相反，是否为激活状态，这个函数可能用的更多一点
    */
   get actived(): boolean {
     return !this._suspensed;
