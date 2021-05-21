@@ -1,9 +1,9 @@
-import { Component } from 'react';
+import { Component, MouseEvent } from 'react';
 import { isObject } from 'lodash';
 import classNames from 'classnames';
 import { Icon } from '@alifd/next';
 import { Title } from '@ali/lowcode-editor-core';
-import { TitleContent } from '@ali/lowcode-types';
+import { IEditor, TitleContent } from '@ali/lowcode-types';
 import { PopupPipe, PopupContext } from '../popup';
 import './index.less';
 import InlineTip from './inlinetip';
@@ -12,6 +12,7 @@ export interface FieldProps {
   className?: string;
   meta?: { package: string; componentName: string } | string;
   title?: TitleContent | null;
+  editor?: IEditor;
   defaultDisplay?: 'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry';
   collapsed?: boolean;
   valueState?: number;
@@ -31,6 +32,7 @@ export class Field extends Component<FieldProps> {
   constructor(props: any) {
     super(props);
     this.handleClear = this.handleClear.bind(this);
+    this.clickHandler = this.clickHandler.bind(this);
   }
 
   private toggleExpand = () => {
@@ -125,6 +127,11 @@ export class Field extends Component<FieldProps> {
     return tipContent;
   }
 
+  clickHandler(event?: MouseEvent) {
+    const { editor, name, title, meta } = this.props;
+    editor?.emit('setting.setter.field.click', { name, title, meta, event });
+  }
+
   render() {
     const { hasError } = this.state;
     if (hasError) {
@@ -154,7 +161,10 @@ export class Field extends Component<FieldProps> {
             <div className="lc-field-head" onClick={isAccordion ? this.toggleExpand : undefined}>
               <div className="lc-field-title">
                 {createValueState(valueState, this.handleClear)}
-                <Title title={title || ''} />
+                <Title
+                  title={title || ''}
+                  onClick={this.clickHandler}
+                />
                 <InlineTip position="top">{tipContent}</InlineTip>
               </div>
               {isAccordion && <Icon className="lc-field-icon" type="arrow-up" size="xs" />}

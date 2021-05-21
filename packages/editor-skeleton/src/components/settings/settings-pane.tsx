@@ -108,6 +108,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
       {
         meta: field?.componentMeta?.npm || field?.componentMeta?.componentName || '',
         title: field.title,
+        editor: field.editor,
         collapsed: !field.expanded,
         valueState: field.isRequired ? 10 : field.valueState,
         onExpandChange: (expandState) => field.setExpanded(expandState),
@@ -196,6 +197,7 @@ class SettingGroupView extends Component<{ field: SettingField }> {
       {
         meta: field.componentMeta?.npm || field.componentMeta?.componentName || '',
         title: field.title,
+        editor: field.editor,
         collapsed: !field.expanded,
         onExpandChange: (expandState) => field.setExpanded(expandState),
         // field: field,
