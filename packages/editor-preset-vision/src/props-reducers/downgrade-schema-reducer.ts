@@ -18,6 +18,7 @@ export function compatibleReducer(props: any) {
           slotTitle: props.title,
           slotName: props.name,
         },
+        __params__: props.params,
       },
     };
   }

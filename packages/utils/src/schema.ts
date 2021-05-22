@@ -27,6 +27,7 @@ export function compatibleLegaoSchema(props: any): any {
         title: (props.value.props as any)?.slotTitle,
         name: (props.value.props as any)?.slotName,
         value: props.value.children,
+        params: (props.value.props as any)?.__params__,
       };
     } else {
       return props.value;
@@ -44,11 +45,11 @@ export function compatibleLegaoSchema(props: any): any {
     if (/^__slot__/.test(key) && props[key] === true) {
       return;
     }
-    // TODO: 目前 dataSource 面板里既用到了 JSExpression，又用到了 variable，这里先都不处理，后面再重构
-    if (key === 'dataSource') {
-      newProps[key] = props[key];
-      return;
-    }
+    // TODO: 先移除，目前没有业务使用
+    // if (key === 'dataSource') {
+    //   newProps[key] = props[key];
+    //   return;
+    // }
     newProps[key] = compatibleLegaoSchema(props[key]);
   });
   return newProps;

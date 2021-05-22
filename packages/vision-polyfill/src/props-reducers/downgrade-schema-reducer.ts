@@ -24,6 +24,7 @@ export function compatibleReducer(props: any, node: Node): any {
           slotName: props.name,
         },
       },
+      __params__: props.params,
     };
   }
   if (isJSExpression(props) && !props.events) {
@@ -35,11 +36,11 @@ export function compatibleReducer(props: any, node: Node): any {
   }
   const newProps: any = {};
   Object.entries<any>(props).forEach(([key, val]) => {
-    // TODO: 目前 dataSource 面板里既用到了 JSExpression，又用到了 variable，这里先都不处理，后面再重构
-    if (key === 'dataSource') {
-      newProps[key] = props[key];
-      return;
-    }
+    // // TODO: 目前 dataSource 面板里既用到了 JSExpression，又用到了 variable，这里先都不处理，后面再重构
+    // if (key === 'dataSource') {
+    //   newProps[key] = props[key];
+    //   return;
+    // }
     newProps[key] = compatibleReducer(val, node);
   });
   return newProps;
