@@ -24,6 +24,7 @@ import { DropLocation, LocationData, isLocationChildrenDetail } from './location
 import { OffsetObserver, createOffsetObserver } from './offset-observer';
 import { focusing } from './focusing';
 import { SettingTopEntry } from './setting';
+import { BemToolsManager } from '../builtin-simulator/bem-tools/manager';
 
 export interface DesignerProps {
   editor: IEditor;
@@ -54,6 +55,8 @@ export class Designer {
   readonly project: Project;
 
   readonly editor: IEditor;
+
+  readonly bemToolsManager = new BemToolsManager(this);
 
   get currentDocument() {
     return this.project.currentDocument;
@@ -228,9 +231,9 @@ export class Designer {
     this.editor.emit(`designer.${event}`, ...args);
   }
 
-  private _dropLocation?: DropLocation;
+  @obx.ref private _dropLocation?: DropLocation;
 
-  get dropLocation() {
+  @computed get dropLocation() {
     return this._dropLocation;
   }
 
@@ -391,7 +394,6 @@ export class Designer {
     this.refreshComponentMetasMap();
     // 完成加载增量资源后发送事件，方便插件监听并处理相关逻辑
     this.editor.emit('designer.incrementalAssetsReady');
-
   }
 
   /**

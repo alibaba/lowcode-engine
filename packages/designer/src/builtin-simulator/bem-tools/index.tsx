@@ -27,6 +27,12 @@ export class BemTools extends Component<{ host: BuiltinSimulatorHost }> {
         <BorderSelecting key="selecting" host={host} />
         <InsertionView key="insertion" host={host} />
         <BorderResizing key="resizing" host={host} />
+        {
+          host.designer.bemToolsManager.getAllBemTools().map(tools => {
+            const ToolsCls = tools.item;
+            return <ToolsCls key={tools.name} host={host} />;
+          })
+        }
       </div>
     );
   }
