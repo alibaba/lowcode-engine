@@ -55,7 +55,7 @@ export function compatibleLegaoSchema(props: any): any {
   return newProps;
 }
 
-function getNodeSchemaById(schema: NodeSchema, nodeId: string): NodeSchema | undefined {
+export function getNodeSchemaById(schema: NodeSchema, nodeId: string): NodeSchema | undefined {
   let found: NodeSchema | undefined;
   if (schema.id === nodeId) {
     return schema;

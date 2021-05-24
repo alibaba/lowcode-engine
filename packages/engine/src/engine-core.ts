@@ -15,11 +15,12 @@ import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-o
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
 import './modules/live-editing';
 import { isPlainObject } from '@ali/lowcode-utils';
+import utils from './modules/utils';
 
 export * from './modules/editor-types';
 export * from './modules/skeleton-types';
 export * from './modules/designer-types';
-// export * from './modules/lowcode-types';
+export * from './modules/lowcode-types';
 
 const { hotkey, monitor, getSetter, registerSetter, getSettersMap } = editorCabin;
 registerDefaults();
@@ -68,6 +69,7 @@ export {
   // store,
   hotkey,
   monitor,
+  utils,
   engineConfig,
 };
 
@@ -97,6 +99,7 @@ const getSelection = () => designer.currentDocument?.selection;
   hotkey,
   monitor,
   init,
+  utils,
   engineConfig,
 };
 

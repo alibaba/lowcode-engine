@@ -1,0 +1,1 @@
+export { NodeSchema } from '@ali/lowcode-types';
