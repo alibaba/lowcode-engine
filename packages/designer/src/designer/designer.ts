@@ -231,9 +231,9 @@ export class Designer {
     this.editor.emit(`designer.${event}`, ...args);
   }
 
-  @obx.ref private _dropLocation?: DropLocation;
+  private _dropLocation?: DropLocation;
 
-  @computed get dropLocation() {
+  dropLocation() {
     return this._dropLocation;
   }
 
