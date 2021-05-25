@@ -10,7 +10,7 @@ export function getCurrentFieldIds() {
       fieldIds.push(fieldId);
     }
   });
-  return fieldIds;
+  return { doc: designer?.currentDocument, fieldIds };
 }
 
 export function invariant(check: any, message: string, thing?: any) {

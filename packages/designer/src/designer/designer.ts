@@ -233,7 +233,7 @@ export class Designer {
 
   private _dropLocation?: DropLocation;
 
-  dropLocation() {
+  get dropLocation() {
     return this._dropLocation;
   }
 
