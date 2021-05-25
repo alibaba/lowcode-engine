@@ -27,7 +27,7 @@ export function compatibleLegaoSchema(props: any): any {
         title: (props.value.props as any)?.slotTitle,
         name: (props.value.props as any)?.slotName,
         value: props.value.children,
-        params: (props.value.props as any)?.__params__,
+        params: (props.value.props as any)?.slotParams,
       };
     } else {
       return props.value;

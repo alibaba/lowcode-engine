@@ -22,9 +22,9 @@ export function compatibleReducer(props: any, node: Node): any {
         props: {
           slotTitle: props.title,
           slotName: props.name,
+          slotParams: props.params,
         },
       },
-      __params__: props.params,
     };
   }
   if (isJSExpression(props) && !props.events) {
