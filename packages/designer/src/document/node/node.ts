@@ -12,6 +12,7 @@ import {
   ComponentSchema,
   NodeStatus,
 } from '@ali/lowcode-types';
+import { compatStage } from '@ali/lowcode-utils';
 import { Props, getConvertedExtraKey } from './props/props';
 import { DocumentModel } from '../document-model';
 import { NodeChildren } from './node-children';
@@ -635,6 +636,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * 导出 schema
    */
   export(stage: TransformStage = TransformStage.Save, options: any = {}): Schema {
+    stage = compatStage(stage);
     const baseSchema: any = {
       componentName: this.componentName,
     };

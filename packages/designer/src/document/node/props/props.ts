@@ -1,6 +1,6 @@
 import { computed, obx } from '@ali/lowcode-editor-core';
 import { PropsMap, PropsList, CompositeValue } from '@ali/lowcode-types';
-import { uniqueId } from '@ali/lowcode-utils';
+import { uniqueId, compatStage } from '@ali/lowcode-utils';
 import { PropStash } from './prop-stash';
 import { Prop, IPropParent, UNSET } from './prop';
 import { Node } from '../node';
@@ -97,6 +97,7 @@ export class Props implements IPropParent {
   }
 
   export(stage: TransformStage = TransformStage.Save): { props?: PropsMap | PropsList; extras?: object } {
+    stage = compatStage(stage);
     if (this.items.length < 1) {
       return {};
     }

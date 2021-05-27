@@ -9,7 +9,7 @@ import { Node, insertChildren, insertChild, isNode, RootNode, ParentalNode } fro
 import { Selection } from './selection';
 import { History } from './history';
 import { TransformStage, ModalNodesManager } from './node';
-import { uniqueId, isPlainObject } from '@ali/lowcode-utils';
+import { uniqueId, isPlainObject, compatStage } from '@ali/lowcode-utils';
 
 export type GetDataType<T, NodeType> = T extends undefined
   ? NodeType extends {
@@ -366,6 +366,7 @@ export class DocumentModel {
   }
 
   export(stage: TransformStage = TransformStage.Serilize) {
+    stage = compatStage(stage);
     // 置顶只作用于 Page 的第一级子节点，目前还用不到里层的置顶；如果后面有需要可以考虑将这段写到 node-children 中的 export
     const currentSchema = this.rootNode?.export(stage);
     if (Array.isArray(currentSchema?.children) && currentSchema?.children.length > 0) {

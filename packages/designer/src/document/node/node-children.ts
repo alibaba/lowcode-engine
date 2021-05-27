@@ -2,7 +2,7 @@ import { obx, computed, globalContext } from '@ali/lowcode-editor-core';
 import { Node, ParentalNode } from './node';
 import { TransformStage } from './transform-stage';
 import { NodeData, isNodeSchema } from '@ali/lowcode-types';
-import { shallowEqual } from '@ali/lowcode-utils';
+import { shallowEqual, compatStage } from '@ali/lowcode-utils';
 import { EventEmitter } from 'events';
 import { foreachReverse } from '../../utils/tree';
 import { NodeRemoveOptions } from '../../types';
@@ -26,6 +26,7 @@ export class NodeChildren {
    * 导出 schema
    */
   export(stage: TransformStage = TransformStage.Save): NodeData[] {
+    stage = compatStage(stage);
     return this.children.map(node => {
       const data = node.export(stage);
       if (node.isLeaf() && TransformStage.Save === stage) {

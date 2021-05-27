@@ -112,7 +112,7 @@ export class DocumentInstance {
   constructor(readonly container: SimulatorRendererContainer, readonly document: DocumentModel) {
     this.dispose = host.autorun(() => {
       // sync schema
-      this._schema = document.export(1);
+      this._schema = document.export(TransformStage.Render);
       this.emitter.emit('rerender');
     });
   }
