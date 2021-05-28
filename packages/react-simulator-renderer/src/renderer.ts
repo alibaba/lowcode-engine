@@ -18,8 +18,7 @@ import {
   getProjectUtils,
   applyActivities,
 } from '@ali/lowcode-utils';
-
-import { RootSchema, ComponentSchema, TransformStage, NodeSchema, ActivityData } from '@ali/lowcode-types';
+import { RootSchema, ComponentSchema, TransformStage, NodeSchema, ActivityType, ActivityData } from '@ali/lowcode-types';
 // just use types
 import { BuiltinSimulatorRenderer, NodeInstance, Component, DocumentModel } from '@ali/lowcode-designer';
 import LowCodeRenderer from '@ali/lowcode-react-renderer';
@@ -27,9 +26,11 @@ import { createMemoryHistory, MemoryHistory } from 'history';
 import Slot from './builtin-components/slot';
 import Leaf from './builtin-components/leaf';
 import { withQueryParams, parseQuery } from './utils/url';
+import { supportsQuickPropSetting, getUppermostPropKey, setInstancesProp } from './utils/misc';
 const loader = new AssetLoader();
+const FULL_RENDER_THRESHOLD = 1000;
 export class DocumentInstance {
-  private instancesMap = new Map<string, ReactInstance[]>();
+  public instancesMap = new Map<string, ReactInstance[]>();
 
   @obx.ref private _schema?: RootSchema;
   @computed get schema(): any {
@@ -39,12 +40,33 @@ export class DocumentInstance {
   private disposeFunctions: Array<() => void> = [];
 
   constructor(readonly container: SimulatorRendererContainer, readonly document: DocumentModel) {
-    this.disposeFunctions.push(host.autorun(() => {
+    const documentExportDisposer = host.autorun(() => {
       this._schema = document.export(TransformStage.Render);
-    }));
-    this.disposeFunctions.push(host.onActivityEvent((data: ActivityData) => {
-      if (host.mutedActivityEvent) return;
-      this._schema = applyActivities(this._schema!, data);
+    });
+    this.disposeFunctions.push(documentExportDisposer);
+    let tid: NodeJS.Timeout;
+    this.disposeFunctions.push(host.onActivityEvent((data: ActivityData, ctx: any) => {
+      if (host.mutedActivityEvent || (ctx && ctx.doc !== this.document)) return;
+
+      if (tid) clearTimeout(tid);
+      // 临时关闭全量计算 schema 的逻辑，在增量计算结束后，来一次全量计算
+      documentExportDisposer.$obx.sleep();
+      if (data.type === ActivityType.MODIFIED) {
+        // 对于修改场景，优先判断是否能走「快捷设置」逻辑
+        if (supportsQuickPropSetting(data, this)) {
+          setInstancesProp(data, this);
+        } else {
+          this._schema = applyActivities(this._schema!, data);
+        }
+      } else if (data.type === ActivityType.ADDED) {
+        // FIXME: 待补充 节点增加 逻辑
+      } else if (data.type === ActivityType.DELETED) {
+        // FIXME: 待补充 节点删除 逻辑
+      } else if (data.type === ActivityType.COMPOSITE) {
+        // FIXME: 待补充逻辑
+      }
+
+      tid = setTimeout(() => documentExportDisposer.$obx.wakeup(true), FULL_RENDER_THRESHOLD);
       // TODO: 调试增量模式，打开以下代码
       // this._deltaData = data;
       // this._deltaMode = true;

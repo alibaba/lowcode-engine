@@ -398,11 +398,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.setupContextMenu();
   }
 
-  postEvent(eventName: string, data: any) {
-    this.emitter.emit(eventName, data);
+  postEvent(eventName: string, ...data: any[]) {
+    this.emitter.emit(eventName, ...data);
   }
 
-  onActivityEvent(cb: (activity: ActivityData) => void) {
+  onActivityEvent(cb: (activity: ActivityData, ctx?: any) => void) {
     this.emitter.on('activity', cb);
     return () => {
       this.emitter.off('activity', cb);
@@ -439,7 +439,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           newValue,
           prop,
         },
-      });
+      }, { doc: this.currentDocument });
     });
     // editor.on('node.add', ({ node }) => {
     //   console.log('add node', node);

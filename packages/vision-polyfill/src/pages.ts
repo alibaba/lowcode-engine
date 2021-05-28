@@ -63,6 +63,7 @@ const pages = Object.assign(project, {
         item.methods = {};
       }
     });
+
     project.load(
       {
         version: '1.0.0',
@@ -73,7 +74,6 @@ const pages = Object.assign(project, {
       },
       true,
     );
-
     // FIXME: 根本原因是 PropStash 导致的，在页面节点初始化结束后，hideModalNodes 导致了第一次变化
     // 这样可以避免页面加载之后就被标记为 isModified
     setTimeout(() => {
