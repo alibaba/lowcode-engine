@@ -246,6 +246,7 @@ export class Designer {
       this._dropLocation.document.internalSetDropLocation(null);
     }
     this._dropLocation = loc;
+    this.postEvent('dropLocation.change', loc);
     loc.document.internalSetDropLocation(loc);
     this.activeTracker.track({ node: loc.target, detail: loc.detail });
     return loc;
@@ -258,6 +259,7 @@ export class Designer {
     if (this._dropLocation) {
       this._dropLocation.document.internalSetDropLocation(null);
     }
+    this.postEvent('dropLocation.change', undefined);
     this._dropLocation = undefined;
   }
 

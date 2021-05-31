@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { observer } from '@ali/lowcode-editor-core';
+import { observer, engineConfig } from '@ali/lowcode-editor-core';
 import { BorderDetecting } from './border-detecting';
+import { BorderContainer } from './border-container';
 import { BuiltinSimulatorHost } from '../host';
 import { BorderSelecting } from './border-selecting';
 import BorderResizing from './border-resizing';
@@ -25,6 +26,7 @@ export class BemTools extends Component<{ host: BuiltinSimulatorHost }> {
       <div className="lc-bem-tools" style={{ transform: `translate(${-scrollX * scale}px,${-scrollY * scale}px)` }}>
         <BorderDetecting key="hovering" host={host} />
         <BorderSelecting key="selecting" host={host} />
+        { engineConfig.get('enableReactiveContainer') && <BorderContainer key="reactive-container-border" host={host} /> }
         <InsertionView key="insertion" host={host} />
         <BorderResizing key="resizing" host={host} />
         {

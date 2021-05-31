@@ -187,6 +187,10 @@ interface EngineOptions {
   deviceMapper?: {
     transform: (originalDevice: string) => string;
   };
+  /**
+   * 开启拖拽组件时，即将被放入的容器是否有视觉反馈
+   */
+  enableReactiveContainer?: boolean;
   [key: string]: any;
 }
 
