@@ -3,7 +3,7 @@ import { isVariable } from './misc';
 import { isPlainObject } from './is-plain-object';
 
 /**
- * 将 JSExpression / JSSlot 等标准协议的结构，降级成乐高版本
+ * 将「乐高版本」协议升级成 JSExpression / JSSlot 等标准协议的结构
  * @param props
  * @returns
  */
