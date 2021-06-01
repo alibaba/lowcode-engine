@@ -1,6 +1,16 @@
 import { ComponentType, ReactElement, isValidElement, ComponentClass } from 'react';
-import { isPlainObject, uniqueId } from '@ali/lowcode-utils';
-import { isI18nData, SettingTarget, InitialItem, FilterItem, isJSSlot, ProjectSchema, AutorunItem, isJSBlock } from '@ali/lowcode-types';
+import { isPlainObject, uniqueId, isVariable } from '@ali/lowcode-utils';
+import {
+  isI18nData,
+  SettingTarget,
+  InitialItem,
+  FilterItem,
+  isJSSlot,
+  ProjectSchema,
+  AutorunItem,
+  isJSBlock,
+  isJSExpression,
+} from '@ali/lowcode-types';
 import { editorCabin, designerCabin } from '@ali/lowcode-engine';
 
 const { SettingField } = designerCabin;
@@ -100,11 +110,8 @@ export interface OldPropConfig {
 }
 
 type ResizeHandler = (dragment: any, triggerDirection: string) => boolean;
-type ResizeCompositeHandler = { handle: ResizeHandler, availableDirects: string[] | undefined };
-type CanResize =
-  | boolean
-  | ResizeHandler
-  | ResizeCompositeHandler;
+type ResizeCompositeHandler = { handle: ResizeHandler; availableDirects: string[] | undefined };
+type CanResize = boolean | ResizeHandler | ResizeCompositeHandler;
 
 function isResizeCompositeHandler(resize: CanResize): resize is ResizeCompositeHandler {
   if ((resize as any).handle) {
@@ -185,7 +192,13 @@ export interface OldPrototypeConfig {
   // => ?
   canResizing?: CanResize;
   onResizeStart?: (e: MouseEvent, triggerDirection: string, dragment: Node) => void;
-  onResize?: (e: MouseEvent, triggerDirection: string, dragment: Node, moveX: number, moveY: number) => void;
+  onResize?: (
+    e: MouseEvent,
+    triggerDirection: string,
+    dragment: Node,
+    moveX: number,
+    moveY: number,
+  ) => void;
   onResizeEnd?: (e: MouseEvent, triggerDirection: string, dragment: Node) => void;
   devMode?: string;
   schema?: ProjectSchema;
@@ -201,6 +214,44 @@ export interface ISetterConfig {
 type SetterGetter = (this: Field, value: any) => ComponentClass;
 
 type ReturnBooleanFunction = (this: Field, value: any) => boolean;
+
+/**
+ * 获取剥去 variable / JSExpression 结构后的值
+ * @param propValue
+ * @returns
+ */
+function getRawValue(propValue: any) {
+  if (isVariable(propValue)) {
+    return propValue.value;
+  }
+  if (isJSExpression(propValue)) {
+    return propValue.mock;
+  }
+  return propValue;
+}
+
+/**
+ * 根据原始值的数据结构（JSExpression / variable / 普通）转换 value，保持相同结构
+ * @param originalValue
+ * @param value
+ * @returns
+ */
+function formatPropValue(originalValue: any, value: any) {
+  if (isJSExpression(originalValue)) {
+    return {
+      type: originalValue.type,
+      value: originalValue.value,
+      mock: value,
+    };
+  } else if (isVariable(originalValue)) {
+    return {
+      type: originalValue.type,
+      variable: originalValue.variable,
+      value,
+    };
+  }
+  return value;
+}
 
 export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollector) {
   const {
@@ -366,13 +417,14 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
           initialFn = defaultInitial;
         }
 
-        const v = initialFn.call(field, currentValue, defaults);
+        const rawValue = getRawValue(currentValue);
+        const v = initialFn.call(field, rawValue, defaults);
 
         if (setterInitial) {
-          return setterInitial.call(field, v, defaults);
+          return formatPropValue(currentValue, setterInitial.call(field, v, defaults));
         }
 
-        return v;
+        return formatPropValue(currentValue, v);
       },
     });
   }
@@ -438,8 +490,7 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
   if (type === 'composite') {
     const initials: InitialItem[] = [];
     const objItems = items
-      ? upgradeConfigure(items,
-        {
+      ? upgradeConfigure(items, {
           addInitial: (item) => {
             initials.push(item);
           },
@@ -492,8 +543,8 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
           componentName: setter,
           condition: condition
             ? (field: Field) => {
-              return condition.call(field, field.getValue());
-            }
+                return condition.call(field, field.getValue());
+              }
             : null,
         };
       });
@@ -540,16 +591,18 @@ type ConfigCollector = {
 };
 
 function getInitialFromSetter(setter: any) {
-  return setter && (
-    setter.initial || setter.Initial
-      || (setter.type && (setter.type.initial || setter.type.Initial))
-    ) || null; // eslint-disable-line
+  return (
+    (setter &&
+      (setter.initial ||
+        setter.Initial ||
+        (setter.type && (setter.type.initial || setter.type.Initial)))) ||
+    null
+  ); // eslint-disable-line
 }
 
 function defaultInitial(value: any, defaultValue: any) {
   return value == null ? defaultValue : value;
 }
-
 
 export function upgradeConfigure(items: OldPropConfig[], collector: ConfigCollector) {
   const configure: any[] = [];
@@ -569,7 +622,9 @@ export function upgradeConfigure(items: OldPropConfig[], collector: ConfigCollec
   return configure;
 }
 
-export function upgradeActions(actions?: Array<ComponentType<any> | ReactElement> | (() => ReactElement)) {
+export function upgradeActions(
+  actions?: Array<ComponentType<any> | ReactElement> | (() => ReactElement),
+) {
   if (!actions) {
     return null;
   }
@@ -744,8 +799,8 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     experimental.initialChildren =
       typeof initialChildren === 'function'
         ? (node: any) => {
-          return initialChildren.call(node, node.settingEntry);
-        }
+            return initialChildren.call(node, node.settingEntry);
+          }
         : initialChildren;
   }
   if (view) {
@@ -827,18 +882,17 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
   const initials: InitialItem[] = [];
   const filters: FilterItem[] = [];
   const autoruns: AutorunItem[] = [];
-  const props = upgradeConfigure(configure || [],
-    {
-      addInitial: (item) => {
-        initials.push(item);
-      },
-      addFilter: (item) => {
-        filters.push(item);
-      },
-      addAutorun: (item) => {
-        autoruns.push(item);
-      },
-    });
+  const props = upgradeConfigure(configure || [], {
+    addInitial: (item) => {
+      initials.push(item);
+    },
+    addFilter: (item) => {
+      filters.push(item);
+    },
+    addAutorun: (item) => {
+      autoruns.push(item);
+    },
+  });
   experimental.initials = initials;
   experimental.filters = filters;
   experimental.autoruns = autoruns;

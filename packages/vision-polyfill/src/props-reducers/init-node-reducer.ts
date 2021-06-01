@@ -24,36 +24,10 @@ export function initNodeReducer(props, node) {
   const initials = node.componentMeta.getMetadata().experimental?.initials;
 
   if (initials) {
-    const getRealValue = (propValue: any) => {
-      if (isVariable(propValue)) {
-        return propValue.value;
-      }
-      if (isJSExpression(propValue)) {
-        return propValue.mock;
-      }
-      return propValue;
-    };
     initials.forEach(item => {
-      // FIXME! this implements SettingTarget
       try {
         // FIXME! item.name could be 'xxx.xxx'
-        const ov = newProps[item.name];
-        const v = item.initial(node as any, getRealValue(ov));
-        if (ov === undefined && v !== undefined) {
-          newProps[item.name] = v;
-        }
-        // 兼容 props 中的属性为 i18n 类型，但是仅提供了一个字符串值，非变量绑定
-        if (
-          isUseI18NSetter(node.componentMeta.prototype, item.name) &&
-          !isI18NObject(ov) &&
-          !isJSExpression(ov) &&
-          !isJSBlock(ov) &&
-          !isJSSlot(ov) &&
-          !isVariable(ov) &&
-          (isString(v) || isI18NObject(v))
-        ) {
-          newProps[item.name] = convertToI18NObject(v);
-        }
+        newProps[item.name] = item.initial(node as any, newProps[item.name]);
       } catch (e) {
         if (hasOwnProperty(props, item.name)) {
           newProps[item.name] = props[item.name];
