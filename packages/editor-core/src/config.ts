@@ -1,3 +1,5 @@
+import lodashGet from 'lodash.get';
+
 export class EngineConfig {
   private config: { [key: string]: any } = {};
 
@@ -17,8 +19,8 @@ export class EngineConfig {
     return this.config[key] !== undefined;
   }
 
-  get(key: string): any {
-    return this.config[key];
+  get(key: string, defaultValue?: any): any {
+    return lodashGet(this.config, key, defaultValue);
   }
 
   set(key: string, value: any) {
