@@ -3,8 +3,13 @@ import {
 } from '@ali/lowcode-utils';
 import { isJSExpression, isJSSlot } from '@ali/lowcode-types';
 import { Node } from '@ali/lowcode-designer';
+import { engineConfig } from '@ali/lowcode-editor-core';
 
 export function compatibleReducer(props: any, node: Node): any {
+  // 如果禁用了降级reducer，则不做处理
+  if (engineConfig.get('visionSettings.disableCompatibleReducer')) {
+    return props;
+  }
   // 如果不是 vc 体系，不做这个兼容处理
   if (!node.componentMeta.prototype) {
     return props;
@@ -27,7 +32,7 @@ export function compatibleReducer(props: any, node: Node): any {
       },
     };
   }
-  if (isJSExpression(props) && !props.events) {
+  if (!props.events && isJSExpression(props)) {
     return {
       type: 'variable',
       value: props.mock,

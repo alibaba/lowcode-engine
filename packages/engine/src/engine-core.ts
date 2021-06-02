@@ -195,6 +195,13 @@ interface EngineOptions {
    * 关闭画布自动渲染，在资产包多重异步加载的场景有效
    */
   disableAutoRender?: boolean;
+  /**
+   * Vision-polyfill settings
+   */
+  visionSettings?: {
+    // 是否禁用降级Reducer
+    disableCompatibleReducer?: boolean;
+  }
   [key: string]: any;
 }
 
