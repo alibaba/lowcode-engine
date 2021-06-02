@@ -191,6 +191,10 @@ interface EngineOptions {
    * 开启拖拽组件时，即将被放入的容器是否有视觉反馈
    */
   enableReactiveContainer?: boolean;
+  /**
+   * 关闭画布自动渲染，在资产包多重异步加载的场景有效
+   */
+  disableAutoRender?: boolean;
   [key: string]: any;
 }
 

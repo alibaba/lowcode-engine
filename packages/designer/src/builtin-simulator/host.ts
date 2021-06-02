@@ -1,4 +1,4 @@
-import { obx, autorun, computed, getPublicPath, hotkey, focusTracker } from '@ali/lowcode-editor-core';
+import { obx, autorun, computed, getPublicPath, hotkey, focusTracker, engineConfig } from '@ali/lowcode-editor-core';
 import { EventEmitter } from 'events';
 import { ISimulatorHost, Component, NodeInstance, ComponentInstance, DropContainer } from '../simulator';
 import Viewport from './viewport';
@@ -138,10 +138,16 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   readonly emitter: EventEmitter = new EventEmitter();
 
+  /**
+   * 是否为画布自动渲染
+   */
+  autoRender = true;
+
   constructor(project: Project) {
     this.project = project;
     this.designer = project?.designer;
     this.scroller = this.designer.createScroller(this.viewport);
+    this.autoRender = engineConfig.get('disableAutoRender') !== true;
   }
 
   get currentDocument() {

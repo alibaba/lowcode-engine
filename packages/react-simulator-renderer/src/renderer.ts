@@ -243,6 +243,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   }
 
   constructor() {
+    this.autoRender = host.autoRender;
+
     this.disposeFunctions.push(host.connect(this, () => {
       // sync layout config
       this._layout = host.project.get('config').layout;
@@ -386,6 +388,11 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   @computed get componentsMap(): any {
     return this._componentsMap;
   }
+
+  /**
+   * 是否为画布自动渲染
+   */
+  autoRender = true;
   /**
    * 加载资源
    */
@@ -523,6 +530,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
    * 刷新渲染器
    */
   rerender() {
+    this.autoRender = true;
     // TODO: 不太优雅
     this._appContext = { ...this._appContext };
   }

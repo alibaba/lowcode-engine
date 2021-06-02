@@ -141,6 +141,7 @@ class Renderer extends Component<{
     const { designMode, device, locale } = container;
     const messages = container.context?.utils?.i18n?.messages || {};
 
+    if (!container.autoRender) return null;
     return (
       // @ts-ignore
       <LowCodeRenderer
