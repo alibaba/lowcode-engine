@@ -36,7 +36,7 @@ export function getProjectUtils(librayMap: LibrayMap, utilsMetadata: UtilsMetada
  */
 export function getUppermostPropKey(prop: any): string {
   let curProp = prop;
-  while (curProp.parent.constructor.name !== 'Props' && curProp.parent.constructor.name !== 'PropStash') {
+  while (curProp.parent.isProp) {
     curProp = curProp.parent;
   }
   return curProp.key;
@@ -84,7 +84,7 @@ export function setInstancesProp(data: ActivityData, doc: DocumentInstance) {
   let value = (schema.props as any)[propKey];
   // 当 prop 是在 PropStash 中产生时，该 prop 需要在下一个 obx 的时钟周期才能挂载到相应位置，
   // 而 schema 是同步 export 得到的，此时 schema 中还没有对应的值，所以直接取 newValue
-  if (prop.parent.constructor.name === 'PropStash') {
+  if (prop.parent.isPropStash) {
     value = newValue;
   }
 

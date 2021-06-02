@@ -5,6 +5,8 @@ import { Node } from '../node';
 
 export type PendingItem = Prop[];
 export class PropStash implements IPropParent {
+  readonly isPropStash = true;
+
   @obx.val private space: Set<Prop> = new Set();
 
   @computed private get maps(): Map<string | number, Prop> {
