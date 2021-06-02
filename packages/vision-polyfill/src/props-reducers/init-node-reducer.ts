@@ -27,7 +27,11 @@ export function initNodeReducer(props, node) {
     initials.forEach(item => {
       try {
         // FIXME! item.name could be 'xxx.xxx'
-        newProps[item.name] = item.initial(node as any, newProps[item.name]);
+        const value = props[item.name];
+        // JSExpression 并且带有 events 字段属于特殊情况，不再处理
+        if (!(isJSExpression(value) && value.events)) {
+          newProps[item.name] = item.initial(node as any, newProps[item.name]);
+        }
       } catch (e) {
         if (hasOwnProperty(props, item.name)) {
           newProps[item.name] = props[item.name];
