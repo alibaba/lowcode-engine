@@ -28,7 +28,7 @@ import Leaf from './builtin-components/leaf';
 import { withQueryParams, parseQuery } from './utils/url';
 import { supportsQuickPropSetting, getUppermostPropKey, setInstancesProp } from './utils/misc';
 const loader = new AssetLoader();
-const FULL_RENDER_THRESHOLD = 1000;
+const FULL_RENDER_THRESHOLD = 500;
 export class DocumentInstance {
   public instancesMap = new Map<string, ReactInstance[]>();
 
