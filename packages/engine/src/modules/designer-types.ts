@@ -7,6 +7,7 @@ export {
   IDesignerCabin,
   BuiltinSimulatorHost,
   TransformStage,
+  PropsReducerContext,
 } from '@ali/lowcode-designer';
 
 // 这样做的目的是为了去除 Node / DocumentModel 等的值属性，仅保留类型属性

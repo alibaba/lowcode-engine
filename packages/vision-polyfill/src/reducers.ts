@@ -38,6 +38,7 @@ designer.addPropsReducer(initNodeReducer, TransformStage.Init);
 designer.addPropsReducer(liveLifecycleReducer, TransformStage.Render);
 
 designer.addPropsReducer(filterReducer, TransformStage.Save);
+designer.addPropsReducer(filterReducer, TransformStage.Render);
 
 // FIXME: Dirty fix, will remove this reducer
 designer.addPropsReducer(compatibleReducer, TransformStage.Save);

@@ -530,7 +530,7 @@ export class Designer {
 
     return reducers.reduce((xprops, reducer) => {
       try {
-        return reducer(xprops, node);
+        return reducer(xprops, node, { stage });
       } catch (e) {
         // todo: add log
         console.warn(e);
@@ -557,4 +557,5 @@ export class Designer {
   }
 }
 
-export type PropsReducer = (props: CompositeObject, node: Node) => CompositeObject;
+export type PropsReducerContext = { stage: TransformStage };
+export type PropsReducer = (props: CompositeObject, node: Node, ctx?: PropsReducerContext) => CompositeObject;

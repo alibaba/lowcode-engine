@@ -166,19 +166,19 @@ interface EngineOptions {
    */
   enableCondition?: boolean;
   /**
-   * 设计模式，live 模式将会实时展示变量值
+   * 设计模式，live 模式将会实时展示变量值，默认值：'design'
    */
   designMode?: 'design' | 'live';
   /**
-   * 设备类型
+   * 设备类型，默认值：'default'
    */
   device?: 'default' | 'mobile' | string;
   /**
-   * 语言
+   * 语言，默认值：'zh_CN'
    */
   locale?: string;
   /**
-   * 渲染器类型
+   * 渲染器类型，默认值：'react'
    */
   renderEnv?: 'react' | 'rax' | string;
   /**
@@ -188,23 +188,24 @@ interface EngineOptions {
     transform: (originalDevice: string) => string;
   };
   /**
-   * 开启拖拽组件时，即将被放入的容器是否有视觉反馈
+   * 开启拖拽组件时，即将被放入的容器是否有视觉反馈，默认值：false
    */
   enableReactiveContainer?: boolean;
   /**
-   * 关闭画布自动渲染，在资产包多重异步加载的场景有效
+   * 关闭画布自动渲染，在资产包多重异步加载的场景有效，默认值：false
    */
   disableAutoRender?: boolean;
   /**
    * Vision-polyfill settings
    */
   visionSettings?: {
-    // 是否禁用降级Reducer
+    // 是否禁用降级 reducer，默认值：false
     disableCompatibleReducer?: boolean;
+    // 是否开启在 render 阶段开启 filter reducer，默认值：false
+    enableFilterReducerInRenderStage?: boolean;
   }
   [key: string]: any;
 }
-
 export async function init(container?: Element, options?: EngineOptions) {
   let engineOptions = null;
   let engineContainer = null;

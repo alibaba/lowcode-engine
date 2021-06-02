@@ -147,7 +147,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.project = project;
     this.designer = project?.designer;
     this.scroller = this.designer.createScroller(this.viewport);
-    this.autoRender = engineConfig.get('disableAutoRender') !== true;
+    this.autoRender = !engineConfig.get('disableAutoRender', false);
   }
 
   get currentDocument() {

@@ -1,8 +1,13 @@
 import logger from '@ali/vu-logger';
+import { Node, PropsReducerContext, designerCabin, engineConfig } from '@ali/lowcode-engine';
 import { hasOwnProperty } from '@ali/lowcode-utils';
-import { Node } from '@ali/lowcode-designer';
+const { TransformStage } = designerCabin;
 
-export function filterReducer(props: any, node: Node): any {
+export function filterReducer(props: any, node: Node, ctx: PropsReducerContext): any {
+  // 老的 vision 逻辑是 render 阶段不走 filter 逻辑
+  if (ctx.stage === TransformStage.Render && !engineConfig.get('visionSettings.enableFilterReducerInRenderStage', false)) {
+    return props;
+  }
   const filters = node.componentMeta.getMetadata().experimental?.filters;
   if (filters && filters.length) {
     const newProps = { ...props };
