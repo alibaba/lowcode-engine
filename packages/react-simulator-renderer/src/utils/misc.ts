@@ -1,5 +1,5 @@
 import { ReactInstance } from 'react';
-import { ActivityData } from '@ali/lowcode-types';
+import { ActivityData, isJSSlot } from '@ali/lowcode-types';
 import { DocumentInstance } from '../renderer';
 
 interface UtilsMetadata {
@@ -58,15 +58,18 @@ export function supportsQuickPropSetting(data: ActivityData, doc: DocumentInstan
   const nodeId = schema.id!;
   // const key = data.payload.prop.key;
   const instances = doc.instancesMap.get(nodeId);
-  const uppermostPropKey = getUppermostPropKey(prop);
+  const propKey = getUppermostPropKey(prop);
+  let value = (schema.props as any)[propKey];
 
   return (
     nodeId &&
     Array.isArray(instances) &&
     instances.length > 0 &&
     haveForceUpdate(instances) &&
-    uppermostPropKey &&
-    !uppermostPropKey.startsWith('___')
+    propKey &&
+    // 不是 extraProp
+    !propKey.startsWith('___') &&
+    !isJSSlot(value)
   );
 }
 
