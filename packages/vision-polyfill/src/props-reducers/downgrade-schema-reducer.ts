@@ -3,7 +3,7 @@ import {
 } from '@ali/lowcode-utils';
 import { isJSExpression, isJSSlot } from '@ali/lowcode-types';
 import { Node } from '@ali/lowcode-designer';
-import { engineConfig } from '@ali/lowcode-editor-core';
+import { engineConfig } from '@ali/lowcode-engine';
 
 export function compatibleReducer(props: any, node: Node): any {
   // 如果禁用了降级reducer，则不做处理
