@@ -1,6 +1,5 @@
 {
   "entry": {
-    "engine": "src/index",
     "engine-core": "src/index-core"
   },
   "library": "___AliLowCodeEngine___",

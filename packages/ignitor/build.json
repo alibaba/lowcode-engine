@@ -1,6 +1,5 @@
 {
   "entry": {
-    "engine": "../engine/src/index.ts",
     "engine-core": "../engine/src/index-core.ts",
     "vision-polyfill": "../vision-polyfill/src/index.ts",
     "react-simulator-renderer": "../react-simulator-renderer/src/index.ts",

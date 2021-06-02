@@ -2,8 +2,8 @@
   "name": "@ali/lowcode-engine",
   "version": "1.0.49",
   "description": "Universal API for AliLowCode engine",
-  "main": "lib/engine.js",
-  "module": "es/engine.js",
+  "main": "lib/engine-core.js",
+  "module": "es/engine-core.js",
   "files": [
     "dist",
     "es",
