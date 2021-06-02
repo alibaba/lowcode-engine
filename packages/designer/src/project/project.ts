@@ -267,10 +267,18 @@ export class Project {
     // TODO: 多设备 simulator 支持
     this._simulator = simulator;
     this.designer.editor.set('simulator', simulator);
+    this.emitter.emit('lowcode_engine_simulator_ready', simulator);
   }
 
   setRendererReady(renderer: any) {
     this.emitter.emit('lowcode_engine_renderer_ready', renderer);
+  }
+
+  onSimulatorReady(fn: (args: any) => void): () => void {
+    this.emitter.on('lowcode_engine_simulator_ready', fn);
+    return () => {
+      this.emitter.removeListener('lowcode_engine_simulator_ready', fn);
+    };
   }
 
   onRendererReady(fn: (args: any) => void): () => void {
