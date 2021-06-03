@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.51](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.49...v1.0.51) (2021-06-03)
+
+
+### Bug Fixes
+
+* 在压缩态没有类名, 换个方式实现 ([f874823](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f874823502acc50cee050bb150dec11906644fad))
+* 跳过 JSSlot 类型的快捷设值 ([ab45c0f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ab45c0f2558e4d548b485567430c29f42b236f7e))
+
+
+### Features
+
+* 支持 disableAutoRender 配置项 ([719928a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/719928a02c8d4fb295a5412a94447c59e52b7b7d))
+
+
+
+
+
 ## [1.0.49](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.48...v1.0.49) (2021-05-20)
 
 **Note:** Version bump only for package @ali/lowcode-react-simulator-renderer

@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.51](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.49...v1.0.51) (2021-06-03)
+
+
+### Bug Fixes
+
+* build-plugin-component 要求必须有 index 文件 ([f54f5b5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f54f5b5775fa816a00376fb7d2285dadeaa70ab5))
+* fieldId 重置需要限定在同一个 doc, 解决多 doc 时 fieldId 重复导致重置的问题 ([7d2bb4f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7d2bb4fa791a2bb1f83a4f9b2951a7947efe001e))
+* 修复 initial / initialValue 在复制组件时不会被重新调用的 bug ([68ddca9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/68ddca93f5ead30110a4f6a98dfe724c9fe7d983))
+* 修改 params 临时存储位置 ([87a1c74](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/87a1c7442013e1d67c1152e71cf7aded33814e38))
+* 兼容没有 prototype 的情况 ([e442436](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e4424364403aa53e5eef4c2ede284285de93cc6a))
+* 参照 vision 的实现, ignore 只影响 save 阶段, 不影响画布渲染 ([9411c9d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9411c9d9a02e919babf3c50c5cbf3d0bbb4fea64))
+* 在压缩态没有类名, 换个方式实现 ([f874823](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f874823502acc50cee050bb150dec11906644fad))
+* 改成从 @ali/lowcode-engine 引入 ([866b957](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/866b957f37c792192d792cd7a295d91139a37e94))
+* 跳过 JSExpression 并带有 events 的初始化流程 ([37809e7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/37809e71e8309c8c686f14bcc050013c5c705c09))
+* 跳过 JSSlot 类型的快捷设值 ([ab45c0f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/ab45c0f2558e4d548b485567430c29f42b236f7e))
+* 还是将 dropLocation 设为非响应式变量, 基于性能考量 ([2acc70a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2acc70a4226ce81ae5f7321e6c1c0e768103694d))
+
+
+### Features
+
+* project 支持 onSimulatorReady 的事件 ([79d0c33](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/79d0c33109535c6241ff94500e971f76e3ad8f0e))
+* 导出 utils 命名空间 ([e3738cc](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e3738ccecad2296309b4c06ab4db767214918f41))
+* 支持 disableAutoRender 配置项 ([719928a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/719928a02c8d4fb295a5412a94447c59e52b7b7d))
+* 支持 visionSettings.enableFilterReducerInRenderStage 配置项 ([277a185](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/277a18564a71abd4d7fc55b16cb9cc84a41eed35))
+* 支持自定义 bem-tools ([1e00783](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1e00783af81db6c84e893a8d6c95e1082e1c041c))
+* 支持节点拖拽时被放入容器的视觉反馈, 通过 enableReactiveContainer 配置项 ([6a308ba](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6a308ba81d2ba11b05309cc65b7e7efeca1bda96))
+* 新增vision engineconfig，支持禁用某些reducer ([94d8080](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/94d8080fe9863ad97c0c0c70ff4b1e1c9c7bcdb8))
+* **editor-skeleton&editor-core:** 添加了点击setter-pane后抛出editor事件 ([2c697c9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2c697c99130990d90ab29471789c96b22cc7c5fa))
+
+
+
+
+
 ## [1.0.49](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.48...v1.0.49) (2021-05-20)
 
 **Note:** Version bump only for package ali-lowcode-engine
