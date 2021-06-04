@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.51](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.49...v1.0.51) (2021-06-03)
+
+
+### Bug Fixes
+
+* fieldId 重置需要限定在同一个 doc, 解决多 doc 时 fieldId 重复导致重置的问题 ([7d2bb4f](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/7d2bb4fa791a2bb1f83a4f9b2951a7947efe001e))
+* 修复 initial / initialValue 在复制组件时不会被重新调用的 bug ([68ddca9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/68ddca93f5ead30110a4f6a98dfe724c9fe7d983))
+* 修改 params 临时存储位置 ([87a1c74](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/87a1c7442013e1d67c1152e71cf7aded33814e38))
+* 兼容没有 prototype 的情况 ([e442436](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e4424364403aa53e5eef4c2ede284285de93cc6a))
+* 参照 vision 的实现, ignore 只影响 save 阶段, 不影响画布渲染 ([9411c9d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/9411c9d9a02e919babf3c50c5cbf3d0bbb4fea64))
+* 改成从 @ali/lowcode-engine 引入 ([866b957](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/866b957f37c792192d792cd7a295d91139a37e94))
+* 跳过 JSExpression 并带有 events 的初始化流程 ([37809e7](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/37809e71e8309c8c686f14bcc050013c5c705c09))
+
+
+### Features
+
+* 支持 visionSettings.enableFilterReducerInRenderStage 配置项 ([277a185](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/277a18564a71abd4d7fc55b16cb9cc84a41eed35))
+* 新增vision engineconfig，支持禁用某些reducer ([94d8080](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/94d8080fe9863ad97c0c0c70ff4b1e1c9c7bcdb8))
+
+
+
+
+
 ## [1.0.49](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.48...v1.0.49) (2021-05-20)
 
 **Note:** Version bump only for package @ali/lowcode-vision-polyfill

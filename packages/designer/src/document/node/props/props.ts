@@ -41,10 +41,9 @@ export class Props implements IPropParent {
     return this;
   }
 
-  private stash = new PropStash(this, prop => {
-    this.items.push(prop);
-    prop.parent = this;
-  });
+  readonly owner: Node;
+
+  private stash: PropStash;
 
   /**
    * 元素个数
@@ -55,7 +54,12 @@ export class Props implements IPropParent {
 
   @obx type: 'map' | 'list' = 'map';
 
-  constructor(readonly owner: Node, value?: PropsMap | PropsList | null, extras?: object) {
+  constructor(owner: Node, value?: PropsMap | PropsList | null, extras?: object) {
+    this.owner = owner;
+    this.stash = new PropStash(this, prop => {
+      this.items.push(prop);
+      prop.parent = this;
+    });
     if (Array.isArray(value)) {
       this.type = 'list';
       this.items = value.map(item => new Prop(this, item.value, item.name, item.spread, { skipSetSlot: true }));

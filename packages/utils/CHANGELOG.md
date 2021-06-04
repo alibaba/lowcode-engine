@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.51](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.49...v1.0.51) (2021-06-03)
+
+
+### Bug Fixes
+
+* 修改 params 临时存储位置 ([87a1c74](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/87a1c7442013e1d67c1152e71cf7aded33814e38))
+
+
+### Features
+
+* 导出 utils 命名空间 ([e3738cc](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e3738ccecad2296309b4c06ab4db767214918f41))
+
+
+
+
+
 ## [1.0.49](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.48...v1.0.49) (2021-05-20)
 
 **Note:** Version bump only for package @ali/lowcode-utils

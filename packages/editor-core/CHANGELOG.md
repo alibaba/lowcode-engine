@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.51](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.49...v1.0.51) (2021-06-03)
+
+
+### Features
+
+* 新增vision engineconfig，支持禁用某些reducer ([94d8080](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/94d8080fe9863ad97c0c0c70ff4b1e1c9c7bcdb8))
+
+
+
+
+
 ## [1.0.49](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.48...v1.0.49) (2021-05-20)
 
 **Note:** Version bump only for package @ali/lowcode-editor-core

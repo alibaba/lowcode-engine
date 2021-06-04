@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.51](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.49...v1.0.51) (2021-06-03)
+
+
+### Bug Fixes
+
+* build-plugin-component 要求必须有 index 文件 ([f54f5b5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/f54f5b5775fa816a00376fb7d2285dadeaa70ab5))
+
+
+### Features
+
+* 导出 utils 命名空间 ([e3738cc](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/e3738ccecad2296309b4c06ab4db767214918f41))
+* 支持 disableAutoRender 配置项 ([719928a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/719928a02c8d4fb295a5412a94447c59e52b7b7d))
+* 支持 visionSettings.enableFilterReducerInRenderStage 配置项 ([277a185](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/277a18564a71abd4d7fc55b16cb9cc84a41eed35))
+* 支持自定义 bem-tools ([1e00783](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1e00783af81db6c84e893a8d6c95e1082e1c041c))
+* 支持节点拖拽时被放入容器的视觉反馈, 通过 enableReactiveContainer 配置项 ([6a308ba](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/6a308ba81d2ba11b05309cc65b7e7efeca1bda96))
+* 新增vision engineconfig，支持禁用某些reducer ([94d8080](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/94d8080fe9863ad97c0c0c70ff4b1e1c9c7bcdb8))
+
+
+
+
+
 ## [1.0.49](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.48...v1.0.49) (2021-05-20)
 
 **Note:** Version bump only for package @ali/lowcode-engine

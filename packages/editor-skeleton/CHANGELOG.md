@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.51](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.49...v1.0.51) (2021-06-03)
+
+
+### Features
+
+* **editor-skeleton&editor-core:** 添加了点击setter-pane后抛出editor事件 ([2c697c9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2c697c99130990d90ab29471789c96b22cc7c5fa))
+
+
+
+
+
 ## [1.0.49](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.48...v1.0.49) (2021-05-20)
 
 **Note:** Version bump only for package @ali/lowcode-editor-skeleton
