@@ -8,6 +8,9 @@ if [ ! -d "$BUILD_DEST" ]; then
 fi
 
 tnpm i -g n
+# 使用官方源有较大概率会 block
+export N_NODE_MIRROR=https://npm.taobao.org/mirrors/node
+
 echo "Switch node version to 14"
 n 14
 echo "Node Version"
