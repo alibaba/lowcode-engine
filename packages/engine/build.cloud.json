@@ -1,6 +1,6 @@
 {
   "entry": {
-    "engine-core": "src/index-core"
+    "engine-core": "src/index"
   },
   "library": "___AliLowCodeEngine___",
   "libraryTarget": "umd",
