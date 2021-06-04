@@ -355,6 +355,8 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
   let initialFn = (slotName ? null : initial) || initialValue;
   if (slotName && initialValue === true) {
     initialFn = (value: any, defaultValue: any) => {
+      // initialValue 为 true，但 value 为 false / '' 等值，说明被关闭了
+      if (!value) return value;
       if (isJSBlock(value)) {
         return value;
       }
