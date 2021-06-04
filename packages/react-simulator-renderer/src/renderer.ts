@@ -48,6 +48,9 @@ export class DocumentInstance {
     this.disposeFunctions.push(host.onActivityEvent((data: ActivityData, ctx: any) => {
       if (host.mutedActivityEvent || (ctx && ctx.doc !== this.document)) return;
 
+      // 当节点数小数 300 个时，不走入增量更新逻辑，后面优化、细化逻辑后逐步放开限制
+      if (this.document.nodesMap.size < 300) return;
+
       if (tid) clearTimeout(tid);
       // 临时关闭全量计算 schema 的逻辑，在增量计算结束后，来一次全量计算
       documentExportDisposer.$obx.sleep();
