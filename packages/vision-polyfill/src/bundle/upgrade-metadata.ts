@@ -1,4 +1,5 @@
 import { ComponentType, ReactElement, isValidElement, ComponentClass } from 'react';
+import omit from 'lodash/omit';
 import { isPlainObject, uniqueId, isVariable } from '@ali/lowcode-utils';
 import {
   isI18nData,
@@ -242,6 +243,7 @@ function formatPropValue(originalValue: any, value: any) {
       type: originalValue.type,
       value: originalValue.value,
       mock: value,
+      ...omit(originalValue, ['type', 'value']),
     };
   } else if (isVariable(originalValue)) {
     return {
