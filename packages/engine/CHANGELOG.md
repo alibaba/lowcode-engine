@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.52](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.51...v1.0.52) (2021-06-07)
+
+
+### Bug Fixes
+
+* 修改 build.cloud.json ([c28970b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c28970b6dbc9fbc542f5785613c7d3a61adcd468))
+
+
+
+
+
 ## [1.0.51](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.49...v1.0.51) (2021-06-03)
 
 

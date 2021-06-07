@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.52](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.51...v1.0.52) (2021-06-07)
+
+
+### Bug Fixes
+
+* undefined 不能跳过 slot 的初始化 ([34cd56e](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/34cd56e2c3910f0d0a3f0354313af106db4590d6))
+* 修复格式化JSExpression时将数据传丢的问题 ([a6ebc3a](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a6ebc3aa75e998788a19472af496df67b24f0f3c))
+* 修改 build.cloud.json ([c28970b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/c28970b6dbc9fbc542f5785613c7d3a61adcd468))
+* 处理 slot 被关闭的情况 ([662c9d6](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/662c9d67bda861d369e49f6725cc12d05f3169a0))
+
+
+
+
+
 ## [1.0.51](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.49...v1.0.51) (2021-06-03)
 
 
