@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.53](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.52...v1.0.53) (2021-06-07)
+
+
+### Bug Fixes
+
+* 修复 slot 类型在 history 操作时被清空的 bug ([1de2621](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1de26215b23a64abe085d52ecae9a769a2dc56b8))
+
+
+
+
+
 ## [1.0.52](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.51...v1.0.52) (2021-06-07)
 
 
