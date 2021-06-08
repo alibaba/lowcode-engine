@@ -6,13 +6,13 @@ import { computed, obx } from '@ali/lowcode-editor-core';
 import { cloneDeep } from '@ali/lowcode-utils';
 
 function getSettingFieldCollectorKey(parent: SettingEntry, config: FieldConfig) {
-  let top = parent;
+  let cur = parent;
   const path = [config.name];
-  while (top !== parent.top) {
-    if (top instanceof SettingField && top.type !== 'group') {
-      path.unshift(top.name);
+  while (cur !== parent.top) {
+    if (cur instanceof SettingField && cur.type !== 'group') {
+      path.unshift(cur.name);
     }
-    top = top.parent;
+    cur = cur.parent;
   }
   return path.join('.');
 }

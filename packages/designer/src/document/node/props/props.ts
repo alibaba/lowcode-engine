@@ -37,6 +37,8 @@ export class Props implements IPropParent {
     return maps;
   }
 
+  readonly path = [];
+
   get props(): Props {
     return this;
   }
