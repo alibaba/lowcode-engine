@@ -27,18 +27,24 @@ export function initNodeReducer(props, node) {
     initials.forEach(item => {
       try {
         // FIXME! item.name could be 'xxx.xxx'
-        const value = props[item.name];
-        // JSExpression 并且带有 events 字段属于特殊情况，不再处理
-        if (!(isJSExpression(value) && value.events)) {
-          newProps[item.name] = item.initial(node as any, newProps[item.name]);
+        const value = newProps[item.name];
+        // 几种不再进行 initial 计算的情况
+        // 1. name === 'fieldId' 并且已经有值
+        // 2. 结构为 JSExpression 并且带有 events 字段
+        if ((item.name === 'fieldId' && value) || (isJSExpression(value) && value.events)) {
+          if (newProps[item.name] && !node.props.has(item.name)) {
+            node.props.add(value, item.name, false, { skipSetSlot: true });
+          }
+          return;
+        }
+        newProps[item.name] = item.initial(node as any, newProps[item.name]);
+        if (newProps[item.name] && !node.props.has(item.name)) {
+          node.props.add(value, item.name, false, { skipSetSlot: true });
         }
       } catch (e) {
         if (hasOwnProperty(props, item.name)) {
           newProps[item.name] = props[item.name];
         }
-      }
-      if (newProps[item.name] && !node.props.has(item.name)) {
-        node.props.add(newProps[item.name], item.name, false, { skipSetSlot: true });
       }
     });
   }
