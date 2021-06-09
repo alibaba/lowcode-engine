@@ -6,6 +6,8 @@ import { Node } from '../../document';
 import { ComponentMeta } from '../../component-meta';
 import { Designer } from '../designer';
 import { EventEmitter } from 'events';
+import { ISetValueOptions } from '../../types';
+import { isSettingField } from './setting-field';
 
 export class SettingPropEntry implements SettingEntry {
   // === static properties ===
@@ -162,7 +164,7 @@ export class SettingPropEntry implements SettingEntry {
   /**
    * 设置当前属性值
    */
-  setValue(val: any, isHotValue?: boolean, force?: boolean, extraOptions?: any) {
+  setValue(val: any, isHotValue?: boolean, force?: boolean, extraOptions?: ISetValueOptions) {
     const oldValue = this.getValue();
     if (this.type === 'field') {
       this.parent.setPropValue(this.name, val);
@@ -178,6 +180,10 @@ export class SettingPropEntry implements SettingEntry {
       }
     }
     this.notifyValueChange(oldValue, val);
+    // 如果 fromSetHotValue，那么在 setHotValue 中已经调用过 valueChange 了
+    if (!extraOptions?.fromSetHotValue) {
+      this.valueChange(extraOptions);
+    }
   }
 
   /**
@@ -272,8 +278,12 @@ export class SettingPropEntry implements SettingEntry {
   /**
    * @deprecated
    */
-  valueChange() {
-    this.emitter.emit('valuechange');
+  valueChange(options: ISetValueOptions = {}) {
+    this.emitter.emit('valuechange', options);
+
+    if (this.parent && isSettingField(this.parent)) {
+      this.parent.valueChange(options);
+    }
   }
 
   notifyValueChange(oldValue: any, newValue:any) {
@@ -288,15 +298,6 @@ export class SettingPropEntry implements SettingEntry {
     return false;
   }
 
-  /*
-  getConfig<K extends keyof IPropConfig>(configName?: K): IPropConfig[K] | IPropConfig {
-    if (configName) {
-      return this.config[configName];
-    }
-
-    return this.config;
-  }
-  */
   getVariableValue() {
     const v = this.getValue();
     if (isJSExpression(v)) {
