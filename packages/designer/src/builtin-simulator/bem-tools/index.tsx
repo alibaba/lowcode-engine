@@ -24,7 +24,7 @@ export class BemTools extends Component<{ host: BuiltinSimulatorHost }> {
     }
     return (
       <div className="lc-bem-tools" style={{ transform: `translate(${-scrollX * scale}px,${-scrollY * scale}px)` }}>
-        <BorderDetecting key="hovering" host={host} />
+        { !engineConfig.get('disableDetecting') && <BorderDetecting key="hovering" host={host} /> }
         <BorderSelecting key="selecting" host={host} />
         { engineConfig.get('enableReactiveContainer') && <BorderContainer key="reactive-container-border" host={host} /> }
         <InsertionView key="insertion" host={host} />

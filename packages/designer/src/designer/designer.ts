@@ -13,7 +13,14 @@ import {
 } from '@ali/lowcode-types';
 import { megreAssets, AssetsJson } from '@ali/lowcode-utils';
 import { Project } from '../project';
-import { Node, DocumentModel, insertChildren, isRootNode, ParentalNode, TransformStage } from '../document';
+import {
+  Node,
+  DocumentModel,
+  insertChildren,
+  isRootNode,
+  ParentalNode,
+  TransformStage,
+} from '../document';
 import { ComponentMeta } from '../component-meta';
 import { INodeSelector, Component } from '../simulator';
 import { Scroller, IScrollable } from './scroller';
@@ -125,7 +132,7 @@ export class Designer {
           } else if (isDragNodeDataObject(dragObject)) {
             // process nodeData
             const nodeData = Array.isArray(dragObject.data) ? dragObject.data : [dragObject.data];
-            const isNotNodeSchema = nodeData.find(item => !isNodeSchema(item));
+            const isNotNodeSchema = nodeData.find((item) => !isNodeSchema(item));
             if (isNotNodeSchema) {
               return;
             }
@@ -213,7 +220,11 @@ export class Designer {
     }
     const { currentSelection } = this;
     // TODO: 避免选中 Page 组件，默认选中第一个子节点；新增规则 或 判断 Live 模式
-    if (currentSelection && currentSelection.selected.length === 0 && this.simulatorProps?.designMode === 'live') {
+    if (
+      currentSelection &&
+      currentSelection.selected.length === 0 &&
+      this.simulatorProps?.designMode === 'live'
+    ) {
       const rootNodeChildrens = this.currentDocument.getRoot().getChildren().children;
       if (rootNodeChildrens.length > 0) {
         currentSelection.select(rootNodeChildrens[0].id);
@@ -301,12 +312,18 @@ export class Designer {
   /**
    * 获得合适的插入位置
    */
-  getSuitableInsertion(insertNode?: Node | NodeSchema | NodeSchema[]): { target: ParentalNode; index?: number } | null {
+  getSuitableInsertion(
+    insertNode?: Node | NodeSchema | NodeSchema[],
+  ): { target: ParentalNode; index?: number } | null {
     const activedDoc = this.project.currentDocument;
     if (!activedDoc) {
       return null;
     }
-    if (Array.isArray(insertNode) && isNodeSchema(insertNode[0]) && this.getComponentMeta(insertNode[0].componentName).isModal) {
+    if (
+      Array.isArray(insertNode) &&
+      isNodeSchema(insertNode[0]) &&
+      this.getComponentMeta(insertNode[0].componentName).isModal
+    ) {
       return {
         target: activedDoc.rootNode as ParentalNode,
       };
@@ -355,7 +372,10 @@ export class Designer {
       if (props.suspensed !== this.props.suspensed && props.suspensed != null) {
         this.suspensed = props.suspensed;
       }
-      if (props.componentMetadatas !== this.props.componentMetadatas && props.componentMetadatas != null) {
+      if (
+        props.componentMetadatas !== this.props.componentMetadatas &&
+        props.componentMetadatas != null
+      ) {
         this.buildComponentMetasMap(props.componentMetadatas);
       }
     } else {
@@ -477,7 +497,10 @@ export class Designer {
     return this.props?.globalComponentActions || null;
   }
 
-  getComponentMeta(componentName: string, generateMetadata?: () => ComponentMetadata | null): ComponentMeta {
+  getComponentMeta(
+    componentName: string,
+    generateMetadata?: () => ComponentMetadata | null,
+  ): ComponentMeta {
     if (this._componentMetasMap.has(componentName)) {
       return this._componentMetasMap.get(componentName)!;
     }
@@ -558,4 +581,8 @@ export class Designer {
 }
 
 export type PropsReducerContext = { stage: TransformStage };
-export type PropsReducer = (props: CompositeObject, node: Node, ctx?: PropsReducerContext) => CompositeObject;
+export type PropsReducer = (
+  props: CompositeObject,
+  node: Node,
+  ctx?: PropsReducerContext,
+) => CompositeObject;
