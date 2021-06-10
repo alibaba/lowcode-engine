@@ -1,6 +1,7 @@
 import { ReactInstance } from 'react';
 import { ActivityData, isJSSlot } from '@ali/lowcode-types';
 import { DocumentInstance } from '../renderer';
+import { isReactClass } from '@ali/lowcode-utils';
 
 interface UtilsMetadata {
   name: string;
@@ -55,9 +56,9 @@ function haveForceUpdate(instances: any[]): boolean {
 export function supportsQuickPropSetting(data: ActivityData, doc: DocumentInstance) {
   const { payload } = data;
   const { schema, prop } = payload;
-  const nodeId = schema.id!;
+  const { componentName, id: nodeId } = schema;
   // const key = data.payload.prop.key;
-  const instances = doc.instancesMap.get(nodeId);
+  const instances = doc.instancesMap.get(nodeId!);
   const propKey = getUppermostPropKey(prop);
   let value = (schema.props as any)[propKey];
 
@@ -65,12 +66,26 @@ export function supportsQuickPropSetting(data: ActivityData, doc: DocumentInstan
     nodeId &&
     Array.isArray(instances) &&
     instances.length > 0 &&
-    haveForceUpdate(instances) &&
     propKey &&
     // 不是 extraProp
     !propKey.startsWith('___') &&
-    !isJSSlot(value)
+    !isJSSlot(value) &&
+    // functional component 不支持 ref.props 直接设值，是 readonly 的
+    isReactClass((doc.container?.components as any)[componentName]) &&
+    haveForceUpdate(instances) &&
+    // 黑名单组件通常会把 schema / children 魔改，导致直接设置 props 失效
+    isAllowedComponent(componentName)
   );
+}
+
+// 不允许走快捷设置的组件黑名单
+const DISABLED__QUICK_SETTING_COMPONENT_NAMES = [
+  'Filter', // 查询组件
+  'Filter2', // 查询组件
+  'TableField', // 明细组件
+];
+function isAllowedComponent(name: string): boolean {
+  return !DISABLED__QUICK_SETTING_COMPONENT_NAMES.includes(name);
 }
 
 /**
