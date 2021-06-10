@@ -48,5 +48,8 @@
   "tnpm": {
     "mode": "yarn",
     "lockfile": "enable"
+  },
+  "resolutions": {
+    "@builder/babel-preset-ice": "1.0.1"
   }
 }
