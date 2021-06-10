@@ -372,7 +372,7 @@ export default function baseRenererFactory() {
         }
         if (Array.isArray(schema)) {
           if (schema.length === 1) return this.__createVirtualDom(schema[0], self, parentInfo);
-          return schema.map((item, idy) => this.__createVirtualDom(item, self, parentInfo, item?.__ctx?.lceKey ? '' : idy));
+          return schema.map((item, idy) => this.__createVirtualDom(item, self, parentInfo, item?.__ctx?.lceKey ? '' : String(idy)));
         }
         // FIXME
         const _children = this.getSchemaChildren(schema);
@@ -484,6 +484,7 @@ export default function baseRenererFactory() {
           }
           props.key = props.key || `${schema.__ctx.lceKey}_${schema.__ctx.idx || 0}_${idx !== undefined ? idx : ''}`;
         } else if (typeof idx === 'number' && !props.key) {
+          // 仅当循环场景走这里
           props.key = idx;
         }
 
