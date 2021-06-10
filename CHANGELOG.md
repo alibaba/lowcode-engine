@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.54](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.53...v1.0.54) (2021-06-08)
+
+
+### Bug Fixes
+
+* fieldId 有值时跳过 initial, 因为在目前 vc 的 fieldId 实现是每次返回不同的值 ([0360572](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/03605724769b72ab28aa6c4ae7311c10257dd8f0))
+
+
+
+
+
 ## [1.0.53](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.52...v1.0.53) (2021-06-07)
 
 

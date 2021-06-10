@@ -1,9 +1,9 @@
 import { Component, Fragment } from 'react';
 import { Icon, Button } from '@alifd/next';
-import { SetterType, FieldConfig } from '@ali/lowcode-types';
+import { SetterType, FieldConfig, CustomView } from '@ali/lowcode-types';
 import { createSettingFieldView } from '../settings/settings-pane';
 import { PopupContext, PopupPipe } from '../popup';
-import { SettingField } from '@ali/lowcode-designer';
+import { isSettingField, SettingField } from '@ali/lowcode-designer';
 import './style.less';
 import { Title } from '@ali/lowcode-editor-core';
 
@@ -165,11 +165,17 @@ class FormSetter extends Component<FormSetterProps> {
     super(props);
     const { config, field } = props;
     const { extraProps } = field;
-    this.items = (config?.items || []).map((conf) => field.createField({
-      ...conf,
-      setValue: extraProps?.setValue,
-    }));
-
+    field.items.forEach((item: SettingField | CustomView) => {
+      if (isSettingField(item)) {
+        const originalSetValue = item.extraProps.setValue;
+        item.extraProps.setValue = (...args) => {
+          // 调用子字段本身的 setValue
+          originalSetValue?.apply(null, args);
+          // 调用父字段本身的 setValue
+          extraProps.setValue?.apply(null, args);
+        };
+      }
+    });
     // TODO: extraConfig for custom fields
   }
 
@@ -181,7 +187,7 @@ class FormSetter extends Component<FormSetterProps> {
     const { field } = this.props;
     return (
       <div className="lc-setter-object lc-block-setter">
-        {this.items.map((item, index) => createSettingFieldView(item, field, index))}
+        {field.items.map((item, index) => createSettingFieldView(item, field, index))}
       </div>
     );
   }

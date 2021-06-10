@@ -4,15 +4,16 @@ import { SettingPropEntry } from './setting-prop-entry';
 import { SettingEntry } from './setting-entry';
 import { computed, obx } from '@ali/lowcode-editor-core';
 import { cloneDeep } from '@ali/lowcode-utils';
+import { ISetValueOptions } from '../../types';
 
 function getSettingFieldCollectorKey(parent: SettingEntry, config: FieldConfig) {
-  let top = parent;
+  let cur = parent;
   const path = [config.name];
-  while (top !== parent.top) {
-    if (top instanceof SettingField && top.type !== 'group') {
-      path.unshift(top.name);
+  while (cur !== parent.top) {
+    if (cur instanceof SettingField && cur.type !== 'group') {
+      path.unshift(cur.name);
     }
-    top = top.parent;
+    cur = cur.parent;
   }
   return path.join('.');
 }
@@ -140,7 +141,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
   private hotValue: any;
 
-  setValue(val: any, isHotValue?: boolean, force?: boolean, extraOptions?: any) {
+  setValue(val: any, isHotValue?: boolean, force?: boolean, extraOptions?: ISetValueOptions) {
     if (isHotValue) {
       this.setHotValue(val, extraOptions);
       return;
@@ -172,9 +173,14 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     this.valueChange();
   }
 
-  setHotValue(data: any, options?: any) {
+  setHotValue(data: any, options?: ISetValueOptions) {
     this.hotValue = data;
     const value = this.transducer.toNative(data);
+    if (options) {
+      options.fromSetHotValue = true;
+    } else {
+      options = { fromSetHotValue: true };
+    }
     if (this.isUseVariable()) {
       const oldValue = this.getValue();
       this.setValue({
@@ -191,7 +197,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
       return;
     }
 
-    this.valueChange();
+    this.valueChange(options);
   }
 
   onEffect(action: () => void): () => void {

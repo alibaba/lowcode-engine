@@ -752,14 +752,16 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
    */
   setupDetecting() {
     const doc = this.contentDocument!;
-    const { detecting } = this.designer;
+    const { detecting, dragon } = this.designer;
     const hover = (e: MouseEvent) => {
       if (!detecting.enable || this.designMode !== 'design') {
         return;
       }
       const nodeInst = this.getNodeInstanceFromElement(e.target as Element);
       detecting.capture(nodeInst?.node || null);
-      e.stopPropagation();
+      if (!engineConfig.get('enableMouseEventPropagationInCanvas', false) || dragon.dragging) {
+        e.stopPropagation();
+      }
     };
     const leave = () => detecting.leave(this.project.currentDocument);
 
@@ -770,7 +772,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     doc.addEventListener(
       'mousemove',
       (e: Event) => {
-        e.stopPropagation();
+        if (!engineConfig.get('enableMouseEventPropagationInCanvas', false) || dragon.dragging) {
+          e.stopPropagation();
+        }
       },
       true,
     );
