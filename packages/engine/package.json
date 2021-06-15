@@ -14,7 +14,7 @@
     "version:update": "node ./scripts/version.js",
     "build": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --skip-demo",
     "cloud-build": "build-scripts build --config build.cloud.json && tnpm run version:update",
-    "test": "build-scripts test --config build.test.json"
+    "test": "build-scripts test --config build.test.json --jest-passWithNoTests"
   },
   "license": "MIT",
   "dependencies": {

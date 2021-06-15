@@ -6,7 +6,7 @@ module.exports = {
   //   // '^.+\\.(ts|tsx)$': 'ts-jest',
   //   // '^.+\\.(js|jsx)$': 'babel-jest',
   // },
-  // testMatch: ['**/node.modify.test.ts'],
+  // testMatch: ['**/node.add.test.ts'],
   // testMatch: ['(/tests?/.*(test))\\.[jt]s$'],
   transformIgnorePatterns: [
     `/node_modules/(?!${esModules})/`,

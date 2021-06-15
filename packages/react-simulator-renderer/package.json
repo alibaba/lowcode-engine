@@ -11,8 +11,6 @@
   ],
   "scripts": {
     "cloud-build": "build-scripts build --skip-demo",
-    "test": "ava",
-    "test:snapshot": "ava --update-snapshots",
     "build": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --skip-demo"
   },
   "dependencies": {

@@ -2,7 +2,7 @@
 
 exports[`React Renderer render basic case 1`] = `
 <div
-  className="lce-page luna-test"
+  className="lce-page lce-test"
   style={
     Object {
       "padding": "0 5px 0 5px",
@@ -654,7 +654,7 @@ exports[`React Renderer render basic case 1`] = `
                       "left": 0,
                       "overflow": "hidden",
                       "position": "sticky",
-                      "width": -2,
+                      "width": -1,
                     }
                   }
                 >
