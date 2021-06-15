@@ -9,9 +9,7 @@
   "main": "lib/index.js",
   "module": "es/index.js",
   "scripts": {
-    "build": "build-scripts build --skip-demo",
-    "test": "ava",
-    "test:snapshot": "ava --update-snapshots"
+    "build": "build-scripts build --skip-demo"
   },
   "dependencies": {
     "@ali/lowcode-types": "1.0.54",
