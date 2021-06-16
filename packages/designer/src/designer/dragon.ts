@@ -76,10 +76,6 @@ export interface ISensor {
    * 获取节点实例
    */
   getNodeInstanceFromElement(e: Element | null): NodeInstance<ComponentInstance> | null;
-  /**
-   * 获取RGL相关信息
-   */
-  getRGLObject(nodeInst: NodeInstance): any;
 }
 
 export type DragObject = DragNodeObject | DragNodeDataObject | DragAnyObject;
@@ -263,12 +259,12 @@ export class Dragon {
 
     this._dragging = false;
 
-    const getRGLObject = (e: MouseEvent | DragEvent) => {
+    const getRGL = (e: MouseEvent | DragEvent) => {
       const locateEvent = createLocateEvent(e);
       const sensor = chooseSensor(locateEvent);
       if (!sensor || !sensor.getNodeInstanceFromElement) return {};
       const nodeInst = sensor.getNodeInstanceFromElement(e.target as Element);
-      return sensor.getRGLObject(nodeInst as NodeInstance);
+      return nodeInst?.node?.getRGL() || {};
     };
 
     const checkesc = (e: KeyboardEvent) => {
@@ -324,7 +320,7 @@ export class Dragon {
       lastArrive = e;
       const locateEvent = createLocateEvent(e);
       const sensor = chooseSensor(locateEvent);
-      const { isRGL, rglNode } = getRGLObject(e);
+      const { isRGL, rglNode } = getRGL(e);
       if (isRGL) {
         this._canDrop = !!sensor?.locate(locateEvent);
         if (this._canDrop) {
@@ -403,7 +399,7 @@ export class Dragon {
     const over = (e?: any) => {
       // 发送drop事件
       if (e) {
-        const { isRGL, rglNode } = getRGLObject(e);
+        const { isRGL, rglNode } = getRGL(e);
         if (isRGL && this._canDrop) {
           const tarNode = dragObject.nodes[0];
           if (rglNode.id !== tarNode.id) {

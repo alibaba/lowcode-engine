@@ -557,14 +557,14 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           });
           const judgeEnterOtherRGL = (e: MouseEvent) => {
             const _nodeInst = this.getNodeInstanceFromElement(e.target as Element);
-            const { isRGL: _isRGL, rglNode: _rglNode } = this.getRGLObject(
-              _nodeInst as NodeInstance,
-            );
+            const _node = _nodeInst?.node;
+            if (!_node) return { status: false };
+            const { isRGL: _isRGL, rglNode: _rglNode } = _node.getRGL();
             const status = !!(
               _isRGL &&
               _rglNode?.id !== rglNode?.id &&
               _rglNode?.getParent() !== node &&
-              nodeInst?.node !== _nodeInst?.node
+              _node !== nodeInst?.node
             );
             return { status, rglNode: _rglNode };
           };
@@ -733,19 +733,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   private disableHovering?: () => void;
 
   private disableDetecting?: () => void;
-
-  /**
-   * 获取node实例的磁贴相关信息
-   */
-  getRGLObject(nodeInst: NodeInstance) {
-    const isContainerNode = nodeInst?.node.isContainer();
-    const isEmptyNode = nodeInst?.node?.isEmpty();
-    const isRGLContainerNode = nodeInst?.node?.isRGLContainer;
-    const isRGLNode = nodeInst?.node?.getParent()?.isRGLContainer;
-    const isRGL = isRGLContainerNode || (isRGLNode && (!isContainerNode || !isEmptyNode));
-    let rglNode = isRGLContainerNode ? nodeInst?.node : isRGL ? nodeInst?.node?.getParent() : {};
-    return { isContainerNode, isEmptyNode, isRGLContainerNode, isRGLNode, isRGL, rglNode };
-  }
 
   /**
    * 设置悬停处理
