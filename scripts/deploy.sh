@@ -12,7 +12,7 @@ tnpm i -g n
 export N_NODE_MIRROR=https://npm.taobao.org/mirrors/node
 
 echo "Switch node version to 14"
-n 14
+n 14.17.0
 echo "Node Version"
 node -v
 
