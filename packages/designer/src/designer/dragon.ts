@@ -322,34 +322,33 @@ export class Dragon {
         return;
       }
       lastArrive = e;
-
       const locateEvent = createLocateEvent(e);
       const sensor = chooseSensor(locateEvent);
-      this._canDrop = !!sensor?.locate(locateEvent);
       const { isRGL, rglNode } = getRGLObject(e);
       if (isRGL) {
-        // 禁止原生响应
-        if (!isFromRGLNode && this._canDrop) {
+        this._canDrop = !!sensor?.locate(locateEvent);
+        if (this._canDrop) {
           this.emitter.emit('rgl.add.placeholder', {
             rglNode,
             node: locateEvent.dragObject.nodes[0],
             event: e,
           });
-        }
-        designer.clearLocation();
-        this.clearState();
-        this.emitter.emit('drag', locateEvent);
-      } else {
-        if (!isFromRGLNode && this._canDrop) {
-          this.emitter.emit('rgl.remove.placeholder');
-        }
-        if (sensor) {
-          sensor.fixEvent(locateEvent);
-        } else {
           designer.clearLocation();
+          this.clearState();
+          this.emitter.emit('drag', locateEvent);
+          return;
         }
-        this.emitter.emit('drag', locateEvent);
+      } else {
+        this._canDrop = false;
+        this.emitter.emit('rgl.remove.placeholder');
       }
+      if (sensor) {
+        sensor.locate(locateEvent);
+        sensor.fixEvent(locateEvent);
+      } else {
+        designer.clearLocation();
+      }
+      this.emitter.emit('drag', locateEvent);
     };
 
     const dragstart = () => {
@@ -405,14 +404,17 @@ export class Dragon {
       // 发送drop事件
       if (e) {
         const { isRGL, rglNode } = getRGLObject(e);
-        if (isRGL && !isFromRGLNode && this._canDrop) {
+        if (isRGL && this._canDrop) {
           const tarNode = dragObject.nodes[0];
-          this.emitter.emit('rgl.drop', {
-            rglNode,
-            node: tarNode,
-          });
-          const { selection } = designer.project.currentDocument;
-          selection.select(tarNode.id);
+          if (rglNode.id !== tarNode.id) {
+            // 避免死循环
+            this.emitter.emit('rgl.drop', {
+              rglNode,
+              node: tarNode,
+            });
+            const { selection } = designer.project.currentDocument;
+            selection.select(tarNode.id);
+          }
         }
       }
 
