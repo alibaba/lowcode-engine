@@ -159,23 +159,32 @@ interface FormSetterProps {
   config: ObjectSetterConfig;
 }
 class FormSetter extends Component<FormSetterProps> {
-  private items: SettingField[];
+  private items: (SettingField | CustomView)[];
 
   constructor(props: RowSetterProps) {
     super(props);
     const { config, field } = props;
     const { extraProps } = field;
-    field.items.forEach((item: SettingField | CustomView) => {
-      if (isSettingField(item)) {
-        const originalSetValue = item.extraProps.setValue;
-        item.extraProps.setValue = (...args) => {
-          // 调用子字段本身的 setValue
-          originalSetValue?.apply(null, args);
-          // 调用父字段本身的 setValue
-          extraProps.setValue?.apply(null, args);
-        };
-      }
-    });
+
+    if (Array.isArray(field.items) && field.items.length > 0) {
+      field.items.forEach((item: SettingField | CustomView) => {
+        if (isSettingField(item)) {
+          const originalSetValue = item.extraProps.setValue;
+          item.extraProps.setValue = (...args) => {
+            // 调用子字段本身的 setValue
+            originalSetValue?.apply(null, args);
+            // 调用父字段本身的 setValue
+            extraProps.setValue?.apply(null, args);
+          };
+        }
+      });
+      this.items = field.items;
+    } else {
+      this.items = (config?.items || []).map((conf) => field.createField({
+        ...conf,
+        setValue: extraProps?.setValue,
+      }));
+    }
     // TODO: extraConfig for custom fields
   }
 
@@ -187,7 +196,7 @@ class FormSetter extends Component<FormSetterProps> {
     const { field } = this.props;
     return (
       <div className="lc-setter-object lc-block-setter">
-        {field.items.map((item, index) => createSettingFieldView(item, field, index))}
+        {this.items.map((item, index) => createSettingFieldView(item, field, index))}
       </div>
     );
   }

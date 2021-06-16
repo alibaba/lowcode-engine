@@ -24,7 +24,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     const { field } = this.props;
     const { extraProps, componentMeta } = field;
     const { condition, defaultValue, display } = extraProps;
-    const { prototype } = componentMeta;
+    const { prototype } = componentMeta!;
     let visible;
     try {
       visible = typeof condition === 'function' ? condition(field) !== false : true;
