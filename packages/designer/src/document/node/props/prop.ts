@@ -6,7 +6,6 @@ import { valueToSource } from './value-to-source';
 import { Props } from './props';
 import { SlotNode, Node } from '../node';
 import { TransformStage } from '../transform-stage';
-import { getFocusedElement } from 'medium-editor';
 
 export const UNSET = Symbol.for('unset');
 export type UNSET = typeof UNSET;
@@ -19,35 +18,6 @@ export interface IPropParent {
 }
 
 export type ValueTypes = 'unset' | 'literal' | 'map' | 'list' | 'expression' | 'slot';
-
-function hasItemsInMetadata(prop: Prop) {
-  const path = prop.path;
-  const { configure } = prop.getNode().componentMeta.getMetadata();
-  if (!path || path.length === 0) return false;
-  let props = configure?.props;
-  while (path.length > 0) {
-    let name = path.shift();
-    let matchedProp = getMatchedProp(props, name!);
-    if (!matchedProp) return false;
-    if (path.length === 0) return !!matchedProp?.items;
-    props = matchedProp.items;
-  }
-}
-
-function getMatchedProp(props: FieldConfig[] | undefined, name: string): FieldConfig | null {
-  let found = null;
-  if (!props) return null;
-  for (const prop of props) {
-    if (prop.name === name) {
-      found = prop;
-      break;
-    } else if (prop.type === 'group' && prop.items) {
-      found = getMatchedProp(prop.items, name);
-      if (found) return found;
-    }
-  }
-  return found;
-}
 
 export class Prop implements IPropParent {
   readonly isProp = true;
@@ -286,19 +256,6 @@ export class Prop implements IPropParent {
 
     this.dispose();
 
-    // 将父属性设置成一个对象，得同时把子属性都设值，同时清空其他子属性
-    if (this._type === 'map' && isPlainObject(val)) {
-      this.items?.forEach((item) => {
-        // @ts-ignore
-        if ([item.key] in val) {
-          // @ts-ignore
-          item.setValue(val[item.key]);
-        } else {
-          this.clearPropValue(item.key!);
-        }
-      });
-    }
-
     if (oldValue !== this._value) {
       editor?.emit('node.innerProp.change', {
         node: this.owner,
@@ -407,13 +364,8 @@ export class Prop implements IPropParent {
     return (this.parent.path || []).concat(this.key as string);
   }
 
-  private get items(): Prop[] | null {
-    // 不在元数据配置项中的，不产生 items
-    if (!hasItemsInMetadata(this)) return null;
-    let _items: any;
-    untracked(() => {
-      _items = this._items;
-    });
+  @computed private get items(): Prop[] | null {
+    let _items: any = this._items;
     if (!_items) {
       if (this._type === 'list') {
         const data = this._value;
