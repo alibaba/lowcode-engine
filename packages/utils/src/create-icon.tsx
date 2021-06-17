@@ -2,12 +2,16 @@ import { isValidElement, ReactNode, createElement, cloneElement } from 'react';
 import { Icon } from '@alifd/next';
 import { IconType } from '@ali/lowcode-types';
 import { isReactComponent } from './is-react';
+import { isESModule } from './is-es-module';
 
 const URL_RE = /^(https?:)\/\//i;
 
 export function createIcon(icon?: IconType | null, props?: Record<string, unknown>): ReactNode {
   if (!icon) {
     return null;
+  }
+  if (isESModule(icon)) {
+    icon = icon.default;
   }
   if (typeof icon === 'string') {
     if (URL_RE.test(icon)) {

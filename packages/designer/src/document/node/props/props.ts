@@ -107,6 +107,7 @@ export class Props implements IPropParent {
     if (this.items.length < 1) {
       return {};
     }
+    let allProps = {} as any;
     let props: any = {};
     const extras: any = {};
     if (this.type === 'list') {
@@ -139,6 +140,12 @@ export class Props implements IPropParent {
         if (value === UNSET) {
           value = undefined;
         }
+        allProps[name] = value;
+      });
+      // compatible vision
+      const transformedProps = this.transformToStatic(allProps);
+      Object.keys(transformedProps).forEach((name) => {
+        const value = transformedProps[name];
         if (typeof name === 'string' && name.startsWith(EXTRA_KEY_PREFIX)) {
           name = getOriginalExtraKey(name);
           extras[name] = value;
@@ -149,6 +156,26 @@ export class Props implements IPropParent {
     }
 
     return { props, extras };
+  }
+
+  /**
+   * @deprecated
+   */
+  private transformToStatic(props: any) {
+    let transducers = this.owner.componentMeta.prototype?.options?.transducers;
+    if (!transducers) {
+      return props;
+    }
+    if (!Array.isArray(transducers)) {
+      transducers = [transducers];
+    }
+    props = transducers.reduce((xprops: any, transducer: any) => {
+      if (transducer && typeof transducer.toStatic === 'function') {
+        return transducer.toStatic(xprops);
+      }
+      return xprops;
+    }, props);
+    return props;
   }
 
   /**
