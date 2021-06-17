@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.55](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.54...v1.0.55) (2021-06-17)
+
+
+### Bug Fixes
+
+* 兼容 icon 为 esmodule 功能 ([8319b13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8319b13051405f7a62328320c88545f22de28901))
+* **vision:** 兼容原 vision proto transducers 功能 ([2ba28f9](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/2ba28f928a095166c434639670b20c4988cf57fe))
+* deploy node version 14.17.0 ([a187d0d](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/a187d0d2bf5b6aedf787aa38374f3c7e46f71085))
+* 以节点id作为key，修复拖拽、增删时组件频繁卸载的问题 ([341f938](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/341f938f7fbf557b5b57965b711e369d75ec5e09))
+* 修复 valueChange 不会因为子属性变化而通知父属性事件监听, 考虑到后续推荐直接使用 setValue, 也实现了 valueChange 事件 ([1297e3c](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/1297e3c0e5f13a50bdd6e79ce5da37a8272e1ff7))
+* 修复设置区 stage 回到首页的功能 ([cec923b](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/cec923b8ff477eb5a419b09f30b0abdf1f211877))
+
+
+### Features
+
+* 支持设置是否允许画布鼠标事件的冒泡 ([4e5c7f5](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/4e5c7f57c1837c40cb4e8ec6b14af22c4b9ad4e4))
+
+
+
+
+
 ## [1.0.54](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.53...v1.0.54) (2021-06-08)
 
 

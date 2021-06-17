@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.55](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.54...v1.0.55) (2021-06-17)
+
+
+### Bug Fixes
+
+* 兼容 icon 为 esmodule 功能 ([8319b13](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/commit/8319b13051405f7a62328320c88545f22de28901))
+
+
+
+
+
 ## [1.0.54](https://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/compare/v1.0.53...v1.0.54) (2021-06-08)
 
 **Note:** Version bump only for package @ali/lowcode-utils
