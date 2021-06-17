@@ -45,6 +45,7 @@ export default class StageBox extends Component<StageBoxProps> {
     } else {
       const stateName = skeleton.createStage({
         content: children,
+        isRoot: true,
       });
       this.stageChain = new StageChain(skeleton.getStage(stateName as string) as StageWidget);
     }
