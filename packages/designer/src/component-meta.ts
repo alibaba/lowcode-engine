@@ -178,10 +178,10 @@ export class ComponentMeta {
       this._title =
         typeof title === 'string'
           ? {
-            type: 'i18n',
-            'en-US': this.componentName,
-            'zh-CN': title,
-          }
+              type: 'i18n',
+              'en-US': this.componentName,
+              'zh-CN': title,
+            }
           : title;
     }
 
@@ -436,6 +436,10 @@ const builtinComponentActions: ComponentAction[] = [
         if (parent) {
           const newNode = doc.insertNode(parent, node, index + 1, true);
           newNode.select();
+          if (node.getRGL().isRGL) {
+            // 如果是磁贴块复制，则需要滚动到影响位置
+            setTimeout(() => newNode.document.simulator?.scrollToNode(newNode), 10);
+          }
         }
       },
     },
