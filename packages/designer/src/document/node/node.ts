@@ -1091,6 +1091,10 @@ export function isRootNode(node: Node): node is RootNode {
   return node && node.isRoot();
 }
 
+export function isLowCodeComponent(node: Node): boolean {
+  return node.componentMeta.getMetadata().devMode === 'lowcode';
+}
+
 export function getZLevelTop(child: Node, zLevel: number): Node | null {
   let l = child.zLevel;
   if (l < zLevel || zLevel < 0) {
