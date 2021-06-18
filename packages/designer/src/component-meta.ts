@@ -23,6 +23,7 @@ import { IconRemove } from './icons/remove';
 import { IconClone } from './icons/clone';
 import { ReactElement } from 'react';
 import { IconHidden } from './icons/hidden';
+import EventEmitter from 'events';
 
 function ensureAList(list?: string | string[]): string[] | null {
   if (!list) {
@@ -65,6 +66,8 @@ export class ComponentMeta {
   readonly isComponentMeta = true;
 
   private _npm?: NpmInfo;
+
+  private emitter: EventEmitter = new EventEmitter();
 
   get npm() {
     return this._npm;
@@ -229,6 +232,11 @@ export class ComponentMeta {
       this._isContainer = false;
       this._isModal = false;
     }
+    this.emitter.emit('metadata_change');
+  }
+
+  refreshMetadata() {
+    this.parseMetadata(this.getMetadata());
   }
 
   private transformMetadata(metadta: ComponentMetadata): TransformedComponentMetadata {
@@ -295,6 +303,13 @@ export class ComponentMeta {
       });
     }
     return true;
+  }
+
+  onMetadataChange(fn: (args: any) => void): () => void {
+    this.emitter.on('metadata_change', fn);
+    return () => {
+      this.emitter.removeListener('metadata_change', fn);
+    };
   }
 
   // compatiable vision
