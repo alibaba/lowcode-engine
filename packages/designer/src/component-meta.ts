@@ -439,15 +439,17 @@ const builtinComponentActions: ComponentAction[] = [
           const { isRGL, rglNode } = node.getRGL();
           if (isRGL) {
             // 复制layout信息
-            let layout = rglNode.getPropValue('layout');
+            let layout = rglNode.getPropValue('layout') || [];
             let curLayout = layout.filter((item) => item.i === node.getPropValue('fieldId'));
-            layout.push({
-              ...curLayout[0],
-              i: newNode.getPropValue('fieldId'),
-            });
-            rglNode.setPropValue('layout', layout);
-            // 如果是磁贴块复制，则需要滚动到影响位置
-            setTimeout(() => newNode.document.simulator?.scrollToNode(newNode), 10);
+            if (curLayout && curLayout[0]) {
+              layout.push({
+                ...curLayout[0],
+                i: newNode.getPropValue('fieldId'),
+              });
+              rglNode.setPropValue('layout', layout);
+              // 如果是磁贴块复制，则需要滚动到影响位置
+              setTimeout(() => newNode.document.simulator?.scrollToNode(newNode), 10);
+            }
           }
         }
       },
