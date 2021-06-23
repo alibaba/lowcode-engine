@@ -17,7 +17,7 @@ import {
 } from '../simulator';
 import Viewport from './viewport';
 import { createSimulator } from './create-simulator';
-import { Node, ParentalNode, contains, isRootNode } from '../document';
+import { Node, ParentalNode, contains, isRootNode, isLowCodeComponent } from '../document';
 import ResourceConsumer from './resource-consumer';
 import {
   AssetLevel,
@@ -792,7 +792,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           return;
         }
         const node = nodeInst.node || this.project.currentDocument?.rootNode;
-        if (!node) {
+        if (!node || isLowCodeComponent(node)) {
           return;
         }
 

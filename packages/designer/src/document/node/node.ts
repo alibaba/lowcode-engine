@@ -156,8 +156,6 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.componentMeta.icon;
   }
 
-  readonly settingEntry: SettingTopEntry;
-
   private isInited = false;
 
   constructor(readonly document: DocumentModel, nodeSchema: Schema, options: any = {}) {
@@ -168,13 +166,11 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       this.props = new Props(this, {
         children: isDOMText(children) || isJSExpression(children) ? children : '',
       });
-      this.settingEntry = this.document.designer.createSettingEntry([this]);
     } else {
       // 这里 props 被初始化两次，一次 new，一次 import，new 的实例需要给 propsReducer 的钩子去使用，
       // import 是为了使用钩子返回的值，并非完全幂等的操作，部分行为执行两次会有 bug，
       // 所以在 props 里会对 new / import 做一些区别化的解析
       this.props = new Props(this, props, extras);
-      this.settingEntry = this.document.designer.createSettingEntry([this]);
       this._children = new NodeChildren(this as ParentalNode, this.initialChildren(children));
       this._children.internalInitParent();
       this.props.import(
@@ -186,6 +182,14 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
     this.isInited = true;
     this.emitter = new EventEmitter();
+  }
+
+  _settingEntry: SettingTopEntry;
+
+  get settingEntry(): SettingTopEntry {
+    if (this._settingEntry) return this._settingEntry;
+    this._settingEntry = this.document.designer.createSettingEntry([this]);
+    return this._settingEntry;
   }
 
   private initProps(props: any): any {
@@ -1089,6 +1093,10 @@ export function isNode(node: any): node is Node {
 
 export function isRootNode(node: Node): node is RootNode {
   return node && node.isRoot();
+}
+
+export function isLowCodeComponent(node: Node): boolean {
+  return node.componentMeta.getMetadata().devMode === 'lowcode';
 }
 
 export function getZLevelTop(child: Node, zLevel: number): Node | null {
