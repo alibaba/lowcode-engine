@@ -476,8 +476,6 @@ export default function baseRenererFactory() {
         if (scopeKey && this.__compScopes[scopeKey]) {
           props.__scope = this.__compScopes[scopeKey];
         }
-        // FIXME 这里清除 key 是为了避免循环渲染中更改 key 导致的渲染重复
-        props.key = '';
         if (schema?.__ctx?.lceKey) {
           if (!isFileSchema(schema)) {
             engine?.props?.onCompGetCtx(schema, self);
