@@ -339,8 +339,8 @@ export class Dragon {
         this.emitter.emit('rgl.remove.placeholder');
       }
       if (sensor) {
-        sensor.locate(locateEvent);
         sensor.fixEvent(locateEvent);
+        sensor.locate(locateEvent);
       } else {
         designer.clearLocation();
       }
