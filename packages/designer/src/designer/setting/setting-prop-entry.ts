@@ -118,6 +118,7 @@ export class SettingPropEntry implements SettingEntry {
    * 1 类似值，比如数组长度一样
    * 2 单一植
    */
+  /* istanbul ignore next */
   @computed get valueState(): number {
     if (this.type !== 'field') {
       const { getValue } = this.extraProps;
@@ -155,7 +156,6 @@ export class SettingPropEntry implements SettingEntry {
     try {
       return getValue ? getValue(this, val) : val;
     } catch (e) {
-      // todo: add log
       console.warn(e);
       return val;
     }
@@ -175,7 +175,7 @@ export class SettingPropEntry implements SettingEntry {
       try {
         setValue(this, val);
       } catch (e) {
-        // todo: add log
+        /* istanbul ignore next */
         console.warn(e);
       }
     }
@@ -198,7 +198,7 @@ export class SettingPropEntry implements SettingEntry {
       try {
         setValue(this, undefined);
       } catch (e) {
-        // todo: add log
+        /* istanbul ignore next */
         console.warn(e);
       }
     }
@@ -320,7 +320,7 @@ export class SettingPropEntry implements SettingEntry {
       return;
     }
     const v = this.getValue();
-    if (isJSExpression(v)) {
+    if (this.isUseVariable()) {
       this.setValue(v.mock);
     } else {
       this.setValue({

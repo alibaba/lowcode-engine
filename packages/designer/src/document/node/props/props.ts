@@ -161,8 +161,9 @@ export class Props implements IPropParent {
   /**
    * @deprecated
    */
+  /* istanbul ignore next */
   private transformToStatic(props: any) {
-    let transducers = this.owner.componentMeta.prototype?.options?.transducers;
+    let transducers = this.owner.componentMeta?.prototype?.options?.transducers;
     if (!transducers) {
       return props;
     }

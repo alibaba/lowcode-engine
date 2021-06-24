@@ -1,16 +1,32 @@
+// @ts-nocheck
 import '../../../fixtures/window';
-import { set, delayObxTick } from '../../../utils';
-import { Editor } from '@ali/lowcode-editor-core';
-import { Props } from '../../../../src/document/node/props/props';
+import { delayObxTick } from '../../../utils';
+import { Editor, engineConfig } from '@ali/lowcode-editor-core';
 import { Designer } from '../../../../src/designer/designer';
-import { Project } from '../../../../src/project/project';
 import { DocumentModel } from '../../../../src/document/document-model';
 import { Prop, isProp, isValidArrayIndex } from '../../../../src/document/node/props/prop';
 import { TransformStage } from '@ali/lowcode-types';
 
-
+const slotNodeImportMockFn = jest.fn();
+const slotNodeRemoveMockFn = jest.fn();
 const mockedOwner = {
   componentName: 'Div',
+  addSlot() {},
+  document: {
+    createNode(schema) {
+      return {
+        ...schema,
+        addSlot() {},
+        internalSetSlotFor() {},
+        import: slotNodeImportMockFn,
+        export() {
+          return schema;
+        },
+        remove: slotNodeRemoveMockFn,
+      };
+    },
+    designer: {},
+  },
 };
 
 const mockedPropsInst = {
@@ -32,7 +48,19 @@ describe('Prop 类测试', () => {
       numProp = new Prop(mockedPropsInst, 1, 'numProp');
       nullProp = new Prop(mockedPropsInst, null, 'nullProp');
       expProp = new Prop(mockedPropsInst, { type: 'JSExpression', value: 'state.haha' }, 'expProp');
-      // slotProp = new Prop(mockedPropsInst, { type: 'JSSlot', value: [{ componentName: 'Button' }] }, 'slotProp');
+      slotProp = new Prop(
+        mockedPropsInst,
+        {
+          type: 'JSSlot',
+          title: '测试 slot',
+          name: 'testSlot',
+          params: { a: 1 },
+          value: [{ componentName: 'Button' }],
+        },
+        'slotProp',
+      );
+      slotNodeImportMockFn.mockClear();
+      slotNodeRemoveMockFn.mockClear();
     });
     afterEach(() => {
       boolProp.purge();
@@ -40,7 +68,7 @@ describe('Prop 类测试', () => {
       numProp.purge();
       nullProp.purge();
       expProp.purge();
-      // slotProp.purge();
+      slotProp.purge();
     });
 
     it('consturctor / getProps / getNode', () => {
@@ -60,6 +88,7 @@ describe('Prop 类测试', () => {
 
       expect(numProp.set()).toBeNull();
       expect(numProp.has()).toBeFalsy();
+      expect(numProp.path).toEqual(['numProp']);
     });
 
     it('getValue / getAsString / setValue', () => {
@@ -121,7 +150,28 @@ describe('Prop 类测试', () => {
       expect(
         new Prop(mockedPropsInst, false, '___condition___').export(TransformStage.Render),
       ).toBeTruthy();
-      // console.log(slotProp.export(TransformStage.Render));
+      engineConfig.set('enableCondition', true);
+      expect(
+        new Prop(mockedPropsInst, false, '___condition___').export(TransformStage.Render),
+      ).toBeFalsy();
+      expect(slotProp.export(TransformStage.Render)).toEqual({
+        type: 'JSSlot',
+        params: { a: 1 },
+        value: {
+          componentName: 'Slot',
+          title: '测试 slot',
+          name: 'testSlot',
+          params: { a: 1 },
+          children: [{ componentName: 'Button' }],
+        },
+      });
+      expect(slotProp.export(TransformStage.Save)).toEqual({
+        type: 'JSSlot',
+        params: { a: 1 },
+        value: [{ componentName: 'Button' }],
+        title: '测试 slot',
+        name: 'testSlot',
+      });
     });
 
     it('compare', () => {
@@ -145,6 +195,21 @@ describe('Prop 类测试', () => {
       boolProp.purge();
     });
 
+    it('slot', () => {
+      // 更新 slot
+      slotProp.setValue({
+        type: 'JSSlot',
+        value: [{
+          componentName: 'Form',
+        }]
+      });
+      expect(slotNodeImportMockFn).toBeCalled();
+
+      // 节点类型转换
+      slotProp.setValue(true);
+      expect(slotNodeRemoveMockFn).toBeCalled();
+    });
+
     it('迭代器 / map / forEach', () => {
       const mockedFn = jest.fn();
       for (const item of strProp) {
@@ -153,13 +218,13 @@ describe('Prop 类测试', () => {
       expect(mockedFn).not.toHaveBeenCalled();
       mockedFn.mockClear();
 
-      strProp.forEach(item => {
+      strProp.forEach((item) => {
         mockedFn();
       });
       expect(mockedFn).not.toHaveBeenCalled();
       mockedFn.mockClear();
 
-      strProp.map(item => {
+      strProp.map((item) => {
         return mockedFn();
       });
       expect(mockedFn).not.toHaveBeenCalled();
@@ -200,7 +265,6 @@ describe('Prop 类测试', () => {
           z1: 1,
           z2: 'str',
         });
-
 
         expect(prop.getPropValue('a')).toBe(1);
         prop.setPropValue('a', 2);
@@ -283,13 +347,13 @@ describe('Prop 类测试', () => {
         expect(mockedFn).toHaveBeenCalledTimes(5);
         mockedFn.mockClear();
 
-        prop.forEach(item => {
+        prop.forEach((item) => {
           mockedFn();
         });
         expect(mockedFn).toHaveBeenCalledTimes(5);
         mockedFn.mockClear();
 
-        prop.map(item => {
+        prop.map((item) => {
           return mockedFn();
         });
         expect(mockedFn).toHaveBeenCalledTimes(5);
@@ -297,6 +361,7 @@ describe('Prop 类测试', () => {
       });
 
       it('dispose', () => {
+        prop.items;
         prop.dispose();
 
         expect(prop._items).toBeNull();
@@ -321,9 +386,15 @@ describe('Prop 类测试', () => {
         expect(prop.get(2).getValue()).toBe('haha');
 
         expect(prop.getAsString()).toBe('');
+
+        prop.unset();
+        prop.set(0, true);
+        expect(prop.set('x', 'invalid')).toBeNull();
+        expect(prop.get(0).getValue()).toBeTruthy();
       });
 
       it('export', () => {
+        expect(prop.export()).toEqual([1, true, 'haha']);
         // 触发构造
         prop.items;
         expect(prop.export()).toEqual([1, true, 'haha']);
@@ -351,18 +422,22 @@ describe('Prop 类测试', () => {
     const designer = new Designer({ editor });
     const doc = new DocumentModel(designer.project, {
       componentName: 'Page',
-      children: [{
-        id: 'div',
-        componentName: 'Div',
-      }],
+      children: [
+        {
+          id: 'div',
+          componentName: 'Div',
+        },
+      ],
     });
     const div = doc.getNode('div');
 
     const slotProp = new Prop(div?.getProps(), {
       type: 'JSSlot',
-      value: [{
-        componentName: 'Button',
-      }],
+      value: [
+        {
+          componentName: 'Button',
+        },
+      ],
     });
 
     expect(slotProp.slotNode?.componentName).toBe('Slot');

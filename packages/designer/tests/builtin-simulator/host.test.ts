@@ -408,7 +408,7 @@ describe('Host 测试', () => {
       host.setupContextMenu();
       host.getNodeInstanceFromElement = () => {
         return {
-          node: { componentMeta: { componentName: 'Button' } },
+          node: { componentMeta: { componentName: 'Button', getMetadata() { return {} } } },
         };
       };
       const mockFn = jest.fn();
@@ -428,7 +428,7 @@ describe('Host 测试', () => {
       dispatchEvent() {},
     };
 
-    // 非法分支测试
+    // 非法分支测试
     host.mountContentFrame();
     expect(host._iframe).toBeUndefined();
 
