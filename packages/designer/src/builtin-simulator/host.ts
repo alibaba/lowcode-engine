@@ -695,8 +695,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         this._iframe?.dispatchEvent(x);
         const target = e.target as HTMLElement;
 
+        const customizeIgnoreSelectors = engineConfig.get('customizeIgnoreSelectors', (defaultSelectors: string[]) => defaultSelectors);
         // TODO: need more elegant solution to ignore click events of components in designer
-        const ignoreSelectors: any = [
+        const defaultIgnoreSelectors: any = [
           '.next-input-group',
           '.next-checkbox-group',
           '.next-checkbox-wrapper',
@@ -718,6 +719,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           '.next-calendar-table',
           '.editor-container', // 富文本组件
         ];
+        const ignoreSelectors = customizeIgnoreSelectors(defaultIgnoreSelectors);
         const ignoreSelectorsString = ignoreSelectors.join(',');
         if (isFormEvent(e) || target?.closest(ignoreSelectorsString)) {
           e.preventDefault();

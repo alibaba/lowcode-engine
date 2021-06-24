@@ -200,6 +200,10 @@ interface EngineOptions {
    */
   disableDetecting?: boolean;
   /**
+   * 定制画布中点击被忽略的 selectors，默认值：(selectors) => selectors
+   */
+  customizeIgnoreSelectors?: (defaultIgnoreSelectors: string[]) => string[];
+  /**
    * Vision-polyfill settings
    */
   visionSettings?: {
