@@ -173,7 +173,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       this.props = new Props(this, props, extras);
       this._children = new NodeChildren(this as ParentalNode, this.initialChildren(children));
       this._children.internalInitParent();
-      this.props.import(
+      this.props.merge(
         this.upgradeProps(this.initProps(props || {})),
         this.upgradeProps(extras || {}),
       );

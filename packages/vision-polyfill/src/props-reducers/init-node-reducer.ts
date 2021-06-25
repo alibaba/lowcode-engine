@@ -33,13 +33,13 @@ export function initNodeReducer(props, node) {
         // 2. 结构为 JSExpression 并且带有 events 字段
         if ((item.name === 'fieldId' && value) || (isJSExpression(value) && value.events)) {
           if (newProps[item.name] && !node.props.has(item.name)) {
-            node.props.add(value, item.name, false, { skipSetSlot: true });
+            node.props.add(value, item.name, false);
           }
           return;
         }
         newProps[item.name] = item.initial(node as any, newProps[item.name]);
         if (newProps[item.name] && !node.props.has(item.name)) {
-          node.props.add(value, item.name, false, { skipSetSlot: true });
+          node.props.add(value, item.name, false);
         }
       } catch (e) {
         if (hasOwnProperty(props, item.name)) {

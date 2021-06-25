@@ -218,6 +218,7 @@ export class Prop implements IPropParent {
    * set value, val should be JSON Object
    */
   setValue(val: CompositeValue) {
+    if (val === this._value) return;
     const editor = this.owner.document?.designer.editor;
     const oldValue = this._value;
     this._value = val;
@@ -231,7 +232,7 @@ export class Prop implements IPropParent {
     } else if (Array.isArray(val)) {
       this._type = 'list';
     } else if (isPlainObject(val)) {
-      if (isJSSlot(val) && this.options.skipSetSlot !== true) {
+      if (isJSSlot(val)) {
         this.setAsSlot(val);
       } else if (isJSExpression(val)) {
         this._type = 'expression';

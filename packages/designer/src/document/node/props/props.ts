@@ -64,9 +64,9 @@ export class Props implements IPropParent {
     });
     if (Array.isArray(value)) {
       this.type = 'list';
-      this.items = value.map(item => new Prop(this, item.value, item.name, item.spread, { skipSetSlot: true }));
+      this.items = value.map(item => new Prop(this, item.value, item.name, item.spread));
     } else if (value != null) {
-      this.items = Object.keys(value).map(key => new Prop(this, value[key], key, false, { skipSetSlot: true }));
+      this.items = Object.keys(value).map(key => new Prop(this, value[key], key, false));
     }
     if (extras) {
       Object.keys(extras).forEach(key => {
@@ -96,10 +96,15 @@ export class Props implements IPropParent {
     originItems.forEach(item => item.purge());
   }
 
-  merge(value: PropsMap) {
+  merge(value: PropsMap, extras?: PropsMap) {
     Object.keys(value).forEach(key => {
       this.query(key, true)!.setValue(value[key]);
     });
+    if (extras) {
+      Object.keys(extras).forEach(key => {
+        this.query(getConvertedExtraKey(key), true)!.setValue(extras[key]);
+      });
+    }
   }
 
   export(stage: TransformStage = TransformStage.Save): { props?: PropsMap | PropsList; extras?: object } {
