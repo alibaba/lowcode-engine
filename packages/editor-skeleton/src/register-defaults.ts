@@ -58,11 +58,11 @@ export const registerDefaults = () => {
   registerSetter('MixedSetter', MixedSetter);
 
   // parseFunc
-  registerMetadataTransducer(parseJSFunc, 9, 'parse-func');
+  registerMetadataTransducer(parseJSFunc, 1, 'parse-func');
 
   // parseProps
-  registerMetadataTransducer(parseProps, 10, 'parse-props');
+  registerMetadataTransducer(parseProps, 5, 'parse-props');
 
   // addon/platform custom
-  registerMetadataTransducer(addonCombine, 11, 'combine-props');
+  registerMetadataTransducer(addonCombine, 10, 'combine-props');
 };
