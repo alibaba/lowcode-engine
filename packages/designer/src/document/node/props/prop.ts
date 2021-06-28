@@ -98,7 +98,7 @@ export class Prop implements IPropParent {
     return this.export(TransformStage.Serilize);
   }
 
-  export(stage: TransformStage = TransformStage.Save): CompositeValue | UNSET {
+  export(stage: TransformStage = TransformStage.Save): CompositeValue {
     stage = compatStage(stage);
     const type = this._type;
     if (stage === TransformStage.Render && this.key === '___condition___') {
@@ -110,7 +110,6 @@ export class Prop implements IPropParent {
     }
 
     if (type === 'unset') {
-      // return UNSET; @康为 之后 review 下这块改造
       return undefined;
     }
 
@@ -147,10 +146,6 @@ export class Prop implements IPropParent {
       const maps: any = {};
       this.items!.forEach((prop, key) => {
         const v = prop.export(stage);
-        // if (v !== UNSET) {
-        //   maps[prop.key == null ? key : prop.key] = v;
-        // }
-        // @康为 之后 review 下这块改造
         maps[prop.key == null ? key : prop.key] = v;
       });
       return maps;
@@ -161,12 +156,9 @@ export class Prop implements IPropParent {
         return this._value;
       }
       return this.items!.map((prop) => {
-        const v = prop.export(stage);
-        return v === UNSET ? undefined : v;
+        return prop.export(stage);
       });
     }
-
-    return undefined;
   }
 
   private _code: string | null = null;
@@ -246,7 +238,7 @@ export class Prop implements IPropParent {
       } else {
         this._type = 'map';
       }
-    } else {
+    } /* istanbul ignore next */ else {
       this._type = 'expression';
       this._value = {
         type: 'JSExpression',
@@ -267,11 +259,7 @@ export class Prop implements IPropParent {
   }
 
   @computed getValue(): CompositeValue {
-    const v = this.export(TransformStage.Serilize);
-    if (v === UNSET) {
-      return undefined;
-    }
-    return v;
+    return this.export(TransformStage.Serilize);
   }
 
   private dispose() {
@@ -563,7 +551,7 @@ export class Prop implements IPropParent {
         items.push(prop);
         maps.set(key, prop);
       }
-    } else {
+    } /* istanbul ignore next */ else {
       return null;
     }
 

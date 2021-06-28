@@ -23,6 +23,7 @@ import { IconRemove } from './icons/remove';
 import { IconClone } from './icons/clone';
 import { ReactElement } from 'react';
 import { IconHidden } from './icons/hidden';
+import EventEmitter from 'events';
 
 function ensureAList(list?: string | string[]): string[] | null {
   if (!list) {
@@ -65,6 +66,8 @@ export class ComponentMeta {
   readonly isComponentMeta = true;
 
   private _npm?: NpmInfo;
+
+  private emitter: EventEmitter = new EventEmitter();
 
   get npm() {
     return this._npm;
@@ -178,10 +181,10 @@ export class ComponentMeta {
       this._title =
         typeof title === 'string'
           ? {
-            type: 'i18n',
-            'en-US': this.componentName,
-            'zh-CN': title,
-          }
+              type: 'i18n',
+              'en-US': this.componentName,
+              'zh-CN': title,
+            }
           : title;
     }
 
@@ -229,6 +232,11 @@ export class ComponentMeta {
       this._isContainer = false;
       this._isModal = false;
     }
+    this.emitter.emit('metadata_change');
+  }
+
+  refreshMetadata() {
+    this.parseMetadata(this.getMetadata());
   }
 
   private transformMetadata(metadta: ComponentMetadata): TransformedComponentMetadata {
@@ -295,6 +303,13 @@ export class ComponentMeta {
       });
     }
     return true;
+  }
+
+  onMetadataChange(fn: (args: any) => void): () => void {
+    this.emitter.on('metadata_change', fn);
+    return () => {
+      this.emitter.removeListener('metadata_change', fn);
+    };
   }
 
   // compatiable vision
@@ -436,6 +451,21 @@ const builtinComponentActions: ComponentAction[] = [
         if (parent) {
           const newNode = doc.insertNode(parent, node, index + 1, true);
           newNode.select();
+          const { isRGL, rglNode } = node.getRGL();
+          if (isRGL) {
+            // 复制layout信息
+            let layout = rglNode.getPropValue('layout') || [];
+            let curLayout = layout.filter((item) => item.i === node.getPropValue('fieldId'));
+            if (curLayout && curLayout[0]) {
+              layout.push({
+                ...curLayout[0],
+                i: newNode.getPropValue('fieldId'),
+              });
+              rglNode.setPropValue('layout', layout);
+              // 如果是磁贴块复制，则需要滚动到影响位置
+              setTimeout(() => newNode.document.simulator?.scrollToNode(newNode), 10);
+            }
+          }
         }
       },
     },

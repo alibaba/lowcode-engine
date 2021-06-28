@@ -110,7 +110,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * @deprecated
    */
-  private _addons: { [key: string]: { exportData: () => any; isProp: boolean; } } = {};
+  private _addons: { [key: string]: { exportData: () => any; isProp: boolean } } = {};
 
   @obx.ref private _parent: ParentalNode | null = null;
 
@@ -156,8 +156,6 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.componentMeta.icon;
   }
 
-  readonly settingEntry: SettingTopEntry;
-
   private isInited = false;
 
   constructor(readonly document: DocumentModel, nodeSchema: Schema, options: any = {}) {
@@ -168,21 +166,30 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       this.props = new Props(this, {
         children: isDOMText(children) || isJSExpression(children) ? children : '',
       });
-      this.settingEntry = this.document.designer.createSettingEntry([this]);
     } else {
       // 这里 props 被初始化两次，一次 new，一次 import，new 的实例需要给 propsReducer 的钩子去使用，
       // import 是为了使用钩子返回的值，并非完全幂等的操作，部分行为执行两次会有 bug，
       // 所以在 props 里会对 new / import 做一些区别化的解析
       this.props = new Props(this, props, extras);
-      this.settingEntry = this.document.designer.createSettingEntry([this]);
       this._children = new NodeChildren(this as ParentalNode, this.initialChildren(children));
       this._children.internalInitParent();
-      this.props.import(this.upgradeProps(this.initProps(props || {})), this.upgradeProps(extras || {}));
+      this.props.import(
+        this.upgradeProps(this.initProps(props || {})),
+        this.upgradeProps(extras || {}),
+      );
       this.setupAutoruns();
     }
 
     this.isInited = true;
     this.emitter = new EventEmitter();
+  }
+
+  _settingEntry: SettingTopEntry;
+
+  get settingEntry(): SettingTopEntry {
+    if (this._settingEntry) return this._settingEntry;
+    this._settingEntry = this.document.designer.createSettingEntry([this]);
+    return this._settingEntry;
   }
 
   private initProps(props: any): any {
@@ -219,6 +226,16 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       }
     }
     return children || [];
+  }
+
+  private _isRGLContainer = false;
+
+  set isRGLContainer(status: boolean) {
+    this._isRGLContainer = status;
+  }
+
+  get isRGLContainer(): boolean {
+    return !!this._isRGLContainer;
   }
 
   isContainer(): boolean {
@@ -335,7 +352,11 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 移除当前节点
    */
-  remove(useMutator = true, purge = true, options: NodeRemoveOptions = { suppressRemoveEvent: false }) {
+  remove(
+    useMutator = true,
+    purge = true,
+    options: NodeRemoveOptions = { suppressRemoveEvent: false },
+  ) {
     if (this.parent) {
       if (!options.suppressRemoveEvent) {
         this.document.designer.editor?.emit('node.remove.topLevel', {
@@ -616,15 +637,21 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   import(data: Schema, checkId = false) {
     const { componentName, id, children, props, ...extras } = data;
     if (this.isSlot()) {
-      foreachReverse(this.children, (subNode: Node) => {
-        subNode.remove(true, true);
-      }, (iterable, idx) => (iterable as NodeChildren).get(idx));
+      foreachReverse(
+        this.children,
+        (subNode: Node) => {
+          subNode.remove(true, true);
+        },
+        (iterable, idx) => (iterable as NodeChildren).get(idx),
+      );
     }
     if (this.isParental()) {
       this.props.import(props, extras);
       (this._children as NodeChildren).import(children, checkId);
     } else {
-      this.props.get('children', true)!.setValue(isDOMText(children) || isJSExpression(children) ? children : '');
+      this.props
+        .get('children', true)!
+        .setValue(isDOMText(children) || isJSExpression(children) ? children : '');
     }
   }
 
@@ -792,7 +819,8 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * 是否可执行某action
    */
   canPerformAction(action: string): boolean {
-    const availableActions = this.componentMeta?.availableActions?.map((action) => action.name) || [];
+    const availableActions =
+      this.componentMeta?.availableActions?.map((action) => action.name) || [];
     return availableActions.indexOf(action) >= 0;
   }
 
@@ -854,7 +882,11 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.children?.onChange(fn);
   }
 
-  mergeChildren(remover: () => any, adder: (children: Node[]) => NodeData[] | null, sorter: () => any) {
+  mergeChildren(
+    remover: () => any,
+    adder: (children: Node[]) => NodeData[] | null,
+    sorter: () => any,
+  ) {
     this.children?.mergeChildren(remover, adder, sorter);
   }
 
@@ -908,6 +940,21 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   /**
+   * 获取磁贴相关信息
+   */
+  getRGL() {
+    const isContainerNode = this.isContainer();
+    const isEmptyNode = this.isEmpty();
+    const isRGLContainerNode = this.isRGLContainer;
+    const isRGLNode = this.getParent()?.isRGLContainer;
+    const isRGL = isRGLContainerNode || (isRGLNode && (!isContainerNode || !isEmptyNode));
+    let rglNode = isRGLContainerNode ? this : isRGL ? this?.getParent() : {};
+    return { isContainerNode, isEmptyNode, isRGLContainerNode, isRGLNode, isRGL, rglNode };
+  }
+
+  /**
+
+  /**
    * @deprecated
    */
   getSuitablePlace(node: Node, ref: any): any {
@@ -933,9 +980,11 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
         return { container: dropElement, ref };
       }
       const rootCanDropIn = this.componentMeta?.prototype?.options?.canDropIn;
-      if (rootCanDropIn === undefined
-          || rootCanDropIn === true
-          || (typeof rootCanDropIn === 'function' && rootCanDropIn(node))) {
+      if (
+        rootCanDropIn === undefined ||
+        rootCanDropIn === true ||
+        (typeof rootCanDropIn === 'function' && rootCanDropIn(node))
+      ) {
         return { container: this, ref };
       }
       // 假如最后找不到合适位置，返回 null 阻止继续插入节点
@@ -944,9 +993,11 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
     const canDropIn = this.componentMeta?.prototype?.options?.canDropIn;
     if (this.isContainer()) {
-      if (canDropIn === undefined ||
+      if (
+        canDropIn === undefined ||
         (typeof canDropIn === 'boolean' && canDropIn) ||
-      (typeof canDropIn === 'function' && canDropIn(node))) {
+        (typeof canDropIn === 'function' && canDropIn(node))
+      ) {
         return { container: this, ref };
       }
     }
@@ -1044,6 +1095,10 @@ export function isRootNode(node: Node): node is RootNode {
   return node && node.isRoot();
 }
 
+export function isLowCodeComponent(node: Node): boolean {
+  return node.componentMeta?.getMetadata().devMode === 'lowcode';
+}
+
 export function getZLevelTop(child: Node, zLevel: number): Node | null {
   let l = child.zLevel;
   if (l < zLevel || zLevel < 0) {
@@ -1113,7 +1168,12 @@ export function comparePosition(node1: Node, node2: Node): PositionNO {
   return PositionNO.BeforeOrAfter;
 }
 
-export function insertChild(container: ParentalNode, thing: Node | NodeData, at?: number | null, copy?: boolean): Node {
+export function insertChild(
+  container: ParentalNode,
+  thing: Node | NodeData,
+  at?: number | null,
+  copy?: boolean,
+): Node {
   let node: Node;
   if (isNode(thing) && (copy || thing.isSlot())) {
     thing = thing.export(TransformStage.Clone);

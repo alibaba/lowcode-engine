@@ -1,8 +1,11 @@
+// @ts-nocheck
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
 import '../../fixtures/window';
 import { Editor } from '@ali/lowcode-editor-core';
 import { Project } from '../../../src/project/project';
+import { SettingTopEntry } from '../../../src/designer/setting/setting-top-entry';
+import { SettingPropEntry } from '../../../src/designer/setting/setting-prop-entry';
 import { Node } from '../../../src/document/node/node';
 import { Designer } from '../../../src/designer/designer';
 import formSchema from '../../../fixtures/schema/form';
@@ -26,6 +29,119 @@ describe('setting-prop-entry 测试', () => {
     designer = null;
     doc.purge();
     doc = null;
+  });
+
+  describe('纯粹的 UnitTest', () => {
+    let mockNode: Node;
+    let mockTopEntry: SettingTopEntry;
+    beforeEach(() => {
+      mockNode = new Node(designer.currentDocument, {
+        componentName: 'Button',
+        props: {
+          a: 'str',
+          b: 222,
+          obj: {
+            x: 1,
+          },
+          jse: {
+            type: 'JSExpression',
+            value: 'state.a',
+            mock: 111,
+          }
+        },
+      });
+      mockTopEntry = new SettingTopEntry(editor, [mockNode]);
+    });
+    afterEach(() => {
+      mockNode = null;
+      mockTopEntry = null;
+    });
+
+    it('常规方法', () => {
+      // type: group 类型
+      const prop = new SettingPropEntry(mockTopEntry, 'xGroup', 'group');
+      expect(prop.setKey('xxx')).toBeUndefined();
+      expect(prop.remove()).toBeUndefined();
+
+      const prop2 = new SettingPropEntry(mockTopEntry, '#xGroup');
+      expect(prop2.setKey('xxx')).toBeUndefined();
+      expect(prop2.remove()).toBeUndefined();
+
+      expect(prop.getVariableValue()).toBe('');
+    });
+
+    it('setValue / getValue / onValueChange', () => {
+      // 获取已有的 prop
+      const prop1 = mockTopEntry.getProp('a');
+      prop1.extraProps = {
+        getValue: (prop, val) => `prefix ${val}`,
+        setValue: (prop, val) => { prop.setValue(`modified ${val}`, false, false, { disableMutator: true }) },
+        defaultValue: 'default',
+      };
+
+      expect(prop1.getDefaultValue()).toBe('default');
+      expect(prop1.getValue()).toBe('prefix str');
+
+      // disableMutator: true
+      prop1.setValue('bbb', false, false, { disableMutator: true });
+      expect(prop1.getValue()).toBe('prefix bbb');
+
+      // disableMutator: false
+      prop1.setValue('bbb');
+      expect(prop1.getValue()).toBe('prefix modified bbb');
+
+      const mockFn3 = jest.fn();
+      const prop2 = mockTopEntry.getProp('obj');
+      const prop3 = prop2.get('x');
+      const offFn = prop3.onValueChange(mockFn3);
+      expect(prop3.getValue()).toBe(1);
+      prop3.setValue(2);
+      expect(mockFn3).toHaveBeenCalled();
+
+      offFn();
+      prop3.setValue(3);
+      mockFn3.mockClear();
+      expect(mockFn3).toHaveBeenCalledTimes(0);
+
+      const prop4 = mockTopEntry.getProp('b');
+      prop4.extraProps = {
+        getValue: () => { throw 'error'; },
+      };
+      expect(prop4.getValue()).toBe(222);
+    });
+
+    it('clearValue', () => {
+      const prop1 = mockTopEntry.getProp('a');
+      prop1.clearValue();
+      expect(prop1.getValue()).toBeUndefined();
+
+      const mockFn = jest.fn();
+      prop1.extraProps = {
+        setValue: mockFn,
+      };
+      prop1.clearValue();
+      expect(mockFn).toHaveBeenCalled();
+    });
+
+    it('getVariableValue/ setUseVariable / isUseVariable / getMockOrValue', () => {
+      const prop1 = mockTopEntry.getProp('jse');
+
+      expect(prop1.isUseVariable()).toBeTruthy();
+      expect(prop1.useVariable).toBeTruthy();
+
+      expect(prop1.getMockOrValue()).toEqual(111);
+      expect(prop1.getVariableValue()).toEqual('state.a');
+
+      prop1.setUseVariable(false);
+      expect(prop1.getValue()).toEqual(111);
+      prop1.setUseVariable(true);
+      expect(prop1.getValue()).toEqual({
+        type: 'JSExpression',
+        value: '',
+        mock: 111,
+      });
+      prop1.setUseVariable(true);
+    });
   });
 
   describe('node 构造函数生成 settingEntry', () => {
@@ -81,9 +197,7 @@ describe('setting-prop-entry 测试', () => {
       expect(divNode?.getProp('behavior').getValue()).toBeUndefined();
     });
 
-    it.skip('type: group 场景测试', () => {
-
-    });
+    it.skip('type: group 场景测试', () => {});
 
     it('JSExpression 类型的 prop', () => {
       designer.createComponentMeta(divMeta);

@@ -6,7 +6,7 @@ module.exports = {
   //   // '^.+\\.(ts|tsx)$': 'ts-jest',
   //   // '^.+\\.(js|jsx)$': 'babel-jest',
   // },
-  // testMatch: ['**/node.add.test.ts'],
+  // testMatch: ['**/setting-prop-entry.test.ts'],
   // testMatch: ['(/tests?/.*(test))\\.[jt]s$'],
   transformIgnorePatterns: [
     `/node_modules/(?!${esModules})/`,
@@ -22,6 +22,7 @@ module.exports = {
     '!src/builtin-simulator/utils/**',
     '!src/plugin/sequencify.ts',
     '!src/document/node/exclusive-group.ts',
+    '!src/document/node/props/value-to-source.ts',
     '!**/node_modules/**',
     '!**/vendor/**',
   ],

@@ -37,5 +37,5 @@
     },
     "outDir": "lib"
   },
-  "exclude": ["**/test", "**/lib", "**/es", "node_modules"]
+  "exclude": ["**/tests/*", "**/*.test.ts", "**/lib", "**/es", "node_modules"]
 }

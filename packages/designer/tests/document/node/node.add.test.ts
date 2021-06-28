@@ -64,6 +64,10 @@ describe('schema 生成节点模型测试', () => {
 
       const exportSchema = currentDocument?.export(1);
       expect(getIdsFromSchema(exportSchema).length).toBe(expectedNodeCnt);
+      nodesMap.forEach(node => {
+        // 触发 getter
+        node.settingEntry;
+      });
       expect(mockCreateSettingEntry).toBeCalledTimes(expectedNodeCnt);
     });
 

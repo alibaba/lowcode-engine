@@ -196,6 +196,14 @@ interface EngineOptions {
    */
   disableAutoRender?: boolean;
   /**
+   * 关闭拖拽组件时的虚线响应，性能考虑，默认值：false
+   */
+  disableDetecting?: boolean;
+  /**
+   * 定制画布中点击被忽略的 selectors，默认值：(selectors) => selectors
+   */
+  customizeIgnoreSelectors?: (defaultIgnoreSelectors: string[]) => string[];
+  /**
    * Vision-polyfill settings
    */
   visionSettings?: {
@@ -203,7 +211,7 @@ interface EngineOptions {
     disableCompatibleReducer?: boolean;
     // 是否开启在 render 阶段开启 filter reducer，默认值：false
     enableFilterReducerInRenderStage?: boolean;
-  }
+  };
   [key: string]: any;
 }
 export async function init(container?: Element, options?: EngineOptions) {

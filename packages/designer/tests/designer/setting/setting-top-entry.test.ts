@@ -1,3 +1,4 @@
+// @ts-nocheck
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
 import '../../fixtures/window';
@@ -73,6 +74,31 @@ describe('setting-top-entry 测试', () => {
 
       expect(typeof settingEntry.getValue).toBe('function');
       settingEntry.getValue();
+    });
+
+    it('onMetadataChange', () => {
+      designer.createComponentMeta(divMeta);
+      designer.project.open(settingSchema);
+      const { currentDocument } = designer.project;
+      const divNode = currentDocument?.getNode('div') as Node;
+
+      const { settingEntry } = divNode!;
+      const mockFn = jest.fn();
+      settingEntry.componentMeta.onMetadataChange(mockFn);
+      settingEntry.componentMeta.refreshMetadata();
+      expect(mockFn).toHaveBeenCalled();
+    });
+
+    it.skip('setupItems - customView', () => {
+      designer.createComponentMeta(divMeta);
+      designer.project.open(settingSchema);
+      const { currentDocument } = designer.project;
+      const divNode = currentDocument?.getNode('div') as Node;
+
+      const { settingEntry } = divNode;
+      // 模拟将第一个配置变成 react funcional component
+      settingEntry.componentMeta.getMetadata().combined[0].items[0] = props => props.xx;
+      settingEntry.setupItems();
     });
 
     it('清理方法测试', () => {

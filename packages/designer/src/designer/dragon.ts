@@ -4,7 +4,7 @@ import { NodeSchema } from '@ali/lowcode-types';
 import { setNativeSelection, cursor } from '@ali/lowcode-utils';
 import { DropLocation } from './location';
 import { Node, DocumentModel } from '../document';
-import { ISimulatorHost, isSimulatorHost } from '../simulator';
+import { ISimulatorHost, isSimulatorHost, NodeInstance, ComponentInstance } from '../simulator';
 import { Designer } from './designer';
 
 export interface LocateEvent {
@@ -72,6 +72,10 @@ export interface ISensor {
    * 取消激活
    */
   deactiveSensor(): void;
+  /**
+   * 获取节点实例
+   */
+  getNodeInstanceFromElement(e: Element | null): NodeInstance<ComponentInstance> | null;
 }
 
 export type DragObject = DragNodeObject | DragNodeDataObject | DragAnyObject;
@@ -126,7 +130,9 @@ export function isShaken(e1: MouseEvent | DragEvent, e2: MouseEvent | DragEvent)
   if (e1.target !== e2.target) {
     return true;
   }
-  return Math.pow(e1.clientY - e2.clientY, 2) + Math.pow(e1.clientX - e2.clientX, 2) > SHAKE_DISTANCE;
+  return (
+    Math.pow(e1.clientY - e2.clientY, 2) + Math.pow(e1.clientX - e2.clientX, 2) > SHAKE_DISTANCE
+  );
 }
 
 function isInvalidPoint(e: any, last: any): boolean {
@@ -199,6 +205,8 @@ export class Dragon {
 
   @obx.ref private _dragging = false;
 
+  @obx.ref private _canDrop = false;
+
   get dragging(): boolean {
     return this._dragging;
   }
@@ -239,16 +247,25 @@ export class Dragon {
    * @param dragObject 拖拽对象
    * @param boostEvent 拖拽初始时事件
    */
-  boost(dragObject: DragObject, boostEvent: MouseEvent | DragEvent) {
+  boost(dragObject: DragObject, boostEvent: MouseEvent | DragEvent, isFromRGLNode?: boolean) {
     const { designer } = this;
     const masterSensors = this.getMasterSensors();
     const handleEvents = makeEventsHandler(boostEvent, masterSensors);
     const newBie = !isDragNodeObject(dragObject);
-    const forceCopyState = isDragNodeObject(dragObject) && dragObject.nodes.some((node) => node.isSlot());
+    const forceCopyState =
+      isDragNodeObject(dragObject) && dragObject.nodes.some((node) => node.isSlot());
     const isBoostFromDragAPI = isDragEvent(boostEvent);
     let lastSensor: ISensor | undefined;
 
     this._dragging = false;
+
+    const getRGL = (e: MouseEvent | DragEvent) => {
+      const locateEvent = createLocateEvent(e);
+      const sensor = chooseSensor(locateEvent);
+      if (!sensor || !sensor.getNodeInstanceFromElement) return {};
+      const nodeInst = sensor.getNodeInstanceFromElement(e.target as Element);
+      return nodeInst?.node?.getRGL() || {};
+    };
 
     const checkesc = (e: KeyboardEvent) => {
       if (e.keyCode === 27) {
@@ -301,9 +318,26 @@ export class Dragon {
         return;
       }
       lastArrive = e;
-
       const locateEvent = createLocateEvent(e);
       const sensor = chooseSensor(locateEvent);
+      const { isRGL, rglNode } = getRGL(e);
+      if (isRGL) {
+        this._canDrop = !!sensor?.locate(locateEvent);
+        if (this._canDrop) {
+          this.emitter.emit('rgl.add.placeholder', {
+            rglNode,
+            node: locateEvent.dragObject.nodes[0],
+            event: e,
+          });
+          designer.clearLocation();
+          this.clearState();
+          this.emitter.emit('drag', locateEvent);
+          return;
+        }
+      } else {
+        this._canDrop = false;
+        this.emitter.emit('rgl.remove.placeholder');
+      }
       if (sensor) {
         sensor.fixEvent(locateEvent);
         sensor.locate(locateEvent);
@@ -363,6 +397,23 @@ export class Dragon {
 
     // end-tail drag process
     const over = (e?: any) => {
+      // 发送drop事件
+      if (e) {
+        const { isRGL, rglNode } = getRGL(e);
+        if (isRGL && this._canDrop) {
+          const tarNode = dragObject.nodes[0];
+          if (rglNode.id !== tarNode.id) {
+            // 避免死循环
+            this.emitter.emit('rgl.drop', {
+              rglNode,
+              node: tarNode,
+            });
+            const { selection } = designer.project.currentDocument;
+            selection.select(tarNode.id);
+          }
+        }
+      }
+
       /* istanbul ignore next */
       if (e && isDragEvent(e)) {
         e.preventDefault();
@@ -461,7 +512,10 @@ export class Dragon {
     const chooseSensor = (e: LocateEvent) => {
       // this.sensors will change on dragstart
       const sensors: ISensor[] = (masterSensors as ISensor[]).concat(this.sensors);
-      let sensor = e.sensor && e.sensor.isEnter(e) ? e.sensor : sensors.find((s) => s.sensorAvailable && s.isEnter(e));
+      let sensor =
+        e.sensor && e.sensor.isEnter(e)
+          ? e.sensor
+          : sensors.find((s) => s.sensorAvailable && s.isEnter(e));
       if (!sensor) {
         // TODO: enter some area like componentspanel cancel
         if (lastSensor) {
@@ -547,7 +601,7 @@ export class Dragon {
   }
 
   private getSimulators() {
-    return new Set(this.designer.project.documents.map(doc => doc.simulator));
+    return new Set(this.designer.project.documents.map((doc) => doc.simulator));
   }
 
   // #region ======== drag and drop helpers ============

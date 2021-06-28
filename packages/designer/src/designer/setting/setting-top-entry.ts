@@ -80,6 +80,8 @@ export class SettingTopEntry implements SettingEntry {
 
     // clear fields
     this.setupItems();
+
+    this.setupEvents();
   }
 
   private setupComponentMeta() {
@@ -118,6 +120,12 @@ export class SettingTopEntry implements SettingEntry {
       });
       this._settingFieldMap = settingFieldMap;
     }
+  }
+
+  private setupEvents() {
+    this.componentMeta?.onMetadataChange(() => {
+      this.setupItems();
+    });
   }
 
   /**
