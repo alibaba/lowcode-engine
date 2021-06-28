@@ -22,6 +22,10 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
 
   componentDidMount() {
     this.setShouldIgnoreRoot();
+
+    this.props.editor.on('designer.selection.change', () => {
+      this._activeKey = null;
+    });
   }
 
   async setShouldIgnoreRoot() {
