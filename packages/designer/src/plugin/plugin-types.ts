@@ -1,7 +1,7 @@
 import { CompositeObject, ComponentAction } from '@ali/lowcode-types';
 import Logger from 'zen-logger';
 import { Skeleton } from '@ali/lowcode-editor-skeleton';
-import { Editor, Hotkey } from '@ali/lowcode-editor-core';
+import { Editor, Hotkey, EngineConfig } from '@ali/lowcode-editor-core';
 import {
   MetadataTransducer,
   Designer,
@@ -54,6 +54,7 @@ export interface ILowCodePluginContext {
   designerCabin: IDesignerCabin;
   setters: Setters;
   utils: Utils;
+  engineConfig: EngineConfig;
 }
 
 interface ILowCodePluginManagerPluginAccessor {

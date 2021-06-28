@@ -12,7 +12,7 @@ export type NodeRemoveOptions = {
   suppressRemoveEvent?: boolean;
 };
 
-const utils = {
+export const utils = {
   isNodeSchema,
   isFormEvent,
   compatibleLegaoSchema,

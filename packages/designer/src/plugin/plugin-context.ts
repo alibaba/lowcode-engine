@@ -1,4 +1,4 @@
-import { Editor, Hotkey, hotkey, getSetter, registerSetter, getSettersMap } from '@ali/lowcode-editor-core';
+import { Editor, Hotkey, hotkey, getSetter, registerSetter, getSettersMap, engineConfig, EngineConfig } from '@ali/lowcode-editor-core';
 import { Skeleton } from '@ali/lowcode-editor-skeleton';
 import { ILowCodePluginConfig, ILowCodePluginManager, ILowCodePluginContext, IDesignerCabin } from './plugin-types';
 import { getLogger, Logger } from '../utils';
@@ -8,7 +8,7 @@ import {
   removeBuiltinComponentAction,
 } from '../component-meta';
 import { Designer } from '../designer';
-import { Setters } from '../types';
+import { Setters, Utils, utils } from '../types';
 
 export default class PluginContext implements ILowCodePluginContext {
   editor: Editor;
@@ -19,6 +19,8 @@ export default class PluginContext implements ILowCodePluginContext {
   plugins: ILowCodePluginManager;
   designerCabin: IDesignerCabin;
   setters: Setters;
+  utils: Utils;
+  engineConfig: EngineConfig;
 
   constructor(editor: Editor, plugins: ILowCodePluginManager) {
     this.editor = editor;
@@ -32,6 +34,8 @@ export default class PluginContext implements ILowCodePluginContext {
       registerSetter,
       getSettersMap,
     };
+    this.engineConfig = engineConfig;
+    this.utils = utils;
   }
 
   private createDesignerCabin(): IDesignerCabin {
