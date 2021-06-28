@@ -1,25 +1,27 @@
 import { project } from '@ali/lowcode-engine';
+import { isPlainObject } from '@ali/lowcode-utils';
 import { toCss } from '@ali/vu-css-style';
 
 export function stylePropsReducer(props: any, node: any) {
   let cssId;
   let cssClass;
   let styleProp;
-  if (props && typeof props === 'object' && props.__style__) {
-    cssId = `_style_pesudo_${node.id.replace(/\$/g, '_')}`;
-    cssClass = `_css_pesudo_${node.id.replace(/\$/g, '_')}`;
+  if (!props || typeof props !== 'object') return props;
+  if (props.__style__) {
+    cssId = `_style_pseudo_${node.id.replace(/\$/g, '_')}`;
+    cssClass = `_css_pseudo_${node.id.replace(/\$/g, '_')}`;
     styleProp = props.__style__;
     appendStyleNode(props, styleProp, cssClass, cssId);
   }
-  if (props && typeof props === 'object' && props.pageStyle) {
-    cssId = '_style_pesudo_engine-document';
+  if (props.pageStyle) {
+    cssId = '_style_pseudo_engine-document';
     cssClass = 'engine-document';
     styleProp = props.pageStyle;
     appendStyleNode(props, styleProp, cssClass, cssId);
   }
-  if (props && typeof props === 'object' && props.containerStyle) {
-    cssId = `_style_pesudo_${node.id}`;
-    cssClass = `_css_pesudo_${node.id.replace(/\$/g, '_')}`;
+  if (props.containerStyle) {
+    cssId = `_style_pseudo_${node.id}`;
+    cssClass = `_css_pseudo_${node.id.replace(/\$/g, '_')}`;
     styleProp = props.containerStyle;
     appendStyleNode(props, styleProp, cssClass, cssId);
   }
@@ -33,24 +35,33 @@ function appendStyleNode(props: any, styleProp: any, cssClass: string, cssId: st
   if (!doc) {
     return;
   }
-  const dom = doc.getElementById(cssId) as HTMLStyleElement;
-  if (typeof styleProp === 'object') {
-    styleProp = toCss(styleProp);
+  if (isPlainObject(styleProp)) {
+    styleProp = isEmptyObject(styleProp) ? '' : toCss(styleProp);
   }
-  if (typeof styleProp === 'string') {
+  if (typeof styleProp === 'string' && styleProp) {
+    const dom = doc.getElementById(cssId) as HTMLStyleElement;
     const newStyleStr = transformStyleStr(styleProp, cssClass);
-    if (dom && stringEquals(dom.textContent!, newStyleStr)) {
+    if (!dom) {
+      const s = doc.createElement('style');
+      s.setAttribute('type', 'text/css');
+      s.setAttribute('id', cssId);
+      doc.getElementsByTagName('head')[0].appendChild(s);
+      s.appendChild(doc.createTextNode(newStyleStr));
       return;
     }
-    if (dom) {
-      dom.parentNode?.removeChild(dom);
+    if (!stringEquals(dom.innerHTML!, newStyleStr)) {
+      dom.innerHTML = newStyleStr;
     }
-    const s = doc.createElement('style');
-    s.setAttribute('type', 'text/css');
-    s.setAttribute('id', cssId);
-    doc.getElementsByTagName('head')[0].appendChild(s);
-    s.appendChild(doc.createTextNode(newStyleStr));
   }
+}
+
+function isEmptyObject(obj: any) {
+  if (!isPlainObject(obj)) return false;
+  let empty = true;
+  for (let k in obj) {
+    empty = false;
+  }
+  return empty;
 }
 
 function stringEquals(str: string, targetStr: string): boolean {
