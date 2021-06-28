@@ -6,7 +6,7 @@ module.exports = {
   //   // '^.+\\.(ts|tsx)$': 'ts-jest',
   //   // '^.+\\.(js|jsx)$': 'babel-jest',
   // },
-  // testMatch: ['**/setting-prop-entry.test.ts'],
+  // testMatch: ['**/setting-field.test.ts'],
   // testMatch: ['(/tests?/.*(test))\\.[jt]s$'],
   transformIgnorePatterns: [
     `/node_modules/(?!${esModules})/`,
@@ -23,6 +23,9 @@ module.exports = {
     '!src/plugin/sequencify.ts',
     '!src/document/node/exclusive-group.ts',
     '!src/document/node/props/value-to-source.ts',
+    '!src/builtin-simulator/live-editing/live-editing.ts',
+    '!src/designer/offset-observer.ts',
+    '!src/designer/clipboard.ts',
     '!**/node_modules/**',
     '!**/vendor/**',
   ],

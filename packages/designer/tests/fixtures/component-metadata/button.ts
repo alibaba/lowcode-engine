@@ -68,6 +68,34 @@ export default {
         },
       },
       {
+        type: 'field',
+        name: 'non-exsiting',
+      },
+      {
+        type: 'field',
+        name: 'obj',
+        items: [
+          {
+            name: 'a',
+            title: 'a',
+            setter: () => 'StringSetter',
+          },
+          {
+            name: 'b',
+            title: 'b',
+            setter: 'NumberSetter',
+          },
+          {
+            name: 'c',
+            title: 'c',
+            setter: {
+              componentName: 'ColorSetter'
+            },
+          },
+        ],
+      },
+      () => 'haha', // CustomView
+      {
         type: 'group',
         name: 'groupkgzzeo41',
         title: '高级',

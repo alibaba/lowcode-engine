@@ -161,6 +161,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     return this.transducer.toHot(v);
   }
 
+  /* istanbul ignore next */
   setMiniAppDataSourceValue(data: any, options?: any) {
     this.hotValue = data;
     const v = this.transducer.toNative(data);
