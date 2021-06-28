@@ -1,6 +1,6 @@
 import { createElement } from 'react';
 import { render } from 'react-dom';
-import { globalContext, Editor, engineConfig } from '@ali/lowcode-editor-core';
+import { globalContext, Editor, engineConfig, EngineOptions } from '@ali/lowcode-editor-core';
 import * as editorCabin from '@ali/lowcode-editor-core';
 import {
   Designer,
@@ -108,6 +108,7 @@ plugins.register((ctx: ILowCodePluginContext) => {
   return {
     name: '___setter_registry___',
     init() {
+      if (engineConfig.get('disableDefaultSetters')) return;
       const builtinSetters = require('@ali/lowcode-engine-ext')?.setters;
       if (builtinSetters) {
         ctx.setters.registerSetter(builtinSetters);
@@ -127,15 +128,17 @@ plugins.register((ctx: ILowCodePluginContext) => {
         type: 'Widget',
         content: DesignerPlugin,
       });
-      skeleton.add({
-        area: 'rightArea',
-        name: 'settingsPane',
-        type: 'Panel',
-        content: SettingsPrimaryPane,
-        props: {
-          ignoreRoot: true,
-        },
-      });
+      if (!engineConfig.get('disableDefaultSettingPanel')) {
+        skeleton.add({
+          area: 'rightArea',
+          name: 'settingsPane',
+          type: 'Panel',
+          content: SettingsPrimaryPane,
+          props: {
+            ignoreRoot: true,
+          },
+        });
+      }
       skeleton.add({
         area: 'leftArea',
         name: 'outlinePane',
@@ -160,60 +163,6 @@ plugins.register((ctx: ILowCodePluginContext) => {
   };
 });
 
-interface EngineOptions {
-  /**
-   * 是否开启 condition 的能力，默认在设计器中不管 condition 是啥都正常展示
-   */
-  enableCondition?: boolean;
-  /**
-   * 设计模式，live 模式将会实时展示变量值，默认值：'design'
-   */
-  designMode?: 'design' | 'live';
-  /**
-   * 设备类型，默认值：'default'
-   */
-  device?: 'default' | 'mobile' | string;
-  /**
-   * 语言，默认值：'zh_CN'
-   */
-  locale?: string;
-  /**
-   * 渲染器类型，默认值：'react'
-   */
-  renderEnv?: 'react' | 'rax' | string;
-  /**
-   * 设备类型映射器，处理设计器与渲染器中 device 的映射
-   */
-  deviceMapper?: {
-    transform: (originalDevice: string) => string;
-  };
-  /**
-   * 开启拖拽组件时，即将被放入的容器是否有视觉反馈，默认值：false
-   */
-  enableReactiveContainer?: boolean;
-  /**
-   * 关闭画布自动渲染，在资产包多重异步加载的场景有效，默认值：false
-   */
-  disableAutoRender?: boolean;
-  /**
-   * 关闭拖拽组件时的虚线响应，性能考虑，默认值：false
-   */
-  disableDetecting?: boolean;
-  /**
-   * 定制画布中点击被忽略的 selectors，默认值：(selectors) => selectors
-   */
-  customizeIgnoreSelectors?: (defaultIgnoreSelectors: string[]) => string[];
-  /**
-   * Vision-polyfill settings
-   */
-  visionSettings?: {
-    // 是否禁用降级 reducer，默认值：false
-    disableCompatibleReducer?: boolean;
-    // 是否开启在 render 阶段开启 filter reducer，默认值：false
-    enableFilterReducerInRenderStage?: boolean;
-  };
-  [key: string]: any;
-}
 export async function init(container?: Element, options?: EngineOptions) {
   let engineOptions = null;
   let engineContainer = null;
@@ -231,8 +180,9 @@ export async function init(container?: Element, options?: EngineOptions) {
   }
   engineContainer.id = 'engine';
 
-  await plugins.init();
   engineConfig.setConfig(engineOptions as any);
+
+  await plugins.init();
   render(
     createElement(Workbench, {
       skeleton,
