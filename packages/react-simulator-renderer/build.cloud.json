@@ -1,8 +1,8 @@
 {
   "entry": {
-    "engine-core": "src/index"
+    "react-simulator-renderer": "src/index"
   },
-  "library": "___AliLowCodeEngine___",
+  "library": "___ReactSimulatorRenderer___",
   "libraryTarget": "umd",
   "externals": {
     "react": "var window.React",

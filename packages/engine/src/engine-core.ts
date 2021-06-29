@@ -162,7 +162,6 @@ plugins.register((ctx: ILowCodePluginContext) => {
     },
   };
 });
-
 export async function init(container?: Element, options?: EngineOptions) {
   let engineOptions = null;
   let engineContainer = null;

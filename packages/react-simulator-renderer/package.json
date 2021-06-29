@@ -10,8 +10,7 @@
     "lib"
   ],
   "scripts": {
-    "cloud-build": "build-scripts build --skip-demo",
-    "build": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --skip-demo"
+    "cloud-build": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --skip-demo"
   },
   "dependencies": {
     "@ali/lowcode-designer": "1.0.56",
@@ -32,16 +31,6 @@
     "@types/react": "^16",
     "@types/react-dom": "^16",
     "build-plugin-component": "^0.2.11"
-  },
-  "ava": {
-    "compileEnhancements": false,
-    "snapshotDir": "test/fixtures/__snapshots__",
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "ts-node/register"
-    ]
   },
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"

@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@ali/lowcode-types": "1.0.56",
+    "@ali/ve-inline-tip": "^3.0.2",
     "@alifd/next": "^1.19.16",
     "lodash.get": "^4.4.2",
     "react": "^16"

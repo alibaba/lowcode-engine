@@ -17,7 +17,9 @@
     "@ali/lowcode-engine-ext": "var window.AliLowCodeEngineExt",
     "@alifd/next": "var Next",
     "moment": "var moment",
-    "lodash": "var _"
+    "lodash": "var _",
+    "lodash.get": "var _.get",
+    "lodash.some": "var _.some"
   },
   "polyfill": false,
   "outputDir": "dist",

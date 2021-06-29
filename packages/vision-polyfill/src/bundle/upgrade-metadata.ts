@@ -1,5 +1,5 @@
 import { ComponentType, ReactElement, isValidElement, ComponentClass } from 'react';
-import omit from 'lodash/omit';
+import { omit } from 'lodash';
 import { isPlainObject, uniqueId, isVariable } from '@ali/lowcode-utils';
 import {
   isI18nData,

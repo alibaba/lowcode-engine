@@ -33,7 +33,8 @@
     [
       "build-plugin-fusion",
       {
-        "themePackage": "@alife/theme-lowcode-light"
+        "themePackage": "@alife/theme-lowcode-light",
+        "externalNext": "umd"
       }
     ],
     [

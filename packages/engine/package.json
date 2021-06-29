@@ -13,7 +13,7 @@
     "start": "build-scripts start",
     "version:update": "node ./scripts/version.js",
     "build": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --skip-demo",
-    "cloud-build": "build-scripts build --config build.cloud.json && tnpm run version:update",
+    "cloud-build": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --config build.cloud.json && tnpm run version:update",
     "test": "build-scripts test --config build.test.json --jest-passWithNoTests"
   },
   "license": "MIT",
@@ -49,7 +49,7 @@
     "@types/events": "^3.0.0",
     "@types/react": "^16.8.3",
     "@types/react-dom": "^16.8.2",
-    "build-plugin-fusion": "^0.1.0",
+    "build-plugin-fusion": "0.1.17-beta.0",
     "build-plugin-moment-locales": "^0.1.0",
     "build-plugin-react-app": "^1.8.0",
     "fs-extra": "^9.0.1",

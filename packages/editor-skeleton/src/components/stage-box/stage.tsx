@@ -1,7 +1,8 @@
 // @todo 改成 hooks
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import Icons from '@ali/ve-icons';
+import { IconArrow } from '../../icons/arrow';
+import { IconExit } from '../../icons/exit';
 import { Stage as StageWidget } from '../../widget/stage';
 import { isTitleConfig } from '@ali/lowcode-types';
 
@@ -77,9 +78,9 @@ export default class Stage extends Component<StageProps> {
 
     const stageBacker = stage?.hasBack() ? (
       <div className="skeleton-stagebox-stagebacker">
-        <Icons name="arrow" className="skeleton-stagebox-stage-arrow" size="medium" data-stage-target="stageback" />
+        <IconArrow className="skeleton-stagebox-stage-IconArrow" size="medium" data-stage-target="stageback" />
         <span className="skeleton-stagebox-stage-title">{newTitle}</span>
-        <Icons name="exit" className="skeleton-stagebox-stage-exit" size="medium" data-stage-target="stageexit" />
+        <IconExit className="skeleton-stagebox-stage-exit" size="medium" data-stage-target="stageexit" />
       </div>
     ) : null;
 
