@@ -8,7 +8,8 @@ import {
   isAssetItem,
   AssetType,
   assetItem,
-  isCSSUrl } from '@ali/lowcode-utils';
+  isCSSUrl,
+} from '@ali/lowcode-utils';
 
 import { BuiltinSimulatorRenderer } from './renderer';
 
@@ -36,7 +37,10 @@ export function createSimulator(
       }
       if (isAssetBundle(asset)) {
         if (asset.assets) {
-          parseAssetList(Array.isArray(asset.assets) ? asset.assets : [asset.assets], asset.level || level);
+          parseAssetList(
+            Array.isArray(asset.assets) ? asset.assets : [asset.assets],
+            asset.level || level,
+          );
         }
         continue;
       }
@@ -50,13 +54,19 @@ export function createSimulator(
       const id = asset.id ? ` data-id="${asset.id}"` : '';
       const lv = asset.level || level || AssetLevel.Environment;
       if (asset.type === AssetType.JSUrl) {
-        (scripts[lv] || scripts[AssetLevel.App]).push(`<script src="${asset.content}"${id}></script>`);
+        (scripts[lv] || scripts[AssetLevel.App]).push(
+          `<script src="${asset.content}"${id}></script>`,
+        );
       } else if (asset.type === AssetType.JSText) {
         (scripts[lv] || scripts[AssetLevel.App]).push(`<script${id}>${asset.content}</script>`);
       } else if (asset.type === AssetType.CSSUrl) {
-        (styles[lv] || styles[AssetLevel.App]).push(`<link rel="stylesheet" href="${asset.content}"${id} />`);
+        (styles[lv] || styles[AssetLevel.App]).push(
+          `<link rel="stylesheet" href="${asset.content}"${id} />`,
+        );
       } else if (asset.type === AssetType.CSSText) {
-        (styles[lv] || styles[AssetLevel.App]).push(`<style type="text/css"${id}>${asset.content}</style>`);
+        (styles[lv] || styles[AssetLevel.App]).push(
+          `<style type="text/css"${id}>${asset.content}</style>`,
+        );
       }
     }
   }
@@ -65,7 +75,7 @@ export function createSimulator(
 
   const styleFrags = Object.keys(styles)
     .map((key) => {
-      return `${styles[key].join('\n') }<meta level="${key}" />`;
+      return `${styles[key].join('\n')}<meta level="${key}" />`;
     })
     .join('');
   const scriptFrags = Object.keys(scripts)
@@ -75,9 +85,27 @@ export function createSimulator(
     .join('');
 
   doc.open();
-  doc.write(`<!doctype html><html class="engine-design-mode"><head><meta charset="utf-8"/>
-  ${styleFrags}
-</head><body>${scriptFrags}</body></html>`);
+  doc.write(`
+<!doctype html>
+<html class="engine-design-mode">
+  <head><meta charset="utf-8"/>
+    ${styleFrags}
+    <style>
+      #engine-skeleton-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 90vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div id="engine-skeleton-wrapper"><img width="154" height="100" src="https://img.alicdn.com/tfs/TB1CmVgayERMeJjy0FcXXc7opXa-308-200.gif" /></div>
+    </div>
+    ${scriptFrags}
+  </body>
+</html>`);
   doc.close();
 
   return new Promise((resolve) => {
