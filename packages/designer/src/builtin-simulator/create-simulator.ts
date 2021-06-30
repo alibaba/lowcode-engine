@@ -90,19 +90,8 @@ export function createSimulator(
 <html class="engine-design-mode">
   <head><meta charset="utf-8"/>
     ${styleFrags}
-    <style>
-      #engine-skeleton-wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 90vh;
-      }
-    </style>
   </head>
   <body>
-    <div id="app">
-      <div id="engine-skeleton-wrapper"><img width="154" height="100" src="https://img.alicdn.com/tfs/TB1CmVgayERMeJjy0FcXXc7opXa-308-200.gif" /></div>
-    </div>
     ${scriptFrags}
   </body>
 </html>`);

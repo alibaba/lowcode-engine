@@ -46,11 +46,11 @@ export interface EngineOptions {
   /**
    * 禁止默认的设置面板，默认值：false
    */
-  disableDefaultSettingPanel: boolean,
+  disableDefaultSettingPanel: boolean;
   /**
    * 禁止默认的设置器，默认值：false
    */
-  disableDefaultSetters: boolean,
+  disableDefaultSetters: boolean;
   /**
    * Vision-polyfill settings
    */

@@ -1,6 +1,7 @@
 import { Component as ReactComponent, ComponentType } from 'react';
 import { ComponentMetadata, NodeSchema } from '@ali/lowcode-types';
 import { ISensor, Point, ScrollTarget, IScrollable, LocateEvent, LocationData } from './designer';
+import { BuiltinSimulatorRenderer } from './builtin-simulator/renderer';
 import { Node, ParentalNode } from './document';
 
 export type AutoFit = '100%';
@@ -76,6 +77,7 @@ export interface ISimulatorHost<P = object> extends ISensor {
   readonly viewport: IViewport;
   readonly contentWindow?: Window;
   readonly contentDocument?: Document;
+  readonly renderer?: BuiltinSimulatorRenderer;
 
   // dependsAsset // like react jQuery lodash
   // themesAsset
