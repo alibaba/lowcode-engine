@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-utils",
-  "version": "1.0.58",
+  "version": "1.0.59",
   "description": "Utils for Ali lowCode engine",
   "files": [
     "es",
@@ -12,7 +12,7 @@
     "build": "build-scripts build --skip-demo"
   },
   "dependencies": {
-    "@ali/lowcode-types": "1.0.58",
+    "@ali/lowcode-types": "1.0.59",
     "@ali/ve-inline-tip": "^3.0.2",
     "@alifd/next": "^1.19.16",
     "lodash.get": "^4.4.2",
