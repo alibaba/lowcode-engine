@@ -1,3 +1,5 @@
+import { ReactElement } from 'react';
+import { EventEmitter } from 'events';
 import { obx, computed, autorun } from '@ali/lowcode-editor-core';
 import {
   isDOMText,
@@ -13,6 +15,7 @@ import {
   NodeStatus,
 } from '@ali/lowcode-types';
 import { compatStage } from '@ali/lowcode-utils';
+import { SettingTopEntry } from '@ali/lowcode-designer';
 import { Props, getConvertedExtraKey } from './props/props';
 import { DocumentModel } from '../document-model';
 import { NodeChildren } from './node-children';
@@ -20,9 +23,6 @@ import { Prop } from './props/prop';
 import { ComponentMeta } from '../../component-meta';
 import { ExclusiveGroup, isExclusiveGroup } from './exclusive-group';
 import { TransformStage } from './transform-stage';
-import { ReactElement } from 'react';
-import { SettingTopEntry } from 'designer/src/designer';
-import { EventEmitter } from 'events';
 import { includeSlot, removeSlot } from '../../utils/slot';
 import { foreachReverse } from '../../utils/tree';
 import { NodeRemoveOptions } from '../../types';
@@ -43,7 +43,7 @@ import { NodeRemoveOptions } from '../../types';
  *  conditionGroup use for condition, for exclusive
  *  title          display on outline
  *  ignored        ignore this node will not publish to render, but will store
- *  locked         can not select/hover/ item on canvas but can control on outline
+ *  isLocked       can not select/hover/ item on canvas but can control on outline
  *  hidden         not visible on canvas
  *  slotArgs       like loopArgs, for slot node
  *
@@ -71,8 +71,8 @@ import { NodeRemoveOptions } from '../../types';
  *  ------- future support -----
  *  conditionGroup
  *  title
- *  ignore
- *  locked
+ *  ignored
+ *  isLocked
  *  hidden
  */
 export class Node<Schema extends NodeSchema = NodeSchema> {
@@ -638,7 +638,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     const { componentName, id, children, props, ...extras } = data;
     if (this.isSlot()) {
       foreachReverse(
-        this.children,
+        this.children!,
         (subNode: Node) => {
           subNode.remove(true, true);
         },
@@ -953,8 +953,6 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   /**
-
-  /**
    * @deprecated
    */
   getSuitablePlace(node: Node, ref: any): any {
@@ -1024,10 +1022,6 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * @deprecated
    */
   registerAddon(key: string, exportData: () => any, isProp = false) {
-    // if (this._addons[key]) {
-    //   throw new Error(`node addon ${key} exist`);
-    // }
-
     this._addons[key] = { exportData, isProp };
   }
 
