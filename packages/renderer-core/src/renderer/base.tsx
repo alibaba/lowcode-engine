@@ -462,6 +462,7 @@ export default function baseRenererFactory() {
         // 对于可以获取到ref的组件做特殊处理
         if (!acceptsRef(Comp)) {
           Comp = compWrapper(Comp);
+          components[schema.componentName] = Comp;
         }
         otherProps.ref = (ref: any) => {
           this.$(props.fieldId || props.ref, ref); // 收集ref
