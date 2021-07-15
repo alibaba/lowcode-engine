@@ -11,10 +11,13 @@
   will-change: transform, width, height;
   overflow: visible;
   & > &-title {
-    position: absolute;
     color: var(--color-brand-light);
-    top: 0;
-    left: 0;
+    transform: translateY(-100%);
+    font-weight: lighter;
+  }
+  & > &-status {
+    margin-left: 5px;
+    color: #3c3c3c;
     transform: translateY(-100%);
     font-weight: lighter;
   }

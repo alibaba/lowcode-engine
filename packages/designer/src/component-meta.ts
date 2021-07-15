@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import {
   ComponentMetadata,
   NpmInfo,
@@ -13,17 +14,12 @@ import {
   FieldConfig,
 } from '@ali/lowcode-types';
 import { computed } from '@ali/lowcode-editor-core';
+import EventEmitter from 'events';
+
 import { isNode, Node, ParentalNode } from './document';
 import { Designer } from './designer';
 import { intlNode } from './locale';
-import { IconContainer } from './icons/container';
-import { IconPage } from './icons/page';
-import { IconComponent } from './icons/component';
-import { IconRemove } from './icons/remove';
-import { IconClone } from './icons/clone';
-import { ReactElement } from 'react';
-import { IconHidden } from './icons/hidden';
-import EventEmitter from 'events';
+import { IconLock, IconUnlock, IconContainer, IconPage, IconComponent, IconRemove, IconClone, IconHidden } from './icons';
 
 function ensureAList(list?: string | string[]): string[] | null {
   if (!list) {
@@ -148,6 +144,7 @@ export class ComponentMeta {
     // if _title is TitleConfig  get _title.icon
     return (
       this._transformedMetadata?.icon ||
+      // eslint-disable-next-line
       (this.componentName === 'Page' ? IconPage : this.isContainer ? IconContainer : IconComponent)
     );
   }
@@ -262,7 +259,7 @@ export class ComponentMeta {
     // eslint-disable-next-line prefer-const
     let { disableBehaviors, actions } = this._transformedMetadata?.configure.component || {};
     const disabled =
-      ensureAList(disableBehaviors) || (this.isRootComponent(false) ? ['copy', 'remove'] : null);
+      ensureAList(disableBehaviors) || (this.isRootComponent(false) ? ['copy', 'remove', 'lock', 'unlock'] : null);
     actions = builtinComponentActions.concat(
       this.designer.getGlobalComponentActions() || [],
       actions || [],
@@ -471,6 +468,36 @@ const builtinComponentActions: ComponentAction[] = [
     },
     important: true,
   },
+  {
+    name: 'lock',
+    content: {
+      icon: IconUnlock, // 解锁icon
+      title: intlNode('lock'),
+      action(node: Node) {
+        node.getExtraProp('isLocked', true)?.setValue(true);
+      },
+    },
+    condition: (node: Node) => {
+      const isLocked = node.getExtraProp('isLocked')?.getValue();
+      return (node.isContainer() && isLocked !== true);
+    },
+    important: true,
+  },
+  {
+    name: 'unlock',
+    content: {
+      icon: IconLock, // 锁定icon
+      title: intlNode('unlock'),
+      action(node: Node) {
+        node.getExtraProp('isLocked', true)?.setValue(false);
+      },
+    },
+    condition: (node: Node) => {
+      const isLocked = node.getExtraProp('isLocked')?.getValue();
+      return (node.isContainer() && isLocked === true);
+    },
+    important: true,
+  },
 ];
 
 export function removeBuiltinComponentAction(name: string) {
@@ -484,7 +511,7 @@ export function addBuiltinComponentAction(action: ComponentAction) {
 }
 
 export function modifyBuiltinComponentAction(
-  actionName,
+  actionName: string,
   handle: (action: ComponentAction) => void,
 ) {
   const builtinAction = builtinComponentActions.find((action) => action.name === actionName);

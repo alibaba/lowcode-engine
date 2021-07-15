@@ -22,6 +22,7 @@ export interface NodeSchema {
   loop?: CompositeValue; // 循环数据
   loopArgs?: [string, string]; // 循环迭代对象、索引名称 ["item", "index"]
   children?: NodeData | NodeData[]; // 子节点
+  isLocked?: boolean; // 是否锁定
 
   // ------- future support -----
   conditionGroup?: string;

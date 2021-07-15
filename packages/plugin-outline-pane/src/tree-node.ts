@@ -12,6 +12,7 @@ export default class TreeNode {
    * 是否可以展开
    */
   @computed get expandable(): boolean {
+    if (this.locked) return false;
     return this.hasChildren() || this.hasSlots() || this.dropDetail?.index != null;
   }
 
@@ -86,14 +87,14 @@ export default class TreeNode {
   }
 
   @computed get locked(): boolean {
-    return this.node.getExtraProp('locked', false)?.getValue() === true;
+    return this.node.getExtraProp('isLocked', false)?.getValue() === true;
   }
 
   setLocked(flag: boolean) {
     if (flag) {
-      this.node.getExtraProp('locked', true)?.setValue(true);
+      this.node.getExtraProp('isLocked', true)?.setValue(true);
     } else {
-      this.node.getExtraProp('locked', false)?.remove();
+      this.node.getExtraProp('isLocked', false)?.remove();
     }
   }
 
@@ -140,7 +141,7 @@ export default class TreeNode {
     return this.node.componentMeta.icon;
   }
 
-  @computed get parent() {
+  @computed get parent(): TreeNode | null {
     const { parent } = this.node;
     if (parent) {
       return this.tree.getTreeNode(parent);

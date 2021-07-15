@@ -1,10 +1,12 @@
+import { ReactInstance, Fragment, Component, createElement } from 'react';
+import { Router, Route, Switch } from 'react-router';
+import cn from 'classnames';
 import { Node } from '@ali/lowcode-designer';
 import LowCodeRenderer from '@ali/lowcode-react-renderer';
-import { ReactInstance, Fragment, Component, createElement } from 'react';
 import { observer } from '@recore/obx-react';
-import { isFromVC } from '@ali/lowcode-utils';
+import { isFromVC, getClosestNode } from '@ali/lowcode-utils';
 import { SimulatorRendererContainer, DocumentInstance } from './renderer';
-import { Router, Route, Switch } from 'react-router';
+
 import './renderer.less';
 
 const DEFAULT_SIMULATOR_LOCALE = 'zh-CN';
@@ -171,9 +173,16 @@ class Renderer extends Component<{
             (children == null || (Array.isArray(children) && !children.length)) &&
             (!viewProps.style || Object.keys(viewProps.style).length === 0)
           ) {
+            let defaultPlaceholder = '拖拽组件或模板到这里';
+            const lockedNode = getClosestNode(leaf, (node) => {
+              return node?.getExtraProp('isLocked')?.getValue() === true;
+            });
+            if (lockedNode) {
+              defaultPlaceholder = '锁定元素及子元素无法编辑';
+            }
             children = (
-              <div className="lc-container-placeholder" style={viewProps.placeholderStyle}>
-                {viewProps.placeholder || '拖拽组件或模板到这里'}
+              <div className={cn('lc-container-placeholder', { 'lc-container-locked': !!lockedNode })} style={viewProps.placeholderStyle}>
+                {viewProps.placeholder || defaultPlaceholder}
               </div>
             );
           }
