@@ -956,26 +956,53 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * @deprecated
    */
   getSuitablePlace(node: Node, ref: any): any {
+    const focusNode = this.document.focusNode;
     // 如果节点是模态框，插入到根节点下
     if (node?.componentMeta?.isModal) {
-      return { container: this.document.rootNode, ref };
+      return { container: focusNode, ref };
     }
 
+    if (!ref && this.contains(focusNode)) {
+      const rootCanDropIn = focusNode.componentMeta?.prototype?.options?.canDropIn;
+      if (
+        rootCanDropIn === undefined ||
+        rootCanDropIn === true ||
+        (typeof rootCanDropIn === 'function' && rootCanDropIn(node))
+      ) {
+        return { container: focusNode };
+      }
+
+      return null;
+    }
+
+    // todo: remove these dirty code (for legao tranditional scene)
     if (this.isRoot() && this.children) {
-      const dropElement = this.children.filter((c: Node) => {
+      const rootCanDropIn = this.componentMeta?.prototype?.options?.canDropIn;
+      if (
+        rootCanDropIn === undefined ||
+        rootCanDropIn === true ||
+        (typeof rootCanDropIn === 'function' && rootCanDropIn(node))
+      ) {
+        return { container: this, ref };
+      }
+
+      const dropElement = this.children.filter((c) => {
         if (!c.isContainer()) {
           return false;
         }
         const canDropIn = c.componentMeta?.prototype?.options?.canDropIn;
-        if (typeof canDropIn === 'function') {
-          return canDropIn(node);
-        } else if (typeof canDropIn === 'boolean') {
-          return canDropIn;
+        if (
+          canDropIn === undefined ||
+          canDropIn === true ||
+          (typeof canDropIn === 'function' && canDropIn(node))
+        ) {
+          return true;
         }
-        return true;
+        return false;
       })[0];
+
       if (dropElement) {
-        return { container: dropElement, ref };
+        return { container: dropElement };
       }
       const rootCanDropIn = this.componentMeta?.prototype?.options?.canDropIn;
       if (
