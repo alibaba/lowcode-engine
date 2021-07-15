@@ -1,18 +1,17 @@
 import { DocumentModel, Node } from '@ali/lowcode-designer';
+import { computed } from '@ali/lowcode-editor-core';
 import TreeNode from './tree-node';
 
 export class Tree {
   private treeNodesMap = new Map<string, TreeNode>();
 
-  readonly root: TreeNode;
-
   readonly id: string;
 
-  readonly document: DocumentModel;
+  @computed get root(): TreeNode {
+    return this.getTreeNode(this.document.focusNode);
+  }
 
-  constructor(document: DocumentModel) {
-    this.document = document;
-    this.root = this.getTreeNode(document.rootNode);
+  constructor(readonly document: DocumentModel) {
     this.id = document.id;
   }
 

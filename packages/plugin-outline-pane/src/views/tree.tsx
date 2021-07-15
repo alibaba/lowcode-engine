@@ -51,11 +51,11 @@ export default class TreeView extends Component<{ tree: Tree }> {
     const { node } = treeNode;
     const { designer } = treeNode;
     const doc = node.document;
-    const { selection } = doc;
+    const { selection, focusNode } = doc;
     const { id } = node;
     const isMulti = e.metaKey || e.ctrlKey || e.shiftKey;
     designer.activeTracker.track(node);
-    if (isMulti && !isRootNode(node) && selection.has(id)) {
+    if (isMulti && !node.contains(focusNode) && selection.has(id)) {
       if (!isFormEvent(e.nativeEvent)) {
         selection.remove(id);
       }
@@ -107,13 +107,13 @@ export default class TreeView extends Component<{ tree: Tree }> {
     const { node } = treeNode;
     const { designer } = treeNode;
     const doc = node.document;
-    const { selection } = doc;
+    const { selection, focusNode } = doc;
 
     // TODO: shift selection
     const isMulti = e.metaKey || e.ctrlKey || e.shiftKey;
     const isLeftButton = e.button === 0;
 
-    if (isLeftButton && !isRootNode(node)) {
+    if (isLeftButton && !node.contains(focusNode)) {
       let nodes: Node[] = [node];
       this.ignoreUpSelected = false;
       if (isMulti) {
@@ -123,7 +123,8 @@ export default class TreeView extends Component<{ tree: Tree }> {
           selection.add(node.id);
           this.ignoreUpSelected = true;
         }
-        selection.remove(doc.rootNode.id);
+        // todo: remove rootNodes id
+        selection.remove(focusNode.id);
         // 获得顶层 nodes
         nodes = selection.getTopNodes();
       } else if (selection.has(node.id)) {

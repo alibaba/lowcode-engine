@@ -102,7 +102,7 @@ export class Selection {
   containsNode(node: Node, excludeRoot = false) {
     for (const id of this._selected) {
       const parent = this.doc.getNode(id);
-      if (excludeRoot && parent === this.doc.rootNode) {
+      if (excludeRoot && parent?.contains(this.doc.focusNode)) {
         continue;
       }
       if (parent?.contains(node)) {
@@ -134,7 +134,7 @@ export class Selection {
     for (const id of this._selected) {
       const node = this.doc.getNode(id);
       // 排除根节点
-      if (!node || (!includeRoot && node === this.doc.rootNode)) {
+      if (!node || (!includeRoot && node.contains(this.doc.focusNode))) {
         continue;
       }
       let i = nodes.length;

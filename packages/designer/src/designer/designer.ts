@@ -13,14 +13,7 @@ import {
 } from '@ali/lowcode-types';
 import { megreAssets, AssetsJson } from '@ali/lowcode-utils';
 import { Project } from '../project';
-import {
-  Node,
-  DocumentModel,
-  insertChildren,
-  isRootNode,
-  ParentalNode,
-  TransformStage,
-} from '../document';
+import { Node, DocumentModel, insertChildren, ParentalNode, TransformStage } from '../document';
 import { ComponentMeta } from '../component-meta';
 import { INodeSelector, Component } from '../simulator';
 import { Scroller, IScrollable } from './scroller';
@@ -45,6 +38,7 @@ export interface DesignerProps {
   suspensed?: boolean;
   componentMetadatas?: ComponentMetadata[];
   globalComponentActions?: ComponentAction[];
+  focusNodeSelector?: (rootNode: Node) => Node;
   onMount?: (designer: Designer) => void;
   onDragstart?: (e: LocateEvent) => void;
   onDrag?: (e: LocateEvent) => void;
@@ -328,19 +322,20 @@ export class Designer {
         target: activedDoc.rootNode as ParentalNode,
       };
     }
+    const focusNode = activedDoc.focusNode;
     const nodes = activedDoc.selection.getNodes();
+    const refNode = nodes.find(item => focusNode.contains(item));
     let target;
     let index: number | undefined;
-    if (!nodes || nodes.length < 1) {
-      target = activedDoc.rootNode;
+    if (!refNode || refNode === focusNode) {
+      target = focusNode;
     } else {
-      const node = nodes[0];
-      if (isRootNode(node) || node.componentMeta.isContainer) {
-        target = node;
+      if (refNode.componentMeta.isContainer) {
+        target = refNode;
       } else {
         // FIXME!!, parent maybe null
-        target = node.parent!;
-        index = node.index + 1;
+        target = refNode.parent!;
+        index = refNode.index + 1;
       }
     }
 

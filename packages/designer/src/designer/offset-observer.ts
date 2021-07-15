@@ -105,7 +105,8 @@ export class OffsetObserver {
     this.node = node;
     const doc = node.document;
     const host = doc.simulator!;
-    this.isRoot = isRootNode(node);
+    const focusNode = doc.focusNode;
+    this.isRoot = node.contains(focusNode);
     this.viewport = host.viewport;
     if (this.isRoot) {
       this.hasOffset = true;

@@ -93,6 +93,23 @@ export class DocumentModel {
     this.rootNode?.getExtraProp('fileName', true)?.setValue(fileName);
   }
 
+  @computed get focusNode() {
+    if (this._drillDownNode) {
+      return this._drillDownNode;
+    }
+    const selector = this.designer.get('focusNodeSelector');
+    if (typeof selector === 'function') {
+      return selector(this.rootNode);
+    }
+    return this.rootNode;
+  }
+
+  @obx.ref private _drillDownNode: Node | null = null;
+
+  drillDown(node: Node | null) {
+    this._drillDownNode = node;
+  }
+
   private _modalNode?: ParentalNode;
 
   private _blank?: boolean;
@@ -151,7 +168,7 @@ export class DocumentModel {
   }
 
   get currentRoot() {
-    return this.modalNode || this.rootNode;
+    return this.modalNode || this.focusNode;
   }
 
   addWillPurge(node: Node) {
@@ -346,6 +363,7 @@ export class DocumentModel {
   }
 
   import(schema: RootSchema, checkId = false) {
+    const drillDownNodeId = this._drillDownNode?.id;
     // TODO: 暂时用饱和式删除，原因是 Slot 节点并不是树节点，无法正常递归删除
     this.nodes.forEach(node => {
       if (node.isRoot()) return;
@@ -363,6 +381,9 @@ export class DocumentModel {
     }
 
     // todo: select added and active track added
+    if (drillDownNodeId) {
+      this.drillDown(this.getNode(drillDownNodeId));
+    }
   }
 
   export(stage: TransformStage = TransformStage.Serilize) {
