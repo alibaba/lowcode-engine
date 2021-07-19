@@ -1,3 +1,4 @@
+import { getClosestNode } from '@ali/lowcode-utils';
 import { Node } from '../../document';
 
 /**
@@ -13,8 +14,14 @@ export const getClosestClickableNode = (
   // 执行 onClickHook 来判断当前节点是否可点击
   while (node) {
     const onClickHook = node.componentMeta?.getMetadata()?.experimental?.callbacks?.onClickHook;
-    const canClick =
+    const lockedNode = getClosestNode(node, (n) => {
+      return n?.getExtraProp('isLocked')?.getValue() === true;
+    });
+    let canClick =
       onClickHook && typeof onClickHook === 'function' ? onClickHook(event, node) : true;
+    if (lockedNode && lockedNode.getId() !== node.getId()) {
+      canClick = false;
+    }
     if (canClick) {
       break;
     }

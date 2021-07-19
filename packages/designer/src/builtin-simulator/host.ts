@@ -30,6 +30,7 @@ import {
   isFormEvent,
   hasOwnProperty,
   UtilsMetadata,
+  getClosestNode,
 } from '@ali/lowcode-utils';
 import {
   DragObjectType,
@@ -463,7 +464,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   }
 
   setupRendererChannel() {
-    const editor = this.designer.editor;
+    const { editor } = this.designer;
     editor.on('node.innerProp.change', ({ node, prop, oldValue, newValue }) => {
       // 在 Node 初始化阶段的属性变更都跳过
       if (!node.isInited) return;
@@ -1205,7 +1206,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     }
     const dropContainer = this.getDropContainer(e);
     const canDropIn = dropContainer?.container?.componentMeta?.prototype?.options?.canDropIn;
-
+    const lockedNode = getClosestNode(dropContainer?.container as Node, (node) => {
+      return node?.getExtraProp('isLocked')?.getValue() === true;
+    });
+    // const isLocked = dropContainer?.container?.getExtraProp('isLocked')?.getValue();
+    if (lockedNode) return null;
     if (
       !dropContainer ||
       canDropIn === false ||
@@ -1277,8 +1282,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       const inst = instances
         ? instances.length > 1
           ? instances.find(
-              (_inst) =>
-                this.getClosestNodeInstance(_inst, container.id)?.instance === containerInstance,
+              (_inst) => this.getClosestNodeInstance(_inst, container.id)?.instance === containerInstance,
             )
           : instances[0]
         : null;
