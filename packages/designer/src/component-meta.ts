@@ -13,7 +13,7 @@ import {
   LiveTextEditingConfig,
   FieldConfig,
 } from '@ali/lowcode-types';
-import { computed } from '@ali/lowcode-editor-core';
+import { computed, engineConfig } from '@ali/lowcode-editor-core';
 import EventEmitter from 'events';
 
 import { isNode, Node, ParentalNode } from './document';
@@ -479,7 +479,7 @@ const builtinComponentActions: ComponentAction[] = [
     },
     condition: (node: Node) => {
       const isLocked = node.getExtraProp('isLocked')?.getValue();
-      return (node.isContainer() && isLocked !== true);
+      return (engineConfig.get('enableCanvasLock', false) && node.isContainer() && isLocked !== true);
     },
     important: true,
   },
@@ -494,7 +494,7 @@ const builtinComponentActions: ComponentAction[] = [
     },
     condition: (node: Node) => {
       const isLocked = node.getExtraProp('isLocked')?.getValue();
-      return (node.isContainer() && isLocked === true);
+      return (engineConfig.get('enableCanvasLock', false) && node.isContainer() && isLocked === true);
     },
     important: true,
   },
