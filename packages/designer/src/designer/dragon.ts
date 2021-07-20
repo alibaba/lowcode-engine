@@ -247,7 +247,7 @@ export class Dragon {
    * @param dragObject 拖拽对象
    * @param boostEvent 拖拽初始时事件
    */
-  boost(dragObject: DragObject, boostEvent: MouseEvent | DragEvent, isFromRGLNode?: boolean) {
+  boost(dragObject: DragObject, boostEvent: MouseEvent | DragEvent, fromRglNode?: Node) {
     const { designer } = this;
     const masterSensors = this.getMasterSensors();
     const handleEvents = makeEventsHandler(boostEvent, masterSensors);
@@ -318,14 +318,31 @@ export class Dragon {
         return;
       }
       lastArrive = e;
+
+      const { isRGL, rglNode } = getRGL(e);
       const locateEvent = createLocateEvent(e);
       const sensor = chooseSensor(locateEvent);
-      const { isRGL, rglNode } = getRGL(e);
+
       if (isRGL) {
+        // 禁止被拖拽元素的阻断
+        const nodeInst = dragObject.nodes[0].getDOMNode();
+        if (nodeInst && nodeInst.style) {
+          this.nodeInstPointerEvents = true;
+          nodeInst.style.pointerEvents = 'none';
+        }
+        // 原生拖拽
+        this.emitter.emit('rgl.sleeping', false);
+        if (fromRglNode && fromRglNode.id === rglNode.id) {
+          designer.clearLocation();
+          this.clearState();
+          this.emitter.emit('drag', locateEvent);
+          return;
+        }
         this._canDrop = !!sensor?.locate(locateEvent);
         if (this._canDrop) {
           this.emitter.emit('rgl.add.placeholder', {
             rglNode,
+            fromRglNode,
             node: locateEvent.dragObject.nodes[0],
             event: e,
           });
@@ -337,6 +354,7 @@ export class Dragon {
       } else {
         this._canDrop = false;
         this.emitter.emit('rgl.remove.placeholder');
+        this.emitter.emit('rgl.sleeping', true);
       }
       if (sensor) {
         sensor.fixEvent(locateEvent);
@@ -397,6 +415,15 @@ export class Dragon {
 
     // end-tail drag process
     const over = (e?: any) => {
+      // 禁止被拖拽元素的阻断
+      if (this.nodeInstPointerEvents) {
+        const nodeInst = dragObject.nodes[0].getDOMNode();
+        if (nodeInst && nodeInst.style) {
+          nodeInst.style.pointerEvents = '';
+        }
+        this.nodeInstPointerEvents = false;
+      }
+
       // 发送drop事件
       if (e) {
         const { isRGL, rglNode } = getRGL(e);
@@ -413,6 +440,9 @@ export class Dragon {
           }
         }
       }
+
+      // 移除磁帖占位消息
+      this.emitter.emit('rgl.remove.placeholder');
 
       /* istanbul ignore next */
       if (e && isDragEvent(e)) {

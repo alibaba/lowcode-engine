@@ -22,3 +22,4 @@ export * from './build-components';
 export * from './appHelper';
 export * from './misc';
 export * from './schema';
+export * from './node-helper';

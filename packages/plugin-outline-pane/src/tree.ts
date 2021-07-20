@@ -12,7 +12,9 @@ export class Tree {
 
   constructor(document: DocumentModel) {
     this.document = document;
-    this.root = this.getTreeNode(document.rootNode);
+    if (document.rootNode) {
+      this.root = this.getTreeNode(document.rootNode);
+    }
     this.id = document.id;
   }
 

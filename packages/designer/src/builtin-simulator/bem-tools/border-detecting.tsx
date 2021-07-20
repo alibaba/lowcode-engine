@@ -1,8 +1,11 @@
 import { Component, Fragment, PureComponent } from 'react';
 import classNames from 'classnames';
 import { computed, observer, Title } from '@ali/lowcode-editor-core';
-import { BuiltinSimulatorHost } from '../host';
 import { TitleContent } from '@ali/lowcode-types';
+import { getClosestNode } from '@ali/lowcode-utils';
+
+import { BuiltinSimulatorHost } from '../host';
+
 
 export class BorderDetectingInstance extends PureComponent<{
   title: TitleContent;
@@ -10,9 +13,10 @@ export class BorderDetectingInstance extends PureComponent<{
   scale: number;
   scrollX: number;
   scrollY: number;
+  isLocked?: boolean;
 }> {
   render() {
-    const { title, rect, scale, scrollX, scrollY } = this.props;
+    const { title, rect, scale, scrollX, scrollY, isLocked } = this.props;
     if (!rect) {
       return null;
     }
@@ -32,6 +36,9 @@ export class BorderDetectingInstance extends PureComponent<{
     return (
       <div className={className} style={style}>
         <Title title={title} className="lc-borders-title" />
+        {
+          isLocked ? (<Title title="已锁定" className="lc-borders-status" />) : null
+        }
       </div>
     );
   }
@@ -74,11 +81,32 @@ export class BorderDetecting extends Component<{ host: BuiltinSimulatorHost }> {
     const { host } = this.props;
     const { current } = this;
 
+
     const canHoverHook = current?.componentMeta.getMetadata()?.experimental?.callbacks?.onHoverHook;
     const canHover = (canHoverHook && typeof canHoverHook === 'function') ? canHoverHook(current) : true;
 
+
     if (!canHover || !current || host.viewport.scrolling || host.liveEditing.editing) {
       return null;
+    }
+    const lockedNode = getClosestNode(current, (n) => {
+      return n?.getExtraProp('isLocked')?.getValue() === true;
+    });
+    if (lockedNode && lockedNode.getId() !== current.getId()) {
+      // return null;
+      // 选中父节锁定的节点
+      return (
+        <BorderDetectingInstance
+          key="line-h"
+          title={current.title}
+          scale={this.scale}
+          scrollX={this.scrollX}
+          scrollY={this.scrollY}
+          // @ts-ignore
+          rect={host.computeComponentInstanceRect(host.getComponentInstances(lockedNode)[0], lockedNode.componentMeta.rootSelector)}
+          isLocked={lockedNode?.getId() !== current.getId()}
+        />
+      );
     }
     const instances = host.getComponentInstances(current);
     if (!instances || instances.length < 1) {

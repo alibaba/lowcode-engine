@@ -52,6 +52,10 @@ export interface EngineOptions {
    */
   disableDefaultSetters: boolean;
   /**
+   * 打开画布的锁定操作，默认值：false
+   */
+  enableCanvasLock: boolean;
+  /**
    * Vision-polyfill settings
    */
   visionSettings?: {
