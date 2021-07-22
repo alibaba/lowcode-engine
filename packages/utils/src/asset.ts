@@ -1,3 +1,4 @@
+import { Package, ComponentCategory, ComponentDescription, RemoteComponentDescription } from '@ali/lowcode-types';
 import { isCSSUrl } from './is-css-url';
 import { createDefer } from './create-defer';
 import { load, evaluate } from './script';
@@ -55,10 +56,11 @@ export type Asset = AssetList | AssetBundle | AssetItem | URL;
 export type AssetList = Array<Asset | undefined | null>;
 
 export interface AssetsJson {
-  packages: Array<any>;
-  components?: Array<any>;
-  componentList?: Array<any>;
-  bizComponentList?: Array<any>;
+  version: string; // 资产包协议版本号
+  packages?: Package[]; // 大包列表，external与package的概念相似，融合在一起
+  components: Array<ComponentDescription | RemoteComponentDescription>; // 所有组件的描述协议列表所有组件的列表
+  componentList?: ComponentCategory[]; // 组件分类列表，用来描述物料面板
+  bizComponentList?: ComponentCategory[]; // 业务组件分类列表，用来描述物料面板
 }
 
 export function isAssetItem(obj: any): obj is AssetItem {

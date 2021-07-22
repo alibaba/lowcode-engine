@@ -6,10 +6,13 @@ import {
   KeyType,
   GetReturnType,
   HookConfig,
+  ComponentDescription,
+  RemoteComponentDescription,
 } from '@ali/lowcode-types';
 import { globalLocale } from './intl';
 import * as utils from './utils';
 import { obx } from './utils';
+import { AssetsJson, AssetLoader } from '@ali/lowcode-utils';
 
 EventEmitter.defaultMaxListeners = 100;
 
@@ -55,8 +58,49 @@ export class Editor extends EventEmitter implements IEditor {
   }
 
   set(key: KeyType, data: any): void {
+    if (key === 'assets') {
+      this.setAssets(data);
+      return;
+    }
     this.context.set(key, data);
     this.notifyGot(key);
+  }
+
+  async setAssets(assets: AssetsJson) {
+    const { components } = assets;
+    if (components && components.length) {
+      const componentDescriptions: ComponentDescription[] = [];
+      const remoteComponentDescriptions: RemoteComponentDescription[] = [];
+      components.forEach((component: any) => {
+        if (!component) {
+          return;
+        }
+        if (component.exportName && component.url) {
+          remoteComponentDescriptions.push(component);
+        } else {
+          componentDescriptions.push(component);
+        }
+      });
+      assets.components = componentDescriptions;
+      assets.componentList = assets.componentList || [];
+
+      // 如果有远程组件描述协议，则自动加载并补充到资产包中，同时出发 designer.incrementalAssetsReady 通知组件面板更新数据
+      if (remoteComponentDescriptions && remoteComponentDescriptions.length) {
+        await Promise.all(
+          remoteComponentDescriptions.map(async (component: any) => {
+            const { exportName, url } = component;
+            await (new AssetLoader()).load(url);
+            if (window[exportName]) {
+              assets.components = assets.components.concat(window[exportName].components || []);
+              assets.componentList = assets.componentList.concat(window[exportName].componentList || []);
+            }
+            return window[exportName];
+          }),
+        );
+      }
+    }
+    this.context.set('assets', assets);
+    this.notifyGot('assets');
   }
 
   onceGot<T = undefined, KeyOrType extends KeyType = any>(keyOrType: KeyOrType): Promise<GetReturnType<T, KeyOrType>> {
