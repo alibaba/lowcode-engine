@@ -211,11 +211,11 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
 
           setValue(field: SettingTarget, eventData) {
             const { eventDataList, eventList } = eventData;
-            eventList.map((item) => {
+            Array.isArray(eventList) && eventList.map((item) => {
               field.parent.clearPropValue(item.name);
               return item;
             });
-            eventDataList.map((item) => {
+            Array.isArray(eventDataList) && eventDataList.map((item) => {
               field.parent.setPropValue(item.name, {
                 type: 'JSFunction',
                 // 需要传下入参
