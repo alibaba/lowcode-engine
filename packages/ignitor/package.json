@@ -39,7 +39,6 @@
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",
-    "@types/events": "^3.0.0",
     "@types/react": "^16.8.3",
     "@types/react-dom": "^16.8.2",
     "@types/streamsaver": "^2.0.0",

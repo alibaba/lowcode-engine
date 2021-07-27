@@ -20,7 +20,6 @@
     "classnames": "^2.2.6",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
-    "event": "^1.0.0",
     "react": "^16",
     "react-dom": "^16.7.0",
     "zen-logger": "^1.1.0"

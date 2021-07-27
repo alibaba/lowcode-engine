@@ -16,6 +16,25 @@ import * as utils from './utils';
 EventEmitter.defaultMaxListeners = 100;
 const NOT_FOUND = Symbol.for('not_found');
 
+export declare interface Editor {
+  addListener(event: string | symbol, listener: (...args: any[]) => void): this;
+  on(event: string | symbol, listener: (...args: any[]) => void): this;
+  once(event: string | symbol, listener: (...args: any[]) => void): this;
+  removeListener(event: string | symbol, listener: (...args: any[]) => void): this;
+  off(event: string | symbol, listener: (...args: any[]) => void): this;
+  removeAllListeners(event?: string | symbol): this;
+  setMaxListeners(n: number): this;
+  getMaxListeners(): number;
+  listeners(event: string | symbol): Function[];
+  rawListeners(event: string | symbol): Function[];
+  emit(event: string | symbol, ...args: any[]): boolean;
+  listenerCount(type: string | symbol): number;
+  // Added in Node 6...
+  prependListener(event: string | symbol, listener: (...args: any[]) => void): this;
+  prependOnceListener(event: string | symbol, listener: (...args: any[]) => void): this;
+  eventNames(): Array<string | symbol>;
+}
+
 export class Editor extends EventEmitter implements IEditor {
   /**
    * Ioc Container
@@ -32,7 +51,10 @@ export class Editor extends EventEmitter implements IEditor {
 
   private hooks: HookConfig[] = [];
 
-  get<T = undefined, KeyOrType = any>(keyOrType: KeyOrType, opt?: GetOptions): GetReturnType<T, KeyOrType> | undefined {
+  get<T = undefined, KeyOrType = any>(
+    keyOrType: KeyOrType,
+    opt?: GetOptions,
+  ): GetReturnType<T, KeyOrType> | undefined {
     const x = this.context.get<T, KeyOrType>(keyOrType, opt);
     if (x === NOT_FOUND) {
       return undefined;
@@ -53,7 +75,9 @@ export class Editor extends EventEmitter implements IEditor {
     this.notifyGot(key);
   }
 
-  onceGot<T = undefined, KeyOrType extends KeyType = any>(keyOrType: KeyOrType): Promise<GetReturnType<T, KeyOrType>> {
+  onceGot<T = undefined, KeyOrType extends KeyType = any>(
+    keyOrType: KeyOrType,
+  ): Promise<GetReturnType<T, KeyOrType>> {
     const x = this.context.get<T, KeyOrType>(keyOrType);
     if (x !== NOT_FOUND) {
       return Promise.resolve(x);
@@ -153,11 +177,11 @@ export class Editor extends EventEmitter implements IEditor {
   };
 
   private waits = new Map<
-  KeyType,
-  Array<{
-    once?: boolean;
-    resolve:(data: any) => void;
-  }>
+    KeyType,
+    Array<{
+      once?: boolean;
+      resolve: (data: any) => void;
+    }>
   >();
 
   private notifyGot(key: KeyType) {

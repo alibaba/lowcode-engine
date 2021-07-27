@@ -46,7 +46,6 @@
     "@ali/lowcode-test-mate": "^1.0.1",
     "@alib/build-scripts": "^0.1.18",
     "@types/domready": "^1.0.0",
-    "@types/events": "^3.0.0",
     "@types/react": "^16.8.3",
     "@types/react-dom": "^16.8.2",
     "build-plugin-fusion": "0.1.17-beta.0",
