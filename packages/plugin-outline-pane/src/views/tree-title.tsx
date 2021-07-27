@@ -1,6 +1,6 @@
 import { Component, KeyboardEvent, FocusEvent, Fragment } from 'react';
 import classNames from 'classnames';
-import { observer, Title, Tip, globalContext, Editor } from '@ali/lowcode-editor-core';
+import { observer, Title, Tip, globalContext, Editor, engineConfig } from '@ali/lowcode-editor-core';
 import { createIcon } from '@ali/lowcode-utils';
 
 import { IconArrowRight } from '../icons/arrow-right';
@@ -168,7 +168,7 @@ export default class TreeTitle extends Component<{
           )}
         </div>
         {isCNode && isNodeParent && !isModal && <HideBtn treeNode={treeNode} />}
-        {isContainer && isCNode && isNodeParent && <LockBtn treeNode={treeNode} />}
+        {engineConfig.get('enableCanvasLock', false) && isContainer && isCNode && isNodeParent && <LockBtn treeNode={treeNode} />}
       </div>
     );
   }
