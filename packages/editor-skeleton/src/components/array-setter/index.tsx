@@ -11,7 +11,6 @@ import './style.less';
 interface ArraySetterState {
   items: SettingField[];
   itemsMap: Map<string | number, SettingField>;
-  prevLength: number;
 }
 
 interface ArraySetterProps {
@@ -24,95 +23,87 @@ interface ArraySetterProps {
 }
 
 export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
-  static getDerivedStateFromProps(props: ArraySetterProps, state: ArraySetterState) {
-    const { value, field, onChange } = props;
-    const newLength = value && Array.isArray(value) ? value.length : 0;
-    if (state && state.prevLength === newLength) {
-      return null;
-    }
-
-    // props value length change will go here
-    const originLength = state ? state.items.length : 0;
-    if (state && originLength === newLength) {
-      return {
-        prevLength: newLength,
-      };
-    }
-
-    const itemsMap = state ? state.itemsMap : new Map<string | number, SettingField>();
-    const items = state ? state.items.slice() : [];
-    if (newLength > originLength) {
-      for (let i = originLength; i < newLength; i++) {
-        const item = field.createField({
-          name: i,
-          setter: props.itemSetter,
-          // FIXME:
-          forceInline: 1,
-          setValue: () => setTimeout(() => ListSetter.onItemChange(onChange, items)),
-          // setValue: props.prop?.extraProps?.setValue,
-        });
-        item.setValue(value[i]);
-        items[i] = item;
-        itemsMap.set(item.id, item);
-      }
-    } else if (newLength < originLength) {
-      const deletes = items.splice(newLength);
-      deletes.forEach((item) => {
-        itemsMap.delete(item.id);
-      });
-
-      ListSetter.onItemChange(onChange, items);
-    }
-    return {
-      items,
-      itemsMap,
-      prevLength: newLength,
-    };
-  }
-
   state: ArraySetterState = {
     items: [],
     itemsMap: new Map<string | number, SettingField>(),
-    prevLength: 0,
   };
 
-
-  static onItemChange(onChange: Function|undefined, items: SettingField[]) {
+  onItemChange = async () => {
+    const { onChange } = this.props;
+    const { items } = this.state;
+    // setValue 的props数据合并会有一些延时，这里延时100毫秒来等待数据合并完成获取到最新数据
+    await this.delay(100);
     onChange && onChange(items.map(item => {
       return item && item.getValue();
     }));
+  };
+
+  componentDidMount() {
+    const { value, field, onChange } = this.props;
+    const itemsMap = new Map<string | number, SettingField>();
+    const items = [];
+    const valueLength = value && Array.isArray(value) ? value.length : 0;
+
+    for (let i = 0; i < valueLength; i++) {
+      const item = field.createField({
+        name: i,
+        setter: this.props.itemSetter,
+        forceInline: 1,
+        setValue: this.onItemChange,
+      });
+      items[i] = item;
+      itemsMap.set(item.id, item);
+    }
+
+    this.setState({
+      items,
+      itemsMap,
+    }, () => {
+      // setValue 会触发onItemChange，需要在items被设值之后才能调用
+      value && value.map((item, index) => {
+        items[index].setValue(item);
+        return item;
+      });
+    });
+  }
+
+  delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   onSort(sortedIds: Array<string | number>) {
     const { itemsMap } = this.state;
     const { onChange, itemSetter, field } = this.props;
-    const items = sortedIds.map((id) => {
-      const item = itemsMap.get(id)!;
-      // item.setKey(index);
-      return item;
+    const sortValues = sortedIds.map((id) => {
+      const value = itemsMap.get(id)!.getValue();
+      return value;
     });
 
     // 对itemsMap重新生成并刷新当前setter数据
     const newItems: SettingField[] = [];
     // const newItemsMap = {};
     itemsMap.clear();
-    for (let i = 0; i < items.length; i++) {
+    for (let i = 0; i < sortValues.length; i++) {
       const newItem = field.createField({
         name: i,
         setter: itemSetter,
         // FIXME:
         forceInline: 1,
-        setValue: () => ListSetter.onItemChange(onChange, newItems),
+        setValue: this.onItemChange,
       });
       newItems[i] = newItem;
 
       itemsMap.set(newItem.id, newItem);
     }
 
-    ListSetter.onItemChange(onChange, items);
     this.setState({
       items: newItems,
       itemsMap,
+    }, () => {
+      sortValues && sortValues.map((value, index) => {
+        newItems[index].setValue(value);
+        return newItems;
+      });
     });
   }
 
@@ -127,15 +118,15 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
       setter: itemSetter,
       // FIXME:
       forceInline: 1,
-      // setValue: () => ListSetter.onItemChange(onChange, items),
+      setValue: this.onItemChange,
     });
     items.push(item);
     itemsMap.set(item.id, item);
-    item.setValue(typeof initialValue === 'function' ? initialValue(item) : initialValue);
     this.scrollToLast = true;
-    ListSetter.onItemChange(onChange, items);
     this.setState({
       items: items.slice(),
+    }, () => {
+      item.setValue(typeof initialValue === 'function' ? initialValue(item) : initialValue);
     });
   }
 
@@ -168,13 +159,6 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
     });
   }
 
-  shouldComponentUpdate(_: any, nextState: ArraySetterState) {
-    if (nextState.items !== this.state.items) {
-      return true;
-    }
-    return false;
-  }
-
   render() {
     let columns: any = null;
     if (this.props.columns) {
@@ -202,11 +186,7 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
             ))}
           </Sortable>
         </div>
-      ) : this.props.multiValue ? (
-        <Message type="warning">当前选择了多个节点，且值不一致，修改会覆盖所有值</Message>
-      ) : (
-        <Message type="notice">当前项目为空</Message>
-      );
+      ) : this.props.multiValue ? (<Message type="warning">当前选择了多个节点，且值不一致，修改会覆盖所有值</Message>) : (<Message type="notice">当前项目为空</Message>);
 
     return (
       <div className="lc-setter-list lc-block-setter">
