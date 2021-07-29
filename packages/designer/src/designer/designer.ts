@@ -321,21 +321,19 @@ export class Designer {
         target: activedDoc.rootNode as ParentalNode,
       };
     }
-    const focusNode = activedDoc.focusNode;
+    const focusNode = activedDoc.focusNode!;
     const nodes = activedDoc.selection.getNodes();
     const refNode = nodes.find(item => focusNode.contains(item));
     let target;
     let index: number | undefined;
     if (!refNode || refNode === focusNode) {
       target = focusNode;
+    } else if (refNode.componentMeta.isContainer) {
+      target = refNode;
     } else {
-      if (refNode.componentMeta.isContainer) {
-        target = refNode;
-      } else {
-        // FIXME!!, parent maybe null
-        target = refNode.parent!;
-        index = refNode.index + 1;
-      }
+      // FIXME!!, parent maybe null
+      target = refNode.parent!;
+      index = refNode.index + 1;
     }
 
     if (target && insertNode && !target.componentMeta.checkNestingDown(target, insertNode)) {

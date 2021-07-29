@@ -5,7 +5,7 @@ import {
   PluginClassSet,
   KeyType,
   GetReturnType,
-  HookConfig
+  HookConfig,
 } from '@ali/lowcode-types';
 import { globalLocale } from './intl';
 import * as utils from './utils';
@@ -156,13 +156,15 @@ export class Editor extends EventEmitter implements IEditor {
     });
   };
 
+  /* eslint-disable */
   private waits = new Map<
-    KeyType,
-    Array<{
-      once?: boolean;
-      resolve: (data: any) => void;
-    }>
+  KeyType,
+  Array<{
+    once?: boolean;
+    resolve: (data: any) => void;
+  }>
   >();
+  /* eslint-enable */
 
   private notifyGot(key: KeyType) {
     let waits = this.waits.get(key);
