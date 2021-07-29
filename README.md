@@ -1,33 +1,39 @@
 ## Ali Lowcode Engine（阿里低代码引擎）
 
-## 开发
+整体文档：https://yuque.antfin.com/ali-lowcode/docs/dzfn58
 
-#### 创建新包
+## 引擎效果预览
 
-- `./scripts/create.sh <package-name>`
+下载并启动 demo 项目
 
-#### 运行示例
+```
+git clone git@gitlab.alibaba-inc.com:ali-lowcode/lowcode-editor-demo.git
+cd lowcode-editor-demo
+tnpm install && tnpm start
+```
 
-- `npm run setup`
-- `npm start`
+## 开发调试
 
-#### 开发提交
+```
+tnpm run setup
+tnpm start
+```
 
-- `git add <your-files>`
-- `git commit -a "feat: xxx"`
+启动引擎后，需要将 demo 项目中的引擎 CDN 地址代理到本地地址。
 
-## 发布
+更多参考：https://yuque.antfin.com/ali-lowcode/docs/vi8i9n
 
-- `npm run pub`
+## 研发协作规范（Code of Conduct）
 
-## 注意
+具体流程请参考：https://yuque.antfin.com/ali-lowcode/docs/tk90n5
 
-- `packages` 工程里一些开发时公共依赖（比如：`typescript`、`ava` 等）会放到工程顶层
-- 工程里的 `.md`、`test/` 等文件修改不会产生新的发布
-- 当工程里存在多个 ts 文件的目录时，最终产生的文件会按文件夹形式放到 `lib` 下
+issue 地址：http://gitlab.alibaba-inc.com/ali-lowcode/ali-lowcode-engine/issues
 
-## 包权限管理
+## 引擎 Changelog
 
-- `npm owner ls @ali/<pkg> --registry http://registry.npm.alibaba-inc.com`
-- `npm owner add <user> @ali/<pkg> --registry http://registry.npm.alibaba-inc.com`
-- `npm owner rm <user> @ali/<pkg> --registry http://registry.npm.alibaba-inc.com`
+参考：https://yuque.antfin.com/ali-lowcode/docs/idext1
+
+## 更多信息
+
+- 低代码物料研发脚手架 - [vdev](https://yuque.antfin.com/uipaas/help/isqc0g)
+- 低代码孵化器 - [UIPaaS](https://yuque.antfin.com/uipaas/help/overview)

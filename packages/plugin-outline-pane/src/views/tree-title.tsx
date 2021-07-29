@@ -1,6 +1,8 @@
 import { Component, KeyboardEvent, FocusEvent, Fragment } from 'react';
 import classNames from 'classnames';
-import { observer, Title, Tip, globalContext, Editor } from '@ali/lowcode-editor-core';
+import { observer, Title, Tip, globalContext, Editor, engineConfig } from '@ali/lowcode-editor-core';
+import { createIcon } from '@ali/lowcode-utils';
+
 import { IconArrowRight } from '../icons/arrow-right';
 import { IconEyeClose } from '../icons/eye-close';
 import { intl, intlNode } from '../locale';
@@ -10,7 +12,8 @@ import { IconCond } from '../icons/cond';
 import { IconLoop } from '../icons/loop';
 import { IconRadioActive } from '../icons/radio-active';
 import { IconRadio } from '../icons/radio';
-import { createIcon } from '@ali/lowcode-utils';
+import { IconLock, IconUnlock } from '../icons';
+
 
 function emitOutlineEvent(type: string, treeNode: TreeNode, rest?: Record<string, unknown>) {
   const editor = globalContext.get(Editor);
@@ -83,6 +86,7 @@ export default class TreeTitle extends Component<{
     const isCNode = !treeNode.isRoot();
     const { node } = treeNode;
     const isNodeParent = node.isParental();
+    const isContainer = node.isContainer();
     let style: any;
     if (isCNode) {
       const { depth } = treeNode;
@@ -164,34 +168,34 @@ export default class TreeTitle extends Component<{
           )}
         </div>
         {isCNode && isNodeParent && !isModal && <HideBtn treeNode={treeNode} />}
-        {/* isCNode && isNodeParent && <LockBtn treeNode={treeNode} /> */}
+        {engineConfig.get('enableCanvasLock', false) && isContainer && isCNode && isNodeParent && <LockBtn treeNode={treeNode} />}
       </div>
     );
   }
 }
 
-// @observer
-// class LockBtn extends Component<{ treeNode: TreeNode }> {
-//   shouldComponentUpdate() {
-//     return false;
-//   }
+@observer
+class LockBtn extends Component<{ treeNode: TreeNode }> {
+  shouldComponentUpdate() {
+    return false;
+  }
 
-//   render() {
-//     const { treeNode } = this.props;
-//     return (
-//       <div
-//         className="tree-node-lock-btn"
-//         onClick={(e) => {
-//           e.stopPropagation();
-//           treeNode.setLocked(!treeNode.locked);
-//         }}
-//       >
-//         {treeNode.locked ? <IconLock /> : <IconUnlock />}
-//         <Tip>{treeNode.locked ? intl('Unlock') : intl('Lock')}</Tip>
-//       </div>
-//     );
-//   }
-// }
+  render() {
+    const { treeNode } = this.props;
+    return (
+      <div
+        className="tree-node-lock-btn"
+        onClick={(e) => {
+          e.stopPropagation();
+          treeNode.setLocked(!treeNode.locked);
+        }}
+      >
+        {treeNode.locked ? <IconLock /> : <IconUnlock />}
+        <Tip>{treeNode.locked ? intl('Unlock') : intl('Lock')}</Tip>
+      </div>
+    );
+  }
+}
 
 @observer
 class HideBtn extends Component<{ treeNode: TreeNode }> {
@@ -216,6 +220,7 @@ class HideBtn extends Component<{ treeNode: TreeNode }> {
     );
   }
 }
+
 
 @observer
 class ExpandBtn extends Component<{ treeNode: TreeNode }> {

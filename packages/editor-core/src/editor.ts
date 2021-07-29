@@ -10,9 +10,27 @@ import {
 import { globalLocale } from './intl';
 import * as utils from './utils';
 import { obx } from './utils';
-// import { tipHandler } from './widgets/tip/tip-handler';
 
 EventEmitter.defaultMaxListeners = 100;
+
+export declare interface Editor {
+  addListener(event: string | symbol, listener: (...args: any[]) => void): this;
+  on(event: string | symbol, listener: (...args: any[]) => void): this;
+  once(event: string | symbol, listener: (...args: any[]) => void): this;
+  removeListener(event: string | symbol, listener: (...args: any[]) => void): this;
+  off(event: string | symbol, listener: (...args: any[]) => void): this;
+  removeAllListeners(event?: string | symbol): this;
+  setMaxListeners(n: number): this;
+  getMaxListeners(): number;
+  listeners(event: string | symbol): Function[];
+  rawListeners(event: string | symbol): Function[];
+  emit(event: string | symbol, ...args: any[]): boolean;
+  listenerCount(type: string | symbol): number;
+  // Added in Node 6...
+  prependListener(event: string | symbol, listener: (...args: any[]) => void): this;
+  prependOnceListener(event: string | symbol, listener: (...args: any[]) => void): this;
+  eventNames(): Array<string | symbol>;
+}
 
 export class Editor extends EventEmitter implements IEditor {
   /**
@@ -87,7 +105,6 @@ export class Editor extends EventEmitter implements IEditor {
     try {
       await init(this);
       // 注册快捷键
-      // registShortCuts(shortCuts, this);
       // 注册 hooks
       this.registerHooks(hooks);
       this.emit('editor.afterInit');
@@ -104,7 +121,6 @@ export class Editor extends EventEmitter implements IEditor {
     }
     try {
       const { lifeCycles = {} } = this.config;
-      // unRegistShortCuts(shortCuts);
 
       this.unregisterHooks();
 
@@ -141,11 +157,11 @@ export class Editor extends EventEmitter implements IEditor {
   };
 
   private waits = new Map<
-  KeyType,
-  Array<{
-    once?: boolean;
-    resolve:(data: any) => void;
-  }>
+    KeyType,
+    Array<{
+      once?: boolean;
+      resolve: (data: any) => void;
+    }>
   >();
 
   private notifyGot(key: KeyType) {

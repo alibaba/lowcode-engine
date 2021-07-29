@@ -17,7 +17,7 @@ export function set(obj: any, path: any, val: any) {
 }
 
 export function delay(ms) {
-  return new Promise(resove => setTimeout(resove, ms));
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 export function delayObxTick() {

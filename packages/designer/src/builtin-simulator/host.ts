@@ -30,6 +30,7 @@ import {
   isFormEvent,
   hasOwnProperty,
   UtilsMetadata,
+  getClosestNode,
 } from '@ali/lowcode-utils';
 import {
   DragObjectType,
@@ -463,7 +464,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   }
 
   setupRendererChannel() {
-    const editor = this.designer.editor;
+    const { editor } = this.designer;
     editor.on('node.innerProp.change', ({ node, prop, oldValue, newValue }) => {
       // 在 Node 初始化阶段的属性变更都跳过
       if (!node.isInited) return;
@@ -546,71 +547,20 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         if (!node) {
           return;
         }
-        const isRGLNode = node?.getParent()?.isRGLContainer;
         const rglNode = node?.getParent();
+        const isRGLNode = rglNode?.isRGLContainer;
         if (isRGLNode) {
           // 如果拖拽的是磁铁块的右下角handle，则直接跳过
           if (downEvent.target.classList.contains('react-resizable-handle')) return;
+          // 禁止多选
           isMulti = false;
           designer.dragon.emitter.emit('rgl.switch', {
             action: 'start',
             rglNode,
           });
-          const judgeEnterOtherRGL = (e: MouseEvent) => {
-            const _nodeInst = this.getNodeInstanceFromElement(e.target as Element);
-            const _node = _nodeInst?.node;
-            if (!_node) return { status: false };
-            const { isRGL: _isRGL, rglNode: _rglNode } = _node.getRGL();
-            const status = !!(
-              _isRGL &&
-              _rglNode?.id !== rglNode?.id &&
-              _rglNode?.getParent() !== node &&
-              _node !== nodeInst?.node
-            );
-            return { status, rglNode: _rglNode };
-          };
-          const move = (e: MouseEvent) => {
-            if (!isShaken(downEvent, e)) {
-              if (nodeInst.instance && nodeInst.instance.style) {
-                nodeInst.instance.style.pointerEvents = 'none';
-              }
-            }
-            const { status, rglNode: _rglNode } = judgeEnterOtherRGL(e);
-            if (status) {
-              designer.dragon.emitter.emit('rgl.add.placeholder', {
-                rglNode: _rglNode,
-                node,
-                event: e,
-                fromRglNode: rglNode,
-              });
-            } else {
-              designer.dragon.emitter.emit('rgl.remove.placeholder');
-            }
-          };
-          const over = (e: MouseEvent) => {
-            const { status, rglNode: _rglNode } = judgeEnterOtherRGL(e);
-            if (status) {
-              designer.dragon.emitter.emit('rgl.drop', {
-                rglNode: _rglNode,
-                node,
-                fromRglNode: rglNode,
-              });
-            }
-            designer.dragon.emitter.emit('rgl.remove.placeholder');
-            if (nodeInst.instance && nodeInst.instance.style) {
-              nodeInst.instance.style.pointerEvents = '';
-            }
-            designer.dragon.emitter.emit('rgl.switch', {
-              action: 'end',
-              rglNode,
-            });
-            doc.removeEventListener('mouseup', over, true);
-            doc.removeEventListener('mousemove', move, true);
-          };
-          doc.addEventListener('mouseup', over, true);
-          doc.addEventListener('mousemove', move, true);
         } else {
           // stop response document focus event
+          // 禁止原生拖拽
           downEvent.stopPropagation();
           downEvent.preventDefault();
         }
@@ -621,6 +571,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         const isLeftButton = downEvent.which === 1 || downEvent.button === 0;
         const checkSelect = (e: MouseEvent) => {
           doc.removeEventListener('mouseup', checkSelect, true);
+          // 取消移动;
+          designer.dragon.emitter.emit('rgl.switch', {
+            action: 'end',
+            rglNode,
+          });
           // 鼠标是否移动 ? - 鼠标抖动应该也需要支持选中事件，偶尔点击不能选中，磁帖块移除shaken检测
           if (!isShaken(downEvent, e) || isRGLNode) {
             let { id } = node;
@@ -667,16 +622,14 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           } else {
             // will clear current selection & select dragment in dragstart
           }
-          if (!isRGLNode) {
-            designer.dragon.boost(
-              {
-                type: DragObjectType.Node,
-                nodes,
-              },
-              downEvent,
-              true,
-            );
-          }
+          designer.dragon.boost(
+            {
+              type: DragObjectType.Node,
+              nodes,
+            },
+            downEvent,
+            isRGLNode ? rglNode : undefined,
+          );
           if (ignoreUpSelected) {
             // multi select mode has add selected, should return
             return;
@@ -1265,7 +1218,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     }
     const dropContainer = this.getDropContainer(e);
     const canDropIn = dropContainer?.container?.componentMeta?.prototype?.options?.canDropIn;
-
+    const lockedNode = getClosestNode(dropContainer?.container as Node, (node) => {
+      return node?.getExtraProp('isLocked')?.getValue() === true;
+    });
+    // const isLocked = dropContainer?.container?.getExtraProp('isLocked')?.getValue();
+    if (lockedNode) return null;
     if (
       !dropContainer ||
       canDropIn === false ||
@@ -1337,8 +1294,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       const inst = instances
         ? instances.length > 1
           ? instances.find(
-              (_inst) =>
-                this.getClosestNodeInstance(_inst, container.id)?.instance === containerInstance,
+              (_inst) => this.getClosestNodeInstance(_inst, container.id)?.instance === containerInstance,
             )
           : instances[0]
         : null;

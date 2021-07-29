@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-ignitor",
-  "version": "1.0.58",
+  "version": "1.0.60",
   "description": "点火器，bootstrap lce project",
   "main": "lib/index.js",
   "private": true,
@@ -39,7 +39,6 @@
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",
-    "@types/events": "^3.0.0",
     "@types/react": "^16.8.3",
     "@types/react-dom": "^16.8.2",
     "@types/streamsaver": "^2.0.0",

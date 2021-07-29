@@ -178,7 +178,6 @@ export async function init(container?: Element, options?: EngineOptions) {
     }
   }
   engineContainer.id = 'engine';
-
   engineConfig.setConfig(engineOptions as any);
 
   await plugins.init();

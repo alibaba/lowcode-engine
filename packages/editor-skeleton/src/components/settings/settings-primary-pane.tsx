@@ -123,6 +123,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
 
   render() {
     const { settings } = this.main;
+    const editor = globalContext.get(Editor);
     if (!settings) {
       // 未选中节点，提示选中 或者 显示根节点设置
       return (
@@ -145,7 +146,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
     }
 
     if (!settings.isSameComponent) {
-      // todo: future support 获取设置项交集编辑
+      // TODO: future support 获取设置项交集编辑
       return (
         <div className="lc-settings-main">
           <div className="lc-settings-notice">
@@ -184,7 +185,19 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
         matched = true;
       }
       return (
-        <Tab.Item className="lc-settings-tab-item" title={<Title title={field.title} />} key={field.name}>
+        <Tab.Item
+          className="lc-settings-tab-item"
+          title={<Title title={field.title} />}
+          key={field.name}
+          onClick={
+            () => {
+              editor?.emit('skeleton.settingsPane.change', {
+                name: field.name,
+                title: field.title,
+              });
+            }
+          }
+        >
           <SkeletonContext.Consumer>
             {(skeleton) => {
               if (skeleton) {
