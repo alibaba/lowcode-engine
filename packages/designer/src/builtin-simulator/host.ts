@@ -705,7 +705,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       const nodeInst = this.getNodeInstanceFromElement(e.target as Element);
       if (nodeInst?.node) {
         let node = nodeInst.node;
-        const focusNode = node.document.focusNode;
+        const focusNode = node.document?.focusNode;
         if (node.contains(focusNode)) {
           node = focusNode;
         }
@@ -758,7 +758,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
         if (!nodeInst) {
           return;
         }
-        const focusNode = this.project.currentDocument!.focusNode;
+        const focusNode = this.project.currentDocument?.focusNode;
         const node = nodeInst.node || focusNode;
         if (!node || isLowCodeComponent(node)) {
           return;

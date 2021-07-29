@@ -97,7 +97,7 @@ export class DocumentModel {
     if (this._drillDownNode) {
       return this._drillDownNode;
     }
-    const selector = this.designer.editor.get<((rootNode: RootNode) => Node) | null>('focusNodeSelector');
+    const selector = this.designer.editor?.get<((rootNode: RootNode) => Node) | null>('focusNodeSelector');
     if (selector && typeof selector === 'function') {
       return selector(this.rootNode!);
     }

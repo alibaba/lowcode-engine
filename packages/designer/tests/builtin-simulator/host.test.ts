@@ -1,3 +1,4 @@
+// @ts-ignore
 import React from 'react';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
@@ -408,7 +409,7 @@ describe('Host 测试', () => {
       host.setupContextMenu();
       host.getNodeInstanceFromElement = () => {
         return {
-          node: { componentMeta: { componentName: 'Button', getMetadata() { return {} } } },
+          node: { componentMeta: { componentName: 'Button', getMetadata() { return {} } }, contains() {} },
         };
       };
       const mockFn = jest.fn();

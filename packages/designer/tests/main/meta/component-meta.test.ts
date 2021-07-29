@@ -1,5 +1,4 @@
-import set from 'lodash/set';
-import cloneDeep from 'lodash/cloneDeep';
+// @ts-ignore
 import '../../fixtures/window';
 import { Node } from '../../../src/document/node/node';
 import { Designer } from '../../../src/designer/designer';
@@ -45,7 +44,7 @@ describe('组件元数据处理', () => {
 
   it('availableActions', () => {
     const meta = new ComponentMeta(designer, divMeta);
-    expect(meta.availableActions).toHaveLength(3);
+    expect(meta.availableActions).toHaveLength(5);
     expect(meta.availableActions[0].name).toBe('remove');
     expect(meta.availableActions[1].name).toBe('hide');
     expect(meta.availableActions[2].name).toBe('copy');
@@ -63,7 +62,7 @@ describe('组件元数据处理', () => {
       },
     });
     // availableActions 有 computed 缓存
-    expect(meta.availableActions).toHaveLength(3);
+    expect(meta.availableActions).toHaveLength(5);
     expect(meta.availableActions[0].name).toBe('remove');
     expect(meta.availableActions[1].name).toBe('hide');
     expect(meta.availableActions[2].name).toBe('copy');

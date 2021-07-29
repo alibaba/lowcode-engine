@@ -956,7 +956,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * @deprecated
    */
   getSuitablePlace(node: Node, ref: any): any {
-    const focusNode = this.document.focusNode;
+    const focusNode = this.document?.focusNode;
     // 如果节点是模态框，插入到根节点下
     if (node?.componentMeta?.isModal) {
       return { container: focusNode, ref };
@@ -975,17 +975,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       return null;
     }
 
-    // todo: remove these dirty code (for legao tranditional scene)
     if (this.isRoot() && this.children) {
-      const rootCanDropIn = this.componentMeta?.prototype?.options?.canDropIn;
-      if (
-        rootCanDropIn === undefined ||
-        rootCanDropIn === true ||
-        (typeof rootCanDropIn === 'function' && rootCanDropIn(node))
-      ) {
-        return { container: this, ref };
-      }
-
       const dropElement = this.children.filter((c) => {
         if (!c.isContainer()) {
           return false;
@@ -1002,7 +992,16 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       })[0];
 
       if (dropElement) {
-        return { container: dropElement };
+        return { container: dropElement, ref };
+      }
+
+      const rootCanDropIn = this.componentMeta?.prototype?.options?.canDropIn;
+      if (
+        rootCanDropIn === undefined ||
+        rootCanDropIn === true ||
+        (typeof rootCanDropIn === 'function' && rootCanDropIn(node))
+      ) {
+        return { container: this, ref };
       }
 
       return null;
