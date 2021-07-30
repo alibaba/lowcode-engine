@@ -1,7 +1,7 @@
 // all this file for polyfill vision logic
 
 import { isValidElement } from 'react';
-import { isSetterConfig } from '@ali/lowcode-types';
+import { isSetterConfig, isDynamicSetter } from '@ali/lowcode-types';
 import { getSetter } from '@ali/lowcode-editor-core';
 
 function getHotterFromSetter(setter) {
@@ -54,6 +54,9 @@ export class Transducer {
     }
     if (typeof setter === 'string') {
       setter = getSetter(setter)?.component;
+    }
+    if (isDynamicSetter(setter)) {
+      setter = setter.call(context, context);
     }
 
     this.setterTransducer = combineTransducer(getTransducerFromSetter(setter), getHotterFromSetter(setter), context);
