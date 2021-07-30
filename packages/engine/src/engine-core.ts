@@ -103,6 +103,19 @@ const getSelection = () => designer.currentDocument?.selection;
   engineConfig,
 };
 
+// 处理 editor.set('assets')，将组件元数据创建好
+plugins.register((ctx: ILowCodePluginContext) => {
+  return {
+    name: '___component_meta_parser___',
+    init() {
+      editor.onGot('assets', (assets: any) => {
+        const { components = [] } = assets;
+        designer.buildComponentMetasMap(components);
+      });
+    },
+  };
+});
+
 // 注册默认的 setters
 plugins.register((ctx: ILowCodePluginContext) => {
   return {

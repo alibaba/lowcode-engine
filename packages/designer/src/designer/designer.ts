@@ -459,7 +459,7 @@ export class Designer {
 
   private _lostComponentMetasMap = new Map<string, ComponentMeta>();
 
-  private buildComponentMetasMap(metas: ComponentMetadata[]) {
+  buildComponentMetasMap(metas: ComponentMetadata[]) {
     metas.forEach((data) => this.createComponentMeta(data));
   }
 
