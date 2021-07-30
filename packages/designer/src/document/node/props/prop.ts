@@ -590,7 +590,7 @@ export class Prop implements IPropParent {
     }
     this._maps = null;
     if (this._slotNode && this._slotNode.slotFor === this) {
-      this._slotNode.purge();
+      this._slotNode.remove();
     }
   }
 

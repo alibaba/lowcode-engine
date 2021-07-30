@@ -95,6 +95,7 @@ export type RootSchema = PageSchema | ComponentSchema | BlockSchema;
 
 export interface SlotSchema extends NodeSchema {
   componentName: 'Slot';
+  name?: string;
   params?: string[];
 }
 
