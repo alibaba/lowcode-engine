@@ -13,6 +13,7 @@ import {
   PageSchema,
   ComponentSchema,
   NodeStatus,
+  CompositeValue,
 } from '@ali/lowcode-types';
 import { compatStage } from '@ali/lowcode-utils';
 import { SettingTopEntry } from '@ali/lowcode-designer';
@@ -544,6 +545,10 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   getExtraProp(key: string, stash = true): Prop | null {
     return this.props.get(getConvertedExtraKey(key), stash) || null;
+  }
+
+  setExtraProp(key: string, value: CompositeValue, spread = false, options: any = {}): Prop | null {
+    return this.props.add(value, getConvertedExtraKey(key), spread, options) || null;
   }
 
   /**

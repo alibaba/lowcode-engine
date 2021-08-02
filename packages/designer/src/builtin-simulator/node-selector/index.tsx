@@ -1,6 +1,7 @@
 import { Overlay } from '@alifd/next';
 import React from 'react';
 import { Title, globalContext, Editor } from '@ali/lowcode-editor-core';
+import { canClickNode } from '@ali/lowcode-utils';
 import './index.less';
 
 import { Node, ParentalNode } from '@ali/lowcode-designer';
@@ -32,7 +33,7 @@ export default class InstanceNodeSelector extends React.Component<IProps, IState
   // 获取节点的父级节点（最多获取5层）
   getParentNodes = (node: Node) => {
     const parentNodes: any[] = [];
-    const focusNode = node.document.focusNode;
+    const { focusNode } = node.document;
 
     if (node.contains(focusNode) || !focusNode.contains(node)) {
       return parentNodes;
@@ -52,8 +53,14 @@ export default class InstanceNodeSelector extends React.Component<IProps, IState
     return parentNodes;
   };
 
-  onSelect = (node: Node) => () => {
-    if (node && typeof node.select === 'function') {
+  onSelect = (node: Node) => (e: unknown) => {
+    if (!node) {
+      return;
+    }
+
+    const canClick = canClickNode(node, e as MouseEvent);
+
+    if (canClick && typeof node.select === 'function') {
       node.select();
       const editor = globalContext.get(Editor);
       const npm = node?.componentMeta?.npm;
