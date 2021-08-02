@@ -140,7 +140,7 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
     const { nodes } = dragObject;
 
     const tree = this._master?.currentTree;
-    if (!tree || !this._shell) {
+    if (!tree || !tree.root || !this._shell) {
       return null;
     }
 

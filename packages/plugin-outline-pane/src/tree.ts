@@ -7,8 +7,11 @@ export class Tree {
 
   readonly id: string;
 
-  @computed get root(): TreeNode {
-    return this.getTreeNode(this.document.focusNode!);
+  @computed get root(): TreeNode | null {
+    if (this.document.focusNode) {
+      return this.getTreeNode(this.document.focusNode!);
+    }
+    return null;
   }
 
   constructor(readonly document: DocumentModel) {

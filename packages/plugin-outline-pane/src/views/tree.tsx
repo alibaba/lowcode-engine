@@ -150,6 +150,9 @@ export default class TreeView extends Component<{ tree: Tree }> {
   render() {
     const { tree } = this.props;
     const { root } = tree;
+    if (!root) {
+      return null;
+    }
     return (
       <div
         className="lc-outline-tree"
