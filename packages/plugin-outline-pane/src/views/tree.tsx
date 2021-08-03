@@ -1,7 +1,7 @@
 import { Component, MouseEvent as ReactMouseEvent } from 'react';
 import { observer, Editor, globalContext } from '@ali/lowcode-editor-core';
 import { isRootNode, Node, DragObjectType, isShaken } from '@ali/lowcode-designer';
-import { isFormEvent } from '@ali/lowcode-utils';
+import { isFormEvent, canClickNode } from '@ali/lowcode-utils';
 import { Tree } from '../tree';
 import RootTreeNodeView from './root-tree-node';
 
@@ -49,6 +49,11 @@ export default class TreeView extends Component<{ tree: Tree }> {
       return;
     }
     const { node } = treeNode;
+
+    if (!canClickNode(node, e)) {
+      return;
+    }
+
     const { designer } = treeNode;
     const doc = node.document;
     const { selection, focusNode } = doc;
@@ -105,6 +110,11 @@ export default class TreeView extends Component<{ tree: Tree }> {
     }
 
     const { node } = treeNode;
+
+    if (!canClickNode(node, e)) {
+      return;
+    }
+
     const { designer } = treeNode;
     const doc = node.document;
     const { selection, focusNode } = doc;
