@@ -123,13 +123,23 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
 
   render() {
     const { settings } = this.main;
-    const editor = globalContext.get(Editor);
+    const editor = globalContext.get('editor');
     if (!settings) {
       // 未选中节点，提示选中 或者 显示根节点设置
       return (
         <div className="lc-settings-main">
           <div className="lc-settings-notice">
             <p>请在左侧画布选中节点</p>
+          </div>
+        </div>
+      );
+    }
+
+    if (settings.isLocked) {
+      return (
+        <div className="lc-settings-main">
+          <div className="lc-settings-notice">
+            <p>该节点已被锁定，无法配置</p>
           </div>
         </div>
       );

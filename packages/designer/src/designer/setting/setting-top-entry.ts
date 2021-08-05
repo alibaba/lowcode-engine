@@ -54,6 +54,10 @@ export class SettingTopEntry implements SettingEntry {
     return this.nodes.length === 1;
   }
 
+  get isLocked(): boolean {
+    return this.first.isLocked;
+  }
+
   /**
    * 多个
    */
