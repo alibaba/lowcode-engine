@@ -44,7 +44,7 @@ import { NodeRemoveOptions } from '../../types';
  *  conditionGroup use for condition, for exclusive
  *  title          display on outline
  *  ignored        ignore this node will not publish to render, but will store
- *  isLocked       can not select/hover/ item on canvas but can control on outline
+ *  isLocked       can not select/hover/ item on canvas and outline
  *  hidden         not visible on canvas
  *  slotArgs       like loopArgs, for slot node
  *
@@ -372,6 +372,20 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
         this.parent.children.delete(this, purge, useMutator, { suppressRemoveEvent: true });
       }
     }
+  }
+
+  /**
+   * 锁住当前节点
+   */
+  lock(flag = true) {
+    this.setExtraProp('isLocked', flag);
+  }
+
+  /**
+   * 获取当前节点的锁定状态
+   */
+  get isLocked(): boolean {
+    return !!this.getExtraProp('isLocked', false)?.getValue();
   }
 
   /**
