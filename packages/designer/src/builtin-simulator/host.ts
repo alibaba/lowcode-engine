@@ -1218,10 +1218,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     }
     const dropContainer = this.getDropContainer(e);
     const canDropIn = dropContainer?.container?.componentMeta?.prototype?.options?.canDropIn;
-    const lockedNode = getClosestNode(dropContainer?.container as Node, (node) => {
-      return node?.getExtraProp('isLocked')?.getValue() === true;
-    });
-    // const isLocked = dropContainer?.container?.getExtraProp('isLocked')?.getValue();
+    const lockedNode = getClosestNode(dropContainer?.container as Node, (node) => node.isLocked);
     if (lockedNode) return null;
     if (
       !dropContainer ||

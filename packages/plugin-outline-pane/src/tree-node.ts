@@ -87,15 +87,11 @@ export default class TreeNode {
   }
 
   @computed get locked(): boolean {
-    return this.node.getExtraProp('isLocked', false)?.getValue() === true;
+    return this.node.isLocked;
   }
 
   setLocked(flag: boolean) {
-    if (flag) {
-      this.node.getExtraProp('isLocked', true)?.setValue(true);
-    } else {
-      this.node.getExtraProp('isLocked', false)?.remove();
-    }
+    this.node.lock(flag);
   }
 
   @computed get selected(): boolean {
