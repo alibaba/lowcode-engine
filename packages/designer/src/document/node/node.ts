@@ -561,8 +561,8 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.props.get(getConvertedExtraKey(key), stash) || null;
   }
 
-  setExtraProp(key: string, value: CompositeValue, spread = false, options: any = {}): Prop | null {
-    return this.props.add(value, getConvertedExtraKey(key), spread, options) || null;
+  setExtraProp(key: string, value: CompositeValue) {
+    this.getProp(getConvertedExtraKey(key), true)?.setValue(value);
   }
 
   /**

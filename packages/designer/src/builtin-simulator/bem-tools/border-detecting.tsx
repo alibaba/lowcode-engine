@@ -112,7 +112,8 @@ export class BorderDetecting extends Component<{ host: BuiltinSimulatorHost }> {
     }
 
     const lockedNode = getClosestNode(current, (n) => {
-      return n?.getExtraProp('isLocked')?.getValue() === true;
+      // 假如当前节点就是 locked 状态，要从当前节点的父节点开始查找
+      return !!(current?.isLocked ? n.parent?.isLocked : n.isLocked);
     });
     if (lockedNode && lockedNode.getId() !== current.getId()) {
       // 选中父节锁定的节点

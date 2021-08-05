@@ -11,12 +11,13 @@ export const getClosestClickableNode = (
   event: MouseEvent,
 ) => {
   let node = currentNode;
-  // 执行 onClickHook 来判断当前节点是否可点击
   while (node) {
-    const lockedNode = getClosestNode(node, (n) => {
-      return n?.getExtraProp('isLocked')?.getValue() === true;
-    });
+    // 判断当前节点是否可点击
     let canClick = canClickNode(node, event);
+    const lockedNode = getClosestNode(node!, (n) => {
+      // 假如当前节点就是 locked 状态，要从当前节点的父节点开始查找
+      return !!(node?.isLocked ? n.parent?.isLocked : n.isLocked);
+    });
     if (lockedNode && lockedNode.getId() !== node.getId()) {
       canClick = false;
     }

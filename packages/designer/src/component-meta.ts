@@ -474,12 +474,11 @@ const builtinComponentActions: ComponentAction[] = [
       icon: IconUnlock, // 解锁icon
       title: intlNode('lock'),
       action(node: Node) {
-        node.getExtraProp('isLocked', true)?.setValue(true);
+        node.lock();
       },
     },
     condition: (node: Node) => {
-      const isLocked = node.getExtraProp('isLocked')?.getValue();
-      return (engineConfig.get('enableCanvasLock', false) && node.isContainer() && isLocked !== true);
+      return (engineConfig.get('enableCanvasLock', false) && node.isContainer() && !node.isLocked);
     },
     important: true,
   },
@@ -489,12 +488,11 @@ const builtinComponentActions: ComponentAction[] = [
       icon: IconLock, // 锁定icon
       title: intlNode('unlock'),
       action(node: Node) {
-        node.getExtraProp('isLocked', true)?.setValue(false);
+        node.lock(false);
       },
     },
     condition: (node: Node) => {
-      const isLocked = node.getExtraProp('isLocked')?.getValue();
-      return (engineConfig.get('enableCanvasLock', false) && node.isContainer() && isLocked === true);
+      return (engineConfig.get('enableCanvasLock', false) && node.isContainer() && node.isLocked);
     },
     important: true,
   },
