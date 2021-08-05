@@ -12,20 +12,23 @@ export function stylePropsReducer(props: any, node: any) {
     cssClass = `_css_pseudo_${node.id.replace(/\$/g, '_')}`;
     styleProp = props.__style__;
     appendStyleNode(props, styleProp, cssClass, cssId);
+    props.className = cssClass;
   }
   if (props.pageStyle) {
     cssId = '_style_pseudo_engine-document';
     cssClass = 'engine-document';
     styleProp = props.pageStyle;
     appendStyleNode(props, styleProp, cssClass, cssId);
+    props.className = cssClass;
   }
   if (props.containerStyle) {
     cssId = `_style_pseudo_${node.id}`;
     cssClass = `_css_pseudo_${node.id.replace(/\$/g, '_')}`;
     styleProp = props.containerStyle;
     appendStyleNode(props, styleProp, cssClass, cssId);
+    props.className = cssClass;
   }
-  props.className = cssClass;
+
   return props;
 }
 
