@@ -111,9 +111,17 @@ export default function rendererFactory() {
         return;
       }
       SetComponent.patchedCatch = true;
-      SetComponent.getDerivedStateFromError = (error: Error) => {
-        return { engineRenderError: true, error };
+
+      // Rax 的 getDerivedStateFromError 有 BUG，这里先用 componentDidCatch 来替代
+      // @see https://github.com/alibaba/rax/issues/2211
+      const originalDidCatch = SetComponent.prototype.componentDidCatch;
+      SetComponent.prototype.componentDidCatch = function didCatch(this: any, error: Error, errorInfo: any) {
+        this.setState({ engineRenderError: true, error });
+        if (originalDidCatch && typeof originalDidCatch === 'function') {
+          originalDidCatch.call(this, error, errorInfo);
+        }
       };
+
       const engine = this;
       const originRender = SetComponent.prototype.render;
       SetComponent.prototype.render = function () {
