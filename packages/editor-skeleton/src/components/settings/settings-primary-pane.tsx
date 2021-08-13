@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Tab, Breadcrumb } from '@alifd/next';
-import { Title, observer, Editor, obx, globalContext } from '@ali/lowcode-editor-core';
+import { Title, observer, Editor, obx, globalContext, engineConfig } from '@ali/lowcode-editor-core';
 import { Node, isSettingField, SettingField, Designer } from '@ali/lowcode-designer';
 import { SettingsMain } from './main';
 import { SettingsPane } from './settings-pane';
@@ -24,7 +24,9 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
     this.setShouldIgnoreRoot();
 
     this.props.editor.on('designer.selection.change', () => {
-      this._activeKey = null;
+      if (!engineConfig.get('stayOnTheSameSettingTab', false)) {
+        this._activeKey = null;
+      }
     });
   }
 
