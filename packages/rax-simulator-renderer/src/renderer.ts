@@ -410,7 +410,9 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       };
     }
     instance = Instance.get(dom);
-    while (instance && instance[INTERNAL]) {
+
+    let loopNum = 0; // 防止由于某种意外而导致死循环
+    while (instance && instance[INTERNAL] && loopNum < 1000) {
       if (isValidDesignModeRaxComponentInstance(instance)) {
       // if (instance && SYMBOL_VNID in instance) {
         // const docId = (instance.props as any).schema.docId;
@@ -422,7 +424,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         };
       }
 
-      instance = instance[INTERNAL].__parentInstance;
+      instance = getRaxVDomParentInstance(instance);
+      loopNum += 1;
     }
 
     return null;
@@ -634,6 +637,23 @@ function getLowCodeComponentProps(props: any) {
     newProps[k] = props[k];
   });
   return newProps;
+}
+
+/**
+ * 获取 Rax 里面 VDOM 的上一级的实例
+ * 注意：Rax 的 development 的包是带有 __parentInstance，
+ *      但是 production 的包 __parentInstance 会被压缩掉，
+ *      所以这里遍历下其中的所有值，尝试找到有 _internal 的那个(别的值不会带有这个属性的)
+ */
+function getRaxVDomParentInstance(instance: { _internal: any }) {
+  const internalInstance = instance._internal;
+  return internalInstance.__parentInstance ||
+    Object.values(internalInstance).find(v => (
+      v !== null &&
+      v !== instance &&
+      typeof v === 'object' &&
+      typeof (v as {_internal: unknown})._internal === 'object'
+    ));
 }
 
 export default new SimulatorRendererContainer();
