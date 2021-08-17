@@ -122,6 +122,7 @@ export class NodeChildren {
    * 删除一个节点
    */
   delete(node: Node, purge = false, useMutator = true, options: NodeRemoveOptions = {}): boolean {
+    node.internalPurgeStart();
     if (node.isParental()) {
       foreachReverse(node.children, (subNode: Node) => {
         subNode.remove(useMutator, purge, options);
@@ -150,7 +151,7 @@ export class NodeChildren {
     document.destroyNode(node);
     this.emitter.emit('change');
     if (useMutator) {
-      this.reportModified(node, this.owner, { type: 'remove', removeIndex: i, removeNode: node });
+      this.reportModified(node, this.owner, { type: 'remove', propagated: false, isSubDeleting: this.owner.isPurging, removeIndex: i, removeNode: node });
     }
     // purge 为 true 时，已在 internalSetParent 中删除了子节点
     if (i > -1 && !purge) {
@@ -200,7 +201,9 @@ export class NodeChildren {
     if (globalContext.has('editor')) {
       globalContext.get('editor').emit('node.add', { node });
     }
-    // this.reportModified(node, this.owner, { type: 'insert' });
+    if (useMutator) {
+      this.reportModified(node, this.owner, { type: 'insert' });
+    }
 
     // check condition group
     if (node.conditionGroup) {
@@ -367,14 +370,6 @@ export class NodeChildren {
     return 'Array';
   }
 
-  // /**
-  //  * @deprecated
-  //  * 为了兼容vision体系存量api
-  //  */
-  // getChildrenArray() {
-  //   return this.children;
-  // }
-
   private reportModified(node: Node, owner: Node, options = {}) {
     if (!node) {
       return;
@@ -392,7 +387,7 @@ export class NodeChildren {
     }
 
     if (owner.parent && !owner.parent.isRoot()) {
-      this.reportModified(node, owner.parent, options);
+      this.reportModified(node, owner.parent, { ...options, propagated: true, });
     }
   }
 }
