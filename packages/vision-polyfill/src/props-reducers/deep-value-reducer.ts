@@ -40,8 +40,7 @@ export function deepValueParser(obj: any, node: Node): any {
     if (isI18nData(obj)) {
       // FIXME! use editor.get
       let locale = Env.getLocale();
-      if (obj.key) {
-        // FIXME: 此处需要升级I18nUtil，改成响应式
+      if (obj.key && i18nUtil.get(obj.key, locale)) {
         return i18nUtil.get(obj.key, locale);
       }
       if (locale !== 'zh_CN' && locale !== 'zh_TW' && !obj[locale]) {
