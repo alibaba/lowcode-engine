@@ -29,6 +29,11 @@ export function reactFindDOMNodes(elem: ReactInstance | null): Array<Element | T
   }
   const elements: Array<Element | Text> = [];
   const fiberNode = (elem as any)[FIBER_KEY];
-  elementsFromFiber(fiberNode.child, elements);
-  return elements.length > 0 ? elements : [findDOMNode(elem)];
+  elementsFromFiber(fiberNode?.child, elements);
+  if (elements.length > 0) return elements;
+  try {
+    return [findDOMNode(elem)];
+  } catch (e) {
+    return null;
+  }
 }

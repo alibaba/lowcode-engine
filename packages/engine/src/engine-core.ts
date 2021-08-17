@@ -175,7 +175,10 @@ plugins.register((ctx: ILowCodePluginContext) => {
     },
   };
 });
+let engineInited = false;
 export async function init(container?: HTMLElement, options?: EngineOptions) {
+  if (engineInited) return;
+  engineInited = true;
   let engineOptions = null;
   let engineContainer = null;
   if (isPlainObject(container)) {

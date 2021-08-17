@@ -56,6 +56,10 @@ export interface EngineOptions {
    */
   enableCanvasLock: boolean;
   /**
+   * 当选中节点切换时，是否停留在相同的设置 tab 上，默认值：false
+   */
+  stayOnTheSameSettingTab: boolean;
+  /**
    * Vision-polyfill settings
    */
   visionSettings?: {
