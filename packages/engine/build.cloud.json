@@ -2,6 +2,7 @@
   "entry": {
     "engine-core": "src/index"
   },
+  "sourceMap": true,
   "library": "___AliLowCodeEngine___",
   "libraryTarget": "umd",
   "externals": {

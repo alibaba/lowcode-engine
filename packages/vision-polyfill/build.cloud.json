@@ -2,6 +2,7 @@
   "entry": {
     "vision-polyfill": "src/index"
   },
+  "sourceMap": true,
   "library": "___VisionPolyfill___",
   "libraryTarget": "umd",
   "externals": {
