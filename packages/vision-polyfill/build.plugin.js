@@ -19,6 +19,6 @@ module.exports = ({ onGetWebpackConfig }) => {
       */
     config.plugins.delete('hot');
     config.devServer.hot(false);
-    config.devtool('hidden-source-map');
+    // config.devtool('hidden-source-map');
   });
 };
