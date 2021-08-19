@@ -20,7 +20,7 @@ import {
 } from '@ali/lowcode-utils';
 import { RootSchema, ComponentSchema, TransformStage, NodeSchema, ActivityType, ActivityData } from '@ali/lowcode-types';
 // just use types
-import { BuiltinSimulatorRenderer, NodeInstance, Component, DocumentModel } from '@ali/lowcode-designer';
+import { BuiltinSimulatorRenderer, NodeInstance, Component, DocumentModel, Node } from '@ali/lowcode-designer';
 import LowCodeRenderer from '@ali/lowcode-react-renderer';
 import { createMemoryHistory, MemoryHistory } from 'history';
 import Slot from './builtin-components/slot';
@@ -474,13 +474,18 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     const renderer = this;
     const { componentsMap: components } = renderer;
 
-    class LowCodeComp extends React.Component {
+    class LowCodeComp extends React.Component<any, any> {
       render() {
+        const newSchema = host.designer.transformProps(_schema as any, {
+          componentMeta: {
+            prototype: 'lowcodeComp',
+          },
+          isRoot: () => false,
+        } as Node, TransformStage.Render);
         const extraProps = getLowCodeComponentProps(this.props);
-        // @ts-ignore
         return createElement(LowCodeRenderer, {
           ...extraProps, // 防止覆盖下面内置属性
-          schema: _schema,
+          schema: newSchema,
           components,
           designMode: renderer.designMode,
           device: renderer.device,
