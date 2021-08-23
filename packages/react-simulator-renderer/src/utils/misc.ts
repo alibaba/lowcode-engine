@@ -47,6 +47,11 @@ function haveForceUpdate(instances: any[]): boolean {
   return instances.every(inst => 'forceUpdate' in inst);
 }
 
+function isPropWritable(props: any, propName: string): boolean {
+  const descriptor = Object.getOwnPropertyDescriptor(props, propName);
+  return !!descriptor?.writable;
+}
+
 /**
  * 是否支持快捷属性值设值
  * @param data
@@ -69,6 +74,8 @@ export function supportsQuickPropSetting(data: ActivityData, doc: DocumentInstan
     propKey &&
     // 不是 extraProp
     !propKey.startsWith('___') &&
+    // props[propKey] 有可能是 readyonly 的
+    instances.every(inst => isPropWritable(inst.props, propKey)) &&
     !isJSSlot(value) &&
     // functional component 不支持 ref.props 直接设值，是 readonly 的
     isReactClass((doc.container?.components as any)[componentName]) &&
