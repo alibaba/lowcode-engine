@@ -5,7 +5,7 @@ import contextFactory from '../context';
 import { isFileSchema, goldlog } from '../utils';
 import baseRendererFactory from './base';
 import divFactory from '../components/Div';
-import { IProps } from '../types';
+import { IProps, ISchema, IState } from '../types';
 
 export default function rendererFactory() {
   const { createElement, Component, PureComponent, findDOMNode } = adapter.getRuntime();
@@ -46,12 +46,14 @@ export default function rendererFactory() {
   return class Renderer extends Component {
     static dislayName = 'renderer';
 
-    static defaultProps = {
+    state: IState = {};
+
+    static defaultProps: IProps = {
       appHelper: null,
       components: {},
       designMode: '',
       suspended: false,
-      schema: {},
+      schema: {} as ISchema,
       onCompGetRef: () => { },
       onCompGetCtx: () => { },
     };

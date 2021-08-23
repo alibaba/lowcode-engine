@@ -1,4 +1,4 @@
-import React, { Component, PureComponent, createElement, createContext, forwardRef } from 'react';
+import React, { Component, PureComponent, createElement, createContext, forwardRef, ReactInstance, ContextType } from 'react';
 import ReactDOM from 'react-dom';
 import {
   adapter,
@@ -8,6 +8,7 @@ import {
   addonRendererFactory,
   tempRendererFactory,
   rendererFactory,
+  types,
 } from '@ali/lowcode-renderer-core';
 import ConfigProvider from '@alifd/next/lib/config-provider';
 
@@ -36,8 +37,23 @@ adapter.setConfigProvider(ConfigProvider);
 
 function factory() {
   const Renderer = rendererFactory();
-  return class ReactRenderer extends Renderer {
-    constructor(props: any, context: any) {
+  return class ReactRenderer extends Renderer implements Component {
+    readonly props: types.IProps;
+
+    context: ContextType<any>;
+
+    setState: (
+      state: types.IState,
+      callback?: () => void,
+    ) => void;
+
+    forceUpdate: (callback?: () => void) => void;
+
+    refs: {
+      [key: string]: ReactInstance,
+    };
+
+    constructor(props: types.IProps, context: ContextType<any>) {
       super(props, context);
     }
 

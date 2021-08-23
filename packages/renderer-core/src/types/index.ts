@@ -1,15 +1,22 @@
 export interface IProps {
-  appHelper: any;
-  components: { [key: string]: any };
-  componentsMap: { [key: string]: any };
-  designMode: string;
-  suspended: boolean;
   schema: ISchema;
-  onCompGetRef: (schema: ISchema, ref: any) => void;
-  onCompGetCtx: (schema: ISchema, ref: any) => void;
-  customCreateElement: (...args: any) => any;
-  notFoundComponent: any;
-  faultComponent: any;
+  components: { [key: string]: any };
+  className?: string;
+  locale?: string;
+  appHelper?: any;
+  componentsMap?: { [key: string]: any };
+  designMode?: string;
+  suspended?: boolean;
+  onCompGetRef?: (schema: ISchema, ref: any) => void;
+  onCompGetCtx?: (schema: ISchema, ref: any) => void;
+  customCreateElement?: (...args: any) => any;
+  notFoundComponent?: any;
+  faultComponent?: any;
+}
+
+export interface IState {
+  engineRenderError?: boolean;
+  error?: Error
 }
 
 export interface IRendererProps {
