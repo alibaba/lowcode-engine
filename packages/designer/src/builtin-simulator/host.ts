@@ -55,6 +55,7 @@ import {
   ComponentSchema,
   TransformStage,
   ActivityData,
+  Package,
 } from '@ali/lowcode-types';
 import { BuiltinSimulatorRenderer } from './renderer';
 import clipboard from '../designer/clipboard';
@@ -63,10 +64,11 @@ import { Project } from '../project';
 import { Scroller } from '../designer/scroller';
 import { isElementNode, isDOMNodeVisible } from '../utils/misc';
 
-export interface LibraryItem {
+export interface LibraryItem extends Package{
   package: string;
   library: string;
   urls?: Asset;
+  editUrls?: Asset;
 }
 
 export interface DeviceStyleProps {
@@ -325,13 +327,13 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
    * urls：Array 资源cdn地址，必须是umd类型，可以是.js或者.css
    * library：String umd包直接导出的name
    */
-  buildLibrary(library) {
-    library = library || (this.get('library') as LibraryItem[]);
+  buildLibrary(library?: LibraryItem[]) {
+    const _library = library || (this.get('library') as LibraryItem[]);
     const libraryAsset: AssetList = [];
-    const libraryExportList = [];
+    const libraryExportList: string[] = [];
 
-    if (library) {
-      library.forEach((item) => {
+    if (_library && _library.length) {
+      _library.forEach((item) => {
         this.libraryMap[item.package] = item.library;
         if (item.async) {
           this.asyncLibraryMap[item.package] = item;
@@ -341,7 +343,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
             `Object.defineProperty(window,'${item.exportName}',{get:()=>window.${item.library}});`,
           );
         }
-        if (item.urls) {
+        if (item.editUrls) {
+          libraryAsset.push(item.editUrls);
+        } else if (item.urls) {
           libraryAsset.push(item.urls);
         }
       });
@@ -365,7 +369,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this._contentWindow = iframe.contentWindow!;
     this._contentDocument = this._contentWindow.document;
 
-    const library = this.get('library') as LibraryItem[];
     const libraryAsset: AssetList = this.buildLibrary();
 
     const vendors = [
