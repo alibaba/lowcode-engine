@@ -86,16 +86,12 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     const skeleton = this.context as Skeleton;
     const { stages } = skeleton;
 
-    // todo: error handling
-    let _onChange = extraProps?.onChange?.value;
-    if (extraProps && extraProps.onChange && extraProps.onChange.type === 'JSFunction') {
-      _onChange = transformStringToFunction(extraProps.onChange.value);
-    }
+    let _onChange = extraProps?.onChange;
     let stageName;
     if (display === 'entry') {
       const stage = stages.add({
         type: 'Widget',
-        name: `${field.getNode().id }_${ field.name.toString()}`,
+        name: `${field.getNode().id }_${field.name.toString()}`,
         content: <Fragment>{field.items.map((item, index) => createSettingFieldView(item, field, index))}</Fragment>,
         props: {
           title: field.title,
