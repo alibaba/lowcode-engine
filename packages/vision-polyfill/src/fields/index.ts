@@ -1,2 +1,2 @@
-export * from './settingField';
+export * from './setting-field';
 export * from './fields';

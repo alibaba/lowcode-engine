@@ -3,8 +3,8 @@ import classNames from 'classnames';
 import { Component } from 'react';
 import { testType } from '@ali/ve-utils';
 import VEField, { IVEFieldProps } from './field';
-import { SettingField } from './settingField';
-import VariableSwitcher from './variableSwitcher';
+import { SettingField } from './setting-field';
+import VariableSwitcher from './variable-switcher';
 import popups from '@ali/ve-popups';
 
 import './fields.less';

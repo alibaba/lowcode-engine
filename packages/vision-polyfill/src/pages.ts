@@ -1,7 +1,7 @@
 import { RootSchema } from '@ali/lowcode-types';
 import { DocumentModel } from '@ali/lowcode-designer';
 import { designer } from '@ali/lowcode-engine';
-import NodeCacheVisitor from './rootNodeVisitor';
+import NodeCacheVisitor from './root-node-visitor';
 
 const { project } = designer;
 

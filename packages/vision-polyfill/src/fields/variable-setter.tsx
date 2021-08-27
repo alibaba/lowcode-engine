@@ -1,4 +1,4 @@
-import './variableSetter.less';
+import './variable-setter.less';
 import { Component } from 'react';
 
 class Input extends Component {

@@ -1,7 +1,7 @@
-import VariableSetter from './variableSetter';
+import VariableSetter from './variable-setter';
 import Icons from '@ali/ve-icons';
 import { IVEFieldProps } from './field';
-import './variableSwitcher.less';
+import './variable-switcher.less';
 import { Component } from 'react';
 import { setters } from '@ali/lowcode-engine';
 

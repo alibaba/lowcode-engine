@@ -1,4 +1,4 @@
-import VariableSetter from './variableSetter';
+import VariableSetter from './variable-setter';
 import context from '../context';
 import { VE_HOOKS } from '../base/const';
 import {
