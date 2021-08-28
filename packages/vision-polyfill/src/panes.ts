@@ -1,6 +1,7 @@
 import { skeleton, editor } from '@ali/lowcode-engine';
 import { ReactElement } from 'react';
 import { IWidgetBaseConfig } from '@ali/lowcode-editor-skeleton';
+import { IconType } from '@ali/lowcode-types';
 import { uniqueId } from '@ali/lowcode-utils';
 import bus from './bus';
 
@@ -50,6 +51,7 @@ export interface OldPaneConfig {
   canSetFixed?: boolean; // 是否可以设置固定模式
   defaultFixed?: boolean; // 是否默认固定
   enableDrag?: boolean;
+  icon?: IconType; // 支持旧vision pane传icon （menu是title, 并非icon）
 }
 
 function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: string } {
@@ -81,6 +83,7 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
       height,
       maxHeight,
       menu,
+      icon,
       isAction,
       canSetFixed,
       defaultFixed,
@@ -88,6 +91,9 @@ function upgradeConfig(config: OldPaneConfig): IWidgetBaseConfig & { area: strin
     } = config;
     if (menu) {
       newConfig.props.title = menu;
+    }
+    if (icon) {
+      newConfig.props.icon = icon;
     }
     if (isAction) {
       newConfig.type = 'Dock';
