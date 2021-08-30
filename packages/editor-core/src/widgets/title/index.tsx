@@ -61,7 +61,7 @@ export class Title extends Component<{ title: TitleContent; className?: string; 
         onClick={this.handleClick}
       >
         {icon ? <b className="lc-title-icon">{icon}</b> : null}
-        {title.label ? intl(title.label) : null}
+        {title.label ? <span className="lc-title-txt">{intl(title.label)}</span> : null}
         {tip}
       </span>
     );
