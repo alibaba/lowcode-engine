@@ -27,6 +27,7 @@ const mockedOwner = {
     },
     designer: {},
   },
+  isInited: true,
 };
 
 const mockedPropsInst = {
