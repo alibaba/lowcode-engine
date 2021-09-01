@@ -195,7 +195,7 @@ export class Dragon {
   private sensors: ISensor[] = [];
 
   /**
-   * current actived sensor, 可用于感应区高亮
+   * current active sensor, 可用于感应区高亮
    */
   @obx.ref private _activeSensor: ISensor | undefined;
 
@@ -619,8 +619,7 @@ export class Dragon {
       new Set(
         this.designer.project.documents
           .map((doc) => {
-            // TODO: not use actived,
-            if (doc.actived && doc.simulator?.sensorAvailable) {
+            if (doc.active && doc.simulator?.sensorAvailable) {
               return doc.simulator;
             }
             return null;

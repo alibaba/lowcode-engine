@@ -28,7 +28,7 @@ export class Project {
   }
 
   @computed get currentDocument() {
-    return this.documents.find((doc) => doc.actived);
+    return this.documents.find((doc) => doc.active);
   }
 
   @obx private _config: any = {};
@@ -67,7 +67,7 @@ export class Project {
    */
   setSchema(schema?: ProjectSchema) {
     // FIXME: 这里的行为和 getSchema 并不对等，感觉不太对
-    const doc = this.documents.find((doc) => doc.actived);
+    const doc = this.documents.find((doc) => doc.active);
     doc && doc.import(schema?.componentsTree[0]);
   }
 
@@ -231,13 +231,13 @@ export class Project {
     return doc.open();
   }
 
-  checkExclusive(actived: DocumentModel) {
+  checkExclusive(activeDoc: DocumentModel) {
     this.documents.forEach((doc) => {
-      if (doc !== actived) {
+      if (doc !== activeDoc) {
         doc.suspense();
       }
     });
-    this.emitter.emit('current-document.change', actived);
+    this.emitter.emit('current-document.change', activeDoc);
   }
 
   closeOthers(opened: DocumentModel) {

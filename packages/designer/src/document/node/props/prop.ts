@@ -55,6 +55,12 @@ export class Prop implements IPropParent {
     if (value !== UNSET) {
       this.setValue(value);
     }
+    this.setupItems();
+  }
+
+  // TODO: 先用调用方式触发子 prop 的初始化，后续须重构
+  private setupItems() {
+    return this.items;
   }
 
   /**
@@ -247,7 +253,9 @@ export class Prop implements IPropParent {
       };
     }
 
-    this.dispose();
+    if (this.owner.isInited) {
+      this.dispose();
+    }
 
     if (oldValue !== this._value) {
       editor?.emit('node.innerProp.change', {
@@ -302,7 +310,6 @@ export class Prop implements IPropParent {
       owner.addSlot(this._slotNode);
       this._slotNode.internalSetSlotFor(this);
     }
-    this.dispose();
   }
 
   /**

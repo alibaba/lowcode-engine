@@ -4,6 +4,11 @@ import { getConvertedExtraKey } from '@ali/lowcode-designer';
 
 export default function (metadata: TransformedComponentMetadata): TransformedComponentMetadata {
   const { componentName, configure = {} } = metadata;
+
+  // 如果已经处理过，不再重新执行一遍
+  if (configure.combined) {
+    return metadata;
+  }
   if (componentName === 'Leaf') {
     return {
       ...metadata,
