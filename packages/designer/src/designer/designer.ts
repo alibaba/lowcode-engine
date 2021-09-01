@@ -308,8 +308,8 @@ export class Designer {
   getSuitableInsertion(
     insertNode?: Node | NodeSchema | NodeSchema[],
   ): { target: ParentalNode; index?: number } | null {
-    const activedDoc = this.project.currentDocument;
-    if (!activedDoc) {
+    const activeDoc = this.project.currentDocument;
+    if (!activeDoc) {
       return null;
     }
     if (
@@ -318,11 +318,11 @@ export class Designer {
       this.getComponentMeta(insertNode[0].componentName).isModal
     ) {
       return {
-        target: activedDoc.rootNode as ParentalNode,
+        target: activeDoc.rootNode as ParentalNode,
       };
     }
-    const focusNode = activedDoc.focusNode!;
-    const nodes = activedDoc.selection.getNodes();
+    const focusNode = activeDoc.focusNode!;
+    const nodes = activeDoc.selection.getNodes();
     const refNode = nodes.find(item => focusNode.contains(item));
     let target;
     let index: number | undefined;

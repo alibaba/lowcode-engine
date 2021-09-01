@@ -446,8 +446,15 @@ export class DocumentModel {
   /**
    * 与 suspensed 相反，是否为激活状态，这个函数可能用的更多一点
    */
-  get actived(): boolean {
+  get active(): boolean {
     return !this._suspensed;
+  }
+
+  /**
+   * @deprecated 兼容
+   */
+  get actived(): boolean {
+    return this.active;
   }
 
   /**
@@ -476,7 +483,7 @@ export class DocumentModel {
     this.setSuspense(true);
   }
 
-  active() {
+  activate() {
     this.setSuspense(false);
   }
 

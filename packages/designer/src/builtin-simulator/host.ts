@@ -1053,7 +1053,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   scrollToNode(node: Node, detail?: any /* , tryTimes = 0 */) {
     this.tryScrollAgain = null;
     if (this.sensing) {
-      // actived sensor
+      // active sensor
       return;
     }
 

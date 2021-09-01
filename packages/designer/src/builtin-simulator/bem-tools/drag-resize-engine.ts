@@ -146,8 +146,7 @@ export default class DragResizeEngine {
   private getMasterSensors(): ISimulatorHost[] {
     return this.designer.project.documents
       .map(doc => {
-        // TODO: not use actived,
-        if (doc.actived && doc.simulator?.sensorAvailable) {
+        if (doc.active && doc.simulator?.sensorAvailable) {
           return doc.simulator;
         }
         return null;
