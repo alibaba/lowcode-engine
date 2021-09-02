@@ -99,7 +99,7 @@ describe('document-model 测试', () => {
     expect(doc.suspensed).toBeFalsy();
 
     doc.suspense();
-    doc.active();
+    doc.activate();
     doc.close();
     doc.remove();
 
