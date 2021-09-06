@@ -103,7 +103,7 @@ const pages = Object.assign(project, {
     return project.documents;
   },
   setCurrentPage(page: DocumentModel) {
-    page.active();
+    page.activate();
   },
   getCurrentPage() {
     return project.currentDocument;
