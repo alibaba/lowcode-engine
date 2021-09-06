@@ -1,6 +1,6 @@
-import { obx, computed } from '@ali/lowcode-editor-core';
-import { isPanel } from './panel';
+import { obx, computed, makeObservable } from '@ali/lowcode-editor-core';
 import { hasOwnProperty } from '@ali/lowcode-utils';
+import { isPanel } from './panel';
 
 export interface WidgetItem {
   name: string;
@@ -15,7 +15,7 @@ function isActiveable(obj: any): obj is Activeable {
 }
 
 export default class WidgetContainer<T extends WidgetItem = any, G extends WidgetItem = any> {
-  @obx.val items: T[] = [];
+  @obx.shallow items: T[] = [];
 
   private maps: { [name: string]: T } = {};
 
@@ -32,8 +32,9 @@ export default class WidgetContainer<T extends WidgetItem = any, G extends Widge
     private exclusive: boolean = false,
     private checkVisible: () => boolean = () => true,
     private defaultSetCurrent: boolean = false,
-  // eslint-disable-next-line no-empty-function
-  ) {}
+  ) {
+    makeObservable(this);
+  }
 
   @computed get visible() {
     return this.checkVisible();

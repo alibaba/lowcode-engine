@@ -1,6 +1,6 @@
 import { Component, Fragment } from 'react';
 import { Icon, Button, Message } from '@alifd/next';
-import { Title } from '@ali/lowcode-editor-core';
+import { Title, runInAction } from '@ali/lowcode-editor-core';
 import { SetterType, FieldConfig, SetterConfig } from '@ali/lowcode-types';
 import { SettingField } from '@ali/lowcode-designer';
 import { createSettingFieldView } from '../settings/settings-pane';
@@ -60,9 +60,11 @@ export class ListSetter extends Component<ArraySetterProps, ArraySetterState> {
       itemsMap,
     }, () => {
       // setValue 会触发onItemChange，需要在items被设值之后才能调用
-      value && value.map((item, index) => {
-        items[index].setValue(item);
-        return item;
+      runInAction(() => {
+        value && value.map((item, index) => {
+          items[index].setValue(item);
+          return item;
+        });
       });
     });
   }

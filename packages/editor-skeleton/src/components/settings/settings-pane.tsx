@@ -158,10 +158,6 @@ class SettingFieldView extends Component<{ field: SettingField }> {
 class SettingGroupView extends Component<{ field: SettingField }> {
   static contextType = SkeletonContext;
 
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
     const { field } = this.props;
     const { extraProps } = field;
@@ -227,12 +223,7 @@ export type SettingsPaneProps = {
 export class SettingsPane extends Component<SettingsPaneProps> {
   static contextType = SkeletonContext;
 
-  @obx
-  private currentStage?: Stage;
-
-  shouldComponentUpdate() {
-    return false;
-  }
+  @obx private currentStage?: Stage;
 
   private popupPipe = new PopupPipe();
 

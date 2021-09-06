@@ -6,10 +6,6 @@ import Panel from '../widget/panel';
 
 @observer
 export default class RightArea extends Component<{ area: Area<any, Panel> }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
     const { area } = this.props;
     return (

@@ -1,5 +1,5 @@
 import { TitleContent, isI18nData } from '@ali/lowcode-types';
-import { computed, obx, intl } from '@ali/lowcode-editor-core';
+import { computed, obx, intl, makeObservable } from '@ali/lowcode-editor-core';
 import { Node, DocumentModel, isLocationChildrenDetail, LocationChildrenDetail, Designer } from '@ali/lowcode-designer';
 import { Tree } from './tree';
 
@@ -35,7 +35,7 @@ export default class TreeNode {
   /**
    * 是否是响应投放区
    */
-  @computed isResponseDropping(): boolean {
+  isResponseDropping(): boolean {
     const loc = this.node.document.dropLocation;
     if (!loc) {
       return false;
@@ -43,7 +43,7 @@ export default class TreeNode {
     return loc.target === this.node;
   }
 
-  @computed isFocusingNode(): boolean {
+  isFocusingNode(): boolean {
     const loc = this.node.document.dropLocation;
     if (!loc) {
       return false;
@@ -218,6 +218,7 @@ export default class TreeNode {
   readonly tree: Tree;
 
   constructor(tree: Tree, node: Node) {
+    makeObservable(this);
     this.tree = tree;
     this.document = node.document;
     this.designer = this.document.designer;

@@ -1,5 +1,5 @@
 import { DocumentModel, Node } from '@ali/lowcode-designer';
-import { computed } from '@ali/lowcode-editor-core';
+import { computed, makeObservable } from '@ali/lowcode-editor-core';
 import TreeNode from './tree-node';
 
 export class Tree {
@@ -15,6 +15,7 @@ export class Tree {
   }
 
   constructor(readonly document: DocumentModel) {
+    makeObservable(this);
     this.id = document.id;
   }
 

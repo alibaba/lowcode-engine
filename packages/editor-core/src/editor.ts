@@ -39,7 +39,7 @@ export class Editor extends EventEmitter implements IEditor {
   /**
    * Ioc Container
    */
-  @obx.val private context = new Map<KeyType, any>();
+  @obx.shallow private context = new Map<KeyType, any>();
 
   get locale() {
     return globalLocale.getLocale();

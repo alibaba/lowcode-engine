@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { createElement, ReactNode } from 'react';
-import { obx, computed } from '@ali/lowcode-editor-core';
+import { obx, computed, makeObservable } from '@ali/lowcode-editor-core';
 import { uniqueId, createContent } from '@ali/lowcode-utils';
 import { TitleContent } from '@ali/lowcode-types';
 import WidgetContainer from './widget-container';
@@ -24,7 +24,7 @@ export default class Panel implements IWidget {
 
   private emitter = new EventEmitter();
 
-  get actived(): boolean {
+  @computed get actived(): boolean {
     return this._actived;
   }
 
@@ -81,6 +81,7 @@ export default class Panel implements IWidget {
   private parent?: WidgetContainer;
 
   constructor(readonly skeleton: Skeleton, readonly config: PanelConfig) {
+    makeObservable(this);
     const { name, content, props = {} } = config;
     const { hideTitleBar, title, icon, description, help } = props;
     this.name = name;
@@ -160,13 +161,13 @@ export default class Panel implements IWidget {
       return;
     }
     if (flag) {
-      this._actived = true;
-      this.parent?.active(this);
       if (this.parent.name === 'leftFloatArea') {
         this.skeleton.leftFixedArea.container.unactiveAll();
       } else if (this.parent.name === 'leftFixedArea') {
         this.skeleton.leftFloatArea.container.unactiveAll();
       }
+      this._actived = true;
+      this.parent?.active(this);
       if (!this.inited) {
         this.inited = true;
       }

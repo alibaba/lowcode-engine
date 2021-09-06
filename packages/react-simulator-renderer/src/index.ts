@@ -1,3 +1,4 @@
+import { runInAction } from 'mobx';
 import renderer from './renderer';
 
 if (typeof window !== 'undefined') {
@@ -5,10 +6,12 @@ if (typeof window !== 'undefined') {
 }
 
 window.addEventListener('beforeunload', () => {
-  (window as any).LCSimulatorHost = null;
-  renderer.dispose?.();
-  (window as any).SimulatorRenderer = null;
-  (window as any).ReactDOM.unmountComponentAtNode(document.getElementById('app'));
+  runInAction(() => {
+    (window as any).LCSimulatorHost = null;
+    renderer.dispose?.();
+    (window as any).SimulatorRenderer = null;
+    (window as any).ReactDOM.unmountComponentAtNode(document.getElementById('app'));
+  });
 });
 
 export default renderer;

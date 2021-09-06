@@ -1,4 +1,4 @@
-import { obx, computed } from '@ali/lowcode-editor-core';
+import { obx, computed, makeObservable } from '@ali/lowcode-editor-core';
 import WidgetContainer from './widget/widget-container';
 import { Skeleton } from './skeleton';
 import { IWidget } from './widget/widget';
@@ -24,10 +24,11 @@ export default class Area<C extends IWidgetBaseConfig = any, T extends IWidget =
   readonly container: WidgetContainer<T, C>;
 
   constructor(readonly skeleton: Skeleton, readonly name: string, handle: (item: T | C) => T, private exclusive?: boolean, defaultSetCurrent = false) {
+    makeObservable(this);
     this.container = skeleton.createContainer(name, handle, exclusive, () => this.visible, defaultSetCurrent);
   }
 
-  @computed isEmpty(): boolean {
+  isEmpty(): boolean {
     return this.container.items.length < 1;
   }
 

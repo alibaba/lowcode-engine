@@ -116,10 +116,6 @@ function processDetail({ target, detail, document }: DropLocation): InsertionDat
 
 @observer
 export class InsertionView extends Component<{ host: BuiltinSimulatorHost }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
     const { host } = this.props;
     const loc = host.currentDocument?.dropLocation;

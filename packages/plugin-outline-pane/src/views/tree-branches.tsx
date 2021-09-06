@@ -11,10 +11,6 @@ export default class TreeBranches extends Component<{
   treeNode: TreeNode;
   isModal?: boolean;
 }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
     const { treeNode, isModal } = this.props;
     const { expanded } = treeNode;
@@ -39,10 +35,6 @@ class TreeNodeChildren extends Component<{
     treeNode: TreeNode;
     isModal?: boolean;
   }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
     const { treeNode, isModal } = this.props;
     const children: any = [];
@@ -112,10 +104,6 @@ class TreeNodeChildren extends Component<{
 class TreeNodeSlots extends Component<{
     treeNode: TreeNode;
   }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
     const { treeNode } = this.props;
     if (!treeNode.hasSlots()) {

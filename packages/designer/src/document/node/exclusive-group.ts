@@ -1,4 +1,4 @@
-import { obx, computed } from '@ali/lowcode-editor-core';
+import { obx, computed, makeObservable } from '@ali/lowcode-editor-core';
 import { uniqueId } from '@ali/lowcode-utils';
 import { TitleContent } from '@ali/lowcode-types';
 import { Node } from './node';
@@ -11,7 +11,7 @@ export class ExclusiveGroup {
 
   readonly id = uniqueId('exclusive');
 
-  @obx.val readonly children: Node[] = [];
+  @obx.shallow readonly children: Node[] = [];
 
   @obx private visibleIndex = 0;
 
@@ -75,6 +75,7 @@ export class ExclusiveGroup {
   readonly title: TitleContent;
 
   constructor(readonly name: string, title?: TitleContent) {
+    makeObservable(this);
     this.title = title || {
       type: 'i18n',
       intl: intl('Condition Group'),

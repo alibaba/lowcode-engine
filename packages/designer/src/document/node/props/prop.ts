@@ -1,12 +1,12 @@
-import { untracked, computed, obx, engineConfig } from '@ali/lowcode-editor-core';
+import { untracked, computed, obx, engineConfig, action, makeObservable, mobx } from '@ali/lowcode-editor-core';
 import { CompositeValue, FieldConfig, isJSExpression, isJSSlot, JSSlot, SlotSchema } from '@ali/lowcode-types';
 import { uniqueId, isPlainObject, hasOwnProperty, compatStage } from '@ali/lowcode-utils';
-import { PropStash } from './prop-stash';
 import { valueToSource } from './value-to-source';
 import { Props } from './props';
 import { SlotNode, Node } from '../node';
 import { TransformStage } from '../transform-stage';
 
+const { set: mobxSet, isObservableArray } = mobx;
 export const UNSET = Symbol.for('unset');
 export type UNSET = typeof UNSET;
 
@@ -23,8 +23,6 @@ export class Prop implements IPropParent {
   readonly isProp = true;
 
   readonly owner: Node;
-
-  private stash: PropStash | undefined;
 
   /**
    * 键值
@@ -47,6 +45,7 @@ export class Prop implements IPropParent {
     spread = false,
     options = {},
   ) {
+    makeObservable(this);
     this.owner = parent.owner;
     this.props = parent.props;
     this.key = key;
@@ -59,6 +58,7 @@ export class Prop implements IPropParent {
   }
 
   // TODO: 先用调用方式触发子 prop 的初始化，后续须重构
+  @action
   private setupItems() {
     return this.items;
   }
@@ -66,6 +66,7 @@ export class Prop implements IPropParent {
   /**
    * @see SettingTarget
    */
+  @action
   getPropValue(propName: string | number): any {
     return this.get(propName)!.getValue();
   }
@@ -73,6 +74,7 @@ export class Prop implements IPropParent {
   /**
    * @see SettingTarget
    */
+  @action
   setPropValue(propName: string | number, value: any): void {
     this.set(propName, value);
   }
@@ -80,6 +82,7 @@ export class Prop implements IPropParent {
   /**
    * @see SettingTarget
    */
+  @action
   clearPropValue(propName: string | number): void {
     this.get(propName, false)?.unset();
   }
@@ -95,7 +98,7 @@ export class Prop implements IPropParent {
     return this._type;
   }
 
-  @obx.ref private _value: any = UNSET;
+  @obx private _value: any = UNSET;
 
   /**
    * 属性值
@@ -213,7 +216,7 @@ export class Prop implements IPropParent {
     this._code = code;
   }
 
-  @computed getAsString(): string {
+  getAsString(): string {
     if (this.type === 'literal') {
       return this._value ? String(this._value) : '';
     }
@@ -223,6 +226,7 @@ export class Prop implements IPropParent {
   /**
    * set value, val should be JSON Object
    */
+  @action
   setValue(val: CompositeValue) {
     if (val === this._value) return;
     const editor = this.owner.document?.designer.editor;
@@ -267,10 +271,11 @@ export class Prop implements IPropParent {
     }
   }
 
-  @computed getValue(): CompositeValue {
+  getValue(): CompositeValue {
     return this.export(TransformStage.Serilize);
   }
 
+  @action
   private dispose() {
     const items = untracked(() => this._items);
     if (items) {
@@ -278,9 +283,6 @@ export class Prop implements IPropParent {
     }
     this._items = null;
     this._maps = null;
-    if (this.stash) {
-      this.stash.clear();
-    }
     if (this._type !== 'slot' && this._slotNode) {
       this._slotNode.remove();
       this._slotNode = undefined;
@@ -293,6 +295,7 @@ export class Prop implements IPropParent {
     return this._slotNode;
   }
 
+  @action
   setAsSlot(data: JSSlot) {
     this._type = 'slot';
     const slotSchema: SlotSchema = {
@@ -315,6 +318,7 @@ export class Prop implements IPropParent {
   /**
    * 取消设置值
    */
+  @action
   unset() {
     this._type = 'unset';
   }
@@ -322,6 +326,7 @@ export class Prop implements IPropParent {
   /**
    * 是否未设置值
    */
+  @action
   isUnset() {
     return this._type === 'unset';
   }
@@ -352,9 +357,9 @@ export class Prop implements IPropParent {
     return this.code === other.code ? 0 : 2;
   }
 
-  @obx.val private _items: Prop[] | null = null;
+  @obx.shallow private _items: Prop[] | null = null;
 
-  @obx.val private _maps: Map<string | number, Prop> | null = null;
+  @obx.shallow private _maps: Map<string | number, Prop> | null = null;
 
   get path(): string[] {
     return (this.parent.path || []).concat(this.key as string);
@@ -401,11 +406,12 @@ export class Prop implements IPropParent {
 
   /**
    * 获取某个属性
-   * @param stash 如果不存在，临时获取一个待写入
+   * @param createIfNone 当没有的时候，是否创建一个
    */
-  get(path: string | number, stash = true): Prop | null {
+  @action
+  get(path: string | number, createIfNone = true): Prop | null {
     const type = this._type;
-    if (type !== 'map' && type !== 'list' && type !== 'unset' && !stash) {
+    if (type !== 'map' && type !== 'list' && type !== 'unset' && !createIfNone) {
       return null;
     }
 
@@ -434,20 +440,12 @@ export class Prop implements IPropParent {
     }
 
     if (prop) {
-      return nest ? prop.get(nest, stash) : prop;
+      return nest ? prop.get(nest, createIfNone) : prop;
     }
 
-    if (stash) {
-      if (!this.stash) {
-        this.stash = new PropStash(this.props, (item) => {
-          // item take effect
-          if (item.key) {
-            this.set(item.key, item, true);
-          }
-          item.parent = this;
-        });
-      }
-      prop = this.stash.get(entry);
+    if (createIfNone) {
+      prop = new Prop(this, UNSET, entry);
+      this.set(entry, prop, true);
       if (nest) {
         return prop.get(nest, true);
       }
@@ -461,6 +459,7 @@ export class Prop implements IPropParent {
   /**
    * 从父级移除本身
    */
+  @action
   remove() {
     this.parent.delete(this);
   }
@@ -468,6 +467,7 @@ export class Prop implements IPropParent {
   /**
    * 删除项
    */
+  @action
   delete(prop: Prop): void {
     if (this.items) {
       const i = this.items.indexOf(prop);
@@ -484,6 +484,7 @@ export class Prop implements IPropParent {
   /**
    * 删除 key
    */
+  @action
   deleteKey(key: string): void {
     if (this.maps) {
       const prop = this.maps.get(key);
@@ -505,6 +506,7 @@ export class Prop implements IPropParent {
    *
    * @param force 强制
    */
+  @action
   add(value: CompositeValue, force = false): Prop | null {
     const type = this._type;
     if (type !== 'list' && type !== 'unset' && !force) {
@@ -523,6 +525,7 @@ export class Prop implements IPropParent {
    *
    * @param force 强制
    */
+  @action
   set(key: string | number, value: CompositeValue | Prop, force = false) {
     const type = this._type;
     if (type !== 'map' && type !== 'list' && type !== 'unset' && !force) {
@@ -543,7 +546,11 @@ export class Prop implements IPropParent {
       if (!isValidArrayIndex(key)) {
         return null;
       }
-      items[key] = prop;
+      if (isObservableArray(items)) {
+        mobxSet(items, key, prop);
+      } else {
+        items[key] = prop;
+      }
     } else if (this.maps) {
       const { maps } = this;
       const orig = maps.get(key);
@@ -584,14 +591,12 @@ export class Prop implements IPropParent {
   /**
    * 回收销毁
    */
+  @action
   purge() {
     if (this.purged) {
       return;
     }
     this.purged = true;
-    if (this.stash) {
-      this.stash.purge();
-    }
     if (this._items) {
       this._items.forEach((item) => item.purge());
     }
@@ -627,6 +632,7 @@ export class Prop implements IPropParent {
   /**
    * 遍历
    */
+  @action
   forEach(fn: (item: Prop, key: number | string | undefined) => void): void {
     const { items } = this;
     if (!items) {
@@ -641,6 +647,7 @@ export class Prop implements IPropParent {
   /**
    * 遍历
    */
+  @action
   map<T>(fn: (item: Prop, key: number | string | undefined) => T): T[] | null {
     const { items } = this;
     if (!items) {

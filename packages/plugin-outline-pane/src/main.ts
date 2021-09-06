@@ -1,4 +1,4 @@
-import { computed, obx } from '@ali/lowcode-editor-core';
+import { computed, makeObservable, obx } from '@ali/lowcode-editor-core';
 import {
   Designer,
   ISensor,
@@ -17,12 +17,12 @@ import {
   contains,
   Node,
 } from '@ali/lowcode-designer';
+import { uniqueId } from '@ali/lowcode-utils';
+import { IEditor } from '@ali/lowcode-types';
 import TreeNode from './tree-node';
 import { IndentTrack } from './helper/indent-track';
 import DwellTimer from './helper/dwell-timer';
-import { uniqueId } from '@ali/lowcode-utils';
 import { Backup } from './views/backup-pane';
-import { IEditor } from '@ali/lowcode-types';
 import { ITreeBoard, TreeMaster, getTreeMaster } from './tree-master';
 
 export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
@@ -51,6 +51,7 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
   readonly at: string | symbol;
 
   constructor(editor: IEditor, at: string | symbol) {
+    makeObservable(this);
     this.editor = editor;
     this.at = at;
     let inited = false;

@@ -1,4 +1,4 @@
-import { computed, obx } from '@ali/lowcode-editor-core';
+import { computed, makeObservable, obx, action } from '@ali/lowcode-editor-core';
 import { NodeData, isJSExpression, isDOMText, NodeSchema, isNodeSchema, RootSchema, PageSchema } from '@ali/lowcode-types';
 import { EventEmitter } from 'events';
 import { Project } from '../project';
@@ -61,7 +61,7 @@ export class DocumentModel {
 
   readonly designer: Designer;
 
-  @obx.val private nodes = new Set<Node>();
+  @obx.shallow private nodes = new Set<Node>();
 
   private seqId = 0;
 
@@ -117,13 +117,7 @@ export class DocumentModel {
   private inited = false;
 
   constructor(project: Project, schema?: RootSchema) {
-    /*
-    // TODO
-    // use special purge process
-    autorun(() => {
-      console.info(this.willPurgeSpace);
-    }, true);
-    */
+    makeObservable(this);
     this.project = project;
     this.designer = this.project?.designer;
     this.emitter = new EventEmitter();
@@ -161,7 +155,7 @@ export class DocumentModel {
     this.inited = true;
   }
 
-  @obx.val private willPurgeSpace: Node[] = [];
+  @obx.shallow private willPurgeSpace: Node[] = [];
 
   get modalNode() {
     return this._modalNode;
@@ -182,7 +176,7 @@ export class DocumentModel {
     }
   }
 
-  @computed isBlank() {
+  isBlank() {
     return this._blank && !this.isModified();
   }
 
@@ -213,7 +207,7 @@ export class DocumentModel {
     return node ? !node.isPurged : false;
   }
 
-  @obx.val private activeNodes?: Node[];
+  @obx.shallow private activeNodes?: Node[];
 
   /**
    * 根据 schema 创建一个节点
@@ -362,6 +356,7 @@ export class DocumentModel {
     return this.rootNode?.schema as any;
   }
 
+  @action
   import(schema: RootSchema, checkId = false) {
     const drillDownNodeId = this._drillDownNode?.id;
     // TODO: 暂时用饱和式删除，原因是 Slot 节点并不是树节点，无法正常递归删除

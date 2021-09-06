@@ -6,10 +6,6 @@ import { BuiltinSimulatorHostView } from '../builtin-simulator';
 
 @observer
 export class DocumentView extends Component<{ document: DocumentModel }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
     const { document } = this.props;
     const { simulatorProps } = document;

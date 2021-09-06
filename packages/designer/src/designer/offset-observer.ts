@@ -1,4 +1,4 @@
-import { obx, computed } from '@ali/lowcode-editor-core';
+import { obx, computed, makeObservable } from '@ali/lowcode-editor-core';
 import { uniqueId } from '@ali/lowcode-utils';
 import { INodeSelector, IViewport } from '../simulator';
 import { isRootNode, Node } from '../document';
@@ -106,8 +106,9 @@ export class OffsetObserver {
     const doc = node.document;
     const host = doc.simulator!;
     const focusNode = doc.focusNode;
-    this.isRoot = node.contains(focusNode);
+    this.isRoot = node.contains(focusNode!);
     this.viewport = host.viewport;
+    makeObservable(this);
     if (this.isRoot) {
       this.hasOffset = true;
       return;

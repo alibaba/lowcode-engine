@@ -31,9 +31,9 @@
     // skip type checking of declaration files
     "skipLibCheck": true,
     "baseUrl": "./packages",
+    "useDefineForClassFields": true,
     "paths": {
-      "@ali/lowcode-*": ["./*/src"],
-      "@ali/visualengine": ["./vision-preset/src"]
+      "@ali/lowcode-*": ["./*/src"]
     },
     "outDir": "lib"
   },

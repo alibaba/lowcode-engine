@@ -1,4 +1,4 @@
-import { computed, obx } from '@ali/lowcode-editor-core';
+import { computed, makeObservable, obx } from '@ali/lowcode-editor-core';
 import { Designer, isLocationChildrenDetail } from '@ali/lowcode-designer';
 import TreeNode from './tree-node';
 import { Tree } from './tree';
@@ -14,6 +14,7 @@ export class TreeMaster {
   readonly designer: Designer;
 
   constructor(designer: Designer) {
+    makeObservable(this);
     this.designer = designer;
     let startTime: any;
     designer.dragon.onDragstart(() => {
@@ -71,7 +72,7 @@ export class TreeMaster {
     }
   }
 
-  @obx.val private boards = new Set<ITreeBoard>();
+  @obx.shallow private boards = new Set<ITreeBoard>();
 
   addBoard(board: ITreeBoard) {
     this.boards.add(board);
@@ -81,7 +82,7 @@ export class TreeMaster {
     this.boards.delete(board);
   }
 
-  @computed hasVisibleTreeBoard() {
+  hasVisibleTreeBoard() {
     for (const item of this.boards) {
       if (item.visible && item.at !== Backup) {
         return true;

@@ -1,7 +1,6 @@
 import { EventEmitter } from 'events';
 import { Node, Designer, Selection, SettingTopEntry } from '@ali/lowcode-designer';
-import { Editor, obx, computed } from '@ali/lowcode-editor-core';
-import { executePendingFn } from '@ali/lowcode-utils';
+import { Editor, obx, computed, makeObservable, action } from '@ali/lowcode-editor-core';
 
 function generateSessionId(nodes: Node[]) {
   return nodes
@@ -34,6 +33,7 @@ export class SettingsMain {
   private designer?: Designer;
 
   constructor(readonly editor: Editor) {
+    makeObservable(this);
     this.init();
   }
 
@@ -54,6 +54,7 @@ export class SettingsMain {
     setupSelection(designer.currentSelection);
   }
 
+  @action
   private setup(nodes: Node[]) {
     // check nodes change
     const sessionId = generateSessionId(nodes);

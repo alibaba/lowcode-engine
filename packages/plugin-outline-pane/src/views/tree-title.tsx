@@ -176,10 +176,6 @@ export default class TreeTitle extends Component<{
 
 @observer
 class LockBtn extends Component<{ treeNode: TreeNode }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
     const { treeNode } = this.props;
     return (
@@ -199,10 +195,6 @@ class LockBtn extends Component<{ treeNode: TreeNode }> {
 
 @observer
 class HideBtn extends Component<{ treeNode: TreeNode }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
     const { treeNode } = this.props;
     return (
@@ -224,10 +216,6 @@ class HideBtn extends Component<{ treeNode: TreeNode }> {
 
 @observer
 class ExpandBtn extends Component<{ treeNode: TreeNode }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
     const { treeNode } = this.props;
     if (!treeNode.expandable) {

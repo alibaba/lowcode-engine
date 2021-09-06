@@ -28,10 +28,6 @@ export default class BoxResizing extends Component<{ host: BuiltinSimulatorHost 
     return this.dragging ? selection.getTopNodes() : selection.getNodes();
   }
 
-  shouldComponentUpdate() {
-    return false;
-  }
-
   componentDidUpdate() {
     // this.hoveringCapture.setBoundary(this.outline);
     // this.willBind();
@@ -71,10 +67,6 @@ export class BoxResizingForNode extends Component<{ host: BuiltinSimulatorHost; 
 
   @computed get instances() {
     return this.host.getComponentInstances(this.props.node);
-  }
-
-  shouldComponentUpdate() {
-    return false;
   }
 
   render() {

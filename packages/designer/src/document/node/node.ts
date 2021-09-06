@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import { EventEmitter } from 'events';
-import { obx, computed, autorun } from '@ali/lowcode-editor-core';
+import { obx, computed, autorun, makeObservable, runInAction, getObserverTree } from '@ali/lowcode-editor-core';
 import {
   isDOMText,
   isJSExpression,
@@ -160,6 +160,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   isInited = false;
 
   constructor(readonly document: DocumentModel, nodeSchema: Schema, options: any = {}) {
+    makeObservable(this);
     const { componentName, id, children, props, ...extras } = nodeSchema;
     this.id = document.nextId(id);
     this.componentName = componentName;
@@ -208,7 +209,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     this.autoruns = autoruns.map((item) => {
       return autorun(() => {
         item.autorun(this.props.get(item.name, true) as any);
-      }, true);
+      });
     });
   }
 
@@ -382,7 +383,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * 获取当前节点的锁定状态
    */
   get isLocked(): boolean {
-    return !!this.getExtraProp('isLocked', false)?.getValue();
+    return !!this.getExtraProp('isLocked')?.getValue();
   }
 
   /**
@@ -417,9 +418,9 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.props.export(TransformStage.Serilize).props || null;
   }
 
-  @obx.val _slots: Node[] = [];
+  @obx.shallow _slots: Node[] = [];
 
-  @computed hasSlots() {
+  hasSlots() {
     return this._slots.length > 0;
   }
 
@@ -465,7 +466,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   /* istanbul ignore next */
-  @computed isConditionalVisible(): boolean | undefined {
+  isConditionalVisible(): boolean | undefined {
     return this._conditionGroup?.isVisible(this);
   }
 
@@ -474,7 +475,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     this._conditionGroup?.setVisible(this);
   }
 
-  @computed hasCondition() {
+  hasCondition() {
     const v = this.getExtraProp('condition', false)?.getValue();
     return v != null && v !== '' && v !== true;
   }
@@ -483,7 +484,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
    * has loop when 1. loop is validArray with length > 1 ; OR  2. loop is variable object
    * @return boolean, has loop config or not
    */
-  @computed hasLoop() {
+  hasLoop() {
     const value = this.getExtraProp('loop', false)?.getValue();
     if (value === undefined || value === null) {
       return false;
@@ -550,12 +551,12 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     };
   }
 
-  getProp(path: string, stash = true): Prop | null {
-    return this.props.query(path, stash as any) || null;
+  getProp(path: string, createIfNone = true): Prop | null {
+    return this.props.query(path, createIfNone) || null;
   }
 
-  getExtraProp(key: string, stash = true): Prop | null {
-    return this.props.get(getConvertedExtraKey(key), stash) || null;
+  getExtraProp(key: string, createIfNone = true): Prop | null {
+    return this.props.get(getConvertedExtraKey(key), createIfNone) || null;
   }
 
   setExtraProp(key: string, value: CompositeValue) {
@@ -647,7 +648,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   set schema(data: Schema) {
-    this.import(data);
+    runInAction(() => this.import(data));
   }
 
   import(data: Schema, checkId = false) {
@@ -865,9 +866,6 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.componentName;
   }
 
-  /**
-   * @deprecated
-   */
   insert(node: Node, ref?: Node, useMutator = true) {
     this.insertAfter(node, ref, useMutator);
   }
@@ -918,7 +916,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     this.children?.mergeChildren(remover, adder, sorter);
   }
 
-  @obx.val status: NodeStatus = {
+  @obx.shallow status: NodeStatus = {
     inPlaceEditing: false,
     locking: false,
     pseudo: false,

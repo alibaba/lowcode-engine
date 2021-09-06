@@ -31,20 +31,16 @@ export class History {
 
   private emitter = new EventEmitter();
 
-  private obx: Reaction;
-
-  private justWokeup = false;
+  private asleep = false;
 
   constructor(logger: () => any, private redoer: (data: NodeSchema) => void, private timeGap: number = 1000) {
     this.session = new Session(0, null, this.timeGap);
     this.records = [this.session];
 
-    this.obx = autorun(() => {
+    autorun(() => {
+      if (this.asleep) return;
       const data = logger();
-      if (this.justWokeup) {
-        this.justWokeup = false;
-        return;
-      }
+
       untracked(() => {
         const log = currentSerialization.serialize(data);
         if (this.session.cursor === 0 && this.session.isActive()) {
@@ -68,7 +64,7 @@ export class History {
           }
         }
       });
-    }, true).$obx;
+    });
   }
 
   get hotData() {
@@ -77,6 +73,14 @@ export class History {
 
   isSavePoint(): boolean {
     return this.point !== this.session.cursor;
+  }
+
+  private sleep() {
+    this.asleep = true;
+  }
+
+  private wakeup() {
+    this.asleep = false;
   }
 
   go(cursor: number) {
@@ -96,7 +100,7 @@ export class History {
     const session = this.records[cursor];
     const hotData = session.data;
 
-    this.obx.sleep();
+    this.sleep();
     try {
       this.redoer(currentSerialization.unserialize(hotData));
       this.emitter.emit('cursor', hotData);
@@ -104,8 +108,7 @@ export class History {
       //
     }
 
-    this.justWokeup = true;
-    this.obx.wakeup();
+    this.wakeup();
     this.session = session;
 
     this.emitter.emit('statechange', this.getState());

@@ -4,17 +4,12 @@ import { observer } from '@ali/lowcode-editor-core';
 import Area from '../area';
 import { PanelConfig } from '../types';
 import Panel from '../widget/panel';
-import { Designer } from '@ali/lowcode-designer';
 
 @observer
 export default class LeftFixedPane extends Component<{ area: Area<PanelConfig, Panel> }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
   componentDidUpdate() {
     // FIXME: dirty fix, need deep think
-    this.props.area.skeleton.editor.get(Designer)?.touchOffsetObserver();
+    this.props.area.skeleton.editor.get('designer')?.touchOffsetObserver();
   }
 
 
@@ -42,10 +37,6 @@ export default class LeftFixedPane extends Component<{ area: Area<PanelConfig, P
 
 @observer
 class Contents extends Component<{ area: Area<PanelConfig, Panel> }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
     const { area } = this.props;
     return <Fragment>{area.container.items.map((panel) => panel.content)}</Fragment>;

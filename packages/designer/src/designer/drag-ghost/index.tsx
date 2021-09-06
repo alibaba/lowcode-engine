@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { observer, obx, Title } from '@ali/lowcode-editor-core';
+import { observer, obx, Title, makeObservable } from '@ali/lowcode-editor-core';
 import { Designer } from '../designer';
 import { DragObject, isDragNodeObject, isDragNodeDataObject } from '../dragon';
 import { isSimulatorHost } from '../../simulator';
@@ -23,6 +23,7 @@ export default class DragGhost extends Component<{ designer: Designer }> {
 
   constructor(props: any) {
     super(props);
+    makeObservable(this);
     this.dispose = [
       this.dragon.onDragstart(e => {
         if (e.originalEvent.type.substr(0, 4) === 'drag') {
@@ -50,10 +51,6 @@ export default class DragGhost extends Component<{ designer: Designer }> {
         this.y = 0;
       }),
     ];
-  }
-
-  shouldComponentUpdate() {
-    return false;
   }
 
   componentWillUnmount() {
