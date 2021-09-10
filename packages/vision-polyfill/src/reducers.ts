@@ -14,6 +14,7 @@ import {
   initNodeReducer,
   liveLifecycleReducer,
   nodeTopFixedReducer,
+  resetLoopDefaultValueReducer,
 } from './props-reducers';
 
 const { LiveEditing, TransformStage } = designerCabin;
@@ -57,3 +58,6 @@ designer.addPropsReducer(removeEmptyPropsReducer, TransformStage.Save);
 
 designer.addPropsReducer(nodeTopFixedReducer, TransformStage.Render);
 designer.addPropsReducer(nodeTopFixedReducer, TransformStage.Save);
+
+// loop的默认值处理
+designer.addPropsReducer(resetLoopDefaultValueReducer, TransformStage.Save);
