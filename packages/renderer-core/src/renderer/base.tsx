@@ -339,6 +339,14 @@ export default function baseRenererFactory() {
       } as IInfo));
     };
 
+    private get self() {
+      const { __ctx } = this.props;
+      const self: any = {};
+      self.__proto__ = __ctx || this;
+
+      return self;
+    }
+
     // 将模型结构转换成react Element
     // schema 模型结构
     // self 为每个渲染组件构造的上下文，self是自上而下继承的
@@ -729,7 +737,11 @@ export default function baseRenererFactory() {
 
     __renderComp(Comp: any, ctxProps: object) {
       const { __schema } = this.props;
-      const data = this.__parseData(__schema?.props);
+      const data = this.__parseProps(__schema?.props, this.self, '', {
+        schema: __schema,
+        Comp,
+        componentInfo: {},
+      });
       const { className } = data;
       const { engine } = this.context || {};
       if (!engine) {

@@ -19,7 +19,7 @@ export default function componentRendererFactory() {
     }
 
     render() {
-      const { __schema } = this.props;
+      const { __schema, __components } = this.props;
       if (this.__checkSchema(__schema)) {
         return '自定义组件 schema 结构异常！';
       }
@@ -36,7 +36,13 @@ export default function componentRendererFactory() {
         return this.__renderContextProvider({ compContext: this });
       }
 
-      return this.__renderContent(this.__renderContextProvider({ compContext: this }));
+      const Component = __components[__schema.componentName];
+
+      if (!Component) {
+        return this.__renderContent(this.__renderContextProvider({ compContext: this }));
+      }
+
+      return this.__renderComp(Component, this.__renderContextProvider({ compContext: this }));
     }
   };
 }
