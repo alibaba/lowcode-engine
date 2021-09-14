@@ -1,10 +1,10 @@
 import { Component } from 'react';
-import { observer } from '@ali/lowcode-editor-core';
+import { observer, engineConfig } from '@ali/lowcode-editor-core';
 import { Designer } from '../designer';
 import { BuiltinSimulatorHostView } from '../builtin-simulator';
 import './project.less';
 
-class Loading extends Component {
+class BuiltinLoading extends Component {
   render() {
     return (
       <div id="engine-loading-wrapper">
@@ -29,6 +29,7 @@ export class ProjectView extends Component<{ designer: Designer }> {
     const { project } = designer;
     const { simulatorProps } = project;
     const Simulator = designer.simulatorComponent || BuiltinSimulatorHostView;
+    const Loading = engineConfig.get('loadingComponent', BuiltinLoading);
 
     return (
       <div className="lc-project">
