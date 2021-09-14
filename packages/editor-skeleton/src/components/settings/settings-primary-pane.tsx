@@ -229,6 +229,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
 
     return (
       <div className="lc-settings-main">
+        { this.renderBreadcrumb() }
         <Tab
           activeKey={activeKey}
           onChange={(tabKey) => {
@@ -238,7 +239,6 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
           animation={false}
           excessMode="dropdown"
           contentClassName="lc-settings-tabs-content"
-          extra={this.renderBreadcrumb()}
         >
           {tabs}
         </Tab>
