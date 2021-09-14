@@ -2,7 +2,7 @@ import { BuiltinSimulatorRenderer, Component, DocumentModel, Node, NodeInstance 
 import { ComponentSchema, NodeSchema, NpmInfo, RootSchema, TransformStage } from '@ali/lowcode-types';
 import { Asset, compatibleLegaoSchema, cursor, isElement, isESModule, isPlainObject, isReactComponent, setNativeSelection } from '@ali/lowcode-utils';
 import LowCodeRenderer from '@ali/lowcode-rax-renderer';
-import { computed, obx } from '@recore/obx';
+import { computed, observable as obx, untracked, makeObservable, configure } from 'mobx';
 import DriverUniversal from 'driver-universal';
 import { EventEmitter } from 'events';
 import { createMemoryHistory, MemoryHistory } from 'history';
@@ -17,6 +17,7 @@ import { getClientRects } from './utils/get-client-rects';
 import loader from './utils/loader';
 import { parseQuery, withQueryParams } from './utils/url';
 
+configure({ enforceActions: 'never' });
 const { Instance } = shared;
 
 export interface LibraryMap {
@@ -110,6 +111,7 @@ export class DocumentInstance {
   private dispose?: () => void;
 
   constructor(readonly container: SimulatorRendererContainer, readonly document: DocumentModel) {
+    makeObservable(this);
     this.dispose = host.autorun(() => {
       // sync schema
       this._schema = document.export(TransformStage.Render);
@@ -270,7 +272,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     });
     const documentInstanceMap = new Map<string, DocumentInstance>();
     let initialEntry = '/';
-    host.autorun(({ firstRun }) => {
+    let firstRun = true;
+    host.autorun(() => {
       this._documentInstances = host.project.documents.map((doc) => {
         let inst = documentInstanceMap.get(doc.id);
         if (!inst) {
@@ -283,6 +286,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       const path = host.project.currentDocument ? documentInstanceMap.get(host.project.currentDocument.id)!.path : '/';
       if (firstRun) {
         initialEntry = path;
+        firstRun = false;
       } else {
         if (this.history.location.pathname !== path) {
           this.history.replace(path);

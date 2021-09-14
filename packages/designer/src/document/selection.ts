@@ -1,14 +1,16 @@
 import { EventEmitter } from 'events';
-import { obx } from '@ali/lowcode-editor-core';
+import { obx, makeObservable } from '@ali/lowcode-editor-core';
 import { Node, comparePosition, PositionNO } from './node/node';
 import { DocumentModel } from './document-model';
 
 export class Selection {
   private emitter = new EventEmitter();
 
-  @obx.val private _selected: string[] = [];
+  @obx.shallow private _selected: string[] = [];
 
-  constructor(readonly doc: DocumentModel) {}
+  constructor(readonly doc: DocumentModel) {
+    makeObservable(this);
+  }
 
   /**
    * 选中的节点 id

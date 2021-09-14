@@ -1,4 +1,4 @@
-import { obx } from '@ali/lowcode-editor-core';
+import { makeObservable, obx } from '@ali/lowcode-editor-core';
 import { Node, DocumentModel } from '../document';
 
 export class Detecting {
@@ -18,6 +18,10 @@ export class Detecting {
   @obx.ref xRayMode = false;
 
   @obx.ref private _current: Node | null = null;
+
+  constructor() {
+    makeObservable(this);
+  }
 
   get current() {
     return this._current;

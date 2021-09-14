@@ -1,4 +1,4 @@
-import { obx, computed } from '@ali/lowcode-editor-core';
+import { obx, computed, makeObservable } from '@ali/lowcode-editor-core';
 import { uniqueId } from '@ali/lowcode-utils';
 import { createElement, ReactNode, ReactInstance } from 'react';
 import { Skeleton } from '../skeleton';
@@ -77,6 +77,7 @@ export default class PanelDock implements IWidget {
   }
 
   constructor(readonly skeleton: Skeleton, readonly config: PanelDockConfig) {
+    makeObservable(this);
     const { content, contentProps, panelProps, name, props } = config;
     this.name = name;
     this.id = uniqueId(`dock:${name}$`);

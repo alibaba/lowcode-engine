@@ -9,7 +9,7 @@ interface ILiteralObject {
 }
 
 export class Env {
-  @obx.val envs: ILiteralObject = {};
+  @obx.shallow envs: ILiteralObject = {};
 
   private emitter: EventEmitter;
 

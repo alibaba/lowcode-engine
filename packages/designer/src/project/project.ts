@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { obx, computed } from '@ali/lowcode-editor-core';
+import { obx, computed, makeObservable, action } from '@ali/lowcode-editor-core';
 import { Designer } from '../designer';
 import { DocumentModel, isDocumentModel, isPageSchema } from '../document';
 import { ProjectSchema, RootSchema } from '@ali/lowcode-types';
@@ -8,7 +8,7 @@ import { ISimulatorHost } from '../simulator';
 export class Project {
   private emitter = new EventEmitter();
 
-  @obx.val readonly documents: DocumentModel[] = [];
+  @obx.shallow readonly documents: DocumentModel[] = [];
 
   private data: ProjectSchema = { version: '1.0.0', componentsMap: [], componentsTree: [], i18n: {} };
 
@@ -24,6 +24,7 @@ export class Project {
   // TODO: 考虑项目级别 History
 
   constructor(readonly designer: Designer, schema?: ProjectSchema) {
+    makeObservable(this);
     this.load(schema);
   }
 
@@ -76,6 +77,7 @@ export class Project {
    *
    * @param autoOpen true 自动打开文档 string 指定打开的文件
    */
+  @action
   load(schema?: ProjectSchema, autoOpen?: boolean | string) {
     this.unload();
     // load new document

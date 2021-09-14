@@ -11,10 +11,6 @@ import './borders.less';
 
 @observer
 export class BemTools extends Component<{ host: BuiltinSimulatorHost }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
     const { host } = this.props;
     const { designMode } = host;

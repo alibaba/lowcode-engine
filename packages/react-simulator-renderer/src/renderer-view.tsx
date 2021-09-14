@@ -3,7 +3,7 @@ import { Router, Route, Switch } from 'react-router';
 import cn from 'classnames';
 import { Node } from '@ali/lowcode-designer';
 import LowCodeRenderer from '@ali/lowcode-react-renderer';
-import { observer } from '@recore/obx-react';
+import { observer } from 'mobx-react';
 import { isFromVC, getClosestNode } from '@ali/lowcode-utils';
 import { SimulatorRendererContainer, DocumentInstance } from './renderer';
 
@@ -99,10 +99,6 @@ function getDeviceView(view: any, device: string, mode: string) {
 
 @observer
 class Layout extends Component<{ rendererContainer: SimulatorRendererContainer }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
     const { rendererContainer, children } = this.props;
     const { layout } = rendererContainer;
@@ -133,10 +129,6 @@ class Renderer extends Component<{
     rendererContainer: SimulatorRendererContainer,
     documentInstance: DocumentInstance,
   }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
     const { documentInstance, rendererContainer: renderer } = this.props;
     const { container } = documentInstance;

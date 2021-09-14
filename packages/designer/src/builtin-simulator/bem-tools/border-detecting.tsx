@@ -46,10 +46,6 @@ export class BorderDetectingInstance extends PureComponent<{
 
 @observer
 export class BorderDetecting extends Component<{ host: BuiltinSimulatorHost }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
   @computed get scale() {
     return this.props.host.viewport.scale;
   }

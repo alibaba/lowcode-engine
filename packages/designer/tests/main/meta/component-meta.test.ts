@@ -50,10 +50,9 @@ describe('组件元数据处理', () => {
     expect(meta.availableActions[2].name).toBe('copy');
 
     removeBuiltinComponentAction('remove');
-    // availableActions 有 computed 缓存
-    expect(meta.availableActions[0].name).toBe('remove');
-    expect(meta.availableActions[1].name).toBe('hide');
-    expect(meta.availableActions[2].name).toBe('copy');
+    expect(meta.availableActions).toHaveLength(4);
+    expect(meta.availableActions[0].name).toBe('hide');
+    expect(meta.availableActions[1].name).toBe('copy');
 
     addBuiltinComponentAction({
       name: 'new',
@@ -61,10 +60,9 @@ describe('组件元数据处理', () => {
         action() {},
       },
     });
-    // availableActions 有 computed 缓存
     expect(meta.availableActions).toHaveLength(5);
-    expect(meta.availableActions[0].name).toBe('remove');
-    expect(meta.availableActions[1].name).toBe('hide');
-    expect(meta.availableActions[2].name).toBe('copy');
+    expect(meta.availableActions[0].name).toBe('hide');
+    expect(meta.availableActions[1].name).toBe('copy');
+    expect(meta.availableActions[4].name).toBe('new');
   });
 });

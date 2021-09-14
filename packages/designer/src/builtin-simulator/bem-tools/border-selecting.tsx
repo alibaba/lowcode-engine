@@ -9,7 +9,7 @@ import {
   ComponentType,
 } from 'react';
 import classNames from 'classnames';
-import { observer, computed, Tip, globalContext, Editor } from '@ali/lowcode-editor-core';
+import { observer, computed, Tip, globalContext, makeObservable } from '@ali/lowcode-editor-core';
 import { createIcon, isReactComponent } from '@ali/lowcode-utils';
 import { ActionContentObject, isActionContentObject } from '@ali/lowcode-types';
 import { BuiltinSimulatorHost } from '../host';
@@ -62,10 +62,6 @@ export class BorderSelectingInstance extends Component<{
 
 @observer
 class Toolbar extends Component<{ observed: OffsetObserver }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
     const { observed } = this.props;
     const { height, width } = observed.viewport;
@@ -169,10 +165,6 @@ export class BorderSelectingForNode extends Component<{ host: BuiltinSimulatorHo
     return this.host.getComponentInstances(this.props.node);
   }
 
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
     const { instances } = this;
     const { node } = this.props;
@@ -215,10 +207,6 @@ export class BorderSelecting extends Component<{ host: BuiltinSimulatorHost }> {
     }
     const { selection } = doc;
     return this.dragging ? selection.getTopNodes() : selection.getNodes();
-  }
-
-  shouldComponentUpdate() {
-    return false;
   }
 
   render() {

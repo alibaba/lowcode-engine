@@ -1,11 +1,17 @@
 import { Component, Fragment } from 'react';
 import { Button, Icon } from '@alifd/next';
+import { action, makeObservable } from '@ali/lowcode-editor-core';
 import { IconFix } from '../../icons/fix';
 import { IconFloat } from '../../icons/float';
 import Panel from '../../widget/panel';
 
 export default class PanelOperationRow extends Component<{ panel: Panel }> {
+  constructor(props) {
+    super(props);
+    makeObservable(this);
+  }
   // fix or float
+  @action
   setDisplay() {
     const { panel } = this.props;
     const current = panel;

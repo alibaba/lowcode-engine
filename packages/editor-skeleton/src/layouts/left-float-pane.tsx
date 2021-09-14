@@ -6,11 +6,6 @@ import Panel from '../widget/panel';
 
 @observer
 export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }> {
-
-  shouldComponentUpdate() {
-    return false;
-  }
-
   private dispose?: () => void;
 
   private focusing?: Focusable;
@@ -118,10 +113,6 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
 
 @observer
 class Contents extends Component<{ area: Area<any, Panel> }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
     const { area } = this.props;
     return (

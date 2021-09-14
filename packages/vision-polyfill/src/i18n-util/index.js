@@ -18,7 +18,7 @@ class DocItem {
   constructor(parent, doc, unInitial) {
     this.parent = parent;
     const { use, ...strings } = doc;
-    this.doc = obx.val({
+    this.doc = obx({
       type: 'i18n',
       ...strings,
     });

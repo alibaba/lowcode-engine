@@ -22,10 +22,6 @@ export class Workbench extends Component<{ skeleton: Skeleton; config?: EditorCo
     skeleton.buildFromConfig(config, components);
   }
 
-  shouldComponentUpdate() {
-    return false;
-  }
-
   // componentDidCatch(error: any) {
   //   globalContext.get(Editor).emit('editor.skeleton.workbench.error', error);
   // }

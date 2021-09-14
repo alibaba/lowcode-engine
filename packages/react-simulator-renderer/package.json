@@ -22,7 +22,9 @@
     "@recore/obx-react": "^1.0.7",
     "classnames": "^2.2.6",
     "react": "^16",
-    "react-dom": "^16.7.0"
+    "react-dom": "^16.7.0",
+    "mobx": "^6.3.0",
+    "mobx-react": "^7.2.0"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",

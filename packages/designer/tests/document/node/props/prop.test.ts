@@ -85,7 +85,7 @@ describe('Prop 类测试', () => {
 
       strProp.unset();
       strProp.add(2, true);
-      strProp.set(1);
+      strProp.set(0);
 
       expect(numProp.set()).toBeNull();
       expect(numProp.has()).toBeFalsy();
@@ -391,7 +391,7 @@ describe('Prop 类测试', () => {
         prop.unset();
         prop.set(0, true);
         expect(prop.set('x', 'invalid')).toBeNull();
-        expect(prop.get(0).getValue()).toBeTruthy();
+        expect(prop.get(0).getValue()).toBeUndefined();
       });
 
       it('export', () => {

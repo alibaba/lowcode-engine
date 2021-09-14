@@ -10,10 +10,6 @@ import { IEditor } from '@ali/lowcode-types';
 export class OutlinePane extends Component<{ config: any; editor: IEditor }> {
   private main = new OutlineMain(this.props.editor, this.props.config.name || this.props.config.pluginKey);
 
-  shouldComponentUpdate() {
-    return false;
-  }
-
   componentWillUnmount() {
     this.main.purge();
   }

@@ -6,3 +6,4 @@ export * from './remove-empty-prop-reducer';
 export * from './style-reducer';
 export * from './upgrade-reducer';
 export * from './node-top-fixed-reducer';
+export * from './reset-loop-default-value-reducer';

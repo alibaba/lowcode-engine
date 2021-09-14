@@ -2,7 +2,7 @@ import { TitleContent, isDynamicSetter, SetterType, DynamicSetter, FieldExtraPro
 import { Transducer } from './utils';
 import { SettingPropEntry } from './setting-prop-entry';
 import { SettingEntry } from './setting-entry';
-import { computed, obx } from '@ali/lowcode-editor-core';
+import { computed, obx, makeObservable, action } from '@ali/lowcode-editor-core';
 import { cloneDeep } from '@ali/lowcode-utils';
 import { ISetValueOptions } from '../../types';
 
@@ -63,7 +63,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
   constructor(parent: SettingEntry, config: FieldConfig, settingFieldCollector?: (name: string | number, field: SettingField) => void) {
     super(parent, config.name, config.type);
-
+    makeObservable(this);
     const { title, items, setter, extraProps, ...rest } = config;
     this.parent = parent;
     this._config = config;
@@ -141,6 +141,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
   private hotValue: any;
 
+  @action
   setValue(val: any, isHotValue?: boolean, force?: boolean, extraOptions?: ISetValueOptions) {
     if (isHotValue) {
       this.setHotValue(val, extraOptions);
@@ -162,6 +163,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
   }
 
   /* istanbul ignore next */
+  @action
   setMiniAppDataSourceValue(data: any, options?: any) {
     this.hotValue = data;
     const v = this.transducer.toNative(data);
@@ -174,6 +176,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     this.valueChange();
   }
 
+  @action
   setHotValue(data: any, options?: ISetValueOptions) {
     this.hotValue = data;
     const value = this.transducer.toNative(data);

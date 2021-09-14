@@ -10,10 +10,6 @@ export default class TreeNodeView extends Component<{
   treeNode: TreeNode;
   isModal?: boolean;
 }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
     const { treeNode, isModal } = this.props;
     const className = classNames('tree-node', {

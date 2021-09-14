@@ -1,11 +1,16 @@
 import {
   obx,
   autorun,
+  reaction,
   computed,
   getPublicPath,
   hotkey,
   focusTracker,
   engineConfig,
+  IReactionPublic,
+  IReactionOptions,
+  IReactionDisposer,
+  makeObservable,
 } from '@ali/lowcode-editor-core';
 import { EventEmitter } from 'events';
 import {
@@ -164,16 +169,27 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   readonly emitter: EventEmitter = new EventEmitter();
 
+  readonly componentsConsumer: ResourceConsumer;
+
+  readonly injectionConsumer: ResourceConsumer;
+
   /**
    * 是否为画布自动渲染
    */
   autoRender = true;
 
   constructor(project: Project) {
+    makeObservable(this);
     this.project = project;
     this.designer = project?.designer;
     this.scroller = this.designer.createScroller(this.viewport);
     this.autoRender = !engineConfig.get('disableAutoRender', false);
+    this.componentsConsumer = new ResourceConsumer<Asset | undefined>(() => this.componentsAsset);
+    this.injectionConsumer = new ResourceConsumer(() => {
+      return {
+        i18n: this.project.i18n,
+      };
+    });
   }
 
   get currentDocument() {
@@ -256,21 +272,24 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
    */
   connect(
     renderer: BuiltinSimulatorRenderer,
-    fn: (context: { dispose: () => void; firstRun: boolean }) => void,
+    effect: (reaction: IReactionPublic) => void, options?: IReactionOptions,
   ) {
     this._renderer = renderer;
-    return autorun(fn as any, true);
+    return autorun(effect, options);
   }
 
-  autorun(fn: (context: { dispose: () => void; firstRun: boolean }) => void) {
-    return autorun(fn as any, true);
+  reaction(expression: (reaction: IReactionPublic) => unknown, effect: (value: unknown, prev: unknown, reaction: IReactionPublic) => void,
+    opts?: IReactionOptions | undefined): IReactionDisposer {
+    return reaction(expression, effect, opts);
+  }
+
+  autorun(effect: (reaction: IReactionPublic) => void, options?: IReactionOptions): IReactionDisposer {
+    return autorun(effect, options);
   }
 
   purge(): void {
     // todo
   }
-
-  readonly viewport = new Viewport();
 
   mountViewport(viewport: Element | null) {
     this.viewport.mount(viewport);
@@ -293,14 +312,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
   get renderer() {
     return this._renderer;
   }
-
-  readonly componentsConsumer = new ResourceConsumer<Asset | undefined>(() => this.componentsAsset);
-
-  readonly injectionConsumer = new ResourceConsumer(() => {
-    return {
-      i18n: this.project.i18n,
-    };
-  });
 
   readonly asyncLibraryMap: { [key: string]: {} } = {};
 

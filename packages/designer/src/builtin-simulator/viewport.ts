@@ -1,4 +1,4 @@
-import { obx, computed } from '@ali/lowcode-editor-core';
+import { obx, computed, makeObservable } from '@ali/lowcode-editor-core';
 import { Point, ScrollTarget } from '../designer';
 import { AutoFit, IViewport } from '../simulator';
 
@@ -24,6 +24,10 @@ export default class Viewport implements IViewport {
   }
 
   private viewportElement?: HTMLElement;
+
+  constructor() {
+    makeObservable(this);
+  }
 
   mount(viewportElement: HTMLElement | null) {
     if (!viewportElement || this.viewportElement === viewportElement) {

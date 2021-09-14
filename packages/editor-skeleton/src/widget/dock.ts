@@ -1,5 +1,5 @@
 import { ReactNode, createElement } from 'react';
-import { obx } from '@ali/lowcode-editor-core';
+import { makeObservable, obx } from '@ali/lowcode-editor-core';
 import { uniqueId, createContent } from '@ali/lowcode-utils';
 import { DockConfig } from '../types';
 import { Skeleton } from '../skeleton';
@@ -59,6 +59,7 @@ export default class Dock implements IWidget {
   }
 
   constructor(readonly skeleton: Skeleton, readonly config: DockConfig) {
+    makeObservable(this);
     const { props = {}, name } = config;
     this.name = name;
     this.align = props.align;

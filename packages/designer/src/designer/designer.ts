@@ -1,5 +1,5 @@
 import { ComponentType } from 'react';
-import { obx, computed, autorun } from '@ali/lowcode-editor-core';
+import { obx, computed, autorun, makeObservable, IReactionPublic, IReactionOptions, IReactionDisposer } from '@ali/lowcode-editor-core';
 import {
   ProjectSchema,
   ComponentMetadata,
@@ -71,6 +71,7 @@ export class Designer {
   }
 
   constructor(props: DesignerProps) {
+    makeObservable(this);
     const { editor } = props;
     this.editor = editor;
     this.setProps(props);
@@ -563,12 +564,12 @@ export class Designer {
     }
   }
 
-  autorun(action: (context: { firstRun: boolean }) => void, sync = false): () => void {
-    return autorun(action, sync as true);
+  autorun(effect: (reaction: IReactionPublic) => void, options?: IReactionOptions): IReactionDisposer {
+    return autorun(effect, options);
   }
 
   purge() {
-    // todo:
+    // TODO:
   }
 }
 

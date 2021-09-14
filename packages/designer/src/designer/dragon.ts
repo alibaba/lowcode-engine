@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { obx } from '@ali/lowcode-editor-core';
+import { obx, makeObservable } from '@ali/lowcode-editor-core';
 import { NodeSchema } from '@ali/lowcode-types';
 import { setNativeSelection, cursor } from '@ali/lowcode-utils';
 import { DropLocation } from './location';
@@ -213,7 +213,9 @@ export class Dragon {
 
   private emitter = new EventEmitter();
 
-  constructor(readonly designer: Designer) {}
+  constructor(readonly designer: Designer) {
+    makeObservable(this);
+  }
 
   /**
    * Quick listen a shell(container element) drag behavior

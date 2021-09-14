@@ -2,7 +2,7 @@ import React, { createElement, ReactInstance } from 'react';
 import { render as reactRender } from 'react-dom';
 import { host } from './host';
 import SimulatorRendererView from './renderer-view';
-import { computed, obx, untracked } from '@recore/obx';
+import { computed, observable as obx, untracked, makeObservable, configure } from 'mobx';
 import { getClientRects } from './utils/get-client-rects';
 import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
 import {
@@ -28,7 +28,10 @@ import Leaf from './builtin-components/leaf';
 import { withQueryParams, parseQuery } from './utils/url';
 import { supportsQuickPropSetting, getUppermostPropKey, setInstancesProp } from './utils/misc';
 const loader = new AssetLoader();
+const DELAY_THRESHOLD = 10;
 const FULL_RENDER_THRESHOLD = 500;
+configure({ enforceActions: 'never' });
+
 export class DocumentInstance {
   public instancesMap = new Map<string, ReactInstance[]>();
 
@@ -40,9 +43,18 @@ export class DocumentInstance {
   private disposeFunctions: Array<() => void> = [];
 
   constructor(readonly container: SimulatorRendererContainer, readonly document: DocumentModel) {
-    const documentExportDisposer = host.autorun(() => {
-      this._schema = document.export(TransformStage.Render);
-    });
+    makeObservable(this);
+    // 标识当前文档导出的状态，用来控制 reaction effect 是否执行
+    let asleep = false;
+    const setDocSchema = (value?: any) => {
+      this._schema = value || document.export(TransformStage.Render);
+    };
+    const documentExportDisposer = host.reaction(() => {
+      return document.export(TransformStage.Render);
+    }, (value) => {
+      if (asleep) return;
+      setDocSchema(value);
+    }, { delay: DELAY_THRESHOLD, fireImmediately: true });
     this.disposeFunctions.push(documentExportDisposer);
     let tid: NodeJS.Timeout;
     this.disposeFunctions.push(host.onActivityEvent((data: ActivityData, ctx: any) => {
@@ -53,7 +65,7 @@ export class DocumentInstance {
 
       if (tid) clearTimeout(tid);
       // 临时关闭全量计算 schema 的逻辑，在增量计算结束后，来一次全量计算
-      documentExportDisposer.$obx.sleep();
+      asleep = true;
       if (data.type === ActivityType.MODIFIED) {
         // 对于修改场景，优先判断是否能走「快捷设置」逻辑
         if (supportsQuickPropSetting(data, this)) {
@@ -69,7 +81,10 @@ export class DocumentInstance {
         // FIXME: 待补充逻辑
       }
 
-      tid = setTimeout(() => documentExportDisposer.$obx.wakeup(true), FULL_RENDER_THRESHOLD);
+      tid = setTimeout(() => {
+        asleep = false;
+        setDocSchema();
+      }, FULL_RENDER_THRESHOLD);
       // TODO: 调试增量模式，打开以下代码
       // this._deltaData = data;
       // this._deltaMode = true;
@@ -246,6 +261,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   }
 
   constructor() {
+    makeObservable(this);
     this.autoRender = host.autoRender;
 
     this.disposeFunctions.push(host.connect(this, () => {
@@ -272,7 +288,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     }));
     const documentInstanceMap = new Map<string, DocumentInstance>();
     let initialEntry = '/';
-    this.disposeFunctions.push(host.autorun(({ firstRun }) => {
+    let firstRun = true;
+    this.disposeFunctions.push(host.autorun(() => {
       this._documentInstances = host.project.documents.map((doc) => {
         let inst = documentInstanceMap.get(doc.id);
         if (!inst) {
@@ -286,6 +303,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         : '/';
       if (firstRun) {
         initialEntry = path;
+        firstRun = false;
       } else if (this.history.location.pathname !== path) {
         this.history.replace(path);
       }

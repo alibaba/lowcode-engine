@@ -157,10 +157,6 @@ export class DraggableLineView extends Component<{ panel: Panel }> {
 
 @observer
 export class TitledPanelView extends Component<{ panel: Panel; area?: string }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
   componentDidMount() {
     this.checkVisible();
   }
@@ -218,10 +214,6 @@ export class PanelView extends Component<{
   hideOperationRow?: boolean;
   hideDragLine?: boolean;
 }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
   componentDidMount() {
     this.checkVisible();
   }
@@ -333,10 +325,6 @@ class PanelTitle extends Component<{ panel: Panel; className?: string }> {
 
 @observer
 export class WidgetView extends Component<{ widget: IWidget }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
   componentDidMount() {
     this.checkVisible();
     this.checkDisabled();

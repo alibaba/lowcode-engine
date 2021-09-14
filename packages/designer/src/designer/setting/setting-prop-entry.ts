@@ -1,4 +1,4 @@
-import { obx, computed } from '@ali/lowcode-editor-core';
+import { obx, computed, makeObservable, runInAction } from '@ali/lowcode-editor-core';
 import { IEditor, isJSExpression } from '@ali/lowcode-types';
 import { uniqueId } from '@ali/lowcode-utils';
 import { SettingEntry } from './setting-entry';
@@ -53,6 +53,7 @@ export class SettingPropEntry implements SettingEntry {
   extraProps: any = {};
 
   constructor(readonly parent: SettingEntry, name: string | number, type?: 'field' | 'group') {
+    makeObservable(this);
     if (type == null) {
       const c = typeof name === 'string' ? name.substr(0, 1) : '';
       if (c === '#') {
@@ -120,34 +121,36 @@ export class SettingPropEntry implements SettingEntry {
    */
   /* istanbul ignore next */
   @computed get valueState(): number {
-    if (this.type !== 'field') {
-      const { getValue } = this.extraProps;
-      return getValue ? (getValue(this, undefined) === undefined ? 0 : 1) : 0;
-    }
-    const propName = this.path.join('.');
-    const first = this.nodes[0].getProp(propName)!;
-    let l = this.nodes.length;
-    let state = 2;
-    while (l-- > 1) {
-      const next = this.nodes[l].getProp(propName, false);
-      const s = first.compare(next);
-      if (s > 1) {
-        return -1;
+    return runInAction(() => {
+      if (this.type !== 'field') {
+        const { getValue } = this.extraProps;
+        return getValue ? (getValue(this, undefined) === undefined ? 0 : 1) : 0;
       }
-      if (s === 1) {
-        state = 1;
+      const propName = this.path.join('.');
+      const first = this.nodes[0].getProp(propName)!;
+      let l = this.nodes.length;
+      let state = 2;
+      while (--l > 0) {
+        const next = this.nodes[l].getProp(propName, false);
+        const s = first.compare(next);
+        if (s > 1) {
+          return -1;
+        }
+        if (s === 1) {
+          state = 1;
+        }
       }
-    }
-    if (state === 2 && first.isUnset()) {
-      return 0;
-    }
-    return state;
+      if (state === 2 && first.isUnset()) {
+        return 0;
+      }
+      return state;
+    });
   }
 
   /**
    * 获取当前属性值
    */
-  @computed getValue(): any {
+  getValue(): any {
     let val: any;
     if (this.type === 'field') {
       val = this.parent.getPropValue(this.name);

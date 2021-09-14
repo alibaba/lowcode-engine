@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Tab, Breadcrumb } from '@alifd/next';
-import { Title, observer, Editor, obx, globalContext, engineConfig } from '@ali/lowcode-editor-core';
+import { Title, observer, Editor, obx, globalContext, engineConfig, makeObservable } from '@ali/lowcode-editor-core';
 import { Node, isSettingField, SettingField, Designer } from '@ali/lowcode-designer';
 import { SettingsMain } from './main';
 import { SettingsPane } from './settings-pane';
@@ -16,8 +16,9 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
 
   @obx.ref private _activeKey?: any;
 
-  shouldComponentUpdate() {
-    return false;
+  constructor(props) {
+    super(props);
+    makeObservable(this);
   }
 
   componentDidMount() {
@@ -62,8 +63,8 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
       );
     }
 
-    const editor = globalContext.get(Editor);
-    const designer = editor.get(Designer);
+    const editor = globalContext.get('editor');
+    const designer = editor.get('designer');
     const current = designer?.currentSelection?.getNodes()?.[0];
     let node: Node | null = settings.first;
     const focusNode = node.document.focusNode;
@@ -229,6 +230,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
 
     return (
       <div className="lc-settings-main">
+        { this.renderBreadcrumb() }
         <Tab
           activeKey={activeKey}
           onChange={(tabKey) => {
@@ -238,7 +240,6 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
           animation={false}
           excessMode="dropdown"
           contentClassName="lc-settings-tabs-content"
-          extra={this.renderBreadcrumb()}
         >
           {tabs}
         </Tab>

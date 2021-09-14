@@ -97,7 +97,8 @@ export function createIntl(
     getLocale(): string;
     setLocale(locale: string): void;
   } {
-  const data = computed(() => {
+  // TODO: make reactive
+  const data = (() => {
     const locale = globalLocale.getLocale();
     if (typeof instance === 'string') {
       if ((window as any)[instance]) {
@@ -110,11 +111,11 @@ export function createIntl(
       return (instance as any)[locale] || {};
     }
     return {};
-  });
+  })();
 
   function intl(key: string, params?: object): string {
     // TODO: tries lost language
-    const str = data.value[key];
+    const str = data[key];
 
     if (str == null) {
       return `##intl@${key}##`;

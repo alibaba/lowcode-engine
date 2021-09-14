@@ -18,10 +18,6 @@ class ModalTreeNodeView extends Component<{ treeNode: TreeNode }> {
     this.modalNodesManager = props.treeNode.document.modalNodesManager;
   }
 
-  shouldComponentUpdate() {
-    return false;
-  }
-
   hideAllNodes() {
     this.modalNodesManager.hideModalNodes();
   }
@@ -57,10 +53,6 @@ class ModalTreeNodeView extends Component<{ treeNode: TreeNode }> {
 
 @observer
 export default class RootTreeNodeView extends Component<{ treeNode: TreeNode }> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
     const { treeNode } = this.props;
     const className = classNames('tree-node', {

@@ -102,8 +102,8 @@ export class AccordionField extends VEField {
   constructor(props: IVEFieldProps) {
     super(props);
     this._generateClassNames(props);
-    if (this.props.onExpandChange) {
-      this.willDetach = this.props.onExpandChange(() => this.forceUpdate());
+    if (props.onExpandChange) {
+      this.willDetach = props.onExpandChange(() => this.forceUpdate());
     }
   }
 

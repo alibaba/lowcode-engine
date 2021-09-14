@@ -1,5 +1,5 @@
 import { ReactNode, createElement } from 'react';
-import { obx } from '@ali/lowcode-editor-core';
+import { makeObservable, obx } from '@ali/lowcode-editor-core';
 import { createContent, uniqueId } from '@ali/lowcode-utils';
 import { WidgetConfig, IWidgetBaseConfig } from '../types';
 import { Skeleton } from '../skeleton';
@@ -71,6 +71,7 @@ export default class Widget implements IWidget {
   readonly title: TitleContent;
 
   constructor(readonly skeleton: Skeleton, readonly config: WidgetConfig) {
+    makeObservable(this);
     const { props = {}, name } = config;
     this.name = name;
     this.align = props.align;

@@ -1,4 +1,4 @@
-import { obx, computed, globalContext } from '@ali/lowcode-editor-core';
+import { obx, computed, globalContext, makeObservable } from '@ali/lowcode-editor-core';
 import { Node, ParentalNode } from './node';
 import { TransformStage } from './transform-stage';
 import { NodeData, isNodeSchema } from '@ali/lowcode-types';
@@ -8,11 +8,12 @@ import { foreachReverse } from '../../utils/tree';
 import { NodeRemoveOptions } from '../../types';
 
 export class NodeChildren {
-  @obx.val private children: Node[];
+  @obx.shallow private children: Node[];
 
   private emitter = new EventEmitter();
 
   constructor(readonly owner: ParentalNode, data: NodeData | NodeData[], options: any = {}) {
+    makeObservable(this);
     this.children = (Array.isArray(data) ? data : [data]).map(child => {
       return this.owner.document.createNode(child, options.checkId);
     });
@@ -83,11 +84,11 @@ export class NodeChildren {
   /**
    * 是否空
    */
-  @computed isEmpty() {
+  isEmpty() {
     return this.size < 1;
   }
 
-  @computed notEmpty() {
+  notEmpty() {
     return this.size > 0;
   }
 
@@ -387,7 +388,7 @@ export class NodeChildren {
     }
 
     if (owner.parent && !owner.parent.isRoot()) {
-      this.reportModified(node, owner.parent, { ...options, propagated: true, });
+      this.reportModified(node, owner.parent, { ...options, propagated: true });
     }
   }
 }

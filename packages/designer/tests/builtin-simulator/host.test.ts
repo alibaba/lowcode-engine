@@ -105,7 +105,7 @@ describe('Host 测试', () => {
         type: AssetType.CSSText,
         content: '.theme {font-size: 50px;}',
       });
-      expect(host.componentsMap).toBe(designer.componentsMap);
+      expect(host.componentsMap).toEqual(designer.componentsMap);
       expect(host.requestHandlersMap).toEqual({});
 
       host.set('renderEnv', 'vue');

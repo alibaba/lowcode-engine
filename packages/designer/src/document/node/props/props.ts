@@ -1,7 +1,6 @@
-import { computed, obx } from '@ali/lowcode-editor-core';
+import { computed, makeObservable, obx, action } from '@ali/lowcode-editor-core';
 import { PropsMap, PropsList, CompositeValue } from '@ali/lowcode-types';
 import { uniqueId, compatStage } from '@ali/lowcode-utils';
-import { PropStash } from './prop-stash';
 import { Prop, IPropParent, UNSET } from './prop';
 import { Node } from '../node';
 import { TransformStage } from '../transform-stage';
@@ -23,7 +22,7 @@ export function getOriginalExtraKey(key: string): string {
 export class Props implements IPropParent {
   readonly id = uniqueId('props');
 
-  @obx.val private items: Prop[] = [];
+  @obx.shallow private items: Prop[] = [];
 
   @computed private get maps(): Map<string, Prop> {
     const maps = new Map();
@@ -45,8 +44,6 @@ export class Props implements IPropParent {
 
   readonly owner: Node;
 
-  private stash: PropStash;
-
   /**
    * 元素个数
    */
@@ -57,11 +54,8 @@ export class Props implements IPropParent {
   @obx type: 'map' | 'list' = 'map';
 
   constructor(owner: Node, value?: PropsMap | PropsList | null, extras?: object) {
+    makeObservable(this);
     this.owner = owner;
-    this.stash = new PropStash(this, prop => {
-      this.items.push(prop);
-      prop.parent = this;
-    });
     if (Array.isArray(value)) {
       this.type = 'list';
       this.items = value.map(item => new Prop(this, item.value, item.name, item.spread));
@@ -75,8 +69,8 @@ export class Props implements IPropParent {
     }
   }
 
+  @action
   import(value?: PropsMap | PropsList | null, extras?: object) {
-    this.stash.clear();
     const originItems = this.items;
     if (Array.isArray(value)) {
       this.type = 'list';
@@ -96,6 +90,7 @@ export class Props implements IPropParent {
     originItems.forEach(item => item.purge());
   }
 
+  @action
   merge(value: PropsMap, extras?: PropsMap) {
     Object.keys(value).forEach(key => {
       this.query(key, true)!.setValue(value[key]);
@@ -119,9 +114,6 @@ export class Props implements IPropParent {
       props = [];
       this.items.forEach(item => {
         let value = item.export(stage);
-        if (value === UNSET) {
-          value = undefined;
-        }
         let name = item.key as string;
         if (name && typeof name === 'string' && name.startsWith(EXTRA_KEY_PREFIX)) {
           name = getOriginalExtraKey(name);
@@ -142,9 +134,6 @@ export class Props implements IPropParent {
           return;
         }
         let value = item.export(stage);
-        if (value === UNSET) {
-          value = undefined;
-        }
         allProps[name] = value;
       });
       // compatible vision
@@ -187,53 +176,19 @@ export class Props implements IPropParent {
   /**
    * 根据 path 路径查询属性
    *
-   * @param stash 如果没有则临时生成一个
+   * @param createIfNone 当没有的时候，是否创建一个
    */
-  query(path: string, stash = true): Prop | null {
-    return this.get(path, stash);
-    // todo: future support list search
-    // let matchedLength = 0;
-    // let firstMatched = null;
-    // if (this.items) {
-    //   // target: a.b.c
-    //   // trys: a.b.c, a.b, a
-    //   let i = this.items.length;
-    //   while (i-- > 0) {
-    //     const expr = this.items[i];
-    //     if (!expr.key) {
-    //       continue;
-    //     }
-    //     const name = String(expr.key);
-    //     if (name === path) {
-    //       // completely match
-    //       return expr;
-    //     }
-
-    //     // fisrt match
-    //     const l = name.length;
-    //     if (path.slice(0, l + 1) === `${name}.`) {
-    //       matchedLength = l;
-    //       firstMatched = expr;
-    //     }
-    //   }
-    // }
-
-    // let ret = null;
-    // if (firstMatched) {
-    //   ret = firstMatched.get(path.slice(matchedLength + 1), true);
-    // }
-    // if (!ret && stash) {
-    //   return this.stash.get(path);
-    // }
-
-    // return ret;
+  @action
+  query(path: string, createIfNone = true): Prop | null {
+    return this.get(path, createIfNone);
   }
 
   /**
    * 获取某个属性, 如果不存在，临时获取一个待写入
-   * @param stash 强制
+   * @param createIfNone 当没有的时候，是否创建一个
    */
-  get(path: string, stash = false): Prop | null {
+  @action
+  get(path: string, createIfNone = false): Prop | null {
     let entry = path;
     let nest = '';
     const i = path.indexOf('.');
@@ -244,10 +199,14 @@ export class Props implements IPropParent {
       }
     }
 
-    const prop = this.maps.get(entry) || (stash && this.stash.get(entry)) || null;
+    let prop = this.maps.get(entry);
+    if (!prop && createIfNone) {
+      prop = new Prop(this, UNSET, entry);
+      this.items.push(prop);
+    }
 
     if (prop) {
-      return nest ? prop.get(nest, stash) : prop;
+      return nest ? prop.get(nest, createIfNone) : prop;
     }
 
     return null;
@@ -256,6 +215,7 @@ export class Props implements IPropParent {
   /**
    * 删除项
    */
+  @action
   delete(prop: Prop): void {
     const i = this.items.indexOf(prop);
     if (i > -1) {
@@ -267,6 +227,7 @@ export class Props implements IPropParent {
   /**
    * 删除 key
    */
+  @action
   deleteKey(key: string): void {
     this.items = this.items.filter(item => {
       if (item.key === key) {
@@ -280,6 +241,7 @@ export class Props implements IPropParent {
   /**
    * 添加值
    */
+  @action
   add(value: CompositeValue | null, key?: string | number, spread = false, options: any = {}): Prop {
     const prop = new Prop(this, value, key, spread, options);
     this.items.push(prop);
@@ -319,6 +281,7 @@ export class Props implements IPropParent {
   /**
    * 遍历
    */
+  @action
   forEach(fn: (item: Prop, key: number | string | undefined) => void): void {
     this.items.forEach(item => {
       return fn(item, item.key);
@@ -328,12 +291,14 @@ export class Props implements IPropParent {
   /**
    * 遍历
    */
+  @action
   map<T>(fn: (item: Prop, key: number | string | undefined) => T): T[] | null {
     return this.items.map(item => {
       return fn(item, item.key);
     });
   }
 
+  @action
   filter(fn: (item: Prop, key: number | string | undefined) => boolean) {
     return this.items.filter(item => {
       return fn(item, item.key);
@@ -345,22 +310,28 @@ export class Props implements IPropParent {
   /**
    * 回收销毁
    */
+  @action
   purge() {
     if (this.purged) {
       return;
     }
     this.purged = true;
-    this.stash.purge();
     this.items.forEach(item => item.purge());
   }
 
-  getProp(path: string, stash = true): Prop | null {
-    return this.query(path, stash as any) || null;
+  /**
+   * 获取某个属性, 如果不存在，临时获取一个待写入
+   * @param createIfNone 当没有的时候，是否创建一个
+   */
+  @action
+  getProp(path: string, createIfNone = true): Prop | null {
+    return this.query(path, createIfNone) || null;
   }
 
   /**
    * 获取单个属性值
    */
+  @action
   getPropValue(path: string): any {
     return this.getProp(path, false)?.value;
   }
@@ -368,6 +339,7 @@ export class Props implements IPropParent {
   /**
    * 设置单个属性值
    */
+  @action
   setPropValue(path: string, value: any) {
     this.getProp(path, true)!.setValue(value);
   }
@@ -383,6 +355,7 @@ export class Props implements IPropParent {
    * @deprecated
    * 获取 props 对应的 node
    */
+  @action
   toData() {
     return this.export()?.props;
   }
