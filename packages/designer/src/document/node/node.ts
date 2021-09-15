@@ -541,7 +541,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   getVisible(): boolean {
-    return !this.getExtraProp('hidden', false)?.getValue();
+    return !this.getExtraProp('hidden')?.getValue();
   }
 
   onVisibleChange(func: (flag: boolean) => any) {
