@@ -46,19 +46,19 @@ export interface EngineOptions {
   /**
    * 禁止默认的设置面板，默认值：false
    */
-  disableDefaultSettingPanel: boolean;
+  disableDefaultSettingPanel?: boolean;
   /**
    * 禁止默认的设置器，默认值：false
    */
-  disableDefaultSetters: boolean;
+  disableDefaultSetters?: boolean;
   /**
    * 打开画布的锁定操作，默认值：false
    */
-  enableCanvasLock: boolean;
+  enableCanvasLock?: boolean;
   /**
    * 当选中节点切换时，是否停留在相同的设置 tab 上，默认值：false
    */
-  stayOnTheSameSettingTab: boolean;
+  stayOnTheSameSettingTab?: boolean;
   /**
    * Vision-polyfill settings
    */
