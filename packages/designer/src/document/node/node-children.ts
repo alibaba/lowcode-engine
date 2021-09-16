@@ -250,7 +250,7 @@ export class NodeChildren {
    * 根据索引获得节点
    */
   get(index: number): Node | null {
-    return this.children[index] || null;
+    return this.children.length > index ? this.children[index] : null;
   }
 
   /**

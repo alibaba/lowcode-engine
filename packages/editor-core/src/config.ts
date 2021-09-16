@@ -1,4 +1,5 @@
-import lodashGet from 'lodash.get';
+import { ComponentType } from 'react';
+import { get as lodashGet } from 'lodash';
 
 export interface EngineOptions {
   /**
@@ -59,6 +60,10 @@ export interface EngineOptions {
    * 当选中节点切换时，是否停留在相同的设置 tab 上，默认值：false
    */
   stayOnTheSameSettingTab?: boolean;
+  /**
+   * 自定义 loading 组件
+   */
+  loadingComponent?: ComponentType;
   /**
    * Vision-polyfill settings
    */
