@@ -1,5 +1,8 @@
 import { makeObservable, obx } from '@ali/lowcode-editor-core';
+import { EventEmitter } from 'events';
 import { Node, DocumentModel } from '../document';
+
+const DETECTING_CHANGE_EVENT = 'detectingChange';
 
 export class Detecting {
   @obx.ref private _enable = true;
@@ -19,6 +22,8 @@ export class Detecting {
 
   @obx.ref private _current: Node | null = null;
 
+  private emitter: EventEmitter = new EventEmitter();
+
   constructor() {
     makeObservable(this);
   }
@@ -28,12 +33,16 @@ export class Detecting {
   }
 
   capture(node: Node | null) {
-    this._current = node;
+    if (this._current !== node) {
+      this._current = node;
+      this.emitter.emit(DETECTING_CHANGE_EVENT, this.current);
+    }
   }
 
   release(node: Node) {
     if (this._current === node) {
       this._current = null;
+      this.emitter.emit(DETECTING_CHANGE_EVENT, this.current);
     }
   }
 
@@ -41,5 +50,12 @@ export class Detecting {
     if (this.current && this.current.document === document) {
       this._current = null;
     }
+  }
+
+  onDetectingChange(fn: () => void) {
+    this.emitter.on(DETECTING_CHANGE_EVENT, fn);
+    return () => {
+      this.emitter.off(DETECTING_CHANGE_EVENT, fn);
+    };
   }
 }
