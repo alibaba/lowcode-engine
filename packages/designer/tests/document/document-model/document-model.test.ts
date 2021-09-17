@@ -32,6 +32,12 @@ describe('document-model 测试', () => {
     expect(doc.isBlank()).toBeFalsy();
     expect(doc.schema).toEqual({
       componentName: 'Page',
+      condition: true,
+      conditionGroup: '',
+      hidden: false,
+      isLocked: false,
+      loop: undefined,
+      title: '',
       id: 'root',
       fileName: '',
       props: {},

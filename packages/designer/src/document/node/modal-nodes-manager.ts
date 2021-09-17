@@ -122,7 +122,7 @@ export class ModalNodesManager {
   }
 
   private setNodes() {
-    const nodes = getModalNodes(this.page.getRoot());
+    const nodes = getModalNodes(this.page.getRoot()!);
     this.modalNodes = nodes;
     this.modalNodes.forEach((node: Node) => {
       this.addNodeEvent(node);

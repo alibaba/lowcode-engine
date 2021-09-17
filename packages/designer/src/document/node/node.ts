@@ -179,6 +179,8 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       this.setupAutoruns();
     }
 
+    this.initBuiltinProps();
+
     this.isInited = true;
     this.emitter = new EventEmitter();
   }
@@ -189,6 +191,18 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     if (this._settingEntry) return this._settingEntry;
     this._settingEntry = this.document.designer.createSettingEntry([this]);
     return this._settingEntry;
+  }
+
+  /**
+   * 节点初始化期间就把内置的一些 prop 初始化好，避免后续不断构造实例导致 reaction 执行多次
+   */
+  private initBuiltinProps() {
+    this.props.has(getConvertedExtraKey('hidden')) || this.props.add(false, getConvertedExtraKey('hidden'));
+    this.props.has(getConvertedExtraKey('title')) || this.props.add('', getConvertedExtraKey('title'));
+    this.props.has(getConvertedExtraKey('isLocked')) || this.props.add(false, getConvertedExtraKey('isLocked'));
+    this.props.has(getConvertedExtraKey('condition')) || this.props.add(true, getConvertedExtraKey('condition'));
+    this.props.has(getConvertedExtraKey('conditionGroup')) || this.props.add('', getConvertedExtraKey('conditionGroup'));
+    this.props.has(getConvertedExtraKey('loop')) || this.props.add(undefined, getConvertedExtraKey('loop'));
   }
 
   private initProps(props: any): any {

@@ -249,7 +249,7 @@ describe('Node 方法测试', () => {
 
       // getComponentName
       btnParent.insertAfter({ getComponentName: () => 'Button' }, firstBtn);
-      expect(btnParent.children.get(1)?.getProps().export().props).toBeUndefined();
+      expect(btnParent.children.get(1)?.getProps().export().props).toEqual({});
       expect(mockFn).toHaveBeenCalledTimes(3);
     });
   });

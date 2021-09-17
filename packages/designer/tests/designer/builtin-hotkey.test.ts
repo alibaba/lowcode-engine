@@ -102,6 +102,9 @@ describe('快捷键测试', () => {
     const firstButtonNode = designer.currentDocument?.getNode('node_k1ow3cbn')!;
     let secondButtonNode = designer.currentDocument?.getNode('node_k1ow3cbp')!;
 
+    // 等待第一个 session 结束
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     firstButtonNode.remove();
     expect(secondButtonNode.getParent()?.children.size).toBe(1);
 
@@ -118,6 +121,9 @@ describe('快捷键测试', () => {
   it('command + y', async () => {
     const firstButtonNode = designer.currentDocument?.getNode('node_k1ow3cbn')!;
     let secondButtonNode = designer.currentDocument?.getNode('node_k1ow3cbp')!;
+
+    // 等待第一个 session 结束
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     firstButtonNode.remove();
     expect(secondButtonNode.getParent()?.children.size).toBe(1);

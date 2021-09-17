@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { autorun, Reaction, untracked, globalContext, Editor } from '@ali/lowcode-editor-core';
+import { autorun, reaction, mobx, untracked, globalContext, Editor } from '@ali/lowcode-editor-core';
 import { NodeSchema } from '@ali/lowcode-types';
 
 // TODO: cache to localStorage
@@ -37,17 +37,12 @@ export class History {
     this.session = new Session(0, null, this.timeGap);
     this.records = [this.session];
 
-    autorun(() => {
+    reaction(() => {
+      return logger();
+    }, (data) => {
       if (this.asleep) return;
-      const data = logger();
-
       untracked(() => {
         const log = currentSerialization.serialize(data);
-        if (this.session.cursor === 0 && this.session.isActive()) {
-          // first log
-          this.session.log(log);
-          this.session.end();
-        } else if (this.session) {
           if (this.session.isActive()) {
             this.session.log(log);
           } else {
@@ -62,9 +57,9 @@ export class History {
               this.emitter.emit('statechange', currentState);
             }
           }
-        }
+        // }
       });
-    });
+    }, { fireImmediately: true });
   }
 
   get hotData() {
