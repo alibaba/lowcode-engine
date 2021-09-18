@@ -40,7 +40,6 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     let setterProps: any = {};
     let setterType: any;
     let initialValue: any = null;
-    const isReactComponent = prototype === null || prototype === undefined;
 
     if (Array.isArray(setter)) {
       setterType = 'MixedSetter';
@@ -58,11 +57,6 @@ class SettingFieldView extends Component<{ field: SettingField }> {
       if (setter.initialValue != null) {
         initialValue = setter.initialValue;
       }
-    } else if (isReactComponent) {
-      setterType = 'MixedSetter';
-      setterProps = {
-        setters: [setter, 'VariableSetter'],
-      };
     } else if (setter) {
       setterType = setter;
     }
