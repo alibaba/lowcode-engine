@@ -1,7 +1,7 @@
 import logger from '@ali/vu-logger';
 import { EventEmitter } from 'events';
 import { editor } from '@ali/lowcode-engine';
-import { isJSExpression } from '@ali/lowcode-types';
+import { GlobalEvent, isJSExpression } from '@ali/lowcode-types';
 
 /**
  * Bus class as an EventEmitter
@@ -87,7 +87,7 @@ function triggerUseVariableChange(data: any) {
     propConfig.useVariableChange.call(prop, { isUseVariable: true });
   }
 }
-editor?.on('node.prop.change', (data) => {
+editor?.on(GlobalEvent.Node.Prop.Change, (data) => {
   bus.emit('node.prop.change', data);
 
   triggerUseVariableChange(data);

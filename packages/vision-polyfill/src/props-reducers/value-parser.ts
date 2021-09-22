@@ -8,7 +8,21 @@ import { isVariable } from '../utils';
 
 // FIXME: 表达式使用 mock 值，未来live 模式直接使用原始值
 // TODO: designType
-export function deepValueParser(obj: any, node: Node): any {
+export function valueParser(obj: any, node: Node): any {
+  return deepValueParser(obj, {
+    node,
+    path: '',
+  });
+}
+
+function deepValueParser(obj: any, info: {
+  node: Node;
+  path?: string;
+}): any {
+  const {
+    path = '',
+    node,
+  } = info;
   // 如果不是 vc 体系，不做这个兼容处理
   if (!node.componentMeta.prototype) {
     return obj;
@@ -34,14 +48,17 @@ export function deepValueParser(obj: any, node: Node): any {
     return obj;
   }
   if (Array.isArray(obj)) {
-    return obj.map((item) => deepValueParser(item, node));
+    return obj.map((item) => deepValueParser(item, { node }));
   }
   if (isPlainObject(obj)) {
     if (isI18nData(obj)) {
       // FIXME! use editor.get
       let locale = Env.getLocale();
       if (obj.key && i18nUtil.get(obj.key, locale)) {
-        return i18nUtil.get(obj.key, locale);
+        return i18nUtil.get(obj.key, locale, {
+          node,
+          path,
+        });
       }
       if (locale !== 'zh_CN' && locale !== 'zh_TW' && !obj[locale]) {
         locale = 'en_US';
@@ -54,7 +71,10 @@ export function deepValueParser(obj: any, node: Node): any {
     }
     const out: any = {};
     Object.keys(obj).forEach((key) => {
-      out[key] = deepValueParser(obj[key], node);
+      out[key] = deepValueParser(obj[key], {
+        node,
+        path: path ? `${path}.${key}` : key,
+      });
     });
     return out;
   }

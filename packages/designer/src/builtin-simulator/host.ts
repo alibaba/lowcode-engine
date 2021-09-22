@@ -441,7 +441,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     // TODO: Thinkof move events control to simulator renderer
     //       just listen special callback
     // because iframe maybe reload
-    this.setupRendererChannel();
     this.setupDragAndClick();
     this.setupDetecting();
     this.setupLiveEditing();
@@ -450,81 +449,6 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
   postEvent(eventName: string, ...data: any[]) {
     this.emitter.emit(eventName, ...data);
-  }
-
-  onActivityEvent(cb: (activity: ActivityData, ctx?: any) => void) {
-    this.emitter.on('activity', cb);
-    return () => {
-      this.emitter.off('activity', cb);
-    };
-  }
-
-  mutedActivityEvent: boolean = false;
-  muteActivityEvent() {
-    this.mutedActivityEvent = true;
-  }
-
-  unmuteActivityEvent() {
-    this.mutedActivityEvent = false;
-  }
-
-  runWithoutActivity(action: () => void) {
-    this.muteActivityEvent();
-    action();
-    this.unmuteActivityEvent();
-  }
-
-  setupRendererChannel() {
-    const { editor } = this.designer;
-    editor.on('node.innerProp.change', ({ node, prop, oldValue, newValue }) => {
-      // 在 Node 初始化阶段的属性变更都跳过
-      if (!node.isInited) return;
-      // 静音状态不触发事件，通常是非局部更新操作
-      if (this.mutedActivityEvent) return;
-      this.postEvent(
-        'activity',
-        {
-          type: 'modified',
-          payload: {
-            schema: node.export(TransformStage.Render, { bypassChildren: true }),
-            oldValue,
-            newValue,
-            prop,
-          },
-        },
-        { doc: this.currentDocument },
-      );
-    });
-    // editor.on('node.add', ({ node }) => {
-    //   console.log('add node', node);
-    //   this.postEvent('activity', {
-    //     type: 'added',
-    //     payload: {
-    //       schema: node.export(TransformStage.Render),
-    //       location: {
-    //         parent: {
-    //           nodeId: node.parent.id,
-    //           index: node.index,
-    //         },
-    //       },
-    //     },
-    //   });
-    // });
-    // editor.on('node.remove.topLevel', ({ node, index }) => {
-    //   console.log('remove node', node);
-    //   this.postEvent('activity', {
-    //     type: 'deleted',
-    //     payload: {
-    //       schema: node.export(TransformStage.Render),
-    //       location: {
-    //         parent: {
-    //           nodeId: node.parent.id,
-    //           index,
-    //         },
-    //       },
-    //     },
-    //   });
-    // });
   }
 
   setupDragAndClick() {
@@ -1302,8 +1226,8 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       const inst = instances
         ? instances.length > 1
           ? instances.find(
-              (_inst) => this.getClosestNodeInstance(_inst, container.id)?.instance === containerInstance,
-            )
+            (_inst) => this.getClosestNodeInstance(_inst, container.id)?.instance === containerInstance,
+          )
           : instances[0]
         : null;
       const rect = inst

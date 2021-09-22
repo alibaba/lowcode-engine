@@ -178,10 +178,10 @@ export class ComponentMeta {
       this._title =
         typeof title === 'string'
           ? {
-              type: 'i18n',
-              'en-US': this.componentName,
-              'zh-CN': title,
-            }
+            type: 'i18n',
+            'en-US': this.componentName,
+            'zh-CN': title,
+          }
           : title;
     }
 
@@ -429,7 +429,7 @@ const builtinComponentActions: ComponentAction[] = [
       icon: IconHidden,
       title: intlNode('hide'),
       action(node: Node) {
-        node.getExtraProp('hidden', true)?.setValue(true);
+        node.setVisible(false);
       },
     },
     condition: (node: Node) => {

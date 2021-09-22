@@ -4,12 +4,12 @@ import cn from 'classnames';
 import { Node } from '@ali/lowcode-designer';
 import LowCodeRenderer from '@ali/lowcode-react-renderer';
 import { observer } from 'mobx-react';
-import { isFromVC, getClosestNode } from '@ali/lowcode-utils';
+import { getClosestNode } from '@ali/lowcode-utils';
+import { GlobalEvent } from '@ali/lowcode-types';
 import { SimulatorRendererContainer, DocumentInstance } from './renderer';
+import { host } from './host';
 
 import './renderer.less';
-
-const DEFAULT_SIMULATOR_LOCALE = 'zh-CN';
 
 // patch cloneElement avoid lost keyProps
 const originCloneElement = window.React.cloneElement;
@@ -129,11 +129,27 @@ class Renderer extends Component<{
     rendererContainer: SimulatorRendererContainer,
     documentInstance: DocumentInstance,
   }> {
+  startTime: number | null = null;
+
+  componentDidUpdate() {
+    if (this.startTime) {
+      const time = Date.now() - this.startTime;
+      const nodeCount = host.designer.currentDocument?.getNodeCount?.();
+      host.designer.editor?.emit(GlobalEvent.Node.Rerender, {
+        componentName: 'Renderer',
+        type: 'All',
+        time,
+        nodeCount,
+      });
+    }
+  }
+
   render() {
     const { documentInstance, rendererContainer: renderer } = this.props;
     const { container } = documentInstance;
     const { designMode, device, locale } = container;
     const messages = container.context?.utils?.i18n?.messages || {};
+    this.startTime = Date.now();
 
     if (!container.autoRender) return null;
     return (
@@ -154,9 +170,7 @@ class Renderer extends Component<{
           const { __id, __designMode, ...viewProps } = props;
           viewProps.componentId = __id;
           const leaf = documentInstance.getNode(__id) as Node;
-          if (isFromVC(leaf?.componentMeta)) {
-            viewProps._leaf = leaf;
-          }
+          viewProps._leaf = leaf;
           viewProps._componentName = leaf?.componentName;
           // 如果是容器 && 无children && 高宽为空 增加一个占位容器，方便拖动
           if (
@@ -207,12 +221,11 @@ class Renderer extends Component<{
             leaf?.isContainer() ? (children == null ? [] : Array.isArray(children) ? children : [children]) : children,
           );
         }}
+        __host={host}
+        __container={container}
         onCompGetRef={(schema: any, ref: ReactInstance | null) => {
           documentInstance.mountInstance(schema.id, ref);
         }}
-        // onCompGetCtx={(schema: any, ctx: object) => {
-        // documentInstance.mountContext(schema.id, ctx);
-        // }}
       />
     );
   }

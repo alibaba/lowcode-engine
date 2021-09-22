@@ -1,5 +1,5 @@
 import { obx, computed, makeObservable, runInAction } from '@ali/lowcode-editor-core';
-import { IEditor, isJSExpression } from '@ali/lowcode-types';
+import { GlobalEvent, IEditor, isJSExpression } from '@ali/lowcode-types';
 import { uniqueId } from '@ali/lowcode-utils';
 import { SettingEntry } from './setting-entry';
 import { Node } from '../../document';
@@ -290,7 +290,7 @@ export class SettingPropEntry implements SettingEntry {
   }
 
   notifyValueChange(oldValue: any, newValue:any) {
-    this.editor.emit('node.prop.change', { node: this.getNode(), prop: this, oldValue, newValue });
+    this.editor.emit(GlobalEvent.Node.Prop.Change, { node: this.getNode(), prop: this, oldValue, newValue });
   }
 
   getDefaultValue() {
