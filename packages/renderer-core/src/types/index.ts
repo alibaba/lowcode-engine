@@ -1,3 +1,10 @@
+import { BuiltinSimulatorHost } from '@ali/lowcode-designer';
+import { baseRendererFactory } from '../renderer';
+import baseRenererFactory from '../renderer/base';
+
+export type IBaseRenderer = ReturnType<typeof baseRenererFactory>;
+export type IBaseRendererInstance = InstanceType<ReturnType<typeof baseRendererFactory>>;
+
 export interface IProps {
   schema: ISchema;
   components: { [key: string]: any };
@@ -17,15 +24,22 @@ export interface IProps {
 export interface IState {
   engineRenderError?: boolean;
   error?: Error
+  onCompGetRef: (schema: ISchema, ref: any) => void;
+  onCompGetCtx: (schema: ISchema, ref: any) => void;
+  customCreateElement: (...args: any) => any;
+  notFoundComponent: any;
+  faultComponent: any;
+  [key: string]: any;
 }
-
 export interface IRendererProps {
-  locale: string;
+  locale?: string;
   messages: object;
   __appHelper: object;
   __components: object;
   __ctx: object;
   __schema: ISchema;
+  __host?: BuiltinSimulatorHost;
+  __container?: any;
   [key: string]: any;
 }
 
@@ -46,7 +60,7 @@ export interface ISchema {
 }
 
 export interface IInfo {
-  schema: any;
+  schema: ISchema;
   Comp: any;
   componentInfo?: any;
 }
@@ -77,7 +91,7 @@ export interface DataSource {
   dataHandler: JSExpression;
 }
 
-type Constructor = new(...args: any) => any;
+export type Constructor = new(...args: any) => any;
 
 export interface IRuntime {
   Component: Constructor;
@@ -90,7 +104,7 @@ export interface IRuntime {
 }
 
 export interface IRendererModules {
-  BaseRenderer?: any;
+  BaseRenderer?: new(...args: any) => IRenderer;
   PageRenderer: any;
   ComponentRenderer: any;
   BlockRenderer?: any,
@@ -102,10 +116,11 @@ export interface IRendererModules {
 export interface IRenderer {
   props?: IRendererProps;
   context?: any;
+  reloadDataSource: () => Promise<any>;
+  getSchemaChildren: (schema: ISchema) => any;
   __beforeInit: (props: IRendererProps) => any;
   __init: (props: IRendererProps) => any;
   __afterInit: (props: IRendererProps) => any;
-  reloadDataSource: () => Promise<any>;
   __setLifeCycleMethods: (method: string, args?: any) => any;
   __bindCustomMethods: (props: IRendererProps) => any;
   __generateCtx: (ctx: object) => any;
@@ -113,7 +128,8 @@ export interface IRenderer {
   __initDataSource: (props: IRendererProps) => any;
   __render: () => any;
   __getRef: (ref: any) => any;
-  getSchemaChildren: (schema: ISchema) => any;
+  __getSchemaChildrenVirtualDom: (schema: ISchema, Comp: any, nodeChildrenMap?: Map<string, any>) => any;
+  __getComponentProps: (schema: ISchema, Comp: any, componentInfo: any) => any;
   __createDom: () => any;
   __createVirtualDom: (schema: any, self: any, parentInfo: IInfo, idx: string | number) => any;
   __createLoopVirtualDom: (schema: any, self: any, parentInfo: IInfo, idx: number | string) => any;

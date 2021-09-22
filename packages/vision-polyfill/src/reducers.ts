@@ -2,7 +2,7 @@ import { editor, designer, designerCabin } from '@ali/lowcode-engine';
 import bus from './bus';
 import { VE_EVENTS } from './base/const';
 
-import { deepValueParser } from './props-reducers/deep-value-reducer';
+import { valueParser } from './props-reducers/value-parser';
 import { liveEditingRule, liveEditingSaveHander } from './vc-live-editing';
 import {
   compatibleReducer,
@@ -49,7 +49,7 @@ designer.addPropsReducer(upgradePageLifeCyclesReducer, TransformStage.Save);
 // 设计器组件样式处理
 designer.addPropsReducer(stylePropsReducer, TransformStage.Render);
 // 国际化 & Expression 渲染时处理
-designer.addPropsReducer(deepValueParser, TransformStage.Render);
+designer.addPropsReducer(valueParser, TransformStage.Render);
 
 // Init 的时候没有拿到 dataSource, 只能在 Render 和 Save 的时候都调用一次，理论上执行时机在 Init
 // Render 和 Save 都要各调用一次，感觉也是有问题的，是不是应该在 Render 执行一次就行了？见上 filterReducer 也是一样的处理方式。

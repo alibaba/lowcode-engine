@@ -26,7 +26,7 @@ import { createMemoryHistory, MemoryHistory } from 'history';
 import Slot from './builtin-components/slot';
 import Leaf from './builtin-components/leaf';
 import { withQueryParams, parseQuery } from './utils/url';
-import { supportsQuickPropSetting, getUppermostPropKey, setInstancesProp } from './utils/misc';
+
 const loader = new AssetLoader();
 const DELAY_THRESHOLD = 10;
 const FULL_RENDER_THRESHOLD = 500;
@@ -35,60 +35,14 @@ configure({ enforceActions: 'never' });
 export class DocumentInstance {
   public instancesMap = new Map<string, ReactInstance[]>();
 
-  @obx.ref private _schema?: RootSchema;
-  @computed get schema(): any {
-    return this._schema;
+  get schema(): any {
+    return this.document.export(TransformStage.Render);
   }
 
   private disposeFunctions: Array<() => void> = [];
 
   constructor(readonly container: SimulatorRendererContainer, readonly document: DocumentModel) {
     makeObservable(this);
-    // 标识当前文档导出的状态，用来控制 reaction effect 是否执行
-    let asleep = false;
-    const setDocSchema = (value?: any) => {
-      this._schema = value || document.export(TransformStage.Render);
-    };
-    const documentExportDisposer = host.reaction(() => {
-      return document.export(TransformStage.Render);
-    }, (value) => {
-      if (asleep) return;
-      setDocSchema(value);
-    }, { delay: DELAY_THRESHOLD, fireImmediately: true });
-    this.disposeFunctions.push(documentExportDisposer);
-    let tid: NodeJS.Timeout;
-    this.disposeFunctions.push(host.onActivityEvent((data: ActivityData, ctx: any) => {
-      if (host.mutedActivityEvent || (ctx && ctx.doc !== this.document)) return;
-
-      // 当节点数小数 200 个时，不走入增量更新逻辑，后面优化、细化逻辑后逐步放开限制
-      if (this.document.nodesMap.size < 200) return;
-
-      if (tid) clearTimeout(tid);
-      // 临时关闭全量计算 schema 的逻辑，在增量计算结束后，来一次全量计算
-      asleep = true;
-      if (data.type === ActivityType.MODIFIED) {
-        // 对于修改场景，优先判断是否能走「快捷设置」逻辑
-        if (supportsQuickPropSetting(data, this)) {
-          setInstancesProp(data, this);
-        } else {
-          // this._schema = applyActivities(this._schema!, data);
-        }
-      } else if (data.type === ActivityType.ADDED) {
-        // FIXME: 待补充 节点增加 逻辑
-      } else if (data.type === ActivityType.DELETED) {
-        // FIXME: 待补充 节点删除 逻辑
-      } else if (data.type === ActivityType.COMPOSITE) {
-        // FIXME: 待补充逻辑
-      }
-
-      tid = setTimeout(() => {
-        asleep = false;
-        setDocSchema();
-      }, FULL_RENDER_THRESHOLD);
-      // TODO: 调试增量模式，打开以下代码
-      // this._deltaData = data;
-      // this._deltaMode = true;
-    }));
   }
 
   @obx.ref private _components: any = {};

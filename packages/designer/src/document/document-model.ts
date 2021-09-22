@@ -140,13 +140,8 @@ export class DocumentModel {
     this.history = new History(
       () => this.export(TransformStage.Serilize),
       (schema) => {
-        if (this.simulator) {
-          this.simulator.runWithoutActivity(() => {
-            this.import(schema as RootSchema, true);
-          });
-        } else {
-          this.import(schema as RootSchema, true);
-        }
+        this.import(schema as RootSchema, true);
+        this.simulator?.rerender();
       },
     );
 
@@ -197,6 +192,13 @@ export class DocumentModel {
    */
   getNode(id: string): Node | null {
     return this._nodesMap.get(id) || null;
+  }
+
+  /**
+   * 根据 id 获取节点
+   */
+  getNodeCount(): number {
+    return this._nodesMap.size;
   }
 
   /**
@@ -364,16 +366,7 @@ export class DocumentModel {
       if (node.isRoot()) return;
       this.internalRemoveAndPurgeNode(node, true);
     });
-    // foreachReverse(this.rootNode?.children, (node: Node) => {
-    //   this.internalRemoveAndPurgeNode(node, true);
-    // });
-    if (this.designer.project.simulator) {
-      this.designer.project.simulator.runWithoutActivity(() => {
-        this.rootNode?.import(schema as any, checkId);
-      });
-    } else {
-      this.rootNode?.import(schema as any, checkId);
-    }
+    this.rootNode?.import(schema as any, checkId);
 
     // todo: select added and active track added
     if (drillDownNodeId) {
