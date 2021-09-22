@@ -1,3 +1,5 @@
+import { Node } from '@ali/lowcode-designer';
+
 declare enum LANGUAGES {
   zh_CN = 'zh_CN',
   en_US = 'en_US'
@@ -62,7 +64,10 @@ export interface II18nUtil {
    * @param key
    * @param lang
    */
-  get(key: string, lang: string): string | I18nRecord;
+  get(key: string, lang: string, info?: {
+    node?: Node,
+    path?: string,
+  }): string | I18nRecord;
   getFromRemote(key: string): Promise<I18nRecord>;
   getItem(key: string, forceData?: boolean): any;
   getItems(): I18nRecord[];

@@ -152,21 +152,9 @@ export interface ISimulatorHost<P = object> extends ISensor {
 
   getDropContainer(e: LocateEvent): DropContainer | null;
 
-  /**
-   * 关闭 activity 事件
-   */
-  muteActivityEvent(): void;
-  /**
-   * 打开 activity 事件
-   */
-  unmuteActivityEvent(): void;
-  /**
-   * 不触发 activity 事件的条件下运行指定 action
-   * @param action
-   */
-  runWithoutActivity(action: () => void): void;
-
   postEvent(evtName: string, evtData: any): void;
+
+  rerender(): void;
   /**
    * 销毁
    */

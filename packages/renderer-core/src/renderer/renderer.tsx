@@ -38,7 +38,6 @@ export default function rendererFactory() {
 
   class NotFoundComponent extends PureComponent {
     render() {
-      console.error('component not found', this.props);
       return createElement(Div, this.props, this.props.children || 'Component Not Found');
     }
   }

@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
-
-import { editorCabin } from '@ali/lowcode-engine';
+import { editorCabin, editor } from '@ali/lowcode-engine';
+import lodashGet from 'lodash.get';
+import { GlobalEvent } from '@ali/lowcode-types';
 
 const { obx } = editorCabin;
 
@@ -23,6 +24,33 @@ class DocItem {
       ...strings,
     });
     this.emitter = new EventEmitter();
+    this.nodeList = new Map();
+    this.onChange((doc, oldDoc) => {
+      if (this.nodeList.size <= 0) {
+        return;
+      }
+      this.nodeList.forEach(({
+        node,
+        path,
+      }) => {
+        const prop = node.settingEntry.getProp(path);
+        const changeInfo = {
+          key: prop?.key,
+          prop,
+          newValue: doc,
+          oldValue: oldDoc,
+        };
+        node.emitPropChange(changeInfo);
+        editor.emit(GlobalEvent.Node.Prop.Change, {
+          node,
+          ...changeInfo,
+        });
+        editor.emit(GlobalEvent.Node.Prop.InnerChange, {
+          node,
+          ...changeInfo,
+        });
+      });
+    });
     this.inited = unInitial !== true;
   }
 
@@ -34,17 +62,18 @@ class DocItem {
     if (lang) {
       return this.doc[lang];
     }
-    return this.doc;
+    return Object.assign({}, this.doc);
   }
 
   setDoc(doc, lang, initial) {
+    const oldValue = Object.assign({}, this.doc);
     if (lang) {
       this.doc[lang] = doc;
     } else {
       const { use, strings } = doc || {};
-      Object.assign(this.doc, strings);
+      Object.assign(this.doc, doc, strings);
     }
-    this.emitter.emit('change', this.doc);
+    this.emitter.emit('change', this.doc, oldValue);
 
     if (initial) {
       this.inited = true;
@@ -52,6 +81,14 @@ class DocItem {
       this.parent._saveChange(this.doc.key, this.doc);
     }
   }
+
+  collectNode = (nodeInfo) => {
+    const key = lodashGet(nodeInfo, 'node.id');
+    if (!key) {
+      return;
+    }
+    this.nodeList.set(key, nodeInfo);
+  };
 
   remove() {
     if (!this.inited) return Promise.reject('not initialized');
@@ -133,6 +170,13 @@ class I18nUtil {
     item = this.items.find(doc => doc.getKey() === key);
     if (!item) {
       item = this.fullList.find(doc => doc.getKey() === key);
+    }
+
+    if (!item && (this.maps[key] || this.fullMap[key])) {
+      // 如果从 items 和 fullList 里面找到 DocItem，就从 maps/fullMap 里面取
+      item = this.maps[key] || this.fullMap[key];
+      this.items.unshift(item);
+      this.fullList.unshift(item);
     }
 
     if (item) {
@@ -228,9 +272,10 @@ class I18nUtil {
     return this._load(configs);
   }
 
-  get(key, lang) {
+  get(key, lang, nodeInfo) {
     const item = this.getItem(key);
     if (item) {
+      item.collectNode(nodeInfo);
       return item.getDoc(lang);
     }
     return null;
