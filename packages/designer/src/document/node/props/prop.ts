@@ -1,5 +1,5 @@
 import { untracked, computed, obx, engineConfig, action, makeObservable, mobx } from '@ali/lowcode-editor-core';
-import { CompositeValue, FieldConfig, isJSExpression, isJSSlot, JSSlot, SlotSchema } from '@ali/lowcode-types';
+import { CompositeValue, GlobalEvent, isJSExpression, isJSSlot, JSSlot, SlotSchema } from '@ali/lowcode-types';
 import { uniqueId, isPlainObject, hasOwnProperty, compatStage } from '@ali/lowcode-utils';
 import { valueToSource } from './value-to-source';
 import { Props } from './props';
@@ -262,12 +262,19 @@ export class Prop implements IPropParent {
     }
 
     if (oldValue !== this._value) {
-      editor?.emit('node.innerProp.change', {
-        node: this.owner,
+      const propsInfo = {
+        key: this.key,
         prop: this,
         oldValue,
         newValue: this._value,
+      };
+
+      editor?.emit(GlobalEvent.Node.Prop.InnerChange, {
+        node: this.owner as any,
+        ...propsInfo,
       });
+
+      this.owner?.emitPropChange?.(propsInfo);
     }
   }
 

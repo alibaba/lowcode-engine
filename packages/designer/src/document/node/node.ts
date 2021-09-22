@@ -14,6 +14,7 @@ import {
   ComponentSchema,
   NodeStatus,
   CompositeValue,
+  GlobalEvent,
 } from '@ali/lowcode-types';
 import { compatStage } from '@ali/lowcode-utils';
 import { SettingTopEntry } from '@ali/lowcode-designer';
@@ -544,7 +545,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return !this.getExtraProp('hidden', false)?.getValue();
   }
 
-  onVisibleChange(func: (flag: boolean) => any) {
+  onVisibleChange(func: (flag: boolean) => any): () => void {
     this.emitter.on('visibleChange', func);
     return () => {
       this.emitter.removeListener('visibleChange', func);
@@ -904,7 +905,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.props;
   }
 
-  onChildrenChange(fn: () => void) {
+  onChildrenChange(fn: (param?: { type: string, node: Node }) => void): (() => void) | undefined {
     return this.children?.onChange(fn);
   }
 
@@ -1097,6 +1098,17 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   toString() {
     return this.id;
   }
+
+  emitPropChange(val: PropChangeOptions) {
+    this.emitter?.emit('propChange', val);
+  }
+
+  onPropChange(func: (info: PropChangeOptions) => void): Function {
+    this.emitter.on('propChange', func);
+    return () => {
+      this.emitter.removeListener('propChange', func);
+    };
+  }
 }
 
 function ensureNode(node: any, document: DocumentModel): Node {
@@ -1119,6 +1131,8 @@ export interface ParentalNode<T extends NodeSchema = NodeSchema> extends Node<T>
 export interface LeafNode extends Node {
   readonly children: null;
 }
+
+export type PropChangeOptions = Omit<GlobalEvent.Node.Prop.ChangeOptions, 'node'>;
 
 export type SlotNode = ParentalNode<SlotSchema>;
 export type PageNode = ParentalNode<PageSchema>;

@@ -30,6 +30,7 @@ import {
 } from '../utils';
 import { IRendererProps, ISchema, IInfo, ComponentModel, IRenderer } from '../types';
 import { compWrapper } from '../hoc';
+import { IComponentConstruct, IComponentHoc, leafWrapper } from '../hoc/leaf';
 
 export default function baseRenererFactory() {
   const { BaseRenderer: customBaseRenderer } = adapter.getRenderers();
@@ -53,7 +54,7 @@ export default function baseRenererFactory() {
   let scopeIdx = 0;
 
   return class BaseRenderer extends Component implements IRenderer {
-    static dislayName = 'base-renderer';
+    static displayName = 'base-renderer';
 
     static defaultProps = {
       __schema: {},
@@ -61,7 +62,11 @@ export default function baseRenererFactory() {
 
     static contextType = AppContext;
 
+    __hoc_components: any = {};
+
     __namespace = 'base';
+
+    _self: any = null;
 
     constructor(props: IRendererProps, context: any) {
       super(props, context);
@@ -332,10 +337,21 @@ export default function baseRenererFactory() {
       const { __schema, __ctx, __components = {} } = this.props;
       const self: any = {};
       self.__proto__ = __ctx || this;
+      if (!this._self) {
+        this._self = self;
+      }
       const _children = this.getSchemaChildren(__schema);
+      let Comp = __components[__schema.componentName];
+      this.componentHoc.forEach((ComponentConstruct: IComponentConstruct) => {
+        Comp = ComponentConstruct(Comp || Div, {
+          schema: __schema,
+          componentInfo: {},
+          baseRenderer: this,
+        });
+      });
       return this.__createVirtualDom(_children, self, ({
         schema: __schema,
-        Comp: __components[__schema.componentName],
+        Comp,
       } as IInfo));
     };
 
@@ -352,7 +368,7 @@ export default function baseRenererFactory() {
     // self 为每个渲染组件构造的上下文，self是自上而下继承的
     // parentInfo 父组件的信息，包含schema和Comp
     // idx 若为循环渲染的循环Index
-    __createVirtualDom = (schema: any, self: any, parentInfo: IInfo, idx: string | number = ''): any => {
+    __createVirtualDom = (schema: ISchema, self: any, parentInfo: IInfo, idx: string | number = ''): any => {
       const { engine } = this.context || {};
       try {
         if (!schema) return null;
@@ -376,7 +392,7 @@ export default function baseRenererFactory() {
         }
         if (typeof schema === 'string') return schema;
         if (typeof schema === 'number' || typeof schema === 'boolean') {
-          return schema.toString();
+          return String(schema);
         }
         if (Array.isArray(schema)) {
           if (schema.length === 1) return this.__createVirtualDom(schema[0], self, parentInfo);
@@ -394,9 +410,15 @@ export default function baseRenererFactory() {
           return schema;
         }
         if (!isSchema(schema)) return null;
-        let Comp = components[schema.componentName] || engine.getNotFoundComponent();
+        let Comp = components[schema.componentName] || this.props.__container?.components?.[schema.componentName];
 
-        if (schema.hidden && engine?.props?.designMode) {
+        if (!Comp) {
+          console.error(`${schema.componentName} is not found! component list is:`, this.props.__container?.components);
+          Comp = engine.getNotFoundComponent();
+        }
+
+        if (schema.hidden && !this._designModeIsDesign) {
+          // designMode 为 design 情况下，需要进入 leaf Hoc，进行相关事件注册
           return null;
         }
 
@@ -457,21 +479,34 @@ export default function baseRenererFactory() {
           otherProps.__designMode = engine.props.designMode;
         }
         const componentInfo: any = {};
-        const props: any =
-          this.__parseProps(schema.props, self, '', {
-            schema,
-            Comp,
-            componentInfo: {
-              ...componentInfo,
-              props: transformArrayToMap(componentInfo.props, 'name'),
-            },
-          }) || {};
+        const props: any = this.__getComponentProps(schema, Comp, {
+          ...componentInfo,
+          props: transformArrayToMap(componentInfo.props, 'name'),
+        }) || {};
+
+        if (!this.__hoc_components[schema.componentName]) {
+          this.componentHoc.forEach((ComponentConstruct: IComponentConstruct) => {
+            Comp = ComponentConstruct(Comp, {
+              schema,
+              componentInfo,
+              baseRenderer: this,
+            });
+          });
+        }
+
 
         // 对于可以获取到ref的组件做特殊处理
-        if (!acceptsRef(Comp)) {
+        if (!acceptsRef(Comp) && !this.__hoc_components[schema.componentName]) {
           Comp = compWrapper(Comp);
           components[schema.componentName] = Comp;
         }
+
+        if (!this.__hoc_components[schema.componentName]) {
+          this.__hoc_components[schema.componentName] = Comp;
+        } else {
+          Comp = this.__hoc_components[schema.componentName];
+        }
+
         otherProps.ref = (ref: any) => {
           this.$(props.fieldId || props.ref, ref); // 收集ref
           const refProps = props.ref;
@@ -500,17 +535,7 @@ export default function baseRenererFactory() {
           props.key = props.__id;
         }
 
-        let child: any = null;
-        if (/*! isFileSchema(schema) && */_children) {
-          child = this.__createVirtualDom(
-            isJSExpression(_children) ? parseExpression(_children, self) : _children,
-            self,
-            {
-              schema,
-              Comp,
-            },
-          );
-        }
+        let child: any = this.__getSchemaChildrenVirtualDom(schema, Comp);
         const renderComp = (props: any) => engine.createElement(Comp, props, child);
         // 设计模式下的特殊处理
         if (engine && [DESIGN_MODE.EXTEND, DESIGN_MODE.BORDER].includes(engine.props.designMode)) {
@@ -550,7 +575,69 @@ export default function baseRenererFactory() {
       }
     };
 
-    __createLoopVirtualDom = (schema: any, self: any, parentInfo: IInfo, idx: number | string) => {
+    get componentHoc(): IComponentConstruct[] {
+      const componentHoc: IComponentHoc[] = [
+        {
+          designMode: 'design',
+          hoc: leafWrapper,
+        },
+      ];
+
+      return componentHoc
+        .filter((d: IComponentHoc) => {
+          if (Array.isArray(d.designMode)) {
+            return d.designMode.includes(this.props.designMode);
+          }
+
+          return d.designMode === this.props.designMode;
+        })
+        .map((d: IComponentHoc) => d.hoc);
+    }
+
+    __getSchemaChildrenVirtualDom = (schema: ISchema, Comp: any) => {
+      let _children = this.getSchemaChildren(schema);
+
+      let children: any = [];
+      if (/*! isFileSchema(schema) && */_children) {
+        if (!Array.isArray(_children)) {
+          _children = [_children];
+        }
+
+        _children.forEach((_child: any) => {
+          const _childVirtualDom = this.__createVirtualDom(
+            isJSExpression(_child) ? parseExpression(_child, self) : _child,
+            self,
+            {
+              schema,
+              Comp,
+            },
+          );
+
+          children.push(_childVirtualDom);
+        });
+      }
+
+      if (children && children.length) {
+        return children;
+      }
+      return null;
+    };
+
+    __getComponentProps = (schema: ISchema, Comp: any, componentInfo?: any) => {
+      if (!schema) {
+        return {};
+      }
+      return this.__parseProps(schema?.props, this.self, '', {
+        schema,
+        Comp,
+        componentInfo: {
+          ...(componentInfo || {}),
+          props: transformArrayToMap((componentInfo || {}).props, 'name'),
+        },
+      }) || {};
+    };
+
+    __createLoopVirtualDom = (schema: ISchema, self: any, parentInfo: IInfo, idx: number | string) => {
       if (isFileSchema(schema)) {
         console.warn('file type not support Loop');
         return null;
@@ -575,6 +662,11 @@ export default function baseRenererFactory() {
         );
       });
     };
+
+    get _designModeIsDesign() {
+      const { engine } = this.context || {};
+      return engine?.props?.designMode === 'design';
+    }
 
     __parseProps = (props: any, self: any, path: string, info: IInfo): any => {
       const { schema, Comp, componentInfo = {} } = info;
@@ -721,6 +813,7 @@ export default function baseRenererFactory() {
     __renderContextProvider = (customProps?: object, children?: any) => {
       customProps = customProps || {};
       children = children || this.__createDom();
+      this.__hoc_components = {};
       return createElement(AppContext.Provider, {
         value: {
           ...this.context,
@@ -742,13 +835,21 @@ export default function baseRenererFactory() {
         Comp,
         componentInfo: {},
       });
+      this.__hoc_components = {};
       const { className } = data;
       const { engine } = this.context || {};
       if (!engine) {
         return null;
       }
+      this.componentHoc.forEach((ComponentConstruct: IComponentConstruct) => {
+        Comp = ComponentConstruct(Comp || Div, {
+          schema: __schema,
+          componentInfo: {},
+          baseRenderer: this,
+        });
+      });
       const child = engine.createElement(
-        Comp || Div,
+        Comp,
         {
           ...data,
           ...this.props,

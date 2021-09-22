@@ -7,6 +7,11 @@ import { EventEmitter } from 'events';
 import { foreachReverse } from '../../utils/tree';
 import { NodeRemoveOptions } from '../../types';
 
+export interface IOnChangeOptions {
+  type: string;
+  node: Node;
+}
+
 export class NodeChildren {
   @obx.shallow private children: Node[];
 
@@ -117,6 +122,10 @@ export class NodeChildren {
       return false;
     }
     this.children.splice(i, 1);
+    this.emitter.emit('change', {
+      type: 'unlink',
+      node,
+    });
   }
 
   /**
@@ -150,7 +159,10 @@ export class NodeChildren {
     document.unlinkNode(node);
     document.selection.remove(node.id);
     document.destroyNode(node);
-    this.emitter.emit('change');
+    this.emitter.emit('change', {
+      type: 'delete',
+      node,
+    });
     if (useMutator) {
       this.reportModified(node, this.owner, { type: 'remove', propagated: false, isSubDeleting: this.owner.isPurging, removeIndex: i, removeNode: node });
     }
@@ -197,7 +209,10 @@ export class NodeChildren {
       children.splice(index, 0, node);
     }
 
-    this.emitter.emit('change');
+    this.emitter.emit('change', {
+      type: 'insert',
+      node,
+    });
     this.emitter.emit('insert', node);
     if (globalContext.has('editor')) {
       globalContext.get('editor').emit('node.add', { node });
@@ -352,7 +367,7 @@ export class NodeChildren {
     }
   }
 
-  onChange(fn: () => void) {
+  onChange(fn: (info?: IOnChangeOptions) => void): () => void {
     this.emitter.on('change', fn);
     return () => {
       this.emitter.removeListener('change', fn);

@@ -22,6 +22,7 @@
     "@ali/lowcode-editor-core": "1.0.67",
     "@ali/lowcode-editor-skeleton": "1.0.67",
     "@ali/lowcode-utils": "1.0.67",
+    "@ali/lowcode-types": "1.0.67",
     "@ali/ve-i18n-util": "^2.0.0",
     "@ali/ve-icons": "^4.1.9",
     "@ali/ve-less-variables": "2.0.3",

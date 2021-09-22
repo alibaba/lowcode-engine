@@ -103,20 +103,12 @@ export class DocumentInstance {
 
   private emitter = new EventEmitter();
 
-  @obx.ref private _schema?: RootSchema;
-  @computed get schema(): any {
-    return this._schema;
+  get schema(): any {
+    return this.document.export(TransformStage.Render);
   }
-
-  private dispose?: () => void;
 
   constructor(readonly container: SimulatorRendererContainer, readonly document: DocumentModel) {
     makeObservable(this);
-    this.dispose = host.autorun(() => {
-      // sync schema
-      this._schema = document.export(TransformStage.Render);
-      this.emitter.emit('rerender');
-    });
   }
 
   @computed get suspended(): any {
@@ -496,6 +488,10 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     return () => {
       this.emitter.removeListener('renderer', fn);
     };
+  }
+
+  rerender() {
+    this.currentDocumentInstance?.refresh();
   }
 
   createComponent(schema: NodeSchema): Component | null {

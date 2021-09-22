@@ -55,14 +55,6 @@ export function waitForThing(obj: any, path: string): Promise<any> {
   return _innerWaitForThing(obj, path);
 }
 
-/**
- * 判断当前 meta 是否从 vc prototype 转换而来
- * @param meta
- */
-export function isFromVC(meta: ComponentMeta) {
-  return !!meta?.getMetadata()?.experimental;
-}
-
 export function arrShallowEquals(arr1: any[], arr2: any[]): boolean {
   if (!Array.isArray(arr1) || !Array.isArray(arr2)) return false;
   if (arr1.length !== arr2.length) return false;

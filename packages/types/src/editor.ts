@@ -1,7 +1,9 @@
 import { EventEmitter } from 'events';
+import StrictEventEmitter from 'strict-event-emitter-types';
 import { ReactNode, ComponentType } from 'react';
-import { NpmInfo } from './npm';
 import { RegisterOptions } from 'power-di';
+import { NpmInfo } from './npm';
+import * as GlobalEvent from './event';
 
 export type KeyType = (new (...args: any[]) => any) | symbol | string;
 export type ClassType = new (...args: any[]) => any;
@@ -17,7 +19,7 @@ export type GetReturnType<T, ClsType> = T extends undefined
     : any
   : T;
 
-export interface IEditor extends EventEmitter {
+export interface IEditor extends StrictEventEmitter<EventEmitter, GlobalEvent.EventConfig> {
   get<T = undefined, KeyOrType = any>(keyOrType: KeyOrType, opt?: GetOptions): GetReturnType<T, KeyOrType> | undefined;
 
   has(keyOrType: KeyType): boolean;

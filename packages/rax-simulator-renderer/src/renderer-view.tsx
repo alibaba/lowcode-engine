@@ -5,6 +5,8 @@ import { useRouter } from './rax-use-router';
 import { DocumentInstance, SimulatorRendererContainer } from './renderer';
 import './renderer.less';
 import { uniqueId } from '@ali/lowcode-utils';
+import { GlobalEvent } from '@ali/lowcode-types';
+import { host } from './host';
 
 // patch cloneElement avoid lost keyProps
 const originCloneElement = (window as any).Rax.cloneElement;
@@ -145,6 +147,7 @@ class Renderer extends Component<{
 }> {
   private unlisten: any;
   private key: string;
+  private startTime: number | null = null;
 
   componentWillMount() {
     this.key = uniqueId('renderer');
@@ -169,12 +172,28 @@ class Renderer extends Component<{
     return false;
   }
 
+  componentDidUpdate() {
+    if (this.startTime) {
+      const time = Date.now() - this.startTime;
+      const nodeCount = host.designer.currentDocument?.getNodeCount?.();
+      host.designer.editor?.emit(GlobalEvent.Node.Rerender, {
+        componentName: 'Renderer',
+        type: 'All',
+        time,
+        nodeCount,
+      });
+    }
+  }
+
   render() {
     const { documentInstance } = this.props;
     const { container } = documentInstance;
     const { designMode, device } = container;
     const { rendererContainer: renderer } = this.props;
+    this.startTime = Date.now();
+
     return (
+      // @ts-ignore
       <RaxRenderer
         schema={documentInstance.schema}
         components={renderer.components}
@@ -183,6 +202,8 @@ class Renderer extends Component<{
         device={device}
         designMode={renderer.designMode}
         key={this.key}
+        __host={host}
+        __container={container}
         suspended={documentInstance.suspended}
         self={documentInstance.scope}
         onCompGetRef={(schema: any, ref: any) => {

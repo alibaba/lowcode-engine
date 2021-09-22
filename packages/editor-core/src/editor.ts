@@ -1,3 +1,4 @@
+import { StrictEventEmitter } from 'strict-event-emitter-types';
 import { EventEmitter } from 'events';
 import {
   IEditor,
@@ -8,6 +9,7 @@ import {
   HookConfig,
   ComponentDescription,
   RemoteComponentDescription,
+  GlobalEvent,
 } from '@ali/lowcode-types';
 import { globalLocale } from './intl';
 import * as utils from './utils';
@@ -16,9 +18,8 @@ import { AssetsJson, AssetLoader } from '@ali/lowcode-utils';
 
 EventEmitter.defaultMaxListeners = 100;
 
-export declare interface Editor {
+export declare interface Editor extends StrictEventEmitter<EventEmitter, GlobalEvent.EventConfig> {
   addListener(event: string | symbol, listener: (...args: any[]) => void): this;
-  on(event: string | symbol, listener: (...args: any[]) => void): this;
   once(event: string | symbol, listener: (...args: any[]) => void): this;
   removeListener(event: string | symbol, listener: (...args: any[]) => void): this;
   off(event: string | symbol, listener: (...args: any[]) => void): this;
@@ -27,7 +28,6 @@ export declare interface Editor {
   getMaxListeners(): number;
   listeners(event: string | symbol): Function[];
   rawListeners(event: string | symbol): Function[];
-  emit(event: string | symbol, ...args: any[]): boolean;
   listenerCount(type: string | symbol): number;
   // Added in Node 6...
   prependListener(event: string | symbol, listener: (...args: any[]) => void): this;
@@ -35,7 +35,7 @@ export declare interface Editor {
   eventNames(): Array<string | symbol>;
 }
 
-export class Editor extends EventEmitter implements IEditor {
+export class Editor extends (EventEmitter as any) implements IEditor {
   /**
    * Ioc Container
    */
