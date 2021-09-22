@@ -167,7 +167,7 @@ class Renderer extends Component<{
         suspended={renderer.suspended}
         self={renderer.scope}
         customCreateElement={(Component: any, props: any, children: any) => {
-          const { __id, __designMode, ...viewProps } = props;
+          const { __id, ...viewProps } = props;
           viewProps.componentId = __id;
           const leaf = documentInstance.getNode(__id) as Node;
           viewProps._leaf = leaf;
