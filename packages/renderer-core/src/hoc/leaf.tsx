@@ -66,6 +66,8 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
       node?: Node;
     } = {};
 
+    static displayName = schema.componentName;
+
     disposeFunctions: ((() => void) | Function)[] = [];
 
     recordTime = () => {
@@ -291,6 +293,8 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
       (LeafWrapper as any)[d] = Comp[d];
     });
   }
+
+  LeafWrapper.displayName = (Comp as any).displayName;
 
   return LeafWrapper;
 }

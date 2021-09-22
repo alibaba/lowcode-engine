@@ -54,7 +54,7 @@ export default function baseRenererFactory() {
   let scopeIdx = 0;
 
   return class BaseRenderer extends Component implements IRenderer {
-    static dislayName = 'base-renderer';
+    static displayName = 'base-renderer';
 
     static defaultProps = {
       __schema: {},
