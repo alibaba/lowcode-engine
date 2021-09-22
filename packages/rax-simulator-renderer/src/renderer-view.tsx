@@ -189,7 +189,7 @@ class Renderer extends Component<{
           documentInstance.mountInstance(schema.id, ref);
         }}
         customCreateElement={(Component: any, props: any, children: any) => {
-          const { __id, __desingMode, ...viewProps } = props;
+          const { __id, ...viewProps } = props;
           viewProps.componentId = __id;
           const leaf = documentInstance.getNode(__id);
           viewProps._leaf = leaf;
