@@ -663,7 +663,7 @@ export class Prop implements IPropParent {
   }
 
   getProps() {
-    return this.parent;
+    return this.props;
   }
 
   getNode() {
