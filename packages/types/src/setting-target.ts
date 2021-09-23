@@ -42,7 +42,7 @@ export interface SettingTarget {
   setValue(value: any): void;
 
   // 取得子项
-  get(propName: string | number): SettingTarget;
+  get(propName: string | number): SettingTarget | null;
 
   // 获取子项属性值
   getPropValue(propName: string | number): any;

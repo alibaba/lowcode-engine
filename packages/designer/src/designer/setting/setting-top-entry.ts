@@ -150,7 +150,8 @@ export class SettingTopEntry implements SettingEntry {
   /**
    * 获取子项
    */
-  get(propName: string | number): SettingPropEntry {
+  get(propName: string | number): SettingPropEntry | null {
+    if (!propName) return null;
     return this._settingFieldMap[propName] || (new SettingPropEntry(this, propName));
   }
 
