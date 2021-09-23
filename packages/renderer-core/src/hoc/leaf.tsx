@@ -96,7 +96,6 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
       this.initOnPropsChangeEvent();
       this.initOnChildrenChangeEvent();
       this.initOnVisibleChangeEvent();
-      this.initLangChangeEvent();
       this.state = {
         nodeChildren: null,
         childrenInState: false,
@@ -183,26 +182,6 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
         this.setState({
           nodeChildren: nextChild,
           childrenInState: true,
-        });
-      });
-
-      dispose && this.disposeFunctions.push(dispose);
-    }
-
-    /**
-     * 监听语言切换
-     */
-    initLangChangeEvent() {
-      if (this.leaf?.componentName !== 'Page') {
-        return;
-      }
-      const dispose = (window as any).VisualEngine.Env.onEnvChange(() => {
-        this.beforeRender(RerenderType.LangChanged);
-        const nextProps = getProps(this.leaf?.export?.(TransformStage.Render) as types.ISchema, Comp, this.componentInfo);
-        const nextChildren = getChildren(this.leaf?.export?.(TransformStage.Render) as types.ISchema, Comp);
-        this.setState({
-          nodeChildren: nextChildren,
-          nodeProps: nextProps,
         });
       });
 

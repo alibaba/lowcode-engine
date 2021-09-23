@@ -1,7 +1,8 @@
 import logger from '@ali/vu-logger';
 import { EventEmitter } from 'events';
-import { editor } from '@ali/lowcode-engine';
+import { editor, designer } from '@ali/lowcode-engine';
 import { GlobalEvent, isJSExpression } from '@ali/lowcode-types';
+import env from './env';
 
 /**
  * Bus class as an EventEmitter
@@ -75,6 +76,13 @@ editor?.on('history.back', (data) => {
 
 editor?.on('history.forward', (data) => {
   bus.emit('ve.history.forward', data);
+});
+
+env.onEnvChange((_envs, name, value) => {
+  if (name !== 'locale') {
+    return;
+  }
+  designer.project.simulator?.set(name, value.replace('_', '-'));
 });
 
 function triggerUseVariableChange(data: any) {
