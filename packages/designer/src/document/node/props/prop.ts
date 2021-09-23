@@ -373,35 +373,30 @@ export class Prop implements IPropParent {
   }
 
   @computed private get items(): Prop[] | null {
-    let _items: any = this._items;
-    if (!_items) {
-      if (this._type === 'list') {
-        const data = this._value;
-        const items = [];
-        for (const item of data) {
-          items.push(new Prop(this, item));
-        }
-        _items = items;
-        this._maps = null;
-      } else if (this._type === 'map') {
-        const data = this._value;
-        const items = [];
-        const maps = new Map<string, Prop>();
-        const keys = Object.keys(data);
-        for (const key of keys) {
-          const prop = new Prop(this, data[key], key);
-          items.push(prop);
-          maps.set(key, prop);
-        }
-        _items = items;
-        this._maps = maps;
-      } else {
-        _items = null;
-        this._maps = null;
+    if (this._items) return this._items;
+    let items: Prop[] | null = [];
+    if (this._type === 'list') {
+      const data = this._value;
+      for (const item of data) {
+        items.push(new Prop(this, item));
       }
-      this._items = _items;
+      this._maps = null;
+    } else if (this._type === 'map') {
+      const data = this._value;
+      const maps = new Map<string, Prop>();
+      const keys = Object.keys(data);
+      for (const key of keys) {
+        const prop = new Prop(this, data[key], key);
+        items.push(prop);
+        maps.set(key, prop);
+      }
+      this._maps = maps;
+    } else {
+      items = null;
+      this._maps = null;
     }
-    return _items;
+    this._items = items;
+    return this._items;
   }
 
   @computed private get maps(): Map<string | number, Prop> | null {
@@ -548,7 +543,7 @@ export class Prop implements IPropParent {
       }
     }
     const prop = isProp(value) ? value : new Prop(this, value, key);
-    const items = this.items!;
+    let items = this._items! || [];
     if (this.type === 'list') {
       if (!isValidArrayIndex(key)) {
         return null;
@@ -558,20 +553,21 @@ export class Prop implements IPropParent {
       } else {
         items[key] = prop;
       }
-    } else if (this.maps) {
+    } else if (this.type === 'map') {
       const { maps } = this;
-      const orig = maps.get(key);
+      const orig = maps?.get(key);
       if (orig) {
         // replace
         const i = items.indexOf(orig);
         if (i > -1) {
           items.splice(i, 1, prop)[0].purge();
         }
-        maps.set(key, prop);
+        maps?.set(key, prop);
       } else {
         // push
         items.push(prop);
-        maps.set(key, prop);
+        this._items = items;
+        maps?.set(key, prop);
       }
     } /* istanbul ignore next */ else {
       return null;
