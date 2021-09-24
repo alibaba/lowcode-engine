@@ -70,6 +70,7 @@ export class Project {
     // FIXME: 这里的行为和 getSchema 并不对等，感觉不太对
     const doc = this.documents.find((doc) => doc.active);
     doc && doc.import(schema?.componentsTree[0]);
+    this.simulator?.rerender();
   }
 
   /**
