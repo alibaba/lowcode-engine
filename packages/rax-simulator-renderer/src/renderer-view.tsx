@@ -209,6 +209,7 @@ class Renderer extends Component<{
         onCompGetRef={(schema: any, ref: any) => {
           documentInstance.mountInstance(schema.id, ref);
         }}
+        getNode={(id: string) => documentInstance.getNode(id) as any}
         customCreateElement={(Component: any, props: any, children: any) => {
           const { __id, ...viewProps } = props;
           viewProps.componentId = __id;

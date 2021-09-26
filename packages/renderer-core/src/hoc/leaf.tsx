@@ -4,7 +4,12 @@ import { EngineOptions } from '@ali/lowcode-editor-core';
 import adapter from '../adapter';
 import * as types from '../types/index';
 
-const compDefaultPropertyNames = ['$$typeof', 'render', 'defaultProps'];
+const compDefaultPropertyNames = [
+  '$$typeof',
+  'render',
+  'defaultProps',
+  'props',
+];
 
 export interface IComponentHocInfo {
   schema: any;
@@ -31,6 +36,8 @@ interface IProps {
   componentId?: number;
 
   children?: Node[];
+
+  __tag?: number;
 }
 
 enum RerenderType {
@@ -55,9 +62,19 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
   } = baseRenderer;
   const engine = baseRenderer.context.engine;
   const host: BuiltinSimulatorHost = baseRenderer.props.__host;
+  const getNode = baseRenderer.props?.getNode;
   const container: BuiltinSimulatorHost = baseRenderer.props.__container;
   const editor = host?.designer?.editor;
   const { Component } = adapter.getRuntime();
+
+  /** 部分没有渲染的 node 节点进行兜底处理 or 渲染方式没有渲染 LeafWrapper */
+  const leaf = getNode(schema.id);
+
+  const wrapDisposeFunctions: Function[] = [
+    leaf?.onPropsChange?.(() => container.rerender()),
+    leaf?.onChildrenChange?.(() => container.rerender()),
+    leaf?.onVisibleChange?.(() => container.rerender()),
+  ];
 
   class LeafWrapper extends Component {
     recordInfo: {
@@ -96,9 +113,11 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
       this.initOnPropsChangeEvent();
       this.initOnChildrenChangeEvent();
       this.initOnVisibleChangeEvent();
+      wrapDisposeFunctions.forEach(d => d && d());
       this.state = {
         nodeChildren: null,
         childrenInState: false,
+        __tag: props.__tag,
       };
     }
 
@@ -109,8 +128,25 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
       this.recordInfo.node = node;
     }
 
+    get isInWhitelist() {
+      return whitelist.includes(schema.componentName);
+    }
+
+    static getDerivedStateFromProps(props: any, state: any) {
+      if (props.__tag === state.__tag) {
+        return null;
+      }
+
+      return {
+        nodeChildren: props.children,
+        nodeProps: props.nodeProps,
+        childrenInState: true,
+        __tag: props.__tag,
+      };
+    }
+
     shouldComponentUpdate() {
-      if (whitelist.includes(schema.componentName)) {
+      if (this.isInWhitelist) {
         __debug(`${schema.componentName} is in leaf Hoc whitelist`);
         container.rerender();
         return false;
@@ -130,6 +166,7 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
         // 如果循坏条件变化，从根节点重新渲染
         // 目前多层循坏无法判断需要从哪一层开始渲染，故先粗暴解决
         if (key === '___loop___') {
+          __debug('key is ___loop___, render a page!');
           container.rerender();
           return;
         }
@@ -218,25 +255,7 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
     }
 
     get leaf(): Node | undefined {
-      return this.props._leaf;
-    }
-
-    get childrenMap(): any {
-      const map = new Map();
-
-      if (!this.hasChildren) {
-        return map;
-      }
-
-      this.children.forEach((d: any) => {
-        if (Array.isArray(d)) {
-          map.set(d[0].props.componentId, d[0]);
-          return;
-        }
-        map.set(d.props.componentId, d);
-      });
-
-      return map;
+      return this.props._leaf || getNode(this.props.componentId);
     }
 
     get visible(): boolean {
@@ -267,6 +286,8 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
 
   if (typeof Comp === 'object') {
     const compExtraPropertyNames = Object.getOwnPropertyNames(Comp).filter(d => !compDefaultPropertyNames.includes(d));
+
+    __debug(`${schema.componentName} extra property names: ${compExtraPropertyNames.join(',')}`);
 
     compExtraPropertyNames.forEach((d: string) => {
       (LeafWrapper as any)[d] = Comp[d];

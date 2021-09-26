@@ -4,7 +4,7 @@ import cn from 'classnames';
 import { Node } from '@ali/lowcode-designer';
 import LowCodeRenderer from '@ali/lowcode-react-renderer';
 import { observer } from 'mobx-react';
-import { getClosestNode } from '@ali/lowcode-utils';
+import { getClosestNode, isFromVC } from '@ali/lowcode-utils';
 import { GlobalEvent } from '@ali/lowcode-types';
 import { SimulatorRendererContainer, DocumentInstance } from './renderer';
 import { host } from './host';
@@ -132,6 +132,10 @@ class Renderer extends Component<{
   startTime: number | null = null;
 
   componentDidUpdate() {
+    this.recordTime();
+  }
+
+  recordTime() {
     if (this.startTime) {
       const time = Date.now() - this.startTime;
       const nodeCount = host.designer.currentDocument?.getNodeCount?.();
@@ -142,6 +146,10 @@ class Renderer extends Component<{
         nodeCount,
       });
     }
+  }
+
+  componentDidMount() {
+    this.recordTime();
   }
 
   render() {
@@ -166,11 +174,14 @@ class Renderer extends Component<{
         device={device}
         suspended={renderer.suspended}
         self={renderer.scope}
+        getNode={(id: string) => documentInstance.getNode(id) as Node}
         customCreateElement={(Component: any, props: any, children: any) => {
           const { __id, ...viewProps } = props;
           viewProps.componentId = __id;
           const leaf = documentInstance.getNode(__id) as Node;
-          viewProps._leaf = leaf;
+          if (isFromVC(leaf?.componentMeta)) {
+            viewProps._leaf = leaf;
+          }
           viewProps._componentName = leaf?.componentName;
           // 如果是容器 && 无children && 高宽为空 增加一个占位容器，方便拖动
           if (

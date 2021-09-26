@@ -342,16 +342,10 @@ export default function baseRenererFactory() {
       }
       const _children = this.getSchemaChildren(__schema);
       let Comp = __components[__schema.componentName];
-      this.componentHoc.forEach((ComponentConstruct: IComponentConstruct) => {
-        Comp = ComponentConstruct(Comp || Div, {
-          schema: __schema,
-          componentInfo: {},
-          baseRenderer: this,
-        });
-      });
+
       return this.__createVirtualDom(_children, self, ({
         schema: __schema,
-        Comp,
+        Comp: this.__getHocComp(Comp, __schema),
       } as IInfo));
     };
 
@@ -478,6 +472,9 @@ export default function baseRenererFactory() {
         if (engine?.props?.designMode) {
           otherProps.__designMode = engine.props.designMode;
         }
+        if (this._designModeIsDesign) {
+          otherProps.__tag = Math.random();
+        }
         const componentInfo: any = {};
         const props: any = this.__getComponentProps(schema, Comp, {
           ...componentInfo,
@@ -493,7 +490,6 @@ export default function baseRenererFactory() {
             });
           });
         }
-
 
         // 对于可以获取到ref的组件做特殊处理
         if (!acceptsRef(Comp) && !this.__hoc_components[schema.componentName]) {
@@ -605,8 +601,8 @@ export default function baseRenererFactory() {
 
         _children.forEach((_child: any) => {
           const _childVirtualDom = this.__createVirtualDom(
-            isJSExpression(_child) ? parseExpression(_child, self) : _child,
-            self,
+            isJSExpression(_child) ? parseExpression(_child, this.self) : _child,
+            this.self,
             {
               schema,
               Comp,
@@ -813,7 +809,6 @@ export default function baseRenererFactory() {
     __renderContextProvider = (customProps?: object, children?: any) => {
       customProps = customProps || {};
       children = children || this.__createDom();
-      this.__hoc_components = {};
       return createElement(AppContext.Provider, {
         value: {
           ...this.context,
@@ -828,26 +823,37 @@ export default function baseRenererFactory() {
       return createElement(AppContext.Consumer, {}, children);
     };
 
+    __getHocComp(Comp: any, schema: any) {
+      if (!this.__hoc_components[schema.componentName]) {
+        this.componentHoc.forEach((ComponentConstruct: IComponentConstruct) => {
+          Comp = ComponentConstruct(Comp || Div, {
+            schema,
+            componentInfo: {},
+            baseRenderer: this,
+          });
+        });
+      } else {
+        Comp = this.__hoc_components[schema.componentName];
+        this.__hoc_components[schema.componentName] = Comp;
+      }
+
+      return Comp;
+    }
+
     __renderComp(Comp: any, ctxProps: object) {
       const { __schema } = this.props;
+      Comp = this.__getHocComp(Comp, __schema);
       const data = this.__parseProps(__schema?.props, this.self, '', {
         schema: __schema,
         Comp,
         componentInfo: {},
       });
-      this.__hoc_components = {};
       const { className } = data;
       const { engine } = this.context || {};
       if (!engine) {
         return null;
       }
-      this.componentHoc.forEach((ComponentConstruct: IComponentConstruct) => {
-        Comp = ComponentConstruct(Comp || Div, {
-          schema: __schema,
-          componentInfo: {},
-          baseRenderer: this,
-        });
-      });
+
       const child = engine.createElement(
         Comp,
         {

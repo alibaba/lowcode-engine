@@ -61,6 +61,14 @@ export function arrShallowEquals(arr1: any[], arr2: any[]): boolean {
   return arr1.every(item => arr2.includes(item));
 }
 
+/**
+ * 判断当前 meta 是否从 vc prototype 转换而来
+ * @param meta
+ */
+ export function isFromVC(meta: ComponentMeta) {
+  return !!meta?.getMetadata()?.experimental;
+}
+
 export function executePendingFn(fn: () => void, timeout: number = 2000) {
   return setTimeout(fn, timeout);
 }
