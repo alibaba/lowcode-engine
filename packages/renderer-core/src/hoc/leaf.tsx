@@ -1,5 +1,6 @@
 import { BuiltinSimulatorHost, Node, PropChangeOptions } from '@ali/lowcode-designer';
 import { GlobalEvent, TransformStage } from '@ali/lowcode-types';
+import { isReactComponent } from '@ali/lowcode-utils';
 import { EngineOptions } from '@ali/lowcode-editor-core';
 import adapter from '../adapter';
 import * as types from '../types/index';
@@ -67,14 +68,21 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
   const editor = host?.designer?.editor;
   const { Component } = adapter.getRuntime();
 
-  /** 部分没有渲染的 node 节点进行兜底处理 or 渲染方式没有渲染 LeafWrapper */
-  const leaf = getNode(schema.id);
+  if (!isReactComponent(Comp)) {
+    console.error(`${schema.componentName} component may be has errors: `, Comp);
+  }
 
-  const wrapDisposeFunctions: Function[] = [
-    leaf?.onPropsChange?.(() => container.rerender()),
-    leaf?.onChildrenChange?.(() => container.rerender()),
-    leaf?.onVisibleChange?.(() => container.rerender()),
-  ];
+  /** 部分没有渲染的 node 节点进行兜底处理 or 渲染方式没有渲染 LeafWrapper */
+  let wrapDisposeFunctions: Function[] = [];
+  if (getNode) {
+    const leaf = getNode(schema.id);
+
+    wrapDisposeFunctions = [
+      leaf?.onPropsChange?.(() => container.rerender()),
+      leaf?.onChildrenChange?.(() => container.rerender()),
+      leaf?.onVisibleChange?.(() => container.rerender()),
+    ];
+  }
 
   class LeafWrapper extends Component {
     recordInfo: {
