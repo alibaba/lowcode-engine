@@ -3,9 +3,9 @@ import { Node, PropsReducerContext, designerCabin, engineConfig } from '@ali/low
 import { hasOwnProperty } from '@ali/lowcode-utils';
 const { TransformStage } = designerCabin;
 
-export function filterReducer(props: any, node: Node, ctx: PropsReducerContext): any {
+export function filterReducer(props: any, node: Node, ctx?: PropsReducerContext): any {
   // 老的 vision 逻辑是 render 阶段不走 filter 逻辑
-  if (ctx.stage === TransformStage.Render && !engineConfig.get('visionSettings.enableFilterReducerInRenderStage', false)) {
+  if (ctx?.stage === TransformStage.Render && !engineConfig.get('visionSettings.enableFilterReducerInRenderStage', false)) {
     return props;
   }
   const filters = node.componentMeta.getMetadata().experimental?.filters;

@@ -47,7 +47,7 @@ export interface InitialItem {
 }
 export interface FilterItem {
   name: string;
-  filter: (target: SettingTarget, currentValue: any) => any;
+  filter: (target: SettingTarget | null, currentValue: any) => any;
 }
 export interface AutorunItem {
   name: string;

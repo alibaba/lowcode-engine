@@ -15,6 +15,7 @@ import {
   liveLifecycleReducer,
   nodeTopFixedReducer,
   resetLoopDefaultValueReducer,
+  filterEmptyEventReducer,
 } from './props-reducers';
 
 const { LiveEditing, TransformStage } = designerCabin;
@@ -40,6 +41,9 @@ designer.addPropsReducer(liveLifecycleReducer, TransformStage.Render);
 
 designer.addPropsReducer(filterReducer, TransformStage.Save);
 designer.addPropsReducer(filterReducer, TransformStage.Render);
+
+designer.addPropsReducer(filterEmptyEventReducer, TransformStage.Save);
+designer.addPropsReducer(filterEmptyEventReducer, TransformStage.Render);
 
 // FIXME: Dirty fix, will remove this reducer
 designer.addPropsReducer(compatibleReducer, TransformStage.Save);
