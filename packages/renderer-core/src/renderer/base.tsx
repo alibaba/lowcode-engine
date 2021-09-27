@@ -832,9 +832,9 @@ export default function baseRenererFactory() {
             baseRenderer: this,
           });
         });
+        this.__hoc_components[schema.componentName] = Comp;
       } else {
         Comp = this.__hoc_components[schema.componentName];
-        this.__hoc_components[schema.componentName] = Comp;
       }
 
       return Comp;
