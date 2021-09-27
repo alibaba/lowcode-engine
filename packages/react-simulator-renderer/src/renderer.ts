@@ -444,7 +444,6 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     }
 
     const renderer = this;
-    const { componentsMap: components } = renderer;
 
     class LowCodeComp extends React.Component<any, any> {
       render() {
@@ -458,7 +457,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         return createElement(LowCodeRenderer, {
           ...extraProps, // 防止覆盖下面内置属性
           schema: newSchema,
-          components,
+          components: renderer.components,
           designMode: renderer.designMode,
           device: renderer.device,
           appHelper: renderer.context,
