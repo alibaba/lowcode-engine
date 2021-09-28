@@ -257,9 +257,7 @@ export class Prop implements IPropParent {
       };
     }
 
-    if (this.owner.isInited) {
-      this.dispose();
-    }
+    this.dispose();
 
     if (oldValue !== this._value) {
       const propsInfo = {
