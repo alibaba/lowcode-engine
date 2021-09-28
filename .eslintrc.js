@@ -28,8 +28,6 @@ module.exports = {
     'eol-last': 0,
     'react/no-find-dom-node': 0,
     'no-case-declarations': 0,
-    '@typescript-eslint/indent': 0,
-    "indent": "off",
-    "@typescript-eslint/indent": ["error", 2]
+    '@typescript-eslint/indent': 0
   }
 };

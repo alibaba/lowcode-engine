@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import { EventEmitter } from 'events';
-import { obx, computed, autorun, makeObservable, runInAction, getObserverTree } from '@ali/lowcode-editor-core';
+import { obx, computed, autorun, makeObservable, runInAction, wrapWithEventSwitch } from '@ali/lowcode-editor-core';
 import {
   isDOMText,
   isJSExpression,
@@ -560,9 +560,10 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   onVisibleChange(func: (flag: boolean) => any): () => void {
-    this.emitter.on('visibleChange', func);
+    const wrappedFunc = wrapWithEventSwitch(func);
+    this.emitter.on('visibleChange', wrappedFunc);
     return () => {
-      this.emitter.removeListener('visibleChange', func);
+      this.emitter.removeListener('visibleChange', wrappedFunc);
     };
   }
 
@@ -920,7 +921,8 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   onChildrenChange(fn: (param?: { type: string, node: Node }) => void): (() => void) | undefined {
-    return this.children?.onChange(fn);
+    const wrappedFunc = wrapWithEventSwitch(fn);
+    return this.children?.onChange(wrappedFunc);
   }
 
   mergeChildren(
@@ -1118,9 +1120,10 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   onPropChange(func: (info: PropChangeOptions) => void): Function {
-    this.emitter.on('propChange', func);
+    const wrappedFunc = wrapWithEventSwitch(func);
+    this.emitter.on('propChange', wrappedFunc);
     return () => {
-      this.emitter.removeListener('propChange', func);
+      this.emitter.removeListener('propChange', wrappedFunc);
     };
   }
 }

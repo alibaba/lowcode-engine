@@ -1,4 +1,4 @@
-import { computed, makeObservable, obx, action } from '@ali/lowcode-editor-core';
+import { computed, makeObservable, obx, action, runWithGlobalEventOff, wrapWithEventSwitch } from '@ali/lowcode-editor-core';
 import { NodeData, isJSExpression, isDOMText, NodeSchema, isNodeSchema, RootSchema, PageSchema } from '@ali/lowcode-types';
 import { EventEmitter } from 'events';
 import { Project } from '../project';
@@ -361,17 +361,19 @@ export class DocumentModel {
   @action
   import(schema: RootSchema, checkId = false) {
     const drillDownNodeId = this._drillDownNode?.id;
-    // TODO: 暂时用饱和式删除，原因是 Slot 节点并不是树节点，无法正常递归删除
-    this.nodes.forEach(node => {
-      if (node.isRoot()) return;
-      this.internalRemoveAndPurgeNode(node, true);
-    });
-    this.rootNode?.import(schema as any, checkId);
+    runWithGlobalEventOff(() => {
+      // TODO: 暂时用饱和式删除，原因是 Slot 节点并不是树节点，无法正常递归删除
+      this.nodes.forEach(node => {
+        if (node.isRoot()) return;
+        this.internalRemoveAndPurgeNode(node, true);
+      });
+      this.rootNode?.import(schema as any, checkId);
 
-    // todo: select added and active track added
-    if (drillDownNodeId) {
-      this.drillDown(this.getNode(drillDownNodeId));
-    }
+      // todo: select added and active track added
+      if (drillDownNodeId) {
+        this.drillDown(this.getNode(drillDownNodeId));
+      }
+    });
   }
 
   export(stage: TransformStage = TransformStage.Serilize) {
@@ -699,16 +701,18 @@ export class DocumentModel {
   }
 
   onNodeCreate(func: (node: Node) => void) {
-    this.emitter.on('nodecreate', func);
+    const wrappedFunc = wrapWithEventSwitch(func);
+    this.emitter.on('nodecreate', wrappedFunc);
     return () => {
-      this.emitter.removeListener('nodecreate', func);
+      this.emitter.removeListener('nodecreate', wrappedFunc);
     };
   }
 
   onNodeDestroy(func: (node: Node) => void) {
-    this.emitter.on('nodedestroy', func);
+    const wrappedFunc = wrapWithEventSwitch(func);
+    this.emitter.on('nodedestroy', wrappedFunc);
     return () => {
-      this.emitter.removeListener('nodedestroy', func);
+      this.emitter.removeListener('nodedestroy', wrappedFunc);
     };
   }
 

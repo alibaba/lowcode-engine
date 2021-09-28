@@ -90,7 +90,6 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
       type?: string;
       node?: Node;
     } = {};
-
     static displayName = schema.componentName;
 
     disposeFunctions: ((() => void) | Function)[] = [];
@@ -140,18 +139,43 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
       return whitelist.includes(schema.componentName);
     }
 
-    static getDerivedStateFromProps(props: any, state: any) {
-      if (props.__tag === state.__tag) {
+    componentWillReceiveProps(nextProps: any) {
+      if (nextProps.__tag === this.state.__tag) {
         return null;
       }
+      const { _leaf, __tag, children, ...rest } = nextProps;
+      if (_leaf && this.leaf && _leaf !== this.leaf) {
+        this.disposeFunctions.forEach(fn => fn());
+        this.disposeFunctions = [];
+        this.initOnChildrenChangeEvent(_leaf);
+        this.initOnPropsChangeEvent(_leaf);
+        this.initOnVisibleChangeEvent(_leaf);
+      }
 
-      return {
-        nodeChildren: props.children,
-        nodeProps: props.nodeProps,
+      this.setState({
+        nodeChildren: children,
+        nodeProps: rest,
         childrenInState: true,
-        __tag: props.__tag,
-      };
+        __tag,
+      });
     }
+
+    // static getDerivedStateFromProps(props: any, state: any) {
+    //   if (props.__tag === state.__tag) {
+    //     return null;
+    //   }
+    //   if (props._leaf && this.state.leaf && props._leaf !== this.state.leaf) {
+    //     this.disposeFunctions.forEach(fn => fn());
+    //   }
+
+    //   return {
+    //     nodeChildren: props.children,
+    //     nodeProps: props.nodeProps,
+    //     childrenInState: true,
+    //     __tag: props.__tag,
+    //     _leaf: props._leaf,
+    //   };
+    // }
 
     shouldComponentUpdate() {
       if (this.isInWhitelist) {
@@ -164,12 +188,12 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
     }
 
     /** 监听参数变化 */
-    initOnPropsChangeEvent(): void {
-      const dispose = this.leaf?.onPropChange?.((propChangeInfo: PropChangeOptions) => {
+    initOnPropsChangeEvent(leaf = this.leaf): void {
+      const dispose = leaf?.onPropChange?.((propChangeInfo: PropChangeOptions) => {
         const {
           key,
         } = propChangeInfo;
-        const node = this.leaf;
+        const node = leaf;
 
         // 如果循坏条件变化，从根节点重新渲染
         // 目前多层循坏无法判断需要从哪一层开始渲染，故先粗暴解决
@@ -180,7 +204,7 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
         }
 
         this.beforeRender(RerenderType.PropsChanged);
-        __debug(`${this.leaf?.componentName} component trigger onPropsChange event`);
+        __debug(`${leaf?.componentName} component trigger onPropsChange event`);
         const nextProps = getProps(node?.export?.(TransformStage.Render) as types.ISchema, Comp, componentInfo);
         this.setState(nextProps.children ? {
           nodeChildren: nextProps.children,
@@ -196,13 +220,13 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
     /**
      * 监听显隐变化
      */
-    initOnVisibleChangeEvent() {
-      const dispose = this.leaf?.onVisibleChange?.((flag: boolean) => {
+    initOnVisibleChangeEvent(leaf = this.leaf) {
+      const dispose = leaf?.onVisibleChange?.((flag: boolean) => {
         if (this.state.visible === flag) {
           return;
         }
 
-        __debug(`${this.leaf?.componentName} component trigger onVisibleChange event`);
+        __debug(`${leaf?.componentName} component trigger onVisibleChange event`);
         this.beforeRender(RerenderType.VisibleChanged);
         this.setState({
           visible: flag,
@@ -215,15 +239,15 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
     /**
      * 监听子元素变化（拖拽，删除...）
      */
-    initOnChildrenChangeEvent() {
-      const dispose = this.leaf?.onChildrenChange?.((param): void => {
+    initOnChildrenChangeEvent(leaf = this.leaf) {
+      const dispose = leaf?.onChildrenChange?.((param): void => {
         const {
           type,
           node,
         } = param || {};
         this.beforeRender(`${RerenderType.ChildChanged}-${type}`, node);
-        __debug(`${this.leaf} component trigger onChildrenChange event`);
-        const nextChild = getChildren(this.leaf?.export?.(TransformStage.Render) as types.ISchema, Comp);
+        __debug(`${leaf} component trigger onChildrenChange event`);
+        const nextChild = getChildren(leaf?.export?.(TransformStage.Render) as types.ISchema, Comp);
         this.setState({
           nodeChildren: nextChild,
           childrenInState: true,
@@ -238,15 +262,16 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
     }
 
     get hasChildren(): boolean {
+      let { children } = this.props;
       if (this.state.childrenInState) {
-        return !!this.state.nodeChildren?.length;
+        children = this.state.nodeChildren;
       }
 
-      if (Array.isArray(this.props.children)) {
-        return Boolean(this.props.children && this.props.children.length);
+      if (Array.isArray(children)) {
+        return Boolean(children && children.length);
       }
 
-      return Boolean(this.props.children);
+      return Boolean(children);
     }
 
     get children(): any {

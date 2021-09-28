@@ -71,6 +71,8 @@ export class SettingTopEntry implements SettingEntry {
 
   readonly designer: Designer;
 
+  disposeFunctions: any[] = [];
+
   constructor(readonly editor: IEditor, readonly nodes: Node[]) {
     if (!Array.isArray(nodes) || nodes.length < 1) {
       throw new ReferenceError('nodes should not be empty');
@@ -85,7 +87,7 @@ export class SettingTopEntry implements SettingEntry {
     // clear fields
     this.setupItems();
 
-    this.setupEvents();
+    this.disposeFunctions.push(this.setupEvents());
   }
 
   private setupComponentMeta() {
@@ -127,7 +129,7 @@ export class SettingTopEntry implements SettingEntry {
   }
 
   private setupEvents() {
-    this.componentMeta?.onMetadataChange(() => {
+    return this.componentMeta?.onMetadataChange(() => {
       this.setupItems();
     });
   }
@@ -219,6 +221,8 @@ export class SettingTopEntry implements SettingEntry {
     this.disposeItems();
     this._settingFieldMap = {};
     this.emitter.removeAllListeners();
+    this.disposeFunctions.forEach(f => f());
+    this.disposeFunctions = [];
   }
 
 

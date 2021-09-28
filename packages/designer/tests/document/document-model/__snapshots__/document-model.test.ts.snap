@@ -180,7 +180,7 @@ Object {
                                     "labelTextAlign": "right",
                                     "labelTipsIcon": "",
                                     "labelTipsText": Object {
-                                      "en_US": "",
+                                      "en_US": null,
                                       "type": "i18n",
                                       "use": "zh_CN",
                                       "zh_CN": "",
@@ -259,7 +259,7 @@ Object {
                                     "labelTextAlign": "right",
                                     "labelTipsIcon": "",
                                     "labelTipsText": Object {
-                                      "en_US": "",
+                                      "en_US": null,
                                       "type": "i18n",
                                       "use": "zh_CN",
                                       "zh_CN": "",
@@ -334,7 +334,7 @@ Object {
                                     "labelTextAlign": "right",
                                     "labelTipsIcon": "",
                                     "labelTipsText": Object {
-                                      "en_US": "",
+                                      "en_US": null,
                                       "type": "i18n",
                                       "use": "zh_CN",
                                       "zh_CN": "",
@@ -426,7 +426,7 @@ Object {
                                     "labelTextAlign": "right",
                                     "labelTipsIcon": "",
                                     "labelTipsText": Object {
-                                      "en_US": "",
+                                      "en_US": null,
                                       "type": "i18n",
                                       "use": "zh_CN",
                                       "zh_CN": "",
@@ -517,7 +517,7 @@ Object {
                                     "labelTextAlign": "right",
                                     "labelTipsIcon": "",
                                     "labelTipsText": Object {
-                                      "en_US": "",
+                                      "en_US": null,
                                       "type": "i18n",
                                       "use": "zh_CN",
                                       "zh_CN": "",
@@ -684,7 +684,7 @@ Object {
                             "labelTextAlign": "right",
                             "labelTipsIcon": "",
                             "labelTipsText": Object {
-                              "en_US": "",
+                              "en_US": null,
                               "type": "i18n",
                               "use": "zh_CN",
                               "zh_CN": "",
@@ -763,7 +763,7 @@ Object {
                                     "labelTextAlign": "right",
                                     "labelTipsIcon": "",
                                     "labelTipsText": Object {
-                                      "en_US": "",
+                                      "en_US": null,
                                       "type": "i18n",
                                       "use": "zh_CN",
                                       "zh_CN": "",
@@ -855,7 +855,7 @@ Object {
                                     "labelTextAlign": "right",
                                     "labelTipsIcon": "",
                                     "labelTipsText": Object {
-                                      "en_US": "",
+                                      "en_US": null,
                                       "type": "i18n",
                                       "use": "zh_CN",
                                       "zh_CN": "",
