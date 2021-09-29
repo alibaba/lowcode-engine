@@ -140,10 +140,13 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
     }
 
     componentWillReceiveProps(nextProps: any) {
+      const { _leaf, __tag, children, ...rest } = nextProps;
       if (nextProps.__tag === this.state.__tag) {
+        this.setState({
+          nodeProps: rest,
+        });
         return null;
       }
-      const { _leaf, __tag, children, ...rest } = nextProps;
       if (_leaf && this.leaf && _leaf !== this.leaf) {
         this.disposeFunctions.forEach(fn => fn());
         this.disposeFunctions = [];
