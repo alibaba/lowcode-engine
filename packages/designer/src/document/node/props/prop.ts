@@ -152,10 +152,15 @@ export class Prop implements IPropParent {
       if (!this._items) {
         return this._value;
       }
-      const maps: any = {};
+      let maps: any;
       this.items!.forEach((prop, key) => {
-        const v = prop.export(stage);
-        maps[prop.key == null ? key : prop.key] = v;
+        if (!prop.isUnset()) {
+          const v = prop.export(stage);
+          if (v != null) {
+            maps = maps || {};
+            maps[prop.key || key] = prop.export(stage);
+          }
+        }
       });
       return maps;
     }

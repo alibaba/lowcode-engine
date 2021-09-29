@@ -72,7 +72,6 @@ Object {
               "hidden": false,
               "id": "node_k1ow3cbd",
               "isLocked": false,
-              "loop": undefined,
               "props": Object {
                 "__slot__action": false,
                 "__slot__content": false,
@@ -121,7 +120,6 @@ Object {
           "hidden": false,
           "id": "node_k1ow3cba",
           "isLocked": false,
-          "loop": undefined,
           "props": Object {},
           "title": "",
         },
@@ -144,7 +142,6 @@ Object {
                                   "hidden": false,
                                   "id": "node_k1ow3cbz",
                                   "isLocked": false,
-                                  "loop": undefined,
                                   "props": Object {
                                     "__category__": "form",
                                     "__style__": Object {},
@@ -223,7 +220,6 @@ Object {
                                   "hidden": false,
                                   "id": "node_k1ow3cc1",
                                   "isLocked": false,
-                                  "loop": undefined,
                                   "props": Object {
                                     "__category__": "form",
                                     "__style__": Object {},
@@ -298,7 +294,6 @@ Object {
                                   "hidden": false,
                                   "id": "node_k1ow3cc3",
                                   "isLocked": false,
-                                  "loop": undefined,
                                   "props": Object {
                                     "__category__": "form",
                                     "__style__": Object {},
@@ -373,7 +368,6 @@ Object {
                               "hidden": false,
                               "id": "node_k1ow3cbx",
                               "isLocked": false,
-                              "loop": undefined,
                               "props": Object {
                                 "__style__": Object {},
                                 "colSpan": "",
@@ -390,7 +384,6 @@ Object {
                                   "hidden": false,
                                   "id": "node_k1ow3cc2",
                                   "isLocked": false,
-                                  "loop": undefined,
                                   "props": Object {
                                     "__category__": "form",
                                     "__style__": Object {},
@@ -465,7 +458,6 @@ Object {
                                   "hidden": false,
                                   "id": "node_k1ow3cc0",
                                   "isLocked": false,
-                                  "loop": undefined,
                                   "props": Object {
                                     "__category__": "form",
                                     "__style__": Object {},
@@ -560,7 +552,6 @@ Object {
                               "hidden": false,
                               "id": "node_k1ow3cby",
                               "isLocked": false,
-                              "loop": undefined,
                               "props": Object {
                                 "__style__": Object {},
                                 "colSpan": "",
@@ -575,7 +566,6 @@ Object {
                           "hidden": false,
                           "id": "node_k1ow3cbw",
                           "isLocked": false,
-                          "loop": undefined,
                           "props": Object {
                             "__style__": Object {},
                             "columnGap": "20",
@@ -592,7 +582,6 @@ Object {
                       "hidden": false,
                       "id": "node_k1ow3cbk",
                       "isLocked": false,
-                      "loop": undefined,
                       "props": Object {},
                       "title": "",
                     },
@@ -603,7 +592,6 @@ Object {
                   "hidden": false,
                   "id": "node_k1ow3cbj",
                   "isLocked": false,
-                  "loop": undefined,
                   "props": Object {
                     "__slot__extra": false,
                     "__slot__subTitle": false,
@@ -648,7 +636,6 @@ Object {
                           "hidden": false,
                           "id": "node_k1ow3cc4",
                           "isLocked": false,
-                          "loop": undefined,
                           "props": Object {
                             "__category__": "form",
                             "__style__": Object {},
@@ -727,7 +714,6 @@ Object {
                                   "hidden": false,
                                   "id": "node_k1ow3cc8",
                                   "isLocked": false,
-                                  "loop": undefined,
                                   "props": Object {
                                     "__category__": "form",
                                     "__style__": Object {},
@@ -802,7 +788,6 @@ Object {
                               "hidden": false,
                               "id": "node_k1ow3cc6",
                               "isLocked": false,
-                              "loop": undefined,
                               "props": Object {
                                 "__style__": Object {},
                                 "colSpan": "",
@@ -819,7 +804,6 @@ Object {
                                   "hidden": false,
                                   "id": "node_k1ow3cc9",
                                   "isLocked": false,
-                                  "loop": undefined,
                                   "props": Object {
                                     "__category__": "form",
                                     "__style__": Object {},
@@ -894,7 +878,6 @@ Object {
                               "hidden": false,
                               "id": "node_k1ow3cc7",
                               "isLocked": false,
-                              "loop": undefined,
                               "props": Object {
                                 "__style__": Object {},
                                 "colSpan": "",
@@ -909,7 +892,6 @@ Object {
                           "hidden": false,
                           "id": "node_k1ow3cc5",
                           "isLocked": false,
-                          "loop": undefined,
                           "props": Object {
                             "__style__": Object {},
                             "columnGap": "20",
@@ -926,7 +908,6 @@ Object {
                       "hidden": false,
                       "id": "node_k1ow3cbm",
                       "isLocked": false,
-                      "loop": undefined,
                       "props": Object {},
                       "title": "",
                     },
@@ -937,7 +918,6 @@ Object {
                   "hidden": false,
                   "id": "node_k1ow3cbl",
                   "isLocked": false,
-                  "loop": undefined,
                   "props": Object {
                     "__slot__extra": false,
                     "__slot__subTitle": false,
@@ -980,7 +960,6 @@ Object {
                       "hidden": false,
                       "id": "node_k1ow3cbn",
                       "isLocked": false,
-                      "loop": undefined,
                       "props": Object {
                         "__style__": ":root {
   margin-right: 16px;
@@ -1025,7 +1004,6 @@ Object {
                       "hidden": false,
                       "id": "node_k1ow3cbp",
                       "isLocked": false,
-                      "loop": undefined,
                       "props": Object {
                         "__style__": ":root {
   width: 80px;
@@ -1063,7 +1041,6 @@ Object {
                   "hidden": false,
                   "id": "node_k1ow3cbo",
                   "isLocked": false,
-                  "loop": undefined,
                   "props": Object {
                     "__style__": ":root {
   display: flex;
@@ -1089,7 +1066,6 @@ Object {
               "hidden": false,
               "id": "form",
               "isLocked": false,
-              "loop": undefined,
               "props": Object {
                 "__style__": Object {},
                 "autoUnmount": true,
@@ -1120,7 +1096,6 @@ Object {
           "hidden": false,
           "id": "node_k1ow3cbb",
           "isLocked": false,
-          "loop": undefined,
           "props": Object {
             "contentBgColor": "transparent",
             "contentMargin": "20",
@@ -1135,7 +1110,6 @@ Object {
           "hidden": false,
           "id": "node_k1ow3cbc",
           "isLocked": false,
-          "loop": undefined,
           "props": Object {},
           "title": "",
         },
@@ -1203,7 +1177,6 @@ Object.keys(module.exports).forEach(function(item) {
           "type": "js",
         },
       },
-      "loop": undefined,
       "methods": Object {
         "__initMethods__": Object {
           "compiled": "function (exports, module) { /*set actions code here*/ }",
