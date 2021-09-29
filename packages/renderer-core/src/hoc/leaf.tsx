@@ -27,7 +27,7 @@ export type IComponentHoc = {
 
 export type IComponentConstruct = (Comp: types.IBaseRenderer, info: IComponentHocInfo) => types.Constructor;
 
-const whitelist: string[] = [];
+// const whitelist: string[] = [];
 
 interface IProps {
   _leaf: Node | undefined;
@@ -135,15 +135,19 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
       this.recordInfo.node = node;
     }
 
-    get isInWhitelist() {
-      return whitelist.includes(schema.componentName);
-    }
+    // get isInWhitelist() {
+    //   return whitelist.includes(schema.componentName);
+    // }
 
     componentWillReceiveProps(nextProps: any) {
       const { _leaf, __tag, children, ...rest } = nextProps;
       if (nextProps.__tag === this.state.__tag) {
+        const nextProps = getProps(this.leaf?.export?.(TransformStage.Render) as types.ISchema, Comp, componentInfo);
         this.setState({
-          nodeProps: rest,
+          nodeProps: {
+            ...rest,
+            ...nextProps,
+          },
         });
         return null;
       }
@@ -163,32 +167,6 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
       });
     }
 
-    // static getDerivedStateFromProps(props: any, state: any) {
-    //   if (props.__tag === state.__tag) {
-    //     return null;
-    //   }
-    //   if (props._leaf && this.state.leaf && props._leaf !== this.state.leaf) {
-    //     this.disposeFunctions.forEach(fn => fn());
-    //   }
-
-    //   return {
-    //     nodeChildren: props.children,
-    //     nodeProps: props.nodeProps,
-    //     childrenInState: true,
-    //     __tag: props.__tag,
-    //     _leaf: props._leaf,
-    //   };
-    // }
-
-    shouldComponentUpdate() {
-      if (this.isInWhitelist) {
-        __debug(`${schema.componentName} is in leaf Hoc whitelist`);
-        container.rerender();
-        return false;
-      }
-
-      return true;
-    }
 
     /** 监听参数变化 */
     initOnPropsChangeEvent(leaf = this.leaf): void {
@@ -197,6 +175,11 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
           key,
         } = propChangeInfo;
         const node = leaf;
+
+        // if (this.isInWhitelist) {
+        //   container.rerender();
+        //   return;
+        // }
 
         // 如果循坏条件变化，从根节点重新渲染
         // 目前多层循坏无法判断需要从哪一层开始渲染，故先粗暴解决
@@ -229,6 +212,11 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
           return;
         }
 
+        // if (this.isInWhitelist) {
+        //   container.rerender();
+        //   return;
+        // }
+
         __debug(`${leaf?.componentName} component trigger onVisibleChange event`);
         this.beforeRender(RerenderType.VisibleChanged);
         this.setState({
@@ -248,6 +236,10 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
           type,
           node,
         } = param || {};
+        // if (this.isInWhitelist) {
+        //   container.rerender();
+        //   return;
+        // }
         this.beforeRender(`${RerenderType.ChildChanged}-${type}`, node);
         __debug(`${leaf} component trigger onChildrenChange event`);
         const nextChild = getChildren(leaf?.export?.(TransformStage.Render) as types.ISchema, Comp);
