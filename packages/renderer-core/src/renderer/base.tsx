@@ -62,8 +62,6 @@ export default function baseRenererFactory() {
 
     static contextType = AppContext;
 
-    __hoc_components: any = {};
-
     __namespace = 'base';
 
     _self: any = null;
@@ -481,26 +479,18 @@ export default function baseRenererFactory() {
           props: transformArrayToMap(componentInfo.props, 'name'),
         }) || {};
 
-        if (!this.__hoc_components[schema.componentName]) {
-          this.componentHoc.forEach((ComponentConstruct: IComponentConstruct) => {
-            Comp = ComponentConstruct(Comp, {
-              schema,
-              componentInfo,
-              baseRenderer: this,
-            });
+        this.componentHoc.forEach((ComponentConstruct: IComponentConstruct) => {
+          Comp = ComponentConstruct(Comp, {
+            schema,
+            componentInfo,
+            baseRenderer: this,
           });
-        }
+        });
 
         // 对于可以获取到ref的组件做特殊处理
-        if (!acceptsRef(Comp) && !this.__hoc_components[schema.componentName]) {
+        if (!acceptsRef(Comp)) {
           Comp = compWrapper(Comp);
           components[schema.componentName] = Comp;
-        }
-
-        if (!this.__hoc_components[schema.componentName]) {
-          this.__hoc_components[schema.componentName] = Comp;
-        } else {
-          Comp = this.__hoc_components[schema.componentName];
         }
 
         otherProps.ref = (ref: any) => {
@@ -824,18 +814,13 @@ export default function baseRenererFactory() {
     };
 
     __getHocComp(Comp: any, schema: any) {
-      if (!this.__hoc_components[schema.componentName]) {
-        this.componentHoc.forEach((ComponentConstruct: IComponentConstruct) => {
-          Comp = ComponentConstruct(Comp || Div, {
-            schema,
-            componentInfo: {},
-            baseRenderer: this,
-          });
+      this.componentHoc.forEach((ComponentConstruct: IComponentConstruct) => {
+        Comp = ComponentConstruct(Comp || Div, {
+          schema,
+          componentInfo: {},
+          baseRenderer: this,
         });
-        this.__hoc_components[schema.componentName] = Comp;
-      } else {
-        Comp = this.__hoc_components[schema.componentName];
-      }
+      });
 
       return Comp;
     }

@@ -26,7 +26,6 @@ export type IComponentHoc = {
 };
 
 export type IComponentConstruct = (Comp: types.IBaseRenderer, info: IComponentHocInfo) => types.Constructor;
-
 // const whitelist: string[] = [];
 
 interface IProps {
@@ -48,6 +47,63 @@ enum RerenderType {
   VisibleChanged = 'VisibleChanged',
   LangChanged = 'LangChanged',
   I18nChanged = 'I18nChanged',
+}
+
+// 缓存 Leaf 层组件，防止重新渲染问题
+const leafComponentCache: {
+  [componentName: string]: any;
+} = {};
+// 缓存导致 rerender 的订阅事件
+const rerenderEventCache: {
+  [componentId: string]: any;
+} = {};
+
+/** 部分没有渲染的 node 节点进行兜底处理 or 渲染方式没有渲染 LeafWrapper */
+function makeRerenderEvent({
+  schema,
+  __debug,
+  container,
+  getNode,
+}: any) {
+  const leaf = getNode?.(schema.id);
+  if (!leaf
+    || rerenderEventCache[schema.id]?.clear
+    || leaf === rerenderEventCache[schema.id]?.leaf
+  ) {
+    return;
+  }
+  rerenderEventCache[schema.id]?.dispose.forEach((d: any) => d && d());
+  rerenderEventCache[schema.id] = {
+    clear: false,
+    leaf,
+    dispose: [
+      leaf?.onPropChange?.(() => {
+        __debug(`${schema.componentName}[${schema.id}] leaf not render in SimulatorRendererView, leaf onPropsChange make rerender`);
+        container.rerender();
+      }),
+      leaf?.onChildrenChange?.(() => {
+        __debug(`${schema.componentName}[${schema.id}] leaf not render in SimulatorRendererView, leaf onChildrenChange make rerender`);
+        container.rerender();
+      }) as Function,
+      leaf?.onVisibleChange?.(() => {
+        __debug(`${schema.componentName}[${schema.id}] leaf not render in SimulatorRendererView, leaf onVisibleChange make rerender`);
+        container.rerender();
+      }),
+    ],
+  };
+}
+
+/** 渲染的 node 节点全局注册事件清除 */
+function clearRerenderEvent(id: string): void {
+  if (!rerenderEventCache[id]) {
+    rerenderEventCache[id] = {
+      clear: true,
+    };
+    return;
+  }
+  rerenderEventCache[id].dispose.forEach((d: any) => d && d());
+  rerenderEventCache[id].dispose = [];
+  rerenderEventCache[id].clear = true;
 }
 
 // 给每个组件包裹一个 HOC Leaf，支持组件内部属性变化，自响应渲染
@@ -72,16 +128,15 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
     console.error(`${schema.componentName} component may be has errors: `, Comp);
   }
 
-  /** 部分没有渲染的 node 节点进行兜底处理 or 渲染方式没有渲染 LeafWrapper */
-  let wrapDisposeFunctions: Function[] = [];
-  if (getNode) {
-    const leaf = getNode(schema.id);
+  makeRerenderEvent({
+    schema,
+    __debug,
+    container,
+    getNode,
+  });
 
-    wrapDisposeFunctions = [
-      leaf?.onPropsChange?.(() => container.rerender()),
-      leaf?.onChildrenChange?.(() => container.rerender()),
-      leaf?.onVisibleChange?.(() => container.rerender()),
-    ];
+  if (leafComponentCache[schema.componentName]) {
+    return leafComponentCache[schema.componentName];
   }
 
   class LeafWrapper extends Component {
@@ -93,6 +148,8 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
     static displayName = schema.componentName;
 
     disposeFunctions: ((() => void) | Function)[] = [];
+
+    __component_tag = 'leafWrapper';
 
     recordTime = () => {
       if (!this.recordInfo.startTime) {
@@ -117,10 +174,11 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
     constructor(props: IProps, context: any) {
       super(props, context);
       // 监听以下事件，当变化时更新自己
+      clearRerenderEvent(schema.id);
       this.initOnPropsChangeEvent();
       this.initOnChildrenChangeEvent();
       this.initOnVisibleChangeEvent();
-      wrapDisposeFunctions.forEach(d => d && d());
+      __debug(`${schema.componentName}[${schema.id}] leaf render in SimulatorRendererView`);
       this.state = {
         nodeChildren: null,
         childrenInState: false,
@@ -323,6 +381,8 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
   }
 
   LeafWrapper.displayName = (Comp as any).displayName;
+
+  leafComponentCache[schema.componentName] = LeafWrapper;
 
   return LeafWrapper;
 }
