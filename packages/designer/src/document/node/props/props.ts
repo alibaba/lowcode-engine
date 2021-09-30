@@ -129,12 +129,11 @@ export class Props implements IPropParent {
     } else {
       this.items.forEach(item => {
         let name = item.key as string;
-        if (name == null) {
-          // todo ...spread
-          return;
-        }
+        if (name == null || item.isUnset() || item.isVirtual()) return;
         let value = item.export(stage);
-        allProps[name] = value;
+        if (value != null) {
+          allProps[name] = value;
+        }
       });
       // compatible vision
       const transformedProps = this.transformToStatic(allProps);
