@@ -521,7 +521,7 @@ export default function baseRenererFactory() {
           props.key = props.__id;
         }
 
-        let child: any = this.__getSchemaChildrenVirtualDom(schema, Comp);
+        let child: any = parentInfo.componentChildren || this.__getSchemaChildrenVirtualDom(schema, Comp);
         const renderComp = (props: any) => engine.createElement(Comp, props, child);
         // 设计模式下的特殊处理
         if (engine && [DESIGN_MODE.EXTEND, DESIGN_MODE.BORDER].includes(engine.props.designMode)) {
@@ -580,7 +580,7 @@ export default function baseRenererFactory() {
         .map((d: IComponentHoc) => d.hoc);
     }
 
-    __getSchemaChildrenVirtualDom = (schema: ISchema, Comp: any) => {
+    __getSchemaChildrenVirtualDom = (schema: ISchema, Comp: any, childrenMap?: Map<any, any>) => {
       let _children = this.getSchemaChildren(schema);
 
       let children: any = [];
@@ -596,6 +596,8 @@ export default function baseRenererFactory() {
             {
               schema,
               Comp,
+              // 有 childrenMap 情况下，children 只计算第一层，不需要遍历多层。
+              componentChildren: childrenMap?.get(_child.id)?.props.children || null,
             },
           );
 
@@ -834,9 +836,14 @@ export default function baseRenererFactory() {
         componentInfo: {},
       });
       const { className } = data;
+      const otherProps: any = {};
       const { engine } = this.context || {};
       if (!engine) {
         return null;
+      }
+
+      if (this._designModeIsDesign) {
+        otherProps.__tag = Math.random();
       }
 
       const child = engine.createElement(
@@ -847,6 +854,7 @@ export default function baseRenererFactory() {
           ref: this.__getRef,
           className: classnames(getFileCssName(__schema?.fileName), className, this.props.className),
           __id: __schema?.id,
+          ...otherProps,
         },
         this.__createDom(),
       );
