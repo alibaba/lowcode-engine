@@ -2,32 +2,42 @@
 import '../../../fixtures/window';
 import { set, delayObxTick } from '../../../utils';
 import { Editor } from '@ali/lowcode-editor-core';
-import { Props, getConvertedExtraKey, getOriginalExtraKey, Prop, isProp, isValidArrayIndex } from '../../../../src/document/node/props/props';
+import {
+  Props,
+  getConvertedExtraKey,
+  getOriginalExtraKey,
+  Prop,
+  isProp,
+  isValidArrayIndex,
+} from '../../../../src/document/node/props/props';
 import { Designer } from '../../../../src/designer/designer';
 import { Project } from '../../../../src/project/project';
 import { DocumentModel } from '../../../../src/document/document-model';
 
 import { TransformStage } from '@ali/lowcode-types';
 
-
 const mockedOwner = { componentName: 'Page' };
 
 describe('Props 类测试', () => {
   let props: Props;
   beforeEach(() => {
-    props = new Props(mockedOwner, {
-      a: 1,
-      b: 'str',
-      c: true,
-      d: {
-        type: 'JSExpression',
-        value: 'state.a',
+    props = new Props(
+      mockedOwner,
+      {
+        a: 1,
+        b: 'str',
+        c: true,
+        d: {
+          type: 'JSExpression',
+          value: 'state.a',
+        },
+        z: {
+          z1: 1,
+          z2: 'str',
+        },
       },
-      z: {
-        z1: 1,
-        z2: 'str',
-      },
-    }, { condition: true });
+      { condition: true },
+    );
   });
   afterEach(() => {
     props.purge();
@@ -49,7 +59,6 @@ describe('Props 类测试', () => {
       z2: 'str',
     });
 
-
     expect(props.getPropValue('a')).toBe(1);
     props.setPropValue('a', 2);
     expect(props.getPropValue('a')).toBe(2);
@@ -59,14 +68,15 @@ describe('Props 类测试', () => {
     expect(props.get('z.z1')?.getValue()).toBe(1);
     expect(props.get('z.z2')?.getValue()).toBe('str');
 
-    const fromStashProp = props.get('l', true);
-    const fromStashNestedProp = props.get('m.m1', true);
-    fromStashProp.setValue('fromStashProp');
-    fromStashNestedProp?.setValue('fromStashNestedProp');
+    const notCreatedProp = props.get('i');
+    expect(notCreatedProp).toBeNull();
+    const newlyCreatedProp = props.get('l', true);
+    const newlyCreatedNestedProp = props.get('m.m1', true);
+    newlyCreatedProp.setValue('newlyCreatedProp');
+    newlyCreatedNestedProp?.setValue('newlyCreatedNestedProp');
 
-    await delayObxTick();
-    expect(props.get('l').getValue()).toBe('fromStashProp');
-    expect(props.get('m.m1').getValue()).toBe('fromStashNestedProp');
+    expect(props.get('l').getValue()).toBe('newlyCreatedProp');
+    expect(props.get('m.m1').getValue()).toBe('newlyCreatedNestedProp');
   });
 
   it('export', () => {
@@ -119,11 +129,66 @@ describe('Props 类测试', () => {
     });
   });
 
+  it('export - remove undefined items', () => {
+    props.import(
+      {
+        a: 1,
+      },
+      { loop: false },
+    );
+    props.setPropValue('x', undefined);
+    expect(props.export()).toEqual({
+      props: {
+        a: 1,
+      },
+      extras: {
+        loop: false,
+      },
+    });
+
+    props.setPropValue('x', 2);
+    expect(props.export()).toEqual({
+      props: {
+        a: 1,
+        x: 2,
+      },
+      extras: {
+        loop: false,
+      },
+    });
+
+    props.setPropValue('y.z', undefined);
+    expect(props.export()).toEqual({
+      props: {
+        a: 1,
+        x: 2,
+      },
+      extras: {
+        loop: false,
+      },
+    });
+
+    props.setPropValue('y.z', 2);
+    expect(props.export()).toEqual({
+      props: {
+        a: 1,
+        x: 2,
+        y: { z: 2 },
+      },
+      extras: {
+        loop: false,
+      },
+    });
+  });
+
   it('import', () => {
-    props.import({
-      x: 1,
-      y: true,
-    }, { loop: false });
+    props.import(
+      {
+        x: 1,
+        y: true,
+      },
+      { loop: false },
+    );
     expect(props.export()).toEqual({
       props: {
         x: 1,
@@ -173,19 +238,19 @@ describe('Props 类测试', () => {
     expect(mockedFn).toHaveBeenCalledTimes(6);
     mockedFn.mockClear();
 
-    props.forEach(item => {
+    props.forEach((item) => {
       mockedFn();
     });
     expect(mockedFn).toHaveBeenCalledTimes(6);
     mockedFn.mockClear();
 
-    props.map(item => {
+    props.map((item) => {
       return mockedFn();
     });
     expect(mockedFn).toHaveBeenCalledTimes(6);
     mockedFn.mockClear();
 
-    props.filter(item => {
+    props.filter((item) => {
       return mockedFn();
     });
     expect(mockedFn).toHaveBeenCalledTimes(6);
@@ -228,7 +293,6 @@ describe('Props 类测试', () => {
     });
   });
 });
-
 
 describe('其他函数', () => {
   it('getConvertedExtraKey', () => {

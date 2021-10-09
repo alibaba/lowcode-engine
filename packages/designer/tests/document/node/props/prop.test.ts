@@ -200,9 +200,11 @@ describe('Prop 类测试', () => {
       // 更新 slot
       slotProp.setValue({
         type: 'JSSlot',
-        value: [{
-          componentName: 'Form',
-        }]
+        value: [
+          {
+            componentName: 'Form',
+          },
+        ],
       });
       expect(slotNodeImportMockFn).toBeCalled();
 
@@ -276,19 +278,20 @@ describe('Prop 类测试', () => {
         expect(prop.get('z.z1')?.getValue()).toBe(1);
         expect(prop.get('z.z2')?.getValue()).toBe('str');
 
-        const fromStashProp = prop.get('l');
-        const fromStashNestedProp = prop.get('m.m1');
-        fromStashProp.setValue('fromStashProp');
-        fromStashNestedProp?.setValue('fromStashNestedProp');
+        const newlyCreatedProp = prop.get('l', true);
+        const newlyCreatedNestedProp = prop.get('m.m1', true);
+        newlyCreatedProp.setValue('newlyCreatedProp');
+        newlyCreatedNestedProp?.setValue('newlyCreatedNestedProp');
 
-        await delayObxTick();
-        expect(prop.get('l').getValue()).toBe('fromStashProp');
-        expect(prop.get('m.m1').getValue()).toBe('fromStashNestedProp');
+        expect(prop.get('l').getValue()).toBe('newlyCreatedProp');
+        expect(prop.get('m.m1').getValue()).toBe('newlyCreatedNestedProp');
+
+        const newlyCreatedNestedProp2 = prop.get('m.m2', true);
+        // .m2 的值为 undefined，导出时将会被移除
+        expect(prop.get('m').getValue()).toEqual({ m1: 'newlyCreatedNestedProp' });
       });
 
       it('export', () => {
-        // TODO: 需要访问一下才能触发构造 _items
-        prop.items;
         expect(prop.export()).toEqual({
           a: 1,
           b: 'str',

@@ -23,7 +23,7 @@ export default function blockRendererFactory() {
         return '区块 schema 结构异常！';
       }
 
-      this.__debug(`render - ${__schema.fileName}`);
+      this.__debug(`${BlockRenderer.dislayName} render - ${__schema.fileName}`);
       this.__generateCtx({});
       this.__render();
 

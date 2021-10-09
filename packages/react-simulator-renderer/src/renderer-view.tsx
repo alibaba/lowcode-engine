@@ -154,7 +154,7 @@ class Renderer extends Component<{
 
   render() {
     const { documentInstance, rendererContainer: renderer } = this.props;
-    const { container } = documentInstance;
+    const { container, document } = documentInstance;
     const { designMode, device, locale } = container;
     const messages = container.context?.utils?.i18n?.messages || {};
     this.startTime = Date.now();
@@ -172,6 +172,7 @@ class Renderer extends Component<{
         appHelper={container.context}
         designMode={designMode}
         device={device}
+        documentId={document.id}
         suspended={renderer.suspended}
         self={renderer.scope}
         getNode={(id: string) => documentInstance.getNode(id) as Node}

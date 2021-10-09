@@ -187,7 +187,7 @@ class Renderer extends Component<{
 
   render() {
     const { documentInstance } = this.props;
-    const { container } = documentInstance;
+    const { container, document } = documentInstance;
     const { designMode, device } = container;
     const { rendererContainer: renderer } = this.props;
     this.startTime = Date.now();
@@ -209,6 +209,7 @@ class Renderer extends Component<{
         onCompGetRef={(schema: any, ref: any) => {
           documentInstance.mountInstance(schema.id, ref);
         }}
+        documentId={document.id}
         getNode={(id: string) => documentInstance.getNode(id) as any}
         customCreateElement={(Component: any, props: any, children: any) => {
           const { __id, ...viewProps } = props;

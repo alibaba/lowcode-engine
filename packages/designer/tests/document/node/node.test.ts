@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-nocheck
 import '../../fixtures/window';
 import { set, delayObxTick, delay } from '../../utils';
 import { Editor } from '@ali/lowcode-editor-core';
@@ -23,7 +23,6 @@ import pageMetadata from '../../fixtures/component-metadata/page';
 import rootHeaderMetadata from '../../fixtures/component-metadata/root-header';
 import rootContentMetadata from '../../fixtures/component-metadata/root-content';
 import rootFooterMetadata from '../../fixtures/component-metadata/root-footer';
-
 
 describe('Node 方法测试', () => {
   let editor: Editor;
@@ -185,12 +184,16 @@ describe('Node 方法测试', () => {
 
     it('null', () => {
       expect(
-        doc.rootNode?.getSuitablePlace.call({ contains: () => false, isContainer: () => false, isRoot: () => false }),
+        doc.rootNode?.getSuitablePlace.call({
+          contains: () => false,
+          isContainer: () => false,
+          isRoot: () => false,
+        }),
       ).toBeNull();
     });
   });
 
-  it('removeChild / replaceWith / replaceChild / onChildrenChange / mergeChildren', () => {
+  it('removeChild / replaceWith / replaceChild', () => {
     const firstBtn = doc.getNode('node_k1ow3cbn')!;
 
     firstBtn.select();
@@ -254,7 +257,7 @@ describe('Node 方法测试', () => {
     });
   });
 
-  it('setVisible / getVisible / onVisibleChange', async () => {
+  it('setVisible / getVisible / onVisibleChange', () => {
     const mockFn = jest.fn();
     const firstBtn = doc.getNode('node_k1ow3cbn')!;
     const off = firstBtn.onVisibleChange(mockFn);
@@ -265,7 +268,6 @@ describe('Node 方法测试', () => {
 
     firstBtn.setVisible(false);
 
-    await delayObxTick();
     expect(firstBtn.getVisible()).toBeFalsy();
     expect(mockFn).toHaveBeenCalledTimes(2);
     expect(mockFn).toHaveBeenCalledWith(false);
@@ -273,7 +275,22 @@ describe('Node 方法测试', () => {
     off();
     mockFn.mockClear();
     firstBtn.setVisible(true);
-    await delayObxTick();
+    expect(mockFn).not.toHaveBeenCalled();
+  });
+
+  it('onPropChange', () => {
+    const mockFn = jest.fn();
+    const firstBtn = doc.getNode('node_k1ow3cbn')!;
+    const off = firstBtn.onPropChange(mockFn);
+
+    firstBtn.setPropValue('x', 1);
+    expect(mockFn).toHaveBeenCalledTimes(1);
+    firstBtn.setPropValue('x', 2);
+    expect(mockFn).toHaveBeenCalledTimes(2);
+
+    off();
+    mockFn.mockClear();
+    firstBtn.setPropValue('x', 3);
     expect(mockFn).not.toHaveBeenCalled();
   });
 
@@ -292,7 +309,9 @@ describe('Node 方法测试', () => {
 
     const pageMeta = designer.getComponentMeta('Page');
     const autorunMockFn = jest.fn();
-    set(pageMeta, '_transformedMetadata.experimental.autoruns', [{ name: 'a', autorun: autorunMockFn }]);
+    set(pageMeta, '_transformedMetadata.experimental.autoruns', [
+      { name: 'a', autorun: autorunMockFn },
+    ]);
     const initialChildrenMockFn = jest.fn();
     set(pageMeta, '_transformedMetadata.experimental.initialChildren', initialChildrenMockFn);
     doc.createNode({ componentName: 'Page', props: { a: 1 } });

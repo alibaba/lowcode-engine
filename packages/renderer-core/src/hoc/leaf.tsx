@@ -50,16 +50,30 @@ enum RerenderType {
 }
 
 // 缓存 Leaf 层组件，防止重新渲染问题
-const leafComponentCache: {
+let leafComponentCaches: {
   [componentName: string]: any;
 } = {};
+
+let cacheDocumentId: any;
+
+function clearCaches(curDocumentId: any, {
+  __debug,
+}: any) {
+  if (cacheDocumentId === curDocumentId) {
+    return;
+  }
+  __debug(`DocumentId changed to ${curDocumentId}, clear caches!`);
+  cacheDocumentId = curDocumentId;
+  leafComponentCaches = {};
+}
+
 // 缓存导致 rerender 的订阅事件
 const rerenderEventCache: {
   [componentId: string]: any;
 } = {};
 
 /** 部分没有渲染的 node 节点进行兜底处理 or 渲染方式没有渲染 LeafWrapper */
-function makeRerenderEvent({
+function initRerenderEvent({
   schema,
   __debug,
   container,
@@ -98,6 +112,7 @@ function clearRerenderEvent(id: string): void {
   if (!rerenderEventCache[id]) {
     rerenderEventCache[id] = {
       clear: true,
+      dispose: [],
     };
     return;
   }
@@ -119,27 +134,34 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
   } = baseRenderer;
   const engine = baseRenderer.context.engine;
   const host: BuiltinSimulatorHost = baseRenderer.props.__host;
+  const curDocumentId = baseRenderer.props?.documentId;
   const getNode = baseRenderer.props?.getNode;
   const container: BuiltinSimulatorHost = baseRenderer.props.__container;
   const editor = host?.designer?.editor;
-  const { Component } = adapter.getRuntime();
+  const { Component, forwardRef } = adapter.getRuntime();
+
+  if (curDocumentId !== cacheDocumentId) {
+    clearCaches(curDocumentId, {
+      __debug,
+    });
+  }
 
   if (!isReactComponent(Comp)) {
     console.error(`${schema.componentName} component may be has errors: `, Comp);
   }
 
-  makeRerenderEvent({
+  initRerenderEvent({
     schema,
     __debug,
     container,
     getNode,
   });
 
-  if (leafComponentCache[schema.componentName]) {
-    return leafComponentCache[schema.componentName];
+  if (leafComponentCaches[schema.componentName]) {
+    return leafComponentCaches[schema.componentName];
   }
 
-  class LeafWrapper extends Component {
+  class LeafHoc extends Component {
     recordInfo: {
       startTime?: number | null;
       type?: string;
@@ -156,7 +178,7 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
         return;
       }
       const endTime = Date.now();
-      const nodeCount = host.designer.currentDocument?.getNodeCount?.();
+      const nodeCount = host?.designer?.currentDocument?.getNodeCount?.();
       const componentName = this.recordInfo.node?.componentName || this.leaf?.componentName || 'UnknownComponent';
       editor?.emit(GlobalEvent.Node.Rerender, {
         componentName,
@@ -171,18 +193,39 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
       this.recordTime();
     }
 
+    componentDidMount() {
+      this.recordTime();
+    }
+
+    get childrenMap(): any {
+      const map = new Map();
+
+      if (!this.hasChildren) {
+        return map;
+      }
+
+      this.children.forEach((d: any) => {
+        if (Array.isArray(d)) {
+          map.set(d[0].props.componentId, d);
+          return;
+        }
+        map.set(d.props.componentId, d);
+      });
+
+      return map;
+    }
+
     constructor(props: IProps, context: any) {
       super(props, context);
       // 监听以下事件，当变化时更新自己
-      clearRerenderEvent(schema.id);
+      __debug(`${schema.componentName}[${this.props.componentId}] leaf render in SimulatorRendererView`);
+      clearRerenderEvent(this.props.componentId);
       this.initOnPropsChangeEvent();
       this.initOnChildrenChangeEvent();
       this.initOnVisibleChangeEvent();
-      __debug(`${schema.componentName}[${schema.id}] leaf render in SimulatorRendererView`);
       this.state = {
         nodeChildren: null,
         childrenInState: false,
-        __tag: props.__tag,
       };
     }
 
@@ -198,17 +241,11 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
     // }
 
     componentWillReceiveProps(nextProps: any) {
-      const { _leaf, __tag, children, ...rest } = nextProps;
-      if (nextProps.__tag === this.state.__tag) {
-        const nextProps = getProps(this.leaf?.export?.(TransformStage.Render) as types.ISchema, Comp, componentInfo);
-        this.setState({
-          nodeProps: {
-            ...rest,
-            ...nextProps,
-          },
-        });
+      const { _leaf } = nextProps;
+      if (nextProps.__tag === this.props.__tag) {
         return null;
       }
+
       if (_leaf && this.leaf && _leaf !== this.leaf) {
         this.disposeFunctions.forEach(fn => fn());
         this.disposeFunctions = [];
@@ -218,10 +255,9 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
       }
 
       this.setState({
-        nodeChildren: children,
-        nodeProps: rest,
-        childrenInState: true,
-        __tag,
+        nodeChildren: null,
+        nodeProps: {},
+        childrenInState: false,
       });
     }
 
@@ -300,7 +336,7 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
         // }
         this.beforeRender(`${RerenderType.ChildChanged}-${type}`, node);
         __debug(`${leaf} component trigger onChildrenChange event`);
-        const nextChild = getChildren(leaf?.export?.(TransformStage.Render) as types.ISchema, Comp);
+        const nextChild = getChildren(leaf?.export?.(TransformStage.Render) as types.ISchema, Comp, this.childrenMap);
         this.setState({
           nodeChildren: nextChild,
           childrenInState: true,
@@ -359,16 +395,27 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
         return null;
       }
 
+      const {
+        ref,
+        ...rest
+      } = this.props;
+
       const compProps = {
-        ...this.props,
+        ...rest,
         ...(this.state.nodeProps || {}),
         children: [],
         __id: this.props.componentId,
+        ref: this.props.forwardedRef,
       };
 
       return engine.createElement(Comp, compProps, this.hasChildren ? this.children : null);
     }
   }
+
+  const LeafWrapper = forwardRef((props: any, ref: any) => (
+    // @ts-ignore
+    <LeafHoc {...props} forwardedRef={ref} />
+  ));
 
   if (typeof Comp === 'object') {
     const compExtraPropertyNames = Object.getOwnPropertyNames(Comp).filter(d => !compDefaultPropertyNames.includes(d));
@@ -382,7 +429,7 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
 
   LeafWrapper.displayName = (Comp as any).displayName;
 
-  leafComponentCache[schema.componentName] = LeafWrapper;
+  leafComponentCaches[schema.componentName] = LeafWrapper;
 
   return LeafWrapper;
 }

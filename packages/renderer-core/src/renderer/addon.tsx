@@ -77,7 +77,7 @@ export default function addonRendererFactory() {
         return '插件 schema 结构异常！';
       }
 
-      this.__debug(`render - ${__schema.fileName}`);
+      this.__debug(`${AddonRenderer.dislayName} render - ${__schema.fileName}`);
       this.__generateCtx({
         component: this,
       });
