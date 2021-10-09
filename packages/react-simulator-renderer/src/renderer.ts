@@ -16,9 +16,8 @@ import {
   isPlainObject,
   AssetLoader,
   getProjectUtils,
-  applyActivities,
 } from '@ali/lowcode-utils';
-import { RootSchema, ComponentSchema, TransformStage, NodeSchema, ActivityType, ActivityData } from '@ali/lowcode-types';
+import { ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
 // just use types
 import { BuiltinSimulatorRenderer, NodeInstance, Component, DocumentModel, Node } from '@ali/lowcode-designer';
 import LowCodeRenderer from '@ali/lowcode-react-renderer';
@@ -28,8 +27,6 @@ import Leaf from './builtin-components/leaf';
 import { withQueryParams, parseQuery } from './utils/url';
 
 const loader = new AssetLoader();
-const DELAY_THRESHOLD = 10;
-const FULL_RENDER_THRESHOLD = 500;
 configure({ enforceActions: 'never' });
 
 export class DocumentInstance {
@@ -447,16 +444,11 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
 
     class LowCodeComp extends React.Component<any, any> {
       render() {
-        const newSchema = host.designer.transformProps(_schema as any, {
-          componentMeta: {
-            prototype: 'lowcodeComp',
-          },
-          isRoot: () => false,
-        } as Node, TransformStage.Render);
         const extraProps = getLowCodeComponentProps(this.props);
         return createElement(LowCodeRenderer, {
           ...extraProps, // 防止覆盖下面内置属性
-          schema: newSchema,
+          // 使用 _schema 为了使低代码组件在页面设计中使用变量，同 react 组件使用效果一致
+          schema: _schema,
           components: renderer.components,
           designMode: renderer.designMode,
           device: renderer.device,
