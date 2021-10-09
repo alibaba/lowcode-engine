@@ -158,7 +158,7 @@ plugins.register((ctx: ILowCodePluginContext) => {
         type: 'PanelDock',
         content: Outline,
         panelProps: {
-          area: 'leftFixedArea',
+          area: 'leftFloatArea',
         },
       });
       skeleton.add({
