@@ -284,7 +284,7 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
         }
 
         this.beforeRender(RerenderType.PropsChanged);
-        __debug(`${leaf?.componentName} component trigger onPropsChange event`);
+        __debug(`${leaf?.componentName}[${this.props.componentId}] component trigger onPropsChange event`);
         const nextProps = getProps(node?.export?.(TransformStage.Render) as types.ISchema, Comp, componentInfo);
         this.setState(nextProps.children ? {
           nodeChildren: nextProps.children,
@@ -311,7 +311,7 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
         //   return;
         // }
 
-        __debug(`${leaf?.componentName} component trigger onVisibleChange event`);
+        __debug(`${leaf?.componentName}[${this.props.componentId}] component trigger onVisibleChange event`);
         this.beforeRender(RerenderType.VisibleChanged);
         this.setState({
           visible: flag,
@@ -335,8 +335,11 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
         //   return;
         // }
         this.beforeRender(`${RerenderType.ChildChanged}-${type}`, node);
-        __debug(`${leaf} component trigger onChildrenChange event`);
-        const nextChild = getChildren(leaf?.export?.(TransformStage.Render) as types.ISchema, Comp, this.childrenMap);
+        __debug(`${schema.componentName}[${this.props.componentId}] component trigger onChildrenChange event`);
+        // TODO: 缓存同级其他元素的 children。
+        // 缓存二级 children Next 查询筛选组件有问题
+        // 缓存一级 children Next Tab 组件有问题
+        const nextChild = getChildren(leaf?.export?.(TransformStage.Render) as types.ISchema, Comp); // this.childrenMap
         this.setState({
           nodeChildren: nextChild,
           childrenInState: true,
