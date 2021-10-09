@@ -63,6 +63,7 @@ export interface IInfo {
   schema: ISchema;
   Comp: any;
   componentInfo?: any;
+  componentChildren?: any
 }
 
 export interface JSExpression {

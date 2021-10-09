@@ -23,7 +23,7 @@ export default function componentRendererFactory() {
       if (this.__checkSchema(__schema)) {
         return '自定义组件 schema 结构异常！';
       }
-      this.__debug(`render - ${__schema.fileName}`);
+      this.__debug(`${CompRenderer.dislayName} render - ${__schema.fileName}`);
 
       this.__generateCtx({
         component: this,

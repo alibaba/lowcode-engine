@@ -198,7 +198,7 @@ export class DocumentModel {
    * 根据 id 获取节点
    */
   getNodeCount(): number {
-    return this._nodesMap.size;
+    return this._nodesMap?.size;
   }
 
   /**
