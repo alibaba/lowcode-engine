@@ -148,6 +148,20 @@ export default function baseRenererFactory() {
         });
     });
 
+    shouldComponentUpdate() {
+      if (this.props.getSchemaChangedSymbol?.() && this.props.__container?.rerender) {
+        this.props.__container?.rerender();
+        return false;
+      }
+      return true;
+    }
+
+    forceUpdate() {
+      if (this.shouldComponentUpdate()) {
+        super.forceUpdate();
+      }
+    }
+
     __setLifeCycleMethods = (method: string, args?: any) => {
       const lifeCycleMethods = getValue(this.props.__schema, 'lifeCycles', {});
       let fn = lifeCycleMethods[method];

@@ -45,32 +45,27 @@ enum RerenderType {
   ChildChanged = 'ChildChanged',
   PropsChanged = 'PropsChanged',
   VisibleChanged = 'VisibleChanged',
-  LangChanged = 'LangChanged',
-  I18nChanged = 'I18nChanged',
 }
 
 // 缓存 Leaf 层组件，防止重新渲染问题
-let leafComponentCaches: {
-  [componentName: string]: any;
-} = {};
-
-let cacheDocumentId: any;
-
-function clearCaches(curDocumentId: any, {
-  __debug,
-}: any) {
-  if (cacheDocumentId === curDocumentId) {
-    return;
+class LeafCache {
+  constructor(public documentId: string) {
   }
-  __debug(`DocumentId changed to ${curDocumentId}, clear caches!`);
-  cacheDocumentId = curDocumentId;
-  leafComponentCaches = {};
+  /** 组件缓存 */
+  component = new Map();
+
+  /**
+   * 状态缓存，场景：属性变化后，改组件被销毁，state 为空，没有展示修改后的属性
+   */
+  state = new Map();
+
+  /**
+   * 订阅事件缓存，导致 rerender 的订阅事件
+   */
+  event = new Map();
 }
 
-// 缓存导致 rerender 的订阅事件
-const rerenderEventCache: {
-  [componentId: string]: any;
-} = {};
+let cache: LeafCache;
 
 /** 部分没有渲染的 node 节点进行兜底处理 or 渲染方式没有渲染 LeafWrapper */
 function initRerenderEvent({
@@ -81,13 +76,13 @@ function initRerenderEvent({
 }: any) {
   const leaf = getNode?.(schema.id);
   if (!leaf
-    || rerenderEventCache[schema.id]?.clear
-    || leaf === rerenderEventCache[schema.id]?.leaf
+    || cache.event.get(schema.id)?.clear
+    || leaf === cache.event.get(schema.id)
   ) {
     return;
   }
-  rerenderEventCache[schema.id]?.dispose.forEach((d: any) => d && d());
-  rerenderEventCache[schema.id] = {
+  cache.event.get(schema.id)?.dispose.forEach((d: any) => d && d());
+  cache.event.set(schema.id, {
     clear: false,
     leaf,
     dispose: [
@@ -104,21 +99,19 @@ function initRerenderEvent({
         container.rerender();
       }),
     ],
-  };
+  });
 }
 
 /** 渲染的 node 节点全局注册事件清除 */
 function clearRerenderEvent(id: string): void {
-  if (!rerenderEventCache[id]) {
-    rerenderEventCache[id] = {
-      clear: true,
-      dispose: [],
-    };
+  if (cache.event.get(id)?.clear) {
     return;
   }
-  rerenderEventCache[id].dispose.forEach((d: any) => d && d());
-  rerenderEventCache[id].dispose = [];
-  rerenderEventCache[id].clear = true;
+  cache.event.get(id)?.dispose?.forEach((d: any) => d && d());
+  cache.event.set(id, {
+    clear: true,
+    dispose: [],
+  });
 }
 
 // 给每个组件包裹一个 HOC Leaf，支持组件内部属性变化，自响应渲染
@@ -137,13 +130,12 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
   const curDocumentId = baseRenderer.props?.documentId;
   const getNode = baseRenderer.props?.getNode;
   const container: BuiltinSimulatorHost = baseRenderer.props.__container;
+  const setSchemaChangedSymbol = baseRenderer.props?.setSchemaChangedSymbol;
   const editor = host?.designer?.editor;
   const { Component, forwardRef } = adapter.getRuntime();
 
-  if (curDocumentId !== cacheDocumentId) {
-    clearCaches(curDocumentId, {
-      __debug,
-    });
+  if (!cache || curDocumentId !== cache.documentId) {
+    cache = new LeafCache(curDocumentId);
   }
 
   if (!isReactComponent(Comp)) {
@@ -157,8 +149,8 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
     getNode,
   });
 
-  if (leafComponentCaches[schema.componentName]) {
-    return leafComponentCaches[schema.componentName];
+  if (cache.component.has(schema.componentName)) {
+    return cache.component.get(schema.componentName);
   }
 
   class LeafHoc extends Component {
@@ -215,18 +207,45 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
       return map;
     }
 
+    get defaultState() {
+      const {
+        hidden = false,
+      } = this.leaf?.schema || {};
+      return {
+        nodeChildren: null,
+        childrenInState: false,
+        visible: !hidden,
+      };
+    }
+
     constructor(props: IProps, context: any) {
       super(props, context);
       // 监听以下事件，当变化时更新自己
       __debug(`${schema.componentName}[${this.props.componentId}] leaf render in SimulatorRendererView`);
       clearRerenderEvent(this.props.componentId);
-      this.initOnPropsChangeEvent();
-      this.initOnChildrenChangeEvent();
-      this.initOnVisibleChangeEvent();
-      this.state = {
-        nodeChildren: null,
-        childrenInState: false,
-      };
+      const _leaf = this.leaf;
+      this.initOnPropsChangeEvent(_leaf);
+      this.initOnChildrenChangeEvent(_leaf);
+      this.initOnVisibleChangeEvent(_leaf);
+      this.curEventLeaf = _leaf;
+
+      let cacheState = cache.state.get(props.componentId);
+      if (!cacheState || cacheState.__tag !== props.__tag) {
+        cacheState = this.defaultState;
+      }
+
+      this.state = cacheState;
+    }
+
+    private curEventLeaf;
+
+    setState(state: any) {
+      cache.state.set(this.props.componentId, {
+        ...this.state,
+        ...state,
+        __tag: this.props.__tag,
+      });
+      super.setState(state);
     }
 
     /** 由于内部属性变化，在触发渲染前，会执行该函数 */
@@ -234,6 +253,7 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
       this.recordInfo.startTime = Date.now();
       this.recordInfo.type = type;
       this.recordInfo.node = node;
+      setSchemaChangedSymbol?.(true);
     }
 
     // get isInWhitelist() {
@@ -241,17 +261,19 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
     // }
 
     componentWillReceiveProps(nextProps: any) {
-      const { _leaf } = nextProps;
+      let { _leaf, componentId } = nextProps;
       if (nextProps.__tag === this.props.__tag) {
         return null;
       }
 
-      if (_leaf && this.leaf && _leaf !== this.leaf) {
+      _leaf = _leaf || getNode(componentId);
+      if (_leaf && this.curEventLeaf && _leaf !== this.curEventLeaf) {
         this.disposeFunctions.forEach(fn => fn());
         this.disposeFunctions = [];
         this.initOnChildrenChangeEvent(_leaf);
         this.initOnPropsChangeEvent(_leaf);
         this.initOnVisibleChangeEvent(_leaf);
+        this.curEventLeaf = _leaf;
       }
 
       this.setState({
@@ -260,7 +282,6 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
         childrenInState: false,
       });
     }
-
 
     /** 监听参数变化 */
     initOnPropsChangeEvent(leaf = this.leaf): void {
@@ -383,18 +404,8 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
       return this.props._leaf || getNode(this.props.componentId);
     }
 
-    get visible(): boolean {
-      if (typeof this.state.visible === 'boolean') {
-        return this.state.visible;
-      }
-      if (typeof this.leaf?.schema?.hidden === 'boolean') {
-        return !this.leaf?.schema?.hidden;
-      }
-      return true;
-    }
-
     render() {
-      if (!this.visible) {
+      if (!this.state.visible) {
         return null;
       }
 
@@ -432,7 +443,7 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
 
   LeafWrapper.displayName = (Comp as any).displayName;
 
-  leafComponentCaches[schema.componentName] = LeafWrapper;
+  cache.component.set(schema.componentName, LeafWrapper);
 
   return LeafWrapper;
 }

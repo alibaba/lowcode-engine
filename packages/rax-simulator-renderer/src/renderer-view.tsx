@@ -185,12 +185,23 @@ class Renderer extends Component<{
     }
   }
 
+  schemaChangedSymbol = false;
+
+  getSchemaChangedSymbol = () => {
+    return this.schemaChangedSymbol;
+  };
+
+  setSchemaChangedSymbol = (symbol: boolean) => {
+    this.schemaChangedSymbol = symbol;
+  };
+
   render() {
     const { documentInstance } = this.props;
     const { container, document } = documentInstance;
     const { designMode, device } = container;
     const { rendererContainer: renderer } = this.props;
     this.startTime = Date.now();
+    this.schemaChangedSymbol = false;
 
     return (
       // @ts-ignore
