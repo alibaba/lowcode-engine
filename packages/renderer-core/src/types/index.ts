@@ -17,6 +17,7 @@ export interface IProps {
   onCompGetRef?: (schema: ISchema, ref: any) => void;
   onCompGetCtx?: (schema: ISchema, ref: any) => void;
   customCreateElement?: (...args: any) => any;
+  rendererName: string;
   notFoundComponent?: any;
   faultComponent?: any;
 }
