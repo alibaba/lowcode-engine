@@ -197,6 +197,7 @@ export class TitledPanelView extends Component<{ panel: Panel; area?: string }> 
           hidden: !panel.visible,
         })}
         id={panelName}
+        data-keep-visible-while-dragging={panel.config.props?.keepVisibleWhileDragging}
       >
         <PanelOperationRow panel={panel} />
         <PanelTitle panel={panel} />
@@ -258,6 +259,7 @@ export class PanelView extends Component<{
           hidden: !panel.visible,
         })}
         id={panelName}
+        data-keep-visible-while-dragging={panel.config.props?.keepVisibleWhileDragging}
       >
         {!hideOperationRow && <PanelOperationRow panel={panel} />}
         {panel.body}

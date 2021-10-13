@@ -543,7 +543,7 @@ export class Dragon {
     /* istanbul ignore next */
     const chooseSensor = (e: LocateEvent) => {
       // this.sensors will change on dragstart
-      const sensors: ISensor[] = (masterSensors as ISensor[]).concat(this.sensors);
+      const sensors: ISensor[] = this.sensors.concat(masterSensors as ISensor[]);
       let sensor =
         e.sensor && e.sensor.isEnter(e)
           ? e.sensor

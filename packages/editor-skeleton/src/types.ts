@@ -104,6 +104,7 @@ export interface PanelProps {
   onDestroy?: () => any;
   shortcut?: string; // 只有在特定位置，可触发 toggle show
   enableDrag?: boolean; // 是否开启通过 drag 调整 宽度
+  keepVisibleWhileDragging?: boolean; // 是否在该 panel 范围内拖拽时保持 visible 状态
 }
 
 export interface PanelDockConfig extends IDockBaseConfig {

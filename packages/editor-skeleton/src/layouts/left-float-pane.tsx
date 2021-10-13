@@ -14,11 +14,18 @@ export default class LeftFloatPane extends Component<{ area: Area<any, Panel> }>
 
   componentDidMount() {
     const { area } = this.props;
-    const triggerClose = () => area.setVisible(false);
-    area.skeleton.editor.on('designer.dragstart', triggerClose);
+    const triggerClose = (e: any) => {
+      if (!area.visible) return;
+      // 假如当前操作 target 祖先节点中有属性 data-keep-visible-while-dragging="true" 代表该 target 所属 panel
+      // 不希望 target 在 panel 范围内拖拽时关闭 panel
+      const panelElem = e.originalEvent?.target.closest('div[data-keep-visible-while-dragging="true"]');
+      if (panelElem) return;
+      area.setVisible(false);
+    };
+    area.skeleton.editor.on('designer.drag', triggerClose);
 
     this.dispose = () => {
-      area.skeleton.editor.removeListener('designer.dragstart', triggerClose);
+      area.skeleton.editor.removeListener('designer.drag', triggerClose);
     };
 
     this.focusing = focusTracker.create({

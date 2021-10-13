@@ -159,6 +159,7 @@ plugins.register((ctx: ILowCodePluginContext) => {
         content: Outline,
         panelProps: {
           area: 'leftFloatArea',
+          keepVisibleWhileDragging: true,
         },
       });
       skeleton.add({

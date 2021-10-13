@@ -143,26 +143,26 @@ export class Designer {
               parent?.componentMeta?.componentName ||
               '';
             // eslint-disable-next-line no-unused-expressions
-            this.postEvent('drag', {
-              time: (endTime - startTime).toFixed(2),
-              selected: nodes
-                ?.map((n) => {
-                  if (!n) {
-                    return;
-                  }
-                  // eslint-disable-next-line no-shadow
-                  const npm = n?.componentMeta?.npm;
-                  return (
-                    [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
-                    n?.componentMeta?.componentName
-                  );
-                })
-                .join('&'),
-              align: loc?.detail?.near?.align || '',
-              pos: loc?.detail?.near?.pos || '',
-              src,
-              dest,
-            });
+            // this.postEvent('drag', {
+            //   time: (endTime - startTime).toFixed(2),
+            //   selected: nodes
+            //     ?.map((n) => {
+            //       if (!n) {
+            //         return;
+            //       }
+            //       // eslint-disable-next-line no-shadow
+            //       const npm = n?.componentMeta?.npm;
+            //       return (
+            //         [npm?.package, npm?.componentName].filter((item) => !!item).join('-') ||
+            //         n?.componentMeta?.componentName
+            //       );
+            //     })
+            //     .join('&'),
+            //   align: loc?.detail?.near?.align || '',
+            //   pos: loc?.detail?.near?.pos || '',
+            //   src,
+            //   dest,
+            // });
           }
         }
       }
