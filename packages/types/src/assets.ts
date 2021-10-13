@@ -5,8 +5,11 @@ import { Snippet, ComponentMetadata } from './metadata';
 export interface Package { // 应该被编辑器默认加载，定义组件大包及external资源的信息
   package: string; // 包名
   version: string; // 包版本号
-  urls?: string[] | null; // 组件打包后的CDN列表，包含js和css
+  urls?: string[] | any; // 组件渲染态视图打包后的 CDN url 列表，包含 js 和 css
+  editUrls?: string[] | any; // 组件编辑态视图打包后的 CDN url 列表，包含 js 和 css
   library: string; // 作为全局变量引用时的名称，和webpack output.library字段含义一样，用来定义全局变量名
+  async?: boolean,
+  exportName?: string;
 }
 
 export interface ComponentCategory { // 组件分类
