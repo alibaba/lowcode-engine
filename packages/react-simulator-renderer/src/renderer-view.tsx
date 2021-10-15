@@ -152,12 +152,23 @@ class Renderer extends Component<{
     this.recordTime();
   }
 
+  schemaChangedSymbol = false;
+
+  getSchemaChangedSymbol = () => {
+    return this.schemaChangedSymbol;
+  };
+
+  setSchemaChangedSymbol = (symbol: boolean) => {
+    this.schemaChangedSymbol = symbol;
+  };
+
   render() {
     const { documentInstance, rendererContainer: renderer } = this.props;
     const { container, document } = documentInstance;
     const { designMode, device, locale } = container;
     const messages = container.context?.utils?.i18n?.messages || {};
     this.startTime = Date.now();
+    this.schemaChangedSymbol = false;
 
     if (!container.autoRender) return null;
     return (
@@ -175,6 +186,8 @@ class Renderer extends Component<{
         documentId={document.id}
         suspended={renderer.suspended}
         self={renderer.scope}
+        getSchemaChangedSymbol={this.getSchemaChangedSymbol}
+        setSchemaChangedSymbol={this.setSchemaChangedSymbol}
         getNode={(id: string) => documentInstance.getNode(id) as Node}
         rendererName="PageRenderer"
         customCreateElement={(Component: any, props: any, children: any) => {

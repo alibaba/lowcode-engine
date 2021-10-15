@@ -16,6 +16,10 @@ export interface IProps {
   suspended?: boolean;
   onCompGetRef?: (schema: ISchema, ref: any) => void;
   onCompGetCtx?: (schema: ISchema, ref: any) => void;
+  /** 传入的 schema 是否有变更 */
+  getSchemaChangedSymbol: () => boolean;
+  /** 设置 schema 是否有变更 */
+  setSchemaChangedSymbol: (symbol: boolean) => void;
   customCreateElement?: (...args: any) => any;
   rendererName: string;
   notFoundComponent?: any;
