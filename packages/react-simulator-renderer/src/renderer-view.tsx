@@ -176,6 +176,7 @@ class Renderer extends Component<{
         suspended={renderer.suspended}
         self={renderer.scope}
         getNode={(id: string) => documentInstance.getNode(id) as Node}
+        rendererName="PageRenderer"
         customCreateElement={(Component: any, props: any, children: any) => {
           const { __id, ...viewProps } = props;
           viewProps.componentId = __id;

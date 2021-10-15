@@ -211,6 +211,7 @@ class Renderer extends Component<{
         }}
         documentId={document.id}
         getNode={(id: string) => documentInstance.getNode(id) as any}
+        rendererName="PageRenderer"
         customCreateElement={(Component: any, props: any, children: any) => {
           const { __id, ...viewProps } = props;
           viewProps.componentId = __id;
