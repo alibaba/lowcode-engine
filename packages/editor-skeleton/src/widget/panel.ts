@@ -154,6 +154,15 @@ export default class Panel implements IWidget {
   getContent() {
     return this.content;
   }
+  /**
+   * check is current panel is in float area or not
+   *
+   * @returns {boolean}
+   * @memberof Panel
+   */
+  isInFloatArea(): boolean {
+    return this.parent?.name === 'leftFloatArea';
+  }
 
   setActive(flag: boolean) {
     if (flag === this._actived) {
@@ -161,9 +170,9 @@ export default class Panel implements IWidget {
       return;
     }
     if (flag) {
-      if (this.parent.name === 'leftFloatArea') {
+      if (this.isInFloatArea()) {
         this.skeleton.leftFixedArea.container.unactiveAll();
-      } else if (this.parent.name === 'leftFixedArea') {
+      } else {
         this.skeleton.leftFloatArea.container.unactiveAll();
       }
       this._actived = true;

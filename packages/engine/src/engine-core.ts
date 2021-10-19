@@ -152,13 +152,21 @@ plugins.register((ctx: ILowCodePluginContext) => {
           },
         });
       }
+
+      // by default in float area;
+      let isInFloatArea = true;
+      const hasPreferenceForOutline = editor?.getPreference()?.contains('outline-pane-pinned-status-isFloat', 'skeleton');
+      if (hasPreferenceForOutline) {
+        isInFloatArea = editor?.getPreference()?.get('outline-pane-pinned-status-isFloat', 'skeleton');
+      }
+
       skeleton.add({
         area: 'leftArea',
         name: 'outlinePane',
         type: 'PanelDock',
         content: Outline,
         panelProps: {
-          area: 'leftFloatArea',
+          area: isInFloatArea ? 'leftFloatArea' : 'leftFixedArea',
           keepVisibleWhileDragging: true,
         },
       });

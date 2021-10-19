@@ -1,4 +1,4 @@
-import { Editor } from '@ali/lowcode-editor-core';
+import { Editor, action, makeObservable } from '@ali/lowcode-editor-core';
 import {
   DockConfig,
   PanelConfig,
@@ -59,6 +59,7 @@ export class Skeleton {
   readonly stages: Area<StageConfig, Stage>;
 
   constructor(readonly editor: Editor) {
+    makeObservable(this);
     this.leftArea = new Area(
       this,
       'leftArea',
@@ -157,6 +158,47 @@ export class Skeleton {
     });
 
     this.setupPlugins();
+    this.setupEvents();
+  }
+  /**
+   * setup events
+   *
+   * @memberof Skeleton
+   */
+  setupEvents() {
+    // adjust pinned status when panel shown
+    this.editor.on('skeleton.panel.show', (panelName, panel) => {
+      const panelNameKey = `${panelName}-pinned-status-isFloat`;
+      const isInFloatAreaPreferenceExists = this.editor?.getPreference()?.contains(panelNameKey, 'skeleton');
+      if (isInFloatAreaPreferenceExists) {
+        const isInFloatAreaFromPreference = this.editor?.getPreference()?.get(panelNameKey, 'skeleton');
+        const currentIsInFloatArea = panel?.isInFloatArea();
+        if (isInFloatAreaFromPreference !== currentIsInFloatArea) {
+          this.toggleFloatStatus(panel);
+        }
+      }
+    });
+  }
+
+  /**
+   * set isFloat status for panel
+   *
+   * @param {*} panel
+   * @memberof Skeleton
+   */
+  @action
+  toggleFloatStatus(panel: Panel) {
+    const isFloat = panel?.parent?.name === 'leftFloatArea';
+    if (isFloat) {
+      this.leftFloatArea.remove(panel);
+      this.leftFixedArea.add(panel);
+      this.leftFixedArea.container.active(panel);
+    } else {
+      this.leftFixedArea.remove(panel);
+      this.leftFloatArea.add(panel);
+      this.leftFloatArea.container.active(panel);
+    }
+    this.editor?.getPreference()?.set(`${panel.name}-pinned-status-isFloat`, !isFloat, 'skeleton');
   }
 
   buildFromConfig(config?: EditorConfig, components: PluginClassSet = {}) {

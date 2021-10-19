@@ -13,6 +13,7 @@ import {
 } from '@ali/lowcode-types';
 import { globalLocale } from './intl';
 import * as utils from './utils';
+import Preference from './utils/preference';
 import { obx } from './utils';
 import { AssetsJson, AssetLoader } from '@ali/lowcode-utils';
 
@@ -33,6 +34,7 @@ export declare interface Editor extends StrictEventEmitter<EventEmitter, GlobalE
   prependListener(event: string | symbol, listener: (...args: any[]) => void): this;
   prependOnceListener(event: string | symbol, listener: (...args: any[]) => void): this;
   eventNames(): Array<string | symbol>;
+  getPreference(): Preference;
 }
 
 export class Editor extends (EventEmitter as any) implements IEditor {
@@ -46,6 +48,12 @@ export class Editor extends (EventEmitter as any) implements IEditor {
   }
 
   readonly utils = utils;
+  /**
+   * used to store preferences
+   *
+   * @memberof Editor
+   */
+  readonly preference = new Preference();
 
   private hooks: HookConfig[] = [];
 
@@ -174,6 +182,10 @@ export class Editor extends (EventEmitter as any) implements IEditor {
     } catch (err) {
       console.warn(err);
     }
+  }
+
+  getPreference() {
+    return this.preference;
   }
 
   initHooks = (hooks: HookConfig[]) => {
