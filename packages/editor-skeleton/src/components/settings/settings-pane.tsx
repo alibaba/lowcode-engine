@@ -61,6 +61,24 @@ class SettingFieldView extends Component<{ field: SettingField }> {
       setterType = setter;
     }
 
+    // 根据是否支持变量配置做相应的更改
+    const supportVariable = field.extraProps?.supportVariable;
+    if (supportVariable) {
+      if (setterType === 'MixedSetter') {
+        if (!setterProps.setters.includes('VariableSetter')) {
+          setterProps.setters.push('VariableSetter');
+        }
+      } else {
+        setterType = 'MixedSetter';
+        setterProps = {
+          setters: [
+            setter,
+            'VariableSetter',
+          ],
+        };
+      }
+    }
+
     let value = null;
     if (defaultValue != null && !('defaultValue' in setterProps)) {
       setterProps.defaultValue = defaultValue;

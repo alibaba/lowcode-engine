@@ -42,6 +42,10 @@ export interface FieldExtraProps {
    */
   forceInline?: number;
   /**
+   * 是否支持变量配置
+   */
+  supportVariable?: boolean;
+  /**
    * compatiable vision display
    */
   display?: 'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry';
