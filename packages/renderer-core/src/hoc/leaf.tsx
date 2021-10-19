@@ -81,7 +81,7 @@ function initRerenderEvent({
   ) {
     return;
   }
-  cache.event.get(schema.id)?.dispose.forEach((d: any) => d && d());
+  cache.event.get(schema.id)?.dispose.forEach((disposeFn: any) => disposeFn && disposeFn());
   cache.event.set(schema.id, {
     clear: false,
     leaf,
@@ -107,7 +107,7 @@ function clearRerenderEvent(id: string): void {
   if (cache.event.get(id)?.clear) {
     return;
   }
-  cache.event.get(id)?.dispose?.forEach((d: any) => d && d());
+  cache.event.get(id)?.dispose?.forEach((disposeFn: any) => disposeFn && disposeFn());
   cache.event.set(id, {
     clear: true,
     dispose: [],
@@ -134,7 +134,10 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
   const editor = host?.designer?.editor;
   const { Component, forwardRef } = adapter.getRuntime();
 
-  if (!cache || curDocumentId !== cache.documentId) {
+  if (!cache || (curDocumentId && curDocumentId !== cache.documentId)) {
+    cache?.event.forEach(event => {
+      event.dispose?.forEach((disposeFn: any) => disposeFn && disposeFn());
+    });
     cache = new LeafCache(curDocumentId);
   }
 
