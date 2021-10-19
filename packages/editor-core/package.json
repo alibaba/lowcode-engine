@@ -25,7 +25,8 @@
     "power-di": "^2.2.4",
     "react": "^16",
     "react-dom": "^16.7.0",
-    "store": "^2.0.12"
+    "store": "^2.0.12",
+    "zen-logger": "^1.1.0"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",

@@ -18,15 +18,8 @@ export default class PanelOperationRow extends Component<{ panel: Panel }> {
     if (!current) {
       return;
     }
-    if (panel?.parent?.name === 'leftFloatArea') {
-      panel.skeleton.leftFloatArea.remove(current);
-      panel.skeleton.leftFixedArea.add(current);
-      panel.skeleton.leftFixedArea.container.active(current);
-    } else {
-      panel.skeleton.leftFixedArea.remove(current);
-      panel.skeleton.leftFloatArea.add(current);
-      panel.skeleton.leftFloatArea.container.active(current);
-    }
+
+    panel.skeleton.toggleFloatStatus(panel);
   }
 
   render() {
