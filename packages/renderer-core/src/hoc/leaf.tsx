@@ -152,7 +152,7 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
     getNode,
   });
 
-  if (cache.component.has(schema.componentName)) {
+  if (curDocumentId && cache.component.has(schema.componentName)) {
     return cache.component.get(schema.componentName);
   }
 
