@@ -446,7 +446,9 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
 
   LeafWrapper.displayName = (Comp as any).displayName;
 
-  cache.component.set(schema.componentName, LeafWrapper);
+  if (curDocumentId) {
+    cache.component.set(schema.componentName, LeafWrapper);
+  }
 
   return LeafWrapper;
 }
