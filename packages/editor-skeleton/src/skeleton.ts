@@ -172,8 +172,8 @@ export class Skeleton {
       const isInFloatAreaPreferenceExists = this.editor?.getPreference()?.contains(panelNameKey, 'skeleton');
       if (isInFloatAreaPreferenceExists) {
         const isInFloatAreaFromPreference = this.editor?.getPreference()?.get(panelNameKey, 'skeleton');
-        const currentIsInFloatArea = panel?.isInFloatArea();
-        if (isInFloatAreaFromPreference !== currentIsInFloatArea) {
+        const isCurrentInFloatArea = panel?.isChildOfFloatArea();
+        if (isInFloatAreaFromPreference !== isCurrentInFloatArea) {
           this.toggleFloatStatus(panel);
         }
       }

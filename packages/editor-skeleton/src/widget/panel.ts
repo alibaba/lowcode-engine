@@ -154,14 +154,25 @@ export default class Panel implements IWidget {
   getContent() {
     return this.content;
   }
+
   /**
    * check is current panel is in float area or not
    *
    * @returns {boolean}
    * @memberof Panel
    */
-  isInFloatArea(): boolean {
+  isChildOfFloatArea(): boolean {
     return this.parent?.name === 'leftFloatArea';
+  }
+
+  /**
+   * check is current panel is in fixed area or not
+   *
+   * @returns {boolean}
+   * @memberof Panel
+   */
+  isChildOfFixedArea(): boolean {
+    return this.parent?.name === 'leftFixedArea';
   }
 
   setActive(flag: boolean) {
@@ -170,9 +181,10 @@ export default class Panel implements IWidget {
       return;
     }
     if (flag) {
-      if (this.isInFloatArea()) {
+      // 对于 Area 的直接 Child，要专门处理 Float & Fixed 分组切换, 其他情况不需要
+      if (this.isChildOfFloatArea()) {
         this.skeleton.leftFixedArea.container.unactiveAll();
-      } else {
+      } else if (this.isChildOfFixedArea()) {
         this.skeleton.leftFloatArea.container.unactiveAll();
       }
       this._actived = true;
