@@ -186,7 +186,7 @@ class LockBtn extends Component<{ treeNode: TreeNode }> {
           treeNode.setLocked(!treeNode.locked);
         }}
       >
-        {treeNode.locked ? <IconLock /> : <IconUnlock />}
+        {treeNode.locked ? <IconUnlock /> : <IconLock /> }
         <Tip>{treeNode.locked ? intl('Unlock') : intl('Lock')}</Tip>
       </div>
     );
@@ -206,7 +206,7 @@ class HideBtn extends Component<{ treeNode: TreeNode }> {
           treeNode.setHidden(!treeNode.hidden);
         }}
       >
-        {treeNode.hidden ? <IconEyeClose /> : <IconEye />}
+        {treeNode.hidden ? <IconEye /> : <IconEyeClose />}
         <Tip>{treeNode.hidden ? intl('Show') : intl('Hide')}</Tip>
       </div>
     );

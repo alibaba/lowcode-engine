@@ -471,7 +471,7 @@ const builtinComponentActions: ComponentAction[] = [
   {
     name: 'lock',
     content: {
-      icon: IconUnlock, // 解锁icon
+      icon: IconLock, // 锁定 icon
       title: intlNode('lock'),
       action(node: Node) {
         node.lock();
@@ -485,7 +485,7 @@ const builtinComponentActions: ComponentAction[] = [
   {
     name: 'unlock',
     content: {
-      icon: IconLock, // 锁定icon
+      icon: IconUnlock, // 解锁 icon
       title: intlNode('unlock'),
       action(node: Node) {
         node.lock(false);

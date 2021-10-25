@@ -46,7 +46,7 @@ export default class PanelOperationRow extends Component<{ panel: Panel }> {
             {canSetFixed && (
               // eslint-disable-next-line react/jsx-no-bind
               <Button text className="lc-pane-icon-fix" onClick={this.setDisplay.bind(this)}>
-                {areaName === 'leftFloatArea' ? <IconFloat /> : <IconFix />}
+                {areaName === 'leftFloatArea' ? <IconFix /> : <IconFloat />}
               </Button>
             )}
             <Button
