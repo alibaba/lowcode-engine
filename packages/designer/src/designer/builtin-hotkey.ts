@@ -7,7 +7,7 @@ import clipboard from './clipboard';
 function isInLiveEditing() {
   if (globalContext.has(Editor)) {
     return Boolean(
-      globalContext.get(Editor).get('designer')?.project?.simulator?.liveEditing?.editing,
+      globalContext.get('editor').get('designer')?.project?.simulator?.liveEditing?.editing,
     );
   }
 }

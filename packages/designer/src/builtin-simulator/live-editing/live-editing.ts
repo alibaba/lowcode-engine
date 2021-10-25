@@ -52,7 +52,7 @@ export class LiveEditing {
     const targetElement = event.target as HTMLElement;
     const { liveTextEditing } = node.componentMeta;
 
-    const editor = globalContext.get(Editor);
+    const editor = globalContext.get('editor');
     const npm = node?.componentMeta?.npm;
     const selected =
       [npm?.package, npm?.componentName].filter((item) => !!item).join('-') || node?.componentMeta?.componentName || '';

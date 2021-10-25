@@ -16,7 +16,7 @@ import { IconLock, IconUnlock } from '../icons';
 
 
 function emitOutlineEvent(type: string, treeNode: TreeNode, rest?: Record<string, unknown>) {
-  const editor = globalContext.get(Editor);
+  const editor = globalContext.get('editor');
   const node = treeNode?.node;
   const npm = node?.componentMeta?.npm;
   const selected =

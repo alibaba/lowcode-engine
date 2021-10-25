@@ -115,7 +115,7 @@ export class History {
     }
     const cursor = this.session.cursor - 1;
     this.go(cursor);
-    const editor = globalContext.get(Editor);
+    const editor = globalContext.get('editor');
     if (!editor) {
       return;
     }
@@ -128,7 +128,7 @@ export class History {
     }
     const cursor = this.session.cursor + 1;
     this.go(cursor);
-    const editor = globalContext.get(Editor);
+    const editor = globalContext.get('editor');
     if (!editor) {
       return;
     }
