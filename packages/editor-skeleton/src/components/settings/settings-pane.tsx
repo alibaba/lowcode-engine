@@ -1,10 +1,10 @@
 import { Component, MouseEvent, Fragment } from 'react';
-import { shallowIntl, createSetterContent, observer, obx } from '@ali/lowcode-editor-core';
+import { shallowIntl, createSetterContent, observer, obx, engineConfig } from '@ali/lowcode-editor-core';
 import { createContent } from '@ali/lowcode-utils';
 import { createField } from '../field';
 import PopupService, { PopupPipe } from '../popup';
 import { SkeletonContext } from '../../context';
-import { SettingField, isSettingField, SettingTopEntry, SettingEntry } from '@ali/lowcode-designer';
+import { SettingField, isSettingField, SettingTopEntry, SettingEntry, ComponentMeta } from '@ali/lowcode-designer';
 // import { Icon } from '@alifd/next';
 import { isSetterConfig, CustomView } from '@ali/lowcode-types';
 import { intl } from '../../locale';
@@ -16,6 +16,12 @@ function transformStringToFunction(str) {
   return new Function(`"use strict"; return ${str}`)();
 }
 
+function isStandardComponent(componentMeta: ComponentMeta | null) {
+  if (!componentMeta) return false;
+  const { prototype } = componentMeta;
+  return prototype == null;
+}
+
 @observer
 class SettingFieldView extends Component<{ field: SettingField }> {
   static contextType = SkeletonContext;
@@ -24,7 +30,6 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     const { field } = this.props;
     const { extraProps, componentMeta } = field;
     const { condition, defaultValue, display } = extraProps;
-    const { prototype } = componentMeta!;
     let visible;
     try {
       visible = typeof condition === 'function' ? condition(field) !== false : true;
@@ -63,7 +68,9 @@ class SettingFieldView extends Component<{ field: SettingField }> {
 
     // 根据是否支持变量配置做相应的更改
     const supportVariable = field.extraProps?.supportVariable;
-    if (supportVariable) {
+    // supportVariableGlobally 只对标准组件生效，vc 需要单独配置
+    const supportVariableGlobally = engineConfig.get('supportVariableGlobally', false) && isStandardComponent(componentMeta);
+    if (supportVariable || supportVariableGlobally) {
       if (setterType === 'MixedSetter') {
         if (!setterProps.setters.includes('VariableSetter')) {
           setterProps.setters.push('VariableSetter');

@@ -65,6 +65,10 @@ export interface EngineOptions {
    */
   loadingComponent?: ComponentType;
   /**
+   * 设置所有属性支持变量配置，默认值：false
+   */
+  supportVariableGlobally?: boolean;
+  /**
    * Vision-polyfill settings
    */
   visionSettings?: {
