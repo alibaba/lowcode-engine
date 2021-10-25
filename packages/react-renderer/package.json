@@ -27,7 +27,6 @@
     "@alifd/next": "^1.21.16"
   },
   "devDependencies": {
-    "@ali/lowcode-test-mate": "^1.0.1",
     "@alib/build-scripts": "^0.1.18",
     "@alifd/next": "^1.19.17",
     "build-plugin-component": "^0.2.10",

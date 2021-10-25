@@ -24,16 +24,6 @@
     "@types/react": "^16",
     "build-plugin-component": "^0.2.10"
   },
-  "ava": {
-    "compileEnhancements": false,
-    "snapshotDir": "test/fixtures/__snapshots__",
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "ts-node/register"
-    ]
-  },
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"
   },

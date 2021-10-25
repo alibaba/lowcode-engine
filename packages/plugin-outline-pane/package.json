@@ -31,16 +31,6 @@
     "build-plugin-fusion": "^0.1.1",
     "build-plugin-moment-locales": "^0.1.0"
   },
-  "ava": {
-    "compileEnhancements": false,
-    "snapshotDir": "test/fixtures/__snapshots__",
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "ts-node/register"
-    ]
-  },
   "license": "MIT",
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"

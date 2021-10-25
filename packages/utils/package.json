@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@ali/lowcode-types": "1.0.70",
-    "@ali/ve-inline-tip": "^3.0.2",
     "@alifd/next": "^1.19.16",
     "lodash.get": "^4.4.2",
     "react": "^16"
@@ -23,16 +22,6 @@
     "@types/node": "^13.7.1",
     "@types/react": "^16",
     "build-plugin-component": "^0.2.10"
-  },
-  "ava": {
-    "compileEnhancements": false,
-    "snapshotDir": "test/fixtures/__snapshots__",
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "ts-node/register"
-    ]
   },
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"

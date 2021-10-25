@@ -15,7 +15,6 @@
     "@ali/lowcode-rax-renderer": "1.0.70",
     "@ali/lowcode-types": "1.0.70",
     "@ali/lowcode-utils": "1.0.70",
-    "@ali/recore-rax": "^1.2.4",
     "@ali/vu-css-style": "^1.0.2",
     "classnames": "^2.2.6",
     "driver-universal": "^3.1.3",
