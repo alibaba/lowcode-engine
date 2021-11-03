@@ -85,6 +85,10 @@ export class ComponentMeta {
     return this._isContainer! || this.isRootComponent();
   }
 
+  get isMinimalRenderUnit(): boolean {
+    return this._isMinimalRenderUnit || false;
+  }
+
   private _isModal?: boolean;
 
   get isModal(): boolean {
@@ -127,6 +131,8 @@ export class ComponentMeta {
   private childWhitelist?: NestingFilter | null;
 
   private _title?: TitleContent;
+
+  private _isMinimalRenderUnit?: boolean;
 
   get title(): string | I18nData | ReactElement {
     // TODO: 标记下。这块需要康师傅加一下API，页面正常渲染。
@@ -220,6 +226,7 @@ export class ComponentMeta {
       this._isModal = !!component.isModal;
       this._descriptor = component.descriptor;
       this._rootSelector = component.rootSelector;
+      this._isMinimalRenderUnit = component.isMinimalRenderUnit;
       if (component.nestingRule) {
         const { parentWhitelist, childWhitelist } = component.nestingRule;
         this.parentWhitelist = buildFilter(parentWhitelist);
