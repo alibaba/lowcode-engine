@@ -330,7 +330,6 @@ function getKeyInfo(combination: string, action?: string): KeyInfo {
  */
 function fireCallback(callback: HotkeyCallback, e: KeyboardEvent, combo?: string, sequence?: string): void {
   try {
-    // 这里不能简化成 editor，单测时没有注册
     const editor = globalContext.get(Editor);
     const designer = editor.get('designer');
     const node = designer?.currentSelection?.getNodes()?.[0];

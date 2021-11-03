@@ -168,6 +168,7 @@ plugins.register((ctx: ILowCodePluginContext) => {
         panelProps: {
           area: isInFloatArea ? 'leftFloatArea' : 'leftFixedArea',
           keepVisibleWhileDragging: true,
+          ...engineConfig.get('defaultOutlinePaneProps'),
         },
       });
       skeleton.add({

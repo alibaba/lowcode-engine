@@ -116,12 +116,12 @@ export class DraggableLineView extends Component<{ panel: Panel }> {
     }
 
     // 抛出事件，对于有些需要 panel 插件随着 度变化进行再次渲染的，由panel插件内部监听事件实现
-    const editor = globalContext.get('editor');
+    const editor = globalContext.get(Editor);
     editor?.emit('dockpane.drag', width);
   }
 
   onDragChange(type: 'start' | 'end') {
-    const editor = globalContext.get('editor');
+    const editor = globalContext.get(Editor);
     editor?.emit('dockpane.dragchange', type);
     // builtinSimulator 屏蔽掉 鼠标事件
     editor?.emit('designer.builtinSimulator.disabledEvents', type === 'start');
@@ -185,7 +185,7 @@ export class TitledPanelView extends Component<{ panel: Panel; area?: string }> 
     if (!panel.inited) {
       return null;
     }
-    const editor = globalContext.get('editor');
+    const editor = globalContext.get(Editor);
     const panelName = area ? `${area}-${panel.name}` : panel.name;
     editor?.emit('skeleton.panel.toggle', {
       name: panelName || '',
@@ -247,7 +247,7 @@ export class PanelView extends Component<{
     if (!panel.inited) {
       return null;
     }
-    const editor = globalContext.get('editor');
+    const editor = globalContext.get(Editor);
     const panelName = area ? `${area}-${panel.name}` : panel.name;
     editor?.emit('skeleton.panel.toggle', {
       name: panelName || '',
