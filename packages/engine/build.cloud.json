@@ -25,9 +25,13 @@
   "ignoreHtmlTemplate": true,
   "plugins": [
     "build-plugin-react-app",
-    ["build-plugin-fusion", {
-      "externalNext": "umd"
-    }],
+    [
+      "build-plugin-fusion",
+      {
+        "themePackage": "@alifd/theme-lowcode-light",
+        "externalNext": "umd"
+      }
+    ],
     ["build-plugin-moment-locales", {
       "locales": ["zh-cn"]
     }],

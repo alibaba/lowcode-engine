@@ -18,7 +18,13 @@
         }
       }
     ],
-    "build-plugin-fusion",
+    [
+      "build-plugin-fusion",
+      {
+        "themePackage": "@alifd/theme-lowcode-light",
+        "externalNext": "umd"
+      }
+    ],
     ["build-plugin-moment-locales", {
       "locales": ["zh-cn"]
     }],

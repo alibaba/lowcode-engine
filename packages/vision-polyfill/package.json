@@ -24,8 +24,8 @@
     "@ali/lowcode-types": "1.0.71",
     "@ali/lowcode-utils": "1.0.71",
     "@alifd/next": "^1.19.12",
-    "@alife/theme-lowcode-dark": "^0.1.0",
-    "@alife/theme-lowcode-light": "^0.1.0",
+    "@alifd/theme-lowcode-dark": "^0.2.0",
+    "@alifd/theme-lowcode-light": "^0.2.0",
     "react": "^16.8.1",
     "react-dom": "^16.8.1"
   },
