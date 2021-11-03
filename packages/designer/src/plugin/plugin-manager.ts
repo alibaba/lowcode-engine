@@ -31,7 +31,18 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     const config = pluginConfigCreator(ctx, pluginOptions);
     invariant(config.name, `${config.name} required`, config);
     ctx.setLogger(config);
-    invariant(!this.pluginsMap.has(config.name), `${config.name} already exists`, this.pluginsMap.get(config.name));
+    const allowOverride = options?.override === true;
+    if (this.pluginsMap.has(config.name)) {
+      if (!allowOverride) {
+        throw new Error(`Plugin with name ${config.name} exists`);
+      } else {
+        // clear existing plugin
+        const originalPlugin = this.pluginsMap.get(config.name);
+        logger.log('plugin override, originalPlugin with name ', config.name, ' will be destroyed, config:', originalPlugin?.config);
+        originalPlugin?.destroy();
+        this.pluginsMap.delete(config.name);
+      }
+    }
     const plugin = new LowCodePlugin(this, config, pluginOptions);
     if (options?.autoInit) {
       await plugin.init();

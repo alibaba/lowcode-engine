@@ -79,4 +79,6 @@ export type ILowCodePluginManager = ILowCodePluginManagerCore & ILowCodePluginMa
 
 export type LowCodeRegisterOptions = {
   autoInit?: boolean;
+  // allow overriding existing plugin with same name when override === true
+  override?: boolean;
 };

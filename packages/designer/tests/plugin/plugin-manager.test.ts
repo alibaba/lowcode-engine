@@ -136,6 +136,51 @@ describe('plugin 测试', () => {
     expect(mockFn).toHaveBeenCalledTimes(2);
   });
 
+  it('默认情况不允许重复注册', async () => {
+    const mockFn = jest.fn();
+    const mockPlugin = (ctx: ILowCodePluginContext, options: any) => {
+      return {
+        name: 'demoDuplicated',
+        init: mockFn,
+      };
+    };
+    pluginManager.register(mockPlugin, { test: 1 });
+    pluginManager.register(mockPlugin, { test: 1 }).catch(e => {
+      expect(e).toEqual(new Error('Plugin with name demoDuplicated exists'));
+    });
+    await pluginManager.init();
+  });
+
+  it('插件增加 override 参数时可以重复注册', async () => {
+    const mockFn = jest.fn();
+    const mockPlugin = (ctx: ILowCodePluginContext, options: any) => {
+      return {
+        name: 'demoOverride',
+        init: mockFn,
+      };
+    };
+    pluginManager.register(mockPlugin, { test: 1 });
+    pluginManager.register(mockPlugin, { test: 1 }, { override: true });
+    await pluginManager.init();
+  });
+
+  it('插件增加 override 参数时可以重复注册, 被覆盖的如果已初始化，会被销毁', async () => {
+    const mockInitFn = jest.fn();
+    const mockDestroyFn = jest.fn();
+    const mockPlugin = (ctx: ILowCodePluginContext, options: any) => {
+      return {
+        name: 'demoOverride',
+        init: mockInitFn,
+        destroy: mockDestroyFn,
+      };
+    };
+    await pluginManager.register(mockPlugin, { test: 1 }, { autoInit: true });
+    expect(mockInitFn).toHaveBeenCalledTimes(1);
+    await pluginManager.register(mockPlugin, { test: 1 }, { override: true });
+    expect(mockDestroyFn).toHaveBeenCalledTimes(1);
+    await pluginManager.init();
+  });
+
   it('内部事件机制', async () => {
     const mockFn = jest.fn();
     pluginManager.register((ctx: ILowCodePluginContext, options: any) => {
