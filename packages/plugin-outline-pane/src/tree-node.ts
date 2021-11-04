@@ -28,8 +28,8 @@ export default class TreeNode {
     return this.node.zLevel;
   }
 
-  isRoot() {
-    return this.tree.root === this;
+  isRoot(includeOriginalRoot = false) {
+    return this.tree.root === this || (includeOriginalRoot && this.tree.document.rootNode === this.node);
   }
 
   /**
@@ -60,7 +60,7 @@ export default class TreeNode {
   @obx.ref private _expanded = false;
 
   get expanded(): boolean {
-    return this.isRoot() || (this.expandable && this._expanded);
+    return this.isRoot(true) || (this.expandable && this._expanded);
   }
 
   setExpanded(value: boolean) {

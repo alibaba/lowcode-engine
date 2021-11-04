@@ -1,10 +1,10 @@
 import { Component } from 'react';
 import classNames from 'classnames';
 import { observer } from '@ali/lowcode-editor-core';
+import { ModalNodesManager } from '@ali/lowcode-designer';
 import TreeNode from '../tree-node';
 import TreeTitle from './tree-title';
 import TreeBranches from './tree-branches';
-import { ModalNodesManager } from '@ali/lowcode-designer';
 import { IconEyeClose } from '../icons/eye-close';
 
 @observer
@@ -24,7 +24,9 @@ class ModalTreeNodeView extends Component<{ treeNode: TreeNode }> {
 
   render() {
     const { treeNode } = this.props;
-    const modalNodes = treeNode.children?.filter((item) => {
+    // 当指定了新的根节点时，要从原始的根节点去获取模态节点
+    const rootTreeNode = treeNode.tree.getTreeNode(treeNode.document.rootNode!);
+    const modalNodes = rootTreeNode.children?.filter((item) => {
       return item.node.componentMeta.isModal;
     });
     if (!modalNodes || modalNodes.length === 0) {
@@ -44,7 +46,7 @@ class ModalTreeNodeView extends Component<{ treeNode: TreeNode }> {
           </div>
         </div>
         <div className="tree-pane-modal-content">
-          <TreeBranches treeNode={treeNode} isModal />
+          <TreeBranches treeNode={rootTreeNode} isModal />
         </div>
       </div>
     );
