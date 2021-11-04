@@ -141,7 +141,7 @@ export interface IRenderer {
   __createLoopVirtualDom: (schema: any, self: any, parentInfo: IInfo, idx: number | string) => any;
   __parseProps: (props: any, self: any, path: string, info: IInfo) => any;
   __initDebug: () => void;
-  __debug: (msg: string) => void;
+  __debug: (...args: any[]) => void;
   __renderContextProvider: (customProps?: object, children?: any) => any;
   __renderContextConsumer: (children: any) => any;
   __renderContent: (children: any) => any;

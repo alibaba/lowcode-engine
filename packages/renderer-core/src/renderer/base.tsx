@@ -1,5 +1,4 @@
 import classnames from 'classnames';
-import Debug from 'debug';
 import { create as createDataSourceEngine } from '@ali/lowcode-datasource-engine/interpret';
 import adapter from '../adapter';
 import divFactory from '../components/Div';
@@ -21,7 +20,7 @@ import {
   transformStringToFunction,
   checkPropTypes,
   getI18n,
-  acceptsRef,
+  canAcceptsRef,
   getFileCssName,
   capitalizeFirstLetter,
   DataHelper,
@@ -31,6 +30,7 @@ import {
 import { IRendererProps, ISchema, IInfo, ComponentModel, IRenderer } from '../types';
 import { compWrapper } from '../hoc';
 import { IComponentConstruct, IComponentHoc, leafWrapper } from '../hoc/leaf';
+import logger from '../utils/logger';
 
 export default function baseRenererFactory() {
   const { BaseRenderer: customBaseRenderer } = adapter.getRenderers();
@@ -44,7 +44,6 @@ export default function baseRenererFactory() {
   const VisualDom = visualDomFactory();
   const AppContext = contextFactory();
 
-  const debug = Debug('renderer:base');
   const DESIGN_MODE = {
     EXTEND: 'extend',
     BORDER: 'border',
@@ -71,7 +70,6 @@ export default function baseRenererFactory() {
       this.__beforeInit(props);
       this.__init(props);
       this.__afterInit(props);
-      this.__initDebug();
       this.__debug(`constructor - ${props?.__schema?.fileName}`);
     }
 
@@ -88,7 +86,7 @@ export default function baseRenererFactory() {
     __afterInit(/* props: IRendererProps */) { }
 
     static getDerivedStateFromProps(props: IRendererProps, state: any) {
-      debug('getDerivedStateFromProps');
+      logger.log('getDerivedStateFromProps');
       const func = props?.__schema?.lifeCycles?.getDerivedStateFromProps;
 
       if (func) {
@@ -356,7 +354,7 @@ export default function baseRenererFactory() {
       let Comp = __components[__schema.componentName];
 
       if (!Comp) {
-        console.error(`${__schema.componentName} is invalid!`);
+        this.__debug(`${__schema.componentName} is invalid!`);
       }
 
       return this.__createVirtualDom(_children, scope, ({
@@ -499,8 +497,8 @@ export default function baseRenererFactory() {
           });
         });
 
-        // 对于可以获取到ref的组件做特殊处理
-        if (!acceptsRef(Comp)) {
+        // 对于不可以接收到 ref 的组件需要做特殊处理
+        if (!canAcceptsRef(Comp)) {
           Comp = compWrapper(Comp);
           components[schema.componentName] = Comp;
         }
@@ -800,15 +798,7 @@ export default function baseRenererFactory() {
       return this.__instanceMap[filedId];
     }
 
-    __initDebug = () => {
-      this.__logger = Debug(`renderer:${this.__namespace || 'base'}`);
-    };
-
-    __debug = (msg = '') => {
-      if (this.__logger) {
-        this.__logger(`${this.__namespace}.${msg}`);
-      }
-    };
+    __debug = logger.log;
 
     __renderContextProvider = (customProps?: object, children?: any) => {
       customProps = customProps || {};

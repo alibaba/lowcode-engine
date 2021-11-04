@@ -718,7 +718,6 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     docUrl,
     devMode: devMode || 'procode',
     schema: schema?.componentsTree[0],
-    // isMinimalRenderUnit,
   };
 
   if (category) {

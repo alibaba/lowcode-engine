@@ -1,16 +1,10 @@
 import { BuiltinSimulatorHost, Node, PropChangeOptions } from '@ali/lowcode-designer';
 import { GlobalEvent, TransformStage } from '@ali/lowcode-types';
-import { isReactComponent } from '@ali/lowcode-utils';
+import { isReactComponent, cloneEnumerableProperty } from '@ali/lowcode-utils';
 import { EngineOptions } from '@ali/lowcode-editor-core';
 import adapter from '../adapter';
 import * as types from '../types/index';
 
-const compDefaultPropertyNames = [
-  '$$typeof',
-  'render',
-  'defaultProps',
-  'props',
-];
 
 export interface IComponentHocInfo {
   schema: any;
@@ -315,8 +309,8 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
 
     makeUnitRender() {
       this.beforeRender(RerenderType.MinimalRenderUnit);
-      const nextProps = getProps(this.leaf?.export?.(TransformStage.Render) as types.ISchema, Comp, componentInfo);
-      const children = getChildren(this.leaf?.export?.(TransformStage.Render) as types.ISchema, Comp);
+      const nextProps = getProps(this.leaf?.export?.(TransformStage.Render) as types.ISchema, scope, Comp, componentInfo);
+      const children = getChildren(this.leaf?.export?.(TransformStage.Render) as types.ISchema, scope, Comp);
       const nextState = {
         nextProps,
         nodeChildren: children,
@@ -358,6 +352,7 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
       const dispose = leaf?.onPropChange?.((propChangeInfo: PropChangeOptions) => {
         const {
           key,
+          newValue = null,
         } = propChangeInfo;
         const node = leaf;
 
@@ -368,18 +363,24 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
           container.rerender();
           return;
         }
-
-        __debug(`${leaf?.componentName}[${this.props.componentId}] component trigger onPropsChange event`);
         if (!this.shouldRenderSingleNode()) {
           return;
         }
         this.beforeRender(RerenderType.PropsChanged);
-        const nextProps = getProps(node?.export?.(TransformStage.Render) as types.ISchema, scope, Comp, componentInfo);
-        this.setState(nextProps.children ? {
-          nodeChildren: nextProps.children,
-          nodeProps: nextProps,
+        const nodeProps = getProps(node?.export?.(TransformStage.Render) as types.ISchema, scope, Comp, componentInfo);
+        const preNodeProps = this.state.nodeProps;
+        const newNodeProps = {
+          ...preNodeProps,
+          [key as string]: newValue,
+          ...nodeProps,
+        };
+        __debug(`${leaf?.componentName}[${this.props.componentId}] component trigger onPropsChange event`, newNodeProps);
+        this.setState('children' in nodeProps ? {
+          nodeChildren: nodeProps.children,
+          nodeProps: newNodeProps,
+          childrenInState: true,
         } : {
-          nodeProps: nextProps,
+          nodeProps: newNodeProps,
         });
       });
 
@@ -395,11 +396,11 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
           return;
         }
 
-        __debug(`${leaf?.componentName}[${this.props.componentId}] component trigger onVisibleChange event`);
         if (!this.shouldRenderSingleNode()) {
           return;
         }
 
+        __debug(`${leaf?.componentName}[${this.props.componentId}] component trigger onVisibleChange(${flag}) event`);
         this.beforeRender(RerenderType.VisibleChanged);
         this.setState({
           visible: flag,
@@ -418,7 +419,6 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
           type,
           node,
         } = param || {};
-        __debug(`${schema.componentName}[${this.props.componentId}] component trigger onChildrenChange event`);
         if (!this.shouldRenderSingleNode()) {
           return;
         }
@@ -427,6 +427,7 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
         // 缓存二级 children Next 查询筛选组件有问题
         // 缓存一级 children Next Tab 组件有问题
         const nextChild = getChildren(leaf?.export?.(TransformStage.Render) as types.ISchema, scope, Comp); // this.childrenMap
+        __debug(`${schema.componentName}[${this.props.componentId}] component trigger onChildrenChange event`, nextChild);
         this.setState({
           nodeChildren: nextChild,
           childrenInState: true,
@@ -454,7 +455,7 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
     }
 
     get children(): any {
-      if (this.state.nodeChildren) {
+      if (this.state.childrenInState) {
         return this.state.nodeChildren;
       }
       if (this.props.children && !Array.isArray(this.props.children)) {
@@ -476,7 +477,7 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
       }
 
       const {
-        ref,
+        forwardedRef,
         ...rest
       } = this.props;
 
@@ -485,27 +486,23 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
         ...(this.state.nodeProps || {}),
         children: [],
         __id: this.props.componentId,
-        ref: this.props.forwardedRef,
+        ref: forwardedRef,
       };
 
       return engine.createElement(Comp, compProps, this.hasChildren ? this.children : null);
     }
   }
 
-  const LeafWrapper = forwardRef((props: any, ref: any) => (
+  let LeafWrapper = forwardRef((props: any, ref: any) => (
     // @ts-ignore
-    <LeafHoc {...props} forwardedRef={ref} ref={(ref) => cache.ref.set(props.componentId, ref)} />
+    <LeafHoc
+      {...props}
+      forwardedRef={ref}
+      ref={(_ref: any) => cache.ref.set(props.componentId, _ref)}
+    />
   ));
 
-  if (typeof Comp === 'object') {
-    const compExtraPropertyNames = Object.getOwnPropertyNames(Comp).filter(d => !compDefaultPropertyNames.includes(d));
-
-    __debug(`${schema.componentName} extra property names: ${compExtraPropertyNames.join(',')}`);
-
-    compExtraPropertyNames.forEach((d: string) => {
-      (LeafWrapper as any)[d] = Comp[d];
-    });
-  }
+  LeafWrapper = cloneEnumerableProperty(LeafWrapper, Comp);
 
   LeafWrapper.displayName = (Comp as any).displayName;
 

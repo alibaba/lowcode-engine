@@ -1,3 +1,4 @@
+import { cloneEnumerableProperty } from '@ali/lowcode-utils';
 import adapter from '../adapter';
 
 export function compWrapper(Comp: any) {
@@ -8,15 +9,16 @@ export function compWrapper(Comp: any) {
     // }
 
     render() {
-      const { forwardRef } = this.props;
+      const { forwardRef, ...rest } = this.props;
+
       return createElement(Comp, {
-        ...this.props,
+        ...rest,
         ref: forwardRef,
       });
     }
   }
 
-  return forwardRef((props: any, ref: any) => {
+  return cloneEnumerableProperty(forwardRef((props: any, ref: any) => {
     return createElement(Wrapper, { ...props, forwardRef: ref });
-  });
+  }), Comp);
 }
