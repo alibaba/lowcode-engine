@@ -202,8 +202,8 @@ export function getI18n(key: string, values = {}, locale = 'zh-CN', messages = {
  * 判断当前组件是否能够设置ref
  * @param {*} Comp 需要判断的组件
  */
-export function acceptsRef(Comp: any) {
-  return Comp?.$$typeof === REACT_FORWARD_REF_TYPE || Comp?.prototype?.isReactComponent || Comp?.prototype?.setState;
+export function canAcceptsRef(Comp: any) {
+  return Comp?.$$typeof === REACT_FORWARD_REF_TYPE || Comp?.prototype?.isReactComponent || Comp?.prototype?.setState || Comp._forwardRef;
 }
 
 /**

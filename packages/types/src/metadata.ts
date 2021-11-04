@@ -29,6 +29,8 @@ export interface ComponentConfigure {
   descriptor?: string;
   nestingRule?: NestingRule;
 
+  isMinimalRenderUnit?: boolean;
+
   rootSelector?: string;
   // copy, move, remove | *
   disableBehaviors?: string[] | string;

@@ -1,5 +1,4 @@
 import classnames from 'classnames';
-import Debug from 'debug';
 import { create as createDataSourceEngine } from '@ali/lowcode-datasource-engine/interpret';
 import adapter from '../adapter';
 import divFactory from '../components/Div';
@@ -21,7 +20,7 @@ import {
   transformStringToFunction,
   checkPropTypes,
   getI18n,
-  acceptsRef,
+  canAcceptsRef,
   getFileCssName,
   capitalizeFirstLetter,
   DataHelper,
@@ -31,6 +30,7 @@ import {
 import { IRendererProps, ISchema, IInfo, ComponentModel, IRenderer } from '../types';
 import { compWrapper } from '../hoc';
 import { IComponentConstruct, IComponentHoc, leafWrapper } from '../hoc/leaf';
+import logger from '../utils/logger';
 
 export default function baseRenererFactory() {
   const { BaseRenderer: customBaseRenderer } = adapter.getRenderers();
@@ -44,7 +44,6 @@ export default function baseRenererFactory() {
   const VisualDom = visualDomFactory();
   const AppContext = contextFactory();
 
-  const debug = Debug('renderer:base');
   const DESIGN_MODE = {
     EXTEND: 'extend',
     BORDER: 'border',
@@ -71,7 +70,6 @@ export default function baseRenererFactory() {
       this.__beforeInit(props);
       this.__init(props);
       this.__afterInit(props);
-      this.__initDebug();
       this.__debug(`constructor - ${props?.__schema?.fileName}`);
     }
 
@@ -88,7 +86,7 @@ export default function baseRenererFactory() {
     __afterInit(/* props: IRendererProps */) { }
 
     static getDerivedStateFromProps(props: IRendererProps, state: any) {
-      debug('getDerivedStateFromProps');
+      logger.log('getDerivedStateFromProps');
       const func = props?.__schema?.lifeCycles?.getDerivedStateFromProps;
 
       if (func) {
@@ -347,34 +345,31 @@ export default function baseRenererFactory() {
 
     __createDom = () => {
       const { __schema, __ctx, __components = {} } = this.props;
-      const self: any = {};
-      self.__proto__ = __ctx || this;
+      const scope: any = {};
+      scope.__proto__ = __ctx || this;
       if (!this._self) {
-        this._self = self;
+        this._self = scope;
       }
       const _children = this.getSchemaChildren(__schema);
       let Comp = __components[__schema.componentName];
 
-      return this.__createVirtualDom(_children, self, ({
+      if (!Comp) {
+        this.__debug(`${__schema.componentName} is invalid!`);
+      }
+
+      return this.__createVirtualDom(_children, scope, ({
         schema: __schema,
-        Comp: this.__getHocComp(Comp, __schema),
+        Comp: this.__getHocComp(Comp, __schema, scope),
       } as IInfo));
     };
 
-    private get self() {
-      const { __ctx } = this.props;
-      const self: any = {};
-      self.__proto__ = __ctx || this;
-
-      return self;
-    }
 
     // 将模型结构转换成react Element
     // schema 模型结构
     // self 为每个渲染组件构造的上下文，self是自上而下继承的
     // parentInfo 父组件的信息，包含schema和Comp
     // idx 若为循环渲染的循环Index
-    __createVirtualDom = (schema: ISchema, self: any, parentInfo: IInfo, idx: string | number = ''): any => {
+    __createVirtualDom = (schema: ISchema, scope: any, parentInfo: IInfo, idx: string | number = ''): any => {
       const { engine } = this.context || {};
       try {
         if (!schema) return null;
@@ -388,28 +383,28 @@ export default function baseRenererFactory() {
         const { __appHelper: appHelper, __components: components = {} } = this.props || {};
 
         if (isJSExpression(schema)) {
-          return parseExpression(schema, self);
+          return parseExpression(schema, scope);
         }
         if (isI18n(schema)) {
-          return parseI18n(schema, self);
+          return parseI18n(schema, scope);
         }
         if (isJSSlot(schema)) {
-          return this.__createVirtualDom(schema.value, self, parentInfo);
+          return this.__createVirtualDom(schema.value, scope, parentInfo);
         }
         if (typeof schema === 'string') return schema;
         if (typeof schema === 'number' || typeof schema === 'boolean') {
           return String(schema);
         }
         if (Array.isArray(schema)) {
-          if (schema.length === 1) return this.__createVirtualDom(schema[0], self, parentInfo);
-          return schema.map((item, idy) => this.__createVirtualDom(item, self, parentInfo, item?.__ctx?.lceKey ? '' : String(idy)));
+          if (schema.length === 1) return this.__createVirtualDom(schema[0], scope, parentInfo);
+          return schema.map((item, idy) => this.__createVirtualDom(item, scope, parentInfo, item?.__ctx?.lceKey ? '' : String(idy)));
         }
         // FIXME
         const _children = this.getSchemaChildren(schema);
         // 解析占位组件
         if (schema.componentName === 'Flagment' && _children) {
-          const tarChildren = isJSExpression(_children) ? parseExpression(_children, self) : _children;
-          return this.__createVirtualDom(tarChildren, self, parentInfo);
+          const tarChildren = isJSExpression(_children) ? parseExpression(_children, scope) : _children;
+          return this.__createVirtualDom(tarChildren, scope, parentInfo);
         }
 
         if (schema.$$typeof) {
@@ -429,26 +424,26 @@ export default function baseRenererFactory() {
         }
 
         if (schema.loop != null) {
-          const loop = parseData(schema.loop, self);
+          const loop = parseData(schema.loop, scope);
           if ((Array.isArray(loop) && loop.length > 0) || isJSExpression(loop)) {
             return this.__createLoopVirtualDom(
               {
                 ...schema,
                 loop,
               },
-              self,
+              scope,
               parentInfo,
               idx,
             );
           }
         }
-        const condition = schema.condition == null ? true : parseData(schema.condition, self);
+        const condition = schema.condition == null ? true : parseData(schema.condition, scope);
         if (!condition) return null;
 
         let scopeKey = '';
         // 判断组件是否需要生成scope，且只生成一次，挂在this.__compScopes上
         if (Comp.generateScope) {
-          const key = parseExpression(schema.props.key, self);
+          const key = parseExpression(schema.props.key, scope);
           if (key) {
             // 如果组件自己设置key则使用组件自己的key
             scopeKey = key;
@@ -469,8 +464,8 @@ export default function baseRenererFactory() {
         // 如果组件有设置scope，需要为组件生成一个新的scope上下文
         if (scopeKey && this.__compScopes[scopeKey]) {
           const compSelf = { ...this.__compScopes[scopeKey] };
-          compSelf.__proto__ = self;
-          self = compSelf;
+          compSelf.__proto__ = scope;
+          scope = compSelf;
         }
 
         // 容器类组件的上下文通过props传递，避免context传递带来的嵌套问题
@@ -488,7 +483,7 @@ export default function baseRenererFactory() {
           otherProps.__tag = Math.random();
         }
         const componentInfo: any = {};
-        const props: any = this.__getComponentProps(schema, Comp, {
+        const props: any = this.__getComponentProps(schema, scope, Comp, {
           ...componentInfo,
           props: transformArrayToMap(componentInfo.props, 'name'),
         }) || {};
@@ -498,11 +493,12 @@ export default function baseRenererFactory() {
             schema,
             componentInfo,
             baseRenderer: this,
+            scope,
           });
         });
 
-        // 对于可以获取到ref的组件做特殊处理
-        if (!acceptsRef(Comp)) {
+        // 对于不可以接收到 ref 的组件需要做特殊处理
+        if (!canAcceptsRef(Comp)) {
           Comp = compWrapper(Comp);
           components[schema.componentName] = Comp;
         }
@@ -522,7 +518,7 @@ export default function baseRenererFactory() {
         }
         if (schema?.__ctx?.lceKey) {
           if (!isFileSchema(schema)) {
-            engine?.props?.onCompGetCtx(schema, self);
+            engine?.props?.onCompGetCtx(schema, scope);
           }
           props.key = props.key || `${schema.__ctx.lceKey}_${schema.__ctx.idx || 0}_${idx !== undefined ? idx : ''}`;
         } else if (typeof idx === 'number' && !props.key) {
@@ -535,7 +531,7 @@ export default function baseRenererFactory() {
           props.key = props.__id;
         }
 
-        let child: any = parentInfo.componentChildren || this.__getSchemaChildrenVirtualDom(schema, Comp);
+        let child: any = parentInfo.componentChildren || this.__getSchemaChildrenVirtualDom(schema, scope, Comp);
         const renderComp = (props: any) => engine.createElement(Comp, props, child);
         // 设计模式下的特殊处理
         if (engine && [DESIGN_MODE.EXTEND, DESIGN_MODE.BORDER].includes(engine.props.designMode)) {
@@ -568,7 +564,7 @@ export default function baseRenererFactory() {
         return engine.createElement(engine.getFaultComponent(), {
           error: e,
           schema,
-          self,
+          self: scope,
           parentInfo,
           idx,
         });
@@ -594,7 +590,7 @@ export default function baseRenererFactory() {
         .map((d: IComponentHoc) => d.hoc);
     }
 
-    __getSchemaChildrenVirtualDom = (schema: ISchema, Comp: any, childrenMap?: Map<any, any>) => {
+    __getSchemaChildrenVirtualDom = (schema: ISchema, scope: any, Comp: any, childrenMap?: Map<any, any>) => {
       let _children = this.getSchemaChildren(schema);
 
       let children: any = [];
@@ -605,8 +601,8 @@ export default function baseRenererFactory() {
 
         _children.forEach((_child: any) => {
           const _childVirtualDom = this.__createVirtualDom(
-            isJSExpression(_child) ? parseExpression(_child, this.self) : _child,
-            this.self,
+            isJSExpression(_child) ? parseExpression(_child, scope) : _child,
+            scope,
             {
               schema,
               Comp,
@@ -625,11 +621,11 @@ export default function baseRenererFactory() {
       return null;
     };
 
-    __getComponentProps = (schema: ISchema, Comp: any, componentInfo?: any) => {
+    __getComponentProps = (schema: ISchema, scope: any, Comp: any, componentInfo?: any) => {
       if (!schema) {
         return {};
       }
-      return this.__parseProps(schema?.props, this.self, '', {
+      return this.__parseProps(schema?.props, scope, '', {
         schema,
         Comp,
         componentInfo: {
@@ -639,7 +635,7 @@ export default function baseRenererFactory() {
       }) || {};
     };
 
-    __createLoopVirtualDom = (schema: ISchema, self: any, parentInfo: IInfo, idx: number | string) => {
+    __createLoopVirtualDom = (schema: ISchema, scope: any, parentInfo: IInfo, idx: number | string) => {
       if (isFileSchema(schema)) {
         console.warn('file type not support Loop');
         return null;
@@ -652,7 +648,7 @@ export default function baseRenererFactory() {
           [itemArg]: item,
           [indexArg]: i,
         };
-        loopSelf.__proto__ = self;
+        loopSelf.__proto__ = scope;
         return this.__createVirtualDom(
           {
             ...schema,
@@ -670,7 +666,7 @@ export default function baseRenererFactory() {
       return engine?.props?.designMode === 'design';
     }
 
-    __parseProps = (props: any, self: any, path: string, info: IInfo): any => {
+    __parseProps = (props: any, scope: any, path: string, info: IInfo): any => {
       const { schema, Comp, componentInfo = {} } = info;
       const propInfo = getValue(componentInfo.props, path);
       // FIXME! 将这行逻辑外置，解耦，线上环境不要验证参数，调试环境可以有，通过传参自定义
@@ -683,7 +679,7 @@ export default function baseRenererFactory() {
 
       const parseReactNode = (data: any, params: any) => {
         if (isEmpty(params)) {
-          return checkProps(this.__createVirtualDom(data, self, ({ schema, Comp } as IInfo)));
+          return checkProps(this.__createVirtualDom(data, scope, ({ schema, Comp } as IInfo)));
         }
         return checkProps(function () {
           const args: any = {};
@@ -696,8 +692,8 @@ export default function baseRenererFactory() {
               }
             });
           }
-          args.__proto__ = self;
-          return self.__createVirtualDom(data, args, { schema, Comp });
+          args.__proto__ = scope;
+          return scope.__createVirtualDom(data, args, { schema, Comp });
         });
       };
 
@@ -713,7 +709,7 @@ export default function baseRenererFactory() {
         return checkProps(props);
       }
       if (isJSExpression(props)) {
-        props = parseExpression(props, self);
+        props = parseExpression(props, scope);
         // 只有当变量解析出来为模型结构的时候才会继续解析
         if (!isSchema(props) && !isJSSlot(props)) return checkProps(props);
       }
@@ -726,7 +722,7 @@ export default function baseRenererFactory() {
         if (i18nProp) {
           props = i18nProp;
         } else {
-          return parseI18n(props, self);
+          return parseI18n(props, scope);
         }
       }
 
@@ -768,10 +764,10 @@ export default function baseRenererFactory() {
         );
       }
       if (Array.isArray(props)) {
-        return checkProps(props.map((item, idx) => this.__parseProps(item, self, path ? `${path}.${idx}` : `${idx}`, info)));
+        return checkProps(props.map((item, idx) => this.__parseProps(item, scope, path ? `${path}.${idx}` : `${idx}`, info)));
       }
       if (typeof props === 'function') {
-        return checkProps(props.bind(self));
+        return checkProps(props.bind(scope));
       }
       if (props && typeof props === 'object') {
         if (props.$$typeof) return checkProps(props);
@@ -781,7 +777,7 @@ export default function baseRenererFactory() {
             res[key] = val;
             return;
           }
-          res[key] = this.__parseProps(val, self, path ? `${path}.${key}` : key, info);
+          res[key] = this.__parseProps(val, scope, path ? `${path}.${key}` : key, info);
         });
         return checkProps(res);
       }
@@ -802,15 +798,7 @@ export default function baseRenererFactory() {
       return this.__instanceMap[filedId];
     }
 
-    __initDebug = () => {
-      this.__logger = Debug(`renderer:${this.__namespace || 'base'}`);
-    };
-
-    __debug = (msg = '') => {
-      if (this.__logger) {
-        this.__logger(`${this.__namespace}.${msg}`);
-      }
-    };
+    __debug = logger.log;
 
     __renderContextProvider = (customProps?: object, children?: any) => {
       customProps = customProps || {};
@@ -829,12 +817,13 @@ export default function baseRenererFactory() {
       return createElement(AppContext.Consumer, {}, children);
     };
 
-    __getHocComp(Comp: any, schema: any) {
+    __getHocComp(Comp: any, schema: any, scope: any) {
       this.componentHoc.forEach((ComponentConstruct: IComponentConstruct) => {
         Comp = ComponentConstruct(Comp || Div, {
           schema,
           componentInfo: {},
           baseRenderer: this,
+          scope,
         });
       });
 
@@ -843,8 +832,11 @@ export default function baseRenererFactory() {
 
     __renderComp(Comp: any, ctxProps: object) {
       const { __schema } = this.props;
-      Comp = this.__getHocComp(Comp, __schema);
-      const data = this.__parseProps(__schema?.props, this.self, '', {
+      const { __ctx } = this.props;
+      const scope: any = {};
+      scope.__proto__ = __ctx || this;
+      Comp = this.__getHocComp(Comp, __schema, scope);
+      const data = this.__parseProps(__schema?.props, scope, '', {
         schema: __schema,
         Comp,
         componentInfo: {},

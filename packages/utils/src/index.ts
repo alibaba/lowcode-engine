@@ -23,3 +23,4 @@ export * from './app-helper';
 export * from './misc';
 export * from './schema';
 export * from './node-helper';
+export * from './clone-enumerable-property';

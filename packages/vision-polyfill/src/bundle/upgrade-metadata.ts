@@ -132,6 +132,7 @@ export interface OldPrototypeConfig {
   componentName: string; // =>
   docUrl?: string; // =>
   defaultProps?: any; // => ?
+  isMinimalRenderUnit?: boolean; // => false
   /**
    * extra actions on the outline of current selected node
    * by default we have: remove / clone
@@ -702,6 +703,9 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     devMode,
     schema,
     isTopFixed,
+
+    // render
+    isMinimalRenderUnit,
   } = oldConfig;
   let {
     canResizing, // resizing
@@ -732,6 +736,7 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
     isModal,
     isFloating,
     descriptor,
+    isMinimalRenderUnit,
   };
 
   if (canOperating === false) {

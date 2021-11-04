@@ -29,7 +29,8 @@
     "react-is": "^16.10.1",
     "serialize-javascript": "^1.7.0",
     "socket.io-client": "^2.2.0",
-    "whatwg-fetch": "^3.0.0"
+    "whatwg-fetch": "^3.0.0",
+    "zen-logger": "^1.1.4"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",
