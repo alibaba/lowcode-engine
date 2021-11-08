@@ -371,10 +371,13 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
         const preNodeProps = this.state.nodeProps;
         const newNodeProps = {
           ...preNodeProps,
-          [key as string]: newValue,
           ...nodeProps,
         };
-        __debug(`${leaf?.componentName}[${this.props.componentId}] component trigger onPropsChange event`, newNodeProps);
+        if (key && !(key in newNodeProps) && (key in this.props)) {
+          // 当 key 在 this.props 中时，且不存在在计算值中，需要用 newValue 覆盖掉 this.props 的取值
+          newNodeProps[key] = newValue;
+        }
+        __debug(`${leaf?.componentName}[${this.props.componentId}] component trigger onPropsChange!`, newNodeProps);
         this.setState('children' in nodeProps ? {
           nodeChildren: nodeProps.children,
           nodeProps: newNodeProps,
