@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-designer",
-  "version": "1.0.72-beta.5",
+  "version": "1.0.72-beta.6",
   "description": "Designer for Ali LowCode Engine",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -14,9 +14,9 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@ali/lowcode-editor-core": "1.0.72-beta.5",
-    "@ali/lowcode-types": "1.0.72-beta.5",
-    "@ali/lowcode-utils": "1.0.72-beta.5",
+    "@ali/lowcode-editor-core": "1.0.72-beta.6",
+    "@ali/lowcode-types": "1.0.72-beta.6",
+    "@ali/lowcode-utils": "1.0.72-beta.6",
     "classnames": "^2.2.6",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
@@ -49,5 +49,5 @@
   "resolutions": {
     "@builder/babel-preset-ice": "1.0.1"
   },
-  "gitHead": "e2424d3e3014c9aedbe4be8a6ef0447a765bc8c9"
+  "gitHead": "84c59cf84abd8aa3a12b3c256abf79344a6d5240"
 }
