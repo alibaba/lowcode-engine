@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-utils",
-  "version": "1.0.72-beta.3",
+  "version": "1.0.72-beta.4",
   "description": "Utils for Ali lowCode engine",
   "files": [
     "es",
@@ -12,7 +12,7 @@
     "build": "build-scripts build --skip-demo"
   },
   "dependencies": {
-    "@ali/lowcode-types": "1.0.72-beta.3",
+    "@ali/lowcode-types": "1.0.72-beta.4",
     "@alifd/next": "^1.19.16",
     "lodash.get": "^4.4.2",
     "react": "^16"
@@ -26,5 +26,5 @@
   "publishConfig": {
     "registry": "https://registry.antfin-inc.com"
   },
-  "gitHead": "62f2494d31c264da3e5aa8d7d9d9e4ccc899d0c9"
+  "gitHead": "e2424d3e3014c9aedbe4be8a6ef0447a765bc8c9"
 }
