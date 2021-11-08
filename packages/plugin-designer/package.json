@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-plugin-designer",
-  "version": "1.0.72-beta.6",
+  "version": "1.0.72-beta.7",
   "description": "alibaba lowcode editor designer plugin",
   "files": [
     "es",
@@ -18,7 +18,7 @@
   ],
   "author": "xiayang.xy",
   "dependencies": {
-    "@ali/lowcode-editor-core": "1.0.72-beta.6",
+    "@ali/lowcode-editor-core": "1.0.72-beta.7",
     "react": "^16.8.1",
     "react-dom": "^16.8.1"
   },
@@ -31,5 +31,5 @@
   "publishConfig": {
     "registry": "https://registry.antfin-inc.com"
   },
-  "gitHead": "84c59cf84abd8aa3a12b3c256abf79344a6d5240"
+  "gitHead": "19b2119b9f95f8a3da0851b3943774a770975991"
 }

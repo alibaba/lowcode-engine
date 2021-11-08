@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-types",
-  "version": "1.0.72-beta.6",
+  "version": "1.0.72-beta.7",
   "description": "Types for Ali lowCode engine",
   "files": [
     "es",
@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@ali/lowcode-datasource-types": "^1.0.21",
-    "@ali/lowcode-designer": "1.0.72-beta.6",
+    "@ali/lowcode-designer": "1.0.72-beta.7",
     "power-di": "^2.2.4",
     "react": "^16",
     "strict-event-emitter-types": "^2.0.0"
@@ -27,5 +27,5 @@
   "publishConfig": {
     "registry": "https://registry.antfin-inc.com"
   },
-  "gitHead": "84c59cf84abd8aa3a12b3c256abf79344a6d5240"
+  "gitHead": "19b2119b9f95f8a3da0851b3943774a770975991"
 }
