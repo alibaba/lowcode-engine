@@ -414,11 +414,11 @@ export default function baseRenererFactory() {
         let Comp = components[schema.componentName] || this.props.__container?.components?.[schema.componentName];
 
         if (!Comp) {
-          console.error(`${schema.componentName} is not found! component list is:`, this.props.__container?.components);
+          console.error(`${schema.componentName} is not found! component list is:`, components || this.props.__container?.components);
           Comp = engine.getNotFoundComponent();
         }
 
-        if (schema.hidden && !this._designModeIsDesign) {
+        if (schema.hidden && (engine?.props?.designMode && engine?.props?.designMode !== 'design')) {
           // designMode 为 design 情况下，需要进入 leaf Hoc，进行相关事件注册
           return null;
         }

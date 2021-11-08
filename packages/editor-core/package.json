@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-editor-core",
-  "version": "1.0.71",
+  "version": "1.0.72-beta.7",
   "description": "Core Api for Ali lowCode engine",
   "license": "MIT",
   "main": "lib/index.js",
@@ -13,8 +13,8 @@
     "build": "build-scripts build --skip-demo"
   },
   "dependencies": {
-    "@ali/lowcode-types": "1.0.71",
-    "@ali/lowcode-utils": "1.0.71",
+    "@ali/lowcode-types": "1.0.72-beta.7",
+    "@ali/lowcode-utils": "1.0.72-beta.7",
     "@alifd/next": "^1.19.16",
     "classnames": "^2.2.6",
     "debug": "^4.1.1",
@@ -41,7 +41,7 @@
     "build-plugin-moment-locales": "^0.1.0"
   },
   "publishConfig": {
-    "registry": "https://registry.npm.alibaba-inc.com"
+    "registry": "https://registry.antfin-inc.com"
   },
-  "gitHead": "3bfd7df92985ec6c9d2ccb8ba95d7b0829fa2b1d"
+  "gitHead": "19b2119b9f95f8a3da0851b3943774a770975991"
 }
