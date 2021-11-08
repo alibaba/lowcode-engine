@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-renderer-core",
-  "version": "1.0.72-beta.1",
+  "version": "1.0.72-beta.2",
   "description": "renderer core",
   "license": "MIT",
   "main": "lib/index.js",
@@ -17,7 +17,7 @@
     "@ali/bzb-request": "^2.6.0-beta.13",
     "@ali/lib-mtop": "^2.5.1",
     "@ali/lowcode-datasource-engine": "^1.0.22",
-    "@ali/lowcode-types": "1.0.72-beta.1",
+    "@ali/lowcode-types": "1.0.72-beta.2",
     "classnames": "^2.2.6",
     "debug": "^4.1.1",
     "fetch-jsonp": "^1.1.3",
@@ -45,5 +45,5 @@
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"
   },
-  "gitHead": "d70348a5f4d0cc6f75e5147530603abcd9bbf29d"
+  "gitHead": "62f2494d31c264da3e5aa8d7d9d9e4ccc899d0c9"
 }

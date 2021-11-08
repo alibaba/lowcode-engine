@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-utils",
-  "version": "1.0.72-beta.1",
+  "version": "1.0.72-beta.2",
   "description": "Utils for Ali lowCode engine",
   "files": [
     "es",
@@ -12,7 +12,7 @@
     "build": "build-scripts build --skip-demo"
   },
   "dependencies": {
-    "@ali/lowcode-types": "1.0.72-beta.1",
+    "@ali/lowcode-types": "1.0.72-beta.2",
     "@alifd/next": "^1.19.16",
     "lodash.get": "^4.4.2",
     "react": "^16"
@@ -26,5 +26,5 @@
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"
   },
-  "gitHead": "d70348a5f4d0cc6f75e5147530603abcd9bbf29d"
+  "gitHead": "62f2494d31c264da3e5aa8d7d9d9e4ccc899d0c9"
 }

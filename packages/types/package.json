@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-types",
-  "version": "1.0.72-beta.1",
+  "version": "1.0.72-beta.2",
   "description": "Types for Ali lowCode engine",
   "files": [
     "es",
@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@ali/lowcode-datasource-types": "^1.0.21",
-    "@ali/lowcode-designer": "1.0.72-beta.1",
+    "@ali/lowcode-designer": "1.0.72-beta.2",
     "power-di": "^2.2.4",
     "react": "^16",
     "strict-event-emitter-types": "^2.0.0"
@@ -27,5 +27,5 @@
   "publishConfig": {
     "registry": "https://registry.npm.alibaba-inc.com"
   },
-  "gitHead": "d70348a5f4d0cc6f75e5147530603abcd9bbf29d"
+  "gitHead": "62f2494d31c264da3e5aa8d7d9d9e4ccc899d0c9"
 }
