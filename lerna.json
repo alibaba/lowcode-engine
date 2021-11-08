@@ -2,7 +2,7 @@
   "lerna": "2.11.0",
   "version": "1.0.71",
   "npmClient": "tnpm",
-  "registry": "http://registry.npm.alibaba-inc.com",
+  "registry": "https://registry.antfin-inc.com",
   "useWorkspaces": true,
   "packages": [
     "packages/*"
