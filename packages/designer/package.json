@@ -44,7 +44,7 @@
     "typescript": "^4.0.3"
   },
   "publishConfig": {
-    "registry": "https://registry.npm.alibaba-inc.com"
+    "registry": "https://registry.antfin-inc.com"
   },
   "resolutions": {
     "@builder/babel-preset-ice": "1.0.1"

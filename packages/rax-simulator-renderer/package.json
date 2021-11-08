@@ -52,7 +52,7 @@
     ]
   },
   "publishConfig": {
-    "registry": "https://registry.npm.alibaba-inc.com"
+    "registry": "https://registry.antfin-inc.com"
   },
   "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-rax-simulator-renderer@1.0.71/build/index.html",
   "gitHead": "62f2494d31c264da3e5aa8d7d9d9e4ccc899d0c9"

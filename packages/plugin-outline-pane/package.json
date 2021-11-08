@@ -33,7 +33,7 @@
   },
   "license": "MIT",
   "publishConfig": {
-    "registry": "https://registry.npm.alibaba-inc.com"
+    "registry": "https://registry.antfin-inc.com"
   },
   "gitHead": "62f2494d31c264da3e5aa8d7d9d9e4ccc899d0c9"
 }
