@@ -7,6 +7,7 @@ import { SettingsPane } from './settings-pane';
 import { StageBox } from '../stage-box';
 import { SkeletonContext } from '../../context';
 import { createIcon } from '@ali/lowcode-utils';
+
 @observer
 export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any }, { shouldIgnoreRoot: boolean }> {
   state = {
@@ -67,7 +68,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
     const designer = editor.get('designer');
     const current = designer?.currentSelection?.getNodes()?.[0];
     let node: Node | null = settings.first;
-    const focusNode = node.document.focusNode;
+    const { focusNode } = node.document;
 
     const items = [];
     let l = 3;
@@ -138,7 +139,8 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
       );
     }
 
-    if (settings.isLocked) {
+    // 当节点被锁定，且未开启锁定后容器可设置属性
+    if (settings.isLocked && !engineConfig.get('enableLockedNodeSetting', false)) {
       return (
         <div className="lc-settings-main">
           <div className="lc-settings-notice">
@@ -147,7 +149,6 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
         </div>
       );
     }
-
     if (Array.isArray(settings.items) && settings.items.length === 0) {
       return (
         <div className="lc-settings-main">
