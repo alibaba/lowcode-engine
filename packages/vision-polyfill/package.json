@@ -43,7 +43,7 @@
     "tsconfig-paths-webpack-plugin": "^3.2.0"
   },
   "publishConfig": {
-    "registry": "https://registry.npm.alibaba-inc.com"
+    "registry": "https://registry.antfin-inc.com"
   },
   "gitHead": "3bfd7df92985ec6c9d2ccb8ba95d7b0829fa2b1d"
 }
