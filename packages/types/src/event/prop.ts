@@ -1,8 +1,6 @@
-import { IPropParent, SettingEntry } from '@ali/lowcode-designer';
-
 export interface ChangeOptions {
   key?: string | number;
-  prop?: SettingEntry | IPropParent;
+  prop?: any;
   node: Node;
   newValue: any;
   oldValue: any;
