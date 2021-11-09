@@ -361,6 +361,8 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
         if (key === '___loop___') {
           __debug('key is ___loop___, render a page!');
           container.rerender();
+          // 由于 scope 变化，需要清空缓存，使用新的 scope
+          cache.component.delete(schema.id);
           return;
         }
         if (!this.shouldRenderSingleNode()) {
