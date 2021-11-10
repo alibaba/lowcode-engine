@@ -7,7 +7,6 @@ import {
   ObjectOf,
   ArrayOf,
   TransformedComponentMetadata,
-  ConfigureSupport,
   OneOfType,
   ConfigureSupportEvent,
 } from '@ali/lowcode-types';
@@ -227,21 +226,21 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
           name,
           description,
         });
-        (supports as ConfigureSupport).events = supportedEvents;
+        supports.events = supportedEvents;
       }
       return;
     }
 
     if (name === 'className' && (propType === 'string' || propType === 'any')) {
-      if ((supports as ConfigureSupport).className == null) {
-        (supports as ConfigureSupport).className = true;
+      if (supports.className == null) {
+        supports.className = true;
       }
       return;
     }
 
     if (name === 'style' && (propType === 'object' || propType === 'any')) {
-      if ((supports as any).style == null) {
-        (supports as any).style = true;
+      if (supports.style == null) {
+        supports.style = true;
       }
       return;
     }
