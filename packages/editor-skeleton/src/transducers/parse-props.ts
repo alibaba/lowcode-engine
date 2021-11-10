@@ -9,6 +9,7 @@ import {
   TransformedComponentMetadata,
   ConfigureSupport,
   OneOfType,
+  ConfigureSupportEvent,
 } from '@ali/lowcode-types';
 
 function propConfigToFieldConfig(propConfig: PropConfig): FieldConfig {
@@ -204,7 +205,7 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
     };
   }
   const { component = {}, supports = {} } = configure;
-  const supportedEvents: any[] | null = (supports as any).events ? null : [];
+  const supportedEvents: ConfigureSupportEvent[] | null = supports.events ? null : [];
   const props: FieldConfig[] = [];
 
   metadata.props.forEach((prop) => {
