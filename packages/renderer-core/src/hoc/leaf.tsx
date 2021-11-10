@@ -21,7 +21,6 @@ export type IComponentHoc = {
 };
 
 export type IComponentConstruct = (Comp: types.IBaseRenderer, info: IComponentHocInfo) => types.Constructor;
-// const whitelist: string[] = [];
 
 interface IProps {
   _leaf: Node | undefined;
@@ -133,6 +132,8 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
   const editor = host?.designer?.editor;
   const { Component, forwardRef } = adapter.getRuntime();
 
+  const componentCacheId = schema.id;
+
   if (!cache || (curDocumentId && curDocumentId !== cache.documentId)) {
     cache?.event.forEach(event => {
       event.dispose?.forEach((disposeFn: any) => disposeFn && disposeFn());
@@ -151,8 +152,8 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
     getNode,
   });
 
-  if (curDocumentId && cache.component.has(schema.id)) {
-    return cache.component.get(schema.id);
+  if (curDocumentId && cache.component.has(componentCacheId)) {
+    return cache.component.get(componentCacheId);
   }
 
   class LeafHoc extends Component {
@@ -302,6 +303,14 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
           singleRender: false,
         };
       }
+      if (leaf?.hasLoop()) {
+        // 含有循环配置的元素，父元素是最小渲染单元
+        this.renderUnitInfo = {
+          minimalUnitId: leaf?.parent?.id,
+          minimalUnitName: leaf?.parent?.componentName,
+          singleRender: false,
+        };
+      }
       if (leaf?.parent) {
         this.getRenderUnitInfo(leaf.parent);
       }
@@ -362,7 +371,7 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
           __debug('key is ___loop___, render a page!');
           container.rerender();
           // 由于 scope 变化，需要清空缓存，使用新的 scope
-          cache.component.delete(schema.id);
+          cache.component.delete(componentCacheId);
           return;
         }
         if (!this.shouldRenderSingleNode()) {
@@ -511,7 +520,7 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
 
   LeafWrapper.displayName = (Comp as any).displayName;
 
-  cache.component.set(schema.id, LeafWrapper);
+  cache.component.set(componentCacheId, LeafWrapper);
 
   return LeafWrapper;
 }
