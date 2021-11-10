@@ -7,6 +7,8 @@ import {
   ObjectOf,
   ArrayOf,
   TransformedComponentMetadata,
+  ConfigureSupport,
+  OneOfType,
 } from '@ali/lowcode-types';
 
 function propConfigToFieldConfig(propConfig: PropConfig): FieldConfig {
@@ -102,7 +104,7 @@ function propTypeToSetter(propType: PropType): SetterType {
         isRequired,
         initialValue: (field: any) => {
           const data: any = {};
-          items.forEach((item) => {
+          items.forEach((item: any) => {
             let initial = item.defaultValue;
             if (initial == null && item.setter && typeof item.setter === 'object') {
               initial = (item.setter as any).initialValue;
@@ -224,14 +226,14 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
           name,
           description,
         });
-        (supports as any).events = supportedEvents;
+        (supports as ConfigureSupport).events = supportedEvents;
       }
       return;
     }
 
     if (name === 'className' && (propType === 'string' || propType === 'any')) {
-      if ((supports as any).className == null) {
-        (supports as any).className = true;
+      if ((supports as ConfigureSupport).className == null) {
+        (supports as ConfigureSupport).className = true;
       }
       return;
     }

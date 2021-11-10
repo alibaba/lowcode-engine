@@ -43,4 +43,5 @@ export interface PropConfig {
   propType: PropType;
   description?: string;
   defaultValue?: any;
+  setter?: any
 }

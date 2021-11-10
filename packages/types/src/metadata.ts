@@ -2,7 +2,7 @@ import { ReactNode, ComponentType, ReactElement } from 'react';
 import { IconType } from './icon';
 import { TipContent } from './tip';
 import { TitleContent } from './title';
-import { PropConfig } from './prop-config';
+import { PropConfig, PropType } from './prop-config';
 import { NpmInfo } from './npm';
 import { FieldConfig } from './field-config';
 import { NodeSchema, NodeData, ComponentSchema } from './schema';
@@ -105,18 +105,26 @@ export interface LiveTextEditingConfig {
   onSaveContent?: (content: string, prop: any) => any;
 }
 
+export type ConfigureSupportEvent = string | {
+  name: string;
+  propType?: PropType;
+  description?: string;
+};
+
+export type ConfigureSupport = {
+  events?: ConfigureSupportEvent[];
+  className?: boolean;
+  style?: boolean;
+  lifecycles?: any[];
+  // general?: boolean;
+  loop?: boolean;
+  condition?: boolean;
+};
+
 export interface Configure {
   props?: FieldConfig[];
   component?: ComponentConfigure;
-  supports?: {
-    events?: any[];
-    className?: boolean;
-    style?: boolean;
-    lifecycles?: any[];
-    // general?: boolean;
-    loop?: boolean;
-    condition?: boolean;
-  };
+  supports?: ConfigureSupport;
 }
 
 export interface ActionContentObject {
