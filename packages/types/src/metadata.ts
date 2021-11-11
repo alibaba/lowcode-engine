@@ -7,6 +7,7 @@ import { NpmInfo } from './npm';
 import { FieldConfig } from './field-config';
 import { NodeSchema, NodeData, ComponentSchema } from './schema';
 import { SettingTarget } from './setting-target';
+import { I18nData } from './i18n';
 
 export type NestingFilter = (testNode: any, currentNode: any) => boolean;
 export interface NestingRule {
@@ -177,6 +178,10 @@ export interface ComponentMetadata {
   configure?: FieldConfig[] | Configure;
   experimental?: Experimental;
   schema?: ComponentSchema;
+  snippets?: Snippet[];
+  group?: string | I18nData;
+  category?: string | I18nData;
+  priority?: number;
 }
 
 export interface TransformedComponentMetadata extends ComponentMetadata {
