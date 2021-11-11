@@ -12,7 +12,7 @@ export interface IWidget {
   readonly align?: string;
   readonly isWidget: true;
   readonly visible: boolean;
-  readonly disabled: boolean;
+  readonly disabled?: boolean;
   readonly body: ReactNode;
   readonly skeleton: Skeleton;
   readonly config: IWidgetBaseConfig;

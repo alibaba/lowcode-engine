@@ -11,6 +11,7 @@ import {
   isPanelConfig,
   DividerConfig,
   isDividerConfig,
+  IWidgetConfigArea,
 } from './types';
 import Panel, { isPanel } from './widget/panel';
 import WidgetContainer from './widget/widget-container';
@@ -221,8 +222,8 @@ export class Skeleton {
     Object.keys(plugins).forEach((area) => {
       plugins[area].forEach((item) => {
         const { pluginKey, type, props = {}, pluginProps } = item;
-        const config: any = {
-          area,
+        const config: Partial<IWidgetBaseConfig> = {
+          area: area as IWidgetConfigArea,
           type: 'Widget',
           name: pluginKey,
           contentProps: pluginProps,
@@ -249,7 +250,7 @@ export class Skeleton {
         if (pluginKey in components) {
           config.content = components[pluginKey];
         }
-        this.add(config);
+        this.add(config as IWidgetBaseConfig);
       });
     });
   }
@@ -296,8 +297,8 @@ export class Skeleton {
   }
 
   createPanel(config: PanelConfig) {
-    config = this.parseConfig(config);
-    const panel = new Panel(this, config);
+    const parsedConfig = this.parseConfig(config);
+    const panel = new Panel(this, parsedConfig as PanelConfig);
     this.panels.set(panel.name, panel);
     return panel;
   }
@@ -316,7 +317,7 @@ export class Skeleton {
       area: 'stages',
       ...config,
     });
-    return stage?.getName();
+    return stage?.getName?.();
   }
 
   createContainer(
@@ -331,8 +332,8 @@ export class Skeleton {
     return container;
   }
 
-  private parseConfig(config: IWidgetBaseConfig): any {
-    if ((config as any).parsed) {
+  private parseConfig(config: IWidgetBaseConfig) {
+    if (config.parsed) {
       return config;
     }
     const { content, ...restConfig } = config;
@@ -357,8 +358,8 @@ export class Skeleton {
     return restConfig;
   }
 
-  add(config: IWidgetBaseConfig & { area?: string }, extraConfig?: object) {
-    const parsedConfig: any = {
+  add(config: IWidgetBaseConfig, extraConfig?: Record<string, any>) {
+    const parsedConfig = {
       ...this.parseConfig(config),
       ...extraConfig,
     };
@@ -375,29 +376,29 @@ export class Skeleton {
     switch (area) {
       case 'leftArea':
       case 'left':
-        return this.leftArea.add(parsedConfig);
+        return this.leftArea.add(parsedConfig as PanelDockConfig);
       case 'rightArea':
       case 'right':
-        return this.rightArea.add(parsedConfig);
+        return this.rightArea.add(parsedConfig as PanelConfig);
       case 'topArea':
       case 'top':
-        return this.topArea.add(parsedConfig);
+        return this.topArea.add(parsedConfig as PanelDockConfig);
       case 'toolbar':
-        return this.toolbar.add(parsedConfig);
+        return this.toolbar.add(parsedConfig as PanelDockConfig);
       case 'mainArea':
       case 'main':
       case 'center':
       case 'centerArea':
-        return this.mainArea.add(parsedConfig);
+        return this.mainArea.add(parsedConfig as PanelConfig);
       case 'bottomArea':
       case 'bottom':
-        return this.bottomArea.add(parsedConfig);
+        return this.bottomArea.add(parsedConfig as PanelConfig);
       case 'leftFixedArea':
-        return this.leftFixedArea.add(parsedConfig);
+        return this.leftFixedArea.add(parsedConfig as PanelConfig);
       case 'leftFloatArea':
-        return this.leftFloatArea.add(parsedConfig);
+        return this.leftFloatArea.add(parsedConfig as PanelConfig);
       case 'stages':
-        return this.stages.add(parsedConfig);
+        return this.stages.add(parsedConfig as StageConfig);
       default:
         // do nothing
     }

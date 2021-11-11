@@ -78,7 +78,7 @@ export default class Panel implements IWidget {
 
   private container?: WidgetContainer<Panel, PanelConfig>;
 
-  @obx.ref private parent?: WidgetContainer;
+  @obx.ref public parent?: WidgetContainer;
 
   constructor(readonly skeleton: Skeleton, readonly config: PanelConfig) {
     makeObservable(this);
