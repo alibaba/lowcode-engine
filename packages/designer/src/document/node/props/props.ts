@@ -228,9 +228,10 @@ export class Props implements IPropParent {
    */
   @action
   deleteKey(key: string): void {
-    this.items = this.items.filter(item => {
+    this.items = this.items.filter((item, i) => {
       if (item.key === key) {
         item.purge();
+        this.items.splice(i, 1);
         return false;
       }
       return true;

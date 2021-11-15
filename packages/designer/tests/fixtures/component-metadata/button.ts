@@ -253,6 +253,7 @@ export default {
         // parentWhitelist: 'Div',
         // childWhitelist: 'Div',
       },
+      descriptor: 'xTitle'
     },
     supports: {},
   },

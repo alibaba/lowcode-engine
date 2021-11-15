@@ -17,6 +17,8 @@ import {
 import { Designer } from '../../../src/designer/designer';
 import formSchema from '../../fixtures/schema/form';
 import divMetadata from '../../fixtures/component-metadata/div';
+import dialogMetadata from '../../fixtures/component-metadata/dialog';
+import btnMetadata from '../../fixtures/component-metadata/button';
 import formMetadata from '../../fixtures/component-metadata/form';
 import otherMeta from '../../fixtures/component-metadata/other';
 import pageMetadata from '../../fixtures/component-metadata/page';
@@ -46,6 +48,28 @@ describe('Node 方法测试', () => {
   });
 
   it('condition group', () => {});
+
+  it('getExtraProp / setExtraProp', () => {
+    const firstBtn = doc.getNode('node_k1ow3cbn')!;
+    expect(firstBtn.getExtraProp('non-existing', false)).toBeNull();
+
+    firstBtn.setExtraProp('xxx', '1111');
+    expect(firstBtn.getExtraProp('xxx', false).getValue()).toBe('1111');
+  });
+
+  it('import(leaf)', () => {
+    const form = doc.getNode('node_k1ow3cbo');
+    form.insert({ componentName: 'Leaf', children: '111' });
+
+    const leaf = form.getChildren().get(2);
+    expect(leaf.getPropValue('children')).toBe('111');
+
+    leaf.import({ componentName: 'Leaf', children: '222' });
+    expect(leaf.getPropValue('children')).toBe('222');
+
+    leaf.import({ componentName: 'Leaf', children: { type: 'JSExpression', value: 'state.x' } });
+    expect(leaf.getPropValue('children')).toEqual({ type: 'JSExpression', value: 'state.x' });
+  });
 
   it('hasCondition', () => {
     const firstBtn = doc.getNode('node_k1ow3cbn')!;
@@ -149,6 +173,22 @@ describe('Node 方法测试', () => {
       expect(o).toBeNull();
     });
 
+    it('放入模态节点', () => {
+      designer.createComponentMeta(pageMetadata);
+      designer.createComponentMeta(dialogMetadata);
+
+      const dialog = doc.createNode({ componentName: 'Dialog' });
+
+      const o = doc.rootNode?.getSuitablePlace(dialog, 1);
+      expect(o.container).toBe(doc.rootNode);
+      expect(o.ref).toBe(1);
+    });
+
+    it('包含 focusNode', () => {
+      const o = doc.rootNode?.getSuitablePlace(doc.rootNode);
+      expect(o.container).toBe(doc.rootNode);
+    });
+
     it.skip('非 root 节点，不能放入子节点', () => {
       designer.createComponentMeta(formMetadata);
       designer.createComponentMeta(pageMetadata);
@@ -195,6 +235,10 @@ describe('Node 方法测试', () => {
 
   it('removeChild / replaceWith / replaceChild', () => {
     const firstBtn = doc.getNode('node_k1ow3cbn')!;
+    const form = doc.getNode('node_k1ow3cbo');
+
+    // 不符合条件的节点直接返回
+    expect(firstBtn.replaceChild(form, { componentName: 'Button', props: { x: 1 } })).toBe(form);
 
     firstBtn.select();
     firstBtn.parent?.replaceChild(firstBtn, { componentName: 'Button', props: { x: 1 } });
@@ -206,6 +250,15 @@ describe('Node 方法测试', () => {
     secondBtn.replaceWith({ componentName: 'Button', props: { y: 1 } });
     expect(firstBtn.parent?.getChildren()?.size).toBe(2);
     expect(firstBtn.parent?.getChildren()?.get(1)?.getPropValue('y')).toBe(1);
+  });
+
+  it('schema', () => {
+    const firstBtn = doc.getNode('node_k1ow3cbn')!;
+    const schema = firstBtn.schema;
+    schema.props.size = 'large';
+    firstBtn.schema = schema;
+
+    expect(firstBtn.getPropValue('size')).toBe('large');
   });
 
   describe('插入相关方法', () => {
@@ -278,6 +331,19 @@ describe('Node 方法测试', () => {
     expect(mockFn).not.toHaveBeenCalled();
   });
 
+  it('RGL / getRGL', () => {
+    const firstBtn = doc.getNode('node_k1ow3cbn')!;
+    firstBtn.isRGLContainer = true;
+    expect(firstBtn.isRGLContainer).toBeTruthy();
+
+    const rgl = firstBtn.getRGL();
+    expect(rgl.isContainerNode).toBeFalsy();
+    expect(rgl.isEmptyNode).toBeTruthy();
+    expect(rgl.isRGLContainerNode).toBeTruthy();
+    expect(rgl.isRGLNode).toBeFalsy();
+    expect(rgl.isRGL).toBeTruthy();
+  });
+
   it('onPropChange', () => {
     const mockFn = jest.fn();
     const firstBtn = doc.getNode('node_k1ow3cbn')!;
@@ -330,8 +396,24 @@ describe('Node 方法测试', () => {
     expect(doc.getNode('form')?.isValidComponent()).toBeFalsy();
   });
 
+  it('title', () => {
+    designer.createComponentMeta(btnMetadata);
+    const btn = doc.getNode('node_k1ow3cbn');
+    // 从 componentMeta 中获取到 title 值
+    expect(btn.title).toEqual({ type: 'i18n', 'zh-CN': '按钮', 'en-US': 'Button' } );
+    // 从 extraProp 中获取值
+    btn.setExtraProp('title', 'hello button');
+    expect(btn.title).toBe('hello button');
+
+    // btn.props.deleteKey('___title___');
+    // 从 componentMeta descriptor 指向的 key 获取 title
+    // btn.setPropValue('xTitle', 'title from descriptor')
+    // expect(btn.title).toBe('title from descriptor');
+  });
+
   it('isEmpty / getIndex / getIcon', () => {
     const firstBtn = doc.getNode('node_k1ow3cbn')!;
+    // expect(firstBtn.children).toBeNull();
     expect(firstBtn.isEmpty()).toBeTruthy();
     expect(firstBtn.index).toBe(0);
     expect(firstBtn.getIndex()).toBe(0);
@@ -378,12 +460,39 @@ describe('Node 方法测试', () => {
     expect(doc.rootNode.toString()).toBe('page');
   });
 
+  it('lock', () => {
+    const form = doc.getNode('node_k1ow3cbo');
+    expect(form.isLocked).toBeFalsy();
+    form.lock(true);
+    expect(form.isLocked).toBeTruthy();
+    form.lock(false);
+    expect(form.isLocked).toBeFalsy();
+    form.lock();
+    expect(form.isLocked).toBeTruthy();
+  });
+
+  it('didDropIn / didDropOut', () => {
+    const form = doc.getNode('node_k1ow3cbo');
+    designer.createComponentMeta(divMetadata);
+    const callbacks = form.componentMeta.getMetadata().experimental?.callbacks;
+    const fn1 = callbacks.onNodeAdd = jest.fn();
+    const fn2 = callbacks.onNodeRemove = jest.fn();
+    const textField = doc.getNode('node_k1ow3cc9');
+    form.didDropIn(textField);
+    expect(fn1).toHaveBeenCalledWith(textField, form);
+
+    form.didDropOut(textField);
+    expect(fn2).toHaveBeenCalledWith(textField, form);
+  });
+
   it('hover', () => {
     const firstBtn = doc.getNode('node_k1ow3cbn')!;
     firstBtn.hover(true);
     expect(doc.designer.detecting.current).toBe(firstBtn);
     firstBtn.hover(false);
     expect(doc.designer.detecting.current).toBeNull();
+    firstBtn.hover();
+    expect(doc.designer.detecting.current).toBe(firstBtn);
   });
 
   it('getRect', () => {
@@ -410,13 +519,14 @@ describe('Node 方法测试', () => {
 
   it('contains / comparePosition', () => {
     const page = doc.getNode('page')!;
+    const content = doc.getNode('node_k1ow3cbb')!;
     const firstBtn = doc.getNode('node_k1ow3cbn')!;
     const secondBtn = doc.getNode('node_k1ow3cbp')!;
     const firstCard = doc.getNode('node_k1ow3cbj')!;
     expect(contains(firstBtn, firstBtn)).toBeTruthy();
     expect(contains(firstBtn, secondBtn)).toBeFalsy();
-    // TODO: 其实这句测试的代码没懂
     expect(contains(firstBtn, page)).toBeFalsy();
+    expect(contains(firstBtn, content)).toBeFalsy();
     expect(contains(firstCard, firstBtn)).toBeFalsy();
 
     expect(comparePosition(firstBtn, secondBtn)).toBe(PositionNO.BeforeOrAfter);

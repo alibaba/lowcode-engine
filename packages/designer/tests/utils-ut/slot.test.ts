@@ -21,10 +21,14 @@ const mockNode = {
   }]
 };
 
+// 没有 slots
+const mockNode2 = {};
+
 it('includeSlot', () => {
   expect(includeSlot(mockNode, 'haha')).toBeTruthy();
   expect(includeSlot(mockNode, 'heihei')).toBeTruthy();
   expect(includeSlot(mockNode, 'xixi')).toBeFalsy();
+  expect(includeSlot(mockNode2, 'xixi')).toBeFalsy();
 });
 
 it('removeSlot', () => {
@@ -34,4 +38,6 @@ it('removeSlot', () => {
   expect(mockNode.slots).toHaveLength(1);
   expect(removeSlot(mockNode, 'heihei')).toBeTruthy();
   expect(mockNode.slots).toHaveLength(0);
+
+  expect(removeSlot(mockNode2, 'xixi')).toBeFalsy();
 });

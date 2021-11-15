@@ -230,7 +230,10 @@ export default {
     supports: {},
   },
   experimental: {
-    callbacks: {},
+    callbacks: {
+      onNodeAdd: (dragment, self) => { console.log(dragment); },
+      onNodeRemove: (dragment, self) => { console.log(dragment); }
+    },
     initials: [
       {
         name: 'behavior',

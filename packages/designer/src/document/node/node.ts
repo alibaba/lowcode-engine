@@ -142,9 +142,10 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   @computed get title(): string | I18nData | ReactElement {
     let t = this.getExtraProp('title');
-    if (!t && this.componentMeta.descriptor) {
-      t = this.getProp(this.componentMeta.descriptor, false);
-    }
+    // TODO: 暂时走不到这个分支
+    // if (!t && this.componentMeta.descriptor) {
+    //   t = this.getProp(this.componentMeta.descriptor, false);
+    // }
     if (t) {
       const v = t.getAsString();
       if (v) {
@@ -175,7 +176,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       this._children.internalInitParent();
       this.props.merge(
         this.upgradeProps(this.initProps(props || {})),
-        this.upgradeProps(extras || {}),
+        this.upgradeProps(extras),
       );
       this.setupAutoruns();
     }
@@ -719,6 +720,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     const _extras_: { [key: string]: any } = {
       ...extras,
     };
+    /* istanbul ignore next */
     Object.keys(this._addons).forEach((key) => {
       const addon = this._addons[key];
       if (addon) {
@@ -1183,12 +1185,18 @@ export function getZLevelTop(child: Node, zLevel: number): Node | null {
   return r;
 }
 
+/**
+ * 测试两个节点是否为包含关系
+ * @param node1 测试的父节点
+ * @param node2 测试的被包含节点
+ * @returns 是否包含
+ */
 export function contains(node1: Node, node2: Node): boolean {
   if (node1 === node2) {
     return true;
   }
 
-  if (!node1.isParental || !node2.parent) {
+  if (!node1.isParental() || !node2.parent) {
     return false;
   }
 
