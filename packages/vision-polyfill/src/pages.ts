@@ -70,8 +70,11 @@ const pages = Object.assign(project, {
         componentsMap: [],
         componentsTree,
         id: pages[0].id,
-        config: project.config,
+        config: {
+          ...project.config,
+          ...pages[0].config,
         },
+      },
       true,
     );
     // FIXME: 在页面节点初始化结束后，还有响应式变量变化导致了多次变化
