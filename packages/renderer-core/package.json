@@ -18,6 +18,7 @@
     "@ali/lib-mtop": "^2.5.1",
     "@ali/lowcode-datasource-engine": "^1.0.22",
     "@ali/lowcode-types": "1.0.72",
+    "@ali/lowcode-utils": "1.0.72",
     "classnames": "^2.2.6",
     "debug": "^4.1.1",
     "fetch-jsonp": "^1.1.3",

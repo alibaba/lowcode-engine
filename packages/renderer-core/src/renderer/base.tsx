@@ -224,20 +224,26 @@ export default function baseRenererFactory() {
       const dataSource = (schema && schema.dataSource) || {};
       // requestHandlersMap 存在才走数据源引擎方案
       if (props?.__appHelper?.requestHandlersMap) {
-        const { dataSourceMap, reloadDataSource } = createDataSourceEngine(dataSource, (this as any), {
-          requestHandlersMap: props.__appHelper.requestHandlersMap,
-        });
-        this.dataSourceMap = dataSourceMap;
-        this.reloadDataSource = () => new Promise((resolve) => {
-          this.__debug('reload data source');
-          // this.__showPlaceholder = true;
-          reloadDataSource().then(() => {
-            // this.__showPlaceholder = false;
-            // @TODO 是否需要 forceUpate
-            // this.forceUpdate();
-            resolve({});
-          });
-        });
+        this.__dataHelper = {
+          updateConfig: (updateDataSource: any) => {
+            const { dataSourceMap, reloadDataSource } = createDataSourceEngine(updateDataSource, (this as any), {
+              requestHandlersMap: props.__appHelper.requestHandlersMap,
+            });
+
+            this.reloadDataSource = () => new Promise((resolve) => {
+              this.__debug('reload data source');
+              // this.__showPlaceholder = true;
+              reloadDataSource().then(() => {
+                // this.__showPlaceholder = false;
+                // @TODO 是否需要 forceUpate
+                // this.forceUpdate();
+                resolve({});
+              });
+            });
+            return dataSourceMap;
+          },
+        };
+        this.dataSourceMap = this.__dataHelper.updateConfig(dataSource);
       } else {
         const appHelper = props.__appHelper;
         this.__dataHelper = new DataHelper(this, dataSource, appHelper, (config: any) => this.__parseData(config));
@@ -531,7 +537,7 @@ export default function baseRenererFactory() {
           props.key = props.__id;
         }
 
-        let child: any = parentInfo.componentChildren || this.__getSchemaChildrenVirtualDom(schema, scope, Comp);
+        let child: any = this.__getSchemaChildrenVirtualDom(schema, scope, Comp);
         const renderComp = (props: any) => engine.createElement(Comp, props, child);
         // 设计模式下的特殊处理
         if (engine && [DESIGN_MODE.EXTEND, DESIGN_MODE.BORDER].includes(engine.props.designMode)) {
@@ -590,7 +596,7 @@ export default function baseRenererFactory() {
         .map((d: IComponentHoc) => d.hoc);
     }
 
-    __getSchemaChildrenVirtualDom = (schema: ISchema, scope: any, Comp: any, childrenMap?: Map<any, any>) => {
+    __getSchemaChildrenVirtualDom = (schema: ISchema, scope: any, Comp: any) => {
       let _children = this.getSchemaChildren(schema);
 
       let children: any = [];
@@ -606,8 +612,6 @@ export default function baseRenererFactory() {
             {
               schema,
               Comp,
-              // 有 childrenMap 情况下，children 只计算第一层，不需要遍历多层。
-              componentChildren: childrenMap?.get(_child.id)?.props.children || null,
             },
           );
 
