@@ -29,7 +29,7 @@ describe('document-model 测试', () => {
     expect(doc.currentRoot).toBe(doc.rootNode);
     expect(doc.root).toBe(doc.rootNode);
     expect(doc.modalNode).toBeUndefined();
-    expect(doc.isBlank()).toBeFalsy();
+    expect(doc.isBlank()).toBeTruthy();
     expect(doc.schema).toEqual({
       componentName: 'Page',
       condition: true,

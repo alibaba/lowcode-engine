@@ -1148,6 +1148,16 @@ Object {
         "sync": true,
       },
       "hidden": false,
+      "i18n": Object {
+        "en-US": Object {
+          "i18n-jwg27yo3": "China",
+          "i18n-jwg27yo4": "Hello",
+        },
+        "zh-CN": Object {
+          "i18n-jwg27yo3": "中国",
+          "i18n-jwg27yo4": "你好",
+        },
+      },
       "id": "page",
       "isLocked": false,
       "lifeCycles": Object {

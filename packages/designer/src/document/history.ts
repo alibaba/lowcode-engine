@@ -185,9 +185,14 @@ export class History {
     this.emitter.removeAllListeners();
     this.records = [];
   }
-
+  /**
+   *
+   * @deprecated
+   * @returns
+   * @memberof History
+   */
   isModified() {
-    return this.point !== this.session.cursor;
+    return this.isSavePoint();
   }
 }
 

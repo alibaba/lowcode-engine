@@ -980,4 +980,14 @@ export default {
       condition: true,
     },
   ],
+  i18n: {
+    'zh-CN': {
+      'i18n-jwg27yo4': '你好',
+      'i18n-jwg27yo3': '中国',
+    },
+    'en-US': {
+      'i18n-jwg27yo4': 'Hello',
+      'i18n-jwg27yo3': 'China',
+    },
+  },
 };

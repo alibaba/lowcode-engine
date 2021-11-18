@@ -407,7 +407,7 @@ export class DocumentModel {
    * 是否已修改
    */
   isModified() {
-    return !this.history.isSavePoint();
+    return this.history.isSavePoint();
   }
 
   // FIXME: does needed?

@@ -58,7 +58,7 @@ export class Project {
       // TODO: future change this filter
       componentsMap: this.currentDocument?.getComponentsMap(),
       componentsTree: this.documents.filter((doc) => !doc.isBlank()).map((doc) => doc.schema),
-      i18n: this._i18n || {},
+      i18n: this.i18n,
     };
   }
 
@@ -99,6 +99,7 @@ export class Project {
         const documentInstances = this.data.componentsTree.map((data) => this.createDocument(data));
         // TODO: 暂时先读 config tabBar 里的值，后面看整个 layout 结构是否能作为引擎规范
         if (this.config?.layout?.props?.tabBar?.items?.length > 0) {
+          // slice(1)这个贼不雅，默认任务fileName 是类'/fileName'的形式
           documentInstances.find((i) => i.fileName === this.config.layout.props.tabBar.items[0].path?.slice(1))?.open();
         } else {
           documentInstances[0].open();
@@ -222,13 +223,14 @@ export class Project {
       return null;
     } else if (isDocumentModel(doc)) {
       return doc.open();
-    } else if (isPageSchema(doc)) {
+    }
+    //  else if (isPageSchema(doc)) {
       // 暂时注释掉，影响了 diff 功能
       // const foundDoc = this.documents.find(curDoc => curDoc?.rootNode?.id && curDoc?.rootNode?.id === doc?.id);
       // if (foundDoc) {
       //   foundDoc.remove();
       // }
-    }
+    // }
 
     doc = this.createDocument(doc);
     return doc.open();
