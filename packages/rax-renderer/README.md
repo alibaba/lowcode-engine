@@ -5,7 +5,7 @@ Rax 渲染模块。
 ## 安装
 
 ```
-$ npm install @ali/lowcode-engine-rax-renderer --save
+$ npm install @ali/lowcode-rax-renderer --save
 ```
 
 ## 使用
@@ -13,7 +13,7 @@ $ npm install @ali/lowcode-engine-rax-renderer --save
 ```js
 import { createElement, render } from 'rax';
 import DriverUniversal from 'driver-universal';
-import RaxRenderer from '@ali/lowcode-engine-rax-renderer';
+import RaxRenderer from '@ali/lowcode-rax-renderer';
 
 const components = {
   View,
