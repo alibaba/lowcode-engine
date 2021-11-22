@@ -316,12 +316,12 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
       }
     }
 
-    makeUnitRender() {
+    makeUnitRender = () => {
       this.beforeRender(RerenderType.MinimalRenderUnit);
       const nextProps = getProps(this.leaf?.export?.(TransformStage.Render) as types.ISchema, scope, Comp, componentInfo);
       const children = getChildren(this.leaf?.export?.(TransformStage.Render) as types.ISchema, scope, Comp);
       const nextState = {
-        nextProps,
+        nodeProps: nextProps,
         nodeChildren: children,
         childrenInState: true,
       };
@@ -331,7 +331,7 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
 
       __debug(`${this.leaf?.componentName}(${this.props.componentId}) MinimalRenderUnit Render!`);
       this.setState(nextState);
-    }
+    };
 
     componentWillReceiveProps(nextProps: any) {
       let { _leaf, componentId } = nextProps;

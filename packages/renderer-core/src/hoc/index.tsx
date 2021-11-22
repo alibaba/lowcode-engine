@@ -9,12 +9,7 @@ export function compWrapper(Comp: any) {
     // }
 
     render() {
-      const { forwardRef, ...rest } = this.props;
-
-      return createElement(Comp, {
-        ...rest,
-        ref: forwardRef,
-      });
+      return createElement(Comp, this.props);
     }
   }
 
