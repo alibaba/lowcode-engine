@@ -1,6 +1,7 @@
-import isObject from 'lodash/isObject';
-import { toCss } from '@ali/vu-css-style';
+import { isObject } from 'lodash';
+import { css } from '@ali/lowcode-utils';
 
+const { toCss } = css;
 const engine = (window as any).VisualEngine;
 const { Trunk, Viewport } = engine;
 

@@ -1,6 +1,6 @@
 
 import { isI18NObject } from './is-object';
-import get from 'lodash.get';
+import { get } from 'lodash';
 import { ComponentMeta } from '@ali/lowcode-designer';
 import { TransformStage } from '@ali/lowcode-types';
 interface Variable {
