@@ -108,15 +108,17 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     let _onChange = extraProps?.onChange;
     let stageName;
     if (display === 'entry') {
+      stageName = `${field.getNode().id }_${field.name.toString()}`;
+      // 清除原 stage，不然 content 引用的一直是老的 field，导致数据无法得到更新
+      stages.container.remove(stageName);
       const stage = stages.add({
         type: 'Widget',
-        name: `${field.getNode().id }_${field.name.toString()}`,
+        name: stageName,
         content: <Fragment>{field.items.map((item, index) => createSettingFieldView(item, field, index))}</Fragment>,
         props: {
           title: field.title,
         },
       });
-      stageName = stage.name;
     }
 
     return createField(
@@ -192,15 +194,17 @@ class SettingGroupView extends Component<{ field: SettingField }> {
 
     let stageName;
     if (display === 'entry') {
-      const stage = stages.add({
+      stageName = `${field.getNode().id }_${field.name.toString()}`;
+      // 清除原 stage，不然 content 引用的一直是老的 field，导致数据无法得到更新
+      stages.container.remove(stageName);
+      stages.add({
         type: 'Widget',
-        name: `${field.getNode().id }_${ field.name.toString()}`,
+        name: stageName,
         content: <Fragment>{field.items.map((item, index) => createSettingFieldView(item, field, index))}</Fragment>,
         props: {
           title: field.title,
         },
       });
-      stageName = stage.name;
     }
 
     // todo: split collapsed state | field.items for optimize
