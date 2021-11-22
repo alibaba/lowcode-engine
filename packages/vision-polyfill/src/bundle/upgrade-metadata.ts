@@ -29,6 +29,11 @@ export enum DISPLAY_TYPE {
   ENTRY = 'entry',
 }
 
+type Tip = string | {
+  content?: string;
+  url?: string;
+  [key: string]: string | undefined;
+};
 // from vision 5.4
 export interface OldPropConfig {
   /**
@@ -45,10 +50,7 @@ export interface OldPropConfig {
    */
   name: string; // =>
   title?: string; // =>
-  tip?: {
-    content?: string;
-    url?: string;
-  };
+  tip?: Tip;
   defaultValue?: any; // => extraProps.defaultValue
   initialValue?: any | ((value: any, defaultValue: any) => any); // => initials.initialValue
   initial?: (value: any, defaultValue: any) => any; // => initials.initialValue
@@ -256,6 +258,21 @@ function formatPropValue(originalValue: any, value: any) {
   return value;
 }
 
+function isTipString(tip: Tip): tip is string {
+  return typeof tip === 'string';
+}
+
+function getTipAttr(tip: Tip, attrName: string, decorator: (originalValue: string) => string = v => v): string {
+  if (isTipString(tip)) {
+    return attrName === 'content' ? decorator(tip) : '';
+  }
+  return decorator(tip[attrName]!);
+}
+
+function getTipContent(tip: Tip, name: string): string {
+  return getTipAttr(tip, 'content', (v) => `属性：${name} | 说明：${v}`);
+}
+
 export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollector) {
   const {
     type,
@@ -301,14 +318,14 @@ export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollec
     if (typeof title !== 'object' || isI18nData(title) || isValidElement(title)) {
       newConfig.title = {
         label: title,
-        tip: tip.content,
-        docUrl: tip.url,
+        tip: getTipContent(tip, name),
+        docUrl: getTipAttr(tip, 'url'),
       };
     } else {
       newConfig.title = {
         ...(title as any),
-        tip: tip.content,
-        docUrl: tip.url,
+        tip: getTipContent(tip, name),
+        docUrl: getTipAttr(tip, 'url'),
       };
     }
   }
