@@ -1,6 +1,7 @@
 import { project } from '@ali/lowcode-engine';
-import { isPlainObject } from '@ali/lowcode-utils';
-import { toCss } from '@ali/vu-css-style';
+import { isPlainObject, css } from '@ali/lowcode-utils';
+
+const { toCss } = css;
 
 export function stylePropsReducer(props: any, node: any) {
   let cssId;

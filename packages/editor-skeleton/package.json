@@ -21,7 +21,6 @@
     "@ali/lowcode-editor-core": "1.0.72",
     "@ali/lowcode-types": "1.0.72",
     "@ali/lowcode-utils": "1.0.72",
-    "@ali/ve-less-variables": "^2.0.0",
     "@alifd/next": "^1.20.12",
     "classnames": "^2.2.6",
     "react": "^16.8.1",

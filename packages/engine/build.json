@@ -12,6 +12,7 @@
           "prop-types": "var window.PropTypes",
           "@ali/visualengine": "var window.VisualEngine",
           "@ali/visualengine-utils": "var window.VisualEngineUtils",
+          "@ali/lowcode-engine-ext": "var window.AliLowCodeEngineExt",
           "rax": "var window.Rax",
           "monaco-editor/esm/vs/editor/editor.api": "var window.monaco",
           "monaco-editor/esm/vs/editor/editor.main.js": "var window.monaco"
