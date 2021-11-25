@@ -1,5 +1,5 @@
 import { Component, MouseEvent, Fragment } from 'react';
-import { shallowIntl, createSetterContent, observer, obx, engineConfig } from '@ali/lowcode-editor-core';
+import { shallowIntl, createSetterContent, observer, obx, engineConfig, runInAction } from '@ali/lowcode-editor-core';
 import { createContent } from '@ali/lowcode-utils';
 import { createField } from '../field';
 import PopupService, { PopupPipe } from '../popup';
@@ -22,14 +22,44 @@ function isStandardComponent(componentMeta: ComponentMeta | null) {
   return prototype == null;
 }
 
+type SettingFieldViewProps = { field: SettingField };
 @observer
 class SettingFieldView extends Component<{ field: SettingField }> {
   static contextType = SkeletonContext;
 
+  stageName: string | undefined;
+
+  constructor(props: SettingFieldViewProps) {
+    super(props);
+
+    const { field } = this.props;
+    const { extraProps } = field;
+    const { display } = extraProps;
+
+    const { stages } = field.editor.get('skeleton') as Skeleton;
+    let stageName;
+    if (display === 'entry') {
+      runInAction(() => {
+        stageName = `${field.getNode().id }_${field.name.toString()}`;
+        // 清除原 stage，不然 content 引用的一直是老的 field，导致数据无法得到更新
+        stages.container.remove(stageName);
+        const stage = stages.add({
+          type: 'Widget',
+          name: stageName,
+          content: <Fragment>{field.items.map((item, index) => createSettingFieldView(item, field, index))}</Fragment>,
+          props: {
+            title: field.title,
+          },
+        });
+      });
+    }
+    this.stageName = stageName;
+  }
+
   render() {
     const { field } = this.props;
     const { extraProps, componentMeta } = field;
-    const { condition, defaultValue, display } = extraProps;
+    const { condition, defaultValue } = extraProps;
     let visible;
     try {
       visible = typeof condition === 'function' ? condition(field) !== false : true;
@@ -102,24 +132,8 @@ class SettingFieldView extends Component<{ field: SettingField }> {
       value = field.getValue();
     }
 
-    const skeleton = this.context as Skeleton;
-    const { stages } = skeleton;
-
     let _onChange = extraProps?.onChange;
-    let stageName;
-    if (display === 'entry') {
-      stageName = `${field.getNode().id }_${field.name.toString()}`;
-      // 清除原 stage，不然 content 引用的一直是老的 field，导致数据无法得到更新
-      stages.container.remove(stageName);
-      const stage = stages.add({
-        type: 'Widget',
-        name: stageName,
-        content: <Fragment>{field.items.map((item, index) => createSettingFieldView(item, field, index))}</Fragment>,
-        props: {
-          title: field.title,
-        },
-      });
-    }
+    let stageName = this.stageName;
 
     return createField(
       {
@@ -175,9 +189,40 @@ class SettingFieldView extends Component<{ field: SettingField }> {
   }
 }
 
+type SettingGroupViewProps = SettingFieldViewProps;
 @observer
-class SettingGroupView extends Component<{ field: SettingField }> {
+class SettingGroupView extends Component<SettingGroupViewProps> {
   static contextType = SkeletonContext;
+
+  stageName: string | undefined;
+
+  constructor(props: SettingGroupViewProps) {
+    super(props);
+    const { field } = this.props;
+    const { extraProps } = field;
+    const { condition, display } = extraProps;
+
+    const { stages } = field.editor.get('skeleton') as Skeleton;
+    // const items = field.items;
+
+    let stageName;
+    if (display === 'entry') {
+      runInAction(() => {
+        stageName = `${field.getNode().id }_${field.name.toString()}`;
+        // 清除原 stage，不然 content 引用的一直是老的 field，导致数据无法得到更新
+        stages.container.remove(stageName);
+        stages.add({
+          type: 'Widget',
+          name: stageName,
+          content: <Fragment>{field.items.map((item, index) => createSettingFieldView(item, field, index))}</Fragment>,
+          props: {
+            title: field.title,
+          },
+        });
+      });
+    }
+    this.stageName = stageName;
+  }
 
   render() {
     const { field } = this.props;
@@ -187,24 +232,6 @@ class SettingGroupView extends Component<{ field: SettingField }> {
 
     if (!visible) {
       return null;
-    }
-
-    const skeleton = this.context as Skeleton;
-    const { stages } = skeleton;
-
-    let stageName;
-    if (display === 'entry') {
-      stageName = `${field.getNode().id }_${field.name.toString()}`;
-      // 清除原 stage，不然 content 引用的一直是老的 field，导致数据无法得到更新
-      stages.container.remove(stageName);
-      stages.add({
-        type: 'Widget',
-        name: stageName,
-        content: <Fragment>{field.items.map((item, index) => createSettingFieldView(item, field, index))}</Fragment>,
-        props: {
-          title: field.title,
-        },
-      });
     }
 
     // todo: split collapsed state | field.items for optimize
@@ -217,7 +244,7 @@ class SettingGroupView extends Component<{ field: SettingField }> {
         onExpandChange: (expandState) => field.setExpanded(expandState),
         // field: field,
         // stages,
-        stageName,
+        stageName: this.stageName,
       },
       field.items.map((item, index) => createSettingFieldView(item, field, index)),
       display,

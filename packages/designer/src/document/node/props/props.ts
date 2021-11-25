@@ -94,10 +94,12 @@ export class Props implements IPropParent {
   merge(value: PropsMap, extras?: PropsMap) {
     Object.keys(value).forEach(key => {
       this.query(key, true)!.setValue(value[key]);
+      this.query(key, true)!.setupItems();
     });
     if (extras) {
       Object.keys(extras).forEach(key => {
         this.query(getConvertedExtraKey(key), true)!.setValue(extras[key]);
+        this.query(getConvertedExtraKey(key), true)!.setupItems();
       });
     }
   }

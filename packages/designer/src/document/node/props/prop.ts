@@ -1,4 +1,4 @@
-import { untracked, computed, obx, engineConfig, action, makeObservable, mobx } from '@ali/lowcode-editor-core';
+import { untracked, computed, obx, engineConfig, action, makeObservable, mobx, runInAction } from '@ali/lowcode-editor-core';
 import { CompositeValue, GlobalEvent, isJSExpression, isJSSlot, JSSlot, SlotSchema } from '@ali/lowcode-types';
 import { uniqueId, isPlainObject, hasOwnProperty, compatStage } from '@ali/lowcode-utils';
 import { valueToSource } from './value-to-source';
@@ -59,7 +59,7 @@ export class Prop implements IPropParent {
 
   // TODO: 先用调用方式触发子 prop 的初始化，后续须重构
   @action
-  private setupItems() {
+  setupItems() {
     return this.items;
   }
 
@@ -234,6 +234,7 @@ export class Prop implements IPropParent {
   @action
   setValue(val: CompositeValue) {
     if (val === this._value) return;
+    this.dispose();
     const editor = this.owner.document?.designer.editor;
     const oldValue = this._value;
     this._value = val;
@@ -261,8 +262,6 @@ export class Prop implements IPropParent {
         value: valueToSource(val),
       };
     }
-
-    this.dispose();
 
     if (oldValue !== this._value) {
       const propsInfo = {
@@ -377,29 +376,31 @@ export class Prop implements IPropParent {
 
   @computed private get items(): Prop[] | null {
     if (this._items) return this._items;
-    let items: Prop[] | null = [];
-    if (this._type === 'list') {
-      const data = this._value;
-      for (const item of data) {
-        items.push(new Prop(this, item));
+    return runInAction(() => {
+      let items: Prop[] | null = [];
+      if (this._type === 'list') {
+        const data = this._value;
+        for (const item of data) {
+          items.push(new Prop(this, item));
+        }
+        this._maps = null;
+      } else if (this._type === 'map') {
+        const data = this._value;
+        const maps = new Map<string, Prop>();
+        const keys = Object.keys(data);
+        for (const key of keys) {
+          const prop = new Prop(this, data[key], key);
+          items.push(prop);
+          maps.set(key, prop);
+        }
+        this._maps = maps;
+      } else {
+        items = null;
+        this._maps = null;
       }
-      this._maps = null;
-    } else if (this._type === 'map') {
-      const data = this._value;
-      const maps = new Map<string, Prop>();
-      const keys = Object.keys(data);
-      for (const key of keys) {
-        const prop = new Prop(this, data[key], key);
-        items.push(prop);
-        maps.set(key, prop);
-      }
-      this._maps = maps;
-    } else {
-      items = null;
-      this._maps = null;
-    }
-    this._items = items;
-    return this._items;
+      this._items = items;
+      return this._items;
+    });
   }
 
   @computed private get maps(): Map<string | number, Prop> | null {
