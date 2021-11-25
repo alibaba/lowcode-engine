@@ -192,6 +192,7 @@ export class Project {
     return this.documents.find(doc => doc.id === id) || null;
   }
 
+  @action
   createDocument(data?: RootSchema): DocumentModel {
     const doc = new DocumentModel(this, data || this?.data?.componentsTree?.[0]);
     this.documents.push(doc);

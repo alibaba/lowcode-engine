@@ -48,7 +48,7 @@
     "registry": "https://registry.antfin-inc.com"
   },
   "resolutions": {
-    "@builder/babel-preset-ice": "1.0.1"
+    "@builder/babel-preset-ice": "1.0.3-0"
   },
   "gitHead": "19b2119b9f95f8a3da0851b3943774a770975991"
 }

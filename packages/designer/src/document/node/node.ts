@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import { EventEmitter } from 'events';
-import { obx, computed, autorun, makeObservable, runInAction, wrapWithEventSwitch } from '@ali/lowcode-editor-core';
+import { obx, computed, autorun, makeObservable, runInAction, wrapWithEventSwitch, action } from '@ali/lowcode-editor-core';
 import {
   isDOMText,
   isJSExpression,
@@ -198,6 +198,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 节点初始化期间就把内置的一些 prop 初始化好，避免后续不断构造实例导致 reaction 执行多次
    */
+  @action
   private initBuiltinProps() {
     this.props.has(getConvertedExtraKey('hidden')) || this.props.add(false, getConvertedExtraKey('hidden'));
     this.props.has(getConvertedExtraKey('title')) || this.props.add('', getConvertedExtraKey('title'));
@@ -207,10 +208,12 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     this.props.has(getConvertedExtraKey('loop')) || this.props.add(undefined, getConvertedExtraKey('loop'));
   }
 
+  @action
   private initProps(props: any): any {
     return this.document.designer.transformProps(props, this, TransformStage.Init);
   }
 
+  @action
   private upgradeProps(props: any): any {
     return this.document.designer.transformProps(props, this, TransformStage.Upgrade);
   }

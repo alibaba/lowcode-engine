@@ -214,6 +214,7 @@ export class DocumentModel {
   /**
    * 根据 schema 创建一个节点
    */
+  @action
   createNode<T extends Node = Node, C = undefined>(data: GetDataType<C, T>, checkId: boolean = true): T {
     let schema: any;
     if (isDOMText(data) || isJSExpression(data)) {

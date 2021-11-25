@@ -51,6 +51,6 @@
     "lockfile": "enable"
   },
   "resolutions": {
-    "@builder/babel-preset-ice": "1.0.1"
+    "@builder/babel-preset-ice": "1.0.3-0"
   }
 }

@@ -1,5 +1,5 @@
 import { TitleContent, isI18nData } from '@ali/lowcode-types';
-import { computed, obx, intl, makeObservable } from '@ali/lowcode-editor-core';
+import { computed, obx, intl, makeObservable, action } from '@ali/lowcode-editor-core';
 import { Node, DocumentModel, isLocationChildrenDetail, LocationChildrenDetail, Designer } from '@ali/lowcode-designer';
 import { Tree } from './tree';
 
@@ -225,6 +225,7 @@ export default class TreeNode {
     this._node = node;
   }
 
+  @action
   setNode(node: Node) {
     if (this._node !== node) {
       this._node = node;

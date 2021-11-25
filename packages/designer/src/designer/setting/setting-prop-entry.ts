@@ -126,6 +126,9 @@ export class SettingPropEntry implements SettingEntry {
         const { getValue } = this.extraProps;
         return getValue ? (getValue(this, undefined) === undefined ? 0 : 1) : 0;
       }
+      if (this.nodes.length === 1) {
+        return 2;
+      }
       const propName = this.path.join('.');
       const first = this.nodes[0].getProp(propName)!;
       let l = this.nodes.length;
