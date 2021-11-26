@@ -202,7 +202,7 @@ export class Props implements IPropParent {
 
     let prop = this.maps.get(entry);
     if (!prop && createIfNone) {
-      prop = new Prop(this, UNSET, entry);
+      prop = new Prop(this, nest ? {} : UNSET, entry);
       this.items.push(prop);
     }
 
