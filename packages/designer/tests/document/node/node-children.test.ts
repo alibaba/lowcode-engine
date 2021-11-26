@@ -75,7 +75,7 @@ describe('NodeChildren 方法测试', () => {
     expect(children.size).toBe(1);
     expect(children.length).toBe(1);
 
-    children.splice(0, 0, { componentName: 'Button' });
+    children.splice(0, 0, doc.createNode({ componentName: 'Button' }));
     expect(children.size).toBe(2);
     expect(children.length).toBe(2);
   });

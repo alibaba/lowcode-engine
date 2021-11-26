@@ -234,7 +234,6 @@ export class Prop implements IPropParent {
   @action
   setValue(val: CompositeValue) {
     if (val === this._value) return;
-    this.dispose();
     const editor = this.owner.document?.designer.editor;
     const oldValue = this._value;
     this._value = val;
@@ -262,6 +261,8 @@ export class Prop implements IPropParent {
         value: valueToSource(val),
       };
     }
+
+    this.dispose();
 
     if (oldValue !== this._value) {
       const propsInfo = {
@@ -450,7 +451,7 @@ export class Prop implements IPropParent {
     }
 
     if (createIfNone) {
-      prop = new Prop(this, UNSET, entry);
+      prop = new Prop(this, nest ? {} : UNSET, entry);
       this.set(entry, prop, true);
       if (nest) {
         return prop.get(nest, true);
