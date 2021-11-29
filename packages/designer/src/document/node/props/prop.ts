@@ -379,10 +379,7 @@ export class Prop implements IPropParent {
    * 构造 items 属性，同时构造 maps 属性
    */
   @computed private get items(): Prop[] | null {
-    // 当类型为 list 时，只要有 _items，直接返回，不再重新构造
-    if (this._type === 'list' && this._items) return this._items;
-    // 当类型为 map 时，_items 和 _maps 理论上都应该存在，数量一致时，可以不再重新构造
-    if (this._type === 'map' && this._items && this._items.length === this._maps?.size) return this._items;
+    if (this._items) return this._items;
     return runInAction(() => {
       let items: Prop[] | null = [];
       if (this._type === 'list') {
