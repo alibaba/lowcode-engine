@@ -53,7 +53,7 @@ export class DocumentModel {
   /**
    * 模态节点管理
    */
-  readonly modalNodesManager: ModalNodesManager;
+  private modalNodesManager: ModalNodesManager;
 
   private _nodesMap = new Map<string, Node>();
 
@@ -369,7 +369,7 @@ export class DocumentModel {
         this.internalRemoveAndPurgeNode(node, true);
       });
       this.rootNode?.import(schema as any, checkId);
-
+      this.modalNodesManager = new ModalNodesManager(this);
       // todo: select added and active track added
       if (drillDownNodeId) {
         this.drillDown(this.getNode(drillDownNodeId));
