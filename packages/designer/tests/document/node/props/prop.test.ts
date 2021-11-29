@@ -394,7 +394,11 @@ describe('Prop 类测试', () => {
         prop.unset();
         prop.set(0, true);
         expect(prop.set('x', 'invalid')).toBeNull();
-        expect(prop.get(0).getValue()).toBeUndefined();
+        expect(prop.get(0).getValue()).toBeTruthy();
+
+        // map / list 级联测试
+        prop.get('loopArgs.0', true).setValue('newItem');;
+        expect(prop.get('loopArgs.0').getValue()).toBe('newItem');
       });
 
       it('export', () => {

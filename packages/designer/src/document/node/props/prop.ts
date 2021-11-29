@@ -375,8 +375,14 @@ export class Prop implements IPropParent {
     return (this.parent.path || []).concat(this.key as string);
   }
 
+  /**
+   * 构造 items 属性，同时构造 maps 属性
+   */
   @computed private get items(): Prop[] | null {
-    if (this._items) return this._items;
+    // 当类型为 list 时，只要有 _items，直接返回，不再重新构造
+    if (this._type === 'list' && this._items) return this._items;
+    // 当类型为 map 时，_items 和 _maps 理论上都应该存在，数量一致时，可以不再重新构造
+    if (this._type === 'map' && this._items && this._items.length === this._maps?.size) return this._items;
     return runInAction(() => {
       let items: Prop[] | null = [];
       if (this._type === 'list') {
@@ -451,7 +457,7 @@ export class Prop implements IPropParent {
     }
 
     if (createIfNone) {
-      prop = new Prop(this, nest ? {} : UNSET, entry);
+      prop = new Prop(this, UNSET, entry);
       this.set(entry, prop, true);
       if (nest) {
         return prop.get(nest, true);
@@ -476,10 +482,10 @@ export class Prop implements IPropParent {
    */
   @action
   delete(prop: Prop): void {
-    if (this.items) {
-      const i = this.items.indexOf(prop);
+    if (this._items) {
+      const i = this._items.indexOf(prop);
       if (i > -1) {
-        this.items.slice(i, 1);
+        this._items.splice(i, 1);
         prop.purge();
       }
       if (this._maps && prop.key) {
@@ -558,8 +564,9 @@ export class Prop implements IPropParent {
       } else {
         items[key] = prop;
       }
+      this._items = items;
     } else if (this.type === 'map') {
-      const { maps } = this;
+      const maps = this._maps || new Map<string, Prop>();
       const orig = maps?.get(key);
       if (orig) {
         // replace
@@ -574,6 +581,7 @@ export class Prop implements IPropParent {
         this._items = items;
         maps?.set(key, prop);
       }
+      this._maps = maps;
     } /* istanbul ignore next */ else {
       return null;
     }

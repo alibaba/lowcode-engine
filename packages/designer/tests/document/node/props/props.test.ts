@@ -77,6 +77,10 @@ describe('Props 类测试', () => {
 
     expect(props.get('l').getValue()).toBe('newlyCreatedProp');
     expect(props.get('m.m1').getValue()).toBe('newlyCreatedNestedProp');
+
+    // map / list 级联测试
+    props.get('loopArgs.0', true).setValue('newItem');
+    expect(props.get('loopArgs.0').getValue()).toBe('newItem');
   });
 
   it('export', () => {
