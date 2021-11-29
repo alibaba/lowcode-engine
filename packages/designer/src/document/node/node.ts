@@ -15,6 +15,7 @@ import {
   NodeStatus,
   CompositeValue,
   GlobalEvent,
+  ComponentAction,
 } from '@ali/lowcode-types';
 import { compatStage } from '@ali/lowcode-utils';
 import { SettingTopEntry } from '@ali/lowcode-designer';
@@ -868,10 +869,17 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   /**
    * 是否可执行某action
    */
-  canPerformAction(action: string): boolean {
+  canPerformAction(actionName: string): boolean {
     const availableActions =
-      this.componentMeta?.availableActions?.map((action) => action.name) || [];
-    return availableActions.indexOf(action) >= 0;
+      this.componentMeta?.availableActions?.filter((action: ComponentAction) => {
+        const { condition } = action;
+        return typeof condition === 'function' ?
+          condition(this) !== false :
+          condition !== false;
+      })
+      .map((action: ComponentAction) => action.name) || [];
+
+    return availableActions.indexOf(actionName) >= 0;
   }
 
   // ======= compatible apis ====
