@@ -4,7 +4,7 @@
  */
 // 需要通过 Env 来判断是否需要
 
-import some from 'lodash.some';
+import { some } from 'lodash';
 
 const pseudoMap = ['hover', 'focus', 'active', 'visited'];
 
