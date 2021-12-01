@@ -247,6 +247,8 @@ describe('Prop 类测试', () => {
             type: 'JSExpression',
             value: 'state.a',
           },
+          emptyArr: [],
+          emptyObj: {},
           z: {
             z1: 1,
             z2: 'str',
@@ -258,7 +260,7 @@ describe('Prop 类测试', () => {
       });
 
       it('items / get', async () => {
-        expect(prop.size).toBe(5);
+        expect(prop.size).toBe(7);
 
         expect(prop.get('a').getValue()).toBe(1);
         expect(prop.get('b').getValue()).toBe('str');
@@ -289,6 +291,10 @@ describe('Prop 类测试', () => {
         const newlyCreatedNestedProp2 = prop.get('m.m2', true);
         // .m2 的值为 undefined，导出时将会被移除
         expect(prop.get('m').getValue()).toEqual({ m1: 'newlyCreatedNestedProp' });
+
+        // 对于空值的 list / map 类型，_items 应该为 null
+        expect(prop.get('emptyArr')._items).toBeNull();
+        expect(prop.get('emptyObj')._items).toBeNull();
       });
 
       it('export', () => {
@@ -300,6 +306,8 @@ describe('Prop 类测试', () => {
             type: 'JSExpression',
             value: 'state.a',
           },
+          emptyArr: [],
+          emptyObj: {},
           z: {
             z1: 1,
             z2: 'str',
@@ -348,19 +356,19 @@ describe('Prop 类测试', () => {
         for (const item of prop) {
           mockedFn();
         }
-        expect(mockedFn).toHaveBeenCalledTimes(5);
+        expect(mockedFn).toHaveBeenCalledTimes(7);
         mockedFn.mockClear();
 
         prop.forEach((item) => {
           mockedFn();
         });
-        expect(mockedFn).toHaveBeenCalledTimes(5);
+        expect(mockedFn).toHaveBeenCalledTimes(7);
         mockedFn.mockClear();
 
         prop.map((item) => {
           return mockedFn();
         });
-        expect(mockedFn).toHaveBeenCalledTimes(5);
+        expect(mockedFn).toHaveBeenCalledTimes(7);
         mockedFn.mockClear();
       });
 

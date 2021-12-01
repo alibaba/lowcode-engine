@@ -79,6 +79,7 @@ Object {
                 "__slot__extraContent": false,
                 "__slot__logo": false,
                 "__slot__tab": false,
+                "__style__": Object {},
                 "action": "",
                 "content": "",
                 "crumb": "",
@@ -94,6 +95,7 @@ Object {
                       "condition": true,
                       "id": "node_k1ow3cbf",
                       "props": Object {
+                        "__style__": Object {},
                         "behavior": "NORMAL",
                         "content": Object {
                           "en_US": "Title",
@@ -142,6 +144,7 @@ Object {
                                   "isLocked": false,
                                   "props": Object {
                                     "__category__": "form",
+                                    "__style__": Object {},
                                     "__useMediator": "value",
                                     "addonAfter": Object {
                                       "type": "i18n",
@@ -219,6 +222,7 @@ Object {
                                   "isLocked": false,
                                   "props": Object {
                                     "__category__": "form",
+                                    "__style__": Object {},
                                     "__useMediator": "value",
                                     "addonAfter": Object {
                                       "type": "i18n",
@@ -292,6 +296,7 @@ Object {
                                   "isLocked": false,
                                   "props": Object {
                                     "__category__": "form",
+                                    "__style__": Object {},
                                     "__useMediator": "value",
                                     "addonAfter": Object {
                                       "type": "i18n",
@@ -364,6 +369,7 @@ Object {
                               "id": "node_k1ow3cbx",
                               "isLocked": false,
                               "props": Object {
+                                "__style__": Object {},
                                 "colSpan": "",
                                 "fieldId": "column_k1p1bnjm",
                               },
@@ -380,6 +386,7 @@ Object {
                                   "isLocked": false,
                                   "props": Object {
                                     "__category__": "form",
+                                    "__style__": Object {},
                                     "__useMediator": "value",
                                     "addonAfter": Object {
                                       "type": "i18n",
@@ -453,6 +460,7 @@ Object {
                                   "isLocked": false,
                                   "props": Object {
                                     "__category__": "form",
+                                    "__style__": Object {},
                                     "__useMediator": "value",
                                     "autoWidth": true,
                                     "behavior": "NORMAL",
@@ -545,6 +553,7 @@ Object {
                               "id": "node_k1ow3cby",
                               "isLocked": false,
                               "props": Object {
+                                "__style__": Object {},
                                 "colSpan": "",
                                 "fieldId": "column_k1p1bnjn",
                               },
@@ -558,6 +567,7 @@ Object {
                           "id": "node_k1ow3cbw",
                           "isLocked": false,
                           "props": Object {
+                            "__style__": Object {},
                             "columnGap": "20",
                             "fieldId": "columns_k1ow3h1v",
                             "layout": "6:6",
@@ -628,6 +638,7 @@ Object {
                           "isLocked": false,
                           "props": Object {
                             "__category__": "form",
+                            "__style__": Object {},
                             "__useMediator": "value",
                             "addonAfter": Object {
                               "type": "i18n",
@@ -705,6 +716,7 @@ Object {
                                   "isLocked": false,
                                   "props": Object {
                                     "__category__": "form",
+                                    "__style__": Object {},
                                     "__useMediator": "value",
                                     "addonAfter": Object {
                                       "type": "i18n",
@@ -777,6 +789,7 @@ Object {
                               "id": "node_k1ow3cc6",
                               "isLocked": false,
                               "props": Object {
+                                "__style__": Object {},
                                 "colSpan": "",
                                 "fieldId": "column_k1p1bnjo",
                               },
@@ -793,6 +806,7 @@ Object {
                                   "isLocked": false,
                                   "props": Object {
                                     "__category__": "form",
+                                    "__style__": Object {},
                                     "__useMediator": "value",
                                     "addonAfter": Object {
                                       "type": "i18n",
@@ -865,6 +879,7 @@ Object {
                               "id": "node_k1ow3cc7",
                               "isLocked": false,
                               "props": Object {
+                                "__style__": Object {},
                                 "colSpan": "",
                                 "fieldId": "column_k1p1bnjp",
                               },
@@ -878,6 +893,7 @@ Object {
                           "id": "node_k1ow3cc5",
                           "isLocked": false,
                           "props": Object {
+                            "__style__": Object {},
                             "columnGap": "20",
                             "fieldId": "columns_k1ow3h22",
                             "layout": "6:6",
@@ -1006,6 +1022,7 @@ Object {
                           "value": Array [
                             Object {
                               "componentName": "Text",
+                              "props": Object {},
                             },
                           ],
                         },
@@ -1035,6 +1052,7 @@ Object {
                     "behavior": "NORMAL",
                     "className": "div_kgaqfbm9",
                     "customClassName": "",
+                    "events": Object {},
                     "fieldId": "div_k1ow3h1o",
                     "useFieldIdAsDomId": false,
                   },
@@ -1049,6 +1067,7 @@ Object {
               "id": "form",
               "isLocked": false,
               "props": Object {
+                "__style__": Object {},
                 "autoUnmount": true,
                 "autoValidate": true,
                 "behavior": "NORMAL",
@@ -1057,6 +1076,7 @@ Object {
                   "variable": "state.formData",
                 },
                 "fieldId": "form",
+                "fieldOptions": Object {},
                 "labelAlign": "top",
                 "obj": Object {
                   "a": 1,
@@ -1117,6 +1137,7 @@ Object {
         "globalConfig": Object {
           "fit": Object {
             "compiled": "",
+            "error": Object {},
             "source": "",
             "type": "js",
           },
@@ -1175,6 +1196,7 @@ Object.keys(module.exports).forEach(function(item) {
       },
       "props": Object {
         "className": "page_kgaqfbm4",
+        "containerStyle": Object {},
         "extensions": Object {
           "启用页头": true,
         },

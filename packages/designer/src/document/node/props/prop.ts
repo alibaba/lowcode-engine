@@ -381,10 +381,11 @@ export class Prop implements IPropParent {
   @computed private get items(): Prop[] | null {
     if (this._items) return this._items;
     return runInAction(() => {
-      let items: Prop[] | null = [];
+      let items: Prop[] | null = null;
       if (this._type === 'list') {
         const data = this._value;
         for (const item of data) {
+          items = items || [];
           items.push(new Prop(this, item));
         }
         this._maps = null;
@@ -394,6 +395,7 @@ export class Prop implements IPropParent {
         const keys = Object.keys(data);
         for (const key of keys) {
           const prop = new Prop(this, data[key], key);
+          items = items || [];
           items.push(prop);
           maps.set(key, prop);
         }
@@ -526,7 +528,8 @@ export class Prop implements IPropParent {
       this.setValue([]);
     }
     const prop = new Prop(this, value);
-    this.items!.push(prop);
+    this._items = this._items || [];
+    this._items.push(prop);
     return prop;
   }
 
