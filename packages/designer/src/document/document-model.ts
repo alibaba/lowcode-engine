@@ -656,6 +656,7 @@ export class DocumentModel {
     const exsitingMap: { [componentName: string]: boolean } = {};
     for (const node of this._nodesMap.values()) {
       const { componentName } = node || {};
+      if (componentName === 'Slot') continue;
       if (!exsitingMap[componentName]) {
         exsitingMap[componentName] = true;
         if (node.componentMeta?.npm?.package) {
