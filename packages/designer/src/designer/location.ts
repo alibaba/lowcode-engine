@@ -78,6 +78,9 @@ export function isRowContainer(container: Element | Text, win?: Window) {
       return true;
     }
   }
+  if (/grid$/.test(display)) {
+    return true;
+  }
   return false;
 }
 
