@@ -13,9 +13,6 @@
     "build": "build-scripts build --skip-demo"
   },
   "dependencies": {
-    "@ali/b3-one": "^0.0.17",
-    "@ali/bzb-request": "^2.6.0-beta.13",
-    "@ali/lib-mtop": "^2.5.1",
     "@ali/lowcode-datasource-engine": "^1.0.22",
     "@ali/lowcode-types": "1.0.74",
     "@ali/lowcode-utils": "1.0.74",

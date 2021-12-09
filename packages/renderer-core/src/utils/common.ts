@@ -1,7 +1,5 @@
 /* eslint-disable no-new-func */
 import Debug from 'debug';
-import { forEach as _forEach, shallowEqual as _shallowEqual } from '@ali/b3-one/lib/obj';
-import { serialize as serializeParams } from '@ali/b3-one/lib/url';
 // moment对象配置
 import _moment from 'moment';
 import 'moment/locale/zh-cn';
@@ -21,8 +19,6 @@ import IntlMessageFormat from 'intl-messageformat';
 
 import { ISchema } from '../types';
 
-export const forEach = _forEach;
-export const shallowEqual = _shallowEqual;
 export const moment = _moment;
 moment.locale('zh-cn');
 (window as any).sdkVersion = pkg.version;
@@ -454,4 +450,42 @@ export function parseI18n(i18nInfo: any, self: any) {
     type: EXPRESSION_TYPE.JSEXPRESSION,
     value: `this.i18n('${i18nInfo.key}')`,
   }, self);
+}
+
+export function forEach(obj: any, fn: any, context?: any) {
+  obj = obj || {};
+  Object.keys(obj).forEach(key => fn.call(context, obj[key], key));
+}
+
+export function shallowEqual(objA: any, objB: any) {
+  if (objA === objB) {
+    return true;
+  }
+
+  if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
+    return false;
+  }
+
+  const keysA = Object.keys(objA);
+  if (keysA.length !== Object.keys(objB).length) {
+    return false;
+  }
+
+  for (let i = 0, key; i < keysA.length; i++) {
+    key = keysA[i];
+    if (!objB.hasOwnProperty(key) || objA[key] !== objB[key]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+export function serializeParams(obj: any) {
+  let rst: any = [];
+  forEach(obj, (val: any, key: any) => {
+    if (val === null || val === undefined || val === '') return;
+    if (typeof val === 'object') rst.push(`${key}=${encodeURIComponent(JSON.stringify(val))}`);
+    else rst.push(`${key}=${encodeURIComponent(val)}`);
+  });
+  return rst.join('&');
 }

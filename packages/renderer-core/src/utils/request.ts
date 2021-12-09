@@ -1,8 +1,14 @@
 import 'whatwg-fetch';
-import fetchMtop from '@ali/lib-mtop';
 import fetchJsonp from 'fetch-jsonp';
-import bzbRequest from '@ali/bzb-request';
-import { serialize, buildUrl, parseUrl } from '@ali/b3-one/lib/url';
+import { serializeParams } from '.';
+
+function buildUrl(dataAPI: any, params: any) {
+  const paramStr = serializeParams(params);
+  if (paramStr) {
+    return dataAPI.indexOf('?') > 0 ? `${dataAPI}&${paramStr}` : `${dataAPI}?${paramStr}`;
+  }
+  return dataAPI;
+}
 
 export function get(dataAPI: any, params = {}, headers = {}, otherProps = {}) {
   headers = {
@@ -24,7 +30,7 @@ export function post(dataAPI: any, params = {}, headers: any = {}, otherProps = 
     'POST',
     headers['Content-Type'].indexOf('application/json') > -1 || Array.isArray(params)
       ? JSON.stringify(params)
-      : serialize(params),
+      : serializeParams(params),
     headers,
     otherProps,
   );
@@ -130,42 +136,5 @@ export function jsonp(dataAPI: any, params = {}, otherProps = {}) {
       .catch((err) => {
         reject(err);
       });
-  });
-}
-
-export function mtop(dataAPI: any, params: any, otherProps: any = {}) {
-  fetchMtop.config.subDomain = otherProps.subDomain || 'm';
-  return fetchMtop.request({
-    api: dataAPI,
-    v: '1.0',
-    data: params,
-    ecode: otherProps.ecode || 0,
-    type: otherProps.method || 'GET',
-    dataType: otherProps.dataType || 'jsonp',
-    AntiFlood: true, // 防刷
-    timeout: otherProps.timeout || 20000,
-  });
-}
-
-export function bzb(apiCode: string, params: any, otherProps: any = {}) {
-  // 通过url参数设置小二工作台请求环境
-  const getUrlEnv = () => {
-    try {
-      if (window.parent && window.parent.location.host === window.location.host) {
-        const urlInfo = parseUrl(window.parent && window.parent.location.href);
-        return urlInfo && urlInfo.params && urlInfo.params._env;
-      }
-      const urlInfo = parseUrl(window.location.href);
-      return urlInfo && urlInfo.params && urlInfo.params._env;
-    } catch (e) {
-      return null;
-    }
-  };
-
-  otherProps.method = otherProps.method || 'GET';
-  otherProps.env = getUrlEnv() || otherProps.env || 'prod';
-  return bzbRequest(apiCode, {
-    data: params,
-    ...otherProps,
   });
 }

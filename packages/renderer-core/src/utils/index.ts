@@ -1,3 +1,3 @@
 export * from './common';
-export * from './dataHelper';
+export * from './data-helper';
 export * from './request';
