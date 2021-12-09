@@ -218,6 +218,8 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
         nodeChildren: null,
         childrenInState: false,
         visible: !hidden,
+        nodeCacheProps: {},
+        nodeProps: {},
       };
     }
 
@@ -349,11 +351,11 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
         this.curEventLeaf = _leaf;
       }
 
-      this.setState({
-        nodeChildren: null,
-        nodeProps: {},
-        childrenInState: false,
-      });
+      const {
+        visible,
+        ...resetState
+      } = this.defaultState;
+      this.setState(resetState);
     }
 
     /** 监听参数变化 */
@@ -378,23 +380,22 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
           return;
         }
         this.beforeRender(RerenderType.PropsChanged);
+        const state = this.state;
+        const nodeCacheProps = state.nodeCacheProps;
         const nodeProps = getProps(node?.export?.(TransformStage.Render) as types.ISchema, scope, Comp, componentInfo);
-        const preNodeProps = this.state.nodeProps;
-        const newNodeProps = {
-          ...preNodeProps,
-          ...nodeProps,
-        };
-        if (key && !(key in newNodeProps) && (key in this.props)) {
+        if (key && !(key in nodeProps) && (key in this.props)) {
           // 当 key 在 this.props 中时，且不存在在计算值中，需要用 newValue 覆盖掉 this.props 的取值
-          newNodeProps[key] = newValue;
+          nodeCacheProps[key] = newValue;
         }
-        __debug(`${leaf?.componentName}[${this.props.componentId}] component trigger onPropsChange!`, newNodeProps);
+        __debug(`${leaf?.componentName}[${this.props.componentId}] component trigger onPropsChange!`, nodeProps, nodeCacheProps, key, newValue);
         this.setState('children' in nodeProps ? {
           nodeChildren: nodeProps.children,
-          nodeProps: newNodeProps,
+          nodeProps,
           childrenInState: true,
+          nodeCacheProps,
         } : {
-          nodeProps: newNodeProps,
+          nodeProps,
+          nodeCacheProps,
         });
       });
 
@@ -497,6 +498,7 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
 
       const compProps = {
         ...rest,
+        ...(this.state.nodeCacheProps || {}),
         ...(this.state.nodeProps || {}),
         children: [],
         __id: this.props.componentId,
