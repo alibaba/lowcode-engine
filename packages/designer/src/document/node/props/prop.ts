@@ -8,6 +8,7 @@ import { TransformStage } from '../transform-stage';
 
 const { set: mobxSet, isObservableArray } = mobx;
 export const UNSET = Symbol.for('unset');
+// eslint-disable-next-line no-redeclare
 export type UNSET = typeof UNSET;
 
 export interface IPropParent {

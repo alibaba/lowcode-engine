@@ -292,7 +292,7 @@ export class SettingPropEntry implements SettingEntry {
     }
   }
 
-  notifyValueChange(oldValue: any, newValue:any) {
+  notifyValueChange(oldValue: any, newValue: any) {
     this.editor.emit(GlobalEvent.Node.Prop.Change, { node: this.getNode(), prop: this, oldValue, newValue });
   }
 
