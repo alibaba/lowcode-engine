@@ -98,7 +98,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
     return this._config;
   }
 
-  private initItems(items: Array<FieldConfig | CustomView>, settingFieldCollector?: { (name: string | number, field: SettingField): void; (name: string, field: SettingField): void; }) {
+  private initItems(items: Array<FieldConfig | CustomView>, settingFieldCollector?: { (name: string | number, field: SettingField): void; (name: string, field: SettingField): void }) {
     this._items = items.map((item) => {
       if (isCustomView(item)) {
         return item;

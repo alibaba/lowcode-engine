@@ -47,9 +47,9 @@ function getTitle(title: string | I18nData | ReactElement) {
 
 @observer
 export class BorderContainer extends Component<{
-  host: BuiltinSimulatorHost,
+  host: BuiltinSimulatorHost;
 }, {
-  target?: ParentalNode,
+  target?: ParentalNode;
 }> {
 
   state = {} as any;

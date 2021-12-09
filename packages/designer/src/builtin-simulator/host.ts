@@ -1004,7 +1004,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     if (!domNode) return;
     if (isElementNode(domNode) && !isDOMNodeVisible(domNode, this.viewport)) {
       const { left, top } = domNode.getBoundingClientRect();
-      const { scrollTop = 0, scrollLeft = 0 } = this.contentDocument?.documentElement!;
+      const { scrollTop = 0, scrollLeft = 0 } = this.contentDocument?.documentElement || {};
       opt.left = left + scrollLeft;
       opt.top = top + scrollTop;
       scroll = true;

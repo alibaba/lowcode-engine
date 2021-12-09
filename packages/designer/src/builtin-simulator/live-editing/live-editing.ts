@@ -62,7 +62,7 @@ export class LiveEditing {
 
     let setterPropElement = getSetterPropElement(targetElement, rootElement);
     let propTarget = setterPropElement?.dataset.setterProp;
-    let matched: (LiveTextEditingConfig & { propElement?: HTMLElement; }) | undefined | null;
+    let matched: (LiveTextEditingConfig & { propElement?: HTMLElement }) | undefined | null;
     if (liveTextEditing) {
       if (propTarget) {
         // 已埋点命中 data-setter-prop="proptarget", 从 liveTextEditing 读取配置（mode|onSaveContent）
@@ -196,7 +196,8 @@ export interface SaveHandler {
 }
 
 function setCaret(event: MouseEvent) {
-  const doc = event.view?.document!;
+  const doc = event.view?.document;
+  if (!doc) return;
   const range = doc.caretRangeFromPoint(event.clientX, event.clientY);
   if (range) {
     selectRange(doc, range);
