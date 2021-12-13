@@ -18,23 +18,11 @@ export interface JSExpression {
 }
 
 /**
- * 函数
- */
-export interface JSFunction {
-  type: 'JSFunction';
-  /**
-   * 表达式字符串
-   */
-  value: string;
-}
-
-/**
  * 事件函数类型
  * @see https://yuque.antfin-inc.com/mo/spec/spec-low-code-building-schema#feHTW
  */
 export interface JSFunction {
   type: 'JSFunction';
-
   /**
    * 函数定义，或直接函数表达式
    */
@@ -42,27 +30,21 @@ export interface JSFunction {
 
   /** 源码 */
   compiled?: string;
-}
 
-/**
- * 函数
- */
-export interface JSFunction {
-  type: 'JSFunction';
-  /**
-   * 函数字符串
-   */
-  value: string;
   /**
    * 模拟值
    */
   mock?: any;
+
   /**
    * 额外扩展属性，如 extType、events
    */
   [key: string]: any;
 }
 
+/**
+ * Slot 函数类型
+ */
 export interface JSSlot {
   type: 'JSSlot';
   title?: string;
@@ -74,6 +56,9 @@ export interface JSSlot {
   name?: string;
 }
 
+/**
+ * @todo 待文档描述
+ */
 export interface JSBlock {
   type: 'JSBlock';
   value: NodeSchema;

@@ -50,11 +50,20 @@ export interface FieldExtraProps {
    * compatiable vision display
    */
   display?: 'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry';
-  // todo 这个 omit 是否合理？
+  // @todo 这个 omit 是否合理？
+  /**
+   * @todo 待补充文档
+   */
   liveTextEditing?: Omit<LiveTextEditingConfig, 'propTarget'>;
 }
 
+/**
+ * 属性面板配置
+ */
 export interface FieldConfig extends FieldExtraProps {
+  /**
+   * @todo 待补充文档
+   */
   type?: 'field' | 'group';
   /**
    * the name of this setting field, which used in quickEditor
@@ -78,11 +87,11 @@ export interface FieldConfig extends FieldExtraProps {
    */
   extraProps?: FieldExtraProps;
   /**
-   * todo 待补充文档
+   * @todo 待补充文档
    */
   description?: TitleContent;
   /**
-   * todo 待补充文档
+   * @todo 待补充文档
    */
   isExtends?: boolean;
 }

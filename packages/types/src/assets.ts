@@ -1,6 +1,7 @@
 import { NpmInfo } from './npm';
 import { PropConfig } from './prop-config';
 import { Snippet, ComponentMetadata } from './metadata';
+import { I18nData } from './i18n';
 
 /**
  * 定义组件大包及external资源的信息，应该被编辑器默认加载
@@ -27,7 +28,7 @@ export interface Package {
    */
   library: string;
   /**
-   * todo 待补充文档
+   * @todo 待补充文档
    */
   async?: boolean;
   /**
@@ -77,11 +78,13 @@ export interface ComponentItem {
   /**
    * 一级分组
    */
-  group?: string;
+  group?: string | I18nData;
+
   /**
    * 二级分组
    */
-  category?: string;
+  category?: string | I18nData;
+
   /**
    * 组件优先级排序
    */
@@ -93,7 +96,7 @@ export interface ComponentItem {
  */
 export interface ComponentDescription extends ComponentMetadata {
   /**
-   * todo 待补充文档
+   * @todo 待补充文档
    */
   keywords: string[];
 }

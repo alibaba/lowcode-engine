@@ -77,7 +77,7 @@ export interface SettingTarget {
    */
   setExtraPropValue: (propName: string, value: any) => void;
 
-  // todo 补充 node 定义
+  // @todo 补充 node 定义
   /**
    * 获取 node 中的第一项
    */
