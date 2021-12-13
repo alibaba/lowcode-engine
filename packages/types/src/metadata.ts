@@ -120,15 +120,16 @@ export interface Experimental {
  */
 export interface LiveTextEditingConfig {
   /**
-   * 待补充文档
+   * todo 待补充文档
    */
   propTarget: string;
   /**
-   * 待补充文档
+   * todo 待补充文档
    */
   selector?: string;
   /**
    * 编辑模式 纯文本|段落编辑|文章编辑（默认纯文本，无跟随工具条）
+   * @default 'plaintext'
    */
   mode?: 'plaintext' | 'paragraph' | 'article';
   /**
@@ -247,8 +248,6 @@ export interface Callbacks {
   /**
    * hooks
    */
-
-
   onMouseDownHook?: (e: MouseEvent, currentNode: any) => any;
   onDblClickHook?: (e: MouseEvent, currentNode: any) => any;
   onClickHook?: (e: MouseEvent, currentNode: any) => any;

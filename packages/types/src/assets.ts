@@ -3,7 +3,7 @@ import { PropConfig } from './prop-config';
 import { Snippet, ComponentMetadata } from './metadata';
 
 /**
- * 应该被编辑器默认加载，定义组件大包及external资源的信息
+ * 定义组件大包及external资源的信息，应该被编辑器默认加载
  */
 export interface Package {
   /**
@@ -27,11 +27,11 @@ export interface Package {
    */
   library: string;
   /**
-   * 待补充文档
+   * todo 待补充文档
    */
   async?: boolean;
   /**
-   * 待补充文档
+   * 组件描述导出名字，可以通过 window[exportName] 获取到组件描述的 Object 内容；
    */
   exportName?: string;
 }
@@ -71,9 +71,21 @@ export interface ComponentItem {
    */
   icon?: string;
   /**
-   * 待补充文档
+   * 可用片段
    */
   snippets?: Snippet[];
+  /**
+   * 一级分组
+   */
+  group?: string;
+  /**
+   * 二级分组
+   */
+  category?: string;
+  /**
+   * 组件优先级排序
+   */
+  priority?: number;
 }
 
 /**
@@ -81,7 +93,7 @@ export interface ComponentItem {
  */
 export interface ComponentDescription extends ComponentMetadata {
   /**
-   * 待补充文档
+   * todo 待补充文档
    */
   keywords: string[];
 }
@@ -91,11 +103,17 @@ export interface ComponentDescription extends ComponentMetadata {
  */
 export interface RemoteComponentDescription {
   /**
-   * 待补充文档
+   * 组件描述导出名字，可以通过 window[exportName] 获取到组件描述的 Object 内容；
    */
-  exportName: string;
+  exportName?: string;
   /**
-   * 待补充文档
+   * 组件描述的资源链接；
    */
-  url: string;
+  url?: string;
+  /**
+   * 组件(库)的 npm 信息；
+   */
+  package?: {
+    npm?: string;
+  };
 }

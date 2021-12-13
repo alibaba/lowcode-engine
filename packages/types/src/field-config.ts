@@ -52,10 +52,6 @@ export interface FieldExtraProps {
   display?: 'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry';
   // todo 这个 omit 是否合理？
   liveTextEditing?: Omit<LiveTextEditingConfig, 'propTarget'>;
-  /**
-   * 待文档定义
-   */
-  onChange?: (value: any, field: SettingTarget) => void;
 }
 
 export interface FieldConfig extends FieldExtraProps {
@@ -82,11 +78,11 @@ export interface FieldConfig extends FieldExtraProps {
    */
   extraProps?: FieldExtraProps;
   /**
-   * 待文档定义
+   * todo 待补充文档
    */
   description?: TitleContent;
   /**
-   * 待文档定义
+   * todo 待补充文档
    */
   isExtends?: boolean;
 }
