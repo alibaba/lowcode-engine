@@ -51,6 +51,7 @@ export interface NodeSchema {
    */
   isLocked?: boolean;
 
+  // @todo
   // ------- future support -----
   conditionGroup?: string;
   title?: string;

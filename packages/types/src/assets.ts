@@ -1,10 +1,9 @@
-import { NpmInfo } from './npm';
-import { PropConfig } from './prop-config';
 import { Snippet, ComponentMetadata } from './metadata';
 import { I18nData } from './i18n';
 
 /**
- * 定义组件大包及external资源的信息，应该被编辑器默认加载
+ * 定义组件大包及 external 资源的信息
+ * 应该被编辑器默认加载
  */
 export interface Package {
   /**
@@ -39,6 +38,7 @@ export interface Package {
 
 /**
  * 组件分类
+ * @deprecated 已被 ComponentMetadata 替代
  */
 export interface ComponentCategory {
   /**
@@ -57,6 +57,7 @@ export interface ComponentCategory {
 
 /**
  * 组件
+ * @deprecated 已被 ComponentMetadata 替代
  */
 export interface ComponentItem {
   /**

@@ -3,6 +3,9 @@ import { SetterType, DynamicSetter } from './setter-config';
 import { SettingTarget } from './setting-target';
 import { LiveTextEditingConfig } from './metadata';
 
+/**
+ * extra props for field
+ */
 export interface FieldExtraProps {
   /**
    * 是否必填参数
@@ -16,6 +19,9 @@ export interface FieldExtraProps {
    * get value for field
    */
   getValue?: (target: SettingTarget, fieldValue: any) => any;
+  /**
+   * set value for field
+   */
   setValue?: (target: SettingTarget, value: any) => void;
   /**
    * the field conditional show, is not set always true
@@ -84,6 +90,7 @@ export interface FieldConfig extends FieldExtraProps {
   items?: FieldConfig[];
   /**
    * extra props for field
+   * 其他配置属性（不做流通要求）
    */
   extraProps?: FieldExtraProps;
   /**

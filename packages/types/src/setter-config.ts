@@ -15,10 +15,12 @@ export type CustomView = ReactElement | ComponentType<any>;
 export type DynamicProps = (target: SettingTarget) => Record<string, unknown>;
 export type DynamicSetter = (target: SettingTarget) => string | SetterConfig | CustomView;
 
+/**
+ * 设置器配置
+ * @todo
+ */
 export interface SetterConfig {
-  /**
-   * if *string* passed must be a registered Setter Name
-   */
+  // if *string* passed must be a registered Setter Name
   componentName: string | CustomView;
   /**
    * the props pass to Setter Component
@@ -27,15 +29,13 @@ export interface SetterConfig {
   children?: any;
   isRequired?: boolean;
   initialValue?: any | ((target: SettingTarget) => any);
-  /* for MixedSetter */
+  // for MixedSetter
   title?: TitleContent;
   // for MixedSetter check this is available
   condition?: (target: SettingTarget) => boolean;
 }
 
-/**
- * if *string* passed must be a registered Setter Name, future support blockSchema
- */
+// if *string* passed must be a registered Setter Name, future support blockSchema
 export type SetterType = SetterConfig | SetterConfig[] | string | CustomView;
 
 export function isSetterConfig(obj: any): obj is SetterConfig {
