@@ -13,5 +13,5 @@ export interface SettingEntry extends SettingTarget {
   // 父级
   readonly parent: SettingEntry;
 
-  get(propName: string | number): SettingEntry | null;
+  get: (propName: string | number) => SettingEntry | null;
 }
