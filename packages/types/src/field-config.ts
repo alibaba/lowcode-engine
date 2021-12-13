@@ -1,6 +1,7 @@
 import { TitleContent } from './title';
 import { SetterType, DynamicSetter } from './setter-config';
 import { SettingTarget } from './setting-target';
+import { LiveTextEditingConfig } from './metadata';
 
 export interface FieldExtraProps {
   /**
@@ -49,13 +50,8 @@ export interface FieldExtraProps {
    * compatiable vision display
    */
   display?: 'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry';
-  liveTextEditing?: {
-    selector: string;
-    // 编辑模式 纯文本|段落编辑|文章编辑（默认纯文本，无跟随工具条）
-    mode?: 'plaintext' | 'paragraph' | 'article';
-    // 从 contentEditable 获取内容并设置到属性
-    onSaveContent?: (content: string, prop: any) => any;
-  };
+  // todo 这个 omit 是否合理？
+  liveTextEditing?: Omit<LiveTextEditingConfig, 'propTarget'>;
 }
 
 export interface FieldConfig extends FieldExtraProps {

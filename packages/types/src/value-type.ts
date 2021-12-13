@@ -1,6 +1,8 @@
 import { NodeSchema, NodeData } from './schema';
 
-// 表达式
+/**
+ * 表达式
+ */
 export interface JSExpression {
   type: 'JSExpression';
   /**
@@ -15,7 +17,9 @@ export interface JSExpression {
   compiled?: string;
 }
 
-// 函数
+/**
+ * 函数
+ */
 export interface JSFunction {
   type: 'JSFunction';
   /**
@@ -40,7 +44,9 @@ export interface JSFunction {
   compiled?: string;
 }
 
-// 函数
+/**
+ * 函数
+ */
 export interface JSFunction {
   type: 'JSFunction';
   /**
@@ -60,7 +66,9 @@ export interface JSFunction {
 export interface JSSlot {
   type: 'JSSlot';
   title?: string;
-  // 函数的入参
+  /**
+   * 函数的入参
+   */
   params?: string[];
   value?: NodeData[] | NodeData;
   name?: string;
@@ -71,7 +79,9 @@ export interface JSBlock {
   value: NodeSchema;
 }
 
-// JSON 基本类型
+/**
+ * JSON 基本类型
+ */
 export type JSONValue =
   | boolean
   | string
@@ -85,7 +95,9 @@ export interface JSONObject {
   [key: string]: JSONValue;
 }
 
-// 复合类型
+/**
+ * 复合类型
+ */
 export type CompositeValue =
   | JSONValue
   | JSExpression

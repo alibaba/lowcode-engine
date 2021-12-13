@@ -11,20 +11,48 @@ import { I18nMap } from './i18n';
 import { UtilsMap } from './utils';
 import { AppConfig } from './app-config';
 
-// 搭建基础协议 - 单个组件树节点描述
 // 转换成一个 .jsx 文件内 React Class 类 render 函数返回的 jsx 代码
+/**
+ * 搭建基础协议 - 单个组件树节点描述
+ */
 export interface NodeSchema {
   id?: string;
-  componentName: string; // 组件名称 必填、首字母大写
-  props?: PropsMap | PropsList; // 组件属性对象
+  /**
+   * 组件名称 必填、首字母大写
+   */
+  componentName: string;
+  /**
+   * 组件属性对象
+   */
+  props?: PropsMap | PropsList;
+  /**
+   * 组件属性对象
+   */
   leadingComponents?: string;
-  condition?: CompositeValue; // 渲染条件
-  loop?: CompositeValue; // 循环数据
-  loopArgs?: [string, string]; // 循环迭代对象、索引名称 ["item", "index"]
-  children?: NodeData | NodeData[]; // 子节点
-  isLocked?: boolean; // 是否锁定
+  /**
+   * 渲染条件
+   */
+  condition?: CompositeValue;
+  /**
+   * 循环数据
+   */
+  loop?: CompositeValue;
+  /**
+   * 循环迭代对象、索引名称 ["item", "index"]
+   */
+  loopArgs?: [string, string];
+  /**
+   * 子节点
+   */
+  children?: NodeData | NodeData[];
+  /**
+   * 是否锁定
+   */
+  isLocked?: boolean;
 
-  // ------- future support -----
+  /**
+   * ------- future support -----
+   */
   conditionGroup?: string;
   title?: string;
   ignore?: boolean;
@@ -50,7 +78,10 @@ export function isDOMText(data: any): data is DOMText {
 export type DOMText = string;
 
 export interface ContainerSchema extends NodeSchema {
-  componentName: string; // 'Block' | 'Page' | 'Component';
+  /**
+   * 'Block' | 'Page' | 'Component';
+   */
+  componentName: string;
   fileName: string;
   meta?: Record<string, unknown>;
   state?: {
