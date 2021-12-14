@@ -7,6 +7,8 @@ import { Node, DocumentModel } from '../document';
 import { ISimulatorHost, isSimulatorHost, NodeInstance, ComponentInstance } from '../simulator';
 import { Designer } from './designer';
 
+export type DragObjectReducer = (dragObject: DragObject) => DragObject;
+
 export interface LocateEvent {
   readonly type: 'LocateEvent';
   /**
@@ -193,7 +195,7 @@ function isDragEvent(e: any): e is DragEvent {
  */
 export class Dragon {
   private sensors: ISensor[] = [];
-
+  private dragObjectTransducers: DragObjectReducer[] = [];
   /**
    * current active sensor, 可用于感应区高亮
    */
@@ -244,15 +246,40 @@ export class Dragon {
   }
 
   /**
+   * change dragObject 对外暴露的拖拽对象处理方法
+   *
+   * @param fn 拖拽对象处理函数
+   */
+  addDragObjectReducer(fn: DragObjectReducer) {
+    this.dragObjectTransducers.push(fn);
+  }
+
+  transformDragObject(dragObject: DragObject) {
+    if (!this.dragObjectTransducers?.length) {
+      return dragObject;
+    }
+
+    return this.dragObjectTransducers.reduce((preDragObject, reducer) => {
+      try {
+        return reducer(preDragObject);
+      } catch (e) {
+        console.warn(e);
+        return preDragObject;
+      }
+    }, dragObject);
+  }
+
+  /**
    * boost your dragObject for dragging(flying) 发射拖拽对象
    *
    * @param dragObject 拖拽对象
    * @param boostEvent 拖拽初始时事件
    */
-  boost(dragObject: DragObject, boostEvent: MouseEvent | DragEvent, fromRglNode?: Node) {
+  boost(dragObjectWrap: DragObject, boostEvent: MouseEvent | DragEvent, fromRglNode?: Node) {
     const { designer } = this;
     const masterSensors = this.getMasterSensors();
     const handleEvents = makeEventsHandler(boostEvent, masterSensors);
+    const dragObject = this.transformDragObject(dragObjectWrap);
     const newBie = !isDragNodeObject(dragObject);
     const forceCopyState =
       isDragNodeObject(dragObject) && dragObject.nodes.some((node) => node.isSlot());
