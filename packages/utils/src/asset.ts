@@ -1,67 +1,10 @@
-import { Package, ComponentCategory, ComponentDescription, RemoteComponentDescription } from '@ali/lowcode-types';
+import { AssetItem, AssetType, AssetLevels, Asset, AssetList, AssetBundle, AssetLevel, AssetsJson } from '@ali/lowcode-types';
 import { isCSSUrl } from './is-css-url';
 import { createDefer } from './create-defer';
 import { load, evaluate } from './script';
 
-export interface AssetItem {
-  type: AssetType;
-  content?: string | null;
-  device?: string;
-  level?: AssetLevel;
-  id?: string;
-}
-
-export enum AssetLevel {
-  // 环境依赖库 比如 react, react-dom
-  Environment = 1,
-  // 基础类库，比如 lodash deep fusion antd
-  Library = 2,
-  // 主题
-  Theme = 3,
-  // 运行时
-  Runtime = 4,
-  // 业务组件
-  Components = 5,
-  // 应用 & 页面
-  App = 6,
-}
-
-export const AssetLevels = [
-  AssetLevel.Environment,
-  AssetLevel.Library,
-  AssetLevel.Theme,
-  AssetLevel.Runtime,
-  AssetLevel.Components,
-  AssetLevel.App,
-];
-
-export type URL = string;
-
-export enum AssetType {
-  JSUrl = 'jsUrl',
-  CSSUrl = 'cssUrl',
-  CSSText = 'cssText',
-  JSText = 'jsText',
-  Bundle = 'bundle',
-}
-
-export interface AssetBundle {
-  type: AssetType.Bundle;
-  level?: AssetLevel;
-  assets?: Asset | AssetList | null;
-}
-
-export type Asset = AssetList | AssetBundle | AssetItem | URL;
-
-export type AssetList = Array<Asset | undefined | null>;
-
-export interface AssetsJson {
-  version: string; // 资产包协议版本号
-  packages?: Package[]; // 大包列表，external与package的概念相似，融合在一起
-  components: Array<ComponentDescription | RemoteComponentDescription>; // 所有组件的描述协议列表所有组件的列表
-  componentList?: ComponentCategory[]; // 组件分类列表，用来描述物料面板
-  bizComponentList?: ComponentCategory[]; // 业务组件分类列表，用来描述物料面板
-}
+// API 向下兼容
+export { AssetItem, AssetType, AssetLevels, Asset, AssetList, AssetBundle, AssetLevel, AssetsJson } from '@ali/lowcode-types';
 
 export function isAssetItem(obj: any): obj is AssetItem {
   return obj && obj.type;
@@ -104,7 +47,7 @@ export function assetItem(type: AssetType, content?: string | null, level?: Asse
 
 export function megreAssets(assets: AssetsJson, incrementalAssets: AssetsJson): AssetsJson {
   if (incrementalAssets.packages) {
-    assets.packages = [...assets.packages, ...incrementalAssets.packages];
+    assets.packages = [...(assets.packages || []), ...incrementalAssets.packages];
   }
 
   if (incrementalAssets.components) {
@@ -122,9 +65,9 @@ function megreAssetsComponentList(assets: AssetsJson, incrementalAssets: AssetsJ
   if (incrementalAssets[listName]) {
     if (assets[listName]) {
       // 根据title进行合并
-      incrementalAssets[listName].map((item) => {
+      incrementalAssets[listName]?.map((item) => {
         let matchFlag = false;
-        assets[listName].map((assetItem) => {
+        assets[listName]?.map((assetItem) => {
           if (assetItem.title === item.title) {
             assetItem.children = assetItem.children.concat(item.children);
             matchFlag = true;
@@ -133,7 +76,7 @@ function megreAssetsComponentList(assets: AssetsJson, incrementalAssets: AssetsJ
           return assetItem;
         });
 
-        !matchFlag && assets[listName].push(item);
+        !matchFlag && assets[listName]?.push(item);
         return item;
       });
     }
@@ -319,8 +262,10 @@ export class AssetLoader {
     return isUrl ? load(content) : evaluate(content);
   }
 
-  private async loadAsyncLibrary(asyncLibraryMap) {
-    const promiseList = []; const libraryKeyList = [];
+  // todo 补充类型
+  private async loadAsyncLibrary(asyncLibraryMap: Record<string, any>) {
+    const promiseList: any[] = [];
+    const libraryKeyList: any[] = [];
     for (const key in asyncLibraryMap) {
       // 需要异步加载
       if (asyncLibraryMap[key].async) {
