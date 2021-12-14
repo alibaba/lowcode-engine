@@ -96,11 +96,11 @@ export interface FieldConfig extends FieldExtraProps {
    */
   extraProps?: FieldExtraProps;
   /**
-   * @todo 待补充文档
+   * @deprecated
    */
   description?: TitleContent;
   /**
-   * @todo 待补充文档
+   * @deprecated
    */
   isExtends?: boolean;
 }

@@ -18,7 +18,6 @@ export type DynamicSetter = (target: SettingTarget) => string | SetterConfig | C
 
 /**
  * 设置器配置
- * @todo
  */
 export interface SetterConfig {
   // if *string* passed must be a registered Setter Name

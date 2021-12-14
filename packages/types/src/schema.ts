@@ -168,6 +168,7 @@ export interface SlotSchema extends NodeSchema {
  * 应用描述
  */
 export interface ProjectSchema {
+  id?: string;
   /**
    * 当前应用协议版本号
    */
@@ -191,7 +192,7 @@ export interface ProjectSchema {
    */
   utils?: UtilsMap;
   /**
-   * @todo 待文档定义
+   * 应用范围内的全局常量
    */
   constants?: JSONObject;
   /**
@@ -206,10 +207,6 @@ export interface ProjectSchema {
    * 当前应用配置信息
    */
   config?: AppConfig | Record<string, any>;
-  /**
-   * @todo 待补充文档
-   */
-  id?: string;
   /**
    * 当前应用元数据信息
    */

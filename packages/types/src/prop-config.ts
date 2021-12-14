@@ -59,7 +59,7 @@ export interface PropConfig {
    */
   defaultValue?: any;
   /**
-   * @todo 待补充文档
+   * @deprecated 已被弃用
    */
   setter?: any;
 }

@@ -101,11 +101,13 @@ export interface Snippet {
    */
   screenshot?: string;
   /**
-   * @todo snippet 打标
+   * snippet 打标
+   *
+   * @deprecated 暂未使用
    */
   label?: string;
   /**
-   * @todo 待补充文档
+   * 待插入的 schema
    */
   schema?: NodeSchema;
 }
@@ -132,7 +134,7 @@ export interface Experimental {
    */
   context?: { [contextInfoName: string]: any };
   /**
-   * @todo 待补充文档
+   * @deprecated 使用组件 metadata 上的 snippets 字段即可
    */
   snippets?: Snippet[];
   /**
@@ -160,7 +162,7 @@ export interface Experimental {
    */
   callbacks?: Callbacks;
   /**
-   * @todo 待补充文档
+   * 拖入容器时，自动带入 children 列表
    */
   initialChildren?: NodeData[] | ((target: SettingTarget) => NodeData[]);
   /**
@@ -201,7 +203,7 @@ export interface Experimental {
   liveTextEditing?: LiveTextEditingConfig[];
 
   /**
-   * @todo 待补充文档
+   * @deprecated 暂未使用
    */
   isTopFixed?: boolean;
 }

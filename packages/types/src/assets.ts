@@ -27,7 +27,9 @@ export interface Package {
    */
   library: string;
   /**
-   * @todo 待补充文档 @jinchan
+   * @deprecated
+   *
+   * @todo 需推进提案 @度城
    */
   async?: boolean;
   /**
