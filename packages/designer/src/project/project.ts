@@ -192,6 +192,10 @@ export class Project {
     return this.documents.find(doc => doc.id === id) || null;
   }
 
+  getDocumentByFileName(fileName: string): DocumentModel | null {
+    return this.documents.find(doc => doc.fileName === fileName) || null;
+  }
+
   @action
   createDocument(data?: RootSchema): DocumentModel {
     const doc = new DocumentModel(this, data || this?.data?.componentsTree?.[0]);

@@ -46,15 +46,16 @@ export interface IDesignerCabin {
 
 export interface ILowCodePluginContext {
   skeleton: Skeleton;
-  designer: Designer;
-  editor: Editor;
+  // designer: Designer;
+  // editor: Editor;
   hotkey: Hotkey;
   logger: Logger;
-  plugins: ILowCodePluginManager;
-  designerCabin: IDesignerCabin;
+  // plugins: ILowCodePluginManager;
+  // designerCabin: IDesignerCabin;
   setters: Setters;
-  utils: Utils;
+  // utils: Utils;
   engineConfig: EngineConfig;
+  material: any;
 }
 
 interface ILowCodePluginManagerPluginAccessor {

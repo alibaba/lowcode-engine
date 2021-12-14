@@ -1,3 +1,4 @@
+import { isEqual } from 'lodash';
 import { globalContext } from './di';
 import { Editor } from './editor';
 
@@ -383,6 +384,21 @@ export class Hotkey {
   bind(combos: string[] | string, callback: HotkeyCallback, action?: string): Hotkey {
     this.bindMultiple(Array.isArray(combos) ? combos : [combos], callback, action);
     return this;
+  }
+
+  unbind(combos: string[] | string, callback: HotkeyCallback, action?: string) {
+    const combinations = Array.isArray(combos) ? combos : [combos];
+
+    combinations.forEach(combination => {
+      const info: KeyInfo = getKeyInfo(combination, action);
+      const { key, modifiers } = info;
+      const idx = this.callBacks[key].findIndex(info => {
+        return isEqual(info.modifiers, modifiers) && info.callback === callback;
+      });
+      if (idx !== -1) {
+        this.callBacks[key].splice(idx, 1);
+      }
+    });
   }
 
   /**

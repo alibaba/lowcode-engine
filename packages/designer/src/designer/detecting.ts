@@ -39,7 +39,7 @@ export class Detecting {
     }
   }
 
-  release(node: Node) {
+  release(node: Node | null) {
     if (this._current === node) {
       this._current = null;
       this.emitter.emit(DETECTING_CHANGE_EVENT, this.current);
@@ -52,7 +52,7 @@ export class Detecting {
     }
   }
 
-  onDetectingChange(fn: () => void) {
+  onDetectingChange(fn: (node: Node) => void) {
     this.emitter.on(DETECTING_CHANGE_EVENT, fn);
     return () => {
       this.emitter.off(DETECTING_CHANGE_EVENT, fn);

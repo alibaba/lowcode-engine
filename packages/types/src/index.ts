@@ -20,3 +20,4 @@ export * from './code-intermediate';
 export * from './code-result';
 export * from './assets';
 export * as GlobalEvent from './event';
+export * from './disposable';

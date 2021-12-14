@@ -51,14 +51,14 @@ const setters: Setters = {
 export {
   editor,
   editorCabin,
-  skeleton,
+  // skeleton,
   skeletonCabin,
   designer,
   designerCabin,
   plugins,
-  setters,
+  // setters,
   project,
-  selection,
+  // selection,
   /**
    * 注册一些全局的切面
    */
@@ -67,10 +67,10 @@ export {
    * 全局的一些数据存储
    */
   // store,
-  hotkey,
+  // hotkey,
   monitor,
   utils,
-  engineConfig,
+  // engineConfig,
 };
 
 const getSelection = () => designer.currentDocument?.selection;
@@ -78,16 +78,16 @@ const getSelection = () => designer.currentDocument?.selection;
 (window as any).AliLowCodeEngine = {
   editor,
   editorCabin,
-  skeleton,
+  // skeleton,
   skeletonCabin,
   designer,
   designerCabin,
   plugins,
-  setters,
+  // setters,
   project,
-  get selection() {
-    return getSelection();
-  },
+  // get selection() {
+  //   return getSelection();
+  // },
   /**
    * 注册一些全局的切面
    */
@@ -96,11 +96,11 @@ const getSelection = () => designer.currentDocument?.selection;
    * 全局的一些数据存储
    */
   // store,
-  hotkey,
+  // hotkey,
   monitor,
   init,
   utils,
-  engineConfig,
+  // engineConfig,
 };
 
 // 处理 editor.set('assets')，将组件元数据创建好

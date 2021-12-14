@@ -1,53 +1,50 @@
-import { Editor, Hotkey, hotkey, getSetter, registerSetter, getSettersMap, engineConfig, EngineConfig } from '@ali/lowcode-editor-core';
-import { Skeleton } from '@ali/lowcode-editor-skeleton';
-import { ILowCodePluginConfig, ILowCodePluginManager, ILowCodePluginContext, IDesignerCabin } from './plugin-types';
-import { getLogger, Logger } from '../utils';
+import { Editor, engineConfig } from '@ali/lowcode-editor-core';
+import { Designer } from '@ali/lowcode-designer';
+import { Skeleton as InnerSkeleton } from '@ali/lowcode-editor-skeleton';
 import {
-  registerMetadataTransducer,
-  addBuiltinComponentAction,
-  removeBuiltinComponentAction,
-} from '../component-meta';
-import { Designer } from '../designer';
-import { Setters, Utils, utils } from '../types';
+  Hotkey,
+  Project,
+  Skeleton,
+  Setters,
+  Material,
+  editorSymbol,
+  designerSymbol,
+  skeletonSymbol,
+} from '@ali/lowcode-shell';
+import { getLogger, Logger } from '../utils/logger';
+import { ILowCodePluginContext } from './plugin-types';
 
+/**
+ * 一些 API 设计约定：
+ * 1. 事件的命名格式为：on[Will|Did]VerbNoun?，参考 https://code.visualstudio.com/api/references/vscode-api#events
+ * 2. 基于 Disposable 模式，对于事件的绑定、快捷键的绑定函数，返回值则是解绑函数
+ */
 export default class PluginContext implements ILowCodePluginContext {
-  editor: Editor;
-  skeleton: Skeleton;
-  designer: Designer;
-  hotkey: Hotkey;
-  logger: Logger;
-  plugins: ILowCodePluginManager;
-  designerCabin: IDesignerCabin;
-  setters: Setters;
-  utils: Utils;
-  engineConfig: EngineConfig;
+  private readonly [editorSymbol]: Editor;
+  private readonly [designerSymbol]: Designer;
+  private readonly [skeletonSymbol]: InnerSkeleton;
+  public hotkey: Hotkey;
+  public project: Project;
+  public skeleton: Skeleton;
+  public logger: Logger;
+  public setters: Setters;
+  public material: Material;
 
-  constructor(editor: Editor, plugins: ILowCodePluginManager) {
-    this.editor = editor;
-    this.designer = editor.get('designer')!;
-    this.skeleton = editor.get('skeleton')!;
-    this.hotkey = hotkey;
-    this.plugins = plugins;
-    this.designerCabin = this.createDesignerCabin();
-    this.setters = {
-      getSetter,
-      registerSetter,
-      getSettersMap,
-    };
-    this.engineConfig = engineConfig;
-    this.utils = utils;
-  }
+  constructor(editor: Editor) {
+    this[editorSymbol] = editor;
+    const designer = this[designerSymbol] = editor.get('designer')!;
+    const skeleton = this[skeletonSymbol] = editor.get('skeleton')!;
 
-  private createDesignerCabin(): IDesignerCabin {
-    return {
-      registerMetadataTransducer,
-      addBuiltinComponentAction,
-      removeBuiltinComponentAction,
-    };
-  }
-
-  setLogger(config: ILowCodePluginConfig): void {
-    this.logger = getLogger({ level: 'log', bizName: `designer:plugin:${config.name}` });
+    // TODO: to be deleted
+    // this.editor = editor;
+    const project = designer.project;
+    this.hotkey = new Hotkey();
+    this.project = new Project(project);
+    this.skeleton = new Skeleton(skeleton);
+    this.setters = new Setters();
+    this.material = new Material(editor);
+    this.config = engineConfig;
+    // TODO: pluginName
+    this.logger = getLogger({ level: 'warn', bizName: 'designer:plugin:' });
   }
 }
-

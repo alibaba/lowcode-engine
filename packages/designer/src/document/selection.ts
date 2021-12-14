@@ -161,7 +161,7 @@ export class Selection {
     return nodes;
   }
 
-  onSelectionChange(fn: () => void): () => void {
+  onSelectionChange(fn: (ids: string[]) => void): () => void {
     this.emitter.on('selectionchange', fn);
     return () => {
       this.emitter.removeListener('selectionchange', fn);

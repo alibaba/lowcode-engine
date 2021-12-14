@@ -18,19 +18,24 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     this.editor = editor;
   }
 
-  private _getLowCodePluginContext() {
-    return new LowCodePluginContext(this.editor, this);
+  private _getLowCodePluginContext(config: any) {
+    return new LowCodePluginContext(this.editor, config);
   }
+
+  // private getNewContext(config: any) {
+  //   return new LowCodePluginContext2(this.editor, config);
+  // }
 
   async register(
     pluginConfigCreator: (ctx: ILowCodePluginContext, pluginOptions?: any) => ILowCodePluginConfig,
     pluginOptions?: any,
     options?: LowCodeRegisterOptions,
   ): Promise<void> {
-    const ctx = this._getLowCodePluginContext();
+    const ctx = this._getLowCodePluginContext({ name: pluginConfigCreator.pluginName });
+    // ctx.newCtx = this.getNewContext();
     const config = pluginConfigCreator(ctx, pluginOptions);
     invariant(config.name, `${config.name} required`, config);
-    ctx.setLogger(config);
+    // ctx.setLogger(config);
     const allowOverride = options?.override === true;
     if (this.pluginsMap.has(config.name)) {
       if (!allowOverride) {
