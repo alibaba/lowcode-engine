@@ -86,6 +86,11 @@ export interface ComponentConfigure {
   actions?: ComponentAction[];
 }
 
+/**
+ * 可用片段
+ *
+ * 内容为组件不同状态下的低代码 schema (可以有多个)，用户从组件面板拖入组件到设计器时会向页面 schema 中插入 snippets 中定义的组件低代码 schema
+ */
 export interface Snippet {
   /**
    * 组件分类title
@@ -99,6 +104,9 @@ export interface Snippet {
    * @todo snippet 打标
    */
   label?: string;
+  /**
+   * @todo 待补充文档
+   */
   schema?: NodeSchema;
 }
 

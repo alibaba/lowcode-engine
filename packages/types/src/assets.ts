@@ -27,7 +27,7 @@ export interface Package {
    */
   library: string;
   /**
-   * @todo 待补充文档
+   * @todo 待补充文档 @jinchan
    */
   async?: boolean;
   /**
@@ -97,7 +97,7 @@ export interface ComponentItem {
  */
 export interface ComponentDescription extends ComponentMetadata {
   /**
-   * @todo 待补充文档
+   * @todo 待补充文档 @jinchan
    */
   keywords: string[];
 }

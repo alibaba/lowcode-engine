@@ -68,7 +68,7 @@ export interface FieldExtraProps {
  */
 export interface FieldConfig extends FieldExtraProps {
   /**
-   * @todo 待补充文档
+   * 面板配置隶属于单个 field 还是分组
    */
   type?: 'field' | 'group';
   /**
@@ -81,6 +81,8 @@ export interface FieldConfig extends FieldExtraProps {
    */
   title?: TitleContent;
   /**
+   * 单个属性的 setter 配置
+   *
    * the field body contains when .type = 'field'
    */
   setter?: SetterType | DynamicSetter;
