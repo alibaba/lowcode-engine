@@ -1,0 +1,16 @@
+# 忽略目录
+node_modules/
+build/
+dist/
+test-cases/
+test/
+tests/
+output/
+es/
+lib/
+coverage/
+
+# 忽略文件
+**/*.min.js
+**/*-min.js
+**/*.bundle.js

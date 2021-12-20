@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`tests/plugins/common/requireUtils should works 1`] = `
+Object {
+  "chunks": Array [
+    Object {
+      "content": "import * from 'react';",
+      "fileType": "jsx",
+      "linkAfter": Array [],
+      "name": "CommonInternalDependencyImport",
+      "type": "string",
+    },
+  ],
+  "contextData": Object {},
+  "depNames": Array [],
+  "ir": Object {},
+}
+`;

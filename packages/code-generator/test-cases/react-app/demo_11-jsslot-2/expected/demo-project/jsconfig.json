@@ -1,0 +1,13 @@
+
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "jsx": "react",
+    "paths": {
+      "@/*": ["./src/*"],
+      "ice": [".ice/index.ts"],
+      "ice/*": [".ice/pages/*"]
+    }
+  }
+}
+    

@@ -1,0 +1,8 @@
+{
+  "inlineStyle": false,
+  "plugins": [],
+  "targets": ["web"],
+  "miniapp": {
+    "buildType": "runtime"
+  }
+}

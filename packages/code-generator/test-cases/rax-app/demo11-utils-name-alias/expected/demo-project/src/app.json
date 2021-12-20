@@ -1,0 +1,11 @@
+{
+  "routes": [
+    {
+      "path": "/aaaa",
+      "source": "pages/Aaaa/index"
+    }
+  ],
+  "window": {
+    "title": "jinyuan-test2"
+  }
+}
