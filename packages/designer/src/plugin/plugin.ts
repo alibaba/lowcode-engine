@@ -1,11 +1,12 @@
+import { CompositeObject } from '@ali/lowcode-types';
+import { getLogger, Logger } from '@ali/lowcode-utils';
 import {
   ILowCodePlugin,
   ILowCodePluginConfig,
   ILowCodePluginManager,
 } from './plugin-types';
-import { CompositeObject } from '@ali/lowcode-types';
 import { EventEmitter } from 'events';
-import { getLogger, Logger, invariant } from '../utils';
+import { invariant } from '../utils';
 
 export class LowCodePlugin implements ILowCodePlugin {
   config: ILowCodePluginConfig;

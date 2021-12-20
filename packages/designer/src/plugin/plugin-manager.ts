@@ -1,8 +1,16 @@
 import { Editor } from '@ali/lowcode-editor-core';
-import { ILowCodePlugin, ILowCodePluginConfig, ILowCodePluginManager, ILowCodePluginContext, LowCodeRegisterOptions } from './plugin-types';
+import { getLogger } from '@ali/lowcode-utils';
+import {
+  ILowCodePlugin,
+  ILowCodePluginConfig,
+  ILowCodePluginManager,
+  ILowCodePluginContext,
+  LowCodeRegisterOptions,
+  PluginContextOptions,
+} from './plugin-types';
 import { LowCodePlugin } from './plugin';
 import LowCodePluginContext from './plugin-context';
-import { getLogger, invariant } from '../utils';
+import { invariant } from '../utils';
 import sequencify from './sequencify';
 
 const logger = getLogger({ level: 'warn', bizName: 'designer:pluginManager' });
@@ -18,24 +26,22 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     this.editor = editor;
   }
 
-  private _getLowCodePluginContext(config: any) {
-    return new LowCodePluginContext(this.editor, config);
+  private _getLowCodePluginContext(options: PluginContextOptions) {
+    return new LowCodePluginContext(this.editor, options);
   }
-
-  // private getNewContext(config: any) {
-  //   return new LowCodePluginContext2(this.editor, config);
-  // }
 
   async register(
     pluginConfigCreator: (ctx: ILowCodePluginContext, pluginOptions?: any) => ILowCodePluginConfig,
     pluginOptions?: any,
     options?: LowCodeRegisterOptions,
   ): Promise<void> {
-    const ctx = this._getLowCodePluginContext({ name: pluginConfigCreator.pluginName });
-    // ctx.newCtx = this.getNewContext();
+    const ctx = this._getLowCodePluginContext({ pluginName: pluginConfigCreator.pluginName });
     const config = pluginConfigCreator(ctx, pluginOptions);
-    invariant(config.name, `${config.name} required`, config);
-    // ctx.setLogger(config);
+    invariant(
+      pluginConfigCreator.pluginName || config.name,
+      'pluginConfigCreator.pluginName required',
+      config,
+    );
     const allowOverride = options?.override === true;
     if (this.pluginsMap.has(config.name)) {
       if (!allowOverride) {
@@ -43,7 +49,12 @@ export class LowCodePluginManager implements ILowCodePluginManager {
       } else {
         // clear existing plugin
         const originalPlugin = this.pluginsMap.get(config.name);
-        logger.log('plugin override, originalPlugin with name ', config.name, ' will be destroyed, config:', originalPlugin?.config);
+        logger.log(
+          'plugin override, originalPlugin with name ',
+          config.name,
+          ' will be destroyed, config:',
+          originalPlugin?.config,
+        );
         originalPlugin?.destroy();
         this.pluginsMap.delete(config.name);
       }
@@ -70,7 +81,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
   }
 
   async delete(pluginName: string): Promise<boolean> {
-    const idx = this.plugins.findIndex(plugin => plugin.name === pluginName);
+    const idx = this.plugins.findIndex((plugin) => plugin.name === pluginName);
     if (idx === -1) return false;
     const plugin = this.plugins[idx];
     await plugin.destroy();
@@ -82,7 +93,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
   async init() {
     const pluginNames: string[] = [];
     const pluginObj: { [name: string]: ILowCodePlugin } = {};
-    this.plugins.forEach(plugin => {
+    this.plugins.forEach((plugin) => {
       pluginNames.push(plugin.name);
       pluginObj[plugin.name] = plugin;
     });
@@ -94,7 +105,9 @@ export class LowCodePluginManager implements ILowCodePluginManager {
       try {
         await this.pluginsMap.get(pluginName)!.init();
       } catch (e) {
-        logger.error(`Failed to init plugin:${pluginName}, it maybe affect those plugins which depend on this.`);
+        logger.error(
+          `Failed to init plugin:${pluginName}, it maybe affect those plugins which depend on this.`,
+        );
         logger.error(e);
       }
     }

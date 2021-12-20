@@ -6,6 +6,7 @@ import {
   MetadataTransducer,
   Designer,
 } from '@ali/lowcode-designer';
+import { Event, Material } from '@ali/lowcode-shell';
 import { Setters, Utils } from '../types';
 
 export interface ILowCodePluginConfig {
@@ -55,7 +56,8 @@ export interface ILowCodePluginContext {
   setters: Setters;
   // utils: Utils;
   engineConfig: EngineConfig;
-  material: any;
+  material: Material;
+  event: Event;
 }
 
 interface ILowCodePluginManagerPluginAccessor {
@@ -82,4 +84,8 @@ export type LowCodeRegisterOptions = {
   autoInit?: boolean;
   // allow overriding existing plugin with same name when override === true
   override?: boolean;
+};
+
+export type PluginContextOptions = {
+  pluginName: string;
 };

@@ -1,5 +1,5 @@
 import { Prop as InnerProp } from '@ali/lowcode-designer';
-import { CompositeValue } from '@ali/lowcode-types';
+import { CompositeValue, TransformStage } from '@ali/lowcode-types';
 import { propSymbol } from './symbols';
 import Node from './node';
 
@@ -27,5 +27,7 @@ export default class Prop {
     return this[propSymbol].getValue();
   }
 
-  exportSchema() {}
+  exportSchema(stage: TransformStage) {
+    return this[propSymbol].export(stage);
+  }
 }
