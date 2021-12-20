@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { COMMON_CHUNK_NAME } from '../../const/generator';
 
 import {
@@ -164,23 +165,21 @@ function buildPackageImport(
 
   // 发现 nodeIdentifier 与 exportName 或者 aliasName 冲突的场景
   const nodeIdentifiers = depsInfo.map((info) => info.nodeIdentifier).filter(Boolean);
-  const conflictInfos = Object.keys(exportItems)
-    .map((exportName) => {
-      const exportItem = exportItems[exportName];
-      const usedNames = [
-        ...exportItem.aliasNames,
-        ...(exportItem.needOriginExport || exportItem.aliasNames.length <= 0 ? [exportName] : []),
+  const conflictInfos = _.flatMap(Object.keys(exportItems), (exportName) => {
+    const exportItem = exportItems[exportName];
+    const usedNames = [
+      ...exportItem.aliasNames,
+      ...(exportItem.needOriginExport || exportItem.aliasNames.length <= 0 ? [exportName] : []),
+    ];
+    const conflictNames = usedNames.filter((n) => nodeIdentifiers.indexOf(n) >= 0);
+    if (conflictNames.length > 0) {
+      return [
+        ...(conflictNames.indexOf(exportName) >= 0 ? [[exportName, true, exportItem]] : []),
+        ...conflictNames.filter((n) => n !== exportName).map((n) => [n, false, exportItem]),
       ];
-      const conflictNames = usedNames.filter((n) => nodeIdentifiers.indexOf(n) >= 0);
-      if (conflictNames.length > 0) {
-        return [
-          ...(conflictNames.indexOf(exportName) >= 0 ? [[exportName, true, exportItem]] : []),
-          ...conflictNames.filter((n) => n !== exportName).map((n) => [n, false, exportItem]),
-        ];
-      }
-      return [];
-    })
-    .flat();
+    }
+    return [];
+  });
 
   const conflictExports = conflictInfos.filter((c) => c[1]).map((c) => c[0] as string);
   const conflictAlias = conflictInfos.filter((c) => !c[1]).map((c) => c[0] as string);

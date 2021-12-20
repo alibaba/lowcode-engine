@@ -5,7 +5,7 @@
   "license": "MIT",
   "main": "lib/index.js",
   "module": "es/index.js",
-  "typings": "es/index.d.ts",
+  "typings": "types/index.d.ts",
   "files": [
     "bin",
     "lib",
@@ -21,11 +21,8 @@
   },
   "scripts": {
     "start": "jest --watchAll",
-    "build": "npm run build:bs",
-    "build:bs": "rimraf lib es dist && npm run build:cjs && npm run build:esm",
-    "build:cjs": "tsc --module commonjs --outDir lib",
-    "build:esm": "tsc --module es6 --outDir es",
-    "clean": "rimraf es lib dist test-cases/*/*/actual",
+    "build": "npm run clean && node scripts/build",
+    "clean": "rimraf es lib types dist test-cases/*/*/actual",
     "lint": "eslint --ext .jsx,.js,.ts,.tsx src/",
     "lintfix": "eslint --ext .jsx,.js,.ts,.tsx --fix src/",
     "template": "node ./scripts/build-template-static-files.js",
@@ -95,6 +92,7 @@
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
     "build-plugin-component": "^0.2.22",
+    "concurrently": "^6.5.1",
     "cross-env": "^7.0.3",
     "esbuild": "^0.14.5",
     "esbuild-plugin-ignore": "^1.1.0",
@@ -115,8 +113,7 @@
     "yargs-parser": "^20.2.9"
   },
   "engines": {
-    "node": ">=10.0.0",
-    "install-node": "14.x"
+    "node": ">=10.0.0"
   },
   "publishConfig": {
     "registry": "http://registry.npm.alibaba-inc.com"
