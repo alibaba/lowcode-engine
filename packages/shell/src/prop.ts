@@ -15,6 +15,14 @@ export default class Prop {
     return new Prop(prop);
   }
 
+  getId() {
+    return this[propSymbol].id;
+  }
+
+  getKey() {
+    return this[propSymbol].key;
+  }
+
   getNode() {
     return Node.create(this[propSymbol].getNode());
   }

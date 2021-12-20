@@ -6,6 +6,7 @@ import {
 import { CompositeValue, NodeSchema, TransformStage } from '@ali/lowcode-types';
 import Prop from './prop';
 import DocumentModel from './document-model';
+import NodeChildren from './node-children';
 import { documentSymbol, nodeSymbol } from './symbols';
 
 export default class Node {
@@ -17,9 +18,17 @@ export default class Node {
     this[documentSymbol] = node.document;
   }
 
-  static create(node: InnerNode | null) {
+  static create(node: InnerNode | null | undefined) {
     if (!node) return null;
     return new Node(node);
+  }
+
+  get id() {
+    return this[nodeSymbol].id;
+  }
+
+  get componentName() {
+    return this[nodeSymbol].componentName;
   }
 
   getDocumentModel() {
@@ -51,18 +60,18 @@ export default class Node {
   }
 
   getPrevSibling() {
-    return this[nodeSymbol].prevSibling;
+    return Node.create(this[nodeSymbol].prevSibling);
   }
   getNextSibling() {
-    return this[nodeSymbol].nextSibling;
+    return Node.create(this[nodeSymbol].nextSibling);
   }
 
   getParent() {
-    return this[nodeSymbol].parent;
+    return Node.create(this[nodeSymbol].parent);
   }
 
   getChildren() {
-    return this[nodeSymbol].children;
+    return NodeChildren.create(this[nodeSymbol].children);
   }
 
   importSchema(data: NodeSchema) {

@@ -7,6 +7,7 @@ export const skeletonSymbol = Symbol('skeleton');
 export const documentSymbol = Symbol('document');
 export const editorSymbol = Symbol('editor');
 export const nodeSymbol = Symbol('node');
+export const nodeChildrenSymbol = Symbol('nodeChildren');
 export const propsSymbol = Symbol('props');
 export const propSymbol = Symbol('prop');
 export const detectingSymbol = Symbol('detecting');

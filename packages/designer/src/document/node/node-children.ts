@@ -328,7 +328,7 @@ export class NodeChildren {
     return this.children.filter(fn);
   }
 
-  find(fn: (item: Node, index: number) => Node) {
+  find(fn: (item: Node, index: number) => boolean) {
     return this.children.find(fn);
   }
 
