@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`postprocessor/prettier should works for custom files 1`] = `
+"<template>
+  <div>Hello</div>
+  <script>
+    export default {};
+  </script>
+</template>
+"
+`;
+
+exports[`postprocessor/prettier should works for js file 1`] = `
+"import { Button } from \\"@alifd/next\\";
+export function App() {
+  return <Button />;
+}
+"
+`;
+
+exports[`postprocessor/prettier should works for json file 1`] = `
+"{ \\"components\\": [\\"Button\\", \\"Block\\"] }
+"
+`;
+
+exports[`postprocessor/prettier should works for jsx file 1`] = `
+"import { Button } from \\"@alifd/next\\";
+export function App() {
+  return <Button />;
+}
+"
+`;
+
+exports[`postprocessor/prettier should works for other files 1`] = `
+".foo {
+  font-size: 12px;
+}
+"
+`;

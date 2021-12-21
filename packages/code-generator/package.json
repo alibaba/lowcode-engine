@@ -1,0 +1,125 @@
+{
+  "name": "@alilc/lowcode-code-generator",
+  "version": "2.0.0",
+  "description": "出码引擎 for LowCode Engine",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "typings": "types/index.d.ts",
+  "files": [
+    "bin",
+    "lib",
+    "es",
+    "demo",
+    "dist",
+    "CHANGELOG.md",
+    "README.md",
+    "example-schema.json"
+  ],
+  "bin": {
+    "lowcode-code-generator": "bin/lowcode-code-generator.js"
+  },
+  "scripts": {
+    "start": "jest --watchAll",
+    "build": "npm run clean && node scripts/build",
+    "clean": "rimraf es lib types dist test-cases/*/*/actual",
+    "lint": "eslint --ext .jsx,.js,.ts,.tsx src/",
+    "lintfix": "eslint --ext .jsx,.js,.ts,.tsx --fix src/",
+    "template": "node ./scripts/build-template-static-files.js",
+    "test": "jest",
+    "test:cov": "jest --coverage",
+    "test:update-snapshots": "cross-env UPDATE_EXPECTED=true jest -u",
+    "release:beta": "standard-version -t @ali/lowcode-code-generator\\@ --prerelease beta && git push --follow-tags && tnpm publish --tag beta",
+    "release": "standard-version -t @ali/lowcode-code-generator\\@ && git push --follow-tags && tnpm publish",
+    "prepublishOnly": "npm run build",
+    "demo": "node bin/lowcode-code-generator.js -i example-schema.json -o demo -s icejs"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": "eslint"
+  },
+  "dependencies": {
+    "@ali/lowcode-types": "^1.0.50",
+    "@babel/generator": "^7.12.11",
+    "@babel/parser": "^7.12.11",
+    "@babel/runtime": "^7.12.5",
+    "@babel/traverse": "^7.12.12",
+    "@babel/types": "^7.12.12",
+    "@types/debug": "^4.1.7",
+    "@types/fs-extra": "^9.0.12",
+    "@types/glob": "^7.2.0",
+    "@types/lodash": "^4.14.162",
+    "@types/qs": "^6.9.6",
+    "@types/semver": "^7.3.4",
+    "chalk": "^4.1.0",
+    "change-case": "^3.1.0",
+    "commander": "^6.1.0",
+    "debug": "^4.3.2",
+    "fs-extra": "9.x",
+    "glob": "^7.2.0",
+    "html-entities": "^2.3.2",
+    "json5": "^2.2.0",
+    "jsonc": "^2.0.0",
+    "jszip": "^3.5.0",
+    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
+    "mock-fs": "^5.1.2",
+    "moment": "^2.29.1",
+    "path-browserify": "^1.0.1",
+    "prettier": "^2.5.1",
+    "qs": "^6.10.1",
+    "semver": "^7.3.4",
+    "short-uuid": "^3.1.1",
+    "tslib": "^2.3.1"
+  },
+  "browser": {
+    "path": "path-browserify",
+    "lodash": "lodash-es",
+    "prettier": "prettier/standalone"
+  },
+  "devDependencies": {
+    "@iceworks/spec": "^1.4.2",
+    "@types/babel__traverse": "^7.11.0",
+    "@types/jest": "^27.0.2",
+    "@types/lodash": "^4.14.162",
+    "@types/node": "^14.14.20",
+    "@types/prettier": "^2.4.2",
+    "@typescript-eslint/eslint-plugin": "^4.12.0",
+    "@typescript-eslint/parser": "^4.12.0",
+    "build-plugin-component": "^0.2.22",
+    "concurrently": "^6.5.1",
+    "cross-env": "^7.0.3",
+    "esbuild": "^0.14.5",
+    "esbuild-plugin-ignore": "^1.1.0",
+    "esbuild-visualizer": "^0.3.1",
+    "eslint": "^7.17.0",
+    "eslint-config-ali": "^11.4.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "jest": "^27.3.1",
+    "rimraf": "^3.0.2",
+    "standard-version": "^9.1.1",
+    "ts-jest": "^27.0.7",
+    "ts-loader": "^6.2.2",
+    "ts-node": "^8.10.2",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "4.x",
+    "yargs-parser": "^20.2.9"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "publishConfig": {
+    "registry": "http://registry.npm.alibaba-inc.com"
+  },
+  "tnpm": {
+    "mode": "yarn",
+    "lockfile": "enable"
+  }
+}

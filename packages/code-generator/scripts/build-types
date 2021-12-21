@@ -1,0 +1,10 @@
+#!/bin/sh
+
+echo building types...
+tsc --outDir types --declaration --emitDeclarationOnly &&  \
+  echo built types... && \
+  rm -rf types/types/src && \
+  mv types/code-generator/src/* types/ && \
+  rm -rf types/code-generator/src
+
+

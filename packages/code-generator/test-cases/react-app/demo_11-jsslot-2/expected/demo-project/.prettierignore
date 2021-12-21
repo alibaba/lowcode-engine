@@ -1,0 +1,11 @@
+
+build/
+tests/
+demo/
+.ice/
+coverage/
+**/*-min.js
+**/*.min.js
+package-lock.json
+yarn.lock
+    
