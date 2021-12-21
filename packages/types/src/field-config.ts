@@ -1,7 +1,11 @@
 import { TitleContent } from './title';
 import { SetterType, DynamicSetter } from './setter-config';
 import { SettingTarget } from './setting-target';
+import { LiveTextEditingConfig } from './metadata';
 
+/**
+ * extra props for field
+ */
 export interface FieldExtraProps {
   /**
    * 是否必填参数
@@ -15,6 +19,9 @@ export interface FieldExtraProps {
    * get value for field
    */
   getValue?: (target: SettingTarget, fieldValue: any) => any;
+  /**
+   * set value for field
+   */
   setValue?: (target: SettingTarget, value: any) => void;
   /**
    * the field conditional show, is not set always true
@@ -49,16 +56,20 @@ export interface FieldExtraProps {
    * compatiable vision display
    */
   display?: 'accordion' | 'inline' | 'block' | 'plain' | 'popup' | 'entry';
-  liveTextEditing?: {
-    selector: string;
-    // 编辑模式 纯文本|段落编辑|文章编辑（默认纯文本，无跟随工具条）
-    mode?: 'plaintext' | 'paragraph' | 'article';
-    // 从 contentEditable 获取内容并设置到属性
-    onSaveContent?: (content: string, prop: any) => any;
-  };
+  // @todo 这个 omit 是否合理？
+  /**
+   * @todo 待补充文档
+   */
+  liveTextEditing?: Omit<LiveTextEditingConfig, 'propTarget'>;
 }
 
+/**
+ * 属性面板配置
+ */
 export interface FieldConfig extends FieldExtraProps {
+  /**
+   * 面板配置隶属于单个 field 还是分组
+   */
   type?: 'field' | 'group';
   /**
    * the name of this setting field, which used in quickEditor
@@ -70,6 +81,8 @@ export interface FieldConfig extends FieldExtraProps {
    */
   title?: TitleContent;
   /**
+   * 单个属性的 setter 配置
+   *
    * the field body contains when .type = 'field'
    */
   setter?: SetterType | DynamicSetter;
@@ -79,6 +92,15 @@ export interface FieldConfig extends FieldExtraProps {
   items?: FieldConfig[];
   /**
    * extra props for field
+   * 其他配置属性（不做流通要求）
    */
   extraProps?: FieldExtraProps;
+  /**
+   * @deprecated
+   */
+  description?: TitleContent;
+  /**
+   * @deprecated
+   */
+  isExtends?: boolean;
 }
