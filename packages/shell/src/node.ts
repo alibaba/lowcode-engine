@@ -23,77 +23,170 @@ export default class Node {
     return new Node(node);
   }
 
+  /**
+   * 返回节点 id
+   */
   get id() {
     return this[nodeSymbol].id;
   }
 
+  /**
+   * 返回节点 componentName
+   */
   get componentName() {
     return this[nodeSymbol].componentName;
   }
 
+  /**
+   * 获取节点所属的文档模型对象
+   * @returns
+   */
   getDocumentModel() {
     return DocumentModel.create(this[documentSymbol]);
   }
 
+  /**
+   * 获取指定 path 的属性模型实例
+   * @param path 属性路径，支持 a / a.b / a.0 等格式
+   * @returns
+   */
   getProp(path: string): Prop | null {
     return Prop.create(this[nodeSymbol].getProp(path));
   }
 
+  /**
+   * 获取指定 path 的属性模型实例值
+   * @param path 属性路径，支持 a / a.b / a.0 等格式
+   * @returns
+   */
   getPropValue(path: string) {
     return this.getProp(path)?.getValue();
   }
 
+  /**
+   * 获取指定 path 的属性模型实例，
+   *  注：导出时，不同于普通属性，该属性并不挂载在 props 之下，而是与 props 同级
+   * @param path 属性路径，支持 a / a.b / a.0 等格式
+   * @returns
+   */
   getExtraProp(path: string): Prop | null {
     return Prop.create(this[nodeSymbol].getProp(getConvertedExtraKey(path)));
   }
 
+  /**
+   * 获取指定 path 的属性模型实例，
+   *  注：导出时，不同于普通属性，该属性并不挂载在 props 之下，而是与 props 同级
+   * @param path 属性路径，支持 a / a.b / a.0 等格式
+   * @returns
+   */
   getExtraPropValue(path: string) {
     return this.getExtraProp(path)?.getValue();
   }
 
+  /**
+   * 设置指定 path 的属性模型实例值
+   * @param path 属性路径，支持 a / a.b / a.0 等格式
+   * @param value 值
+   * @returns
+   */
   setPropValue(path: string, value: CompositeValue) {
     return this.getProp(path)?.setValue(value);
   }
 
+  /**
+   * 设置指定 path 的属性模型实例值
+   * @param path 属性路径，支持 a / a.b / a.0 等格式
+   * @param value 值
+   * @returns
+   */
   setExtraPropValue(path: string, value: CompositeValue) {
     return this.getExtraProp(path)?.setValue(value);
   }
 
+  /**
+   * 获取当前节点的前一个兄弟节点
+   * @returns
+   */
   getPrevSibling() {
     return Node.create(this[nodeSymbol].prevSibling);
   }
+
+  /**
+   * 获取当前节点的后一个兄弟节点
+   * @returns
+   */
   getNextSibling() {
     return Node.create(this[nodeSymbol].nextSibling);
   }
 
+  /**
+   * 获取当前节点的父亲节点
+   * @returns
+   */
   getParent() {
     return Node.create(this[nodeSymbol].parent);
   }
 
+  /**
+   * 获取当前节点的孩子节点模型
+   * @returns
+   */
   getChildren() {
     return NodeChildren.create(this[nodeSymbol].children);
   }
 
+  /**
+   * 导入节点数据
+   * @param data
+   */
   importSchema(data: NodeSchema) {
     this[nodeSymbol].import(data);
   }
 
+  /**
+   * 导出节点数据
+   * @param stage
+   * @param options
+   * @returns
+   */
   exportSchema(stage?: TransformStage, options?: any) {
     return this[nodeSymbol].export(stage, options);
   }
 
-  insertBefore(node: InnerNode<NodeSchema>, ref?: InnerNode<NodeSchema> | undefined, useMutator?: boolean) {
-    this[nodeSymbol].insertBefore(node, ref, useMutator);
+  /**
+   * 在指定位置之前插入一个节点
+   * @param node
+   * @param ref
+   * @param useMutator
+   */
+  insertBefore(node: Node, ref?: Node | undefined, useMutator?: boolean) {
+    this[nodeSymbol].insertBefore(node[nodeSymbol], ref?.[nodeSymbol], useMutator);
   }
 
-  insertAfter(node: InnerNode<NodeSchema>, ref?: InnerNode<NodeSchema> | undefined, useMutator?: boolean) {
-    this[nodeSymbol].insertAfter(node, ref, useMutator);
+  /**
+   * 在指定位置之后插入一个节点
+   * @param node
+   * @param ref
+   * @param useMutator
+   */
+  insertAfter(node: Node, ref?: Node | undefined, useMutator?: boolean) {
+    this[nodeSymbol].insertAfter(node[nodeSymbol], ref?.[nodeSymbol], useMutator);
   }
 
-  replaceChild(node: InnerNode<NodeSchema>, data: any) {
-    return Node.create(this[nodeSymbol].replaceChild(node, data));
+  /**
+   * 替换指定节点
+   * @param node 待替换的子节点
+   * @param data 用作替换的节点对象或者节点描述
+   * @returns
+   */
+  replaceChild(node: Node, data: any) {
+    return Node.create(this[nodeSymbol].replaceChild(node[nodeSymbol], data));
   }
 
+  /**
+   * 将当前节点替换成指定节点描述
+   * @param schema
+   */
   replaceWith(schema: NodeSchema) {
     this[nodeSymbol].replaceWith(schema);
   }

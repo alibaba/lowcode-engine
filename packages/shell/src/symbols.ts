@@ -1,5 +1,5 @@
 /**
- * 以下 symbol 均用于在 plugin context 对外暴露的模型中存储相应内部模型的 key
+ * 以下 symbol 均用于在 shell 层对外暴露的模型中存储相应内部模型的 key
  */
 export const projectSymbol = Symbol('project');
 export const designerSymbol = Symbol('designer');
@@ -13,3 +13,5 @@ export const propSymbol = Symbol('prop');
 export const detectingSymbol = Symbol('detecting');
 export const selectionSymbol = Symbol('selection');
 export const historySymbol = Symbol('history');
+export const simulatorHostSymbol = Symbol('simulatorHost');
+export const simulatorRendererSymbol = Symbol('simulatorRenderer');

@@ -1,7 +1,4 @@
-import {
-  NodeChildren as InnerNodeChildren,
-  Node as InnerNode,
-} from '@ali/lowcode-designer';
+import { NodeChildren as InnerNodeChildren, Node as InnerNode } from '@ali/lowcode-designer';
 import { NodeSchema } from '@ali/lowcode-types';
 import Node from './node';
 import { nodeSymbol, nodeChildrenSymbol } from './symbols';
@@ -16,6 +13,10 @@ export default class NodeChildren {
   static create(nodeChldren: InnerNodeChildren | null) {
     if (!nodeChldren) return null;
     return new NodeChildren(nodeChldren);
+  }
+
+  getOwner() {
+    return Node.create(this[nodeChildrenSymbol].owner);
   }
 
   get size() {
@@ -87,6 +88,19 @@ export default class NodeChildren {
       this[nodeChildrenSymbol].find((item: InnerNode<NodeSchema>, index: number) => {
         return fn(Node.create(item)!, index);
       }),
+    );
+  }
+
+  mergeChildren(
+    remover: (node: Node, idx: number) => boolean,
+    adder: (children: Node[]) => any,
+    sorter: (firstNode: Node, secondNode: Node) => number,
+  ) {
+    this[nodeChildrenSymbol].mergeChildren(
+      (node: InnerNode, idx: number) => remover(Node.create(node)!, idx),
+      (children: InnerNode[]) => adder(children.map((node) => Node.create(node)!)),
+      (firstNode: InnerNode, secondNode: InnerNode) =>
+        sorter(Node.create(firstNode)!, Node.create(secondNode)!),
     );
   }
 }

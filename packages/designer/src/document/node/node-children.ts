@@ -19,13 +19,13 @@ export class NodeChildren {
 
   constructor(readonly owner: ParentalNode, data: NodeData | NodeData[], options: any = {}) {
     makeObservable(this);
-    this.children = (Array.isArray(data) ? data : [data]).map(child => {
+    this.children = (Array.isArray(data) ? data : [data]).map((child) => {
       return this.owner.document.createNode(child, options.checkId);
     });
   }
 
   internalInitParent() {
-    this.children.forEach(child => child.internalSetParent(this.owner));
+    this.children.forEach((child) => child.internalSetParent(this.owner));
   }
 
   /**
@@ -33,7 +33,7 @@ export class NodeChildren {
    */
   export(stage: TransformStage = TransformStage.Save): NodeData[] {
     stage = compatStage(stage);
-    return this.children.map(node => {
+    return this.children.map((node) => {
       const data = node.export(stage);
       if (node.isLeaf() && TransformStage.Save === stage) {
         // FIXME: filter empty
@@ -47,7 +47,7 @@ export class NodeChildren {
     data = data ? (Array.isArray(data) ? data : [data]) : [];
 
     const originChildren = this.children.slice();
-    this.children.forEach(child => child.internalSetParent(null));
+    this.children.forEach((child) => child.internalSetParent(null));
 
     const children = new Array<Node>(data.length);
     for (let i = 0, l = data.length; i < l; i++) {
@@ -134,12 +134,20 @@ export class NodeChildren {
   delete(node: Node, purge = false, useMutator = true, options: NodeRemoveOptions = {}): boolean {
     node.internalPurgeStart();
     if (node.isParental()) {
-      foreachReverse(node.children, (subNode: Node) => {
-        subNode.remove(useMutator, purge, options);
-      }, (iterable, idx) => (iterable as NodeChildren).get(idx));
-      foreachReverse(node.slots, (slotNode: Node) => {
-        slotNode.remove(useMutator, purge);
-      }, (iterable, idx) => (iterable as [])[idx]);
+      foreachReverse(
+        node.children,
+        (subNode: Node) => {
+          subNode.remove(useMutator, purge, options);
+        },
+        (iterable, idx) => (iterable as NodeChildren).get(idx),
+      );
+      foreachReverse(
+        node.slots,
+        (slotNode: Node) => {
+          slotNode.remove(useMutator, purge);
+        },
+        (iterable, idx) => (iterable as [])[idx],
+      );
     }
     // 需要在从 children 中删除 node 前记录下 index，internalSetParent 中会执行删除(unlink)操作
     const i = this.children.indexOf(node);
@@ -164,7 +172,13 @@ export class NodeChildren {
       node,
     });
     if (useMutator) {
-      this.reportModified(node, this.owner, { type: 'remove', propagated: false, isSubDeleting: this.owner.isPurging, removeIndex: i, removeNode: node });
+      this.reportModified(node, this.owner, {
+        type: 'remove',
+        propagated: false,
+        isSubDeleting: this.owner.isPurging,
+        removeIndex: i,
+        removeNode: node,
+      });
     }
     // purge 为 true 时，已在 internalSetParent 中删除了子节点
     if (i > -1 && !purge) {
@@ -183,10 +197,11 @@ export class NodeChildren {
     const i = children.indexOf(node);
 
     if (node.parent) {
-      globalContext.has('editor') && globalContext.get('editor').emit('node.remove.topLevel', {
-        node,
-        index: node.index,
-      });
+      globalContext.has('editor') &&
+        globalContext.get('editor').emit('node.remove.topLevel', {
+          node,
+          index: node.index,
+        });
     }
 
     if (i < 0) {
@@ -332,7 +347,11 @@ export class NodeChildren {
     return this.children.find(fn);
   }
 
-  mergeChildren(remover: () => any, adder: (children: Node[]) => NodeData[] | null, sorter: () => any) {
+  mergeChildren(
+    remover: (node: Node, idx: number) => boolean,
+    adder: (children: Node[]) => NodeData[] | null,
+    sorter: (firstNode: Node, secondNode: Node) => number,
+  ) {
     let changed = false;
     if (remover) {
       const willRemove = this.children.filter(remover);

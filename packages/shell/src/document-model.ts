@@ -13,7 +13,7 @@ import Detecting from './detecting';
 import History from './history';
 import Project from './project';
 import Prop from './prop';
-import { documentSymbol, editorSymbol } from './symbols';
+import { documentSymbol, editorSymbol, nodeSymbol } from './symbols';
 
 type IOnChangeOptions = {
   type: string;
@@ -48,14 +48,26 @@ export default class DocumentModel {
     return new DocumentModel(document);
   }
 
+  /**
+   * 获取当前文档所属的 project
+   * @returns
+   */
   getProject() {
     return Project.create(this[documentSymbol].project);
   }
 
+  /**
+   * 获取文档的根节点
+   * @returns
+   */
   getRoot() {
     return Node.create(this[documentSymbol].getRoot());
   }
 
+  /**
+   * 获取文档下所有节点
+   * @returns
+   */
   getNodesMap() {
     const map = new Map<string, Node>();
     for (let id in this[documentSymbol].nodesMap.keys()) {
@@ -64,30 +76,61 @@ export default class DocumentModel {
     return map;
   }
 
+  /**
+   * 根据 nodeId 返回 Node 实例
+   * @param nodeId
+   * @returns
+   */
   getNodeById(nodeId: string) {
     return Node.create(this[documentSymbol].getNode(nodeId));
   }
 
+  /**
+   * 导入 schema
+   * @param schema
+   */
   importSchema(schema: RootSchema) {
     this[documentSymbol].import(schema);
   }
 
+  /**
+   * 导出 schema
+   * @param stage
+   * @returns
+   */
   exportSchema(stage?: TransformStage) {
     return this[documentSymbol].export(stage);
   }
 
+  /**
+   * 插入节点
+   * @param parent
+   * @param thing
+   * @param at
+   * @param copy
+   * @returns
+   */
   insertNode(
-    parent: ParentalNode<NodeSchema>,
-    thing: InnerNode<NodeSchema> | NodeData,
+    parent: Node,
+    thing: Node,
     at?: number | null | undefined,
     copy?: boolean | undefined,
   ) {
-    const node = this[documentSymbol].insertNode(parent, thing, at, copy);
+    const node = this[documentSymbol].insertNode(
+      parent[nodeSymbol] as any,
+      thing?.[nodeSymbol],
+      at,
+      copy,
+    );
     return Node.create(node);
   }
 
-  removeNode(idOrNode: string | InnerNode<NodeSchema>) {
-    this[documentSymbol].removeNode(idOrNode);
+  /**
+   * 移除指定节点/节点id
+   * @param idOrNode
+   */
+  removeNode(idOrNode: string | Node) {
+    this[documentSymbol].removeNode(idOrNode as any);
   }
 
   /**
@@ -126,6 +169,10 @@ export default class DocumentModel {
     });
   }
 
+  /**
+   * 当前 document 的节点显隐状态变更事件
+   * @param fn
+   */
   onChangeNodeVisible(fn: (node: Node, visible: boolean) => void) {
     // TODO: history 变化时需要重新绑定
     this[documentSymbol].nodesMap.forEach((node) => {
@@ -135,30 +182,40 @@ export default class DocumentModel {
     });
   }
 
+  /**
+   * 当前 document 的节点 children 变更事件
+   * @param fn
+   */
   onChangeNodeChildren(fn: (info?: IOnChangeOptions) => void) {
     // TODO: history 变化时需要重新绑定
     this[documentSymbol].nodesMap.forEach((node) => {
       node.onChildrenChange((info?: InnerIOnChangeOptions) => {
-        return info ? fn({
-          type: info.type,
-          node: Node.create(node)!,
-        }) : fn();
+        return info
+          ? fn({
+              type: info.type,
+              node: Node.create(node)!,
+            })
+          : fn();
       });
     });
   }
 
   /**
    * 当前 document 节点属性修改事件
+   * @param fn
    */
   onChangeNodeProp(fn: (info: PropChangeOptions) => void) {
-    this[editorSymbol].on(GlobalEvent.Node.Prop.InnerChange, (info: GlobalEvent.Node.Prop.ChangeOptions) => {
-      fn({
-        key: info.key,
-        oldValue: info.oldValue,
-        newValue: info.newValue,
-        prop: Prop.create(info.prop)!,
-        node: Node.create(info.node as any)!,
-      });
-    });
+    this[editorSymbol].on(
+      GlobalEvent.Node.Prop.InnerChange,
+      (info: GlobalEvent.Node.Prop.ChangeOptions) => {
+        fn({
+          key: info.key,
+          oldValue: info.oldValue,
+          newValue: info.newValue,
+          prop: Prop.create(info.prop)!,
+          node: Node.create(info.node as any)!,
+        });
+      },
+    );
   }
 }
