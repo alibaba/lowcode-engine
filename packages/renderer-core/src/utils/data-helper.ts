@@ -1,6 +1,6 @@
 /* eslint-disable object-curly-newline */
 import { transformArrayToMap, isJSFunction, transformStringToFunction, clone } from './common';
-import { jsonp, mtop, request, get, post, bzb } from './request';
+import { jsonp, request, get, post } from './request';
 import { DataSource, DataSourceItem } from '../types';
 
 const DS_STATUS = {
@@ -211,8 +211,8 @@ export class DataHelper {
           return new Promise((resolve) => {
             const { type, id, dataHandler, options } = item;
             const doFetch = (type: string, options: any) => {
-              this.fetchOne(type, options)
-                .then((data: any) => {
+              this.fetchOne(type as any, options)
+                ?.then((data: any) => {
                   if (afterRequest) {
                     this.appHelper.utils.afterRequest(item, data, undefined, (data: any, error: any) => {
                       fetchHandler(data, error);
@@ -290,38 +290,27 @@ export class DataHelper {
     }
   }
 
-  fetchOne(type: string, options: any) {
+  fetchOne(type: DataSourceType, options: any) {
     // eslint-disable-next-line prefer-const
     let { uri, url, method = 'GET', headers, params, ...otherProps } = options;
     otherProps = otherProps || {};
-    switch (type) {
-      case 'mtop':
-        method && (otherProps.method = method);
-        return mtop(uri, params, otherProps);
-      case 'jsonp':
-        return jsonp(uri, params, otherProps);
-      case 'bzb':
-        return bzb(uri, params, {
-          method,
-          headers,
-          ...otherProps,
-        });
-      // todo:
-      case 'legao':
-        if (method === 'JSONP') {
-          return jsonp(url, params, otherProps);
-        }
-        // return webTable(uri, params, otherProps);
-        break;
-      default:
-        method = method.toUpperCase();
-        if (method === 'GET') {
-          return get(uri, params, headers, otherProps);
-        }
-        if (method === 'POST') {
-          return post(uri, params, headers, otherProps);
-        }
-        return request(uri, method, params, headers, otherProps);
+    if (type === 'jsonp') {
+      return jsonp(uri, params, otherProps);
     }
+
+    if (type === 'fetch') {
+      switch (method.toUpperCase()) {
+        case 'GET':
+          return get(uri, params, headers, otherProps);
+        case 'POST':
+          return post(uri, params, headers, otherProps);
+        default:
+          return request(uri, method, params, headers, otherProps);
+      }
+    }
+
+    console.error(`Engine default dataSource not support type:[${type}] dataSource request!`);
   }
 }
+
+type DataSourceType = 'fetch' | 'jsonp';

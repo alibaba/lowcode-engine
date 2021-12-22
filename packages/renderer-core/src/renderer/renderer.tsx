@@ -1,8 +1,7 @@
 import Debug from 'debug';
-import { isEmpty } from '@ali/b3-one/lib/obj';
 import adapter from '../adapter';
 import contextFactory from '../context';
-import { isFileSchema, goldlog } from '../utils';
+import { isFileSchema, goldlog, isEmpty } from '../utils';
 import baseRendererFactory from './base';
 import divFactory from '../components/Div';
 import { IProps, ISchema, IState } from '../types';
