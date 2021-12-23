@@ -6,30 +6,43 @@ import {
   Designer,
   LowCodePluginManager,
   ILowCodePluginContext,
-  Setters,
+  // Setters,
 } from '@ali/lowcode-designer';
 import * as designerCabin from '@ali/lowcode-designer';
-import { Skeleton, SettingsPrimaryPane, registerDefaults } from '@ali/lowcode-editor-skeleton';
+import { Skeleton as InnerSkeleton, SettingsPrimaryPane, registerDefaults } from '@ali/lowcode-editor-skeleton';
 import * as skeletonCabin from '@ali/lowcode-editor-skeleton';
 import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
+import {
+  Hotkey,
+  Project,
+  Skeleton,
+  Setters,
+  Material,
+  Event,
+  editorSymbol,
+  designerSymbol,
+  skeletonSymbol,
+} from '@ali/lowcode-shell';
+import { getLogger, Logger } from '@ali/lowcode-utils';
 import './modules/live-editing';
 import { isPlainObject } from '@ali/lowcode-utils';
 import utils from './modules/utils';
+
 
 export * from './modules/editor-types';
 export * from './modules/skeleton-types';
 export * from './modules/designer-types';
 export * from './modules/lowcode-types';
 
-const { hotkey, monitor, getSetter, registerSetter, getSettersMap } = editorCabin;
+const { monitor } = editorCabin;
 registerDefaults();
 
 const editor = new Editor();
 globalContext.register(editor, Editor);
 globalContext.register(editor, 'editor');
 
-const skeleton = new Skeleton(editor);
+const skeleton = new InnerSkeleton(editor);
 editor.set(Skeleton, skeleton);
 editor.set('skeleton' as any, skeleton);
 
@@ -42,11 +55,20 @@ editor.set('plugins' as any, plugins);
 
 const { project, currentSelection: selection } = designer;
 const { Workbench } = skeletonCabin;
-const setters: Setters = {
-  getSetter,
-  registerSetter,
-  getSettersMap,
-};
+// const setters: Setters = {
+//   getSetter,
+//   registerSetter,
+//   getSettersMap,
+// };
+
+const hotkey = new Hotkey();
+const project2 = new Project(project);
+const skeleton2 = new Skeleton(skeleton);
+const setters2 = new Setters();
+const material = new Material(editor);
+const config = engineConfig;
+const event = new Event(editor, { prefix: 'common' });
+const logger = getLogger({ level: 'warn', bizName: 'common' });
 
 export {
   editor,
@@ -76,15 +98,22 @@ export {
 const getSelection = () => designer.currentDocument?.selection;
 // TODO: build-plugin-component 的 umd 开发态没有导出 AliLowCodeEngine，这里先简单绕过
 (window as any).AliLowCodeEngine = {
+  /**
+   * 待删除 start，不要用
+   */
   editor,
   editorCabin,
-  // skeleton,
   skeletonCabin,
   designer,
   designerCabin,
+  /**
+   * 待删除 end
+   */
   plugins,
-  // setters,
-  project,
+  skeleton: skeleton2,
+  project: project2,
+  setters: setters2,
+  material,
   // get selection() {
   //   return getSelection();
   // },
@@ -100,6 +129,10 @@ const getSelection = () => designer.currentDocument?.selection;
   monitor,
   init,
   utils,
+  config,
+  event,
+  logger,
+  hotkey,
   // engineConfig,
 };
 
