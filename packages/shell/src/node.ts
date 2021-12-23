@@ -146,6 +146,17 @@ export default class Node {
     return this.children;
   }
 
+  /**
+   * @deprecated
+   */
+  getDOMNode() {
+    return this[nodeSymbol].getDOMNode();
+  }
+
+  getRect() {
+    return this[nodeSymbol].getRect();
+  }
+
   hasSlots() {
     return this[nodeSymbol].hasSlots();
   }

@@ -40,7 +40,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     let stageName;
     if (display === 'entry') {
       runInAction(() => {
-        stageName = `${field.getNode().id }_${field.name.toString()}`;
+        stageName = `${field.getNode().id}_${field.name.toString()}`;
         // 清除原 stage，不然 content 引用的一直是老的 field，导致数据无法得到更新
         stages.container.remove(stageName);
         const stage = stages.add({
@@ -62,7 +62,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     const { condition, defaultValue } = extraProps;
     let visible;
     try {
-      visible = typeof condition === 'function' ? condition(field) !== false : true;
+      visible = typeof condition === 'function' ? condition(field.internalToShellPropEntry()) !== false : true;
     } catch (error) {
       console.error('exception when condition (hidden) is excuted', error);
     }
@@ -86,7 +86,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
       if (setter.props) {
         setterProps = setter.props;
         if (typeof setterProps === 'function') {
-          setterProps = setterProps(field);
+          setterProps = setterProps(field.internalToShellPropEntry());
         }
       }
       if (setter.initialValue != null) {
@@ -150,40 +150,40 @@ class SettingFieldView extends Component<{ field: SettingField }> {
         ...extraProps,
       },
       !stageName &&
-        createSetterContent(setterType, {
-          ...shallowIntl(setterProps),
-          forceInline: extraProps.forceInline,
-          key: field.id,
-          // === injection
-          prop: field, // for compatible vision
-          selected: field.top?.getNode(),
-          field,
-          // === IO
-          value, // reaction point
-          onChange: (value: any) => {
-            this.setState({
-              // eslint-disable-next-line react/no-unused-state
-              value,
-            });
-            field.setValue(value);
-            if (_onChange) _onChange(value, field);
-          },
-          onInitial: () => {
-            if (initialValue == null) {
-              return;
-            }
-            const value = typeof initialValue === 'function' ? initialValue(field) : initialValue;
-            this.setState({
-              // eslint-disable-next-line react/no-unused-state
-              value,
-            });
-            field.setValue(value);
-          },
+      createSetterContent(setterType, {
+        ...shallowIntl(setterProps),
+        forceInline: extraProps.forceInline,
+        key: field.id,
+        // === injection
+        prop: field.internalToShellPropEntry(), // for compatible vision
+        selected: field.top?.getNode()?.internalToShellNode(),
+        field: field.internalToShellPropEntry(),
+        // === IO
+        value, // reaction point
+        onChange: (value: any) => {
+          this.setState({
+            // eslint-disable-next-line react/no-unused-state
+            value,
+          });
+          field.setValue(value);
+          if (_onChange) _onChange(value, field);
+        },
+        onInitial: () => {
+          if (initialValue == null) {
+            return;
+          }
+          const value = typeof initialValue === 'function' ? initialValue(field.internalToShellPropEntry()) : initialValue;
+          this.setState({
+            // eslint-disable-next-line react/no-unused-state
+            value,
+          });
+          field.setValue(value);
+        },
 
-          removeProp: () => {
-            field.parent.clearPropValue(field.name);
-          },
-        }),
+        removeProp: () => {
+          field.parent.clearPropValue(field.name);
+        },
+      }),
       extraProps.forceInline ? 'plain' : extraProps.display,
     );
   }
@@ -200,7 +200,7 @@ class SettingGroupView extends Component<SettingGroupViewProps> {
     super(props);
     const { field } = this.props;
     const { extraProps } = field;
-    const { condition, display } = extraProps;
+    const { display } = extraProps;
 
     const { stages } = field.editor.get('skeleton') as Skeleton;
     // const items = field.items;
@@ -208,7 +208,7 @@ class SettingGroupView extends Component<SettingGroupViewProps> {
     let stageName;
     if (display === 'entry') {
       runInAction(() => {
-        stageName = `${field.getNode().id }_${field.name.toString()}`;
+        stageName = `${field.getNode().id}_${field.name.toString()}`;
         // 清除原 stage，不然 content 引用的一直是老的 field，导致数据无法得到更新
         stages.container.remove(stageName);
         stages.add({
@@ -228,7 +228,7 @@ class SettingGroupView extends Component<SettingGroupViewProps> {
     const { field } = this.props;
     const { extraProps } = field;
     const { condition, display } = extraProps;
-    const visible = field.isSingle && typeof condition === 'function' ? condition(field) !== false : true;
+    const visible = field.isSingle && typeof condition === 'function' ? condition(field.internalToShellPropEntry()) !== false : true;
 
     if (!visible) {
       return null;

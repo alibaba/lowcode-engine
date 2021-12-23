@@ -24,11 +24,9 @@ import {
   designerSymbol,
   skeletonSymbol,
 } from '@ali/lowcode-shell';
-import { getLogger, Logger } from '@ali/lowcode-utils';
+import { getLogger, Logger, isPlainObject } from '@ali/lowcode-utils';
 import './modules/live-editing';
-import { isPlainObject } from '@ali/lowcode-utils';
 import utils from './modules/utils';
-
 
 export * from './modules/editor-types';
 export * from './modules/skeleton-types';
@@ -71,12 +69,12 @@ const event = new Event(editor, { prefix: 'common' });
 const logger = getLogger({ level: 'warn', bizName: 'common' });
 
 export {
-  editor,
-  editorCabin,
+  // editor,
+  // editorCabin,
   // skeleton,
-  skeletonCabin,
-  designer,
-  designerCabin,
+  // skeletonCabin,
+  // designer,
+  // designerCabin,
   plugins,
   // setters,
   project,

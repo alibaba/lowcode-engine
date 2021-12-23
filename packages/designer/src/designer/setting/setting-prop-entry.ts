@@ -1,6 +1,7 @@
 import { obx, computed, makeObservable, runInAction } from '@ali/lowcode-editor-core';
 import { GlobalEvent, IEditor, isJSExpression } from '@ali/lowcode-types';
 import { uniqueId } from '@ali/lowcode-utils';
+import { SettingPropEntry as ShellSettingPropEntry } from '@ali/lowcode-shell';
 import { SettingEntry } from './setting-entry';
 import { Node } from '../../document';
 import { ComponentMeta } from '../../component-meta';
@@ -124,7 +125,11 @@ export class SettingPropEntry implements SettingEntry {
     return runInAction(() => {
       if (this.type !== 'field') {
         const { getValue } = this.extraProps;
-        return getValue ? (getValue(this, undefined) === undefined ? 0 : 1) : 0;
+        return getValue
+          ? getValue(this.internalToShellPropEntry(), undefined) === undefined
+            ? 0
+            : 1
+          : 0;
       }
       if (this.nodes.length === 1) {
         return 2;
@@ -160,7 +165,7 @@ export class SettingPropEntry implements SettingEntry {
     }
     const { getValue } = this.extraProps;
     try {
-      return getValue ? getValue(this, val) : val;
+      return getValue ? getValue(this.internalToShellPropEntry(), val) : val;
     } catch (e) {
       console.warn(e);
       return val;
@@ -179,7 +184,7 @@ export class SettingPropEntry implements SettingEntry {
     const { setValue } = this.extraProps;
     if (setValue && !extraOptions?.disableMutator) {
       try {
-        setValue(this, val);
+        setValue(this.internalToShellPropEntry(), val);
       } catch (e) {
         /* istanbul ignore next */
         console.warn(e);
@@ -202,7 +207,7 @@ export class SettingPropEntry implements SettingEntry {
     const { setValue } = this.extraProps;
     if (setValue) {
       try {
-        setValue(this, undefined);
+        setValue(this.internalToShellPropEntry(), undefined);
       } catch (e) {
         /* istanbul ignore next */
         console.warn(e);
@@ -293,7 +298,12 @@ export class SettingPropEntry implements SettingEntry {
   }
 
   notifyValueChange(oldValue: any, newValue: any) {
-    this.editor.emit(GlobalEvent.Node.Prop.Change, { node: this.getNode(), prop: this, oldValue, newValue });
+    this.editor.emit(GlobalEvent.Node.Prop.Change, {
+      node: this.getNode(),
+      prop: this,
+      oldValue,
+      newValue,
+    });
   }
 
   getDefaultValue() {
@@ -351,5 +361,9 @@ export class SettingPropEntry implements SettingEntry {
       return v.mock;
     }
     return v;
+  }
+
+  internalToShellPropEntry() {
+    return ShellSettingPropEntry.create(this) as any;
   }
 }

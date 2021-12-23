@@ -35,7 +35,7 @@ export default class Project {
   }
 
   /**
-   * @deprecated use simulatorHost instead.
+   * @deprecated use .simulatorHost instead.
    */
   get simulator() {
     return this.simulatorHost;
