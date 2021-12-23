@@ -13,5 +13,6 @@ export const propSymbol = Symbol('prop');
 export const detectingSymbol = Symbol('detecting');
 export const selectionSymbol = Symbol('selection');
 export const historySymbol = Symbol('history');
+export const componentMetaSymbol = Symbol('componentMeta');
 export const simulatorHostSymbol = Symbol('simulatorHost');
 export const simulatorRendererSymbol = Symbol('simulatorRenderer');

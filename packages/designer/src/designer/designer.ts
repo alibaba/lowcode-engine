@@ -512,6 +512,10 @@ export class Designer {
     return meta;
   }
 
+  getComponentMetasMap() {
+    return this._componentMetasMap;
+  }
+
   @computed get componentsMap(): { [key: string]: NpmInfo | Component } {
     const maps: any = {};
     const designer = this;

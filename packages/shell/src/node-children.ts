@@ -15,7 +15,7 @@ export default class NodeChildren {
     return new NodeChildren(nodeChldren);
   }
 
-  getOwner() {
+  get owner(): Node | null {
     return Node.create(this[nodeChildrenSymbol].owner);
   }
 
@@ -89,6 +89,12 @@ export default class NodeChildren {
         return fn(Node.create(item)!, index);
       }),
     );
+  }
+
+  reduce(fn: (acc: any, cur: Node) => any, initialValue: any) {
+    return this[nodeChildrenSymbol].reduce((acc: any, cur: InnerNode) => {
+      return fn(acc, Node.create(cur)!);
+    }, initialValue);
   }
 
   mergeChildren(

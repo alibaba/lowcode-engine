@@ -11,6 +11,7 @@ import {
 import { AssetsJson } from '@ali/lowcode-utils';
 import { ComponentAction } from '@ali/lowcode-types';
 import { editorSymbol, designerSymbol } from './symbols';
+import ComponentMeta from './component-meta';
 
 export default class Material {
   private readonly [editorSymbol]: Editor;
@@ -19,6 +20,10 @@ export default class Material {
   constructor(editor: Editor) {
     this[editorSymbol] = editor;
     this[designerSymbol] = editor.get('designer')!;
+  }
+
+  get componentsMap() {
+    return this[designerSymbol].componentsMap;
   }
 
   setAssets(assets: AssetsJson) {
@@ -46,11 +51,16 @@ export default class Material {
   }
 
   getComponentMeta(componentName: string) {
-    return this[designerSymbol].getComponentMeta(componentName);
+    return ComponentMeta.create(this[designerSymbol].getComponentMeta(componentName));
   }
 
-  getComponentsMap() {
-    return this[designerSymbol].componentsMap;
+  getComponentMetasMap() {
+    const map = new Map<string, ComponentMeta>();
+    const originalMap = this[designerSymbol].getComponentMetasMap();
+    for (let componentName in originalMap.keys()) {
+      map.set(componentName, this.getComponentMeta(componentName)!);
+    }
+    return map;
   }
 
   addBuiltinComponentAction(action: ComponentAction) {

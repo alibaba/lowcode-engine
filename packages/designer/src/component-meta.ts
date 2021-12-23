@@ -145,7 +145,6 @@ export class ComponentMeta {
   }
 
   @computed get icon() {
-    // TODO: 标记下。这块需要康师傅加一下API，页面正常渲染。
     // give Slot default icon
     // if _title is TitleConfig  get _title.icon
     return (

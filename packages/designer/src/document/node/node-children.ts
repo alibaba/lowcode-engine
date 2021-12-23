@@ -347,6 +347,10 @@ export class NodeChildren {
     return this.children.find(fn);
   }
 
+  reduce(fn: (acc: any, cur: Node) => any, initialValue: any) {
+    return this.children.reduce(fn, initialValue);
+  }
+
   mergeChildren(
     remover: (node: Node, idx: number) => boolean,
     adder: (children: Node[]) => NodeData[] | null,

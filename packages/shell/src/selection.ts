@@ -15,16 +15,16 @@ export default class Selection {
     this[selectionSymbol] = document.selection;
   }
 
+  get selected() {
+    return this[selectionSymbol].selected;
+  }
+
   select(id: string) {
     this[selectionSymbol].select(id);
   }
 
   selectAll(ids: string[]) {
     this[selectionSymbol].selectAll(ids);
-  }
-
-  getSelected() {
-    return this[selectionSymbol].selected;
   }
 
   remove(id: string) {

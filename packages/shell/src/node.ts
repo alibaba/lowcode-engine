@@ -7,6 +7,7 @@ import { CompositeValue, NodeSchema, TransformStage } from '@ali/lowcode-types';
 import Prop from './prop';
 import DocumentModel from './document-model';
 import NodeChildren from './node-children';
+import ComponentMeta from './component-meta';
 import { documentSymbol, nodeSymbol } from './symbols';
 
 export default class Node {
@@ -30,6 +31,50 @@ export default class Node {
     return this[nodeSymbol].id;
   }
 
+  get title() {
+    return this[nodeSymbol].title;
+  }
+
+  get isContainer() {
+    return this[nodeSymbol].isContainer();
+  }
+
+  get isRoot() {
+    return this[nodeSymbol].isRoot();
+  }
+
+  get isPage() {
+    return this[nodeSymbol].isPage();
+  }
+
+  get isComponent() {
+    return this[nodeSymbol].isComponent();
+  }
+
+  get isSlot() {
+    return this[nodeSymbol].isSlot();
+  }
+
+  get isParental() {
+    return this[nodeSymbol].isParental();
+  }
+
+  get isLeaf() {
+    return this[nodeSymbol].isLeaf();
+  }
+
+  get index() {
+    return this[nodeSymbol].index;
+  }
+
+  get icon() {
+    return this[nodeSymbol].icon;
+  }
+
+  get zLevel() {
+    return this[nodeSymbol].zLevel;
+  }
+
   /**
    * 返回节点 componentName
    */
@@ -37,12 +82,68 @@ export default class Node {
     return this[nodeSymbol].componentName;
   }
 
+  get componentMeta() {
+    return ComponentMeta.create(this[nodeSymbol].componentMeta);
+  }
+
   /**
    * 获取节点所属的文档模型对象
    * @returns
    */
-  getDocumentModel() {
+  get document() {
     return DocumentModel.create(this[documentSymbol]);
+  }
+
+  /**
+   * 获取当前节点的前一个兄弟节点
+   * @returns
+   */
+  get prevSibling(): Node | null {
+    return Node.create(this[nodeSymbol].prevSibling);
+  }
+
+  /**
+   * 获取当前节点的后一个兄弟节点
+   * @returns
+   */
+  get nextSibling(): Node | null {
+    return Node.create(this[nodeSymbol].nextSibling);
+  }
+
+  /**
+   * 获取当前节点的父亲节点
+   * @returns
+   */
+  get parent(): Node | null {
+    return Node.create(this[nodeSymbol].parent);
+  }
+
+  /**
+   * 获取当前节点的孩子节点模型
+   * @returns
+   */
+  get children() {
+    return NodeChildren.create(this[nodeSymbol].children);
+  }
+
+  get slots(): Node[] {
+    return this[nodeSymbol].slots.map((node: InnerNode) => Node.create(node)!);
+  }
+
+  get slotFor() {
+    return Prop.create(this[nodeSymbol].slotFor);
+  }
+
+  hasSlots() {
+    return this[nodeSymbol].hasSlots();
+  }
+
+  hasCondition() {
+    return this[nodeSymbol].hasCondition();
+  }
+
+  hasLoop() {
+    return this[nodeSymbol].hasLoop();
   }
 
   /**
@@ -101,38 +202,6 @@ export default class Node {
    */
   setExtraPropValue(path: string, value: CompositeValue) {
     return this.getExtraProp(path)?.setValue(value);
-  }
-
-  /**
-   * 获取当前节点的前一个兄弟节点
-   * @returns
-   */
-  getPrevSibling() {
-    return Node.create(this[nodeSymbol].prevSibling);
-  }
-
-  /**
-   * 获取当前节点的后一个兄弟节点
-   * @returns
-   */
-  getNextSibling() {
-    return Node.create(this[nodeSymbol].nextSibling);
-  }
-
-  /**
-   * 获取当前节点的父亲节点
-   * @returns
-   */
-  getParent() {
-    return Node.create(this[nodeSymbol].parent);
-  }
-
-  /**
-   * 获取当前节点的孩子节点模型
-   * @returns
-   */
-  getChildren() {
-    return NodeChildren.create(this[nodeSymbol].children);
   }
 
   /**

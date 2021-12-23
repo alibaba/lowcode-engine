@@ -2,7 +2,7 @@ import { Editor as InnerEditor } from '@ali/lowcode-editor-core';
 import { getLogger } from '@ali/lowcode-utils';
 import { editorSymbol } from './symbols';
 
-const logger = getLogger({ level: 'warn', bizName: 'shell:event:' });
+const logger = getLogger({ level: 'warn', bizName: 'shell:event' });
 
 type EventOptions = {
   prefix: string;

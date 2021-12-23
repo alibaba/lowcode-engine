@@ -52,7 +52,7 @@ export default class DocumentModel {
    * 获取当前文档所属的 project
    * @returns
    */
-  getProject() {
+  get project() {
     return Project.create(this[documentSymbol].project);
   }
 
@@ -60,7 +60,7 @@ export default class DocumentModel {
    * 获取文档的根节点
    * @returns
    */
-  getRoot() {
+  get root(): Node | null {
     return Node.create(this[documentSymbol].getRoot());
   }
 
@@ -68,7 +68,7 @@ export default class DocumentModel {
    * 获取文档下所有节点
    * @returns
    */
-  getNodesMap() {
+  get nodesMap() {
     const map = new Map<string, Node>();
     for (let id in this[documentSymbol].nodesMap.keys()) {
       map.set(id, this.getNodeById(id)!);
@@ -123,6 +123,15 @@ export default class DocumentModel {
       copy,
     );
     return Node.create(node);
+  }
+
+  /**
+   * 创建一个节点
+   * @param data
+   * @returns
+   */
+  createNode(data: any) {
+    return Node.create(this[documentSymbol].createNode(data));
   }
 
   /**

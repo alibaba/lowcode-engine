@@ -23,6 +23,14 @@ export default class Project {
   }
 
   /**
+   * 获取当前 project 下所有 documents
+   * @returns
+   */
+  get documents(): DocumentModel[] {
+    return this[projectSymbol].documents.map((doc) => DocumentModel.create(doc)!);
+  }
+
+  /**
    * 打开一个 document
    * @param doc
    * @returns
@@ -59,14 +67,6 @@ export default class Project {
    */
   getDocumentById(id: string): DocumentModel | null {
     return DocumentModel.create(this[projectSymbol].getDocument(id));
-  }
-
-  /**
-   * 获取当前 project 下所有 documents
-   * @returns
-   */
-  getDocuments(): DocumentModel[] {
-    return this[projectSymbol].documents.map((doc) => DocumentModel.create(doc)!);
   }
 
   /**

@@ -15,11 +15,6 @@ import {
 import { getLogger, Logger } from '@ali/lowcode-utils';
 import { ILowCodePluginContext, PluginContextOptions } from './plugin-types';
 
-/**
- * 一些 API 设计约定：
- * 1. 事件的命名格式为：on[Will|Did]VerbNoun?，参考 https://code.visualstudio.com/api/references/vscode-api#events
- * 2. 基于 Disposable 模式，对于事件的绑定、快捷键的绑定函数，返回值则是解绑函数
- */
 export default class PluginContext implements ILowCodePluginContext {
   private readonly [editorSymbol]: Editor;
   private readonly [designerSymbol]: Designer;
