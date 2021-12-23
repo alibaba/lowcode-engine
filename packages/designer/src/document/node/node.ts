@@ -19,6 +19,7 @@ import {
 } from '@ali/lowcode-types';
 import { compatStage } from '@ali/lowcode-utils';
 import { SettingTopEntry } from '@ali/lowcode-designer';
+import { Node as ShellNode } from '@ali/lowcode-shell';
 import { Props, getConvertedExtraKey } from './props/props';
 import { DocumentModel } from '../document-model';
 import { NodeChildren } from './node-children';
@@ -299,7 +300,8 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   private didDropIn(dragment: Node) {
     const callbacks = this.componentMeta.getMetadata().experimental?.callbacks;
     if (callbacks?.onNodeAdd) {
-      callbacks?.onNodeAdd.call(this, dragment, this);
+      const cbThis = this.internalToShellNode();
+      callbacks?.onNodeAdd.call(cbThis, dragment.internalToShellNode(), cbThis);
     }
     if (this._parent) {
       this._parent.didDropIn(dragment);
@@ -309,7 +311,8 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   private didDropOut(dragment: Node) {
     const callbacks = this.componentMeta.getMetadata().experimental?.callbacks;
     if (callbacks?.onNodeRemove) {
-      callbacks?.onNodeRemove.call(this, dragment, this);
+      const cbThis = this.internalToShellNode();
+      callbacks?.onNodeRemove.call(cbThis, dragment.internalToShellNode(), cbThis);
     }
     if (this._parent) {
       this._parent.didDropOut(dragment);
@@ -359,6 +362,10 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
 
   internalSetSlotFor(slotFor: Prop | null | undefined) {
     this._slotFor = slotFor;
+  }
+
+  internalToShellNode(): ShellNode | null {
+    return ShellNode.create(this);
   }
 
   /**

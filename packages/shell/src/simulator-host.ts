@@ -15,6 +15,14 @@ export default class SimulatorHost {
     return new SimulatorHost(host);
   }
 
+  get contentWindow() {
+    return this[simulatorHostSymbol].contentWindow;
+  }
+
+  get contentDocument() {
+    return this[simulatorHostSymbol].contentDocument;
+  }
+
   set(key: string, value: any) {
     this[simulatorHostSymbol].set(key, value);
   }

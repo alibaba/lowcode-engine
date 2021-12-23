@@ -109,7 +109,7 @@ export default class DragResizeEngine {
         doc.addEventListener('mouseup', over, true);
       });
 
-      this.emitter.emit('resizestart', e, direction, node);
+      this.emitter.emit('resizeStart', e, direction, node);
       this.dragResizing = true;
       this.designer.detecting.enable = false;
       cursor.addState('ew-resize');
@@ -121,9 +121,9 @@ export default class DragResizeEngine {
   }
 
   onResizeStart(func: (e: MouseEvent, direction: string, node: any) => any) {
-    this.emitter.on('resizestart', func);
+    this.emitter.on('resizeStart', func);
     return () => {
-      this.emitter.removeListener('resizestart', func);
+      this.emitter.removeListener('resizeStart', func);
     };
   }
 

@@ -39,6 +39,7 @@ import {
 } from '@ali/lowcode-utils';
 import {
   DragObjectType,
+  DragNodeObject,
   isShaken,
   LocateEvent,
   isDragAnyObject,
@@ -1135,11 +1136,11 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
    */
   locate(e: LocateEvent): any {
     const { dragObject } = e;
-    const { nodes } = dragObject;
+    const { nodes } = dragObject as DragNodeObject;
 
-    const operationalNodes = nodes?.filter((node: any) => {
+    const operationalNodes = nodes?.filter((node) => {
       const onMoveHook = node.componentMeta?.getMetadata()?.experimental?.callbacks?.onMoveHook;
-      const canMove = onMoveHook && typeof onMoveHook === 'function' ? onMoveHook(node) : true;
+      const canMove = onMoveHook && typeof onMoveHook === 'function' ? onMoveHook(node.internalToShellNode()) : true;
 
       return canMove;
     });

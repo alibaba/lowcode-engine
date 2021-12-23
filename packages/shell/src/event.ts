@@ -12,6 +12,11 @@ export default class Event {
   private readonly [editorSymbol]: InnerEditor;
   private readonly options: EventOptions;
 
+  /**
+   * 内核触发的事件名
+   */
+  readonly names = [];
+
   constructor(editor: InnerEditor, options: EventOptions) {
     this[editorSymbol] = editor;
     this.options = options;
