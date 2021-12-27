@@ -1,17 +1,17 @@
-import { SettingEntry } from '@ali/lowcode-designer';
-import { CompositeValue, SettingTarget } from '@ali/lowcode-types';
+import { SettingField } from '@ali/lowcode-designer';
+import { CompositeValue, FieldConfig } from '@ali/lowcode-types';
 import { settingPropEntrySymbol } from './symbols';
 import Node from './node';
 import SettingTopEntry from './setting-top-entry';
 
 export default class SettingPropEntry {
-  private readonly [settingPropEntrySymbol]: SettingEntry;
+  private readonly [settingPropEntrySymbol]: SettingField;
 
-  constructor(prop: SettingEntry) {
+  constructor(prop: SettingField) {
     this[settingPropEntrySymbol] = prop;
   }
 
-  static create(prop: SettingEntry) {
+  static create(prop: SettingField) {
     return new SettingPropEntry(prop);
   }
 
@@ -36,5 +36,21 @@ export default class SettingPropEntry {
 
   getProps() {
     return SettingTopEntry.create(this[settingPropEntrySymbol].getProps() as SettingEntry) as any;
+  }
+
+  isUseVariable() {
+    return this[settingPropEntrySymbol].isUseVariable();
+  }
+
+  setUseVariable(flag: boolean) {
+    this[settingPropEntrySymbol].setUseVariable(flag);
+  }
+
+  createField(config: FieldConfig) {
+    return SettingPropEntry.create(this[settingPropEntrySymbol].createField(config));
+  }
+
+  getMockOrValue() {
+    return this[settingPropEntrySymbol].getMockOrValue();
   }
 }

@@ -1,16 +1,14 @@
 import { createElement } from 'react';
 import { render } from 'react-dom';
 import { globalContext, Editor, engineConfig, EngineOptions } from '@ali/lowcode-editor-core';
-import * as editorCabin from '@ali/lowcode-editor-core';
 import {
   Designer,
   LowCodePluginManager,
   ILowCodePluginContext,
   // Setters,
 } from '@ali/lowcode-designer';
-import * as designerCabin from '@ali/lowcode-designer';
 import { Skeleton as InnerSkeleton, SettingsPrimaryPane, registerDefaults } from '@ali/lowcode-editor-skeleton';
-import * as skeletonCabin from '@ali/lowcode-editor-skeleton';
+
 import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
 import {
@@ -20,20 +18,19 @@ import {
   Setters,
   Material,
   Event,
-  editorSymbol,
-  designerSymbol,
-  skeletonSymbol,
 } from '@ali/lowcode-shell';
 import { getLogger, Logger, isPlainObject } from '@ali/lowcode-utils';
 import './modules/live-editing';
 import utils from './modules/utils';
+import * as editorCabin from './modules/editor-cabin';
+import * as skeletonCabin from './modules/skeleton-cabin';
+import * as designerCabin from './modules/designer-cabin';
 
 export * from './modules/editor-types';
 export * from './modules/skeleton-types';
 export * from './modules/designer-types';
 export * from './modules/lowcode-types';
 
-const { monitor } = editorCabin;
 registerDefaults();
 
 const editor = new Editor();
@@ -88,7 +85,6 @@ export {
    */
   // store,
   // hotkey,
-  monitor,
   utils,
   // engineConfig,
 };
@@ -124,7 +120,6 @@ const getSelection = () => designer.currentDocument?.selection;
    */
   // store,
   // hotkey,
-  monitor,
   init,
   utils,
   config,
