@@ -13,7 +13,7 @@ import {
   LiveTextEditingConfig,
   FieldConfig,
 } from '@ali/lowcode-types';
-import { computed, engineConfig } from '@ali/lowcode-editor-core';
+import { makeObservable, obx, computed, engineConfig } from '@ali/lowcode-editor-core';
 import EventEmitter from 'events';
 
 import { isNode, Node, ParentalNode } from './document';
@@ -130,7 +130,7 @@ export class ComponentMeta {
 
   private childWhitelist?: NestingFilter | null;
 
-  private _title?: TitleContent;
+  @obx private _title?: TitleContent;
 
   private _isMinimalRenderUnit?: boolean;
 
@@ -162,6 +162,7 @@ export class ComponentMeta {
   }
 
   constructor(readonly designer: Designer, metadata: ComponentMetadata) {
+    makeObservable(this);
     this.parseMetadata(metadata);
   }
 
