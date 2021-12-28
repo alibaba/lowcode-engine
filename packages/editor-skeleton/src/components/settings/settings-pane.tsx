@@ -132,6 +132,13 @@ class SettingFieldView extends Component<{ field: SettingField }> {
       value = field.getValue();
     }
 
+    // 当前 field 没有 value 值时，将 initialValue 写入 field
+    // 之所以用 initialValue，而不是 defaultValue 是为了保持跟 props.onInitial 的逻辑一致
+    if (value == undefined && initialValue != undefined) {
+      const _initialValue = typeof initialValue === 'function' ? initialValue(field.internalToShellPropEntry()) : initialValue;
+      field.setValue(_initialValue);
+    }
+
     let _onChange = extraProps?.onChange;
     let stageName = this.stageName;
 
