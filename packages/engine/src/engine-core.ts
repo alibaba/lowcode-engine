@@ -37,9 +37,9 @@ const editor = new Editor();
 globalContext.register(editor, Editor);
 globalContext.register(editor, 'editor');
 
-const skeleton = new InnerSkeleton(editor);
-editor.set(Skeleton, skeleton);
-editor.set('skeleton' as any, skeleton);
+const innerSkeleton = new InnerSkeleton(editor);
+editor.set(Skeleton, innerSkeleton);
+editor.set('skeleton' as any, innerSkeleton);
 
 const designer = new Designer({ editor });
 editor.set(Designer, designer);
@@ -48,7 +48,7 @@ editor.set('designer' as any, designer);
 const plugins = new LowCodePluginManager(editor).toProxy();
 editor.set('plugins' as any, plugins);
 
-const { project, currentSelection: selection } = designer;
+const { project: innerProject, currentSelection: selection } = designer;
 const { Workbench } = skeletonCabin;
 // const setters: Setters = {
 //   getSetter,
@@ -57,9 +57,9 @@ const { Workbench } = skeletonCabin;
 // };
 
 const hotkey = new Hotkey();
-const project2 = new Project(project);
-const skeleton2 = new Skeleton(skeleton);
-const setters2 = new Setters();
+const project = new Project(innerProject);
+const skeleton = new Skeleton(innerSkeleton);
+const setters = new Setters();
 const material = new Material(editor);
 const config = engineConfig;
 const event = new Event(editor, { prefix: 'common' });
@@ -67,13 +67,13 @@ const logger = getLogger({ level: 'warn', bizName: 'common' });
 
 export {
   // editor,
-  // editorCabin,
+  editorCabin,
   // skeleton,
-  // skeletonCabin,
+  skeletonCabin,
   // designer,
-  // designerCabin,
+  designerCabin,
   plugins,
-  // setters,
+  setters,
   project,
   // selection,
   /**
@@ -84,8 +84,11 @@ export {
    * 全局的一些数据存储
    */
   // store,
-  // hotkey,
+  hotkey,
   utils,
+  config,
+  event,
+  logger,
   // engineConfig,
 };
 
@@ -95,18 +98,18 @@ const getSelection = () => designer.currentDocument?.selection;
   /**
    * 待删除 start，不要用
    */
-  editor,
-  editorCabin,
-  skeletonCabin,
+  editor: event,
   designer,
-  designerCabin,
   /**
    * 待删除 end
    */
+  editorCabin,
+  skeletonCabin,
+  designerCabin,
   plugins,
-  skeleton: skeleton2,
-  project: project2,
-  setters: setters2,
+  skeleton,
+  project,
+  setters,
   material,
   // get selection() {
   //   return getSelection();
@@ -235,7 +238,7 @@ export async function init(container?: HTMLElement, options?: EngineOptions) {
   await plugins.init();
   render(
     createElement(Workbench, {
-      skeleton,
+      skeleton: innerSkeleton,
       className: 'engine-main',
       topAreaItemClassName: 'engine-actionitem',
     }),

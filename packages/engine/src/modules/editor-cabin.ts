@@ -9,4 +9,5 @@ export {
   observer,
   getSetter,
   getSettersMap,
+  globalLocale,
 } from '@ali/lowcode-editor-core';

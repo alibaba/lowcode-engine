@@ -29,7 +29,7 @@ const languageMap: { [key: string]: string } = {
 
 const LowcodeConfigKey = 'ali-lowcode-config';
 
-class AliGlobalLocale {
+class GlobalLocale {
   private emitter = new EventEmitter();
 
   @obx.ref private _locale?: string;
@@ -114,7 +114,7 @@ class AliGlobalLocale {
     return this.locale;
   }
 
-  onLocaleChange(fn: (locale: string) => void): () => void {
+  onChangeLocale(fn: (locale: string) => void): () => void {
     this.emitter.on('localechange', fn);
     return () => {
       this.emitter.removeListener('localechange', fn);
@@ -135,12 +135,13 @@ function hasLocalStorage(obj: any): obj is WindowLocalStorage {
   return obj.localStorage;
 }
 
-let globalLocale: AliGlobalLocale;
-if ((window as any).__aliGlobalLocale) {
-  globalLocale = (window as any).__aliGlobalLocale as any;
-} else {
-  globalLocale = new AliGlobalLocale();
-  (window as any).__aliGlobalLocale = globalLocale;
-}
+let globalLocale = new GlobalLocale();
+// let globalLocale: GlobalLocale;
+// if ((window as any).__GlobalLocale) {
+//   globalLocale = (window as any).__GlobalLocale as any;
+// } else {
+//   globalLocale = new GlobalLocale();
+//   (window as any).__GlobalLocale = globalLocale;
+// }
 
 export { globalLocale };
