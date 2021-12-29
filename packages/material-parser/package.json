@@ -1,0 +1,65 @@
+{
+  "name": "@ali/lowcode-material-parser",
+  "version": "1.0.45",
+  "description": "material parser for Ali lowCode engine",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "files": [
+    "lib",
+    "schemas"
+  ],
+  "devDependencies": {
+    "@babel/runtime": "^7.11.2",
+    "@types/debug": "^4.1.5",
+    "@types/fs-extra": "^8.0.1",
+    "@types/jest": "^26.0.18",
+    "@types/js-yaml": "^3.12.2",
+    "@types/lodash": "^4.14.149",
+    "@types/node": "^14.6.0",
+    "@types/prop-types": "^15.7.3",
+    "copy-webpack-plugin": "^9.1.0",
+    "copyfiles": "^2.4.1",
+    "jest": "^26.6.3",
+    "js-yaml": "^3.13.1",
+    "json-schema-to-typescript": "^8.2.0",
+    "ts-jest": "^26.0.0",
+    "ts-loader": "^9.2.6",
+    "ts-node": "^8.10.2",
+    "tslib": "^1.11.1",
+    "webpack": "^5.64.1",
+    "webpack-cli": "^4.9.1",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prebuild": "npm run schema && npm run bundle",
+    "postbuild": "copyfiles -u 1 \"src/**/*.json\" lib/",
+    "prepublishOnly": "npm run build",
+    "test": "jest --verbose",
+    "test:snapshot": "jest --updateSnapshot --verbose",
+    "schema": "node ./scripts/transform.js",
+    "bundle": "webpack"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "ajv": "^6.12.0",
+    "ast-types": "^0.13.3",
+    "cross-spawn-promise": "^0.10.2",
+    "debug": "^4.1.1",
+    "find-config": "^1.0.0",
+    "fs-extra": "^8.1.0",
+    "lodash": "^4.17.15",
+    "parse-prop-types": "^0.3.0",
+    "prop-types": "^15.7.2",
+    "react-docgen": "5.3.0",
+    "react-docgen-typescript": "^1.16.5",
+    "safe-eval": "^0.4.1",
+    "short-uuid": "^3.1.1",
+    "ts-polyfill": "^3.8.1-rc",
+    "typescript": "3.9.4",
+    "vm2": "^3.9.2"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
+  }
+}

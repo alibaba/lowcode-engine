@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    // Enable strictest settings like strictNullChecks & noImplicitAny.
+    "strict": false,
+    // Allow json import
+    "resolveJsonModule": true,
+    // skip type checking of declaration files
+    "skipLibCheck": true,
+    "baseUrl": "./packages",
+    "allowJs": true
+  },
+  "exclude": ["**/test", "**/lib", "**/dist", "**/es", "node_modules", "schemas"],
+  "include": ["src/**/*"]
+}

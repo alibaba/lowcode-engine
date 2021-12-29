@@ -1,0 +1,8 @@
+{
+    "name": "transpiled-component",
+    "version": "1.0.0",
+    "main": "lib/index.js",
+    "dependencies": {
+        "react": "^16.0.0"
+    }
+}
