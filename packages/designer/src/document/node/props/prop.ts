@@ -379,7 +379,7 @@ export class Prop implements IPropParent {
   /**
    * 构造 items 属性，同时构造 maps 属性
    */
-  @computed private get items(): Prop[] | null {
+  private get items(): Prop[] | null {
     if (this._items) return this._items;
     return runInAction(() => {
       let items: Prop[] | null = null;
@@ -617,9 +617,11 @@ export class Prop implements IPropParent {
     if (this._items) {
       this._items.forEach((item) => item.purge());
     }
+    this._items = null;
     this._maps = null;
     if (this._slotNode && this._slotNode.slotFor === this) {
       this._slotNode.remove();
+      this._slotNode = undefined;
     }
   }
 
