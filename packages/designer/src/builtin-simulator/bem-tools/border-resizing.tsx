@@ -151,7 +151,8 @@ export class BoxResizingInstance extends Component<{
         (e as any).trigger = direction;
         (e as any).deltaX = moveX;
         (e as any).deltaY = moveY;
-        metaData.experimental.callbacks.onResize(e, node);
+        const cbNode = node?.isNode ? node.internalToShellNode() : node;
+        metaData.experimental.callbacks.onResize(e, cbNode);
       }
     };
 
@@ -164,7 +165,8 @@ export class BoxResizingInstance extends Component<{
         typeof metaData.experimental.callbacks.onResizeStart === 'function'
       ) {
         (e as any).trigger = direction;
-        metaData.experimental.callbacks.onResizeStart(e, node);
+        const cbNode = node?.isNode ? node.internalToShellNode() : node;
+        metaData.experimental.callbacks.onResizeStart(e, cbNode);
       }
     };
 
@@ -177,7 +179,8 @@ export class BoxResizingInstance extends Component<{
         typeof metaData.experimental.callbacks.onResizeEnd === 'function'
       ) {
         (e as any).trigger = direction;
-        metaData.experimental.callbacks.onResizeEnd(e, node);
+        const cbNode = node?.isNode ? node.internalToShellNode() : node;
+        metaData.experimental.callbacks.onResizeEnd(e, cbNode);
       }
 
       const editor = globalContext.get(Editor);

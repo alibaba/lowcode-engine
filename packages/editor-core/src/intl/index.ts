@@ -1,6 +1,6 @@
 import { ReactNode, Component, createElement } from 'react';
 import { IntlMessageFormat } from 'intl-messageformat';
-import { globalLocale } from './ali-global-locale';
+import { globalLocale } from './global-locale';
 import { isI18nData } from '@ali/lowcode-types';
 import { observer, computed } from '../utils';
 

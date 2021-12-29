@@ -1,5 +1,5 @@
 import { NodeChildren as InnerNodeChildren, Node as InnerNode } from '@ali/lowcode-designer';
-import { NodeSchema } from '@ali/lowcode-types';
+import { NodeSchema, NodeData, TransformStage } from '@ali/lowcode-types';
 import Node from './node';
 import { nodeSymbol, nodeChildrenSymbol } from './symbols';
 
@@ -95,6 +95,14 @@ export default class NodeChildren {
     return this[nodeChildrenSymbol].reduce((acc: any, cur: InnerNode) => {
       return fn(acc, Node.create(cur)!);
     }, initialValue);
+  }
+
+  importSchema(data?: NodeData | NodeData[]) {
+    this[nodeChildrenSymbol].import(data);
+  }
+
+  exportSchema(stage?: TransformStage) {
+    return this[nodeChildrenSymbol].export(stage);
   }
 
   mergeChildren(

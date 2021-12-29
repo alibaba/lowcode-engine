@@ -30,6 +30,17 @@ export default class Project {
     return this[projectSymbol].documents.map((doc) => DocumentModel.create(doc)!);
   }
 
+  get simulatorHost() {
+    return SimulatorHost.create(this[projectSymbol].simulator as any || this[simulatorHostSymbol]);
+  }
+
+  /**
+   * @deprecated use .simulatorHost instead.
+   */
+  get simulator() {
+    return this.simulatorHost;
+  }
+
   /**
    * 打开一个 document
    * @param doc

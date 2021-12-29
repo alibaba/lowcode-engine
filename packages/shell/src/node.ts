@@ -5,6 +5,7 @@ import {
 } from '@ali/lowcode-designer';
 import { CompositeValue, NodeSchema, TransformStage } from '@ali/lowcode-types';
 import Prop from './prop';
+import Props from './props';
 import DocumentModel from './document-model';
 import NodeChildren from './node-children';
 import ComponentMeta from './component-meta';
@@ -134,6 +135,28 @@ export default class Node {
     return Prop.create(this[nodeSymbol].slotFor);
   }
 
+  get props() {
+    return Props.create(this[nodeSymbol].props);
+  }
+
+  /**
+   * @deprecated use .children instead
+   */
+  getChildren() {
+    return this.children;
+  }
+
+  /**
+   * @deprecated
+   */
+  getDOMNode() {
+    return this[nodeSymbol].getDOMNode();
+  }
+
+  getRect() {
+    return this[nodeSymbol].getRect();
+  }
+
   hasSlots() {
     return this[nodeSymbol].hasSlots();
   }
@@ -144,6 +167,13 @@ export default class Node {
 
   hasLoop() {
     return this[nodeSymbol].hasLoop();
+  }
+
+  /**
+   * @deprecated use .props instead
+   */
+  getProps() {
+    return this.props;
   }
 
   /**

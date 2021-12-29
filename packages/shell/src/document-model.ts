@@ -13,6 +13,7 @@ import Detecting from './detecting';
 import History from './history';
 import Project from './project';
 import Prop from './prop';
+import Canvas from './canvas';
 import { documentSymbol, editorSymbol, nodeSymbol } from './symbols';
 
 type IOnChangeOptions = {
@@ -34,6 +35,7 @@ export default class DocumentModel {
   public selection: Selection;
   public detecting: Detecting;
   public history: History;
+  public canvas: Canvas;
 
   constructor(document: InnerDocumentModel) {
     this[documentSymbol] = document;
@@ -41,6 +43,7 @@ export default class DocumentModel {
     this.selection = new Selection(document);
     this.detecting = new Detecting(document);
     this.history = new History(document);
+    this.canvas = new Canvas(document.designer);
   }
 
   static create(document: InnerDocumentModel | undefined | null) {

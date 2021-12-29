@@ -419,7 +419,11 @@ export class NodeChildren {
     const callbacks = owner.componentMeta.getMetadata().experimental?.callbacks;
     if (callbacks?.onSubtreeModified) {
       try {
-        callbacks?.onSubtreeModified.call(node, owner, options);
+        callbacks?.onSubtreeModified.call(
+          node.internalToShellNode(),
+          owner.internalToShellNode(),
+          options,
+        );
       } catch (e) {
         console.error('error when excute experimental.callbacks.onSubtreeModified', e);
       }

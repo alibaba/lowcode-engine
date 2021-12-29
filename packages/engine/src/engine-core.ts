@@ -1,37 +1,45 @@
 import { createElement } from 'react';
 import { render } from 'react-dom';
 import { globalContext, Editor, engineConfig, EngineOptions } from '@ali/lowcode-editor-core';
-import * as editorCabin from '@ali/lowcode-editor-core';
 import {
   Designer,
   LowCodePluginManager,
   ILowCodePluginContext,
-  Setters,
+  // Setters,
 } from '@ali/lowcode-designer';
-import * as designerCabin from '@ali/lowcode-designer';
-import { Skeleton, SettingsPrimaryPane, registerDefaults } from '@ali/lowcode-editor-skeleton';
-import * as skeletonCabin from '@ali/lowcode-editor-skeleton';
+import { Skeleton as InnerSkeleton, SettingsPrimaryPane, registerDefaults } from '@ali/lowcode-editor-skeleton';
+
 import Outline, { OutlineBackupPane, getTreeMaster } from '@ali/lowcode-plugin-outline-pane';
 import DesignerPlugin from '@ali/lowcode-plugin-designer';
+import {
+  Hotkey,
+  Project,
+  Skeleton,
+  Setters,
+  Material,
+  Event,
+} from '@ali/lowcode-shell';
+import { getLogger, Logger, isPlainObject } from '@ali/lowcode-utils';
 import './modules/live-editing';
-import { isPlainObject } from '@ali/lowcode-utils';
 import utils from './modules/utils';
+import * as editorCabin from './modules/editor-cabin';
+import * as skeletonCabin from './modules/skeleton-cabin';
+import * as designerCabin from './modules/designer-cabin';
 
 export * from './modules/editor-types';
 export * from './modules/skeleton-types';
 export * from './modules/designer-types';
 export * from './modules/lowcode-types';
 
-const { hotkey, monitor, getSetter, registerSetter, getSettersMap } = editorCabin;
 registerDefaults();
 
 const editor = new Editor();
 globalContext.register(editor, Editor);
 globalContext.register(editor, 'editor');
 
-const skeleton = new Skeleton(editor);
-editor.set(Skeleton, skeleton);
-editor.set('skeleton' as any, skeleton);
+const innerSkeleton = new InnerSkeleton(editor);
+editor.set(Skeleton, innerSkeleton);
+editor.set('skeleton' as any, innerSkeleton);
 
 const designer = new Designer({ editor });
 editor.set(Designer, designer);
@@ -40,23 +48,32 @@ editor.set('designer' as any, designer);
 const plugins = new LowCodePluginManager(editor).toProxy();
 editor.set('plugins' as any, plugins);
 
-const { project, currentSelection: selection } = designer;
+const { project: innerProject, currentSelection: selection } = designer;
 const { Workbench } = skeletonCabin;
-const setters: Setters = {
-  getSetter,
-  registerSetter,
-  getSettersMap,
-};
+// const setters: Setters = {
+//   getSetter,
+//   registerSetter,
+//   getSettersMap,
+// };
+
+const hotkey = new Hotkey();
+const project = new Project(innerProject);
+const skeleton = new Skeleton(innerSkeleton);
+const setters = new Setters();
+const material = new Material(editor);
+const config = engineConfig;
+const event = new Event(editor, { prefix: 'common' });
+const logger = getLogger({ level: 'warn', bizName: 'common' });
 
 export {
-  editor,
+  // editor,
   editorCabin,
   // skeleton,
   skeletonCabin,
-  designer,
+  // designer,
   designerCabin,
   plugins,
-  // setters,
+  setters,
   project,
   // selection,
   /**
@@ -67,24 +84,33 @@ export {
    * 全局的一些数据存储
    */
   // store,
-  // hotkey,
-  monitor,
+  hotkey,
   utils,
+  config,
+  event,
+  logger,
   // engineConfig,
 };
 
 const getSelection = () => designer.currentDocument?.selection;
 // TODO: build-plugin-component 的 umd 开发态没有导出 AliLowCodeEngine，这里先简单绕过
 (window as any).AliLowCodeEngine = {
-  editor,
-  editorCabin,
-  // skeleton,
-  skeletonCabin,
+  /**
+   * 待删除 start，不要用
+   */
+  editor: event,
   designer,
+  /**
+   * 待删除 end
+   */
+  editorCabin,
+  skeletonCabin,
   designerCabin,
   plugins,
-  // setters,
+  skeleton,
   project,
+  setters,
+  material,
   // get selection() {
   //   return getSelection();
   // },
@@ -97,9 +123,12 @@ const getSelection = () => designer.currentDocument?.selection;
    */
   // store,
   // hotkey,
-  monitor,
   init,
   utils,
+  config,
+  event,
+  logger,
+  hotkey,
   // engineConfig,
 };
 
@@ -209,7 +238,7 @@ export async function init(container?: HTMLElement, options?: EngineOptions) {
   await plugins.init();
   render(
     createElement(Workbench, {
-      skeleton,
+      skeleton: innerSkeleton,
       className: 'engine-main',
       topAreaItemClassName: 'engine-actionitem',
     }),

@@ -11,6 +11,7 @@ import Selection from './selection';
 import Setters from './setters';
 import Hotkey from './hotkey';
 import Skeleton from './skeleton';
+import SettingPropEntry from './setting-prop-entry';
 export * from './symbols';
 
 /**
@@ -33,4 +34,5 @@ export {
   Setters,
   Hotkey,
   Skeleton,
+  SettingPropEntry,
 };

@@ -44,7 +44,8 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
       return null;
     }
     if (isDynamicSetter(this._setter)) {
-      return this._setter.call(this, this);
+      const shellThis = this.internalToShellPropEntry();
+      return this._setter.call(shellThis, shellThis);
     }
     return this._setter;
   }
