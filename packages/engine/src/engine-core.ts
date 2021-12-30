@@ -50,11 +50,6 @@ editor.set('plugins' as any, plugins);
 
 const { project: innerProject, currentSelection: selection } = designer;
 const { Workbench } = skeletonCabin;
-// const setters: Setters = {
-//   getSetter,
-//   registerSetter,
-//   getSettersMap,
-// };
 
 const hotkey = new Hotkey();
 const project = new Project(innerProject);
@@ -64,9 +59,16 @@ const material = new Material(editor);
 const config = engineConfig;
 const event = new Event(editor, { prefix: 'common' });
 const logger = getLogger({ level: 'warn', bizName: 'common' });
+const common = {
+  utils,
+  editorCabin,
+  designerCabin,
+  skeletonCabin,
+};
 
 export {
   // editor,
+  common,
   editorCabin,
   // skeleton,
   skeletonCabin,
@@ -85,7 +87,6 @@ export {
    */
   // store,
   hotkey,
-  utils,
   config,
   event,
   logger,
@@ -106,30 +107,17 @@ const getSelection = () => designer.currentDocument?.selection;
   editorCabin,
   skeletonCabin,
   designerCabin,
+  common,
   plugins,
   skeleton,
   project,
   setters,
   material,
-  // get selection() {
-  //   return getSelection();
-  // },
-  /**
-   * 注册一些全局的切面
-   */
-  // hooks,
-  /**
-   * 全局的一些数据存储
-   */
-  // store,
-  // hotkey,
   init,
-  utils,
   config,
   event,
   logger,
   hotkey,
-  // engineConfig,
 };
 
 // 处理 editor.set('assets')，将组件元数据创建好

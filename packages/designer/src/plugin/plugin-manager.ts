@@ -27,7 +27,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
   }
 
   private _getLowCodePluginContext(options: PluginContextOptions) {
-    return new LowCodePluginContext(this.editor, options);
+    return new LowCodePluginContext(this, options);
   }
 
   async register(
