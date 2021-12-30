@@ -1,5 +1,6 @@
 export {
   Title,
+  Tip,
   shallowIntl,
   createIntl,
   createSetterContent,

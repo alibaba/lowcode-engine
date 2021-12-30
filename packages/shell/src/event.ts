@@ -26,6 +26,10 @@ export default class Event {
   }
 
   on(event: string, listener: (...args: unknown[]) => void) {
+    if (event.startsWith('designer')) {
+      logger.warn('designer events are disabled');
+      return;
+    }
     this[editorSymbol].on(event, listener);
   }
 
