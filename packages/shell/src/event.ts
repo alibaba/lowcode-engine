@@ -1,4 +1,4 @@
-import { Editor as InnerEditor } from '@ali/lowcode-editor-core';
+import { Editor as InnerEditor, globalContext } from '@ali/lowcode-editor-core';
 import { getLogger } from '@ali/lowcode-utils';
 import { editorSymbol } from './symbols';
 
@@ -12,6 +12,7 @@ export default class Event {
   private readonly [editorSymbol]: InnerEditor;
   private readonly options: EventOptions;
 
+  // TODO:
   /**
    * 内核触发的事件名
    */
@@ -40,4 +41,8 @@ export default class Event {
     }
     this[editorSymbol].emit(`${this.options.prefix}:${event}`, ...args);
   }
+}
+
+export function getEvent(editor: InnerEditor, options: any = { prefix: 'common' }) {
+  return new Event(editor, options);
 }

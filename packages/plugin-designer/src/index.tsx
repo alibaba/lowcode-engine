@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Editor, engineConfig } from '@ali/lowcode-editor-core';
+import { Editor, engineConfig, globalContext } from '@ali/lowcode-editor-core';
 import { DesignerView, Designer } from '@ali/lowcode-designer';
 import { Asset } from '@ali/lowcode-utils';
 import './index.scss';
@@ -46,7 +46,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
   }
 
   private async setupAssets() {
-    const { editor } = this.props;
+    const editor = globalContext.get('editor');
     try {
       const assets = await editor.onceGot('assets');
       const renderEnv = engineConfig.get('renderEnv') || editor.get('renderEnv');
@@ -85,7 +85,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
   }
 
   private handleDesignerMount = (designer: Designer): void => {
-    const { editor } = this.props;
+    const editor = globalContext.get('editor');
     editor.set('designer', designer);
     editor.emit('designer.ready', designer);
     editor.onGot('schema', (schema) => {
@@ -94,7 +94,7 @@ export default class DesignerPlugin extends PureComponent<PluginProps, DesignerP
   };
 
   render(): React.ReactNode {
-    const { editor } = this.props;
+    const editor = globalContext.get('editor');
     const {
       componentMetadatas,
       utilsMetadata,
