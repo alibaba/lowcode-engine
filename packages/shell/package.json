@@ -8,6 +8,7 @@
     "lib",
     "es"
   ],
+  "private": true,
   "scripts": {
     "build": "build-scripts build --skip-demo",
     "test": "build-scripts test --config build.test.json",

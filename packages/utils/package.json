@@ -6,6 +6,7 @@
     "es",
     "lib"
   ],
+  "private": true,
   "main": "lib/index.js",
   "module": "es/index.js",
   "scripts": {

@@ -9,6 +9,7 @@
     "lib",
     "es"
   ],
+  "private": true,
   "scripts": {
     "build": "build-scripts build --skip-demo"
   },

@@ -15,6 +15,7 @@
     "lint": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet",
     "lint:fix": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet --fix",
     "pub": "tnpm run watchdog:build && lerna publish patch --force-publish --exact --no-changelog",
+    "pub:premajor": "tnpm run watchdog:build && lerna publish premajor --force-publish --exact --dist-tag beta --preid beta --no-changelog",
     "pub:prepatch": "tnpm run watchdog:build && lerna publish prepatch --force-publish --exact --dist-tag beta --preid beta --no-changelog",
     "pub:prerelease": "tnpm run watchdog:build && lerna publish prerelease --force-publish --exact --dist-tag beta --preid beta --no-changelog",
     "setup": "./scripts/setup.sh",

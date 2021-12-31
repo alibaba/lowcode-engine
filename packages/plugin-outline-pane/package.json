@@ -11,6 +11,7 @@
   "scripts": {
     "build": "build-scripts build --skip-demo"
   },
+  "private": true,
   "dependencies": {
     "@ali/lowcode-designer": "1.0.74",
     "@ali/lowcode-editor-core": "1.0.74",
