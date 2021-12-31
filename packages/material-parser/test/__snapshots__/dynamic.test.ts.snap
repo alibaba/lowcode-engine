@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`materialize dynamic component by online 1`] = `
+Array [
+  Object {
+    "componentName": "BizAnchor",
+    "devMode": "proCode",
+    "docUrl": "",
+    "npm": Object {
+      "destructuring": false,
+      "exportName": "default",
+      "main": "lib/index.js",
+      "package": "@alifd/biz-anchor",
+      "subName": "",
+      "version": "1.1.7",
+    },
+    "props": Array [
+      Object {
+        "defaultValue": false,
+        "name": "noHash",
+      },
+    ],
+    "screenshot": "",
+    "title": "@alifd/biz-anchor",
+  },
+]
+`;

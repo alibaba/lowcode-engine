@@ -1,0 +1,1753 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`d.ts component by local 1`] = `
+Array [
+  Object {
+    "componentName": "default",
+    "devMode": "proCode",
+    "docUrl": "",
+    "npm": Object {
+      "destructuring": false,
+      "exportName": "default",
+      "main": "src/index.jsx",
+      "package": "dts-component",
+      "subName": "",
+      "version": "1.2.3",
+    },
+    "props": Array [
+      Object {
+        "description": "是否是财鲸主站，该字段由后端 vm 中吐出在 window.appConfig 中",
+        "name": "isMainSite",
+        "propType": "bool",
+      },
+      Object {
+        "description": "财鲸主站的 app 名称，该字段由后端 vm 中吐出在 window.appConfig 中",
+        "name": "mainSiteAppName",
+        "propType": "string",
+      },
+      Object {
+        "description": "主站中文名，该字段由后端 vm 中吐出在 window.appConfig 中",
+        "name": "mainSiteName",
+        "propType": "string",
+      },
+      Object {
+        "description": "主站英文名，该字段由后端 vm 中吐出在 window.appConfig 中",
+        "name": "mainSiteNameEn",
+        "propType": "string",
+      },
+      Object {
+        "description": "主站链接，该字段由后端 vm 中吐出在 window.appConfig 中",
+        "name": "mainSiteLink",
+        "propType": "string",
+      },
+      Object {
+        "description": "子站点的应用名，该字段由后端 vm 中吐出在 window.appConfig 中",
+        "name": "subSiteAppName",
+        "propType": Object {
+          "isRequired": true,
+          "type": "string",
+        },
+      },
+      Object {
+        "description": "子站点的名称，该字段由后端 vm 中吐出在 window.appConfig 中",
+        "name": "subSiteName",
+        "propType": Object {
+          "isRequired": true,
+          "type": "string",
+        },
+      },
+      Object {
+        "description": "子站点的英文名称，该字段由后端 vm 中吐出在 window.appConfig 中",
+        "name": "subSiteNameEn",
+        "propType": Object {
+          "isRequired": true,
+          "type": "string",
+        },
+      },
+      Object {
+        "description": "子站点的链接，该字段由后端 vm 中吐出在 window.appConfig 中",
+        "name": "subSiteLink",
+        "propType": Object {
+          "isRequired": true,
+          "type": "string",
+        },
+      },
+      Object {
+        "description": "子站访问相关接口时，属于buc 跨域请求，需要把 ssoTicket 带上，该字段由后端 vm 中吐出在 window.appConfig 中",
+        "name": "ssoTicket",
+        "propType": Object {
+          "isRequired": true,
+          "type": "string",
+        },
+      },
+      Object {
+        "description": "是否使用 ak/sk 方案（用于登录）",
+        "name": "aksk",
+        "propType": "bool",
+      },
+      Object {
+        "description": "是否显示左侧导航",
+        "name": "sidebarVisible",
+        "propType": "bool",
+      },
+      Object {
+        "description": "是否显示顶部菜单栏",
+        "name": "topbarVisible",
+        "propType": "bool",
+      },
+      Object {
+        "description": "是否开启全屏",
+        "name": "isFullScreen",
+        "propType": "bool",
+      },
+      Object {
+        "description": "当前选中的导航 key",
+        "name": "navSelectedKeys",
+        "propType": Object {
+          "type": "oneOfType",
+          "value": Array [
+            "string",
+            Object {
+              "type": "arrayOf",
+              "value": "string",
+            },
+          ],
+        },
+      },
+      Object {
+        "description": "history 对象",
+        "name": "history",
+        "propType": Object {
+          "type": "oneOfType",
+          "value": Array [
+            "string",
+            "object",
+          ],
+        },
+      },
+      Object {
+        "description": "左侧子导航数组",
+        "name": "nav",
+        "propType": Object {
+          "type": "arrayOf",
+          "value": "object",
+        },
+      },
+      Object {
+        "description": "Next Nav 组件本身的配置",
+        "name": "nextNavConfig",
+        "propType": "object",
+      },
+      Object {
+        "description": "切换语言的 Url",
+        "name": "setLanguageUrl",
+        "propType": "string",
+      },
+      Object {
+        "description": "顶部控件的扩展区渲染内容",
+        "name": "extra",
+        "propType": "node",
+      },
+      Object {
+        "description": "顶部导航站点名称后面的快速入口区域自定义渲染",
+        "name": "quickEntry",
+        "propType": "node",
+      },
+      Object {
+        "description": "水印配置项",
+        "name": "waterMarkOptions",
+        "propType": "object",
+      },
+      Object {
+        "description": "是否需要默认的登出行为",
+        "name": "needDefaultLogout",
+        "propType": "bool",
+      },
+      Object {
+        "description": "点击登出按钮后的回调函数",
+        "name": "onLogoutClick",
+        "propType": "func",
+      },
+      Object {
+        "description": "侧边栏收起展开回调函数",
+        "name": "onToggleMenu",
+        "propType": "func",
+      },
+      Object {
+        "description": "logo 的 style 覆盖",
+        "name": "logoStyle",
+        "propType": "object",
+      },
+      Object {
+        "description": "logo 点击事件，传入覆盖",
+        "name": "onLogoClick",
+        "propType": "func",
+      },
+      Object {
+        "description": "切换语言自定义事件",
+        "name": "onToggleLang",
+        "propType": Object {
+          "params": Array [
+            Object {
+              "name": "nextConfig",
+              "propType": "object",
+            },
+            Object {
+              "name": "appName",
+              "propType": "any",
+            },
+          ],
+          "raw": "(nextConfig: Record<string, any>, appName: any) => void",
+          "type": "func",
+        },
+      },
+      Object {
+        "description": "语言切换器显示切换",
+        "name": "langVisible",
+        "propType": "bool",
+      },
+      Object {
+        "description": "打开启用浏览器缩放警告",
+        "name": "scaleWarning",
+        "propType": "bool",
+      },
+      Object {
+        "description": "This event is fired whenever the application navigates to a new page.",
+        "name": "test",
+        "propType": Object {
+          "isRequired": true,
+          "type": "string",
+        },
+      },
+    ],
+    "screenshot": "",
+    "title": "dts-component",
+  },
+]
+`;
+
+exports[`materialize multiple exported component by local 1`] = `
+Array [
+  Object {
+    "componentName": "AIMakeBlank",
+    "devMode": "proCode",
+    "docUrl": "",
+    "npm": Object {
+      "destructuring": true,
+      "exportName": "AIMakeBlank",
+      "main": "es/index.js",
+      "package": "multiple-exported-component",
+      "subName": "",
+      "version": "1.0.0",
+    },
+    "props": Array [
+      Object {
+        "name": "styleBoxModel",
+        "propType": Object {
+          "isRequired": true,
+          "type": "object",
+        },
+      },
+      Object {
+        "name": "styleLayout",
+        "propType": Object {
+          "isRequired": true,
+          "type": "object",
+        },
+      },
+      Object {
+        "name": "styleBackground",
+        "propType": Object {
+          "isRequired": true,
+          "type": "object",
+        },
+      },
+      Object {
+        "name": "styleFlexLayout",
+        "propType": Object {
+          "isRequired": true,
+          "type": "object",
+        },
+      },
+      Object {
+        "name": "style",
+        "propType": "object",
+      },
+      Object {
+        "name": "id",
+        "propType": "string",
+      },
+    ],
+    "screenshot": "",
+    "title": "multiple-exported-component",
+  },
+  Object {
+    "componentName": "AIMakeIcon",
+    "devMode": "proCode",
+    "docUrl": "",
+    "npm": Object {
+      "destructuring": true,
+      "exportName": "AIMakeIcon",
+      "main": "es/index.js",
+      "package": "multiple-exported-component",
+      "subName": "",
+      "version": "1.0.0",
+    },
+    "props": Array [
+      Object {
+        "name": "className",
+        "propType": "string",
+      },
+      Object {
+        "name": "iconClassName",
+        "propType": "string",
+      },
+      Object {
+        "name": "styleBoxModel",
+        "propType": Object {
+          "isRequired": true,
+          "type": "object",
+        },
+      },
+      Object {
+        "name": "styleText",
+        "propType": Object {
+          "isRequired": true,
+          "type": "object",
+        },
+      },
+      Object {
+        "name": "styleBackground",
+        "propType": Object {
+          "isRequired": true,
+          "type": "object",
+        },
+      },
+      Object {
+        "name": "style",
+        "propType": "object",
+      },
+    ],
+    "screenshot": "",
+    "title": "multiple-exported-component",
+  },
+  Object {
+    "componentName": "AIMakeImage",
+    "devMode": "proCode",
+    "docUrl": "",
+    "npm": Object {
+      "destructuring": true,
+      "exportName": "AIMakeImage",
+      "main": "es/index.js",
+      "package": "multiple-exported-component",
+      "subName": "",
+      "version": "1.0.0",
+    },
+    "props": Array [
+      Object {
+        "name": "styleBoxModel",
+        "propType": Object {
+          "isRequired": true,
+          "type": "object",
+        },
+      },
+      Object {
+        "name": "style",
+        "propType": "object",
+      },
+    ],
+    "screenshot": "",
+    "title": "multiple-exported-component",
+  },
+  Object {
+    "componentName": "AIMakeLink",
+    "devMode": "proCode",
+    "docUrl": "",
+    "npm": Object {
+      "destructuring": true,
+      "exportName": "AIMakeLink",
+      "main": "es/index.js",
+      "package": "multiple-exported-component",
+      "subName": "",
+      "version": "1.0.0",
+    },
+    "props": Array [
+      Object {
+        "name": "styleBoxModel",
+        "propType": Object {
+          "isRequired": true,
+          "type": "object",
+        },
+      },
+      Object {
+        "name": "styleText",
+        "propType": Object {
+          "isRequired": true,
+          "type": "object",
+        },
+      },
+      Object {
+        "name": "styleLayout",
+        "propType": Object {
+          "isRequired": true,
+          "type": "object",
+        },
+      },
+      Object {
+        "name": "styleBackground",
+        "propType": Object {
+          "isRequired": true,
+          "type": "object",
+        },
+      },
+      Object {
+        "name": "style",
+        "propType": "object",
+      },
+    ],
+    "screenshot": "",
+    "title": "multiple-exported-component",
+  },
+  Object {
+    "componentName": "AIMakePlaceholder",
+    "devMode": "proCode",
+    "docUrl": "",
+    "npm": Object {
+      "destructuring": true,
+      "exportName": "AIMakePlaceholder",
+      "main": "es/index.js",
+      "package": "multiple-exported-component",
+      "subName": "",
+      "version": "1.0.0",
+    },
+    "props": Array [
+      Object {
+        "name": "styleBoxModel",
+        "propType": Object {
+          "isRequired": true,
+          "type": "object",
+        },
+      },
+      Object {
+        "name": "styleLayout",
+        "propType": Object {
+          "isRequired": true,
+          "type": "object",
+        },
+      },
+      Object {
+        "name": "style",
+        "propType": "object",
+      },
+    ],
+    "screenshot": "",
+    "title": "multiple-exported-component",
+  },
+  Object {
+    "componentName": "AIMakeText",
+    "devMode": "proCode",
+    "docUrl": "",
+    "npm": Object {
+      "destructuring": true,
+      "exportName": "AIMakeText",
+      "main": "es/index.js",
+      "package": "multiple-exported-component",
+      "subName": "",
+      "version": "1.0.0",
+    },
+    "props": Array [
+      Object {
+        "name": "type",
+        "propType": "string",
+      },
+      Object {
+        "name": "styleBoxModel",
+        "propType": Object {
+          "isRequired": true,
+          "type": "object",
+        },
+      },
+      Object {
+        "name": "styleText",
+        "propType": Object {
+          "isRequired": true,
+          "type": "object",
+        },
+      },
+      Object {
+        "name": "styleLayout",
+        "propType": Object {
+          "isRequired": true,
+          "type": "object",
+        },
+      },
+      Object {
+        "name": "styleBackground",
+        "propType": Object {
+          "isRequired": true,
+          "type": "object",
+        },
+      },
+      Object {
+        "name": "style",
+        "propType": "object",
+      },
+    ],
+    "screenshot": "",
+    "title": "multiple-exported-component",
+  },
+  Object {
+    "componentName": "Root",
+    "devMode": "proCode",
+    "docUrl": "",
+    "npm": Object {
+      "destructuring": true,
+      "exportName": "Root",
+      "main": "es/index.js",
+      "package": "multiple-exported-component",
+      "subName": "",
+      "version": "1.0.0",
+    },
+    "props": Array [
+      Object {
+        "name": "style",
+        "propType": "object",
+      },
+    ],
+    "screenshot": "",
+    "title": "multiple-exported-component",
+  },
+]
+`;
+
+exports[`materialize single exported component by local 1`] = `
+Array [
+  Object {
+    "componentName": "Demo",
+    "devMode": "proCode",
+    "docUrl": "",
+    "npm": Object {
+      "destructuring": false,
+      "exportName": "default",
+      "main": "src/index.js",
+      "package": "single-exported-component",
+      "subName": "",
+      "version": "1.0.0",
+    },
+    "props": Array [
+      Object {
+        "name": "optionalArray",
+        "propType": "array",
+      },
+      Object {
+        "name": "optionalBool",
+        "propType": "bool",
+      },
+      Object {
+        "description": "desc",
+        "name": "optionalFunc",
+        "propType": Object {
+          "params": Array [
+            Object {
+              "description": "The title of the book.",
+              "name": "title",
+              "propType": "string",
+            },
+            Object {
+              "description": "The author of the book.",
+              "name": "author",
+              "propType": "string",
+            },
+          ],
+          "raw": "(title: string, author: string) => any",
+          "returns": Object {
+            "propType": "any",
+          },
+          "type": "func",
+        },
+      },
+      Object {
+        "defaultValue": 123,
+        "name": "optionalNumber",
+        "propType": "number",
+      },
+      Object {
+        "name": "optionalObject",
+        "propType": "object",
+      },
+      Object {
+        "name": "optionalString",
+        "propType": "string",
+      },
+      Object {
+        "name": "optionalSymbol",
+        "propType": "symbol",
+      },
+      Object {
+        "name": "optionalNode",
+        "propType": "node",
+      },
+      Object {
+        "name": "optionalElement",
+        "propType": "element",
+      },
+      Object {
+        "name": "optionalElementType",
+        "propType": "object",
+      },
+      Object {
+        "name": "optionalMessage",
+        "propType": Object {
+          "type": "instanceOf",
+          "value": "Demo",
+        },
+      },
+      Object {
+        "name": "optionalEnum",
+        "propType": Object {
+          "type": "oneOf",
+          "value": Array [
+            "News",
+            "Photos",
+          ],
+        },
+      },
+      Object {
+        "name": "optionalUnion",
+        "propType": Object {
+          "type": "oneOfType",
+          "value": Array [
+            "string",
+            "number",
+            Object {
+              "type": "instanceOf",
+              "value": "Demo",
+            },
+          ],
+        },
+      },
+      Object {
+        "name": "optionalObjectOf",
+        "propType": Object {
+          "type": "objectOf",
+          "value": "number",
+        },
+      },
+      Object {
+        "name": "optionalObjectWithShape",
+        "propType": Object {
+          "type": "shape",
+          "value": Array [
+            Object {
+              "name": "optionalProperty",
+              "propType": "string",
+            },
+            Object {
+              "name": "requiredProperty",
+              "propType": Object {
+                "isRequired": true,
+                "type": "number",
+              },
+            },
+          ],
+        },
+      },
+      Object {
+        "name": "optionalObjectWithShape2",
+        "propType": Object {
+          "isRequired": true,
+          "type": "shape",
+          "value": Array [
+            Object {
+              "name": "optionalProperty",
+              "propType": "string",
+            },
+            Object {
+              "name": "requiredProperty",
+              "propType": Object {
+                "isRequired": true,
+                "type": "number",
+              },
+            },
+          ],
+        },
+      },
+      Object {
+        "name": "optionalObjectWithStrictShape",
+        "propType": Object {
+          "type": "exact",
+          "value": Array [
+            Object {
+              "name": "optionalProperty",
+              "propType": "string",
+            },
+            Object {
+              "name": "requiredProperty",
+              "propType": Object {
+                "isRequired": true,
+                "type": "number",
+              },
+            },
+          ],
+        },
+      },
+      Object {
+        "name": "requiredFunc",
+        "propType": Object {
+          "isRequired": true,
+          "type": "func",
+        },
+      },
+      Object {
+        "name": "requiredAny",
+        "propType": Object {
+          "isRequired": true,
+          "type": "any",
+        },
+      },
+    ],
+    "screenshot": "",
+    "title": "single-exported-component",
+  },
+]
+`;
+
+exports[`rax component by local 1`] = `
+Array [
+  Object {
+    "componentName": "default",
+    "devMode": "proCode",
+    "docUrl": "",
+    "npm": Object {
+      "destructuring": false,
+      "exportName": "default",
+      "main": "src/index.tsx",
+      "package": "@ali/chaoshi-meta-example",
+      "subName": "",
+      "version": "1.0.0",
+    },
+    "props": Array [
+      Object {
+        "name": "a",
+        "propType": Object {
+          "isRequired": true,
+          "type": "string",
+        },
+      },
+      Object {
+        "name": "ref",
+        "propType": Object {
+          "type": "oneOfType",
+          "value": Array [
+            Object {
+              "params": Array [
+                Object {
+                  "name": "instance",
+                  "propType": "object",
+                },
+              ],
+              "raw": "(instance: unknown) => void",
+              "returns": Object {
+                "propType": "number",
+              },
+              "type": "func",
+            },
+            Object {
+              "type": "shape",
+              "value": Array [
+                Object {
+                  "name": "T",
+                  "propType": Object {
+                    "isRequired": true,
+                    "type": "any",
+                  },
+                },
+                Object {
+                  "name": "current",
+                  "propType": Object {
+                    "isRequired": true,
+                    "type": "object",
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      },
+      Object {
+        "name": "key",
+        "propType": Object {
+          "type": "oneOfType",
+          "value": Array [
+            "string",
+            "number",
+          ],
+        },
+      },
+    ],
+    "screenshot": "",
+    "title": "@ali/chaoshi-meta-example",
+  },
+  Object {
+    "componentName": "Price",
+    "devMode": "proCode",
+    "docUrl": "",
+    "npm": Object {
+      "destructuring": true,
+      "exportName": "Price",
+      "main": "src/index.tsx",
+      "package": "@ali/chaoshi-meta-example",
+      "subName": "",
+      "version": "1.0.0",
+    },
+    "props": Array [
+      Object {
+        "name": "color",
+        "propType": "string",
+      },
+      Object {
+        "name": "fontSize",
+        "propType": "number",
+      },
+      Object {
+        "name": "symbolSize",
+        "propType": "number",
+      },
+      Object {
+        "name": "decimalSize",
+        "propType": "number",
+      },
+      Object {
+        "name": "value",
+        "propType": "string",
+      },
+      Object {
+        "name": "autoScale",
+        "propType": "bool",
+      },
+      Object {
+        "name": "className",
+        "propType": "string",
+      },
+      Object {
+        "name": "style",
+        "propType": "object",
+      },
+      Object {
+        "name": "rest",
+        "propType": "object",
+      },
+    ],
+    "screenshot": "",
+    "title": "@ali/chaoshi-meta-example",
+  },
+  Object {
+    "componentName": "Title",
+    "devMode": "proCode",
+    "docUrl": "",
+    "npm": Object {
+      "destructuring": true,
+      "exportName": "Title",
+      "main": "src/index.tsx",
+      "package": "@ali/chaoshi-meta-example",
+      "subName": "",
+      "version": "1.0.0",
+    },
+    "props": Array [
+      Object {
+        "name": "type",
+        "propType": Object {
+          "type": "oneOfType",
+          "value": Array [
+            "small",
+            "medium",
+            "large",
+          ],
+        },
+      },
+      Object {
+        "name": "doubleLine",
+        "propType": "bool",
+      },
+      Object {
+        "name": "className",
+        "propType": "string",
+      },
+      Object {
+        "name": "style",
+        "propType": "object",
+      },
+      Object {
+        "name": "rest",
+        "propType": "object",
+      },
+    ],
+    "screenshot": "",
+    "title": "@ali/chaoshi-meta-example",
+  },
+]
+`;
+
+exports[`transpiled component by local 1`] = `
+Array [
+  Object {
+    "componentName": "MyComponent",
+    "devMode": "proCode",
+    "docUrl": "",
+    "npm": Object {
+      "destructuring": true,
+      "exportName": "\\"default\\"",
+      "main": "lib/index.js",
+      "package": "transpiled-component",
+      "subName": "",
+      "version": "1.0.0",
+    },
+    "props": Array [
+      Object {
+        "description": "Description of prop \\"foo\\".",
+        "name": "foo",
+        "propType": Object {
+          "isRequired": true,
+          "type": "number",
+        },
+      },
+      Object {
+        "defaultValue": 21,
+        "description": "Description of prop \\"bar\\" (a custom validation function).",
+        "name": "bar",
+        "propType": "object",
+      },
+      Object {
+        "name": "baz",
+        "propType": Object {
+          "type": "oneOfType",
+          "value": Array [
+            "number",
+            "string",
+          ],
+        },
+      },
+      Object {
+        "name": "optionalObjectWithShape2",
+        "propType": Object {
+          "isRequired": true,
+          "type": "shape",
+          "value": Array [
+            Object {
+              "name": "optionalProperty",
+              "propType": "string",
+            },
+            Object {
+              "name": "requiredProperty",
+              "propType": Object {
+                "isRequired": true,
+                "type": "number",
+              },
+            },
+          ],
+        },
+      },
+    ],
+    "screenshot": "",
+    "title": "transpiled-component",
+  },
+]
+`;
+
+exports[`ts component 2 by local 1`] = `
+Array [
+  Object {
+    "componentName": "default",
+    "devMode": "proCode",
+    "docUrl": "",
+    "npm": Object {
+      "destructuring": false,
+      "exportName": "default",
+      "main": "src/index.tsx",
+      "package": "@alife/empty",
+      "subName": "",
+      "version": "1.0.1",
+    },
+    "props": Array [
+      Object {
+        "name": "className",
+        "propType": "string",
+      },
+      Object {
+        "name": "style",
+        "propType": "object",
+      },
+      Object {
+        "name": "imageStyle",
+        "propType": "object",
+      },
+      Object {
+        "name": "image",
+        "propType": "node",
+      },
+      Object {
+        "name": "description",
+        "propType": "node",
+      },
+      Object {
+        "name": "type",
+        "propType": Object {
+          "type": "oneOf",
+          "value": Array [
+            "default",
+            "custom",
+          ],
+        },
+      },
+    ],
+    "screenshot": "",
+    "title": "@alife/empty",
+  },
+]
+`;
+
+exports[`ts component by local 1`] = `
+Array [
+  Object {
+    "componentName": "default",
+    "devMode": "proCode",
+    "docUrl": "",
+    "npm": Object {
+      "destructuring": false,
+      "exportName": "default",
+      "main": "src/index.tsx",
+      "package": "ts-component",
+      "subName": "",
+      "version": "1.0.0",
+    },
+    "props": Array [
+      Object {
+        "name": "error",
+        "propType": Object {
+          "isRequired": true,
+          "params": Array [
+            Object {
+              "name": "a",
+              "propType": "string",
+            },
+          ],
+          "raw": "(a: string) => number",
+          "returns": Object {
+            "propType": "number",
+          },
+          "type": "func",
+        },
+      },
+      Object {
+        "name": "void",
+        "propType": Object {
+          "isRequired": true,
+          "type": "void",
+        },
+      },
+      Object {
+        "name": "object",
+        "propType": Object {
+          "isRequired": true,
+          "type": "object",
+        },
+      },
+      Object {
+        "name": "trigger",
+        "propType": Object {
+          "type": "arrayOf",
+          "value": Object {
+            "type": "oneOf",
+            "value": Array [
+              "click",
+              "hover",
+              "contextMenu",
+            ],
+          },
+        },
+      },
+      Object {
+        "name": "str",
+        "propType": "string",
+      },
+      Object {
+        "name": "num",
+        "propType": Object {
+          "isRequired": true,
+          "type": "number",
+        },
+      },
+      Object {
+        "name": "any",
+        "propType": Object {
+          "isRequired": true,
+          "type": "any",
+        },
+      },
+      Object {
+        "name": "bool",
+        "propType": Object {
+          "isRequired": true,
+          "type": "bool",
+        },
+      },
+      Object {
+        "name": "tuple",
+        "propType": Object {
+          "isRequired": true,
+          "type": "tuple",
+          "value": Array [
+            Object {
+              "isRequired": true,
+              "type": "number",
+            },
+            Object {
+              "isRequired": true,
+              "type": "string",
+            },
+            Object {
+              "isRequired": true,
+              "type": "oneOf",
+              "value": Array [
+                true,
+              ],
+            },
+          ],
+        },
+      },
+      Object {
+        "name": "enum",
+        "propType": Object {
+          "isRequired": true,
+          "type": "oneOf",
+          "value": Array [
+            "red",
+            "yellow",
+            "green",
+          ],
+        },
+      },
+      Object {
+        "name": "arr",
+        "propType": Object {
+          "isRequired": true,
+          "type": "arrayOf",
+          "value": "number",
+        },
+      },
+      Object {
+        "name": "halfEmptyObj",
+        "propType": Object {
+          "isRequired": true,
+          "type": "shape",
+          "value": Array [
+            Object {
+              "name": "fun",
+              "propType": Object {
+                "isRequired": true,
+                "params": Array [
+                  Object {
+                    "name": "a",
+                    "propType": Object {
+                      "type": "arrayOf",
+                      "value": "string",
+                    },
+                  },
+                ],
+                "raw": "(a: string[]) => void",
+                "returns": Object {
+                  "propType": "number",
+                },
+                "type": "func",
+              },
+            },
+          ],
+        },
+      },
+      Object {
+        "name": "emptyObj",
+        "propType": Object {
+          "isRequired": true,
+          "type": "object",
+        },
+      },
+      Object {
+        "name": "func",
+        "propType": Object {
+          "isRequired": true,
+          "params": Array [
+            Object {
+              "name": "arg",
+              "propType": "string",
+            },
+          ],
+          "raw": "(arg: string) => number",
+          "returns": Object {
+            "propType": "number",
+          },
+          "type": "func",
+        },
+      },
+      Object {
+        "name": "funcs",
+        "propType": Object {
+          "isRequired": true,
+          "type": "shape",
+          "value": Array [
+            Object {
+              "name": "n",
+              "propType": Object {
+                "isRequired": true,
+                "raw": "() => number",
+                "type": "func",
+              },
+            },
+            Object {
+              "name": "a",
+              "propType": Object {
+                "isRequired": true,
+                "params": Array [
+                  Object {
+                    "name": "arg",
+                    "propType": "string",
+                  },
+                  Object {
+                    "name": "num",
+                    "propType": "number",
+                  },
+                ],
+                "raw": "(arg: string, num: number) => void",
+                "returns": Object {
+                  "propType": "number",
+                },
+                "type": "func",
+              },
+            },
+          ],
+        },
+      },
+      Object {
+        "name": "fuzzy",
+        "propType": Object {
+          "isRequired": true,
+          "type": "oneOfType",
+          "value": Array [
+            "number",
+            "bool",
+            Object {
+              "type": "shape",
+              "value": Array [
+                Object {
+                  "name": "a",
+                  "propType": Object {
+                    "isRequired": true,
+                    "type": "any",
+                  },
+                },
+                Object {
+                  "name": "sa",
+                  "propType": Object {
+                    "isRequired": true,
+                    "type": "arrayOf",
+                    "value": "string",
+                  },
+                },
+              ],
+            },
+            Object {
+              "type": "oneOf",
+              "value": Array [
+                "number",
+                "object",
+                "test",
+              ],
+            },
+          ],
+        },
+      },
+      Object {
+        "name": "oneOf",
+        "propType": Object {
+          "isRequired": true,
+          "type": "oneOfType",
+          "value": Array [
+            "bool",
+            Object {
+              "type": "shape",
+              "value": Array [
+                Object {
+                  "name": "s",
+                  "propType": Object {
+                    "isRequired": true,
+                    "type": "string",
+                  },
+                },
+                Object {
+                  "name": "n",
+                  "propType": Object {
+                    "isRequired": true,
+                    "type": "number",
+                  },
+                },
+              ],
+            },
+            Object {
+              "type": "oneOf",
+              "value": Array [
+                "test",
+              ],
+            },
+          ],
+        },
+      },
+      Object {
+        "name": "refFunc",
+        "propType": Object {
+          "isRequired": true,
+          "params": Array [
+            Object {
+              "name": "p",
+              "propType": "object",
+            },
+          ],
+          "raw": "(p: Props) => void",
+          "returns": Object {
+            "propType": "number",
+          },
+          "type": "func",
+        },
+      },
+      Object {
+        "name": "elementOrOther",
+        "propType": Object {
+          "isRequired": true,
+          "type": "oneOfType",
+          "value": Array [
+            "element",
+            Object {
+              "params": Array [
+                Object {
+                  "name": "a",
+                  "propType": "string",
+                },
+              ],
+              "raw": "Func",
+              "type": "func",
+            },
+          ],
+        },
+      },
+      Object {
+        "name": "obj",
+        "propType": Object {
+          "isRequired": true,
+          "type": "shape",
+          "value": Array [
+            Object {
+              "name": "a",
+              "propType": Object {
+                "isRequired": true,
+                "type": "number",
+              },
+            },
+            Object {
+              "name": "arrOfStr",
+              "propType": Object {
+                "isRequired": true,
+                "type": "arrayOf",
+                "value": "string",
+              },
+            },
+            Object {
+              "name": "arrOfObj",
+              "propType": Object {
+                "isRequired": true,
+                "type": "arrayOf",
+                "value": Object {
+                  "type": "shape",
+                  "value": Array [
+                    Object {
+                      "name": "s",
+                      "propType": Object {
+                        "isRequired": true,
+                        "type": "string",
+                      },
+                    },
+                    Object {
+                      "name": "n",
+                      "propType": Object {
+                        "isRequired": true,
+                        "type": "number",
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+            Object {
+              "name": "func",
+              "propType": Object {
+                "isRequired": true,
+                "type": "func",
+              },
+            },
+          ],
+        },
+      },
+      Object {
+        "name": "objOf",
+        "propType": Object {
+          "isRequired": true,
+          "type": "objectOf",
+          "value": "number",
+        },
+      },
+      Object {
+        "name": "exact",
+        "propType": Object {
+          "isRequired": true,
+          "type": "shape",
+          "value": Array [
+            Object {
+              "name": "a",
+              "propType": Object {
+                "isRequired": true,
+                "type": "number",
+              },
+            },
+          ],
+        },
+      },
+      Object {
+        "name": "node",
+        "propType": "node",
+      },
+      Object {
+        "name": "element",
+        "propType": "element",
+      },
+      Object {
+        "name": "elementType",
+        "propType": Object {
+          "type": "oneOfType",
+          "value": Array [
+            "object",
+            Object {
+              "type": "oneOf",
+              "value": Array [
+                "symbol",
+                "object",
+                "html",
+                "loading",
+                "a",
+                "abbr",
+                "address",
+                "area",
+                "article",
+                "aside",
+                "audio",
+                "b",
+                "base",
+                "bdi",
+                "bdo",
+                "big",
+                "blockquote",
+                "body",
+                "br",
+                "button",
+                "canvas",
+                "caption",
+                "cite",
+                "code",
+                "col",
+                "colgroup",
+                "data",
+                "datalist",
+                "dd",
+                "del",
+                "details",
+                "dfn",
+                "dialog",
+                "div",
+                "dl",
+                "dt",
+                "em",
+                "embed",
+                "fieldset",
+                "figcaption",
+                "figure",
+                "footer",
+                "form",
+                "h1",
+                "h2",
+                "h3",
+                "h4",
+                "h5",
+                "h6",
+                "head",
+                "header",
+                "hgroup",
+                "hr",
+                "i",
+                "iframe",
+                "img",
+                "input",
+                "ins",
+                "kbd",
+                "keygen",
+                "label",
+                "legend",
+                "li",
+                "link",
+                "main",
+                "map",
+                "mark",
+                "menu",
+                "menuitem",
+                "meta",
+                "meter",
+                "nav",
+                "noindex",
+                "noscript",
+                "ol",
+                "optgroup",
+                "option",
+                "output",
+                "p",
+                "param",
+                "picture",
+                "pre",
+                "progress",
+                "q",
+                "rp",
+                "rt",
+                "ruby",
+                "s",
+                "samp",
+                "script",
+                "section",
+                "select",
+                "small",
+                "source",
+                "span",
+                "strong",
+                "style",
+                "sub",
+                "summary",
+                "sup",
+                "table",
+                "tbody",
+                "td",
+                "textarea",
+                "tfoot",
+                "th",
+                "thead",
+                "time",
+                "title",
+                "tr",
+                "track",
+                "u",
+                "ul",
+                "var",
+                "video",
+                "wbr",
+                "webview",
+                "svg",
+                "animate",
+                "animateMotion",
+                "animateTransform",
+                "circle",
+                "clipPath",
+                "defs",
+                "desc",
+                "ellipse",
+                "feBlend",
+                "feColorMatrix",
+                "feComponentTransfer",
+                "feComposite",
+                "feConvolveMatrix",
+                "feDiffuseLighting",
+                "feDisplacementMap",
+                "feDistantLight",
+                "feDropShadow",
+                "feFlood",
+                "feFuncA",
+                "feFuncB",
+                "feFuncG",
+                "feFuncR",
+                "feGaussianBlur",
+                "feImage",
+                "feMerge",
+                "feMergeNode",
+                "feMorphology",
+                "feOffset",
+                "fePointLight",
+                "feSpecularLighting",
+                "feSpotLight",
+                "feTile",
+                "feTurbulence",
+                "filter",
+                "foreignObject",
+                "g",
+                "image",
+                "line",
+                "linearGradient",
+                "marker",
+                "mask",
+                "metadata",
+                "mpath",
+                "path",
+                "pattern",
+                "polygon",
+                "polyline",
+                "radialGradient",
+                "rect",
+                "stop",
+                "switch",
+                "text",
+                "textPath",
+                "tspan",
+                "use",
+                "view",
+                "list",
+                "cell",
+                "refresh",
+                "recycle-list",
+                "scroller",
+                "slider",
+                "indicator",
+                "waterfall",
+                "web",
+                "richtext",
+                "slot",
+                "swiper",
+                "swiper-item",
+                "scroll-view",
+                "cover-view",
+                "cover-image",
+                "camera",
+                "movable-view",
+                "movable-area",
+                "match-media",
+                "icon",
+                "rich-text",
+                "radio",
+                "radio-group",
+                "picker-view",
+                "picker",
+                "navigator",
+                "web-view",
+                "lifestyle",
+                "contact-button",
+                "aria-component",
+                "functional-page-navigator",
+                "live-player",
+                "live-pusher",
+                "ad",
+                "ad-custom",
+                "open-data",
+                "voip-room",
+                "page-meta",
+                "picker-view-column",
+                "official-account",
+                "navigation-bar",
+                "template",
+              ],
+            },
+          ],
+        },
+      },
+      Object {
+        "name": "union",
+        "propType": Object {
+          "isRequired": true,
+          "type": "oneOfType",
+          "value": Array [
+            "string",
+            "number",
+            Object {
+              "type": "shape",
+              "value": Array [
+                Object {
+                  "name": "a",
+                  "propType": Object {
+                    "isRequired": true,
+                    "type": "string",
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      },
+      Object {
+        "name": "func2",
+        "propType": Object {
+          "isRequired": true,
+          "params": Array [
+            Object {
+              "name": "a",
+              "propType": "string",
+            },
+          ],
+          "raw": "Func",
+          "type": "func",
+        },
+      },
+      Object {
+        "name": "html",
+        "propType": Object {
+          "isRequired": true,
+          "type": "object",
+        },
+      },
+      Object {
+        "name": "loading",
+        "propType": Object {
+          "type": "oneOfType",
+          "value": Array [
+            "bool",
+            Object {
+              "type": "shape",
+              "value": Array [
+                Object {
+                  "name": "delay",
+                  "propType": "number",
+                },
+              ],
+            },
+          ],
+        },
+      },
+    ],
+    "screenshot": "",
+    "title": "ts-component",
+  },
+  Object {
+    "componentName": "SubModule",
+    "devMode": "proCode",
+    "docUrl": "",
+    "npm": Object {
+      "destructuring": false,
+      "exportName": "default",
+      "main": "src/index.tsx",
+      "package": "ts-component",
+      "subName": "SubModule",
+      "version": "1.0.0",
+    },
+    "props": Array [
+      Object {
+        "name": "name",
+        "propType": Object {
+          "isRequired": true,
+          "type": "string",
+        },
+      },
+    ],
+    "screenshot": "",
+    "title": "ts-component",
+  },
+]
+`;
+
+exports[`without display name by local 1`] = `Array []`;

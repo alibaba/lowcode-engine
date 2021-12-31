@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should be right in dir basic-error 1`] = `
+"[
+  {
+    \\"keyword\\": \\"required\\",
+    \\"dataPath\\": \\"\\",
+    \\"schemaPath\\": \\"#/required\\",
+    \\"params\\": {
+      \\"missingProperty\\": \\"props\\"
+    },
+    \\"message\\": \\"should have required property 'props'\\"
+  }
+]"
+`;
+
+exports[`should be right in dir basic-success 1`] = `true`;
+
+exports[`should be right in dir configure 1`] = `true`;
+
+exports[`should be right in dir props-basic-type 1`] = `true`;
+
+exports[`should be right in dir props-complex-type 1`] = `true`;
