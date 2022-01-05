@@ -4,6 +4,7 @@ import { obx, computed, makeObservable } from '@ali/lowcode-editor-core';
 import { uniqueId, createContent } from '@ali/lowcode-utils';
 import { TitleContent } from '@ali/lowcode-types';
 import WidgetContainer from './widget-container';
+import { getEvent } from '@ali/lowcode-shell';
 import { PanelConfig, HelpTipConfig } from '../types';
 import { TitledPanelView, TabsPanelView, PanelView } from '../components/widget-views';
 import { Skeleton } from '../skeleton';
@@ -51,7 +52,7 @@ export default class Panel implements IWidget {
     const { content, contentProps } = this.config;
     return createContent(content, {
       ...contentProps,
-      editor: this.skeleton.editor,
+      editor: getEvent(this.skeleton.editor),
       config: this.config,
       panel: this,
       pane: this,

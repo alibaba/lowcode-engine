@@ -1,5 +1,5 @@
 import { Editor, EngineConfig, engineConfig } from '@ali/lowcode-editor-core';
-import { Designer } from '@ali/lowcode-designer';
+import { Designer, ILowCodePluginManager } from '@ali/lowcode-designer';
 import { Skeleton as InnerSkeleton } from '@ali/lowcode-editor-skeleton';
 import {
   Hotkey,
@@ -27,9 +27,10 @@ export default class PluginContext implements ILowCodePluginContext {
   public material: Material;
   public config: EngineConfig;
   public event: Event;
+  public plugins: ILowCodePluginManager;
 
-  constructor(editor: Editor, options: PluginContextOptions) {
-    this[editorSymbol] = editor;
+  constructor(plugins: ILowCodePluginManager, options: PluginContextOptions) {
+    const editor = this[editorSymbol] = plugins.editor;
     const designer = this[designerSymbol] = editor.get('designer')!;
     const skeleton = this[skeletonSymbol] = editor.get('skeleton')!;
 
@@ -41,7 +42,8 @@ export default class PluginContext implements ILowCodePluginContext {
     this.setters = new Setters();
     this.material = new Material(editor);
     this.config = engineConfig;
-    this.event = new Event(editor, { prefix: `plugin:${pluginName}` });
+    this.plugins = plugins;
+    this.event = new Event(editor, { prefix: 'common' });
     this.logger = getLogger({ level: 'warn', bizName: `designer:plugin:${pluginName}` });
   }
 }

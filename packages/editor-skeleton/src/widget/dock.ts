@@ -1,6 +1,7 @@
 import { ReactNode, createElement } from 'react';
 import { makeObservable, obx } from '@ali/lowcode-editor-core';
 import { uniqueId, createContent } from '@ali/lowcode-utils';
+import { getEvent } from '@ali/lowcode-shell';
 import { DockConfig } from '../types';
 import { Skeleton } from '../skeleton';
 import { DockView, WidgetView } from '../components/widget-views';
@@ -48,7 +49,7 @@ export default class Dock implements IWidget {
       this._body = createContent(content, {
         ...contentProps,
         config: this.config,
-        editor: this.skeleton.editor,
+        editor: getEvent(this.skeleton.editor),
       });
     } else {
       this._body = createElement(DockView, props);

@@ -1,13 +1,11 @@
 import { History as InnerHistory, DocumentModel as InnerDocumentModel } from '@ali/lowcode-designer';
-import { documentSymbol, historySymbol } from './symbols';
+import { historySymbol } from './symbols';
 
 export default class History {
-  private readonly [documentSymbol]: InnerDocumentModel;
   private readonly [historySymbol]: InnerHistory;
 
-  constructor(document: InnerDocumentModel) {
-    this[documentSymbol] = document;
-    this[historySymbol] = this[documentSymbol].getHistory();
+  constructor(history: InnerHistory) {
+    this[historySymbol] = history;
   }
 
   /**

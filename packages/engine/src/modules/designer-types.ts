@@ -18,3 +18,4 @@ export type RootNode = designerCabin.RootNode;
 export type EditingTarget = designerCabin.EditingTarget;
 export type SaveHandler = designerCabin.SaveHandler;
 export type ComponentMeta = designerCabin.ComponentMeta;
+export type SettingField = designerCabin.SettingField;

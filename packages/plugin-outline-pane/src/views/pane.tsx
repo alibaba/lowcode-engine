@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { observer } from '@ali/lowcode-editor-core';
+import { observer, globalContext } from '@ali/lowcode-editor-core';
 import { intl } from '../locale';
 import { OutlineMain } from '../main';
 import TreeView from './tree';
@@ -8,7 +8,7 @@ import { IEditor } from '@ali/lowcode-types';
 
 @observer
 export class OutlinePane extends Component<{ config: any; editor: IEditor }> {
-  private main = new OutlineMain(this.props.editor, this.props.config.name || this.props.config.pluginKey);
+  private main = new OutlineMain(globalContext.get('editor'), this.props.config.name || this.props.config.pluginKey);
 
   componentWillUnmount() {
     this.main.purge();

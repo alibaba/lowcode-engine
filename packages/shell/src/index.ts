@@ -1,7 +1,7 @@
 import Detecting from './detecting';
 // import Dragon from './dragon';
 import DocumentModel from './document-model';
-import Event from './event';
+import Event, { getEvent } from './event';
 import History from './history';
 import Material from './material';
 import Node from './node';
@@ -35,4 +35,5 @@ export {
   Hotkey,
   Skeleton,
   SettingPropEntry,
+  getEvent,
 };

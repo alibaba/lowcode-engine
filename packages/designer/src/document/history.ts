@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 import { autorun, reaction, mobx, untracked, globalContext, Editor } from '@ali/lowcode-editor-core';
 import { NodeSchema } from '@ali/lowcode-types';
+import { History as ShellHistory } from '@ali/lowcode-shell';
 
 // TODO: cache to localStorage
 
@@ -100,7 +101,7 @@ export class History {
       this.redoer(currentSerialization.unserialize(hotData));
       this.emitter.emit('cursor', hotData);
     } catch (e) {
-      //
+      console.error(e);
     }
 
     this.wakeup();
@@ -193,6 +194,10 @@ export class History {
    */
   isModified() {
     return this.isSavePoint();
+  }
+
+  internalToShellHistory() {
+    return new ShellHistory(this);
   }
 }
 

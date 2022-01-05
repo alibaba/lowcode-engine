@@ -13,7 +13,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
   state = {
     shouldIgnoreRoot: false,
   };
-  private main = new SettingsMain(this.props.editor);
+  private main = new SettingsMain(globalContext.get('editor'));
 
   @obx.ref private _activeKey?: any;
 
@@ -25,7 +25,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
   componentDidMount() {
     this.setShouldIgnoreRoot();
 
-    this.props.editor.on('designer.selection.change', () => {
+    globalContext.get('editor').on('designer.selection.change', () => {
       if (!engineConfig.get('stayOnTheSameSettingTab', false)) {
         this._activeKey = null;
       }
@@ -33,7 +33,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
   }
 
   async setShouldIgnoreRoot() {
-    const designMode = await this.props.editor.get('designMode');
+    const designMode = await globalContext.get('editor').get('designMode');
     this.setState({
       shouldIgnoreRoot: designMode === 'live',
     });

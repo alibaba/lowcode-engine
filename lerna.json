@@ -5,7 +5,9 @@
   "registry": "http://registry.antfin-inc.com",
   "useWorkspaces": true,
   "packages": [
-    "packages/*"
+    "packages/*",
+    "!packages/code-generator",
+    "!packages/material-parser"
   ],
   "command": {
     "bootstrap": {

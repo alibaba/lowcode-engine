@@ -120,7 +120,10 @@ export default class Project {
    * 当前 project 内的 document 变更事件
    */
   onChangeDocument(fn: (doc: DocumentModel) => void) {
-    // TODO: 思考一下是否要实现补偿触发能力
+    if (this[projectSymbol].currentDocument) {
+      fn(DocumentModel.create(this[projectSymbol].currentDocument)!);
+      return () => {};
+    }
     return this[projectSymbol].onCurrentDocumentChange((originalDoc) => {
       fn(DocumentModel.create(originalDoc)!);
     });

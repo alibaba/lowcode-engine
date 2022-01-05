@@ -1,6 +1,7 @@
 import { ReactNode, createElement } from 'react';
 import { makeObservable, obx } from '@ali/lowcode-editor-core';
 import { createContent, uniqueId } from '@ali/lowcode-utils';
+import { getEvent } from '@ali/lowcode-shell';
 import { WidgetConfig, IWidgetBaseConfig } from '../types';
 import { Skeleton } from '../skeleton';
 import { WidgetView } from '../components/widget-views';
@@ -56,7 +57,7 @@ export default class Widget implements IWidget {
     this._body = createContent(content, {
       ...contentProps,
       config: this.config,
-      editor: this.skeleton.editor,
+      editor: getEvent(this.skeleton.editor),
     });
     return this._body;
   }
