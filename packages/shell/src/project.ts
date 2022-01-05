@@ -30,6 +30,9 @@ export default class Project {
     return this[projectSymbol].documents.map((doc) => DocumentModel.create(doc)!);
   }
 
+  /**
+   * 获取模拟器的 host
+   */
   get simulatorHost() {
     return SimulatorHost.create(this[projectSymbol].simulator as any || this[simulatorHostSymbol]);
   }

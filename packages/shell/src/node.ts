@@ -26,63 +26,99 @@ export default class Node {
   }
 
   /**
-   * 返回节点 id
+   * 节点 id
    */
   get id() {
     return this[nodeSymbol].id;
   }
 
+  /**
+   * 节点标题
+   */
   get title() {
     return this[nodeSymbol].title;
   }
 
+  /**
+   * 是否为「容器型」节点
+   */
   get isContainer() {
     return this[nodeSymbol].isContainer();
   }
 
+  /**
+   * 是否为根节点
+   */
   get isRoot() {
     return this[nodeSymbol].isRoot();
   }
 
+  /**
+   * 是否为 Page 节点
+   */
   get isPage() {
     return this[nodeSymbol].isPage();
   }
 
+  /**
+   * 是否为 Component 节点
+   */
   get isComponent() {
     return this[nodeSymbol].isComponent();
   }
 
+  /**
+   * 是否为插槽节点
+   */
   get isSlot() {
     return this[nodeSymbol].isSlot();
   }
 
+  /**
+   * 是否为父类/分支节点
+   */
   get isParental() {
     return this[nodeSymbol].isParental();
   }
 
+  /**
+   * 是否为叶子节点
+   */
   get isLeaf() {
     return this[nodeSymbol].isLeaf();
   }
 
+  /**
+   * 下标
+   */
   get index() {
     return this[nodeSymbol].index;
   }
 
+  /**
+   * 图标
+   */
   get icon() {
     return this[nodeSymbol].icon;
   }
 
+  /**
+   * 节点所在树的层级深度，根节点深度为 0
+   */
   get zLevel() {
     return this[nodeSymbol].zLevel;
   }
 
   /**
-   * 返回节点 componentName
+   * 节点 componentName
    */
   get componentName() {
     return this[nodeSymbol].componentName;
   }
 
+  /**
+   * 节点的物料元数据
+   */
   get componentMeta() {
     return ComponentMeta.create(this[nodeSymbol].componentMeta);
   }
@@ -127,14 +163,23 @@ export default class Node {
     return NodeChildren.create(this[nodeSymbol].children);
   }
 
+  /**
+   * 节点上挂载的插槽节点们
+   */
   get slots(): Node[] {
     return this[nodeSymbol].slots.map((node: InnerNode) => Node.create(node)!);
   }
 
+  /**
+   * 当前节点为插槽节点时，返回节点对应的属性实例
+   */
   get slotFor() {
     return Prop.create(this[nodeSymbol].slotFor);
   }
 
+  /**
+   * 返回节点的属性集
+   */
   get props() {
     return Props.create(this[nodeSymbol].props);
   }
@@ -153,18 +198,34 @@ export default class Node {
     return this[nodeSymbol].getDOMNode();
   }
 
+  /**
+   * 返回节点的尺寸、位置信息
+   * @returns
+   */
   getRect() {
     return this[nodeSymbol].getRect();
   }
 
+  /**
+   * 是否有挂载插槽节点
+   * @returns
+   */
   hasSlots() {
     return this[nodeSymbol].hasSlots();
   }
 
+  /**
+   * 是否设定了渲染条件
+   * @returns
+   */
   hasCondition() {
     return this[nodeSymbol].hasCondition();
   }
 
+  /**
+   * 是否设定了循环数据
+   * @returns
+   */
   hasLoop() {
     return this[nodeSymbol].hasLoop();
   }
@@ -248,7 +309,7 @@ export default class Node {
    * @param options
    * @returns
    */
-  exportSchema(stage?: TransformStage, options?: any) {
+  exportSchema(stage: TransformStage = TransformStage.Render, options?: any) {
     return this[nodeSymbol].export(stage, options);
   }
 

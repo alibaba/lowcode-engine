@@ -12,10 +12,21 @@ export default class Skeleton {
     this[skeletonSymbol] = skeleton;
   }
 
+  /**
+   * 增加一个面板实例
+   * @param config
+   * @param extraConfig
+   * @returns
+   */
   add(config: IWidgetBaseConfig, extraConfig?: Record<string, any>) {
     return this[skeletonSymbol].add(config, extraConfig);
   }
 
+  /**
+   * 移除一个面板实例
+   * @param config
+   * @returns
+   */
   remove(config: IWidgetBaseConfig) {
     const { area, name } = config;
     const skeleton = this[skeletonSymbol];

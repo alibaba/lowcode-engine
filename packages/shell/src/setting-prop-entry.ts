@@ -26,30 +26,59 @@ export default class SettingPropEntry {
     return this.node;
   }
 
+  /**
+   * 设置值
+   * @param val
+   */
   setValue(val: CompositeValue) {
     this[settingPropEntrySymbol].setValue(val);
   }
 
+  /**
+   * 获取值
+   * @returns
+   */
   getValue() {
     return this[settingPropEntrySymbol].getValue();
   }
 
+  /**
+   * 获取设置属性集
+   * @returns
+   */
   getProps() {
     return SettingTopEntry.create(this[settingPropEntrySymbol].getProps() as SettingEntry) as any;
   }
 
+  /**
+   * 是否绑定了变量
+   * @returns
+   */
   isUseVariable() {
     return this[settingPropEntrySymbol].isUseVariable();
   }
 
+  /**
+   * 设置绑定变量
+   * @param flag
+   */
   setUseVariable(flag: boolean) {
     this[settingPropEntrySymbol].setUseVariable(flag);
   }
 
+  /**
+   * 创建一个设置 field 实例
+   * @param config
+   * @returns
+   */
   createField(config: FieldConfig) {
     return SettingPropEntry.create(this[settingPropEntrySymbol].createField(config));
   }
 
+  /**
+   * 获取值，当为变量时，返回 mock
+   * @returns
+   */
   getMockOrValue() {
     return this[settingPropEntrySymbol].getMockOrValue();
   }

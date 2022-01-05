@@ -101,7 +101,7 @@ export default class DocumentModel {
    * @param stage
    * @returns
    */
-  exportSchema(stage?: TransformStage) {
+  exportSchema(stage: TransformStage = TransformStage.Render) {
     return this[documentSymbol].export(stage);
   }
 

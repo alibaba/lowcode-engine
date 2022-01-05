@@ -22,22 +22,45 @@ export default class Material {
     this[designerSymbol] = editor.get('designer')!;
   }
 
+  /**
+   * 获取组件 map 结构
+   */
   get componentsMap() {
     return this[designerSymbol].componentsMap;
   }
 
+  /**
+   * 设置「资产包」结构
+   * @param assets
+   * @returns
+   */
   setAssets(assets: AssetsJson) {
     return this[editorSymbol].setAssets(assets);
   }
 
+  /**
+   * 获取「资产包」结构
+   * @returns
+   */
   getAssets() {
     return this[editorSymbol].get('assets');
   }
 
+  /**
+   * 加载增量的「资产包」结构，该增量包会与原有的合并
+   * @param incrementalAssets
+   * @returns
+   */
   loadIncrementalAssets(incrementalAssets: AssetsJson) {
     return this[designerSymbol].loadIncrementalAssets(incrementalAssets);
   }
 
+  /**
+   * 注册物料元数据管道函数
+   * @param transducer
+   * @param level
+   * @param id
+   */
   registerMetadataTransducer(
     transducer: MetadataTransducer,
     level?: number,
@@ -46,14 +69,27 @@ export default class Material {
     registerMetadataTransducer(transducer, level, id);
   }
 
+  /**
+   * 获取所有物料元数据管道函数
+   * @returns
+   */
   getRegisteredMetadataTransducers() {
     return getRegisteredMetadataTransducers();
   }
 
+  /**
+   * 获取指定名称的物料元数据
+   * @param componentName
+   * @returns
+   */
   getComponentMeta(componentName: string) {
     return ComponentMeta.create(this[designerSymbol].getComponentMeta(componentName));
   }
 
+  /**
+   * 获取所有已注册的物料元数据
+   * @returns
+   */
   getComponentMetasMap() {
     const map = new Map<string, ComponentMeta>();
     const originalMap = this[designerSymbol].getComponentMetasMap();
@@ -63,14 +99,27 @@ export default class Material {
     return map;
   }
 
+  /**
+   * 在设计器辅助层增加一个扩展 action
+   * @param action
+   */
   addBuiltinComponentAction(action: ComponentAction) {
     addBuiltinComponentAction(action);
   }
 
+  /**
+   * 移除设计器辅助层的指定 action
+   * @param name
+   */
   removeBuiltinComponentAction(name: string) {
     removeBuiltinComponentAction(name);
   }
 
+  /**
+   * 修改已有的设计器辅助层的指定 action
+   * @param actionName
+   * @param handle
+   */
   modifyBuiltinComponentAction(actionName: string, handle: (action: ComponentAction) => void) {
     modifyBuiltinComponentAction(actionName, handle);
   }

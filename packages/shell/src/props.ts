@@ -16,10 +16,16 @@ export default class Props {
     return new Props(props);
   }
 
+  /**
+   * id
+   */
   get id() {
     return this[propsSymbol].id;
   }
 
+  /**
+   * 返回当前 props 的路径
+   */
   get path() {
     return this[propsSymbol].path;
   }

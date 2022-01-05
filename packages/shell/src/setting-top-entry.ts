@@ -13,6 +13,9 @@ export default class SettingTopEntry {
     return new SettingTopEntry(prop);
   }
 
+  /**
+   * 返回所属的节点实例
+   */
   get node(): Node | null {
     return Node.create(this[settingTopEntrySymbol].getNode());
   }
@@ -24,10 +27,20 @@ export default class SettingTopEntry {
     return this.node;
   }
 
+  /**
+   * 获取指定 propName 的值
+   * @param propName
+   * @returns
+   */
   getPropValue(propName: string | number) {
     return this[settingTopEntrySymbol].getPropValue(propName);
   }
 
+  /**
+   * 设置指定 propName 的值
+   * @param propName
+   * @param value
+   */
   setPropValue(propName: string | number, value: any) {
     this[settingTopEntrySymbol].setPropValue(propName, value);
   }
