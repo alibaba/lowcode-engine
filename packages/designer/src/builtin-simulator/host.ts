@@ -1139,7 +1139,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     const { nodes } = dragObject as DragNodeObject;
 
     const operationalNodes = nodes?.filter((node) => {
-      const onMoveHook = node.componentMeta?.getMetadata()?.experimental?.callbacks?.onMoveHook;
+      const onMoveHook = node.componentMeta?.getMetadata()?.advanced?.callbacks?.onMoveHook;
       const canMove = onMoveHook && typeof onMoveHook === 'function' ? onMoveHook(node.internalToShellNode()) : true;
 
       return canMove;

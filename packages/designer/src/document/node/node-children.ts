@@ -416,7 +416,7 @@ export class NodeChildren {
     if (node.isRoot()) {
       return;
     }
-    const callbacks = owner.componentMeta.getMetadata().experimental?.callbacks;
+    const callbacks = owner.componentMeta.getMetadata().advanced?.callbacks;
     if (callbacks?.onSubtreeModified) {
       try {
         callbacks?.onSubtreeModified.call(
@@ -425,7 +425,7 @@ export class NodeChildren {
           options,
         );
       } catch (e) {
-        console.error('error when excute experimental.callbacks.onSubtreeModified', e);
+        console.error('error when execute advanced.callbacks.onSubtreeModified', e);
       }
     }
 

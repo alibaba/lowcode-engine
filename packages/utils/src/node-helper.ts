@@ -20,7 +20,7 @@ export const getClosestNode = (node: Node, until: (node: Node) => boolean): Node
  * @returns {boolean} 是否可点击，true表示可点击
  */
 export const canClickNode = (node: Node, e: unknown): boolean => {
-  const onClickHook = node.componentMeta?.getMetadata()?.experimental?.callbacks?.onClickHook;
+  const onClickHook = node.componentMeta?.getMetadata()?.advanced?.callbacks?.onClickHook;
   const canClick = typeof onClickHook === 'function' ? onClickHook(e as MouseEvent, node) : true;
   return canClick;
 };

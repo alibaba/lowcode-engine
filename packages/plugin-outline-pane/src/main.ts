@@ -146,7 +146,7 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
     }
 
     const operationalNodes = nodes?.filter((node: any) => {
-      const onMoveHook = node.componentMeta?.getMetadata()?.experimental?.callbacks?.onMoveHook;
+      const onMoveHook = node.componentMeta?.getMetadata()?.advanced?.callbacks?.onMoveHook;
       const canMove = onMoveHook && typeof onMoveHook === 'function' ? onMoveHook(node) : true;
 
       return canMove;

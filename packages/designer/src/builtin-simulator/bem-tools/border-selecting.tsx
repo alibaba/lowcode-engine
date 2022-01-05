@@ -46,7 +46,7 @@ export class BorderSelectingInstance extends Component<{
       dragging,
     });
 
-    const hideSelectTools = observed.node.componentMeta.getMetadata().experimental?.hideSelectTools;
+    const hideSelectTools = observed.node.componentMeta.getMetadata().advanced?.hideSelectTools;
 
     if (hideSelectTools) {
       return null;

@@ -78,7 +78,7 @@ export class BorderDetecting extends Component<{ host: BuiltinSimulatorHost }> {
     const { current } = this;
 
 
-    const canHoverHook = current?.componentMeta.getMetadata()?.experimental?.callbacks?.onHoverHook;
+    const canHoverHook = current?.componentMeta.getMetadata()?.advanced?.callbacks?.onHoverHook;
     const canHover = (canHoverHook && typeof canHoverHook === 'function') ? canHoverHook(current.internalToShellNode()) : true;
 
 

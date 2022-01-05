@@ -66,7 +66,7 @@ export function arrShallowEquals(arr1: any[], arr2: any[]): boolean {
  * @param meta
  */
  export function isFromVC(meta: ComponentMeta) {
-  return !!meta?.getMetadata()?.experimental;
+  return !!meta?.getMetadata()?.advanced;
 }
 
 export function executePendingFn(fn: () => void, timeout: number = 2000) {

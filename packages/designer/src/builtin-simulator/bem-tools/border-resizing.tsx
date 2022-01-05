@@ -41,7 +41,7 @@ export default class BoxResizing extends Component<{ host: BuiltinSimulatorHost 
     }
 
     // const componentMeta = selecting[0].componentMeta;
-    // const metaData = componentMeta.getMetadata();
+    // const metadata = componentMeta.getMetadata();
 
     return (
       <Fragment>
@@ -130,57 +130,45 @@ export class BoxResizingInstance extends Component<{
     this.props.observed.purge();
   }
 
-  getExperiMentalFns = (metaData: any) => {
-    if (metaData.experimental && metaData.experimental.callbacks) {
-      return metaData.experimantal.callbacks;
-    }
-  };
-
   componentDidMount() {
     // this.hoveringCapture.setBoundary(this.outline);
     this.willBind();
 
     const resize = (e: MouseEvent, direction: string, node: any, moveX: number, moveY: number) => {
-      const metaData = node.componentMeta.getMetadata();
+      const metadata = node.componentMeta.getMetadata();
       if (
-        metaData &&
-        metaData.experimental &&
-        metaData.experimental.callbacks &&
-        typeof metaData.experimental.callbacks.onResize === 'function'
+        metadata?.advanced?.callbacks &&
+        typeof metadata.advanced.callbacks.onResize === 'function'
       ) {
         (e as any).trigger = direction;
         (e as any).deltaX = moveX;
         (e as any).deltaY = moveY;
         const cbNode = node?.isNode ? node.internalToShellNode() : node;
-        metaData.experimental.callbacks.onResize(e, cbNode);
+        metadata.advanced.callbacks.onResize(e, cbNode);
       }
     };
 
     const resizeStart = (e: MouseEvent, direction: string, node: any) => {
-      const metaData = node.componentMeta.getMetadata();
+      const metadata = node.componentMeta.getMetadata();
       if (
-        metaData &&
-        metaData.experimental &&
-        metaData.experimental.callbacks &&
-        typeof metaData.experimental.callbacks.onResizeStart === 'function'
+        metadata?.advanced?.callbacks &&
+        typeof metadata.advanced.callbacks.onResizeStart === 'function'
       ) {
         (e as any).trigger = direction;
         const cbNode = node?.isNode ? node.internalToShellNode() : node;
-        metaData.experimental.callbacks.onResizeStart(e, cbNode);
+        metadata.advanced.callbacks.onResizeStart(e, cbNode);
       }
     };
 
     const resizeEnd = (e: MouseEvent, direction: string, node: any) => {
-      const metaData = node.componentMeta.getMetadata();
+      const metadata = node.componentMeta.getMetadata();
       if (
-        metaData &&
-        metaData.experimental &&
-        metaData.experimental.callbacks &&
-        typeof metaData.experimental.callbacks.onResizeEnd === 'function'
+        metadata?.advanced?.callbacks &&
+        typeof metadata.advanced.callbacks.onResizeEnd === 'function'
       ) {
         (e as any).trigger = direction;
         const cbNode = node?.isNode ? node.internalToShellNode() : node;
-        metaData.experimental.callbacks.onResizeEnd(e, cbNode);
+        metadata.advanced.callbacks.onResizeEnd(e, cbNode);
       }
 
       const editor = globalContext.get(Editor);
@@ -252,9 +240,9 @@ export class BoxResizingInstance extends Component<{
 
     const { node, offsetWidth, offsetHeight, offsetTop, offsetLeft } = observed;
     let triggerVisible: any = [];
-    const metaData = node.componentMeta.getMetadata();
-    if (metaData && metaData.experimental && metaData.experimental.getResizingHandlers) {
-      triggerVisible = metaData.experimental.getResizingHandlers(node);
+    const metadata = node.componentMeta.getMetadata();
+    if (metadata?.advanced?.getResizingHandlers) {
+      triggerVisible = metadata.advanced.getResizingHandlers(node);
     }
 
     const baseSideClass = 'lc-borders lc-resize-side';

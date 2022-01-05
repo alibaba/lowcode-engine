@@ -524,7 +524,7 @@ export class Designer {
       if (metaData.devMode === 'lowcode') {
         maps[key] = metaData.schema;
       } else {
-        const view = metaData.experimental?.view;
+        const view = metaData.advanced?.view;
         if (view) {
           maps[key] = view;
         } else {

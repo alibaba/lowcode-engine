@@ -126,9 +126,9 @@ export interface AutorunItem {
 }
 
 /**
- * 试验特性配置
+ * 高级特性配置
  */
-export interface Experimental {
+export interface Advanced {
   /**
    * @todo 待补充文档
    */
@@ -389,9 +389,13 @@ export interface ComponentMetadata {
    */
   configure?: FieldConfig[] | Configure;
   /**
-   * 试验特性配置
+   * 高级特性配置
    */
-  experimental?: Experimental;
+  advanced?: Advanced;
+  /**
+   * @deprecated, use advanced instead
+   */
+  experimental?: Advanced;
   /**
    * @todo 待补充文档
    */

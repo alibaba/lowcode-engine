@@ -38,7 +38,7 @@ export default class DragGhost extends Component<{ designer: Designer }> {
         this.y = e.globalY;
         if (isSimulatorHost(e.sensor)) {
           const container = e.sensor.getDropContainer(e);
-          if (container?.container.componentMeta.getMetadata().experimental?.isAbsoluteLayoutContainer) {
+          if (container?.container.componentMeta.getMetadata().advanced?.isAbsoluteLayoutContainer) {
             this.isAbsoluteLayoutContainer = true;
             return;
           }
