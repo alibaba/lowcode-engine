@@ -1,21 +1,3 @@
 {
-  "sourceMap": true,
-  "plugins": [
-    [
-      "build-plugin-component",
-      {
-        "filename": "rax-simulator-renderer",
-        "library": "SimulatorRenderer",
-        "libraryExport": "default",
-        "libraryTarget": "umd",
-        "externals": {
-          "react": "var window.React",
-          "react-dom": "var window.ReactDOM",
-          "prop-types": "var window.PropTypes",
-          "rax": "var window.Rax"
-        }
-      }
-    ],
-    "./build.plugin.js"
-  ]
+  "plugins": ["build-plugin-component", "./build.plugin.js"]
 }

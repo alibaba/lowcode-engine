@@ -10,7 +10,8 @@
     "lib"
   ],
   "scripts": {
-    "cloud-build": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --skip-demo"
+    "build": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --skip-demo",
+    "cloud-build": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --config build.cloud.json"
   },
   "dependencies": {
     "@ali/lowcode-designer": "1.0.76",
