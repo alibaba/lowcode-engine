@@ -80,7 +80,8 @@ export class Routes extends Component<{ rendererContainer: SimulatorRendererCont
 function ucfirst(s: string) {
   return s.charAt(0).toUpperCase() + s.substring(1);
 }
-function getDeviceView(view: any, device: string, mode: string) {
+
+export function getDeviceView(view: any, device: string, mode: string) {
   if (!view || typeof view === 'string') {
     return view;
   }
@@ -126,8 +127,8 @@ class Layout extends Component<{ rendererContainer: SimulatorRendererContainer }
 
 @observer
 class Renderer extends Component<{
-    rendererContainer: SimulatorRendererContainer,
-    documentInstance: DocumentInstance,
+    rendererContainer: SimulatorRendererContainer;
+    documentInstance: DocumentInstance;
   }> {
   startTime: number | null = null;
 
