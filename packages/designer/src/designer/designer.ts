@@ -1,5 +1,13 @@
 import { ComponentType } from 'react';
-import { obx, computed, autorun, makeObservable, IReactionPublic, IReactionOptions, IReactionDisposer } from '@ali/lowcode-editor-core';
+import {
+  obx,
+  computed,
+  autorun,
+  makeObservable,
+  IReactionPublic,
+  IReactionOptions,
+  IReactionDisposer,
+} from '@ali/lowcode-editor-core';
 import {
   ProjectSchema,
   ComponentMetadata,
@@ -245,8 +253,29 @@ export class Designer {
   /**
    * 创建插入位置，考虑放到 dragon 中
    */
-  createLocation(locationData: LocationData): DropLocation {
+  createLocation(locationData: LocationData): DropLocation | null {
     const loc = new DropLocation(locationData);
+    // 对于 slot 类型的节点，把 target 设置成宿主节点更有意义
+    const target = loc.target.isSlot() ? loc.target.slotFor?.owner : loc.target;
+    const slotTarget = loc.target.isSlot() ? loc.target : null;
+    if (
+      typeof target?.componentMeta.getMetadata().experimental?.callbacks?.onLocateHook ===
+      'function'
+    ) {
+      // 对于 onLocateHook 返回 false 的场景，认为无法正常创建 dropLocation，即无法插入
+      if (
+        target.componentMeta
+          .getMetadata()
+          .experimental?.callbacks?.onLocateHook?.({
+            dragObject: loc.event.dragObject,
+            target,
+            slotTarget,
+            detail: loc.detail,
+          }) === false
+      ) {
+        return null;
+      }
+    }
     if (this._dropLocation && this._dropLocation.document !== loc.document) {
       this._dropLocation.document.internalSetDropLocation(null);
     }
@@ -324,7 +353,7 @@ export class Designer {
     }
     const focusNode = activeDoc.focusNode!;
     const nodes = activeDoc.selection.getNodes();
-    const refNode = nodes.find(item => focusNode.contains(item));
+    const refNode = nodes.find((item) => focusNode.contains(item));
     let target;
     let index: number | undefined;
     if (!refNode || refNode === focusNode) {
@@ -564,7 +593,10 @@ export class Designer {
     }
   }
 
-  autorun(effect: (reaction: IReactionPublic) => void, options?: IReactionOptions): IReactionDisposer {
+  autorun(
+    effect: (reaction: IReactionPublic) => void,
+    options?: IReactionOptions,
+  ): IReactionDisposer {
     return autorun(effect, options);
   }
 
