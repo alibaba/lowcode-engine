@@ -379,4 +379,11 @@ export default class Node {
   hover(flag = true) {
     this[nodeSymbol].hover(flag);
   }
+
+  /**
+   * 删除当前节点实例
+   */
+   remove() {
+    this[nodeSymbol].remove();
+  }
 }
