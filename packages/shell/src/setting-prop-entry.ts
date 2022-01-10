@@ -15,8 +15,32 @@ export default class SettingPropEntry {
     return new SettingPropEntry(prop);
   }
 
+  /**
+   * 获取设置属性的 name
+   */
+  get name() {
+    return this[settingPropEntrySymbol].name;
+  }
+
+  /**
+   * 获取设置属性的 key
+   */
+   get key() {
+    return this[settingPropEntrySymbol].getKey();
+  }
+
+  /**
+   * 获取设置属性对应的节点实例
+   */
   get node(): Node | null {
     return Node.create(this[settingPropEntrySymbol].getNode());
+  }
+
+  /**
+   * 获取设置属性的父设置属性
+   */
+  get parent(): SettingPropEntry {
+    return SettingPropEntry.create(this[settingPropEntrySymbol].parent as any);
   }
 
   /**
@@ -24,6 +48,13 @@ export default class SettingPropEntry {
    */
   getNode() {
     return this.node;
+  }
+
+  /**
+   * @deprecated use .parent instead
+   */
+   getParent() {
+    return this.parent;
   }
 
   /**

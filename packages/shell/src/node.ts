@@ -68,6 +68,13 @@ export default class Node {
   }
 
   /**
+   * 是否为「模态框」节点
+   */
+   get isModal() {
+    return this[nodeSymbol].isModal();
+  }
+
+  /**
    * 是否为插槽节点
    */
   get isSlot() {
@@ -185,6 +192,13 @@ export default class Node {
   }
 
   /**
+   * 返回节点的属性集
+   */
+   get propsData() {
+    return this[nodeSymbol].propsData;
+  }
+
+  /**
    * @deprecated use .children instead
    */
   getChildren() {
@@ -192,7 +206,7 @@ export default class Node {
   }
 
   /**
-   * @deprecated
+   * 获取节点实例对应的 dom 节点
    */
   getDOMNode() {
     return this[nodeSymbol].getDOMNode();
@@ -349,5 +363,20 @@ export default class Node {
    */
   replaceWith(schema: NodeSchema) {
     this[nodeSymbol].replaceWith(schema);
+  }
+
+  /**
+   * 选中当前节点实例
+   */
+  select() {
+    this[nodeSymbol].select();
+  }
+
+  /**
+   * 设置悬停态
+   * @param flag
+   */
+  hover(flag = true) {
+    this[nodeSymbol].hover(flag);
   }
 }

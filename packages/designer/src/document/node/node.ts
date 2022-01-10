@@ -262,8 +262,12 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.isParental() && this.componentMeta.isContainer;
   }
 
+  isModal(): boolean {
+    return this.componentMeta.isModal;
+  }
+
   isRoot(): boolean {
-    return this.document.rootNode == (this as any);
+    return this.document.rootNode === (this as any);
   }
 
   isPage(): boolean {
