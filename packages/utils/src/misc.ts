@@ -66,7 +66,7 @@ export function arrShallowEquals(arr1: any[], arr2: any[]): boolean {
  * @param meta
  */
  export function isFromVC(meta: ComponentMeta) {
-  return !!meta?.getMetadata()?.advanced;
+  return !!meta?.getMetadata().configure?.advanced;
 }
 
 export function executePendingFn(fn: () => void, timeout: number = 2000) {
@@ -92,4 +92,16 @@ export function compatStage(stage: TransformStage | number): TransformStage {
     return stageList[stage - 1] as TransformStage;
   }
   return stage as TransformStage;
+}
+
+export function invariant(check: any, message: string, thing?: any) {
+  if (!check) {
+    throw new Error(`Invariant failed: ${ message }${thing ? ` in '${thing}'` : ''}`);
+  }
+}
+
+export function deprecate(fail: any, message: string, alterative?: string) {
+  if (fail) {
+    console.warn(`Deprecation: ${message}` + alterative ? `, use ${alterative} instead.'` : '');
+  }
 }

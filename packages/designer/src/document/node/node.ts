@@ -223,7 +223,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   private autoruns?: Array<() => void>;
 
   private setupAutoruns() {
-    const autoruns = this.componentMeta.getMetadata().advanced?.autoruns;
+    const autoruns = this.componentMeta.getMetadata().configure.advanced?.autoruns;
     if (!autoruns || autoruns.length < 1) {
       return;
     }
@@ -237,7 +237,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   private initialChildren(children: any): NodeData[] {
     // FIXME! this is dirty code
     if (children == null) {
-      const initialChildren = this.componentMeta.getMetadata().advanced?.initialChildren;
+      const initialChildren = this.componentMeta.getMetadata().configure.advanced?.initialChildren;
       if (initialChildren) {
         if (typeof initialChildren === 'function') {
           return initialChildren(this as any) || [];
@@ -302,7 +302,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   private didDropIn(dragment: Node) {
-    const callbacks = this.componentMeta.getMetadata().advanced?.callbacks;
+    const callbacks = this.componentMeta.getMetadata().configure.advanced?.callbacks;
     if (callbacks?.onNodeAdd) {
       const cbThis = this.internalToShellNode();
       callbacks?.onNodeAdd.call(cbThis, dragment.internalToShellNode(), cbThis);
@@ -313,7 +313,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   private didDropOut(dragment: Node) {
-    const callbacks = this.componentMeta.getMetadata().advanced?.callbacks;
+    const callbacks = this.componentMeta.getMetadata().configure.advanced?.callbacks;
     if (callbacks?.onNodeRemove) {
       const cbThis = this.internalToShellNode();
       callbacks?.onNodeRemove.call(cbThis, dragment.internalToShellNode(), cbThis);

@@ -13,6 +13,7 @@ import {
   LiveTextEditingConfig,
   FieldConfig,
 } from '@ali/lowcode-types';
+import { deprecate } from '@ali/lowcode-utils';
 import { computed, engineConfig } from '@ali/lowcode-editor-core';
 import EventEmitter from 'events';
 
@@ -199,7 +200,7 @@ export class ComponentMeta {
           : title;
     }
 
-    const liveTextEditing = this._transformedMetadata.advanced?.liveTextEditing || [];
+    const liveTextEditing = this._transformedMetadata.configure.advanced?.liveTextEditing || [];
 
     function collectLiveTextEditing(items: FieldConfig[]) {
       items.forEach((config) => {
@@ -219,7 +220,7 @@ export class ComponentMeta {
     collectLiveTextEditing(this.configure);
     this._liveTextEditing = liveTextEditing.length > 0 ? liveTextEditing : undefined;
 
-    const isTopFiexd = this._transformedMetadata.advanced?.isTopFixed;
+    const isTopFiexd = this._transformedMetadata.configure.advanced?.isTopFixed;
 
     if (isTopFiexd) {
       this._isTopFixed = isTopFiexd;
@@ -259,8 +260,9 @@ export class ComponentMeta {
     if (!result.configure) {
       result.configure = {};
     }
-    if (result.experimental && !result.advanced) {
-      result.advanced = result.experimental;
+    if (result.experimental && !result.configure.advanced) {
+      deprecate(result.experimental, '.experimental', '.configure.advanced');
+      result.configure.advanced = result.experimental;
     }
     return result as any;
   }

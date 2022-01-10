@@ -285,6 +285,10 @@ export interface Configure {
    * 通用扩展面板支持性配置
    */
   supports?: ConfigureSupport;
+  /**
+   * 高级特性配置
+   */
+  advanced?: Advanced;
 }
 
 /**
@@ -388,10 +392,6 @@ export interface ComponentMetadata {
    * 编辑体验增强
    */
   configure?: FieldConfig[] | Configure;
-  /**
-   * 高级特性配置
-   */
-  advanced?: Advanced;
   /**
    * @deprecated, use advanced instead
    */

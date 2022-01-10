@@ -137,38 +137,38 @@ export class BoxResizingInstance extends Component<{
     const resize = (e: MouseEvent, direction: string, node: any, moveX: number, moveY: number) => {
       const metadata = node.componentMeta.getMetadata();
       if (
-        metadata?.advanced?.callbacks &&
-        typeof metadata.advanced.callbacks.onResize === 'function'
+        metadata.configure?.advanced?.callbacks &&
+        typeof metadata.configure.advanced.callbacks.onResize === 'function'
       ) {
         (e as any).trigger = direction;
         (e as any).deltaX = moveX;
         (e as any).deltaY = moveY;
         const cbNode = node?.isNode ? node.internalToShellNode() : node;
-        metadata.advanced.callbacks.onResize(e, cbNode);
+        metadata.configure.advanced.callbacks.onResize(e, cbNode);
       }
     };
 
     const resizeStart = (e: MouseEvent, direction: string, node: any) => {
       const metadata = node.componentMeta.getMetadata();
       if (
-        metadata?.advanced?.callbacks &&
-        typeof metadata.advanced.callbacks.onResizeStart === 'function'
+        metadata.configure?.advanced?.callbacks &&
+        typeof metadata.configure.advanced.callbacks.onResizeStart === 'function'
       ) {
         (e as any).trigger = direction;
         const cbNode = node?.isNode ? node.internalToShellNode() : node;
-        metadata.advanced.callbacks.onResizeStart(e, cbNode);
+        metadata.configure.advanced.callbacks.onResizeStart(e, cbNode);
       }
     };
 
     const resizeEnd = (e: MouseEvent, direction: string, node: any) => {
       const metadata = node.componentMeta.getMetadata();
       if (
-        metadata?.advanced?.callbacks &&
-        typeof metadata.advanced.callbacks.onResizeEnd === 'function'
+        metadata.configure?.advanced?.callbacks &&
+        typeof metadata.configure.advanced.callbacks.onResizeEnd === 'function'
       ) {
         (e as any).trigger = direction;
         const cbNode = node?.isNode ? node.internalToShellNode() : node;
-        metadata.advanced.callbacks.onResizeEnd(e, cbNode);
+        metadata.configure.advanced.callbacks.onResizeEnd(e, cbNode);
       }
 
       const editor = globalContext.get(Editor);
@@ -241,8 +241,8 @@ export class BoxResizingInstance extends Component<{
     const { node, offsetWidth, offsetHeight, offsetTop, offsetLeft } = observed;
     let triggerVisible: any = [];
     const metadata = node.componentMeta.getMetadata();
-    if (metadata?.advanced?.getResizingHandlers) {
-      triggerVisible = metadata.advanced.getResizingHandlers(node);
+    if (metadata.configure?.advanced?.getResizingHandlers) {
+      triggerVisible = metadata.configure.advanced.getResizingHandlers(node);
     }
 
     const baseSideClass = 'lc-borders lc-resize-side';

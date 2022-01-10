@@ -416,7 +416,7 @@ export class NodeChildren {
     if (node.isRoot()) {
       return;
     }
-    const callbacks = owner.componentMeta.getMetadata().advanced?.callbacks;
+    const callbacks = owner.componentMeta.getMetadata().configure.advanced?.callbacks;
     if (callbacks?.onSubtreeModified) {
       try {
         callbacks?.onSubtreeModified.call(
