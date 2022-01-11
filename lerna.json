@@ -1,6 +1,6 @@
 {
   "lerna": "2.11.0",
-  "version": "2.0.0-beta.3",
+  "version": "2.0.0-beta.4",
   "npmClient": "tnpm",
   "registry": "http://registry.antfin-inc.com",
   "useWorkspaces": true,
