@@ -933,7 +933,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
     return this.props;
   }
 
-  onChildrenChange(fn: (param?: { type: string, node: Node }) => void): (() => void) | undefined {
+  onChildrenChange(fn: (param?: { type: string; node: Node }) => void): (() => void) | undefined {
     const wrappedFunc = wrapWithEventSwitch(fn);
     return this.children?.onChange(wrappedFunc);
   }

@@ -5,6 +5,7 @@ import { BuiltinSimulatorRenderer } from './builtin-simulator/renderer';
 import { Node, ParentalNode } from './document';
 
 export type AutoFit = '100%';
+// eslint-disable-next-line no-redeclare
 export const AutoFit = '100%';
 
 export interface IViewport extends IScrollable {

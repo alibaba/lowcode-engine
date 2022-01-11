@@ -179,7 +179,7 @@ hotkey.bind(['command+z', 'ctrl+z'], (e) => {
 
   e.preventDefault();
   const selection = focusing.focusDesigner?.currentSelection;
-  const curSelected = Array.from(selection?.selected!);
+  const curSelected = Array.from(selection?.selected || []);
   his.back();
   selection?.selectAll(curSelected);
 });
@@ -193,7 +193,7 @@ hotkey.bind(['command+y', 'ctrl+y', 'command+shift+z'], (e) => {
   }
   e.preventDefault();
   const selection = focusing.focusDesigner?.currentSelection;
-  const curSelected = Array.from(selection?.selected!);
+  const curSelected = Array.from(selection?.selected || []);
   his.forward();
   selection?.selectAll(curSelected);
 });

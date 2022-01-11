@@ -11,7 +11,7 @@ export default class TreeNode {
   /**
    * 是否可以展开
    */
-  @computed get expandable(): boolean {
+  get expandable(): boolean {
     if (this.locked) return false;
     return this.hasChildren() || this.hasSlots() || this.dropDetail?.index != null;
   }

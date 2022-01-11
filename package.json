@@ -25,23 +25,20 @@
     "test": "lerna run test --stream",
     "test:snapshot": "lerna run test:snapshot",
     "watchdog:build": "node ./scripts/watchdog.js",
-    "xima:fix": "xima fix",
-    "xima:scan": "xima scan --quiet"
+    "f2elint:scan": "f2elint scan -q -i ./packages/*/src",
+    "f2elint:fix": "f2elint fix -i ./packages/*/src"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "xima exec lint-staged",
-      "commit-msg": "xima exec commitlint -E HUSKY_GIT_PARAMS"
+      "pre-commit": "f2elint commit-file-scan",
+      "commit-msg": "f2elint commit-msg-scan"
     }
-  },
-  "lint-staged": {
-    "**/*.{css,scss,less}": "xima exec stylelint",
-    "**/*.{js,jsx,ts,tsx}": "xima exec eslint"
   },
   "devDependencies": {
     "@ali/lerna": "^1",
-    "typescript": "^3.2.2",
-    "xima": "^0.3.0"
+    "f2elint": "^2.0.1",
+    "husky": "^7.0.4",
+    "typescript": "^3.2.2"
   },
   "engines": {
     "node": ">=14.0.0"

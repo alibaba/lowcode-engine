@@ -72,7 +72,7 @@ export class DocumentModel {
   /**
    * @deprecated
    */
-  private _addons: Array<{ name: string, exportData: any }> = [];
+  private _addons: Array<{ name: string; exportData: any }> = [];
 
   /**
    * 模拟器
@@ -634,7 +634,7 @@ export class DocumentModel {
   ) {
     let visitorResult = {};
     if (!visitorName) {
-      /* tslint:disable no-console */
+      /* eslint-disable-next-line no-console */
       console.warn('Invalid or empty RootNodeVisitor name.');
     }
     try {
@@ -656,6 +656,7 @@ export class DocumentModel {
     const exsitingMap: { [componentName: string]: boolean } = {};
     for (const node of this._nodesMap.values()) {
       const { componentName } = node || {};
+      if (componentName === 'Slot') continue;
       if (!exsitingMap[componentName]) {
         exsitingMap[componentName] = true;
         if (node.componentMeta?.npm?.package) {
