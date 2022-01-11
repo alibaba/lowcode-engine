@@ -1,19 +1,18 @@
 {
   "name": "@ali/lowcode-utils",
-  "version": "2.0.0-beta.2",
+  "version": "2.0.0-beta.3",
   "description": "Utils for Ali lowCode engine",
   "files": [
-    "es",
-    "lib"
+    "lib/**/*.d.ts",
+    "es/**/*.d.ts"
   ],
-  "private": true,
   "main": "lib/index.js",
   "module": "es/index.js",
   "scripts": {
     "build": "build-scripts build --skip-demo"
   },
   "dependencies": {
-    "@ali/lowcode-types": "2.0.0-beta.2",
+    "@ali/lowcode-types": "2.0.0-beta.3",
     "@alifd/next": "^1.19.16",
     "lodash": "^4.17.21",
     "react": "^16",
