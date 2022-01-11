@@ -1,17 +1,20 @@
 {
   "plugins": [
-    ["build-plugin-component", {
-      "filename": "react-renderer",
-      "library": "___AliLowCodeReactRenderer___",
-      "libraryTarget": "umd",
-      "libraryExport": "default",
-      "externals": {
-        "react": "var window.React",
-        "react-dom": "var window.ReactDOM",
-        "prop-types": "var window.PropTypes",
-        "moment": "var window.moment"
+    [
+      "build-plugin-component",
+      {
+        "filename": "react-renderer",
+        "library": "___AliLowCodeReactRenderer___",
+        "libraryTarget": "umd",
+        "libraryExport": "default",
+        "externals": {
+          "react": "var window.React",
+          "react-dom": "var window.ReactDOM",
+          "prop-types": "var window.PropTypes",
+          "moment": "var window.moment"
+        }
       }
-    }],
+    ],
     "build-plugin-fusion",
     ["build-plugin-moment-locales", {
       "locales": ["zh-cn"]
