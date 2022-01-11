@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-engine",
-  "version": "2.0.0-beta.0",
+  "version": "2.0.0-beta.1",
   "description": "Universal API for AliLowCode engine",
   "main": "lib/engine-core.js",
   "module": "es/engine-core.js",
@@ -18,13 +18,13 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@ali/lowcode-designer": "2.0.0-beta.0",
-    "@ali/lowcode-editor-core": "2.0.0-beta.0",
-    "@ali/lowcode-editor-skeleton": "2.0.0-beta.0",
+    "@ali/lowcode-designer": "2.0.0-beta.1",
+    "@ali/lowcode-editor-core": "2.0.0-beta.1",
+    "@ali/lowcode-editor-skeleton": "2.0.0-beta.1",
     "@ali/lowcode-engine-ext": "^1.0.0",
-    "@ali/lowcode-plugin-designer": "2.0.0-beta.0",
-    "@ali/lowcode-plugin-outline-pane": "2.0.0-beta.0",
-    "@ali/lowcode-utils": "2.0.0-beta.0",
+    "@ali/lowcode-plugin-designer": "2.0.0-beta.1",
+    "@ali/lowcode-plugin-outline-pane": "2.0.0-beta.1",
+    "@ali/lowcode-utils": "2.0.0-beta.1",
     "@alifd/next": "^1.19.12",
     "react": "^16.8.1",
     "react-dom": "^16.8.1"
