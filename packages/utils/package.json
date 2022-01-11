@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-utils",
-  "version": "2.0.0-beta.6",
+  "version": "2.0.0-beta.7",
   "description": "Utils for Ali lowCode engine",
   "files": [
     "lib/**/*.d.ts",
@@ -12,7 +12,7 @@
     "build": "build-scripts build --skip-demo"
   },
   "dependencies": {
-    "@ali/lowcode-types": "2.0.0-beta.6",
+    "@ali/lowcode-types": "2.0.0-beta.7",
     "@alifd/next": "^1.19.16",
     "lodash": "^4.17.21",
     "react": "^16",
