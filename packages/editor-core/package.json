@@ -1,20 +1,20 @@
 {
   "name": "@ali/lowcode-editor-core",
-  "version": "2.0.0-beta.7",
+  "version": "2.0.0-beta.8",
   "description": "Core Api for Ali lowCode engine",
   "license": "MIT",
   "main": "lib/index.js",
   "module": "es/index.js",
   "files": [
-    "lib/**/*.d.ts",
-    "es/**/*.d.ts"
+    "lib",
+    "es"
   ],
   "scripts": {
     "build": "build-scripts build --skip-demo"
   },
   "dependencies": {
-    "@ali/lowcode-types": "2.0.0-beta.7",
-    "@ali/lowcode-utils": "2.0.0-beta.7",
+    "@ali/lowcode-types": "2.0.0-beta.8",
+    "@ali/lowcode-utils": "2.0.0-beta.8",
     "@alifd/next": "^1.19.16",
     "classnames": "^2.2.6",
     "debug": "^4.1.1",

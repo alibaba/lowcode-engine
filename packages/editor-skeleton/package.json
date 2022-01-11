@@ -1,13 +1,13 @@
 {
   "name": "@ali/lowcode-editor-skeleton",
-  "version": "2.0.0-beta.7",
+  "version": "2.0.0-beta.8",
   "description": "alibaba lowcode editor skeleton",
   "main": "lib/index.js",
   "module": "es/index.js",
   "stylePath": "style.js",
   "files": [
-    "lib/**/*.d.ts",
-    "es/**/*.d.ts"
+    "lib",
+    "es"
   ],
   "scripts": {
     "build": "build-scripts build --skip-demo"
@@ -17,10 +17,10 @@
     "editor"
   ],
   "dependencies": {
-    "@ali/lowcode-designer": "2.0.0-beta.7",
-    "@ali/lowcode-editor-core": "2.0.0-beta.7",
-    "@ali/lowcode-types": "2.0.0-beta.7",
-    "@ali/lowcode-utils": "2.0.0-beta.7",
+    "@ali/lowcode-designer": "2.0.0-beta.8",
+    "@ali/lowcode-editor-core": "2.0.0-beta.8",
+    "@ali/lowcode-types": "2.0.0-beta.8",
+    "@ali/lowcode-utils": "2.0.0-beta.8",
     "@alifd/next": "^1.20.12",
     "classnames": "^2.2.6",
     "react": "^16.8.1",
