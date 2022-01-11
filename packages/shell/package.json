@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-shell",
-  "version": "1.0.74",
+  "version": "2.0.0-beta.0",
   "description": "Shell Layer for AliLowCodeEngine",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -16,10 +16,10 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@ali/lowcode-editor-core": "1.0.74",
-    "@ali/lowcode-editor-skeleton": "1.0.74",
-    "@ali/lowcode-types": "1.0.74",
-    "@ali/lowcode-utils": "1.0.74",
+    "@ali/lowcode-editor-core": "2.0.0-beta.0",
+    "@ali/lowcode-editor-skeleton": "2.0.0-beta.0",
+    "@ali/lowcode-types": "2.0.0-beta.0",
+    "@ali/lowcode-utils": "2.0.0-beta.0",
     "classnames": "^2.2.6",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",

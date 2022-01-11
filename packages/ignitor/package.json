@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-ignitor",
-  "version": "1.0.74",
+  "version": "2.0.0-beta.0",
   "description": "点火器，bootstrap lce project",
   "main": "lib/index.js",
   "private": true,
