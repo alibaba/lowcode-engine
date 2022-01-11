@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-code-generator",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-beta.2",
   "description": "出码引擎 for LowCode Engine",
   "license": "MIT",
   "main": "lib/index.js",
@@ -45,7 +45,7 @@
     "**/*.{js,jsx,ts,tsx}": "eslint"
   },
   "dependencies": {
-    "@ali/lowcode-types": "2.0.0-beta.1",
+    "@ali/lowcode-types": "2.0.0-beta.2",
     "@babel/generator": "^7.12.11",
     "@babel/parser": "^7.12.11",
     "@babel/runtime": "^7.12.5",

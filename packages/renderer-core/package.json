@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-renderer-core",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-beta.2",
   "description": "renderer core",
   "license": "MIT",
   "main": "lib/index.js",
@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "@ali/lowcode-datasource-engine": "^1.0.22",
-    "@ali/lowcode-types": "2.0.0-beta.1",
-    "@ali/lowcode-utils": "2.0.0-beta.1",
+    "@ali/lowcode-types": "2.0.0-beta.2",
+    "@ali/lowcode-utils": "2.0.0-beta.2",
     "classnames": "^2.2.6",
     "debug": "^4.1.1",
     "fetch-jsonp": "^1.1.3",
