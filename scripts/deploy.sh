@@ -35,5 +35,7 @@ mv ./packages/rax-simulator-renderer/dist/js/* $BUILD_DEST
 mv ./packages/rax-simulator-renderer/dist/css/* $BUILD_DEST
 mv ./packages/engine/dist/js/* $BUILD_DEST
 mv ./packages/engine/dist/css/* $BUILD_DEST
+mv ./packages/vision-polyfill/dist/js/* $BUILD_DEST
+mv ./packages/vision-polyfill/dist/css/* $BUILD_DEST
 
 echo "Complete"
