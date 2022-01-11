@@ -1,9 +1,9 @@
 {
   "entry": {
-    "react-simulator-renderer": "src/index"
+    "rax-simulator-renderer": "src/index"
   },
   "sourceMap": true,
-  "library": "___ReactSimulatorRenderer___",
+  "library": "___RaxSimulatorRenderer___",
   "libraryTarget": "umd",
   "externals": {
     "react": "var window.React",
@@ -11,6 +11,7 @@
     "prop-types": "var window.PropTypes",
     "@alifd/next": "var Next",
     "@ali/lowcode-engine-ext": "var window.AliLowCodeEngineExt",
+    "rax": "var window.Rax",
     "moment": "var moment",
     "lodash": "var _"
   },
