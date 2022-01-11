@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-material-parser",
-  "version": "2.0.0-beta.4",
+  "version": "2.0.0-beta.5",
   "description": "material parser for Ali lowCode engine",
   "main": "lib/index.js",
   "module": "es/index.js",
