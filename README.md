@@ -45,13 +45,19 @@
 
 - 现代浏览器（Chrome >= 80, Edge >= 80, last 2 safari versions, last 2 firefox versions）
 
+## 📚 引擎协议
+
+引擎完整实现了《阿里巴巴中后台前端基础搭建协议规范》和《阿里巴巴中后台前端物料协议规范》，协议栈是低代码领域的物料能否流通的关键部分。
+
+![image](https://user-images.githubusercontent.com/1195765/150266126-fef3e3a9-d6a4-4f8e-8592-745f1a344162.png)
+
 ## 🌰 使用示例
 
 ```bash
 npm install @alilc/lowcode-engine --save-dev
 ```
 
-> **TIPS：仅支持 cdn 引入方式，npm 包提供的 typings 等代码提示能力**
+> **TIPS：仅支持 cdn 方式引入，npm 包用于提供 typings 等代码提示能力**
 
 ```ts
 import { init, skeleton } from '@alilc/lowcode-engine';
