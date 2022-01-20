@@ -1,0 +1,21 @@
+name: Issue Reply
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  reply-helper:
+    runs-on: ubuntu-latest
+    steps:
+      - name: help wanted
+        if: github.event.label.name == 'help wanted'
+        uses: actions-cool/issues-helper@v2
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Hello @${{ github.event.issue.user.login }}. We totally like your proposal/feedback, welcome PR。
+
+            你好 @${{ github.event.issue.user.login }}，我们完全同意你的提议/反馈，欢迎 PR。
