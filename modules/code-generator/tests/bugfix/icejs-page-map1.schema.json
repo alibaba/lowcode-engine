@@ -1,0 +1,47 @@
+{
+  "version": "1.0.0",
+  "componentsMap": [
+    {
+      "devMode": "lowcode",
+      "componentName": "Page"
+    },
+    {
+      "package": "@alilc/antd-lowcode-materials",
+      "version": "0.18.0",
+      "exportName": "Typography",
+      "main": "dist/antd-lowcode.esm.js",
+      "destructuring": true,
+      "subName": "Text",
+      "componentName": "Text"
+    }
+  ],
+  "componentsTree": [
+    {
+      "componentName": "Page",
+      "id": "node_dockcviv8fo1",
+      "props": {},
+      "fileName": "test",
+      "dataSource": {
+        "list": []
+      },
+      "css": "body {\n  font-size: 12px;\n}\n\n.botton {\n  width: 100px;\n  color: #ff00ff;\n}",
+      "lifeCycles": {},
+
+      "hidden": false,
+      "title": "",
+      "isLocked": false,
+      "condition": true,
+      "conditionGroup": "",
+      "state": {},
+      "children": [
+        {
+          "componentName": "Text",
+          "props": {
+            "text": "hello world"
+          }
+        }
+      ]
+    }
+  ],
+  "i18n": {}
+}

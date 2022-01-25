@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    [
+      "build-plugin-component",
+      {
+        "babelPlugins": ["@babel/plugin-transform-typescript"]
+      }
+    ]
+  ]
+}

@@ -1,0 +1,1308 @@
+{
+  "version": "1.0.0",
+  "componentsMap": [
+    {
+      "devMode": "lowcode",
+      "componentName": "Page"
+    },
+    {
+      "devMode": "lowcode",
+      "componentName": "Slot"
+    },
+    {
+      "package": "@alilc/antd-lowcode-materials",
+      "version": "0.18.0",
+      "exportName": "Typography",
+      "main": "dist/antd-lowcode.esm.js",
+      "destructuring": true,
+      "subName": "Text",
+      "componentName": "Typography.Text"
+    },
+    {
+      "package": "@alilc/antd-lowcode-materials",
+      "version": "0.18.0",
+      "exportName": "Button",
+      "main": "dist/antd-lowcode.esm.js",
+      "destructuring": true,
+      "componentName": "Button"
+    },
+    {
+      "package": "@alilc/antd-lowcode-materials",
+      "version": "0.18.0",
+      "exportName": "Modal",
+      "main": "dist/antd-lowcode.esm.js",
+      "destructuring": true,
+      "componentName": "Modal"
+    },
+    {
+      "destructuring": true,
+      "exportName": "AliAutoSearchSelect",
+      "main": "lib/index.js",
+      "package": "@alife/mc-assets-1935",
+      "version": "0.1.69",
+      "subName": "default",
+      "componentName": "AliAutoSearchSelectDefault"
+    },
+    {
+      "package": "@alilc/antd-lowcode-materials",
+      "version": "0.18.0",
+      "exportName": "Form",
+      "main": "dist/antd-lowcode.esm.js",
+      "destructuring": true,
+      "subName": "Item",
+      "componentName": "Form.Item"
+    },
+    {
+      "package": "@alilc/antd-lowcode-materials",
+      "version": "0.18.0",
+      "exportName": "Col",
+      "main": "dist/antd-lowcode.esm.js",
+      "destructuring": true,
+      "componentName": "Col"
+    },
+    {
+      "package": "@alilc/antd-lowcode-materials",
+      "version": "0.18.0",
+      "exportName": "Input",
+      "main": "dist/antd-lowcode.esm.js",
+      "destructuring": true,
+      "componentName": "Input"
+    },
+    {
+      "package": "@alilc/antd-lowcode-materials",
+      "version": "0.18.0",
+      "exportName": "Row",
+      "main": "dist/antd-lowcode.esm.js",
+      "destructuring": true,
+      "componentName": "Row"
+    },
+    {
+      "package": "@alilc/antd-lowcode-materials",
+      "version": "0.18.0",
+      "exportName": "Select",
+      "main": "dist/antd-lowcode.esm.js",
+      "destructuring": true,
+      "componentName": "Select"
+    },
+    {
+      "package": "@alilc/antd-lowcode-materials",
+      "version": "0.18.0",
+      "exportName": "Form",
+      "main": "dist/antd-lowcode.esm.js",
+      "destructuring": true,
+      "componentName": "Form"
+    },
+    {
+      "package": "@alife/pro-layout",
+      "version": "^0.1.0",
+      "exportName": "P",
+      "main": "lib/index.js",
+      "destructuring": true,
+      "subName": "",
+      "componentName": "NextP"
+    },
+    {
+      "package": "@alife/pro-layout",
+      "version": "^0.1.0",
+      "exportName": "Col",
+      "main": "lib/index.js",
+      "destructuring": true,
+      "subName": "",
+      "componentName": "NextCol"
+    },
+    {
+      "package": "@alife/pro-layout",
+      "version": "^0.1.0",
+      "exportName": "Row",
+      "main": "lib/index.js",
+      "destructuring": true,
+      "subName": "",
+      "componentName": "NextRow"
+    },
+    {
+      "package": "@alife/pro-layout",
+      "version": "^0.1.0",
+      "exportName": "RowColContainer",
+      "main": "lib/index.js",
+      "destructuring": true,
+      "subName": "",
+      "componentName": "NextRowColContainer"
+    },
+    {
+      "package": "@alife/pro-layout",
+      "version": "^0.1.0",
+      "exportName": "BlockCell",
+      "main": "lib/index.js",
+      "destructuring": true,
+      "subName": "",
+      "componentName": "NextBlockCell"
+    },
+    {
+      "destructuring": true,
+      "exportName": "AliAutoSearchTable",
+      "main": "lib/index.js",
+      "package": "@alife/mc-assets-1935",
+      "version": "0.1.69",
+      "subName": "default",
+      "componentName": "AliAutoSearchTableDefault"
+    },
+    {
+      "package": "@alife/pro-layout",
+      "version": "^0.1.0",
+      "exportName": "Block",
+      "main": "lib/index.js",
+      "destructuring": true,
+      "subName": "",
+      "componentName": "NextBlock"
+    },
+    {
+      "package": "@alife/pro-layout",
+      "version": "^0.1.0",
+      "exportName": "Page",
+      "main": "lib/index.js",
+      "destructuring": true,
+      "componentName": "NextPage"
+    }
+  ],
+  "componentsTree": [
+    {
+      "componentName": "Page",
+      "id": "node_dockcviv8fo1",
+      "props": {
+        "ref": "outterView",
+        "style": {
+          "height": "100%"
+        }
+      },
+      "fileName": "test",
+      "dataSource": {
+        "list": []
+      },
+      "css": "body {\n  font-size: 12px;\n}\n\n.botton {\n  width: 100px;\n  color: #ff00ff;\n}",
+      "lifeCycles": {
+        "constructor": {
+          "type": "JSFunction",
+          "value": "function() {\n    this.__jp__init();\n    this.initUrl();\n  }"
+        },
+        "componentDidMount": {
+          "type": "JSFunction",
+          "value": "function() {\n    // this.initUserHeaders();\n    this.statusDict = {\n      0: {\n        type: 'danger',\n        text: '失败',\n      },\n      1: {\n        type: 'success',\n        text: '成功',\n      },\n      2: {\n        type: 'default',\n        text: '构建中',\n      },\n      3: {\n        type: 'warning',\n        text: '构建超时',\n      },\n    };\n    this.statusOptions = Object.keys(this.statusDict).map(k => ({\n      label: this.statusDict[k].text,\n      value: k,\n    }));\n\n    this.searchParams = {};\n  }"
+        },
+        "componentDidUpdate": {
+          "type": "JSFunction",
+          "value": "function(prevProps, prevState, snapshot) {}"
+        },
+        "componentWillUnmount": {
+          "type": "JSFunction",
+          "value": "function() {}"
+        }
+      },
+      "methods": {
+        "__jp__init": {
+          "type": "JSFunction",
+          "value": "function() {\n  window.jianpin.emitter.emit('rootIns', this);\n  this.__jp__initEnv && this.__jp__initEnv();\n  this.__jp__initConfig && this.__jp__initConfig();\n  this.__jp__initDataSource && this.__jp__initDataSource();\n  this.__jp__initRouter && this.__jp__initRouter();\n  this.__jp__initUtils && this.__jp__initUtils();\n  this.__jp__initUziModel && this.__jp__initUziModel();\n  this.__jp__registerModel && this.__jp__registerModel();\n  this.__jp__finishedFn && this.__jp__finishedFn();\n}"
+        },
+        "__jp__initRouter": {
+          "type": "JSFunction",
+          "value": "function() {\n  if (window.arsenal) {\n    this.$router = new window.jianpin.ArsenalRouter({\n      app: this.props.microApp,\n    });\n  } else {\n    this.$router = new window.jianpin.ArsenalRouter();\n  }\n}"
+        },
+        "__jp__initDataSource": {
+          "type": "JSFunction",
+          "value": "function() {\n  this.$apis = {\n  BUILD_LIST: {\n    name: '打包列表',\n    code: 'BUILD_LIST',\n    url: '/ws/nvwa/android/combuild/get_build/',\n    method: 'GET',\n    dataHandler: res => res.data,\n  },\n  BUC_USER: {\n    name: '搜索用户',\n    code: 'BUC_USER',\n    url: '/ws/nvwa/sso_users/',\n    method: 'GET',\n  },\n  CHANNELS: {\n    name: '渠道列表',\n    code: 'CHANNELS',\n    url: '/ws/nvwa/android/adaptproject/search/',\n    method: 'GET',\n  },\n};\n  this.$ds = new window.jianpin.DataSource(this, {});\n}"
+        },
+        "__jp__initEnv": {
+          "type": "JSFunction",
+          "value": "function() {\n  let env = 'prod';\n\n  if (window.jianpin && window.jianpin.env === 'dev') {\n    env = 'dev';\n  } else if (window.arsenalConfig)  {\n    env = window.arsenalConfig.env;\n  }\n\n  const urlSearchParams = new URLSearchParams(window.location.search);\n  const searchParams = {};\n  for (const [key, value] of urlSearchParams) {\n    searchParams[key] = value;\n  }\n  this.$env = env === 'local' ? (window.$arsenalEnv || 'dev') : env;\n  this.$searchParams = searchParams;\n\n  if (window.arsenal && window.arsenal.store) {\n    this.$user = window.arsenal.store.getState('user');\n    this.$store = window.arsenal.store;\n    window.arsenal.store.subscribe('user', () => {\n      this.$user = window.arsenal.store.getState('user');\n    });\n  } else {\n    this.$store = {\n      subscribe: () => {},\n      getState: () => {},\n    };\n    this.$user = {};\n    if (window.jianpin && typeof window.jianpin.getUser === 'function') {\n      this.$user = window.jianpin.getUser() || {};\n    }\n  }\n}"
+        },
+        "__jp__initConfig": {
+          "type": "JSFunction",
+          "value": "function() {\n  const __config = {\n  \"default\": {},\n  \"dev\": {\n    \"apiOptions\": {\n      \"apiPrefix\": \"https://auto-nvwa-test.alibaba.net\"\n    }\n  },\n  \"daily\": {},\n  \"pre\": {},\n  \"prod\": {}\n};\n\n  this.$config = window.jianpin.utils.extend(true, {}, __config.default, __config[this.$env]);\n\n  this.$totalConfig = __config;\n}"
+        },
+        "__jp__initUtils": {
+          "type": "JSFunction",
+          "value": "function() {\n  this.$utils = window.jianpin.utils;\n}"
+        },
+        "__jp__initUziModel": {
+          "type": "JSFunction",
+          "value": "function () {\n  const defModel = {\n  apis: {},\n  state: {},\n  exposes: {},\n  effects: {},\n  reducers: {},\n};\n  this.$uziModel = {\n    ...defModel,\n  };\n}"
+        },
+        "__jp__registerModel": {
+          "type": "JSFunction",
+          "value": "function () {\n  if (this.props.microModel) {\n    this.$uziModel = this.props.microModel;\n    return;\n  }\n  const ns = \"jianpin-ns\";\n  const uziContext = window.jianpin.uziCore.createUziContext();\n  const { register, subscribe, getUzi, getState } = uziContext;\n  const { extend, parseJSFunc } = window.jianpin.utils;\n  const model = extend(true, {}, this.$uziModel);\n  parseJSFunc(model);\n  register(ns, model);\n\n  const uzi = getUzi(ns);\n  subscribe((state) => {\n    this.$uziModel = {\n      ...this.$uziModel,\n      state,\n    };\n    this.forceUpdate();\n  }, ns);\n\n  this.$uziModel = {\n    apis: uzi.apis,\n    uzi,\n    loading: {},\n    state: getState(ns),\n  };\n}"
+        },
+        "__jp__finishedFn": {
+          "type": "JSFunction",
+          "value": "function () {\n  window.jianpin.utils.parseJSFunc(this.$config);\n}"
+        },
+        "initUrl": {
+          "type": "JSFunction",
+          "value": "function() {\n    const apiOptions = this.$config.apiOptions;\n    const apiPrefix = (apiOptions && apiOptions.apiPrefix) || '';\n    this.userUrl = `${apiPrefix}${this.$apis.BUC_USER.url}`;\n    this.channelUrl = `${apiPrefix}${this.$apis.CHANNELS.url}`;\n  }"
+        },
+        "initUserHeaders": {
+          "type": "JSFunction",
+          "value": "function() {\n    this.userHeaders = {};\n    if (this.$user && this.$user.workid) {\n      this.userHeaders = {\n        headers: {\n          'buc-user': window.jianpin.utils.Base64.encode(\n            JSON.stringify(this.$user)\n          ),\n        },\n      };\n    }\n  }"
+        },
+        "fetchBuilds": {
+          "type": "JSFunction",
+          "value": "function() {\n    this.$ds\n      .resolve('BUILD_LIST', {\n        params: this.searchParams,\n      })\n      .then(res => {\n        const { page, builds } = res;\n        const { num_pages, page_number, per_page } = page;\n        this.setState({\n          page: page_number,\n          pageSize: per_page,\n          total: num_pages * per_page,\n          builds,\n        });\n      });\n  }"
+        },
+        "userHandler": {
+          "type": "JSFunction",
+          "value": "function(res) {\n    const data = res.data.items.map(item => {\n      const { id, label } = item;\n      return {\n        label: `${id}/${label}`,\n        value: id,\n      };\n    });\n    return data;\n  }"
+        },
+        "channelHandler": {
+          "type": "JSFunction",
+          "value": "function(res) {\n    const data = res.data.info.map(item => {\n      const { id, channelId } = item;\n      return {\n        label: channelId,\n        value: id,\n      };\n    });\n    return data;\n  }"
+        },
+        "renderStatus": {
+          "type": "JSFunction",
+          "value": "function(status) {\n    return this.statusDict[status]?.text || '暂无';\n  }"
+        },
+        "getStatusColor": {
+          "type": "JSFunction",
+          "value": "function(status) {\n    return this.statusDict[status]?.type || 'default';\n  }"
+        },
+        "getLinkText": {
+          "type": "JSFunction",
+          "value": "function(record) {\n    const { status } = record || {};\n    if (status === 0) {\n      return '查看错误信息';\n    } else if (status === 1) {\n      return '去下载';\n    }\n    return '查看详情';\n  }"
+        },
+        "renderTime": {
+          "type": "JSFunction",
+          "value": "function(time) {\n    return time\n      ? this.$utils.moment(time).format('YYYY-MM-DD HH:mm')\n      : '暂无';\n  }"
+        },
+        "onPageChange": {
+          "type": "JSFunction",
+          "value": "function(pageIndex, pageSize) {\n    this.setSearchParams({\n      page: pageIndex,\n      page_size: pageSize,\n    });\n    this.fetchBuilds();\n  }"
+        },
+        "renderUser": {
+          "type": "JSFunction",
+          "value": "function(creator) {\n    return creator ? creator.user_name : '暂无';\n  }"
+        },
+        "setSearchParams": {
+          "type": "JSFunction",
+          "value": "function(params) {\n    this.searchParams = {\n      ...this.searchParams,\n      ...params,\n    };\n  }"
+        },
+        "onFinish": {
+          "type": "JSFunction",
+          "value": "function(values) {\n    const formValues = Object.keys(values).reduce((pre, key) => {\n      const value = values[key];\n      if (value === undefined || value === null) {\n        return pre;\n      }\n      return {\n        ...pre,\n        [key]: value,\n      };\n    }, {});\n    this.setSearchParams(formValues);\n    this.fetchBuilds();\n  }"
+        },
+        "linkHandler": {
+          "type": "JSFunction",
+          "value": "function(_, record) {\n    console.log('debug record', record);\n    if (record && record.result_url) {\n      window.open(record.result_url);\n      return;\n    }\n    if (record && record.error_info) {\n      this.setState({\n        errorVisible: true,\n        errorInfo: record.error_info,\n      });\n      return;\n    }\n    if (record && record.status === 0) {\n      this.$utils.message.error('暂无错误信息！');\n      return;\n    }\n    this.$utils.message.info('暂无详情信息！');\n  }"
+        },
+        "toNewPage": {
+          "type": "JSFunction",
+          "value": "function() {\n    this.$router.push('/android/component_package/add');\n  }"
+        },
+        "showErrorModal": {
+          "type": "JSFunction",
+          "value": "function() {\n    this.setState({\n      errorVisible: true,\n    });\n  }"
+        },
+        "hideErrorModal": {
+          "type": "JSFunction",
+          "value": "function() {\n    this.setState({\n      errorVisible: false,\n    });\n  }"
+        }
+      },
+      "hidden": false,
+      "title": "",
+      "isLocked": false,
+      "condition": true,
+      "conditionGroup": "",
+      "state": {
+        "page": 1,
+        "pageSize": 10,
+        "total": 0,
+        "builds": [],
+        "errorVisible": false,
+        "errorInfo": ""
+      },
+      "children": [
+        {
+          "componentName": "Modal",
+          "id": "node_ockxhcliuqd",
+          "props": {
+            "title": "错误信息",
+            "okText": "确认",
+            "cancelText": "取消",
+            "visible": {
+              "type": "JSExpression",
+              "value": "this.state.errorVisible",
+              "mock": true
+            },
+            "closable": true,
+            "footer": {
+              "type": "JSSlot",
+              "value": [
+                {
+                  "componentName": "Button",
+                  "id": "node_ockxhcliuqf",
+                  "props": {
+                    "type": "primary",
+                    "children": "确定",
+                    "__events": {
+                      "eventDataList": [
+                        {
+                          "type": "componentEvent",
+                          "name": "onClick",
+                          "relatedEventName": "hideErrorModal"
+                        }
+                      ],
+                      "eventList": [
+                        {
+                          "name": "onClick",
+                          "template": "onClick(event,${extParams}){\n// 点击按钮时的回调\nconsole.log('onClick', event);}",
+                          "disabled": true
+                        }
+                      ]
+                    },
+                    "onClick": {
+                      "type": "JSFunction",
+                      "value": "function(){this.hideErrorModal.apply(this,Array.prototype.slice.call(arguments).concat([])) }"
+                    }
+                  },
+                  "hidden": false,
+                  "title": "",
+                  "isLocked": false,
+                  "condition": true,
+                  "conditionGroup": "",
+                  "loopArgs": ["", ""]
+                }
+              ]
+            },
+            "width": "720px",
+            "__events": {
+              "eventDataList": [
+                {
+                  "type": "componentEvent",
+                  "name": "onCancel",
+                  "relatedEventName": "hideErrorModal"
+                }
+              ],
+              "eventList": [
+                {
+                  "name": "afterClose",
+                  "templete": "onCancel(${extParams}){\n// 完全关闭后的回调\nconsole.log('afterClose');}",
+                  "disabled": false
+                },
+                {
+                  "name": "onCancel",
+                  "template": "onCancel(${extParams}){\n// 点击遮罩层或右上角叉或取消按钮的回调\nconsole.log('onCancel');}",
+                  "disabled": true
+                },
+                {
+                  "name": "onOk",
+                  "template": "onOk(${extParams}){\n// 点击确定回调\nconsole.log('onOk');}",
+                  "disabled": false
+                }
+              ]
+            },
+            "onCancel": {
+              "type": "JSFunction",
+              "value": "function(){this.hideErrorModal.apply(this,Array.prototype.slice.call(arguments).concat([])) }"
+            }
+          },
+          "hidden": true,
+          "title": "",
+          "isLocked": false,
+          "condition": true,
+          "conditionGroup": "",
+          "loopArgs": ["", ""],
+          "children": [
+            {
+              "componentName": "Typography.Text",
+              "id": "node_ockxhcliuqg",
+              "props": {
+                "children": {
+                  "type": "JSExpression",
+                  "value": "this.state.errorInfo",
+                  "mock": "text"
+                }
+              },
+              "hidden": false,
+              "title": "",
+              "isLocked": false,
+              "condition": true,
+              "conditionGroup": "",
+              "loopArgs": ["", ""]
+            }
+          ]
+        },
+        {
+          "componentName": "NextPage",
+          "id": "node_ocko19zplh1",
+          "props": {
+            "columns": 12,
+            "headerDivider": true,
+            "placeholderStyle": {
+              "gridRowEnd": "span 1",
+              "gridColumnEnd": "span 12"
+            },
+            "placeholder": "页面主体内容：拖拽Block布局组件到这里",
+            "header": "",
+            "headerProps": {
+              "background": "surface"
+            },
+            "footer": "",
+            "minHeight": "100vh",
+            "presetNav": true,
+            "presetAside": true
+          },
+          "title": "页面",
+          "hidden": false,
+          "isLocked": false,
+          "condition": true,
+          "conditionGroup": "",
+          "children": [
+            {
+              "componentName": "NextBlock",
+              "id": "node_ockwq51blv16",
+              "props": {
+                "placeholderStyle": {
+                  "height": "100%"
+                },
+                "noPadding": false,
+                "noBorder": false,
+                "title": "",
+                "rowGap": 20,
+                "colGap": 20,
+                "background": "surface",
+                "layoutmode": "O",
+                "strict": true,
+                "colSpan": 12,
+                "rowSpan": 1,
+                "mode": "transparent",
+                "childTotalColumns": 12
+              },
+              "title": "区域",
+              "hidden": false,
+              "isLocked": false,
+              "condition": true,
+              "conditionGroup": "",
+              "children": [
+                {
+                  "componentName": "NextBlockCell",
+                  "id": "node_ockxfuqtmx2",
+                  "props": {
+                    "colSpan": 12,
+                    "rowSpan": 1,
+                    "mode": "procard",
+                    "isAutoContainer": true,
+                    "title": "",
+                    "childNum": 2,
+                    "childMode": "initial"
+                  },
+                  "hidden": false,
+                  "title": "",
+                  "isLocked": false,
+                  "condition": true,
+                  "conditionGroup": "",
+                  "children": [
+                    {
+                      "componentName": "NextRowColContainer",
+                      "id": "node_ockxfuqtmx3",
+                      "props": {
+                        "rowGap": 20,
+                        "colGap": 20,
+                        "strict": true
+                      },
+                      "title": "行列容器",
+                      "hidden": false,
+                      "isLocked": false,
+                      "condition": true,
+                      "conditionGroup": "",
+                      "children": [
+                        {
+                          "componentName": "NextRow",
+                          "id": "node_ockxfuqtmx4",
+                          "props": {
+                            "strict": true
+                          },
+                          "title": "行",
+                          "hidden": false,
+                          "isLocked": false,
+                          "condition": true,
+                          "conditionGroup": "",
+                          "children": [
+                            {
+                              "componentName": "NextCol",
+                              "id": "node_ockxfuqtmx5",
+                              "props": {
+                                "colSpan": 1,
+                                "strict": true
+                              },
+                              "title": "列",
+                              "hidden": false,
+                              "isLocked": false,
+                              "condition": true,
+                              "conditionGroup": "",
+                              "children": [
+                                {
+                                  "componentName": "NextP",
+                                  "id": "node_ockxfuqxgd7c",
+                                  "props": {
+                                    "wrap": false,
+                                    "type": "body2",
+                                    "verAlign": "middle",
+                                    "textSpacing": true,
+                                    "align": "left",
+                                    "full": true,
+                                    "flex": true
+                                  },
+                                  "title": "段落",
+                                  "hidden": false,
+                                  "isLocked": false,
+                                  "condition": true,
+                                  "conditionGroup": "",
+                                  "children": [
+                                    {
+                                      "componentName": "Form",
+                                      "id": "node_ockxfuqxgd7d",
+                                      "props": {
+                                        "labelCol": {
+                                          "span": 6
+                                        },
+                                        "wrapperCol": {
+                                          "span": 18
+                                        },
+                                        "onFinish": {
+                                          "type": "JSFunction",
+                                          "value": "function(){this.onFinish.apply(this,Array.prototype.slice.call(arguments).concat([])) }"
+                                        },
+                                        "name": "basic",
+                                        "__events": {
+                                          "eventDataList": [
+                                            {
+                                              "type": "componentEvent",
+                                              "name": "onFinish",
+                                              "relatedEventName": "onFinish"
+                                            }
+                                          ],
+                                          "eventList": [
+                                            {
+                                              "name": "onFinish",
+                                              "template": "onFinish(values,${extParams}){\n// 提交表单且数据验证成功后回调事件\nconsole.log('onFinish',values);}",
+                                              "disabled": true
+                                            },
+                                            {
+                                              "name": "onFinishFailed",
+                                              "template": "onFinishFailed({values,errorFields,outOfDate},${extParams}){\n// 提交表单且数据验证失败后回调事件\nconsole.log('onFinishFailed',values, errorFields, outOfDate);}",
+                                              "disabled": false
+                                            },
+                                            {
+                                              "name": "onFieldsChange",
+                                              "template": "onFieldsChange(changedFields,allFields,${extParams}){\n// 字段更新时触发回调事件\nconsole.log('onFieldsChange',changedFields,allFields);}",
+                                              "disabled": false
+                                            },
+                                            {
+                                              "name": "onValuesChange",
+                                              "template": "onValuesChange(changedValues,allValues,${extParams}){\n// 字段值更新时触发回调事件\nconsole.log('onValuesChange',changedValues,allValues);}",
+                                              "disabled": false
+                                            }
+                                          ]
+                                        }
+                                      },
+                                      "hidden": false,
+                                      "title": "",
+                                      "isLocked": false,
+                                      "condition": true,
+                                      "conditionGroup": "",
+                                      "children": [
+                                        {
+                                          "componentName": "Row",
+                                          "id": "node_ockxfuqxgd82",
+                                          "props": {},
+                                          "hidden": false,
+                                          "title": "",
+                                          "isLocked": false,
+                                          "condition": true,
+                                          "conditionGroup": "",
+                                          "children": [
+                                            {
+                                              "componentName": "Col",
+                                              "id": "node_ockxfuqxgd83",
+                                              "props": {
+                                                "span": 8
+                                              },
+                                              "hidden": false,
+                                              "title": "",
+                                              "isLocked": false,
+                                              "condition": true,
+                                              "conditionGroup": "",
+                                              "children": [
+                                                {
+                                                  "componentName": "Form.Item",
+                                                  "id": "node_ockxfuqtmx7e",
+                                                  "props": {
+                                                    "label": "渠道号",
+                                                    "name": "channel_id"
+                                                  },
+                                                  "hidden": false,
+                                                  "title": "",
+                                                  "isLocked": false,
+                                                  "condition": true,
+                                                  "conditionGroup": "",
+                                                  "children": [
+                                                    {
+                                                      "componentName": "AliAutoSearchSelectDefault",
+                                                      "id": "node_ockxfurh9p1",
+                                                      "props": {
+                                                        "type": "custom",
+                                                        "style": {
+                                                          "width": "100%"
+                                                        },
+                                                        "placeholder": "请搜索选择渠道号",
+                                                        "config": {
+                                                          "url": {
+                                                            "type": "JSExpression",
+                                                            "value": "this.channelUrl"
+                                                          },
+                                                          "searchKey": "search_param",
+                                                          "dataHandler": {
+                                                            "type": "JSFunction",
+                                                            "value": "function(){ return this.channelHandler.apply(this,Array.prototype.slice.call(arguments).concat([])) }"
+                                                          },
+                                                          "method": "GET"
+                                                        },
+                                                        "init": true
+                                                      },
+                                                      "hidden": false,
+                                                      "title": "",
+                                                      "isLocked": false,
+                                                      "condition": true,
+                                                      "conditionGroup": ""
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "componentName": "Col",
+                                              "id": "node_ockxfuqxgd84",
+                                              "props": {
+                                                "span": 8
+                                              },
+                                              "hidden": false,
+                                              "title": "",
+                                              "isLocked": false,
+                                              "condition": true,
+                                              "conditionGroup": "",
+                                              "children": [
+                                                {
+                                                  "componentName": "Form.Item",
+                                                  "id": "node_ockxfuqtmx7f",
+                                                  "props": {
+                                                    "label": "构建号",
+                                                    "name": "buildId"
+                                                  },
+                                                  "hidden": false,
+                                                  "title": "",
+                                                  "isLocked": false,
+                                                  "condition": true,
+                                                  "conditionGroup": "",
+                                                  "children": [
+                                                    {
+                                                      "componentName": "Input",
+                                                      "id": "node_ockxfuqxgd7",
+                                                      "props": {
+                                                        "placeholder": "请输入"
+                                                      },
+                                                      "hidden": false,
+                                                      "title": "",
+                                                      "isLocked": false,
+                                                      "condition": true,
+                                                      "conditionGroup": "",
+                                                      "loopArgs": ["", ""]
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "componentName": "Col",
+                                              "id": "node_ockxfuqxgd85",
+                                              "props": {
+                                                "span": 8
+                                              },
+                                              "hidden": false,
+                                              "title": "",
+                                              "isLocked": false,
+                                              "condition": true,
+                                              "conditionGroup": "",
+                                              "children": [
+                                                {
+                                                  "componentName": "Form.Item",
+                                                  "id": "node_ockxfuqtmx7g",
+                                                  "props": {
+                                                    "label": "构建人",
+                                                    "name": "user_id"
+                                                  },
+                                                  "hidden": false,
+                                                  "title": "",
+                                                  "isLocked": false,
+                                                  "condition": true,
+                                                  "conditionGroup": "",
+                                                  "children": [
+                                                    {
+                                                      "componentName": "AliAutoSearchSelectDefault",
+                                                      "id": "node_ockxfuqxgdd",
+                                                      "props": {
+                                                        "type": "custom",
+                                                        "style": {
+                                                          "width": "100%"
+                                                        },
+                                                        "placeholder": "请搜索选择构建人",
+                                                        "config": {
+                                                          "url": {
+                                                            "type": "JSExpression",
+                                                            "value": "this.userUrl"
+                                                          },
+                                                          "searchKey": "q",
+                                                          "method": "GET",
+                                                          "dataHandler": {
+                                                            "type": "JSFunction",
+                                                            "value": "function(){ return this.userHandler.apply(this,Array.prototype.slice.call(arguments).concat([])) }"
+                                                          }
+                                                        }
+                                                      },
+                                                      "hidden": false,
+                                                      "title": "",
+                                                      "isLocked": false,
+                                                      "condition": true,
+                                                      "conditionGroup": ""
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "componentName": "Row",
+                                          "id": "node_ockxfuqxgd8o",
+                                          "props": {
+                                            "style": {}
+                                          },
+                                          "hidden": false,
+                                          "title": "",
+                                          "isLocked": false,
+                                          "condition": true,
+                                          "conditionGroup": "",
+                                          "children": [
+                                            {
+                                              "componentName": "Col",
+                                              "id": "node_ockxfuqxgd8p",
+                                              "props": {
+                                                "span": 8
+                                              },
+                                              "hidden": false,
+                                              "title": "",
+                                              "isLocked": false,
+                                              "condition": true,
+                                              "conditionGroup": "",
+                                              "children": [
+                                                {
+                                                  "componentName": "Form.Item",
+                                                  "id": "node_ockxfuqtmx7h",
+                                                  "props": {
+                                                    "label": "构建状态",
+                                                    "name": "status",
+                                                    "style": {
+                                                      "marginBottom": "0"
+                                                    }
+                                                  },
+                                                  "hidden": false,
+                                                  "title": "",
+                                                  "isLocked": false,
+                                                  "condition": true,
+                                                  "conditionGroup": "",
+                                                  "children": [
+                                                    {
+                                                      "componentName": "Select",
+                                                      "id": "node_ockxfuqxgde",
+                                                      "props": {
+                                                        "style": {},
+                                                        "options": {
+                                                          "type": "JSExpression",
+                                                          "value": "this.statusOptions"
+                                                        },
+                                                        "allowClear": true,
+                                                        "placeholder": "请选择构建状态"
+                                                      },
+                                                      "hidden": false,
+                                                      "title": "",
+                                                      "isLocked": false,
+                                                      "condition": true,
+                                                      "conditionGroup": ""
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "componentName": "Col",
+                                              "id": "node_ockxfuqxgd8q",
+                                              "props": {
+                                                "span": 16
+                                              },
+                                              "hidden": false,
+                                              "title": "",
+                                              "isLocked": false,
+                                              "condition": true,
+                                              "conditionGroup": "",
+                                              "children": [
+                                                {
+                                                  "componentName": "Form.Item",
+                                                  "id": "node_ockxfuqxgd7g",
+                                                  "props": {
+                                                    "wrapperCol": {
+                                                      "offset": 6
+                                                    },
+                                                    "style": {
+                                                      "textAlign": "right",
+                                                      "marginBottom": "0"
+                                                    }
+                                                  },
+                                                  "hidden": false,
+                                                  "title": "",
+                                                  "isLocked": false,
+                                                  "condition": true,
+                                                  "conditionGroup": "",
+                                                  "children": [
+                                                    {
+                                                      "componentName": "Button",
+                                                      "id": "node_ockxfuqxgd7h",
+                                                      "props": {
+                                                        "type": "primary",
+                                                        "children": "查看",
+                                                        "htmlType": "submit"
+                                                      },
+                                                      "hidden": false,
+                                                      "title": "",
+                                                      "isLocked": false,
+                                                      "condition": true,
+                                                      "conditionGroup": ""
+                                                    },
+                                                    {
+                                                      "componentName": "Button",
+                                                      "id": "node_ockxfuqxgd7i",
+                                                      "props": {
+                                                        "style": {
+                                                          "marginLeft": 20
+                                                        },
+                                                        "children": "新增打包",
+                                                        "type": "link",
+                                                        "__events": {
+                                                          "eventDataList": [
+                                                            {
+                                                              "type": "componentEvent",
+                                                              "name": "onClick",
+                                                              "relatedEventName": "toNewPage"
+                                                            }
+                                                          ],
+                                                          "eventList": [
+                                                            {
+                                                              "name": "onClick",
+                                                              "template": "onClick(event,${extParams}){\n// 点击按钮时的回调\nconsole.log('onClick', event);}",
+                                                              "disabled": true
+                                                            }
+                                                          ]
+                                                        },
+                                                        "onClick": {
+                                                          "type": "JSFunction",
+                                                          "value": "function(){this.toNewPage.apply(this,Array.prototype.slice.call(arguments).concat([])) }"
+                                                        }
+                                                      },
+                                                      "hidden": false,
+                                                      "title": "",
+                                                      "isLocked": false,
+                                                      "condition": true,
+                                                      "conditionGroup": ""
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "componentName": "NextBlockCell",
+                  "id": "node_ockxfuqtmx7i",
+                  "props": {
+                    "colSpan": 12,
+                    "rowSpan": 1,
+                    "mode": "procard",
+                    "isAutoContainer": true,
+                    "title": "",
+                    "childNum": 2,
+                    "childMode": "initial"
+                  },
+                  "hidden": false,
+                  "title": "",
+                  "isLocked": false,
+                  "condition": true,
+                  "conditionGroup": "",
+                  "children": [
+                    {
+                      "componentName": "NextRowColContainer",
+                      "id": "node_ockxfuqtmx7j",
+                      "props": {
+                        "rowGap": 20,
+                        "colGap": 20,
+                        "strict": true
+                      },
+                      "title": "行列容器",
+                      "hidden": false,
+                      "isLocked": false,
+                      "condition": true,
+                      "conditionGroup": "",
+                      "children": [
+                        {
+                          "componentName": "NextRow",
+                          "id": "node_ockxfuqtmx7k",
+                          "props": {
+                            "strict": true
+                          },
+                          "title": "行",
+                          "hidden": false,
+                          "isLocked": false,
+                          "condition": true,
+                          "conditionGroup": "",
+                          "children": [
+                            {
+                              "componentName": "NextCol",
+                              "id": "node_ockxfuqtmx7l",
+                              "props": {
+                                "colSpan": 1,
+                                "strict": true
+                              },
+                              "title": "列",
+                              "hidden": false,
+                              "isLocked": false,
+                              "condition": true,
+                              "conditionGroup": "",
+                              "children": [
+                                {
+                                  "componentName": "NextP",
+                                  "id": "node_ockxg2pglu1t",
+                                  "props": {
+                                    "wrap": false,
+                                    "type": "body2",
+                                    "verAlign": "middle",
+                                    "textSpacing": true,
+                                    "align": "left",
+                                    "flex": true
+                                  },
+                                  "title": "段落",
+                                  "hidden": false,
+                                  "isLocked": false,
+                                  "condition": true,
+                                  "conditionGroup": "",
+                                  "children": [
+                                    {
+                                      "componentName": "AliAutoSearchTableDefault",
+                                      "id": "node_ockxg2pglu1u",
+                                      "props": {
+                                        "rowKey": "key",
+                                        "dataSource": {
+                                          "type": "JSExpression",
+                                          "value": "this.state.builds"
+                                        },
+                                        "columns": [
+                                          {
+                                            "title": "渠道号",
+                                            "dataIndex": "channelId",
+                                            "key": "name"
+                                          },
+                                          {
+                                            "title": "Job名称",
+                                            "dataIndex": "job_name",
+                                            "key": "age"
+                                          },
+                                          {
+                                            "title": "构建号",
+                                            "dataIndex": "buildId",
+                                            "key": "address"
+                                          },
+                                          {
+                                            "title": "版本号",
+                                            "dataIndex": "version"
+                                          },
+                                          {
+                                            "title": "组件",
+                                            "dataIndex": "components"
+                                          },
+                                          {
+                                            "title": "构建状态",
+                                            "dataIndex": "status",
+                                            "render": {
+                                              "type": "JSSlot",
+                                              "params": ["text", "record", "index"],
+                                              "value": [
+                                                {
+                                                  "componentName": "Typography.Text",
+                                                  "id": "node_ockxg2qmtb6",
+                                                  "props": {
+                                                    "children": {
+                                                      "type": "JSExpression",
+                                                      "value": "this.renderStatus(this.text)",
+                                                      "mock": ""
+                                                    },
+                                                    "type": {
+                                                      "type": "JSExpression",
+                                                      "value": "this.getStatusColor(this.text)"
+                                                    }
+                                                  },
+                                                  "hidden": false,
+                                                  "title": "",
+                                                  "isLocked": false,
+                                                  "condition": true,
+                                                  "conditionGroup": ""
+                                                }
+                                              ]
+                                            }
+                                          },
+                                          {
+                                            "title": "构建时间",
+                                            "dataIndex": "create_time",
+                                            "render": {
+                                              "type": "JSFunction",
+                                              "value": "function(){ return this.renderTime.apply(this,Array.prototype.slice.call(arguments).concat([])) }"
+                                            }
+                                          },
+                                          {
+                                            "title": "构建人",
+                                            "dataIndex": "creator",
+                                            "render": {
+                                              "type": "JSFunction",
+                                              "value": "function(){ return this.renderUser.apply(this,Array.prototype.slice.call(arguments).concat([])) }"
+                                            }
+                                          },
+                                          {
+                                            "title": "详情",
+                                            "dataIndex": "result_url",
+                                            "render": {
+                                              "type": "JSSlot",
+                                              "params": ["text", "record", "index"],
+                                              "value": [
+                                                {
+                                                  "componentName": "Button",
+                                                  "id": "node_ockxhavvl63",
+                                                  "props": {
+                                                    "type": "link",
+                                                    "children": {
+                                                      "type": "JSExpression",
+                                                      "value": "this.getLinkText(this.record)",
+                                                      "mock": ""
+                                                    },
+                                                    "__events": {
+                                                      "eventDataList": [
+                                                        {
+                                                          "type": "componentEvent",
+                                                          "name": "onClick",
+                                                          "relatedEventName": "linkHandler",
+                                                          "paramStr": "this.record"
+                                                        }
+                                                      ],
+                                                      "eventList": [
+                                                        {
+                                                          "name": "onClick",
+                                                          "template": "onClick(event,${extParams}){\n// 点击按钮时的回调\nconsole.log('onClick', event);}",
+                                                          "disabled": true
+                                                        }
+                                                      ]
+                                                    },
+                                                    "onClick": {
+                                                      "type": "JSFunction",
+                                                      "value": "function(){this.linkHandler.apply(this,Array.prototype.slice.call(arguments).concat([this.record])) }"
+                                                    },
+                                                    "style": {
+                                                      "paddingLeft": "0px",
+                                                      "paddingRight": "0px"
+                                                    }
+                                                  },
+                                                  "hidden": false,
+                                                  "title": "",
+                                                  "isLocked": false,
+                                                  "condition": true,
+                                                  "conditionGroup": "",
+                                                  "loopArgs": ["", ""]
+                                                }
+                                              ]
+                                            }
+                                          }
+                                        ],
+                                        "actions": [],
+                                        "size": "small",
+                                        "pagination": {
+                                          "total": {
+                                            "type": "JSExpression",
+                                            "value": "this.state.total"
+                                          },
+                                          "defaultPageIndex": {
+                                            "type": "JSExpression",
+                                            "value": "this.state.page"
+                                          },
+                                          "defaultPageSize": {
+                                            "type": "JSExpression",
+                                            "value": "this.state.pageSize"
+                                          },
+                                          "onPageChange": {
+                                            "type": "JSFunction",
+                                            "value": "function(){ return this.onPageChange.apply(this,Array.prototype.slice.call(arguments).concat([])) }"
+                                          }
+                                        },
+                                        "loading": {
+                                          "type": "JSExpression",
+                                          "value": "this.state.LOADING_BUILD_LIST"
+                                        }
+                                      },
+                                      "hidden": false,
+                                      "title": "",
+                                      "isLocked": false,
+                                      "condition": true,
+                                      "conditionGroup": "",
+                                      "loopArgs": ["", ""]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "componentName": "NextBlockCell",
+                  "id": "node_ockxhclely3",
+                  "props": {
+                    "colSpan": 12,
+                    "rowSpan": 1,
+                    "mode": "procard",
+                    "isAutoContainer": true,
+                    "title": "",
+                    "childNum": 2,
+                    "childMode": "initial",
+                    "style": {
+                      "display": "none"
+                    }
+                  },
+                  "hidden": false,
+                  "title": "",
+                  "isLocked": false,
+                  "condition": true,
+                  "conditionGroup": "",
+                  "children": [
+                    {
+                      "componentName": "NextRowColContainer",
+                      "id": "node_ockxhclely4",
+                      "props": {
+                        "rowGap": 20,
+                        "colGap": 20,
+                        "strict": true
+                      },
+                      "title": "行列容器",
+                      "hidden": false,
+                      "isLocked": false,
+                      "condition": true,
+                      "conditionGroup": "",
+                      "children": [
+                        {
+                          "componentName": "NextRow",
+                          "id": "node_ockxhclely5",
+                          "props": {
+                            "strict": true
+                          },
+                          "title": "行",
+                          "hidden": false,
+                          "isLocked": false,
+                          "condition": true,
+                          "conditionGroup": "",
+                          "children": [
+                            {
+                              "componentName": "NextCol",
+                              "id": "node_ockxhclely6",
+                              "props": {
+                                "colSpan": 1,
+                                "strict": true
+                              },
+                              "title": "列",
+                              "hidden": false,
+                              "isLocked": false,
+                              "condition": true,
+                              "conditionGroup": "",
+                              "children": [
+                                {
+                                  "componentName": "NextP",
+                                  "id": "node_ockxhclelya",
+                                  "props": {
+                                    "wrap": false,
+                                    "type": "body2",
+                                    "verAlign": "middle",
+                                    "textSpacing": true,
+                                    "align": "left",
+                                    "flex": true
+                                  },
+                                  "title": "段落",
+                                  "hidden": false,
+                                  "isLocked": false,
+                                  "condition": true,
+                                  "conditionGroup": "",
+                                  "children": [
+                                    {
+                                      "componentName": "Button",
+                                      "id": "node_ockxhclelyb",
+                                      "props": {
+                                        "type": "link",
+                                        "children": "链接按钮"
+                                      },
+                                      "hidden": false,
+                                      "title": "",
+                                      "isLocked": false,
+                                      "condition": true,
+                                      "conditionGroup": ""
+                                    },
+                                    {
+                                      "componentName": "Typography.Text",
+                                      "id": "node_ockxhclely14",
+                                      "props": {
+                                        "children": "text"
+                                      },
+                                      "hidden": false,
+                                      "title": "",
+                                      "isLocked": false,
+                                      "condition": true,
+                                      "conditionGroup": ""
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "i18n": {}
+}

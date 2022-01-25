@@ -1,0 +1,40 @@
+ 
+@import 'scss/variable';
+
+// put your code here
+
+.whale-telephone {
+  display: flex;
+  .whale-telephone-select {
+    min-width: 72px;
+    width: 72px;
+    .next-select-inner {
+      min-width: 72px;
+    }
+    .next-input.next-medium {
+      border-radius: 0;
+      border-right: none;
+    }
+  }
+  .whale-telephone-number-input {
+    flex-grow: 2;
+    border-radius: 0;
+    &.next-input.next-medium {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+
+  &.whale-telephone-readonly {
+    font-family: Roboto;
+    color: #262626;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+}
+
+.whale-telephone-select-popup {
+  .code-span {
+    float: right;
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "name": "@alilc/lowcode-editor-skeleton",
+  "version": "1.0.0",
+  "description": "alibaba lowcode editor skeleton",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "stylePath": "style.js",
+  "files": [
+    "lib",
+    "es"
+  ],
+  "scripts": {
+    "build": "build-scripts build --skip-demo"
+  },
+  "keywords": [
+    "lowcode",
+    "editor"
+  ],
+  "dependencies": {
+    "@alifd/next": "^1.20.12",
+    "@alilc/lowcode-designer": "1.0.0",
+    "@alilc/lowcode-editor-core": "1.0.0",
+    "@alilc/lowcode-types": "1.0.0",
+    "@alilc/lowcode-utils": "1.0.0",
+    "classnames": "^2.2.6",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1"
+  },
+  "devDependencies": {
+    "@alib/build-scripts": "^0.1.3",
+    "@types/react": "^16.9.13",
+    "@types/react-dom": "^16.9.4",
+    "build-plugin-component": "^0.2.7",
+    "build-plugin-fusion": "^0.1.0",
+    "build-plugin-moment-locales": "^0.1.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "http",
+    "url": "https://github.com/alibaba/lowcode-engine/tree/main/packages/editor-skeleton"
+  },
+  "gitHead": "2669f179e6f899d395ce1942d0fe04f9c5ed48a6"
+}

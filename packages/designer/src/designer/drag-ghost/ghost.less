@@ -1,0 +1,23 @@
+.lc-ghost-group {
+  box-sizing: border-box;
+  position: fixed;
+  z-index: 99999;
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 6px grey;
+  transform: translate(-10%, -50%);
+  .lc-ghost {
+    .lc-ghost-title {
+      text-align: center;
+      font-size: var(--font-size-text);
+      text-overflow: ellipsis;
+      color: var(--color-text-light);
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  }
+}

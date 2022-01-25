@@ -1,0 +1,65 @@
+{
+  version: '1.0.0',
+  componentsMap: [
+    {
+      package: '@alilc/lowcode-components',
+      version: '^1.0.0',
+      componentName: 'Page',
+      destructuring: true,
+      exportName: 'Page',
+    },
+    {
+      package: '@alilc/lowcode-components',
+      version: '^1.0.0',
+      componentName: 'Table',
+      destructuring: true,
+      exportName: 'Table',
+    },
+  ],
+  componentsTree: [
+    {
+      componentName: 'Page',
+      id: 'node_ockp6ci0hm1',
+      props: {},
+      fileName: 'example',
+      dataSource: {
+        list: [
+          {
+            id: 'userList',
+            type: 'http',
+            description: '用户列表',
+            options: {
+              uri: 'https://api.example.com/user/list',
+            },
+          },
+        ],
+      },
+      children: [
+        {
+          componentName: 'Table',
+          id: 'node_ockp6ci0hm22',
+          props: {
+            dataSource: {
+              type: 'DataSource',
+              id: 'userList',
+            },
+            columns: [
+              {
+                dataIndex: 'name',
+                title: '姓名',
+              },
+              {
+                dataIndex: 'age',
+                title: '年龄',
+              },
+            ],
+          },
+        },
+      ],
+    },
+  ],
+  meta: {
+    name: 'example',
+    description: 'Example',
+  },
+}

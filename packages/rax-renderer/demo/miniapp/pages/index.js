@@ -1,0 +1,4 @@
+Page({
+  onLoad() {},
+  onShow() {},
+});

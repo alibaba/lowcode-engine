@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`notFountComponent not found snapshot 1`] = `
+<div
+  className="lce-page _css_pseudo_node_ockyigdqxl1"
+  style={Object {}}
+>
+  <div
+    __componentName="RootHeader"
+    __id="node_ockyigdqxl2"
+  >
+    Component Not Found
+  </div>
+  <div
+    __componentName="RootContent"
+    __id="node_ockyigdqxl3"
+    contentBgColor="white"
+    contentMargin="20"
+    contentPadding="20"
+  >
+    <div
+      __componentName="Button"
+      __id="node_ockyigdqxl5"
+      __style__={Object {}}
+      baseIcon=""
+      behavior="NORMAL"
+      className="_css_pseudo_node_ockyigdqxl5"
+      content="按 钮"
+      events={
+        Object {
+          "ignored": true,
+        }
+      }
+      fieldId="button_kyige3yf"
+      loading={false}
+      otherIcon=""
+      size="medium"
+      triggerEventsWhenLoading={false}
+      type="primary"
+    >
+      Component Not Found
+    </div>
+  </div>
+  <div
+    __componentName="RootFooter"
+    __id="node_ockyigdqxl4"
+  >
+    Component Not Found
+  </div>
+</div>
+`;

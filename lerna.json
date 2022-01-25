@@ -1,0 +1,36 @@
+{
+  "lerna": "4.0.0",
+  "version": "1.0.0",
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "packages": [
+    "packages/*"
+  ],
+  "command": {
+    "bootstrap": {
+      "npmClientArgs": [
+        "--no-package-lock"
+      ]
+    },
+    "version": {
+      "allowBranch": [
+        "master",
+        "main",
+        "release/*",
+        "daily/*",
+        "refactor/*"
+      ]
+    },
+    "publish": {
+      "npmClient": "npm",
+      "verifyRegistry": false,
+      "verifyAccess": false,
+      "ignoreChanges": [
+        "**/*.md",
+        "**/test/**"
+      ],
+      "message": "chore(release): publish %v",
+      "conventionalCommits": true
+    }
+  }
+}

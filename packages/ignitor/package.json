@@ -1,0 +1,19 @@
+{
+  "name": "@alilc/lowcode-ignitor",
+  "version": "1.0.0",
+  "description": "点火器，bootstrap lce project",
+  "main": "lib/index.js",
+  "private": true,
+  "files": [
+    "dist",
+    "es",
+    "lib"
+  ],
+  "scripts": {
+    "start": "build-scripts start --disable-open"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@alib/build-scripts": "^0.1.18"
+  }
+}

@@ -1,0 +1,844 @@
+{
+  "version": "1.0.0",
+  "componentsMap": [
+    {
+      "package": "@alipay/insragdoll-common-components",
+      "version": "1.0.x",
+      "exportName": "Page",
+      "destructuring": false,
+      "main": "/es/components/page",
+      "subName": "",
+      "componentName": "Page"
+    },
+    {
+      "package": "@alipay/insragdoll-common-components",
+      "version": "1.0.x",
+      "exportName": "Image",
+      "main": "/es/components/image",
+      "destructuring": false,
+      "subName": "",
+      "componentName": "Image"
+    },
+    {
+      "package": "@alipay/insragdoll-common-components",
+      "version": "1.0.x",
+      "exportName": "Container",
+      "main": "/es/components/container",
+      "destructuring": false,
+      "subName": "",
+      "componentName": "Container"
+    },
+    {
+      "devMode": "lowcode",
+      "componentName": "Slot"
+    },
+    {
+      "package": "@alipay/insragdoll-common-components",
+      "version": "1.0.x",
+      "exportName": "Text",
+      "main": "/es/components/text",
+      "destructuring": false,
+      "subName": "",
+      "componentName": "Text"
+    },
+    {
+      "package": "@alipay/insragdoll-common-components",
+      "version": "1.0.x",
+      "exportName": "Link",
+      "main": "/es/components/link",
+      "destructuring": false,
+      "subName": "",
+      "componentName": "Link"
+    },
+    {
+      "package": "@alipay/insragdoll-common-components",
+      "version": "1.0.x",
+      "exportName": "Share",
+      "main": "/es/components/share",
+      "destructuring": false,
+      "subName": "",
+      "componentName": "Share"
+    },
+    {
+      "package": "@alipay/insragdoll-common-components",
+      "version": "1.0.x",
+      "exportName": "DruidList",
+      "main": "/es/components/druid-list",
+      "destructuring": false,
+      "subName": "",
+      "componentName": "DruidList"
+    }
+  ],
+  "componentsTree": [
+    {
+      "componentName": "Page",
+      "id": "node_dockcviv8fo1",
+      "props": {
+        "ref": "outerView",
+        "style": {
+          "height": "100%"
+        },
+        "isTransparentTitle": true,
+        "spmA": "a691",
+        "spmB": "b34649",
+        "spmBizType": "BAOXIAN"
+      },
+      "fileName": "/",
+      "dataSource": {
+        "list": []
+      },
+      "lifeCycles": {
+        "componentDidMount": {
+          "type": "JSFunction",
+          "value": "function() {\n    this.utils.rpc('com.alipay.inslifeweb.channel.pilotpension.render', {\n        showType: 4,\n      })\n      .then((result) => {\n        this.setState({\n          policyCount: result.policyCount,\n          hasAuthorized: result.hasAuthorized\n        });\n      });\n  }"
+        }
+      },
+      "hidden": false,
+      "title": "",
+      "isLocked": false,
+      "condition": true,
+      "conditionGroup": "",
+      "_insiopConfig": {
+        "sceneCode": "PILOT_PENSION_LANDING_PAGE"
+      },
+      "css": "body {\n  background: #f5f5f9;\n}",
+      "methods": {
+        "handleAuth": {
+          "type": "JSFunction",
+          "value": "function() {\n    this.setState({\n      hasAuthorized: true,\n    });\n    \n    this.utils.rpc('com.alipay.inslifeweb.agreement.index.authorize', {\n      bizScene: 'PILOT_ENDOWMENT_CHANNEL_POLICY_AGREEMENT',\n      agreementScene: '20',\n    });\n\n    Tracert.click('c88773.d183217');\n  }"
+        }
+      },
+      "state": {
+        "policyCount": 0,
+        "hasAuthorized": false
+      },
+      "children": [
+        {
+          "componentName": "DruidList",
+          "id": "node_ockwcyxpypb",
+          "props": {
+            "slotList": [
+              {
+                "childRender": {
+                  "type": "JSSlot",
+                  "params": ["module"],
+                  "value": [
+                    {
+                      "componentName": "Container",
+                      "id": "node_ockwnbkrje1e",
+                      "props": {
+                        "style": {
+                          "marginBottom": "16px"
+                        },
+                        "spmC": "c88756"
+                      },
+                      "hidden": false,
+                      "title": "",
+                      "isLocked": false,
+                      "condition": true,
+                      "conditionGroup": "",
+                      "loopArgs": ["", ""],
+                      "children": [
+                        {
+                          "componentName": "Image",
+                          "id": "node_ockwd01xqzc",
+                          "props": {
+                            "src": {
+                              "type": "JSExpression",
+                              "value": "this.module.imgList[0].imgUrl",
+                              "mock": "https://img.alicdn.com/imgextra/i3/O1CN01eqyMv71N2XZXffFkv_!!6000000001512-2-tps-750-642.png"
+                            },
+                            "width": "100%",
+                            "style": {
+                              "display": "block"
+                            }
+                          },
+                          "hidden": false,
+                          "title": "",
+                          "isLocked": false,
+                          "condition": true,
+                          "conditionGroup": "",
+                          "loopArgs": ["", ""]
+                        }
+                      ]
+                    }
+                  ],
+                  "title": "图片区块"
+                },
+                "templateCode": "PILOT_PENSION_LANDING_PAGE_PICTURE"
+              },
+              {
+                "childRender": {
+                  "type": "JSSlot",
+                  "params": ["module"],
+                  "value": [
+                    {
+                      "componentName": "Container",
+                      "id": "node_ockwdmjns334",
+                      "props": {
+                        "style": {
+                          "marginLeft": "24px",
+                          "marginRight": "24px",
+                          "marginTop": "0px",
+                          "borderRadius": "16px",
+                          "backgroundColor": "#ffffff",
+                          "marginBottom": "16px",
+                          "paddingLeft": "20px",
+                          "paddingTop": "20px",
+                          "paddingRight": "20px",
+                          "paddingBottom": "20px"
+                        },
+                        "spmC": "c88773"
+                      },
+                      "hidden": false,
+                      "title": "已授权状态",
+                      "isLocked": false,
+                      "condition": {
+                        "type": "JSExpression",
+                        "value": "this.state.policyCount > 0 && this.state.hasAuthorized",
+                        "mock": true
+                      },
+                      "conditionGroup": "",
+                      "loopArgs": ["", ""],
+                      "children": [
+                        {
+                          "componentName": "Container",
+                          "id": "node_ockwkbudw48",
+                          "props": {
+                            "style": {
+                              "backgroundColor": "#fff",
+                              "marginRight": "0px",
+                              "display": "flex",
+                              "flexDirection": "row",
+                              "justifyContent": "space-between",
+                              "alignItems": "center",
+                              "borderBottomStyle": "solid",
+                              "borderBottomWidth": "0px",
+                              "borderBottomColor": "#9b9b9b",
+                              "marginBottom": "0px",
+                              "marginLeft": "0px"
+                            }
+                          },
+                          "hidden": false,
+                          "title": "",
+                          "isLocked": false,
+                          "conditionGroup": "",
+                          "loopArgs": ["", ""],
+                          "condition": true,
+                          "children": [
+                            {
+                              "componentName": "Container",
+                              "id": "node_ockwkbudw49",
+                              "props": {},
+                              "hidden": false,
+                              "title": "",
+                              "isLocked": false,
+                              "condition": true,
+                              "conditionGroup": "",
+                              "loopArgs": ["", ""],
+                              "children": [
+                                {
+                                  "componentName": "Text",
+                                  "id": "node_ockwkbudw4a",
+                                  "props": {
+                                    "context": "我的保单",
+                                    "style": {
+                                      "marginRight": "16px",
+                                      "fontSize": "30px"
+                                    }
+                                  },
+                                  "hidden": false,
+                                  "title": "",
+                                  "isLocked": false,
+                                  "condition": true,
+                                  "conditionGroup": "",
+                                  "loopArgs": ["", ""]
+                                },
+                                {
+                                  "componentName": "Text",
+                                  "id": "node_ockwkbudw4b",
+                                  "props": {
+                                    "context": "专属商业养老保险",
+                                    "style": {
+                                      "color": "#999999",
+                                      "fontSize": "24px"
+                                    }
+                                  },
+                                  "hidden": false,
+                                  "title": "",
+                                  "isLocked": false,
+                                  "condition": true,
+                                  "conditionGroup": "",
+                                  "loopArgs": ["", ""]
+                                }
+                              ]
+                            },
+                            {
+                              "componentName": "Link",
+                              "id": "node_ockx02i8r07",
+                              "props": {
+                                "link": "./pilot-pension_policy-list.html",
+                                "spmD": "c88773.d183218"
+                              },
+                              "hidden": false,
+                              "title": "",
+                              "isLocked": false,
+                              "condition": true,
+                              "conditionGroup": "",
+                              "children": [
+                                {
+                                  "componentName": "Container",
+                                  "id": "node_ockwkbudw4s",
+                                  "props": {
+                                    "style": {
+                                      "boxSizing": "border-box",
+                                      "display": "flex",
+                                      "position": "relative",
+                                      "alignItems": "center",
+                                      "flexDirection": "row",
+                                      "marginLeft": "24px",
+                                      "borderWidth": "1px",
+                                      "borderStyle": "solid",
+                                      "borderRadius": "8px",
+                                      "borderColor": "#1677ff",
+                                      "paddingRight": "24px",
+                                      "paddingLeft": "24px",
+                                      "height": "58px",
+                                      "lineHeight": "30px",
+                                      "whiteSpace": "nowrap"
+                                    }
+                                  },
+                                  "hidden": false,
+                                  "title": "",
+                                  "isLocked": false,
+                                  "condition": true,
+                                  "conditionGroup": "",
+                                  "loopArgs": ["", ""],
+                                  "children": [
+                                    {
+                                      "componentName": "Text",
+                                      "id": "node_ockwkbudw4t",
+                                      "props": {
+                                        "context": "点击查看",
+                                        "style": {
+                                          "color": "#1677ff",
+                                          "fontSize": "24px"
+                                        }
+                                      },
+                                      "hidden": false,
+                                      "title": "",
+                                      "isLocked": false,
+                                      "condition": true,
+                                      "conditionGroup": ""
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "componentName": "Container",
+                      "id": "node_ockwptkenn17",
+                      "props": {
+                        "style": {
+                          "marginLeft": "24px",
+                          "marginRight": "24px",
+                          "marginTop": "0px",
+                          "borderRadius": "16px",
+                          "backgroundColor": "#ffffff",
+                          "marginBottom": "16px",
+                          "paddingLeft": "20px",
+                          "paddingTop": "20px",
+                          "paddingRight": "20px",
+                          "paddingBottom": "20px"
+                        },
+                        "spmC": "c88773"
+                      },
+                      "hidden": false,
+                      "title": "未授权状态",
+                      "isLocked": false,
+                      "condition": {
+                        "type": "JSExpression",
+                        "value": "this.state.policyCount > 0 && !this.state.hasAuthorized",
+                        "mock": true
+                      },
+                      "conditionGroup": "",
+                      "loopArgs": ["", ""],
+                      "children": [
+                        {
+                          "componentName": "Container",
+                          "id": "node_ockwptkenn19",
+                          "props": {
+                            "style": {
+                              "marginBottom": "0px",
+                              "borderStyle": "none",
+                              "display": "flex",
+                              "alignItems": "center",
+                              "paddingBottom": "16px"
+                            }
+                          },
+                          "hidden": false,
+                          "title": "",
+                          "isLocked": false,
+                          "condition": true,
+                          "conditionGroup": "",
+                          "loopArgs": ["", ""],
+                          "children": [
+                            {
+                              "componentName": "Text",
+                              "id": "node_ockwptkenn1a",
+                              "props": {
+                                "context": "我的保单",
+                                "style": {
+                                  "marginRight": "16px",
+                                  "fontSize": "30px"
+                                }
+                              },
+                              "hidden": false,
+                              "title": "",
+                              "isLocked": false,
+                              "condition": true,
+                              "conditionGroup": "",
+                              "loopArgs": ["", ""]
+                            },
+                            {
+                              "componentName": "Text",
+                              "id": "node_ockwptkenn1b",
+                              "props": {
+                                "context": "专属商业养老保险",
+                                "style": {
+                                  "color": "#999999",
+                                  "fontSize": "24px"
+                                }
+                              },
+                              "hidden": false,
+                              "title": "",
+                              "isLocked": false,
+                              "condition": true,
+                              "conditionGroup": "",
+                              "loopArgs": ["", ""]
+                            }
+                          ]
+                        },
+                        {
+                          "componentName": "Container",
+                          "id": "node_ockwvvdp9p7",
+                          "props": {
+                            "style": {
+                              "paddingTop": "16px",
+                              "borderTopWidth": "1px",
+                              "borderTopColor": "#eeeeee"
+                            }
+                          },
+                          "hidden": false,
+                          "title": "",
+                          "isLocked": false,
+                          "condition": true,
+                          "conditionGroup": "",
+                          "loopArgs": ["", ""],
+                          "children": [
+                            {
+                              "componentName": "Text",
+                              "id": "node_ockwptkenn1c",
+                              "props": {
+                                "context": "同意在蚂蚁保查看、管理专属商业养老保险保单",
+                                "style": {
+                                  "height": "37px",
+                                  "lineHeight": "37px",
+                                  "color": "#999",
+                                  "fontSize": "26px",
+                                  "fontWeight": "400",
+                                  "marginLeft": "0px",
+                                  "display": "block",
+                                  "borderTopWidth": "1px",
+                                  "borderTopStyle": "solid",
+                                  "borderTopColor": "#eeeeee",
+                                  "paddingTop": "0px",
+                                  "borderStyle": "none"
+                                }
+                              },
+                              "hidden": false,
+                              "title": "",
+                              "isLocked": false,
+                              "condition": true,
+                              "conditionGroup": "",
+                              "loopArgs": ["", ""]
+                            }
+                          ]
+                        },
+                        {
+                          "componentName": "Container",
+                          "id": "node_ockwptkenn1d",
+                          "props": {
+                            "style": {
+                              "display": "block",
+                              "flexDirection": "row"
+                            }
+                          },
+                          "hidden": false,
+                          "title": "",
+                          "isLocked": false,
+                          "condition": true,
+                          "conditionGroup": "",
+                          "loopArgs": ["", ""],
+                          "children": [
+                            {
+                              "componentName": "Container",
+                              "id": "node_ockwptkenn1e",
+                              "props": {
+                                "style": {
+                                  "boxSizing": "border-box",
+                                  "display": "inline-block",
+                                  "position": "relative",
+                                  "alignItems": "center",
+                                  "flexDirection": "row",
+                                  "marginTop": "16px",
+                                  "marginLeft": "0px",
+                                  "borderWidth": "1px",
+                                  "borderStyle": "solid",
+                                  "borderRadius": "8px",
+                                  "borderColor": "#1677ff",
+                                  "paddingRight": "24px",
+                                  "paddingLeft": "24px",
+                                  "whiteSpace": "nowrap",
+                                  "paddingTop": "0px",
+                                  "paddingBottom": "0px",
+                                  "height": "58px",
+                                  "lineHeight": "58px"
+                                },
+                                "__events": {
+                                  "eventDataList": [
+                                    {
+                                      "type": "componentEvent",
+                                      "name": "onClick",
+                                      "relatedEventName": "handleAuth"
+                                    }
+                                  ],
+                                  "eventList": [
+                                    {
+                                      "name": "onClick",
+                                      "disabled": true
+                                    }
+                                  ]
+                                },
+                                "onClick": {
+                                  "type": "JSFunction",
+                                  "value": "function(){this.handleAuth.apply(this,Array.prototype.slice.call(arguments).concat([])) }"
+                                }
+                              },
+                              "hidden": false,
+                              "title": "",
+                              "isLocked": false,
+                              "condition": true,
+                              "conditionGroup": "",
+                              "children": [
+                                {
+                                  "componentName": "Text",
+                                  "id": "node_ockwptkenn1f",
+                                  "props": {
+                                    "context": "同意并查看",
+                                    "style": {
+                                      "color": "#1677ff",
+                                      "fontSize": "24px"
+                                    }
+                                  },
+                                  "hidden": false,
+                                  "title": "",
+                                  "isLocked": false,
+                                  "condition": true,
+                                  "conditionGroup": ""
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "title": "我的保单"
+                },
+                "templateCode": "PILOT_PENSION_LANDING_PAGE_MYPOLICY"
+              },
+              {
+                "childRender": {
+                  "type": "JSSlot",
+                  "params": ["module"],
+                  "value": [
+                    {
+                      "componentName": "Container",
+                      "id": "node_ockwdbwgg7o",
+                      "props": {
+                        "style": {
+                          "paddingTop": "20px",
+                          "paddingLeft": "20px",
+                          "paddingRight": "20px",
+                          "backgroundColor": "#ffffff",
+                          "marginLeft": "24px",
+                          "marginRight": "24px",
+                          "paddingBottom": "20px",
+                          "borderRadius": "16px",
+                          "marginBottom": "16px"
+                        },
+                        "spmC": "c88758"
+                      },
+                      "hidden": false,
+                      "title": "",
+                      "isLocked": false,
+                      "condition": true,
+                      "conditionGroup": "",
+                      "children": [
+                        {
+                          "componentName": "Container",
+                          "id": "node_ockwdb9utbc",
+                          "props": {
+                            "style": {
+                              "paddingBottom": "24px"
+                            }
+                          },
+                          "hidden": false,
+                          "title": "",
+                          "isLocked": false,
+                          "condition": true,
+                          "conditionGroup": "",
+                          "loopArgs": ["", ""],
+                          "loop": {
+                            "type": "JSExpression",
+                            "value": "this.module.productImg"
+                          },
+                          "children": [
+                            {
+                              "componentName": "Link",
+                              "id": "node_ockx03llkjw",
+                              "props": {
+                                "link": {
+                                  "type": "JSExpression",
+                                  "value": "this.item.link"
+                                },
+                                "spmD": "c88758.d183221"
+                              },
+                              "hidden": false,
+                              "title": "",
+                              "isLocked": false,
+                              "condition": true,
+                              "conditionGroup": "",
+                              "children": [
+                                {
+                                  "componentName": "Image",
+                                  "id": "node_ockwdb9utbd",
+                                  "props": {
+                                    "src": {
+                                      "type": "JSExpression",
+                                      "value": "this.item.imgSrc",
+                                      "mock": "https://img.alicdn.com/imgextra/i1/O1CN01c35RIk1e3Ji8oUPXQ_!!6000000003815-2-tps-654-376.png"
+                                    },
+                                    "width": "100%",
+                                    "style": {
+                                      "display": "block"
+                                    }
+                                  },
+                                  "hidden": false,
+                                  "title": "",
+                                  "isLocked": false,
+                                  "condition": true,
+                                  "conditionGroup": "",
+                                  "loopArgs": ["", ""]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "componentName": "Text",
+                          "id": "node_ockwnbkrje1l",
+                          "props": {
+                            "context": "更多指定保司产品将逐渐开放，敬请期待",
+                            "style": {
+                              "color": "#999999",
+                              "fontSize": "26px",
+                              "textAlign": "center",
+                              "display": "block"
+                            }
+                          },
+                          "hidden": false,
+                          "title": "",
+                          "isLocked": false,
+                          "condition": true,
+                          "conditionGroup": ""
+                        }
+                      ]
+                    }
+                  ],
+                  "title": "产品列表"
+                },
+                "templateCode": "PILOT_PENSION_LANDING_PAGE_ARTICLE_LIST"
+              },
+              {
+                "childRender": {
+                  "type": "JSSlot",
+                  "params": ["module"],
+                  "value": [
+                    {
+                      "componentName": "Container",
+                      "id": "node_ockx4gcrxg1c",
+                      "props": {
+                        "style": {
+                          "paddingTop": "0px",
+                          "paddingLeft": "0px",
+                          "paddingRight": "0px",
+                          "backgroundColor": "#ffffff",
+                          "marginLeft": "24px",
+                          "marginRight": "24px",
+                          "paddingBottom": "0px",
+                          "borderRadius": "16px",
+                          "marginBottom": "16px"
+                        },
+                        "spmC": "c88757"
+                      },
+                      "hidden": false,
+                      "title": "",
+                      "isLocked": false,
+                      "condition": true,
+                      "conditionGroup": "",
+                      "children": [
+                        {
+                          "componentName": "Image",
+                          "id": "node_ockx4h25ygq",
+                          "props": {
+                            "src": {
+                              "type": "JSExpression",
+                              "value": "this.module.header",
+                              "mock": "https://gw.alicdn.com/imgextra/i2/O1CN01nQxtcb1ail4yyw2kZ_!!6000000003364-2-tps-702-78.png"
+                            },
+                            "width": "100%"
+                          },
+                          "hidden": false,
+                          "title": "标题",
+                          "isLocked": false,
+                          "condition": true,
+                          "conditionGroup": ""
+                        },
+                        {
+                          "componentName": "Container",
+                          "id": "node_ockx4gcrxg1d",
+                          "props": {
+                            "style": {
+                              "paddingBottom": "24px"
+                            }
+                          },
+                          "hidden": false,
+                          "title": "文章列表循环",
+                          "isLocked": false,
+                          "condition": true,
+                          "conditionGroup": "",
+                          "loopArgs": ["", ""],
+                          "loop": {
+                            "type": "JSExpression",
+                            "value": "this.module.productIntroduce"
+                          },
+                          "children": [
+                            {
+                              "componentName": "Link",
+                              "id": "node_ockx4gcrxg1e",
+                              "props": {
+                                "link": {
+                                  "type": "JSExpression",
+                                  "value": "this.item.link"
+                                },
+                                "spmD": {
+                                  "type": "JSExpression",
+                                  "value": "'c88757.d183219_' + this.index"
+                                }
+                              },
+                              "hidden": false,
+                              "title": "",
+                              "isLocked": false,
+                              "condition": true,
+                              "conditionGroup": "",
+                              "loopArgs": ["", ""],
+                              "children": [
+                                {
+                                  "componentName": "Image",
+                                  "id": "node_ockx4gcrxg1f",
+                                  "props": {
+                                    "src": "https://img.alicdn.com/imgextra/i4/O1CN015NY1E21XIhhWNXs3J_!!6000000002901-2-tps-700-230.png",
+                                    "width": "100%",
+                                    "style": {
+                                      "display": "block"
+                                    }
+                                  },
+                                  "hidden": false,
+                                  "title": "",
+                                  "isLocked": false,
+                                  "condition": true,
+                                  "conditionGroup": "",
+                                  "loopArgs": ["", ""]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "title": "文章列表"
+                },
+                "templateCode": "PILOT_PENSION_LANDING_PAGE_PRODUCT_LIST"
+              },
+              {
+                "childRender": {
+                  "type": "JSSlot",
+                  "params": ["module"],
+                  "value": [
+                    {
+                      "componentName": "Share",
+                      "id": "node_ockx0429phm",
+                      "props": {
+                        "bizType": "ztokenV0_PaWxRUaO",
+                        "title": {
+                          "type": "JSExpression",
+                          "value": "this.module.share.shareTitle",
+                          "mock": "我是分享标题"
+                        },
+                        "desc": {
+                          "type": "JSExpression",
+                          "value": "this.module.share.shareDesc",
+                          "mock": "我是分享描述"
+                        },
+                        "iconUrl": {
+                          "type": "JSExpression",
+                          "value": "this.module.share.iconUrl",
+                          "mock": "我是分享图标链接"
+                        }
+                      },
+                      "hidden": false,
+                      "title": "",
+                      "isLocked": false,
+                      "condition": true,
+                      "conditionGroup": ""
+                    }
+                  ],
+                  "title": "分享设置"
+                },
+                "templateCode": "PILOT_PENSION_LANDING_PAGE_SHARE"
+              }
+            ],
+            "moduleList": {
+              "type": "JSExpression",
+              "value": "this.state._insiopData.modules || []"
+            }
+          },
+          "hidden": false,
+          "title": "德鲁伊容器",
+          "isLocked": false,
+          "condition": true,
+          "conditionGroup": "",
+          "loopArgs": ["", ""]
+        }
+      ]
+    }
+  ],
+  "i18n": {}
+}

@@ -1,0 +1,57 @@
+{
+  "name": "@alilc/lowcode-engine",
+  "version": "1.0.0",
+  "description": "Universal API for AliLowCode engine",
+  "main": "lib/engine-core.js",
+  "module": "es/engine-core.js",
+  "files": [
+    "dist",
+    "es",
+    "lib"
+  ],
+  "scripts": {
+    "start": "build-scripts start",
+    "version:update": "node ./scripts/version.js",
+    "build": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --skip-demo",
+    "build:umd": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --config build.umd.json && npm run version:update",
+    "test": "build-scripts test --config build.test.json --jest-passWithNoTests"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@alifd/next": "^1.19.12",
+    "@alilc/lowcode-designer": "1.0.0",
+    "@alilc/lowcode-editor-core": "1.0.0",
+    "@alilc/lowcode-editor-skeleton": "1.0.0",
+    "@alilc/lowcode-engine-ext": "^1.0.0",
+    "@alilc/lowcode-plugin-designer": "1.0.0",
+    "@alilc/lowcode-plugin-outline-pane": "1.0.0",
+    "@alilc/lowcode-shell": "1.0.0",
+    "@alilc/lowcode-utils": "1.0.0",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1"
+  },
+  "devDependencies": {
+    "@alib/build-scripts": "^0.1.18",
+    "@alifd/theme-lowcode-dark": "^0.2.0",
+    "@alifd/theme-lowcode-light": "^0.2.0",
+    "@alilc/lowcode-test-mate": "^1.0.1",
+    "@types/domready": "^1.0.0",
+    "@types/react": "^16.8.3",
+    "@types/react-dom": "^16.8.2",
+    "build-plugin-fusion": "0.1.17-beta.0",
+    "build-plugin-moment-locales": "^0.1.0",
+    "build-plugin-react-app": "^1.8.0",
+    "fs-extra": "^9.0.1",
+    "prop-types": "^15.7.2",
+    "tsconfig-paths-webpack-plugin": "^3.2.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "http",
+    "url": "https://github.com/alibaba/lowcode-engine/tree/main/packages/engine"
+  },
+  "gitHead": "2669f179e6f899d395ce1942d0fe04f9c5ed48a6"
+}

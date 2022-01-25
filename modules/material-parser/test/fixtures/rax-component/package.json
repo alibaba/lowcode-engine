@@ -1,0 +1,65 @@
+{
+  "name": "@ali/chaoshi-meta-example",
+  "version": "1.0.0",
+  "description": "intro component",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "miniappConfig": {
+    "main": "lib/miniapp/index",
+    "main:wechat": "lib/wechat-miniprogram/index"
+  },
+  "files": [
+    "build",
+    "dist",
+    "es",
+    "lib",
+    "material-meta.json"
+  ],
+  "keywords": [
+    "Rax",
+    "rax-component"
+  ],
+  "engines": {
+    "npm": ">=3.0.0"
+  },
+  "scripts": {
+    "start": "build-scripts start",
+    "build": "build-scripts build",
+    "eslint": "eslint --ext .js,.jsx,.ts,.tsx ./",
+    "eslint:fix": "npm run eslint -- --fix",
+    "stylelint": "stylelint \"**/*.{css,scss,less}\"",
+    "lint": "npm run eslint && npm run stylelint",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@ali/pcom-chaoshi-meta-design": "^1.1.5",
+    "rax-text": "^2.0.0",
+    "rax-view": "^2.0.0"
+  },
+  "peerDependencies": {
+    "rax": "^1.1.0"
+  },
+  "devDependencies": {
+    "@alib/build-scripts": "^0.1.0",
+    "@alife/build-plugin-lowcode": "^1.0.17",
+    "@iceworks/spec": "^1.0.0",
+    "@types/rax": "^1.0.0",
+    "build-plugin-component": "^1.0.0",
+    "driver-universal": "^3.1.0",
+    "eslint": "^6.8.0",
+    "rax": "^1.1.0",
+    "rax-test-renderer": "^1.0.0",
+    "stylelint": "^13.7.2",
+    "typescript": "^3.7.3"
+  },
+  "componentConfig": {
+    "name": "ChaoshiMetaExample",
+    "title": "ChaoshiMetaExample",
+    "category": "Information"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npm.alibaba-inc.com"
+  },
+  "license": "MIT",
+  "homepage": "https://unpkg.alibaba-inc.com/@ali/chaoshi-meta-example@1.0.0/build/index.html"
+}

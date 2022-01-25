@@ -1,0 +1,56 @@
+{
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/css-modules-typescript-loader",
+      "**/@alife/theme-lowcode-*"
+    ]
+  },
+  "scripts": {
+    "build": "./scripts/build.sh",
+    "build:npm": "lerna run build --stream",
+    "build:umd": "lerna run build:umd --stream",
+    "clean": "rm -rf ./packages/*/lib ./packages/*/es ./packages/*/dist ./packages/*/build",
+    "lint": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet",
+    "lint:fix": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet --fix",
+    "pub": "npm run watchdog:build && lerna publish patch --force-publish --exact --no-changelog",
+    "pub:premajor": "npm run watchdog:build && lerna publish premajor --force-publish --exact --dist-tag beta --preid beta --no-changelog",
+    "pub:prepatch": "npm run watchdog:build && lerna publish prepatch --force-publish --exact --dist-tag beta --preid beta --no-changelog",
+    "pub:prerelease": "npm run watchdog:build && lerna publish prerelease --force-publish --exact --dist-tag beta --preid beta --no-changelog",
+    "setup": "./scripts/setup.sh",
+    "setup:test": "./scripts/setup-for-test.sh",
+    "setup:skip-build": "./scripts/setup-skip-build.sh",
+    "start": "./scripts/start.sh",
+    "start:demo": "./scripts/start.sh @ali/lowcode-demo",
+    "test": "lerna run test --stream",
+    "test:snapshot": "lerna run test:snapshot",
+    "watchdog:build": "node ./scripts/watchdog.js",
+    "f2elint:scan": "f2elint scan -q -i ./packages/*/src",
+    "f2elint:fix": "f2elint fix -i ./packages/*/src"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "f2elint commit-file-scan",
+      "commit-msg": "f2elint commit-msg-scan"
+    }
+  },
+  "devDependencies": {
+    "f2elint": "^2.0.1",
+    "husky": "^7.0.4",
+    "lerna": "^4.0.0",
+    "typescript": "^4.5.5"
+  },
+  "engines": {
+    "node": ">=14.17.0"
+  },
+  "tnpm": {
+    "mode": "yarn",
+    "lockfile": "enable"
+  },
+  "resolutions": {
+    "@builder/babel-preset-ice": "1.0.1"
+  }
+}

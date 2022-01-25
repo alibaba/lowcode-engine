@@ -1,0 +1,156 @@
+@scope: lc-borders;
+
+.@{scope} {
+  box-sizing: border-box;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  border: 1px solid var(--color-brand-light);
+  will-change: transform, width, height;
+  overflow: visible;
+  & > &-title {
+    color: var(--color-brand-light);
+    transform: translateY(-100%);
+    font-weight: lighter;
+  }
+  & > &-status {
+    margin-left: 5px;
+    color: #3c3c3c;
+    transform: translateY(-100%);
+    font-weight: lighter;
+  }
+  & > &-actions {
+    position: absolute;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: stretch;
+    justify-content: flex-end;
+    pointer-events: all;
+    > * {
+      flex-shrink: 0;
+    }
+  }
+
+  &-action,
+  .ve-icon-button.ve-action-save {
+    box-sizing: border-box;
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-brand, #006cff);
+    opacity: 1;
+    max-height: 100%;
+    overflow: hidden;
+    color: white;
+    &:hover {
+      background: var(--color-brand-light, #006cff);
+    }
+  }
+
+  &.lc-resize-corner {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border: 1px solid #197aff;
+    background: #fff;
+    pointer-events: auto;
+    z-index: 2;
+  }
+
+  &.lc-resize-side {
+    border-width: 0;
+    z-index: 1;
+    pointer-events: auto;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+
+    &:after {
+      content: "";
+      display: block;
+      border: 1px solid #197aff;
+      background: #fff;
+      // background: #738397;
+      border-radius: 2px;
+      // animation: flashing 1.5s infinite linear;
+    }
+
+    &.e,
+    &.w {
+      cursor: ew-resize;
+      &:after {
+        width: 4px;
+        // height: calc(100% - 20px);
+        min-height: 50%;
+      }
+    }
+
+    &.n,
+    &.s {
+      cursor: ns-resize;
+      &:after {
+        // width: calc(100% - 20px);
+        min-width: 50%;
+        height: 4px;
+      }
+    }
+  }
+
+  // &&-hovering {
+  &&-detecting {
+    z-index: 1;
+    border-style: dashed;
+    background: rgba(0,121,242,.04);
+
+    &.x-loop {
+      border-color: rgba(138, 93, 226, 0.8);
+      background: rgba(138, 93, 226, 0.04);
+
+      >.@{scope}-title {
+        color: rgba(138, 93, 226, 1.0);
+      }
+    }
+
+    &.x-condition {
+      border-color: rgba(255, 99, 8, 0.8);
+      background: rgba(255, 99, 8, 0.04);
+      >.@{scope}-title {
+        color: rgb(255, 99, 8);
+      }
+    }
+  }
+
+  &&-selecting {
+    z-index: 2;
+    border-width: 2px;
+
+    &.x-loop {
+      border-color: rgba(147, 112, 219, 1.0);
+      background: rgba(147, 112, 219, 0.04);
+
+      >@{scope}-title {
+        color: rgba(147, 112, 219, 1.0);
+      }
+      &.highlight {
+        background: transparent;
+      }
+    }
+
+    &.x-condition {
+      border-color: rgb(255, 99, 8);
+      >@{scope}-title {
+        color: rgb(255, 99, 8);
+      }
+    }
+
+    &.dragging {
+      background: rgba(182, 178, 178, 0.8);
+      border: none;
+    }
+  }
+}

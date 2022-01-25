@@ -1,0 +1,6 @@
+{
+  "internal": true,
+  "main": "../dist/standalone-loader.js",
+  "module": "../dist/standalone-loader.esm.js",
+  "types": "../types/standalone-loader.d.ts"
+}

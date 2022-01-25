@@ -1,0 +1,34 @@
+{
+  "name": "@alilc/lowcode-types",
+  "version": "1.0.0",
+  "description": "Types for Ali lowCode engine",
+  "files": [
+    "es",
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "scripts": {
+    "build": "build-scripts build --skip-demo"
+  },
+  "dependencies": {
+    "@alilc/lowcode-datasource-types": "^1.0.0",
+    "react": "^16.9 || ^17",
+    "strict-event-emitter-types": "^2.0.0"
+  },
+  "devDependencies": {
+    "@alib/build-scripts": "^0.1.18",
+    "@types/node": "^13.7.1",
+    "@types/react": "^16",
+    "build-plugin-component": "^0.2.10"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "http",
+    "url": "https://github.com/alibaba/lowcode-engine/tree/main/packages/types"
+  },
+  "gitHead": "2669f179e6f899d395ce1942d0fe04f9c5ed48a6"
+}

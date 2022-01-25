@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "build-plugin-component",
+    "build-plugin-fusion",
+    "./build.plugin.js"
+  ]
+}

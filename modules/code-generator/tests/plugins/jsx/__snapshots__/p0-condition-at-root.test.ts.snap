@@ -1,0 +1,227 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`condition at root condition and loop should be both works 1`] = `
+Object {
+  "chunks": Array [
+    Object {
+      "content": "
+        const __$$context = this;
+        const { state } = this;
+        return (this.state.otherThings).map((item, index) => ((__$$context) => (!!(__$$context.state.something) && (<Page><Text>Hello world!</Text></Page>)))(__$$createChildContext(__$$context, { item, index })));
+      ",
+      "fileType": "jsx",
+      "linkAfter": Array [
+        "ReactComponentClassRenderStart",
+        "ReactComponentClassRenderPre",
+      ],
+      "name": "ReactComponentClassRenderJSX",
+      "type": "string",
+    },
+    Object {
+      "content": "
+        function __$$createChildContext(oldContext, ext) {
+          const childContext = {
+            ...oldContext,
+            ...ext,
+          };
+          childContext.__proto__ = oldContext;
+          return childContext;
+        }
+      ",
+      "fileType": "jsx",
+      "linkAfter": Array [
+        "CommonFileExport",
+      ],
+      "name": "CommonCustomContent",
+      "type": "string",
+    },
+  ],
+  "contextData": Object {},
+  "depNames": Array [],
+  "ir": Object {
+    "children": Array [
+      Object {
+        "children": "Hello world!",
+        "componentName": "Text",
+      },
+    ],
+    "componentName": "Page",
+    "condition": Object {
+      "type": "JSExpression",
+      "value": "this.state.something",
+    },
+    "containerType": "Page",
+    "fileName": "test",
+    "loop": Object {
+      "type": "JSExpression",
+      "value": "this.state.otherThings",
+    },
+    "moduleName": "test",
+  },
+}
+`;
+
+exports[`condition at root condition=JSExpression should be ignored 1`] = `
+Object {
+  "chunks": Array [
+    Object {
+      "content": "
+        const __$$context = this;
+        const { state } = this;
+        return !!(this.state.something) && (<Page><Text>Hello world!</Text></Page>);
+      ",
+      "fileType": "jsx",
+      "linkAfter": Array [
+        "ReactComponentClassRenderStart",
+        "ReactComponentClassRenderPre",
+      ],
+      "name": "ReactComponentClassRenderJSX",
+      "type": "string",
+    },
+    Object {
+      "content": "
+        function __$$createChildContext(oldContext, ext) {
+          const childContext = {
+            ...oldContext,
+            ...ext,
+          };
+          childContext.__proto__ = oldContext;
+          return childContext;
+        }
+      ",
+      "fileType": "jsx",
+      "linkAfter": Array [
+        "CommonFileExport",
+      ],
+      "name": "CommonCustomContent",
+      "type": "string",
+    },
+  ],
+  "contextData": Object {},
+  "depNames": Array [],
+  "ir": Object {
+    "children": Array [
+      Object {
+        "children": "Hello world!",
+        "componentName": "Text",
+      },
+    ],
+    "componentName": "Page",
+    "condition": Object {
+      "type": "JSExpression",
+      "value": "this.state.something",
+    },
+    "containerType": "Page",
+    "fileName": "test",
+    "moduleName": "test",
+  },
+}
+`;
+
+exports[`condition at root condition=null should be ignored 1`] = `
+Object {
+  "chunks": Array [
+    Object {
+      "content": "
+        const __$$context = this;
+        const { state } = this;
+        return <Page><Text>Hello world!</Text></Page>;
+      ",
+      "fileType": "jsx",
+      "linkAfter": Array [
+        "ReactComponentClassRenderStart",
+        "ReactComponentClassRenderPre",
+      ],
+      "name": "ReactComponentClassRenderJSX",
+      "type": "string",
+    },
+    Object {
+      "content": "
+        function __$$createChildContext(oldContext, ext) {
+          const childContext = {
+            ...oldContext,
+            ...ext,
+          };
+          childContext.__proto__ = oldContext;
+          return childContext;
+        }
+      ",
+      "fileType": "jsx",
+      "linkAfter": Array [
+        "CommonFileExport",
+      ],
+      "name": "CommonCustomContent",
+      "type": "string",
+    },
+  ],
+  "contextData": Object {},
+  "depNames": Array [],
+  "ir": Object {
+    "children": Array [
+      Object {
+        "children": "Hello world!",
+        "componentName": "Text",
+      },
+    ],
+    "componentName": "Page",
+    "condition": null,
+    "containerType": "Page",
+    "fileName": "test",
+    "moduleName": "test",
+  },
+}
+`;
+
+exports[`condition at root condition=true should be ignored 1`] = `
+Object {
+  "chunks": Array [
+    Object {
+      "content": "
+        const __$$context = this;
+        const { state } = this;
+        return <Page><Text>Hello world!</Text></Page>;
+      ",
+      "fileType": "jsx",
+      "linkAfter": Array [
+        "ReactComponentClassRenderStart",
+        "ReactComponentClassRenderPre",
+      ],
+      "name": "ReactComponentClassRenderJSX",
+      "type": "string",
+    },
+    Object {
+      "content": "
+        function __$$createChildContext(oldContext, ext) {
+          const childContext = {
+            ...oldContext,
+            ...ext,
+          };
+          childContext.__proto__ = oldContext;
+          return childContext;
+        }
+      ",
+      "fileType": "jsx",
+      "linkAfter": Array [
+        "CommonFileExport",
+      ],
+      "name": "CommonCustomContent",
+      "type": "string",
+    },
+  ],
+  "contextData": Object {},
+  "depNames": Array [],
+  "ir": Object {
+    "children": Array [
+      Object {
+        "children": "Hello world!",
+        "componentName": "Text",
+      },
+    ],
+    "componentName": "Page",
+    "condition": true,
+    "containerType": "Page",
+    "fileName": "test",
+    "moduleName": "test",
+  },
+}
+`;

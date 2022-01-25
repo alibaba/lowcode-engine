@@ -1,0 +1,46 @@
+{
+  "name": "@alilc/lowcode-react-simulator-renderer",
+  "version": "1.0.0",
+  "description": "react simulator renderer for alibaba lowcode designer",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "license": "MIT",
+  "files": [
+    "es",
+    "lib",
+    "dist"
+  ],
+  "scripts": {
+    "build": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --skip-demo",
+    "build:umd": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --config build.umd.json"
+  },
+  "dependencies": {
+    "@alilc/lowcode-designer": "1.0.0",
+    "@alilc/lowcode-react-renderer": "1.0.0",
+    "@alilc/lowcode-types": "1.0.0",
+    "@alilc/lowcode-utils": "1.0.0",
+    "classnames": "^2.2.6",
+    "mobx": "^6.3.0",
+    "mobx-react": "^7.2.0",
+    "react": "^16",
+    "react-dom": "^16.7.0"
+  },
+  "devDependencies": {
+    "@alib/build-scripts": "^0.1.18",
+    "@types/classnames": "^2.2.7",
+    "@types/node": "^13.7.1",
+    "@types/react": "^16",
+    "@types/react-dom": "^16",
+    "@types/react-router": "^5.1.17",
+    "build-plugin-component": "^0.2.11"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "http",
+    "url": "https://github.com/alibaba/lowcode-engine/tree/main/packages/react-simulator-renderer"
+  },
+  "gitHead": "2669f179e6f899d395ce1942d0fe04f9c5ed48a6"
+}

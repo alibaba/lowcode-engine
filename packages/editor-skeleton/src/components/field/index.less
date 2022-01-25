@@ -1,0 +1,235 @@
+@x-gap: 12px;
+@y-gap: 8px;
+
+.lc-settings-content > .lc-field:first-child > .lc-field-head {
+  border-top: none !important;
+}
+
+.lc-field {
+  .lc-field-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .lc-field-title {
+      display: flex;
+      align-items: center;
+      .lc-valuestate {
+        height: 6px;
+        width: 6px;
+        min-width: 6px;
+        border-radius: 100%;
+        margin-right: 2px;
+        pointer-events: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        > svg {
+          display: none;
+        }
+        &.valuestate-multiple {
+          background-color: rgb(232, 145, 83);
+          pointer-events: auto;
+          &:hover {
+            background-color: rgb(223, 139, 30);
+            cursor: pointer;
+            transform: scale(2);
+            transform-origin: center;
+            > svg {
+              display: block;
+            }
+          }
+        }
+        &.valuestate-isset {
+          background-color: rgba(124, 177, 238, 0.6);
+          pointer-events: auto;
+          &:hover {
+            background-color: rgb(45, 126, 219);
+            cursor: pointer;
+            transform: scale(2);
+            transform-origin: center;
+            > svg {
+              display: block;
+            }
+          }
+        }
+        &.valuestate-required {
+          background-color: rgb(250, 82, 76);
+          pointer-events: auto;
+          &:hover {
+            background-color: rgb(224, 46, 40);
+          }
+        }
+      }
+    }
+    .lc-field-icon {
+      transform-origin: center;
+      transition: transform 0.1s;
+    }
+  }
+
+  &.lc-inline-field {
+    display: flex;
+    align-items: center;
+    margin: 12px;
+
+    > .lc-field-head {
+      width: 70px;
+      margin-right: 1px;
+      .lc-title-label {
+        width: 70px;
+        word-break: break-all;
+      }
+    }
+    > .lc-field-body {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &.lc-block-field, &.lc-accordion-field, &.lc-entry-field {
+    display: block;
+    &:first-child {
+      > .lc-field-head {
+        // border-top: none;
+      }
+    }
+    > .lc-field-head {
+      height: 32px;
+      display: flex;
+      align-items: center;
+      font-weight: 500;
+      background: var(--color-block-background-shallow, rgba(31,56,88,.06));
+      border-top: 1px solid var(--color-line-normal,rgba(31,56,88,.1));
+      border-bottom: 1px solid var(--color-line-normal,rgba(31,56,88,.1));
+      color: var(--color-title);
+      padding: 0 12px;
+      user-select: none;
+
+      > .lc-field-icon {
+        color: #8f9bb3;
+      }
+    }
+
+    > .lc-field-body {
+      padding: 12px;
+
+      .lc-inline-field {
+        margin: 12px 0;
+
+        &:first-child {
+          margin-top: 0;
+        }
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    // + .lc-inline-field {
+    //   border-top: 1px solid var(--color-line-normal);
+    // }
+  }
+
+  &.lc-entry-field {
+    margin-bottom: 6px;
+
+    > .lc-field-head {
+      cursor: pointer;
+    }
+  }
+
+  .lc-setter-actions {
+    display: flex;
+    align-items: center;
+  }
+
+  &.lc-block-field {
+    position: relative;
+    >.lc-field-body>.lc-block-setter>.lc-setter-actions {
+      position: absolute;
+      right: 10px;
+      top: 0;
+      height: 32px;
+    }
+  }
+
+  &.lc-accordion-field {
+    position: relative;
+
+    > .lc-field-head {
+      cursor: pointer;
+    }
+    
+    &.lc-field-is-collapsed {
+      margin-bottom: 6px;
+    }
+
+    // collapsed
+    // &:last-child.lc-field-is-collapsed{
+    //   border-bottom: 1px solid var(--color-line-normal);
+    // }
+    &.lc-field-is-collapsed {
+      > .lc-field-head .lc-field-icon {
+        transform: rotate(180deg);
+      }
+      > .lc-field-body {
+        display: none;
+      }
+    }
+
+    // 邻近的保持上下距离
+    + .lc-field {
+      // margin-top: @y-gap;
+    }
+  }
+
+  // 2rd level reset
+  .lc-field-body {
+    // .lc-inline-field {
+    //   &:first-child {
+    //     padding-top: 0;
+    //   }
+    //   + .lc-accordion-field, +.lc-block-field {
+    //     margin-top: @y-gap;
+    //   }
+    // }
+
+    // .lc-field {
+    //   border-top: none !important;
+    // }
+
+    // .lc-accordion-field, .lc-block-field {
+    //   > .lc-field-head {
+    //     padding-left: @x-gap;
+    //     background: var(--color-block-background-light);
+    //     border-bottom: none;
+    //     border-top: none;
+    //     > .lc-field-icon {
+    //       // margin-right: @x-gap/2;
+    //       margin-right: 0;
+    //     }
+    //   }
+
+    //   > .lc-field-body {
+    //     padding: 8px;
+    //   }
+    // }
+
+    // 3rd level field title width should short
+    // .lc-field-body .lc-inline-field {
+    //   > .lc-field-head {
+    //     width: 50px;
+    //     .lc-title-label {
+    //       width: 50px;
+    //     }
+    //   }
+    // }
+    // >.lc-block-setter {
+    //   flex: 1;
+    // }
+  }
+}
