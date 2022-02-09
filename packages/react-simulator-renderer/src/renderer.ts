@@ -1,7 +1,7 @@
 import React, { createElement, ReactInstance } from 'react';
 import { render as reactRender } from 'react-dom';
 import { host } from './host';
-import SimulatorRendererView from './renderer-view';
+import SimulatorRendererView, { getDeviceView } from './renderer-view';
 import { computed, observable as obx, untracked, makeObservable, configure } from 'mobx';
 import { getClientRects } from './utils/get-client-rects';
 import { reactFindDOMNodes, FIBER_KEY } from './utils/react-find-dom-nodes';
@@ -466,7 +466,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
               isEmpty: () => false,
             };
             viewProps._leaf = _leaf;
-            return createElement(Comp, viewProps, children);
+            const View = getDeviceView(Comp, renderer.device, renderer.designMode);
+            return createElement(View, viewProps, children);
           },
         });
       }
