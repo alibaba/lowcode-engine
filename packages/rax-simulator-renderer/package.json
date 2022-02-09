@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-rax-simulator-renderer",
-  "version": "1.0.76",
+  "version": "1.0.77",
   "description": "rax simulator renderer for alibaba lowcode designer",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -11,10 +11,10 @@
     "cloud-build": "build-scripts build --config build.cloud.json"
   },
   "dependencies": {
-    "@ali/lowcode-designer": "1.0.76",
-    "@ali/lowcode-rax-renderer": "1.0.76",
-    "@ali/lowcode-types": "1.0.76",
-    "@ali/lowcode-utils": "1.0.76",
+    "@ali/lowcode-designer": "1.0.77",
+    "@ali/lowcode-rax-renderer": "1.0.77",
+    "@ali/lowcode-types": "1.0.77",
+    "@ali/lowcode-utils": "1.0.77",
     "classnames": "^2.2.6",
     "driver-universal": "^3.1.3",
     "history": "^5.0.0",
@@ -53,6 +53,6 @@
   "publishConfig": {
     "registry": "https://registry.antfin-inc.com"
   },
-  "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-rax-simulator-renderer@1.0.73/build/index.html",
+  "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-rax-simulator-renderer@1.0.76/build/index.html",
   "gitHead": "19b2119b9f95f8a3da0851b3943774a770975991"
 }
