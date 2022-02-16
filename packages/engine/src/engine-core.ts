@@ -176,10 +176,9 @@ export {
 })();
 
 let engineInited = false;
-export const version = '{{VERSION_PLACEHOLDER}}';
-const DEFAULT_VERSION = '1.0.0';
-const runtimeVersion = version.indexOf('VERSION_PLACEHOLDER') > -1 ? DEFAULT_VERSION : version;
-  engineConfig.set('ENGINE_VERSION', runtimeVersion);
+// @ts-ignore webpack Define variable
+export const version = VERSION_PLACEHOLDER;
+engineConfig.set('ENGINE_VERSION', version);
 export async function init(
   container?: HTMLElement,
   options?: EngineOptions,
