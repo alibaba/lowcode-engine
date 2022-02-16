@@ -125,6 +125,14 @@ export default class SettingPropEntry {
   }
 
   /**
+   * 清空指定属性值
+   * @param propName
+   */
+  clearPropValue(propName: string | number) {
+    this[settingPropEntrySymbol].clearPropValue(propName);
+  }
+
+  /**
    * 获取配置的默认值
    * @returns
    */
