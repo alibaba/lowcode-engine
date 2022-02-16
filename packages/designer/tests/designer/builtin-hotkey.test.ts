@@ -2,6 +2,7 @@ import '../fixtures/window';
 import { Editor, globalContext } from '@alilc/lowcode-editor-core';
 import { Designer } from '../../src/designer/designer';
 import formSchema from '../fixtures/schema/form';
+import '../../src/designer/builtin-hotkey';
 import { fireEvent } from '@testing-library/react';
 
 const editor = new Editor();
@@ -242,49 +243,50 @@ describe('快捷键测试', () => {
       expect(designer.currentDocument?.selection.selected[0]).toBe('page');
     });
     it('isFormEvent: true', () => {
+      const inputDOMNode = document.createElement('INPUT');
       designer.currentDocument?.selection.select('page');
       // nothing happened
 
-      fireEvent.keyDown(document, { keyCode: 39 });
+      fireEvent.keyDown(inputDOMNode, { keyCode: 39 });
       expect(designer.currentDocument?.selection.selected[0]).toBe('page');
 
-      fireEvent.keyDown(document, { keyCode: 37 });
+      fireEvent.keyDown(inputDOMNode, { keyCode: 37 });
       expect(designer.currentDocument?.selection.selected[0]).toBe('page');
 
-      fireEvent.keyDown(document, { keyCode: 40 });
+      fireEvent.keyDown(inputDOMNode, { keyCode: 40 });
       expect(designer.currentDocument?.selection.selected[0]).toBe('page');
 
-      fireEvent.keyDown(document, { keyCode: 38 });
+      fireEvent.keyDown(inputDOMNode, { keyCode: 38 });
       expect(designer.currentDocument?.selection.selected[0]).toBe('page');
 
-      fireEvent.keyDown(document, { keyCode: 39, altKey: true });
+      fireEvent.keyDown(inputDOMNode, { keyCode: 39, altKey: true });
       expect(designer.currentDocument?.selection.selected[0]).toBe('page');
 
-      fireEvent.keyDown(document, { keyCode: 37, altKey: true });
+      fireEvent.keyDown(inputDOMNode, { keyCode: 37, altKey: true });
       expect(designer.currentDocument?.selection.selected[0]).toBe('page');
 
-      fireEvent.keyDown(document, { keyCode: 40, altKey: true });
+      fireEvent.keyDown(inputDOMNode, { keyCode: 40, altKey: true });
       expect(designer.currentDocument?.selection.selected[0]).toBe('page');
 
-      fireEvent.keyDown(document, { keyCode: 38, altKey: true });
+      fireEvent.keyDown(inputDOMNode, { keyCode: 38, altKey: true });
       expect(designer.currentDocument?.selection.selected[0]).toBe('page');
 
-      fireEvent.keyDown(document, { keyCode: 90, metaKey: true });
+      fireEvent.keyDown(inputDOMNode, { keyCode: 90, metaKey: true });
       expect(designer.currentDocument?.selection.selected[0]).toBe('page');
 
-      fireEvent.keyDown(document, { keyCode: 89, metaKey: true });
+      fireEvent.keyDown(inputDOMNode, { keyCode: 89, metaKey: true });
       expect(designer.currentDocument?.selection.selected[0]).toBe('page');
 
-      fireEvent.keyDown(document, { keyCode: 67, metaKey: true });
+      fireEvent.keyDown(inputDOMNode, { keyCode: 67, metaKey: true });
       expect(designer.currentDocument?.selection.selected[0]).toBe('page');
 
-      fireEvent.keyDown(document, { keyCode: 86, metaKey: true });
+      fireEvent.keyDown(inputDOMNode, { keyCode: 86, metaKey: true });
       expect(designer.currentDocument?.selection.selected[0]).toBe('page');
 
-      fireEvent.keyDown(document, { keyCode: 27 });
+      fireEvent.keyDown(inputDOMNode, { keyCode: 27 });
       expect(designer.currentDocument?.selection.selected[0]).toBe('page');
 
-      fireEvent.keyDown(document, { keyCode: 46 });
+      fireEvent.keyDown(inputDOMNode, { keyCode: 46 });
       expect(designer.currentDocument?.selection.selected[0]).toBe('page');
     });
   });

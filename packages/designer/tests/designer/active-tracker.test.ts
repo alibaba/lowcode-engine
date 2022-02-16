@@ -1,3 +1,4 @@
+import '../fixtures/window';
 import { ActiveTracker } from '../../src/designer/active-tracker';
 
 it('ActiveTracker 测试，Node', () => {

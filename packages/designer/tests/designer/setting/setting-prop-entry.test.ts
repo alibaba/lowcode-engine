@@ -75,7 +75,8 @@ describe('setting-prop-entry 测试', () => {
       const prop1 = mockTopEntry.getProp('a');
       prop1.extraProps = {
         getValue: (prop, val) => `prefix ${val}`,
-        setValue: (prop, val) => { prop.setValue(`modified ${val}`, false, false, { disableMutator: true }) },
+        // prop 是 shell prop entry
+        setValue: (prop, val) => { prop.setValue(`modified ${val}`, { disableMutator: true }) },
         defaultValue: 'default',
       };
 

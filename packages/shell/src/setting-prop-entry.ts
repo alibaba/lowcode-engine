@@ -1,4 +1,4 @@
-import { SettingField } from '@alilc/lowcode-designer';
+import { SettingField, ISetValueOptions } from '@alilc/lowcode-designer';
 import { CompositeValue, FieldConfig } from '@alilc/lowcode-types';
 import { settingPropEntrySymbol } from './symbols';
 import Node from './node';
@@ -111,8 +111,8 @@ export default class SettingPropEntry {
    * 设置值
    * @param val 值
    */
-  setValue(val: CompositeValue) {
-    this[settingPropEntrySymbol].setValue(val);
+  setValue(val: CompositeValue, extraOptions?: ISetValueOptions) {
+    this[settingPropEntrySymbol].setValue(val, false, false, extraOptions);
   }
 
   /**
