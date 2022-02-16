@@ -153,6 +153,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
     if (value === undefined && isInitialValueNotEmpty(initialValue)) {
       const _initialValue = typeof initialValue === 'function' ? initialValue(field.internalToShellPropEntry()) : initialValue;
       field.setValue(_initialValue);
+      value = _initialValue;
     }
 
     let _onChange = extraProps?.onChange;
