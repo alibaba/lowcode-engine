@@ -120,9 +120,8 @@ https://cdn.jsdelivr.net/npm/@alilc/lowcode-react-simulator-renderer@1.0.0/dist/
 - [官方物料 WIP](http://lowcode-engine.cn/)
 - [官方设置器（setter）WIP](http://lowcode-engine.cn/)
 - [官方插件（plugin）WIP](http://lowcode-engine.cn/)
-- [用户文档 WIP](http://lowcode-engine.cn/)
-- [贡献指南 WIP](http://lowcode-engine.cn/)
-- [更新日志](CHANGELOG..md)
+- [用户文档 WIP](http://lowcode-engine.cn/#/doc)
+- [更新日志](http://lowcode-engine.cn/#/doc?url=engine-changelog)
 
 ## 💻 本地调试
 
@@ -140,6 +139,9 @@ lowcode-engine 启动后，提供了几个 umd 文件，可以结合 [lowcode-de
 
 ## 🤝 参与共建
 
-请先阅读 [贡献指南 WIP](http://lowcode-engine.cn/?docs#/doc?url=contributing).
+请先阅读：
+1. [如何配置引擎调试环境？](https://www.yuque.com/lce/doc/glz0fx)
+2. [关于引擎的研发协作流程](https://www.yuque.com/lce/doc/contributing)
+3. [引擎的工程化配置](https://www.yuque.com/lce/doc/gxwqg6)
 
-> 强烈推荐阅读 [《提问的智慧》](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way)、[《如何向开源社区提问题》](https://github.com/seajs/seajs/issues/545) 和 [《如何有效地报告 Bug》](http://www.chiark.greenend.org.uk/%7Esgtatham/bugs-cn.html)、[《如何向开源项目提交无法解答的问题》](https://zhuanlan.zhihu.com/p/25795393)，更好的问题更容易获得帮助。
+> 强烈推荐阅读 [《提问的智慧》](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way)、[《如何向开源社区提问题》](https://github.com/seajs/seajs/issues/545) 和 [《如何有效地报告 Bug》](http://www.chiark.greenend.org.uk/%7Esgtatham/bugs-cn.html)、[《如何向开源项目提交无法解答的问题》](https://zhuanlan.zhihu.com/p/25795393)，更好的问题更容易获得帮助。（此段参考 [antd](https://github.com/ant-design/ant-design)）
