@@ -1,0 +1,33 @@
+name: lint & test
+
+on: [push, pull_request]
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: install
+        run: npm i && npm run setup:skip-build
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: lint
+        run: npm run lint
+    needs: setup
+
+  test-designer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: lint
+        run: cd packages/designer && npm test
+    needs: setup

@@ -126,7 +126,8 @@ function toCss(runtime) {
       css.push(
         `:root${pseudo === 'default' ? '' : `${prefix}${pseudo}`} {
 ${runtimeToCss(normalizeStyle(runtime[pseudo]))}
-}\n`);
+}\n`,
+);
     });
     return css.join('\n');
   }

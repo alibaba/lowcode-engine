@@ -7,7 +7,7 @@ interface UtilsMetadata {
     subName?: string;
     destructuring?: boolean;
     main?: string;
-  }
+  };
 }
 
 interface LibrayMap {
