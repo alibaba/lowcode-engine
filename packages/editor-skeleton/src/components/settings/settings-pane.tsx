@@ -10,12 +10,6 @@ import { SkeletonContext } from '../../context';
 // import { Icon } from '@alifd/next';
 import { intl } from '../../locale';
 
-function transformStringToFunction(str) {
-  if (typeof str !== 'string') return str;
-  // eslint-disable-next-line no-new-func
-  return new Function(`"use strict"; return ${str}`)();
-}
-
 function isStandardComponent(componentMeta: ComponentMeta | null) {
   if (!componentMeta) return false;
   const { prototype } = componentMeta;
@@ -38,8 +32,9 @@ function isInitialValueNotEmpty(initialValue: any) {
 }
 
 type SettingFieldViewProps = { field: SettingField };
+type SettingFieldViewState = { fromOnChange: boolean; value: any };
 @observer
-class SettingFieldView extends Component<{ field: SettingField }> {
+class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldViewState> {
   static contextType = SkeletonContext;
 
   stageName: string | undefined;
@@ -150,7 +145,7 @@ class SettingFieldView extends Component<{ field: SettingField }> {
 
     // 当前 field 没有 value 值时，将 initialValue 写入 field
     // 之所以用 initialValue，而不是 defaultValue 是为了保持跟 props.onInitial 的逻辑一致
-    if (value === undefined && isInitialValueNotEmpty(initialValue)) {
+    if (!this.state?.fromOnChange && value === undefined && isInitialValueNotEmpty(initialValue)) {
       const _initialValue = typeof initialValue === 'function' ? initialValue(field.internalToShellPropEntry()) : initialValue;
       field.setValue(_initialValue);
       value = _initialValue;
@@ -184,8 +179,10 @@ class SettingFieldView extends Component<{ field: SettingField }> {
         field: field.internalToShellPropEntry(),
         // === IO
         value, // reaction point
+        initialValue,
         onChange: (value: any) => {
           this.setState({
+            fromOnChange: true,
             // eslint-disable-next-line react/no-unused-state
             value,
           });
