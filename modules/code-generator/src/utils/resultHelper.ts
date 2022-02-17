@@ -53,7 +53,6 @@ export function flattenResult(dir: ResultDir, cwd = ''): FlattenFile[] {
     ),
   ].concat(
     ...dir.dirs.map((subDir) =>
-      flattenResult(subDir, [cwd, subDir.name].filter((x) => x !== '' && x !== '.').join('/')),
-    ),
+      flattenResult(subDir, [cwd, subDir.name].filter((x) => x !== '' && x !== '.').join('/'))),
   );
 }

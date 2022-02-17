@@ -16,7 +16,7 @@ export default class Preference {
     return `${STORAGE_KEY_PREFIX}_${moduleKey}.${key}`;
   }
 
-  set(key: string, value:any, module?: string) {
+  set(key: string, value: any, module?: string) {
     if (!key || typeof key !== 'string' || key.length === 0) {
       logger.error('Invalid key when setting preference', key);
       return;
@@ -26,7 +26,7 @@ export default class Preference {
     store.set(storageKey, value);
   }
 
-  get(key: string, module: string) : any {
+  get(key: string, module: string): any {
     if (!key || typeof key !== 'string' || key.length === 0) {
       logger.error('Invalid key when getting from preference', key);
       return;
@@ -44,7 +44,7 @@ export default class Preference {
    * @returns {boolean}
    * @memberof Preference
    */
-  contains(key: string, module: string) : boolean {
+  contains(key: string, module: string): boolean {
     if (!key || typeof key !== 'string' || key.length === 0) {
       logger.error('Invalid key when getting from preference', key);
       return false;

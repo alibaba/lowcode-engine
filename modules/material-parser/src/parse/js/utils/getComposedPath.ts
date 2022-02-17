@@ -25,6 +25,7 @@ export default function getComposedPropTypesPath(documentation, propName, p) {
     const ast = parser.parse(fileContent);
 
     visit(ast, {
+      // eslint-disable-next-line no-loop-func
       visitAssignmentExpression(path: any) {
         // Ignore anything that is not `exports.X = ...;` or
         // `module.exports = ...;`
