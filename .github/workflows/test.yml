@@ -3,24 +3,21 @@ name: lint & test
 on: [push, pull_request]
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2
-
-      - name: install
-        run: npm i && npm run setup:skip-build
-
   lint:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v2
 
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: install
+        run: npm i && npm run setup:skip-build
+
       - name: lint
         run: npm run lint
-    needs: setup
 
   test-designer:
     runs-on: ubuntu-latest
@@ -28,6 +25,12 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
 
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: install
+        run: npm i && npm run setup:skip-build
+
       - name: lint
         run: cd packages/designer && npm test
-    needs: setup
