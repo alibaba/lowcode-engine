@@ -32,5 +32,5 @@ jobs:
       - name: install
         run: npm i && npm run setup:skip-build
 
-      - name: lint
+      - name: test
         run: cd packages/designer && npm test
