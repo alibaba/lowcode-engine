@@ -113,7 +113,8 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
     const supportVariableGlobally = engineConfig.get('supportVariableGlobally', false) && isStandardComponent(componentMeta);
     if (supportVariable || supportVariableGlobally) {
       if (setterType === 'MixedSetter') {
-        if (!setterProps.setters.includes('VariableSetter')) {
+        // VariableSetter 不单独使用
+        if (Array.isArray(setterProps.setters) && !setterProps.setters.includes('VariableSetter')) {
           setterProps.setters.push('VariableSetter');
         }
       } else {
