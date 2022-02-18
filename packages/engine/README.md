@@ -134,6 +134,10 @@ $ npm start
 ```
 
 > 📢 npm 访问速度较慢，阿里员工可以使用 tnpm，其他同学建议使用 cnpm 或者指定镜像 registry。
+>
+> ❕node 版本限制在 14
+>
+> ❕windows 环境尽量使用 [WSL](https://docs.microsoft.com/zh-cn/windows/wsl/install)
 
 lowcode-engine 启动后，提供了几个 umd 文件，可以结合 [lowcode-demo](https://github.com/alibaba/lowcode-demo) 项目做调试，文件代理规则参考这里。
 
