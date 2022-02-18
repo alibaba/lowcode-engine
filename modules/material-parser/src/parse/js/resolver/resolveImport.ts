@@ -50,6 +50,7 @@ export function resolveToImport(initialPath) {
         }
         pathBuffer.unshift(...paths);
       }
+      // eslint-disable-next-line no-fallthrough
       case 'Identifier':
       case 'JSXIdentifier': {
         const valuePath = resolveToValue(path);

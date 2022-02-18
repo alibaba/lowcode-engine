@@ -37,6 +37,7 @@ export declare interface Editor extends StrictEventEmitter<EventEmitter, GlobalE
   getPreference(): Preference;
 }
 
+// eslint-disable-next-line no-redeclare
 export class Editor extends (EventEmitter as any) implements IEditor {
   /**
    * Ioc Container
