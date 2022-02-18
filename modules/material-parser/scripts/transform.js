@@ -3,8 +3,10 @@ const fs = require('fs');
 const path = require('path');
 const Ajv = require('ajv');
 const { compile } = require('json-schema-to-typescript');
+const { ESLint } = require('eslint');
 
 const ajv = new Ajv();
+const eslint = new ESLint({ fix: true });
 
 const YamlPath = path.resolve(__dirname, '../schemas/schema.yml');
 const JsonPath = path.resolve(__dirname, '../src/validate/schema.json');
@@ -19,7 +21,13 @@ const tsPath = path.resolve(__dirname, '../src/core/schema/types.ts');
     console.log('yaml file is successfully transformed into json');
     const ts = await compile(schema, 'ComponentMeta');
     fs.writeFileSync(tsPath, ts);
-    console.log('schema.d.ts is successfully generated');
+    // Lint files. This doesn't modify target files.
+    const results = await eslint.lintFiles([tsPath]);
+
+    // Modify the files with the fixed code.
+    await ESLint.outputFixes(results);
+
+    console.log('schema/types.d.ts is successfully generated');
   } catch (e) {
     console.log(e);
     process.exit(1);
