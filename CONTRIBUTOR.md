@@ -2,6 +2,8 @@
 - [albertxiao1994](https://github.com/albertxiao1994)
 - [alex-mm](https://github.com/alex-mm)
 - [alvarto](https://github.com/alvarto)
+- [alvinhui](https://github.com/alvinhui)
+- [boycgit](https://github.com/boycgit)
 - [chenmingjia](https://github.com/chenmingjia)
 - [Clarence-pan](https://github.com/Clarence-pan)
 - [hujiulong](https://github.com/hujiulong)
@@ -18,7 +20,7 @@
 - [mochen666](https://github.com/mochen666)
 - [tsy77](https://github.com/tsy77)
 - [Ychangqing](https://github.com/Ychangqing)
+- [yize](https://github.com/yize)
 - [youluna](https://github.com/youluna)
-- [九神](https://github.com/yize)
 
 如果您贡献过低代码引擎，但是没有看到您的名字，为我们的疏忽感到抱歉。欢迎您通过 PR 补充上自己的名字。
