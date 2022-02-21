@@ -1,4 +1,4 @@
-import { autorun, obx } from '@ali/lowcode-editor-core';
+import { autorun, makeObservable, obx } from '@ali/lowcode-editor-core';
 import { BuiltinSimulatorHost } from './host';
 import { EventEmitter } from 'events';
 import { BuiltinSimulatorRenderer, isSimulatorRenderer } from './renderer';
@@ -29,6 +29,7 @@ export default class ResourceConsumer<T = any> {
   private _consuming?: () => void;
 
   constructor(provider: () => T, private consumer?: RendererConsumer<T>) {
+    makeObservable(this);
     this._providing = autorun(() => {
       this._data = provider();
     });
