@@ -2,6 +2,7 @@ import {
   Skeleton as InnerSkeleton,
   IWidgetBaseConfig,
   IWidgetConfigArea,
+  SkeletonEvents,
 } from '@alilc/lowcode-editor-skeleton';
 import { skeletonSymbol } from './symbols';
 
@@ -59,11 +60,87 @@ export default class Skeleton {
   }
 
   /**
+   * enable widget
+   * @param name
+   */
+  enableWidget(name: string) {
+    this[skeletonSymbol].getWidget(name)?.enable?.();
+  }
+
+  /**
    * 隐藏 widget
    * @param name
    */
   hideWidget(name: string) {
     this[skeletonSymbol].getWidget(name)?.hide();
+  }
+
+  /**
+   * disable widget，不可点击
+   * @param name
+   */
+  disableWidget(name: string) {
+    this[skeletonSymbol].getWidget(name)?.disable?.();
+  }
+
+  /**
+   * 监听 panel 显示事件
+   * @param listener
+   * @returns
+   */
+  onShowPanel(listener: (...args: unknown[]) => void) {
+    const { editor } = this[skeletonSymbol];
+    editor.on(SkeletonEvents.PANEL_SHOW, (name: any, panel: any) => {
+      // 不泄漏 skeleton
+      const { skeleton, ...restPanel } = panel;
+      listener(name, restPanel);
+    });
+    return () => editor.off(SkeletonEvents.PANEL_SHOW, listener);
+  }
+
+  /**
+   * 监听 panel 隐藏事件
+   * @param listener
+   * @returns
+   */
+  onHidePanel(listener: (...args: unknown[]) => void) {
+    const { editor } = this[skeletonSymbol];
+    editor.on(SkeletonEvents.PANEL_HIDE, (name: any, panel: any) => {
+      // 不泄漏 skeleton
+      const { skeleton, ...restPanel } = panel;
+      listener(name, restPanel);
+    });
+    return () => editor.off(SkeletonEvents.PANEL_HIDE, listener);
+  }
+
+  /**
+   * 监听 widget 显示事件
+   * @param listener
+   * @returns
+   */
+  onShowWidget(listener: (...args: unknown[]) => void) {
+    const { editor } = this[skeletonSymbol];
+    editor.on(SkeletonEvents.WIDGET_SHOW, (name: any, panel: any) => {
+      // 不泄漏 skeleton
+      const { skeleton, ...rest } = panel;
+      listener(name, rest);
+    });
+    return () => editor.off(SkeletonEvents.WIDGET_SHOW, listener);
+  }
+
+  /**
+   * 监听 widget 隐藏事件
+   * @param listener
+   * @returns
+   */
+  onHideWidget(listener: (...args: unknown[]) => void) {
+    const { editor } = this[skeletonSymbol];
+    editor.on(SkeletonEvents.WIDGET_HIDE, (name: any, panel: any) => {
+      // 不泄漏 skeleton
+      const { skeleton, ...rest } = panel;
+      listener(name, rest);
+    });
+    return () => editor.off(SkeletonEvents.WIDGET_HIDE, listener);
   }
 }
 
@@ -94,5 +171,7 @@ function normalizeArea(area: IWidgetConfigArea | undefined) {
       return 'leftFloatArea';
     case 'stages':
       return 'stages';
+    default:
+      throw new Error(`${area} not supported`);
   }
 }

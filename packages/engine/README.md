@@ -114,14 +114,16 @@ https://cdn.jsdelivr.net/npm/@alilc/lowcode-react-simulator-renderer@1.0.0/dist/
 #### 方式 3：使用自有 cdn
 将源码中 packages/engine/dist 和 packages/(react|rax)-simulator-renderer/dist 下的文件传至你的 cdn 提供商
 
-## 🔗 链接
+## 🔗 相关链接
 
-- [官网首页 WIP](http://lowcode-engine.cn/)
-- [官方物料 WIP](http://lowcode-engine.cn/)
-- [官方设置器（setter）WIP](http://lowcode-engine.cn/)
-- [官方插件（plugin）WIP](http://lowcode-engine.cn/)
-- [用户文档 WIP](http://lowcode-engine.cn/#/doc)
-- [更新日志](http://lowcode-engine.cn/#/doc?url=engine-changelog)
+- [官网首页](http://lowcode-engine.cn/)
+- [Demo 马上玩](https://alifd.alicdn.com/npm/@alilc/lowcode-demo@1.0.0/build/index.html) | [引擎 Demo 仓库](https://github.com/alibaba/lowcode-demo)
+- [官方物料](https://github.com/alibaba/lowcode-materials)
+- [官方设置器（setter）](https://github.com/alibaba/lowcode-engine-ext)
+- [官方插件（plugin）](https://github.com/alibaba/lowcode-plugins)
+- [用户文档](http://lowcode-engine.cn/doc)
+- [API WIP](http://lowcode-engine.cn/doc?url=vlmeme)
+- [更新日志](http://lowcode-engine.cn/doc?url=engine-changelog)
 
 ## 💻 本地调试
 
@@ -135,9 +137,9 @@ $ npm start
 
 > 📢 npm 访问速度较慢，阿里员工可以使用 tnpm，其他同学建议使用 cnpm 或者指定镜像 registry。
 >
-> ❕node 版本限制在 14
+> 📢 node 版本限制在 14
 >
-> ❕windows 环境尽量使用 [WSL](https://docs.microsoft.com/zh-cn/windows/wsl/install)
+> 📢 windows 环境尽量使用 [WSL](https://docs.microsoft.com/zh-cn/windows/wsl/install)
 
 lowcode-engine 启动后，提供了几个 umd 文件，可以结合 [lowcode-demo](https://github.com/alibaba/lowcode-demo) 项目做调试，文件代理规则参考这里。
 
