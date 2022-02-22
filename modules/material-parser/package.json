@@ -3,7 +3,6 @@
   "version": "1.0.1-beta.1",
   "description": "material parser for Ali lowCode engine",
   "main": "lib/index.js",
-  "module": "es/index.js",
   "files": [
     "lib",
     "schemas"
