@@ -51,5 +51,6 @@
   },
   "resolutions": {
     "@builder/babel-preset-ice": "1.0.1"
-  }
+  },
+  "version": "1.0.1-beta.0"
 }
