@@ -9,7 +9,10 @@
     "skipLibCheck": true,
     "baseUrl": "./packages",
     "allowJs": true,
-    "outDir": "lib"
+    "outDir": "lib",
+    "lib": ["es2018"],
+    "module": "commonjs",
+    "target": "es2018"
   },
   "exclude": ["**/test", "**/lib", "**/dist", "**/es", "node_modules", "schemas"],
   "include": ["src/**/*"]
