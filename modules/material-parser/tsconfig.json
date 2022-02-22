@@ -8,7 +8,11 @@
     // skip type checking of declaration files
     "skipLibCheck": true,
     "baseUrl": "./packages",
-    "allowJs": true
+    "allowJs": true,
+    "outDir": "lib",
+    "lib": ["es2018"],
+    "module": "commonjs",
+    "target": "es2018"
   },
   "exclude": ["**/test", "**/lib", "**/dist", "**/es", "node_modules", "schemas"],
   "include": ["src/**/*"]
