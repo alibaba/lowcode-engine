@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-material-parser",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "material parser for Ali lowCode engine",
   "main": "lib/index.js",
   "files": [
@@ -61,5 +61,8 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
+  },
+  "engines": {
+    "node": ">=10.0.0"
   }
 }
