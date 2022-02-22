@@ -8,7 +8,8 @@
     // skip type checking of declaration files
     "skipLibCheck": true,
     "baseUrl": "./packages",
-    "allowJs": true
+    "allowJs": true,
+    "outDir": "lib"
   },
   "exclude": ["**/test", "**/lib", "**/dist", "**/es", "node_modules", "schemas"],
   "include": ["src/**/*"]
