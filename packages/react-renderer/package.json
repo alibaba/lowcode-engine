@@ -11,7 +11,8 @@
   "scripts": {
     "test": "build-scripts test --config build.test.json",
     "start": "build-scripts start",
-    "build": "build-scripts build --skip-demo"
+    "build": "build-scripts build --skip-demo",
+    "cloud-build": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --config build.cloud.json"
   },
   "keywords": [
     "lowcode",
@@ -28,6 +29,7 @@
     "build-plugin-component": "^0.2.10",
     "build-plugin-fusion": "^0.1.0",
     "build-plugin-moment-locales": "^0.1.0",
+    "build-plugin-react-app": "^2.2.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-test-renderer": "^16"
