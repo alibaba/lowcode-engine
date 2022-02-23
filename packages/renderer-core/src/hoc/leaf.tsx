@@ -2,9 +2,9 @@ import { BuiltinSimulatorHost, Node, PropChangeOptions } from '@ali/lowcode-desi
 import { GlobalEvent, TransformStage } from '@ali/lowcode-types';
 import { isReactComponent, cloneEnumerableProperty } from '@ali/lowcode-utils';
 import { EngineOptions } from '@ali/lowcode-editor-core';
+import { debounce } from '../utils/common';
 import adapter from '../adapter';
 import * as types from '../types/index';
-
 
 export interface IComponentHocInfo {
   schema: any;
@@ -17,7 +17,7 @@ type DesignMode = Pick<EngineOptions, 'designMode'>['designMode'];
 
 export type IComponentHoc = {
   designMode: DesignMode | DesignMode[];
-  hoc: IComponentConstruct,
+  hoc: IComponentConstruct;
 };
 
 export type IComponentConstruct = (Comp: types.IBaseRenderer, info: IComponentHocInfo) => types.Constructor;
@@ -44,7 +44,7 @@ enum RerenderType {
 
 // 缓存 Leaf 层组件，防止重新渲染问题
 class LeafCache {
-  constructor(public documentId: string) {
+  constructor(public documentId: string, public device: 'mobile' | 'web') {
   }
   /** 组件缓存 */
   component = new Map();
@@ -126,6 +126,7 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
   const engine = baseRenderer.context.engine;
   const host: BuiltinSimulatorHost = baseRenderer.props.__host;
   const curDocumentId = baseRenderer.props?.documentId;
+  const curDevice = baseRenderer.props?.device;
   const getNode = baseRenderer.props?.getNode;
   const container: BuiltinSimulatorHost = baseRenderer.props.__container;
   const setSchemaChangedSymbol = baseRenderer.props?.setSchemaChangedSymbol;
@@ -134,11 +135,11 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
 
   const componentCacheId = schema.id;
 
-  if (!cache || (curDocumentId && curDocumentId !== cache.documentId)) {
+  if (!cache || (curDocumentId && curDocumentId !== cache.documentId) || (curDevice && curDevice !== cache.device)) {
     cache?.event.forEach(event => {
       event.dispose?.forEach((disposeFn: any) => disposeFn && disposeFn());
     });
-    cache = new LeafCache(curDocumentId);
+    cache = new LeafCache(curDocumentId, curDevice);
   }
 
   if (!isReactComponent(Comp)) {
@@ -262,20 +263,22 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
     }
 
     renderUnitInfo: {
-      minimalUnitId?: string,
+      minimalUnitId?: string;
       minimalUnitName?: string;
-      singleRender?: boolean,
+      singleRender?: boolean;
     };
 
-    shouldRenderSingleNode(): boolean {
+    judgeMiniUnitRender() {
       if (!this.renderUnitInfo) {
         this.getRenderUnitInfo();
       }
 
-      const renderUnitInfo = this.renderUnitInfo;
+      const renderUnitInfo = this.renderUnitInfo || {
+        singleRender: true,
+      };
 
       if (renderUnitInfo.singleRender) {
-        return true;
+        return;
       }
 
       const ref = cache.ref.get(renderUnitInfo.minimalUnitId);
@@ -283,29 +286,32 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
       if (!ref) {
         __debug('Cant find minimalRenderUnit ref! This make rerender!');
         container.rerender();
-        return false;
+        return;
       }
       __debug(`${this.leaf?.componentName}(${this.props.componentId}) need render, make its minimalRenderUnit ${renderUnitInfo.minimalUnitName}(${renderUnitInfo.minimalUnitId})`);
       ref.makeUnitRender();
-
-      return false;
     }
 
     getRenderUnitInfo(leaf = this.leaf) {
-      if (leaf?.isRoot()) {
+      // leaf 在低代码组件中存在 mock 的情况，退出最小渲染单元判断
+      if (!leaf || typeof leaf.isRoot !== 'function') {
+        return;
+      }
+
+      if (leaf.isRoot()) {
         this.renderUnitInfo = {
           singleRender: true,
           ...(this.renderUnitInfo || {}),
         };
       }
-      if (leaf?.componentMeta.isMinimalRenderUnit) {
+      if (leaf.componentMeta.isMinimalRenderUnit) {
         this.renderUnitInfo = {
           minimalUnitId: leaf.id,
           minimalUnitName: leaf.componentName,
           singleRender: false,
         };
       }
-      if (leaf?.hasLoop()) {
+      if (leaf.hasLoop()) {
         // 含有循环配置的元素，父元素是最小渲染单元
         this.renderUnitInfo = {
           minimalUnitId: leaf?.parent?.id,
@@ -313,12 +319,13 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
           singleRender: false,
         };
       }
-      if (leaf?.parent) {
+      if (leaf.parent) {
         this.getRenderUnitInfo(leaf.parent);
       }
     }
 
-    makeUnitRender = () => {
+    // 最小渲染单元做防抖处理
+    makeUnitRenderDebounced = debounce(() => {
       this.beforeRender(RerenderType.MinimalRenderUnit);
       const nextProps = getProps(this.leaf?.export?.(TransformStage.Render) as types.ISchema, scope, Comp, componentInfo);
       const children = getChildren(this.leaf?.export?.(TransformStage.Render) as types.ISchema, scope, Comp);
@@ -333,6 +340,10 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
 
       __debug(`${this.leaf?.componentName}(${this.props.componentId}) MinimalRenderUnit Render!`);
       this.setState(nextState);
+    }, 20);
+
+    makeUnitRender = () => {
+      this.makeUnitRenderDebounced();
     };
 
     componentWillReceiveProps(nextProps: any) {
@@ -376,9 +387,6 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
           cache.component.delete(componentCacheId);
           return;
         }
-        if (!this.shouldRenderSingleNode()) {
-          return;
-        }
         this.beforeRender(RerenderType.PropsChanged);
         const state = this.state;
         const nodeCacheProps = state.nodeCacheProps;
@@ -397,6 +405,8 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
           nodeProps,
           nodeCacheProps,
         });
+
+        this.judgeMiniUnitRender();
       });
 
       dispose && this.disposeFunctions.push(dispose);
@@ -411,15 +421,12 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
           return;
         }
 
-        if (!this.shouldRenderSingleNode()) {
-          return;
-        }
-
         __debug(`${leaf?.componentName}[${this.props.componentId}] component trigger onVisibleChange(${flag}) event`);
         this.beforeRender(RerenderType.VisibleChanged);
         this.setState({
           visible: flag,
         });
+        this.judgeMiniUnitRender();
       });
 
       dispose && this.disposeFunctions.push(dispose);
@@ -434,9 +441,6 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
           type,
           node,
         } = param || {};
-        if (!this.shouldRenderSingleNode()) {
-          return;
-        }
         this.beforeRender(`${RerenderType.ChildChanged}-${type}`, node);
         // TODO: 缓存同级其他元素的 children。
         // 缓存二级 children Next 查询筛选组件有问题
@@ -448,6 +452,7 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
           childrenInState: true,
         });
       });
+      this.judgeMiniUnitRender();
 
       dispose && this.disposeFunctions.push(dispose);
     }
