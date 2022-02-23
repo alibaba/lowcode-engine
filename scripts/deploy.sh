@@ -7,7 +7,7 @@ if [ ! -d "$BUILD_DEST" ]; then
   mkdir -p "$BUILD_DEST"
 fi
 
-tnpm i -g n
+npm i -g n
 # 使用官方源有较大概率会 block
 export N_NODE_MIRROR=https://npm.taobao.org/mirrors/node
 
@@ -19,10 +19,10 @@ node -v
 echo "Deploy ${WORK_DIR} -> ${BUILD_DEST} ..."
 
 echo "Clean"
-tnpm run clean
+npm run clean
 
 echo "Setup"
-tnpm run setup
+npm run setup
 
 # set source
 # yarn config set registry https://registry.npm.alibaba-inc.com

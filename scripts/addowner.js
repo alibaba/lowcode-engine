@@ -36,7 +36,7 @@ function addPackageOwners(packageName) {
 function addOwner(packageName, setOwner) {
   console.info(`addowner "${setOwner}" for "${packageName}"`);
   try {
-    execSync(`tnpm owner add ${setOwner} ${packageName}`, {
+    execSync(`npm owner add ${setOwner} ${packageName}`, {
       encoding: 'utf-8',
     });
     console.info('OK');
