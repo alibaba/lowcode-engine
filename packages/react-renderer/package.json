@@ -29,7 +29,6 @@
     "build-plugin-component": "^0.2.10",
     "build-plugin-fusion": "^0.1.0",
     "build-plugin-moment-locales": "^0.1.0",
-    "build-plugin-react-app": "^2.2.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-test-renderer": "^16"
