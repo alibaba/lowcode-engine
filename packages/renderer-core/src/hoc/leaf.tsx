@@ -5,7 +5,6 @@ import { EngineOptions } from '@ali/lowcode-editor-core';
 import adapter from '../adapter';
 import * as types from '../types/index';
 
-
 export interface IComponentHocInfo {
   schema: any;
   baseRenderer: types.IBaseRendererInstance;
@@ -17,7 +16,7 @@ type DesignMode = Pick<EngineOptions, 'designMode'>['designMode'];
 
 export type IComponentHoc = {
   designMode: DesignMode | DesignMode[];
-  hoc: IComponentConstruct,
+  hoc: IComponentConstruct;
 };
 
 export type IComponentConstruct = (Comp: types.IBaseRenderer, info: IComponentHocInfo) => types.Constructor;
@@ -44,7 +43,7 @@ enum RerenderType {
 
 // 缓存 Leaf 层组件，防止重新渲染问题
 class LeafCache {
-  constructor(public documentId: string) {
+  constructor(public documentId: string, public device: 'mobile' | 'web') {
   }
   /** 组件缓存 */
   component = new Map();
@@ -126,6 +125,7 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
   const engine = baseRenderer.context.engine;
   const host: BuiltinSimulatorHost = baseRenderer.props.__host;
   const curDocumentId = baseRenderer.props?.documentId;
+  const curDevice = baseRenderer.props?.device;
   const getNode = baseRenderer.props?.getNode;
   const container: BuiltinSimulatorHost = baseRenderer.props.__container;
   const setSchemaChangedSymbol = baseRenderer.props?.setSchemaChangedSymbol;
@@ -134,11 +134,11 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
 
   const componentCacheId = schema.id;
 
-  if (!cache || (curDocumentId && curDocumentId !== cache.documentId)) {
+  if (!cache || (curDocumentId && curDocumentId !== cache.documentId) || (curDevice && curDevice !== cache.device)) {
     cache?.event.forEach(event => {
       event.dispose?.forEach((disposeFn: any) => disposeFn && disposeFn());
     });
-    cache = new LeafCache(curDocumentId);
+    cache = new LeafCache(curDocumentId, curDevice);
   }
 
   if (!isReactComponent(Comp)) {
@@ -262,9 +262,9 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
     }
 
     renderUnitInfo: {
-      minimalUnitId?: string,
+      minimalUnitId?: string;
       minimalUnitName?: string;
-      singleRender?: boolean,
+      singleRender?: boolean;
     };
 
     shouldRenderSingleNode(): boolean {
