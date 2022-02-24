@@ -33,7 +33,7 @@
 
 ## ✨ 特性
 
-- 🌈 提炼自企业级低代码平台的面向扩展开发的内核引擎，奉行最小内核，最强生态的设计理念
+- 🌈 提炼自企业级低代码平台的面向扩展设计的内核引擎，奉行最小内核，最强生态的设计理念
 - 📦 开箱即用的高质量生态元素，包括 物料体系、设置器、插件 等
 - ⚙️ 完善的工具链，支持 物料体系、设置器、插件 等生态元素的全链路研发周期
 - 🔌 强大的扩展能力，已支撑近 100 个各种垂直类低代码平台
@@ -111,7 +111,7 @@ https://cdn.jsdelivr.net/npm/@alilc/lowcode-engine@1.0.0/dist/js/engine-core.js
 https://cdn.jsdelivr.net/npm/@alilc/lowcode-react-simulator-renderer@1.0.0/dist/js/react-simulator-renderer.js
 ```
 
-#### 方式 3：使用自有 cdn
+#### 方式 4：使用自有 cdn
 将源码中 packages/engine/dist 和 packages/(react|rax)-simulator-renderer/dist 下的文件传至你的 cdn 提供商
 
 ## 🔗 相关链接
@@ -121,9 +121,9 @@ https://cdn.jsdelivr.net/npm/@alilc/lowcode-react-simulator-renderer@1.0.0/dist/
 - [官方物料](https://github.com/alibaba/lowcode-materials)
 - [官方设置器（setter）](https://github.com/alibaba/lowcode-engine-ext)
 - [官方插件（plugin）](https://github.com/alibaba/lowcode-plugins)
+- [生态元素（物料、setter、插件）工具链](https://www.yuque.com/lce/doc/ulvlkz)
 - [用户文档](http://lowcode-engine.cn/doc)
-- [API WIP](http://lowcode-engine.cn/doc?url=vlmeme)
-- [更新日志](http://lowcode-engine.cn/doc?url=engine-changelog)
+- [API [WIP]](http://lowcode-engine.cn/doc?url=vlmeme)
 
 ## 💻 本地调试
 
@@ -137,11 +137,11 @@ $ npm start
 
 > 📢 npm 访问速度较慢，阿里员工可以使用 tnpm，其他同学建议使用 cnpm 或者指定镜像 registry。
 >
-> 📢 node 版本限制在 14
+> 📢 node 版本限定在 14
 >
-> 📢 windows 环境尽量使用 [WSL](https://docs.microsoft.com/zh-cn/windows/wsl/install)
+> 📢 windows 环境必须使用 [WSL](https://docs.microsoft.com/zh-cn/windows/wsl/install)，其他终端不保证能正常运行
 
-lowcode-engine 启动后，提供了几个 umd 文件，可以结合 [lowcode-demo](https://github.com/alibaba/lowcode-demo) 项目做调试，文件代理规则参考这里。
+lowcode-engine 启动后，提供了几个 umd 文件，可以结合 [lowcode-demo](https://github.com/alibaba/lowcode-demo) 项目做调试，文件代理规则参考[这里](https://www.yuque.com/lce/doc/glz0fx)。
 
 ## 🤝 参与共建
 
