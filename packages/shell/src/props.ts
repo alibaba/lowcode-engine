@@ -30,6 +30,9 @@ export default class Props {
     return this[propsSymbol].path;
   }
 
+  /**
+   * 返回所属的 node 实例
+   */
   get node(): Node | null {
     return Node.create(this[propsSymbol].getNode());
   }
@@ -63,7 +66,7 @@ export default class Props {
   }
 
   /**
-   * 获取指定 path 的属性模型实例，
+   * 获取指定 path 的属性模型实例值
    *  注：导出时，不同于普通属性，该属性并不挂载在 props 之下，而是与 props 同级
    * @param path 属性路径，支持 a / a.b / a.0 等格式
    * @returns
