@@ -6,7 +6,8 @@
   "module": "es/index.js",
   "files": [
     "lib",
-    "es"
+    "es",
+    "dist"
   ],
   "scripts": {
     "test": "build-scripts test --config build.test.json",
