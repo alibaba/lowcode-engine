@@ -521,7 +521,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       return false;
     }
 
-    if (Array.isArray(value) && value.length > 0) {
+    if (Array.isArray(value)) {
       return true;
     }
     if (isJSExpression(value)) {
