@@ -501,7 +501,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
   }
 
   /**
-   * has loop when 1. loop is validArray with length > 1 ; OR  2. loop is variable object
+   * has loop when 1. loop is valid array ; OR  2. loop is variable object
    * @return boolean, has loop config or not
    */
   hasLoop() {
@@ -510,7 +510,7 @@ export class Node<Schema extends NodeSchema = NodeSchema> {
       return false;
     }
 
-    if (Array.isArray(value) && value.length > 0) {
+    if (Array.isArray(value)) {
       return true;
     }
     if (isJSExpression(value)) {
