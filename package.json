@@ -14,8 +14,8 @@
     "build:npm": "lerna run build --stream",
     "build:umd": "lerna run build:umd --stream",
     "clean": "rm -rf ./packages/*/lib ./packages/*/es ./packages/*/dist ./packages/*/build",
-    "lint": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet",
-    "lint:fix": "eslint --ext .ts,.tsx,.js,.jsx ./ --quiet --fix",
+    "lint": "f2elint scan -q -i ./packages/*/src",
+    "lint:fix": "f2elint fix -i ./packages/*/src",
     "pub": "npm run watchdog:build && lerna publish patch --force-publish --exact --no-changelog",
     "pub:premajor": "npm run watchdog:build && lerna publish premajor --force-publish --exact --dist-tag beta --preid beta --no-changelog",
     "pub:prepatch": "npm run watchdog:build && lerna publish prepatch --force-publish --exact --dist-tag beta --preid beta --no-changelog",
@@ -26,9 +26,7 @@
     "start": "./scripts/start.sh",
     "test": "lerna run test --stream",
     "test:snapshot": "lerna run test:snapshot",
-    "watchdog:build": "node ./scripts/watchdog.js",
-    "f2elint:scan": "f2elint scan -q -i ./packages/*/src",
-    "f2elint:fix": "f2elint fix -i ./packages/*/src"
+    "watchdog:build": "node ./scripts/watchdog.js"
   },
   "husky": {
     "hooks": {
