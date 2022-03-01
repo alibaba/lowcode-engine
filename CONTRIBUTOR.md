@@ -19,6 +19,7 @@
 - [mark-ck](https://github.com/mark-ck)
 - [mochen666](https://github.com/mochen666)
 - [tsy77](https://github.com/tsy77)
+- [yanbingbing](https://github.com/yanbingbing)
 - [Ychangqing](https://github.com/Ychangqing)
 - [yize](https://github.com/yize)
 - [youluna](https://github.com/youluna)
