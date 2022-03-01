@@ -21,4 +21,5 @@ lerna run build:umd \
   --scope @alilc/lowcode-engine \
   --scope @alilc/lowcode-rax-simulator-renderer \
   --scope @alilc/lowcode-react-simulator-renderer \
+  --scope @alilc/lowcode-react-renderer \
   --stream
