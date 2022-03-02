@@ -117,7 +117,7 @@ https://cdn.jsdelivr.net/npm/@alilc/lowcode-react-simulator-renderer@1.0.0/dist/
 ## 🔗 相关链接
 
 - [官网首页](http://lowcode-engine.cn/)
-- [Demo 马上玩](https://alifd.alicdn.com/npm/@alilc/lowcode-demo@1.0.0/build/index.html) | [引擎 Demo 仓库](https://github.com/alibaba/lowcode-demo)
+- [Demo 马上玩](http://lowcode-engine.cn/demo) | [引擎 Demo 仓库](https://github.com/alibaba/lowcode-demo)
 - [官方物料](https://github.com/alibaba/lowcode-materials)
 - [官方设置器（setter）](https://github.com/alibaba/lowcode-engine-ext)
 - [官方插件（plugin）](https://github.com/alibaba/lowcode-plugins)
