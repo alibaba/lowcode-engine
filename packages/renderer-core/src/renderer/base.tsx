@@ -712,7 +712,7 @@ export default function baseRenererFactory() {
       ) {
         return checkProps(props);
       }
-      if (isJSExpression(props)) {
+      if (isJSExpression(props) || isJSFunction(props)) {
         props = parseExpression(props, scope);
         // 只有当变量解析出来为模型结构的时候才会继续解析
         if (!isSchema(props) && !isJSSlot(props)) return checkProps(props);
