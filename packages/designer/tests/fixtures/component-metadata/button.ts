@@ -5,7 +5,7 @@ export default {
     componentName: 'Button',
   },
   title: '按钮',
-  docUrl: 'http://gitlab.alibaba-inc.com/vision-components/vc-block/blob/master/README.md',
+  docUrl: 'https://github.com/alibaba/lowcode-materials/tree/main/docs',
   devMode: 'procode',
   tags: ['布局'],
   configure: {
