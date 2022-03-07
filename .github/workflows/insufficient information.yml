@@ -8,14 +8,12 @@ jobs:
   reply-helper:
     runs-on: ubuntu-latest
     steps:
-      - name: help wanted
-        if: github.event.label.name == 'help wanted'
+      - name: insufficient information
+        if: github.event.label.name == 'insufficient information'
         uses: actions-cool/issues-helper@v2
         with:
           actions: 'create-comment'
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
           body: |
-            Hello @${{ github.event.issue.user.login }}. We totally like your proposal/feedback, PR wanted。
-
-            你好 @${{ github.event.issue.user.login }}，我们完全同意你的提议/反馈，欢迎 PR。
+            你好 @${{ github.event.issue.user.login }}，由于缺乏必要的信息（如 bug 重现步骤、引擎版本信息 等），无法定位问题，请按照 issue bug 模板补全信息。
