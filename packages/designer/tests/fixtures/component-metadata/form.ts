@@ -4,7 +4,7 @@ export default {
     package: '@ali/vc-form',
   },
   title: '表单',
-  docUrl: 'http://gitlab.alibaba-inc.com/vision-components/vc-block/blob/master/README.md',
+  docUrl: 'https://github.com/alibaba/lowcode-materials/tree/main/docs',
   devMode: 'procode',
   tags: ['布局'],
   configure: {
