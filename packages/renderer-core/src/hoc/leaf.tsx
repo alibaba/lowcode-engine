@@ -451,9 +451,8 @@ export function leafWrapper(Comp: types.IBaseRenderer, {
           nodeChildren: nextChild,
           childrenInState: true,
         });
+        this.judgeMiniUnitRender();
       });
-      this.judgeMiniUnitRender();
-
       dispose && this.disposeFunctions.push(dispose);
     }
 
