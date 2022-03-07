@@ -61,5 +61,5 @@
     "registry": "https://registry.npm.alibaba-inc.com"
   },
   "license": "MIT",
-  "homepage": "https://unpkg.alibaba-inc.com/@ali/chaoshi-meta-example@1.0.0/build/index.html"
+  "homepage": "https://unpkg.com/@ali/chaoshi-meta-example@1.0.0/build/index.html"
 }
