@@ -63,8 +63,11 @@ const pluginFactory: BuilderComponentPluginFactory<IceJsPackageJsonPluginConfig>
         moment: '^2.24.0',
         react: '^16.4.1',
         'react-dom': '^16.4.1',
+        'react-router': '^5.2.1',
         '@alifd/theme-design-pro': '^0.x',
         'intl-messageformat': '^9.3.6',
+        '@ice/store': '^1.4.3',
+        '@loadable/component': '^5.15.2',
 
         // 数据源相关的依赖:
         ...buildDataSourceDependencies(ir, cfg?.datasourceConfig),
