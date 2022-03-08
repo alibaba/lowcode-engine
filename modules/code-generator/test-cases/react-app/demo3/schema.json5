@@ -118,7 +118,7 @@
 	],
 	"constants": {
 		"ENV": "prod",
-		"DOMAIN": "xxx.alibaba-inc.com"
+		"DOMAIN": "xxx.xxx.com"
 	},
 	"i18n": {
 		"zh-CN": {

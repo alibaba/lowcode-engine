@@ -191,39 +191,39 @@
       methods: {
         __jp__init: {
           type: 'JSFunction',
-          value: 'function() {\n  this.__jp__initEnv && this.__jp__initEnv();\n  this.__jp__initConfig && this.__jp__initConfig();\n  this.__jp__initDataSource && this.__jp__initDataSource();\n  this.__jp__initRouter && this.__jp__initRouter();\n  this.__jp__initUtils && this.__jp__initUtils();\n}',
+          value: 'function() { /*...*/ }',
         },
         __jp__initRouter: {
           type: 'JSFunction',
-          value: 'function() {\n  if (window.arsenal) {\n    this.$router = new window.jianpin.ArsenalRouter({\n      app: this.props.microApp,\n    });\n  } else {\n    this.$router = new window.jianpin.ArsenalRouter();\n  }\n}',
+          value: 'function() { /*...*/ }',
         },
         __jp__initDataSource: {
           type: 'JSFunction',
-          value: "function() {\n  this.$apis = {\n  PKG_LIST: {\n    name: '打包列表',\n    code: 'PKG_LIST',\n    url: 'https://auto-nvwa.amap.com/ws/nvwa/cpp5x/packages/',\n    method: 'GET',\n    dataHandler: res => res.data,\n  },\n  PROJECTS: {\n    name: '项目名称/渠道号',\n    code: 'PROJECTS',\n    url:\n      'http://auto-nvwa-staging.alibaba.com/ws/nvwa/cpp/select_projects/',\n    method: 'GET',\n    state: 'projects',\n    params: {\n      size: 5000,\n    },\n    dataHandler: res => {\n      return res.data.data.result.map(d => {\n        const { id, channelId, project_name } = d;\n        return {\n          label: `${project_name} / ${channelId}`,\n          value: id,\n        };\n      });\n    },\n  },\n  RELOAD: {\n    name: '重新执行',\n    code: 'RELOAD',\n    url: 'https://auto-nvwa.amap.com/cpp/configbuild/rebuild/',\n    method: 'GET',\n  },\n  BUILD_RESULT: {\n    name: '打包结果',\n    code: 'BUILD_RESULT',\n    url:\n      'https://auto-nvwa.amap.com/cpp/api/configbuild/get_build_result/',\n    method: 'GET',\n    state: 'results',\n    dataHandler: res => {\n      return res.data.result;\n    },\n  },\n  BUC_USER: {\n    name: '搜索用户',\n    code: 'BUC_USER',\n    url: 'https://auto-nvwa.amap.com/ws/nvwa/sso_users/',\n    method: 'GET',\n    dataHandler: res => res.data.items,\n  },\n};\n  this.$ds = new window.jianpin.DataSource(this, {});\n}",
+          value: 'function() { /*...*/ }',
         },
         __jp__initEnv: {
           type: 'JSFunction',
-          value: "function() {\n  const hostname = window.location.hostname;\n  let env = 'prod';\n\n  if (window.jianpin && window.jianpin.env === 'dev') {\n    env = 'dev';\n  } else if (window.arsenalConfig)  {\n    env = window.arsenalConfig.env;\n  }\n\n  const urlSearchParams = new URLSearchParams(window.location.search);\n  const searchParams = {};\n  for (const [key, value] of urlSearchParams) {\n    searchParams[key] = value;\n  }\n  this.$env =  env;\n  this.$searchParams = searchParams;\n\n  if (window.arsenal && window.arsenal.store) {\n    this.$user = window.arsenal.store.getState('user');\n    this.$store = window.arsenal.store;\n    window.arsenal.store.subscribe('user', () => {\n      this.$user = window.arsenal.store.getState('user');\n    });\n  } else {\n    this.$store = {\n      subscribe: () => {},\n      getState: () => {},\n    };\n    this.$user = this.__jp__mockUser || {};\n  }\n}",
+          value: 'function() { /*...*/ }',
         },
         __jp__initConfig: {
           type: 'JSFunction',
-          value: 'function() {\n  const __config = {\n  "default": {},\n  "dev": {},\n  "daily": {},\n  "pre": {},\n  "prod": {}\n};\n\n  this.$config = window.jianpin.utils.extend(true, {}, __config.default, __config[this.$env]);\n}',
+          value: 'function() { /*...*/ }',
         },
         __jp__initUtils: {
           type: 'JSFunction',
-          value: 'function() {\n  this.$utils = {\n    message: window.jianpin.utils.message,\n    axios: window.jianpin.utils.axios,\n    moment: window.jianpin.utils.moment,\n  };\n}',
+          value: 'function() { /*...*/ }',
         },
         setSearchItem: {
           type: 'JSFunction',
-          value: 'function(item) {\n    const searchState = this.state.searchValues;\n    const reducer = (pre, key) => {\n      let value = searchState[key];\n      if (item.hasOwnProperty(key)) {\n        value = item[key];\n      }\n      return {\n        ...pre,\n        [key]: value || null,\n      };\n    };\n    const searchValues = Object.keys(searchState).reduce(reducer, {});\n    this.setState({\n      searchValues,\n    });\n  }',
+          value: 'function() { /*...*/ }',
         },
         fetchProject: {
           type: 'JSFunction',
-          value: "function(value, callback) {\n    if (this.projectTimeout) {\n      clearTimeout(this.projectTimeout);\n      this.projectTimeout = null;\n    }\n    this.currentProject = value;\n\n    const fake = () => {\n      this.$ds\n        .resolve('PROJECTS', {\n          params: { search_param: value },\n        })\n        .then(res => {\n          if (this.currentProject !== value) {\n            return;\n          }\n          callback(res || []);\n        });\n    };\n    this.projectTimeout = setTimeout(fake, 300);\n  }",
+          value: 'function() { /*...*/ }',
         },
         handleProjectSearch: {
           type: 'JSFunction',
-          value: 'function(value) {\n    if (value) {\n      this.fetchProject(value, projects => {\n        this.setState({ projects });\n      });\n    } else {\n      this.setState({ projects: [] });\n    }\n  }',
+          value: 'function() { /*...*/ }',
         },
         handleProjectChange: {
           type: 'JSFunction',
@@ -231,11 +231,11 @@
         },
         fetchUser: {
           type: 'JSFunction',
-          value: "function(value, callback) {\n    if (this.userTimeout) {\n      clearTimeout(this.userTimeout);\n      this.userTimeout = null;\n    }\n    this.currentUser = value;\n\n    const fake = () => {\n      this.$ds\n        .resolve('BUC_USER', {\n          params: { q: value },\n        })\n        .then(res => {\n          if (this.currentUser !== value) {\n            return;\n          }\n          const data = res.slice(0, 8).map(r => ({\n            label: `${r.id} / ${r.label}`,\n            value: r.id,\n          }));\n          callback(data);\n        });\n    };\n    this.userTimeout = setTimeout(fake, 300);\n  }",
+          value: 'function() { /*...*/ }',
         },
         handleUserSearch: {
           type: 'JSFunction',
-          value: 'function(value) {\n    if (value) {\n      this.fetchUser(value, userOptions => {\n        this.setState({ userOptions });\n      });\n    } else {\n      this.setState({ userOptions: [] });\n    }\n  }',
+          value: 'function() { /*...*/ }',
         },
         handleUserChange: {
           type: 'JSFunction',
@@ -243,7 +243,7 @@
         },
         fetchPkgs: {
           type: 'JSFunction',
-          value: "function() {\n    const { pageIndex, pageSize } = this.pageParams;\n    this.$ds\n      .resolve('PKG_LIST', {\n        params: {\n          ...this.searchParams,\n          page: pageIndex,\n          size: pageSize,\n        },\n      })\n      .then(res => {\n        const { result, page } = res.data;\n        const { count } = page;\n        this.setState({\n          isSearch: true,\n          pkgs: result,\n          total: count,\n        });\n      });\n  }",
+          value: 'function() { /*...*/ }',
         },
         onPageChange: {
           type: 'JSFunction',
@@ -259,31 +259,31 @@
         },
         reload: {
           type: 'JSFunction',
-          value: "function(id) {\n    if (!confirm('确实要重新执行？')) {\n      return;\n    }\n    this.$ds\n      .resolve('RELOAD', {\n        params: {\n          build_id: id,\n        },\n      })\n      .then(res => {\n        const { code, message } = res.data.status;\n        if (code == 0) {\n          this.$utils.message.error(message);\n        } else {\n          const { pageIndex, pageSize } = this.pageParams;\n          this.onPageChange(pageIndex, pageSize);\n        }\n      })\n      .catch(err => {\n        this.$utils.message.error(err.message);\n      });\n  }",
+          value: 'function() { /*...*/ }',
         },
         handleResult: {
           type: 'JSFunction',
-          value: "function(e) {\n    // e.persist();\n    e.preventDefault();\n    e.stopPropagation();\n    let href;\n    let tagName;\n    let target = e.target;\n    do {\n      tagName = target.tagName.toUpperCase();\n      href = target.getAttribute('href');\n      target = target.parentNode;\n    } while (!href && tagName !== 'TD');\n    if (!href) {\n      return;\n    }\n\n    this.$ds\n      .resolve('BUILD_RESULT', {\n        params: {\n          build_id: href,\n        },\n      })\n      .then(res => {\n        this.setState({\n          resultVisible: true,\n        });\n      })\n      .catch(err => {\n        this.$utils.message.error(`打包结果获取失败: ${err.message}`);\n      });\n  }",
+          value: 'function() { /*...*/ }',
         },
         handleDetail: {
           type: 'JSFunction',
-          value: 'function() {\n    // 跳转详情页面 TODO\n  }',
+          value: 'function() { /*...*/ }',
         },
         onResultCancel: {
           type: 'JSFunction',
-          value: 'function() {\n    this.setState({\n      resultVisible: false,\n    });\n  }',
+          value: 'function() { /*...*/ }',
         },
         formatResult: {
           type: 'JSFunction',
-          value: "function(item) {\n    if (!item) {\n      return '暂无结果';\n    }\n    const { channel, plat, version, status } = item;\n    return [channel, plat, version, status].join('-');\n  }",
+          value: 'function() { /*...*/ }',
         },
         handleDownload: {
           type: 'JSFunction',
-          value: "function() {\n    const { results } = this.state;\n    if (!results || results.length < 1) {\n      return;\n    }\n    let link = document.createElement('a');\n    link.style.display = 'none';\n    document.body.appendChild(link);\n    results.forEach(r => {\n      link.href = r.download_link;\n      link.click();\n    });\n    document.body.removeChild(link);\n    link = null;\n  }",
+          value: 'function() { /*...*/ }',
         },
         onFinish: {
           type: 'JSFunction',
-          value: 'function(f) {\n    const params = Object.keys(f).reduce((pre, key) => {\n      const value = f[key];\n      if (value === undefined) {\n        return pre;\n      }\n      return {\n        ...pre,\n        [key]: value,\n      };\n    }, {});\n    this.searchParams = params;\n    this.fetchPkgs();\n  }',
+          value: 'function() { /*...*/ }',
         },
       },
       state: {

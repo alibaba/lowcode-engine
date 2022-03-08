@@ -248,7 +248,7 @@ class Home$$Page extends Component {
           options: function () {
             return {
               method: 'GET',
-              uri: 'https://shs.alibaba-inc.com/mock/1458/demo/user',
+              uri: 'https://shs.xxx.com/mock/1458/demo/user',
               isSync: true,
             };
           },

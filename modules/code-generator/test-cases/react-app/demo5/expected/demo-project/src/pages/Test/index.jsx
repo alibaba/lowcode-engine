@@ -60,128 +60,34 @@ class Test$$Page extends React.Component {
   };
 
   componentWillUnmount() {
-    console.log("will umount");
+    /* ... */
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log(this.state);
+  componentDidUpdate() {
+    /* ... */
   }
 
-  onChange(optionItem, data) {
-    this.setState({
-      selectedGateway: optionItem.value,
-    });
-    fetch(
-      "https://oneapi.alibaba-inc.com/mock/knk1s2w7/ws/tconf/gate/publish/list/" +
-        optionItem.value
-    )
-      .then((res) => {
-        return res.json();
-      })
-      .then((resData) => {
-        this.setState({
-          records: resData.data,
-        });
-      });
+  onChange() {
+    /* ... */
   }
 
-  getActions(item) {
-    const actions = [];
-
-    if (item.show_detail) {
-      actions.push({
-        text: "详情",
-        needConfirm: false,
-        handler: () => {
-          console.log("详情");
-        },
-      });
-    }
-
-    if (item.show_roll_back) {
-      actions.push({
-        text: "回滚到此版本",
-        needConfirm: false,
-        handler: () => {
-          console.log("回滚到此版本");
-        },
-      });
-    }
-
-    if (item.show_continue) {
-      actions.push({
-        text: "继续",
-        needConfirm: false,
-        handler: () => {
-          console.log("继续");
-        },
-      });
-    }
-
-    return actions;
+  getActions() {
+    /* ... */
   }
 
   onCreateOrder() {
-    if (!this.state.selectedGateway) {
-      alert("请先选择网关");
-      return;
-    }
-
-    this.setState({
-      modalVisible: true,
-    });
+    /* ... */
   }
 
   onCancelModal() {
-    this.setState({
-      modalVisible: false,
-    });
+    /* ... */
   }
 
   onConfirmCreateOrder() {
-    fetch(
-      `https://oneapi.alibaba-inc.com/mock/knk1s2w7/ws/tconf/gate/publish/app/${this.state.selectedGateway}`,
-      {
-        method: "POST",
-      }
-    )
-      .then((res) => {
-        return res.json();
-      })
-      .then((resJson) => {
-        console.log("create result: ", resJson);
-
-        if (resJson.result !== true) {
-          throw new Error(resJson.message + resJson.errdetail);
-        }
-      })
-      .then(() => {
-        console.log("创建发布单成功");
-        this.onCancelModal();
-      })
-      .catch((err) => {
-        console.error(err);
-        alert("创建失败");
-      });
+    /* ... */
   }
 
-  componentDidMount() {
-    this.setState({
-      gateways: [
-        {
-          domain: "uniproxy.amap.com:7001",
-          gate_code: "auto-edd-uniproxy",
-          gate_status_desc: "解锁",
-          label: "auto-edd-uniproxy",
-          value: "auto-edd-uniproxy",
-        },
-      ],
-    });
-    console.log("-----------", this, this.page);
-    setTimeout(() => {
-      console.log(this.state.gateways);
-    }, 1000);
-  }
+  componentDidMount() {}
 
   render() {
     const __$$context = this;

@@ -110,4 +110,4 @@ console.log(result); // 出码结果(默认是递归结构描述的，可以传 
 
 ## 参与共建
 
-欢迎参与共建，如何共建请参阅：[./CONTRIBUTING.md](https://code.aone.alibaba-inc.com/ali-lowcode/code-generator/blob/develop/CONTRIBUTING.md)
+欢迎参与共建，如何共建请参阅：[./CONTRIBUTING.md](https://github.com/alibaba/lowcode-engine/blob/main/modules/code-generator/CONTRIBUTING.md)

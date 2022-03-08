@@ -6,8 +6,6 @@ import { JSExpression, JSFunction, isJSExpression, isJSFunction } from '@alilc/l
 import { CodeGeneratorError, IScope } from '../types';
 import { transformExpressionLocalRef, ParseError } from './expressionParser';
 
-// demo: https://riddle.alibaba-inc.com/riddles/3d4c977f
-
 function parseFunction(content: string): t.FunctionExpression | null {
   try {
     const ast = parser.parse(`(${content});`);

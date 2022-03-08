@@ -16,7 +16,6 @@ export type RaxFrameworkOptions = {
 
   /**
    * 构建配置
-   * @see https://rax.alibaba-inc.com/docs/guide/build-config
    */
   buildConfig?: {
     inlineStyle?: boolean | { forceEnableCSS: boolean };

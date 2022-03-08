@@ -309,7 +309,7 @@ codealike.json
             "type": "fetch",
             "options": {
               "method": "GET",
-              "uri": "https://shs.alibaba-inc.com/mock/1458/demo/user",
+              "uri": "https://shs.xxx.com/mock/1458/demo/user",
               "isSync": true
             },
             "dataHandler": {
@@ -323,7 +323,7 @@ codealike.json
             "type": "fetch",
             "options": {
               "method": "GET",
-              "uri": "https://shs.alibaba-inc.com/mock/1458/demo/orders",
+              "uri": "https://shs.xxx.com/mock/1458/demo/orders",
               "isSync": true
             },
             "dataHandler": {
@@ -467,7 +467,7 @@ codealike.json
   ],
   "constants": {
     "ENV": "prod",
-    "DOMAIN": "xxx.alibaba-inc.com"
+    "DOMAIN": "xxx.xxx.com"
   },
   "css": "body {font-size: 12px;} .table { width: 100px;}",
   "config": {
@@ -556,7 +556,7 @@ codealike.json
   "author": "",
   "license": "ISC",
   "publishConfig": {
-    "registry": "https://registry.npm.alibaba-inc.com"
+    "registry": "https://registry.npm.xxx.com"
   },
   "dependencies": {
     "@alilc/lowcode-code-generator": "^1.0.0-beta.16",
