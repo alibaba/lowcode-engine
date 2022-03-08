@@ -319,6 +319,7 @@ export class SchemaParser implements ISchemaParser {
         containersDeps,
         utilsDeps,
         packages: npms || [],
+        dataSourcesTypes: this.collectDataSourcesTypes(schema),
       },
     };
   }
@@ -349,6 +350,27 @@ export class SchemaParser implements ISchemaParser {
       schema = schemaSrc;
     }
     return schema;
+  }
+
+  private collectDataSourcesTypes(schema: ProjectSchema): string[] {
+    const dataSourcesTypes = new Set<string>();
+
+    // 数据源的默认类型为 fetch
+    const defaultDataSourceType = 'fetch';
+
+    // 收集应用级别的数据源
+    schema.dataSource?.list?.forEach((ds) => {
+      dataSourcesTypes.add(ds.type || defaultDataSourceType);
+    });
+
+    // 收集容器级别的数据源（页面/组件/区块）
+    schema.componentsTree.forEach((rootNode) => {
+      rootNode.dataSource?.list?.forEach((ds) => {
+        dataSourcesTypes.add(ds.type || defaultDataSourceType);
+      });
+    });
+
+    return Array.from(dataSourcesTypes.values());
   }
 }
 

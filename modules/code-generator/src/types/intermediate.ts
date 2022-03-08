@@ -42,6 +42,7 @@ export interface IProjectInfo {
   packages: INpmPackage[];
   meta?: { name?: string; title?: string } | Record<string, any>;
   config?: Record<string, any>;
+  dataSourcesTypes?: string[];
 }
 
 export interface IPageMeta {

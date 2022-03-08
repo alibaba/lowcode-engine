@@ -10,6 +10,7 @@ import {
   ICodeStruct,
   IProjectInfo,
 } from '../../../../../types';
+import { buildDataSourceDependencies } from '../../../../../utils/dataSource';
 
 interface IIceJsPackageJSON extends PackageJSON {
   ideMode: {
@@ -22,7 +23,31 @@ interface IIceJsPackageJSON extends PackageJSON {
   originTemplate: string;
 }
 
-const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
+export type IceJsPackageJsonPluginConfig = {
+  /**
+   * 数据源配置
+   */
+  datasourceConfig?: {
+    /** 数据源引擎的版本 */
+    engineVersion?: string;
+    /** 数据源引擎的包名 */
+    enginePackage?: string;
+    /** 数据源 handlers 的版本 */
+    handlersVersion?: {
+      [key: string]: string;
+    };
+    /** 数据源 handlers 的包名 */
+    handlersPackages?: {
+      [key: string]: string;
+    };
+  };
+  /** 包名 */
+  packageName?: string;
+  /** 版本 */
+  packageVersion?: string;
+};
+
+const pluginFactory: BuilderComponentPluginFactory<IceJsPackageJsonPluginConfig> = (cfg) => {
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
     const next: ICodeStruct = {
       ...pre,
@@ -31,21 +56,18 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
     const ir = next.ir as IProjectInfo;
 
     const packageJson: IIceJsPackageJSON = {
-      name: '@alifd/scaffold-lite-js',
-      version: '0.1.5',
+      name: cfg?.packageName || 'icejs-demo-app',
+      version: cfg?.packageVersion || '0.1.5',
       description: '轻量级模板，使用 JavaScript，仅包含基础的 Layout。',
       dependencies: {
         moment: '^2.24.0',
         react: '^16.4.1',
         'react-dom': '^16.4.1',
         '@alifd/theme-design-pro': '^0.x',
-        '@alilc/lowcode-datasource-engine': '*',
-        // TODO: 如何动态获取下面这些依赖？
-        '@alilc/lowcode-datasource-url-params-handler': '*',
-        '@alilc/lowcode-datasource-fetch-handler': '*',
-        '@alilc/lowcode-datasource-mtop-handler': '*',
-        '@alilc/lowcode-datasource-mopen-handler': '*',
         'intl-messageformat': '^9.3.6',
+
+        // 数据源相关的依赖:
+        ...buildDataSourceDependencies(ir, cfg?.datasourceConfig),
       },
       devDependencies: {
         '@ice/spec': '^1.0.0',
