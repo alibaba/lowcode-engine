@@ -164,7 +164,7 @@
       lifeCycles: {
         constructor: {
           type: 'JSFunction',
-          value: 'function() {\n    // customerProjectInfo: {\n    //   id: null,\n    //   systemProjectName: \'锐捷AR\',\n    //   projectVersionTypeArray: [\'1\', \'2\'],\n    //   projectVersionType: \'1,2\',\n    //   versionLine: 1,\n    //   expectedTime: \'2021-05-06\',\n    //   expectedNum: \'5000\',\n    //   projectModal: 1,\n    //   displayWidth: 12,\n    //   displayHeight: 13,\n    //   displayInch: 14,\n    //   displayDpi: 15,\n    //   mainSoc: \'MTK856\',\n    //   cpuCoreNum: 6,\n    //   instructions: \'ARMv7\',\n    //   osVersion: 2,\n    //   status: 1,\n    // },\n    // "customerProjectInfo": {\n    //   "id": null,\n    //   "systemProjectName": null,\n    //   "projectVersionTypeArray": null,\n    //   "projectVersionType": null,\n    //   "versionLine": 2,\n    //   "expectedTime": null,\n    //   "expectedNum": null,\n    //   "projectModal": 0,\n    //   "displayWidth": null,\n    //   "displayHeight": null,\n    //   "displayInch": null,\n    //   "displayDpi": null,\n    //   "mainSoc": null,\n    //   "cpuCoreNum": null,\n    //   "instructions": null,\n    //   "osVersion": 0\n    //   "status": null,\n    // },\n\n    this.__jp__init();\n  }',
+          value: "function() { /*...*/ }",
         },
         componentDidMount: {
           type: 'JSFunction',
@@ -182,39 +182,39 @@
       methods: {
         __jp__init: {
           type: 'JSFunction',
-          value: 'function() {\n  this.__jp__initEnv();\n  this.__jp__initDataSource();\n  this.__jp__initRouter();\n  this.__jp__initUtils();\n}',
+          value: "function() { /*...*/ }",
         },
         __jp__initRouter: {
           type: 'JSFunction',
-          value: 'function() {\n  if (window.arsenal) {\n    this.$router = new window.jianpin.ArsenalRouter({\n      app: this.props.microApp,\n    });\n  } else {\n    this.$router = new window.jianpin.ArsenalRouter();\n  }\n}',
+          value: "function() { /*...*/ }",
         },
         __jp__initDataSource: {
           type: 'JSFunction',
-          value: "function() {\n    // 数据源面板存在缺陷，先用次数代码模式代替\n    this.$apis = {\n  ADD_OR_UPDATE_CUSTOMER_PROJECT: {\n    name: '添加或删除用户项目',\n    code: 'ADD_OR_UPDATE_CUSTOMER_PROJECT',\n    url: '/customer/project/addOrUpdate',\n    method: 'POST',\n    state: 'customerProjectInfo',\n    params: {},\n    data: {},\n    dataHandler: res => {\n      console.log('res.data.data = ' + JSON.stringify(res.data.data));\n      if (res.data.code === '200') {\n        this.$utils.message.success(res.data.message);\n        //关闭修改状态\n        this.setState({\n          isModifyStatus: false,\n        });\n        this.setState({\n          currentStep: 2,\n        });\n      } else {\n        this.$utils.message.error(res.data.message);\n      }\n      //修改步骤三审核的显示文本\n      switch (res.data.data.status) {\n        case 1:\n          this.setState({\n            thirdAuditText: '审核中',\n            thirdButtonText: '修改',\n          });\n          break;\n        case 2:\n          this.setState({\n            thirdAuditText: '审核未通过',\n            thirdButtonText: '修改',\n          });\n          break;\n        case 3:\n        case 4:\n        case 5:\n        case 6:\n          this.setState({\n            thirdAuditText: '审核通过',\n            thirdButtonText: '开始配置',\n          });\n          break;\n      }\n\n      return res.data.data;\n    },\n  },\n};\n\n    this.$ds = new window.jianpin.DataSource(this,{\n  apiPrefix: {\n    dev: 'http://localhost:7001/ws/autozeus',\n    online: '/ws/autozeus',\n  },\n  headers: {\n    'X-Tproxy-User-Mozi-Tid': '10005920384',\n    'X-Tproxy-User-Mozi-Uid': '1627124',\n    'X-Tproxy-User-Mozi-User': 'shitao',\n    'X-Tproxy-User-Refer-Id': '239355',\n  },\n});\n  }",
+          value: "function() { /*...*/ }",
         },
         __jp__initEnv: {
           type: 'JSFunction',
-          value: "function() {\n  const hostname = window.location.hostname;\n  let env = 'prod';\n\n  if (window.jianpin.env === 'dev') {\n    env = 'dev';\n  } else if (window.arsenalConfig)  {\n    env = window.arsenalConfig.env;\n  }\n\n  const urlSearchParams = new URLSearchParams(window.location.search);\n  const searchParams = {};\n  for (const [key, value] of urlSearchParams) {\n    searchParams[key] = value;\n  }\n  this.$env =  env;\n  this.$searchParams = searchParams;\n}",
+          value: "function() { /*...*/ }",
         },
         __jp__initUtils: {
           type: 'JSFunction',
-          value: 'function() {\n  this.$utils = {\n    message: window.jianpin.utils.message,\n    axios: window.jianpin.utils.axios,\n    moment: window.jianpin.utils.moment,\n  };\n}',
+          value: "function() { /*...*/ }",
         },
         onFinishFirst: {
           type: 'JSFunction',
-          value: "function(data) {\n    //第一步 下一步\n\n    console.log('first data', data);\n    this.setState({\n      //customerProjectInfo: data,\n      currentStep: 1,\n    });\n    // this.state.customerProjectInfo.systemProjectName = data.systemProjectName;\n    // this.state.customerProjectInfo.projectVersionTypeArray = data.projectVersionTypeArray;\n    // this.state.customerProjectInfo.projectVersionType = data.projectVersionType;\n    // this.state.customerProjectInfo.versionLine = data.versionLine;\n    // this.state.customerProjectInfo.expectedTime = data.expectedTime;\n    // this.state.customerProjectInfo.expectedNum = data.expectedNum;\n\n    this.setState({\n      customerProjectInfo: {\n        ...this.state.customerProjectInfo,\n        ...data,\n        // systemProjectName: data.systemProjectName,\n        // projectVersionTypeArray: data.projectVersionTypeArray,\n        // projectVersionType: data.projectVersionType,\n        // versionLine: data.versionLine,\n        // expectedTime: data.expectedTime,\n        // expectedNum: data.expectedNum,\n      },\n    });\n\n    console.log(\n      'first customerProjectInfo',\n      this.state.customerProjectInfo\n    );\n\n    if (\n      this.state.customerProjectInfo.id > 0 &&\n      !this.state.isModifyStatus\n    ) {\n      //按钮显示为下一步\n      this.setState({\n        secondCommitText: '下一步',\n      });\n    } else {\n      //按钮显示为完成并提交\n      this.setState({\n        secondCommitText: '完成并提交',\n      });\n    }\n  }",
+          value: "function() { /*...*/ }",
         },
         onClickPreSecond: {
           type: 'JSFunction',
-          value: 'function() {\n    //第二步 上一步\n\n    this.setState({\n      currentStep: 0,\n    });\n  }',
+          value: "function() { /*...*/ }",
         },
         onFinishSecond: {
           type: 'JSFunction',
-          value: "function(data) {\n    //第二步 完成并提交 下一步\n\n    console.log('second data', data);\n\n    if (\n      this.state.customerProjectInfo.id > 0 &&\n      !this.state.isModifyStatus\n    ) {\n      //下一步  执行的动作\n\n      //修改步骤三审核的显示文本\n      switch (this.state.customerProjectInfo.status) {\n        case 1:\n          this.setState({\n            thirdAuditText: '审核中',\n            thirdButtonText: '修改',\n          });\n          break;\n        case 2:\n          this.setState({\n            thirdAuditText: '审核未通过',\n            thirdButtonText: '修改',\n          });\n          break;\n        case 3:\n        case 4:\n        case 5:\n        case 6:\n          this.setState({\n            thirdAuditText: '审核通过',\n            thirdButtonText: '开始配置',\n          });\n          break;\n      }\n\n      this.setState({\n        currentStep: 2,\n      });\n    } else {\n      // 完成并提交 执行的动作\n\n      // this.setState({\n      //   currentStep: 2,\n      // });\n\n      // this.state.customerProjectInfo.projectModal = data.projectModal;\n      // this.state.customerProjectInfo.displayWidth = data.displayWidth;\n      // this.state.customerProjectInfo.displayHeight = data.displayHeight;\n      // this.state.customerProjectInfo.displayInch = data.displayInch;\n      // this.state.customerProjectInfo.displayDpi = data.displayDpi;\n      // this.state.customerProjectInfo.mainSoc = data.mainSoc;\n      // this.state.customerProjectInfo.cpuCoreNum = data.cpuCoreNum;\n      // this.state.customerProjectInfo.instructions = data.instructions;\n      // this.state.customerProjectInfo.osVersion = data.osVersion;\n\n      this.setState({\n        customerProjectInfo: {\n          ...this.state.customerProjectInfo,\n          ...data,\n          // projectModal: data.projectModal,\n          // displayWidth: data.displayWidth,\n          // displayHeight: data.displayHeight,\n          // displayInch: data.displayInch,\n          // displayDpi: data.displayDpi,\n          // mainSoc: data.mainSoc,\n          // cpuCoreNum: data.cpuCoreNum,\n          // instructions: data.instructions,\n          // osVersion: data.osVersion,\n        },\n      });\n\n      console.log(\n        'second customerProjectInfo',\n        this.state.customerProjectInfo\n      );\n\n      this.$ds.resolve(this.$apis.ADD_OR_UPDATE_CUSTOMER_PROJECT, {\n        data: this.state.customerProjectInfo,\n      });\n    }\n  }",
+          value: "function() { /*...*/ }",
         },
         onClickModifyThird: {
           type: 'JSFunction',
-          value: "function() {\n    //第三步 修改 开始配置\n\n    if (this.state.customerProjectInfo.status > 2) {\n      //状态大于2说明审核通过了，可以开始配置\n      // todo 路由跳转\n      alert('功能配置/版本管理等功能暂未上线，敬请期待');\n      this.$router.push('/');\n    } else {\n      //状态小于2说明审核未通过了，可以修改\n      //置为修改状态\n      // this.setState({\n      //   isModifyDialogVisible: true,\n      //   isModifyStatus: true,\n      // });\n      //20210609 产品修改为直接跳转到第一步，无需对话框\n      this.setState({\n        isModifyDialogVisible: false,\n        isModifyStatus: true,\n        currentStep: 0,\n      });\n    }\n  }",
+          value: "function() { /*...*/ }",
         },
         onOkModifyDialogThird: {
           type: 'JSFunction',

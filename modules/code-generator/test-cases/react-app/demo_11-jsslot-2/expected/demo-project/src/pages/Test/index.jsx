@@ -88,195 +88,39 @@ class Test$$Page extends React.Component {
   componentWillUnmount() {}
 
   __jp__init() {
-    this.__jp__initEnv && this.__jp__initEnv();
-    this.__jp__initConfig && this.__jp__initConfig();
-    this.__jp__initDataSource && this.__jp__initDataSource();
-    this.__jp__initRouter && this.__jp__initRouter();
-    this.__jp__initUtils && this.__jp__initUtils();
+    /*...*/
   }
 
   __jp__initRouter() {
-    if (window.arsenal) {
-      this.$router = new window.jianpin.ArsenalRouter({
-        app: this.props.microApp,
-      });
-    } else {
-      this.$router = new window.jianpin.ArsenalRouter();
-    }
+    /*...*/
   }
 
   __jp__initDataSource() {
-    this.$apis = {
-      PKG_LIST: {
-        name: "打包列表",
-        code: "PKG_LIST",
-        url: "https://auto-nvwa.amap.com/ws/nvwa/cpp5x/packages/",
-        method: "GET",
-        dataHandler: (res) => res.data,
-      },
-      PROJECTS: {
-        name: "项目名称/渠道号",
-        code: "PROJECTS",
-        url: "http://auto-nvwa-staging.alibaba.com/ws/nvwa/cpp/select_projects/",
-        method: "GET",
-        state: "projects",
-        params: {
-          size: 5000,
-        },
-        dataHandler: (res) => {
-          return res.data.data.result.map((d) => {
-            const { id, channelId, project_name } = d;
-            return {
-              label: `${project_name} / ${channelId}`,
-              value: id,
-            };
-          });
-        },
-      },
-      RELOAD: {
-        name: "重新执行",
-        code: "RELOAD",
-        url: "https://auto-nvwa.amap.com/cpp/configbuild/rebuild/",
-        method: "GET",
-      },
-      BUILD_RESULT: {
-        name: "打包结果",
-        code: "BUILD_RESULT",
-        url: "https://auto-nvwa.amap.com/cpp/api/configbuild/get_build_result/",
-        method: "GET",
-        state: "results",
-        dataHandler: (res) => {
-          return res.data.result;
-        },
-      },
-      BUC_USER: {
-        name: "搜索用户",
-        code: "BUC_USER",
-        url: "https://auto-nvwa.amap.com/ws/nvwa/sso_users/",
-        method: "GET",
-        dataHandler: (res) => res.data.items,
-      },
-    };
-    this.$ds = new window.jianpin.DataSource(this, {});
+    /*...*/
   }
 
   __jp__initEnv() {
-    const hostname = window.location.hostname;
-    let env = "prod";
-
-    if (window.jianpin && window.jianpin.env === "dev") {
-      env = "dev";
-    } else if (window.arsenalConfig) {
-      env = window.arsenalConfig.env;
-    }
-
-    const urlSearchParams = new URLSearchParams(window.location.search);
-    const searchParams = {};
-
-    for (const [key, value] of urlSearchParams) {
-      searchParams[key] = value;
-    }
-
-    this.$env = env;
-    this.$searchParams = searchParams;
-
-    if (window.arsenal && window.arsenal.store) {
-      this.$user = window.arsenal.store.getState("user");
-      this.$store = window.arsenal.store;
-      window.arsenal.store.subscribe("user", () => {
-        this.$user = window.arsenal.store.getState("user");
-      });
-    } else {
-      this.$store = {
-        subscribe: () => {},
-        getState: () => {},
-      };
-      this.$user = this.__jp__mockUser || {};
-    }
+    /*...*/
   }
 
   __jp__initConfig() {
-    const __config = {
-      default: {},
-      dev: {},
-      daily: {},
-      pre: {},
-      prod: {},
-    };
-    this.$config = window.jianpin.utils.extend(
-      true,
-      {},
-      __config.default,
-      __config[this.$env]
-    );
+    /*...*/
   }
 
   __jp__initUtils() {
-    this.$utils = {
-      message: window.jianpin.utils.message,
-      axios: window.jianpin.utils.axios,
-      moment: window.jianpin.utils.moment,
-    };
+    /*...*/
   }
 
-  setSearchItem(item) {
-    const searchState = this.state.searchValues;
-
-    const reducer = (pre, key) => {
-      let value = searchState[key];
-
-      if (item.hasOwnProperty(key)) {
-        value = item[key];
-      }
-
-      return { ...pre, [key]: value || null };
-    };
-
-    const searchValues = Object.keys(searchState).reduce(reducer, {});
-    this.setState({
-      searchValues,
-    });
+  setSearchItem() {
+    /*...*/
   }
 
-  fetchProject(value, callback) {
-    if (this.projectTimeout) {
-      clearTimeout(this.projectTimeout);
-      this.projectTimeout = null;
-    }
-
-    this.currentProject = value;
-
-    const fake = () => {
-      this.$ds
-        .resolve("PROJECTS", {
-          params: {
-            search_param: value,
-          },
-        })
-        .then((res) => {
-          if (this.currentProject !== value) {
-            return;
-          }
-
-          callback(res || []);
-        });
-    };
-
-    this.projectTimeout = setTimeout(fake, 300);
+  fetchProject() {
+    /*...*/
   }
 
-  handleProjectSearch(value) {
-    if (value) {
-      this.fetchProject(value, (projects) => {
-        this.setState({
-          projects,
-        });
-      });
-    } else {
-      this.setState({
-        projects: [],
-      });
-    }
+  handleProjectSearch() {
+    /*...*/
   }
 
   handleProjectChange(id) {
@@ -285,49 +129,12 @@ class Test$$Page extends React.Component {
     });
   }
 
-  fetchUser(value, callback) {
-    if (this.userTimeout) {
-      clearTimeout(this.userTimeout);
-      this.userTimeout = null;
-    }
-
-    this.currentUser = value;
-
-    const fake = () => {
-      this.$ds
-        .resolve("BUC_USER", {
-          params: {
-            q: value,
-          },
-        })
-        .then((res) => {
-          if (this.currentUser !== value) {
-            return;
-          }
-
-          const data = res.slice(0, 8).map((r) => ({
-            label: `${r.id} / ${r.label}`,
-            value: r.id,
-          }));
-          callback(data);
-        });
-    };
-
-    this.userTimeout = setTimeout(fake, 300);
+  fetchUser() {
+    /*...*/
   }
 
-  handleUserSearch(value) {
-    if (value) {
-      this.fetchUser(value, (userOptions) => {
-        this.setState({
-          userOptions,
-        });
-      });
-    } else {
-      this.setState({
-        userOptions: [],
-      });
-    }
+  handleUserSearch() {
+    /*...*/
   }
 
   handleUserChange(user) {
@@ -338,20 +145,7 @@ class Test$$Page extends React.Component {
   }
 
   fetchPkgs() {
-    const { pageIndex, pageSize } = this.pageParams;
-    this.$ds
-      .resolve("PKG_LIST", {
-        params: { ...this.searchParams, page: pageIndex, size: pageSize },
-      })
-      .then((res) => {
-        const { result, page } = res.data;
-        const { count } = page;
-        this.setState({
-          isSearch: true,
-          pkgs: result,
-          total: count,
-        });
-      });
+    /*...*/
   }
 
   onPageChange(pageIndex, pageSize) {
@@ -370,115 +164,32 @@ class Test$$Page extends React.Component {
     return user.user_name;
   }
 
-  reload(id) {
-    if (!confirm("确实要重新执行？")) {
-      return;
-    }
-
-    this.$ds
-      .resolve("RELOAD", {
-        params: {
-          build_id: id,
-        },
-      })
-      .then((res) => {
-        const { code, message } = res.data.status;
-
-        if (code == 0) {
-          this.$utils.message.error(message);
-        } else {
-          const { pageIndex, pageSize } = this.pageParams;
-          this.onPageChange(pageIndex, pageSize);
-        }
-      })
-      .catch((err) => {
-        this.$utils.message.error(err.message);
-      });
+  reload() {
+    /*...*/
   }
 
-  handleResult(e) {
-    // e.persist();
-    e.preventDefault();
-    e.stopPropagation();
-    let href;
-    let tagName;
-    let target = e.target;
-
-    do {
-      tagName = target.tagName.toUpperCase();
-      href = target.getAttribute("href");
-      target = target.parentNode;
-    } while (!href && tagName !== "TD");
-
-    if (!href) {
-      return;
-    }
-
-    this.$ds
-      .resolve("BUILD_RESULT", {
-        params: {
-          build_id: href,
-        },
-      })
-      .then((res) => {
-        this.setState({
-          resultVisible: true,
-        });
-      })
-      .catch((err) => {
-        this.$utils.message.error(`打包结果获取失败: ${err.message}`);
-      });
+  handleResult() {
+    /*...*/
   }
 
   handleDetail() {
-    // 跳转详情页面 TODO
+    /*...*/
   }
 
   onResultCancel() {
-    this.setState({
-      resultVisible: false,
-    });
+    /*...*/
   }
 
-  formatResult(item) {
-    if (!item) {
-      return "暂无结果";
-    }
-
-    const { channel, plat, version, status } = item;
-    return [channel, plat, version, status].join("-");
+  formatResult() {
+    /*...*/
   }
 
   handleDownload() {
-    const { results } = this.state;
-
-    if (!results || results.length < 1) {
-      return;
-    }
-
-    let link = document.createElement("a");
-    link.style.display = "none";
-    document.body.appendChild(link);
-    results.forEach((r) => {
-      link.href = r.download_link;
-      link.click();
-    });
-    document.body.removeChild(link);
-    link = null;
+    /*...*/
   }
 
-  onFinish(f) {
-    const params = Object.keys(f).reduce((pre, key) => {
-      const value = f[key];
-
-      if (value === undefined) {
-        return pre;
-      }
-
-      return { ...pre, [key]: value };
-    }, {});
-    this.searchParams = params;
-    this.fetchPkgs();
+  onFinish() {
+    /*...*/
   }
 
   componentDidMount() {

@@ -111,3 +111,7 @@ codealike.json
 
 # types
 /types
+
+# backup files
+*.bak
+

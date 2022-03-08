@@ -200,55 +200,55 @@
       "methods": {
         "__jp__init": {
           "type": "JSFunction",
-          "value": "function() {\n  window.jianpin.emitter.emit('rootIns', this);\n  this.__jp__initEnv && this.__jp__initEnv();\n  this.__jp__initConfig && this.__jp__initConfig();\n  this.__jp__initDataSource && this.__jp__initDataSource();\n  this.__jp__initRouter && this.__jp__initRouter();\n  this.__jp__initUtils && this.__jp__initUtils();\n  this.__jp__initUziModel && this.__jp__initUziModel();\n  this.__jp__registerModel && this.__jp__registerModel();\n  this.__jp__finishedFn && this.__jp__finishedFn();\n}"
+          "value": "function() { /*...*/ }"
         },
         "__jp__initRouter": {
           "type": "JSFunction",
-          "value": "function() {\n  if (window.arsenal) {\n    this.$router = new window.jianpin.ArsenalRouter({\n      app: this.props.microApp,\n    });\n  } else {\n    this.$router = new window.jianpin.ArsenalRouter();\n  }\n}"
+          "value": "function() { /*...*/ }"
         },
         "__jp__initDataSource": {
           "type": "JSFunction",
-          "value": "function() {\n  this.$apis = {\n  BUILD_LIST: {\n    name: '打包列表',\n    code: 'BUILD_LIST',\n    url: '/ws/nvwa/android/combuild/get_build/',\n    method: 'GET',\n    dataHandler: res => res.data,\n  },\n  BUC_USER: {\n    name: '搜索用户',\n    code: 'BUC_USER',\n    url: '/ws/nvwa/sso_users/',\n    method: 'GET',\n  },\n  CHANNELS: {\n    name: '渠道列表',\n    code: 'CHANNELS',\n    url: '/ws/nvwa/android/adaptproject/search/',\n    method: 'GET',\n  },\n};\n  this.$ds = new window.jianpin.DataSource(this, {});\n}"
+          "value": "function() { /*...*/ }"
         },
         "__jp__initEnv": {
           "type": "JSFunction",
-          "value": "function() {\n  let env = 'prod';\n\n  if (window.jianpin && window.jianpin.env === 'dev') {\n    env = 'dev';\n  } else if (window.arsenalConfig)  {\n    env = window.arsenalConfig.env;\n  }\n\n  const urlSearchParams = new URLSearchParams(window.location.search);\n  const searchParams = {};\n  for (const [key, value] of urlSearchParams) {\n    searchParams[key] = value;\n  }\n  this.$env = env === 'local' ? (window.$arsenalEnv || 'dev') : env;\n  this.$searchParams = searchParams;\n\n  if (window.arsenal && window.arsenal.store) {\n    this.$user = window.arsenal.store.getState('user');\n    this.$store = window.arsenal.store;\n    window.arsenal.store.subscribe('user', () => {\n      this.$user = window.arsenal.store.getState('user');\n    });\n  } else {\n    this.$store = {\n      subscribe: () => {},\n      getState: () => {},\n    };\n    this.$user = {};\n    if (window.jianpin && typeof window.jianpin.getUser === 'function') {\n      this.$user = window.jianpin.getUser() || {};\n    }\n  }\n}"
+          "value": "function() { /*...*/ }"
         },
         "__jp__initConfig": {
           "type": "JSFunction",
-          "value": "function() {\n  const __config = {\n  \"default\": {},\n  \"dev\": {\n    \"apiOptions\": {\n      \"apiPrefix\": \"https://auto-nvwa-test.alibaba.net\"\n    }\n  },\n  \"daily\": {},\n  \"pre\": {},\n  \"prod\": {}\n};\n\n  this.$config = window.jianpin.utils.extend(true, {}, __config.default, __config[this.$env]);\n\n  this.$totalConfig = __config;\n}"
+          "value": "function() { /*...*/ }"
         },
         "__jp__initUtils": {
           "type": "JSFunction",
-          "value": "function() {\n  this.$utils = window.jianpin.utils;\n}"
+          "value": "function() { /*...*/ }"
         },
         "__jp__initUziModel": {
           "type": "JSFunction",
-          "value": "function () {\n  const defModel = {\n  apis: {},\n  state: {},\n  exposes: {},\n  effects: {},\n  reducers: {},\n};\n  this.$uziModel = {\n    ...defModel,\n  };\n}"
+          "value": "function() { /*...*/ }"
         },
         "__jp__registerModel": {
           "type": "JSFunction",
-          "value": "function () {\n  if (this.props.microModel) {\n    this.$uziModel = this.props.microModel;\n    return;\n  }\n  const ns = \"jianpin-ns\";\n  const uziContext = window.jianpin.uziCore.createUziContext();\n  const { register, subscribe, getUzi, getState } = uziContext;\n  const { extend, parseJSFunc } = window.jianpin.utils;\n  const model = extend(true, {}, this.$uziModel);\n  parseJSFunc(model);\n  register(ns, model);\n\n  const uzi = getUzi(ns);\n  subscribe((state) => {\n    this.$uziModel = {\n      ...this.$uziModel,\n      state,\n    };\n    this.forceUpdate();\n  }, ns);\n\n  this.$uziModel = {\n    apis: uzi.apis,\n    uzi,\n    loading: {},\n    state: getState(ns),\n  };\n}"
+          "value": "function() { /*...*/ }"
         },
         "__jp__finishedFn": {
           "type": "JSFunction",
-          "value": "function () {\n  window.jianpin.utils.parseJSFunc(this.$config);\n}"
+          "value": "function() { /*...*/ }"
         },
         "initUrl": {
           "type": "JSFunction",
-          "value": "function() {\n    const apiOptions = this.$config.apiOptions;\n    const apiPrefix = (apiOptions && apiOptions.apiPrefix) || '';\n    this.userUrl = `${apiPrefix}${this.$apis.BUC_USER.url}`;\n    this.channelUrl = `${apiPrefix}${this.$apis.CHANNELS.url}`;\n  }"
+          "value": "function() { /*...*/ }"
         },
         "initUserHeaders": {
           "type": "JSFunction",
-          "value": "function() {\n    this.userHeaders = {};\n    if (this.$user && this.$user.workid) {\n      this.userHeaders = {\n        headers: {\n          'buc-user': window.jianpin.utils.Base64.encode(\n            JSON.stringify(this.$user)\n          ),\n        },\n      };\n    }\n  }"
+          "value": "function() { /*...*/ }"
         },
         "fetchBuilds": {
           "type": "JSFunction",
-          "value": "function() {\n    this.$ds\n      .resolve('BUILD_LIST', {\n        params: this.searchParams,\n      })\n      .then(res => {\n        const { page, builds } = res;\n        const { num_pages, page_number, per_page } = page;\n        this.setState({\n          page: page_number,\n          pageSize: per_page,\n          total: num_pages * per_page,\n          builds,\n        });\n      });\n  }"
+          "value": "function() { /*...*/ }"
         },
         "userHandler": {
           "type": "JSFunction",
-          "value": "function(res) {\n    const data = res.data.items.map(item => {\n      const { id, label } = item;\n      return {\n        label: `${id}/${label}`,\n        value: id,\n      };\n    });\n    return data;\n  }"
+          "value": "function() { /*...*/ }"
         },
         "channelHandler": {
           "type": "JSFunction",

@@ -81,13 +81,13 @@
             id: 'urlParams',
             type: 'urlParams',
           },
-          // 示例数据源：https://shs.alibaba-inc.com/mock/1458/demo/user
+          // 示例数据源：https://shs.xxx.com/mock/1458/demo/user
           {
             id: 'user',
             type: 'fetch',
             options: {
               method: 'GET',
-              uri: 'https://shs.alibaba-inc.com/mock/1458/demo/user',
+              uri: 'https://shs.xxx.com/mock/1458/demo/user',
               isSync: true,
             },
             dataHandler: {
@@ -95,7 +95,7 @@
               value: 'function (response) {\nif (!response.success){\n    throw new Error(response.message);\n  }\n  return response.data;\n}',
             },
           },
-          // 示例数据源：https://shs.alibaba-inc.com/mock/1458/demo/orders
+          // 示例数据源：https://shs.xxx.com/mock/1458/demo/orders
           {
             id: 'orders',
             type: 'fetch',
@@ -255,7 +255,7 @@
 	],
 	"constants": {
 		"ENV": "prod",
-		"DOMAIN": "xxx.alibaba-inc.com"
+		"DOMAIN": "xxx.xxx.com"
 	},
 	"i18n": {
 		"zh-CN": {

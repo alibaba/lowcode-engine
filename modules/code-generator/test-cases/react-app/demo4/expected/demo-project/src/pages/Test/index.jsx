@@ -72,7 +72,7 @@ class Test$$Page extends React.Component {
               isCors: true,
               timeout: 5000,
               headers: {},
-              uri: "https://mocks.alibaba-inc.com/mock/jjpin/user/list",
+              uri: "https://mocks.xxx.com/mock/jjpin/user/list",
             };
           },
           id: "users",

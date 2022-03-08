@@ -75,7 +75,7 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
       },
       repository: {
         type: 'git',
-        url: 'http://gitlab.alibaba-inc.com/msd/leak-scan/tree/master',
+        url: 'http://gitlab.xxx.com/msd/leak-scan/tree/master',
       },
       private: true,
       originTemplate: '@alifd/scaffold-lite-js',
