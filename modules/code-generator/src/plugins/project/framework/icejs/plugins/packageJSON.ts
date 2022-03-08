@@ -76,7 +76,6 @@ const pluginFactory: BuilderComponentPluginFactory<IceJsPackageJsonPluginConfig>
         eslint: '^6.0.1',
         'ice.js': '^1.0.0',
         stylelint: '^13.2.0',
-        '@ali/build-plugin-ice-def': '^0.1.0',
       },
       scripts: {
         start: 'icejs start',

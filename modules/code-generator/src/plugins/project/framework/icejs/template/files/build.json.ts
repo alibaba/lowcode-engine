@@ -23,8 +23,7 @@ export default function getFile(): [string[], ResultFile] {
           "zh-cn"
         ]
       }
-    ],
-    "@ali/build-plugin-ice-def"
+    ]
   ]
 }
       `,
