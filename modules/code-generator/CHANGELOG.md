@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.2-beta.1](https://github.com/alibaba/lowcode-engine/compare/@alilc/lowcode-code-generator@1.0.2-beta.0...@alilc/lowcode-code-generator@1.0.2-beta.1) (2022-03-08)
+
+
+### Bug Fixes
+
+* 🐛 补充 icejs 模板中缺失的依赖包 ([a94553e](https://github.com/alibaba/lowcode-engine/commit/a94553e503d439b67478df6a34950d9e3d15a063))
+
 ### [1.0.2-beta.0](https://github.com/alibaba/lowcode-engine/compare/@alilc/lowcode-code-generator@1.0.0...@alilc/lowcode-code-generator@1.0.2-beta.0) (2022-03-08)
 
 
