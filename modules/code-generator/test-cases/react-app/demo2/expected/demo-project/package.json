@@ -1,18 +1,17 @@
 {
-  "name": "@alifd/scaffold-lite-js",
+  "name": "icejs-demo-app",
   "version": "0.1.5",
   "description": "轻量级模板，使用 JavaScript，仅包含基础的 Layout。",
   "dependencies": {
     "moment": "^2.24.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-router": "^5.2.1",
     "@alifd/theme-design-pro": "^0.x",
-    "@alilc/lowcode-datasource-engine": "*",
-    "@alilc/lowcode-datasource-url-params-handler": "*",
-    "@alilc/lowcode-datasource-fetch-handler": "*",
-    "@alilc/lowcode-datasource-mtop-handler": "*",
-    "@alilc/lowcode-datasource-mopen-handler": "*",
     "intl-messageformat": "^9.3.6",
+    "@ice/store": "^1.4.3",
+    "@loadable/component": "^5.15.2",
+    "@alilc/lowcode-datasource-engine": "latest",
     "@alifd/next": "1.19.18"
   },
   "devDependencies": {
@@ -21,8 +20,7 @@
     "build-plugin-moment-locales": "^0.1.0",
     "eslint": "^6.0.1",
     "ice.js": "^1.0.0",
-    "stylelint": "^13.2.0",
-    "@ali/build-plugin-ice-def": "^0.1.0"
+    "stylelint": "^13.2.0"
   },
   "scripts": {
     "start": "icejs start",

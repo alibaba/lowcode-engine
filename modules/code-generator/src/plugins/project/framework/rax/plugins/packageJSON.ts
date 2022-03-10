@@ -1,4 +1,3 @@
-import changeCase from 'change-case';
 import { NpmInfo, PackageJSON } from '@alilc/lowcode-types';
 import { COMMON_CHUNK_NAME } from '../../../../../const/generator';
 
@@ -14,6 +13,7 @@ import { isNpmInfo } from '../../../../../utils/schema';
 import { getErrorMessage } from '../../../../../utils/errors';
 import { calcCompatibleVersion } from '../../../../../utils/version';
 import { RaxFrameworkOptions } from '../types/RaxFrameworkOptions';
+import { buildDataSourceDependencies } from '../../../../../utils/dataSource';
 
 const pluginFactory: BuilderComponentPluginFactory<RaxFrameworkOptions> = (cfg) => {
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
@@ -26,7 +26,7 @@ const pluginFactory: BuilderComponentPluginFactory<RaxFrameworkOptions> = (cfg) 
     const npmDeps = getNpmDependencies(ir);
 
     const packageJson: PackageJSON = {
-      name: cfg?.packageName || '@alilc/rax-app-demo',
+      name: cfg?.packageName || 'rax-demo-app',
       private: true,
       version: cfg?.packageVersion || '1.0.0',
       scripts: {
@@ -39,18 +39,7 @@ const pluginFactory: BuilderComponentPluginFactory<RaxFrameworkOptions> = (cfg) 
       },
       dependencies: {
         // 数据源相关的依赖:
-        [cfg?.datasourceConfig?.enginePackage || '@alilc/lowcode-datasource-engine']:
-          cfg?.datasourceConfig?.engineVersion || 'latest',
-        // TODO: [p1] 如何动态获取下究竟用了哪些类型的数据源？
-        ...['url-params', 'fetch', 'mtop', 'mopen'].reduce(
-          (acc, dsType) => ({
-            ...acc,
-            [cfg?.datasourceConfig?.handlersPackages?.[dsType] ||
-            `@alilc/lowcode-datasource-${changeCase.kebab(dsType)}-handler`]:
-              cfg?.datasourceConfig?.handlersVersion?.[dsType] || 'latest',
-          }),
-          {},
-        ),
+        ...buildDataSourceDependencies(ir, cfg?.datasourceConfig),
 
         // 环境判断
         'universal-env': '^3.2.0',

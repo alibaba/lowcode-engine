@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-code-generator",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "出码引擎 for LowCode Engine",
   "license": "MIT",
   "main": "lib/index.js",
@@ -41,7 +41,7 @@
     "test:cov": "jest --coverage",
     "test:update-snapshots": "cross-env UPDATE_EXPECTED=true jest -u",
     "analyze:standalone": "ANALYZE=true node scripts/build-standalone",
-    "release:beta": "standard-version -t @alilc/lowcode-code-generator\\@ --prerelease beta && git push --follow-tags && npm publish --tag beta",
+    "release:beta": "standard-version -t @alilc/lowcode-code-generator\\@ -r patch --prerelease beta && git push --follow-tags && npm publish --tag beta",
     "release:patch": "standard-version -t @alilc/lowcode-code-generator\\@ -r patch && git push --follow-tags && npm publish",
     "release:minor": "standard-version -t @alilc/lowcode-code-generator\\@ -r minor && git push --follow-tags && npm publish",
     "prepublishOnly": "npm run build",

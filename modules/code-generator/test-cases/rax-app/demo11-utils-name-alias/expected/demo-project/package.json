@@ -1,5 +1,5 @@
 {
-  "name": "@alilc/rax-app-demo",
+  "name": "rax-demo-app",
   "private": true,
   "version": "1.0.0",
   "scripts": {
@@ -13,9 +13,6 @@
   "dependencies": {
     "@alilc/lowcode-datasource-engine": "latest",
     "@alilc/lowcode-datasource-url-params-handler": "latest",
-    "@alilc/lowcode-datasource-fetch-handler": "latest",
-    "@alilc/lowcode-datasource-mtop-handler": "latest",
-    "@alilc/lowcode-datasource-mopen-handler": "latest",
     "universal-env": "^3.2.0",
     "intl-messageformat": "^9.3.6",
     "rax": "^1.1.0",
