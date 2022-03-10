@@ -86,7 +86,7 @@ export class DocumentModel {
   }
 
   get fileName(): string {
-    return this.rootNode?.getExtraProp('fileName')?.getAsString() || this.id;
+    return this.rootNode?.getExtraProp('fileName', false)?.getAsString() || this.id;
   }
 
   set fileName(fileName: string) {
