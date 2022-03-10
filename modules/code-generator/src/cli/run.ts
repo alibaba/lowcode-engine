@@ -89,7 +89,7 @@ async function getProjectBuilderFactory(
       console.log(`"${solution}" is not internal, installing it as ${solutionPackageName}...`);
     }
 
-    spawnSync('tnpm', ['i', solutionPackageName], {
+    spawnSync('npm', ['i', solutionPackageName], {
       stdio: quiet ? 'ignore' : 'inherit',
     });
   }
