@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="http://lowcode-engine.cn">
+  <a href="https://lowcode-engine.cn">
     <img width="200" src="https://img.alicdn.com/imgextra/i3/O1CN01i8K9cD1d0HU7TjDtv_!!6000000003673-2-tps-500-591.png">
   </a>
 </p>
@@ -29,7 +29,7 @@
 
 </div>
 
-[![](https://img.alicdn.com/imgextra/i4/O1CN01GhzQuE1rnenyCCQTF_!!6000000005676-0-tps-2878-1588.jpg)](http://lowcode-engine.cn)
+[![](https://img.alicdn.com/imgextra/i4/O1CN01GhzQuE1rnenyCCQTF_!!6000000005676-0-tps-2878-1588.jpg)](https://lowcode-engine.cn)
 
 ## ✨ 特性
 
@@ -90,7 +90,7 @@ init(document.getElementById('lce'));
 ```
 
 ### cdn 可选方式：
-#### 方式 1：alifd cdn
+#### 方式 1（推荐）：alifd cdn
 ```html
 https://alifd.alicdn.com/npm/@alilc/lowcode-engine@1.0.0/dist/js/engine-core.js
 
@@ -116,14 +116,14 @@ https://cdn.jsdelivr.net/npm/@alilc/lowcode-react-simulator-renderer@1.0.0/dist/
 
 ## 🔗 相关链接
 
-- [官网首页](http://lowcode-engine.cn/)
-- [Demo 马上玩](http://lowcode-engine.cn/demo) | [引擎 Demo 仓库](https://github.com/alibaba/lowcode-demo)
+- [官网首页](https://lowcode-engine.cn/)
+- [Demo 马上玩](https://lowcode-engine.cn/demo) | [引擎 Demo 仓库](https://github.com/alibaba/lowcode-demo)
 - [官方物料](https://github.com/alibaba/lowcode-materials)
 - [官方设置器（setter）](https://github.com/alibaba/lowcode-engine-ext)
 - [官方插件（plugin）](https://github.com/alibaba/lowcode-plugins)
 - [生态元素（物料、setter、插件）工具链](https://www.yuque.com/lce/doc/ulvlkz)
-- [用户文档](http://lowcode-engine.cn/doc)
-- [API [WIP]](http://lowcode-engine.cn/doc?url=vlmeme)
+- [用户文档](https://lowcode-engine.cn/doc)
+- [API [WIP]](https://lowcode-engine.cn/doc?url=vlmeme)
 
 ## 💻 本地调试
 
