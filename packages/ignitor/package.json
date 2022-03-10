@@ -10,7 +10,7 @@
     "lib"
   ],
   "scripts": {
-    "start": "build-scripts start --disable-open"
+    "start": "build-scripts start --disable-open --port 5555"
   },
   "license": "MIT",
   "devDependencies": {
