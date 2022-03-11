@@ -348,7 +348,7 @@ export default class Node {
    * @param useMutator
    */
   insertBefore(node: Node, ref?: Node | undefined, useMutator?: boolean) {
-    this[nodeSymbol].insertBefore(node[nodeSymbol], ref?.[nodeSymbol], useMutator);
+    this[nodeSymbol].insertBefore(node[nodeSymbol] || node, ref?.[nodeSymbol], useMutator);
   }
 
   /**
@@ -358,7 +358,7 @@ export default class Node {
    * @param useMutator
    */
   insertAfter(node: Node, ref?: Node | undefined, useMutator?: boolean) {
-    this[nodeSymbol].insertAfter(node[nodeSymbol], ref?.[nodeSymbol], useMutator);
+    this[nodeSymbol].insertAfter(node[nodeSymbol] || node, ref?.[nodeSymbol], useMutator);
   }
 
   /**
