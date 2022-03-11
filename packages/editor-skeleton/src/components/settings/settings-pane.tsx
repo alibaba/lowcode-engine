@@ -187,7 +187,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
             // eslint-disable-next-line react/no-unused-state
             value,
           });
-          field.setValue(value);
+          field.setValue(value, true);
           if (_onChange) _onChange(value, field);
         },
         onInitial: () => {
@@ -199,7 +199,7 @@ class SettingFieldView extends Component<SettingFieldViewProps, SettingFieldView
             // eslint-disable-next-line react/no-unused-state
             value,
           });
-          field.setValue(value);
+          field.setValue(value, true);
         },
 
         removeProp: () => {
