@@ -48,7 +48,7 @@ const plugins = new LowCodePluginManager(editor).toProxy();
 editor.set('plugins' as any, plugins);
 
 const { project: innerProject } = designer;
-const skeletonCabin = getSkeletonCabin();
+const skeletonCabin = getSkeletonCabin(innerSkeleton);
 const { Workbench } = skeletonCabin;
 
 const hotkey = new Hotkey();
