@@ -5,6 +5,7 @@ import { EngineOptions } from '@alilc/lowcode-editor-core';
 import { debounce } from '../utils/common';
 import adapter from '../adapter';
 import * as types from '../types/index';
+import { parseData } from '../utils';
 
 export interface IComponentHocInfo {
   schema: any;
@@ -24,7 +25,10 @@ export interface IComponentHocState {
   childrenInState: boolean;
   nodeChildren: any;
   nodeCacheProps: any;
+  /** 控制是否显示隐藏 */
   visible: boolean;
+  /** 控制是否渲染 */
+  condition: boolean;
   nodeProps: any;
 }
 
@@ -233,11 +237,13 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
     get defaultState() {
       const {
         hidden = false,
+        condition = true,
       } = this.leaf?.schema || {};
       return {
         nodeChildren: null,
         childrenInState: false,
         visible: !hidden,
+        condition: parseData(condition, scope),
         nodeCacheProps: {},
         nodeProps: {},
       };
@@ -401,6 +407,16 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
         } = propChangeInfo;
         const node = leaf;
 
+        if (key === '___condition___') {
+          const condition = parseData(newValue, scope);
+          __debug(`key is ___condition___, change condition value to [${condition}]`);
+          // 条件表达式改变
+          this.setState({
+            condition,
+          });
+          return;
+        }
+
         // 如果循坏条件变化，从根节点重新渲染
         // 目前多层循坏无法判断需要从哪一层开始渲染，故先粗暴解决
         if (key === '___loop___') {
@@ -514,7 +530,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
     }
 
     render() {
-      if (!this.state.visible) {
+      if (!this.state.visible || !this.state.condition) {
         return null;
       }
 
