@@ -157,6 +157,10 @@ export interface IBaseRendererProps {
   setSchemaChangedSymbol?: (symbol: boolean) => void;
   documentId?: string;
   getNode?: any;
+  /**
+   * 设备类型，默认值：'default'
+   */
+  device?: 'default' | 'mobile' | string;
 }
 
 export interface IInfo {

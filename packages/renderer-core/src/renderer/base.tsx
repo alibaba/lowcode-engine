@@ -467,8 +467,10 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           otherProps.__componentName = schema.componentName;
         }
 
-        if (schema.hidden && (engine?.props?.designMode && engine?.props?.designMode !== 'design')) {
-          // designMode 为 design 情况下，需要进入 leaf Hoc，进行相关事件注册
+        // DesignMode 为 design 情况下，需要进入 leaf Hoc，进行相关事件注册
+        const displayInHook = engine?.props?.designMode === 'design';
+
+        if (schema.hidden && !displayInHook) {
           return null;
         }
 
@@ -488,7 +490,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           }
         }
         const condition = schema.condition == null ? true : parseData(schema.condition, scope);
-        if (!condition) return null;
+        if (!condition && !displayInHook) return null;
 
         let scopeKey = '';
         // 判断组件是否需要生成scope，且只生成一次，挂在this.__compScopes上
