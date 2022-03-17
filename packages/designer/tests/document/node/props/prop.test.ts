@@ -430,6 +430,11 @@ describe('Prop 类测试', () => {
         // illegal
         // expect(prop.set(5, 1)).toBeNull();
       });
+
+      it('should return undefined when all items are undefined', () => {
+        prop = new Prop(mockedPropsInst, [undefined, undefined], '___loopArgs___');
+        expect(prop.getValue()).toBeUndefined();
+      });
     });
   });
 
