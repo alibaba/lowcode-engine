@@ -1,5 +1,6 @@
 /* eslint-disable no-new-func */
-import Debug from 'debug';
+// import Debug from 'debug';
+import logger from './logger';
 import { forEach as _forEach, shallowEqual as _shallowEqual } from '@ali/b3-one/lib/obj';
 import { serialize as serializeParams } from '@ali/b3-one/lib/url';
 // moment对象配置
@@ -52,7 +53,7 @@ const EXPRESSION_TYPE = {
 const EXPRESSION_REG = /^\{\{(\{.*\}|.*?)\}\}$/;
 const hasSymbol = typeof Symbol === 'function' && Symbol.for;
 const REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
-const debug = Debug('utils:index');
+// const debug = Debug('utils:index');
 
 const ENV = {
   TBE: 'TBE',
@@ -434,7 +435,8 @@ export function parseExpression(str: any, self: any) {
     const code = `with($scope || {}) { ${tarStr} }`;
     return new Function('$scope', code)(self);
   } catch (err) {
-    debug('parseExpression.error', err, str, self);
+    // debug('parseExpression.error', err, str, self);
+    logger.error('parseExpression.error', err, str, self);
     return undefined;
   }
 }
