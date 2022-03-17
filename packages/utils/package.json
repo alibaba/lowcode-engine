@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-utils",
-  "version": "1.0.3-beta.0",
+  "version": "1.0.3",
   "description": "Utils for Ali lowCode engine",
   "files": [
     "lib",
@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@alifd/next": "^1.19.16",
-    "@alilc/lowcode-types": "1.0.3-beta.0",
+    "@alilc/lowcode-types": "1.0.3",
     "lodash": "^4.17.21",
     "react": "^16",
     "zen-logger": "^1.1.0"
