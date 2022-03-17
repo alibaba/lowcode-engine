@@ -26,7 +26,7 @@ import rootHeaderMetadata from '../../fixtures/component-metadata/root-header';
 import rootContentMetadata from '../../fixtures/component-metadata/root-content';
 import rootFooterMetadata from '../../fixtures/component-metadata/root-footer';
 
-describe.skip('Node 方法测试', () => {
+describe('Node 方法测试', () => {
   let editor: Editor;
   let designer: Designer;
   let project: Project;
@@ -474,15 +474,16 @@ describe.skip('Node 方法测试', () => {
   it('didDropIn / didDropOut', () => {
     const form = doc.getNode('node_k1ow3cbo');
     designer.createComponentMeta(divMetadata);
+    designer.createComponentMeta(formMetadata);
     const callbacks = form.componentMeta.getMetadata().configure.advanced?.callbacks;
     const fn1 = callbacks.onNodeAdd = jest.fn();
     const fn2 = callbacks.onNodeRemove = jest.fn();
     const textField = doc.getNode('node_k1ow3cc9');
     form.didDropIn(textField);
-    expect(fn1).toHaveBeenCalledWith(textField, form);
+    expect(fn1).toHaveBeenCalledWith(textField.internalToShellNode(), form.internalToShellNode());
 
     form.didDropOut(textField);
-    expect(fn2).toHaveBeenCalledWith(textField, form);
+    expect(fn2).toHaveBeenCalledWith(textField.internalToShellNode(), form.internalToShellNode());
   });
 
   it('hover', () => {
