@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`React Renderer render basic case 1`] = `
+exports[`Base Render renderComp 1`] = `
 <div
   className="lce-page lce-test"
   style={
@@ -863,11 +863,161 @@ exports[`React Renderer render basic case 1`] = `
       </div>
     </div>
   </div>
-  <div
-    __id="node_dockd5nrh9pr"
-    name="error"
+  <span
+    aria-haspopup={true}
+    className="next-select next-select-trigger next-select-single next-medium next-inactive next-no-search"
+    onClick={[Function]}
+    onKeyDown={[Function]}
+    onMouseDown={[Function]}
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
   >
-    Component Not Found
-  </div>
+    <span
+      className="next-input next-medium next-select-inner"
+    >
+      <span
+        className="next-select-values next-input-text-field"
+      >
+        <span
+          className="next-select-trigger-search"
+        >
+          <input
+            __id="node_dockd5nrh9pr"
+            autoComplete="off"
+            disabled={false}
+            height="100%"
+            maxLength={null}
+            name="error"
+            onBlur={[Function]}
+            onChange={[Function]}
+            onCompositionEnd={[Function]}
+            onCompositionStart={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            placeholder="请选择"
+            readOnly={true}
+            role="combobox"
+            size="1"
+            tabIndex={0}
+            value=""
+          />
+          <span
+            aria-hidden={true}
+          >
+            <span>
+              请选择
+            </span>
+            <span>
+               
+            </span>
+          </span>
+        </span>
+      </span>
+      <span
+        className="next-input-control"
+      >
+        <span
+          aria-hidden={true}
+          className="next-select-arrow"
+          onClick={[Function]}
+        >
+          <i
+            className="next-icon next-icon-arrow-down next-medium next-select-symbol-fold"
+            style={Object {}}
+          />
+        </span>
+      </span>
+    </span>
+    <span
+      aria-live="polite"
+      className="next-sr-only"
+    >
+      
+    </span>
+  </span>
+</div>
+`;
+
+exports[`JSExpression JSExpression props 1`] = `
+<div
+  className="lce-page"
+  style={Object {}}
+>
+  <div
+    className="div-ut"
+    forwardRef={[Function]}
+    visible={true}
+  />
+</div>
+`;
+
+exports[`JSExpression JSExpression props with loop 1`] = `
+<div
+  className="lce-page"
+  style={Object {}}
+>
+  <div
+    className="div-ut"
+    forwardRef={[Function]}
+    name1="1"
+    name2="1"
+  />
+  <div
+    className="div-ut"
+    forwardRef={[Function]}
+    name1="2"
+    name2="2"
+  />
+</div>
+`;
+
+exports[`JSExpression JSFunction props 1`] = `
+<div
+  className="lce-page"
+  style={Object {}}
+>
+  <div
+    className="div-ut"
+    forwardRef={[Function]}
+    onClick={[Function]}
+  />
+</div>
+`;
+
+exports[`JSExpression JSFunction props with loop 1`] = `
+<div
+  className="lce-page"
+  style={Object {}}
+>
+  <div
+    className="div-ut"
+    forwardRef={[Function]}
+    onClick1={[Function]}
+    onClick2={[Function]}
+    onClick3={[Function]}
+    onClick4={[Function]}
+  />
+  <div
+    className="div-ut"
+    forwardRef={[Function]}
+    onClick1={[Function]}
+    onClick2={[Function]}
+    onClick3={[Function]}
+    onClick4={[Function]}
+  />
+</div>
+`;
+
+exports[`JSExpression base props 1`] = `
+<div
+  className="lce-page"
+  style={Object {}}
+>
+  <div
+    className="div-ut"
+    forwardRef={[Function]}
+    text="123"
+    visible={true}
+  />
 </div>
 `;

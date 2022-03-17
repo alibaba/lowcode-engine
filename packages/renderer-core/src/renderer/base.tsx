@@ -32,7 +32,7 @@ import { compWrapper } from '../hoc';
 import { IComponentConstruct, IComponentHoc, leafWrapper } from '../hoc/leaf';
 import logger from '../utils/logger';
 
-export default function baseRenererFactory() {
+export default function baseRendererFactory() {
   const { BaseRenderer: customBaseRenderer } = adapter.getRenderers();
 
   if (customBaseRenderer) {
@@ -712,7 +712,7 @@ export default function baseRenererFactory() {
       ) {
         return checkProps(props);
       }
-      if (isJSExpression(props)) {
+      if (isJSExpression(props) || isJSFunction(props)) {
         props = parseExpression(props, scope);
         // 只有当变量解析出来为模型结构的时候才会继续解析
         if (!isSchema(props) && !isJSSlot(props)) return checkProps(props);

@@ -1,8 +1,7 @@
 import { BuiltinSimulatorHost } from '@ali/lowcode-designer';
 import { baseRendererFactory } from '../renderer';
-import baseRenererFactory from '../renderer/base';
 
-export type IBaseRenderer = ReturnType<typeof baseRenererFactory>;
+export type IBaseRenderer = ReturnType<typeof baseRendererFactory>;
 export type IBaseRendererInstance = InstanceType<ReturnType<typeof baseRendererFactory>>;
 
 export interface IProps {
@@ -28,7 +27,7 @@ export interface IProps {
 
 export interface IState {
   engineRenderError?: boolean;
-  error?: Error
+  error?: Error;
   onCompGetRef: (schema: ISchema, ref: any) => void;
   onCompGetCtx: (schema: ISchema, ref: any) => void;
   customCreateElement: (...args: any) => any;
@@ -57,7 +56,7 @@ export interface ComponentModel {
 export interface ISchema {
   componentName: string;
   props: any;
-  children: ComponentModel[]
+  children: ComponentModel[];
   dataSource?: any;
   methods?: any;
   lifeCycles?: any;
@@ -68,7 +67,7 @@ export interface IInfo {
   schema: ISchema;
   Comp: any;
   componentInfo?: any;
-  componentChildren?: any
+  componentChildren?: any;
 }
 
 export interface JSExpression {
@@ -113,9 +112,9 @@ export interface IRendererModules {
   BaseRenderer?: new(...args: any) => IRenderer;
   PageRenderer: any;
   ComponentRenderer: any;
-  BlockRenderer?: any,
-  AddonRenderer?: any,
-  TempRenderer?: any,
+  BlockRenderer?: any;
+  AddonRenderer?: any;
+  TempRenderer?: any;
   DivRenderer?: any;
 }
 
