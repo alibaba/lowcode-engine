@@ -40,8 +40,8 @@ import { ensureValidClassName } from '../utils/validate';
 const defaultContainer: IContainerInfo = {
   containerType: 'Component',
   componentName: 'Component',
-  moduleName: 'Index',
-  fileName: 'Index',
+  moduleName: '',
+  fileName: '',
   css: '',
   props: {},
 };
