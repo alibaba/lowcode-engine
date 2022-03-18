@@ -108,7 +108,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
   }
 
   private disposeItems() {
-    this._items.forEach(item => isSettingField(item) && item.purge());
+    this._items.forEach((item) => isSettingField(item) && item.purge());
     this._items = [];
   }
 
@@ -131,7 +131,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
   }
 
   getItems(filter?: (item: SettingField | CustomView) => boolean): Array<SettingField | CustomView> {
-    return this._items.filter(item => {
+    return this._items.filter((item) => {
       if (filter) {
         return filter(item);
       }
@@ -189,6 +189,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
       const oldValue = this.getValue();
       this.setValue({
         type: 'JSExpression',
+        ...oldValue,
         value: oldValue.value,
         mock: value,
       }, false, false, options);
