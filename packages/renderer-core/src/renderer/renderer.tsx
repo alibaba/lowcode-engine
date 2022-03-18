@@ -20,7 +20,7 @@ export default function rendererFactory() {
 
   class FaultComponent extends PureComponent {
     render() {
-      // FIXME: errorlog
+      console.error(this.props.error);
       console.error('render error', this.props);
       return createElement(Div, {
         style: {
