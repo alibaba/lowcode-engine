@@ -124,8 +124,8 @@ Pass the files under packages/engine/dist and packages/(react|rax)-simulator-ren
 - [official setter](https://github.com/alibaba/lowcode-engine-ext)
 - [Official plugin (plugin)](https://github.com/alibaba/lowcode-plugins)
 - [Ecological elements (materials, setters, plugins) toolchain](https://www.yuque.com/lce/doc/ulvlkz)
-- [User Documentation](http://lowcode-engine.cn/doc)
-- [API [WIP]](http://lowcode-engine.cn/doc?url=vlmeme)
+- [User Documentation](http://lowcode-engine.cn/docV2)
+- [API](http://lowcode-engine.cn/docV2/vlmeme)
 
 ## 💻 Local debugging
 
