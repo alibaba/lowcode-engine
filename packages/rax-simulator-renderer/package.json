@@ -53,6 +53,6 @@
   "publishConfig": {
     "registry": "https://registry.antfin-inc.com"
   },
-  "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-rax-simulator-renderer@1.0.73/build/index.html",
+  "homepage": "https://unpkg.alibaba-inc.com/@ali/lowcode-rax-simulator-renderer@1.0.76/build/index.html",
   "gitHead": "19b2119b9f95f8a3da0851b3943774a770975991"
 }
