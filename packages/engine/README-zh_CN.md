@@ -124,8 +124,8 @@ https://cdn.jsdelivr.net/npm/@alilc/lowcode-react-simulator-renderer@1.0.0/dist/
 - [官方设置器（setter）](https://github.com/alibaba/lowcode-engine-ext)
 - [官方插件（plugin）](https://github.com/alibaba/lowcode-plugins)
 - [生态元素（物料、setter、插件）工具链](https://www.yuque.com/lce/doc/ulvlkz)
-- [用户文档](https://lowcode-engine.cn/doc)
-- [API [WIP]](https://lowcode-engine.cn/doc?url=vlmeme)
+- [用户文档](https://lowcode-engine.cn/docV2)
+- [API](https://lowcode-engine.cn/docV2/vlmeme)
 
 ## 💻 本地调试
 
