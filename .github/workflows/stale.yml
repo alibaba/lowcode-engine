@@ -17,3 +17,6 @@ jobs:
           days-before-issue-close: 2
           days-before-pr-stale: 10
           days-before-pr-close: 2
+          exempt-issue-labels: 'bug,enhancement,good first issue,help wanted,WIP'
+          stale-issue-label: 'stale'
+          stale-pr-label: 'stale'

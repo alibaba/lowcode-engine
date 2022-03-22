@@ -98,7 +98,7 @@ class Toolbar extends Component<{ observed: OffsetObserver }> {
     const { node } = observed;
     const actions: ReactNodeArray = [];
     node.componentMeta.availableActions.forEach((action) => {
-      const { important, condition, content, name } = action;
+      const { important = true, condition, content, name } = action;
       if (node.isSlot() && (name === 'copy' || name === 'remove')) {
         // FIXME: need this?
         return;
