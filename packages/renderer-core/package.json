@@ -10,7 +10,12 @@
     "es"
   ],
   "scripts": {
+    "test": "build-scripts test --config build.test.json",
     "build": "build-scripts build --skip-demo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.alibaba-inc.com:ali-lowcode/ali-lowcode-engine.git"
   },
   "dependencies": {
     "@ali/b3-one": "^0.0.17",
