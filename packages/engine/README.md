@@ -130,7 +130,7 @@ Pass the files under packages/engine/dist and packages/(react|rax)-simulator-ren
 ## 💻 Local debugging
 
 ```bash
-$ git clone git@github.com: alibaba/lowcode-engine.git
+$ git clone git@github.com:alibaba/lowcode-engine.git
 $ cd lowcode-engine
 $ npm install
 $ npm run setup
