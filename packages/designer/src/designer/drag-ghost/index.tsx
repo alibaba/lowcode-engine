@@ -26,7 +26,7 @@ export default class DragGhost extends Component<{ designer: Designer }> {
     makeObservable(this);
     this.dispose = [
       this.dragon.onDragstart(e => {
-        if (e.originalEvent.type.substr(0, 4) === 'drag') {
+        if (e.originalEvent.type.slice(0, 4) === 'drag') {
           return;
         }
         this.dragObject = e.dragObject;
