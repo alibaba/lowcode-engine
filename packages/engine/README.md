@@ -66,7 +66,7 @@ skeleton.add({
   area: 'topArea',
   type: 'Widget',
   name: 'logo',
-  content: YourFantaticLogo,
+  content: YourFantasticLogo,
   contentProps: {
     logo:
       'https://img.alicdn.com/tfs/TB1_SocGkT2gK0jSZFkXXcIQFXa-66-66.png',
