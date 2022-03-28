@@ -29,7 +29,7 @@ An enterprise-class low-code technology stack for scale-out design
 
 </div>
 
-[![](https://img.alicdn.com/imgextra/i4/O1CN01GhzQuE1rnenyCCQTF_!!6000000005676-0-tps-2878-1588.jpg)](http://lowcode-engine.cn)
+[![](https://img.alicdn.com/imgextra/i4/O1CN01RkvLv91gv1PZtdtSv_!!6000000004203-2-tps-2878-1588.png)](http://lowcode-engine.cn)
 
 English | [简体中文](./packages/engine/README-zh_CN.md)
 
