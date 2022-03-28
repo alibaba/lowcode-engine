@@ -11,6 +11,7 @@ export interface BuiltinSimulatorRenderer {
   setNativeSelection(enableFlag: boolean): void;
   setDraggingState(state: boolean): void;
   setCopyState(state: boolean): void;
+  loadAsyncLibrary(asyncMap: { [index: string]: any }): void;
   clearState(): void;
   run(): void;
 }
