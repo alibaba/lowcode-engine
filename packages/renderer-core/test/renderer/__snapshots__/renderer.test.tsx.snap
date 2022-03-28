@@ -1008,6 +1008,68 @@ exports[`JSExpression JSFunction props with loop 1`] = `
 </div>
 `;
 
+exports[`JSExpression JSSlot has loop 1`] = `
+<div
+  className="lce-page"
+  style={Object {}}
+>
+  <div
+    __id="node_ocl1ao1o7w3"
+    __style__=":root {
+ padding: 12px;
+ background: #f2f2f2;
+ border: 1px solid #ddd;
+}"
+    behavior="NORMAL"
+    className="div_l1ao7pfc"
+    customClassName=""
+    fieldId="div_l1ao7lvq"
+    forwardRef={[Function]}
+    useFieldIdAsDomId={false}
+  >
+    <div>
+      这是一个低代码业务组件~
+    </div>
+  </div>
+  <div
+    __id="node_ocl1ao1o7w3"
+    __style__=":root {
+ padding: 12px;
+ background: #f2f2f2;
+ border: 1px solid #ddd;
+}"
+    behavior="NORMAL"
+    className="div_l1ao7pfc"
+    customClassName=""
+    fieldId="div_l1ao7lvq"
+    forwardRef={[Function]}
+    useFieldIdAsDomId={false}
+  >
+    <div>
+      这是一个低代码业务组件~
+    </div>
+  </div>
+  <div
+    __id="node_ocl1ao1o7w3"
+    __style__=":root {
+ padding: 12px;
+ background: #f2f2f2;
+ border: 1px solid #ddd;
+}"
+    behavior="NORMAL"
+    className="div_l1ao7pfc"
+    customClassName=""
+    fieldId="div_l1ao7lvq"
+    forwardRef={[Function]}
+    useFieldIdAsDomId={false}
+  >
+    <div>
+      这是一个低代码业务组件~
+    </div>
+  </div>
+</div>
+`;
+
 exports[`JSExpression base props 1`] = `
 <div
   className="lce-page"
