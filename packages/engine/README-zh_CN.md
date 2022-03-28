@@ -29,7 +29,7 @@
 
 </div>
 
-[![](https://img.alicdn.com/imgextra/i4/O1CN01GhzQuE1rnenyCCQTF_!!6000000005676-0-tps-2878-1588.jpg)](https://lowcode-engine.cn)
+[![](https://img.alicdn.com/imgextra/i4/O1CN01RkvLv91gv1PZtdtSv_!!6000000004203-2-tps-2878-1588.png)](https://lowcode-engine.cn)
 
 简体中文 | [English](./README.md)
 
