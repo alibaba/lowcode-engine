@@ -1,4 +1,4 @@
-import Env from '../env';
+import env from '../env';
 import { Node } from '@ali/lowcode-designer';
 import { isJSSlot, isI18nData, isJSExpression } from '@ali/lowcode-types';
 import { isPlainObject } from '@ali/lowcode-utils';
@@ -23,8 +23,8 @@ function deepValueParser(obj: any, info: {
     path = '',
     node,
   } = info;
-  // 如果不是 vc 体系，不做这个兼容处理
-  if (!node.componentMeta.prototype) {
+  // 如果是 vc 体系 / 低代码组件，才做这个兼容处理
+  if (!node.componentMeta.prototype && node.componentMeta.getMetadata().devMode !== 'lowcode') {
     return obj;
   }
   if (isJSExpression(obj)) {
@@ -53,7 +53,7 @@ function deepValueParser(obj: any, info: {
   if (isPlainObject(obj)) {
     if (isI18nData(obj)) {
       // FIXME! use editor.get
-      let locale = Env.getLocale();
+      let locale = env.getLocale();
       if (obj.key && i18nUtil.get(obj.key, locale)) {
         return i18nUtil.get(obj.key, locale, {
           node,
