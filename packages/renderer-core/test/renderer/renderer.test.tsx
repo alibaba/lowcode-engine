@@ -236,6 +236,89 @@ describe('JSExpression', () => {
 
       componentSnapshot = component;
       done();
-    });;
+    });
   });
+
+  it('JSSlot has loop', (done) => {
+    const schema = {
+      componentName: "Page",
+      props: {},
+      children: [
+        {
+          componentName: "SlotComponent",
+          id: "node_k8bnubvz",
+          props: {
+            mobileSlot: {
+              type: "JSSlot",
+              title: "mobile容器",
+              name: "mobileSlot",
+              value: [
+                {
+                  condition: true,
+                  hidden: false,
+                  children: [
+                    {
+                      condition: true,
+                      hidden: false,
+                      loopArgs: [
+                        "item",
+                        "index"
+                        ],
+                        isLocked: false,
+                        conditionGroup: "",
+                        componentName: "Text",
+                        id: "node_ocl1ao1o7w4",
+                        title: "",
+                        props: {
+                          maxLine: 0,
+                          showTitle: false,
+                          className: "text_l1ao7pfb",
+                          behavior: "NORMAL",
+                          content: "这是一个低代码业务组件~",
+                          __style__: ":root {\n font-size: 14px;\n color: #666;\n}",
+                          fieldId: "text_l1ao7lvp"
+                        }
+                    }
+                  ],
+                  loop: {
+                    type: "JSExpression",
+                    value: "state.content"
+                  },
+                  loopArgs: [
+                      "item",
+                      "index"
+                  ],
+                  isLocked: false,
+                  conditionGroup: "",
+                  componentName: "Div",
+                  id: "node_ocl1ao1o7w3",
+                  title: "",
+                  props: {
+                    useFieldIdAsDomId: false,
+                    customClassName: "",
+                    className: "div_l1ao7pfc",
+                    behavior: "NORMAL",
+                    __style__: ":root {\n padding: 12px;\n background: #f2f2f2;\n border: 1px solid #ddd;\n}",
+                    fieldId: "div_l1ao7lvq"
+                  }
+                }
+              ]
+            },
+          },
+        }
+      ],
+      state: {
+        content: {
+          type: "JSExpression",
+          value: "[{}, {}, {}]",
+        },
+      },
+    };
+
+    getComp(schema, components.Div).then(({ component, inst }) => {
+      expect(inst.length).toBe(3);
+      componentSnapshot = component;
+      done();
+    });
+  })
 })

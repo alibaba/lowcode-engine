@@ -1,6 +1,10 @@
 import { Box, Breadcrumb, Form, Select, Input, Button, Table, Pagination, Dialog } from '@alifd/next';
 
-const Div = (props) => (<div {...props}>{props.children}</div>);
+const Div = (props: any) => (<div {...props}>{props.children}</div>);
+
+const Text = (props: any) => (<div>{props.content}</div>);
+
+const SlotComponent = (props: any) => props.mobileSlot;
 
 const components = {
   Box,
@@ -17,6 +21,8 @@ const components = {
   Dialog,
   ErrorComponent: Select,
   Div,
+  SlotComponent,
+  Text,
 };
 
 export default components;
