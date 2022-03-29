@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.3](https://github.com/alibaba/lowcode-engine/compare/@alilc/lowcode-code-generator@1.0.2...@alilc/lowcode-code-generator@1.0.3) (2022-03-29)
+
+
+### Features
+
+* add getConvertedExtraKey / getOriginalExtraKey to utils ([8e7bb9d](https://github.com/alibaba/lowcode-engine/commit/8e7bb9d4b86454dd77c6928eb769cd764cad8630))
+
+
+### Bug Fixes
+
+* 🐛 出码: 解决 componentName 和 exportName 不一致时生成的 import 语句的问题 ([eefc091](https://github.com/alibaba/lowcode-engine/commit/eefc091ee7e86d6214d20d486212cb5aff237946))
+* component cannot be redisplayed by configuration after rendering is closed ([c54f369](https://github.com/alibaba/lowcode-engine/commit/c54f369e1860d818479dda9d6429f851c0b08fa6))
+* fix loop configuration auto fill empty array issue ([d087092](https://github.com/alibaba/lowcode-engine/commit/d087092fd712eff0556adacda692d3ff6f2f9f22))
+* make important true by default ([c63b6e1](https://github.com/alibaba/lowcode-engine/commit/c63b6e1bfadc3fc87ed41840952e02ffbff24fab))
+* make insertAfter & insertBefore work ([70fd372](https://github.com/alibaba/lowcode-engine/commit/70fd3720d098d6e227acb9281ee22feee66b9c0b))
+* npm源 ([437adcc](https://github.com/alibaba/lowcode-engine/commit/437adccf5f2dbb400de6e2bef10cfc4b65286f2b))
+* prop should return undefined when all items are undefined ([5bb9ec7](https://github.com/alibaba/lowcode-engine/commit/5bb9ec7a1dfaabfdb5369226b54d5f63a7999e59))
+* should not create new prop while querying fileName ([19c207d](https://github.com/alibaba/lowcode-engine/commit/19c207d29de045f473ba73baaf34e7294d40261a))
+* variable binding lost after modify the mock value ([ef95b56](https://github.com/alibaba/lowcode-engine/commit/ef95b5683273d8302bde1582de8afe3d87a808d8))
+* Workbench should receive the original skeleton other than shell skeleton ([d5c3ca1](https://github.com/alibaba/lowcode-engine/commit/d5c3ca1068ce2c2140980bd059d0da333574dc34))
+
 ### [1.0.2](https://github.com/alibaba/lowcode-engine/compare/@alilc/lowcode-code-generator@1.0.2-beta.1...@alilc/lowcode-code-generator@1.0.2) (2022-03-08)
 
 ### [1.0.2-beta.1](https://github.com/alibaba/lowcode-engine/compare/@alilc/lowcode-code-generator@1.0.2-beta.0...@alilc/lowcode-code-generator@1.0.2-beta.1) (2022-03-08)
