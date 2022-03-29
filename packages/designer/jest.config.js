@@ -1,5 +1,3 @@
-const esModules = ['@recore/obx-react'].join('|');
-
 module.exports = {
   // transform: {
   //   '^.+\\.[jt]sx?$': 'babel-jest',
@@ -9,7 +7,6 @@ module.exports = {
   // testMatch: ['**/bugs/*.test.ts'],
   // testMatch: ['(/tests?/.*(test))\\.[jt]s$'],
   transformIgnorePatterns: [
-    `/node_modules/(?!${esModules})/`,
   ],
   setupFiles: ['./tests/fixtures/unhandled-rejection.ts'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
