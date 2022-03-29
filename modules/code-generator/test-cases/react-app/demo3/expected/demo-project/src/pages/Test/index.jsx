@@ -9,6 +9,8 @@ import Super, {
   SearchTable as SearchTableExport,
 } from "@alifd/next";
 
+import SuperOther from "@alifd/next";
+
 import utils from "../../utils";
 
 import { i18n as _$$i18n } from "../../i18n";
@@ -16,8 +18,6 @@ import { i18n as _$$i18n } from "../../i18n";
 import "./index.css";
 
 const SuperSub = Super.Sub;
-
-const SuperOther = Super;
 
 const SelectOption = Select.Option;
 
