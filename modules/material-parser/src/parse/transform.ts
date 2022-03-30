@@ -282,23 +282,21 @@ export function transformItem(name: string, item: any) {
   if (!isNil(defaultValue) && typeof defaultValue === 'object' && isEvaluable(defaultValue)) {
     if (defaultValue === null) {
       result.defaultValue = defaultValue;
-    } else {
-      // if ('computed' in defaultValue) {
-      // val = val.value;
+    } else if ('computed' in defaultValue) {
+      // parsed data from react-docgen
       try {
         if (isEvaluable(defaultValue.value)) {
-          const value = safeEval(`'${defaultValue.value}'`);
-          result.defaultValue = value;
+          result.defaultValue = safeEval(defaultValue.value);
         } else {
           result.defaultValue = defaultValue.value;
         }
       } catch (e) {
         log(e);
       }
+    } else {
+      // parsed data from react-docgen-typescript
+      result.defaultValue = defaultValue.value;
     }
-    // else {
-    //   result.defaultValue = defaultValue.value;
-    // }
   }
   if (result.propType === undefined) {
     delete result.propType;
