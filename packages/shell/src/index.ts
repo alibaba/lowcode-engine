@@ -5,6 +5,7 @@ import Event, { getEvent } from './event';
 import History from './history';
 import Material from './material';
 import Node from './node';
+import NodeChildren from './node-children';
 import Project from './project';
 import Prop from './prop';
 import Selection from './selection';
@@ -13,6 +14,7 @@ import Hotkey from './hotkey';
 import Skeleton from './skeleton';
 import Dragon from './dragon';
 import SettingPropEntry from './setting-prop-entry';
+import SettingTopEntry from './setting-top-entry';
 export * from './symbols';
 
 /**
@@ -30,6 +32,7 @@ export {
   History,
   Material,
   Node,
+  NodeChildren,
   Project,
   Prop,
   Selection,
@@ -37,6 +40,7 @@ export {
   Hotkey,
   Skeleton,
   SettingPropEntry,
+  SettingTopEntry,
   Dragon,
   getEvent,
 };

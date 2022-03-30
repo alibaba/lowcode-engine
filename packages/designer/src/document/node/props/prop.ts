@@ -316,6 +316,7 @@ export class Prop implements IPropParent {
     const slotSchema: SlotSchema = {
       componentName: 'Slot',
       title: data.title,
+      id: data.id,
       name: data.name,
       params: data.params,
       children: data.value,

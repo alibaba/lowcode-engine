@@ -38,6 +38,13 @@ export default class NodeChildren {
   }
 
   /**
+   * judge if it is not empty
+   */
+  get notEmpty() {
+    return !this.isEmpty;
+  }
+
+  /**
    * 删除指定节点
    * @param node
    * @returns
@@ -81,7 +88,7 @@ export default class NodeChildren {
    * @returns
    */
   get(index: number) {
-    return this[nodeChildrenSymbol].get(index);
+    return Node.create(this[nodeChildrenSymbol].get(index));
   }
 
   /**

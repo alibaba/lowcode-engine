@@ -6,6 +6,7 @@ import {
   LowCodePluginManager,
   ILowCodePluginContext,
   PluginPreference,
+  TransformStage,
 } from '@alilc/lowcode-designer';
 import {
   Skeleton as InnerSkeleton,
@@ -22,7 +23,8 @@ import utils from './modules/utils';
 import * as editorCabin from './modules/editor-cabin';
 import getSkeletonCabin from './modules/skeleton-cabin';
 import getDesignerCabin from './modules/designer-cabin';
-
+import classes from './modules/classes';
+import symbols from './modules/symbols';
 export * from './modules/editor-types';
 export * from './modules/skeleton-types';
 export * from './modules/designer-types';
@@ -60,8 +62,12 @@ const config = engineConfig;
 const event = new Event(editor, { prefix: 'common' });
 const logger = getLogger({ level: 'warn', bizName: 'common' });
 const designerCabin = getDesignerCabin(editor);
+const objects = {
+  TransformStage,
+};
 const common = {
   utils,
+  objects,
   editorCabin,
   designerCabin,
   skeletonCabin,
@@ -80,6 +86,12 @@ export {
   common,
   // 兼容原 editor 的事件功能
   event as editor,
+};
+// declare this is open-source version
+export const isOpenSource = true;
+export const __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = {
+  symbols,
+  classes,
 };
 
 // 注册一批内置插件

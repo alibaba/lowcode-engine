@@ -106,7 +106,11 @@ export default class TreeTitle extends Component<{
         data-id={treeNode.id}
         onClick={() => {
           if (isModal) {
-            node.document.modalNodesManager.setVisible(node);
+            if (node.getVisible()) {
+              node.document.modalNodesManager.setInvisible(node);
+            } else {
+              node.document.modalNodesManager.setVisible(node);
+            }
             return;
           }
           if (node.conditionGroup) {

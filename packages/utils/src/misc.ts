@@ -102,6 +102,6 @@ export function invariant(check: any, message: string, thing?: any) {
 
 export function deprecate(fail: any, message: string, alterative?: string) {
   if (fail) {
-    console.warn(`Deprecation: ${message}` + (alterative ? `, use ${alterative} instead.'` : ''));
+    console.warn(`Deprecation: ${message}` + (alterative ? `, use ${alterative} instead.` : ''));
   }
 }

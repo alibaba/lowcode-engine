@@ -50,7 +50,11 @@ export class LowCodePlugin implements ILowCodePlugin {
     if (typeof this.meta.dependencies === 'string') {
       return [this.meta.dependencies];
     }
-    return this.meta.dependencies || [];
+    // compat legacy way to declare dependencies
+    if (typeof this.config.dep === 'string') {
+      return [this.config.dep];
+    }
+    return this.meta.dependencies || this.config.dep || [];
   }
 
   get disabled() {

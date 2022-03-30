@@ -61,6 +61,15 @@ export default class Event {
     }
     this[editorSymbol].emit(`${this.options.prefix}:${event}`, ...args);
   }
+
+  /**
+   * DO NOT USE if u fully understand what this method does.
+   * @param event
+   * @param args
+   */
+  __internalEmit__(event: string, ...args: unknown[]) {
+    this[editorSymbol].emit(event, ...args);
+  }
 }
 
 export function getEvent(editor: InnerEditor, options: any = { prefix: 'common' }) {

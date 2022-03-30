@@ -17,9 +17,13 @@ export default class Node {
   private readonly [documentSymbol]: InnerDocumentModel;
   private readonly [nodeSymbol]: InnerNode;
 
+  private _id: string;
+
   constructor(node: InnerNode) {
     this[nodeSymbol] = node;
     this[documentSymbol] = node.document;
+
+    this._id = this[nodeSymbol].id;
   }
 
   static create(node: InnerNode | null | undefined) {
@@ -36,7 +40,14 @@ export default class Node {
    * 节点 id
    */
   get id() {
-    return this[nodeSymbol].id;
+    return this._id;
+  }
+
+  /**
+   * set id
+   */
+  set id(id: string) {
+    this._id = id;
   }
 
   /**
@@ -84,7 +95,7 @@ export default class Node {
   /**
    * 是否为「模态框」节点
    */
-   get isModal() {
+  get isModal() {
     return this[nodeSymbol].isModal();
   }
 
@@ -107,6 +118,13 @@ export default class Node {
    */
   get isLeaf() {
     return this[nodeSymbol].isLeaf();
+  }
+
+  /**
+   * judge if it is a node or not
+   */
+  get isNode() {
+    return true;
   }
 
   /**
@@ -208,8 +226,15 @@ export default class Node {
   /**
    * 返回节点的属性集
    */
-   get propsData() {
+  get propsData() {
     return this[nodeSymbol].propsData;
+  }
+
+  /**
+   * 获取符合搭建协议-节点 schema 结构
+   */
+  get schema(): any {
+    return this[nodeSymbol].schema;
   }
 
   /**
@@ -258,11 +283,23 @@ export default class Node {
     return this[nodeSymbol].hasLoop();
   }
 
+  getVisible() {
+    return this[nodeSymbol].getVisible();
+  }
+
+  isConditionalVisible() {
+    return this[nodeSymbol].isConditionalVisible();
+  }
+
   /**
    * @deprecated use .props instead
    */
   getProps() {
     return this.props;
+  }
+
+  contains(node: Node) {
+    return this[nodeSymbol].contains(node[nodeSymbol]);
   }
 
   /**

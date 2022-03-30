@@ -17,6 +17,13 @@ export default class Dragon {
   }
 
   /**
+   * is dragging or not
+   */
+  get dragging() {
+    return this[dragonSymbol].dragging;
+  }
+
+  /**
    * 绑定 dragstart 事件
    * @param func
    * @returns
