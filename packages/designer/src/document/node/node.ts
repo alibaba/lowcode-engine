@@ -1189,7 +1189,9 @@ export function isRootNode(node: Node): node is RootNode {
 }
 
 export function isLowCodeComponent(node: Node): boolean {
-  return node.componentMeta?.getMetadata().devMode === 'lowcode';
+  const devMode = node.componentMeta?.getMetadata?.()?.devMode;
+  if (!devMode) { return false; }
+  return ['lowcode', 'lowCode'].includes(devMode);
 }
 
 export function getZLevelTop(child: Node, zLevel: number): Node | null {

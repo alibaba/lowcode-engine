@@ -379,7 +379,7 @@ export interface ComponentMetadata {
   /**
    * 组件研发模式
    */
-  devMode?: 'procode' | 'lowcode';
+  devMode?: 'procode' | 'lowcode' | 'proCode' | 'lowCode';
   /**
    * npm 源引入完整描述对象
    */

@@ -521,7 +521,7 @@ export class Designer {
     const designer = this;
     designer._componentMetasMap.forEach((config, key) => {
       const metaData = config.getMetadata();
-      if (metaData.devMode === 'lowcode') {
+      if (metaData.devMode && ['lowcode', 'lowCode'].includes(metaData.devMode)) {
         maps[key] = metaData.schema;
       } else {
         const view = metaData.configure.advanced?.view;

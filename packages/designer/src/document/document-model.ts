@@ -26,7 +26,7 @@ export interface ComponentMap {
   destructuring?: boolean;
   exportName?: string;
   subName?: string;
-  devMode?: 'lowcode' | 'procode';
+  devMode?: 'lowcode' | 'procode' | 'proCode' | 'lowCode';
 }
 
 export class DocumentModel {
