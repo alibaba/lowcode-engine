@@ -1,5 +1,4 @@
 const esModules = [
-  '@recore/obx-react',
   '@alilc/lowcode-datasource-engine',
 ].join('|');
 
