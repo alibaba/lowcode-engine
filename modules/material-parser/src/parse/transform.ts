@@ -286,9 +286,11 @@ export function transformItem(name: string, item: any) {
       // if ('computed' in defaultValue) {
       // val = val.value;
       try {
-        const value = safeEval(defaultValue.value);
-        if (isEvaluable(value)) {
+        if (isEvaluable(defaultValue.value)) {
+          const value = safeEval(`'${defaultValue.value}'`);
           result.defaultValue = value;
+        } else {
+          result.defaultValue = defaultValue.value;
         }
       } catch (e) {
         log(e);
