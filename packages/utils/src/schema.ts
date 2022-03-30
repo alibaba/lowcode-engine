@@ -26,7 +26,7 @@ export function compatibleLegaoSchema(props: any): any {
         type: 'JSSlot',
         title: (props.value.props as any)?.slotTitle,
         name: (props.value.props as any)?.slotName,
-        value: props.value.children,
+        value: compatibleLegaoSchema(props.value.children),
         params: (props.value.props as any)?.slotParams,
       };
     } else {
