@@ -13,6 +13,14 @@ export async function isNPMInstalled(args: {
   return pathExists(path.join(args.workDir, 'node_modules'));
 }
 
+export async function isNPMModuleInstalled(
+  args: { workDir: string; moduleDir: string; npmClient?: string },
+  name: string,
+) {
+  const modulePkgJsonPath = path.resolve(args.workDir, 'node_modules', name, 'package.json');
+  return pathExists(modulePkgJsonPath);
+}
+
 export async function install(args: { workDir: string; moduleDir: string; npmClient?: string }) {
   if (await isNPMInstalled(args)) return;
   const { workDir, npmClient = 'tnpm' } = args;
@@ -27,6 +35,7 @@ export async function installModule(
   args: { workDir: string; moduleDir: string; npmClient?: string },
   name: string,
 ) {
+  if (await isNPMModuleInstalled(args, name)) return;
   const { workDir, npmClient = 'tnpm' } = args;
   try {
     await spawn(npmClient, ['i', name], { stdio: 'inherit', cwd: workDir } as any);
