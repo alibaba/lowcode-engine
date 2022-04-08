@@ -288,7 +288,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
             const { search } = history.location;
             return parseQuery(search);
           },
-          execEventFlow() {}
+          execEventFlow() {},
         },
         i18n: {
           setLocale: (loc: string) => {

@@ -24,6 +24,7 @@ export function compatibleReducer(props: any, node: Node): any {
       value: {
         componentName: 'Slot',
         children: props.value,
+        id: node.id,
         props: {
           slotTitle: props.title,
           slotName: props.name,
