@@ -5,6 +5,7 @@ import { createProjectBuilder } from '../generator/ProjectBuilder';
 import esmodule from '../plugins/common/esmodule';
 import containerClass from '../plugins/component/react/containerClass';
 import containerInitState from '../plugins/component/react/containerInitState';
+import containerInjectContext from '../plugins/component/react/containerInjectContext';
 import containerInjectUtils from '../plugins/component/react/containerInjectUtils';
 import containerInjectDataSourceEngine from '../plugins/component/react/containerInjectDataSourceEngine';
 import containerInjectI18n from '../plugins/component/react/containerInjectI18n';
@@ -31,6 +32,7 @@ export default function createIceJsProjectBuilder(): IProjectBuilder {
           fileType: 'jsx',
         }),
         containerClass(),
+        containerInjectContext(),
         containerInjectUtils(),
         containerInjectDataSourceEngine(),
         containerInjectI18n(),
@@ -53,6 +55,7 @@ export default function createIceJsProjectBuilder(): IProjectBuilder {
           fileType: 'jsx',
         }),
         containerClass(),
+        containerInjectContext(),
         containerInjectUtils(),
         containerInjectDataSourceEngine(),
         containerInjectI18n(),
@@ -86,6 +89,7 @@ export default function createIceJsProjectBuilder(): IProjectBuilder {
 export const plugins = {
   containerClass,
   containerInitState,
+  containerInjectContext,
   containerInjectUtils,
   containerInjectI18n,
   containerInjectDataSourceEngine,

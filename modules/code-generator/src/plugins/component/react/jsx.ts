@@ -100,8 +100,8 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       fileType: cfg.fileType,
       name: REACT_CHUNK_NAME.ClassRenderJSX,
       content: `
-        const __$$context = this;
-        const { state } = this;
+        const __$$context = this._context || this;
+        const { state } = __$$context;
         return ${jsxContent};
       `,
       linkAfter: [REACT_CHUNK_NAME.ClassRenderStart, REACT_CHUNK_NAME.ClassRenderPre],

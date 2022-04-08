@@ -1,3 +1,5 @@
+// 注意: 出码引擎注入的临时变量默认都以 "__$$" 开头，禁止在搭建的代码中直接访问。
+// 例外：react 框架的导出名和各种组件名除外。
 import React from "react";
 
 import Super, {
@@ -13,7 +15,7 @@ import SuperOther from "@alifd/next";
 
 import utils from "../../utils";
 
-import { i18n as _$$i18n } from "../../i18n";
+import * as __$$i18n from "../../i18n";
 
 import "./index.css";
 
@@ -24,23 +26,23 @@ const SelectOption = Select.Option;
 const SearchTable = SearchTableExport.default;
 
 class Test$$Page extends React.Component {
+  _context = this;
+
   constructor(props, context) {
     super(props);
 
     this.utils = utils;
 
+    __$$i18n._inject2(this);
+
     this.state = {};
   }
-
-  i18n = (i18nKey) => {
-    return _$$i18n(i18nKey);
-  };
 
   componentDidMount() {}
 
   render() {
-    const __$$context = this;
-    const { state } = this;
+    const __$$context = this._context || this;
+    const { state } = __$$context;
     return (
       <div>
         <Super title={this.state.title} />

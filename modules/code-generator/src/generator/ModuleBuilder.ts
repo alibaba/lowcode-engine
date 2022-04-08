@@ -5,6 +5,7 @@ import {
   CodeGeneratorError,
   ICodeChunk,
   ICompiledModule,
+  IContextData,
   IModuleBuilder,
   IParseResult,
   ISchemaParser,
@@ -23,6 +24,7 @@ export function createModuleBuilder(
     plugins: BuilderComponentPlugin[];
     postProcessors: PostProcessor[];
     mainFileName?: string;
+    contextData?: IContextData;
   } = {
     plugins: [],
     postProcessors: [],
@@ -41,7 +43,13 @@ export function createModuleBuilder(
 
     let files: ResultFile[] = [];
 
-    const { chunks } = await chunkGenerator.run(input);
+    const { chunks } = await chunkGenerator.run(input, {
+      ir: input,
+      chunks: [],
+      depNames: [],
+      contextData: options.contextData || {},
+    });
+
     chunks.forEach((fileChunkList) => {
       const content = linker.link(fileChunkList);
       const file = createResultFile(

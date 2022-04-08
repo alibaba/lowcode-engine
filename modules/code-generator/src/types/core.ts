@@ -59,8 +59,22 @@ export interface IBaseCodeStruct {
 
 export interface ICodeStruct extends IBaseCodeStruct {
   ir: any;
-  // FIXME: 这个方案不太好，想清楚场景，结构化表达，不要那么通用
-  contextData: Record<string, any>;
+  contextData: IContextData;
+}
+
+/** 上下文数据，用来在插件之间共享一些数据 */
+export interface IContextData {
+  /** 是否处于严格模式 */
+  inStrictMode?: boolean;
+
+  /** 是否使用了 Ref 的 API (this.$/this.$$) */
+  useRefApi?: boolean;
+
+  /**
+   * 其他自定义数据
+   * （三方自定义插件也可以在此放一些数据，建议起个长一点的名称，用自己的插件名做前缀，以防冲突）
+   */
+  [key: string]: any;
 }
 
 export type BuilderComponentPlugin = (initStruct: ICodeStruct) => Promise<ICodeStruct>;

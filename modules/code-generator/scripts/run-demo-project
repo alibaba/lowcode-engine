@@ -1,0 +1,55 @@
+#!/usr/bin/env node
+
+// @ts-check
+const program = require('commander');
+const { spawnSync } = require('child_process');
+const glob = require('glob');
+const fs = require('fs');
+const path = require('path');
+const _ = require('lodash');
+
+program
+  .option('--npm <npm>', 'specify the npm command location or alias')
+  .arguments('<project>')
+  .action((project, options) => {
+    try {
+      if (!fs.existsSync(project)) {
+        throw new Error(`Project ${project} does not exist`);
+      }
+
+      const getProjectActualPath = [
+        () => path.resolve(process.cwd(), project),
+        () =>
+          path.resolve(
+            process.cwd(),
+            path.join(
+              project,
+              path.dirname(glob.sync('*/package.json', { cwd: project })[0] || ''),
+            ),
+          ),
+      ]
+        .map((x) => _.memoize(x))
+        .find((x) => fs.existsSync(path.join(x(), 'package.json')));
+
+      if (!getProjectActualPath) {
+        throw new Error(`Project ${project} is not a valid project(no package.json)`);
+      }
+
+      const projectActualPath = getProjectActualPath();
+      if (path.resolve(process.cwd(), project) !== projectActualPath) {
+        console.log('Changing directory to', path.relative(process.cwd(), projectActualPath));
+      }
+
+      process.chdir(projectActualPath);
+
+      const npm = options.npm || 'npm';
+      const cmd = `${npm} install && ${npm} start`;
+      console.log('# %s', cmd);
+      spawnSync(cmd, { stdio: 'inherit', shell: true });
+    } catch (err) {
+      console.log(err);
+      process.exit(1);
+    }
+  });
+
+program.parse(process.argv);

@@ -1,3 +1,5 @@
+// 注意: 出码引擎注入的临时变量默认都以 "__$$" 开头，禁止在搭建的代码中直接访问。
+// 例外：react 框架的导出名和各种组件名除外。
 import React from "react";
 
 import { Page } from "@alilc/b6-page";
@@ -10,11 +12,13 @@ import { create as __$$createDataSourceEngine } from "@alilc/lowcode-datasource-
 
 import utils from "../../utils";
 
-import { i18n as _$$i18n } from "../../i18n";
+import * as __$$i18n from "../../i18n";
 
 import "./index.css";
 
 class Aaaa$$Page extends React.Component {
+  _context = this;
+
   _dataSourceConfig = this._defineDataSourceConfig();
   _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceConfig, this, {
     runtimeConfig: true,
@@ -35,6 +39,8 @@ class Aaaa$$Page extends React.Component {
     super(props);
 
     this.utils = utils;
+
+    __$$i18n._inject2(this);
 
     this.state = {};
   }
@@ -60,17 +66,13 @@ class Aaaa$$Page extends React.Component {
     };
   }
 
-  i18n = (i18nKey) => {
-    return _$$i18n(i18nKey);
-  };
-
   componentDidMount() {
     this._dataSourceEngine.reloadDataSource();
   }
 
   render() {
-    const __$$context = this;
-    const { state } = this;
+    const __$$context = this._context || this;
+    const { state } = __$$context;
     return (
       <div title="" backgroundColor="#fff" textColor="#333" style={{}}>
         <Text
