@@ -283,11 +283,12 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
             history.replace(withQueryParams(path, params));
           },
         },
-        legaoBuiltins: {
+        legaoBuiltin: {
           getUrlParams() {
             const { search } = history.location;
             return parseQuery(search);
           },
+          execEventFlow() {}
         },
         i18n: {
           setLocale: (loc: string) => {
