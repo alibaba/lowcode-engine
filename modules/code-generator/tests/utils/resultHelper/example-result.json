@@ -1,0 +1,46 @@
+{
+  "name": ".",
+  "dirs": [
+    {
+      "name": "src",
+      "dirs": [
+        {
+          "name": "components",
+          "dirs": [
+            {
+              "name": "Hello",
+              "dirs": [],
+              "files": [
+                {
+                  "name": "index",
+                  "ext": "js",
+                  "content": "export default () => <div>Hello</div>"
+                },
+                {
+                  "name": "index",
+                  "ext": "css",
+                  "content": ".hello {color: red}"
+                }
+              ]
+            }
+          ],
+          "files": [
+            {
+              "name": "index",
+              "ext": "js",
+              "content": "export * from \"./Hello\";"
+            }
+          ]
+        }
+      ],
+      "files": [
+        { "name": "index", "ext": "js", "content": "console.log(\"Hello\")" },
+        { "name": "index", "ext": "css", "content": "html,body{ padding: 0; }" }
+      ]
+    }
+  ],
+  "files": [
+    { "name": ".eslintrc", "ext": "", "content": "{}" },
+    { "name": "package", "ext": "json", "content": "{ \"name\": \"demo\", \"version\":\"1.0.0\" }" }
+  ]
+}

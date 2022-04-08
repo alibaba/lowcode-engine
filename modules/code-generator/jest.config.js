@@ -6,4 +6,5 @@ module.exports = {
   collectCoverage: false,
   collectCoverageFrom: ['src/**/*.{ts,tsx}', '!**/node_modules/**', '!**/vendor/**'],
   testMatch: ['<rootDir>/tests/**/*.test.ts'],
+  setupFiles: ['./jest.setup.js'],
 };

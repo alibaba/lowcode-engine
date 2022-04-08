@@ -85,6 +85,7 @@
     "lodash-es": "^4.17.21",
     "mock-fs": "^5.1.2",
     "moment": "^2.29.1",
+    "nanomatch": "^1.2.13",
     "node-fetch": "2.x",
     "path-browserify": "^1.0.1",
     "prettier": "^2.5.1",

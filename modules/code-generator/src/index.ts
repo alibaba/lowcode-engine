@@ -25,16 +25,8 @@ import i18n from './plugins/project/i18n';
 import utils from './plugins/project/utils';
 import prettier from './postprocessor/prettier';
 
-// 引入常用工具
-import * as utilsCommon from './utils/common';
-import * as utilsCompositeType from './utils/compositeType';
-import * as utilsJsExpression from './utils/jsExpression';
-import * as utilsJsSlot from './utils/jsSlot';
-import * as utilsNodeToJSX from './utils/nodeToJSX';
-import * as utilsResultHelper from './utils/resultHelper';
-import * as utilsTemplateHelper from './utils/templateHelper';
-import * as utilsValidate from './utils/validate';
-import * as utilsSchema from './utils/schema';
+// 引入全局常用工具
+import * as globalUtils from './utils';
 
 import * as CONSTANTS from './const';
 
@@ -85,17 +77,7 @@ export default {
   postprocessor: {
     prettier,
   },
-  utils: {
-    common: utilsCommon,
-    compositeType: utilsCompositeType,
-    jsExpression: utilsJsExpression,
-    jsSlot: utilsJsSlot,
-    nodeToJSX: utilsNodeToJSX,
-    resultHelper: utilsResultHelper,
-    templateHelper: utilsTemplateHelper,
-    validate: utilsValidate,
-    schema: utilsSchema,
-  },
+  utils: globalUtils,
   chunkNames: {
     COMMON_CHUNK_NAME,
     CLASS_DEFINE_CHUNK_NAME,

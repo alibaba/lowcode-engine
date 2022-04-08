@@ -37,6 +37,8 @@ class List$$Page extends Component {
 
   constructor(props, context) {
     super(props);
+
+    __$$i18n._inject2(this);
   } /* end of constructor */
 
   componentDidMount() {
@@ -74,11 +76,6 @@ class List$$Page extends Component {
       </Page>
     );
   } /* end of render */
-
-  _i18nText(t) {
-    const locale = this._context.getLocale();
-    return t[locale] ?? t[String(locale).replace('-', '_')] ?? t[t.use || 'zh_CN'] ?? t.en_US;
-  }
 
   _createContext() {
     const self = this;

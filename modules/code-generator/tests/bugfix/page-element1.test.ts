@@ -1,6 +1,7 @@
 import CodeGenerator from '../../src';
 import * as fs from 'fs';
 import * as path from 'path';
+import { createDiskPublisher } from '../helpers/solutionHelper';
 
 test('page-element1', async () => {
   const inputSchemaJsonFile = path.join(__dirname, 'page-element1.schema.json');
@@ -67,7 +68,7 @@ function exportProject(inputPath: string, outputPath: string) {
 
   return builder.generateProject(newSchema).then(async (result) => {
     // displayResultInConsole(result);
-    const publisher = CodeGenerator.publishers.disk();
+    const publisher = createDiskPublisher();
     await publisher.publish({
       project: result,
       outputPath,

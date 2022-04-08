@@ -2,6 +2,7 @@ import CodeGenerator from '../../src';
 import * as fs from 'fs';
 import * as path from 'path';
 import { ProjectSchema } from '@alilc/lowcode-types';
+import { createDiskPublisher } from '../helpers/solutionHelper';
 
 const testCaseBaseName = path.basename(__filename, '.test.ts');
 const inputSchemaJsonFile = path.join(__dirname, `${testCaseBaseName}.schema.json`);
@@ -205,7 +206,7 @@ function exportProject(
 
   return builder.generateProject(schema).then(async (result) => {
     // displayResultInConsole(result);
-    const publisher = CodeGenerator.publishers.disk();
+    const publisher = createDiskPublisher();
     await publisher.publish({
       project: result,
       outputPath,

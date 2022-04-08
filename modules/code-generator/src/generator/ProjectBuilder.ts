@@ -14,7 +14,7 @@ import { SchemaParser } from '../parser/SchemaParser';
 import { createResultDir, addDirectory, addFile } from '../utils/resultHelper';
 
 import { createModuleBuilder } from './ModuleBuilder';
-import { ProjectPreProcessor, ProjectPostProcessor } from '../types/core';
+import { ProjectPreProcessor, ProjectPostProcessor, IContextData } from '../types/core';
 import { CodeGeneratorError } from '../types/error';
 
 interface IModuleInfo {
@@ -36,6 +36,10 @@ export interface ProjectBuilderInitOptions {
   projectPreProcessors?: ProjectPreProcessor[];
   /** 项目级别的后置处理器 */
   projectPostProcessors?: ProjectPostProcessor[];
+  /** 是否处于严格模式 */
+  inStrictMode?: boolean;
+  /** 一些额外的上下文数据 */
+  extraContextData?: Record<string, unknown>;
 }
 
 export class ProjectBuilder implements IProjectBuilder {
@@ -57,6 +61,12 @@ export class ProjectBuilder implements IProjectBuilder {
   /** 项目级别的后置处理器 */
   private projectPostProcessors: ProjectPostProcessor[];
 
+  /** 是否处于严格模式 */
+  public readonly inStrictMode: boolean;
+
+  /** 一些额外的上下文数据 */
+  public readonly extraContextData: IContextData;
+
   constructor({
     template,
     plugins,
@@ -64,6 +74,8 @@ export class ProjectBuilder implements IProjectBuilder {
     schemaParser = new SchemaParser(),
     projectPreProcessors = [],
     projectPostProcessors = [],
+    inStrictMode = false,
+    extraContextData = {},
   }: ProjectBuilderInitOptions) {
     this.template = template;
     this.plugins = plugins;
@@ -71,6 +83,8 @@ export class ProjectBuilder implements IProjectBuilder {
     this.schemaParser = schemaParser;
     this.projectPreProcessors = projectPreProcessors;
     this.projectPostProcessors = projectPostProcessors;
+    this.inStrictMode = inStrictMode;
+    this.extraContextData = extraContextData;
   }
 
   async generateProject(originalSchema: ProjectSchema | string): Promise<ResultDir> {
@@ -264,6 +278,10 @@ export class ProjectBuilder implements IProjectBuilder {
         builders[pluginName] = createModuleBuilder({
           plugins: this.plugins[pluginName],
           postProcessors: this.postProcessors,
+          contextData: {
+            inStrictMode: this.inStrictMode,
+            ...this.extraContextData,
+          },
           ...options,
         });
       }

@@ -31,13 +31,34 @@ import { isContainerSchema } from '../../../utils/schema';
 import { REACT_CHUNK_NAME } from './const';
 
 export interface PluginConfig {
-  fileType: string;
+  fileType?: string;
+
+  /**
+   * 数据源配置
+   */
+  datasourceConfig?: {
+    /** 数据源引擎的版本 */
+    engineVersion?: string;
+
+    /** 数据源引擎的包名 */
+    enginePackage?: string;
+
+    /** 数据源 handlers 的版本 */
+    handlersVersion?: {
+      [key: string]: string;
+    };
+
+    /** 数据源 handlers 的包名 */
+    handlersPackages?: {
+      [key: string]: string;
+    };
+  };
 }
 
 const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => {
-  const cfg: PluginConfig = {
-    fileType: FileType.JSX,
+  const cfg = {
     ...config,
+    fileType: config?.fileType || FileType.JSX,
   };
 
   const plugin: BuilderComponentPlugin = async (pre: ICodeStruct) => {
@@ -65,7 +86,9 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
           };
 
           const handlerFactoryExportName = `create${changeCase.pascal(dsType)}Handler`;
-          const handlerPkgName = `@alilc/lowcode-datasource-${changeCase.kebab(dsType)}-handler`;
+          const handlerPkgName =
+            cfg.datasourceConfig?.handlersPackages?.[dsType] ||
+            `@alilc/lowcode-datasource-${changeCase.kebab(dsType)}-handler`;
 
           next.chunks.push({
             type: ChunkType.STRING,
