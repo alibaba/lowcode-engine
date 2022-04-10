@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.4-beta.0](https://github.com/alibaba/lowcode-engine/compare/@alilc/lowcode-code-generator@1.0.3...@alilc/lowcode-code-generator@1.0.4-beta.0) (2022-04-10)
+
+
+### Features
+
+* **material-parser:** check module before install it; fix default value issue in ts parser ([fc452f7](https://github.com/alibaba/lowcode-engine/commit/fc452f7166f02acfba6076c1a9425e6f5880b5f6))
+
+
+### Bug Fixes
+
+* 🐛 修正 i18n 里面的一个参数命名问题 ([1e9e388](https://github.com/alibaba/lowcode-engine/commit/1e9e388ce9104d76c4f6d9bc513c57e5059d7982))
+* 🐛 解决出码缺乏对于 i18n 数据的 params 的处理的问题 ([1eb9add](https://github.com/alibaba/lowcode-engine/commit/1eb9addd8df2323f9aabac87af32ac2efcd6bf22)), closes [#288](https://github.com/alibaba/lowcode-engine/issues/288)
+* 🐛 解决小程序环境没有 window, 而 rax 出码中却默认在 __$eval 中用到 window 的问题 ([67dabb0](https://github.com/alibaba/lowcode-engine/commit/67dabb04beb32b6e94eb1276222e53b416e47c9d))
+* Fix the conversion failure of some props expressions under Slot props of low-code components ([7db5461](https://github.com/alibaba/lowcode-engine/commit/7db5461706c739fac673b2466bc2fda7661242e4))
+* fix unnecessary props calculation ([f1fed75](https://github.com/alibaba/lowcode-engine/commit/f1fed75f39be8289ede1ec558b04428a69e25b5f))
+* 修正 react 框架出码中在严格模式对 methods 和 context 的处理 ([79db4ac](https://github.com/alibaba/lowcode-engine/commit/79db4ac97f34f24b7f7460fb3fc67521967f8cc5))
+
 ### [1.0.3](https://github.com/alibaba/lowcode-engine/compare/@alilc/lowcode-code-generator@1.0.2...@alilc/lowcode-code-generator@1.0.3) (2022-03-29)
 
 
