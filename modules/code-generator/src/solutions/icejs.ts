@@ -22,8 +22,15 @@ import icejs from '../plugins/project/framework/icejs';
 
 import { prettier } from '../postprocessor';
 
-export default function createIceJsProjectBuilder(): IProjectBuilder {
+export type IceJsProjectBuilderOptions = {
+  inStrictMode?: boolean;
+};
+
+export default function createIceJsProjectBuilder(
+  options?: IceJsProjectBuilderOptions,
+): IProjectBuilder {
   return createProjectBuilder({
+    inStrictMode: options?.inStrictMode,
     template: icejs.template,
     plugins: {
       components: [
