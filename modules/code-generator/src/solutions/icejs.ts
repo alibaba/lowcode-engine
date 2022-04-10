@@ -1,4 +1,4 @@
-import { IProjectBuilder } from '../types';
+import { IProjectBuilder, IProjectBuilderOptions } from '../types';
 
 import { createProjectBuilder } from '../generator/ProjectBuilder';
 
@@ -22,15 +22,14 @@ import icejs from '../plugins/project/framework/icejs';
 
 import { prettier } from '../postprocessor';
 
-export type IceJsProjectBuilderOptions = {
-  inStrictMode?: boolean;
-};
+export interface IceJsProjectBuilderOptions extends IProjectBuilderOptions {}
 
 export default function createIceJsProjectBuilder(
   options?: IceJsProjectBuilderOptions,
 ): IProjectBuilder {
   return createProjectBuilder({
     inStrictMode: options?.inStrictMode,
+    extraContextData: { ...options },
     template: icejs.template,
     plugins: {
       components: [

@@ -152,7 +152,7 @@ class Test$$Page extends React.Component {
                         width: "400px",
                         display: "inline-block",
                       }}
-                      options={this.state.gateways}
+                      options={__$$eval(() => this.state.gateways)}
                       mode="single"
                       defaultValue={["auto-edd-uniproxy"]}
                       labelInValue={true}
@@ -220,7 +220,7 @@ class Test$$Page extends React.Component {
                   </Button>
                   <Modal
                     title="创建发布单"
-                    visible={this.state.modalVisible}
+                    visible={__$$eval(() => this.state.modalVisible)}
                     footer=""
                     __events={{
                       eventDataList: [
@@ -317,7 +317,7 @@ class Test$$Page extends React.Component {
                   </Modal>
                   <AliAutoSearchTableDefault
                     rowKey="key"
-                    dataSource={this.state.records}
+                    dataSource={__$$eval(() => this.state.records)}
                     columns={[
                       {
                         title: "发布名称",
@@ -342,7 +342,7 @@ class Test$$Page extends React.Component {
                       },
                       { title: "发布时间", dataIndex: "publish_id" },
                     ]}
-                    actions={this.actions || []}
+                    actions={__$$eval(() => this.actions || [])}
                     getActions={function () {
                       return this.getActions.apply(
                         this,
@@ -361,6 +361,17 @@ class Test$$Page extends React.Component {
 }
 
 export default Test$$Page;
+
+function __$$eval(expr) {
+  try {
+    return expr();
+  } catch (error) {}
+}
+
+function __$$evalArray(expr) {
+  const res = __$$eval(expr);
+  return Array.isArray(res) ? res : [];
+}
 
 function __$$createChildContext(oldContext, ext) {
   const childContext = {

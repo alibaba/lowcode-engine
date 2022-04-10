@@ -200,7 +200,7 @@ class Test$$Page extends React.Component {
       >
         <Modal
           title="是否修改"
-          visible={this.state.isModifyDialogVisible}
+          visible={__$$eval(() => this.state.isModifyDialogVisible)}
           okText="确认"
           okType=""
           forceRender={false}
@@ -293,13 +293,13 @@ class Test$$Page extends React.Component {
                 flex={true}
                 style={{ marginBottom: "24px" }}
               >
-                <Steps current={this.state.currentStep}>
+                <Steps current={__$$eval(() => this.state.currentStep)}>
                   <Steps.Step title="版本申请" description="" />
                   <Steps.Step title="机器配置" subTitle="" description="" />
                   <Steps.Step title="项目审批" description="" />
                 </Steps>
               </NextP>
-              {!!(this.state.currentStep === 0) && (
+              {!!__$$eval(() => this.state.currentStep === 0) && (
                 <NextP
                   wrap={false}
                   type="body2"
@@ -347,7 +347,9 @@ class Test$$Page extends React.Component {
                         { name: "onValuesChange", disabled: true },
                       ],
                     }}
-                    initialValues={this.state.customerProjectInfo}
+                    initialValues={__$$eval(
+                      () => this.state.customerProjectInfo
+                    )}
                     onValuesChange={function () {
                       this.onValuesChange.apply(
                         this,
@@ -391,10 +393,11 @@ class Test$$Page extends React.Component {
                           { label: "UI定制", value: "4", disabled: false },
                         ]}
                         style={{ width: "600px" }}
-                        disabled={
-                          this.state.customerProjectInfo.id > 0 &&
-                          !this.state.isModifyStatus
-                        }
+                        disabled={__$$eval(
+                          () =>
+                            this.state.customerProjectInfo.id > 0 &&
+                            !this.state.isModifyStatus
+                        )}
                       />
                     </Form.Item>
                     <Form.Item
@@ -409,11 +412,12 @@ class Test$$Page extends React.Component {
                     >
                       <Select
                         style={{ width: "600px" }}
-                        options={this.state.versionLinesArray}
-                        disabled={
-                          this.state.customerProjectInfo.id > 0 &&
-                          !this.state.isModifyStatus
-                        }
+                        options={__$$eval(() => this.state.versionLinesArray)}
+                        disabled={__$$eval(
+                          () =>
+                            this.state.customerProjectInfo.id > 0 &&
+                            !this.state.isModifyStatus
+                        )}
                         placeholder="请选择版本线"
                       />
                     </Form.Item>
@@ -442,10 +446,11 @@ class Test$$Page extends React.Component {
                       <Input
                         placeholder="公司简称-产品名称-版本类型"
                         style={{ width: "600px" }}
-                        disabled={
-                          this.state.customerProjectInfo.id > 0 &&
-                          !this.state.isModifyStatus
-                        }
+                        disabled={__$$eval(
+                          () =>
+                            this.state.customerProjectInfo.id > 0 &&
+                            !this.state.isModifyStatus
+                        )}
                       />
                     </Form.Item>
                     <Form.Item
@@ -462,10 +467,11 @@ class Test$$Page extends React.Component {
                     >
                       <DatePicker
                         style={{ width: "600px" }}
-                        disabled={
-                          this.state.customerProjectInfo.id > 0 &&
-                          !this.state.isModifyStatus
-                        }
+                        disabled={__$$eval(
+                          () =>
+                            this.state.customerProjectInfo.id > 0 &&
+                            !this.state.isModifyStatus
+                        )}
                       />
                     </Form.Item>
                     <Form.Item
@@ -484,10 +490,11 @@ class Test$$Page extends React.Component {
                         value={3}
                         style={{ width: "600px" }}
                         placeholder="单位（台）使用该版本的机器数量+预计出货量，请如实填写"
-                        disabled={
-                          this.state.customerProjectInfo.id > 0 &&
-                          !this.state.isModifyStatus
-                        }
+                        disabled={__$$eval(
+                          () =>
+                            this.state.customerProjectInfo.id > 0 &&
+                            !this.state.isModifyStatus
+                        )}
                         min={0}
                         size="middle"
                       />
@@ -543,7 +550,7 @@ class Test$$Page extends React.Component {
                   </Form>
                 </NextP>
               )}
-              {!!(this.state.currentStep === 1) && (
+              {!!__$$eval(() => this.state.currentStep === 1) && (
                 <NextP
                   wrap={false}
                   type="body2"
@@ -592,7 +599,9 @@ class Test$$Page extends React.Component {
                         { name: "onValuesChange", disabled: true },
                       ],
                     }}
-                    initialValues={this.state.customerProjectInfo}
+                    initialValues={__$$eval(
+                      () => this.state.customerProjectInfo
+                    )}
                     onValuesChange={function () {
                       this.onValuesChange.apply(
                         this,
@@ -614,11 +623,12 @@ class Test$$Page extends React.Component {
                     >
                       <Select
                         style={{ width: "600px" }}
-                        options={this.state.projectModalsArray}
-                        disabled={
-                          this.state.customerProjectInfo.id > 0 &&
-                          !this.state.isModifyStatus
-                        }
+                        options={__$$eval(() => this.state.projectModalsArray)}
+                        disabled={__$$eval(
+                          () =>
+                            this.state.customerProjectInfo.id > 0 &&
+                            !this.state.isModifyStatus
+                        )}
                         placeholder="请选择设备类型"
                       />
                     </Form.Item>
@@ -638,10 +648,11 @@ class Test$$Page extends React.Component {
                         value={3}
                         style={{ width: "600px" }}
                         placeholder="例如1280"
-                        disabled={
-                          this.state.customerProjectInfo.id > 0 &&
-                          !this.state.isModifyStatus
-                        }
+                        disabled={__$$eval(
+                          () =>
+                            this.state.customerProjectInfo.id > 0 &&
+                            !this.state.isModifyStatus
+                        )}
                         min={0}
                       />
                     </Form.Item>
@@ -661,10 +672,11 @@ class Test$$Page extends React.Component {
                         value={3}
                         style={{ width: "600px" }}
                         placeholder="例如720"
-                        disabled={
-                          this.state.customerProjectInfo.id > 0 &&
-                          !this.state.isModifyStatus
-                        }
+                        disabled={__$$eval(
+                          () =>
+                            this.state.customerProjectInfo.id > 0 &&
+                            !this.state.isModifyStatus
+                        )}
                         min={0}
                       />
                     </Form.Item>
@@ -684,10 +696,11 @@ class Test$$Page extends React.Component {
                         value={3}
                         style={{ width: "600px" }}
                         placeholder="请输入尺寸"
-                        disabled={
-                          this.state.customerProjectInfo.id > 0 &&
-                          !this.state.isModifyStatus
-                        }
+                        disabled={__$$eval(
+                          () =>
+                            this.state.customerProjectInfo.id > 0 &&
+                            !this.state.isModifyStatus
+                        )}
                         min={0}
                       />
                     </Form.Item>
@@ -703,10 +716,11 @@ class Test$$Page extends React.Component {
                         value={3}
                         style={{ width: "600px" }}
                         placeholder="UI定制项目必填"
-                        disabled={
-                          this.state.customerProjectInfo.id > 0 &&
-                          !this.state.isModifyStatus
-                        }
+                        disabled={__$$eval(
+                          () =>
+                            this.state.customerProjectInfo.id > 0 &&
+                            !this.state.isModifyStatus
+                        )}
                         min={0}
                       />
                     </Form.Item>
@@ -727,10 +741,11 @@ class Test$$Page extends React.Component {
                       <Input
                         placeholder="请输入芯片名称"
                         style={{ width: "600px" }}
-                        disabled={
-                          this.state.customerProjectInfo.id > 0 &&
-                          !this.state.isModifyStatus
-                        }
+                        disabled={__$$eval(
+                          () =>
+                            this.state.customerProjectInfo.id > 0 &&
+                            !this.state.isModifyStatus
+                        )}
                       />
                     </Form.Item>
                     <Form.Item
@@ -749,10 +764,11 @@ class Test$$Page extends React.Component {
                         value={3}
                         style={{ width: "600px" }}
                         placeholder="请输入芯片核数"
-                        disabled={
-                          this.state.customerProjectInfo.id > 0 &&
-                          !this.state.isModifyStatus
-                        }
+                        disabled={__$$eval(
+                          () =>
+                            this.state.customerProjectInfo.id > 0 &&
+                            !this.state.isModifyStatus
+                        )}
                         defaultValue=""
                         min={0}
                       />
@@ -767,11 +783,12 @@ class Test$$Page extends React.Component {
                     >
                       <Select
                         style={{ width: "600px" }}
-                        options={this.state.instructionsArray}
-                        disabled={
-                          this.state.customerProjectInfo.id > 0 &&
-                          !this.state.isModifyStatus
-                        }
+                        options={__$$eval(() => this.state.instructionsArray)}
+                        disabled={__$$eval(
+                          () =>
+                            this.state.customerProjectInfo.id > 0 &&
+                            !this.state.isModifyStatus
+                        )}
                       />
                     </Form.Item>
                     <Form.Item
@@ -788,11 +805,12 @@ class Test$$Page extends React.Component {
                     >
                       <Select
                         style={{ width: "600px" }}
-                        options={this.state.osVersionsArray}
-                        disabled={
-                          this.state.customerProjectInfo.id > 0 &&
-                          !this.state.isModifyStatus
-                        }
+                        options={__$$eval(() => this.state.osVersionsArray)}
+                        disabled={__$$eval(
+                          () =>
+                            this.state.customerProjectInfo.id > 0 &&
+                            !this.state.isModifyStatus
+                        )}
                         placeholder="请选择系统版本"
                       />
                     </Form.Item>
@@ -829,11 +847,12 @@ class Test$$Page extends React.Component {
                         type="primary"
                         htmlType="submit"
                         style={{ float: "right", marginLeft: "20px" }}
-                        loading={
-                          this.state.LOADING_ADD_OR_UPDATE_CUSTOMER_PROJECT
-                        }
+                        loading={__$$eval(
+                          () =>
+                            this.state.LOADING_ADD_OR_UPDATE_CUSTOMER_PROJECT
+                        )}
                       >
-                        {this.state.secondCommitText}
+                        {__$$eval(() => this.state.secondCommitText)}
                       </Button>
                       <Button
                         type="primary"
@@ -862,7 +881,7 @@ class Test$$Page extends React.Component {
                   </Form>
                 </NextP>
               )}
-              {!!(this.state.currentStep === 2) && (
+              {!!__$$eval(() => this.state.currentStep === 2) && (
                 <NextP
                   wrap={false}
                   type="body2"
@@ -925,7 +944,7 @@ class Test$$Page extends React.Component {
                           style={{ width: "200px" }}
                         />
                         <Steps.Step
-                          title={this.state.thirdAuditText}
+                          title={__$$eval(() => this.state.thirdAuditText)}
                           subTitle=""
                           description=""
                           style={{ width: "200px" }}
@@ -982,9 +1001,11 @@ class Test$$Page extends React.Component {
                           );
                         }.bind(this)}
                       >
-                        {this.state.thirdButtonText}
+                        {__$$eval(() => this.state.thirdButtonText)}
                       </Button>
-                      {!!(this.state.customerProjectInfo.status > 2) && (
+                      {!!__$$eval(
+                        () => this.state.customerProjectInfo.status > 2
+                      ) && (
                         <Button
                           type="primary"
                           htmlType="submit"
@@ -1022,6 +1043,17 @@ class Test$$Page extends React.Component {
 }
 
 export default Test$$Page;
+
+function __$$eval(expr) {
+  try {
+    return expr();
+  } catch (error) {}
+}
+
+function __$$evalArray(expr) {
+  const res = __$$eval(expr);
+  return Array.isArray(res) ? res : [];
+}
 
 function __$$createChildContext(oldContext, ext) {
   const childContext = {

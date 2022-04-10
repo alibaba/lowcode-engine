@@ -1,4 +1,4 @@
-import { IProjectBuilder } from '../types';
+import { IProjectBuilder, IProjectBuilderOptions } from '../types';
 
 import { createProjectBuilder } from '../generator/ProjectBuilder';
 
@@ -22,8 +22,14 @@ import raxApp from '../plugins/project/framework/rax';
 import { prettier } from '../postprocessor';
 import { RaxFrameworkOptions } from '../plugins/project/framework/rax/types/RaxFrameworkOptions';
 
-export default function createRaxProjectBuilder(options?: RaxFrameworkOptions): IProjectBuilder {
+export interface RaxProjectBuilderOptions extends IProjectBuilderOptions, RaxFrameworkOptions {}
+
+export default function createRaxProjectBuilder(
+  options?: RaxProjectBuilderOptions,
+): IProjectBuilder {
   return createProjectBuilder({
+    inStrictMode: options?.inStrictMode,
+    extraContextData: { ...options },
     template: raxApp.template,
     plugins: {
       components: [

@@ -190,7 +190,7 @@ class Test$$Page extends React.Component {
                 flex={true}
               >
                 <AliSearchTable
-                  dataSource={this.state.users.data}
+                  dataSource={__$$eval(() => this.state.users.data)}
                   rowKey="workid"
                   columns={[
                     { title: "花名", dataIndex: "cname" },
@@ -264,6 +264,17 @@ class Test$$Page extends React.Component {
 }
 
 export default Test$$Page;
+
+function __$$eval(expr) {
+  try {
+    return expr();
+  } catch (error) {}
+}
+
+function __$$evalArray(expr) {
+  const res = __$$eval(expr);
+  return Array.isArray(res) ? res : [];
+}
 
 function __$$createChildContext(oldContext, ext) {
   const childContext = {

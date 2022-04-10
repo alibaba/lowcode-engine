@@ -218,7 +218,7 @@ class Test$$Page extends React.Component {
       >
         <Modal
           title="查看结果"
-          visible={this.state.resultVisible}
+          visible={__$$eval(() => this.state.resultVisible)}
           footer={
             <Button
               type="primary"
@@ -269,7 +269,9 @@ class Test$$Page extends React.Component {
           maskClosable={true}
         >
           <AliAutoDivDefault style={{ width: "100%" }}>
-            {!!(this.state.results && this.state.results.length > 0) && (
+            {!!__$$eval(
+              () => this.state.results && this.state.results.length > 0
+            ) && (
               <AliAutoDivDefault
                 style={{
                   width: "100%",
@@ -301,20 +303,26 @@ class Test$$Page extends React.Component {
                 </Button>
               </AliAutoDivDefault>
             )}
-            {this.state.results.map((item, index) =>
+            {__$$eval(() => this.state.results).map((item, index) =>
               ((__$$context) => (
                 <AliAutoDivDefault style={{ width: "100%", marginTop: "10px" }}>
                   <Typography.Text>
-                    {__$$context.formatResult(item)}
+                    {__$$eval(() => __$$context.formatResult(item))}
                   </Typography.Text>
-                  {!!item.download_link && (
-                    <Typography.Link href={item.download_link} target="_blank">
+                  {!!__$$eval(() => item.download_link) && (
+                    <Typography.Link
+                      href={__$$eval(() => item.download_link)}
+                      target="_blank"
+                    >
                       {" "}
                       - 点击下载
                     </Typography.Link>
                   )}
-                  {!!item.release_notes && (
-                    <Typography.Link href={item.release_notes} target="_blank">
+                  {!!__$$eval(() => item.release_notes) && (
+                    <Typography.Link
+                      href={__$$eval(() => item.release_notes)}
+                      target="_blank"
+                    >
                       {" "}
                       - 跳转发布节点
                     </Typography.Link>
@@ -378,7 +386,7 @@ class Test$$Page extends React.Component {
                       preserve={true}
                       scrollToFirstError={true}
                       size="middle"
-                      values={this.state.searchValues}
+                      values={__$$eval(() => this.state.searchValues)}
                     >
                       <Form.Item
                         label="项目名称/渠道号"
@@ -388,7 +396,7 @@ class Test$$Page extends React.Component {
                       >
                         <Select
                           style={{ width: "320px" }}
-                          options={this.state.projects}
+                          options={__$$eval(() => this.state.projects)}
                           showArrow={false}
                           tokenSeparators={[]}
                           showSearch={true}
@@ -454,14 +462,16 @@ class Test$$Page extends React.Component {
                       <Form.Item label="构建人" name="user_id">
                         <Select
                           style={{ width: "210px" }}
-                          options={this.state.userOptions}
+                          options={__$$eval(() => this.state.userOptions)}
                           showSearch={true}
                           defaultActiveFirstOption={false}
                           size="middle"
                           bordered={true}
                           filterOption={true}
                           optionFilterProp="label"
-                          notFoundContent={this.userNotFoundContent}
+                          notFoundContent={__$$eval(
+                            () => this.userNotFoundContent
+                          )}
                           showArrow={false}
                           placeholder="请输入构建人"
                           __events={{
@@ -568,13 +578,14 @@ class Test$$Page extends React.Component {
                 align="left"
                 flex={true}
               >
-                {!!(
-                  !this.state.isSearch ||
-                  (this.state.isSearch && this.state.pkgs.length > 0)
+                {!!__$$eval(
+                  () =>
+                    !this.state.isSearch ||
+                    (this.state.isSearch && this.state.pkgs.length > 0)
                 ) && (
                   <AliAutoSearchTableDefault
                     rowKey="key"
-                    dataSource={this.state.pkgs}
+                    dataSource={__$$eval(() => this.state.pkgs)}
                     columns={[
                       { title: "ID", dataIndex: "id", key: "name", width: 80 },
                       {
@@ -584,20 +595,18 @@ class Test$$Page extends React.Component {
                         width: 142,
                         render: (text, record, index) =>
                           ((__$$context) =>
-                            text
-                              .split(",")
-                              .map((item, index) =>
-                                ((__$$context) => (
-                                  <Typography.Text style={{ display: "block" }}>
-                                    {item}
-                                  </Typography.Text>
-                                ))(
-                                  __$$createChildContext(__$$context, {
-                                    item,
-                                    index,
-                                  })
-                                )
+                            __$$eval(() => text.split(",")).map((item, index) =>
+                              ((__$$context) => (
+                                <Typography.Text style={{ display: "block" }}>
+                                  {__$$eval(() => item)}
+                                </Typography.Text>
                               ))(
+                                __$$createChildContext(__$$context, {
+                                  item,
+                                  index,
+                                })
+                              )
+                            ))(
                             __$$createChildContext(__$$context, {
                               text,
                               record,
@@ -612,26 +621,30 @@ class Test$$Page extends React.Component {
                         render: (text, record, index) =>
                           ((__$$context) => (
                             <Tooltip
-                              title={(text || []).map((item, index) =>
-                                ((__$$context) => (
-                                  <Typography.Text
-                                    style={{
-                                      display: "block",
-                                      color: "#FFFFFF",
-                                    }}
-                                  >
-                                    {item.channelId + " / " + item.version}
-                                  </Typography.Text>
-                                ))(
-                                  __$$createChildContext(__$$context, {
-                                    item,
-                                    index,
-                                  })
-                                )
+                              title={__$$eval(() => text || []).map(
+                                (item, index) =>
+                                  ((__$$context) => (
+                                    <Typography.Text
+                                      style={{
+                                        display: "block",
+                                        color: "#FFFFFF",
+                                      }}
+                                    >
+                                      {__$$eval(
+                                        () =>
+                                          item.channelId + " / " + item.version
+                                      )}
+                                    </Typography.Text>
+                                  ))(
+                                    __$$createChildContext(__$$context, {
+                                      item,
+                                      index,
+                                    })
+                                  )
                               )}
                             >
                               <Typography.Text>
-                                {text[0].version}
+                                {__$$eval(() => text[0].version)}
                               </Typography.Text>
                             </Tooltip>
                           ))(
@@ -655,9 +668,9 @@ class Test$$Page extends React.Component {
                         render: (text, record, index) =>
                           ((__$$context) => [
                             <Typography.Text>
-                              {__$$context.statusDesc[text]}
+                              {__$$eval(() => __$$context.statusDesc[text])}
                             </Typography.Text>,
-                            !!(text === 2) && (
+                            !!__$$eval(() => text === 2) && (
                               <Icon
                                 type="SyncOutlined"
                                 size={16}
@@ -701,12 +714,17 @@ class Test$$Page extends React.Component {
                         dataIndex: "jenkins_link",
                         render: (text, record, index) =>
                           ((__$$context) => [
-                            !!text && (
-                              <Typography.Link href={text} target="_blank">
+                            !!__$$eval(() => text) && (
+                              <Typography.Link
+                                href={__$$eval(() => text)}
+                                target="_blank"
+                              >
                                 查看
                               </Typography.Link>
                             ),
-                            !!!text && <Typography.Text>暂无</Typography.Text>,
+                            !!__$$eval(() => !text) && (
+                              <Typography.Text>暂无</Typography.Text>
+                            ),
                           ])(
                             __$$createChildContext(__$$context, {
                               text,
@@ -722,7 +740,7 @@ class Test$$Page extends React.Component {
                         width: 120,
                         render: (text, record, index) =>
                           ((__$$context) => [
-                            !!text && (
+                            !!__$$eval(() => text) && (
                               <Typography.Link
                                 href="http://rivermap.alibaba.net/dashboard/testExecute"
                                 target="_blank"
@@ -730,7 +748,9 @@ class Test$$Page extends React.Component {
                                 查看
                               </Typography.Link>
                             ),
-                            !!!text && <Typography.Text>暂无</Typography.Text>,
+                            !!__$$eval(() => !text) && (
+                              <Typography.Text>暂无</Typography.Text>
+                            ),
                           ])(
                             __$$createChildContext(__$$context, {
                               text,
@@ -813,7 +833,7 @@ class Test$$Page extends React.Component {
                                 );
                               }.bind(__$$context)}
                               ghost={false}
-                              href={text}
+                              href={__$$eval(() => text)}
                             >
                               查看
                             </Button>
@@ -885,7 +905,7 @@ class Test$$Page extends React.Component {
                     ]}
                     actions={[]}
                     pagination={{
-                      total: this.state.total,
+                      total: __$$eval(() => this.state.total),
                       defaultPageSize: 10,
                       onPageChange: function () {
                         return this.onPageChange.apply(
@@ -917,9 +937,9 @@ class Test$$Page extends React.Component {
                 align="left"
                 flex={true}
               >
-                {!!(this.state.pkgs.length < 1 && this.state.isSearch) && (
-                  <Empty description="暂无数据" />
-                )}
+                {!!__$$eval(
+                  () => this.state.pkgs.length < 1 && this.state.isSearch
+                ) && <Empty description="暂无数据" />}
               </NextP>
             </NextBlockCell>
           </NextBlock>
@@ -930,6 +950,17 @@ class Test$$Page extends React.Component {
 }
 
 export default Test$$Page;
+
+function __$$eval(expr) {
+  try {
+    return expr();
+  } catch (error) {}
+}
+
+function __$$evalArray(expr) {
+  const res = __$$eval(expr);
+  return Array.isArray(res) ? res : [];
+}
 
 function __$$createChildContext(oldContext, ext) {
   const childContext = {

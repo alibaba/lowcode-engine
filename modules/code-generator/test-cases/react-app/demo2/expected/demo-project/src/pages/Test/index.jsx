@@ -43,12 +43,12 @@ class Test$$Page extends React.Component {
     return (
       <div ref={this._refsManager.linkRef("outterView")} autoLoading={true}>
         <Form
-          labelCol={this.state.colNum}
+          labelCol={__$$eval(() => this.state.colNum)}
           style={{}}
           ref={this._refsManager.linkRef("testForm")}
         >
           <Form.Item
-            label={this.i18n("i18n-jwg27yo4")}
+            label={__$$eval(() => this.i18n("i18n-jwg27yo4"))}
             name="name"
             initValue="李雷"
           >
@@ -91,6 +91,17 @@ class Test$$Page extends React.Component {
 }
 
 export default Test$$Page;
+
+function __$$eval(expr) {
+  try {
+    return expr();
+  } catch (error) {}
+}
+
+function __$$evalArray(expr) {
+  const res = __$$eval(expr);
+  return Array.isArray(res) ? res : [];
+}
 
 function __$$createChildContext(oldContext, ext) {
   const childContext = {

@@ -75,13 +75,13 @@ class Index$$Page extends React.Component {
     return (
       <div>
         <div>
-          {this.dataSourceMap.todos.data.map((item, index) =>
+          {__$$eval(() => this.dataSourceMap.todos.data).map((item, index) =>
             ((__$$context) => (
               <div>
                 <Switch
                   checkedChildren="开"
                   unCheckedChildren="关"
-                  checked={item.done}
+                  checked={__$$eval(() => item.done)}
                 />
               </div>
             ))(__$$createChildContext(__$$context, { item, index }))
@@ -93,6 +93,17 @@ class Index$$Page extends React.Component {
 }
 
 export default Index$$Page;
+
+function __$$eval(expr) {
+  try {
+    return expr();
+  } catch (error) {}
+}
+
+function __$$evalArray(expr) {
+  const res = __$$eval(expr);
+  return Array.isArray(res) ? res : [];
+}
 
 function __$$createChildContext(oldContext, ext) {
   const childContext = {

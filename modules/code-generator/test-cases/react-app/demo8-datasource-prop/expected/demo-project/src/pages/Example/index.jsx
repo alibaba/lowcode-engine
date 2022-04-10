@@ -72,7 +72,7 @@ class Example$$Page extends React.Component {
     return (
       <div>
         <Table
-          dataSource={this.dataSourceMap["userList"]}
+          dataSource={__$$eval(() => this.dataSourceMap["userList"])}
           columns={[
             { dataIndex: "name", title: "姓名" },
             { dataIndex: "age", title: "年龄" },
@@ -84,6 +84,17 @@ class Example$$Page extends React.Component {
 }
 
 export default Example$$Page;
+
+function __$$eval(expr) {
+  try {
+    return expr();
+  } catch (error) {}
+}
+
+function __$$evalArray(expr) {
+  const res = __$$eval(expr);
+  return Array.isArray(res) ? res : [];
+}
 
 function __$$createChildContext(oldContext, ext) {
   const childContext = {

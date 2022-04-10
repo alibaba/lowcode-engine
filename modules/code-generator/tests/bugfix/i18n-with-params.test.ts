@@ -35,7 +35,7 @@ function exportProject(
 ) {
   const schemaJsonStr = fs.readFileSync(importPath, { encoding: 'utf8' });
   const schema = { ...JSON.parse(schemaJsonStr), ...mergeSchema };
-  const builder = CodeGenerator.solutions.icejs();
+  const builder = CodeGenerator.solutions.icejs({ tolerateEvalErrors: false });
 
   return builder.generateProject(schema).then(async (result) => {
     const publisher = createDiskPublisher();

@@ -141,13 +141,7 @@ export default List$$Page;
 function __$$eval(expr) {
   try {
     return expr();
-  } catch (err) {
-    try {
-      if (window.handleEvalError) {
-        window.handleEvalError('Failed to evaluate: ', expr, err);
-      }
-    } catch (e) {}
-  }
+  } catch (error) {}
 }
 
 function __$$evalArray(expr) {
