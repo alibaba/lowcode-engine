@@ -131,7 +131,7 @@ class Test$$Page extends React.Component {
     return (
       <div ref={this._refsManager.linkRef("outterView")} autoLoading={true}>
         <Form
-          labelCol={this.state.colNum}
+          labelCol={__$$eval(() => this.state.colNum)}
           style={{}}
           ref={this._refsManager.linkRef("testForm")}
         >
@@ -154,9 +154,9 @@ class Test$$Page extends React.Component {
             <Button.Group>
               {["a", "b", "c"].map((item, index) =>
                 ((__$$context) =>
-                  !!(index >= 1) && (
+                  !!__$$eval(() => index >= 1) && (
                     <Button type="primary" style={{ margin: "0 5px 0 5px" }}>
-                      {item}
+                      {__$$eval(() => item)}
                     </Button>
                   ))(__$$createChildContext(__$$context, { item, index }))
               )}
@@ -169,6 +169,17 @@ class Test$$Page extends React.Component {
 }
 
 export default Test$$Page;
+
+function __$$eval(expr) {
+  try {
+    return expr();
+  } catch (error) {}
+}
+
+function __$$evalArray(expr) {
+  const res = __$$eval(expr);
+  return Array.isArray(res) ? res : [];
+}
 
 function __$$createChildContext(oldContext, ext) {
   const childContext = {

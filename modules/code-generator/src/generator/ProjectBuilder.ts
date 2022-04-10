@@ -280,6 +280,8 @@ export class ProjectBuilder implements IProjectBuilder {
           postProcessors: this.postProcessors,
           contextData: {
             inStrictMode: this.inStrictMode,
+            tolerateEvalErrors: true,
+            evalErrorsHandler: '',
             ...this.extraContextData,
           },
           ...options,

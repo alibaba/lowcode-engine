@@ -45,7 +45,7 @@ class Test$$Page extends React.Component {
     const { state } = __$$context;
     return (
       <div>
-        <Super title={this.state.title} />
+        <Super title={__$$eval(() => this.state.title)} />
         <SuperSub />
         <SuperOther />
         <Button />
@@ -61,6 +61,17 @@ class Test$$Page extends React.Component {
 }
 
 export default Test$$Page;
+
+function __$$eval(expr) {
+  try {
+    return expr();
+  } catch (error) {}
+}
+
+function __$$evalArray(expr) {
+  const res = __$$eval(expr);
+  return Array.isArray(res) ? res : [];
+}
 
 function __$$createChildContext(oldContext, ext) {
   const childContext = {

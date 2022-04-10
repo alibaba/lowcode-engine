@@ -63,10 +63,7 @@ export interface ICodeStruct extends IBaseCodeStruct {
 }
 
 /** 上下文数据，用来在插件之间共享一些数据 */
-export interface IContextData {
-  /** 是否处于严格模式 */
-  inStrictMode?: boolean;
-
+export interface IContextData extends IProjectBuilderOptions {
   /** 是否使用了 Ref 的 API (this.$/this.$$) */
   useRefApi?: boolean;
 
@@ -137,6 +134,33 @@ export interface IProjectSlot {
 
 export interface IProjectPlugins {
   [slotName: string]: BuilderComponentPlugin[];
+}
+
+export interface IProjectBuilderOptions {
+  /** 是否处于严格模式(默认: 否) */
+  inStrictMode?: boolean;
+
+  /**
+   * 是否要容忍对 JSExpression 求值时的异常
+   * 默认：true
+   * 注: 如果容忍异常，则会在求值时包裹 try-catch 块，
+   *     catch 到异常时默认会抛出一个 CustomEvent 事件里面包含异常信息和求值的表达式
+   */
+  tolerateEvalErrors?: boolean;
+
+  /**
+   * 容忍异常的时候的的错误处理语句块
+   * 默认: 无
+   * 您可以设置为一个语句块，比如：
+   *  window.dispatchEvent(new CustomEvent('lowcode-eval-error', { error, expr }))
+   *
+   * 一般可以结合埋点监控模块用来监控求值异常
+   *
+   * 其中:
+   * - error: 异常信息
+   * - expr: 求值的表达式
+   */
+  evalErrorsHandler?: string;
 }
 
 export interface IProjectBuilder {

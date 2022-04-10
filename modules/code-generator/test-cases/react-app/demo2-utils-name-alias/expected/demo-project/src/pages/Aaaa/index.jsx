@@ -87,6 +87,17 @@ class Aaaa$$Page extends React.Component {
 
 export default Aaaa$$Page;
 
+function __$$eval(expr) {
+  try {
+    return expr();
+  } catch (error) {}
+}
+
+function __$$evalArray(expr) {
+  const res = __$$eval(expr);
+  return Array.isArray(res) ? res : [];
+}
+
 function __$$createChildContext(oldContext, ext) {
   const childContext = {
     ...oldContext,
