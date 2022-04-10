@@ -103,8 +103,8 @@ export default class Project {
    * 导出 project
    * @returns
    */
-  exportSchema() {
-    return this[projectSymbol].getSchema();
+  exportSchema(stage: TransformStage = TransformStage.Render) {
+    return this[projectSymbol].getSchema(stage);
   }
 
   /**
