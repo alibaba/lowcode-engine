@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-code-generator",
-  "version": "1.0.3",
+  "version": "1.0.4-beta.0",
   "description": "出码引擎 for LowCode Engine",
   "license": "MIT",
   "main": "lib/index.js",
