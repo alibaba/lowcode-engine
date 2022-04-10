@@ -51,7 +51,7 @@ const _inject2 = (target) => {
     // 优先取直接传过来的语料
     const localMsg = t[locale] ?? t[String(locale).replace("-", "_")];
     if (localMsg != null) {
-      return format(localMsg, variables);
+      return format(localMsg, t.params);
     }
 
     // 其次用项目级别的
