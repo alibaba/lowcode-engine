@@ -565,7 +565,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
             engine?.props?.onCompGetCtx(schema, scope);
           }
           props.key = props.key || `${schema.__ctx.lceKey}_${schema.__ctx.idx || 0}_${idx !== undefined ? idx : ''}`;
-        } else if (typeof idx === 'number' && !props.key) {
+        } else if ((typeof idx === 'number' || typeof idx === 'string') && !props.key) {
           // 仅当循环场景走这里
           props.key = idx;
         }

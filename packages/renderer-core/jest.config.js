@@ -1,7 +1,3 @@
-const esModules = [
-  '@alilc/lowcode-datasource-engine',
-].join('|');
-
 module.exports = {
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',

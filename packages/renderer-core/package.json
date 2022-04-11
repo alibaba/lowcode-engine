@@ -10,6 +10,7 @@
     "es"
   ],
   "scripts": {
+    "test": "build-scripts test --config build.test.json",
     "build": "build-scripts build --skip-demo"
   },
   "dependencies": {
