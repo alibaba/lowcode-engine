@@ -8,7 +8,7 @@
 
 <div align="center">
 
-An enterprise-class low-code technology stack for scale-out design
+An enterprise-class low-code technology stack with scale-out design
 
 [![NPM version][npm-image]][npm-url] [![NPM downloads][download-image]][download-url]
 
@@ -141,11 +141,11 @@ $ npm start
 >
 > 📢 node version limited to 14
 >
-> 📢 Windows environment must use [WSL](https://docs.microsoft.com/zh-cn/windows/wsl/install), other terminals are not guaranteed to work normally
+> 📢 Windows environment must use [WSL](https://docs.microsoft.com/en-us/windows/wsl/install), other terminals are not guaranteed to work normally
 
 After lowcode-engine is started, several umd files are provided, which can be debugged in combination with the [lowcode-demo](https://github.com/alibaba/lowcode-demo) project. Refer to the file proxy rules [here](https:/ /www.yuque.com/lce/doc/glz0fx).
 
-## 🤝 Participate in co-construction
+## 🤝 Participation
 
 Please read first:
 1. [How to configure the engine debugging environment? ](https://www.yuque.com/lce/doc/glz0fx)
@@ -153,3 +153,6 @@ Please read first:
 3. [Engineering Configuration of Engine](https://www.yuque.com/lce/doc/gxwqg6)
 
 > Strongly recommend reading ["The Wisdom of Asking Questions"](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way), ["How to Ask Questions to the Open Source Community"](https: //github.com/seajs/seajs/issues/545) and [How to Report Bugs Effectively](http://www.chiark.greenend.org.uk/%7Esgtatham/bugs-cn.html), [ "How to Submit Unanswerable Questions to Open Source Projects"](https://zhuanlan.zhihu.com/p/25795393), better questions are easier to get help. (This paragraph refers to [antd](https://github.com/ant-design/ant-design))
+
+About Pull Request:
+- set the target branch to **develop** other than **main**

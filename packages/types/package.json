@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@alilc/lowcode-datasource-types": "^1.0.0",
-    "react": "^16.9 || ^17",
+    "react": "^16.9",
     "strict-event-emitter-types": "^2.0.0"
   },
   "devDependencies": {
