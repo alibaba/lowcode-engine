@@ -87,6 +87,7 @@ describe('Designer 测试', () => {
       function setMockDropLocation() {
         const mockTarget = {
           document: doc,
+          isSlot() { return true; },
           children: {
             get(x) {
               return x;
@@ -155,6 +156,7 @@ describe('Designer 测试', () => {
       function setMockDropLocation() {
         const mockTarget = {
           document: doc,
+          isSlot() { return true; },
           children: {
             get(x) {
               return x;
@@ -310,6 +312,7 @@ describe('Designer 测试', () => {
   it('createLocation / clearLocation', () => {
     const mockTarget = {
       document: doc,
+      isSlot() { return true; },
       children: {
         get(x) {
           return x;
@@ -334,6 +337,7 @@ describe('Designer 测试', () => {
     designer.createLocation({
       target: {
         document: doc2,
+        isSlot() { return true; },
         children: {
           get(x) {
             return x;
