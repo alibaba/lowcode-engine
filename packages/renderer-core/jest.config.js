@@ -1,8 +1,3 @@
-const esModules = [
-  '@recore/obx-react',
-  '@alilc/lowcode-datasource-engine',
-].join('|');
-
 module.exports = {
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',

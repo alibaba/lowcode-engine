@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-material-parser",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "material parser for Ali lowCode engine",
   "main": "lib/index.js",
   "files": [
@@ -18,6 +18,8 @@
     "@types/prop-types": "^15.7.3",
     "copy-webpack-plugin": "^9.1.0",
     "copyfiles": "^2.4.1",
+    "eslint": "^8.12.0",
+    "eslint-config-ali": "^14.0.0",
     "jest": "^26.6.3",
     "js-yaml": "^3.13.1",
     "json-schema-to-typescript": "^8.2.0",

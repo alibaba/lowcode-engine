@@ -79,7 +79,7 @@ function resolvePrefer(prefer: any, targetRect: any, bounds: any) {
   }
   const force = prefer[0] === '!';
   if (force) {
-    prefer = prefer.substr(1);
+    prefer = prefer.slice(1);
   }
   let [dir, offset] = prefer.split(/\s+/);
   let forceDirection = false;

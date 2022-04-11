@@ -31,6 +31,7 @@ const jestConfig = {
     '!src/builtin-simulator/live-editing/live-editing.ts',
     '!src/designer/offset-observer.ts',
     '!src/designer/clipboard.ts',
+    '!src/builtin-simulator/host.ts',
     '!**/node_modules/**',
     '!**/vendor/**',
   ],
