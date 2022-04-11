@@ -1,4 +1,4 @@
-import { flatMap } from 'lodash';
+import { flatMap, camelCase, get } from 'lodash';
 import { COMMON_CHUNK_NAME } from '../../const/generator';
 
 import {
@@ -71,6 +71,37 @@ function getDependencyIdentifier(info: IDependencyItem): string {
   return info.aliasName || info.exportName;
 }
 
+function getExportNameOfDep(dep: IDependency): string {
+  if (dep.destructuring) {
+    return (
+      dep.exportName ||
+      dep.componentName ||
+      throwNewError('destructuring dependency must have exportName or componentName')
+    );
+  }
+
+  if (!dep.subName) {
+    return (
+      dep.componentName ||
+      dep.exportName ||
+      throwNewError('dependency item must have componentName or exportName')
+    );
+  }
+
+  return (
+    dep.exportName ||
+    `__$${camelCase(
+      get(dep, 'moduleName') ||
+        get(dep, 'package') ||
+        throwNewError('dep.moduleName or dep.package is undefined'),
+    )}_default`
+  );
+}
+
+function throwNewError(msg: string): never {
+  throw new Error(msg);
+}
+
 function buildPackageImport(
   pkg: string,
   deps: IDependency[],
@@ -90,7 +121,7 @@ function buildPackageImport(
 
   const depsInfo: IDependencyItem[] = deps.map((dep) => {
     const info: IDependencyItem = {
-      exportName: dep.exportName,
+      exportName: getExportNameOfDep(dep),
       isDefault: !dep.destructuring,
       subName: dep.subName || undefined,
       nodeIdentifier: dep.componentName || undefined,
@@ -171,24 +202,21 @@ function buildPackageImport(
 
   // 发现 nodeIdentifier 与 exportName 或者 aliasName 冲突的场景
   const nodeIdentifiers = depsInfo.map((info) => info.nodeIdentifier).filter(Boolean);
-  const conflictInfos = flatMap(
-    Object.keys(exportItems),
-    (exportName) => {
-      const exportItem = exportItems[exportName];
-      const usedNames = [
-        ...exportItem.aliasNames,
-        ...(exportItem.needOriginExport || exportItem.aliasNames.length <= 0 ? [exportName] : []),
+  const conflictInfos = flatMap(Object.keys(exportItems), (exportName) => {
+    const exportItem = exportItems[exportName];
+    const usedNames = [
+      ...exportItem.aliasNames,
+      ...(exportItem.needOriginExport || exportItem.aliasNames.length <= 0 ? [exportName] : []),
+    ];
+    const conflictNames = usedNames.filter((n) => nodeIdentifiers.indexOf(n) >= 0);
+    if (conflictNames.length > 0) {
+      return [
+        ...(conflictNames.indexOf(exportName) >= 0 ? [[exportName, true, exportItem]] : []),
+        ...conflictNames.filter((n) => n !== exportName).map((n) => [n, false, exportItem]),
       ];
-      const conflictNames = usedNames.filter((n) => nodeIdentifiers.indexOf(n) >= 0);
-      if (conflictNames.length > 0) {
-        return [
-          ...(conflictNames.indexOf(exportName) >= 0 ? [[exportName, true, exportItem]] : []),
-          ...conflictNames.filter((n) => n !== exportName).map((n) => [n, false, exportItem]),
-        ];
-      }
-      return [];
-    },
-  );
+    }
+    return [];
+  });
 
   const conflictExports = conflictInfos.filter((c) => c[1]).map((c) => c[0] as string);
   const conflictAlias = conflictInfos.filter((c) => !c[1]).map((c) => c[0] as string);
@@ -282,6 +310,12 @@ function buildPackageImport(
         },
       });
     } else if (info.aliasName) {
+      // default 方式的导入会生成单独de import 语句，无需生成赋值语句
+      if (info.isDefault && defaultExportNames.find((n) => n === info.aliasName)) {
+        delete aliasDefineStatements[info.aliasName];
+        return;
+      }
+
       let contentStatement = '';
       if (aliasDefineStatements[info.aliasName]) {
         contentStatement = aliasDefineStatements[info.aliasName];
