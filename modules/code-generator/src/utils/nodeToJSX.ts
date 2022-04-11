@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { pipe } from 'fp-ts/function';
 import { NodeSchema, isNodeSchema, NodeDataType, CompositeValue } from '@alilc/lowcode-types';
 
 import {
@@ -17,6 +18,7 @@ import { getStaticExprValue } from './common';
 import { executeFunctionStack } from './aopHelper';
 import { encodeJsxStringNode } from './encodeJsxAttrString';
 import { unwrapJsExprQuoteInJsx } from './jsxHelpers';
+import { transformThis2Context } from '../core/jsx/handlers/transformThis2Context';
 
 function mergeNodeGeneratorConfig(
   cfg1: NodeGeneratorConfig,
@@ -255,6 +257,8 @@ export function generateReactLoopCtrl(
   next?: NodePlugin,
 ): CodePiece[] {
   if (nodeItem.loop) {
+    const tolerateEvalErrors = config?.tolerateEvalErrors ?? true;
+
     const loopItemName = nodeItem.loopArgs?.[0] || 'item';
     const loopIndexName = nodeItem.loopArgs?.[1] || 'index';
 
@@ -262,9 +266,20 @@ export function generateReactLoopCtrl(
     const subScope = scope.createSubScope([loopItemName, loopIndexName]);
     const pieces: CodePiece[] = next ? next(nodeItem, subScope, config) : [];
 
-    const loopDataExpr = generateCompositeType(nodeItem.loop, scope, {
-      handlers: config?.handlers,
-    });
+    // 生成循环变量表达式
+    const loopDataExpr = pipe(
+      nodeItem.loop,
+      // 将 JSExpression 转换为 JS 表达式代码:
+      (expr) =>
+        generateCompositeType(expr, scope, {
+          handlers: config?.handlers,
+          tolerateEvalErrors: false, // 这个内部不需要包 try catch, 下面会统一加的
+        }),
+      // 将 this.xxx 转换为 __$$context.xxx:
+      (expr) => transformThis2Context(expr, scope, { ignoreRootScope: true }),
+      // 如果要容忍错误，则包一层 try catch (基于助手函数 __$$evalArray)
+      (expr) => (tolerateEvalErrors ? `__$$evalArray(() => (${expr}))` : expr),
+    );
 
     pieces.unshift({
       value: `(${loopDataExpr}).map((${loopItemName}, ${loopIndexName}) => ((__$$context) => (`,

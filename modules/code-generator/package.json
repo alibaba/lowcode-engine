@@ -75,6 +75,7 @@
     "change-case": "^3.1.0",
     "commander": "^6.1.0",
     "debug": "^4.3.2",
+    "fp-ts": "^2.11.9",
     "fs-extra": "9.x",
     "glob": "^7.2.0",
     "html-entities": "^2.3.2",

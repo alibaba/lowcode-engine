@@ -79,10 +79,11 @@ export function isJsCode(value: unknown): boolean {
 
 export function generateExpression(value: any, scope: IScope): string {
   if (isJSExpression(value)) {
-    const exprVal = (value as JSExpression).value;
+    const exprVal = (value as JSExpression).value.trim();
     if (!exprVal) {
       return 'null';
     }
+
     const afterProcessWithLocals = transformExpressionLocalRef(exprVal, scope);
     return afterProcessWithLocals;
   }

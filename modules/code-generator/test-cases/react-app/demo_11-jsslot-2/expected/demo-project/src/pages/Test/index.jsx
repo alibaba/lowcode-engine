@@ -303,7 +303,7 @@ class Test$$Page extends React.Component {
                 </Button>
               </AliAutoDivDefault>
             )}
-            {__$$eval(() => this.state.results).map((item, index) =>
+            {__$$evalArray(() => this.state.results).map((item, index) =>
               ((__$$context) => (
                 <AliAutoDivDefault style={{ width: "100%", marginTop: "10px" }}>
                   <Typography.Text>
@@ -595,17 +595,18 @@ class Test$$Page extends React.Component {
                         width: 142,
                         render: (text, record, index) =>
                           ((__$$context) =>
-                            __$$eval(() => text.split(",")).map((item, index) =>
-                              ((__$$context) => (
-                                <Typography.Text style={{ display: "block" }}>
-                                  {__$$eval(() => item)}
-                                </Typography.Text>
-                              ))(
-                                __$$createChildContext(__$$context, {
-                                  item,
-                                  index,
-                                })
-                              )
+                            __$$evalArray(() => text.split(",")).map(
+                              (item, index) =>
+                                ((__$$context) => (
+                                  <Typography.Text style={{ display: "block" }}>
+                                    {__$$eval(() => item)}
+                                  </Typography.Text>
+                                ))(
+                                  __$$createChildContext(__$$context, {
+                                    item,
+                                    index,
+                                  })
+                                )
                             ))(
                             __$$createChildContext(__$$context, {
                               text,
@@ -621,7 +622,7 @@ class Test$$Page extends React.Component {
                         render: (text, record, index) =>
                           ((__$$context) => (
                             <Tooltip
-                              title={__$$eval(() => text || []).map(
+                              title={__$$evalArray(() => text || []).map(
                                 (item, index) =>
                                   ((__$$context) => (
                                     <Typography.Text
