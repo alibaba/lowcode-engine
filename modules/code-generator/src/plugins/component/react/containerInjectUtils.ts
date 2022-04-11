@@ -83,6 +83,23 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
         `,
         linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.InsMethod]],
       });
+    } else {
+      // useRef 为 false 的时候是指没有组件在 props 中配置 ref 属性，但这个时候其实也可能有代码访问 this.$/$$ 所以还是加上个空的代码
+      next.chunks.push({
+        type: ChunkType.STRING,
+        fileType: cfg.fileType,
+        name: CLASS_DEFINE_CHUNK_NAME.InsMethod,
+        content: ` $ = () => null; `,
+        linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.InsMethod]],
+      });
+
+      next.chunks.push({
+        type: ChunkType.STRING,
+        fileType: cfg.fileType,
+        name: CLASS_DEFINE_CHUNK_NAME.InsMethod,
+        content: ` $$ = () => [];        `,
+        linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.InsMethod]],
+      });
     }
 
     return next;

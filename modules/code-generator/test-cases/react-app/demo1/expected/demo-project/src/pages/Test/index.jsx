@@ -152,7 +152,7 @@ class Test$$Page extends React.Component {
           </Form.Item>
           <div style={{ textAlign: "center" }}>
             <Button.Group>
-              {["a", "b", "c"].map((item, index) =>
+              {__$$evalArray(() => ["a", "b", "c"]).map((item, index) =>
                 ((__$$context) =>
                   !!__$$eval(() => index >= 1) && (
                     <Button type="primary" style={{ margin: "0 5px 0 5px" }}>

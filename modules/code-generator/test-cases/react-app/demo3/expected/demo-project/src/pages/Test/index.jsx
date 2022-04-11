@@ -38,6 +38,10 @@ class Test$$Page extends React.Component {
     this.state = {};
   }
 
+  $ = () => null;
+
+  $$ = () => [];
+
   componentDidMount() {}
 
   render() {

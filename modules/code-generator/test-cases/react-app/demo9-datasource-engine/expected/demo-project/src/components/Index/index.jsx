@@ -41,6 +41,10 @@ class Index$$Page extends React.Component {
     this.state = {};
   }
 
+  $ = () => null;
+
+  $$ = () => [];
+
   _defineDataSourceConfig() {
     const _this = this;
     return {
@@ -75,16 +79,17 @@ class Index$$Page extends React.Component {
     return (
       <div>
         <div>
-          {__$$eval(() => this.dataSourceMap.todos.data).map((item, index) =>
-            ((__$$context) => (
-              <div>
-                <Switch
-                  checkedChildren="开"
-                  unCheckedChildren="关"
-                  checked={__$$eval(() => item.done)}
-                />
-              </div>
-            ))(__$$createChildContext(__$$context, { item, index }))
+          {__$$evalArray(() => this.dataSourceMap.todos.data).map(
+            (item, index) =>
+              ((__$$context) => (
+                <div>
+                  <Switch
+                    checkedChildren="开"
+                    unCheckedChildren="关"
+                    checked={__$$eval(() => item.done)}
+                  />
+                </div>
+              ))(__$$createChildContext(__$$context, { item, index }))
           )}
         </div>
       </div>
