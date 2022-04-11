@@ -34,8 +34,8 @@ export default class Material {
    * @param assets
    * @returns
    */
-  setAssets(assets: AssetsJson) {
-    return this[editorSymbol].setAssets(assets);
+  async setAssets(assets: AssetsJson) {
+    return await this[editorSymbol].setAssets(assets);
   }
 
   /**
