@@ -2,6 +2,15 @@ import { isJSBlock, isJSSlot, ActivityType, NodeSchema, PageSchema, RootSchema }
 import { isVariable } from './misc';
 import { isPlainObject } from './is-plain-object';
 
+function isJsObject(props: any) {
+  if (typeof props === 'object' && props !== null) {
+    return props.type && props.source && props.compiled;
+  }
+}
+function isActionRef(props: any): boolean {
+  return props.type && props.type === 'actionRef';
+}
+
 /**
  * 将「乐高版本」协议升级成 JSExpression / JSSlot 等标准协议的结构
  * @param props
@@ -38,6 +47,19 @@ export function compatibleLegaoSchema(props: any): any {
       type: 'JSExpression',
       value: props.variable,
       mock: props.value,
+    };
+  }
+  if (isJsObject(props)) {
+    return {
+      type: 'JSExpression',
+      value: props.compiled,
+      extType: 'function',
+    };
+  }
+  if (isActionRef(props)) {
+    return {
+      type: 'JSExpression',
+      value: `${props.id}.bind(this)`,
     };
   }
   const newProps: any = {};
