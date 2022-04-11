@@ -217,6 +217,7 @@ export interface HandlerSet<T> {
 export interface CompositeValueGeneratorOptions {
   handlers?: HandlerSet<string>;
   nodeGenerator?: NodeGenerator<string>;
+  tolerateEvalErrors?: boolean;
 }
 
 /**

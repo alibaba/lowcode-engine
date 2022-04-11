@@ -41,6 +41,10 @@ class Example$$Page extends React.Component {
     this.state = {};
   }
 
+  $ = () => null;
+
+  $$ = () => [];
+
   _defineDataSourceConfig() {
     const _this = this;
     return {
