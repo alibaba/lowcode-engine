@@ -143,7 +143,7 @@ $ npm start
 >
 > 📢 Windows environment must use [WSL](https://docs.microsoft.com/en-us/windows/wsl/install), other terminals are not guaranteed to work normally
 
-After lowcode-engine is started, several umd files are provided, which can be debugged in combination with the [lowcode-demo](https://github.com/alibaba/lowcode-demo) project. Refer to the file proxy rules [here](https:/ /www.yuque.com/lce/doc/glz0fx).
+After lowcode-engine is started, several umd files are provided, which can be debugged in combination with the [lowcode-demo](https://github.com/alibaba/lowcode-demo) project. Refer to the file proxy rules [here](https://www.yuque.com/lce/doc/glz0fx).
 
 ## 🤝 Participation
 
