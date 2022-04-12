@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.4](https://github.com/alibaba/lowcode-engine/compare/@alilc/lowcode-code-generator@1.0.4-beta.0...@alilc/lowcode-code-generator@1.0.4) (2022-04-12)
+
+
+### Bug Fixes
+
+* 🐛 解决 react 中 jsx 出码的时候对于循环数据漏包 __$evalArray 的问题 ([eb4cc69](https://github.com/alibaba/lowcode-engine/commit/eb4cc693f5dbcae54546c569eb8fa331d074e062))
+
 ### [1.0.4-beta.1](https://github.com/alibaba/lowcode-engine/compare/@alilc/lowcode-code-generator@1.0.4-beta.0...@alilc/lowcode-code-generator@1.0.4-beta.1) (2022-04-11)
 
 
