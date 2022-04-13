@@ -1,4 +1,3 @@
-// @ts-ignore
 import '../../fixtures/window';
 import { Node } from '../../../src/document/node/node';
 import { Designer } from '../../../src/designer/designer';
@@ -18,7 +17,7 @@ jest.mock('../../../src/designer/designer', () => {
 
 let designer = null;
 beforeAll(() => {
-  designer = new Designer({});
+  designer = new Designer({} as any);
 });
 
 describe('组件元数据处理', () => {
@@ -66,3 +65,15 @@ describe('组件元数据处理', () => {
     expect(meta.availableActions[4].name).toBe('new');
   });
 });
+
+describe('组件元数据transducers', () => {
+  it('legacyIssues', () => {
+    const legacyMeta: any = {
+      ...divMeta,
+      devMode: 'procode'
+    }
+    const meta = new ComponentMeta(designer, legacyMeta);
+    const metadata = meta.getMetadata();
+    expect(metadata.devMode).toBe('proCode');
+  })
+})

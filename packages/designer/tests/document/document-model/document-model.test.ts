@@ -175,7 +175,7 @@ describe('document-model 测试', () => {
       { componentName: 'Other', package: '@ali/vc-other' }
     );
     expect(comps.find(comp => comp.componentName === 'Page')).toEqual(
-      { componentName: 'Page', devMode: 'lowcode' }
+      { componentName: 'Page', devMode: 'lowCode' }
     );
   });
 
