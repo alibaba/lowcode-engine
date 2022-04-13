@@ -26,7 +26,7 @@ export interface ComponentMap {
   destructuring?: boolean;
   exportName?: string;
   subName?: string;
-  devMode?: 'lowcode' | 'procode';
+  devMode?: 'lowCode' | 'proCode';
 }
 
 export class DocumentModel {
@@ -667,7 +667,7 @@ export class DocumentModel {
           });
         } else {
           componentsMap.push({
-            devMode: 'lowcode',
+            devMode: 'lowCode',
             componentName,
           });
         }
