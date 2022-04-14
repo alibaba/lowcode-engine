@@ -4,7 +4,7 @@ module.exports = {
   //   // '^.+\\.(ts|tsx)$': 'ts-jest',
   //   // '^.+\\.(js|jsx)$': 'babel-jest',
   // },
-  // testMatch: ['**/bugs/*.test.ts'],
+  // testMatch: ['**/designer/designer.test.ts'],
   // testMatch: ['(/tests?/.*(test))\\.[jt]s$'],
   transformIgnorePatterns: [
   ],
@@ -23,6 +23,7 @@ module.exports = {
     '!src/builtin-simulator/live-editing/live-editing.ts',
     '!src/designer/offset-observer.ts',
     '!src/designer/clipboard.ts',
+    '!src/builtin-simulator/host.ts',
     '!**/node_modules/**',
     '!**/vendor/**',
   ],

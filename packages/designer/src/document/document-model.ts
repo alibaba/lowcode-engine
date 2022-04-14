@@ -664,7 +664,7 @@ export class DocumentModel {
             ...node.componentMeta.npm,
             componentName,
           });
-        } else {
+        } else if (node.componentMeta?.getMetadata().devMode?.toLowerCase() === 'lowcode') {
           componentsMap.push({
             devMode: 'lowcode',
             componentName,
