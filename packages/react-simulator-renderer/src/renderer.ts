@@ -19,7 +19,13 @@ import {
 } from '@ali/lowcode-utils';
 import { ComponentSchema, TransformStage, NodeSchema } from '@ali/lowcode-types';
 // just use types
-import { BuiltinSimulatorRenderer, NodeInstance, Component, DocumentModel, Node } from '@ali/lowcode-designer';
+import {
+  BuiltinSimulatorRenderer,
+  NodeInstance,
+  Component,
+  DocumentModel,
+  Node,
+} from '@ali/lowcode-designer';
 import LowCodeRenderer from '@ali/lowcode-react-renderer';
 import { createMemoryHistory, MemoryHistory } from 'history';
 import Slot from './builtin-components/slot';
@@ -196,7 +202,7 @@ export class DocumentInstance {
   }
 
   dispose() {
-    this.disposeFunctions.forEach(fn => fn());
+    this.disposeFunctions.forEach((fn) => fn());
     this.instancesMap = new Map();
   }
 }
@@ -215,50 +221,57 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     makeObservable(this);
     this.autoRender = host.autoRender;
 
-    this.disposeFunctions.push(host.connect(this, () => {
-      // sync layout config
-      this._layout = host.project.get('config').layout;
+    this.disposeFunctions.push(
+      host.connect(this, () => {
+        // sync layout config
+        this._layout = host.project.get('config').layout;
 
-      // todo: split with others, not all should recompute
-      if (this._libraryMap !== host.libraryMap || this._componentsMap !== host.designer.componentsMap) {
-        this._libraryMap = host.libraryMap || {};
-        this._componentsMap = host.designer.componentsMap;
-        this.buildComponents();
-      }
+        // todo: split with others, not all should recompute
+        if (
+          this._libraryMap !== host.libraryMap ||
+          this._componentsMap !== host.designer.componentsMap
+        ) {
+          this._libraryMap = host.libraryMap || {};
+          this._componentsMap = host.designer.componentsMap;
+          this.buildComponents();
+        }
 
-      // sync designMode
-      this._designMode = host.designMode;
+        // sync designMode
+        this._designMode = host.designMode;
 
-      this._locale = host.locale;
+        this._locale = host.locale;
 
-      // sync requestHandlersMap
-      this._requestHandlersMap = host.requestHandlersMap;
+        // sync requestHandlersMap
+        this._requestHandlersMap = host.requestHandlersMap;
 
-      // sync device
-      this._device = host.device;
-    }));
+        // sync device
+        this._device = host.device;
+      }),
+    );
     const documentInstanceMap = new Map<string, DocumentInstance>();
     let initialEntry = '/';
     let firstRun = true;
-    this.disposeFunctions.push(host.autorun(() => {
-      this._documentInstances = host.project.documents.map((doc) => {
-        let inst = documentInstanceMap.get(doc.id);
-        if (!inst) {
-          inst = new DocumentInstance(this, doc);
-          documentInstanceMap.set(doc.id, inst);
+    this.disposeFunctions.push(
+      host.autorun(() => {
+        this._documentInstances = host.project.documents.map((doc) => {
+          let inst = documentInstanceMap.get(doc.id);
+          if (!inst) {
+            inst = new DocumentInstance(this, doc);
+            documentInstanceMap.set(doc.id, inst);
+          }
+          return inst;
+        });
+        const path = host.project.currentDocument
+          ? documentInstanceMap.get(host.project.currentDocument.id)!.path
+          : '/';
+        if (firstRun) {
+          initialEntry = path;
+          firstRun = false;
+        } else if (this.history.location.pathname !== path) {
+          this.history.replace(path);
         }
-        return inst;
-      });
-      const path = host.project.currentDocument
-        ? documentInstanceMap.get(host.project.currentDocument.id)!.path
-        : '/';
-      if (firstRun) {
-        initialEntry = path;
-        firstRun = false;
-      } else if (this.history.location.pathname !== path) {
-        this.history.replace(path);
-      }
-    }));
+      }),
+    );
     const history = createMemoryHistory({
       initialEntries: [initialEntry],
     });
@@ -327,7 +340,11 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   private _libraryMap: { [key: string]: string } = {};
 
   private buildComponents() {
-    this._components = buildComponents(this._libraryMap, this._componentsMap, this.createComponent.bind(this));
+    this._components = buildComponents(
+      this._libraryMap,
+      this._componentsMap,
+      this.createComponent.bind(this),
+    );
     this._components = {
       ...builtinComponents,
       ...this._components,
@@ -508,8 +525,8 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
   }
 
   dispose() {
-    this.disposeFunctions.forEach(fn => fn());
-    this.documentInstances.forEach(docInst => docInst.dispose());
+    this.disposeFunctions.forEach((fn) => fn());
+    this.documentInstances.forEach((docInst) => docInst.dispose());
     untracked(() => {
       this._componentsMap = {};
       this._components = null;
@@ -530,7 +547,9 @@ function cacheReactKey(el: Element): Element {
   if (REACT_KEY !== '') {
     return el;
   }
-  REACT_KEY = Object.keys(el).find((key) => key.startsWith('__reactInternalInstance$')) || '';
+  REACT_KEY = Object.keys(el).find(
+    (key) => key.startsWith('__reactInternalInstance$') || key.startsWith('__reactFiber$'),
+  );
   if (!REACT_KEY && (el as HTMLElement).parentElement) {
     return cacheReactKey((el as HTMLElement).parentElement!);
   }
@@ -540,7 +559,10 @@ function cacheReactKey(el: Element): Element {
 const SYMBOL_VNID = Symbol('_LCNodeId');
 const SYMBOL_VDID = Symbol('_LCDocId');
 
-function getClosestNodeInstance(from: ReactInstance, specId?: string): NodeInstance<ReactInstance> | null {
+function getClosestNodeInstance(
+  from: ReactInstance,
+  specId?: string,
+): NodeInstance<ReactInstance> | null {
   let el: any = from;
   if (el) {
     if (isElement(el)) {
@@ -599,7 +621,7 @@ function getLowCodeComponentProps(props: any) {
     return props;
   }
   const newProps: any = {};
-  Object.keys(props).forEach(k => {
+  Object.keys(props).forEach((k) => {
     if (['children', 'componentId', '__designMode', '_componentName', '_leaf'].includes(k)) {
       return;
     }
