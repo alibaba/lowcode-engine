@@ -174,9 +174,9 @@ describe('document-model 测试', () => {
     expect(comps.find(comp => comp.componentName === 'Other')).toEqual(
       { componentName: 'Other', package: '@ali/vc-other' }
     );
-    expect(comps.find(comp => comp.componentName === 'Page')).toEqual(
-      { componentName: 'Page', devMode: 'lowcode' }
-    );
+    // expect(comps.find(comp => comp.componentName === 'Page')).toEqual(
+    //   { componentName: 'Page', devMode: 'lowcode' }
+    // );
   });
 
   it('acceptRootNodeVisitor / getRootNodeVisitor', () => {

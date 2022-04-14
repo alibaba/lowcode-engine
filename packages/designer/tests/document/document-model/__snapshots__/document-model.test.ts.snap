@@ -2,64 +2,7 @@
 
 exports[`document-model 测试 各种方法测试 1`] = `
 Object {
-  "componentsMap": Array [
-    Object {
-      "componentName": "PageHeader",
-      "devMode": "lowcode",
-    },
-    Object {
-      "componentName": "RootHeader",
-      "devMode": "lowcode",
-    },
-    Object {
-      "componentName": "TextField",
-      "devMode": "lowcode",
-    },
-    Object {
-      "componentName": "Column",
-      "devMode": "lowcode",
-    },
-    Object {
-      "componentName": "SelectField",
-      "devMode": "lowcode",
-    },
-    Object {
-      "componentName": "ColumnsLayout",
-      "devMode": "lowcode",
-    },
-    Object {
-      "componentName": "CardContent",
-      "devMode": "lowcode",
-    },
-    Object {
-      "componentName": "Card",
-      "devMode": "lowcode",
-    },
-    Object {
-      "componentName": "Button",
-      "devMode": "lowcode",
-    },
-    Object {
-      "componentName": "Div",
-      "devMode": "lowcode",
-    },
-    Object {
-      "componentName": "Form",
-      "devMode": "lowcode",
-    },
-    Object {
-      "componentName": "RootContent",
-      "devMode": "lowcode",
-    },
-    Object {
-      "componentName": "RootFooter",
-      "devMode": "lowcode",
-    },
-    Object {
-      "componentName": "Page",
-      "devMode": "lowcode",
-    },
-  ],
+  "componentsMap": Array [],
   "componentsTree": Array [
     Object {
       "children": Array [
