@@ -463,8 +463,14 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
         if (!Comp) {
           console.error(`${schema.componentName} component is not found in components list! component list is:`, components || this.props.__container?.components);
-          Comp = engine.getNotFoundComponent();
-          otherProps.__componentName = schema.componentName;
+          return engine.createElement(
+            engine.getNotFoundComponent(),
+            {
+              componentName: schema.componentName,
+              componentId: schema.id,
+            },
+            this.__getSchemaChildrenVirtualDom(schema, scope, Comp),
+          );
         }
 
         // DesignMode 为 design 情况下，需要进入 leaf Hoc，进行相关事件注册

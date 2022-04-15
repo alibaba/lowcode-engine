@@ -11,6 +11,7 @@
     "dist"
   ],
   "scripts": {
+    "test": "build-scripts test --config build.test.json",
     "build": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --skip-demo",
     "build:umd": "NODE_OPTIONS=--max_old_space_size=8192 build-scripts build --config build.umd.json"
   },
