@@ -6,6 +6,7 @@ import TreeNode from '../tree-node';
 import TreeTitle from './tree-title';
 import TreeBranches from './tree-branches';
 import { IconEyeClose } from '../icons/eye-close';
+import { intl } from '../locale';
 
 @observer
 class ModalTreeNodeView extends Component<{ treeNode: TreeNode }> {
@@ -37,7 +38,7 @@ class ModalTreeNodeView extends Component<{ treeNode: TreeNode }> {
     return (
       <div className="tree-node-modal">
         <div className="tree-node-modal-title">
-          <span>模态视图层</span>
+          <span>{intl('Modal Views')}</span>
           <div
             className="tree-node-modal-title-visible-icon"
             onClick={this.hideAllNodes.bind(this)}

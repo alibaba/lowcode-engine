@@ -2,6 +2,7 @@ import { Component } from 'react';
 import { isJSSlot } from '@ali/lowcode-types';
 import { Button, Input, Icon } from '@alifd/next';
 import './index.less';
+import { intl } from '../../locale';
 
 export default class SlotSetter extends Component<{
   value: any;
@@ -30,7 +31,7 @@ export default class SlotSetter extends Component<{
     if (!isJSSlot(value)) {
       return (
         <Button type="primary" onClick={this.handleInitial}>
-          开启插槽
+          {intl('Open slot')}
         </Button>
       );
     }
@@ -46,13 +47,13 @@ export default class SlotSetter extends Component<{
           }}
           type="secondary"
         >
-          关闭插槽
+          {intl('Close slot')}
         </Button>
         {hasParams ? (
           <Input
             className="lc-slot-params"
-            addonTextBefore="入参"
-            placeholder="插槽入参，以逗号风格"
+            addonTextBefore={intl('Parameter')}
+            placeholder={intl('ParameterPlaceholder')}
             value={value.params!.join(',')}
             autoFocus
             onChange={(val) => {
@@ -91,7 +92,7 @@ export default class SlotSetter extends Component<{
                 });
             }}
           >
-            添加入参
+            {intl('Add parameters')}
           </Button>
         ) : null}
       </div>

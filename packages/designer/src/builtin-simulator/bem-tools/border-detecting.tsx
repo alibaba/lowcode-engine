@@ -5,6 +5,7 @@ import { TitleContent } from '@ali/lowcode-types';
 import { getClosestNode } from '@ali/lowcode-utils';
 
 import { BuiltinSimulatorHost } from '../host';
+import { intl } from '../../locale';
 
 
 export class BorderDetectingInstance extends PureComponent<{
@@ -37,7 +38,7 @@ export class BorderDetectingInstance extends PureComponent<{
       <div className={className} style={style}>
         <Title title={title} className="lc-borders-title" />
         {
-          isLocked ? (<Title title="已锁定" className="lc-borders-status" />) : null
+          isLocked ? (<Title title={intl('Locked')} className="lc-borders-status" />) : null
         }
       </div>
     );

@@ -7,6 +7,7 @@ import { SettingsPane } from './settings-pane';
 import { StageBox } from '../stage-box';
 import { SkeletonContext } from '../../context';
 import { createIcon } from '@ali/lowcode-utils';
+import { intl } from '../../locale';
 
 @observer
 export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any }, { shouldIgnoreRoot: boolean }> {
@@ -133,7 +134,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
       return (
         <div className="lc-settings-main">
           <div className="lc-settings-notice">
-            <p>请在左侧画布选中节点</p>
+            <p>{intl('Please select the node on the left canvas')}</p>
           </div>
         </div>
       );
@@ -144,7 +145,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
       return (
         <div className="lc-settings-main">
           <div className="lc-settings-notice">
-            <p>该节点已被锁定，无法配置</p>
+            <p>{intl('Locked node cannot be configured')}</p>
           </div>
         </div>
       );
@@ -153,7 +154,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
       return (
         <div className="lc-settings-main">
           <div className="lc-settings-notice">
-            <p>该组件暂无配置</p>
+            <p>{intl('There is no configuration for this component')}</p>
           </div>
         </div>
       );
@@ -164,7 +165,7 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
       return (
         <div className="lc-settings-main">
           <div className="lc-settings-notice">
-            <p>请选中同一类型节点编辑</p>
+            <p>{intl('Please select the same type of node to edit')}</p>
           </div>
         </div>
       );
