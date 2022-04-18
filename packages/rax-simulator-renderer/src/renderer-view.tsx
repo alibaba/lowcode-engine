@@ -7,6 +7,7 @@ import './renderer.less';
 import { uniqueId } from '@ali/lowcode-utils';
 import { GlobalEvent } from '@ali/lowcode-types';
 import { host } from './host';
+import { intl } from './locale';
 
 // patch cloneElement avoid lost keyProps
 const originCloneElement = (window as any).Rax.cloneElement;
@@ -69,8 +70,8 @@ export default class SimulatorRendererView extends Component<{ rendererContainer
 }
 
 export const Routes = (props: {
-  rendererContainer: SimulatorRendererContainer,
-  history: History
+  rendererContainer: SimulatorRendererContainer;
+  history: History;
 }) => {
   const { rendererContainer, history } = props;
   const { documentInstances } = rendererContainer;
@@ -238,7 +239,7 @@ class Renderer extends Component<{
           ) {
             children = (
               <div className="lc-container-placeholder" style={viewProps.placeholderStyle}>
-                {viewProps.placeholder || '拖拽组件或模板到这里'}
+                {viewProps.placeholder || intl('Drag and drop components or templates here')}
               </div>
             );
           }
