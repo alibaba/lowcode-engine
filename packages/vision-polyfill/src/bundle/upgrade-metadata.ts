@@ -13,6 +13,7 @@ import {
   isJSExpression,
 } from '@ali/lowcode-types';
 import { editorCabin, designerCabin } from '@ali/lowcode-engine';
+import { intl } from '../locale';
 
 const { SettingField } = designerCabin;
 const { untracked } = editorCabin;
@@ -270,7 +271,7 @@ function getTipAttr(tip: Tip, attrName: string, decorator: (originalValue: strin
 }
 
 function getTipContent(tip: Tip, name: string): string {
-  return getTipAttr(tip, 'content', (v) => `属性：${name} | 说明：${v}`);
+  return getTipAttr(tip, 'content', (v) => `${intl('PropName:')}${name} | ${intl('Explanation:')}${v}`);
 }
 
 export function upgradePropConfig(config: OldPropConfig, collector: ConfigCollector) {
@@ -802,10 +803,9 @@ export function upgradeMetadata(oldConfig: OldPrototypeConfig) {
         schema,
       };
     });
-  }
-  // FIXME! defaultProps for initial input
-  // initialChildren maybe a function
-  else if (defaultProps || initialChildren) {
+  } else if (defaultProps || initialChildren) {
+    // FIXME! defaultProps for initial input
+    // initialChildren maybe a function
     const snippet = {
       screenshot: icon,
       label: title,

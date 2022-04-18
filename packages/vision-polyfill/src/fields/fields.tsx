@@ -6,6 +6,7 @@ import VEField, { IVEFieldProps } from './field';
 import { SettingField } from './setting-field';
 import VariableSwitcher from './variable-switcher';
 import popups from '@ali/ve-popups';
+import { intl } from '../locale';
 
 import './fields.less';
 
@@ -29,8 +30,8 @@ function renderTip(tip: IHelpTip, prop?: { propName?: string }) {
     return (
       <Icons.Tip position="top" url={tip.url} key="icon-tip" className="engine-field-tip-icon">
         <div>
-          <div>属性：{propName}</div>
-          <div>说明：{tip.content}</div>
+          <div>{intl('PropName:')}{propName}</div>
+          <div>{intl('Explanation:')}{tip.content}</div>
         </div>
       </Icons.Tip>
     );
@@ -38,8 +39,8 @@ function renderTip(tip: IHelpTip, prop?: { propName?: string }) {
   return (
     <Icons.Tip position="top" key="icon" className="engine-field-tip-icon">
       <div>
-        <div>属性：{propName}</div>
-        <div>说明：{tip}</div>
+        <div>{intl('PropName:')}{propName}</div>
+        <div>{intl('Explanation:')}{tip}</div>
       </div>
     </Icons.Tip>
   );
