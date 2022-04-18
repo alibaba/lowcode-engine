@@ -930,7 +930,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
       const buitin = capitalizeFirstLetter(this.__namespace);
       const componentNames = [buitin, ...extraComponents];
-      return !isSchema(schema, true) || !componentNames.includes(schema?.componentName ?? '');
+      return !isSchema(schema) || !componentNames.includes(schema?.componentName ?? '');
     };
 
     get requestHandlersMap() {
