@@ -332,7 +332,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
       ...this._components,
     };
   }
-  @obx.ref private _components: any = {};
+  private _components: any = {};
 
   get components(): object {
     // 根据 device 选择不同组件，进行响应式
