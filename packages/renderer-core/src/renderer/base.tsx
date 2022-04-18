@@ -421,7 +421,14 @@ export default function baseRendererFactory() {
 
         if (!Comp) {
           console.error(`${schema.componentName} is not found! component list is:`, components || this.props.__container?.components);
-          Comp = engine.getNotFoundComponent();
+          return engine.createElement(
+            engine.getNotFoundComponent(),
+            {
+              componentName: schema.componentName,
+              componentId: schema.id,
+            },
+            this.__getSchemaChildrenVirtualDom(schema, scope, Comp),
+          );
         }
 
         if (schema.hidden && (engine?.props?.designMode && engine?.props?.designMode !== 'design')) {

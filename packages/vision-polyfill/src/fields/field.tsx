@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Component } from 'react';
 import InlineTip from './inlinetip';
 import { isPlainObject } from '@ali/lowcode-utils';
+import { intl } from '../locale';
 
 interface IHelpTip {
   url?: string;
@@ -26,7 +27,7 @@ function getFieldTitle(title: string, tip: IHelpTip, compact?: boolean, propName
 
   tipContent = (
     <div>
-      <div>属性：{propName}</div>
+      <div>{intl('PropName:')}{propName}</div>
     </div>
   );
 
@@ -34,15 +35,15 @@ function getFieldTitle(title: string, tip: IHelpTip, compact?: boolean, propName
     tipUrl = tip.url;
     tipContent = (
       <div>
-        <div>属性：{propName}</div>
-        <div>说明：{tip.content}</div>
+        <div>{intl('PropName:')}{propName}</div>
+        <div>{intl('Explanation:')}{tip.content}</div>
       </div>
     );
   } else if (tip) {
     tipContent = (
       <div>
-        <div>属性：{propName}</div>
-        <div>说明：{tip}</div>
+        <div>{intl('PropName:')}{propName}</div>
+        <div>{intl('Explanation:')}{tip}</div>
       </div>
     );
   }

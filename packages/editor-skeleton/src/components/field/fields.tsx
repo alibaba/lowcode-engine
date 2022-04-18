@@ -7,6 +7,7 @@ import { IEditor, TitleContent } from '@ali/lowcode-types';
 import { PopupPipe, PopupContext } from '../popup';
 import './index.less';
 import InlineTip from './inlinetip';
+import { intl } from '../../locale';
 
 export interface FieldProps {
   className?: string;
@@ -105,22 +106,22 @@ export class Field extends Component<FieldProps> {
   getTipContent(propName: string, tip?: any): any {
     let tipContent = (
       <div>
-        <div>属性：{propName}</div>
+        <div>{intl('PropName:')}{propName}</div>
       </div>
     );
 
     if (isObject(tip)) {
       tipContent = (
         <div>
-          <div>属性：{propName}</div>
-          <div>说明：{(tip as any).content}</div>
+          <div>{intl('PropName:')}{propName}</div>
+          <div>{intl('Explanation:')}{(tip as any).content}</div>
         </div>
       );
     } else if (tip) {
       tipContent = (
         <div>
-          <div>属性：{propName}</div>
-          <div>说明：{tip}</div>
+          <div>{intl('PropName:')}{propName}</div>
+          <div>{intl('Explanation:')}{tip}</div>
         </div>
       );
     }

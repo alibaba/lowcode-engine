@@ -8,6 +8,7 @@ import { getClosestNode, isFromVC } from '@ali/lowcode-utils';
 import { GlobalEvent } from '@ali/lowcode-types';
 import { SimulatorRendererContainer, DocumentInstance } from './renderer';
 import { host } from './host';
+import { intl } from './locale';
 
 import './renderer.less';
 
@@ -206,12 +207,12 @@ class Renderer extends Component<{
             (children == null || (Array.isArray(children) && !children.length)) &&
             (!viewProps.style || Object.keys(viewProps.style).length === 0)
           ) {
-            let defaultPlaceholder = '拖拽组件或模板到这里';
+            let defaultPlaceholder = intl('Drag and drop components or templates here');
             const lockedNode = getClosestNode(leaf, (node) => {
               return node?.getExtraProp('isLocked')?.getValue() === true;
             });
             if (lockedNode) {
-              defaultPlaceholder = '锁定元素及子元素无法编辑';
+              defaultPlaceholder = intl('Locked elements and child elements cannot be edited');
             }
             children = (
               <div className={cn('lc-container-placeholder', { 'lc-container-locked': !!lockedNode })} style={viewProps.placeholderStyle}>

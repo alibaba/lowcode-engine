@@ -5,5 +5,16 @@
   "Multiple Value, Click to Clear": "Multiple Value, Click to Clear",
   "Required": "Required",
   "Setted Value, Click to Clear": "Setted Value, Click to Clear",
-  "Multiple Value": "Multiple Value"
+  "Multiple Value": "Multiple Value",
+  "Please select the node on the left canvas": "Please select the node on the left canvas",
+  "Locked node cannot be configured": "Locked node cannot be configured",
+  "There is no configuration for this component": "There is no configuration for this component",
+  "Please select the same type of node to edit": "Please select the same type of node to edit",
+  "PropName:": "Prop: ",
+  "Explanation:": "Explanation: ",
+  "Open slot": "Open slot",
+  "Close slot": "Close slot",
+  "Add parameters": "Add parameters",
+  "Parameter": "Parameter",
+  "ParameterPlaceholder": "Slot input parameters, separated by commas"
 }
