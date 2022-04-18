@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`leafWrapper base 1`] = `
+<div
+  _leaf={
+    Node {
+      "emitter": EventEmitter {
+        "_events": Object {
+          "onChildrenChange": [Function],
+          "onPropChange": [Function],
+          "onVisibleChange": [Function],
+        },
+        "_eventsCount": 3,
+        "_maxListeners": undefined,
+        Symbol(kCapture): false,
+      },
+      "hasLoop": false,
+      "schema": Object {},
+    }
+  }
+>
+  <div>
+    content
+  </div>
+</div>
+`;
+
+exports[`leafWrapper change props 1`] = `
+<div
+  _leaf={
+    Node {
+      "emitter": EventEmitter {
+        "_events": Object {
+          "onChildrenChange": [Function],
+          "onPropChange": [Function],
+          "onVisibleChange": [Function],
+        },
+        "_eventsCount": 3,
+        "_maxListeners": undefined,
+        Symbol(kCapture): false,
+      },
+      "hasLoop": false,
+      "schema": Object {},
+    }
+  }
+>
+  <div>
+    new content
+  </div>
+</div>
+`;

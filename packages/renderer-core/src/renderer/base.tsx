@@ -565,7 +565,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
             engine?.props?.onCompGetCtx(schema, scope);
           }
           props.key = props.key || `${schema.__ctx.lceKey}_${schema.__ctx.idx || 0}_${idx !== undefined ? idx : ''}`;
-        } else if (typeof idx === 'number' && !props.key) {
+        } else if ((typeof idx === 'number' || typeof idx === 'string') && !props.key) {
           // 仅当循环场景走这里
           props.key = idx;
         }
@@ -930,7 +930,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
       const buitin = capitalizeFirstLetter(this.__namespace);
       const componentNames = [buitin, ...extraComponents];
-      return !isSchema(schema, true) || !componentNames.includes(schema?.componentName ?? '');
+      return !isSchema(schema) || !componentNames.includes(schema?.componentName ?? '');
     };
 
     get requestHandlersMap() {

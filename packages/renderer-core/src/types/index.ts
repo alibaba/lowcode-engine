@@ -2,6 +2,8 @@ import type { ComponentLifecycle, CSSProperties } from 'react';
 import { BuiltinSimulatorHost } from '@alilc/lowcode-designer';
 import { RequestHandler, NodeSchema, NodeData, RootSchema, JSONObject } from '@alilc/lowcode-types';
 
+export type ISchema = NodeSchema | RootSchema;
+
 /*
  ** Duck typed component type supporting both react and rax
  */
