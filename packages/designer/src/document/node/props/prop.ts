@@ -313,6 +313,7 @@ export class Prop implements IPropParent {
       componentName: 'Slot',
       title: data.title,
       name: data.name,
+      id: data.id,
       params: data.params,
       children: data.value,
     };
