@@ -47,6 +47,10 @@ export function compatibleReducer(props: any, node: Node): any {
     //   newProps[key] = props[key];
     //   return;
     // }
+    // 假如当前值是 JSSlot 类型，优先传入相对应的 slotNode
+    if (isJSSlot(val)) {
+      node = node.getProp(key)?.slotNode || node;
+    }
     newProps[key] = compatibleReducer(val, node);
   });
   return newProps;
