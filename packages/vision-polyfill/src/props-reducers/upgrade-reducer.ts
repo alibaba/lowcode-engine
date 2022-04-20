@@ -14,6 +14,7 @@ export function upgradePropsReducer(props: any): any {
     if (props.value.componentName === 'Slot') {
       return {
         type: 'JSSlot',
+        id: props.value.id,
         title: (props.value.props as any)?.slotTitle,
         name: (props.value.props as any)?.slotName,
         value: props.value.children,
