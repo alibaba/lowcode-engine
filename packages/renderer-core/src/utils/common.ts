@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-new-func */
 import Debug from 'debug';
 import { isI18nData, RootSchema, NodeSchema, isJSExpression, JSSlot } from '@alilc/lowcode-types';
@@ -35,35 +36,53 @@ const EXPRESSION_TYPE = {
   I18N: 'i18n',
 };
 
-const hasSymbol = typeof Symbol === 'function' && Symbol.for;
-const REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
 const debug = Debug('utils:index');
 
-const ENV = {
-  TBE: 'TBE',
-  WEBIDE: 'WEB-IDE',
-  VSCODE: 'VSCODE',
-  WEB: 'WEB',
-};
+/**
+ * check if schema passed in is a valid schema
+ * @name isSchema
+ * @returns boolean
+ */
+export function isSchema(schema: any): schema is NodeSchema {
+  if (isEmpty(schema)) {
+    return false;
+  }
+  // Leaf and Slot should be valid
+  if (schema.componentName === 'Leaf' || schema.componentName === 'Slot') {
+    return true;
+  }
+  if (Array.isArray(schema)) {
+    return schema.every((item) => isSchema(item));
+  }
+  // check if props is valid
+  const isValidProps = (props: any) => {
+    if (!props) {
+      return false;
+    }
+    if (isJSExpression(props)) {
+      return true;
+    }
+    return (typeof schema.props === 'object' && !Array.isArray(props));
+  };
+  return !!(schema.componentName && isValidProps(schema.props));
+}
 
 /**
- * @name isSchema
- * @description 判断是否是模型结构
+ * check if schema passed in is a container type, including : Component Block Page
+ * @param schema
+ * @returns boolean
  */
-export function isSchema(schema: any, ignoreArr = false): schema is NodeSchema {
-  if (isEmpty(schema)) return false;
-  // Leaf 组件也返回 true
-  if (schema.componentName === 'Leaf' || schema.componentName === 'Slot') return true;
-  if (!ignoreArr && Array.isArray(schema)) return schema.every((item) => isSchema(item));
-  return !!(schema.componentName && schema.props && (typeof schema.props === 'object' || isJSExpression(schema.props)));
-}
-
 export function isFileSchema(schema: NodeSchema): schema is RootSchema {
-  if (isEmpty(schema)) return false;
-  return ['Page', 'Block', 'Component', 'Addon', 'Temp'].includes(schema.componentName);
+  if (!isSchema(schema)) {
+    return false;
+  }
+  return ['Page', 'Block', 'Component'].includes(schema.componentName);
 }
 
-// 判断当前页面是否被嵌入到同域的页面中
+/**
+ * check if current page is nested within another page with same host
+ * @returns boolean
+ */
 export function inSameDomain() {
   try {
     return window.parent !== window && window.parent.location.host === window.location.host;
@@ -72,8 +91,15 @@ export function inSameDomain() {
   }
 }
 
+/**
+ * get css styled name from schema`s fileName
+ * FileName -> lce-file-name
+ * @returns string
+ */
 export function getFileCssName(fileName: string) {
-  if (!fileName) return;
+  if (!fileName) {
+    return;
+  }
   const name = fileName.replace(/([A-Z])/g, '-$1').toLowerCase();
   return (`lce-${name}`)
     .split('-')
@@ -81,77 +107,43 @@ export function getFileCssName(fileName: string) {
     .join('-');
 }
 
-// 兼容乐高设计态 JSBlock 的老协议
+/**
+ * check if a object is type of JSSlot
+ * @returns string
+ */
 export function isJSSlot(obj: any): obj is JSSlot {
-  return obj && typeof obj === 'object' && ([EXPRESSION_TYPE.JSSLOT, EXPRESSION_TYPE.JSBLOCK].includes(obj.type));
+  if (!obj) {
+    return false;
+  }
+  if (typeof obj !== 'object' || Array.isArray(obj)) {
+    return false;
+  }
+
+  // Compatible with the old protocol JSBlock
+  return ([EXPRESSION_TYPE.JSSLOT, EXPRESSION_TYPE.JSBLOCK].includes(obj.type));
 }
 
 /**
- * @name wait
- * @description 等待函数
+ * get value from an object
+ * @returns string
  */
-export function wait(ms: number) {
-  return new Promise((resolve) => setTimeout(() => resolve(true), ms));
-}
-
-export function curry(Comp: any, hocs = []) {
-  return hocs.reverse().reduce((pre, cur: (pre: any) => any) => {
-    return cur(pre);
-  }, Comp);
-}
-
 export function getValue(obj: any, path: string, defaultValue = {}) {
-  if (isEmpty(obj) || typeof obj !== 'object') return defaultValue;
+  // array is not valid type, return default value
+  if (Array.isArray(obj)) {
+    return defaultValue;
+  }
+
+  if (isEmpty(obj) || typeof obj !== 'object') {
+    return defaultValue;
+  }
+
   const res = path.split('.').reduce((pre, cur) => {
     return pre && pre[cur];
   }, obj);
-  if (res === undefined) return defaultValue;
+  if (res === undefined) {
+    return defaultValue;
+  }
   return res;
-}
-
-// 更新obj的内容但不改变obj的指针
-export function fillObj(receiver: any = {}, ...suppliers: any) {
-  Object.keys(receiver).forEach((item) => {
-    delete receiver[item];
-  });
-  Object.assign(receiver, ...suppliers);
-  return receiver;
-}
-
-// 中划线转驼峰
-export function toHump(name: string) {
-  // eslint-disable-next-line no-useless-escape
-  return name.replace(/\-(\w)/g, (_: any, letter: string) => {
-    return letter.toUpperCase();
-  });
-}
-
-// 驼峰转中划线
-export function toLine(name: string) {
-  return name.replace(/([A-Z])/g, '-$1').toLowerCase();
-}
-
-// 获取当前环境
-export function getEnv() {
-  const { userAgent } = navigator;
-  const isVscode = /Electron\//.test(userAgent);
-  if (isVscode) return ENV.VSCODE;
-  const isTheia = (window as any).is_theia === true;
-  if (isTheia) return ENV.WEBIDE;
-  return ENV.WEB;
-}
-
-/**
- * 用于构造国际化字符串处理函数
- * @param {*} locale 国际化标识，例如 zh-CN、en-US
- * @param {*} messages 国际化语言包
- */
-export function generateI18n(locale = 'zh-CN', messages: any = {}) {
-  return (key: string, values = {}) => {
-    if (!messages || !messages[key]) return '';
-    const formater = new IntlMessageFormat(messages[key], locale);
-    return formater.format(values);
-  };
 }
 
 /**
@@ -162,7 +154,9 @@ export function generateI18n(locale = 'zh-CN', messages: any = {}) {
  * @param {*} messages 国际化语言包
  */
 export function getI18n(key: string, values = {}, locale = 'zh-CN', messages: Record<string, any> = {}) {
-  if (!messages || !messages[locale] || !messages[locale][key]) return '';
+  if (!messages || !messages[locale] || !messages[locale][key]) {
+    return '';
+  }
   const formater = new IntlMessageFormat(messages[locale][key], locale);
   return formater.format(values);
 }
@@ -172,107 +166,46 @@ export function getI18n(key: string, values = {}, locale = 'zh-CN', messages: Re
  * @param {*} Comp 需要判断的组件
  */
 export function canAcceptsRef(Comp: any) {
+  const hasSymbol = typeof Symbol === 'function' && Symbol.for;
+  const REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
+  // eslint-disable-next-line max-len
   return Comp?.$$typeof === REACT_FORWARD_REF_TYPE || Comp?.prototype?.isReactComponent || Comp?.prototype?.setState || Comp._forwardRef;
 }
-
 /**
- * 黄金令箭埋点
- * @param {String} gmKey 为黄金令箭业务类型
- * @param {Object} params 参数
- * @param {String} logKey 属性串
+ * transform array to a object
+ * @param arr array to be transformed
+ * @param key key of array item, which`s value will be used as key in result map
+ * @param overwrite overwrite existing item in result or not
+ * @returns object result map
  */
-export function goldlog(gmKey: string, params = {}, logKey = 'other') {
-  // vscode 黄金令箭API
-  const sendIDEMessage = (window as any).sendIDEMessage || (inSameDomain() && (window.parent as any).sendIDEMessage);
-  const goKey = serializeParams({
-    sdkVersion: pkg.version,
-    env: getEnv(),
-    ...params,
-  });
-  if (sendIDEMessage) {
-    sendIDEMessage({
-      action: 'goldlog',
-      data: {
-        logKey: `/lce.core.${logKey}`,
-        gmKey,
-        goKey,
-      },
-    });
-  }
-  (window as any)?.goldlog?.record(`/lce.core.${logKey}`, gmKey, goKey, 'POST');
-}
-
-// utils为编辑器打包生成的utils文件内容，utilsConfig为数据库存放的utils配置
-export function generateUtils(utils: any, utilsConfig: Array<{ name: string; type: string; content: any }>) {
-  if (!Array.isArray(utilsConfig)) return { ...utils };
-  const res: any = {};
-  utilsConfig.forEach((item) => {
-    if (!item.name || !item.type || !item.content) return;
-    if (item.type === 'function' && typeof item.content === 'function') {
-      res[item.name] = item.content;
-    } else if (item.type === 'npm' && utils[item.name]) {
-      res[item.name] = utils[item.name];
-    }
-  });
-  return res;
-}
-
-// 将函数返回结果转成promise形式，如果函数有返回值则根据返回值的bool类型判断是reject还是resolve，若函数无返回值默认执行resolve
-export function transformToPromise(input: any) {
-  if (input instanceof Promise) return input;
-  return new Promise((resolve, reject) => {
-    if (input || input === undefined) {
-      resolve({});
-    } else {
-      reject();
-    }
-  });
-}
-
-export function moveArrayItem(arr: any[], sourceIdx: number, distIdx: number, direction: 'after' | 'before') {
-  if (
-    !Array.isArray(arr) ||
-    sourceIdx === distIdx ||
-    sourceIdx < 0 ||
-    sourceIdx >= arr.length ||
-    distIdx < 0 ||
-    distIdx >= arr.length
-  ) return arr;
-  const item = arr[sourceIdx];
-  if (direction === 'after') {
-    arr.splice(distIdx + 1, 0, item);
-  } else {
-    arr.splice(distIdx, 0, item);
-  }
-  if (sourceIdx < distIdx) {
-    arr.splice(sourceIdx, 1);
-  } else {
-    arr.splice(sourceIdx + 1, 1);
-  }
-  return arr;
-}
-
 export function transformArrayToMap(arr: any[], key: string, overwrite = true) {
-  if (isEmpty(arr) || !Array.isArray(arr)) return {};
+  if (isEmpty(arr) || !Array.isArray(arr)) {
+    return {};
+  }
   const res: any = {};
   arr.forEach((item) => {
     const curKey = item[key];
-    if (item[key] === undefined) return;
-    if (res[curKey] && !overwrite) return;
+    if (item[key] === undefined) {
+      return;
+    }
+    if (res[curKey] && !overwrite) {
+      return;
+    }
     res[curKey] = item;
   });
   return res;
 }
 
 export function checkPropTypes(value: any, name: string, rule: any, componentName: string) {
+  let ruleFunction = rule;
   if (typeof rule === 'string') {
-    rule = new Function(`"use strict"; const PropTypes = arguments[0]; return ${rule}`)(PropTypes2);
+    ruleFunction = new Function(`"use strict"; const PropTypes = arguments[0]; return ${rule}`)(PropTypes2);
   }
-  if (!rule || typeof rule !== 'function') {
+  if (!ruleFunction || typeof ruleFunction !== 'function') {
     console.warn('checkPropTypes should have a function type rule argument');
     return true;
   }
-  const err = rule(
+  const err = ruleFunction(
     {
       [name]: value,
     },
@@ -288,67 +221,111 @@ export function checkPropTypes(value: any, name: string, rule: any, componentNam
   return !err;
 }
 
-export function transformSchemaToPure(obj: any) {
-  const pureObj = (obj: any): any => {
-    if (Array.isArray(obj)) {
-      return obj.map((item) => pureObj(item));
-    } else if (typeof obj === 'object') {
-      // 对于undefined及null直接返回
-      if (!obj) return obj;
-      const res: any = {};
-      forEach(obj, (val: any, key: string) => {
-        if (key.startsWith('__') && key !== '__ignoreParse') return;
-        res[key] = pureObj(val);
-      });
-      return res;
-    }
-    return obj;
-  };
-  return pureObj(obj);
-}
 
-export function transformSchemaToStandard(obj: any) {
-  const standardObj = (obj: any): any => {
-    if (Array.isArray(obj)) {
-      return obj.map((item) => standardObj(item));
-    } else if (typeof obj === 'object') {
-      // 对于undefined及null直接返回
-      if (!obj) return obj;
-      const res: any = {};
-      forEach(obj, (val: any, key: string) => {
-        if (key.startsWith('__') && key !== '__ignoreParse') return;
-        if (isSchema(val) && key !== 'children' && obj.type !== 'JSSlot') {
-          res[key] = {
-            type: 'JSSlot',
-            value: standardObj(val),
-          };
-          // table特殊处理
-          if (key === 'cell') {
-            res[key].params = ['value', 'index', 'record'];
-          }
-        } else {
-          res[key] = standardObj(val);
-        }
-      });
-      return res;
-    } else if (typeof obj === 'function') {
-      return {
-        type: 'JSFunction',
-        value: obj.toString(),
-      };
-    }
-    return obj;
-  };
-  return standardObj(obj);
-}
-
+/**
+ * transform string to a function
+ * @param str function in string form
+ * @returns funtion
+ */
 export function transformStringToFunction(str: string) {
-  if (typeof str !== 'string') return str;
+  if (typeof str !== 'string') {
+    return str;
+  }
   if (inSameDomain() && (window.parent as any).__newFunc) {
     return (window.parent as any).__newFunc(`"use strict"; return ${str}`)();
   } else {
     return new Function(`"use strict"; return ${str}`)();
   }
+}
+
+/**
+ * 对象类型JSExpression，支持省略this
+ * @param str expression in string form
+ * @param self scope object
+ * @returns funtion
+ */
+export function parseExpression(str: any, self: any) {
+  try {
+    const contextArr = ['"use strict";', 'var __self = arguments[0];'];
+    contextArr.push('return ');
+    let tarStr: string;
+
+    tarStr = (str.value || '').trim();
+
+    // NOTE: use __self replace 'this' in the original function str
+    // may be wrong in extreme case which contains '__self' already
+    tarStr = tarStr.replace(/this(\W|$)/g, (_a: any, b: any) => `__self${b}`);
+    tarStr = contextArr.join('\n') + tarStr;
+
+    // 默认调用顶层窗口的parseObj, 保障new Function的window对象是顶层的window对象
+    if (inSameDomain() && (window.parent as any).__newFunc) {
+      return (window.parent as any).__newFunc(tarStr)(self);
+    }
+    const code = `with($scope || {}) { ${tarStr} }`;
+    return new Function('$scope', code)(self);
+  } catch (err) {
+    debug('parseExpression.error', err, str, self);
+    return undefined;
+  }
+}
+
+/**
+ * capitalize first letter
+ * @param word string to be proccessed
+ * @returns string capitalized string
+ */
+export function capitalizeFirstLetter(word: string) {
+  if (!word || !isString(word) || word.length === 0) {
+    return word;
+  }
+  return word[0].toUpperCase() + word.slice(1);
+}
+
+/**
+ * check str passed in is a string type of not
+ * @param str obj to be checked
+ * @returns boolean
+ */
+export function isString(str: any): boolean {
+  return {}.toString.call(str) === '[object String]';
+}
+
+/**
+ * check if obj is type of variable structure
+ * @param obj object to be checked
+ * @returns boolean
+ */
+export function isVariable(obj: any) {
+  if (!obj || Array.isArray(obj)) {
+    return false;
+  }
+  return typeof obj === 'object' && obj?.type === 'variable';
+}
+
+/**
+ * 将 i18n 结构，降级解释为对 i18n 接口的调用
+ * @param i18nInfo object
+ * @param self context
+ */
+export function parseI18n(i18nInfo: any, self: any) {
+  return parseExpression({
+    type: EXPRESSION_TYPE.JSEXPRESSION,
+    value: `this.i18n('${i18nInfo.key}')`,
+  }, self);
+}
+
+/**
+ * for each key in targetObj, run fn with the value of the value, and the context paased in.
+ * @param targetObj object that keys will be for each
+ * @param fn function that process each item
+ * @param context
+ */
+export function forEach(targetObj: any, fn: any, context?: any) {
+  if (!targetObj || Array.isArray(targetObj) || isString(targetObj) || typeof targetObj !== 'object') {
+    return;
+  }
+
+  Object.keys(targetObj).forEach((key) => fn.call(context, targetObj[key], key));
 }
 
 export function parseData(schema: unknown, self: any): any {
@@ -364,10 +341,14 @@ export function parseData(schema: unknown, self: any): any {
     return schema.bind(self);
   } else if (typeof schema === 'object') {
     // 对于undefined及null直接返回
-    if (!schema) return schema;
+    if (!schema) {
+      return schema;
+    }
     const res: any = {};
     forEach(schema, (val: any, key: string) => {
-      if (key.startsWith('__')) return;
+      if (key.startsWith('__')) {
+        return;
+      }
       res[key] = parseData(val, self);
     });
     return res;
@@ -375,79 +356,22 @@ export function parseData(schema: unknown, self: any): any {
   return schema;
 }
 
-/* 全匹配{{开头,}}结尾的变量表达式，或者对象类型JSExpression，支持省略this */
-export function parseExpression(str: any, self: any) {
-  try {
-    const contextArr = ['"use strict";', 'var __self = arguments[0];'];
-    contextArr.push('return ');
-    let tarStr;
-
-    tarStr = (str.value || '').trim();
-    tarStr = tarStr.replace(/this(\W|$)/g, (_a: any, b: any) => `__self${b}`);
-    tarStr = contextArr.join('\n') + tarStr;
-    // 默认调用顶层窗口的parseObj,保障new Function的window对象是顶层的window对象
-    if (inSameDomain() && (window.parent as any).__newFunc) {
-      return (window.parent as any).__newFunc(tarStr)(self);
-    }
-    const code = `with($scope || {}) { ${tarStr} }`;
-    return new Function('$scope', code)(self);
-  } catch (err) {
-    debug('parseExpression.error', err, str, self);
-    return undefined;
-  }
-}
-
-// 首字母大写
-export function capitalizeFirstLetter(word: string) {
-  return word[0].toUpperCase() + word.slice(1);
-}
-
-export function isVariable(obj: any) {
-  return obj && typeof obj === 'object' && obj?.type === 'variable';
-}
-
-/* 将 i18n 结构，降级解释为对 i18n 接口的调用 */
-export function parseI18n(i18nInfo: any, self: any) {
-  return parseExpression({
-    type: EXPRESSION_TYPE.JSEXPRESSION,
-    value: `this.i18n('${i18nInfo.key}')`,
-  }, self);
-}
-
-export function forEach(obj: any, fn: any, context?: any) {
-  obj = obj || {};
-  Object.keys(obj).forEach(key => fn.call(context, obj[key], key));
-}
-
-export function shallowEqual(objA: any, objB: any) {
-  if (objA === objB) {
-    return true;
-  }
-
-  if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
-    return false;
-  }
-
-  const keysA = Object.keys(objA);
-  if (keysA.length !== Object.keys(objB).length) {
-    return false;
-  }
-
-  for (let i = 0, key; i < keysA.length; i++) {
-    key = keysA[i];
-    if (!objB.hasOwnProperty(key) || objA[key] !== objB[key]) {
-      return false;
-    }
-  }
-  return true;
-}
-
+/**
+ * process params for using in a url query
+ * @param obj params to be processed
+ * @returns string
+ */
 export function serializeParams(obj: any) {
-  let rst: any = [];
+  let result: any = [];
   forEach(obj, (val: any, key: any) => {
-    if (val === null || val === undefined || val === '') return;
-    if (typeof val === 'object') rst.push(`${key}=${encodeURIComponent(JSON.stringify(val))}`);
-    else rst.push(`${key}=${encodeURIComponent(val)}`);
+    if (val === null || val === undefined || val === '') {
+      return;
+    }
+    if (typeof val === 'object') {
+      result.push(`${key}=${encodeURIComponent(JSON.stringify(val))}`);
+    } else {
+      result.push(`${key}=${encodeURIComponent(val)}`);
+    }
   });
-  return rst.join('&');
+  return result.join('&');
 }
