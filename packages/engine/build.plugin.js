@@ -1,8 +1,18 @@
+const { execSync } = require('child_process');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-const fse = require('fs-extra');
-// read from lerna
-const lernaConfig = JSON.parse(fse.readFileSync('../../lerna.json', 'utf8'));
-const { version } = lernaConfig;
+
+function getReleaseVersion() {
+  const gitBranchName = execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf-8' });
+  const reBranchVersion = /^(?:[\w-]+\/)(\d+\.\d+\.\d+)$/im;
+  const match = reBranchVersion.exec(gitBranchName);
+  if (!match) {
+    throw new Error(`[engine] gitBranchName: ${gitBranchName} is not valid`);
+  }
+
+  return match[1];
+}
+
+const version = getReleaseVersion();
 
 module.exports = ({ context, onGetWebpackConfig }) => {
   onGetWebpackConfig((config) => {
