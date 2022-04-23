@@ -29,6 +29,11 @@ import { RAX_CHUNK_NAME } from './const';
 
 export interface PluginConfig extends RaxFrameworkOptions {
   fileType?: string;
+
+  /**
+   * 数据源的 handlers 的映射配置
+   * @deprecated 请使用 datasourceConfig.handlersPackages 来配置
+   */
   dataSourceHandlersPackageMap?: Record<string, string>;
 }
 

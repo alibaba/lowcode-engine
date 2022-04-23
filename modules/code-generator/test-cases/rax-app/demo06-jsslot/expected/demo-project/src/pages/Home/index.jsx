@@ -35,6 +35,8 @@ class Home$$Page extends Component {
 
   constructor(props, context) {
     super(props);
+
+    __$$i18n._inject2(this);
   } /* end of constructor */
 
   componentDidMount() {
@@ -74,11 +76,6 @@ class Home$$Page extends Component {
       </Page>
     );
   } /* end of render */
-
-  _i18nText(t) {
-    const locale = this._context.getLocale();
-    return t[locale] ?? t[String(locale).replace('-', '_')] ?? t[t.use || 'zh_CN'] ?? t.en_US;
-  }
 
   _createContext() {
     const self = this;
@@ -144,13 +141,7 @@ export default Home$$Page;
 function __$$eval(expr) {
   try {
     return expr();
-  } catch (err) {
-    try {
-      if (window.handleEvalError) {
-        window.handleEvalError('Failed to evaluate: ', expr, err);
-      }
-    } catch (e) {}
-  }
+  } catch (error) {}
 }
 
 function __$$evalArray(expr) {

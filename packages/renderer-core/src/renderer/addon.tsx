@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import baseRendererFactory from './base';
-import { isEmpty, goldlog } from '../utils';
+import { isEmpty } from '../utils';
 import { IRendererAppHelper, IBaseRendererProps, IBaseRenderComponent } from '../types';
 
 export default function addonRendererFactory(): IBaseRenderComponent {
@@ -56,21 +56,6 @@ export default function addonRendererFactory(): IBaseRenderComponent {
         delete this.appHelper.addons[config.addonKey];
       }
     }
-
-    goldlog = (goKey: string, params: any) => {
-      const { addonKey, addonConfig = {} } = this.props.config || {};
-      goldlog(
-        goKey,
-        {
-          addonKey,
-          package: addonConfig.package,
-          version: addonConfig.version,
-          ...this.appHelper.logParams,
-          ...params,
-        },
-        'addon',
-      );
-    };
 
     get utils() {
       const { utils = {} } = this.context.config || {};

@@ -52,7 +52,7 @@ export class Project {
   /**
    * 获取项目整体 schema
    */
-  getSchema(stage: TransformStage = TransformStage.Render): ProjectSchema {
+  getSchema(stage: TransformStage = TransformStage.Save): ProjectSchema {
     return {
       ...this.data,
       // TODO: future change this filter

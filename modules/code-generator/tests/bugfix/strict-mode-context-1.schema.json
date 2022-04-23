@@ -1,0 +1,677 @@
+{
+  "version": "1.0.0",
+  "componentsMap": [
+    {
+      "package": "@alilc/antd-lowcode",
+      "version": "0.5.4",
+      "exportName": "Typography",
+      "main": "dist/antd-lowcode.esm.js",
+      "destructuring": true,
+      "subName": "Text",
+      "componentName": "Typography.Text"
+    },
+    {
+      "package": "@alilc/antd-lowcode",
+      "version": "0.5.4",
+      "exportName": "Select",
+      "main": "dist/antd-lowcode.esm.js",
+      "destructuring": true,
+      "componentName": "Select"
+    },
+    {
+      "package": "@alilc/antd-lowcode",
+      "version": "0.5.4",
+      "exportName": "Space",
+      "main": "dist/antd-lowcode.esm.js",
+      "destructuring": true,
+      "componentName": "Space"
+    },
+    {
+      "package": "@alilc/antd-lowcode",
+      "version": "0.5.4",
+      "exportName": "Button",
+      "main": "dist/antd-lowcode.esm.js",
+      "destructuring": true,
+      "componentName": "Button"
+    },
+    {
+      "package": "@alilc/antd-lowcode",
+      "version": "0.5.4",
+      "exportName": "InputNumber",
+      "main": "dist/antd-lowcode.esm.js",
+      "destructuring": true,
+      "componentName": "InputNumber"
+    },
+    {
+      "package": "@alilc/antd-lowcode",
+      "version": "0.5.4",
+      "exportName": "Form",
+      "main": "dist/antd-lowcode.esm.js",
+      "destructuring": true,
+      "subName": "Item",
+      "componentName": "Form.Item"
+    },
+    {
+      "package": "@alilc/antd-lowcode",
+      "version": "0.5.4",
+      "exportName": "Input",
+      "main": "dist/antd-lowcode.esm.js",
+      "destructuring": true,
+      "subName": "TextArea",
+      "componentName": "Input.TextArea"
+    },
+    {
+      "package": "@alilc/antd-lowcode",
+      "version": "0.5.4",
+      "exportName": "Form",
+      "main": "dist/antd-lowcode.esm.js",
+      "destructuring": true,
+      "componentName": "Form"
+    },
+    {
+      "package": "@alilc/antd-lowcode",
+      "version": "0.5.4",
+      "exportName": "Modal",
+      "main": "dist/antd-lowcode.esm.js",
+      "destructuring": true,
+      "componentName": "Modal"
+    },
+    {
+      "package": "@alife/mc-assets-1935",
+      "version": "0.1.16",
+      "exportName": "AliAutoSearchTable",
+      "main": "build/lowcode/index.js",
+      "destructuring": true,
+      "subName": "default",
+      "componentName": "AliAutoSearchTableDefault"
+    },
+    {
+      "package": "@alilc/antd-lowcode",
+      "version": "0.5.4",
+      "exportName": "Card",
+      "main": "dist/antd-lowcode.esm.js",
+      "destructuring": true,
+      "componentName": "Card"
+    },
+    {
+      "package": "@alife/container",
+      "version": "0.3.7",
+      "exportName": "P",
+      "main": "lib/index.js",
+      "destructuring": true,
+      "subName": "",
+      "componentName": "NextP"
+    },
+    {
+      "package": "@alife/container",
+      "version": "0.3.7",
+      "exportName": "Block",
+      "main": "lib/index.js",
+      "destructuring": true,
+      "subName": "Cell",
+      "componentName": "NextBlockCell"
+    },
+    {
+      "package": "@alife/container",
+      "version": "0.3.7",
+      "exportName": "Block",
+      "main": "lib/index.js",
+      "destructuring": true,
+      "subName": "",
+      "componentName": "NextBlock"
+    },
+    {
+      "devMode": "lowcode",
+      "componentName": "Slot"
+    },
+    {
+      "package": "@alife/container",
+      "version": "0.3.7",
+      "exportName": "Page",
+      "main": "lib/index.js",
+      "destructuring": true,
+      "subName": "",
+      "componentName": "NextPage"
+    },
+    {
+      "devMode": "lowcode",
+      "componentName": "Page"
+    }
+  ],
+  "componentsTree": [
+    {
+      "componentName": "Page",
+      "id": "node_dockcviv8fo1",
+      "props": {
+        "ref": "outterView",
+        "style": {
+          "height": "100%"
+        }
+      },
+      "fileName": "test",
+      "dataSource": {
+        "list": []
+      },
+      "css": "body {\n  font-size: 12px;\n}\n\n.botton {\n  width: 100px;\n  color: #ff00ff\n}",
+      "lifeCycles": {
+        "componentDidMount": {
+          "type": "JSFunction",
+          "value": "function() { /* ... */ }"
+        },
+        "componentWillUnmount": {
+          "type": "JSFunction",
+          "value": "function() { /* ... */ }"
+        },
+        "componentDidUpdate": {
+          "type": "JSFunction",
+          "value": "function() { /* ... */ }"
+        }
+      },
+      "methods": {
+        "onChange": {
+          "type": "JSFunction",
+          "value": "function() { /* ... */ }"
+        },
+        "getActions": {
+          "type": "JSFunction",
+          "value": "function() { /* ... */ }"
+        },
+        "onCreateOrder": {
+          "type": "JSFunction",
+          "value": "function() { /* ... */ }"
+        },
+        "onCancelModal": {
+          "type": "JSFunction",
+          "value": "function() { /* ... */ }"
+        },
+        "onConfirmCreateOrder": {
+          "type": "JSFunction",
+          "value": "function() { /* ... */ }"
+        }
+      },
+      "state": {
+        "name": "nongzhou",
+        "gateways": [],
+        "selectedGateway": null,
+        "records": [],
+        "modalVisible": false
+      },
+      "children": [
+        {
+          "componentName": "NextPage",
+          "id": "node_ocknqx3esma",
+          "props": {
+            "columns": 12,
+            "headerDivider": true,
+            "placeholderStyle": {
+              "gridRowEnd": "span 1",
+              "gridColumnEnd": "span 12"
+            },
+            "placeholder": "页面主体内容：拖拽Block布局组件到这里",
+            "header": {
+              "type": "JSSlot",
+              "title": "header"
+            },
+            "headerProps": {
+              "background": "surface"
+            },
+            "footer": {
+              "type": "JSSlot",
+              "title": "footer"
+            },
+            "minHeight": "100vh",
+            "style": {
+              "cursor": "pointer"
+            }
+          },
+          "title": "页面",
+          "children": [
+            {
+              "componentName": "NextBlock",
+              "id": "node_ocknqx3esmb",
+              "props": {
+                "prefix": "next-",
+                "placeholderStyle": {
+                  "height": "100%"
+                },
+                "noPadding": false,
+                "noBorder": false,
+                "background": "surface",
+                "layoutmode": "O",
+                "colSpan": 12,
+                "rowSpan": 1,
+                "childTotalColumns": 12
+              },
+              "title": "区块",
+              "children": [
+                {
+                  "componentName": "NextBlockCell",
+                  "id": "node_ocknqx3esmc",
+                  "props": {
+                    "title": "",
+                    "prefix": "next-",
+                    "placeholderStyle": {
+                      "height": "100%"
+                    },
+                    "layoutmode": "O",
+                    "childTotalColumns": 12,
+                    "isAutoContainer": true,
+                    "colSpan": 12,
+                    "rowSpan": 1
+                  },
+                  "children": [
+                    {
+                      "componentName": "NextP",
+                      "id": "node_ocknqx3esm1j",
+                      "props": {
+                        "wrap": false,
+                        "type": "body2",
+                        "verAlign": "middle",
+                        "textSpacing": true,
+                        "align": "left",
+                        "full": true,
+                        "flex": true
+                      },
+                      "title": "段落",
+                      "children": [
+                        {
+                          "componentName": "Card",
+                          "id": "node_ocknqx3esm1k",
+                          "props": {
+                            "title": ""
+                          },
+                          "children": [
+                            {
+                              "componentName": "Space",
+                              "id": "node_ocknqx3esm1n",
+                              "props": {
+                                "size": 0,
+                                "align": "center",
+                                "direction": "horizontal"
+                              },
+                              "children": [
+                                {
+                                  "componentName": "Typography.Text",
+                                  "id": "node_ocknqx3esm1l",
+                                  "props": {
+                                    "children": "所在网关："
+                                  }
+                                },
+                                {
+                                  "componentName": "Select",
+                                  "id": "node_ocknqx3esm1m",
+                                  "props": {
+                                    "style": {
+                                      "marginTop": "16px",
+                                      "marginRight": "16px",
+                                      "marginBottom": "16px",
+                                      "marginLeft": "16px",
+                                      "width": "400px",
+                                      "display": "inline-block"
+                                    },
+                                    "options": {
+                                      "type": "JSExpression",
+                                      "value": "this.state.gateways"
+                                    },
+                                    "mode": "single",
+                                    "defaultValue": ["auto-edd-uniproxy"],
+                                    "labelInValue": true,
+                                    "showSearch": true,
+                                    "allowClear": false,
+                                    "placeholder": "请选取网关",
+                                    "showArrow": true,
+                                    "loading": false,
+                                    "tokenSeparators": [],
+                                    "__events": {
+                                      "eventDataList": [
+                                        {
+                                          "type": "componentEvent",
+                                          "name": "onChange",
+                                          "relatedEventName": "onChange"
+                                        }
+                                      ],
+                                      "eventList": [
+                                        {
+                                          "name": "onBlur",
+                                          "disabled": false
+                                        },
+                                        {
+                                          "name": "onChange",
+                                          "disabled": true
+                                        },
+                                        {
+                                          "name": "onDeselect",
+                                          "disabled": false
+                                        },
+                                        {
+                                          "name": "onFocus",
+                                          "disabled": false
+                                        },
+                                        {
+                                          "name": "onInputKeyDown",
+                                          "disabled": false
+                                        },
+                                        {
+                                          "name": "onMouseEnter",
+                                          "disabled": false
+                                        },
+                                        {
+                                          "name": "onMouseLeave",
+                                          "disabled": false
+                                        },
+                                        {
+                                          "name": "onPopupScroll",
+                                          "disabled": false
+                                        },
+                                        {
+                                          "name": "onSearch",
+                                          "disabled": false
+                                        },
+                                        {
+                                          "name": "onSelect",
+                                          "disabled": false
+                                        },
+                                        {
+                                          "name": "onDropdownVisibleChange",
+                                          "disabled": false
+                                        }
+                                      ]
+                                    },
+                                    "onChange": {
+                                      "type": "JSFunction",
+                                      "value": "function(){this.onChange.apply(this,Array.prototype.slice.call(arguments).concat([])) }"
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "componentName": "Button",
+                              "id": "node_ockntwgdsn7",
+                              "props": {
+                                "type": "primary",
+                                "children": "创建发布单",
+                                "style": {
+                                  "display": "block",
+                                  "marginTop": "20px",
+                                  "marginBottom": "20px"
+                                },
+                                "__events": {
+                                  "eventDataList": [
+                                    {
+                                      "type": "componentEvent",
+                                      "name": "onClick",
+                                      "relatedEventName": "onCreateOrder"
+                                    }
+                                  ],
+                                  "eventList": [
+                                    {
+                                      "name": "onClick",
+                                      "disabled": true
+                                    }
+                                  ]
+                                },
+                                "onClick": {
+                                  "type": "JSFunction",
+                                  "value": "function(){this.onCreateOrder.apply(this,Array.prototype.slice.call(arguments).concat([])) }"
+                                }
+                              }
+                            },
+                            {
+                              "componentName": "Modal",
+                              "id": "node_ockntx4eo9p",
+                              "props": {
+                                "title": "创建发布单",
+                                "visible": {
+                                  "type": "JSExpression",
+                                  "value": "this.state.modalVisible"
+                                },
+                                "footer": "",
+                                "__events": {
+                                  "eventDataList": [
+                                    {
+                                      "type": "componentEvent",
+                                      "name": "onCancel",
+                                      "relatedEventName": "onCancelModal"
+                                    }
+                                  ],
+                                  "eventList": [
+                                    {
+                                      "name": "onCancel",
+                                      "disabled": true
+                                    },
+                                    {
+                                      "name": "onOk",
+                                      "disabled": false
+                                    }
+                                  ]
+                                },
+                                "onCancel": {
+                                  "type": "JSFunction",
+                                  "value": "function(){this.onCancelModal.apply(this,Array.prototype.slice.call(arguments).concat([])) }"
+                                },
+                                "zIndex": 2000
+                              },
+                              "hidden": true,
+                              "children": [
+                                {
+                                  "componentName": "Form",
+                                  "id": "node_ockntx4eo9s",
+                                  "props": {
+                                    "labelCol": {
+                                      "span": 6
+                                    },
+                                    "wrapperCol": {
+                                      "span": 14
+                                    },
+                                    "onFinish": {
+                                      "type": "JSFunction",
+                                      "value": "function(){this.onConfirmCreateOrder.apply(this,Array.prototype.slice.call(arguments).concat([])) }"
+                                    },
+                                    "name": "basic",
+                                    "__events": {
+                                      "eventDataList": [
+                                        {
+                                          "type": "componentEvent",
+                                          "name": "onFinish",
+                                          "relatedEventName": "onConfirmCreateOrder"
+                                        }
+                                      ],
+                                      "eventList": [
+                                        {
+                                          "name": "onFinish",
+                                          "disabled": true
+                                        },
+                                        {
+                                          "name": "onFinishFailed",
+                                          "disabled": false
+                                        },
+                                        {
+                                          "name": "onFieldsChange",
+                                          "disabled": false
+                                        },
+                                        {
+                                          "name": "onValuesChange",
+                                          "disabled": false
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "children": [
+                                    {
+                                      "componentName": "Form.Item",
+                                      "id": "node_ockntx4eo91k",
+                                      "props": {
+                                        "label": "发布批次"
+                                      },
+                                      "children": [
+                                        {
+                                          "componentName": "InputNumber",
+                                          "id": "node_ockntx4eo91l",
+                                          "props": {
+                                            "value": 3,
+                                            "min": 1
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "componentName": "Form.Item",
+                                      "id": "node_ockntx4eo91r",
+                                      "props": {
+                                        "label": "批次间隔时间"
+                                      },
+                                      "children": [
+                                        {
+                                          "componentName": "InputNumber",
+                                          "id": "node_ockntx4eo91s",
+                                          "props": {
+                                            "value": 3
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "componentName": "Form.Item",
+                                      "id": "node_ockntx4eo91y",
+                                      "props": {
+                                        "label": "备注 "
+                                      },
+                                      "children": [
+                                        {
+                                          "componentName": "Input.TextArea",
+                                          "id": "node_ockntx4eo91z",
+                                          "props": {
+                                            "rows": 3,
+                                            "placeholder": "请输入"
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "componentName": "Form.Item",
+                                      "id": "node_ockntx4eo9v",
+                                      "props": {
+                                        "wrapperCol": {
+                                          "offset": 6
+                                        },
+                                        "style": {
+                                          "flexDirection": "row",
+                                          "alignItems": "flex-end",
+                                          "justifyContent": "center",
+                                          "display": "flex"
+                                        },
+                                        "labelAlign": "right"
+                                      },
+                                      "children": [
+                                        {
+                                          "componentName": "Button",
+                                          "id": "node_ockntx4eo9w",
+                                          "props": {
+                                            "type": "primary",
+                                            "children": "提交",
+                                            "htmlType": "submit"
+                                          }
+                                        },
+                                        {
+                                          "componentName": "Button",
+                                          "id": "node_ockntx4eo9x",
+                                          "props": {
+                                            "style": {
+                                              "marginLeft": 20
+                                            },
+                                            "children": "取消",
+                                            "__events": {
+                                              "eventDataList": [
+                                                {
+                                                  "type": "componentEvent",
+                                                  "name": "onClick",
+                                                  "relatedEventName": "onCancelModal"
+                                                }
+                                              ],
+                                              "eventList": [
+                                                {
+                                                  "name": "onClick",
+                                                  "disabled": true
+                                                }
+                                              ]
+                                            },
+                                            "onClick": {
+                                              "type": "JSFunction",
+                                              "value": "function(){this.onCancelModal.apply(this,Array.prototype.slice.call(arguments).concat([])) }"
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "componentName": "AliAutoSearchTableDefault",
+                              "id": "node_ocknqx3esm1q",
+                              "props": {
+                                "rowKey": "key",
+                                "dataSource": {
+                                  "type": "JSExpression",
+                                  "value": "this.state.records"
+                                },
+                                "columns": [
+                                  {
+                                    "title": "发布名称",
+                                    "dataIndex": "order_name",
+                                    "key": "name"
+                                  },
+                                  {
+                                    "title": "类型",
+                                    "dataIndex": "order_type_desc",
+                                    "key": "age"
+                                  },
+                                  {
+                                    "title": "发布状态",
+                                    "dataIndex": "order_status_desc",
+                                    "key": "address"
+                                  },
+                                  {
+                                    "title": "发布人",
+                                    "dataIndex": "creator_name"
+                                  },
+                                  {
+                                    "title": "当前批次/总批次",
+                                    "dataIndex": "cur_batch_no"
+                                  },
+                                  {
+                                    "title": "发布机器/总机器",
+                                    "dataIndex": "pubblish_ip_finish_num"
+                                  },
+                                  {
+                                    "title": "发布时间",
+                                    "dataIndex": "publish_id"
+                                  }
+                                ],
+                                "actions": {
+                                  "type": "JSExpression",
+                                  "value": "this.actions || []"
+                                },
+                                "getActions": {
+                                  "type": "JSFunction",
+                                  "value": "function(){ return this.getActions.apply(this,Array.prototype.slice.call(arguments).concat([])) }"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "i18n": {}
+}

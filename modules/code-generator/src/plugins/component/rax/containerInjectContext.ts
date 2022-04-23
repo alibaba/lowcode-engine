@@ -10,6 +10,7 @@ import {
   IContainerInfo,
 } from '../../../types';
 import { RAX_CHUNK_NAME } from './const';
+import { DEFAULT_LINK_AFTER } from '../../../const';
 
 export interface PluginConfig {
   fileType: string;
@@ -44,6 +45,16 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       name: COMMON_CHUNK_NAME.InternalDepsImport,
       content: "import * as __$$i18n from '../../i18n';",
       linkAfter: [COMMON_CHUNK_NAME.ExternalDepsImport],
+    });
+
+    next.chunks.push({
+      type: ChunkType.STRING,
+      fileType: cfg.fileType,
+      name: CLASS_DEFINE_CHUNK_NAME.ConstructorContent,
+      content: `
+        __$$i18n._inject2(this);
+      `,
+      linkAfter: [...DEFAULT_LINK_AFTER[CLASS_DEFINE_CHUNK_NAME.ConstructorContent]],
     });
 
     next.chunks.push({

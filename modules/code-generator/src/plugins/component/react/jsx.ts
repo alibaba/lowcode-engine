@@ -42,12 +42,14 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       ...pre,
     };
 
+    const { tolerateEvalErrors = true, evalErrorsHandler = '' } = next.contextData;
+
     // 这里会将内部的一些子上下文的访问(this.xxx)转换为 __$$context.xxx 的形式
     // 与 Rax 所不同的是，这里不会将最顶层的 this 转换掉
     const customHandlers: HandlerSet<string> = {
-      expression(input: JSExpression, scope: IScope) {
+      expression(input: JSExpression, scope: IScope, config) {
         return transformJsExpr(generateExpression(input, scope), scope, {
-          dontWrapEval: true,
+          dontWrapEval: !(config?.tolerateEvalErrors ?? tolerateEvalErrors),
           dontTransformThis2ContextAtRootScope: true,
         });
       },
@@ -69,6 +71,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     const generatorPlugins: NodeGeneratorConfig = {
       handlers: customHandlers,
       tagMapping: (v) => nodeTypeMapping[v] || v,
+      tolerateEvalErrors,
     };
 
     if (next.contextData.useRefApi) {
@@ -100,8 +103,8 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       fileType: cfg.fileType,
       name: REACT_CHUNK_NAME.ClassRenderJSX,
       content: `
-        const __$$context = this;
-        const { state } = this;
+        const __$$context = this._context || this;
+        const { state } = __$$context;
         return ${jsxContent};
       `,
       linkAfter: [REACT_CHUNK_NAME.ClassRenderStart, REACT_CHUNK_NAME.ClassRenderPre],
@@ -111,7 +114,23 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       type: ChunkType.STRING,
       fileType: cfg.fileType,
       name: COMMON_CHUNK_NAME.CustomContent,
-      content: `
+      content: [
+        tolerateEvalErrors &&
+          `
+          function __$$eval(expr) {
+            try {
+              return expr();
+            } catch (error) { 
+              ${evalErrorsHandler}
+            }
+          }
+
+          function __$$evalArray(expr) {
+            const res = __$$eval(expr);
+            return Array.isArray(res) ? res : [];
+          }
+      `,
+        `
         function __$$createChildContext(oldContext, ext) {
           const childContext = {
             ...oldContext,
@@ -121,6 +140,9 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
           return childContext;
         }
       `,
+      ]
+        .filter(Boolean)
+        .join('\n'),
       linkAfter: [COMMON_CHUNK_NAME.FileExport],
     });
     return next;

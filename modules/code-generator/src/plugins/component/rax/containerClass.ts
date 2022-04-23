@@ -137,19 +137,6 @@ const pluginFactory: BuilderComponentPluginFactory<unknown> = () => {
     next.chunks.push({
       type: ChunkType.STRING,
       fileType: FileType.JSX,
-      name: CLASS_DEFINE_CHUNK_NAME.InsPrivateMethod,
-      content: `
-        _i18nText(t) {
-          const locale = this._context.getLocale();
-          return t[locale] ?? t[String(locale).replace('-', '_')] ?? t[t.use || 'zh_CN'] ?? t.en_US;
-        }
-      `,
-      linkAfter: [RAX_CHUNK_NAME.ClassRenderEnd],
-    });
-
-    next.chunks.push({
-      type: ChunkType.STRING,
-      fileType: FileType.JSX,
       name: COMMON_CHUNK_NAME.FileExport,
       content: `export default ${componentClassName};`,
       linkAfter: [

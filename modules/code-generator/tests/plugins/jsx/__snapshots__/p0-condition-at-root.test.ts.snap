@@ -5,9 +5,9 @@ Object {
   "chunks": Array [
     Object {
       "content": "
-        const __$$context = this;
-        const { state } = this;
-        return (this.state.otherThings).map((item, index) => ((__$$context) => (!!(__$$context.state.something) && (<Page><Text>Hello world!</Text></Page>)))(__$$createChildContext(__$$context, { item, index })));
+        const __$$context = this._context || this;
+        const { state } = __$$context;
+        return (__$$evalArray(() => (this.state.otherThings))).map((item, index) => ((__$$context) => (!!(__$$eval(() => (__$$context.state.something))) && (<Page><Text>Hello world!</Text></Page>)))(__$$createChildContext(__$$context, { item, index })));
       ",
       "fileType": "jsx",
       "linkAfter": Array [
@@ -19,6 +19,20 @@ Object {
     },
     Object {
       "content": "
+          function __$$eval(expr) {
+            try {
+              return expr();
+            } catch (error) { 
+              
+            }
+          }
+
+          function __$$evalArray(expr) {
+            const res = __$$eval(expr);
+            return Array.isArray(res) ? res : [];
+          }
+      
+
         function __$$createChildContext(oldContext, ext) {
           const childContext = {
             ...oldContext,
@@ -66,9 +80,9 @@ Object {
   "chunks": Array [
     Object {
       "content": "
-        const __$$context = this;
-        const { state } = this;
-        return !!(this.state.something) && (<Page><Text>Hello world!</Text></Page>);
+        const __$$context = this._context || this;
+        const { state } = __$$context;
+        return !!(__$$eval(() => (this.state.something))) && (<Page><Text>Hello world!</Text></Page>);
       ",
       "fileType": "jsx",
       "linkAfter": Array [
@@ -80,6 +94,20 @@ Object {
     },
     Object {
       "content": "
+          function __$$eval(expr) {
+            try {
+              return expr();
+            } catch (error) { 
+              
+            }
+          }
+
+          function __$$evalArray(expr) {
+            const res = __$$eval(expr);
+            return Array.isArray(res) ? res : [];
+          }
+      
+
         function __$$createChildContext(oldContext, ext) {
           const childContext = {
             ...oldContext,
@@ -123,8 +151,8 @@ Object {
   "chunks": Array [
     Object {
       "content": "
-        const __$$context = this;
-        const { state } = this;
+        const __$$context = this._context || this;
+        const { state } = __$$context;
         return <Page><Text>Hello world!</Text></Page>;
       ",
       "fileType": "jsx",
@@ -137,6 +165,20 @@ Object {
     },
     Object {
       "content": "
+          function __$$eval(expr) {
+            try {
+              return expr();
+            } catch (error) { 
+              
+            }
+          }
+
+          function __$$evalArray(expr) {
+            const res = __$$eval(expr);
+            return Array.isArray(res) ? res : [];
+          }
+      
+
         function __$$createChildContext(oldContext, ext) {
           const childContext = {
             ...oldContext,
@@ -177,8 +219,8 @@ Object {
   "chunks": Array [
     Object {
       "content": "
-        const __$$context = this;
-        const { state } = this;
+        const __$$context = this._context || this;
+        const { state } = __$$context;
         return <Page><Text>Hello world!</Text></Page>;
       ",
       "fileType": "jsx",
@@ -191,6 +233,20 @@ Object {
     },
     Object {
       "content": "
+          function __$$eval(expr) {
+            try {
+              return expr();
+            } catch (error) { 
+              
+            }
+          }
+
+          function __$$evalArray(expr) {
+            const res = __$$eval(expr);
+            return Array.isArray(res) ? res : [];
+          }
+      
+
         function __$$createChildContext(oldContext, ext) {
           const childContext = {
             ...oldContext,

@@ -1,3 +1,5 @@
+// 注意: 出码引擎注入的临时变量默认都以 "__$$" 开头，禁止在搭建的代码中直接访问。
+// 例外：react 框架的导出名和各种组件名除外。
 import React from "react";
 
 import { Switch } from "@alifd/next";
@@ -8,11 +10,13 @@ import { create as __$$createDataSourceEngine } from "@alilc/lowcode-datasource-
 
 import utils from "../../utils";
 
-import { i18n as _$$i18n } from "../../i18n";
+import * as __$$i18n from "../../i18n";
 
 import "./index.css";
 
 class Index$$Page extends React.Component {
+  _context = this;
+
   _dataSourceConfig = this._defineDataSourceConfig();
   _dataSourceEngine = __$$createDataSourceEngine(this._dataSourceConfig, this, {
     runtimeConfig: true,
@@ -32,8 +36,14 @@ class Index$$Page extends React.Component {
 
     this.utils = utils;
 
+    __$$i18n._inject2(this);
+
     this.state = {};
   }
+
+  $ = () => null;
+
+  $$ = () => [];
 
   _defineDataSourceConfig() {
     const _this = this;
@@ -59,30 +69,27 @@ class Index$$Page extends React.Component {
     };
   }
 
-  i18n = (i18nKey) => {
-    return _$$i18n(i18nKey);
-  };
-
   componentDidMount() {
     this._dataSourceEngine.reloadDataSource();
   }
 
   render() {
-    const __$$context = this;
-    const { state } = this;
+    const __$$context = this._context || this;
+    const { state } = __$$context;
     return (
       <div>
         <div>
-          {this.dataSourceMap.todos.data.map((item, index) =>
-            ((__$$context) => (
-              <div>
-                <Switch
-                  checkedChildren="开"
-                  unCheckedChildren="关"
-                  checked={item.done}
-                />
-              </div>
-            ))(__$$createChildContext(__$$context, { item, index }))
+          {__$$evalArray(() => this.dataSourceMap.todos.data).map(
+            (item, index) =>
+              ((__$$context) => (
+                <div>
+                  <Switch
+                    checkedChildren="开"
+                    unCheckedChildren="关"
+                    checked={__$$eval(() => item.done)}
+                  />
+                </div>
+              ))(__$$createChildContext(__$$context, { item, index }))
           )}
         </div>
       </div>
@@ -91,6 +98,17 @@ class Index$$Page extends React.Component {
 }
 
 export default Index$$Page;
+
+function __$$eval(expr) {
+  try {
+    return expr();
+  } catch (error) {}
+}
+
+function __$$evalArray(expr) {
+  const res = __$$eval(expr);
+  return Array.isArray(res) ? res : [];
+}
 
 function __$$createChildContext(oldContext, ext) {
   const childContext = {

@@ -1,10 +1,11 @@
-import { IProjectBuilder } from '../types';
+import { IProjectBuilder, IProjectBuilderOptions } from '../types';
 
 import { createProjectBuilder } from '../generator/ProjectBuilder';
 
 import esmodule from '../plugins/common/esmodule';
 import containerClass from '../plugins/component/react/containerClass';
 import containerInitState from '../plugins/component/react/containerInitState';
+import containerInjectContext from '../plugins/component/react/containerInjectContext';
 import containerInjectUtils from '../plugins/component/react/containerInjectUtils';
 import containerInjectDataSourceEngine from '../plugins/component/react/containerInjectDataSourceEngine';
 import containerInjectI18n from '../plugins/component/react/containerInjectI18n';
@@ -21,8 +22,14 @@ import icejs from '../plugins/project/framework/icejs';
 
 import { prettier } from '../postprocessor';
 
-export default function createIceJsProjectBuilder(): IProjectBuilder {
+export interface IceJsProjectBuilderOptions extends IProjectBuilderOptions {}
+
+export default function createIceJsProjectBuilder(
+  options?: IceJsProjectBuilderOptions,
+): IProjectBuilder {
   return createProjectBuilder({
+    inStrictMode: options?.inStrictMode,
+    extraContextData: { ...options },
     template: icejs.template,
     plugins: {
       components: [
@@ -31,6 +38,7 @@ export default function createIceJsProjectBuilder(): IProjectBuilder {
           fileType: 'jsx',
         }),
         containerClass(),
+        containerInjectContext(),
         containerInjectUtils(),
         containerInjectDataSourceEngine(),
         containerInjectI18n(),
@@ -53,6 +61,7 @@ export default function createIceJsProjectBuilder(): IProjectBuilder {
           fileType: 'jsx',
         }),
         containerClass(),
+        containerInjectContext(),
         containerInjectUtils(),
         containerInjectDataSourceEngine(),
         containerInjectI18n(),
@@ -86,6 +95,7 @@ export default function createIceJsProjectBuilder(): IProjectBuilder {
 export const plugins = {
   containerClass,
   containerInitState,
+  containerInjectContext,
   containerInjectUtils,
   containerInjectI18n,
   containerInjectDataSourceEngine,

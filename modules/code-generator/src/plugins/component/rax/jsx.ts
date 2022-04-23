@@ -62,6 +62,7 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
 
     const ir = next.ir as IContainerInfo;
     const rootScope = Scope.createRootScope();
+    const { tolerateEvalErrors = true, evalErrorsHandler = '' } = next.contextData;
 
     // Rax 构建到小程序的时候，不能给组件起起别名，得直接引用，故这里将所有的别名替换掉
     // 先收集下所有的 alias 的映射
@@ -86,7 +87,9 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
     // 3. 通过 this.xxx 能拿到的东西太多了，而且自定义的 methods 可能会无意间破坏 Rax 框架或小程序框架在页面 this 上的东东
     const customHandlers: HandlerSet<string> = {
       expression(input: JSExpression, scope: IScope) {
-        return transformJsExpr(generateExpression(input, scope), scope);
+        return transformJsExpr(generateExpression(input, scope), scope, {
+          dontWrapEval: !tolerateEvalErrors,
+        });
       },
       function(input, scope: IScope) {
         return transformThis2Context(input.value || 'null', scope);
@@ -138,17 +141,14 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
       type: ChunkType.STRING,
       fileType: cfg.fileType,
       name: COMMON_CHUNK_NAME.CustomContent,
-      content: `
-
+      content: [
+        tolerateEvalErrors &&
+          `
         function __$$eval(expr) {
           try {
             return expr();
-          } catch (err) { 
-            try {
-              if (window.handleEvalError) {
-                window.handleEvalError('Failed to evaluate: ', expr, err);
-              }
-            } catch (e) {}
+          } catch (error) { 
+            ${evalErrorsHandler}
           }
         }
 
@@ -156,16 +156,57 @@ const pluginFactory: BuilderComponentPluginFactory<PluginConfig> = (config?) => 
           const res = __$$eval(expr);
           return Array.isArray(res) ? res : [];
         }
-
+        `,
+        `
         function __$$createChildContext(oldContext, ext) {
           return Object.assign({}, oldContext, ext);
         }
-
       `,
+      ]
+        .filter(Boolean)
+        .join('\n'),
       linkAfter: [COMMON_CHUNK_NAME.FileExport],
     });
 
     return next;
+
+    function generateRaxLoopCtrl(
+      nodeItem: NodeSchema,
+      scope: IScope,
+      config?: NodeGeneratorConfig,
+      next?: NodePlugin,
+    ): CodePiece[] {
+      if (nodeItem.loop) {
+        const loopItemName = nodeItem.loopArgs?.[0] || 'item';
+        const loopIndexName = nodeItem.loopArgs?.[1] || 'index';
+        const subScope = scope.createSubScope([loopItemName, loopIndexName]);
+        const pieces: CodePiece[] = next ? next(nodeItem, subScope, config) : [];
+
+        const loopDataExpr = tolerateEvalErrors
+          ? `__$$evalArray(() => (${transformThis2Context(
+              generateCompositeType(nodeItem.loop, scope, { handlers: config?.handlers }),
+              scope,
+            )}))`
+          : `(${transformThis2Context(
+              generateCompositeType(nodeItem.loop, scope, { handlers: config?.handlers }),
+              scope,
+            )})`;
+
+        pieces.unshift({
+          value: `${loopDataExpr}.map((${loopItemName}, ${loopIndexName}) => ((__$$context) => (`,
+          type: PIECE_TYPE.BEFORE,
+        });
+
+        pieces.push({
+          value: `))(__$$createChildContext(__$$context, { ${loopItemName}, ${loopIndexName} })))`,
+          type: PIECE_TYPE.AFTER,
+        });
+
+        return pieces;
+      }
+
+      return next ? next(nodeItem, scope, config) : [];
+    }
   };
 
   return plugin;
@@ -187,39 +228,6 @@ function isImportAliasDefineChunk(chunk: ICodeChunk): chunk is ICodeChunk & {
     typeof chunk.ext.originalName === 'string' &&
     !!(chunk.ext.dependency as NpmInfo | null)?.componentName
   );
-}
-
-function generateRaxLoopCtrl(
-  nodeItem: NodeSchema,
-  scope: IScope,
-  config?: NodeGeneratorConfig,
-  next?: NodePlugin,
-): CodePiece[] {
-  if (nodeItem.loop) {
-    const loopItemName = nodeItem.loopArgs?.[0] || 'item';
-    const loopIndexName = nodeItem.loopArgs?.[1] || 'index';
-    const subScope = scope.createSubScope([loopItemName, loopIndexName]);
-    const pieces: CodePiece[] = next ? next(nodeItem, subScope, config) : [];
-
-    const loopDataExpr = `__$$evalArray(() => (${transformThis2Context(
-      generateCompositeType(nodeItem.loop, scope, { handlers: config?.handlers }),
-      scope,
-    )}))`;
-
-    pieces.unshift({
-      value: `${loopDataExpr}.map((${loopItemName}, ${loopIndexName}) => ((__$$context) => (`,
-      type: PIECE_TYPE.BEFORE,
-    });
-
-    pieces.push({
-      value: `))(__$$createChildContext(__$$context, { ${loopItemName}, ${loopIndexName} })))`,
-      type: PIECE_TYPE.AFTER,
-    });
-
-    return pieces;
-  }
-
-  return next ? next(nodeItem, scope, config) : [];
 }
 
 function generateNodeAttrForRax(
