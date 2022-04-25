@@ -1,6 +1,6 @@
 {
   "name": "@ali/lowcode-vision-polyfill",
-  "version": "1.0.80",
+  "version": "1.0.81",
   "description": "Vision Polyfill for Ali lowCode engine",
   "main": "lib/index.js",
   "private": true,
