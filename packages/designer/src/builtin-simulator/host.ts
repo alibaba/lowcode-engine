@@ -1114,7 +1114,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
     // fix target : 浏览器事件响应目标
     if (!e.target || notMyEvent) {
-      e.target = this.contentDocument?.elementFromPoint(e.canvasX!, e.canvasY!);
+      if (!isNaN(e.canvasX!) && !isNaN(e.canvasY!)) {
+        e.target = this.contentDocument?.elementFromPoint(e.canvasX!, e.canvasY!);
+      }
     }
 
     // 事件已订正
