@@ -14,8 +14,11 @@ export default class TreeBranches extends Component<{
   render() {
     const { treeNode, isModal } = this.props;
     const { expanded } = treeNode;
+    const { filterWorking, matchChild } = treeNode.filterReult;
+    // 条件过滤生效时，如果命中了子节点，需要将该节点展开
+    const expandInFilterResult = filterWorking && matchChild;
 
-    if (!expanded) {
+    if (!expandInFilterResult && !expanded) {
       return null;
     }
 
@@ -40,12 +43,18 @@ class TreeNodeChildren extends Component<{
     const children: any = [];
     let groupContents: any[] = [];
     let currentGrp: ExclusiveGroup;
+    const { filterWorking, matchSelf, keywords } = treeNode.filterReult;
+
     const endGroup = () => {
       if (groupContents.length > 0) {
         children.push(
           <div key={currentGrp.id} className="condition-group-container" data-id={currentGrp.firstNode.id}>
             <div className="condition-group-title">
-              <Title title={currentGrp.title} />
+              <Title
+                title={currentGrp.title}
+                match={filterWorking && matchSelf}
+                keywords={keywords}
+              />
             </div>
             {groupContents}
           </div>,

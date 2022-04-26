@@ -96,6 +96,7 @@ export default class TreeTitle extends Component<{
         marginLeft: -indent,
       };
     }
+    const { filterWorking, matchSelf, keywords } = treeNode.filterReult;
 
     return (
       <div
@@ -143,7 +144,11 @@ export default class TreeTitle extends Component<{
             />
           ) : (
             <Fragment>
-              <Title title={treeNode.title} />
+              <Title
+                title={treeNode.title}
+                match={filterWorking && matchSelf}
+                keywords={keywords}
+              />
               {node.slotFor && (
                 <a className="tree-node-tag slot">
                   {/* todo: click redirect to prop */}

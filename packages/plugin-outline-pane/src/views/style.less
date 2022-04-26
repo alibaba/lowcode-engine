@@ -6,12 +6,40 @@
   background-color: white;
 
   > .lc-outline-tree-container {
-    top: 0;
+    top: 52px;
     left: 0;
     bottom: 0;
     right: 0;
     position: absolute;
     overflow: auto;
+  }
+
+  > .lc-outline-filter {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+
+    .lc-outline-filter-search-input {
+      width: 100%;
+    }
+
+    .lc-outline-filter-icon {
+      background: #ebecf0;
+      border: 1px solid #c4c6cf;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      border-radius: 0 2px 2px 0;
+      overflow: hidden;
+      margin-left: -2px;
+      z-index: 1;
+      padding: 0 6px;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
   }
 }
 
