@@ -40,5 +40,8 @@ jobs:
       - name: install
         run: npm i && npm run setup:skip-build
 
-      - name: test
-        run: cd packages/designer && npm test
+      - uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          working-directory: packages/designer
+          test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
+          skip-step: install

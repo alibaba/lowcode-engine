@@ -9,7 +9,6 @@ export interface ActiveTarget {
   detail?: LocationDetail;
   instance?: ComponentInstance;
 }
-
 export class ActiveTracker {
   private emitter = new EventEmitter();
 
