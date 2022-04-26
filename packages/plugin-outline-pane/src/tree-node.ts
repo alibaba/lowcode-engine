@@ -3,6 +3,20 @@ import { computed, obx, intl, makeObservable, action } from '@alilc/lowcode-edit
 import { Node, DocumentModel, isLocationChildrenDetail, LocationChildrenDetail, Designer } from '@alilc/lowcode-designer';
 import { Tree } from './tree';
 
+/**
+ * 大纲树过滤结果
+ */
+export interface FilterResult {
+  // 过滤条件是否生效
+  filterWorking: boolean;
+  // 命中子节点
+  matchChild: boolean;
+  // 命中本节点
+  matchSelf: boolean;
+  // 关键字
+  keywords: string;
+}
+
 export default class TreeNode {
   get id(): string {
     return this.node.id;
@@ -230,5 +244,21 @@ export default class TreeNode {
     if (this._node !== node) {
       this._node = node;
     }
+  }
+
+  @obx.ref private _filterResult: FilterResult = {
+    filterWorking: false,
+    matchChild: false,
+    matchSelf: false,
+    keywords: '',
+  };
+
+  get filterReult(): FilterResult {
+    return this._filterResult;
+  }
+
+  @action
+  setFilterReult(val: FilterResult) {
+    this._filterResult = val;
   }
 }
