@@ -6,6 +6,7 @@ import { SimulatorContext } from '../context';
 import { BuiltinSimulatorHost } from '../host';
 import { OffsetObserver, Designer } from '../../designer';
 import { Node } from '../../document';
+import { normalizeTriggers } from '../../utils/misc';
 
 @observer
 export default class BoxResizing extends Component<{ host: BuiltinSimulatorHost }> {
@@ -245,12 +246,14 @@ export class BoxResizingInstance extends Component<{
       triggerVisible = metadata.configure.advanced.getResizingHandlers(node.internalToShellNode());
     }
 
+    triggerVisible = normalizeTriggers(triggerVisible);
+
     const baseSideClass = 'lc-borders lc-resize-side';
     const baseCornerClass = 'lc-borders lc-resize-corner';
 
     return (
       <div>
-        {triggerVisible.includes('n') && (
+        {triggerVisible.includes('N') && (
           <div
             ref={(ref) => { this.outlineN = ref; }}
             className={classNames(baseSideClass, 'n')}
@@ -261,7 +264,7 @@ export class BoxResizingInstance extends Component<{
             }}
           />
         )}
-        {triggerVisible.includes('ne') && (
+        {triggerVisible.includes('NE') && (
           <div
             ref={(ref) => { this.outlineNE = ref; }}
             className={classNames(baseCornerClass, 'ne')}
@@ -271,7 +274,7 @@ export class BoxResizingInstance extends Component<{
             }}
           />
         )}
-        {triggerVisible.includes('e') && (
+        {triggerVisible.includes('E') && (
           <div
             className={classNames(baseSideClass, 'e')}
             ref={(ref) => { this.outlineE = ref; }}
@@ -282,7 +285,7 @@ export class BoxResizingInstance extends Component<{
             }}
           />
         )}
-        {triggerVisible.includes('se') && (
+        {triggerVisible.includes('SE') && (
           <div
             ref={(ref) => { this.outlineSE = ref; }}
             className={classNames(baseCornerClass, 'se')}
@@ -292,7 +295,7 @@ export class BoxResizingInstance extends Component<{
             }}
           />
         )}
-        {triggerVisible.includes('s') && (
+        {triggerVisible.includes('S') && (
           <div
             ref={(ref) => { this.outlineS = ref; }}
             className={classNames(baseSideClass, 's')}
@@ -303,7 +306,7 @@ export class BoxResizingInstance extends Component<{
             }}
           />
         )}
-        {triggerVisible.includes('sw') && (
+        {triggerVisible.includes('SW') && (
           <div
             ref={(ref) => { this.outlineSW = ref; }}
             className={classNames(baseCornerClass, 'sw')}
@@ -313,7 +316,7 @@ export class BoxResizingInstance extends Component<{
             }}
           />
         )}
-        {triggerVisible.includes('w') && (
+        {triggerVisible.includes('W') && (
           <div
             ref={(ref) => { this.outlineW = ref; }}
             className={classNames(baseSideClass, 'w')}
@@ -324,7 +327,7 @@ export class BoxResizingInstance extends Component<{
             }}
           />
         )}
-        {triggerVisible.includes('nw') && (
+        {triggerVisible.includes('NW') && (
           <div
             ref={(ref) => { this.outlineNW = ref; }}
             className={classNames(baseCornerClass, 'nw')}
