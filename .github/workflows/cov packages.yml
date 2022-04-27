@@ -1,0 +1,27 @@
+name: lint & test
+
+on:
+  pull_request:
+    paths:
+      - 'packages/**'
+      - '!packages/**.md'
+
+jobs:
+  cov-designer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: install
+        run: npm i && npm run setup:skip-build
+
+      - uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          working-directory: packages/designer
+          test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
+          skip-step: install
