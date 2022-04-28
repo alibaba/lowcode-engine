@@ -32,6 +32,8 @@ export default function componentRendererFactory(): IBaseRenderComponent {
 
       const noContainer = this.__parseData(__schema.props?.noContainer);
 
+      this.__bindCustomMethods(this.props);
+
       if (noContainer) {
         return this.__renderContextProvider({ compContext: this });
       }
@@ -44,5 +46,12 @@ export default function componentRendererFactory(): IBaseRenderComponent {
 
       return this.__renderComp(Component, this.__renderContextProvider({ compContext: this }));
     }
+
+    /** 需要重载下面几个方法，如果在低代码组件中绑定了对应的生命周期时会出现死循环 */
+    componentDidMount() {}
+    getSnapshotBeforeUpdate() {}
+    componentDidUpdate() {}
+    componentWillUnmount() {}
+    componentDidCatch() {}
   };
 }
