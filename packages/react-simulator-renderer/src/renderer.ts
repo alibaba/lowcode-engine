@@ -428,8 +428,6 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     const _schema: any = {
       ...compatibleLegaoSchema(schema),
     };
-    _schema.methods = {};
-    _schema.lifeCycles = {};
 
     if (schema.componentName === 'Component' && (schema as ComponentSchema).css) {
       const doc = window.document;
