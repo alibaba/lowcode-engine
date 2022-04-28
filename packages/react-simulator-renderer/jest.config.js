@@ -18,7 +18,7 @@ const jestConfig = {
   ],
   setupFiles: ['./test/utils/host.ts'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
-  collectCoverage: false,
+  collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.ts',
     '!src/**/*.d.ts',

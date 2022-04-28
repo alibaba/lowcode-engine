@@ -25,3 +25,39 @@ jobs:
           working-directory: packages/designer
           test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
           skip-step: install
+  cov-renderer-core:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: install
+        run: npm i && npm run setup:skip-build
+
+      - uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          working-directory: packages/renderer-core
+          test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
+          skip-step: install
+  cov-react-simulator-renderer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: install
+        run: npm i && npm run setup:skip-build
+
+      - uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          working-directory: packages/react-simulator-renderer
+          test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
+          skip-step: install
