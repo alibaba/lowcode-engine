@@ -14,7 +14,7 @@ module.exports = ({ context, onGetWebpackConfig }) => {
     config
       .plugin('define')
       .use(context.webpack.DefinePlugin, [{
-        VERSION_PLACEHOLDER: JSON.stringify(version),
+        VERSION_PLACEHOLDER: version,
       }]);
     config.plugins.delete('hot');
     config.devServer.hot(false);

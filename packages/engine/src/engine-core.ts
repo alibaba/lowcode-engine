@@ -177,7 +177,7 @@ export {
 
 let engineInited = false;
 // @ts-ignore webpack Define variable
-export const version = VERSION_PLACEHOLDER;
+export const version = 'VERSION_PLACEHOLDER';
 engineConfig.set('ENGINE_VERSION', version);
 export async function init(
   container?: HTMLElement,
