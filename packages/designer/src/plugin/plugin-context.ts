@@ -21,6 +21,7 @@ import {
   PreferenceValueType,
   IPluginPreferenceMananger,
 } from './plugin-types';
+import { isValidPreferenceKey } from './plugin-utils';
 
 export default class PluginContext implements ILowCodePluginContext {
   private readonly [editorSymbol]: Editor;
@@ -53,26 +54,22 @@ export default class PluginContext implements ILowCodePluginContext {
     this.plugins = plugins;
     this.event = new Event(editor, { prefix: 'common' });
     this.logger = getLogger({ level: 'warn', bizName: `designer:plugin:${pluginName}` });
+
+    const enhancePluginContextHook = engineConfig.get('enhancePluginContextHook');
+    if (enhancePluginContextHook) {
+      enhancePluginContextHook(this);
+    }
   }
 
   setPreference(
     pluginName: string,
     preferenceDeclaration: ILowCodePluginPreferenceDeclaration,
   ): void {
-    const isValidPreferenceKey = (key: string): boolean => {
-      if (!preferenceDeclaration || !Array.isArray(preferenceDeclaration.properties)) {
-        return false;
-      }
-      return preferenceDeclaration.properties.some((prop) => {
-        return prop.key === key;
-      });
-    };
-
     const getPreferenceValue = (
       key: string,
       defaultValue?: PreferenceValueType,
       ): PreferenceValueType | undefined => {
-      if (!isValidPreferenceKey(key)) {
+      if (!isValidPreferenceKey(key, preferenceDeclaration)) {
         return undefined;
       }
       const pluginPreference = this.plugins.getPluginPreference(pluginName) || {};

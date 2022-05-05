@@ -260,6 +260,10 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
       this.initOnVisibleChangeEvent(_leaf);
       this.curEventLeaf = _leaf;
 
+      cache.ref.set(props.componentId, {
+        makeUnitRender: this.makeUnitRender,
+      });
+
       let cacheState = cache.state.get(props.componentId);
       if (!cacheState || cacheState.__tag !== props.__tag) {
         cacheState = this.defaultState;
@@ -557,7 +561,6 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
     <LeafHoc
       {...props}
       forwardedRef={ref}
-      ref={(_ref: any) => cache.ref.set(props.componentId, _ref)}
     />
   ));
 

@@ -11,6 +11,7 @@ import {
   RemoteComponentDescription,
   GlobalEvent,
 } from '@alilc/lowcode-types';
+import { engineConfig } from './config';
 import { globalLocale } from './intl';
 import * as utils from './utils';
 import Preference from './utils/preference';
@@ -71,6 +72,8 @@ export class Editor extends (EventEmitter as any) implements IEditor {
       this.setAssets(data);
       return;
     }
+    // store the data to engineConfig while invoking editor.set()
+    engineConfig.set(key as any, data);
     this.context.set(key, data);
     this.notifyGot(key);
   }

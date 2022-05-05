@@ -642,6 +642,7 @@ export class DocumentModel {
       this.rootNodeVisitorMap[visitorName] = visitorResult;
     } catch (e) {
       console.error('RootNodeVisitor is not valid.');
+      console.error(e);
     }
     return visitorResult;
   }

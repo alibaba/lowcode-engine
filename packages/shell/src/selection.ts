@@ -23,6 +23,13 @@ export default class Selection {
   }
 
   /**
+   * return selected Node instance
+   */
+  get node() {
+    return this.getNodes()[0];
+  }
+
+  /**
    * 选中指定节点（覆盖方式）
    * @param id
    */

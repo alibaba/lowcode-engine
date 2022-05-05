@@ -1098,7 +1098,9 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
 
     // fix target : 浏览器事件响应目标
     if (!e.target || notMyEvent) {
-      e.target = this.contentDocument?.elementFromPoint(e.canvasX!, e.canvasY!);
+      if (!isNaN(e.canvasX!) && !isNaN(e.canvasY!)) {
+        e.target = this.contentDocument?.elementFromPoint(e.canvasX!, e.canvasY!);
+      }
     }
 
     // 事件已订正
@@ -1156,14 +1158,12 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
       return null;
     }
     const dropContainer = this.getDropContainer(e);
-    const canDropIn = dropContainer?.container?.componentMeta?.prototype?.options?.canDropIn;
+    const childWhitelist = dropContainer?.container?.componentMeta?.childWhitelist;
     const lockedNode = getClosestNode(dropContainer?.container as Node, (node) => node.isLocked);
     if (lockedNode) return null;
     if (
       !dropContainer ||
-      canDropIn === false ||
-      // too dirty
-      (nodes && typeof canDropIn === 'function' && !canDropIn(operationalNodes[0]))
+      (nodes && typeof childWhitelist === 'function' && !childWhitelist(operationalNodes[0]))
     ) {
       return null;
     }

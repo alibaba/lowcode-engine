@@ -44,6 +44,11 @@ export default class Prop {
   }
 
   /**
+   * judge if it is a prop or not
+   */
+  get isProp() { return true; }
+
+  /**
    * 设置值
    * @param val
    */
