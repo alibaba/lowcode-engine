@@ -1,11 +1,10 @@
 import React, { PureComponent } from 'react';
-import { Editor, engineConfig, globalContext } from '@alilc/lowcode-editor-core';
+import { engineConfig, globalContext } from '@alilc/lowcode-editor-core';
 import { DesignerView, Designer } from '@alilc/lowcode-designer';
 import { Asset } from '@alilc/lowcode-utils';
 import './index.scss';
 
 export interface PluginProps {
-  editor: Editor;
 }
 
 interface DesignerPluginState {
