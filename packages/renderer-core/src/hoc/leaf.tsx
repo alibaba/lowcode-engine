@@ -238,7 +238,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
       const {
         hidden = false,
         condition = true,
-      } = this.leaf?.export(TransformStage.Render) || {};
+      } = this.leaf?.export?.(TransformStage.Render) || {};
       return {
         nodeChildren: null,
         childrenInState: false,
