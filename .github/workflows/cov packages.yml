@@ -8,6 +8,8 @@ on:
 
 jobs:
   cov-designer:
+    # skip fork's PR, otherwise it fails while making a comment
+    if: ${{ github.event.pull_request.head.repo.full_name == "alibaba/lowcode-engine" }}
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -20,5 +22,60 @@ jobs:
       - name: install
         run: npm i && npm run setup:skip-build
 
-      - name: echo
-        run: echo ${{ toJSON(github) }}
+      - uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          working-directory: packages/designer
+          test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
+          skip-step: install
+          annotations: none
+          base-coverage-file: ./report.json
+
+  cov-renderer-core:
+    # skip fork's PR, otherwise it fails while making a comment
+    if: ${{ github.event.pull_request.head.repo.full_name == "alibaba/lowcode-engine" }}
+    permissions:
+      checks: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: install
+        run: npm i && npm run setup:skip-build
+
+      - uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          working-directory: packages/renderer-core
+          test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
+          skip-step: install
+          annotations: none
+
+  cov-react-simulator-renderer:
+    # skip fork's PR, otherwise it fails while making a comment
+    if: ${{ github.event.pull_request.head.repo.full_name == "alibaba/lowcode-engine" }}
+    permissions:
+      checks: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: install
+        run: npm i && npm run setup:skip-build
+
+      - uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          working-directory: packages/react-simulator-renderer
+          test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
+          skip-step: install
+          annotations: none
