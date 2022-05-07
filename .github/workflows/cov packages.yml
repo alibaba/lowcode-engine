@@ -8,6 +8,9 @@ on:
 
 jobs:
   cov-designer:
+    permissions:
+      checks: write
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -25,7 +28,13 @@ jobs:
           working-directory: packages/designer
           test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
           skip-step: install
+          annotations: none
+          package-manager: yarn
+
   cov-renderer-core:
+    permissions:
+      checks: write
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -43,7 +52,13 @@ jobs:
           working-directory: packages/renderer-core
           test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
           skip-step: install
+          annotations: none
+          package-manager: yarn
+
   cov-react-simulator-renderer:
+    permissions:
+      checks: write
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -61,3 +76,5 @@ jobs:
           working-directory: packages/react-simulator-renderer
           test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
           skip-step: install
+          annotations: none
+          package-manager: yarn
