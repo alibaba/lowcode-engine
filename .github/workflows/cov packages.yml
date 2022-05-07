@@ -21,7 +21,7 @@ jobs:
         run: npm i && npm run setup:skip-build
 
       - name: echo
-        run: echo ${{ github.head_ref }}
+        run: echo ${{ github }}
 
       - uses: ArtiomTr/jest-coverage-report-action@v2
         with:
