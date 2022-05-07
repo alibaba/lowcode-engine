@@ -8,6 +8,7 @@ on:
 
 jobs:
   xxx:
+    runs-on: ubuntu-latest
     steps:
       - name: echo
         run: echo ${{ github.event.pull_request.head.repo.full_name }}
