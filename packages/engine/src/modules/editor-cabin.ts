@@ -10,6 +10,5 @@ export {
   computed,
   observer,
   globalLocale,
-  globalContext,
   makeObservable,
 } from '@alilc/lowcode-editor-core';

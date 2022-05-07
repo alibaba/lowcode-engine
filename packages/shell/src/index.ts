@@ -15,6 +15,8 @@ import Skeleton from './skeleton';
 import Dragon from './dragon';
 import SettingPropEntry from './setting-prop-entry';
 import SettingTopEntry from './setting-top-entry';
+import DesignerView from './designer-view';
+
 export * from './symbols';
 
 /**
@@ -42,5 +44,6 @@ export {
   SettingPropEntry,
   SettingTopEntry,
   Dragon,
+  DesignerView,
   getEvent,
 };
