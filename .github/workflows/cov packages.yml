@@ -10,6 +10,7 @@ jobs:
   cov-designer:
     permissions:
       checks: write
+      issues: write
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
