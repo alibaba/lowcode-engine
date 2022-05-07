@@ -29,6 +29,7 @@ jobs:
           test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
           skip-step: install
           annotations: none
+          base-coverage-file: ./packages/designer/tests/__mocks__/mock_report.json
           package-manager: yarn
 
   cov-renderer-core:
