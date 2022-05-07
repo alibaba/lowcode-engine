@@ -12,9 +12,9 @@ jobs:
       - name: echo
         run: echo ${{ github.event.pull_request.head.repo.full_name }}
   cov-designer:
+    runs-on: ubuntu-latest
     # skip fork's PR, otherwise it fails while making a comment
     if: ${{ github.event.pull_request.head.repo.full_name == "alibaba/lowcode-engine" }}
-    runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -35,9 +35,9 @@ jobs:
           base-coverage-file: ./report.json
 
   cov-renderer-core:
+    runs-on: ubuntu-latest
     # skip fork's PR, otherwise it fails while making a comment
     if: ${{ github.event.pull_request.head.repo.full_name == "alibaba/lowcode-engine" }}
-    runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -58,9 +58,9 @@ jobs:
           base-coverage-file: ./report.json
 
   cov-react-simulator-renderer:
+    runs-on: ubuntu-latest
     # skip fork's PR, otherwise it fails while making a comment
     if: ${{ github.event.pull_request.head.repo.full_name == "alibaba/lowcode-engine" }}
-    runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v2
