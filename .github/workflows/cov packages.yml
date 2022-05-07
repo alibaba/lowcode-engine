@@ -8,9 +8,8 @@ on:
 
 jobs:
   cov-designer:
-    permissions:
-      checks: write
-      pull-requests: write
+    # skip fork's PR, otherwise it fails while making a comment
+    if: ${{ github.event.pull_request.head.repo.full_name == "alibaba/lowcode-engine" }}
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -29,12 +28,11 @@ jobs:
           test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
           skip-step: install
           annotations: none
-          package-manager: yarn
+          base-coverage-file: ./report.json
 
   cov-renderer-core:
-    permissions:
-      checks: write
-      pull-requests: write
+    # skip fork's PR, otherwise it fails while making a comment
+    if: ${{ github.event.pull_request.head.repo.full_name == "alibaba/lowcode-engine" }}
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -53,12 +51,11 @@ jobs:
           test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
           skip-step: install
           annotations: none
-          package-manager: yarn
+          base-coverage-file: ./report.json
 
   cov-react-simulator-renderer:
-    permissions:
-      checks: write
-      pull-requests: write
+    # skip fork's PR, otherwise it fails while making a comment
+    if: ${{ github.event.pull_request.head.repo.full_name == "alibaba/lowcode-engine" }}
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -77,4 +74,4 @@ jobs:
           test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
           skip-step: install
           annotations: none
-          package-manager: yarn
+          base-coverage-file: ./report.json
