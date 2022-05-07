@@ -21,13 +21,4 @@ jobs:
         run: npm i && npm run setup:skip-build
 
       - name: echo
-        run: echo ${{ github }}
-
-      - uses: ArtiomTr/jest-coverage-report-action@v2
-        with:
-          working-directory: packages/designer
-          test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
-          skip-step: install
-          annotations: none
-          base-coverage-file: ./report.json
-          package-manager: yarn
+        run: echo ${{ toJSON(github) }}
