@@ -3,7 +3,6 @@ import { LocationDetail } from './location';
 import { Node, isNode } from '../document/node/node';
 import { ComponentInstance } from '../simulator';
 import { obx } from '@alilc/lowcode-editor-core';
-
 export interface ActiveTarget {
   node: Node;
   detail?: LocationDetail;
