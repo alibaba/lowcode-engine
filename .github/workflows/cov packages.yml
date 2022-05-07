@@ -8,10 +8,6 @@ on:
 
 jobs:
   cov-designer:
-    permissions:
-      checks: write
-      issues: write
-      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -23,6 +19,9 @@ jobs:
 
       - name: install
         run: npm i && npm run setup:skip-build
+
+      - name: echo
+        run: echo github.head_ref
 
       - uses: ArtiomTr/jest-coverage-report-action@v2
         with:
@@ -31,52 +30,4 @@ jobs:
           skip-step: install
           annotations: none
           base-coverage-file: ./report.json
-          package-manager: yarn
-
-  cov-renderer-core:
-    permissions:
-      checks: write
-      pull-requests: write
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2
-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: install
-        run: npm i && npm run setup:skip-build
-
-      - uses: ArtiomTr/jest-coverage-report-action@v2
-        with:
-          working-directory: packages/renderer-core
-          test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
-          skip-step: install
-          annotations: none
-          package-manager: yarn
-
-  cov-react-simulator-renderer:
-    permissions:
-      checks: write
-      pull-requests: write
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2
-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: install
-        run: npm i && npm run setup:skip-build
-
-      - uses: ArtiomTr/jest-coverage-report-action@v2
-        with:
-          working-directory: packages/react-simulator-renderer
-          test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
-          skip-step: install
-          annotations: none
           package-manager: yarn
