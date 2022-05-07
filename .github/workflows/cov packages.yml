@@ -1,4 +1,4 @@
-name: lint & test
+name: coverage
 
 on:
   pull_request:
@@ -7,6 +7,10 @@ on:
       - '!packages/**.md'
 
 jobs:
+  xxx:
+    steps:
+      - name: echo
+        run: echo ${{ github.event.pull_request.head.repo.full_name }}
   cov-designer:
     # skip fork's PR, otherwise it fails while making a comment
     if: ${{ github.event.pull_request.head.repo.full_name == "alibaba/lowcode-engine" }}
