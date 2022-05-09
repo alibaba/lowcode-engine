@@ -9,6 +9,7 @@ import Props from './props';
 import DocumentModel from './document-model';
 import NodeChildren from './node-children';
 import ComponentMeta from './component-meta';
+import SettingTopEntry from './setting-top-entry';
 import { documentSymbol, nodeSymbol } from './symbols';
 
 const shellNodeSymbol = Symbol('shellNodeSymbol');
@@ -235,6 +236,10 @@ export default class Node {
    */
   get schema(): any {
     return this[nodeSymbol].schema;
+  }
+
+  get settingEntry(): any {
+    return SettingTopEntry.create(this[nodeSymbol].settingEntry as any);
   }
 
   /**
