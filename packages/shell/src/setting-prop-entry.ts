@@ -64,6 +64,10 @@ export default class SettingPropEntry {
     return this[settingPropEntrySymbol].extraProps;
   }
 
+  get props() {
+    return SettingTopEntry.create(this[settingPropEntrySymbol].props);
+  }
+
   /**
    * 获取设置属性对应的节点实例
    */
