@@ -117,7 +117,7 @@ export class Selection {
   /**
    * 获取选中的节点
    */
-  getNodes() {
+  getNodes(): Node[] {
     const nodes = [];
     for (const id of this._selected) {
       const node = this.doc.getNode(id);

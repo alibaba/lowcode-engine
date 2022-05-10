@@ -108,6 +108,9 @@ export default function rendererFactory(): IRenderComponent {
       if (SetComponent.patchedCatch) {
         return;
       }
+      if (!SetComponent.prototype) {
+        return;
+      }
       SetComponent.patchedCatch = true;
 
       // Rax 的 getDerivedStateFromError 有 BUG，这里先用 componentDidCatch 来替代

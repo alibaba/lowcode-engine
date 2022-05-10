@@ -10,3 +10,8 @@ jest.mock('zen-logger', () => {
     default: Logger,
   };
 });
+
+export const mockConsoleWarn = jest.fn();
+console.warn = mockConsoleWarn;
+
+process.env.NODE_ENV = 'production';

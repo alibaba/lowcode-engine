@@ -18,14 +18,14 @@ export default class Selection {
   /**
    * 返回选中的节点 id
    */
-  get selected() {
+  get selected(): string[] {
     return this[selectionSymbol].selected;
   }
 
   /**
    * return selected Node instance
    */
-  get node() {
+  get node(): Node {
     return this.getNodes()[0];
   }
 
@@ -81,7 +81,7 @@ export default class Selection {
    * 获取选中的节点实例
    * @returns
    */
-  getNodes() {
+  getNodes(): Node[] {
     return this[selectionSymbol].getNodes().map((node: InnerNode) => Node.create(node));
   }
 }
