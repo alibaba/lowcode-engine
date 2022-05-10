@@ -84,7 +84,7 @@ export default class Node {
   /**
    * 是否为「模态框」节点
    */
-   get isModal() {
+  get isModal() {
     return this[nodeSymbol].isModal();
   }
 
@@ -208,7 +208,7 @@ export default class Node {
   /**
    * 返回节点的属性集
    */
-   get propsData() {
+  get propsData() {
     return this[nodeSymbol].propsData;
   }
 
@@ -224,6 +224,20 @@ export default class Node {
    */
   getDOMNode() {
     return this[nodeSymbol].getDOMNode();
+  }
+
+  /**
+   * 执行新增、删除、排序等操作
+   * @param remover
+   * @param adder
+   * @param sorter
+   */
+  mergeChildren(
+    remover: (node: Node, idx: number) => boolean,
+    adder: (children: Node[]) => any,
+    sorter: (firstNode: Node, secondNode: Node) => number,
+  ) {
+    return this.children?.mergeChildren(remover, adder, sorter);
   }
 
   /**

@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-code-generator",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "出码引擎 for LowCode Engine",
   "license": "MIT",
   "main": "lib/index.js",
@@ -75,6 +75,7 @@
     "change-case": "^3.1.0",
     "commander": "^6.1.0",
     "debug": "^4.3.2",
+    "fp-ts": "^2.11.9",
     "fs-extra": "9.x",
     "glob": "^7.2.0",
     "html-entities": "^2.3.2",
@@ -85,6 +86,7 @@
     "lodash-es": "^4.17.21",
     "mock-fs": "^5.1.2",
     "moment": "^2.29.1",
+    "nanomatch": "^1.2.13",
     "node-fetch": "2.x",
     "path-browserify": "^1.0.1",
     "prettier": "^2.5.1",

@@ -1,0 +1,58 @@
+{
+  "version": "1.0.0",
+  "componentsMap": [
+    {
+      "package": "react-greetings",
+      "version": "1.0.0",
+      "componentName": "Greetings",
+      "exportName": "Greetings",
+      "destructuring": true
+    }
+  ],
+  "componentsTree": [
+    {
+      "componentName": "Page",
+      "id": "node_ocl137q7oc1",
+      "fileName": "test",
+      "props": { "style": {} },
+      "lifeCycles": {},
+      "dataSource": { "list": [] },
+      "state": {
+        "name": "lowcode world",
+        "users": null
+      },
+      "methods": {},
+      "children": [
+        {
+          "componentName": "Greetings",
+          "id": "node_ocl137q7oc4",
+          "loop": {
+            "type": "JSExpression",
+            "value": "this.state.users"
+          },
+          "loopArgs": ["item", ""],
+          "props": {
+            "content": {
+              "type": "i18n",
+              "key": "greetings.hello",
+              "params": {
+                "name": {
+                  "type": "JSExpression",
+                  "value": "this.item"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "i18n": {
+    "zh_CN": {
+      "greetings.hello": "${name}, 你好！"
+    },
+    "en_US": {
+      "greetings.hello": "Hello, ${name}!"
+    }
+  }
+}

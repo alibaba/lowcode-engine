@@ -16,6 +16,8 @@
     "clean": "rm -rf ./packages/*/lib ./packages/*/es ./packages/*/dist ./packages/*/build",
     "lint": "f2elint scan -q -i ./packages/*/src",
     "lint:fix": "f2elint fix -i ./packages/*/src",
+    "lint:modules": "f2elint scan -q -i ./modules/*/src",
+    "lint:modules:fix": "f2elint fix -i ./modules/*/src",
     "pub": "npm run watchdog:build && lerna publish patch --force-publish --exact --no-changelog",
     "pub:premajor": "npm run watchdog:build && lerna publish premajor --force-publish --exact --dist-tag beta --preid beta --no-changelog",
     "pub:prepatch": "npm run watchdog:build && lerna publish prepatch --force-publish --exact --dist-tag beta --preid beta --no-changelog",

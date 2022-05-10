@@ -1,20 +1,26 @@
+// 注意: 出码引擎注入的临时变量默认都以 "__$$" 开头，禁止在搭建的代码中直接访问。
+// 例外：react 框架的导出名和各种组件名除外。
 import React from "react";
 
 import { Form, Input, NumberPicker, Select, Button } from "@alifd/next";
 
 import utils, { RefsManager } from "../../utils";
 
-import { i18n as _$$i18n } from "../../i18n";
+import * as __$$i18n from "../../i18n";
 
 import "./index.css";
 
 class Test$$Page extends React.Component {
+  _context = this;
+
   constructor(props, context) {
     super(props);
 
     this.utils = utils;
 
     this._refsManager = new RefsManager();
+
+    __$$i18n._inject2(this);
 
     this.state = { text: "outter" };
   }
@@ -27,26 +33,22 @@ class Test$$Page extends React.Component {
     return this._refsManager.getAll(refName);
   };
 
-  i18n = (i18nKey) => {
-    return _$$i18n(i18nKey);
-  };
-
   componentDidMount() {
     console.log("componentDidMount");
   }
 
   render() {
-    const __$$context = this;
-    const { state } = this;
+    const __$$context = this._context || this;
+    const { state } = __$$context;
     return (
       <div ref={this._refsManager.linkRef("outterView")} autoLoading={true}>
         <Form
-          labelCol={this.state.colNum}
+          labelCol={__$$eval(() => this.state.colNum)}
           style={{}}
           ref={this._refsManager.linkRef("testForm")}
         >
           <Form.Item
-            label={this.i18n("i18n-jwg27yo4")}
+            label={__$$eval(() => this.i18n("i18n-jwg27yo4"))}
             name="name"
             initValue="李雷"
           >
@@ -89,6 +91,17 @@ class Test$$Page extends React.Component {
 }
 
 export default Test$$Page;
+
+function __$$eval(expr) {
+  try {
+    return expr();
+  } catch (error) {}
+}
+
+function __$$evalArray(expr) {
+  const res = __$$eval(expr);
+  return Array.isArray(res) ? res : [];
+}
 
 function __$$createChildContext(oldContext, ext) {
   const childContext = {

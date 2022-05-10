@@ -1,5 +1,9 @@
 module.exports = {
   extends: 'eslint-config-ali/typescript/react',
+  parserOptions: {
+    project: [], // for lint performance
+    createDefaultProgram: false, // for lint performance
+  },
   rules: {
     'react/no-multi-comp': 0,
     'no-unused-expressions': 0,
@@ -34,5 +38,7 @@ module.exports = {
     "@typescript-eslint/method-signature-style": 0,
     "@typescript-eslint/consistent-type-assertions": 0,
     "@typescript-eslint/no-useless-constructor": 0,
+    '@typescript-eslint/dot-notation': 0, // for lint performance
+    '@typescript-eslint/restrict-plus-operands': 0, // for lint performance
   }
 };

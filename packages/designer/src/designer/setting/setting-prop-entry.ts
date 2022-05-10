@@ -56,7 +56,7 @@ export class SettingPropEntry implements SettingEntry {
   constructor(readonly parent: SettingEntry, name: string | number, type?: 'field' | 'group') {
     makeObservable(this);
     if (type == null) {
-      const c = typeof name === 'string' ? name.substr(0, 1) : '';
+      const c = typeof name === 'string' ? name.slice(0, 1) : '';
       if (c === '#') {
         this.type = 'group';
       } else {

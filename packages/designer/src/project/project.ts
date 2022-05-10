@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 import { obx, computed, makeObservable, action } from '@alilc/lowcode-editor-core';
 import { Designer } from '../designer';
 import { DocumentModel, isDocumentModel, isPageSchema } from '../document';
-import { ProjectSchema, RootSchema } from '@alilc/lowcode-types';
+import { ProjectSchema, RootSchema, TransformStage } from '@alilc/lowcode-types';
 import { ISimulatorHost } from '../simulator';
 
 export class Project {
@@ -52,12 +52,12 @@ export class Project {
   /**
    * 获取项目整体 schema
    */
-  getSchema(): ProjectSchema {
+  getSchema(stage: TransformStage = TransformStage.Save): ProjectSchema {
     return {
       ...this.data,
       // TODO: future change this filter
       componentsMap: this.currentDocument?.getComponentsMap(),
-      componentsTree: this.documents.filter((doc) => !doc.isBlank()).map((doc) => doc.schema),
+      componentsTree: this.documents.filter((doc) => !doc.isBlank()).map((doc) => doc.export(stage)),
       i18n: this.i18n,
     };
   }

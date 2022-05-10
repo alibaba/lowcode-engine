@@ -57,7 +57,11 @@ function generateObject(
   options: CompositeValueGeneratorOptions = {},
 ): string {
   if (value.type === 'i18n') {
-    return `this._i18nText(${JSON.stringify(value)})`;
+    // params 可能会绑定变量，这里需要处理下
+    if (value.params && typeof value.params === 'object') {
+      return `this._i18nText(${generateUnknownType(_.omit(value, 'type'), scope, options)})`;
+    }
+    return `this._i18nText(${JSON.stringify(_.omit(value, 'type'))})`; // TODO: 优化：这里可以考虑提取成个常量...
   }
 
   const body = Object.keys(value)

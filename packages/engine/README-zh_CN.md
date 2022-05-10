@@ -29,7 +29,7 @@
 
 </div>
 
-[![](https://img.alicdn.com/imgextra/i4/O1CN01GhzQuE1rnenyCCQTF_!!6000000005676-0-tps-2878-1588.jpg)](https://lowcode-engine.cn)
+[![](https://img.alicdn.com/imgextra/i2/O1CN01UhoS7C1sNNhySvfWi_!!6000000005754-2-tps-2878-1588.png)](https://lowcode-engine.cn)
 
 简体中文 | [English](./README.md)
 
@@ -47,9 +47,9 @@
 
 ## 📚 引擎协议
 
-引擎完整实现了《阿里巴巴中后台前端基础搭建协议规范》和《阿里巴巴中后台前端物料协议规范》，协议栈是低代码领域的物料能否流通的关键部分。
+引擎完整实现了《低代码引擎搭建协议规范》和《低代码引擎物料协议规范》，协议栈是低代码领域的物料能否流通的关键部分。
 
-![image](https://user-images.githubusercontent.com/1195765/150266126-fef3e3a9-d6a4-4f8e-8592-745f1a344162.png)
+![image](https://img.alicdn.com/imgextra/i3/O1CN01IisBcy1dNBIg16QFM_!!6000000003723-2-tps-1916-1070.png)
 
 ## 🌰 使用示例
 
@@ -124,8 +124,8 @@ https://cdn.jsdelivr.net/npm/@alilc/lowcode-react-simulator-renderer@1.0.0/dist/
 - [官方设置器（setter）](https://github.com/alibaba/lowcode-engine-ext)
 - [官方插件（plugin）](https://github.com/alibaba/lowcode-plugins)
 - [生态元素（物料、setter、插件）工具链](https://www.yuque.com/lce/doc/ulvlkz)
-- [用户文档](https://lowcode-engine.cn/doc)
-- [API [WIP]](https://lowcode-engine.cn/doc?url=vlmeme)
+- [用户文档](https://lowcode-engine.cn/docV2)
+- [API](https://lowcode-engine.cn/docV2/vlmeme)
 
 ## 💻 本地调试
 
@@ -153,3 +153,6 @@ lowcode-engine 启动后，提供了几个 umd 文件，可以结合 [lowcode-de
 3. [引擎的工程化配置](https://www.yuque.com/lce/doc/gxwqg6)
 
 > 强烈推荐阅读 [《提问的智慧》](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way)、[《如何向开源社区提问题》](https://github.com/seajs/seajs/issues/545) 和 [《如何有效地报告 Bug》](http://www.chiark.greenend.org.uk/%7Esgtatham/bugs-cn.html)、[《如何向开源项目提交无法解答的问题》](https://zhuanlan.zhihu.com/p/25795393)，更好的问题更容易获得帮助。（此段参考 [antd](https://github.com/ant-design/ant-design)）
+
+关于提交 PR：
+请将目标合并分支设置为 **develop**，不要指定 **main** 分支，在发布正式版本后，develop 分支将会合入 main 分支。

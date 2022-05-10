@@ -59,7 +59,7 @@ function matchPath(route, pathname, parentParams) {
   }
 
   return {
-    path: !end && url.charAt(url.length - 1) === '/' ? url.substr(1) : url,
+    path: !end && url.charAt(url.length - 1) === '/' ? url.slice(1) : url,
     params,
   };
 }
@@ -96,7 +96,7 @@ function matchRoute(route, baseUrl, pathname, parentParams) {
             childMatches = matchRoute(
               childRoute,
               baseUrl + matched.path,
-              pathname.substr(matched.path.length),
+              pathname.slice(matched.path.length),
               matched.params,
             );
           }

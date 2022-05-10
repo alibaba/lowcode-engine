@@ -73,7 +73,10 @@ function cacheReactKey(el: Element): Element {
   if (REACT_KEY !== '') {
     return el;
   }
-  REACT_KEY = Object.keys(el).find((key) => key.startsWith('__reactInternalInstance$')) || '';
+  // react17 采用 __reactFiber 开头
+  REACT_KEY = Object.keys(el).find(
+    (key) => key.startsWith('__reactInternalInstance$') || key.startsWith('__reactFiber$'),
+  ) || '';
   if (!REACT_KEY && (el as HTMLElement).parentElement) {
     return cacheReactKey((el as HTMLElement).parentElement!);
   }
@@ -291,7 +294,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
     });
     this.history = history;
     history.listen(({ location }) => {
-      host.project.open(location.pathname.substr(1));
+      host.project.open(location.pathname.slice(1));
     });
     host.componentsConsumer.consume(async (componentsAsset) => {
       if (componentsAsset) {

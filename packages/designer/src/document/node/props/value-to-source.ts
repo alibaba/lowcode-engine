@@ -66,7 +66,7 @@ export function valueToSource(
             indentString,
             lineEnding,
             visitedObjects: new Set([value, ...visitedObjects]),
-          }).substr(indentLevel * indentString.length)})`
+          }).slice(indentLevel * indentString.length)})`
           : `${indentString.repeat(indentLevel)}new Map()`;
       }
 
@@ -85,7 +85,7 @@ export function valueToSource(
             indentString,
             lineEnding,
             visitedObjects: new Set([value, ...visitedObjects]),
-          }).substr(indentLevel * indentString.length)})`
+          }).slice(indentLevel * indentString.length)})`
           : `${indentString.repeat(indentLevel)}new Set()`;
       }
 
@@ -129,7 +129,7 @@ export function valueToSource(
           if (item === null) {
             items.push(indentString.repeat(indentLevel + 1));
           } else if (itemsStayOnTheSameLine) {
-            items.push(item.substr(indentLevel * indentString.length));
+            items.push(item.slice(indentLevel * indentString.length));
           } else {
             items.push(item);
           }
@@ -166,11 +166,11 @@ export function valueToSource(
               doubleQuote,
             })
             : propertyName;
-          const trimmedPropertyValueString = propertyValueString.substr((indentLevel + 1) * indentString.length);
+          const trimmedPropertyValueString = propertyValueString.slice((indentLevel + 1) * indentString.length);
 
           if (typeof propertyValue === 'function' && trimmedPropertyValueString.startsWith(`${propertyName}()`)) {
             entries.push(
-              `${indentString.repeat(indentLevel + 1)}${quotedPropertyName} ${trimmedPropertyValueString.substr(
+              `${indentString.repeat(indentLevel + 1)}${quotedPropertyName} ${trimmedPropertyValueString.slice(
                 propertyName.length,
               )}`,
             );

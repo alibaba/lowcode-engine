@@ -30,7 +30,7 @@ export default function componentRendererFactory(): IBaseRenderComponent {
       });
       this.__render();
 
-      const { noContainer } = this.__parseData(__schema.props);
+      const noContainer = this.__parseData(__schema.props?.noContainer);
 
       if (noContainer) {
         return this.__renderContextProvider({ compContext: this });
