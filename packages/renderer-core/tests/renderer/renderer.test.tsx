@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer/';
+import renderer from 'react-test-renderer';
 import schema from '../fixtures/schema/basic';
 import '../utils/react-env-init';
 import rendererFactory from '../../src/renderer/renderer';
