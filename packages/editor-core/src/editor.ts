@@ -20,6 +20,15 @@ import { AssetsJson, AssetLoader } from '@alilc/lowcode-utils';
 
 EventEmitter.defaultMaxListeners = 100;
 
+// inner instance keys which should not be stored in config
+const keyBlacklist = [
+  'designer',
+  'skeleton',
+  'currentDocument',
+  'simulator',
+  'plugins',
+];
+
 export declare interface Editor extends StrictEventEmitter<EventEmitter, GlobalEvent.EventConfig> {
   addListener(event: string | symbol, listener: (...args: any[]) => void): this;
   once(event: string | symbol, listener: (...args: any[]) => void): this;
@@ -73,7 +82,9 @@ export class Editor extends (EventEmitter as any) implements IEditor {
       return;
     }
     // store the data to engineConfig while invoking editor.set()
-    engineConfig.set(key as any, data);
+    if (!keyBlacklist.includes(key as string)) {
+      engineConfig.set(key as any, data);
+    }
     this.context.set(key, data);
     this.notifyGot(key);
   }

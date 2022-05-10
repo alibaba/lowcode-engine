@@ -37,14 +37,10 @@ globalContext.register(editor, Editor);
 globalContext.register(editor, 'editor');
 
 const innerSkeleton = new InnerSkeleton(editor);
-editor.set(Skeleton, innerSkeleton);
 editor.set('skeleton' as any, innerSkeleton);
-engineConfig.set('skeleton' as any, innerSkeleton);
 
 const designer = new Designer({ editor });
-editor.set(Designer, designer);
 editor.set('designer' as any, designer);
-engineConfig.set('designer' as any, designer);
 
 const plugins = new LowCodePluginManager(editor).toProxy();
 editor.set('plugins' as any, plugins);
