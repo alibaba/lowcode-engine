@@ -12,6 +12,12 @@ import divMetadata from '../fixtures/component-metadata/div';
 import { delayObxTick } from '../utils';
 import { fireEvent } from '@testing-library/react';
 
+const mockNode = {
+  internalToShellNode() {
+    return 'mockNode';
+  },
+};
+
 describe('Designer 测试', () => {
   let editor: Editor;
   let designer: Designer;
@@ -178,9 +184,9 @@ describe('Designer 测试', () => {
 
   it('addPropsReducer / transformProps', () => {
     // 没有相应的 reducer
-    expect(designer.transformProps({ num: 1 }, TransformStage.Init)).toEqual({ num: 1 });
+    expect(designer.transformProps({ num: 1 }, mockNode, TransformStage.Init)).toEqual({ num: 1 });
     // props 是数组
-    expect(designer.transformProps([{ num: 1 }], TransformStage.Init)).toEqual([{ num: 1 }]);
+    expect(designer.transformProps([{ num: 1 }], mockNode, TransformStage.Init)).toEqual([{ num: 1 }]);
 
     designer.addPropsReducer((props, node) => {
       props.num += 1;
@@ -217,17 +223,17 @@ describe('Designer 测试', () => {
       return props;
     }, TransformStage.Upgrade);
 
-    expect(designer.transformProps({ num: 1 }, {}, TransformStage.Init)).toEqual({ num: 3 });
-    expect(designer.transformProps({ num: 1 }, {}, TransformStage.Clone)).toEqual({ num: 2 });
-    expect(designer.transformProps({ num: 1 }, {}, TransformStage.Serilize)).toEqual({ num: 2 });
-    expect(designer.transformProps({ num: 1 }, {}, TransformStage.Render)).toEqual({ num: 2 });
-    expect(designer.transformProps({ num: 1 }, {}, TransformStage.Save)).toEqual({ num: 2 });
-    expect(designer.transformProps({ num: 1 }, {}, TransformStage.Upgrade)).toEqual({ num: 2 });
+    expect(designer.transformProps({ num: 1 }, mockNode, TransformStage.Init)).toEqual({ num: 3 });
+    expect(designer.transformProps({ num: 1 }, mockNode, TransformStage.Clone)).toEqual({ num: 2 });
+    expect(designer.transformProps({ num: 1 }, mockNode, TransformStage.Serilize)).toEqual({ num: 2 });
+    expect(designer.transformProps({ num: 1 }, mockNode, TransformStage.Render)).toEqual({ num: 2 });
+    expect(designer.transformProps({ num: 1 }, mockNode, TransformStage.Save)).toEqual({ num: 2 });
+    expect(designer.transformProps({ num: 1 }, mockNode, TransformStage.Upgrade)).toEqual({ num: 2 });
 
     designer.addPropsReducer((props, node) => {
       throw new Error('calculate error');
     }, TransformStage.Upgrade);
-    expect(designer.transformProps({ num: 1 }, {}, TransformStage.Upgrade)).toEqual({ num: 2 });
+    expect(designer.transformProps({ num: 1 }, mockNode, TransformStage.Upgrade)).toEqual({ num: 2 });
   });
 
   it('setProps', () => {
