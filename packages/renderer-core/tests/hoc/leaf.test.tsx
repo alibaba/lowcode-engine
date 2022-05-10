@@ -6,7 +6,6 @@ import { leafWrapper } from '../../src/hoc/leaf';
 import components from '../utils/components';
 import Node from '../utils/node';
 
-
 const baseRenderer: any = {
   __debug () {},
   __getComponentProps (schema: any) {
@@ -71,8 +70,29 @@ describe('leafWrapper', () => {
     let tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
-});
 
+  it('change ___condition___ props', () => {
+    TextNode.schema.condition = false;
+    TextNode.emitPropChange({
+      key: '___condition___',
+      newValue: false,
+    } as any);
+
+    let tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('change ___condition___ props, but not hidden component', () => {
+    TextNode.schema.condition = true;
+    TextNode.emitPropChange({
+      key: '___condition___',
+      newValue: false,
+    } as any);
+
+    let tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
+  })
+});
 
 describe('loop', () => {
   const Div = leafWrapper(components.Div as any, {
@@ -105,4 +125,4 @@ describe('loop', () => {
       <Text _leaf={TextNode} content="content"></Text>
     </Div>
   );
-})
+});

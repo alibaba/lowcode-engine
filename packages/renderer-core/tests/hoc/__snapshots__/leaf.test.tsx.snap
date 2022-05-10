@@ -25,6 +25,52 @@ exports[`leafWrapper base 1`] = `
 </div>
 `;
 
+exports[`leafWrapper change ___condition___ props 1`] = `
+<div
+  _leaf={
+    Node {
+      "emitter": EventEmitter {
+        "_events": Object {
+          "onChildrenChange": [Function],
+          "onPropChange": [Function],
+          "onVisibleChange": [Function],
+        },
+        "_eventsCount": 3,
+        "_maxListeners": undefined,
+        Symbol(kCapture): false,
+      },
+      "hasLoop": false,
+      "schema": Object {},
+    }
+  }
+/>
+`;
+
+exports[`leafWrapper change ___condition___ props, but not hidden component 1`] = `
+<div
+  _leaf={
+    Node {
+      "emitter": EventEmitter {
+        "_events": Object {
+          "onChildrenChange": [Function],
+          "onPropChange": [Function],
+          "onVisibleChange": [Function],
+        },
+        "_eventsCount": 3,
+        "_maxListeners": undefined,
+        Symbol(kCapture): false,
+      },
+      "hasLoop": false,
+      "schema": Object {},
+    }
+  }
+>
+  <div>
+    new content
+  </div>
+</div>
+`;
+
 exports[`leafWrapper change props 1`] = `
 <div
   _leaf={

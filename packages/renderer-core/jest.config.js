@@ -14,23 +14,15 @@ const jestConfig = {
   transformIgnorePatterns: [
     `/node_modules/(?!${esModules})/`,
   ],
-  setupFiles: ['./tests/fixtures/unhandled-rejection.ts'],
+  setupFiles: [
+    './tests/fixtures/unhandled-rejection.ts',
+    './tests/setup.ts',
+  ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.ts',
-    '!src/**/*.d.ts',
-    '!src/icons/**',
-    '!src/locale/**',
-    '!src/builtin-simulator/utils/**',
-    '!src/plugin/sequencify.ts',
-    '!src/document/node/exclusive-group.ts',
-    '!src/document/node/props/value-to-source.ts',
-    '!src/builtin-simulator/live-editing/live-editing.ts',
-    '!src/designer/offset-observer.ts',
-    '!src/designer/clipboard.ts',
-    '!**/node_modules/**',
-    '!**/vendor/**',
+    'src/**/*.tsx',
   ],
 };
 
