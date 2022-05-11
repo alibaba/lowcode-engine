@@ -1026,7 +1026,20 @@ exports[`JSExpression JSSlot has loop 1`] = `
     forwardRef={[Function]}
     useFieldIdAsDomId={false}
   >
-    <div>
+    <div
+      __id="node_ocl1ao1o7w4"
+      __style__=":root {
+ font-size: 14px;
+ color: #666;
+}"
+      behavior="NORMAL"
+      className="text_l1ao7pfb"
+      content="这是一个低代码业务组件~"
+      fieldId="text_l1ao7lvp"
+      forwardRef={[Function]}
+      maxLine={0}
+      showTitle={false}
+    >
       这是一个低代码业务组件~
     </div>
   </div>
@@ -1044,7 +1057,20 @@ exports[`JSExpression JSSlot has loop 1`] = `
     forwardRef={[Function]}
     useFieldIdAsDomId={false}
   >
-    <div>
+    <div
+      __id="node_ocl1ao1o7w4"
+      __style__=":root {
+ font-size: 14px;
+ color: #666;
+}"
+      behavior="NORMAL"
+      className="text_l1ao7pfb"
+      content="这是一个低代码业务组件~"
+      fieldId="text_l1ao7lvp"
+      forwardRef={[Function]}
+      maxLine={0}
+      showTitle={false}
+    >
       这是一个低代码业务组件~
     </div>
   </div>
@@ -1062,7 +1088,20 @@ exports[`JSExpression JSSlot has loop 1`] = `
     forwardRef={[Function]}
     useFieldIdAsDomId={false}
   >
-    <div>
+    <div
+      __id="node_ocl1ao1o7w4"
+      __style__=":root {
+ font-size: 14px;
+ color: #666;
+}"
+      behavior="NORMAL"
+      className="text_l1ao7pfb"
+      content="这是一个低代码业务组件~"
+      fieldId="text_l1ao7lvp"
+      forwardRef={[Function]}
+      maxLine={0}
+      showTitle={false}
+    >
       这是一个低代码业务组件~
     </div>
   </div>

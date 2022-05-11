@@ -11,6 +11,16 @@ jest.mock('zen-logger', () => {
   };
 });
 
+jest.mock('lodash', () => {
+  const original = jest.requireActual('lodash');
+
+  return {
+    ...original,
+    debounce: (fn) => () => fn(),
+    throttle: (fn) => () => fn(),
+  }
+})
+
 export const mockConsoleWarn = jest.fn();
 console.warn = mockConsoleWarn;
 
