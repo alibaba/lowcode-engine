@@ -1,9 +1,17 @@
 import React from 'react';
 import { Box, Breadcrumb, Form, Select, Input, Button, Table, Pagination, Dialog } from '@alifd/next';
 
-const Div = (props: any) => (<div {...props}>{props.children}</div>);
+const Div = ({_leaf, ...rest}: any) => (<div {...rest}>{rest.children}</div>);
 
-const Text = (props: any) => (<div>{props.content}</div>);
+const MiniRenderDiv = ({_leaf, ...rest}: any) => {
+  return (
+    <div {...rest}>
+      {rest.children}
+    </div>
+  );
+};
+
+const Text = ({_leaf, ...rest}: any) => (<div {...rest}>{rest.content}</div>);
 
 const SlotComponent = (props: any) => props.mobileSlot;
 
@@ -24,6 +32,7 @@ const components = {
   Div,
   SlotComponent,
   Text,
+  MiniRenderDiv,
 };
 
 export default components;
