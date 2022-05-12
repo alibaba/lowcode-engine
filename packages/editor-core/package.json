@@ -27,7 +27,7 @@
     "react-dom": "^16.7.0",
     "store": "^2.0.12",
     "zen-logger": "^1.1.0",
-    "@alilc/lowcode-datasource-engine": "^1.0.1"
+    "@alilc/lowcode-datasource-types": "^1.0.1"
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",
