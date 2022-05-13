@@ -117,8 +117,12 @@ export default class ComponentMeta {
    * @param parent
    * @returns
    */
-   checkNestingDown(my: Node | NodeData, target: NodeSchema | Node | NodeSchema[]) {
+  checkNestingDown(my: Node | NodeData, target: NodeSchema | Node | NodeSchema[]) {
     const curNode = my.isNode ? my[nodeSymbol] : my;
     return this[componentMetaSymbol].checkNestingDown(curNode as any, target[nodeSymbol] || target);
+  }
+
+  refreshMetadata() {
+    this[componentMetaSymbol].refreshMetadata();
   }
 }
