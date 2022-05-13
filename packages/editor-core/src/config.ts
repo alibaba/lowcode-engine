@@ -1,6 +1,9 @@
 import { ComponentType } from 'react';
 import { get as lodashGet } from 'lodash';
 import { isPlainObject } from '@alilc/lowcode-utils';
+
+import { RequestHandlersMap } from '@alilc/lowcode-datasource-types';
+
 import { getLogger } from './utils/logger';
 
 const logger = getLogger({ level: 'log', bizName: 'config' });
@@ -205,6 +208,8 @@ export interface EngineOptions {
     // 是否开启在 render 阶段开启 filter reducer，默认值：false
     enableFilterReducerInRenderStage?: boolean;
   };
+
+  requestHandlersMap: RequestHandlersMap;
 }
 
 const getStrictModeValue = (engineOptions: EngineOptions, defaultValue: boolean): boolean => {
