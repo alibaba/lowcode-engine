@@ -38,7 +38,8 @@
     "@types/store": "^2.0.2",
     "build-plugin-component": "^0.2.11",
     "build-plugin-fusion": "^0.1.0",
-    "build-plugin-moment-locales": "^0.1.0"
+    "build-plugin-moment-locales": "^0.1.0",
+    "@alilc/lowcode-datasource-types": "^1.0.1"
   },
   "publishConfig": {
     "access": "public",
