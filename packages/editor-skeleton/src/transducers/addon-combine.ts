@@ -261,11 +261,13 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
           {
             name: getConvertedExtraKey('loop'),
             title: { type: 'i18n', 'zh-CN': '循环数据', 'en-US': 'Loop Data' },
+            defaultValue: [],
             setter: [
               {
                 componentName: 'JsonSetter',
                 props: {
                   label: { type: 'i18n', 'zh-CN': '编辑数据', 'en-US': 'Edit Data' },
+                  defaultValue: '[]',
                 },
               },
               {
