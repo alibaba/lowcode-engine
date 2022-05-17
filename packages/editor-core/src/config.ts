@@ -114,7 +114,10 @@ const VALID_ENGINE_OPTIONS = {
     description: '自定义 simulatorUrl 的地址',
   },
 };
-export interface EngineOptions {
+interface EngineOptionsType {
+  [key: string]: any;
+}
+export interface EngineOptions extends EngineOptionsType {
   /**
    * 是否开启 condition 的能力，默认在设计器中不管 condition 是啥都正常展示
    */

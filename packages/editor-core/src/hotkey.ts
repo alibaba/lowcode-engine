@@ -349,7 +349,7 @@ function fireCallback(callback: HotkeyCallback, e: KeyboardEvent, combo?: string
       selected,
     });
   } catch (err) {
-    console.error(err.message);
+    if (err instanceof Error) console.error(err.message);
   }
 }
 
