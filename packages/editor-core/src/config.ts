@@ -114,7 +114,11 @@ const VALID_ENGINE_OPTIONS = {
     description: '自定义 simulatorUrl 的地址',
   },
 };
-export interface EngineOptions {
+
+interface EngineOptionsType {
+  [key: string]: any;
+}
+export interface EngineOptions extends EngineOptionsType {
   /**
    * 是否开启 condition 的能力，默认在设计器中不管 condition 是啥都正常展示
    */
@@ -150,7 +154,7 @@ export interface EngineOptions {
    * enable strict plugin mode, default value: false
    * under strict mode, customed engineOption is not accepted.
    */
-   enableStrictPluginMode?: boolean;
+  enableStrictPluginMode?: boolean;
   /**
    * 开启拖拽组件时，即将被放入的容器是否有视觉反馈，默认值：false
    */
@@ -226,11 +230,11 @@ export class EngineConfig {
   private config: { [key: string]: any } = {};
 
   private waits = new Map<
-  string,
-  Array<{
-    once?: boolean;
-    resolve: (data: any) => void;
-  }>
+    string,
+    Array<{
+      once?: boolean;
+      resolve: (data: any) => void;
+    }>
   >();
 
   constructor(config?: { [key: string]: any }) {
@@ -332,7 +336,7 @@ export class EngineConfig {
     const val = this.config?.[key];
     if (val !== undefined) {
       fn(val);
-      return () => {};
+      return () => { };
     } else {
       this.setWait(key, fn);
       return () => {

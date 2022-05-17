@@ -125,7 +125,7 @@ let REVERSE_MAP: CtrlKeyMap;
  * programatically
  */
 for (let i = 1; i < 20; ++i) {
-  MAP[111 + i] = `f${ i}`;
+  MAP[111 + i] = `f${i}`;
 }
 
 /**
@@ -349,7 +349,7 @@ function fireCallback(callback: HotkeyCallback, e: KeyboardEvent, combo?: string
       selected,
     });
   } catch (err) {
-    console.error(err.message);
+    if (err instanceof Error) console.error(err.message);
   }
 }
 
