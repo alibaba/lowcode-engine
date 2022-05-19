@@ -208,6 +208,15 @@ export interface EngineOptions {
     // 是否开启在 render 阶段开启 filter reducer，默认值：false
     enableFilterReducerInRenderStage?: boolean;
   };
+  /**
+   * 与 react-renderer 的 appHelper 一致，  https://lowcode-engine.cn/docV2/nhilce#appHelper
+   */
+  appHelper?: {
+    /** 全局公共函数 */
+    utils?: Record<string, any>;
+    /** 全局常量 */
+    constants?: Record<string, any>;
+  };
 
   requestHandlersMap: RequestHandlersMap;
 }

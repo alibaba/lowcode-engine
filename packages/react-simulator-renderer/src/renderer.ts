@@ -25,6 +25,7 @@ import { createMemoryHistory, MemoryHistory } from 'history';
 import Slot from './builtin-components/slot';
 import Leaf from './builtin-components/leaf';
 import { withQueryParams, parseQuery } from './utils/url';
+import { merge } from 'lodash';
 
 const loader = new AssetLoader();
 configure({ enforceActions: 'never' });
@@ -308,6 +309,7 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
         ...this._appContext,
       };
       newCtx.utils.i18n.messages = data.i18n || {};
+      merge(newCtx, data.appHelper || {});
       this._appContext = newCtx;
     });
   }
