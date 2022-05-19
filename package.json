@@ -28,7 +28,8 @@
     "start": "./scripts/start.sh",
     "test": "lerna run test --stream",
     "test:snapshot": "lerna run test:snapshot",
-    "watchdog:build": "node ./scripts/watchdog.js"
+    "watchdog:build": "node ./scripts/watchdog.js",
+    "sync": "./scripts/sync.sh"
   },
   "husky": {
     "hooks": {
