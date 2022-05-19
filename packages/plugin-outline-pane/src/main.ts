@@ -60,7 +60,7 @@ export class OutlineMain implements ISensor, ITreeBoard, IScrollable {
         return false;
       }
       inited = true;
-      const designer = await editor.onceGot(Designer);
+      const designer = await editor.onceGot('designer');
       this.setupDesigner(designer);
     };
 

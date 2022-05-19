@@ -23,6 +23,8 @@ const jestConfig = {
   collectCoverageFrom: [
     'src/**/*.ts',
     'src/**/*.tsx',
+    '!src/utils/logger.ts',
+    '!src/types/index.ts',
   ],
 };
 
