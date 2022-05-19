@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-editor-core",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Core Api for Ali lowCode engine",
   "license": "MIT",
   "main": "lib/index.js",
@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "@alifd/next": "^1.19.16",
-    "@alilc/lowcode-types": "1.0.7",
-    "@alilc/lowcode-utils": "1.0.7",
+    "@alilc/lowcode-types": "1.0.8",
+    "@alilc/lowcode-utils": "1.0.8",
     "classnames": "^2.2.6",
     "debug": "^4.1.1",
     "intl-messageformat": "^9.3.1",
@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@alib/build-scripts": "^0.1.18",
+    "@alilc/lowcode-datasource-types": "^1.0.1",
     "@types/classnames": "^2.2.7",
     "@types/lodash.get": "^4.4.6",
     "@types/node": "^13.7.1",
@@ -38,8 +39,7 @@
     "@types/store": "^2.0.2",
     "build-plugin-component": "^0.2.11",
     "build-plugin-fusion": "^0.1.0",
-    "build-plugin-moment-locales": "^0.1.0",
-    "@alilc/lowcode-datasource-types": "^1.0.1"
+    "build-plugin-moment-locales": "^0.1.0"
   },
   "publishConfig": {
     "access": "public",
