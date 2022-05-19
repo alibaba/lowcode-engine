@@ -63,6 +63,8 @@ export interface SetterConfig {
    * @todo 物料协议推进
    */
   valueType?: CompositeValue[];
+  // 标识是否为动态setter，默认为true
+  isDynamic?: boolean;
 }
 
 // if *string* passed must be a registered Setter Name, future support blockSchema
