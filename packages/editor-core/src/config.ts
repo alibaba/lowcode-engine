@@ -30,6 +30,11 @@ const VALID_ENGINE_OPTIONS = {
     default: 'default',
     description: '设备类型',
   },
+  deviceClassName: {
+    type: 'string',
+    default: undefined,
+    description: '指定初始化的 deviceClassName，挂载到画布的顶层节点上',
+  },
   locale: {
     type: 'string',
     default: 'zh_CN',
@@ -131,6 +136,10 @@ export interface EngineOptions {
    * 设备类型，默认值：'default'
    */
   device?: 'default' | 'mobile' | string;
+  /**
+   * 指定初始化的 deviceClassName，挂载到画布的顶层节点上
+   */
+  deviceClassName?: string;
   /**
    * 语言，默认值：'zh_CN'
    */
