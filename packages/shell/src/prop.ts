@@ -44,6 +44,13 @@ export default class Prop {
   }
 
   /**
+   * return the slot node (only if the current prop represents a slot)
+   */
+  get slotNode(): Node | null {
+    return Node.create(this[propSymbol].slotNode);
+  }
+
+  /**
    * judge if it is a prop or not
    */
   get isProp() { return true; }
