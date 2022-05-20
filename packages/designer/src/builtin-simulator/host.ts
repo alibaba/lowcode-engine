@@ -189,6 +189,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     this.componentsConsumer = new ResourceConsumer<Asset | undefined>(() => this.componentsAsset);
     this.injectionConsumer = new ResourceConsumer(() => {
       return {
+        appHelper: engineConfig.get('appHelper'),
         i18n: this.project.i18n,
       };
     });
