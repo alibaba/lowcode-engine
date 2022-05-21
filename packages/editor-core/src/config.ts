@@ -118,6 +118,10 @@ const VALID_ENGINE_OPTIONS = {
     type: 'array',
     description: '自定义 simulatorUrl 的地址',
   },
+  requestHandlersMap: {
+    type: 'object',
+    description: '数据源引擎的请求处理器映射',
+  },
 };
 export interface EngineOptions {
   /**
@@ -227,6 +231,9 @@ export interface EngineOptions {
     constants?: Record<string, any>;
   };
 
+  /**
+   * 数据源引擎的请求处理器映射
+   */
   requestHandlersMap: RequestHandlersMap;
 }
 
@@ -316,7 +323,7 @@ export class EngineConfig {
         if (isValidKey(key)) {
           this.set(key, engineOptions[key]);
         } else {
-          logger.warn(`failed to config ${key} to engineConfig, only predefined options can be set under strict mode, predefined options: ${VALID_ENGINE_OPTIONS}`);
+          logger.warn(`failed to config ${key} to engineConfig, only predefined options can be set under strict mode, predefined options: `, VALID_ENGINE_OPTIONS);
         }
       });
     } else {
