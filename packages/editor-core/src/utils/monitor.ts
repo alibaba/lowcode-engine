@@ -1,6 +1,6 @@
 export class Monitor {
   fn = (params: any) => {
-    const { AES } = window as any;
+    const { AES = {} } = window as any;
     if (typeof AES.log === 'function') {
       const { p1 = '', p2 = '', p3 = '', p4 = 'OTHER', ...rest } = params || {};
       AES.log('event', {
@@ -12,10 +12,6 @@ export class Monitor {
       });
     }
   };
-
-  constructor() {
-    (window as any).AES = (window as any).AES || {};
-  }
 
   register(fn: () => any) {
     if (typeof fn === 'function') {
@@ -30,7 +26,7 @@ export class Monitor {
   }
 
   setConfig(key: string | object, value?: string): void {
-    const { AES } = window as any;
+    const { AES = {} } = window as any;
     if (typeof AES?.setConfig !== 'function') {
       return;
     }
