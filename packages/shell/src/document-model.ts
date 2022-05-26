@@ -68,6 +68,10 @@ export default class DocumentModel {
     return this[documentSymbol].id;
   }
 
+  set id(id) {
+    this[documentSymbol].id = id;
+  }
+
   /**
    * 获取当前文档所属的 project
    * @returns
