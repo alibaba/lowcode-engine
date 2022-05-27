@@ -161,8 +161,8 @@ export default class DocumentModel {
     copy?: boolean | undefined,
   ) {
     const node = this[documentSymbol].insertNode(
-      parent[nodeSymbol] as any,
-      thing?.[nodeSymbol],
+      parent[nodeSymbol] ? parent[nodeSymbol] : parent,
+      thing?.[nodeSymbol] ? thing[nodeSymbol] : thing,
       at,
       copy,
     );
