@@ -208,7 +208,7 @@ export default class DocumentModel {
    * 当前 document 的 hover 变更事件
    */
   onChangeDetecting(fn: (node: Node) => void) {
-    this[documentSymbol].designer.detecting.onDetectingChange((node: InnerNode) => {
+    return this[documentSymbol].designer.detecting.onDetectingChange((node: InnerNode) => {
       fn(Node.create(node)!);
     });
   }
@@ -217,7 +217,7 @@ export default class DocumentModel {
    * 当前 document 的选中变更事件
    */
   onChangeSelection(fn: (ids: string[]) => void) {
-    this[documentSymbol].selection.onSelectionChange((ids: string[]) => {
+    return this[documentSymbol].selection.onSelectionChange((ids: string[]) => {
       fn(ids);
     });
   }
