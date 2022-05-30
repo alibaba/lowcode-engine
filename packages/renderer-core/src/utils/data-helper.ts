@@ -1,9 +1,11 @@
+/* eslint-disable no-console */
+/* eslint-disable max-len */
 /* eslint-disable object-curly-newline */
 import { isJSFunction } from '@alilc/lowcode-types';
-import { transformArrayToMap, transformStringToFunction, clone } from './common';
+import { transformArrayToMap, transformStringToFunction } from './common';
 import { jsonp, request, get, post } from './request';
-import { DataSource, DataSourceItem } from '../types';
 import logger from './logger';
+import { DataSource, DataSourceItem, IRendererAppHelper } from '../types';
 
 const DS_STATUS = {
   INIT: 'init',
@@ -12,22 +14,77 @@ const DS_STATUS = {
   ERROR: 'error',
 };
 
+type DataSourceType = 'fetch' | 'jsonp';
+
+/**
+ * do request for standard DataSourceType
+ * @param {DataSourceType} type type of DataSourceItem
+ * @param {any} options
+ */
+export function doRequest(type: DataSourceType, options: any) {
+  // eslint-disable-next-line prefer-const
+  let { uri, url, method = 'GET', headers, params, ...otherProps } = options;
+  otherProps = otherProps || {};
+  if (type === 'jsonp') {
+    return jsonp(uri, params, otherProps);
+  }
+
+  if (type === 'fetch') {
+    switch (method.toUpperCase()) {
+      case 'GET':
+        return get(uri, params, headers, otherProps);
+      case 'POST':
+        return post(uri, params, headers, otherProps);
+      default:
+        return request(uri, method, params, headers, otherProps);
+    }
+  }
+
+  logger.log(`Engine default dataSource does not support type:[${type}] dataSource request!`, options);
+}
+
+// TODO: according to protocol, we should implement errorHandler/shouldFetch/willFetch/requestHandler and isSync controll.
 export class DataHelper {
+  /**
+   * host object that will be "this" object when excuting dataHandler
+   *
+   * @type {*}
+   * @memberof DataHelper
+   */
   host: any;
 
+  /**
+   * data source config
+   *
+   * @type {DataSource}
+   * @memberof DataHelper
+   */
   config: DataSource;
 
+  /**
+   * a parser function which will be called to process config data
+   * which eventually will call common/utils.processData() to process data
+   * (originalConfig) => parsedConfig
+   * @type {*}
+   * @memberof DataHelper
+   */
   parser: any;
 
+  /**
+   * config.list
+   *
+   * @type {any[]}
+   * @memberof DataHelper
+   */
   ajaxList: any[];
 
   ajaxMap: any;
 
   dataSourceMap: any;
 
-  appHelper: any;
+  appHelper: IRendererAppHelper;
 
-  constructor(comp: any, config: DataSource, appHelper: any, parser: any) {
+  constructor(comp: any, config: DataSource, appHelper: IRendererAppHelper, parser: any) {
     this.host = comp;
     this.config = config || {};
     this.parser = parser;
@@ -35,15 +92,6 @@ export class DataHelper {
     this.ajaxMap = transformArrayToMap(this.ajaxList, 'id');
     this.dataSourceMap = this.generateDataSourceMap();
     this.appHelper = appHelper;
-  }
-
-  // 重置config，dataSourceMap状态会被重置；
-  resetConfig(config = {}) {
-    this.config = config as DataSource;
-    this.ajaxList = (config as DataSource)?.list || [];
-    this.ajaxMap = transformArrayToMap(this.ajaxList, 'id');
-    this.dataSourceMap = this.generateDataSourceMap();
-    return this.dataSourceMap;
   }
 
   // 更新config，只会更新配置，状态保存；
@@ -79,6 +127,7 @@ export class DataHelper {
       res[item.id] = {
         status: DS_STATUS.INIT,
         load: (...args: any) => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           return this.getDataSource(item.id, ...args);
         },
@@ -93,41 +142,54 @@ export class DataHelper {
     this.dataSourceMap[id].status = error ? DS_STATUS.ERROR : DS_STATUS.LOADED;
   }
 
-  getInitData() {
-    const initSyncData = this.parser(this.ajaxList).filter((item: DataSourceItem) => {
-      if (item.isInit) {
+  /**
+   * get all dataSourceItems which marked as isInit === true
+   * @private
+   * @returns
+   * @memberof DataHelper
+   */
+  getInitDataSourseConfigs() {
+    const initConfigs = this.parser(this.ajaxList).filter((item: DataSourceItem) => {
+      // according to [spec](https://lowcode-engine.cn/lowcode), isInit should be boolean true to be working
+      if (item.isInit === true) {
         this.dataSourceMap[item.id].status = DS_STATUS.LOADING;
         return true;
       }
       return false;
     });
+    return initConfigs;
+  }
+
+  /**
+   * process all dataSourceItems which marked as isInit === true, and get dataSource request results.
+   * @public
+   * @returns
+   * @memberof DataHelper
+   */
+  getInitData() {
+    const initSyncData = this.getInitDataSourseConfigs();
     // 所有 datasource 的 datahandler
     return this.asyncDataHandler(initSyncData).then((res) => {
-      let { dataHandler } = this.config;
-      if (isJSFunction(dataHandler)) {
-        dataHandler = transformStringToFunction(dataHandler.value);
-      }
-      if (!dataHandler || typeof dataHandler !== 'function') return res;
-      try {
-        return (dataHandler as any).call(this.host, res);
-      } catch (e) {
-        console.error('请求数据处理函数运行出错', e);
-      }
+      const { dataHandler } = this.config;
+      return this.handleData(null, dataHandler, res, null);
     });
   }
 
   getDataSource(id: string, params: any, otherOptions: any, callback: any) {
     const req = this.parser(this.ajaxMap[id]);
     const options = req.options || {};
+    let callbackFn = callback;
+    let otherOptionsObj = otherOptions;
     if (typeof otherOptions === 'function') {
-      callback = otherOptions;
-      otherOptions = {};
+      callbackFn = otherOptions;
+      otherOptionsObj = {};
     }
-    const { headers, ...otherProps } = otherOptions || {};
+    const { headers, ...otherProps } = otherOptionsObj || {};
     if (!req) {
       console.warn(`getDataSource API named ${id} not exist`);
       return;
     }
+
     return this.asyncDataHandler([
       {
         ...req,
@@ -149,170 +211,99 @@ export class DataHelper {
         },
       },
     ])
-      .then((res: any) => {
-        try {
-          callback && callback(res && res[id]);
-        } catch (e) {
-          console.error('load请求回调函数报错', e);
-        }
-
-        return res && res[id];
-      })
-      .catch((err) => {
-        try {
-          callback && callback(null, err);
-        } catch (e) {
-          console.error('load请求回调函数报错', e);
-        }
-
-        return err;
-      });
+    .then((res: any) => {
+      try {
+        callbackFn && callbackFn(res && res[id]);
+      } catch (e) {
+        console.error('load请求回调函数报错', e);
+      }
+      return res && res[id];
+    })
+    .catch((err) => {
+      try {
+        callbackFn && callbackFn(null, err);
+      } catch (e) {
+        console.error('load请求回调函数报错', e);
+      }
+      return err;
+    });
   }
 
   asyncDataHandler(asyncDataList: any[]) {
     return new Promise((resolve, reject) => {
-      const allReq = [];
-      const doserReq: Array<{name: string; package: string; params: any }> = [];
-      const doserList: string[] = [];
-      const beforeRequest = this.appHelper && this.appHelper.utils && this.appHelper.utils.beforeRequest;
-      const afterRequest = this.appHelper && this.appHelper.utils && this.appHelper.utils.afterRequest;
-      const csrfInput = document.getElementById('_csrf_token');
-      const _tb_token_ = (csrfInput as any)?.value;
+      const allReq: any[] = [];
       asyncDataList.forEach((req) => {
-        const { id, type, options } = req;
-        if (!id || !type || type === 'legao') return;
-        if (type === 'doServer') {
-          const { uri, params } = options || {};
-          if (!uri) return;
-          doserList.push(id);
-          doserReq.push({ name: uri, package: 'cms', params });
-        } else {
-          allReq.push(req);
+        const { id, type } = req;
+        // TODO: need refactoring to remove 'legao' related logic
+        if (!id || !type || type === 'legao') {
+          return;
         }
+        allReq.push(req);
       });
 
-      if (doserReq.length > 0) {
-        allReq.push({
-          type: 'doServer',
-          options: {
-            uri: '/nrsService.do',
-            cors: true,
-            method: 'POST',
-            params: {
-              data: JSON.stringify(doserReq),
-              _tb_token_,
-            },
-          },
-        });
+      if (allReq.length === 0) {
+        resolve({});
       }
-      if (allReq.length === 0) resolve({});
       const res: any = {};
-      // todo:
       Promise.all(
         allReq.map((item: any) => {
-          return new Promise((resolve) => {
+          return new Promise((innerResolve) => {
             const { type, id, dataHandler, options } = item;
-            const doFetch = (type: string, options: any) => {
-              this.fetchOne(type as any, options)
-                ?.then((data: any) => {
-                  if (afterRequest) {
-                    this.appHelper.utils.afterRequest(item, data, undefined, (data: any, error: any) => {
-                      fetchHandler(data, error);
-                    });
-                  } else {
-                    fetchHandler(data, undefined);
-                  }
-                })
-                .catch((err: Error) => {
-                  if (afterRequest) {
-                    // 必须要这么调用，否则beforeRequest中的this会丢失
-                    this.appHelper.utils.afterRequest(item, undefined, err, (data: any, error: any) => {
-                      fetchHandler(data, error);
-                    });
-                  } else {
-                    fetchHandler(undefined, err);
-                  }
-                });
-            };
+
             const fetchHandler = (data: any, error: any) => {
-              if (type === 'doServer') {
-                if (!Array.isArray(data)) {
-                  data = [data];
-                }
-                doserList.forEach((id, idx) => {
-                  const req: any = this.ajaxMap[id];
-                  if (req) {
-                    res[id] = this.dataHandler(id, req.dataHandler, data && data[idx], error);
-                    this.updateDataSourceMap(id, res[id], error);
-                  }
-                });
-              } else {
-                res[id] = this.dataHandler(id, dataHandler, data, error);
-                this.updateDataSourceMap(id, res[id], error);
-              }
-              resolve({});
+              res[id] = this.handleData(id, dataHandler, data, error);
+              this.updateDataSourceMap(id, res[id], error);
+              innerResolve({});
             };
 
-            if (type === 'doServer') {
-              doserList.forEach((item) => {
-                this.dataSourceMap[item].status = DS_STATUS.LOADING;
-              });
-            } else {
-              this.dataSourceMap[id].status = DS_STATUS.LOADING;
-            }
-            // 请求切片
-            if (beforeRequest) {
-              // 必须要这么调用，否则beforeRequest中的this会丢失
-              this.appHelper.utils.beforeRequest(item, clone(options), (options: any) => doFetch(type, options));
-            } else {
-              doFetch(type, options);
-            }
+            const doFetch = (innerType: string, innerOptions: any) => {
+              doRequest(innerType as any, innerOptions)
+                ?.then((data: any) => {
+                  fetchHandler(data, undefined);
+                })
+                .catch((err: Error) => {
+                  fetchHandler(undefined, err);
+                });
+            };
+
+            this.dataSourceMap[id].status = DS_STATUS.LOADING;
+            doFetch(type, options);
           });
         }),
-      )
-        .then(() => {
-          resolve(res);
-        })
-        .catch((e) => {
-          reject(e);
-        });
+      ).then(() => {
+        resolve(res);
+      }).catch((e) => {
+        reject(e);
+      });
     });
   }
 
-  // dataHandler todo:
-  dataHandler(id: string, dataHandler: any, data: any, error: any) {
+  /**
+   * process data using dataHandler
+   *
+   * @param {(string | null)} id request id, will be used in error message, can be null
+   * @param {*} dataHandler
+   * @param {*} data
+   * @param {*} error
+   * @returns
+   * @memberof DataHelper
+   */
+  handleData(id: string | null, dataHandler: any, data: any, error: any) {
+    let dataHandlerFun = dataHandler;
     if (isJSFunction(dataHandler)) {
-      dataHandler = transformStringToFunction(dataHandler.value);
+      dataHandlerFun = transformStringToFunction(dataHandler.value);
     }
-    if (!dataHandler || typeof dataHandler !== 'function') return data;
+    if (!dataHandlerFun || typeof dataHandlerFun !== 'function') {
+      return data;
+    }
     try {
-      return dataHandler.call(this.host, data, error);
+      return dataHandlerFun.call(this.host, data, error);
     } catch (e) {
-      console.error(`[${ id }]单个请求数据处理函数运行出错`, e);
-    }
-  }
-
-  fetchOne(type: DataSourceType, options: any) {
-    // eslint-disable-next-line prefer-const
-    let { uri, url, method = 'GET', headers, params, ...otherProps } = options;
-    otherProps = otherProps || {};
-    if (type === 'jsonp') {
-      return jsonp(uri, params, otherProps);
-    }
-
-    if (type === 'fetch') {
-      switch (method.toUpperCase()) {
-        case 'GET':
-          return get(uri, params, headers, otherProps);
-        case 'POST':
-          return post(uri, params, headers, otherProps);
-        default:
-          return request(uri, method, params, headers, otherProps);
+      if (id) {
+        console.error(`[${id}]单个请求数据处理函数运行出错`, e);
+      } else {
+        console.error('请求数据处理函数运行出错', e);
       }
     }
-
-    logger.log(`Engine default dataSource not support type:[${type}] dataSource request!`, options);
   }
 }
-
-type DataSourceType = 'fetch' | 'jsonp';
