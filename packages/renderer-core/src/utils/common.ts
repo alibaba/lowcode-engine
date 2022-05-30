@@ -118,7 +118,7 @@ export function isJSSlot(obj: any): obj is JSSlot {
   }
 
   // Compatible with the old protocol JSBlock
-  return ([EXPRESSION_TYPE.JSSLOT, EXPRESSION_TYPE.JSBLOCK].includes(obj.type));
+  return [EXPRESSION_TYPE.JSSLOT, EXPRESSION_TYPE.JSBLOCK].includes(obj.type);
 }
 
 /**

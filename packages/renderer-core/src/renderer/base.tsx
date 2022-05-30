@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable react/prop-types */
 import classnames from 'classnames';
 import { create as createDataSourceEngine } from '@alilc/lowcode-datasource-engine/interpret';
@@ -154,8 +155,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         this.__showPlaceholder = false;
         return resolve({});
       }
-      this.__dataHelper
-        .getInitData()
+      this.__dataHelper.getInitData()
         .then((res: any) => {
           this.__showPlaceholder = false;
           if (isEmpty(res)) {
@@ -286,8 +286,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
             // this.__showPlaceholder = false;
             return resolve({});
           }
-          this.__dataHelper
-            .getInitData()
+          this.__dataHelper.getInitData()
             .then((res: any) => {
               // this.__showPlaceholder = false;
               if (isEmpty(res)) {
