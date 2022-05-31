@@ -30,6 +30,11 @@ const VALID_ENGINE_OPTIONS = {
     default: 'default',
     description: '设备类型',
   },
+  deviceClassName: {
+    type: 'string',
+    default: undefined,
+    description: '指定初始化的 deviceClassName，挂载到画布的顶层节点上',
+  },
   locale: {
     type: 'string',
     default: 'zh_CN',
@@ -113,6 +118,10 @@ const VALID_ENGINE_OPTIONS = {
     type: 'array',
     description: '自定义 simulatorUrl 的地址',
   },
+  requestHandlersMap: {
+    type: 'object',
+    description: '数据源引擎的请求处理器映射',
+  },
 };
 export interface EngineOptions {
   /**
@@ -131,6 +140,10 @@ export interface EngineOptions {
    * 设备类型，默认值：'default'
    */
   device?: 'default' | 'mobile' | string;
+  /**
+   * 指定初始化的 deviceClassName，挂载到画布的顶层节点上
+   */
+  deviceClassName?: string;
   /**
    * 语言，默认值：'zh_CN'
    */
@@ -218,6 +231,9 @@ export interface EngineOptions {
     constants?: Record<string, any>;
   };
 
+  /**
+   * 数据源引擎的请求处理器映射
+   */
   requestHandlersMap: RequestHandlersMap;
 }
 
@@ -307,7 +323,7 @@ export class EngineConfig {
         if (isValidKey(key)) {
           this.set(key, engineOptions[key]);
         } else {
-          logger.warn(`failed to config ${key} to engineConfig, only predefined options can be set under strict mode, predefined options: ${VALID_ENGINE_OPTIONS}`);
+          logger.warn(`failed to config ${key} to engineConfig, only predefined options can be set under strict mode, predefined options: `, VALID_ENGINE_OPTIONS);
         }
       });
     } else {
