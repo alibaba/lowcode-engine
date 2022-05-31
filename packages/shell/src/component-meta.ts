@@ -84,6 +84,10 @@ export default class ComponentMeta {
     return this[componentMetaSymbol].prototype;
   }
 
+  get availableActions() {
+    return this[componentMetaSymbol].availableActions;
+  }
+
   /**
    * 设置 npm 信息
    * @param npm

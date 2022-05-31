@@ -17,7 +17,7 @@ function getVersion() {
 
   const [_, version, beta] = match;
 
-  return beta && beta.endsWith('beta') ? `${version}(beta)` : version;
+  return beta && beta.endsWith('beta') ? `${version}-beta` : version;
 }
 
 const releaseVersion = getVersion();

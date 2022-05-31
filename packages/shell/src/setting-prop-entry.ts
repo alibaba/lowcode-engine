@@ -3,6 +3,7 @@ import { CompositeValue, FieldConfig } from '@alilc/lowcode-types';
 import { settingPropEntrySymbol } from './symbols';
 import Node from './node';
 import SettingTopEntry from './setting-top-entry';
+import ComponentMeta from './component-meta';
 
 export default class SettingPropEntry {
   private readonly [settingPropEntrySymbol]: SettingField;
@@ -87,6 +88,13 @@ export default class SettingPropEntry {
    */
   get isSettingField(): boolean {
     return this[settingPropEntrySymbol].isSettingField;
+  }
+
+  /**
+   * componentMeta
+   */
+  get componentMeta(): ComponentMeta | null {
+    return ComponentMeta.create(this[settingPropEntrySymbol].componentMeta);
   }
 
   /**

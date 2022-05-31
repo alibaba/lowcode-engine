@@ -40,7 +40,9 @@ export class LowCodePluginManager implements ILowCodePluginManager {
 
   isEngineVersionMatched(versionExp: string): boolean {
     const engineVersion = engineConfig.get('ENGINE_VERSION');
-    return semverSatisfies(engineVersion, versionExp);
+    // ref: https://github.com/npm/node-semver#functions
+    // 1.0.1-beta should match '^1.0.0'
+    return semverSatisfies(engineVersion, versionExp, { includePrerelease: true });
   }
 
   /**
