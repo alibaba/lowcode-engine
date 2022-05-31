@@ -18,7 +18,7 @@ async function deletePackagesDirLockFile() {
 }
 
 async function bootstrap() {
-    shell.exec('lerna bootstrap --force-local');
+    await shell.exec('lerna bootstrap --force-local');
 }
 
 const setup = gulp.series(deleteRootDirLockFile, clean, deletePackagesDirLockFile, bootstrap);
