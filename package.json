@@ -25,7 +25,7 @@
     "setup": "node ./scripts/setup.js",
     "setup:test": "./scripts/setup-for-test.sh",
     "setup:skip-build": "./scripts/setup-skip-build.sh",
-    "start": "./scripts/start.sh",
+    "start": "node ./scripts/start.js",
     "test": "lerna run test --stream",
     "test:snapshot": "lerna run test:snapshot",
     "watchdog:build": "node ./scripts/watchdog.js",
