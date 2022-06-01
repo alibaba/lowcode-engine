@@ -2,7 +2,15 @@ import 'whatwg-fetch';
 import fetchJsonp from 'fetch-jsonp';
 import { serializeParams } from '.';
 
-function buildUrl(dataAPI: any, params: any) {
+/**
+ * this is a private method, export for testing purposes only.
+ *
+ * @export
+ * @param {*} dataAPI
+ * @param {*} params
+ * @returns
+ */
+export function buildUrl(dataAPI: any, params: any) {
   const paramStr = serializeParams(params);
   if (paramStr) {
     return dataAPI.indexOf('?') > 0 ? `${dataAPI}&${paramStr}` : `${dataAPI}?${paramStr}`;
@@ -10,43 +18,75 @@ function buildUrl(dataAPI: any, params: any) {
   return dataAPI;
 }
 
-export function get(dataAPI: any, params = {}, headers = {}, otherProps = {}) {
-  headers = {
+/**
+ * do Get request
+ *
+ * @export
+ * @param {*} dataAPI
+ * @param {*} [params={}]
+ * @param {*} [headers={}]
+ * @param {*} [otherProps={}]
+ * @returns
+ */
+ export function get(dataAPI: any, params = {}, headers = {}, otherProps = {}) {
+  const processedHeaders = {
     Accept: 'application/json',
     ...headers,
   };
-  dataAPI = buildUrl(dataAPI, params);
-  return request(dataAPI, 'GET', null, headers, otherProps);
+  const url = buildUrl(dataAPI, params);
+  return request(url, 'GET', null, processedHeaders, otherProps);
 }
 
+/**
+ * do Post request
+ *
+ * @export
+ * @param {*} dataAPI
+ * @param {*} [params={}]
+ * @param {*} [headers={}]
+ * @param {*} [otherProps={}]
+ * @returns
+ */
 export function post(dataAPI: any, params = {}, headers: any = {}, otherProps = {}) {
-  headers = {
+  const processedHeaders = {
     Accept: 'application/json',
     'Content-Type': 'application/x-www-form-urlencoded',
     ...headers,
   };
+  const body = processedHeaders['Content-Type'].indexOf('application/json') > -1 || Array.isArray(params)
+  ? JSON.stringify(params)
+  : serializeParams(params);
+
   return request(
     dataAPI,
     'POST',
-    headers['Content-Type'].indexOf('application/json') > -1 || Array.isArray(params)
-      ? JSON.stringify(params)
-      : serializeParams(params),
-    headers,
+    body,
+    processedHeaders,
     otherProps,
   );
 }
 
+/**
+ * do request
+ *
+ * @export
+ * @param {*} dataAPI
+ * @param {string} [method='GET']
+ * @param {*} data
+ * @param {*} [headers={}]
+ * @param {*} [otherProps={}]
+ * @returns
+ */
 export function request(dataAPI: any, method = 'GET', data: any, headers = {}, otherProps: any = {}) {
-  switch (method) {
-    case 'PUT':
-    case 'DELETE':
-      headers = {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        ...headers,
-      };
-      data = JSON.stringify(data || {});
-      break;
+  let processedHeaders = headers || {};
+  let payload = data;
+  if (method === 'PUT' || method === 'DELETE') {
+    processedHeaders = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      ...processedHeaders,
+    };
+    payload = JSON.stringify(payload || {});
   }
   return new Promise((resolve, reject) => {
     if (otherProps.timeout) {
@@ -57,8 +97,8 @@ export function request(dataAPI: any, method = 'GET', data: any, headers = {}, o
     fetch(dataAPI, {
       method,
       credentials: 'include',
-      headers,
-      body: data,
+      headers: processedHeaders,
+      body: payload,
       ...otherProps,
     })
       .then((response) => {
@@ -101,6 +141,7 @@ export function request(dataAPI: any, method = 'GET', data: any, headers = {}, o
                   code: response.status,
                 };
               });
+          default:
         }
         return null;
       })
@@ -108,6 +149,7 @@ export function request(dataAPI: any, method = 'GET', data: any, headers = {}, o
         if (json && json.__success !== false) {
           resolve(json);
         } else {
+          // eslint-disable-next-line no-param-reassign
           delete json.__success;
           reject(json);
         }
@@ -118,13 +160,23 @@ export function request(dataAPI: any, method = 'GET', data: any, headers = {}, o
   });
 }
 
+/**
+ * do jsonp request
+ *
+ * @export
+ * @param {*} dataAPI
+ * @param {*} [params={}]
+ * @param {*} [otherProps={}]
+ * @returns
+ */
 export function jsonp(dataAPI: any, params = {}, otherProps = {}) {
   return new Promise((resolve, reject) => {
-    otherProps = {
+    const processedOtherProps = {
       timeout: 5000,
       ...otherProps,
     };
-    fetchJsonp(buildUrl(dataAPI, params), otherProps)
+    const url = buildUrl(dataAPI, params);
+    fetchJsonp(url, processedOtherProps)
       .then((response) => response.json())
       .then((json) => {
         if (json) {
