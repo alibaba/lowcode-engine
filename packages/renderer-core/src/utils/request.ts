@@ -146,7 +146,11 @@ export function request(dataAPI: any, method = 'GET', data: any, headers = {}, o
         return null;
       })
       .then((json) => {
-        if (json && json.__success !== false) {
+        if (!json) {
+          reject(json);
+          return;
+        }
+        if (json.__success !== false) {
           resolve(json);
         } else {
           // eslint-disable-next-line no-param-reassign
@@ -177,7 +181,9 @@ export function jsonp(dataAPI: any, params = {}, otherProps = {}) {
     };
     const url = buildUrl(dataAPI, params);
     fetchJsonp(url, processedOtherProps)
-      .then((response) => response.json())
+      .then((response) => {
+        response.json();
+      })
       .then((json) => {
         if (json) {
           resolve(json);
