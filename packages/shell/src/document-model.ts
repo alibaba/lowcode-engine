@@ -187,6 +187,15 @@ export default class DocumentModel {
   }
 
   /**
+   * componentsMap of documentModel
+   * @param extraComps
+   * @returns
+   */
+  getComponentsMap(extraComps?: string[]) {
+    return this[documentSymbol].getComponentsMap(extraComps);
+  }
+
+  /**
    * 当前 document 新增节点事件
    */
   onAddNode(fn: (node: Node) => void) {
