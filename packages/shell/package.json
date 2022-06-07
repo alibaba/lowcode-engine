@@ -1,6 +1,6 @@
 {
   "name": "@alilc/lowcode-shell",
-  "version": "1.0.10-beta.1",
+  "version": "1.0.10-beta.2",
   "description": "Shell Layer for AliLowCodeEngine",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -15,11 +15,11 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@alilc/lowcode-designer": "1.0.10-beta.1",
-    "@alilc/lowcode-editor-core": "1.0.10-beta.1",
-    "@alilc/lowcode-editor-skeleton": "1.0.10-beta.1",
-    "@alilc/lowcode-types": "1.0.10-beta.1",
-    "@alilc/lowcode-utils": "1.0.10-beta.1",
+    "@alilc/lowcode-designer": "1.0.10-beta.2",
+    "@alilc/lowcode-editor-core": "1.0.10-beta.2",
+    "@alilc/lowcode-editor-skeleton": "1.0.10-beta.2",
+    "@alilc/lowcode-types": "1.0.10-beta.2",
+    "@alilc/lowcode-utils": "1.0.10-beta.2",
     "classnames": "^2.2.6",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
@@ -57,5 +57,5 @@
     "type": "http",
     "url": "https://github.com/alibaba/lowcode-engine/tree/main/packages/shell"
   },
-  "gitHead": "89bed55582d3d4bf14663a78ab720dfd4a2aac93"
+  "gitHead": "ab33caf3f2b8ed8ff060e7ff9966fc2ad9c2ee40"
 }
