@@ -5,9 +5,10 @@ const fse = require('fs-extra');
 // get version from git branch name,
 //  e.g. release/1.0.7 => 1.0.7
 //       release/1.0.7-beta => 1.0.7 (beta)
+//       release/1.0.7-beta.0 => 1.0.7 (beta)
 function getVersion() {
   const gitBranchName = execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf-8' });
-  const reBranchVersion = /^(?:[\w-]+\/)(\d+\.\d+\.\d+)(-?beta)?$/im;
+  const reBranchVersion = /^(?:[\w-]+\/)(\d+\.\d+\.\d+)(-?beta)?(?:\.\d+)?$/im;
 
   const match = reBranchVersion.exec(gitBranchName);
   if (!match) {
