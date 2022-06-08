@@ -1,5 +1,5 @@
 import { SettingField, ISetValueOptions } from '@alilc/lowcode-designer';
-import { CompositeValue, FieldConfig } from '@alilc/lowcode-types';
+import { CompositeValue, FieldConfig, CustomView, isCustomView } from '@alilc/lowcode-types';
 import { settingPropEntrySymbol } from './symbols';
 import Node from './node';
 import SettingTopEntry from './setting-top-entry';
@@ -14,6 +14,13 @@ export default class SettingPropEntry {
 
   static create(prop: SettingField) {
     return new SettingPropEntry(prop);
+  }
+
+  /**
+   * 获取设置属性的 isGroup
+   */
+  get isGroup() {
+    return this[settingPropEntrySymbol].isGroup;
   }
 
   /**
@@ -95,6 +102,18 @@ export default class SettingPropEntry {
    */
   get componentMeta(): ComponentMeta | null {
     return ComponentMeta.create(this[settingPropEntrySymbol].componentMeta);
+  }
+
+  /**
+   * 获取设置属性的 items
+   */
+  get items(): Array<SettingPropEntry | CustomView> {
+    return this[settingPropEntrySymbol].items?.map((item) => {
+      if (isCustomView(item)) {
+        return item;
+      }
+      return item.internalToShellPropEntry();
+    });
   }
 
   /**
