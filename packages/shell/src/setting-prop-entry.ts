@@ -17,6 +17,13 @@ export default class SettingPropEntry {
   }
 
   /**
+   * 获取设置属性的 isGroup
+   */
+  get isGroup() {
+    return this[settingPropEntrySymbol].isGroup;
+  }
+
+  /**
    * 获取设置属性的 id
    */
   get id() {
@@ -95,6 +102,13 @@ export default class SettingPropEntry {
    */
   get componentMeta(): ComponentMeta | null {
     return ComponentMeta.create(this[settingPropEntrySymbol].componentMeta);
+  }
+
+  /**
+   * 获取设置属性的 items
+   */
+  get items() {
+    return this[settingPropEntrySymbol].items;
   }
 
   /**
