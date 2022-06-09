@@ -69,7 +69,9 @@ export class Transducer {
       isDynamic = dynamicFlag === undefined ? isDynamic : dynamicFlag !== false;
     }
     if (isDynamicSetter(setter) && isDynamic) {
-      setter = setter.call(context, context);
+      try {
+        setter = setter.call(context, context);
+      } catch (e) { console.error(e); }
     }
 
     this.setterTransducer = combineTransducer(getTransducerFromSetter(setter), getHotterFromSetter(setter), context);
