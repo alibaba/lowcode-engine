@@ -87,7 +87,7 @@ export default function (metadata: TransformedComponentMetadata): TransformedCom
     });
   }
   //  通用设置
-  let propsGroup = props || [];
+  let propsGroup = props ? [...props] : [];
   const basicInfo: any = {};
   if (componentName === 'Slot') {
     if (!configure.component) {
