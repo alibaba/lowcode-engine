@@ -66,6 +66,13 @@ export default class SettingPropEntry {
   }
 
   /**
+   * 获取设置属性的 expanded
+   */
+  get expanded() {
+    return this[settingPropEntrySymbol].expanded;
+  }
+
+  /**
    * 获取设置属性的 extraProps
    */
   get extraProps() {
