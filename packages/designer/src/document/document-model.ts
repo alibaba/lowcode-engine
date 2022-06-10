@@ -93,7 +93,7 @@ export class DocumentModel {
     this.rootNode?.getExtraProp('fileName', true)?.setValue(fileName);
   }
 
-  @computed get focusNode() {
+  get focusNode() {
     if (this._drillDownNode) {
       return this._drillDownNode;
     }

@@ -89,7 +89,7 @@ export default class DocumentModel {
   }
 
   get focusNode(): Node {
-    return this._focusNode;
+    return this._focusNode || this.root;
   }
 
   set focusNode(node: Node) {
