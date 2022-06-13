@@ -131,8 +131,6 @@ export interface EngineOptions {
   /**
    * @todo designMode 无法映射到文档渲染模块
    *
-   * @see https://yuque.antfin.com/ali-lowcode/docs/hk2ogo#designMode
-   *
    * 设计模式，live 模式将会实时展示变量值，默认值：'design'
    */
   designMode?: 'design' | 'live';
