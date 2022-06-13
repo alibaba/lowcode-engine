@@ -306,6 +306,10 @@ export default class Node {
     return this[nodeSymbol].getVisible();
   }
 
+  setVisible(flag: boolean) {
+    this[nodeSymbol].setVisible(flag);
+  }
+
   isConditionalVisible() {
     return this[nodeSymbol].isConditionalVisible();
   }
