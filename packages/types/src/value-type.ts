@@ -27,7 +27,7 @@ export interface JSExpression {
 
 /**
  * 事件函数类型
- * @see https://yuque.antfin-inc.com/mo/spec/spec-low-code-building-schema#feHTW
+ * @see https://lowcode-engine.cn/lowcode
  *
  * 保留与原组件属性、生命周期( React / 小程序)一致的输入参数，并给所有事件函数 binding 统一一致的上下文（当前组件所在容器结构的 this 对象）
  */

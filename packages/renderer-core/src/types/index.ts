@@ -148,9 +148,6 @@ export interface IBaseRendererProps {
   __host?: BuiltinSimulatorHost;
   __container?: any;
   config?: Record<string, any>;
-  /**
-   * @see https://yuque.antfin.com/ali-lowcode/docs/hk2ogo#designMode
-   */
   designMode?: 'live' | 'design';
   className?: string;
   style?: CSSProperties;
