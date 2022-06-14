@@ -105,8 +105,6 @@ export default class Material {
     return isComponentMeta(obj);
   }
 
-
-
   /**
    * 获取所有已注册的物料元数据
    * @returns
@@ -114,7 +112,7 @@ export default class Material {
   getComponentMetasMap() {
     const map = new Map<string, ComponentMeta>();
     const originalMap = this[designerSymbol].getComponentMetasMap();
-    for (let componentName in originalMap.keys()) {
+    for (let componentName of originalMap.keys()) {
       map.set(componentName, this.getComponentMeta(componentName)!);
     }
     return map;
