@@ -14,22 +14,22 @@ An enterprise-class low-code technology stack with scale-out design
 
 [![][issues-helper-image]][issues-helper-url] [![Issues need help][help-wanted-image]][help-wanted-url]
 
-[npm-image]: https://img.shields.io/npm/v/@alilc/lowcode-engine.svg?style=flat-square
+[npm-image]: http://img.shields.io/npm/v/@alilc/lowcode-engine.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/@alilc/lowcode-engine
 
-[download-image]: https://img.shields.io/npm/dm/@alilc/lowcode-engine.svg?style=flat-square
+[download-image]: http://img.shields.io/npm/dm/@alilc/lowcode-engine.svg?style=flat-square
 [download-url]: https://npmjs.org/package/@alilc/lowcode-engine
 [help-wanted-image]: https://flat.badgen.net/github/label-issues/alibaba/lowcode-engine/help%20wanted/open
 [help-wanted-url]: https://github.com/alibaba/lowcode-engine/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22
 
-[issues-helper-image]: https://img.shields.io/badge/using-issues--helper-orange?style=flat-square
+[issues-helper-image]: http://img.shields.io/badge/using-issues--helper-orange?style=flat-square
 [issues-helper-url]: https://github.com/actions-cool/issues-helper
 
 </div>
 
 [![](https://img.alicdn.com/imgextra/i2/O1CN01UhoS7C1sNNhySvfWi_!!6000000005754-2-tps-2878-1588.png)](http://lowcode-engine.cn)
 
-English | [简体中文](./packages/engine/README-zh_CN.md)
+English | [简体中文](./README-zh_CN.md)
 
 ## ✨ Features
 
