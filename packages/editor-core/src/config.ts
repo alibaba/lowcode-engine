@@ -118,6 +118,13 @@ const VALID_ENGINE_OPTIONS = {
     type: 'array',
     description: '自定义 simulatorUrl 的地址',
   },
+  /**
+   * 与 react-renderer 的 appHelper 一致，  https://lowcode-engine.cn/docV2/nhilce#appHelper
+   */
+  appHelper: {
+    type: 'object',
+    description: '定义 utils 和 constants 等对象',
+  },
   requestHandlersMap: {
     type: 'object',
     description: '数据源引擎的请求处理器映射',
