@@ -297,6 +297,7 @@ export class Prop implements IPropParent {
       items.forEach((prop) => prop.purge());
     }
     this._items = null;
+    this._prevMaps = this._maps;
     this._maps = null;
     if (this._type !== 'slot' && this._slotNode) {
       this._slotNode.remove();
@@ -377,6 +378,14 @@ export class Prop implements IPropParent {
 
   @obx.shallow private _maps: Map<string | number, Prop> | null = null;
 
+  /**
+   * 作为 _maps 的一层缓存机制，主要是复用部分已存在的 Prop，保持响应式关系，比如：
+   * 当前 Prop#_value 值为 { a: 1 }，当调用 setValue({ a: 2 }) 时，所有原来的子 Prop 均被销毁，
+   * 导致假如外部有 mobx reaction（常见于 observer），此时响应式链路会被打断，
+   * 因为 reaction 监听的是原 Prop(a) 的 _value，而不是新 Prop(a) 的 _value。
+   */
+  private _prevMaps: Map<string | number, Prop> | null = null;
+
   get path(): string[] {
     return (this.parent.path || []).concat(this.key as string);
   }
@@ -400,7 +409,13 @@ export class Prop implements IPropParent {
         const maps = new Map<string, Prop>();
         const keys = Object.keys(data);
         for (const key of keys) {
-          const prop = new Prop(this, data[key], key);
+          let prop: Prop;
+          if (this._prevMaps?.has(key)) {
+            prop = this._prevMaps.get(key)!;
+            prop.setValue(data[key]);
+          } else {
+            prop = new Prop(this, data[key], key);
+          }
           items = items || [];
           items.push(prop);
           maps.set(key, prop);
