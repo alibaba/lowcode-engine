@@ -1,6 +1,6 @@
 import { createContext, ReactNode, Component, PureComponent } from 'react';
 import { EventEmitter } from 'events';
-import { Drawer } from '@alifd/next';
+import { Drawer, ConfigProvider } from '@alifd/next';
 import { uniqueId } from '@alilc/lowcode-utils';
 import './style.less';
 
@@ -82,6 +82,8 @@ export default class PopupService extends Component<{ popupPipe?: PopupPipe; act
 export class PopupContent extends PureComponent<{ safeId?: string }> {
   static contextType = PopupContext;
 
+  popupContainerId = uniqueId('popupContainer');
+
   state: any = {
     visible: false,
     offsetX: -300,
@@ -151,7 +153,7 @@ export class PopupContent extends PureComponent<{ safeId?: string }> {
         }}
         trigger={<div className="lc-popup-placeholder" style={pos} />}
         triggerType="click"
-        canCloseByOutSideClick={false}
+        canCloseByOutSideClick
         animation={false}
         onClose={this.onClose}
         id={this.props.safeId}
@@ -161,9 +163,13 @@ export class PopupContent extends PureComponent<{ safeId?: string }> {
         <div className="lc-ballon-title">{title}</div>
         <div className="lc-ballon-content">
           <PopupService actionKey={actionKey} safeId={id}>
-            {content}
+            <ConfigProvider popupContainer={this.popupContainerId}>
+              {content}
+            </ConfigProvider>
           </PopupService>
         </div>
+        <div id={this.popupContainerId} />
+        <div id="engine-variable-setter-dialog" />
       </Drawer>
     );
   }
