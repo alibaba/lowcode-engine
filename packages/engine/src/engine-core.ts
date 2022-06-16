@@ -212,6 +212,7 @@ export async function init(
   engineConfig.setEngineOptions(engineOptions as any);
 
   await plugins.init(pluginPreference as any);
+
   render(
     createElement(Workbench, {
       skeleton: innerSkeleton,

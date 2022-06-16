@@ -28,7 +28,6 @@ jobs:
           test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
           skip-step: install
           annotations: none
-          base-coverage-file: ./report.json
 
   cov-renderer-core:
     runs-on: ubuntu-latest
