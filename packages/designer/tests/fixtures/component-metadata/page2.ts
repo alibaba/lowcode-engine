@@ -1,9 +1,8 @@
 import { ComponentMetadata } from "@alilc/lowcode-types";
 export default {
-  componentName: 'Div',
+  componentName: 'Page',
   npm: {
-    package: '@ali/vc-div',
-    componentName: 'Div',
+    package: '@ali/vc-page',
   },
   title: '容器',
   docUrl: 'https://github.com/alibaba/lowcode-materials/tree/main/docs',
@@ -229,55 +228,52 @@ export default {
       },
     },
     supports: {},
-    advanced: {
-      callbacks: {
-        onNodeAdd: (dragment, self) => { console.log(dragment); },
-        onNodeRemove: (dragment, self) => { console.log(dragment); }
+  },
+  experimental: {
+    callbacks: {},
+    initials: [
+      {
+        name: 'behavior',
       },
-      initials: [
-        {
-          name: 'behavior',
-        },
-        {
-          name: '__style__',
-        },
-        {
-          name: 'fieldId',
-        },
-        {
-          name: 'useFieldIdAsDomId',
-        },
-        {
-          name: 'customClassName',
-        },
-        {
-          name: 'events',
-        },
-        {
-          name: 'onClick',
-        },
-        {
-          name: 'onMouseEnter',
-        },
-        {
-          name: 'onMouseLeave',
-        },
-      ],
-      filters: [
-        {
-          name: 'events',
-        },
-        {
-          name: 'onClick',
-        },
-        {
-          name: 'onMouseEnter',
-        },
-        {
-          name: 'onMouseLeave',
-        },
-      ],
-      autoruns: [],
-    },
+      {
+        name: '__style__',
+      },
+      {
+        name: 'fieldId',
+      },
+      {
+        name: 'useFieldIdAsDomId',
+      },
+      {
+        name: 'customClassName',
+      },
+      {
+        name: 'events',
+      },
+      {
+        name: 'onClick',
+      },
+      {
+        name: 'onMouseEnter',
+      },
+      {
+        name: 'onMouseLeave',
+      },
+    ],
+    filters: [
+      {
+        name: 'events',
+      },
+      {
+        name: 'onClick',
+      },
+      {
+        name: 'onMouseEnter',
+      },
+      {
+        name: 'onMouseLeave',
+      },
+    ],
+    autoruns: [],
   },
 } as ComponentMetadata;

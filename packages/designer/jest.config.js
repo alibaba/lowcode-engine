@@ -10,7 +10,7 @@ const jestConfig = {
   //   // '^.+\\.(js|jsx)$': 'babel-jest',
   // },
   // testMatch: ['**/document/node/node.test.ts'],
-  // testMatch: ['**/designer/builtin-hotkey.test.ts'],
+  // testMatch: ['**/component-meta.test.ts'],
   // testMatch: ['**/plugin/plugin-manager.test.ts'],
   // testMatch: ['(/tests?/.*(test))\\.[jt]s$'],
   transformIgnorePatterns: [
