@@ -26,9 +26,8 @@ jobs:
         with:
           working-directory: packages/designer
           test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
-          skip-step: install
+          package-manager: yarn
           annotations: none
-          base-coverage-file: ./report.json
 
   cov-renderer-core:
     runs-on: ubuntu-latest
@@ -49,9 +48,8 @@ jobs:
         with:
           working-directory: packages/renderer-core
           test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
-          skip-step: install
+          package-manager: yarn
           annotations: none
-          base-coverage-file: ./report.json
 
   cov-react-simulator-renderer:
     runs-on: ubuntu-latest
@@ -72,6 +70,5 @@ jobs:
         with:
           working-directory: packages/react-simulator-renderer
           test-script: npm test -- --jest-ci --jest-json --jest-coverage --jest-testLocationInResults --jest-outputFile=report.json
-          skip-step: install
+          package-manager: yarn
           annotations: none
-          base-coverage-file: ./report.json
