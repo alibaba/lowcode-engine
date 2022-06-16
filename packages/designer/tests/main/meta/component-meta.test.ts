@@ -190,6 +190,7 @@ describe('组件元数据处理', () => {
   });
 });
 
+
 describe('组件元数据 transducers', () => {
   it('legacyIssues', () => {
     const legacyMeta: any = {

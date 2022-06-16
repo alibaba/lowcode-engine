@@ -142,6 +142,7 @@ export class SettingField extends SettingPropEntry implements SettingEntry {
 
   private hotValue: any;
 
+
   @action
   setValue(val: any, isHotValue?: boolean, force?: boolean, extraOptions?: ISetValueOptions) {
     if (isHotValue) {
