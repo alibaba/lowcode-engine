@@ -148,11 +148,11 @@ describe('组件元数据处理', () => {
     expect(meta.availableActions).toHaveLength(0);
   });
 
-  // it('availableActions - rootCompoment', () => {
-  //   const meta = new ComponentMeta(designer, page2Meta);
-  //   // (hide + new) left
-  //   expect(meta.availableActions).toHaveLength(2);
-  // });
+  it('availableActions - rootCompoment', () => {
+    const meta = new ComponentMeta(designer, page2Meta);
+    // (hide + new) left
+    expect(meta.availableActions).toHaveLength(2);
+  });
 
   describe.skip('checkNesting', () => {
     const mockNode = (componentName) => {

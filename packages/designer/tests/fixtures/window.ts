@@ -22,7 +22,7 @@ window.console.warn = () => {};
 const originalLog = window.console.log;
 window.console.log = (...args) => {
   // suppress boring warnings
-  if (args[0].startsWith('Though the "loose" option was set to "false"')) return;
+  if (args[0].includes('Though the "loose" option was set to "false"')) return;
   originalLog.apply(window.console, args);
 };
 window.React = window.React || {};
