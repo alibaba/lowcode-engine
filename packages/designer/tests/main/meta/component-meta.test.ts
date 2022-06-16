@@ -154,7 +154,7 @@ describe('组件元数据处理', () => {
     expect(meta.availableActions).toHaveLength(2);
   });
 
-  describe('checkNesting', () => {
+  describe.skip('checkNesting', () => {
     const mockNode = (componentName) => {
       return {
         internalToShellNode() {
@@ -189,6 +189,7 @@ describe('组件元数据处理', () => {
     });
   });
 });
+
 
 describe('组件元数据 transducers', () => {
   it('legacyIssues', () => {
