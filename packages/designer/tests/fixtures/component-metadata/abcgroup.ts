@@ -1,11 +1,11 @@
 import { ComponentMetadata } from "@alilc/lowcode-types";
 export default {
-  componentName: 'Div',
+  componentName: 'Abc.Group',
   npm: {
     package: '@ali/vc-div',
     componentName: 'Div',
   },
-  title: '容器',
+  title: { label: '容器' },
   docUrl: 'https://github.com/alibaba/lowcode-materials/tree/main/docs',
   devMode: 'proCode',
   tags: ['布局'],
@@ -223,13 +223,10 @@ export default {
     ],
     component: {
       isContainer: true,
-      nestingRule: {
-        // parentWhitelist: 'Div',
-        // childWhitelist: 'Div',
-      },
     },
     supports: {},
     advanced: {
+      isTopFixed: true,
       callbacks: {
         onNodeAdd: (dragment, self) => { console.log(dragment); },
         onNodeRemove: (dragment, self) => { console.log(dragment); }

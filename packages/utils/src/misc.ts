@@ -105,3 +105,7 @@ export function deprecate(fail: any, message: string, alterative?: string) {
     console.warn(`Deprecation: ${message}` + (alterative ? `, use ${alterative} instead.` : ''));
   }
 }
+
+export function isRegExp(obj: any): obj is RegExp {
+  return obj && obj.test && obj.exec && obj.compile;
+}
