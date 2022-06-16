@@ -191,17 +191,17 @@ describe('组件元数据处理', () => {
 });
 
 
-describe('组件元数据 transducers', () => {
-  it('legacyIssues', () => {
-    const legacyMeta: any = {
-      ...divMeta,
-      devMode: 'procode',
-    };
-    const meta = new ComponentMeta(designer, legacyMeta);
-    const metadata = meta.getMetadata();
-    expect(metadata.devMode).toBe('proCode');
-  });
-});
+// describe('组件元数据 transducers', () => {
+//   it('legacyIssues', () => {
+//     const legacyMeta: any = {
+//       ...divMeta,
+//       devMode: 'procode',
+//     };
+//     const meta = new ComponentMeta(designer, legacyMeta);
+//     const metadata = meta.getMetadata();
+//     expect(metadata.devMode).toBe('proCode');
+//   });
+// });
 
 describe('帮助函数', () => {
   it('ensureAList', () => {

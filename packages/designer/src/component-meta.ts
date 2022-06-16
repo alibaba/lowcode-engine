@@ -175,6 +175,7 @@ export class ComponentMeta {
     }
   }
 
+
   private parseMetadata(metadata: ComponentMetadata) {
     const { componentName, npm } = metadata;
     this._npm = npm || this._npm;
