@@ -152,3 +152,11 @@ Please read first:
 
 About Pull Request:
 - set the target branch to **develop** other than **main**
+
+## ❤️ Contributors
+
+Special thanks to everyone who contributed to this project.
+
+<p>
+<a href="https://github.com/alibaba/lowcode-engine/graphs/contributors"><img src="https://contrib.rocks/image?repo=alibaba/lowcode-engine" /></a>
+</p>
