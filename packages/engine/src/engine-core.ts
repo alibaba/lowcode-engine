@@ -61,6 +61,7 @@ const designerCabin = getDesignerCabin(editor);
 const objects = {
   TransformStage,
 };
+
 const common = {
   utils,
   objects,
