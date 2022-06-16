@@ -152,3 +152,11 @@ lowcode-engine 启动后，提供了几个 umd 文件，可以结合 [lowcode-de
 
 关于提交 PR：
 请将目标合并分支设置为 **develop**，不要指定 **main** 分支，在发布正式版本后，develop 分支将会合入 main 分支。
+
+## ❤️ 致谢
+
+感谢所有为引擎项目贡献力量的同学们~
+
+<p>
+<a href="https://github.com/alibaba/lowcode-engine/graphs/contributors"><img src="https://contrib.rocks/image?repo=alibaba/lowcode-engine" /></a>
+</p>
