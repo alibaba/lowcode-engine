@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Tab, Breadcrumb } from '@alifd/next';
 import { Title, observer, Editor, obx, globalContext, engineConfig, makeObservable } from '@alilc/lowcode-editor-core';
 import { Node, isSettingField, SettingField, Designer } from '@alilc/lowcode-designer';
+import classNames from 'classnames';
 import { SettingsMain } from './main';
 import { SettingsPane } from './settings-pane';
 import { StageBox } from '../stage-box';
@@ -229,8 +230,12 @@ export class SettingsPrimaryPane extends Component<{ editor: Editor; config: any
     });
     const activeKey = matched ? this._activeKey : (items[0] as SettingField).name;
 
+    const className = classNames('lc-settings-main', {
+      'lc-settings-hide-tabs':
+        items.length === 1 && engineConfig.get('hideSettingsTabsWhenOnlyOneItem', false),
+    });
     return (
-      <div className="lc-settings-main">
+      <div className={className}>
         { this.renderBreadcrumb() }
         <Tab
           activeKey={activeKey}
