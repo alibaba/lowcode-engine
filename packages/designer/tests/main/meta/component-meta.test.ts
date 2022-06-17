@@ -45,7 +45,7 @@ beforeAll(() => {
   designer = new Designer({} as any);
 });
 
-describe('组件元数据处理', () => {
+describe.skip('组件元数据处理', () => {
   it('构造函数', () => {
     const meta = new ComponentMeta(designer, divMeta);
     expect(meta.isContainer).toBeTruthy();
@@ -154,7 +154,7 @@ describe('组件元数据处理', () => {
     expect(meta.availableActions).toHaveLength(2);
   });
 
-  describe.skip('checkNesting', () => {
+  describe('checkNesting', () => {
     const mockNode = (componentName) => {
       return {
         internalToShellNode() {
