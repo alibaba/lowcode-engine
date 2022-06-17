@@ -100,6 +100,10 @@ const VALID_ENGINE_OPTIONS = {
     default: false,
     description: '当选中节点切换时，是否停留在相同的设置 tab 上',
   },
+  hideSettingsTabsWhenOnlyOneItem: {
+    type: 'boolean',
+    description: '是否在只有一个 item 的时候隐藏设置 tabs',
+  },
   loadingComponent: {
     type: 'ComponentType',
     default: undefined,
@@ -205,6 +209,10 @@ export interface EngineOptions {
    * 当选中节点切换时，是否停留在相同的设置 tab 上，默认值：false
    */
   stayOnTheSameSettingTab?: boolean;
+  /**
+   * 是否在只有一个 item 的时候隐藏设置 tabs，默认值：false
+   */
+  hideSettingsTabsWhenOnlyOneItem?: boolean;
   /**
    * 自定义 loading 组件
    */
