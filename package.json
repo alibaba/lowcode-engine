@@ -6,7 +6,8 @@
     ],
     "nohoist": [
       "**/css-modules-typescript-loader",
-      "**/@alife/theme-lowcode-*"
+      "**/@alifc/theme-lowcode-*",
+      "**/jest"
     ]
   },
   "scripts": {

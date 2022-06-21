@@ -148,7 +148,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     for (const pluginName of sequence) {
       try {
         await this.pluginsMap.get(pluginName)!.init();
-      } catch (e) {
+      } catch (e) /* istanbul ignore next */ {
         logger.error(
           `Failed to init plugin:${pluginName}, it maybe affect those plugins which depend on this.`,
         );
@@ -189,6 +189,7 @@ export class LowCodePluginManager implements ILowCodePluginManager {
     });
   }
 
+  /* istanbul ignore next */
   setDisabled(pluginName: string, flag = true) {
     logger.warn(`plugin:${pluginName} has been set disable:${flag}`);
     this.pluginsMap.get(pluginName)?.setDisabled(flag);
