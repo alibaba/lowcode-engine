@@ -247,7 +247,7 @@ export interface EngineOptions {
   /**
    * 数据源引擎的请求处理器映射
    */
-  requestHandlersMap: RequestHandlersMap;
+  requestHandlersMap?: RequestHandlersMap;
 }
 
 const getStrictModeValue = (engineOptions: EngineOptions, defaultValue: boolean): boolean => {
