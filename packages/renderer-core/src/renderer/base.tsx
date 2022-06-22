@@ -475,10 +475,6 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         // DesignMode 为 design 情况下，需要进入 leaf Hoc，进行相关事件注册
         const displayInHook = engine?.props?.designMode === 'design';
 
-        if (schema.hidden && !displayInHook) {
-          return null;
-        }
-
         if (schema.loop != null) {
           const loop = parseData(schema.loop, scope);
           const useLoop = isUseLoop(loop, this._designModeIsDesign);

@@ -1121,3 +1121,20 @@ exports[`JSExpression base props 1`] = `
   />
 </div>
 `;
+
+exports[`designMode designMode:default 1`] = `
+<div
+  className="lce-page"
+  style={Object {}}
+>
+  <div
+    className="div-ut"
+    forwardRef={[Function]}
+  >
+    <div
+      className="div-ut-children"
+      forwardRef={[Function]}
+    />
+  </div>
+</div>
+`;
