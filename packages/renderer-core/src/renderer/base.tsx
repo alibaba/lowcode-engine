@@ -257,7 +257,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         this.__dataHelper = {
           updateConfig: (updateDataSource: any) => {
             const { dataSourceMap, reloadDataSource } = createDataSourceEngine(
-              updateDataSource,
+              updateDataSource ?? {},
               this,
               props.__appHelper.requestHandlersMap ? { requestHandlersMap: props.__appHelper.requestHandlersMap } : undefined,
             );
