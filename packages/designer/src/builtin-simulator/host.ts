@@ -228,6 +228,10 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
     return this.get('requestHandlersMap') || null;
   }
 
+  get thisRequiredInJSE(): any {
+    return engineConfig.get('thisRequiredInJSE') ?? true;
+  }
+
   @computed get componentsAsset(): Asset | undefined {
     return this.get('componentsAsset');
   }

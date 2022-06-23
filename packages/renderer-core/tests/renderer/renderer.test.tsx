@@ -145,12 +145,58 @@ describe('JSExpression', () => {
       ]
     };
 
-    getComp(schema, components.Div).then(({ component, inst }) => {
+    getComp(schema, components.Div, {
+      thisRequiredInJSE: false,
+    }).then(({ component, inst }) => {
       // expect(inst[0].props.visible).toBeTruthy();
       expect(inst.length).toEqual(2);
       [1, 2].forEach((i) => {
         expect(inst[0].props[`name${i}`]).toBe('1');
         expect(inst[1].props[`name${i}`]).toBe('2');
+      })
+      componentSnapshot = component;
+      done();
+    });
+  });
+
+  it('JSExpression props with loop, and thisRequiredInJSE is true', (done) => {
+    const schema = {
+      componentName: 'Page',
+      props: {},
+      state: {
+        isShowDialog: true,
+      },
+      children: [
+        {
+          componentName: "Div",
+          loop: [
+            {
+              name: '1',
+            },
+            {
+              name: '2'
+            }
+          ],
+          props: {
+            className: "div-ut",
+            name1: {
+              type: 'JSExpression',
+              value: 'this.item.name',
+            },
+            name2: {
+              type: 'JSExpression',
+              value: 'item.name',
+            },
+          }
+        }
+      ]
+    };
+
+    getComp(schema, components.Div).then(({ component, inst }) => {
+      expect(inst.length).toEqual(2);
+      [0, 1].forEach((i) => {
+        expect(inst[i].props[`name1`]).toBe(i + 1 + '');
+        expect(inst[i].props[`name2`]).toBe(undefined);
       })
       componentSnapshot = component;
       done();

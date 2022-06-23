@@ -994,6 +994,24 @@ exports[`JSExpression JSExpression props with loop 1`] = `
 </div>
 `;
 
+exports[`JSExpression JSExpression props with loop, and thisRequiredInJSE is true 1`] = `
+<div
+  className="lce-page"
+  style={Object {}}
+>
+  <div
+    className="div-ut"
+    forwardRef={[Function]}
+    name1="1"
+  />
+  <div
+    className="div-ut"
+    forwardRef={[Function]}
+    name1="2"
+  />
+</div>
+`;
+
 exports[`JSExpression JSFunction props 1`] = `
 <div
   className="lce-page"
