@@ -125,7 +125,7 @@ Pass the files under packages/engine/dist and packages/(react|rax)-simulator-ren
 - [User Documentation](http://lowcode-engine.cn/docV2)
 - [API](http://lowcode-engine.cn/docV2/vlmeme)
 
-This [awesome-lowcode-engine](https://github.com/lowcode-workspace/awesome-lowcode-engine) page links to a repository which records all of the tools\materials\solutions which use or build for the lowcode-engine, PR is welcomed.
+This [awesome-lowcode-engine](https://github.com/lowcode-workspace/awesome-lowcode-engine) page links to a repository which records all of the tools\materials\solutions that use or built for the lowcode-engine, PR is welcomed.
 
 ## 💻 Local debugging
 
