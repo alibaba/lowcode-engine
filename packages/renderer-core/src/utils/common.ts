@@ -242,7 +242,7 @@ export function transformStringToFunction(str: string) {
  * @param self scope object
  * @returns funtion
  */
-export function parseExpression(str: any, self: any) {
+export function parseExpression(str: any, self: any, thisRequired = false) {
   try {
     const contextArr = ['"use strict";', 'var __self = arguments[0];'];
     contextArr.push('return ');
@@ -259,12 +259,16 @@ export function parseExpression(str: any, self: any) {
     if (inSameDomain() && (window.parent as any).__newFunc) {
       return (window.parent as any).__newFunc(tarStr)(self);
     }
-    const code = `with($scope || {}) { ${tarStr} }`;
+    const code = `with(${thisRequired ? '{}' : '$scope || {}'}) { ${tarStr} }`;
     return new Function('$scope', code)(self);
   } catch (err) {
-    logger.error('parseExpression.error', err, str, self);
+    logger.error('parseExpression.error', err, str, self?.__self ?? self);
     return undefined;
   }
+}
+
+export function parseThisRequiredExpression(str: any, self: any) {
+  return parseExpression(str, self, true);
 }
 
 /**
