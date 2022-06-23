@@ -367,7 +367,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
         return null;
       }
 
-      _leaf = _leaf || getNode(componentId);
+      _leaf = _leaf || getNode?.(componentId);
       if (_leaf && this.curEventLeaf && _leaf !== this.curEventLeaf) {
         this.disposeFunctions.forEach((fn) => fn());
         this.disposeFunctions = [];
@@ -513,7 +513,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
     }
 
     get leaf(): Node | undefined {
-      return this.props._leaf || getNode(componentCacheId);
+      return this.props._leaf || getNode?.(componentCacheId);
     }
 
     render() {

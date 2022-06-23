@@ -12,6 +12,7 @@ import {
   getValue,
   parseData,
   parseExpression,
+  parseThisRequiredExpression,
   parseI18n,
   isEmpty,
   isSchema,
@@ -83,11 +84,13 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     getLocale: any;
     setLocale: any;
     styleElement: any;
+    parseExpression: any;
     [key: string]: any;
 
     constructor(props: IBaseRendererProps, context: IBaseRendererContext) {
       super(props, context);
       this.context = context;
+      this.parseExpression = props?.thisRequiredInJSE ? parseThisRequiredExpression : parseExpression;
       this.__beforeInit(props);
       this.__init(props);
       this.__afterInit(props);
@@ -112,7 +115,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
       if (func) {
         if (isJSExpression(func) || isJSFunction(func)) {
-          const fn = parseExpression(func, this);
+          const fn = props.thisRequiredInJSE ? parseThisRequiredExpression(func, this) : parseExpression(func, this);
           return fn(props, state);
         }
 
@@ -193,7 +196,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       if (fn) {
         // TODO, cache
         if (isJSExpression(fn) || isJSFunction(fn)) {
-          fn = parseExpression(fn, this);
+          fn = this.parseExpression(fn, this);
         }
         if (typeof fn !== 'function') {
           console.error(`生命周期${method}类型不符`, fn);
@@ -219,7 +222,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       this.__customMethodsList = customMethodsList;
       forEach(__schema.methods, (val: any, key: string) => {
         if (isJSExpression(val) || isJSFunction(val)) {
-          val = parseExpression(val, this);
+          val = this.parseExpression(val, this);
         }
         if (typeof val !== 'function') {
           console.error(`自定义函数${key}类型不符`, val);
@@ -414,7 +417,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         const { __appHelper: appHelper, __components: components = {} } = this.props || {};
 
         if (isJSExpression(schema)) {
-          return parseExpression(schema, scope);
+          return this.parseExpression(schema, scope);
         }
         if (isI18nData(schema)) {
           return parseI18n(schema, scope);
@@ -434,7 +437,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         const _children = this.getSchemaChildren(schema);
         // 解析占位组件
         if (schema?.componentName === 'Fragment' && _children) {
-          const tarChildren = isJSExpression(_children) ? parseExpression(_children, scope) : _children;
+          const tarChildren = isJSExpression(_children) ? this.parseExpression(_children, scope) : _children;
           return this.__createVirtualDom(tarChildren, scope, parentInfo);
         }
 
@@ -475,10 +478,6 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         // DesignMode 为 design 情况下，需要进入 leaf Hoc，进行相关事件注册
         const displayInHook = engine?.props?.designMode === 'design';
 
-        if (schema.hidden && !displayInHook) {
-          return null;
-        }
-
         if (schema.loop != null) {
           const loop = parseData(schema.loop, scope);
           const useLoop = isUseLoop(loop, this._designModeIsDesign);
@@ -500,7 +499,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         let scopeKey = '';
         // 判断组件是否需要生成scope，且只生成一次，挂在this.__compScopes上
         if (Comp.generateScope) {
-          const key = parseExpression(schema.props?.key, scope);
+          const key = this.parseExpression(schema.props?.key, scope);
           if (key) {
             // 如果组件自己设置key则使用组件自己的key
             scopeKey = key;
@@ -651,7 +650,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
         _children.forEach((_child: any) => {
           const _childVirtualDom = this.__createVirtualDom(
-            isJSExpression(_child) ? parseExpression(_child, scope) : _child,
+            isJSExpression(_child) ? this.parseExpression(_child, scope) : _child,
             scope,
             {
               schema,
@@ -758,7 +757,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         return checkProps(props);
       }
       if (isJSExpression(props)) {
-        props = parseExpression(props, scope);
+        props = this.parseExpression(props, scope);
         // 只有当变量解析出来为模型结构的时候才会继续解析
         if (!isSchema(props) && !isJSSlot(props)) return checkProps(props);
       }

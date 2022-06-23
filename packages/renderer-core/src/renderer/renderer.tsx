@@ -60,6 +60,7 @@ export default function rendererFactory(): IRenderComponent {
       schema: {} as RootSchema,
       onCompGetRef: () => { },
       onCompGetCtx: () => { },
+      thisRequiredInJSE: true,
     };
 
     static findDOMNode = findDOMNode;

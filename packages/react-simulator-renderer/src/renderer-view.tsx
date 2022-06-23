@@ -189,6 +189,7 @@ class Renderer extends Component<{
         setSchemaChangedSymbol={this.setSchemaChangedSymbol}
         getNode={(id: string) => documentInstance.getNode(id) as Node}
         rendererName="PageRenderer"
+        thisRequiredInJSE={host.thisRequiredInJSE}
         customCreateElement={(Component: any, props: any, children: any) => {
           const { __id, ...viewProps } = props;
           viewProps.componentId = __id;

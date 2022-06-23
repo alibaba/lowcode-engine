@@ -3,27 +3,12 @@ import { autorun, reaction, mobx, untracked, globalContext, Editor } from '@alil
 import { NodeSchema } from '@alilc/lowcode-types';
 import { History as ShellHistory } from '@alilc/lowcode-shell';
 
-// TODO: cache to localStorage
-
-export interface Serialization<T = any> {
-  serialize(data: NodeSchema): T;
-  unserialize(data: T): NodeSchema;
+export interface Serialization<K = NodeSchema, T = string> {
+  serialize(data: K): T;
+  unserialize(data: T): K;
 }
 
-let currentSerialization: Serialization<any> = {
-  serialize(data: NodeSchema): string {
-    return JSON.stringify(data);
-  },
-  unserialize(data: string) {
-    return JSON.parse(data);
-  },
-};
-
-export function setSerialization(serialization: Serialization) {
-  currentSerialization = serialization;
-}
-
-export class History {
+export class History<T = NodeSchema> {
   private session: Session;
 
   private records: Session[];
@@ -34,16 +19,29 @@ export class History {
 
   private asleep = false;
 
-  constructor(logger: () => any, private redoer: (data: NodeSchema) => void, private timeGap: number = 1000) {
+  private currentSerialization: Serialization<T, string> = {
+    serialize(data: T): string {
+      return JSON.stringify(data);
+    },
+    unserialize(data: string) {
+      return JSON.parse(data);
+    },
+  };
+
+  setSerialization(serialization: Serialization<T, string>) {
+    this.currentSerialization = serialization;
+  }
+
+  constructor(dataFn: () => T, private redoer: (data: T) => void, private timeGap: number = 1000) {
     this.session = new Session(0, null, this.timeGap);
     this.records = [this.session];
 
     reaction(() => {
-      return logger();
-    }, (data) => {
+      return dataFn();
+    }, (data: T) => {
       if (this.asleep) return;
       untracked(() => {
-        const log = currentSerialization.serialize(data);
+        const log = this.currentSerialization.serialize(data);
           if (this.session.isActive()) {
             this.session.log(log);
           } else {
@@ -98,9 +96,9 @@ export class History {
 
     this.sleep();
     try {
-      this.redoer(currentSerialization.unserialize(hotData));
+      this.redoer(this.currentSerialization.unserialize(hotData));
       this.emitter.emit('cursor', hotData);
-    } catch (e) {
+    } catch (e) /* istanbul ignore next */ {
       console.error(e);
     }
 
@@ -201,7 +199,7 @@ export class History {
   }
 }
 
-class Session {
+export class Session {
   private _data: any;
 
   private activeTimer: any;

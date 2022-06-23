@@ -133,6 +133,10 @@ const VALID_ENGINE_OPTIONS = {
     type: 'object',
     description: '数据源引擎的请求处理器映射',
   },
+  thisRequiredInJSE: {
+    type: 'boolean',
+    description: 'JSExpression 是否只支持使用 this 来访问上下文变量',
+  },
 };
 export interface EngineOptions {
   /**
@@ -248,6 +252,12 @@ export interface EngineOptions {
    * 数据源引擎的请求处理器映射
    */
   requestHandlersMap?: RequestHandlersMap;
+
+  /**
+   * @default true
+   * JSExpression 是否只支持使用 this 来访问上下文变量，假如需要兼容原来的 'state.xxx'，则设置为 false
+   */
+  thisRequiredInJSE?: boolean;
 }
 
 const getStrictModeValue = (engineOptions: EngineOptions, defaultValue: boolean): boolean => {

@@ -7,7 +7,7 @@ import components from '../utils/components';
 
 const Renderer = rendererFactory();
 
-function getComp(schema, comp = null): Promise<{
+function getComp(schema, comp = null, others = {}): Promise<{
   component,
   inst,
 }> {
@@ -17,6 +17,7 @@ function getComp(schema, comp = null): Promise<{
       <Renderer
         schema={schema}
         components={components as any}
+        {...others}
       />);
 
     const componentInstance = component.root;
@@ -144,12 +145,58 @@ describe('JSExpression', () => {
       ]
     };
 
-    getComp(schema, components.Div).then(({ component, inst }) => {
+    getComp(schema, components.Div, {
+      thisRequiredInJSE: false,
+    }).then(({ component, inst }) => {
       // expect(inst[0].props.visible).toBeTruthy();
       expect(inst.length).toEqual(2);
       [1, 2].forEach((i) => {
         expect(inst[0].props[`name${i}`]).toBe('1');
         expect(inst[1].props[`name${i}`]).toBe('2');
+      })
+      componentSnapshot = component;
+      done();
+    });
+  });
+
+  it('JSExpression props with loop, and thisRequiredInJSE is true', (done) => {
+    const schema = {
+      componentName: 'Page',
+      props: {},
+      state: {
+        isShowDialog: true,
+      },
+      children: [
+        {
+          componentName: "Div",
+          loop: [
+            {
+              name: '1',
+            },
+            {
+              name: '2'
+            }
+          ],
+          props: {
+            className: "div-ut",
+            name1: {
+              type: 'JSExpression',
+              value: 'this.item.name',
+            },
+            name2: {
+              type: 'JSExpression',
+              value: 'item.name',
+            },
+          }
+        }
+      ]
+    };
+
+    getComp(schema, components.Div).then(({ component, inst }) => {
+      expect(inst.length).toEqual(2);
+      [0, 1].forEach((i) => {
+        expect(inst[i].props[`name1`]).toBe(i + 1 + '');
+        expect(inst[i].props[`name2`]).toBe(undefined);
       })
       componentSnapshot = component;
       done();
@@ -321,4 +368,82 @@ describe('JSExpression', () => {
       done();
     });
   })
+});
+
+describe("designMode", () => {
+  it('designMode:default', (done) => {
+    const schema = {
+      componentName: 'Page',
+      props: {},
+      children: [
+        {
+          componentName: "Div",
+          props: {
+            className: 'div-ut',
+            children: [
+              {
+                componentName: "Div",
+                visible: true,
+                props: {
+                  className: 'div-ut-children',
+                }
+              }
+            ]
+          }
+        }
+      ]
+    };
+
+    getComp(schema, components.Div).then(({ component, inst }) => {
+      expect(inst.length).toBe(2);
+      expect(inst[0].props.className).toBe('div-ut');
+      expect(inst[1].props.className).toBe('div-ut-children');
+      componentSnapshot = component;
+      done();
+    });
+  });
+  it('designMode:design', (done) => {
+    const schema = {
+      componentName: 'Page',
+      props: {},
+      children: [
+        {
+          componentName: "Div",
+          id: '0',
+          props: {
+            className: 'div-ut',
+            children: [
+              {
+                componentName: "Div",
+                id: 'hiddenId',
+                hidden: true,
+                props: {
+                  className: 'div-ut-children',
+                }
+              }
+            ]
+          }
+        }
+      ]
+    };
+
+    getComp(schema, components.Div, {
+      designMode: 'design',
+      getNode: (id) => {
+        if (id === 'hiddenId') {
+          return {
+            export() {
+              return {
+                hidden: true,
+              };
+            }
+          }
+        }
+      }
+    }).then(({ component, inst }) => {
+      expect(inst.length).toBe(1);
+      expect(inst[0].props.className).toBe('div-ut');
+      done();
+    });
+  });
 })

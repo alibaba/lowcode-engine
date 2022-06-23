@@ -113,6 +113,8 @@ describe.only('Project 方法测试', () => {
     expect(project.documents.length).toBe(4);
 
     expect(project.getDocument(project.currentDocument?.id)).toBe(doc3);
+    expect(project.getDocumentByFileName(project.currentDocument?.fileName)).toBe(doc3);
+    expect(project.getDocumentByFileName('unknown')).toBeNull();
     expect(project.checkExclusive(project.currentDocument));
 
     expect(project.documents[0].opened).toBeTruthy();
