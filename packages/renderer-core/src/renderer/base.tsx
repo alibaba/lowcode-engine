@@ -245,8 +245,8 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     };
 
     __parseData = (data: any, ctx?: Record<string, any>) => {
-      const { __ctx } = this.props;
-      return parseData(data, ctx || __ctx || this);
+      const { __ctx, thisRequiredInJSE } = this.props;
+      return parseData(data, ctx || __ctx || this, { thisRequiredInJSE });
     };
 
     __initDataSource = (props = this.props) => {
@@ -479,7 +479,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         const displayInHook = engine?.props?.designMode === 'design';
 
         if (schema.loop != null) {
-          const loop = parseData(schema.loop, scope);
+          const loop = this.__parseData(schema.loop, scope);
           const useLoop = isUseLoop(loop, this._designModeIsDesign);
           if (useLoop) {
             return this.__createLoopVirtualDom(
@@ -493,7 +493,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
             );
           }
         }
-        const condition = schema.condition == null ? true : parseData(schema.condition, scope);
+        const condition = schema.condition == null ? true : this.__parseData(schema.condition, scope);
         if (!condition && !displayInHook) return null;
 
         let scopeKey = '';
