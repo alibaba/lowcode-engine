@@ -125,6 +125,8 @@ https://cdn.jsdelivr.net/npm/@alilc/lowcode-react-simulator-renderer@1.0.0/dist/
 - [用户文档](https://lowcode-engine.cn/docV2)
 - [API](https://lowcode-engine.cn/docV2/vlmeme)
 
+[awesome-lowcode-engine](https://github.com/lowcode-workspace/awesome-lowcode-engine) 中包含了一系列围绕引擎建设的工具、解决方案等，如果你有类似的解决方案或者工具，欢迎提 PR 到该仓库，让更多人了解到
+
 ## 💻 本地调试
 
 ```bash
