@@ -141,6 +141,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
     __debug,
     __getComponentProps: getProps,
     __getSchemaChildrenVirtualDom: getChildren,
+    __parseData,
   } = baseRenderer;
   const { engine } = baseRenderer.context;
   const host = baseRenderer.props?.__host;
@@ -225,7 +226,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
         nodeChildren: null,
         childrenInState: false,
         visible: !hidden,
-        condition: parseData(condition, scope),
+        condition: __parseData(condition, scope),
         nodeCacheProps: {},
         nodeProps: {},
       };
@@ -395,7 +396,7 @@ export function leafWrapper(Comp: types.IBaseRenderComponent, {
 
         if (key === '___condition___') {
           const { condition = true } = this.leaf?.export(TransformStage.Render) || {};
-          const conditionValue = parseData(condition, scope);
+          const conditionValue = __parseData(condition, scope);
           __debug(`key is ___condition___, change condition value to [${condition}]`);
           // 条件表达式改变
           this.setState({

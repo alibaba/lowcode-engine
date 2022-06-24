@@ -330,15 +330,15 @@ export function forEach(targetObj: any, fn: any, context?: any) {
   Object.keys(targetObj).forEach((key) => fn.call(context, targetObj[key], key));
 }
 
-export function parseData(schema: unknown, self: any): any {
+export function parseData(schema: unknown, self: any, options: any): any {
   if (isJSExpression(schema)) {
-    return parseExpression(schema, self);
+    return parseExpression(schema, self, options.thisRequiredInJSE);
   } else if (isI18nData(schema)) {
     return parseI18n(schema, self);
   } else if (typeof schema === 'string') {
     return schema.trim();
   } else if (Array.isArray(schema)) {
-    return schema.map((item) => parseData(item, self));
+    return schema.map((item) => parseData(item, self, options));
   } else if (typeof schema === 'function') {
     return schema.bind(self);
   } else if (typeof schema === 'object') {
@@ -351,7 +351,7 @@ export function parseData(schema: unknown, self: any): any {
       if (key.startsWith('__')) {
         return;
       }
-      res[key] = parseData(val, self);
+      res[key] = parseData(val, self, options);
     });
     return res;
   }
