@@ -329,7 +329,7 @@ describe('JSExpression', () => {
                   ],
                   loop: {
                     type: "JSExpression",
-                    value: "state.content"
+                    value: "this.state.content"
                   },
                   loopArgs: [
                       "item",

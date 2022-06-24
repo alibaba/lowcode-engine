@@ -330,7 +330,11 @@ export function forEach(targetObj: any, fn: any, context?: any) {
   Object.keys(targetObj).forEach((key) => fn.call(context, targetObj[key], key));
 }
 
-export function parseData(schema: unknown, self: any, options: any): any {
+interface IParseOptions {
+  thisRequiredInJSE?: boolean;
+}
+
+export function parseData(schema: unknown, self: any, options: IParseOptions = {}): any {
   if (isJSExpression(schema)) {
     return parseExpression(schema, self, options.thisRequiredInJSE);
   } else if (isI18nData(schema)) {
