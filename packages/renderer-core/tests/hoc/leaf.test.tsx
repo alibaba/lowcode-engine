@@ -5,6 +5,7 @@ import '../utils/react-env-init';
 import { leafWrapper } from '../../src/hoc/leaf';
 import components from '../utils/components';
 import Node from '../utils/node';
+import { parseData } from '../../src/utils';
 
 let rerenderCount = 0;
 
@@ -37,6 +38,9 @@ const baseRenderer: any = {
       }
     },
     documentId: '01'
+  },
+  __parseData (data, scope) {
+    return parseData(data, scope, {});
   }
 }
 
