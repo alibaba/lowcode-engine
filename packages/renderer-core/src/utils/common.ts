@@ -5,22 +5,15 @@ import { isI18nData, RootSchema, NodeSchema, isJSExpression, JSSlot } from '@ali
 // moment对象配置
 import _moment from 'moment';
 import 'moment/locale/zh-cn';
-import pkg from '../../package.json';
-
 import { isEmpty } from 'lodash';
-
-import _serialize from 'serialize-javascript';
-import * as _jsonuri from 'jsonuri';
-
 import IntlMessageFormat from 'intl-messageformat';
+import pkg from '../../package.json';
 
 export const moment = _moment;
 moment.locale('zh-cn');
 (window as any).sdkVersion = pkg.version;
 
 export { pick, isEqualWith as deepEqual, cloneDeep as clone, isEmpty, throttle, debounce } from 'lodash';
-export const jsonuri = _jsonuri;
-export const serialize = _serialize;
 
 const ReactIs = require('react-is');
 const ReactPropTypesSecret = require('prop-types/lib/ReactPropTypesSecret');
