@@ -73,7 +73,7 @@ const VALID_ENGINE_OPTIONS = {
   customizeIgnoreSelectors: {
     type: 'function',
     default: undefined,
-    description: '定制画布中点击被忽略的 selectors, eg. (defaultIgnoreSelectors: string[]) => string[]',
+    description: '定制画布中点击被忽略的 selectors, eg. (defaultIgnoreSelectors: string[], e: MouseEvent) => string[]',
   },
   disableDefaultSettingPanel: {
     type: 'boolean',
@@ -192,7 +192,7 @@ export interface EngineOptions {
   /**
    * 定制画布中点击被忽略的 selectors，默认值：undefined
    */
-  customizeIgnoreSelectors?: (defaultIgnoreSelectors: string[]) => string[];
+  customizeIgnoreSelectors?: (defaultIgnoreSelectors: string[], e: MouseEvent) => string[];
   /**
    * 禁止默认的设置面板，默认值：false
    */
