@@ -214,7 +214,7 @@ export class Project {
       return doc.open();
     }
     if (typeof doc === 'string') {
-      const got = this.documents.find((item) => item.fileName === doc);
+      const got = this.documents.find((item) => item.fileName === doc || item.id === doc);
       if (got) {
         return got.open();
       }
