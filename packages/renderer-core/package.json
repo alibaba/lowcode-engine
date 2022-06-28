@@ -27,7 +27,6 @@
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "react-is": "^16.10.1",
-    "serialize-javascript": "^1.7.0",
     "socket.io-client": "^2.2.0",
     "whatwg-fetch": "^3.0.0",
     "zen-logger": "^1.1.4"
@@ -45,7 +44,6 @@
     "@types/node": "^13.7.1",
     "@types/prop-types": "^15.7.3",
     "@types/react-test-renderer": "^17.0.1",
-    "@types/serialize-javascript": "^5.0.0",
     "babel-jest": "^26.5.2",
     "build-plugin-component": "^0.2.11",
     "jest": "^26.6.3",
