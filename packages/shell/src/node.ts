@@ -330,8 +330,8 @@ export default class Node {
    * @param path 属性路径，支持 a / a.b / a.0 等格式
    * @returns
    */
-  getProp(path: string): Prop | null {
-    return Prop.create(this[nodeSymbol].getProp(path));
+  getProp(path: string, createIfNone = true): Prop | null {
+    return Prop.create(this[nodeSymbol].getProp(path, createIfNone));
   }
 
   /**
@@ -340,7 +340,7 @@ export default class Node {
    * @returns
    */
   getPropValue(path: string) {
-    return this.getProp(path)?.getValue();
+    return this.getProp(path, false)?.getValue();
   }
 
   /**
