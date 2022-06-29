@@ -3,6 +3,7 @@ import { NpmInfo, ComponentSchema } from '@alilc/lowcode-types';
 import { Component } from '@alilc/lowcode-designer';
 import { isESModule } from './is-es-module';
 import { isReactComponent, acceptsRef, wrapReactClass } from './is-react';
+import { isObject } from './is-object';
 
 interface LibraryMap {
   [key: string]: string;
@@ -76,6 +77,22 @@ function findComponent(libraryMap: LibraryMap, componentName: string, npm?: NpmI
   return getSubComponent(library, paths);
 }
 
+/**
+ * 判断是否是一个混合组件，即 components 是一个对象，对象值是 React 组件
+ * 示例：
+ * {
+ *    Button: ReactNode,
+ *    Text: ReactNode,
+ * }
+ */
+function isMixinComponent(components: any) {
+  if (!isObject(components)) {
+    return false;
+  }
+
+  return Object.keys(components).some(componentName => isReactComponent(components[componentName]));
+}
+
 export function buildComponents(libraryMap: LibraryMap,
   componentsMap: { [componentName: string]: NpmInfo | ComponentType<any> | ComponentSchema },
   createComponent: (schema: ComponentSchema) => Component | null) {
@@ -88,6 +105,8 @@ export function buildComponents(libraryMap: LibraryMap,
       if (!acceptsRef(component)) {
         component = wrapReactClass(component as FunctionComponent);
       }
+      components[componentName] = component;
+    } else if (isMixinComponent(component)) {
       components[componentName] = component;
     } else {
       component = findComponent(libraryMap, componentName, component);

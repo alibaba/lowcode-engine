@@ -116,7 +116,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       if (func) {
         if (isJSExpression(func) || isJSFunction(func)) {
           const fn = props.thisRequiredInJSE ? parseThisRequiredExpression(func, this) : parseExpression(func, this);
-          return fn(props, state);
+          return fn?.(props, state);
         }
 
         if (typeof func === 'function') {
@@ -208,6 +208,14 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           console.error(`[${this.props.__schema.componentName}]生命周期${method}出错`, e);
         }
       }
+    };
+
+    _getComponentView = (componentName: string) => {
+      const { __components } = this.props;
+      if (!__components) {
+        return;
+      }
+      return __components[componentName];
     };
 
     __bindCustomMethods = (props = this.props) => {
