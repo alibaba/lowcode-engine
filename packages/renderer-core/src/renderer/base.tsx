@@ -151,9 +151,9 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       this.__debug(`componentWillUnmount - ${this.props?.__schema?.fileName}`);
     }
 
-    async componentDidCatch(e: any, ...args: any[]) {
-      this.__setLifeCycleMethods('componentDidCatch', { e, ...args });
-      console.warn(e);
+    async componentDidCatch(...args: any[]) {
+      this.__setLifeCycleMethods('componentDidCatch', args);
+      console.warn(args);
     }
 
     reloadDataSource = () => new Promise((resolve, reject) => {
