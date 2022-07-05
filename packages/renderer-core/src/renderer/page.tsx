@@ -15,7 +15,7 @@ export default function pageRendererFactory(): IBaseRenderComponent {
       const schema = props.__schema || {};
       this.state = this.__parseData(schema.state || {});
       this.__initDataSource(props);
-      this.__setLifeCycleMethods('constructor', [props, ...rest]);
+      this.__excuteLifeCycleMethod('constructor', [props, ...rest]);
     }
 
     async componentDidUpdate(prevProps: IBaseRendererProps, _prevState: {}, snapshot: unknown) {
@@ -40,7 +40,7 @@ export default function pageRendererFactory(): IBaseRenderComponent {
       this.__bindCustomMethods(this.props);
       this.__initDataSource(this.props);
 
-      // this.__setLifeCycleMethods('constructor', arguments);
+      // this.__excuteLifeCycleMethod('constructor', arguments);
 
       this.__generateCtx({
         page: this,

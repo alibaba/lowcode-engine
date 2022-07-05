@@ -240,7 +240,7 @@ export type IBaseRendererInstance = IGeneralComponent<
     __beforeInit(props: IBaseRendererProps): void;
     __init(props: IBaseRendererProps): void;
     __afterInit(props: IBaseRendererProps): void;
-    __setLifeCycleMethods(method: string, args?: any[]): void;
+    __excuteLifeCycleMethod(method: string, args?: any[]): void;
     __bindCustomMethods(props: IBaseRendererProps): void;
     __generateCtx(ctx: Record<string, any>): void;
     __parseData(data: any, ctx?: any): any;
