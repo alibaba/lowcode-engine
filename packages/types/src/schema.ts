@@ -26,7 +26,7 @@ export interface NodeSchema {
    * 组件属性对象
    */
   props?: {
-    children?: NodeData[];
+    children?: NodeData | NodeData[];
   } & PropsMap;// | PropsList;
   /**
    * 组件属性对象
