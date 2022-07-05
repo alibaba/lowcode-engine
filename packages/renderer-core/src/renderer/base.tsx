@@ -131,28 +131,28 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     }
 
     async getSnapshotBeforeUpdate(...args: any[]) {
-      this.__setLifeCycleMethods('getSnapshotBeforeUpdate', args);
+      this.__excuteLifeCycleMethod('getSnapshotBeforeUpdate', args);
       this.__debug(`getSnapshotBeforeUpdate - ${this.props?.__schema?.fileName}`);
     }
 
     async componentDidMount(...args: any[]) {
       this.reloadDataSource();
-      this.__setLifeCycleMethods('componentDidMount', args);
+      this.__excuteLifeCycleMethod('componentDidMount', args);
       this.__debug(`componentDidMount - ${this.props?.__schema?.fileName}`);
     }
 
     async componentDidUpdate(...args: any[]) {
-      this.__setLifeCycleMethods('componentDidUpdate', args);
+      this.__excuteLifeCycleMethod('componentDidUpdate', args);
       this.__debug(`componentDidUpdate - ${this.props.__schema.fileName}`);
     }
 
     async componentWillUnmount(...args: any[]) {
-      this.__setLifeCycleMethods('componentWillUnmount', args);
+      this.__excuteLifeCycleMethod('componentWillUnmount', args);
       this.__debug(`componentWillUnmount - ${this.props?.__schema?.fileName}`);
     }
 
     async componentDidCatch(...args: any[]) {
-      this.__setLifeCycleMethods('componentDidCatch', args);
+      this.__excuteLifeCycleMethod('componentDidCatch', args);
       console.warn(args);
     }
 
@@ -194,7 +194,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       }
     }
 
-    __setLifeCycleMethods = (method: string, args?: any) => {
+    __excuteLifeCycleMethod = (method: string, args?: any) => {
       const lifeCycleMethods = getValue(this.props.__schema, 'lifeCycles', {});
       let fn = lifeCycleMethods[method];
       if (fn) {
@@ -360,7 +360,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
     __render = () => {
       const schema = this.props.__schema;
-      this.__setLifeCycleMethods('render');
+      this.__excuteLifeCycleMethod('render');
       this.__writeCss();
 
       const { engine } = this.context;
