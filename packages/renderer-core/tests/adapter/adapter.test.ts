@@ -1,6 +1,5 @@
 // @ts-nocheck
 import adapter, { Env } from '../../src/adapter';
-import { IRuntime, IRendererModules, IGeneralConstructor } from '../../src/types';
 
 
 

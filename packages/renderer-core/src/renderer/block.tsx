@@ -13,7 +13,7 @@ export default function blockRendererFactory(): IBaseRenderComponent {
       const schema = props.__schema || {};
       this.state = this.__parseData(schema.state || {});
       this.__initDataSource(props);
-      this.__setLifeCycleMethods('constructor', [...arguments]);
+      this.__excuteLifeCycleMethod('constructor', [...arguments]);
     }
 
     render() {

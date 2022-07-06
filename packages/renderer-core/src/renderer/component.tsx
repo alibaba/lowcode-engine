@@ -15,7 +15,7 @@ export default function componentRendererFactory(): IBaseRenderComponent {
       const schema = props.__schema || {};
       this.state = this.__parseData(schema.state || {});
       this.__initDataSource(props);
-      this.__setLifeCycleMethods('constructor', arguments as any);
+      this.__excuteLifeCycleMethod('constructor', arguments as any);
     }
 
     render() {

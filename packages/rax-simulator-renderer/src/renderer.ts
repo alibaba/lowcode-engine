@@ -523,10 +523,11 @@ export class SimulatorRendererContainer implements BuiltinSimulatorRenderer {
           ...extraProps,
           schema: _schema,
           components,
-          designMode: renderer.designMode,
+          designMode: '',
           device: renderer.device,
           appHelper: renderer.context,
           rendererName: 'LowCodeRenderer',
+          thisRequiredInJSE: host.thisRequiredInJSE,
           customCreateElement: (Comp: any, props: any, children: any) => {
             const componentMeta = host.currentDocument?.getComponentMeta(Comp.displayName);
             if (componentMeta?.isModal) {

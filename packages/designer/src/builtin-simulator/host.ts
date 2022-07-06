@@ -618,7 +618,7 @@ export class BuiltinSimulatorHost implements ISimulatorHost<BuiltinSimulatorProp
           '.next-calendar-table',
           '.editor-container', // 富文本组件
         ];
-        const ignoreSelectors = customizeIgnoreSelectors?.(defaultIgnoreSelectors) || defaultIgnoreSelectors;
+        const ignoreSelectors = customizeIgnoreSelectors?.(defaultIgnoreSelectors, e) || defaultIgnoreSelectors;
         const ignoreSelectorsString = ignoreSelectors.join(',');
         // 提供了 customizeIgnoreSelectors 的情况下，忽略 isFormEvent() 判断
         if ((!customizeIgnoreSelectors && isFormEvent(e)) || target?.closest(ignoreSelectorsString)) {
