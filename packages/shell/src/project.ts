@@ -136,41 +136,40 @@ export default class Project {
    * 当前 project 内的 document 变更事件
    */
   onChangeDocument(fn: (doc: DocumentModel) => void) {
-    if (this[projectSymbol].currentDocument) {
-      fn(DocumentModel.create(this[projectSymbol].currentDocument)!);
-      return () => {};
-    }
-    return this[projectSymbol].onCurrentDocumentChange((originalDoc) => {
+    const offFn = this[projectSymbol].onCurrentDocumentChange((originalDoc) => {
       fn(DocumentModel.create(originalDoc)!);
     });
+    if (this[projectSymbol].currentDocument) {
+      fn(DocumentModel.create(this[projectSymbol].currentDocument)!);
+    }
+    return offFn;
   }
 
   /**
    * 当前 project 的模拟器 ready 事件
    */
   onSimulatorHostReady(fn: (host: SimulatorHost) => void) {
-    if (this[simulatorHostSymbol]) {
-      fn(SimulatorHost.create(this[simulatorHostSymbol])!);
-      return () => {};
-    }
-    return this[projectSymbol].onSimulatorReady((simulator: BuiltinSimulatorHost) => {
+    const offFn = this[projectSymbol].onSimulatorReady((simulator: BuiltinSimulatorHost) => {
       this[simulatorHostSymbol] = simulator;
       fn(SimulatorHost.create(simulator)!);
     });
+    if (this[simulatorHostSymbol]) {
+      fn(SimulatorHost.create(this[simulatorHostSymbol])!);
+    }
+    return offFn;
   }
 
   /**
    * 当前 project 的渲染器 ready 事件
    */
   onSimulatorRendererReady(fn: () => void) {
-    if (this[simulatorRendererSymbol]) {
-      fn();
-      return () => {};
-    }
-    // TODO: 补充 renderer 实例
-    return this[projectSymbol].onRendererReady((renderer: any) => {
+    const offFn = this[projectSymbol].onRendererReady((renderer: any) => {
       this[simulatorRendererSymbol] = renderer;
       fn();
     });
+    if (this[simulatorRendererSymbol]) {
+      fn();
+    }
+    return offFn;
   }
 }
