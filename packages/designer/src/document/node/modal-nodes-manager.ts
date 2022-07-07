@@ -3,6 +3,7 @@ import { Node } from './node';
 import { DocumentModel } from '../document-model';
 
 function getModalNodes(node: Node) {
+  if (!node) return [];
   let nodes: any = [];
   if (node.componentMeta.isModal) {
     nodes.push(node);
