@@ -77,7 +77,6 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     __compScopes: Record<string, any> = {};
     __instanceMap: Record<string, any> = {};
     __dataHelper: any;
-    __showPlaceholder: boolean = false;
     __customMethodsList: any[] = [];
     dataSourceMap: Record<string, any> = {};
     __ref: any;
@@ -106,7 +105,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       this.__compScopes = {};
       this.__instanceMap = {};
       this.__bindCustomMethods(props);
-      this.__initI18nAPIs();
+      this.__initI18nAPIs(props);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -159,12 +158,10 @@ export default function baseRendererFactory(): IBaseRenderComponent {
     reloadDataSource = () => new Promise((resolve, reject) => {
       this.__debug('reload data source');
       if (!this.__dataHelper) {
-        this.__showPlaceholder = false;
         return resolve({});
       }
       this.__dataHelper.getInitData()
         .then((res: any) => {
-          this.__showPlaceholder = false;
           if (isEmpty(res)) {
             this.forceUpdate();
             return resolve({});
@@ -172,10 +169,6 @@ export default function baseRendererFactory(): IBaseRenderComponent {
           this.setState(res, resolve as () => void);
         })
         .catch((err: Error) => {
-          if (this.__showPlaceholder) {
-            this.__showPlaceholder = false;
-            this.forceUpdate();
-          }
           reject(err);
         });
     });
@@ -193,12 +186,15 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         super.forceUpdate();
       }
     }
-
+    /**
+     * execute method in schema.lifeCycles
+     * @PRIVATE
+     */
     __excuteLifeCycleMethod = (method: string, args?: any) => {
       const lifeCycleMethods = getValue(this.props.__schema, 'lifeCycles', {});
       let fn = lifeCycleMethods[method];
       if (fn) {
-        // TODO, cache
+        // TODO: cache
         if (isJSExpression(fn) || isJSFunction(fn)) {
           fn = this.parseExpression(fn, this);
         }
@@ -214,6 +210,10 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       }
     };
 
+    /**
+     * this method is for legacy purpose only, which used _ prefix instead of __ as private for some historical reasons
+     * @LEGACY
+     */
     _getComponentView = (componentName: string) => {
       const { __components } = this.props;
       if (!__components) {
@@ -262,14 +262,18 @@ export default function baseRendererFactory(): IBaseRenderComponent {
       return parseData(data, ctx || __ctx || this, { thisRequiredInJSE });
     };
 
-    __initDataSource = (props = this.props) => {
+    __initDataSource = (props: IBaseRendererProps) => {
+      if (!props) {
+        return;
+      }
       const schema = props.__schema || {};
       const defaultDataSource: DataSource = {
         list: [],
       };
-      const dataSource = (schema && schema?.dataSource) || defaultDataSource;
+      const dataSource = schema.dataSource || defaultDataSource;
       // requestHandlersMap 存在才走数据源引擎方案
-      if (props?.__appHelper?.requestHandlersMap) {
+      const useDataSourceEngine = !!(props.__appHelper?.requestHandlersMap);
+      if (useDataSourceEngine) {
         this.__dataHelper = {
           updateConfig: (updateDataSource: any) => {
             const { dataSourceMap, reloadDataSource } = createDataSourceEngine(
@@ -280,11 +284,7 @@ export default function baseRendererFactory(): IBaseRenderComponent {
 
             this.reloadDataSource = () => new Promise((resolve) => {
               this.__debug('reload data source');
-              // this.__showPlaceholder = true;
               reloadDataSource().then(() => {
-                // this.__showPlaceholder = false;
-                // @TODO 是否需要 forceUpate
-                // this.forceUpdate();
                 resolve({});
               });
             });
@@ -299,12 +299,10 @@ export default function baseRendererFactory(): IBaseRenderComponent {
         this.reloadDataSource = () => new Promise((resolve, reject) => {
           this.__debug('reload data source');
           if (!this.__dataHelper) {
-            // this.__showPlaceholder = false;
             return resolve({});
           }
           this.__dataHelper.getInitData()
             .then((res: any) => {
-              // this.__showPlaceholder = false;
               if (isEmpty(res)) {
                 this.forceUpdate();
                 return resolve({});
@@ -312,28 +310,30 @@ export default function baseRendererFactory(): IBaseRenderComponent {
               this.setState(res, resolve as () => void);
             })
             .catch((err: Error) => {
-              if (this.__showPlaceholder) {
-                this.__showPlaceholder = false;
-                this.forceUpdate();
-              }
               reject(err);
             });
         });
       }
-      // 设置容器组件占位，若设置占位则在初始异步请求完成之前用loading占位且不渲染容器组件内部内容
-      // @TODO __showPlaceholder 的逻辑一旦开启就关不掉，先注释掉了
-      /* this.__showPlaceholder = this.__parseData(schema.props && schema.props.autoLoading) && (dataSource.list || []).some(
-        (item) => !!this.__parseData(item.isInit),
-      ); */
     };
 
-    __initI18nAPIs = () => {
+    /**
+     * init i18n apis
+     * @PRIVATE
+     */
+    __initI18nAPIs = (props: IBaseRendererProps) => {
       this.i18n = (key: string, values = {}) => {
-        const { locale, messages } = this.props;
+        const { locale, messages } = props;
         return getI18n(key, values, locale, messages);
       };
-      this.getLocale = () => this.props.locale;
-      this.setLocale = (loc: string) => this.appHelper?.utils?.i18n?.setLocale && this.appHelper?.utils?.i18n?.setLocale(loc);
+      this.getLocale = () => props.locale;
+      this.setLocale = (loc: string) => {
+        const setLocaleFn = this.appHelper?.utils?.i18n?.setLocale;
+        if (!setLocaleFn || typeof setLocaleFn !== 'function') {
+          console.warn('initI18nAPIs Failed, i18n only works when appHelper.utils.i18n.setLocale() exists');
+          return undefined;
+        }
+        return setLocaleFn(loc);
+      };
     };
 
     __writeCss = () => {
